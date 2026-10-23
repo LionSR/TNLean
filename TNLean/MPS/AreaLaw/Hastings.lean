@@ -24,6 +24,7 @@ import TNLean.MPS.AreaLaw.Hastings.GaussianTimeAverage
 import TNLean.MPS.AreaLaw.Hastings.InteractionPicture
 import TNLean.MPS.AreaLaw.Hastings.IntervalMutualInformation
 import TNLean.MPS.AreaLaw.Hastings.MainTheorem
+import TNLean.MPS.AreaLaw.Hastings.MovedEstimate
 import TNLean.MPS.AreaLaw.Hastings.PartCommutators
 import TNLean.MPS.AreaLaw.Hastings.PositiveFactorization
 import TNLean.MPS.AreaLaw.Hastings.ProductStateExpectation

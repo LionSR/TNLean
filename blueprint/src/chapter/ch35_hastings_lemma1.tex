@@ -378,18 +378,12 @@ $\|P_q(M)-P_q(H)\|\le\sqrt q\,\Delta E^{-1}\|M-H\|$ for Hermitian $M$, the gap
 bound and the first inequality of the display in
 \cite[lines 843--864]{Hastings2007AreaLaw}, with $M=M_L+M_B+M_R$.
 
-% Lean statement pending.
-\begin{theorem}[The cut-offs next to the time average]
-    \label{thm:hastings_moved_estimate}
-    \uses{thm:hastings_gaussian_time_average_gap,
-        thm:hastings_gaussian_time_average_stability, thm:hastings_cutoffs}
-    Let $M$ be Hermitian with $\|M-H\|\le\delta$, and let $O_L$, $O_R$ be
-    commuting orthogonal projections with $\|\Psi_0-O_LO_R\Psi_0\|\le\eta$. Then
-    \begin{align*}
-        \|P_q(M)\,O_LO_R-P_0\|\le e^{-q/2}+\sqrt q\,\Delta E^{-1}\delta+\eta,
-    \end{align*}
-    which is \cite[lines 865--876]{Hastings2007AreaLaw}.
-\end{theorem}
+For $M$ Hermitian with $\|M-H\|\le\delta$ and commuting orthogonal projections
+$O_L$, $O_R$ with $\|\Psi_0-O_LO_R\Psi_0\|\le\eta$,
+Theorem~\ref{thm:hastings_moved_estimate} gives
+$\|P_q(M)\,O_LO_R-P_0\|\le e^{-q/2}+\sqrt q\,\Delta E^{-1}\delta+\eta$, which is
+\cite[lines 865--876]{Hastings2007AreaLaw}; the cut-offs of
+Theorem~\ref{thm:hastings_cutoffs} supply $\eta$.
 
 The interaction picture $e^{i(A+B)t}=U(t)e^{iAt}$ and the Gaussian average
 $P_B$ of $U(t)$ are Definitions~\ref{def:hastings_interaction_propagator}
