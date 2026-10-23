@@ -14,7 +14,7 @@ projections. Each ground state `Ψ_a` is an approximate eigenvector of every pai
 `M = M_{k,k+1}`: `‖(M - ⟨Ψ_a, M Ψ_a⟩) Ψ_a‖ ≤ ε` (eq. `low`). At the first level `P^1_k` projects
 onto the eigenvectors of `M` whose eigenvalues lie within `x` of `c = ⟨Ψ_a, M Ψ_a⟩`. At each
 later level the normalized image `Ψ^1_a = P^1_k P^1_{k+2} Ψ_a / ‖·‖` of the previous level
-replaces `Ψ_a`, the window stays centred at `c` (line 681), and the deficiencies obey the
+replaces `Ψ_a`, and the window stays centred at `c` (line 681). The source states the
 recursion `b_m = (ε + 2 b_{m-1})^{1 - 1/h}` with `h = log₂ N` levels (lines 696–704).
 
 This file proves the estimates of one level and the recursion as an inequality between real
@@ -52,12 +52,13 @@ expectation, `x ⟨Ψ_a, (1 - P^1) Ψ_a⟩ ≤ ε` with `b₁ = ε / x` (lines 6
 `‖(1 - P) Ψ‖ ≤ ε / x`, so here the deficiency `b` of a level is measured in norm. It implies the
 printed `⟨Ψ, P Ψ⟩ ≥ 1 - b`, and with it the normalization bound `2 b` and the second level
 hold as printed. From the third level on, the window stays centred at the expectation in `Ψ_a`,
-so the residual must be compared with `Ψ_a`, at distance up to `2 ∑_{j<m} b_j`. The chain of
-levels then obeys `b_m = (ε + 2 ∑_{j<m} b_j)^s` rather than the printed `(ε + 2 b_{m-1})^s`, and
-the constant of the final bound grows like `3^h = N^{log₂ 3}` instead of `2^h = N`, since the
-coefficients obey `c_m = 1 + 2 ∑_{j<m} c_j = 3^{m-1}`; this is still polynomial in `N`, so the
-source's conclusion survives. The recursion theorems below are inequalities for the printed
-recursion between real numbers. Documented in
+so the residual must be compared with `Ψ_a`. If consecutive normalized vectors differ by at
+most `2 b_j`, the triangle inequality gives distance at most `2 ∑_{j<m} b_j`. This yields
+an accumulated scalar majorant `(ε + 2 ∑_{j<m} b_j)^s`, whose coefficient bound grows like
+`3^{m-1}`. It does not establish the source's smaller recurrence, nor show that a sharper
+argument is impossible. The identification of either majorant with the complete hierarchy
+remains open. The recursion theorems below concern the printed scalar recurrence only.
+Documented in
 `docs/paper-gaps/hastings05_hierarchical_projection.tex`.
 
 Not formalized here: the supersite grouping of lines 609–628, the energy bound eq. `hchy` and

@@ -11,9 +11,10 @@ The first level projects onto the eigenvectors of $M$ with eigenvalue within
 $x$ of $c$; each later level projects the normalized output of the previous
 one with the pair operator compressed to the range of the level below, the
 window still centred at $c$, and the
-deficiencies $b_m$ of the levels obey a recursion over $h=\log_2N$ levels.
-This section proves the estimates of one level and the bound on the
-recursion. The deficiency of a level is measured in norm: the source states
+source states a recurrence for the deficiencies over $h=\log_2N$ levels.
+This section proves the estimates of one level and bounds the printed
+scalar recurrence. Applying that recurrence to the entire hierarchy
+requires a further argument. The deficiency of a level is measured in norm: the source states
 it as an expectation, which alone would not give the normalization bound it
 uses at the next level~\cite{gap:hastings05_hierarchical_projection}. Norms of
 operators are operator norms.
@@ -153,8 +154,8 @@ $h$ levels.
 \begin{proof}\leanok
     The first bound follows from
     $\lvert1-\lVert v\rVert\rvert\le\lVert v-\Psi\rVert$. For the second, with
-    $t=\lVert Q\Psi\rVert\le1$, the left side is $2-2t$ and the right side is
-    $2-2t^2$. For the third, $PP'$ is an orthogonal projection,
+    $0<t=\lVert Q\Psi\rVert\le1$, the left side is $2-2t$ and the right
+    side is $2-2t^2$. If $Q\Psi=0$, the two sides are $1$ and $2$. For the third, $PP'$ is an orthogonal projection,
     and~\eqref{eq:hastings05_two_projections_sq} gives
     $\lVert\Psi-PP'\Psi\rVert^2\le2b^2$.
 \end{proof}
@@ -244,7 +245,7 @@ $h$ levels.
     norms.
 \end{proof}
 
-\begin{definition}[Deficiencies of the levels]
+\begin{definition}[The scalar recurrence]
     \label{def:hastings05_level_deficiency}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency,
         TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_zero,
@@ -254,7 +255,8 @@ $h$ levels.
     For real numbers $\epsilon$, $a$ and $s$, let $b_0=0$ and
     $b_{m+1}=(\epsilon+ab_m)^s$. The source takes $a=2$ and $s=1-1/h$, so
     that $b_1=\epsilon^{1-1/h}$~\cite[lines 696--704]{Hastings2006Solving}.
-    For $\epsilon\ge0$ and $a\ge0$ every $b_m$ is nonnegative.
+    For $\epsilon\ge0$ and $a\ge0$ every $b_m$ is nonnegative. This scalar
+    sequence is considered independently of the projection hierarchy.
 \end{definition}
 
 \begin{theorem}[The recursion]
@@ -291,7 +293,7 @@ $h$ levels.
     $(1-1/h)^n\ge e^{-1}\ge1/3$, and $1-1/h\ge3/4$.
 \end{proof}
 
-\begin{theorem}[The bound after all levels]
+\begin{theorem}[The bound after $h$ iterations]
     \label{thm:hastings05_final_bound}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_self_le,
         TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_exp_le,
