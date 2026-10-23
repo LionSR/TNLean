@@ -20,7 +20,7 @@ operators are operator norms.
 
 The supersite grouping, the final energy bound, the count of the final states
 and the extensions to higher dimensions
-(\cite[lines 609--628 and 705--756]{Hastings2006Solving}) are not part of this
+(\cite[lines 609--628 and 709--756]{Hastings2006Solving}) are not part of this
 section, and neither is the bookkeeping that follows one vector through all
 $h$ levels.
 
@@ -37,8 +37,8 @@ $h$ levels.
     $c=\langle\Psi_a,M\Psi_a\rangle$.
 \end{definition}
 
-\begin{lemma}[The shifted operator]
-    \label{lem:hastings05_shifted_hermitian}
+\begin{theorem}[The shifted operator]
+    \label{thm:hastings05_shifted_hermitian}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.isHermitian_sub_ofReal_smul_one,
         TNLean.MPS.AreaLaw.LocalSolution.ofReal_smul_one_eq_algebraMap,
         TNLean.MPS.AreaLaw.LocalSolution.isStarProjection_windowProjection}
@@ -47,14 +47,14 @@ $h$ levels.
     For a Hermitian matrix $M$ and a real number $c$, the matrix $M-c$ is
     Hermitian, and every window projection of $M$ is an orthogonal
     projection.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The scalar $c$ is real, and the spectral cut-off of a Hermitian matrix is
     an orthogonal projection.
 \end{proof}
 
-\begin{lemma}[Deficiency and expectation of a projection]
-    \label{lem:hastings05_projection_deficiency}
+\begin{theorem}[Deficiency and expectation of a projection]
+    \label{thm:hastings05_projection_deficiency}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.re_inner_toEuclideanLin_eq_norm_sq,
         TNLean.MPS.AreaLaw.LocalSolution.norm_sq_add_norm_sub_sq,
         TNLean.MPS.AreaLaw.LocalSolution.re_inner_eq_one_sub_norm_sub_sq,
@@ -73,7 +73,7 @@ $h$ levels.
          & \le\lVert\Psi-P\Psi\rVert^2+\lVert\Psi-P'\Psi\rVert^2.
         \label{eq:hastings05_two_projections_sq}
     \end{align}
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The vectors $P\Psi$ and $\Psi-P\Psi$ are orthogonal. With
     $d=\lVert\Psi-P\Psi\rVert$, the expectation $1-d^2$ is nonnegative, so
@@ -88,8 +88,8 @@ $h$ levels.
         TNLean.MPS.AreaLaw.LocalSolution.one_sub_div_le_re_inner_windowProjection,
         TNLean.MPS.AreaLaw.LocalSolution.one_sub_div_sq_le_re_inner_windowProjection}
     \leanok
-    \uses{def:hastings05_window_projection,lem:hastings05_shifted_hermitian,
-        lem:hastings05_projection_deficiency,thm:hastings_spectral_cutoff_obd}
+    \uses{def:hastings05_window_projection,thm:hastings05_shifted_hermitian,
+        thm:hastings05_projection_deficiency,thm:hastings_spectral_cutoff_obd}
     Let $M$ be Hermitian, $c$ real, $x>0$ and $P=P_x(M,c)$. For every vector
     $\Psi$,
     \begin{align}
@@ -108,7 +108,7 @@ $h$ levels.
 \end{theorem}
 \begin{proof}\leanok
     Apply Theorem~\ref{thm:hastings_spectral_cutoff_obd} to $M-c$ and
-    Lemma~\ref{lem:hastings05_projection_deficiency}.
+    Theorem~\ref{thm:hastings05_projection_deficiency}.
 \end{proof}
 
 \begin{theorem}[An eigenvalue in the window]
@@ -134,7 +134,7 @@ $h$ levels.
         TNLean.MPS.AreaLaw.LocalSolution.norm_inv_norm_smul_toEuclideanLin_sub_sq_le,
         TNLean.MPS.AreaLaw.LocalSolution.norm_inv_norm_smul_sub_le_two_mul}
     \leanok
-    \uses{lem:hastings05_projection_deficiency}
+    \uses{thm:hastings05_projection_deficiency}
     Let $\Psi$ be a unit vector. For every vector $v$,
     $\lVert v/\lVert v\rVert-\Psi\rVert\le2\lVert v-\Psi\rVert$. For an
     orthogonal projection $Q$,
@@ -163,7 +163,7 @@ $h$ levels.
     \label{thm:hastings05_nested_projections}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_sq_le_of_mul_eq}
     \leanok
-    \uses{lem:hastings05_projection_deficiency}
+    \uses{thm:hastings05_projection_deficiency}
     Let $P$ and $Q$ be orthogonal projections with $PQ=P$, let $\Psi$ be a
     unit vector and $\Psi'=Q\Psi/\lVert Q\Psi\rVert$. Then
     \begin{align*}
@@ -277,14 +277,14 @@ $h$ levels.
     $b_{m+1}\le(1+aC)\epsilon^{s^{m+1}}$.
 \end{proof}
 
-\begin{lemma}[The exponent]
-    \label{lem:hastings05_exponent}
+\begin{theorem}[The exponent]
+    \label{thm:hastings05_exponent}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.one_sub_inv_natCast_mem_Icc,
         TNLean.MPS.AreaLaw.LocalSolution.quarter_le_one_sub_inv_pow}
     \leanok
     For every natural number $h$, $0\le1-1/h\le1$, with $1/0$ read as $0$.
     For $h\ge2$, $(1-1/h)^h\ge1/4$.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The cases $h=2,3$ are direct. For $h=n+1\ge4$,
     $1-1/h\ge e^{-1/n}$ because $1+1/n\le e^{1/n}$, so
@@ -297,7 +297,7 @@ $h$ levels.
         TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_exp_le,
         TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_le_rpow_quarter}
     \leanok
-    \uses{thm:hastings05_recursion,lem:hastings05_exponent}
+    \uses{thm:hastings05_recursion,thm:hastings05_exponent}
     Let $0<\epsilon\le1$, $h$ a natural number, $a=2$ and $s=1-1/h$. Then
     $b_h\le(2^h-1)\epsilon^{(1-1/h)^h}$. For $\epsilon=e^{-t}$ with $t\ge0$,
     \begin{align*}
@@ -313,6 +313,6 @@ $h$ levels.
 \end{theorem}
 \begin{proof}\leanok
     Theorem~\ref{thm:hastings05_recursion} with $s=1-1/h$ and
-    Lemma~\ref{lem:hastings05_exponent}; for the exponential form,
+    Theorem~\ref{thm:hastings05_exponent}; for the exponential form,
     $(e^{-t})^y=e^{-ty}$.
 \end{proof}

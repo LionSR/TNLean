@@ -50,8 +50,13 @@ expectation, `x ⟨Ψ_a, (1 - P^1) Ψ_a⟩ ≤ ε` with `b₁ = ε / x` (lines 6
 `‖Ψ^1_a - Ψ_a‖ ≤ 2 b₁` (line 689). An expectation bound `⟨Ψ, (1 - P) Ψ⟩ ≤ b` gives only
 `‖(1 - P) Ψ‖ ≤ √b`, which would change the recursion. The spectral step proves the stronger
 `‖(1 - P) Ψ‖ ≤ ε / x`, so here the deficiency `b` of a level is measured in norm. It implies the
-printed `⟨Ψ, P Ψ⟩ ≥ 1 - b`, and with it the normalization bound `2 b` and the linear recursion
-hold as printed. Documented in `docs/paper-gaps/hastings05_hierarchical_projection.tex`.
+printed `⟨Ψ, P Ψ⟩ ≥ 1 - b`, and with it the normalization bound `2 b` and the second level
+hold as printed. From the third level on, the window stays centred at the expectation in `Ψ_a`,
+so the residual must be compared with `Ψ_a`, at distance up to `2 ∑_{j<m} b_j`. The chain of
+levels then obeys `b_m = (ε + 2 ∑_{j<m} b_j)^s` rather than the printed `(ε + 2 b_{m-1})^s`, and
+the constant of the final bound is of order `2^h h!` instead of `2^h`. The recursion theorems
+below are inequalities for the printed recursion between real numbers. Documented in
+`docs/paper-gaps/hastings05_hierarchical_projection.tex`.
 
 Not formalized here: the supersite grouping of lines 609–628, the energy bound eq. `hchy` and
 the count of at most `2n` final states (lines 709–730), which the source states with "one may

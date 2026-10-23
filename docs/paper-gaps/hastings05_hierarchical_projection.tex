@@ -17,7 +17,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{local correction}{resolved}
+\gapnote{local-correction}{resolved}
 
 \section{The source passage}
 
@@ -80,8 +80,21 @@ For an orthogonal projection $Q$ and a unit vector $\Psi$ with $t=\lVert Q\Psi\r
   \Bigl\lVert\frac{Q\Psi}{t}-\Psi\Bigr\rVert^2=2-2t\le2(1-t^2)
   =2\lVert\Psi-Q\Psi\rVert^2 .
 \end{align*}
-With $Q=PP'$ the two bounds give $\lVert\Psi^1_a-\Psi_a\rVert\le2b$. The
-residual and the recursion then follow as in the source.
+With $Q=PP'$ the two bounds give $\lVert\Psi^1_a-\Psi_a\rVert\le2b$, so
+the residual at the second level and the printed $b_2$ follow as in the
+source. From the third level on, the window stays centred at the expectation
+in $\Psi_a$, so the residual of $\Psi^{m-1}_a$ for the new pair operator has to
+be compared with $\Psi_a$, not with $\Psi^{m-2}_a$. By the triangle inequality
+$\lVert\Psi^{m-1}_a-\Psi_a\rVert\le2\sum_{j<m}b_j$, so the chain of levels
+obeys
+\begin{align*}
+  b_m=\Bigl(\epsilon+2\sum_{j<m}b_j\Bigr)^{1-1/h}
+\end{align*}
+rather than the printed $b_m=(\epsilon+2b_{m-1})^{1-1/h}$, and the constant in
+front of the final bound grows to order $2^hh!$ instead of $2^h$. The
+formalization proves the bound for the printed recursion as a statement about
+real numbers, and does not identify it with the deficiency of the levels
+beyond the second.
 
 \section{The residual and the recursion}
 
