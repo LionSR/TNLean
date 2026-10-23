@@ -9046,3 +9046,17 @@ spectral split → block extraction → MPV calculation → strict bounds
   existing `Fin` bound and `omega` close the contradiction.
 - **Notes:** The basis embeddings reuse Mathlib's `Orthonormal.comp`; the
   complex square-root identities reuse `Complex.ofReal_sqrt_sq`.
+
+### Regional entropy from coefficient-matrix ranks — reused Mathlib (2026-10-23)
+
+- **Pattern:** Write a pure-state marginal as `C * Cᴴ`, bound its rank by
+  that of `C`, and apply the entropy bound by the logarithm of the rank.
+- **Seen:** The binary, flag, and full-region arguments in
+  `MPS/AreaLaw/EntropyScaling/QutritEntropy.lean`.
+- **Abstraction:** Existing `Matrix.rank_mul_le_left`,
+  `Matrix.rank_le_card_width`, `Matrix.rank_vecMulVec_le`, and QICLean's
+  `vonNeumannEntropy_le_log_rank` and
+  `vonNeumannEntropy_eq_zero_of_rank_le_one` cover these arguments.
+- **Notes:** The binary coefficient matrix factors through the `2^N` binary
+  words. The flag and full-region coefficient matrices have rank at most one.
+  No new tactic is needed; the three applications occur in one module.
