@@ -65,12 +65,10 @@ open scoped Matrix.Norms.L2Operator InnerProductSpace
 
 namespace TNLean.Lattice
 
-/-- A filtered Hermitian operator is Hermitian. -/
-theorem isHermitian_gaussianFilteredTerm {n : Type*} [Fintype n] [DecidableEq n] (q ΔE : ℝ)
-    {H W : Matrix n n ℂ} (hH : H.IsHermitian) (hW : W.IsHermitian) :
-    (gaussianFilteredTerm q ΔE H W).IsHermitian := by
-  change (gaussianIntertwiner _ H H W)ᴴ = gaussianIntertwiner _ H H W
-  rw [gaussianIntertwiner_conjTranspose _ hH hH W, hW.eq]
+/-- A sum of Hermitian terms is Hermitian. -/
+private theorem isHermitian_sum_univ {κ n : Type*} [Fintype κ] {h : κ → Matrix n n ℂ}
+    (hHerm : ∀ k, (h k).IsHermitian) : (∑ k, h k).IsHermitian :=
+  isSelfAdjoint_sum Finset.univ fun k _ => (hHerm k).isSelfAdjoint
 
 section Graph
 
@@ -100,8 +98,7 @@ theorem norm_commutator_gaussianFilteredTerm_le_graphDistance {q ΔE : ℝ} (hq 
       (2 + 4 * |b₀| * Real.exp (2 * μ * R)) * (S.card : ℝ) * ‖W‖ * ‖B‖ *
           Real.exp ((2 * vR * |b₀| * Real.exp (2 * μ * R) + 1) * T - μ * l) +
         2 * ‖W‖ * ‖B‖ * Real.exp (-(T * ΔE) ^ 2 / (2 * q)) := by
-  have hH : (∑ k, h k).IsHermitian :=
-    isSelfAdjoint_sum Finset.univ fun j _ => (hHerm j).isSelfAdjoint
+  have hH : (∑ k, h k).IsHermitian := isHermitian_sum_univ hHerm
   refine norm_commutator_gaussianFilteredTerm_le hq hH W B hT (by positivity) fun t ht => ?_
   have hLR := norm_heisenberg_commutator_le_graphDistance_finset G X a ha h hHerm hSupport R
     hDiam vR hCard b₀ hBudget S hW y hB μ hμ l hl t
@@ -132,8 +129,7 @@ theorem norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood [NeZe
           (2 ^ kg * kg.factorial * Real.exp (1 / 2) / (1 - Real.exp (-(1 / 2)))) *
           Real.exp ((2 * vR * |b₀| * Real.exp (2 * R) + 1) * T - l / 2) +
         2 * ‖W‖ * Real.exp (-(T * ΔE) ^ 2 / (2 * q)) := by
-  have hH : (∑ k, h k).IsHermitian :=
-    isSelfAdjoint_sum Finset.univ fun j _ => (hHerm j).isSelfAdjoint
+  have hH : (∑ k, h k).IsHermitian := isHermitian_sum_univ hHerm
   set v : ℝ := 2 * vR * |b₀| * Real.exp (2 * R) + 1 with hv_def
   set P : ℝ := (2 + 4 * |b₀| * Real.exp (2 * R)) * (S.card : ℝ) ^ 2 * ‖W‖ * Kg *
     (2 ^ kg * kg.factorial * Real.exp (1 / 2) / (1 - Real.exp (-(1 / 2)))) with hP_def
@@ -177,8 +173,7 @@ theorem exists_local_approx_gaussianFilteredTerm [NeZero d] (Kg : ℝ) (kg : ℕ
             (2 ^ kg * kg.factorial * Real.exp (1 / 2) / (1 - Real.exp (-(1 / 2)))) *
             Real.exp ((2 * vR * |b₀| * Real.exp (2 * R) + 1) * T - l / 2) +
           2 * ‖W‖ * Real.exp (-(T * ΔE) ^ 2 / (2 * q)) := by
-  have hH : (∑ k, h k).IsHermitian :=
-    isSelfAdjoint_sum Finset.univ fun j _ => (hHerm j).isSelfAdjoint
+  have hH : (∑ k, h k).IsHermitian := isHermitian_sum_univ hHerm
   exact ⟨_, siteExpectation_mem_supportedOperators _ _,
     (norm_siteExpectation_le _ _).trans (norm_gaussianFilteredTerm_le q ΔE hH W),
     fun hW' => isHermitian_siteExpectation _ (isHermitian_gaussianFilteredTerm q ΔE hH hW'),

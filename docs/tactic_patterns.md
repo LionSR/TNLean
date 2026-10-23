@@ -4801,6 +4801,22 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Hermitian sum of pointwise-Hermitian terms — candidate
+- **Pattern:**
+  ```lean
+  isSelfAdjoint_sum Finset.univ fun j _ => (hHerm j).isSelfAdjoint
+  ```
+- **Seen:** 5 occurrences across 3 files (2026-10-23):
+  `TNLean/Lattice/GaussianFilteredTermLocalization.lean` (three, now one
+  private helper `isHermitian_sum_univ`),
+  `TNLean/Circuit/LiebRobinson/GraphLocalization.lean:312`,
+  `TNLean/Circuit/LiebRobinson/CommutatorRecursion.lean:450`.
+- **Abstraction:** proposed public `Matrix.isHermitian_sum` in an algebra file
+  upstream of `TNLean/Circuit/LiebRobinson/`, replacing the private helper.
+- **Notes:** a one-term wrapper around Mathlib's `isSelfAdjoint_sum`; the gain
+  is the readable statement, not line count. Promote with the next change to
+  the Lieb--Robinson files, so their callers are refactored in the same PR.
+
 ### Mass of a cut beyond its leading eigenvalues — candidate
 - **Pattern:**
   ```lean
