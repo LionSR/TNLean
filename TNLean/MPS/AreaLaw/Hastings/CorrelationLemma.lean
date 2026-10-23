@@ -40,19 +40,11 @@ source's `max(2v/ΔE, ξ_C)` (lines 96–112, 139–142); the printed `ξ' = 6ξ
 
 ## Main results
 
-* `Matrix.IsStarProjection.posSemidef`: an orthogonal projection is positive semidefinite.
 * `exists_norm_inner_mul_sub_le`: Lemma 3.
 -/
 
 open Matrix
-open scoped InnerProductSpace Matrix.Norms.L2Operator ComplexOrder
-
-theorem IsStarProjection.posSemidef {n : Type*} [Fintype n] {P : Matrix n n ℂ}
-    (hP : IsStarProjection P) : P.PosSemidef := by
-  have h : P = Pᴴ * P := by
-    rw [← star_eq_conjTranspose, hP.isSelfAdjoint.star_eq, hP.isIdempotentElem.eq]
-  rw [h]
-  exact posSemidef_conjTranspose_mul_self P
+open scoped InnerProductSpace Matrix.Norms.L2Operator ComplexOrder MatrixOrder
 
 namespace TNLean.MPS.AreaLaw
 
@@ -97,7 +89,8 @@ theorem exists_norm_inner_mul_sub_le (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ J) (hΔ
     rw [mul_div_cancel₀ _ two_ne_zero]
   rw [hrate] at herr
   exact norm_inner_mul_sub_le_of_factorization hgs.1 a hψL hψR hdec hO hA hSA hA1
-    ⟨OB, OL, OR, _, _, _, hOB, hOL.posSemidef, hOR.posSemidef, hOB1, hOL.norm_le, hOR.norm_le,
+    ⟨OB, OL, OR, _, _, _, hOB, nonneg_iff_posSemidef.mp hOL.nonneg,
+      nonneg_iff_posSemidef.mp hOR.nonneg, hOB1, hOL.norm_le, hOR.norm_le,
       hsB, subset_rfl, hsL, subset_rfl, hsR, disjoint_compl_left, herr⟩
 
 end TNLean.MPS.AreaLaw

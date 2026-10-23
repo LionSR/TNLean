@@ -12,8 +12,7 @@ chain. -/
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
-  for decl in #[``IsStarProjection.posSemidef,
-    ``TNLean.MPS.AreaLaw.exists_norm_inner_mul_sub_le] do
+  for decl in #[``TNLean.MPS.AreaLaw.exists_norm_inner_mul_sub_le] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl
