@@ -10,7 +10,7 @@ clusters of sites, and its convergence rests on the classical fact that a
 lattice of $N$ sites carries at most $Nx^{n}$ clusters of $n$ sites for some
 constant $x$ \cite[lines 1227--1254]{Hastings2006Solving}. We prove this for an
 arbitrary finite simple graph whose vertices all have degree at most $\Delta$,
-with the explicit constant $x=\Delta^{2}$. A cluster is a set of vertices that
+with the explicit constant $x=\max(1,\Delta^{2})$. A cluster is a set of vertices that
 induces a connected subgraph.
 
 \begin{theorem}[Clusters through a vertex]
@@ -18,7 +18,7 @@ induces a connected subgraph.
     \lean{TNLean.Lattice.card_connected_induce_mem_le}
     \leanok
     Let $G$ be a finite simple graph in which every vertex has degree at most
-    $\Delta$, let $v$ be a vertex, and let $n$ be a natural number. At most
+    $\Delta$, let $v$ be a vertex, and let $n\ge1$ be an integer. At most
     $\Delta^{2(n-1)}$ sets of $n$ vertices contain $v$ and induce a connected
     subgraph of $G$.
 \end{theorem}
@@ -39,12 +39,16 @@ induces a connected subgraph.
 
 \begin{theorem}[Clusters of a given size]
     \label{thm:hastings_connected_set_count}
-    \lean{TNLean.Lattice.card_connected_induce_le}
+    \lean{TNLean.Lattice.card_connected_induce_le,
+        TNLean.Lattice.card_connected_induce_le_exponential}
     \leanok
     \uses{thm:hastings_connected_set_count_mem}
     Let $G$ be a simple graph on $N$ vertices in which every vertex has degree
-    at most $\Delta$, and let $n$ be a natural number. At most
+    at most $\Delta$, and let $n\ge1$ be an integer. At most
     $N\Delta^{2(n-1)}$ sets of $n$ vertices induce a connected subgraph of $G$.
+    In particular the number is at most $Nx^n$ for
+    $x=\max(1,\Delta^2)$. The latter bound also holds for $n=0$, since the
+    empty induced graph is not connected.
 \end{theorem}
 
 \begin{proof}
@@ -53,4 +57,7 @@ induces a connected subgraph.
     A set inducing a connected subgraph is nonempty, so it contains some
     vertex; sum the bound of Theorem~\ref{thm:hastings_connected_set_count_mem}
     over the $N$ vertices.
+    For $n\ge1$, $\Delta^{2(n-1)}=(\Delta^2)^{n-1}\le x^{n-1}\le x^n$,
+    since $x\ge1$. This choice also covers $\Delta=0$, when the connected
+    singleton sets would prevent taking $x=0$.
 \end{proof}

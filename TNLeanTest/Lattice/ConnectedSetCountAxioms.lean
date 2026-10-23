@@ -17,10 +17,21 @@ run_cmd do
     ``TNLean.Lattice.exists_closedWalk_support_toFinset_eq,
     ``TNLean.Lattice.card_finsetWalkLength_le_pow,
     ``TNLean.Lattice.card_connected_induce_mem_le,
-    ``TNLean.Lattice.card_connected_induce_le] do
+    ``TNLean.Lattice.card_connected_induce_le,
+    ``TNLean.Lattice.card_connected_induce_le_exponential] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl
     unless axioms.all (allowed.contains ·) do
       throwError "Unexpected axioms for {decl}: {axioms}"
     Lean.logInfo m!"{decl}: {axioms}"
+
+open Finset
+
+-- The source-shaped bound must include singleton clusters in an edgeless graph.
+example {V : Type*} [Fintype V] [DecidableEq V] (n : ℕ) :
+    #{S : Finset V | S.card = n ∧ ((⊥ : SimpleGraph V).induce (S : Set V)).Connected} ≤
+      Fintype.card V := by
+  classical
+  simpa using TNLean.Lattice.card_connected_induce_le_exponential (⊥ : SimpleGraph V)
+    (Δ := 0) (by simp) n

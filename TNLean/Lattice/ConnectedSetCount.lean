@@ -19,7 +19,8 @@ lattice animals (Klarner, Canad. J. Math. 19 (1967) 851). This file proves the
 count for an arbitrary finite simple graph of maximum degree at most `Δ`: at
 most `Δ ^ (2 (n - 1))` connected vertex sets of size `n` contain a given vertex,
 and at most `N Δ ^ (2 (n - 1))` connected vertex sets have size `n`. The source
-leaves `x` unspecified; here it is the explicit constant `Δ ^ 2`.
+leaves `x` unspecified; the bound in that form holds with `x = max 1 (Δ ^ 2)`,
+including graphs of degree zero.
 
 The proof traverses a set: every connected set `S` of `n` vertices containing
 `v` is the vertex set of a closed walk from `v` of length exactly `2 (n - 1)`,
@@ -30,8 +31,9 @@ The walk determines `S`, and at most `Δ ^ L` walks of length `L` start at `v`.
 ## Main results
 
 * `TNLean.Lattice.card_connected_induce_mem_le`: the count through one vertex.
-* `TNLean.Lattice.card_connected_induce_le`: the total count, `N x ^ n` with
-  `x = Δ ^ 2` up to the shift `n - 1`.
+* `TNLean.Lattice.card_connected_induce_le`: the sharper total count.
+* `TNLean.Lattice.card_connected_induce_le_exponential`: the source form `N x ^ n`,
+  with `x = max 1 (Δ ^ 2)`.
 -/
 
 namespace TNLean.Lattice
@@ -149,5 +151,16 @@ theorem card_connected_induce_le {Δ : ℕ} (hΔ : ∀ v, G.degree v ≤ Δ) (n 
     _ ≤ ∑ _v : V, Δ ^ (2 * (n - 1)) := Finset.sum_le_sum fun v _ =>
         card_connected_induce_mem_le G hΔ v n
     _ = _ := by simp
+
+/-- The exponential cluster count used in Hastings, arXiv:cond-mat/0508554v3,
+lines 1227–1254. The constant `max 1 (Δ ^ 2)` also covers edgeless graphs,
+whose connected singleton sets must still be counted. -/
+theorem card_connected_induce_le_exponential {Δ : ℕ} (hΔ : ∀ v, G.degree v ≤ Δ) (n : ℕ) :
+    #{S : Finset V | #S = n ∧ (G.induce (S : Set V)).Connected} ≤
+      Fintype.card V * (max 1 (Δ ^ 2)) ^ n := by
+  refine (card_connected_induce_le G hΔ n).trans (Nat.mul_le_mul_left _ ?_)
+  rw [pow_mul]
+  exact (pow_le_pow_left' (le_max_right 1 (Δ ^ 2)) (n - 1)).trans
+    (pow_le_pow_right' (le_max_left 1 (Δ ^ 2)) (Nat.sub_le n 1))
 
 end TNLean.Lattice
