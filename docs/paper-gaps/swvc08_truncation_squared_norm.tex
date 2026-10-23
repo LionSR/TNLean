@@ -30,10 +30,10 @@ that there is a matrix product state $\phi_D$ of bond dimension at most $D$
 with
 \begin{align}
     \|\psi-\phi_D\|_2 &\le 2\sum_{k=1}^{N-1}\epsilon_k(D).
-    \label{eq:swv07_truncation_printed}
+    \label{eq:swvc08_truncation_printed}
 \end{align}
 The left-hand side is missing a square.\footnote{arXiv:0705.0292v2,
-    \path{paper_v2.tex}, lines 239--245, equation label \path{eq:eps-upper}.}
+    \path{paper_v2.tex}, lines 239--245.}
 The cited result of Verstraete and Cirac~\cite[Lemma~1]{VerstraeteCirac2006Faithfully}
 has the squared norm on the left.\footnote{arXiv:cond-mat/0505140v6,
     \path{convexPRA2.tex}, first lemma.}
@@ -50,22 +50,22 @@ Optimizing its scalar coefficient therefore gives
 \begin{align}
     \inf_{c\in\mathbb C}\|\psi-c(u\otimes v)\|_2^2
     &=1-|\langle u\otimes v,\psi\rangle|^2\ge\frac1{16}.
-    \label{eq:swv07_truncation_product}
+    \label{eq:swvc08_truncation_product}
 \end{align}
 Equality is attained by the product vector $(\sqrt{15}/4)|00\rangle$.
 Thus the best bond-one error is $1/4$, whereas
-(\ref{eq:swv07_truncation_printed}) would require $1/4\le1/8$.
+(\ref{eq:swvc08_truncation_printed}) would require $1/4\le1/8$.
 The counterexample also excludes normalized product approximants.
 
 \section{The corrected bound and its formalization}
 
-The squared-norm bound of Verstraete and Cirac is
+The squared-norm bound of Verstraete and Cirac~\cite[Lemma~1]{VerstraeteCirac2006Faithfully} is
 $\|\psi-\phi_D\|_2^2\le2\sum_k\epsilon_k(D)$.
 For the unnormalized vector $\Phi$ obtained by sequential projection onto
 the leading eigenspaces, the formalization proves the stronger estimate
 \begin{align}
     \|\psi-\Phi\|_2^2 &\le\sum_{k=1}^{N-1}\epsilon_k(D).
-    \label{eq:swv07_truncation_corrected}
+    \label{eq:swvc08_truncation_corrected}
 \end{align}
 The same vector is an open-boundary matrix product state of bond dimension
 at most $D$.\footnote{\leanid{TNLean.MPS.AreaLaw.norm_sequentialTruncation_leadingEigenprojection_sub_sq_le}
@@ -73,7 +73,7 @@ at most $D$.\footnote{\leanid{TNLean.MPS.AreaLaw.norm_sequentialTruncation_leadi
     in \doclink{TNLean/MPS/AreaLaw/SequentialTruncation}.}
 No normalization of $\Phi$ is asserted. The older estimate
 $\|\psi-\Phi\|_2\le\sum_k\sqrt{\epsilon_k(D)}$ is weaker than
-(\ref{eq:swv07_truncation_corrected}).
+(\ref{eq:swvc08_truncation_corrected}).
 This note resolves the missing square; the deduction of efficient
 approximation from a family of R\'enyi entropy bounds remains open in
 \ghissue{9855}.
