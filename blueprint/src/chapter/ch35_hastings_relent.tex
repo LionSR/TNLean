@@ -112,22 +112,22 @@ constant $C_2$ is $7$, as recorded in~\cite{gap:hastings07_relent_constants}.
     Theorem~\ref{thm:hastings_relent_projector} applies.
 \end{proof}
 
-\begin{theorem}[The entropy gain across a cut of a gapped chain, with Lemma~1
-        at the rate $\kappa\hat\xi$]
+\begin{theorem}[The entropy gain across a cut of a gapped chain]
     \label{thm:hastings_relent}
     \lean{TNLean.MPS.AreaLaw.Hastings.exists_relent_of_isGappedGroundState}
     \leanok
-    \uses{def:chain_model, def:hastings_bootstrap_remainder}
-    Let $R$ be a natural number and $\kappa>6$. There is a constant $K\ge0$,
-    depending only on $R$ and $\kappa$, with the following property. Let
-    $\Omega$ be a gapped ground vector, with gap $\Delta E>0$, of a
-    Hamiltonian on the chain of $L$ sites with local dimension $q$,
-    interaction range $R$ and term norms at most $J\ge0$. Let $\hat\xi$ be the
-    length of Theorem~\ref{thm:hastings_lemma1_polynomial_constant} in units
-    of the gap, $\xi'=\kappa\hat\xi$ and $C_1=K\hat\xi^3$. Let $c$ be a cut and
-    $l$ a natural number with $c+l\le L$, and let $A$ and $B$ be the $l$
-    sites before and after the cut, cut short at the left end of the chain
-    when $l>c$. If the entropy $S_c$ of the first $c$ sites satisfies
+    \uses{def:chain_model, def:hastings_bootstrap_remainder,
+        thm:hastings_lemma1_endpoint}
+    Let $R$ be a natural number. There is a constant $K\ge0$, depending only
+    on $R$, with the following property. Let $\Omega$ be a gapped ground
+    vector, with gap $\Delta E>0$, of a Hamiltonian on the chain of $L$ sites
+    with local dimension $q$, interaction range $R$ and term norms at most
+    $J\ge0$. Let $\tilde\xi$ be the length of
+    Theorem~\ref{thm:hastings_lemma1_endpoint}, $\xi'=6\tilde\xi$ and
+    $C_1=K\tilde\xi^3$. Let $c$ be a cut and $l$ a natural number with
+    $c+l\le L$, and let $A$ and $B$ be the $l$ sites before and after the cut,
+    cut short at the left end of the chain when $l>c$. If the entropy $S_c$
+    of the first $c$ sites satisfies
     \begin{align}
         S_c\ge\bigl(l+\xi'\ln C_1\bigr)\ln q+F(\xi',q),
     \end{align}
@@ -138,26 +138,28 @@ constant $C_2$ is $7$, as recorded in~\cite{gap:hastings07_relent_constants}.
     \end{align}
     This is eq.~(relent) of~\cite{Hastings2007AreaLaw}, lines 234--242,
     under the window assumption of line 483, with the constants
-    of~\cite{gap:hastings07_relent_constants}. The constant $C_1=K\hat\xi^3$
-    is polynomial in $\hat\xi$, as at lines 258--262. Lemma~1 is used at the
-    rate $\xi'=\kappa\hat\xi$ with $\kappa>6$ fixed and $K$ depending on
-    $\kappa$, rather than at $\xi'=6\xi$. The length $\hat\xi$ has the form of
-    the source's $\max(2v/\Delta E,\xi_C)$, but it comes from a Lieb--Robinson
+    of~\cite{gap:hastings07_relent_constants}. The rate is the printed
+    $\xi'=6\tilde\xi$ of lines 141--142, and $C_1=K\tilde\xi^3$ is polynomial in
+    $\tilde\xi$, as at lines 258--262. The length $\tilde\xi$ may stand in for
+    the source's $\xi$, because the source fixes $\xi=\max(2v/\Delta E,\xi_C)$
+    only through some Lieb--Robinson pair $(v,\xi_C)$ (lines 96--112), and
+    raising $v$ keeps a pair valid. It has the form of the
+    source's $\max(2v/\Delta E,\xi_C)$, but it comes from a Lieb--Robinson
     estimate on the chain whose prefactor grows with $J$ and whose second
-    operator acts on one site, and it is not proved equal to it for a pair
-    satisfying the bound of lines 96--112. These points are recorded
+    operator acts on one site, and it is not shown to arise from a pair
+    satisfying the bound of lines 96--112. This is recorded
     in~\cite{gap:hastings07_lemma1_decay_length,
         gap:hastings07_gaussian_average_exponent}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:hastings_relent_window, thm:hastings_lemma1_polynomial_constant,
+    \uses{thm:hastings_relent_window, thm:hastings_lemma1_endpoint,
         thm:hastings_factorization_mono, lem:chain_entropy_inequalities}
-    Theorem~\ref{thm:hastings_lemma1_polynomial_constant} gives $K_0\ge0$ such
-    that at every cut and every length $m$ there are operators $O_B$, $O_L$,
-    $O_R$ as in Theorem~\ref{thm:hastings_relent_window} with
-    $\|O_BO_LO_R-P_0\|\le K_0\hat\xi^3e^{-m/\xi'}$. Take $K=K_0+1$. Since
-    $\hat\xi\ge16$, the constant $C_1=K\hat\xi^3$ is at least $1$, and the same
-    operators satisfy the bound with $C_1$ in place of $K_0\hat\xi^3$. For
+    Theorem~\ref{thm:hastings_lemma1_endpoint} gives $K_0\ge0$ such that at
+    every cut and every length $m$ there are operators $O_B$, $O_L$, $O_R$ as
+    in Theorem~\ref{thm:hastings_relent_window} with
+    $\|O_BO_LO_R-P_0\|\le K_0\tilde\xi^3e^{-m/(6\tilde\xi)}$. Take $K=K_0+1$. Since
+    $\tilde\xi\ge8$, the constant $C_1=K\tilde\xi^3$ is at least $1$, and the same
+    operators satisfy the bound with $C_1$ in place of $K_0\tilde\xi^3$. For
     $q\ge2$ Theorem~\ref{thm:hastings_relent_window} gives the claim. For $q=1$
     the entropy $S_c$ vanishes while $F(\xi',1)=1+\ln(\xi'/2+1)>0$, so the
     window assumption cannot hold.
