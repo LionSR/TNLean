@@ -9014,3 +9014,13 @@ spectral split → block extraction → MPV calculation → strict bounds
   built on `Lattice.Sheet.birth_bounded`, `Real.rpow_neg_ofNat` and
   `Lattice.hasSourceBoundedChange_liftOne`. The stage births call it with an
   empty prefix and the scalar idle vector; the former private copy is removed.
+
+### Comparing vectors through one cut matrix — candidate (2026-10-23)
+
+- **Pattern:** Prove equality of chain vectors by applying injectivity of the
+  coefficient matrix at a fixed cut, then use a matrix multiplication identity.
+- **Seen:** The left-supported and right-supported product replacements in
+  `MPS/AreaLaw/ProductReplacement.lean` (two occurrences in one file).
+- **Abstraction:** Both use the local `cutMatrix_injective` helper. The common
+  step is a coordinate equivalence; no new tactic is needed. A further use in
+  another file would justify making the injectivity lemma public.

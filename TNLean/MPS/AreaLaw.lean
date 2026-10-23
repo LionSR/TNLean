@@ -34,6 +34,7 @@ import TNLean.MPS.AreaLaw.MPSApproximation
 import TNLean.MPS.AreaLaw.OpenMPS
 import TNLean.MPS.AreaLaw.OpenMPSRank
 import TNLean.MPS.AreaLaw.PartialSwap
+import TNLean.MPS.AreaLaw.ProductReplacement
 import TNLean.MPS.AreaLaw.ProtocolConditionalPreparation
 import TNLean.MPS.AreaLaw.ProtocolCutCoordinates
 import TNLean.MPS.AreaLaw.ProtocolInitialization

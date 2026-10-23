@@ -1,0 +1,71 @@
+\section{Product replacement at a cut}
+
+The product replacement argument of~\cite{Schuch2008EntropyScaling}
+(arXiv:0705.0292v2, lines 436--470) can be expressed directly in terms of
+coefficient spaces and cut ranks.
+
+\begin{lemma}[Product replacement does not increase cut ranks]
+    \label{lem:chain_product_replacement_ranks}
+    \lean{TNLean.MPS.AreaLaw.rank_cutMatrix_le_of_product_mem_ranges}
+    \leanok
+    \uses{def:chain_open_mps}
+    Let $\psi,\chi$ be vectors on $L$ sites of local dimension $q$, and
+    write $C=M_k(\psi)$ for the coefficient matrix at a cut $k$.
+    Suppose $u\in\operatorname{range}C$, $v\in\operatorname{range}C^{\mathsf T}$,
+    and $M_k(\chi)=uv^{\mathsf T}$. Then
+    $\operatorname{rank}M_j(\chi)\le\operatorname{rank}M_j(\psi)$ at every cut $j$.
+    No nonvanishing or normalization is required.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:hastings_supported_cut_rank}
+    Choose $w,z$ with $Cw=u$ and $C^{\mathsf T}z=v$. The identities
+    \begin{align}
+        \label{eq:chain_product_replacement_local_maps}
+        (uz^{\mathsf T})C=uv^{\mathsf T}
+        =C(vw^{\mathsf T})^{\mathsf T}
+    \end{align}
+    express $\chi$ both as a left-local and as a right-local linear image of
+    $\psi$. For $j\le k$, use the right-local image; for $j>k$, use the
+    left-local image. The corresponding operator acts on only one side of
+    cut $j$, so cannot increase its rank. If there are no configurations,
+    both vectors vanish and the assertion is immediate.
+\end{proof}
+
+\begin{corollary}[Preservation of the bond bound]
+    \label{cor:chain_product_replacement_mps}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.of_product_mem_cut_ranges}
+    \leanok
+    \uses{lem:chain_product_replacement_ranks,def:chain_open_mps}
+    Under the hypotheses of Lemma~\ref{lem:chain_product_replacement_ranks},
+    if $\psi$ is an open-boundary MPS of bond dimension at most $D$, then
+    so is $\chi$. This includes $D=0$ and empty or one-site chains.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{lem:chain_product_replacement_ranks,thm:chain_cut_rank_of_mps}
+    Each internal cut rank of $\chi$ is at most the corresponding rank of
+    $\psi$, hence at most $D$. Apply the cut-rank characterization.
+\end{proof}
+
+\begin{theorem}[Normalized product replacement]
+    \label{thm:chain_normalized_product_replacement}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.exists_product_overlap_ge}
+    \leanok
+    \uses{def:chain_open_mps}
+    Let $\psi$ be a unit open-boundary MPS of bond dimension at most $D$.
+    At any cut $k$, let $a,b$ be arbitrary target vectors on the two sides.
+    There are unit vectors $u,v$ and a unit open-boundary MPS $\chi$ of
+    bond dimension at most $D$ such that $M_k(\chi)=uv^{\mathsf T}$,
+    $\operatorname{rank}M_j(\chi)\le\operatorname{rank}M_j(\psi)$ for every $j$, and
+    $|\langle a\otimes b,\psi\rangle|
+        \le |\langle a,u\rangle|\,|\langle b,v\rangle|$.
+    The inner product on the left is taken in cut coordinates.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{cor:chain_product_replacement_mps}
+    The product-overlap theorem in~\cite{QICLean2026Blueprint} gives unit
+    $u\in\operatorname{range}M_k(\psi)$ and
+    $v\in\operatorname{range}M_k(\psi)^{\mathsf T}$ with the stated overlap
+    bound. Transport $u\otimes v$ back to the chain coordinates to define
+    $\chi$. This transport preserves norms, so $\|\chi\|=\|u\|\,\|v\|=1$.
+    Corollary~\ref{cor:chain_product_replacement_mps} preserves the bond bound.
+\end{proof}
