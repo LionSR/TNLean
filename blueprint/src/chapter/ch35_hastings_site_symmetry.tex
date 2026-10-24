@@ -42,7 +42,8 @@ $g\cdot x=x\circ g^{-1}$, and $P_g$ is the permutation matrix of this move.
     \leanok
     \uses{def:hastings_site_permutation}
     An operator $H$ is invariant under the action of $G$ when $P_gH=HP_g$ for every
-    $g\in G$, equivalently $P_gHP_g^\dagger=H$.
+    $g\in G$. In particular, $H$ is invariant if $P_gHP_g^\dagger=H$ for every
+    $g\in G$.
 \end{definition}
 
 \begin{theorem}[Sums of translated terms]
@@ -56,6 +57,7 @@ $g\cdot x=x\circ g^{-1}$, and $P_g$ is the permutation matrix of this move.
     translates is invariant.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{def:hastings_site_permutation}
     Conjugating by $P_g$ sends $h_k$ to $h_{g\cdot k}$, and $k\mapsto g\cdot k$
     permutes $K$. For the translates, take $K=G$ acting on itself by left
     multiplication.
@@ -72,6 +74,7 @@ $g\cdot x=x\circ g^{-1}$, and $P_g$ is the permutation matrix of this move.
     operator of $P_gWP_g^\dagger$ is therefore $P_g\widetilde WP_g^\dagger$.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{def:hastings_site_permutation}
     $e^{iUHU^\dagger t}=Ue^{iHt}U^\dagger$, so the integrand of the filter is
     conjugated by $U$ at every time, and conjugation by $U$ commutes with the
     integral.

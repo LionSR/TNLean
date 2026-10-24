@@ -203,12 +203,6 @@ theorem embedOp_rectKronecker {e : κ → ι} (he : Function.Injective e)
   simp only [h1, h2, Function.comp_apply]
   split_ifs <;> simp
 
-/-- The chain form of `embedOp_rectKronecker`, for sites `Fin m` placed among `Fin n`. -/
-theorem embedOp_finKronecker {m n : ℕ} {e : Fin m → Fin n} (he : Function.Injective e)
-    (A : Fin m → Matrix (Fin d) (Fin d) ℂ) :
-    embedOp e (finKronecker A) = finKronecker (Function.extend e A 1) :=
-  embedOp_rectKronecker he A
-
 omit [DecidableEq ι] in
 /-- Every operator acts on the set of all sites. -/
 theorem mem_supportedOperators_univ (X : Matrix (ι → Fin d) (ι → Fin d) ℂ) :
@@ -303,14 +297,6 @@ def inputCfg (hd : 0 < d) {r : ℕ} (n : ℕ) (w : Fin r → Fin d) : Fin n → 
 theorem inputCfg_self (hd : 0 < d) {r : ℕ} (w : Fin r → Fin d) : inputCfg hd r w = w := by
   funext i
   simp only [inputCfg, Nat.sub_self, zero_le, dite_true, Nat.sub_zero]
-
-theorem inputCfg_injective (hd : 0 < d) {r n : ℕ} (hr : r ≤ n) :
-    Function.Injective (inputCfg (d := d) hd (r := r) n) := by
-  intro w w' h
-  funext j
-  have := congrFun h ⟨n - r + j.val, by omega⟩
-  simp only [inputCfg, show n - r ≤ n - r + j.val by omega, dite_true] at this
-  convert this using 2 <;> ext <;> simp
 
 /-! ### Sums over extensions by zero -/
 

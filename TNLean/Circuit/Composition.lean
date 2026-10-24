@@ -176,11 +176,6 @@ theorem isBondCircuitOfDepth (h : IsBondCircuitOn bond R T U) :
   obtain ⟨Ls, hl, -, rfl⟩ := h
   exact ⟨Ls, hl, rfl⟩
 
-theorem mem_supportedOperators (h : IsBondCircuitOn bond R T U) :
-    U ∈ supportedOperators d R := by
-  obtain ⟨Ls, -, hR, rfl⟩ := h
-  exact circuitOp_mem_supportedOperators Ls hR
-
 theorem mem_unitary (h : IsBondCircuitOn bond R T U) : U ∈ unitary
     (Matrix (ι → Fin d) (ι → Fin d) ℂ) := by
   obtain ⟨Ls, -, -, rfl⟩ := h
