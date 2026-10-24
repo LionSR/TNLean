@@ -168,7 +168,7 @@
     \leanok
     \uses{thm:hastings_schmidt_tail_constraint}
     Let $\Omega$ be a unit vector on a chain of $L$ sites with local
-    dimension $D>1$, and let $\xi'>0$. Suppose that the approximate
+    dimension $D\ge1$, and let $\xi'>0$. Suppose that the approximate
     factorization of Theorem~\ref{thm:hastings_schmidt_tail_constraint} holds
     at every internal cut $j$, and that the natural number $k_0$ satisfies
     $k_0\ge\exp(2S_j)/2$ for the entropy $S_j$ of the first $j$ sites at
@@ -176,7 +176,10 @@
     truncating every cut onto the $k'$ leading eigenvectors of its left
     marginal gives an open-boundary matrix product state $\Phi$ of bond
     dimension at most $k'$, without requiring $\Phi$ to be normalized.
-    For $L<2$, there is no internal cut and $\Phi=\Omega$. For $L\ge2$, the
+    For $L<2$, there is no internal cut and $\Phi=\Omega$. For $D=1$ every
+    left marginal is a $1\times1$ matrix of trace one, the truncation is
+    exact and again $\Phi=\Omega$, so the bound below holds although
+    $\log D=0$; the source assumes $D\ge2$. For $L\ge2$, the
     entropy hypothesis implies $k_0>0$, and
     \begin{align}
         \lVert\Phi-\Omega\rVert^2
@@ -237,7 +240,7 @@
     \leanok
     \uses{thm:hastings_area_law_from_factorization}
     Let $\Omega$ be a gapped ground vector of a finite-range Hamiltonian on a
-    chain of $L$ sites with local dimension $D>1$, and suppose that Lemma~1
+    chain of $L$ sites with local dimension $D\ge1$, and suppose that Lemma~1
     of \cite{Hastings2007AreaLaw} holds around $\Omega$ with constants
     $\xi'>0$ and $C_1\ge1$, as in
     Theorem~\ref{thm:hastings_area_law_from_factorization}. Let $S_{\max}$ be
@@ -283,7 +286,7 @@
     $\Delta E>0$ be a gap, let $\zeta$ be the decay length of Lemma~1 obtained
     by raising the Lieb--Robinson velocity by a factor $\tfrac54$, and put
     $\xi'=6\zeta$ and $C_1=\max(K\zeta^3,1)$. For every chain of $L$ sites
-    with local dimension $D>1$ and every gapped ground vector $\Omega$ of a
+    with local dimension $D\ge1$ and every gapped ground vector $\Omega$ of a
     Hamiltonian of range $R$, strength $J$ and gap $\Delta E$, with
     $k_0=\lceil\exp(2S_{\max})/2\rceil$ for the bound $S_{\max}$ of the area
     law at the same $\xi'$ and $C_1$, as in Theorem~\ref{thm:hastings_area_law},
@@ -331,7 +334,7 @@
     the interaction terms, let $\Delta E>0$ be a gap, let $\hat\xi$ be the
     decay length of Lemma~1 in units of the gap, and put $\xi'=\kappa\hat\xi$
     and $C_1=\max(K\hat\xi^3,1)$. For every chain of $L$ sites with local
-    dimension $D>1$ and every gapped ground vector $\Omega$ of a Hamiltonian
+    dimension $D\ge1$ and every gapped ground vector $\Omega$ of a Hamiltonian
     of range $R$, strength $J$ and gap $\Delta E$, with
     $k_0=\lceil\exp(2S_{\max})/2\rceil$ for the bound $S_{\max}$ of the area
     law, truncating every cut onto the $k'$ leading eigenvectors of its left
