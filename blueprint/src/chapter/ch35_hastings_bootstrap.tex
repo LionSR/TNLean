@@ -207,11 +207,39 @@ of a gapped chain combines them with the factorization of
     as in \cite[Lemma~2]{Hastings2007AreaLaw}, lines 304--309.
 \end{definition}
 
+\begin{theorem}[The Schmidt tail from overlaps with mixtures of bounded Schmidt rank]
+    \label{thm:hastings_bootstrap_schmidt_tail}
+    \lean{TNLean.MPS.AreaLaw.Hastings.exists_eigenvalues₀_tail_le_of_schmidtRank_mixtures,
+        TNLean.MPS.AreaLaw.Hastings.eigenvalues₀_nonneg_and_sum_eq_one}
+    \leanok
+    Let $\Psi$ be a unit bipartite vector with reduced density matrix
+    $\rho_\Psi$, let $k$ and $D$ be natural numbers, and let $\xi'>0$ and
+    $c\ge1$. Suppose that at every scale $s$
+    with $ce^{-2s/\xi'}<1$ some mixture of states of Schmidt rank at most
+    $kD^{2s}$, of positive total weight, has normalized overlap with $\Psi$ at
+    least $1-ce^{-2s/\xi'}$. Then the eigenvalues $p_1\ge p_2\ge\dots$ of
+    $\rho_\Psi$ form a probability vector, and there is a natural number $m'$
+    with $m'<\tfrac{\xi'}{2}\ln c+1$ such that for every $n\ge0$
+    \begin{align}
+        \sum_{a>kD^{2(m'+1+n)}}p_a\le e^{-2(n+1)/\xi'}.
+    \end{align}
+    These are equations \texttt{constraint} and \texttt{constraint2} in the
+    proof of \cite[Lemma~2]{Hastings2007AreaLaw}, lines 333--356.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_mixture_tail, thm:hastings_schmidt_overlap_tail}
+    Since $\rho_\Psi=C_\Psi C_\Psi^\dagger$ is positive semidefinite with
+    $\operatorname{tr}\rho_\Psi=\lVert\Psi\rVert^2=1$, its eigenvalues are
+    nonnegative and, by Theorem~\ref{thm:hastings_schmidt_overlap_tail} with no
+    eigenvalue removed, sum to $1$. At each such scale Theorem~\ref{thm:hastings_mixture_tail} bounds the mass of the Schmidt coefficients beyond the first
+    $kD^{2s}$ by $ce^{-2s/\xi'}$, which is equation \texttt{constraint}. Let $m'$ be the least
+    natural number with $ce^{-2m'/\xi'}\le1$; then $2m'<\xi'\ln c+2$, and the
+    scale $m'+1+n$ satisfies $ce^{-2(m'+1+n)/\xi'}\le e^{-2(n+1)/\xi'}<1$.
+\end{proof}
+
 \begin{theorem}[Entropy from overlaps with mixtures of bounded Schmidt rank]
     \label{thm:hastings_bootstrap_stage}
-    \lean{TNLean.MPS.AreaLaw.Hastings.vonNeumannEntropy_le_of_schmidtRank_mixtures,
-        TNLean.MPS.AreaLaw.Hastings.eigenvalues₀_nonneg_and_sum_eq_one,
-        TNLean.MPS.AreaLaw.Hastings.exists_eigenvalues₀_tail_le_of_schmidtRank_mixtures}
+    \lean{TNLean.MPS.AreaLaw.Hastings.vonNeumannEntropy_le_of_schmidtRank_mixtures}
     \leanok
     \uses{def:hastings_bootstrap_remainder}
     Let $\Psi$ be a unit bipartite vector with reduced density matrix
@@ -227,12 +255,13 @@ of a gapped chain combines them with the factorization of
     is equation \texttt{bootstrap}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:hastings_geometric_tail_entropy, thm:hastings_mixture_tail,
-        thm:hastings_schmidt_overlap_tail}
-    At each such scale Theorem~\ref{thm:hastings_mixture_tail} bounds the mass of the Schmidt coefficients beyond the first
-    $kD^{2s}$ by $ce^{-2s/\xi'}$, which is equation \texttt{constraint}. Let $m'$ be the least
-    natural number with $ce^{-2m'/\xi'}\le1$, so that $2m'+2\le\xi'\ln c+4$. The
-    constraints at the scales $m'+1+n$ are the hypotheses of the second form of
+    \uses{thm:hastings_geometric_tail_entropy, thm:hastings_schmidt_overlap_tail,
+        thm:hastings_bootstrap_schmidt_tail}
+    By Theorem~\ref{thm:hastings_schmidt_overlap_tail} the entropy of
+    $\rho_\Psi$ is the entropy of its eigenvalues.
+    Theorem~\ref{thm:hastings_bootstrap_schmidt_tail} gives the scale $m'$, with
+    $2m'+2\le\xi'\ln c+4$, and the constraints at the scales $m'+1+n$. These are
+    the hypotheses of the second form of
     Theorem~\ref{thm:hastings_geometric_tail_entropy}.
 \end{proof}
 
@@ -354,36 +383,80 @@ of a gapped chain combines them with the factorization of
     Theorem~\ref{thm:hastings_bootstrap_scale}.
 \end{proof}
 
-\begin{lemma}[The bootstrap lemma]
-    \label{lem:hastings_bootstrap}
-    \uses{def:chain_model, def:hastings_bootstrap_remainder}
-    Let $\rho$ be a density matrix of unit trace that is a mixture of pure
-    states of Schmidt rank at most $k$ across the cut between sites $j$ and
-    $j+1$, with $\langle\Psi_0,\rho\Psi_0\rangle=P>0$,
-    where $\Psi_0$ is the unique ground state of a Hamiltonian with
-    finite-range interactions of bounded strength and a spectral gap
-    $\Delta E>0$ above the ground energy. Then
+\begin{theorem}[The bootstrap bound from the factorization at one cut]
+    \label{thm:hastings_bootstrap_factorization_at}
+    \lean{TNLean.MPS.AreaLaw.Hastings.entropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt}
+    \leanok
+    \uses{def:hastings_factorization_at, def:hastings_bootstrap_remainder}
+    Let $\Omega$ be a unit vector on the chain of $L$ sites with local
+    dimension $q\ge2$, let $j$ be a cut, and let $\xi'>0$ and $C_1\ge1$.
+    Suppose that at the cut $j$ and every length $m$ there is an approximate
+    factorization of $|\Omega\rangle\langle\Omega|$ with error
+    $C_1e^{-m/\xi'}$. Then the conclusion of
+    Theorem~\ref{thm:hastings_bootstrap_chain_stage} holds for every mixture
+    as there.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_bootstrap_chain_stage, thm:hastings_factorization_bootstrap_form}
+    An approximate factorization at the cut $j$ and length $m$ has $O_B$
+    supported on the sites $j-m,\dots,j+m-1$, hence on the first $j+m$
+    sites, so it supplies the hypothesis of
+    Theorem~\ref{thm:hastings_bootstrap_chain_stage}.
+\end{proof}
+
+\begin{theorem}[The bootstrap lemma]
+    \label{thm:hastings_bootstrap}
+    \lean{TNLean.MPS.AreaLaw.exists_entropy_le_of_overlap_schmidtRank_mixture}
+    \leanok
+    \uses{def:chain_model, def:hastings_bootstrap_remainder,
+        thm:hastings_lemma1_endpoint}
+    Let $R$ be a range. There is a constant $K\ge1$, depending only on $R$,
+    with the following property. Let $H$ be a Hamiltonian on a chain of $L$
+    sites with local dimension $D$, a sum of terms of range $R$ and norm at
+    most $J\ge0$, whose ground state $\Psi_0$ is unique with gap $\Delta E>0$
+    above the ground energy. Let $\tilde\xi$ be the length of
+    Theorem~\ref{thm:hastings_lemma1_endpoint}, and set $\xi'=6\tilde\xi$ and
+    $C_1=K\tilde\xi^3$. Let $\rho$
+    be a density matrix of unit trace that is a mixture of pure states of
+    Schmidt rank at most $k\ge1$ across the cut between sites $j$ and $j+1$, with
+    $\langle\Psi_0,\rho\Psi_0\rangle=P>0$. (The case $k=0$ is vacuous: a vector
+    of Schmidt rank zero vanishes, and then $P=0$.) Then
     \begin{align}
-        S(\rho^0_{1,j})\le\ln k+\xi'\ln\bigl(2C_1(\xi)^2/P\bigr)\ln D+F(\xi',D).
+        S(\rho^0_{1,j})\le\ln k+\xi'\ln\bigl(2C_1^2/P\bigr)\ln D+F(\xi',D),
     \end{align}
-    Here $\rho^0_{1,j}$ is the reduced density matrix of
-    $|\Psi_0\rangle\langle\Psi_0|$ on sites $1,\dots,j$, $D\ge2$ is the local
-    dimension, $\xi=\max(2v/\Delta E,\xi_C)$ as in
-    \cite[lines 126--142]{Hastings2007AreaLaw}, and $\xi'>0$ and
-    $C_1(\xi)\ge1$ are a decay length and a constant for which the
-    approximate factorization
-    $\|O_B(j,m)O_L(j,m)O_R(j,m)-P_0\|\le C_1(\xi)e^{-m/\xi'}$ of
-    \cite[Lemma~1]{Hastings2007AreaLaw} holds; the source takes $\xi'=6\xi$,
-    and the lemma uses $\xi'$ only through this estimate. Enlarging
-    $C_1(\xi)$ keeps the estimate true, so $C_1(\xi)\ge1$ costs nothing. This is
-    \cite[Lemma~2]{Hastings2007AreaLaw}, lines 280--311.
-\end{lemma}
-\begin{proof}
-    \uses{thm:hastings_bootstrap_chain_stage}
-    The approximate factorization of the ground-state projector of
-    \cite[Lemma~1]{Hastings2007AreaLaw} supplies the operators
-    $O_B(j,m)$, $O_L(j,m)$, $O_R(j,m)$ with the supports and the estimate
-    required by Theorem~\ref{thm:hastings_bootstrap_chain_stage}, applied with
-    $\Omega=\Psi_0$, $q=D$, $C_1=C_1(\xi)$ and the pure states of the mixture
-    $\rho$. That theorem gives the bound.
+    where $\rho^0_{1,j}$ is the reduced density matrix of
+    $|\Psi_0\rangle\langle\Psi_0|$ on sites $1,\dots,j$. This is a quantitatively restricted form of
+    \cite[Lemma~2]{Hastings2007AreaLaw}, lines 280--311, at the printed rate
+    $\xi'=6\xi$ for the length $\xi=\tilde\xi$. The length $\tilde\xi$ may
+    stand in for the source's $\xi$: the source fixes
+    $\xi=\max(2v/\Delta E,\xi_C)$ only through some Lieb--Robinson pair, and a
+    bound valid for $|t|\le l/v$ stays valid for a larger velocity
+    \cite[lines 96--112]{Hastings2007AreaLaw}, so raising the velocity of the
+    chain estimate is a legitimate choice
+    \cite{gap:hastings07_lemma1_decay_length}. The constant $C_1$ is bounded
+    by a polynomial in the length, as the source requires, and is uniform in
+    the chain length, local dimension, Hamiltonian, ground state, cut and
+    mixture. The result inherits the remaining restriction of the formalized
+    Lemma~1: the length $\tilde\xi$ comes from the chain Lieb--Robinson
+    estimate with its velocity raised by $5/4$. That estimate is linear in the
+    size of the support, as in the source, but its prefactor grows with $J$
+    and its second operator acts on one site, so $\tilde\xi$ is not shown to
+    be the source's $\max(2v/\Delta E,\xi_C)$ for a Lieb--Robinson pair in the
+    source's sense
+    \cite{gap:hastings07_lemma1_decay_length,
+        gap:hastings07_gaussian_average_exponent}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_lemma1_endpoint,
+        thm:hastings_bootstrap_factorization_at, thm:hastings_factorization_mono,
+        lem:chain_entropy_inequalities}
+    Theorem~\ref{thm:hastings_lemma1_endpoint} gives a constant $K_0\ge0$
+    depending only on $R$ and an approximate factorization of the
+    ground-state projector with error $K_0\tilde\xi^3e^{-m/(6\tilde\xi)}$ at
+    every cut and length; it also holds with $K=\max(K_0,1)$, and then
+    $C_1=K\tilde\xi^3\ge1$ since $\tilde\xi\ge20$.
+    For $D\ge2$,
+    Theorem~\ref{thm:hastings_bootstrap_factorization_at} gives the bound.
+    For $D=1$ the entropy vanishes, while the right side is nonnegative,
+    with the convention $\ln0=0$ in the term $\ln(D^2-1)$ of $F(\xi',D)$.
 \end{proof}
