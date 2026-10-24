@@ -21,12 +21,6 @@ open Module
 
 variable {d D : ℕ}
 
-namespace RectSpanGrowth
-
-variable (A : MPSTensor d D) (i₀ : Fin d)
-
-end RectSpanGrowth
-
 /-- Under normality, some rectangular span equals the full range of left
 multiplication. -/
 theorem exists_rectSpan_eq_range_of_isNormal
