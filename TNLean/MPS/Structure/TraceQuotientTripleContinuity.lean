@@ -53,15 +53,14 @@ theorem continuous_traceQuotientTripleColumns
     (hLC (F *ᵥ Pi.single ab.2 1))).matrix_mul
       ((continuous_apply j).comp hB) |>.matrix_trace
 
-
 private theorem rank_traceGram_of_pair {d D : ℕ} (A : MPSTensor d D)
     (hA : Kraus.IsInjective A) (G : Matrix (Fin d) (Fin d) ℂ)
     (α₂ : ℂ) (hα₂ : α₂ ≠ 0)
     (hG : ∀ j i, G j i = α₂ * Matrix.trace (A i * A j)) :
     G.rank = D * D := by
   have hMap : G.mulVecLin =
-      α₂ • (MPSTensor.traceMulRightPi A).comp (Fintype.linearCombination ℂ A) := by
-    exact LinearMap.ext fun x => by
+      α₂ • (MPSTensor.traceMulRightPi A).comp (Fintype.linearCombination ℂ A) :=
+    LinearMap.ext fun x => by
       simpa only [Matrix.mul_one, Matrix.one_mulVec, Matrix.coe_mulVecLin, LinearMap.comp_apply,
         LinearMap.smul_apply] using traceQuotientSection_pair A G
         (1 : Matrix (Fin d) (Fin d) ℂ) α₂ hG x

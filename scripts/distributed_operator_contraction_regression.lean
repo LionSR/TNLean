@@ -9,8 +9,8 @@ parallel star/sample links. No actual circuit expansion is assumed.
 -/
 
 open scoped BigOperators
-open TNLean.PEPS TNLean.PEPS.Approximation
-open TNLean.PEPS.Approximation.DistributedOperatorContraction
+open TNLean.Lattice TNLean.Lattice.Compression
+open TNLean.Lattice.Compression.DistributedOperatorContraction
 
 noncomputable section
 

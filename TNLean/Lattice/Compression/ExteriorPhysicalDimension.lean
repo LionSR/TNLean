@@ -25,7 +25,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 open TNLean.Lattice.PartyCircuit
 variable {P : Type} [Fintype P] [DecidableEq P]
 
@@ -62,4 +62,4 @@ theorem finrank_exteriorFamilyPhysicalLayout (d : P → ℕ) (ps : List P)
   simpa only [Fintype.card_pi, Fintype.card_fin, Finset.prod_coe_sort] using
     Module.finrank_eq_card_basis (exteriorFamilyPhysicalBasis d ps hps hcover A).toBasis
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

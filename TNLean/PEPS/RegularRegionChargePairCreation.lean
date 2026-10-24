@@ -394,8 +394,8 @@ theorem regularRegionChargeReferenceMatrix_mulVec_braided
     rfl
   have hinit (α : RegionHalfEdgeConfig (Γ := Γ) G R) :
       col 1 α = regularProjectorChargePairOpenRegionMatrix R e₀ e₁
-        σ.character p α θ := by
-    exact initial_weighted_column R e₀ e₁ σ.character p α θ
+        σ.character p α θ :=
+    initial_weighted_column R e₀ e₁ σ.character p α θ
   funext α
   have hentry (s : G × G) (b : Rest (G := G) R T o e₀ e₁ hne) :
       regularRegionChargeReferenceMatrix R T hT htree o e₀ e₁ hne D α

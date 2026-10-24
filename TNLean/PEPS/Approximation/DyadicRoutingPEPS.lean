@@ -54,6 +54,7 @@ an arbitrary party network; they are verified for the compressed protocol networ
 noncomputable section
 
 namespace TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 
 open Finset
 

@@ -39,7 +39,7 @@ These proofs are newly written from the paper's mathematical argument. No OpenAI
 Lean code is copied or adapted.
 -/
 
-namespace TNLean.PEPS.Approximation
+namespace TNLean.Lattice.Compression
 
 variable {Party Gate Position : Type*} [DecidableEq Party] [DecidableEq Gate]
 
@@ -167,4 +167,4 @@ theorem disjoint_participants_of_not_mem_gatesTouching (gates : Finset Gate)
   intro p hpg hpA
   exact hnot ((mem_gatesTouching _ _ _ _).2 ⟨hg, p, hpA, hpg⟩)
 
-end TNLean.PEPS.Approximation
+end TNLean.Lattice.Compression

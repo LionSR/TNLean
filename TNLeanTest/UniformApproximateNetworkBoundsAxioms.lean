@@ -15,8 +15,8 @@ open TNLean.Lattice.PartyCircuit.EffectCircuit
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
-  for decl in #[``TNLean.PEPS.Approximation.sampledNetworkPrefactor_pos,
-      ``TNLean.PEPS.Approximation.sampledNetworkExponent_pos,
+  for decl in #[``TNLean.Lattice.Compression.sampledNetworkPrefactor_pos,
+      ``TNLean.Lattice.Compression.sampledNetworkExponent_pos,
       ``uniform_sampled_approximate_network_bounds_of_le,
       ``exists_uniform_sampled_approximate_network_bounds] do
     unless env.contains decl do

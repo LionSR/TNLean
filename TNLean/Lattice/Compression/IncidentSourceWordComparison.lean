@@ -23,7 +23,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
 
 noncomputable section
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
 private theorem restrict_partialResidual_eval_heq (A : P → Bool) {a b : Layout P}
