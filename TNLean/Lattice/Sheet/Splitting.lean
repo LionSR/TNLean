@@ -22,7 +22,8 @@ depends on a geometry of the sites.
   coordinates `TNLean.Lattice.sheetSplit`, in which an operator on `S` is `A' ⊗ 1` and an
   operator on a set disjoint from `S` is `1 ⊗ A'`.
 * An operator acting on `T ∪ E` is `A' ⊗ 1_U` in these coordinates, and an operator on a subset
-  of `E` is `(1_T ⊗ A') ⊗ 1_U`.
+  of `E` is `(1_T ⊗ A') ⊗ 1_U`. An operator supported disjointly from `T` is
+  `1_T ⊗ V` after reassociating these same coordinates.
 * `Sheet.one_kronecker_mul_stack`: the operator `1 ⊗ B` passes through a tagged stack
   `∑_t |t⟩ ⊗ S_t` whenever `B` commutes with every `S_t`.
 * `Sheet.exists_sheetSplitting`: Lemma 6.4 `lem:splitting` for the regional mutual
@@ -221,6 +222,43 @@ theorem exists_threeSplit_eq_one_kronecker_kronecker_one {T E : Finset ι} (h : 
   change _ = ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ _) ⊗ₖ
     (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ)
   simp only [hT, hU, rectKronecker_one]
+
+/-- An operator supported disjointly from T is `1_T ⊗ V` in the existing
+three-region coordinates. Empty regions and zero local dimension are included.
+
+Supporting tensor-partition algebra for AKLV, arXiv:1301.1162v1,
+Lemma 4.2 (`l:agsp`), lines 646–654, and ALVV, arXiv:1602.08828v2,
+`eq:H-mid-cut`, lines 810–821, and `prop:Cheby-AGSP-eff`, lines 1324–1332. -/
+theorem exists_threeSplit_eq_reindex_one_kronecker
+    {T E : Finset ι} (h : Disjoint T E) {D : Set ι}
+    (hD : Disjoint D (T : Set ι))
+    {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (hA : A ∈ supportedOperators q D) :
+    ∃ V : Matrix ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
+        ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ,
+      A.submatrix (threeSplit q T E h).symm (threeSplit q T E h).symm =
+        ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ V).reindex
+          (Equiv.prodAssoc (T → Fin q) (E → Fin q)
+            (↥(T ∪ E)ᶜ → Fin q)).symm
+          (Equiv.prodAssoc (T → Fin q) (E → Fin q)
+            (↥(T ∪ E)ᶜ → Fin q)).symm := by
+  obtain ⟨B, hB⟩ :=
+    TNLean.Lattice.exists_one_kronecker_of_mem_supportedOperators
+      (q := q) (S := T) hD hA
+  let c := FiniteProduct.complementUnionEquiv (fun _ : ι ↦ Fin q) T E h
+  refine ⟨B.submatrix c.symm c.symm, ?_⟩
+  ext ⟨⟨t, e⟩, u⟩ ⟨⟨t', e'⟩, u'⟩
+  change A
+      ((FiniteProduct.splitEquiv (fun _ : ι ↦ Fin q) (T ∪ E)).symm
+        ((FiniteProduct.unionEquiv (fun _ : ι ↦ Fin q) T E h).symm (t, e), u))
+      ((FiniteProduct.splitEquiv (fun _ : ι ↦ Fin q) (T ∪ E)).symm
+        ((FiniteProduct.unionEquiv (fun _ : ι ↦ Fin q) T E h).symm (t', e'), u')) =
+    (1 : Matrix (T → Fin q) (T → Fin q) ℂ) t t' *
+      B (c.symm (e, u)) (c.symm (e', u'))
+  rw [FiniteProduct.split_union_symm (fun _ : ι ↦ Fin q) T E h t e u,
+    FiniteProduct.split_union_symm (fun _ : ι ↦ Fin q) T E h t' e' u']
+  exact congrFun
+    (congrFun hB (t, c.symm (e, u))) (t', c.symm (e', u'))
 
 /-! ### The splitting consequence on a sheet -/
 
