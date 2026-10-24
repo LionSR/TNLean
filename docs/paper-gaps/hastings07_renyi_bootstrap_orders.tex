@@ -10,7 +10,7 @@
 \date{}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source statement}
 Hastings, \emph{An area law for one-dimensional quantum systems}~\cite{Hastings2007AreaLaw},
@@ -37,11 +37,11 @@ of $F(\xi',D)$.\footnote{\leanid{TNLean.MPS.AreaLaw.exists_renyiEntropy_le_of_ov
     in \doclink{TNLean/MPS/AreaLaw/Hastings/RenyiBootstrapLemma}.}
 Order $1$ is the von Neumann entropy, bounded by the formalized
 Lemma~2. Orders $\alpha>1$, for which
-(\ref{eq:hastings07_renyi_bootstrap_orders_conv}) always holds, are not covered:
-the power-sum estimate used for $0<\alpha<1$ rests on the concavity of
-$t\mapsto t^\alpha$, which fails for $\alpha>1$.
+(\ref{eq:hastings07_renyi_bootstrap_orders_conv}) always holds, are not covered
+by that estimate, which rests on the concavity of $t\mapsto t^\alpha$; they are
+treated below.
 
-\section{Elimination plan}
+\section{Resolution}
 For $\alpha>1$ the Rényi entropy is at most the von Neumann entropy. With $p_i$
 the eigenvalues of $\rho$ and the concavity of the logarithm,
 \begin{align}
@@ -49,10 +49,14 @@ the eigenvalues of $\rho$ and the concavity of the logarithm,
  \ge(\alpha-1)\sum_{p_i>0}p_i\ln p_i,
  \label{eq:hastings07_renyi_bootstrap_orders_jensen}
 \end{align}
-and dividing by $1-\alpha<0$ gives $S_\alpha(\rho)\le S(\rho)$. Formalizing
-(\ref{eq:hastings07_renyi_bootstrap_orders_jensen}) and applying it to the
-formalized Lemma~2 removes the restriction, with $F(\xi',D)$ itself as the
-function for every $\alpha>1$.
+and dividing by $1-\alpha<0$ gives $S_\alpha(\rho)\le S(\rho)$. Applied to the
+formalized Lemma~2, this covers every order $\alpha>1$, with $F(\xi',D)$ itself
+as the function replacing $F(\xi',D)$, so the restriction is removed.\footnote{%
+    \leanid{TNLean.MPS.AreaLaw.exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_of_one_lt}
+    in \doclink{TNLean/MPS/AreaLaw/Hastings/RenyiBootstrapLemma}; the inequality
+    (\ref{eq:hastings07_renyi_bootstrap_orders_jensen}) is
+    \leanid{Entropy.inv_one_sub_mul_log_sum_rpow_le_probabilityEntropy} in the
+    companion library QICLean.}
 \bibliographystyle{unsrt}
 \bibliography{references}
 \end{document}
