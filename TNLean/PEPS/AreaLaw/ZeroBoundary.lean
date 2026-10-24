@@ -202,8 +202,9 @@ theorem regionalEntropy_eq_zero_of_card_le_one (Ω : StateSpace Λ q) (hΩ : ‖
 /-- **Local dimension one** (area-law preprint, `01-preliminaries.tex`,
 line 116): for `q = 1` every regional entropy of every unit vector vanishes. -/
 theorem regionalEntropy_eq_zero_of_q_eq_one {Ω : StateSpace Λ 1} (hΩ : ‖Ω‖ = 1)
-    (A : Finset (Site Λ)) : regionalEntropy Λ 1 Ω A = 0 :=
-  regionalEntropy_eq_zero_of_card_le_one Ω hΩ A (by simp)
+    (A : Finset (Site Λ)) : regionalEntropy Λ 1 Ω A = 0 := by
+  rw [regionalEntropy_eq_regionEntropy]
+  exact TNLean.Lattice.regionEntropy_eq_zero_of_localDimension_one hΩ A
 
 /-- **Empty domain** (area-law preprint, `01-preliminaries.tex`, line 116): on
 the empty domain every regional entropy of every unit vector vanishes. -/

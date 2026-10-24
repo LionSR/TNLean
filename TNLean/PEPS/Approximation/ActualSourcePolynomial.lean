@@ -29,8 +29,8 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open MeasureTheory QICLean.ComplexGaussian
 open scoped Matrix ComplexConjugate NNReal
-namespace TNLean.PEPS.PairEffect.SourceCircuit
-open TNLean.PEPS.Approximation
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.Lattice.Compression
 
 open Classical in
 /-- The actual sampled physical operator has inverse-power accuracy with an
@@ -94,4 +94,4 @@ theorem exists_sourceSample_polynomial_error_le
     (L ^ q)⁻¹ hε hεone p₀ hp₀ hp₀s bIn bPhysical bDiscard
   exact ⟨lam, E, F, hframes, ω, hω.trans (div_le_div_of_nonneg_right hsmall (by norm_num))⟩
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

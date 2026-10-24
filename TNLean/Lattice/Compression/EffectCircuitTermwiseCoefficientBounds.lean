@@ -20,7 +20,7 @@ lines 143–149, 199–208 and 590–600.
 
 noncomputable section
 open scoped NNReal
-namespace TNLean.PEPS.PairEffect.EffectCircuit
+namespace TNLean.Lattice.PartyCircuit.EffectCircuit
 variable {P : Type}
 
 /-- Every monomial in each prescribed nonprivate gate list contains at most
@@ -111,4 +111,4 @@ theorem exists_one_le_isExpansionBounded_of_termwise_power_bounds
     hKbound).mono le_rfl
     (mul_le_mul_of_nonneg_right (le_add_of_nonneg_left zero_le_one) (by positivity))
 
-end TNLean.PEPS.PairEffect.EffectCircuit
+end TNLean.Lattice.PartyCircuit.EffectCircuit

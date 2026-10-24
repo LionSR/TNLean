@@ -33,7 +33,7 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 
 noncomputable section
 open scoped TensorProduct Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 /-- The exact rank-one source operator at an original occurrence and local label pair.
@@ -147,4 +147,4 @@ theorem sourceReplacedDensity_sub_exact {m n : Type} [Fintype m] [Fintype n]
   simp only [Finset.piecewise, hm, ite_apply]
   rfl
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

@@ -26,7 +26,7 @@ reused.
 noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
 /-- A chronological composition with source-prepared nonprivate gates.
@@ -159,4 +159,4 @@ def coefficient (A : P → Bool) : {a b : Layout P} → (w : SourceCircuit a b) 
   | _, _, .frame _ w, ξ => coefficient A w ξ
 
 end SourceCircuit
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

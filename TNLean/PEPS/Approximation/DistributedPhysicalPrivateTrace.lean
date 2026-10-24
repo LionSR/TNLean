@@ -19,7 +19,8 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 
 noncomputable section
 open scoped Matrix
-namespace TNLean.PEPS.PairEffect.DistributedConstruction
+namespace TNLean.Lattice.PartyCircuit.DistributedConstruction
+open TNLean.Lattice.PartyCircuit
 variable {P : Type} [Fintype P] [DecidableEq P]
 variable {E : Option {_p : P // true = true} → Type} [∀ q, Fintype (E q)]
 
@@ -66,4 +67,4 @@ theorem physicalDensity_eq_grouped_partialTrace
   rw [hDensity]
   simpa only [Matrix.euclideanOuterProduct, Pi.star_def, starRingEnd_apply] using h
 
-end TNLean.PEPS.PairEffect.DistributedConstruction
+end TNLean.Lattice.PartyCircuit.DistributedConstruction

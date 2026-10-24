@@ -23,19 +23,19 @@ the encoded frames, whose holes lie in `E`, are treated in
 
 ## Main definitions
 
-* `EncodedFrame.pairSource`: the map inserting the normalized vector `s` on `T × B_T`.
-* `EncodedFrame.birthKernel`, `EncodedFrame.birthEffect`: the map `⟨s| (1_T ⊗ V)` on the
+* `Sheet.pairSource`: the map inserting the normalized vector `s` on `T × B_T`.
+* `Sheet.birthKernel`, `Sheet.birthEffect`: the map `⟨s| (1_T ⊗ V)` on the
   registers of `T ∪ U`, and its extension by the identity on `E`.
-* `EncodedFrame.birthOp`: the canonical map `B` (`eq:birth-map`).
-* `EncodedFrame.sheetBirthOp`: the canonical map of splitting data on the raw registers of a
+* `Sheet.birthOp`: the canonical map `B` (`eq:birth-map`).
+* `Sheet.sheetBirthOp`: the canonical map of splitting data on the raw registers of a
   sheet.
 
 ## Main results
 
-* `EncodedFrame.birthOp_eq`: `B = 𝒱ᴴ (S Sᴴ) 𝒱`, with `S Sᴴ = |s⟩⟨s|_{T B_T} ⊗ 1_{E B_E}`.
-* `EncodedFrame.norm_birthOp_le_one`, `EncodedFrame.birthOp_isHermitian`,
-  `EncodedFrame.norm_act_birthOp_sub_le`.
-* `EncodedFrame.commute_sheetBirthOp`: the canonical map commutes with every operator acting on
+* `Sheet.birthOp_eq`: `B = 𝒱ᴴ (S Sᴴ) 𝒱`, with `S Sᴴ = |s⟩⟨s|_{T B_T} ⊗ 1_{E B_E}`.
+* `Sheet.norm_birthOp_le_one`, `Sheet.birthOp_isHermitian`,
+  `Sheet.norm_act_birthOp_sub_le`.
+* `Sheet.commute_sheetBirthOp`: the canonical map commutes with every operator acting on
   a subset of `E`.
 
 ## References
@@ -54,7 +54,7 @@ open scoped BigOperators Kronecker Matrix.Norms.L2Operator
 
 noncomputable section
 
-namespace TNLean.PEPS.EncodedFrame
+namespace TNLean.Lattice.Sheet
 
 /-- A coordinate vector `v` with `star v ⬝ᵥ v = 1` is a unit vector. -/
 theorem norm_toLp_eq_one_of_star_dotProduct {ι : Type*} [Fintype ι] {v : ι → ℂ}
@@ -319,4 +319,4 @@ theorem commute_sheetBirthOp (σ : SplittingData q T E) {D : Set ι} (hD : D ⊆
 
 end Sheet
 
-end TNLean.PEPS.EncodedFrame
+end TNLean.Lattice.Sheet

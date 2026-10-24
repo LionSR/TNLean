@@ -187,165 +187,6 @@ noncomputable def localOrthogonalSectorProbability
   (multiplicity s : ℝ) * (Matrix.trace (mpo (K s) N)).re /
     (Matrix.trace (mpo M N)).re
 
-/-- Every local orthogonal sector has positive probability when its
-multiplicity and the full and sector normalizations are positive.
-
-Source: arXiv:1606.00608, Appendix C.2, lines 1753--1770 and 1791--1808. -/
-theorem localOrthogonalSectorProbability_pos
-    (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
-    (multiplicity : Fin g → ℕ) (hmultiplicity : ∀ s, 0 < multiplicity s)
-    {N : ℕ} (hMtrace : 0 < Matrix.trace (mpo M N))
-    (hSectorTrace : ∀ s, 0 < Matrix.trace (mpo (K s) N)) (s : Fin g) :
-    0 < localOrthogonalSectorProbability M K multiplicity N s := by
-  rw [localOrthogonalSectorProbability]
-  have hMre : 0 < (Matrix.trace (mpo M N)).re :=
-    (RCLike.pos_iff.mp hMtrace).1
-  have hSre : 0 < (Matrix.trace (mpo (K s) N)).re :=
-    (RCLike.pos_iff.mp (hSectorTrace s)).1
-  exact div_pos (mul_pos (by exact_mod_cast hmultiplicity s) hSre) hMre
-
-/-- The normalized full chain is the probability-weighted sum of its local
-orthogonal sectors.
-
-Source: arXiv:1606.00608, Appendix C.2, lines 1753--1770 and 1791--1808. -/
-theorem normalizedMPO_eq_sum_localOrthogonalSectorProbability_smul
-    (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
-    (multiplicity : Fin g → ℕ) {N : ℕ}
-    (hM : mpo M N = ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N)
-    (hMtrace : 0 < Matrix.trace (mpo M N))
-    (hSectorTrace : ∀ s, 0 < Matrix.trace (mpo (K s) N)) :
-    normalizedMPO M N = ∑ s : Fin g,
-      (localOrthogonalSectorProbability M K multiplicity N s : ℂ) •
-        normalizedMPO (K s) N := by
-  classical
-  have hMtraceEq : Matrix.trace (mpo M N) =
-      ((Matrix.trace (mpo M N)).re : ℂ) := by
-    apply Complex.ext
-    · rfl
-    · simpa using (RCLike.pos_iff.mp hMtrace).2
-  have hSectorTraceEq : ∀ s,
-      Matrix.trace (mpo (K s) N) = ((Matrix.trace (mpo (K s) N)).re : ℂ) :=
-    fun s ↦ by
-      apply Complex.ext
-      · rfl
-      · simpa using (RCLike.pos_iff.mp (hSectorTrace s)).2
-  have hpComplex (s : Fin g) :
-      (localOrthogonalSectorProbability M K multiplicity N s : ℂ) =
-        (multiplicity s : ℂ) * Matrix.trace (mpo (K s) N) /
-          Matrix.trace (mpo M N) := by
-    rw [localOrthogonalSectorProbability, hMtraceEq, hSectorTraceEq s]
-    norm_num
-  rw [normalizedMPO]
-  nth_rewrite 2 [hM]
-  rw [Finset.smul_sum]
-  apply Finset.sum_congr rfl
-  intro s _
-  rw [normalizedMPO, hpComplex]
-  simp only [smul_smul]
-  congr 1
-  field_simp [(ne_of_gt hMtrace), (ne_of_gt (hSectorTrace s))]
-
-/-- Every nonempty marginal has the same local-sector probabilities as the
-normalized full chain.
-
-Source: arXiv:1606.00608, Appendix C.2, lines 1753--1770 and 1791--1808. -/
-theorem reducedBlockState_eq_sum_localOrthogonalSectorProbability_smul
-    (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
-    (multiplicity : Fin g → ℕ) {N L : ℕ} (hL : L ≤ N)
-    (hM : mpo M N = ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N)
-    (hMtrace : 0 < Matrix.trace (mpo M N))
-    (hSectorTrace : ∀ s, 0 < Matrix.trace (mpo (K s) N)) :
-    reducedBlockState M N L hL = ∑ s : Fin g,
-      (localOrthogonalSectorProbability M K multiplicity N s : ℂ) •
-        reducedBlockState (K s) N L hL := by
-  classical
-  have hfull := normalizedMPO_eq_sum_localOrthogonalSectorProbability_smul
-    M K multiplicity hM hMtrace hSectorTrace
-  ext u v
-  rw [reducedBlockState_eq_sum]
-  simp_rw [hfull, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
-  simp_rw [reducedBlockState_eq_sum]
-  rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro s _
-  rw [Finset.mul_sum]
-
-/-- Entropy of a nonempty marginal of a local orthogonal sum is the Shannon
-entropy of the sector probabilities plus the probability-weighted sector
-entropies.
-
-Source: arXiv:1606.00608, Appendix C.2, lines 1760--1780 and 1806--1808. -/
-theorem blockEntropy_eq_sum_localOrthogonalSectorProbability
-    (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
-    (multiplicity : Fin g → ℕ) (P : Fin g → Matrix (Fin d) (Fin d) ℂ)
-    (hmultiplicity : ∀ s, 0 < multiplicity s)
-    (hP : ∀ s, IsOrthogonalProjection (P s))
-    (hPorthogonal : ∀ {s t}, s ≠ t → P s * P t = 0)
-    (hMpdo : IsMPDO M) (hSectorMpdo : ∀ s, IsMPDO (K s))
-    {N L : ℕ} (hN : 0 < N) (hL : L + 1 ≤ N)
-    (hM : mpo M N = ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N)
-    (hMtrace : 0 < Matrix.trace (mpo M N))
-    (hSectorTrace : ∀ s, 0 < Matrix.trace (mpo (K s) N))
-    (hsupport : ∀ s,
-      firstSiteMatrix (P s) L * reducedBlockState (K s) N (L + 1) hL =
-        reducedBlockState (K s) N (L + 1) hL) :
-    blockEntropy M N (L + 1) hL (hMpdo N hN) =
-      ∑ s : Fin g,
-        (Real.negMulLog
-            (localOrthogonalSectorProbability M K multiplicity N s) +
-          localOrthogonalSectorProbability M K multiplicity N s *
-            blockEntropy (K s) N (L + 1) hL (hSectorMpdo s N hN)) := by
-  classical
-  let p : Fin g → ℝ := fun s ↦
-    localOrthogonalSectorProbability M K multiplicity N s
-  let ρ : Fin g → Matrix (Fin (L + 1) → Fin d) (Fin (L + 1) → Fin d) ℂ :=
-    fun s ↦ reducedBlockState (K s) N (L + 1) hL
-  let Q : Fin g → Matrix (Fin (L + 1) → Fin d) (Fin (L + 1) → Fin d) ℂ :=
-    fun s ↦ firstSiteMatrix (P s) L
-  have hp : ∀ s, 0 < p s := fun s ↦
-    localOrthogonalSectorProbability_pos M K multiplicity hmultiplicity
-      hMtrace hSectorTrace s
-  have hρpos : ∀ s, (ρ s).PosSemidef := fun s ↦
-    reducedBlockState_posSemidef (K s) N (L + 1) hL (hSectorMpdo s N hN)
-  have hρtrace : ∀ s, Matrix.trace (ρ s) = 1 := fun s ↦
-    reducedBlockState_trace (K s) N (L + 1) hL (ne_of_gt (hSectorTrace s))
-  have hQherm : ∀ s, (Q s).IsHermitian := fun s ↦
-    firstSiteMatrix_isHermitian (hP s).1 L
-  have hQρ : ∀ s, Q s * ρ s = ρ s := by
-    intro s
-    simpa only [Q, ρ] using hsupport s
-  have hρQ : ∀ s, ρ s * Q s = ρ s := fun s ↦
-    mul_eq_self_of_isHermitian_of_mul_eq_self (hρpos s).isHermitian
-      (hQherm s) (hQρ s)
-  have hQorthogonal : ∀ s t, s ≠ t → Q s * Q t = 0 := by
-    intro s t hst
-    change firstSiteMatrix (P s) L * firstSiteMatrix (P t) L = 0
-    rw [firstSiteMatrix_mul_firstSiteMatrix, hPorthogonal hst]
-    ext u v
-    simp [firstSiteMatrix]
-  have hsum : reducedBlockState M N (L + 1) hL =
-      ∑ s, (p s : ℂ) • ρ s := by
-    exact reducedBlockState_eq_sum_localOrthogonalSectorProbability_smul
-      M K multiplicity hL hM hMtrace hSectorTrace
-  have hadd := vonNeumannEntropy_eq_sum_of_pairwise_annihilating_supports
-    (reducedBlockState M N (L + 1) hL)
-    (reducedBlockState_isHermitian M N (L + 1) hL (hMpdo N hN))
-    (fun s ↦ (p s : ℂ) • ρ s) Q
-    (fun s ↦ ((hρpos s).smul (a := (p s : ℂ))
-      (by exact_mod_cast (hp s).le)).isHermitian)
-    hsum (fun s ↦ ⟨by rw [Matrix.mul_smul, hQρ],
-      by rw [Matrix.smul_mul, hρQ]⟩) hQorthogonal
-  calc
-    blockEntropy M N (L + 1) hL (hMpdo N hN) =
-        ∑ s, vonNeumannEntropy ((p s : ℂ) • ρ s)
-          (((hρpos s).smul (a := (p s : ℂ))
-            (by exact_mod_cast (hp s).le)).isHermitian) := hadd
-    _ = _ := by
-      apply Finset.sum_congr rfl
-      intro s _
-      simpa only [p, ρ, blockEntropy, add_comm] using
-        vonNeumannEntropy_smul (hρpos s) (hρtrace s) (p s)
-
 private noncomputable def proportionalLocalOrthogonalSectorProbability
     (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
     (multiplicity : Fin g → ℕ) (c : ℝ) (N : ℕ) (s : Fin g) : ℝ :=
@@ -497,6 +338,94 @@ private theorem blockEntropy_eq_sum_proportionalLocalOrthogonalSectorProbability
       intro s _
       simpa only [p, ρ, blockEntropy, add_comm] using
         vonNeumannEntropy_smul (hρpos s) (hρtrace s) (p s)
+
+private theorem proportionalLocalOrthogonalSectorProbability_one
+    (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
+    (multiplicity : Fin g → ℕ) (N : ℕ) :
+    proportionalLocalOrthogonalSectorProbability M K multiplicity 1 N =
+      localOrthogonalSectorProbability M K multiplicity N := by
+  funext s
+  simp only [proportionalLocalOrthogonalSectorProbability,
+    localOrthogonalSectorProbability, one_mul]
+
+/-- Every local orthogonal sector has positive probability when its
+multiplicity and the full and sector normalizations are positive.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1753--1770 and 1791--1808. -/
+theorem localOrthogonalSectorProbability_pos
+    (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
+    (multiplicity : Fin g → ℕ) (hmultiplicity : ∀ s, 0 < multiplicity s)
+    {N : ℕ} (hMtrace : 0 < Matrix.trace (mpo M N))
+    (hSectorTrace : ∀ s, 0 < Matrix.trace (mpo (K s) N)) (s : Fin g) :
+    0 < localOrthogonalSectorProbability M K multiplicity N s := by
+  have h := proportionalLocalOrthogonalSectorProbability_pos M K multiplicity
+    hmultiplicity (c := 1) one_pos hMtrace hSectorTrace s
+  rwa [proportionalLocalOrthogonalSectorProbability_one] at h
+
+/-- The normalized full chain is the probability-weighted sum of its local
+orthogonal sectors.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1753--1770 and 1791--1808. -/
+theorem normalizedMPO_eq_sum_localOrthogonalSectorProbability_smul
+    (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
+    (multiplicity : Fin g → ℕ) {N : ℕ}
+    (hM : mpo M N = ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N)
+    (hMtrace : 0 < Matrix.trace (mpo M N))
+    (hSectorTrace : ∀ s, 0 < Matrix.trace (mpo (K s) N)) :
+    normalizedMPO M N = ∑ s : Fin g,
+      (localOrthogonalSectorProbability M K multiplicity N s : ℂ) •
+        normalizedMPO (K s) N := by
+  have h := normalizedMPO_eq_sum_proportionalLocalOrthogonalSectorProbability_smul
+    M K multiplicity (c := 1) one_pos (by simpa using hM) hMtrace hSectorTrace
+  rwa [proportionalLocalOrthogonalSectorProbability_one] at h
+
+/-- Every nonempty marginal has the same local-sector probabilities as the
+normalized full chain.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1753--1770 and 1791--1808. -/
+theorem reducedBlockState_eq_sum_localOrthogonalSectorProbability_smul
+    (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
+    (multiplicity : Fin g → ℕ) {N L : ℕ} (hL : L ≤ N)
+    (hM : mpo M N = ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N)
+    (hMtrace : 0 < Matrix.trace (mpo M N))
+    (hSectorTrace : ∀ s, 0 < Matrix.trace (mpo (K s) N)) :
+    reducedBlockState M N L hL = ∑ s : Fin g,
+      (localOrthogonalSectorProbability M K multiplicity N s : ℂ) •
+        reducedBlockState (K s) N L hL := by
+  have h :=
+    reducedBlockState_eq_sum_proportionalLocalOrthogonalSectorProbability_smul
+      M K multiplicity (c := 1) one_pos hL (by simpa using hM) hMtrace hSectorTrace
+  rwa [proportionalLocalOrthogonalSectorProbability_one] at h
+
+/-- Entropy of a nonempty marginal of a local orthogonal sum is the Shannon
+entropy of the sector probabilities plus the probability-weighted sector
+entropies.
+
+Source: arXiv:1606.00608, Appendix C.2, lines 1760--1780 and 1806--1808. -/
+theorem blockEntropy_eq_sum_localOrthogonalSectorProbability
+    (M : MPOTensor d D) (K : (s : Fin g) → MPOTensor d (dim s))
+    (multiplicity : Fin g → ℕ) (P : Fin g → Matrix (Fin d) (Fin d) ℂ)
+    (hmultiplicity : ∀ s, 0 < multiplicity s)
+    (hP : ∀ s, IsOrthogonalProjection (P s))
+    (hPorthogonal : ∀ {s t}, s ≠ t → P s * P t = 0)
+    (hMpdo : IsMPDO M) (hSectorMpdo : ∀ s, IsMPDO (K s))
+    {N L : ℕ} (hN : 0 < N) (hL : L + 1 ≤ N)
+    (hM : mpo M N = ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N)
+    (hMtrace : 0 < Matrix.trace (mpo M N))
+    (hSectorTrace : ∀ s, 0 < Matrix.trace (mpo (K s) N))
+    (hsupport : ∀ s,
+      firstSiteMatrix (P s) L * reducedBlockState (K s) N (L + 1) hL =
+        reducedBlockState (K s) N (L + 1) hL) :
+    blockEntropy M N (L + 1) hL (hMpdo N hN) =
+      ∑ s : Fin g,
+        (Real.negMulLog
+            (localOrthogonalSectorProbability M K multiplicity N s) +
+          localOrthogonalSectorProbability M K multiplicity N s *
+            blockEntropy (K s) N (L + 1) hL (hSectorMpdo s N hN)) := by
+  have h := blockEntropy_eq_sum_proportionalLocalOrthogonalSectorProbability
+    M K multiplicity P hmultiplicity hP hPorthogonal hMpdo hSectorMpdo
+    (c := 1) one_pos hN hL (by simpa using hM) hMtrace hSectorTrace hsupport
+  rwa [proportionalLocalOrthogonalSectorProbability_one] at h
 
 /-- A finite local orthogonal sum known up to a positive scalar at each chain
 length satisfies the saturated area law whenever every sector does.

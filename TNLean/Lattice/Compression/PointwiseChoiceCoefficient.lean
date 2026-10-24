@@ -25,7 +25,7 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 
 open scoped ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 open Classical in
@@ -147,4 +147,4 @@ theorem sum_coefficient_all_mul_conj_smul_eq_sum_nonemptyGateLabels
   intro ζ
   simp only [e, Equiv.symm_apply_apply]
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

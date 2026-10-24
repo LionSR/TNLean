@@ -36,8 +36,9 @@ protocol follows (`EncodedFrame.exists_originalCircuit_initial_of_holes_eq_nil`)
 noncomputable section
 
 namespace TNLean.PEPS.EncodedFrame
+open TNLean.Lattice.Sheet
 
-open PairEffect
+open TNLean.Lattice.PartyCircuit
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {Party : Type}
   {pos : ι → ℝ × ℝ}

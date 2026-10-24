@@ -150,8 +150,7 @@ theorem wordTupleSpanTop_eventually_of_wordTupleSpanTop_period_window
   intro n hn
   let residue := (n - start) % period
   let quotient := (n - start) / period
-  have hresidue : residue < period := by
-    exact Nat.mod_lt _ hperiod_pos
+  have hresidue : residue < period := Nat.mod_lt _ hperiod_pos
   have hbase : WordTupleSpanTop A (start + residue) :=
     hwindow residue hresidue
   have hpad : WordTupleSpanTop A (start + residue + quotient * period) :=

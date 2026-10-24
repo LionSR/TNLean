@@ -23,7 +23,7 @@ Independently formalized; no upstream Lean proof text reused.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
 namespace SourceCircuit
@@ -133,4 +133,4 @@ theorem isExpansionBounded_replacement {K r : ℕ} {S δ : ℝ} (hδ : 0 < δ)
   | frame t w ih =>
       exact ⟨ih hb hK, SourceCircuit.isExpansionBounded_exchangeBlocks _ _ _ _ _⟩
 end OriginalCircuit
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

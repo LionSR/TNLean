@@ -84,6 +84,7 @@ open TNLean.Lattice (siteLift siteLift_conjTranspose siteLift_mem_supportedOpera
 noncomputable section
 
 namespace TNLean.PEPS.EncodedFrame
+open TNLean.Lattice.Sheet
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
 

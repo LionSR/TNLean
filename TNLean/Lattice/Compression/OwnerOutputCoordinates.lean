@@ -27,7 +27,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect.Layout
+namespace TNLean.Lattice.PartyCircuit.Layout
 variable {P Q R X d : Type} [Fintype X] [Fintype d]
 
 /-- Relabelling owners commutes with the identification of equal register lists. -/
@@ -96,4 +96,4 @@ theorem mapOwner_mapOwner_partitionBasis_coordinates {Y e : Type}
   rw [mapOwner_mapOwner_tensorBasis_coordinates]
   exact partitionBasis_coordinates_of_eq f a' b' L h bA bE bD bF _ x y i j
 
-end TNLean.PEPS.PairEffect.Layout
+end TNLean.Lattice.PartyCircuit.Layout

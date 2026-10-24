@@ -179,8 +179,8 @@ theorem sum_sectorProjection (hη : EtaStructure rho) :
 Source: arXiv:1606.00608, Appendix C.2, lines 1364--1368. -/
 theorem sectorProjection_mul_eq_zero (hη : EtaStructure rho)
     {k l : Fin hη.m} (hkl : k ≠ l) :
-    hη.sectorProjection k * hη.sectorProjection l = 0 := by
-  exact orthogonalProjection_mul_eq_zero_of_sum_eq_one
+    hη.sectorProjection k * hη.sectorProjection l = 0 :=
+  orthogonalProjection_mul_eq_zero_of_sum_eq_one
     hη.sectorProjection hη.sectorProjection_isOrthogonal
     hη.sum_sectorProjection hkl
 

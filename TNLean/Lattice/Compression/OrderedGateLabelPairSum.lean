@@ -21,7 +21,7 @@ empty label types are included.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 565–579.
 -/
 
-namespace TNLean.PEPS.Approximation
+namespace TNLean.Lattice.Compression
 open scoped ComplexConjugate
 variable {G : Type} [Fintype G] {Ket Bra : G → Type}
 variable [∀ g, Fintype (Ket g)] [∀ g, Fintype (Bra g)] {m n : Type}
@@ -54,4 +54,4 @@ theorem sum_weighted_gateLabels_eq_sum_orderedGateLabelPairs
   exact sum_gateLabels_eq_sum_orderedGateLabelPairs
     (fun η θ ↦ (∏ g, a g (η g) * conj (b g (θ g))) • K η θ)
 
-end TNLean.PEPS.Approximation
+end TNLean.Lattice.Compression

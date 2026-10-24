@@ -35,29 +35,13 @@ open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
 
-/-- The square-grid entropy area law at fixed local dimension `q` for the family of states `G`,
-with the given constant `C_A ≥ 0`: the entropy of every region of every state of the family `G`
-is at most `C_A` times the number of original edges crossing the cut. Proposition 2.1
-concerns the family `IsSquareGroundState q J Δ` of unit gapped ground vectors.
-`SquareEntropyAreaLaw` asserts that some such constant exists for that family for all
-`q ≥ 2` and `J, Δ > 0`.
-
-Source: polynomial-PEPS Proposition 2.1 (`prop:area-law`),
-`01-preliminaries.tex`, lines 39–52. -/
-def SquareEntropyAreaLawAt (q : ℕ) (G : ∀ L : ℕ, StateSpace L q → Prop) (C_A : ℝ) : Prop :=
-  0 ≤ C_A ∧
-    ∀ L : ℕ, ∀ Ω : StateSpace L q, G L Ω → ∀ A : Finset (Vertex L),
-        FiniteProduct.entropy (fun _ : Vertex L ↦ Fin q) Ω A ≤
-          C_A * Fintype.card {e : Edge (squareLatticeGraph L L) // IsRegionBoundaryEdge A e}
-
 /-- The square entropy area law supplies a constant at each admissible `q`, `J`
 and `Δ` (`01-preliminaries.tex`, lines 39–52). -/
 theorem SquareEntropyAreaLaw.exists_squareEntropyAreaLawAt
     (harea : SquareEntropyAreaLaw) {q : ℕ} (hq : 2 ≤ q)
     {J Δ : ℝ} (hJ : 0 < J) (hΔ : 0 < Δ) :
-    ∃ C_A : ℝ, SquareEntropyAreaLawAt q (IsSquareGroundState q J Δ) C_A := by
-  obtain ⟨C_A, hC_A, hall⟩ := harea q hq J Δ hJ hΔ
-  exact ⟨C_A, hC_A, fun L Ω ⟨h, E₀, hΩ⟩ ↦ hall L h E₀ Ω hΩ⟩
+    ∃ C_A : ℝ, SquareEntropyAreaLawAt q (IsSquareGroundState q J Δ) C_A :=
+  harea q hq J Δ hJ hΔ
 
 /-- The original-state entropy of every sampled closed square of radius `0 ≤ r ≤ 2 u` is at
 most `C_S * (1 + u)` with `C_S = max 1 (16 * C_A)`, for every state of a family `G` obeying the

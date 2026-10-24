@@ -8,14 +8,29 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Lattice
 
+import TNLean.Lattice.ClusterExpansion
 import TNLean.Lattice.Compression
+import TNLean.Lattice.ConnectedSetCount
+import TNLean.Lattice.CrossingSupports
 import TNLean.Lattice.EntropyComparison
 import TNLean.Lattice.EntropyDimension
 import TNLean.Lattice.FiniteDomain
+import TNLean.Lattice.GaussianFilteredGround
+import TNLean.Lattice.GaussianFilteredIncrement
+import TNLean.Lattice.GaussianFilteredLocality
+import TNLean.Lattice.GaussianFilteredTerm
+import TNLean.Lattice.GaussianFilteredTermLocalization
+import TNLean.Lattice.GaussianFilteredTruncation
+import TNLean.Lattice.GaussianFilteredTruncationGround
+import TNLean.Lattice.GaussianTail
+import TNLean.Lattice.GaussianTailMoment
+import TNLean.Lattice.HeisenbergDuhamel
 import TNLean.Lattice.LocalHamiltonian
+import TNLean.Lattice.LowEnergyCommutatorExample
 import TNLean.Lattice.MarginalTails
 import TNLean.Lattice.PartyCircuit
 import TNLean.Lattice.PhysicalBufferCoordinates
+import TNLean.Lattice.ProductForm
 import TNLean.Lattice.ProductGroundState
 import TNLean.Lattice.RegionEntropyInequalities
 import TNLean.Lattice.RegionSplit
@@ -28,6 +43,8 @@ import TNLean.Lattice.RegionalSwapSupport
 import TNLean.Lattice.ReplicaSwap
 import TNLean.Lattice.Sheet
 import TNLean.Lattice.SiteRelabelEntropy
+import TNLean.Lattice.SiteSymmetry
 import TNLean.Lattice.SupportedPolarUnitary
 import TNLean.Lattice.SupportedUnitaryEntropy
+import TNLean.Lattice.VariationalLowerBound
 import TNLean.Lattice.ZeroEntropy

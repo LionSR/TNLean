@@ -106,8 +106,8 @@ theorem rfp_nt_structural_full_sqSum (A : MPSTensor d D) [NeZero D]
     simpa [X, Matrix.star_eq_conjTranspose] using Matrix.UnitaryGroup.star_mul_self U₀
   have hXXh : X * Xᴴ = 1 := by
     simpa [X, Matrix.star_eq_conjTranspose] using Unitary.mul_star_self_of_mem U₀.prop
-  have hX_inv : X⁻¹ = Xᴴ := by
-    exact Matrix.right_inv_eq_left_inv
+  have hX_inv : X⁻¹ = Xᴴ :=
+    Matrix.right_inv_eq_left_inv
       (Matrix.mul_nonsing_inv X (Ne.isUnit hX_det)) hXhX
   have hB_eq_gauge : B = Kraus.gaugeTensor X A := by
     ext i
@@ -286,8 +286,8 @@ theorem rfp_nt_structural_full_sqSum (A : MPSTensor d D) [NeZero D]
       finrank_span_le_card (R := ℂ) (M := Mat) (s := Set.range B)
     exact hspan_finrank.symm.le.trans hspan_le
   have hrange_card_le : (Set.range B).toFinset.card ≤ d := by
-    have hs : Finset.univ.image B = (Set.range B).toFinset := by
-      exact (Set.toFinset_range (f := B)).symm
+    have hs : Finset.univ.image B = (Set.range B).toFinset :=
+      (Set.toFinset_range (f := B)).symm
     rw [← hs]
     simpa using (Finset.card_image_le (s := Finset.univ) (f := B))
   have hCard : Fintype.card (Fin D × Fin D) ≤ Fintype.card (Fin d) := by

@@ -10,7 +10,7 @@ import Lean.Util.CollectAxioms
 /-! # Axiom check for the exact sampled physical density contraction -/
 
 set_option linter.hashCommand false
-open TNLean.PEPS.PairEffect.SourceCircuit
+open TNLean.Lattice.PartyCircuit.SourceCircuit
 
 run_cmd do
   let decl := ``physicalSourceReplacedDensity_pure_sampled_eq_exterior_smul_contractedOperator

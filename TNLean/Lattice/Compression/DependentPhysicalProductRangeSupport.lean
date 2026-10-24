@@ -27,7 +27,7 @@ Section 7, lines 2992–3019.
 
 open scoped BigOperators Matrix
 
-namespace TNLean.PEPS
+namespace TNLean.Lattice
 
 variable {Site : Type*} [Fintype Site] [DecidableEq Site]
 variable {In Out : Site → Type*}
@@ -236,4 +236,4 @@ theorem mem_range_dependentPhysicalProductFamilyMap_iff [∀ v, Fintype (In v)] 
     refine ⟨dependentPhysicalProductFamilyMap L ψ, ?_⟩
     simpa only [← LinearMap.comp_apply, dependentPhysicalProductFamilyMap_comp] using hproduct
 
-end TNLean.PEPS
+end TNLean.Lattice

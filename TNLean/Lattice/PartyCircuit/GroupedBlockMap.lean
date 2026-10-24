@@ -25,7 +25,7 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
 variable {P Q : Type}
 
@@ -98,4 +98,4 @@ theorem eval_sum_mapOwner_comp {ι : Type} [Fintype ι] (f : P → Q)
       isoL (Layout.mapOwnerIso f b) ∘L (∑ ξ, c ξ • (w ξ).eval) := by
   simp only [finsetSum_comp, smul_comp, eval_mapOwner_comp, comp_finsetSum, comp_smul]
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

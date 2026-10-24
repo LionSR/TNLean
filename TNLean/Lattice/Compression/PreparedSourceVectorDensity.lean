@@ -26,7 +26,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open scoped TensorProduct Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
 variable {P m n : Type} [Fintype m] [Fintype n]
     (R : SourceInventory P) (U V : Fin R.length → HSpace)
@@ -74,4 +74,4 @@ theorem preparedMatrix_mul_vecMulVec_preparedInput (p : Word [] ℓ) :
           (.comp (SourceInventory.prepareSlots R U V ζ ℓ) w)).eval 1) j)) := by
   exact preparedMatrix_mul_vecMulVec R U V η ζ ℓ v w bIn bOut (p.eval 1) (p.eval 1)
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

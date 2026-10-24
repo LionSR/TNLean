@@ -26,8 +26,8 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open scoped TensorProduct Matrix
-namespace TNLean.PEPS.PairEffect.SourceCircuit
-open SourceInventory TNLean.PEPS.Approximation
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.Lattice.PartyCircuit.SourceInventory TNLean.Lattice.Compression
 variable {P : Type} {a b : Layout P}
 variable (w : SourceCircuit a b) (S : Finset (sourceLocations w))
     (E : ∀ e : sourceLocations w, branchLabels w e.1 →
@@ -143,4 +143,4 @@ theorem exists_correctedSchmidtInput_identity (p₀ : Word [] a) :
         (partialSchmidtSourceVectors A w S E F ξ (e.symm i)))) = _
   rw [crossingVector_partialSchmidtSourceVectors w S E F ξ (e.symm i)]
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

@@ -186,8 +186,7 @@ theorem ChainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
   rw [hK, hK'] at hfwd hrev
   let crossing := Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
   let Z := crossing.biUnion (fun X ↦ X.1)
-  let N := fun A : Finset (Fin L) ↦ Finset.univ.filter (fun y : Fin L ↦
-    ∃ x ∈ A, (Nat.dist x.val y.val : ℝ) ≤ (ℓ : ℝ))
+  let N := fun A : Finset (Fin L) ↦ chainNeighborhood A (ℓ : ℝ)
   let S := N (Q ∪ Z)
   obtain ⟨path, _, _, _, _, hpathIntegral⟩ :=
     hlocal q hq L h D (ℓ : ℝ) (Nat.cast_nonneg _)

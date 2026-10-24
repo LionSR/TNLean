@@ -25,7 +25,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.PartyChain
+namespace TNLean.Lattice.PartyCircuit.PartyChain
 open ContinuousLinearMap
 variable {P : Type} {a b c : Layout P}
 
@@ -89,4 +89,4 @@ theorem effectCount_comp (M : PartyChain a b) (N : PartyChain b c) :
       rw [ih N]
       omega
 
-end TNLean.PEPS.PairEffect.PartyChain
+end TNLean.Lattice.PartyCircuit.PartyChain

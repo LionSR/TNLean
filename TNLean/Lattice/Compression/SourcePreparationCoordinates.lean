@@ -27,7 +27,7 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect.SourceInventory
+namespace TNLean.Lattice.PartyCircuit.SourceInventory
 
 variable {P : Type}
 
@@ -170,7 +170,7 @@ theorem prepareSlots_eval_heq_prepare (R : SourceInventory P)
   exact Layout.memCongr_apply_heq _ _
 
 /-- A source operation respects equality of the spectator register list and vector. -/
-theorem _root_.TNLean.PEPS.PairEffect.Word.eval_source_apply_heq (s : PairSource P)
+theorem _root_.TNLean.Lattice.PartyCircuit.Word.eval_source_apply_heq (s : PairSource P)
     {a b : Layout P} (h : a = b) {x : Mem a} {y : Mem b} (hxy : HEq x y) :
     HEq ((Word.source s.distinct s.leftSpace s.rightSpace s.vector a).eval x)
       ((Word.source s.distinct s.leftSpace s.rightSpace s.vector b).eval y) := by
@@ -195,11 +195,11 @@ theorem prepareSlots_cons_eval_heq (r : PairSource P) (R : SourceInventory P)
       (fun i ↦ η i.succ) ℓ x).symm
 
 /-- An operation on spectator registers commutes with preparing the pair in front. -/
-theorem _root_.TNLean.PEPS.PairEffect.PairSource.eval_frame_frame_source (r : PairSource P)
+theorem _root_.TNLean.Lattice.PartyCircuit.PairSource.eval_frame_frame_source (r : PairSource P)
     (U V : HSpace) (η : U ⊗[ℂ] V) {a b : Layout P} (w : Word a b) (x : Mem a) :
     (Word.frame ⟨r.left, U⟩ (Word.frame ⟨r.right, V⟩ w)).eval
       ((Word.source r.distinct U V η a).eval x) =
     (Word.source r.distinct U V η b).eval (w.eval x) := by
   exact eval_frameList_prepare [⟨r.left, r.right, r.distinct, U, V, η⟩] w x
 
-end TNLean.PEPS.PairEffect.SourceInventory
+end TNLean.Lattice.PartyCircuit.SourceInventory

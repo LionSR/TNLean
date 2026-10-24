@@ -19,7 +19,8 @@ local-image condition and no discarded part of the ambient kernel.
 
 noncomputable section
 namespace TNLean.PEPS
-open DependentBondNetwork
+open TNLean.Lattice
+open DependentBondNetwork TNLean.Lattice.DependentBondNetwork
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]

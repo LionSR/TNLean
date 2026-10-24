@@ -75,8 +75,8 @@ equations (3.12)--(3.14). -/
 @[simp] theorem reindex_blockedInteractionMatrix (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (L K : ℕ) :
     Matrix.reindex (blockedConfigEquiv d K L) (blockedConfigEquiv d K L)
-      (blockedInteractionMatrix h L K) = openInteractionMatrix h (K * L) := by
-  exact (Matrix.reindex (blockedConfigEquiv d K L) (blockedConfigEquiv d K L)).apply_symm_apply _
+      (blockedInteractionMatrix h L K) = openInteractionMatrix h (K * L) :=
+  (Matrix.reindex (blockedConfigEquiv d K L) (blockedConfigEquiv d K L)).apply_symm_apply _
 
 private theorem chainWindowOperator_openInteractionMatrix {W n b : ℕ}
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hRW : R ≤ W) (hb : b + W ≤ n) :

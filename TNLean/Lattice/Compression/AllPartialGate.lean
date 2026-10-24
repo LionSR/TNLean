@@ -18,7 +18,8 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.Lattice.PartyCircuit
 variable {P C ι : Type} [Fintype C] [Fintype ι]
 
 /-- A touched gate in the actual all-party expansion has the identity as its
@@ -53,4 +54,4 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_id
   rw [hw]
   exact hg (e ξ)
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

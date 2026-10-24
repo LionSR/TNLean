@@ -28,7 +28,7 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 variable {P : Type}
 
@@ -224,4 +224,4 @@ theorem exists_grouped (S : SourceInventory P) (hS : S.IsNormalized) :
 
 end SourceInventory
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

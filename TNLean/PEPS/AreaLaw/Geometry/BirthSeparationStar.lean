@@ -122,9 +122,6 @@ theorem interior_repairNormTriangle_inter_eq_empty {s t : RepairFanSlot} (hst : 
 private def scaleHomeomorph (v : ℝ × ℝ) {r : ℝ} (hr : r ≠ 0) : (ℝ × ℝ) ≃ₜ (ℝ × ℝ) :=
   (Homeomorph.smulOfNeZero r hr).trans (Homeomorph.addLeft v)
 
-private theorem scaleHomeomorph_apply (v : ℝ × ℝ) {r : ℝ} (hr : r ≠ 0) (x : ℝ × ℝ) :
-    scaleHomeomorph v hr x = v + r • x := rfl
-
 private theorem repairCurrentFanTriangle_eq_image (v : ℝ × ℝ) {r : ℝ} (hr : r ≠ 0)
     (s : RepairFanSlot) :
     repairCurrentFanTriangle v r s =

@@ -13,7 +13,7 @@ This file provides the calculus used to read explicit matrices as allowed monomi
 Theorem 5.2 of the polynomial-PEPS manuscript.  A register `ℂ^α` of a party is a Euclidean
 register; one or two Euclidean registers at the front of a layout are identified with `ℂ^α`
 (`oneIso`) or with `ℂ^{α × β}` (`twoIso`), and a matrix acts on them through
-`EncodedFrame.act`.  A local map built from a matrix on such registers acts, under these
+`Sheet.act`.  A local map built from a matrix on such registers acts, under these
 identifications, as the matrix tensored with the identity of the untouched registers
 (`eval_localMap`).
 
@@ -24,19 +24,19 @@ of a word acts at a party of `S` and every pair source joins two parties of `S`,
 
 ## Main definitions
 
-* `PairEffect.Word.UsesOnly`, `PairEffect.Word.sourceCount`,
-  `PairEffect.PartyChain.UsesOnly`, `PairEffect.PartyChain.sourceCount`.
-* `PairEffect.oneIso`, `PairEffect.twoIso` : one or two Euclidean registers as a Euclidean
+* `PartyCircuit.Word.UsesOnly`, `PartyCircuit.Word.sourceCount`,
+  `PartyCircuit.PartyChain.UsesOnly`, `PartyCircuit.PartyChain.sourceCount`.
+* `PartyCircuit.oneIso`, `PartyCircuit.twoIso` : one or two Euclidean registers as a Euclidean
   space.
-* `PairEffect.matLocal₂₁`, `PairEffect.matLocal₁₂`, `PairEffect.matLocal₂₂` : local maps given
+* `PartyCircuit.matLocal₂₁`, `PartyCircuit.matLocal₁₂`, `PartyCircuit.matLocal₂₂` : local maps given
   by matrices on one or two registers of one party.
 
 ## Main results
 
-* `PairEffect.pairHeadIso_eq` : the identification of a front pair register is the
+* `PartyCircuit.pairHeadIso_eq` : the identification of a front pair register is the
   concatenation identification followed by `twoIso`.
-* `PairEffect.eval_localMap`, `PairEffect.eval_localMap₂₁`, `PairEffect.eval_localMap₁₂`,
-  `PairEffect.pairHeadIso_eval_localMap₂₂` : the operator of a local map on the front
+* `PartyCircuit.eval_localMap`, `PartyCircuit.eval_localMap₂₁`, `PartyCircuit.eval_localMap₁₂`,
+  `PartyCircuit.pairHeadIso_eval_localMap₂₂` : the operator of a local map on the front
   registers.
 
 ## References
@@ -49,10 +49,10 @@ noncomputable section
 
 open scoped InnerProductSpace TensorProduct Matrix.Norms.L2Operator
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 open EuclideanSpace ContinuousLinearMap Matrix
-open EncodedFrame (act)
+open Sheet (act)
 
 variable {P : Type}
 
@@ -329,4 +329,4 @@ theorem pairHeadIso_eval_localMap₂₂ (p : P) (A : Matrix (γ × δ) (α × β
 end LocalMaps
 
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

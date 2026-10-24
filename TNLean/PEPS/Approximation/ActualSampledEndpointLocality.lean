@@ -19,7 +19,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} {a b : Layout P}
 
 /-- The actual sampled source-input operator restricted to selected owners
@@ -76,4 +76,4 @@ theorem restrict_sampledEndpointInputWord_eval_eq_of_incident_samples
       (sources_sampledEndpointWord w k lam L R ξ ζ j' ω')]
   simp only [Word.eval_castLayouts, hWord]
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit
