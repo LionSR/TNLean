@@ -1425,14 +1425,15 @@ variational bound is unaffected; the infinite expansion remains unformalized.
 ### Local solution of gapped Hamiltonians: the final state in the energy estimate
 
 [hastings05_hierarchical_energy.tex](hastings05_hierarchical_energy.tex)
-(scope restriction, open) records eq. `hchy` of Hastings, *Solving gapped Hamiltonians
+(local correction, resolved) records eq. `hchy` of Hastings, *Solving gapped Hamiltonians
 locally* (arXiv:cond-mat/0508554v3, source lines 705–720), which the source asserts with
 "one may show". From a norm deficiency `b` of the last projection, the normalized image of
 the ground state has energy within `4 ‖M‖ b`, so `4 N J b_h` for `N` terms of norm at most
 `J`. That state lies in the span of the final states `α^h`. The spectral windows give
 the bound for every final state, with error `∑_m 2^{h-1-m} x_m`, for the links of the open
-chain; the wrap link `(N, 1)` of the periodic chain is the joining operator of no level and
-remains uncontrolled.
+chain. The link `(N, 1)` closing the periodic chain is the joining operator of no level; one
+further window for it inside the final space, whose deficiency is the next step of the same
+recursion, gives eq. `hchy` for the periodic sum with one more radius `x_h`.
 
 ### Local solution of gapped Hamiltonians: the number of final states
 
