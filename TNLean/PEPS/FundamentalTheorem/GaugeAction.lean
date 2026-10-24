@@ -701,15 +701,13 @@ noncomputable def consistentOffEquivDoubled (A : Tensor G d) (e : Edge G) :
       exact (localConfig_value_eq_left (G := G) A e ξ hξ ie hie).symm
   right_inv y := by
     rcases y with ⟨i, k, ζ⟩
-    have hvne : ¬ e.1.2 = e.1.1 := (edgeLeft_ne_edgeRight e).symm
     refine Prod.ext ?_ (Prod.ext ?_ ?_)
     · change localOfDoubled (G := G) A e i k ζ e.1.1 (edgeLeftIncident (G := G) e) = i
-      unfold localOfDoubled edgeLeftIncident; simp
+      exact localOfDoubled_left_e (G := G) A e i k ζ
     · change localOfDoubled (G := G) A e i k ζ e.1.2 (edgeRightIncident (G := G) e) = k
-      unfold localOfDoubled edgeRightIncident; simp [hvne]
+      exact localOfDoubled_right_e (G := G) A e i k ζ
     · funext f
       change localOfDoubled (G := G) A e i k ζ f.1.1.1 (edgeLeftIncident (G := G) f.1) = ζ f
-      have hf : f.1 ≠ e := f.2
       exact localOfDoubled_left_ne (G := G) A e i k ζ f
 
 /-- The per-edge consistency deltas off `e` collapse to the consistency-off-`e`
@@ -889,12 +887,7 @@ theorem edgeInsertedCoeff_eq_sum_local (A : Tensor G d) (e : Edge G)
     exact congrArg Subtype.val this.symm
   subst hξeq
   simp only [hF]
-  rw [show localOfDoubled (G := G) A e i k ζ e.1.1 (edgeLeftIncident (G := G) e) = i by
-        unfold localOfDoubled edgeLeftIncident; simp]
-  rw [show localOfDoubled (G := G) A e i k ζ e.1.2 (edgeRightIncident (G := G) e) = k by
-        unfold localOfDoubled edgeRightIncident
-        have hvne : ¬ e.1.2 = e.1.1 := (edgeLeft_ne_edgeRight e).symm
-        simp [hvne]]
+  rw [localOfDoubled_left_e (G := G) A e i k ζ, localOfDoubled_right_e (G := G) A e i k ζ]
   rw [prod_univ_splitAtEdge e
     (fun v => A.component v (localOfDoubled (G := G) A e i k ζ v) (σ v))]
   rw [edgeInsertedLeftLocalConfig_eq_localOfDoubled,

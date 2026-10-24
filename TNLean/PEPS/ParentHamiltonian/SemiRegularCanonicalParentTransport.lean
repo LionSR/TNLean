@@ -160,8 +160,8 @@ theorem finrank_regionParentGroundSpace_multiplicity_eq
     Module.finrank ℂ (regionParentGroundSpace (numberedGraphDressedAveragingTensor
       (multiplicityRestoredRepresentation d D) 1 eY) R) =
       Module.finrank ℂ (regionParentGroundSpace (numberedGraphDressedAveragingTensor
-        (blockMatrixRepresentation d D) (blockFourthRootWeight d) eX) R) := by
-  exact (canonicalMultiplicityParentEquiv d D hd eX eY R hcover).symm.finrank_eq
+        (blockMatrixRepresentation d D) (blockFourthRootWeight d) eX) R) :=
+  (canonicalMultiplicityParentEquiv d D hd eX eY R hcover).symm.finrank_eq
 
 /-- Arbitrary positive canonical parent interactions, with the actual regional
 kernels on both sides, have their full Hamiltonian kernels identified by the
