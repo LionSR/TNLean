@@ -1473,6 +1473,14 @@ form remains open under issue #9811.
 
 ## Rényi entropy and matrix product state approximation
 
+- [`swvc08_von_neumann_error_range.tex`](swvc08_von_neumann_error_range.tex)
+  (false source, resolved) records the normalization gap and the failure of
+  the stated large-error range in the von Neumann bond-dimension bound.
+  A nonzero bond-one approximation to a maximally entangled prefix disproves
+  the printed bound at error greater than one. For error below one, a
+  pure-state overlap and spectral-mass argument recovers the coefficient
+  one-half. The qualitative obstruction survives; its Lean proof remains open.
+
 - [`swvc08_renyi_bond_dimension_sign.tex`](swvc08_renyi_bond_dimension_sign.tex)
   (false source, resolved) corrects the sign of the error term in the
   bond-dimension lower bound of Schuch, Wolf, Verstraete and Cirac
