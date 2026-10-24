@@ -1347,7 +1347,7 @@ positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
 ### Local solution of gapped Hamiltonians after Hastings: the hierarchical projection
 
 [hastings05_hierarchical_projection.tex](hastings05_hierarchical_projection.tex)
-(local correction, open) records the stronger norm estimate
+(local correction, resolved) records the stronger norm estimate
 `‖Ψ − P Ψ‖ ≤ ε/x` needed for the normalization step in Hastings,
 *Solving Gapped Hamiltonians Locally* (arXiv:cond-mat/0508554v3, lines 640–704).
 The printed expectation bound alone gives only `√(ε/x)`. The scalar recurrence
@@ -1356,6 +1356,9 @@ are proved, but their application to the full hierarchy remains open.
 Comparing successive normalized vectors by the triangle inequality gives an
 accumulated majorant involving `∑_{j<m} b_j`, with coefficient `3^{m−1}`.
 That estimate neither proves nor refutes the source's smaller recurrence.
+The complete hierarchy is controlled instead by measuring every deficiency
+against the ground state: `D_{m+1}² ≤ 2 D_m² + ((ε + 2 K D_m)/x_m)²`, which with
+the source's window radii gives `D_m ≤ (3^m − 1) e^{s^m}`, still polynomial in `N`.
 
 ## Polynomial PEPS: zero-floor maximizing filters
 
