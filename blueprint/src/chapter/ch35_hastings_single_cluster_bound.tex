@@ -102,6 +102,30 @@
     gives $\operatorname{tr}e^{-Y}\le e^{(n_C+n_{B(C)})J\beta}Z$.
 \end{proof}
 
+\begin{theorem}[The boundary count]
+    \label{thm:hastings_cluster_boundary_count}
+    \lean{TNLean.Lattice.ClusterExpansion.clusterBoundary,
+        TNLean.Lattice.ClusterExpansion.card_add_card_clusterBoundary_le}
+    \leanok
+    Let $C$ be a set of sites, and let $B(C)$ be the set of $j\notin C$ such
+    that $H_j$ acts on some site of $C$. Suppose that every site $i\in C$ has a
+    set $N(i)$ of at most $S$ sites that contains $i$ and every $j$ for which
+    $H_j$ acts on $i$. Then
+    \begin{align*}
+        n_C+n_{B(C)}\le Sn_C.
+    \end{align*}
+    In~\cite[lines 181--183]{Hastings2006Solving}, $N(i)$ is the set of sites
+    within the interaction range $R$ of $i$, of which there are at most $S$,
+    and $H_j$ acts only on sites within distance $R$ of $j$. This is the second
+    inequality of~\cite[line 1186]{Hastings2006Solving}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The sets $C$ and $B(C)$ are disjoint, and both lie in
+    $\bigcup_{i\in C}N(i)$, which has at most $Sn_C$ elements.
+\end{proof}
+
 \begin{theorem}[Equation (percb2)]
     \label{thm:hastings_cluster_part_percb2}
     \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_le_pow}
@@ -117,7 +141,8 @@
     This is equation (percb2) of~\cite[lines 1186--1195]{Hastings2006Solving}
     with $\|O\|Z$ on the right. The source obtains $n_C+n_{B(C)}\le Sn_C$ from
     the lattice, where $S$ bounds the number of terms acting on a site; here it
-    is a hypothesis.
+    is a hypothesis, which Theorem~\ref{thm:hastings_cluster_boundary_count}
+    supplies.
 \end{theorem}
 
 \begin{proof}

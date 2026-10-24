@@ -28,6 +28,8 @@ with `H_D = ∑_{k ∈ D} h k`, which is the definition used here. If `‖h k‖
   bound `‖O‖ y^{n_C} Tr e^{-βH}` when `n_C + n_B ≤ S n_C`.
 * `TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_biUnion_le`: the same bound for
   several disjoint clusters, `‖O‖ ∏_i y^{n_{C_i}} Tr e^{-βH}`.
+* `TNLean.Lattice.ClusterExpansion.card_add_card_clusterBoundary_le`: the count
+  `n_C + n_{B(C)} ≤ S n_C` when the terms acting on each site lie in a set of at most `S`.
 
 ## References
 
@@ -35,7 +37,7 @@ Hastings, *Solving gapped Hamiltonians locally*, arXiv:cond-mat/0508554v3, `proj
 lines 1174–1195. The source states the bound before equation `percb2` with `Tr(O e^{-βH})` on
 the right; the form proved here, with `‖O‖ Tr e^{-βH}` and `‖H_C + H_B‖ ≤ (n_C + n_B) J`, is the
 one equation `percb2` uses. The final step of `percb2`, `n_C + n_B ≤ S n_C`, is a property of
-clusters on a lattice; here it is a hypothesis.
+clusters on a lattice, proved by `card_add_card_clusterBoundary_le`.
 -/
 
 open scoped Matrix.Norms.L2Operator
@@ -160,7 +162,7 @@ theorem norm_trace_mul_clusterPart_le {H : Matrix ι ι ℂ} (hH : H.IsHermitian
 
 Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1186–1195, with `‖O‖ Tr e^{-βH}` on
 the right as in `norm_trace_mul_clusterPart_le`. The source derives `n_C + n_B ≤ S n_C` from the
-lattice; here it is the hypothesis `hS`. -/
+lattice; here it is the hypothesis `hS`, which `card_add_card_clusterBoundary_le` supplies. -/
 theorem norm_trace_mul_clusterPart_le_pow {H : Matrix ι ι ℂ} (hH : H.IsHermitian)
     {h : κ → Matrix ι ι ℂ} {B C : Finset κ}
     (hh : ∀ k ∈ B ∪ C, (h k).IsHermitian) {J : ℝ} (hJ : ∀ k ∈ B ∪ C, ‖h k‖ ≤ J)
@@ -227,5 +229,41 @@ theorem norm_trace_mul_clusterPart_biUnion_le {ν : Type*} {T : Finset ν}
       _ = S * ∑ i ∈ T, ((C i).card : ℝ) := (Finset.mul_sum _ _ _).symm
   rw [Finset.prod_pow_eq_pow_sum, ← hCcard]
   exact norm_trace_mul_clusterPart_le_pow hH hh hJ O hβ hS'
+
+section Boundary
+
+variable [Fintype κ]
+
+/-- The boundary `B(C)` of a cluster `C` of term centres: the terms `j ∉ C` acting on some site of
+`C`, where `acts j` is the set of sites on which `H_j` acts. Hastings, arXiv:cond-mat/0508554v3,
+`proj3new.tex`, lines 1131–1134. -/
+def clusterBoundary (acts : κ → Finset κ) (C : Finset κ) : Finset κ :=
+  {j | j ∉ C ∧ ∃ i ∈ C, i ∈ acts j}
+
+/-- **The boundary count.** Let `nbhd i` contain `i` and every term acting on the site `i`, with
+at most `S` elements for each site of `C`. Then `n_C + n_{B(C)} ≤ S n_C`, the hypothesis of
+`norm_trace_mul_clusterPart_le_pow`. In Hastings' setting `nbhd i` is the set of sites within the
+interaction range `R` of `i`, of which there are at most `S`, and `H_j` acts only within distance
+`R` of `j`. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 181–183 and 1186. -/
+theorem card_add_card_clusterBoundary_le (acts : κ → Finset κ) (C : Finset κ)
+    (nbhd : κ → Finset κ) (hself : ∀ i ∈ C, i ∈ nbhd i)
+    (hacts : ∀ j, ∀ i ∈ C, i ∈ acts j → j ∈ nbhd i) {S : ℕ} (hS : ∀ i ∈ C, #(nbhd i) ≤ S) :
+    #C + #(clusterBoundary acts C) ≤ S * #C := by
+  have hdisj : Disjoint C (clusterBoundary acts C) :=
+    Finset.disjoint_left.mpr fun i hi hiB ↦ (Finset.mem_filter.mp hiB).2.1 hi
+  have hsub : C ∪ clusterBoundary acts C ⊆ C.biUnion nbhd := by
+    intro j hj
+    rw [Finset.mem_biUnion]
+    rcases Finset.mem_union.mp hj with hjC | hjB
+    · exact ⟨j, hjC, hself j hjC⟩
+    · obtain ⟨-, -, i, hi, hij⟩ := Finset.mem_filter.mp hjB
+      exact ⟨i, hi, hacts j i hi hij⟩
+  rw [← Finset.card_union_of_disjoint hdisj]
+  calc #(C ∪ clusterBoundary acts C) ≤ #(C.biUnion nbhd) := Finset.card_le_card hsub
+    _ ≤ ∑ i ∈ C, #(nbhd i) := Finset.card_biUnion_le
+    _ ≤ ∑ _i ∈ C, S := Finset.sum_le_sum hS
+    _ = S * #C := by rw [Finset.sum_const, smul_eq_mul, mul_comm]
+
+end Boundary
 
 end TNLean.Lattice.ClusterExpansion

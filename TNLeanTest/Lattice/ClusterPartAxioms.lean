@@ -17,7 +17,9 @@ run_cmd do
     ``TNLean.Lattice.ClusterExpansion.clusterPart_eq_sum_powerset,
     ``TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_le,
     ``TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_le_pow,
-    ``TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_biUnion_le] do
+    ``TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_biUnion_le,
+    ``TNLean.Lattice.ClusterExpansion.clusterBoundary,
+    ``TNLean.Lattice.ClusterExpansion.card_add_card_clusterBoundary_le] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl
