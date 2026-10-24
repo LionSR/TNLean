@@ -225,23 +225,9 @@ private theorem norm_heisenberg_commutator_le_graph_kernel_sum {κ : Type*} [Fin
         Real.exp ((2 * vR * |b₀| * Real.exp (2 * R) + 1) * |t|) by positivity)]
   · have hNo (x : ι) (hx : x ∈ S) : G.edist x y = ⊤ :=
       not_not.mp (fun hxy => hF ⟨x, Finset.mem_filter.mpr ⟨hx, hxy⟩⟩)
-    let C : Set ι := {x | ¬G.Reachable x y}
-    have hReach : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.Reachable x z :=
-      fun k x hx z hz => SimpleGraph.reachable_of_edist_ne_top
-        (ne_top_of_le_ne_top (ENat.natCast_ne_top R) (hDiam k x hx z hz))
-    have hClosed (k : κ) : (X k : Set ι) ⊆ C ∨ Disjoint (X k : Set ι) C := by
-      by_cases hk : ∃ x ∈ X k, G.Reachable x y
-      · obtain ⟨x, hx, hxy⟩ := hk
-        exact Or.inr (Set.disjoint_left.mpr fun z hz hzC =>
-          hzC ((hReach k z hz x hx).trans hxy))
-      · exact Or.inl fun z hz hzy => hk ⟨z, hz, hzy⟩
-    have hSC : (S : Set ι) ⊆ C := fun x hx hxy =>
-      (SimpleGraph.edist_ne_top_iff_reachable.mpr hxy) (hNo x hx)
-    have hCy : Disjoint C ({y} : Set ι) :=
-      Set.disjoint_singleton_right.mpr (fun hy => hy (SimpleGraph.Reachable.refl y))
-    have hComm := commute_heisenbergEvolution_of_closed h (fun k => (X k : Set ι))
-      hSupport C ({y} : Set ι) hClosed hCy (supportedOperators_mono hSC hA) hB t
-    rw [sub_eq_zero.mpr hComm.eq, norm_zero]
+    have hComm := heisenberg_commutator_eq_zero_of_forall_edist_eq_top
+      G X h hSupport R hDiam S hA y hB hNo t
+    rw [hComm, norm_zero]
     positivity
 
 /-- Summing the kernels outside the union of balls centered on the initial support. -/
