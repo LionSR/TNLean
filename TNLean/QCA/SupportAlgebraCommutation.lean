@@ -280,7 +280,6 @@ private theorem evenPairLocalImages_overlappingLifts_commute
   rw [← map_mul, (quasiLocalObservable_commute_of_disjoint
     (disjoint_evenPair_evenPair_add_one x) A₀ B₀).eq, map_mul]
 
-
 /-- Left support algebras respect equality of their left finite region. -/
 private lemma transport_leftSupportAlgebra {d : ℕ} {Λ Γ Δ : Finset ℤ} (h : Λ = Γ)
     (S : StarSubalgebra ℂ
@@ -392,8 +391,8 @@ private lemma disjoint_leftPair_rightPair_of_ne_add_one {x z : ℤ} (h : x ≠ z
   omega
 
 private lemma disjoint_rightPair_leftPair_of_ne_add_one {x z : ℤ} (h : z ≠ x + 1) :
-    Disjoint (rightPair x) (leftPair z) := by
-  exact (disjoint_leftPair_rightPair_of_ne_add_one h).symm
+    Disjoint (rightPair x) (leftPair z) :=
+  (disjoint_leftPair_rightPair_of_ne_add_one h).symm
 
 namespace PropagatesWithin
 

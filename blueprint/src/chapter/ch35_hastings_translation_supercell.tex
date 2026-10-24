@@ -43,7 +43,8 @@ every $v$ in this eigenspace.
     \lean{TNLean.Lattice.groundCompression_commutator_eq_of_mem_supercell,
         TNLean.Lattice.norm_groundCompression_commutator_le_of_mem_supercell}
     \leanok
-    \uses{thm:hastings_supercell_compression,thm:hastings_filtered_term_translate}
+    \uses{def:hastings_site_permutation,def:hastings_site_invariant,
+        def:hastings_gaussian_filtered_term}
     Let $G$ act on an index set, let the terms satisfy
     $h_{g\cdot k}=P_gh_kP_g^\dagger$, and let $M_k$ be their filtered operators.
     For every $g\in S$ and all indices $i$, $j$,
@@ -54,6 +55,7 @@ every $v$ in this eigenspace.
     then $B(i,g\cdot j)$ bounds it too, for every $g\in S$.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:hastings_supercell_compression,thm:hastings_filtered_term_translate}
     Since $H$ is invariant, $M_{g\cdot j}=P_gM_jP_g^\dagger$, and its
     compression is $PM_jP$ by the previous theorem.
 \end{proof}
