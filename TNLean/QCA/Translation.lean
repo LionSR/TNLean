@@ -101,8 +101,8 @@ lemma translateRegion_mono (a : ℤ) {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ) :
 Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
 @[simp]
 lemma siteTranslation_apply_val (a : ℤ) (Λ : Finset ℤ) (i : Λ) :
-    (Finset.equivMap (Equiv.addRight a).toEmbedding Λ i : ℤ) = i + a := by
-  exact Finset.equivMap_apply_coe (Equiv.addRight a).toEmbedding Λ i
+    (Finset.equivMap (Equiv.addRight a).toEmbedding Λ i : ℤ) = i + a :=
+  Finset.equivMap_apply_coe (Equiv.addRight a).toEmbedding Λ i
 
 /-- The inverse site equivalence sends \(i\) to \(i-a\).
 
@@ -219,8 +219,8 @@ open scoped ComplexOrder in
 Context: arXiv:1703.09188, Appendix, lines 2292--2298, which introduce the quasi-local algebra
 and its lattice translation. -/
 lemma localTranslation_norm (d : ℕ) (a : ℤ) (Λ : Finset ℤ) (A : LocalAlgebra d Λ) :
-    ‖localTranslation d a Λ A‖ = ‖A‖ := by
-  exact StarAlgEquiv.norm_map (localTranslation d a Λ) A
+    ‖localTranslation d a Λ A‖ = ‖A‖ :=
+  StarAlgEquiv.norm_map (localTranslation d a Λ) A
 
 open scoped ComplexOrder in
 /-- Finite-region translation is an operator-norm isometry.
@@ -228,8 +228,8 @@ open scoped ComplexOrder in
 Context: arXiv:1703.09188, Appendix, lines 2292--2298, which introduce the quasi-local algebra
 and its lattice translation. -/
 lemma localTranslation_isometry (d : ℕ) (a : ℤ) (Λ : Finset ℤ) :
-    Isometry (localTranslation d a Λ) := by
-  exact StarAlgEquiv.isometry (localTranslation d a Λ)
+    Isometry (localTranslation d a Λ) :=
+  StarAlgEquiv.isometry (localTranslation d a Λ)
 
 /-- A translated local observable evaluated on translated configurations has its original matrix
 entry.

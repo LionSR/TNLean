@@ -309,8 +309,6 @@ theorem perVertexScalar (A B : Tensor G d)
   set Btilde := absorbEdgeGauges B Z with hBt
   have hbd : A.bondDim = Btilde.bondDim := hPA.bondDim_eq
   have hBtinj : IsVertexInjective Btilde := isVertexInjective_absorbEdgeGauges B Z hB
-  have hposBt : ∀ e : Edge G, 0 < Btilde.bondDim e := by
-    intro e; rw [← congr_fun hbd e]; exact hpos e
   have hedge : ∀ (ie : IncidentEdge G v)
       (N : Matrix (Fin (A.bondDim ie.1)) (Fin (A.bondDim ie.1)) ℂ) (σ : V → Fin d),
       edgeInsertedCoeff (G := G) A ie.1 σ N =

@@ -101,8 +101,8 @@ theorem actualCharge_defect_le_of_density_energy_bound_at_exponent
   have ha : 0 ≤ a := div_nonneg hW (Nat.cast_nonneg S.K)
   have herr : 0 ≤ err := S.actualCharge_energyError_nonneg hm hM s dims E ha k (pre k) p
   have hℓ : 0 ≤ ℓ := zero_le_one.trans (one_le_transportLogDimBound (NeZero.pos q) S.r₀)
-  have hcoef : Cen * a ^ 2 * ℓ ^ een * err ≤ |Cen| * a ^ 2 * ℓ ^ een * err := by
-    exact mul_le_mul_of_nonneg_right
+  have hcoef : Cen * a ^ 2 * ℓ ^ een * err ≤ |Cen| * a ^ 2 * ℓ ^ een * err :=
+    mul_le_mul_of_nonneg_right
       (mul_le_mul_of_nonneg_right
         (mul_le_mul_of_nonneg_right (le_abs_self Cen) (sq_nonneg a))
         (Real.rpow_nonneg hℓ een)) herr

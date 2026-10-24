@@ -75,8 +75,8 @@ theorem mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one
     refine Tendsto.congr (fun n => ?_) htr0
     -- `Φ` preserves powers; `((Φ M : V →L[ℂ] V) : V →ₗ[ℂ] V) = M` by definition.
     have hpow : (F' ^ n) =
-        Φ ((Kraus.mixedMapLM (d := d) (D₁ := D₁) (D₂ := D₂) A B) ^ n) := by
-      exact (map_pow Φ (Kraus.mixedMapLM A B) n).symm
+        Φ ((Kraus.mixedMapLM (d := d) (D₁ := D₁) (D₂ := D₂) A B) ^ n) :=
+      (map_pow Φ (Kraus.mixedMapLM A B) n).symm
     -- Pass to underlying linear maps.
     have hlin :
         ((F' ^ n : V →L[ℂ] V) : V →ₗ[ℂ] V) =

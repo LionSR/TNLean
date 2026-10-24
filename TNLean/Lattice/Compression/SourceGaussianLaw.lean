@@ -62,8 +62,8 @@ theorem measurePreserving_sourceGaussian_eval (w : SourceCircuit a b) (k : ℕ)
     MeasurePreserving (fun ω : SourceGaussianSamples w k ↦ ω e (ξ, ζ))
       (sourceGaussianLaw w k)
       (law (Fin k × (Fin (min (sourceDims w e).1 (sourceDims w e).2) ×
-        Fin (min (sourceDims w e).1 (sourceDims w e).2)))) := by
-  exact (measurePreserving_eval (fun _ : branchLabels w e.1 × branchLabels w e.1 ↦
+        Fin (min (sourceDims w e).1 (sourceDims w e).2)))) :=
+  (measurePreserving_eval (fun _ : branchLabels w e.1 × branchLabels w e.1 ↦
     law (Fin k × (Fin (min (sourceDims w e).1 (sourceDims w e).2) ×
       Fin (min (sourceDims w e).1 (sourceDims w e).2)))) (ξ, ζ)).comp
     (measurePreserving_eval (fun e : sourceLocations w ↦ independentDensityLaw k
@@ -82,8 +82,8 @@ theorem measurePreserving_selected_sourceGaussian (w : SourceCircuit a b) (k : �
       (sourceGaussianLaw w k)
       (independentDensityLaw k
         (fun e : S ↦ Fin (min (sourceDims w e.1).1 (sourceDims w e.1).2))
-        (fun e : S ↦ Fin (min (sourceDims w e.1).1 (sourceDims w e.1).2))) := by
-  exact measurePreserving_selectedBranchSamples
+        (fun e : S ↦ Fin (min (sourceDims w e.1).1 (sourceDims w e.1).2))) :=
+  measurePreserving_selectedBranchSamples
     (B := fun e : sourceLocations w ↦ branchLabels w e.1 × branchLabels w e.1)
     (A := fun e _ ↦ Fin (min (sourceDims w e).1 (sourceDims w e).2))
     (C := fun e _ ↦ Fin (min (sourceDims w e).1 (sourceDims w e).2))
@@ -113,8 +113,8 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–340. -/
 theorem integrable_sampledSourceMatrix (hk : 0 < k)
     (hnonneg : ∀ e ξ j, 0 ≤ lam e ξ j)
     (e : sourceLocations w) (ξ ζ : branchLabels w e.1) :
-    Integrable (sampledSourceMatrix w k lam E F e ξ ζ) (sourceGaussianLaw w k) := by
-  exact (measurePreserving_sourceGaussian_eval w k e ξ ζ).integrable_comp_of_integrable
+    Integrable (sampledSourceMatrix w k lam E F e ξ ζ) (sourceGaussianLaw w k) :=
+  (measurePreserving_sourceGaussian_eval w k e ξ ζ).integrable_comp_of_integrable
     (integrable_ambientSampledSource k hk (lam e ξ) (lam e ζ)
       (hnonneg e ξ) (hnonneg e ζ) (E e ξ) (F e ξ) (E e ζ) (F e ζ))
 
