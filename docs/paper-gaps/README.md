@@ -1389,6 +1389,17 @@ not the printed power `k`. When commutators are written as `i^k ad_H^k`, this
 factor already supplies the alternating sign. The finite-polynomial
 variational bound is unaffected; the infinite expansion remains unformalized.
 
+### Local solution of gapped Hamiltonians: cluster size in the percolation bound
+
+[hastings05_percolation_cluster_size.tex](hastings05_percolation_cluster_size.tex)
+(local correction, resolved) records the start of the sum over cluster sizes in
+Hastings, *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3,
+source lines 1227–1254). A cluster of diameter larger than `l_proj` has at least
+`⌊l_proj/(2R)⌋ + 1` sites, not `l_proj + 1` as printed at line 1240, unless the
+bonds are nearest-neighbour. The decay length `ξ_perc = 2R / ln(1/(xy))` of order
+`R` absorbs the difference. The formalized sum takes the size threshold as a
+hypothesis.
+
 ### One-dimensional area law after Hastings: the decay length of Lemma 1
 
 [hastings07_lemma1_decay_length.tex](hastings07_lemma1_decay_length.tex)
