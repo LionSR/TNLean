@@ -24,6 +24,21 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Hermitian sum of pointwise-Hermitian terms — promoted (2026-10-23)
+- **Pattern:**
+  ```lean
+  isSelfAdjoint_sum Finset.univ fun j _ => (hHerm j).isSelfAdjoint
+  ```
+- **Seen:** 5 occurrences across 3 files: three in
+  `TNLean/Lattice/GaussianFilteredTermLocalization.lean`, one each in
+  `TNLean/Circuit/LiebRobinson/GraphLocalization.lean` and
+  `TNLean/Circuit/LiebRobinson/CommutatorRecursion.lean`.
+- **Abstraction:** `Matrix.isHermitian_sum` in
+  `TNLean/Algebra/MatrixHermitianSum.lean`; all five call sites refactored.
+- **Notes:** where the goal is `IsSelfAdjoint`, append `.isSelfAdjoint`. The
+  sums with a case split in each term (`CommutatorRecursion.lean`, the second
+  skew-adjoint goal) keep `isSelfAdjoint_sum` with an `intro`.
+
 ### Gaussian absolute first moment — promoted (2026-10-23)
 
 - **Pattern:** Bound the integral of `|t|` against a centred Gaussian, either
@@ -4814,6 +4829,21 @@ three-plaquette output measurement, and the routed reunion measurement.
   `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
 
 ## Candidates
+
+### Restricting an operator Schmidt decomposition at a fixed configuration — candidate (2026-10-23)
+
+- **Pattern:** Choose an actual configuration in the region carrying an identity
+  factor, restrict each outside matrix to that configuration, and retain the
+  same number of summands in the operator Schmidt decomposition.
+- **Seen:** The left-factor argument in
+  `TNLean/Lattice/Sheet/LeftSupportedSchmidtRank.lean` and the right-factor
+  argument in `TNLean/Lattice/Sheet/SupportedSchmidtRank.lean` (PR #10029).
+- **Abstraction (proposed):** If another use appears, first seek a lemma saying
+  that restriction by separate coordinate maps preserves a product
+  decomposition with the same number of summands.
+- **Notes:** The left and right arguments use different cuts. Both treat empty
+  global configuration spaces separately; no identity factor is cancelled.
+
 
 ### Mass of a cut beyond its leading eigenvalues — candidate
 - **Pattern:**

@@ -1304,6 +1304,19 @@ lines 246–267) states positive operators at the rate `e^{-l/ξ'}`, while the n
 (lines 912–943) obtains a positive `O_B⁺ = O_Bᴴ O_B` only at error `O(√ε)`. The bound
 proved is `(√2 + 4) √C₁ e^{-l/(2ξ')}`.
 
+### Local solution of gapped Hamiltonians after Hastings: the finite-range approximation
+
+[hastings05_filtered_term_approximation.tex](hastings05_filtered_term_approximation.tex)
+(local correction, resolved) records two deviations in the finite-range approximation `M_i` of
+a Gaussian-filtered term in Hastings, *Solving Gapped Hamiltonians Locally*
+(arXiv:cond-mat/0508554v3, lines 285–320). First, the printed Gaussian weight
+`e^{-(tΔE)²/2}` of eq. `mid` stands for `e^{-(tΔE)²/(2q)}`. Second, `M_i` is taken to be the
+normalized partial trace of the filtered term onto a neighbourhood of the support of `H_i`,
+rather than the source's truncated evolution. Its support lies within radius `l + R`
+of the anchor when the neighbourhood radius is `l`. The source radius therefore requires
+`l = l_proj - R` and `R ≤ l_proj`; the norm bound is unchanged, and the localization
+estimate is analogous to the source's, with different constants.
+
 ### One-dimensional area law after Hastings: the entropy gain constants
 
 [hastings07_relent_constants.tex](hastings07_relent_constants.tex)
