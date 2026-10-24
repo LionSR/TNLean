@@ -145,13 +145,6 @@ def translate (w : ℝ × ℝ) : SquarePatch (fun x => pos x + w) q where
 
 @[simp] theorem translate_center (w : ℝ × ℝ) : (p.translate w).center = p.center + w := rfl
 
-@[simp] theorem translate_scale (w : ℝ × ℝ) : (p.translate w).scale = p.scale := rfl
-
-@[simp] theorem translate_dim (w : ℝ × ℝ) : (p.translate w).dim = p.dim := rfl
-
-theorem translate_outer (w : ℝ × ℝ) : (p.translate w).outer = p.outer :=
-  (squareSample_translate pos w p.center _).symm
-
 theorem cylSum_translate (w : ℝ × ℝ) : (p.translate w).cylSum = p.cylSum := by
   refine Finset.sum_congr rfl fun s _ => ?_
   exact siteLift_rankOne_castSiteVec (squareSample_translate pos w p.center (p.radius s.1))
