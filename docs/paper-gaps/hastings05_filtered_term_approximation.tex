@@ -112,7 +112,7 @@ lines~1548--1561):
 \begin{align}
   \lVert[\tilde M_i^0,M_j]\rVert\le
   J^2\bigl(N_Mg(c_1l,l)+2e^{-(c_1l\Delta E)^2/(2q)}\bigr),
-  \label{eq:lc}
+  \label{eq:hastings05_lc}
 \end{align}
 with $N_M$ the number of sites acted on by $M_j$; this is the Lieb--Robinson
 bound applied site by site. The formalization instead uses the partial trace of
@@ -125,11 +125,11 @@ commutes with $M_j$, so
   \lVert[\tilde M_i^0,M_j]\rVert
   =\lVert[\tilde M_i^0-\mathbb E_K(\tilde M_i^0),M_j]\rVert
   \le2\lVert M_j\rVert\,\lVert\tilde M_i^0-\mathbb E_K(\tilde M_i^0)\rVert,
-  \label{eq:lc-pt}
+  \label{eq:hastings05_lc_partial_trace}
 \end{align}
-and~\eqref{eq:apb-pt}, with neighbourhood radius $r$, bounds the right side. The term $N_Mg(c_1l,l)$
-of~\eqref{eq:lc} is replaced by the localization term
-of~\eqref{eq:apb-pt}, which does not depend on the size of the support of
+and~\eqref{eq:hastings05_filtered_partial_trace_bound}, with neighbourhood radius $r$, bounds the right side. The term $N_Mg(c_1l,l)$
+of~\eqref{eq:hastings05_lc} is replaced by the localization term
+of~\eqref{eq:hastings05_filtered_partial_trace_bound}, which does not depend on the size of the support of
 $M_j$. The rest of the argument for eq.~\texttt{blecm} (lines~1562--1601) is
 unchanged as a projection argument. For $r>0$, taking $T=c_1r$ and
 $q=c_1r\Delta E$ yields exponential decay provided $c_1>0$ and
@@ -150,7 +150,7 @@ trace. The theorems that take $M_i$ as input,
 and \leanid{TNLean.Lattice.norm_sum_sub_le_of_sum_eq}, hold for every operator
 $M$, so they apply to the source's truncated evolution as well.
 \leanid{TNLean.Lattice.norm_commutator_gaussianFilteredTerm_le_of_disjoint}
-proves~\eqref{eq:lc-pt} with the bound~\eqref{eq:apb-pt}, and
+proves~\eqref{eq:hastings05_lc_partial_trace} with the bound~\eqref{eq:hastings05_filtered_partial_trace_bound}, and
 \leanid{TNLean.Lattice.norm_groundCompression_commutator_le_graphNeighborhood}
 combines it with the triangle inequality of lines~1562--1593.
 
