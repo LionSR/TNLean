@@ -34,10 +34,15 @@ with `H_D = ∑_{k ∈ D} h k`, which is the definition used here. If `‖h k‖
 ## References
 
 Hastings, *Solving gapped Hamiltonians locally*, arXiv:cond-mat/0508554v3, `proj3new.tex`,
-lines 1174–1195. The source states the bound before equation `percb2` with `Tr(O e^{-βH})` on
-the right; the form proved here, with `‖O‖ Tr e^{-βH}` and `‖H_C + H_B‖ ≤ (n_C + n_B) J`, is the
-one equation `percb2` uses. The final step of `percb2`, `n_C + n_B ≤ S n_C`, is a property of
-clusters on a lattice, proved by `card_add_card_clusterBoundary_le`.
+lines 1174–1195.
+
+**Local fix (right side of the single-cluster bound):** the source states the bound before
+equation `percb2` with `Tr(O e^{-βH})` on the right, which fails as printed; the form proved here,
+with `‖O‖ Tr e^{-βH}` and `‖H_C + H_B‖ ≤ (n_C + n_B) J`, is the one equation `percb2` uses.
+Documented in `docs/paper-gaps/hastings05_cluster_part_trace_pairing.tex`.
+
+The final step of `percb2`, `n_C + n_B ≤ S n_C`, is a property of clusters on a lattice, proved
+by `card_add_card_clusterBoundary_le`.
 -/
 
 open scoped Matrix.Norms.L2Operator
