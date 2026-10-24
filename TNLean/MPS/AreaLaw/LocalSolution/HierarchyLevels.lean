@@ -188,8 +188,8 @@ theorem hierarchyDeficiency_le_hierarchyMajorant {K e : ℝ} (hK : 0 < K) (he : 
     linarith
 
 /-- **The closed form.** For `0 < e ≤ 1` and `0 ≤ s ≤ 1`, `β_m ≤ (3^m - 1) e^{s^m}`. The
-source's case `s = 1 - 1/h`, `m = h` is `hierarchyMajorant_le_rpow_quarter`. Each step uses `e ≤ e^{s^m}`, `e^{s^m} ≤ e^{s^{m+1}}` and
-`C^s ≤ C` for `C ≥ 1`. -/
+source's case `s = 1 - 1/h`, `m = h` is `hierarchyMajorant_le_rpow_quarter`. Each step uses
+`e ≤ e^{s^m}`, `e^{s^m} ≤ e^{s^{m+1}}` and `C^s ≤ C` for `C ≥ 1`. -/
 theorem hierarchyMajorant_le {e s : ℝ} (he0 : 0 < e) (he1 : e ≤ 1) (hs0 : 0 ≤ s)
     (hs1 : s ≤ 1) (m : ℕ) :
     hierarchyMajorant e s m ≤ ((3 : ℝ) ^ m - 1) * e ^ (s ^ m) := by
