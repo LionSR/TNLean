@@ -1360,7 +1360,7 @@ positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
 ### Local solution of gapped Hamiltonians after Hastings: the hierarchical projection
 
 [hastings05_hierarchical_projection.tex](hastings05_hierarchical_projection.tex)
-(local correction, open) records the stronger norm estimate
+(local correction, resolved) records the stronger norm estimate
 `‖Ψ − P Ψ‖ ≤ ε/x` needed for the normalization step in Hastings,
 *Solving Gapped Hamiltonians Locally* (arXiv:cond-mat/0508554v3, lines 640–704).
 The printed expectation bound alone gives only `√(ε/x)`. The scalar recurrence
@@ -1369,6 +1369,9 @@ are proved, but their application to the full hierarchy remains open.
 Comparing successive normalized vectors by the triangle inequality gives an
 accumulated majorant involving `∑_{j<m} b_j`, with coefficient `3^{m−1}`.
 That estimate neither proves nor refutes the source's smaller recurrence.
+The complete hierarchy is controlled instead by measuring every deficiency
+against the ground state: `D_{m+1}² ≤ 2 D_m² + ((ε + 2 K D_m)/x_m)²`, which with
+the source's window radii gives `D_m ≤ (3^m − 1) e^{s^m}`, still polynomial in `N`.
 
 ## Polynomial PEPS: zero-floor maximizing filters
 
@@ -1449,14 +1452,25 @@ bonds are nearest-neighbour. The decay length `ξ_perc = 2R / ln(1/(xy))` of ord
 `R` absorbs the difference. The formalized sum takes the size threshold as a
 hypothesis.
 
+### Local solution of gapped Hamiltonians: the example of non-commuting low-energy terms
+
+[hastings05_low_energy_example.tex](hastings05_low_energy_example.tex)
+(scope restriction, open) records two slips in the example of Hastings,
+*Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, source lines
+1655–1676). The printed terms sum to `H = −S^z_1 + ∑_{i ≥ 2} S^z_i`, not
+`∑_{i ≠ 0} S^z_i`, and `H_0` commutes on the ground space with `H_i` for `i ≥ 3`, not
+`i ≥ 2`. The ground space stays two-dimensional and the non-commutation claims are
+unchanged. The formalized statement concerns the terms `H_i`, not the filtered `M_i` of
+the source's claim; the unargued passage between them is not formalized.
+
 ### One-dimensional area law after Hastings: the orders of the Rényi bootstrap lemma
 
 [hastings07_renyi_bootstrap_orders.tex](hastings07_renyi_bootstrap_orders.tex)
-(scope restriction, open) records that the Rényi form of Lemma 2 in Hastings,
+(scope restriction, resolved) records that the Rényi form of Lemma 2 in Hastings,
 *An area law for one-dimensional quantum systems* (arXiv:0705.2024v4, source lines 392–410),
 is formalized for orders `0 < α < 1` under the convergence condition
-`e^{−2α/ξ'} (D²)^{1−α} < 1`; order `1` is the von Neumann Lemma 2. Orders `α > 1` remain;
-the elimination plan is `S_α ≤ S` by the concavity of the logarithm.
+`e^{−2α/ξ'} (D²)^{1−α} < 1`; order `1` is the von Neumann Lemma 2. Orders `α > 1` follow
+from the von Neumann Lemma 2 by `S_α ≤ S`, the concavity of the logarithm.
 
 ### Local solution of gapped Hamiltonians: the truncated dynamics of `M_i`
 

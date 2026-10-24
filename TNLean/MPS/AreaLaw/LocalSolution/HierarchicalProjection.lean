@@ -66,8 +66,7 @@ Documented in
 
 Not formalized here: the supersite grouping of lines 609–628, the energy bound eq. `hchy` and
 the count of at most `2n` final states (lines 709–730), which the source states with "one may
-show", the bookkeeping that tracks which vector each level is compared with across all `h`
-levels, and the extensions to higher dimensions (lines 745–756).
+show", and the extensions to higher dimensions (lines 745–756).
 
 ## Main statements
 

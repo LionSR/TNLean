@@ -154,9 +154,9 @@ which the relevant geometric series converges.
     chain Lieb--Robinson estimate with raised velocity and is not shown to be
     the source's $\max(2v/\Delta E,\xi_C)$ for a Lieb--Robinson pair in the
     source's sense \cite{gap:hastings07_lemma1_decay_length,
-        gap:hastings07_gaussian_average_exponent}. It is proved for orders
-    $0<\alpha<1$; order $1$ is the von Neumann entropy of
-    Theorem~\ref{thm:hastings_bootstrap}, and orders $\alpha>1$ are not covered
+        gap:hastings07_gaussian_average_exponent}. It is proved here for orders $0<\alpha<1$; order $1$ is the von Neumann
+    entropy of Theorem~\ref{thm:hastings_bootstrap}, and orders $\alpha>1$ are
+    Theorem~\ref{thm:hastings_renyi_bootstrap_above_one}
     \cite{gap:hastings07_renyi_bootstrap_orders}.
 \end{theorem}
 \begin{proof}\leanok
@@ -169,4 +169,32 @@ which the relevant geometric series converges.
     since $\tilde\xi\ge20$. Theorem~\ref{thm:hastings_renyi_bootstrap_factorization_at}
     gives the bound for $D\ge2$ and the value at most $0$ for $D=1$, where the
     right side is nonnegative.
+\end{proof}
+
+\begin{theorem}[The Rényi form of the bootstrap lemma, orders above one]
+    \label{thm:hastings_renyi_bootstrap_above_one}
+    \lean{TNLean.MPS.AreaLaw.exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_of_one_lt,
+        TNLean.MPS.AreaLaw.Hastings.renyiEntropy_cutMatrix_le_regionEntropy_of_one_lt}
+    \leanok
+    \uses{thm:hastings_bootstrap}
+    In the setting of Theorem~\ref{thm:hastings_bootstrap}, with the same
+    constant $K$, for every order $\alpha>1$
+    \begin{align*}
+        S_\alpha(\rho^0_{1,j})\le\ln k+\xi'\ln\bigl(2C_1^2/P\bigr)\ln D+F(\xi',D).
+    \end{align*}
+    For $\alpha>1$ the convergence condition of
+    \cite[line 406]{Hastings2007AreaLaw} always holds, and the function
+    replacing $F(\xi',D)$ is $F(\xi',D)$ itself; together with
+    Theorem~\ref{thm:hastings_renyi_bootstrap} this covers the orders of
+    \cite[lines 392--410]{Hastings2007AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_bootstrap}
+    For a density matrix with eigenvalues $p_i$ and $\alpha>1$, the concavity of
+    the logarithm with weights $p_i$ gives
+    $\ln\sum_ip_i^\alpha\ge(\alpha-1)\sum_ip_i\ln p_i$, so dividing by
+    $1-\alpha<0$ gives $S_\alpha\le S$ (the bound of Rényi entropies of order
+    above one in the companion quantum-channel
+    volume~\cite[``Rényi entropy of order above one'']{QICLean2026Blueprint}).
+    Theorem~\ref{thm:hastings_bootstrap} bounds $S$.
 \end{proof}
