@@ -13,7 +13,6 @@ every temperature. -/
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[
-    ``TNLean.Lattice.ClusterExpansion.list_prod_ofFn_smul,
     ``TNLean.Lattice.ClusterExpansion.sum_prod_le_exp_of_subset_powerset,
     ``TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_pow_le,
     ``TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_pow_le_percolation] do

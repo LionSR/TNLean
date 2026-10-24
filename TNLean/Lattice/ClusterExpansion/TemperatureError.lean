@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ListProduct
 import TNLean.Lattice.ClusterExpansion.Percolation
 import TNLean.Lattice.ClusterExpansion.ThermalProduct
 import TNLean.Lattice.ClusterExpansion.Truncation
@@ -10,7 +11,7 @@ import TNLean.Lattice.ClusterExpansion.Truncation
 /-!
 # The error of the truncated expansion at every temperature
 
-At arbitrary temperature Hastings, *Solving gapped Hamiltonians locally*
+At arbitrary temperature, Hastings, *Solving gapped Hamiltonians locally*
 (arXiv:cond-mat/0508554v3, `References/cond-mat_0508554/proj3new.tex`, lines 1303–1347), replaces
 `e^{-βH}` by the product `ρ(β, l) = ρ(β/n, l)^n` of `n` truncated factors (equation `mplt`), and
 bounds the error by the operators `ρ_m` of the terms with at least `m` large clusters across the
@@ -20,7 +21,8 @@ This file proves that bound. Each factor is the inclusion–exclusion sum
 `ρ(β/n, l) = ∑_U (-1)^{|U|} ρ(β/n, U)` over the admissible families `U` of large connected sets
 (`truncatedExp_eq_sum`), and the empty family gives `e^{-βH/n}`. Expanding the `n`-th power gives a
 sum over words `w` of `n` families, in which the word of empty families is `e^{-βH}`. Every other
-word is a product of cluster parts bounded by `‖O‖ (∏_j ∏_{C ∈ w_j} y^{n_C}) Tr e^{-βH}`
+word is a product of cluster parts whose trace against `O` has modulus at most
+`‖O‖ (∏_j ∏_{C ∈ w_j} y^{n_C}) Tr e^{-βH}`
 (`norm_trace_mul_list_prod_clusterPart_le_pow`), with `y = (e^{Jβ/n} - 1) e^{SJβ/n}`. Summing
 over the words,
 
@@ -31,7 +33,6 @@ source's estimate of `∑_{m ≥ 1} ρ_m` by `∑_{m ≥ 1} (1/m!) (∑_C n y^{n
 
 ## Main results
 
-* `TNLean.Lattice.ClusterExpansion.list_prod_ofFn_smul`: scalars leave an ordered product.
 * `TNLean.Lattice.ClusterExpansion.sum_prod_le_exp_of_subset_powerset`: for families of subsets
   of `T` and nonnegative weights, `∑_U ∏_{i ∈ U} a_i ≤ exp(∑_{i ∈ T} a_i)`.
 * `TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_pow_le`:
@@ -49,17 +50,6 @@ open Finset Matrix
 open scoped Matrix.Norms.L2Operator
 
 namespace TNLean.Lattice.ClusterExpansion
-
-/-- Scalars leave an ordered product: `∏_i (c_i a_i) = (∏_i c_i) ∏_i a_i`, with the product of the
-`a_i` taken in order. -/
-theorem list_prod_ofFn_smul {R A : Type*} [CommMonoid R] [Monoid A] [MulAction R A]
-    [IsScalarTower R A A] [SMulCommClass R A A] {n : ℕ} (c : Fin n → R) (a : Fin n → A) :
-    (List.ofFn fun i ↦ c i • a i).prod = (∏ i, c i) • (List.ofFn a).prod := by
-  induction n with
-  | zero => simp
-  | succ n ih =>
-    simp only [List.ofFn_succ, List.prod_cons, Fin.prod_univ_succ]
-    rw [ih, smul_mul_smul_comm]
 
 /-- **Families of subsets.** For nonnegative weights `a` on a finite set `T` and any collection
 `𝒜` of subsets of `T`, `∑_{U ∈ 𝒜} ∏_{i ∈ U} a_i ≤ exp(∑_{i ∈ T} a_i)`. The empty family
@@ -85,7 +75,8 @@ variable {ι κ : Type*} [Fintype ι] [DecidableEq ι] [Fintype κ] [DecidableEq
 /-- **The error at every temperature** (Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`,
 lines 1334–1347). Let `H = ∑_k h_k` be Hermitian with Hermitian terms of norm at most `J`, let
 `β ≥ 0` and `n > 0`, and let every large connected set `C` have `n_C + n_{∂C} ≤ S n_C`. Then the
-product `ρ(β, l) = ρ(β/n, l)^n` of equation `mplt` satisfies, for every `O`,
+product `ρ(β, l) = ρ(β/n, l)^n` of equation `mplt`, for any `n > 0` (the source takes the
+smallest even `n` with `β/n ≤ β₀`), satisfies, for every `O`,
 `|Tr (O (e^{-βH} - ρ(β/n, l)^n))| ≤ ‖O‖ (exp(n ∑_C y^{n_C}) - 1) Tr e^{-βH}`, the sum over the
 large connected sets, with `y = (e^{Jβ/n} - 1) e^{SJβ/n}`.
 
@@ -152,7 +143,7 @@ theorem norm_trace_mul_exp_sub_truncatedExp_pow_le {H : Matrix ι ι ℂ} (hHerm
     intro w hw
     have hwA : ∀ j, w j ∈ 𝒜 := Fintype.mem_piFinset.1 hw
     simp only [hterm_def]
-    rw [list_prod_ofFn_smul, Matrix.mul_smul, trace_smul, norm_smul, norm_prod]
+    rw [List.prod_ofFn_smul, Matrix.mul_smul, trace_smul, norm_smul, norm_prod]
     simp only [norm_pow, norm_neg, norm_one, one_pow, prod_const_one, one_mul]
     refine (norm_trace_mul_list_prod_clusterPart_le_pow hHerm hn
       (B := fun j ↦ (w j).biUnion (boundary G)) (C := fun j ↦ (w j).biUnion id)
@@ -168,8 +159,8 @@ theorem norm_trace_mul_exp_sub_truncatedExp_pow_le {H : Matrix ι ι ℂ} (hHerm
     sum_prod_le_exp_of_subset_powerset (filter_subset _ _) fun C _ ↦ hy0 C
   have hwords : ∑ w ∈ W.erase w₀, ∏ j, f (w j) = (∑ U ∈ 𝒜, f U) ^ n - 1 := by
     have h1 : (∑ U ∈ 𝒜, f U) ^ n = ∑ w ∈ W, ∏ j, f (w j) := by
-      rw [hW, ← prod_univ_sum]
-      simp
+      rw [hW]
+      exact sum_pow' 𝒜 f n
     rw [h1, ← add_sum_erase W _ hw₀]
     simp [hw₀_def, hf]
   rw [hdiff, Matrix.mul_neg, trace_neg, norm_neg, Finset.mul_sum, trace_sum]
