@@ -90,6 +90,17 @@ theorem regularChargePairOpenRegionMatrix_eq_image
   rw [← hP, Matrix.mulVec_mulVec, hTP]
   exact hT
 
+/-- With trivial weight, the canonical correlated column is the plain canonical
+open-region column. -/
+private theorem regularProjectorChargePairOpenRegionMatrix_one (R : Finset V)
+    (e₀ e₁ : {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R})
+    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (fun α => regularProjectorChargePairOpenRegionMatrix
+        (G := G) R e₀ e₁ (fun _ => 1) 1 α θ) =
+      fun α => regularProjectorOpenRegionMatrix R α θ := by
+  funext α
+  simp only [regularProjectorChargePairOpenRegionMatrix, regularProjectorOpenRegionMatrix,
+    one_mul]
 
 /-- Removing the correlated weight recovers the actual numbered open-region
 contraction. Source: SCP10, the unmodified six-spin input in lines 2505–2558. -/
@@ -101,14 +112,8 @@ theorem regularChargePairOpenRegionMatrix_one_eq_openRegionWeight {d : ℕ}
     (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
     (fun s => regularChargePairOpenRegionMatrix a R e₀ e₁ (fun _ => 1) 1 s θ) =
       openRegionWeight (groupBondTensor a) R (fun f => Fintype.equivFin G (θ f)) := by
-  rw [← regularChargePairOpenRegionMatrix_eq_image a ha R e₀ e₁ _ 1 θ]
-  have hplain : (fun α => regularProjectorChargePairOpenRegionMatrix
-        (G := G) R e₀ e₁ (fun _ => 1) 1 α θ) =
-      fun α => regularProjectorOpenRegionMatrix R α θ := by
-    funext α
-    simp only [regularProjectorChargePairOpenRegionMatrix, regularProjectorOpenRegionMatrix,
-      one_mul]
-  rw [hplain]
+  rw [← regularChargePairOpenRegionMatrix_eq_image a ha R e₀ e₁ _ 1 θ,
+    regularProjectorChargePairOpenRegionMatrix_one R e₀ e₁ θ]
   exact regionPhysicalMap_regularProjectorOpenRegionMatrix a ha R θ
 
 /-- The actual correlated two-bond charge insertion can be prepared by one unitary
@@ -150,15 +155,10 @@ theorem exists_unitary_regularPhysicalChargePairCreation
   obtain ⟨W, hW, hWT⟩ :=
     exists_unitary_regionPhysicalProductMatrix_mul_of_projector_commute a ha R U hU hUP.eq
   refine ⟨W, hW, fun θ => ?_⟩
-  have hplain : (fun α => regularProjectorChargePairOpenRegionMatrix
-        (G := G) R e₀ e₁ (fun _ => 1) 1 α θ) =
-      fun α => regularProjectorOpenRegionMatrix R α θ := by
-    funext α
-    simp only [regularProjectorChargePairOpenRegionMatrix, regularProjectorOpenRegionMatrix,
-      one_mul]
   rw [← regularChargePairOpenRegionMatrix_eq_image a
       (fun v => (ha v).toIsGInjective) R e₀ e₁ _ 1 θ,
-    hplain, Matrix.mulVec_mulVec, hWT, ← Matrix.mulVec_mulVec]
+    regularProjectorChargePairOpenRegionMatrix_one R e₀ e₁ θ, Matrix.mulVec_mulVec, hWT,
+    ← Matrix.mulVec_mulVec]
   rw [regularRegionChargeReferenceMatrix_mulVec R T hT htree o e₀ e₁ hne Q
     S.toRepresentation.character p hraw θ]
   exact regularChargePairOpenRegionMatrix_eq_image a
