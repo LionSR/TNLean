@@ -120,8 +120,8 @@ theorem sum_norm_offDiagonalPart_le {ι : Type*} (t : Finset ι) {A : E →L[�
 
 omit [CompleteSpace E] in
 /-- **Eq. `low` up to `o(i)`.** Let `P` be the orthogonal projection onto a closed subspace `K`
-spanned by a unit vector `v` and a vector `w` orthogonal to it, so that every vector of `K` is
-`⟨v, u⟩ v + ⟨w, u⟩ w`. Then for every `M`,
+with `v ∈ K` a unit vector, `⟨v, w⟩ = 0`, and every vector `u` of `K` equal to
+`⟨v, u⟩ v + ⟨w, u⟩ w`, as when `v`, `w` is an orthonormal pair spanning `K`. Then for every `M`,
 `‖M v - ⟨v, M v⟩ v‖ ≤ ‖(1 - P) M v‖ + ‖o‖`, where `o` is the off-diagonal part of `P M P` in the
 pair. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 476–491; the first term is the
 one bounded by eq. `facld` (`norm_sub_starProjection_apply_le_of_gaussianFilteredTerm`). -/

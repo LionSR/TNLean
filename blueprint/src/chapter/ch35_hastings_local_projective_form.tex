@@ -322,8 +322,9 @@ commutators in Theorem~\ref{thm:hastings05_two_dim_basis}.
     \lean{TNLean.Lattice.norm_apply_sub_inner_smul_le_add_offDiagonalPart}
     \leanok
     \uses{thm:hastings05_two_dim_basis}
-    Let $P$ be the orthogonal projection onto a closed subspace spanned by a
-    unit vector $v$ and a vector $w$ orthogonal to it. Then for every $M$,
+    Let $v,w$ be an orthonormal pair and $P$ the orthogonal projection onto
+    their span, so that $Pu=\langle v,u\rangle v+\langle w,u\rangle w$. Then
+    for every $M$,
     \begin{align}
         \|Mv-\langle v,Mv\rangle v\|\le\|(1-P)Mv\|+\|o_{PMP}\|.
     \end{align}
