@@ -1316,6 +1316,10 @@ rather than the source's truncated evolution. Its support lies within radius `l 
 of the anchor when the neighbourhood radius is `l`. The source radius therefore requires
 `l = l_proj - R` and `R ≤ l_proj`; the norm bound is unchanged, and the localization
 estimate is analogous to the source's, with different constants.
+The same partial trace bounds the commutator with a separated operator in
+the degenerate case. Its closed neighbourhood must be strictly smaller than
+the support separation; the decay estimate also requires a positive time-window
+slope `c₁` with `v c₁ < 1/2`.
 
 ### One-dimensional area law after Hastings: the entropy gain constants
 
