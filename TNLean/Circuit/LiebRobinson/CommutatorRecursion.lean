@@ -15,6 +15,7 @@ import Mathlib.Tactic.FunProp
 import Mathlib.Analysis.Normed.Operator.Mul
 import Mathlib.Analysis.Normed.Module.FiniteDimension
 import Mathlib.Analysis.CStarAlgebra.Matrix
+import TNLean.Algebra.MatrixHermitianSum
 import TNLean.Circuit.LocalCircuit
 
 /-!
@@ -447,7 +448,7 @@ theorem heisenbergCommutatorNorm_le_integral {κ : Type*} [Fintype κ]
     simp
   have hK : K ∈ skewAdjoint _ :=
     IsSelfAdjoint.smul_mem_skewAdjoint hI
-      (isSelfAdjoint_sum Finset.univ (fun j _ => (hHerm j).isSelfAdjoint))
+      (Matrix.isHermitian_sum _ fun j _ => hHerm j).isSelfAdjoint
   have hL : L ∈ skewAdjoint _ := by
     apply IsSelfAdjoint.smul_mem_skewAdjoint hI
     apply isSelfAdjoint_sum

@@ -183,19 +183,13 @@ theorem norm_gaussianFilteredTerm_sub_self_le (q ΔE : ℝ) {H : Matrix n n ℂ}
   have habs : Integrable (fun t : ℝ => |t|) μ :=
     ((memLp_id_gaussianReal (μ := 0) (v := (q / ΔE ^ 2).toNNReal) 1).integrable
       le_rfl).abs
-  have hmoment : ∫ t, |t| ∂μ ≤ Real.sqrt (2 * (q / ΔE ^ 2).toNNReal / Real.pi) := by
-    have h0 := integral_compl_Icc_abs_gaussianReal_le (q / ΔE ^ 2).toNNReal le_rfl
-    simp only [neg_zero, ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, zero_pow, zero_div,
-      Real.exp_zero, mul_one] at h0
-    rwa [setIntegral_eq_integral_of_forall_compl_eq_zero fun t ht => by
-      simp only [Set.mem_compl_iff, not_not, Set.Icc_self, Set.mem_singleton_iff] at ht
-      simp [ht]] at h0
   rw [hdiff]
   calc ‖∫ t, f t ∂μ‖ ≤ ∫ t, c * |t| ∂μ :=
         norm_integral_le_of_norm_le (habs.const_mul c) (Filter.Eventually.of_forall hf)
     _ = c * ∫ t, |t| ∂μ := integral_const_mul c _
     _ ≤ c * Real.sqrt (2 * (q / ΔE ^ 2).toNNReal / Real.pi) :=
-        mul_le_mul_of_nonneg_left hmoment (norm_nonneg _)
+        mul_le_mul_of_nonneg_left
+          (integral_abs_gaussianReal_le_sqrt_two_mul_div_pi _) (norm_nonneg _)
     _ = _ := mul_comm _ _
 
 end Increment
