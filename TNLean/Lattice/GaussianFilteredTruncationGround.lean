@@ -55,7 +55,6 @@ theorem exp_neg_sq_div_eq_of_time_eq {q ΔE : ℝ} (hΔE : ΔE ≠ 0) :
   · congr 1
     rw [div_mul_cancel₀ q hΔE]
     field_simp
-    ring
 
 section Graph
 
@@ -85,7 +84,7 @@ theorem norm_gaussianFilteredTerm_sub_truncated_le_of_time [NeZero d] [Decidable
           Real.exp ((2 * vR * |b₀| * Real.exp (2 * μ * R) + 1) * (q / ΔE) - μ * m) +
         2 * ‖W‖ * Real.exp (-q / 2) := by
   have hb := norm_gaussianFilteredTerm_sub_truncated_le G X a ha h hHerm hSupport R hDiam vR hCard
-    b₀ hBudget hq s K hsK S hSK hW J hJ μ hμ m hm (div_nonneg hq hΔE.le)
+    b₀ hBudget (ΔE := ΔE) hq s K hsK S hSK hW J hJ μ hμ m hm (div_nonneg hq hΔE.le)
   rwa [exp_neg_sq_div_eq_of_time_eq hΔE.ne'] at hb
 
 /-- **Eq. `facld` for the truncated approximation.** Let every eigenvalue of `H = ∑ₖ hₖ` equal
@@ -123,7 +122,7 @@ of `norm_gaussianFilteredTerm_sub_truncated_le`. Hastings, arXiv:cond-mat/050855
 `T = q / ΔE`. -/
 theorem norm_truncated_apply_sub_inner_smul_le [NeZero d] [DecidableEq κ] {q ΔE : ℝ}
     (hq : 0 ≤ q) (hΔE : 0 < ΔE) {E₀ : ℝ} {Ω : EuclideanSpace ℂ (ι → Fin d)}
-    (hgs : IsGappedGroundState (∑ k, h k) E₀ Ω ΔE) (s : Finset κ) (K : Finset ι)
+    (hgs : Matrix.IsGappedGroundState (∑ k, h k) E₀ Ω ΔE) (s : Finset κ) (K : Finset ι)
     (hsK : ∀ k ∈ s, X k ⊆ K) (S : Finset ι) (hSK : S ⊆ K)
     {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W ∈ supportedOperators d (S : Set ι)) (J : ℝ)
     (hJ : ∀ k, ‖h k‖ ≤ J) (μ : ℝ) (hμ : 0 ≤ μ) (m : ℕ)
