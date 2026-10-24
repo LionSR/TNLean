@@ -43,17 +43,20 @@ open scoped InnerProductSpace
 namespace TNLean.Lattice
 
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+  [CompleteSpace E]
 
 /-- The off-diagonal part `⟨v, B w⟩ |v⟩⟨w| + ⟨w, B v⟩ |w⟩⟨v|` of `B` in the pair `v`, `w`.
 Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 476–480. -/
 noncomputable def offDiagonalPart (v w : E) (B : E →L[𝕜] E) : E →L[𝕜] E :=
   ⟪v, B w⟫_𝕜 • InnerProductSpace.rankOne 𝕜 v w + ⟪w, B v⟫_𝕜 • InnerProductSpace.rankOne 𝕜 w v
 
+omit [CompleteSpace E] in
 theorem offDiagonalPart_apply (v w : E) (B : E →L[𝕜] E) (x : E) :
     offDiagonalPart v w B x =
       (⟪v, B w⟫_𝕜 * ⟪w, x⟫_𝕜) • v + (⟪w, B v⟫_𝕜 * ⟪v, x⟫_𝕜) • w := by
   simp [offDiagonalPart, InnerProductSpace.rankOne_apply, smul_smul]
 
+omit [CompleteSpace E] in
 /-- **The norm of the off-diagonal part.** For an orthonormal pair `v`, `w`, the off-diagonal
 part of `B` has norm at most the larger of `‖⟨v, B w⟩‖` and `‖⟨w, B v⟩‖`. -/
 theorem norm_offDiagonalPart_le {v w : E} (hv : ‖v‖ = 1) (hw : ‖w‖ = 1) (hvw : ⟪v, w⟫_𝕜 = 0)
@@ -115,14 +118,15 @@ theorem sum_norm_offDiagonalPart_le {ι : Type*} (t : Finset ι) {A : E →L[�
   exact Finset.sum_le_sum fun i _ =>
     norm_offDiagonalPart_le_norm_commutator_div hA (B i) hv hw hvw hAv hAw hrs
 
+omit [CompleteSpace E] in
 /-- **Eq. `low` up to `o(i)`.** Let `P` be the orthogonal projection onto a closed subspace `K`
-spanned by an orthonormal pair `v`, `w`, so that every vector of `K` is
+spanned by a unit vector `v` and a vector `w` orthogonal to it, so that every vector of `K` is
 `⟨v, u⟩ v + ⟨w, u⟩ w`. Then for every `M`,
 `‖M v - ⟨v, M v⟩ v‖ ≤ ‖(1 - P) M v‖ + ‖o‖`, where `o` is the off-diagonal part of `P M P` in the
 pair. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 476–491; the first term is the
 one bounded by eq. `facld` (`norm_sub_starProjection_apply_le_of_gaussianFilteredTerm`). -/
 theorem norm_apply_sub_inner_smul_le_add_offDiagonalPart (K : Submodule 𝕜 E)
-    [K.HasOrthogonalProjection] {v w : E} (hv : ‖v‖ = 1) (hw : ‖w‖ = 1) (hvw : ⟪v, w⟫_𝕜 = 0)
+    [K.HasOrthogonalProjection] {v w : E} (hv : ‖v‖ = 1) (hvw : ⟪v, w⟫_𝕜 = 0)
     (hvK : v ∈ K) (hspan : ∀ u ∈ K, u = ⟪v, u⟫_𝕜 • v + ⟪w, u⟫_𝕜 • w) (M : E →L[𝕜] E) :
     ‖M v - ⟪v, M v⟫_𝕜 • v‖ ≤
       ‖M v - K.starProjection (M v)‖ +
@@ -134,16 +138,18 @@ theorem norm_apply_sub_inner_smul_le_add_offDiagonalPart (K : Submodule 𝕜 E)
   have hdecomp := hspan (P (M v)) (K.starProjection_apply_mem _)
   have hvv : ⟪v, P (M v)⟫_𝕜 = ⟪v, M v⟫_𝕜 := by rw [hsa, hPv]
   have hoff : offDiagonalPart v w (P * M * P) v = ⟪w, P (M v)⟫_𝕜 • w := by
-    rw [offDiagonalPart_apply, hvw, inner_self_eq_norm_sq_to_K, hv]
+    rw [offDiagonalPart_apply, inner_eq_zero_symm.mp hvw, inner_self_eq_norm_sq_to_K, hv]
     simp [hPv]
-  have hsplit : M v - ⟪v, M v⟫_𝕜 • v =
-      (M v - P (M v)) + offDiagonalPart v w (P * M * P) v := by
-    rw [hoff]
-    nth_rewrite 2 [hdecomp]
+  have hP : P (M v) - ⟪v, M v⟫_𝕜 • v = ⟪w, P (M v)⟫_𝕜 • w := by
+    nth_rw 1 [hdecomp]
     rw [hvv]
     abel
+  have hsplit : M v - ⟪v, M v⟫_𝕜 • v =
+      (M v - P (M v)) + offDiagonalPart v w (P * M * P) v := by
+    rw [hoff, ← hP]
+    abel
   rw [hsplit]
-  refine (norm_add_le _ _).trans (add_le_add_left ?_ _)
+  refine (norm_add_le _ _).trans (add_le_add le_rfl ?_)
   simpa [hv] using (offDiagonalPart v w (P * M * P)).le_opNorm v
 
 end TNLean.Lattice

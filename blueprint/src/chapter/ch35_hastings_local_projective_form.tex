@@ -164,9 +164,10 @@ bounded through the partial trace of
 Theorem~\ref{thm:hastings05_filtered_approximation_graph}, so the term
 $N_Mg(c_1l,l)$ of eq.~(lc) is replaced by the localization term of that
 theorem~\cite{gap:hastings05_filtered_term_approximation}. The translation
-invariant case~\cite[lines 1603--1642]{Hastings2006Solving}, the example at
-lines 1655--1676, and the summed bound eq.~(oibu), which the source states
-only to order of magnitude, are not formalized.
+invariant case~\cite[lines 1603--1642]{Hastings2006Solving} and the example at
+lines 1655--1676 are not treated here. The summed bound eq.~(oibu), which the
+source states only to order of magnitude, is kept as the sum of the
+commutators in Theorem~\ref{thm:hastings05_two_dim_basis}.
 
 \begin{theorem}[Low-energy commutators]
     \label{thm:hastings05_low_energy_commutator}
@@ -280,4 +281,58 @@ only to order of magnitude, are not formalized.
     Since $A$ is self-adjoint and $r$ is real,
     $\langle v,[A,B]w\rangle=(r-s)\langle v,Bw\rangle$, and
     $|\langle v,[A,B]w\rangle|\le\|[A,B]\|\,\|v\|\,\|w\|$.
+\end{proof}
+
+\begin{theorem}[A basis of a two-dimensional ground space]
+    \label{thm:hastings05_two_dim_basis}
+    \lean{TNLean.Lattice.offDiagonalPart,
+        TNLean.Lattice.offDiagonalPart_apply,
+        TNLean.Lattice.norm_offDiagonalPart_le,
+        TNLean.Lattice.norm_offDiagonalPart_le_norm_commutator_div,
+        TNLean.Lattice.sum_norm_offDiagonalPart_le}
+    \leanok
+    \uses{thm:hastings05_offdiagonal_commutator}
+    Let $v,w$ be an orthonormal pair, and let the off-diagonal part of $B$ be
+    $o_B=\langle v,Bw\rangle\lvert v\rangle\langle w\rvert
+        +\langle w,Bv\rangle\lvert w\rangle\langle v\rvert$. Then
+    $\|o_B\|\le\max(|\langle v,Bw\rangle|,|\langle w,Bv\rangle|)$. If
+    moreover $A$ is self-adjoint with $Av=rv$, $Aw=sw$ and $r\ne s$, then
+    \begin{align}
+        \|o_B\|\le\frac{\|[A,B]\|}{|r-s|},
+        \qquad
+        \sum_i\|o_{B_i}\|\le\frac{\sum_i\|[A,B_i]\|}{|r-s|}
+    \end{align}
+    for every $B$ and every finite family $B_i$. With $A=PM_jP$, $B_i=PM_iP$
+    and $v,w$ an eigenbasis of the two-dimensional ground space, these are
+    $o(i)\le\|[PM_iP,PM_jP]\|/\delta\lambda_j$ and the sum behind
+    eq.~(oibu)~\cite[lines 1678--1694]{Hastings2006Solving}, for $n=2$ and
+    with the eigenbasis given~\cite{gap:hastings05_filtered_term_approximation}.
+\end{theorem}
+\begin{proof}\leanok
+    The two terms of $o_Bx$ are multiples of $v$ and of $w$, so
+    $\|o_Bx\|^2=|\langle v,Bw\rangle|^2|\langle w,x\rangle|^2
+        +|\langle w,Bv\rangle|^2|\langle v,x\rangle|^2$, and Bessel's
+    inequality bounds $|\langle v,x\rangle|^2+|\langle w,x\rangle|^2$ by
+    $\|x\|^2$. Theorem~\ref{thm:hastings05_offdiagonal_commutator} bounds
+    both elements by $\|[A,B]\|/|r-s|$.
+\end{proof}
+
+\begin{theorem}[Ground states as approximate eigenvectors up to the off-diagonal part]
+    \label{thm:hastings05_low_up_to_offdiagonal}
+    \lean{TNLean.Lattice.norm_apply_sub_inner_smul_le_add_offDiagonalPart}
+    \leanok
+    \uses{thm:hastings05_two_dim_basis}
+    Let $P$ be the orthogonal projection onto a closed subspace spanned by a
+    unit vector $v$ and a vector $w$ orthogonal to it. Then for every $M$,
+    \begin{align}
+        \|Mv-\langle v,Mv\rangle v\|\le\|(1-P)Mv\|+\|o_{PMP}\|.
+    \end{align}
+    This is eq.~(low) up to $o(i)$~\cite[lines 476--491]{Hastings2006Solving};
+    Theorem~\ref{thm:hastings05_facld} bounds the first term.
+\end{theorem}
+\begin{proof}\leanok
+    Write $Mv-\langle v,Mv\rangle v=(1-P)Mv+(PMv-\langle v,Mv\rangle v)$. Since
+    $PMv=\langle v,PMv\rangle v+\langle w,PMv\rangle w$ and
+    $\langle v,PMv\rangle=\langle v,Mv\rangle$, the second term is
+    $\langle w,PMPv\rangle w=o_{PMP}v$.
 \end{proof}

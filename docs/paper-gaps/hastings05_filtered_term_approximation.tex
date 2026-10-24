@@ -138,6 +138,41 @@ $e^{-(1/2-vc_1)r}$, and both spectral exponentials are
 $e^{-c_1r\Delta E/2}$. This gives an analogous estimate with different
 constants, rather than the printed quantitative bound.
 
+\section{A basis of a two-dimensional ground space}
+
+For a ground space of dimension $n=2$ the source chooses a basis that
+diagonalizes $A=PM_jP$, with eigenvalues $r\ne s$ and
+$\delta\lambda_j=|r-s|$ (lines~1678--1688). For an orthonormal eigenbasis
+$v,w$ and any $B$, $\langle v,[A,B]w\rangle=(r-s)\langle v,Bw\rangle$, so
+both off-diagonal elements of $B$ are at most $\lVert[A,B]\rVert/|r-s|$. The
+off-diagonal part
+$\langle v,Bw\rangle\lvert v\rangle\langle w\rvert
++\langle w,Bv\rangle\lvert w\rangle\langle v\rvert$ maps the two
+coordinates of a vector to orthogonal directions, so its norm is at most the
+larger element, and
+\begin{align}
+  o(i)\le\frac{\lVert[PM_iP,PM_jP]\rVert}{\delta\lambda_j}
+  \label{eq:hastings05_filtered_term_approximation_oi}
+\end{align}
+(lines~1688--1690). Since $PM_iv$ lies in the span of $v,w$ and
+$\langle v,PM_iv\rangle=\langle v,M_iv\rangle$,
+\begin{align}
+  \lVert M_iv-\langle v,M_iv\rangle v\rVert
+  \le\lVert(1-P)M_iv\rVert+o(i),
+  \label{eq:hastings05_filtered_term_approximation_low}
+\end{align}
+which is eq.~\texttt{low} up to $o(i)$ (lines~476--491); eq.~\texttt{facld}
+bounds the first term.
+
+The formalization is a scope restriction in three respects. It treats only
+$n=2$; the source only sketches $n>2$ (lines~1695--1705). It takes the
+eigenbasis $v,w$ as given, its existence being the spectral theorem, and does
+not choose the $j$ maximizing $\delta\lambda_j$, since the bounds hold for
+every $j$. And it leaves eq.~\texttt{oibu} as
+$\sum_io(i)\le\sum_i\lVert[PM_iP,PM_jP]\rVert/\delta\lambda_j$: the
+source sums the decaying commutator bound over $i$ only to order of magnitude,
+and the resulting constant depends on the growth of the graph.
+
 \section{Formalization}
 
 \leanid{TNLean.Lattice.exists_local_approx_gaussianFilteredTerm} gives an
@@ -153,6 +188,11 @@ $M$, so they apply to the source's truncated evolution as well.
 proves~\eqref{eq:lc-pt} with the bound~\eqref{eq:apb-pt}, and
 \leanid{TNLean.Lattice.norm_groundCompression_commutator_le_graphNeighborhood}
 combines it with the triangle inequality of lines~1562--1593.
+\leanid{TNLean.Lattice.norm_offDiagonalPart_le_norm_commutator_div} and
+\leanid{TNLean.Lattice.sum_norm_offDiagonalPart_le}
+prove~\eqref{eq:hastings05_filtered_term_approximation_oi} and its sum, and
+\leanid{TNLean.Lattice.norm_apply_sub_inner_smul_le_add_offDiagonalPart}
+proves~\eqref{eq:hastings05_filtered_term_approximation_low}.
 
 \bibliographystyle{plain}
 \bibliography{references}
