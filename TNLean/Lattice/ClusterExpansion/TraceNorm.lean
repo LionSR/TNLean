@@ -42,8 +42,8 @@ variable {n : Type*} [Fintype n] [DecidableEq n]
 
 /-- A unitary matrix has operator norm at most one.
 
-A local copy, to be replaced by the QICLean lemma requested in
-https://github.com/LionSR/QICLean/issues/913 at the next QICLean pin bump. -/
+A local copy of a general fact about unitary matrices, kept here until QICLean provides it for
+matrices over any finite index. -/
 theorem l2OpNorm_le_one_of_mem_unitaryGroup {U : Matrix n n ℂ} (hU : U ∈ unitaryGroup n ℂ) :
     ‖U‖ ≤ 1 := by
   rcases isEmpty_or_nonempty n with hn | hn
@@ -57,8 +57,8 @@ Hermitian hypothesis on `D` is needed: the polar decomposition `D = U √(Dᴴ D
 lines 1291–1297.
 
 A local copy of the duality for an arbitrary finite index type. QICLean proves its `Fin D` form
-(`Matrix.exists_mem_unitaryGroup_trace_conjTranspose_mul_eq`); its generalization is requested in
-https://github.com/LionSR/QICLean/issues/913, and this lemma is removed once that lands. -/
+(`Matrix.exists_mem_unitaryGroup_trace_conjTranspose_mul_eq`); this lemma is removed once QICLean
+states that result for any finite index. -/
 theorem re_trace_sqrt_le_of_forall_norm_trace_mul_le {D : Matrix n n ℂ} {ε : ℝ}
     (h : ∀ O : Matrix n n ℂ, ‖O‖ ≤ 1 → ‖(O * D).trace‖ ≤ ε) :
     (CFC.sqrt (Dᴴ * D)).trace.re ≤ ε := by
