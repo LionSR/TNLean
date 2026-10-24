@@ -15,7 +15,9 @@ run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[``commute_supersiteHierarchy, ``isStarProjection_supersiteHierarchy,
     ``abs_re_inner_supersiteHierarchySum_sub_le, ``re_inner_supersiteHierarchySum_le_add,
-    ``card_le_two_mul_re_trace_of_supersiteHierarchy] do
+    ``card_le_two_mul_re_trace_of_supersiteHierarchy, ``norm_sub_supersiteClosingLinkWindow_le,
+    ``re_inner_supersiteHierarchySum_add_le_add,
+    ``card_le_two_mul_re_trace_of_supersiteClosingLink] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl
