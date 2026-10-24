@@ -16,7 +16,9 @@ run_cmd do
   for decl in #[
     ``Hastings.renyiEntropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt,
     ``Hastings.renyiEntropy_cutMatrix_nonpos_of_one,
-    ``exists_renyiEntropy_le_of_overlap_schmidtRank_mixture] do
+    ``exists_renyiEntropy_le_of_overlap_schmidtRank_mixture,
+    ``Hastings.renyiEntropy_cutMatrix_le_regionEntropy_of_one_lt,
+    ``exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_of_one_lt] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl

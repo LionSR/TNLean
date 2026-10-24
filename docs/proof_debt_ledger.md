@@ -212,6 +212,16 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   reference — staged helpers for abandoned proof attempts.
 - **First PR**: the Wielandt-module wave (~30 declarations, ~300+ lines) —
   the most isolated directory, zero blueprint exposure.
+- **PEPS approximation helper removal (2026-10-22, #9881)**: four unused
+  helpers in four modules are removed (15 Lean lines). In
+  `CellColouredGeneration`, `tile_subset_box` is the first conjunct of tile
+  membership. In `DyadicAnchors`, `dyadicAnchor_ne_zero` follows from the
+  retained odd-multiple formula `dyadicAnchor_of_ne_zero` and positivity.
+  In `DyadicProtocolConstants`, `holeRadius_nonneg` is `mul_nonneg` applied
+  to the nonnegative minimum. In `DyadicRepaintingSchedule`,
+  `edgeOperations_eq_append` is the definitional concatenation of
+  `auxSteps` and `mainSteps`. No definitions or source-labelled conclusions
+  are removed, and no replacement declarations are introduced.
 - **Evidence update (2026-08-26)**: the
   `MPS/ParentHamiltonian/BNTBlockIntersection.lean` concentration was the
   pre-Condition-C1 branch of the BNT block-diagonal route. Thirteen

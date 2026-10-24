@@ -487,13 +487,8 @@ theorem leftBoundaryRightEdgeInjectivityCountermodelSeven_rectangular :
     NormalSquareLatticeRectangleInjectivityHypotheses
       leftBoundaryRightEdgeInjectivityCountermodelSeven := by
   constructor
-  · intro R hR
-    obtain ⟨xStart, yStart, _hx, _hy, rfl⟩ := hR
-    intro hLeft
-    rw [mem_squareLatticeContiguousRectangle] at hLeft ⊢
-    simp only [squareLatticeRightEdge] at hLeft ⊢
-    omega
-  · intro R hR
+  all_goals
+    intro R hR
     obtain ⟨xStart, yStart, _hx, _hy, rfl⟩ := hR
     intro hLeft
     rw [mem_squareLatticeContiguousRectangle] at hLeft ⊢
