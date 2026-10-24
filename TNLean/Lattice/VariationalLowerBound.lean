@@ -226,7 +226,7 @@ theorem card_mul_le_of_mulVec_eq_smul_of_sitePerm [Fintype G] (q : ℕ)
     (hE : (∑ g : G, sitePermMatrix q g * H₀ * (sitePermMatrix q g)ᴴ) *ᵥ Ω = (E : ℂ) • Ω) :
     Fintype.card G * c ≤ E :=
   card_mul_le_of_mulVec_eq_smul_of_conj (fun g ↦ sitePermMatrix q g)
-    (sitePermMatrix_mem_unitaryGroup q) H₀ (commute_sitePermMatrix_sum q H₀) a m hK hΩ hE
+    (sitePermMatrix_mem_unitaryGroup q) H₀ (isSiteInvariant_sum_conj q H₀) a m hK hΩ hE
 
 /-- The least-eigenvalue specialization for translates on finitely many sites.
 Hastings, arXiv:cond-mat/0508554v3, eq. `varnum`, lines 856–877. -/
@@ -239,7 +239,7 @@ theorem card_mul_sInf_spectrum_le_of_sitePerm [Fintype G] (q : ℕ)
         commutatorIter (∑ g : G, sitePermMatrix q g * H₀ * (sitePermMatrix q g)ᴴ)
           H₀ (k + 1))) ≤ E :=
   card_mul_sInf_spectrum_le_of_conj (fun g ↦ sitePermMatrix q g)
-    (sitePermMatrix_mem_unitaryGroup q) H₀ hH₀ (commute_sitePermMatrix_sum q H₀) a m hΩ hE
+    (sitePermMatrix_mem_unitaryGroup q) H₀ hH₀ (isSiteInvariant_sum_conj q H₀) a m hΩ hE
 
 end SitePermutation
 

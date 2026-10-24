@@ -1,0 +1,92 @@
+\section{Translation-invariant Hamiltonians on a finite set of sites}
+\label{sec:hastings_site_symmetry}
+
+% Hastings, arXiv:cond-mat/0508554v3, proj3new.tex, lines 862--863 and
+% 1603--1642.
+
+\cite{Hastings2006Solving} shows that for a translation-invariant system on a
+lattice the low-energy commutators of the filtered terms are exponentially small
+in the linear size of the system. The statements here describe translation
+invariance on any finite set of sites $V$, with a group $G$ acting on $V$, such as
+the translations of a periodic lattice or a group of automorphisms of a finite
+graph. Each $g\in G$ moves the configurations $x\colon V\to\{1,\dots,q\}$ to
+$g\cdot x=x\circ g^{-1}$, and $P_g$ is the permutation matrix of this move.
+
+\begin{definition}[Site permutations]
+    \label{def:hastings_site_permutation}
+    \lean{Matrix.sitePermMatrix, Matrix.sitePermMatrix_mul,
+        Matrix.sitePermMatrix_mem_unitaryGroup,
+        Matrix.sitePermMatrix_mul_mul_conjTranspose}
+    \leanok
+    For $g\in G$, $P_g$ is the permutation matrix of $x\mapsto g\cdot x$ on the
+    configurations. The map $g\mapsto P_g$ is a unitary representation of $G$, and
+    $(P_gAP_g^\dagger)(x,y)=A(x\circ g,y\circ g)$ for every operator $A$.
+\end{definition}
+
+\begin{lemma}[Support of a translated operator]
+    \label{lem:hastings_site_permutation_support}
+    \lean{Matrix.sitePermMatrix_mul_mul_conjTranspose_mem_supportedOperators}
+    \leanok
+    \uses{def:hastings_site_permutation,aux:permuted-operator-support}
+    If $A$ acts on the sites $S$, then $P_gAP_g^\dagger$ acts on $g\cdot S$.
+\end{lemma}
+\begin{proof}\leanok
+    $P_gAP_g^\dagger$ is $A$ with both configurations precomposed with the
+    permutation $v\mapsto g\cdot v$ of the sites, which carries the support $S$ to
+    $g\cdot S$.
+\end{proof}
+
+\begin{definition}[Invariant operators]
+    \label{def:hastings_site_invariant}
+    \lean{Matrix.IsSiteInvariant, Matrix.isSiteInvariant_of_conj}
+    \leanok
+    \uses{def:hastings_site_permutation}
+    An operator $H$ is invariant under the action of $G$ when $P_gH=HP_g$ for every
+    $g\in G$, equivalently $P_gHP_g^\dagger=H$.
+\end{definition}
+
+\begin{lemma}[Sums of translated terms]
+    \label{lem:hastings_site_invariant_sum}
+    \lean{Matrix.isSiteInvariant_sum_of_covariant, Matrix.isSiteInvariant_sum_conj}
+    \leanok
+    \uses{def:hastings_site_invariant}
+    Let $G$ also act on a finite index set $K$, and let the operators $h_k$ satisfy
+    $h_{g\cdot k}=P_gh_kP_g^\dagger$. Then $\sum_kh_k$ is invariant. In particular,
+    for one operator $H_0$, the sum $\sum_{g\in G}P_gH_0P_g^\dagger$ of its
+    translates is invariant.
+\end{lemma}
+\begin{proof}\leanok
+    Conjugating by $P_g$ sends $h_k$ to $h_{g\cdot k}$, and $k\mapsto g\cdot k$
+    permutes $K$. For the translates, take $K=G$ acting on itself by left
+    multiplication.
+\end{proof}
+
+\begin{lemma}[Filtering commutes with translation]
+    \label{lem:hastings_filtered_term_translate}
+    \lean{Matrix.gaussianFilteredTerm_conj,
+        Matrix.gaussianFilteredTerm_sitePermMatrix_conj}
+    \leanok
+    \uses{def:hastings_site_invariant,def:hastings_gaussian_filtered_term}
+    For a unitary $U$ and Hermitian $H$, filtering $UWU^\dagger$ with respect to
+    $UHU^\dagger$ gives $U\widetilde WU^\dagger$. If $H$ is invariant, the filtered
+    operator of $P_gWP_g^\dagger$ is therefore $P_g\widetilde WP_g^\dagger$.
+\end{lemma}
+\begin{proof}\leanok
+    $e^{iUHU^\dagger t}=Ue^{iHt}U^\dagger$, so the integrand of the filter is
+    conjugated by $U$ at every time, and conjugation by $U$ commutes with the
+    integral.
+\end{proof}
+
+\begin{lemma}[Graph automorphisms preserve distances]
+    \label{lem:hastings_site_action_distance}
+    \lean{Matrix.edist_smul_of_adj_iff, Matrix.cycleGraph_adj_smul}
+    \leanok
+    If every $g\in G$ preserves the adjacency of a graph on $V$, then
+    $d(g\cdot x,g\cdot y)=d(x,y)$ for all sites $x$, $y$. The rotations of a ring
+    of $n$ sites are such an action.
+\end{lemma}
+\begin{proof}\leanok
+    A walk from $x$ to $y$ is carried to a walk of the same length from $g\cdot x$ to
+    $g\cdot y$, so $d(g\cdot x,g\cdot y)\le d(x,y)$; apply this to $g^{-1}$ for the
+    reverse inequality.
+\end{proof}
