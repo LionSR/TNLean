@@ -271,10 +271,12 @@
     \lean{TNLean.Lattice.ClusterExpansion.clusterPart_empty_empty,
         TNLean.Lattice.ClusterExpansion.norm_trace_mul_list_prod_clusterPart_le_pow}
     \leanok
-    \uses{def:hastings_cluster_part, thm:hastings_cluster_part_thermal}
-    Let $n\ge1$, and for each $j<n$ let $C_j$ be a cluster with boundary $B_j$ such that
-    $\|H_k\|\le J$ for $k\in C_j\cup B_j$ and $n_{C_j}+n_{B_j}\le Sn_{C_j}$. With
-    $y=(e^{J\beta/n}-1)e^{SJ\beta/n}$ and $\beta\ge0$, for every operator $O$,
+    \uses{def:hastings_cluster_part}
+    Let $H$ be a Hermitian Hamiltonian, let $\beta\ge0$, and put
+    $Z=\operatorname{tr}e^{-\beta H}$. Let $n\ge1$, and for each $j<n$ let $C_j$ be a
+    cluster with boundary $B_j$ such that the terms $H_k$ with $k\in C_j\cup B_j$ are
+    Hermitian with $\|H_k\|\le J$, and $n_{C_j}+n_{B_j}\le Sn_{C_j}$. With
+    $y=(e^{J\beta/n}-1)e^{SJ\beta/n}$, for every operator $O$,
     \begin{align}
         \left|\operatorname{tr}\bigl(O\rho(\beta/n,C_0)\rho(\beta/n,C_1)\cdots
         \rho(\beta/n,C_{n-1})\bigr)\right|
