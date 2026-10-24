@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Lattice.LowEnergyCommutator
 import TNLean.Lattice.SiteSymmetry
 
 /-!
@@ -24,7 +25,7 @@ step and the transfer of any bound.
 * `Matrix.sitePermMatrix_inv`: `P_{g⁻¹} = P_g†`.
 * `Submodule.starProjection_mul_conj_mul_starProjection`: if `U†` fixes a closed subspace
   pointwise, compressing `U W U†` onto it gives the compression of `W`.
-* `TNLean.Lattice.starProjection_mul_sitePermMatrix_conj_mul_starProjection`: the same for the
+* `TNLean.Lattice.groundCompression_sitePermMatrix_conj`: the same for the
   site permutations of a subgroup that fixes every ground vector.
 * `TNLean.Lattice.groundCompression_commutator_eq_of_mem_supercell`: for covariant terms, the
   low-energy commutator of the filtered terms at `i` and `j` equals the one at `i` and `g • j`.
@@ -89,24 +90,21 @@ theorem _root_.Matrix.sitePermMatrix_inv (q : ℕ) (g : G) :
 
 variable {q : ℕ} {H : Matrix (V → Fin q) (V → Fin q) ℂ} {E₀ : ℝ}
 
-/-- `𝒞 W` is the compression `P W P` of `W` to the ground eigenspace of `H` at energy `E₀`, as
-an operator on the Euclidean space; `P` is the orthogonal projection onto that eigenspace. -/
-local notation "𝒞 " W:max => Submodule.starProjection (groundEigenspace H E₀) *
-  toEuclideanCLM (n := V → Fin q) (𝕜 := ℂ) W * Submodule.starProjection (groundEigenspace H E₀)
-
 /-- **The low-energy compression is unchanged by a supercell translation.** Let `S` be a
 subgroup whose site permutations leave every ground vector of `H` unchanged: the source's
 supercell, "such that all of the `n` ground states are unchanged by translation by a
 supercell" (Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1626–1628). Then for
 `g ∈ S` the compression of `P_g W P_g†` to the ground space equals that of `W`. -/
-theorem starProjection_mul_sitePermMatrix_conj_mul_starProjection (S : Subgroup G)
+theorem groundCompression_sitePermMatrix_conj (S : Subgroup G)
     (hS : ∀ g ∈ S, ∀ v ∈ groundEigenspace H E₀,
       sitePermMatrix q g *ᵥ WithLp.ofLp v = WithLp.ofLp v)
     {g : G} (hg : g ∈ S) (W : Matrix (V → Fin q) (V → Fin q) ℂ) :
-    𝒞 (sitePermMatrix q g * W * (sitePermMatrix q g)ᴴ) = 𝒞 W := by
+    groundCompression H E₀ (sitePermMatrix q g * W * (sitePermMatrix q g)ᴴ) =
+      groundCompression H E₀ W := by
   have hstar : toEuclideanCLM (n := V → Fin q) (𝕜 := ℂ) (sitePermMatrix q g)ᴴ =
       (toEuclideanCLM (n := V → Fin q) (𝕜 := ℂ) (sitePermMatrix q g)).adjoint := by
     rw [← star_eq_conjTranspose, map_star, ContinuousLinearMap.star_eq_adjoint]
+  simp only [groundCompression]
   rw [map_mul, map_mul, hstar]
   refine Submodule.starProjection_mul_conj_mul_starProjection (fun v hv ↦ ?_) _
   rw [← hstar, ← sitePermMatrix_inv]
@@ -131,14 +129,18 @@ theorem groundCompression_commutator_eq_of_mem_supercell (r ΔE : ℝ)
     (hS : ∀ g ∈ S, ∀ v ∈ groundEigenspace H E₀,
       sitePermMatrix q g *ᵥ WithLp.ofLp v = WithLp.ofLp v)
     {g : G} (hg : g ∈ S) (i j : κ) :
-    𝒞 (gaussianFilteredTerm r ΔE H (h i)) * 𝒞 (gaussianFilteredTerm r ΔE H (h (g • j))) -
-        𝒞 (gaussianFilteredTerm r ΔE H (h (g • j))) * 𝒞 (gaussianFilteredTerm r ΔE H (h i)) =
-      𝒞 (gaussianFilteredTerm r ΔE H (h i)) * 𝒞 (gaussianFilteredTerm r ΔE H (h j)) -
-        𝒞 (gaussianFilteredTerm r ΔE H (h j)) * 𝒞 (gaussianFilteredTerm r ΔE H (h i)) := by
-  have hj : 𝒞 (gaussianFilteredTerm r ΔE H (h (g • j))) =
-      𝒞 (gaussianFilteredTerm r ΔE H (h j)) := by
+    groundCompression H E₀ (gaussianFilteredTerm r ΔE H (h i)) *
+        groundCompression H E₀ (gaussianFilteredTerm r ΔE H (h (g • j))) -
+      groundCompression H E₀ (gaussianFilteredTerm r ΔE H (h (g • j))) *
+        groundCompression H E₀ (gaussianFilteredTerm r ΔE H (h i)) =
+    groundCompression H E₀ (gaussianFilteredTerm r ΔE H (h i)) *
+        groundCompression H E₀ (gaussianFilteredTerm r ΔE H (h j)) -
+      groundCompression H E₀ (gaussianFilteredTerm r ΔE H (h j)) *
+        groundCompression H E₀ (gaussianFilteredTerm r ΔE H (h i)) := by
+  have hj : groundCompression H E₀ (gaussianFilteredTerm r ΔE H (h (g • j))) =
+      groundCompression H E₀ (gaussianFilteredTerm r ΔE H (h j)) := by
     simp only [hcov, gaussianFilteredTerm_sitePermMatrix_conj r ΔE hInv hH]
-    exact starProjection_mul_sitePermMatrix_conj_mul_starProjection S hS hg _
+    exact groundCompression_sitePermMatrix_conj S hS hg _
   rw [hj]
 
 /-- **Transfer of a commutator bound across supercell translations.** If `B i j` bounds the
@@ -155,11 +157,15 @@ theorem norm_groundCompression_commutator_le_of_mem_supercell (r ΔE : ℝ)
       sitePermMatrix q g *ᵥ WithLp.ofLp v = WithLp.ofLp v)
     (B : κ → κ → ℝ)
     (hB : ∀ i j,
-      ‖𝒞 (gaussianFilteredTerm r ΔE H (h i)) * 𝒞 (gaussianFilteredTerm r ΔE H (h j)) -
-        𝒞 (gaussianFilteredTerm r ΔE H (h j)) * 𝒞 (gaussianFilteredTerm r ΔE H (h i))‖ ≤ B i j)
+      ‖groundCompression H E₀ (gaussianFilteredTerm r ΔE H (h i)) *
+          groundCompression H E₀ (gaussianFilteredTerm r ΔE H (h j)) -
+        groundCompression H E₀ (gaussianFilteredTerm r ΔE H (h j)) *
+          groundCompression H E₀ (gaussianFilteredTerm r ΔE H (h i))‖ ≤ B i j)
     {g : G} (hg : g ∈ S) (i j : κ) :
-    ‖𝒞 (gaussianFilteredTerm r ΔE H (h i)) * 𝒞 (gaussianFilteredTerm r ΔE H (h j)) -
-        𝒞 (gaussianFilteredTerm r ΔE H (h j)) * 𝒞 (gaussianFilteredTerm r ΔE H (h i))‖ ≤
+    ‖groundCompression H E₀ (gaussianFilteredTerm r ΔE H (h i)) *
+        groundCompression H E₀ (gaussianFilteredTerm r ΔE H (h j)) -
+      groundCompression H E₀ (gaussianFilteredTerm r ΔE H (h j)) *
+        groundCompression H E₀ (gaussianFilteredTerm r ΔE H (h i))‖ ≤
       B i (g • j) := by
   have := hB i (g • j)
   rwa [groundCompression_commutator_eq_of_mem_supercell r ΔE hInv hH hcov S hS hg i j] at this

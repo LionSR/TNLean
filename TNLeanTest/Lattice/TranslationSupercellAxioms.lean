@@ -15,7 +15,7 @@ run_cmd do
   for decl in #[
       ``Submodule.starProjection_mul_conj_mul_starProjection,
       ``Matrix.sitePermMatrix_inv,
-      ``TNLean.Lattice.starProjection_mul_sitePermMatrix_conj_mul_starProjection,
+      ``TNLean.Lattice.groundCompression_sitePermMatrix_conj,
       ``TNLean.Lattice.groundCompression_commutator_eq_of_mem_supercell,
       ``TNLean.Lattice.norm_groundCompression_commutator_le_of_mem_supercell] do
     unless (← Lean.getEnv).contains decl do
