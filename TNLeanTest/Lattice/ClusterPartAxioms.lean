@@ -16,8 +16,12 @@ run_cmd do
     ``TNLean.Lattice.ClusterExpansion.clusterPart,
     ``TNLean.Lattice.ClusterExpansion.clusterPart_eq_sum_powerset,
     ``TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_le,
+    ``TNLean.Lattice.ClusterExpansion.re_trace_exp_sub_sum_sub_sum_le,
+    ``TNLean.Lattice.ClusterExpansion.norm_mul_exp_mul_sub_one_pow_nonneg,
+    ``TNLean.Lattice.ClusterExpansion.exp_card_add_card_mul_le,
     ``TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_le_pow,
     ``TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_biUnion_le,
+    ``TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_mul_clusterPart_mul_exp_le_pow,
     ``TNLean.Lattice.ClusterExpansion.clusterBoundary,
     ``TNLean.Lattice.ClusterExpansion.card_add_card_clusterBoundary_le] do
     unless (← Lean.getEnv).contains decl do

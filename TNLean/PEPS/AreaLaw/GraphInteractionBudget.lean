@@ -88,8 +88,8 @@ theorem sum_supportWeights_containing_le (F : Finset (Finset V)) (B : Finset V) 
       intro X hX
       exact hw X (Finset.mem_filter.mp hX).1
     _ = ((F.filter (fun X => a ∈ X)).card : ℝ) * J := by simp
-    _ ≤ (2 ^ (B.card - 1) : ℕ) * J := by
-      exact mul_le_mul_of_nonneg_right (Nat.cast_le.mpr hcard) hJ
+    _ ≤ (2 ^ (B.card - 1) : ℕ) * J :=
+      mul_le_mul_of_nonneg_right (Nat.cast_le.mpr hcard) hJ
 
 /-- A nonnegative weight on each support is counted at least once by the sites it meets.
 Only the weights of the original supports occur; no multiplicity of interaction labels is

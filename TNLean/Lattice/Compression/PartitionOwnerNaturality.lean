@@ -109,8 +109,8 @@ theorem partitionIso_mapOwner_heq (f : P → Q) (g : Q → Bool)
  selected memory. -/
 private theorem restrictMapOwnerIso_apply_heq (f : P → Q) (g : Q → Bool)
     (a : Layout P) (x : Mem (restrict (fun p ↦ g (f p)) a)) :
-    HEq (restrictMapOwnerIso f g a x) x := by
-  exact (memCongr_apply_heq (restrict_mapOwner f g a).symm
+    HEq (restrictMapOwnerIso f g a x) x :=
+  (memCongr_apply_heq (restrict_mapOwner f g a).symm
     (mapOwnerIso f _ x)).trans (mapOwnerIso_apply_heq f _ x)
 
 /-- Tensor products of canonical identity identifications act as the identity

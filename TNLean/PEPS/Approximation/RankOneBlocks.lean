@@ -340,18 +340,19 @@ theorem op_apply (c' c : ι → Fin q) :
 private theorem notMem_E_of_mem_T {x : ι} (hx : x ∈ b.T) : x ∉ b.E :=
   Finset.disjoint_left.mp b.disj hx
 
+/-- Two configurations agreeing outside `E` agree on both parts of the block. -/
+private theorem restrict_congr {c c' : ι → Fin q} (h : ∀ x ∉ b.E, c x = c' x) :
+    ((fun x : b.T => c x) = fun x : b.T => c' x) ∧
+      ((fun x : ↥(b.T ∪ b.E)ᶜ => c x) = fun x : ↥(b.T ∪ b.E)ᶜ => c' x) :=
+  ⟨funext fun x => h x (b.notMem_E_of_mem_T x.2),
+    funext fun x => h x fun hx => Finset.mem_compl.mp x.2 (Finset.mem_union_right _ hx)⟩
+
 theorem ketAt_congr {c c' : ι → Fin q} (h : ∀ x ∉ b.E, c x = c' x) : b.ketAt c = b.ketAt c' := by
-  have h₁ : (fun x : b.T => c x) = fun x : b.T => c' x :=
-    funext fun x => h x (b.notMem_E_of_mem_T x.2)
-  have h₂ : (fun x : ↥(b.T ∪ b.E)ᶜ => c x) = fun x : ↥(b.T ∪ b.E)ᶜ => c' x :=
-    funext fun x => h x fun hx => Finset.mem_compl.mp x.2 (Finset.mem_union_right _ hx)
+  obtain ⟨h₁, h₂⟩ := b.restrict_congr h
   rw [ketAt, ketAt, h₁, h₂]
 
 theorem braAt_congr {c c' : ι → Fin q} (h : ∀ x ∉ b.E, c x = c' x) : b.braAt c = b.braAt c' := by
-  have h₁ : (fun x : b.T => c x) = fun x : b.T => c' x :=
-    funext fun x => h x (b.notMem_E_of_mem_T x.2)
-  have h₂ : (fun x : ↥(b.T ∪ b.E)ᶜ => c x) = fun x : ↥(b.T ∪ b.E)ᶜ => c' x :=
-    funext fun x => h x fun hx => Finset.mem_compl.mp x.2 (Finset.mem_union_right _ hx)
+  obtain ⟨h₁, h₂⟩ := b.restrict_congr h
   rw [braAt, braAt, h₁, h₂]
 
 /-- **Products of disjoint blocks.** If every site lies outside all blocks of the list but at

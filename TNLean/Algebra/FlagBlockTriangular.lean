@@ -83,6 +83,20 @@ theorem finrank_eq_sum_of_flag {K V : Type*} [Field K] [AddCommGroup V] [Module 
   rw [htop, finrank_top, hlast] at hkey
   simpa using hkey
 
+/-- The indices at most `k` are `k` together with the indices below `k`. -/
+private lemma filter_le_eq_insert_filter_lt {r : ℕ} (k : Fin r) :
+    Finset.univ.filter (fun l : Fin r => l ≤ k) =
+      insert k (Finset.univ.filter (fun l : Fin r => l < k)) := by
+  ext l
+  simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_insert]
+  constructor
+  · intro h; rcases lt_or_eq_of_le h with h' | h'
+    · exact Or.inr h'
+    · exact Or.inl h'
+  · rintro (rfl | h)
+    · exact le_refl _
+    · exact h.le
+
 /-- **Composition-series triangular gauge** (Lemma 7.6 of the P5 asymmetric-compression
 fundamental-theorem note). If `H` is an increasing flag of subspaces from `⊥` to `⊤` of a
 finite-dimensional complex vector space `V`, and every endomorphism `f i` preserves every member
@@ -158,17 +172,7 @@ theorem exists_linearEquiv_blockTriangular_of_flag {ι : Type*} {V : Type*} [Add
         simp only [hSdef, Finset.mem_filter, Finset.mem_univ, true_and]
         exact ⟨le_trans hl0p.1 (Fin.castSucc_lt_castSucc_iff.mpr hm).le, hne⟩
       exact absurd (hmax m hmS) (not_le.mpr hm)
-    have hins : Finset.univ.filter (fun m : Fin r => m ≤ l0) =
-        insert l0 (Finset.univ.filter (fun m : Fin r => m < l0)) := by
-      ext m
-      simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_insert]
-      constructor
-      · intro h; rcases lt_or_eq_of_le h with h' | h'
-        · exact Or.inr h'
-        · exact Or.inl h'
-      · rintro (rfl | h)
-        · exact le_refl _
-        · exact h.le
+    have hins := filter_le_eq_insert_filter_lt l0
     have hnotmem : l0 ∉ Finset.univ.filter (fun m : Fin r => m < l0) := by simp
     have hsplit : Φ x = (∑ m ∈ Finset.univ.filter (fun m : Fin r => m < l0), term m x) +
         term l0 x := by
@@ -268,17 +272,7 @@ theorem exists_linearEquiv_blockTriangular_of_flag {ι : Type*} {V : Type*} [Add
       rw [Fin.le_iff_val_le_val, Fin.val_succ, Fin.val_castSucc]
       have := Fin.lt_def.mp hkl
       omega
-    have hins : Finset.univ.filter (fun l : Fin r => l ≤ k) =
-        insert k (Finset.univ.filter (fun l : Fin r => l < k)) := by
-      ext l
-      simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_insert]
-      constructor
-      · intro h; rcases lt_or_eq_of_le h with h' | h'
-        · exact Or.inr h'
-        · exact Or.inl h'
-      · rintro (rfl | h)
-        · exact le_refl _
-        · exact h.le
+    have hins := filter_le_eq_insert_filter_lt k
     have hnotmem : k ∉ Finset.univ.filter (fun l : Fin r => l < k) := by simp
     have hsplit : Φ (e (v : V)) =
         (∑ l ∈ Finset.univ.filter (fun l : Fin r => l < k), term l (e (v : V))) +

@@ -222,7 +222,6 @@ theorem SquareHamiltonian.reset_localized_filter (q : ℕ) (hq : 1 ≤ q) (J : �
   refine ⟨hψn, hφn, z, _, hz, hMsupp, hMnorm.trans hW, h₁.trans_eq ?_, h₂.trans_eq ?_⟩ <;>
     rw [resetFilterPrefactor, ← hCgdef, ← hT₀def] <;> ring
 
-
 /-- **The localized two-sided filter of the information reset.** For a gap `Δ > 0` and an
 exponent `r ≥ 0` there are constants `C, K` with the following property. Let `Ω` be a gapped
 ground state of an open square Hamiltonian, `R, C₀` disjoint regions with
