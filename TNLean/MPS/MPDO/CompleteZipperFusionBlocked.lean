@@ -107,20 +107,6 @@ noncomputable def ofWords (P : MultiBlockCompression B S C) (u : Fin d' → List
     simp only [P.unmatched]
     exact evalWord_zero_of_ne_nil (hu j)
 
-/-- The compression maps of `ofWords` are those of the original compression. -/
-theorem ofWords_left (P : MultiBlockCompression B S C) (u : Fin d' → List (Fin d))
-    (hu : ∀ j, u j ≠ []) {B' : MPSTensor d' DB} (hB' : ∀ j, B' j = Kraus.evalWord B (u j))
-    {C' : ∀ s, MPSTensor d' (D s)} (hC' : ∀ s j, C' s j = Kraus.evalWord (C s) (u j))
-    (s : {s // s ∈ S}) :
-    (P.ofWords u hu hB' hC').left s = P.left s := rfl
-
-/-- The compression maps of `ofWords` are those of the original compression. -/
-theorem ofWords_right (P : MultiBlockCompression B S C) (u : Fin d' → List (Fin d))
-    (hu : ∀ j, u j ≠ []) {B' : MPSTensor d' DB} (hB' : ∀ j, B' j = Kraus.evalWord B (u j))
-    {C' : ∀ s, MPSTensor d' (D s)} (hC' : ∀ s j, C' s j = Kraus.evalWord (C s) (u j))
-    (s : {s // s ∈ S}) :
-    (P.ofWords u hu hB' hC').right s = P.right s := rfl
-
 /-- A vanishing remainder means that every letter is block diagonal in the block coordinates. -/
 theorem conjMatrix_eq_blockDiagonal'_of_remainder_eq_zero (P : MultiBlockCompression B S C)
     (hP : P.remainder = 0) (i : Fin d) :

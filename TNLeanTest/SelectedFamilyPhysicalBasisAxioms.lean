@@ -15,10 +15,10 @@ run_cmd do
   let decls := #[
     ``TNLean.Lattice.PartyCircuit.Layout.atParty_none_mapOwner_all,
     ``TNLean.Lattice.PartyCircuit.Layout.atParty_some_mapOwner_all,
-    ``TNLean.PEPS.PairEffect.selectedFamilyPhysicalIndex,
-    ``TNLean.PEPS.PairEffect.selectedFamilyPhysicalPartyBasis,
-    ``TNLean.PEPS.PairEffect.selectedFamilyPhysicalPartyBasis_none_apply_heq,
-    ``TNLean.PEPS.PairEffect.selectedFamilyPhysicalPartyBasis_some_apply_heq]
+    ``TNLean.Lattice.PartyCircuit.selectedFamilyPhysicalIndex,
+    ``TNLean.Lattice.PartyCircuit.selectedFamilyPhysicalPartyBasis,
+    ``TNLean.Lattice.PartyCircuit.selectedFamilyPhysicalPartyBasis_none_apply_heq,
+    ``TNLean.Lattice.PartyCircuit.selectedFamilyPhysicalPartyBasis_some_apply_heq]
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
   for decl in decls do

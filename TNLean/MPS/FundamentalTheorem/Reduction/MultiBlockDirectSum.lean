@@ -325,8 +325,6 @@ noncomputable def directSum : MultiBlockCompression A (Finset.univ : Finset κ) 
     exact congrFun (congrFun ((P (directSumZeroEquiv P t).1).unmatched i
       (directSumZeroEquiv P t).2) p) q
 
-theorem directSum_z : (directSum P e hA).z = ∑ k, (P k).z := rfl
-
 /-- **The remainder of the direct sum is the direct sum of the remainders** (P5 note,
 Theorem 7.7(vi)). -/
 theorem remainder_directSum (i : Fin d) :

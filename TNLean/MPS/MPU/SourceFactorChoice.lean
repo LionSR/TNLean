@@ -224,17 +224,6 @@ section Factors
 
 variable {d D : ℕ} {U : MPOTensor d D}
 
-/-- The left multiplication by a row coisometry is injective on row vectors. -/
-private theorem vecMul_injective_of_isCoisometry {m k : Type*} [Fintype m] [Fintype k]
-    [DecidableEq m] {V : Matrix m k ℂ} (hV : V.IsCoisometry) : Function.Injective V.vecMul := by
-  intro x y hxy
-  calc
-    x = x ᵥ* (V * Vᴴ) := by rw [hV, Matrix.vecMul_one]
-    _ = (x ᵥ* V) ᵥ* Vᴴ := (Matrix.vecMul_vecMul _ _ _).symm
-    _ = (y ᵥ* V) ᵥ* Vᴴ := congrArg (fun z ↦ z ᵥ* Vᴴ) hxy
-    _ = y ᵥ* (V * Vᴴ) := Matrix.vecMul_vecMul _ _ _
-    _ = y := by rw [hV, Matrix.vecMul_one]
-
 /-- The normalization matrix $H=C_1(I_d\otimes\rho)C_1^\dagger$ of a supplied decomposition
 of the first cut, arXiv:1703.09188, `Y1Y1X1X1` (lines 487--494); ME.tex, Lemma 1.2. -/
 noncomputable def sourceGramOf (S₁ : SourceCutSVD (sourceCutM₁ U) r[U])

@@ -19,7 +19,7 @@ noncomputable section
 
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 
-open TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 
 variable {P : Type}
 

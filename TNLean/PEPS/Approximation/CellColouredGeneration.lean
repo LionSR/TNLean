@@ -98,9 +98,6 @@ theorem IsValid.eq_of_dist_le (hS : S.IsValid) {Q Q' : ActiveSquare} (hQ : Q ∈
   have := hS.separated.forall hQ' hQ hne p hp a ha
   linarith
 
-theorem tile_subset_box {col : Colouring} {Q : ActiveSquare} {u t : ℝ} {f : Fin 2} :
-    tile col Q u t f ⊆ box Q.corner u := fun _ hp ↦ hp.1
-
 theorem not_mem_tile_zero_and_one {col : Colouring} {Q : ActiveSquare} {u t : ℝ}
     {p : ℝ × ℝ} (h₀ : p ∈ tile col Q u t 0) (h₁ : p ∈ tile col Q u t 1) : False := by
   have := h₀.2.2.2.mp (h₁.2.2.2.mpr rfl)

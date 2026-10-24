@@ -1,0 +1,76 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\setlength{\emergencystretch}{2em}
+\title{The Threshold of the Spectral Cut-offs in Hastings' Approximate Ground-State Projector}
+\author{}
+\date{October 22, 2026}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source statement}
+
+In the appendix of~\cite{Hastings2007AreaLaw}, the localized filtered terms
+$M_L$ and $M_R$ satisfy $\lVert M_L\Psi_0\rVert,\lVert M_R\Psi_0\rVert\le
+    \delta$ with $\delta=\mathcal O(\Delta E^{-1}J^2e^{-l/3\xi})$, and $O_L$
+($O_R$) is defined as the projection onto the eigenvectors of $M_L$ ($M_R$)
+with eigenvalue less than or equal to
+$\theta=\Delta E^{-1}J^2e^{-l/6\xi}$.\footnote{\path{References/0705.2024/law16.tex},
+    lines~829--841.}
+The source then uses, in the cut-off estimate leading to its final
+bound,\footnote{\path{References/0705.2024/law16.tex}, lines~878--880.}
+\begin{align}
+    \lVert(M_L+M_R)O_LO_R\rVert
+     & \le 2\theta.
+    \label{eq:hastings07_spectral_cutoff_source_use}
+\end{align}
+
+\section{The point at issue}
+
+The terms $M_L$ and $M_R$ are shifted to have ground-state expectation zero,
+so they are not positive in general. If $M_L$ has an eigenvalue $\lambda<
+    -\theta$, its eigenvector lies in the range of the printed projection $O_L$,
+and $\lVert M_LO_L\rVert\ge\lvert\lambda\rvert>\theta$. The bound
+(\ref{eq:hastings07_spectral_cutoff_source_use}) then fails.
+
+\section{The corrected statement}
+
+Let $O_\theta(M)$ be the projection onto the eigenvectors of $M$ with
+eigenvalue of absolute value at most $\theta$. For Hermitian $M$, $\theta>0$
+and every vector $\Psi$,
+\begin{align}
+    \lVert\Psi-O_\theta(M)\Psi\rVert
+     & \le\frac{\lVert M\Psi\rVert}{\theta},
+    \label{eq:hastings07_spectral_cutoff_obd}
+    \\
+    \lVert M\,O_\theta(M)\rVert
+     & \le\theta.
+    \label{eq:hastings07_spectral_cutoff_norm}
+\end{align}
+The first bound is the source's estimate on the moved ground vector, with
+constant one; the second gives
+(\ref{eq:hastings07_spectral_cutoff_source_use}) once $O_L$ and $O_R$
+commute, which holds because they are supported on disjoint
+regions.\footnote{\leanid{TNLean.MPS.AreaLaw.Hastings.norm_sub_spectralCutoff_le}
+    and \leanid{TNLean.MPS.AreaLaw.Hastings.norm_mul_spectralCutoff_le} in
+    \doclink{TNLean/MPS/AreaLaw/Hastings/SpectralCutoff}.}
+
+\section{Conclusion}
+
+The later steps of the source use the cut-offs only through
+(\ref{eq:hastings07_spectral_cutoff_obd}) and
+(\ref{eq:hastings07_spectral_cutoff_norm}), so replacing the one-sided
+threshold by the absolute threshold changes no constant and no conclusion of
+the source; it makes the estimate it uses hold for terms that are not
+positive. The bounds hold for every threshold $\theta>0$. The size of the
+ground-state residual $\lVert M_L\Psi_0\rVert$, and hence the choice of
+$\theta$ relative to the width of the Gaussian filter, is a separate question
+settled where Lemma~1 is assembled; this note does not depend on it.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

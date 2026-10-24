@@ -12,7 +12,7 @@ party. Source: polynomial-PEPS, `04-compression.tex`, lines 233–251 and 351–
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
 /-- Select one original party while retaining its exact label.
@@ -27,4 +27,4 @@ theorem partySelector_none : partySelector (none : Option P) = Option.isNone := 
   funext q
   cases q <;> simp [partySelector]
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

@@ -721,13 +721,6 @@ namespace MPOTensor
 
 variable {m n : ℕ}
 
-/-- `assocInv_mul_kronId_kronId` against a trailing factor. -/
-theorem assocInv_mul_kronId_kronId_assoc {p : ℕ} (X : Matrix (Fin m) (Fin n) ℂ) (b c : ℕ)
-    (Z : Matrix (Fin (n * b * c)) (Fin p) ℂ) :
-    mulTensorAssocInvMatrix m b c * (kronId (kronId X b) c * Z) =
-      kronId X (b * c) * (mulTensorAssocInvMatrix n b c * Z) := by
-  rw [← Matrix.mul_assoc, assocInv_mul_kronId_kronId, Matrix.mul_assoc]
-
 /-- `assocInv_mul_kronId_idKron` against a trailing factor. -/
 theorem assocInv_mul_kronId_idKron_assoc {p : ℕ} (a c : ℕ) (X : Matrix (Fin m) (Fin n) ℂ)
     (Z : Matrix (Fin (a * n * c)) (Fin p) ℂ) :
@@ -747,13 +740,5 @@ theorem kronId_mul_idKron_assoc {m' n' p : ℕ} (V : Matrix (Fin m) (Fin n) ℂ)
     (U : Matrix (Fin m') (Fin n') ℂ) (Z : Matrix (Fin (n * n')) (Fin p) ℂ) :
     kronId V m' * (idKron n U * Z) = idKron m U * (kronId V n' * Z) := by
   rw [← Matrix.mul_assoc, kronId_mul_idKron, Matrix.mul_assoc]
-
-/-- `assocInv_pentagon` against a trailing factor. -/
-theorem assocInv_pentagon_assoc {p : ℕ} (a b c e : ℕ)
-    (Z : Matrix (Fin (a * b * c * e)) (Fin p) ℂ) :
-    idKron a (mulTensorAssocInvMatrix b c e) * (mulTensorAssocInvMatrix a (b * c) e *
-        (kronId (mulTensorAssocInvMatrix a b c) e * Z)) =
-      mulTensorAssocInvMatrix a b (c * e) * (mulTensorAssocInvMatrix (a * b) c e * Z) := by
-  rw [← Matrix.mul_assoc, ← Matrix.mul_assoc, assocInv_pentagon, Matrix.mul_assoc]
 
 end MPOTensor

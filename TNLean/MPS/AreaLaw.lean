@@ -22,16 +22,19 @@ import TNLean.MPS.AreaLaw.Counting
 import TNLean.MPS.AreaLaw.CutMatrixGrowth
 import TNLean.MPS.AreaLaw.DoubledHamiltonian
 import TNLean.MPS.AreaLaw.EntropyInequalities
+import TNLean.MPS.AreaLaw.EntropyScaling
 import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.Hastings
 import TNLean.MPS.AreaLaw.InformationReset
 import TNLean.MPS.AreaLaw.InteractionBudget
 import TNLean.MPS.AreaLaw.IntervalNeighborhoodEntropy
 import TNLean.MPS.AreaLaw.LiebRobinson
+import TNLean.MPS.AreaLaw.LocalSolution
 import TNLean.MPS.AreaLaw.LogarithmicAreaLaw
 import TNLean.MPS.AreaLaw.LogarithmicSeparation
 import TNLean.MPS.AreaLaw.MPSApproximation
 import TNLean.MPS.AreaLaw.OpenMPS
+import TNLean.MPS.AreaLaw.OpenMPSCutRank
 import TNLean.MPS.AreaLaw.OpenMPSRank
 import TNLean.MPS.AreaLaw.PartialSwap
 import TNLean.MPS.AreaLaw.ProtocolConditionalPreparation
@@ -61,6 +64,7 @@ import TNLean.MPS.AreaLaw.ResetSupportSeparation
 import TNLean.MPS.AreaLaw.SequentialTruncation
 import TNLean.MPS.AreaLaw.SharpChainCompression
 import TNLean.MPS.AreaLaw.SharpPhysicalCompression
+import TNLean.MPS.AreaLaw.SupportedCutRank
 import TNLean.MPS.AreaLaw.SupportedGaussianIntegral
 import TNLean.MPS.AreaLaw.SwappedDoubledHamiltonian
 import TNLean.MPS.AreaLaw.WindowCounting

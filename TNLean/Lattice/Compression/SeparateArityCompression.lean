@@ -24,7 +24,7 @@ open scoped Matrix NNReal
 
 namespace TNLean
 open TNLean.Lattice.PartyCircuit
-open TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 variable {P : Type} {input output : Layout P}
 
 namespace Lattice.PartyCircuit.SourceCircuit
@@ -93,9 +93,9 @@ theorem card_participants_produce_le_of_arity
 end Lattice.PartyCircuit.OriginalCircuit
 end TNLean
 
-namespace TNLean.PEPS.PairEffect.DistributedConstruction
+namespace TNLean.Lattice.PartyCircuit.DistributedConstruction
 open TNLean.Lattice.PartyCircuit
-open TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 attribute [local instance] Classical.propDecidable
 
 /-- Uniform compression with separate participant and lifetime bounds, from an absolute
@@ -260,4 +260,4 @@ theorem exists_uniform_sampled_network_sub_pure_le_of_arity_lifetime
   exact ⟨Gate, _, _, participants, root, hroot, Label, _, k, c, T,
     hσ, herror, hlow, hhigh, hdim, hinc, hlocal⟩
 
-end TNLean.PEPS.PairEffect.DistributedConstruction
+end TNLean.Lattice.PartyCircuit.DistributedConstruction

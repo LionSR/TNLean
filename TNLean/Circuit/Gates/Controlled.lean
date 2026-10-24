@@ -246,6 +246,31 @@ theorem siteOp_diagonal (t : ι) (f : Fin d → ℂ) :
       simp [h2]
     · rw [ite_eq_right h1]
 
+/-- Entrywise, `u` at the site `t` has the entry `u (x t) (y t)` between configurations that
+agree off `t`, and `0` between the others. -/
+theorem siteOp_apply (t : ι) (u : Matrix (Fin d) (Fin d) ℂ) (x y : ι → Fin d) :
+    siteOp t u x y = if ∀ i, i ≠ t → x i = y i then u (x t) (y t) else 0 := by
+  have hag : AgreeOff ![t] x y ↔ ∀ i, i ≠ t → x i = y i :=
+    forall_congr' fun i => by simp [eq_comm]
+  simp only [siteOp, embedOp_apply, submatrix_apply, Function.comp_apply,
+    Equiv.funUnique_apply, Fin.default_eq_zero, Matrix.cons_val_zero, hag]
+
+theorem siteOp_add (t : ι) (u v : Matrix (Fin d) (Fin d) ℂ) :
+    siteOp t (u + v) = siteOp t u + siteOp t v := by
+  ext x y
+  simp only [siteOp_apply, Matrix.add_apply]
+  split_ifs <;> simp
+
+theorem siteOp_neg (t : ι) (u : Matrix (Fin d) (Fin d) ℂ) :
+    siteOp t (-u) = -siteOp t u := by
+  ext x y
+  simp only [siteOp_apply, Matrix.neg_apply]
+  split_ifs <;> simp
+
+theorem siteOp_sub (t : ι) (u v : Matrix (Fin d) (Fin d) ℂ) :
+    siteOp t (u - v) = siteOp t u - siteOp t v := by
+  rw [sub_eq_add_neg, siteOp_add, siteOp_neg, ← sub_eq_add_neg]
+
 /-- The controlled operator: `u` at the site `t` when the sites of `S` are in the configuration
 `c`, the identity otherwise.
 

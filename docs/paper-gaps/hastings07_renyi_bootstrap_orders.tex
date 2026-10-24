@@ -1,0 +1,62 @@
+\documentclass{article}
+\usepackage[margin=28mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{The Orders of the Rényi Bootstrap Lemma}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{resolved}
+
+\section{The source statement}
+Hastings, \emph{An area law for one-dimensional quantum systems}~\cite{Hastings2007AreaLaw},
+\href{https://arxiv.org/abs/0705.2024v4}{arXiv:0705.2024v4}, source
+\path{law16.tex}, lines 392--410, extends Lemma~2 to the Rényi entropies
+\begin{align}
+ S_\alpha(\rho)=\frac1{1-\alpha}\ln\operatorname{tr}\rho^\alpha
+ \label{eq:hastings07_renyi_bootstrap_orders_def}
+\end{align}
+``for sufficiently large $\alpha$'': maximizing the Rényi entropy under the
+Schmidt-tail constraint gives a series that converges whenever
+\begin{align}
+ e^{-2\alpha/\xi'}\,(D^2)^{1-\alpha}<1,
+ \label{eq:hastings07_renyi_bootstrap_orders_conv}
+\end{align}
+and the bound then differs from the von Neumann bound only in the function
+replacing $F(\xi',D)$.
+
+\section{What is formalized}
+The formalized Rényi bootstrap lemma covers the orders $0<\alpha<1$ satisfying
+(\ref{eq:hastings07_renyi_bootstrap_orders_conv}), with the function
+$4\ln D-\ln\bigl(1-(D^2)^{1-\alpha}e^{-2\alpha/\xi'}\bigr)/(1-\alpha)$ in place
+of $F(\xi',D)$.\footnote{\leanid{TNLean.MPS.AreaLaw.exists_renyiEntropy_le_of_overlap_schmidtRank_mixture}
+    in \doclink{TNLean/MPS/AreaLaw/Hastings/RenyiBootstrapLemma}.}
+Order $1$ is the von Neumann entropy, bounded by the formalized
+Lemma~2. Orders $\alpha>1$, for which
+(\ref{eq:hastings07_renyi_bootstrap_orders_conv}) always holds, are not covered
+by that estimate, which rests on the concavity of $t\mapsto t^\alpha$; they are
+treated below.
+
+\section{Resolution}
+For $\alpha>1$ the Rényi entropy is at most the von Neumann entropy. With $p_i$
+the eigenvalues of $\rho$ and the concavity of the logarithm,
+\begin{align}
+ \ln\sum_ip_i^\alpha=\ln\sum_ip_i\,p_i^{\alpha-1}
+ \ge(\alpha-1)\sum_{p_i>0}p_i\ln p_i,
+ \label{eq:hastings07_renyi_bootstrap_orders_jensen}
+\end{align}
+and dividing by $1-\alpha<0$ gives $S_\alpha(\rho)\le S(\rho)$. Applied to the
+formalized Lemma~2, this covers every order $\alpha>1$, with $F(\xi',D)$ itself
+as the function replacing $F(\xi',D)$, so the restriction is removed.\footnote{%
+    \leanid{TNLean.MPS.AreaLaw.exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_of_one_lt}
+    in \doclink{TNLean/MPS/AreaLaw/Hastings/RenyiBootstrapLemma}; the inequality
+    (\ref{eq:hastings07_renyi_bootstrap_orders_jensen}) is
+    \leanid{Entropy.inv_one_sub_mul_log_sum_rpow_le_probabilityEntropy} in the
+    companion library QICLean.}
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}
