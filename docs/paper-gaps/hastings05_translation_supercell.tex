@@ -1,0 +1,86 @@
+\documentclass{article}
+\usepackage[margin=28mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{The Supercell in Hastings' Translation-Invariant Case}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source argument}
+Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
+\href{https://arxiv.org/abs/cond-mat/0508554v3}{arXiv:cond-mat/0508554v3},
+source \path{proj3new.tex}, lines 1603--1642, considers a translationally
+invariant system on a $d$-dimensional lattice with $n$ ground states, and the
+filtered local terms $M_i$ with their compressions $P M_i P$ to the ground
+space. Choosing the ground states as eigenvectors of the translations, with
+momenta $\vec k_a$, the matrix elements satisfy
+$(M_{\vec x,y})_{ab}=(M_{\vec x+\vec x',y})_{ab}
+\exp[i\vec x'\cdot(\vec k_a-\vec k_b)]$ (lines 1613--1618).
+
+The source then assumes the ``simplest case'' (lines 1620--1625): every
+component of every momentum is a rational multiple $2\pi p/q$ whose
+denominator $q$ does not depend on the system size. From this it derives a
+supercell, whose size in direction $m$ is the least common multiple of the
+denominators $q^m_a$, such that ``all of the $n$ ground states are unchanged by
+translation by a supercell'' (lines 1626--1630). For a translation $\vec x'$
+by whole supercells, $[M_{\vec x_1,y_1},M_{\vec x_2,y_2}]$ and
+$[M_{\vec x_1,y_1},M_{\vec x_2+\vec x',y_2}]$ then agree in the low-energy
+sector, and choosing $\vec x'$ to place the second site at a distance of order
+the linear size of the system makes the commutator exponentially small in that
+size (lines 1634--1641).
+
+\section{The restriction}
+The formalization does not assume rational momenta. It assumes directly a
+subgroup $S$ of the symmetry group whose site permutations $P_g$ leave every
+ground vector unchanged, $P_g v=v$ for $g\in S$ and $v$ in the ground space,
+which is the conclusion of lines 1626--1630. From this it proves, for
+covariant terms $H_{g\cdot k}=P_gH_kP_g^\dagger$ and an invariant Hamiltonian,
+\begin{align}
+    PM_{g\cdot j}P=PM_jP,\qquad
+    [PM_iP,PM_jP]=[PM_iP,PM_{g\cdot j}P]\qquad(g\in S),
+\end{align}
+so that any bound on the low-energy commutator at the pair $(i,g\cdot j)$
+applies at $(i,j)$. The step from rational momenta to the supercell, and the
+geometric statement that some $g\in S$ moves $j$ to a distance of order the
+linear size from $i$, are not formalized.
+
+\section{Elimination plan}
+For an abelian group $G$, such as the translations of a finite torus, the
+operators $P_g$ commute with $H$ and with one another, so they restrict to
+commuting unitaries on the ground space. A joint eigenbasis gives characters
+$\chi_a$ of $G$, one for each ground state, which are the momenta of the
+source. The subgroup $S=\bigcap_a\ker\chi_a$ then fixes every ground vector,
+with no further hypothesis. The size-independent denominators of lines
+1620--1625 are what make the cosets of this $S$ boundedly spaced, which
+gives the geometric statement above. Formalizing both steps removes the
+restriction.
+
+\section{A slip}
+At line 1638 the source writes the distance ``between $(\vec x_1,y_2)$ and
+$(\vec x_2+\vec x',y_2)$''; the first site is $(\vec x_1,y_1)$.
+
+\section{The case not covered}
+Lines 1643--1652 mention a case the source calls ``very artificial'', in
+which the denominators depend on the system size and the supercell is as
+large as the system. The source states that the commutators are still
+exponentially small there, but does not give the proof. This case is not
+covered.
+
+\section{The formalization}
+The step is formalized for a group acting on the sites of a finite system, a
+subgroup fixing every ground vector, covariant terms and an invariant
+Hermitian Hamiltonian.\footnote{\leanid{TNLean.Lattice.starProjection_mul_sitePermMatrix_conj_mul_starProjection},
+    \leanid{TNLean.Lattice.groundCompression_commutator_eq_of_mem_supercell},
+    \leanid{TNLean.Lattice.norm_groundCompression_commutator_le_of_mem_supercell}
+    in \doclink{TNLean/Lattice/TranslationSupercell}.}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
