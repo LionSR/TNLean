@@ -8,4 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Lattice.ClusterExpansion
 
+import TNLean.Lattice.ClusterExpansion.AllTemperatures
 import TNLean.Lattice.ClusterExpansion.Percolation
+import TNLean.Lattice.ClusterExpansion.TraceNorm
