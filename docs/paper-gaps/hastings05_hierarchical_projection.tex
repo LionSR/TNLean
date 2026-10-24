@@ -17,7 +17,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{local-correction}{open}
+\gapnote{local-correction}{resolved}
 
 \section{The source passage}
 
@@ -108,10 +108,12 @@ $\beta_m\le c_m\epsilon^{(1-1/h)^m}$ has
 $c_1=1$ and $c_m=1+2\sum_{1\le j<m}c_j=3^{m-1}$.
 This remains polynomial in $N=2^h$. It does not prove the printed
 recurrence with only the preceding deficiency, nor rule out a sharper
-argument giving that recurrence. The identification of an appropriate
-majorant with the complete hierarchy remains to be proved. The Lean
+argument giving that recurrence. The Lean
 recurrence theorems establish inequalities for the printed scalar sequence;
-they do not identify it with deficiencies beyond the second level.
+they do not identify it with deficiencies beyond the second level. The
+complete hierarchy is instead controlled by measuring every deficiency
+against $\Psi_a$; see
+Section~\ref{sec:hastings05_hierarchical_projection_all_levels}.
 
 \newpage
 \section{The restricted spectral window}
@@ -178,11 +180,14 @@ $b_h\le(2^h-1)\epsilon^{1/4}$.
 
 \section{What is not formalized}
 
-The supersite grouping (lines 609--628), the energy bound eq.~(hchy) and the
-count of at most $2n$ final states (lines 709--730), which the source states
-only with ``one may show'', and the extensions to higher dimensions
-(lines 745--756) are not formalized. Neither is the bookkeeping that follows a
-vector through all $h$ levels. The source projects at level $m$ inside the
+The energy bound eq.~(hchy) and the count of at most $2n$ final states
+(lines 709--730), which the source states only with ``one may show'', and the
+extensions to higher dimensions (lines 745--756) are not part of this note.
+
+\section{All levels against the ground state}
+\label{sec:hastings05_hierarchical_projection_all_levels}
+
+The source projects at level $m$ inside the
 range of the two projections of level $m-1$ (lines 671--676). For orthogonal
 projections $P\le Q$ and a unit vector $\Psi$ with
 $\Psi'=Q\Psi/\lVert Q\Psi\rVert$, the formalization proves
@@ -192,8 +197,37 @@ $\Psi'=Q\Psi/\lVert Q\Psi\rVert$, the formalization proves
 \end{align}
 which combines the deficiencies of consecutive levels. Along such a chain the
 deficiency of $\Psi_a$ under a projection of level $m$ collects the squared
-deficiencies of the earlier levels in addition to $b_m^2$, a term whose control is needed to justify the printed
-recursion for the complete hierarchy. Tracking it is left to the assembly of all levels.
+deficiencies of the earlier levels in addition to $b_m^2$.
+
+The formalization therefore measures every deficiency against $\Psi_a$
+itself. Let $P_k^m$ be the projection of level $m$ on block $k$, with
+$P_k^0=1$, and let $P_k^{m+1}$ be the window of the pair operator $M$ joining
+the two halves of block $k$, centred at $c=\langle\Psi_a,M\Psi_a\rangle$ with
+radius $x_m$, inside the range of $Q=P_{2k}^mP_{2k+1}^m$. The two halves act
+on disjoint supersites, so their projections commute. Suppose
+$\lVert(M-c)\Psi_a\rVert\le\epsilon$ and $\lVert M-c\rVert\le K$ for every
+pair operator, and let each half move $\Psi_a$ by at most $D_m$. Then
+$\lVert\Psi_a-Q\Psi_a\rVert^2\le2D_m^2$, and the normalized image
+$\Psi'=Q\Psi_a/\lVert Q\Psi_a\rVert$ lies in the range of $Q$ at distance at
+most $2D_m$ from $\Psi_a$. By the restricted window bound,
+$\lVert\Psi'-P_k^{m+1}\Psi'\rVert\le(\epsilon+2KD_m)/x_m$, and
+(\ref{eq:hastings05_hierarchical_projection_nested_deficiency}) gives
+\begin{align}\label{eq:hastings05_hierarchical_projection_ground_recurrence}
+    D_0=0,\qquad
+    D_{m+1}^2\le2D_m^2+\Bigl(\frac{\epsilon+2KD_m}{x_m}\Bigr)^2 .
+\end{align}
+With $K>0$, $e>0$, $\epsilon=Ke$ and the source's radius
+$x_m=K(e+2\beta_m)^{1-s}$ (lines 676--681), where $\beta_0=0$ and
+$\beta_{m+1}^2=2\beta_m^2+(e+2\beta_m)^{2s}$, induction gives
+$D_m\le\beta_m$. For $0<e\le1$ and $0\le s\le1$,
+\begin{align}\label{eq:hastings05_hierarchical_projection_ground_bound}
+    \beta_m\le(3^m-1)\,e^{s^m},
+\end{align}
+since $C_{m+1}^2=2C_m^2+(1+2C_m)^2\le(3C_m+2)^2$ for the coefficients. This
+replaces the printed recurrence and its coefficient $2^h-1$ by
+(\ref{eq:hastings05_hierarchical_projection_ground_recurrence}) and $3^h-1$,
+which is still polynomial in $N=2^h$. With $s=1-1/h$ and $h\ge2$ the final
+deficiency is at most $(3^h-1)e^{1/4}$.
 
 \section{Formalization}
 
@@ -216,6 +250,24 @@ The bounds for the scalar recurrence in (\ref{eq:hastings05_hierarchical_project
 hierarchy.\footnote{Declarations:
     \leanid{TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_le} and
     \leanid{TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_self_le}.}
+
+The bound over all levels,
+(\ref{eq:hastings05_hierarchical_projection_ground_recurrence}) and
+(\ref{eq:hastings05_hierarchical_projection_ground_bound}), is
+formalized.\footnote{Declarations:
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_hierarchy_le},
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_le_hierarchyMajorant}, and
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_le}.}
+The commutation of the two halves of each block, which the bound over all
+levels takes as a hypothesis, is derived from the supersite grouping of lines
+609--628: a spectral window keeps the support of its operator, so every
+projection of level $m$ acts on its block of $2^m$ supersites, and the two
+halves of a block act on disjoint sites. The residual of a pair operator is
+at most the sum of the residuals of its summands $M_i$, with centre the sum of
+their expectations.\footnote{Declarations:
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_supersiteHierarchy_le},
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.mem_supportedOperators_hierarchy}, and
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.norm_toEuclideanLin_sum_sub_le}.}
 
 \bibliographystyle{plain}
 \bibliography{references}
