@@ -110,30 +110,17 @@ theorem eventuallyRepresentativeWordTupleSpan_of_basis_injective
   exact eventually_wordTupleSpanTop_of_blockSelectorWords_of_isNBlkInjective
     P.basis (p := 1) hSelectors (by omega) (fun j => hBlkPos j 1 (by omega))
 
-/-- Physical blocking transports the BNT hypotheses needed for simultaneous
-representative separation, without asserting preservation of the entire
-canonical-form structure.
-
-Suppose `p > 0` and every `p`-blocked representative is injective.  Pair
-separation is first obtained for the original representatives at length
-`6 * p`, using Condition C1 at length `2 * p - 1`, and is then transported to
-length `6` for the blocked representatives.  The resulting selector suffix,
-together with injectivity of the blocked representatives, gives simultaneous
-word-tuple span at every sufficiently large blocked length.
-
-This is the representative-level form of the blocking and block-injectivity
-argument in arXiv:1606.00608, lines 318--344, used in Appendix C.3, Lemma L,
-lines 1835--1858. -/
-theorem eventuallyRepresentativeWordTupleSpan_blockTensor
-    (hCF : IsBNTCanonicalForm P) (p : ℕ) (hp : 0 < p)
-    (hInj : ∀ j, Kraus.IsInjective (MPSTensor.blockTensor (P.basis j) p)) :
-    (P.blockTensor p).EventuallyRepresentativeWordTupleSpan := by
+/-- Common block injectivity of the representatives at a positive length `p` gives pairwise
+trace separation of distinct representatives at length `6 * p`, by the three-block
+separation argument with Condition C1 at length `2 * p - 1`. -/
+private theorem pairTraceSeparatingAt_six_mul_of_common_isNBlkInjective
+    (hCF : IsBNTCanonicalForm P) {p : ℕ} (hp : 0 < p)
+    (hAtP : ∀ j : Fin P.basisCount, Kraus.IsNBlkInjective (P.basis j) p) :
+    ∀ k j : Fin P.basisCount, j ≠ k →
+      PairTraceSeparatingAt (P.basis k) (P.basis j) (6 * p) := by
   classical
   let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
     fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
-  have hAtP : ∀ j : Fin P.basisCount, Kraus.IsNBlkInjective (P.basis j) p := by
-    intro j
-    exact (isNBlkInjective_iff_blockTensor_isInjective (P.basis j) p).2 (hInj j)
   have hAtLeastP : ∀ (j : Fin P.basisCount) (n : ℕ), p ≤ n →
       Kraus.IsNBlkInjective (P.basis j) n := by
     intro j n hpn
@@ -177,6 +164,34 @@ theorem eventuallyRepresentativeWordTupleSpan_blockTensor
     intro k j hjk
     rw [← hLength]
     exact hSepOriginalRaw k j hjk
+  exact hSepOriginal
+
+/-- Physical blocking transports the BNT hypotheses needed for simultaneous
+representative separation, without asserting preservation of the entire
+canonical-form structure.
+
+Suppose `p > 0` and every `p`-blocked representative is injective.  Pair
+separation is first obtained for the original representatives at length
+`6 * p`, using Condition C1 at length `2 * p - 1`, and is then transported to
+length `6` for the blocked representatives.  The resulting selector suffix,
+together with injectivity of the blocked representatives, gives simultaneous
+word-tuple span at every sufficiently large blocked length.
+
+This is the representative-level form of the blocking and block-injectivity
+argument in arXiv:1606.00608, lines 318--344, used in Appendix C.3, Lemma L,
+lines 1835--1858. -/
+theorem eventuallyRepresentativeWordTupleSpan_blockTensor
+    (hCF : IsBNTCanonicalForm P) (p : ℕ) (hp : 0 < p)
+    (hInj : ∀ j, Kraus.IsInjective (MPSTensor.blockTensor (P.basis j) p)) :
+    (P.blockTensor p).EventuallyRepresentativeWordTupleSpan := by
+  classical
+  let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
+    fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
+  have hAtP : ∀ j : Fin P.basisCount, Kraus.IsNBlkInjective (P.basis j) p := by
+    intro j
+    exact (isNBlkInjective_iff_blockTensor_isInjective (P.basis j) p).2 (hInj j)
+  have hSepOriginal :=
+    pairTraceSeparatingAt_six_mul_of_common_isNBlkInjective hCF hp hAtP
   have hSepBlocked : ∀ k j : Fin P.basisCount, j ≠ k →
       PairTraceSeparatingAt
         (MPSTensor.blockTensor (P.basis k) p)
@@ -220,51 +235,8 @@ theorem eventuallyRepresentativeWordTupleSpan
   let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
     fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
   obtain ⟨p, hp, hAtP⟩ := hCF.exists_common_basis_isNBlkInjective
-  have hAtLeastP : ∀ (j : Fin P.basisCount) (n : ℕ), p ≤ n →
-      Kraus.IsNBlkInjective (P.basis j) n := by
-    intro j n hpn
-    exact isNBlkInjective_of_le hp (hAtP j) hpn
-  let L₀ := 2 * p - 1
-  have hBlk0 : ∀ j : Fin P.basisCount, Kraus.IsNBlkInjective (P.basis j) L₀ := by
-    intro j
-    apply hAtLeastP j
-    dsimp [L₀]
-    omega
-  have hBlk1 : ∀ j : Fin P.basisCount,
-      Kraus.IsNBlkInjective (P.basis j) (L₀ + 1) := by
-    intro j
-    apply hAtLeastP j
-    dsimp [L₀]
-    omega
-  have hBlk3 : ∀ j : Fin P.basisCount,
-      Kraus.IsNBlkInjective (P.basis j)
-        ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) := by
-    intro j
-    apply hAtLeastP j
-    dsimp [L₀]
-    omega
-  have hIrr : HasIrreducibleBlocks (d := d) P.basis :=
-    HasIrreducibleBlocks.ofForall hCF.basis_irreducible
-  have hLeft : IsLeftCanonicalBlockFamily (d := d) P.basis :=
-    IsLeftCanonicalBlockFamily.ofForall hCF.basis_left_canonical
-  have hOverlap : HasNormalizedSelfOverlap (d := d) P.basis :=
-    HasNormalizedSelfOverlap.ofForall hCF.basis_normalized_self_overlap
-  have hBlocks : BlocksNotGaugePhaseEquiv (d := d) P.basis :=
-    hCF.basis_distinct
-  have hL₀ : 0 < L₀ := by
-    dsimp [L₀]
-    omega
-  have hSepRaw :=
-    forall_pairTraceSeparatingAt_threeBlock_of_blocksNotGaugePhaseEquiv_c1
-      P.basis hIrr hLeft hOverlap hBlocks hBlk0 hBlk1 hBlk3 hL₀
-  have hLength : (L₀ + 1) + ((L₀ + 1) + (L₀ + 1)) = 6 * p := by
-    dsimp [L₀]
-    omega
-  have hSep : ∀ k j : Fin P.basisCount, j ≠ k →
-      PairTraceSeparatingAt (P.basis k) (P.basis j) (6 * p) := by
-    intro k j hjk
-    rw [← hLength]
-    exact hSepRaw k j hjk
+  have hSep :=
+    pairTraceSeparatingAt_six_mul_of_common_isNBlkInjective hCF hp hAtP
   have hPair : HasPairBlockSeparatingWords P.basis (6 * p) :=
     hasPairBlockSeparatingWords_of_forall_pairTraceSeparatingAt P.basis hSep
   let selectorLength := (P.basisCount - 1) * (6 * p)

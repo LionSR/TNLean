@@ -32,6 +32,31 @@ namespace MPOTensor.CPSVBlockingChannelCounterexample
 open NeighboringTraceObstructionAmbientBlocks
 open NeighboringTraceObstructionAmbientCounterexample
 
+/-- A channel between ambient closure families restricts, through the boundary
+isolating the first sector, to a channel between the embedded closure families. -/
+private theorem exists_embeddedMap_of_exists_ambientMap (N : ℕ)
+    (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
+    (hGauge : MPSTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B))
+    (h : ∃ T : Matrix (Fin 2 → Fin 5) (Fin 2 → Fin 5) ℂ →ₗ[ℂ]
+        Matrix (Fin N → Fin 5) (Fin N → Fin 5) ℂ,
+      IsKrausCPTP T ∧
+      ∀ Y : Matrix (Fin 3) (Fin 3) ℂ,
+        T (physCloseN (ambient mu B hmu) 2 Y) =
+          physCloseN (ambient mu B hmu) N Y) :
+    ∃ T : Matrix (Fin 2 → Fin 5) (Fin 2 → Fin 5) ℂ →ₗ[ℂ]
+        Matrix (Fin N → Fin 5) (Fin N → Fin 5) ℂ,
+      IsKrausCPTP T ∧
+      ∀ X : Matrix (Fin 2) (Fin 2) ℂ,
+        T (physCloseN embeddedObstruction 2 X) =
+          physCloseN embeddedObstruction N X := by
+  obtain ⟨T, hT, hclose⟩ := h
+  refine ⟨T, hT, fun X ↦ ?_⟩
+  obtain ⟨Y, hY⟩ :=
+    exists_ambient_boundary_physCloseN_eq_embeddedObstruction
+      mu B hmu hGauge X
+  rw [← hY 2, ← hY N]
+  exact hclose Y
+
 /-- No trace-preserving completely positive map sends every two-site closure
 of the ambient tensor to the corresponding three-site closure.
 
@@ -47,14 +72,9 @@ theorem not_exists_ambient_two_to_three_site_map
       ∀ Y : Matrix (Fin 3) (Fin 3) ℂ,
         T (physCloseN (ambient mu B hmu) 2 Y) =
           physCloseN (ambient mu B hmu) 3 Y := by
-  rintro ⟨T, hT, hclose⟩
-  apply not_exists_embedded_two_to_three_site_map
-  refine ⟨T, hT, fun X ↦ ?_⟩
-  obtain ⟨Y, hY⟩ :=
-    exists_ambient_boundary_physCloseN_eq_embeddedObstruction
-      mu B hmu hGauge X
-  rw [← hY 2, ← hY 3]
-  exact hclose Y
+  intro h
+  exact not_exists_embedded_two_to_three_site_map
+    (exists_embeddedMap_of_exists_ambientMap 3 mu B hmu hGauge h)
 
 /-- No trace-preserving completely positive map sends every two-site closure
 of the ambient tensor to the corresponding four-site closure.
@@ -71,14 +91,9 @@ theorem not_exists_ambient_two_to_four_site_map
       ∀ Y : Matrix (Fin 3) (Fin 3) ℂ,
         T (physCloseN (ambient mu B hmu) 2 Y) =
           physCloseN (ambient mu B hmu) 4 Y := by
-  rintro ⟨T, hT, hclose⟩
-  apply not_exists_embedded_two_to_four_site_map
-  refine ⟨T, hT, fun X ↦ ?_⟩
-  obtain ⟨Y, hY⟩ :=
-    exists_ambient_boundary_physCloseN_eq_embeddedObstruction
-      mu B hmu hGauge X
-  rw [← hY 2, ← hY 4]
-  exact hclose Y
+  intro h
+  exact not_exists_embedded_two_to_four_site_map
+    (exists_embeddedMap_of_exists_ambientMap 4 mu B hmu hGauge h)
 
 /-- The two-site blocking of the ambient tensor is not a renormalization fixed
 point in the trace-preserving completely positive map sense of CPSV16,

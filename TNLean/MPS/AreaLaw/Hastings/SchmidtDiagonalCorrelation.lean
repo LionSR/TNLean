@@ -41,12 +41,11 @@ namespace Matrix
 variable {n : Type*} [Fintype n] [DecidableEq n]
 local notation "T" => toEuclideanCLM (n := n) (𝕜 := ℂ)
 
-/-- A Hermitian matrix is self-adjoint for the Euclidean inner product. -/
+/-- A Hermitian matrix is self-adjoint for the Euclidean inner product: the form of
+`Matrix.isSymmetric_toEuclideanLin_iff` for the continuous linear map. -/
 theorem IsHermitian.inner_toEuclideanCLM_left {O : Matrix n n ℂ} (hO : O.IsHermitian)
-    (x y : EuclideanSpace ℂ n) : ⟪T O x, y⟫_ℂ = ⟪x, T O y⟫_ℂ := by
-  have h : ContinuousLinearMap.adjoint (T O) = T O := by
-    rw [← ContinuousLinearMap.star_eq_adjoint, ← map_star, star_eq_conjTranspose, hO.eq]
-  rw [← ContinuousLinearMap.adjoint_inner_right, h]
+    (x y : EuclideanSpace ℂ n) : ⟪T O x, y⟫_ℂ = ⟪x, T O y⟫_ℂ :=
+  isSymmetric_toEuclideanLin_iff.mpr hO x y
 
 /-- The quadratic form of a positive semidefinite matrix has nonnegative real part. -/
 theorem PosSemidef.re_inner_toEuclideanCLM_nonneg {P : Matrix n n ℂ} (hP : P.PosSemidef)

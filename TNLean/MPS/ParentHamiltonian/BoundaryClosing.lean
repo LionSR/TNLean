@@ -698,16 +698,10 @@ lemma closure_property_auxiliary_boundary_product_eq_of_right_products
         YAt ⟨M, by omega⟩ (ρPlus j σ) * A j * Kraus.evalWord A (List.ofFn σ) =
           YAt ⟨M + 1 - L₀, by omega⟩ (ρMinus j σ) * A j *
             Kraus.evalWord A (List.ofFn σ) := by
-  refine closure_property_auxiliary_boundary_product_eq_of_closing_restrictions
-    (A := A) hInj hL₀ hM YAt hYAt μ ?_
-  intro η
-  exact closure_property_boundary_restriction_eq_of_first_products
-    (A := A) hL₀ hM η μ
-    (YAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ))
-    (YAt ⟨M + 1 - L₀, by omega⟩ (mirrorMiddleBackground L₀ (M + 1) η μ))
-    (hYAt ⟨M, by omega⟩ (wrappedMiddleBackground L₀ (M + 1) η μ))
-    (hYAt ⟨M + 1 - L₀, by omega⟩
-      (mirrorMiddleBackground L₀ (M + 1) η μ)) (hProd η)
+  exact closure_property_auxiliary_boundary_product_eq_of_closing_restrictions
+    (A := A) hInj hL₀ hM YAt hYAt μ
+    (closure_property_boundary_restrictions_eq_of_first_products
+      (A := A) hL₀ hM YAt hYAt μ hProd)
 
 /-- Cancellation form of the second boundary-crossing coordinate comparison.
 

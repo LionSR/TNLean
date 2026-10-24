@@ -1,0 +1,87 @@
+\documentclass{article}
+\usepackage[margin=28mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{The Truncated Dynamics in Hastings' Approximation $M_i$}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The printed estimate}
+Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
+\href{https://arxiv.org/abs/cond-mat/0508554v3}{arXiv:cond-mat/0508554v3},
+source \path{proj3new.tex}, lines 285--320, approximates the filtered term
+$\tilde H_i^0$ by
+\begin{align}
+ M_i=\frac{\Delta E}{\sqrt{2\pi q}}\int dt\,e^{-(t\Delta E)^2/(2q)}\,
+ e^{iH_{\rm loc}t}H_ie^{-iH_{\rm loc}t},\qquad
+ H_{\rm loc}=\sum_{j:\,d(i,j)\le l_{proj}-R}H_j,
+ \label{eq:hastings05_truncated_dynamics_mi}
+\end{align}
+and states, eq.~(apb),
+\begin{align}
+ \|\tilde H_i^0-M_i\|\le J\bigl(N(l_{proj})\,g(c_1l_{proj},l_{proj})
+ +2e^{-(c_1l_{proj}\Delta E)^2/(2q)}\bigr),
+ \label{eq:hastings05_truncated_dynamics_apb}
+\end{align}
+with $N(l_{proj})$ the number of sites $j$ with
+$l_{proj}-R<d(i,j)\le l_{proj}+R$. Eq.~(mid) prints the weight as
+$e^{-(t\Delta E)^2/2}$; the weight of eq.~(thd), $e^{-(t\Delta E)^2/(2q)}$, is
+meant, since otherwise $M_i$ would not be normalized and the bound
+(\ref{eq:hastings05_truncated_dynamics_apb}) would not follow from the proof at
+lines 1458--1533.
+
+\section{The proof and the formalized estimate}
+The proof (lines 1469--1505) compares the two evolutions of $H_i$. With
+$V=H-H_{\rm loc}$ and $\tau_t$, $\tau^{\rm loc}_t$ the two Heisenberg evolutions,
+\begin{align}
+ \|\tau_t(W)-\tau^{\rm loc}_t(W)\|\le\Bigl|\int_0^t
+ \|[V,\tau^{\rm loc}_u(W)]\|\,du\Bigr|.
+ \label{eq:hastings05_truncated_dynamics_duhamel}
+\end{align}
+The terms of $V$ whose support does not meet the support $K$ of
+$\tau^{\rm loc}_u(W)$ commute with it, and the others are bounded by the
+Lieb--Robinson bound for the truncated dynamics. The source then asserts that
+$JS\int_0^tg(t',l_{proj}-2R)\,dt'$ is bounded by $g(t,l_{proj})$, citing
+[lsmh] (line 1496).
+
+The formalization differs in three points, none of which changes the order of
+the estimate.
+\begin{enumerate}
+ \item The truncation is stated for any family $s$ of terms acting inside a set
+  $K$ that contains the support $S$ of $W$. The shell consists of the omitted
+  terms whose supports meet $K$, and $m$ is a lower bound on the graph
+  distance from $S$ to each of them. With $K$ the sites within distance
+  $l_{proj}$ of $i$ and $s$ the terms with $d(i,j)\le l_{proj}-R$, each shell
+  term has $l_{proj}-R<d(i,j)\le l_{proj}+R$, so the shell count is at most
+  $N(l_{proj})$, and $m$ may be taken as $l_{proj}-3R$ when $H_i$ acts within
+  distance $R$ of $i$.
+ \item The time integral in (\ref{eq:hastings05_truncated_dynamics_duhamel})
+  is bounded on $|t|\le T$ by $T$ times the largest integrand, instead of the
+  absorption into $g(t,l_{proj})$. The Lieb--Robinson bound for a shell term
+  acting on $X_j$ is obtained from the single-site bound by the partial trace
+  over $X_j$, which costs a factor $2|X_j|\le2v_R$. The resulting bound is
+  \begin{align}
+   \|\tilde H_i^0-M_i\|\le2v_RC|S|\,\|W\|\,J\,N\,T\,e^{vT-\mu m}
+   +2\|W\|e^{-(T\Delta E)^2/(2q)},
+  \end{align}
+  for every $T\ge0$ and $\mu\ge0$, where $C=2+4|b_0|e^{2\mu R}$ and
+  $v=2v_R|b_0|e^{2\mu R}+1$ are the constants of the graph Lieb--Robinson
+  bound, $N$ is the shell count and $J$ bounds the norms of the terms. With
+  $\mu>0$ fixed, $m=l_{proj}-3R$ and $T=c_1l_{proj}$ for a constant
+  $0<c_1<\mu/v$, the exponent is $-(\mu-vc_1)l_{proj}+3\mu R$, so the first
+  term is exponentially small in $l_{proj}$, as in
+  (\ref{eq:hastings05_truncated_dynamics_apb}).
+ \item The constants are explicit and are not identified with the source's
+  $g$ and $c_1$; the parameters $q$ and $T$ are left free.
+\end{enumerate}
+The support of $M_i$, the bound $\|M_i\|\le\|H_i\|$ and the hermiticity of
+$M_i$ hold as stated in the source.
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}

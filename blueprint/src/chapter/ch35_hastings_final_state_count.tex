@@ -1,0 +1,66 @@
+\section{The number of final states in Hastings' hierarchical construction}
+\label{sec:hastings_final_state_count}
+
+% Hastings, arXiv:cond-mat/0508554v3, proj3new.tex, lines 722--730.
+
+The hierarchical construction of \cite{Hastings2006Solving} ends with a family
+of final states, and the source asserts that once each of them lies within
+energy $\Delta E/2$ of the ground state there are at most $2n$ of them, $n$
+being the number of ground states \cite[lines 722--730]{Hastings2006Solving}.
+The source gives no argument; the following one rests only on the gap and on
+Bessel's inequality \cite{gap:hastings05_final_state_count}.
+
+\begin{theorem}[Bessel's inequality against a projection]
+    \label{thm:hastings_final_state_bessel}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.inner_toEuclideanCLM_eq_inner_self,
+        TNLean.MPS.AreaLaw.LocalSolution.re_inner_toEuclideanCLM_eq_norm_sq,
+        TNLean.MPS.AreaLaw.LocalSolution.sum_norm_sq_le_re_trace}
+    \leanok
+    Let $P$ be an orthogonal projection on $\mathbb C^d$ and let $\phi_k$,
+    $k\in S$, be orthonormal. Then $\langle\phi_k,P\phi_k\rangle=\|P\phi_k\|^2$
+    and
+    \begin{align}
+        \sum_{k\in S}\|P\phi_k\|^2\le\operatorname{tr}P.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Since $P$ is self-adjoint and $P^2=P$,
+    $\langle\phi,P\phi\rangle=\langle\phi,P^2\phi\rangle=\|P\phi\|^2$. With
+    $e_j$ the standard basis, $\|P\phi_k\|^2=\sum_j|\langle\phi_k,Pe_j\rangle|^2$.
+    Exchanging the sums and applying Bessel's inequality to each $Pe_j$ gives
+    $\sum_k\|P\phi_k\|^2\le\sum_j\|Pe_j\|^2=\sum_jP_{jj}=\operatorname{tr}P$.
+\end{proof}
+
+\begin{theorem}[Orthonormal states of low energy]
+    \label{thm:hastings_final_state_count}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.one_sub_mul_card_le_re_trace,
+        TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace}
+    \leanok
+    \uses{thm:hastings_final_state_bessel}
+    Let $P$ be an orthogonal projection and $H$ an operator with
+    $H-E_0\ge\Delta E\,(1-P)$ for some $\Delta E>0$, that is,
+    $\Delta E\,(\|v\|^2-\langle v,Pv\rangle)\le\langle v,Hv\rangle-E_0\|v\|^2$
+    for every $v$. If $\phi_k$, $k\in S$, are orthonormal with
+    $\langle\phi_k,H\phi_k\rangle\le E_0+\theta\Delta E$, then
+    \begin{align}
+        (1-\theta)\,|S|\le\operatorname{tr}P.
+    \end{align}
+    In particular at most $2\operatorname{tr}P$ orthonormal states have energy
+    at most $E_0+\Delta E/2$. With $P$ the projection onto the $n$ ground
+    states this is the count of \cite[lines 722--730]{Hastings2006Solving},
+    for final states whose energy under $H$ is within $\Delta E/2$ of the
+    ground energy \cite{gap:hastings05_final_state_count}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:hastings_final_state_bessel}
+    For each $k$ the gap gives
+    $\Delta E\,(1-\|P\phi_k\|^2)\le\theta\Delta E$, so
+    $\|P\phi_k\|^2\ge1-\theta$. Summing over $k$ and applying
+    Theorem~\ref{thm:hastings_final_state_bessel} gives
+    $(1-\theta)|S|\le\operatorname{tr}P$; take $\theta=1/2$ for the second
+    statement.
+\end{proof}

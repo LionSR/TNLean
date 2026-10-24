@@ -78,16 +78,21 @@ theorem exists_localLift_eq_localLift_of_subset {D D' : Finset V} (hDD : D ⊆ D
   · exact ⟨0, Subsingleton.elim _ _⟩
   · exact ((isSupportedOn_localLift K).mono hDD).exists_localLift σ₀
 
+omit [Fintype V] in
+private theorem conjTranspose_mul_self_of_isStarProjection {D : Finset V}
+    {P : Matrix (RegionConfig n D) (RegionConfig n D) ℂ} (hP : IsStarProjection P) :
+    Pᴴ * P = P := by
+  have h := hP.isSelfAdjoint.star_eq
+  rw [star_eq_conjTranspose] at h
+  rw [h, hP.isIdempotentElem.eq]
+
 /-- The squared norm of a lifted star projection applied to a vector is the trace of the
 projection against the regional state. -/
 theorem norm_sq_toEuclideanLin_localLift_eq_trace {D : Finset V}
     {P : Matrix (RegionConfig n D) (RegionConfig n D) ℂ} (hP : IsStarProjection P)
     (ψ : EuclideanSpace ℂ (SiteConfig n)) :
     ‖toEuclideanLin (localLift D P) ψ‖ ^ 2 = (P * regionState D ψ).trace.re := by
-  have hPP : Pᴴ * P = P := by
-    have h := hP.isSelfAdjoint.star_eq
-    rw [star_eq_conjTranspose] at h
-    rw [h, hP.isIdempotentElem.eq]
+  have hPP := conjTranspose_mul_self_of_isStarProjection hP
   have hinner : ⟪toEuclideanLin (localLift D P) ψ, toEuclideanLin (localLift D P) ψ⟫_ℂ =
       ⟪ψ, toEuclideanLin (localLift D P) ψ⟫_ℂ := by
     rw [← LinearMap.adjoint_inner_right, ← toEuclideanLin_conjTranspose_eq_adjoint,
@@ -101,10 +106,7 @@ theorem norm_toEuclideanLin_localLift_le {D : Finset V}
     {P : Matrix (RegionConfig n D) (RegionConfig n D) ℂ} (hP : IsStarProjection P)
     (ψ : EuclideanSpace ℂ (SiteConfig n)) :
     ‖toEuclideanLin (localLift D P) ψ‖ ≤ ‖ψ‖ := by
-  have hPP : Pᴴ * P = P := by
-    have h := hP.isSelfAdjoint.star_eq
-    rw [star_eq_conjTranspose] at h
-    rw [h, hP.isIdempotentElem.eq]
+  have hPP := conjTranspose_mul_self_of_isStarProjection hP
   set v := toEuclideanLin (localLift D P) ψ
   have hinner : ⟪v, v⟫_ℂ = ⟪ψ, v⟫_ℂ := by
     simp only [v]
@@ -302,8 +304,8 @@ theorem norm_sub_sequentialTruncation_sq_le (hP : ∀ k, IsStarProjection (P k))
   | zero => simp [sequentialTruncation]
   | succ j ih =>
     rw [Finset.sum_range_succ, sequentialTruncation]
-    set D := leftBlock L (L - 1 - j) with hD
-    set Pj := P (L - 1 - j) with hPj
+    set D := leftBlock L (L - 1 - j)
+    set Pj := P (L - 1 - j)
     set x := ψ - sequentialTruncation P j ψ with hx
     have hH : Pjᴴ = Pj := by
       have h := (hP (L - 1 - j)).isSelfAdjoint.star_eq
@@ -470,7 +472,11 @@ theorem isOpenMPS_sequentialTruncation_leadingEigenprojection
 truncating every internal cut onto the `D` leading eigenvectors of its left marginal gives a
 vector `Φ` with `‖Φ - ψ‖² ≤ ∑_k ε_k(D)`, where `ε_k(D)` is the weight beyond the `D`
 largest eigenvalues at the cut `k`. Verstraete and Cirac, Phys. Rev. B 73, 094423 (2006),
-state `‖Φ - ψ‖² ≤ 2 ∑_k ε_k(D)`; the bound here, without the factor `2`, implies theirs. -/
+state `‖Φ - ψ‖² ≤ 2 ∑_k ε_k(D)`; the bound here, without the factor `2`, implies theirs.
+Within a repeated eigenvalue the eigenvectors are those of the chosen eigenbasis, as in
+`isOpenMPS_sequentialTruncation_leadingEigenprojection` (**Scope restriction (fixed
+eigenbasis)**, `docs/paper-gaps/tnlean_one_dimensional_threshold_truncation.tex`);
+`norm_sub_sequentialTruncation_sq_le` covers every family of projections. -/
 theorem norm_sequentialTruncation_leadingEigenprojection_sub_sq_le
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (hψ : ‖ψ‖ = 1) (D : ℕ) :
     let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦

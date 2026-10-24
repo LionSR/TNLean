@@ -540,8 +540,8 @@ theorem not_exists_two_to_three_site_map :
       Matrix (Fin 64) (Fin 64) ℂ :=
     Matrix.equivReindexMap threeSiteChainFinEquiv ∘ₗ T ∘ₗ
       Matrix.equivReindexMap twoSiteChainFinEquiv.symm
-  have hTfin : IsKrausCPTP Tfin := by
-    exact isKrausCPTP_comp
+  have hTfin : IsKrausCPTP Tfin :=
+    isKrausCPTP_comp
       (isKrausCPTP_comp
         (Matrix.equivReindexMap_isKrausCPTP twoSiteChainFinEquiv.symm) hT)
       (Matrix.equivReindexMap_isKrausCPTP threeSiteChainFinEquiv)
@@ -580,8 +580,8 @@ theorem not_exists_two_to_four_site_map :
       Matrix (Fin 256) (Fin 256) ℂ :=
     Matrix.equivReindexMap fourSiteChainFinEquiv ∘ₗ T ∘ₗ
       Matrix.equivReindexMap twoSiteChainFinEquiv.symm
-  have hTfin : IsKrausCPTP Tfin := by
-    exact isKrausCPTP_comp
+  have hTfin : IsKrausCPTP Tfin :=
+    isKrausCPTP_comp
       (isKrausCPTP_comp
         (Matrix.equivReindexMap_isKrausCPTP twoSiteChainFinEquiv.symm) hT)
       (Matrix.equivReindexMap_isKrausCPTP fourSiteChainFinEquiv)

@@ -80,8 +80,8 @@ theorem IsGInjective.torusGClosure_ne_zero_of_isSemiRegular
     (ha : IsGInjective (torusLegRep U) (siteMap a))
     (hU : Representation.IsSemiRegular (Matrix.toLinAlgEquiv'.toMonoidHom.comp U))
     (g h : G) :
-    torusGClosure (width := width) (height := height) U a g h ≠ 0 := by
-  exact (ha.linearIndependent_torusGClosureClass_of_isSemiRegular hU).ne_zero
+    torusGClosure (width := width) (height := height) U a g h ≠ 0 :=
+  (ha.linearIndependent_torusGClosureClass_of_isSemiRegular hU).ne_zero
     (pairConjugacyClass G (g, h))
 
 /-- Commuting pair classes give independent actual closures of every semi-regular
