@@ -28,13 +28,16 @@ with `H_D = ∑_{k ∈ D} h k`, which is the definition used here. If `‖h k‖
   bound `‖O‖ y^{n_C} Tr e^{-βH}` when `n_C + n_B ≤ S n_C`.
 * `TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_biUnion_le`: the same bound for
   several disjoint clusters, `‖O‖ ∏_i y^{n_{C_i}} Tr e^{-βH}`.
+* `TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_mul_clusterPart_mul_exp_le_pow`: the cluster
+  part `ρ(β/n, C)` between the thermal factors `e^{-kβH/n}` and `e^{-(n-k-1)βH/n}`, with the same
+  bound for `y = (e^{Jβ/n} - 1) e^{SJβ/n}`.
 * `TNLean.Lattice.ClusterExpansion.card_add_card_clusterBoundary_le`: the count
   `n_C + n_{B(C)} ≤ S n_C` when the terms acting on each site lie in a set of at most `S`.
 
 ## References
 
 Hastings, *Solving gapped Hamiltonians locally*, arXiv:cond-mat/0508554v3, `proj3new.tex`,
-lines 1174–1195.
+lines 1174–1195 and 1322–1333.
 
 **Local fix (right side of the single-cluster bound):** the source states the bound before
 equation `percb2` with `Tr(O e^{-βH})` on the right, which fails as printed; the form proved here,
@@ -92,6 +95,52 @@ theorem clusterPart_eq_sum_powerset (H : Matrix ι ι ℂ) (h : κ → Matrix ι
       abel
     rw [hcard, hexp]
 
+/-- Removing the cluster and its boundary from the Hamiltonian raises the partition function by at
+most `e^{(n_C + n_B) J β}`: `Tr e^{-β (H - H_B - H_C)} ≤ e^{(n_C + n_B) J β} Tr e^{-βH}`, since
+`‖H_B + H_C‖ ≤ (n_C + n_B) J`. -/
+theorem re_trace_exp_sub_sum_sub_sum_le {H : Matrix ι ι ℂ} (hH : H.IsHermitian)
+    {h : κ → Matrix ι ι ℂ} {B C : Finset κ}
+    (hh : ∀ k ∈ B ∪ C, (h k).IsHermitian) {J : ℝ} (hJ : ∀ k ∈ B ∪ C, ‖h k‖ ≤ J)
+    {β : ℝ} (hβ : 0 ≤ β) :
+    (NormedSpace.exp (-(β • (H - ∑ k ∈ B, h k - ∑ k ∈ C, h k)))).trace.re ≤
+      Real.exp ((C.card + B.card) * J * β) * (NormedSpace.exp (-(β • H))).trace.re := by
+  have hBsub : B ⊆ B ∪ C := Finset.subset_union_left
+  have hCsub : C ⊆ B ∪ C := Finset.subset_union_right
+  have hsumH : ∀ T ⊆ B ∪ C, (∑ k ∈ T, h k).IsHermitian := fun T hT ↦
+    (isSelfAdjoint_sum T fun k hk ↦ (hh k (hT hk)).isSelfAdjoint).isHermitian
+  have hsum : ∀ T ⊆ B ∪ C, ‖∑ k ∈ T, h k‖ ≤ T.card * J := fun T hT ↦
+    (norm_sum_le _ _).trans <| by
+      simpa using Finset.sum_le_sum fun k hk ↦ hJ k (hT hk)
+  have hV : (β • (∑ k ∈ B, h k + ∑ k ∈ C, h k)).IsHermitian :=
+    ((hsumH B hBsub).add (hsumH C hCsub)).smul (IsSelfAdjoint.all β)
+  have hX : (-(β • H)).IsHermitian := (hH.smul (IsSelfAdjoint.all β)).neg
+  have hYV : -(β • (H - ∑ k ∈ B, h k - ∑ k ∈ C, h k)) =
+      -(β • H) + β • (∑ k ∈ B, h k + ∑ k ∈ C, h k) := by
+    rw [smul_sub, smul_sub, smul_add]
+    abel
+  have hnormV : ‖β • (∑ k ∈ B, h k + ∑ k ∈ C, h k)‖ ≤ (C.card + B.card) * J * β := by
+    rw [norm_smul, Real.norm_of_nonneg hβ]
+    calc β * ‖∑ k ∈ B, h k + ∑ k ∈ C, h k‖
+        ≤ β * (B.card * J + C.card * J) :=
+          mul_le_mul_of_nonneg_left
+            ((norm_add_le _ _).trans (add_le_add (hsum B hBsub) (hsum C hCsub))) hβ
+      _ = (C.card + B.card) * J * β := by ring
+  have hZ := hX.re_trace_exp_nonneg
+  rw [hYV]
+  exact (hX.re_trace_exp_add_le hV).trans
+    (mul_le_mul_of_nonneg_right (Real.exp_le_exp.mpr hnormV) hZ)
+
+/-- The cluster factor `‖O‖ (e^{tJ} - 1)^{n_C}` is nonnegative for `t ≥ 0`, since `J ≥ 0` as soon
+as the cluster is nonempty. -/
+theorem norm_mul_exp_mul_sub_one_pow_nonneg {h : κ → Matrix ι ι ℂ} {B C : Finset κ} {J : ℝ}
+    (hJ : ∀ k ∈ B ∪ C, ‖h k‖ ≤ J) (O : Matrix ι ι ℂ) {t : ℝ} (ht : 0 ≤ t) :
+    0 ≤ ‖O‖ * (Real.exp (t * J) - 1) ^ C.card := by
+  refine mul_nonneg (norm_nonneg _) ?_
+  rcases C.eq_empty_or_nonempty with hC | ⟨k, hk⟩
+  · simp [hC]
+  · have hJ0 : 0 ≤ J := (norm_nonneg _).trans (hJ k (Finset.mem_union_right _ hk))
+    exact pow_nonneg (sub_nonneg.mpr (Real.one_le_exp (mul_nonneg ht hJ0))) _
+
 /-- **The single-cluster bound of the high-temperature expansion.** For a Hermitian `H`,
 Hermitian terms `h k` with `‖h k‖ ≤ J` on a cluster `C` and its boundary `B`, `β ≥ 0` and every
 `O`, `|Tr (O ρ(β, C))| ≤ ‖O‖ (e^{βJ} - 1)^{n_C} e^{(n_C + n_B) J β} Tr e^{-βH}`.
@@ -111,9 +160,6 @@ theorem norm_trace_mul_clusterPart_le {H : Matrix ι ι ℂ} (hH : H.IsHermitian
   have hCsub : C ⊆ B ∪ C := Finset.subset_union_right
   have hsumH : ∀ T ⊆ B ∪ C, (∑ k ∈ T, h k).IsHermitian := fun T hT ↦
     (isSelfAdjoint_sum T fun k hk ↦ (hh k (hT hk)).isSelfAdjoint).isHermitian
-  have hsum : ∀ T ⊆ B ∪ C, ‖∑ k ∈ T, h k‖ ≤ T.card * J := fun T hT ↦
-    (norm_sum_le _ _).trans <| by
-      simpa using Finset.sum_le_sum fun k hk ↦ hJ k (hT hk)
   have hY : (β • (H - ∑ k ∈ B, h k - ∑ k ∈ C, h k)).IsHermitian :=
     ((hH.sub (hsumH B hBsub)).sub (hsumH C hCsub)).smul (IsSelfAdjoint.all β)
   have hg : ∀ k ∈ C, (β • h k).IsHermitian := fun k hk ↦
@@ -126,36 +172,8 @@ theorem norm_trace_mul_clusterPart_le {H : Matrix ι ι ℂ} (hH : H.IsHermitian
       (NormedSpace.exp (-(β • (H - ∑ k ∈ B, h k - ∑ k ∈ C, h k)))).trace.re := by
     rw [clusterPart_eq_sum_powerset]
     exact Matrix.norm_trace_mul_sum_powerset_exp_le_pow C hY (fun k ↦ β • h k) hg hgJ O
-  -- The trace of `e^{-Y}` against the partition function.
-  have hV : (β • (∑ k ∈ B, h k + ∑ k ∈ C, h k)).IsHermitian :=
-    ((hsumH B hBsub).add (hsumH C hCsub)).smul (IsSelfAdjoint.all β)
-  have hX : (-(β • H)).IsHermitian := (hH.smul (IsSelfAdjoint.all β)).neg
-  have hYV : -(β • (H - ∑ k ∈ B, h k - ∑ k ∈ C, h k)) =
-      -(β • H) + β • (∑ k ∈ B, h k + ∑ k ∈ C, h k) := by
-    rw [smul_sub, smul_sub, smul_add]
-    abel
-  have hnormV : ‖β • (∑ k ∈ B, h k + ∑ k ∈ C, h k)‖ ≤ (C.card + B.card) * J * β := by
-    rw [norm_smul, Real.norm_of_nonneg hβ]
-    calc β * ‖∑ k ∈ B, h k + ∑ k ∈ C, h k‖
-        ≤ β * (B.card * J + C.card * J) :=
-          mul_le_mul_of_nonneg_left
-            ((norm_add_le _ _).trans (add_le_add (hsum B hBsub) (hsum C hCsub))) hβ
-      _ = (C.card + B.card) * J * β := by ring
-  have hZ : 0 ≤ (NormedSpace.exp (-(β • H))).trace.re := by
-    rw [hX.re_trace_exp_eq_sum]
-    exact Finset.sum_nonneg fun i _ ↦ (Real.exp_pos _).le
-  have h2 : (NormedSpace.exp (-(β • (H - ∑ k ∈ B, h k - ∑ k ∈ C, h k)))).trace.re ≤
-      Real.exp ((C.card + B.card) * J * β) * (NormedSpace.exp (-(β • H))).trace.re := by
-    rw [hYV]
-    exact (hX.re_trace_exp_add_le hV).trans
-      (mul_le_mul_of_nonneg_right (Real.exp_le_exp.mpr hnormV) hZ)
-  -- The cluster factor is nonnegative: `J ≥ 0` as soon as the cluster is nonempty.
-  have hP : 0 ≤ ‖O‖ * (Real.exp (β * J) - 1) ^ C.card := by
-    refine mul_nonneg (norm_nonneg _) ?_
-    rcases C.eq_empty_or_nonempty with hC | ⟨k, hk⟩
-    · simp [hC]
-    · have hJ0 : 0 ≤ J := (norm_nonneg _).trans (hJ k (hCsub hk))
-      exact pow_nonneg (sub_nonneg.mpr (Real.one_le_exp (mul_nonneg hβ hJ0))) _
+  have h2 := re_trace_exp_sub_sum_sub_sum_le hH hh hJ hβ
+  have hP := norm_mul_exp_mul_sub_one_pow_nonneg hJ O hβ
   calc ‖(O * clusterPart H h B C β).trace‖
       ≤ ‖O‖ * (Real.exp (β * J) - 1) ^ C.card *
           (NormedSpace.exp (-(β • (H - ∑ k ∈ B, h k - ∑ k ∈ C, h k)))).trace.re := h1
@@ -163,6 +181,21 @@ theorem norm_trace_mul_clusterPart_le {H : Matrix ι ι ℂ} (hH : H.IsHermitian
         (Real.exp ((C.card + B.card) * J * β) * (NormedSpace.exp (-(β • H))).trace.re) :=
       mul_le_mul_of_nonneg_left h2 hP
     _ = _ := by ring
+
+/-- `e^{(n_C + n_B) J β} ≤ (e^{SJβ})^{n_C}` when `n_C + n_B ≤ S n_C`, using `J ≥ 0` when `B ∪ C` is
+nonempty: the last step of equation `percb2`. -/
+theorem exp_card_add_card_mul_le {h : κ → Matrix ι ι ℂ} {B C : Finset κ} {J : ℝ}
+    (hJ : ∀ k ∈ B ∪ C, ‖h k‖ ≤ J) {β : ℝ} (hβ : 0 ≤ β) {S : ℝ}
+    (hS : (C.card + B.card : ℝ) ≤ S * C.card) :
+    Real.exp ((C.card + B.card) * J * β) ≤ Real.exp (S * J * β) ^ C.card := by
+  rw [← Real.exp_nat_mul, Real.exp_le_exp]
+  rcases (B ∪ C).eq_empty_or_nonempty with hBC | ⟨k, hk⟩
+  · obtain ⟨hB, hC⟩ := Finset.union_eq_empty.mp hBC
+    simp [hB, hC]
+  · have hJβ : 0 ≤ J * β := mul_nonneg ((norm_nonneg _).trans (hJ k hk)) hβ
+    calc (C.card + B.card : ℝ) * J * β = (C.card + B.card) * (J * β) := by ring
+      _ ≤ S * C.card * (J * β) := mul_le_mul_of_nonneg_right hS hJβ
+      _ = C.card * (S * J * β) := by ring
 
 /-- **Equation `percb2`.** If the cluster and its boundary satisfy `n_C + n_B ≤ S n_C`, then
 `|Tr (O ρ(β, C))| ≤ ‖O‖ y^{n_C} Tr e^{-βH}` with `y = (e^{βJ} - 1) e^{SJβ}`.
@@ -179,25 +212,9 @@ theorem norm_trace_mul_clusterPart_le_pow {H : Matrix ι ι ℂ} (hH : H.IsHermi
     ‖(O * clusterPart H h B C β).trace‖ ≤
       ‖O‖ * ((Real.exp (β * J) - 1) * Real.exp (S * J * β)) ^ C.card *
         (NormedSpace.exp (-(β • H))).trace.re := by
-  have hZ : 0 ≤ (NormedSpace.exp (-(β • H))).trace.re := by
-    rw [(hH.smul (IsSelfAdjoint.all β)).neg.re_trace_exp_eq_sum]
-    exact Finset.sum_nonneg fun i _ ↦ (Real.exp_pos _).le
-  -- `(n_C + n_B) J β ≤ S n_C J β`, using `J ≥ 0` when `B ∪ C` is nonempty.
-  have hexp : Real.exp ((C.card + B.card) * J * β) ≤ Real.exp (S * J * β) ^ C.card := by
-    rw [← Real.exp_nat_mul, Real.exp_le_exp]
-    rcases (B ∪ C).eq_empty_or_nonempty with hBC | ⟨k, hk⟩
-    · obtain ⟨hB, hC⟩ := Finset.union_eq_empty.mp hBC
-      simp [hB, hC]
-    · have hJβ : 0 ≤ J * β := mul_nonneg ((norm_nonneg _).trans (hJ k hk)) hβ
-      calc (C.card + B.card : ℝ) * J * β = (C.card + B.card) * (J * β) := by ring
-        _ ≤ S * C.card * (J * β) := mul_le_mul_of_nonneg_right hS hJβ
-        _ = C.card * (S * J * β) := by ring
-  have hP : 0 ≤ ‖O‖ * (Real.exp (β * J) - 1) ^ C.card := by
-    refine mul_nonneg (norm_nonneg _) ?_
-    rcases C.eq_empty_or_nonempty with hC | ⟨k, hk⟩
-    · simp [hC]
-    · have hJ0 : 0 ≤ J := (norm_nonneg _).trans (hJ k (Finset.mem_union_right _ hk))
-      exact pow_nonneg (sub_nonneg.mpr (Real.one_le_exp (mul_nonneg hβ hJ0))) _
+  have hZ := (hH.smul (IsSelfAdjoint.all β)).neg.re_trace_exp_nonneg
+  have hexp := exp_card_add_card_mul_le hJ hβ hS
+  have hP := norm_mul_exp_mul_sub_one_pow_nonneg hJ O hβ
   calc ‖(O * clusterPart H h B C β).trace‖
       ≤ ‖O‖ * (Real.exp (β * J) - 1) ^ C.card * Real.exp ((C.card + B.card) * J * β) *
           (NormedSpace.exp (-(β • H))).trace.re :=
@@ -239,6 +256,91 @@ theorem norm_trace_mul_clusterPart_biUnion_le {ν : Type*} {T : Finset ν}
       _ = S * ∑ i ∈ T, ((C i).card : ℝ) := (Finset.mul_sum _ _ _).symm
   rw [Finset.prod_pow_eq_pow_sum, ← hCcard]
   exact norm_trace_mul_clusterPart_le_pow hH hh hJ O hβ hS'
+
+/-- **The cluster part between thermal factors.** For `0 ≤ k < n`, the cluster part `ρ(β/n, C)`
+placed between `e^{-kβH/n}` and `e^{-(n-k-1)βH/n}` satisfies, when `n_C + n_B ≤ S n_C`,
+`|Tr (O e^{-kβH/n} ρ(β/n, C) e^{-(n-k-1)βH/n})| ≤ ‖O‖ y^{n_C} Tr e^{-βH}` with
+`y = (e^{Jβ/n} - 1) e^{SJβ/n}`.
+
+Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1322–1333, multiplied by
+`Z = Tr e^{-βH}`; the source states it as `Z⁻¹ Tr (O ρ(kβ/n) ρ(β/n, C) ρ((n-k-1)β/n)) ≤ ‖O‖ y^{n_C}`
+with `ρ(β) = e^{-βH}`, proved "as above", that is, as equation `percb2`. -/
+theorem norm_trace_mul_exp_mul_clusterPart_mul_exp_le_pow {H : Matrix ι ι ℂ}
+    (hH : H.IsHermitian) {h : κ → Matrix ι ι ℂ} {B C : Finset κ}
+    (hh : ∀ k ∈ B ∪ C, (h k).IsHermitian) {J : ℝ} (hJ : ∀ k ∈ B ∪ C, ‖h k‖ ≤ J)
+    (O : Matrix ι ι ℂ) {β : ℝ} (hβ : 0 ≤ β) {S : ℝ}
+    (hS : (C.card + B.card : ℝ) ≤ S * C.card) {n k : ℕ} (hkn : k < n) :
+    ‖(O * NormedSpace.exp (((k : ℝ) / n) • -(β • H)) * clusterPart H h B C (β / n) *
+        NormedSpace.exp ((((n - k - 1 : ℕ) : ℝ) / n) • -(β • H))).trace‖ ≤
+      ‖O‖ * ((Real.exp (β / n * J) - 1) * Real.exp (S * J * (β / n))) ^ C.card *
+        (NormedSpace.exp (-(β • H))).trace.re := by
+  have hn : (0 : ℝ) < n := by exact_mod_cast (Nat.zero_le k).trans_lt hkn
+  have hβn : 0 ≤ β / n := div_nonneg hβ hn.le
+  set W := H - ∑ i ∈ B, h i - ∑ i ∈ C, h i with hW
+  have hCsub : C ⊆ B ∪ C := Finset.subset_union_right
+  have hsumH : ∀ T ⊆ B ∪ C, (∑ i ∈ T, h i).IsHermitian := fun T hT ↦
+    (isSelfAdjoint_sum T fun i hi ↦ (hh i (hT hi)).isSelfAdjoint).isHermitian
+  have hX : (β • H).IsHermitian := hH.smul (IsSelfAdjoint.all β)
+  have hY : (β • W).IsHermitian :=
+    ((hH.sub (hsumH B Finset.subset_union_left)).sub (hsumH C hCsub)).smul (IsSelfAdjoint.all β)
+  have hg : ∀ i ∈ C, (β • h i).IsHermitian := fun i hi ↦
+    (hh i (hCsub hi)).smul (IsSelfAdjoint.all β)
+  have hgJ : ∀ i ∈ C, ‖β • h i‖ ≤ β * J := fun i hi ↦ by
+    rw [norm_smul, Real.norm_of_nonneg hβ]
+    exact mul_le_mul_of_nonneg_left (hJ i (hCsub hi)) hβ
+  -- The cluster part as the alternating sum of `e^{-(1/n) (βW + ∑_{i ∈ E} β h i)}`.
+  have hρ : clusterPart H h B C (β / n) = ∑ E ∈ C.powerset, (-1 : ℂ) ^ (C.card - E.card) •
+      NormedSpace.exp ((1 / n : ℝ) • -(β • W + ∑ i ∈ E, β • h i)) := by
+    rw [clusterPart_eq_sum_powerset]
+    refine Finset.sum_congr rfl fun E _ ↦ ?_
+    congr 2
+    rw [hW, ← Finset.smul_sum, ← Finset.smul_sum]
+    module
+  have hpqr : (k : ℝ) / n + 1 / n + ((n - k - 1 : ℕ) : ℝ) / n = 1 := by
+    rw [Nat.cast_sub (by omega), Nat.cast_sub (by omega)]
+    field_simp
+    ring
+  have hr : (0 : ℝ) ≤ ((n - k - 1 : ℕ) : ℝ) / n := by positivity
+  have key := Matrix.norm_trace_mul_exp_mul_sum_powerset_exp_mul_exp_le_pow C hX hY
+    (fun i ↦ β • h i) hg hgJ (by positivity) (by positivity) hr hpqr O
+  rw [hρ]
+  -- The partition-function factors.
+  have hZ := hX.neg.re_trace_exp_nonneg
+  set Z := (NormedSpace.exp (-(β • H))).trace.re
+  have hZY : (NormedSpace.exp (-(β • W))).trace.re ^ (1 / n : ℝ) ≤
+      Real.exp ((C.card + B.card) * J * (β / n)) * Z ^ (1 / n : ℝ) := by
+    have hYnn := hY.neg.re_trace_exp_nonneg
+    calc (NormedSpace.exp (-(β • W))).trace.re ^ (1 / n : ℝ)
+        ≤ (Real.exp ((C.card + B.card) * J * β) * Z) ^ (1 / n : ℝ) :=
+          Real.rpow_le_rpow hYnn (re_trace_exp_sub_sum_sub_sum_le hH hh hJ hβ) (by positivity)
+      _ = Real.exp ((C.card + B.card) * J * (β / n)) * Z ^ (1 / n : ℝ) := by
+          rw [Real.mul_rpow (Real.exp_pos _).le hZ, ← Real.exp_mul]
+          congr 2
+          ring
+  have hZZ : Z ^ ((k : ℝ) / n + ((n - k - 1 : ℕ) : ℝ) / n) * Z ^ (1 / n : ℝ) = Z := by
+    rw [← Real.rpow_add' hZ (by linarith), show (k : ℝ) / n + ((n - k - 1 : ℕ) : ℝ) / n +
+      1 / n = 1 by linarith, Real.rpow_one]
+  have hP : 0 ≤ ‖O‖ * (Real.exp (1 / n * (β * J)) - 1) ^ C.card := by
+    rw [show 1 / (n : ℝ) * (β * J) = β / n * J by ring]
+    exact norm_mul_exp_mul_sub_one_pow_nonneg hJ O hβn
+  have hZk := Real.rpow_nonneg hZ ((k : ℝ) / n + ((n - k - 1 : ℕ) : ℝ) / n)
+  calc _ ≤ ‖O‖ * (Real.exp (1 / n * (β * J)) - 1) ^ C.card *
+        Z ^ ((k : ℝ) / n + ((n - k - 1 : ℕ) : ℝ) / n) *
+          (NormedSpace.exp (-(β • W))).trace.re ^ (1 / n : ℝ) := key
+    _ ≤ ‖O‖ * (Real.exp (1 / n * (β * J)) - 1) ^ C.card *
+        Z ^ ((k : ℝ) / n + ((n - k - 1 : ℕ) : ℝ) / n) *
+          (Real.exp ((C.card + B.card) * J * (β / n)) * Z ^ (1 / n : ℝ)) := by
+        gcongr
+    _ = ‖O‖ * (Real.exp (β / n * J) - 1) ^ C.card *
+        Real.exp ((C.card + B.card) * J * (β / n)) * Z := by
+        rw [show 1 / (n : ℝ) * (β * J) = β / n * J by ring]
+        linear_combination (‖O‖ * (Real.exp (β / n * J) - 1) ^ C.card *
+          Real.exp ((C.card + B.card) * J * (β / n))) * hZZ
+    _ ≤ ‖O‖ * (Real.exp (β / n * J) - 1) ^ C.card * Real.exp (S * J * (β / n)) ^ C.card * Z := by
+        rw [show 1 / (n : ℝ) * (β * J) = β / n * J by ring] at hP
+        gcongr
+        exact exp_card_add_card_mul_le hJ hβn hS
+    _ = _ := by rw [mul_pow, ← mul_assoc]
 
 section Boundary
 
