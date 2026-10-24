@@ -12,11 +12,14 @@ import TNLean.MPS.AreaLaw.MPSApproximation
 # Matrix product state approximation of the gapped ground state from Lemma 1
 
 Let `Ω` be a gapped ground vector of a finite-range Hamiltonian on the chain of `L` sites with
-local dimension `q > 1`, and suppose Lemma 1 holds around `Ω` with constants `ξ' > 0` and
+local dimension `q ≥ 1`, and suppose Lemma 1 holds around `Ω` with constants `ξ' > 0` and
 `C₁ ≥ 1`. The area law bounds the entropy of every initial segment by `S_max`. With
 `k₀ = ⌈exp(2 S_max)/2⌉`, truncating every cut onto the `k'` leading eigenvectors of its left
 marginal, for `k' ≥ k₀`, gives an open-boundary matrix product state `Φ` of bond dimension at
 most `k'` with `‖Φ - Ω‖² ≤ (L - 1) 4 C₁² e^{2/ξ'} (k'/k₀)^{-1/(ξ' log q)}`.
+
+For `q = 1` the chain space is one-dimensional, the truncation is exact and `Φ = Ω`, so the
+bound holds although `log q = 0`; the source assumes `q ≥ 2`.
 
 Source: Hastings, *An area law for one-dimensional quantum systems*, arXiv:0705.2024v4,
 section "Matrix Product States", lines 505–557, with `S_max` from eq. `entbd` (lines 130–137).
@@ -66,16 +69,16 @@ variable {L q R : ℕ} {J : ℝ}
 
 /-- **Matrix product state approximation of the gapped ground state, from Lemma 1 (stage
 theorem).** Let `Ω` be a gapped ground vector of a finite-range Hamiltonian `h` on the chain
-of `L` sites with local dimension `q > 1`, around which Lemma 1 holds with constants `ξ' > 0`
+of `L` sites with local dimension `q ≥ 1`, around which Lemma 1 holds with constants `ξ' > 0`
 and `C₁ ≥ 1`. With `k₀ = ⌈exp(2 S_max)/2⌉` for the area-law bound
 `S_max = areaLawBound ξ' C₁ q`, for every `k' ≥ k₀` the truncation `Φ` onto the `k'` leading
 eigenvectors at every cut is an open-boundary matrix product state of bond dimension at most
 `k'` with
 `‖Φ - Ω‖² ≤ (L - 1) 4 C₁² e^{2/ξ'} (k'/k₀)^{-1/(ξ' log q)}`.
 Hastings, arXiv:0705.2024v4, lines 505–557, with the constants of the module docstring. -/
-theorem isOpenMPS_norm_sub_sq_le_of_gappedGroundState (h : ChainHamiltonian L q R J)
+theorem isOpenMPS_norm_sub_sq_le_of_gappedGroundState [NeZero q] (h : ChainHamiltonian L q R J)
     {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ) (hq : 1 < q)
+    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ)
     {ξ' C₁ : ℝ} (hξ' : 0 < ξ') (hC₁ : 1 ≤ C₁)
     (hfact : ∀ c l : ℕ, c + l ≤ L → ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       IsFactorizationAt Ω c l (C₁ * Real.exp (-(l / ξ'))) OB OL OR)
@@ -89,7 +92,7 @@ theorem isOpenMPS_norm_sub_sq_le_of_gappedGroundState (h : ChainHamiltonian L q 
       ‖Φ - Ω‖ ^ 2 ≤ ((L - 1 : ℕ) : ℝ) *
         (4 * C₁ ^ 2 * exp (2 / ξ') * ((k' : ℝ) / k₀) ^ (-1 / (ξ' * log q))) := by
   intro k₀ P Φ
-  refine isOpenMPS_norm_sub_sq_le_of_isFactorizationAt_of_entropy hq hgs.1 hξ'
+  refine isOpenMPS_norm_sub_sq_le_of_isFactorizationAt_of_entropy hgs.1 hξ'
     (fun j _ m hm ↦ hfact j m hm) (fun j _ ↦ ?_) hk'
   -- The area law bounds the entropy of every initial segment by `S_max`.
   have hS := regionEntropy_prefix_le_of_factorization h hgs hξ' hC₁ hfact j
@@ -102,7 +105,7 @@ theorem isOpenMPS_norm_sub_sq_le_of_gappedGroundState (h : ChainHamiltonian L q 
 range and `κ > 6`. There is a constant `K ≥ 0`, depending only on `R` and `κ`, with the
 following property. Let `J ≥ 0` bound the interaction terms, let `ΔE > 0` be a gap, and put
 `ξ̂ = lemmaOneLength R (J/ΔE) 1`, `ξ' = κ ξ̂` and `C₁ = max (K ξ̂³) 1`. For every chain of `L`
-sites with local dimension `q > 1` and every gapped ground vector `Ω` of a chain Hamiltonian
+sites with local dimension `q ≥ 1` and every gapped ground vector `Ω` of a chain Hamiltonian
 of range `R` and term norm `J` with gap `ΔE`, with `k₀ = ⌈exp(2 S_max)/2⌉` for
 `S_max = areaLawBound ξ' C₁ q`, the truncation `Φ` onto the `k'` leading eigenvectors at every
 cut, for every `k' ≥ k₀`, is an open-boundary matrix product state of bond dimension at most
@@ -111,7 +114,7 @@ only on `R`, `κ`, `J/ΔE` and `q`, not on `L`. Hastings, arXiv:0705.2024v4, lin
 `C₁` polynomial in `ξ̂` as at lines 258–262 and the restrictions of the module docstring. -/
 theorem exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState (R : ℕ) {κ : ℝ} (hκ : 6 < κ) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
-      ∀ {L q : ℕ}, 1 < q → ∀ (h : ChainHamiltonian L q R J) {E₀ : ℝ}
+      ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
       {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, Matrix.IsGappedGroundState h.operator E₀ Ω ΔE →
       ∀ {k' : ℕ}, ⌈Real.exp (2 * areaLawBound (κ * lemmaOneLength R (J / ΔE) 1)
           (max (K * lemmaOneLength R (J / ΔE) 1 ^ 3) 1) q) / 2⌉₊ ≤ k' →
@@ -127,11 +130,10 @@ theorem exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState (R : ℕ) {κ : �
               exp (2 / (κ * lemmaOneLength R (J / ΔE) 1)) *
               ((k' : ℝ) / k₀) ^ (-1 / ((κ * lemmaOneLength R (J / ΔE) 1) * log q))) := by
   obtain ⟨K, hK0, hF⟩ := exists_projectorFactorization_pow R hκ
-  refine ⟨K, hK0, fun {J ΔE} hJ hΔ {L q} hq h {E₀} {Ω} hgs {k'} hk' ↦ ?_⟩
-  have : NeZero q := ⟨by omega⟩
+  refine ⟨K, hK0, fun {J ΔE} hJ hΔ {L q} _ h {E₀} {Ω} hgs {k'} hk' ↦ ?_⟩
   have hξ'0 : 0 < κ * lemmaOneLength R (J / ΔE) 1 :=
     mul_pos (by linarith) (lemmaOneLength_pos R _ 1)
-  refine isOpenMPS_norm_sub_sq_le_of_gappedGroundState h hgs hq hξ'0 (le_max_right _ _)
+  refine isOpenMPS_norm_sub_sq_le_of_gappedGroundState h hgs hξ'0 (le_max_right _ _)
     (fun c l _ ↦ ?_) hk'
   obtain ⟨OB, OL, OR, hf⟩ := hF hJ hΔ h hgs c l
   exact ⟨OB, OL, OR, hf.mono
@@ -146,7 +148,7 @@ Hastings, arXiv:0705.2024v4, lines 505–557, with `ξ' = 6ξ` (lines 141–142)
 polynomial in `ζ` (lines 258–262), and the restriction on `ζ` of the module docstring. -/
 theorem exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState_endpoint (R : ℕ) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
-      ∀ {L q : ℕ}, 1 < q → ∀ (h : ChainHamiltonian L q R J) {E₀ : ℝ}
+      ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
       {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, Matrix.IsGappedGroundState h.operator E₀ Ω ΔE →
       ∀ {k' : ℕ}, ⌈Real.exp (2 * areaLawBound (6 * lemmaOneEndpointLength R J ΔE)
           (max (K * lemmaOneEndpointLength R J ΔE ^ 3) 1) q) / 2⌉₊ ≤ k' →
@@ -162,11 +164,10 @@ theorem exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState_endpoint (R : ℕ
               exp (2 / (6 * lemmaOneEndpointLength R J ΔE)) *
               ((k' : ℝ) / k₀) ^ (-1 / ((6 * lemmaOneEndpointLength R J ΔE) * log q))) := by
   obtain ⟨K, hK0, hF⟩ := exists_projectorFactorization_endpoint R
-  refine ⟨K, hK0, fun {J ΔE} hJ hΔ {L q} hq h {E₀} {Ω} hgs {k'} hk' ↦ ?_⟩
-  have : NeZero q := ⟨by omega⟩
+  refine ⟨K, hK0, fun {J ΔE} hJ hΔ {L q} _ h {E₀} {Ω} hgs {k'} hk' ↦ ?_⟩
   have hζ0 : 0 < 6 * lemmaOneEndpointLength R J ΔE := by
     rw [lemmaOneEndpointLength_eq]; linarith [lemmaOneLength_pos R (J / ΔE) 1]
-  refine isOpenMPS_norm_sub_sq_le_of_gappedGroundState h hgs hq hζ0 (le_max_right _ _)
+  refine isOpenMPS_norm_sub_sq_le_of_gappedGroundState h hgs hζ0 (le_max_right _ _)
     (fun c l _ ↦ ?_) hk'
   obtain ⟨OB, OL, OR, hf⟩ := hF hJ hΔ h hgs c l
   exact ⟨OB, OL, OR, hf.mono
