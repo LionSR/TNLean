@@ -1,0 +1,67 @@
+\documentclass{article}
+\usepackage[margin=28mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{The Final State in Hastings' Energy Estimate (hchy)}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The asserted estimate}
+Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
+\href{https://arxiv.org/abs/cond-mat/0508554v3}{arXiv:cond-mat/0508554v3},
+source \path{proj3new.tex}, lines 705--720, states that after the last of the
+$h=\log_2N$ levels of the hierarchical construction ``there is at least one
+state $\alpha^h$, and one may show''
+\begin{align}
+ \langle\alpha^h,\textstyle\sum_iM_i\,\alpha^h\rangle
+ \le\langle\Psi_a,\textstyle\sum_iM_i\,\Psi_a\rangle
+ +NJ\,O\bigl(e^{-l_{\rm proj}/(\log_2(N)\,l_{\rm fac})}\bigr).
+ \label{eq:hastings05_hierarchical_energy_hchy}
+\end{align}
+No argument is given.
+
+\section{What is proved}
+Let $Q$ be the projection onto the states kept at the last level and suppose
+$\|\Psi_a-Q\Psi_a\|\le b<1$, the norm form of the deficiency used for every
+level. Then $\phi=Q\Psi_a/\|Q\Psi_a\|$ is a unit vector with $Q\phi=\phi$ and
+$\|\phi-\Psi_a\|\le2b$, and for every operator $M$
+\begin{align}
+ \operatorname{Re}\langle\phi,M\phi\rangle
+ \le\operatorname{Re}\langle\Psi_a,M\Psi_a\rangle+2\|M\|\,\|\phi-\Psi_a\|
+ \le\operatorname{Re}\langle\Psi_a,M\Psi_a\rangle+4\|M\|b,
+ \label{eq:hastings05_hierarchical_energy_proved}
+\end{align}
+by writing the difference of the two expectations as
+$\langle\phi-\Psi_a,M\phi\rangle+\langle\Psi_a,M(\phi-\Psi_a)\rangle$. For
+$M=\sum_{i<N}M_i$ with $\|M_i\|\le J$ the error term is $4NJb$, so with $b=b_h$
+(\ref{eq:hastings05_hierarchical_energy_proved}) is
+(\ref{eq:hastings05_hierarchical_energy_hchy}) with the explicit constant
+$4NJb_h$.\footnote{\leanid{TNLean.MPS.AreaLaw.LocalSolution.exists_mem_range_re_inner_le_add}
+    and
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.exists_mem_range_re_inner_sum_le_add}
+    in \doclink{TNLean/MPS/AreaLaw/LocalSolution/HierarchicalEnergy}.}
+
+\section{The restriction}
+The state $\phi$ is a unit vector in the span of the final states $\alpha^h$,
+not one of them. The $\alpha^h$ are eigenvectors of the last pair operator,
+not of $\sum_iM_i$, so an energy bound for the normalized image does not pass
+to a single $\alpha^h$; the source's assertion for a single final state is not
+derived. The deficiency $b_h$ of the last level is a hypothesis here; bounding
+it is a separate induction over the levels of the projection, formalized
+separately. Elimination plan: show that one of the $\alpha^h$ satisfies
+(\ref{eq:hastings05_hierarchical_energy_hchy}). The span statement already
+serves the approximation of the ground state, which needs one low-energy
+state in the final space. It does not serve the count of at most $2n$ final
+states (lines 722--730), which needs every orthonormal $\alpha^h$ to have
+energy within $\Delta E/2$ of the ground state; the cross terms
+$\langle\alpha^h_k,\sum_iM_i\,\alpha^h_l\rangle$ need not vanish, so a bound
+for one vector of the span says nothing about the individual $\alpha^h$.
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}

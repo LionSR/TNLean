@@ -1,0 +1,81 @@
+\section{Low-energy terms that fail to commute without translation invariance}
+\label{sec:hastings_low_energy_example}
+
+% Hastings, arXiv:cond-mat/0508554v3, proj3new.tex, lines 1655--1676.
+
+When the ground space is degenerate, the local approximations of the
+Hamiltonian determine the ground states only in a basis that diagonalizes
+their compressions to the ground space, and such a basis exists approximately
+when these compressions nearly commute. For translation-invariant systems they
+do \cite[lines 1603--1642]{Hastings2006Solving}. The source illustrates the
+failure without translation invariance by an example in which the local terms
+$H_i$ themselves have non-commuting compressions
+\cite[lines 1655--1676]{Hastings2006Solving}, and states that for long enough
+filtering times and projection ranges the filtered approximations inherit this.
+Only the statement about the terms $H_i$ is formalized here; the passage to the
+filtered approximations is not argued in the source and is not formalized
+\cite{gap:hastings05_low_energy_example}.
+
+On a chain of $m+3$ spins $1/2$, with sites $0,1,\ldots,m+2$, let
+\begin{align}
+    H_0=S^x_0+S^y_0,\qquad
+    H_1=-S^x_0-S^z_1,\qquad
+    H_2=-S^y_0+S^z_2,\qquad
+    H_i=S^z_i\quad(i\ge3),
+\end{align}
+and let $H=\sum_iH_i$. The source does not specify the chain beyond site $0$;
+further sites with $H_i=S^z_i$ would only add scalars on the ground space.
+
+\begin{theorem}[The Hamiltonian of the example]
+    \label{thm:hastings_low_energy_example_hamiltonian}
+    \lean{TNLean.Lattice.LowEnergyExample.hamiltonian_eq_diagonal,
+        TNLean.Lattice.LowEnergyExample.groundEnergy_le,
+        TNLean.Lattice.LowEnergyExample.energy_eq_groundEnergy_iff,
+        TNLean.Lattice.LowEnergyExample.hamiltonian_mulVec_eq_iff}
+    \leanok
+    The terms acting on site $0$ cancel, and
+    $H=-S^z_1+\sum_{i\ge2}S^z_i$. Its least eigenvalue is
+    $E_0=-(m+2)/2$, and the eigenspace for $E_0$ is spanned by the two
+    configurations with spin $1$ up, every spin $i\ge2$ down and spin $0$
+    free. In particular a vector $v$ satisfies $Hv=E_0v$ exactly when
+    $Pv=v$, for the orthogonal projection $P$ onto these two
+    configurations.
+\end{theorem}
+\begin{proof}\leanok
+    Sum the terms: the operators on site $0$ add to zero. The remaining
+    operator is diagonal in the product basis, with diagonal entry
+    $-s_1+\sum_{i\ge2}s_i$ for spins $s_i=\pm\tfrac12$. Each summand is at
+    least $-\tfrac12$, with equality exactly for $s_1=\tfrac12$ and
+    $s_i=-\tfrac12$, $i\ge2$.
+\end{proof}
+
+The source writes this Hamiltonian as $\sum_{i\neq0}S^z_i$; the sign of
+$S^z_1$ is reversed there, which changes the ground configurations but not
+the dimension of the ground space or the conclusions below
+\cite{gap:hastings05_low_energy_example}.
+
+\begin{theorem}[The compressions fail to commute near site $0$]
+    \label{thm:hastings_low_energy_example_commutators}
+    \lean{TNLean.Lattice.LowEnergyExample.not_commute_compress_term_zero_one,
+        TNLean.Lattice.LowEnergyExample.not_commute_compress_term_one_two,
+        TNLean.Lattice.LowEnergyExample.not_commute_compress_term_zero_two,
+        TNLean.Lattice.LowEnergyExample.commute_compress_term_zero_of_three_le}
+    \leanok
+    \uses{thm:hastings_low_energy_example_hamiltonian}
+    The compressions $PH_0P$, $PH_1P$ and $PH_2P$ to the ground space
+    pairwise fail to commute, while $PH_0P$ commutes with $PH_iP$ for every
+    $i\ge3$.
+\end{theorem}
+\begin{proof}\leanok
+    On the ground space $S^z_k$ is a scalar for every $k\neq0$, and an
+    operator on site $0$ acts through its $2\times2$ matrix. So $PH_0P$,
+    $PH_1P$ and $PH_2P$ are, up to scalar multiples of $P$, the
+    compressions of $S^x_0+S^y_0$, $-S^x_0$ and $-S^y_0$, and their
+    commutators are $\pm$ the compression of $[S^x_0,S^y_0]=iS^z_0\neq0$. For
+    $i\ge3$, $PH_iP$ is a scalar multiple of $P$.
+\end{proof}
+
+The source states the last claim for $i\ge2$, but the pair $(0,2)$ is among
+the non-commuting ones \cite{gap:hastings05_low_energy_example}. The failure
+of commutation is localized near site $0$: the two ground states differ only
+there, and only $H_0$, $H_1$ and $H_2$ fail to commute on the ground space.

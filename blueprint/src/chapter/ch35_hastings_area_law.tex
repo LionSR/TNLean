@@ -111,7 +111,8 @@ window.
 \begin{proof}\leanok
     \uses{thm:hastings_main_stage_long_window,
         thm:hastings_cut_entropy_slow,thm:hastings_window_entropy_bounds,
-        thm:hastings_relent_window,thm:hastings_window_claim_of_relent}
+        thm:hastings_relent_window,thm:hastings_window_claim_of_relent,
+        lem:chain_entropy_inequalities}
     For $q\le1$ every entropy vanishes. For $q\ge2$, apply
     Theorem~\ref{thm:hastings_main_stage_long_window} with the window length
     $l_0$ of Definition~\ref{def:hastings_area_law_bound} and the window
@@ -129,4 +130,59 @@ window.
     $\lbrack a,a+2l)$ by the entropies of $\lbrack a,a+l)$ and
     $\lbrack a+l,a+2l)$, each at most the window entropy at length $l$, minus
     the gain, which is the doubling inequality.
+\end{proof}
+
+\begin{theorem}[Hastings' area law for gapped chains]
+    \label{thm:hastings_area_law}
+    \lean{TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le}
+    \leanok
+    \uses{def:chain_model,def:hastings_area_law_bound,
+        thm:hastings_lemma1_endpoint}
+    Let $R$ be a range. There is a constant $K\ge0$, depending only on $R$,
+    with the following property. Let $J\ge0$ bound the norms of the
+    interaction terms, let $\Delta E>0$, and let $\tilde\xi$ be the length of
+    Theorem~\ref{thm:hastings_lemma1_endpoint}, which depends on $R$ and
+    $J/\Delta E$ only. For every chain of $L$ sites with local dimension $q$,
+    every finite-range Hamiltonian on it of range $R$ with terms of norm at
+    most $J$, and every ground vector $\Omega$ separated by a gap $\Delta E$
+    from the rest of the spectrum, the entropy of the first $i$ sites is at
+    most $S_{\max}$ for every $i$, with $S_{\max}$ as in
+    Definition~\ref{def:hastings_area_law_bound} for $\xi'=6\tilde\xi$ and
+    $C_1=\max\{K\tilde\xi^3,1\}$. In particular $S_{\max}$ depends on $R$,
+    $J/\Delta E$ and $q$, but not on $L$, on the Hamiltonian, or on $\Omega$.
+
+    This is the main theorem of~\cite{Hastings2007AreaLaw}, equation (entbd),
+    at the printed rate $\xi'=6\xi$ for $\xi=\tilde\xi$. The length
+    $\tilde\xi$ may stand in for the source's $\xi$ because the source fixes
+    $\xi=\max(2v/\Delta E,\xi_C)$ only through some Lieb--Robinson pair
+    $(v,\xi_C)$ (lines 96--112), and raising $v$ keeps a pair
+    valid~\cite{gap:hastings07_lemma1_decay_length}. As in the source,
+    the constant $C_1$ is bounded by a polynomial in the length
+    (lines 258--262). The source takes $\xi=\max(2v/\Delta E,\xi_C)$ for a
+    Lieb--Robinson pair $(v,\xi_C)$, which gives the printed value
+    $S_{\max}=c_0\xi'\ln(\xi')\ln(D)2^{\xi'\ln D}$. Here, as in
+    Theorem~\ref{thm:hastings_lemma1_endpoint}, $\tilde\xi$ comes from a
+    chain Lieb--Robinson estimate whose prefactor grows with $J$ and whose
+    second operator acts on a single site, with the velocity raised by the
+    factor $5/4$, so it is not shown to be the length of a Lieb--Robinson
+    pair in the source's sense (lines 96--112);
+    see~\cite{gap:hastings07_lemma1_decay_length,
+        gap:hastings07_gaussian_average_exponent}. In addition $S_{\max}$
+    grows as $4^{\xi'\ln q}$, not $2^{\xi'\ln q}$, as recorded
+    in~\cite{gap:hastings07_doubling_constants}, and the entropy gain enters
+    with the constants of~\cite{gap:hastings07_relent_constants}. The printed
+    value of $S_{\max}$ is therefore not claimed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_lemma1_endpoint,
+        thm:hastings_area_law_from_factorization,
+        thm:hastings_factorization_mono}
+    Theorem~\ref{thm:hastings_lemma1_endpoint} gives the constant $K$, such
+    that the operators of
+    Theorem~\ref{thm:hastings_area_law_from_factorization} exist at every cut
+    and length with error $K\tilde\xi^3e^{-l/(6\tilde\xi)}$. Replace
+    $K\tilde\xi^3$ by $\max\{K\tilde\xi^3,1\}$, which only enlarges the error
+    (Theorem~\ref{thm:hastings_factorization_mono}), and apply
+    Theorem~\ref{thm:hastings_area_law_from_factorization} with
+    $\xi'=6\tilde\xi$.
 \end{proof}
