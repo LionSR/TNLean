@@ -376,6 +376,16 @@ noncomputable def siteExpectationLM (q : ℕ) [NeZero q] (K : Finset ι) :
     (B : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
     siteExpectationLM q K B = siteExpectation q K B := rfl
 
+/-- The map `M ↦ M - E_K(M)`, the deviation of a matrix from its normalized partial trace onto
+`K`, as a continuous linear map. -/
+noncomputable def subSiteExpectationCLM (q : ℕ) [NeZero q] (K : Finset ι) :
+    Matrix (ι → Fin q) (ι → Fin q) ℂ →L[ℂ] Matrix (ι → Fin q) (ι → Fin q) ℂ :=
+  LinearMap.toContinuousLinearMap (LinearMap.id - siteExpectationLM q K)
+
+@[simp] theorem subSiteExpectationCLM_apply [NeZero q] (K : Finset ι)
+    (B : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
+    subSiteExpectationCLM q K B = B - siteExpectation q K B := rfl
+
 /-- Operators acting on `K` are fixed by the expectation. Source: area law,
 `03-quasilocal.tex`, lines 27–29: "fixes every operator supported in the ball". -/
 theorem siteExpectation_of_mem_supportedOperators [NeZero q] (K : Finset ι)

@@ -26,9 +26,9 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 noncomputable section
 open scoped Matrix ComplexConjugate
 namespace TNLean
-open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
-namespace PEPS.PairEffect
+namespace Lattice.PartyCircuit
 private theorem restrict_eval_heq_of_selector_eq {Q : Type} {f g : Q → Bool}
     (h : f = g) {a b : Layout Q} (w : Word a b) (hs : w.sources = []) :
     HEq (w.restrict f hs).eval (w.restrict g hs).eval := by
@@ -153,7 +153,7 @@ private theorem empty_party_words_mixed_partialTrace
   funext row col
   rfl
 
-end PEPS.PairEffect
+end Lattice.PartyCircuit
 namespace Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} {a b : Layout P}
 

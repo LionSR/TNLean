@@ -52,8 +52,8 @@ theorem apply_projection_compression_eq (f : E →ₚ[ℂ] ℂ) (p X : E)
     norm_eq_zero.mp (le_antisymm
       (by simpa only [star_star, hqstar, hq, hfq, norm_zero, Real.sqrt_zero, mul_zero] using
         PositiveLinearMap.norm_map_star_mul_le f (star Y) (1 - p)) (norm_nonneg _))
-  have hPL (Y : E) : f (p * Y) = f Y := by
-    exact (sub_eq_zero.mp (by simpa only [sub_mul, one_mul, map_sub] using hL Y)).symm
+  have hPL (Y : E) : f (p * Y) = f Y :=
+    (sub_eq_zero.mp (by simpa only [sub_mul, one_mul, map_sub] using hL Y)).symm
   exact (sub_eq_zero.mp
     (by simpa only [mul_sub, mul_one, map_sub] using hR (p * X))).symm.trans (hPL X)
 

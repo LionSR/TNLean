@@ -21,9 +21,9 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–355,
 noncomputable section
 open scoped Matrix
 namespace TNLean
-open TNLean.PEPS TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
+open TNLean.Lattice TNLean.Lattice.PartyCircuit
 
-namespace PEPS.PairEffect
+namespace Lattice.PartyCircuit
 private theorem mixed_toMatrix_basis_independent
     {E F : Type} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F]
@@ -72,7 +72,7 @@ private theorem mixed_matrix_eq_of_column_eq
   exact hcolumns.trans (hchange.trans h)
 
 
-end PEPS.PairEffect
+end Lattice.PartyCircuit
 namespace Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} [Fintype P] [DecidableEq P] {a b : Layout P}
 variable {I O : Option {_p : P // true = true} → Type}

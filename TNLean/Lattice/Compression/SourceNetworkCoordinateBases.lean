@@ -54,7 +54,7 @@ theorem finiteDimensional_registers_slotLayout (R : SourceInventory P)
 
 end Lattice.PartyCircuit.SourceInventory
 
-namespace PEPS.PairEffect
+namespace Lattice.PartyCircuit
 private theorem finiteDimensional_mem_atParty_of_registers {Q : Type}
     (q : Q) (ℓ : Layout Q)
     (h : ∀ r ∈ ℓ, FiniteDimensional ℂ r.space) :
@@ -65,9 +65,9 @@ private theorem finiteDimensional_mem_atParty_of_registers {Q : Type}
   change r ∈ ℓ.filter (fun s ↦ decide (s.owner = q)) at hr
   exact h r (List.mem_filter.mp hr).1
 
-end PEPS.PairEffect
+end Lattice.PartyCircuit
 namespace Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
 /-- Every retained source register has its original finite Euclidean endpoint space.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267 and 409–434. -/

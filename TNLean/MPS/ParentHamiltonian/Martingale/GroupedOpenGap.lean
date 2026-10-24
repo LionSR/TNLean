@@ -41,7 +41,6 @@ theorem grouped_martingaleDifference_zero (A : MPSTensor d D)
   rw [openPrefixGroundProjectionES_eq_one_of_lt A (by omega),
     openPrefixGroundProjectionES_eq_one_of_lt A (by omega), sub_self]
 
-
 /-- At the first complete grouped window, the local ground projection
 annihilates the grouped martingale difference by idempotence. -/
 theorem groupedIntervalGroundProjectionES_comp_martingaleDifference_one

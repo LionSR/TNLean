@@ -26,7 +26,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 565–588.
 noncomputable section
 open scoped Matrix ComplexConjugate
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 attribute [local instance] Classical.propDecidable
 variable {P : Type} [Fintype P] {a : Layout P}
 variable {I E : Option {_p : P // true = true} → Type}

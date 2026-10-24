@@ -29,8 +29,6 @@ variable {d : ℕ}
 
 namespace BlockSumGroundSpace
 
-variable {r : ℕ} {dim : Fin r → ℕ}
-
 /-- The boundary parametrization of a block-diagonal tensor is the sum of the block
 boundary parametrizations applied to the diagonal boundary blocks. -/
 theorem groundSpaceMap_toTensorFromBlocks_eq_sum_diagonalBlock

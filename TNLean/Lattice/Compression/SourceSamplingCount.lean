@@ -29,7 +29,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 
 noncomputable section
-namespace TNLean.PEPS.Approximation
+namespace TNLean.Lattice.Compression
 
 open Classical in
 /-- The sum of the cardinality weights over all nonempty subsets. -/
@@ -132,4 +132,4 @@ theorem sum_sourceErrorWeights_sourceSamplingCount_le {E : Type*} [Fintype E]
   have hexp := Real.exp_le_exp.mpr hmul
   linarith
 
-end TNLean.PEPS.Approximation
+end TNLean.Lattice.Compression

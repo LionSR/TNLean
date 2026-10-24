@@ -1,0 +1,364 @@
+\section{Decay of the Schmidt tail in Hastings' area law}
+\label{sec:hastings_schmidt_tail}
+
+% Hastings, arXiv:0705.2024v4, law16.tex, lines 540--552 (section on matrix
+% product states, equations constraint and est).
+
+\begin{theorem}[The Schmidt-tail constraint]
+    \label{thm:hastings_schmidt_tail_constraint}
+    \lean{TNLean.MPS.AreaLaw.Hastings.one_sub_kyFanNorm_le_of_factorization}
+    \leanok
+    Let $\Omega$ be a unit vector on a chain of $L$ sites of local dimension
+    $q\ge1$, let $j$ be a cut and $\rho$ the marginal of $\Omega$ on the first
+    $j$ sites, with eigenvalues $p_1\ge p_2\ge\dots$. Suppose that for every
+    $m$ with $j+m\le L$ there are operators $O_B$ supported on the first
+    $j+m$ sites, $O_L$ supported on the first $j$ sites and $O_R$ supported
+    on the remaining sites with
+    $\|O_BO_LO_R-|\Omega\rangle\langle\Omega|\|\le C_1e^{-m/\xi'}$. If
+    $k\ge1$ and $p_1+\cdots+p_k\ge1/2$, then for every $m$ and every
+    $n\ge kq^{2m}$,
+    \begin{align}
+        \sum_{a>n}p_a & \le 4C_1^2e^{-2m/\xi'}.
+        \notag
+    \end{align}
+    The weight hypothesis holds for $k\ge\exp(2S(\rho))/2$ by
+    Theorem~\ref{thm:hastings_leading_weight}; with that choice the
+    conclusion is the constraint on the Schmidt tail with $P=1/2$ in the
+    section on matrix product states of \cite{Hastings2007AreaLaw}
+    (Theorem~\ref{thm:hastings_schmidt_tail_constraint_entropy}).
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_bootstrap_scale, thm:hastings_mixture_tail,
+        thm:hastings_cut_coordinates, lem:chain_sequential_truncation}
+    Let $E$ project the first $j$ sites onto the eigenvectors of $p_1,\dots,p_k$
+    and put $\psi=E\Omega$. Then $\psi$ has Schmidt rank at most $k$ across the
+    cut, and $\langle\psi,\Omega\rangle=\|\psi\|^2=p_1+\cdots+p_k=P\ge1/2$.
+    Theorem~\ref{thm:hastings_bootstrap_scale} applied to the state
+    $\psi/\|\psi\|$ gives, at every
+    scale $m$ with $(2C_1^2/P)e^{-2m/\xi'}<1$, a mixture of vectors of Schmidt
+    rank at most $kq^{2m}$ whose normalized overlap with $\Omega$ is at least
+    $1-(2C_1^2/P)e^{-2m/\xi'}$, and Theorem~\ref{thm:hastings_mixture_tail}
+    turns this into
+    $\sum_{a>kq^{2m}}p_a\le(2C_1^2/P)e^{-2m/\xi'}\le4C_1^2e^{-2m/\xi'}$. At the
+    remaining scales the right-hand side is at least one. The tail decreases
+    as $n$ grows.
+\end{proof}
+
+\begin{theorem}[Leading weight from the entropy]
+    \label{thm:hastings_leading_weight}
+    \lean{TNLean.MPS.AreaLaw.Hastings.one_half_le_kyFanNorm_of_exp_two_mul_vonNeumannEntropy_le}
+    \leanok
+    Let $\rho$ be a density matrix with eigenvalues $p_1\ge p_2\ge\cdots$ and
+    entropy $S(\rho)$. If $k\ge\exp(2S(\rho))/2$, then
+    $p_1+\cdots+p_k\ge1/2$. This is the bound that opens the section on matrix
+    product states of \cite{Hastings2007AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    If $k$ exceeds the dimension, the sum is the trace. Otherwise suppose
+    $p_1+\cdots+p_k<1/2$. Then $p_k<1/(2k)$, so every $p_a$ with $a>k$ is
+    below $1/(2k)$, and the tail of weight more than $1/2$ alone contributes
+    more than $\frac12\log(2k)$ to the entropy. Hence
+    $S(\rho)>\frac12\log(2k)$, that is $k<\exp(2S(\rho))/2$.
+\end{proof}
+
+\begin{theorem}[The Schmidt-tail constraint from the entropy]
+    \label{thm:hastings_schmidt_tail_constraint_entropy}
+    \lean{TNLean.MPS.AreaLaw.Hastings.one_sub_kyFanNorm_le_of_factorization_of_entropy}
+    \leanok
+    \uses{thm:hastings_schmidt_tail_constraint}
+    In the setting of Theorem~\ref{thm:hastings_schmidt_tail_constraint}, if
+    $k\ge\exp(2S(\rho))/2$, then for every $m$ and every
+    $n\ge kq^{2m}$ the eigenvalues of $\rho$ beyond the $n$ largest add up to
+    at most $4C_1^2e^{-2m/\xi'}$. This is the constraint on the Schmidt tail in
+    the section on matrix product states of \cite{Hastings2007AreaLaw}, with
+    $k_0=\exp(2S(\rho))/2$ and $P=1/2$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_leading_weight}
+    Since $\exp(2S(\rho))/2>0$, the integer $k$ is at least $1$.
+    Theorem~\ref{thm:hastings_leading_weight} gives the weight hypothesis of
+    Theorem~\ref{thm:hastings_schmidt_tail_constraint}.
+\end{proof}
+
+\begin{theorem}[Polynomial decay of the Schmidt tail from geometric bounds]
+    \label{thm:hastings_schmidt_tail_rpow}
+    \lean{TNLean.MPS.AreaLaw.Hastings.schmidtTail_le_rpow_of_geometric}
+    \leanok
+    Let $D>1$, $\xi>0$, $c\ge0$ and $k_0>0$, and let $\tau$ be a real
+    function on the natural numbers. Suppose that for all natural numbers
+    $m$ and $k$ with $k_0D^{2m}\le k$,
+    \begin{align}
+        \tau(k) & \le c\,e^{-2m/\xi}.
+        \label{eq:hastings_schmidt_tail_geometric}
+    \end{align}
+    Then for every natural number $k\ge k_0$,
+    \begin{align}
+        \tau(k) & \le c\,e^{2/\xi}\Bigl(\frac{k}{k_0}\Bigr)^{-1/(\xi\log D)}.
+        \label{eq:hastings_schmidt_tail_rpow}
+    \end{align}
+    Take $\tau(k)$ to be the mass beyond the $k$ largest squared Schmidt
+    coefficients of the ground state across a cut, $k_0=\exp(2S)/2$ for the
+    entropy $S$ of the cut, $\xi$ the decay length written $\xi'$ in the
+    section on matrix product states of \cite{Hastings2007AreaLaw}, and
+    $c=4C_1^2$ for the constant $C_1$ of the approximate factorization there.
+    Then the hypothesis (\ref{eq:hastings_schmidt_tail_geometric}) is the
+    consequence of the bootstrap lemma in that section, and
+    (\ref{eq:hastings_schmidt_tail_rpow}) is the estimate that follows it,
+    with two corrections: the constant $e^{2/\xi}$ replaces the printed
+    $e^{1/\xi}$, and the sign of the exponent is
+    restored~\cite{gap:hastings07_schmidt_tail_constant}. The tail here
+    starts after the $k$-th coefficient rather than at it: it is the tail
+    that a matrix product state of bond dimension $k$ discards. A bound
+    for the sum starting at the $k$-th coefficient requires the separate
+    initial-scale estimate described in that note.
+\end{theorem}
+\begin{proof}\leanok
+    Put $x=\log(k/k_0)/\log D\ge0$, let $n$ be the integer part of $x$ and
+    $m$ the integer part of $n/2$. Then $D^{2m}\le D^x=k/k_0$, so
+    (\ref{eq:hastings_schmidt_tail_geometric}) applies at $m$. Since
+    $2m\ge n-1>x-2$,
+    \begin{align}
+        \tau(k) & \le c\,e^{-2m/\xi}\le c\,e^{2/\xi}e^{-x/\xi},
+        \notag
+    \end{align}
+    and $e^{-x/\xi}=(k/k_0)^{-1/(\xi\log D)}$.
+\end{proof}
+
+\begin{theorem}[Matrix product state from the decay of the Schmidt tail]
+    \label{thm:hastings_schmidt_tail_mps}
+    \lean{TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_sq_le_of_schmidtTail_geometric}
+    \leanok
+    Let $\psi$ be a unit vector on a chain of $L$ sites, and let $D>1$,
+    $\xi>0$, $c\ge0$ and $k_0>0$. Suppose that at every internal cut the
+    mass beyond the $n$ largest eigenvalues of the left marginal is at most
+    $c\,e^{-2m/\xi}$ whenever $k_0D^{2m}\le n$. Then for every natural
+    number $k'\ge k_0$, truncating every cut onto the $k'$ leading
+    eigenvectors of its left marginal gives an open-boundary matrix product
+    state vector $\Phi$, not necessarily normalized, of bond dimension at most $k'$.
+    If $L<2$, then $\Phi=\psi$. For $L\ge2$,
+    \begin{align}
+        \lVert\Phi-\psi\rVert^2
+         & \le(L-1)\,c\,e^{2/\xi}\Bigl(\frac{k'}{k_0}\Bigr)^{-1/(\xi\log D)}.
+        \notag
+    \end{align}
+    Here the mass beyond the $n$ largest eigenvalues is the sum over the
+    eigenvalues of index at least $n+1$ in nonincreasing order, so the
+    source's sum from index $k'$ is this mass at $k'-1$. This is the
+    conclusion of the section on matrix product states of
+    \cite{Hastings2007AreaLaw}, whose error, stated without a measure, is the
+    squared Hilbert-space norm of the unnormalized truncation
+    ~\cite{gap:hastings07_mps_error_measure}, with the constant of
+    Theorem~\ref{thm:hastings_schmidt_tail_rpow}
+    \cite{gap:hastings07_schmidt_tail_constant}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_sequential_truncation_eigen, thm:chain_sequential_truncation_sq,
+        thm:hastings_schmidt_tail_rpow}
+    Sequential truncation onto the leading eigenvectors gives an
+    open-boundary matrix product state of bond dimension at most $k'$ with
+    $\lVert\Phi-\psi\rVert^2\le\sum_k\varepsilon_k(k')$, where
+    $\varepsilon_k(k')$ is the mass beyond the $k'$ largest eigenvalues at
+    the cut $k$. Theorem~\ref{thm:hastings_schmidt_tail_rpow} bounds each
+    $\varepsilon_k(k')$, and there are $L-1$ internal cuts.
+\end{proof}
+
+\begin{theorem}[Matrix product state from the entropy of the cuts]
+    \label{thm:hastings_mps_from_entropy}
+    \lean{TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_sq_le_of_factorization_of_entropy}
+    \leanok
+    \uses{thm:hastings_schmidt_tail_constraint}
+    Let $\Omega$ be a unit vector on a chain of $L$ sites with local
+    dimension $D>1$, and let $\xi'>0$. Suppose that the approximate
+    factorization of Theorem~\ref{thm:hastings_schmidt_tail_constraint} holds
+    at every internal cut $j$, and that the natural number $k_0$ satisfies
+    $k_0\ge\exp(2S_j)/2$ for the entropy $S_j$ of the first $j$ sites at
+    every internal cut $j$. Then for every natural number $k'\ge k_0$,
+    truncating every cut onto the $k'$ leading eigenvectors of its left
+    marginal gives an open-boundary matrix product state $\Phi$ of bond
+    dimension at most $k'$, without requiring $\Phi$ to be normalized.
+    For $L<2$, there is no internal cut and $\Phi=\Omega$. For $L\ge2$, the
+    entropy hypothesis implies $k_0>0$, and
+    \begin{align}
+        \lVert\Phi-\Omega\rVert^2
+         & \le(L-1)\,4C_1^2e^{2/\xi'}\Bigl(\frac{k'}{k_0}\Bigr)^{-1/(\xi'\log D)}.
+        \notag
+    \end{align}
+    The conditional construction in \cite{Hastings2007AreaLaw} explicitly
+    assumes a uniform entropy bound. Its application to gapped ground states
+    requires deriving both that bound and the factorization, with constants
+    uniform in chain length, from the Hamiltonian assumptions
+    ~\cite{gap:hastings07_mps_entropy_stage}.
+    Entropies and logarithms here use the natural base. For $L\ge2$, one may
+    choose $k_0=\lceil\exp(2\max_j S_j)/2\rceil$, with the maximum over
+    internal cuts. The error is the squared Hilbert-space norm of the
+    unnormalized vector~\cite{gap:hastings07_mps_error_measure},
+    and the constant is that of
+    Theorem~\ref{thm:hastings_schmidt_tail_rpow}
+    \cite{gap:hastings07_schmidt_tail_constant}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_schmidt_tail_constraint_entropy, thm:hastings_schmidt_tail_mps,
+        thm:chain_sequential_truncation_eigen, thm:chain_sequential_truncation_sq}
+    At every internal cut, Theorem~\ref{thm:hastings_schmidt_tail_constraint_entropy}
+    with $k=k_0$ bounds the mass beyond the $n$ largest eigenvalues by
+    $4C_1^2e^{-2m/\xi'}$ whenever $k_0D^{2m}\le n$, since $k_0$ is at least
+    $\exp(2S_j)/2$. Theorem~\ref{thm:hastings_schmidt_tail_mps} with
+    $c=4C_1^2$ then gives the bound. Without an internal cut,
+    Theorems~\ref{thm:chain_sequential_truncation_eigen}
+    and~\ref{thm:chain_sequential_truncation_sq} give directly that $\Phi$ is a
+    matrix product state with $\Phi=\Omega$.
+\end{proof}
+
+\begin{theorem}[Matrix product state from Lemma~1 and the entropy of the cuts]
+    \label{thm:hastings_mps_from_entropy_lemma1}
+    \lean{TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_sq_le_of_isFactorizationAt_of_entropy}
+    \leanok
+    \uses{thm:hastings_mps_from_entropy, def:hastings_factorization_at}
+    The bound of Theorem~\ref{thm:hastings_mps_from_entropy} holds when, at
+    every internal cut $j$ and every length $m$ with $j+m\le L$, the
+    approximate factorization is given in the form of the conclusion of
+    Lemma~1 of \cite{Hastings2007AreaLaw}: commuting orthogonal projections
+    $O_L$ and $O_R$ supported before and after the cut, and an operator $O_B$
+    of norm at most one supported on the $2m$ sites around the cut, cut short
+    at the ends of the chain, with
+    $\lVert O_BO_LO_R-|\Omega\rangle\langle\Omega|\rVert\le C_1e^{-m/\xi'}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_mps_from_entropy, def:hastings_factorization_at,
+        thm:hastings_factorization_bootstrap_form}
+    The operator $O_B$ is supported on the first $j+m$ sites, $O_L$ on the
+    first $j$ sites and $O_R$ on the remaining sites, which is the
+    factorization of Theorem~\ref{thm:hastings_mps_from_entropy}.
+\end{proof}
+
+\begin{theorem}[Matrix product state of the gapped ground state from Lemma~1]
+    \label{thm:hastings_mps_ground_state}
+    \lean{TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_sq_le_of_gappedGroundState}
+    \leanok
+    \uses{thm:hastings_area_law_from_factorization}
+    Let $\Omega$ be a gapped ground vector of a finite-range Hamiltonian on a
+    chain of $L$ sites with local dimension $D>1$, and suppose that Lemma~1
+    of \cite{Hastings2007AreaLaw} holds around $\Omega$ with constants
+    $\xi'>0$ and $C_1\ge1$, as in
+    Theorem~\ref{thm:hastings_area_law_from_factorization}. Let $S_{\max}$ be
+    the bound of that theorem on the entropy of every initial segment, and
+    $k_0=\lceil\exp(2S_{\max})/2\rceil$. Then for every natural number
+    $k'\ge k_0$, truncating every cut onto the $k'$ leading eigenvectors of
+    its left marginal gives an open-boundary matrix product state $\Phi$ of
+    bond dimension at most $k'$ with
+    \begin{align}
+        \lVert\Phi-\Omega\rVert^2
+         & \le(L-1)\,4C_1^2e^{2/\xi'}\Bigl(\frac{k'}{k_0}\Bigr)^{-1/(\xi'\log D)}.
+        \notag
+    \end{align}
+    Lemma~1 is a hypothesis here, as in
+    Theorem~\ref{thm:hastings_area_law_from_factorization}. With Lemma~1
+    supplied for the gapped ground state, this is the conclusion of the section
+    on matrix product states of \cite{Hastings2007AreaLaw}, restricted in its
+    quantitative bounds as Lemma~1 is: its length is not shown to be the
+    source's $\max(2v/\Delta E,\xi_C)$, and the printed $\xi'=6\xi$ is not
+    reached; $k_0$ inherits these through $S_{\max}$
+    \cite{gap:hastings07_lemma1_decay_length,gap:hastings07_gaussian_average_exponent}.
+    The error is measured in
+    the squared norm~\cite{gap:hastings07_mps_error_measure}, and the constant
+    is that of Theorem~\ref{thm:hastings_schmidt_tail_rpow}
+    \cite{gap:hastings07_schmidt_tail_constant}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_mps_from_entropy_lemma1, thm:hastings_area_law_from_factorization}
+    Theorem~\ref{thm:hastings_area_law_from_factorization} bounds the entropy
+    $S_j$ of the first $j$ sites by $S_{\max}$ at every cut, so
+    $\exp(2S_j)/2\le\exp(2S_{\max})/2\le k_0$. This is the entropy hypothesis
+    of Theorem~\ref{thm:hastings_mps_from_entropy_lemma1}, which gives the
+    bound~\cite{gap:hastings07_mps_entropy_stage}.
+\end{proof}
+
+\begin{theorem}[Matrix product state approximation of the gapped ground state]
+    \label{thm:hastings_mps_gapped_chain}
+    \lean{TNLean.MPS.AreaLaw.Hastings.exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState_endpoint}
+    \leanok
+    \uses{thm:hastings_lemma1_endpoint, thm:hastings_area_law}
+    Let $R$ be a range. There is a constant $K\ge0$, depending only on $R$,
+    with the following property. Let $J\ge0$ bound the interaction terms, let
+    $\Delta E>0$ be a gap, let $\zeta$ be the decay length of Lemma~1 obtained
+    by raising the Lieb--Robinson velocity by a factor $\tfrac54$, and put
+    $\xi'=6\zeta$ and $C_1=\max(K\zeta^3,1)$. For every chain of $L$ sites
+    with local dimension $D>1$ and every gapped ground vector $\Omega$ of a
+    Hamiltonian of range $R$, strength $J$ and gap $\Delta E$, with
+    $k_0=\lceil\exp(2S_{\max})/2\rceil$ for the bound $S_{\max}$ of the area
+    law at the same $\xi'$ and $C_1$, as in Theorem~\ref{thm:hastings_area_law},
+    truncating every cut onto the $k'$ leading eigenvectors of its left
+    marginal, for every natural number $k'\ge k_0$, gives an open-boundary
+    matrix product state $\Phi$ of bond dimension at most $k'$ with
+    \begin{align}
+        \lVert\Phi-\Omega\rVert^2
+         & \le(L-1)\,4C_1^2e^{2/\xi'}\Bigl(\frac{k'}{k_0}\Bigr)^{-1/(\xi'\log D)}.
+        \notag
+    \end{align}
+    The constants depend only on $R$, $J/\Delta E$ and $D$, not on $L$. This
+    is the conclusion of the section on matrix product states of
+    \cite{Hastings2007AreaLaw} under its Hamiltonian assumptions alone, at the
+    printed rate $\xi'=6\xi$ for $\xi=\zeta$ and with $C_1$ polynomial in
+    $\zeta$. The length $\zeta$ may stand in for the source's $\xi$ because the
+    source fixes $\xi=\max(2v/\Delta E,\xi_C)$ only through some Lieb--Robinson
+    pair $(v,\xi_C)$ (lines 96--112), and raising $v$ keeps a pair
+    valid~\cite{gap:hastings07_lemma1_decay_length}. The chain estimate behind
+    $\zeta$, whose prefactor grows with $J$ and whose second operator acts on
+    one site, is not shown to give a Lieb--Robinson pair in the source's form
+    \cite{gap:hastings07_lemma1_decay_length,gap:hastings07_gaussian_average_exponent}.
+    The error is measured in the squared
+    norm~\cite{gap:hastings07_mps_error_measure}, and the constant is that of
+    Theorem~\ref{thm:hastings_schmidt_tail_rpow}
+    \cite{gap:hastings07_schmidt_tail_constant}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_lemma1_endpoint, thm:hastings_mps_ground_state,
+        thm:hastings_factorization_mono}
+    Lemma~1 at the printed rate gives the factorization at error
+    $K\zeta^3e^{-l/(6\zeta)}$ at every cut and length. Taking
+    $C_1=\max(K\zeta^3,1)$ only enlarges the error, and
+    Theorem~\ref{thm:hastings_mps_ground_state} gives the
+    bound~\cite{gap:hastings07_mps_entropy_stage}.
+\end{proof}
+
+\begin{theorem}[Matrix product state of the gapped ground state at a rate above the endpoint]
+    \label{thm:hastings_mps_gapped_chain_rate}
+    \lean{TNLean.MPS.AreaLaw.Hastings.exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState}
+    \leanok
+    \uses{thm:hastings_lemma1_polynomial_constant}
+    Let $R$ be a range and $\kappa>6$. There is a constant $K\ge0$, depending
+    only on $R$ and $\kappa$, with the following property. Let $J\ge0$ bound
+    the interaction terms, let $\Delta E>0$ be a gap, let $\hat\xi$ be the
+    decay length of Lemma~1 in units of the gap, and put $\xi'=\kappa\hat\xi$
+    and $C_1=\max(K\hat\xi^3,1)$. For every chain of $L$ sites with local
+    dimension $D>1$ and every gapped ground vector $\Omega$ of a Hamiltonian
+    of range $R$, strength $J$ and gap $\Delta E$, with
+    $k_0=\lceil\exp(2S_{\max})/2\rceil$ for the bound $S_{\max}$ of the area
+    law, truncating every cut onto the $k'$ leading eigenvectors of its left
+    marginal, for every natural number $k'\ge k_0$, gives an open-boundary
+    matrix product state $\Phi$ of bond dimension at most $k'$ with
+    \begin{align}
+        \lVert\Phi-\Omega\rVert^2
+         & \le(L-1)\,4C_1^2e^{2/\xi'}\Bigl(\frac{k'}{k_0}\Bigr)^{-1/(\xi'\log D)}.
+        \notag
+    \end{align}
+    The constants depend only on $R$, $\kappa$, $J/\Delta E$ and $D$, not on
+    $L$, and $C_1$ is polynomial in $\hat\xi$. This is the form at the length
+    $\hat\xi$, at any rate $\xi'=\kappa\hat\xi$ with $\kappa>6$; the printed
+    rate is Theorem~\ref{thm:hastings_mps_gapped_chain}. The length $\hat\xi$
+    is not shown to be the length of the source's Lieb--Robinson pair
+    \cite{gap:hastings07_lemma1_decay_length,gap:hastings07_gaussian_average_exponent}.
+    The error is measured in the squared
+    norm~\cite{gap:hastings07_mps_error_measure}, and the constant is that of
+    Theorem~\ref{thm:hastings_schmidt_tail_rpow}
+    \cite{gap:hastings07_schmidt_tail_constant}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_lemma1_polynomial_constant, thm:hastings_mps_ground_state,
+        thm:hastings_factorization_mono}
+    Lemma~1 with a polynomial constant gives the factorization at error
+    $K\hat\xi^3e^{-l/\xi'}$ at every cut and length. Taking
+    $C_1=\max(K\hat\xi^3,1)$ only enlarges the error, and
+    Theorem~\ref{thm:hastings_mps_ground_state} gives the
+    bound~\cite{gap:hastings07_mps_entropy_stage}.
+\end{proof}

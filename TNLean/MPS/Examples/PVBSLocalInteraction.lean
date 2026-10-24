@@ -75,8 +75,7 @@ theorem parentInteraction_pvbs_two_apply (μ : ℝ) (v : NSiteSpace 2 2) (σ : C
   have hswap (a b : Fin 2) : (![a, b] : Cfg 2 2) ∘ Equiv.swap 0 1 = ![b, a] := by
     ext k
     fin_cases k <;> simp
-  obtain ⟨a, b, rfl⟩ : ∃ a b : Fin 2, σ = ![a, b] := by
-    exact ⟨σ 0, σ 1, Matrix.eq_vecCons_fin_two σ⟩
+  obtain ⟨a, b, rfl⟩ : ∃ a b : Fin 2, σ = ![a, b] := ⟨σ 0, σ 1, Matrix.eq_vecCons_fin_two σ⟩
   fin_cases a <;> fin_cases b <;> simp [w, z, hswap] <;> field_simp <;> ring
 
 end MPSTensor

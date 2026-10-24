@@ -24,16 +24,16 @@ and 565–588.
 
 noncomputable section
 namespace TNLean
-open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 open ContinuousLinearMap
 
-namespace PEPS.PairEffect
+namespace Lattice.PartyCircuit
 private theorem id_heq_of_memory_eq {E F : HSpace} (h : E = F) :
     HEq (ContinuousLinearMap.id ℂ E) (ContinuousLinearMap.id ℂ F) := by
   cases h
   rfl
 
-end PEPS.PairEffect
+end Lattice.PartyCircuit
 namespace Lattice.PartyCircuit
 /-- Two words have the same selected remaining evaluation, with the source
 proof supplied by each word. Source: polynomial-PEPS Theorem 5.2,
