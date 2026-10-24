@@ -1,0 +1,66 @@
+\documentclass{article}
+\usepackage[margin=28mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{The Example of Non-Commuting Low-Energy Terms in Hastings' Appendix~B}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source example}
+Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
+\href{https://arxiv.org/abs/cond-mat/0508554v3}{arXiv:cond-mat/0508554v3},
+source \path{proj3new.tex}, lines 1655--1676, shows that without translation
+invariance the local terms need not commute in the low-energy sector. On a
+chain of spins $1/2$ it takes
+\begin{align}
+    H_i=S^z_i\quad(i\neq0,1,2),\qquad
+    H_0=S^x_0+S^y_0,\qquad
+    H_1=-S^x_0-S^z_1,\qquad
+    H_2=-S^y_0+S^z_2,
+    \label{eq:hastings05_low_energy_example_terms}
+\end{align}
+and states that this ``is a complicated way of writing the Hamiltonian
+$H=\sum_{i\neq0}S^z_i$'' (line 1660), whose ground space is spanned by the two
+states with every spin down except spin~$0$. It then states that $H_0$, $H_1$
+and $H_2$ pairwise fail to commute in the low-energy sector, ``still $H_0$
+commutes in the low energy sector with $H_i$ for $i\geq2$'' (line 1670).
+
+\section{The two corrections}
+The terms acting on site~$0$ cancel, but the sum of the terms in
+(\ref{eq:hastings05_low_energy_example_terms}) is
+\begin{align}
+    H_0+H_1+H_2=-S^z_1+S^z_2,
+    \qquad
+    H=-S^z_1+\sum_{i\geq2}S^z_i,
+    \label{eq:hastings05_low_energy_example_sum}
+\end{align}
+not $\sum_{i\neq0}S^z_i$: the sign of $S^z_1$ is reversed. The ground space of
+(\ref{eq:hastings05_low_energy_example_sum}) is still two-dimensional,
+spanned by the states with spin~$1$ up, every spin $i\geq2$ down and spin~$0$
+free. On it $S^z_k$ is a scalar for every $k\neq0$, so the compressions of
+$H_0$, $H_1$ and $H_2$ are, up to scalars, those of $S^x_0+S^y_0$, $-S^x_0$ and
+$-S^y_0$, which pairwise fail to commute because $[S^x_0,S^y_0]\neq0$. The
+conclusions of the example are therefore unchanged.
+
+The range ``$i\geq2$'' at line 1670 contradicts the preceding sentence, which
+lists $H_0$ and $H_2$ as non-commuting. The compression of $H_0$ commutes with
+that of $H_i$ exactly for $i\geq3$, where $H_i=S^z_i$ is a scalar on the ground
+space.
+
+Both corrections are local: the example is formalized with the sum
+(\ref{eq:hastings05_low_energy_example_sum}) and the range $i\geq3$, on a chain
+of $m+3$ sites.\footnote{\leanid{TNLean.Lattice.LowEnergyExample.hamiltonian_eq_diagonal},
+    \leanid{TNLean.Lattice.LowEnergyExample.not_commute_compress_term_zero_one},
+    \leanid{TNLean.Lattice.LowEnergyExample.commute_compress_term_zero_of_three_le}
+    in \doclink{TNLean/Lattice/LowEnergyCommutatorExample}.}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
