@@ -1317,8 +1317,23 @@ effect `O_B† O_B`) supplies the Lindblad–Uhlmann data with `C₁` replaced b
 [hastings07_mps_error_measure.tex](hastings07_mps_error_measure.tex)
 (clarification, resolved) records that Hastings' error
 `N (k'/k₀)^{-1/(ξ' ln D)}` for the matrix product state (arXiv:0705.2024v4,
-lines 553–557), stated without an error measure, holds for the squared norm,
-through the squared error `‖Φ − ψ‖² ≤ ∑_j τ_j(k')` of sequential truncation.
+lines 553–557), stated without an error measure, holds for the squared
+Hilbert-space norm of the unnormalized truncation, through the squared error `‖Φ − ψ‖² ≤ ∑_j τ_j(k')` of sequential truncation.
+
+### One-dimensional area law after Hastings: the entropy hypothesis of the matrix product state
+
+[hastings07_mps_entropy_stage.tex](hastings07_mps_entropy_stage.tex)
+(scope restriction, resolved) distinguishes the conditional approximation
+construction (arXiv:0705.2024v4, lines 505–557), which explicitly assumes an
+entropy bound at lines 516–518, from its application under only the Hamiltonian
+assumptions. That application requires deriving uniform factorization and
+entropy bounds and applying them to the approximation theorem. For chains
+with at least two sites, the entropy bound gives a common positive integer
+`k₀ ≥ exp(2 S_j)/2`; shorter chains need no truncation.
+Both bounds are now derived: the area law gives the entropy bound, and Lemma 1
+with a constant independent of the chain gives the factorization, so the estimate
+holds under the Hamiltonian assumptions alone, with the quantitative restrictions of
+the formalized Lemma 1.
 
 ### One-dimensional area law after Hastings: the threshold of the spectral cut-offs
 
@@ -1328,6 +1343,19 @@ the appendix of Hastings (arXiv:0705.2024v4, lines 829–841) are taken onto the
 eigenvalues of absolute value at most the threshold, rather than the printed
 eigenvalues at most the threshold, because the centered terms need not be
 positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
+
+### Local solution of gapped Hamiltonians after Hastings: the hierarchical projection
+
+[hastings05_hierarchical_projection.tex](hastings05_hierarchical_projection.tex)
+(local correction, open) records the stronger norm estimate
+`‖Ψ − P Ψ‖ ≤ ε/x` needed for the normalization step in Hastings,
+*Solving Gapped Hamiltonians Locally* (arXiv:cond-mat/0508554v3, lines 640–704).
+The printed expectation bound alone gives only `√(ε/x)`. The scalar recurrence
+`b_m = (ε + 2 b_{m−1})^{1−1/h}` and its bound with coefficient `2ʰ − 1`
+are proved, but their application to the full hierarchy remains open.
+Comparing successive normalized vectors by the triangle inequality gives an
+accumulated majorant involving `∑_{j<m} b_j`, with coefficient `3^{m−1}`.
+That estimate neither proves nor refutes the source's smaller recurrence.
 
 ## Polynomial PEPS: zero-floor maximizing filters
 
@@ -1351,6 +1379,82 @@ positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
   length `ξ₀` rather than `ξ₀/2`, and the implicit hypotheses `2 C₁ > 1` and
   `ln C₁ + C₂ ≥ 0`.
 
+### Local solution of gapped Hamiltonians: Gaussian commutator coefficients
+
+[hastings05_gaussian_series_coefficients.tex](hastings05_gaussian_series_coefficients.tex)
+(local correction, resolved) records the variance-power correction in Hastings,
+*Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, source lines
+1005–1009). The even Gaussian moment of order `k` contains `(q/ΔE²)^(k/2)`,
+not the printed power `k`. When commutators are written as `i^k ad_H^k`, this
+factor already supplies the alternating sign. The finite-polynomial
+variational bound is unaffected; the infinite expansion remains unformalized.
+
+### Local solution of gapped Hamiltonians: the number of final states
+
+[hastings05_final_state_count.tex](hastings05_final_state_count.tex)
+(clarification, resolved) supplies the argument for the count asserted at the end of
+the hierarchical construction in Hastings, *Solving gapped Hamiltonians locally*
+(arXiv:cond-mat/0508554v3, source lines 722–730). If `H − E₀ ≥ ΔE (1 − P)` for the ground
+projection `P` of trace `n`, then orthonormal states of energy at most `E₀ + θ ΔE` number at
+most `n / (1 − θ)`, by Bessel's inequality; `θ = 1/2` gives `2n`. The energy under `H` is
+taken as a hypothesis.
+
+### Local solution of gapped Hamiltonians: the right side of the single-cluster bound
+
+[hastings05_cluster_part_trace_pairing.tex](hastings05_cluster_part_trace_pairing.tex)
+(local correction, resolved) records the bound stated before equation `percb2` in
+Hastings, *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, source
+lines 1174–1184). It is printed with `Tr(O e^{−βH})` on the right; applied to `±O`
+this would make `ρ(β, C)` a multiple of `e^{−βH}`, which fails already for one term.
+The intended form, used by `percb2`, has `‖O‖ Tr e^{−βH}` on the right, and that is
+what is formalized.
+
+### Local solution of gapped Hamiltonians: cluster size in the percolation bound
+
+[hastings05_percolation_cluster_size.tex](hastings05_percolation_cluster_size.tex)
+(local correction, resolved) records the start of the sum over cluster sizes in
+Hastings, *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3,
+source lines 1227–1254). A cluster of diameter larger than `l_proj` has at least
+`⌊l_proj/(2R)⌋ + 1` sites, not `l_proj + 1` as printed at line 1240, unless the
+bonds are nearest-neighbour. The decay length `ξ_perc = 2R / ln(1/(xy))` of order
+`R` absorbs the difference. The formalized sum takes the size threshold as a
+hypothesis.
+
+### One-dimensional area law after Hastings: the decay length of Lemma 1
+
+[hastings07_lemma1_decay_length.tex](hastings07_lemma1_decay_length.tex)
+(scope restriction, open) compares the chain Lieb–Robinson estimate with
+Hastings's bound (arXiv:0705.2024v4, lines 96–112). The chain commutator bound is
+linear in the support, as in the source. Its quadratic localization factor enters
+with supports of at most `6R` sites for the parts and of `O(R + l)` sites for the
+boundary operator, where the faster decay of that term absorbs the polynomial in
+`l`; it changes the constant, not the length or the rate. It differs in having a prefactor that
+grows with `J` and a single-site second operator, so `(v₀, 2)` is not shown to be
+a source pair. The length `ξ = 8 max(2v₀/ΔE, 1)` is not homogeneous in `(J, ΔE)`;
+applied to `H/ΔE`, Lemma 1 holds with the homogeneous length
+`16(1 + c_R J/ΔE)`. The factorization constant is uniform in chain length and
+local dimension, and at the rate `ξ' = κ ξ̂` with `κ > 6` it is at most `K ξ̂³`
+with `K` depending only on `R` and `κ`, the source's polynomial bound in `ξ`
+(lines 258–262). The endpoint rate `ξ' = 6ξ` is reached at the length
+`(5/4) ξ̂` of a Lieb–Robinson pair with inflated velocity, which the source
+allows because it fixes `ξ` only through some pair (lines 96–112); at a fixed
+length the argument needs `ξ' > 6ξ`. A Lieb–Robinson pair in the source's
+form remains open under issue #9811.
+
+## Hastings' high-temperature matrix product form, arXiv:cond-mat/0508554
+
+- [`hastings05_planar_domain_scope.tex`](hastings05_planar_domain_scope.tex)
+  (scope restriction, open) records that the matrix product form of Trotter
+  products in Section IV of Hastings (arXiv:cond-mat/0508554v3, lines
+  1017–1079), stated there for an arbitrary lattice and metric, is formalized for
+  finite domains of `ℤ²` with the walk distance of the local Hamiltonians of the
+  two-dimensional area law. The centre-indexed theorem preserves the source's
+  radius bound, including centres outside their supports; the original
+  diameter-bounded statement is a corollary. The source's count of at most
+  `nS` index components per site remains unproved: for a product of `m`
+  factors the construction carries `m` components of `q²` values at every site,
+  one for every factor wherever it acts, so the `n`-th power `ρₙ` carries `n m`.
+
 ## Rényi entropy and matrix product state approximation
 
 - [`swvc08_renyi_bond_dimension_sign.tex`](swvc08_renyi_bond_dimension_sign.tex)
@@ -1359,3 +1463,18 @@ positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
   (arXiv:0705.0292v2). A flat Schmidt spectrum disproves the printed plus
   sign; the corrected minus sign preserves the obstruction from
   super-logarithmic entropy growth. The Lean development remains open in #9857.
+
+- [`swvc08_interior_block_bond_rank.tex`](swvc08_interior_block_bond_rank.tex)
+  (false source, resolved) distinguishes a boundary block, of rank at most
+  `D`, from an interior contiguous block, of rank at most `D²`. Two Bell
+  pairs on four sites attain the latter bound and disprove the printed
+  `log D` entropy bound even at zero approximation error. Replacing it by
+  `2 log D` preserves the asymptotic obstruction; the full Lean result
+  remains open in #9857.
+
+- [`swvc08_truncation_squared_norm.tex`](swvc08_truncation_squared_norm.tex)
+  (false source, resolved) records the missing square in the displayed truncation
+  bound of Schuch–Wolf–Verstraete–Cirac, arXiv:0705.0292v2, lines 239–245. A two-qubit
+  state disproves the printed norm estimate. The note compares the corrected
+  squared-norm bound with the stronger proved sequential-truncation estimate;
+  the Rényi family theorem remains open in #9855.

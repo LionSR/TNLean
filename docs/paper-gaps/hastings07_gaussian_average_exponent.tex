@@ -87,8 +87,9 @@ which changes only constants. The final bound of the appendix,
 keeps the polynomial prefactor $\sqrt{l/\xi}$, which comes from the factor
 $\sqrt q$.\footnote{\path{References/0705.2024/law16.tex}, lines~903--907.}
 It therefore gives $\|O_BO_LO_R-P_0\|\le C_1e^{-l/\xi'}$ for every
-$\xi'>6\xi$, with $C_1$ depending on $\xi'-6\xi$, but not at the printed
-$\xi'=6\xi$ of line~142.\footnote{\path{References/0705.2024/law16.tex},
+$\xi'>6\xi$, with $C_1$ depending on $\xi'-6\xi$. This argument does not
+establish the printed endpoint $\xi'=6\xi$ of line~142; it does not
+show that the endpoint factorization is false.\footnote{\path{References/0705.2024/law16.tex},
     lines~141--142.}
 Indeed, with $\delta=1/(6\xi)-1/\xi'>0$,
 \begin{align}
@@ -98,7 +99,11 @@ Indeed, with $\delta=1/(6\xi)-1/\xi'>0$,
 \end{align}
 the supremum being attained at $l=1/(2\delta)$, while no constant independent of
 $l$ absorbs $\sqrt l$ at $\delta=0$. Lemma~1 is therefore stated with
-$6\xi<\xi'$. The printed claim (\ref{eq:hastings07_gaussian_average_source})
+$6\xi<\xi'$ at a fixed length. The printed endpoint is reached instead at the
+length $\tfrac54\hat\xi$ obtained by raising the velocity of the chain
+Lieb--Robinson estimate, which the source allows because it fixes $\xi$ only
+through some Lieb--Robinson pair; that length carries the same restriction on
+the pair as $\hat\xi$; see \path{hastings07_lemma1_decay_length.tex}. The printed claim (\ref{eq:hastings07_gaussian_average_source})
 is false for the printed $q$, while the corrected statement follows from the
 source's own estimates, with the larger $q$ and any decay length $\xi'>6\xi$.
 
