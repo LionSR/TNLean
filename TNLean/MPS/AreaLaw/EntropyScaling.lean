@@ -8,5 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.AreaLaw.EntropyScaling
 
+import TNLean.MPS.AreaLaw.EntropyScaling.QutritEntropy
 import TNLean.MPS.AreaLaw.EntropyScaling.QutritFamily
 import TNLean.MPS.AreaLaw.EntropyScaling.QutritMiddleTail

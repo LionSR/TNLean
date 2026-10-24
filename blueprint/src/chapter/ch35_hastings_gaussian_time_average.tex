@@ -13,7 +13,10 @@ the parameter $q$. Norms are operator norms.
 \begin{definition}[Gaussian time average]
     \label{def:hastings_gaussian_time_average}
     \lean{TNLean.MPS.AreaLaw.Hastings.timeAverageVariance,
-        TNLean.MPS.AreaLaw.Hastings.gaussianTimeAverage}
+        TNLean.MPS.AreaLaw.Hastings.gaussianTimeAverage,
+        TNLean.MPS.AreaLaw.Hastings.gaussianTimeAverage_eq_integral,
+        TNLean.MPS.AreaLaw.Hastings.le_timeAverageVariance_mul_sq,
+        TNLean.MPS.AreaLaw.Hastings.sqrt_timeAverageVariance}
     \leanok
     Let $q$ and $\Delta E$ be real numbers and put $h=\max(q/\Delta E^2,0)$ if
     $\Delta E\ne0$, and $h=0$ if $\Delta E=0$.
@@ -26,6 +29,8 @@ the parameter $q$. Norms are operator norms.
     the operator
     $P_q=\frac{\Delta E}{\sqrt{2\pi q}}\int e^{iHt}e^{-(t\Delta E)^2/2q}\,dt$
     of \cite[lines 843--847]{Hastings2007AreaLaw}.
+    The variance satisfies $q\le h\,\Delta E^2$ whenever $\Delta E\ne0$, and
+    $\sqrt h=\sqrt{\max(q,0)}/\Delta E$ whenever $\Delta E>0$.
 \end{definition}
 
 \begin{theorem}[Gaussian time average across the gap]
@@ -76,15 +81,40 @@ the parameter $q$. Norms are operator norms.
     the norm.
 \end{proof}
 
-\begin{theorem}[First absolute moment of a Gaussian]
-    \label{thm:hastings_gaussian_absolute_moment}
-    \lean{TNLean.MPS.AreaLaw.Hastings.integral_abs_gaussianReal_le}
+\begin{theorem}[First absolute moment of a Gaussian tail]
+    \label{thm:hastings_gaussian_absolute_moment_tail}
+    \lean{TNLean.Lattice.integral_compl_Icc_abs_gaussianReal_le}
     \leanok
-    For every $h\ge0$, $\int|t|\,d\gamma_h(t)\le\sqrt h$.
+    For $h,T\ge0$,
+    \begin{align*}
+        \int_{|t|>T}|t|\,d\gamma_h(t)
+        \le \sqrt{2h/\pi}\,e^{-T^2/(2h)},
+    \end{align*}
+    where the right-hand side is interpreted as zero when $h=0$.
 \end{theorem}
 \begin{proof}\leanok
-    The variance of $|t|$ is nonnegative, so
-    $\bigl(\int|t|\,d\gamma_h\bigr)^2\le\int t^2\,d\gamma_h=h$.
+    If $h=0$, the measure is concentrated at zero and the integral vanishes.
+    For $h>0$, write $\varphi_h(t)=(2\pi h)^{-1/2}e^{-t^2/(2h)}$.
+    Since $(-h\varphi_h)'(t)=t\varphi_h(t)$ and $\varphi_h(t)\to0$ as
+    $t\to\infty$, one has $\int_T^\infty t\varphi_h(t)\,dt=h\varphi_h(T)$.
+    Reflection gives the same contribution on $(-\infty,-T)$, hence the
+    asserted bound, with equality for $h>0$.
+\end{proof}
+
+\begin{theorem}[First absolute moment of a Gaussian]
+    \label{thm:hastings_gaussian_absolute_moment}
+    \lean{TNLean.Lattice.integral_abs_gaussianReal_le_sqrt_two_mul_div_pi,
+        TNLean.Lattice.integral_abs_gaussianReal_le}
+    \leanok
+    For every $h\ge0$,
+    $\int|t|\,d\gamma_h(t)\le\sqrt{2h/\pi}\le\sqrt h$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_gaussian_absolute_moment_tail}
+    Specialize Theorem~\ref{thm:hastings_gaussian_absolute_moment_tail} to $T=0$.
+    Since $|t|$ vanishes at zero, removing that point does not change the
+    integral, even when $h=0$. Finally, $2\le\pi$ gives
+    $\sqrt{2h/\pi}\le\sqrt h$.
 \end{proof}
 
 \begin{theorem}[Stability of the Gaussian time average]
