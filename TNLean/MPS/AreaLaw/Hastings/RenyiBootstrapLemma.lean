@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.BootstrapLemma
 import TNLean.MPS.AreaLaw.Hastings.SchmidtRankRenyiBootstrap
+import QICLean.Entropy.Renyi.VonNeumannBound
 
 /-!
 # The Rényi form of Hastings' bootstrap lemma
@@ -33,17 +34,19 @@ site, so `ζ` is not shown to be the source's `max(2v/ΔE, ξ_C)` for a Lieb–R
 source's sense (lines 96–112). Documented in `docs/paper-gaps/hastings07_lemma1_decay_length.tex`
 and `docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
 
-**Scope restriction (orders):** the Rényi bound is proved for orders `0 < α < 1`. Order `1` is
-the von Neumann entropy, bounded by `exists_entropy_le_of_overlap_schmidtRank_mixture`. Orders
-`α > 1`, for which the convergence condition always holds, are not covered here. Documented in
-`docs/paper-gaps/hastings07_renyi_bootstrap_orders.tex`.
+Orders `α > 1` are covered as well: there the Rényi entropy is at most the von Neumann entropy
+(`Entropy.inv_one_sub_mul_log_sum_rpow_le_probabilityEntropy`), so the von Neumann Lemma 2
+bounds it, with `F(ξ', D)` itself as the function replacing `F(ξ', D)`. Order `1` is the von
+Neumann entropy.
 
 ## Main results
 
 * `TNLean.MPS.AreaLaw.Hastings.renyiEntropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt`:
   the Rényi bound from Lemma 1 at one cut.
 * `TNLean.MPS.AreaLaw.exists_renyiEntropy_le_of_overlap_schmidtRank_mixture`: the Rényi form of
-  Lemma 2 for a gapped chain.
+  Lemma 2 for a gapped chain, for orders `0 < α < 1`.
+* `TNLean.MPS.AreaLaw.exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_of_one_lt`: the same
+  for orders `α > 1`.
 -/
 
 namespace TNLean.MPS.AreaLaw.Hastings
@@ -135,6 +138,26 @@ theorem renyiEntropy_cutMatrix_nonpos_of_one {Ω : EuclideanSpace ℂ (Fin L →
     Real.log_nonpos (Finset.sum_nonneg fun a _ ↦ Real.rpow_nonneg (hp0 a) _) hsum'
   exact mul_nonpos_of_nonneg_of_nonpos (inv_nonneg.mpr (by linarith)) hlog
 
+/-- For `α > 1` the Rényi entropy of order `α` of the first `j` sites of a unit vector is at most
+its von Neumann entropy. -/
+theorem renyiEntropy_cutMatrix_le_regionEntropy_of_one_lt {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hΩ : ‖Ω‖ = 1) (j : ℕ) {α : ℝ} (hα : 1 < α) :
+    renyiEntropy (cutMatrix Ω j * (cutMatrix Ω j)ᴴ)
+        (posSemidef_self_mul_conjTranspose (cutMatrix Ω j)).isHermitian α ≤
+      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 j) Ω := by
+  set Ψ := WithLp.ofLp (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω)
+  have hΨ : star Ψ ⬝ᵥ Ψ = 1 := by
+    rw [star_cutVector_dotProduct, inner_self_eq_norm_sq_to_K, hΩ]; norm_num
+  obtain ⟨hp0, hpsum⟩ := eigenvalues₀_nonneg_and_sum_eq_one Ψ hΨ
+  rw [regionEntropy_interval_eq]
+  change renyiEntropy (schmidtCoeffMatrix Ψ * (schmidtCoeffMatrix Ψ)ᴴ)
+      (posSemidef_self_mul_conjTranspose (schmidtCoeffMatrix Ψ)).isHermitian α ≤
+    vonNeumannEntropy (schmidtCoeffMatrix Ψ * (schmidtCoeffMatrix Ψ)ᴴ)
+      (posSemidef_self_mul_conjTranspose (schmidtCoeffMatrix Ψ)).isHermitian
+  rw [renyiEntropy_eq_log_sum_eigenvalues₀_rpow _ (by linarith) hα.ne',
+    vonNeumannEntropy_eq_probabilityEntropy_eigenvalues₀]
+  exact Entropy.inv_one_sub_mul_log_sum_rpow_le_probabilityEntropy _ hp0 hpsum hα
+
 end TNLean.MPS.AreaLaw.Hastings
 
 namespace TNLean.MPS.AreaLaw
@@ -200,5 +223,31 @@ theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture (R : ℕ) :
         exact ⟨OB, OL, OR, hFm.mono (mul_le_mul_of_nonneg_right
           (mul_le_mul_of_nonneg_right (le_max_left _ _) (pow_pos (by linarith) 3).le)
           (Real.exp_pos _).le)⟩) hk w ψ hw hrank hnorm hP hPdef
+
+/-- **Hastings' bootstrap lemma for Rényi entropies of order above one.** With the constant `K`
+of `exists_entropy_le_of_overlap_schmidtRank_mixture`, under the same hypotheses, the Rényi
+entropy of every order `α > 1` of the first `j` sites is at most
+`ln k + ξ' ln(2 C₁²/P) ln q + F(ξ', q)`, the von Neumann bound, since `S_α ≤ S` for `α > 1`.
+Here the convergence condition of line 406 holds for every `α > 1`, and the function replacing
+`F(ξ', q)` is `F(ξ', q)` itself. Hastings, arXiv:0705.2024v4, Lemma 2 (`ble`), lines 392–410,
+with the restrictions of the module docstring. -/
+theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_of_one_lt (R : ℕ) :
+    ∃ K : ℝ, 1 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
+      ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, IsGappedGroundState h.operator E₀ Ω ΔE →
+      ∀ {α : ℝ}, 1 < α →
+      ∀ (j : ℕ) {k r : ℕ}, 1 ≤ k → ∀ (w : Fin r → ℝ)
+        (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q)), (∀ i, 0 ≤ w i) →
+        (∀ i, (cutMatrix (ψ i) j).rank ≤ k) → ∑ i, w i * ‖ψ i‖ ^ 2 = 1 →
+        ∀ {P : ℝ}, 0 < P → ∑ i, w i * ‖⟪ψ i, Ω⟫_ℂ‖ ^ 2 = P →
+        renyiEntropy (cutMatrix Ω j * (cutMatrix Ω j)ᴴ)
+            (posSemidef_self_mul_conjTranspose (cutMatrix Ω j)).isHermitian α ≤
+          Real.log k + 6 * lemmaOneEndpointLength R J ΔE *
+            Real.log (2 * (K * lemmaOneEndpointLength R J ΔE ^ 3) ^ 2 / P) * Real.log q +
+            bootstrapRemainder (6 * lemmaOneEndpointLength R J ΔE) q := by
+  obtain ⟨K, hK, hL2⟩ := exists_entropy_le_of_overlap_schmidtRank_mixture R
+  refine ⟨K, hK, fun hJ hΔ L q _ h E₀ Ω hgs α hα j k r hk w ψ hw hrank hnorm P hP hPdef ↦ ?_⟩
+  exact (renyiEntropy_cutMatrix_le_regionEntropy_of_one_lt hgs.1 j hα).trans
+    (hL2 hJ hΔ h hgs j hk w ψ hw hrank hnorm hP hPdef)
 
 end TNLean.MPS.AreaLaw
