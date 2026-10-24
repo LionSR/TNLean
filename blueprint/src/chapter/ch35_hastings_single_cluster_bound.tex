@@ -185,3 +185,83 @@
     $n_C+n_{B(C)}\le Sn_C$. Theorem~\ref{thm:hastings_cluster_part_percb2} gives
     $\|O\|y^{\sum_in_{C_i}}Z=\|O\|\prod_iy^{n_{C_i}}Z$.
 \end{proof}
+
+\begin{theorem}[The cluster part between thermal factors]
+    \label{thm:hastings_cluster_part_thermal}
+    \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_mul_clusterPart_mul_exp_le_pow}
+    \leanok
+    \uses{thm:hastings_cluster_part_percb2}
+    In the setting of Theorem~\ref{thm:hastings_cluster_part_percb2}, let $n\ge1$ and
+    $0\le k\le n-1$, and put $y=(e^{J\beta/n}-1)e^{SJ\beta/n}$. Then
+    \begin{align}
+        \left|\operatorname{tr}\bigl(Oe^{-k\beta H/n}\rho(\beta/n,C)
+        e^{-(n-k-1)\beta H/n}\bigr)\right|
+        \le\|O\|y^{n_C}Z.
+        \label{eq:hastings_cluster_part_thermal}
+    \end{align}
+    This is the bound of~\cite[lines 1322--1333]{Hastings2006Solving}, multiplied by $Z$,
+    where $\rho(\beta)=e^{-\beta H}$; the source proves it as (percb2).
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:hastings_cluster_part, thm:hastings_cluster_part_bound,
+        thm:hastings_cluster_part_percb2}
+    Put $Y=\beta(H-H_C-H_{B(C)})$. As in the proof of
+    Theorem~\ref{thm:hastings_cluster_part_bound}, $\rho(\beta/n,C)$ is the alternating sum of
+    the $e^{-(Y+\sum_{i\in E}\beta H_i)/n}$ over $E\subseteq C$. The bound for alternating
+    sums between thermal factors in the companion quantum-channel
+    volume~\cite[``Alternating sums between thermal factors, uniform form'']{QICLean2026Blueprint},
+    with the weights $k/n$, $1/n$ and $(n-k-1)/n$ and the terms $\beta H_i$ of norm at most
+    $\beta J$, gives
+    \begin{align*}
+        \left|\operatorname{tr}\bigl(Oe^{-k\beta H/n}\rho(\beta/n,C)
+        e^{-(n-k-1)\beta H/n}\bigr)\right|
+        \le\|O\|\bigl(e^{J\beta/n}-1\bigr)^{n_C}Z^{(n-1)/n}
+        \bigl(\operatorname{tr}e^{-Y}\bigr)^{1/n}.
+    \end{align*}
+    As in that proof, $\operatorname{tr}e^{-Y}\le e^{(n_C+n_{B(C)})J\beta}Z$. Taking
+    $1/n$-th powers and using $Z^{(n-1)/n}Z^{1/n}=Z$ bounds the right side by
+    $\|O\|(e^{J\beta/n}-1)^{n_C}e^{(n_C+n_{B(C)})J\beta/n}Z$, and
+    $(n_C+n_{B(C)})J\beta/n\le Sn_CJ\beta/n$ as in the proof of
+    Theorem~\ref{thm:hastings_cluster_part_percb2}.
+\end{proof}
+
+\begin{theorem}[Products of cluster parts]
+    \label{thm:hastings_cluster_part_product}
+    \lean{TNLean.Lattice.ClusterExpansion.clusterPart_empty_empty,
+        TNLean.Lattice.ClusterExpansion.norm_trace_mul_list_prod_clusterPart_le_pow}
+    \leanok
+    \uses{def:hastings_cluster_part, thm:hastings_cluster_part_thermal}
+    Let $n\ge1$, and for each $j<n$ let $C_j$ be a cluster with boundary $B_j$ such that
+    $\|H_k\|\le J$ for $k\in C_j\cup B_j$ and $n_{C_j}+n_{B_j}\le Sn_{C_j}$. With
+    $y=(e^{J\beta/n}-1)e^{SJ\beta/n}$ and $\beta\ge0$, for every operator $O$,
+    \begin{align}
+        \left|\operatorname{tr}\bigl(O\rho(\beta/n,C_0)\rho(\beta/n,C_1)\cdots
+        \rho(\beta/n,C_{n-1})\bigr)\right|
+        \le\|O\|y^{\sum_jn_{C_j}}Z.
+        \label{eq:hastings_cluster_part_product}
+    \end{align}
+    A factor with $C_j=B_j=\emptyset$ is the thermal factor $e^{-\beta H/n}$, so this bounds
+    every product of thermal factors and cluster parts in the operator $\rho_m$
+    of~\cite[lines 1334--1341]{Hastings2006Solving}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:hastings_cluster_part, thm:hastings_cluster_part_thermal}
+    Put $Y_j=\beta(H-H_{C_j}-H_{B_j})$, so that $\rho(\beta/n,C_j)$ is the alternating sum of
+    the $e^{-(Y_j+\sum_{i\in E}\beta H_i)/n}$ over $E\subseteq C_j$. The bound for products of
+    alternating sums in the companion quantum-channel
+    volume~\cite[``Products of alternating sums, uniform form'']{QICLean2026Blueprint}, with
+    the operator $O$ before the first factor, the identity before the others, the weight $1/n$
+    on every factor and the terms $\beta H_i$ of norm at most $\beta J$, gives
+    \begin{align*}
+        \left|\operatorname{tr}\bigl(O\rho(\beta/n,C_0)\cdots\rho(\beta/n,C_{n-1})\bigr)\right|
+        \le\|O\|\prod_j\bigl(e^{J\beta/n}-1\bigr)^{n_{C_j}}
+        \bigl(\operatorname{tr}e^{-Y_j}\bigr)^{1/n}.
+    \end{align*}
+    As in the proof of Theorem~\ref{thm:hastings_cluster_part_thermal}, each
+    $(\operatorname{tr}e^{-Y_j})^{1/n}\le e^{Sn_{C_j}J\beta/n}Z^{1/n}$, and the $n$ factors
+    $Z^{1/n}$ multiply to $Z$.
+\end{proof}
