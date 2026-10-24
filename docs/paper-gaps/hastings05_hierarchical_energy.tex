@@ -81,11 +81,15 @@ of the ground energy.\footnote{\leanid{TNLean.MPS.AreaLaw.LocalSolution.card_le_
     in \doclink{TNLean/MPS/AreaLaw/LocalSolution/FinalStateEnergy}.}
 
 \section{The restriction}
-The chain of supersites is periodic (line 627). The binary tree of joining
+The chain of supersites is periodic (lines 626--628). The binary tree of joining
 operators covers the $N-1$ links $(k,k+1)$, $1\le k<N$, of the open chain,
 and the link $(N,1)$ joins the two halves of no block, so no window controls
 its energy. Bound~(\ref{eq:hastings05_hierarchical_energy_every_state})
-therefore concerns $M_{\rm open}=\sum_iM_i-M_{N,1}$, not $\sum_iM_i$.
+therefore concerns $M_{\rm open}=\sum_iM_i-M_{N,1}$, not $\sum_iM_i$. For the
+same reason the count of final states assumes the gap for $M_{\rm open}$,
+whereas the source's gap is that of $\sum_iM_i$; a gap of the periodic
+Hamiltonian does not give one for $M_{\rm open}$, so this is a hypothesis
+different from the source's and not only a narrower conclusion.
 Bounding the missing term by its norm adds about $2\|M_{N,1}\|$, of order
 $Jl_{\rm proj}$, which is far larger than the error in
 (\ref{eq:hastings05_hierarchical_energy_hchy}) and than the budget
