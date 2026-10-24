@@ -64,6 +64,43 @@
     $Y=\beta(H-H_C-H_{B(C)})$.
 \end{definition}
 
+\begin{theorem}[Removing a cluster and its boundary]
+    \label{thm:hastings_cluster_removal_trace}
+    \lean{TNLean.Lattice.ClusterExpansion.re_trace_exp_sub_sum_sub_sum_le}
+    \leanok
+    Let $H$ be Hermitian, let the terms $H_k$ with $k\in C\cup B(C)$ be Hermitian
+    with $\|H_k\|\le J$, and let $\beta\ge0$. Then, with
+    $Z=\operatorname{tr}e^{-\beta H}$,
+    \begin{align}
+        \operatorname{tr}e^{-\beta(H-H_C-H_{B(C)})}\le e^{(n_C+n_{B(C)})J\beta}Z.
+        \label{eq:hastings_cluster_removal_trace}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The triangle inequality gives
+    $\|\beta(H_C+H_{B(C)})\|\le(n_C+n_{B(C)})J\beta$, and the bound for a
+    Hermitian perturbation in the exponent in the companion quantum-channel
+    volume~\cite[``A Hermitian perturbation in the exponent'']{QICLean2026Blueprint},
+    applied to $-\beta H+\beta(H_C+H_{B(C)})$, gives the claim.
+\end{proof}
+
+\begin{theorem}[The boundary count in the exponent]
+    \label{thm:hastings_cluster_exp_count}
+    \lean{TNLean.Lattice.ClusterExpansion.exp_card_add_card_mul_le}
+    \leanok
+    Let $\|H_k\|\le J$ for $k\in C\cup B(C)$, let $\beta\ge0$, and suppose that
+    $n_C+n_{B(C)}\le Sn_C$. Then
+    $e^{(n_C+n_{B(C)})J\beta}\le\bigl(e^{SJ\beta}\bigr)^{n_C}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    If $C\cup B(C)$ is empty, both sides equal $1$. Otherwise $J\ge0$, so
+    $(n_C+n_{B(C)})J\beta\le Sn_CJ\beta$.
+\end{proof}
+
 \begin{theorem}[The bound on the cluster part]
     \label{thm:hastings_cluster_part_bound}
     \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_le}
@@ -87,7 +124,7 @@
 
 \begin{proof}
     \leanok
-    \uses{def:hastings_cluster_part}
+    \uses{def:hastings_cluster_part, thm:hastings_cluster_removal_trace}
     By~(\ref{eq:hastings_cluster_part}) with $E=C\setminus D$, the alternating-sum
     bound of the companion quantum-channel
     volume~\cite[``Alternating sums of shifted exponentials'']{QICLean2026Blueprint},
@@ -97,11 +134,8 @@
         \left|\operatorname{tr}\bigl(O\rho(\beta,C)\bigr)\right|
         \le\|O\|\bigl(e^{\beta J}-1\bigr)^{n_C}\operatorname{tr}e^{-Y}.
     \end{align*}
-    Since $-Y=-\beta H+\beta(H_C+H_{B(C)})$ and
-    $\|\beta(H_C+H_{B(C)})\|\le(n_C+n_{B(C)})J\beta$, the bound for a Hermitian
-    perturbation in the exponent in the same
-    volume~\cite[``A Hermitian perturbation in the exponent'']{QICLean2026Blueprint}
-    gives $\operatorname{tr}e^{-Y}\le e^{(n_C+n_{B(C)})J\beta}Z$.
+    Theorem~\ref{thm:hastings_cluster_removal_trace} gives
+    $\operatorname{tr}e^{-Y}\le e^{(n_C+n_{B(C)})J\beta}Z$.
 \end{proof}
 
 \begin{theorem}[The boundary count]
@@ -149,10 +183,9 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:hastings_cluster_part_bound}
-    If $C\cup B(C)$ is empty, both sides of~(\ref{eq:hastings_cluster_part_percb2})
-    agree with those of~(\ref{eq:hastings_cluster_part_bound}). Otherwise
-    $J\ge0$, so $(n_C+n_{B(C)})J\beta\le Sn_CJ\beta$, and
+    \uses{thm:hastings_cluster_part_bound, thm:hastings_cluster_exp_count}
+    By Theorem~\ref{thm:hastings_cluster_exp_count},
+    $e^{(n_C+n_{B(C)})J\beta}\le e^{SJ\beta n_C}$, and
     (\ref{eq:hastings_cluster_part_bound}) gives the claim.
 \end{proof}
 
@@ -184,4 +217,46 @@
     boundaries has at most $\sum_in_{B(C_i)}$ terms, so the union satisfies
     $n_C+n_{B(C)}\le Sn_C$. Theorem~\ref{thm:hastings_cluster_part_percb2} gives
     $\|O\|y^{\sum_in_{C_i}}Z=\|O\|\prod_iy^{n_{C_i}}Z$.
+\end{proof}
+
+\begin{theorem}[The cluster part between thermal factors]
+    \label{thm:hastings_cluster_part_thermal}
+    \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_mul_clusterPart_mul_exp_le_pow}
+    \leanok
+    \uses{thm:hastings_cluster_part_percb2}
+    In the setting of Theorem~\ref{thm:hastings_cluster_part_percb2}, let $n\ge1$ and
+    $0\le k\le n-1$, and put $y=(e^{J\beta/n}-1)e^{SJ\beta/n}$. Then
+    \begin{align}
+        \left|\operatorname{tr}\bigl(Oe^{-k\beta H/n}\rho(\beta/n,C)
+        e^{-(n-k-1)\beta H/n}\bigr)\right|
+        \le\|O\|y^{n_C}Z.
+        \label{eq:hastings_cluster_part_thermal}
+    \end{align}
+    This is the bound of~\cite[lines 1322--1333]{Hastings2006Solving}, multiplied by $Z$,
+    where $\rho(\beta)=e^{-\beta H}$; the source proves it as (percb2).
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:hastings_cluster_part, thm:hastings_cluster_removal_trace,
+        thm:hastings_cluster_exp_count}
+    Put $Y=\beta(H-H_C-H_{B(C)})$. As in the proof of
+    Theorem~\ref{thm:hastings_cluster_part_bound}, $\rho(\beta/n,C)$ is the alternating sum of
+    the $e^{-(Y+\sum_{i\in E}\beta H_i)/n}$ over $E\subseteq C$. The bound for alternating
+    sums between thermal factors in the companion quantum-channel
+    volume~\cite[``Alternating sums between thermal factors, uniform form'']{QICLean2026Blueprint},
+    with the weights $k/n$, $1/n$ and $(n-k-1)/n$ and the terms $\beta H_i$ of norm at most
+    $\beta J$, gives
+    \begin{align*}
+        \left|\operatorname{tr}\bigl(Oe^{-k\beta H/n}\rho(\beta/n,C)
+        e^{-(n-k-1)\beta H/n}\bigr)\right|
+        \le\|O\|\bigl(e^{J\beta/n}-1\bigr)^{n_C}Z^{(n-1)/n}
+        \bigl(\operatorname{tr}e^{-Y}\bigr)^{1/n}.
+    \end{align*}
+    Theorem~\ref{thm:hastings_cluster_removal_trace} gives
+    $\operatorname{tr}e^{-Y}\le e^{(n_C+n_{B(C)})J\beta}Z$. Taking
+    $1/n$-th powers and using $Z^{(n-1)/n}Z^{1/n}=Z$ bounds the right side by
+    $\|O\|(e^{J\beta/n}-1)^{n_C}e^{(n_C+n_{B(C)})J\beta/n}Z$, and
+    Theorem~\ref{thm:hastings_cluster_exp_count}, with $\beta/n$ in place of
+    $\beta$, bounds $e^{(n_C+n_{B(C)})J\beta/n}$ by $e^{SJ\beta n_C/n}$.
 \end{proof}

@@ -118,8 +118,8 @@ theorem qIndex_le_iIndex_of_isPrimitivePaper [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : IsPrimitivePaper A) :
-    qIndex A ≤ iIndex A := by
-  exact qIndex_le_iIndex A
+    qIndex A ≤ iIndex A :=
+  qIndex_le_iIndex A
     (hasEventuallyFullKrausRank_of_isPrimitivePaper A hNorm hPrim)
 
 /-! ## Part 2: Case (3) — noninvertible with nonzero eigenvalue gives `D²` -/
@@ -319,8 +319,8 @@ lemma wordSpan_eq_top_of_isPrimitivePaper_of_isUnit
     (hPrim : IsPrimitivePaper A)
     (i₀ : Fin d)
     (hInv : IsUnit (A i₀)) :
-    Kraus.wordSpan A (D ^ 2 - krausRank A + 1) = ⊤ := by
-  exact wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_isUnit
+    Kraus.wordSpan A (D ^ 2 - krausRank A + 1) = ⊤ :=
+  wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_isUnit
     A hNorm hPrim (Kraus.apply_mem_wordSpan_one A i₀) hInv
 
 /-- **Theorem 1, case (2)**: generator corollary of the one-step subspace theorem.
@@ -334,8 +334,8 @@ lemma iIndex_le_of_isPrimitivePaper_of_isUnit
     (hPrim : IsPrimitivePaper A)
     (i₀ : Fin d)
     (hInv : IsUnit (A i₀)) :
-    iIndex A ≤ D ^ 2 - krausRank A + 1 := by
-  exact iIndex_le_of_mem_wordSpan_one_of_isUnit
+    iIndex A ≤ D ^ 2 - krausRank A + 1 :=
+  iIndex_le_of_mem_wordSpan_one_of_isUnit
     A hNorm hPrim (Kraus.apply_mem_wordSpan_one A i₀) hInv
 
 /-! ## Part 4: Case (1) — General bound via blocking

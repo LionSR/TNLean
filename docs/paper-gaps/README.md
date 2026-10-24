@@ -1416,7 +1416,10 @@ variational bound is unaffected; the infinite expansion remains unformalized.
 locally* (arXiv:cond-mat/0508554v3, source lines 705–720), which the source asserts with
 "one may show". From a norm deficiency `b` of the last projection, the normalized image of
 the ground state has energy within `4 ‖M‖ b`, so `4 N J b_h` for `N` terms of norm at most
-`J`. That state lies in the span of the final states `α^h` rather than being one of them.
+`J`. That state lies in the span of the final states `α^h`. The spectral windows give
+the bound for every final state, with error `∑_m 2^{h-1-m} x_m`, for the links of the open
+chain; the wrap link `(N, 1)` of the periodic chain is the joining operator of no level and
+remains uncontrolled.
 
 ### Local solution of gapped Hamiltonians: the number of final states
 
