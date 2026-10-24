@@ -7,9 +7,14 @@ When the ground space is degenerate, the local approximations of the
 Hamiltonian determine the ground states only in a basis that diagonalizes
 their compressions to the ground space, and such a basis exists approximately
 when these compressions nearly commute. For translation-invariant systems they
-do \cite[lines 1603--1642]{Hastings2006Solving}. The following example shows
-that without translation invariance they need not
-\cite[lines 1655--1676]{Hastings2006Solving}.
+do \cite[lines 1603--1642]{Hastings2006Solving}. The source illustrates the
+failure without translation invariance by an example in which the local terms
+$H_i$ themselves have non-commuting compressions
+\cite[lines 1655--1676]{Hastings2006Solving}, and states that for long enough
+filtering times and projection ranges the filtered approximations inherit this.
+Only the statement about the terms $H_i$ is formalized here; the passage to the
+filtered approximations is not argued in the source and is not formalized
+\cite{gap:hastings05_low_energy_example}.
 
 On a chain of $m+3$ spins $1/2$, with sites $0,1,\ldots,m+2$, let
 \begin{align}
@@ -18,7 +23,8 @@ On a chain of $m+3$ spins $1/2$, with sites $0,1,\ldots,m+2$, let
     H_2=-S^y_0+S^z_2,\qquad
     H_i=S^z_i\quad(i\ge3),
 \end{align}
-and let $H=\sum_iH_i$.
+and let $H=\sum_iH_i$. The source does not specify the chain beyond site $0$;
+further sites with $H_i=S^z_i$ would only add scalars on the ground space.
 
 \begin{theorem}[The Hamiltonian of the example]
     \label{thm:hastings_low_energy_example_hamiltonian}

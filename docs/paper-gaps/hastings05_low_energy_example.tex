@@ -10,7 +10,7 @@
 \date{}
 \begin{document}
 \maketitle
-\gapnote{local-correction}{resolved}
+\gapnote{scope-restriction}{open}
 
 \section{The source example}
 Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
@@ -53,6 +53,19 @@ lists $H_0$ and $H_2$ as non-commuting. The compression of $H_0$ commutes with
 that of $H_i$ exactly for $i\geq3$, where $H_i=S^z_i$ is a scalar on the ground
 space.
 
+\section{The scope of the formalized statement}
+The source's claim is about the filtered local approximations: ``the $M_i$ need
+not commute in the low energy sector'' (line 1656). It reaches this from the
+terms $H_i$ through the remark that ``for large enough $q,l_{proj}$, the
+commutator of the $M_i$ in the low energy sector is close to that of the $H_i$
+in the low energy sector'' (lines 1665--1667), which is stated without
+argument. The formalized theorems concern the compressions of the $H_i$
+themselves. This is a scope restriction: the passage from the $H_i$ to the
+$M_i$ is not formalized. The source also leaves the chain unspecified beyond
+site~$0$; sites to the left of $0$ with $H_i=S^z_i$ would only add scalars on
+the ground space, and the formalized chain starts at site~$0$.
+
+\section{The formalization}
 Both corrections are local: the example is formalized with the sum
 (\ref{eq:hastings05_low_energy_example_sum}) and the range $i\geq3$, on a chain
 of $m+3$ sites.\footnote{\leanid{TNLean.Lattice.LowEnergyExample.hamiltonian_eq_diagonal},

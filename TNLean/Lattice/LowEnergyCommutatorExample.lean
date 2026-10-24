@@ -19,6 +19,15 @@ fail to commute, while `P H_0 P` commutes with `P H_i P` for every `i ≥ 3`. So
 compressions of local terms to a degenerate ground space need not commute without
 translation invariance, and the failure is localized near site `0`.
 
+**Scope restriction (the terms `H_i`, not their filtered versions):** the source's claim
+(line 1656) is that the filtered local approximations `M_i` need not commute in the low-energy
+sector. It reaches this from the `H_i` by the unargued remark that for large `q` and `l_proj`
+the low-energy commutators of the `M_i` are close to those of the `H_i` (lines 1665–1667).
+The theorems here concern the compressions of the `H_i` themselves; that step to the `M_i` is
+not formalized. The source's chain is not specified beyond site `0`; sites left of `0`, with
+`H_i = S^z_i`, would only add scalars on the ground space, so the chain starts at site `0`.
+Documented in `docs/paper-gaps/hastings05_low_energy_example.tex`.
+
 **Local fix (source slips):** the source writes `H = ∑_{i ≠ 0} S^z_i` (line 1660); the sum of
 the printed terms is `−S^z_1 + ∑_{i ≥ 2} S^z_i`. The ground space is still two-dimensional,
 with spin `1` up, and the commutator claims are unchanged. The source also says `H_0` commutes
