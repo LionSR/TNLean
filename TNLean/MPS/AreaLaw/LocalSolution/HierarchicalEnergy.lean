@@ -26,9 +26,10 @@ constant `4 N J b` in place of `N J O(·)`.
 
 **Scope restriction (the final state):** the state produced is the normalized image of `Ψ_a`,
 a unit vector in the span of the final states `α^h`, rather than one of the `α^h` themselves.
-The `α^h` are eigenvectors of the last pair operator, not of `∑_i M_i`, so the source's
-assertion for a single `α^h` is not derived here. The deficiency `b` of the last level is a
-hypothesis; it is bounded by an induction over the `h` levels of the projection.
+The bound holds for any sum of terms, including the link `(N, 1)` of the periodic chain.
+`FinalStateEnergy.lean` proves eq. `hchy` for every final state from the spectral windows,
+for the links of the open chain. The deficiency `b` of the last level is a hypothesis; it is
+bounded by an induction over the `h` levels of the projection.
 Documented in `docs/paper-gaps/hastings05_hierarchical_energy.tex`.
 
 ## Main results
