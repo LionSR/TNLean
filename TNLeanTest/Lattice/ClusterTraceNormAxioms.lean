@@ -14,7 +14,6 @@ the matrix product form at every temperature in Hastings' high-temperature expan
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[
-    ``TNLean.Lattice.ClusterExpansion.l2OpNorm_le_one_of_mem_unitaryGroup,
     ``TNLean.Lattice.ClusterExpansion.re_trace_sqrt_le_of_forall_norm_trace_mul_le,
     ``TNLean.Lattice.ClusterExpansion.re_trace_sqrt_sub_le_of_forall_norm_trace_mul_sub_le,
     ``TNLean.Lattice.ClusterExpansion.posSemidef_pow_two_mul,

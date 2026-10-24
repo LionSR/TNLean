@@ -9048,6 +9048,19 @@ spectral split → block extraction → MPV calculation → strict bounds
   `Lattice.hasSourceBoundedChange_liftOne`. The stage births call it with an
   empty prefix and the scalar idle vector; the former private copy is removed.
 
+### Distinguished symbol versus an embedded finite alphabet — candidate (2026-10-23)
+
+- **Pattern:** Evaluate an equality of finite words at one site, take the
+  natural values of the letters, and use the smaller alphabet's upper bound
+  to contradict equality with the distinguished symbol.
+- **Seen:** The two symmetric flag/binary cases of `qutritWord_injective`
+  in `MPS/AreaLaw/EntropyScaling/QutritFamily.lean`.
+- **Abstraction:** No additional helper is introduced: these are two uses in
+  one theorem. The positive chain length provides the chosen site, and the
+  existing `Fin` bound and `omega` close the contradiction.
+- **Notes:** The basis embeddings reuse Mathlib's `Orthonormal.comp`; the
+  complex square-root identities reuse `Complex.ofReal_sqrt_sq`.
+
 ### Product forms of ordered exponential products — candidate (2026-10-23)
 
 - **Pattern:** Apply closure under powers and list products, unpack membership in a mapped
