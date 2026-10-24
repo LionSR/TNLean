@@ -25,8 +25,11 @@ the same recursion. Every unit vector `φ` it keeps is kept by `P h 0` and has
 
 **Local fix (closing-link window):** the source states eq. `hchy` for `∑_i M_i` without
 mentioning the link `(N, 1)`, which the windows of its `h` levels do not control. Here the final
-states are those kept by one further window for that link, inside the space of the last level.
-Documented in `docs/paper-gaps/hastings05_hierarchical_energy.tex`.
+states are those kept by one further window for that link, inside the space of the last level,
+so eq. `hchy` and the count are proved for this corrected construction rather than for the
+source's own states `α^h`. The kept states are combinations of the `α^h`, and no matrix product
+form or bond dimension is claimed for them. Documented in
+`docs/paper-gaps/hastings05_hierarchical_energy.tex`.
 
 ## Main results
 
@@ -87,8 +90,9 @@ theorem norm_sub_closingLinkWindow_le (hP0 : ∀ k, P 0 k = 1)
   linarith
 
 /-- **eq. `hchy` for the periodic sum.** In the hierarchy of `re_inner_hierarchySum_le_add`,
-let `W` be Hermitian and `x_W ≥ 0`. Every unit vector `φ` kept by the window of `W` at
-`re⟨Ψ, W Ψ⟩` and `x_W` inside the range of the final projection `P h 0` satisfies
+let `W` be Hermitian and `x_W ≥ 0`; the construction takes `x_W = x h`, the radius for which
+`norm_sub_closingLinkWindow_le` bounds the deficiency. Every unit vector `φ` kept by the
+window of `W` at `re⟨Ψ, W Ψ⟩` and `x_W` inside the range of the final projection `P h 0` satisfies
 `re⟨φ, (T + W) φ⟩ ≤ re⟨Ψ, (T + W) Ψ⟩ + ∑ x + x_W`, where `T = hierarchySum M h 0`. With
 `W = M_{N,1}` and `Ψ = Ψ_a`, this is eq. `hchy` of Hastings, arXiv:cond-mat/0508554v3,
 `proj3new.tex`, lines 709–720, for `∑_i M_i` and each final state. -/

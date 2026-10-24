@@ -97,21 +97,32 @@ tree, and let $R$ project onto the eigenvectors of $QM_{N,1}Q$ in the range of
 $Q$ with eigenvalue within $x_h$ of $\langle\Psi_a,M_{N,1}\Psi_a\rangle$. This
 is the step of a further level whose second half is the whole space, so the
 one-level estimate gives
-\begin{align*}
+\begin{align}
  \|\Psi_a-R\Psi_a\|^2\le2D_h^2+\bigl((\varepsilon+2KD_h)/x_h\bigr)^2=D_{h+1}^2,
-\end{align*}
+ \label{eq:hastings05_hierarchical_energy_closing_deficiency}
+\end{align}
 with $D_m$ the deficiency recursion of the tree, $\varepsilon$ the residual
-and $K$ the norm bound of the links.\footnote{\leanid{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_closingLinkWindow_le}
+and $K$ the norm bound of the links. With the source's radii,
+$x_m=K(e+2D_m)^{1-s}$ for $\varepsilon=Ke$ and $s=1-1/h$, the closed form of the
+deficiencies applies at every level, the extra one included:
+$D_{h+1}\le(3^{h+1}-1)e^{s^{h+1}}$. Since $s^{h+1}=(1-1/h)\,s^h$ and
+$s^h\ge1/4$ for $h\ge2$, this is at most $3\cdot3^h e^{1/8}$ for $e\le1$, of the
+same kind as the bound $(3^h-1)e^{1/4}$ of the last level of the tree: polynomial in
+$N=2^h$ times a power of the residual $e$, which is exponentially small in
+$l_{\rm proj}/l_{\rm fac}$. Under the source's choice of $l_{\rm proj}$ it is
+therefore below $1$, so $R\Psi_a\ne0$ and at least one final state
+survives.\footnote{\leanid{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_closingLinkWindow_le}
     in \doclink{TNLean/MPS/AreaLaw/LocalSolution/ClosingLink}.}
 A unit vector $\phi$ with $R\phi=\phi$ has $Q\phi=\phi$ and
 $|\operatorname{Re}\langle\phi,M_{N,1}\phi\rangle-\langle\Psi_a,M_{N,1}\Psi_a\rangle|\le x_h$
 by (\ref{eq:hastings05_hierarchical_energy_window}), so adding this to
 (\ref{eq:hastings05_hierarchical_energy_every_state}) gives
-\begin{align*}
+\begin{align}
  \operatorname{Re}\langle\phi,\textstyle\sum_iM_i\,\phi\rangle
  \le\operatorname{Re}\langle\Psi_a,\textstyle\sum_iM_i\,\Psi_a\rangle
  +\sum_{m<h}2^{h-1-m}x_m+x_h,
-\end{align*}
+ \label{eq:hastings05_hierarchical_energy_periodic}
+\end{align}
 which is eq.~(\ref{eq:hastings05_hierarchical_energy_hchy}) for the periodic
 sum, and the count of at most $2n$ final states follows from the gap of
 $\sum_iM_i$ itself.\footnote{\leanid{TNLean.MPS.AreaLaw.LocalSolution.re_inner_hierarchySum_add_le_add}
@@ -120,8 +131,13 @@ $\sum_iM_i$ itself.\footnote{\leanid{TNLean.MPS.AreaLaw.LocalSolution.re_inner_h
     in \doclink{TNLean/MPS/AreaLaw/LocalSolution/ClosingLink}.}
 The final states are thus those kept by $R$, a subspace of the source's
 final space: the construction has one window more than the source states,
-and its error has one radius more. The open-chain statements remain as the
-case without the closing link.
+and its error has one radius more. Bound~(\ref{eq:hastings05_hierarchical_energy_periodic})
+and the count of at most $2n$ states are proved for this corrected
+construction, not for the source's own states $\alpha^h$, whose energy for the
+link $(N,1)$ remains uncontrolled. The eigenvectors of $QM_{N,1}Q$ are linear
+combinations of the $\alpha^h$, so the matrix product form of the kept states,
+and any bound on their bond dimension, is not claimed here. The open-chain
+statements remain as the case without the closing link.
 \bibliographystyle{unsrt}
 \bibliography{references}
 \end{document}
