@@ -19,7 +19,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 open ContinuousLinearMap
 variable {P : Type}
 
@@ -89,4 +89,4 @@ theorem restrict_localPart_eval_heq_of_sources_nil (f : P → Bool) {a b : Layou
         ((Word.frame r w).restrict f hs).eval
       exact hcomp.trans (heq_of_eq (ContinuousLinearMap.comp_id _))
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

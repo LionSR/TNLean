@@ -20,16 +20,20 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 noncomputable section
 open ContinuousLinearMap
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
+namespace Lattice.PartyCircuit
 private theorem eval_localEndpoint_tmul (r : Reg P)
     (A : r.space →L[ℂ] r.space) (tail : Layout P) (x : r.space) (y : Mem tail) :
     (Word.localEndpoint r A tail).eval (x ⊗ₜ[ℂ] y) = A x ⊗ₜ[ℂ] y := by
   simp [Word.localEndpoint, Word.eval, appendIso, isoL_apply,
     LinearIsometryEquiv.symm_lTensor]
 
-namespace SourceInventory
+end Lattice.PartyCircuit
+namespace Lattice.PartyCircuit.SourceInventory
+open TNLean.Lattice.PartyCircuit
 private theorem slotVector_cons_eq (r : PairSource P) (R : SourceInventory P)
     (U V : Fin (r :: R).length → HSpace) (η : ∀ i, U i ⊗[ℂ] V i) :
     slotVector (r :: R) U V η =
@@ -60,5 +64,5 @@ theorem eval_endpointWord_slotVector_tmul (R : SourceInventory P)
         comp_apply, eval_localEndpoint_tmul ⟨r.right, V 0⟩ (B 0) _ (v 0) _,
         lTensor_tmul, ih]
 
-end SourceInventory
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.SourceInventory
+end TNLean

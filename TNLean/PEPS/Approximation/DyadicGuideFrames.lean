@@ -58,7 +58,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame
+open EncodedFrame TNLean.Lattice.Sheet
 
 /-! ### The canonical tag holder -/
 

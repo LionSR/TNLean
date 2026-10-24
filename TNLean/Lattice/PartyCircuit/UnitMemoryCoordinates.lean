@@ -17,7 +17,7 @@ exactly the memory identification associated with the empty-list equality.
 -/
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 variable {P : Type}
 namespace Layout
 /-- Appending the scalar unit is the literal identification with an empty final
@@ -42,4 +42,4 @@ theorem appendIso_symm_tmul_one_eq_memCongr_symm (a : Layout P) (x : Mem a) :
   simpa only [LinearIsometryEquiv.apply_symm_apply, one_smul] using
     memCongr_append_nil_appendIso_symm_tmul a x 1
 end Layout
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

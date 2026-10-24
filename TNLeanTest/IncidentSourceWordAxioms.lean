@@ -13,8 +13,8 @@ set_option linter.hashCommand false
 
 run_cmd do
   let decls := #[
-    ``TNLean.PEPS.PairEffect.SourceCircuit.incidentSourceWord,
-    ``TNLean.PEPS.PairEffect.SourceCircuit.sources_incidentSourceWord
+    ``TNLean.Lattice.PartyCircuit.SourceCircuit.incidentSourceWord,
+    ``TNLean.Lattice.PartyCircuit.SourceCircuit.sources_incidentSourceWord
   ]
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv

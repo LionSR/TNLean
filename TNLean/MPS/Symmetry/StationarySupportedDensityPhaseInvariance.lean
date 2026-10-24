@@ -307,8 +307,8 @@ theorem eventually_cohomologousTo_of_continuous_unique_stationary_density
       ((ρ t).X (g⁻¹) : Matrix (Fin (D t)) (Fin (D t)) ℂ) * A t i *
         ((ρ t).X (g⁻¹) : Matrix (Fin (D t)) (Fin (D t)) ℂ)ᴴ)
     (t₀ : T) (hInj : Kraus.IsInjective (A t₀)) :
-    ∀ᶠ t in 𝓝 t₀, (ω t).CohomologousTo (ω t₀) := by
-  exact eventually_cohomologousTo_of_continuousOn_unique_stationary_density
+    ∀ᶠ t in 𝓝 t₀, (ω t).CohomologousTo (ω t₀) :=
+  eventually_cohomologousTo_of_continuousOn_unique_stationary_density
     D ω ρ B hB σ Set.univ isOpen_univ hσcont.continuousOn hσ htrace hfix
     (fun t _ => huniq t) K hK hsupport A hA hUnitary U hCov t₀ (Set.mem_univ t₀) hInj
 

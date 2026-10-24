@@ -18,7 +18,7 @@ Independently formalized; no upstream Lean proof text reused.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 namespace OriginalCircuit
 variable {P : Type}
 
@@ -49,9 +49,9 @@ theorem card_nonprivateLocations {a b : Layout P} (w : OriginalCircuit a b) :
     Fintype.card w.nonprivateLocations = w.nonprivateCount :=
   Nat.card_eq_fintype_card.symm.trans w.natCard_nonprivateLocations
 end OriginalCircuit
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 variable {P : Type}
 /-- The number of nonprivate occurrences involving a party over the whole
 original chronology. Source: polynomial-PEPS 04-compression.tex, lines 140–142. -/
@@ -75,9 +75,9 @@ def OriginalCircuit.participationLocationsEquiv {r : ℕ} {S δ : ℝ}
           ((w.isExpansionBounded_produce_iff r S).mpr hb)).participants g} :=
   (w.replacementLocationsEquiv hδ hb).subtypeEquiv (fun g ↦ by
     rw [w.participants_replacementLocationsEquiv hδ hb g])
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit
 
-namespace TNLean.PEPS.PairEffect.OriginalCircuit
+namespace TNLean.Lattice.PartyCircuit.OriginalCircuit
 variable {P : Type}
 
 /-- Replacement preserves each party's number of participating nonprivate
@@ -98,4 +98,4 @@ theorem participationCount_replacement_le {r b₀ : ℕ} {S δ : ℝ} {a b : Lay
     (w.produce.replacement hδ w.isAllowed_produce
       ((w.isExpansionBounded_produce_iff r S).mpr hb)).participationCount p ≤ b₀ :=
   (w.participationCount_replacement hδ hb p).trans_le (hlifetime p)
-end TNLean.PEPS.PairEffect.OriginalCircuit
+end TNLean.Lattice.PartyCircuit.OriginalCircuit

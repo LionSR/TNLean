@@ -58,6 +58,7 @@ open TNLean.Lattice (siteLift)
 noncomputable section
 
 namespace TNLean.PEPS.EncodedFrame
+open TNLean.Lattice.Sheet
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
 
@@ -229,7 +230,7 @@ end TNLean.PEPS.EncodedFrame
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame
+open EncodedFrame TNLean.Lattice.Sheet
 
 /-- The position of a site of `Λ_L = {1, …, L}²`: the zero-based coordinates `(i, j)` are the
 point `(i + 1, j + 1)`.

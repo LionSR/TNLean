@@ -23,7 +23,8 @@ and 565–588.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
 private theorem projectAllChoices_comp (A : P → Bool) {a b c : Layout P}
@@ -284,4 +285,4 @@ theorem restrict_partialWord_all_localPart_eval_heq_singleton_projection
     (some (⟨p, rfl⟩ : {_p : P // true = true})) hlift W V
     (selectedLocalPartComparison_circuit w p ξ)
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

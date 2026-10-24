@@ -26,7 +26,7 @@ noncomputable section
 
 open scoped TensorProduct Matrix Matrix.Norms.L2Operator
 
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
 variable {P m n : Type} [Fintype m] [Fintype n]
     (R : SourceInventory P) (U V U' V' : Fin R.length → HSpace)
@@ -85,4 +85,4 @@ theorem norm_sourceFrameMatrix_le_one
     (Word.comp (mapSourceSlots R U V U' V' f g ℓ) v)
     ⟨(mapSourceSlots_spec R U V U' V' f g hf hg ℓ).1, hv⟩ bIn bOut
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

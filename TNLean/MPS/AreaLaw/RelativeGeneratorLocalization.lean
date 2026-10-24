@@ -46,8 +46,7 @@ theorem ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
     let K' := (h.swappedDoubled D).operator
     let C := Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
     let Z := C.biUnion (fun X ↦ X.1)
-    let B := Finset.univ.filter (fun y : Fin L ↦
-      ∃ x ∈ Z, (Nat.dist x.val y.val : ℝ) ≤ ℓ)
+    let B := chainNeighborhood Z ℓ
     let G := QuantumCircuit.heisenbergEvolution K' t (K' - K)
     let b₀ : ℝ := ((2 ^ (2 * R + 1) : ℕ) : ℝ) * (2 * J)
     let a : ℝ := 2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
@@ -62,8 +61,7 @@ theorem ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
   let K' := g.operator
   let C := Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
   let Z := C.biUnion (fun X ↦ X.1)
-  let B := Finset.univ.filter (fun y : Fin L ↦
-    ∃ x ∈ Z, (Nat.dist x.val y.val : ℝ) ≤ ℓ)
+  let B := chainNeighborhood Z ℓ
   let G := heisenbergEvolution K' t (K' - K)
   let b₀ : ℝ := ((2 ^ (2 * R + 1) : ℕ) : ℝ) * (2 * J)
   let a : ℝ := 2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
@@ -78,8 +76,7 @@ theorem ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
       (A : Matrix (Fin L → Fin (q * q)) (Fin L → Fin (q * q)) ℂ)
       (hA : Entropy.IsSupportedOn (n := fun _ ↦ q * q) A S) :
       ‖heisenbergEvolution K' t A - siteExpectation (q * q)
-        (Finset.univ.filter (fun y : Fin L ↦
-          ∃ x ∈ S, (Nat.dist x.val y.val : ℝ) ≤ ℓ))
+        (chainNeighborhood S ℓ)
         (heisenbergEvolution K' t A)‖ ≤
           a * (S.card : ℝ) ^ 2 * ‖A‖ * Real.exp (v * |t| - ℓ / 2) := by
     exact norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
@@ -91,8 +88,7 @@ theorem ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
       ‖heisenbergEvolution K' t A - siteExpectation (q * q) B
         (heisenbergEvolution K' t A)‖ ≤
           2 * (a * (S.card : ℝ) ^ 2 * ‖A‖ * Real.exp (v * |t| - ℓ / 2)) := by
-    let N := Finset.univ.filter (fun y : Fin L ↦
-      ∃ x ∈ S, (Nat.dist x.val y.val : ℝ) ≤ ℓ)
+    let N := chainNeighborhood S ℓ
     have hNB : N ⊆ B := by
       intro y hy
       obtain ⟨x, hx, hxy⟩ := (Finset.mem_filter.mp hy).2

@@ -3,14 +3,14 @@
 
 \begin{definition}[Sources in prescribed pair slots]
     \label{def:peps_source_slots}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.ofSlots}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.ofSlots_nil}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.ofSlots_cons}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.isNormalized_ofSlots}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.layout_ofSlots_eq}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.partyPairs_ofSlots}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.slotLayout}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.prepareSlots}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.ofSlots}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.ofSlots_nil}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.ofSlots_cons}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.isNormalized_ofSlots}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.layout_ofSlots_eq}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.partyPairs_ofSlots}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.slotLayout}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.prepareSlots}
     \leanok
     \uses{def:peps_source_inventory}
     Following \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
@@ -33,8 +33,8 @@
 
 \begin{theorem}[A common order and endpoint orientation]
     \label{thm:peps_source_ordering}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.of_perm}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_ofSlots_expands}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.Expands.of_perm}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.exists_ofSlots_expands}
     \leanok
     \uses{def:peps_source_slots,def:peps_source_expansion}
     Let $R$ be a reference source list with distinct unordered pairs,
@@ -58,9 +58,9 @@
 
 \begin{definition}[Orthogonal sums of branch spaces]
     \label{def:peps_common_halfspaces}
-    \lean{TNLean.PEPS.PairEffect.PairSource.commonSpace}
-    \lean{TNLean.PEPS.PairEffect.PairSource.commonInclusion}
-    \lean{TNLean.PEPS.PairEffect.PairSource.commonProjection}
+    \lean{TNLean.Lattice.PartyCircuit.PairSource.commonSpace}
+    \lean{TNLean.Lattice.PartyCircuit.PairSource.commonInclusion}
+    \lean{TNLean.Lattice.PartyCircuit.PairSource.commonProjection}
     \leanok
     For the common-space construction in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
@@ -76,11 +76,11 @@
 
 \begin{theorem}[Embedding and recovering a pair source]
     \label{thm:peps_common_pair_source}
-    \lean{TNLean.PEPS.PairEffect.PairSource.commonProjection_commonInclusion}
-    \lean{TNLean.PEPS.PairEffect.PairSource.norm_commonProjection_le}
-    \lean{TNLean.PEPS.PairEffect.PairSource.commonVector}
-    \lean{TNLean.PEPS.PairEffect.PairSource.norm_commonVector}
-    \lean{TNLean.PEPS.PairEffect.PairSource.mapL_commonProjection_commonVector}
+    \lean{TNLean.Lattice.PartyCircuit.PairSource.commonProjection_commonInclusion}
+    \lean{TNLean.Lattice.PartyCircuit.PairSource.norm_commonProjection_le}
+    \lean{TNLean.Lattice.PartyCircuit.PairSource.commonVector}
+    \lean{TNLean.Lattice.PartyCircuit.PairSource.norm_commonVector}
+    \lean{TNLean.Lattice.PartyCircuit.PairSource.mapL_commonProjection_commonVector}
     \leanok
     \uses{def:peps_common_halfspaces}
     Each $j_\xi$ is isometric, $\|\pi_\xi\|\le1$, and
@@ -109,10 +109,10 @@
 
 \begin{theorem}[Local maps on a prepared pair]
     \label{thm:peps_map_source_pair}
-    \lean{TNLean.PEPS.PairEffect.Word.mapPair}
-    \lean{TNLean.PEPS.PairEffect.Word.mapPair_spec}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_mapPair_tmul}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_mapPair_source}
+    \lean{TNLean.Lattice.PartyCircuit.Word.mapPair}
+    \lean{TNLean.Lattice.PartyCircuit.Word.mapPair_spec}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_mapPair_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_mapPair_source}
     \leanok
     \uses{def:peps_party_layout,def:peps_source_inventory}
     Let $A:U\to U'$ and $B:V\to V'$ be continuous linear maps at the
@@ -138,7 +138,7 @@
 
 \begin{theorem}[Local contractions with a prepared tail]
     \label{thm:peps_source_cons_mapL}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.cons_mapL}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.Expands.cons_mapL}
     \leanok
     \uses{def:peps_source_inventory,def:peps_source_expansion}
     In the local contraction step of
@@ -170,10 +170,10 @@
 
 \begin{theorem}[Common spaces for normalized source lists]
     \label{thm:peps_common_source_lists}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.common_ofSlots_expands}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_common_expansions}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_prepareSlots_recovery}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_prepareSlots_expands}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.common_ofSlots_expands}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.exists_common_expansions}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.exists_prepareSlots_recovery}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.exists_prepareSlots_expands}
     \leanok
     \uses{def:peps_source_slots,def:peps_common_halfspaces,def:peps_source_expansion}
     Let $(S_\xi)_{\xi\in\Xi}$ be a finite family of normalized source
@@ -206,8 +206,8 @@
 
 \begin{theorem}[Local factorization in common private spaces]
     \label{thm:peps_common_party_maps}
-    \lean{TNLean.PEPS.PairEffect.Word.exists_common_source_preparation}
-    \lean{TNLean.PEPS.PairEffect.Word.exists_common_prepared_tensorPartyMaps}
+    \lean{TNLean.Lattice.PartyCircuit.Word.exists_common_source_preparation}
+    \lean{TNLean.Lattice.PartyCircuit.Word.exists_common_prepared_tensorPartyMaps}
     \leanok
     \uses{def:peps_source_slots,def:peps_party_registers}
     For the common private spaces in
@@ -249,7 +249,7 @@
 
 \begin{theorem}[The weighted gate in common private spaces]
     \label{thm:peps_common_source_gate}
-    \lean{TNLean.PEPS.PairEffect.Word.exists_common_source_gate}
+    \lean{TNLean.Lattice.PartyCircuit.Word.exists_common_source_gate}
     \leanok
     \uses{def:peps_source_slots,def:peps_party_registers}
     In the common-space form of
@@ -284,7 +284,7 @@
 
 \begin{theorem}[Finite coordinates for a finite family of source vectors]
     \label{thm:peps_finite_pair_coordinates}
-    \lean{TNLean.PEPS.PairEffect.PairSource.exists_finite_coordinates}
+    \lean{TNLean.Lattice.PartyCircuit.PairSource.exists_finite_coordinates}
     \leanok
     For the source vectors used in the Schmidt decompositions of
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
@@ -312,8 +312,8 @@
 
 \begin{theorem}[Source preparations in finite coordinates]
     \label{thm:peps_finite_source_coordinates}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.ofSlots_mapIsometry_expands}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_finite_coordinate_expansions}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.ofSlots_mapIsometry_expands}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.exists_finite_coordinate_expansions}
     \leanok
     \uses{def:peps_source_slots,def:peps_source_expansion}
     Fix a finite source list, common halfspaces $U_e,V_e$, and a finite
@@ -343,9 +343,9 @@
 
 \begin{theorem}[The source-gate expansion in finite coordinates]
     \label{thm:peps_finite_source_gate}
-    \lean{TNLean.PEPS.PairEffect.Word.exists_finite_source_preparation}
-    \lean{TNLean.PEPS.PairEffect.Word.exists_finite_prepared_tensorPartyMaps}
-    \lean{TNLean.PEPS.PairEffect.Word.exists_finite_source_gate}
+    \lean{TNLean.Lattice.PartyCircuit.Word.exists_finite_source_preparation}
+    \lean{TNLean.Lattice.PartyCircuit.Word.exists_finite_prepared_tensorPartyMaps}
+    \lean{TNLean.Lattice.PartyCircuit.Word.exists_finite_source_gate}
     \leanok
     \uses{def:peps_source_slots,def:peps_party_registers}
     In the exact finite-coordinate form of

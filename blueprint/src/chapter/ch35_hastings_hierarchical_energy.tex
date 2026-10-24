@@ -1,0 +1,70 @@
+\section{The energy of the final state of Hastings' hierarchical construction}
+\label{sec:hastings05_hierarchical_energy}
+
+% Hastings, arXiv:cond-mat/0508554v3, proj3new.tex, lines 705--720 (eq. hchy).
+
+At the end of the hierarchical construction \cite{Hastings2006Solving}
+states that, once the deficiency $b_h$ of the last level is small, some final
+state has energy close to that of the ground state, eq.~(hchy) at
+lines 709--720; the source writes ``one may show''. The step from the
+deficiency of the final projection to the energy is the following. Here the
+deficiency is measured in norm, as in
+Section~\ref{sec:hastings05_hierarchical_projection}, and the state produced
+is the normalized image of the ground state, which lies in the span of the
+final states \cite{gap:hastings05_hierarchical_energy}.
+
+\begin{theorem}[Energies of nearby unit vectors]
+    \label{thm:hastings05_energy_nearby}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.abs_re_inner_sub_re_inner_le}
+    \leanok
+    For unit vectors $\phi$, $\psi$ and every operator $M$,
+    $|\operatorname{Re}\langle\phi,M\phi\rangle-\operatorname{Re}\langle\psi,M\psi\rangle|
+        \le2\|M\|\,\|\phi-\psi\|$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    $\langle\phi,M\phi\rangle-\langle\psi,M\psi\rangle
+        =\langle\phi-\psi,M\phi\rangle+\langle\psi,M(\phi-\psi)\rangle$,
+    and each term has modulus at most $\|M\|\,\|\phi-\psi\|$.
+\end{proof}
+
+\begin{theorem}[Normalizing the image under one projection]
+    \label{thm:hastings05_normalization_one}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_inv_norm_smul_toEuclideanLin_sub_le_two_mul}
+    \leanok
+    If the orthogonal projection $Q$ moves the unit vector $\psi$ by at most $b$,
+    then $\|Q\psi/\|Q\psi\|-\psi\|\le2b$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Normalizing a vector $v$ moves it by $|1-\|v\||\le\|v-\psi\|$, so the
+    normalized image is within $2\|Q\psi-\psi\|$ of $\psi$.
+\end{proof}
+
+\begin{theorem}[A final state of nearly the ground-state energy]
+    \label{thm:hastings05_hchy}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.exists_mem_range_re_inner_le_add,
+        TNLean.MPS.AreaLaw.LocalSolution.exists_mem_range_re_inner_sum_le_add}
+    \leanok
+    \uses{thm:hastings05_energy_nearby, thm:hastings05_normalization_one}
+    Let $Q$ be an orthogonal projection that moves the unit vector $\Psi$ by at
+    most $b<1$. Then some unit vector $\phi$ with $Q\phi=\phi$ and
+    $\|\phi-\Psi\|\le2b$ satisfies, for every operator $M$,
+    \begin{align*}
+        \operatorname{Re}\langle\phi,M\phi\rangle
+        \le\operatorname{Re}\langle\Psi,M\Psi\rangle+4\|M\|b.
+    \end{align*}
+    For $M=\sum_{i<N}M_i$ with $\|M_i\|\le J$ the error is at most $4NJb$. With
+    $Q$ the projection onto the final states and $b=b_h$ this is
+    eq.~(hchy) of~\cite[lines 709--720]{Hastings2006Solving}, with the explicit
+    constant $4NJb_h$, for a unit vector in the span of the final states
+    $\alpha^h$ rather than one of them \cite{gap:hastings05_hierarchical_energy}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:hastings05_energy_nearby, thm:hastings05_normalization_one}
+    Since $\|Q\Psi\|\ge1-b>0$, take $\phi=Q\Psi/\|Q\Psi\|$. Then $Q\phi=\phi$,
+    $\|\phi-\Psi\|\le2b$ by Theorem~\ref{thm:hastings05_normalization_one}, and
+    Theorem~\ref{thm:hastings05_energy_nearby} gives the energy bound; for the
+    sum, $\|M\|\le NJ$.
+\end{proof}

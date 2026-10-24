@@ -38,13 +38,13 @@ The generic statements of this file are candidates for QICLean.
 
 ## Main results
 
-* `TNLean.PEPS.Approximation.sum_norm_sq_le_traceNorm_reindex_sq` — the sum of
+* `TNLean.Lattice.Compression.sum_norm_sq_le_traceNorm_reindex_sq` — the sum of
   the squared moduli of all entries is at most the squared trace norm.
-* `TNLean.PEPS.Approximation.exists_ne_zero_norm_sq_le_of_sum` — selection of
+* `TNLean.Lattice.Compression.exists_ne_zero_norm_sq_le_of_sum` — selection of
   one index from the two square-summed families.
-* `TNLean.PEPS.Approximation.exists_phase_normalize_sub_le` — the
+* `TNLean.Lattice.Compression.exists_phase_normalize_sub_le` — the
   normalization step in an arbitrary complex normed space.
-* `TNLean.PEPS.Approximation.exists_column_ne_zero_of_traceNorm_sub_pure_le` —
+* `TNLean.Lattice.Compression.exists_column_ne_zero_of_traceNorm_sub_pure_le` —
   the vector part of Lemma 8.1.
 
 ## References
@@ -58,7 +58,7 @@ noncomputable section
 
 open scoped Matrix Matrix.Norms.Frobenius ComplexOrder
 
-namespace TNLean.PEPS.Approximation
+namespace TNLean.Lattice.Compression
 
 section Frobenius
 
@@ -271,4 +271,4 @@ theorem exists_eq_column_ne_zero_of_traceNorm_sub_pure_le (e : ι ≃ Fin n)
 
 end Column
 
-end TNLean.PEPS.Approximation
+end TNLean.Lattice.Compression

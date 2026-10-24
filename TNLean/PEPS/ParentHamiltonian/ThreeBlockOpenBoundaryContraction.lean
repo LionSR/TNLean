@@ -19,7 +19,7 @@ Source: SCP10, arXiv:1001.3807, Theorem 5.4.
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS.ThreeBlockDependent
-open DependentBondNetwork
+open TNLean.Lattice.DependentBondNetwork
 
 /-- The twelve virtual incidences at the three core tensors. -/
 abbrev CoreEndpoint := {p : Endpoint Bond // endpointVertex tail head p ∈ coreVertices}

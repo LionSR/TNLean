@@ -299,35 +299,6 @@ namespace ScanData
 
 variable {X : ScannerExponents} {κ : ScanConstants} {n : ℕ} (S : ScanData X κ n)
 
-/-- Old-leaf eighth-root integrals are nonnegative. -/
-lemma integral_etaOld_rpow_nonneg (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) (i : S.ι)
-    (h : (S.round r).H) :
-    0 ≤ ∫ θ, (S.round r).etaOld i h θ ^ (1 / 8 : ℝ) ∂((S.round r).μOld k p h) :=
-  integral_nonneg fun θ ↦ Real.rpow_nonneg (S.histories.etaOld_nonneg r i h θ) _
-
-/-- New-leaf eighth-root integrals are nonnegative. -/
-lemma integral_etaNew_rpow_nonneg (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) (i : S.ι)
-    (h : (S.round r).H) (c : (S.round r).Ch h) :
-    0 ≤ ∫ θ, (S.round r).etaNew i h c θ ^ (1 / 8 : ℝ) ∂((S.round r).μNew k p h c) :=
-  integral_nonneg fun θ ↦ Real.rpow_nonneg (S.histories.etaNew_nonneg r i h c θ) _
-
-open Classical in
-/-- The leaf sum of one term is nonnegative for `p ∈ (0, 1)`. -/
-lemma termEnergy_nonneg (r : Fin (X.rounds n)) (k : ℕ) {p : ℝ} (hp : p ∈ Ioo (0 : ℝ) 1)
-    (i : S.ι) : 0 ≤ (S.round r).termEnergy k p i := by
-  unfold ScanRound.termEnergy
-  refine add_nonneg (Finset.sum_nonneg fun h _ ↦ ?_)
-    (Finset.sum_nonneg fun h _ ↦ Finset.sum_nonneg fun c _ ↦ ?_)
-  · split_ifs
-    · exact mul_nonneg (mul_nonneg (by linarith [hp.2]) (S.histories.w_nonneg r h))
-        (S.integral_etaOld_rpow_nonneg r k p i h)
-    · exact le_rfl
-  · split_ifs
-    · exact mul_nonneg (mul_nonneg (mul_nonneg hp.1.le (S.histories.w_nonneg r h))
-        (S.histories.q_nonneg r h c))
-        (S.integral_etaNew_rpow_nonneg r k p i h c)
-    · exact le_rfl
-
 open Classical in
 /-- Old good leaves: Hölder's inequality over histories, split terms and `θ` at an interior
 interpolation parameter (`08-scanner.tex`, lines 495–501). -/

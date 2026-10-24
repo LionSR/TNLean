@@ -27,10 +27,10 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
-end TNLean.PEPS.PairEffect.Word
-namespace TNLean.PEPS.PairEffect.Layout
+end TNLean.Lattice.PartyCircuit.Word
+namespace TNLean.Lattice.PartyCircuit.Layout
 variable {P X Y d e I T : Type} [Fintype X] [Fintype Y] [Fintype d] [Fintype e]
     [Fintype I] [Fintype T]
 
@@ -125,4 +125,4 @@ theorem mapOwner_mapOwner_coordinates_eq_separated {Q R : Type}
   exact partition_coordinates_eq_separated f a' b' L h bA bE bD bF
     v v' F G tau _ k hz x y i j
 
-end TNLean.PEPS.PairEffect.Layout
+end TNLean.Lattice.PartyCircuit.Layout

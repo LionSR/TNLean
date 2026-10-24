@@ -85,11 +85,6 @@ attribute [local instance 1001]
 
 /-! ### The fixed points of the blocks in the full bond space -/
 
-private theorem posSemidef_embeddedBlockState {D' : ℕ} (ι : Fin D' → Fin D)
-    {σ : Matrix (Fin D') (Fin D') ℂ} (hσ : σ.PosSemidef) :
-    (embeddedBlockState ι σ).PosSemidef :=
-  hσ.mul_mul_conjTranspose_same _
-
 /-- The pair of a block embedded along `ι` is the pair of the embedded fixed point:
 `ι_* ω(σ) = ω(E σ Eᴴ)`. -/
 theorem embedPair_fixedPointPair {D' : ℕ} {ι : Fin D' → Fin D} (hι : Function.Injective ι)

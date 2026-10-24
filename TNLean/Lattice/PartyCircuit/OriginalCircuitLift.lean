@@ -24,13 +24,13 @@ lines 658–667).
 
 ## Main definitions
 
-* `PairEffect.OriginalCircuit.castLayouts`, `PairEffect.OriginalCircuit.frameList`,
-  `PairEffect.OriginalCircuit.appendTail`.
+* `PartyCircuit.OriginalCircuit.castLayouts`, `PartyCircuit.OriginalCircuit.frameList`,
+  `PartyCircuit.OriginalCircuit.appendTail`.
 
 ## Main results
 
-* `PairEffect.OriginalCircuit.eval_frameList_appendIso_symm`,
-  `PairEffect.OriginalCircuit.eval_appendTail_appendIso_symm` : the operators beside
+* `PartyCircuit.OriginalCircuit.eval_frameList_appendIso_symm`,
+  `PartyCircuit.OriginalCircuit.eval_appendTail_appendIso_symm` : the operators beside
   spectators.
 * `nonprivateCount_*`, `participants_*_subset`, `isExpansionBounded_*`, `isMonomialBounded_*` :
   the gate data are unchanged.
@@ -46,7 +46,7 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 variable {P : Type}
 
@@ -236,4 +236,4 @@ theorem isMonomialBounded_appendTail {a b : Layout P} (c : OriginalCircuit a b) 
 
 end OriginalCircuit
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

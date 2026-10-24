@@ -22,7 +22,7 @@ No injectivity assumption on the owner map is required.
 noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.Layout
+namespace TNLean.Lattice.PartyCircuit.Layout
 variable {P Q : Type}
 
 /-- The selected memory contains the same ordered tensor factors before and
@@ -186,4 +186,4 @@ theorem partitionIso_of_forall_false (g : P → Bool) (a : Layout P)
         LinearIsometryEquiv.coe_toLinearEquiv,
         TensorProduct.mk_apply] using hstep
 
-end TNLean.PEPS.PairEffect.Layout
+end TNLean.Lattice.PartyCircuit.Layout

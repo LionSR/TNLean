@@ -19,7 +19,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
 private theorem clm_heq_of_identity_intertwining {A B A' B' : HSpace}
     (ha : A' = A) (hb : B' = B)
@@ -49,4 +49,4 @@ theorem eval_mapOwner_heq {P Q : Type} (f : P → Q) {a b : Layout P}
     (Layout.mapOwnerIso_apply_heq f a) (Layout.mapOwnerIso_apply_heq f b)
     (eval_mapOwner f w)
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

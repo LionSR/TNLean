@@ -27,7 +27,7 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect.PairSource
+namespace TNLean.Lattice.PartyCircuit.PairSource
 
 variable {ι : Type} [Fintype ι]
 
@@ -86,4 +86,4 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 260–267. -/
   | tmul x y => simp
   | add x y hx hy => simp only [map_add, hx, hy]
 
-end TNLean.PEPS.PairEffect.PairSource
+end TNLean.Lattice.PartyCircuit.PairSource

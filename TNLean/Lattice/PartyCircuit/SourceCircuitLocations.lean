@@ -22,7 +22,7 @@ reused.
 
 noncomputable section
 
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 
 variable {P : Type}
 
@@ -200,4 +200,4 @@ theorem isTouched_gate_iff (A : P → Bool) {C ι : Type} [Fintype C] [Fintype �
     IsTouched A (.gate owner G tail) () ↔ ∃ p : C, A (owner p) = true := by
   simp [IsTouched, participants]
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

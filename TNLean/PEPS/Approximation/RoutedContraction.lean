@@ -33,7 +33,7 @@ dimension at most `D ^ m`.
 
 No injectivity, isometry, translation-invariance, or uniform-dimension assumption is made.
 
-Party networks and their coefficients are defined in `TNLean.PEPS.Approximation.PartyNetwork`.
+Party networks and their coefficients are defined in `TNLean.Lattice.Compression.PartyNetwork`.
 
 ## Main results
 
@@ -55,6 +55,7 @@ noncomputable section
 open scoped BigOperators
 
 namespace TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 
 
 variable {V : Type*} [Fintype V] [LinearOrder V]

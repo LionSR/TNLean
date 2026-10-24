@@ -27,7 +27,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 open ContinuousLinearMap
 variable {P : Type}
 
@@ -220,4 +220,4 @@ theorem isExpansionBounded_physicalFirstOutput (K : ℕ) (S : ℝ) :
       w.IsExpansionBounded K S :=
   ⟨fun h ↦ h.1, fun h ↦ ⟨h, isExpansionBounded_exchangeBlocks aux physical priv K S⟩⟩
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

@@ -125,6 +125,17 @@ becomes unused, so these are deleted: `siteSplit`, `rectKronecker_submatrix_site
 `configurationSplit_eq_siteSplit` and `exists_operator_submatrix_eq`, all in namespace
 `TNLean.PEPS.AreaLaw`.
 
+### Local dimension one (21 October 2026)
+
+`TNLean.Lattice.regionEntropy_eq_zero_of_localDimension_one` is now stated
+for every finite site type `V`. It replaces the unused chain-specific
+`TNLean.MPS.AreaLaw.regionEntropy_eq_zero_of_localDimension_one`; no alias is
+retained. Its importing axiom check and blueprint association use the shared
+name. The PEPS theorem `TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_q_eq_one`
+keeps its statement and follows from the same result through
+`regionalEntropy_eq_regionEntropy`. Both assertions express the vanishing
+entropy of every region when each local space is one-dimensional.
+
 ### Deferred: one Hamiltonian model for the chain and the lattice domains
 
 The two Hamiltonian structures could become instances of one structure over a finite site
