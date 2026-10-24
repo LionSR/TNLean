@@ -34,7 +34,7 @@ noncomputable section
 open scoped InnerProductSpace TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 variable {P : Type} {ℓX ℓY : Layout P}
 
@@ -90,4 +90,4 @@ lemma partyPairEffectElimination_with_grouped_sources {m r : ℕ} (hm : m ≠ 0)
   exact ⟨h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11,
     fun q hq ↦ q.2.exists_grouped_source_preparation (h6 q hq)⟩
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

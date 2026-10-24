@@ -21,10 +21,11 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
-namespace SourceCircuit
+namespace Lattice.PartyCircuit.SourceCircuit
 variable {a b : Layout P}
 variable (w : SourceCircuit a b) (k : ℕ)
   (lam : ∀ e : sourceLocations w, branchLabels w e.1 →
@@ -72,5 +73,5 @@ theorem sampledEndpointInputWord_none_eval_heq_id
   exact (heq_of_eq hc).trans ((Word.eval_castLayouts_heq _ _ _).trans
     (sampledEndpointWord_none_eval_heq_id w k lam E F ξ ζ j ω))
 
-end SourceCircuit
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.SourceCircuit
+end TNLean

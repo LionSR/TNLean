@@ -98,8 +98,8 @@ theorem openSuffixParentHamiltonianES_C2 (A : MPSTensor d D)
     {L N n : ℕ} (hL : 0 < L) (hLn : L ≤ n) (hnN : n ≤ N) :
     LinearMap.id -
         (LinearMap.ker (openSuffixParentHamiltonianES A L L N n)).starProjection.toLinearMap ≤
-      openSuffixParentHamiltonianES A L L N n := by
-  exact (openSuffixParentHamiltonianES_eq_id_sub_starProjection_ker
+      openSuffixParentHamiltonianES A L L N n :=
+  (openSuffixParentHamiltonianES_eq_id_sub_starProjection_ker
     A hL hLn hnN).symm.le
 
 /-- Quadratic-form version of condition C2 with \(\gamma_L=1\). -/

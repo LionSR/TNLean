@@ -157,8 +157,8 @@ private theorem primitiveCubeRoot_two_pow_not_tendsto (z : ℂ) :
 `primitiveCubeRoot`.
 
 Source: arXiv:1606.00608, equations `eq:II_ABasicTensors` and `II_CF1`, lines 219--246. -/
-noncomputable def cubePhaseCanonicalData : CPSVCanonicalFormData cubePhaseTensor := by
-  exact CPSVCanonicalFormData.ofBlocks
+noncomputable def cubePhaseCanonicalData : CPSVCanonicalFormData cubePhaseTensor :=
+  CPSVCanonicalFormData.ofBlocks
     (fun _ => by simp) cubePhaseWeight cubePhaseWeight_ne_zero (fun _ => scalarUnitTensor)
     (fun _ => scalarUnitTensor_isNormalTensor)
 

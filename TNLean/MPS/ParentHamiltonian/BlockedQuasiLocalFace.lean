@@ -51,8 +51,8 @@ theorem groundSpace_support_blockTensor_iff
       (groundSpaceProjectionMatrix A N)) = 1) ↔
     (∀ (a : ℤ) (N : ℕ), 0 < N → (quasiLocalBlockingFunctional d L).symm φ
       (quasiLocalIntervalObservable (blockPhysDim d L) a N
-        (groundSpaceProjectionMatrix (blockTensor A L) N)) = 1) := by
-  exact (quasiLocalState_groundSpaceProjection_eq_one_iff_aligned A φ hφ
+        (groundSpaceProjectionMatrix (blockTensor A L) N)) = 1) :=
+  (quasiLocalState_groundSpaceProjection_eq_one_iff_aligned A φ hφ
     (NeZero.pos L)).trans
     (groundSpace_support_blockTensor_iff_aligned_of_positive_lengths A L φ).symm
 

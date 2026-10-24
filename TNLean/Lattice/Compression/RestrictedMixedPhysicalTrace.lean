@@ -20,7 +20,8 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 574–579.
 
 noncomputable section
 open scoped Matrix
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
+open TNLean.Lattice.PartyCircuit
 
 /-- The mixed coordinate trace for arbitrary source-free words is formed before
 the actual sampled words are substituted. Source: polynomial-PEPS Theorem 5.2,
@@ -37,4 +38,4 @@ def restrictedMixedPhysicalTrace {Q I X E : Type}
       LinearMap.toMatrix B.toBasis B.toBasis (v.restrict f hv).eval.toLinearMap *
       (Matrix.of (fun row col ↦ C.repr ((t.restrict f ht).eval (B col)) row))ᴴ)
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

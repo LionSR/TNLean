@@ -26,8 +26,8 @@ and its two-site blocking are both in vertical canonical form.
 Source: arXiv:1606.00608, Appendix C.4, lines 1951--1956. -/
 theorem verticalCF_and_blockTwo_of_horizontalCF (M : MPOTensor d D)
     (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
-    IsVerticalCF M ∧ IsVerticalCF (blockTwo M) := by
-  exact ⟨verticalCF_of_horizontalCF M hHorizontal hM,
+    IsVerticalCF M ∧ IsVerticalCF (blockTwo M) :=
+  ⟨verticalCF_of_horizontalCF M hHorizontal hM,
     verticalCF_of_horizontalCF (blockTwo M) hHorizontal.blockTwo hM.blockTwo⟩
 
 end MPOTensor

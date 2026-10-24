@@ -18,12 +18,12 @@ set_option linter.hashCommand false
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
-  for decl in #[``TNLean.PEPS.PairEffect.SourceCircuit.sourcePrivatePreparation,
-      ``TNLean.PEPS.PairEffect.SourceCircuit.sources_sourcePrivatePreparation,
-      ``TNLean.PEPS.PairEffect.SourceCircuit.partialSourceWord,
-      ``TNLean.PEPS.PairEffect.SourceCircuit.sources_partialSourceWord,
-      ``TNLean.PEPS.PairEffect.SourceCircuit.eval_sourcePrivatePreparation_tmul,
-      ``TNLean.PEPS.PairEffect.SourceCircuit.eval_partialSourceWord_tmul] do
+  for decl in #[``TNLean.Lattice.PartyCircuit.SourceCircuit.sourcePrivatePreparation,
+      ``TNLean.Lattice.PartyCircuit.SourceCircuit.sources_sourcePrivatePreparation,
+      ``TNLean.Lattice.PartyCircuit.SourceCircuit.partialSourceWord,
+      ``TNLean.Lattice.PartyCircuit.SourceCircuit.sources_partialSourceWord,
+      ``TNLean.Lattice.PartyCircuit.SourceCircuit.eval_sourcePrivatePreparation_tmul,
+      ``TNLean.Lattice.PartyCircuit.SourceCircuit.eval_partialSourceWord_tmul] do
     unless env.contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl

@@ -23,7 +23,7 @@ reused.
 noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.SourceInventory
+namespace TNLean.Lattice.PartyCircuit.SourceInventory
 variable {P : Type}
 
 /-- Inventories with the same ordered register layout differ only in their vectors.
@@ -57,9 +57,9 @@ private theorem exists_ofSlots_of_layout_eq (R S : SourceInventory P)
             | succ i => exact hη i
           · rw [ofSlots_cons]
             exact congrArg (List.cons (⟨p, q, hpq, U, V, η₁⟩ : PairSource P)) heq
-end TNLean.PEPS.PairEffect.SourceInventory
+end TNLean.Lattice.PartyCircuit.SourceInventory
 
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 /-- Original source positions retained after grouping all exterior parties.
@@ -202,4 +202,4 @@ theorem exists_partial_source_preparation (A : P → Bool) {a b : Layout P}
   · intro ξ
     rw [Word.eval_comp, comp_assoc, hde, Word.eval_eq_localPart_comp_prepare]
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

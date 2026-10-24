@@ -20,7 +20,7 @@ Independently formalized; no upstream Lean proof text reused.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 /-- The occurrences expanded by the all-party partial expansion are precisely
@@ -67,4 +67,4 @@ theorem allChoicesNonemptyLabelsEquiv_apply {a b : Layout P} (w : SourceCircuit 
     allChoicesNonemptyLabelsEquiv w ξ g =
       choiceAt (fun _ => true) w ξ g.1 ((isTouched_all_iff w g.1).mpr g.2) := rfl
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

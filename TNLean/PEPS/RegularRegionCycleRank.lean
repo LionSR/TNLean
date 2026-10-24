@@ -102,8 +102,8 @@ theorem regionGroupOrder_pow_div_pow_eq_cycleRank (R : Finset V)
         (Fintype.card {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R} + 1) /
         (Fintype.card G : ℂ) ^ R.card =
       (Fintype.card G : ℂ) ^
-        (Fintype.card {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R} + 1 - R.card) := by
-  exact (pow_sub₀ (Fintype.card G : ℂ) (Nat.cast_ne_zero.mpr Fintype.card_ne_zero)
+        (Fintype.card {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R} + 1 - R.card) :=
+  (pow_sub₀ (Fintype.card G : ℂ) (Nat.cast_ne_zero.mpr Fintype.card_ne_zero)
     (region_card_le_internalEdge_card_add_one R hR)).symm
 
 /-- Including the site factors gives the cycle-exponent expression for the

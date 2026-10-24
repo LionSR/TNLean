@@ -1,0 +1,123 @@
+\documentclass{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{./command}
+\setlength{\emergencystretch}{2em}
+\title{Two Boundary Bonds of an Interior Block}
+\author{}
+\date{October 23, 2026}
+\begin{document}
+\maketitle
+\gapnote{false-source}{resolved}
+
+\section{The source passage}
+
+Schuch, Wolf, Verstraete and Cirac~\cite{Schuch2008EntropyScaling}
+define matrix product states with open boundaries and bond dimension $D$,
+but subsequently allow $\rho_N^L$ to be any reduced block of $L$ sites.
+The estimate $S(\sigma_{N,D}^L)\le\log D$ used in their von Neumann entropy
+argument is valid for a block at a boundary of the chain. For an interior
+contiguous block the bound is $2\log D$. The same distinction applies to
+the rank cutoff in the subsequent R\'enyi argument.\footnote{%
+    arXiv:0705.0292v2, \path{paper_v2.tex}: open-boundary definition,
+    lines 181--196; single-bond rank bound, lines 234--264; reduced blocks,
+    lines 269--270; von Neumann bound, lines 298--305; R\'enyi argument,
+    lines 317--345.}
+All logarithms below have base two. Entropies are taken on normalized
+density matrices; the local dimension is $d\ge2$ and $D\ge1$.
+
+\section{Rank bound and an exact counterexample}
+
+Let $B=\{a+1,\ldots,b\}$ with $0<a<b<N$. Cutting the two bonds at its
+ends gives an expansion
+\begin{align}
+    |\phi\rangle & =\sum_{u=1}^{D_a}\sum_{v=1}^{D_b}
+    |L_u\rangle\otimes|M_{uv}\rangle\otimes|R_v\rangle .
+    \label{eq:swvc08_block_factorization}
+\end{align}
+By (\ref{eq:swvc08_block_factorization}), the reduced operator $\sigma_B$
+is supported on the span of the $D_aD_b$ vectors $M_{uv}$. Thus, for every
+order $0\le\alpha\le\infty$,
+\begin{align}
+    \operatorname{rank}\sigma_B & \le D_aD_b\le D^2,
+    \label{eq:swvc08_block_rank}                                                \\
+    S_\alpha(\sigma_B)          & \le\log\operatorname{rank}\sigma_B\le2\log D.
+    \label{eq:swvc08_block_entropy}
+\end{align}
+The rank assertion does not require $\phi$ to be normalized; the entropy
+assertion does. A proper prefix or suffix cuts only one bond and retains
+the bound $\log D$.
+
+For sharpness, take four qubits in the state
+\begin{align}
+    |\phi\rangle & =|\Phi^+\rangle_{12}\otimes|\Phi^+\rangle_{34},
+    \label{eq:swvc08_block_bell_pair_state}
+\end{align}
+where $|\Phi^+\rangle=(|00\rangle+|11\rangle)/\sqrt2$.
+This is an open-boundary MPS of bond dimension $2$. Explicitly, for the
+standard columns $e_0,e_1\in\mathbb C^2$, its matrices are
+\begin{align}
+    A^{[1]}_i & =e_i^{\mathsf T}/\sqrt2,    &
+    A^{[2]}_j & =e_je_0^{\mathsf T},
+    \label{eq:swvc08_block_left_tensors}      \\
+    A^{[3]}_k & =e_0e_k^{\mathsf T}/\sqrt2, &
+    A^{[4]}_l & =e_l.
+    \label{eq:swvc08_block_right_tensors}
+\end{align}
+The product of (\ref{eq:swvc08_block_left_tensors}) and
+(\ref{eq:swvc08_block_right_tensors}) is $\delta_{ij}\delta_{kl}/2$,
+giving (\ref{eq:swvc08_block_bell_pair_state}). The block $B=\{2,3\}$ has
+reduced state $I_4/4$, rank $4$, and $S_\alpha=2$ for every order, whereas
+$\log D=1$. Taking the target and approximant equal gives error zero, so
+this contradicts the rank-$D$ reading independently of any error constant
+or sign convention.
+
+\newpage
+\section{Corrected approximation bounds and status}
+
+For normalized target and approximant, the source's continuity argument
+with full trace-norm error at most $\delta$ gives
+\begin{align}
+    2\log D & \ge S(\rho_N^L)-\tfrac12\delta L\log d-1.
+    \label{eq:swvc08_block_von_neumann_bound}
+\end{align}
+If $S(\rho_N^L)\ge cL$, $L\ge\eta N$, and $\delta<2c/\log d$, the right
+side of (\ref{eq:swvc08_block_von_neumann_bound}) is at least
+$\eta(c-\delta\log d/2)N-1$. The factor two only halves
+the resulting exponential lower bound on $D$.
+
+For the R\'enyi argument, let the target be normalized and $\alpha>1$.
+The approximating vector may be unnormalized. Its reduced positive operator
+still has rank at most $r=D^2$, so the target's spectral tail beyond $r$
+obeys $\varepsilon(r)\le\delta$ by trace-norm contractivity and the
+rank-constrained spectral-tail bound. Convexity gives
+\begin{align}
+    S_\alpha(\rho_N^L) & \le\log r
+    -\frac{\alpha}{\alpha-1}\log(1-\varepsilon(r)).
+    \label{eq:swvc08_block_renyi_mass}
+\end{align}
+Rearranging (\ref{eq:swvc08_block_renyi_mass}), for $0\le\delta<1$,
+\begin{align}
+    2\log D & \ge S_\alpha(\rho_N^L)
+    -\frac{\alpha}{\alpha-1}|\log(1-\delta)|.
+    \label{eq:swvc08_block_renyi_bound}
+\end{align}
+The minus sign is the separate correction recorded in
+\cite{gap:swvc08_renyi_bond_dimension_sign}. If
+$S_\alpha(\rho_N^L)\ge c\eta^\kappa N^\kappa$ with $c,\eta,\kappa>0$,
+then $D\ge2^{(c\eta^\kappa N^\kappa-C_\delta)/2}$, where
+$C_\delta=\alpha|\log(1-\delta)|/(\alpha-1)$ is independent of $N$.
+This still excludes polynomial bond dimension. For a prefix or suffix,
+replace $2\log D$ by $\log D$ throughout.
+
+This note resolves the two-boundary correction mathematically. It does not
+claim a new Lean proof of the interior-block rank estimate or of the full
+approximation obstruction. That development remains open in
+\ghissue{9857}; a proof restricted to boundary blocks must be identified as
+such. No assertion about disconnected sets of sites is made here.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

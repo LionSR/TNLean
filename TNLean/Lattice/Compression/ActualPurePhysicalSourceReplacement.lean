@@ -19,7 +19,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 
 noncomputable section
 open scoped Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} {a : Layout P}
 
 /-- The physical source-replaced output on the recorded product input is the
@@ -64,4 +64,4 @@ theorem physicalSourceReplacedDensity_pure_eq_sum_actualColumnTraces
       (sourceReplacedDensity_pure_eq_sum_actualColumns w ψ Y bIn
         ((bPhysical.tensorProduct bGarbage).map (appendIso physical garbage).symm))
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

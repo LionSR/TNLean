@@ -26,7 +26,7 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
 /-- An original chronology with arbitrary private contractions and prescribed
@@ -273,4 +273,4 @@ theorem mem_owners_wholePartyLayout [Fintype P] (H : P → HSpace) (p : P) :
   exact Finset.mem_univ p
 end ProductInput
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

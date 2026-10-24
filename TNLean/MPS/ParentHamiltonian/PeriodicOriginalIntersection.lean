@@ -60,8 +60,8 @@ theorem IsPeriodic.exists_eventually_cyclic_wordSpan
     intro u v
     simpa only [P, Equiv.apply_eq_iff_eq, neg_inj] using
       orthogonalProjection_mul_eq_ite_of_sum_eq_one Q hproj hsum (e (-u)) (e (-v))
-  have hSum : ∑ u, P u = 1 := by
-    exact ((Equiv.neg (ZMod m)).trans e).sum_comp Q |>.trans hsum
+  have hSum : ∑ u, P u = 1 :=
+    ((Equiv.neg (ZMod m)).trans e).sum_comp Q |>.trans hsum
   have heAdd (u : ZMod m) : e (u + 1) = e u + 1 := by
     change (ZMod.finEquiv m).symm (u + 1) = (ZMod.finEquiv m).symm u + 1
     rw [map_add, map_one]

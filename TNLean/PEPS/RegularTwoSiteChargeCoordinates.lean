@@ -48,6 +48,24 @@ def regularTwoSiteChargeColumn (i : ι) (j : κ) (χ : G → ℂ) (p : G)
     regularLegProjector ι α.1 ((Equiv.funSplitAt i G).symm (k, θ.1)) *
     regularLegProjector κ α.2 ((Equiv.funSplitAt j G).symm (k, θ.2))
 
+omit [Fintype G] [DecidableEq G] [Fintype ι] in
+private theorem eq_smul_funSplitAt_symm_iff (i : ι) (α : ι → G)
+    (θ : {e : ι // e ≠ i} → G) (k x : G) :
+    α = x • (Equiv.funSplitAt i G).symm (k, θ) ↔
+      α i = x * k ∧ (fun e : {e : ι // e ≠ i} => α e) = x • θ := by
+  constructor
+  · intro h
+    constructor
+    · simpa using congrFun h i
+    · funext e
+      simpa [e.property] using congrFun h e
+  · rintro ⟨h, hb⟩
+    funext e
+    by_cases he : e = i
+    · subst e
+      simpa using h
+    · simpa [he] using congrFun hb ⟨e, he⟩
+
 /-- The shared-label character matrix appears in each pair of independent local averages.
 Source: SCP10, charge detection, lines 2470–2486. -/
 theorem regularTwoSiteChargeColumn_apply (i : ι) (j : κ) (χ : G → ℂ) (p : G)
@@ -61,34 +79,12 @@ theorem regularTwoSiteChargeColumn_apply (i : ι) (j : κ) (χ : G → ℂ) (p :
   classical
   have hs (k x : G) :
       α.1 = x • (Equiv.funSplitAt i G).symm (k, θ.1) ↔
-        α.1 i = x * k ∧ (fun e : {e : ι // e ≠ i} => α.1 e) = x • θ.1 := by
-    constructor
-    · intro h
-      constructor
-      · simpa using congrFun h i
-      · funext e
-        simpa [e.property] using congrFun h e
-    · rintro ⟨h, hb⟩
-      funext e
-      by_cases he : e = i
-      · subst e
-        simpa using h
-      · simpa [he] using congrFun hb ⟨e, he⟩
+        α.1 i = x * k ∧ (fun e : {e : ι // e ≠ i} => α.1 e) = x • θ.1 :=
+    eq_smul_funSplitAt_symm_iff i α.1 θ.1 k x
   have ht (k y : G) :
       α.2 = y • (Equiv.funSplitAt j G).symm (k, θ.2) ↔
-        α.2 j = y * k ∧ (fun e : {e : κ // e ≠ j} => α.2 e) = y • θ.2 := by
-    constructor
-    · intro h
-      constructor
-      · simpa using congrFun h j
-      · funext e
-        simpa [e.property] using congrFun h e
-    · rintro ⟨h, hb⟩
-      funext e
-      by_cases he : e = j
-      · subst e
-        simpa using h
-      · simpa [he] using congrFun hb ⟨e, he⟩
+        α.2 j = y * k ∧ (fun e : {e : κ // e ≠ j} => α.2 e) = y • θ.2 :=
+    eq_smul_funSplitAt_symm_iff j α.2 θ.2 k y
   simp only [regularTwoSiteChargeColumn, regularLegProjector_apply,
     Finset.mul_sum, Finset.sum_mul]
   rw [Fintype.sum_reverse_three]

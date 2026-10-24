@@ -8,7 +8,7 @@ $\{\ket z\}$, and $\sigma$ is an arbitrary operator on that space.
 
 \begin{theorem}[Columns of an operator and the trace norm]
     \label{thm:peps_ket_column_hilbert_schmidt}
-    \lean{TNLean.PEPS.Approximation.sum_norm_sq_le_traceNorm_reindex_sq}
+    \lean{TNLean.Lattice.Compression.sum_norm_sq_le_traceNorm_reindex_sq}
     \leanok
     For every operator $E$ on a finite-dimensional space with orthonormal
     basis $\{\ket z\}$,
@@ -25,7 +25,7 @@ $\{\ket z\}$, and $\sigma$ is an arbitrary operator on that space.
 
 \begin{theorem}[Selection of one index]
     \label{thm:peps_ket_column_selection}
-    \lean{TNLean.PEPS.Approximation.exists_ne_zero_norm_sq_le_of_sum}
+    \lean{TNLean.Lattice.Compression.exists_ne_zero_norm_sq_le_of_sum}
     \leanok
     Let $f_z$ be vectors and $a_z$ complex numbers indexed by a finite set,
     with $\sum_z\lVert f_z\rVert^2\le\eta^2$ and $\sum_z|a_z|^2=1$. Then some
@@ -41,8 +41,8 @@ $\{\ket z\}$, and $\sigma$ is an arbitrary operator on that space.
 
 \begin{theorem}[Normalization within twice the error]
     \label{thm:peps_ket_column_normalization}
-    \lean{TNLean.PEPS.Approximation.normalize_sub_le_two_mul,
-        TNLean.PEPS.Approximation.exists_phase_normalize_sub_le}
+    \lean{TNLean.Lattice.Compression.normalize_sub_le_two_mul,
+        TNLean.Lattice.Compression.exists_phase_normalize_sub_le}
     \leanok
     Let $\lVert\Omega\rVert=1$ and $\eta<1$. If $\lVert w-\Omega\rVert\le\eta$,
     then $w\ne0$ and $\lVert w/\lVert w\rVert-\Omega\rVert\le2\eta$.
@@ -63,8 +63,8 @@ $\{\ket z\}$, and $\sigma$ is an arbitrary operator on that space.
 
 \begin{theorem}[Nonzero column close to a pure state]
     \label{thm:peps_ket_column_vector}
-    \lean{TNLean.PEPS.Approximation.exists_column_ne_zero_of_traceNorm_sub_pure_le,
-        TNLean.PEPS.Approximation.exists_eq_column_ne_zero_of_traceNorm_sub_pure_le,
+    \lean{TNLean.Lattice.Compression.exists_column_ne_zero_of_traceNorm_sub_pure_le,
+        TNLean.Lattice.Compression.exists_eq_column_ne_zero_of_traceNorm_sub_pure_le,
         Matrix.toEuclideanLin_single_one_apply}
     \leanok
     In the vector part of \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS},
@@ -90,10 +90,10 @@ $\{\ket z\}$, and $\sigma$ is an arbitrary operator on that space.
 
 \begin{definition}[Operator networks and fixed inputs on directed multigraphs]
     \label{def:peps_ket_column_dependent_fix_input}
-    \lean{TNLean.PEPS.Approximation.operatorNetworkMatrix,
-        TNLean.PEPS.Approximation.fixInput,
-        TNLean.PEPS.Approximation.network_fixInput,
-        TNLean.PEPS.Approximation.operatorNetworkMatrix_mulVec_single}
+    \lean{TNLean.Lattice.Compression.operatorNetworkMatrix,
+        TNLean.Lattice.Compression.fixInput,
+        TNLean.Lattice.Compression.network_fixInput,
+        TNLean.Lattice.Compression.operatorNetworkMatrix_mulVec_single}
     \leanok
     \uses{def:peps_dependent_network}
     Consider a contraction on a directed multigraph with edge-dependent
@@ -109,7 +109,7 @@ $\{\ket z\}$, and $\sigma$ is an arbitrary operator on that space.
 
 \begin{theorem}[Ket column of an operator network on a directed multigraph]
     \label{thm:peps_ket_column_dependent}
-    \lean{TNLean.PEPS.Approximation.exists_fixInput_network_of_traceNorm_sub_pure_le}
+    \lean{TNLean.Lattice.Compression.exists_fixInput_network_of_traceNorm_sub_pure_le}
     \leanok
     \uses{def:peps_ket_column_dependent_fix_input}
     In the directed-multigraph model of \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS},
@@ -301,8 +301,8 @@ the small-patch rewrite lemma, and the compression theorem.
 
 \begin{lemma}[Telescoping a chain of contractions]
     \label{lem:peps_protocol_telescoping}
-    \lean{TNLean.PEPS.Approximation.norm_trajectory_sub_reference_le}
-    \lean{TNLean.PEPS.Approximation.norm_trajectory_le}
+    \lean{TNLean.Lattice.PartyCircuit.norm_trajectory_sub_reference_le}
+    \lean{TNLean.Lattice.PartyCircuit.norm_trajectory_le}
     \leanok
     Let $E_0,E_1,\dots$ be normed spaces, let
     $S_t\colon E_t\to E_{t+1}$ be linear maps with
@@ -323,9 +323,9 @@ the small-patch rewrite lemma, and the compression theorem.
 
 \begin{theorem}[Error and normalization of the protocol]
     \label{thm:peps_protocol_density}
-    \lean{TNLean.PEPS.Approximation.norm_protocol_sub_reference_le}
-    \lean{TNLean.PEPS.Approximation.rectangularTraceNorm_protocol_density_sub_le}
-    \lean{TNLean.PEPS.Approximation.rectangularTraceNorm_compressed_density_sub_le}
+    \lean{TNLean.Lattice.PartyCircuit.norm_protocol_sub_reference_le}
+    \lean{TNLean.Lattice.PartyCircuit.rectangularTraceNorm_protocol_density_sub_le}
+    \lean{TNLean.Lattice.PartyCircuit.rectangularTraceNorm_compressed_density_sub_le}
     \leanok
     Let $L\geq1$ and $C_{\rm ch},C_{\rm step},C_{\rm hole},C_{\rm comp}$
     be constants with $C_{\rm step},C_{\rm hole}\geq0$. Suppose that, in
@@ -368,7 +368,7 @@ the small-patch rewrite lemma, and the compression theorem.
 
 \begin{theorem}[Retained norm and trace of the protocol]
     \label{thm:peps_protocol_retained_norm}
-    \lean{TNLean.PEPS.Approximation.protocol_norm_and_trace_deficit_le}
+    \lean{TNLean.Lattice.PartyCircuit.protocol_norm_and_trace_deficit_le}
     \leanok
     As a consequence of the error and reference-norm bounds in
     \cite[Section~8.1]{OpenAI2026PolynomialPEPS}, under the hypotheses of

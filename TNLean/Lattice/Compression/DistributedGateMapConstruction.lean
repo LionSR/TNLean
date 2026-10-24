@@ -33,14 +33,14 @@ nonempty-party convention, a degenerate-case reading of the source recorded in
 
 ## Main results
 
-* `TNLean.PEPS.PairEffect.DistributedConstruction.toGateMapConstruction`: a distributed
+* `TNLean.Lattice.PartyCircuit.DistributedConstruction.toGateMapConstruction`: a distributed
   construction read with the operators of its own gate expansions.
-* `TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity_toGateMapConstruction`:
+* `TNLean.Lattice.PartyCircuit.DistributedConstruction.physicalDensity_toGateMapConstruction`:
   this reading keeps the physical density.
-* `TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_network`:
+* `TNLean.Lattice.PartyCircuit.DistributedConstruction.exists_uniform_sampled_network`:
   the case of Theorem 5.2 without messages, for a family of distributed constructions with
   their actual expansions.
-* `TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_network_sub_pure_le`:
+* `TNLean.Lattice.PartyCircuit.DistributedConstruction.exists_uniform_sampled_network_sub_pure_le`:
   Remark 5.3 for that family.
 
 ## References
@@ -60,11 +60,12 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open scoped Matrix NNReal
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 
 variable {P : Type}
 
-namespace EffectCircuit
+namespace Lattice.PartyCircuit.EffectCircuit
 
 /-- The operator of every recorded gate occurrence: the sum of its own monomial list.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 21–43. -/
@@ -72,7 +73,7 @@ def expansionGateMaps : {a b : Layout P} → (w : EffectCircuit a b) → w.GateM
   | _, _, .id _ => PUnit.unit
   | _, _, .comp w v => (expansionGateMaps w, expansionGateMaps v)
   | _, _, .localMap .. => PUnit.unit
-  | _, _, @EffectCircuit.gate _ _ _ _ _ _ L _ => PairEffect.gate (toGate L)
+  | _, _, @EffectCircuit.gate _ _ _ _ _ _ L _ => Lattice.PartyCircuit.gate (toGate L)
   | _, _, .swap .. => PUnit.unit
   | _, _, .frame _ w => expansionGateMaps w
 
@@ -98,9 +99,9 @@ theorem evalWithGateMaps_expansionGateMaps {a b : Layout P} (w : EffectCircuit a
   | swap => rfl
   | frame r w ih => exact congrArg (fun A ↦ A.lTensor r.space) ih
 
-end EffectCircuit
+end Lattice.PartyCircuit.EffectCircuit
 
-namespace OriginalCircuit
+namespace Lattice.PartyCircuit.OriginalCircuit
 
 variable {a b : Layout P}
 
@@ -130,7 +131,7 @@ theorem isGateApproximation_reexpand_expansionGateLists (w : OriginalCircuit a b
   | privateMap p ha hb A hA tail => exact hA
   | nonprivateGate owner hC L hL hG tail =>
       refine ⟨hC, hL, hG, ?_⟩
-      change ‖PairEffect.gate (toGate L) - PairEffect.gate (toGate L)‖ ≤ δ
+      change ‖Lattice.PartyCircuit.gate (toGate L) - Lattice.PartyCircuit.gate (toGate L)‖ ≤ δ
       simpa only [sub_self, norm_zero] using hδ
   | swap => trivial
   | frame r w ih => exact ih
@@ -185,8 +186,9 @@ theorem natCard_participation_produce (w : OriginalCircuit a b) (p : P) :
   (Nat.card_congr (w.produceLocationsEquiv.subtypeEquiv fun g ↦ by
     rw [w.participants_produce])).symm
 
-end OriginalCircuit
+end Lattice.PartyCircuit.OriginalCircuit
 
+namespace Lattice.PartyCircuit
 namespace DistributedConstruction
 
 variable [Fintype P]
@@ -216,10 +218,12 @@ theorem physicalDensity_toGateMapConstruction (C : DistributedConstruction P) :
 
 end DistributedConstruction
 
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit
+end TNLean
 
-namespace TNLean.PEPS.PairEffect.DistributedConstruction
-open TNLean.PEPS.Approximation
+namespace TNLean.Lattice.PartyCircuit.DistributedConstruction
+open TNLean.Lattice.PartyCircuit
+open TNLean.Lattice.Compression
 attribute [local instance] Classical.propDecidable
 
 /-- **Theorem 5.2 without messages, from coefficient-sum bounds.** Under the hypotheses of
@@ -492,4 +496,4 @@ theorem exists_uniform_sampled_network_sub_pure_le
   exact ⟨Gate, _, _, participants, root, hroot, Label, _, k, c, T,
     hσ, herror, hlow, hhigh, hdim, hinc, hlocal⟩
 
-end TNLean.PEPS.PairEffect.DistributedConstruction
+end TNLean.Lattice.PartyCircuit.DistributedConstruction

@@ -314,6 +314,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
         TNLean.MPS.AreaLaw.IsChainSupport.subset_window_of_splits,
         TNLean.MPS.AreaLaw.chainCrossConst,
         TNLean.MPS.AreaLaw.card_crossingTerms_interval_le,
+        TNLean.MPS.AreaLaw.cutBudgetConst,
+        TNLean.MPS.AreaLaw.one_le_cutBudgetConst,
         TNLean.MPS.AreaLaw.chainBudgetConst,
         TNLean.MPS.AreaLaw.one_le_chainBudgetConst,
         TNLean.MPS.AreaLaw.supportDim_le_real,
@@ -334,7 +336,9 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \end{align}
     Both bounds are independent of the interval, and no support of range $R$
     is split by two of the shells $[l-(j+1)R,\,r+(j+1)R)$, $j\ge0$, of an
-    interval $[l,r)$.
+    interval $[l,r)$. For a natural number $N$ put
+    $B(N)=1+N\log^2\bigl(e\,q^{R+1}\bigr)$, so that $B(N)\ge1$ and
+    $B_R=B(N_R)$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -1001,7 +1005,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $w$ or $\ell$, or containment of the cores in the outer regions,
     is needed beyond the displayed hypotheses.
     This is the support-separation step in Part~II
-    of~\cite{TNLean2026OneDimensional}, lines 419--425, on a contiguous
+    of~\cite{TNLean2026OneDimensional}, on a contiguous
     chain; see~\cite{gap:tnlean_one_dimensional_connected_domain_scope}.
 \end{lemma}
 \begin{proof}
@@ -1053,8 +1057,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     The constants $C_p,L_0$ precede the length, Hamiltonian, state,
     regions and information bound. Only the original full-system gap
     is assumed. This is the contiguous-chain form of the information-reset
-    lemma in Part~II of~\cite{TNLean2026OneDimensional},
-    lines 319--435; the domain distinction
+    lemma in Part~II of~\cite{TNLean2026OneDimensional}; the domain distinction
     is recorded in~\cite{gap:tnlean_one_dimensional_connected_domain_scope}.
 \end{theorem}
 \begin{proof}
@@ -1396,11 +1399,11 @@ for an arbitrary finite set of sites and are instantiated here directly.
 
 \begin{theorem}[Entropy at local dimension one]
     \label{thm:chain_entropy_dim_one}
-    \lean{TNLean.MPS.AreaLaw.regionEntropy_eq_zero_of_localDimension_one}
+    \lean{TNLean.Lattice.regionEntropy_eq_zero_of_localDimension_one}
     \leanok
-    \uses{def:chain_model}
-    Let $\Omega$ be a unit vector on a finite chain with one-dimensional
-    local spaces. For every set $A$ of sites, $S_\Omega(A)=0$. This is the
+    Let $V$ be a finite set of sites and let $\Omega$ be a unit vector on
+    $\bigotimes_{x\in V}\mathbb C$, with one-dimensional local spaces.
+    For every set $A$ of sites, $S_\Omega(A)=0$. This is the
     dimension-one case of the entropy dimension bound used in
     \cite[Part~I]{TNLean2026OneDimensional}.
 \end{theorem}
@@ -1420,6 +1423,10 @@ for an arbitrary finite set of sites and are instantiated here directly.
         TNLean.MPS.AreaLaw.chainDiscountConst_nonneg,
         TNLean.MPS.AreaLaw.chainIntervalEntropyBound_nonneg,
         TNLean.MPS.AreaLaw.regionEntropy_interval_le,
+        TNLean.MPS.AreaLaw.cutShellConst,
+        TNLean.MPS.AreaLaw.cutShellConst_nonneg,
+        TNLean.MPS.AreaLaw.cutAreaLawConst,
+        TNLean.MPS.AreaLaw.cutAreaLawConst_nonneg,
         TNLean.MPS.AreaLaw.chainShellConst,
         TNLean.MPS.AreaLaw.chainShellCount_le,
         TNLean.MPS.AreaLaw.chainAreaLawConst,
@@ -1428,7 +1435,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
         TNLean.MPS.AreaLaw.chainAreaLaw
     }
     \leanok
-    \uses{def:chain_model}
+    \uses{def:chain_model, lem:chain_crossing_count}
     Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
     finite-range Hamiltonian with term norms at most $J\ge0$ on the chain of
     $L$ sites with local dimension $q\ge1$. Every interval $X$ satisfies
@@ -1444,6 +1451,11 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $S(A)\le C_{\mathrm{int}}\,|\partial A|$. Hence the constant
     $C_0(q,R)(1+J/\Delta)$, chosen before $L$, the Hamiltonian, the ground
     vector and the region, bounds $S(A)/|\partial A|$ for every gapped chain.
+    For a natural number $N$, let $E(N)$, $C_1(N)=5+E(N)+128B(N)$ and
+    $C_0(N)=\bigl(8R\log q+\log2\bigr)C_1(N)+1024\,e\,B(N)$ be the same
+    nonnegative constants with $N_R$ replaced by $N$, where $B(N)$ is the
+    budget of Lemma~\ref{lem:chain_crossing_count}; thus
+    $C_0(q,R)=C_0(N_R)$.
     This is the connected case of Theorem~A; the general case is
     Theorem~\ref{thm:domain_area_law}.
 \end{theorem}
@@ -1464,7 +1476,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \label{thm:chain_area_log_cube}
     \lean{
         TNLean.MPS.AreaLaw.chainAreaLawConst_le_mul_log_cube,
-        TNLean.MPS.AreaLaw.regionEntropy_le_log_cube_mul_card_boundaryEdges
+        TNLean.MPS.AreaLaw.regionEntropy_le_log_cube_mul_card_boundaryEdges,
+        TNLean.MPS.AreaLaw.chainLogCubeConst
     }
     \leanok
     \uses{thm:chain_area_law}
@@ -1501,7 +1514,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
     satisfies $E_R(q)\le64\,e\,N_R\log^2(e\,q^{R+1})\le
         64\,e\,N_R\log^2(e\,2^{R+1})\,t^2$, and
     Theorem~\ref{thm:chain_budget_log_sq} gives $B_R(q)\le B_R(2)t^2$. Hence
-    $C_1(q,R)$ is at most $t^2$ times the bracket in $K_R$. Also
+    the factor $5+E_R+128B_R$ of $C_0(q,R)$ is at most $t^2$ times the
+    factor $5+64\,e\,N_R\log^2(e\,2^{R+1})+128B_R(2)$ of $K_R$. Also
     $8R\log q+\log2\le(8R\log2+\log2)t$ and $B_R(q)\le B_R(2)t^3$. Summing
     proves (\ref{eq:chain_log_cube_coefficient}). Combine this with
     Theorem~\ref{thm:chain_area_law} to obtain
@@ -1513,7 +1527,11 @@ for an arbitrary finite set of sites and are instantiated here directly.
 % Source: part1_arealaw.tex:706--745, combining the count and energy refinements.
 \begin{theorem}[Area law for consecutive-window interactions]
     \label{thm:chain_window_area_law}
-    \lean{TNLean.MPS.AreaLaw.chainAreaLaw_of_consecutive_terms}
+    \lean{
+        TNLean.MPS.AreaLaw.chainAreaLaw_of_consecutive_terms,
+        TNLean.MPS.AreaLaw.windowBudgetConst,
+        TNLean.MPS.AreaLaw.windowAreaLawConst
+    }
     \leanok
     \uses{def:chain_model}
     Fix natural numbers $q\ge1$ and $R$, and real numbers $J\ge0$ and
@@ -1531,7 +1549,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
         +1024\,e\,B_{\mathrm{win}}(q,R).
         \label{eq:chain_window_area_constant}
     \end{align}
-    These are the constants $C_1(q,R)$ and $C_0(q,R)$ of
+    These are the factor $5+E_R+128B_R$ and the constant $C_0(q,R)$ of
     Theorem~\ref{thm:chain_area_law} with the crossing count $N_R$ replaced by
     $2R$ and the cut budget $B_R$ by $B_{\mathrm{win}}$; they are fixed before
     the chain length, Hamiltonian, ground vector and region. Let $L$ be any
@@ -2314,7 +2332,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     may overlap or repeat. No nonnegativity assumption on $c$ is added,
     and no Hamiltonian, gap or positive local dimension is assumed.
     These are the interval-neighborhood and entropy steps in Part~II
-    of~\cite{TNLean2026OneDimensional}, lines 458--461 and 482--487.
+    of~\cite{TNLean2026OneDimensional}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -2371,7 +2389,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     is imposed. The constants precede the length, Hamiltonian, state,
     regions and interval representation.
     This is the contiguous-chain form of the logarithmic-separation
-    lemma in Part~II of~\cite{TNLean2026OneDimensional}, lines 454--488;
+    lemma in Part~II of~\cite{TNLean2026OneDimensional};
     see~\cite{gap:tnlean_one_dimensional_connected_domain_scope} for the
     domain distinction.
 \end{theorem}
@@ -2503,6 +2521,44 @@ for an arbitrary finite set of sites and are instantiated here directly.
     and $c=0$. If $L=0$, take $c=\psi(\varnothing)$. If $L=1$, take
     $c=1$ and the $1\times1$ matrices $A_0(s)_{0,0}=\psi(s)$.
     The assertion about all cuts follows by restricting to internal cuts.
+\end{proof}
+
+\begin{theorem}[Cut ranks characterize open-boundary matrix product states]
+    \label{thm:chain_cut_rank_of_mps}
+    \lean{
+        TNLean.MPS.AreaLaw.rank_cutMatrix_le_bondDim,
+        TNLean.MPS.AreaLaw.IsOpenMPS.rank_cutMatrix_le,
+        TNLean.MPS.AreaLaw.isOpenMPS_iff_internal_cutMatrix_rank_le
+    }
+    \leanok
+    Let $\psi$ be a vector on $L$ sites of local dimension $q$.
+    If $\psi$ is a scalar multiple of a rectangular open-boundary
+    contraction with bond dimensions $d_0,\ldots,d_L$, then its cut
+    matrix $M_k$ satisfies $\operatorname{rank}M_k\le d_k$ for
+    $0\le k\le L$. In particular, $\psi$ is an open-boundary matrix
+    product state of bond dimension at most $D$ if and only if
+    $\operatorname{rank}M_k\le D$ at every internal cut $0<k<L$.
+    No normalization is required. The endpoint ranks are at most one;
+    when $L\le1$ there are no internal rank conditions, even for $D=0$.
+    This is the single-cut rank observation used in the truncation-error
+    lower bound of~\cite{Schuch2008EntropyScaling}; see also the sequential
+    truncation proposition in~\cite[Part IIa]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:chain_open_mps,thm:chain_mps_of_cut_rank}
+    Split a virtual path at bond $k$. For each fixed
+    bond index $\alpha\in\{0,\ldots,d_k-1\}$, the sums over the remaining
+    virtual indices on the two sides are independent. Hence
+    \begin{align}
+        M_k(a,b)=c\sum_{\alpha=0}^{d_k-1}U_k(a,\alpha)V_k(\alpha,b).
+    \end{align}
+    Absorbing $c$ into $U_k$ factors $M_k$ through $\mathbb C^{d_k}$,
+    so its rank is at most $d_k$. This remains valid when $d_k=0$:
+    the sum is empty and the cut matrix vanishes. At the endpoints,
+    $d_0=d_L=1$. The converse is
+    Theorem~\ref{thm:chain_mps_of_cut_rank}, which includes empty and
+    one-site chains.
 \end{proof}
 
 \begin{theorem}[Growth of chain cut ranks]
@@ -2645,6 +2701,38 @@ for an arbitrary finite set of sites and are instantiated here directly.
     gives the error bound. The argument is the proof of
     Theorem~\ref{thm:chain_sequential_truncation_full}, applied to the
     eigenprojections directly.
+\end{proof}
+
+\begin{theorem}[Squared error of sequential truncation]
+    \label{thm:chain_sequential_truncation_sq}
+    \lean{
+        TNLean.MPS.AreaLaw.norm_sequentialTruncation_leadingEigenprojection_sub_sq_le,
+        TNLean.MPS.AreaLaw.norm_sub_sequentialTruncation_sq_le}
+    \leanok
+    \uses{thm:chain_sequential_truncation_eigen}
+    In the setting of Theorem~\ref{thm:chain_sequential_truncation_eigen},
+    \begin{align}
+        \|\Phi-\psi\|^2\le\sum_{k=1}^{L-1}\epsilon_k(D). \notag
+    \end{align}
+    Verstraete and Cirac~\cite{VerstraeteCirac2006Faithfully} state this
+    bound with a factor $2$ on the right; the form here implies theirs.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Write $\Phi_0=\psi$ and $\Phi_j=P_{L-j}\Phi_{j-1}$, so that
+    $\Phi=\Phi_{L-1}$. For an orthogonal projection $P$,
+    \begin{align}
+        \psi-P\Phi_{j-1} & =P(\psi-\Phi_{j-1})+(1-P)\psi, \notag
+    \end{align}
+    and the two terms are orthogonal, since $P^*=P=P^2$ gives
+    \begin{align}
+        \langle P(\psi-\Phi_{j-1}),(1-P)\psi\rangle
+         & =\langle\psi-\Phi_{j-1},(P-P^2)\psi\rangle=0. \notag
+    \end{align}
+    Hence
+    $\|\psi-\Phi_j\|^2\le\|\psi-\Phi_{j-1}\|^2+\|(1-P_{L-j})\psi\|^2$,
+    and $\|(1-P_k)\psi\|^2=\operatorname{tr}((1-\Pi_k)\rho_k)=\epsilon_k(D)$.
+    Summing over the steps gives the bound.
 \end{proof}
 
 \begin{lemma}[Sequential truncation at an entropy threshold]
@@ -2988,6 +3076,41 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Unit norm implies that the chosen approximant is nonzero.
 \end{proof}
 
+% Source: part2a_mps_information.tex, thm:Bshort and sec:shortcut,
+% lines 73--92, at a free accuracy.
+\begin{theorem}[Prescribed accuracy with a polynomial bond bound]
+    \label{thm:chain_polynomial_mps_accuracy_bound}
+    \lean{TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error_rpow,
+        TNLean.MPS.AreaLaw.polynomial_floor_exp_le}
+    \leanok
+    \uses{thm:chain_polynomial_mps_accuracy}
+    Under the hypotheses of Theorem~\ref{thm:chain_polynomial_mps_accuracy},
+    for every $0<\varepsilon\le1$ there is a unit open-boundary matrix
+    product state $\Phi$ with $\|\Phi-\Omega\|\le\varepsilon$ whose bond
+    dimension $D$ satisfies
+    \begin{align}
+        D & \le e^{C_{\mathrm{int}}^{\mathrm{pol}}}(2c_0)^{64s}
+        \left(\frac{L}{\varepsilon}\right)^{64s}.
+        \label{eq:chain_polynomial_mps_accuracy_bound}
+    \end{align}
+    The case $\varepsilon=1/L$ is the bond bound $L^{128s}$ of Theorem~B.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_polynomial_mps_accuracy}
+    Take the state of Theorem~\ref{thm:chain_polynomial_mps_accuracy}, with
+    bond dimension $D_\varepsilon$ of
+    (\ref{eq:chain_polynomial_mps_accuracy}). Put $y=2Lc_0/\varepsilon>0$.
+    For $s\ge0$ and every $b\ge y^2$,
+    $\lfloor e^{C+64s\log y}\rfloor\le e^{C+32s\log b}=e^Cb^{32s}$.
+    With $b=y^2$ this gives
+    \begin{align}
+        D_\varepsilon & \le e^{C_{\mathrm{int}}^{\mathrm{pol}}}y^{64s}
+        =e^{C_{\mathrm{int}}^{\mathrm{pol}}}(2c_0)^{64s}
+        \left(\frac{L}{\varepsilon}\right)^{64s}.\notag
+    \end{align}
+\end{proof}
+
 \section{Physical coordinates of the terminal chain registers}
 
 \begin{definition}[Terminal main and auxiliary registers]
@@ -3133,7 +3256,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     The terminal coordinate map sends a raw configuration $c$ to
     $(\chi(c|_X),c|_{\mathcal A})$ and hence sends its basis vector to
     the corresponding physical and auxiliary product-basis vector.
-    This defines a unitary identification $T$ from the actual raw
+    This defines a unitary identification $T$ from the raw
     memory with the physical factors followed by all auxiliary factors.
     At a party with $M_p=\varnothing$, the physical factor is
     one-dimensional.
@@ -3165,7 +3288,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \uses{def:chain_terminal_coordinates}
     Restriction to an owner fibre commutes with the main block
     identification and leaves every auxiliary coordinate unchanged.
-    In product orthonormal bases, the density transforms by the actual
+    In product orthonormal bases, the density transforms by the
     tensor product of the physical and private changes of basis.
     If $V$ is the private change of orthonormal basis, then
     $V^*V=1$ and $\operatorname{Tr}_{\rm private}((U_\chi\otimes V)
@@ -3235,7 +3358,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     main labels first, followed
     by every copy-site label in the prescribed copy order. Each original
     raw label occurs once, and flattening the sheet list gives exactly
-    this register list. Denote by $\mathcal R$ the existing main/auxiliary
+    this register list. Denote by $\mathcal R$ the main/auxiliary
     sheet readout transported along that register-list equality.
 \end{definition}
 
@@ -3533,7 +3656,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Let $\Psi_j$ be the tensor product, in this list order, of the reference
     vectors of all the sheets in stage $j$, followed by $\xi$; each sheet
     reference is formed from the same original $\Omega$.
-    There are eight circuits $c_j$ between these actual register lists with
+    There are eight circuits $c_j$ between these register lists with
     at most one nonprivate gate each, its participants contained in the set
     in row $j$. Each gate expansion has at most one monomial, coefficient
     sum at most one, at most one normalized pair effect and at most one
@@ -3563,7 +3686,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
         thm:lattice_bounded_change_closure,
         thm:peps_original_produced_resource_bounds,def:lattice_sheet_stack}
     Apply the birth and death estimates at $p=12$.
-    Every modified band is owned by the departing party in its actual sheet.
+    Every modified band is owned by the departing party in its sheet.
     Apply the birth estimate to rows $0,1,2,6$ and its reversed
     death estimate to rows $4,5,7$, with the environments displayed in the
     table. For a death, changing the owner back in its after-death sheet
@@ -3667,7 +3790,7 @@ The objects below are owner assignments and ordered lists of sheets.
     When $m>0$, the environment at the first stage for the direct death, evaluated
     after that death, is $E(M_0^{(L)},P_1)=[t,L)_L$.
     The four specified owner changes give $M_k^{(R)}=M_{k+1}$.
-    If $L\ge3t$, the actual one-band main endpoints satisfy
+    If $L\ge3t$, the one-band main endpoints satisfy
     $\widehat M_k^{(L)}=M_k^{(L)}$ and
     $\widehat M_k^{(R)}=M_k^{(R)}=M_{k+1}$.
 \end{theorem}
@@ -3699,11 +3822,11 @@ The objects below are owner assignments and ordered lists of sheets.
     Suppose $w\ge1$.
     Denote the right copy at stage $k$ by $\rho_k$, for $0\le k<m$,
     and the left copy used at stage $j+1$ by $\lambda_j$, for
-    $0\le j<m-1$. The actual retired right auxiliary comes from the
+    $0\le j<m-1$. The retired right auxiliary comes from the
     initial main sheet $\widehat M_k^{(L)}$ and has centre $b=(k+1)t$.
     It assigns $[b-3w,b-2w)_L$ to $R_k$,
     $[b-2w,b-w)_L$ to $R_{k+1}$, and the remaining sites to $P_{k+1}$.
-    The actual retired left auxiliary $\lambda_j$ is formed from
+    The retired left auxiliary $\lambda_j$ is formed from
     $M_{j+1}^{(2)}$ and has centre $c=(j+1)t$.
     It assigns $[c-3w,c-2w)_L$ to $R_{j+1}$,
     $[c-2w,c-w)_L$ to $P_{j+2}$, and the remaining sites to $P_{j+1}$.
@@ -3740,7 +3863,7 @@ The objects below are owner assignments and ordered lists of sheets.
     Retain the initial ordered list $\mathcal C$ of all auxiliary copy
     labels. Its order is fixed throughout. The activation stage is
     $s(\rho_j)=j$ and $s(\lambda_j)=j+1$.
-    Let $U_c^\infty$ be the actual retired sheet of copy $c$, and let
+    Let $U_c^\infty$ be the retired sheet of copy $c$, and let
     $U_c^0$ be the sheet assigning that copy entirely to its initial
     holder, namely $P_{j+1}$ for either $c=\rho_j$ or $c=\lambda_j$.
     Before stage $k$, set
@@ -3805,7 +3928,7 @@ The objects below are owner assignments and ordered lists of sheets.
     activation times $j$ and $j+1$ shows that the left update changes
     precisely $\lambda_{k-1}$ and that the right update changes precisely
     $\rho_k$. The main endpoint identity and these single-label updates
-    give the next entire list. For any existing stage or copy, $m>0$
+    give the next entire list. For any stage or copy, $m>0$
     implies $w\ge1$ and $L\ge3t$; thus the endpoint comparisons require
     no extra hypothesis here. Removing a selected label from the fixed
     list and placing it first preserves all other occurrences and their order.
@@ -3895,7 +4018,7 @@ The objects below are owner assignments and ordered lists of sheets.
     Before its activation the selected label still carries its initial
     constant-owner sheet. Selecting that label therefore gives the
     correct band entrance. At its exit, replacing that one label by
-    its actual retired sheet and restoring the original order gives
+    its retired sheet and restoring the original order gives
     the stated permutation. For the first left transfer the defining
     direct death replaces the entire eight-step band, with seven
     repeated boundaries afterwards. The next-stage identity identifies
@@ -4060,7 +4183,7 @@ with the retained-copy correction of
     In each table the auxiliary starts entirely at its specified party $C$.
     All nineteen premises concern the original $\Omega$: the boundary
     premise is conditional on $k=0$, and the eight left premises on $k>0$.
-    In particular rows $4,5,7$ use their actual after-death environments,
+    In particular rows $4,5,7$ use their after-death environments,
     and row $6$ uses its before-birth environment.
 
     Let $\psi(\mathcal F)$ denote the tensor product of the sheet references
@@ -4086,7 +4209,7 @@ with the retained-copy correction of
     \uses{thm:chain_sweep_stage_owners,thm:chain_stage_margins,
         thm:chain_one_band_conditional_changes,thm:chain_sweep_local_boundaries,
         thm:chain_plain_birth_death,thm:lattice_bounded_change_closure}
-    The two birth targets are held by $R_k$ in their actual before-birth
+    The two birth targets are held by $R_k$ in their before-birth
     sheets. Apply the birth estimate with
     (\ref{eq:chain_stage_remainder_information}) and
     (\ref{eq:chain_stage_block_information}). The derived band flanks and
@@ -4114,13 +4237,13 @@ with the retained-copy correction of
         def:peps_original_chronology_composite}
     Let $q\ge1$ and let $\Omega$ be any original chain vector.
     Write $\delta_L=L^{-12}$ for $L>0$ and $\delta_0=0$.
-    Suppose each given circuit $c_{k,j}$ between the actual successive
+    Suppose each given circuit $c_{k,j}$ between the successive
     boundary lists is a bounded change from $\psi(\mathcal B_{k,j})$ to
     $\psi(\mathcal B_{k,j+1})$, with participants in $\mathcal S_{k,j}$,
     bounds $r=K=1$ and error $4\delta_L$, and has pair-source bound one.
     At $k=0$ and $3\le j<10$, require the identity circuit, zero
     reference error and zero nonprivate count, as in the local conclusion.
-    Put $N=18m$. On the existing chronological lists $\mathcal G_n$, define
+    Put $N=18m$. On the chronological lists $\mathcal G_n$, define
     \begin{align}
         d_n & =
         \begin{cases}
@@ -4147,7 +4270,7 @@ with the retained-copy correction of
     \leanok
     \uses{def:chain_conditional_middle_circuit}
     In Definition~\ref{def:chain_conditional_middle_circuit}, let $N(C)$
-    count actual nonprivate occurrences and let $n_p(C)$ count those
+    count nonprivate occurrences and let $n_p(C)$ count those
     involving party $p$. Then
     \begin{align}
         N(C) & \le18m, & n_p(C) & \le40.
@@ -4170,7 +4293,7 @@ with the retained-copy correction of
 \begin{proof}\leanok
     \uses{thm:chain_stage_incidence,thm:peps_original_chronology_composition,
         lem:peps_protocol_telescoping,thm:chain_initial_copies}
-    The count identities for chronological composition sum the actual
+    The count identities for chronological composition sum the
     position counts. There is at most one nonprivate occurrence per position,
     and an occurrence involving $p$ lies in a position counted by
     $N_{\rm pos}(p)$. Thus Theorem~\ref{thm:chain_stage_incidence} gives
@@ -4199,7 +4322,7 @@ with the retained-copy correction of
     Place $R_i$ at level $\ell(R_i)=i$ and $P_{j+1}$ at
     $\ell(P_{j+1})=j$.
     Retain all parties, including $R_m$ and the parties with scalar
-    main output. For an actual tagged star or sample link $e$, write
+    main output. For a tagged star or sample link $e$, write
     $s(e),t(e)$ for its two oriented party endpoints. Let $\partial_r$
     be the links with exactly one endpoint in $\{p:\ell(p)<r\}$.
     Every crossing link retains its original gate and kind tag.
@@ -4217,7 +4340,7 @@ with the retained-copy correction of
     Write $\operatorname{part}(g)$ for the participant set of a gate.
     Every pair of parties in one $\mathcal S_{k,j}$ has level distance
     at most two, and each finite subset of $\mathcal S_{k,j}$ has at
-    most eight elements. Each actual nonprivate gate $g$ of the middle
+    most eight elements. Each nonprivate gate $g$ of the middle
     circuit has a stage and position with
     \begin{align}
         \operatorname{part}(g) & \subseteq\mathcal S_{k,j}.
@@ -4234,14 +4357,14 @@ with the retained-copy correction of
     $[\max\{k-1,0\},k+3)$, with at most one remainder party and one
     completed party at each level, giving the coarse bound eight.
     Each local gate has the required stage support. Transporting its
-    participant set through the actual boundary identifications and
+    participant set through the boundary identifications and
     chronological composition gives (\ref{eq:chain_middle_gate_support}).
     Apply the two stage bounds to this same support witness, and use
     $8\le40$. When $m=0$, there is no nonprivate gate to which a stage
     need be assigned.
 \end{proof}
 
-\begin{theorem}[Congestion of the actual tagged links]
+\begin{theorem}[Congestion of the tagged links]
     \label{thm:chain_tagged_link_congestion}
     \lean{TNLean.MPS.AreaLaw.ChainSweep.prefixCrossingLinks_zero,
         TNLean.MPS.AreaLaw.ChainSweep.prefixCrossingLinks_eq_empty_of_stageCount_lt,
@@ -4262,7 +4385,7 @@ with the retained-copy correction of
     \end{align}
     The endpoint prefixes $r=0$ and $r>m$ have no crossing links.
     For the middle circuit $C$, its derived support supplies the
-    required gate distance. Thus the actual common-original-gate and
+    required gate distance. Thus the common-original-gate and
     degree conclusions of distributed compression at $d=3120$ imply
     \begin{align}
         |\partial_r| & \le24960.
@@ -4330,7 +4453,7 @@ Definition~\ref{def:chain_open_mps}.
     $x_a$ be the product of their $\Omega$-reference vectors. Then
     $\|x_a\|=1$, including an empty product. From the constructed product
     input $X=\bigotimes_a x_a$ there is an original circuit $C$ to the
-    actual terminal physical factors followed by all retained private
+    terminal physical factors followed by all retained private
     registers. The physical factor at $a$ has dimension $d_a=q^{|M_a|}$.
     Its output $\Psi=CX$ satisfies
     \begin{align}
@@ -4349,7 +4472,7 @@ Definition~\ref{def:chain_open_mps}.
     have pairwise distance at most two.
 
     Let $J$ be the prescribed identification of the terminal sheet stack
-    with its raw register list, and let $T$ be the existing private
+    with its raw register list, and let $T$ be the private
     terminal regrouping. Put $Y=J^{-1}T^{-1}\Psi$.
     With the sheet readout $\mathcal R$ and copy-labelled vector $\Xi$
     of Definition~\ref{def:chain_terminal_reference}, one has
@@ -4361,7 +4484,7 @@ Definition~\ref{def:chain_open_mps}.
     The prescribed owner-grouping isometry $A_{\rm aux}$ identifies the
     private memory with the Euclidean space of the original auxiliary
     copy-site configurations, so that memory is finite-dimensional.
-    Write $V$ for the actual readout of $\Psi$ in the prescribed physical
+    Write $V$ for the readout of $\Psi$ in the prescribed physical
     coordinates and the fixed standard private orthonormal basis, and put
     $\rho=\operatorname{Tr}_{\rm private}|V\rangle\langle V|$.
     For the fixed main-block coordinate map $U_\chi$,
@@ -4383,17 +4506,17 @@ Definition~\ref{def:chain_open_mps}.
         thm:chain_terminal_reference_density,thm:chain_terminal_reference_error,
         thm:chain_terminal_coordinates}
     Compose the constructed private initialization, the given family's
-    chronological middle, and the actual private terminal regrouping.
+    chronological middle, and the private terminal regrouping.
     The two ends have no nonprivate occurrence; each such occurrence
     of the composite is the same occurrence of the middle with the same
     participant set. Its support and bounds therefore give
     (\ref{eq:chain_preparation_counts}) and
     (\ref{eq:chain_preparation_support}). The initialization is exact
     and the terminal regrouping is an isometry, so pulling back by
-    $J^{-1}T^{-1}$ gives the actual middle output. The terminal reference
+    $J^{-1}T^{-1}$ gives the middle output. The terminal reference
     identity and its derived auxiliary norm give
-    (\ref{eq:chain_preparation_sheet_error}). The actual private layout
-    is finite-dimensional through the existing grouping by auxiliary
+    (\ref{eq:chain_preparation_sheet_error}). The private layout
+    is finite-dimensional through the grouping by auxiliary
     owner. The physical marginal theorem is invariant under the choice
     of private orthonormal basis, so the terminal density-error estimate
     gives (\ref{eq:chain_preparation_physical_error}) in the stated
@@ -4421,14 +4544,14 @@ Definition~\ref{def:chain_open_mps}.
 
 \begin{theorem}[One useful column and all its cut ranks]
     \label{thm:compression_useful_column_all_cuts}
-    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.exists_useful_column_of_sub_pure_le}
+    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.exists_useful_column_of_sub_pure_le}
     \leanok
     \uses{def:compression_operator_operator,def:compression_operator_alphabets,
         def:compression_operator_endpoint_tensor,def:peps_dependent_network,
         def:peps_ket_column_dependent_fix_input}
-    Let $\sigma$ be the actual distributed operator contraction with
+    Let $\sigma$ be the distributed operator contraction with
     input and output alphabet $X_a$ at each party, all finite. Retain its
-    tagged link alphabets $D_e$ and actual endpoint tensors $A_a$.
+    tagged link alphabets $D_e$ and endpoint tensors $A_a$.
     Let $\omega\in\bigotimes_a\mathbb C^{X_a}$ be a unit vector and suppose
     $\|\sigma-|\omega\rangle\langle\omega|\|_1\le\epsilon<1$.
     There exist one product-basis input $z$ and one nonzero column
@@ -4448,14 +4571,14 @@ Definition~\ref{def:chain_open_mps}.
          & =\operatorname{rank}F_S(v).
         \label{eq:compression_useful_column_ranks}
     \end{align}
-    The cut product contains one alphabet for each actual tagged crossing
+    The cut product contains one alphabet for each tagged crossing
     edge, retaining parallel links and allowing empty alphabets.
     The column selection is that of
     \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_ket_column_dependent,thm:compression_operator_column_cut_rank}
-    Apply the existing column selection to the actual endpoint tensors
+    Apply column selection to the endpoint tensors
     of $\sigma$. Fixing $z_a$ locally gives this same column on the
     same graph and alphabets. The identity-bond factorization therefore
     bounds its rank at every cut. Since $v\ne0$, multiplication by the
@@ -4472,7 +4595,7 @@ Definition~\ref{def:chain_open_mps}.
         def:chain_party_placement,def:compression_operator_operator}
     Let $i$ range over an arbitrary index set $I$, with sizes $s_i\ge2$
     and natural lengths and widths $L_i,w_i$. Let $\mathcal C_i$ be given
-    distributed constructions on the actual parties of these chains,
+    distributed constructions on the parties of these chains,
     with no messages in their recorded monomial expansions;
     write $W_i$ for their original circuits and $\rho_i$ for their
     unrenormalized physical densities. The index map $i\mapsto L_i$
@@ -4492,7 +4615,7 @@ Definition~\ref{def:chain_open_mps}.
     $K_i\le C_Ks_i^u$. Every recorded monomial has at most $r$ pair
     effects, and at every original nonprivate gate the moduli of the
     recorded coefficients sum to at most $C_Ss_i^v$.
-    Let $\omega_i$ be unit vectors in the actual physical output spaces,
+    Let $\omega_i$ be unit vectors in the physical output spaces,
     and let $\eta_i\in\mathbb R$ satisfy
     \begin{align}
         \|\rho_i-|\omega_i\rangle\langle\omega_i|\|_1 & \le\eta_i.
@@ -4505,7 +4628,7 @@ Definition~\ref{def:chain_open_mps}.
     conclusion follows from its derived stage support.
 
     For every real $p>0$, there exist $C_p\ge0$ and an integer $\alpha>0$,
-    chosen before all $i$, such that every member has an actual tagged
+    chosen before all $i$, such that every member has a tagged
     distributed operator network $\sigma_i$ satisfying
     \begin{align}
         \|\sigma_i-\rho_i\|_1 & \le s_i^{-p},\notag                                \\
@@ -4517,16 +4640,16 @@ Definition~\ref{def:chain_open_mps}.
         \label{eq:chain_uniform_compression_dimensions}
     \end{align}
     The alphabet bound in (\ref{eq:chain_uniform_compression_dimensions})
-    holds for every actual tagged link $e$.
-    Every party meets at most $2b(a-1)$ actual links, and the two endpoints
+    holds for every tagged link $e$.
+    Every party meets at most $2b(a-1)$ links, and the two endpoints
     of each link participate in one common original nonprivate gate
     of this same $W_i$. Consequently every level prefix has at most
     $\chi$ tagged crossing links.
     Set $B_i=\max\{1,\lceil C_ps_i^\alpha\rceil_+\}$, a natural number.
-    Every actual star or sample alphabet has size at most $B_i$.
+    Every star or sample alphabet has size at most $B_i$.
 
     Only for a member with $\epsilon_i<1$, choose one product-basis
-    input $z_i$ and a nonzero actual column $v_i=\sigma_i|z_i\rangle$.
+    input $z_i$ and a nonzero column $v_i=\sigma_i|z_i\rangle$.
     This is the same input-fixed endpoint network, with
     $\|\widehat v_i\|=1$ and
     $\|\widehat v_i-e^{i\theta_i}\omega_i\|\le2\epsilon_i$ for some real
@@ -4549,7 +4672,7 @@ Definition~\ref{def:chain_open_mps}.
     \uses{thm:peps_separate_arity_compression,
         thm:chain_tagged_link_congestion,thm:compression_useful_column_all_cuts}
     Apply Theorem~\ref{thm:peps_separate_arity_compression} to the
-    whole family, retaining its actual sampled tensors and tagged alphabets.
+    whole family, retaining its sampled tensors and tagged alphabets.
     Its density estimates and trace bounds give
     (\ref{eq:chain_uniform_compression_error}) and
     (\ref{eq:chain_uniform_compression_dimensions}).
@@ -4561,7 +4684,7 @@ Definition~\ref{def:chain_open_mps}.
     $B_i^{|\partial S_t|}\le B_i^{\chi}$.
     After fixing a member with $\epsilon_i<1$, apply
     Theorem~\ref{thm:compression_useful_column_all_cuts} once to its
-    actual network. Its one choice of $z_i,v_i$ has the literal
+    network. Its one choice of $z_i,v_i$ has the
     input-fixed tensors and works for all prefixes, giving
     (\ref{eq:chain_uniform_column_rank}) and
     (\ref{eq:chain_uniform_normalized_rank}).
@@ -4576,7 +4699,7 @@ Definition~\ref{def:chain_open_mps}.
         def:chain_party_placement,def:chain_open_mps}
     Let $L,w,q$ be arbitrary natural numbers, with the same owner and
     block-coordinate definitions, including the zero-width convention.
-    Let $\psi$ be any vector on the actual physical party factors
+    Let $\psi$ be any vector on the physical party factors
     $\bigotimes_a\mathbb C^{d_a}$, where $d_a=q^{|M_a|}$.
     Define the original-site vector exactly by
     \begin{align}
@@ -4603,9 +4726,9 @@ Definition~\ref{def:chain_open_mps}.
 \begin{proof}\leanok
     \uses{def:chain_terminal_coordinates,def:chain_sweep_stage_assignments,
         def:chain_party_placement,def:chain_open_mps}
-    For $a\le m$, the actual owner satisfies
+    For $a\le m$, the owner satisfies
     $\ell(\operatorname{owner}(x))<a$ exactly when $x<at$.
-    On each side, restricting that owner map and applying the existing
+    On each side, restricting that owner map and applying the
     block encoding gives a bijection between site configurations and
     the corresponding party configurations, including empty owner fibres.
     Encoding after gluing the two site configurations is the same as
@@ -4623,7 +4746,7 @@ Definition~\ref{def:chain_open_mps}.
     \leanok
     \uses{thm:chain_party_prefix_site_coordinates,def:chain_open_mps}
     In (\ref{eq:chain_party_vector_pullback}), suppose $q\ge1$, $w\ge1$,
-    $L\ge60w$ and $R\in\mathbb N$ with $R\ge1$. Suppose the actual
+    $L\ge60w$ and $R\in\mathbb N$ with $R\ge1$. Suppose the
     physical party tensor has the prefix bounds
     \begin{align}
         \operatorname{rank}F_{S_a}(\psi) & \le R
@@ -4718,7 +4841,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     Theorem~\ref{thm:chain_one_band_geometry} give its margin; the main
     endpoint gives the last margin. This proves
     (\ref{eq:chain_band_separation}).
-    Each $T_j$ is one lattice interval, including the actual exchange
+    Each $T_j$ is one lattice interval, including the exchange
     target. Apply the logarithmic-separation estimate of
     \cite[Part~II, the lemma on information at logarithmic separation]{TNLean2026OneDimensional}
     with exponent $24$ and one interval. It chooses uniform constants
@@ -4734,7 +4857,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     \uses{def:chain_sweep_stage_assignments,def:chain_model}
     For arbitrary natural $L,q$, let $w\ge1$ and $0\le k<m$.
     Put $a=kt$ and $b=(k+1)t$, where $t=20w$.
-    The actual target and environment pairs are
+    The target and environment pairs are
     \begin{align}
         (T_k^R,E(M_k,R_k))
          & =(\lbrack b+w,L)_L,\lbrack 0,a)_L),\notag               \\
@@ -4760,7 +4883,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
 \begin{proof}
     \leanok
     \uses{thm:chain_sweep_stage_owners,thm:chain_logarithmic_separation}
-    The actual stage ownership gives (\ref{eq:chain_birth_regions})
+    The stage ownership gives (\ref{eq:chain_birth_regions})
     and the first after-death environment. Their interval endpoints
     give $|x-y|\ge w$ directly. Apply the same physical
     logarithmic-separation estimate with exponent $24$ and one
@@ -4778,12 +4901,12 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     There are $D_{24}>0$ and $L_0\ge1$ such that, for every
     $L\ge L_0$, every corresponding gapped ground vector $\Omega$
     and every natural $w\ge1$ with
-    $D_{24}\log L\le w$, each actual stage $k<m$ admits eighteen
+    $D_{24}\log L\le w$, each stage $k<m$ admits eighteen
     circuits between its prescribed successive boundaries.
     For each $0\le j<18$, $c_{k,j}$ is a bounded change on
     $\mathcal S_{k,j}$ with bounds $r=K=1$, pair-source bound one,
     at most one nonprivate occurrence, and reference error at most
-    $4L^{-12}$. At $k=0$ the positions $3,\ldots,9$ are the actual
+    $4L^{-12}$. At $k=0$ the positions $3,\ldots,9$ are the
     identity circuits, have zero error and have no nonprivate occurrence.
     Thus these circuits satisfy the entire local conclusion of
     Theorem~\ref{thm:chain_conditional_local_circuits}, including the
@@ -4801,13 +4924,13 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     of their length cutoffs. Since $\log L\ge0$, this common width
     meets both original conditions. The existence of $k<m$ forces
     $4t\le L$ and hence the required margin $3t\le L$.
-    The actual flanks permit the band estimate at
+    The flanks permit the band estimate at
     $(a,A,B,C)=(kt,R_k,P_{k+1},P_k)$ only for $k>0$, and at
     $((k+1)t,R_k,R_{k+1},P_{k+1})$ at every stage.
-    Rewrite the right band's main entrance by its actual endpoint
+    Rewrite the right band's main entrance by its endpoint
     identity. Together with the two births and the exceptional first
-    death, these supply precisely the nineteen written information
-    premises of Theorem~\ref{thm:chain_conditional_local_circuits}.
+    death, these supply precisely the nineteen information
+    hypotheses of Theorem~\ref{thm:chain_conditional_local_circuits}.
     The ground-state hypothesis supplies $\|\Omega\|=1$.
     The resulting circuits retain the seven identity positions; no
     predecessor $P_0$ or left copy is introduced at stage zero.
@@ -4849,8 +4972,8 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
         d_p=q^{|M_p|} & \le q^{80w},     & d_p          & \le KL^s.
         \label{eq:chain_physical_dimensions}
     \end{align}
-    Use the actual inverse terminal regrouping to form $Y$, the
-    sheet readout $\mathcal R$, and the actual standard physical/private
+    Use the inverse terminal regrouping to form $Y$, the
+    sheet readout $\mathcal R$, and the standard physical/private
     readout $V$ as in Theorem~\ref{thm:chain_conditional_preparation}.
     Put $\rho=\operatorname{Tr}_{\rm private}|V\rangle\langle V|$
     and $\varepsilon=4NL^{-12}$. Then
@@ -4864,7 +4987,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     The vector $\Xi$ is the product over the distinct original copies,
     including the empty product. It need not be a product over parties.
     Only the main factors have dimensions $d_p$; all auxiliary registers
-    remain private at their actual owners. This is the preparation
+    remain private at their owners. This is the preparation
     assertion of \cite[Part~II, the sweep proposition and
         the density estimate in the proof of Theorem~B]{TNLean2026OneDimensional},
     with \cite{gap:tnlean_one_dimensional_band_sweep_corrections}.
@@ -4884,14 +5007,14 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
         \label{eq:chain_physical_ceiling}
     \end{align}
     This retains the ceiling correction also at $q=1$.
-    Choose the physical local circuits at every actual stage and apply
+    Choose the physical local circuits at every stage and apply
     Theorem~\ref{thm:chain_conditional_preparation}. This constructs
     the private initialization, chronological middle and final private
     regrouping with the same output and marginal. Its derived stage
     support, together with Theorem~\ref{thm:chain_stage_arity_three},
     gives arity three. The block geometry gives the party, count and
     dimension bounds. Since $18m\le L$,
-    $\varepsilon\le4L^{-11}\le26L^{-11}$; the actual marginal bound
+    $\varepsilon\le4L^{-11}\le26L^{-11}$; the marginal bound
     is at most $2\varepsilon$. No normalization of $\Psi$ is made.
 \end{proof}
 
@@ -4905,12 +5028,12 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     Given an original vector $\Omega$, the initial
     party spaces $H_p$ and their unit vectors $x_p$ from the grouped
     initial list, and a circuit $C$ from their product layout to the
-    specified terminal layout, take the existing distributed construction
+    specified terminal layout, take the distributed construction
     with initial spaces $H_p$, initial vectors $x_p$, circuit $C$,
     physical dimensions $q^{|M_p|}$, the prescribed party order, and
     the full private auxiliary layout.
     The input is exactly $X=\bigotimes_p x_p$ and its physical density
-    is the actual standard readout of $CX$ followed by the partial trace.
+    is the standard readout of $CX$ followed by the partial trace.
     The party $R_0$ exists even if $m=0$; parties with scalar main
     outputs and the final remainder $R_m$ are retained.
     The definition imposes no resource or approximation bound on $C$.
@@ -4932,7 +5055,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     with $L\ge L_0$, $H$ a Hamiltonian of the fixed parameters and
     $\Omega$ a gapped ground vector at energy $E_0$.
     For every $i\in\iota$, set $w_i=\lceil D\log L_i\rceil_+$.
-    One can choose the unit initial vectors and the actual circuit
+    One can choose the unit initial vectors and the circuit
     $C_i$ together, obtaining the construction of
     Definition~\ref{def:chain_physical_construction} for all $i$.
     With $\omega_i=U_{\chi_i}\Omega_i$, these same constructions satisfy
@@ -4948,7 +5071,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     most one pair effect, and the coefficient moduli at each gate sum to
     at most one. Its original participants
     have pairwise level distance at most two.
-    The target density is literally the coordinate reindexing of
+    The target density is the coordinate reindexing of
     $|\Omega_i\rangle\langle\Omega_i|$ by $\chi_i$.
     Thus all premises of Theorem~\ref{thm:chain_uniform_compressed_block_column}
     hold with arity $3$, lifetime $40$, crossing parameter $1600$,
@@ -4968,7 +5091,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     Record them without changing the circuit, input, private layout
     or standard marginal. The pair-effect and coefficient-sum bounds
     are the expansion bound $(1,1)$ of the preparation. The main-coordinate map is an isometry,
-    and its pure density equals the literal reindexing entry by entry.
+    and its pure density equals the reindexing entry by entry.
     Hence the physical preparation estimates give
     (\ref{eq:chain_uniform_physical_family}) and every stated
     compression premise for this same family.
@@ -5015,19 +5138,19 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
         def:chain_party_placement}
     Retain $q,D,C_p,\alpha,\chi,L,w,A_L,n$ from
     Theorem~\ref{thm:chain_protocol_polynomial_bond} and assume
-    $60w\le L$. Let $\psi$ be a unit vector in the actual physical
+    $60w\le L$. Let $\psi$ be a unit vector in the physical
     party space. Suppose its coefficient flattening satisfies
     $\operatorname{rank}F_{S_r}(\psi)\le A_L^{\chi}$ for every
     $1\le r\le m$, where $S_r=\{p:\ell(p)<r\}$.
     Write $\chi_{\rm cfg}$ for the fixed main-configuration equivalence.
-    Define the literal inverse main-coordinate vector
+    Define the inverse main-coordinate vector
     $\Phi(x)=\psi(\chi_{\rm cfg}(x))$ and $B=q^{40w}A_L^{\chi}$.
     Then $\|\Phi\|=1$, every original-site cut $0\le k\le L$
     satisfies $\operatorname{rank}M_k(\Phi)\le B$, and $\Phi$
     is an open-boundary MPS of bond $B$. The polynomial bound
     (\ref{eq:chain_protocol_polynomial_bond}) holds and $n\ge1$.
-    The prefix-rank bounds are explicit hypotheses of this auxiliary
-    assertion, rather than physical assumptions in the final theorem.
+    The prefix-rank bounds are hypotheses here; for the protocol vector
+    they are proved in Theorem~\ref{thm:chain_protocol_mps_approximation}.
     It is the block-to-site passage in
     \cite[Part~II, end of the proof of Theorem~B]{TNLean2026OneDimensional}.
 \end{theorem}
@@ -5035,12 +5158,12 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     \uses{thm:chain_site_ranks_of_party_prefixes,thm:chain_mps_of_cut_rank,
         thm:chain_protocol_polynomial_bond}
     Positivity of $D\log L$ gives $w\ge1$, and $A_L^{\chi}\ge1$.
-    The actual coordinate equivalence preserves the norm.
+    The coordinate equivalence preserves the norm.
     Apply Theorem~\ref{thm:chain_site_ranks_of_party_prefixes} with
     $R=A_L^{\chi}$. It retains scalar physical parties and the
     nonempty final remainder, and bounds every original-site cut by
     $q^{40w}R$, including when $m=0$.
-    The existing internal-cut rank theorem constructs an MPS
+    Theorem~\ref{thm:chain_mps_of_cut_rank} constructs an MPS
     representation of this very $\Phi$. Apply
     Theorem~\ref{thm:chain_protocol_polynomial_bond} to its bond.
 \end{proof}
@@ -5101,18 +5224,18 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     $\epsilon=L^{-5}+52L^{-11}$. For every $L\ge2$,
     $52L^{-11}\le L^{-5}$, $\epsilon<1$ and
     $2\epsilon\le4L^{-5}\le L^{-1}$.
-    The actual operator network therefore has one nonzero
+    The operator network therefore has one nonzero
     product-basis column $v$, chosen before all cuts, whose
     normalization $u=v/\|v\|$ has unit norm and phase error at most
     $2\epsilon$ from $U_{\chi_{\rm cfg}}\Omega$, where
-    $\chi_{\rm cfg}$ is the actual main-configuration equivalence.
+    $\chi_{\rm cfg}$ is the main-configuration equivalence.
     Fixing the physical input changes only the local tensors; the
     same graph and its tagged alphabets remain. Every alphabet has
     dimension at most $A_L=\max\{1,\lceil C_pL^\alpha\rceil_+\}$,
     so this same $u$ has all prefix ranks at most $A_L^{1600}$.
     Normalization does not change those ranks.
     Apply Theorem~\ref{thm:chain_protocol_mps_of_prefix_ranks} to
-    $u$. It gives the literal original-site vector
+    $u$. It gives the original-site vector
     $\Phi(x)=u(\chi_{\rm cfg}(x))$ with bond $B=q^{40w}A_L^{1600}$ and
     $B\le C_{\rm large}L^n\le CL^n$.
     The coordinate isometry gives, for the same phase,
@@ -5152,7 +5275,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     length and width used to specify the party set.
 
     For each $p>0$ there are $C_p\ge0$ and natural $\alpha>0$,
-    before all members, and for every member one actual sampled
+    before all members, and for every member one sampled
     network with both density estimates, retained trace bounds,
     polynomial alphabets and common-original-gate witnesses in
     (\ref{eq:peps_separate_arity_network})--(\ref{eq:peps_separate_arity_pure}).
@@ -5162,7 +5285,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
         |\partial_r| & \le1280\le1600.
         \label{eq:chain_sharp_sampled_crossings}
     \end{align}
-    Here $\partial_r$ consists of the actual links crossing
+    Here $\partial_r$ consists of the links crossing
     $\{j:\ell(j)<r\}$. These are auxiliary preparation hypotheses
     for the crossing step in
     \cite[Part~II, proof of Theorem~B]{TNLean2026OneDimensional}.
@@ -5170,7 +5293,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
 \begin{proof}\leanok
     \uses{thm:peps_separate_arity_compression,thm:chain_tagged_link_congestion}
     Apply Theorem~\ref{thm:peps_separate_arity_compression} with
-    $a=3$ and $b=40$. It retains the actual network and gives
+    $a=3$ and $b=40$. It retains the network and gives
     $2\cdot40(3-1)=160$ incident links per party.
     Its common-original-gate witnesses and the original gate's
     distance bound put the endpoints of each crossing link in
@@ -5209,7 +5332,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
         \|\rho_i-|\omega_i\rangle\langle\omega_i|\|_1 & \le52L_i^{-11},
         \label{eq:chain_sharp_physical_inputs}
     \end{align}
-    where $\omega_i=U_{\chi_i}\Omega_i$ is the actual unit
+    where $\omega_i=U_{\chi_i}\Omega_i$ is the unit
     main-coordinate vector. Monomial and coefficient-sum bounds are one,
     original-gate participant distances are at most two, and
     $w_i\ge1$, $60w_i\le L_i$.
@@ -5242,7 +5365,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     \uses{thm:chain_uniform_physical_family,thm:chain_sharp_sampled_crossings}
     In the physical preparation family retain the derived arity-three
     bound of the same chosen circuits. The arity follows from their
-    actual stage support and the participant table; it is independent
+    stage support and the participant table; it is independent
     of the lifetime bound. All members are present before sampling
     constants are selected.
     Apply Theorem~\ref{thm:chain_sharp_sampled_crossings} at $p=5$,
@@ -5251,5 +5374,5 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     $C_K=C_S=1$ and $\eta_i=52L_i^{-11}$.
     Retain its witnesses and all original preparation conclusions.
     This gives (\ref{eq:chain_sharp_physical_outputs}) on the same
-    actual tensor entries and tagged alphabets.
+    tensor entries and tagged alphabets.
 \end{proof}

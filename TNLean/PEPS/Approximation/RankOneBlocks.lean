@@ -13,7 +13,7 @@ normalized vectors and covectors on groups of sites, each group on at most two p
 monomial allowed by Theorem 5.2. This file provides the pieces of that reading on the registers
 of an encoded frame, one register per site and per tag (`TNLean.PEPS.Approximation.FrameRegisters`).
 
-* `PairEffect.PartyChain.append`: two monomials applied in succession.
+* `PartyCircuit.PartyChain.append`: two monomials applied in succession.
 * `PairEffect.rankOneChain`: on two registers `ℂ^α` of `p_A` and `ℂ^β` of `p_B`, the
   rank-one map `|v⟩⟨w|` followed by a change of the owners to `p_A'` and `p_B'`. The bra is a
   normalized pair effect when `p_A ≠ p_B` and a private contraction otherwise; the ket is a
@@ -30,12 +30,12 @@ of an encoded frame, one register per site and per tag (`TNLean.PEPS.Approximati
 
 ## Main definitions
 
-* `PairEffect.PartyChain.append`, `PairEffect.rankOneChain`.
+* `PartyCircuit.PartyChain.append`, `PairEffect.rankOneChain`.
 * `EncodedFrame.RankOneBlock`, `EncodedFrame.RankOneBlock.op`, `EncodedFrame.zeroPair`.
 
 ## Main results
 
-* `PairEffect.PartyChain.eval_append`, `PairEffect.PartyChain.append_props`.
+* `PartyCircuit.PartyChain.eval_append`, `PartyCircuit.PartyChain.append_props`.
 * `PairEffect.pairHeadIso_rankOneChain`, `PairEffect.rankOneChain_props`.
 * `EncodedFrame.RankOneBlock.op_apply`, `EncodedFrame.RankOneBlock.prod_op_apply`.
 * `EncodedFrame.exists_pairVec`: a vector on the sites of a group read on its two parts.
@@ -59,7 +59,7 @@ open scoped InnerProductSpace TensorProduct Kronecker Matrix.Norms.L2Operator
 
 /-! ### Composing monomials -/
 
-namespace TNLean.PEPS.PairEffect.PartyChain
+namespace TNLean.Lattice.PartyCircuit.PartyChain
 
 variable {P : Type}
 
@@ -110,13 +110,14 @@ theorem swapsMeet_append (f : P → Bool) {ℓZ : Layout P} : {ℓX ℓY : Layou
   | _, _, final _, _, hM, hM' => swapsMeet_precomp f hM hM'
   | _, _, effect _ _ _ _ _ _ rest, _, hM, hM' => ⟨hM.1, swapsMeet_append f (M := rest) hM.2 hM'⟩
 
-end TNLean.PEPS.PairEffect.PartyChain
+end TNLean.Lattice.PartyCircuit.PartyChain
 
 /-! ### A rank-one map on two front registers -/
 
 namespace TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
-open EncodedFrame (act act_apply_apply)
+open TNLean.Lattice.Sheet (act act_apply_apply)
 
 variable {P : Type} {α β : Type} [Fintype α] [Fintype β] [DecidableEq α] [DecidableEq β]
 
@@ -289,8 +290,9 @@ end TNLean.PEPS.PairEffect
 /-! ### Rank-one blocks of sites -/
 
 namespace TNLean.PEPS.EncodedFrame
+open TNLean.Lattice.Sheet
 
-open PairEffect
+open PairEffect TNLean.Lattice.PartyCircuit
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ}
 

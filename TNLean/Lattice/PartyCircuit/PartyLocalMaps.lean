@@ -24,7 +24,7 @@ open scoped InnerProductSpace TensorProduct
 
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 variable {P : Type}
 
@@ -144,4 +144,4 @@ theorem Word.exists_tensorPartyMaps_parties {ℓ ℓ' : Layout P} (w : Word ℓ 
   exact w.exists_tensorPartyMaps hs hw w.parties.toList w.parties.nodup_toList
     (fun p hp ↦ Finset.mem_toList.mpr hp)
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

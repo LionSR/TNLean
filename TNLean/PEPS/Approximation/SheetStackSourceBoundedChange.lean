@@ -14,7 +14,7 @@ Item 3 of Theorem 5.2 of the polynomial-PEPS manuscript asks for a constant boun
 pair sources, pair effects and messages in each monomial of every gate (`04-compression.tex`,
 lines 143–147). The protocol of Proposition 7.1 provides it through the counts of the step
 theorems of its changes (`06-geometry.tex`, lines 572–583). This file carries the pair-source
-bound `PairEffect.OriginalCircuit.IsSourceBounded` alongside the bounded changes of the sheets of
+bound `PartyCircuit.OriginalCircuit.IsSourceBounded` alongside the bounded changes of the sheets of
 `TNLean.PEPS.Approximation.SheetStackChange`. The predicate and its closure properties hold for
 sheets of any type and are proved in `TNLean.Lattice.Sheet.StackSourceBoundedChange`; this file
 reads them at the encoded frames, with the reference vectors `Ω_F`.
@@ -37,7 +37,7 @@ noncomputable section
 
 namespace TNLean.PEPS.EncodedFrame
 
-open PairEffect PairEffect.OriginalCircuit
+open TNLean.Lattice.PartyCircuit TNLean.Lattice.PartyCircuit.OriginalCircuit
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {Party : Type}
   {pos : ι → ℝ × ℝ}

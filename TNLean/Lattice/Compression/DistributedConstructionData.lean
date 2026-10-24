@@ -26,7 +26,8 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 17–30,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
+open TNLean.Lattice.PartyCircuit
 
 /-- The original input and output data, on a finite nonempty party set.
 There is no assumption on the size of private spaces beyond finiteness.
@@ -66,4 +67,4 @@ structure DistributedConstructionData (P : Type) [Fintype P] where
   Source: `04-compression.tex`, lines 17–19 and 150–151. -/
   finite_privateOutput : ∀ r ∈ privateOutput, FiniteDimensional ℂ r.space
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

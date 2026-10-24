@@ -42,8 +42,8 @@ theorem IsBiorthogonalDecomposition.mpv_eq_sum_multiplicity
       (fun q : (c : ι) × Fin (N c) ↦ A q.1)
       (fun q ↦ V q.1 q.2) (fun q ↦ W q.1 q.2))
     {L : ℕ} (hL : 0 < L) (w : Fin L → Fin d) :
-    mpv B w = ∑ c, (N c : ℂ) * mpv (A c) w := by
-  exact h.trace_evalWord_eq_sum_multiplicity (List.ofFn w)
+    mpv B w = ∑ c, (N c : ℂ) * mpv (A c) w :=
+  h.trace_evalWord_eq_sum_multiplicity (List.ofFn w)
     (by rw [Ne, List.ofFn_eq_nil_iff]; omega)
 
 /-- Positive-dimensional blocks with simultaneous word spanning have

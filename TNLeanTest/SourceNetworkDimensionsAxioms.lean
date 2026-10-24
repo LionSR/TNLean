@@ -10,7 +10,7 @@ import Lean.Util.CollectAxioms
 /-! # Axiom checks for source density link dimensions and locality -/
 
 set_option linter.hashCommand false
-open TNLean.PEPS.PairEffect.SourceCircuit
+open TNLean.Lattice.PartyCircuit.SourceCircuit
 
 run_cmd do
   let decl := ``card_alphabet_source_density

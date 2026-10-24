@@ -19,7 +19,7 @@ reused.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 /-- All source positions in preparation order, retaining the order of slots
@@ -286,4 +286,4 @@ theorem layout_sources_partialWord (A : P → Bool) {a b : Layout P}
           simp only [List.filterMap_cons, hs, List.filter_cons, ht, ↓reduceIte,
             List.flatMap_cons, PairSource.layout, hl, hr, hU, hV, ih]
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

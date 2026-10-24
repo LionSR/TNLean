@@ -16,7 +16,7 @@ the scalar memory. The register spaces and maps are arbitrary.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–309 and 565–588.
 -/
 
-namespace TNLean.PEPS.PairEffect.SourceInventory
+namespace TNLean.Lattice.PartyCircuit.SourceInventory
 
 variable {P : Type}
 
@@ -65,4 +65,4 @@ theorem restrict_endpointWord_eq_nil_and_eval_eq_id
   simp only [PairSource.layout, List.mem_cons, List.not_mem_nil, or_false] at hr
   grind
 
-end TNLean.PEPS.PairEffect.SourceInventory
+end TNLean.Lattice.PartyCircuit.SourceInventory
