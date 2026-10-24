@@ -20,8 +20,8 @@ invariant, $P$ is the orthogonal projection onto the eigenspace of $H$ for an
 energy $E_0$, and $S\le G$ is a subgroup with $P_gv=v$ for every $g\in S$ and
 every $v$ in this eigenspace.
 
-\begin{lemma}[Compression of a conjugate]
-    \label{lem:hastings_supercell_compression}
+\begin{theorem}[Compression of a conjugate]
+    \label{thm:hastings_supercell_compression}
     \lean{Submodule.starProjection_mul_conj_mul_starProjection,
         Matrix.sitePermMatrix_inv,
         TNLean.Lattice.starProjection_mul_sitePermMatrix_conj_mul_starProjection}
@@ -31,7 +31,7 @@ every $v$ in this eigenspace.
     space, and let $U^\dagger$ fix every vector of $K$. Then
     $Q(UWU^\dagger)Q=QWQ$ for every operator $W$. In particular
     $P(P_gWP_g^\dagger)P=PWP$ for every $g\in S$.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     $U^\dagger Q=Q$, and taking adjoints $QU=Q$; so
     $QUWU^\dagger Q=QWQ$. For $g\in S$ take $U=P_g$: then
@@ -43,7 +43,7 @@ every $v$ in this eigenspace.
     \lean{TNLean.Lattice.groundCompression_commutator_eq_of_mem_supercell,
         TNLean.Lattice.norm_groundCompression_commutator_le_of_mem_supercell}
     \leanok
-    \uses{lem:hastings_supercell_compression,thm:hastings_filtered_term_translate}
+    \uses{thm:hastings_supercell_compression,thm:hastings_filtered_term_translate}
     Let $G$ act on an index set, let the terms satisfy
     $h_{g\cdot k}=P_gh_kP_g^\dagger$, and let $M_k$ be their filtered operators.
     For every $g\in S$ and all indices $i$, $j$,
@@ -55,7 +55,7 @@ every $v$ in this eigenspace.
 \end{theorem}
 \begin{proof}\leanok
     Since $H$ is invariant, $M_{g\cdot j}=P_gM_jP_g^\dagger$, and its
-    compression is $PM_jP$ by the lemma.
+    compression is $PM_jP$ by the previous theorem.
 \end{proof}
 
 With a bound $B(i,j)$ that decays in the distance from $i$ to $j$, choosing

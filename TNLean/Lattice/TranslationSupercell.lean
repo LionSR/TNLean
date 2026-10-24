@@ -35,7 +35,8 @@ step and the transfer of any bound.
 rational multiples of `2π` whose denominators do not depend on the system size (lines
 1620–1625), and derives from this a supercell whose translations leave every ground state
 unchanged (lines 1626–1630). The three results in `TNLean.Lattice` above instead assume
-directly a subgroup `S` of the symmetry group with this property. Documented in `docs/paper-gaps/hastings05_translation_supercell.tex`.
+directly a subgroup `S` of the symmetry group with this property. Documented in
+`docs/paper-gaps/hastings05_translation_supercell.tex`.
 -/
 
 open Matrix GaussianFilter
