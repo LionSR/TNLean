@@ -180,3 +180,62 @@ eq.~(thd) \cite{gap:hastings05_truncated_dynamics}.
     is that of Theorem~\ref{thm:hastings_gaussian_filtered_spectral}, and the
     adjoint of the filter of $W$ is the filter of $W^\dagger$.
 \end{proof}
+
+\begin{theorem}[The truncated approximation at the time window $T=q/\Delta E$]
+    \label{thm:hastings_truncated_approximation_time}
+    \lean{TNLean.Lattice.exp_neg_sq_div_eq_of_time_eq,
+        TNLean.Lattice.norm_gaussianFilteredTerm_sub_truncated_le_of_time}
+    \leanok
+    \uses{thm:hastings_truncated_approximation}
+    In the setting of Theorem~\ref{thm:hastings_truncated_approximation}, let
+    $q\ge0$ and $\Delta E>0$. At $T=q/\Delta E$ the Gaussian tail
+    $e^{-(T\Delta E)^2/(2q)}$ equals $e^{-q/2}$, so
+    \begin{align*}
+        \|\widetilde W-M\|\le2v_RC\,|S|\,\|W\|\,J\,N\,\frac{q}{\Delta E}\,
+        e^{vq/\Delta E-\mu m}+2\|W\|e^{-q/2}.
+    \end{align*}
+    For $q=c_1l_{proj}\Delta E$ this is the time $T=c_1l_{proj}$ of
+    \cite[lines 337--349]{Hastings2006Solving}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:hastings_truncated_approximation}
+    Put $T=q/\Delta E$ in Theorem~\ref{thm:hastings_truncated_approximation};
+    then $(T\Delta E)^2/(2q)=q/2$ for $q>0$, and both sides of the tail
+    identity are $1$ for $q=0$.
+\end{proof}
+
+\begin{theorem}[Ground vectors under the truncated approximation]
+    \label{thm:hastings_truncated_facld}
+    \lean{TNLean.Lattice.norm_sub_starProjection_truncated_apply_le,
+        TNLean.Lattice.norm_truncated_apply_sub_inner_smul_le}
+    \leanok
+    \uses{thm:hastings_truncated_approximation_time, thm:hastings05_facld}
+    In the setting of Theorem~\ref{thm:hastings_truncated_approximation}, let
+    $q\ge0$ and $\Delta E>0$, and let every eigenvalue of $H=\sum_kh_k$ equal
+    $E_0$ or be at least $E_0+\Delta E$. Write
+    \begin{align*}
+        \delta=3\|W\|e^{-q/2}+2v_RC\,|S|\,\|W\|\,J\,N\,\frac{q}{\Delta E}\,
+        e^{vq/\Delta E-\mu m}.
+    \end{align*}
+    For every ground vector $\psi$, the component of $M\psi$ orthogonal to the
+    ground space has norm at most $\delta\|\psi\|$. If $\Omega$ is a unique
+    ground state with gap $\Delta E$, then
+    $\|M\Omega-\langle\Omega,M\Omega\rangle\Omega\|\le\delta$. With $W=H_i$
+    and the choices of Theorem~\ref{thm:hastings_truncated_approximation},
+    these are eq.~(facld) of \cite[lines 322--348]{Hastings2006Solving} and
+    the bound for one ground state at lines 375--387, with explicit
+    constants and $q$ free. For $\mu>0$ fixed, $m=l_{proj}-3R$ and
+    $q=c_1l_{proj}\Delta E$ with $0<c_1<\mu/v$, both terms of $\delta$ decay
+    exponentially in $l_{proj}$ \cite{gap:hastings05_truncated_dynamics}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:hastings_truncated_approximation_time, thm:hastings05_facld}
+    Theorem~\ref{thm:hastings05_facld} bounds both quantities by
+    $\|W\|e^{-q/2}+\|\widetilde W-M\|$ (times $\|\psi\|$ for the first), and
+    Theorem~\ref{thm:hastings_truncated_approximation_time} bounds
+    $\|\widetilde W-M\|$.
+\end{proof}
