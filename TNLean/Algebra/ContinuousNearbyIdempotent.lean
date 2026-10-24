@@ -59,8 +59,8 @@ private theorem newton_iterate_eq_of_idempotent {n : ℕ}
 private theorem newton_limit_mem_adjoin {n : ℕ}
     (X P : Matrix (Fin n) (Fin n) ℂ)
     (hP : Tendsto (fun k => ((fun x => 3 * x ^ 2 - 2 * x ^ 3)^[k]) X)
-      atTop (𝓝 P)) : P ∈ Algebra.adjoin ℂ {X} := by
-  exact (Algebra.adjoin ℂ {X}).toSubmodule.closed_of_finiteDimensional.mem_of_tendsto hP
+      atTop (𝓝 P)) : P ∈ Algebra.adjoin ℂ {X} :=
+  (Algebra.adjoin ℂ {X}).toSubmodule.closed_of_finiteDimensional.mem_of_tendsto hP
     (Eventually.of_forall (newton_iterate_mem_adjoin X))
 
 
