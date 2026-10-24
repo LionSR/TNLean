@@ -51,8 +51,8 @@ theorem regularRegionTwoCycleMove_coordinateTranslation (o : RV R)
     (e₀ e₁ : RC (Γ := Γ) R T) (hne : e₀ ≠ e₁)
     (ℓ : RV R → G) (c : RegularRegionCoordinates (Γ := Γ) (G := G) R T o) :
     regularRegionTwoCycleMove R T o e₀ e₁ hne (regularRegionCoordinateTranslation R T o ℓ c) =
-      regularRegionCoordinateTranslation R T o ℓ (regularRegionTwoCycleMove R T o e₀ e₁ hne c) := by
-  exact regularRegionCyclePermutation_coordinateTranslation R T o
+      regularRegionCoordinateTranslation R T o ℓ (regularRegionTwoCycleMove R T o e₀ e₁ hne c) :=
+  regularRegionCyclePermutation_coordinateTranslation R T o
     (regularTwoCycleMove e₀ e₁ hne) (regularTwoCycleMove_conjugation e₀ e₁ hne) ℓ c
 
 /-- The native physical two-cycle permutation commutes with every independent
@@ -62,8 +62,8 @@ theorem regularRegionTwoCyclePhysicalMove_commute_vertexTranslation
     (e₀ e₁ : RC (Γ := Γ) R T) (hne : e₀ ≠ e₁) (ℓ : RV R → G) :
     Commute (Matrix.permMatrixHom (R := ℂ)
       (regularRegionTwoCyclePhysicalMove R T hT htree o e₀ e₁ hne))
-      (regularRegionVertexTranslationMatrix (Γ := Γ) R ℓ) := by
-  exact regularRegionCyclePhysicalPermutation_commute_vertexTranslation R T hT htree o
+      (regularRegionVertexTranslationMatrix (Γ := Γ) R ℓ) :=
+  regularRegionCyclePhysicalPermutation_commute_vertexTranslation R T hT htree o
     (regularTwoCycleMove e₀ e₁ hne) (regularTwoCycleMove_conjugation e₀ e₁ hne) ℓ
 
 /-- The actual two-cycle operation commutes with the product of local regular

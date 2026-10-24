@@ -225,7 +225,7 @@ theorem norm_interactionAverage_mul_sub_le (h : ℝ≥0) {A B : Matrix n n ℂ}
     · rw [CStarRing.norm_mem_unitary_mul _ (interactionPropagator_mem_unitaryGroup hA hB t)]
       exact norm_hermitianUnitaryPath_mul_sub_le hA X t
     · rw [integral_mul_const]
-      exact mul_le_mul_of_nonneg_right (integral_abs_gaussianReal_le h) (norm_nonneg _)
+      exact mul_le_mul_of_nonneg_right (Lattice.integral_abs_gaussianReal_le h) (norm_nonneg _)
   calc ‖interactionAverage h A B * X - P₀‖
       ≤ ‖GaussianFilter.gaussianIntertwiner h (A + B) 0 1 * X - P₀‖ +
           ‖GaussianFilter.gaussianIntertwiner h (A + B) 0 1 * X -
