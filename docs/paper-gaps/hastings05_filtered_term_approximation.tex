@@ -29,7 +29,7 @@ $\lVert H_i\rVert\le J$ and $H_i$ acting within distance $R$ of the site $i$
 \begin{align}
   \tilde H_i^0=\frac{\Delta E}{\sqrt{2\pi q}}\int dt\,
   e^{iHt}H_ie^{-iHt}\,e^{-(t\Delta E)^2/(2q)}
-  \label{eq:thd}
+  \label{eq:hastings05_filtered_term}
 \end{align}
 (eqs.~\texttt{tnd}, \texttt{thd}, lines~194--207). The source then defines
 (eqs.~\texttt{mid}, \texttt{odef}, \texttt{hpdef}, lines~285--307)
@@ -38,7 +38,7 @@ $\lVert H_i\rVert\le J$ and $H_i$ acting within distance $R$ of the site $i$
   e^{-(t\Delta E)^2/2}\,e^{iH_{\mathrm{loc}}t}H_ie^{-iH_{\mathrm{loc}}t},
   \qquad
   H_{\mathrm{loc}}=\sum_{j:\,d(i,j)\le l_{\mathrm{proj}}-R}H_j,
-  \label{eq:mid}
+  \label{eq:hastings05_local_evolution_term}
 \end{align}
 and states that $M_i$ acts within distance $l_{\mathrm{proj}}$ of $i$, that
 $\lVert M_i\rVert\le J$ (line~320), and that
@@ -46,7 +46,7 @@ $\lVert M_i\rVert\le J$ (line~320), and that
   \lVert\tilde H_i^0-M_i\rVert\le
   J\bigl(N(l_{\mathrm{proj}})\,g(c_1l_{\mathrm{proj}},l_{\mathrm{proj}})
   +2e^{-(c_1l_{\mathrm{proj}}\Delta E)^2/(2q)}\bigr)
-  \label{eq:apb}
+  \label{eq:hastings05_local_evolution_bound}
 \end{align}
 (eq.~\texttt{apb}, lines~309--320, proved at lines~1458--1533). The later
 argument (eq.~\texttt{facld} and lines~359--387) uses only these three
@@ -54,11 +54,12 @@ properties of $M_i$.
 
 \section{Two local corrections}
 
-\paragraph{The exponent in~\eqref{eq:mid}.} The Gaussian weight in~\eqref{eq:mid}
-is printed as $e^{-(t\Delta E)^2/2}$. With the prefactor
+\paragraph{The exponent in~\eqref{eq:hastings05_local_evolution_term}.}
+The Gaussian weight in~\eqref{eq:hastings05_local_evolution_term} is printed as $e^{-(t\Delta E)^2/2}$. With the prefactor
 $\Delta E/\sqrt{2\pi q}$ it is a probability density only when $q=1$, and the
-comparison~\eqref{eq:apb} with~\eqref{eq:thd} splits the two integrals at the
-same time with the same weight. The weight of~\eqref{eq:thd},
+comparison~\eqref{eq:hastings05_local_evolution_bound}
+with~\eqref{eq:hastings05_filtered_term} splits the two integrals at the same
+time with the same weight. The weight of~\eqref{eq:hastings05_filtered_term},
 $e^{-(t\Delta E)^2/(2q)}$, is meant.
 
 \paragraph{The construction of $M_i$.} The formalization does not evolve $H_i$
@@ -72,27 +73,31 @@ This operator has analogous support, norm and approximation bounds.
   \item $\lVert\mathbb E_K(\tilde H_i^0)\rVert\le\lVert\tilde H_i^0\rVert
     \le\lVert H_i\rVert\le J$, since the partial trace and the filter do not
     increase the norm. It is Hermitian when $H_i$ is.
-  \item Splitting~\eqref{eq:thd} at $|t|=T$ and applying the Lieb--Robinson
-    localization of $e^{iHt}H_ie^{-iHt}$ onto $K$ for $|t|\le T$ gives
+  \item Splitting~\eqref{eq:hastings05_filtered_term} at $|t|=T$ and applying
+    the Lieb--Robinson localization of $e^{iHt}H_ie^{-iHt}$ onto $K$ for
+    $|t|\le T$ gives
     \begin{align}
       \lVert\tilde H_i^0-\mathbb E_K(\tilde H_i^0)\rVert
       \le C'|S|^2\lVert H_i\rVert e^{vT-l/2}
       +2\lVert H_i\rVert e^{-(T\Delta E)^2/(2q)},
-      \label{eq:apb-pt}
+      \label{eq:hastings05_filtered_partial_trace_bound}
     \end{align}
     with $S$ the support of $H_i$ and $C'$, $v$ the constants of the graph
-    localization estimate. This is an analogue of~\eqref{eq:apb}, with a
-    different construction and localization term.
+    localization estimate. This is an analogue
+    of~\eqref{eq:hastings05_local_evolution_bound}, with a different construction and localization term.
 \end{itemize}
 
 Since $S$ lies within distance $R$ of $i$, the set $K$ lies within distance
 $l+R$ of $i$. For integer radii $l_{\mathrm{proj}}\ge R$, take
 $l=l_{\mathrm{proj}}-R$ to recover the source's support radius. The
-localization term in~\eqref{eq:apb-pt} then becomes
-\begin{align*}
- C'|S|^2\lVert H_i\rVert e^{vT-(l_{\mathrm{proj}}-R)/2}.
-\end{align*}
-In particular, at $T=c_1l_{\mathrm{proj}}$ it carries an extra factor
+localization term in~\eqref{eq:hastings05_filtered_partial_trace_bound}
+then becomes
+\begin{align}
+  C'|S|^2\lVert H_i\rVert e^{vT-(l_{\mathrm{proj}}-R)/2}.
+  \label{eq:hastings05_filtered_shifted_localization}
+\end{align}
+In particular, at $T=c_1l_{\mathrm{proj}}$ the
+term~\eqref{eq:hastings05_filtered_shifted_localization} carries an extra factor
 $e^{R/2}$ compared with substituting $l=l_{\mathrm{proj}}$. The source's
 quantitative estimate is not asserted for this different construction.
 At $q=0$ the filter is defined to be $H_i$ itself; the bounds remain valid
@@ -138,8 +143,8 @@ constants, rather than the printed quantitative bound.
 \leanid{TNLean.Lattice.exists_local_approx_gaussianFilteredTerm} gives an
 operator with these support, norm and approximation bounds, and
 \leanid{TNLean.Lattice.norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood}
-proves~\eqref{eq:apb-pt} for the partial trace. The theorems that take $M_i$
-as input,
+proves~\eqref{eq:hastings05_filtered_partial_trace_bound} for the partial
+trace. The theorems that take $M_i$ as input,
 \leanid{TNLean.Lattice.norm_sub_starProjection_apply_le_of_gaussianFilteredTerm},
 \leanid{TNLean.Lattice.norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm}
 and \leanid{TNLean.Lattice.norm_sum_sub_le_of_sum_eq}, hold for every operator

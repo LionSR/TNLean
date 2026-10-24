@@ -9,7 +9,7 @@
 \date{October 23, 2026}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source statement}
 
@@ -81,9 +81,18 @@ the area law on the chain, which bounds $S(\rho^0_{1,j})$ by a constant
 $S_{\max}$ for every cut. Taking $k_0=\lceil\exp(2S_{\max})/2\rceil$ then
 supplies the entropy threshold for the ground state, with $k_0$ independent of
 $j$ and $N$. The application also requires deriving Lemma~1 with uniform
-constants from the Hamiltonian assumptions. The full Hamiltonian theorem
-remains open until both deductions and their application to the matrix
-product state estimate are formalized.
+constants from the Hamiltonian assumptions.
+Both deductions are formalized. For the gapped ground state around which
+Lemma~1 holds, the area law supplies the entropy threshold, and the matrix
+product state estimate follows. Lemma~1 is in turn supplied for every gapped
+chain of finite range with a constant $C_1$ independent of the chain length,
+so the estimate holds under the source's Hamiltonian assumptions alone, with
+$k_0$ independent of $N$.\footnote{\leanid{TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_sq_le_of_gappedGroundState}
+    and
+    \leanid{TNLean.MPS.AreaLaw.Hastings.exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState}
+    in \doclink{TNLean/MPS/AreaLaw/Hastings/MPSGroundState}.} The quantitative
+restrictions of the formalized Lemma~1, which $k_0$ inherits, are recorded in
+\path{hastings07_lemma1_decay_length.tex}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
