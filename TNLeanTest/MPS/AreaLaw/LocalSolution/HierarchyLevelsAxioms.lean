@@ -3,12 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.LocalSolution.SupersiteHierarchy
+import TNLean.MPS.AreaLaw.LocalSolution.HierarchyLevels
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
 /-! Presence and permitted-axiom checks for the deficiencies of all levels of Hastings'
-hierarchical projection and its supersite grouping. -/
+hierarchical projection. -/
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
@@ -24,17 +24,7 @@ run_cmd do
     ``TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_nonneg,
     ``TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_le_hierarchyMajorant,
     ``TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_le,
-    ``TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_le_rpow_quarter,
-    ``TNLean.MPS.AreaLaw.LocalSolution.cfc_mem_supportedOperators,
-    ``TNLean.MPS.AreaLaw.LocalSolution.windowProjection_mem_supportedOperators,
-    ``TNLean.MPS.AreaLaw.LocalSolution.compressedWindowProjection_mem_supportedOperators,
-    ``TNLean.MPS.AreaLaw.LocalSolution.levelBlock,
-    ``TNLean.MPS.AreaLaw.LocalSolution.levelBlock_two_mul_subset,
-    ``TNLean.MPS.AreaLaw.LocalSolution.levelBlock_two_mul_add_one_subset,
-    ``TNLean.MPS.AreaLaw.LocalSolution.disjoint_levelBlock_two_mul,
-    ``TNLean.MPS.AreaLaw.LocalSolution.mem_supportedOperators_hierarchy,
-    ``TNLean.MPS.AreaLaw.LocalSolution.norm_sub_supersiteHierarchy_le,
-    ``TNLean.MPS.AreaLaw.LocalSolution.norm_toEuclideanLin_sum_sub_le] do
+    ``TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_le_rpow_quarter] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl
