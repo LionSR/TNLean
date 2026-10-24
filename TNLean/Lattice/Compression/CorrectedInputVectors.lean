@@ -28,7 +28,7 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS.Approximation TNLean.Lattice.PartyCircuit.SourceInventory
+open TNLean.Lattice.Compression TNLean.Lattice.PartyCircuit.SourceInventory
 variable {P : Type}
 
 -- Keeping the retained-slot list opaque stops elaboration from unfolding the

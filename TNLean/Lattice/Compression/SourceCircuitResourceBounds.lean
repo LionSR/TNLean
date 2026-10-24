@@ -29,7 +29,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 variable {P : Type} {a b : Layout P}
 
 /-- Expansion bounds hold at every actual gate occurrence, including repeated

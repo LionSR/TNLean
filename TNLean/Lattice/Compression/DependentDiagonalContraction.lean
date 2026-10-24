@@ -16,7 +16,7 @@ to close any extra cut incidences without changing the internal contraction.
 
 noncomputable section
 open scoped BigOperators
-namespace TNLean.PEPS.DependentBondNetwork
+namespace TNLean.Lattice.DependentBondNetwork
 
 variable {Edge : Type*} (D : Edge → Type*)
 
@@ -86,4 +86,4 @@ theorem sum_cutIdentityWeight_mul (C : Finset Edge)
       ring
     _ = _ := sum_identityWeight_mul D _
 
-end TNLean.PEPS.DependentBondNetwork
+end TNLean.Lattice.DependentBondNetwork

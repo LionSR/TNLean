@@ -20,7 +20,7 @@ noncomputable section
 open ContinuousLinearMap
 open scoped TensorProduct
 namespace TNLean
-open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
 namespace Lattice.PartyCircuit.SourceInventory
 variable {P Q : Type}

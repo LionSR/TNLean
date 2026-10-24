@@ -1,0 +1,40 @@
+{
+ "reviewedAt": "2026-10-23T12:50:00Z",
+ "checked": [],
+ "entries": [
+  {
+   "id": "docs/paper-gaps/lvv13_trimmed_energy_constant.tex",
+   "kind": "missing-step",
+   "status": "open",
+   "paper": "lvv",
+   "result": "Lemma l:2, energy of a trimmed low-energy state",
+   "issue": 9819,
+   "stage": "alg:2",
+   "prs": {},
+   "title": "Energy bound after trimming at one cut",
+   "summary": "The printed proof drops two terms, one of which depends on 1/ε; the bound ε<sub>0</sub> + 6√δ and the constant chosen from it downstream have not yet been rechecked.",
+   "context": "Lemma l:2 trims a low-energy state to the constant Schmidt rank <i>B</i><sub>δ</sub> at one cut and bounds the energy of the result. The algorithm uses it to show that a good state of constant rank at a cut always exists, and chooses its accuracy constant <i>c</i><sub>ε</sub> = (ε/169)<sup>2</sup> from this bound.",
+   "claims": "If δ(1 + 1/ε) ≤ 1/2 and <i>w</i> has energy at most ε<sub>0</sub> + δ, the normalized trimmed state has energy at most ε<sub>0</sub> + 6√δ.",
+   "found": "The proof first bounds the change in one local term by 2√δ′ with δ′ = δ(1 + 1/ε) ≥ δ, then continues with 2√δ; and of a term (1 − ε<sub>0</sub>)δ′ it keeps only −ε<sub>0</sub>δ′. Keeping both gives a bound of the form ε<sub>0</sub> + 2(δ + δ′ + 2√δ′), which depends on 1/ε. This reading comes from the tracking issue and has not yet been written up as a note.",
+   "impact": "Probably not. A smaller choice of <i>c</i><sub>ε</sub>, polynomial in ε, appears to restore the later inequality 14√<i>c</i><sub>ε</sub> &lt; ε/12, which would change constants but not the polynomial running time.",
+   "plan": "Write the paper-gap note with the corrected bound, recheck the choice of <i>c</i><sub>ε</sub> and the inequality used in the proof of Lemma l:leading, and record whether only constants change."
+  },
+  {
+   "id": "docs/paper-gaps/lvv13_runtime_ground_energy.tex",
+   "kind": "error",
+   "status": "open",
+   "paper": "lvv",
+   "result": "Theorem 1, dependence of the running time on the ground energy",
+   "issue": 9822,
+   "stage": "alg:5",
+   "prs": {},
+   "title": "Ground energy in the exponent of the running time",
+   "summary": "As quoted in the tracking issue, Theorem 1 gives an exponent independent of the ground energy, but the normalization of the approximate ground-state projector contributes a factor polynomial in <i>n</i> only when ε<sub>0</sub>/ε is bounded; this page states the corrected exponent, and the reading has not yet been checked against the source in a note.",
+   "context": "The algorithm uses the operator <i>A</i> = ((1 − <i>H</i>/<i>n</i>)/(1 − ε<sub>0</sub>/<i>n</i>))<sup><i>m</i></sup> with <i>m</i> of order (<i>n</i>/ε) log <i>n</i>, and samples it by an average of words in the factors 1 − <i>H<sub>i</sub></i> multiplied by <i>C</i><sup><i>m</i></sup>, <i>C</i> = (1 − ε<sub>0</sub>/<i>n</i>)<sup>−1</sup>. The size of <i>C</i><sup><i>m</i></sup> controls the variance in the matrix Bernstein bound, and hence the number of sampled words.",
+   "claims": "Tracker #9832 quotes Theorem 1 of arXiv:1307.5143v1 (lines 213–216 of the source) as running in time <i>n</i><sup><i>c</i>(<i>d</i>, ε)</sup> poly(<i>n</i>/η) with <i>c</i>(<i>d</i>, ε) = 2<sup><i>O</i>(log<sup>3</sup> <i>d</i>/ε)</sup>, with no dependence on the ground energy ε<sub>0</sub>.",
+   "found": "<i>C</i><sup><i>m</i></sup> = (1 − ε<sub>0</sub>/<i>n</i>)<sup>−<i>m</i></sup> is about e<sup>ε<sub>0</sub><i>m</i>/<i>n</i></sup> = <i>n</i><sup><i>O</i>(ε<sub>0</sub>/ε)</sup>. The hypotheses 0 ≤ <i>H<sub>i</sub></i> ≤ 1 allow ε<sub>0</sub> of order <i>n</i>, and then this factor, and with it the exponent of the running time, grows with <i>n</i>. Treating <i>C</i><sup>2<i>m</i></sup> as <i>n</i><sup><i>O</i>(1/ε)</sup> requires ε<sub>0</sub> bounded. The corrected exponent is 2<sup><i>O</i>(log<sup>3</sup> <i>d</i>/ε) + <i>O</i>(ε<sub>0</sub>/ε)</sup>.",
+   "impact": "The algorithm is polynomial-time whenever ε<sub>0</sub>/ε is bounded, in particular for frustration-free chains; for an extensive ground energy the stated bound does not give polynomial time. The formalization targets existence statements, not running times, so no formal statement depends on this.",
+   "plan": "Check the printed statement and the sampling estimate against the source, write the paper-gap note, and correct the result table in #9832."
+  }
+ ]
+}

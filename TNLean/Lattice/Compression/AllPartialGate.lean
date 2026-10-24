@@ -19,7 +19,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 
 noncomputable section
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 variable {P C ι : Type} [Fintype C] [Fintype ι]
 
 /-- A touched gate in the actual all-party expansion has the identity as its

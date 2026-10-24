@@ -270,15 +270,6 @@ theorem rightTreeGauge_mul_rightTreeGaugeInv (Y : Fus.FusionGauge) (a b c d : Λ
   simp only [Pi.one_apply, ← Matrix.mul_kronecker_mul, ← Matrix.transpose_mul,
     Units.inv_mul, Matrix.transpose_one, Matrix.one_kronecker_one]
 
-/-- `leftTreeGaugeInv` is a left inverse of `leftTreeGauge`. -/
-theorem leftTreeGaugeInv_mul_leftTreeGauge (Y : Fus.FusionGauge) (a b c d : Λ) :
-    Fus.leftTreeGaugeInv Y a b c d * Fus.leftTreeGauge Y a b c d = 1 := by
-  rw [leftTreeGaugeInv, leftTreeGauge, ← Matrix.blockDiagonal'_mul, ← Matrix.blockDiagonal'_one]
-  congr 1
-  funext e
-  simp only [Pi.one_apply, ← Matrix.mul_kronecker_mul, ← Matrix.transpose_mul,
-    Units.mul_inv, Matrix.transpose_one, Matrix.one_kronecker_one]
-
 /-- `leftTreeGaugeInv` is a right inverse of `leftTreeGauge`. -/
 theorem leftTreeGauge_mul_leftTreeGaugeInv (Y : Fus.FusionGauge) (a b c d : Λ) :
     Fus.leftTreeGauge Y a b c d * Fus.leftTreeGaugeInv Y a b c d = 1 := by

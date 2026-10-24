@@ -21,7 +21,7 @@ its actual singleton restrictions.
 noncomputable section
 open ContinuousLinearMap
 namespace TNLean
-open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 variable {P : Type} [Fintype P] [DecidableEq P]
 variable {I J : P → Type} [∀ p, Fintype (I p)] [∀ p, Fintype (J p)]
 
