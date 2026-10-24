@@ -4873,6 +4873,26 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Raising a time bound inside a Gaussian-tail exponential — candidate (2026-10-24)
+
+- **Pattern:**
+  ```lean
+  Real.exp_le_exp.mpr (sub_le_sub_right (mul_le_mul_of_nonneg_left hs hv) _)
+  ```
+  turning `hs : |s| ≤ T` and `hv : 0 ≤ v` into
+  `Real.exp (v * |s| - c) ≤ Real.exp (v * T - c)`.
+- **Seen:** 6 occurrences across 4 files:
+  `MPS/AreaLaw/SupportedGaussianIntegral.lean` (two),
+  `MPS/AreaLaw/DomainSupportedGaussianIntegral.lean` (two),
+  `MPS/AreaLaw/Hastings/ChainLocalizedParts.lean` and
+  `MPS/AreaLaw/Hastings/BoundaryLocalization.lean`.
+- **Abstraction (proposed):** a scalar lemma
+  `Real.exp_mul_abs_sub_le_exp_mul_sub (hv : 0 ≤ v) (hs : |s| ≤ T)`
+  in a small algebra file, with the six call sites refactored.
+- **Notes:** Above the promotion threshold. The finite-domain supported Gaussian
+  change mirrors the chain proof line for line and does not refactor the two
+  Hastings files; promotion is left to a separate refactor of all four files.
+
 ### Infimum over walk lengths under graph maps — candidate (2026-10-21)
 
 - **Pattern:** Rewrite extended graph distance as the infimum of walk lengths,
