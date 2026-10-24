@@ -27,7 +27,7 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 private theorem assoc_symm_mapL {E E' F F' G G' : HSpace}
     (a : E →L[ℂ] E') (b : F →L[ℂ] F') (c : G →L[ℂ] G')
@@ -335,4 +335,4 @@ theorem Word.partitionIso_eval (f : P → Bool) {ℓ ℓ' : Layout P} (w : Word 
             assoc_symm_mapL (ContinuousLinearMap.id ℂ r.space) (w.restrict f hs).eval
               (w.restrict (fun p ↦ !f p) hs).eval (x ⊗ₜ Layout.partitionIso f a y)
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

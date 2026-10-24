@@ -15,8 +15,9 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–355,
 
 noncomputable section
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect
-namespace SourceCircuit
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
+namespace Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} {a b : Layout P}
 
 /-- A source-free word representing arbitrary original endpoint maps is
@@ -91,5 +92,5 @@ theorem restrict_sampledEndpointWord_eval_heq_incidentSampledEndpointWord
     (sampledEndpointWord_eq_endpointWord w k lam E F ξ ζ j ω)
     (incidentSampledEndpointWord_eval_heq_selectedRegisterWord w k lam E F p ξ ζ j ω)
 
-end SourceCircuit
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.SourceCircuit
+end TNLean

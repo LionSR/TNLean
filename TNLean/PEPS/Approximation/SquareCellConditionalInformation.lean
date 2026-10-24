@@ -128,7 +128,6 @@ theorem cell_conditionalMutualInformation_le_square_of_rectangle {q L : ℕ}
       (CellPartition.box (CellPartition.cellCorner o' s m₀) s)
       (AngularGrid.cell o s m₀) from fun x hx ↦ (hboxshift x).mp hx).closure
       (continuous_id.add continuous_const)
-  change ∀ E : Finset (Site (rectangularDomain L L)), _ at hbound
   rw [hG, hB] at hbound
   have hE' : E.map σ.toEmbedding ⊆ (G.map σ.toEmbedding ∪ B.map σ.toEmbedding)ᶜ := by
     intro y hy

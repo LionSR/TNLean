@@ -26,8 +26,8 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.SourceCircuit
-open TNLean.PEPS.Approximation SourceInventory
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.Lattice.Compression TNLean.Lattice.PartyCircuit.SourceInventory
 variable {P : Type}
 
 /-- The actual corrected and crossing input representation. A single allowed,
@@ -69,4 +69,4 @@ theorem exists_correctedInputVector_identity {a b : Layout P} (w : SourceCircuit
   obtain ⟨u, hu, hus, hue⟩ := exists_correctedInputReordering w S
   exact ⟨u, hu, hus, fun ξ η ↦ correctedInputVector_identity_of_reordering w S p₀ u ξ η (hue η)⟩
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

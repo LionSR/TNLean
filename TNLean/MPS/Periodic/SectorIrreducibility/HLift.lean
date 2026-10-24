@@ -280,8 +280,7 @@ private theorem sector_supported_pow_fixed_eq_smul_projection
   let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
   have hUnital : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K := by
     simpa [KadisonSchwarz.IsUnitalKraus, K] using hTP
-  have hIrrAdjLM : IsIrreducibleMap (Kraus.mapLM K) := by
-    exact hIrrAdj
+  have hIrrAdjLM : IsIrreducibleMap (Kraus.mapLM K) := hIrrAdj
   have hOrbitFix :
       T (orbitSumProjection (D := D) (m := m) T X) =
         orbitSumProjection (D := D) (m := m) T X :=

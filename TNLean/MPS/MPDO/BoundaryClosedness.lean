@@ -238,7 +238,6 @@ theorem mpoWithBoundary_mulVec_eq_sum_of_biorthogonalDecomposition
   funext σ
   simpa only [Finset.sum_apply] using h.mpvWithBoundary (productBoundary X Y) hL σ
 
-
 /-- An exact fusion decomposition into copies of the same tensor supplies
 closedness with the explicit length-independent boundary
 \(Z=\sum_c V_c(X\otimes Y)W_c\).

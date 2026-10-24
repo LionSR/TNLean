@@ -37,7 +37,7 @@ open scoped TensorProduct
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.Lattice TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame
+open TNLean.Lattice TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
 
 variable {L w q : ℕ}
 
@@ -142,13 +142,6 @@ theorem stackRegs_terminalFrames (L w : ℕ) :
   simp [terminalRawOrder, terminalAuxiliarySiteOrder, siteRegs, List.map_append,
     List.map_map, Function.comp_def, rawOwner]
 
-private theorem cons_tensor_heq {P : Type} (r : Reg P) {a b : Layout P}
-    (h : a = b) (x : r.space) (y : Mem a) (z : Mem b) (hy : HEq y z) :
-    HEq (x ⊗ₜ y : Mem (r :: a)) (x ⊗ₜ z : Mem (r :: b)) := by
-  cases h
-  cases hy
-  rfl
-
 private theorem append_tensor_heq {P : Type} {a a' b b' : Layout P}
     (ha : a = a') (hb : b = b') (x : Mem a) (y : Mem b)
     (x' : Mem a') (y' : Mem b') (hx : HEq x x') (hy : HEq y y') :
@@ -169,8 +162,7 @@ private theorem mapped_siteVec_heq {ι κ P : Type} (own : κ → P) (f : ι →
   | cons x xs ih =>
       have ht : siteRegs q own (xs.map f) = siteRegs q (fun x ↦ own (f x)) xs := by
         simp [siteRegs, List.map_map, Function.comp_def]
-      exact cons_tensor_heq ⟨own (f x), euc (Fin q)⟩ ht
-        (EuclideanSpace.single (c (f x)) (1 : ℂ)) _ _ ih
+      exact Layout.cons_tmul_heq rfl ht HEq.rfl ih
 
 private theorem append_siteVec_heq {ι P : Type} (own : ι → P)
     (a b : List ι) (c : ι → Fin q) :

@@ -24,7 +24,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 21–43,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.EffectCircuit
+namespace TNLean.Lattice.PartyCircuit.EffectCircuit
 variable {P : Type}
 
 /-- One monomial list on the original local input and output spaces of each
@@ -134,4 +134,4 @@ theorem participationCount_reexpand {a b : Layout P} (w : EffectCircuit a b)
   exact (w.reexpandLocationsEquiv lists).subtypeEquiv (fun g ↦ by
     rw [w.participants_reexpand lists g])
 
-end TNLean.PEPS.PairEffect.EffectCircuit
+end TNLean.Lattice.PartyCircuit.EffectCircuit

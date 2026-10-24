@@ -148,26 +148,6 @@ theorem uDagMPS_eq (a : Fin 9) : uDagMPS a = complexOfEisenstein (uDagEisMPS a) 
 theorem identityMPS_eq (a : Fin 9) : identityMPS a = complexOfEisenstein (identityEisMPS a) :=
   rfl
 
-/-- The letter `(1, 0)` of `U` carries the column `(1, 1)ᵀ` in position zero (data file
-§2.0). -/
-theorem uMPS_apply_three : uMPS 3 = !![1, 0; 1, 0] := by
-  rw [show uMPS 3 = complexOfEisenstein !![1, 0; 1, 0] from rfl]
-  ext a b
-  fin_cases a <;> fin_cases b <;> simp [complexOfEisenstein]
-
-/-- The letter `(2, 1)` of `U` carries the column `(1, ω)ᵀ` in position one (data file §2.0). -/
-theorem uMPS_apply_seven : uMPS 7 = !![0, 1; 0, eisensteinOmega] := by
-  rw [show uMPS 7 = complexOfEisenstein !![0, 1; 0, omega] from rfl]
-  ext a b
-  fin_cases a <;> fin_cases b <;> simp [complexOfEisenstein]
-
-/-- The letter `(0, 2)` of `U` carries the column `(1, ω²)ᵀ` in position one (data file
-§2.0). -/
-theorem uMPS_apply_two : uMPS 2 = !![0, 1; 0, eisensteinOmega ^ 2] := by
-  rw [show uMPS 2 = complexOfEisenstein !![0, 1; 0, omega ^ 2] from rfl]
-  ext a b
-  fin_cases a <;> fin_cases b <;> simp [complexOfEisenstein]
-
 /-! ### Normality of the three blocks
 
 `U` and `U†` are normal at word length two (data file §2.0): four length-two words combine,

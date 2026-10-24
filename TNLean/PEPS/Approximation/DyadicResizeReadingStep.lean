@@ -38,7 +38,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame PairEffect
+open EncodedFrame TNLean.Lattice.Sheet TNLean.Lattice.PartyCircuit
 
 /-- **The resizes of a level as gates, with one footprint ratio and their pair sources.** The
 conclusion of `resize_step_reading_of_le`, together with the bound of `2b` pair sources in every

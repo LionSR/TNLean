@@ -22,7 +22,7 @@ takes the reference vector of the sheets within `C L⁻²⁰` of the next refere
 
 The predicate and its closure properties hold for sheets of any type and are proved in
 `TNLean.Lattice.Sheet.StackChange`, together with the predicate
-`PairEffect.OriginalCircuit.IsBoundedChange` for one original circuit and the bounded words and
+`PartyCircuit.OriginalCircuit.IsBoundedChange` for one original circuit and the bounded words and
 chains of the births, deaths and exchanges. This file reads them at the encoded frames, with
 the reference vectors `Ω_F`:
 
@@ -52,7 +52,7 @@ namespace TNLean.PEPS
 
 namespace EncodedFrame
 
-open PairEffect
+open TNLean.Lattice.PartyCircuit
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {Party : Type}
   {pos : ι → ℝ × ℝ}
@@ -77,7 +77,7 @@ theorem pairRef_eq_twoLayoutIso_symm (F₁ F₂ : Frame pos q Party)
 
 /-- **A bounded change of the sheets.** There is an original circuit from the registers of the
 frames `Fs`, followed by the idle registers `ℓ`, to those of `Fs'`, followed by `ℓ`, that is a
-bounded change, in the sense of `PairEffect.OriginalCircuit.IsBoundedChange`, from the reference
+bounded change, in the sense of `PartyCircuit.OriginalCircuit.IsBoundedChange`, from the reference
 vector of `Fs` with idle vector `ξ` to that of `Fs'`. This is `Lattice.HasBoundedChange` at the
 reference vectors `Ω_F` of the frames.
 

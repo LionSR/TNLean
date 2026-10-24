@@ -68,7 +68,6 @@ theorem traceQuotientSection_pair {d r D : ℕ} (A : MPSTensor d D)
     Matrix.sum_mul, Matrix.trace_sum, Matrix.smul_mul, Matrix.trace_smul,
     Pi.smul_apply, smul_eq_mul, Finset.mul_sum, mul_comm, mul_left_comm]
 
-
 /-- The three-site proportionality identity persists after contracting its
 first two physical indices with arbitrary coefficient vectors.
 Auxiliary context: arXiv:1010.3732, Section II.F.2, lines 953–993. -/
@@ -87,7 +86,6 @@ theorem traceQuotientSection_triple {d D E : ℕ}
   simp only [Fintype.linearCombination_apply, Matrix.sum_mul,
     Matrix.smul_mul, Matrix.mul_smul, Matrix.trace_sum, Matrix.trace_smul,
     smul_eq_mul, hTriple', Finset.mul_sum, mul_assoc, mul_left_comm]
-
 
 /-- Contracted three-site columns determine the full bilinear product data.
 Auxiliary context: arXiv:1010.3732, Section II.F.2, lines 953–993. -/
@@ -111,7 +109,6 @@ theorem traceQuotientProductColumns_triple {d r D : ℕ}
     simpa only [toLinearMap₂'_apply_mulVec_prod, LinearMap.smul_apply,
       LinearMap.compr₂_apply, LinearMap.compl₁₂_apply, LinearMap.mul_apply']
       using congrArg (fun f => f x y) hMaps
-
 
 /-- Exact trace data recover the quotient product, including the ratio of
 its two-site and three-site normalizations.

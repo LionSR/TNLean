@@ -30,7 +30,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect.Layout
+namespace TNLean.Lattice.PartyCircuit.Layout
 variable {P : Type}
 
 /-- The append identification commutes with equality of its source-register list. -/
@@ -41,9 +41,9 @@ theorem memCongr_append_tmul {a b : Layout P} (h : a = b)
   cases h
   rfl
 
-end TNLean.PEPS.PairEffect.Layout
+end TNLean.Lattice.PartyCircuit.Layout
 
-namespace TNLean.PEPS.PairEffect.SourceInventory
+namespace TNLean.Lattice.PartyCircuit.SourceInventory
 variable {P : Type}
 
 /-- The joint source vector has unit norm, including the terminal scalar factor. -/
@@ -133,10 +133,10 @@ theorem mem_freeSlotLayout (R : SourceInventory P) (U V : Fin R.length → HSpac
       (r = ⟨(R.get i).left, U i⟩ ∨ r = ⟨(R.get i).right, V i⟩) := by
   simp [freeSlotLayout, selectedSources_eq_map, layout, List.mem_flatMap, PairSource.layout]
 
-end TNLean.PEPS.PairEffect.SourceInventory
+end TNLean.Lattice.PartyCircuit.SourceInventory
 
-namespace TNLean.PEPS.PairEffect.SourceCircuit
-open TNLean.PEPS.Approximation SourceInventory
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.Lattice.Compression TNLean.Lattice.PartyCircuit.SourceInventory
 variable {P : Type}
 
 open Classical in
@@ -298,4 +298,4 @@ theorem restrict_correctedSourceLayout_append {a b : Layout P} (w : SourceCircui
       List.nil_append]
 
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

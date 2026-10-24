@@ -22,7 +22,7 @@ Independently formalized; no upstream Lean proof text reused.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 /-- The explicit source-only word expansion preserves the absolute coefficient sum.
 Source: polynomial-PEPS 04-compression.tex, lines 65–67 and 120–124. -/
@@ -129,4 +129,4 @@ theorem card_replacementLabels_stackLength_le {C : Type} {a b : Layout C}
   gcongr
   exact stackLength_le r S δ
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

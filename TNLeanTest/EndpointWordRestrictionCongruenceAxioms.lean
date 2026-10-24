@@ -11,9 +11,9 @@ import Lean.Util.CollectAxioms
 
 set_option linter.hashCommand false
 
-open TNLean.PEPS.PairEffect.SourceInventory in
+open TNLean.Lattice.PartyCircuit.SourceInventory in
 run_cmd do
-  let decls := #[``TNLean.PEPS.PairEffect.Word.restrict_castLayouts,
+  let decls := #[``TNLean.Lattice.PartyCircuit.Word.restrict_castLayouts,
     ``restrict_endpointWord_eval_eq_of_local_eq]
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv

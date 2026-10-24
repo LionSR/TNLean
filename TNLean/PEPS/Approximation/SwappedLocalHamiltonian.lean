@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Lattice.CrossingSupports
 import TNLean.Lattice.PhysicalBufferCoordinates
 import TNLean.Lattice.RegionalSwapSupport
 import TNLean.PEPS.Approximation.SheetSwapDoubledTermNorm
@@ -19,15 +20,17 @@ site, and conjugate by the swap `F_A` of the replicas on `A`. This file shows:
 * the result is again a Hamiltonian of range `R` on `Λ`, now with local dimension `q²` and term
   bound `2J`, with the same supports (`LocalHamiltonian.swappedDoubled`);
 * it differs from the doubled Hamiltonian only through the terms whose support crosses `A`
-  (`LocalHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing`), so the
-  difference is supported on the sites of these supports and has norm at most
-  `4 μ_R J |Λ|`, with `μ_R = 2^(v_R - 1)` and `v_R = 1 + 2R(R + 1)`
+  (`LocalHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing`), the crossing
+  terms `Entropy.crossingTerms` of the supports at the cut `A`, so the difference is supported
+  on the sites `crossingSites` of these supports and has norm at most `4 μ_R J |Λ|`,
+  with `μ_R = 2^(v_R - 1)` and `v_R = 1 + 2R(R + 1)`
   (`LocalHamiltonian.swapped_doubled_boundary_bound`);
-* every site of a crossing support is within walk distance `R` of a site of `A` and of a site
-  outside `A` (`exists_walks_of_mem_crossingSites`);
 * the supported Gaussian approximation of the physical buffer holds at range `R` with the
   graph-ball localization constants at range `R` and term bound `2J`
   (`LocalHamiltonian.supported_buffer_gaussian_integral`).
+
+The sites of the crossing supports and their walks to both sides of `A` are in
+`TNLean.Lattice.CrossingSupports`.
 
 The polynomial-PEPS manuscript treats only site and nearest-neighbour terms on the open square,
 which is range one; this file extends its boundary estimate to range `R`. The range-one
@@ -54,39 +57,6 @@ noncomputable section
 namespace TNLean.Lattice
 
 variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ}
-
-/-- The supports of interaction range `R` that cross a set `A` of sites: those that meet `A`
-and are not contained in it. -/
-def crossingSupports (Λ : Finset (ℤ × ℤ)) (R : ℕ) (A : Finset (Site Λ)) :
-    Finset (AdmissibleSupport Λ R) := by
-  classical
-  exact Finset.univ.filter fun X ↦ ¬ (X.1 ⊆ A ∨ Disjoint X.1 A)
-
-/-- The sites of the supports of range `R` crossing `A`. At range one these are the endpoints of
-the edges crossing `A`. -/
-def crossingSites (Λ : Finset (ℤ × ℤ)) (R : ℕ) (A : Finset (Site Λ)) : Finset (Site Λ) := by
-  classical
-  exact (crossingSupports Λ R A).biUnion fun X ↦ X.1
-
-theorem mem_crossingSupports {A : Finset (Site Λ)} {X : AdmissibleSupport Λ R} :
-    X ∈ crossingSupports Λ R A ↔ ¬ (X.1 ⊆ A ∨ Disjoint X.1 A) := by
-  classical
-  simp [crossingSupports]
-
-/-- **Every site of a crossing support is near both sides of `A`.** It is joined by walks of
-length at most `R` to a site of `A` and to a site outside `A`. -/
-theorem exists_walks_of_mem_crossingSites {A : Finset (Site Λ)} {z : Site Λ}
-    (hz : z ∈ crossingSites Λ R A) :
-    ∃ x ∈ A, ∃ y ∉ A, (∃ p : (domainGraph Λ).Walk z x, p.length ≤ R) ∧
-      ∃ p : (domainGraph Λ).Walk z y, p.length ≤ R := by
-  classical
-  simp only [crossingSites, Finset.mem_biUnion] at hz
-  obtain ⟨X, hX, hzX⟩ := hz
-  rw [mem_crossingSupports, not_or] at hX
-  obtain ⟨hsub, hdisj⟩ := hX
-  obtain ⟨y, hyX, hyA⟩ := Finset.not_subset.mp hsub
-  obtain ⟨x, hxX, hxA⟩ := Finset.not_disjoint_iff.mp hdisj
-  exact ⟨x, hxA, y, hyA, X.2.2 z hzX x hxX, X.2.2 z hzX y hyX⟩
 
 /-- There are at most `μ_R |Λ|` supports of range `R`, with `μ_R = 2^(v_R - 1)`: every support
 is nonempty, and at most `μ_R` supports contain a given site.
@@ -193,13 +163,20 @@ theorem sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing (h : LocalHamilton
     (A : Finset (Site Λ)) :
     let F := sheetSwapOp q A
     F * doubledHamiltonian h.operator * Fᴴ - doubledHamiltonian h.operator =
-      ∑ X ∈ crossingSupports Λ R A,
+      ∑ X ∈ Entropy.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A,
         (F * doubledHamiltonian (h.term X) * Fᴴ - doubledHamiltonian (h.term X)) := by
   classical
   intro F
-  have hcancel (X : AdmissibleSupport Λ R) (hX : X ∉ crossingSupports Λ R A) :
+  have hcancel (X : AdmissibleSupport Λ R)
+      (hX : X ∉ Entropy.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A) :
       F * doubledHamiltonian (h.term X) * Fᴴ - doubledHamiltonian (h.term X) = 0 := by
-    rw [mem_crossingSupports, not_not] at hX
+    have hX : X.1 ⊆ A ∨ Disjoint X.1 A := by
+      simp only [Entropy.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and, not_and,
+        not_exists, not_not] at hX
+      by_cases hXA : ∃ v ∈ X.1, v ∈ A
+      · exact Or.inl fun v hv ↦ hX hXA v hv
+      · push Not at hXA
+        exact Or.inr (Finset.disjoint_left.mpr hXA)
     refine sub_eq_zero.mpr
       (sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators (h.supported X) ?_)
     rcases hX with hX | hX
@@ -227,10 +204,11 @@ theorem swapped_doubled_boundary_bound (h : LocalHamiltonian Λ q R J) (hJ : 0 �
       ‖F * K * Fᴴ - K‖ ≤ swapBoundaryCoefficient R * J * (Λ.card : ℝ) := by
   classical
   intro p K F
+  set T := Entropy.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A
   have hsum := congrArg (Matrix.reindex p p)
     (h.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing A)
   simp only [← Matrix.coe_reindexRingEquiv, map_sum, map_sub, map_mul] at hsum
-  change F * K * Fᴴ - K = ∑ X ∈ crossingSupports Λ R A,
+  change F * K * Fᴴ - K = ∑ X ∈ T,
     (F * Matrix.reindex p p (doubledHamiltonian (h.term X)) * Fᴴ -
       Matrix.reindex p p (doubledHamiltonian (h.term X))) at hsum
   have hnorm (M : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :
@@ -262,19 +240,19 @@ theorem swapped_doubled_boundary_bound (h : LocalHamiltonian Λ q R J) (hJ : 0 �
           (reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators A X.1
             (h.supported X))
           (hplain X.1 (h.supported X)))
-  have hbound : ‖F * K * Fᴴ - K‖ ≤ ((crossingSupports Λ R A).card : ℝ) * (4 * J) := by
+  have hbound : ‖F * K * Fᴴ - K‖ ≤ (T.card : ℝ) * (4 * J) := by
     simpa only [hsum, nsmul_eq_mul] using
-      (norm_sum_le (crossingSupports Λ R A) fun X ↦
+      (norm_sum_le T fun X ↦
         F * Matrix.reindex p p (doubledHamiltonian (h.term X)) * Fᴴ -
           Matrix.reindex p p (doubledHamiltonian (h.term X))).trans
-        (Finset.sum_le_card_nsmul (crossingSupports Λ R A) _ (4 * J) fun X _ ↦
+        (Finset.sum_le_card_nsmul T _ (4 * J) fun X _ ↦
           (hnorm (h.term X)).trans
             (mul_le_mul_of_nonneg_left (h.norm_le X) (by norm_num)))
-  have hcard : ((crossingSupports Λ R A).card : ℝ) ≤
+  have hcard : (T.card : ℝ) ≤
       ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * Λ.card := by
     exact_mod_cast ((Finset.card_le_univ _).trans (card_admissibleSupport_le Λ R))
   refine ⟨hsupport, hbound.trans ?_⟩
-  calc ((crossingSupports Λ R A).card : ℝ) * (4 * J)
+  calc (T.card : ℝ) * (4 * J)
       ≤ (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * Λ.card) * (4 * J) :=
         mul_le_mul_of_nonneg_right hcard (by linarith)
     _ = swapBoundaryCoefficient R * J * (Λ.card : ℝ) := by

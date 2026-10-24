@@ -36,7 +36,7 @@ noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.Lattice TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame
+open TNLean.Lattice TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
 
 /-- The physical assumptions imply the actual eighteen local circuits at
 every stage, including the seven identity operations after the first direct

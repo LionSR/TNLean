@@ -24,6 +24,7 @@ Theorem 5.9. No independence, blocking, or uniform-representation premise is use
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS.NativeTorus
+open TNLean.Lattice
 
 variable {width height : ℕ} [NeZero width] [NeZero height]
 variable [Fact (2 < width)] [Fact (2 < height)]

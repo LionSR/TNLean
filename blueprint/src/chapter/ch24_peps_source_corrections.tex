@@ -15,10 +15,10 @@ no bound on private dimensions is imposed.
 
 \begin{definition}[Substitution in the original composition]
     \label{def:peps_source_substitution}
-    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.branchWithSources}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.evalWithSources}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialWithSources}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.selectedSourceVectors}
+    \lean{TNLean.Lattice.PartyCircuit.PreparedSourceGate.branchWithSources}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.evalWithSources}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialWithSources}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.selectedSourceVectors}
     \leanok
     \uses{def:peps_source_circuit,def:peps_prepared_source_gate,def:peps_partial_source_choices}
     Given vectors $\eta_{e,\alpha}$ in the original source halfspaces,
@@ -36,10 +36,10 @@ no bound on private dimensions is imposed.
 
 \begin{theorem}[Summing untouched gates]
     \label{thm:peps_source_substitution_partial}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.evalWithSources_original}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialWithSources_original}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.evalWithSources_eq_sum_partialWithSources}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_selectedSourceVectors_eq_sum}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.evalWithSources_original}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialWithSources_original}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.evalWithSources_eq_sum_partialWithSources}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_selectedSourceVectors_eq_sum}
     \leanok
     \uses{def:peps_source_substitution}
     Original vectors recover $W(\nu)=W$ and the original partial branches.
@@ -58,7 +58,7 @@ no bound on private dimensions is imposed.
 \end{theorem}
 
 \begin{proof}
-    \lean{TNLean.PEPS.PairEffect.Layout.affectedOwner_mapOwner_eq_none}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.affectedOwner_mapOwner_eq_none}
     \leanok
     \uses{thm:peps_partial_source_evaluation,thm:peps_source_circuit_incidence}
     By induction on the chronological composition, at a touched gate the
@@ -87,8 +87,8 @@ no bound on private dimensions is imposed.
 
 \begin{definition}[Remaining operations after source extraction]
     \label{def:peps_canonical_source_residual}
-    \lean{TNLean.PEPS.PairEffect.Word.residualInSlots}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialResidual}
+    \lean{TNLean.Lattice.PartyCircuit.Word.residualInSlots}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialResidual}
     \leanok
     \uses{thm:peps_source_preparation,thm:peps_partial_fixed_layout}
     Moving the prepared sources of a word to its initial registers
@@ -101,13 +101,13 @@ no bound on private dimensions is imposed.
 
 \begin{theorem}[Recovery from the remaining operations]
     \label{thm:peps_canonical_source_recovery}
-    \lean{TNLean.PEPS.PairEffect.Word.sources_residualInSlots}
-    \lean{TNLean.PEPS.PairEffect.Word.isAllowed_residualInSlots}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_residualInSlots_prepare}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.slotLayout_partialSlots_eq}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_partialResidual}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isAllowed_partialResidual}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_partialResidual_prepare}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sources_residualInSlots}
+    \lean{TNLean.Lattice.PartyCircuit.Word.isAllowed_residualInSlots}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_residualInSlots_prepare}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.slotLayout_partialSlots_eq}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sources_partialResidual}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isAllowed_partialResidual}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_partialResidual_prepare}
     \leanok
     \uses{def:peps_canonical_source_residual}
     The composition $V$ has no pair sources. It is allowed if the
@@ -134,10 +134,10 @@ no bound on private dimensions is imposed.
 
 \begin{theorem}[Uniform recovery after source substitution]
     \label{thm:peps_canonical_substitution_recovery}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.layout_sources_partialWithSources}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.residualInSlots_partialWithSources}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.ofSlots_partialWithSources}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_partialResidual_prepare_substituted}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.layout_sources_partialWithSources}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.residualInSlots_partialWithSources}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.ofSlots_partialWithSources}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_partialResidual_prepare_substituted}
     \leanok
     \uses{def:peps_source_substitution,def:peps_canonical_source_residual}
     For arbitrary $\eta$, the ordered pair-source inventory of
@@ -193,11 +193,11 @@ no bound on private dimensions is imposed.
 
 \begin{definition}[Corrected terms at original source positions]
     \label{def:peps_original_corrected_term}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.SourceBasisChoice}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceBasisChoiceFintype}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.labelBasisVectors}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceBasisMatrix}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.SourceBasisChoice}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceBasisChoiceFintype}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.labelBasisVectors}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceBasisMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceTerm}
     \leanok
     \uses{def:peps_source_substitution}
     Fix $S\subseteq\mathcal E$. A choice $u$ specifies at each $e=(g,j)\in S$
@@ -220,7 +220,7 @@ no bound on private dimensions is imposed.
 
 \begin{theorem}[The empty corrected set]
     \label{thm:peps_corrected_empty}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm_empty}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceTerm_empty}
     \leanok
     \uses{def:peps_original_corrected_term}
     If $M$ is the original circuit matrix, then $F_\varnothing(E;\rho)=M\rho M^\dagger$.
@@ -234,11 +234,11 @@ no bound on private dimensions is imposed.
 
 \begin{definition}[Partially expanded basis substitutions]
     \label{def:peps_partial_basis_substitution}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceBasisMatrix}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.SelectedSourceCoordinates}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.selectedSourceCoordinatesFintype}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.coordinateBasisVectors}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialCoordinateBasisMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSourceBasisMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.SelectedSourceCoordinates}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.selectedSourceCoordinatesFintype}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.coordinateBasisVectors}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialCoordinateBasisMatrix}
     \leanok
     \uses{def:peps_original_corrected_term,def:peps_partial_source_choices}
     Let $M_{\mathcal A,\xi;S,u}$ be the matrix of the corresponding
@@ -252,11 +252,11 @@ no bound on private dimensions is imposed.
 
 \begin{theorem}[Partial expansion of the same corrected term]
     \label{thm:peps_corrected_partial}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceBasisMatrix_eq_sum_partial}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm_eq_sum_partial}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceBasisMatrix_eq_ite}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm_eq_sum_coordinates}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialCoordinateBasisMatrix_eq_preparedMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceBasisMatrix_eq_sum_partial}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceTerm_eq_sum_partial}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSourceBasisMatrix_eq_ite}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceTerm_eq_sum_coordinates}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialCoordinateBasisMatrix_eq_preparedMatrix}
     \leanok
     \uses{def:peps_partial_basis_substitution}
     Suppose every $e\in S$ has an endpoint in $\mathcal A$.
@@ -296,11 +296,11 @@ no bound on private dimensions is imposed.
 
 \begin{definition}[Selected retained positions]
     \label{def:peps_selected_retained_positions}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.selectedPartialSlots}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.mem_selectedPartialSlots}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.selectedPartialSlotEquiv}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.selectedSourceCoordinateEquiv}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.selectedSourceCoordinateEquiv_apply}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.selectedPartialSlots}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.mem_selectedPartialSlots}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.selectedPartialSlotEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.selectedSourceCoordinateEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.selectedSourceCoordinateEquiv_apply}
     \leanok
     \uses{def:peps_partial_fixed_positions}
     Let $i\mapsto e_i$ enumerate the retained positions. Set
@@ -311,7 +311,7 @@ no bound on private dimensions is imposed.
 \end{definition}
 \begin{theorem}[Changing the enumeration of selected sources]
     \label{thm:peps_selected_retained_coordinates}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialCoordinateBasisMatrix_reindex}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialCoordinateBasisMatrix_reindex}
     \leanok
     \uses{def:peps_selected_retained_positions,thm:peps_canonical_substitution_recovery}
     Under this bijection, $K_{\mathcal A,\xi;S,a}$ is the
@@ -339,8 +339,8 @@ index sets.
 
 \begin{theorem}[Prepared densities as source contractions]
     \label{thm:peps_prepared_source_contraction}
-    \lean{TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient}
-    \lean{TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient_basis}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sourceContraction_preparedDensityCoefficient}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sourceContraction_preparedDensityCoefficient_basis}
     \leanok
     \uses{thm:peps_prepared_density_components}
     Suppose $\eta_i=\sum_a r_i(a)u_i(a_1)\otimes v_i(a_2)$ and
@@ -365,7 +365,7 @@ index sets.
 
 \begin{definition}[Replacement of source operators]
     \label{def:peps_prepared_source_replacement}
-    \lean{TNLean.PEPS.PairEffect.Word.sourceOperatorDensity}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sourceOperatorDensity}
     \leanok
     For remaining compositions $V_\xi$ and weights $c_\xi$,
     define
@@ -380,9 +380,9 @@ index sets.
 \end{definition}
 \begin{theorem}[The prepared corrected-subset identity]
     \label{thm:peps_prepared_subset_identity}
-    \lean{TNLean.PEPS.PairEffect.Word.sourceOperatorDensity_sub}
-    \lean{TNLean.PEPS.PairEffect.Word.sourceOperatorDensity_exact}
-    \lean{TNLean.PEPS.PairEffect.Word.sourceOperatorDensity_sub_prepared}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sourceOperatorDensity_sub}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sourceOperatorDensity_exact}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sourceOperatorDensity_sub_prepared}
     \leanok
     \uses{def:peps_prepared_source_replacement}
     If $X$ is any family of source matrices, then
@@ -407,7 +407,7 @@ index sets.
 
 \begin{theorem}[Expanding only the selected source matrices]
     \label{thm:peps_selected_source_contraction}
-    \lean{TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient_selected}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sourceContraction_preparedDensityCoefficient_selected}
     \leanok
     \uses{thm:peps_prepared_source_contraction}
     Let $X_i=\ketbra{\eta_i}{\zeta_i}$ in the chosen ket and bra
@@ -434,7 +434,7 @@ index sets.
 
 \begin{theorem}[The corrected term in a partial expansion]
     \label{thm:peps_corrected_source_contraction}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm_eq_sourceContraction}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceTerm_eq_sourceContraction}
     \leanok
     \uses{def:peps_original_corrected_term,def:peps_selected_retained_positions}
     Suppose every $e\in S$ has an endpoint in $\mathcal A$.
@@ -468,8 +468,8 @@ index sets.
 
 \begin{definition}[All original source positions]
     \label{def:peps_all_original_source_slots}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allSourceSlotEquiv}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allSourceSlotEquiv_apply}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allSourceSlotEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allSourceSlotEquiv_apply}
     \leanok
     \uses{def:peps_partial_fixed_positions}
     Taking every party to be affected retains every original source
@@ -478,7 +478,7 @@ index sets.
 \end{definition}
 \begin{theorem}[Reindexing nonempty source subsets]
     \label{thm:peps_all_source_subsets}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_nonempty_allSourceSlots}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_nonempty_allSourceSlots}
     \leanok
     \uses{def:peps_all_original_source_slots}
     This bijection identifies sums over nonempty subsets of the
@@ -492,8 +492,8 @@ index sets.
 
 \begin{definition}[Replacement in the complete circuit density]
     \label{def:peps_global_source_replacement}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exactSourceMatrix}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceReplacedDensity}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exactSourceMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceReplacedDensity}
     \leanok
     \uses{def:peps_prepared_source_replacement,def:peps_all_original_source_slots}
     Put $X_{e,\alpha,\beta}=\ketbra{\nu_{e,\alpha}}{\nu_{e,\beta}}$.
@@ -506,9 +506,9 @@ index sets.
 \end{definition}
 \begin{theorem}[The global corrected-subset identity]
     \label{thm:peps_global_corrected_subsets}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceReplacedDensity_exact}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceReplacedDensity_piecewise}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceReplacedDensity_sub_exact}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceReplacedDensity_exact}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceReplacedDensity_piecewise}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceReplacedDensity_sub_exact}
     \leanok
     \uses{def:peps_global_source_replacement}
     The exact sources recover $\widehat\rho(X)=M\rho M^\dagger$.
@@ -534,9 +534,9 @@ index sets.
 
 \begin{definition}[Physical output after discarding retained registers]
     \label{def:peps_physical_source_replacement}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalDensity}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalCorrectedSourceTerm}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalSourceReplacedDensity}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalDensity}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalCorrectedSourceTerm}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalSourceReplacedDensity}
     \leanok
     \uses{def:peps_global_source_replacement,def:peps_original_corrected_term}
     Suppose the final ordered register list is the physical list
@@ -552,9 +552,9 @@ index sets.
 \end{definition}
 \begin{theorem}[The physical corrected-subset identity]
     \label{thm:peps_physical_corrected_subsets}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalSourceReplacedDensity_exact}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalSourceReplacedDensity_sub_exact}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.rectangularTraceNorm_physicalSourceReplacedDensity_sub_le}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalSourceReplacedDensity_exact}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalSourceReplacedDensity_sub_exact}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.rectangularTraceNorm_physicalSourceReplacedDensity_sub_le}
     \leanok
     \uses{def:peps_physical_source_replacement}
     Exact sources recover $\widehat\rho_{\mathrm{phys}}(X)=\rho_{\mathrm{phys}}$.
@@ -581,10 +581,10 @@ index sets.
 
 \begin{definition}[The source-to-output composition]
     \label{def:peps_actual_private_preparation}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourcePrivatePreparation}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_sourcePrivatePreparation}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceWord}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_partialSourceWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourcePrivatePreparation}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sources_sourcePrivatePreparation}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSourceWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sources_partialSourceWord}
     \leanok
     \uses{def:peps_private_product_input,def:peps_canonical_source_residual,def:peps_all_party_source_registers,def:peps_affected_owner,def:peps_partial_source_choices,thm:peps_owner_composition,thm:peps_canonical_source_recovery}
     Let $W$ be a distributed composition with input memory $\mathcal H_a$,
@@ -606,8 +606,8 @@ index sets.
 
 \begin{theorem}[Action of the private preparation]
     \label{thm:peps_actual_private_preparation}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_sourcePrivatePreparation_tmul}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_partialSourceWord_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_sourcePrivatePreparation_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_partialSourceWord_tmul}
     \leanok
     \uses{def:peps_actual_private_preparation}
     With the append and owner identifications understood,

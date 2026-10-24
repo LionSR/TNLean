@@ -25,8 +25,9 @@ and 565–588.
 
 noncomputable section
 open scoped Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
-open TNLean.PEPS.Approximation
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.Lattice
+open TNLean.Lattice.Compression
 attribute [local instance] Classical.propDecidable
 variable {P : Type} [Fintype P] {a : Layout P}
 variable {I E : Option {_p : P // true = true} → Type}
@@ -96,4 +97,4 @@ theorem physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_originalGateSa
   simpa only [M, originalGateLabelsAtOfAllChoices_eq_restrictGates,
     restrict_reindexedSourceSampleAssignment_eq] using! h
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

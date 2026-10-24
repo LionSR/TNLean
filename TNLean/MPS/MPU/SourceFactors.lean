@@ -193,20 +193,16 @@ noncomputable def sourceSVD₂ :
     (by simp [sourceCutM₂Fin, Matrix.reindex_apply])
     (sourceCutM₂_rank_eq_sourceCutM₂Fin_rank U).symm
 
-private theorem sourceSVD₁_V_vecMul_injective :
-    Function.Injective (sourceSVD₁ U).V.vecMul := by
+/-- The left multiplication by a row coisometry is injective on row vectors. -/
+theorem vecMul_injective_of_isCoisometry {m k : Type*} [Fintype m] [Fintype k]
+    [DecidableEq m] {V : Matrix m k ℂ} (hV : V.IsCoisometry) : Function.Injective V.vecMul := by
   intro x y hxy
   calc
-    x = x ᵥ* (1 : Matrix (Fin r[U]) (Fin r[U]) ℂ) := (Matrix.vecMul_one x).symm
-    _ = x ᵥ* ((sourceSVD₁ U).V * (sourceSVD₁ U).Vᴴ) := by
-      rw [(sourceSVD₁ U).V_coisometry]
-    _ = (x ᵥ* (sourceSVD₁ U).V) ᵥ* (sourceSVD₁ U).Vᴴ :=
-      (Matrix.vecMul_vecMul _ _ _).symm
-    _ = (y ᵥ* (sourceSVD₁ U).V) ᵥ* (sourceSVD₁ U).Vᴴ :=
-      congrArg (fun z ↦ z ᵥ* (sourceSVD₁ U).Vᴴ) hxy
-    _ = y ᵥ* ((sourceSVD₁ U).V * (sourceSVD₁ U).Vᴴ) :=
-      Matrix.vecMul_vecMul _ _ _
-    _ = y := by rw [(sourceSVD₁ U).V_coisometry, Matrix.vecMul_one]
+    x = x ᵥ* (V * Vᴴ) := by rw [hV, Matrix.vecMul_one]
+    _ = (x ᵥ* V) ᵥ* Vᴴ := (Matrix.vecMul_vecMul _ _ _).symm
+    _ = (y ᵥ* V) ᵥ* Vᴴ := congrArg (fun z ↦ z ᵥ* Vᴴ) hxy
+    _ = y ᵥ* (V * Vᴴ) := Matrix.vecMul_vecMul _ _ _
+    _ = y := by rw [hV, Matrix.vecMul_one]
 
 /-- The positive normalization matrix $A=V_1(I_d\otimes\rho)V_1^*$ from
 arXiv:1703.09188, `Y1Y1X1X1` (lines 487--494). -/
@@ -219,7 +215,7 @@ This justifies the inverse square root in arXiv:1703.09188, `Y1Y1X1X1` (lines 48
 theorem sourceGram₁_posDef {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hρ : ρ.PosDef) : (sourceGram₁ U ρ).PosDef :=
   (sourceWeight_posDef (d := d) hρ).mul_mul_conjTranspose_same
-    (sourceSVD₁_V_vecMul_injective U)
+    (vecMul_injective_of_isCoisometry (sourceSVD₁ U).V_coisometry)
 
 /-- The weighted factor $X_1=V_1^*A^{-1/2}$ from arXiv:1703.09188,
 `Y1Y1X1X1` (lines 487--494). -/

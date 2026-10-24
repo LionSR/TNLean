@@ -1,0 +1,100 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\setlength{\emergencystretch}{2em}
+\title{The Entropy Hypothesis of the Matrix Product State in Hastings' Area Law}
+\author{}
+\date{October 23, 2026}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{resolved}
+
+\section{The source statement}
+
+All logarithms and entropies below use the natural base.
+The section on matrix product states of~\cite{Hastings2007AreaLaw} works
+with the ground state $\Psi_0$ of a gapped chain of $N$ sites with local
+dimension $D>1$. Its conditional construction explicitly assumes a uniform
+entropy bound in lines 516--518. At a cut $(j,j+1)$ it writes
+$\Psi_0=\sum_\alpha A_0(\alpha)\Psi_{L,0}(\alpha)\otimes\Psi_{R,0}(\alpha)$
+with $\lvert A_0(\alpha)\rvert$ nonincreasing, and sets
+\begin{align}
+    k_0 & =\exp\bigl(2S(\rho^0_{1,j})\bigr)/2,
+    \label{eq:hastings07_mps_entropy_stage_k0}
+\end{align}
+where $S(\rho^0_{1,j})$ is the entropy of the first $j$ sites. The area law
+proved earlier in the paper bounds this entropy uniformly in $j$ and $N$, so
+$k_0$ is bounded by a constant independent of the cut and of the chain
+length. The section concludes that a matrix product state of bond dimension
+$k'$ approximates $\Psi_0$ with an error of order
+$N(k'/k_0)^{-1/(\xi'\ln D)}$.\footnote{\path{References/0705.2024/law16.tex},
+    lines~505--557.}
+
+\section{The formalized statement}
+
+Let $\Psi_0$ be a unit vector, $\xi'>0$, and $C_1$ the factorization
+constant. Assume the approximate factorization of Lemma~1 at every internal
+cut, and choose a natural number $k_0$ such that, at every internal cut $j$,
+\begin{align}
+    k_0 & \ge\exp\bigl(2S(\rho^0_{1,j})\bigr)/2.
+    \label{eq:hastings07_mps_entropy_stage_hyp}
+\end{align}
+Under these hypotheses, the formalized theorem proves that truncating every
+cut onto its $k'$
+leading Schmidt vectors, for $k'\ge k_0$, gives a matrix product state $\Phi$
+of bond dimension at most $k'$. This vector need not be normalized. For
+$N<2$ there is no truncation and $\Phi=\Psi_0$. For $N\ge2$, the entropy
+hypothesis implies $k_0>0$, and the squared Hilbert-space error satisfies
+\begin{align}
+    \lVert\Phi-\Psi_0\rVert^2
+     & \le(N-1)\,4C_1^2e^{2/\xi'}(k'/k_0)^{-1/(\xi'\ln D)}.
+    \label{eq:hastings07_mps_entropy_stage_bound}
+\end{align}
+The error measure and the constant $e^{2/\xi'}$ are recorded in the notes
+\path{hastings07_mps_error_measure.tex} and
+\path{hastings07_schmidt_tail_constant.tex}.\footnote{\leanid{TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_sq_le_of_factorization_of_entropy}
+    in \doclink{TNLean/MPS/AreaLaw/Hastings/MPSFromEntropy}.}
+
+\section{The restriction}
+
+The entropy premise is already present in the source's conditional
+construction; (\ref{eq:hastings07_mps_entropy_stage_hyp}) specifies the
+common integer threshold used in that construction. The remaining
+restriction concerns the application under only the Hamiltonian assumptions.
+The theorem takes both factorization and entropy bounds as hypotheses,
+rather than deriving them from finite interaction range, bounded interaction
+strength and a spectral gap. In a family of chains, their constants must be
+uniform in the chain length to obtain the source's approximation conclusion.
+
+The source's $k_0$ in (\ref{eq:hastings07_mps_entropy_stage_k0}) is a real
+number that depends on the cut. For $N\ge2$, the formalized $k_0$ is one natural number
+that is at least as large at every cut, such as the ceiling of the largest of
+these values. Since the bound (\ref{eq:hastings07_mps_entropy_stage_bound})
+increases with $k_0$, this choice only weakens it.
+
+\section{Elimination plan}
+
+The hypothesis (\ref{eq:hastings07_mps_entropy_stage_hyp}) is discharged by
+the area law on the chain, which bounds $S(\rho^0_{1,j})$ by a constant
+$S_{\max}$ for every cut. Taking $k_0=\lceil\exp(2S_{\max})/2\rceil$ then
+supplies the entropy threshold for the ground state, with $k_0$ independent of
+$j$ and $N$. The application also requires deriving Lemma~1 with uniform
+constants from the Hamiltonian assumptions.
+Both deductions are formalized. For the gapped ground state around which
+Lemma~1 holds, the area law supplies the entropy threshold, and the matrix
+product state estimate follows. Lemma~1 is in turn supplied for every gapped
+chain of finite range with a constant $C_1$ independent of the chain length,
+so the estimate holds under the source's Hamiltonian assumptions alone, with
+$k_0$ independent of $N$.\footnote{\leanid{TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_sq_le_of_gappedGroundState}
+    and
+    \leanid{TNLean.MPS.AreaLaw.Hastings.exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState}
+    in \doclink{TNLean/MPS/AreaLaw/Hastings/MPSGroundState}.} The quantitative
+restrictions of the formalized Lemma~1, which $k_0$ inherits, are recorded in
+\path{hastings07_lemma1_decay_length.tex}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

@@ -12,7 +12,7 @@ import TNLean.PEPS.Approximation.TagRegisters
 Words of exchanges of tensor factors used to move the tag registers of encoded frames: the
 splitting and merging of the tag registers of a concatenated list of holes (`tagSplit`,
 `tagMerge`), and the canonical identification of tag orderings as a word
-(`exists_tagWord_of_perm`). Every such word is a reordering (`PairEffect.Word.IsReordering`);
+(`exists_tagWord_of_perm`). Every such word is a reordering (`PartyCircuit.Word.IsReordering`);
 each operator is computed on product vectors. The reassociations and exchanges of blocks of
 registers that do not involve tags are in `TNLean.Lattice.Sheet.Reordering`.
 
@@ -40,7 +40,7 @@ open scoped InnerProductSpace TensorProduct
 
 namespace TNLean.PEPS.EncodedFrame
 
-open PairEffect ContinuousLinearMap EuclideanSpace
+open TNLean.Lattice.PartyCircuit ContinuousLinearMap EuclideanSpace
 
 variable {ι : Type} {q : ℕ} {Party : Type}
 

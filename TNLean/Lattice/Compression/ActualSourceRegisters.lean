@@ -18,7 +18,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 /-- The actual fixed registers supplied by the all-party source preparation.
@@ -29,4 +29,4 @@ abbrev allResidualSourceLayout {a b : Layout P} (w : SourceCircuit a b) :
     (fun i => euc (Fin (sourceDims w (partialSlotEquiv (fun _ => true) w i).1).1))
     (fun i => euc (Fin (sourceDims w (partialSlotEquiv (fun _ => true) w i).1).2))
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

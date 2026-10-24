@@ -8,8 +8,8 @@ no bound on the spectator dimension occurs.
 
 \begin{definition}[A local bra and a message summand]
     \label{def:peps_local_message_summand}
-    \lean{TNLean.PEPS.PairEffect.Word.localDiscard}
-    \lean{TNLean.PEPS.PairEffect.Word.transferTerm}
+    \lean{TNLean.Lattice.PartyCircuit.Word.localDiscard}
+    \lean{TNLean.Lattice.PartyCircuit.Word.transferTerm}
     \leanok
     \uses{def:peps_party_layout}
     For a vector $u\in H$ at a party $a$, the local bra is
@@ -21,11 +21,11 @@ no bound on the spectator dimension occurs.
 
 \begin{theorem}[Local message summands]
     \label{thm:peps_local_message_summands}
-    \lean{TNLean.PEPS.PairEffect.Word.isAllowed_localDiscard}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_localDiscard_tmul}
-    \lean{TNLean.PEPS.PairEffect.Word.isAllowed_transferTerm}
-    \lean{TNLean.PEPS.PairEffect.Word.sources_transferTerm}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_transferTerm_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.Word.isAllowed_localDiscard}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_localDiscard_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.Word.isAllowed_transferTerm}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sources_transferTerm}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_transferTerm_tmul}
     \leanok
     A local bra defined by a normalized vector has norm at most one. Every message summand is an allowed product of local
     contractions, containing no pair source. On $x\otimes y$ its action is
@@ -45,7 +45,7 @@ no bound on the spectator dimension occurs.
 
 \begin{theorem}[The exact message identity]
     \label{thm:peps_exact_message_identity}
-    \lean{TNLean.PEPS.PairEffect.Word.sum_eval_transferTerm}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sum_eval_transferTerm}
     \leanok
     Summing the message summands over an orthonormal basis gives exactly the
     identity transfer from sender to receiver, tensored with the identity
@@ -66,8 +66,8 @@ no bound on the spectator dimension occurs.
 
 \begin{definition}[Prepending and composing monomials]
     \label{def:peps_compose_actual_monomials}
-    \lean{TNLean.PEPS.PairEffect.PartyChain.prependWord}
-    \lean{TNLean.PEPS.PairEffect.PartyChain.comp}
+    \lean{TNLean.Lattice.PartyCircuit.PartyChain.prependWord}
+    \lean{TNLean.Lattice.PartyCircuit.PartyChain.comp}
     \leanok
     Prepend a word to the initial word of a monomial. To compose two monomials
     with matching intermediate registers, retain the first monomial's effects
@@ -76,12 +76,12 @@ no bound on the spectator dimension occurs.
 
 \begin{theorem}[Operators and pair effects of composed monomials]
     \label{thm:peps_compose_actual_monomials}
-    \lean{TNLean.PEPS.PairEffect.PartyChain.eval_prependWord}
-    \lean{TNLean.PEPS.PairEffect.PartyChain.isAllowed_prependWord}
-    \lean{TNLean.PEPS.PairEffect.PartyChain.effectCount_prependWord}
-    \lean{TNLean.PEPS.PairEffect.PartyChain.eval_comp}
-    \lean{TNLean.PEPS.PairEffect.PartyChain.isAllowed_comp}
-    \lean{TNLean.PEPS.PairEffect.PartyChain.effectCount_comp}
+    \lean{TNLean.Lattice.PartyCircuit.PartyChain.eval_prependWord}
+    \lean{TNLean.Lattice.PartyCircuit.PartyChain.isAllowed_prependWord}
+    \lean{TNLean.Lattice.PartyCircuit.PartyChain.effectCount_prependWord}
+    \lean{TNLean.Lattice.PartyCircuit.PartyChain.eval_comp}
+    \lean{TNLean.Lattice.PartyCircuit.PartyChain.isAllowed_comp}
+    \lean{TNLean.Lattice.PartyCircuit.PartyChain.effectCount_comp}
     \leanok
     \uses{def:peps_compose_actual_monomials}
     An allowed monomial may be preceded by an allowed word containing no pair
@@ -102,12 +102,12 @@ no bound on the spectator dimension occurs.
 
 \begin{theorem}[The finite expansion of a message]
     \label{thm:peps_message_expansion_count}
-    \lean{TNLean.PEPS.PairEffect.gate_toGate_eq_sum}
-    \lean{TNLean.PEPS.PairEffect.PartyGate.transfer}
-    \lean{TNLean.PEPS.PairEffect.PartyGate.length_transfer}
-    \lean{TNLean.PEPS.PairEffect.PartyGate.isAllowed_effectCount_transfer}
-    \lean{TNLean.PEPS.PairEffect.PartyGate.sum_norm_coeff_transfer}
-    \lean{TNLean.PEPS.PairEffect.PartyGate.eval_transfer}
+    \lean{TNLean.Lattice.PartyCircuit.gate_toGate_eq_sum}
+    \lean{TNLean.Lattice.PartyCircuit.PartyGate.transfer}
+    \lean{TNLean.Lattice.PartyCircuit.PartyGate.length_transfer}
+    \lean{TNLean.Lattice.PartyCircuit.PartyGate.isAllowed_effectCount_transfer}
+    \lean{TNLean.Lattice.PartyCircuit.PartyGate.sum_norm_coeff_transfer}
+    \lean{TNLean.Lattice.PartyCircuit.PartyGate.eval_transfer}
     \leanok
     The finite expansion consisting of the message summands, each with
     coefficient one, has $\dim H$ terms and absolute coefficient sum
@@ -127,8 +127,8 @@ no bound on the spectator dimension occurs.
 
 \begin{definition}[Composition of gate expansions]
     \label{def:peps_composed_gate_expansion}
-    \lean{TNLean.PEPS.PairEffect.PartyGate.comp}
-    \lean{TNLean.PEPS.PairEffect.PartyGate.mem_comp}
+    \lean{TNLean.Lattice.PartyCircuit.PartyGate.comp}
+    \lean{TNLean.Lattice.PartyCircuit.PartyGate.mem_comp}
     \leanok
     \uses{def:peps_compose_actual_monomials}
     Let $L=((c_j,M_j))_j$ and $K=((d_k,N_k))_k$ be ordered gate
@@ -139,11 +139,11 @@ no bound on the spectator dimension occurs.
 
 \begin{theorem}[Operator and resources of composed expansions]
     \label{thm:peps_composed_gate_resources}
-    \lean{TNLean.PEPS.PairEffect.PartyGate.gate_comp}
-    \lean{TNLean.PEPS.PairEffect.PartyGate.length_comp}
-    \lean{TNLean.PEPS.PairEffect.PartyGate.sum_norm_comp}
-    \lean{TNLean.PEPS.PairEffect.PartyGate.isAllowed_comp}
-    \lean{TNLean.PEPS.PairEffect.PartyGate.effectCount_comp_le}
+    \lean{TNLean.Lattice.PartyCircuit.PartyGate.gate_comp}
+    \lean{TNLean.Lattice.PartyCircuit.PartyGate.length_comp}
+    \lean{TNLean.Lattice.PartyCircuit.PartyGate.sum_norm_comp}
+    \lean{TNLean.Lattice.PartyCircuit.PartyGate.isAllowed_comp}
+    \lean{TNLean.Lattice.PartyCircuit.PartyGate.effectCount_comp_le}
     \leanok
     \uses{def:peps_composed_gate_expansion}
     The composed list evaluates to the second gate operator after the
@@ -163,12 +163,12 @@ no bound on the spectator dimension occurs.
 \end{proof}
 \begin{definition}[Monomials with finite-dimensional messages]
     \label{def:peps_message_monomial}
-    \lean{TNLean.PEPS.PairEffect.MessageMonomial}
-    \lean{TNLean.PEPS.PairEffect.MessageMonomial.eval}
-    \lean{TNLean.PEPS.PairEffect.MessageMonomial.IsAllowed}
-    \lean{TNLean.PEPS.PairEffect.MessageMonomial.messageDimensions}
-    \lean{TNLean.PEPS.PairEffect.MessageMonomial.effectCount}
-    \lean{TNLean.PEPS.PairEffect.MessageMonomial.expand}
+    \lean{TNLean.Lattice.PartyCircuit.MessageMonomial}
+    \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.eval}
+    \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.IsAllowed}
+    \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.messageDimensions}
+    \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.effectCount}
+    \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.expand}
     \leanok
     \uses{def:peps_party_monomial}
     A monomial with messages is a chronological composition of the
@@ -187,9 +187,9 @@ no bound on the spectator dimension occurs.
 \begin{theorem}[Exact expansion and resources of bounded messages]
     \label{thm:peps_message_expansion}
     \uses{def:peps_message_monomial}
-    \lean{TNLean.PEPS.PairEffect.MessageMonomial.eval_expand}
-    \lean{TNLean.PEPS.PairEffect.MessageMonomial.isAllowed_effectCount_expand}
-    \lean{TNLean.PEPS.PairEffect.MessageMonomial.expansion_size}
+    \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.eval_expand}
+    \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.isAllowed_effectCount_expand}
+    \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.expansion_size}
     \leanok
     The expansion $\mathcal E(M)$ evaluates to the original
     monomial. If $M$ is allowed, every term is an allowed existing
@@ -215,8 +215,8 @@ no bound on the spectator dimension occurs.
 
 \begin{theorem}[Polynomial cost of boundedly many messages]
     \label{thm:peps_message_expansion_polynomial}
-    \lean{TNLean.PEPS.PairEffect.MessageMonomial.expansion_size_le}
-    \lean{TNLean.PEPS.PairEffect.MessageMonomial.expansion_size_le_of_power_bounds}
+    \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.expansion_size_le}
+    \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.expansion_size_le_of_power_bounds}
     \leanok
     Suppose $M$ contains at most $m$ messages, each of dimension at most
     $D\geq1$. Both the number of expanded monomials and their absolute
@@ -246,8 +246,8 @@ normalized pair sources and effects, and finite-dimensional transfers, as in
 
 \begin{definition}[Weighted message monomials]
     \label{def:peps_message_gate}
-    \lean{TNLean.PEPS.PairEffect.MessageGate,
-        TNLean.PEPS.PairEffect.MessageGate.eval}
+    \lean{TNLean.Lattice.PartyCircuit.MessageGate,
+        TNLean.Lattice.PartyCircuit.MessageGate.eval}
     \leanok
     \uses{def:peps_message_monomial}
     A weighted gate list is a finite ordered list
@@ -258,8 +258,8 @@ normalized pair sources and effects, and finite-dimensional transfers, as in
 
 \begin{definition}[Expanding all messages in a gate]
     \label{def:peps_message_gate_expand}
-    \lean{TNLean.PEPS.PairEffect.MessageGate.expand,
-        TNLean.PEPS.PairEffect.MessageGate.mem_expand}
+    \lean{TNLean.Lattice.PartyCircuit.MessageGate.expand,
+        TNLean.Lattice.PartyCircuit.MessageGate.mem_expand}
     \leanok
     \uses{def:peps_message_gate}
     Write the coordinate expansion of the messages in $M_j$ as the ordered
@@ -276,7 +276,7 @@ normalized pair sources and effects, and finite-dimensional transfers, as in
 
 \begin{theorem}[Expansion of a gate without messages]
     \label{thm:peps_message_gate_segment_expansion}
-    \lean{TNLean.PEPS.PairEffect.MessageGate.expand_map_segment}
+    \lean{TNLean.Lattice.PartyCircuit.MessageGate.expand_map_segment}
     \leanok
     \uses{def:peps_party_monomial,def:peps_message_monomial,
         def:peps_message_gate_expand}
@@ -304,9 +304,9 @@ normalized pair sources and effects, and finite-dimensional transfers, as in
 
 \begin{theorem}[Operator and effect count under message expansion]
     \label{thm:peps_message_gate_eval}
-    \lean{TNLean.PEPS.PairEffect.MessageGate.eval_expand,
-        TNLean.PEPS.PairEffect.MessageGate.isAllowed_expand,
-        TNLean.PEPS.PairEffect.MessageGate.effectCount_expand_le}
+    \lean{TNLean.Lattice.PartyCircuit.MessageGate.eval_expand,
+        TNLean.Lattice.PartyCircuit.MessageGate.isAllowed_expand,
+        TNLean.Lattice.PartyCircuit.MessageGate.effectCount_expand_le}
     \leanok
     \uses{def:peps_message_gate_expand}
     The expanded list has operator $G_L$. If every $M_j$ is allowed, so is
@@ -324,9 +324,9 @@ normalized pair sources and effects, and finite-dimensional transfers, as in
 
 \begin{theorem}[Term count and coefficient sum]
     \label{thm:peps_message_gate_size}
-    \lean{TNLean.PEPS.PairEffect.MessageGate.expansion_size,
-        TNLean.PEPS.PairEffect.MessageGate.expansion_size_le,
-        TNLean.PEPS.PairEffect.MessageGate.expansion_size_le_of_coeff_le}
+    \lean{TNLean.Lattice.PartyCircuit.MessageGate.expansion_size,
+        TNLean.Lattice.PartyCircuit.MessageGate.expansion_size_le,
+        TNLean.Lattice.PartyCircuit.MessageGate.expansion_size_le_of_coeff_le}
     \leanok
     \uses{def:peps_message_gate_expand}
     Let $d_{j,1},\ldots,d_{j,m_j}$ be the dimensions of the messages in
@@ -353,7 +353,7 @@ normalized pair sources and effects, and finite-dimensional transfers, as in
 
 \begin{definition}[The corresponding original circuit gate]
     \label{def:peps_message_gate_circuit}
-    \lean{TNLean.PEPS.PairEffect.MessageGate.toOriginalCircuit}
+    \lean{TNLean.Lattice.PartyCircuit.MessageGate.toOriginalCircuit}
     \leanok
     \uses{thm:peps_message_gate_eval}
     Suppose the local participant set $C$ has $|C|\ne1$, its embedding in
@@ -365,9 +365,9 @@ normalized pair sources and effects, and finite-dimensional transfers, as in
 
 \begin{theorem}[Operator and occurrences of the constructed gate]
     \label{thm:peps_message_gate_circuit_properties}
-    \lean{TNLean.PEPS.PairEffect.MessageGate.eval_toOriginalCircuit,
-        TNLean.PEPS.PairEffect.MessageGate.nonprivateCount_toOriginalCircuit,
-        TNLean.PEPS.PairEffect.MessageGate.participants_toOriginalCircuit}
+    \lean{TNLean.Lattice.PartyCircuit.MessageGate.eval_toOriginalCircuit,
+        TNLean.Lattice.PartyCircuit.MessageGate.nonprivateCount_toOriginalCircuit,
+        TNLean.Lattice.PartyCircuit.MessageGate.participants_toOriginalCircuit}
     \leanok
     \uses{def:peps_message_gate_circuit}
     The constructed gate's operator is the relabelling of
@@ -386,8 +386,8 @@ normalized pair sources and effects, and finite-dimensional transfers, as in
 
 \begin{theorem}[Resource bounds for the constructed gate]
     \label{thm:peps_message_gate_circuit_bounds}
-    \lean{TNLean.PEPS.PairEffect.MessageGate.isExpansionBounded_toOriginalCircuit,
-        TNLean.PEPS.PairEffect.MessageGate.isMonomialBounded_toOriginalCircuit}
+    \lean{TNLean.Lattice.PartyCircuit.MessageGate.isExpansionBounded_toOriginalCircuit,
+        TNLean.Lattice.PartyCircuit.MessageGate.isMonomialBounded_toOriginalCircuit}
     \leanok
     \uses{def:peps_message_gate_circuit}
     Under the dimension and message-count bounds of

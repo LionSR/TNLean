@@ -1,0 +1,169 @@
+\section{The matrix product form of Trotter products}
+\label{sec:hastings_product_form}
+
+% Hastings, arXiv:cond-mat/0508554v3, proj3new.tex, lines 1024--1046 (eq. mpf)
+% and 1048--1079 (the Trotter decomposition).
+
+For the density matrix at nonzero temperature, \cite[lines
+    1024--1079]{Hastings2006Solving} introduces a matrix product form in which
+every site carries one index, every site carries an operator acting on it
+alone, and the coefficients are products of functions of finite range. Every
+Trotter product of a finite-range Hamiltonian has this form exactly. The error
+between a Trotter product and the Gibbs operator is not estimated here. The
+source works on an arbitrary lattice; here the sites form a finite domain of
+the square lattice with the walk distance. The term supports lie in balls of
+radius $R$ about specified centres, as in the source. The original
+diameter-bounded statement follows as a corollary. The source's count of the
+indices at a site is not established~\cite{gap:hastings05_planar_domain_scope}.
+
+\begin{definition}[Matrix product form]
+    \label{def:hastings_product_form}
+    \lean{
+        TNLean.Lattice.IsLocalCoefficient,
+        TNLean.Lattice.ProductForm,
+        TNLean.Lattice.HasProductForm,
+        TNLean.Lattice.IsLocalCoefficient.mono,
+        TNLean.Lattice.HasProductForm.mono
+    }
+    \leanok
+    \uses{def:area_law_hamiltonian}
+    Let $\Lambda$ be a finite domain with local dimension $q$, and let $l\ge0$.
+    An operator $\rho$ on $\mathcal H_\Lambda$ has a matrix product form of
+    range $l$ if there are a finite set $\mathcal A$, operators
+    $\rho_j(a)$ on the site $j$ for every site $j$ and every
+    $a\in\mathcal A$, and functions $F_i\colon\mathcal A^\Lambda\to\mathbb C$
+    for every site $i$, such that $F_i(\alpha)$ depends only on the indices
+    $\alpha_j$ with $d_\Lambda(i,j)\le l$ and
+    \begin{align}
+        \label{eq:hastings_mpf}
+        \rho=\sum_{\alpha\in\mathcal A^\Lambda}
+        \Bigl(\prod_{i\in\Lambda}F_i(\alpha)\Bigr)
+        \bigotimes_{j\in\Lambda}\rho_j(\alpha_j).
+    \end{align}
+    This is the right-hand side of the product-form identity in~\cite[lines
+        1024--1039]{Hastings2006Solving}. The index set is the same at every site;
+    a smaller index set at one site is padded with values on which the
+    function at that site vanishes. A product form of range $l$ has every
+    larger range.
+\end{definition}
+
+\begin{theorem}[Operators supported near a specified centre]
+    \label{thm:hastings_product_form_supported_radius}
+    \lean{TNLean.Lattice.hasProductForm_of_mem_supportedOperators_radius}
+    \leanok
+    \uses{def:hastings_product_form}
+    Fix $i_0\in\Lambda$ and $X\subseteq\Lambda$ such that
+    $d_\Lambda(i_0,j)\le R$ for every $j\in X$.
+    Every operator supported on $X$ has a matrix product form of range $R$.
+    The centre need not belong to $X$, and $X$ may be empty.
+    This is the finite planar-domain case of the supported-factor expansion
+    in~\cite[lines 1053--1061]{Hastings2006Solving}.
+\end{theorem}
+\begin{proof}\leanok
+    Take $\mathcal A=\{1,\dots,q\}^2$ and let the single-site operators be
+    the matrix units $|a_j\rangle\langle b_j|$. Attach to $i_0$ the matrix
+    element between the configurations equal to $a$ and $b$ on $X$ and
+    equal to $a_{i_0}$ off $X$. At every site outside $X$, multiply the
+    coefficient by the indicator of $a_j=b_j$, including at $i_0$ if
+    $i_0\notin X$. The matrix element reads only indices on $X$ and at
+    $i_0$, all within radius $R$; each diagonal indicator reads only its
+    own index. Supported operators vanish between configurations differing
+    off $X$, and their other entries depend only on the labels on $X$.
+    Thus~(\ref{eq:hastings_mpf}) holds entry by entry.
+\end{proof}
+
+\begin{theorem}[Operators supported on a small set]
+    \label{thm:hastings_product_form_supported}
+    \lean{TNLean.Lattice.hasProductForm_of_mem_supportedOperators}
+    \leanok
+    \uses{thm:hastings_product_form_supported_radius}
+    Let $X\subseteq\Lambda$ be nonempty with $d_\Lambda(x,y)\le R$ for all
+    $x,y\in X$. Every operator supported on $X$ has a matrix product form of
+    range $R$.
+\end{theorem}
+\begin{proof}\leanok
+    Choose any $i_0\in X$ and apply the preceding theorem.
+\end{proof}
+
+\begin{theorem}[Products of matrix product forms]
+    \label{thm:hastings_product_form_mul}
+    \lean{
+        TNLean.Lattice.HasProductForm.mul,
+        TNLean.Lattice.hasProductForm_one,
+        TNLean.Lattice.hasProductForm_list_prod,
+        TNLean.Lattice.HasProductForm.pow
+    }
+    \leanok
+    \uses{def:hastings_product_form}
+    If $\rho$ and $\sigma$ have matrix product forms of range $l$, then so does
+    $\rho\sigma$. The identity has a matrix product form of every range, and
+    hence so does every finite ordered product and every power of operators
+    with matrix product forms of range $l$.
+\end{theorem}
+\begin{proof}\leanok
+    With index sets $\mathcal A$ and $\mathcal B$, group the two indices at
+    each site into one index in $\mathcal A\times\mathcal B$, take the
+    products $\rho_j(a)\sigma_j(b)$ as the operators on the site $j$, and the
+    products of the two functions at each site as the new functions, as
+    in~\cite[lines 1068--1077]{Hastings2006Solving}. The operators on distinct
+    sites multiply factor by factor.
+\end{proof}
+
+\begin{theorem}[Trotter products with prescribed centres]
+    \label{thm:hastings_trotter_product_form_radius}
+    \lean{TNLean.Lattice.hasProductForm_trotterProduct_of_radius}
+    \leanok
+    \uses{thm:hastings_product_form_supported_radius,thm:hastings_product_form_mul}
+    For each $i\in\Lambda$, let $H_i$ be an operator supported on
+    $X_i\subseteq\{j:d_\Lambda(i,j)\le R\}$. For any ordered list
+    $i_1,\ldots,i_m$, real $\beta$, and integer $n\ge1$,
+    \begin{align}
+        \label{eq:hastings_trotter_product_radius}
+        \Bigl[\prod_{k=1}^m\exp\bigl(-\tfrac\beta n H_{i_k}\bigr)\Bigr]^n
+    \end{align}
+    has a matrix product form of range $R$. Neither Hermiticity nor
+    nonempty supports are required. With the separate convention that the
+    zero-step product is the identity, the conclusion also holds for $n=0$.
+    This proves the radius-based construction of~\cite[lines
+        1053--1077]{Hastings2006Solving} on the stated planar domains.
+\end{theorem}
+\begin{proof}\leanok
+    The supported operators form a finite-dimensional closed algebra, so
+    each exponential is supported on $X_i$. Apply the supported-operator
+    theorem with centre $i$, then closure under finite products and powers.
+\end{proof}
+
+\begin{theorem}[Trotter products have a matrix product form]
+    \label{thm:hastings_trotter_product_form}
+    \lean{
+        TNLean.Lattice.LocalHamiltonian.hasProductForm_trotterProduct,
+        TNLean.Lattice.LocalHamiltonian.trotterProduct,
+        QuantumCircuit.exp_mem_supportedOperators,
+        QuantumCircuit.apply_eq_apply_of_mem_supportedOperators
+    }
+    \leanok
+    \uses{
+        def:area_law_hamiltonian,
+        thm:hastings_product_form_supported,
+        thm:hastings_product_form_mul
+    }
+    Let $H=\sum_Xh_X$ be a Hamiltonian on $\Lambda$ whose nonempty term
+    supports have diameter at most $R$, let
+    $X_1,\dots,X_m$ be any finite sequence of supports, let $\beta$ be real
+    and let $n\ge1$. The Trotter product
+    \begin{align}
+        \label{eq:hastings_trotter_product}
+        \rho_n=\Bigl[\prod_{k=1}^{m}\exp\bigl(-\tfrac{\beta}{n}h_{X_k}\bigr)
+            \Bigr]^n
+    \end{align}
+    has a matrix product form of range $R$. With the separate convention
+    $\rho_0=1$, the same conclusion holds at $n=0$. This is the
+    diameter-restricted specialization of the construction
+    in~\cite[lines 1048--1077]{Hastings2006Solving}.
+\end{theorem}
+\begin{proof}\leanok
+    The operators supported on a set of sites form a finite-dimensional, hence
+    closed, algebra, so each factor $\exp(-\beta h_{X_k}/n)$ is supported on
+    $X_k$. Each factor therefore has a matrix product form of range $R$, and
+    so does the product and its $n$-th power.
+\end{proof}

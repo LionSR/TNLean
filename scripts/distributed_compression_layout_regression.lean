@@ -19,6 +19,7 @@ The small finite computations below use kernel-checked `decide`.
 -/
 
 namespace TNLean.PEPS.Approximation.DistributedLayoutRegression
+open TNLean.Lattice.Compression
 
 variable {Position Gate : Type*}
 

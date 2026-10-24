@@ -18,7 +18,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 open ContinuousLinearMap
 variable {P : Type}
 
@@ -327,4 +327,4 @@ theorem restrict_exchangeBlocks_eval_heq (f : P → Bool) (a b tail : Layout P) 
                 (by simp only [Layout.restrict_cons, hr', Bool.false_eq_true, ↓reduceIte])
                 (rfl : Layout.restrict f tail = Layout.restrict f tail))
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

@@ -12,7 +12,7 @@ import Lean.Util.CollectAxioms
 set_option linter.hashCommand false
 
 run_cmd do
-  let decl := ``TNLean.PEPS.PairEffect.mapL_heq
+  let decl := ``TNLean.Lattice.PartyCircuit.mapL_heq
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
   unless env.contains decl do

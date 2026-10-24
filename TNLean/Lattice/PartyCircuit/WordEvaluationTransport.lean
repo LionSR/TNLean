@@ -22,7 +22,7 @@ Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
 -/
 
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
 /-- Evaluation under equal register lists preserves heterogeneous input equality. -/
 theorem eval_castLayouts_apply_heq {P : Type} {a b a' b' : Layout P}
@@ -76,4 +76,4 @@ theorem eval_id_heq {P : Type} {a b : Layout P} (h : a = b) :
   cases h
   rfl
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word
