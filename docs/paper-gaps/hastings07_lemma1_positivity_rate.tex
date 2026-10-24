@@ -1,0 +1,62 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{The Rate of the Positive Version of Hastings' Lemma~1}
+\author{}
+\date{October 22, 2026}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source statement}
+
+Lemma~1 of~\cite{Hastings2007AreaLaw} (arXiv:0705.2024v4, \path{law16.tex},
+lines~246--267) asserts, for a Hamiltonian with a unique gapped ground state
+$\Psi_0$ and $P_0=|\Psi_0\rangle\langle\Psi_0|$, Hermitian positive definite
+operators $O_B,O_L,O_R$ of norm at most one, supported on the $2l$ sites
+around the cut, on the sites before it and on the sites after it, with
+\begin{align}
+    \Vert O_BO_LO_R-P_0\Vert & \le C_1(\xi)e^{-l/\xi'}=\epsilon(l).
+    \label{eq:hastings07_lemma1_positivity_rate_source}
+\end{align}
+
+\section{The point at issue}
+
+The note added to the source (lines~912--943) observes that the construction
+in the appendix does not make $O_B$ positive. The operators $O_L$ and $O_R$ it
+builds are commuting orthogonal projections, and $O_B$ is a contraction
+satisfying~\eqref{eq:hastings07_lemma1_positivity_rate_source}. The note
+replaces $O_B$ by $O_B^+=O_B^\dagger O_B$, which is positive semidefinite, has
+norm at most one and the same support, and shows
+$\Vert O_B^+O_LO_R-P_0\Vert\le\mathcal O(\sqrt{\epsilon(l)})$. So the positive
+version holds at the rate $e^{-l/(2\xi')}$, not at the rate $e^{-l/\xi'}$
+printed in the lemma.
+
+\section{The statement proved}
+
+With the explicit bound
+$\sqrt{1-(1-\epsilon)^2}+3\epsilon+\epsilon^2\le(\sqrt2+4)\sqrt\epsilon$ for
+$0\le\epsilon\le1$, and the trivial bound $2$ for $\epsilon>1$,
+\begin{align}
+    \Vert O_B^+O_LO_R-P_0\Vert & \le(\sqrt2+4)\sqrt{C_1}\,e^{-l/(2\xi')}.
+    \label{eq:hastings07_lemma1_positivity_rate_proved}
+\end{align}
+The decay length doubles and the constant becomes $(\sqrt2+4)\sqrt{C_1}$.%
+\footnote{\leanid{TNLean.MPS.AreaLaw.Hastings.exists_posSemidef_factorization}
+    in \path{TNLean/MPS/AreaLaw/Hastings/PositiveFactorization.lean}.}
+
+\section{Conclusion}
+
+The correction changes the decay length of the positive version of Lemma~1
+from $\xi'$ to $2\xi'$. The note added also shows that the rest of the proof
+of the area law needs no positivity of $O_B$, so the bound of the main
+theorem keeps its form, and only its constants change if the positive version
+is used.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

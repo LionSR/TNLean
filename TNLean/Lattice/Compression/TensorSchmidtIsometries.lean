@@ -27,7 +27,7 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect.PairSource
+namespace TNLean.Lattice.PartyCircuit.PairSource
 
 private def orthonormalFrame {ι : Type} [Fintype ι] (U : HSpace)
     (u : ι → U) (hu : Orthonormal ℂ u) : EuclideanSpace ℂ ι →ₗᵢ[ℂ] U :=
@@ -98,4 +98,4 @@ theorem exists_probability_schmidt_isometries (U V : HSpace)
     show G₀ (EuclideanSpace.basisFun _ ℂ j) = _ from
     orthonormalFrame_basis _ _ _ j]
 
-end TNLean.PEPS.PairEffect.PairSource
+end TNLean.Lattice.PartyCircuit.PairSource

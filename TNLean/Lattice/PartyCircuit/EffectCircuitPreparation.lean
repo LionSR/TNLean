@@ -36,7 +36,7 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 private theorem sum_get_wordList {P : Type} {a b : Layout P}
     (l : List (ℂ × Word a b)) :
@@ -157,7 +157,7 @@ def eval : {a b : Layout P} → EffectCircuit a b → Mem a →L[ℂ] Mem b
   | _, _, .localMap p ha hb A tail => (Word.localMap p ha hb A tail).eval
   | _, _, @EffectCircuit.gate _ C _ owner a b L tail =>
       isoL (appendIso (Layout.mapOwner owner b) tail).symm ∘L
-        (isoL (Layout.mapOwnerIso owner b) ∘L PairEffect.gate (toGate L) ∘L
+        (isoL (Layout.mapOwnerIso owner b) ∘L PartyCircuit.gate (toGate L) ∘L
           isoL (Layout.mapOwnerIso owner a).symm).rTensor (Mem tail) ∘L
         isoL (appendIso (Layout.mapOwner owner a) tail)
   | _, _, .swap r s tail => (Word.swap r s tail).eval
@@ -171,7 +171,7 @@ def IsAllowed : {a b : Layout P} → EffectCircuit a b → Prop
   | _, _, .comp w v => w.IsAllowed ∧ v.IsAllowed
   | _, _, .localMap _ _ _ A _ => ‖A‖ ≤ 1
   | _, _, @EffectCircuit.gate _ _ _ _ _ _ L _ =>
-      (∀ q ∈ L, q.2.IsAllowed) ∧ ‖PairEffect.gate (toGate L)‖ ≤ 1
+      (∀ q ∈ L, q.2.IsAllowed) ∧ ‖PartyCircuit.gate (toGate L)‖ ≤ 1
   | _, _, .swap .. => True
   | _, _, .frame _ w => w.IsAllowed
 /-- Original chronological evaluation is a contraction.
@@ -592,4 +592,4 @@ theorem eval_castLayouts {a b a' b' : Layout P} (w : SourceCircuit a b)
   rfl
 end SourceCircuit
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

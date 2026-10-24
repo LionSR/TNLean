@@ -136,12 +136,6 @@ theorem mulTensorAssocInvMatrix_eq_finCongr (D₁ D₂ D₃ : ℕ) :
       (finCongr (mul_assoc D₁ D₂ D₃).symm).toPEquiv.toMatrix := by
   rw [mulTensorAssocInvMatrix, mulTensorAssocEquiv_eq_finCongr, finCongr_symm]
 
-/-- The bond associator is the permutation matrix of `finCongr`. -/
-theorem mulTensorAssocMatrix_eq_finCongr (D₁ D₂ D₃ : ℕ) :
-    mulTensorAssocMatrix D₁ D₂ D₃ =
-      (finCongr (mul_assoc D₁ D₂ D₃)).toPEquiv.toMatrix := by
-  rw [mulTensorAssocMatrix, mulTensorAssocEquiv_eq_finCongr]
-
 /-- The bond identification of `GroupFamily.castMat` is the permutation matrix of
 `finCongr`; for explicit bond dimensions it is the identity by
 `finCongr_toMatrix_eq_one`. -/

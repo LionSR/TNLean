@@ -16,9 +16,10 @@ Source: polynomial-PEPS, `04-compression.tex`, lines 279–309 and 565–588.
 noncomputable section
 open ContinuousLinearMap
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
-namespace Word
+namespace Lattice.PartyCircuit.Word
 /-- Apply an actual endpoint operator to one register, leaving the other
 registers as spectators. Source: polynomial-PEPS 04-compression.tex, lines 279–309. -/
 def localEndpoint (r : Reg P) (A : r.space →L[ℂ] r.space) (tail : Layout P) :
@@ -30,8 +31,8 @@ def localEndpoint (r : Reg P) (A : r.space →L[ℂ] r.space) (tail : Layout P) 
 Source: polynomial-PEPS 04-compression.tex, lines 279–309. -/
 theorem sources_localEndpoint (r : Reg P) (A : r.space →L[ℂ] r.space) (tail : Layout P) :
     (localEndpoint r A tail).sources = [] := rfl
-end Word
-namespace SourceInventory
+end Lattice.PartyCircuit.Word
+namespace Lattice.PartyCircuit.SourceInventory
 /-- The actual source-free operator applying the two supplied endpoint maps
 at every original source slot. Owners and slot order are recorded by the
 original inventory. Source: polynomial-PEPS 04-compression.tex, lines 279–309
@@ -61,5 +62,5 @@ theorem sources_endpointWord (R : SourceInventory P) (U V : Fin R.length → HSp
       exact (Word.sources_castLayouts _ _ _).trans (by
         simp only [Word.sources, Word.sources_localEndpoint, ih, List.nil_append])
 
-end SourceInventory
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.SourceInventory
+end TNLean

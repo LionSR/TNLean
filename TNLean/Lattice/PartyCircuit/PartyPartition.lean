@@ -18,7 +18,7 @@ noncomputable section
 
 open scoped InnerProductSpace TensorProduct
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 open ContinuousLinearMap
 
@@ -312,4 +312,4 @@ theorem partitionIso_cons_cons_false_false_tmul (f : P → Bool) (r t : Reg P)
 
 end Layout
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

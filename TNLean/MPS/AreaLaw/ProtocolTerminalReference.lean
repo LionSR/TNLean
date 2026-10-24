@@ -37,7 +37,7 @@ open scoped TensorProduct
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.Lattice TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame
+open TNLean.Lattice TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
 
 variable {L w q : ℕ}
 
@@ -162,8 +162,7 @@ private theorem mapped_siteVec_heq {ι κ P : Type} (own : κ → P) (f : ι →
   | cons x xs ih =>
       have ht : siteRegs q own (xs.map f) = siteRegs q (fun x ↦ own (f x)) xs := by
         simp [siteRegs, List.map_map, Function.comp_def]
-      exact Layout.cons_tmul_heq ⟨own (f x), euc (Fin q)⟩ ht
-        (EuclideanSpace.single (c (f x)) (1 : ℂ)) ih
+      exact Layout.cons_tmul_heq rfl ht HEq.rfl ih
 
 private theorem append_siteVec_heq {ι P : Type} (own : ι → P)
     (a b : List ι) (c : ι → Fin q) :

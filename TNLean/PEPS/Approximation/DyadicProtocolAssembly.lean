@@ -22,7 +22,7 @@ into a `DyadicProtocol` and proves the bounds `DyadicProtocol.IsDistributionProt
 * a list of encoded frames `st t` at every stage, the initial frames raw and each held by one
   party;
 * one original circuit for each change of the schedule, a bounded change in the sense of
-  `PairEffect.OriginalCircuit.IsBoundedChange` from the reference vector of `st t` to that of
+  `PartyCircuit.OriginalCircuit.IsBoundedChange` from the reference vector of `st t` to that of
   `st (t + 1)`, whose participants are parties the event of the change uses;
 * at the end of the schedule, a main frame read by the unit-square parties, with trivial holes,
   followed by other sheets whose holes satisfy the frame constraint and are at most `C L³` in
@@ -53,7 +53,8 @@ namespace TNLean.PEPS
 
 namespace Approximation
 
-open EncodedFrame PairEffect PairEffect.OriginalCircuit
+open EncodedFrame TNLean.Lattice.Sheet TNLean.Lattice.PartyCircuit
+open TNLean.Lattice.PartyCircuit.OriginalCircuit
 
 /-! ### The parties an event uses -/
 

@@ -20,8 +20,8 @@ unit vector it moves by at most `4 ‖𝒱 ω - s ⊗ s'‖`, since `F_{T B_T}` 
 
 ## Main definitions
 
-* `EncodedFrame.bufferCorrection`: `D_U` for abstract finite systems.
-* `EncodedFrame.sheetBufferCorrection`: `D_U` on the raw registers of two sheets.
+* `Sheet.bufferCorrection`: `D_U` for abstract finite systems.
+* `Sheet.sheetBufferCorrection`: `D_U` on the raw registers of two sheets.
 
 The unitary `F_S` swapping the two raw sheets at the sites of `S`, `TNLean.Lattice.sheetSwapOp`,
 and its algebra (`TNLean.Lattice.sheetSwapOp_mul_sheetSwapOp`: `F_A F_Y = F_T` for
@@ -30,10 +30,10 @@ the sites and are stated in `TNLean.Lattice.RegionalSwap`.
 
 ## Main results
 
-* `EncodedFrame.bufferCorrection_mul_tSwap`: `D_U F_T = (𝒱^{⊗2})ᴴ F_{T B_T} 𝒱^{⊗2}`
+* `Sheet.bufferCorrection_mul_tSwap`: `D_U F_T = (𝒱^{⊗2})ᴴ F_{T B_T} 𝒱^{⊗2}`
   (`eq:exchange-net-map`).
-* `EncodedFrame.norm_act_bufferCorrection_mul_tSwap_sub_le`: `‖D_U F_T ω^{⊗2} - ω^{⊗2}‖ ≤ 4δ`.
-* `EncodedFrame.commute_sheetBufferCorrection`: the buffer correction commutes with products
+* `Sheet.norm_act_bufferCorrection_mul_tSwap_sub_le`: `‖D_U F_T ω^{⊗2} - ω^{⊗2}‖ ≤ 4δ`.
+* `Sheet.commute_sheetBufferCorrection`: the buffer correction commutes with products
   of operators acting on `T ∪ E`.
 
 ## References
@@ -54,7 +54,7 @@ open TNLean.Lattice (sheetSwap sheetSwapOp)
 
 noncomputable section
 
-namespace TNLean.PEPS.EncodedFrame
+namespace TNLean.Lattice.Sheet
 
 section Kron
 
@@ -322,4 +322,4 @@ theorem commute_sheetBufferCorrection (σ : SplittingData q T E)
 
 end SheetBuffer
 
-end TNLean.PEPS.EncodedFrame
+end TNLean.Lattice.Sheet

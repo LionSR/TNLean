@@ -31,11 +31,12 @@ noncomputable section
 open scoped InnerProductSpace TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 
 variable {P : Type}
 
-namespace Layout
+namespace Lattice.PartyCircuit.Layout
 
 theorem restrict_pair {f : P → Bool} {p q : P} (hp : f p = true) (hq : f q = true)
     (α β : Type) [Fintype α] [Fintype β] (ℓ : Layout P) :
@@ -47,9 +48,9 @@ theorem restrict_not_pair {f : P → Bool} {p q : P} (hp : f p = true) (hq : f q
     restrict (fun p ↦ !f p) (⟨p, euc α⟩ :: ⟨q, euc β⟩ :: ℓ) = restrict (fun p ↦ !f p) ℓ := by
   simp [restrict_cons, hp, hq]
 
-end Layout
+end Lattice.PartyCircuit.Layout
 
-namespace PartyChain
+namespace Lattice.PartyCircuit.PartyChain
 
 /-! ### The selected and complementary parts -/
 
@@ -217,6 +218,6 @@ theorem eval_mapOwner {Q : Type} (g : P → Q) {ℓX ℓY : Layout P} (M : Party
       simp only [comp_assoc] at he' ih' ⊢
       rw [w.eval_mapOwner_comp g, he', ih']
 
-end PartyChain
+end Lattice.PartyCircuit.PartyChain
 
-end TNLean.PEPS.PairEffect
+end TNLean

@@ -20,7 +20,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–450.
 
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect.Layout
+namespace TNLean.Lattice.PartyCircuit.Layout
 variable {P X Y d e : Type} [Fintype X] [Fintype Y] [Fintype d] [Fintype e]
 
 /-- The product of the two regional bases, transported to the original memory. -/
@@ -169,4 +169,4 @@ theorem partitionBasis_coordinates_of_eq (f : P → Bool) (a b L : Layout P)
   cases h
   exact partitionBasis_coordinates f a b bA bE bD bF z x y i j
 
-end TNLean.PEPS.PairEffect.Layout
+end TNLean.Lattice.PartyCircuit.Layout

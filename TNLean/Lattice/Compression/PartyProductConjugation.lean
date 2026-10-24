@@ -21,7 +21,7 @@ Source: polynomial-PEPS, `04-compression.tex`, lines 279–355 and 565–588.
 -/
 noncomputable section
 open scoped Matrix
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 variable {P : Type} [Fintype P]
 variable {I O : P → Type}
 
@@ -62,4 +62,4 @@ theorem partialTraceRight_partyProduct_conjugate
         (fun p => Matrix.partialTraceRight (A p * X p * (B p)ᴴ)) := by
   simpa only [partyProductMatrix_conjugate, dependentPhysicalProductFamilyMatrix] using
     partialTraceRight_partyProductMatrix (fun p => A p * X p * (B p)ᴴ)
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

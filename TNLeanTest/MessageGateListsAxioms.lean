@@ -11,7 +11,7 @@ import Lean.Util.CollectAxioms
 
 set_option linter.hashCommand false
 
-open TNLean.PEPS.PairEffect.EffectCircuit
+open TNLean.Lattice.PartyCircuit.EffectCircuit
 
 run_cmd do
   let decls := #[``MessageGateLists, ``expandMessageGateLists,

@@ -12,7 +12,7 @@ reused.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 /-- An expanded gate contributes exactly the sum of the absolute values of its
@@ -95,4 +95,4 @@ theorem sum_norm_coefficient_swap (A : P → Bool) (r s : Reg P) (tail : Layout 
   change (∑ _ : Unit, ‖(1 : ℂ)‖) = 1
   simp
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

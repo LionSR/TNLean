@@ -3,15 +3,15 @@
 
 \begin{theorem}[Exchanging lists of registers]
     \label{thm:peps_register_exchange}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_exchangeBlocks_appendIso_symm}
-    \lean{TNLean.PEPS.PairEffect.Word.exchangeBlocks}
-    \lean{TNLean.PEPS.PairEffect.Word.isAllowed_exchangeBlocks}
-    \lean{TNLean.PEPS.PairEffect.Word.moveHead}
-    \lean{TNLean.PEPS.PairEffect.Word.isAllowed_moveHead}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_moveHead_appendIso_symm}
-    \lean{TNLean.PEPS.PairEffect.appendIso_symm_cons_tmul}
-    \lean{TNLean.PEPS.PairEffect.Word.sources_moveHead}
-    \lean{TNLean.PEPS.PairEffect.Word.sources_exchangeBlocks}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_exchangeBlocks_appendIso_symm}
+    \lean{TNLean.Lattice.PartyCircuit.Word.exchangeBlocks}
+    \lean{TNLean.Lattice.PartyCircuit.Word.isAllowed_exchangeBlocks}
+    \lean{TNLean.Lattice.PartyCircuit.Word.moveHead}
+    \lean{TNLean.Lattice.PartyCircuit.Word.isAllowed_moveHead}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_moveHead_appendIso_symm}
+    \lean{TNLean.Lattice.PartyCircuit.appendIso_symm_cons_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sources_moveHead}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sources_exchangeBlocks}
     \leanok
     \uses{def:peps_party_layout}
     Let $\mathcal H_A$, $\mathcal H_B$, and $\mathcal H_C$ be the memories
@@ -55,22 +55,22 @@
 
 \begin{definition}[The sources of a composition]
     \label{def:peps_source_inventory}
-    \lean{TNLean.PEPS.PairEffect.PairSource}
-    \lean{TNLean.PEPS.PairEffect.PairSource.layout}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.layout}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.IsNormalized}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.prepare}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.vector}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.layout_nil}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.layout_cons}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.layout_append}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.isAllowed_prepare_iff}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.isNormalized_cons}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepare_eq_appendIso_symm}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepare_append}
-    \lean{TNLean.PEPS.PairEffect.Word.sources}
-    \lean{TNLean.PEPS.PairEffect.Word.sources_prepare}
+    \lean{TNLean.Lattice.PartyCircuit.PairSource}
+    \lean{TNLean.Lattice.PartyCircuit.PairSource.layout}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.layout}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.IsNormalized}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.prepare}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.vector}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.layout_nil}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.layout_cons}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.layout_append}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.isAllowed_prepare_iff}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.isNormalized_cons}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.eval_prepare_eq_appendIso_symm}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.eval_prepare_append}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sources}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sources_prepare}
     \leanok
     \uses{def:peps_party_layout}
     A pair source consists of distinct parties $p,q$, their Hilbert spaces
@@ -97,19 +97,19 @@
 
 \begin{theorem}[Preparation before the local operations]
     \label{thm:peps_source_preparation}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_eq_localPart_comp_prepare}
-    \lean{TNLean.PEPS.PairEffect.Word.localPart}
-    \lean{TNLean.PEPS.PairEffect.Word.sources_localPart}
-    \lean{TNLean.PEPS.PairEffect.Word.isAllowed_localPart}
-    \lean{TNLean.PEPS.PairEffect.Word.isNormalized_sources}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_localPart_prepare}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_frameList_prepare}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_moveHead_prepare}
-    \lean{TNLean.PEPS.PairEffect.Word.castInput}
-    \lean{TNLean.PEPS.PairEffect.Word.sources_castInput}
-    \lean{TNLean.PEPS.PairEffect.Word.isAllowed_castInput}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_castInput_of_heq}
-    \lean{TNLean.PEPS.PairEffect.Word.sources_frameList}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_eq_localPart_comp_prepare}
+    \lean{TNLean.Lattice.PartyCircuit.Word.localPart}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sources_localPart}
+    \lean{TNLean.Lattice.PartyCircuit.Word.isAllowed_localPart}
+    \lean{TNLean.Lattice.PartyCircuit.Word.isNormalized_sources}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_localPart_prepare}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.eval_frameList_prepare}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.eval_moveHead_prepare}
+    \lean{TNLean.Lattice.PartyCircuit.Word.castInput}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sources_castInput}
+    \lean{TNLean.Lattice.PartyCircuit.Word.isAllowed_castInput}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_castInput_of_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sources_frameList}
     \leanok
     \uses{def:peps_source_inventory}
     Let $F:\mathcal H_{\rm in}\to\mathcal H_{\rm out}$ be an allowed
@@ -149,9 +149,9 @@
 
 \begin{theorem}[Parties of the remaining operations]
     \label{thm:peps_source_word_parties}
-    \lean{TNLean.PEPS.PairEffect.Word.parties_localPart}
-    \lean{TNLean.PEPS.PairEffect.Word.parties_mapOwner}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_localPart_mapOwner_eval_heq_id_of_disjoint}
+    \lean{TNLean.Lattice.PartyCircuit.Word.parties_localPart}
+    \lean{TNLean.Lattice.PartyCircuit.Word.parties_mapOwner}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_localPart_mapOwner_eval_heq_id_of_disjoint}
     \leanok
     \uses{thm:peps_source_preparation,def:peps_owner_composition,thm:peps_party_factorization,thm:peps_party_restriction,def:peps_single_party_selector}
     For any composition $W$, write $\mathcal P(W)$ for the parties of its
@@ -201,11 +201,11 @@
 
 \begin{definition}[Expansion of a preparation]
     \label{def:peps_source_expansion}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands}
-    \lean{TNLean.PEPS.PairEffect.PairSource.partyPair}
-    \lean{TNLean.PEPS.PairEffect.PairSource.reverse}
-    \lean{TNLean.PEPS.PairEffect.PairSource.partyPair_reverse}
-    \lean{TNLean.PEPS.PairEffect.PairSource.norm_reverse_vector}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.Expands}
+    \lean{TNLean.Lattice.PartyCircuit.PairSource.partyPair}
+    \lean{TNLean.Lattice.PartyCircuit.PairSource.reverse}
+    \lean{TNLean.Lattice.PartyCircuit.PairSource.partyPair_reverse}
+    \lean{TNLean.Lattice.PartyCircuit.PairSource.norm_reverse_vector}
     \leanok
     \uses{def:peps_source_inventory}
     A source list $G$ expands to $S$ when, beside every spectator memory
@@ -219,12 +219,12 @@
 
 \begin{theorem}[Composition and reordering of expansions]
     \label{thm:peps_source_expansion_operations}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.refl}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.trans}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.cons}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.reverse}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.swap}
-    \lean{TNLean.PEPS.PairEffect.eval_swap_reversedSource}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.Expands.refl}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.Expands.trans}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.Expands.cons}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.Expands.reverse}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.Expands.swap}
+    \lean{TNLean.Lattice.PartyCircuit.eval_swap_reversedSource}
     \leanok
     \uses{def:peps_source_expansion}
     Expansion is reflexive and transitive, and remains valid upon placing
@@ -252,16 +252,16 @@
 
 \begin{theorem}[One source for each participating pair]
     \label{thm:peps_grouped_sources}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_grouped}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_combined}
-    \lean{TNLean.PEPS.PairEffect.Word.exists_grouped_source_preparation}
-    \lean{TNLean.PEPS.PairEffect.PairSource.combine}
-    \lean{TNLean.PEPS.PairEffect.PairSource.partyPair_combine}
-    \lean{TNLean.PEPS.PairEffect.PairSource.norm_combine_vector}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.combine}
-    \lean{TNLean.PEPS.PairEffect.expandCombinedPair}
-    \lean{TNLean.PEPS.PairEffect.isAllowed_expandCombinedPair}
-    \lean{TNLean.PEPS.PairEffect.eval_expandCombinedPair}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.exists_grouped}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.exists_combined}
+    \lean{TNLean.Lattice.PartyCircuit.Word.exists_grouped_source_preparation}
+    \lean{TNLean.Lattice.PartyCircuit.PairSource.combine}
+    \lean{TNLean.Lattice.PartyCircuit.PairSource.partyPair_combine}
+    \lean{TNLean.Lattice.PartyCircuit.PairSource.norm_combine_vector}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.Expands.combine}
+    \lean{TNLean.Lattice.PartyCircuit.expandCombinedPair}
+    \lean{TNLean.Lattice.PartyCircuit.isAllowed_expandCombinedPair}
+    \lean{TNLean.Lattice.PartyCircuit.eval_expandCombinedPair}
     \leanok
     \uses{def:peps_source_expansion}
     Let $S$ be a finite list of normalized pair sources. There is a list

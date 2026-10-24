@@ -314,6 +314,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
         TNLean.MPS.AreaLaw.IsChainSupport.subset_window_of_splits,
         TNLean.MPS.AreaLaw.chainCrossConst,
         TNLean.MPS.AreaLaw.card_crossingTerms_interval_le,
+        TNLean.MPS.AreaLaw.cutBudgetConst,
+        TNLean.MPS.AreaLaw.one_le_cutBudgetConst,
         TNLean.MPS.AreaLaw.chainBudgetConst,
         TNLean.MPS.AreaLaw.one_le_chainBudgetConst,
         TNLean.MPS.AreaLaw.supportDim_le_real,
@@ -334,7 +336,9 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \end{align}
     Both bounds are independent of the interval, and no support of range $R$
     is split by two of the shells $[l-(j+1)R,\,r+(j+1)R)$, $j\ge0$, of an
-    interval $[l,r)$.
+    interval $[l,r)$. For a natural number $N$ put
+    $B(N)=1+N\log^2\bigl(e\,q^{R+1}\bigr)$, so that $B(N)\ge1$ and
+    $B_R=B(N_R)$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -1442,6 +1446,10 @@ for an arbitrary finite set of sites and are instantiated here directly.
         TNLean.MPS.AreaLaw.chainDiscountConst_nonneg,
         TNLean.MPS.AreaLaw.chainIntervalEntropyBound_nonneg,
         TNLean.MPS.AreaLaw.regionEntropy_interval_le,
+        TNLean.MPS.AreaLaw.cutShellConst,
+        TNLean.MPS.AreaLaw.cutShellConst_nonneg,
+        TNLean.MPS.AreaLaw.cutAreaLawConst,
+        TNLean.MPS.AreaLaw.cutAreaLawConst_nonneg,
         TNLean.MPS.AreaLaw.chainShellConst,
         TNLean.MPS.AreaLaw.chainShellCount_le,
         TNLean.MPS.AreaLaw.chainAreaLawConst,
@@ -1450,7 +1458,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
         TNLean.MPS.AreaLaw.chainAreaLaw
     }
     \leanok
-    \uses{def:chain_model}
+    \uses{def:chain_model, lem:chain_crossing_count}
     Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
     finite-range Hamiltonian with term norms at most $J\ge0$ on the chain of
     $L$ sites with local dimension $q\ge1$. Every interval $X$ satisfies
@@ -1466,6 +1474,11 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $S(A)\le C_{\mathrm{int}}\,|\partial A|$. Hence the constant
     $C_0(q,R)(1+J/\Delta)$, chosen before $L$, the Hamiltonian, the ground
     vector and the region, bounds $S(A)/|\partial A|$ for every gapped chain.
+    For a natural number $N$, let $E(N)$, $C_1(N)=5+E(N)+128B(N)$ and
+    $C_0(N)=\bigl(8R\log q+\log2\bigr)C_1(N)+1024\,e\,B(N)$ be the same
+    nonnegative constants with $N_R$ replaced by $N$, where $B(N)$ is the
+    budget of Lemma~\ref{lem:chain_crossing_count}; thus
+    $C_0(q,R)=C_0(N_R)$.
     This is the connected case of Theorem~A; the general case is
     Theorem~\ref{thm:domain_area_law}.
 \end{theorem}
@@ -1486,7 +1499,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \label{thm:chain_area_log_cube}
     \lean{
         TNLean.MPS.AreaLaw.chainAreaLawConst_le_mul_log_cube,
-        TNLean.MPS.AreaLaw.regionEntropy_le_log_cube_mul_card_boundaryEdges
+        TNLean.MPS.AreaLaw.regionEntropy_le_log_cube_mul_card_boundaryEdges,
+        TNLean.MPS.AreaLaw.chainLogCubeConst
     }
     \leanok
     \uses{thm:chain_area_law}
@@ -1536,7 +1550,11 @@ for an arbitrary finite set of sites and are instantiated here directly.
 % Source: part1_arealaw.tex:706--745, combining the count and energy refinements.
 \begin{theorem}[Area law for consecutive-window interactions]
     \label{thm:chain_window_area_law}
-    \lean{TNLean.MPS.AreaLaw.chainAreaLaw_of_consecutive_terms}
+    \lean{
+        TNLean.MPS.AreaLaw.chainAreaLaw_of_consecutive_terms,
+        TNLean.MPS.AreaLaw.windowBudgetConst,
+        TNLean.MPS.AreaLaw.windowAreaLawConst
+    }
     \leanok
     \uses{def:chain_model}
     Fix natural numbers $q\ge1$ and $R$, and real numbers $J\ge0$ and
@@ -2160,6 +2178,44 @@ for an arbitrary finite set of sites and are instantiated here directly.
     The assertion about all cuts follows by restricting to internal cuts.
 \end{proof}
 
+\begin{theorem}[Cut ranks characterize open-boundary matrix product states]
+    \label{thm:chain_cut_rank_of_mps}
+    \lean{
+        TNLean.MPS.AreaLaw.rank_cutMatrix_le_bondDim,
+        TNLean.MPS.AreaLaw.IsOpenMPS.rank_cutMatrix_le,
+        TNLean.MPS.AreaLaw.isOpenMPS_iff_internal_cutMatrix_rank_le
+    }
+    \leanok
+    Let $\psi$ be a vector on $L$ sites of local dimension $q$.
+    If $\psi$ is a scalar multiple of a rectangular open-boundary
+    contraction with bond dimensions $d_0,\ldots,d_L$, then its cut
+    matrix $M_k$ satisfies $\operatorname{rank}M_k\le d_k$ for
+    $0\le k\le L$. In particular, $\psi$ is an open-boundary matrix
+    product state of bond dimension at most $D$ if and only if
+    $\operatorname{rank}M_k\le D$ at every internal cut $0<k<L$.
+    No normalization is required. The endpoint ranks are at most one;
+    when $L\le1$ there are no internal rank conditions, even for $D=0$.
+    This is the single-cut rank observation used in the truncation-error
+    lower bound of~\cite{Schuch2008EntropyScaling}; see also the sequential
+    truncation proposition in~\cite[Part IIa]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:chain_open_mps,thm:chain_mps_of_cut_rank}
+    Split a virtual path at bond $k$. For each fixed
+    bond index $\alpha\in\{0,\ldots,d_k-1\}$, the sums over the remaining
+    virtual indices on the two sides are independent. Hence
+    \begin{align}
+        M_k(a,b)=c\sum_{\alpha=0}^{d_k-1}U_k(a,\alpha)V_k(\alpha,b).
+    \end{align}
+    Absorbing $c$ into $U_k$ factors $M_k$ through $\mathbb C^{d_k}$,
+    so its rank is at most $d_k$. This remains valid when $d_k=0$:
+    the sum is empty and the cut matrix vanishes. At the endpoints,
+    $d_0=d_L=1$. The converse is
+    Theorem~\ref{thm:chain_mps_of_cut_rank}, which includes empty and
+    one-site chains.
+\end{proof}
+
 \begin{theorem}[Growth of chain cut ranks]
     \label{thm:chain_cut_rank_growth}
     \lean{
@@ -2300,6 +2356,38 @@ for an arbitrary finite set of sites and are instantiated here directly.
     gives the error bound. The argument is the proof of
     Theorem~\ref{thm:chain_sequential_truncation_full}, applied to the
     eigenprojections directly.
+\end{proof}
+
+\begin{theorem}[Squared error of sequential truncation]
+    \label{thm:chain_sequential_truncation_sq}
+    \lean{
+        TNLean.MPS.AreaLaw.norm_sequentialTruncation_leadingEigenprojection_sub_sq_le,
+        TNLean.MPS.AreaLaw.norm_sub_sequentialTruncation_sq_le}
+    \leanok
+    \uses{thm:chain_sequential_truncation_eigen}
+    In the setting of Theorem~\ref{thm:chain_sequential_truncation_eigen},
+    \begin{align}
+        \|\Phi-\psi\|^2\le\sum_{k=1}^{L-1}\epsilon_k(D). \notag
+    \end{align}
+    Verstraete and Cirac~\cite{VerstraeteCirac2006Faithfully} state this
+    bound with a factor $2$ on the right; the form here implies theirs.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Write $\Phi_0=\psi$ and $\Phi_j=P_{L-j}\Phi_{j-1}$, so that
+    $\Phi=\Phi_{L-1}$. For an orthogonal projection $P$,
+    \begin{align}
+        \psi-P\Phi_{j-1} & =P(\psi-\Phi_{j-1})+(1-P)\psi, \notag
+    \end{align}
+    and the two terms are orthogonal, since $P^*=P=P^2$ gives
+    \begin{align}
+        \langle P(\psi-\Phi_{j-1}),(1-P)\psi\rangle
+         & =\langle\psi-\Phi_{j-1},(P-P^2)\psi\rangle=0. \notag
+    \end{align}
+    Hence
+    $\|\psi-\Phi_j\|^2\le\|\psi-\Phi_{j-1}\|^2+\|(1-P_{L-j})\psi\|^2$,
+    and $\|(1-P_k)\psi\|^2=\operatorname{tr}((1-\Pi_k)\rho_k)=\epsilon_k(D)$.
+    Summing over the steps gives the bound.
 \end{proof}
 
 \begin{lemma}[Sequential truncation at an entropy threshold]
@@ -4111,7 +4199,7 @@ Definition~\ref{def:chain_open_mps}.
 
 \begin{theorem}[One useful column and all its cut ranks]
     \label{thm:compression_useful_column_all_cuts}
-    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.exists_useful_column_of_sub_pure_le}
+    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.exists_useful_column_of_sub_pure_le}
     \leanok
     \uses{def:compression_operator_operator,def:compression_operator_alphabets,
         def:compression_operator_endpoint_tensor,def:peps_dependent_network,

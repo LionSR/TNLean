@@ -28,7 +28,7 @@ noncomputable section
 open scoped InnerProductSpace TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 variable {P : Type} [Fintype P]
 
@@ -54,4 +54,4 @@ theorem Word.exists_prepared_tensorPartyMaps {ℓ ℓ' : Layout P} (w : Word ℓ
   refine ⟨S, hS, hN, hK, B, hB, ?_⟩
   rw [he, ← comp_assoc, hF, comp_assoc]
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

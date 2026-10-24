@@ -36,7 +36,7 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open scoped InnerProductSpace TensorProduct Matrix Matrix.Norms.L2Operator
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
 /-- Finite coordinates preserve the norm bound of the actual exterior word.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 454–470. -/
@@ -73,4 +73,4 @@ theorem rectangularTraceNorm_partialTrace_physicalOutputMatrix_le
     (norm_physicalOutputMatrix_le_one J v bIn bD hv)
     (norm_physicalOutputMatrix_le_one J w bIn' bD hw)
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

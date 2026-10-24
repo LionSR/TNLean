@@ -35,7 +35,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame PairEffect
+open EncodedFrame TNLean.Lattice.Sheet TNLean.Lattice.PartyCircuit
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {pos : ι → ℝ × ℝ}
   {Party : Type} {Ω : EuclideanSpace ℂ (ι → Fin q)} {ℓ : Layout Party} {ξ : Mem ℓ}

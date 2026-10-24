@@ -8,7 +8,7 @@ import TNLean.Lattice.Compression.DependentPhysicalProductRangeSupport
 /-! # Product-range regressions with dependent alphabets -/
 
 open scoped BigOperators Matrix
-open TNLean.PEPS
+open TNLean.Lattice
 
 noncomputable section
 set_option linter.hashCommand false
@@ -68,8 +68,8 @@ example : (fun _ : (v : Bool) → Fin (if v then 3 else 2) => (1 : ℂ)) ∈
     Matrix.mulVec_single, Matrix.col]
 
 /--
-info: 'TNLean.PEPS.mem_range_dependentPhysicalProductFamilyMap_iff' depends on axioms:
+info: 'TNLean.Lattice.mem_range_dependentPhysicalProductFamilyMap_iff' depends on axioms:
 [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.mem_range_dependentPhysicalProductFamilyMap_iff
+#print axioms TNLean.Lattice.mem_range_dependentPhysicalProductFamilyMap_iff

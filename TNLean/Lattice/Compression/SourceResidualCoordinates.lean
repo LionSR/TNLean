@@ -25,8 +25,9 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect
-namespace Word
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
+namespace Lattice.PartyCircuit.Word
 variable {P : Type} {a b : Layout P}
 
 /-- The original local operations in prescribed source coordinates.
@@ -77,9 +78,9 @@ theorem eval_residualInSlots_prepare (w : Word a b) (R : SourceInventory P)
     exact hc _ h
   exact hs _ hη (SourceInventory.layout_ofSlots_eq R U V η (fun _ ↦ 0))
 
-end Word
+end Lattice.PartyCircuit.Word
 
-namespace SourceCircuit
+namespace Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 /-- The common coordinate slots have the actual partial source layout.
@@ -144,5 +145,5 @@ theorem eval_partialResidual_prepare (A : P → Bool) {a b : Layout P}
   Word.eval_residualInSlots_prepare _ _ _ _ _ _
     ((exists_partial_source_preparation_with_original_vectors A w hw).2.1 ξ)
 
-end SourceCircuit
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.SourceCircuit
+end TNLean

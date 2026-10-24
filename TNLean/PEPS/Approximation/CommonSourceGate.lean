@@ -26,8 +26,10 @@ noncomputable section
 open scoped InnerProductSpace TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 
+namespace Lattice.PartyCircuit
 /-- The actual weighted gate has a source expansion in fixed private spaces,
 with its original coefficients and with normalized sources and local contractions.
 Source: polynomial-PEPS manuscript, `eq:compression-source-gate`,
@@ -58,4 +60,5 @@ theorem Word.exists_common_source_gate {P ι : Type} [Fintype P] [Fintype ι]
   refine ⟨R, hR, hRK, U, V, η, hη, B, hB, ?_⟩
   simp only [comp_finsetSum, comp_smul, he]
 
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit
+end TNLean

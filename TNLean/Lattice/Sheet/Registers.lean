@@ -28,19 +28,19 @@ Nothing here depends on a geometry of the sites.
 
 ## Main definitions
 
-* `EncodedFrame.groupWord`, `EncodedFrame.ungroupWord`: grouping the raw registers of two
+* `Sheet.groupWord`, `Sheet.ungroupWord`: grouping the raw registers of two
   regions.
-* `EncodedFrame.merge`, `EncodedFrame.relabelRest`.
-* `EncodedFrame.sites`, `EncodedFrame.sitesEquiv`: the sites in a fixed order.
-* `EncodedFrame.frontLayoutIso`, `EncodedFrame.frontLayoutVec`: front registers followed by the
+* `Sheet.merge`, `Sheet.relabelRest`.
+* `Sheet.sites`, `Sheet.sitesEquiv`: the sites in a fixed order.
+* `Sheet.frontLayoutIso`, `Sheet.frontLayoutVec`: front registers followed by the
   raw registers, in canonical coordinates, and their basis vectors.
 
 ## Main results
 
-* `EncodedFrame.eval_groupWord`, `EncodedFrame.eval_ungroupWord`, `EncodedFrame.groupWord_props`,
-  `EncodedFrame.ungroupWord_props`: grouping is an allowed word at the owners of the regions.
-* `EncodedFrame.eval_place`: a grouped monomial on basis vectors.
-* `EncodedFrame.frontLayoutIso_place`: a grouped monomial acts as `1_κ ⊗ (1_E ⊗ M)`.
+* `Sheet.eval_groupWord`, `Sheet.eval_ungroupWord`, `Sheet.groupWord_props`,
+  `Sheet.ungroupWord_props`: grouping is an allowed word at the owners of the regions.
+* `Sheet.eval_place`: a grouped monomial on basis vectors.
+* `Sheet.frontLayoutIso_place`: a grouped monomial acts as `1_κ ⊗ (1_E ⊗ M)`.
 
 ## References
 
@@ -53,9 +53,9 @@ noncomputable section
 
 open scoped InnerProductSpace TensorProduct Kronecker
 
-namespace TNLean.PEPS.EncodedFrame
+namespace TNLean.Lattice.Sheet
 
-open PairEffect ContinuousLinearMap EuclideanSpace
+open PartyCircuit ContinuousLinearMap EuclideanSpace
 
 variable {ι : Type} {q : ℕ} {Party : Type}
 
@@ -543,4 +543,4 @@ theorem frontLayoutIso_place {T E : Finset ι} (k : Layout Party)
 
 end FrontLayout
 
-end TNLean.PEPS.EncodedFrame
+end TNLean.Lattice.Sheet

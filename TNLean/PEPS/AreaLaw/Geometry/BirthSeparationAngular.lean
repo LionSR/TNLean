@@ -89,9 +89,6 @@ Source: area-law Section 11, `geometry:birth-separation`, lines 627–645. -/
 def unitBox (d : ℝ × ℝ) : Set (ℝ × ℝ) :=
   Set.Icc (⌊d.1⌋ : ℝ) ⌈d.1⌉ ×ˢ Set.Icc (⌊d.2⌋ : ℝ) ⌈d.2⌉
 
-theorem mem_unitBox_self (d : ℝ × ℝ) : d ∈ unitBox d :=
-  ⟨⟨Int.floor_le _, Int.le_ceil _⟩, ⟨Int.floor_le _, Int.le_ceil _⟩⟩
-
 private theorem floor_le_ceil_of_abs_sub_lt {s t : ℝ} (h : |s - t| < 1) :
     ⌊s⌋ ≤ ⌈t⌉ := by
   have h1 : (⌊s⌋ : ℝ) < ⌈t⌉ + 1 := by
@@ -204,12 +201,6 @@ theorem IsQuarterSectorial.inter {q : ℝ × ℝ} {P P' : Set (ℝ × ℝ)}
     (h : IsQuarterSectorial q P) (h' : IsQuarterSectorial q P') :
     IsQuarterSectorial q (P ∩ P') := by
   rw [Set.inter_eq_iInter]; exact .iInter fun b ↦ by cases b <;> assumption
-
-theorem isQuarterSectorial_univ (q : ℝ × ℝ) : IsQuarterSectorial q Set.univ :=
-  ⟨fun _ _ _ ↦ by simp, fun _ _ _ _ _ ↦ trivial⟩
-
-theorem isQuarterSectorial_empty (q : ℝ × ℝ) : IsQuarterSectorial q ∅ :=
-  ⟨fun _ _ _ ↦ by simp, fun _ _ h ↦ h.elim⟩
 
 /-! ### Integer half-planes -/
 

@@ -18,18 +18,18 @@ a geometry of the sites.
 
 ## Main definitions
 
-* `EncodedFrame.rankOne`: the rank-one projector `|v⟩⟨v|`.
-* `EncodedFrame.zeroVec`: the product zero vector `|0⟩^{⊗ D}`.
-* `EncodedFrame.stack`: the tagged stack `∑_t |t⟩ ⊗ R_t`.
+* `Sheet.rankOne`: the rank-one projector `|v⟩⟨v|`.
+* `Sheet.zeroVec`: the product zero vector `|0⟩^{⊗ D}`.
+* `Sheet.stack`: the tagged stack `∑_t |t⟩ ⊗ R_t`.
 
 ## Main results
 
-* `EncodedFrame.norm_act_le_of_norm_le_one`: a contraction does not increase norms.
-* `EncodedFrame.norm_act_eq_of_gram_eq`: matrices with the same Gram matrix move every vector to
+* `Sheet.norm_act_le_of_norm_le_one`: a contraction does not increase norms.
+* `Sheet.norm_act_eq_of_gram_eq`: matrices with the same Gram matrix move every vector to
   the same length.
-* `EncodedFrame.norm_act_list_prod_sub_le`: the defect of a product of contractions is at most
+* `Sheet.norm_act_list_prod_sub_le`: the defect of a product of contractions is at most
   the sum of their defects.
-* `EncodedFrame.stack_conjTranspose_mul_stack`: `(stack R)ᴴ stack S = ∑_t R_tᴴ S_t`.
+* `Sheet.stack_conjTranspose_mul_stack`: `(stack R)ᴴ stack S = ∑_t R_tᴴ S_t`.
 
 ## References
 
@@ -47,7 +47,7 @@ open scoped BigOperators Matrix.Norms.L2Operator
 
 noncomputable section
 
-namespace TNLean.PEPS.EncodedFrame
+namespace TNLean.Lattice.Sheet
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
 
@@ -197,4 +197,4 @@ theorem stack_mul {l : Type*} (R : T → Matrix m n ℂ) (A : Matrix n l ℂ) :
 
 end Stack
 
-end TNLean.PEPS.EncodedFrame
+end TNLean.Lattice.Sheet

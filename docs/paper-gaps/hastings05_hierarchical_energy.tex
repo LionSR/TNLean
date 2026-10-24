@@ -1,0 +1,108 @@
+\documentclass{article}
+\usepackage[margin=28mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{The Final State in Hastings' Energy Estimate (hchy)}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The asserted estimate}
+Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
+\href{https://arxiv.org/abs/cond-mat/0508554v3}{arXiv:cond-mat/0508554v3},
+source \path{proj3new.tex}, lines 705--720, states that after the last of the
+$h=\log_2N$ levels of the hierarchical construction ``there is at least one
+state $\alpha^h$, and one may show''
+\begin{align}
+ \langle\alpha^h,\textstyle\sum_iM_i\,\alpha^h\rangle
+ \le\langle\Psi_a,\textstyle\sum_iM_i\,\Psi_a\rangle
+ +NJ\,O\bigl(e^{-l_{\rm proj}/(\log_2(N)\,l_{\rm fac})}\bigr).
+ \label{eq:hastings05_hierarchical_energy_hchy}
+\end{align}
+No argument is given.
+
+\section{What is proved}
+Let $Q$ be the projection onto the states kept at the last level and suppose
+$\|\Psi_a-Q\Psi_a\|\le b<1$, the norm form of the deficiency used for every
+level. Then $\phi=Q\Psi_a/\|Q\Psi_a\|$ is a unit vector with $Q\phi=\phi$ and
+$\|\phi-\Psi_a\|\le2b$, and for every operator $M$
+\begin{align}
+ \operatorname{Re}\langle\phi,M\phi\rangle
+ \le\operatorname{Re}\langle\Psi_a,M\Psi_a\rangle+2\|M\|\,\|\phi-\Psi_a\|
+ \le\operatorname{Re}\langle\Psi_a,M\Psi_a\rangle+4\|M\|b,
+ \label{eq:hastings05_hierarchical_energy_proved}
+\end{align}
+by writing the difference of the two expectations as
+$\langle\phi-\Psi_a,M\phi\rangle+\langle\Psi_a,M(\phi-\Psi_a)\rangle$. For
+$M=\sum_{i<N}M_i$ with $\|M_i\|\le J$ the error term is $4NJb$, so with $b=b_h$
+(\ref{eq:hastings05_hierarchical_energy_proved}) is
+(\ref{eq:hastings05_hierarchical_energy_hchy}) with the explicit constant
+$4NJb_h$.\footnote{\leanid{TNLean.MPS.AreaLaw.LocalSolution.exists_mem_range_re_inner_le_add}
+    and
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.exists_mem_range_re_inner_sum_le_add}
+    in \doclink{TNLean/MPS/AreaLaw/LocalSolution/HierarchicalEnergy}.}
+
+\section{Every final state}
+At level $m+1$ the source compresses the operator $M$ joining the two halves
+of a block to the range of the projection $Q$ of the level below and keeps
+the eigenvectors of $QMQ$ with eigenvalue within $x_m$ of
+$c=\langle\Psi_a,M\Psi_a\rangle$ (lines 640--642 and 671--685). A unit vector
+$\phi$ kept by the final projection is kept at every level. For each joining
+operator it satisfies $Q\phi=\phi$ and lies in the window of $QMQ$, where
+$\|(QMQ-c)\phi\|\le x_m$, so
+\begin{align}
+ |\operatorname{Re}\langle\phi,M\phi\rangle-c|
+ =|\operatorname{Re}\langle\phi,(QMQ-c)\phi\rangle|\le x_m.
+ \label{eq:hastings05_hierarchical_energy_window}
+\end{align}
+Summing over the $2^{h-1-m}$ joining operators of each level $m$ gives
+\begin{align}
+ \operatorname{Re}\langle\phi,M_{\rm open}\,\phi\rangle
+ \le\operatorname{Re}\langle\Psi_a,M_{\rm open}\Psi_a\rangle
+ +\sum_{m<h}2^{h-1-m}x_m,
+ \label{eq:hastings05_hierarchical_energy_every_state}
+\end{align}
+where $M_{\rm open}$ is the sum of the joining operators. This holds for every
+unit vector in the final space, in particular for each
+$\alpha^h$.\footnote{\leanid{TNLean.MPS.AreaLaw.LocalSolution.abs_re_inner_hierarchySum_sub_le}
+    and
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.re_inner_hierarchySum_le_add}
+    in \doclink{TNLean/MPS/AreaLaw/LocalSolution/FinalStateEnergy}.}
+Cross terms between different $\alpha^h$ play no role, and together with the
+count of low-energy orthonormal states it gives at most $2n$ final states
+once the right side of
+(\ref{eq:hastings05_hierarchical_energy_every_state}) is within $\Delta E/2$
+of the ground energy.\footnote{\leanid{TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_hierarchy}
+    in \doclink{TNLean/MPS/AreaLaw/LocalSolution/FinalStateEnergy}.}
+
+\section{The restriction}
+The chain of supersites is periodic (lines 626--628). The binary tree of joining
+operators covers the $N-1$ links $(k,k+1)$, $1\le k<N$, of the open chain,
+and the link $(N,1)$ joins the two halves of no block, so no window controls
+its energy. Bound~(\ref{eq:hastings05_hierarchical_energy_every_state})
+therefore concerns $M_{\rm open}=\sum_iM_i-M_{N,1}$, not $\sum_iM_i$. For the
+same reason the count of final states assumes the gap for $M_{\rm open}$,
+whereas the source's gap is that of $\sum_iM_i$; a gap of the periodic
+Hamiltonian does not give one for $M_{\rm open}$, so this is a hypothesis
+different from the source's and not only a narrower conclusion.
+Bounding the missing term by its norm adds about $2\|M_{N,1}\|$, of order
+$Jl_{\rm proj}$, which is far larger than the error in
+(\ref{eq:hastings05_hierarchical_energy_hchy}) and than the budget
+$\Delta E/2$ of the count. The source does not address this term.
+Bound~(\ref{eq:hastings05_hierarchical_energy_proved}) holds for any sum of
+terms, the periodic one included, but only for the normalized image of
+$\Psi_a$, a unit vector in the span of the final states.
+
+Elimination plan: control the energy of the link $(N,1)$ on the final space,
+for instance by one further window for $M_{N,1}$ inside the final space, whose
+deficiency is bounded by the same one-level estimate as the other levels;
+or state the construction for an open chain, where the restriction is
+absent.
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}

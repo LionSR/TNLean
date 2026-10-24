@@ -129,16 +129,13 @@ private theorem surprisalTail_leftBlock_le_of_consecutive_terms
     {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ)
     (k : ℕ) (w : ℝ) (hw : 0 ≤ w) :
-    let B : ℝ :=
-      1 + (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2
     Entropy.surprisalTail
       (Entropy.regionState_isHermitian
         (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω).eigenvalues
       (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω) w ≤
       2 * Real.exp (Real.exp 1 / 2) *
-        Real.exp (-(w / (32 * Real.sqrt ((1 + J / Δ) * B)))) := by
+        Real.exp (-(w / (32 * Real.sqrt ((1 + J / Δ) * windowBudgetConst q R)))) := by
   classical
-  dsimp only
   let A := {X : ChainSupport L R // h.term X ≠ 0}
   let g : A → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun X ↦ h.term X.val
   let D : A → Finset (Fin L) := fun X ↦ X.val.1
@@ -389,17 +386,16 @@ theorem exists_isOpenMPS_norm_sub_le_of_error
 has a normalized matrix product state approximant at every accuracy `0 < ε ≤ 1`.
 The entropy coefficient and concentration scale are fixed before the chain length,
 Hamiltonian, ground vector and requested accuracy.
+
+**Scope restriction (full windows):** the window hypothesis is narrower than the general
+finite-range model of Theorem B; recorded in
+`docs/paper-gaps/tnlean_one_dimensional_discount_constants.tex`, section
+"Full consecutive windows".
 Source: the one-dimensional note, Remark `rem:sharper`, lines 706–745, and Section 7,
 proof of Theorem B, with a free accuracy parameter in the same truncation argument. -/
 theorem exists_isOpenMPS_norm_sub_le_of_error_of_consecutive_terms
     (q R : ℕ) (J Δ : ℝ) (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
-    let B : ℝ :=
-      1 + (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2
-    let C₁ : ℝ := 5 + min (32 * (2 * R : ℕ) * (q : ℝ) ^ (2 * (R + 1)))
-      (64 * Real.exp 1 * (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2) +
-        128 * B
-    let C : ℝ :=
-      ((8 * R * Real.log (q : ℝ) + Real.log 2) * C₁ + 1024 * Real.exp 1 * B) * (1 + J / Δ)
+    let C : ℝ := windowAreaLawConst q R * (1 + J / Δ)
     ∀ L : ℕ, 1 ≤ L → ∀ h : ChainHamiltonian L q R J,
       (∀ X : ChainSupport L R, h.term X ≠ 0 →
         ∃ a : ℕ, a + R + 1 ≤ L ∧ X.1 = interval L a (a + R + 1)) →
@@ -408,7 +404,7 @@ theorem exists_isOpenMPS_norm_sub_le_of_error_of_consecutive_terms
         ∀ ε : ℝ, 0 < ε → ε ≤ 1 →
           ∃ Φ : EuclideanSpace ℂ (Fin L → Fin q), ‖Φ‖ = 1 ∧
             IsOpenMPS L q
-              ⌊Real.exp (C + 64 * Real.sqrt ((1 + J / Δ) * B) *
+              ⌊Real.exp (C + 64 * Real.sqrt ((1 + J / Δ) * windowBudgetConst q R) *
                 Real.log (2 * (L : ℝ) * tailPrefactorRoot / ε))⌋₊
               (fun x ↦ Φ x) ∧ ‖Φ - Ω‖ ≤ ε := by
   dsimp only
@@ -416,11 +412,8 @@ theorem exists_isOpenMPS_norm_sub_le_of_error_of_consecutive_terms
     chainAreaLaw_of_consecutive_terms q R J Δ hq hJ hΔ
   rw [← hCeq]
   intro L hL h hwindow E₀ Ω hgs ε hε hε1
-  let B : ℝ :=
-    1 + (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2
-  have hB : 1 ≤ B := by
-    dsimp only [B]
-    exact le_add_of_nonneg_right (by positivity)
+  let B : ℝ := windowBudgetConst q R
+  have hB : 1 ≤ B := one_le_windowBudgetConst q R
   have hθ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
   have hs : 0 < Real.sqrt ((1 + J / Δ) * B) :=
     Real.sqrt_pos.mpr (by nlinarith)

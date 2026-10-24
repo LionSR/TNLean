@@ -90,18 +90,14 @@ families. -/
 @[simp] theorem sameMPV₂_reindex_left (h : D₁ = D₂)
     (A : MPSTensor d D₁) (B : MPSTensor d D₃) :
     SameMPV₂ (reindex h A) B ↔ SameMPV₂ A B := by
-  constructor <;> intro hAB N σ
-  · simpa only [reindex_mpv] using hAB N σ
-  · simpa only [reindex_mpv] using hAB N σ
+  constructor <;> intro hAB N σ <;> simpa only [reindex_mpv] using hAB N σ
 
 /-- Reindexing the right tensor preserves equality of matrix product vector
 families. -/
 @[simp] theorem sameMPV₂_reindex_right (h : D₁ = D₂)
     (A : MPSTensor d D₃) (B : MPSTensor d D₁) :
     SameMPV₂ A (reindex h B) ↔ SameMPV₂ A B := by
-  constructor <;> intro hAB N σ
-  · simpa only [reindex_mpv] using hAB N σ
-  · simpa only [reindex_mpv] using hAB N σ
+  constructor <;> intro hAB N σ <;> simpa only [reindex_mpv] using hAB N σ
 
 /-- Simultaneous bond-dimension reindexing preserves gauge-phase equivalence. -/
 @[simp] theorem gaugePhaseEquiv_reindex (h : D₁ = D₂)

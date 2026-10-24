@@ -15,9 +15,10 @@ depend only on the standard logical axioms.
 
 set_option linter.hashCommand false
 
+open TNLean.Lattice.PartyCircuit in
 run_cmd do
   let decl :=
-    ``TNLean.PEPS.PairEffect.SourceCircuit.sourceContraction_preparedDensityCoefficient_pure_eq_mul
+    ``SourceCircuit.sourceContraction_preparedDensityCoefficient_pure_eq_mul
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
   unless env.contains decl do

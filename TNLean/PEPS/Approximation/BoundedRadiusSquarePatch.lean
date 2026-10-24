@@ -41,7 +41,7 @@ theorem exists_squarePatch_integerCoordinates_of_radius_le_four
         (fun x : Lattice.Site Λ ↦ ((x.1.1 : ℝ), (x.1.2 : ℝ))) q,
       P.center = z ∧ P.scale = u ∧
       (∑ j, P.dim j) ≤ q ^ 81 ∧
-      ‖EncodedFrame.act (1 - P.cylSum)
+      ‖Lattice.Sheet.act (1 - P.cylSum)
         (dependentGlobalConfigIsometry (Out := fun _ : Lattice.Site Λ ↦ Fin q) Ω)‖ = 0 := by
   classical
   let : LinearOrder (Lattice.Site Λ) :=

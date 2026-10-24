@@ -15,7 +15,7 @@ The edge actions and inserted matrices are independent parameters.
 
 noncomputable section
 open scoped BigOperators Matrix
-open TNLean.PEPS TNLean.PEPS.DependentBondNetwork
+open TNLean.PEPS TNLean.PEPS.DependentBondNetwork TNLean.Lattice.DependentBondNetwork
 
 namespace TNLeanTest.DependentBondProjectors
 

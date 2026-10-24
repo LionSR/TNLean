@@ -27,12 +27,12 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word
 
-namespace TNLean.PEPS.PairEffect.SourceInventory
+namespace TNLean.Lattice.PartyCircuit.SourceInventory
 variable {P I : Type}
 
 /-- Register layout of a prescribed ordered list of source positions. -/
@@ -245,4 +245,4 @@ theorem exists_reorderFreeSlots (R : SourceInventory P) (U V : Fin R.length → 
       ((heq_of_eq (DFunLike.congr_fun (hwe η) x)).trans
         (eval_prepareSourcePositions_filter R U V free η ℓ x))
 
-end TNLean.PEPS.PairEffect.SourceInventory
+end TNLean.Lattice.PartyCircuit.SourceInventory

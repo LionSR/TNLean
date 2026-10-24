@@ -11,7 +11,7 @@ spaces and order; denote the resulting list by $\ell^q$.
 
 \begin{theorem}[An owner map with no selected image]
     \label{thm:peps_excluded_mapped_owners}
-    \lean{TNLean.PEPS.PairEffect.Layout.restrict_mapOwner_eq_nil}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.restrict_mapOwner_eq_nil}
     \leanok
     \uses{def:peps_party_registers,def:peps_owner_layout,def:peps_party_partition}
     Let $q:P\to Q$ be any map and $s:Q\to\{0,1\}$ any selection.
@@ -39,7 +39,7 @@ Concatenation of register lists is denoted by juxtaposition.
 
 \begin{theorem}[Excluded spectator registers preserve the restriction]
     \label{thm:peps_excluded_spectator_restriction}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_frameList_eval_heq_of_eq_nil}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_frameList_eval_heq_of_eq_nil}
     \leanok
     \uses{def:peps_party_registers,def:peps_party_partition,
         thm:peps_party_restriction}
@@ -74,8 +74,8 @@ These identities concern the register selections used in
 
 \begin{theorem}[Successive restrictions to nested party sets]
     \label{thm:peps_nested_party_restrictions}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_restrict_heq_of_implies,
-        TNLean.PEPS.PairEffect.Word.restrict_restrict_eval_heq_of_implies}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_restrict_heq_of_implies,
+        TNLean.Lattice.PartyCircuit.Word.restrict_restrict_eval_heq_of_implies}
     \leanok
     \uses{thm:peps_party_restriction}
     Let $P$ be any set of parties and let $W:\ell\to m$ be a
@@ -146,7 +146,7 @@ These identities concern the register selections used in
 
 \begin{theorem}[A singleton restriction after excluding another party]
     \label{thm:peps_singleton_after_excluded_party}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_withoutParty_atParty_eval_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_withoutParty_atParty_eval_heq}
     \leanok
     \uses{thm:peps_nested_party_restrictions,def:peps_single_party_selector}
     Let $p,q\in P$ be distinct and let $W$ be any source-free
@@ -168,8 +168,8 @@ These identities concern the register selections used in
 
 \begin{theorem}[Scalar restrictions under composition and framing]
     \label{thm:peps_scalar_residual_composition}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_localPart_comp_scalar}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_localPart_frame_scalar}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_localPart_comp_scalar}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_localPart_frame_scalar}
     \leanok
     \uses{def:peps_canonical_source_residual,thm:peps_party_restriction}
     In the scalar-restriction identities used in

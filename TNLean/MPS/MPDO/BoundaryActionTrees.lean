@@ -136,8 +136,8 @@ theorem fusionThenAction_support_eq_sequentialAction (a b : Fin r) (x : Fin s)
     (∑ q : FusionActionPath N M a b x,
       fusionThenActionSynthesis WF WA a b x q * fusionThenActionAnalysis VF VA a b x q) =
     ∑ q : SequentialActionPath M a b x,
-      sequentialActionSynthesis WA a b x q * sequentialActionAnalysis VA a b x q := by
-  exact MPSTensor.IsBiorthogonalDecomposition.support_eq_of_wordTupleSpanTop
+      sequentialActionSynthesis WA a b x q * sequentialActionAnalysis VA a b x q :=
+  MPSTensor.IsBiorthogonalDecomposition.support_eq_of_wordTupleSpanTop
     (A := A)
     (f := fun q : FusionActionPath N M a b x ↦ q.2.1)
     (g := fun q : SequentialActionPath M a b x ↦ q.2.1)

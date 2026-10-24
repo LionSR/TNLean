@@ -24,7 +24,7 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
 namespace EffectCircuit
@@ -254,7 +254,7 @@ theorem appendIso_assoc_symm_heq (a b c : Layout P)
       rw [← TensorProduct.smul_tmul', map_smul]
   | cons r a ih =>
       induction x using TensorProduct.inductionOn with
-      | tmul u v => exact Layout.cons_tmul_heq r (List.append_assoc a b c).symm u (ih v)
+      | tmul u v => exact Layout.cons_tmul_heq rfl (List.append_assoc a b c).symm HEq.rfl (ih v)
       | add x y hx hy =>
           simp only [TensorProduct.add_tmul, map_add]
           exact memory_add_heq (List.append_assoc (r :: a) b c).symm hx hy
@@ -319,4 +319,4 @@ theorem gate_auxiliary_layout {C : Type} (owner : C ↪ P)
   exact (congrArg (fun d => Layout.mapOwner owner d ++ tail)
     ((prepGate m L).output_of_isPreparation (isPreparation_prepGate m L))).trans
       (by rw [Layout.mapOwner_append, List.append_assoc])
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

@@ -31,8 +31,10 @@ noncomputable section
 
 open scoped ComplexConjugate TensorProduct Matrix Matrix.Norms.L2Operator
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 
+namespace Lattice.PartyCircuit
 /-- Construct the finite source coordinates and the exact density coefficients of
 the original weighted gate. The elementary preparation operators are contractions,
 and the ket and bra retain the coefficients `c ξ` and `conj (c ζ)`, respectively.
@@ -95,4 +97,5 @@ theorem Word.exists_finite_density_expansion {P ι m n : Type}
       (fun _ i ↦ EuclideanSpace.basisFun (Fin (b i)) ℂ)
       c η ℓ v bIn bOut ρ
 
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit
+end TNLean

@@ -15,15 +15,15 @@ calculus, where operators are composed as continuous linear maps.
 
 ## Main definitions
 
-* `EncodedFrame.act`: a matrix as a continuous linear map of Euclidean spaces.
+* `Sheet.act`: a matrix as a continuous linear map of Euclidean spaces.
 
 ## Main results
 
-* `EncodedFrame.act_apply`, `EncodedFrame.act_apply_apply`, `EncodedFrame.ofLp_act`: the action
+* `Sheet.act_apply`, `Sheet.act_apply_apply`, `Sheet.ofLp_act`: the action
   is matrix-vector multiplication.
-* `EncodedFrame.act_single_apply`: the action on a standard basis vector is a column.
-* `EncodedFrame.norm_act`: the operator norm of the action is the operator norm of the matrix.
-* `EncodedFrame.act_mul`: products of matrices act by composition.
+* `Sheet.act_single_apply`: the action on a standard basis vector is a column.
+* `Sheet.norm_act`: the operator norm of the action is the operator norm of the matrix.
+* `Sheet.act_mul`: products of matrices act by composition.
 -/
 
 open Matrix
@@ -31,7 +31,7 @@ open scoped Matrix.Norms.L2Operator
 
 noncomputable section
 
-namespace TNLean.PEPS.EncodedFrame
+namespace TNLean.Lattice.Sheet
 
 variable {l m n : Type*} [Fintype m] [Fintype n]
 
@@ -71,4 +71,4 @@ theorem act_mul [Fintype l] (A : Matrix m n ℂ) (B : Matrix n l ℂ) (ψ : Eucl
     act (A * B) ψ = act A (act B ψ) := by
   simp [act_apply, Matrix.mulVec_mulVec]
 
-end TNLean.PEPS.EncodedFrame
+end TNLean.Lattice.Sheet

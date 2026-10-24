@@ -24,9 +24,10 @@ no scalar is cancelled.
 
 noncomputable section
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
-namespace SourceCircuit
+namespace Lattice.PartyCircuit.SourceCircuit
 /-- The actual empty-party gate retained at the grouped owner `none` acts by
 its original coefficient sum. Source: polynomial-PEPS, `04-compression.tex`,
 lines 24–28, 233–251 and 351–417. -/
@@ -73,5 +74,5 @@ theorem restrict_partialWord_localPart_gate_heq_coeffSum_of_isEmpty
     simp only [Word.eval, ContinuousLinearMap.rTensor_smul, ContinuousLinearMap.rTensor_id,
       ContinuousLinearMap.comp_apply, smul_apply, ContinuousLinearMap.id_apply,
       isoL_apply, map_smul, LinearIsometryEquiv.symm_apply_apply])
-end SourceCircuit
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.SourceCircuit
+end TNLean
