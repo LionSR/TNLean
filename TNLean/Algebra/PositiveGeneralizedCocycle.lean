@@ -73,8 +73,8 @@ theorem norm_embedding (r : Units NNReal) : norm (embedding r) = r := by
   exact Complex.norm_of_nonneg r.val.property
 
 /-- A canonical positive real power is positive-valued. -/
-theorem isPositive_positiveRpow (r : ℝ) (z : Units ℂ) : IsPositive (positiveRpow r z) := by
-  exact ⟨rpow r (norm z), rfl⟩
+theorem isPositive_positiveRpow (r : ℝ) (z : Units ℂ) : IsPositive (positiveRpow r z) :=
+  ⟨rpow r (norm z), rfl⟩
 
 /-- Positive real powers recover the usual `NNReal.rpow` on embedded positive
 units. -/

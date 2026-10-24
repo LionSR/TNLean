@@ -84,11 +84,6 @@ theorem gateMemoryMap_tmul {C : Type} (owner : C ↪ P) (a b : Layout C)
     LinearIsometryEquiv.apply_symm_apply, rTensor_tmul,
     LinearIsometryEquiv.symm_apply_apply]
 
-private theorem memCongr_apply_heq {a b : Layout P} (h : a = b) (x : Mem a) :
-    HEq (Layout.memCongr h x) x := by
-  cases h
-  rfl
-
 private theorem mapOwner_apply_heq {C : Type} (owner : C → P)
     {a b : Layout C} (h : a = b) {x : Mem a} {y : Mem b} (hxy : HEq x y) :
     HEq (Layout.mapOwnerIso owner a x) (Layout.mapOwnerIso owner b y) := by
@@ -107,7 +102,7 @@ theorem preparation_mapOwner_heq {C : Type} (owner : C → P)
   have he := w.eval_isPreparation_heq hw x
   rw [SourceInventory.eval_prepare_eq_appendIso_symm] at he
   have hm := mapOwner_apply_heq owner (w.output_of_isPreparation hw) he
-  exact hm.trans ((memCongr_apply_heq (Layout.mapOwner_append owner w.sources.layout a)
+  exact hm.trans ((Layout.memCongr_apply_heq (Layout.mapOwner_append owner w.sources.layout a)
     (Layout.mapOwnerIso owner (w.sources.layout ++ a)
       ((appendIso w.sources.layout a).symm (w.sources.vector ⊗ₜ[ℂ] x)))).symm.trans
     (heq_of_eq (Layout.mapOwnerIso_append_tmul owner w.sources.layout a w.sources.vector x)))
@@ -153,7 +148,7 @@ theorem gateMemoryMap_auxiliary_tmul {C : Type} [Fintype C]
   have hp := preparation_mapOwner_heq owner (prepGate m L)
     (isPreparation_prepGate m L) (gate (toGate L) x)
   have he := append_tmul_heq hb rfl hp (HEq.rfl : HEq y y)
-  exact eq_of_heq ((memCongr_apply_heq h _).trans (he.trans
+  exact eq_of_heq ((Layout.memCongr_apply_heq h _).trans (he.trans
     (appendIso_assoc_symm_heq
       (Layout.mapOwner owner (prepGate m L).sources.layout)
       (Layout.mapOwner owner b) tail
