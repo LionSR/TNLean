@@ -465,11 +465,6 @@ geometric content the factoring fields of a coherent frame consume: the two
 super-edges incident to a super-site carry exactly the two crossing bundles of
 its region's boundary. -/
 
-/-- A vertex outside `red` lies in `blue` or in `complement`. -/
-theorem mem_blue_or_complement_of_not_mem_red (hP : F.IsPartition) {w : V}
-    (hw : w ∉ F.red) : w ∈ F.blue ∨ w ∈ F.complement :=
-  or_iff_not_imp_left.mpr (hP.mem_complement_of_notMem hw)
-
 /-- **Crossing classification at the red super-site.** A boundary edge of `red`
 is an `r-b` crossing edge or an `r-c` crossing edge: its out-of-`red` endpoint
 lies in `blue` or in `complement`. -/

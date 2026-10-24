@@ -146,7 +146,6 @@ theorem IsGInjective.regionParent_annihilates_torusGClosure_of_isSimplyConnected
   rw [← hspaces]
   exact stateCoeff_slice_mem_regionGroundSpace _ R τ
 
-
 variable {ι : Type*} [Fintype ι]
 
 /-- Every commuting regular closure is killed by a finite family of parents

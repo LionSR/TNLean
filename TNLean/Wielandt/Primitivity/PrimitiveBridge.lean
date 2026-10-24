@@ -76,8 +76,8 @@ theorem isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef [NeZero D]
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ)
     (hρ_pd : ρ.PosDef) :
-    IsStronglyIrreduciblePaper A := by
-  exact isStronglyIrreduciblePaper_of ρ hρ_pd hP.fixedPoint_is_fixed
+    IsStronglyIrreduciblePaper A :=
+  isStronglyIrreduciblePaper_of ρ hρ_pd hP.fixedPoint_is_fixed
     hP.isPrimitive
     (hP.isIrreducibleMap_of_posDef hρ_pd)
 

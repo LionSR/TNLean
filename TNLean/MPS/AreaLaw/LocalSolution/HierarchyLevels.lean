@@ -38,6 +38,7 @@ supersite grouping of lines 609–628.
 ## Main statements
 
 * `norm_sub_compressedWindowProjection_mul_sq_le`: one level against the ground state.
+* `isStarProjection_hierarchy`: every projection of the hierarchy is an orthogonal projection.
 * `hierarchyDeficiency`, `norm_sub_hierarchy_le`: all levels for given window radii.
 * `hierarchyMajorant`, `hierarchyDeficiency_le_hierarchyMajorant`: the source's window radii.
 * `hierarchyMajorant_le`, `hierarchyMajorant_le_rpow_quarter`: `D_m ≤ (3^m - 1) e^{s^m}`, and
@@ -90,6 +91,23 @@ theorem hierarchyDeficiency_succ (ε K : ℝ) (x : ℕ → ℝ) (m : ℕ) :
     hierarchyDeficiency ε K x (m + 1) = √(2 * hierarchyDeficiency ε K x m ^ 2 +
       ((ε + K * (2 * hierarchyDeficiency ε K x m)) / x m) ^ 2) := rfl
 
+/-- Every projection of the hierarchy is an orthogonal projection, when the halves of each block
+commute. -/
+theorem isStarProjection_hierarchy (P M : ℕ → ℕ → Matrix ι ι ℂ) (c : ℕ → ℕ → ℝ) (x : ℕ → ℝ)
+    (hP0 : ∀ k, P 0 k = 1)
+    (hstep : ∀ m k, P (m + 1) k =
+      compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
+    (hcomm : ∀ m k, Commute (P m (2 * k)) (P m (2 * k + 1)))
+    (hM : ∀ m k, (M m k).IsHermitian) : ∀ m k, IsStarProjection (P m k) := by
+  intro m
+  induction m with
+  | zero => intro k; rw [hP0]; exact IsStarProjection.one _
+  | succ m ih =>
+    intro k
+    rw [hstep]
+    exact isStarProjection_compressedWindowProjection
+      ((ih (2 * k)).mul (ih (2 * k + 1)) (hcomm m k)) (hM m k) _ _
+
 /-- **All levels.** Let `P m k` be the level-`m` projection of block `k`, with `P 0 k = 1` on
 single supersites and `P (m + 1) k` the window of `M m k` at `c m k` and `x m` inside the range
 of `P m (2k) P m (2k + 1)`. If the two halves of each block commute, every residual
@@ -108,19 +126,21 @@ theorem norm_sub_hierarchy_le (P M : ℕ → ℕ → Matrix ι ι ℂ) (c : ℕ 
     (hK : ∀ m k, ‖M m k - (c m k : ℂ) • 1‖ ≤ K) :
     ∀ m k, IsStarProjection (P m k) ∧
       ‖ψ - toEuclideanLin (P m k) ψ‖ ≤ hierarchyDeficiency ε K x m := by
+  have hproj := isStarProjection_hierarchy P M c x hP0 hstep hcomm hM
+  suffices hbound : ∀ m k, ‖ψ - toEuclideanLin (P m k) ψ‖ ≤ hierarchyDeficiency ε K x m from
+    fun m k ↦ ⟨hproj m k, hbound m k⟩
   intro m
   induction m with
   | zero =>
     intro k
     rw [hP0, hierarchyDeficiency_zero, toEuclideanLin_one_apply, sub_self, norm_zero]
-    exact ⟨IsStarProjection.one _, le_rfl⟩
   | succ m ih =>
     intro k
-    obtain ⟨hP, hD⟩ := ih (2 * k)
-    obtain ⟨hP', hD'⟩ := ih (2 * k + 1)
-    have hQ := hP.mul hP' (hcomm m k)
+    have hP := hproj m (2 * k)
+    have hP' := hproj m (2 * k + 1)
+    have hD := ih (2 * k)
+    have hD' := ih (2 * k + 1)
     rw [hstep]
-    refine ⟨isStarProjection_compressedWindowProjection hQ (hM m k) _ _, ?_⟩
     have hD0 : 0 ≤ hierarchyDeficiency ε K x m := (norm_nonneg _).trans hD
     have h := norm_sub_compressedWindowProjection_mul_sq_le hP hP' (hcomm m k) (hM m k)
       (c m k) (hx m) hψ (hres m k) hD hD'
