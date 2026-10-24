@@ -1402,6 +1402,16 @@ projection `P` of trace `n`, then orthonormal states of energy at most `E₀ + �
 most `n / (1 − θ)`, by Bessel's inequality; `θ = 1/2` gives `2n`. The energy under `H` is
 taken as a hypothesis.
 
+### Local solution of gapped Hamiltonians: the right side of the single-cluster bound
+
+[hastings05_cluster_part_trace_pairing.tex](hastings05_cluster_part_trace_pairing.tex)
+(local correction, resolved) records the bound stated before equation `percb2` in
+Hastings, *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, source
+lines 1174–1184). It is printed with `Tr(O e^{−βH})` on the right; applied to `±O`
+this would make `ρ(β, C)` a multiple of `e^{−βH}`, which fails already for one term.
+The intended form, used by `percb2`, has `‖O‖ Tr e^{−βH}` on the right, and that is
+what is formalized.
+
 ### Local solution of gapped Hamiltonians: cluster size in the percolation bound
 
 [hastings05_percolation_cluster_size.tex](hastings05_percolation_cluster_size.tex)
