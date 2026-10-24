@@ -24,5 +24,6 @@ import TNLean.Lattice.Sheet.Stack
 import TNLean.Lattice.Sheet.StackChange
 import TNLean.Lattice.Sheet.StackEndpoints
 import TNLean.Lattice.Sheet.StackSourceBoundedChange
+import TNLean.Lattice.Sheet.SupportedSchmidtRank
 import TNLean.Lattice.Sheet.SwapCorrection
 import TNLean.Lattice.Sheet.TwoRegisters

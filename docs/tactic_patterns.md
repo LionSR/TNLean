@@ -9048,3 +9048,14 @@ spectral split → block extraction → MPV calculation → strict bounds
   built on `Lattice.Sheet.birth_bounded`, `Real.rpow_neg_ofNat` and
   `Lattice.hasSourceBoundedChange_liftOne`. The stage births call it with an
   empty prefix and the scalar idle vector; the former private copy is removed.
+
+### Product forms of ordered exponential products — candidate (2026-10-23)
+
+- **Pattern:** Apply closure under powers and list products, unpack membership in a mapped
+  list, and prove the factor supported using closure under scalar multiplication and exponentials.
+- **Seen:** Two occurrences in `TNLean/Lattice/ProductForm.lean`, in
+  `hasProductForm_trotterProduct_of_radius` and
+  `LocalHamiltonian.hasProductForm_trotterProduct`.
+- **Abstraction:** None yet; the two proofs have different support hypotheses and are below
+  the promotion threshold. The supported expansion is shared through
+  `hasProductForm_of_mem_supportedOperators_radius`; the diameter theorem is its corollary.
