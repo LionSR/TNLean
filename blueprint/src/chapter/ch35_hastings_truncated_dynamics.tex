@@ -1,0 +1,181 @@
+\section{The truncated approximation of a filtered term}
+\label{sec:hastings_truncated_dynamics}
+
+% Hastings, arXiv:cond-mat/0508554v3, proj3new.tex, eqs. mid, odef, hpdef, apb
+% (lines 285--320), proved at lines 1458--1533.
+
+For a term $H_i$ of a local Hamiltonian $H=\sum_jH_j$, \cite{Hastings2006Solving}
+approximates the filtered term $\tilde H_i^0$ by the filter of $H_i$ under the
+truncated Hamiltonian $H_{\rm loc}=\sum_{j:\,d(i,j)\le l_{proj}-R}H_j$,
+\begin{align*}
+    M_i=\frac{\Delta E}{\sqrt{2\pi q}}\int dt\,e^{-(t\Delta E)^2/(2q)}\,
+    e^{iH_{\rm loc}t}H_ie^{-iH_{\rm loc}t},
+\end{align*}
+\cite[eqs.~(mid), (odef), (hpdef), lines 285--303]{Hastings2006Solving}. Here
+the truncation keeps any family $s$ of terms acting inside a set $K$ of sites
+containing the support $S$ of the filtered operator $W$, and the shell consists
+of the omitted terms whose supports meet $K$. The time integral of the
+Lieb--Robinson bound is bounded by $T$ times its largest value, the constants
+are explicit, and the Gaussian weight of eq.~(mid) is read as that of
+eq.~(thd) \cite{gap:hastings05_truncated_dynamics}.
+
+\begin{theorem}[Support of the truncated filter]
+    \label{thm:hastings_truncated_support}
+    \lean{TNLean.Lattice.hermitianUnitaryPath_conj_mem_supportedOperators,
+        TNLean.Lattice.gaussianFilteredTerm_mem_supportedOperators}
+    \leanok
+    \uses{def:hastings_gaussian_filtered_term}
+    If $H$ and $W$ act on a set $K$ of sites, then so do $e^{iHt}We^{-iHt}$ for
+    every $t$ and the filtered operator $\widetilde W$. In particular $M_i$ acts on
+    the sites within distance $l_{proj}$ of $i$
+    \cite[lines 302--304]{Hastings2006Solving}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The operators acting on $K$ form a closed subalgebra, so they contain the
+    exponential $e^{iHt}$ and the products $e^{iHt}We^{-iHt}$. The filter is
+    the average of these products against a probability measure, and a
+    closed subspace contains such averages.
+\end{proof}
+
+\begin{theorem}[Comparison of two evolutions]
+    \label{thm:hastings_truncated_evolution_comparison}
+    \lean{TNLean.Lattice.norm_conj_sub_conj_le}
+    \leanok
+    Let $H$ be Hermitian and $H'$ any matrix, and write
+    $\tau'_u(W)=e^{iH'u}We^{-iH'u}$. If
+    $\|[H-H',\tau'_u(W)]\|\le\varepsilon$ for all $u$ between $0$ and $t$, then
+    \begin{align*}
+        \|e^{iHt}We^{-iHt}-e^{iH't}We^{-iH't}\|\le\varepsilon\,|t|.
+    \end{align*}
+    This is the comparison of $H_i(t)$ and $H_i^{\rm trunc}(t)$ in
+    \cite[lines 1469--1482]{Hastings2006Solving}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Put $f(s)=e^{iHs}\tau'_{t-s}(W)e^{-iHs}$, so that $f(0)=\tau'_t(W)$ and
+    $f(t)=e^{iHt}We^{-iHt}$. Differentiating,
+    $f'(s)=e^{iHs}\,i[H-H',\tau'_{t-s}(W)]\,e^{-iHs}$, whose norm is at most
+    $\varepsilon$ because $e^{iHs}$ is unitary. The mean value inequality on
+    the interval between $0$ and $t$ gives the bound.
+\end{proof}
+
+\begin{theorem}[Filtering a comparison of evolutions]
+    \label{thm:hastings_truncated_filter_comparison}
+    \lean{TNLean.Lattice.norm_gaussianFilteredTerm_sub_le}
+    \leanok
+    \uses{def:hastings_gaussian_filtered_term}
+    Let $H$ and $H'$ be Hermitian, $q\ge0$, $T\ge0$ and $\varepsilon\ge0$. If
+    $\|e^{iHt}We^{-iHt}-e^{iH't}We^{-iH't}\|\le\varepsilon$ for all $|t|\le T$,
+    then the filters of $W$ under $H$ and under $H'$ differ in norm by at most
+    $\varepsilon+2\|W\|e^{-(T\Delta E)^2/(2q)}$
+    \cite[eq.~(dmi) and lines 1524--1533]{Hastings2006Solving}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:hastings_filtered_locality}
+    The difference of the filters is the Gaussian average of the difference of
+    the evolutions. Split the average at $|t|=T$: inside, the integrand is at
+    most $\varepsilon$; outside, it is at most $2\|W\|$, and the Gaussian mass
+    of the complement of $[-T,T]$ is at most $e^{-(T\Delta E)^2/(2q)}$.
+\end{proof}
+
+\begin{theorem}[Lieb--Robinson bound against an operator on several sites]
+    \label{thm:hastings_truncated_multisite_lieb_robinson}
+    \lean{TNLean.Lattice.norm_commutator_heisenbergEvolution_le_graphDistance_finset}
+    \leanok
+    \uses{thm:qc_graph_lieb_robinson_finset}
+    Under the finite-range interaction assumptions of
+    Theorem~\ref{thm:qc_graph_lieb_robinson_finset}, let $A$ act on a finite set
+    $S$ and $B$ on a finite set $Y$, with $m\le d_G(x,y)$ for all $x\in S$ and
+    $y\in Y$. For every $\mu\ge0$,
+    \begin{align*}
+        \|[B,\tau_t(A)]\|\le2|Y|\,C\,|S|\,\|A\|\,\|B\|\,e^{v|t|-\mu m},
+    \end{align*}
+    with $C=2+4|b_0|e^{2\mu R}$ and $v=2v_R|b_0|e^{2\mu R}+1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:qc_graph_lieb_robinson_finset, lem:qc_site_expectation_commutator}
+    Let $E$ be the normalized partial trace over $Y$. Then $E(\tau_t(A))$ acts
+    outside $Y$ and commutes with $B$, so
+    $\|[B,\tau_t(A)]\|\le2\|B\|\,\|\tau_t(A)-E(\tau_t(A))\|$. By
+    Lemma~\ref{lem:qc_site_expectation_commutator}, the last norm is at most the
+    sum over $y\in Y$ of the single-site commutator bounds of
+    Theorem~\ref{thm:qc_graph_lieb_robinson_finset}, each at most
+    $C|S|\,\|A\|e^{v|t|-\mu m}$.
+\end{proof}
+
+\begin{theorem}[The omitted terms against the truncated evolution]
+    \label{thm:hastings_truncated_omitted_commutator}
+    \lean{TNLean.Lattice.norm_commutator_sub_truncated_le}
+    \leanok
+    \uses{thm:hastings_truncated_multisite_lieb_robinson}
+    Let $W$ act on $S\subseteq K$, let $s$ be a family of terms acting inside
+    $K$, put $H_s=\sum_{k\in s}h_k$, and let $m$ bound from below the graph
+    distance from $S$ to the support of every omitted term meeting $K$. Then
+    \begin{align*}
+        \|[H-H_s,e^{iH_su}We^{-iH_su}]\|
+        \le2v_RC\,|S|\,\|W\|\Bigl(\sum_k\|h_k\|\Bigr)e^{v|u|-\mu m},
+    \end{align*}
+    the sum running over the omitted terms meeting $K$
+    \cite[lines 1469--1505]{Hastings2006Solving}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:hastings_truncated_support,
+        thm:hastings_truncated_multisite_lieb_robinson}
+    The difference $H-H_s$ is the sum of the omitted terms. The evolution under
+    $H_s$ acts on $K$, so an omitted term whose support is disjoint from $K$
+    commutes with it. For an omitted term meeting $K$, apply
+    Theorem~\ref{thm:hastings_truncated_multisite_lieb_robinson} to the family
+    in which the terms outside $s$ are replaced by $0$, which generates the
+    evolution under $H_s$ and satisfies the same interaction bounds, and use
+    $|X_k|\le v_R$.
+\end{proof}
+
+\begin{theorem}[Hastings' truncated approximation]
+    \label{thm:hastings_truncated_approximation}
+    \lean{TNLean.Lattice.norm_gaussianFilteredTerm_sub_truncated_le_sum,
+        TNLean.Lattice.norm_gaussianFilteredTerm_sub_truncated_le,
+        TNLean.Lattice.exists_truncated_approx_gaussianFilteredTerm}
+    \leanok
+    \uses{def:hastings_gaussian_filtered_term}
+    In the setting of Theorem~\ref{thm:hastings_truncated_omitted_commutator},
+    let every term have norm at most $J$ and let $N$ be the number of omitted
+    terms meeting $K$. Let $M$ be the filter of $W$ under $H_s$. Then $M$ acts
+    on $K$, $\|M\|\le\|W\|$, $M$ is Hermitian when $W$ is, and for every
+    $q\ge0$, $T\ge0$ and $\mu\ge0$,
+    \begin{align*}
+        \|\widetilde W-M\|\le2v_RC\,|S|\,\|W\|\,J\,N\,T\,e^{vT-\mu m}
+        +2\|W\|e^{-(T\Delta E)^2/(2q)}.
+    \end{align*}
+    With $W=H_i$, $K$ the sites within distance $l_{proj}$ of $i$ and $s$ the
+    terms with $d(i,j)\le l_{proj}-R$, $M=M_i$ and the shell count satisfies
+    $N\le N(l_{proj})$; this is the analogue of
+    \cite[eq.~(apb), lines 300--320]{Hastings2006Solving} with explicit
+    constants and $q$, $T$ free \cite{gap:hastings05_truncated_dynamics}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:hastings_truncated_support,
+        thm:hastings_truncated_evolution_comparison,
+        thm:hastings_truncated_filter_comparison,
+        thm:hastings_truncated_omitted_commutator,
+        thm:hastings_gaussian_filtered_spectral}
+    For $|t|\le T$ and $u$ between $0$ and $t$,
+    Theorem~\ref{thm:hastings_truncated_omitted_commutator} bounds the
+    commutator by $\varepsilon=2v_RC|S|\,\|W\|JN\,e^{vT-\mu m}$, so
+    Theorem~\ref{thm:hastings_truncated_evolution_comparison} bounds the
+    difference of the evolutions by $\varepsilon T$, and
+    Theorem~\ref{thm:hastings_truncated_filter_comparison} gives the estimate.
+    The support is Theorem~\ref{thm:hastings_truncated_support}, the norm bound
+    is that of Theorem~\ref{thm:hastings_gaussian_filtered_spectral}, and the
+    adjoint of the filter of $W$ is the filter of $W^\dagger$.
+\end{proof}
