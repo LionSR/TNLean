@@ -33,7 +33,9 @@ replacing $F(\xi',D)$.
 The formalized Rényi bootstrap lemma covers the orders $0<\alpha<1$ satisfying
 (\ref{eq:hastings07_renyi_bootstrap_orders_conv}), with the function
 $4\ln D-\ln\bigl(1-(D^2)^{1-\alpha}e^{-2\alpha/\xi'}\bigr)/(1-\alpha)$ in place
-of $F(\xi',D)$. Order $1$ is the von Neumann entropy, bounded by the formalized
+of $F(\xi',D)$.\footnote{\leanid{TNLean.MPS.AreaLaw.exists_renyiEntropy_le_of_overlap_schmidtRank_mixture}
+    in \doclink{TNLean/MPS/AreaLaw/Hastings/RenyiBootstrapLemma}.}
+Order $1$ is the von Neumann entropy, bounded by the formalized
 Lemma~2. Orders $\alpha>1$, for which
 (\ref{eq:hastings07_renyi_bootstrap_orders_conv}) always holds, are not covered:
 the power-sum estimate used for $0<\alpha<1$ rests on the concavity of
