@@ -58,7 +58,30 @@ every $v$ in this eigenspace.
     compression is $PM_jP$ by the previous theorem.
 \end{proof}
 
-With a bound $B(i,j)$ that decays in the distance from $i$ to $j$, choosing
-$g\in S$ that carries $j$ far from $i$ gives the source's conclusion. At line
+With the bound of the low-energy commutator of separated operators on a finite
+graph, this gives the decay across supercell translations.
+
+\begin{theorem}[Decay across a supercell translation]
+    \label{thm:hastings_supercell_decay}
+    \lean{TNLean.Lattice.norm_groundCompression_commutator_le_of_supercell_separation}
+    \leanok
+    \uses{thm:hastings_supercell_compression,thm:hastings05_low_energy_commutator,
+        thm:hastings05_blecm}
+    Let the sites be the vertices of a finite graph, let each term $h_k$ act on
+    a set $X_k$, and let every eigenvalue of $H=\sum_kh_k$ equal $E_0$ or be at
+    least $E_0+\Delta E$. If $g\in S$ and $X_{g\cdot j}$ is disjoint from the
+    sites within distance $l$ of $X_i$, then $\|[PM_iP,PM_jP]\|$ is at most the
+    bound of Theorem~\ref{thm:hastings05_blecm} for the pair $h_i$, $h_{g\cdot j}$ at
+    separation $l$, which decays exponentially in $l$.
+\end{theorem}
+\begin{proof}\leanok
+    The compression of $M_k$ is that of $h_k$, and the compression of
+    $h_{g\cdot j}=P_gh_jP_g^\dagger$ is that of $h_j$ by
+    Theorem~\ref{thm:hastings_supercell_compression}. Apply the bound for
+    separated operators to $h_i$ and $h_{g\cdot j}$.
+\end{proof}
+
+Choosing $g\in S$ that carries $X_j$ to distance of order the linear size of
+the system from $X_i$ gives the source's conclusion. At line
 1638 the source writes the first site as $(\vec x_1,y_2)$ where
 $(\vec x_1,y_1)$ is meant \cite{gap:hastings05_translation_supercell}.
