@@ -1846,8 +1846,12 @@ for an arbitrary finite set of sites and are instantiated here directly.
          & \le\sum_{\alpha\in s}S_\Omega(N_m(I_\alpha))\le |s|c.\notag
     \end{align}
     Each $N_m(I_\alpha)$ is itself a relative interval by
-    Theorem~\ref{thm:domain_interval_neighborhood}, and neighborhoods commute
-    with unions. For a domain Hamiltonian, extend its terms by zero to the
+    Theorem~\ref{thm:domain_interval_neighborhood}, and
+    \begin{align}
+        N_m\left(\bigcup_{\alpha\in s}I_\alpha\right)
+         & =\bigcup_{\alpha\in s}N_m(I_\alpha).\notag
+    \end{align}
+    For a domain Hamiltonian, extend its terms by zero to the
     chain of increasing labels. Its operator and original ground vector
     are unchanged, so Theorem~\ref{thm:chain_area_law} supplies the interval
     entropy bound.
