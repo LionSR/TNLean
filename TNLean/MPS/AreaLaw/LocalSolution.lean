@@ -13,4 +13,5 @@ import TNLean.MPS.AreaLaw.LocalSolution.FinalStateEnergy
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchicalEnergy
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchicalProjection
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchyLevels
+import TNLean.MPS.AreaLaw.LocalSolution.SupersiteFinalState
 import TNLean.MPS.AreaLaw.LocalSolution.SupersiteHierarchy
