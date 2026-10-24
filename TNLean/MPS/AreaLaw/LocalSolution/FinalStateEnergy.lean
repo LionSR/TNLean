@@ -148,22 +148,6 @@ theorem abs_re_inner_sub_le_of_compressedWindowProjection {Q M : Matrix ι ι �
 
 variable (P M : ℕ → ℕ → Matrix ι ι ℂ) (c : ℕ → ℕ → ℝ) (x : ℕ → ℝ)
 
-/-- Every projection of the hierarchy is an orthogonal projection, and the halves of each block
-commute. -/
-theorem isStarProjection_hierarchy (hP0 : ∀ k, P 0 k = 1)
-    (hstep : ∀ m k, P (m + 1) k =
-      compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
-    (hcomm : ∀ m k, Commute (P m (2 * k)) (P m (2 * k + 1)))
-    (hM : ∀ m k, (M m k).IsHermitian) : ∀ m k, IsStarProjection (P m k) := by
-  intro m
-  induction m with
-  | zero => intro k; rw [hP0]; exact IsStarProjection.one _
-  | succ m ih =>
-    intro k
-    rw [hstep]
-    exact isStarProjection_compressedWindowProjection
-      ((ih (2 * k)).mul (ih (2 * k + 1)) (hcomm m k)) (hM m k) _ _
-
 /-- **eq. `hchy` below one block.** In the hierarchy of `norm_sub_hierarchy_le`, with radii
 `x m ≥ 0`, every vector `φ` kept by the projection of block `k` of level `m` satisfies
 `|re⟨φ, M_T φ⟩ - c_T ‖φ‖²| ≤ x_T ‖φ‖²`, where `M_T`, `c_T` and `x_T` sum the joining
