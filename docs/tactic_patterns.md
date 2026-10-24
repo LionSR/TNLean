@@ -24,6 +24,21 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Hermitian sum of pointwise-Hermitian terms — promoted (2026-10-23)
+- **Pattern:**
+  ```lean
+  isSelfAdjoint_sum Finset.univ fun j _ => (hHerm j).isSelfAdjoint
+  ```
+- **Seen:** 5 occurrences across 3 files: three in
+  `TNLean/Lattice/GaussianFilteredTermLocalization.lean`, one each in
+  `TNLean/Circuit/LiebRobinson/GraphLocalization.lean` and
+  `TNLean/Circuit/LiebRobinson/CommutatorRecursion.lean`.
+- **Abstraction:** `Matrix.isHermitian_sum` in
+  `TNLean/Algebra/MatrixHermitianSum.lean`; all five call sites refactored.
+- **Notes:** where the goal is `IsSelfAdjoint`, append `.isSelfAdjoint`. The
+  sums with a case split in each term (`CommutatorRecursion.lean`, the second
+  skew-adjoint goal) keep `isSelfAdjoint_sum` with an `intro`.
+
 ### Gaussian absolute first moment — promoted (2026-10-23)
 
 - **Pattern:** Bound the integral of `|t|` against a centred Gaussian, either
