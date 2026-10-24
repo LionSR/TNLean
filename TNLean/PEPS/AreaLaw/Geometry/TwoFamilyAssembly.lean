@@ -624,8 +624,8 @@ theorem isTwoFamilyDecompositionConstant_twoFamilyConstant
     obtain ⟨hji, hfji⟩ := (Finset.mem_filter.mp hj).2
     rw [hpiece] at hzj
     have hzc : integerPoint z.val ∈ 𝔇N.current (e j).val := (Finset.mem_filter.mp hzj).2
-    have hcol : 𝔇N.color (e j).val = 𝔇N.color (e i).val := by
-      exact (hfam j).symm.trans (hfji.trans (hfam i))
+    have hcol : 𝔇N.color (e j).val = 𝔇N.color (e i).val :=
+      (hfam j).symm.trans (hfji.trans (hfam i))
     have hrank : rank (e j) ≤ rank (e i) := hmono hji.le
     have hne : (e j).val ≠ (e i).val := fun h ↦
       hji.ne (e.injective (Subtype.ext h))

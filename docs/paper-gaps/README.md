@@ -1377,6 +1377,19 @@ The complete hierarchy is controlled instead by measuring every deficiency
 against the ground state: `D_{m+1}² ≤ 2 D_m² + ((ε + 2 K D_m)/x_m)²`, which with
 the source's window radii gives `D_m ≤ (3^m − 1) e^{s^m}`, still polynomial in `N`.
 
+### Local solution of gapped Hamiltonians: the supercell of the translation-invariant case
+
+[hastings05_translation_supercell.tex](hastings05_translation_supercell.tex)
+(scope restriction, open) concerns the translation-invariant case of Hastings,
+*Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, source lines
+1603–1642). The source assumes ground-state momenta that are rational with
+denominators independent of the system size, and derives a supercell whose
+translations leave every ground state unchanged. The formalization assumes such a
+subgroup directly and proves that the low-energy commutator at `(i, j)` equals the one
+at `(i, g • j)` for every `g` in it. The note sketches how to derive the subgroup from
+the characters of an abelian translation group, records a slip at line 1638, and
+notes that the size-dependent case of lines 1643–1652 is not covered.
+
 ## Polynomial PEPS: zero-floor maximizing filters
 
 - [`polypeps_square_zero_floor_optimizer_scope.tex`](polypeps_square_zero_floor_optimizer_scope.tex)
@@ -1412,14 +1425,15 @@ variational bound is unaffected; the infinite expansion remains unformalized.
 ### Local solution of gapped Hamiltonians: the final state in the energy estimate
 
 [hastings05_hierarchical_energy.tex](hastings05_hierarchical_energy.tex)
-(scope restriction, open) records eq. `hchy` of Hastings, *Solving gapped Hamiltonians
+(local correction, resolved) records eq. `hchy` of Hastings, *Solving gapped Hamiltonians
 locally* (arXiv:cond-mat/0508554v3, source lines 705–720), which the source asserts with
 "one may show". From a norm deficiency `b` of the last projection, the normalized image of
 the ground state has energy within `4 ‖M‖ b`, so `4 N J b_h` for `N` terms of norm at most
 `J`. That state lies in the span of the final states `α^h`. The spectral windows give
 the bound for every final state, with error `∑_m 2^{h-1-m} x_m`, for the links of the open
-chain; the wrap link `(N, 1)` of the periodic chain is the joining operator of no level and
-remains uncontrolled.
+chain. The link `(N, 1)` closing the periodic chain is the joining operator of no level; one
+further window for it inside the final space, whose deficiency is the next step of the same
+recursion, gives eq. `hchy` for the periodic sum with one more radius `x_h`.
 
 ### Local solution of gapped Hamiltonians: the number of final states
 
@@ -1447,6 +1461,17 @@ lines 1174–1184). It is printed with `Tr(O e^{−βH})` on the right; applied 
 this would make `ρ(β, C)` a multiple of `e^{−βH}`, which fails already for one term.
 The intended form, used by `percb2`, has `‖O‖ Tr e^{−βH}` on the right, and that is
 what is formalized.
+
+### Local solution of gapped Hamiltonians: the boundary of a cluster
+
+[hastings05_cluster_boundary.tex](hastings05_cluster_boundary.tex)
+(local correction, resolved) records that the boundary `B(C)` of Hastings, *Solving gapped
+Hamiltonians locally* (arXiv:cond-mat/0508554v3, source lines 1130–1133), the terms acting on a
+site of `C`, is too small for the claim at lines 1134–1138 that a term containing `H_C` and
+avoiding `H_{B(C)}` has the sites of `H_C` as a cluster. On a chain with `H_i` acting on
+`{i − 1, i, i + 1}`, the term `H_1 H_3` avoids `B({1}) = {0, 2}` but overlaps `H_1`. The
+formalization uses the terms whose support meets the support of `H_C`; then `S` in equation
+`percb2` counts the sites within `2R` of a site.
 
 ### Local solution of gapped Hamiltonians: cluster size in the percolation bound
 

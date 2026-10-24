@@ -272,8 +272,8 @@ the same pair. Theorem 5.2, `04-compression.tex:565–588`. -/
 theorem card_distributedLinkParties (gates : Finset Gate)
     (participants : Gate → Finset Party) (root : Gate → Party)
     {link : Gate × (Party ⊕ Sym2 Party)} (hlink : link ∈ distributedLinks gates participants root) :
-    (distributedLinkParties root link).card = 2 := by
-  exact card_gateLinkParties _ _ ((mem_distributedLinks _ _ _ _).mp hlink).2
+    (distributedLinkParties root link).card = 2 :=
+  card_gateLinkParties _ _ ((mem_distributedLinks _ _ _ _).mp hlink).2
 
 /-- The tagged original gate witnesses co-participation of a link's endpoints.
 Theorem 5.2, `04-compression.tex:581–588`. -/
