@@ -111,13 +111,9 @@ of a gapped chain combines them with the factorization of
     $\epsilon\ge\sqrt P$ the bound is trivial.
 \end{proof}
 
-\begin{theorem}[Overlaps and the tail of the Schmidt coefficients]
+\begin{theorem}[Overlap with a vector of bounded Schmidt rank]
     \label{thm:hastings_schmidt_overlap_tail}
-    \lean{
-        TNLean.MPS.AreaLaw.Hastings.normSq_dotProduct_le_kyFanNorm,
-        TNLean.MPS.AreaLaw.Hastings.vonNeumannEntropy_eq_probabilityEntropy_eigenvalues₀,
-        TNLean.MPS.AreaLaw.Hastings.sum_eigenvalues₀_filter_le
-    }
+    \lean{TNLean.MPS.AreaLaw.Hastings.normSq_dotProduct_le_kyFanNorm}
     \leanok
     Let $\varphi$ be a bipartite vector with coefficient matrix $C_\varphi$, and
     let $\rho_\varphi=C_\varphi C_\varphi^\dagger$ be its unnormalized reduced
@@ -125,18 +121,13 @@ of a gapped chain combines them with the factorization of
     of Schmidt rank at most $K$, with $K$ less than the dimension of the first
     factor,
     $|\langle\varphi,\psi\rangle|^2\le\|\psi\|^2\,\|\rho_\varphi\|_{(K)}$, where
-    $\|\cdot\|_{(K)}$ is the sum of the $K$ largest eigenvalues. For every
-    Hermitian matrix $A$, the entropy of $A$ is the entropy of its
-    eigenvalues in decreasing order, and the sum of the eigenvalues beyond the
-    first $K$ is $\operatorname{tr}A-\|A\|_{(K)}$; we apply this to
-    $A=\rho_\varphi$.
+    $\|\cdot\|_{(K)}$ is the sum of the $K$ largest eigenvalues.
 \end{theorem}
 \begin{proof}\leanok
-    For $\psi=0$ both sides of the first statement vanish. Otherwise,
+    For $\psi=0$ both sides vanish. Otherwise,
     normalizing $\psi$ reduces it to the variational
     characterization of the maximal overlap with states of Schmidt rank at most
-    $K$ by the Ky Fan norm. The other two statements read the entropy and the
-    Ky Fan norm off the eigenvalues in decreasing order.
+    $K$ by the Ky Fan norm.
 \end{proof}
 
 \begin{theorem}[The Schmidt tail from one mixture]

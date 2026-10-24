@@ -165,7 +165,7 @@ theorem one_half_le_kyFanNorm_of_exp_two_mul_vonNeumannEntropy_le {m : Type*} [F
     unfold Matrix.IsHermitian.eigenvalues at h
     simpa [hp] using h
   have hpsum : ∑ a, p a = 1 := by
-    have h := sum_eigenvalues₀_filter_le hA 0
+    have h := hA.sum_eigenvalues₀_filter_le 0
     simp only [zero_le, Finset.filter_true, Matrix.IsHermitian.kyFanNorm_zero, sub_zero, htr,
       Complex.one_re] at h
     exact h
