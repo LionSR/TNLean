@@ -109,6 +109,14 @@ private theorem card_cyclic_interval_endpoints
   · omega
   · split_ifs <;> omega
 
+private theorem mem_torusContiguousRectangle_iff_and
+    {width height : ℕ} [NeZero width] [NeZero height]
+    (xStart yStart xLen yLen : ℕ) (p : TorusVertex width height) :
+    p ∈ torusContiguousRectangle xStart yStart xLen yLen ↔
+      (xStart ≤ p.1.val ∧ p.1.val < xStart + xLen) ∧
+      (yStart ≤ p.2.val ∧ p.2.val < yStart + yLen) := by
+  simp only [mem_torusContiguousRectangle, and_assoc]
+
 variable {width height : ℕ} [NeZero width] [NeZero height]
 variable [Fact (2 < width)] [Fact (2 < height)]
 
@@ -135,12 +143,7 @@ private theorem boundary_torusRightEdge_rectangle_iff
     · simp only [h1, h2]
       exact crossing_symm _ _
   rw [he]
-  have hm (p : TorusVertex width height) :
-      p ∈ torusContiguousRectangle xStart yStart xLen yLen ↔
-      (xStart ≤ p.1.val ∧ p.1.val < xStart + xLen) ∧
-      (yStart ≤ p.2.val ∧ p.2.val < yStart + yLen) := by
-    simp only [mem_torusContiguousRectangle, and_assoc]
-  simp only [hm]
+  simp only [mem_torusContiguousRectangle_iff_and]
   rw [crossing_common_right, cyclic_interval_crossing_iff v.1 xStart xLen hxPos hxBound hxLen]
 
 private theorem boundary_torusUpEdge_rectangle_iff
@@ -163,12 +166,7 @@ private theorem boundary_torusUpEdge_rectangle_iff
     · simp only [h1, h2]
       exact crossing_symm _ _
   rw [he]
-  have hm (p : TorusVertex width height) :
-      p ∈ torusContiguousRectangle xStart yStart xLen yLen ↔
-      (xStart ≤ p.1.val ∧ p.1.val < xStart + xLen) ∧
-      (yStart ≤ p.2.val ∧ p.2.val < yStart + yLen) := by
-    simp only [mem_torusContiguousRectangle, and_assoc]
-  simp only [hm]
+  simp only [mem_torusContiguousRectangle_iff_and]
   rw [crossing_common_left, cyclic_interval_crossing_iff v.2 yStart yLen hyPos hyBound hyLen]
 
 /-- There are twice the vertical side length in horizontal crossing bonds

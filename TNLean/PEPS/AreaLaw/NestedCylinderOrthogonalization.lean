@@ -107,7 +107,6 @@ private theorem projector_sup_eq_add {ι : Type*} [Fintype ι]
       rw [Matrix.mulVecLin_mul]
       exact LinearMap.range_comp_le_range _ _
 
-
 private theorem projector_finset_sup {ι κ : Type*} [Fintype κ]
     (S : ι → Submodule ℂ (κ → ℂ))
     (h : Pairwise fun i j => coordinateRangeProjector (S i) * coordinateRangeProjector (S j) = 0)

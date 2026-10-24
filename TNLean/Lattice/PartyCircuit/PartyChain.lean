@@ -176,10 +176,6 @@ def stackAppIso : {ℓX ℓY : Layout P} → (M : PartyChain ℓX ℓY) → (ℓ
       ((stackIso p q α β m (stackApp m rest ℓ)).trans ((stackAppIso rest ℓ).lTensor _)).trans
         (leftCommIso _ _ _)
 
-theorem stackAppIso_final {ℓX ℓY : Layout P} (w : Word ℓX ℓY) (ℓ : Layout P) (x : Mem ℓ) :
-    (final w).stackAppIso m ℓ x = x ⊗ₜ (1 : ℂ) :=
-  rfl
-
 theorem stackAppIso_effect {ℓX ℓY : Layout P} {p q : P} (hpq : p ≠ q) (α β : Type)
     [Fintype α] [Fintype β] (ℓS : Layout P) (w : Word ℓX (⟨p, euc α⟩ :: ⟨q, euc β⟩ :: ℓS))
     (η : EuclideanSpace ℂ (α × β)) (rest : PartyChain ℓS ℓY) (ℓ : Layout P)

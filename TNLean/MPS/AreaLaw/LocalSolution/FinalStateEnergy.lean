@@ -38,8 +38,9 @@ The tree of joining operators covers the `N - 1` links `(k, k+1)` of the open ch
 link `(N, 1)` is the joining operator of no level, so no window controls its energy. The sum
 of the joining operators, `hierarchySum M h 0`, is therefore the open-chain part of
 `∑_i M_i`, and the count of final states assumes the gap for this open-chain sum rather than
-for the periodic `∑_i M_i` of the source. Documented in
-`docs/paper-gaps/hastings05_hierarchical_energy.tex`.
+for the periodic `∑_i M_i` of the source. One further window for that link, inside the range of
+the final projection, removes the restriction (`card_le_two_mul_re_trace_of_closingLink`).
+Documented in `docs/paper-gaps/hastings05_hierarchical_energy.tex`.
 
 ## Main results
 

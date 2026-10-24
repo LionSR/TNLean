@@ -111,8 +111,8 @@ theorem integrable_rectangularTraceNorm_physicalCorrectedSourceTerm_gaussian
     Integrable (fun ω ↦ Matrix.rectangularTraceNorm
       (physicalCorrectedSourceTerm physical garbage w S
         (sourceGaussianCorrection w k lam E F ω) bIn bPhysical bGarbage ρ))
-      (sourceGaussianLaw w k) := by
-  exact integrable_rectangularTraceNorm_map_correctedSourceTerm_gaussian A w S hS k hk
+      (sourceGaussianLaw w k) :=
+  integrable_rectangularTraceNorm_map_correctedSourceTerm_gaussian A w S hS k hk
     lam hnonneg E F hsource bIn
     ((bPhysical.tensorProduct bGarbage).map (appendIso physical garbage).symm) ρ
     (Matrix.partialTraceRightLM (α := x) (β := d))

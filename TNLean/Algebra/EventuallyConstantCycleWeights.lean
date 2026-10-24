@@ -164,8 +164,8 @@ theorem cycleWeight_eq_one {w : V → V → ℕ}
   let N := t * K
   have ht : 0 < t := by simp [t]
   have hN : 0 < N := Nat.mul_pos ht hK
-  have hN₀ : N₀ < N := by
-    exact (Nat.lt_succ_self N₀).trans_le (Nat.le_mul_of_pos_right t hK)
+  have hN₀ : N₀ < N :=
+    (Nat.lt_succ_self N₀).trans_le (Nat.le_mul_of_pos_right t hK)
   have hm : 1 < N + 1 := by omega
   have hL : 0 < (N + 1) * N := Nat.mul_pos (Nat.succ_pos N) hN
   have hN₀L : N₀ < (N + 1) * N :=

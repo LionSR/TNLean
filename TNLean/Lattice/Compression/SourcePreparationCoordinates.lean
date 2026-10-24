@@ -27,6 +27,19 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 
+namespace TNLean.Lattice.PartyCircuit.Layout
+variable {P : Type}
+
+/-- The append identification commutes with equality of its source-register list. -/
+theorem memCongr_append_tmul {a b : Layout P} (h : a = b)
+    (ℓ : Layout P) (x : Mem a) (y : Mem ℓ) :
+    Layout.memCongr (congrArg (· ++ ℓ) h) ((appendIso a ℓ).symm (x ⊗ₜ[ℂ] y)) =
+      (appendIso b ℓ).symm (Layout.memCongr h x ⊗ₜ[ℂ] y) := by
+  cases h
+  rfl
+
+end TNLean.Lattice.PartyCircuit.Layout
+
 namespace TNLean.Lattice.PartyCircuit.SourceInventory
 
 variable {P : Type}
@@ -103,13 +116,6 @@ theorem slotVector_eq_vector (R : SourceInventory P)
         (vector (ofSlots R U V η)) := by
   exact eq_of_heq ((slotVector_heq_vector R U V η).trans (Layout.memCongr_apply_heq _ _).symm)
 
-private theorem transport_append {a b : Layout P} (h : a = b)
-    (ℓ : Layout P) (x : Mem a) (y : Mem ℓ) :
-    Layout.memCongr (congrArg (· ++ ℓ) h) ((appendIso a ℓ).symm (x ⊗ₜ y)) =
-      (appendIso b ℓ).symm (Layout.memCongr h x ⊗ₜ y) := by
-  cases h
-  rfl
-
 /-- Preparation in fixed slots tensors the actual multilinear source vector with the input. -/
 theorem eval_prepareSlots_eq_appendIso_symm (R : SourceInventory P)
     (U V : Fin R.length → HSpace) (η : ∀ i, U i ⊗[ℂ] V i)
@@ -120,7 +126,7 @@ theorem eval_prepareSlots_eq_appendIso_symm (R : SourceInventory P)
   change Layout.memCongr (congrArg (· ++ ℓ) (layout_ofSlots_eq R U V η (fun _ ↦ 0)))
     (((ofSlots R U V η).prepare ℓ).eval x) = _
   rw [eval_prepare_eq_appendIso_symm]
-  exact transport_append _ _ _ _
+  exact Layout.memCongr_append_tmul _ _ _ _
 
 /-- A finite linear combination in every actual pair slot expands its preparation operator
 as the sum over choices of one component from each slot. Source: polynomial-PEPS Theorem 5.2,
