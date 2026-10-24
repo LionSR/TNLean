@@ -35,7 +35,7 @@ taken as an orthonormal eigenbasis of `A = P M_j P` on the ground space, whose e
 spectral theorem; the choice of `j` maximizing `δλ_j` is not made, since every bound here holds
 for any `j`. The summation of the decaying commutator bound over `i` into eq. `oibu`, which the
 source states only to order of magnitude, is left as the sum of the commutators. Documented in
-`docs/paper-gaps/hastings05_filtered_term_approximation.tex`.
+`docs/paper-gaps/hastings05_two_dim_ground_basis.tex`.
 -/
 
 open scoped InnerProductSpace
