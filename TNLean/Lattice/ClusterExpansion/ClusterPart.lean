@@ -57,6 +57,7 @@ noncomputable def clusterPart (H : Matrix ι ι ℂ) (h : κ → Matrix ι ι �
   ∑ D ∈ C.powerset, (-1 : ℂ) ^ D.card •
     NormedSpace.exp (-(β • (H - ∑ k ∈ B, h k - ∑ k ∈ D, h k)))
 
+omit [DecidableEq κ] in
 /-- The cluster part as the alternating sum over the retained terms `E = C \ D`, in the form of
 `Matrix.norm_trace_mul_sum_powerset_exp_le`. -/
 theorem clusterPart_eq_sum_powerset (H : Matrix ι ι ℂ) (h : κ → Matrix ι ι ℂ)
@@ -64,6 +65,7 @@ theorem clusterPart_eq_sum_powerset (H : Matrix ι ι ℂ) (h : κ → Matrix ι
     clusterPart H h B C β =
       ∑ E ∈ C.powerset, (-1 : ℂ) ^ (C.card - E.card) •
         NormedSpace.exp (-(β • (H - ∑ k ∈ B, h k - ∑ k ∈ C, h k) + ∑ k ∈ E, β • h k)) := by
+  classical
   refine Finset.sum_nbij' (fun D ↦ C \ D) (fun E ↦ C \ E) ?_ ?_ ?_ ?_ ?_
   · intro D _
     exact Finset.mem_powerset.mpr Finset.sdiff_subset
@@ -198,7 +200,7 @@ theorem norm_trace_mul_clusterPart_le_pow {H : Matrix ι ι ℂ} (hH : H.IsHermi
     _ ≤ ‖O‖ * (Real.exp (β * J) - 1) ^ C.card * Real.exp (S * J * β) ^ C.card *
           (NormedSpace.exp (-(β • H))).trace.re :=
         mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left hexp hP) hZ
-    _ = _ := by ring
+    _ = _ := by rw [mul_pow, ← mul_assoc]
 
 /-- **Several clusters.** For pairwise disjoint clusters `C i`, `i ∈ T`, with boundaries `B i`
 satisfying `n_{C_i} + n_{B_i} ≤ S n_{C_i}`, the operator `ρ(β, C_1, …, C_m)` of the terms containing
