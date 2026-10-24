@@ -25,7 +25,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.ProductInput
+namespace TNLean.Lattice.PartyCircuit.ProductInput
 variable {P : Type} [Fintype P]
 
 /-- The memory of the actual whole-party input layout is finite-dimensional
@@ -39,4 +39,4 @@ theorem finiteDimensional_wholePartyMem (H : P → HSpace)
   obtain ⟨p, _, rfl⟩ := List.mem_map.mp hr
   exact hH p
 
-end TNLean.PEPS.PairEffect.ProductInput
+end TNLean.Lattice.PartyCircuit.ProductInput

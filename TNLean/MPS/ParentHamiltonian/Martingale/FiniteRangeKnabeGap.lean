@@ -110,8 +110,8 @@ theorem parentHamiltonianES_gap_of_openParentHamiltonianES_gap
     let G := LinearMap.toContinuousLinearMap (openParentHamiltonianES A R W)
     let B := ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W)) G
     have hFiber : ∀ y : EuclideanSpace ℂ (Cfg d W × Cfg d (N - W)),
-        γ * (⟪B y, y⟫_ℂ).re ≤ (⟪B y, B y⟫_ℂ).re := by
-      exact LinearMap.IsPositive.quadraticForm_sq_ge_rightFiberwiseMap_of_norm_gap
+        γ * (⟪B y, y⟫_ℂ).re ≤ (⟪B y, B y⟫_ℂ).re :=
+      LinearMap.IsPositive.quadraticForm_sq_ge_rightFiberwiseMap_of_norm_gap
         G (openParentHamiltonianES_isPositive A R W) hγ.le hOpenGap
     have hConj := cyclicWindowSum_zmodLocalTermES_conj_cyclicActiveBlock
       A hR hmR hN s

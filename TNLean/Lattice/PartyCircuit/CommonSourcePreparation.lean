@@ -28,7 +28,7 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect.SourceInventory
+namespace TNLean.Lattice.PartyCircuit.SourceInventory
 
 variable {P ι : Type} [Fintype ι]
 
@@ -69,4 +69,4 @@ theorem common_ofSlots_expands (R : SourceInventory P) (U V : ι → Fin R.lengt
           (Expands.cons _ (ih (fun ζ i ↦ U ζ i.succ) (fun ζ i ↦ V ζ i.succ)
             (fun ζ i ↦ η ζ i.succ)))
 
-end TNLean.PEPS.PairEffect.SourceInventory
+end TNLean.Lattice.PartyCircuit.SourceInventory

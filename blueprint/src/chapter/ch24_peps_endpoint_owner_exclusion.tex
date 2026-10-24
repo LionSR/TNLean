@@ -15,10 +15,10 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{definition}[The word of local source-register operators]
     \label{def:peps_source_register_operator_word}
-    \lean{TNLean.PEPS.PairEffect.Word.localEndpoint}
-    \lean{TNLean.PEPS.PairEffect.Word.sources_localEndpoint}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.endpointWord}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.sources_endpointWord}
+    \lean{TNLean.Lattice.PartyCircuit.Word.localEndpoint}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sources_localEndpoint}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.endpointWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.sources_endpointWord}
     \leanok
     \uses{def:peps_party_layout,def:peps_source_slots}
     % Source: 04-compression.tex, lines 279--309 and 565--588.
@@ -33,7 +33,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Restriction away from every source owner]
     \label{thm:peps_source_register_operator_exclusion}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.restrict_endpointWord_eq_nil_and_eval_eq_id}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.restrict_endpointWord_eq_nil_and_eval_eq_id}
     \leanok
     \uses{def:peps_source_register_operator_word,thm:peps_party_restriction}
     Let $f:\mathcal P\to\{0,1\}$ satisfy $f(p_i)=f(q_i)=0$ for all
@@ -55,7 +55,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Action on the original endpoint factors]
     \label{thm:peps_source_register_operator_evaluation}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_endpointWord_slotVector_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.eval_endpointWord_slotVector_tmul}
     \leanok
     \uses{def:peps_source_register_operator_word,def:peps_joint_source_vector}
     For any $u_i\in U_i$ and $v_i\in V_i$, in the register
@@ -79,8 +79,8 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Coordinates of the original joint source vector]
     \label{thm:peps_joint_source_vector_coordinates}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.slotVector_eq_sum_slotBasis}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.slotBasis_repr_slotVector}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.slotVector_eq_sum_slotBasis}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.slotBasis_repr_slotVector}
     \leanok
     \uses{def:peps_joint_source_vector,def:peps_source_slot_basis}
     Let $b_i,c_i$ be finite orthonormal bases of $U_i,V_i$ and let $e_x$ be
@@ -103,8 +103,8 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{definition}[The operator with specified orthonormal coordinates]
     \label{def:peps_operator_from_basis_matrix}
-    \lean{TNLean.PEPS.PairEffect.basisMatrixOperator}
-    \lean{TNLean.PEPS.PairEffect.basisMatrixOperator_repr}
+    \lean{TNLean.Lattice.PartyCircuit.basisMatrixOperator}
+    \lean{TNLean.Lattice.PartyCircuit.basisMatrixOperator_repr}
     \leanok
     For an orthonormal basis $b=(b_j)_{j\in I}$ of a finite-dimensional complex
     inner product space and a matrix $M=(M_{ij})_{i,j\in I}$, define $T_b(M)$ by
@@ -113,9 +113,9 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Coordinates of the source-endpoint operator]
     \label{thm:peps_endpoint_operator_coordinates}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.slotBasis_repr_endpointWord}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.endpointMatrixWord}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.slotBasis_repr_endpointMatrixWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.slotBasis_repr_endpointWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.endpointMatrixWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.slotBasis_repr_endpointMatrixWord}
     \leanok
     \uses{thm:peps_source_register_operator_evaluation,
         thm:peps_joint_source_vector_coordinates,def:peps_operator_from_basis_matrix}
@@ -141,7 +141,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Finite averaging of endpoint operators]
     \label{thm:peps_endpoint_matrix_average}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.endpointMatrixAverage_eq_product}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.endpointMatrixAverage_eq_product}
     \leanok
     \uses{thm:peps_endpoint_operator_coordinates}
     For endpoint matrices $L_{i,s},H_{i,s}$ ($0\le i<n$, $0\le s<k$), entrywise
@@ -165,7 +165,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Matrices in orthonormal coordinates]
     \label{thm:peps_matrix_orthonormal_coordinates}
-    \lean{TNLean.PEPS.PairEffect.matrix_repr_eval_eq_toMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.matrix_repr_eval_eq_toMatrix}
     \leanok
     For finite orthonormal bases $b=(b_j)$ and $c=(c_i)$ and a continuous linear
     map $A$, the matrix of $A$ has entries $M_{ij}=\langle c_i,A b_j\rangle$.
@@ -177,7 +177,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Dependence on the selected endpoint maps]
     \label{thm:peps_source_register_operator_local_congruence}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.restrict_endpointWord_eval_eq_of_local_eq}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.restrict_endpointWord_eval_eq_of_local_eq}
     \leanok
     \uses{def:peps_source_register_operator_word,thm:peps_party_restriction}
     % Source: 04-compression.tex, lines 279--309 and 565--588.
@@ -201,7 +201,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Restriction and register-list identification]
     \label{thm:peps_party_restriction_canonical_layouts}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_castLayouts}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_castLayouts}
     \leanok
     \uses{thm:peps_party_restriction,thm:peps_basis_memory_equalities}
     % Source: 04-compression.tex, lines 233--251, 279--309 and 565--588.
@@ -221,7 +221,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Dependence on incident source samples]
     \label{thm:peps_actual_sampled_endpoint_locality}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_sampledEndpointInputWord_eval_eq_of_incident_samples}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_sampledEndpointInputWord_eval_eq_of_incident_samples}
     \leanok
     \uses{def:peps_actual_sampled_endpoint_word,
         def:peps_original_sampled_endpoint_factors,
@@ -264,7 +264,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[The physical mixed trace in the original coordinates]
     \label{thm:peps_selected_physical_private_trace}
-    \lean{TNLean.PEPS.PairEffect.selectedPhysicalPrivateBasis_partialTrace_mixed}
+    \lean{TNLean.Lattice.PartyCircuit.selectedPhysicalPrivateBasis_partialTrace_mixed}
     \leanok
     \uses{thm:peps_selected_physical_private_basis_grouped,
         thm:peps_selected_physical_basis_grouped,def:peps_selected_physical_configurations}
@@ -299,7 +299,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[The original physical density in grouped coordinates]
     \label{thm:peps_distributed_grouped_physical_trace}
-    \lean{TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity_eq_grouped_partialTrace}
+    \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction.physicalDensity_eq_grouped_partialTrace}
     \leanok
     \uses{def:peps_distributed_construction_density,
         thm:peps_selected_physical_private_trace}
@@ -321,7 +321,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Restriction of an exchange of register blocks]
     \label{thm:peps_party_restriction_exchange_blocks}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_exchangeBlocks_eval_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_exchangeBlocks_eval_heq}
     \leanok
     \uses{thm:peps_party_restriction,thm:peps_basis_memory_equalities}
     % Source: 04-compression.tex, lines 233--267, 409--434 and 565--588.
@@ -346,7 +346,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Restriction beside spectator registers]
     \label{thm:peps_append_spectators_restriction}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_appendTail_eval_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_appendTail_eval_heq}
     \leanok
     \uses{def:peps_append_spectators,thm:peps_party_restriction,
         thm:peps_party_restriction_exchange_blocks,
@@ -371,7 +371,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Spectators at an excluded owner]
     \label{thm:peps_spectator_owner_exclusion}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_mapOwner_appendTail_eval_heq_id_of_disjoint}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_mapOwner_appendTail_eval_heq_id_of_disjoint}
     \leanok
     \uses{thm:peps_owner_disjoint_restriction,
         thm:peps_append_spectators_restriction,thm:peps_append_spectators}
@@ -394,9 +394,9 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Operator identities under composition and framing]
     \label{thm:peps_operator_composition_framing}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_comp_heq,
-        TNLean.PEPS.PairEffect.Word.eval_frame_heq,
-        TNLean.PEPS.PairEffect.Word.eval_frameList_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_comp_heq,
+        TNLean.Lattice.PartyCircuit.Word.eval_frame_heq,
+        TNLean.Lattice.PartyCircuit.Word.eval_frameList_heq}
     \leanok
     \uses{thm:peps_basis_memory_equalities,def:peps_party_registers}
     % Source: 04-compression.tex, lines 233--251 and 409--434.
@@ -418,7 +418,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Restriction of the local part without sources]
     \label{thm:peps_source_free_local_part_restriction}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_localPart_eval_heq_of_sources_nil}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_localPart_eval_heq_of_sources_nil}
     \leanok
     \uses{thm:peps_source_preparation,thm:peps_party_restriction,
         thm:peps_basis_memory_equalities}
@@ -446,7 +446,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Moving a register through an erased prefix]
     \label{thm:peps_erased_prefix_register_move}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_moveHead_eval_heq_id_of_prefix_eq_nil}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_moveHead_eval_heq_id_of_prefix_eq_nil}
     \leanok
     \uses{thm:peps_party_restriction,thm:peps_register_exchange,
         thm:peps_basis_memory_equalities}
@@ -471,7 +471,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Framing a local part with erased sources]
     \label{thm:peps_local_part_framing_restriction}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_localPart_frameList_eval_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_localPart_frameList_eval_heq}
     \leanok
     \uses{thm:peps_source_preparation,thm:peps_party_restriction,
         thm:peps_basis_memory_equalities}
@@ -504,8 +504,8 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Identities and input identifications under restriction]
     \label{thm:peps_identity_input_identification}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_id_heq,
-        TNLean.PEPS.PairEffect.Word.restrict_castInput_eval_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_id_heq,
+        TNLean.Lattice.PartyCircuit.Word.restrict_castInput_eval_heq}
     \leanok
     \uses{thm:peps_basis_memory_equalities,thm:peps_party_restriction}
     % Source: 04-compression.tex, lines 233--251 and 409--434.
@@ -524,7 +524,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Spectators outside the owners of a sourced composition]
     \label{thm:peps_sourced_spectator_owner_exclusion}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_localPart_mapOwner_appendTail_eval_heq_id_of_disjoint}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_localPart_mapOwner_appendTail_eval_heq_id_of_disjoint}
     \leanok
     \uses{thm:peps_source_word_parties,def:peps_append_spectators,
         thm:peps_party_restriction,thm:peps_basis_memory_equalities}
@@ -563,7 +563,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Spectators at a party absent from the core]
     \label{thm:peps_absent_party_spectator_identity}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_localPart_appendTail_eval_heq_id_of_not_mem_parties}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_localPart_appendTail_eval_heq_id_of_not_mem_parties}
     \leanok
     \uses{thm:peps_source_word_parties,def:peps_append_spectators,
         thm:peps_party_restriction,def:peps_single_party_selector}
@@ -596,7 +596,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[A nonincident party in the all-party expansion]
     \label{thm:peps_all_gate_nonincident_identity}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident}
     \leanok
     \uses{def:peps_prepared_source_gate,def:peps_partial_source_choices,
         def:peps_affected_owner,def:peps_single_party_selector}
@@ -635,7 +635,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Restriction of a framed source-free composition]
     \label{thm:peps_retained_spectator_framing}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_frameList_eval_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_frameList_eval_heq}
     \leanok
     \uses{thm:peps_party_restriction,thm:peps_basis_memory_equalities}
     % Source: 04-compression.tex, lines 233--267, 351--381, 409--434 and 565--588.
@@ -656,7 +656,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Composition of equal selected local parts]
     \label{thm:peps_selected_local_part_composition}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_localPart_comp_eval_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_localPart_comp_eval_heq}
     \leanok
     \uses{thm:peps_source_preparation,thm:peps_party_restriction,
         thm:peps_basis_memory_equalities}
@@ -684,7 +684,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Register moves with equal retained prefixes]
     \label{thm:peps_register_move_retained_prefix}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_moveHead_eval_heq_of_restrict_eq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_moveHead_eval_heq_of_restrict_eq}
     \leanok
     \uses{thm:peps_party_restriction,thm:peps_register_exchange,
         thm:peps_basis_memory_equalities}
@@ -708,7 +708,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Framing equal selected local parts]
     \label{thm:peps_selected_local_part_framing}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_localPart_frame_eval_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_localPart_frame_eval_heq}
     \leanok
     \uses{thm:peps_source_preparation,thm:peps_party_restriction,
         thm:peps_basis_memory_equalities}
@@ -738,7 +738,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Local dependence on given incident choices]
     \label{thm:peps_all_branch_incident_locality}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialWord_all_localPart_eval_heq_of_projectAllChoices_eq}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_partialWord_all_localPart_eval_heq_of_projectAllChoices_eq}
     \leanok
     \uses{def:peps_partial_source_choices,def:peps_touched_labels,
         thm:peps_incident_gate_labels,def:peps_affected_owner,
@@ -773,8 +773,8 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Restriction of a register move]
     \label{thm:peps_register_move_restriction}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_moveHead_true_eval_heq,
-        TNLean.PEPS.PairEffect.Word.restrict_moveHead_false_eval_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_moveHead_true_eval_heq,
+        TNLean.Lattice.PartyCircuit.Word.restrict_moveHead_false_eval_heq}
     \leanok
     \uses{thm:peps_party_restriction,thm:peps_register_exchange,
         thm:peps_basis_memory_equalities}
@@ -802,7 +802,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{theorem}[Erasing a framed register from the local part]
     \label{thm:peps_selected_local_part_erased_frame}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_localPart_frame_false_eval_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_localPart_frame_false_eval_heq}
     \leanok
     \uses{thm:peps_source_preparation,thm:peps_party_restriction}
     % Source: 04-compression.tex, lines 246--267, 351--381 and 409--434.

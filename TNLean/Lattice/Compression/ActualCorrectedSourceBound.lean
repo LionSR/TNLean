@@ -28,7 +28,7 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open MeasureTheory QICLean.ComplexGaussian
 open scoped Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 
 open Classical in
 /-- The actual corrected term has the coefficient-weighted Gaussian bound in
@@ -101,4 +101,4 @@ theorem integral_actualCorrectedSourceTerm_le
           hnonneg hmass hE hF p₀ hp₀ hp₀s ξ ζ bA bE bD bF).2 (norm_nonneg _)
     _ = _ := by simp only [← Finset.sum_mul, mul_assoc]
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

@@ -27,7 +27,8 @@ Independently formalized; no upstream Lean proof text reused.
 
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.MessageGate
+namespace TNLean.Lattice.PartyCircuit.MessageGate
+open TNLean.Lattice.PartyCircuit
 variable {P C : Type} [Fintype C] {a b : Layout C}
 
 /-- Construct the existing original gate from the actual message expansion.
@@ -88,4 +89,4 @@ theorem isMonomialBounded_toOriginalCircuit (L : MessageGate a b) (owner : C ↪
   exact_mod_cast (L.expansion_size_le D m K hD hK hd hm).1.trans
     (Nat.le_ceil ((K : ℝ) * D ^ m))
 
-end TNLean.PEPS.PairEffect.MessageGate
+end TNLean.Lattice.PartyCircuit.MessageGate

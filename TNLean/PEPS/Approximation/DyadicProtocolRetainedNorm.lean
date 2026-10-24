@@ -38,8 +38,9 @@ module does not construct it.
 noncomputable section
 
 namespace TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol
+open TNLean.Lattice.PartyCircuit
 
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
 variable {L q : ℕ} {P : Type} [Fintype P] {D : DyadicProtocol L q P} {Ω : StateSpace L q}
   {C_N C_K C_E : ℝ} {b k r : ℕ}

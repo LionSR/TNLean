@@ -69,8 +69,7 @@ theorem ChainHamiltonian.mutualInformation_le_of_logarithmic_separation
     nlinarith only [mul_nonneg (show 0 ≤ 3 * Cp * (1 + b) + 3 by positivity)
       (sub_nonneg.mpr hlog)]
   let N := fun (ρ : ℝ) (S : Finset (Fin L)) ↦
-    Finset.univ.filter (fun y : Fin L ↦
-      ∃ x ∈ S, (Nat.dist x.val y.val : ℝ) ≤ ρ)
+    chainNeighborhood S ρ
   let D := N (w + 1) T
   let C := (N (2 * w + 2) T)ᶜ
   have hDC : Disjoint D C := by

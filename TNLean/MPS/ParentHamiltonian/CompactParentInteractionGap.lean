@@ -118,8 +118,8 @@ theorem exists_uniform_parentInteraction_gap_of_compact_isNormal
     {S : Set X} (hS : IsCompact S) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ S, ∀ N : ℕ, D ^ 4 + 1 ≤ N →
       ∀ v ∈ (LinearMap.ker (periodicInteractionHamiltonianES (H x).toLinearMap N))ᗮ,
-        δ * ‖v‖ ≤ ‖periodicInteractionHamiltonianES (H x).toLinearMap N v‖ := by
-  exact exists_uniform_parentInteraction_gap_of_compact_isNormal_at_range
+        δ * ‖v‖ ≤ ‖periodicInteractionHamiltonianES (H x).toLinearMap N v‖ :=
+  exists_uniform_parentInteraction_gap_of_compact_isNormal_at_range
     A hA hNormal le_rfl H hH hParent hS
 
 /-- Continuous positive interactions for several blocks have a uniform gap

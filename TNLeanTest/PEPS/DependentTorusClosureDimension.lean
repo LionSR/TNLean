@@ -127,7 +127,7 @@ example : Fintype.card (BondAlphabet ((1, 1), true)) = 54 := by decide
 -- All four canonical physical configuration spaces have different dimensions too.
 example : Function.Injective (fun v : DependentTorus.Vertex =>
     Fintype.card (DependentTorus.LocalConfig BondAlphabet v)) := by
-  simp only [DependentTorus.LocalConfig, DependentBondNetwork.LocalConfig,
+  simp only [DependentTorus.LocalConfig, TNLean.Lattice.DependentBondNetwork.LocalConfig,
     Fintype.card_pi, BondAlphabet, Fintype.card_prod, Fintype.card_fin]
   decide
 

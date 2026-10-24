@@ -10,7 +10,7 @@ import Lean.Util.CollectAxioms
 /-! # Axiom check for the physical-density contraction approximation from local gate expansions -/
 
 set_option linter.hashCommand false
-open TNLean.PEPS.PairEffect.EffectCircuit
+open TNLean.Lattice.PartyCircuit.EffectCircuit
 
 run_cmd do
   let decl := ``exists_sampled_contractedOperator_approximate_error_le

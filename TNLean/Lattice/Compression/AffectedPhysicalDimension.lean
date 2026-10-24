@@ -28,7 +28,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.Layout
+namespace TNLean.Lattice.PartyCircuit.Layout
 variable {P Q : Type}
 
 /-- The second owner map distinguishes exactly the original affected parties. -/
@@ -54,9 +54,10 @@ def affectedOutputIso (A : P → Bool) (f : Bool → Bool) (a : Layout P) :
     ((restrictMapOwnerIso (affectedOwner A) (fun p ↦ f (side p)) a).trans
       (restrictMapOwnerIso side f (mapOwner (affectedOwner A) a)))
 
-end TNLean.PEPS.PairEffect.Layout
+end TNLean.Lattice.PartyCircuit.Layout
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
+open TNLean.Lattice.PartyCircuit
 variable {P : Type} [DecidableEq P]
 
 /-- The actual affected output memory has coordinates in the original local
@@ -86,4 +87,4 @@ theorem finrank_affectedFamilyPhysicalLayout (d : P → ℕ) (ps : List P)
   simpa only [Fintype.card_pi, Fintype.card_fin, Finset.prod_coe_sort] using
     Module.finrank_eq_card_basis (affectedFamilyPhysicalBasis d ps hps hcover A).toBasis
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

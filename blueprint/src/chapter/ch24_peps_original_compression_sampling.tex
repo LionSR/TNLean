@@ -10,7 +10,7 @@ contraction of local tensors is a separate assertion.
 
 \begin{definition}[Distributed construction]
     \label{def:peps_distributed_construction}
-    \lean{TNLean.PEPS.PairEffect.DistributedConstruction}
+    \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction}
     \leanok
     \uses{def:peps_original_circuit}
     A distributed construction has a finite nonempty set $P$ of parties.
@@ -36,8 +36,8 @@ contraction of local tensors is a separate assertion.
 
 \begin{definition}[Original input and physical density]
     \label{def:peps_distributed_construction_density}
-    \lean{TNLean.PEPS.PairEffect.DistributedConstruction.input,
-        TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity}
+    \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction.input,
+        TNLean.Lattice.PartyCircuit.DistributedConstruction.physicalDensity}
     \leanok
     \uses{def:peps_distributed_construction}
     The input of a distributed construction is the normalized product
@@ -53,8 +53,8 @@ contraction of local tensors is a separate assertion.
 
 \begin{theorem}[Subnormalized physical density]
     \label{thm:peps_distributed_construction_density}
-    \lean{TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity_posSemidef,
-        TNLean.PEPS.PairEffect.DistributedConstruction.trace_physicalDensity_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction.physicalDensity_posSemidef,
+        TNLean.Lattice.PartyCircuit.DistributedConstruction.trace_physicalDensity_le_one}
     \leanok
     \uses{def:peps_distributed_construction_density}
     The physical density of a distributed construction is positive
@@ -70,7 +70,7 @@ contraction of local tensors is a separate assertion.
 
 \begin{theorem}[A fixed inverse power meets the per-gate error tolerance]
     \label{thm:peps_fixed_power_gate_budget}
-    \lean{TNLean.PEPS.PairEffect.inversePower_le_sourceGateBudget_half}
+    \lean{TNLean.Lattice.PartyCircuit.inversePower_le_sourceGateBudget_half}
     \leanok
     Let $L\ge2$, $C\ge1$, $M\le CL^n$, where $M,n$ are nonnegative
     integers, and let $p$ be real. Set
@@ -92,8 +92,8 @@ contraction of local tensors is a separate assertion.
 
 \begin{theorem}[Monotonicity in the local approximation tolerance]
     \label{thm:peps_original_approximation_budget}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsGateApproximation.mono}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.isGateApproximation_budget_of_power_bound}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsGateApproximation.mono}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.isGateApproximation_budget_of_power_bound}
     \leanok
     Increasing the permitted local approximation error preserves the original
     operators, approximate monomial lists and all contraction and allowedness
@@ -112,7 +112,7 @@ contraction of local tensors is a separate assertion.
 
 \begin{theorem}[A positive polynomial coefficient bound]
     \label{thm:peps_original_coefficient_majorant}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.exists_one_le_isExpansionBounded_of_termwise_power_bounds}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.exists_one_le_isExpansionBounded_of_termwise_power_bounds}
     \leanok
     Let $L\geq1$. Suppose every nonprivate gate of the original circuit
     has at most $K\leq C_KL^u$ monomials, each with at most $r$ pair
@@ -136,9 +136,9 @@ contraction of local tensors is a separate assertion.
 
 \begin{theorem}[Finite expansion bounds and replacement coefficients]
     \label{thm:peps_original_finite_expansion_bound}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isMonomialBounded_mono}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.exists_isMonomialBounded}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.sum_norm_branchCoefficient_physicalFirstReplacement_le}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isMonomialBounded_mono}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.exists_isMonomialBounded}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.sum_norm_branchCoefficient_physicalFirstReplacement_le}
     \leanok
     Every finite original circuit has an integer $K$ bounding the lengths
     of all its gate expansions. Any larger integer is also such a bound.
@@ -159,7 +159,7 @@ contraction of local tensors is a separate assertion.
 
 \begin{theorem}[Physical approximation after replacement and sampling]
     \label{thm:peps_sampled_original_density}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.exists_physicalFirst_sourceSample_original_error_le}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.exists_physicalFirst_sourceSample_original_error_le}
     \leanok
     In the density-approximation steps of
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
@@ -225,7 +225,7 @@ contraction of local tensors is a separate assertion.
 
 \begin{theorem}[Sampling from approximate original gates]
     \label{thm:peps_approximate_source_sample}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.exists_sourceSample_approximate_error_le}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.exists_sourceSample_approximate_error_le}
     \leanok
     Let a finite distributed construction begin in a product of normalized
     party vectors. Suppose its original gates are contractions, its number of
@@ -275,7 +275,7 @@ contraction of local tensors is a separate assertion.
 
 \begin{theorem}[Explicit polynomial dimensions of the replacement links]
     \label{thm:peps_physical_first_link_polynomial}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_physicalFirstNetworkAlphabet_le_power}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_physicalFirstNetworkAlphabet_le_power}
     \leanok
     Let an original circuit have at most $N$ nonprivate gate occurrences,
     each with at most $b$ participants. Suppose each gate has at most $K$
@@ -335,7 +335,7 @@ contraction of local tensors is a separate assertion.
 
 \begin{theorem}[Trace bounded by the trace norm]
     \label{thm:peps_trace_le_trace_norm}
-    \lean{TNLean.PEPS.Approximation.norm_trace_le_rectangularTraceNorm}
+    \lean{TNLean.Lattice.Compression.norm_trace_le_rectangularTraceNorm}
     \leanok
     Every complex square matrix $X$ satisfies
     $\lvert\operatorname{Tr}X\rvert\le\|X\|_1$.
@@ -350,7 +350,7 @@ contraction of local tensors is a separate assertion.
 
 \begin{theorem}[Adding an absolute error to a pure-state approximation]
     \label{thm:peps_absolute_error_pure_state}
-    \lean{TNLean.PEPS.Approximation.rectangularTraceNorm_sub_pure_le_of_retained_density}
+    \lean{TNLean.Lattice.Compression.rectangularTraceNorm_sub_pure_le_of_retained_density}
     \leanok
     Let $\sigma,\rho$ be complex square matrices and $\Omega$ a unit vector.
     If $\|\sigma-\rho\|_1\le\kappa$ and
@@ -372,7 +372,7 @@ contraction of local tensors is a separate assertion.
 
 \begin{theorem}[Absolute error and retained norm]
     \label{thm:peps_compression_retained_norm}
-    \lean{TNLean.PEPS.PairEffect.DistributedConstruction.rectangularTraceNorm_compression_sub_pure_le}
+    \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction.rectangularTraceNorm_compression_sub_pure_le}
     \leanok
     \uses{def:peps_distributed_construction_density}
     % Source: 04-compression.tex, lines 602--611.
@@ -402,7 +402,7 @@ contraction of local tensors is a separate assertion.
 
 \begin{definition}[A distributed construction with the operators of its expansions]
     \label{def:peps_distributed_construction_gate_maps}
-    \lean{TNLean.PEPS.PairEffect.DistributedConstruction.toGateMapConstruction}
+    \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction.toGateMapConstruction}
     \leanok
     \uses{def:peps_distributed_construction,def:peps_original_gate_construction}
     A distributed construction determines a construction with prescribed
@@ -414,7 +414,7 @@ contraction of local tensors is a separate assertion.
 
 \begin{theorem}[The operators of the expansions keep the physical density]
     \label{thm:peps_distributed_construction_gate_maps_density}
-    \lean{TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity_toGateMapConstruction}
+    \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction.physicalDensity_toGateMapConstruction}
     \leanok
     \uses{def:peps_distributed_construction_gate_maps,def:peps_distributed_construction_density,def:peps_original_gate_construction_density}
     The construction of
@@ -430,10 +430,10 @@ contraction of local tensors is a separate assertion.
 
 \begin{theorem}[Separate arity and lifetime bounds for link incidence]
     \label{thm:peps_separate_arity_incidence}
-    \lean{TNLean.PEPS.Approximation.card_incidentDistributedLinks_le_of_arity_lifetime,
-        TNLean.PEPS.PairEffect.SourceCircuit.card_incidentSourceDensityLinks_le_of_arity_lifetime,
-        TNLean.PEPS.PairEffect.OriginalCircuit.card_incidentPhysicalFirstDensityLinks_le_of_arity_lifetime,
-        TNLean.PEPS.PairEffect.OriginalCircuit.card_participants_produce_le_of_arity}
+    \lean{TNLean.Lattice.Compression.card_incidentDistributedLinks_le_of_arity_lifetime,
+        TNLean.Lattice.PartyCircuit.SourceCircuit.card_incidentSourceDensityLinks_le_of_arity_lifetime,
+        TNLean.Lattice.PartyCircuit.OriginalCircuit.card_incidentPhysicalFirstDensityLinks_le_of_arity_lifetime,
+        TNLean.Lattice.PartyCircuit.OriginalCircuit.card_participants_produce_le_of_arity}
     \leanok
     \uses{def:compression_operator_links,def:compression_operator_incidences}
     Let $G$ be a finite set of gate occurrences, each with a finite
@@ -486,8 +486,8 @@ contraction of local tensors is a separate assertion.
 
 \begin{theorem}[Uniform compression with separate arity and lifetime]
     \label{thm:peps_separate_arity_compression}
-    \lean{TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_network_of_arity_lifetime,
-        TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_network_sub_pure_le_of_arity_lifetime}
+    \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction.exists_uniform_sampled_network_of_arity_lifetime,
+        TNLean.Lattice.PartyCircuit.DistributedConstruction.exists_uniform_sampled_network_sub_pure_le_of_arity_lifetime}
     \leanok
     \uses{def:peps_distributed_construction,def:peps_distributed_construction_density,
         def:compression_operator_operator,def:compression_operator_alphabets}
@@ -495,13 +495,14 @@ contraction of local tensors is a separate assertion.
     without messages. Let $(\mathcal C_i)_{i\in I}$ be an arbitrary
     family of distributed constructions with real sizes $L_i\ge2$.
     Fix natural $a,b,n,d,r,u,v$ with $a\le b$ and real
-    $C_N,C_D,C_K,C_C$, before all members. Suppose every member has
+    $C_N,C_D,C_K,C_S$, before all members. Suppose every member has
     at most $C_NL_i^n$ original nonprivate gates and physical
     dimensions at most $C_DL_i^d$. Each such gate has at most $a$
     participants, each party participates in at most $b$ gates, and
     there is a natural monomial bound $K_i\le C_KL_i^u$.
-    Every recorded monomial has at most $r$ pair effects and a
-    coefficient of modulus at most $C_CL_i^v$.
+    Every recorded monomial has at most $r$ pair effects, and at every
+    original nonprivate gate the moduli of the recorded coefficients sum
+    to at most $C_SL_i^v$.
 
     For every $p>0$, there are $C_p\ge0$ and a natural $\alpha>0$
     before all members, such that each member admits actual finite
@@ -532,7 +533,7 @@ contraction of local tensors is a separate assertion.
     normalization of $\sigma_i$ is asserted.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:peps_uniform_approximate_operator_network,
+    \uses{thm:peps_uniform_approximate_operator_network_of_le,
         thm:peps_distributed_construction_gate_maps_density,
         thm:peps_separate_arity_incidence,thm:peps_compression_retained_norm}
     Use each gate's own recorded expansion. It gives its original
@@ -557,9 +558,9 @@ contraction of local tensors is a separate assertion.
 
 \begin{theorem}[Compression of a family of distributed constructions with explicit constants]
     \label{thm:peps_distributed_construction_compression_of_le}
-    \lean{TNLean.PEPS.PairEffect.DistributedConstruction.uniform_sampled_network_of_le,
-        TNLean.PEPS.PairEffect.DistributedConstruction.uniform_sampled_network_of_sum_le,
-        TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_reexpand_expansionGateLists}
+    \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction.uniform_sampled_network_of_le,
+        TNLean.Lattice.PartyCircuit.DistributedConstruction.uniform_sampled_network_of_sum_le,
+        TNLean.Lattice.PartyCircuit.OriginalCircuit.isExpansionBounded_reexpand_expansionGateLists}
     \leanok
     \uses{def:peps_compression_constants}
     Under the hypotheses of
@@ -587,7 +588,7 @@ contraction of local tensors is a separate assertion.
 
 \begin{theorem}[Compression of a family of distributed constructions]
     \label{thm:peps_distributed_construction_compression}
-    \lean{TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_network}
+    \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction.exists_uniform_sampled_network}
     \leanok
     In the case of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} without messages
     (the recorded expansions of a distributed construction consist of allowed
@@ -632,7 +633,7 @@ contraction of local tensors is a separate assertion.
 
 \begin{theorem}[The compressed network and the retained norm]
     \label{thm:peps_compression_retained_norm_network}
-    \lean{TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_network_sub_pure_le}
+    \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction.exists_uniform_sampled_network_sub_pure_le}
     \leanok
     Combining the case of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} without messages with
     \cite[Remark~5.3]{OpenAI2026PolynomialPEPS}, under the hypotheses of

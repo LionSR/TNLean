@@ -42,11 +42,11 @@ open scoped Matrix ComplexConjugate NNReal
 `max C 0`, at every nonnegative base. This removes sign conditions on the
 polynomial constants of polynomial-PEPS Theorem 5.2, `04-compression.tex`,
 lines 133–175. -/
-theorem TNLean.PEPS.Approximation.mul_pow_le_max_zero_mul_pow (C : ℝ) {x : ℝ}
+theorem TNLean.Lattice.Compression.mul_pow_le_max_zero_mul_pow (C : ℝ) {x : ℝ}
     (hx : 0 ≤ x) (k : ℕ) : C * x ^ k ≤ max C 0 * x ^ k :=
   mul_le_mul_of_nonneg_right (le_max_left _ _) (pow_nonneg hx _)
 
-namespace TNLean.PEPS.Approximation
+namespace TNLean.Lattice.Compression
 
 /-- The prefactor of Theorem 5.2 in terms of the constants of its hypotheses:
 `sampledNetworkPrefactor` at gate-count constant `1 + max C_N 0`,
@@ -107,10 +107,11 @@ theorem compressionExponent_eq_sampledNetworkExponent (r b n d u v : ℕ) (p : �
     compressionExponent r b n d u v p = sampledNetworkExponent r b n d u (u + v) p :=
   rfl
 
-end TNLean.PEPS.Approximation
+end TNLean.Lattice.Compression
 
-namespace TNLean.PEPS.PairEffect.GateMapConstruction
-open TNLean.PEPS.Approximation
+namespace TNLean.Lattice.PartyCircuit.GateMapConstruction
+open TNLean.Lattice.PartyCircuit
+open TNLean.Lattice.Compression
 attribute [local instance] Classical.propDecidable
 
 /-- **Theorem 5.2 from coefficient-sum bounds.** Expansions available at one fixed
@@ -556,4 +557,4 @@ theorem exists_uniform_approximate_sampled_network
     uniform_approximate_sampled_network_of_le size hsize P C₀ b n d C_N C_D hN₀ hphysical₀
       harity₀ hlifetime₀ r C_K C_C u v p hLists le_rfl le_rfl⟩
 
-end TNLean.PEPS.PairEffect.GateMapConstruction
+end TNLean.Lattice.PartyCircuit.GateMapConstruction

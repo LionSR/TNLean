@@ -20,7 +20,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 variable {P : Type}
 
 /-- Equal selected input, intermediate, output and source lists, together with
@@ -161,4 +161,4 @@ theorem restrict_localPart_frame_false_eval_heq (f : P → Bool) (r : Reg P)
   change HEq (u.comp v).eval core.eval
   exact hcomp.trans (heq_of_eq (ContinuousLinearMap.comp_id core.eval))
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

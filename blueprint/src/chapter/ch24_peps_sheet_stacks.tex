@@ -48,18 +48,9 @@ no holes, this is the normalization of $\Omega$.
 \begin{theorem}[The initial private maps]
     \label{thm:peps_sheet_initialization}
     \lean{TNLean.PEPS.EncodedFrame.framesSpace,
-        TNLean.Lattice.splitMap,
-        TNLean.Lattice.splitMap_tmul_one,
-        TNLean.Lattice.norm_splitMap_le,
-        TNLean.Lattice.splitCircuit,
-        TNLean.Lattice.nonprivateCount_splitCircuit,
-        TNLean.Lattice.isExpansionBounded_splitCircuit,
-        TNLean.Lattice.isMonomialBounded_splitCircuit,
-        TNLean.Lattice.participants_splitCircuit_subset,
-        TNLean.Lattice.eval_splitCircuit,
         TNLean.PEPS.EncodedFrame.exists_originalCircuit_initial}
     \leanok
-    \uses{def:peps_sheet_stack}
+    \uses{def:peps_sheet_stack,thm:lattice_stack_initialization}
     Suppose each frame in $\mathcal F_1,\dots,\mathcal F_m$ has all its raw and tag registers owned by a single party, and each party $p$ holds as its initial private memory the registers of its frames in list order with unit-norm product reference vector $\bigotimes_{\mathcal F_i\text{ at }p}\Omega_{\mathcal F_i}$. Then one private map per party followed by a sheet reordering (with $0$ nonprivate gates) maps $\bigotimes_p\bigotimes_{\mathcal F_i\text{ at }p}\Omega_{\mathcal F_i}$ exactly to $\Omega_{\mathcal F_1}\otimes\cdots\otimes\Omega_{\mathcal F_m}$ (\texttt{06-geometry.tex}, lines 658--662).
 \end{theorem}
 
@@ -144,10 +135,10 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{theorem}[The final reference vector]
     \label{thm:peps_final_reference}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero,
-        TNLean.PEPS.PairEffect.OriginalCircuit.participants_subset_of_nonprivateCount_eq_zero,
-        TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_of_nonprivateCount_eq_zero,
-        TNLean.PEPS.PairEffect.OriginalCircuit.isMonomialBounded_of_nonprivateCount_eq_zero,
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero,
+        TNLean.Lattice.PartyCircuit.OriginalCircuit.participants_subset_of_nonprivateCount_eq_zero,
+        TNLean.Lattice.PartyCircuit.OriginalCircuit.isExpansionBounded_of_nonprivateCount_eq_zero,
+        TNLean.Lattice.PartyCircuit.OriginalCircuit.isMonomialBounded_of_nonprivateCount_eq_zero,
         TNLean.PEPS.EncodedFrame.eq_trivialTag,
         TNLean.PEPS.EncodedFrame.rawProd_trivialTag,
         TNLean.PEPS.EncodedFrame.Frame.regRef_of_outer_eq_empty,
@@ -227,23 +218,15 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{definition}[Bounded changes of the sheets]
     \label{def:peps_bounded_change}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.norm_eval_le_norm,
-        TNLean.PEPS.PairEffect.OriginalCircuit.IsBoundedChange,
-        TNLean.PEPS.EncodedFrame.HasBoundedChange}
+    \lean{TNLean.PEPS.EncodedFrame.HasBoundedChange}
     \leanok
-    \uses{def:peps_sheet_stack}
+    \uses{def:peps_sheet_stack,def:lattice_bounded_change}
     An original circuit $C$ is a bounded change from $x$ to $y$ with participant set $S$, bounds $(r,K)$, and error $\varepsilon$ if $C$ has at most one nonprivate gate (with participants in $S$), every expansion monomial has $\le r$ pair effects, the monomial count and $\ell_1$ coefficient sum are $\le K$, and $\lVert Cx-y\rVert\le\varepsilon$. A bounded change of sheets from $\mathcal F_1,\dots,\mathcal F_m$ to $\mathcal F'_1,\dots,\mathcal F'_{m'}$ (with common idle registers $\ell$ and vector $\xi$) is a bounded change from $\Omega_{\mathcal F_1}\otimes\cdots\otimes\Omega_{\mathcal F_m}\otimes\xi$ to $\Omega_{\mathcal F'_1}\otimes\cdots\otimes\Omega_{\mathcal F'_{m'}}\otimes\xi$ (\cite[Proposition~7.1, items 2 and 4]{OpenAI2026PolynomialPEPS}; \texttt{06-geometry.tex}, lines 25--41 and 572--583).
 \end{definition}
 
 \begin{theorem}[Operations that preserve bounded changes]
     \label{thm:peps_bounded_change_closure}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.IsBoundedChange.mono,
-        TNLean.PEPS.PairEffect.OriginalCircuit.IsBoundedChange.comp_right,
-        TNLean.PEPS.PairEffect.OriginalCircuit.IsBoundedChange.comp_left,
-        TNLean.PEPS.PairEffect.OriginalCircuit.isBoundedChange_id,
-        TNLean.PEPS.PairEffect.Word.isBoundedChange_toOriginalCircuit,
-        TNLean.PEPS.PairEffect.PartyChain.isBoundedChange_toOriginalCircuit,
-        TNLean.PEPS.EncodedFrame.pairRef_eq_twoLayoutIso_symm,
+    \lean{TNLean.PEPS.EncodedFrame.pairRef_eq_twoLayoutIso_symm,
         TNLean.PEPS.EncodedFrame.HasBoundedChange.mono,
         TNLean.PEPS.EncodedFrame.hasBoundedChange_of_perm,
         TNLean.PEPS.EncodedFrame.hasBoundedChange_refl,
@@ -257,7 +240,8 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.EncodedFrame.hasBoundedChange_perm_liftOne,
         TNLean.PEPS.EncodedFrame.exists_isBoundedChange_of_frame_eq}
     \leanok
-    \uses{def:peps_bounded_change, thm:peps_sheet_reordering, thm:peps_identity_change}
+    \uses{def:peps_bounded_change,thm:peps_sheet_reordering,thm:peps_identity_change,
+        thm:lattice_bounded_change_closure}
     Let $\lVert\Omega\rVert\le1$ and $\lVert\xi\rVert\le1$.
     \begin{enumerate}
         \item Sheet permutations and equal-frame transitions are bounded changes for any $S,r,K$ and $\varepsilon\ge0$, and composing a bounded change with a sheet permutation on either side preserves $(S,r,K,\varepsilon)$.
@@ -383,11 +367,11 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{theorem}[A protocol from a bounded trajectory of sheets]
     \label{thm:peps_protocol_from_bounded_trajectory}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.chainLayout,
-        TNLean.PEPS.PairEffect.OriginalCircuit.chainStep,
-        TNLean.PEPS.PairEffect.OriginalCircuit.chainVec,
-        TNLean.PEPS.PairEffect.OriginalCircuit.chainStep_induction,
-        TNLean.PEPS.PairEffect.OriginalCircuit.norm_chainStep_eval_sub_le,
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.chainLayout,
+        TNLean.Lattice.PartyCircuit.OriginalCircuit.chainStep,
+        TNLean.Lattice.PartyCircuit.OriginalCircuit.chainVec,
+        TNLean.Lattice.PartyCircuit.OriginalCircuit.chainStep_induction,
+        TNLean.Lattice.PartyCircuit.OriginalCircuit.norm_chainStep_eval_sub_le,
         TNLean.PEPS.Approximation.card_eventUses_le,
         TNLean.PEPS.Approximation.pow_le_paddedSide,
         TNLean.PEPS.Approximation.finiteDimensional_of_mem_stackRegs,

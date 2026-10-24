@@ -56,6 +56,7 @@ noncomputable section
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 
 
 /-- A nonzero contraction forces every bond dimension to be positive: a zero dimension makes

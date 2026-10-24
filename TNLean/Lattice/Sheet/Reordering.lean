@@ -11,16 +11,16 @@ import TNLean.Lattice.PartyCircuit.SiteRegisters
 Words of exchanges of tensor factors used to move whole blocks of registers of a party layout:
 reassociations of concatenated blocks (`Word.assocWord`, `Word.unassocWord`) and the exchange of
 two pairs of blocks around a middle pair (`Word.swapPairs`). Every such word is a reordering
-(`PairEffect.Word.IsReordering`); each operator is computed on product vectors. Nothing here
+(`PartyCircuit.Word.IsReordering`); each operator is computed on product vectors. Nothing here
 depends on what the registers hold.
 
 ## Main definitions
 
-* `PairEffect.Word.assocWord`, `PairEffect.Word.unassocWord`, `PairEffect.Word.swapPairs`.
+* `PartyCircuit.Word.assocWord`, `PartyCircuit.Word.unassocWord`, `PartyCircuit.Word.swapPairs`.
 
 ## Main results
 
-* `PairEffect.Word.eval_assocWord_appendIso_symm`, `PairEffect.Word.eval_swapPairs`: the
+* `PartyCircuit.Word.eval_assocWord_appendIso_symm`, `PartyCircuit.Word.eval_swapPairs`: the
   operators on product vectors.
 
 ## References
@@ -35,7 +35,7 @@ open scoped InnerProductSpace TensorProduct
 
 /-! ### Reassociating blocks of registers -/
 
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
 open ContinuousLinearMap
 
@@ -145,4 +145,4 @@ theorem eval_swapPairs (a₁ b₁ m₁ m₂ a₂ b₂ t : Layout P) (x₁ : Mem 
     (swapPairs a₁ b₁ m₁ m₂ a₂ b₂ t).IsReordering := by
   simp [swapPairs]
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

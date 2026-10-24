@@ -55,9 +55,9 @@ distinguished pair effects $E_i=\bra{\eta_i}\otimes\mathbf{1}$, proving the
 operator-norm bound, the normalization of $\Gamma_m$, the monomial count
 $Km^r$, and the preservation of $\sum_\xi|c_\xi|$ in that setting.\footnote{The
 party-free operator theorem is
-\leanid{TNLean.PEPS.PairEffect.pairEffectElimination}; the rescaling at a fixed
+\leanid{TNLean.Lattice.PartyCircuit.pairEffectElimination}; the rescaling at a fixed
 stack length is
-\leanid{TNLean.PEPS.PairEffect.replaceGate_rescaled_stackLength}.} Because a
+\leanid{TNLean.Lattice.PartyCircuit.replaceGate_rescaled_stackLength}.} Because a
 party-free model cannot distinguish single-party contractions from two-party
 effects, clauses (i) and (iii) could not be expressed there.
 
@@ -101,14 +101,14 @@ opposite endpoint orders by a tensor swap and regrouping locally) into a list
 $G$ with at most one normalized pair source per unordered party pair, so that
 $P_S=E\circ P_G$ for a source-free word $E$ and hence $F=(B\circ E)\circ P_G$
 (clause (iv)).\footnote{Clauses (i)--(iii) and the error bound are proved in
-\leanid{TNLean.PEPS.PairEffect.partyPairEffectElimination}, with adjacent-source
-merging in \leanid{TNLean.PEPS.PairEffect.eval_combineSources}. The general
+\leanid{TNLean.Lattice.PartyCircuit.partyPairEffectElimination}, with adjacent-source
+merging in \leanid{TNLean.Lattice.PartyCircuit.eval_combineSources}. The general
 source-commutation and grouping theorems are
-\leanid{TNLean.PEPS.PairEffect.Word.eval_eq_localPart_comp_prepare},
-\leanid{TNLean.PEPS.PairEffect.SourceInventory.exists_grouped}, and
-\leanid{TNLean.PEPS.PairEffect.Word.exists_grouped_source_preparation}, which
+\leanid{TNLean.Lattice.PartyCircuit.Word.eval_eq_localPart_comp_prepare},
+\leanid{TNLean.Lattice.PartyCircuit.SourceInventory.exists_grouped}, and
+\leanid{TNLean.Lattice.PartyCircuit.Word.exists_grouped_source_preparation}, which
 combine to give the complete Lemma~5.1 statement in
-\leanid{TNLean.PEPS.PairEffect.partyPairEffectElimination_with_grouped_sources}.}
+\leanid{TNLean.Lattice.PartyCircuit.partyPairEffectElimination_with_grouped_sources}.}
 
 \section{Effect on the paper and what remains}
 
@@ -119,9 +119,9 @@ consolidation of the source-free part $B\circ E$ into a tensor product of one
 contraction per party, together with padding by one-dimensional pair sources on
 unused party pairs of a fixed gate party set, is also proved.\footnote{The
 party-wise consolidation theorems are
-\leanid{TNLean.PEPS.PairEffect.Word.exists_tensorPartyMaps_parties},
-\leanid{TNLean.PEPS.PairEffect.Word.exists_prepared_tensorPartyMaps}, and
-\leanid{TNLean.PEPS.PairEffect.Word.exists_complete_prepared_tensorPartyMaps}.}
+\leanid{TNLean.Lattice.PartyCircuit.Word.exists_tensorPartyMaps_parties},
+\leanid{TNLean.Lattice.PartyCircuit.Word.exists_prepared_tensorPartyMaps}, and
+\leanid{TNLean.Lattice.PartyCircuit.Word.exists_complete_prepared_tensorPartyMaps}.}
 Nothing in Lemma~5.1 remains open; the later steps of Theorem~5.2 (matching
 source spaces across different monomials in \path{04-compression.tex},
 lines~253--267, followed by importance sampling) are separate results.

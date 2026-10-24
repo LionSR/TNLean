@@ -24,7 +24,7 @@ reused.
 
 noncomputable section
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 variable {P Q : Type}
 
@@ -121,4 +121,4 @@ theorem mem_partyPair_mapOwner (f : P → Q) (S : SourceInventory P) (k : Sym2 Q
 
 end SourceInventory
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

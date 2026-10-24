@@ -54,24 +54,39 @@ replicas on a region $R$.
     which holds without any invertibility assumption.
 \end{proof}
 
-\begin{definition}[The constants of the information reset]
-    \label{def:peps_reset_constants}
+\begin{definition}[The variance and cutoff of the information reset]
+    \label{def:lattice_reset_constants}
     \lean{TNLean.Lattice.resetVariance,
         TNLean.Lattice.resetCutoff,
-        TNLean.PEPS.Approximation.resetRadius,
-        TNLean.PEPS.Approximation.resetFilterPrefactor,
-        TNLean.PEPS.Approximation.resetUnitaryPrefactor,
         TNLean.Lattice.resetVariance_pos,
         TNLean.Lattice.resetCutoff_pos,
         TNLean.Lattice.resetVariance_mul_sq_div_two,
-        TNLean.Lattice.resetCutoff_sq_div,
+        TNLean.Lattice.resetCutoff_sq_div}
+    \leanok
+    For real numbers $\Delta$ and $r$ put
+    \begin{align*}
+        A(\Delta,r) & =\frac{2(30+r)}{\Delta^2}, & T_0(\Delta,r) & =\frac{2(30+r)}{\Delta}.
+    \end{align*}
+    If $\Delta\neq0$, then $A\Delta^2/2=30+r$, and if moreover $r\neq-30$, then
+    $T_0^2/(2A)=30+r$. If $\Delta>0$ and $r\ge0$, both are positive.
+\end{definition}
+
+\begin{proof}\leanok
+    Direct computation.
+\end{proof}
+
+\begin{definition}[The constants of the information reset]
+    \label{def:peps_reset_constants}
+    \lean{TNLean.PEPS.Approximation.resetRadius,
+        TNLean.PEPS.Approximation.resetFilterPrefactor,
+        TNLean.PEPS.Approximation.resetUnitaryPrefactor,
         TNLean.PEPS.Approximation.resetRadius_pos,
         TNLean.PEPS.Approximation.resetFilterPrefactor_pos,
         TNLean.PEPS.Approximation.resetUnitaryPrefactor_pos,
         TNLean.PEPS.Approximation.resetRadius_eq,
         TNLean.PEPS.Approximation.resetUnitaryPrefactor_eq}
     \leanok
-    \uses{def:peps_square_localization_constants}
+    \uses{def:peps_square_localization_constants,def:lattice_reset_constants}
     For real numbers $J$, $\Delta$ and $r$, with $C_\square$ and $v_\square(J)$
     the constants of Definition~\ref{def:peps_square_localization_constants}
     and decay rate $\mu=1/2$, put
@@ -104,9 +119,9 @@ replicas on a region $R$.
     \label{thm:peps_reset_regional_filter_explicit}
     \lean{TNLean.Lattice.regional_physicalBuffer_filter}
     \leanok
-    \uses{def:peps_reset_constants}
+    \uses{def:lattice_reset_constants}
     Fix $\Delta>0$ and $r\geq0$, and put $A=A(\Delta,r)$ and
-    $T_0=T_0(\Delta,r)$ as in Definition~\ref{def:peps_reset_constants}. Let
+    $T_0=T_0(\Delta,r)$ as in Definition~\ref{def:lattice_reset_constants}. Let
     $H$ be a Hamiltonian on a finite set of sites with normalized eigenvector
     $\Omega$ of eigenvalue $E_0$ and
     $H-E_0\geq\Delta(\id-|\Omega\rangle\langle\Omega|)$. Let $R,C$ be disjoint
@@ -128,7 +143,7 @@ replicas on a region $R$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_reset_regional_coordinates,def:peps_reset_constants}
+    \uses{thm:peps_reset_regional_coordinates,def:lattice_reset_constants}
     By Theorem~\ref{thm:peps_reset_regional_coordinates}, the information bound is
     a relative-entropy bound for the regional splitting of $\Omega$. The
     overlap estimate of the purified relative entropy gives a Hermitian
@@ -174,7 +189,7 @@ replicas on a region $R$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_reset_regional_filter_explicit,def:peps_reset_constants}
+    \uses{thm:peps_reset_regional_filter_explicit,def:lattice_reset_constants}
     Take $A=A(\Delta,r)$ and $T_0=T_0(\Delta,r)$, which are positive, in
     Theorem~\ref{thm:peps_reset_regional_filter_explicit}.
 \end{proof}
@@ -208,7 +223,7 @@ replicas on a region $R$.
     put $C=C_F(J,\Delta,r)$ and $K=K(J,\Delta,r)$ as in
     Definition~\ref{def:peps_reset_constants}. Let $L\ge1$, let $H$ be an open
     $L\times L$ square Hamiltonian with interaction bound $J$, and let $\Omega$
-    be a normalized eigenvector with the full-system gap $\Delta$. Let $R,C_0$
+    be a normalized ground vector with the full-system gap $\Delta$. Let $R,C_0$
     be disjoint with $I_\Omega(R:C_0)\le b$, $b\ge0$. Put $Q=(R\cup C_0)^c$, let
     $Z_R$ be the endpoints of the edges crossing $R$, and let $B$ be the graph
     neighbourhood of radius $\lceil K(1+b+\log L)\rceil$ of $Q\cup Z_R$ on the
@@ -249,7 +264,7 @@ replicas on a region $R$.
     Fix an integer $q\ge1$, real numbers $J\ge0$, $\Delta>0$ and $r\ge0$.
     There are constants $C,K>0$ with the following property. Let $L\ge1$, let
     $H$ be an open square Hamiltonian with interaction bound $J$, and let
-    $\Omega$ be a normalized eigenvector with the full-system gap $\Delta$.
+    $\Omega$ be a normalized ground vector with the full-system gap $\Delta$.
     Let $R,C_0$ be disjoint with $I_\Omega(R:C_0)\le b$, $b\ge0$. Put
     $Q=(R\cup C_0)^c$, let $Z_R$ be the endpoints of the edges crossing $R$,
     and let $B$ be the graph neighbourhood of radius $\lceil K(1+b+\log L)\rceil$
@@ -301,4 +316,79 @@ replicas on a region $R$.
     \uses{thm:peps_reset_unitary_explicit,def:peps_reset_constants}
     Take $C=C_U(J,\Delta,r)$ and $K=K(J,\Delta,r)$, which are positive, in
     Theorem~\ref{thm:peps_reset_unitary_explicit}.
+\end{proof}
+
+\subsection{The supported unitary at interaction range $R$}
+
+The source treats only site and nearest-neighbour terms on the open square,
+which is interaction range one. The statements of this subsection extend the
+localized filter and the reset unitary to a Hamiltonian of range $R$ on a
+finite domain with at most $L^2$ sites; the range-one statements above are
+unchanged.
+
+\begin{definition}[The constants of the information reset at range $R$]
+    \label{def:peps_reset_constants_range}
+    \lean{TNLean.PEPS.Approximation.rangeResetRadius,
+        TNLean.PEPS.Approximation.rangeResetFilterPrefactor,
+        TNLean.PEPS.Approximation.rangeResetUnitaryPrefactor,
+        TNLean.PEPS.Approximation.rangeResetRadius_pos,
+        TNLean.PEPS.Approximation.rangeResetFilterPrefactor_pos,
+        TNLean.PEPS.Approximation.rangeResetUnitaryPrefactor_pos}
+    \leanok
+    \uses{def:peps_reset_constants,def:area_graph_ball_localization_constants,
+        def:peps_crossing_supports}
+    For an integer $R\ge0$ and real numbers $J$, $\Delta$ and $r$, with $C_0$
+    and $v$ as in Definition~\ref{def:area_graph_ball_localization_constants},
+    $c_R$ as in Definition~\ref{def:peps_crossing_supports}, $T_0=T_0(\Delta,r)$
+    as in Definition~\ref{def:peps_reset_constants} and $\mu=1/2$, put
+    \begin{align*}
+        K_R(J,\Delta,r)     & =\frac{v(R,2J)T_0+15+r}{\mu}, \\
+        C_{F,R}(J,\Delta,r) & =2C_0(R)(1+c_RJ)(1+T_0)+3,    \\
+        C_{U,R}(J,\Delta,r) & =2C_{F,R}(J,\Delta,r).
+    \end{align*}
+    If $J\ge0$, $\Delta>0$ and $r\ge0$, all three are positive.
+\end{definition}
+
+\begin{theorem}[The localized filter and the unitary at range $R$]
+    \label{thm:peps_reset_unitary_range}
+    \lean{TNLean.Lattice.LocalHamiltonian.reset_localized_filter,
+        TNLean.Lattice.LocalHamiltonian.reset_unitary}
+    \leanok
+    \uses{def:area_law_hamiltonian,def:peps_frame_sheet_swap,
+        def:peps_crossing_supports,def:peps_reset_constants_range}
+    Fix integers $q\ge1$ and $R\ge0$, and real numbers $J\ge0$, $\Delta>0$
+    and $r\ge0$. Let $L\ge1$, let $\Lambda$ be a finite domain with at most
+    $L^2$ sites, let $H$ be a Hamiltonian of range $R$ on $\Lambda$ with
+    Hermitian terms of norm at most $J$, and let $\Omega$ be a normalized
+    ground vector with the full-system gap $\Delta$. Let $A,C\subseteq\Lambda$ be
+    disjoint with $I_\Omega(A:C)\le b$, $b\ge0$, and let $B$ be the graph
+    neighbourhood of radius $\lceil K_R(J,\Delta,r)(1+b+\log L)\rceil$ of
+    $(A\cup C)^c\cup Z_R(A)$. With $\Psi=\Omega\otimes\Omega$ and
+    $\Phi=F_A\Psi$ on the paired sites, the vectors $\Psi$ and $\Phi$ are unit
+    vectors, and there are a real number $z\ge e^{-2b}$ and a contraction $M$
+    supported on $B$ with
+    \begin{align*}
+        \|M\Psi-z\Phi\|,\ \|M^*\Phi-z\Psi\| & \le C_{F,R}(J,\Delta,r)e^{-10b}L^{-r},
+    \end{align*}
+    and a unitary $U$ supported on $B$ with
+    $\|U\Psi-\Phi\|\le C_{U,R}(J,\Delta,r)L^{-r}$. This extends
+    Theorems~\ref{thm:peps_reset_localized_filter_explicit}
+    and~\ref{thm:peps_reset_unitary_explicit} from range one to range $R$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_reset_regional_filter_explicit,
+        thm:peps_supported_physical_buffer_gaussian_range,
+        thm:peps_reset_polar_step,def:peps_reset_constants_range}
+    The proof of Theorem~\ref{thm:peps_reset_localized_filter_explicit}
+    applies with Theorem~\ref{thm:peps_supported_physical_buffer_gaussian_range}
+    in place of Theorem~\ref{thm:peps_supported_physical_buffer_gaussian}.
+    Since $|\Lambda|\le L^2$, the localization error is at most
+    \begin{align*}
+        2C_0(R)|\Lambda|(1+c_RJ|\Lambda|T_0B_*)e^{vT_0B_*-\mu\ell}
+         & \le2C_0(R)(1+c_RJ)L^4(1+T_0B_*)e^{vT_0B_*-\mu\ell} \\
+         & \le2C_0(R)(1+c_RJ)(1+T_0)e^{-10b}L^{-r},
+    \end{align*}
+    because $\mu K_R=vT_0+15+r$. Theorem~\ref{thm:peps_reset_polar_step} then
+    gives the unitary.
 \end{proof}

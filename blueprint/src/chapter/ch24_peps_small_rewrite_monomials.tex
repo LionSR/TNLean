@@ -20,15 +20,15 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
 
 \begin{lemma}[A rank-one map on two registers with a change of owners]
     \label{lem:peps_rank_one_chain}
-    \lean{TNLean.PEPS.PairEffect.PartyChain.append,
-        TNLean.PEPS.PairEffect.PartyChain.eval_append,
-        TNLean.PEPS.PairEffect.PartyChain.append_props,
+    \lean{TNLean.Lattice.PartyCircuit.PartyChain.append,
+        TNLean.Lattice.PartyCircuit.PartyChain.eval_append,
+        TNLean.Lattice.PartyCircuit.PartyChain.append_props,
         TNLean.PEPS.PairEffect.braLocal,
         TNLean.PEPS.PairEffect.ketLocal,
         TNLean.PEPS.PairEffect.norm_braLocal_le,
         TNLean.PEPS.PairEffect.norm_ketLocal_le,
-        TNLean.PEPS.PairEffect.owner_of_mem_pair,
-        TNLean.PEPS.PairEffect.owner_of_mem_nil,
+        TNLean.Lattice.PartyCircuit.owner_of_mem_pair,
+        TNLean.Lattice.PartyCircuit.owner_of_mem_nil,
         TNLean.PEPS.PairEffect.braChain,
         TNLean.PEPS.PairEffect.ketWord,
         TNLean.PEPS.PairEffect.rankOneChain,
@@ -241,8 +241,8 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
 
 \begin{theorem}[Small-patch rewrite: expansion into allowed monomials]
     \label{thm:peps_frame_small_rewrite_monomials}
-    \lean{TNLean.PEPS.EncodedFrame.act_smul,
-        TNLean.PEPS.EncodedFrame.act_sum,
+    \lean{TNLean.Lattice.Sheet.act_smul,
+        TNLean.Lattice.Sheet.act_sum,
         TNLean.PEPS.EncodedFrame.truncationRank_mono,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx_of_card_le}

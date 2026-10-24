@@ -22,11 +22,12 @@ part2b_mps_protocol.tex:594–614.
 noncomputable section
 open scoped Matrix NNReal
 
-namespace TNLean.PEPS.PairEffect
-open TNLean.PEPS.Approximation
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
+open TNLean.Lattice.Compression
 variable {P : Type} {input output : Layout P}
 
-namespace SourceCircuit
+namespace Lattice.PartyCircuit.SourceCircuit
 
 open Classical in
 /-- The actual source-density network inherits separate participant and
@@ -46,9 +47,9 @@ theorem card_incidentSourceDensityLinks_le_of_arity_lifetime
   rw [card_incidentNonemptyGates_eq_participationCount]
   exact hlifetime p
 
-end SourceCircuit
+end Lattice.PartyCircuit.SourceCircuit
 
-namespace OriginalCircuit
+namespace Lattice.PartyCircuit.OriginalCircuit
 
 open Classical in
 /-- The actual replacement used for the physical density has the original
@@ -89,14 +90,16 @@ theorem card_participants_produce_le_of_arity
   rw [← w.produceLocationsEquiv.apply_symm_apply g, participants_produce]
   exact harity _
 
-end OriginalCircuit
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.OriginalCircuit
+end TNLean
 
-namespace TNLean.PEPS.PairEffect.DistributedConstruction
-open TNLean.PEPS.Approximation
+namespace TNLean.Lattice.PartyCircuit.DistributedConstruction
+open TNLean.Lattice.PartyCircuit
+open TNLean.Lattice.Compression
 attribute [local instance] Classical.propDecidable
 
-/-- Uniform compression with separate participant and lifetime bounds.
+/-- Uniform compression with separate participant and lifetime bounds, from an absolute
+coefficient-sum bound at every nonprivate gate.
 The larger bound b is used for sampling; the same actual sampled network
 has incidence at most 2b(a-1). No numerical degree is supplied as a premise.
 Source: polynomial-PEPS Theorem 5.2, 04-compression.tex:137–175,565–600;
@@ -105,14 +108,14 @@ theorem exists_uniform_sampled_network_of_arity_lifetime
     {ι : Type*} (size : ι → ℝ) (hsize : ∀ i, 2 ≤ size i)
     (P : ι → Type) [∀ L, Fintype (P L)]
     (C₀ : ∀ L, DistributedConstruction (P L))
-    (a b n d r u v : ℕ) (hab : a ≤ b) (C_N C_D C_K C_C : ℝ)
+    (a b n d r u s : ℕ) (hab : a ≤ b) (C_N C_D C_K C_S : ℝ)
     (hN₀ : ∀ L, ((C₀ L).circuit.nonprivateCount : ℝ) ≤ C_N * size L ^ n)
     (hphysical₀ : ∀ L j, ((C₀ L).physicalDimension j : ℝ) ≤ C_D * size L ^ d)
     (harity₀ : ∀ L g, ((C₀ L).circuit.participants g).card ≤ a)
     (hlifetime₀ : ∀ L j, (C₀ L).circuit.participationCount j ≤ b)
     (hmonomial₀ : ∀ L, ∃ K : ℕ, (C₀ L).circuit.IsMonomialBounded K ∧
       (K : ℝ) ≤ C_K * size L ^ u)
-    (htermwise₀ : ∀ L, (C₀ L).circuit.IsTermwiseBounded r (C_C * size L ^ v))
+    (hexpansion₀ : ∀ L, (C₀ L).circuit.IsExpansionBounded r (C_S * size L ^ s))
     (p : ℝ) (hp : 0 < p) :
     ∃ (C_p : ℝ) (α : ℕ), 0 ≤ C_p ∧ 0 < α ∧ ∀ L,
       ∃ (Gate : Type) (_ : Fintype Gate) (_ : DecidableEq Gate)
@@ -138,8 +141,8 @@ theorem exists_uniform_sampled_network_of_arity_lifetime
               ∃ g : (C₀ L).circuit.nonprivateLocations,
                 j ∈ (C₀ L).circuit.participants g ∧ l ∈ (C₀ L).circuit.participants g) := by
   have hsize0 : ∀ L, 0 ≤ size L := fun L ↦ (by norm_num : (0 : ℝ) ≤ 2).trans (hsize L)
-  obtain ⟨r', C_p, α, hC, hα, hfamily⟩ :=
-    GateMapConstruction.exists_uniform_approximate_sampled_network size hsize P
+  have hfamily :=
+    GateMapConstruction.uniform_approximate_sampled_network_of_sum_le size hsize P
       (fun L ↦ (C₀ L).toGateMapConstruction) b n d C_N C_D
       (fun L ↦ by
         change ((C₀ L).circuit.produce.expandedGateCount : ℝ) ≤ _
@@ -156,15 +159,18 @@ theorem exists_uniform_sampled_network_of_arity_lifetime
           j ∈ (C₀ L).circuit.produce.participants g} ≤ b
         rw [OriginalCircuit.natCard_participation_produce]
         exact hlifetime₀ L j)
-      (fun _ ↦ ⟨r, C_K, C_C, u, v, fun L ↦ by
+      r C_K C_S u s p
+      (fun L ↦ by
         obtain ⟨K, hK, hKb⟩ := hmonomial₀ L
         exact ⟨(C₀ L).circuit.produce.expansionGateLists, K,
-          (C₀ L).circuit.isTermwiseBounded_reexpand_expansionGateLists (htermwise₀ L),
+          (C₀ L).circuit.isExpansionBounded_reexpand_expansionGateLists (hexpansion₀ L),
           (C₀ L).circuit.monomialCount_reexpand_expansionGateLists_le hK, hKb,
           (C₀ L).circuit.isGateApproximation_reexpand_expansionGateLists
-            (inv_nonneg.mpr (pow_nonneg (hsize0 L) _))⟩⟩)
-      p hp
-  refine ⟨C_p, α, hC, hα, fun L ↦ ?_⟩
+            (inv_nonneg.mpr (pow_nonneg (hsize0 L) _))⟩)
+      le_rfl le_rfl
+  refine ⟨sumCompressionPrefactor r b C_N C_D C_K C_S, sampledNetworkExponent r b n d u s p,
+    by rw [sumCompressionPrefactor]; exact (sampledNetworkPrefactor_pos _ _ _ _ _ _).le,
+    sampledNetworkExponent_pos _ _ _ _ _ _ hp, fun L ↦ ?_⟩
   obtain ⟨lists, B, hB, hb, happrox, T, herror, hdim, _hinc, hlocal⟩ := hfamily L
   rw [physicalDensity_toGateMapConstruction] at herror
   refine ⟨_, _, _, _, _, _, _, _, _, _, T, herror, hdim, ?_, ?_⟩
@@ -200,14 +206,14 @@ theorem exists_uniform_sampled_network_sub_pure_le_of_arity_lifetime
     {ι : Type*} (size : ι → ℝ) (hsize : ∀ i, 2 ≤ size i)
     (P : ι → Type) [∀ L, Fintype (P L)]
     (C₀ : ∀ L, DistributedConstruction (P L))
-    (a b n d r u v : ℕ) (hab : a ≤ b) (C_N C_D C_K C_C : ℝ)
+    (a b n d r u s : ℕ) (hab : a ≤ b) (C_N C_D C_K C_S : ℝ)
     (hN₀ : ∀ L, ((C₀ L).circuit.nonprivateCount : ℝ) ≤ C_N * size L ^ n)
     (hphysical₀ : ∀ L j, ((C₀ L).physicalDimension j : ℝ) ≤ C_D * size L ^ d)
     (harity₀ : ∀ L g, ((C₀ L).circuit.participants g).card ≤ a)
     (hlifetime₀ : ∀ L j, (C₀ L).circuit.participationCount j ≤ b)
     (hmonomial₀ : ∀ L, ∃ K : ℕ, (C₀ L).circuit.IsMonomialBounded K ∧
       (K : ℝ) ≤ C_K * size L ^ u)
-    (htermwise₀ : ∀ L, (C₀ L).circuit.IsTermwiseBounded r (C_C * size L ^ v))
+    (hexpansion₀ : ∀ L, (C₀ L).circuit.IsExpansionBounded r (C_S * size L ^ s))
     (Ω : ∀ L, EuclideanSpace ℂ ((j : P L) → Fin ((C₀ L).physicalDimension j)))
     (hΩ : ∀ L, ‖Ω L‖ = 1) (η : ι → ℝ)
     (hpure : ∀ L, Matrix.rectangularTraceNorm
@@ -244,8 +250,8 @@ theorem exists_uniform_sampled_network_sub_pure_le_of_arity_lifetime
                 j ∈ (C₀ L).circuit.participants g ∧ l ∈ (C₀ L).circuit.participants g) := by
   obtain ⟨C_p, α, hC, hα, hfamily⟩ :=
     exists_uniform_sampled_network_of_arity_lifetime size hsize P C₀
-      a b n d r u v hab C_N C_D C_K C_C hN₀ hphysical₀ harity₀ hlifetime₀
-      hmonomial₀ htermwise₀ p hp
+      a b n d r u s hab C_N C_D C_K C_S hN₀ hphysical₀ harity₀ hlifetime₀
+      hmonomial₀ hexpansion₀ p hp
   refine ⟨C_p, α, hC, hα, fun L ↦ ?_⟩
   obtain ⟨Gate, _, _, participants, root, hroot, Label, _, k, c, T,
     herror, hdim, hinc, hlocal⟩ := hfamily L
@@ -254,4 +260,4 @@ theorem exists_uniform_sampled_network_sub_pure_le_of_arity_lifetime
   exact ⟨Gate, _, _, participants, root, hroot, Label, _, k, c, T,
     hσ, herror, hlow, hhigh, hdim, hinc, hlocal⟩
 
-end TNLean.PEPS.PairEffect.DistributedConstruction
+end TNLean.Lattice.PartyCircuit.DistributedConstruction

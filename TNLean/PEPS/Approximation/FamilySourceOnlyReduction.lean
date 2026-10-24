@@ -25,7 +25,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.OriginalCircuit
+namespace TNLean.Lattice.PartyCircuit.OriginalCircuit
 variable {P : Type} [Fintype P] [DecidableEq P]
 
 /-- The actual source-only density reduction for arbitrary original local
@@ -52,4 +52,4 @@ theorem rectangularTraceNorm_sourceOnly_family_regional_density_sub_le_half
     (familyRegionalPhysicalReadout d Finset.univ.toList (Finset.nodup_toList _)
       (fun p ↦ Finset.mem_toList.mpr (Finset.mem_univ p)) priv A) _
     (ProductInput.norm_vector _).le
-end TNLean.PEPS.PairEffect.OriginalCircuit
+end TNLean.Lattice.PartyCircuit.OriginalCircuit

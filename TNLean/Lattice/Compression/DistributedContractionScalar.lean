@@ -19,7 +19,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 573–579.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.Approximation.DistributedOperatorContraction
+namespace TNLean.Lattice.Compression.DistributedOperatorContraction
 
 /-- Placing a scalar in one existing local matrix scales the literal contraction.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 573–579. -/
@@ -39,7 +39,7 @@ theorem contractedOperator_smul_at_party
   classical
   rw [DistributedOperatorContraction.contractedOperator_eq_sum_productMatrix,
     DistributedOperatorContraction.contractedOperator_eq_sum_productMatrix]
-  simp_rw [TNLean.PEPS.PairEffect.partyProductMatrix_smul_at_party]
+  simp_rw [TNLean.Lattice.PartyCircuit.partyProductMatrix_smul_at_party]
   simp only [Finset.smul_sum, smul_smul]
   apply Finset.sum_congr rfl
   intro ξ _
@@ -47,4 +47,4 @@ theorem contractedOperator_smul_at_party
   intro j _
   rw [mul_comm]
 
-end TNLean.PEPS.Approximation.DistributedOperatorContraction
+end TNLean.Lattice.Compression.DistributedOperatorContraction

@@ -12,7 +12,7 @@ import Lean.Util.CollectAxioms
 set_option linter.hashCommand false
 
 run_cmd do
-  let decl := ``TNLean.PEPS.PairEffect.Word.restrict_localPart_eval_heq_of_sources_nil
+  let decl := ``TNLean.Lattice.PartyCircuit.Word.restrict_localPart_eval_heq_of_sources_nil
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
   unless env.contains decl do

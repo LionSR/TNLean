@@ -62,8 +62,8 @@ theorem IsHorizontalCF.exists_sectorCompression_ne_zero_of_corner
     (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M)
     (P : Matrix (Fin d) (Fin d) ℂ)
     (hcorner : ∃ v, P * verticalTensor M v * P ≠ 0) :
-    ∃ N, sectorCompression M P N ≠ 0 := by
-  exact exists_sectorCompression_ne_zero_of_corner_of_insertedTensor_eq M
+    ∃ N, sectorCompression M P N ≠ 0 :=
+  exists_sectorCompression_ne_zero_of_corner_of_insertedTensor_eq M
     (hHorizontal.insertedTensor_eq_of_firstSiteActionAgree M) P hcorner
 
 /-- A nonzero normal representative gives a nonzero physical range corner
@@ -459,8 +459,8 @@ lines 1895--1902.  The Gram normalization and final coisometry argument at
 lines 1903--1921 are not included. -/
 theorem IsHorizontalCF.exists_verticalBNTGrouping_with_isometry
     (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
-    HasVerticalBNTGroupingWithIsometry M := by
-  exact exists_verticalBNTGrouping_with_isometry_of_decomposition M hM
+    HasVerticalBNTGroupingWithIsometry M :=
+  exists_verticalBNTGrouping_with_isometry_of_decomposition M hM
     (hHorizontal.exists_normal_verticalBlockDecomp_with_isometry M hM)
     (hHorizontal.exists_sectorCompression_ne_zero_of_corner M)
 

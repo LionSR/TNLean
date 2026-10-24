@@ -27,7 +27,7 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 noncomputable section
 open MeasureTheory QICLean.ComplexGaussian
 open scoped Matrix ComplexConjugate Matrix.Norms.Elementwise
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} {a b : Layout P}
 
 local instance {m n : Type*} [Fintype m] [Fintype n] : ContinuousENorm (Matrix m n ℂ) :=
@@ -167,4 +167,4 @@ theorem exists_unbiased_sampledSourceMatrix (w : SourceCircuit a b) (k : ℕ) (h
     integral_sampledSourceMatrix w k lam E F hk (fun e ξ ↦ (h e ξ).1)
       (fun e ξ ↦ (h e ξ).2.2.2.2) e ξ ζ⟩
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit
