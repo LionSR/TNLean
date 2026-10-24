@@ -27,7 +27,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open scoped TensorProduct Matrix
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 open TNLean.Lattice.PartyCircuit
 
 /-- A simultaneous Schmidt expansion of a corrected coordinate and a fixed
@@ -50,11 +50,11 @@ def HasSchmidtInputFrames {I : Type} [Fintype I]
           (A (EuclideanSpace.basisFun _ ℂ (i, j)) ⊗ₜ[ℂ]
             B (EuclideanSpace.basisFun _ ℂ j))
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit
 
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS.PairEffect
-open TNLean.Lattice.PartyCircuit.SourceInventory TNLean.PEPS.Approximation
+open TNLean.Lattice.PartyCircuit
+open TNLean.Lattice.PartyCircuit.SourceInventory TNLean.Lattice.Compression
 variable {P : Type} {a b : Layout P}
 /-- The affected input list consists of the corrected prefix and affected crossing registers. -/
 private theorem affectedInputLayout (C T : Layout Bool)

@@ -1,0 +1,187 @@
+\section{The single-cluster bound in Hastings' cluster expansion}
+\label{sec:hastings_single_cluster_bound}
+
+\begin{theorem}[The single-cluster bound]
+    \label{thm:hastings_single_cluster_bound}
+    Let $H$ be a Hermitian Hamiltonian, let $\beta\ge0$, and put
+    $Z=\operatorname{tr}e^{-\beta H}$. For a cluster $C$ and its disjoint boundary
+    $B(C)$, suppose that the Hermitian terms $H_k$ have operator norm at most $J$.
+    As in the source, the terms are indexed by sites, with $H_k$ supported near
+    site $k$, so $C$ and $B(C)$ are sets of sites. Write $n_C=|C|$ and
+    $n_{B(C)}=|B(C)|$ for their numbers of sites, $H_C=\sum_{k\in C}H_k$ and
+    $H_{B(C)}=\sum_{k\in B(C)}H_k$. Then for every operator $O$
+    \begin{align}
+        Z^{-1}\left|\operatorname{tr}\left(Oe^{-\beta(H-H_C-H_{B(C)})}\right)\right|
+        \le\|O\|e^{(n_C+n_{B(C)})J\beta}.
+        \label{eq:hastings_single_cluster_application}
+    \end{align}
+    This is the single-cluster estimate of~\cite[Section IV]{Hastings2006Solving},
+    with an absolute value on the trace.
+\end{theorem}
+\begin{proof}
+    It is the finite-sum perturbation estimate in the companion quantum-channel
+    volume~\cite[``The single-cluster bound'']{QICLean2026Blueprint}, applied to
+    $T=C\cup B(C)$. The source proves it by an imaginary-time Dyson expansion. For
+    the companion proof, put $V=H_C+H_{B(C)}$ and $a=(n_C+n_{B(C)})J$, and let $I$ be the identity.
+    The triangle inequality gives $\|V\|\le a$. Hermiticity and monotonicity of the
+    trace exponential then give
+    \begin{align}
+        V & \le aI,                                                 \\
+        \operatorname{tr}e^{-\beta H+\beta V}
+          & \le\operatorname{tr}e^{-\beta H+\beta aI}=e^{\beta a}Z.
+        \label{eq:hastings_single_cluster_trace_bound}
+    \end{align}
+    The matrix $A=e^{-\beta(H-V)}$ satisfies $A\ge0$, so
+    \begin{align}
+        |\operatorname{tr}(OA)|
+         & \le\|O\|\operatorname{tr}A
+        \le\|O\|e^{\beta a}Z,
+        \label{eq:hastings_single_cluster_trace_pairing}
+    \end{align}
+    where the second inequality is~(\ref{eq:hastings_single_cluster_trace_bound}).
+    For positive dimension, $Z>0$, and dividing
+    (\ref{eq:hastings_single_cluster_trace_pairing}) by $Z$ gives
+    (\ref{eq:hastings_single_cluster_application}). In dimension zero the estimate
+    uses $0^{-1}=0$.
+\end{proof}
+
+\begin{definition}[The cluster part]
+    \label{def:hastings_cluster_part}
+    \lean{TNLean.Lattice.ClusterExpansion.clusterPart,
+        TNLean.Lattice.ClusterExpansion.clusterPart_eq_sum_powerset}
+    \leanok
+    For a Hamiltonian $H$ containing the terms $H_k$, a cluster $C$, its boundary
+    $B(C)$ and $\beta\in\mathbb R$, put
+    \begin{align}
+        \rho(\beta,C)=\sum_{D\subseteq C}(-1)^{|D|}e^{-\beta(H-H_{B(C)}-H_D)}.
+        \label{eq:hastings_cluster_part}
+    \end{align}
+    By inclusion and exclusion this is the sum of the terms of the power series
+    of $e^{-\beta H}$ that contain every $H_i$ with $i\in C$ and no $H_j$ with
+    $j\in B(C)$, the operator $\rho(\beta,C)$
+    of~\cite[lines 1174--1177]{Hastings2006Solving}. With $E=C\setminus D$ it is
+    $\sum_{E\subseteq C}(-1)^{|C|-|E|}e^{-(Y+\sum_{i\in E}\beta H_i)}$ for
+    $Y=\beta(H-H_C-H_{B(C)})$.
+\end{definition}
+
+\begin{theorem}[The bound on the cluster part]
+    \label{thm:hastings_cluster_part_bound}
+    \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_le}
+    \leanok
+    \uses{def:hastings_cluster_part}
+    Let $H$ be Hermitian, let the terms $H_k$ with $k\in C\cup B(C)$ be Hermitian
+    with $\|H_k\|\le J$, and let $\beta\ge0$. Then for every operator $O$,
+    with $Z=\operatorname{tr}e^{-\beta H}$,
+    \begin{align}
+        \left|\operatorname{tr}\bigl(O\rho(\beta,C)\bigr)\right|
+        \le\|O\|\bigl(e^{\beta J}-1\bigr)^{n_C}e^{(n_C+n_{B(C)})J\beta}Z.
+        \label{eq:hastings_cluster_part_bound}
+    \end{align}
+    This is the bound stated before equation (percb2)
+    in~\cite[lines 1174--1195]{Hastings2006Solving}, with $\|O\|Z$ in place of the
+    printed $\operatorname{tr}(Oe^{-\beta H})$, which is the form used in (percb2),
+    and with $\|H_C+H_{B(C)}\|\le(n_C+n_{B(C)})J$. The printed form fails: applied
+    to $\pm O$ it would make $\rho(\beta,C)$ a multiple of $e^{-\beta H}$
+    \cite{gap:hastings05_cluster_part_trace_pairing}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:hastings_cluster_part}
+    By~(\ref{eq:hastings_cluster_part}) with $E=C\setminus D$, the alternating-sum
+    bound of the companion quantum-channel
+    volume~\cite[``Alternating sums of shifted exponentials'']{QICLean2026Blueprint},
+    applied with $Y=\beta(H-H_C-H_{B(C)})$ and the terms $\beta H_i$, $i\in C$, of
+    norm at most $\beta J$, gives
+    \begin{align*}
+        \left|\operatorname{tr}\bigl(O\rho(\beta,C)\bigr)\right|
+        \le\|O\|\bigl(e^{\beta J}-1\bigr)^{n_C}\operatorname{tr}e^{-Y}.
+    \end{align*}
+    Since $-Y=-\beta H+\beta(H_C+H_{B(C)})$ and
+    $\|\beta(H_C+H_{B(C)})\|\le(n_C+n_{B(C)})J\beta$, the bound for a Hermitian
+    perturbation in the exponent in the same
+    volume~\cite[``A Hermitian perturbation in the exponent'']{QICLean2026Blueprint}
+    gives $\operatorname{tr}e^{-Y}\le e^{(n_C+n_{B(C)})J\beta}Z$.
+\end{proof}
+
+\begin{theorem}[The boundary count]
+    \label{thm:hastings_cluster_boundary_count}
+    \lean{TNLean.Lattice.ClusterExpansion.clusterBoundary,
+        TNLean.Lattice.ClusterExpansion.card_add_card_clusterBoundary_le}
+    \leanok
+    Let $C$ be a set of sites, and let $B(C)$ be the set of $j\notin C$ such
+    that $H_j$ acts on some site of $C$. Suppose that every site $i\in C$ has a
+    set $N(i)$ of at most $S$ sites that contains $i$ and every $j$ for which
+    $H_j$ acts on $i$. Then
+    \begin{align*}
+        n_C+n_{B(C)}\le Sn_C.
+    \end{align*}
+    In~\cite[lines 181--183]{Hastings2006Solving}, $N(i)$ is the set of sites
+    within the interaction range $R$ of $i$, of which there are at most $S$,
+    and $H_j$ acts only on sites within distance $R$ of $j$. This is the second
+    inequality of~\cite[line 1186]{Hastings2006Solving}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The sets $C$ and $B(C)$ are disjoint, and both lie in
+    $\bigcup_{i\in C}N(i)$, which has at most $Sn_C$ elements.
+\end{proof}
+
+\begin{theorem}[Equation (percb2)]
+    \label{thm:hastings_cluster_part_percb2}
+    \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_le_pow}
+    \leanok
+    \uses{thm:hastings_cluster_part_bound}
+    In the setting of Theorem~\ref{thm:hastings_cluster_part_bound}, suppose that
+    $n_C+n_{B(C)}\le Sn_C$. Then, with $y=(e^{J\beta}-1)e^{SJ\beta}$,
+    \begin{align}
+        \left|\operatorname{tr}\bigl(O\rho(\beta,C)\bigr)\right|
+        \le\|O\|y^{n_C}Z.
+        \label{eq:hastings_cluster_part_percb2}
+    \end{align}
+    This is equation (percb2) of~\cite[lines 1186--1195]{Hastings2006Solving},
+    multiplied by $Z$. The source obtains $n_C+n_{B(C)}\le Sn_C$ from
+    the lattice, where $S$ bounds the number of terms acting on a site; here it
+    is a hypothesis, which Theorem~\ref{thm:hastings_cluster_boundary_count}
+    supplies.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:hastings_cluster_part_bound}
+    If $C\cup B(C)$ is empty, both sides of~(\ref{eq:hastings_cluster_part_percb2})
+    agree with those of~(\ref{eq:hastings_cluster_part_bound}). Otherwise
+    $J\ge0$, so $(n_C+n_{B(C)})J\beta\le Sn_CJ\beta$, and
+    (\ref{eq:hastings_cluster_part_bound}) gives the claim.
+\end{proof}
+
+\begin{theorem}[Several clusters]
+    \label{thm:hastings_cluster_part_several}
+    \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_biUnion_le}
+    \leanok
+    \uses{thm:hastings_cluster_part_percb2}
+    Let $C_1,\dots,C_m$ be pairwise disjoint clusters with boundaries
+    $B(C_1),\dots,B(C_m)$, each with $n_{C_i}+n_{B(C_i)}\le Sn_{C_i}$, and let
+    $\rho(\beta,C_1,\dots,C_m)$ be the operator~(\ref{eq:hastings_cluster_part})
+    for the cluster $C_1\cup\dots\cup C_m$ and the boundary
+    $B(C_1)\cup\dots\cup B(C_m)$. Under the hypotheses of
+    Theorem~\ref{thm:hastings_cluster_part_bound} on these terms,
+    \begin{align*}
+        \left|\operatorname{tr}\bigl(O\rho(\beta,C_1,\dots,C_m)\bigr)\right|
+        \le\|O\|\prod_{i=1}^m y^{n_{C_i}}Z.
+    \end{align*}
+    This is the bound on $\rho(\beta,C_1,C_2,\dots)$ that the remark
+    of~\cite[lines 1218--1224]{Hastings2006Solving} derives in the same way as
+    (percb2). For the clusters of one term of the power series, no $C_j$ meets
+    $B(C_i)$, so the operator above is the source's $\rho(\beta,C_1,\dots,C_m)$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:hastings_cluster_part_percb2}
+    The union of the clusters has $\sum_in_{C_i}$ sites, and the union of the
+    boundaries has at most $\sum_in_{B(C_i)}$ terms, so the union satisfies
+    $n_C+n_{B(C)}\le Sn_C$. Theorem~\ref{thm:hastings_cluster_part_percb2} gives
+    $\|O\|y^{\sum_in_{C_i}}Z=\|O\|\prod_iy^{n_{C_i}}Z$.
+\end{proof}

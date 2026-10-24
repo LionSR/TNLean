@@ -147,8 +147,8 @@ classes `[g]`, of the numbers of conjugacy classes of the centralizers of `g`.
 Source: SCP10, following Theorem 5.9, lines 1613–1621. -/
 theorem card_commutingPairConjugacyClass_eq_sum_card_centralizer [Fintype G] :
     Nat.card (CommutingPairConjugacyClass G) =
-      ∑ C : ConjClasses G, Nat.card (ConjClasses (Subgroup.centralizer ({C.out} : Set G))) := by
-  exact card_commutingPairConjugacyClass_eq_sum_card_centralizer_of_representatives
+      ∑ C : ConjClasses G, Nat.card (ConjClasses (Subgroup.centralizer ({C.out} : Set G))) :=
+  card_commutingPairConjugacyClass_eq_sum_card_centralizer_of_representatives
     Quotient.out Quotient.out_eq
 
 end

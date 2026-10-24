@@ -18,7 +18,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 variable {E : Type} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
     {I : Type} [Fintype I]
 
@@ -54,4 +54,4 @@ theorem matrix_repr_eval_eq_toMatrix
   simp only [LinearMap.toMatrix_apply, OrthonormalBasis.coe_toBasis,
     OrthonormalBasis.coe_toBasis_repr_apply, Matrix.of_apply, ContinuousLinearMap.coe_coe]
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

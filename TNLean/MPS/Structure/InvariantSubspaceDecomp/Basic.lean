@@ -127,8 +127,6 @@ lemma evalWord_reindex_fin (e : Fin D ≃ m) (A : MPSTensor d D) :
   induction w with
   | nil =>
       -- Empty word: `Kraus.evalWord` returns `1`, and reindexing preserves `1`.
-      have h1 : Matrix.reindex e e (1 : Matrix (Fin D) (Fin D) ℂ) = (1 : Matrix m m ℂ) := by
-        simp
       simp [_root_.evalWord, Kraus.evalWord]
   | cons i w ih =>
       -- One more letter: unfold both recursions.

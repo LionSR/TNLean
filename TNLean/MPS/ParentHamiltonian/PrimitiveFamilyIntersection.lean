@@ -60,7 +60,6 @@ theorem eventually_iSup_groundSpace_restriction_intersection_of_independent_midd
   filter_upwards [hIndep, Filter.eventually_all.mpr hInter] with n hn hStep
   exact iSup_groundSpace_eq_restriction_intersection_of_middle_independent A hn hStep
 
-
 /-- A finite family of inequivalent primitive tensors with faithful
 invariant matrices has the joint one-step intersection property at every
 sufficiently large length. Middle-space independence follows from overlap

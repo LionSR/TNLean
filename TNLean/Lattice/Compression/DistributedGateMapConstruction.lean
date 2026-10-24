@@ -33,14 +33,14 @@ nonempty-party convention, a degenerate-case reading of the source recorded in
 
 ## Main results
 
-* `TNLean.PEPS.PairEffect.DistributedConstruction.toGateMapConstruction`: a distributed
+* `TNLean.Lattice.PartyCircuit.DistributedConstruction.toGateMapConstruction`: a distributed
   construction read with the operators of its own gate expansions.
-* `TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity_toGateMapConstruction`:
+* `TNLean.Lattice.PartyCircuit.DistributedConstruction.physicalDensity_toGateMapConstruction`:
   this reading keeps the physical density.
-* `TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_network`:
+* `TNLean.Lattice.PartyCircuit.DistributedConstruction.exists_uniform_sampled_network`:
   the case of Theorem 5.2 without messages, for a family of distributed constructions with
   their actual expansions.
-* `TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_network_sub_pure_le`:
+* `TNLean.Lattice.PartyCircuit.DistributedConstruction.exists_uniform_sampled_network_sub_pure_le`:
   Remark 5.3 for that family.
 
 ## References
@@ -61,7 +61,7 @@ noncomputable section
 open scoped Matrix NNReal
 
 namespace TNLean
-open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
 variable {P : Type}
 
@@ -188,7 +188,7 @@ theorem natCard_participation_produce (w : OriginalCircuit a b) (p : P) :
 
 end Lattice.PartyCircuit.OriginalCircuit
 
-namespace PEPS.PairEffect
+namespace Lattice.PartyCircuit
 namespace DistributedConstruction
 
 variable [Fintype P]
@@ -218,12 +218,12 @@ theorem physicalDensity_toGateMapConstruction (C : DistributedConstruction P) :
 
 end DistributedConstruction
 
-end PEPS.PairEffect
+end Lattice.PartyCircuit
 end TNLean
 
-namespace TNLean.PEPS.PairEffect.DistributedConstruction
+namespace TNLean.Lattice.PartyCircuit.DistributedConstruction
 open TNLean.Lattice.PartyCircuit
-open TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 attribute [local instance] Classical.propDecidable
 
 /-- **Theorem 5.2 without messages, from coefficient-sum bounds.** Under the hypotheses of
@@ -496,4 +496,4 @@ theorem exists_uniform_sampled_network_sub_pure_le
   exact ⟨Gate, _, _, participants, root, hroot, Label, _, k, c, T,
     hσ, herror, hlow, hhigh, hdim, hinc, hlocal⟩
 
-end TNLean.PEPS.PairEffect.DistributedConstruction
+end TNLean.Lattice.PartyCircuit.DistributedConstruction

@@ -26,7 +26,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 open TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
@@ -141,4 +141,4 @@ theorem expansion_size_le_of_coeff_le (L : MessageGate a b) (D C : ℝ) (m K : �
   exact ⟨hsize.1, hsize.2.trans (mul_le_mul_of_nonneg_right hmass (by positivity))⟩
 
 end MessageGate
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

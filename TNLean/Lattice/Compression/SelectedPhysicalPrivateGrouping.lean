@@ -21,7 +21,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 open TNLean.Lattice.PartyCircuit
 
 private theorem partyGroupedBasis_map_memCongr
@@ -106,4 +106,4 @@ theorem selectedPhysicalPrivateBasis_grouped
     LinearIsometryEquiv.trans_apply]
   exact congrArg (Layout.memCongr h) hColumn
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

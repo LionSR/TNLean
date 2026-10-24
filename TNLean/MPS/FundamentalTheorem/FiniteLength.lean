@@ -182,13 +182,13 @@ theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D]
       ker_bot_of_range_le ΦA ΦB (traceMulRightPi_ker_eq_bot hA) hRange
     -- Equal kernels → equal range dimensions → lc_B surjective
     have hKerEq : lcA.ker = lcB.ker := by
-      ext α; constructor
+      ext α
+      have h1 : (ΦA ∘ₗ lcA) α = (ΦB ∘ₗ lcB) α := congrFun (congrArg DFunLike.coe hComp) α
+      constructor
       · intro hα
-        have h1 : (ΦA ∘ₗ lcA) α = (ΦB ∘ₗ lcB) α := congrFun (congrArg DFunLike.coe hComp) α
         simp only [LinearMap.comp_apply, LinearMap.mem_ker.mp hα, map_zero] at h1
         exact LinearMap.mem_ker.mpr (LinearMap.ker_eq_bot'.mp hKerΦB _ h1.symm)
       · intro hα
-        have h1 : (ΦA ∘ₗ lcA) α = (ΦB ∘ₗ lcB) α := congrFun (congrArg DFunLike.coe hComp) α
         simp only [LinearMap.comp_apply, LinearMap.mem_ker.mp hα, map_zero] at h1
         exact LinearMap.mem_ker.mpr
           (LinearMap.ker_eq_bot'.mp (traceMulRightPi_ker_eq_bot hA) _ h1)

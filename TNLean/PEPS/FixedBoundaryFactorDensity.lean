@@ -201,8 +201,8 @@ theorem normalized_reducedMatrix_eq_of_scalar
   classical
   have ha : (C * C.conjTranspose).trace = a := by
     rw [hC, trace_smul, hρ, smul_eq_mul, mul_one]
-  have hn : (C * C.conjTranspose).trace ≠ 0 := by
-    exact mt Matrix.trace_mul_conjTranspose_self_eq_zero_iff.mp hne
+  have hn : (C * C.conjTranspose).trace ≠ 0 :=
+    mt Matrix.trace_mul_conjTranspose_self_eq_zero_iff.mp hne
   refine ⟨lt_of_le_of_ne (Matrix.posSemidef_self_mul_conjTranspose C).trace_nonneg
     (Ne.symm hn), ?_⟩
   rw [ha, hC, smul_smul, inv_mul_cancel₀ (ha ▸ hn), one_smul]

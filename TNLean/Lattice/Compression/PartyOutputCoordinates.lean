@@ -31,7 +31,7 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 namespace TNLean
-open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
 variable {P : Type}
 attribute [local instance] Classical.propDecidable
@@ -158,7 +158,7 @@ private theorem orderedPartyVector_removeHead (p : P) (ps : List P) (a : Layout 
     exact removeHeadVector_heq p a v q (by intro h; exact hp (h ▸ hq))
 
 end Lattice.PartyCircuit
-namespace PEPS.PairEffect
+namespace Lattice.PartyCircuit
 /-- Grouping a partitioned tensor retains the first party's vector and groups the
 complement over the ordered remaining parties. The list has no repetitions and
 covers every register owner; it need not contain every element of the party type.
@@ -616,5 +616,5 @@ theorem partyGroupedBasis_append (physical garbage : Layout P)
     (fun p => bPhysical p (x p)) (fun p => bGarbage p (y p))
 
 end Bases
-end PEPS.PairEffect
+end Lattice.PartyCircuit
 end TNLean

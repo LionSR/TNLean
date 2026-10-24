@@ -13,10 +13,10 @@ This file proves the statements of Lemma 5.1 `lem:effects` about parties for gat
 expansions into monomials placed on parties: the replaced gate has an expansion using only
 local contractions and normalized pair sources, and its additional registers are owned by the
 endpoint parties of the eliminated effects.  Registers, source-only words and stacks of pair
-registers are defined in `TNLean.PEPS.Approximation.PartyWord`; allowed monomials on parties
+registers are defined in `TNLean.Lattice.PartyCircuit.PartyWord`; allowed monomials on parties
 (`PartyChain`), their replaced terms and their stacks in
-`TNLean.PEPS.Approximation.PartyChain`; the combination of two adjacent pair sources in
-`TNLean.PEPS.Approximation.PairSourceCombination`.
+`TNLean.Lattice.PartyCircuit.PartyChain`; the combination of two adjacent pair sources in
+`TNLean.Lattice.PartyCircuit.PairSourceCombination`.
 
 In the replacement, the stack of an effect occurrence on `(p, q)` consists of `m` pair
 registers `ℂ^α ⊗ ℂ^β`, the `ℂ^α` half owned by `p` and the `ℂ^β` half owned by `q`.  The
@@ -26,7 +26,7 @@ vector with a product of pair sources (`gateIso_prepGate`), and the additional r
 the stacks (`gateOut_eq`).
 
 The combination of arbitrary sources on one unordered pair, including sources separated
-by local operations, is proved in `TNLean.PEPS.Approximation.PairEffectSourcePreparation`.
+by local operations, is proved in `TNLean.Lattice.PartyCircuit.PairEffectSourcePreparation`.
 That module proves `partyPairEffectElimination_with_grouped_sources`, which retains all
 conclusions here and includes the last clause of Lemma 5.1. The earlier restriction and
 its resolution are recorded in `docs/paper-gaps/polypeps_pair_effects_party_layout.tex`.

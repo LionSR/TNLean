@@ -191,7 +191,7 @@ theorem exists_single_leaf (hN : 0 < N) (hR : N ≤ R) (ψ : MPVSpace d N)
   ext s
   rw [blockMatVector_apply]
   simp only [Fintype.sum_unique, Fin.prod_univ_one, pairFamilyVector_apply,
-    pairFamilyState, Fin.prod_univ_one, mul_one]
+    pairFamilyState, mul_one]
   change ψ (decodeBlockEquiv d N (blockIndexEquiv d hsum s 0)) = ψ s
   rw [blockIndexEquiv_apply, Equiv.apply_symm_apply]
   apply congrArg (fun cfg : Cfg d N => ψ cfg)

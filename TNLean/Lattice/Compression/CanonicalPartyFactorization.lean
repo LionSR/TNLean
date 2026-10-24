@@ -22,7 +22,7 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 namespace TNLean
-open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
 namespace Lattice.PartyCircuit

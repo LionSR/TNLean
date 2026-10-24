@@ -26,7 +26,7 @@ words may otherwise be arbitrary, and their local maps may vanish.
 noncomputable section
 open scoped Matrix
 namespace TNLean.Lattice.PartyCircuit.Word
-open TNLean.PEPS TNLean.PEPS.PairEffect
+open TNLean.Lattice TNLean.Lattice.PartyCircuit
 variable {P : Type} [Fintype P] [DecidableEq P]
 variable {I J : P → Type} [∀ p, Fintype (I p)] [∀ p, Fintype (J p)]
 

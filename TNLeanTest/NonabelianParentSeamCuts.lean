@@ -10,7 +10,7 @@ import TNLean.Algebra.SemiRegularGroupAlgebra
 /-! # Nonabelian microscopic parent-to-seam regression -/
 
 noncomputable section
-open TNLean.PEPS TNLean.PEPS.DependentBondNetwork
+open TNLean.PEPS TNLean.Lattice TNLean.PEPS.DependentBondNetwork TNLean.Lattice.DependentBondNetwork
 
 namespace NonabelianNativeParent
 local instance : Fact (2 < 3) := ⟨by decide⟩

@@ -12,7 +12,7 @@ import TNLean.Lattice.PartyCircuit.WordOwnerMap
 
 An allowed monomial of Theorem 5.2 is a composition of local contractions, normalized pair
 sources and normalized pair effects. Read operation by operation, it is an original circuit in
-the sense of `TNLean.PEPS.Approximation.OriginalCircuit`: every local contraction is a private
+the sense of `TNLean.Lattice.PartyCircuit.OriginalCircuit`: every local contraction is a private
 map of its party, every pair source and every pair effect is a nonprivate gate whose two
 participants are the endpoint parties, and the exchanges of tensor factors are kept.
 

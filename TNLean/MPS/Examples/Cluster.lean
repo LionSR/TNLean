@@ -322,21 +322,21 @@ def clusterZ2Z2Action :
 
 /-- The first generator acts by `σx ⊗ I`. -/
 @[simp] lemma clusterZ2Z2Action_10 :
-    clusterZ2Z2Action (Multiplicative.ofAdd ((1, 0) : ZMod 2 × ZMod 2)) = clusterPhysX1 := by
-  exact ofCommutingInvolutions_ofAdd_10 clusterPhysX1 clusterPhysX2
+    clusterZ2Z2Action (Multiplicative.ofAdd ((1, 0) : ZMod 2 × ZMod 2)) = clusterPhysX1 :=
+  ofCommutingInvolutions_ofAdd_10 clusterPhysX1 clusterPhysX2
     clusterPhysX1_sq clusterPhysX2_sq clusterPhysX1X2_comm
 
 /-- The second generator acts by `I ⊗ σx`. -/
 @[simp] lemma clusterZ2Z2Action_01 :
-    clusterZ2Z2Action (Multiplicative.ofAdd ((0, 1) : ZMod 2 × ZMod 2)) = clusterPhysX2 := by
-  exact ofCommutingInvolutions_ofAdd_01 clusterPhysX1 clusterPhysX2
+    clusterZ2Z2Action (Multiplicative.ofAdd ((0, 1) : ZMod 2 × ZMod 2)) = clusterPhysX2 :=
+  ofCommutingInvolutions_ofAdd_01 clusterPhysX1 clusterPhysX2
     clusterPhysX1_sq clusterPhysX2_sq clusterPhysX1X2_comm
 
 /-- The product of the generators acts by `σx ⊗ σx`. -/
 @[simp] lemma clusterZ2Z2Action_11 :
     clusterZ2Z2Action (Multiplicative.ofAdd ((1, 1) : ZMod 2 × ZMod 2)) =
-      clusterPhysX1 * clusterPhysX2 := by
-  exact ofCommutingInvolutions_ofAdd_11 clusterPhysX1 clusterPhysX2
+      clusterPhysX1 * clusterPhysX2 :=
+  ofCommutingInvolutions_ofAdd_11 clusterPhysX1 clusterPhysX2
     clusterPhysX1_sq clusterPhysX2_sq clusterPhysX1X2_comm
 
 /-! #### Virtual gauges `σz` and `σx` -/
@@ -608,8 +608,8 @@ private theorem maximallyMixed_trace :
 two generators act by real symmetric involutive permutation matrices, so each
 group element equals its own adjoint inverse. -/
 theorem clusterZ2Z2Action_unitary (g : Multiplicative (ZMod 2 × ZMod 2)) :
-    clusterZ2Z2Action g * (clusterZ2Z2Action g)ᴴ = 1 := by
-  exact ofCommutingInvolutions_mul_conjTranspose clusterPhysX1 clusterPhysX2
+    clusterZ2Z2Action g * (clusterZ2Z2Action g)ᴴ = 1 :=
+  ofCommutingInvolutions_mul_conjTranspose clusterPhysX1 clusterPhysX2
     clusterPhysX1_sq clusterPhysX2_sq clusterPhysX1X2_comm
     (by rw [clusterPhysX1_conjTranspose, clusterPhysX1_sq])
     (by rw [clusterPhysX2_conjTranspose, clusterPhysX2_sq]) g
