@@ -16,7 +16,7 @@ support may meet several components. Its evolution commutes exactly with an
 on-site observable at infinite distance from the support.
 
 This extends the chain estimate of the TNLean one-dimensional note,
-`part2a_mps_information.tex`, Lemma `lem:LR`, lines 260–273, to the finite
+`part2a_mps_information.tex`, Lemma `lem:LR`, lines 267–309, to the finite
 domains specified in `part0_preamble.tex`, lines 191–215. No ground-state or
 spectral-gap assumption is used.
 -/
@@ -26,7 +26,7 @@ open scoped Matrix.Norms.L2Operator
 namespace TNLean.MPS.AreaLaw
 
 /-- The finite-domain commutator estimate, extending the chain estimate of the
-TNLean one-dimensional note, `part2a_mps_information.tex`, Lemma `lem:LR`, lines 260–273,
+TNLean one-dimensional note, `part2a_mps_information.tex`, Lemma `lem:LR`, lines 267–309,
 to the induced integer domains of `part0_preamble.tex`, lines 191–215. -/
 theorem norm_heisenberg_commutator_le_domainDistance
     {Λ : Finset ℤ} {q R : ℕ} {κ : Type*} [Fintype κ]
