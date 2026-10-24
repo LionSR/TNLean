@@ -1093,7 +1093,6 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \leanok
     \uses{thm:peps_reset_regional_filter,thm:chain_supported_gaussian_integral,
         thm:peps_reset_polar_step,lem:chain_reset_support_separation,
-        thm:peps_reset_paired_support,thm:peps_reset_exchanged_cores,
         thm:regional_reset_cores_entropy,thm:peps_reset_entropy_scalar}
     Set $r=2p+10$. Choose the Gaussian constants $A,T_0>0$ from
     Theorem~\ref{thm:peps_reset_regional_filter} once, and choose the locality
@@ -1145,10 +1144,9 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $\ell+R<C_pB_*=w$.
     Lemma~\ref{lem:chain_reset_support_separation} makes $S$ disjoint from
     both cores, so $V$ acts trivially on their joint marginal in each
-    replica. By Theorem~\ref{thm:peps_reset_exchanged_cores}, the two cores
-    of the first replica of $\Phi$ are uncorrelated. Transporting paired
-    coordinates to the two replicas and applying the entropy comparison of
-    Theorem~\ref{thm:regional_reset_cores_entropy} yields
+    replica. The entropy comparison of
+    Theorem~\ref{thm:regional_reset_cores_entropy}, applied to the unitary
+    $V$ supported on $S$, yields
     \begin{align}
         I_\Omega(R_0:C_0)
          & \le8\sqrt\delta\,\log(e q^{|R_0|})\notag \\

@@ -20,7 +20,8 @@ Extension of the chain lemma in the TNLean one-dimensional note, `lem:logsep`,
 `part0_preamble.tex`, lines 191–215.
 -/
 
-open SimpleGraph QuantumCircuit
+open QuantumCircuit
+
 namespace TNLean.MPS.AreaLaw
 
 /-- A finite intrinsic distance bounds the physical integer separation.

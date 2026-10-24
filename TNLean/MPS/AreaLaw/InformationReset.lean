@@ -37,10 +37,9 @@ Source: TNLean one-dimensional note, Lemma `lem:reset`,
 
 open Matrix QuantumCircuit MeasureTheory ProbabilityTheory
 open scoped Kronecker Matrix.Norms.L2Operator NNReal
-open TNLean.Lattice (doubledVector_comp_sumArrow exists_regional_physicalBuffer_filter
-  exists_supported_unitary_of_two_sided mutualInformation_relabelSites_replicaSwap_eq_zero
-  norm_reindex_mulVec_sub norm_two_sided_le_of_norm_sub_le reindex_physicalBuffer_eq_siteLift
-  replicaSwap reset_entropy_scalar sheetSwap sheetSwapOp sheetSwapOp_mulVec_comp_sumArrow
+open TNLean.Lattice (exists_regional_physicalBuffer_filter
+  exists_supported_unitary_of_two_sided norm_two_sided_le_of_norm_sub_le
+  reindex_physicalBuffer_eq_siteLift reset_entropy_scalar sheetSwapOp
   siteLift_mem_supportedOperators)
 
 namespace TNLean.MPS.AreaLaw
