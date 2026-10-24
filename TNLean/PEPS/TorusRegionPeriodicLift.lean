@@ -92,8 +92,8 @@ theorem continuousLift_torusRegionRealization_periodTranslate_disjoint
   simp only [map_add, torusRealProjection_periodVector, add_zero, hF] at hvw
   have he : w = v := Subtype.ext hvw
   subst w
-  have hz : torusPeriodVector width height j = 0 := by
-    exact add_left_cancel (hw.trans (add_zero (F v)).symm)
+  have hz : torusPeriodVector width height j = 0 :=
+    add_left_cancel (hw.trans (add_zero (F v)).symm)
   exact hj ((torusPeriodVector_eq_zero_iff j).mp hz)
 
 /-- The exact planar closed-cell realization supplied by the covering lift is

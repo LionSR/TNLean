@@ -133,15 +133,6 @@ instance (R₁ R₂ : Finset V) (e : Edge G) :
   unfold IsP0OuterEdge; infer_instance
 
 omit [Fintype V] [DecidableRel G.Adj] in
-/-- Each endpoint of a `P₀`-outer edge lies outside `R₂`: one endpoint is in `R₁ ∪ R₂` while
-the other is outside, and not being an `R₂` boundary edge forces both onto the same side of
-`R₂`, namely outside it. -/
-theorem isP0OuterEdge_both_not_mem_R₂ {R₁ R₂ : Finset V} {e : Edge G}
-    (h : IsP0OuterEdge (G := G) R₁ R₂ e) : e.1.1 ∉ R₂ ∧ e.1.2 ∉ R₂ := by
-  simp only [IsP0OuterEdge, IsRegionBoundaryEdge, Finset.mem_union] at *
-  grind
-
-omit [Fintype V] [DecidableRel G.Adj] in
 /-- A `P₀`-outer edge is not a boundary edge of the overlap `R₁ ∩ R₂`: both endpoints lie
 outside `R₂`, hence outside the overlap. -/
 theorem not_isRegionBoundaryEdge_inter_of_p0Outer {R₁ R₂ : Finset V} {e : Edge G}

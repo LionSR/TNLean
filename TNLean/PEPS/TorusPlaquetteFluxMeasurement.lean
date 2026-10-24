@@ -88,7 +88,6 @@ theorem regularWalkHolonomy_torusPlaquetteWalk_reverse (u : Edge Γₜ → G) (v
   rw [regularWalkHolonomy_reverse, regularWalkHolonomy_torusPlaquetteWalk]
   group
 
-
 /-- The four physical sites surrounding a native torus plaquette. Source:
 SCP10, the detection tweezer in Theorem 6.15, lines 2225–2258. -/
 def torusPlaquetteRegion (v : X) : Finset X :=
