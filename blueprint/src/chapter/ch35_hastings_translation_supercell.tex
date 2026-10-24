@@ -65,8 +65,7 @@ graph, this gives the decay across supercell translations.
     \label{thm:hastings_supercell_decay}
     \lean{TNLean.Lattice.norm_groundCompression_commutator_le_of_supercell_separation}
     \leanok
-    \uses{thm:hastings_supercell_compression,thm:hastings05_low_energy_commutator,
-        thm:hastings05_blecm}
+    \uses{def:hastings_gaussian_filtered_term,thm:hastings05_blecm}
     Let the sites be the vertices of a finite graph, let each term $h_k$ act on
     a set $X_k$, and let every eigenvalue of $H=\sum_kh_k$ equal $E_0$ or be at
     least $E_0+\Delta E$. If $g\in S$ and $X_{g\cdot j}$ is disjoint from the
@@ -75,6 +74,8 @@ graph, this gives the decay across supercell translations.
     separation $l$, which decays exponentially in $l$.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:hastings_supercell_compression,thm:hastings05_low_energy_commutator,
+        thm:hastings05_blecm}
     The compression of $M_k$ is that of $h_k$, and the compression of
     $h_{g\cdot j}=P_gh_jP_g^\dagger$ is that of $h_j$ by
     Theorem~\ref{thm:hastings_supercell_compression}. Apply the bound for
