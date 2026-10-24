@@ -24,8 +24,8 @@ part2b_mps_protocol.tex:587–614 and order of constants:626–632.
 
 noncomputable section
 namespace TNLean.MPS.AreaLaw.ChainSweep
-open QuantumCircuit TNLean.Lattice TNLean.PEPS TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
-open TNLean.PEPS.Approximation
+open QuantumCircuit TNLean.Lattice TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
+open TNLean.Lattice.Compression
 
 /-- The physical hypotheses alone give uniformly polynomial sampled networks
 whose every block cut has at most 1280 crossing links, hence at most 1600.

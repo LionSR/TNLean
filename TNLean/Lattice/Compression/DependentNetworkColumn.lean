@@ -16,7 +16,7 @@ on every edge and the same inserted bond matrices. Its contraction is the column
 `σ|z⟩` of the contracted operator `σ` at the product-basis vector `|z⟩`.
 
 The networks are the edge-dependent contractions of
-`TNLean.PEPS.DependentBondNetwork`, which allow parallel edges, heterogeneous
+`TNLean.Lattice.DependentBondNetwork`, which allow parallel edges, heterogeneous
 physical spaces, edge-dependent virtual alphabets and arbitrary inserted bond
 matrices. No positivity or Hermiticity of the contracted operator is assumed.
 The same extraction for tensors on a finite simple graph is in
@@ -24,10 +24,10 @@ The same extraction for tensors on a finite simple graph is in
 
 ## Main results
 
-* `TNLean.PEPS.Approximation.network_fixInput` and
-  `TNLean.PEPS.Approximation.operatorNetworkMatrix_mulVec_single` — fixing the
+* `TNLean.Lattice.Compression.network_fixInput` and
+  `TNLean.Lattice.Compression.operatorNetworkMatrix_mulVec_single` — fixing the
   input indices selects the column of the contracted operator.
-* `TNLean.PEPS.Approximation.exists_fixInput_network_of_traceNorm_sub_pure_le`
+* `TNLean.Lattice.Compression.exists_fixInput_network_of_traceNorm_sub_pure_le`
   — Lemma 8.1 for edge-dependent operator networks.
 
 ## References
@@ -42,9 +42,9 @@ noncomputable section
 
 open scoped BigOperators Matrix
 
-namespace TNLean.PEPS.Approximation
+namespace TNLean.Lattice.Compression
 
-open TNLean.PEPS.DependentBondNetwork
+open TNLean.Lattice.DependentBondNetwork
 
 section Dependent
 
@@ -133,4 +133,4 @@ theorem exists_fixInput_network_of_traceNorm_sub_pure_le
 
 end Dependent
 
-end TNLean.PEPS.Approximation
+end TNLean.Lattice.Compression

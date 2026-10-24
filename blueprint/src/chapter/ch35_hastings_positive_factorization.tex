@@ -1,0 +1,136 @@
+\section{The positive version of Hastings' approximate factorization}
+\label{sec:hastings_positive_factorization}
+
+% Hastings, arXiv:0705.2024v4, law16.tex, lines 246--267 (Lemma 1) and
+% lines 912--943 (note added).
+
+Lemma~1 of \cite{Hastings2007AreaLaw} asserts positive operators, but its
+construction gives an operator $O_B$ that need not be positive. The note added
+to the source replaces $O_B$ by $O_B^\dagger O_B$. This section records that
+step on the chain of $L$ sites, with $P_0=|\Omega\rangle\langle\Omega|$ for a
+unit vector $\Omega$ and operator norms throughout.
+
+\begin{definition}[Approximate factorization at a cut]
+    \label{def:hastings_factorization_at}
+    \lean{TNLean.MPS.AreaLaw.Hastings.IsFactorizationAt}
+    \leanok
+    \uses{def:chain_model}
+    Let $c$ and $l$ be natural numbers and $\epsilon$ real. Operators
+    $O_B,O_L,O_R$ form an approximate factorization at $(c,l)$ with error
+    $\epsilon$ if $O_L$ and $O_R$ are commuting orthogonal projections
+    supported on the first $c$ sites and on the remaining sites, $O_B$ has norm
+    at most one and is supported on the sites $c-l,\dots,c+l-1$, and
+    \begin{align}
+        \Vert O_BO_LO_R-P_0\Vert & \le\epsilon.
+        \label{eq:hastings_factorization_at}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Enlarging the error]
+    \label{thm:hastings_factorization_mono}
+    \lean{TNLean.MPS.AreaLaw.Hastings.IsFactorizationAt.mono}
+    \leanok
+    \uses{def:hastings_factorization_at}
+    An approximate factorization at $(c,l)$ with error $\epsilon$ is one with
+    every error $\epsilon'\ge\epsilon$.
+\end{theorem}
+\begin{proof}\leanok
+    Only the bound~\eqref{eq:hastings_factorization_at} involves the error.
+\end{proof}
+
+\begin{theorem}[Supports are closed under adjoints]
+    \label{thm:hastings_supported_conj_transpose}
+    \lean{Entropy.IsSupportedOn.conjTranspose}
+    \leanok
+    \uses{def:chain_model}
+    If an operator is supported on a set of sites, so is its adjoint.
+\end{theorem}
+\begin{proof}\leanok
+    The matrix entries of the adjoint are the conjugates of the transposed
+    entries, and the support conditions are symmetric in the two
+    configurations.
+\end{proof}
+
+\begin{theorem}[The rank-one projection onto a unit vector]
+    \label{thm:hastings_rank_one_projection}
+    \lean{TNLean.MPS.AreaLaw.Hastings.isStarProjection_vecMulVec_of_norm_eq_one}
+    \leanok
+    For a unit vector $\Omega$, $|\Omega\rangle\langle\Omega|$ is an
+    orthogonal projection.
+\end{theorem}
+\begin{proof}\leanok
+    It is self-adjoint, and its square is
+    $\langle\Omega,\Omega\rangle\,|\Omega\rangle\langle\Omega|=|\Omega\rangle\langle\Omega|$.
+\end{proof}
+
+\begin{theorem}[An elementary bound]
+    \label{thm:hastings_positivity_constant}
+    \lean{TNLean.MPS.AreaLaw.Hastings.sqrt_one_sub_sq_add_le}
+    \leanok
+    For $0\le\epsilon\le1$,
+    \begin{align}
+        \sqrt{1-(1-\epsilon)^2}+3\epsilon+\epsilon^2 & \le(\sqrt2+4)\sqrt\epsilon.
+        \label{eq:hastings_positivity_constant}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    $1-(1-\epsilon)^2\le2\epsilon$, and $\epsilon^2\le\epsilon\le\sqrt\epsilon$.
+\end{proof}
+
+\begin{theorem}[The positive repair at one cut]
+    \label{thm:hastings_positive_repair}
+    \lean{TNLean.MPS.AreaLaw.Hastings.IsFactorizationAt.conjTranspose_mul_self}
+    \leanok
+    \uses{def:hastings_factorization_at}
+    If $O_B,O_L,O_R$ form an approximate factorization at $(c,l)$ with error
+    $\epsilon$, then $O_B^\dagger O_B$ is positive semidefinite and
+    $O_B^\dagger O_B,O_L,O_R$ form an approximate factorization at $(c,l)$ with
+    error $(\sqrt2+4)\sqrt\epsilon$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_supported_conj_transpose,
+        thm:hastings_rank_one_projection, thm:hastings_positivity_constant}
+    The operator $O_B^\dagger O_B$ is positive semidefinite, has norm
+    $\Vert O_B\Vert^2\le1$, and is supported where $O_B$ is. The positivity
+    correction of the note added, with $Q=O_LO_R$, bounds the error by
+    $\sqrt{1-(1-\epsilon)^2}+3\epsilon+\epsilon^2$, which is at most
+    $(\sqrt2+4)\sqrt\epsilon$ by~\eqref{eq:hastings_positivity_constant} when
+    $\epsilon\le1$. When $\epsilon>1$, the error is at most
+    $\Vert O_B^\dagger O_BO_LO_R\Vert+\Vert P_0\Vert\le2<(\sqrt2+4)\sqrt\epsilon$.
+\end{proof}
+
+\begin{theorem}[The positive version of Lemma~1]
+    \label{thm:hastings_positive_factorization}
+    \lean{TNLean.MPS.AreaLaw.Hastings.exists_posSemidef_factorization}
+    \leanok
+    \uses{def:hastings_factorization_at}
+    Let $\Omega$ be a unit vector, $C_1\ge0$ and $\xi'$ real. Suppose that at a
+    cut $c$ and length $l$ there is an approximate factorization with error
+    $C_1e^{-l/\xi'}$. Then at the same $(c,l)$ there is one with $O_B$ positive semidefinite and error
+    \begin{align}
+        (\sqrt2+4)\sqrt{C_1}\,e^{-l/(2\xi')}.
+        \label{eq:hastings_positive_factorization}
+    \end{align}
+    This is the positive operator $O_B^+$ of the note added to
+    \cite{Hastings2007AreaLaw}, lines 912--943, with the rate of Lemma~1 halved
+    \cite{gap:hastings07_lemma1_positivity_rate}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_positive_repair}
+    Apply Theorem~\ref{thm:hastings_positive_repair} and use
+    $\sqrt{C_1e^{-l/\xi'}}=\sqrt{C_1}\,e^{-l/(2\xi')}$.
+\end{proof}
+
+\begin{theorem}[The factorization in the form used by the bootstrap]
+    \label{thm:hastings_factorization_bootstrap_form}
+    \lean{TNLean.MPS.AreaLaw.Hastings.exists_factorization_of_isFactorizationAt}
+    \leanok
+    \uses{def:hastings_factorization_at}
+    An approximate factorization at $(j,m)$ with error $\epsilon$ has $O_B$
+    supported on the first $j+m$ sites, $O_L$ on the first $j$ sites and $O_R$
+    on the remaining sites, with~\eqref{eq:hastings_factorization_at}. This is
+    the hypothesis of Theorem~\ref{thm:hastings_bootstrap_scale} at the scale $m$.
+\end{theorem}
+\begin{proof}\leanok
+    The sites $j-m,\dots,j+m-1$ lie among the first $j+m$ sites.
+\end{proof}

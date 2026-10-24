@@ -23,6 +23,7 @@ only the commuting restriction is used in the four-cut dimension theorem.
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS.DependentTorus
+open TNLean.Lattice
 
 local notation "tail" => (torusLabelledBondTail (width := 2) (height := 2))
 local notation "head" => (torusLabelledBondHead (width := 2) (height := 2))

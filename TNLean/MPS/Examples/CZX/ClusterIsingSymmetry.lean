@@ -31,8 +31,8 @@ symmetry of the CZX state, as `O_Z = ∏ CZ_{i,i+1} ∏ X_i`, without the factor
   than the review's `D_N X^{⊗N}`; the two differ by the global sign `(−1)^N`
   (`docs/paper-gaps/mpu_czx_tensor_normalization.tex`), which cancels in every conjugation.
 * The decorated operator `U` exchanges them with a sign, `U X_j U† = −Z_{j−1} X_j Z_{j+1}`, so
-  `U H(λ) U† = −λ H(λ⁻¹)` for `λ ≠ 0`: `U` commutes with `H(−1)` and sends `H(1)` to `−H(1)`. The factors
-  `Z_i` of `U` flip the sign of the transverse field at the symmetric point.
+  `U H(λ) U† = −λ H(λ⁻¹)` for `λ ≠ 0`: `U` commutes with `H(−1)` and sends `H(1)` to `−H(1)`.
+  The factors `Z_i` of `U` flip the sign of the transverse field at the symmetric point.
 
 All operators are monomial matrices on the configurations `Fin N → Fin 2`, and every identity
 reduces to one parity computation: flipping bit `j` changes `∑_i s_i s_{i+1}` by
@@ -224,6 +224,10 @@ theorem czxDecorated_phase_flipAt (hN : 2 ≤ N) (j : Fin N) (t : Fin N → Fin 
 
 /-! ### The local conjugation relations -/
 
+private theorem neg_one_pow_rev_add_rev (a b : Fin 2) :
+    (-1 : ℂ) ^ (a.rev.val + b.rev.val) = (-1) ^ (a.val + b.val) := by
+  fin_cases a <;> fin_cases b <;> simp [Fin.rev]
+
 /-- **`U X_j = −Z_{j−1} X_j Z_{j+1} U`.** Project result. -/
 theorem czxDecorated_mul_pauliXAt (hN : 2 ≤ N) (j : Fin N) :
     czxDecorated N * pauliXAt j = -(clusterTerm j * czxDecorated N) := by
@@ -233,10 +237,7 @@ theorem czxDecorated_mul_pauliXAt (hN : 2 ≤ N) (j : Fin N) :
   funext s
   rw [Pi.neg_apply]
   rw [czxDecorated_phase_flipAt hN, mul_one]
-  have hrev : ∀ a b : Fin 2, (-1 : ℂ) ^ (a.rev.val + b.rev.val) = (-1) ^ (a.val + b.val) := by
-    intro a b
-    fin_cases a <;> fin_cases b <;> simp [Fin.rev]
-  rw [spinFlip_apply, spinFlip_apply, hrev]
+  rw [spinFlip_apply, spinFlip_apply, neg_one_pow_rev_add_rev]
 
 /-- **`U Z_{j−1} X_j Z_{j+1} = −X_j U`.** Project result. -/
 theorem czxDecorated_mul_clusterTerm (hN : 2 ≤ N) (j : Fin N) :
@@ -247,10 +248,8 @@ theorem czxDecorated_mul_clusterTerm (hN : 2 ≤ N) (j : Fin N) :
   funext s
   rw [Pi.neg_apply]
   rw [czxDecorated_phase_flipAt hN, one_mul]
-  have hsq : ∀ k : ℕ, (-1 : ℂ) ^ k * (-1) ^ k = 1 := fun k ↦ by
-    rw [← mul_pow, neg_one_mul, neg_neg, one_pow]
   linear_combination (-(-1 : ℂ) ^ (czExponent (spinFlip N s) + ∑ i, (spinFlip N s i).val)) *
-    hsq ((s (j - 1)).val + (s (j + 1)).val)
+    neg_one_pow_mul_neg_one_pow_self (R := ℂ) ((s (j - 1)).val + (s (j + 1)).val)
 
 /-- `U` commutes with `CZ_{i,i+2} X_{i+1}`. -/
 theorem czxDecorated_mul_czXTerm (hN : 2 ≤ N) (i : Fin N) :
@@ -276,10 +275,7 @@ theorem czxDecorated_mul_zzTerm (i : Fin N) :
     mul_one, one_mul]
   congr 1
   funext s
-  have hbit : ∀ a b : Fin 2, (-1 : ℂ) ^ (a.rev.val + b.rev.val) = (-1) ^ (a.val + b.val) := by
-    intro a b
-    fin_cases a <;> fin_cases b <;> simp [Fin.rev]
-  rw [Equiv.Perm.one_apply, spinFlip_apply, spinFlip_apply, hbit, mul_comm]
+  rw [Equiv.Perm.one_apply, spinFlip_apply, spinFlip_apply, neg_one_pow_rev_add_rev, mul_comm]
 
 /-! ### The two Hamiltonians -/
 
@@ -376,10 +372,9 @@ theorem mpo_czxTensor_mul_clusterTerm (hN : 2 ≤ N) (j : Fin N) :
   congr 1
   funext s
   rw [neg_one_pow_czExponent_flipAt hN, one_mul, pow_add]
-  have hsq : ∀ k : ℕ, (-1 : ℂ) ^ k * (-1) ^ k = 1 := fun k ↦ by
-    rw [← mul_pow, neg_one_mul, neg_neg, one_pow]
   linear_combination (-1 : ℂ) ^ czExponent s * ((-1) ^ (s (j + 1)).val * (-1) ^ (s (j + 1)).val *
-    hsq (s (j - 1)).val + hsq (s (j + 1)).val)
+    neg_one_pow_mul_neg_one_pow_self (R := ℂ) (s (j - 1)).val +
+      neg_one_pow_mul_neg_one_pow_self (R := ℂ) (s (j + 1)).val)
 
 /-- **The review's CZX operator exchanges the two terms.** Project result:
 `O_Z H(λ) O_Z† = −∑_j X_j − λ ∑_j Z_{j−1} X_j Z_{j+1}` on every periodic chain of `N ≥ 2`

@@ -339,12 +339,12 @@ theorem exists_braVertexBlock (l : List (Hole pos q Party)) (own : ι → Party)
       simp [inner_self_eq_norm_sq_to_K, hf]
     obtain ⟨b, hbE, hbK, hbB, M, m₁, m₂, m₆, m₃, m₄, m₅⟩ := exists_groupBlock l own S O hne
       ⟨P, hP, fun x hx => (hPO x hx).1⟩ (fun x hx => (hPO x hx).2) (zeroGroupVec O)
-      (WholeGroup.conjFamily (fun _ : Unit => f) ()) (norm_zeroGroupVec O)
-      ((WholeGroup.orthonormal_conjFamily hfo).1 ())
+      (Lattice.WholeGroup.conjFamily (fun _ : Unit => f) ()) (norm_zeroGroupVec O)
+      ((Lattice.WholeGroup.orthonormal_conjFamily hfo).1 ())
     refine ⟨b, 1, by simp, hbE, fun c => by rw [hbK, zeroGroupVec_apply], fun c => ?_, M, m₁,
       m₂, m₆, by simpa [hne] using m₃, by simpa [hne] using m₄, m₅⟩
     rw [hbB]
-    simp [WholeGroup.conjFamily]
+    simp [Lattice.WholeGroup.conjFamily]
   · refine ⟨emptyBlock, f fun x => (0 : ι → Fin q) x.1, ?_, fun x => ?_, fun c => ?_,
       fun c => ?_, .final (.id _), trivial, trivial, fun _ _ => trivial, Nat.zero_le _,
       Nat.zero_le _, fun z => ?_⟩

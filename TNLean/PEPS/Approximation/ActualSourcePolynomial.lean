@@ -30,7 +30,7 @@ noncomputable section
 open MeasureTheory QICLean.ComplexGaussian
 open scoped Matrix ComplexConjugate NNReal
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 
 open Classical in
 /-- The actual sampled physical operator has inverse-power accuracy with an

@@ -279,18 +279,6 @@ theorem complexOfGolden_zero {m n : Type*} :
     complexOfGolden (0 : Matrix m n GoldenInt) = 0 :=
   complexOfRing_zero goldenToComplex
 
-theorem complexOfGolden_sum {m n κ : Type*} (t : Finset κ) (f : κ → Matrix m n GoldenInt) :
-    complexOfGolden (∑ x ∈ t, f x) = ∑ x ∈ t, complexOfGolden (f x) :=
-  complexOfRing_sum goldenToComplex t f
-
-theorem complexOfGolden_single {m n : Type*} [DecidableEq m] [DecidableEq n] (i : m) (j : n) :
-    complexOfGolden (Matrix.single i j (1 : GoldenInt)) = Matrix.single i j (1 : ℂ) :=
-  complexOfRing_single goldenToComplex i j
-
-theorem complexOfGolden_smul {m n : Type*} (c : GoldenInt) (X : Matrix m n GoldenInt) :
-    complexOfGolden (c • X) = goldenToComplex c • complexOfGolden X :=
-  complexOfRing_smul goldenToComplex c X
-
 variable {d D D₁ D₂ : ℕ}
 
 /-- Word evaluation of a tensor over the golden integers. -/

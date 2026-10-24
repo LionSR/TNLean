@@ -25,47 +25,11 @@ namespace MPOSymmetry
 
 variable {D₀ D₁ : ℕ}
 
-private theorem symmetricProjection_mul
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-    {P Q : E →ₗ[ℂ] E} (hP : P.IsSymmetricProjection)
-    (hQ : Q.IsSymmetricProjection) (hPQ : Commute P Q) :
-    (P * Q).IsSymmetricProjection :=
-  ⟨hP.isIdempotentElem.mul_of_commute hPQ hQ.isIdempotentElem,
-    hP.isSymmetric.mul_of_commute hQ.isSymmetric hPQ⟩
-
 private theorem symmetricProjection_one_sub
     {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
     {P : E →ₗ[ℂ] E} (hP : P.IsSymmetricProjection) :
     (1 - P).IsSymmetricProjection :=
   ⟨hP.isIdempotentElem.one_sub, LinearMap.IsSymmetric.id.sub hP.isSymmetric⟩
-
-private theorem one_sub_mul_le_add_one_sub
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-    {P Q : E →ₗ[ℂ] E} (hP : P.IsSymmetricProjection)
-    (hQ : Q.IsSymmetricProjection) (hPQ : Commute P Q) :
-    1 - P * Q ≤ (1 - P) + (1 - Q) := by
-  have hcomm : Commute (1 - P) (1 - Q) :=
-    (Commute.one_left (1 - Q)).sub_left ((Commute.one_right P).sub_right hPQ)
-  have hpos := (symmetricProjection_mul (symmetricProjection_one_sub hP)
-    (symmetricProjection_one_sub hQ) hcomm).isPositive
-  rw [LinearMap.le_def]
-  convert hpos using 1
-  noncomm_ring
-
-private theorem one_sub_mul_mul_le
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-    {P R C : E →ₗ[ℂ] E} (hP : P.IsSymmetricProjection)
-    (hR : R.IsSymmetricProjection) (hC : C.IsSymmetricProjection)
-    (hRC : Commute R C) (hRP : Commute R P) (hCP : Commute C P) :
-    1 - R * C * P ≤ (1 - P) + (1 - R) + (1 - C) := by
-  have h₁ := one_sub_mul_le_add_one_sub
-    (symmetricProjection_mul hR hC hRC) hP (hRP.mul_left hCP)
-  have h₂ := one_sub_mul_le_add_one_sub (P := R) (Q := C) hR hC hRC
-  change ((1 - R * C) + (1 - P) - (1 - R * C * P)).IsPositive at h₁
-  change ((1 - R) + (1 - C) - (1 - R * C)).IsPositive at h₂
-  rw [LinearMap.le_def]
-  convert h₁.add h₂ using 1
-  abel
 
 /-- Every physical row-sector selector is an orthogonal projection.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
@@ -117,8 +81,9 @@ theorem mixedEndpointLeftTensor_starProjection_eq_outerCorner
   have hCP := mixedEndpointColumnSector_commute_extendedSupport_starProjection A₀ A₁
     (bondInterpolationMatrix D₀ D₁ 0)
   have hprod : (R * C * S.starProjection.toLinearMap).IsSymmetricProjection :=
-    symmetricProjection_mul
-      (symmetricProjection_mul (mixedEndpointRowSector_isSymmetricProjection 0)
+    LinearMap.IsSymmetricProjection.mul_of_commute
+      (LinearMap.IsSymmetricProjection.mul_of_commute
+        (mixedEndpointRowSector_isSymmetricProjection 0)
         (mixedEndpointColumnSector_isSymmetricProjection 1) hRC)
       (Submodule.isSymmetricProjection_starProjection S) (hRP.mul_left hCP)
   symm
@@ -172,7 +137,7 @@ theorem parentInteractionES_mixedEndpointLeftTensor_le
     (bondInterpolationMatrix D₀ D₁ 0)).range
   have hP : S.starProjection.toLinearMap.IsSymmetricProjection :=
     Submodule.isSymmetricProjection_starProjection S
-  have hupper := one_sub_mul_mul_le hP
+  have hupper := LinearMap.IsSymmetricProjection.one_sub_mul_mul_le hP
     (mixedEndpointRowSector_isSymmetricProjection (D₀ := D₀) (D₁ := D₁) 0)
     (mixedEndpointColumnSector_isSymmetricProjection (D₀ := D₀) (D₁ := D₁) 1)
     (mixedEndpointRowSector_commute_columnSector (D₀ := D₀) (D₁ := D₁) 0 1)

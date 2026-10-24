@@ -16,7 +16,7 @@ logical axioms. The finite sampled sum retains the original joint assignment.
 
 set_option linter.hashCommand false
 
-open TNLean.PEPS.PairEffect TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.Lattice.PartyCircuit TNLean.Lattice.PartyCircuit.SourceCircuit
   TNLean.Lattice.PartyCircuit.SourceInventory in
 run_cmd do
   let decls := #[
