@@ -43,6 +43,7 @@ import TNLean.MPS.AreaLaw.Hastings.RelativeEntropyGain
 import TNLean.MPS.AreaLaw.Hastings.RelentAssembly
 import TNLean.MPS.AreaLaw.Hastings.RelentFromBootstrap
 import TNLean.MPS.AreaLaw.Hastings.RelentGapped
+import TNLean.MPS.AreaLaw.Hastings.RenyiBootstrapLemma
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalChain
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalCorrelation
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalOperators
