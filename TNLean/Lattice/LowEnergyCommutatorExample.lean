@@ -3,8 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Analysis.Complex.Basic
-import Mathlib.LinearAlgebra.Matrix.Notation
+import TNLean.Circuit.Gates.Controlled
 
 /-!
 # Low-energy commutators need not vanish without translation invariance
@@ -49,6 +48,7 @@ Spins are encoded by `Fin 2`, with `0` for up and `1` for down.
 -/
 
 open Matrix Complex
+open QuantumCircuit (siteOp siteOp_apply siteOp_add siteOp_neg siteOp_sub siteOp_diagonal)
 
 namespace TNLean.Lattice.LowEnergyExample
 
@@ -66,50 +66,15 @@ noncomputable def spinZ : Matrix (Fin 2) (Fin 2) ℂ := !![1 / 2, 0; 0, -1 / 2]
 /-- The value of `S^z` on a spin: `1/2` for up and `-1/2` for down. -/
 noncomputable def spinValue (a : Fin 2) : ℝ := if a = 0 then 1 / 2 else -1 / 2
 
-/-- The operator `X` acting on site `i` of the chain and as the identity elsewhere. -/
-noncomputable def siteOp (i : Fin L) (X : Matrix (Fin 2) (Fin 2) ℂ) :
-    Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ :=
-  Matrix.of fun σ τ ↦ if ∀ j, j ≠ i → σ j = τ j then X (σ i) (τ i) else 0
+/-- `S^z` is diagonal, with the value of the spin on the diagonal. -/
+theorem spinZ_eq_diagonal : spinZ = diagonal fun a ↦ (spinValue a : ℂ) := by
+  ext a b
+  fin_cases a <;> fin_cases b <;> simp [spinZ, spinValue]
 
-theorem siteOp_apply (i : Fin L) (X : Matrix (Fin 2) (Fin 2) ℂ) (σ τ : Fin L → Fin 2) :
-    siteOp i X σ τ = if ∀ j, j ≠ i → σ j = τ j then X (σ i) (τ i) else 0 := rfl
-
-theorem siteOp_add (i : Fin L) (X Y : Matrix (Fin 2) (Fin 2) ℂ) :
-    siteOp i (X + Y) = siteOp i X + siteOp i Y := by
-  ext σ τ; simp only [Matrix.add_apply, siteOp_apply]; split_ifs <;> simp
-
-theorem siteOp_neg (i : Fin L) (X : Matrix (Fin 2) (Fin 2) ℂ) :
-    siteOp i (-X) = -siteOp i X := by
-  ext σ τ; simp only [Matrix.neg_apply, siteOp_apply]; split_ifs <;> simp
-
-/-- A diagonal site operator is diagonal on configurations. -/
+/-- `S^z` at the site `i` is diagonal on configurations. -/
 theorem siteOp_spinZ (i : Fin L) :
     siteOp i spinZ = diagonal fun σ ↦ (spinValue (σ i) : ℂ) := by
-  ext σ τ
-  rw [siteOp_apply]
-  by_cases h : σ = τ
-  · subst h
-    simp only [diagonal_apply_eq, ne_eq, implies_true, ↓reduceIte]
-    unfold spinZ spinValue
-    generalize σ i = a
-    fin_cases a <;> simp
-  · rw [diagonal_apply_ne _ h]
-    split_ifs with hag
-    · have hi : σ i ≠ τ i := fun hi ↦ h (funext fun j ↦ by
-        by_cases hj : j = i
-        · subst hj; exact hi
-        · exact hag j hj)
-      unfold spinZ
-      revert hi; generalize σ i = a; generalize τ i = b
-      fin_cases a <;> fin_cases b <;> simp
-    · rfl
-
-theorem siteOp_zero (i : Fin L) : siteOp i (0 : Matrix (Fin 2) (Fin 2) ℂ) = 0 := by
-  ext σ τ; simp only [siteOp_apply, Matrix.zero_apply]; split_ifs <;> rfl
-
-theorem siteOp_sub (i : Fin L) (X Y : Matrix (Fin 2) (Fin 2) ℂ) :
-    siteOp i (X - Y) = siteOp i X - siteOp i Y := by
-  rw [sub_eq_add_neg, siteOp_add, siteOp_neg, ← sub_eq_add_neg]
+  rw [spinZ_eq_diagonal, siteOp_diagonal]
 
 variable (m : ℕ)
 
