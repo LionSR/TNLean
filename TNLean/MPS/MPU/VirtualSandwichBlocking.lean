@@ -94,14 +94,6 @@ theorem IsMPUSimple.virtualSandwich_gl {U : MPOTensor d D} (hU : IsMPUSimple U)
       ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) :=
   hU.virtualSandwich _ _ (Units.inv_mul X)
 
-/-- The similarity by an invertible matrix `X` preserves and reflects simplicity.
-
-Source: arXiv:1703.09188, Proposition IV.5, lines 773--804; MD.tex Lemma 1.2. -/
-theorem isMPUSimple_virtualSandwich_gl_iff {U : MPOTensor d D} (X : GL (Fin D) ℂ) :
-    IsMPUSimple (MPOTensor.virtualSandwich (X : Matrix (Fin D) (Fin D) ℂ) U
-      ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) ↔ IsMPUSimple U :=
-  isMPUSimple_virtualSandwich_iff _ _ (Units.inv_mul X)
-
 /-- A bond similarity leaves every periodic operator unchanged.
 
 Source: arXiv:1703.09188, Proposition IV.5, lines 773--804; MD.tex Lemma 1.2. -/

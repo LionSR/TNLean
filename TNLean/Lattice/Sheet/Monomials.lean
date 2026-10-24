@@ -26,22 +26,22 @@ geometry of the sites; the statements for encoded frames are in
 
 ## Main definitions
 
-* `EncodedFrame.birthWord`, `EncodedFrame.birthPrivateWord` : the birth, for `Q∘ ≠ P∘` and for
+* `Sheet.birthWord`, `Sheet.birthPrivateWord` : the birth, for `Q∘ ≠ P∘` and for
   `Q∘ = P∘`.
-* `EncodedFrame.deathChain`, `EncodedFrame.deathPrivateChain` : the death.
-* `EncodedFrame.sheetPlace` : the matrix `1_E ⊗ M` on a sheet.
-* `EncodedFrame.correctionMatrix`, `EncodedFrame.correctionWord` : the corrections of an
+* `Sheet.deathChain`, `Sheet.deathPrivateChain` : the death.
+* `Sheet.sheetPlace` : the matrix `1_E ⊗ M` on a sheet.
+* `Sheet.correctionMatrix`, `Sheet.correctionWord` : the corrections of an
   exchange on the two copies of `U`, and a private contraction on two registers of one party.
 
 ## Main results
 
-* `EncodedFrame.pairHeadIso_birthWord_eval`, `EncodedFrame.pairHeadIso_deathChain_eval` : the
+* `Sheet.pairHeadIso_birthWord_eval`, `Sheet.pairHeadIso_deathChain_eval` : the
   operator of the birth and of the death is `Kᴴ K ⊗ 1` with `K = ⟨s| (1_T ⊗ V)`.
-* `EncodedFrame.sheetBirthOp_eq_submatrix` : the canonical map of `eq:birth-map` is
+* `Sheet.sheetBirthOp_eq_submatrix` : the canonical map of `eq:birth-map` is
   `B = 1_E ⊗ Kᴴ K` (`sheetPlace`).
-* `EncodedFrame.Frame.exists_birthWord`, `EncodedFrame.Frame.exists_deathChain` : the monomials
+* `Sheet.Frame.exists_birthWord`, `Sheet.Frame.exists_deathChain` : the monomials
   of a birth and of a death on the grouped registers of `T` and `U`.
-* `EncodedFrame.sheetBufferCorrection_mul_sheetSwapOp_eq` : the corrections `D_U F_A` act on the
+* `Sheet.sheetBufferCorrection_mul_sheetSwapOp_eq` : the corrections `D_U F_A` act on the
   two copies of `U` alone.
 
 ## References
@@ -63,9 +63,9 @@ noncomputable section
 open Matrix ContinuousLinearMap EuclideanSpace
 open scoped InnerProductSpace TensorProduct Kronecker Matrix.Norms.L2Operator
 
-namespace TNLean.PEPS.EncodedFrame
+namespace TNLean.Lattice.Sheet
 
-open PairEffect
+open PartyCircuit
 
 /-! ### The birth and the death for abstract systems -/
 
@@ -426,7 +426,7 @@ namespace Frame
 
 /-- The monomial of a birth or a death on the registers of `T` and `U`. -/
 theorem exists_birthWord {T E : Finset ι} (P Q : Party) (σ : SplittingData q T E)
-    (ℓ : PairEffect.Layout Party) :
+    (ℓ : PartyCircuit.Layout Party) :
     ∃ w : Word (⟨P, euc (T → Fin q)⟩ :: ⟨P, euc (↥(T ∪ E)ᶜ → Fin q)⟩ :: ℓ)
         (⟨Q, euc (T → Fin q)⟩ :: ⟨P, euc (↥(T ∪ E)ᶜ → Fin q)⟩ :: ℓ),
       w.IsAllowed ∧ w.UsesOnly {P, Q} ∧ w.sourceCount ≤ 1 ∧
@@ -444,7 +444,7 @@ theorem exists_birthWord {T E : Finset ι} (P Q : Party) (σ : SplittingData q T
 
 /-- The monomial of a death on the registers of `T` and `U`. -/
 theorem exists_deathChain {T E : Finset ι} (P Q : Party) (σ : SplittingData q T E)
-    (ℓ : PairEffect.Layout Party) :
+    (ℓ : PartyCircuit.Layout Party) :
     ∃ M : PartyChain (⟨Q, euc (T → Fin q)⟩ :: ⟨P, euc (↥(T ∪ E)ᶜ → Fin q)⟩ :: ℓ)
         (⟨P, euc (T → Fin q)⟩ :: ⟨P, euc (↥(T ∪ E)ᶜ → Fin q)⟩ :: ℓ),
       M.IsAllowed ∧ M.UsesOnly {P, Q} ∧ M.sourceCount = 0 ∧ M.toEffectChain.effectCount ≤ 1 ∧
@@ -578,9 +578,9 @@ end Correction
 /-- **The corrections as a private contraction.** A private contraction at `P∘` on two
 registers `ℂ^U` of `P∘`, given by a matrix `W`. -/
 def correctionWord {Party : Type} {U : Type} [Fintype U] [DecidableEq U] (P : Party)
-    (W : Matrix (U × U) (U × U) ℂ) (ℓ : PairEffect.Layout Party) :
+    (W : Matrix (U × U) (U × U) ℂ) (ℓ : PartyCircuit.Layout Party) :
     Word (⟨P, euc U⟩ :: ⟨P, euc U⟩ :: ℓ) (⟨P, euc U⟩ :: ⟨P, euc U⟩ :: ℓ) :=
   Word.localMap (ℓ₁ := [⟨P, euc U⟩, ⟨P, euc U⟩]) (ℓ₂ := [⟨P, euc U⟩, ⟨P, euc U⟩]) P
     owner_of_mem_two owner_of_mem_two (matLocal₂₂ P W) ℓ
 
-end TNLean.PEPS.EncodedFrame
+end TNLean.Lattice.Sheet

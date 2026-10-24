@@ -23,7 +23,7 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 
 noncomputable section
 open scoped TensorProduct Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 /-- The partial slots belonging to the selected original positions.
@@ -130,4 +130,4 @@ theorem partialCoordinateBasisMatrix_reindex {m n : Type} [Fintype m] [Fintype n
   · have he := mt (mem_selectedPartialSlots A w S i).mpr hi
     simp only [selectedSourceVectors, ite_eq_right he, dite_eq_right hi, partialSlotVector]
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

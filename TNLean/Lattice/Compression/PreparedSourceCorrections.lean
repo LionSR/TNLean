@@ -25,7 +25,7 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 
 noncomputable section
 open scoped ComplexConjugate Matrix TensorProduct
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
 variable {P m n ι : Type} [Fintype m] [Fintype n] [Fintype ι]
     (R : SourceInventory P) (U V : Fin R.length → HSpace)
@@ -114,4 +114,4 @@ theorem sourceOperatorDensity_sub_prepared
   exact sourceOperatorDensity_sub R U V (fun ξ i ↦ bU ξ i) (fun ξ i ↦ bV ξ i)
     c ℓ v bIn bOut ρ _ E
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

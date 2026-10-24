@@ -22,7 +22,7 @@ noncomputable section
 
 open scoped InnerProductSpace TensorProduct
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 open ContinuousLinearMap
 
@@ -114,4 +114,4 @@ theorem eval_exchangeBlocks_appendIso_symm (a b tail : Layout P)
           simp only [TensorProduct.add_tmul, map_add, TensorProduct.tmul_add, hx, hy]
 
 end Word
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

@@ -27,7 +27,7 @@ noncomputable section
 
 open scoped TensorProduct
 
-namespace TNLean.PEPS.PairEffect.PairSource
+namespace TNLean.Lattice.PartyCircuit.PairSource
 
 /-- A finite family of algebraic pair-source vectors admits exact finite coordinates
 in the same endpoint spaces for every member of the family. The inclusions are
@@ -55,4 +55,4 @@ theorem exists_finite_coordinates {ι : Type} [Finite ι] (U V : HSpace)
       (ζ ξ) |>.trans (((TensorProduct.mapInclIsometry U₀ V₀).norm_map (ζ ξ)).symm.trans
         (congrArg norm (hζ ξ)))
 
-end TNLean.PEPS.PairEffect.PairSource
+end TNLean.Lattice.PartyCircuit.PairSource

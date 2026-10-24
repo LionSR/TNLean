@@ -13,7 +13,7 @@ reused.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 open Classical in
@@ -118,4 +118,4 @@ theorem sum_norm_coefficient_mul_conj_le_pow_card (A : P → Bool) {a b : Layout
         (sum_norm_coefficient_le_pow_card A w B hB) 2
     _ = _ := by rw [← pow_mul, Nat.mul_comm]
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

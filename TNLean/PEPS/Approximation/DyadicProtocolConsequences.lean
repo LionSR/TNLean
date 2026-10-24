@@ -94,9 +94,9 @@ theorem mono (h : D.IsDistributionProtocol Ω C_N C_K C_E b k r) {C_N' C_K' C_E'
   exact { h with
     card_le := h.card_le.trans (by gcongr)
     changes_le := h.changes_le.trans (by gcongr)
-    monomialBounded := fun t ht ↦ PairEffect.OriginalCircuit.isMonomialBounded_mono _
+    monomialBounded := fun t ht ↦ Lattice.PartyCircuit.OriginalCircuit.isMonomialBounded_mono _
       (h.monomialBounded t ht) (Nat.floor_le_floor hpow)
-    expansionBounded := fun t ht ↦ PairEffect.OriginalCircuit.isExpansionBounded_mono _
+    expansionBounded := fun t ht ↦ Lattice.PartyCircuit.OriginalCircuit.isExpansionBounded_mono _
       (h.expansionBounded t ht) le_rfl hpow
     reference_step := fun t ht ↦ (h.reference_step t ht).trans (by gcongr)
     reference_changes := ⟨Ξ, hΞ, le_trans (by gcongr) hlower, href⟩ }

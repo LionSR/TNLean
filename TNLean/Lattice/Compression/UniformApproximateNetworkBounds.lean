@@ -30,7 +30,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–175,
 noncomputable section
 open QICLean.ComplexGaussian
 open scoped Matrix ComplexConjugate NNReal
-namespace TNLean.PEPS.Approximation
+namespace TNLean.Lattice.Compression
 
 /-- The prefactor `C_branch ² + C_sample` of the link alphabets of the sampled
 network, for arity and lifetime bound `b`, at most `r` pair effects per
@@ -75,10 +75,10 @@ theorem sampledNetworkExponent_pos (r b n d u s : ℕ) {p : ℝ} (hp : 0 < p) :
   unfold sampledNetworkExponent
   omega
 
-end TNLean.PEPS.Approximation
+end TNLean.Lattice.Compression
 
-namespace TNLean.PEPS.PairEffect.EffectCircuit
-open TNLean.PEPS.Approximation
+namespace TNLean.Lattice.PartyCircuit.EffectCircuit
+open TNLean.Lattice.Compression
 attribute [local instance] Classical.propDecidable
 
 /-- Uniform original resource bounds give a single polynomial bound for all
@@ -336,4 +336,4 @@ theorem exists_uniform_sampled_approximate_network_bounds
     uniform_sampled_approximate_network_bounds_of_le r b n d C_N C_D hCN (C_K q) (C_B q)
       (u q) (s q) (hCK q) (hCB q) p le_rfl le_rfl⟩
 
-end TNLean.PEPS.PairEffect.EffectCircuit
+end TNLean.Lattice.PartyCircuit.EffectCircuit

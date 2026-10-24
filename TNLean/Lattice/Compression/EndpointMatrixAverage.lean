@@ -20,7 +20,7 @@ Source: polynomial-PEPS, `04-compression.tex`, lines 279–355 and 565–588.
 
 noncomputable section
 open scoped Kronecker
-namespace TNLean.PEPS.PairEffect.SourceInventory
+namespace TNLean.Lattice.PartyCircuit.SourceInventory
 variable {P : Type}
 
 /-- Averaging the actual endpoint words is the product of the original slot
@@ -49,4 +49,4 @@ theorem endpointMatrixAverage_eq_product (R : SourceInventory P)
   rw [Finset.prod_mul_distrib, Fintype.prod_sum]
   simp only [Finset.prod_const, Finset.card_univ, Fintype.card_fin]
 
-end TNLean.PEPS.PairEffect.SourceInventory
+end TNLean.Lattice.PartyCircuit.SourceInventory

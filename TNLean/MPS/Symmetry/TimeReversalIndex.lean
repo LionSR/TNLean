@@ -127,6 +127,18 @@ private lemma antiunitaryTwist_twice (A : MPSTensor d D) (P : Matrix (Fin d) (Fi
   refine Finset.sum_congr rfl fun k _ => Finset.sum_congr rfl fun j _ => ?_
   ring
 
+/-- If `P P* = 1`, applying the antiunitary twist `Bⁱ ↦ ∑ⱼ Pᵢⱼ B*ʲ` twice is the
+identity. -/
+private lemma antiunitaryTwist_twice_of_mul_map_star_eq_one (A : MPSTensor d D)
+    {P : Matrix (Fin d) (Fin d) ℂ} (hP : P * P.map (starRingEnd ℂ) = 1) (i : Fin d) :
+    ∑ j : Fin d, P i j • (∑ k : Fin d, P j k • (A k).map (starRingEnd ℂ)).map (starRingEnd ℂ) =
+      A i := by
+  have h1 := antiunitaryTwist_twice A P i
+  rw [hP] at h1
+  simp only [Matrix.one_apply, ite_smul, one_smul, zero_smul, Finset.sum_ite_eq,
+    Finset.mem_univ, ite_true] at h1
+  exact h1
+
 /-- The antiunitary twist of a transformed family: if `Bʲ = ζ M Aʲ N`, then
 `∑ⱼ Pᵢⱼ B*ʲ = ζ* M* (∑ⱼ Pᵢⱼ A*ʲ) N*`. -/
 private lemma antiunitaryTwist_smul_mul_mul (A : MPSTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
@@ -153,12 +165,8 @@ theorem mul_map_star_eq_one_or_neg_one_of_timeReversal_gauge [NeZero D] {A : MPS
     (X : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = 1 ∨
       (X : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = -1 := by
   refine mul_map_star_eq_one_or_neg_one_of_twice hA X (c := starRingEnd ℂ ζ * ζ) fun i => ?_
-  have h1 := antiunitaryTwist_twice A P i
-  rw [hP] at h1
-  simp only [Matrix.one_apply, ite_smul, one_smul, zero_smul, Finset.sum_ite_eq,
-    Finset.mem_univ, ite_true] at h1
   calc A i = ∑ j : Fin d, P i j • (∑ k : Fin d, P j k • (A k).map (starRingEnd ℂ)).map
-        (starRingEnd ℂ) := h1.symm
+        (starRingEnd ℂ) := (antiunitaryTwist_twice_of_mul_map_star_eq_one A hP i).symm
     _ = ∑ j : Fin d, P i j • (ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ * A j * X)).map
         (starRingEnd ℂ) := Finset.sum_congr rfl fun j _ => by rw [h j]
     _ = starRingEnd ℂ ζ • (((X : Matrix (Fin D) (Fin D) ℂ)ᴴ).map (starRingEnd ℂ) *
@@ -243,11 +251,7 @@ theorem mul_map_star_eq_of_timeReversal_gauges [NeZero D] {A : MPSTensor d D}
   rintro rfl
   obtain ⟨i, hi⟩ := exists_apply_ne_zero_of_isNormal hA
   apply hi
-  have h1 := antiunitaryTwist_twice A P i
-  rw [hP] at h1
-  simp only [Matrix.one_apply, ite_smul, one_smul, zero_smul, Finset.sum_ite_eq,
-    Finset.mem_univ, ite_true] at h1
-  rw [← h1]
+  rw [← antiunitaryTwist_twice_of_mul_map_star_eq_one A hP i]
   simp [h]
 
 /-- **The reflection index does not depend on the unitary gauge.**

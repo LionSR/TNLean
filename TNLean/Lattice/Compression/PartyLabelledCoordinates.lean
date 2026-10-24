@@ -11,7 +11,8 @@ An exhaustive order identifies the tensor-basis coordinates with functions on
 the original party set. Source: polynomial-PEPS, `04-compression.tex`, lines 565–579.
 -/
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
+open TNLean.Lattice.PartyCircuit
 variable {P : Type} [Fintype P] [DecidableEq P]
 variable {I J : P → Type} [∀ p, Fintype (I p)] [∀ p, Fintype (J p)]
 
@@ -56,4 +57,4 @@ theorem partyLabelledBasis_repr_tensorPartyMaps (a z : Layout P)
       partyListBasis_repr_tensorPartyMaps a z b c B ps _ _
     _ = _ := (List.Nodup.getEquivOfForallMemList ps hn hc).prod_comp
       (fun p => (c p).repr (B p (b p (y p))) (x p))
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

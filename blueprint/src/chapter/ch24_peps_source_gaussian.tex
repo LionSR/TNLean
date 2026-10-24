@@ -12,7 +12,7 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{definition}[Coordinates of an original source]
     \label{def:peps_source_coordinates}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceCoordinates}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceCoordinates}
     \leanok
     Let $z_{e,\alpha}\in\C^{u_ev_e}$ be the coordinates of
     $\nu_{e,\alpha}$ in the tensor product of the standard orthonormal
@@ -21,8 +21,8 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{theorem}[Local Schmidt frames chosen before partial expansion]
     \label{thm:peps_local_schmidt_sources}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceCoordinates_norm}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_local_schmidt_source_frames}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceCoordinates_norm}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_local_schmidt_source_frames}
     \leanok
     \uses{def:peps_source_coordinates}
     For every original position $e=(g,j)$ and local label $\alpha\in\Xi_g$,
@@ -54,7 +54,7 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{theorem}[Finite Schmidt support in arbitrary endpoint spaces]
     \label{thm:peps_tensor_schmidt_isometries}
-    \lean{TNLean.PEPS.PairEffect.PairSource.exists_probability_schmidt_isometries}
+    \lean{TNLean.Lattice.PartyCircuit.PairSource.exists_probability_schmidt_isometries}
     \leanok
     Let $U,V$ be complex inner-product spaces and let
     $z$ in the algebraic tensor product $U\otimes V$ have norm one
@@ -75,9 +75,9 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{definition}[A single law indexed by original sources]
     \label{def:peps_source_gaussian_law}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.SourceGaussianSamples}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceGaussianLaw}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceGaussianLawIsProbabilityMeasure}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.SourceGaussianSamples}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceGaussianLaw}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceGaussianLawIsProbabilityMeasure}
     \leanok
     Fix a sample count $k\geq0$. For every $e=(g,j)$, every ordered pair
     $(\alpha,\beta)\in\Xi_g^2$, every $0\leq s<k$, and every
@@ -89,8 +89,8 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{theorem}[Fixed selections retain the Gaussian law]
     \label{thm:peps_source_gaussian_selection}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.measurePreserving_sourceGaussian_eval}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.measurePreserving_selected_sourceGaussian}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.measurePreserving_sourceGaussian_eval}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.measurePreserving_selected_sourceGaussian}
     \leanok
     \uses{def:peps_source_gaussian_law}
     Selecting a fixed original position and a fixed ordered pair of local
@@ -109,8 +109,8 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{definition}[Sampled source operators]
     \label{def:peps_sampled_source_matrix}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledSourceMatrix}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceGaussianCorrection}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sampledSourceMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceGaussianCorrection}
     \leanok
     \uses{thm:peps_local_schmidt_sources,def:peps_source_gaussian_law}
     For $k>0$, let $\widehat X_{e,\alpha\beta}$ be the average of the
@@ -132,11 +132,11 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{theorem}[Unbiasedness of the original-source construction]
     \label{thm:peps_unbiased_original_sources}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integrable_sampledSourceMatrix}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integral_sampledSourceMatrix}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_unbiased_sampledSourceMatrix}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integral_sourceGaussianCorrection}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceGaussianCorrection_eq_transport}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integrable_sampledSourceMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integral_sampledSourceMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_unbiased_sampledSourceMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integral_sourceGaussianCorrection}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceGaussianCorrection_eq_transport}
     \leanok
     \uses{thm:peps_local_schmidt_sources,thm:peps_source_gaussian_selection,def:peps_sampled_source_matrix}
     For every $k>0$, the Schmidt weights and frames may be chosen so that
@@ -164,10 +164,10 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{theorem}[Covariance at original corrected positions]
     \label{thm:peps_actual_gaussian_covariance}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceCorrection_product_eq_selected}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integrable_sourceCorrection_product_mul_conj}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integral_sourceCorrection_product_mul_conj}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integral_sourceCorrection_product_eq_zero}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceCorrection_product_eq_selected}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integrable_sourceCorrection_product_mul_conj}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integral_sourceCorrection_product_mul_conj}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integral_sourceCorrection_product_eq_zero}
     \leanok
     \uses{thm:peps_source_gaussian_selection}
     Fix $k>0$, $S\subseteq\mathcal E$, deterministic local labels
@@ -220,7 +220,7 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{theorem}[Frame-mapped sources in prepared words]
     \label{thm:peps_prepared_source_frames}
-    \lean{TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient_selected_frames}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sourceContraction_preparedDensityCoefficient_selected_frames}
     \leanok
     \uses{thm:peps_selected_multilinear_expansion,
         thm:peps_prepared_source_contraction}
@@ -255,10 +255,10 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{definition}[Schmidt assignments at retained original positions]
     \label{def:peps_partial_schmidt_assignments}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.PartialSchmidtCoordinates}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSchmidtCoordinateEquiv}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSchmidtCoordinateEquiv_apply}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSchmidtSourceVectors}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.PartialSchmidtCoordinates}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSchmidtCoordinateEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSchmidtCoordinateEquiv_apply}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSchmidtSourceVectors}
     \leanok
     \uses{def:peps_selected_retained_positions}
     Let $S\subseteq\mathcal E$ and suppose every position in $S$ has an
@@ -273,7 +273,7 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{theorem}[Corrected terms in Schmidt coordinates]
     \label{thm:peps_corrected_gaussian_sum}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm_gaussian_eq_sum}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceTerm_gaussian_eq_sum}
     \leanok
     \uses{def:peps_partial_schmidt_assignments,thm:peps_prepared_source_frames,
         thm:peps_unbiased_original_sources,thm:peps_corrected_source_contraction}
@@ -306,8 +306,8 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{theorem}[Pointwise physical error of the sampled operators]
     \label{thm:peps_sampled_physical_error}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physical_sampledSourceMatrix_sub_eq_sum}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.rectangularTraceNorm_physical_sampledSourceMatrix_sub_le}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physical_sampledSourceMatrix_sub_eq_sum}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.rectangularTraceNorm_physical_sampledSourceMatrix_sub_le}
     \leanok
     \uses{def:peps_sampled_source_matrix,thm:peps_physical_corrected_subsets}
     Suppose the final memory is the ordered tensor product of physical

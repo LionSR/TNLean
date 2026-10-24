@@ -32,36 +32,36 @@ contractions, with unchanged absolute coefficient sum.
 The model here has no parties: the effect-free pieces `F_i` of an `EffectChain` are arbitrary
 contractions.  Two statements of Lemma 5.1 about parties (the expansion of `G'_m` uses only
 local contractions and normalized pair sources, and its additional registers are owned by the
-original participating parties) are proved in `TNLean.PEPS.Approximation.PartyLayout`, where
+original participating parties) are proved in `TNLean.Lattice.PartyCircuit.PartyLayout`, where
 monomials are placed on parties and their effect chains are the `EffectChain`s of this file.
 The last clause, that all sources on one pair of parties combine into one, is proved for
-arbitrary source occurrences in `TNLean.PEPS.Approximation.PairEffectSourcePreparation` by
+arbitrary source occurrences in `TNLean.Lattice.PartyCircuit.PairEffectSourcePreparation` by
 `partyPairEffectElimination_with_grouped_sources`.
 
 ## Main definitions
 
-* `PairEffect.HSpace` : a bundled complex inner product space.
-* `PairEffect.EffectChain` : a monomial written as a chain of contractions and pair effects.
-* `PairEffect.EffectChain.eval` : the operator of a monomial.
-* `PairEffect.EffectChain.replace` : the replaced monomial with occurrence-specific stacks.
-* `PairEffect.EffectChain.replaceTerm` : one term of the expansion of the replaced monomial.
-* `PairEffect.inventory`, `PairEffect.inventoryVector` : the common stack space and the
+* `PartyCircuit.HSpace` : a bundled complex inner product space.
+* `PartyCircuit.EffectChain` : a monomial written as a chain of contractions and pair effects.
+* `PartyCircuit.EffectChain.eval` : the operator of a monomial.
+* `PartyCircuit.EffectChain.replace` : the replaced monomial with occurrence-specific stacks.
+* `PartyCircuit.EffectChain.replaceTerm` : one term of the expansion of the replaced monomial.
+* `PartyCircuit.inventory`, `PartyCircuit.inventoryVector` : the common stack space and the
   common garbage vector `Γ_m` of a gate expansion.
-* `PairEffect.replaceGate` : the replaced gate `G'_m`.
-* `PairEffect.termList` : the expansion of `G'_m` into weighted contractions.
-* `PairEffect.stackLength` : a choice of `m` from `r`, the coefficient sum and the target error.
+* `PartyCircuit.replaceGate` : the replaced gate `G'_m`.
+* `PartyCircuit.termList` : the expansion of `G'_m` into weighted contractions.
+* `PartyCircuit.stackLength` : a choice of `m` from `r`, the coefficient sum and the target error.
 
 ## Main results
 
-* `PairEffect.EffectChain.norm_replace_sub_le` : telescoping bound `n / √m` for one monomial.
-* `PairEffect.EffectChain.replace_eq_sum` : expansion of a replaced monomial.
-* `PairEffect.norm_replaceGate_sub_le` : the gate error `(r / √m) ∑_ξ |c_ξ|`.
-* `PairEffect.replaceGate_eq_sum_termList`, `PairEffect.length_termList_le`,
-  `PairEffect.sum_norm_coeff_termList`, `PairEffect.norm_term_le_one` : the expansion of
+* `PartyCircuit.EffectChain.norm_replace_sub_le` : telescoping bound `n / √m` for one monomial.
+* `PartyCircuit.EffectChain.replace_eq_sum` : expansion of a replaced monomial.
+* `PartyCircuit.norm_replaceGate_sub_le` : the gate error `(r / √m) ∑_ξ |c_ξ|`.
+* `PartyCircuit.replaceGate_eq_sum_termList`, `PartyCircuit.length_termList_le`,
+  `PartyCircuit.sum_norm_coeff_termList`, `PartyCircuit.norm_term_le_one` : the expansion of
   `G'_m`, its count `K m^r`, its absolute coefficient sum and contractivity of its terms.
-* `PairEffect.pairEffectElimination` : the error, count and coefficient-sum clauses of
+* `PartyCircuit.pairEffectElimination` : the error, count and coefficient-sum clauses of
   Lemma 5.1 `lem:effects`.
-* `PairEffect.replaceGate_rescaled`, `PairEffect.replaceGate_rescaled_stackLength` :
+* `PartyCircuit.replaceGate_rescaled`, `PartyCircuit.replaceGate_rescaled_stackLength` :
   near-contractivity and rescaling, also at the stack length chosen for a target error.
 
 ## References
@@ -74,7 +74,7 @@ noncomputable section
 
 open scoped InnerProductSpace TensorProduct
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 open EuclideanSpace CyclicInsertion ContinuousLinearMap
 
@@ -607,4 +607,4 @@ theorem replaceGate_rescaled_stackLength {X Y : HSpace} {r : ℕ} {S δ : ℝ} (
   obtain ⟨h1, -, h3, h4⟩ := replaceGate_rescaled (stackLength_ne_zero r S δ) L hL hG hle
   exact ⟨h1, h3, h4⟩
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

@@ -164,7 +164,7 @@ theorem information_reset_of_card_le (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ p : ℝ} 
   have hL1 : (1 : ℝ) ≤ L := le_trans (le_max_left _ _) hL
   have hLn : 1 ≤ L := by exact_mod_cast hL1
   have hΩ : ‖Ω‖ = 1 := (Matrix.isGappedGroundState_iff.mp hgs).1
-  obtain ⟨hψn, hφn, U, hUu, hUs, hUerr⟩ :=
+  obtain ⟨-, -, U, hUu, hUs, hUerr⟩ :=
     h.reset_unitary hq hJ hΔ (r := 2 * p + 10) (by linarith) hLn hΛ E₀ Ω hgs A C hAC b hb hI
   have hB1 : 1 ≤ 1 + b + Real.log L := by linarith [Real.log_nonneg hL1]
   have hℓ : ((⌈rangeResetRadius R J Δ (2 * p + 10) * (1 + b + Real.log L)⌉₊ : ℕ) : ℝ) +
@@ -175,7 +175,7 @@ theorem information_reset_of_card_le (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ p : ℝ} 
     rw [rangeResetWidth]
     nlinarith
   have hent := mutualInformation_cores_le_of_sites_reset_unitary hq hΩ hAC hA₀ hC₀ _
-    (notMem_rangeResetSupport hAC hA₀ hC₀ hℓ hAw hCw) hUu hUs hψn hφn hUerr
+    (notMem_rangeResetSupport hAC hA₀ hC₀ hℓ hAw hCw) hUu hUs hUerr
   refine hent.trans ?_
   have hA₀card : (A₀.card : ℝ) ≤ (L : ℝ) ^ 2 := by
     have h₁ : A₀.card ≤ Λ.card := by

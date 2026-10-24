@@ -10,7 +10,7 @@ import Lean.Util.CollectAxioms
 /-! # Axiom checks for changing the monomial lists of a fixed chronology -/
 
 set_option linter.hashCommand false
-open TNLean.PEPS.PairEffect.EffectCircuit
+open TNLean.Lattice.PartyCircuit.EffectCircuit
 
 run_cmd do
   let declarations := #[``GateLists, ``reexpand, ``reexpandGateMaps,

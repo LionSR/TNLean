@@ -40,9 +40,10 @@ noncomputable section
 
 namespace TNLean.PEPS
 
-open PairEffect
+open TNLean.Lattice.PartyCircuit
 
 namespace EncodedFrame
+open TNLean.Lattice.Sheet
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ} {Party : Type}
 
@@ -106,7 +107,7 @@ end EncodedFrame
 
 namespace Approximation
 
-open EncodedFrame
+open EncodedFrame TNLean.Lattice.Sheet
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ} {κ Party : Type}
 

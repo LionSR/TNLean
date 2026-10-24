@@ -25,7 +25,7 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 private def substitutedSourceAt (A : P → Bool) {a b : Layout P}
@@ -184,4 +184,4 @@ theorem eval_partialResidual_prepare_substituted (A : P → Bool) {a b : Layout 
   exact Word.eval_residualInSlots_prepare _ _ _ _ _ _
     (ofSlots_partialWithSources A w η ξ)
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

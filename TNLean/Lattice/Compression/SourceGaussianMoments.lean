@@ -33,7 +33,7 @@ open scoped Matrix ComplexConjugate
 
 
 
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} {a b : Layout P}
 
 /-- Products of the actual original-source correction entries have finite
@@ -103,4 +103,4 @@ theorem partialSourceCorrection_product_memLp_two (A : P → Bool)
   simp_rw [he]
   exact sourceCorrection_product_memLp_two w k hk S ξ₀ ζ₀ lam hnonneg _ _
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

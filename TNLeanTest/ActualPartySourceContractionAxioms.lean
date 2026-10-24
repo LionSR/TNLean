@@ -19,10 +19,10 @@ logical axioms. The guard includes the endpoint word used in source coordinates.
 
 set_option linter.hashCommand false
 
-open TNLean.PEPS.PairEffect.SourceCircuit TNLean.PEPS.PairEffect.SourceInventory in
+open TNLean.Lattice.PartyCircuit.SourceCircuit TNLean.Lattice.PartyCircuit.SourceInventory in
 run_cmd do
   let decls := #[
-    ``TNLean.PEPS.PairEffect.partySelector_none,
+    ``TNLean.Lattice.PartyCircuit.partySelector_none,
     ``restrict_partialWord_all_gate_localPart_eval_heq_id,
     ``restrict_partialWord_all_localPart_eval_heq_emptyGateScalar,
     ``restrict_partialResidual_all_eval_heq_emptyGateScalar,

@@ -28,7 +28,7 @@ noncomputable section
 open scoped InnerProductSpace TensorProduct Matrix.Norms.L2Operator
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
 /-- Normalized source preparation followed by allowed operations has matrix
 operator norm at most one in any orthonormal input and output bases.
@@ -70,4 +70,4 @@ theorem norm_preparedMatrix_tmul_le_one {P m n : Type}
   apply norm_preparedMatrix_le_one R U V _ _ ℓ w hw bIn bOut
   exact fun i ↦ (TensorProduct.norm_tmul _ _).trans (by rw [hu, hv, one_mul])
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

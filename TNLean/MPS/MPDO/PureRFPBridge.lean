@@ -160,8 +160,8 @@ private theorem doubledTensor_isRFPViaTS_of_hasPhysicalBlockingIsometry
       intro X
       simp only [singleKrausMap_apply, Matrix.conjTranspose_conjTranspose, P]
       exact Matrix.trace_mul_cycle Vᴴ X V
-    have hS : IsKrausCPTP S := by
-      exact Matrix.supportCompletion_isKrausCPTP
+    have hS : IsKrausCPTP S :=
+      Matrix.supportCompletion_isKrausCPTP
         (singleKrausMap Vᴴ) P (Matrix.faithfulDensity (Fin d))
         (singleKrausMap_isKrausCP Vᴴ) hPherm hPidem hEtrace
         (Matrix.faithfulDensity_posDef (Fin d)).posSemidef

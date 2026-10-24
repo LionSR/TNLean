@@ -16,10 +16,10 @@ This gives the contractions used in
 
 \begin{definition}[Bases of source and input registers]
     \label{def:peps_source_slot_basis}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.slotBasis}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.slotBasis_apply}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.preparedInputBasis}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.preparedInputBasis_apply}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.slotBasis}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.slotBasis_apply}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.preparedInputBasis}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.preparedInputBasis_apply}
     \leanok
     \uses{def:peps_joint_source_vector}
     Choose finite orthonormal bases $(u_{e,r})_{r\in I_e}$ of $U_e$
@@ -58,8 +58,8 @@ This gives the contractions used in
 
 \begin{definition}[The complete free-input matrix]
     \label{def:peps_free_source_matrix}
-    \lean{TNLean.PEPS.PairEffect.Word.freeSourceMatrix}
-    \lean{TNLean.PEPS.PairEffect.Word.freeSourceMatrix_apply}
+    \lean{TNLean.Lattice.PartyCircuit.Word.freeSourceMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.Word.freeSourceMatrix_apply}
     \leanok
     \uses{def:peps_source_slot_basis,def:peps_prepared_matrix,def:peps_prepared_density_coefficient}
     Let $T:\mathcal S\otimes\mathcal H\to\mathcal K$ be the
@@ -77,7 +77,7 @@ This gives the contractions used in
 
 \begin{definition}[Source columns on a prescribed pure input]
     \label{def:peps_pure_source_matrix}
-    \lean{TNLean.PEPS.PairEffect.Word.pureSourceMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.Word.pureSourceMatrix}
     \leanok
     \uses{def:peps_source_slot_basis}
     For a prescribed vector $\psi\in\mathcal H$, let $A_{T,\psi}$
@@ -92,7 +92,7 @@ This gives the contractions used in
 
 \begin{theorem}[Pure-input prepared density coefficients]
     \label{thm:peps_pure_source_density_coefficient}
-    \lean{TNLean.PEPS.PairEffect.Word.preparedDensityCoefficient_pure_eq_vecMulVec}
+    \lean{TNLean.Lattice.PartyCircuit.Word.preparedDensityCoefficient_pure_eq_vecMulVec}
     \leanok
     \uses{def:peps_pure_source_matrix,def:peps_prepared_density_coefficient}
     Let $T,T':\mathcal S\otimes\mathcal H\to\mathcal K$ be two
@@ -119,7 +119,7 @@ This gives the contractions used in
 
 \begin{definition}[The product source matrix]
     \label{def:peps_product_source_matrix}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.productSourceMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.productSourceMatrix}
     \leanok
     \uses{def:peps_source_inventory}
     Let $K_e$ be sets indexed by the ordered source positions, and put
@@ -136,7 +136,7 @@ This gives the contractions used in
 
 \begin{theorem}[Finite contraction of source columns]
     \label{thm:peps_source_column_contraction}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.sourceContraction_columns_eq_mul}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.sourceContraction_columns_eq_mul}
     \leanok
     \uses{def:peps_product_source_matrix}
     Suppose each $K_e$ is finite. Let $\mathcal R,\mathcal T$ be
@@ -172,7 +172,7 @@ This gives the contractions used in
 
 \begin{theorem}[Contraction on a prescribed pure input]
     \label{thm:peps_pure_source_contraction}
-    \lean{TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient_pure_eq_mul}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sourceContraction_preparedDensityCoefficient_pure_eq_mul}
     \leanok
     \uses{def:peps_pure_source_matrix,def:peps_prepared_density_coefficient,
         def:peps_product_source_matrix}
@@ -200,7 +200,7 @@ This gives the contractions used in
 
 \begin{theorem}[Physical entries of a pure prepared coefficient]
     \label{thm:peps_pure_source_physical}
-    \lean{TNLean.PEPS.PairEffect.Word.preparedDensityCoefficient_pure_partialTrace_apply}
+    \lean{TNLean.Lattice.PartyCircuit.Word.preparedDensityCoefficient_pure_partialTrace_apply}
     \leanok
     \uses{def:peps_pure_source_matrix,def:peps_prepared_density_coefficient}
     Suppose the output consists of a physical memory followed by a
@@ -229,8 +229,8 @@ This gives the contractions used in
 
 \begin{theorem}[Mixed products of party matrices]
     \label{thm:peps_party_product_conjugation}
-    \lean{TNLean.PEPS.PairEffect.partyProductMatrix_conjTranspose,
-        TNLean.PEPS.PairEffect.partyProductMatrix_conjugate}
+    \lean{TNLean.Lattice.PartyCircuit.partyProductMatrix_conjTranspose,
+        TNLean.Lattice.PartyCircuit.partyProductMatrix_conjugate}
     \leanok
     \uses{def:peps_dependent_physical_product}
     Let $P$ be finite, let $I_p$ be finite input alphabets, and let
@@ -267,8 +267,8 @@ This gives the contractions used in
 
 \begin{theorem}[Tracing the private coordinates at each party]
     \label{thm:peps_party_product_partial_trace}
-    \lean{TNLean.PEPS.PairEffect.partialTraceRight_partyProductMatrix,
-        TNLean.PEPS.PairEffect.partialTraceRight_partyProduct_conjugate}
+    \lean{TNLean.Lattice.PartyCircuit.partialTraceRight_partyProductMatrix,
+        TNLean.Lattice.PartyCircuit.partialTraceRight_partyProduct_conjugate}
     \leanok
     \uses{def:peps_dependent_physical_product,
         thm:peps_party_product_conjugation}
@@ -302,7 +302,7 @@ This gives the contractions used in
 
 \begin{theorem}[Absorbing a common scalar at one party]
     \label{thm:peps_party_product_scalar}
-    \lean{TNLean.PEPS.PairEffect.partyProductMatrix_smul_at_party}
+    \lean{TNLean.Lattice.PartyCircuit.partyProductMatrix_smul_at_party}
     \leanok
     \uses{def:peps_dependent_physical_product}
     Let $P$ be finite and choose $p_0\in P$. For any family of
@@ -326,7 +326,7 @@ This gives the contractions used in
 
 \begin{theorem}[Joint contraction of all source inputs]
     \label{thm:peps_free_source_contraction}
-    \lean{TNLean.PEPS.PairEffect.Word.norm_freeSourceMatrix_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.Word.norm_freeSourceMatrix_le_one}
     \leanok
     \uses{def:peps_free_source_matrix}
     If $T$ is an allowed composition, then $\|A_T\|\le1$ in the
@@ -344,8 +344,8 @@ This gives the contractions used in
 
 \begin{theorem}[The bra-adjoint--ket contraction]
     \label{thm:peps_free_source_overlap}
-    \lean{TNLean.PEPS.PairEffect.Word.freeSourceMatrix_conjTranspose_mul_apply}
-    \lean{TNLean.PEPS.PairEffect.Word.norm_freeSourceMatrix_conjTranspose_mul_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.Word.freeSourceMatrix_conjTranspose_mul_apply}
+    \lean{TNLean.Lattice.PartyCircuit.Word.norm_freeSourceMatrix_conjTranspose_mul_le_one}
     \leanok
     \uses{def:peps_free_source_matrix}
     Let $T$ and $T'$ be compositions with a common output
@@ -372,8 +372,8 @@ This gives the contractions used in
 
 \begin{theorem}[Tracing a prepared density coefficient]
     \label{thm:peps_free_source_trace}
-    \lean{TNLean.PEPS.PairEffect.Word.trace_preparedMatrix_mul_conjTranspose_eq}
-    \lean{TNLean.PEPS.PairEffect.Word.trace_preparedDensityCoefficient_eq_freeSourceMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.Word.trace_preparedMatrix_mul_conjTranspose_eq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.trace_preparedDensityCoefficient_eq_freeSourceMatrix}
     \leanok
     \uses{def:peps_free_source_matrix,def:peps_prepared_density_coefficient}
     With the ket and bra input coordinates as above, let
@@ -403,8 +403,8 @@ This gives the contractions used in
 
 \begin{definition}[Pair labels of the source slots]
     \label{def:peps_source_pair_index}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.pairIndexEquiv}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.pairIndexEquiv_apply}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.pairIndexEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.pairIndexEquiv_apply}
     \leanok
     \uses{def:peps_source_inventory}
     Let $R$ be a source list whose unordered pair labels are distinct
@@ -417,8 +417,8 @@ This gives the contractions used in
 
 \begin{theorem}[Number of pair-source slots]
     \label{thm:peps_source_pair_count}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.length_eq_choose}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.length_le_card_sq}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.length_eq_choose}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.length_le_card_sq}
     \leanok
     \uses{def:peps_source_pair_index}
     For the pair slots in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
@@ -435,7 +435,7 @@ This gives the contractions used in
 \end{proof}
 \begin{definition}[Local maps on source slots]
     \label{def:peps_source_slot_maps}
-    \lean{TNLean.PEPS.PairEffect.Word.mapSourceSlots}
+    \lean{TNLean.Lattice.PartyCircuit.Word.mapSourceSlots}
     \leanok
     \uses{def:peps_source_slots,def:peps_party_layout}
     For each slot $e$, let $L_e:U_e\to U'_e$ and
@@ -448,8 +448,8 @@ This gives the contractions used in
 
 \begin{theorem}[Action of the local source maps]
     \label{thm:peps_source_slot_maps}
-    \lean{TNLean.PEPS.PairEffect.Word.mapSourceSlots_spec}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_mapSourceSlots_prepareSlots}
+    \lean{TNLean.Lattice.PartyCircuit.Word.mapSourceSlots_spec}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_mapSourceSlots_prepareSlots}
     \leanok
     \uses{def:peps_source_slot_maps,def:peps_source_slots}
     For every family $\eta_e\in U_e\otimes V_e$,
@@ -477,8 +477,8 @@ This gives the contractions used in
 
 \begin{definition}[The complete matrix in source frames]
     \label{def:peps_source_frame_matrix}
-    \lean{TNLean.PEPS.PairEffect.Word.sourceFrameMatrix}
-    \lean{TNLean.PEPS.PairEffect.Word.sourceFrameMatrix_eq_freeSourceMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sourceFrameMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sourceFrameMatrix_eq_freeSourceMatrix}
     \leanok
     \uses{def:peps_source_slot_maps,def:peps_free_source_matrix}
     Let $T:\mathcal S'\otimes\mathcal H\to\mathcal K$ be a
@@ -511,7 +511,7 @@ This gives the contractions used in
 
 \begin{theorem}[Joint contraction in source frames]
     \label{thm:peps_source_frame_contraction}
-    \lean{TNLean.PEPS.PairEffect.Word.norm_sourceFrameMatrix_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.Word.norm_sourceFrameMatrix_le_one}
     \leanok
     \uses{def:peps_source_frame_matrix}
     Assume that $T$ is allowed and that each $L_e$ and $M_e$ is a
@@ -534,7 +534,7 @@ This gives the contractions used in
 \begin{theorem}[Contraction through the source columns]
     \label{thm:peps_actual_pure_source_contraction}
     \leanok
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceContraction_preparedDensityCoefficient_pure_eq_mul}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceContraction_preparedDensityCoefficient_pure_eq_mul}
     \uses{def:peps_actual_source_column_matrix,def:peps_product_source_matrix,
         thm:peps_pure_source_density_coefficient}
     Let $\psi$ be the recorded private product input, let $\xi,\zeta$
@@ -569,8 +569,8 @@ This gives the contractions used in
 
 \begin{definition}[Source slots as participant pairs]
     \label{def:peps_original_source_pair_indices}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourcePairEquiv,
-        TNLean.PEPS.PairEffect.SourceCircuit.sourcePairEquiv_apply}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourcePairEquiv,
+        TNLean.Lattice.PartyCircuit.SourceCircuit.sourcePairEquiv_apply}
     \leanok
     \uses{def:peps_source_pair_index,def:compression_operator_samples}
     For each gate occurrence in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
@@ -592,7 +592,7 @@ This gives the contractions used in
 
 \begin{definition}[Sample positions of the original circuit]
     \label{def:peps_original_source_sample_indices}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceSampleEquiv}
     \leanok
     \uses{def:peps_original_source_pair_indices,def:compression_operator_samples}
     In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, identify an
@@ -607,7 +607,7 @@ This gives the contractions used in
 
 \begin{theorem}[Incidence of original sample positions]
     \label{thm:peps_original_source_sample_incidence}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.mem_sourceSampleEquiv_iff}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.mem_sourceSampleEquiv_iff}
     \leanok
     \uses{def:peps_original_source_pair_indices,
         def:peps_original_source_sample_indices}
@@ -626,7 +626,7 @@ This gives the contractions used in
 
 \begin{definition}[Local sample positions in the original order]
     \label{def:peps_local_source_sample_indices}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSlotSampleEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSlotSampleEquiv}
     \leanok
     \uses{def:peps_partial_fixed_positions,
         def:peps_original_source_sample_indices,
@@ -647,7 +647,7 @@ This gives the contractions used in
 
 \begin{definition}[Common sample assignments in the original source order]
     \label{def:peps_source_sample_assignment_indices}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allSourceSampleAssignmentEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allSourceSampleAssignmentEquiv}
     \leanok
     \uses{def:peps_all_original_source_slots,def:peps_original_source_sample_indices}
     Let $w$ be a chronological source composition on an arbitrary party set
@@ -678,7 +678,7 @@ This gives the contractions used in
 
 \begin{theorem}[Inverse assignments at the original source occurrence]
     \label{thm:peps_source_sample_assignment_occurrence}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allSourceSampleAssignmentEquiv_symm_apply}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allSourceSampleAssignmentEquiv_symm_apply}
     \leanok
     \uses{def:peps_source_sample_assignment_indices}
     For each assignment $j:\mathcal S\to[k]$ and each original source
@@ -697,7 +697,7 @@ This gives the contractions used in
 
 \begin{theorem}[Reindexing a common sample sum]
     \label{thm:peps_source_sample_assignment_sum}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_sourceSampleAssignments_eq}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_sourceSampleAssignments_eq}
     \leanok
     \uses{def:peps_source_sample_assignment_indices}
     For arbitrary index sets $I,J$ and any matrix family
@@ -721,7 +721,7 @@ This gives the contractions used in
 
 \begin{theorem}[Number of the original shared samples]
     \label{thm:peps_original_source_sample_count}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.length_allSourceSlots_eq_sum_pairSampleLabels}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.length_allSourceSlots_eq_sum_pairSampleLabels}
     \leanok
     \uses{def:peps_all_original_source_slots,def:peps_original_source_sample_indices,
         thm:peps_source_pair_count}
@@ -753,7 +753,7 @@ This gives the contractions used in
 
 \begin{theorem}[Distributing the source averaging factor]
     \label{thm:peps_original_source_sample_averaging}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.inv_sampleSize_pow_allSourceSlots_eq_prod}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.inv_sampleSize_pow_allSourceSlots_eq_prod}
     \leanok
     \uses{thm:peps_original_source_sample_count}
     With the notation of Theorem~\ref{thm:peps_original_source_sample_count},

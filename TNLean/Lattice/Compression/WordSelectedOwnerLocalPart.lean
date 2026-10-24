@@ -25,7 +25,8 @@ and 565–588.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
+open TNLean.Lattice.PartyCircuit
 open ContinuousLinearMap
 variable {P Q : Type}
 
@@ -398,4 +399,4 @@ theorem restrict_localPart_mapOwner_eval_heq_of_singleton_fiber
   change selectedOwnerLocalPartIdentity f (partySelector p) (partySelector q) u
   exact restrict_localPart_mapOwner_eval_heq_induction f p q hf hsel (fun w ↦ hS w) u
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

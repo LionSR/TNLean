@@ -23,7 +23,7 @@ Source: polynomial-PEPS, `04-compression.tex`, lines 279–309 and 565–588.
 
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect.SourceInventory
+namespace TNLean.Lattice.PartyCircuit.SourceInventory
 variable {P : Type}
 
 /-- The matrix of the literal endpoint word in the actual slot basis is the
@@ -44,4 +44,4 @@ theorem slotBasis_repr_endpointWord (R : SourceInventory P)
   simp only [OrthonormalBasis.repr_apply_apply,
     OrthonormalBasis.tensorProduct_apply', TensorProduct.inner_tmul]
 
-end TNLean.PEPS.PairEffect.SourceInventory
+end TNLean.Lattice.PartyCircuit.SourceInventory

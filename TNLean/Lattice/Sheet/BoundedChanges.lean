@@ -46,7 +46,7 @@ noncomputable section
 
 open Matrix ContinuousLinearMap EuclideanSpace
 open scoped InnerProductSpace TensorProduct Kronecker Matrix.Norms.L2Operator
-open TNLean.PEPS.EncodedFrame TNLean.PEPS.PairEffect
+open TNLean.Lattice.Sheet TNLean.Lattice.PartyCircuit
 
 namespace TNLean.Lattice
 

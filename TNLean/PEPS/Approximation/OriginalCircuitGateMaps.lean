@@ -20,7 +20,7 @@ lines 21–43 and 137–151, revision
 
 noncomputable section
 
-namespace TNLean.PEPS.PairEffect.OriginalCircuit
+namespace TNLean.Lattice.PartyCircuit.OriginalCircuit
 
 variable {P : Type}
 
@@ -53,4 +53,4 @@ theorem isGateApproximation_zero_canonicalGateMaps {a b : Layout P}
   | swap => trivial
   | frame r w ih => exact ih
 
-end TNLean.PEPS.PairEffect.OriginalCircuit
+end TNLean.Lattice.PartyCircuit.OriginalCircuit

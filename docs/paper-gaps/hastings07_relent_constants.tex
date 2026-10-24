@@ -1,0 +1,121 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+% Fallbacks keep this note compilable when a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{The Constants in the Entropy Gain of Hastings' Area Law}
+\author{}
+\date{2026-10-22}
+
+\begin{document}
+\maketitle
+\gapnote{clarification}{resolved}
+
+\section{The source passage}
+
+Hastings' proof of the one-dimensional area law~\cite{Hastings2007AreaLaw}
+(arXiv:0705.2024v4) reduces the strengthened doubling inequality
+(lines~201--204) to the bound
+\begin{equation}\label{eq:relent}
+  S(\rho_{j-l+1,j})+S(\rho_{j+1,j+l})-S(\rho_{j-l+1,j+l})
+  \ge\bigl(1-2\epsilon\bigr)\frac{l}{\xi'}-\ln C_1-C_2,
+  \qquad\epsilon=C_1e^{-l/\xi'},
+\end{equation}
+for adjacent intervals of $l$ sites (lines~238--242). Lines~413--503 prove it.
+Here $\Psi_0$ is the unique ground state of the chain, $P_0=|\Psi_0\rangle
+\langle\Psi_0|$ its projector, and $\rho_{a,b}$ the marginal of $P_0$ on the
+sites $a,\dots,b$. The operators $O_B,O_L,O_R$ of Lemma~1 satisfy
+$\lVert O_BO_LO_R-P_0\rVert\le\epsilon$. Let $\rho$ be the ground-state
+marginal on the $2l$ sites, $\sigma=\rho_{1,j}\otimes\rho_{j+1,N}$,
+$x=\operatorname{tr}(O_B\sigma)$ and $y=\operatorname{tr}(O_LO_R\sigma)$.
+The proof shows $\operatorname{tr}(O_B\rho)\ge1-2\epsilon$, bounds $x$
+(eq.~\texttt{xbd}), and bounds the mutual information below by the binary
+relative entropy
+\begin{equation}\label{eq:LU}
+  (1-2\epsilon)\ln\frac{1-2\epsilon}{x}+2\epsilon\ln\frac{2\epsilon}{1-x}
+\end{equation}
+(eq.~\texttt{LU}). It ends with ``$C_2$ is a numeric constant of order unity''
+(line~500).
+
+\section{Route 1 and the bound on $x$}
+
+Hastings' note added (lines~911--925) observes that the operator $O_B$ of
+Lemma~1 need not be positive, and runs the Lindblad--Uhlmann step with the
+effect $E=O_B^\dagger O_B$ (route~1). With $Z=O_LO_R$, the product of the two
+commuting projections of Lemma~1, the bound
+$\lVert O_BZ-P_0\rVert\le\epsilon$ gives:
+\begin{itemize}
+  \item $\lVert(1-Z)\Psi_0\rVert\le\epsilon$, since $ZO_B^\dagger\Psi_0$ is
+    within $\epsilon$ of $\Psi_0$;
+  \item $\langle\Psi_0,E\Psi_0\rangle=\lVert O_B\Psi_0\rVert^2\ge(1-2\epsilon)^2
+    \ge1-4\epsilon$;
+  \item $y=\langle O_L\rangle\langle O_R\rangle\ge1-2\epsilon^2$ for the product
+    state, since each factor is at least
+    $\lVert Z\Psi_0\rVert^2\ge1-\epsilon^2$. This is stronger than the
+    $1-2\epsilon$ of line~446.
+\end{itemize}
+Route~1 also gives $\lVert ZEZ-P_0\rVert\le2\epsilon+\epsilon^2$. Writing
+$E=ZEZ+(1-Z)E+ZE(1-Z)$ and bounding the cross terms by the Cauchy--Schwarz
+inequality for the expectation in $\sigma$ gives
+\[
+  x\le p+\delta+\sqrt{1-y}\,\bigl(\sqrt x+\sqrt{p+\delta}\bigr),
+  \qquad\delta=2\epsilon+\epsilon^2,\quad p=\operatorname{tr}(\sigma P_0).
+\]
+With $p\le2\epsilon$ (lines~484--490) and $1-y\le2\epsilon^2$, this gives
+$x\le20\,\epsilon$ for $\epsilon\le1/136$. The case analysis below is
+therefore run with $\epsilon'=2\epsilon=2C_1e^{-l/\xi'}$ in place of
+$\epsilon$. Then $1-2\epsilon'$ bounds the ground-state expectation from below
+and $x\le36\,\epsilon'$. Replacing $C_1$ by $2C_1$ keeps the rate
+$e^{-l/\xi'}$ and the coefficient $l/\xi'$ of the strengthened doubling
+inequality.
+
+\section{The value of $C_2$}
+
+The formalization proves~\eqref{eq:relent} with $C_2=7$, using only $2C_1>1$
+and the nonnegativity of the mutual information. It splits on $\epsilon$.
+\begin{itemize}
+  \item For $\epsilon\le1/68$, $x\le36\epsilon$ and $1-2\epsilon\ge1/2$ give
+    \[
+      (1-2\epsilon)\ln\frac{1-2\epsilon}{x}
+      \ge(1-2\epsilon)\ln\frac1\epsilon-\ln 72
+      \ge(1-2\epsilon)\ln\frac1\epsilon-5 .
+    \]
+    The inequality $\ln u\ge1-1/u$ gives
+    $2\epsilon\ln(2\epsilon/(1-x))\ge-1$. Since
+    $\ln(1/\epsilon)=l/\xi'-\ln C_1$ and $\ln C_1>-\ln2>-1$,
+    the bound~\eqref{eq:LU} is at least
+    $(1-2\epsilon)l/\xi'-\ln C_1-7$.
+  \item For $1/68<\epsilon<1/2$, the right side of~\eqref{eq:relent} equals
+    $(1-2\epsilon)\ln(1/\epsilon)-2\epsilon\ln C_1-C_2$. This is at most
+    $\ln68+\ln2-7<0$.
+  \item For $\epsilon\ge1/2$, the right side is at most $-\ln C_1-7<0$.
+\end{itemize}
+In the last two cases the nonnegativity of the mutual information suffices.
+The doubling iteration needs $\ln C_1+C_2\ge0$, which holds since
+$\ln C_1>-1$.
+
+\section{Formalization}
+
+\leanid{TNLean.MPS.AreaLaw.Hastings.le_of_lindbladUhlmann} proves the case
+analysis above for real numbers. Its hypotheses are $\Delta\ge0$ and, for
+$\epsilon\le1/68$, a point $x\in(0,36\epsilon]$ at which~\eqref{eq:LU} is at
+most $\Delta$. \leanid{TNLean.MPS.AreaLaw.Hastings.relentConst} is $C_2=7$.
+To reach that form from the effect bound, note that the binary relative
+entropy of $a$ with respect to $b$ is increasing in $a$ and decreasing in $b$
+for $b\le a$. So $a=\operatorname{tr}(\rho E)\ge1-2\epsilon'$ may be lowered
+to $1-2\epsilon'$, and $\operatorname{tr}(\sigma E)$ may be raised to
+$x=36\,\epsilon'\le1-2\epsilon'$. That choice of $x$ also avoids proving
+$x>0$.
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

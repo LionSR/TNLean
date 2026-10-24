@@ -32,8 +32,8 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open MeasureTheory QICLean.ComplexGaussian
 open scoped Matrix ComplexConjugate NNReal
-namespace TNLean.PEPS.PairEffect.SourceCircuit
-open TNLean.PEPS.Approximation
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.Lattice.Compression
 
 open Classical in
 /-- An actual allowed source-only circuit admits original-source Schmidt data
@@ -89,4 +89,4 @@ theorem exists_sourceSample_lifetime_error_le
     (fun s ξ ↦ (hframes s ξ).2.2.1) (fun s ξ ↦ (hframes s ξ).2.2.2.1)
     (fun s ξ ↦ (hframes s ξ).2.2.2.2) p₀ hp₀ hp₀s bIn bPhysical bDiscard
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

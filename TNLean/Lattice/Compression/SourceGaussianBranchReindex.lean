@@ -27,7 +27,7 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open QICLean.ComplexGaussian
 open scoped TensorProduct Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 
 open Classical in
 /-- The actual partial-branch density, with its two independent endpoint
@@ -68,4 +68,4 @@ theorem gaussianSchmidtBranchDensity_eq_sum_original
   rw [partialSchmidtCoordinateEquiv_apply, partialSchmidtCoordinateEquiv_apply]
   rfl
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

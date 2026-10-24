@@ -57,6 +57,7 @@ is a named numerical constant: the hole ratio `ε₀ = 1 / 30000`, the mesh rati
 noncomputable section
 
 namespace TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 
 open EncodedFrame
 

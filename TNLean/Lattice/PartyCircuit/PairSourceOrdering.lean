@@ -25,7 +25,7 @@ noncomputable section
 
 open scoped InnerProductSpace TensorProduct
 
-namespace TNLean.PEPS.PairEffect.SourceInventory
+namespace TNLean.Lattice.PartyCircuit.SourceInventory
 
 variable {P : Type}
 
@@ -141,4 +141,4 @@ theorem exists_ofSlots_expands (R S : SourceInventory P)
       (∀ i, ‖η i‖ = 1) ∧ (ofSlots R U V η).Expands S := by
   exact exists_ofSlots_expands_of_perm R S hS ((List.perm_ext_iff_of_nodup hR hSN).mpr hK)
 
-end TNLean.PEPS.PairEffect.SourceInventory
+end TNLean.Lattice.PartyCircuit.SourceInventory

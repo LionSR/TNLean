@@ -11,7 +11,7 @@ Source: polynomial-PEPS, `04-compression.tex:137–151`.
 -/
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 open ContinuousLinearMap
 variable {P : Type}
 
@@ -201,4 +201,4 @@ Source: polynomial-PEPS, `04-compression.tex:137–151` and `233–251`. -/
 theorem card_familyRegionalPhysicalIndex [DecidableEq P] (d : P → ℕ) (A : Finset P) :
     Fintype.card ((p : {p // p ∈ A}) → Fin (d p)) = ∏ p ∈ A, d p := by
   simp only [Fintype.card_pi, Fintype.card_fin, Finset.prod_coe_sort]
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

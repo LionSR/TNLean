@@ -36,7 +36,7 @@ open scoped TensorProduct
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame
+open TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
 
 /-- The number of completed stages. Source: Part II, `con:sweep`, lines 329–342. -/
 def stageCount (L w : ℕ) : ℕ := L / (20 * w) - 3

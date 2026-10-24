@@ -26,7 +26,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 
 noncomputable section
-namespace TNLean.PEPS.Approximation
+namespace TNLean.Lattice.Compression
 
 /-- Power bounds for the number of sources, the choice cost, and inverse accuracy
 give a uniform power bound for the explicit integer sample count. -/
@@ -101,4 +101,4 @@ theorem sourceSamplingCount_lt_of_gate_power_bounds (N b : ℕ)
     N (B ^ (4 * b) * D ^ 4) L C_N (C_B ^ (4 * b) * C_D ^ 4)
     n (4 * b * m + 4 * r) p hL hCN (by positivity) (by positivity) hN hQbound
 
-end TNLean.PEPS.Approximation
+end TNLean.Lattice.Compression
