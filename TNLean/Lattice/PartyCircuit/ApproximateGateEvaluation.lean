@@ -28,7 +28,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.EffectCircuit
+namespace TNLean.Lattice.PartyCircuit.EffectCircuit
 variable {P : Type}
 
 /-- Original gate operators, one for each occurrence of the chronology.
@@ -64,7 +64,7 @@ def IsGateApproximation (δ : ℝ) : {a b : Layout P} → (w : EffectCircuit a b
   | _, _, .localMap _ _ _ A _, _ => ‖A‖ ≤ 1
   | _, _, @EffectCircuit.gate _ C _ _ a b L _, G =>
       Fintype.card C ≠ 1 ∧ (∀ q ∈ L, q.2.IsAllowed) ∧ ‖(G : Mem a →L[ℂ] Mem b)‖ ≤ 1 ∧
-        ‖PairEffect.gate (toGate L) - (G : Mem a →L[ℂ] Mem b)‖ ≤ δ
+        ‖PartyCircuit.gate (toGate L) - (G : Mem a →L[ℂ] Mem b)‖ ≤ δ
   | _, _, .swap .., _ => True
   | _, _, .frame _ w, G => w.IsGateApproximation δ G
 
@@ -81,4 +81,4 @@ theorem norm_evalWithGateMaps_le_one {a b : Layout P} (w : EffectCircuit a b)
   | swap r s tail => exact Word.norm_eval_le_one (.swap r s tail) trivial
   | frame r w ih => exact (norm_lTensor_le _ _).trans (ih G h)
 
-end TNLean.PEPS.PairEffect.EffectCircuit
+end TNLean.Lattice.PartyCircuit.EffectCircuit

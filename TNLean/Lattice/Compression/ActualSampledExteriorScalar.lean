@@ -25,8 +25,10 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 
 noncomputable section
 open scoped Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 
+namespace Lattice.PartyCircuit
 private theorem restrict_eval_heq_of_selector_eq {Q : Type} {f g : Q → Bool}
     (h : f = g) {a b : Layout Q} (w : Word a b) (hs : w.sources = []) :
     HEq (w.restrict f hs).eval (w.restrict g hs).eval := by
@@ -151,7 +153,8 @@ private theorem empty_party_words_mixed_partialTrace
   funext row col
   rfl
 
-namespace SourceCircuit
+end Lattice.PartyCircuit
+namespace Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} {a b : Layout P}
 
 /-- The actual exterior source input is empty. Source: polynomial-PEPS
@@ -242,5 +245,5 @@ theorem partialSourceWord_sampled_none_partialTrace_eq_scalar
     (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω) ha hb B C
     w.emptyGateScalar w.emptyGateScalar hξ hζ hU
 
-end SourceCircuit
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.SourceCircuit
+end TNLean

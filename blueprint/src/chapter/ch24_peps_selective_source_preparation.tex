@@ -15,9 +15,9 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{definition}[A gate with common finite source positions]
     \label{def:peps_prepared_source_gate}
-    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate}
-    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.branchWord}
-    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.eval}
+    \lean{TNLean.Lattice.PartyCircuit.PreparedSourceGate}
+    \lean{TNLean.Lattice.PartyCircuit.PreparedSourceGate.branchWord}
+    \lean{TNLean.Lattice.PartyCircuit.PreparedSourceGate.eval}
     \leanok
     \uses{def:peps_source_slots,def:peps_party_registers}
     Fix a finite branch set $\Xi$, coefficients $c_\xi\in\C$, and
@@ -41,9 +41,9 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{theorem}[Prepared branches and the complete gate]
     \label{thm:peps_prepared_gate_properties}
-    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.branchWord_isAllowed}
-    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.sources_branchWord}
-    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.norm_eval_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.PreparedSourceGate.branchWord_isAllowed}
+    \lean{TNLean.Lattice.PartyCircuit.PreparedSourceGate.sources_branchWord}
+    \lean{TNLean.Lattice.PartyCircuit.PreparedSourceGate.norm_eval_le_one}
     \leanok
     \uses{def:peps_prepared_source_gate}
     Each $F_\xi$ is an allowed composition. Its ordered source list is
@@ -62,7 +62,7 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{theorem}[Construction from the original branch operators]
     \label{thm:peps_prepared_gate_exists}
-    \lean{TNLean.PEPS.PairEffect.Word.exists_preparedSourceGate}
+    \lean{TNLean.Lattice.PartyCircuit.Word.exists_preparedSourceGate}
     \leanok
     \uses{def:peps_prepared_source_gate}
     Suppose $P$ and $\Xi$ are finite, each $W_\xi:a\to b$ is an
@@ -87,8 +87,8 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{definition}[Keeping affected owners distinct]
     \label{def:peps_affected_owner}
-    \lean{TNLean.PEPS.PairEffect.affectedOwner}
-    \lean{TNLean.PEPS.PairEffect.affectedOwner_eq_none}
+    \lean{TNLean.Lattice.PartyCircuit.affectedOwner}
+    \lean{TNLean.Lattice.PartyCircuit.affectedOwner_eq_none}
     \leanok
     Let $\mathcal A\subseteq P$ have decidable membership. Set
     $Q=\mathcal A\sqcup\{*\}$, where $*$ denotes the exterior, and
@@ -106,8 +106,8 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{theorem}[Equality of grouped owners]
     \label{thm:peps_affected_owner_equality}
-    \lean{TNLean.PEPS.PairEffect.affectedOwner_eq_iff}
-    \lean{TNLean.PEPS.PairEffect.PairSource.affectedOwner_ne_iff}
+    \lean{TNLean.Lattice.PartyCircuit.affectedOwner_eq_iff}
+    \lean{TNLean.Lattice.PartyCircuit.PairSource.affectedOwner_ne_iff}
     \leanok
     \uses{def:peps_affected_owner}
     One has $g(p)=g(q)$ if and only if $p=q$ or both parties are
@@ -127,9 +127,9 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{theorem}[The surviving ordered source occurrences]
     \label{thm:peps_affected_source_occurrences}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.mem_mapOwner_affectedOwner}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.map_partyPair_affectedOwner}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.mapOwner_affectedOwner_eq_nil_iff}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.mem_mapOwner_affectedOwner}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.map_partyPair_affectedOwner}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.mapOwner_affectedOwner_eq_nil_iff}
     \leanok
     \uses{def:peps_affected_owner,def:peps_owner_sources}
     A source occurs in $S_g$ if and only if it is obtained from an
@@ -156,7 +156,7 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{definition}[Retaining a complete operation at one grouped owner]
     \label{def:peps_grouped_block_map}
-    \lean{TNLean.PEPS.PairEffect.Word.groupedBlockMap}
+    \lean{TNLean.Lattice.PartyCircuit.Word.groupedBlockMap}
     \leanok
     \uses{def:peps_owner_layout,def:peps_party_layout}
     Let $f:P\to Q$, and suppose every register in $a$ and $b$ has
@@ -168,8 +168,8 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{theorem}[Exact action of an untouched aggregate]
     \label{thm:peps_grouped_block_map}
-    \lean{TNLean.PEPS.PairEffect.Word.groupedBlockMap_spec}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_groupedBlockMap}
+    \lean{TNLean.Lattice.PartyCircuit.Word.groupedBlockMap_spec}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_groupedBlockMap}
     \leanok
     \uses{def:peps_grouped_block_map}
     The complete operation satisfies
@@ -197,7 +197,7 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{theorem}[Grouping preserves the weighted gate sum]
     \label{thm:peps_grouped_gate_sum}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_sum_mapOwner_comp}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_sum_mapOwner_comp}
     \leanok
     \uses{def:peps_owner_composition}
     For a finite family of compositions $F_\xi:a\to b$ and arbitrary
@@ -218,7 +218,7 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{definition}[The complete gate after grouping]
     \label{def:peps_prepared_gate_grouped}
-    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.evalAtOwners}
+    \lean{TNLean.Lattice.PartyCircuit.PreparedSourceGate.evalAtOwners}
     \leanok
     \uses{def:peps_prepared_source_gate,def:peps_owner_layout}
     For common finite source data and any map $f:P\to Q$, define
@@ -227,8 +227,8 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{theorem}[The original expansion and aggregate norm after grouping]
     \label{thm:peps_prepared_gate_grouped}
-    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.evalAtOwners_eq_sum}
-    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.norm_evalAtOwners_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.PreparedSourceGate.evalAtOwners_eq_sum}
+    \lean{TNLean.Lattice.PartyCircuit.PreparedSourceGate.norm_evalAtOwners_le_one}
     \leanok
     \uses{def:peps_prepared_gate_grouped,def:peps_owner_composition}
     The branch expansion is $G^f=\sum_\xi c_\xi F_\xi^f$,
@@ -249,10 +249,10 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{definition}[The selected original source positions]
     \label{def:peps_selected_source_positions}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.selectedSources}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.layout_selectedSources_eq}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.freeSlotLayout}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.mem_selectedSources}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.selectedSources}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.layout_selectedSources_eq}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.freeSlotLayout}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.mem_selectedSources}
     \leanok
     \uses{def:peps_source_slots}
     Let $E$ be an ordered list of pair positions, with halfspaces
@@ -266,9 +266,9 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{definition}[Selective source preparation]
     \label{def:peps_selective_preparation}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.prepareSelected}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.prepareFreeSlots}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.fillSourceVectors}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.prepareSelected}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.prepareFreeSlots}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.fillSourceVectors}
     \leanok
     \uses{def:peps_selected_source_positions}
     Fix vectors $\eta_e\in U_e\otimes V_e$ only at positions outside
@@ -288,9 +288,9 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{theorem}[Only the fixed sources are prepared]
     \label{thm:peps_selective_preparation_sources}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.isAllowed_prepareSelected}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.sources_prepareSelected}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.mem_sources_prepareSelected}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.isAllowed_prepareSelected}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.sources_prepareSelected}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.mem_sources_prepareSelected}
     \leanok
     \uses{def:peps_selective_preparation}
     The source list of $\Phi_\eta$ is the list of fixed
@@ -312,7 +312,7 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{theorem}[Uniform recovery of every completed preparation]
     \label{thm:peps_selective_preparation_recovery}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSelected_prepareFreeSlots}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.eval_prepareSelected_prepareFreeSlots}
     \leanok
     \uses{def:peps_selective_preparation}
     For every family of free vectors,
@@ -336,7 +336,7 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{theorem}[Two contractions independent of the free source vectors]
     \label{thm:peps_selective_partition}
-    \lean{TNLean.PEPS.PairEffect.Word.exists_selective_partition}
+    \lean{TNLean.Lattice.PartyCircuit.Word.exists_selective_partition}
     \leanok
     \uses{def:peps_selective_preparation,def:peps_party_partition}
     Let $f:P\to\{0,1\}$ specify two sides. Suppose every fixed
@@ -380,7 +380,7 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{definition}[Extension by spectator registers]
     \label{def:peps_append_spectators}
-    \lean{TNLean.PEPS.PairEffect.Word.appendTail}
+    \lean{TNLean.Lattice.PartyCircuit.Word.appendTail}
     \leanok
     \uses{def:peps_party_layout,thm:peps_register_exchange}
     Given a composition $W:a\to b$ and a spectator list
@@ -391,9 +391,9 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{theorem}[Exact spectator extension]
     \label{thm:peps_append_spectators}
-    \lean{TNLean.PEPS.PairEffect.Word.isAllowed_appendTail}
-    \lean{TNLean.PEPS.PairEffect.Word.sources_appendTail}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_appendTail}
+    \lean{TNLean.Lattice.PartyCircuit.Word.isAllowed_appendTail}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sources_appendTail}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_appendTail}
     \leanok
     \uses{def:peps_append_spectators}
     The spectator extension has the same ordered source list
@@ -418,7 +418,7 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{theorem}[Relabelling a composition beside spectators]
     \label{thm:peps_owner_spectator_extension}
-    \lean{TNLean.PEPS.PairEffect.Word.mapOwner_appendTail_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.mapOwner_appendTail_heq}
     \leanok
     \uses{def:peps_append_spectators,def:peps_owner_composition,
         def:peps_owner_layout}
@@ -466,12 +466,12 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{theorem}[Congruence under equal register lists]
     \label{thm:peps_word_structural_congruence}
-    \lean{TNLean.PEPS.PairEffect.Word.comp_heq}
-    \lean{TNLean.PEPS.PairEffect.Word.frame_heq}
-    \lean{TNLean.PEPS.PairEffect.Word.id_heq}
-    \lean{TNLean.PEPS.PairEffect.Word.swap_heq}
-    \lean{TNLean.PEPS.PairEffect.Word.castLayouts_heq}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.comp_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.frame_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.id_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.swap_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.castLayouts_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_heq}
     \leanok
     \uses{def:peps_party_layout,thm:peps_party_restriction}
     For the register operations in
@@ -501,7 +501,7 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{theorem}[Relabelling equal register lists]
     \label{thm:peps_owner_layout_identification}
-    \lean{TNLean.PEPS.PairEffect.Word.mapOwner_castLayouts}
+    \lean{TNLean.Lattice.PartyCircuit.Word.mapOwner_castLayouts}
     \leanok
     \uses{def:peps_owner_composition,thm:peps_party_restriction}
     For the register operations in
@@ -523,7 +523,7 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{theorem}[Restriction commutes with relabelling owners]
     \label{thm:peps_owner_selection_commutation}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_mapOwner_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_mapOwner_heq}
     \leanok
     \uses{def:peps_owner_composition,thm:peps_party_restriction}
     For the party restrictions in
@@ -559,7 +559,7 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{theorem}[Evaluation under relabelling owners]
     \label{thm:peps_owner_evaluation_identification}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_mapOwner_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_mapOwner_heq}
     \leanok
     \uses{def:peps_owner_composition,def:peps_owner_layout}
     For the relabellings in
@@ -586,7 +586,7 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{theorem}[Relabelling a framed word]
     \label{thm:peps_owner_framed_word}
-    \lean{TNLean.PEPS.PairEffect.Word.mapOwner_frameList_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.mapOwner_frameList_heq}
     \leanok
     \uses{def:peps_owner_composition,def:peps_owner_layout,
         thm:peps_word_structural_congruence}
@@ -614,7 +614,7 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{theorem}[Source registers at an owner with a singleton fibre]
     \label{thm:peps_selected_source_owner_registers}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.atParty_layout_mapOwner_of_singleton_fiber}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.atParty_layout_mapOwner_of_singleton_fiber}
     \leanok
     \uses{def:peps_source_inventory,def:peps_owner_sources,
         def:peps_single_party_selector,def:peps_party_registers,def:peps_owner_layout}
@@ -651,7 +651,7 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{theorem}[Coordinate endpoint spaces recover the fixed source list]
     \label{thm:peps_partial_slot_coordinate_layout}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.slotLayout_partialSlots_eq_layout}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.slotLayout_partialSlots_eq_layout}
     \leanok
     \uses{def:peps_partial_fixed_positions,thm:peps_partial_fixed_layout}
     In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
@@ -677,7 +677,7 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{theorem}[Selected source lists in two owner groupings]
     \label{thm:peps_singleton_all_source_layout}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.mapOwner_atParty_partialSlots_eq_allResidualSourceLayout}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.mapOwner_atParty_partialSlots_eq_allResidualSourceLayout}
     \leanok
     \uses{thm:peps_partial_slot_coordinate_layout,thm:peps_incident_gate_labels,
         def:peps_affected_owner,def:peps_all_party_source_registers}
@@ -710,7 +710,7 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{definition}[The source-to-output word from incident labels]
     \label{def:peps_incident_source_word}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.incidentSourceWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.incidentSourceWord}
     \leanok
     \uses{thm:peps_incident_gate_labels,def:peps_partial_source_choices,
         def:peps_canonical_source_residual,thm:peps_singleton_all_source_layout,
@@ -738,7 +738,7 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{theorem}[No pair preparations in the incident-label word]
     \label{thm:peps_incident_source_word_sources}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_incidentSourceWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sources_incidentSourceWord}
     \leanok
     \uses{def:peps_incident_source_word}
     For the source-to-output composition in
@@ -763,7 +763,7 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{theorem}[Selected original lists in two owner groupings]
     \label{thm:peps_singleton_all_original_layout}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.mapOwner_selected_originalLayout_eq}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.mapOwner_selected_originalLayout_eq}
     \leanok
     \uses{def:peps_affected_owner,thm:peps_incident_gate_labels,
         def:peps_owner_layout,thm:peps_party_restriction}
@@ -796,7 +796,7 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{theorem}[Tensor maps under equal memory spaces]
     \label{thm:peps_tensor_map_memory_congruence}
-    \lean{TNLean.PEPS.PairEffect.mapL_heq}
+    \lean{TNLean.Lattice.PartyCircuit.mapL_heq}
     \leanok
     \uses{def:peps_party_layout,thm:peps_basis_memory_equalities}
     For the tensor maps in

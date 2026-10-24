@@ -170,6 +170,13 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selector
     have hconj := MPOTensor.listProd_conj_of_conjTranspose_mul_self U hU
       (fun l => A (w l))
     simpa only [hletter] using hconj
+  have hone : (fun γ =>
+      (1 : Matrix (Fin (Fam.chi.dim α β γ))
+        (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ
+        (1 : Matrix (Fin (Fam.bondDim γ)) (Fin (Fam.bondDim γ)) ℂ)) =
+      fun _ => 1 := by
+    funext γ
+    exact Matrix.one_kronecker_one
   have hDword : ∀ w : List (Fin (p * p)),
       _root_.evalWord D w = Matrix.blockDiagonal' fun γ =>
         (1 : Matrix (Fin (Fam.chi.dim α β γ))
@@ -179,13 +186,7 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selector
     induction w with
     | nil =>
         simp only [_root_.evalWord, Kraus.evalWord_nil]
-        rw [show (fun γ =>
-            (1 : Matrix (Fin (Fam.chi.dim α β γ))
-              (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ
-              (1 : Matrix (Fin (Fam.bondDim γ)) (Fin (Fam.bondDim γ)) ℂ)) =
-            fun _ => 1 by
-          funext γ
-          exact Matrix.one_kronecker_one]
+        rw [hone]
         exact Matrix.blockDiagonal'_one.symm
     | cons ij w ih =>
         simp only [_root_.evalWord, Kraus.evalWord_cons, ih, D]
@@ -227,13 +228,7 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selector
         funext γ
         rw [hcoeffTotal]
       _ = 1 := by
-        rw [show (fun γ =>
-            (1 : Matrix (Fin (Fam.chi.dim α β γ))
-              (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ
-              (1 : Matrix (Fin (Fam.bondDim γ)) (Fin (Fam.bondDim γ)) ℂ)) =
-            fun _ => 1 by
-          funext γ
-          exact Matrix.one_kronecker_one]
+        rw [hone]
         exact Matrix.blockDiagonal'_one
   let P := U * Uᴴ
   have hPword (w : Fin (n + 1) → Fin (p * p)) :

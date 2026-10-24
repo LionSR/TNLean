@@ -18,6 +18,7 @@ arbitrary coefficient families because no gate is expanded.
 -/
 
 namespace TNLean.PEPS.Approximation.CorrectedPositionCostRegression
+open TNLean.Lattice.Compression
 
 open scoped NNReal
 

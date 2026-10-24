@@ -13,7 +13,7 @@ import Lean.Util.CollectAxioms
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[``TNLean.MPS.AreaLaw.chainBudgetConst_le_mul_log_sq,
-      ``TNLean.MPS.AreaLaw.regionEntropy_eq_zero_of_localDimension_one] do
+      ``TNLean.Lattice.regionEntropy_eq_zero_of_localDimension_one] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl

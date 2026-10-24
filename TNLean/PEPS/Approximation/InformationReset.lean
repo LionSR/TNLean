@@ -172,11 +172,19 @@ theorem mutualInformation_cores_le_of_sites_reset_unitary {V : Type*} [Fintype V
     let p := sitePairConfigurationEquiv V q q
     let F := reindex p p (sheetSwapOp q A)
     let ψ : (V → Fin (q * q)) → ℂ := fun c ↦ Ω (p.symm c).1 * Ω (p.symm c).2
-    ‖WithLp.toLp 2 ψ‖ = 1 → ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 →
     ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤ δ →
     FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A₀ C₀ ≤
       8 * √δ * Real.log (Real.exp 1 * ((q : ℝ) ^ A₀.card)) := by
-  intro p F ψ hψn hφn hUerr
+  intro p F ψ hUerr
+  have hΩsum : ∑ i, ‖WithLp.ofLp Ω i‖ ^ 2 = 1 := by
+    rw [← EuclideanSpace.norm_sq_eq, hΩ]
+    norm_num
+  have hψn : ‖WithLp.toLp 2 ψ‖ = 1 :=
+    (EuclideanSpace.norm_toLp_comp_equiv p.symm (doubledVector (WithLp.ofLp Ω))).trans
+      (Matrix.norm_doubledVector hΩsum)
+  have hφn : ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 :=
+    (Matrix.norm_toLp_mulVec_of_unitary (Matrix.reindex_mem_unitaryGroup p (sheetSwapOp q A)
+      (sheetSwap q A).permMatrix_mem_unitaryGroup) ψ).trans hψn
   set Pe := (Equiv.sumArrowEquivProdArrow V V (Fin q)).trans p with hPe
   set U' := reindex Pe.symm Pe.symm U with hU'
   have hU's : U' ∈ supportedOperators q ((B.disjSum B : Finset (V ⊕ V)) : Set (V ⊕ V)) :=
@@ -246,11 +254,10 @@ theorem mutualInformation_cores_le_of_reset_unitary {L q : ℕ} (hq : 1 ≤ q)
     let F := reindex pe pe (TNLean.Lattice.sheetSwapOp q R)
     let ψ : Lattice.Configuration (rectangularDomain L L) (q * q) → ℂ := fun c ↦
       Ω (pe.symm c).1 * Ω (pe.symm c).2
-    ‖WithLp.toLp 2 ψ‖ = 1 → ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 →
     ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤ δ →
     FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R₀ C₀ ≤
       8 * √δ * Real.log (Real.exp 1 * ((q : ℝ) ^ R₀.card)) := by
-  intro pe F ψ hψn hφn hUerr
+  intro pe F ψ hUerr
   set a := rectangleSiteEquiv L L
   set e := rectangleConfigurationEquiv L L (q * q)
   set S := B.image a.symm
@@ -277,17 +284,12 @@ theorem mutualInformation_cores_le_of_reset_unitary {L q : ℕ} (hq : 1 ≤ q)
     ext x y
     simp
   refine mutualInformation_cores_le_of_sites_reset_unitary hq hΩ hRC hR₀ hC₀ S hnot'
-    (reindex_mem_unitaryGroup e.symm U hUu) hU₀s ?_ ?_ ?_
-  · simp only [hψ, EuclideanSpace.norm_toLp_comp_equiv]
-    exact hψn
-  · simp only [hψ, hF, Matrix.submatrix_mulVec_equiv, Function.comp_assoc,
-      Equiv.self_comp_symm, Function.comp_id, EuclideanSpace.norm_toLp_comp_equiv]
-    exact hφn
-  · simp only [hψ, hF, hU₀, Matrix.submatrix_mulVec_equiv, Function.comp_assoc,
-      Equiv.self_comp_symm, Function.comp_id, ← WithLp.toLp_sub]
-    rw [show (U *ᵥ ψ) ∘ e - (F *ᵥ ψ) ∘ e = (U *ᵥ ψ - F *ᵥ ψ) ∘ e from rfl,
-      EuclideanSpace.norm_toLp_comp_equiv, WithLp.toLp_sub]
-    exact hUerr
+    (reindex_mem_unitaryGroup e.symm U hUu) hU₀s ?_
+  simp only [hψ, hF, hU₀, Matrix.submatrix_mulVec_equiv, Function.comp_assoc,
+    Equiv.self_comp_symm, Function.comp_id, ← WithLp.toLp_sub]
+  rw [show (U *ᵥ ψ) ∘ e - (F *ᵥ ψ) ∘ e = (U *ᵥ ψ - F *ᵥ ψ) ∘ e from rfl,
+    EuclideanSpace.norm_toLp_comp_equiv, WithLp.toLp_sub]
+  exact hUerr
 
 /-- The reset width `C_p = K + 2` of Lemma 3.3, where `K = resetRadius J Δ (2p + 10)` is the
 localization radius coefficient at the error exponent `r = 2p + 10`. The cores are required
@@ -344,7 +346,7 @@ theorem SquareHamiltonian.information_reset_of_resetThreshold_le (q : ℕ) (hq :
   have hL1 : (1 : ℝ) ≤ L := le_trans (le_max_left _ _) hL
   have hLn : 1 ≤ L := by exact_mod_cast hL1
   have hΩ : ‖Ω‖ = 1 := hgs.1
-  obtain ⟨hψn, hφn, U, hUu, hUs, hUerr⟩ := hreset L hLn h E₀ Ω hgs R C hRC b hb hI
+  obtain ⟨-, -, U, hUu, hUs, hUerr⟩ := hreset L hLn h E₀ Ω hgs R C hRC b hb hI
   have hB1 : 1 ≤ 1 + b + Real.log L := by linarith [Real.log_nonneg hL1]
   have hℓ : ((⌈resetRadius J Δ (2 * p + 10) * (1 + b + Real.log L)⌉₊ : ℕ) : ℝ) + 1 ≤
       resetWidth J Δ p * (1 + b + Real.log L) := by
@@ -352,7 +354,7 @@ theorem SquareHamiltonian.information_reset_of_resetThreshold_le (q : ℕ) (hq :
     rw [resetWidth]
     nlinarith
   have hent := mutualInformation_cores_le_of_reset_unitary hq hΩ hRC hR₀ hC₀ _
-    (notMem_resetSupport hRC hR₀ hC₀ hℓ hRw hCw) hUu hUs hψn hφn hUerr
+    (notMem_resetSupport hRC hR₀ hC₀ hℓ hRw hCw) hUu hUs hUerr
   refine hent.trans ?_
   have hR₀card : (R₀.card : ℝ) ≤ (L : ℝ) ^ 2 := by
     have := Finset.card_le_univ R₀

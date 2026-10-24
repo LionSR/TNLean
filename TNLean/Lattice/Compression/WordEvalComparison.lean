@@ -19,7 +19,7 @@ restriction preserves an arbitrary equality of complete operators.
   351–434 and 565–588; revision `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
 /-- Compare the evaluations of two words with their actual input and output
 spaces. This comparison does not impose allowedness or source-free conditions.
@@ -42,4 +42,4 @@ theorem isEvalComparison_of_eval_eq {Q : Type} {a b : Layout Q}
     (u v : Word a b) (h : u.eval = v.eval) : IsEvalComparison u v :=
   heq_of_eq h
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

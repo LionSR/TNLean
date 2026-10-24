@@ -15,20 +15,20 @@ expansions used in the dyadic protocol-to-network implication. -/
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
-  for decl in #[``TNLean.PEPS.PairEffect.OriginalCircuit.sequence,
-      ``TNLean.PEPS.PairEffect.OriginalCircuit.eval_sequence_zero,
-      ``TNLean.PEPS.PairEffect.OriginalCircuit.eval_sequence_succ,
-      ``TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_sequence,
-      ``TNLean.PEPS.PairEffect.OriginalCircuit.nonprivateCount_sequence,
-      ``TNLean.PEPS.PairEffect.OriginalCircuit.forall_participants_sequence,
-      ``TNLean.PEPS.PairEffect.OriginalCircuit.isMonomialBounded_sequence,
-      ``TNLean.PEPS.PairEffect.OriginalCircuit.participationCount_comp,
-      ``TNLean.PEPS.PairEffect.OriginalCircuit.participationCount_sequence,
-      ``TNLean.PEPS.PairEffect.OriginalCircuit.canonicalGateMaps,
-      ``TNLean.PEPS.PairEffect.OriginalCircuit.evalWithGateMaps_canonicalGateMaps,
-      ``TNLean.PEPS.PairEffect.OriginalCircuit.isGateApproximation_zero_canonicalGateMaps,
-      ``TNLean.PEPS.PairEffect.OriginalCircuit.monomialCount_produce_le_of_isMonomialBounded,
-      ``TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_mono] do
+  for decl in #[``TNLean.Lattice.PartyCircuit.OriginalCircuit.sequence,
+      ``TNLean.Lattice.PartyCircuit.OriginalCircuit.eval_sequence_zero,
+      ``TNLean.Lattice.PartyCircuit.OriginalCircuit.eval_sequence_succ,
+      ``TNLean.Lattice.PartyCircuit.OriginalCircuit.isExpansionBounded_sequence,
+      ``TNLean.Lattice.PartyCircuit.OriginalCircuit.nonprivateCount_sequence,
+      ``TNLean.Lattice.PartyCircuit.OriginalCircuit.forall_participants_sequence,
+      ``TNLean.Lattice.PartyCircuit.OriginalCircuit.isMonomialBounded_sequence,
+      ``TNLean.Lattice.PartyCircuit.OriginalCircuit.participationCount_comp,
+      ``TNLean.Lattice.PartyCircuit.OriginalCircuit.participationCount_sequence,
+      ``TNLean.Lattice.PartyCircuit.OriginalCircuit.canonicalGateMaps,
+      ``TNLean.Lattice.PartyCircuit.OriginalCircuit.evalWithGateMaps_canonicalGateMaps,
+      ``TNLean.Lattice.PartyCircuit.OriginalCircuit.isGateApproximation_zero_canonicalGateMaps,
+      ``TNLean.Lattice.PartyCircuit.OriginalCircuit.monomialCount_produce_le_of_isMonomialBounded,
+      ``TNLean.Lattice.PartyCircuit.OriginalCircuit.isExpansionBounded_mono] do
     unless env.contains decl do
       throwError "Missing imported declaration {decl}"
     let axioms ← Lean.collectAxioms decl

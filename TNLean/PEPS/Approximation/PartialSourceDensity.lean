@@ -25,7 +25,7 @@ reused.
 noncomputable section
 open scoped ComplexConjugate Matrix
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 /-- The weighted partial expansion is the original operator under the canonical
@@ -77,4 +77,4 @@ theorem density_eval_eq_sum_partialWord {m n : Type}
   rw [toMatrix_eval_eq_sum_partialWord A w bIn bOut]
   exact Matrix.sum_smul_mul_mul_conjTranspose _ _ _ _ _
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

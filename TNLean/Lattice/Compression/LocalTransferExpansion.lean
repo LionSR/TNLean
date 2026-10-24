@@ -27,11 +27,12 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open scoped TensorProduct InnerProductSpace
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 open ContinuousLinearMap
 variable {P : Type}
 
-namespace Word
+namespace Lattice.PartyCircuit.Word
 
 /-- Contract a register against a local bra, leaving its spectators untouched. -/
 def localDiscard (r : Reg P) (x : r.space) (a : Layout P) : Word (r :: a) a :=
@@ -95,5 +96,5 @@ theorem sum_eval_transferTerm (sender receiver : P) (H : HSpace) {ι : Type} [Fi
       rw [eval_transferTerm_tmul sender receiver H b, TensorProduct.smul_tmul']
     _ = _ := by rw [b.sum_repr']
 
-end Word
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.Word
+end TNLean

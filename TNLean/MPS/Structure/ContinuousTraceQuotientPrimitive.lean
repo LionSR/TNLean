@@ -121,7 +121,6 @@ private theorem leftRegularMatrix_recover_of_mem_adjoin {r D : ℕ}
     exact hM
   rw [← hx, leftRegularMatrix_mulVec, hU]
 
-
 private theorem rightRegularMatrix_idempotent {r : ℕ}
     (μ : (Fin r → ℂ) →ₗ[ℂ] (Fin r → ℂ) →ₗ[ℂ] (Fin r → ℂ))
     (hAssoc : ∀ x y z, μ (μ x y) z = μ x (μ y z))
@@ -201,11 +200,6 @@ private theorem exists_local_continuous_idempotent_element
   rintro t ⟨s, hs, rfl⟩
   refine ⟨hPIdem s s.property, (hRank s hs).trans ?_⟩
   simpa only [R, hp₀Eq] using hRank₀
-
-end Matrix
-
-namespace Matrix
-
 
 /-- Continuous raw two-site and three-site trace data with injective pointwise
 realizations of constant positive minimal dimension admit a local continuous

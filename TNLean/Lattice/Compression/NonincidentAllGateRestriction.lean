@@ -21,7 +21,8 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.Lattice.PartyCircuit
 variable {P C ι : Type} [Fintype C] [Fintype ι]
 
 private theorem restrict_localPart_eval_heq_of_word_heq {Q : Type} (f : Q → Bool)
@@ -167,4 +168,4 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident
       (Word.restrict_localMap_false_eval_heq f none _ _ _ _
         (by simp [f, q, partySelector]))
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

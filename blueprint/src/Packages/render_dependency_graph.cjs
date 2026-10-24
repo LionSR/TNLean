@@ -5,6 +5,46 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
+const {Worker, isMainThread, parentPort, workerData} = require('node:worker_threads');
+
+// Graphviz's dot layout recurses deeply on large graphs. Its WASM frames share
+// the V8 stack, whose default size (about 1 MB) the full blueprint graph
+// exceeds. The layout therefore runs in a worker thread with a larger stack.
+const LAYOUT_STACK_MB = 256;
+
+async function layoutInWorker(dot, assetRoot) {
+  return new Promise((resolve, reject) => {
+    const worker = new Worker(__filename, {
+      workerData: {dot, assetRoot},
+      resourceLimits: {stackSizeMb: LAYOUT_STACK_MB},
+    });
+    worker.once('message', resolve);
+    worker.once('error', reject);
+    worker.once('exit', code => {
+      if (code !== 0) reject(new Error('Graphviz worker exited with code ' + code));
+    });
+  });
+}
+
+async function layoutWorker() {
+  const {dot, assetRoot} = workerData;
+  const hpcc = require(path.join(assetRoot, 'hpcc.min.js'));
+  global.document = {}; // The same workaround as the bundled graph worker.
+  global.fetch = async function (requested) {
+    const filename = path.resolve(String(requested));
+    const allowed = ['graphvizlib.wasm', 'expatlib.wasm']
+      .some(name => filename === path.join(assetRoot, name));
+    if (!allowed) throw new Error('Refusing a nonlocal Graphviz asset request');
+    return new Response(fs.readFileSync(filename), {
+      headers: {'Content-Type': 'application/wasm'},
+    });
+  };
+  hpcc.wasmFolder(assetRoot);
+  // Reserve stdout for the result; Graphviz diagnostics belong on stderr.
+  console.log = (...args) => console.error(...args);
+  const svg = await hpcc.graphviz.layout(dot, 'svg', 'dot', {images: []});
+  parentPort.postMessage(svg);
+}
 
 async function main() {
   if (Number(process.versions.node.split('.')[0]) < 18) {
@@ -43,26 +83,12 @@ async function main() {
   }
 
   const assetRoot = path.resolve(assets);
-  const hpcc = require(path.join(assetRoot, 'hpcc.min.js'));
-  global.document = {}; // The same workaround as the bundled graph worker.
-  global.fetch = async function (requested) {
-    const filename = path.resolve(String(requested));
-    const allowed = ['graphvizlib.wasm', 'expatlib.wasm']
-      .some(name => filename === path.join(assetRoot, name));
-    if (!allowed) throw new Error('Refusing a nonlocal Graphviz asset request');
-    return new Response(fs.readFileSync(filename), {
-      headers: {'Content-Type': 'application/wasm'},
-    });
-  };
-  hpcc.wasmFolder(assetRoot);
-  // Reserve stdout for the result; Graphviz diagnostics belong on stderr.
-  console.log = (...args) => console.error(...args);
-  const svg = await hpcc.graphviz.layout(dot, 'svg', 'dot', {images: []});
+  const svg = await layoutInWorker(dot, assetRoot);
   if (!svg) throw new Error('Graphviz returned no SVG');
   process.stdout.write(JSON.stringify({dot, svg}));
 }
 
-main().catch(error => {
+(isMainThread ? main() : layoutWorker()).catch(error => {
   console.error(String(error && error.stack || error));
   process.exitCode = 1;
 });

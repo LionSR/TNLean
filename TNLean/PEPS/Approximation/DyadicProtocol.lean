@@ -106,8 +106,9 @@ Three consequences are proved for every protocol satisfying the bounds:
 noncomputable section
 
 namespace TNLean.PEPS.Approximation
+open TNLean.Lattice.PartyCircuit
 
-open Finset TNLean.PEPS.PairEffect
+open Finset TNLean.Lattice.PartyCircuit
 
 /-- The aligned squares of the padded dyadic hierarchy of `[0, N] ^ 2`, each given by its scale
 `j` and its block address `(x, y)`: the square

@@ -19,7 +19,6 @@ run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let decls := #[
     ``TNLean.Lattice.card_admissibleSupport_le,
-    ``TNLean.Lattice.exists_walks_of_mem_crossingSites,
     ``TNLean.Lattice.LocalHamiltonian.swappedDoubled_operator,
     ``TNLean.Lattice.LocalHamiltonian.swapped_doubled_boundary_bound,
     ``TNLean.Lattice.LocalHamiltonian.supported_buffer_gaussian_integral]

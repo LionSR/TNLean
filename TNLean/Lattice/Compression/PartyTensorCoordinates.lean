@@ -14,7 +14,8 @@ Source: polynomial-PEPS, `04-compression.tex`, lines 565–579.
 -/
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
+open TNLean.Lattice.PartyCircuit
 variable {P : Type} {I J : P → Type} [∀ p, Fintype (I p)] [∀ p, Fintype (J p)]
 
 /-- The tensor basis in the prescribed order of party memories.
@@ -108,4 +109,4 @@ theorem partyListBasis_repr_tensorPartyMaps (a z : Layout P)
           calc
             _ = F 0 * ∏ i : Fin ps.length, F i.succ := mul_comm _ _
             _ = ∏ i, F i := (Fin.prod_univ_succ F).symm
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

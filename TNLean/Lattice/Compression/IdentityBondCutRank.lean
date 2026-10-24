@@ -36,7 +36,7 @@ noncomputable section
 
 open scoped BigOperators Matrix
 
-namespace TNLean.PEPS.DependentBondNetwork
+namespace TNLean.Lattice.DependentBondNetwork
 
 variable {V E : Type*} [Fintype V] [DecidableEq V] [Fintype E] [DecidableEq E]
     {tail head : E → V} {D : E → Type*} [∀ e, Fintype (D e)]
@@ -71,11 +71,11 @@ theorem rank_flattening_network_one_le [∀ v, Fintype (P v)]
       Matrix.rank_le_card_width _
     _ = _ := Fintype.card_pi
 
-end TNLean.PEPS.DependentBondNetwork
+end TNLean.Lattice.DependentBondNetwork
 
-namespace TNLean.PEPS.Approximation.DistributedOperatorContraction
+namespace TNLean.Lattice.Compression.DistributedOperatorContraction
 
-open TNLean.PEPS.DependentBondNetwork
+open TNLean.Lattice.DependentBondNetwork
 
 variable {Party Gate : Type*} [Fintype Party] [DecidableEq Party] [DecidableEq Gate]
     (gates : Finset Gate) (participants : Gate → Finset Party) (root : Gate → Party)
@@ -132,4 +132,4 @@ theorem rank_flattening_contractedOperator_column_le [∀ p, Fintype (Out p)]
         (endpointTensor gates participants root hroot Label k c T) z) (fun _ ↦ 1)) S).rank ≤ _
   exact rank_flattening_network_one_le _ S
 
-end TNLean.PEPS.Approximation.DistributedOperatorContraction
+end TNLean.Lattice.Compression.DistributedOperatorContraction

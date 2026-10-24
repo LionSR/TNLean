@@ -22,10 +22,11 @@ columns. Empty source inventories and zero input vectors are included.
 
 noncomputable section
 open scoped BigOperators TensorProduct Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
-namespace Word
+namespace Lattice.PartyCircuit.Word
 /-- Columns are the actual output vectors obtained from elementary source
 basis vectors and the given pure input. Source: polynomial-PEPS,
 `04-compression.tex`, lines 137–139 and 409–434. -/
@@ -63,5 +64,5 @@ theorem preparedDensityCoefficient_pure_eq_vecMulVec
   simp only [pureSourceMatrix, SourceInventory.eval_prepareSlots_eq_appendIso_symm,
     ← SourceInventory.slotBasis_apply]
 
-end Word
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.Word
+end TNLean

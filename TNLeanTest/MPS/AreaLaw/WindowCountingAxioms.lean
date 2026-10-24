@@ -14,7 +14,8 @@ open TNLean.MPS.AreaLaw
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[``ChainHamiltonian.card_crossingTerms_interval_le_of_consecutive_terms,
-      ``ChainHamiltonian.log_surprisalMoment_interval_le_of_consecutive_terms] do
+      ``ChainHamiltonian.log_surprisalMoment_interval_le_of_consecutive_terms,
+      ``one_le_windowBudgetConst] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl

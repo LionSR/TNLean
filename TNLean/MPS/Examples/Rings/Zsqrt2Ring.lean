@@ -87,10 +87,6 @@ theorem complexOfZsqrt2_one {n : Type*} [DecidableEq n] :
     complexOfZsqrt2 (1 : Matrix n n (ℤ√2)) = 1 :=
   complexOfRing_one zsqrt2ToComplex
 
-theorem complexOfZsqrt2_single {m n : Type*} [DecidableEq m] [DecidableEq n] (i : m) (j : n) :
-    complexOfZsqrt2 (Matrix.single i j (1 : ℤ√2)) = Matrix.single i j (1 : ℂ) :=
-  complexOfRing_single zsqrt2ToComplex i j
-
 theorem complexOfZsqrt2_smul {m n : Type*} (c : ℤ√2) (X : Matrix m n (ℤ√2)) :
     complexOfZsqrt2 (c • X) = zsqrt2ToComplex c • complexOfZsqrt2 X :=
   complexOfRing_smul zsqrt2ToComplex c X

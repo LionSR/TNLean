@@ -10,15 +10,15 @@ import Lean.Util.CollectAxioms
 /-! # Axiom check for literal uniform operator networks from original approximate gate expansions -/
 
 set_option linter.hashCommand false
-open TNLean.PEPS.PairEffect.GateMapConstruction
+open TNLean.Lattice.PartyCircuit.GateMapConstruction
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
-  for decl in #[``TNLean.PEPS.Approximation.compressionPrefactor_pos,
-      ``TNLean.PEPS.Approximation.compressionExponent_pos,
-      ``TNLean.PEPS.Approximation.compressionPrefactor_eq_sumCompressionPrefactor,
-      ``TNLean.PEPS.PairEffect.EffectCircuit.IsExpansionBounded.mono,
+  for decl in #[``TNLean.Lattice.Compression.compressionPrefactor_pos,
+      ``TNLean.Lattice.Compression.compressionExponent_pos,
+      ``TNLean.Lattice.Compression.compressionPrefactor_eq_sumCompressionPrefactor,
+      ``TNLean.Lattice.PartyCircuit.EffectCircuit.IsExpansionBounded.mono,
       ``uniform_approximate_sampled_network_of_sum_le,
       ``uniform_approximate_sampled_network_of_le,
       ``exists_uniform_approximate_sampled_network] do

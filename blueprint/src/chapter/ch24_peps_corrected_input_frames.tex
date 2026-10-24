@@ -17,9 +17,9 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 \begin{theorem}[Identifying equal register lists]
     \uses{thm:peps_basis_memory_equalities}
     \label{thm:peps_register_identifications}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_castLayouts_apply_heq}
-    \lean{TNLean.PEPS.PairEffect.Layout.memCongr_append_tmul}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_source_apply_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_castLayouts_apply_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.memCongr_append_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_source_apply_heq}
     \leanok
     % The register-identification equality is tagged in its canonical
     % coordinate-chapter home; cite that entry rather than duplicate its tag.
@@ -36,13 +36,13 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{definition}[Ordered source positions]
     \label{def:peps_ordered_source_positions}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.sourcePositionsLayout}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.prepareSourcePositions}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.slotReference}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.sourcePositionsLayout_eq_layout}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.sourcePositionsLayout_append}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.selectedSources_eq_map}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.sourcePositionsLayout_filter}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.sourcePositionsLayout}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.prepareSourcePositions}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.slotReference}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.sourcePositionsLayout_eq_layout}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.sourcePositionsLayout_append}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.selectedSources_eq_map}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.sourcePositionsLayout_filter}
     \leanok
     For a family of pair sources $r_i$ and a finite ordered list $J$ of positions,
     let $L_J$ be the concatenation of their two-register lists, and let
@@ -54,9 +54,9 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{theorem}[Preparation in an ordered list]
     \label{thm:peps_ordered_source_preparation}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSourcePositions_heq}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSourcePositions_append}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSourcePositions_filter}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.eval_prepareSourcePositions_heq}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.eval_prepareSourcePositions_append}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.eval_prepareSourcePositions_filter}
     \leanok
     Preparation indexed by positions equals preparation of the corresponding
     ordered source records. Under the concatenation identifications,
@@ -72,8 +72,8 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{theorem}[Uniform permutation of source registers]
     \label{thm:peps_reorder_source_positions}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_reorderSourcePositions}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_reorderFreeSlots}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.exists_reorderSourcePositions}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.exists_reorderFreeSlots}
     \leanok
     If $J$ and $J'$ are permutations of the same list of source positions, fix
     a spectator register list. There is an allowed composition $U$ containing
@@ -98,9 +98,9 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{definition}[The joint vector of selected sources]
     \label{def:peps_free_source_vector}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.freeSourceVector}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.crossingSourceVector}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.mem_freeSlotLayout}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.freeSourceVector}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.crossingSourceVector}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.mem_freeSlotLayout}
     \leanok
     For selected positions $J$, let $\eta_J\in\mathcal H_{L_J}$ be their ordered
     tensor product, with the scalar $1$ for the empty list. Its memory is fixed
@@ -112,10 +112,10 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{theorem}[Preparation and normalization of source vectors]
     \label{thm:peps_free_source_norm}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepareFreeSlots_eq_appendIso_symm}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.norm_freeSourceVector}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.norm_crossingSourceVector}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.freeSourceVector_congr}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.eval_prepareFreeSlots_eq_appendIso_symm}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.norm_freeSourceVector}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.norm_crossingSourceVector}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.freeSourceVector_congr}
     \leanok
     For every spectator vector $x$,
     \begin{align}
@@ -137,10 +137,10 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{definition}[Corrected and crossing blocks]
     \label{def:peps_corrected_crossing_blocks}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSlotMask}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.crossingSlotMask}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceLayout}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.crossingSourceLayout}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSlotMask}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.crossingSlotMask}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceLayout}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.crossingSourceLayout}
     \leanok
     Let $S$ be a set of original source occurrences of a circuit $W$, and let
     $A(S)$ consist of all their endpoint parties. Among the surviving partial
@@ -153,13 +153,13 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{theorem}[The free positions are corrected or crossing]
     \label{thm:peps_corrected_crossing_masks}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSlotMask_endpoints}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedFreeSlots_eq_or}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.crossingSlotMask_eq_false_of_corrected}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedFreeSlots_masks}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceLayout_owners}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_correctedSourceLayout_append}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedMask_meets}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSlotMask_endpoints}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedFreeSlots_eq_or}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.crossingSlotMask_eq_false_of_corrected}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedFreeSlots_masks}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceLayout_owners}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_correctedSourceLayout_append}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedMask_meets}
     \leanok
     Both endpoints of every corrected position lie in $A(S)$. Thus corrected
     and crossing positions are disjoint, and the free positions are exactly
@@ -177,7 +177,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{theorem}[A common corrected-source rearrangement]
     \label{thm:peps_corrected_reordering}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_correctedInputReordering}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_correctedInputReordering}
     \leanok
     There is an allowed composition $U$, containing no sources, from the
     corrected block followed by the crossing block and original input to the
@@ -194,12 +194,12 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{theorem}[Preparing vectors from the scalar unit]
     \label{thm:peps_source_scalar_preparation}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepare_nil_heq}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.vector_append_heq}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepareFreeSlots_nil_heq}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.vector_append_eq}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_framed_sourceVector}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_framed_freeSourceVectors}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.eval_prepare_nil_heq}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.vector_append_heq}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.eval_prepareFreeSlots_nil_heq}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.vector_append_eq}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.eval_framed_sourceVector}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.eval_framed_freeSourceVectors}
     \leanok
     Preparing an inventory on $1\in\mathbb C$ gives its ordered joint vector.
     Concatenating two inventories gives the vector
@@ -218,11 +218,11 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{definition}[Absorbing the original input preparation]
     \label{def:peps_prepared_reordered_word}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.sourceVectorPair}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.preparedReorderedWord}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedInputPreparation}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedPreparedWord}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedInputVector}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.sourceVectorPair}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.preparedReorderedWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedInputPreparation}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedPreparedWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedInputVector}
     \leanok
     Given a scalar-input composition $p_0$, a register permutation $U$, fixed
     source vectors, and a residual composition $V$, form $\widetilde V$ by
@@ -237,8 +237,8 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{theorem}[Evaluation after absorbing the input]
     \label{thm:peps_prepared_reordered_vector}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_reordered_prepared_vector}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedInputVector_identity_of_reordering}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.eval_reordered_prepared_vector}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedInputVector_identity_of_reordering}
     \leanok
     Suppose $U$ has the uniform preparation property
     (\ref{eq:peps_frames_reorder}). Then $\widetilde V$ evaluated on
@@ -258,7 +258,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{definition}[Uniform equality of corrected inputs]
     \label{def:peps_uniform_corrected_input}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.HasCorrectedInputVectors}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.HasCorrectedInputVectors}
     \leanok
     The uniform corrected-input identity asserts the existence of one allowed,
     source-free $U$ such that the evaluation equality in
@@ -269,7 +269,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{theorem}[Construction of the uniform input identity]
     \label{thm:peps_uniform_corrected_input}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_correctedInputVector_identity}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_correctedInputVector_identity}
     \leanok
     Every circuit and scalar-input composition satisfy the uniform
     corrected-input identity. No normalization or contraction assumption is
@@ -285,8 +285,8 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{theorem}[Local factors of the rearranged composition]
     \label{thm:peps_reordered_local_factors}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isTensorPartitioned_reordered_partial}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isTensorPartitioned_prepared_reordered_partial}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isTensorPartitioned_reordered_partial}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isTensorPartitioned_prepared_reordered_partial}
     \leanok
     Suppose the circuit is allowed. After the common rearrangement, its
     selectively prepared residual factors across the affected/exterior
@@ -307,9 +307,9 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{definition}[Ordered tensor products of source isometries]
     \label{def:peps_source_input_isometries}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.matrixFrame}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.sourcePositionsFrame}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.selectedSourceFrame}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.matrixFrame}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.sourcePositionsFrame}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.selectedSourceFrame}
     \leanok
     A matrix $E$ with $E^*E=1$ defines the linear isometry whose columns are
     $E$. Tensor the two endpoint isometries in the order of a list of source
@@ -321,10 +321,10 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{theorem}[Columns are the prepared endpoint vectors]
     \label{thm:peps_source_input_columns}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.matrixFrame_basis}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.sourcePositionsFrame_basis_prepare}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.selectedSourceFrame_basis}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.selectedSourceFrame_basis_prepare}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.matrixFrame_basis}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.sourcePositionsFrame_basis_prepare}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.selectedSourceFrame_basis}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.selectedSourceFrame_basis_prepare}
     \leanok
     The column at a given endpoint assignment is the ordered tensor of its
     endpoint columns. With an arbitrary spectator vector appended,
@@ -342,7 +342,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{definition}[The corrected-source isometry]
     \label{def:peps_corrected_source_frame}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceFrame}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceFrame}
     \leanok
     Fix a partial branch $\xi$ and the original endpoint matrices $E_e,F_e$,
     each with orthonormal columns. For $I=\prod_{e\in S}(J_e\times J_e)$,
@@ -353,7 +353,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{theorem}[Corrected coordinates preserve the source order]
     \label{thm:peps_corrected_source_columns}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceFrame_basis}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceFrame_basis}
     \leanok
     For every corrected coordinate $i\in I$, $Q_\xi e_i$ is the joint
     corrected-source vector formed from the original $E_e,F_e$ columns at $i$.
@@ -372,7 +372,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{definition}[The crossing-source vector]
     \label{def:peps_actual_crossing_vector}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceCrossingVector}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceCrossingVector}
     \leanok
     For branch $\xi$, let $\beta_\xi\in\mathcal H_{T_A}\otimes\mathcal H_{T_E}$
     be the ordered tensor of its crossing sources, relabelled and
@@ -382,8 +382,8 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{theorem}[Schmidt isometries for the crossing vector]
     \label{thm:peps_crossing_schmidt}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.norm_sourceCrossingVector}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_sourceCrossing_schmidt}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.norm_sourceCrossingVector}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_sourceCrossing_schmidt}
     \leanok
     For every partial branch, $\|\beta_\xi\|=1$. There are a finite index set
     $J$, probabilities $\tau_j\geq0$ with $\sum_j\tau_j=1$, and linear
@@ -407,7 +407,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{definition}[Schmidt input isometries]
     \label{def:peps_schmidt_input_frames}
-    \lean{TNLean.PEPS.PairEffect.HasSchmidtInputFrames}
+    \lean{TNLean.Lattice.PartyCircuit.HasSchmidtInputFrames}
     \leanok
     Fix the corrected isometry $Q$ and the crossing vector $\beta$.
     Thus $Q\colon\ell^2(I)\to\mathcal H_C$. Choose probabilities $\tau$
@@ -425,7 +425,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{theorem}[Construction of the input isometries]
     \label{thm:peps_actual_schmidt_input_frames}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_correctedInputFrames}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_correctedInputFrames}
     \leanok
     For each partial branch and original endpoint matrices with
     orthonormal columns, the corrected isometry $Q_\xi$ and crossing
@@ -445,7 +445,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{definition}[A local-word Schmidt output representation]
     \label{def:peps_schmidt_local_output}
-    \lean{TNLean.PEPS.PairEffect.Word.HasSchmidtOutput}
+    \lean{TNLean.Lattice.PartyCircuit.Word.HasSchmidtOutput}
     \leanok
     A family $z_i$ in the affected/exterior output tensor product has a
     local-word Schmidt representation if there are allowed source-free
@@ -460,7 +460,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{theorem}[Applying the two local factors]
     \label{thm:peps_local_schmidt_output}
-    \lean{TNLean.PEPS.PairEffect.Word.hasSchmidtOutput_of_isTensorPartitioned}
+    \lean{TNLean.Lattice.PartyCircuit.Word.hasSchmidtOutput_of_isTensorPartitioned}
     \leanok
     If a composition factors into allowed source-free local words, and
     its inputs admit~(\ref{eq:peps_frames_input_schmidt}), then its outputs
@@ -478,7 +478,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{definition}[The corrected-column input identity]
     \label{def:peps_corrected_schmidt_inputs}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.HasCorrectedSchmidtInputs}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.HasCorrectedSchmidtInputs}
     \leanok
     The corrected-column input identity asserts that one allowed source-free
     rearrangement, chosen before every branch and corrected coordinate,
@@ -489,7 +489,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{theorem}[Substitution of the corrected endpoint columns]
     \label{thm:peps_corrected_schmidt_input_identity}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_correctedSchmidtInput_identity}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_correctedSchmidtInput_identity}
     \leanok
     Every circuit, endpoint matrix family and scalar-input composition satisfy
     the corrected-column input identity. No orthonormality or contraction
@@ -506,7 +506,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{theorem}[Schmidt expansion of the partial output]
     \label{thm:peps_actual_corrected_schmidt_output}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_correctedSchmidtOutput}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_correctedSchmidtOutput}
     \leanok
     Let $W$ be an allowed circuit, let all original endpoint matrices have
     orthonormal columns, and let $p_0$ be an allowed scalar-input composition

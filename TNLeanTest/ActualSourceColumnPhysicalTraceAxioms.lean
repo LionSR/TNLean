@@ -11,7 +11,7 @@ import Lean.Util.CollectAxioms
 
 set_option linter.hashCommand false
 
-open TNLean.PEPS.PairEffect.SourceCircuit in
+open TNLean.Lattice.PartyCircuit.SourceCircuit in
 run_cmd do
   let decls := #[``selectedPhysicalPrivateBasis_partialTrace_actualColumns]
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]

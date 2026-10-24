@@ -30,7 +30,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open scoped InnerProductSpace TensorProduct Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
 /-- Applying fixed exterior matrices commutes with tracing the affected discard.
 The ket and bra retained-coordinate spaces may have different dimensions. -/
@@ -157,4 +157,4 @@ theorem partialTrace_separatedSchmidtOutput_eq_weightedSourceError
   exact congrFun (congrFun
     (sum_schmidtPhysicalVector_outer_eq_weightedSourceError J x y v w F F' bD tau tau' z) t) u
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

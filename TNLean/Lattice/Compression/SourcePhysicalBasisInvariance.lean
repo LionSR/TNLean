@@ -27,7 +27,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open scoped TensorProduct Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 
 variable {P m n : Type} [Fintype m] [Fintype n] {a b : Layout P}
 
@@ -97,4 +97,4 @@ theorem rectangularTraceNorm_physicalCorrectedSourceTerm_basis_eq
   simpa only [Fintype.sum_prod_type, c, z, t, OrthonormalBasis.map,
     LinearIsometryEquiv.symm_symm, LinearIsometryEquiv.trans_apply] using h
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

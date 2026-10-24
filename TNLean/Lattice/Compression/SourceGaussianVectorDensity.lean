@@ -28,7 +28,7 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open QICLean.ComplexGaussian
 open scoped TensorProduct Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} {a b : Layout P}
 
 open Classical in
@@ -90,4 +90,4 @@ theorem correctedSourceTerm_gaussian_vecMulVec_eq_sum
   simp_rw [← hin, Word.preparedMatrix_mul_vecMulVec]
   rfl
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit
