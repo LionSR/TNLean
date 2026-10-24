@@ -243,20 +243,6 @@ shared virtual leg the bond operator lives on.  The argument: a boundary edge `f
 window has its out-of-window endpoint outside the other window (else `f` would cross between the
 two windows, forcing `f = e` by the single-crossing characterization), hence outside `S`. -/
 
-omit [Fact (1 < width)] [Fact (1 < height)] in
-/-- The end pair contains the left window, so a vertex of the left window lies in `S`. -/
-private theorem mem_endPair_of_mem_leftWindow {L K : ℕ} {s : TorusVertex width height}
-    {v : TorusVertex width height} (hv : v ∈ horizontalStaircaseLeftWindow s L K) :
-    v ∈ horizontalStaircaseEndPair s L K :=
-  horizontalStaircaseLeftWindow_subset_endPair s hv
-
-omit [Fact (1 < width)] [Fact (1 < height)] in
-/-- The end pair contains the right window, so a vertex of the right window lies in `S`. -/
-private theorem mem_endPair_of_mem_rightWindow {L K : ℕ} {s : TorusVertex width height}
-    {v : TorusVertex width height} (hv : v ∈ horizontalStaircaseRightWindow s L K) :
-    v ∈ horizontalStaircaseEndPair s L K :=
-  horizontalStaircaseRightWindow_subset_endPair s hv
-
 /-- **A non-reference boundary edge of the left window is a boundary edge of the end pair.**
 
 A boundary edge `f` of the left end window with `f ≠ e` is a boundary edge of the end pair
@@ -296,12 +282,12 @@ theorem isRegionBoundaryEdge_endPair_of_leftWindow
   -- The in-endpoint of `f` lies in `S`; the out-endpoint lies outside both windows, so outside `S`.
   rcases hf with ⟨hin, hout⟩ | ⟨hout, hin⟩
   · -- `f.1.1 ∈ left ⊆ S`; `f.1.2 ∉ left`, and ∉ right else `f` crosses the windows.
-    refine Or.inl ⟨mem_endPair_of_mem_leftWindow hin, ?_⟩
+    refine Or.inl ⟨horizontalStaircaseLeftWindow_subset_endPair _ hin, ?_⟩
     rw [horizontalStaircaseEndPair, Finset.mem_union, not_or]
     -- `f.1.1 ∉ right` by disjointness with the left window.
     exact ⟨hout, fun hR => hnotR (Or.inr ⟨fun hc => hdisj hin hc, hR⟩)⟩
   · -- `f.1.2 ∈ left ⊆ S`; `f.1.1 ∉ left`, and ∉ right by the same single-crossing argument.
-    refine Or.inr ⟨?_, mem_endPair_of_mem_leftWindow hin⟩
+    refine Or.inr ⟨?_, horizontalStaircaseLeftWindow_subset_endPair _ hin⟩
     rw [horizontalStaircaseEndPair, Finset.mem_union, not_or]
     exact ⟨hout, fun hR => hnotR (Or.inl ⟨hR, fun hc => hdisj hin hc⟩)⟩
 
@@ -340,10 +326,10 @@ theorem isRegionBoundaryEdge_endPair_of_rightWindow
   rw [Finset.disjoint_left] at hdisj
   rw [IsRegionBoundaryEdge] at hnotL
   rcases hf with ⟨hin, hout⟩ | ⟨hout, hin⟩
-  · refine Or.inl ⟨mem_endPair_of_mem_rightWindow hin, ?_⟩
+  · refine Or.inl ⟨horizontalStaircaseRightWindow_subset_endPair _ hin, ?_⟩
     rw [horizontalStaircaseEndPair, Finset.mem_union, not_or]
     exact ⟨fun hL' => hnotL (Or.inr ⟨fun hc => hdisj hc hin, hL'⟩), hout⟩
-  · refine Or.inr ⟨?_, mem_endPair_of_mem_rightWindow hin⟩
+  · refine Or.inr ⟨?_, horizontalStaircaseRightWindow_subset_endPair _ hin⟩
     rw [horizontalStaircaseEndPair, Finset.mem_union, not_or]
     exact ⟨fun hL' => hnotL (Or.inl ⟨hL', fun hc => hdisj hc hin⟩), hout⟩
 

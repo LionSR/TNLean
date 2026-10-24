@@ -10,14 +10,17 @@ import TNLean.MPS.AreaLaw.Hastings.SchmidtTailMPS
 /-!
 # Matrix product state approximation from the entropy of the cuts
 
-Suppose that the unit vector `Ω` on a chain of `L` sites with local dimension `q > 1` satisfies
+Suppose that the unit vector `Ω` on a chain of `L` sites with local dimension `q ≥ 1` satisfies
 the approximate factorization of Hastings' Lemma 1 at every internal cut, and that a natural
 number `k₀` satisfies `k₀ ≥ exp(2 S_j)/2` for the entropy `S_j` of the first `j` sites at every
 internal cut `j`. Truncating every cut onto the `k'` leading eigenvectors of its left marginal,
 for `k' ≥ k₀`, gives an open-boundary matrix product state `Φ` of bond dimension at most `k'`
 with `‖Φ - Ω‖² ≤ (L - 1) 4 C₁² e^{2/ξ'} (k'/k₀)^{-1/(ξ' log q)}` when `L ≥ 2`.
-For `L < 2`, there is no internal cut and `Φ = Ω`. The vector `Φ` is not required to be
-normalized; the error is the squared Hilbert-space norm. Entropies use natural logarithms.
+For `L < 2`, there is no internal cut and `Φ = Ω`. For `q = 1` every left marginal is a `1 × 1`
+matrix of trace one, so the truncation is exact and again `Φ = Ω`; there `log q = 0`, and the
+bound holds because its left side vanishes. The source assumes `q ≥ 2`. The vector `Φ` is not
+required to be normalized; the error is the squared Hilbert-space norm. Entropies use natural
+logarithms.
 
 Source: Hastings, *An area law for one-dimensional quantum systems*, arXiv:0705.2024v4,
 section "Matrix Product States", lines 505–557. The constraint at each cut is eq. `constraint`
@@ -43,7 +46,7 @@ constraint is available only at even exponents. Documented in
 -/
 
 open Matrix Real
-open scoped Matrix.Norms.L2Operator
+open scoped Matrix.Norms.L2Operator ComplexOrder
 
 namespace TNLean.MPS.AreaLaw.Hastings
 
@@ -56,11 +59,11 @@ cut `j`, then for every `k' ≥ k₀` the
 truncation `Φ` onto the `k'` leading eigenvectors at every cut is an open-boundary matrix product
 state of bond dimension at most `k'`. For `L ≥ 2`,
 `‖Φ - Ω‖² ≤ (L - 1) 4 C₁² e^{2/ξ'} (k'/k₀)^{-1/(ξ' log q)}`.
-For `L < 2`, `Φ = Ω`. The approximant need not be normalized, and the error is the squared
-Hilbert-space norm, not a trace norm.
+For `L < 2` or `q = 1`, `Φ = Ω`. The approximant need not be normalized, and the error is the
+squared Hilbert-space norm, not a trace norm.
 Hastings, arXiv:0705.2024v4, lines 505–557, with the constant described in the module
 docstring. -/
-theorem isOpenMPS_norm_sub_sq_le_of_factorization_of_entropy (hq : 1 < q)
+theorem isOpenMPS_norm_sub_sq_le_of_factorization_of_entropy [NeZero q]
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) {ξ' C₁ : ℝ} (hξ' : 0 < ξ')
     (hfact : ∀ j ∈ Finset.Ico 1 L, ∀ m : ℕ, j + m ≤ L →
       ∃ (OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (SB SL SR : Finset (Fin L)),
@@ -91,18 +94,42 @@ theorem isOpenMPS_norm_sub_sq_le_of_factorization_of_entropy (hq : 1 < q)
     exact h
   · have hk₀pos : (0 : ℝ) < k₀ :=
       lt_of_lt_of_le (by positivity) (hk₀ 1 (Finset.mem_Ico.mpr ⟨le_rfl, by omega⟩))
-    refine isOpenMPS_norm_sub_sq_le_of_schmidtTail_geometric Ω hΩ
-      (by exact_mod_cast hq) hξ' (by positivity) hk₀pos ?_ (by exact_mod_cast hk')
-    intro j hj m n hn
-    exact one_sub_kyFanNorm_le_of_factorization_of_entropy hq.le hΩ j (hfact j hj) (hk₀ j hj)
-      m n (by exact_mod_cast hn)
+    rcases (NeZero.one_le (n := q)).lt_or_eq with hq | hq
+    · refine isOpenMPS_norm_sub_sq_le_of_schmidtTail_geometric Ω hΩ
+        (by exact_mod_cast hq) hξ' (by positivity) hk₀pos ?_ (by exact_mod_cast hk')
+      intro j hj m n hn
+      exact one_sub_kyFanNorm_le_of_factorization_of_entropy hq.le hΩ j (hfact j hj)
+        (hk₀ j hj) m n (by exact_mod_cast hn)
+    · -- For `q = 1` every left marginal is a `1 × 1` matrix of trace one, so the truncation onto
+      -- `k' ≥ 1` leading eigenvectors is exact and `Φ = Ω`.
+      subst hq
+      obtain ⟨hmps, hnorm⟩ := isOpenMPS_sequentialTruncation_leadingEigenprojection Ω hΩ k'
+      refine ⟨hmps, ?_⟩
+      have hk'1 : 1 ≤ k' := le_trans (by exact_mod_cast hk₀pos) hk'
+      have hzero : ∀ j ∈ Finset.Ico 1 L, Real.sqrt (1 -
+          (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ 1) (leftBlock L j)
+            Ω).kyFanNorm k') = 0 := by
+        intro j _
+        refine Real.sqrt_eq_zero'.2 ?_
+        have hpsd := Entropy.regionState_posSemidef (n := fun _ : Fin L ↦ 1) (leftBlock L j) Ω
+        have hcard := hpsd.isHermitian.kyFanNorm_card_eq_trace_re
+        rw [Entropy.trace_regionState, hΩ] at hcard
+        have hc1 : Fintype.card (Entropy.RegionConfig (fun _ : Fin L ↦ 1) (leftBlock L j)) ≤ k' :=
+          (Fintype.card_le_one_iff_subsingleton.2 inferInstance).trans hk'1
+        have := hpsd.kyFanNorm_mono hc1
+        simp only [one_pow, Complex.ofReal_one, Complex.one_re] at hcard
+        linarith
+      rw [Finset.sum_congr rfl hzero, Finset.sum_const_zero] at hnorm
+      rw [le_antisymm hnorm (norm_nonneg _)]
+      simp only [ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, zero_pow]
+      positivity
 
 /-- **Matrix product state from the entropy of the cuts, from Lemma 1 (stage theorem).** The
 same bound as `isOpenMPS_norm_sub_sq_le_of_factorization_of_entropy`, with the approximate
 factorization at every internal cut `j` and every length `m` in the form of the conclusion of
 Lemma 1, `IsFactorizationAt Ω j m (C₁ e^{-m/ξ'})`. Hastings, arXiv:0705.2024v4, lines 246–267
 and 505–557. -/
-theorem isOpenMPS_norm_sub_sq_le_of_isFactorizationAt_of_entropy (hq : 1 < q)
+theorem isOpenMPS_norm_sub_sq_le_of_isFactorizationAt_of_entropy [NeZero q]
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) {ξ' C₁ : ℝ} (hξ' : 0 < ξ')
     (hfact : ∀ j ∈ Finset.Ico 1 L, ∀ m : ℕ, j + m ≤ L →
       ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
@@ -119,7 +146,7 @@ theorem isOpenMPS_norm_sub_sq_le_of_isFactorizationAt_of_entropy (hq : 1 < q)
     IsOpenMPS L q k' (fun x ↦ Φ x) ∧
       ‖Φ - Ω‖ ^ 2 ≤ ((L - 1 : ℕ) : ℝ) *
         (4 * C₁ ^ 2 * exp (2 / ξ') * ((k' : ℝ) / k₀) ^ (-1 / (ξ' * log q))) :=
-  isOpenMPS_norm_sub_sq_le_of_factorization_of_entropy hq hΩ hξ'
+  isOpenMPS_norm_sub_sq_le_of_factorization_of_entropy hΩ hξ'
     (fun j hj m hm ↦ by
       obtain ⟨OB, OL, OR, hF⟩ := hfact j hj m hm
       exact ⟨OB, OL, OR, exists_factorization_of_isFactorizationAt hF⟩)

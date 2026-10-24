@@ -27,8 +27,7 @@ the form `C y e^{C y}` into a linear bound.
 * `prod_range_sub_prod_range_eq_sum_mul_sub_mul` — the telescoping identity for two products.
 * `norm_prod_range_sub_prod_range_le_of_forall_norm_prod_le` — the perturbation bound for
   uniformly bounded contiguous reference products.
-* `prod_range_sub_pow_eq_sum_mul_sub_mul`, `pow_sub_pow_eq_sum_mul_sub_mul` — the telescoping
-  identity, for ordered products and for powers.
+* `prod_range_sub_pow_eq_sum_mul_sub_mul` — the telescoping identity for ordered products.
 * `norm_prod_range_sub_pow_le_of_forall_norm_pow_le` — the telescoping bound near an element
   whose powers are bounded.
 * `norm_prod_range_sub_pow_le_of_isIdempotentElem`, `norm_pow_sub_pow_le_of_isIdempotentElem` —
@@ -81,14 +80,6 @@ theorem prod_range_sub_pow_eq_sum_mul_sub_mul {R : Type*} [Ring R] (X : ℕ → 
       ∑ k ∈ Finset.range n, ((List.range k).map X).prod * (X k - E) * E ^ (n - 1 - k) := by
   simpa [List.map_const', List.prod_replicate] using
     prod_range_sub_prod_range_eq_sum_mul_sub_mul X (fun _ => E) n
-
-/-- The telescoping identity `X^n - E^n = ∑_{k<n} X^k (X - E) E^{n-1-k}` in a ring.
-
-arXiv:2103.13367, eq. `eq:final_eq` (second line). -/
-theorem pow_sub_pow_eq_sum_mul_sub_mul {R : Type*} [Ring R] (X E : R) (n : ℕ) :
-    X ^ n - E ^ n = ∑ k ∈ Finset.range n, X ^ k * (X - E) * E ^ (n - 1 - k) := by
-  simpa [List.map_const', List.prod_replicate] using
-    prod_range_sub_pow_eq_sum_mul_sub_mul (fun _ => X) E n
 
 /-- **Telescoping bound for two ordered products.** If every contiguous product of the
 reference factors `Y`, including the empty product, has norm at most `c`, and

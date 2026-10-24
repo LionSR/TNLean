@@ -347,17 +347,22 @@ section Boundary
 
 variable [Fintype κ]
 
-/-- The boundary `B(C)` of a cluster `C` of term centres: the terms `j ∉ C` acting on some site of
-`C`, where `acts j` is the set of sites on which `H_j` acts. Hastings, arXiv:cond-mat/0508554v3,
-`proj3new.tex`, lines 1131–1134. -/
+/-- The boundary `B(C)` of a set `C` of terms: the terms `j ∉ C` with `i ∈ acts j` for some
+`i ∈ C`. With `acts j` the set of sites on which `H_j` acts, this is the boundary printed in
+Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1131–1134. The truncated expansion uses
+`acts j` the set of terms whose support meets that of `H_j`, the neighbours in
+`overlapGraph`, for which a word avoiding `B(C)` has `C` as a cluster; see
+`docs/paper-gaps/hastings05_cluster_boundary.tex`. -/
 def clusterBoundary (acts : κ → Finset κ) (C : Finset κ) : Finset κ :=
   {j | j ∉ C ∧ ∃ i ∈ C, i ∈ acts j}
 
-/-- **The boundary count.** Let `nbhd i` contain `i` and every term acting on the site `i`, with
-at most `S` elements for each site of `C`. Then `n_C + n_{B(C)} ≤ S n_C`, the hypothesis of
-`norm_trace_mul_clusterPart_le_pow`. In Hastings' setting `nbhd i` is the set of sites within the
-interaction range `R` of `i`, of which there are at most `S`, and `H_j` acts only within distance
-`R` of `j`. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 181–183 and 1186. -/
+/-- **The boundary count.** Let `nbhd i` contain `i` and every `j` with `i ∈ acts j`, with at most
+`S` elements for each `i ∈ C`. Then `n_C + n_{B(C)} ≤ S n_C`, the hypothesis of
+`norm_trace_mul_clusterPart_le_pow`. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines
+181–183 and 1186, takes `nbhd i` the sites within the interaction range `R` of `i`, with `H_j`
+acting only within distance `R` of `j`. For the boundary of overlapping supports
+(`docs/paper-gaps/hastings05_cluster_boundary.tex`), `nbhd i` is the set of terms whose support
+meets that of `H_i`, whose centres lie within `2R` of `i`, so `S` counts the sites within `2R`. -/
 theorem card_add_card_clusterBoundary_le (acts : κ → Finset κ) (C : Finset κ)
     (nbhd : κ → Finset κ) (hself : ∀ i ∈ C, i ∈ nbhd i)
     (hacts : ∀ j, ∀ i ∈ C, i ∈ acts j → j ∈ nbhd i) {S : ℕ} (hS : ∀ i ∈ C, #(nbhd i) ≤ S) :

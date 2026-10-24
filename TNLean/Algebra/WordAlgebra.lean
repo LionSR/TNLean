@@ -66,9 +66,6 @@ lemma ofWord_append (u v : List (Fin d)) : ofWord (u ++ v) = ofWord u * ofWord v
 lemma ofWord_cons (i : Fin d) (w : List (Fin d)) : ofWord (i :: w) = ofWord [i] * ofWord w := by
   rw [← ofWord_append]; rfl
 
-lemma ofWord_eq_single (w : List (Fin d)) :
-    ofWord w = MonoidAlgebra.single (FreeMonoid.ofList w) (1 : ℂ) := rfl
-
 /-- The augmentation: the algebra map sending every generator to zero. Its kernel is the ideal
 of polynomials with zero constant term (eq:p5-positive-ideal). -/
 noncomputable def aug : WordAlgebra d →ₐ[ℂ] ℂ :=
@@ -82,9 +79,6 @@ lemma aug_ofWord (w : List (Fin d)) : aug (ofWord w) = if w = [] then 1 else 0 :
   | cons i w => simp
 
 @[simp] lemma aug_ofWord_nil : aug (ofWord ([] : List (Fin d))) = 1 := by simp
-
-lemma aug_ofWord_of_ne_nil {w : List (Fin d)} (hw : w ≠ []) : aug (ofWord w) = 0 := by
-  simp [aug_ofWord, hw]
 
 lemma aug_mul_left {p : WordAlgebra d} (hp : aug p = 0) (q : WordAlgebra d) :
     aug (q * p) = 0 := by

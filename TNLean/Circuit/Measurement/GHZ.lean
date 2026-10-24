@@ -272,10 +272,6 @@ noncomputable def ghzProtocol (α : Fin b → ℂ) : MeasurementProtocol b (M * 
 
 /-! ### The action of the protocol -/
 
-omit [NeZero b] [NeZero M] in
-private theorem exists_ghzSite (j : Fin (M * 2)) : ∃ n r, ghzSite n r = j :=
-  ⟨(finProdFinEquiv.symm j).1, (finProdFinEquiv.symm j).2, finProdFinEquiv.apply_symm_apply j⟩
-
 private theorem exists_firstLayer_op_mulVec : ∃ P : (Fin (M * 2) → Fin b) → (Fin (M * 2) → Fin b),
     (∀ v, (firstLayer (b := b) (M := M)).op *ᵥ v = v ∘ P) ∧
     (∀ x (n : Fin M), n.val + 1 < M → P x (ghzSite n 1) = x (ghzSite n 1) - x (ghzSite n 0)) ∧
