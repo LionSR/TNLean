@@ -54,7 +54,7 @@ end TNLean.PEPS.EncodedFrame
 
 namespace TNLean.PEPS.Approximation
 
-open Set EncodedFrame PairEffect
+open Set EncodedFrame TNLean.Lattice.PartyCircuit
 
 /-! ### Empty targets -/
 

@@ -12,27 +12,27 @@ dimensions.
 
 \begin{definition}[Private product inputs and exact local operations]
     \label{def:peps_private_product_input}
-    \lean{TNLean.PEPS.PairEffect.ProductInput.mem_owners_wholePartyLayout}
-    \lean{TNLean.PEPS.PairEffect.ProductInput.nodup_owners_wholePartyLayout}
-    \lean{TNLean.PEPS.PairEffect.ProductInput.ofAllParties}
-    \lean{TNLean.PEPS.PairEffect.ProductInput.owners_wholePartyLayout}
-    \lean{TNLean.PEPS.PairEffect.ProductInput.wholePartyLayout}
-    \lean{TNLean.PEPS.PairEffect.ProductInput}
-    \lean{TNLean.PEPS.PairEffect.ProductInput.eval_prepare}
-    \lean{TNLean.PEPS.PairEffect.ProductInput.eval_prepare_smul}
-    \lean{TNLean.PEPS.PairEffect.ProductInput.isAllowed_prepare}
-    \lean{TNLean.PEPS.PairEffect.ProductInput.mapOwner}
-    \lean{TNLean.PEPS.PairEffect.ProductInput.mapOwnerIso_vector}
-    \lean{TNLean.PEPS.PairEffect.ProductInput.norm_vector}
-    \lean{TNLean.PEPS.PairEffect.ProductInput.ofParties}
-    \lean{TNLean.PEPS.PairEffect.ProductInput.partitionIso_symm_mapOwner_vector}
-    \lean{TNLean.PEPS.PairEffect.ProductInput.partitionIso_symm_vector}
-    \lean{TNLean.PEPS.PairEffect.ProductInput.partitionIso_vector}
-    \lean{TNLean.PEPS.PairEffect.ProductInput.prepare}
-    \lean{TNLean.PEPS.PairEffect.ProductInput.prepareIsometry}
-    \lean{TNLean.PEPS.PairEffect.ProductInput.restrict}
-    \lean{TNLean.PEPS.PairEffect.ProductInput.sources_prepare}
-    \lean{TNLean.PEPS.PairEffect.ProductInput.vector}
+    \lean{TNLean.Lattice.PartyCircuit.ProductInput.mem_owners_wholePartyLayout}
+    \lean{TNLean.Lattice.PartyCircuit.ProductInput.nodup_owners_wholePartyLayout}
+    \lean{TNLean.Lattice.PartyCircuit.ProductInput.ofAllParties}
+    \lean{TNLean.Lattice.PartyCircuit.ProductInput.owners_wholePartyLayout}
+    \lean{TNLean.Lattice.PartyCircuit.ProductInput.wholePartyLayout}
+    \lean{TNLean.Lattice.PartyCircuit.ProductInput}
+    \lean{TNLean.Lattice.PartyCircuit.ProductInput.eval_prepare}
+    \lean{TNLean.Lattice.PartyCircuit.ProductInput.eval_prepare_smul}
+    \lean{TNLean.Lattice.PartyCircuit.ProductInput.isAllowed_prepare}
+    \lean{TNLean.Lattice.PartyCircuit.ProductInput.mapOwner}
+    \lean{TNLean.Lattice.PartyCircuit.ProductInput.mapOwnerIso_vector}
+    \lean{TNLean.Lattice.PartyCircuit.ProductInput.norm_vector}
+    \lean{TNLean.Lattice.PartyCircuit.ProductInput.ofParties}
+    \lean{TNLean.Lattice.PartyCircuit.ProductInput.partitionIso_symm_mapOwner_vector}
+    \lean{TNLean.Lattice.PartyCircuit.ProductInput.partitionIso_symm_vector}
+    \lean{TNLean.Lattice.PartyCircuit.ProductInput.partitionIso_vector}
+    \lean{TNLean.Lattice.PartyCircuit.ProductInput.prepare}
+    \lean{TNLean.Lattice.PartyCircuit.ProductInput.prepareIsometry}
+    \lean{TNLean.Lattice.PartyCircuit.ProductInput.restrict}
+    \lean{TNLean.Lattice.PartyCircuit.ProductInput.sources_prepare}
+    \lean{TNLean.Lattice.PartyCircuit.ProductInput.vector}
     \leanok
     \uses{def:peps_party_layout,def:peps_party_monomial}
     For an ordered register list with spaces $H_1,\ldots,H_n$, choose
@@ -50,33 +50,33 @@ dimensions.
 
 \begin{definition}[Prepared sources and retained spectators]
     \label{def:peps_source_replacement_operations}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsAllowed}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.eval}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.norm_eval_le_one}
-    \lean{TNLean.PEPS.PairEffect.PartyChain.isPreparation_prepStack}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.castLayouts}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_castLayouts}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_exchangeBlocks}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_frameList_tmul}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_ofLocalWord}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exchangeBlocks}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.frameList}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isAllowed_castLayouts}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isAllowed_frameList}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isAllowed_ofLocalWord}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.ofLocalWord}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.norm_vector}
-    \lean{TNLean.PEPS.PairEffect.Word.IsPreparation}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_isPreparation_cast}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_isPreparation_heq}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_localPrepare}
-    \lean{TNLean.PEPS.PairEffect.Word.isAllowed_localPrepare}
-    \lean{TNLean.PEPS.PairEffect.Word.localPrepare}
-    \lean{TNLean.PEPS.PairEffect.Word.output_of_isPreparation}
-    \lean{TNLean.PEPS.PairEffect.exists_prepared_effectReplacement}
-    \lean{TNLean.PEPS.PairEffect.isPreparation_prepGate}
-    \lean{TNLean.PEPS.PairEffect.isPreparation_prepWord}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsAllowed}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.eval}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.norm_eval_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.PartyChain.isPreparation_prepStack}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.castLayouts}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_castLayouts}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_exchangeBlocks}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_frameList_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_ofLocalWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exchangeBlocks}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.frameList}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isAllowed_castLayouts}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isAllowed_frameList}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isAllowed_ofLocalWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.ofLocalWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.norm_vector}
+    \lean{TNLean.Lattice.PartyCircuit.Word.IsPreparation}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_isPreparation_cast}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_isPreparation_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_localPrepare}
+    \lean{TNLean.Lattice.PartyCircuit.Word.isAllowed_localPrepare}
+    \lean{TNLean.Lattice.PartyCircuit.Word.localPrepare}
+    \lean{TNLean.Lattice.PartyCircuit.Word.output_of_isPreparation}
+    \lean{TNLean.Lattice.PartyCircuit.exists_prepared_effectReplacement}
+    \lean{TNLean.Lattice.PartyCircuit.isPreparation_prepGate}
+    \lean{TNLean.Lattice.PartyCircuit.isPreparation_prepWord}
     \leanok
     \uses{def:peps_private_product_input,def:peps_party_monomial}
     A source-only operation is a composition of local contractions,
@@ -95,19 +95,19 @@ dimensions.
 
 \begin{definition}[Original distributed circuits]
     \label{def:peps_original_circuit}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.gateLocations}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.participants}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isAllowed_produce}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_produce_iff}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.nonprivateLocations}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participants}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participants_produce}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.produce}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.produceLocationsEquiv}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.eval}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.nonprivateCount}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.IsExpansionBounded}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.gateLocations}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.participants}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isAllowed_produce}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isExpansionBounded_produce_iff}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.nonprivateLocations}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participants}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participants_produce}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.produce}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.produceLocationsEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.eval}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.nonprivateCount}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.IsExpansionBounded}
     \leanok
     \uses{def:peps_party_layout,def:peps_party_monomial}
     An original circuit is an ordered composition of contractions on
@@ -122,12 +122,12 @@ dimensions.
 
 \begin{theorem}[Common auxiliary vector and operator error]
     \label{thm:peps_circuit_effect_error}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.referenceEval_apply}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.norm_auxiliaryVector}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.norm_replacement_sub_reference_le}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.isAllowed_replacement}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.eval_produce}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.expandedGateCount_produce}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.referenceEval_apply}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.norm_auxiliaryVector}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.norm_replacement_sub_reference_le}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.isAllowed_replacement}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.eval_produce}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.expandedGateCount_produce}
     \leanok
     \uses{def:peps_original_circuit,cor:peps_pair_effects_rescaling}
     Let $T$ be the operator of an original circuit and let $\delta>0$.
@@ -143,37 +143,37 @@ dimensions.
 \end{theorem}
 
 \begin{proof}\leanok
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsExpansionBounded}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.auxiliary}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.auxiliaryVector}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.expandedGateCount}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.replacement}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_frameList}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isAllowed_exchangeBlocks}
-    \lean{TNLean.PEPS.PairEffect.appendIso_assoc_symm_heq}
-    \lean{TNLean.PEPS.PairEffect.castOutputMap}
-    \lean{TNLean.PEPS.PairEffect.castOutputMap_sub}
-    \lean{TNLean.PEPS.PairEffect.exists_prepared_effectReplacement_native}
-    \lean{TNLean.PEPS.PairEffect.exists_prepared_effectReplacement_uniform}
-    \lean{TNLean.PEPS.PairEffect.gateMemoryMap}
-    \lean{TNLean.PEPS.PairEffect.gateMemoryMap_sub}
-    \lean{TNLean.PEPS.PairEffect.gate_auxiliary_layout}
-    \lean{TNLean.PEPS.PairEffect.norm_castOutputMap}
-    \lean{TNLean.PEPS.PairEffect.norm_gateMemoryMap_le}
-    \lean{TNLean.PEPS.PairEffect.norm_retainMap_le}
-    \lean{TNLean.PEPS.PairEffect.replacementCoefficients}
-    \lean{TNLean.PEPS.PairEffect.retainMap}
-    \lean{TNLean.PEPS.PairEffect.retainMap_sub}
-    \lean{TNLean.PEPS.PairEffect.retainMap_tmul}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.norm_referenceEval_le_one}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.referenceEval}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exchangeHead_tmul}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.norm_eval_castLayouts_sub}
-    \lean{TNLean.PEPS.PairEffect.appendIso_singleton_symm_tmul}
-    \lean{TNLean.PEPS.PairEffect.gateMemoryMap_auxiliary_identity}
-    \lean{TNLean.PEPS.PairEffect.gateMemoryMap_auxiliary_tmul}
-    \lean{TNLean.PEPS.PairEffect.gateMemoryMap_tmul}
-    \lean{TNLean.PEPS.PairEffect.preparation_mapOwner_heq}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsExpansionBounded}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.auxiliary}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.auxiliaryVector}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.expandedGateCount}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.replacement}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_frameList}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isAllowed_exchangeBlocks}
+    \lean{TNLean.Lattice.PartyCircuit.appendIso_assoc_symm_heq}
+    \lean{TNLean.Lattice.PartyCircuit.castOutputMap}
+    \lean{TNLean.Lattice.PartyCircuit.castOutputMap_sub}
+    \lean{TNLean.Lattice.PartyCircuit.exists_prepared_effectReplacement_native}
+    \lean{TNLean.Lattice.PartyCircuit.exists_prepared_effectReplacement_uniform}
+    \lean{TNLean.Lattice.PartyCircuit.gateMemoryMap}
+    \lean{TNLean.Lattice.PartyCircuit.gateMemoryMap_sub}
+    \lean{TNLean.Lattice.PartyCircuit.gate_auxiliary_layout}
+    \lean{TNLean.Lattice.PartyCircuit.norm_castOutputMap}
+    \lean{TNLean.Lattice.PartyCircuit.norm_gateMemoryMap_le}
+    \lean{TNLean.Lattice.PartyCircuit.norm_retainMap_le}
+    \lean{TNLean.Lattice.PartyCircuit.replacementCoefficients}
+    \lean{TNLean.Lattice.PartyCircuit.retainMap}
+    \lean{TNLean.Lattice.PartyCircuit.retainMap_sub}
+    \lean{TNLean.Lattice.PartyCircuit.retainMap_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.norm_referenceEval_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.referenceEval}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exchangeHead_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.norm_eval_castLayouts_sub}
+    \lean{TNLean.Lattice.PartyCircuit.appendIso_singleton_symm_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.gateMemoryMap_auxiliary_identity}
+    \lean{TNLean.Lattice.PartyCircuit.gateMemoryMap_auxiliary_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.gateMemoryMap_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.preparation_mapOwner_heq}
     \uses{cor:peps_pair_effects_rescaling}
     We induct on the composition of operations in the circuit. The ideal
     replacement of each nonprivate gate is its original operator
@@ -187,9 +187,9 @@ dimensions.
 
 \begin{theorem}[Preservation of participating parties]
     \label{thm:peps_replacement_participants}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.replacementLocationsEquiv}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participants_replacementLocationsEquiv}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_participants_ne_one}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.replacementLocationsEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participants_replacementLocationsEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_participants_ne_one}
     \leanok
     \uses{def:peps_original_circuit}
     The nonprivate gates of the original circuit correspond
@@ -200,16 +200,16 @@ dimensions.
 \end{theorem}
 
 \begin{proof}\leanok
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.exists_replacementLocationsEquiv}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.participants_replacementLocationsEquiv}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.replacementLocationsEquiv}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.castLocationsEquiv}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exchangeBlocksLocationsEquivEmpty}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.false_of_gateLocation_ofLocalWord}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.frameListLocationsEquiv}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.ofLocalWordLocationsEquivEmpty}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.participants_castLocationsEquiv}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.participants_frameListLocationsEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.exists_replacementLocationsEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.participants_replacementLocationsEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.replacementLocationsEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.castLocationsEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exchangeBlocksLocationsEquivEmpty}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.false_of_gateLocation_ofLocalWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.frameListLocationsEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.ofLocalWordLocationsEquivEmpty}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.participants_castLocationsEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.participants_frameListLocationsEquiv}
     By induction on the circuit, each original nonprivate gate contributes
     one replacement gate with the same participating set, while private
     operations and permutations contribute none. Composition takes the
@@ -219,10 +219,10 @@ dimensions.
 
 \begin{theorem}[Physical density error]
     \label{thm:peps_source_only_density_error}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le_half_of_count_le}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_wholeParty_density_sub_le_half}
-    \lean{TNLean.PEPS.PairEffect.sourceGateBudget_eq_of_pos}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le_half_of_count_le}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.rectangularTraceNorm_sourceOnly_wholeParty_density_sub_le_half}
+    \lean{TNLean.Lattice.PartyCircuit.sourceGateBudget_eq_of_pos}
     \leanok
     \uses{thm:peps_circuit_effect_error}
     Decompose the original output memory into physical and discarded registers.
@@ -246,26 +246,26 @@ dimensions.
     \lean{Matrix.norm_appendAuxiliaryVector}
     \lean{Matrix.partialTraceRight_appendAuxiliaryVector}
     \lean{Matrix.rectangularTraceNorm_appendAuxiliaryVector_error_le_two}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.finiteDimensional_auxiliary}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.originalPhysicalDensity}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.rectangularTraceNorm_replacement_density_sub_le}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.replacementPhysicalDensity}
-    \lean{TNLean.PEPS.PairEffect.PartyChain.finiteDimensional_sources_prepStack}
-    \lean{TNLean.PEPS.PairEffect.auxiliaryCoordinateIso}
-    \lean{TNLean.PEPS.PairEffect.auxiliaryCoordinateIso_tmul}
-    \lean{TNLean.PEPS.PairEffect.auxiliaryCoordinates}
-    \lean{TNLean.PEPS.PairEffect.extendedPhysicalReadout}
-    \lean{TNLean.PEPS.PairEffect.extendedPhysicalReadout_append_tmul}
-    \lean{TNLean.PEPS.PairEffect.finiteDimensional_mem_append}
-    \lean{TNLean.PEPS.PairEffect.finiteDimensional_sources_comp}
-    \lean{TNLean.PEPS.PairEffect.finiteDimensional_sources_prepGate}
-    \lean{TNLean.PEPS.PairEffect.finiteDimensional_sources_prepWord}
-    \lean{TNLean.PEPS.PairEffect.norm_extendedPhysicalReadout_le_one}
-    \lean{TNLean.PEPS.PairEffect.rectangularTraceNorm_extendedPhysicalReadout_error_le}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le_half}
-    \lean{TNLean.PEPS.PairEffect.sourceGateBudget}
-    \lean{TNLean.PEPS.PairEffect.sourceGateBudget_pos}
-    \lean{TNLean.PEPS.PairEffect.sourceGateBudget_spec}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.finiteDimensional_auxiliary}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.originalPhysicalDensity}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.rectangularTraceNorm_replacement_density_sub_le}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.replacementPhysicalDensity}
+    \lean{TNLean.Lattice.PartyCircuit.PartyChain.finiteDimensional_sources_prepStack}
+    \lean{TNLean.Lattice.PartyCircuit.auxiliaryCoordinateIso}
+    \lean{TNLean.Lattice.PartyCircuit.auxiliaryCoordinateIso_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.auxiliaryCoordinates}
+    \lean{TNLean.Lattice.PartyCircuit.extendedPhysicalReadout}
+    \lean{TNLean.Lattice.PartyCircuit.extendedPhysicalReadout_append_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.finiteDimensional_mem_append}
+    \lean{TNLean.Lattice.PartyCircuit.finiteDimensional_sources_comp}
+    \lean{TNLean.Lattice.PartyCircuit.finiteDimensional_sources_prepGate}
+    \lean{TNLean.Lattice.PartyCircuit.finiteDimensional_sources_prepWord}
+    \lean{TNLean.Lattice.PartyCircuit.norm_extendedPhysicalReadout_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.rectangularTraceNorm_extendedPhysicalReadout_error_le}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le_half}
+    \lean{TNLean.Lattice.PartyCircuit.sourceGateBudget}
+    \lean{TNLean.Lattice.PartyCircuit.sourceGateBudget_pos}
+    \lean{TNLean.Lattice.PartyCircuit.sourceGateBudget_spec}
     \uses{thm:peps_circuit_effect_error}
     Set $u=\widetilde T x$ and $v=\Gamma\otimes Tx$. Both vectors have norm at
     most one, and (\ref{eq:peps_circuit_effect_error}) gives
@@ -284,7 +284,7 @@ dimensions.
 
 \begin{theorem}[Regional dimensions without padding]
     \label{thm:peps_family_regional_dimensions}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_family_regional_density_sub_le_half}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.rectangularTraceNorm_sourceOnly_family_regional_density_sub_le_half}
     \leanok
     \uses{def:peps_family_physical_output,
         thm:peps_source_only_density_error,
@@ -321,7 +321,7 @@ dimensions.
 
 \begin{theorem}[Constant-dimensional regional density estimate]
     \label{thm:peps_constant_family_regional_density}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_regional_density_sub_le_half}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.rectangularTraceNorm_sourceOnly_regional_density_sub_le_half}
     \leanok
     \uses{def:peps_family_physical_output,thm:peps_source_only_density_error}
     Suppose $d_p=d$ at every party and the discarded private memory
@@ -341,16 +341,16 @@ dimensions.
 
 \begin{theorem}[Resources of the constructed source-only circuit]
     \label{thm:peps_source_only_resources}
-    \lean{TNLean.PEPS.PairEffect.sum_norm_replacementCoefficients_le}
-    \lean{TNLean.PEPS.PairEffect.card_replacementLabels_le}
-    \lean{TNLean.PEPS.PairEffect.stackLength_le}
-    \lean{TNLean.PEPS.PairEffect.card_replacementLabels_stackLength_le}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_replacement}
-    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.length_sources_branchWord_eq_choose}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.slotCount_eq_choose}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_sourceLocations_replacement_le}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participationCount_replacement}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participationCount_replacement_le}
+    \lean{TNLean.Lattice.PartyCircuit.sum_norm_replacementCoefficients_le}
+    \lean{TNLean.Lattice.PartyCircuit.card_replacementLabels_le}
+    \lean{TNLean.Lattice.PartyCircuit.stackLength_le}
+    \lean{TNLean.Lattice.PartyCircuit.card_replacementLabels_stackLength_le}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isExpansionBounded_replacement}
+    \lean{TNLean.Lattice.PartyCircuit.PreparedSourceGate.length_sources_branchWord_eq_choose}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.slotCount_eq_choose}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_sourceLocations_replacement_le}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participationCount_replacement}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participationCount_replacement_le}
     \leanok
     \uses{thm:peps_circuit_effect_error,thm:peps_replacement_participants}
     Suppose each original nonprivate gate has at most $K$ monomials,
@@ -375,29 +375,29 @@ dimensions.
 \end{theorem}
 
 \begin{proof}\leanok
-    \lean{TNLean.PEPS.PairEffect.exists_prepared_effectReplacement_uniform_resources}
-    \lean{TNLean.PEPS.PairEffect.length_wordList_le}
-    \lean{TNLean.PEPS.PairEffect.sum_norm_coeff_wordList}
-    \lean{TNLean.PEPS.PairEffect.sum_norm_replacementCoefficients}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.IsMonomialBounded}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.IsExpansionBounded}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isExpansionBounded_castLayouts}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isExpansionBounded_exchangeBlocks}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isExpansionBounded_frameList}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isExpansionBounded_ofLocalWord}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_nonprivateLocations}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.natCard_nonprivateLocations}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.nonprivateLocationsFintype}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participationCount}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participationLocationsEquiv}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.participationCount}
-    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.length_slots}
-    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.length_sources_branchWord}
-    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.length_sources_branchWord_le_choose}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_sourceLocations_eq_sum_choose}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_sourceLocations_le}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.IsExpansionBounded.at_gate}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.participationCount_eq_card_incidentGates}
+    \lean{TNLean.Lattice.PartyCircuit.exists_prepared_effectReplacement_uniform_resources}
+    \lean{TNLean.Lattice.PartyCircuit.length_wordList_le}
+    \lean{TNLean.Lattice.PartyCircuit.sum_norm_coeff_wordList}
+    \lean{TNLean.Lattice.PartyCircuit.sum_norm_replacementCoefficients}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.IsMonomialBounded}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.IsExpansionBounded}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isExpansionBounded_castLayouts}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isExpansionBounded_exchangeBlocks}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isExpansionBounded_frameList}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isExpansionBounded_ofLocalWord}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_nonprivateLocations}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.natCard_nonprivateLocations}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.nonprivateLocationsFintype}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participationCount}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participationLocationsEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.participationCount}
+    \lean{TNLean.Lattice.PartyCircuit.PreparedSourceGate.length_slots}
+    \lean{TNLean.Lattice.PartyCircuit.PreparedSourceGate.length_sources_branchWord}
+    \lean{TNLean.Lattice.PartyCircuit.PreparedSourceGate.length_sources_branchWord_le_choose}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_sourceLocations_eq_sum_choose}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_sourceLocations_le}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.IsExpansionBounded.at_gate}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.participationCount_eq_card_incidentGates}
     \uses{cor:peps_pair_effects_rescaling,thm:peps_replacement_participants}
     Expanding the cyclic insertion averages preserves the absolute sum of
     the coefficients, and dividing by $1+\delta>1$ does not increase it.

@@ -115,8 +115,8 @@ lemma trace_powN_sigma (N : ℕ) : (powN sigma N).trace = 1 := by
 /-- The independent bond states and the even-parity flag state give a
 positive semidefinite operator in the original site coordinates. -/
 theorem decoratedState_posSemidef {N : ℕ} (hN : 0 < N) :
-    (decoratedState N).PosSemidef := by
-  exact ((Matrix.finKronecker_posSemidef (fun _ : Fin N => sigma)
+    (decoratedState N).PosSemidef :=
+  ((Matrix.finKronecker_posSemidef (fun _ : Fin N => sigma)
     (fun _ => sigma_posSemidef)).kronecker (evenFlagState_posSemidef hN)).submatrix
       ((incomingCellEquiv N).trans (bondFlagEquiv N))
 

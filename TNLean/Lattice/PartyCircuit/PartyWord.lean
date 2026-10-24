@@ -29,20 +29,20 @@ positions, so no permutation of pair registers is needed (`stackIso_insWord`).
 
 ## Main definitions
 
-* `PairEffect.Reg`, `PairEffect.Layout`, `PairEffect.Mem` : registers with owners, layouts and
+* `PartyCircuit.Reg`, `PartyCircuit.Layout`, `PartyCircuit.Mem` : registers with owners, layouts and
   their memory spaces.
-* `PairEffect.Word` : source-only words, with `Word.eval` and `Word.IsAllowed`.
-* `PairEffect.IsSourceOnly` : an operator between memories that is the operator of an
+* `PartyCircuit.Word` : source-only words, with `Word.eval` and `Word.IsAllowed`.
+* `PartyCircuit.IsSourceOnly` : an operator between memories that is the operator of an
   allowed source-only word.
-* `PairEffect.pairRegs`, `PairEffect.stackIso` : stacks of pair registers.
-* `PairEffect.prepWord`, `PairEffect.insWord` : preparation of `η^{⊗ n}` and insertion at a
+* `PartyCircuit.pairRegs`, `PartyCircuit.stackIso` : stacks of pair registers.
+* `PartyCircuit.prepWord`, `PartyCircuit.insWord` : preparation of `η^{⊗ n}` and insertion at a
   position, by pair sources.
 
 ## Main results
 
-* `PairEffect.map_owner_pairRegs` : the owners of a stack.
-* `PairEffect.stackIso_prepWord` : `prepWord` prepares `η^{⊗ n}`.
-* `PairEffect.stackIso_insWord` : `insWord` is the insertion map `I_k`.
+* `PartyCircuit.map_owner_pairRegs` : the owners of a stack.
+* `PartyCircuit.stackIso_prepWord` : `prepWord` prepares `η^{⊗ n}`.
+* `PartyCircuit.stackIso_insWord` : `insWord` is the insertion map `I_k`.
 
 ## References
 
@@ -54,7 +54,7 @@ noncomputable section
 
 open scoped InnerProductSpace TensorProduct
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 open EuclideanSpace CyclicInsertion ContinuousLinearMap
 
@@ -419,4 +419,4 @@ theorem stackIso_insWord {ℓ : Layout P} : (m : ℕ) → (k : Fin m) →
 
 end Stack
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

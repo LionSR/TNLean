@@ -17,7 +17,7 @@ a direct repainting, the resize of one hole, the point treatment of one mark of 
 operation or its removal, a birth or death on one sheet, and the lens exchange of two sheets.
 The step theorems of these operations each produce an original circuit, a word or a chain of
 pair resources on the registers of the encoded frames. This file turns each of them into a
-bounded change (`PairEffect.OriginalCircuit.IsBoundedChange`) whose participants are parties
+bounded change (`PartyCircuit.OriginalCircuit.IsBoundedChange`) whose participants are parties
 used by the event of the change (`Approximation.EventUses`), with the raw owners of the frames
 read through the party map of the repainting (`Approximation.labelParty`). The placeholder label
 of a repainting is read as the fresh placeholder party of that repainting
@@ -54,7 +54,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame PairEffect Metric
+open EncodedFrame TNLean.Lattice.Sheet TNLean.Lattice.PartyCircuit Metric
 
 /-! ### The parties used by a repainting -/
 

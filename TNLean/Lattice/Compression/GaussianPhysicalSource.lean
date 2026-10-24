@@ -36,7 +36,7 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open MeasureTheory QICLean.ComplexGaussian
 open scoped InnerProductSpace TensorProduct Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 
 open Classical in
 /-- Actual global Gaussian source-entry products give the separated physical
@@ -128,4 +128,4 @@ theorem integral_rectangularTraceNorm_gaussianPhysicalSource_le
     ring
   exact h.trans_eq hpow
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

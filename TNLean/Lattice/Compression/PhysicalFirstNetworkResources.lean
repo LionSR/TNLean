@@ -29,8 +29,8 @@ Independently formalized; no upstream Lean proof text reused.
 
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.OriginalCircuit
-open TNLean.PEPS.Approximation
+namespace TNLean.Lattice.PartyCircuit.OriginalCircuit
+open TNLean.Lattice.Compression
 variable {P : Type} {a : Layout P}
 
 /-- The actual gate correspondence from the original chronology to its
@@ -114,4 +114,4 @@ theorem card_incidentPhysicalFirstLinks_le
     exact (Finset.card_le_card hsub).trans
       ((R.participationCount_eq_card_incidentGates p).symm.trans_le hl)
 
-end TNLean.PEPS.PairEffect.OriginalCircuit
+end TNLean.Lattice.PartyCircuit.OriginalCircuit

@@ -19,11 +19,11 @@ set_option linter.hashCommand false
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
-  for decl in #[``TNLean.PEPS.Approximation.norm_trajectory_sub_reference_le,
-      ``TNLean.PEPS.Approximation.norm_trajectory_le,
-      ``TNLean.PEPS.Approximation.norm_protocol_sub_reference_le,
-      ``TNLean.PEPS.Approximation.rectangularTraceNorm_protocol_density_sub_le,
-      ``TNLean.PEPS.Approximation.rectangularTraceNorm_compressed_density_sub_le] do
+  for decl in #[``TNLean.Lattice.PartyCircuit.norm_trajectory_sub_reference_le,
+      ``TNLean.Lattice.PartyCircuit.norm_trajectory_le,
+      ``TNLean.Lattice.PartyCircuit.norm_protocol_sub_reference_le,
+      ``TNLean.Lattice.PartyCircuit.rectangularTraceNorm_protocol_density_sub_le,
+      ``TNLean.Lattice.PartyCircuit.rectangularTraceNorm_compressed_density_sub_le] do
     unless env.contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl

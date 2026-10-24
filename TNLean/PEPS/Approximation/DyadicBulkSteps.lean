@@ -48,7 +48,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open Set EncodedFrame PairEffect
+open Set EncodedFrame TNLean.Lattice.PartyCircuit
 open EuclideanSpace (vecKron)
 
 variable {q : ℕ} [NeZero q] {a A₀ D L₀ : ℝ} {m₀ : ℕ} {L : ℕ}

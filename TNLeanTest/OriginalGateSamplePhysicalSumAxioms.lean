@@ -10,7 +10,7 @@ import Lean.Util.CollectAxioms
 /-! # Axiom check for the actual density in original gate and sample indices -/
 
 set_option linter.hashCommand false
-open TNLean.PEPS.PairEffect.SourceCircuit
+open TNLean.Lattice.PartyCircuit.SourceCircuit
 
 run_cmd do
   let decl := ``physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_originalGateSampleSum

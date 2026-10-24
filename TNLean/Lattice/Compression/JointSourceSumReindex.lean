@@ -19,7 +19,8 @@ and 565–579.
 
 noncomputable section
 open scoped ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.Lattice
 variable {P : Type}
 
 open Classical in
@@ -38,7 +39,7 @@ theorem sum_choiceSamples_eq_sum_originalGateSamples {a b : Layout P}
         ∑ θ : (g : w.nonemptyGateLocations) → w.branchLabels g.1,
           (∏ g : w.nonemptyGateLocations,
             w.branchCoefficient g.1 (η g) * conj (w.branchCoefficient g.1 (θ g))) •
-              ∑ j : Approximation.DistributedOperatorContraction.Sample
+              ∑ j : Compression.DistributedOperatorContraction.Sample
                   (Finset.univ : Finset w.nonemptyGateLocations)
                   (fun g ↦ w.participants g.1) → Fin k,
                 K ((allChoicesNonemptyLabelsEquiv w).symm η)
@@ -48,4 +49,4 @@ theorem sum_choiceSamples_eq_sum_originalGateSamples {a b : Layout P}
     w (fun ξ ζ ↦ ∑ j, K ξ ζ j)]
   simp_rw [sum_sourceSampleAssignments_eq]
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

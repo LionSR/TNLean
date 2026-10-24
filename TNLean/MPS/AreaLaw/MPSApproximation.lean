@@ -129,16 +129,13 @@ private theorem surprisalTail_leftBlock_le_of_consecutive_terms
     {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ)
     (k : ℕ) (w : ℝ) (hw : 0 ≤ w) :
-    let B : ℝ :=
-      1 + (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2
     Entropy.surprisalTail
       (Entropy.regionState_isHermitian
         (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω).eigenvalues
       (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω) w ≤
       2 * Real.exp (Real.exp 1 / 2) *
-        Real.exp (-(w / (32 * Real.sqrt ((1 + J / Δ) * B)))) := by
+        Real.exp (-(w / (32 * Real.sqrt ((1 + J / Δ) * windowBudgetConst q R)))) := by
   classical
-  dsimp only
   let A := {X : ChainSupport L R // h.term X ≠ 0}
   let g : A → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun X ↦ h.term X.val
   let D : A → Finset (Fin L) := fun X ↦ X.val.1
@@ -389,17 +386,16 @@ theorem exists_isOpenMPS_norm_sub_le_of_error
 has a normalized matrix product state approximant at every accuracy `0 < ε ≤ 1`.
 The entropy coefficient and concentration scale are fixed before the chain length,
 Hamiltonian, ground vector and requested accuracy.
+
+**Scope restriction (full windows):** the window hypothesis is narrower than the general
+finite-range model of Theorem B; recorded in
+`docs/paper-gaps/tnlean_one_dimensional_discount_constants.tex`, section
+"Full consecutive windows".
 Source: the one-dimensional note, Remark `rem:sharper`, lines 706–745, and Section 7,
 proof of Theorem B, with a free accuracy parameter in the same truncation argument. -/
 theorem exists_isOpenMPS_norm_sub_le_of_error_of_consecutive_terms
     (q R : ℕ) (J Δ : ℝ) (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
-    let B : ℝ :=
-      1 + (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2
-    let C₁ : ℝ := 5 + min (32 * (2 * R : ℕ) * (q : ℝ) ^ (2 * (R + 1)))
-      (64 * Real.exp 1 * (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2) +
-        128 * B
-    let C : ℝ :=
-      ((8 * R * Real.log (q : ℝ) + Real.log 2) * C₁ + 1024 * Real.exp 1 * B) * (1 + J / Δ)
+    let C : ℝ := windowAreaLawConst q R * (1 + J / Δ)
     ∀ L : ℕ, 1 ≤ L → ∀ h : ChainHamiltonian L q R J,
       (∀ X : ChainSupport L R, h.term X ≠ 0 →
         ∃ a : ℕ, a + R + 1 ≤ L ∧ X.1 = interval L a (a + R + 1)) →
@@ -408,7 +404,7 @@ theorem exists_isOpenMPS_norm_sub_le_of_error_of_consecutive_terms
         ∀ ε : ℝ, 0 < ε → ε ≤ 1 →
           ∃ Φ : EuclideanSpace ℂ (Fin L → Fin q), ‖Φ‖ = 1 ∧
             IsOpenMPS L q
-              ⌊Real.exp (C + 64 * Real.sqrt ((1 + J / Δ) * B) *
+              ⌊Real.exp (C + 64 * Real.sqrt ((1 + J / Δ) * windowBudgetConst q R) *
                 Real.log (2 * (L : ℝ) * tailPrefactorRoot / ε))⌋₊
               (fun x ↦ Φ x) ∧ ‖Φ - Ω‖ ≤ ε := by
   dsimp only
@@ -416,11 +412,8 @@ theorem exists_isOpenMPS_norm_sub_le_of_error_of_consecutive_terms
     chainAreaLaw_of_consecutive_terms q R J Δ hq hJ hΔ
   rw [← hCeq]
   intro L hL h hwindow E₀ Ω hgs ε hε hε1
-  let B : ℝ :=
-    1 + (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2
-  have hB : 1 ≤ B := by
-    dsimp only [B]
-    exact le_add_of_nonneg_right (by positivity)
+  let B : ℝ := windowBudgetConst q R
+  have hB : 1 ≤ B := one_le_windowBudgetConst q R
   have hθ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
   have hs : 0 < Real.sqrt ((1 + J / Δ) * B) :=
     Real.sqrt_pos.mpr (by nlinarith)
@@ -533,7 +526,7 @@ theorem chainBondDimension_le_mul_rpow {L : ℕ} (hL : 1 ≤ L) :
 
 /-- Scalar comparison for the printed MPS bond bound.
 Source: one-dimensional note, part2a_mps_information.tex, thm:Bshort, lines80–92. -/
-private theorem polynomial_floor_exp_le {C s y b : ℝ} (hs : 0 ≤ s)
+theorem polynomial_floor_exp_le {C s y b : ℝ} (hs : 0 ≤ s)
     (hy : 0 < y) (hyb : y ^ 2 ≤ b) :
     (⌊Real.exp (C + 64 * s * Real.log y)⌋₊ : ℝ) ≤
       Real.exp C * b ^ (32 * s) := by
@@ -602,5 +595,47 @@ theorem exists_isOpenMPS_norm_sub_le_polynomial
     simp only [u₀, one_div_one_div]
     nlinarith only [hdim, show 0 ≤ Real.exp C_int *
       (32 * Real.exp (Real.exp 1 / 2) * (L : ℝ) ^ 4) ^ (32 * s) by positivity]
+
+/-- **Matrix product state approximation at accuracy `ε` with a polynomial bond bound.**
+For `L ≥ 1` and `0 < ε ≤ 1`, a gapped ground vector `Ω` of a finite-range Hamiltonian on the
+chain has a normalized open-boundary matrix product state `Φ` within `ε` of `Ω` whose bond
+dimension `D` satisfies `D ≤ e^{C_int} (2 c₀)^{64 s} (L / ε)^{64 s}`, with the printed
+`C_int`, `s = √((1 + J/Δ) B_R)` and `c₀ = √(2 e^{e/2})`. Theorem B is the case `ε = 1/L`.
+Source: one-dimensional note, part2a_mps_information.tex, thm:Bshort and sec:shortcut,
+lines 73–92, at a free accuracy. -/
+theorem exists_isOpenMPS_norm_sub_le_of_error_rpow
+    (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ) {L : ℕ}
+    (hL : 1 ≤ L) (h : ChainHamiltonian L q R J) {E₀ : ℝ}
+    {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ)
+    {ε : ℝ} (hε : 0 < ε) (hε1 : ε ≤ 1) :
+    let C_E : ℝ := 8 * chainCrossConst R * (q : ℝ) ^ (2 * (R + 1)) * J
+    let m : ℕ :=
+      ⌈max (max (max 4 (4 * C_E / Δ))
+        (128 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)))
+        (4096 * Real.exp 1 * (1 + J / Δ) * chainBudgetConst q R)⌉₊
+    let C_int := 8 * (m : ℝ) * R * Real.log q + 1 + 2 * C_E / Δ
+    let s := Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)
+    ∃ Φ : EuclideanSpace ℂ (Fin L → Fin q), ‖Φ‖ = 1 ∧ ∃ D : ℕ,
+      IsOpenMPS L q D (fun x ↦ Φ x) ∧ ‖Φ - Ω‖ ≤ ε ∧
+      (D : ℝ) ≤ Real.exp C_int * (2 * tailPrefactorRoot) ^ (64 * s) *
+        ((L : ℝ) / ε) ^ (64 * s) := by
+  intro C_E m C_int s
+  obtain ⟨Φ, hΦ, hMPS, herror⟩ :=
+    exists_isOpenMPS_norm_sub_le_of_error_polynomial hq hJ hΔ hL h hgs hε hε1
+  refine ⟨Φ, hΦ, _, hMPS, herror, ?_⟩
+  have hroot := tailPrefactorRoot_pos
+  have hLpos : (0 : ℝ) < L := by exact_mod_cast hL
+  set y : ℝ := 2 * (L : ℝ) * tailPrefactorRoot / ε with hydef
+  have hy : 0 < y := by rw [hydef]; positivity
+  have hdim := polynomial_floor_exp_le (C := C_int) (s := s) (Real.sqrt_nonneg _) hy le_rfl
+  have hpow : (y ^ 2) ^ (32 * s) =
+      (2 * tailPrefactorRoot) ^ (64 * s) * ((L : ℝ) / ε) ^ (64 * s) := by
+    rw [← Real.rpow_natCast, ← Real.rpow_mul hy.le,
+      show y = (2 * tailPrefactorRoot) * ((L : ℝ) / ε) by rw [hydef]; ring,
+      Real.mul_rpow (by positivity) (by positivity)]
+    congr 2 <;> push_cast <;> ring
+  rw [hpow, ← mul_assoc] at hdim
+  exact hdim
 
 end TNLean.MPS.AreaLaw

@@ -26,8 +26,8 @@ reused.
 noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.Word
-open SourceInventory
+namespace TNLean.Lattice.PartyCircuit.Word
+open TNLean.Lattice.PartyCircuit.SourceInventory
 variable {P : Type}
 
 /-- Preparing only internal sources gives two fixed local contractions, uniformly
@@ -75,4 +75,4 @@ theorem exists_selective_partition (f : P → Bool) (R : SourceInventory P)
   simpa only [eval_comp, comp_assoc] using
     congrArg (fun T ↦ T ∘L (prepareFreeSlots R U V free ζ ℓ).eval) he
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

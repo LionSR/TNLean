@@ -21,7 +21,7 @@ lines 25–37, and Theorem 5.2, `04-compression.tex`, lines 140–149 and
 
 open scoped BigOperators
 
-namespace TNLean.PEPS.PairEffect.OriginalCircuit
+namespace TNLean.Lattice.PartyCircuit.OriginalCircuit
 
 variable {P : Type} (a : ℕ → Layout P)
   (step : (t : ℕ) → OriginalCircuit (a t) (a (t + 1)))
@@ -117,4 +117,4 @@ theorem participationCount_sequence (t : ℕ) (p : P) :
       rw [Finset.sum_range_succ, ← ih]
       exact participationCount_comp (sequence a step t) (step t) p
 
-end TNLean.PEPS.PairEffect.OriginalCircuit
+end TNLean.Lattice.PartyCircuit.OriginalCircuit

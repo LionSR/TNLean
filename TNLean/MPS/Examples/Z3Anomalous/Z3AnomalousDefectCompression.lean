@@ -102,10 +102,6 @@ def pairTargetEis (ab : Fin 3 × Fin 3) :
     Fin 9 → Matrix (Fin (pairTargetDim ab)) (Fin (pairTargetDim ab)) EisensteinInt :=
   summandEisMPS (ab.1 + ab.2)
 
-theorem pairTarget_eq (ab : Fin 3 × Fin 3) (i : Fin 9) :
-    pairTarget ab i = complexOfEisenstein (pairTargetEis ab i) :=
-  summandMPS_eq _ i
-
 /-- The slots of the square: all nine pairs of summands. -/
 abbrev squareSlots : Finset (Fin 3 × Fin 3) := Finset.univ
 

@@ -18,7 +18,18 @@ The interaction family is the existing all-support Hamiltonian. Zero interaction
 omitted only from the finite sum to which the marginal estimate is applied. No new
 Hamiltonian or change in the norm bound is involved.
 
+**Scope restriction (full windows):** the three theorems about `ChainHamiltonian` in
+this module assume that every nonzero interaction occupies a full window of `R + 1`
+consecutive sites contained in the chain; only under that hypothesis are the note's
+crossing count `N_R` and budget `B_R` replaced by `2R` and `B_win`. Recorded in
+`docs/paper-gaps/tnlean_one_dimensional_discount_constants.tex`, section
+"Full consecutive windows".
+
 ## Main results
+
+* `windowBudgetConst`, `windowAreaLawConst`: the constants `B_win` and `C₀,win`, which are
+  `cutBudgetConst` and `cutAreaLawConst` at the crossing count `2R`, so `B_R` and
+  `C₀(q, R)` with `N_R` replaced by `2R`.
 
 * `ChainHamiltonian.card_crossingTerms_interval_le_of_consecutive_terms`: the crossing
   count for the nonzero interactions.
@@ -39,6 +50,21 @@ open scoped ComplexOrder Matrix.Norms.L2Operator
 namespace TNLean.MPS.AreaLaw
 
 variable {L q R : ℕ} {J : ℝ}
+
+/-- The cut budget `B_win = 1 + 2R log² (e q^{R + 1})` of full consecutive windows.
+Source: the one-dimensional note, `rem:sharper`, lines 706–709. -/
+noncomputable def windowBudgetConst (q R : ℕ) : ℝ :=
+  cutBudgetConst (2 * R) q R
+
+/-- The window budget is at least one. -/
+theorem one_le_windowBudgetConst (q R : ℕ) : 1 ≤ windowBudgetConst q R :=
+  one_le_cutBudgetConst _ q R
+
+/-- The area-law constant `C₀,win`: `C₀(q, R)` with `N_R` replaced by `2R` and `B_R` by
+`B_win`; its shell constant `C₁,win` is `cutShellConst (2 * R) q R`.
+Source: the one-dimensional note, `rem:sharper`, lines 706–745. -/
+noncomputable def windowAreaLawConst (q R : ℕ) : ℝ :=
+  cutAreaLawConst (2 * R) q R
 
 /-- The starting positions of windows crossing a cut lie among its preceding `R` sites.
 Source: the one-dimensional note, `rem:sharper`, lines 706–709. -/
@@ -127,8 +153,9 @@ theorem ChainHamiltonian.cutLogBudget_interval_le_of_consecutive_terms
         (interval L l r))
       (Entropy.supportDim (fun _ : Fin L ↦ q) ∘
         (fun X : {X : ChainSupport L R // h.term X ≠ 0} ↦ X.val.1)) ≤
-      1 + (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2 := by
+      windowBudgetConst q R := by
   classical
+  unfold windowBudgetConst cutBudgetConst
   let A := {X : ChainSupport L R // h.term X ≠ 0}
   let D : A → Finset (Fin L) := fun X ↦ X.val.1
   let C := Entropy.crossingTerms D (interval L l r)
@@ -167,14 +194,12 @@ theorem ChainHamiltonian.log_surprisalMoment_interval_le_of_consecutive_terms
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ)
     (l r : ℕ) {u : ℝ}
-    (hu : |u| ≤ Entropy.tailRadius (J / Δ)
-      (1 + (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2)) :
+    (hu : |u| ≤ Entropy.tailRadius (J / Δ) (windowBudgetConst q R)) :
     Real.log (Entropy.surprisalMoment
       (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
         (interval L l r) Ω).eigenvalues u) ≤
       u * Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r) Ω +
-        512 * Real.exp 1 * (J / Δ) *
-          (1 + (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2) * u ^ 2 := by
+        512 * Real.exp 1 * (J / Δ) * windowBudgetConst q R * u ^ 2 := by
   classical
   let A := {X : ChainSupport L R // h.term X ≠ 0}
   let g : A → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun X ↦ h.term X.val
@@ -182,7 +207,7 @@ theorem ChainHamiltonian.log_surprisalMoment_interval_le_of_consecutive_terms
   have hsum : (∑ X : A, g X) = h.operator := by
     exact (Finset.sum_eq_sum_subtype_ne_zero h.term h.term (fun _ hX ↦ hX)).symm
   let C := Entropy.crossingTerms D (interval L l r)
-  let B : ℝ := 1 + (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2
+  let B : ℝ := windowBudgetConst q R
   let budget := Entropy.cutLogBudget C (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ D)
   have hbudget : budget ≤ B :=
     h.cutLogBudget_interval_le_of_consecutive_terms hq hwindow l r

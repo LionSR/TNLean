@@ -125,9 +125,8 @@ private theorem isNBlkInjective_succ_and_three_mul_succ_of_unital
     (∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L₀ + 1)) ∧
       ∀ k : Fin r,
         Kraus.IsNBlkInjective (A k) ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1))) := by
-  constructor <;> intro k
-  · exact isNBlkInjective_of_ge_of_unital (A k) (hUnital k) (hBlk0 k) (by omega)
-  · exact isNBlkInjective_of_ge_of_unital (A k) (hUnital k) (hBlk0 k) (by omega)
+  constructor <;> intro k <;>
+    exact isNBlkInjective_of_ge_of_unital (A k) (hUnital k) (hBlk0 k) (by omega)
 
 /-- Length-\(L_0\) injectivity form of the BNT product span at all sufficiently
 large lengths.

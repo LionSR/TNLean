@@ -23,9 +23,11 @@ Independently formalized; no upstream Lean proof text reused.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 variable {P ι : Type} [Fintype ι] {c : ι → ℂ} {a b : Layout P}
 
+namespace Lattice.PartyCircuit
 /-- Each actual prepared branch creates one pair source at each common slot.
 Source: polynomial-PEPS, `04-compression.tex:233–251` and `342–355`. -/
 theorem PreparedSourceGate.length_sources_branchWord
@@ -63,9 +65,10 @@ theorem PreparedSourceGate.length_sources_branchWord_le_choose [Fintype P]
     (G.branchWord ξ).sources.length ≤ b.choose 2 := by
   rw [G.length_sources_branchWord_eq_choose]
   exact Nat.choose_le_choose 2 hb
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit
+end TNLean
 
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 /-- Every actual gate occurrence has one common source slot per unordered pair
 of its participating original parties.
@@ -100,9 +103,9 @@ theorem card_sourceLocations_le {a b : Layout P} (w : SourceCircuit a b) {b₀ :
   rw [card_sourceLocations_eq_sum_choose]
   exact (Finset.sum_le_sum fun g _ ↦ Nat.choose_le_choose 2 (hb g)).trans_eq
     (by simp)
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit
 
-namespace TNLean.PEPS.PairEffect.OriginalCircuit
+namespace TNLean.Lattice.PartyCircuit.OriginalCircuit
 variable {P : Type}
 /-- Actual source positions of the constructed replacement are bounded by the
 original nonprivate gate count and the original per-gate participant bound.
@@ -123,4 +126,4 @@ theorem card_sourceLocations_replacement_le {r : ℕ} {S δ : ℝ} {a b : Layout
   have hcard := w.card_nonprivateLocations
   exact (R.card_sourceLocations_le hpartR).trans_eq
     (congrArg (fun n ↦ n * b₀.choose 2) ((Fintype.card_congr e).symm.trans hcard))
-end TNLean.PEPS.PairEffect.OriginalCircuit
+end TNLean.Lattice.PartyCircuit.OriginalCircuit

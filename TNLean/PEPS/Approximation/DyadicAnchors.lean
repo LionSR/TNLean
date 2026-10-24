@@ -106,10 +106,6 @@ theorem padicValNat_two_dyadicAnchor {j : ℕ} (hj : j ≠ 0) (r : ℕ) :
   rw [dyadicAnchor_of_ne_zero hj, padicValNat.mul (by positivity) (by omega),
     padicValNat.prime_pow, padicValNat.eq_zero_of_not_dvd (by omega), add_zero]
 
-/-- A nonunit anchor coordinate is nonzero. -/
-theorem dyadicAnchor_ne_zero {j : ℕ} (hj : j ≠ 0) (r : ℕ) : dyadicAnchor j r ≠ 0 := by
-  rw [dyadicAnchor_of_ne_zero hj]; positivity
-
 /-- A nonunit anchor coordinate determines its scale and block index: such a row or column
 belongs to a unique nonunit scale.
 

@@ -23,6 +23,7 @@ and Lemma 8.2, `07-assembly.tex`, lines 96–177. Source revision:
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS.Approximation.DistributedOperatorContraction
+open TNLean.Lattice.Compression TNLean.Lattice.Compression.DistributedOperatorContraction
 
 variable {Party Gate : Type*} [Fintype Party]
   [DecidableEq Party] [DecidableEq Gate]

@@ -29,7 +29,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.EffectCircuit
+namespace TNLean.Lattice.PartyCircuit.EffectCircuit
 variable {P Phys Env : Type} [Fintype Phys] [Fintype Env] [DecidableEq Phys]
 
 /-- The original physical density, computed from the original gate operators
@@ -88,4 +88,4 @@ theorem rectangularTraceNorm_rescaledOriginal_density_sub_le_budget
         (mul_nonneg (by norm_num) (sourceGateBudget_pos hε M).le)).trans
           (sourceGateBudget_spec hε.le M))
 
-end TNLean.PEPS.PairEffect.EffectCircuit
+end TNLean.Lattice.PartyCircuit.EffectCircuit

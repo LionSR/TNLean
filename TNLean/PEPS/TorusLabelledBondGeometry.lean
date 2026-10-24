@@ -20,6 +20,7 @@ SCP10, Theorem 5.5. The four seam cuts at period two each remove four edges.
 -/
 
 namespace TNLean.PEPS
+open TNLean.Lattice
 
 /-- Actual native bond IDs; false is horizontal and true is vertical. -/
 abbrev TorusLabelledBond (width height : ℕ) := TorusVertex width height × Bool

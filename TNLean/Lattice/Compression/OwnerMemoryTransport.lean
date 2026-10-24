@@ -21,7 +21,7 @@ empty type whenever such a map exists.
 
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect.Layout
+namespace TNLean.Lattice.PartyCircuit.Layout
 variable {P Q : Type}
 
 /-- Selecting registers after an owner map is the owner map of the selected
@@ -68,4 +68,4 @@ theorem mapOwnerIso_apply_heq (f : P → Q) (a : Layout P) (x : Mem a) :
       exact lTensor_apply_heq_refl (mem_mapOwner f a) (mapOwnerIso f a)
         ih r.space x
 
-end TNLean.PEPS.PairEffect.Layout
+end TNLean.Lattice.PartyCircuit.Layout

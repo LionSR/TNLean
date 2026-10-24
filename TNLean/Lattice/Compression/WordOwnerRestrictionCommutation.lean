@@ -20,7 +20,7 @@ and 565–588.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 open ContinuousLinearMap
 variable {P Q : Type}
 
@@ -135,4 +135,4 @@ theorem restrict_mapOwner_heq (f : P → Q) (g : Q → Bool) {a b : Layout P}
       · simp only [mapOwner, restrict, dite_eq_right hr, mapOwner_castLayouts]
         exact (castLayouts_heq _ _ _).trans ((ih hs).trans (castLayouts_heq _ _ _).symm)
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word
