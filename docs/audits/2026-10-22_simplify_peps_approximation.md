@@ -15,8 +15,8 @@ migrated to the replacement.
 | `translate_scale` | `TNLean/PEPS/Approximation/AdaptivePatchSupply.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
 | `translate_dim` | `TNLean/PEPS/Approximation/AdaptivePatchSupply.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
 | `translate_outer` | `TNLean/PEPS/Approximation/AdaptivePatchSupply.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
-| `tile_subset_box` | `TNLean/PEPS/Approximation/CellColouredGeneration.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
 | `exists_const_mul_rpow_le_rpow` | `TNLean/PEPS/Approximation/CellTwoFamilyPartition.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
-| `dyadicAnchor_ne_zero` | `TNLean/PEPS/Approximation/DyadicAnchors.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
-| `holeRadius_nonneg` | `TNLean/PEPS/Approximation/DyadicProtocolConstants.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
-| `edgeOperations_eq_append` | `TNLean/PEPS/Approximation/DyadicRepaintingSchedule.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+
+The four elementary helpers `tile_subset_box`, `dyadicAnchor_ne_zero`, `holeRadius_nonneg` and
+`edgeOperations_eq_append`, which this pass also found unused, were removed first by #9889 and are
+recorded in `docs/audits/2026-10-22_peps_approximation_elementary_deletions.md`.
