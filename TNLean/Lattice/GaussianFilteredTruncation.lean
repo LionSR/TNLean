@@ -61,9 +61,9 @@ section Abstract
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
-/-- **Comparison of two Heisenberg evolutions.** For Hermitian `H`, if the commutator of
-`H - H'` with the evolution `e^{iH'u} W e^{-iH'u}` has norm at most `ε` for all `u` between
-`0` and `t`, then `‖e^{iHt} W e^{-iHt} - e^{iH't} W e^{-iH't}‖ ≤ ε |t|`. Hastings,
+/-- **Comparison of two Heisenberg evolutions.** For Hermitian `H` and any `H'`, if the
+commutator of `H - H'` with the evolution `e^{iH'u} W e^{-iH'u}` has norm at most `ε` for
+all `u` between `0` and `t`, then `‖e^{iHt} W e^{-iHt} - e^{iH't} W e^{-iH't}‖ ≤ ε |t|`. Hastings,
 arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1469–1482: the difference of the two
 evolutions is the time integral of the commutators with the omitted terms. -/
 theorem norm_conj_sub_conj_le {H H' : Matrix n n ℂ} (hH : H.IsHermitian) (W : Matrix n n ℂ)
