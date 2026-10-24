@@ -28,7 +28,7 @@ constant `4 N J b` in place of `N J O(·)`.
 a unit vector in the span of the final states `α^h`, rather than one of the `α^h` themselves.
 The `α^h` are eigenvectors of the last pair operator, not of `∑_i M_i`, so the source's
 assertion for a single `α^h` is not derived here. The deficiency `b` of the last level is a
-hypothesis; bounding it through all `h` levels is the bookkeeping of the hierarchy.
+hypothesis; it is bounded by an induction over the `h` levels of the projection.
 Documented in `docs/paper-gaps/hastings05_hierarchical_energy.tex`.
 
 ## Main results
