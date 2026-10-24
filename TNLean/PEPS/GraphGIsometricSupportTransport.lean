@@ -45,10 +45,8 @@ theorem IsGIsometric.exists_physicalSupportTransport
   obtain ⟨cb, hcb, hBinner⟩ := hB.exists_inner_eq
   let J := (Real.sqrt ca : ℂ)⁻¹ • coordinateAdjoint A
   let F := (Real.sqrt cb : ℂ)⁻¹ • B ∘ₗ J
-  have hBP : B ∘ₗ ρ.averageMap = B := by
-    apply LinearMap.ext
-    intro u
-    exact apply_averageMap_of_forall_comp_eq hB.invariant u
+  have hBP : B ∘ₗ ρ.averageMap = B :=
+    LinearMap.ext (apply_averageMap_of_forall_comp_eq hB.invariant)
   change J ∘ₗ A = (Real.sqrt ca : ℂ) • ρ.averageMap at hJA
   have hFA : F ∘ₗ A = ((Real.sqrt ca : ℂ) / (Real.sqrt cb : ℂ)) • B := by
     simp only [F, LinearMap.comp_assoc, hJA, LinearMap.comp_smul, LinearMap.smul_comp,

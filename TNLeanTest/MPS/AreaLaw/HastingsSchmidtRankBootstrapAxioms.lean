@@ -13,8 +13,8 @@ run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[
     ``TNLean.MPS.AreaLaw.Hastings.normSq_dotProduct_le_kyFanNorm,
-    ``TNLean.MPS.AreaLaw.Hastings.vonNeumannEntropy_eq_probabilityEntropy_eigenvalues₀,
-    ``TNLean.MPS.AreaLaw.Hastings.sum_eigenvalues₀_filter_le,
+    ``vonNeumannEntropy_eq_probabilityEntropy_eigenvalues₀,
+    ``Matrix.IsHermitian.sum_eigenvalues₀_filter_le,
     ``TNLean.MPS.AreaLaw.Hastings.vonNeumannEntropy_le_of_schmidtRank_mixtures] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
