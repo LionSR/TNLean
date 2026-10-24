@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Analysis.Convex.Integral
 import QICLean.Analysis.ProjectedEvolution
+import TNLean.Algebra.MatrixHermitianSum
 import TNLean.Circuit.LiebRobinson.GraphPropagation
 import TNLean.Lattice.GaussianFilteredLocality
 import TNLean.Lattice.ProductForm
@@ -32,7 +33,7 @@ only the terms of `H` near `i`. This is the filter of `H_i` under the truncated 
   `norm_gaussianFilteredTerm_sub_truncated_le`: the error of the truncation to a subfamily `s`
   of terms acting on `K`, with the Lieb–Robinson bound for the truncated dynamics and the sum of
   norms (or the number) of the omitted terms meeting `K`.
-* `exists_truncated_approx_gaussianFilteredTerm`: the truncated filter acts on `K`, has norm at
+* `truncated_approx_gaussianFilteredTerm`: the truncated filter acts on `K`, has norm at
   most `‖W‖`, is Hermitian when `W` is, and satisfies the bound of eq. `apb`.
 
 **Local fix (the truncated approximation `M_i`, eqs. `mid`, `apb`, `truncb`):** the truncation
@@ -343,9 +344,8 @@ theorem norm_gaussianFilteredTerm_sub_truncated_le_sum [NeZero d] [DecidableEq �
           (∑ k ∈ sᶜ.filter (fun k => ¬Disjoint (X k) K), ‖h k‖) * T *
           Real.exp ((2 * vR * |b₀| * Real.exp (2 * μ * R) + 1) * T - μ * m) +
         2 * ‖W‖ * Real.exp (-(T * ΔE) ^ 2 / (2 * q)) := by
-  have hH : (∑ k, h k).IsHermitian := isSelfAdjoint_sum _ fun k _ => (hHerm k).isSelfAdjoint
-  have hHs : (∑ k ∈ s, h k).IsHermitian :=
-    isSelfAdjoint_sum _ fun k _ => (hHerm k).isSelfAdjoint
+  have hH : (∑ k, h k).IsHermitian := Matrix.isHermitian_sum _ fun k _ => hHerm k
+  have hHs : (∑ k ∈ s, h k).IsHermitian := Matrix.isHermitian_sum _ fun k _ => hHerm k
   have hv : 0 ≤ 2 * vR * |b₀| * Real.exp (2 * μ * R) + 1 := by positivity
   generalize hF : 2 * vR * (2 + 4 * |b₀| * Real.exp (2 * μ * R)) * (S.card : ℝ) * ‖W‖ *
     (∑ k ∈ sᶜ.filter (fun k => ¬Disjoint (X k) K), ‖h k‖) = F
@@ -405,33 +405,30 @@ Hamiltonian `H_s = ∑_{k ∈ s} hₖ` acts on `K`, has norm at most `‖W‖`, 
 and approximates the filter of `W` under `H` as in
 `norm_gaussianFilteredTerm_sub_truncated_le`. Hastings, arXiv:cond-mat/0508554v3,
 `proj3new.tex`, eqs. `mid`, `odef`, `hpdef`, `apb` and `‖M_i‖ ≤ J` (lines 285–320). -/
-theorem exists_truncated_approx_gaussianFilteredTerm [NeZero d] [DecidableEq κ] {q ΔE : ℝ}
+theorem truncated_approx_gaussianFilteredTerm [NeZero d] [DecidableEq κ] {q ΔE : ℝ}
     (hq : 0 ≤ q) (s : Finset κ) (K : Finset ι) (hsK : ∀ k ∈ s, X k ⊆ K) (S : Finset ι)
     (hSK : S ⊆ K) {W : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hW : W ∈ supportedOperators d (S : Set ι)) (J : ℝ) (hJ : ∀ k, ‖h k‖ ≤ J) (μ : ℝ)
     (hμ : 0 ≤ μ) (m : ℕ)
     (hm : ∀ k ∉ s, ¬Disjoint (X k) K → ∀ x ∈ S, ∀ y ∈ X k, (m : ℕ∞) ≤ G.edist x y)
     {T : ℝ} (hT : 0 ≤ T) :
-    ∃ M : Matrix (ι → Fin d) (ι → Fin d) ℂ,
-      M = gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W ∧
-      M ∈ supportedOperators d (K : Set ι) ∧ ‖M‖ ≤ ‖W‖ ∧ (W.IsHermitian → M.IsHermitian) ∧
-      ‖gaussianFilteredTerm q ΔE (∑ k, h k) W - M‖ ≤
+    gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W ∈ supportedOperators d (K : Set ι) ∧
+      ‖gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W‖ ≤ ‖W‖ ∧
+      (W.IsHermitian → (gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W).IsHermitian) ∧
+      ‖gaussianFilteredTerm q ΔE (∑ k, h k) W - gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W‖ ≤
         2 * vR * (2 + 4 * |b₀| * Real.exp (2 * μ * R)) * (S.card : ℝ) * ‖W‖ * J *
             ((sᶜ.filter (fun k => ¬Disjoint (X k) K)).card : ℝ) * T *
             Real.exp ((2 * vR * |b₀| * Real.exp (2 * μ * R) + 1) * T - μ * m) +
           2 * ‖W‖ * Real.exp (-(T * ΔE) ^ 2 / (2 * q)) := by
-  have hHs : (∑ k ∈ s, h k).IsHermitian :=
-    isSelfAdjoint_sum _ fun k _ => (hHerm k).isSelfAdjoint
+  have hHs : (∑ k ∈ s, h k).IsHermitian := Matrix.isHermitian_sum _ fun k _ => hHerm k
   have hHsK : (∑ k ∈ s, h k) ∈ supportedOperators d (K : Set ι) :=
     Submodule.sum_mem _ fun k hk =>
       supportedOperators_mono (Finset.coe_subset.mpr (hsK k hk)) (hSupport k)
-  refine ⟨_, rfl, gaussianFilteredTerm_mem_supportedOperators q ΔE hHsK
+  exact ⟨gaussianFilteredTerm_mem_supportedOperators q ΔE hHsK
     (supportedOperators_mono (Finset.coe_subset.mpr hSK) hW),
-    norm_gaussianFilteredTerm_le q ΔE hHs W, fun hW' => ?_,
+    norm_gaussianFilteredTerm_le q ΔE hHs W, isHermitian_gaussianFilteredTerm q ΔE hHs,
     norm_gaussianFilteredTerm_sub_truncated_le G X a ha h hHerm hSupport R hDiam vR hCard b₀
       hBudget hq s K hsK S hSK hW J hJ μ hμ m hm hT⟩
-  change (gaussianIntertwiner _ _ _ W)ᴴ = gaussianIntertwiner _ _ _ W
-  rw [gaussianIntertwiner_conjTranspose _ hHs hHs W, hW'.eq]
 
 end Graph
 
