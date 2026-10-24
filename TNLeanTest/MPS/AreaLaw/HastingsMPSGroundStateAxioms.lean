@@ -10,11 +10,13 @@ import Lean.Util.CollectAxioms
 /-! Presence and permitted-axiom checks for the matrix product state approximation of the
 gapped ground state in Hastings' section on matrix product states. -/
 
+open TNLean.MPS.AreaLaw.Hastings in
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[
-      ``TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_sq_le_of_gappedGroundState,
-      ``TNLean.MPS.AreaLaw.Hastings.exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState] do
+      ``isOpenMPS_norm_sub_sq_le_of_gappedGroundState,
+      ``exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState,
+      ``exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState_endpoint] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl
