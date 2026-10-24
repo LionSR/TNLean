@@ -24,7 +24,7 @@ This identification permits a subsequent change to party source coordinates.
 
 noncomputable section
 open scoped TensorProduct Matrix
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} {a b : Layout P}
 
 /-- The literal source-to-output matrix of an actual all-party chronological
@@ -80,4 +80,4 @@ theorem partialSourceGlobalMatrix_eq_toMatrix (w : SourceCircuit a b)
     OrthonormalBasis.coe_toBasis_repr_apply, actualSourceInputBasis_apply]
   rfl
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

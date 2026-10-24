@@ -27,7 +27,7 @@ No injectivity, representation, or graph simplicity assumption is made here.
 noncomputable section
 open scoped BigOperators
 
-namespace TNLean.PEPS.DependentBondNetwork
+namespace TNLean.Lattice.DependentBondNetwork
 
 variable {Vertex Edge : Type*}
 
@@ -149,4 +149,4 @@ theorem network_eq_sum_site
 
 end Finite
 
-end TNLean.PEPS.DependentBondNetwork
+end TNLean.Lattice.DependentBondNetwork

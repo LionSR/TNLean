@@ -27,7 +27,7 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect.SourceInventory
+namespace TNLean.Lattice.PartyCircuit.SourceInventory
 
 variable {P ι : Type}
 
@@ -80,4 +80,4 @@ theorem exists_finite_coordinate_expansions [Finite ι] (R : SourceInventory P)
     (fun i ↦ η₀ i ξ)
   simpa only [hmap] using h
 
-end TNLean.PEPS.PairEffect.SourceInventory
+end TNLean.Lattice.PartyCircuit.SourceInventory

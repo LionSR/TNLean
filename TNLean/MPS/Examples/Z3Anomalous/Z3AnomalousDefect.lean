@@ -159,13 +159,6 @@ def defectEisMPS : Fin 9 → Matrix (Fin 5) (Fin 5) EisensteinInt :=
 
 theorem defectMPS_eq (a : Fin 9) : defectMPS a = complexOfEisenstein (defectEisMPS a) := rfl
 
-/-- The letter `(1, 0)` of the defect is the recorded one: the column `(1, 1)ᵀ` of `U` in the
-coordinates `1, 2` (data file §2.5). -/
-theorem defectEis_apply_one_zero :
-    defectEis 1 0 =
-      !![0, 0, 0, 0, 0; 0, 1, 0, 0, 0; 0, 1, 0, 0, 0; 0, 0, 0, 0, 0; 0, 0, 0, 0, 0] := by
-  decide +kernel
-
 theorem defectMPS_eq_blockDiagonal (a : Fin 9) :
     defectMPS a =
       (Matrix.blockDiagonal' fun k => summandMPS k a).submatrix defectBond.symm

@@ -28,11 +28,12 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 
 variable {P : Type}
 
-namespace Word
+namespace Lattice.PartyCircuit.Word
 
 /-- Preparing the pair sources first keeps the parties of the local maps. -/
 theorem usesOnly_localPart {S : Set P} {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') (hw : w.UsesOnly S) :
@@ -177,9 +178,9 @@ theorem complementPart_eval_heq_id (f : P → Bool) {ℓ ℓ' : Layout P} (w : W
   refine ⟨hin.symm.trans hlp.1, ?_⟩
   exact (castInput_eval_heq _ _).trans (hlp.2.trans (id_heq_id hin))
 
-end Word
+end Lattice.PartyCircuit.Word
 
-namespace PartyChain
+namespace Lattice.PartyCircuit.PartyChain
 
 private theorem castLayouts_eval_heq {ℓ ℓ' a b : Layout P} (w : Word ℓ ℓ') (h : ℓ = a)
     (h' : ℓ' = b) : HEq (w.castLayouts h h').eval w.eval :=
@@ -200,8 +201,9 @@ theorem complementPart_eval_heq_id (f : P → Bool) {ℓX ℓY : Layout P} (M : 
       exact Word.comp_heq_id (h₁.trans hnp) h₂ _ _
         ((castLayouts_eval_heq _ _ _).trans e₁) e₂
 
-end PartyChain
+end Lattice.PartyCircuit.PartyChain
 
+namespace PEPS.PairEffect
 /-- A map that is the identity up to a layout identification is that identification. -/
 theorem eq_isoL_memCongr_of_heq_id {a b : Layout P} (h : a = b) (F : Mem a →L[ℂ] Mem b)
     (hF : HEq F (ContinuousLinearMap.id ℂ (Mem a))) : F = isoL (Layout.memCongr h) := by
@@ -209,6 +211,9 @@ theorem eq_isoL_memCongr_of_heq_id {a b : Layout P} (h : a = b) (F : Mem a →L[
   rw [eq_of_heq hF]
   rfl
 
+end PEPS.PairEffect
+namespace Lattice.PartyCircuit
+open TNLean.PEPS.PairEffect
 /-- **Monomials meeting the selection fix the other registers.** A monomial that uses only the
 parties of `S` and moves a register of `S` at each exchange of tensor factors leaves the other
 registers in place. -/
@@ -219,4 +224,5 @@ theorem PartyChain.fixesOutside_of_swapsMeet [DecidableEq P] (S : Finset P) {ℓ
     (hM : M.SwapsMeet fun p ↦ decide (p ∈ S)) : M.FixesOutside S h :=
   ⟨hU, eq_isoL_memCongr_of_heq_id h _ (M.complementPart_eval_heq_id _ hU hM).2⟩
 
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit
+end TNLean

@@ -19,7 +19,7 @@ Source: polynomial-PEPS manuscript, proof of Theorem 5.2,
 
 noncomputable section
 open scoped BigOperators Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
 /-- The contraction on a pure input is the product source matrix between the
 literal ket and bra source-to-output matrices.
@@ -50,4 +50,4 @@ theorem sourceContraction_preparedDensityCoefficient_pure_eq_mul
       (v.pureSourceMatrix R U V bU bV ℓ bOut ψ)
       (v'.pureSourceMatrix R U V bU bV ℓ bOut ψ) X)
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

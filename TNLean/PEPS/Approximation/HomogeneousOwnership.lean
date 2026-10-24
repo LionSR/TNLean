@@ -54,6 +54,7 @@ open scoped BigOperators Kronecker Matrix.Norms.L2Operator
 noncomputable section
 
 namespace TNLean.PEPS.EncodedFrame
+open TNLean.Lattice.Sheet
 
 /-! ### Birth and death in an encoded frame -/
 

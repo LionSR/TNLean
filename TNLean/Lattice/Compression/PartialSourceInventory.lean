@@ -12,7 +12,7 @@ reused.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 /-- Every partial branch is allowed: expanded gates use their normalized source
@@ -98,4 +98,4 @@ theorem mem_sources_partialWord (A : P → Bool) {a b : Layout P}
   rw [sources_partialWord]
   exact SourceInventory.mem_mapOwner_affectedOwner A (expandedSources A w ξ) t
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

@@ -9,7 +9,7 @@ All coordinate bases in this section are finite orthonormal bases.
 
 \begin{definition}[Bases adapted to the party partition]
     \label{def:peps_partition_output_bases}
-    \lean{TNLean.PEPS.PairEffect.Layout.regionalOutputIso}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.regionalOutputIso}
     \leanok
     \uses{def:peps_party_partition,
         def:peps_basis_partition_bases,
@@ -30,7 +30,7 @@ All coordinate bases in this section are finite orthonormal bases.
 
 \begin{theorem}[Regrouping physical and discarded coordinates]
     \label{thm:peps_partition_output_coordinates}
-    \lean{TNLean.PEPS.PairEffect.Word.repr_effectMap}
+    \lean{TNLean.Lattice.PartyCircuit.Word.repr_effectMap}
     \leanok
     \uses{def:peps_partition_output_bases,
         thm:peps_basis_memory_equalities,
@@ -55,8 +55,8 @@ All coordinate bases in this section are finite orthonormal bases.
 
 \begin{theorem}[Output coordinates under owner relabelling]
     \label{thm:peps_owner_output_coordinates}
-    \lean{TNLean.PEPS.PairEffect.Layout.mapOwner_mapOwner_tensorBasis_coordinates}
-    \lean{TNLean.PEPS.PairEffect.Layout.mapOwner_mapOwner_partitionBasis_coordinates}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwner_mapOwner_tensorBasis_coordinates}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwner_mapOwner_partitionBasis_coordinates}
     \leanok
     \uses{thm:peps_partition_output_coordinates,
         thm:peps_basis_owner_coordinates}
@@ -78,8 +78,8 @@ All coordinate bases in this section are finite orthonormal bases.
 
 \begin{theorem}[Coordinates of a local Schmidt expansion]
     \label{thm:peps_local_schmidt_output_coordinates}
-    \lean{TNLean.PEPS.PairEffect.Layout.partition_coordinates_eq_separated}
-    \lean{TNLean.PEPS.PairEffect.Layout.mapOwner_mapOwner_coordinates_eq_separated}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.partition_coordinates_eq_separated}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwner_mapOwner_coordinates_eq_separated}
     \leanok
     \uses{thm:peps_owner_output_coordinates}
     Let $V,W$ be the two local output maps, let $F,G$ be input isometries, and
@@ -115,9 +115,9 @@ All coordinate bases in this section are finite orthonormal bases.
 
 \begin{theorem}[Original physical dimensions after the two owner maps]
     \label{thm:peps_affected_original_dimensions}
-    \lean{TNLean.PEPS.PairEffect.Layout.affectedOutputIso}
-    \lean{TNLean.PEPS.PairEffect.affectedFamilyPhysicalBasis}
-    \lean{TNLean.PEPS.PairEffect.finrank_affectedFamilyPhysicalLayout}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.affectedOutputIso}
+    \lean{TNLean.Lattice.PartyCircuit.affectedFamilyPhysicalBasis}
+    \lean{TNLean.Lattice.PartyCircuit.finrank_affectedFamilyPhysicalLayout}
     \leanok
     \uses{def:peps_basis_owner_restriction}
     Let the parties be listed without repetition, with physical space

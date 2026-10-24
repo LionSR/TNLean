@@ -21,7 +21,7 @@ lines 143–149 and 199–208, revision
 
 noncomputable section
 
-namespace TNLean.PEPS.PairEffect.OriginalCircuit
+namespace TNLean.Lattice.PartyCircuit.OriginalCircuit
 
 variable {P : Type}
 
@@ -59,4 +59,4 @@ theorem isExpansionBounded_mono {a b : Layout P} (w : OriginalCircuit a b) {r r'
   | swap => trivial
   | frame _ w ih => exact ih h
 
-end TNLean.PEPS.PairEffect.OriginalCircuit
+end TNLean.Lattice.PartyCircuit.OriginalCircuit

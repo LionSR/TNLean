@@ -20,7 +20,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–450.
 noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.Layout
+namespace TNLean.Lattice.PartyCircuit.Layout
 variable {P : Type}
 
 /-- Regroup two partitioned register lists and concatenate each pair of parts. -/
@@ -159,4 +159,4 @@ theorem partitionIso_append_tmul (f : P → Bool) (a b : Layout P)
                 ((complementaryHead_heq r (restrict_append f a b)
                   (restrict_append (fun p ↦ !f p) a b) u (ih v)).trans hr.symm)
 
-end TNLean.PEPS.PairEffect.Layout
+end TNLean.Lattice.PartyCircuit.Layout

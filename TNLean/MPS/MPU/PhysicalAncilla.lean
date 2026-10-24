@@ -126,6 +126,14 @@ noncomputable def normalizedDiagonalLift (A : MPSTensor (d * d) D) (x : ℕ) :
       if a = b then ((Real.sqrt x : ℂ)⁻¹) • A ij else 0 := by
   simp [normalizedDiagonalLift]
 
+/-- The `x` copies of the squared normalization `1 / √x` sum to one. -/
+private theorem natCast_mul_sqrt_inv_mul_sqrt_inv {x : ℕ} (hx : 0 < x) :
+    (x : ℂ) * ((Real.sqrt x : ℂ)⁻¹ * (Real.sqrt x : ℂ)⁻¹) = 1 := by
+  have hscale : (x : ℂ) * (Real.sqrt x : ℂ)⁻¹ * (Real.sqrt x : ℂ)⁻¹ = 1 := by
+    rw [mul_assoc, Complex.ofReal_sqrt_inv_mul_self (x : ℝ) (by positivity)]
+    simp [hx.ne']
+  simpa [mul_assoc] using hscale
+
 /-- A nonempty normalized diagonal ancilla leaves the transfer map unchanged. -/
 theorem transferMap_normalizedDiagonalLift (A : MPSTensor (d * d) D)
     (x : ℕ) (hx : 0 < x) :
@@ -138,9 +146,6 @@ theorem transferMap_normalizedDiagonalLift (A : MPSTensor (d * d) D)
   apply Finset.sum_congr rfl
   intro ij _
   rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
-  have hscale : (x : ℂ) * (Real.sqrt x : ℂ)⁻¹ * (Real.sqrt x : ℂ)⁻¹ = 1 := by
-    rw [mul_assoc, Complex.ofReal_sqrt_inv_mul_self (x : ℝ) (by positivity)]
-    simp [hx.ne']
   have hinner (a : Fin x) :
       (∑ b : Fin x,
         normalizedDiagonalLift A x (finProdFinEquiv (ij, finProdFinEquiv (a, b))) * X *
@@ -156,10 +161,7 @@ theorem transferMap_normalizedDiagonalLift (A : MPSTensor (d * d) D)
   rw [Finset.sum_congr rfl (fun a _ ↦ hinner a), Finset.sum_const]
   rw [Finset.card_univ, Fintype.card_fin]
   rw [← Nat.cast_smul_eq_nsmul ℂ, smul_smul]
-  have hscale' :
-      (x : ℂ) * ((Real.sqrt x : ℂ)⁻¹ * (Real.sqrt x : ℂ)⁻¹) = 1 := by
-    simpa [mul_assoc] using hscale
-  rw [hscale', one_smul]
+  rw [natCast_mul_sqrt_inv_mul_sqrt_inv hx, one_smul]
 
 /-- A nonempty normalized diagonal lift preserves tensor irreducibility. -/
 theorem isIrreducibleTensor_normalizedDiagonalLift
@@ -201,9 +203,6 @@ theorem leftCanonical_normalizedDiagonalLift
     Fintype.sum_prod_type]
   apply Eq.trans (Finset.sum_congr rfl fun ij _ ↦ ?_) hA
   rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
-  have hscale : (x : ℂ) * (Real.sqrt x : ℂ)⁻¹ * (Real.sqrt x : ℂ)⁻¹ = 1 := by
-    rw [mul_assoc, Complex.ofReal_sqrt_inv_mul_self (x : ℝ) (by positivity)]
-    simp [hx.ne']
   have hinner (a : Fin x) :
       (∑ b : Fin x,
         (normalizedDiagonalLift A x (finProdFinEquiv (ij, finProdFinEquiv (a, b))))ᴴ *
@@ -218,10 +217,7 @@ theorem leftCanonical_normalizedDiagonalLift
     · simp
   rw [Finset.sum_congr rfl (fun a _ ↦ hinner a), Finset.sum_const,
     Finset.card_univ, Fintype.card_fin, ← Nat.cast_smul_eq_nsmul ℂ, smul_smul]
-  have hscale' :
-      (x : ℂ) * ((Real.sqrt x : ℂ)⁻¹ * (Real.sqrt x : ℂ)⁻¹) = 1 := by
-    simpa [mul_assoc] using hscale
-  rw [hscale', one_smul]
+  rw [natCast_mul_sqrt_inv_mul_sqrt_inv hx, one_smul]
 
 /-- The normalized flattening after identity-ancilla attachment is the normalized
 original flattening with a diagonal ancilla, in the explicit doubled-index shuffle.

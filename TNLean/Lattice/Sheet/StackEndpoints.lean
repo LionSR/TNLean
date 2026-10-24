@@ -48,7 +48,7 @@ open ContinuousLinearMap
 
 namespace TNLean.Lattice
 
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
 variable {κ : Type*} {Party : Type}
 

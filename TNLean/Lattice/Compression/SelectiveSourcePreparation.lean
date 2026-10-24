@@ -30,7 +30,7 @@ reused.
 noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.SourceInventory
+namespace TNLean.Lattice.PartyCircuit.SourceInventory
 variable {P : Type}
 
 /-- Select original source occurrences without changing their order.
@@ -266,4 +266,4 @@ theorem mem_sources_prepareSelected (R : SourceInventory P)
   · rintro ⟨i, h, rfl⟩
     exact ⟨i, by simp [h], by simp [fillSourceVectors, h]⟩
 
-end TNLean.PEPS.PairEffect.SourceInventory
+end TNLean.Lattice.PartyCircuit.SourceInventory

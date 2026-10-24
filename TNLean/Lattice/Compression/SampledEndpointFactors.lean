@@ -19,7 +19,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 noncomputable section
 open QICLean.ComplexGaussian
 open scoped Kronecker
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} {a b : Layout P}
 
 variable (w : SourceCircuit a b) (k : ℕ)
@@ -60,4 +60,4 @@ theorem sampledSourceMatrix_eq_endpoint_average (e : sourceLocations w)
         sampledEndpointLeft w k lam E e (ξ, ζ) j ω ⊗ₖ
           sampledEndpointRight w k lam F e (ξ, ζ) j ω := rfl
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

@@ -26,9 +26,10 @@ Independently formalized; no upstream Lean proof text reused.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
-open TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 
 /-- The all-party grouping retains every original party with its actual label.
 Source: polynomial-PEPS 04-compression.tex, lines 409–417. -/
@@ -98,4 +99,4 @@ theorem choicesOfOriginalGateLabelsAt_eq_projectAllChoices {a b : Layout P}
   exact (choiceAt_choicesOfTouchedLabels _ w _ g hg).trans
     (choiceAt_projectAllChoices _ w ξ g hg).symm
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

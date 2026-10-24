@@ -451,8 +451,8 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted_of_irreducible
       simpa [Matrix.smul_one_eq_diagonal] using hscalar_psd
     have hdiag_nonneg := (Matrix.posSemidef_diagonal_iff).1 hdiag_psd
     exact hdiag_nonneg ⟨0, NeZero.pos D⟩
-  have hc_eq_real : c = (c.re : ℂ) := by
-    exact Complex.ext rfl (RCLike.nonneg_iff.mp hc_nonneg).2
+  have hc_eq_real : c = (c.re : ℂ) :=
+    Complex.ext rfl (RCLike.nonneg_iff.mp hc_nonneg).2
   have hcre_nonneg : 0 ≤ c.re := (RCLike.nonneg_iff.mp hc_nonneg).1
   have hcre_ne0 : c.re ≠ 0 := by
     intro h0
@@ -462,8 +462,8 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted_of_irreducible
       _ = 0 := by simp [h0]
   have hcre_pos : 0 < c.re := lt_of_le_of_ne hcre_nonneg (Ne.symm hcre_ne0)
   set a : ℂ := (Real.sqrt c.re : ℂ)
-  have ha_ne0 : a ≠ 0 := by
-    exact Complex.ofReal_ne_zero.2 (Real.sqrt_ne_zero'.mpr hcre_pos)
+  have ha_ne0 : a ≠ 0 :=
+    Complex.ofReal_ne_zero.2 (Real.sqrt_ne_zero'.mpr hcre_pos)
   have hc_eq_sq : c = a * a := by
     calc
       c = (c.re : ℂ) := hc_eq_real

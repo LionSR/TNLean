@@ -20,7 +20,8 @@ and 568–579.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.Lattice
 variable {P : Type}
 
 open Classical in
@@ -29,7 +30,7 @@ shared gate-pair samples. Source: polynomial-PEPS Theorem 5.2,
 `04-compression.tex`, lines 342–417 and 568–579. -/
 def allSourceSampleAssignmentEquiv {a b : Layout P} (w : SourceCircuit a b) (k : ℕ) :
     (Fin (partialSlots (fun _ : P ↦ true) w).length → Fin k) ≃
-      (Approximation.DistributedOperatorContraction.Sample
+      (Compression.DistributedOperatorContraction.Sample
         (Finset.univ : Finset w.nonemptyGateLocations) (fun g ↦ w.participants g.1) → Fin k) :=
   Equiv.piCongrLeft (fun _ ↦ Fin k)
     ((allSourceSlotEquiv w).trans (sourceSampleEquiv w))
@@ -41,7 +42,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 342–417
 and 568–579. -/
 theorem allSourceSampleAssignmentEquiv_symm_apply {a b : Layout P}
     (w : SourceCircuit a b) (k : ℕ)
-    (j : Approximation.DistributedOperatorContraction.Sample
+    (j : Compression.DistributedOperatorContraction.Sample
       (Finset.univ : Finset w.nonemptyGateLocations) (fun g ↦ w.participants g.1) → Fin k)
     (e : w.sourceLocations) :
     (allSourceSampleAssignmentEquiv w k).symm j ((allSourceSlotEquiv w).symm e) =
@@ -57,9 +58,9 @@ theorem sum_sourceSampleAssignments_eq {a b : Layout P}
     (w : SourceCircuit a b) (k : ℕ) {m n : Type}
     (F : (Fin (partialSlots (fun _ : P ↦ true) w).length → Fin k) → Matrix m n ℂ) :
     (∑ j, F j) =
-      ∑ j : Approximation.DistributedOperatorContraction.Sample
+      ∑ j : Compression.DistributedOperatorContraction.Sample
           (Finset.univ : Finset w.nonemptyGateLocations) (fun g ↦ w.participants g.1) → Fin k,
         F ((allSourceSampleAssignmentEquiv w k).symm j) := by
   exact ((allSourceSampleAssignmentEquiv w k).symm.sum_comp F).symm
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

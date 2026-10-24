@@ -26,7 +26,7 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.SourceInventory
+namespace TNLean.Lattice.PartyCircuit.SourceInventory
 variable {P : Type}
 
 /-- Preparing a source inventory on the scalar unit produces its actual joint vector. -/
@@ -200,4 +200,4 @@ theorem eval_reordered_prepared_vector (R : SourceInventory P)
     ((prepareFreeSlots R U V free η ℓ).eval (p.eval 1)) = _ at hsη
   rw [hsη]
 
-end TNLean.PEPS.PairEffect.SourceInventory
+end TNLean.Lattice.PartyCircuit.SourceInventory

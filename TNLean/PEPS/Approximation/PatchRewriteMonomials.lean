@@ -96,8 +96,9 @@ open Matrix ContinuousLinearMap EuclideanSpace
 open scoped InnerProductSpace TensorProduct Kronecker Matrix.Norms.L2Operator
 
 namespace TNLean.PEPS.EncodedFrame
+open TNLean.Lattice.Sheet
 
-open PairEffect SiteChain
+open TNLean.Lattice.PartyCircuit SiteChain
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ} {Party : Type}
 

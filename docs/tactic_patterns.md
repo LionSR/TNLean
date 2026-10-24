@@ -24,6 +24,54 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Hermitian sum of pointwise-Hermitian terms — promoted (2026-10-23)
+- **Pattern:**
+  ```lean
+  isSelfAdjoint_sum Finset.univ fun j _ => (hHerm j).isSelfAdjoint
+  ```
+- **Seen:** 5 occurrences across 3 files: three in
+  `TNLean/Lattice/GaussianFilteredTermLocalization.lean`, one each in
+  `TNLean/Circuit/LiebRobinson/GraphLocalization.lean` and
+  `TNLean/Circuit/LiebRobinson/CommutatorRecursion.lean`.
+- **Abstraction:** `Matrix.isHermitian_sum` in
+  `TNLean/Algebra/MatrixHermitianSum.lean`; all five call sites refactored.
+- **Notes:** where the goal is `IsSelfAdjoint`, append `.isSelfAdjoint`. The
+  sums with a case split in each term (`CommutatorRecursion.lean`, the second
+  skew-adjoint goal) keep `isSelfAdjoint_sum` with an `intro`.
+
+### Gaussian absolute first moment — promoted (2026-10-23)
+
+- **Pattern:** Bound the integral of `|t|` against a centred Gaussian, either
+  by `√(2h/π)` or by the simpler `√h`.
+- **Seen:** The tail specialization in `Lattice/GaussianFilteredIncrement.lean`
+  and the independent variance argument in `MPS/AreaLaw/Hastings/GaussianTimeAverage.lean`.
+  The additional proof reported in #9945 is already absent from main.
+- **Abstraction:** `TNLean.Lattice.integral_abs_gaussianReal_le_sqrt_two_mul_div_pi`
+  specializes the existing tail bound to zero; `integral_abs_gaussianReal_le`
+  follows by `2 ≤ π`. Both live in `Lattice/GaussianTailMoment.lean`.
+- **Notes:** The filtered increment, time average, interaction picture and
+  boundary localization use these shared facts. Zero variance needs no extra
+  assumption. No new tactic or independent moment proof is introduced.
+
+### A configuration from a unit vector — promoted (2026-10-23)
+
+- **Pattern:** Prove the configuration type nonempty by contradiction: an empty index
+  type makes the vector space a subsingleton, so a unit vector would have norm zero.
+- **Seen:** Three occurrences in `MPS/AreaLaw/Hastings/IntervalMutualInformation.lean`,
+  `RelentAssembly.lean`, and `SchmidtDiagonalChain.lean`.
+- **Abstraction:** Use the existing Mathlib results `Function.ne_iff`,
+  `WithLp.ofLp_eq_zero`, and `norm_ne_zero_iff` directly:
+
+  ```lean
+  obtain ⟨σ₀, _⟩ := Function.ne_iff.mp
+    ((WithLp.ofLp_eq_zero (x := Ω)).not.mpr (norm_ne_zero_iff.mp (by simp [hΩ])))
+  ```
+
+- **Notes:** All three five-line contradiction arguments are replaced by this
+  two-line idiom. No new generic or chain-specific declaration is needed; the
+  unit-norm hypothesis supplies the nonzero coefficient function.
+
+
 ### Counting supports in short windows — promoted (2026-10-21)
 
 - **Pattern:** Bound the number of supports contained in a window of at most `n`
@@ -127,7 +175,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** The former concatenation inductions `rawAppend_siteVec`
   in `MPS/AreaLaw/ProtocolTerminalWord.lean` and `append_siteVec_transport`
   in `MPS/AreaLaw/ProtocolTerminalReference.lean`.
-- **Abstraction:** `TNLean.PEPS.EncodedFrame.siteVec_append` in
+- **Abstraction:** `TNLean.Lattice.Sheet.siteVec_append` in
   `PEPS/Approximation/SiteVectorAppend.lean`.
 - **Refactor:** `packMain_siteVec` and `append_siteVec_heq` apply the shared
   identity directly; their two private aliases have been removed.
@@ -262,7 +310,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** the compression theorems and the dyadic protocol, in
   `UniformApproximateSampledNetwork.lean`, `UniformMessageGateCompression.lean` and
   `DyadicProtocolCompression.lean` under `TNLean/PEPS/Approximation/`.
-- **Abstraction:** `TNLean.PEPS.Approximation.mul_pow_le_max_zero_mul_pow` in
+- **Abstraction:** `TNLean.Lattice.Compression.mul_pow_le_max_zero_mul_pow` in
   `UniformApproximateSampledNetwork.lean`.
 - **Notes:** The sign of `max C 0` is `le_max_right`. Net Lean line delta: +9 (20 added, 11
   removed) across the three changed modules, since the new lemma and its docstring outweigh the
@@ -492,7 +540,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** `PartyGateComposition.isAllowed_comp`,
   `PartyGateComposition.effectCount_comp_le`, and
   `MessageMonomial.isAllowed_effectCount_expand` use the same decomposition.
-- **Abstraction:** `TNLean.PEPS.PairEffect.PartyGate.mem_comp`, using Mathlib's
+- **Abstraction:** `TNLean.Lattice.PartyCircuit.PartyGate.mem_comp`, using Mathlib's
   `List.mem_flatMap` and `List.mem_map` once at the defining composition.
 - **Refactor:** All three consumers use this characterization directly;
   no custom tactic or extra membership definition is introduced.
@@ -504,7 +552,7 @@ abstracted — record why, so it is not re-proposed).
   then apply the triangle inequality and operator-norm submultiplicativity.
 - **Seen:** The identical 17-line proof in `EffectCircuitError` and the
   approximate-gate error development; both chronological induction proofs use it.
-- **Abstraction:** The existing `TNLean.PEPS.PairEffect.norm_comp_sub_comp_le_one`
+- **Abstraction:** The existing `TNLean.Lattice.PartyCircuit.norm_comp_sub_comp_le_one`
   is public in `EffectCircuitError`; `ApproximateCircuitError` imports it.
 - **Refactor:** Removed the second proof. The original signature and proof are
   unchanged. The related three-factor estimate in the symmetry development has
@@ -714,7 +762,7 @@ abstracted — record why, so it is not re-proposed).
   `common_pair_cons_expands` in
   `TNLean/Lattice/PartyCircuit/CommonSourcePreparation.lean`.
 - **Abstraction:** the theorem
-  `TNLean.PEPS.PairEffect.SourceInventory.Expands.cons_mapL` in
+  `TNLean.Lattice.PartyCircuit.SourceInventory.Expands.cons_mapL` in
   [SourcePairMaps.lean](../TNLean/Lattice/PartyCircuit/SourcePairMaps.lean) takes the two
   continuous linear maps and their operator-norm bounds. Issue #8973 requests
   the common lemma; the two private copies are removed, rather than retained
@@ -863,7 +911,7 @@ abstracted — record why, so it is not re-proposed).
   of `b` with that of `a` along `a = b` (`04-compression.tex`, lines 246–267).
 - **Seen:** a public copy in `UnitMemoryCoordinates.lean` and private copies in
   `GroupedBlockMap.lean` and `WordOwnerMap.lean`.
-- **Abstraction:** `TNLean.PEPS.PairEffect.Layout.memCongr_symm`, moved next to
+- **Abstraction:** `TNLean.Lattice.PartyCircuit.Layout.memCongr_symm`, moved next to
   `memCongr` in `TNLean/Lattice/PartyCircuit/PartyPartition.lean`; the duplicates
   are deleted.
 - **Notes:** the full name is unchanged, so the existing blueprint reference
@@ -3790,6 +3838,23 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Completed refactors
 
+### Chain neighborhood of a region — completed (2026-10-21)
+
+- **Pattern:** The radius-`ρ` neighbourhood of a set of chain sites, written
+  inline as `Finset.univ.filter (fun y : Fin L ↦ ∃ x ∈ S, (Nat.dist x.val y.val : ℝ) ≤ ρ)`,
+  often under a local `let` with `dsimp only` or `change` steps to match the
+  `let` of a statement with the one in its proof.
+- **Seen:** Fourteen occurrences in seven files of `MPS/AreaLaw/`:
+  `IntervalNeighborhoodEntropy.lean` (four), `RelativeGeneratorLocalization.lean`
+  (four), `LiebRobinson.lean` (two), `InformationReset.lean`,
+  `LogarithmicSeparation.lean`, `ResetSupportSeparation.lean` and
+  `SupportedGaussianIntegral.lean`.
+- **Abstraction:** `chainNeighborhood S ρ` in
+  `TNLean/MPS/AreaLaw/ChainNeighborhood.lean`, with the simp lemmas
+  `mem_chainNeighborhood` and `chainNeighborhood_empty`. Statements name it
+  directly; membership proofs use `mem_chainNeighborhood` in place of
+  `Finset.mem_filter, Finset.mem_univ, true_and`.
+
 ### Common coordinate shells for polynomial and logarithmic discounts — completed cleanup
 
 - **Pattern:** The logarithmic finite-family discount and the source-exact polynomial
@@ -4767,7 +4832,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Pattern:** a word of exchanges of tensor factors, built by recursion or
   composition, gets a lemma that it is allowed, uses any given parties and has
   no pair source, followed by three one-line projections.
-- **Helper:** the predicate `PairEffect.Word.IsReordering` with the simp lemmas
+- **Helper:** the predicate `PartyCircuit.Word.IsReordering` with the simp lemmas
   `isReordering_id`, `isReordering_swap`, `isReordering_comp_iff`,
   `isReordering_frame_iff`, `isReordering_frameList_iff` and the projections
   `IsReordering.isAllowed`, `IsReordering.usesOnly` and
@@ -4784,6 +4849,52 @@ three-plaquette output measurement, and the routed reunion measurement.
   `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
 
 ## Candidates
+
+### Restricting an operator Schmidt decomposition at a fixed configuration — candidate (2026-10-23)
+
+- **Pattern:** Choose an actual configuration in the region carrying an identity
+  factor, restrict each outside matrix to that configuration, and retain the
+  same number of summands in the operator Schmidt decomposition.
+- **Seen:** The left-factor argument in
+  `TNLean/Lattice/Sheet/LeftSupportedSchmidtRank.lean` and the right-factor
+  argument in `TNLean/Lattice/Sheet/SupportedSchmidtRank.lean` (PR #10029).
+- **Abstraction (proposed):** If another use appears, first seek a lemma saying
+  that restriction by separate coordinate maps preserves a product
+  decomposition with the same number of summands.
+- **Notes:** The left and right arguments use different cuts. Both treat empty
+  global configuration spaces separately; no identity factor is cancelled.
+
+
+### Mass of a cut beyond its leading eigenvalues — candidate
+- **Pattern:**
+  ```lean
+  1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L k)
+    ψ).kyFanNorm n
+  ```
+- **Seen:** 5 occurrences (2026-10-22), in statements and proofs of
+  `TNLean/MPS/AreaLaw/SequentialTruncation.lean` and
+  `TNLean/MPS/AreaLaw/Hastings/SchmidtTailMPS.lean`.
+- **Abstraction:** proposed definition of the mass of the left marginal at the
+  cut `k` beyond its `n` largest eigenvalues, with a lemma rewriting it as the
+  sum of the trailing eigenvalues.
+- **Notes:** a term pattern rather than a tactic; promote together with the next
+  statement that uses it, so the definition lands with its rewriting lemma.
+
+### Reflected sum over the internal cuts of a sequential truncation — candidate
+- **Pattern:**
+  ```lean
+  rw [Finset.sum_Ico_eq_sum_range]
+  conv_lhs => rw [← Finset.sum_range_reflect]
+  refine Finset.sum_congr rfl fun i hi ↦ ?_   -- or `Finset.sum_le_sum`
+  have hi' : i < L - 1 := Finset.mem_range.mp hi
+  rw [show L - 1 - (L - 1 - 1 - i) = 1 + i by omega, hmass]
+  ```
+- **Seen:** 2 occurrences (2026-10-22): `TNLean/MPS/AreaLaw/SequentialTruncation.lean`,
+  in `sequentialTruncation_prefix_rank_error` and
+  `norm_sequentialTruncation_leadingEigenprojection_sub_sq_le`.
+- **Abstraction:** proposed lemma rewriting `∑ i ∈ range (L - 1), f (L - 1 - i)` as
+  `∑ k ∈ Ico 1 L, f k`, which matches the step order of `sequentialTruncation`.
+- **Notes:** promote at the third occurrence.
 
 ### A maximal finite support fills its coordinate interval — candidate
 
@@ -4995,30 +5106,6 @@ no additional helper is proposed.
   support and distance hypotheses. Keep their short arguments explicit until
   the pattern occurs in a second file and meets the promotion threshold.
 
-
-
-### Chain neighborhood of a region — candidate (2026-10-19)
-
-- **Pattern:** The radius-`ρ` neighborhood of a set of chain sites written
-  inline as a local `let`:
-
-  ```lean
-  let N := Finset.univ.filter
-    (fun y : Fin L ↦ ∃ x ∈ S, (Nat.dist x.val y.val : ℝ) ≤ ρ)
-  ```
-
-  with `dsimp only` or `change` steps to match the `let` of a statement with
-  the one in its proof.
-- **Seen:** At least thirteen occurrences in six files of `MPS/AreaLaw/`:
-  `IntervalNeighborhoodEntropy.lean` (four), `RelativeGeneratorLocalization.lean`
-  (four), `LiebRobinson.lean` (two), `InformationReset.lean`,
-  `LogarithmicSeparation.lean` and `SupportedGaussianIntegral.lean`.
-- **Possible abstraction:** One definition
-  `chainNeighborhood (L : ℕ) (ρ : ℝ) (S : Finset (Fin L)) : Finset (Fin L)`
-  with a `mem_chainNeighborhood` simp lemma, used in every statement.
-- **Notes:** Past the promotion threshold. The refactor changes theorem
-  statements across the chain layer, so it needs its own pull request with a
-  build; it was not done in the review round that recorded it.
 
 
 ### Dyadic padding bounds — candidate (2026-10-16)
@@ -7483,7 +7570,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   identification argument across two files.
 - **Abstraction:** Canonical conjugation already uses the shared
   `Layout.conj_memCongr_heq`, `Layout.norm_conj_memCongr`, and
-  `Layout.eq_conj_memCongr_of_heq`. The existing `PairEffect.mapL_heq`
+  `Layout.eq_conj_memCongr_of_heq`. The existing `PartyCircuit.mapL_heq`
   is now public in `PartyTensorMaps`, with its original signature and
   equality-elimination proof. `PartyFactorization.mapL_apply_heq` uses
   that shared map equality and ordinary congruence for its application
@@ -8421,7 +8508,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Seen:** The local sampled factors in `ActualSampledPhysicalFactors`, the
   empty-party scalar in `ActualSampledExteriorScalar`, and their comparison
   in `ActualSampledPhysicalScalar` use this same trace.
-- **Abstraction:** `PairEffect.restrictedMixedPhysicalTrace` in
+- **Abstraction:** `PartyCircuit.restrictedMixedPhysicalTrace` in
   `RestrictedMixedPhysicalTrace.lean` owns the exact matrix expression.
   The sampled factors and exterior scalar use the same definition; their
   comparison retains that expression instead of expanding the circuit words.
@@ -8993,3 +9080,41 @@ spectral split → block extraction → MPV calculation → strict bounds
   built on `Lattice.Sheet.birth_bounded`, `Real.rpow_neg_ofNat` and
   `Lattice.hasSourceBoundedChange_liftOne`. The stage births call it with an
   empty prefix and the scalar idle vector; the former private copy is removed.
+
+### Distinguished symbol versus an embedded finite alphabet — candidate (2026-10-23)
+
+- **Pattern:** Evaluate an equality of finite words at one site, take the
+  natural values of the letters, and use the smaller alphabet's upper bound
+  to contradict equality with the distinguished symbol.
+- **Seen:** The two symmetric flag/binary cases of `qutritWord_injective`
+  in `MPS/AreaLaw/EntropyScaling/QutritFamily.lean`.
+- **Abstraction:** No additional helper is introduced: these are two uses in
+  one theorem. The positive chain length provides the chosen site, and the
+  existing `Fin` bound and `omega` close the contradiction.
+- **Notes:** The basis embeddings reuse Mathlib's `Orthonormal.comp`; the
+  complex square-root identities reuse `Complex.ofReal_sqrt_sq`.
+
+### Regional entropy from coefficient-matrix ranks — reused Mathlib (2026-10-23)
+
+- **Pattern:** Write a pure-state marginal as `C * Cᴴ`, bound its rank by
+  that of `C`, and apply the entropy bound by the logarithm of the rank.
+- **Seen:** The binary, flag, and full-region arguments in
+  `MPS/AreaLaw/EntropyScaling/QutritEntropy.lean`.
+- **Abstraction:** Existing `Matrix.rank_mul_le_left`,
+  `Matrix.rank_le_card_width`, `Matrix.rank_vecMulVec_le`, and QICLean's
+  `vonNeumannEntropy_le_log_rank` and
+  `vonNeumannEntropy_eq_zero_of_rank_le_one` cover these arguments.
+- **Notes:** The binary coefficient matrix factors through the `2^N` binary
+  words. The flag and full-region coefficient matrices have rank at most one.
+  No new tactic is needed; the three applications occur in one module.
+
+### Product forms of ordered exponential products — candidate (2026-10-23)
+
+- **Pattern:** Apply closure under powers and list products, unpack membership in a mapped
+  list, and prove the factor supported using closure under scalar multiplication and exponentials.
+- **Seen:** Two occurrences in `TNLean/Lattice/ProductForm.lean`, in
+  `hasProductForm_trotterProduct_of_radius` and
+  `LocalHamiltonian.hasProductForm_trotterProduct`.
+- **Abstraction:** None yet; the two proofs have different support hypotheses and are below
+  the promotion threshold. The supported expansion is shared through
+  `hasProductForm_of_mem_supportedOperators_radius`; the diameter theorem is its corollary.

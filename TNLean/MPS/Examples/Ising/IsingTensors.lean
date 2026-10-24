@@ -111,19 +111,11 @@ multiplied by `√2` so that its entries lie in `ℤ[√2]`. The operator statem
 these `v`-free tensors; omitting the factors `v` does not change the periodic operators, since
 the source's tensors are bond-similar to `A_1`, `A_ψ` and the unscaled `A_σ = (√2)⁻¹ • isingSigma`
 (`IsingTwist.mpo_isingStringNetTensor` in `IsingGSymbol`); the source's `σ` operator is
-therefore `(√2)⁻ᴸ` times the periodic operator of `isingSigma`. Documented in `docs/paper-gaps/bmwshv17_ising_boundary_tensor_normalization.tex`.
+therefore `(√2)⁻ᴸ` times the periodic operator of `isingSigma`. Documented in
+`docs/paper-gaps/bmwshv17_ising_boundary_tensor_normalization.tex`.
 -/
 noncomputable def isingSigma : MPOTensor 10 4 :=
   fun h h' => complexOfZsqrt2 (isingSigmaZ h h')
-
-/-- The letter `((1,1,1), (σ,1,σ))` of `√2 A_σ` is `√2` times the matrix unit at
-`((σ,1), (σ,1))` (data file §1.1). -/
-theorem isingSigma_apply_zero_six :
-    isingSigma 0 6 = (Real.sqrt 2 : ℂ) • Matrix.single 2 2 1 := by
-  ext p q
-  simp only [isingSigma, isingSigmaZ, complexOfZsqrt2_apply, Matrix.smul_apply,
-    Matrix.single_apply, smul_eq_mul, mul_ite, mul_one, mul_zero]
-  split_ifs <;> simp
 
 theorem isingOneZ_eq_zero_of_rho_ne :
     ∀ h h' : Fin 10, isingRho h ≠ isingRho h' → isingOneZ h h' = 0 := by

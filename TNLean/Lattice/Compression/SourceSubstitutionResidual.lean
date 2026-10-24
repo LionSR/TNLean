@@ -28,7 +28,7 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 variable {P Q T : Type}
 
 /-- The same operations and source spaces, allowing source vectors to vary only
@@ -199,10 +199,10 @@ private theorem variation_prepareSlots (f : P → Q) (R : SourceInventory P)
       (SourceInventory.prepareSlots R U V θ tail) :=
   ((variation_ofSlots f R U V η θ h).prepare tail).castLayouts _ _ _ _
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word
 
-namespace TNLean.PEPS.PairEffect.SourceCircuit
-open Word
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.Lattice.PartyCircuit.Word
 variable {P : Type}
 
 /-- The chronological construction changes only surviving source vectors;
@@ -276,4 +276,4 @@ theorem residualInSlots_partialWithSources (A : P → Bool) {a b : Layout P}
     ((variation_partialWithSources A w η hη ξ).localPart.2.trans
       (heq_castInput _ _).symm)
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

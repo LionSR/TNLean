@@ -17,7 +17,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 variable {P : Type}
 
 /-- Composition respects heterogeneous equality of words and equality of their three layouts. -/
@@ -89,4 +89,4 @@ theorem mapOwner_frameList_heq {Q : Type} (f : P → Q) (rs : Layout P)
       exact frame_heq ⟨f r.owner, r.space⟩
         (Layout.mapOwner_append f rs a) (Layout.mapOwner_append f rs b) ih
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

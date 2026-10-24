@@ -11,7 +11,7 @@ import Lean.Util.CollectAxioms
 
 set_option linter.hashCommand false
 
-open TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 
 run_cmd do
   let decls := #[``sum_gateLabels_eq_sum_orderedGateLabelPairs,

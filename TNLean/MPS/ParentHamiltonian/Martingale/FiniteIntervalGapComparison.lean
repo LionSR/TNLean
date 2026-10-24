@@ -29,7 +29,7 @@ private theorem inner_eq_inner_orthogonal_ker_projection
   have hproj : H ((LinearMap.ker H).starProjection v) = 0 :=
     LinearMap.mem_ker.mp (Submodule.starProjection_apply_mem _ _)
   simp only [Submodule.starProjection_orthogonal_val, map_sub, sub_zero,
-    hH.isSymmetric v, hproj, sub_zero]
+    hH.isSymmetric v, hproj]
 
 namespace LinearMap.IsPositive
 

@@ -21,9 +21,10 @@ source inventories and arbitrary complex source matrices.
 -/
 noncomputable section
 open scoped BigOperators Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
-namespace SourceInventory
+namespace Lattice.PartyCircuit.SourceInventory
 /-- The literal matrix product over the recorded source positions.
 Source: polynomial-PEPS, `04-compression.tex`, lines 279–355 and 565–588. -/
 def productSourceMatrix (R : SourceInventory P) {K : Fin R.length → Type}
@@ -62,5 +63,5 @@ theorem sourceContraction_columns_eq_mul (R : SourceInventory P)
   simp only [Matrix.conjTranspose_apply, starRingEnd_apply]
   exact mul_right_comm _ _ _
 
-end SourceInventory
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.SourceInventory
+end TNLean

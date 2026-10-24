@@ -17,7 +17,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–434 and 5
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceInventory
+namespace TNLean.Lattice.PartyCircuit.SourceInventory
 
 /-- Relabelling the owners of an arbitrary endpoint-register list and
 identifying its input and output layouts preserves the operator under the
@@ -32,4 +32,4 @@ theorem endpointRegisterWord_eval_heq_mapOwner_castLayouts {P Q : Type}
   (Word.eval_castLayouts_heq ((endpointRegisterWord D).mapOwner f) ha hb).trans
     (Word.eval_mapOwner_heq f (endpointRegisterWord D))
 
-end TNLean.PEPS.PairEffect.SourceInventory
+end TNLean.Lattice.PartyCircuit.SourceInventory

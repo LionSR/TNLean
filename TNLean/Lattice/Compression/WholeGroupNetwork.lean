@@ -11,7 +11,7 @@ import TNLean.Lattice.Compression.DependentBondNetwork
 
 The whole-group tensor bound is stated for vertex tensors with one leg per incident edge,
 contracted by the coordinate pairing. The edge-dependent networks of
-`TNLean.PEPS.DependentBondNetwork` instead give each vertex one leg per endpoint incidence and
+`TNLean.Lattice.DependentBondNetwork` instead give each vertex one leg per endpoint incidence and
 insert a matrix on every edge. With identity edge matrices the two contractions agree; without
 edges from a vertex to itself, the endpoint incidences at a vertex are exactly its incident edges,
 so the vertex norms agree as well. Hence the whole-group tensor bound applies verbatim to
@@ -41,7 +41,7 @@ open scoped BigOperators Matrix InnerProductSpace
 
 noncomputable section
 
-namespace TNLean.PEPS.WholeGroup
+namespace TNLean.Lattice.WholeGroup
 
 open DependentBondNetwork Matrix
 
@@ -183,4 +183,4 @@ theorem exists_simultaneous_network_truncation [∀ v, DecidableEq (P v)]
 
 end Network
 
-end TNLean.PEPS.WholeGroup
+end TNLean.Lattice.WholeGroup

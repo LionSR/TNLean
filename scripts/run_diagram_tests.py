@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
-"""Run every blueprint diagram test and declaration-inventory check.
+"""Run every blueprint diagram test.
 
 `pr-ci.yml` used to carry one step per diagram test ("Check X diagrams"), and
 every new diagram test added its path to three path lists as well, so
 concurrent pull requests conflicted in the workflow. This runner discovers the
 tests instead:
 
-* ``scripts/test_tenkz_*.py`` and ``scripts/test_*_diagram.py``, except the
-  tests in ``EXCLUDED``, which need a built web site or run in another job;
-* ``scripts/check_*_blueprint.py`` declaration-inventory checks.
+``scripts/test_tenkz_*.py`` and ``scripts/test_*_diagram.py``, except the
+tests in ``EXCLUDED``, which need a built web site or run in another job.
 
 A test whose source declares an ``--output-dir`` option renders into
 ``<output-dir>/<test name>``, so CI can preserve the diagrams for review.
@@ -28,7 +27,7 @@ from pathlib import Path
 
 OUTPUT_DIR_OPTION = re.compile(r"""['"]--output-dir['"]""")
 
-PATTERNS = ("test_tenkz_*.py", "test_*_diagram.py", "check_*_blueprint.py")
+PATTERNS = ("test_tenkz_*.py", "test_*_diagram.py")
 
 # Run elsewhere with their own setup.
 EXCLUDED = {

@@ -28,7 +28,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open scoped TensorProduct Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceInventory
+namespace TNLean.Lattice.PartyCircuit.SourceInventory
 
 /-- A rectangular matrix with orthonormal columns gives its actual Euclidean isometry. -/
 def matrixFrame {m n : Type} [Fintype m] [Fintype n] [DecidableEq n]
@@ -231,4 +231,4 @@ theorem selectedSourceFrame_basis_prepare {P : Type} (R : SourceInventory P)
   exact (Layout.memCongr_apply_heq _ _).trans
     ((heq_of_eq hp).trans (eval_prepareSourcePositions_filter R U V selected _ ℓ x))
 
-end TNLean.PEPS.PairEffect.SourceInventory
+end TNLean.Lattice.PartyCircuit.SourceInventory

@@ -102,7 +102,7 @@ theorem isOpenMPS_of_polynomial_partyPrefix_bounds
     (ψ : EuclideanSpace ℂ ((p : Party L w) → Fin (physicalDimension L w q p)))
     (hψ : ‖ψ‖ = 1)
     (hprefix : ∀ r : ℕ, 0 < r → r ≤ stageCount L w →
-      (TNLean.PEPS.WholeGroup.flattening (fun y ↦ ψ y)
+      (TNLean.Lattice.WholeGroup.flattening (fun y ↦ ψ y)
         (Finset.univ.filter fun p : Party L w ↦ partyLevel p < r)).rank ≤
           (max 1 ⌈Cp * (L : ℝ) ^ α⌉₊) ^ χ) :
     let Φ : EuclideanSpace ℂ (Fin L → Fin q) :=

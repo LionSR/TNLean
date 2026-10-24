@@ -18,8 +18,8 @@ the slot set and all finite index sets may be empty.
 
 \begin{definition}[The joint source vector]
     \label{def:peps_joint_source_vector}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.slotVector}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.slotLayout_cons}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.slotVector}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.slotLayout_cons}
     \leanok
     \uses{def:peps_source_slots}
     The joint source vector is the multilinear map
@@ -33,9 +33,9 @@ the slot set and all finite index sets may be empty.
 
 \begin{theorem}[Preparation and finite sums of sources]
     \label{thm:peps_source_preparation_sums}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.slotVector_eq_vector}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSlots_eq_appendIso_symm}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSlots_sum_smul}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.slotVector_eq_vector}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.eval_prepareSlots_eq_appendIso_symm}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.eval_prepareSlots_sum_smul}
     \leanok
     \uses{def:peps_joint_source_vector}
     For every original memory $\mathcal H$, the source
@@ -67,7 +67,7 @@ the slot set and all finite index sets may be empty.
 
 \begin{definition}[Matrices of prepared branches]
     \label{def:peps_prepared_matrix}
-    \lean{TNLean.PEPS.PairEffect.Word.preparedMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.Word.preparedMatrix}
     \leanok
     \uses{def:peps_source_slots,def:peps_party_layout}
     Let $T:\mathcal S\otimes\mathcal H_{\rm in}
@@ -88,9 +88,9 @@ the slot set and all finite index sets may be empty.
 
 \begin{theorem}[Coordinates of source preparation]
     \label{thm:peps_prepared_matrix_coordinates}
-    \lean{TNLean.PEPS.PairEffect.Word.preparedMatrix_sum_smul}
-    \lean{TNLean.PEPS.PairEffect.Word.preparedMatrix_eq_sum_basis}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSlots_eq_sum_basis}
+    \lean{TNLean.Lattice.PartyCircuit.Word.preparedMatrix_sum_smul}
+    \lean{TNLean.Lattice.PartyCircuit.Word.preparedMatrix_eq_sum_basis}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.eval_prepareSlots_eq_sum_basis}
     \leanok
     \uses{def:peps_prepared_matrix}
     For finite families as in
@@ -122,7 +122,7 @@ the slot set and all finite index sets may be empty.
 
 \begin{definition}[Density coefficients of prepared branches]
     \label{def:peps_prepared_density_coefficient}
-    \lean{TNLean.PEPS.PairEffect.Word.preparedDensityCoefficient}
+    \lean{TNLean.Lattice.PartyCircuit.Word.preparedDensityCoefficient}
     \leanok
     \uses{def:peps_prepared_matrix}
     Choose vector families $u_{e,r}\in U_e$, $v_{e,s}\in V_e$ for
@@ -141,7 +141,7 @@ the slot set and all finite index sets may be empty.
 
 \begin{theorem}[Density expansion for finite component families]
     \label{thm:peps_prepared_density_components}
-    \lean{TNLean.PEPS.PairEffect.Word.preparedMatrix_density_sum_smul}
+    \lean{TNLean.Lattice.PartyCircuit.Word.preparedMatrix_density_sum_smul}
     \leanok
     \uses{def:peps_prepared_density_coefficient}
     Suppose the families in
@@ -180,8 +180,8 @@ the slot set and all finite index sets may be empty.
 
 \begin{theorem}[Coordinate density expansion of a weighted gate]
     \label{thm:peps_prepared_gate_density}
-    \lean{TNLean.PEPS.PairEffect.Word.preparedMatrix_density_eq_sum_basis}
-    \lean{TNLean.PEPS.PairEffect.Word.preparedMatrix_gate_density_eq_sum_basis}
+    \lean{TNLean.Lattice.PartyCircuit.Word.preparedMatrix_density_eq_sum_basis}
+    \lean{TNLean.Lattice.PartyCircuit.Word.preparedMatrix_gate_density_eq_sum_basis}
     \leanok
     \uses{def:peps_prepared_density_coefficient}
     Let $\Xi$ be finite. For each $\xi\in\Xi$, choose a branch
@@ -222,8 +222,8 @@ the slot set and all finite index sets may be empty.
 
 \begin{theorem}[Operator norm of a prepared branch]
     \label{thm:peps_prepared_matrix_contraction}
-    \lean{TNLean.PEPS.PairEffect.Word.norm_preparedMatrix_le_one}
-    \lean{TNLean.PEPS.PairEffect.Word.norm_preparedMatrix_tmul_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.Word.norm_preparedMatrix_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.Word.norm_preparedMatrix_tmul_le_one}
     \leanok
     \uses{def:peps_prepared_matrix}
     If $T$ is an allowed composition and $\|\eta_e\|=1$ in every
@@ -249,7 +249,7 @@ the slot set and all finite index sets may be empty.
 
 \begin{theorem}[Density coefficients constructed from a gate]
     \label{thm:peps_actual_gate_density}
-    \lean{TNLean.PEPS.PairEffect.Word.exists_finite_density_expansion}
+    \lean{TNLean.Lattice.PartyCircuit.Word.exists_finite_density_expansion}
     \leanok
     \uses{def:peps_prepared_density_coefficient,def:peps_party_layout}
     Let $P$ and $\Xi$ be finite. For every $\xi\in\Xi$, let $F_\xi$

@@ -64,7 +64,7 @@ open ContinuousLinearMap
 
 namespace TNLean.PEPS.EncodedFrame
 
-open PairEffect
+open TNLean.Lattice.PartyCircuit
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {Party : Type} {pos : ι → ℝ × ℝ}
 
