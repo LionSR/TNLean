@@ -124,14 +124,14 @@ theorem norm_sub_hierarchy_le (P M : ℕ → ℕ → Matrix ι ι ℂ) (c : ℕ 
       (c m k) (hx m) hψ (hres m k) hD hD'
     have hε : 0 ≤ ε := (norm_nonneg _).trans (hres m k)
     have hmono : (ε + ‖M m k - (c m k : ℂ) • 1‖ * (2 * hierarchyDeficiency ε K x m)) / x m ≤
-        (ε + K * (2 * hierarchyDeficiency ε K x m)) / x m := by
-      gcongr
-      exact hK m k
+        (ε + K * (2 * hierarchyDeficiency ε K x m)) / x m :=
+      div_le_div_of_nonneg_right (by nlinarith [hK m k]) (hx m).le
     have hnn : 0 ≤ (ε + ‖M m k - (c m k : ℂ) • 1‖ * (2 * hierarchyDeficiency ε K x m)) / x m :=
       div_nonneg (by positivity) (hx m).le
     rw [hierarchyDeficiency_succ]
     refine Real.le_sqrt_of_sq_le (h.trans ?_)
-    gcongr
+    have := pow_le_pow_left₀ hnn hmono 2
+    linarith
 
 /-- The deficiency majorant for the source's window radii: `β₀ = 0` and
 `β_{m+1} = √(2 β_m² + ((e + 2 β_m)^s)²)`. Here `e = ε / K` is the residual in units of the
@@ -172,14 +172,18 @@ theorem hierarchyDeficiency_le_hierarchyMajorant {K e : ℝ} (hK : 0 < K) (he : 
       | zero => exact le_rfl
       | succ m => exact Real.sqrt_nonneg _
     have hpos : 0 < e + 2 * β := by positivity
+    have hsplit : (e + 2 * β) ^ s * (K * (e + 2 * β) ^ (1 - s)) = K * (e + 2 * β) := by
+      rw [mul_left_comm, ← Real.rpow_add hpos, add_sub_cancel, Real.rpow_one]
     have hterm : (K * e + K * (2 * D)) / (K * (e + 2 * β) ^ (1 - s)) ≤ (e + 2 * β) ^ s := by
-      rw [div_le_iff₀ (by positivity), ← mul_add, mul_comm K, ← mul_assoc,
-        ← Real.rpow_add hpos, add_sub_cancel, Real.rpow_one]
-      gcongr
+      rw [div_le_iff₀ (by positivity), hsplit]
+      have := mul_le_mul_of_nonneg_left ih hK.le
+      linarith
+    have hnn : 0 ≤ (K * e + K * (2 * D)) / (K * (e + 2 * β) ^ (1 - s)) := by positivity
     rw [hierarchyDeficiency_succ, hierarchyMajorant_succ]
-    gcongr
-    · exact ih
-    · exact div_nonneg (by positivity) (by positivity)
+    refine Real.sqrt_le_sqrt ?_
+    have h1 := pow_le_pow_left₀ hD ih 2
+    have h2 := pow_le_pow_left₀ hnn hterm 2
+    linarith
 
 /-- **The closed form.** For `0 < e ≤ 1` and `0 ≤ s ≤ 1`, `β_m ≤ (3^m - 1) e^{s^m}`. For the
 source's `s = 1 - 1/h` and `N = 2^h` supersites this is at most `N^{log₂ 3} e^{1/4}` when
@@ -208,9 +212,10 @@ theorem hierarchyMajorant_le {e s : ℝ} (he0 : 0 < e) (he1 : e ≤ 1) (hs0 : 0 
       simpa using Real.rpow_le_rpow_of_exponent_ge he0 he1 hsm1
     have ht' : t ^ s = e ^ (s ^ (m + 1)) := by
       rw [← Real.rpow_mul he0.le, pow_succ]
-    have htt' : t ≤ e ^ (s ^ (m + 1)) :=
-      Real.rpow_le_rpow_of_exponent_ge he0 he1 (by rw [pow_succ]; exact mul_le_of_le_one_right
-        hsm0 hs1)
+    have hss : s ^ (m + 1) ≤ s ^ m := by
+      rw [pow_succ]
+      exact mul_le_of_le_one_right hsm0 hs1
+    have htt' : t ≤ e ^ (s ^ (m + 1)) := Real.rpow_le_rpow_of_exponent_ge he0 he1 hss
     -- `e + 2 β ≤ (1 + 2 C) t`, and `((1 + 2 C) t)^s ≤ (1 + 2 C) t^s`.
     have h1 : e + 2 * β ≤ (1 + 2 * C) * t := by nlinarith
     have h2 : (e + 2 * β) ^ s ≤ (1 + 2 * C) * e ^ (s ^ (m + 1)) := by
