@@ -1344,6 +1344,19 @@ eigenvalues of absolute value at most the threshold, rather than the printed
 eigenvalues at most the threshold, because the centered terms need not be
 positive and the later estimate uses `‖M_L O_L‖` at most the threshold.
 
+### Local solution of gapped Hamiltonians after Hastings: the hierarchical projection
+
+[hastings05_hierarchical_projection.tex](hastings05_hierarchical_projection.tex)
+(local correction, open) records the stronger norm estimate
+`‖Ψ − P Ψ‖ ≤ ε/x` needed for the normalization step in Hastings,
+*Solving Gapped Hamiltonians Locally* (arXiv:cond-mat/0508554v3, lines 640–704).
+The printed expectation bound alone gives only `√(ε/x)`. The scalar recurrence
+`b_m = (ε + 2 b_{m−1})^{1−1/h}` and its bound with coefficient `2ʰ − 1`
+are proved, but their application to the full hierarchy remains open.
+Comparing successive normalized vectors by the triangle inequality gives an
+accumulated majorant involving `∑_{j<m} b_j`, with coefficient `3^{m−1}`.
+That estimate neither proves nor refutes the source's smaller recurrence.
+
 ## Polynomial PEPS: zero-floor maximizing filters
 
 - [`polypeps_square_zero_floor_optimizer_scope.tex`](polypeps_square_zero_floor_optimizer_scope.tex)
@@ -1392,6 +1405,16 @@ taken as a hypothesis.
 1303–1314, eq. `mplt`), is positive semidefinite, and positive definite only when the truncated
 high-temperature form is invertible, which the source does not establish. The formalization
 proves positive semidefiniteness, which is what the even power is used for.
+
+### Local solution of gapped Hamiltonians: the right side of the single-cluster bound
+
+[hastings05_cluster_part_trace_pairing.tex](hastings05_cluster_part_trace_pairing.tex)
+(local correction, resolved) records the bound stated before equation `percb2` in
+Hastings, *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, source
+lines 1174–1184). It is printed with `Tr(O e^{−βH})` on the right; applied to `±O`
+this would make `ρ(β, C)` a multiple of `e^{−βH}`, which fails already for one term.
+The intended form, used by `percb2`, has `‖O‖ Tr e^{−βH}` on the right, and that is
+what is formalized.
 
 ### Local solution of gapped Hamiltonians: cluster size in the percolation bound
 
