@@ -13,8 +13,8 @@ The cuts are immediately after sites u and v, with u < v. The three regions are
 [r,r+2), and the condition r+1 < L makes both sites actual chain sites.
 
 This is the elementary support classification needed for ALVV,
-arXiv:1602.08828v2, eq:H-mid-cut and item:small-sr (local source lines 806–831),
-and the algebraic step in prop:Cheby-AGSP-eff (lines 1324–1332). The convention
+arXiv:1602.08828v2, `eq:H-mid-cut` and `item:small-sr` (local source lines 806–831),
+and the algebraic step in `prop:Cheby-AGSP-eff` (lines 1324–1332). The convention
 here agrees with the explicitly named cuts (i1,i1+1) and (i2,i2+1).
 Adjacent cuts are allowed; their crossing supports share the middle site.
 -/
