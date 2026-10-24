@@ -19,7 +19,9 @@ relative interval.
 
 No equality between intrinsic graph distance and distance between labels is
 used. In particular, a ball cannot cross a missing physical edge. Empty domains
-and empty intervals are included.
+and empty intervals are included. The results are auxiliary geometry for the
+interval-neighborhood step of logarithmic separation on finite domains; no
+information-reset or entropy bound is asserted here.
 
 Source: TNLean one-dimensional note, `part0_preamble.tex`, lines 191–199,
 and the interval-neighborhood argument in `part2a_mps_information.tex`,
@@ -30,6 +32,7 @@ open SimpleGraph QuantumCircuit
 
 namespace TNLean.MPS.AreaLaw
 
+/-- A walk of the induced domain graph visits every label between its endpoints. -/
 private theorem mem_support_of_between {Λ : Finset ℤ} {i j : Fin Λ.card}
     (p : (domainGraph Λ).Walk i j) :
     ∀ k : Fin Λ.card, min i j ≤ k → k ≤ max i j → k ∈ p.support := by
@@ -42,6 +45,8 @@ private theorem mem_support_of_between {Λ : Finset ℤ} {i j : Fin Λ.card}
         (fun e ↦ Or.inr (val_eq_add_one_of_sitePos_eq_add_one e))
     grind [Walk.support_cons, Fin.le_def, Fin.ext_iff]
 
+/-- A label between two sites at graph distance at most `m` is itself within graph
+distance `m` of the first site. -/
 private theorem edist_le_of_between {Λ : Finset ℤ} {i j k : Fin Λ.card}
     (m : ℕ) (hij : (domainGraph Λ).edist i j ≤ (m : ℕ∞))
     (hk₁ : min i j ≤ k) (hk₂ : k ≤ max i j) :
@@ -52,6 +57,8 @@ private theorem edist_le_of_between {Λ : Finset ℤ} {i j k : Fin Λ.card}
     ((ENat.natCast_le_natCast.mpr (p.length_takeUntil_le_length _)).trans
       (by simpa only [hp] using hij))
 
+/-- The union of graph balls of radius `m` about an order-connected set of centers is
+order-connected. -/
 private theorem neighborhood_between {Λ : Finset ℤ} (I : Finset (Fin Λ.card))
     (hI : Set.OrdConnected (I : Set (Fin Λ.card)))
     (m : ℕ) {u v z : Fin Λ.card}
@@ -74,8 +81,7 @@ private theorem neighborhood_between {Λ : Finset ℤ} (I : Finset (Fin Λ.card)
         ((le_of_lt (lt_of_not_ge haz)).trans (le_max_left a u)))⟩
 
 /-- Intrinsic graph neighborhoods of an order-connected subset of a finite integer
-domain are relative order intervals. This is auxiliary geometry for logarithmic
-separation on finite domains, not an information-reset or entropy theorem.
+domain are relative order intervals.
 Source: TNLean one-dimensional note, `part0_preamble.tex`, lines 191–199, and
 the interval neighborhoods in `part2a_mps_information.tex`, lines 472–488. -/
 theorem domainNeighborhood_eq_interval_of_ordConnected (Λ : Finset ℤ)
@@ -96,8 +102,7 @@ theorem domainNeighborhood_eq_interval_of_ordConnected (Λ : Finset ℤ)
   · exact ⟨0, 0, (Finset.not_nonempty_iff_eq_empty.mp hN).trans (by simp [interval])⟩
 
 /-- A natural-radius intrinsic neighborhood of a relative interval is a relative
-interval. This auxiliary domain-geometry statement concerns the interval-neighborhood
-step in the logarithmic-separation argument; it does not assert the information bound.
+interval.
 Source: TNLean one-dimensional note, `part0_preamble.tex`, lines 191–199, and
 `part2a_mps_information.tex`, lines 472–488. -/
 theorem domainNeighborhood_interval_eq (Λ : Finset ℤ) (a b m : ℕ) :
