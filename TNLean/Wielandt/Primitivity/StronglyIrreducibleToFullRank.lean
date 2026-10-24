@@ -57,8 +57,8 @@ theorem hasEventuallyFullKrausRank_of_isPrimitiveMPS_of_posDef [NeZero D]
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ)
     (hρ_pd : ρ.PosDef) :
-    HasEventuallyFullKrausRank A := by
-  exact hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper A hP.norm
+    HasEventuallyFullKrausRank A :=
+  hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper A hP.norm
     (isStronglyIrreduciblePaper_of_isPrimitiveMPS_of_posDef hP hρ_pd)
 
 /-- A primitive MPS tensor with a positive-definite fixed point is irreducible.
@@ -78,8 +78,8 @@ theorem isNormal_of_isPrimitiveMPS_with_posDef [NeZero D]
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : IsPrimitiveMPS A ρ)
     (hρ_pd : ρ.PosDef) :
-    Kraus.IsNormal A := by
-  exact (hasEventuallyFullKrausRank_iff_isNormal A).mp
+    Kraus.IsNormal A :=
+  (hasEventuallyFullKrausRank_iff_isNormal A).mp
     (hasEventuallyFullKrausRank_of_isPrimitiveMPS_of_posDef hP hρ_pd)
 
 end MPSTensor

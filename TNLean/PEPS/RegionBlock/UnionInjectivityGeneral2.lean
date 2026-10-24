@@ -360,15 +360,6 @@ theorem ThreeBlockGeometry.blueRedCrossing_fiber_card
           (fun eg : Edge G => g.IsBlueRedCrossingEdge A eg))
         (fun eg => by simp [Finset.mem_filter]) (fun eg => A.bondDim eg)]
 
-omit [DecidableRel G.Adj] in
-/-- A host boundary edge is a red boundary edge: having one endpoint in `univ \ red`
-and one in `red` is the same as having one endpoint in `red` and one outside. -/
-theorem ThreeBlockGeometry.isRegionBoundaryEdge_red_of_host
-    {eg : Edge G} (hg : IsRegionBoundaryEdge (G := G) (Finset.univ \ g.red) eg) :
-    IsRegionBoundaryEdge (G := G) g.red eg := by
-  simp only [IsRegionBoundaryEdge, Finset.mem_sdiff, Finset.mem_univ, true_and] at *
-  grind
-
 /-- A host boundary edge that is not a red/blue crossing edge is a complement boundary
 edge: its host-side endpoint lies in the complement (otherwise it would lie in the blue
 block and the edge would be a crossing edge). -/

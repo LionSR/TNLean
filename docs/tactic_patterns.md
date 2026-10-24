@@ -9169,3 +9169,14 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Abstraction:** None yet; the two proofs have different support hypotheses and are below
   the promotion threshold. The supported expansion is shared through
   `hasProductForm_of_mem_supportedOperators_radius`; the diameter theorem is its corollary.
+
+### Intersecting a nearest-neighbour support with a cut interval — candidate (2026-10-23)
+
+- **Pattern:** Apply finite-set extensionality, simplify interval membership and
+  equality of finite indices with `Fin.ext_iff`, then close the endpoint arithmetic
+  with `omega`.
+- **Seen:** Two three-line arguments in
+  `MPS/AreaLaw/TwoCutEdgeSupports.lean`, proving the two singleton intersections.
+- **Existing simplification:** `mem_interval` and `Fin.ext_iff` already express the
+  required normal form. The occurrences are in one file; no additional helper or
+  tactic is proposed at this stage.

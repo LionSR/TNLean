@@ -127,13 +127,6 @@ theorem blockEmbed_apply_of_fst_ne {k : o} {x : Σ k, Fin (n k)} (h : x.1 ≠ k)
   blockEmbed_apply_of_ne fun heq => h (congrArg Sigma.fst heq)
 
 omit [Fintype o] in
-/-- The block projection vanishes off its own block. -/
-theorem blockProj_apply_of_fst_ne {k : o} (i : Fin (n k)) {y : Σ k, Fin (n k)} (h : y.1 ≠ k) :
-    blockProj n k i y = 0 := by
-  simp only [blockProj, Matrix.transpose_apply]
-  exact blockEmbed_apply_of_fst_ne h i
-
-omit [Fintype o] in
 /-- The block embedding restricted to its own block is the identity indicator. -/
 theorem blockEmbed_apply_fst_eq (k : o) (i j : Fin (n k)) :
     blockEmbed n k (⟨k, i⟩ : Σ k, Fin (n k)) j = if i = j then 1 else 0 := by

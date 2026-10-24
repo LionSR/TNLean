@@ -105,12 +105,6 @@ theorem bondNeighbourhood_mono {X Y : Set ι} (h : X ⊆ Y) :
   · exact subset_bondNeighbourhood Y (h hx)
   · exact mem_bondNeighbourhood.mpr (Or.inr ⟨b, hxb, y, hyb, h hyX⟩)
 
-theorem lightCone_mono {X Y : Set ι} (h : X ⊆ Y) (r : ℕ) :
-    lightCone bond X r ⊆ lightCone bond Y r := by
-  induction r with
-  | zero => exact h
-  | succ r ih => exact bondNeighbourhood_mono ih
-
 theorem lightCone_subset_succ (X : Set ι) (r : ℕ) :
     lightCone bond X r ⊆ lightCone bond X (r + 1) :=
   subset_bondNeighbourhood _
@@ -120,9 +114,6 @@ theorem lightCone_mono_radius (X : Set ι) {r s : ℕ} (h : r ≤ s) :
   induction s, h using Nat.le_induction with
   | base => exact subset_rfl
   | succ s _ ih => exact ih.trans (lightCone_subset_succ X s)
-
-theorem subset_lightCone (X : Set ι) (r : ℕ) : X ⊆ lightCone bond X r :=
-  lightCone_mono_radius X (Nat.zero_le r)
 
 theorem lightCone_lightCone (X : Set ι) (r s : ℕ) :
     lightCone bond (lightCone bond X r) s = lightCone bond X (r + s) := by
@@ -283,8 +274,6 @@ variable {n : ℕ}
 Source: arXiv:2307.01696, main text before Theorem 1 (local circuits on a chain), without the
 pair closing the ring. -/
 def openBond (k : Fin n) : Set (Fin (n + 1)) := {k.castSucc, k.succ}
-
-theorem openBond_nonempty (k : Fin n) : (openBond k).Nonempty := ⟨_, Or.inl rfl⟩
 
 /-- **The open-chain light cone.** On the open chain, the light cone of radius `r` of `X`
 lies within distance `r` of `X` along the chain. -/

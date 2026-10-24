@@ -395,9 +395,7 @@ theorem localIncidentMatrixOp_comp (A : Tensor G d) {v : V}
     rw [localVirtualConfigSplitAt_symm_apply_fst]
     congr 2
     apply (localVirtualConfigSplitAt (G := G) A ie).injective
-    ext
-    · simp
-    · simp
+    ext <;> simp
   simp only [hinner, Finset.mul_sum]
   rw [Finset.sum_comm]
   refine Finset.sum_congr rfl ?_

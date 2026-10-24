@@ -251,6 +251,7 @@ theorem edgeInsertedCoeff_eq_applyGauge_of_region (A B : Tensor G d) (R : Finset
   -- The natural-number smul is the cast smul; cancel the positive scalar.
   rw [← Nat.cast_smul_eq_nsmul ℂ, ← Nat.cast_smul_eq_nsmul ℂ] at hkey
   exact smul_right_injective ℂ hne hkey
+
 /-- **The region absorbed equality at any region from the edge-level absorbed equality.**
 
 If the edge-level absorbed equality holds at an edge `e` --- inserting `N` on `A`'s edge `e`

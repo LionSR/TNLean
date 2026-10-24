@@ -147,3 +147,137 @@ filter of Definition~\ref{def:hastings_gaussian_filtered_term}.
     Theorem~\ref{thm:hastings_gaussian_filtered_spectral}, so
     $\sum_iM_i-H=\sum_i(M_i-\widetilde W_i)$.
 \end{proof}
+
+\subsection*{Degenerate ground spaces}
+
+% Hastings, arXiv:cond-mat/0508554v3, proj3new.tex, lines 395--491 (degenerate
+% ground space), Appendix B at lines 1535--1708 (eqs. lc, blecm, oibu).
+
+When the ground space is degenerate, the ground states are approximate
+eigenvectors of the $M_i$ only in a basis that diagonalizes the compressions
+$PM_iP$ together, where $P$ is the orthogonal projection onto the ground
+space~\cite[lines 395--491]{Hastings2006Solving}. Such a basis exists
+approximately when these compressions nearly commute. In this subsection every
+eigenvalue of $H$ equals $E_0$ or is at least $E_0+\Delta E$, with $\Delta E>0$,
+and $q\ge0$. The commutator of $\widetilde W$ with a separated operator is
+bounded through the partial trace of
+Theorem~\ref{thm:hastings05_filtered_approximation_graph}, so the term
+$N_Mg(c_1l,l)$ of eq.~(lc) is replaced by the localization term of that
+theorem~\cite{gap:hastings05_filtered_term_approximation}. The translation
+invariant case~\cite[lines 1603--1642]{Hastings2006Solving}, the example at
+lines 1655--1676, and the summed bound eq.~(oibu), which the source states
+only to order of magnitude, are not formalized.
+
+\begin{theorem}[Low-energy commutators]
+    \label{thm:hastings05_low_energy_commutator}
+    \lean{TNLean.Lattice.groundCompression,
+        TNLean.Lattice.groundCompression_gaussianFilteredTerm,
+        TNLean.Lattice.norm_one_sub_starProjection_mul_gaussianFilteredTerm_mul_le,
+        TNLean.Lattice.norm_starProjection_mul_gaussianFilteredTerm_mul_one_sub_le,
+        TNLean.Lattice.norm_groundCompression_commutator_le}
+    \leanok
+    \uses{thm:hastings_gaussian_filtered_spectral}
+    For all operators $W$ and $B$,
+    $P\widetilde WP=PWP$,
+    $\|(1-P)\widetilde WP\|\le\|W\|e^{-q/2}$,
+    $\|P\widetilde W(1-P)\|\le\|W\|e^{-q/2}$, and
+    \begin{align}
+        \|[PWP,PBP]\|\le\|[\widetilde W,B]\|+2\|W\|\,\|B\|\,e^{-q/2}.
+        \label{eq:hastings05_low_energy_bound}
+    \end{align}
+    With $W=M_i$ and $B=M_j$ this is the triangle inequality
+    of~\cite[lines 1562--1593]{Hastings2006Solving}.
+\end{theorem}
+\begin{proof}\leanok
+    The first identity holds because $\widetilde W$ and $W$ have the same
+    matrix elements between ground vectors. The second bound is the bound on
+    the excited component of $\widetilde W\psi$ applied to $\psi=Px$, and the
+    third follows by taking adjoints, since the adjoint of $\widetilde W$ is
+    the filtered operator of $W^\dagger$. Writing $Q=1-P$,
+    \begin{align}
+        [P\widetilde WP,PBP]=P[\widetilde W,B]P-P\widetilde WQBP
+        +PBQ\widetilde WP,
+        \label{eq:hastings05_compressed_commutator_split}
+    \end{align}
+    and $\|P\|\le1$.
+\end{proof}
+
+\begin{theorem}[The commutator with a separated operator]
+    \label{thm:hastings05_lc}
+    \lean{TNLean.Lattice.norm_commutator_gaussianFilteredTerm_le_of_disjoint}
+    \leanok
+    \uses{thm:hastings05_filtered_approximation_graph}
+    Under the assumptions of
+    Theorem~\ref{thm:hastings05_filtered_approximation_graph}, let $W$ act on
+    $S$ and $B$ on a set disjoint from $N_l(S)$. Assume $q>0$. Then
+    \begin{align}
+        \|[\widetilde W,B]\|\le2\|B\|\Bigl(C|S|^2\,\|W\|\,K_gT_k\,e^{vT-l/2}
+        +2\|W\|\,e^{-(T\Delta E)^2/(2q)}\Bigr)
+        \label{eq:hastings05_separated_commutator}
+    \end{align}
+    for every $T\ge0$. At $q=0$, the bound holds with $\widetilde W=W$
+    and the Gaussian tail factor replaced by $1$.
+    This is an analogue of the separated-operator bound
+    in~\cite[lines 1548--1561]{Hastings2006Solving}. Since $N_l(S)$ is a
+    closed neighbourhood, the support separation must exceed $l$; if it is
+    at least an integer $s\ge1$, one may choose $l=s-1$.
+\end{theorem}
+\begin{proof}\leanok
+    The partial trace $\mathbb E_{N_l(S)}(\widetilde W)$ acts on $N_l(S)$ and
+    so commutes with $B$. Hence
+    $[\widetilde W,B]=[\widetilde W-\mathbb E_{N_l(S)}(\widetilde W),B]$, whose
+    norm is at most $2\|B\|$ times the bound of
+    Theorem~\ref{thm:hastings05_filtered_approximation_graph}.
+\end{proof}
+
+\begin{theorem}[Low-energy commutators of separated operators]
+    \label{thm:hastings05_blecm}
+    \lean{TNLean.Lattice.norm_groundCompression_commutator_le_graphNeighborhood}
+    \leanok
+    \uses{thm:hastings05_low_energy_commutator,thm:hastings05_lc}
+    Under the assumptions of Theorem~\ref{thm:hastings05_lc}, with
+    $H=\sum_kh_k$ gapped as above,
+    \begin{align}
+        \|[PWP,PBP]\|\le2\|B\|\Bigl(C|S|^2\,\|W\|\,K_gT_k\,e^{vT-l/2}
+        +2\|W\|\,e^{-(T\Delta E)^2/(2q)}\Bigr)+2\|W\|\,\|B\|\,e^{-q/2}.
+        \label{eq:hastings05_separated_compression}
+    \end{align}
+    At $q=0$, replace the Gaussian tail factor by $1$ and set
+    $\widetilde W=W$. For $l>0$, choose $c_1>0$ with $vc_1<1/2$, and set
+    $T=c_1l$ and $q=c_1l\Delta E$. The right-hand side of~(\ref{eq:hastings05_separated_compression}) becomes
+    \begin{align}
+        2C|S|^2\|W\|\,\|B\|K_gT_k e^{-(1/2-vc_1)l}
+        +6\|W\|\,\|B\|e^{-c_1l\Delta E/2}.
+        \label{eq:hastings05_exponential_commutator_decay}
+    \end{align}
+    For fixed prefactors this decays exponentially in $l$. With $W=M_i$
+    and $B=M_j$, it is an analogue of the low-energy estimate
+    in~\cite[lines 1562--1601]{Hastings2006Solving}, with the different
+    localization constants and separation convention described above.
+\end{theorem}
+\begin{proof}\leanok
+    Combine Theorems~\ref{thm:hastings05_low_energy_commutator}
+    and~\ref{thm:hastings05_lc}.
+\end{proof}
+
+\begin{theorem}[Off-diagonal elements from a commutator]
+    \label{thm:hastings05_offdiagonal_commutator}
+    \lean{TNLean.Lattice.abs_sub_mul_norm_inner_le_norm_commutator,
+        TNLean.Lattice.norm_inner_le_norm_commutator_div}
+    \leanok
+    Let $A$ be self-adjoint with $Av=rv$ and $Aw=sw$ for real $r\ne s$. Then
+    for every operator $B$,
+    \begin{align}
+        |\langle v,Bw\rangle|\le\frac{\|[A,B]\|\,\|v\|\,\|w\|}{|r-s|}.
+        \label{eq:hastings05_offdiagonal_bound}
+    \end{align}
+    With $A=PM_jP$, $B=PM_iP$ and $v$, $w$ unit ground vectors, this is the
+    bound $o(i)\le\|[PM_iP,PM_jP]\|/\delta\lambda_j$
+    of~\cite[lines 1678--1690]{Hastings2006Solving} on the off-diagonal
+    elements of $M_i$ in a basis of the ground space that diagonalizes $M_j$.
+\end{theorem}
+\begin{proof}\leanok
+    Since $A$ is self-adjoint and $r$ is real,
+    $\langle v,[A,B]w\rangle=(r-s)\langle v,Bw\rangle$, and
+    $|\langle v,[A,B]w\rangle|\le\|[A,B]\|\,\|v\|\,\|w\|$.
+\end{proof}
