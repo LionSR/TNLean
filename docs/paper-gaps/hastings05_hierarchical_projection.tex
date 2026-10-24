@@ -180,10 +180,9 @@ $b_h\le(2^h-1)\epsilon^{1/4}$.
 
 \section{What is not formalized}
 
-The supersite grouping (lines 609--628), the energy bound eq.~(hchy) and the
-count of at most $2n$ final states (lines 709--730), which the source states
-only with ``one may show'', and the extensions to higher dimensions
-(lines 745--756) are not formalized.
+The energy bound eq.~(hchy) and the count of at most $2n$ final states
+(lines 709--730), which the source states only with ``one may show'', and the
+extensions to higher dimensions (lines 745--756) are not part of this note.
 
 \section{All levels against the ground state}
 \label{sec:hastings05_hierarchical_projection_all_levels}
@@ -255,11 +254,20 @@ hierarchy.\footnote{Declarations:
 The bound over all levels,
 (\ref{eq:hastings05_hierarchical_projection_ground_recurrence}) and
 (\ref{eq:hastings05_hierarchical_projection_ground_bound}), is
-formalized with the commutation of the two halves of each block as a
-hypothesis.\footnote{Declarations:
+formalized.\footnote{Declarations:
     \leanid{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_hierarchy_le},
     \leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_le_hierarchyMajorant}, and
     \leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_le}.}
+The commutation of the two halves of each block, which the bound over all
+levels takes as a hypothesis, is derived from the supersite grouping of lines
+609--628: a spectral window keeps the support of its operator, so every
+projection of level $m$ acts on its block of $2^m$ supersites, and the two
+halves of a block act on disjoint sites. The residual of a pair operator is
+at most the sum of the residuals of its summands $M_i$, with centre the sum of
+their expectations.\footnote{Declarations:
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_supersiteHierarchy_le},
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.mem_supportedOperators_hierarchy}, and
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.norm_toEuclideanLin_sum_sub_le}.}
 
 \bibliographystyle{plain}
 \bibliography{references}

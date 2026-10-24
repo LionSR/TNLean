@@ -31,8 +31,9 @@ instead replaces the printed recurrence by `D_{m+1}² ≤ 2 D_m² + (e + 2 D_m)^
 coefficient `2^m - 1` by `3^m - 1`, which is still polynomial in the number `N = 2^h` of
 supersites. Documented in `docs/paper-gaps/hastings05_hierarchical_projection.tex`.
 
-The blocks of one level act on disjoint sets of supersites, so their projections commute; here
-that commutation is a hypothesis, discharged by the supersite grouping of lines 609–628.
+The blocks of one level act on disjoint sets of supersites, so their projections commute. Here
+that commutation is a hypothesis; `norm_sub_supersiteHierarchy_le` derives it from the
+supersite grouping of lines 609–628.
 
 ## Main statements
 

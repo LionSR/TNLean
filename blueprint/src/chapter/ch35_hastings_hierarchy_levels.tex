@@ -116,3 +116,83 @@ a hypothesis.
     $(e+2\beta_m)^s\le(1+2C_m)e^{s^{m+1}}$, and
     $2C_m^2+(1+2C_m)^2\le(3C_m+2)^2=C_{m+1}^2$.
 \end{proof}
+
+\subsection{The supersite grouping}
+
+The source groups the sites into supersites of $2l_{\mathrm{proj}}$ sites, so
+that each $M_i$ acts on at most two neighbouring supersites, and lets
+$M_{k,k+1}$ be the sum of the $M_i$ acting on supersites $k$ and
+$k+1$~\cite[lines 609--628]{Hastings2006Solving}. Block $k$ of level $m$
+consists of the sites whose supersite has quotient $k$ by $2^m$.
+
+\begin{theorem}[Spectral windows keep supports]
+    \label{thm:hastings05_window_support}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.cfc_mem_supportedOperators,
+        TNLean.MPS.AreaLaw.LocalSolution.windowProjection_mem_supportedOperators,
+        TNLean.MPS.AreaLaw.LocalSolution.compressedWindowProjection_mem_supportedOperators}
+    \leanok
+    \uses{def:hastings05_window_projection,def:hastings05_compressed_window}
+    If a Hermitian operator $A$ acts on a set of sites $S$, so does $f(A)$ for
+    every real function $f$. In particular the window of $M$, and the window of
+    $M$ inside the range of $Q$, act on $S$ when $M$ and $Q$ do.
+\end{theorem}
+\begin{proof}\leanok
+    The operators acting on $S$ form a closed $*$-subalgebra containing $A$,
+    and $f(A)$ lies in every such subalgebra.
+\end{proof}
+
+\begin{definition}[Blocks of a level]
+    \label{def:hastings05_level_block}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.levelBlock}
+    \leanok
+    Given the supersite $\sigma(i)\in\mathbb N$ of each site $i$, block $k$ of
+    level $m$ is the set of sites $i$ with $\lfloor\sigma(i)/2^m\rfloor=k$.
+\end{definition}
+
+\begin{theorem}[Halves of a block]
+    \label{thm:hastings05_level_block_halves}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.levelBlock_two_mul_subset,
+        TNLean.MPS.AreaLaw.LocalSolution.levelBlock_two_mul_add_one_subset,
+        TNLean.MPS.AreaLaw.LocalSolution.disjoint_levelBlock_two_mul}
+    \leanok
+    \uses{def:hastings05_level_block}
+    Blocks $2k$ and $2k+1$ of level $m$ are disjoint and contained in block $k$
+    of level $m+1$.
+\end{theorem}
+\begin{proof}\leanok
+    $\lfloor\sigma/2^{m+1}\rfloor=\lfloor\lfloor\sigma/2^m\rfloor/2\rfloor$.
+\end{proof}
+
+\begin{theorem}[All levels on supersites]
+    \label{thm:hastings05_supersite_hierarchy}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.mem_supportedOperators_hierarchy,
+        TNLean.MPS.AreaLaw.LocalSolution.norm_sub_supersiteHierarchy_le}
+    \leanok
+    \uses{thm:hastings05_hierarchy_levels,thm:hastings05_window_support,
+        thm:hastings05_level_block_halves}
+    In the setting of Theorem~\ref{thm:hastings05_hierarchy_levels}, suppose
+    each pair operator $M_k^m$ acts on block $k$ of level $m+1$ instead of
+    assuming that the halves commute. Then every $P_k^m$ acts on block $k$ of
+    level $m$, and the conclusion of
+    Theorem~\ref{thm:hastings05_hierarchy_levels} holds.
+\end{theorem}
+\begin{proof}\leanok
+    By induction each $P_k^m$ acts on its block, by
+    Theorems~\ref{thm:hastings05_window_support}
+    and~\ref{thm:hastings05_level_block_halves}. The halves act on disjoint
+    sites, so they commute.
+\end{proof}
+
+\begin{theorem}[The residual of a sum]
+    \label{thm:hastings05_sum_residual}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_toEuclideanLin_sum_sub_le}
+    \leanok
+    For operators $M_i$ and reals $c_i$,
+    $\lVert(\sum_iM_i-\sum_ic_i)\psi\rVert\le\sum_i\lVert(M_i-c_i)\psi\rVert$.
+    With $c_i=\langle\Psi_a,M_i\Psi_a\rangle$, this bounds the residual of
+    $M_{k,k+1}$ by eq.~(low) for its summands
+    \cite[lines 628--639]{Hastings2006Solving}.
+\end{theorem}
+\begin{proof}\leanok
+    The triangle inequality.
+\end{proof}

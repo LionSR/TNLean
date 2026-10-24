@@ -11,3 +11,4 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.LocalSolution.FinalStateCount
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchicalProjection
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchyLevels
+import TNLean.MPS.AreaLaw.LocalSolution.SupersiteHierarchy

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Range
 import TNLean.Circuit.LocalCircuit
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchyLevels
 
@@ -56,7 +57,7 @@ theorem cfc_mem_supportedOperators (f : ℝ → ℝ) {S : Set ι}
     { (supportedOperators d S).toSubalgebra (one_mem_supportedOperators S)
         fun _ _ ↦ mul_mem_supportedOperators with
       star_mem' := star_mem_supportedOperators }
-  haveI : IsClosed (s : Set (Matrix (ι → Fin d) (ι → Fin d) ℂ)) :=
+  have : IsClosed (s : Set (Matrix (ι → Fin d) (ι → Fin d) ℂ)) :=
     Submodule.closed_of_finiteDimensional (supportedOperators d S)
   exact cfc_mem (𝕜 := ℝ) (s := s) f hA
 
@@ -79,7 +80,7 @@ end Support
 
 section Supersites
 
-variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
+variable {ι : Type*}
 
 /-- The sites of block `k` at level `m`: those whose supersite has quotient `k` by `2^m`. -/
 def levelBlock (blk : ι → ℕ) (m k : ℕ) : Set ι :=
@@ -87,21 +88,26 @@ def levelBlock (blk : ι → ℕ) (m k : ℕ) : Set ι :=
 
 theorem levelBlock_two_mul_subset (blk : ι → ℕ) (m k : ℕ) :
     levelBlock blk m (2 * k) ⊆ levelBlock blk (m + 1) k := fun i hi ↦ by
-  simp only [levelBlock, Set.mem_setOf_eq] at hi ⊢
+  change blk i / 2 ^ m = _ at hi
+  change blk i / 2 ^ (m + 1) = k
   rw [pow_succ, ← Nat.div_div_eq_div_mul, hi]
   omega
 
 theorem levelBlock_two_mul_add_one_subset (blk : ι → ℕ) (m k : ℕ) :
     levelBlock blk m (2 * k + 1) ⊆ levelBlock blk (m + 1) k := fun i hi ↦ by
-  simp only [levelBlock, Set.mem_setOf_eq] at hi ⊢
+  change blk i / 2 ^ m = _ at hi
+  change blk i / 2 ^ (m + 1) = k
   rw [pow_succ, ← Nat.div_div_eq_div_mul, hi]
   omega
 
 theorem disjoint_levelBlock_two_mul (blk : ι → ℕ) (m k : ℕ) :
     Disjoint (levelBlock blk m (2 * k)) (levelBlock blk m (2 * k + 1)) :=
   Set.disjoint_left.mpr fun i h₁ h₂ ↦ by
-    simp only [levelBlock, Set.mem_setOf_eq] at h₁ h₂
+    change blk i / 2 ^ m = 2 * k at h₁
+    change blk i / 2 ^ m = 2 * k + 1 at h₂
     omega
+
+variable {d : ℕ} [Fintype ι] [DecidableEq ι]
 
 /-- **Each projection acts on its block.** If `P 0 k = 1`, `P (m + 1) k` is the window of
 `M m k` inside the range of `P m (2k) P m (2k + 1)`, and the pair operator `M m k` acts on the
@@ -169,7 +175,7 @@ theorem norm_toEuclideanLin_sum_sub_le {α : Type*} (s : Finset α) (Mi : α →
   have e : ∑ a ∈ s, Mi a - ((∑ a ∈ s, ci a : ℝ) : ℂ) • (1 : Matrix ι ι ℂ) =
       ∑ a ∈ s, (Mi a - (ci a : ℂ) • 1) := by
     rw [Finset.sum_sub_distrib, Complex.ofReal_sum, Finset.sum_smul]
-  rw [e, map_sum, LinearMap.coeFn_sum, Finset.sum_apply]
+  rw [e, map_sum, LinearMap.sum_apply]
   exact norm_sum_le _ _
 
 end Residual
