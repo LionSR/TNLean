@@ -1389,7 +1389,7 @@ taken as a hypothesis.
 [hastings05_mplt_positivity.tex](hastings05_mplt_positivity.tex)
 (local-correction, resolved) records that Hastings' matrix product form at every temperature,
 `ρ(β, l_proj) = ρ(β/n, l_proj)^n` with `n` even (arXiv:cond-mat/0508554v3, source lines
-1303–1311, eq. `mplt`), is positive semidefinite, and positive definite only when the truncated
+1303–1314, eq. `mplt`), is positive semidefinite, and positive definite only when the truncated
 high-temperature form is invertible, which the source does not establish. The formalization
 proves positive semidefiniteness, which is what the even power is used for.
 

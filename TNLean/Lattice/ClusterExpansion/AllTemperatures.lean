@@ -26,7 +26,7 @@ The truncated high-temperature form `ρ(β/n, l_proj)` is Hermitian because it i
 sum of exponentials of Hermitian operators, but its definition belongs to the cluster
 expansion and is not used here: the results take any Hermitian operator in product form. The
 error bound at every temperature (lines 1322–1349) and the count of index values (lines
-1313–1320) are not proved here; the index count is the one recorded as not established in
+1318–1320) are not proved here; the index count is the one recorded as not established in
 `TNLean/Lattice/ProductForm.lean`.
 
 **Local fix (positivity at every temperature):** the source states that `ρ(β, l_proj)` is
@@ -64,7 +64,7 @@ theorem posSemidef_pow_two_mul {A : Matrix n n ℂ} (hA : A.IsHermitian) (k : �
 
 /-- **Positivity at every temperature.** An even power of a Hermitian matrix is positive
 semidefinite. This is why Hastings takes the number of factors in eq. `mplt` even.
-Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1309–1311. -/
+Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1313–1314. -/
 theorem posSemidef_pow_of_even {A : Matrix n n ℂ} (hA : A.IsHermitian) {m : ℕ} (hm : Even m) :
     (A ^ m).PosSemidef := by
   obtain ⟨k, rfl⟩ := hm
@@ -75,7 +75,7 @@ theorem posSemidef_pow_of_even {A : Matrix n n ℂ} (hA : A.IsHermitian) {m : �
 of range `l`, as the truncated high-temperature density matrix `ρ(β/n, l_proj)` is. For even `m`
 the power `ρ^m` is positive semidefinite and again in product form of range `l`, the `m`
 indices at each site being grouped into one. Hastings, arXiv:cond-mat/0508554v3,
-`proj3new.tex`, lines 1303–1313. -/
+`proj3new.tex`, lines 1303–1317. -/
 theorem HasProductForm.pow_of_even {Λ : Finset (ℤ × ℤ)} {q l : ℕ}
     {ρ : Matrix (Configuration Λ q) (Configuration Λ q) ℂ} (hρ : HasProductForm Λ q l ρ)
     (hH : ρ.IsHermitian) {m : ℕ} (hm : Even m) :
@@ -83,7 +83,7 @@ theorem HasProductForm.pow_of_even {Λ : Finset (ℤ × ℤ)} {q l : ℕ}
   ⟨hρ.pow m, posSemidef_pow_of_even hH hm⟩
 
 /-- **The number of factors in eq. `mplt`.** For `β ≥ 0` and `β₀ > 0` there is an even `n ≥ 2`
-with `β/n ≤ β₀`. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1305–1308. -/
+with `β/n ≤ β₀`. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1307–1312. -/
 theorem exists_even_div_le {β β₀ : ℝ} (hβ : 0 ≤ β) (hβ₀ : 0 < β₀) :
     ∃ m : ℕ, Even m ∧ 2 ≤ m ∧ β / m ≤ β₀ := by
   refine ⟨2 * (⌈β / β₀⌉₊ + 1), even_two_mul _, by omega, ?_⟩
