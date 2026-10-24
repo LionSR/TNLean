@@ -30,7 +30,7 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 /-- One occurrence of a pair source, with its actual endpoint parties, spaces and vector.
 Source: polynomial-PEPS Lemma 5.1, `04-compression.tex`, lines 68–70. -/
@@ -317,4 +317,4 @@ theorem eval_eq_localPart_comp_prepare {ℓ ℓ' : Layout P} (w : Word ℓ ℓ')
 
 end Word
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

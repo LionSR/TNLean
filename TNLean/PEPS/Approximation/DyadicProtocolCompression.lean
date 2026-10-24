@@ -64,8 +64,9 @@ noncomputable section
 open scoped Matrix
 
 namespace TNLean.PEPS.Approximation.DyadicProtocol
+open TNLean.Lattice.Compression
 
-open Finset TNLean.PEPS.PairEffect
+open Finset TNLean.Lattice.PartyCircuit
 
 variable {L q : ℕ} {P : Type} [Fintype P] (D : DyadicProtocol L q P)
 
@@ -287,7 +288,7 @@ theorem physicalOut_foldVertex (hL : 0 < L) (x : Configuration L q) :
   ext
   simp [physicalOut, D.physicalDimension_site, Nat.mod_eq_of_lt (x v).2]
 
-open DistributedOperatorContraction in
+open DistributedOperatorContraction TNLean.Lattice.Compression.DistributedOperatorContraction in
 /-- **From a compressed density to an operator party network on dyadic anchors.** Let a
 distributed operator contraction on the parties of a protocol be within `ε` of the physical
 density of the protocol, with link alphabets of size at most `C₁ L ^ α`, at most `deg` links at
@@ -375,8 +376,9 @@ theorem exists_partyNetwork_of_contractedOperator (hL : 0 < L) {Ω : StateSpace 
 end TNLean.PEPS.Approximation.DyadicProtocol
 
 namespace TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 
-open Finset TNLean.PEPS.PairEffect
+open Finset TNLean.Lattice.PartyCircuit
 
 /-- A protocol with the bounds of §8 for fixed constants, on a square of some side `L ≥ 2`,
 together with its unit target vector. These instances form the family of constructions to which

@@ -10,7 +10,7 @@ import Lean.Util.CollectAxioms
 /-! # Axiom check for restriction of the reindexed common samples -/
 
 set_option linter.hashCommand false
-open TNLean.PEPS.PairEffect.SourceCircuit
+open TNLean.Lattice.PartyCircuit.SourceCircuit
 
 run_cmd do
   let decl := ``restrict_reindexedSourceSampleAssignment_eq

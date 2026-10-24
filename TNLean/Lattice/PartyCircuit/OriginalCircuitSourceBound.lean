@@ -23,17 +23,17 @@ one pair source.
 
 ## Main definitions
 
-* `PairEffect.OriginalCircuit.IsSourceBounded`.
+* `PartyCircuit.OriginalCircuit.IsSourceBounded`.
 
 ## Main results
 
-* `PairEffect.OriginalCircuit.IsSourceBounded.mono`,
-  `PairEffect.OriginalCircuit.isSourceBounded_of_nonprivateCount_eq_zero`.
-* `PairEffect.OriginalCircuit.isSourceBounded_castLayouts`,
-  `PairEffect.OriginalCircuit.isSourceBounded_frameList`,
-  `PairEffect.OriginalCircuit.isSourceBounded_appendTail`.
-* `PairEffect.Word.isSourceBounded_toOriginalCircuit`,
-  `PairEffect.PartyChain.isSourceBounded_toOriginalCircuit` and their forms
+* `PartyCircuit.OriginalCircuit.IsSourceBounded.mono`,
+  `PartyCircuit.OriginalCircuit.isSourceBounded_of_nonprivateCount_eq_zero`.
+* `PartyCircuit.OriginalCircuit.isSourceBounded_castLayouts`,
+  `PartyCircuit.OriginalCircuit.isSourceBounded_frameList`,
+  `PartyCircuit.OriginalCircuit.isSourceBounded_appendTail`.
+* `PartyCircuit.Word.isSourceBounded_toOriginalCircuit`,
+  `PartyCircuit.PartyChain.isSourceBounded_toOriginalCircuit` and their forms
   `_of_one_le` for every positive constant.
 
 ## References
@@ -44,7 +44,7 @@ one pair source.
 
 noncomputable section
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 variable {P : Type}
 
@@ -155,4 +155,4 @@ theorem PartyChain.isSourceBounded_toOriginalCircuit_of_one_le {a b : Layout P}
     (M.toOriginalCircuit hM).IsSourceBounded r :=
   (M.isSourceBounded_toOriginalCircuit hM).mono hr
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

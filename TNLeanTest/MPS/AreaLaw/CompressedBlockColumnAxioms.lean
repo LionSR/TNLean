@@ -15,7 +15,7 @@ are required to belong to the standard set consisting of propositional extension
 classical choice and quotient soundness. Each declaration and its axioms are reported.
 -/
 
-open TNLean.PEPS.Approximation.DistributedOperatorContraction
+open TNLean.Lattice.Compression.DistributedOperatorContraction
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]

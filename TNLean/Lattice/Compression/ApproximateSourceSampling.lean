@@ -32,8 +32,9 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open MeasureTheory QICLean.ComplexGaussian
 open scoped Matrix ComplexConjugate NNReal
-open TNLean.PEPS.Approximation
-namespace TNLean.PEPS.PairEffect.EffectCircuit
+open TNLean.Lattice.Compression
+namespace TNLean.Lattice.PartyCircuit.EffectCircuit
+open TNLean.Lattice.PartyCircuit
 variable {P : Type} [Fintype P]
 
 open Classical in
@@ -121,4 +122,4 @@ theorem exists_sourceSample_approximate_error_le
     _ ≤ 3 * ε / 4 + ε / 2 / 2 := add_le_add hω hquarter
     _ = ε := by ring
 
-end TNLean.PEPS.PairEffect.EffectCircuit
+end TNLean.Lattice.PartyCircuit.EffectCircuit

@@ -79,7 +79,7 @@ end Matrix
 
 
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 open ContinuousLinearMap
 variable {P : Type} {Phys Env Aux : Type*}
   [Fintype Phys] [Fintype Env] [Fintype Aux]
@@ -167,11 +167,11 @@ theorem rectangularTraceNorm_extendedPhysicalReadout_error_le
   exact (Matrix.rectangularTraceNorm_appendAuxiliaryVector_error_le_two
     (K v) (H γ) (extendedPhysicalReadout H K u) ((H.norm_map γ).trans hγ)
     hKv hRu).trans (mul_le_mul_of_nonneg_left hdist (by positivity))
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit
 
 
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 variable {P : Type}
 /-- Concatenated finite memories are finite by the actual concatenation isometry.
 Source: polynomial-PEPS, `04-compression.tex:199–217`. -/
@@ -309,4 +309,4 @@ theorem rectangularTraceNorm_replacement_density_sub_le [DecidableEq Phys]
   simpa only [replacementPhysicalDensity, originalPhysicalDensity,
     show 2 * (2 * δ * (w.expandedGateCount : ℝ)) = 4 * δ * w.expandedGateCount by ring] using he
 end EffectCircuit
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

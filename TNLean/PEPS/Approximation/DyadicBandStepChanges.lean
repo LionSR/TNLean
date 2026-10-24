@@ -34,7 +34,7 @@ open Set Metric Filter Topology
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame PairEffect
+open EncodedFrame TNLean.Lattice.PartyCircuit
 
 /-- **Values of readings near a change.** If on the open `δ`-neighborhood of the set where two
 labellings differ the first is `A` and the second takes only `A` and `B`, then at every point where

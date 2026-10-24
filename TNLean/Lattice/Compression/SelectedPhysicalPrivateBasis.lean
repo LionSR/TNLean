@@ -21,7 +21,8 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
 variable {E : Option {_p : P // true = true} → Type} [∀ q, Fintype (E q)]
 
@@ -75,4 +76,4 @@ theorem selectedPhysicalPrivateBasis_apply_heq
     LinearIsometryEquiv.trans_apply]
   exact (Layout.memCongr_apply_heq _ _).trans (Layout.memCongr_apply_heq _ _)
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

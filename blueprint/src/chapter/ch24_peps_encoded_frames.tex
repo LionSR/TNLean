@@ -56,7 +56,7 @@ norm of matrices, rectangular ones included.
     \label{def:peps_frame_hole_encoder}
     \lean{TNLean.PEPS.EncodedFrame.SquarePatch.branch,
         TNLean.PEPS.EncodedFrame.SquarePatch.encoder,
-        TNLean.PEPS.EncodedFrame.stack,
+        TNLean.Lattice.Sheet.stack,
         TNLean.PEPS.EncodedFrame.SquarePatch.card_tag_of_outer_eq_empty,
         TNLean.PEPS.EncodedFrame.SquarePatch.encoder_submatrix_of_outer_eq_empty}
     \leanok
@@ -180,7 +180,7 @@ norm of matrices, rectangular ones included.
 
 \begin{lemma}[Telescoping on a vector]
     \label{lem:peps_frame_telescoping}
-    \lean{TNLean.PEPS.EncodedFrame.norm_act_list_prod_sub_le,
+    \lean{TNLean.Lattice.Sheet.norm_act_list_prod_sub_le,
         TNLean.PEPS.EncodedFrame.norm_act_projProd_sub_le}
     \leanok
     For contractions $A_1,\dots,A_s$ and every vector $\psi$,
@@ -223,12 +223,12 @@ norm of matrices, rectangular ones included.
 
 \begin{definition}[Site registers]
     \label{def:lattice_site_registers}
-    \lean{TNLean.PEPS.EncodedFrame.siteRegs,
-        TNLean.PEPS.EncodedFrame.sites,
-        TNLean.PEPS.EncodedFrame.nodup_sites,
-        TNLean.PEPS.EncodedFrame.mem_sites,
-        TNLean.PEPS.EncodedFrame.sitesEquiv,
-        TNLean.PEPS.EncodedFrame.owner_siteRegs}
+    \lean{TNLean.Lattice.Sheet.siteRegs,
+        TNLean.Lattice.Sheet.sites,
+        TNLean.Lattice.Sheet.nodup_sites,
+        TNLean.Lattice.Sheet.mem_sites,
+        TNLean.Lattice.Sheet.sitesEquiv,
+        TNLean.Lattice.Sheet.owner_siteRegs}
     \leanok
     \uses{def:peps_party_layout}
     For an owner $o$ of each site of a finite set $\Lambda$ and a list $\ell$ of
@@ -269,13 +269,13 @@ norm of matrices, rectangular ones included.
 
 \begin{lemma}[Canonical coordinates of site registers]
     \label{lem:lattice_site_register_coordinates}
-    \lean{TNLean.PEPS.EncodedFrame.siteVec,
-        TNLean.PEPS.EncodedFrame.siteVec_append,
-        TNLean.PEPS.EncodedFrame.siteVec_congr,
-        TNLean.PEPS.EncodedFrame.siteIsoList,
-        TNLean.PEPS.EncodedFrame.siteIsoList_siteVec,
-        TNLean.PEPS.EncodedFrame.groupIso,
-        TNLean.PEPS.EncodedFrame.groupIso_siteVec}
+    \lean{TNLean.Lattice.Sheet.siteVec,
+        TNLean.Lattice.Sheet.siteVec_append,
+        TNLean.Lattice.Sheet.siteVec_congr,
+        TNLean.Lattice.Sheet.siteIsoList,
+        TNLean.Lattice.Sheet.siteIsoList_siteVec,
+        TNLean.Lattice.Sheet.groupIso,
+        TNLean.Lattice.Sheet.groupIso_siteVec}
     \leanok
     \uses{def:lattice_site_registers}
     For a list $\ell$ of sites, including lists with repetitions, write
@@ -877,7 +877,7 @@ pair sources with the same constant.
 
 \begin{definition}[Pair-source bound of an original circuit]
     \label{def:peps_circuit_source_bound}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.IsSourceBounded}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.IsSourceBounded}
     \leanok
     \uses{def:peps_original_circuit}
     An original circuit satisfies the pair-source bound with constant $r$
@@ -887,15 +887,15 @@ pair sources with the same constant.
 
 \begin{lemma}[Pair sources of monomials read as circuits]
     \label{lem:peps_circuit_source_bound_monomials}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.IsSourceBounded.mono,
-        TNLean.PEPS.PairEffect.OriginalCircuit.isSourceBounded_of_nonprivateCount_eq_zero,
-        TNLean.PEPS.PairEffect.OriginalCircuit.isSourceBounded_castLayouts,
-        TNLean.PEPS.PairEffect.OriginalCircuit.isSourceBounded_frameList,
-        TNLean.PEPS.PairEffect.OriginalCircuit.isSourceBounded_appendTail,
-        TNLean.PEPS.PairEffect.Word.isSourceBounded_toOriginalCircuit,
-        TNLean.PEPS.PairEffect.PartyChain.isSourceBounded_toOriginalCircuit,
-        TNLean.PEPS.PairEffect.Word.isSourceBounded_toOriginalCircuit_of_one_le,
-        TNLean.PEPS.PairEffect.PartyChain.isSourceBounded_toOriginalCircuit_of_one_le}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.IsSourceBounded.mono,
+        TNLean.Lattice.PartyCircuit.OriginalCircuit.isSourceBounded_of_nonprivateCount_eq_zero,
+        TNLean.Lattice.PartyCircuit.OriginalCircuit.isSourceBounded_castLayouts,
+        TNLean.Lattice.PartyCircuit.OriginalCircuit.isSourceBounded_frameList,
+        TNLean.Lattice.PartyCircuit.OriginalCircuit.isSourceBounded_appendTail,
+        TNLean.Lattice.PartyCircuit.Word.isSourceBounded_toOriginalCircuit,
+        TNLean.Lattice.PartyCircuit.PartyChain.isSourceBounded_toOriginalCircuit,
+        TNLean.Lattice.PartyCircuit.Word.isSourceBounded_toOriginalCircuit_of_one_le,
+        TNLean.Lattice.PartyCircuit.PartyChain.isSourceBounded_toOriginalCircuit_of_one_le}
     \leanok
     \uses{def:peps_circuit_source_bound}
     The pair-source bound with constant $r$ implies the bound with every
@@ -914,12 +914,12 @@ pair sources with the same constant.
 
 \begin{lemma}[A sum of monomials as one gate keeps its pair sources]
     \label{lem:peps_party_gate_source_bound}
-    \lean{TNLean.PEPS.PairEffect.Word.sourceCount_selectedPart,
-        TNLean.PEPS.PairEffect.PartyChain.sourceCount_selectedPart,
-        TNLean.PEPS.PairEffect.Word.sourceCount_mapOwner_le,
-        TNLean.PEPS.PairEffect.PartyChain.sourceCount_mapOwner_le,
+    \lean{TNLean.Lattice.PartyCircuit.Word.sourceCount_selectedPart,
+        TNLean.Lattice.PartyCircuit.PartyChain.sourceCount_selectedPart,
+        TNLean.Lattice.PartyCircuit.Word.sourceCount_mapOwner_le,
+        TNLean.Lattice.PartyCircuit.PartyChain.sourceCount_mapOwner_le,
         TNLean.PEPS.PairEffect.isSourceBounded_gateCircuit,
-        TNLean.PEPS.PairEffect.PartyGate.exists_originalCircuit_isSourceBounded}
+        TNLean.Lattice.PartyCircuit.PartyGate.exists_originalCircuit_isSourceBounded}
     \leanok
     \uses{lem:peps_circuit_source_bound_monomials}
     Let $\sum_\xi c_\xi M_\xi$ be a contraction expanded into allowed

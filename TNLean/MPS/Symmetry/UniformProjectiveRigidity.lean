@@ -174,10 +174,6 @@ private theorem supportProj_eq_of_isHermitian_idempotent
       hP.supportProj_isHermitian.eq] using congrArg conjTranspose hP.supportProj_mul_self
   exact hPS.symm.trans hPS'
 
-end Matrix
-
-namespace Matrix
-
 private theorem exists_radius_invertible_spectral_line
     {n : Type*} [Fintype n] [DecidableEq n] {D : ℕ}
     (J₀ : Matrix n (Fin 1) ℂ) (hJ₀ : J₀.IsIsometry)
@@ -288,9 +284,6 @@ private theorem cohomologous_of_projective_intertwiner
   rw [← mul_inv_cancel_right₀ (Units.ne_zero (f (g * h))) (ω₁ (g, h) : ℂ), ← hs]
   ring
 
-
-open TNLean.Algebra
-
 private theorem cohomologous_of_uniformly_near_intertwiner_orbit
     {n : Type*} [Fintype n] [DecidableEq n] {D : ℕ} [NeZero D]
     (J₀ : Matrix n (Fin 1) ℂ) (hJ₀ : J₀.IsIsometry)
@@ -351,7 +344,6 @@ private theorem cohomologous_of_uniformly_near_intertwiner_orbit
   simpa only [Matrix.mul_assoc, hρ, Matrix.mul_one, Matrix.smul_mul] using hh
 
 
-open scoped InnerProductSpace Kronecker
 namespace Matrix
 
 private noncomputable def fromColumnVector {D : ℕ} :
@@ -403,9 +395,6 @@ private theorem exists_identity_intertwiner_frame {D : ℕ} [NeZero D] :
   rw [hdecode]
   exact isUnit_one
 
-end Matrix
-
-namespace Matrix
 private noncomputable def choiEuclideanLinearMap {D : ℕ} (a : ℂ) :
     (EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ] EuclideanSpace ℂ (Fin D × Fin D)) →ₗ[ℂ]
       Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ where

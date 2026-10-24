@@ -80,6 +80,7 @@ open TNLean.Lattice (apply_eq_submatrix_apply commute_sheetSwapOp_kronecker
 noncomputable section
 
 namespace TNLean.PEPS.EncodedFrame
+open TNLean.Lattice.Sheet
 
 /-! ### Exchange data -/
 

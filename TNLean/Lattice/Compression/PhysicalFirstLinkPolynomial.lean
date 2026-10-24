@@ -28,8 +28,8 @@ Independently formalized; no upstream Lean proof text reused.
 
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.OriginalCircuit
-open TNLean.PEPS.Approximation
+namespace TNLean.Lattice.PartyCircuit.OriginalCircuit
+open TNLean.Lattice.Compression
 variable {P : Type} [DecidableEq P] {a : Layout P}
 
 open Classical in
@@ -78,4 +78,4 @@ theorem card_physicalFirstNetworkAlphabet_le_power
       hpart L C_N C_B C_D n s d p hL hCB hB hD
       ((Nat.cast_le.mpr hcount).trans hN) hBbound hDbound).le
 
-end TNLean.PEPS.PairEffect.OriginalCircuit
+end TNLean.Lattice.PartyCircuit.OriginalCircuit

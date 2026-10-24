@@ -27,7 +27,7 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
 variable {P Q : Type}
 
@@ -246,4 +246,4 @@ theorem eval_mapOwner_comp (f : P → Q) {ℓ ℓ' : Layout P} (w : Word ℓ ℓ
   ext x
   exact eval_mapOwner f w x
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

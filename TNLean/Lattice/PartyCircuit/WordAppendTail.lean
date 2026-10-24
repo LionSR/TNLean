@@ -27,7 +27,7 @@ noncomputable section
 
 open scoped InnerProductSpace TensorProduct
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 open ContinuousLinearMap
 
@@ -113,4 +113,4 @@ theorem eval_appendTail {a b : Layout P} (w : Word a b) (tail : Layout P) :
   rw [eval_exchangeTwo, eval_frameList_appendIso, eval_exchangeTwo]
 
 end Word
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

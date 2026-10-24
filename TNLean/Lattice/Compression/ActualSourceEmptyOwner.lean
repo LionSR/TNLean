@@ -20,7 +20,7 @@ independent of any choice of monomial or source vector.
   lines 253–267, 342–417 and 409–434.
 -/
 
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 /-- The fixed all-party source layout has no registers at the exterior owner.
@@ -40,4 +40,4 @@ theorem restrict_allResidualSourceLayout_isNone {a b : Layout P}
   · simp only [(partialSlot_spec (fun _ ↦ true) w i).2.1, affectedOwner,
       ↓reduceDIte, Option.isNone_some, Bool.false_eq_true] at hnone
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

@@ -21,7 +21,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 /-- Prepare the original private product input, leaving the fixed source
@@ -60,4 +60,4 @@ theorem sources_partialSourceWord {a b : Layout P} (w : SourceCircuit a b)
   exact (congrArg₂ (fun S T : SourceInventory _ => S ++ T)
     (sources_partialResidual _ _ _) (sources_sourcePrivatePreparation w ψ)).trans rfl
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

@@ -28,9 +28,9 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.SourceCircuit
-open TNLean.PEPS.Approximation
-open SourceInventory
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.Lattice.Compression
+open TNLean.Lattice.PartyCircuit.SourceInventory
 variable {P : Type}
 
 -- Keeping the retained-slot list opaque stops elaboration from unfolding the
@@ -139,4 +139,4 @@ theorem isTensorPartitioned_prepared_reordered_partial {a b : Layout P}
   exact isTensorPartitioned_reordered_partial w hw S (C ++ T) (.comp p u)
     ⟨hp, hu⟩ (by simp [Word.sources, hps, hus]) ξ
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

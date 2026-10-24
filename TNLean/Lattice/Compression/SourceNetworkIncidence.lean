@@ -19,8 +19,8 @@ and 581–588.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
-open TNLean.PEPS.Approximation
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.Lattice.Compression
 variable {P : Type} {a b : Layout P}
 
 open Classical in
@@ -56,4 +56,4 @@ theorem card_incidentSourceDensityLinks_le (w : SourceCircuit a b) (b : ℕ)
   rw [card_incidentNonemptyGates_eq_participationCount]
   exact hlifetime p
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

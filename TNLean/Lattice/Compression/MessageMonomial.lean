@@ -29,7 +29,8 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
 /-- An existing monomial, a finite-dimensional identity transfer, or their
@@ -163,4 +164,4 @@ theorem expansion_size_le_of_power_bounds {a b : Layout P} (M : MessageMonomial 
   simpa only [mul_pow, ← pow_mul] using h
 
 end MessageMonomial
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

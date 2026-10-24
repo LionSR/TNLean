@@ -23,17 +23,18 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 233–245,
 
 noncomputable section
 
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.Lattice
 
 open Classical in
 private def participantPairEquiv {C P : Type} [Fintype C] (owner : C ↪ P) :
     {z : Sym2 C // ¬z.IsDiag} ≃
-      {z : Sym2 P // z ∈ Approximation.pairSampleLabels
+      {z : Sym2 P // z ∈ Compression.pairSampleLabels
         (Finset.univ.map owner)} := by
   let f : {z : Sym2 C // ¬z.IsDiag} →
-      {z : Sym2 P // z ∈ Approximation.pairSampleLabels
+      {z : Sym2 P // z ∈ Compression.pairSampleLabels
         (Finset.univ.map owner)} := fun z ↦ ⟨Sym2.map owner z.1, by
-    apply (Approximation.mem_pairSampleLabels _ _).mpr
+    apply (Compression.mem_pairSampleLabels _ _).mpr
     refine ⟨?_, fun h ↦ z.2 ((Sym2.isDiag_map owner.injective).mp h)⟩
     intro p hp
     obtain ⟨c, _, rfl⟩ := Sym2.mem_map.mp hp
@@ -45,7 +46,7 @@ private def participantPairEquiv {C P : Type} [Fintype C] (owner : C ↪ P) :
     rcases z with ⟨z, hz⟩
     obtain ⟨p, q⟩ := z
     obtain ⟨hp, hq, hpq⟩ :=
-      (Approximation.mk_mem_pairSampleLabels _ _ _).mp hz
+      (Compression.mk_mem_pairSampleLabels _ _ _).mp hz
     obtain ⟨c, _, hc⟩ := Finset.mem_map.mp hp
     obtain ⟨d, _, hd⟩ := Finset.mem_map.mp hq
     refine ⟨⟨Sym2.mk c d, ?_⟩, ?_⟩
@@ -70,7 +71,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 233–245,
 342–364 and 568–571. -/
 def sourcePairEquiv : {a b : Layout P} → (w : SourceCircuit a b) →
     (g : w.gateLocations) → Fin (w.slotCount g) ≃
-      {z : Sym2 P // z ∈ Approximation.pairSampleLabels (w.participants g)}
+      {z : Sym2 P // z ∈ Compression.pairSampleLabels (w.participants g)}
   | _, _, .id _, g => nomatch g
   | _, _, .comp w v, g => by
       change gateLocations w ⊕ gateLocations v at g
@@ -118,7 +119,7 @@ An empty or singleton-participant gate contributes no pair position.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 568–571
 and 581–588. -/
 def sourceSampleEquiv {a b : Layout P} (w : SourceCircuit a b) :
-    w.sourceLocations ≃ Approximation.DistributedOperatorContraction.Sample
+    w.sourceLocations ≃ Compression.DistributedOperatorContraction.Sample
       (Finset.univ : Finset w.nonemptyGateLocations) (fun g ↦ w.participants g.1) where
   toFun e :=
     ⟨⟨⟨e.1, ⟨(w.endpoints e).1, (w.endpoints_mem_participants e).1⟩⟩,
@@ -131,4 +132,4 @@ def sourceSampleEquiv {a b : Layout P} (w : SourceCircuit a b) :
     rcases s with ⟨⟨⟨g, hg⟩, hactive⟩, z⟩
     exact Sigma.ext rfl (heq_of_eq (Equiv.apply_symm_apply (sourcePairEquiv w g) z))
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

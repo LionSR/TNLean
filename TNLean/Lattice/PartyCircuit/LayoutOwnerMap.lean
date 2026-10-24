@@ -20,7 +20,7 @@ reused.
 -/
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect.Layout
+namespace TNLean.Lattice.PartyCircuit.Layout
 open ContinuousLinearMap
 variable {P Q : Type}
 
@@ -93,4 +93,4 @@ theorem owners_mapOwner_image (f : P → Q) (a : Layout P) :
   ext q
   simp [mapOwner, List.map_map, Function.comp_def]
 
-end TNLean.PEPS.PairEffect.Layout
+end TNLean.Lattice.PartyCircuit.Layout

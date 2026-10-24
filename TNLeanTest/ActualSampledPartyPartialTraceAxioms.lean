@@ -11,7 +11,7 @@ import Lean.Util.CollectAxioms
 
 set_option linter.hashCommand false
 
-open TNLean.PEPS.PairEffect.SourceCircuit in
+open TNLean.Lattice.PartyCircuit.SourceCircuit in
 run_cmd do
   let decl := ``partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_partyProduct
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]

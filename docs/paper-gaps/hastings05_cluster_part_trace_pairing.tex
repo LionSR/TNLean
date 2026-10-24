@@ -1,0 +1,55 @@
+\documentclass{article}
+\usepackage[margin=28mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{The Right Side of Hastings' Single-Cluster Bound}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The printed step}
+Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
+\href{https://arxiv.org/abs/cond-mat/0508554v3}{arXiv:cond-mat/0508554v3},
+source \path{proj3new.tex}, lines 1174--1184, defines $\rho(\beta,C)$ as the
+sum of the terms of the power series of $e^{-\beta H}$ that contain every
+$H_i$ with $i\in C$ and no $H_j$ with $j\in B(C)$, and states that for any
+operator $O$
+\begin{align}
+ \operatorname{Tr}\bigl(O\rho(\beta,C)\bigr)
+ \le\bigl[e^{J\beta}-1\bigr]^{n_C}e^{\beta\|H_C+H_{B(C)}\|}
+ \operatorname{Tr}\bigl(Oe^{-\beta H}\bigr).
+ \label{eq:hastings05_cluster_part_printed}
+\end{align}
+
+\section{The printed form fails}
+Write $c\ge0$ for the constant on the right. For a Hermitian $O$,
+applying~(\ref{eq:hastings05_cluster_part_printed}) to $O$ and to $-O$ forces
+$\operatorname{Tr}(O\rho(\beta,C))=c\operatorname{Tr}(Oe^{-\beta H})$, so
+$\rho(\beta,C)$ would be a multiple of $e^{-\beta H}$. A single term already
+violates this. Take $H=h=\operatorname{diag}(1,0)$, $C=\{1\}$, $B(C)=\emptyset$
+and $\beta>0$. Then $\rho(\beta,C)=e^{-\beta h}-1=\operatorname{diag}(e^{-\beta}-1,0)$,
+and for $O=-\operatorname{diag}(1,0)$ the left side
+of~(\ref{eq:hastings05_cluster_part_printed}) is $1-e^{-\beta}>0$ while the
+right side is $-ce^{-\beta}\le0$.
+
+\section{The correction}
+The next display, equation (percb2) at lines 1186--1195, bounds
+$Z^{-1}\operatorname{Tr}(O\rho(\beta,C))$ by $\|O\|$ times the same constant,
+with $Z=\operatorname{Tr}e^{-\beta H}$. The intended intermediate bound is
+therefore
+\begin{align}
+ \bigl|\operatorname{Tr}\bigl(O\rho(\beta,C)\bigr)\bigr|
+ \le\bigl[e^{J\beta}-1\bigr]^{n_C}e^{\beta\|H_C+H_{B(C)}\|}\,\|O\|Z,
+ \label{eq:hastings05_cluster_part_corrected}
+\end{align}
+which is what the formalization proves, with
+$\|H_C+H_{B(C)}\|\le(n_C+n_{B(C)})J$. Equation (percb2) and everything
+downstream are unaffected.
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}

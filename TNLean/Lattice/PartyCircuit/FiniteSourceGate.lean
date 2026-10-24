@@ -33,7 +33,7 @@ noncomputable section
 open scoped InnerProductSpace TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 /-- The actual monomials have normalized sources in common finite coordinate
 spaces, followed by allowed operations with no further sources.
@@ -134,4 +134,4 @@ theorem Word.exists_finite_source_gate {P ι : Type} [Fintype P] [Fintype ι]
   refine ⟨R, hR, hRK, a, b, η, hη, B, hB, ?_⟩
   simp only [comp_finsetSum, comp_smul, he]
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

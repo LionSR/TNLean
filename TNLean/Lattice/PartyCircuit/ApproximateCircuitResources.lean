@@ -26,7 +26,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.EffectCircuit
+namespace TNLean.Lattice.PartyCircuit.EffectCircuit
 variable {P : Type}
 
 /-- The rescaled original circuit has exactly the recorded gate occurrences. -/
@@ -128,4 +128,4 @@ theorem isMonomialBounded_rescaledOriginal {δ : ℝ} (hδ : 0 ≤ δ)
   | swap => trivial
   | frame r w ih => exact ih G h hK
 
-end TNLean.PEPS.PairEffect.EffectCircuit
+end TNLean.Lattice.PartyCircuit.EffectCircuit

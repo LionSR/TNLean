@@ -103,7 +103,7 @@ theorem RectangularEntropyAreaLaw.squareEntropyAreaLaw (harea : RectangularEntro
     Approximation.SquareEntropyAreaLaw := by
   intro q hq J Δ hJ hΔ
   obtain ⟨C, hC, hbound⟩ := harea q (by omega) J Δ hJ hΔ
-  refine ⟨C, hC, fun L h E₀ Ω hΩ A ↦ ?_⟩
-  exact (hbound L L h.toRectangularHamiltonian E₀ Ω hΩ A).1
+  exact ⟨C, hC, fun L Ω ⟨h, E₀, hΩ⟩ A ↦
+    (hbound L L h.toRectangularHamiltonian E₀ Ω hΩ A).1⟩
 
 end TNLean.PEPS.AreaLaw

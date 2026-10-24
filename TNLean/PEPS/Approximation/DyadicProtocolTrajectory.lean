@@ -37,7 +37,7 @@ namespace TNLean.PEPS
 
 namespace EncodedFrame
 
-open PairEffect
+open TNLean.Lattice.PartyCircuit
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {Party : Type}
   {pos : ι → ℝ × ℝ}
@@ -57,7 +57,7 @@ end EncodedFrame
 
 namespace Approximation
 
-open EncodedFrame PairEffect
+open EncodedFrame TNLean.Lattice.PartyCircuit
 
 /-- **The accumulated error of the schedule.** Let `2 ^ k < 2 L` with `L ≥ 1`, let
 `n` be at most the number of changes of the schedule, and let each of the first `n` changes

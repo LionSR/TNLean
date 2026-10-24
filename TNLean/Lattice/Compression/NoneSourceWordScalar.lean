@@ -19,7 +19,9 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 
 noncomputable section
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
+namespace Lattice.PartyCircuit
 private theorem scalar_comp_heq {Q : Type} {a b d : Layout Q}
     (A : Mem a →L[ℂ] Mem b) (B : Mem b →L[ℂ] Mem d)
     (ha : a = []) (hb : b = []) (hd : d = []) (α β : ℂ)
@@ -54,7 +56,8 @@ private theorem restrict_comp_scalar_heq {Q : Type} (f : Q → Bool)
   exact (heq_of_eq hcomp).trans
     (scalar_comp_heq (u.restrict f hu).eval (v.restrict f hv).eval ha hb hc α β hA hB)
 
-namespace SourceCircuit
+end Lattice.PartyCircuit
+namespace Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 /-- The actual prepared source word has the original empty-gate scalar as its
@@ -82,5 +85,5 @@ theorem restrict_partialSourceWord_all_eval_heq_emptyGateScalar
     (hm b) 1 w.emptyGateScalar (by simpa only [one_smul] using hp) hr
   simpa only [partialSourceWord, one_mul] using h
 
-end SourceCircuit
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.SourceCircuit
+end TNLean

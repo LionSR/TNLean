@@ -25,16 +25,16 @@ here depends on a geometry of the sites.
 
 ## Main definitions
 
-* `EncodedFrame.twoFrontLayoutIso`: the registers of two sheets in canonical coordinates.
-* `EncodedFrame.pairUIso`: the raw registers of `U` on two sheets.
-* `EncodedFrame.frontCorrectionWord`, `EncodedFrame.twoSheetPlace`, `EncodedFrame.liftFront`.
+* `Sheet.twoFrontLayoutIso`: the registers of two sheets in canonical coordinates.
+* `Sheet.pairUIso`: the raw registers of `U` on two sheets.
+* `Sheet.frontCorrectionWord`, `Sheet.twoSheetPlace`, `Sheet.liftFront`.
 
 ## Main results
 
-* `EncodedFrame.twoFrontLayoutIso_eq_act_of_basis`: operators on two sheets are determined by
+* `Sheet.twoFrontLayoutIso_eq_act_of_basis`: operators on two sheets are determined by
   their values on basis vectors.
-* `EncodedFrame.eval_frontCorrectionWord`: the corrections on basis vectors.
-* `EncodedFrame.twoFrontLayoutIso_frontCorrectionWord`, `EncodedFrame.frontCorrectionWord_props`.
+* `Sheet.eval_frontCorrectionWord`: the corrections on basis vectors.
+* `Sheet.twoFrontLayoutIso_frontCorrectionWord`, `Sheet.frontCorrectionWord_props`.
 
 ## References
 
@@ -46,9 +46,9 @@ noncomputable section
 
 open scoped InnerProductSpace TensorProduct Kronecker Matrix.Norms.L2Operator
 
-namespace TNLean.PEPS.EncodedFrame
+namespace TNLean.Lattice.Sheet
 
-open PairEffect ContinuousLinearMap EuclideanSpace
+open PartyCircuit ContinuousLinearMap EuclideanSpace
 
 variable {ι : Type} {q : ℕ} {Party : Type}
 
@@ -381,4 +381,4 @@ theorem frontCorrectionWord_props (k₁ k₂ : Layout Party)
 
 end Correction
 
-end TNLean.PEPS.EncodedFrame
+end TNLean.Lattice.Sheet

@@ -26,9 +26,11 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
+namespace Lattice.PartyCircuit
 /-- The operator of a party expansion is the sum of its actual weighted monomials. -/
 theorem gate_toGate_eq_sum {a b : Layout P} (L : PartyGate a b) :
     gate (toGate L) = (L.map fun t ↦ t.1 • t.2.toEffectChain.eval).sum := by
@@ -36,7 +38,9 @@ theorem gate_toGate_eq_sum {a b : Layout P} (L : PartyGate a b) :
   | nil => rfl
   | cons t L ih => simp only [gate, List.map_cons, List.sum_cons, ih]
 
-namespace PartyGate
+end Lattice.PartyCircuit
+namespace Lattice.PartyCircuit.PartyGate
+open TNLean.Lattice.PartyCircuit
 
 open Classical in
 /-- The actual message expansion, with one local basis monomial per message coordinate. -/
@@ -80,5 +84,5 @@ theorem eval_transfer (sender receiver : P) (H : HSpace)
   simpa only [transfer, List.map_map, Function.comp_def, PartyChain.toEffectChain, EffectChain.eval,
     one_smul, Finset.sum_map_toList] using Word.sum_eval_transferTerm sender receiver H b a
 
-end PartyGate
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.PartyGate
+end TNLean

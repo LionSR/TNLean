@@ -8,8 +8,8 @@ import TNLean.Lattice.PartyCircuit.FrontRegisters
 /-!
 # Composing a monomial with words
 
-A monomial of the distributed-circuit calculus (`PairEffect.PartyChain`) may be preceded or
-followed by a word (`PairEffect.Word`) without changing its shape: the word is absorbed into the
+A monomial of the distributed-circuit calculus (`PartyCircuit.PartyChain`) may be preceded or
+followed by a word (`PartyCircuit.Word`) without changing its shape: the word is absorbed into the
 first or the last private step. The bounded changes of the polynomial-PEPS manuscript are built
 this way, a birth or a death being a grouping word, a monomial on the grouped registers and an
 ungrouping word. This file records the composition and its effect on the allowedness, the
@@ -17,13 +17,13 @@ parties used and the numbers of pair sources and pair effects.
 
 ## Main definitions
 
-* `PairEffect.PartyChain.precomp`, `PairEffect.PartyChain.postcomp`: a monomial composed with
+* `PartyCircuit.PartyChain.precomp`, `PartyCircuit.PartyChain.postcomp`: a monomial composed with
   words.
 
 ## Main results
 
-* `PairEffect.PartyChain.eval_precomp`, `PairEffect.PartyChain.eval_postcomp`: the operators.
-* `PairEffect.PartyChain.precomp_props`, `PairEffect.PartyChain.postcomp_props`: allowedness,
+* `PartyCircuit.PartyChain.eval_precomp`, `PartyCircuit.PartyChain.eval_postcomp`: the operators.
+* `PartyCircuit.PartyChain.precomp_props`, `PartyCircuit.PartyChain.postcomp_props`: allowedness,
   parties and counts.
 
 ## References
@@ -38,7 +38,7 @@ open ContinuousLinearMap
 
 /-! ### Composing a monomial with words -/
 
-namespace TNLean.PEPS.PairEffect.PartyChain
+namespace TNLean.Lattice.PartyCircuit.PartyChain
 
 variable {P : Type}
 
@@ -88,4 +88,4 @@ theorem postcomp_props {ℓX ℓY ℓZ : Layout P} (S : Set P) :
       · change (rest.postcomp w).toEffectChain.effectCount + 1 = _
         rw [h₄]
 
-end TNLean.PEPS.PairEffect.PartyChain
+end TNLean.Lattice.PartyCircuit.PartyChain

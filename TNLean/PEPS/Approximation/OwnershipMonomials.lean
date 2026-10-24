@@ -51,8 +51,9 @@ open Matrix ContinuousLinearMap EuclideanSpace
 open scoped InnerProductSpace TensorProduct Kronecker Matrix.Norms.L2Operator
 
 namespace TNLean.PEPS.EncodedFrame
+open TNLean.Lattice.Sheet
 
-open PairEffect
+open TNLean.Lattice.PartyCircuit
 
 /-! ### Birth and death in an encoded frame -/
 
@@ -61,6 +62,7 @@ section FrameMonomial
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ} {Party : Type}
 
 namespace Frame
+open TNLean.Lattice.Sheet.Frame
 
 variable (F : Frame pos q Party) {T : Finset ι} {P Q : Party}
 
@@ -100,7 +102,7 @@ theorem birth_monomial [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
         (F.changeOwner T Q).refVec Ω‖ ≤ L ^ (-30 : ℤ) ∧
       (∀ x ∉ T ∪ F.birthEnv P, F.owner x = P ∧ (F.changeOwner T Q).owner x = P) ∧
       (∀ x ∈ T, (F.changeOwner T Q).owner x = Q) ∧
-      ∀ ℓ : PairEffect.Layout Party,
+      ∀ ℓ : Lattice.PartyCircuit.Layout Party,
         ∃ w : Word (⟨P, euc (T → Fin q)⟩ :: ⟨P, euc (↥(T ∪ F.birthEnv P)ᶜ → Fin q)⟩ :: ℓ)
             (⟨Q, euc (T → Fin q)⟩ :: ⟨P, euc (↥(T ∪ F.birthEnv P)ᶜ → Fin q)⟩ :: ℓ),
           w.IsAllowed ∧ w.UsesOnly {P, Q} ∧ w.sourceCount ≤ 1 ∧
@@ -145,7 +147,7 @@ theorem death_monomial [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
         F.refVec Ω‖ ≤ L ^ (-30 : ℤ) ∧
       (∀ x ∉ T ∪ F.birthEnv P, F.owner x = P ∧ (F.changeOwner T Q).owner x = P) ∧
       (∀ x ∈ T, (F.changeOwner T Q).owner x = Q) ∧
-      ∀ ℓ : PairEffect.Layout Party,
+      ∀ ℓ : Lattice.PartyCircuit.Layout Party,
         ∃ M : PartyChain (⟨Q, euc (T → Fin q)⟩ :: ⟨P, euc (↥(T ∪ F.birthEnv P)ᶜ → Fin q)⟩ :: ℓ)
             (⟨P, euc (T → Fin q)⟩ :: ⟨P, euc (↥(T ∪ F.birthEnv P)ᶜ → Fin q)⟩ :: ℓ),
           M.IsAllowed ∧ M.UsesOnly {P, Q} ∧ M.sourceCount = 0 ∧
@@ -190,7 +192,7 @@ theorem exchange_correction_monomial (σ : SplittingData q (X.tSet P) (X.eSet P)
         (threeSplit₂ (X.disjoint_tSet_eSet P)) (threeSplit₂ (X.disjoint_tSet_eSet P)) ∧
       (∀ x ∉ X.tSet P ∪ X.eSet P, (X.owner₁ x = P ∧ X.owner₂ x = P) ∧
         (X.newFrame₁.owner x = P ∧ X.newFrame₂.owner x = P)) ∧
-      ∀ ℓ : PairEffect.Layout Party,
+      ∀ ℓ : Lattice.PartyCircuit.Layout Party,
         ∃ w : Word (⟨P, euc (↥(X.tSet P ∪ X.eSet P)ᶜ → Fin q)⟩ ::
               ⟨P, euc (↥(X.tSet P ∪ X.eSet P)ᶜ → Fin q)⟩ :: ℓ)
             (⟨P, euc (↥(X.tSet P ∪ X.eSet P)ᶜ → Fin q)⟩ ::

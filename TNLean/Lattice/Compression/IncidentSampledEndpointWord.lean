@@ -27,7 +27,8 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.Lattice.PartyCircuit
 variable {P : Type} {a b : Layout P}
 
 variable (w : SourceCircuit a b) (k : ℕ)
@@ -106,4 +107,4 @@ theorem sources_incidentSampledEndpointWord (p : P) (η θ : OriginalGateLabelsA
   simp only [Word.sources_castLayouts, Word.sources_mapOwner,
     SourceInventory.sources_endpointRegisterWord, SourceInventory.mapOwner_nil]
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

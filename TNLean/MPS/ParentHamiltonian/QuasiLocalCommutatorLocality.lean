@@ -103,8 +103,8 @@ theorem tendsto_quasiLocalIntervalObservable_bulkObservable_commutator
           (openInteractionMatrix h ((ℓ n + k) + r n) * bulkObservable X (ℓ n) (r n) -
             bulkObservable X (ℓ n) (r n) * openInteractionMatrix h ((ℓ n + k) + r n)))) f
       (nhds (quasiLocalIntervalObservable d (a - ((R - 1 : ℕ) : ℤ))
-        ((R - 1 + k) + (R - 1)) (localCommutatorObservable h X))) := by
-  exact tendsto_const_nhds.congr'
+        ((R - 1 + k) + (R - 1)) (localCommutatorObservable h X))) :=
+  tendsto_const_nhds.congr'
     (Filter.EventuallyEq.symm
       (eventually_quasiLocalIntervalObservable_bulkObservable_commutator_eq a h X hR hk hℓ hr))
 
@@ -124,8 +124,8 @@ theorem tendsto_apply_quasiLocalIntervalObservable_bulkObservable_commutator
           (openInteractionMatrix h ((ℓ n + k) + r n) * bulkObservable X (ℓ n) (r n) -
             bulkObservable X (ℓ n) (r n) * openInteractionMatrix h ((ℓ n + k) + r n))))) f
       (nhds (ω (quasiLocalIntervalObservable d (a - ((R - 1 : ℕ) : ℤ))
-        ((R - 1 + k) + (R - 1)) (localCommutatorObservable h X)))) := by
-  exact tendsto_const_nhds.congr'
+        ((R - 1 + k) + (R - 1)) (localCommutatorObservable h X)))) :=
+  tendsto_const_nhds.congr'
     (Filter.EventuallyEq.fun_comp (Filter.EventuallyEq.symm
       (eventually_quasiLocalIntervalObservable_bulkObservable_commutator_eq a h X hR hk hℓ hr)) ω)
 

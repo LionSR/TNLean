@@ -69,7 +69,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open Set Metric EncodedFrame PairEffect
+open Set Metric EncodedFrame TNLean.Lattice.PartyCircuit
 open EuclideanSpace (vecKron)
 
 /-! ### The treated squares at the block -/
