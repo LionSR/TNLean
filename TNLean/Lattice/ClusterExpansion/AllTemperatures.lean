@@ -17,7 +17,9 @@ from each factor, group into a single index, so the power is again in the form o
 
 This file proves the structural part of that step for any Hermitian operator in product form.
 
-* An even power of a Hermitian matrix is positive semidefinite: `A^{2k} = (A^k)ᴴ A^k`.
+* An even power of a Hermitian matrix is positive semidefinite: `A^{2k} = (A^k)ᴴ A^k`. The source
+  calls `ρ(β, l_proj)` positive definite; an even power is positive definite only when the base is
+  invertible, and positive semidefinite in general, which is what is proved here.
 * A power of an operator in product form of range `l` is in product form of range `l`
   (`TNLean.Lattice.HasProductForm.pow`, which groups the indices of the factors).
 * For `β ≥ 0` and `β₀ > 0` an even `n ≥ 2` with `β/n ≤ β₀` exists.

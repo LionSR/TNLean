@@ -40,8 +40,11 @@ namespace TNLean.Lattice.ClusterExpansion
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
-/-- A unitary matrix has operator norm at most one. -/
-theorem norm_le_one_of_mem_unitaryGroup {U : Matrix n n ℂ} (hU : U ∈ unitaryGroup n ℂ) :
+/-- A unitary matrix has operator norm at most one.
+
+A local copy, to be replaced by the QICLean lemma requested in
+https://github.com/LionSR/QICLean/issues/913 at the next QICLean pin bump. -/
+theorem l2OpNorm_le_one_of_mem_unitaryGroup {U : Matrix n n ℂ} (hU : U ∈ unitaryGroup n ℂ) :
     ‖U‖ ≤ 1 := by
   rcases isEmpty_or_nonempty n with hn | hn
   · simp [Subsingleton.elim U 0]
@@ -51,7 +54,11 @@ theorem norm_le_one_of_mem_unitaryGroup {U : Matrix n n ℂ} (hU : U ∈ unitary
 `O` of operator norm at most one, then the trace norm `Tr √(Dᴴ D)` of `D` is at most `ε`. No
 Hermitian hypothesis on `D` is needed: the polar decomposition `D = U √(Dᴴ D)` gives
 `Tr (Uᴴ D) = Tr √(Dᴴ D)` with `‖Uᴴ‖ ≤ 1`. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`,
-lines 1291–1297. -/
+lines 1291–1297.
+
+A local copy of the duality for an arbitrary finite index type. QICLean proves its `Fin D` form
+(`Matrix.exists_mem_unitaryGroup_trace_conjTranspose_mul_eq`); its generalization is requested in
+https://github.com/LionSR/QICLean/issues/913, and this lemma is removed once that lands. -/
 theorem re_trace_sqrt_le_of_forall_norm_trace_mul_le {D : Matrix n n ℂ} {ε : ℝ}
     (h : ∀ O : Matrix n n ℂ, ‖O‖ ≤ 1 → ‖(O * D).trace‖ ≤ ε) :
     (CFC.sqrt (Dᴴ * D)).trace.re ≤ ε := by
@@ -61,7 +68,7 @@ theorem re_trace_sqrt_le_of_forall_norm_trace_mul_le {D : Matrix n n ℂ} {ε : 
     conv_lhs => rw [hD]
     rw [← Matrix.mul_assoc, hUU, Matrix.one_mul]
   have hnorm : ‖star (U : Matrix n n ℂ)‖ ≤ 1 :=
-    norm_le_one_of_mem_unitaryGroup (Unitary.star_mem U.2)
+    l2OpNorm_le_one_of_mem_unitaryGroup (Unitary.star_mem U.2)
   calc (CFC.sqrt (Dᴴ * D)).trace.re ≤ ‖(CFC.sqrt (Dᴴ * D)).trace‖ := Complex.re_le_norm _
     _ = ‖(star (U : Matrix n n ℂ) * D).trace‖ := by rw [hO]
     _ ≤ ε := h _ hnorm
