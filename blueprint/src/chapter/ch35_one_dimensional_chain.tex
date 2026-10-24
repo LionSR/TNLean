@@ -1755,8 +1755,10 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Every range-$R$ support has at most $R+1$ sites. For finite $\delta$,
     the graph propagation estimate with exponential weight parameter one
     gives the stronger decay $e^{-\delta}$, which is at most
-    $e^{-\delta/2}$. For infinite $\delta$, exact commutation on disconnected
-    components makes the left side zero. All distances are those of the
+    $e^{-\delta/2}$. For infinite $\delta$, every $x\in S$ has
+    $d_\Lambda(x,y)=\infty$, so $[\tau_t(A),B]=0$ by
+    Theorem~\ref{thm:qc_graph_lieb_robinson_zero_finset} and the left side
+    vanishes. All distances are those of the
     induced graph; sites separated by a hole are not identified with
     consecutive sites of a longer chain.
 \end{proof}
