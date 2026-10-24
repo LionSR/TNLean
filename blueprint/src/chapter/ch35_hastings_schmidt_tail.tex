@@ -178,8 +178,9 @@
     dimension at most $k'$, without requiring $\Phi$ to be normalized.
     For $L<2$, there is no internal cut and $\Phi=\Omega$. For $D=1$ every
     left marginal is a $1\times1$ matrix of trace one, the truncation is
-    exact and again $\Phi=\Omega$, so the bound below holds although
-    $\log D=0$; the source assumes $D\ge2$. For $L\ge2$, the
+    exact and again $\Phi=\Omega$; the exponent below, undefined at $D=1$,
+    is read there as $0$, and the bound holds because its left side
+    vanishes. The source assumes $D\ge2$. For $L\ge2$, the
     entropy hypothesis implies $k_0>0$, and
     \begin{align}
         \lVert\Phi-\Omega\rVert^2
@@ -254,6 +255,8 @@
          & \le(L-1)\,4C_1^2e^{2/\xi'}\Bigl(\frac{k'}{k_0}\Bigr)^{-1/(\xi'\log D)}.
         \notag
     \end{align}
+    For $D=1$ the exponent is read as $0$; the bound then holds because
+    $\Phi=\Omega$, as in Theorem~\ref{thm:hastings_mps_from_entropy}.
     Lemma~1 is a hypothesis here, as in
     Theorem~\ref{thm:hastings_area_law_from_factorization}. With Lemma~1
     supplied for the gapped ground state, this is the conclusion of the section
@@ -298,6 +301,8 @@
          & \le(L-1)\,4C_1^2e^{2/\xi'}\Bigl(\frac{k'}{k_0}\Bigr)^{-1/(\xi'\log D)}.
         \notag
     \end{align}
+    For $D=1$ the exponent is read as $0$; the bound then holds because
+    $\Phi=\Omega$, as in Theorem~\ref{thm:hastings_mps_from_entropy}.
     The constants depend only on $R$, $J/\Delta E$ and $D$, not on $L$. This
     is the conclusion of the section on matrix product states of
     \cite{Hastings2007AreaLaw} under its Hamiltonian assumptions alone, at the
@@ -345,6 +350,8 @@
          & \le(L-1)\,4C_1^2e^{2/\xi'}\Bigl(\frac{k'}{k_0}\Bigr)^{-1/(\xi'\log D)}.
         \notag
     \end{align}
+    For $D=1$ the exponent is read as $0$; the bound then holds because
+    $\Phi=\Omega$, as in Theorem~\ref{thm:hastings_mps_from_entropy}.
     The constants depend only on $R$, $\kappa$, $J/\Delta E$ and $D$, not on
     $L$, and $C_1$ is polynomial in $\hat\xi$. This is the form at the length
     $\hat\xi$, at any rate $\xi'=\kappa\hat\xi$ with $\kappa>6$; the printed
