@@ -1304,6 +1304,19 @@ lines 246–267) states positive operators at the rate `e^{-l/ξ'}`, while the n
 (lines 912–943) obtains a positive `O_B⁺ = O_Bᴴ O_B` only at error `O(√ε)`. The bound
 proved is `(√2 + 4) √C₁ e^{-l/(2ξ')}`.
 
+### Local solution of gapped Hamiltonians after Hastings: the finite-range approximation
+
+[hastings05_filtered_term_approximation.tex](hastings05_filtered_term_approximation.tex)
+(local correction, resolved) records two deviations in the finite-range approximation `M_i` of
+a Gaussian-filtered term in Hastings, *Solving Gapped Hamiltonians Locally*
+(arXiv:cond-mat/0508554v3, lines 285–320). First, the printed Gaussian weight
+`e^{-(tΔE)²/2}` of eq. `mid` stands for `e^{-(tΔE)²/(2q)}`. Second, `M_i` is taken to be the
+normalized partial trace of the filtered term onto a neighbourhood of the support of `H_i`,
+rather than the source's truncated evolution. Its support lies within radius `l + R`
+of the anchor when the neighbourhood radius is `l`. The source radius therefore requires
+`l = l_proj - R` and `R ≤ l_proj`; the norm bound is unchanged, and the localization
+estimate is analogous to the source's, with different constants.
+
 ### One-dimensional area law after Hastings: the entropy gain constants
 
 [hastings07_relent_constants.tex](hastings07_relent_constants.tex)
@@ -1389,6 +1402,15 @@ not the printed power `k`. When commutators are written as `i^k ad_H^k`, this
 factor already supplies the alternating sign. The finite-polynomial
 variational bound is unaffected; the infinite expansion remains unformalized.
 
+### Local solution of gapped Hamiltonians: the final state in the energy estimate
+
+[hastings05_hierarchical_energy.tex](hastings05_hierarchical_energy.tex)
+(scope restriction, open) records eq. `hchy` of Hastings, *Solving gapped Hamiltonians
+locally* (arXiv:cond-mat/0508554v3, source lines 705–720), which the source asserts with
+"one may show". From a norm deficiency `b` of the last projection, the normalized image of
+the ground state has energy within `4 ‖M‖ b`, so `4 N J b_h` for `N` terms of norm at most
+`J`. That state lies in the span of the final states `α^h` rather than being one of them.
+
 ### Local solution of gapped Hamiltonians: the number of final states
 
 [hastings05_final_state_count.tex](hastings05_final_state_count.tex)
@@ -1398,6 +1420,13 @@ the hierarchical construction in Hastings, *Solving gapped Hamiltonians locally*
 projection `P` of trace `n`, then orthonormal states of energy at most `E₀ + θ ΔE` number at
 most `n / (1 − θ)`, by Bessel's inequality; `θ = 1/2` gives `2n`. The energy under `H` is
 taken as a hypothesis.
+
+[hastings05_mplt_positivity.tex](hastings05_mplt_positivity.tex)
+(local-correction, resolved) records that Hastings' matrix product form at every temperature,
+`ρ(β, l_proj) = ρ(β/n, l_proj)^n` with `n` even (arXiv:cond-mat/0508554v3, source lines
+1303–1314, eq. `mplt`), is positive semidefinite, and positive definite only when the truncated
+high-temperature form is invertible, which the source does not establish. The formalization
+proves positive semidefiniteness, which is what the even power is used for.
 
 ### Local solution of gapped Hamiltonians: the right side of the single-cluster bound
 
@@ -1430,6 +1459,15 @@ hypothesis.
 `i ≥ 2`. The ground space stays two-dimensional and the non-commutation claims are
 unchanged. The formalized statement concerns the terms `H_i`, not the filtered `M_i` of
 the source's claim; the unargued passage between them is not formalized.
+
+### One-dimensional area law after Hastings: the orders of the Rényi bootstrap lemma
+
+[hastings07_renyi_bootstrap_orders.tex](hastings07_renyi_bootstrap_orders.tex)
+(scope restriction, open) records that the Rényi form of Lemma 2 in Hastings,
+*An area law for one-dimensional quantum systems* (arXiv:0705.2024v4, source lines 392–410),
+is formalized for orders `0 < α < 1` under the convergence condition
+`e^{−2α/ξ'} (D²)^{1−α} < 1`; order `1` is the von Neumann Lemma 2. Orders `α > 1` remain;
+the elimination plan is `S_α ≤ S` by the concavity of the logarithm.
 
 ### Local solution of gapped Hamiltonians: the truncated dynamics of `M_i`
 
@@ -1480,6 +1518,14 @@ form remains open under issue #9811.
   one for every factor wherever it acts, so the `n`-th power `ρₙ` carries `n m`.
 
 ## Rényi entropy and matrix product state approximation
+
+- [`swvc08_von_neumann_error_range.tex`](swvc08_von_neumann_error_range.tex)
+  (false source, resolved) records the normalization gap and the failure of
+  the stated large-error range in the von Neumann bond-dimension bound.
+  A nonzero bond-one approximation to a maximally entangled prefix disproves
+  the printed bound at error greater than one. For error below one, a
+  pure-state overlap and spectral-mass argument recovers the coefficient
+  one-half. The qualitative obstruction survives; its Lean proof remains open.
 
 - [`swvc08_renyi_bond_dimension_sign.tex`](swvc08_renyi_bond_dimension_sign.tex)
   (false source, resolved) corrects the sign of the error term in the

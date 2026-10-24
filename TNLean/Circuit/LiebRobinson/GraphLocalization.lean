@@ -309,7 +309,7 @@ theorem norm_heisenberg_sub_siteExpectation_graphBall_le [NeZero q] {κ : Type*}
       simp
     have hK : Complex.I • H ∈ skewAdjoint (Matrix (ι → Fin q) (ι → Fin q) ℂ) :=
       IsSelfAdjoint.smul_mem_skewAdjoint hI
-        (isSelfAdjoint_sum Finset.univ (fun j _ => (hHerm j).isSelfAdjoint))
+        (Matrix.isHermitian_sum _ fun j _ => hHerm j).isSelfAdjoint
     let : NormedAlgebra ℚ (Matrix (ι → Fin q) (ι → Fin q) ℂ) :=
       .restrictScalars ℚ ℝ (Matrix (ι → Fin q) (ι → Fin q) ℂ)
     simp only [τA, heisenbergEvolution_def]

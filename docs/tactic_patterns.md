@@ -24,6 +24,35 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Hermitian sum of pointwise-Hermitian terms — promoted (2026-10-23)
+- **Pattern:**
+  ```lean
+  isSelfAdjoint_sum Finset.univ fun j _ => (hHerm j).isSelfAdjoint
+  ```
+- **Seen:** 5 occurrences across 3 files: three in
+  `TNLean/Lattice/GaussianFilteredTermLocalization.lean`, one each in
+  `TNLean/Circuit/LiebRobinson/GraphLocalization.lean` and
+  `TNLean/Circuit/LiebRobinson/CommutatorRecursion.lean`.
+- **Abstraction:** `Matrix.isHermitian_sum` in
+  `TNLean/Algebra/MatrixHermitianSum.lean`; all five call sites refactored.
+- **Notes:** where the goal is `IsSelfAdjoint`, append `.isSelfAdjoint`. The
+  sums with a case split in each term (`CommutatorRecursion.lean`, the second
+  skew-adjoint goal) keep `isSelfAdjoint_sum` with an `intro`.
+
+### Gaussian absolute first moment — promoted (2026-10-23)
+
+- **Pattern:** Bound the integral of `|t|` against a centred Gaussian, either
+  by `√(2h/π)` or by the simpler `√h`.
+- **Seen:** The tail specialization in `Lattice/GaussianFilteredIncrement.lean`
+  and the independent variance argument in `MPS/AreaLaw/Hastings/GaussianTimeAverage.lean`.
+  The additional proof reported in #9945 is already absent from main.
+- **Abstraction:** `TNLean.Lattice.integral_abs_gaussianReal_le_sqrt_two_mul_div_pi`
+  specializes the existing tail bound to zero; `integral_abs_gaussianReal_le`
+  follows by `2 ≤ π`. Both live in `Lattice/GaussianTailMoment.lean`.
+- **Notes:** The filtered increment, time average, interaction picture and
+  boundary localization use these shared facts. Zero variance needs no extra
+  assumption. No new tactic or independent moment proof is introduced.
+
 ### A configuration from a unit vector — promoted (2026-10-23)
 
 - **Pattern:** Prove the configuration type nonempty by contradiction: an empty index
@@ -4801,6 +4830,21 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Restricting an operator Schmidt decomposition at a fixed configuration — candidate (2026-10-23)
+
+- **Pattern:** Choose an actual configuration in the region carrying an identity
+  factor, restrict each outside matrix to that configuration, and retain the
+  same number of summands in the operator Schmidt decomposition.
+- **Seen:** The left-factor argument in
+  `TNLean/Lattice/Sheet/LeftSupportedSchmidtRank.lean` and the right-factor
+  argument in `TNLean/Lattice/Sheet/SupportedSchmidtRank.lean` (PR #10029).
+- **Abstraction (proposed):** If another use appears, first seek a lemma saying
+  that restriction by separate coordinate maps preserves a product
+  decomposition with the same number of summands.
+- **Notes:** The left and right arguments use different cuts. Both treat empty
+  global configuration spaces separately; no identity factor is cancelled.
+
+
 ### Mass of a cut beyond its leading eigenvalues — candidate
 - **Pattern:**
   ```lean
@@ -9033,6 +9077,19 @@ spectral split → block extraction → MPV calculation → strict bounds
   built on `Lattice.Sheet.birth_bounded`, `Real.rpow_neg_ofNat` and
   `Lattice.hasSourceBoundedChange_liftOne`. The stage births call it with an
   empty prefix and the scalar idle vector; the former private copy is removed.
+
+### Distinguished symbol versus an embedded finite alphabet — candidate (2026-10-23)
+
+- **Pattern:** Evaluate an equality of finite words at one site, take the
+  natural values of the letters, and use the smaller alphabet's upper bound
+  to contradict equality with the distinguished symbol.
+- **Seen:** The two symmetric flag/binary cases of `qutritWord_injective`
+  in `MPS/AreaLaw/EntropyScaling/QutritFamily.lean`.
+- **Abstraction:** No additional helper is introduced: these are two uses in
+  one theorem. The positive chain length provides the chosen site, and the
+  existing `Fin` bound and `omega` close the contradiction.
+- **Notes:** The basis embeddings reuse Mathlib's `Orthonormal.comp`; the
+  complex square-root identities reuse `Complex.ofReal_sqrt_sq`.
 
 ### Product forms of ordered exponential products — candidate (2026-10-23)
 
