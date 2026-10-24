@@ -14,8 +14,6 @@ run_cmd do
   for decl in #[``Matrix.conjTranspose_commutatorIter, ``Matrix.isHermitian_smul_commutatorIter,
     ``Matrix.commutatorIter_sum, ``Matrix.commutatorIter_self_succ, ``Matrix.commutatorIter_conj,
     ``Matrix.posSemidef_sub_card_smul_of_conj, ``Matrix.card_mul_le_of_mulVec_eq_smul_of_conj,
-    ``Matrix.sitePermMatrix_mul, ``Matrix.sitePermMatrix_mem_unitaryGroup,
-    ``Matrix.commute_sitePermMatrix_sum,
     ``Matrix.card_mul_le_of_mulVec_eq_smul_of_sitePerm,
     ``Matrix.card_mul_sInf_spectrum_le_of_conj,
     ``Matrix.card_mul_sInf_spectrum_le_of_sitePerm] do

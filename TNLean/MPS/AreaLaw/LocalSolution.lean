@@ -9,3 +9,4 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw.LocalSolution
 
 import TNLean.MPS.AreaLaw.LocalSolution.FinalStateCount
+import TNLean.MPS.AreaLaw.LocalSolution.HierarchicalProjection
