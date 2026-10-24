@@ -13,6 +13,7 @@ import TNLean.Lattice.Sheet.BoundedChanges
 import TNLean.Lattice.Sheet.Composition
 import TNLean.Lattice.Sheet.Defs
 import TNLean.Lattice.Sheet.FrontChanges
+import TNLean.Lattice.Sheet.LeftSupportedSchmidtRank
 import TNLean.Lattice.Sheet.Monomials
 import TNLean.Lattice.Sheet.Operators
 import TNLean.Lattice.Sheet.Registers

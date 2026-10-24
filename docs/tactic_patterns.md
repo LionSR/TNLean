@@ -4830,6 +4830,21 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Restricting an operator Schmidt decomposition at a fixed configuration — candidate (2026-10-23)
+
+- **Pattern:** Choose an actual configuration in the region carrying an identity
+  factor, restrict each outside matrix to that configuration, and retain the
+  same number of summands in the operator Schmidt decomposition.
+- **Seen:** The left-factor argument in
+  `TNLean/Lattice/Sheet/LeftSupportedSchmidtRank.lean` and the right-factor
+  argument in `TNLean/Lattice/Sheet/SupportedSchmidtRank.lean` (PR #10029).
+- **Abstraction (proposed):** If another use appears, first seek a lemma saying
+  that restriction by separate coordinate maps preserves a product
+  decomposition with the same number of summands.
+- **Notes:** The left and right arguments use different cuts. Both treat empty
+  global configuration spaces separately; no identity factor is cancelled.
+
+
 ### Mass of a cut beyond its leading eigenvalues — candidate
 - **Pattern:**
   ```lean
@@ -9062,6 +9077,19 @@ spectral split → block extraction → MPV calculation → strict bounds
   built on `Lattice.Sheet.birth_bounded`, `Real.rpow_neg_ofNat` and
   `Lattice.hasSourceBoundedChange_liftOne`. The stage births call it with an
   empty prefix and the scalar idle vector; the former private copy is removed.
+
+### Distinguished symbol versus an embedded finite alphabet — candidate (2026-10-23)
+
+- **Pattern:** Evaluate an equality of finite words at one site, take the
+  natural values of the letters, and use the smaller alphabet's upper bound
+  to contradict equality with the distinguished symbol.
+- **Seen:** The two symmetric flag/binary cases of `qutritWord_injective`
+  in `MPS/AreaLaw/EntropyScaling/QutritFamily.lean`.
+- **Abstraction:** No additional helper is introduced: these are two uses in
+  one theorem. The positive chain length provides the chosen site, and the
+  existing `Fin` bound and `omega` close the contradiction.
+- **Notes:** The basis embeddings reuse Mathlib's `Orthonormal.comp`; the
+  complex square-root identities reuse `Complex.ofReal_sqrt_sq`.
 
 ### Product forms of ordered exponential products — candidate (2026-10-23)
 
