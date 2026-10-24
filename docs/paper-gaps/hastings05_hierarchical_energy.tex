@@ -51,10 +51,14 @@ not of $\sum_iM_i$, so an energy bound for the normalized image does not pass
 to a single $\alpha^h$; the source's assertion for a single final state is not
 derived. The deficiency $b_h$ of the last level is a hypothesis here; bounding
 it through all levels is the bookkeeping of the hierarchy, which is formalized
-separately. Elimination plan: either show that one of the $\alpha^h$ satisfies
-(\ref{eq:hastings05_hierarchical_energy_hchy}), or record that the downstream
-uses (the count of final states and the approximation of the ground state)
-need only a state in their span.
+separately. Elimination plan: show that one of the $\alpha^h$ satisfies
+(\ref{eq:hastings05_hierarchical_energy_hchy}). The span statement already
+serves the approximation of the ground state, which needs one low-energy
+state in the final space. It does not serve the count of at most $2n$ final
+states (lines 722--730), which needs every orthonormal $\alpha^h$ to have
+energy within $\Delta E/2$ of the ground state; the cross terms
+$\langle\alpha^h_k,\sum_iM_i\,\alpha^h_l\rangle$ need not vanish, so a bound
+for one vector of the span says nothing about the individual $\alpha^h$.
 \bibliographystyle{unsrt}
 \bibliography{references}
 \end{document}
