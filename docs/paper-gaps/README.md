@@ -1376,6 +1376,16 @@ not the printed power `k`. When commutators are written as `i^k ad_H^k`, this
 factor already supplies the alternating sign. The finite-polynomial
 variational bound is unaffected; the infinite expansion remains unformalized.
 
+### Local solution of gapped Hamiltonians: the number of final states
+
+[hastings05_final_state_count.tex](hastings05_final_state_count.tex)
+(clarification, resolved) supplies the argument for the count asserted at the end of
+the hierarchical construction in Hastings, *Solving gapped Hamiltonians locally*
+(arXiv:cond-mat/0508554v3, source lines 722–730). If `H − E₀ ≥ ΔE (1 − P)` for the ground
+projection `P` of trace `n`, then orthonormal states of energy at most `E₀ + θ ΔE` number at
+most `n / (1 − θ)`, by Bessel's inequality; `θ = 1/2` gives `2n`. The energy under `H` is
+taken as a hypothesis.
+
 ### Local solution of gapped Hamiltonians: cluster size in the percolation bound
 
 [hastings05_percolation_cluster_size.tex](hastings05_percolation_cluster_size.tex)
