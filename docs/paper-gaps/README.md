@@ -1449,6 +1449,17 @@ bonds are nearest-neighbour. The decay length `ξ_perc = 2R / ln(1/(xy))` of ord
 `R` absorbs the difference. The formalized sum takes the size threshold as a
 hypothesis.
 
+### Local solution of gapped Hamiltonians: the example of non-commuting low-energy terms
+
+[hastings05_low_energy_example.tex](hastings05_low_energy_example.tex)
+(scope restriction, open) records two slips in the example of Hastings,
+*Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, source lines
+1655–1676). The printed terms sum to `H = −S^z_1 + ∑_{i ≥ 2} S^z_i`, not
+`∑_{i ≠ 0} S^z_i`, and `H_0` commutes on the ground space with `H_i` for `i ≥ 3`, not
+`i ≥ 2`. The ground space stays two-dimensional and the non-commutation claims are
+unchanged. The formalized statement concerns the terms `H_i`, not the filtered `M_i` of
+the source's claim; the unargued passage between them is not formalized.
+
 ### One-dimensional area law after Hastings: the orders of the Rényi bootstrap lemma
 
 [hastings07_renyi_bootstrap_orders.tex](hastings07_renyi_bootstrap_orders.tex)
