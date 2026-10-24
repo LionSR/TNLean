@@ -215,7 +215,6 @@ theorem historyFacts_actualScanRound (X : ScannerExponents) (N : ℕ)
     rw [hSK, hSn, hSD]
     have : (0 : ℝ) ≤ X.K N * N * X.D N := by positivity
     nlinarith
-  have hηC : 2 * transportLogDimBound q S.r₀ ≤ C * Real.log N ^ Cl := hCη
   -- Admissibility, compatibility and support caps for both kinds of round.
   have hadmC (s : ℕ) := S.actualChargeData_isAdmissible hm hM s
   have hadmF (s : ℕ) := S.actualFillData_isAdmissible hm hM s
@@ -351,9 +350,9 @@ theorem historyFacts_actualScanRound (X : ScannerExponents) (N : ℕ)
       etaOld_le := fun r ↦ S.actualScanRound_cases hm hM dims E a pre
         (fun R ↦ ∀ i h θ, R.etaOld i h θ ≤ C * Real.log N ^ Cl) r.val
         (fun _ i h θ ↦ ((S.actualChargeData hm hM _).splitEta_le_two_mul_of_logDim_le dims E
-          (hadmC _) (hcompatC _ (hstage r)) hℓ (hsuppC _) i _ θ).trans hηC)
+          (hadmC _) (hcompatC _ (hstage r)) hℓ (hsuppC _) i _ θ).trans hCη)
         (fun _ i h θ ↦ ((S.actualFillData hm hM _).splitEta_le_two_mul_of_logDim_le dims E
-          (hadmF _) (hcompatF _ (hstage r)) hℓ (hsuppF _) i _ θ).trans hηC)
+          (hadmF _) (hcompatF _ (hstage r)) hℓ (hsuppF _) i _ θ).trans hCη)
       etaNew_nonneg := fun r ↦ S.actualScanRound_cases hm hM dims E a pre
         (fun R ↦ ∀ i h c θ, 0 ≤ R.etaNew i h c θ) r.val
         (fun _ i h c θ ↦ (S.actualChargeData hm hM _).splitEta_nonneg dims E (hadmC _) i _ θ.1)
@@ -361,9 +360,9 @@ theorem historyFacts_actualScanRound (X : ScannerExponents) (N : ℕ)
       etaNew_le := fun r ↦ S.actualScanRound_cases hm hM dims E a pre
         (fun R ↦ ∀ i h c θ, R.etaNew i h c θ ≤ C * Real.log N ^ Cl) r.val
         (fun _ i h c θ ↦ ((S.actualChargeData hm hM _).splitEta_le_two_mul_of_logDim_le dims E
-          (hadmC _) (hcompatC _ (hstage r)) hℓ (hsuppC _) i _ θ).trans hηC)
+          (hadmC _) (hcompatC _ (hstage r)) hℓ (hsuppC _) i _ θ).trans hCη)
         (fun _ i h c θ ↦ ((S.actualFillData hm hM _).splitEta_le_two_mul_of_logDim_le dims E
-          (hadmF _) (hcompatF _ (hstage r)) hℓ (hsuppF _) i _ θ).trans hηC)
+          (hadmF _) (hcompatF _ (hstage r)) hℓ (hsuppF _) i _ θ).trans hCη)
       measurable_etaOld := fun r ↦ S.actualScanRound_cases hm hM dims E a pre
         (fun R ↦ ∀ i h, Measurable (R.etaOld i h)) r.val
         (fun _ i h ↦ (S.actualChargeData hm hM _).measurable_splitEta_sphere dims E i _)

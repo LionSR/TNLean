@@ -127,8 +127,8 @@ private theorem edgeComplementConfigSplitAt_symm_apply_incident
       Fin (A.bondDim f.1.1))
     (ie : IncidentEdge G j) :
     edgeComplementValue (G := G) A e
-        ((edgeComplementConfigSplitAt (G := G) A e hj).symm (η, r)) hj ie = η ie := by
-  exact edgeComplementConfigSplitAt_symm_apply_incident (G := G) A e hj η r
+        ((edgeComplementConfigSplitAt (G := G) A e hj).symm (η, r)) hj ie = η ie :=
+  edgeComplementConfigSplitAt_symm_apply_incident (G := G) A e hj η r
     (middleIncidentToComplement (G := G) e hj ie) ie.2
 
 /-! ### Kernel-descent construction for the middle block -/

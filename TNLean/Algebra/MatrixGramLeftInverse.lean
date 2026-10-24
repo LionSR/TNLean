@@ -20,9 +20,8 @@ isometric and applies also to a zero-dimensional domain.
 set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true
-open scoped Matrix ComplexOrder
 
-open scoped Matrix Matrix.Norms.L2Operator
+open scoped Matrix ComplexOrder Matrix.Norms.L2Operator
 
 namespace Matrix
 

@@ -36,7 +36,6 @@ extracted from a limit.
 * `Real.add_mul_rpow_le_mul_rpow_of_le`: a two-term power sum is at most
   `η x ^ b` beyond the larger of two power-ratio thresholds.
 * `Real.one_le_log_natCast_of_three_le`: `1 ≤ log n` for natural `n ≥ 3`.
-* `Nat.half_le_floor_of_one_le`: `x / 2 ≤ ⌊x⌋₊` for `x ≥ 1`.
 
 Each threshold result also has a form for natural arguments `n` with
 `⌈threshold⌉₊ ≤ n`.
@@ -287,13 +286,3 @@ theorem mul_exp_neg_le_rpow_neg_of_ceil_stretchedExpThreshold_le {C c θ s : ℝ
   mul_exp_neg_le_rpow_neg_of_stretchedExpThreshold_le hC hc hθ (Nat.ceil_le.mp hn)
 
 end Real
-
-namespace Nat
-
-/-- The floor of a real number at least one is at least half of it. -/
-theorem half_le_floor_of_one_le {x : ℝ} (hx : 1 ≤ x) : x / 2 ≤ ⌊x⌋₊ := by
-  have h1 : (1 : ℝ) ≤ ⌊x⌋₊ := by exact_mod_cast (Nat.one_le_floor_iff x).mpr hx
-  have h2 := Nat.lt_floor_add_one x
-  linarith
-
-end Nat
