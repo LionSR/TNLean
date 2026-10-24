@@ -8,7 +8,7 @@ import TNLean.Lattice.TranslationSupercell
 /-!
 # Decay of low-energy commutators across supercell translations
 
-Let a group `G` act on the sites of a finite graph and on the index set of the local terms
+Let a group `Γ` act on the sites of a finite graph `G` and on the index set of the local terms
 `h_k`, covariantly: `h_{g•k} = P_g h_k P_g†`. Let `S` be a subgroup whose site permutations
 leave every ground vector of `H = ∑_k h_k` unchanged. Hastings, *Solving gapped Hamiltonians
 locally* (arXiv:cond-mat/0508554v3, `References/cond-mat_0508554/proj3new.tex`, lines

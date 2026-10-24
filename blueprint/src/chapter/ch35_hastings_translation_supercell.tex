@@ -67,12 +67,14 @@ graph, this gives the decay across supercell translations.
     \label{thm:hastings_supercell_decay}
     \lean{TNLean.Lattice.norm_groundCompression_commutator_le_of_supercell_separation}
     \leanok
-    \uses{def:hastings_gaussian_filtered_term,thm:hastings05_blecm}
+    \uses{def:hastings_site_permutation,def:hastings_gaussian_filtered_term,
+        thm:hastings05_blecm}
     Let the sites be the vertices of a finite graph, let each term $h_k$ act on
-    a set $X_k$, and let every eigenvalue of $H=\sum_kh_k$ equal $E_0$ or be at
-    least $E_0+\Delta E$. If $g\in S$ and $X_{g\cdot j}$ is disjoint from the
-    sites within distance $l$ of $X_i$, then $\|[PM_iP,PM_jP]\|$ is at most the
-    bound of Theorem~\ref{thm:hastings05_blecm} for the pair $h_i$, $h_{g\cdot j}$ at
+    a set $X_k$, let the terms satisfy $h_{g\cdot k}=P_gh_kP_g^\dagger$, and let
+    every eigenvalue of $H=\sum_kh_k$ equal $E_0$ or be at least $E_0+\Delta E$.
+    If $g\in S$ and $X_{g\cdot j}$ is disjoint from the sites within distance $l$
+    of $X_i$, then $\|[PM_iP,PM_jP]\|$ is at most the bound of
+    Theorem~\ref{thm:hastings05_blecm} for the pair $h_i$, $h_{g\cdot j}$ at
     separation $l$, which decays exponentially in $l$.
 \end{theorem}
 \begin{proof}\leanok
