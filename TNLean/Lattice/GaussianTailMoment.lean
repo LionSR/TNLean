@@ -18,6 +18,8 @@ at most `|t| ‖[H, W]‖`; this moment then bounds their total contribution.
 ## Main declarations
 
 * `TNLean.Lattice.integral_compl_Icc_abs_gaussianReal_le`: the first-moment tail.
+* `TNLean.Lattice.integral_abs_gaussianReal_le_sqrt_two_mul_div_pi`: its specialization at zero.
+* `TNLean.Lattice.integral_abs_gaussianReal_le`: the simpler bound by the standard deviation.
 
 ## References
 
@@ -106,5 +108,22 @@ theorem integral_compl_Icc_abs_gaussianReal_le (h : ℝ≥0) {T : ℝ} (hT : 0 �
     rw [Real.sq_sqrt (by positivity)]
   rw [hsq]
   ring
+
+/-- The first absolute moment is at most `√(2h/π)`, by the tail estimate at zero.
+The integrand vanishes at zero, including when the Gaussian is a point mass. -/
+theorem integral_abs_gaussianReal_le_sqrt_two_mul_div_pi (h : ℝ≥0) :
+    ∫ t, |t| ∂gaussianReal 0 h ≤ Real.sqrt (2 * h / Real.pi) := by
+  have h0 := integral_compl_Icc_abs_gaussianReal_le h le_rfl
+  simp only [neg_zero, ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, zero_pow, zero_div,
+    Real.exp_zero, mul_one] at h0
+  rwa [setIntegral_eq_integral_of_forall_compl_eq_zero (by simp)] at h0
+
+/-- The first absolute moment of a centred Gaussian of variance `h` is at most `√h`.
+This follows from the first-moment tail at zero and `2 ≤ π`. -/
+theorem integral_abs_gaussianReal_le (h : ℝ≥0) :
+    ∫ t, |t| ∂gaussianReal 0 h ≤ Real.sqrt h := by
+  exact (integral_abs_gaussianReal_le_sqrt_two_mul_div_pi h).trans (Real.sqrt_le_sqrt
+    ((div_le_iff₀ Real.pi_pos).2 (by
+      simpa [mul_comm] using mul_le_mul_of_nonneg_right Real.two_le_pi h.2)))
 
 end TNLean.Lattice

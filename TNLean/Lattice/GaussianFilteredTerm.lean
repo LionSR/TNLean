@@ -100,6 +100,12 @@ theorem norm_gaussianFilteredTerm_le (q ΔE : ℝ) {H : Matrix n n ℂ} (hH : H.
     (W : Matrix n n ℂ) : ‖gaussianFilteredTerm q ΔE H W‖ ≤ ‖W‖ :=
   norm_gaussianIntertwiner_le _ hH hH W
 
+/-- A filtered Hermitian operator is Hermitian. -/
+theorem isHermitian_gaussianFilteredTerm (q ΔE : ℝ) {H W : Matrix n n ℂ} (hH : H.IsHermitian)
+    (hW : W.IsHermitian) : (gaussianFilteredTerm q ΔE H W).IsHermitian := by
+  change (gaussianIntertwiner _ H H W)ᴴ = gaussianIntertwiner _ H H W
+  rw [gaussianIntertwiner_conjTranspose _ hH hH W, hW.eq]
+
 /-- Filtering is additive in the filtered operator. -/
 theorem gaussianFilteredTerm_sum {ι : Type*} (s : Finset ι) (q ΔE : ℝ) {H : Matrix n n ℂ}
     (hH : H.IsHermitian) (W : ι → Matrix n n ℂ) :

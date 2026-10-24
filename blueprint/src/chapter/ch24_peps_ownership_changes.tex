@@ -68,6 +68,107 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     identities remain valid when a configuration set is empty.
 \end{proof}
 
+% ALVV arXiv:1602.08828v2, local_alg_arxiv_v2.tex, eq:H-mid-cut,
+% lines 810--821; this is a separate locality auxiliary, not that source theorem.
+\begin{theorem}[Support-intersection bound for an operator on two regions]
+    \label{thm:peps_supported_left_factor_rank}
+    \lean{TNLean.Lattice.Sheet.exists_threeSplit_eq_kronecker_one_rank_le}
+    \leanok
+    \uses{lem:peps_frame_split_forms}
+    Let $\Lambda$ be a finite site set, let $q$ be any natural number, and
+    let $T,E,D\subseteq\Lambda$ satisfy $T\cap E=\varnothing$ and
+    $D\subseteq T\cup E$. Put $U=\Lambda\setminus(T\cup E)$, and let
+    $A$ be an operator supported on $D$. There is an operator $B$ on
+    $\mathcal H_T\otimes\mathcal H_E$ such that, in the three-region
+    coordinates of Lemma~\ref{lem:peps_frame_split_forms},
+    \begin{align}
+        A                     & = B\otimes\id_U,\notag    \\
+        \operatorname{OSR}(B) & \le q^{2|D\cap T|}.\notag
+    \end{align}
+    The rank is taken across $\mathcal H_T:\mathcal H_E$, allowing an empty
+    sum in the operator Schmidt decomposition. The statement includes
+    $q=0$ and empty regions. In particular, $|D\cap T|=1$ gives the bound
+    $q^2$. This support estimate applies to the local terms in the
+    nearest-neighbour Hamiltonian decomposition of
+    \cite[Section~4.1]{Arad2016RigorousRG}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:peps_frame_split_forms,thm:area_law_supported_identity}
+    If there is no global configuration, then $A=0$, and take $B=0$.
+    Otherwise choose a global configuration and let $u_0$ be its restriction
+    to $U$. Take $B$ from Lemma~\ref{lem:peps_frame_split_forms}.
+    The support criterion of Theorem~\ref{thm:area_law_supported_identity}
+    and the matrix-unit decomposition across a cut~\cite[``Matrix-unit
+        decomposition across a cut'']{QICLean2026Blueprint} give
+    \begin{align}
+        A & =\sum_{\alpha=1}^{M}L_\alpha\otimes R_\alpha,\notag \\
+        M & \le\bigl(q^{|D\cap T|}\bigr)^2,\notag
+    \end{align}
+    in the coordinates
+    $\mathcal H_T\otimes\mathcal H_{\Lambda\setminus T}$.
+    For a configuration $e$ on $E$, let $\gamma(e)$ be the configuration on
+    $\Lambda\setminus T=E\sqcup U$ equal to $e$ on $E$ and to $u_0$ on $U$.
+    Restricting the outside factors at this fixed $u_0$ yields
+    \begin{align}
+        (\widehat R_\alpha)_{e,e'}
+          & =(R_\alpha)_{\gamma(e),\gamma(e')},\notag                   \\
+        B & =\sum_{\alpha=1}^{M}L_\alpha\otimes\widehat R_\alpha.\notag
+    \end{align}
+    The identity on $U$ has entry $1$ at $(u_0,u_0)$, so this restriction
+    gives the same $B$. Its operator Schmidt rank is at most $M$.
+\end{proof}
+
+\begin{theorem}[Support-intersection bound for a complementary operator]
+    \label{thm:peps_supported_right_factor_rank}
+    \lean{TNLean.Lattice.Sheet.exists_threeSplit_eq_reindex_one_kronecker_rank_le}
+    \leanok
+    \uses{lem:peps_frame_split_forms}
+    Let $\Lambda$ be a finite site set, let $q$ be any natural number, and
+    let $T,E,D\subseteq\Lambda$ satisfy $T\cap E=D\cap T=\varnothing$.
+    Put $U=\Lambda\setminus(T\cup E)$, and let $A$ be an operator supported
+    on $D$. There is an operator $V$ on $\mathcal H_E\otimes\mathcal H_U$
+    such that, in the three-region coordinates of
+    Lemma~\ref{lem:peps_frame_split_forms},
+    \begin{align}
+        A                     & =\id_T\otimes V,\notag    \\
+        \operatorname{OSR}(V) & \le q^{2|D\cap E|}.\notag
+    \end{align}
+    The tensor product is read after canonical reassociation into
+    $(\mathcal H_T\otimes\mathcal H_E)\otimes\mathcal H_U$.
+    Here the operator Schmidt rank is the least number of simple operator
+    tensors in a decomposition, allowing the empty sum. The statement
+    includes $q=0$ and empty regions. In particular, $|D\cap E|=1$ gives
+    the bound $q^2$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:peps_frame_split_forms,thm:area_law_supported_identity}
+    If there is no global configuration, then $A=0$, and take $V=0$.
+    Otherwise choose a global configuration and let $t_0$ be its restriction
+    to $T$. The support criterion of
+    Theorem~\ref{thm:area_law_supported_identity} and the matrix-unit
+    decomposition across a cut~\cite[``Matrix-unit decomposition across a
+        cut'']{QICLean2026Blueprint} give, in the coordinates
+    $\mathcal H_E\otimes\mathcal H_{\Lambda\setminus E}$,
+    \begin{align}
+        A & =\sum_{\alpha=1}^{M}L_\alpha\otimes R_\alpha,\notag \\
+        M & \le\bigl(q^{|D\cap E|}\bigr)^2.\notag
+    \end{align}
+    The count is the square of the number of configurations on $D\cap E$;
+    no factor-norm estimate is needed.
+    Take $V$ from Lemma~\ref{lem:peps_frame_split_forms}.
+    For a configuration $u$ on $U$, let $\gamma(u)$ be the configuration
+    on $\Lambda\setminus E=T\sqcup U$ equal to $t_0$ on $T$ and to $u$ on $U$.
+    Evaluating both tensor decompositions at the same first-region
+    configuration $t_0$ gives
+    \begin{align}
+        (\widehat R_\alpha)_{u,u'}
+          & =(R_\alpha)_{\gamma(u),\gamma(u')},\notag                   \\
+        V & =\sum_{\alpha=1}^{M}L_\alpha\otimes\widehat R_\alpha.\notag
+    \end{align}
+    Thus the same $M$ summands give a decomposition of $V$ and bound its
+    operator Schmidt rank. No injectivity of $\gamma$ is required.
+\end{proof}
+
 \begin{lemma}[Splitting consequence on a sheet]
     \label{lem:peps_frame_splitting}
     \lean{TNLean.Lattice.Sheet.SplittingData,

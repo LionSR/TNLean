@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.AreaLaw.Hastings.PositiveFactorization
 import TNLean.MPS.AreaLaw.Hastings.SchmidtTailConstraint
 import TNLean.MPS.AreaLaw.Hastings.SchmidtTailMPS
 
@@ -26,8 +27,9 @@ product state follow from it as in the source.
 **Scope restriction (conditional construction):** Hastings explicitly assumes a uniform entropy
 bound in the conditional construction (lines 516–518). This theorem takes the factorization
 and a common entropy threshold as hypotheses. The application under only the Hamiltonian
-assumptions still requires deriving the factorization and a uniform entropy bound, with
-constants independent of chain length, from those assumptions. Documented in
+assumptions, which derives both bounds with constants independent of chain length, is
+`exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState` in
+`TNLean/MPS/AreaLaw/Hastings/MPSGroundState.lean`. Documented in
 `docs/paper-gaps/hastings07_mps_entropy_stage.tex`.
 
 The source's `k₀ = exp(2S)/2` is a real number. Here `k₀` is any natural number at least
@@ -94,5 +96,33 @@ theorem isOpenMPS_norm_sub_sq_le_of_factorization_of_entropy (hq : 1 < q)
     intro j hj m n hn
     exact one_sub_kyFanNorm_le_of_factorization_of_entropy hq.le hΩ j (hfact j hj) (hk₀ j hj)
       m n (by exact_mod_cast hn)
+
+/-- **Matrix product state from the entropy of the cuts, from Lemma 1 (stage theorem).** The
+same bound as `isOpenMPS_norm_sub_sq_le_of_factorization_of_entropy`, with the approximate
+factorization at every internal cut `j` and every length `m` in the form of the conclusion of
+Lemma 1, `IsFactorizationAt Ω j m (C₁ e^{-m/ξ'})`. Hastings, arXiv:0705.2024v4, lines 246–267
+and 505–557. -/
+theorem isOpenMPS_norm_sub_sq_le_of_isFactorizationAt_of_entropy (hq : 1 < q)
+    {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) {ξ' C₁ : ℝ} (hξ' : 0 < ξ')
+    (hfact : ∀ j ∈ Finset.Ico 1 L, ∀ m : ℕ, j + m ≤ L →
+      ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
+        IsFactorizationAt Ω j m (C₁ * Real.exp (-(m / ξ'))) OB OL OR)
+    {k₀ : ℕ}
+    (hk₀ : ∀ j ∈ Finset.Ico 1 L,
+      Real.exp (2 * Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω) / 2 ≤
+        k₀)
+    {k' : ℕ} (hk' : k₀ ≤ k') :
+    let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
+      (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L k)
+        Ω).leadingEigenprojection k'
+    let Φ := sequentialTruncation P (L - 1) Ω
+    IsOpenMPS L q k' (fun x ↦ Φ x) ∧
+      ‖Φ - Ω‖ ^ 2 ≤ ((L - 1 : ℕ) : ℝ) *
+        (4 * C₁ ^ 2 * exp (2 / ξ') * ((k' : ℝ) / k₀) ^ (-1 / (ξ' * log q))) :=
+  isOpenMPS_norm_sub_sq_le_of_factorization_of_entropy hq hΩ hξ'
+    (fun j hj m hm ↦ by
+      obtain ⟨OB, OL, OR, hF⟩ := hfact j hj m hm
+      exact ⟨OB, OL, OR, exists_factorization_of_isFactorizationAt hF⟩)
+    hk₀ hk'
 
 end TNLean.MPS.AreaLaw.Hastings
