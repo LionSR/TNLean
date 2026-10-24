@@ -8,4 +8,5 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Lattice.ClusterExpansion
 
+import TNLean.Lattice.ClusterExpansion.ClusterPart
 import TNLean.Lattice.ClusterExpansion.Percolation
