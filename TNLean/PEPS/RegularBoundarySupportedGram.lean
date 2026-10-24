@@ -128,8 +128,8 @@ theorem IsGInjective.injective_regularBoundaryRestrictedMap (n : ℕ)
   apply (injective_iff_map_eq_zero _).2
   intro x hx
   have hz := hT.injOn_invariants _ (regularBoundarySupportEmbedding_mem_invariants n x) hx
-  have hc : (Real.sqrt (Fintype.card G : ℝ) : ℂ)⁻¹ ≠ 0 := by
-    exact inv_ne_zero (Complex.ofReal_ne_zero.mpr
+  have hc : (Real.sqrt (Fintype.card G : ℝ) : ℂ)⁻¹ ≠ 0 :=
+    inv_ne_zero (Complex.ofReal_ne_zero.mpr
       (Real.sqrt_pos.mpr (Nat.cast_pos.mpr Fintype.card_pos)).ne')
   have hzero : ((regularBoundaryInvariantsEquiv n).symm x).1 = 0 :=
     (smul_eq_zero.mp hz).resolve_left hc
