@@ -8,10 +8,13 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.AreaLaw.Hastings
 
+import TNLean.MPS.AreaLaw.Hastings.AreaLaw
+import TNLean.MPS.AreaLaw.Hastings.BootstrapLemma
 import TNLean.MPS.AreaLaw.Hastings.BoundaryFactorization
 import TNLean.MPS.AreaLaw.Hastings.BoundaryLocalization
 import TNLean.MPS.AreaLaw.Hastings.ChainBootstrap
 import TNLean.MPS.AreaLaw.Hastings.ChainLocalizedParts
+import TNLean.MPS.AreaLaw.Hastings.CorrelationLemma
 import TNLean.MPS.AreaLaw.Hastings.CutProductExpectation
 import TNLean.MPS.AreaLaw.Hastings.CutProductState
 import TNLean.MPS.AreaLaw.Hastings.CutoffPair
@@ -19,18 +22,27 @@ import TNLean.MPS.AreaLaw.Hastings.DecaySlack
 import TNLean.MPS.AreaLaw.Hastings.Doubling
 import TNLean.MPS.AreaLaw.Hastings.EffectExpectation
 import TNLean.MPS.AreaLaw.Hastings.EffectFromFactorization
+import TNLean.MPS.AreaLaw.Hastings.FactorizationBudget
+import TNLean.MPS.AreaLaw.Hastings.GappedAreaLaw
 import TNLean.MPS.AreaLaw.Hastings.GaussianTimeAverage
 import TNLean.MPS.AreaLaw.Hastings.InteractionPicture
 import TNLean.MPS.AreaLaw.Hastings.IntervalMutualInformation
+import TNLean.MPS.AreaLaw.Hastings.LemmaOneConstant
+import TNLean.MPS.AreaLaw.Hastings.MPSFromEntropy
+import TNLean.MPS.AreaLaw.Hastings.MPSGroundState
 import TNLean.MPS.AreaLaw.Hastings.MainTheorem
 import TNLean.MPS.AreaLaw.Hastings.MovedEstimate
 import TNLean.MPS.AreaLaw.Hastings.PartCommutators
 import TNLean.MPS.AreaLaw.Hastings.PositiveFactorization
+import TNLean.MPS.AreaLaw.Hastings.PowerExponential
 import TNLean.MPS.AreaLaw.Hastings.ProductStateExpectation
+import TNLean.MPS.AreaLaw.Hastings.ProjectorFactorization
+import TNLean.MPS.AreaLaw.Hastings.ProjectorFactorizationScaling
 import TNLean.MPS.AreaLaw.Hastings.ProjectorOverlap
 import TNLean.MPS.AreaLaw.Hastings.RelativeEntropyGain
 import TNLean.MPS.AreaLaw.Hastings.RelentAssembly
 import TNLean.MPS.AreaLaw.Hastings.RelentFromBootstrap
+import TNLean.MPS.AreaLaw.Hastings.RelentGapped
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalChain
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalCorrelation
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalOperators
