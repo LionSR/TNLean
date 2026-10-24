@@ -1389,6 +1389,15 @@ not the printed power `k`. When commutators are written as `i^k ad_H^k`, this
 factor already supplies the alternating sign. The finite-polynomial
 variational bound is unaffected; the infinite expansion remains unformalized.
 
+### Local solution of gapped Hamiltonians: the final state in the energy estimate
+
+[hastings05_hierarchical_energy.tex](hastings05_hierarchical_energy.tex)
+(scope restriction, open) records eq. `hchy` of Hastings, *Solving gapped Hamiltonians
+locally* (arXiv:cond-mat/0508554v3, source lines 705–720), which the source asserts with
+"one may show". From a norm deficiency `b` of the last projection, the normalized image of
+the ground state has energy within `4 ‖M‖ b`, so `4 N J b_h` for `N` terms of norm at most
+`J`. That state lies in the span of the final states `α^h` rather than being one of them.
+
 ### Local solution of gapped Hamiltonians: the number of final states
 
 [hastings05_final_state_count.tex](hastings05_final_state_count.tex)
