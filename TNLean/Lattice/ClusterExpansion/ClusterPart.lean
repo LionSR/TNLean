@@ -207,8 +207,10 @@ satisfying `n_{C_i} + n_{B_i} ≤ S n_{C_i}`, the operator `ρ(β, C_1, …, C_m
 every cluster and no boundary term satisfies
 `|Tr (O ρ(β, C_1, …, C_m))| ≤ ‖O‖ (∏_i y^{n_{C_i}}) Tr e^{-βH}` with `y = (e^{βJ} - 1) e^{SJβ}`.
 
-Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, line 1216 (the remark after the bound on
-`ρ_m`): the bound on `ρ(β, C_1, C_2, …)` derived in the same way as equation `percb2`. -/
+Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1218–1224 (the remark added after the
+bound on `ρ_m`): the bound on `ρ(β, C_1, C_2, …)` derived in the same way as equation `percb2`.
+For clusters of one term of the power series, no cluster meets the boundary of another, so the
+cluster part of the union with the union of the boundaries is that operator. -/
 theorem norm_trace_mul_clusterPart_biUnion_le {ν : Type*} {T : Finset ν}
     {H : Matrix ι ι ℂ} (hH : H.IsHermitian) {h : κ → Matrix ι ι ℂ} {B C : ν → Finset κ}
     (hdisj : (T : Set ν).PairwiseDisjoint C)
