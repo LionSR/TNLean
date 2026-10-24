@@ -42,10 +42,10 @@ positions (lines 1634–1639).
   `g • S` when `A` acts on `S`.
 * `Matrix.isSiteInvariant_sum_of_covariant`: the sum of covariant terms is invariant;
   `Matrix.isSiteInvariant_sum_conj` is the sum of the translates of one term.
-* `Matrix.gaussianFilteredTerm_sitePermMatrix_conj`: for invariant `H`, filtering commutes with
-  translation.
-* `Matrix.edist_smul_of_adj_iff`: an action by graph automorphisms preserves distances;
-  `Matrix.cycleGraph_adj_smul`: the rotations of a ring are such an action.
+* `TNLean.Lattice.gaussianFilteredTerm_sitePermMatrix_conj`: for invariant `H`, filtering
+  commutes with translation.
+* `SimpleGraph.edist_smul_of_adj_iff`: an action by graph automorphisms preserves distances;
+  `SimpleGraph.cycleGraph_adj_smul`: the rotations of a ring are such an action.
 -/
 
 open Matrix GaussianFilter
@@ -143,11 +143,19 @@ theorem isSiteInvariant_sum_conj [Fintype G] (q : ℕ) (H₀ : Matrix (V → Fin
   isSiteInvariant_sum_of_covariant q _ fun g k ↦ by
     simp only [smul_eq_mul, sitePermMatrix_mul, conjTranspose_mul, Matrix.mul_assoc]
 
+end SitePermutation
+
+end Matrix
+
+namespace TNLean.Lattice
+
+variable {V : Type*} [Fintype V] [DecidableEq V] {G : Type*} [Group G] [MulAction G V]
+
 /-- Conjugating `H` and `W` by the same unitary conjugates the Gaussian-filtered operator. -/
 theorem gaussianFilteredTerm_conj {n : Type*} [Fintype n] [DecidableEq n] (r ΔE : ℝ)
     {U H : Matrix n n ℂ} (hU : U ∈ unitaryGroup n ℂ) (hH : H.IsHermitian) (W : Matrix n n ℂ) :
-    TNLean.Lattice.gaussianFilteredTerm r ΔE (U * H * Uᴴ) (U * W * Uᴴ) =
-      U * TNLean.Lattice.gaussianFilteredTerm r ΔE H W * Uᴴ := by
+    gaussianFilteredTerm r ΔE (U * H * Uᴴ) (U * W * Uᴴ) =
+      U * gaussianFilteredTerm r ΔE H W * Uᴴ := by
   have hUU : U * Uᴴ = 1 := by simpa [star_eq_conjTranspose] using (mem_unitaryGroup_iff).mp hU
   have hUU' : Uᴴ * U = 1 := by simpa [star_eq_conjTranspose] using (mem_unitaryGroup_iff').mp hU
   have hpath (t : ℝ) : hermitianUnitaryPath (U * H * Uᴴ) t = U * hermitianUnitaryPath H t * Uᴴ := by
@@ -160,7 +168,7 @@ theorem gaussianFilteredTerm_conj {n : Type*} [Fintype n] [DecidableEq n] (r ΔE
         U * (hermitianUnitaryPath H t * W * hermitianUnitaryPath H (-t)) * Uᴴ := by
     rw [hpath, hpath]
     simp only [Matrix.mul_assoc, ← Matrix.mul_assoc Uᴴ U, hUU', Matrix.one_mul]
-  simp only [TNLean.Lattice.gaussianFilteredTerm, gaussianIntertwiner, hint]
+  simp only [gaussianFilteredTerm, gaussianIntertwiner, hint]
   exact (ContinuousLinearMap.mulLeftRight ℂ (Matrix n n ℂ) U Uᴴ).integral_comp_comm
     (integrable_intertwinerIntegrand _ hH hH W)
 
@@ -172,9 +180,9 @@ lines 1613–1618, uses for translationally invariant systems. -/
 theorem gaussianFilteredTerm_sitePermMatrix_conj {q : ℕ} (r ΔE : ℝ)
     {H : Matrix (V → Fin q) (V → Fin q) ℂ} (hInv : IsSiteInvariant G q H) (hH : H.IsHermitian)
     (g : G) (W : Matrix (V → Fin q) (V → Fin q) ℂ) :
-    TNLean.Lattice.gaussianFilteredTerm r ΔE H
+    gaussianFilteredTerm r ΔE H
         (sitePermMatrix q g * W * (sitePermMatrix q g)ᴴ) =
-      sitePermMatrix q g * TNLean.Lattice.gaussianFilteredTerm r ΔE H W *
+      sitePermMatrix q g * gaussianFilteredTerm r ΔE H W *
         (sitePermMatrix q g)ᴴ := by
   have hu := sitePermMatrix_mem_unitaryGroup (V := V) q g
   have hconj : sitePermMatrix q g * H * (sitePermMatrix q g)ᴴ = H := by
@@ -184,7 +192,12 @@ theorem gaussianFilteredTerm_sitePermMatrix_conj {q : ℕ} (r ΔE : ℝ)
   conv_lhs => rw [← hconj]
   exact gaussianFilteredTerm_conj r ΔE hu hH W
 
-omit [Fintype V] [DecidableEq V] in
+end TNLean.Lattice
+
+namespace SimpleGraph
+
+variable {V : Type*} {G : Type*} [Group G] [MulAction G V]
+
 /-- **Site actions by graph automorphisms preserve distances.** If every `g` preserves
 adjacency of the graph `Γ` on the sites, then `d(g • x, g • y) = d(x, y)`. For the
 translations of a lattice this is the source's setting of a translationally invariant system
@@ -203,12 +216,11 @@ theorem edist_smul_of_adj_iff (Γ : SimpleGraph V)
   refine le_antisymm (hle g x y) ?_
   simpa only [inv_smul_smul] using hle g⁻¹ (g • x) (g • y)
 
-end SitePermutation
-
 /-- The rotations of a ring of `n` sites, `x ↦ a + x`, are automorphisms of the cycle graph. -/
 theorem cycleGraph_adj_smul {n : ℕ} [NeZero n] (a : Multiplicative (Fin n)) (x y : Fin n) :
-    (SimpleGraph.cycleGraph n).Adj (a • x) (a • y) ↔ (SimpleGraph.cycleGraph n).Adj x y := by
-  change (SimpleGraph.cycleGraph n).Adj (a.toAdd + x) (a.toAdd + y) ↔ _
-  simp only [SimpleGraph.cycleGraph_adj', add_sub_add_left_eq_sub]
+    (cycleGraph n).Adj (a • x) (a • y) ↔ (cycleGraph n).Adj x y := by
+  change (cycleGraph n).Adj (a.toAdd + x) (a.toAdd + y) ↔ _
+  simp only [cycleGraph_adj', add_sub_add_left_eq_sub]
 
-end Matrix
+
+end SimpleGraph
