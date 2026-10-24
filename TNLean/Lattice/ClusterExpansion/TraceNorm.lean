@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.PolarUnitaryCorrection
+import QICLean.Analysis.RectangularTraceNorm
 
 /-!
 # The trace-norm form of the cluster-expansion bound
@@ -40,16 +41,6 @@ namespace TNLean.Lattice.ClusterExpansion
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
-/-- A unitary matrix has operator norm at most one.
-
-A local copy of a general fact about unitary matrices, kept here until QICLean provides it for
-matrices over any finite index. -/
-theorem l2OpNorm_le_one_of_mem_unitaryGroup {U : Matrix n n ℂ} (hU : U ∈ unitaryGroup n ℂ) :
-    ‖U‖ ≤ 1 := by
-  rcases isEmpty_or_nonempty n with hn | hn
-  · simp [Subsingleton.elim U 0]
-  · exact (CStarRing.norm_of_mem_unitary hU).le
-
 /-- **Trace-norm duality from the polar decomposition.** If `‖Tr (O D)‖ ≤ ε` for every matrix
 `O` of operator norm at most one, then the trace norm `Tr √(Dᴴ D)` of `D` is at most `ε`. No
 Hermitian hypothesis on `D` is needed: the polar decomposition `D = U √(Dᴴ D)` gives
@@ -67,8 +58,7 @@ theorem re_trace_sqrt_le_of_forall_norm_trace_mul_le {D : Matrix n n ℂ} {ε : 
   have hO : star (U : Matrix n n ℂ) * D = CFC.sqrt (Dᴴ * D) := by
     conv_lhs => rw [hD]
     rw [← Matrix.mul_assoc, hUU, Matrix.one_mul]
-  have hnorm : ‖star (U : Matrix n n ℂ)‖ ≤ 1 :=
-    l2OpNorm_le_one_of_mem_unitaryGroup (Unitary.star_mem U.2)
+  have hnorm : ‖star (U : Matrix n n ℂ)‖ ≤ 1 := l2_opNorm_unitary_le_one (Unitary.star_mem U.2)
   calc (CFC.sqrt (Dᴴ * D)).trace.re ≤ ‖(CFC.sqrt (Dᴴ * D)).trace‖ := Complex.re_le_norm _
     _ = ‖(star (U : Matrix n n ℂ) * D).trace‖ := by rw [hO]
     _ ≤ ε := h _ hnorm
