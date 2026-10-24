@@ -20,6 +20,7 @@ import TNLean.Lattice.GaussianFilteredIncrement
 import TNLean.Lattice.GaussianFilteredLocality
 import TNLean.Lattice.GaussianFilteredTerm
 import TNLean.Lattice.GaussianFilteredTermLocalization
+import TNLean.Lattice.GaussianFilteredTruncation
 import TNLean.Lattice.GaussianTail
 import TNLean.Lattice.GaussianTailMoment
 import TNLean.Lattice.HeisenbergDuhamel
