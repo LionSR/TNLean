@@ -233,9 +233,12 @@ above are unchanged.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_swapped_local_hamiltonian,thm:area_law_crossing_supports}
-    Only supports crossing $A$ contribute to $K'-K$, and each difference
-    has norm at most $4J$. By Theorem~\ref{thm:area_law_crossing_supports},
+    \uses{thm:peps_swapped_local_hamiltonian,
+        thm:peps_sheet_swap_doubled_term_norm,thm:area_law_crossing_supports}
+    Only supports crossing $A$ contribute to $K'-K$. By
+    Theorem~\ref{thm:peps_sheet_swap_doubled_term_norm} and $\|h_X\|\le J$,
+    each difference has norm at most $4J$.
+    By Theorem~\ref{thm:area_law_crossing_supports},
     there are at most $v_R\mu_R|\partial_\Lambda A|$ such supports.
     The triangle inequality and $c_R=4\mu_R$ give the estimate.
     Pairing the site coordinates preserves the operator norm.
