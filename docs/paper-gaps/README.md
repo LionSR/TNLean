@@ -1377,6 +1377,19 @@ The complete hierarchy is controlled instead by measuring every deficiency
 against the ground state: `D_{m+1}² ≤ 2 D_m² + ((ε + 2 K D_m)/x_m)²`, which with
 the source's window radii gives `D_m ≤ (3^m − 1) e^{s^m}`, still polynomial in `N`.
 
+### Local solution of gapped Hamiltonians: the supercell of the translation-invariant case
+
+[hastings05_translation_supercell.tex](hastings05_translation_supercell.tex)
+(scope restriction, open) concerns the translation-invariant case of Hastings,
+*Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, source lines
+1603–1642). The source assumes ground-state momenta that are rational with
+denominators independent of the system size, and derives a supercell whose
+translations leave every ground state unchanged. The formalization assumes such a
+subgroup directly and proves that the low-energy commutator at `(i, j)` equals the one
+at `(i, g • j)` for every `g` in it. The note sketches how to derive the subgroup from
+the characters of an abelian translation group, records a slip at line 1638, and
+notes that the size-dependent case of lines 1643–1652 is not covered.
+
 ## Polynomial PEPS: zero-floor maximizing filters
 
 - [`polypeps_square_zero_floor_optimizer_scope.tex`](polypeps_square_zero_floor_optimizer_scope.tex)
