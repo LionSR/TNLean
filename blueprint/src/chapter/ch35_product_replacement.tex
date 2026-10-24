@@ -116,8 +116,22 @@ coefficient spaces and cut ranks.
     squared fidelities multiply.
 \end{theorem}
 \begin{proof}\leanok
-    Expand the inner product as a finite sum over configurations and factor
-    this sum over the blocks. Take norms and squares for the remaining identities.
+    The map $\sigma\mapsto(\tau_0,\ldots,\tau_{K-1})$, with
+    $\tau_i(j)=\sigma(Li+j)$, is a bijection from configurations on $KL$ sites
+    to families of block configurations. Reindexing the configuration sum
+    along it and using~\eqref{eq:chain_copy_product_coefficients} gives
+    \begin{align}
+        \label{eq:chain_copy_product_inner}
+        \Bigl\langle\bigotimes_{i=0}^{K-1}\eta_i,\bigotimes_{i=0}^{K-1}\theta_i\Bigr\rangle
+         & =\sum_{\tau_0,\ldots,\tau_{K-1}}\,\prod_{i=0}^{K-1}
+            \overline{\eta_i(\tau_i)}\,\theta_i(\tau_i)
+           =\prod_{i=0}^{K-1}\langle\eta_i,\theta_i\rangle.
+    \end{align}
+    Taking $\theta_i=\eta_i$ and square roots gives
+    $\bigl\|\bigotimes_{i=0}^{K-1}\eta_i\bigr\|=\prod_{i=0}^{K-1}\|\eta_i\|$,
+    and taking squared absolute values gives
+    $\bigl|\bigl\langle\bigotimes_{i=0}^{K-1}\eta_i,\bigotimes_{i=0}^{K-1}\theta_i\bigr\rangle\bigr|^2
+        =\prod_{i=0}^{K-1}|\langle\eta_i,\theta_i\rangle|^2$.
 \end{proof}
 
 \begin{theorem}[Factorization at copy boundaries]
@@ -184,9 +198,17 @@ coefficient spaces and cut ranks.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_interval_slice_mps}
-    Each unit factor has a nonzero coefficient. Fix such a coefficient in
-    every other block. The resulting interval slice is the selected factor
-    multiplied by a nonzero product of coefficients.
+    Fix the factor $\eta_i$. Each unit factor $\eta_j$ has a block
+    configuration $\sigma_j$ with $\eta_j(\sigma_j)\neq0$. Fix the exterior of
+    the interval of block $i$, which starts at site $Li$, to $\sigma_j$ on every
+    block $j\neq i$. By~\eqref{eq:chain_copy_product_coefficients}, the
+    resulting interval slice $\phi$ of $\bigotimes_{j=0}^{K-1}\eta_j$ is
+    \begin{align}
+        \label{eq:chain_copy_product_slice}
+        \phi(x)=\Bigl(\prod_{j\neq i}\eta_j(\sigma_j)\Bigr)\,\eta_i(x),
+    \end{align}
+    a nonzero multiple of $\eta_i$. Theorem~\ref{thm:chain_interval_slice_mps}
+    gives $\eta_i$ the bond bound $D$.
 \end{proof}
 
 \begin{theorem}[Scalar error amplification for a block product]
@@ -223,14 +245,35 @@ coefficient spaces and cut ranks.
     This includes blocks of length zero.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:chain_copy_product_inner}
-    Choose a configuration with nonzero coefficient. Rank at most one makes
-    every two-by-two minor at a copy boundary vanish. Successively replacing
-    the blocks of the chosen configuration therefore expresses every
-    coefficient as a product of one-block coefficient ratios times the
-    original nonzero coefficient. Absorb that scalar into the first factor.
-    The product of the factor norms is one. Dividing each factor by its norm
-    thus normalizes all factors without changing their product.
+    Write $\Psi(x_0,\ldots,x_{K-1})$ for the coefficient of $\psi$ at the
+    configuration whose block $i$ is $x_i$, and $(x_{<n},y_{\ge n})$ for the
+    configuration agreeing with $x$ on blocks $i<n$ and with $y$ on blocks
+    $i\ge n$. The coefficient matrix at $nL$ has rank at most one for every
+    $n$, since the cuts $0$ and $KL$ have rank at most one automatically.
+    Its two-by-two minors therefore vanish:
+    \begin{align}
+        \label{eq:chain_copy_cross_ratio}
+        \Psi(x)\,\Psi(y)=\Psi(x_{<n},y_{\ge n})\,\Psi(y_{<n},x_{\ge n}).
+    \end{align}
+    Choose $x^0$ with $\Psi(x^0)\neq0$, and write $x^0[i\mapsto a]$ for $x^0$
+    with block $i$ replaced by $a$. Applying~\eqref{eq:chain_copy_cross_ratio}
+    at the boundary $nL$ to $(x_{<n+1},x^0_{\ge n+1})$ and $x^0$ gives
+    \begin{align}
+        \Psi(x_{<n+1},x^0_{\ge n+1})\,\Psi(x^0)
+        =\Psi(x_{<n},x^0_{\ge n})\,\Psi\bigl(x^0[n\mapsto x_n]\bigr),
+        \notag
+    \end{align}
+    and induction on $n$ yields
+    \begin{align}
+        \label{eq:chain_copy_coefficient_factorization}
+        \Psi(x)=\Psi(x^0)\prod_{i=0}^{K-1}
+            \frac{\Psi\bigl(x^0[i\mapsto x_i]\bigr)}{\Psi(x^0)}.
+    \end{align}
+    Put $w_i(a)=\Psi(x^0[i\mapsto a])/\Psi(x^0)$, absorb the scalar into the
+    first factor by setting $v_0=\Psi(x^0)\,w_0$ and $v_i=w_i$ for $i>0$, and
+    conclude $\psi=\bigotimes_{i=0}^{K-1}v_i$. Then
+    $\prod_{i=0}^{K-1}\|v_i\|=\|\psi\|=1$, so every $\|v_i\|$ is nonzero and
+    the unit vectors $v_i/\|v_i\|$ have the same product $\psi$.
 \end{proof}
 
 \begin{theorem}[Product replacement by normalized MPS factors]
@@ -258,7 +301,7 @@ coefficient spaces and cut ranks.
     \uses{def:chain_copy_product,def:chain_open_mps,thm:chain_copy_error_amplification}
     Let $K\ge1$, let $\eta$ be a unit block vector, and let $\psi$ be any unit
     MPS on $KL$ sites of bond dimension at most $D$. Put
-    $F=|\langle\eta^{\otimes K},\psi\rangle|^2$ and suppose $T(F)<1$,
+    $F=\bigl|\bigl\langle\bigotimes_{i=0}^{K-1}\eta,\psi\bigr\rangle\bigr|^2$ and suppose $T(F)<1$,
     with $T$ as in Theorem~\ref{thm:chain_copy_error_amplification}.
     There is a unit block MPS $\theta$ of bond dimension at most $D$ such that,
     writing $f=|\langle\eta,\theta\rangle|^2$,
@@ -269,7 +312,7 @@ coefficient spaces and cut ranks.
     These are estimates for the scalar function of squared fidelity.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:chain_unit_mps_copy_replacement,thm:chain_copy_error_amplification}
+    \uses{thm:chain_unit_mps_copy_replacement,thm:chain_copy_product_inner,thm:chain_copy_error_amplification}
     Replace the approximant by a product of unit MPS block factors with
     no smaller overlap. Its squared fidelity is no smaller, and hence its
     scalar error is no larger than $T(F)$. Apply the block-product
