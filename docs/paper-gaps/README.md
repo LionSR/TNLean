@@ -1463,11 +1463,11 @@ the source's claim; the unargued passage between them is not formalized.
 ### One-dimensional area law after Hastings: the orders of the Rényi bootstrap lemma
 
 [hastings07_renyi_bootstrap_orders.tex](hastings07_renyi_bootstrap_orders.tex)
-(scope restriction, open) records that the Rényi form of Lemma 2 in Hastings,
+(scope restriction, resolved) records that the Rényi form of Lemma 2 in Hastings,
 *An area law for one-dimensional quantum systems* (arXiv:0705.2024v4, source lines 392–410),
 is formalized for orders `0 < α < 1` under the convergence condition
-`e^{−2α/ξ'} (D²)^{1−α} < 1`; order `1` is the von Neumann Lemma 2. Orders `α > 1` remain;
-the elimination plan is `S_α ≤ S` by the concavity of the logarithm.
+`e^{−2α/ξ'} (D²)^{1−α} < 1`; order `1` is the von Neumann Lemma 2. Orders `α > 1` follow
+from the von Neumann Lemma 2 by `S_α ≤ S`, the concavity of the logarithm.
 
 ### Local solution of gapped Hamiltonians: the truncated dynamics of `M_i`
 
