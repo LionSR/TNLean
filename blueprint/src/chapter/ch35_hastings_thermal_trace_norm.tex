@@ -13,7 +13,7 @@ operators. The truncated density matrix $\rho(\beta,l_{\mathrm{proj}})$ of the
 cluster expansion enters only through the hypotheses, and the error bound at
 every temperature \cite[lines 1322--1349]{Hastings2006Solving} is not proved
 here. The trace norm of a square matrix $D$ is
-$|D|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
+$\|D\|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
 
 \begin{theorem}[The trace norm from expectation values]
     \label{thm:hastings_thermal_trace_norm_duality}
@@ -22,12 +22,12 @@ $|D|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
     \leanok
     Let $D$ be a square complex matrix and $\epsilon$ a real number. If
     $|\operatorname{Tr}(OD)|\le\epsilon$ for every matrix $O$ with
-    $\|O\|\le1$, then $|D|_1\le\epsilon$.
+    $\|O\|\le1$, then $\|D\|_1\le\epsilon$.
 \end{theorem}
 \begin{proof}\leanok
     The polar decomposition writes $D=U\sqrt{D^\dagger D}$ with $U$ unitary.
     Then $O=U^\dagger$ has $\|O\|\le1$ and
-    $\operatorname{Tr}(OD)=\operatorname{Tr}\sqrt{D^\dagger D}=|D|_1$. For a
+    $\operatorname{Tr}(OD)=\operatorname{Tr}\sqrt{D^\dagger D}=\|D\|_1$. For a
     Hermitian $D$ this $O$ may be taken to be the operator of signs of the
     eigenvalues of $D$ that \cite[lines 1291--1294]{Hastings2006Solving} uses;
     the polar decomposition removes the need for $D$ to be Hermitian.
@@ -44,9 +44,9 @@ $|D|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
         \le\epsilon\,\|O\|\operatorname{Re}\operatorname{Tr}\rho
     \end{align}
     for every matrix $O$, then
-    $|\rho-\sigma|_1\le\epsilon\operatorname{Re}\operatorname{Tr}\rho$. For the
+    $\|\rho-\sigma\|_1\le\epsilon\operatorname{Re}\operatorname{Tr}\rho$. For the
     thermal state $\rho=\rho(\beta)$, which is positive with
-    $\operatorname{Tr}\rho(\beta)=Z=|\rho(\beta)|_1$, and
+    $\operatorname{Tr}\rho(\beta)=Z=\|\rho(\beta)\|_1$, and
     $\sigma=\rho(\beta,l_{\mathrm{proj}})$, the hypothesis is the bound of
     eq.~(perc2) with
     $\epsilon=\exp[N\exp(-l_{\mathrm{proj}}/\xi_{\mathrm{perc}})]-1$, and the

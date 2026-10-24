@@ -35,6 +35,12 @@ definite only when the base `ρ(β/n, l_proj)` is invertible, which the source d
 The results here state positive semidefiniteness, which is what the even power is used for.
 Documented in `docs/paper-gaps/hastings05_mplt_positivity.tex`.
 
+**Scope restriction (geometry):** `TNLean.Lattice.HasProductForm.pow_of_even` is stated for the
+product form on finite domains of `ℤ × ℤ` with walk distance, as defined in
+`TNLean.Lattice.ProductForm`, rather than on the source's arbitrary metric lattice (lines
+1024–1046). The positivity lemmas and `exists_even_div_le` are general. Documented in
+`docs/paper-gaps/hastings05_planar_domain_scope.tex`.
+
 ## Main results
 
 * `TNLean.Lattice.ClusterExpansion.posSemidef_pow_of_even`: `A^m ≥ 0` for Hermitian `A` and even
