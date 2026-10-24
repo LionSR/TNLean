@@ -1389,6 +1389,15 @@ not the printed power `k`. When commutators are written as `i^k ad_H^k`, this
 factor already supplies the alternating sign. The finite-polynomial
 variational bound is unaffected; the infinite expansion remains unformalized.
 
+### Local solution of gapped Hamiltonians: the final state in the energy estimate
+
+[hastings05_hierarchical_energy.tex](hastings05_hierarchical_energy.tex)
+(scope restriction, open) records eq. `hchy` of Hastings, *Solving gapped Hamiltonians
+locally* (arXiv:cond-mat/0508554v3, source lines 705–720), which the source asserts with
+"one may show". From a norm deficiency `b` of the last projection, the normalized image of
+the ground state has energy within `4 ‖M‖ b`, so `4 N J b_h` for `N` terms of norm at most
+`J`. That state lies in the span of the final states `α^h` rather than being one of them.
+
 ### Local solution of gapped Hamiltonians: the number of final states
 
 [hastings05_final_state_count.tex](hastings05_final_state_count.tex)
@@ -1398,6 +1407,13 @@ the hierarchical construction in Hastings, *Solving gapped Hamiltonians locally*
 projection `P` of trace `n`, then orthonormal states of energy at most `E₀ + θ ΔE` number at
 most `n / (1 − θ)`, by Bessel's inequality; `θ = 1/2` gives `2n`. The energy under `H` is
 taken as a hypothesis.
+
+[hastings05_mplt_positivity.tex](hastings05_mplt_positivity.tex)
+(local-correction, resolved) records that Hastings' matrix product form at every temperature,
+`ρ(β, l_proj) = ρ(β/n, l_proj)^n` with `n` even (arXiv:cond-mat/0508554v3, source lines
+1303–1314, eq. `mplt`), is positive semidefinite, and positive definite only when the truncated
+high-temperature form is invertible, which the source does not establish. The formalization
+proves positive semidefiniteness, which is what the even power is used for.
 
 ### Local solution of gapped Hamiltonians: the right side of the single-cluster bound
 
@@ -1419,6 +1435,15 @@ source lines 1227–1254). A cluster of diameter larger than `l_proj` has at lea
 bonds are nearest-neighbour. The decay length `ξ_perc = 2R / ln(1/(xy))` of order
 `R` absorbs the difference. The formalized sum takes the size threshold as a
 hypothesis.
+
+### One-dimensional area law after Hastings: the orders of the Rényi bootstrap lemma
+
+[hastings07_renyi_bootstrap_orders.tex](hastings07_renyi_bootstrap_orders.tex)
+(scope restriction, open) records that the Rényi form of Lemma 2 in Hastings,
+*An area law for one-dimensional quantum systems* (arXiv:0705.2024v4, source lines 392–410),
+is formalized for orders `0 < α < 1` under the convergence condition
+`e^{−2α/ξ'} (D²)^{1−α} < 1`; order `1` is the von Neumann Lemma 2. Orders `α > 1` remain;
+the elimination plan is `S_α ≤ S` by the concavity of the logarithm.
 
 ### Local solution of gapped Hamiltonians: the truncated dynamics of `M_i`
 
