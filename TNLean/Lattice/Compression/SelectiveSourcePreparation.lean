@@ -186,7 +186,6 @@ private theorem prepareFreeSlots_cons_false_heq (r : PairSource P)
   exact (prepareFreeSlots_heq_prepare R (fun i ↦ U i.succ) (fun i ↦ V i.succ)
       (fun i ↦ free i.succ) (fun i ↦ ζ i.succ) ℓ x).symm
 
-
 /-- One fixed word reconstructs preparation for every family of free vectors.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–434. -/
 theorem eval_prepareSelected_prepareFreeSlots (R : SourceInventory P)
