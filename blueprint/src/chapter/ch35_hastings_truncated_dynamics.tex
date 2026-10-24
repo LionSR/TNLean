@@ -226,9 +226,7 @@ eq.~(thd) \cite{gap:hastings05_truncated_dynamics}.
     and the choices of Theorem~\ref{thm:hastings_truncated_approximation},
     these are eq.~(facld) of \cite[lines 322--348]{Hastings2006Solving} and
     the bound for one ground state at lines 375--387, with explicit
-    constants and $q$ free. For $\mu>0$ fixed, $m=l_{proj}-3R$ and
-    $q=c_1l_{proj}\Delta E$ with $0<c_1<\mu/v$, both terms of $\delta$ decay
-    exponentially in $l_{proj}$ \cite{gap:hastings05_truncated_dynamics}.
+    constants and $q$ free.
 \end{theorem}
 
 \begin{proof}
@@ -239,3 +237,13 @@ eq.~(thd) \cite{gap:hastings05_truncated_dynamics}.
     Theorem~\ref{thm:hastings_truncated_approximation_time} bounds
     $\|\widetilde W-M\|$.
 \end{proof}
+
+\begin{remark}
+    Take $\mu>0$ fixed, $m=l_{proj}-3R$ and $q=c_1l_{proj}\Delta E$ with
+    $0<c_1<\mu/v$, and suppose the number $N$ of omitted terms meeting $K$
+    grows subexponentially in $l_{proj}$, for instance polynomially when spheres
+    in the graph have polynomial size. Then both terms of $\delta$ in
+    Theorem~\ref{thm:hastings_truncated_facld} decay exponentially in
+    $l_{proj}$, which is the form $JO(e^{-l_{proj}/l_{fac}})$ of
+    eq.~(facld) \cite{gap:hastings05_truncated_dynamics}.
+\end{remark}

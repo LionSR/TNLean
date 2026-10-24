@@ -26,9 +26,13 @@ module inherits its **Local fix (the truncated approximation `M_i`, eqs. `mid`, 
 `truncb`):** the shell is the set of omitted terms meeting `K`, the time integral of the
 Lieb–Robinson function is bounded by `T` times its value at `T`, and the constants are explicit
 rather than the source's `g` and `c₁`. Documented in
-`docs/paper-gaps/hastings05_truncated_dynamics.tex`. With `μ > 0` fixed, `m = l_proj - 3R` and
-`q = c₁ l_proj ΔE` for a constant `0 < c₁ < μ / v`, both terms decay exponentially in `l_proj`,
-which is the form `J O(e^{-l_proj / l_fac})` of eq. `facld`.
+`docs/paper-gaps/hastings05_truncated_dynamics.tex`.
+
+Remark (not formalized): take `μ > 0` fixed, `m = l_proj - 3R` and `q = c₁ l_proj ΔE` for a
+constant `0 < c₁ < μ / v`, and suppose the number `N` of omitted terms meeting `K` grows
+subexponentially in `l_proj` (polynomially, for instance, when spheres have polynomial size).
+Then both terms decay exponentially in `l_proj`, which is the form `J O(e^{-l_proj / l_fac})`
+of eq. `facld`.
 
 ## References
 
