@@ -83,8 +83,8 @@ theorem latticeL1Distance_le_of_edist_le
     latticeL1Distance (coord a) (coord b) ≤ R := by
   have hfinite : G.edist a b < ⊤ := lt_of_le_of_lt hdist (by simp)
   obtain ⟨p, hp⟩ := SimpleGraph.exists_walk_of_edist_ne_top (ne_of_lt hfinite)
-  have hlength : p.length ≤ R := by
-    exact ENat.natCast_le_natCast.mp (hp.le.trans hdist)
+  have hlength : p.length ≤ R :=
+    ENat.natCast_le_natCast.mp (hp.le.trans hdist)
   exact (latticeL1Distance_le_walk_length coord hstep p).trans hlength
 
 end TNLean.PEPS.AreaLaw

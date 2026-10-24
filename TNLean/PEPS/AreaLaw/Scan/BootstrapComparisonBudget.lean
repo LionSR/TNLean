@@ -59,14 +59,11 @@ theorem bootstrap_comparison_budget_bound_of_threshold_le {e₀ : ℝ}
   obtain ⟨hg₀, hg₀half, hℓ, hℓ₁, hκ⟩ :=
     BootstrapParameters.parameter_bounds he₀pos he₀₁
   have hℓg₀ : BootstrapParameters.ell e₀ < BootstrapParameters.g0 e₀ :=
-    (div_lt_self (div_pos hg₀ (by norm_num : (0 : ℝ) < 1000))
-      (by norm_num : (1 : ℝ) < 100)).trans
-      (div_lt_self hg₀ (by norm_num : (1 : ℝ) < 1000))
+    BootstrapParameters.ell_lt_g0 he₀pos he₀₁
   have hμℓ : BootstrapParameters.mu e₀ < 1 - BootstrapParameters.ell e₀ :=
     sub_lt_sub_left hℓg₀ 1
-  have hκμ : BootstrapParameters.kappa e₀ < BootstrapParameters.mu e₀ := by
-    linarith [show BootstrapParameters.kappa e₀ ≤ BootstrapParameters.ell e₀ from
-      min_le_left _ _, show BootstrapParameters.mu e₀ = 1 - BootstrapParameters.g0 e₀ from rfl]
+  have hκμ : BootstrapParameters.kappa e₀ < BootstrapParameters.mu e₀ :=
+    BootstrapParameters.kappa_lt_mu he₀pos he₀₁
   let X : ScannerExponents :=
     { ell := BootstrapParameters.ell e₀
       kappa := BootstrapParameters.kappa e₀
