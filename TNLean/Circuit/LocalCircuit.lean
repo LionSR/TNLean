@@ -190,10 +190,6 @@ theorem expect_smul (ψ : (ι → Fin d) → ℂ) (c : ℂ)
     expect ψ (c • A) = c * expect ψ A := by
   simp [expect, smul_mulVec, dotProduct_smul]
 
-theorem expect_zero (ψ : (ι → Fin d) → ℂ) :
-    expect ψ (0 : Matrix (ι → Fin d) (ι → Fin d) ℂ) = 0 := by
-  simp [expect]
-
 theorem expect_one (ψ : (ι → Fin d) → ℂ) :
     expect ψ (1 : Matrix (ι → Fin d) (ι → Fin d) ℂ) = star ψ ⬝ᵥ ψ := by
   simp [expect]
@@ -216,12 +212,6 @@ theorem expect_productVector_rectKronecker (v : ι → Fin d → ℂ)
   rw [Fintype.prod_sum]
   refine Finset.sum_congr rfl fun τ _ ↦ ?_
   rw [← Finset.prod_mul_distrib, ← Finset.prod_mul_distrib]
-
-/-- The chain form of `expect_productVector_rectKronecker`, for the sites `Fin N`. -/
-theorem expect_productVector_finKronecker {N : ℕ} (v : Fin N → Fin d → ℂ)
-    (m : Fin N → Matrix (Fin d) (Fin d) ℂ) :
-    expect (productVector v) (finKronecker m) = ∏ i, star (v i) ⬝ᵥ (m i *ᵥ v i) :=
-  expect_productVector_rectKronecker v m
 
 /-- Product vectors factorize expectations of products of operators on disjoint sets of
 sites: `⟨AB⟩⟨1⟩ = ⟨A⟩⟨B⟩`. -/
