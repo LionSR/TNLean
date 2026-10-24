@@ -41,5 +41,6 @@ import TNLean.Lattice.SiteRelabelEntropy
 import TNLean.Lattice.SiteSymmetry
 import TNLean.Lattice.SupportedPolarUnitary
 import TNLean.Lattice.SupportedUnitaryEntropy
+import TNLean.Lattice.TranslationSupercell
 import TNLean.Lattice.VariationalLowerBound
 import TNLean.Lattice.ZeroEntropy
