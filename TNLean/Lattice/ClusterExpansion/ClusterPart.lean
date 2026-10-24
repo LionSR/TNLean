@@ -160,9 +160,10 @@ theorem norm_trace_mul_clusterPart_le {H : Matrix ι ι ℂ} (hH : H.IsHermitian
 /-- **Equation `percb2`.** If the cluster and its boundary satisfy `n_C + n_B ≤ S n_C`, then
 `|Tr (O ρ(β, C))| ≤ ‖O‖ y^{n_C} Tr e^{-βH}` with `y = (e^{βJ} - 1) e^{SJβ}`.
 
-Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1186–1195, with `‖O‖ Tr e^{-βH}` on
-the right as in `norm_trace_mul_clusterPart_le`. The source derives `n_C + n_B ≤ S n_C` from the
-lattice; here it is the hypothesis `hS`, which `card_add_card_clusterBoundary_le` supplies. -/
+Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1186–1195, multiplied by
+`Z = Tr e^{-βH}`; the source states it as `Z⁻¹ Tr (O ρ(β, C)) ≤ ‖O‖ y^{n_C}`. The source
+derives `n_C + n_B ≤ S n_C` from the lattice; here it is the hypothesis `hS`, which
+`card_add_card_clusterBoundary_le` supplies. -/
 theorem norm_trace_mul_clusterPart_le_pow {H : Matrix ι ι ℂ} (hH : H.IsHermitian)
     {h : κ → Matrix ι ι ℂ} {B C : Finset κ}
     (hh : ∀ k ∈ B ∪ C, (h k).IsHermitian) {J : ℝ} (hJ : ∀ k ∈ B ∪ C, ‖h k‖ ≤ J)
