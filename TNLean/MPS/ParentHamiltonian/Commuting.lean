@@ -238,8 +238,8 @@ theorem HasNNCPHGroundSpaces.hasParentHamiltonianGroundSpaceSpanning
     {B : MPSTensor d D}
     {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
     (h : HasNNCPHGroundSpaces B A) :
-    HasParentHamiltonianGroundSpaceSpanning B 2 A := by
-  exact HasNNCPHGroundSpace.hasParentHamiltonianGroundSpaceSpanning h
+    HasParentHamiltonianGroundSpaceSpanning B 2 A :=
+  HasNNCPHGroundSpace.hasParentHamiltonianGroundSpaceSpanning h
 
 /-- The all-chain NNCPH ground-space condition is exactly the all-chain
 commutation-and-zero-energy condition together with the source ground-space

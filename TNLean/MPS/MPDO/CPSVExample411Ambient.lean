@@ -164,8 +164,8 @@ configurations. -/
 binary periodic MPO. -/
 theorem mpo_ambientM_eq_singleKrausMap (N : ℕ) :
     mpo ambientM N = singleKrausMap (sitewisePhysicalMatrix inclusion N)
-      (mpo CPSVExample411BinarySupport.M N) := by
-  exact (singleKrausMap_sitewisePhysicalMatrix_mpo inclusion CPSVExample411BinarySupport.M N).symm
+      (mpo CPSVExample411BinarySupport.M N) :=
+  (singleKrausMap_sitewisePhysicalMatrix_mpo inclusion CPSVExample411BinarySupport.M N).symm
 
 /-- Supported positive-length entries of the ambient MPO are exactly the
 binary cycle weights. -/
@@ -187,8 +187,8 @@ theorem mpo_ambientM_supported_apply {N : ℕ} [NeZero N]
 
 /-- The ambient and binary periodic MPOs have equal traces at every length. -/
 theorem trace_mpo_ambientM (N : ℕ) :
-    Matrix.trace (mpo ambientM N) = Matrix.trace (mpo CPSVExample411BinarySupport.M N) := by
-  exact trace_mpo_changePhysicalBasis_of_isometry
+    Matrix.trace (mpo ambientM N) = Matrix.trace (mpo CPSVExample411BinarySupport.M N) :=
+  trace_mpo_changePhysicalBasis_of_isometry
     inclusion inclusion_isometry CPSVExample411BinarySupport.M N
 
 /-- For positive length, the ambient MPO trace is the binary cycle partition

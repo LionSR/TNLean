@@ -41,8 +41,7 @@ theorem evalWord_mul_cyclicProj {r n m : ℕ} [NeZero m]
     (hcyclic : ∀ k : Fin m, Kraus.transferMap (d := r) (D := n) K (P (k + 1)) = P k) :
     ∀ (w : List (Fin r)) (k : Fin m),
       Kraus.evalWord K w * P k = P (k - (w.length : Fin m)) * Kraus.evalWord K w := by
-  have hcyclicLM : ∀ k : Fin m, Kraus.mapLM K (P (k + 1)) = P k := fun k => by
-        exact hcyclic k
+  have hcyclicLM : ∀ k : Fin m, Kraus.mapLM K (P (k + 1)) = P k := fun k => hcyclic k
   intro w
   induction w with
   | nil =>

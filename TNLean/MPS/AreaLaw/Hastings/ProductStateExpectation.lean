@@ -3,6 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.ToEuclideanCLM
+import TNLean.Circuit.EntropySupport
 import TNLean.MPS.AreaLaw.Hastings.CutProductExpectation
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalCorrelation
 
@@ -11,11 +13,16 @@ import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalCorrelation
 
 Lemma 1 of Hastings' proof of the area law gives orthogonal projections `O_L`, `O_R`, commuting,
 and a contraction `O_B` with `‖O_B O_L O_R − |Ψ⟩⟨Ψ|‖ ≤ ε`. As Hastings' note added explains
-(arXiv:0705.2024v4, lines 911–925), `O_B` need not be positive, and the Lindblad–Uhlmann step is
-run with the effect `O_Bᴴ O_B`. This file proves the expectation bounds that step needs:
-`Ψ` lies within `ε` of the range of `O_L O_R`, the effect has ground-state expectation at least
-`(1 − 2ε)²`, and the expectation `y` of `O_L O_R` in the product of the two marginals of `Ψ`
-(line 446) is at least `1 − 2ε²`.
+(arXiv:0705.2024v4, lines 916–925, route 1 of the note added), `O_B` need not be positive, and
+the Lindblad–Uhlmann step is run with the effect `O_Bᴴ O_B`. This file proves the expectation
+bounds that step needs: `Ψ` lies within `ε` of the range of `O_L O_R`, the effect has
+ground-state expectation at least `(1 − 2ε)²`, and the expectation `y` of `O_L O_R` in the
+product of the two marginals of `Ψ` (line 446) is at least `1 − 2ε²`.
+
+The last bound works at a cut of the chain and takes the factorization
+`tr(σ O_L O_R) = ⟨Ψ, O_L Ψ⟩ ⟨Ψ, O_R Ψ⟩` from `trace_cutProductState_mul_mul`, and the pure-state
+identity `tr(|Ψ⟩⟨Ψ| A) = ⟨Ψ, A Ψ⟩` from QICLean's `Entropy.inner_toEuclideanLin_eq_trace`; no
+separate statement in the Kronecker coordinates of an abstract bipartition is kept.
 
 ## Main results
 
@@ -28,27 +35,11 @@ run with the effect `O_Bᴴ O_B`. This file proves the expectation bounds that s
 ## References
 
 * M. B. Hastings, *An area law for one-dimensional quantum systems*, J. Stat. Mech. (2007)
-  P08024, arXiv:0705.2024v4, `References/0705.2024/law16.tex`, lines 413–446 and 911–925.
+  P08024, arXiv:0705.2024v4, `References/0705.2024/law16.tex`, lines 413–446 and 916–925
+  (route 1 of the note added).
 -/
 
 open scoped ComplexOrder InnerProductSpace Matrix.Norms.L2Operator MatrixOrder
-
-namespace Matrix
-
-variable {n : Type*} [Fintype n] [DecidableEq n]
-
-/-- The expectation `⟪x, A y⟫` as a dot product of coordinate vectors. -/
-theorem inner_toEuclideanCLM_eq_dotProduct (A : Matrix n n ℂ) (x y : EuclideanSpace ℂ n) :
-    ⟪x, toEuclideanCLM (n := n) (𝕜 := ℂ) A y⟫_ℂ = star x.ofLp ⬝ᵥ (A *ᵥ y.ofLp) := by
-  rw [EuclideanSpace.inner_eq_star_dotProduct, ofLp_toEuclideanCLM, dotProduct_comm]
-
-/-- A contraction does not increase the norm of a vector. -/
-theorem norm_toEuclideanCLM_le_of_norm_le_one {A : Matrix n n ℂ} (hA1 : ‖A‖ ≤ 1)
-    (x : EuclideanSpace ℂ n) : ‖toEuclideanCLM (n := n) (𝕜 := ℂ) A x‖ ≤ ‖x‖ :=
-  ((toEuclideanCLM (n := n) (𝕜 := ℂ) A).le_opNorm x).trans
-    (mul_le_of_le_one_left (norm_nonneg x) hA1)
-
-end Matrix
 
 namespace TNLean.MPS.AreaLaw.Hastings
 
@@ -236,20 +227,26 @@ theorem one_sub_sq_le_re_inner_right {Ψ : EuclideanSpace ℂ n} (hΨ : ‖Ψ‖
   have h1 := norm_toEuclideanCLM_one_sub_le hΨ hZ hprod
   exact (one_sub_sq_le_norm_sq hΨ hZ h1).trans (norm_sq_le_re_inner_right hOL hOR Ψ)
 
-/-- **The expectation in the product of the marginals.** Let `O_L` and `O_R` be commuting
+/-- **The expectation in the product of the marginals.** Let `O_L` and `O_R` be
 orthogonal projections, `O_L` supported on the sites to the left of the cut after `c` sites and
 `O_R` on the remaining sites, with `‖O_B O_L O_R - |Ω⟩⟨Ω|‖ ≤ ε`. Then the expectation `y` of
 `O_L O_R` in the product `σ = ρ_{<c} ⊗ ρ_{≥c}` of the two marginals of `Ω` satisfies
 `1 - 2ε² ≤ y`: `y = ⟨Ω, O_L Ω⟩ ⟨Ω, O_R Ω⟩` and both factors are at least `1 - ε²`.
+The support conditions imply that the projections commute.
 Hastings, arXiv:0705.2024v4, `law16.tex` lines 440–446. -/
 theorem one_sub_two_mul_sq_le_re_trace_cutProductState_mul {L q c : ℕ}
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     {OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hOL : IsStarProjection OL) (hOR : IsStarProjection OR) (hcomm : Commute OL OR)
+    (hOL : IsStarProjection OL) (hOR : IsStarProjection OR)
     (hL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OL (leftBlock L c))
     (hR : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OR (leftBlock L c)ᶜ) {ε : ℝ}
     (hprod : ‖OB * OL * OR - vecMulVec Ω.ofLp (star Ω.ofLp)‖ ≤ ε) :
     1 - 2 * ε ^ 2 ≤ (cutProductState L q c Ω * (OL * OR)).trace.re := by
+  have hcomm : Commute OL OR :=
+    QuantumCircuit.commute_of_mem_supportedOperators
+      (Finset.disjoint_coe.mpr disjoint_compl_right)
+      (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hL)
+      (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hR)
   rw [trace_cutProductState_mul_mul c Ω hL hR]
   change 1 - 2 * ε ^ 2 ≤ (⟪Ω, toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) OL Ω⟫_ℂ *
     ⟪Ω, toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) OR Ω⟫_ℂ).re

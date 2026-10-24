@@ -148,8 +148,8 @@ theorem IsBoundaryCompatible.parentInteractionES_commute_mpoWithBoundary
         (mpoWithBoundary T X L)ᴴ = mpoWithBoundary T Y L)
     (X : Matrix (Fin D₁) (Fin D₁) ℂ) :
     Commute (MPSTensor.parentInteractionES A L)
-      (Matrix.toEuclideanLin (mpoWithBoundary T X L)) := by
-  exact MPSTensor.parentInteractionES_commute_of_starAlgebra_invariant A
+      (Matrix.toEuclideanLin (mpoWithBoundary T X L)) :=
+  MPSTensor.parentInteractionES_commute_of_starAlgebra_invariant A
     (StarAlgebra.adjoin ℂ (Set.range (fun Y ↦ mpoWithBoundary T Y L)))
     (h.groundSpaceES_invariant_boundaryStarAlgebra hL hstar)
     (StarAlgebra.subset_adjoin ℂ _ ⟨X, rfl⟩)

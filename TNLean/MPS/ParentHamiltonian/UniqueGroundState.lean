@@ -502,8 +502,8 @@ theorem wrapped_mirror_witness_agree_of_right_products
       Ywrap (wrappedMiddleBackground L₀ N η μ) * A j =
         Ymirror (mirrorMiddleBackground L₀ N η μ) * A j) :
     Ywrap (wrappedMiddleBackground L₀ N η μ) =
-      Ymirror (mirrorMiddleBackground L₀ N η μ) := by
-  exact right_witness_unique_of_isNBlkInjective (A := A) hInj hL₀ hProd
+      Ymirror (mirrorMiddleBackground L₀ N η μ) :=
+  right_witness_unique_of_isNBlkInjective (A := A) hInj hL₀ hProd
 
 /-- The full equality of the two boundary-crossing restrictions follows from
 equality after fixing each first physical index:
@@ -858,8 +858,8 @@ specialization of arXiv:2011.12127, Section IV.C, lines 2041--2048. -/
 theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (hA : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : 2 * L₀ ≤ N) :
-    HasUniqueGroundState (chainGroundSpace A (2 * L₀) N) := by
-  exact parentHamiltonian_unique_gs hA hL₀ (by omega) hN
+    HasUniqueGroundState (chainGroundSpace A (2 * L₀) N) :=
+  parentHamiltonian_unique_gs hA hL₀ (by omega) hN
 
 /-- Unique ground state for normal tensors at range \(L₀+1\) on every ring
 with \(L₀+1\le N\): \(\dim \mathcal G_{N,L₀+1}(A)=1\). This is
@@ -870,6 +870,6 @@ implies normality; it is retained in this specialization. -/
 theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
     {L₀ : ℕ} (_hA : Kraus.IsNormal A) (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 ≤ N) :
-    HasUniqueGroundState (chainGroundSpace A (L₀ + 1) N) := by
-  exact parentHamiltonian_unique_gs hInj hL₀ (by omega) hN
+    HasUniqueGroundState (chainGroundSpace A (L₀ + 1) N) :=
+  parentHamiltonian_unique_gs hInj hL₀ (by omega) hN
 end MPSTensor

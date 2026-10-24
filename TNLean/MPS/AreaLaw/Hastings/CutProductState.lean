@@ -58,12 +58,8 @@ theorem cutProductState_posSemidef (c : ℕ) (Ω : EuclideanSpace ℂ (Fin L →
 /-- The trace of a pure-state matrix is the squared norm of the vector. -/
 theorem trace_vecMulVec_self_star {m : Type*} [Fintype m] (ψ : EuclideanSpace ℂ m) :
     (vecMulVec (WithLp.ofLp ψ) (star (WithLp.ofLp ψ))).trace = (‖ψ‖ : ℂ) ^ 2 := by
-  classical
-  rw [← Matrix.mul_one (vecMulVec _ _), ← Entropy.inner_toEuclideanLin_eq_trace]
-  have h1 : toEuclideanLin (1 : Matrix m m ℂ) ψ = ψ := by
-    ext σ; simp
-  rw [h1]
-  exact inner_self_eq_norm_sq_to_K ψ
+  rw [trace_vecMulVec]
+  exact (EuclideanSpace.inner_eq_star_dotProduct ψ ψ).symm.trans (inner_self_eq_norm_sq_to_K ψ)
 
 /-- The trace of the pure state of `Ω` in cut coordinates is `‖Ω‖²`. -/
 theorem trace_cutPureState (c : ℕ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)) :

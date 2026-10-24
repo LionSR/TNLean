@@ -436,7 +436,7 @@ private theorem c3CenteredVirtualResidualES_eq_wholeIncrementCenteredResidualES
     [NeZero D] (A : MPSTensor d D) (K l : ℕ)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
     c3CenteredVirtualResidualES A K l ρ hρ =
-      wholeIncrementCenteredResidualES A K l 1 ρ (ne_of_gt hρ.trace_pos)  := by
+      wholeIncrementCenteredResidualES A K l 1 ρ (ne_of_gt hρ.trace_pos) := by
   rw [c3CenteredVirtualResidualES, wholeIncrementCenteredResidualES,
     reassocTailBoundaryMapES_one]
   congr 1
@@ -452,7 +452,6 @@ private theorem c3CenteredVirtualResidualES_eq_wholeIncrementCenteredResidualES
     boundaryFamilyEquiv_wholeIncrementRightOverlapFactorES_apply,
     Matrix.gramReshuffle_fixedPointProj_frobeniusEquivEuclidean_apply,
     Fintype.sum_prod_type]
-
 
 /-- The centered overlap residual factors exactly through the length-\(l\) Gram
 error on the common direct sum. -/
@@ -508,8 +507,8 @@ theorem IsPrimitiveMPS.c3_centeredVirtualResidualES_norm_sq_le_geometric
   have hGram' : ‖groundSpaceGram A l - Kinf‖ ^ 2 ≤
       (D : ℝ) ^ 3 * (C_G * r ^ l) ^ 2 := by
     simpa only [Kinf] using hGram l hl
-  have hTail' : ‖tailVirtualMapES A K‖ ^ 2 ≤ C_T ^ 2 := by
-    exact (sq_le_sq₀ (norm_nonneg _) hC_T.le).mpr (hTail K)
+  have hTail' : ‖tailVirtualMapES A K‖ ^ 2 ≤ C_T ^ 2 :=
+    (sq_le_sq₀ (norm_nonneg _) hC_T.le).mpr (hTail K)
   calc
     ‖c3CenteredVirtualResidualES A K l ρ hρ‖ ^ 2 ≤
         (‖groundSpaceGram A l - Kinf‖ * ‖tailVirtualMapES A K‖) ^ 2 :=

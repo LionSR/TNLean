@@ -29,6 +29,7 @@ fbc25   = "arXiv:2502.20257 (MPU symmetry defects and gauging)"
 glm23   = "arXiv:2203.12563 (MPO-symmetric MPS phase classification)"
 gnvw12  = "Gross, Nesme, Vogts, Werner, Commun. Math. Phys. 310 (2012)"
 gs24    = "arXiv:2405.00439 (domain walls of anomalous MPU symmetries)"
+hastings05 = "Hastings, Solving gapped Hamiltonians locally, Phys. Rev. B 73 (2006) 085115, arXiv:cond-mat/0508554"
 hastings07 = "Hastings, An area law for one-dimensional quantum systems, J. Stat. Mech. (2007) P08024, arXiv:0705.2024"
 hjpw04  = "Hayden, Jozsa, Petz, Winter (2004)"
 knabe88 = "Knabe, J. Stat. Phys. 52 (1988)"
@@ -51,6 +52,7 @@ ssvcw05 = "quant-ph/0501096 (sequential generation of entangled multiqubit state
 spwc10  = "arXiv:0909.5347 (quantum Wielandt inequality)"
 sun25   = "arXiv:2504.16985 (anomalous symmetries of matrix product density operators)"
 sw04    = "Schumacher and Werner, quant-ph/0405174 (quantum cellular automata)"
+swvc08   = "Schuch, Wolf, Verstraete and Cirac, Entropy scaling and simulability by Matrix Product States, arXiv:0705.0292v2"
 tnlean  = "internal theorem-surface audit, no single external source"
 
 [blueprint.graphs]

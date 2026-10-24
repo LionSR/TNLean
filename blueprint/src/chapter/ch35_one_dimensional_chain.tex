@@ -2178,6 +2178,44 @@ for an arbitrary finite set of sites and are instantiated here directly.
     The assertion about all cuts follows by restricting to internal cuts.
 \end{proof}
 
+\begin{theorem}[Cut ranks characterize open-boundary matrix product states]
+    \label{thm:chain_cut_rank_of_mps}
+    \lean{
+        TNLean.MPS.AreaLaw.rank_cutMatrix_le_bondDim,
+        TNLean.MPS.AreaLaw.IsOpenMPS.rank_cutMatrix_le,
+        TNLean.MPS.AreaLaw.isOpenMPS_iff_internal_cutMatrix_rank_le
+    }
+    \leanok
+    Let $\psi$ be a vector on $L$ sites of local dimension $q$.
+    If $\psi$ is a scalar multiple of a rectangular open-boundary
+    contraction with bond dimensions $d_0,\ldots,d_L$, then its cut
+    matrix $M_k$ satisfies $\operatorname{rank}M_k\le d_k$ for
+    $0\le k\le L$. In particular, $\psi$ is an open-boundary matrix
+    product state of bond dimension at most $D$ if and only if
+    $\operatorname{rank}M_k\le D$ at every internal cut $0<k<L$.
+    No normalization is required. The endpoint ranks are at most one;
+    when $L\le1$ there are no internal rank conditions, even for $D=0$.
+    This is the single-cut rank observation used in the truncation-error
+    lower bound of~\cite{Schuch2008EntropyScaling}; see also the sequential
+    truncation proposition in~\cite[Part IIa]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:chain_open_mps,thm:chain_mps_of_cut_rank}
+    Split a virtual path at bond $k$. For each fixed
+    bond index $\alpha\in\{0,\ldots,d_k-1\}$, the sums over the remaining
+    virtual indices on the two sides are independent. Hence
+    \begin{align}
+        M_k(a,b)=c\sum_{\alpha=0}^{d_k-1}U_k(a,\alpha)V_k(\alpha,b).
+    \end{align}
+    Absorbing $c$ into $U_k$ factors $M_k$ through $\mathbb C^{d_k}$,
+    so its rank is at most $d_k$. This remains valid when $d_k=0$:
+    the sum is empty and the cut matrix vanishes. At the endpoints,
+    $d_0=d_L=1$. The converse is
+    Theorem~\ref{thm:chain_mps_of_cut_rank}, which includes empty and
+    one-site chains.
+\end{proof}
+
 \begin{theorem}[Growth of chain cut ranks]
     \label{thm:chain_cut_rank_growth}
     \lean{
@@ -2341,7 +2379,12 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \begin{align}
         \psi-P\Phi_{j-1} & =P(\psi-\Phi_{j-1})+(1-P)\psi, \notag
     \end{align}
-    and the two terms are orthogonal. Hence
+    and the two terms are orthogonal, since $P^*=P=P^2$ gives
+    \begin{align}
+        \langle P(\psi-\Phi_{j-1}),(1-P)\psi\rangle
+         & =\langle\psi-\Phi_{j-1},(P-P^2)\psi\rangle=0. \notag
+    \end{align}
+    Hence
     $\|\psi-\Phi_j\|^2\le\|\psi-\Phi_{j-1}\|^2+\|(1-P_{L-j})\psi\|^2$,
     and $\|(1-P_k)\psi\|^2=\operatorname{tr}((1-\Pi_k)\rho_k)=\epsilon_k(D)$.
     Summing over the steps gives the bound.
