@@ -283,7 +283,8 @@
 
 \begin{proof}
     \leanok
-    \uses{def:hastings_cluster_part, thm:hastings_cluster_part_thermal}
+    \uses{def:hastings_cluster_part, thm:hastings_cluster_removal_trace,
+        thm:hastings_cluster_exp_count}
     Put $Y_j=\beta(H-H_{C_j}-H_{B_j})$, so that $\rho(\beta/n,C_j)$ is the alternating sum of
     the $e^{-(Y_j+\sum_{i\in E}\beta H_i)/n}$ over $E\subseteq C_j$. The bound for products of
     alternating sums in the companion quantum-channel
@@ -295,7 +296,8 @@
         \le\|O\|\prod_j\bigl(e^{J\beta/n}-1\bigr)^{n_{C_j}}
         \bigl(\operatorname{tr}e^{-Y_j}\bigr)^{1/n}.
     \end{align*}
-    As in the proof of Theorem~\ref{thm:hastings_cluster_part_thermal}, each
+    Theorems~\ref{thm:hastings_cluster_removal_trace} and~\ref{thm:hastings_cluster_exp_count},
+    the latter with $\beta/n$ in place of $\beta$, give
     $(\operatorname{tr}e^{-Y_j})^{1/n}\le e^{Sn_{C_j}J\beta/n}Z^{1/n}$, and the $n$ factors
     $Z^{1/n}$ multiply to $Z$.
 \end{proof}
