@@ -22,7 +22,7 @@ run_cmd do
       ``norm_commutator_sub_truncated_le,
       ``norm_gaussianFilteredTerm_sub_truncated_le_sum,
       ``norm_gaussianFilteredTerm_sub_truncated_le,
-      ``exists_truncated_approx_gaussianFilteredTerm] do
+      ``truncated_approx_gaussianFilteredTerm] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl

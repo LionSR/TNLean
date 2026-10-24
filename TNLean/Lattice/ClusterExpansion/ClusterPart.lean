@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.TraceExpAlternatingSum
+import TNLean.Algebra.MatrixHermitianSum
 
 /-!
 # The cluster part of the high-temperature expansion
@@ -110,7 +111,7 @@ theorem norm_trace_mul_clusterPart_le {H : Matrix ι ι ℂ} (hH : H.IsHermitian
   have hBsub : B ⊆ B ∪ C := Finset.subset_union_left
   have hCsub : C ⊆ B ∪ C := Finset.subset_union_right
   have hsumH : ∀ T ⊆ B ∪ C, (∑ k ∈ T, h k).IsHermitian := fun T hT ↦
-    (isSelfAdjoint_sum T fun k hk ↦ (hh k (hT hk)).isSelfAdjoint).isHermitian
+    Matrix.isHermitian_sum T fun k hk ↦ hh k (hT hk)
   have hsum : ∀ T ⊆ B ∪ C, ‖∑ k ∈ T, h k‖ ≤ T.card * J := fun T hT ↦
     (norm_sum_le _ _).trans <| by
       simpa using Finset.sum_le_sum fun k hk ↦ hJ k (hT hk)
