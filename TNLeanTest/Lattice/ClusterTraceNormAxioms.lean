@@ -19,7 +19,7 @@ run_cmd do
     ``TNLean.Lattice.ClusterExpansion.re_trace_sqrt_sub_le_of_forall_norm_trace_mul_sub_le,
     ``TNLean.Lattice.ClusterExpansion.posSemidef_pow_two_mul,
     ``TNLean.Lattice.ClusterExpansion.posSemidef_pow_of_even,
-    ``TNLean.Lattice.ClusterExpansion.HasProductForm.pow_of_even,
+    ``TNLean.Lattice.HasProductForm.pow_of_even,
     ``TNLean.Lattice.ClusterExpansion.exists_even_div_le] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"

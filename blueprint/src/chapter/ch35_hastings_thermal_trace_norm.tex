@@ -37,7 +37,6 @@ $|D|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
     \label{thm:hastings_thermal_trace_norm}
     \lean{TNLean.Lattice.ClusterExpansion.re_trace_sqrt_sub_le_of_forall_norm_trace_mul_sub_le}
     \leanok
-    \uses{thm:hastings_thermal_trace_norm_duality}
     Let $\rho$ and $\sigma$ be square complex matrices with
     $\operatorname{Re}\operatorname{Tr}\rho\ge0$, and let $\epsilon\ge0$. If
     \begin{align}
@@ -54,6 +53,7 @@ $|D|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
     conclusion is the bound of \cite[lines 1281--1299]{Hastings2006Solving}.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:hastings_thermal_trace_norm_duality}
     For $\|O\|\le1$ the hypothesis gives
     $|\operatorname{Tr}(O(\rho-\sigma))|\le\epsilon\operatorname{Re}\operatorname{Tr}\rho$,
     since $\epsilon\ge0$. Apply
@@ -62,7 +62,7 @@ $|D|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
 
 \begin{theorem}[The matrix product form at every temperature]
     \label{thm:hastings_thermal_all_temperatures}
-    \lean{TNLean.Lattice.ClusterExpansion.HasProductForm.pow_of_even,
+    \lean{TNLean.Lattice.HasProductForm.pow_of_even,
         TNLean.Lattice.ClusterExpansion.posSemidef_pow_of_even,
         TNLean.Lattice.ClusterExpansion.posSemidef_pow_two_mul,
         TNLean.Lattice.ClusterExpansion.exists_even_div_le}
@@ -70,7 +70,7 @@ $|D|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
     \uses{def:hastings_product_form}
     Let $\rho$ be a Hermitian operator in matrix product form of range $l$, and
     let $m$ be even. Then $\rho^m$ is positive semidefinite and in matrix product
-    form of range $l$. Moreover, for $\beta\ge0$ and $\beta_0>0$ there is an even
+    form of range $l$. For $\beta\ge0$ and $\beta_0>0$ there is an even
     $m\ge2$ with $\beta/m\le\beta_0$. Applied to the truncated high-temperature
     form $\rho(\beta/m,l_{\mathrm{proj}})$, which is Hermitian, this is the
     positivity and the matrix product form of

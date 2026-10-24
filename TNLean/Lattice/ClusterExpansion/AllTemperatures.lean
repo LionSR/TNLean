@@ -39,7 +39,7 @@ Documented in `docs/paper-gaps/hastings05_mplt_positivity.tex`.
 
 * `TNLean.Lattice.ClusterExpansion.posSemidef_pow_of_even`: `A^m ≥ 0` for Hermitian `A` and even
   `m`.
-* `TNLean.Lattice.ClusterExpansion.HasProductForm.pow_of_even`: for Hermitian `ρ` in product
+* `TNLean.Lattice.HasProductForm.pow_of_even`: for Hermitian `ρ` in product
   form of range `l` and even `m`, `ρ^m` is positive semidefinite and in product form of range `l`.
 * `TNLean.Lattice.ClusterExpansion.exists_even_div_le`: an even number of factors suffices.
 
@@ -76,7 +76,7 @@ of range `l`, as the truncated high-temperature density matrix `ρ(β/n, l_proj)
 the power `ρ^m` is positive semidefinite and again in product form of range `l`, the `m`
 indices at each site being grouped into one. Hastings, arXiv:cond-mat/0508554v3,
 `proj3new.tex`, lines 1303–1317. -/
-theorem HasProductForm.pow_of_even {Λ : Finset (ℤ × ℤ)} {q l : ℕ}
+theorem _root_.TNLean.Lattice.HasProductForm.pow_of_even {Λ : Finset (ℤ × ℤ)} {q l : ℕ}
     {ρ : Matrix (Configuration Λ q) (Configuration Λ q) ℂ} (hρ : HasProductForm Λ q l ρ)
     (hH : ρ.IsHermitian) {m : ℕ} (hm : Even m) :
     HasProductForm Λ q l (ρ ^ m) ∧ (ρ ^ m).PosSemidef :=
