@@ -1,0 +1,54 @@
+\documentclass{article}
+\usepackage[margin=28mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\title{Positivity of the Matrix Product Form at Every Temperature}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source statement}
+Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
+\href{https://arxiv.org/abs/cond-mat/0508554v3}{arXiv:cond-mat/0508554v3},
+source \path{proj3new.tex}, lines 1303--1311, sets
+$\rho(\beta,l_{\mathrm{proj}})=\rho(\beta/n,l_{\mathrm{proj}})^n$ for
+$\beta>\beta_0$ (eq.~(mplt)), with $n$ the smallest even integer such that
+$\beta/n\le\beta_0$, and states: ``By picking $n$ even we guarantee that
+$\rho(\beta,l_{\mathrm{proj}})$ is positive definite.''
+
+\section{The point at issue}
+The truncated high-temperature form $A=\rho(\beta/n,l_{\mathrm{proj}})$ is
+Hermitian. For even $n=2k$,
+\begin{align}
+  A^n=(A^k)^\dagger A^k,
+\end{align}
+so $\langle v,A^nv\rangle=\lVert A^kv\rVert^2\ge0$ for every vector $v$: the
+power is positive semidefinite. It is positive definite exactly when $A^k$ has
+trivial kernel, that is, when $A$ is invertible. The source does not show that
+the truncated form $A$ is invertible. It approximates $e^{-\beta H/n}$, which
+is invertible, only in the trace-norm sense of lines 1281--1299, and an
+approximation in trace norm need not be invertible.
+
+\section{The statement proved}
+The formalization proves that the even power is positive semidefinite, which is
+what the evenness of $n$ guarantees. Positive definiteness holds under the
+additional hypothesis that $\rho(\beta/n,l_{\mathrm{proj}})$ is invertible,
+which is not established. Nothing later in the source's argument uses strict
+positivity: the purpose of the even power is that
+$\rho(\beta,l_{\mathrm{proj}})$ be a positive operator, as a density matrix
+should be, and semidefiniteness suffices for that.
+
+\section{Formalization}
+The positive semidefiniteness of even powers is
+\leanid{TNLean.Lattice.ClusterExpansion.posSemidef_pow_of_even}, and together
+with the matrix product form it is
+\leanid{TNLean.Lattice.ClusterExpansion.HasProductForm.pow_of_even}.
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}

@@ -70,15 +70,15 @@ $|D|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
     \uses{def:hastings_product_form}
     Let $\rho$ be a Hermitian operator in matrix product form of range $l$, and
     let $m$ be even. Then $\rho^m$ is positive semidefinite and in matrix product
-    form of range $l$. It is positive definite when $\rho$ is invertible; the
-    source calls $\rho(\beta,l_{\mathrm{proj}})$ positive definite, and
-    without invertibility of $\rho(\beta/m,l_{\mathrm{proj}})$ an even power is
-    positive semidefinite only. Moreover, for $\beta\ge0$ and $\beta_0>0$ there is an even
+    form of range $l$. Moreover, for $\beta\ge0$ and $\beta_0>0$ there is an even
     $m\ge2$ with $\beta/m\le\beta_0$. Applied to the truncated high-temperature
     form $\rho(\beta/m,l_{\mathrm{proj}})$, which is Hermitian, this is the
     positivity and the matrix product form of
     $\rho(\beta,l_{\mathrm{proj}})=\rho(\beta/m,l_{\mathrm{proj}})^m$ in
-    eq.~(mplt) of \cite[lines 1303--1313]{Hastings2006Solving}. The count of
+    eq.~(mplt) of \cite[lines 1303--1313]{Hastings2006Solving}, with positive
+    semidefiniteness in place of the source's positive definiteness, which
+    would need $\rho(\beta/m,l_{\mathrm{proj}})$ to be
+    invertible~\cite{gap:hastings05_mplt_positivity}. The count of
     index values in lines 1313--1320 is not established; it is the count
     recorded as open for
     Theorem~\ref{thm:hastings_trotter_product_form_radius}.

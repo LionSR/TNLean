@@ -1386,6 +1386,13 @@ projection `P` of trace `n`, then orthonormal states of energy at most `E₀ + �
 most `n / (1 − θ)`, by Bessel's inequality; `θ = 1/2` gives `2n`. The energy under `H` is
 taken as a hypothesis.
 
+[hastings05_mplt_positivity.tex](hastings05_mplt_positivity.tex)
+(local-correction, resolved) records that Hastings' matrix product form at every temperature,
+`ρ(β, l_proj) = ρ(β/n, l_proj)^n` with `n` even (arXiv:cond-mat/0508554v3, source lines
+1303–1311, eq. `mplt`), is positive semidefinite, and positive definite only when the truncated
+high-temperature form is invertible, which the source does not establish. The formalization
+proves positive semidefiniteness, which is what the even power is used for.
+
 ### Local solution of gapped Hamiltonians: cluster size in the percolation bound
 
 [hastings05_percolation_cluster_size.tex](hastings05_percolation_cluster_size.tex)
