@@ -39,6 +39,7 @@ import TNLean.Lattice.RegionalSwapSupport
 import TNLean.Lattice.ReplicaSwap
 import TNLean.Lattice.Sheet
 import TNLean.Lattice.SiteRelabelEntropy
+import TNLean.Lattice.SiteSymmetry
 import TNLean.Lattice.SupportedPolarUnitary
 import TNLean.Lattice.SupportedUnitaryEntropy
 import TNLean.Lattice.VariationalLowerBound
