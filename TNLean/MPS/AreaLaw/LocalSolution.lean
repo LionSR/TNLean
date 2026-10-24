@@ -8,4 +8,5 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.AreaLaw.LocalSolution
 
+import TNLean.MPS.AreaLaw.LocalSolution.FinalStateCount
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchicalProjection

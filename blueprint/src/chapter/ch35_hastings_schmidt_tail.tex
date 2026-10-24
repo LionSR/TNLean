@@ -275,6 +275,54 @@
 
 \begin{theorem}[Matrix product state approximation of the gapped ground state]
     \label{thm:hastings_mps_gapped_chain}
+    \lean{TNLean.MPS.AreaLaw.Hastings.exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState_endpoint}
+    \leanok
+    \uses{thm:hastings_lemma1_endpoint, thm:hastings_area_law}
+    Let $R$ be a range. There is a constant $K\ge0$, depending only on $R$,
+    with the following property. Let $J\ge0$ bound the interaction terms, let
+    $\Delta E>0$ be a gap, let $\zeta$ be the decay length of Lemma~1 obtained
+    by raising the Lieb--Robinson velocity by a factor $\tfrac54$, and put
+    $\xi'=6\zeta$ and $C_1=\max(K\zeta^3,1)$. For every chain of $L$ sites
+    with local dimension $D>1$ and every gapped ground vector $\Omega$ of a
+    Hamiltonian of range $R$, strength $J$ and gap $\Delta E$, with
+    $k_0=\lceil\exp(2S_{\max})/2\rceil$ for the bound $S_{\max}$ of the area
+    law at the same $\xi'$ and $C_1$, as in Theorem~\ref{thm:hastings_area_law},
+    truncating every cut onto the $k'$ leading eigenvectors of its left
+    marginal, for every natural number $k'\ge k_0$, gives an open-boundary
+    matrix product state $\Phi$ of bond dimension at most $k'$ with
+    \begin{align}
+        \lVert\Phi-\Omega\rVert^2
+         & \le(L-1)\,4C_1^2e^{2/\xi'}\Bigl(\frac{k'}{k_0}\Bigr)^{-1/(\xi'\log D)}.
+        \notag
+    \end{align}
+    The constants depend only on $R$, $J/\Delta E$ and $D$, not on $L$. This
+    is the conclusion of the section on matrix product states of
+    \cite{Hastings2007AreaLaw} under its Hamiltonian assumptions alone, at the
+    printed rate $\xi'=6\xi$ for $\xi=\zeta$ and with $C_1$ polynomial in
+    $\zeta$. The length $\zeta$ may stand in for the source's $\xi$ because the
+    source fixes $\xi=\max(2v/\Delta E,\xi_C)$ only through some Lieb--Robinson
+    pair $(v,\xi_C)$ (lines 96--112), and raising $v$ keeps a pair
+    valid~\cite{gap:hastings07_lemma1_decay_length}. The chain estimate behind
+    $\zeta$, whose prefactor grows with $J$ and whose second operator acts on
+    one site, is not shown to give a Lieb--Robinson pair in the source's form
+    \cite{gap:hastings07_lemma1_decay_length,gap:hastings07_gaussian_average_exponent}.
+    The error is measured in the squared
+    norm~\cite{gap:hastings07_mps_error_measure}, and the constant is that of
+    Theorem~\ref{thm:hastings_schmidt_tail_rpow}
+    \cite{gap:hastings07_schmidt_tail_constant}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_lemma1_endpoint, thm:hastings_mps_ground_state,
+        thm:hastings_factorization_mono}
+    Lemma~1 at the printed rate gives the factorization at error
+    $K\zeta^3e^{-l/(6\zeta)}$ at every cut and length. Taking
+    $C_1=\max(K\zeta^3,1)$ only enlarges the error, and
+    Theorem~\ref{thm:hastings_mps_ground_state} gives the
+    bound~\cite{gap:hastings07_mps_entropy_stage}.
+\end{proof}
+
+\begin{theorem}[Matrix product state of the gapped ground state at a rate above the endpoint]
+    \label{thm:hastings_mps_gapped_chain_rate}
     \lean{TNLean.MPS.AreaLaw.Hastings.exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState}
     \leanok
     \uses{thm:hastings_lemma1_polynomial_constant}
@@ -295,12 +343,10 @@
         \notag
     \end{align}
     The constants depend only on $R$, $\kappa$, $J/\Delta E$ and $D$, not on
-    $L$. This is the conclusion of the section on matrix product states of
-    \cite{Hastings2007AreaLaw} under its Hamiltonian assumptions alone, with
-    $C_1$ polynomial in $\hat\xi$ as in that paper. It holds at the rate
-    $\xi'=\kappa\hat\xi$ for every fixed $\kappa>6$ rather than at the
-    printed endpoint, and $\hat\xi$ is not shown to be the length of the
-    source's Lieb--Robinson pair
+    $L$, and $C_1$ is polynomial in $\hat\xi$. This is the form at the length
+    $\hat\xi$, at any rate $\xi'=\kappa\hat\xi$ with $\kappa>6$; the printed
+    rate is Theorem~\ref{thm:hastings_mps_gapped_chain}. The length $\hat\xi$
+    is not shown to be the length of the source's Lieb--Robinson pair
     \cite{gap:hastings07_lemma1_decay_length,gap:hastings07_gaussian_average_exponent}.
     The error is measured in the squared
     norm~\cite{gap:hastings07_mps_error_measure}, and the constant is that of
