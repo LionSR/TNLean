@@ -72,7 +72,8 @@ this section are natural. The norm $\|\cdot\|_1$ is the full trace norm.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:renyi_entropy_tail_threshold,thm:chain_sequential_truncation_sq}
+    \uses{thm:renyi_entropy_tail_threshold,thm:chain_sequential_truncation_eigen,
+        thm:chain_sequential_truncation_sq}
     By~(\ref{eq:renyi_finite_entropy_threshold}), each discarded weight is
     at most $\delta^2/[16(N+1)]$.
     Squared-error sequential truncation gives a matrix product vector $\Phi$
@@ -100,7 +101,7 @@ this section are natural. The norm $\|\cdot\|_1$ is the full trace norm.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:chain_sequential_truncation_sq}
+    \uses{thm:chain_sequential_truncation_eigen,thm:chain_sequential_truncation_sq}
     All discarded spectral weights vanish. The squared-error bound for
     sequential truncation is therefore zero, so the truncated vector
     equals $\psi_N$.
