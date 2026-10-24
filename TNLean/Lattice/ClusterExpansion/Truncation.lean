@@ -63,8 +63,8 @@ Documented in `docs/paper-gaps/hastings05_cluster_boundary.tex`.
 * `TNLean.Lattice.ClusterExpansion.pairwiseDisjoint_of_admissible`,
   `card_add_card_biUnion_boundary_le`: the members of an admissible family are pairwise
   disjoint, and the boundary count passes to their union.
-* `TNLean.Lattice.ClusterExpansion.hasSum_truncatedExpSeries`: the inclusion–exclusion
-  identity `ρ(β, l) = ∑_U (-1)^{|U|} ρ(β, U)` (lines 1197–1225).
+* `TNLean.Lattice.ClusterExpansion.hasSum_truncatedExpTerm`, `truncatedExp_eq_sum`: the
+  inclusion–exclusion identity `ρ(β, l) = ∑_U (-1)^{|U|} ρ(β, U)` (lines 1197–1225).
 * `TNLean.Lattice.ClusterExpansion.exp_sub_truncatedExp`: `e^{-βH} - ρ(β, l)` as the sum over
   nonempty families.
 * `TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_le`: the bound
@@ -329,14 +329,16 @@ theorem card_biUnion_of_admissible {U : Finset (Finset κ)} (hU : IsAdmissible G
 sets has `n_C + n_{∂C} ≤ S n_C`, then the union has `n_{⋃U} + n_{⋃∂U} ≤ S n_{⋃U}`, the
 hypothesis of `norm_trace_mul_clusterPart_le_pow` for `ρ(β, C_1, …, C_m)`. -/
 theorem card_add_card_biUnion_boundary_le {U : Finset (Finset κ)} (hU : IsAdmissible G U)
-    (hconn : ∀ C ∈ U, (G.induce (C : Set κ)).Connected) {S : ℕ}
-    (hS : ∀ C ∈ U, #C + #(boundary G C) ≤ S * #C) :
-    #(U.biUnion id) + #(U.biUnion (boundary G)) ≤ S * #(U.biUnion id) := by
-  rw [card_biUnion_of_admissible G hU hconn, Finset.mul_sum]
-  calc (∑ C ∈ U, #C) + #(U.biUnion (boundary G))
-      ≤ (∑ C ∈ U, #C) + ∑ C ∈ U, #(boundary G C) := by
-        gcongr; exact Finset.card_biUnion_le
-    _ = ∑ C ∈ U, (#C + #(boundary G C)) := Finset.sum_add_distrib.symm
+    (hconn : ∀ C ∈ U, (G.induce (C : Set κ)).Connected) {S : ℝ}
+    (hS : ∀ C ∈ U, ((#C : ℝ) + #(boundary G C)) ≤ S * #C) :
+    ((#(U.biUnion id) : ℝ) + #(U.biUnion (boundary G))) ≤ S * #(U.biUnion id) := by
+  rw [card_biUnion_of_admissible G hU hconn]
+  push_cast
+  rw [Finset.mul_sum]
+  calc (∑ C ∈ U, (#C : ℝ)) + #(U.biUnion (boundary G))
+      ≤ (∑ C ∈ U, (#C : ℝ)) + ∑ C ∈ U, (#(boundary G C) : ℝ) := by
+        gcongr; exact_mod_cast Finset.card_biUnion_le
+    _ = ∑ C ∈ U, ((#C : ℝ) + #(boundary G C)) := Finset.sum_add_distrib.symm
     _ ≤ ∑ C ∈ U, S * #C := Finset.sum_le_sum hS
 
 end Clusters
