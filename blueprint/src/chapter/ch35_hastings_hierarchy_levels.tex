@@ -19,7 +19,8 @@ a hypothesis.
     \label{thm:hastings05_level_against_ground_state}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_compressedWindowProjection_mul_sq_le}
     \leanok
-    \uses{thm:hastings05_nested_projections,thm:hastings05_normalization,
+    \uses{thm:hastings05_projection_deficiency,
+        thm:hastings05_nested_projections,thm:hastings05_normalization,
         thm:hastings05_compressed_window_projection,
         thm:hastings05_compressed_window_bound}
     Let $P,P'$ be commuting orthogonal projections, $M$ Hermitian, $c$ real,
@@ -91,7 +92,7 @@ a hypothesis.
     \uses{def:hastings05_hierarchy_deficiency,def:hastings05_hierarchy_majorant}
     Let $K>0$ and $e>0$. With $\epsilon=Ke$ and the radii
     $x_m=K(e+2\beta_m)^{1-s}$ of~\cite[lines 676--681]{Hastings2006Solving},
-    $0\le D_m\le\beta_m$ for every $m$.
+    $D_m\le\beta_m$ and $0\le\beta_m$ for every $m$.
 \end{theorem}
 \begin{proof}\leanok
     By induction, $(\epsilon+2KD_m)/x_m\le(e+2\beta_m)/(e+2\beta_m)^{1-s}
@@ -100,12 +101,13 @@ a hypothesis.
 
 \begin{theorem}[The closed form]
     \label{thm:hastings05_hierarchy_closed_form}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_le}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_le,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_le_rpow_quarter}
     \leanok
-    \uses{def:hastings05_hierarchy_majorant,thm:hastings05_hierarchy_source_radii}
+    \uses{def:hastings05_hierarchy_majorant,thm:hastings05_exponent}
     For $0<e\le1$ and $0\le s\le1$, $\beta_m\le(3^m-1)e^{s^m}$. For the
-    source's $s=1-1/h$, $N=2^h$ supersites and $h\ge2$, the deficiency of the
-    last level is at most $(3^h-1)e^{1/4}$, in place of the printed
+    source's $s=1-1/h$, $N=2^h$ supersites and $h\ge2$, the majorant of the
+    last level satisfies $\beta_h\le(3^h-1)e^{1/4}$, in place of the printed
     $N\exp[-(l_{\mathrm{proj}}/l_{\mathrm{fac}})(1-1/h)^h]$
     for $e=\exp(-l_{\mathrm{proj}}/l_{\mathrm{fac}})$
     \cite[lines 705--707]{Hastings2006Solving}.
@@ -114,7 +116,9 @@ a hypothesis.
     Write $\beta_m\le C_me^{s^m}$ with $C_m=3^m-1$. Since $e\le e^{s^m}\le
         e^{s^{m+1}}$ and $y^s\le y$ for $y\ge1$,
     $(e+2\beta_m)^s\le(1+2C_m)e^{s^{m+1}}$, and
-    $2C_m^2+(1+2C_m)^2\le(3C_m+2)^2=C_{m+1}^2$.
+    $2C_m^2+(1+2C_m)^2\le(3C_m+2)^2=C_{m+1}^2$. For $s=1-1/h$ and $m=h$,
+    $(1-1/h)^h\ge1/4$ by Theorem~\ref{thm:hastings05_exponent}, and
+    $e^{(1-1/h)^h}\le e^{1/4}$ since $e\le1$.
 \end{proof}
 
 \subsection{The supersite grouping}

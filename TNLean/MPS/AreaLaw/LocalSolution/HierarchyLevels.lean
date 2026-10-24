@@ -40,7 +40,8 @@ supersite grouping of lines 609–628.
 * `norm_sub_compressedWindowProjection_mul_sq_le`: one level against the ground state.
 * `hierarchyDeficiency`, `norm_sub_hierarchy_le`: all levels for given window radii.
 * `hierarchyMajorant`, `hierarchyDeficiency_le_hierarchyMajorant`: the source's window radii.
-* `hierarchyMajorant_le`: `D_m ≤ (3^m - 1) e^{s^m}`.
+* `hierarchyMajorant_le`, `hierarchyMajorant_le_rpow_quarter`: `D_m ≤ (3^m - 1) e^{s^m}`, and
+  `(3^h - 1) e^{1/4}` for the source's exponent.
 -/
 
 open Matrix
@@ -186,11 +187,8 @@ theorem hierarchyDeficiency_le_hierarchyMajorant {K e : ℝ} (hK : 0 < K) (he : 
     have h2 := pow_le_pow_left₀ hnn hterm 2
     linarith
 
-/-- **The closed form.** For `0 < e ≤ 1` and `0 ≤ s ≤ 1`, `β_m ≤ (3^m - 1) e^{s^m}`. For the
-source's `s = 1 - 1/h` and `N = 2^h` supersites this is at most `N^{log₂ 3} e^{1/4}` when
-`h ≥ 2` (`quarter_le_one_sub_inv_pow`), compared with the printed
-`N exp(-(l_proj/l_fac)(1 - 1/h)^h)` of arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 705–707,
-for `e = exp(-l_proj/l_fac)`. Each step uses `e ≤ e^{s^m}`, `e^{s^m} ≤ e^{s^{m+1}}` and
+/-- **The closed form.** For `0 < e ≤ 1` and `0 ≤ s ≤ 1`, `β_m ≤ (3^m - 1) e^{s^m}`. The
+source's case `s = 1 - 1/h`, `m = h` is `hierarchyMajorant_le_rpow_quarter`. Each step uses `e ≤ e^{s^m}`, `e^{s^m} ≤ e^{s^{m+1}}` and
 `C^s ≤ C` for `C ≥ 1`. -/
 theorem hierarchyMajorant_le {e s : ℝ} (he0 : 0 < e) (he1 : e ≤ 1) (hs0 : 0 ≤ s)
     (hs1 : s ≤ 1) (m : ℕ) :
@@ -240,5 +238,19 @@ theorem hierarchyMajorant_le {e s : ℝ} (he0 : 0 < e) (he1 : e ≤ 1) (hs0 : 0 
       rw [e3]
       have := Real.rpow_pos_of_pos he0 (s ^ (m + 1))
       nlinarith [mul_nonneg hC hC]
+
+/-- **The last level for the source's exponent.** For `0 < e ≤ 1`, `h ≥ 2` and
+`s = 1 - 1/h`, the majorant of the last level satisfies `β_h ≤ (3^h - 1) e^{1/4}`, since
+`(1 - 1/h)^h ≥ 1/4`. With `N = 2^h` supersites and `e = exp(-l_proj/l_fac)` this is the analogue
+of the printed `N exp(-(l_proj/l_fac)(1 - 1/h)^h)` of arXiv:cond-mat/0508554v3,
+`proj3new.tex`, lines 705–707, with `3^h = N^{log₂ 3}` in place of `N`. -/
+theorem hierarchyMajorant_le_rpow_quarter {e : ℝ} (he0 : 0 < e) (he1 : e ≤ 1) {h : ℕ}
+    (hh : 2 ≤ h) :
+    hierarchyMajorant e (1 - 1 / (h : ℝ)) h ≤ ((3 : ℝ) ^ h - 1) * e ^ (1 / 4 : ℝ) := by
+  obtain ⟨hs0, hs1⟩ := one_sub_inv_natCast_mem_Icc h
+  refine (hierarchyMajorant_le he0 he1 hs0 hs1 h).trans ?_
+  have h3 : (1 : ℝ) ≤ 3 ^ h := one_le_pow₀ (by norm_num)
+  exact mul_le_mul_of_nonneg_left
+    (Real.rpow_le_rpow_of_exponent_ge he0 he1 (quarter_le_one_sub_inv_pow hh)) (by linarith)
 
 end TNLean.MPS.AreaLaw.LocalSolution
