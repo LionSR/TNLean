@@ -293,14 +293,17 @@ section Strings
 
 variable {G : Type*} [Group G]
 
+private theorem zmod_add_one_eq_natCast {w : ℕ} [NeZero w] (c : ZMod w) :
+    c + 1 = ((c.val + 1 : ℕ) : ZMod w) := by
+  push_cast
+  rw [ZMod.natCast_zmod_val]
+
 /-- A comparison of the column (or row) offsets of the two ends of a bond, when the bond does
 not cross either side of the interval `[0, m)`. -/
 private theorem zmod_val_add_one_lt_iff {w : ℕ} [NeZero w] {c : ZMod w} {m : ℕ}
     (h0 : c + 1 ≠ 0) (h1 : c + 1 ≠ m) : (c + 1).val < m ↔ c.val < m := by
   have hlt := ZMod.val_lt c
-  have hc : c + 1 = ((c.val + 1 : ℕ) : ZMod w) := by
-    push_cast
-    rw [ZMod.natCast_zmod_val]
+  have hc := zmod_add_one_eq_natCast c
   have hne : c.val + 1 ≠ w := fun h => h0 (by rw [hc, h, ZMod.natCast_self])
   have hv : (c + 1).val = c.val + 1 := by
     rw [hc, ZMod.val_natCast_of_lt (by omega)]
@@ -310,9 +313,7 @@ private theorem zmod_val_add_one_lt_iff {w : ℕ} [NeZero w] {c : ZMod w} {m : �
 
 private theorem zmod_not_val_lt_of_add_one_eq_zero {w : ℕ} [NeZero w] {c : ZMod w} {m : ℕ}
     (hm : m < w) (h0 : c + 1 = 0) : ¬c.val < m := by
-  have hc : c + 1 = ((c.val + 1 : ℕ) : ZMod w) := by
-    push_cast
-    rw [ZMod.natCast_zmod_val]
+  have hc := zmod_add_one_eq_natCast c
   rw [hc, ZMod.natCast_eq_zero_iff] at h0
   have := Nat.le_of_dvd (Nat.succ_pos _) h0
   omega
@@ -320,9 +321,7 @@ private theorem zmod_not_val_lt_of_add_one_eq_zero {w : ℕ} [NeZero w] {c : ZMo
 private theorem zmod_val_lt_of_add_one_eq {w : ℕ} [NeZero w] {c : ZMod w} {m : ℕ}
     (hm : m < w) (h0 : c + 1 ≠ 0) (h1 : c + 1 = m) : ¬(c + 1).val < m ∧ c.val < m := by
   have hlt := ZMod.val_lt c
-  have hc : c + 1 = ((c.val + 1 : ℕ) : ZMod w) := by
-    push_cast
-    rw [ZMod.natCast_zmod_val]
+  have hc := zmod_add_one_eq_natCast c
   have hne : c.val + 1 ≠ w := fun h => h0 (by rw [hc, h, ZMod.natCast_self])
   rw [h1, ZMod.val_natCast_of_lt hm]
   rw [hc, ZMod.natCast_eq_natCast_iff', Nat.mod_eq_of_lt (by omega), Nat.mod_eq_of_lt hm] at h1
