@@ -491,7 +491,7 @@ theorem norm_heisenberg_commutator_le_graphDistance {κ : Type*} [Fintype κ]
 
 /-- Exact commutation when every initial site is at infinite graph distance from `y`.
 This is the disconnected-domain extension of the TNLean one-dimensional note,
-`part2a_mps_information.tex`, Lemma `lem:LR`, lines 260–309; the closed-region argument
+`part2a_mps_information.tex`, Lemma `lem:LR`, lines 267–309; the closed-region argument
 is the exact-vanishing step of OpenAI, *A two-dimensional area law from a global
 spectral gap*, Lemma 4.1, `03-quasilocal.tex`, lines 63 and 113–114. -/
 theorem heisenberg_commutator_eq_zero_of_forall_edist_eq_top

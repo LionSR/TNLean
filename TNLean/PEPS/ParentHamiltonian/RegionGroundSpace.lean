@@ -48,8 +48,8 @@ noncomputable def regionGroundSpace (A : Tensor Γ d) (R : Finset V) :
 /-- The local ground space is the span of the open-region tensors indexed by
 crossing-bond configurations. Source: arXiv:2011.12127, lines 2003–2008. -/
 theorem regionGroundSpace_eq_span (A : Tensor Γ d) (R : Finset V) :
-    regionGroundSpace A R = Submodule.span ℂ (Set.range (openRegionWeight A R)) := by
-  exact Fintype.range_linearCombination ℂ (openRegionWeight A R)
+    regionGroundSpace A R = Submodule.span ℂ (Set.range (openRegionWeight A R)) :=
+  Fintype.range_linearCombination ℂ (openRegionWeight A R)
 
 /-- A subspace contains the regional ground space exactly when it contains
 every actual open-region tensor. Source: arXiv:2011.12127, the boundary
@@ -99,8 +99,8 @@ theorem stateCoeff_slice_mem_regionGroundSpace (A : Tensor Γ d) (R : Finset V)
   classical
   by_cases h : Nonempty (VirtualConfig A)
   · obtain ⟨ζ⟩ := h
-    have hA (e : Edge Γ) : A.bondDim e ≠ 0 := by
-      exact Nat.ne_zero_of_lt (lt_of_le_of_lt (Nat.zero_le (ζ e).val) (ζ e).isLt)
+    have hA (e : Edge Γ) : A.bondDim e ≠ 0 :=
+      Nat.ne_zero_of_lt (lt_of_le_of_lt (Nat.zero_le (ζ e).val) (ζ e).isLt)
     refine ⟨fun μ => openRegionWeight A (Finset.univ \ R)
       (regionComplementBoundaryConfig A R μ) τ, ?_⟩
     funext σ
@@ -122,7 +122,7 @@ theorem localOperator_stateCoeff_slice_eq_zero (A : Tensor Γ d) (R : Finset V)
     (h : Module.End ℂ (RegionPhysicalConfig (d := d) R → ℂ))
     (hh : regionGroundSpace A R ≤ h.ker)
     (τ : RegionPhysicalConfig (d := d) (Finset.univ \ R)) :
-    h (fun σ => stateCoeff A (assembleRegionσ R σ τ)) = 0 := by
-  exact hh (stateCoeff_slice_mem_regionGroundSpace A R τ)
+    h (fun σ => stateCoeff A (assembleRegionσ R σ τ)) = 0 :=
+  hh (stateCoeff_slice_mem_regionGroundSpace A R τ)
 
 end TNLean.PEPS

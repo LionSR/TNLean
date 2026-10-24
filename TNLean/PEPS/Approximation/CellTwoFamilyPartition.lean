@@ -47,14 +47,6 @@ namespace TNLean.PEPS.Approximation.CellPartition
 
 open TNLean.PEPS.AreaLaw.Geometry
 
-/-- For `γ < δ` and `K > 0` there is a threshold `U > 1` above which
-`K u ^ γ ≤ u ^ δ`, namely `cellPowerThreshold K γ δ = max 2 (K ^ (1 / (δ - γ)))`.
-Source: Lemma 3.2, `02-information.tex`, lines 238–240 and 304–307. -/
-theorem exists_const_mul_rpow_le_rpow {K γ δ : ℝ} (hK : 0 < K) (hγδ : γ < δ) :
-    ∃ U : ℝ, 1 < U ∧ ∀ u, U ≤ u → K * u ^ γ ≤ u ^ δ :=
-  ⟨cellPowerThreshold K γ δ, one_lt_cellPowerThreshold K γ δ,
-    fun _ hu ↦ const_mul_rpow_le_rpow_of_cellPowerThreshold_le hK hγδ hu⟩
-
 /-- The intermediate exponent `γ' = (max γ 0 + 1) / 2` of the cell recursion: for `γ < 1`
 it satisfies `γ < γ'`, `0 < γ' < 1`, and children of side `8 u ^ γ` shrink below `u ^ γ'`.
 Source: Lemma 3.2, `02-information.tex`, lines 224–227. -/

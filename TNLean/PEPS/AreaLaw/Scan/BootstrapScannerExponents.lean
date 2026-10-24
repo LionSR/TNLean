@@ -42,21 +42,8 @@ def scannerExponents (e₀ : ℝ) (he₀ : 0 < e₀) (he₀₁ : e₀ < 1) : Sca
     kappa_pos := by
       obtain ⟨_, _, _, _, hκ⟩ := parameter_bounds he₀ he₀₁
       exact hκ
-    kappa_lt_mu := by
-      obtain ⟨hg₀, hg₀half, hℓ, hℓ₁, hκ⟩ := parameter_bounds he₀ he₀₁
-      have hℓg₀ : ell e₀ < g0 e₀ :=
-        (div_lt_self (div_pos hg₀ (by norm_num : (0 : ℝ) < 1000))
-          (by norm_num : (1 : ℝ) < 100)).trans
-          (div_lt_self hg₀ (by norm_num : (1 : ℝ) < 1000))
-      linarith [show kappa e₀ ≤ ell e₀ from min_le_left _ _,
-        show mu e₀ = 1 - g0 e₀ from rfl]
-    mu_lt_one_sub_ell := by
-      obtain ⟨hg₀, _, _, _, _⟩ := parameter_bounds he₀ he₀₁
-      have hℓg₀ : ell e₀ < g0 e₀ :=
-        (div_lt_self (div_pos hg₀ (by norm_num : (0 : ℝ) < 1000))
-          (by norm_num : (1 : ℝ) < 100)).trans
-          (div_lt_self hg₀ (by norm_num : (1 : ℝ) < 1000))
-      exact sub_lt_sub_left hℓg₀ 1
+    kappa_lt_mu := kappa_lt_mu he₀ he₀₁
+    mu_lt_one_sub_ell := sub_lt_sub_left (ell_lt_g0 he₀ he₀₁) 1
     nu_pos := by
       obtain ⟨hg₀, _, _, _, _⟩ := parameter_bounds he₀ he₀₁
       exact div_pos hg₀ (by norm_num)
@@ -67,15 +54,6 @@ def scannerExponents (e₀ : ℝ) (he₀ : 0 < e₀) (he₀₁ : e₀ < 1) : Sca
     e_lt_one := by
       obtain ⟨hg₀, _, _, _, _⟩ := parameter_bounds he₀ he₀₁
       exact sub_lt_self 1 hg₀
-    kappa_le_e := by
-      obtain ⟨hg₀, hg₀half, hℓ, hℓ₁, hκ⟩ := parameter_bounds he₀ he₀₁
-      have hℓg₀ : ell e₀ < g0 e₀ :=
-        (div_lt_self (div_pos hg₀ (by norm_num : (0 : ℝ) < 1000))
-          (by norm_num : (1 : ℝ) < 100)).trans
-          (div_lt_self hg₀ (by norm_num : (1 : ℝ) < 1000))
-      have hκμ : kappa e₀ < mu e₀ := by
-        linarith [show kappa e₀ ≤ ell e₀ from min_le_left _ _,
-          show mu e₀ = 1 - g0 e₀ from rfl]
-      exact hκμ.le }
+    kappa_le_e := (kappa_lt_mu he₀ he₀₁).le }
 
 end TNLean.PEPS.AreaLaw.Scan.BootstrapParameters

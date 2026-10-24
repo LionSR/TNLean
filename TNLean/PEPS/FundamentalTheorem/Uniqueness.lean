@@ -436,30 +436,26 @@ theorem gauge_unique_mod_edge_scalars (A B : Tensor G d)
     refine Matrix.inv_eq_right_inv ?_
     rw [hprop e, Matrix.smul_mul, Matrix.mul_smul, smul_smul,
       mul_inv_cancel₀ hcne, one_smul, Matrix.mul_nonsing_inv _ hYdet]
-  refine ⟨c, ?_, ?_⟩
-  · -- `IsVertexBalanced c`: the oriented product at each vertex is one.
-    intro v
-    -- `edgeScalarAt c v ie` equals the local extraction `cvFun v ie` by uniqueness.
-    have hmatch : ∀ ie : IncidentEdge G v,
-        edgeScalarAt (G := G) c v ie = cvFun v ie := by
-      intro ie
-      refine huniq v ie _ _ ?_ (hcvProp v ie)
-      unfold edgeScalarAt edgeGaugeAt
-      by_cases h : ie.1.1.1 = v
-      · simp only [ite_eq_left h]; rw [hprop ie.1]
-      · simp only [ite_eq_right h]
-        rw [hpropInv ie.1, Matrix.transpose_smul, Units.val_inv_eq_inv_val]
-    calc (∏ ie : IncidentEdge G v, edgeScalarAt (G := G) c v ie)
-        = ∏ ie : IncidentEdge G v, cvFun v ie :=
-          Finset.prod_congr rfl (fun ie _ => hmatch ie)
-      _ = 1 := hcvProd v
-  · -- The oriented relation between the two gauge families at every endpoint.
+  -- The oriented relation between the two gauge families at every endpoint.
+  have hrel : ∀ (v : V) (ie : IncidentEdge G v),
+      edgeGaugeAt A X v ie = edgeScalarAt (G := G) c v ie • edgeGaugeAt A Y v ie := by
     intro v ie
     unfold edgeScalarAt edgeGaugeAt
     by_cases h : ie.1.1.1 = v
     · simp only [ite_eq_left h]; rw [hprop ie.1]
     · simp only [ite_eq_right h]
       rw [hpropInv ie.1, Matrix.transpose_smul, Units.val_inv_eq_inv_val]
+  refine ⟨c, ?_, hrel⟩
+  -- `IsVertexBalanced c`: the oriented product at each vertex is one.
+  intro v
+  -- `edgeScalarAt c v ie` equals the local extraction `cvFun v ie` by uniqueness.
+  have hmatch : ∀ ie : IncidentEdge G v,
+      edgeScalarAt (G := G) c v ie = cvFun v ie :=
+    fun ie => huniq v ie _ _ (hrel v ie) (hcvProp v ie)
+  calc (∏ ie : IncidentEdge G v, edgeScalarAt (G := G) c v ie)
+      = ∏ ie : IncidentEdge G v, cvFun v ie :=
+        Finset.prod_congr rfl (fun ie _ => hmatch ie)
+    _ = 1 := hcvProd v
 
 
 end PEPS

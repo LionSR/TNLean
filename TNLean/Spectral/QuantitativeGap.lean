@@ -137,8 +137,8 @@ theorem exponential_convergence_of_primitive [NeZero D]
       _ ≤ ‖X‖ + ‖P X‖ := norm_sub_le _ _
       _ ≤ ‖X‖ + ‖P'‖ * ‖X‖ := by gcongr
       _ = (1 + ‖P'‖) * ‖X‖ := by ring
-      _ ≤ C * ‖X‖ := by
-        exact mul_le_mul_of_nonneg_right hC_ge_one_plus (norm_nonneg X)
+      _ ≤ C * ‖X‖ :=
+        mul_le_mul_of_nonneg_right hC_ge_one_plus (norm_nonneg X)
       _ = C * (1 - (1 - r)) ^ 0 * ‖X‖ := by simp
   · have hn1 : 1 ≤ n := Nat.succ_le_of_lt (Nat.pos_of_ne_zero hn)
     have hpowEq :=
@@ -235,8 +235,8 @@ theorem correlation_length_bound [NeZero D]
     have hzero : ‖X‖ ≤ C * ‖X‖ := by
       calc
         ‖X‖ ≤ 1 * ‖X‖ := by simp
-        _ ≤ C * ‖X‖ := by
-          exact mul_le_mul_of_nonneg_right hC_ge_one (norm_nonneg X)
+        _ ≤ C * ‖X‖ :=
+          mul_le_mul_of_nonneg_right hC_ge_one (norm_nonneg X)
     have hexp0 : Real.exp (-((0 : ℕ) : ℝ) / ξ) = 1 := by
       norm_num
     simpa [E, hexp0] using hzero
