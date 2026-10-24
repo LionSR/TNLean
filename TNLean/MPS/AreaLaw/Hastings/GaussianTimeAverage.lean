@@ -7,6 +7,7 @@ import QICLean.Analysis.GaussianFilter.GroundEstimate
 import QICLean.Analysis.GlobalGap
 import QICLean.Analysis.UnitaryEvolution
 import TNLean.Algebra.GappedGroundState
+import TNLean.Lattice.GaussianTailMoment
 
 /-!
 # The Gaussian time average of a gapped Hamiltonian
@@ -27,8 +28,6 @@ right generator `0` and input `1`.
   `‖P_q(H) - |Ω⟩⟨Ω|‖ ≤ exp(-q/2)` (`law16.tex`, line 848).
 * `TNLean.MPS.AreaLaw.Hastings.norm_hermitianUnitaryPath_sub_le`: the Duhamel bound
   `‖e^{iMt} - e^{iHt}‖ ≤ ‖M - H‖ |t|` for Hermitian `M` and `H`.
-* `TNLean.MPS.AreaLaw.Hastings.integral_abs_gaussianReal_le`: the first absolute moment of
-  the centred Gaussian of variance `h` is at most `√h`.
 * `TNLean.MPS.AreaLaw.Hastings.norm_gaussianTimeAverage_sub_le`: for Hermitian `M` and `H`
   and `ΔE > 0`, `‖P_q(M) - P_q(H)‖ ≤ √q / ΔE · ‖M - H‖`.
 * `TNLean.MPS.AreaLaw.Hastings.norm_gaussianTimeAverage_sub_groundProjector_le_add`: the
@@ -146,21 +145,6 @@ theorem norm_hermitianUnitaryPath_sub_le {M H : Matrix n n ℂ} (hM : M.IsHermit
     (hermitianUnitaryPath_zero M) (hermitianUnitaryPath_zero H) (hderiv M) (hderiv H) t _
     (fun _ _ => le_rfl)
 
-/-- The first absolute moment of the centred Gaussian of variance `h` is at most `√h`,
-by the Cauchy–Schwarz inequality `(∫|t|)² ≤ ∫ t² = h`. The exact value is `√(2h/π)`. -/
-theorem integral_abs_gaussianReal_le (h : ℝ≥0) :
-    ∫ t, |t| ∂gaussianReal 0 h ≤ Real.sqrt h := by
-  have hmem : MemLp (fun t : ℝ => |t|) 2 (gaussianReal 0 h) := by
-    simpa [Real.norm_eq_abs] using (memLp_id_gaussianReal (μ := 0) (v := h) 2).norm
-  have hsq : ∫ t, t ^ 2 ∂gaussianReal 0 h = h := by
-    rw [← variance_of_integral_eq_zero aemeasurable_id' (by simp)]
-    exact variance_fun_id_gaussianReal
-  have hvar := variance_nonneg (fun t : ℝ => |t|) (gaussianReal 0 h)
-  rw [variance_eq_sub hmem] at hvar
-  simp only [Pi.pow_apply, sq_abs, hsq] at hvar
-  apply Real.le_sqrt_of_sq_le
-  linarith
-
 /-- **Perturbation stability.** For Hermitian `M` and `H` and `ΔE > 0`,
 `‖P_q(M) - P_q(H)‖ ≤ √q / ΔE · ‖M - H‖`. The constant bounds the first absolute moment
 `(ΔE/√(2πq)) ∫ |t| e^{-(tΔE)²/2q} dt = √(2/π) √q / ΔE` of the Gaussian weight.
@@ -185,7 +169,7 @@ theorem norm_gaussianTimeAverage_sub_le {M H : Matrix n n ℂ} (hM : M.IsHermiti
         (Filter.Eventually.of_forall (norm_hermitianUnitaryPath_sub_le hM hH))
     _ = ‖M - H‖ * ∫ t, |t| ∂gaussianReal 0 h := integral_const_mul _ _
     _ ≤ ‖M - H‖ * Real.sqrt h :=
-      mul_le_mul_of_nonneg_left (integral_abs_gaussianReal_le h) (norm_nonneg _)
+      mul_le_mul_of_nonneg_left (Lattice.integral_abs_gaussianReal_le h) (norm_nonneg _)
     _ = _ := by rw [sqrt_timeAverageVariance q hΔ, mul_comm]
 
 /-- **Gap bound under perturbation.** If `Ω` is a gapped ground vector of the Hermitian
