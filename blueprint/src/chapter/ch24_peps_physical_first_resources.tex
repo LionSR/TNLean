@@ -7,7 +7,7 @@ physical operator with a contraction of local tensors.
 
 \begin{theorem}[Finite coordinates for the original input]
     \label{thm:peps_finite_whole_party_input}
-    \lean{TNLean.PEPS.PairEffect.ProductInput.finiteDimensional_wholePartyMem}
+    \lean{TNLean.Lattice.PartyCircuit.ProductInput.finiteDimensional_wholePartyMem}
     \leanok
     Let $P$ be a finite set of parties and let $H_p$ be their original
     finite-dimensional private memories. The ordered memory
@@ -24,7 +24,7 @@ physical operator with a contraction of local tensors.
 
 \begin{theorem}[Source positions after the physical output exchange]
     \label{thm:peps_physical_first_source_count}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_sourceLocations_physicalFirstReplacement_le}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_sourceLocations_physicalFirstReplacement_le}
     \leanok
     Let $W$ be an original contraction circuit with $N$ nonprivate gate
     occurrences, each involving at most $a$ parties. Its physical-first
@@ -41,7 +41,7 @@ physical operator with a contraction of local tensors.
 
 \begin{theorem}[Polynomial sample count from original resources]
     \label{thm:peps_physical_first_sample_polynomial}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.sourceSamplingCount_physicalFirstReplacement_lt_power}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.sourceSamplingCount_physicalFirstReplacement_lt_power}
     \leanok
     Let $W,N,a$ be as in
     Theorem~\ref{thm:peps_physical_first_source_count}.
@@ -74,7 +74,7 @@ physical operator with a contraction of local tensors.
 
 \begin{theorem}[Polynomial branch counts after the physical exchange]
     \label{thm:peps_physical_first_branch_polynomial}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_branchLabels_physicalFirstReplacement_le_power}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_branchLabels_physicalFirstReplacement_le_power}
     \leanok
     Suppose $L\ge1$, $C_N\ge1$, $C_K,C_S,S\ge0$, and
     \begin{align}
@@ -100,7 +100,7 @@ physical operator with a contraction of local tensors.
 
 \begin{definition}[Original gate occurrences]
     \label{def:peps_physical_first_original_locality}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.physicalFirstReplacementLocationsEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.physicalFirstReplacementLocationsEquiv}
     \leanok
     \uses{thm:peps_replacement_participants,thm:peps_physical_first_occurrences}
     Let $E$ be the bijection from original nonprivate gate occurrences to
@@ -110,8 +110,8 @@ physical operator with a contraction of local tensors.
 
 \begin{theorem}[Original participants and link locality]
     \label{thm:peps_physical_first_original_locality}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participants_physicalFirstReplacementLocationsEquiv}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.exists_original_gate_of_physicalFirst_link}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participants_physicalFirstReplacementLocationsEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.exists_original_gate_of_physicalFirst_link}
     \uses{def:peps_physical_first_original_locality}
     \leanok
     The bijection $E$ preserves participating sets. Choose any collection of
@@ -132,7 +132,7 @@ physical operator with a contraction of local tensors.
 
 \begin{theorem}[Original lifetime bound controls the link degree]
     \label{thm:peps_physical_first_original_degree}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_incidentPhysicalFirstLinks_le}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_incidentPhysicalFirstLinks_le}
     \leanok
     Suppose every original gate involves at most $b$ parties and each party
     participates in at most $b$ original nonprivate occurrences over the
@@ -151,7 +151,7 @@ physical operator with a contraction of local tensors.
 
 \begin{theorem}[Polynomial virtual dimensions of the source alphabets]
     \label{thm:peps_source_alphabet_polynomial}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_sourceNetworkAlphabet_le_of_power_bounds}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_sourceNetworkAlphabet_le_of_power_bounds}
     \leanok
     Fix a set of gate occurrences of a source circuit, and the
     root assignment defining its star links. A star link at occurrence

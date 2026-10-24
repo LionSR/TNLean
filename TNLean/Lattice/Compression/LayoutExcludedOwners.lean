@@ -19,7 +19,7 @@ retained. The spaces and order of those registers are arbitrary.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.Layout
+namespace TNLean.Lattice.PartyCircuit.Layout
 variable {P : Type}
 
 /-- A selector excluding every mapped owner retains no register.
@@ -34,4 +34,4 @@ theorem restrict_mapOwner_eq_nil {Q : Type} (owner : P → Q) (f : Q → Bool)
   obtain ⟨s, _, rfl⟩ := List.mem_map.mp hr
   simp only [hf s.owner, Bool.false_eq_true] at hsel
 
-end TNLean.PEPS.PairEffect.Layout
+end TNLean.Lattice.PartyCircuit.Layout

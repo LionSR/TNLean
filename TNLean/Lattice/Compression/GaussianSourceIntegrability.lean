@@ -33,7 +33,7 @@ open scoped Matrix ComplexConjugate
 
 
 
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 open QICLean.ComplexGaussian
 
 open Classical in
@@ -58,4 +58,4 @@ theorem integrable_rectangularTraceNorm_sourceCorrectionSum {P m n : Type}
   exact integrable_sourceCorrection_product_mul_conj w k hk S ξ ζ lam hnonneg
     q.1 r.1 q.2 r.2
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

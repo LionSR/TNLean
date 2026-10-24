@@ -27,7 +27,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
 /-- A positive gate budget, with the zero-nonprivate-gate case included.
@@ -113,9 +113,9 @@ theorem rectangularTraceNorm_sourceOnly_wholeParty_density_sub_le_half
   w.rectangularTraceNorm_sourceOnly_density_sub_le_half hε hb K _
     (ProductInput.norm_vector _).le
 end OriginalCircuit
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 /-- At a positive upper bound on the number of nonprivate gates, the common
 budget is exactly the manuscript's choice.
 Source: polynomial-PEPS 04-compression.tex, lines 200–202. -/
@@ -147,9 +147,9 @@ theorem rectangularTraceNorm_sourceOnly_density_sub_le_half_of_count_le
     (mul_nonneg (by norm_num) (sourceGateBudget_pos hε M).le)).trans
       (sourceGateBudget_spec hε.le M))
 end OriginalCircuit
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit
 
-namespace TNLean.PEPS.PairEffect.OriginalCircuit
+namespace TNLean.Lattice.PartyCircuit.OriginalCircuit
 variable {P : Type} [Fintype P] [DecidableEq P]
 
 /-- The source-only density reduction with the actual labelled regional readout.
@@ -176,4 +176,4 @@ theorem rectangularTraceNorm_sourceOnly_regional_density_sub_le_half
     (familyRegionalPhysicalReadout (fun _ ↦ d) Finset.univ.toList (Finset.nodup_toList _)
       (fun p ↦ Finset.mem_toList.mpr (Finset.mem_univ p)) priv A) _
     (ProductInput.norm_vector _).le
-end TNLean.PEPS.PairEffect.OriginalCircuit
+end TNLean.Lattice.PartyCircuit.OriginalCircuit

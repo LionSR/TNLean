@@ -26,7 +26,7 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 /-- With every party affected, the canonical source slots enumerate all original
@@ -62,4 +62,4 @@ theorem sum_nonempty_allSourceSlots {M : Type*} [AddCommMonoid M]
   · intro S hS
     rfl
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

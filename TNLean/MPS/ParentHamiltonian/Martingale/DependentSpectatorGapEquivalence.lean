@@ -322,8 +322,8 @@ theorem norm_gap_dependentRightFiberwiseMap_iff [∀ q, Nonempty (S q)]
     {δ : ℝ} (hδ : 0 ≤ δ) :
     (∀ x ∈ (LinearMap.ker (dependentRightFiberwiseMap (S := S) G).toLinearMap)ᗮ,
       δ * ‖x‖ ≤ ‖dependentRightFiberwiseMap (S := S) G x‖) ↔
-      ∀ q, ∀ x ∈ (LinearMap.ker (G q).toLinearMap)ᗮ, δ * ‖x‖ ≤ ‖G q x‖ := by
-  exact (norm_gap_sigmaFiberwiseMap_iff
+      ∀ q, ∀ x ∈ (LinearMap.ker (G q).toLinearMap)ᗮ, δ * ‖x‖ ≤ ‖G q x‖ :=
+  (norm_gap_sigmaFiberwiseMap_iff
     (fun q ↦ rightFiberwiseMap (S := S q) (G q)) hδ).trans
       (forall_congr' fun q ↦ norm_gap_rightFiberwiseMap_iff (S := S q) (G q) hδ)
 

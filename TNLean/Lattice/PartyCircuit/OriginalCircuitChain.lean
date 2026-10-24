@@ -17,16 +17,16 @@ with no operation added: the layouts are identified along equalities only.
 
 ## Main definitions
 
-* `PairEffect.OriginalCircuit.chainLayout`, `PairEffect.OriginalCircuit.chainStep`: a first
+* `PartyCircuit.OriginalCircuit.chainLayout`, `PartyCircuit.OriginalCircuit.chainStep`: a first
   circuit into `B 0`, circuits from `B t` to `B (t + 1)` for `t < n`, and a last circuit from
   `B n` to `Z`, as one sequence, followed by identities on `Z`.
-* `PairEffect.OriginalCircuit.chainVec`: the vectors of the stages.
+* `PartyCircuit.OriginalCircuit.chainVec`: the vectors of the stages.
 
 ## Main results
 
-* `PairEffect.OriginalCircuit.chainStep_induction`: a property of the three kinds of circuits
+* `PartyCircuit.OriginalCircuit.chainStep_induction`: a property of the three kinds of circuits
   holds for every circuit of the sequence.
-* `PairEffect.OriginalCircuit.norm_chainStep_eval_sub_le`: the errors of the circuits on the
+* `PartyCircuit.OriginalCircuit.norm_chainStep_eval_sub_le`: the errors of the circuits on the
   vectors of the stages.
 
 ## References
@@ -37,9 +37,9 @@ with no operation added: the layouts are identified along equalities only.
 
 noncomputable section
 
-namespace TNLean.PEPS
+namespace TNLean.Lattice
 
-namespace PairEffect.OriginalCircuit
+namespace PartyCircuit.OriginalCircuit
 
 variable {P : Type}
 
@@ -199,6 +199,6 @@ theorem norm_chainStep_eval_sub_le {c₀ : OriginalCircuit A (B 0)}
       rw [sub_self, norm_zero]
       exact hid t h
 
-end PairEffect.OriginalCircuit
+end PartyCircuit.OriginalCircuit
 
-end TNLean.PEPS
+end TNLean.Lattice

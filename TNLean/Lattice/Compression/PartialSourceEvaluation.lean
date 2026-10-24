@@ -23,7 +23,7 @@ reused.
 noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 variable {P ι : Type} [Fintype ι]
 /-- Extending a weighted operator sum beside spectators retains each complex coefficient.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–417. -/
@@ -48,9 +48,9 @@ theorem eval_sum_appendTail {a b : Layout P} (c : ι → ℂ) (w : ι → Word a
     DFunLike.congr_fun (eval_appendTail (w ξ) tail) (x ⊗ₜ y)
   simp_rw [he]
   simp [TensorProduct.sum_tmul, TensorProduct.smul_tmul]
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word
 
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P C ι : Type} [Fintype C] [Fintype ι]
 /-- Partial expansion of a placed gate preserves its complete weighted operator.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–417. -/
@@ -95,9 +95,9 @@ theorem eval_partial_gate (A : P → Bool) (owner : C ↪ P)
     rw [hs]
     exact Word.eval_groupedBlockMap (affectedOwner A) none _ _ (hExt a) (hExt b)
       (G.evalAtOwners owner) tail
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit
 
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 /-- The weighted sum of the partially expanded chronological operators.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–417. -/
@@ -170,4 +170,4 @@ theorem expandedEval_mapOwner (A : P → Bool) {a b : Layout P} (w : SourceCircu
         x ⊗ₜ Layout.mapOwnerIso (affectedOwner A) b (w.eval y)
       exact congrArg (fun z ↦ x ⊗ₜ z) (DFunLike.congr_fun ih y)
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

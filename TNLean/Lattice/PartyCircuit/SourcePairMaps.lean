@@ -25,7 +25,7 @@ noncomputable section
 open scoped InnerProductSpace TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 variable {P : Type}
 
@@ -90,4 +90,4 @@ theorem cons_mapL (r : PairSource P) (U V U' V' : HSpace)
 
 end SourceInventory.Expands
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

@@ -36,6 +36,7 @@ noncomputable section
 namespace TNLean.PEPS
 
 namespace EncodedFrame
+open TNLean.Lattice.Sheet
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ}
   {Ω : EuclideanSpace ℂ (ι → Fin q)} {B₀ C c p : ℝ} {L : ℕ}
@@ -92,7 +93,7 @@ end EncodedFrame
 
 namespace Approximation
 
-open EncodedFrame PairEffect Set Metric
+open EncodedFrame TNLean.Lattice.Sheet TNLean.Lattice.PartyCircuit Set Metric
 
 /-- **The resizes of a level as gates, with supplied patches.** In the setting of
 `resize_step_reading_of_le`, let the old and new hole patches and the net patches be supplied by

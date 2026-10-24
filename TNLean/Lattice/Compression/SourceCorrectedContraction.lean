@@ -30,7 +30,7 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 noncomputable section
 open scoped TensorProduct Matrix ComplexConjugate
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 
 open Classical in
 private theorem sum_labelBasis_density {I m n : Type} [Fintype I] [DecidableEq I] [Fintype n]
@@ -272,4 +272,4 @@ theorem partialCoordinateBasisMatrix_eq_preparedMatrix {m n : Type}
     OrthonormalBasis.coe_toBasis, OrthonormalBasis.map_apply]
   rfl
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

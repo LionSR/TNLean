@@ -26,7 +26,7 @@ of monomials and the number of pair effects of each monomial.
 
 ## Main definitions
 
-* `PairEffect.PartyChain.FixesOutside` : a monomial leaves the registers outside `S` in place.
+* `PartyCircuit.PartyChain.FixesOutside` : a monomial leaves the registers outside `S` in place.
 * `PairEffect.selectedGate`, `PairEffect.mapOwnerGate` : the restriction and relabelling of a
   sum of monomials.
 
@@ -34,7 +34,7 @@ of monomials and the number of pair effects of each monomial.
 
 * `PairEffect.partitionIso_gate` : the factorization of a sum of monomials that fix the
   registers outside `S`.
-* `PairEffect.PartyGate.exists_originalCircuit` : such a sum is an original circuit with at most
+* `PartyCircuit.PartyGate.exists_originalCircuit` : such a sum is an original circuit with at most
   one nonprivate gate, whose participants lie in `S`.
 
 ## References
@@ -49,13 +49,14 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 
 variable {P : Type}
 
 /-! ### Pair effects of a monomial using selected parties -/
 
-namespace PartyChain
+namespace Lattice.PartyCircuit.PartyChain
 
 theorem effectParties_of_usesOnly {S : Set P} {ℓX ℓY : Layout P} (M : PartyChain ℓX ℓY)
     (h : M.UsesOnly S) : ∀ e ∈ M.effectParties, e.1 ∈ S ∧ e.2 ∈ S ∧ e.1 ≠ e.2 := by
@@ -84,10 +85,11 @@ def FixesOutside [DecidableEq P] (S : Finset P) {ℓX ℓY : Layout P}
   ∃ hM : M.UsesOnly {p | decide (p ∈ S) = true},
     (M.complementPart (fun p ↦ decide (p ∈ S)) hM).eval = isoL (Layout.memCongr h)
 
-end PartyChain
+end Lattice.PartyCircuit.PartyChain
 
 /-! ### Restricting and relabelling a sum of monomials -/
 
+namespace PEPS.PairEffect
 /-- The selected parts of the monomials of a sum. -/
 def selectedGate (f : P → Bool) {ℓ ℓ' : Layout P} :
     (G : PartyGate ℓ ℓ') → (∀ m ∈ G, m.2.UsesOnly {p | f p = true}) →
@@ -178,4 +180,5 @@ theorem gate_mapOwnerGate {Q : Type} (g : P → Q) {ℓ ℓ' : Layout P} :
       simp only [mapOwnerGate, toGate, gate, add_comp, comp_add, smul_comp, comp_smul,
         PartyChain.eval_mapOwner, gate_mapOwnerGate g G]
 
-end TNLean.PEPS.PairEffect
+end PEPS.PairEffect
+end TNLean

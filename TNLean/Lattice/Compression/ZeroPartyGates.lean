@@ -23,10 +23,11 @@ bound implies that its coefficient sum has norm at most one.
 
 noncomputable section
 open scoped BigOperators
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 open ContinuousLinearMap
 
-namespace Word
+namespace Lattice.PartyCircuit.Word
 variable {P : Type} [IsEmpty P] {a b : Layout P}
 
 /-- A branch on no participating parties is the identity on the scalar memory.
@@ -35,8 +36,8 @@ private theorem eval_heq_id_of_isEmpty (w : Word a b) :
     HEq w.eval (ContinuousLinearMap.id ℂ ℂ) := by
   exact (w.eq_nil_and_eval_eq_id_of_parties_eq_empty
     (Finset.eq_empty_of_isEmpty w.parties)).2.2
-end Word
-namespace Layout
+end Lattice.PartyCircuit.Word
+namespace Lattice.PartyCircuit.Layout
 variable {P : Type} [IsEmpty P]
 /-- With no parties, every register layout is empty. Source: polynomial-PEPS,
 `04-compression.tex`, lines 24–28. -/
@@ -44,9 +45,9 @@ private theorem eq_nil_of_isEmpty (a : Layout P) : a = [] := by
   cases a with
   | nil => rfl
   | cons r a => exact isEmptyElim r.owner
-end Layout
+end Lattice.PartyCircuit.Layout
 
-namespace PreparedSourceGate
+namespace Lattice.PartyCircuit.PreparedSourceGate
 variable {P ι : Type} [IsEmpty P] [Fintype ι] {a b : Layout P} {c : ι → ℂ}
 /-- A gate on no parties is the scalar sum of its original branch coefficients.
 Source: polynomial-PEPS, `04-compression.tex`, lines 24–28 and 233–251. -/
@@ -66,5 +67,5 @@ theorem norm_coeffSum_le_one_of_isEmpty (G : PreparedSourceGate c a b) :
   cases Layout.eq_nil_of_isEmpty b
   simpa only [eq_of_heq G.eval_heq_coeffSum_smul_id_of_isEmpty, norm_smul,
     norm_id, mul_one] using G.norm_eval_le_one
-end PreparedSourceGate
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.PreparedSourceGate
+end TNLean

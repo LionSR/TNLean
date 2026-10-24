@@ -28,13 +28,18 @@ September 24, 2026, `00-introduction.tex`, `eq:model`, `eq:global-gap`, and comp
 Independently formalized using the existing QICLean and TNLean estimates; no upstream
 Lean proof text is reused.
 
-**Scope restriction (supplied feasible filters):** This selects one maximizing
-family on supplied nested single-crossing regions, for every real interaction
-bound. The scope, including the empty-square case, is recorded in
-`docs/paper-gaps/polypeps_square_zero_floor_optimizer_scope.tex`. It does not
-construct the geometric regions or weights or identify the source's filter
-coordinates with QICLean's feasible families. The representation comparison is
-recorded in https://sirui-lu.com/QICLean/paper-gaps/oai26_zero_floor_energy_scope.pdf.
+**Scope restriction (canonical filter coordinates):** The theorem adds no
+hypothesis to the companion lemma `exists_maximizer_energy`. As there, the nested
+single-crossing regions and the weights are supplied, and every real interaction
+bound is allowed. The filters here are QICLean's zero-floor feasible families in
+canonical integer-domain coordinates. Their identification with adapted copies
+of the companion source's positive filters is proved in
+`PinnedNestedFilterCoordinates.lean`, and `PinnedZeroFloorOptimizer.lean`
+restates this theorem in those coordinates. Both
+are recorded, including the empty-square case, in
+`docs/paper-gaps/polypeps_square_zero_floor_optimizer_scope.tex`. The comparison
+with the companion code's own filter types is recorded in
+https://sirui-lu.com/QICLean/paper-gaps/oai26_zero_floor_energy_scope.pdf.
 -/
 
 open Matrix

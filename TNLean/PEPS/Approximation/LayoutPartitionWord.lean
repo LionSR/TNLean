@@ -28,11 +28,12 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 
 variable {P : Type}
 
-namespace Layout
+namespace Lattice.PartyCircuit.Layout
 
 /-- Collect the selected registers of a layout in front of the others, each in their original
 order. -/
@@ -216,6 +217,6 @@ theorem eval_unpartitionWord_appendIso_symm (f : P → Bool) :
                 rw [hc, Word.eval_moveHead_appendIso_symm, lTensor_tmul,
                   eval_unpartitionWord_appendIso_symm f ℓ]
 
-end Layout
+end Lattice.PartyCircuit.Layout
 
-end TNLean.PEPS.PairEffect
+end TNLean

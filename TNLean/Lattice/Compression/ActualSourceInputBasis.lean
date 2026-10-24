@@ -27,7 +27,7 @@ source matrix.
 
 noncomputable section
 
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 
 variable {P : Type} {a b : Layout P}
 
@@ -63,4 +63,4 @@ def actualSourceInputBasis (w : SourceCircuit a b) :
     OrthonormalBasis w.allSourceLabels ℂ (Mem (w.allResidualSourceLayout ++ [])) :=
   w.allSourceBasis.map (Layout.memCongr (List.append_nil w.allResidualSourceLayout).symm)
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

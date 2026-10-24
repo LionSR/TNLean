@@ -137,8 +137,8 @@ theorem blockTwo_apply_eq_sum_X₂_mul_sourceU_mul_X₁
       ∑ l : Fin ℓ[U], ∑ r : Fin r[U],
         S.X₂ (α, (finProdFinEquiv.symm i).1) l *
           sourceU U S (l, r) (finProdFinEquiv.symm j) *
-            S.X₁ ((finProdFinEquiv.symm i).2, γ) r := by
-  exact mul_apply_eq_sum_X₂_mul_sourceU_mul_X₁ U S
+            S.X₁ ((finProdFinEquiv.symm i).2, γ) r :=
+  mul_apply_eq_sum_X₂_mul_sourceU_mul_X₁ U S
     (finProdFinEquiv.symm i).1 (finProdFinEquiv.symm j).1
     (finProdFinEquiv.symm i).2 (finProdFinEquiv.symm j).2 α γ
 
@@ -152,8 +152,8 @@ theorem blockTwo_apply_eq_sum_sourceV_mul_Y₁_mul_Y₂
       ∑ r : Fin r[U], ∑ l : Fin ℓ[U],
         sourceV U S (finProdFinEquiv.symm i) (r, l) *
           S.Y₁ r (α, (finProdFinEquiv.symm j).1) *
-            S.Y₂ l ((finProdFinEquiv.symm j).2, γ) := by
-  exact mul_apply_eq_sum_sourceV_mul_Y₁_mul_Y₂ U S
+            S.Y₂ l ((finProdFinEquiv.symm j).2, γ) :=
+  mul_apply_eq_sum_sourceV_mul_Y₁_mul_Y₂ U S
     (finProdFinEquiv.symm i).1 (finProdFinEquiv.symm j).1
     (finProdFinEquiv.symm i).2 (finProdFinEquiv.symm j).2 α γ
 
@@ -212,8 +212,8 @@ theorem mul_apply_eq_sum_sourceV_mul_sourceY₁_mul_sourceY₂_pair
     (U q.1 j.1 * U q.2 j.2) α γ =
       ∑ r : Fin r[U], ∑ l : Fin ℓ[U],
         sourceV U ρ hρ q (r, l) * sourceY₁ U ρ hρ r (α, j.1) *
-          sourceY₂ U l (j.2, γ) := by
-  exact mul_apply_eq_sum_sourceV_mul_sourceY₁_mul_sourceY₂ U ρ hρ
+          sourceY₂ U l (j.2, γ) :=
+  mul_apply_eq_sum_sourceV_mul_sourceY₁_mul_sourceY₂ U ρ hρ
     q.1 j.1 q.2 j.2 α γ
 
 /-- The concrete two-site block has the compact-SVD $X_2$--$u$--$X_1$ source

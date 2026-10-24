@@ -129,8 +129,8 @@ theorem IsBoundaryCompatible.nonzero_parentInteractionES_and_parentHamiltonianES
     MPSTensor.parentInteractionES A L ≠ 0 ∧
       ∀ X ∈ commutingBoundaryAlgebra T,
         Commute (MPSTensor.parentHamiltonianES A L N)
-          (Matrix.toEuclideanLin (mpoWithBoundary T X N)) := by
-  exact ⟨MPSTensor.parentInteractionES_ne_zero A L hDim,
+          (Matrix.toEuclideanLin (mpoWithBoundary T X N)) :=
+  ⟨MPSTensor.parentInteractionES_ne_zero A L hDim,
     fun _ hX ↦ h.parentHamiltonianES_commute_mpoWithBoundary hL hLN hstar hX⟩
 
 end MPOTensor

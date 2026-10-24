@@ -25,7 +25,8 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
+open TNLean.Lattice.PartyCircuit
 open ContinuousLinearMap
 variable {P : Type}
 
@@ -207,4 +208,4 @@ theorem restrict_localPart_mapOwner_appendTail_eval_heq_id_of_disjoint {C : Type
   obtain ⟨c, _, hc⟩ := Finset.mem_image.mp hp
   exact howner c hc
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

@@ -8,7 +8,7 @@ where each $p\in P$ retains its own owner and $*$ denotes the exterior owner.
 
 \begin{definition}[Fixed all-party source registers]
     \label{def:peps_all_party_source_registers}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allResidualSourceLayout}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allResidualSourceLayout}
     \leanok
     \uses{def:peps_partial_fixed_positions,def:peps_affected_owner}
     Let $\mathcal E_W$ be the source occurrences in their original
@@ -21,7 +21,7 @@ where each $p\in P$ retains its own owner and $*$ denotes the exterior owner.
 
 \begin{theorem}[No exterior source registers for the all-party selection]
     \label{thm:peps_all_party_source_exterior_empty}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_allResidualSourceLayout_isNone}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_allResidualSourceLayout_isNone}
     \leanok
     \uses{def:peps_all_party_source_registers}
     The sublist of $R_W$ consisting of registers at owner
@@ -45,11 +45,11 @@ the empty sublist at $*$ has exterior memory $\C$.
 \begin{definition}[Fixed coordinates of the source input]
     \label{def:peps_actual_source_input_basis}
     \leanok
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allSourceU}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allSourceV}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allSourceLabels}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allSourceBasis}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.actualSourceInputBasis}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allSourceU}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allSourceV}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allSourceLabels}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allSourceBasis}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.actualSourceInputBasis}
     \uses{def:peps_all_party_source_registers,def:peps_source_slot_basis}
     For each source occurrence $e$, take the standard bases of
     $\C^{u_e}$ and $\C^{v_e}$. Their ordered tensor product forms an
@@ -67,7 +67,7 @@ the empty sublist at $*$ has exterior memory $\C$.
 \begin{definition}[Source-to-output column matrix]
     \label{def:peps_actual_source_column_matrix}
     \leanok
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceGlobalMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSourceGlobalMatrix}
     \uses{def:peps_actual_private_preparation,def:peps_actual_source_input_basis}
     Let $T_\xi$ be the source-to-output composition with
     private input $\psi$, and choose a finite orthonormal output basis
@@ -84,8 +84,8 @@ the empty sublist at $*$ has exterior memory $\C$.
 \begin{theorem}[Coordinates of the source-to-output word]
     \label{thm:peps_actual_source_column_coordinates}
     \leanok
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.actualSourceInputBasis_apply}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceGlobalMatrix_eq_toMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.actualSourceInputBasis_apply}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSourceGlobalMatrix_eq_toMatrix}
     \uses{def:peps_actual_source_column_matrix}
     Every $x\in I_W$ satisfies
     $b_x^+=J_{R_W,\varnothing}^{-1}(b_x\otimes1)$.
@@ -104,8 +104,8 @@ the empty sublist at $*$ has exterior memory $\C$.
 \begin{definition}[Scalar contributions of zero-party gates]
     \label{def:peps_empty_party_gate_scalar}
     \leanok
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.emptyGateScalar}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.emptyGateScalar_gate_of_isEmpty}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.emptyGateScalar}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.emptyGateScalar_gate_of_isEmpty}
     \uses{def:peps_source_circuit_positions,def:peps_prepared_source_gate}
     At gate occurrence $g$, let $C_g$ be its participating party set,
     $\Xi_g$ its monomial labels, and $c_{g,\alpha}$ its coefficients.
@@ -127,9 +127,9 @@ the empty sublist at $*$ has exterior memory $\C$.
 \begin{theorem}[The operator and norm of a zero-party gate]
     \label{thm:peps_empty_party_gate_scalar}
     \leanok
-    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.eval_heq_coeffSum_smul_id_of_isEmpty}
-    \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.norm_coeffSum_le_one_of_isEmpty}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.norm_emptyGateScalar_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.PreparedSourceGate.eval_heq_coeffSum_smul_id_of_isEmpty}
+    \lean{TNLean.Lattice.PartyCircuit.PreparedSourceGate.norm_coeffSum_le_one_of_isEmpty}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.norm_emptyGateScalar_le_one}
     \uses{def:peps_empty_party_gate_scalar}
     A prepared gate with no participating parties acts on $\C$ as
     $z\mapsto(\sum_{\alpha\in\Xi_g}c_{g,\alpha})z$.
@@ -151,7 +151,7 @@ the empty sublist at $*$ has exterior memory $\C$.
 
 \begin{theorem}[Exterior restriction of the private preparation]
     \label{thm:peps_actual_private_preparation_exterior}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_sourcePrivatePreparation_none_eval_heq_id}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_sourcePrivatePreparation_none_eval_heq_id}
     \leanok
     \uses{def:peps_actual_private_preparation,
         thm:peps_all_party_source_exterior_empty}
@@ -185,7 +185,7 @@ the empty sublist at $*$ has exterior memory $\C$.
 
 \begin{theorem}[Exterior scalar of a zero-party gate]
     \label{thm:peps_actual_empty_party_gate_scalar}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialWord_localPart_gate_heq_coeffSum_of_isEmpty}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_partialWord_localPart_gate_heq_coeffSum_of_isEmpty}
     \leanok
     \uses{def:peps_partial_source_choices,def:peps_canonical_source_residual,
         thm:peps_empty_party_gate_scalar}
@@ -227,7 +227,7 @@ the empty sublist at $*$ has exterior memory $\C$.
 
 \begin{theorem}[Selecting the exterior owner]
     \label{thm:peps_exterior_owner_selector}
-    \lean{TNLean.PEPS.PairEffect.partySelector_none}
+    \lean{TNLean.Lattice.PartyCircuit.partySelector_none}
     \leanok
     \uses{def:peps_single_party_selector}
     In the owner set $Q=P\sqcup\{*\}$, the singleton selector
@@ -241,7 +241,7 @@ the empty sublist at $*$ has exterior memory $\C$.
 
 \begin{theorem}[Exterior restriction of a touched gate]
     \label{thm:peps_actual_touched_gate_exterior}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialWord_all_gate_localPart_eval_heq_id}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_partialWord_all_gate_localPart_eval_heq_id}
     \leanok
     \uses{def:peps_partial_source_choices,thm:peps_source_word_parties}
     When all original parties are selected and a gate has at least one
@@ -261,9 +261,9 @@ the empty sublist at $*$ has exterior memory $\C$.
 
 \begin{theorem}[Chronological exterior scalar]
     \label{thm:peps_actual_chronological_exterior_scalar}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialWord_all_localPart_eval_heq_emptyGateScalar}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialResidual_all_eval_heq_emptyGateScalar}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialSourceWord_all_eval_heq_emptyGateScalar}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_partialWord_all_localPart_eval_heq_emptyGateScalar}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_partialResidual_all_eval_heq_emptyGateScalar}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_partialSourceWord_all_eval_heq_emptyGateScalar}
     \leanok
     \uses{def:peps_empty_party_gate_scalar,def:peps_canonical_source_residual,
         thm:peps_actual_touched_gate_exterior,thm:peps_actual_empty_party_gate_scalar,
@@ -307,8 +307,8 @@ the empty sublist at $*$ has exterior memory $\C$.
 
 \begin{definition}[Party matrices and their source coordinates]
     \label{def:peps_actual_party_source_matrices}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.actualPartySourceBasisChange}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourcePartyMatrix}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.actualPartySourceBasisChange}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSourcePartyMatrix}
     \leanok
     \uses{def:peps_actual_source_input_basis,def:peps_actual_private_preparation,
         def:peps_party_grouped_basis}
@@ -329,7 +329,7 @@ the empty sublist at $*$ has exterior memory $\C$.
 
 \begin{theorem}[Source columns in party coordinates]
     \label{thm:peps_actual_party_source_columns}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceGlobalMatrix_eq_partyProduct_mul_basisChange}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSourceGlobalMatrix_eq_partyProduct_mul_basisChange}
     \leanok
     \uses{def:peps_actual_party_source_matrices,thm:peps_actual_source_column_coordinates,
         thm:peps_actual_party_word_entries}
@@ -360,7 +360,7 @@ the empty sublist at $*$ has exterior memory $\C$.
 
 \begin{theorem}[An input operator between prepared source columns]
     \label{thm:peps_actual_source_mixed_word}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceGlobalMatrix_mixed_word}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSourceGlobalMatrix_mixed_word}
     \leanok
     \uses{def:peps_actual_party_source_matrices,
         thm:peps_actual_source_column_coordinates,thm:peps_actual_party_mixed_matrix}
@@ -386,9 +386,9 @@ the empty sublist at $*$ has exterior memory $\C$.
 
 \begin{definition}[Endpoint factors at the sampled sources]
     \label{def:peps_original_sampled_endpoint_factors}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointLeft}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointRight}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledSourceMatrix_eq_endpoint_average}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sampledEndpointLeft}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sampledEndpointRight}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sampledSourceMatrix_eq_endpoint_average}
     \leanok
     \uses{def:peps_sampled_source_matrix,def:peps_source_gaussian_law}
     At a source occurrence $e$, fix ket and bra
@@ -407,8 +407,8 @@ the empty sublist at $*$ has exterior memory $\C$.
 
 \begin{definition}[The sampled endpoint word on the source input]
     \label{def:peps_actual_sampled_endpoint_word}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointWord}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointInputWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sampledEndpointWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sampledEndpointInputWord}
     \leanok
     \uses{def:peps_original_sampled_endpoint_factors,
         def:peps_source_register_operator_word,def:peps_actual_source_input_basis}
@@ -422,8 +422,8 @@ the empty sublist at $*$ has exterior memory $\C$.
 
 \begin{theorem}[Sampled endpoint words contain no sources]
     \label{thm:peps_actual_sampled_endpoint_word_sources}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_sampledEndpointWord}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_sampledEndpointInputWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sources_sampledEndpointWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sources_sampledEndpointInputWord}
     \leanok
     \uses{def:peps_actual_sampled_endpoint_word}
     The sampled endpoint word and the induced word $U_{\xi,\zeta,j}$ on the
@@ -439,9 +439,9 @@ the empty sublist at $*$ has exterior memory $\C$.
 
 \begin{theorem}[The sampled source matrix as an average of endpoint words]
     \label{thm:peps_actual_sampled_endpoint_average}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointWord_average}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.actualSourceInputBasis_repr_sampledEndpointInputWord}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointInputMatrix_average}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sampledEndpointWord_average}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.actualSourceInputBasis_repr_sampledEndpointInputWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sampledEndpointInputMatrix_average}
     \leanok
     \uses{def:peps_actual_sampled_endpoint_word,
         thm:peps_endpoint_matrix_average,def:peps_actual_source_input_basis}
@@ -469,7 +469,7 @@ the empty sublist at $*$ has exterior memory $\C$.
 
 \begin{theorem}[Sampled contraction before the physical trace]
     \label{thm:peps_actual_sampled_party_contraction}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceGlobalMatrix_sampled_eq_sum_partyProduct}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSourceGlobalMatrix_sampled_eq_sum_partyProduct}
     \leanok
     \uses{thm:peps_actual_sampled_endpoint_average,thm:peps_actual_source_mixed_word}
     In the same notation, let
@@ -494,8 +494,8 @@ the empty sublist at $*$ has exterior memory $\C$.
 
 \begin{theorem}[Exterior restriction of the sampled endpoint word]
     \label{thm:peps_actual_sampled_endpoint_exterior}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointWord_none_eval_heq_id}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointInputWord_none_eval_heq_id}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sampledEndpointWord_none_eval_heq_id}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sampledEndpointInputWord_none_eval_heq_id}
     \leanok
     \uses{def:peps_actual_sampled_endpoint_word,thm:peps_partial_fixed_layout,
         thm:peps_source_register_operator_exclusion}
@@ -522,7 +522,7 @@ the empty sublist at $*$ has exterior memory $\C$.
 
 \begin{theorem}[Source replacement through the prepared columns]
     \label{thm:peps_actual_pure_source_replacement}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceReplacedDensity_pure_eq_sum_actualColumns}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceReplacedDensity_pure_eq_sum_actualColumns}
     \leanok
     \uses{def:peps_global_source_replacement,thm:peps_actual_pure_source_contraction}
     Let $\psi$ be the private product input, let $c_\xi$ be the
@@ -556,7 +556,7 @@ the empty sublist at $*$ has exterior memory $\C$.
 
 \begin{theorem}[Physical source replacement through the prepared columns]
     \label{thm:peps_actual_pure_physical_source_replacement}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalSourceReplacedDensity_pure_eq_sum_actualColumnTraces}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalSourceReplacedDensity_pure_eq_sum_actualColumnTraces}
     \leanok
     \uses{thm:peps_actual_pure_source_replacement,def:peps_physical_source_replacement}
     Choose finite orthonormal bases of the physical and private
@@ -587,7 +587,7 @@ the empty sublist at $*$ has exterior memory $\C$.
 
 \begin{theorem}[Physical traces of mixed source-column matrices]
     \label{thm:peps_actual_source_column_physical_trace}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.selectedPhysicalPrivateBasis_partialTrace_actualColumns}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.selectedPhysicalPrivateBasis_partialTrace_actualColumns}
     \leanok
     \uses{thm:peps_selected_physical_private_trace,thm:peps_actual_source_column_coordinates}
     Let $X$ be a matrix on the joint source-coordinate space,
@@ -634,7 +634,7 @@ the empty sublist at $*$ has exterior memory $\C$.
 
 \begin{theorem}[Local output traces of the sampled contraction]
     \label{thm:peps_actual_sampled_local_output_trace}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_partyProduct}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_partyProduct}
     \leanok
     \uses{thm:peps_actual_sampled_party_contraction,thm:peps_party_product_partial_trace}
     In the notation of Theorem~\ref{thm:peps_actual_sampled_party_contraction},
@@ -668,7 +668,7 @@ the empty sublist at $*$ has exterior memory $\C$.
 
 \begin{definition}[Mixed physical trace of restricted words]
     \label{def:peps_restricted_mixed_physical_trace}
-    \lean{TNLean.PEPS.PairEffect.restrictedMixedPhysicalTrace}
+    \lean{TNLean.Lattice.PartyCircuit.restrictedMixedPhysicalTrace}
     \leanok
     \uses{thm:peps_party_restriction,def:peps_actual_party_source_matrices}
     Let $S$ be a selection of parties, let $u,t:a\to b$ and $v:a\to a$
@@ -691,7 +691,7 @@ the empty sublist at $*$ has exterior memory $\C$.
 
 \begin{definition}[The local physical factor]
     \label{def:peps_actual_sampled_physical_factor}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledPhysicalFactor}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sampledPhysicalFactor}
     \leanok
     \uses{def:peps_restricted_mixed_physical_trace,
         def:peps_selected_physical_private_basis,
@@ -716,7 +716,7 @@ the empty sublist at $*$ has exterior memory $\C$.
 
 \begin{theorem}[Sampled factors on the original physical parties]
     \label{thm:peps_actual_sampled_physical_factors}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_physicalFactors}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_physicalFactors}
     \leanok
     \uses{thm:peps_actual_sampled_local_output_trace,
         def:peps_actual_sampled_physical_factor,
@@ -757,7 +757,7 @@ the empty sublist at $*$ has exterior memory $\C$.
 
 \begin{theorem}[The exterior factor in the sampled physical trace]
     \label{thm:peps_actual_sampled_exterior_trace}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceWord_sampled_none_partialTrace_eq_scalar}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSourceWord_sampled_none_partialTrace_eq_scalar}
     \leanok
     \uses{thm:peps_actual_chronological_exterior_scalar,
         thm:peps_actual_sampled_endpoint_exterior}
@@ -794,7 +794,7 @@ the empty sublist at $*$ has exterior memory $\C$.
 
 \begin{theorem}[The common exterior scalar in the sampled physical sum]
     \label{thm:peps_actual_sampled_physical_scalar}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceGlobalMatrix_sampled_partialTrace_eq_scalar_smul_physicalSum}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSourceGlobalMatrix_sampled_partialTrace_eq_scalar_smul_physicalSum}
     \leanok
     \uses{thm:peps_actual_sampled_physical_factors,thm:peps_actual_sampled_exterior_trace}
     In the notation of Theorem~\ref{thm:peps_actual_sampled_physical_factors},

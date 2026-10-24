@@ -18,8 +18,8 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open scoped NNReal
-namespace TNLean.PEPS.PairEffect.SourceCircuit
-open TNLean.PEPS.Approximation
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.Lattice.Compression
 variable {P : Type}
 
 open Classical in
@@ -139,4 +139,4 @@ theorem sum_norm_coefficient_mul_conj_le_lifetime {a b : Layout P}
   simpa only [Nat.cast_one, one_pow, Finset.prod_const_one, mul_one, NNReal.coe_one,
     ← pow_mul] using h
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

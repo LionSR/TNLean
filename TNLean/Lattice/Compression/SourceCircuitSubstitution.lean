@@ -27,9 +27,10 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 
-namespace PreparedSourceGate
+namespace Lattice.PartyCircuit.PreparedSourceGate
 
 /-- Prepare arbitrary vectors in the gate's fixed slots before its actual remaining word.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 233–267 and 338–355. -/
@@ -39,9 +40,9 @@ def branchWithSources {P ι : Type} [Fintype ι] {c : ι → ℂ} {a b : Layout 
   .comp (SourceInventory.prepareSlots G.slots (fun i ↦ euc (Fin (G.leftDim i)))
     (fun i ↦ euc (Fin (G.rightDim i))) η a) (G.remaining ξ)
 
-end PreparedSourceGate
+end Lattice.PartyCircuit.PreparedSourceGate
 
-namespace SourceCircuit
+namespace Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 /-- Evaluate the actual circuit with occurrence-local source substitutions.
@@ -266,5 +267,5 @@ theorem eval_selectedSourceVectors_eq_sum (A : P → Bool) {a b : Layout P}
     hUntouched (isTouched_of_source_endpoint A w e (hS e hes))
   simp only [selectedSourceVectors, ite_eq_right he]
 
-end SourceCircuit
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.SourceCircuit
+end TNLean

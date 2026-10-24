@@ -54,7 +54,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open Set EncodedFrame PairEffect
+open Set EncodedFrame TNLean.Lattice.PartyCircuit
 open EuclideanSpace (vecKron)
 
 /-- A point lies in the translate `S + d` exactly when `x - d` lies in `S`. -/

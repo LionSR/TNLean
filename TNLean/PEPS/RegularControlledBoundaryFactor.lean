@@ -325,8 +325,8 @@ theorem regularControlledProjectorCutMatrix_coordinates
           ∑ x : G, if cS.1 = (fun f => x * m * θ (E.symm f)) ∧
             cS.2.2.2 = (fun f => x *
               regularRegionTreeCycleResidual (Finset.univ \ R) T hT htree o u f * x⁻¹)
-            then (1 : ℂ) else 0 := by
-    exact regularCycleControlledBoundaryMatrix_mul_coordinates_of_combined_relative_walk_words
+            then (1 : ℂ) else 0 :=
+    regularCycleControlledBoundaryMatrix_mul_coordinates_of_combined_relative_walk_words
       R kR T hT htree o v w p u (e.symm 0) hrelative cS θ
   change (∑ θ : Boundary (Γ := Γ) R → G,
     regularProjectorTwistedRegionMatrix R u

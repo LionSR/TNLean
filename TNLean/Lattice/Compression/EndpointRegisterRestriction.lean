@@ -19,7 +19,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–309,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceInventory
+namespace TNLean.Lattice.PartyCircuit.SourceInventory
 variable {P : Type}
 
 /-- The ordered endpoint registers and their supplied endomorphisms, with the
@@ -205,4 +205,4 @@ theorem restrict_endpointWord_eval_heq_registerWord (f : P → Bool)
       (sources_endpointRegisterWord D)))).trans
     ((Word.eval_castLayouts_heq _ _ _).trans (restrict_endpointRegisterWord_eval_heq f D))
 
-end TNLean.PEPS.PairEffect.SourceInventory
+end TNLean.Lattice.PartyCircuit.SourceInventory

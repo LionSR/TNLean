@@ -27,7 +27,7 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 noncomputable section
 open MeasureTheory QICLean.ComplexGaussian
 open scoped ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} {a b : Layout P}
   (w : SourceCircuit a b) (k : ℕ) (hk : 0 < k)
   (S : Finset (sourceLocations w))
@@ -112,4 +112,4 @@ theorem integral_sourceCorrection_product_eq_zero [Nonempty S] :
     (C := fun e _ ↦ Fin (min (sourceDims w e).1 (sourceDims w e).2)) k S
     (fun e ↦ (ξ e, ζ e)) (fun e ↦ lam e.1 (ξ e)) (fun e ↦ lam e.1 (ζ e)) i l
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

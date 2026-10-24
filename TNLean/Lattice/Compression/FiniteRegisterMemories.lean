@@ -31,7 +31,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect.Layout
+namespace TNLean.Lattice.PartyCircuit.Layout
 variable {P Q R : Type}
 
 /-- A finite list of finite-dimensional register spaces has finite-dimensional
@@ -67,4 +67,4 @@ def restrictedDiscardBasis (q : P → Q) (r : Q → R) (f : R → Bool)
   letI := finiteDimensional_mem_restrict_mapOwner_mapOwner q r f ℓ h
   exact stdOrthonormalBasis ℂ _
 
-end TNLean.PEPS.PairEffect.Layout
+end TNLean.Lattice.PartyCircuit.Layout

@@ -27,7 +27,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open scoped TensorProduct Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
 variable {P Q X Y I T d e : Type} [Fintype X] [Fintype Y] [Fintype I] [Fintype T]
     [Fintype d] [Fintype e] {a b : Layout P} {c f : Layout Q}
@@ -95,4 +95,4 @@ theorem separatedPhysicalDensity_submatrix {a' : Layout P} {c' : Layout Q} {L U 
   simp only [Matrix.submatrix_apply, Matrix.sum_apply, Matrix.smul_apply,
     Matrix.vecMulVec_apply, separatedPhysicalCoordinates]
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

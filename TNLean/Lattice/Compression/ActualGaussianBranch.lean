@@ -30,7 +30,7 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open MeasureTheory QICLean.ComplexGaussian
 open scoped TensorProduct Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 
 open Classical in
 /-- An actual partial branch, reduced to the physical output in the canonical
@@ -122,4 +122,4 @@ theorem integrable_actualGaussianBranch_and_integral_le
     rfl
   simpa only [he] using hN
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

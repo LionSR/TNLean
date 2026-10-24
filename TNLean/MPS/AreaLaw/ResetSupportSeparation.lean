@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hamiltonian
+import TNLean.MPS.AreaLaw.ChainNeighborhood
 import Mathlib.Data.Nat.Dist
 
 /-!
@@ -47,8 +48,7 @@ lemma chain_reset_support_separation
       w - (R : ℝ) < (Nat.dist a.val z.val : ℝ)) ∧
       ∀ ℓ : ℝ, ℓ + (R : ℝ) ≤ w →
         Disjoint
-          (Finset.univ.filter (fun y : Fin L ↦
-            ∃ z ∈ Q ∪ Z, (Nat.dist z.val y.val : ℝ) ≤ ℓ))
+          (chainNeighborhood (Q ∪ Z) ℓ)
           (R₀ ∪ C₀) := by
   classical
   intro Q crossing Z

@@ -19,7 +19,7 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$.
 
 \begin{definition}[A participant root at each original gate]
     \label{def:peps_source_gate_root}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceGateRoot}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceGateRoot}
     \leanok
     \uses{def:peps_touched_labels}
     In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, choose
@@ -33,7 +33,7 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$.
 
 \begin{theorem}[The root is an original participant]
     \label{thm:peps_source_gate_root_mem}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceGateRoot_mem}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceGateRoot_mem}
     \leanok
     \uses{def:peps_source_gate_root}
     For the star roots in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
@@ -50,7 +50,7 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$.
 
 \begin{theorem}[Incident labels after reindexing a full choice]
     \label{thm:peps_reindexed_incident_gate_labels}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.originalGateLabelsAtOfAllChoices_eq_restrictGates}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.originalGateLabelsAtOfAllChoices_eq_restrictGates}
     \leanok
     \uses{thm:peps_incident_gate_labels,def:peps_touched_labels}
     For the gate-label identification in
@@ -74,7 +74,7 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$.
 
 \begin{theorem}[Incident samples after reindexing a full assignment]
     \label{thm:peps_reindexed_incident_samples}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_reindexedSourceSampleAssignment_eq}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_reindexedSourceSampleAssignment_eq}
     \leanok
     \uses{def:peps_source_sample_assignment_indices,def:peps_local_source_sample_indices}
     For the local sample values in
@@ -99,7 +99,7 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$.
 
 \begin{theorem}[Reindexing choices and common samples together]
     \label{thm:peps_joint_gate_sample_sum}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_choiceSamples_eq_sum_originalGateSamples}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_choiceSamples_eq_sum_originalGateSamples}
     \leanok
     \uses{def:peps_touched_labels,def:peps_source_sample_assignment_indices}
     In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, let $P$ be
@@ -137,7 +137,7 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$.
 
 \begin{theorem}[Labels on the full selected gate set]
     \label{thm:peps_full_selected_gate_label_sum}
-    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.sum_eq_sum_gateLabels_univ}
+    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.sum_eq_sum_gateLabels_univ}
     \leanok
     \uses{def:compression_operator_gate_labels}
     For the occurrence identification in
@@ -170,7 +170,7 @@ $z^K_g=(z_g)_1$ and $z^B_g=(z_g)_2$. The matrix indices $I,J$ are arbitrary.
 
 \begin{theorem}[Pairing the ket and bra label sums]
     \label{thm:peps_ordered_gate_label_pair_sum}
-    \lean{TNLean.PEPS.Approximation.sum_gateLabels_eq_sum_orderedGateLabelPairs}
+    \lean{TNLean.Lattice.Compression.sum_gateLabels_eq_sum_orderedGateLabelPairs}
     \leanok
     For the shared ket and bra label in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, any matrix family
@@ -194,7 +194,7 @@ $z^K_g=(z_g)_1$ and $z^B_g=(z_g)_2$. The matrix indices $I,J$ are arbitrary.
 
 \begin{theorem}[Pairing the weighted ket and bra sums]
     \label{thm:peps_ordered_gate_label_pair_weighted_sum}
-    \lean{TNLean.PEPS.Approximation.sum_weighted_gateLabels_eq_sum_orderedGateLabelPairs}
+    \lean{TNLean.Lattice.Compression.sum_weighted_gateLabels_eq_sum_orderedGateLabelPairs}
     \leanok
     For the ordered coefficient sum in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, arbitrary
@@ -220,7 +220,7 @@ $z^K_g=(z_g)_1$ and $z^B_g=(z_g)_2$. The matrix indices $I,J$ are arbitrary.
 
 \begin{theorem}[Placing gate weights inside the ordered coefficient product]
     \label{thm:peps_ordered_gate_label_averaging}
-    \lean{TNLean.PEPS.Approximation.weighted_sum_gateLabels_eq_exterior_smul_orderedGateLabelPairs}
+    \lean{TNLean.Lattice.Compression.weighted_sum_gateLabels_eq_exterior_smul_orderedGateLabelPairs}
     \leanok
     To place the averaging factors in the gate coefficients as in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, let $w_g\in\C$ be
@@ -248,7 +248,7 @@ $z^K_g=(z_g)_1$ and $z^B_g=(z_g)_2$. The matrix indices $I,J$ are arbitrary.
 
 \begin{theorem}[The distributed density contraction in original gate labels]
     \label{thm:peps_density_pair_univ_double_sum}
-    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.contractedOperator_densityPair_univ_eq_double_sum}
+    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.contractedOperator_densityPair_univ_eq_double_sum}
     \leanok
     \uses{def:compression_operator_operator,def:compression_operator_density_coefficient}
     In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, let $P,G$ be
@@ -332,7 +332,7 @@ its sample argument is read at the original ordered incident slots.
 
 \begin{theorem}[The sampled physical sum in original gate and sample positions]
     \label{thm:peps_original_gate_sample_physical_sum}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_originalGateSampleSum}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_originalGateSampleSum}
     \leanok
     \uses{def:peps_incident_sampled_physical_factor,def:peps_source_sample_assignment_indices}
     In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, the data just
@@ -370,7 +370,7 @@ its sample argument is read at the original ordered incident slots.
 
 \begin{theorem}[The exact distributed contraction of the sampled physical density]
     \label{thm:peps_actual_sampled_distributed_contraction}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_exterior_smul_contractedOperator}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_exterior_smul_contractedOperator}
     \leanok
     \uses{def:compression_operator_operator,def:compression_operator_density_coefficient,
         def:peps_incident_sampled_physical_factor,def:peps_source_gate_root}

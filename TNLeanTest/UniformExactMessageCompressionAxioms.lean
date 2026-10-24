@@ -12,7 +12,7 @@ set_option linter.hashCommand false
 
 run_cmd do
   let decl :=
-    ``TNLean.PEPS.PairEffect.GateMapConstruction.exists_uniform_exact_message_sampled_network
+    ``TNLean.Lattice.PartyCircuit.GateMapConstruction.exists_uniform_exact_message_sampled_network
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
   unless env.contains decl do

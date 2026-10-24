@@ -32,7 +32,7 @@ and prop:sweep, lines 349–378.
 noncomputable section
 open scoped BigOperators
 
-namespace TNLean.PEPS.PairEffect.OriginalCircuit
+namespace TNLean.Lattice.PartyCircuit.OriginalCircuit
 
 variable {P : Type}
 
@@ -93,11 +93,11 @@ private theorem castLayouts_id_heq {a b a' b' : Layout P}
   cases hb
   exact h
 
-end TNLean.PEPS.PairEffect.OriginalCircuit
+end TNLean.Lattice.PartyCircuit.OriginalCircuit
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.Lattice TNLean.PEPS.PairEffect TNLean.PEPS.EncodedFrame
+open TNLean.Lattice TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
 
 variable {L w q : ℕ}
 
@@ -372,7 +372,7 @@ theorem sweepMiddleCircuit_norm_and_error (hΩ : ‖Ω‖ = 1) :
     (OriginalCircuit.sequence a step n).eval (ref 0)
   let S : (n : ℕ) → Mem (a n) →ₗ[ℂ] Mem (a (n + 1)) := fun n ↦ (step n).eval.toLinearMap
   have herr : ‖x N - ref N‖ ≤ ∑ n ∈ Finset.range N, ‖S n (ref n) - ref (n + 1)‖ :=
-    TNLean.PEPS.Approximation.norm_trajectory_sub_reference_le S x ref N
+    TNLean.Lattice.PartyCircuit.norm_trajectory_sub_reference_le S x ref N
       (fun n _ v ↦ (step n).norm_eval_le_norm v) rfl
       (fun n _ ↦ OriginalCircuit.eval_sequence_succ a step n (ref 0))
   have herr' : ‖x N - ref N‖ ≤ (N : ℝ) * (4 * (L : ℝ) ^ (-12 : ℤ)) := by

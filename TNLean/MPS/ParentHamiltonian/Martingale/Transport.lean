@@ -238,9 +238,7 @@ private theorem replaceWindow_commute_of_cyclic_windows_disjoint {N L : ℕ}
   by_cases hi : ((k.val + N - i.val) % N < L)
   · have hnotj : ¬ ((k.val + N - j.val) % N < L) := fun hj => hij k hi hj
     simp [replaceWindow, hi, hnotj]
-  · by_cases hj : ((k.val + N - j.val) % N < L)
-    · simp [replaceWindow, hi, hj]
-    · simp [replaceWindow, hi, hj]
+  · by_cases hj : ((k.val + N - j.val) % N < L) <;> simp [replaceWindow, hi, hj]
 
 private theorem linearMap_apply_eq_sum {α : Type*} [Fintype α] [DecidableEq α]
     (P : EuclideanSpace ℂ α →ₗ[ℂ] EuclideanSpace ℂ α)

@@ -25,7 +25,7 @@ noncomputable section
 
 open scoped InnerProductSpace TensorProduct
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 open ContinuousLinearMap
 
@@ -352,4 +352,4 @@ theorem eq_nil_and_eval_eq_id_of_parties_eq_empty {ℓ ℓ' : Layout P} (w : Wor
 
 end Word
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

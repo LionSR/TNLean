@@ -21,6 +21,7 @@ three so that the four virtual legs are distinct edges of the native graph.
 
 noncomputable section
 namespace TNLean.PEPS.NativeTorus
+open TNLean.Lattice
 
 variable {width height : ℕ} [NeZero width] [NeZero height]
 variable [Fact (2 < width)] [Fact (2 < height)]
@@ -35,7 +36,7 @@ local notation "head" => (graphEdgeHead (Γ := torusGraph width height))
 
 /-- The actual incident virtual coordinates, with each bond's own alphabet. -/
 abbrev LocalConfig (D : Bond → Type*) (v : Vertex) :=
-  DependentBondNetwork.LocalConfig tail head D v
+  Lattice.DependentBondNetwork.LocalConfig tail head D v
 
 variable (D : Edge (torusGraph width height) → Type*) [∀ e, Fintype (D e)] [∀ e, DecidableEq (D e)]
 variable {Phys Out : TorusVertex width height → Type*}
@@ -46,7 +47,7 @@ def closure
     (U : (e : Bond) → G →* Matrix (D e) (D e) ℂ)
     (A : (v : Vertex) → LocalConfig D v → Phys v → ℂ) (g h : G) :
     ((v : Vertex) → Phys v) → ℂ :=
-  DependentBondNetwork.network tail head D A
+  Lattice.DependentBondNetwork.network tail head D A
     (fun e ↦ U e (torusClosureEdgeAssignment g h e))
 
 /-- The span of actual closures with commuting seam labels. -/

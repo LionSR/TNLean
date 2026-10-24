@@ -1,0 +1,77 @@
+\subsection{Entropy of arbitrary regions}
+
+All entropies in this subsection use natural logarithms. Write
+$H_2(p)=-p\log p-(1-p)\log(1-p)$, with $0\log0=0$.
+
+\begin{theorem}[Regional flag decomposition]
+    \label{thm:qutrit_entropy_scaling_region_mixture}
+    \lean{TNLean.MPS.AreaLaw.EntropyScaling.regionState_qutritState_decomposition}
+    \leanok
+    \uses{def:qutrit_entropy_scaling_state}
+    Let $N>0$, $0\le p\le1$, and let $A$ be a proper subset of the $2N$ sites.
+    If $\rho_A(p)$ is the reduced state of $\ket{\psi_{2N}(p)}$ on $A$, then
+    \begin{align}
+        \rho_A(p)=(1-p)\rho_A(0)+p\rho_A(1).
+        \label{eq:qutrit_entropy_scaling_region_mixture}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    The defining sum gives
+    $\ket{\psi_{2N}(p)}=\sqrt{1-p}\ket{\psi_{2N}(0)}
+        +\sqrt p\ket{\psi_{2N}(1)}$.
+    Choose a site outside $A$. The flag has letter $2$ at that site, whereas
+    every binary word has letter $0$ or $1$. Thus the partial trace of each
+    cross term between the flag and binary states is zero. Squaring the two coefficients gives
+    (\ref{eq:qutrit_entropy_scaling_region_mixture}), also at $p=0,1$.
+\end{proof}
+
+\begin{theorem}[Entropy bound on every region]
+    \label{thm:qutrit_entropy_scaling_region_entropy}
+    \lean{TNLean.MPS.AreaLaw.EntropyScaling.regionEntropy_qutritState_le,
+        TNLean.MPS.AreaLaw.EntropyScaling.regionEntropy_qutritState_empty,
+        TNLean.MPS.AreaLaw.EntropyScaling.regionEntropy_qutritState_univ}
+    \leanok
+    \uses{def:qutrit_entropy_scaling_state}
+    Let $N>0$, $0\le p\le1$, and let $A$ be any subset of the $2N$ sites. Then
+    \begin{align}
+        S(\rho_A(p))\le H_2(p)+pN\log2.
+        \label{eq:qutrit_entropy_scaling_region_entropy}
+    \end{align}
+    The empty and full regions both have entropy zero.
+    This bounds the entropy of the state in~\cite{Schuch2008EntropyScaling}
+    without a connectedness assumption on $A$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:qutrit_entropy_scaling_region_mixture,
+        thm:qutrit_entropy_scaling_normalization}
+    The marginal of the flag state has rank at most one and hence entropy
+    zero. The binary state is a sum of $2^N$ computational-basis product
+    vectors across $A\mid A^c$. Its coefficient matrix therefore factors
+    through a space of dimension $2^N$, so
+    $\operatorname{rank}\rho_A(1)\le2^N$ and
+    $S(\rho_A(1))\le\log(2^N)=N\log2$.
+    For a proper region, use (\ref{eq:qutrit_entropy_scaling_region_mixture})
+    and the entropy inequalities for positive matrices
+    $S(X+Y)\le S(X)+S(Y)$ and
+    $S(c\rho)=cS(\rho)-c\log c$ when $\operatorname{tr}\rho=1$.
+    These give (\ref{eq:qutrit_entropy_scaling_region_entropy}).
+    For the full region, purity gives entropy zero; its asserted upper bound
+    is nonnegative. For the empty region, the normalized marginal has rank
+    at most one and again entropy zero.
+\end{proof}
+
+\begin{theorem}[Uniform regional bound for the inverse-length family]
+    \label{thm:qutrit_entropy_scaling_family_entropy}
+    \lean{TNLean.MPS.AreaLaw.EntropyScaling.regionEntropy_qutritFamily_le}
+    \leanok
+    \uses{def:qutrit_entropy_scaling_state}
+    For $N>0$ and every region $A$, the source's choice $p_N=1/N$ satisfies
+    $S(\rho_A(p_N))\le2\log2$, or two bits.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:qutrit_entropy_scaling_region_entropy}
+    Substitute $p_N=1/N$ into
+    (\ref{eq:qutrit_entropy_scaling_region_entropy}). Since
+    $H_2(p_N)\le\log2$ and $p_N N=1$, the right-hand side is at most
+    $2\log2$.
+\end{proof}

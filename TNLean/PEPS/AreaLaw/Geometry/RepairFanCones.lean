@@ -129,12 +129,6 @@ theorem smul_mem_repairFanCone {s : RepairFanSlot} {y : ℝ × ℝ} {t : ℝ} (h
     smul_eq_mul] at hy ⊢
   constructor <;> nlinarith [mul_nonneg ht hy.1, mul_nonneg ht hy.2]
 
-theorem smul_mem_repairFanCone_iff {s : RepairFanSlot} {y : ℝ × ℝ} {t : ℝ} (ht : 0 < t) :
-    t • y ∈ repairFanCone s ↔ y ∈ repairFanCone s := by
-  refine ⟨fun h ↦ ?_, smul_mem_repairFanCone ht.le⟩
-  have := smul_mem_repairFanCone (inv_pos.mpr ht).le h
-  rwa [smul_smul, inv_mul_cancel₀ ht.ne', one_smul] at this
-
 /-- A vector with vanishing cross product against `d` is a multiple of `d`,
 with coefficient read by any `a` with `a × d = 1`.
 Auxiliary to area-law Section 11, lines 340–348. -/
