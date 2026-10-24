@@ -27,7 +27,7 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 noncomputable section
 open MeasureTheory QICLean.ComplexGaussian
 open scoped Matrix ComplexConjugate Matrix.Norms.Elementwise
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} {a b : Layout P}
 
 local instance {m n : Type*} [Fintype m] [Fintype n] : ContinuousENorm (Matrix m n ℂ) :=
@@ -138,4 +138,4 @@ theorem rectangularTraceNorm_physical_sampledSourceMatrix_sub_le
   rw [physical_sampledSourceMatrix_sub_eq_sum]
   exact Matrix.rectangularTraceNorm_sum_le _ _
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

@@ -20,7 +20,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 
 noncomputable section
 open scoped Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} {a b : Layout P}
 
 /-- Source replacement on the recorded product input retains the actual
@@ -75,4 +75,4 @@ theorem sourceReplacedDensity_pure_eq_sum_actualColumns
   rw [hinput] at h
   exact h
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

@@ -17,8 +17,6 @@ This repository uses [Claude Code](https://docs.anthropic.com/en/docs/claude-cod
   - [Changed Lean Compilation-Time Gate](#changed-lean-compilation-time-gate-pr-ciyml)
   - [Changed-File Lean Checks](#changed-file-lean-checks-pr-ciyml-build-job)
   - [Blueprint Diagram Tests](#blueprint-diagram-tests-pr-ciyml-blueprint-job)
-  - [Lean Linter-Warning Sweep](#lean-linter-warning-sweep-housekeepingyml-linter-sweep-job)
-  - [Lean Linter-Warning Auto-Fix](#lean-linter-warning-auto-fix-lean-linter-warning-autofixyml)
   - [Review Comment Auto-Fix](#review-comment-auto-fix-auto-fixyml)
   - [Agent Mention Handler](#agent-mention-handler-agent-mentionyml)
   - [Shared CI Auto-Fix Template](#shared-ci-auto-fix-template-_ci-auto-fix-sharedyml)
@@ -238,8 +236,7 @@ including axiom-guard files that pin `#print axioms` output with `#guard_msgs`.
 ### Blueprint Diagram Tests (`pr-ci.yml`, `blueprint` job)
 
 When blueprint sources change, `scripts/run_diagram_tests.py` runs every
-`scripts/test_tenkz_*.py` and `scripts/test_*_diagram.py` test and every
-`scripts/check_*_blueprint.py` declaration-inventory check, reports all
+`scripts/test_tenkz_*.py` and `scripts/test_*_diagram.py` test, reports all
 failures, and fails the step if any test fails. Tests that declare an
 `--output-dir` option render into `$RUNNER_TEMP/diagram-tests/<test>`; the whole
 directory is uploaded as the `diagram-tests-<sha>` artifact for review after
@@ -373,35 +370,6 @@ recorded by the push event before any commit in that push was applied.
 
 ---
 
-### Lean Linter-Warning Sweep (`housekeeping.yml`, `linter-sweep` job)
-
-**What it does**: Runs `lake exe cache get && lake build -q --log-level=info`,
-parses Lean compiler/linter warnings with
-`scripts/lean_linter_warning_report.py`, writes the summary to the workflow
-summary, and uploads the log plus JSON/text reports.
-
-**When it runs**: Weekly and by manual dispatch. It is report-only and never
-edits files or opens pull requests.
-
----
-
-### Lean Linter-Warning Auto-Fix (`lean-linter-warning-autofix.yml`)
-
-**What it does**: Runs the same warning capture as the sweep, then optionally
-asks Claude to apply only the listed Lean linter-warning fixes.
-
-**When it runs**: Manual dispatch only. PR creation requires `base_ref=main`,
-`create_pr=true`, an available `CLAUDE_CODE_OAUTH_TOKEN`, a successful initial
-Lean build, at least one warning, and a non-empty Lean-only diff.
-
-**Safety guards**: The workflow refuses to open a PR if the automated edit
-creates untracked files, deletes files, changes non-Lean files, changes the
-file list during validation, or adds proof-integrity tokens such as `sorry`,
-`admit`, `axiom`, `unsafe`, `native_decide`, `unsafeCast`, `unsafeCoerce`,
-`lcProof`, `ofReduceBool`, or `ofReduceNat`.
-
----
-
 ### Review Comment Auto-Fix (`auto-fix.yml`)
 
 **What it does**: After a PR review completes, this workflow reads the review comments and asks Claude to fix each issue. This creates the fixed-point loop described above.
@@ -493,8 +461,7 @@ blueprint, review, and prompt failures are not enough to trip the guard.
 
 **When it runs**:
 
-- On failed completed runs of `auto-fix.yml`, `pr-review.yml`,
-  `lean-linter-warning-autofix.yml`, and
+- On failed completed runs of `auto-fix.yml`, `pr-review.yml`, and
   `issue-automation.yml`, only when the failed run's
   head repository is the TNLean repository itself.
 - Hourly by schedule, to re-enable switches whose cooldown has elapsed.
@@ -554,7 +521,7 @@ provider or mention handler.
 
 | Variable | Disabled workflows |
 |----------|--------------------|
-| `CLAUDE_AUTO_FIX_ENABLED=false` | `auto-fix.yml`; write-mode linter auto-fix skips before Lean setup/build |
+| `CLAUDE_AUTO_FIX_ENABLED=false` | `auto-fix.yml` |
 | `CLAUDE_REVIEW_ENABLED=false` | `pr-review.yml` and the model-backed jobs of `issue-automation.yml` |
 | `DEEPSEEK_MENTION_ENABLED=false` | the `@deepseek` handle of `agent-mention.yml` |
 

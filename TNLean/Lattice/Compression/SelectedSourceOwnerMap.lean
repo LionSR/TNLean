@@ -21,7 +21,7 @@ and 565–588.
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceInventory
+namespace TNLean.Lattice.PartyCircuit.SourceInventory
 variable {P Q : Type}
 
 /-- The selected source-register list is unchanged by removing sources whose
@@ -73,4 +73,4 @@ theorem atParty_layout_mapOwner_of_singleton_fiber (f : P → Q) (p : P) (q : Q)
         rw [hcons, layout_cons, hsplit, hhead, ih, layout_cons, hsplit,
           Layout.mapOwner_append]
 
-end TNLean.PEPS.PairEffect.SourceInventory
+end TNLean.Lattice.PartyCircuit.SourceInventory

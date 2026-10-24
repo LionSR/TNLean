@@ -48,8 +48,9 @@ noncomputable section
 open scoped InnerProductSpace TensorProduct Kronecker
 
 namespace TNLean.PEPS.EncodedFrame
+open TNLean.Lattice.Sheet
 
-open PairEffect ContinuousLinearMap EuclideanSpace
+open TNLean.Lattice.PartyCircuit ContinuousLinearMap EuclideanSpace
 
 variable {ι : Type} {q : ℕ} {Party : Type}
 
@@ -144,7 +145,7 @@ raw register `ℂ^q` per site, held by the raw owner.
 
 Polynomial-PEPS manuscript, `05-frames.tex`, lines 13–20 and Definition 6.1 `def:frame`,
 lines 71–82. -/
-abbrev regs : PairEffect.Layout Party := layoutRegs q F.holes F.owner
+abbrev regs : Lattice.PartyCircuit.Layout Party := layoutRegs q F.holes F.owner
 
 /-- The registers of a frame identified with the canonical coordinates `F.Layout` of its tags and
 raw sites (`05-frames.tex`, lines 94–96). -/

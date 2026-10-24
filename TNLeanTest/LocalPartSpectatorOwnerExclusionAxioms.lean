@@ -11,10 +11,11 @@ import Lean.Util.CollectAxioms
 
 set_option linter.hashCommand false
 
+open TNLean.Lattice.PartyCircuit in
 run_cmd do
   let decls := #[
-    ``TNLean.PEPS.PairEffect.Word.restrict_localPart_appendTail_eval_heq_id_of_not_mem_parties,
-    ``TNLean.PEPS.PairEffect.Word.restrict_localPart_mapOwner_appendTail_eval_heq_id_of_disjoint
+    ``Word.restrict_localPart_appendTail_eval_heq_id_of_not_mem_parties,
+    ``Word.restrict_localPart_mapOwner_appendTail_eval_heq_id_of_disjoint
   ]
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv

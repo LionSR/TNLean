@@ -148,21 +148,37 @@ above are unchanged.
 
 \begin{definition}[Crossing supports and the swap coefficient]
     \label{def:peps_crossing_supports}
-    \lean{TNLean.Lattice.crossingSupports,
-        TNLean.Lattice.crossingSites,
-        TNLean.Lattice.swapBoundaryCoefficient,
-        TNLean.Lattice.card_admissibleSupport_le,
-        TNLean.Lattice.exists_walks_of_mem_crossingSites}
+    \lean{TNLean.Lattice.crossingSites,
+        TNLean.Lattice.swapBoundaryCoefficient}
     \leanok
     \uses{def:area_law_hamiltonian}
     Let $\Lambda$ be a finite domain, $R\ge0$ an integer and
     $A\subseteq\Lambda$. A support of range $R$ \emph{crosses} $A$ if it meets
     $A$ and is not contained in $A$; let $Z_R(A)$ be the union of the
-    crossing supports. Every site of $Z_R(A)$ is joined by walks of length at
-    most $R$ to a site of $A$ and to a site outside $A$. With
-    $v_R=1+2R(R+1)$ and $\mu_R=2^{v_R-1}$, there are at most $\mu_R|\Lambda|$
-    supports of range $R$, and we put $c_R=4\mu_R$.
+    crossing supports. With $v_R=1+2R(R+1)$ and $\mu_R=2^{v_R-1}$, put
+    $c_R=4\mu_R$.
 \end{definition}
+
+\begin{lemma}[Crossing supports lie near both sides and are few]
+    \label{lem:peps_crossing_supports_near_and_few}
+    \lean{TNLean.Lattice.exists_walks_of_mem_crossingSites,
+        TNLean.Lattice.card_admissibleSupport_le}
+    \leanok
+    \uses{def:peps_crossing_supports}
+    Every site of $Z_R(A)$ is joined by walks of length at most $R$ to a site
+    of $A$ and to a site outside $A$. There are at most $\mu_R|\Lambda|$
+    supports of range $R$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_crossing_supports}
+    A site $z$ of $Z_R(A)$ lies in a crossing support $X$, which contains a
+    site $x\in A$ and a site $y\notin A$. Any two sites of a support of range
+    $R$ are joined by a walk of length at most $R$, so this holds for $z,x$
+    and for $z,y$. Every support is nonempty, and at most $\mu_R$ supports
+    contain a given site by Theorem~\ref{thm:area_law_crossing_supports}, so
+    summing over the sites gives at most $\mu_R|\Lambda|$ supports.
+\end{proof}
 
 \begin{theorem}[The partially swapped Hamiltonian at range $R$]
     \label{thm:peps_swapped_local_hamiltonian}
@@ -189,6 +205,7 @@ above are unchanged.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{lem:peps_crossing_supports_near_and_few}
     Conjugating a doubled term by the swap keeps its support, and changes its
     norm by a factor at most two. A term supported inside $A$ or disjoint
     from it commutes with the swap after doubling, so only crossing supports

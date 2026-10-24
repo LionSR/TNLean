@@ -27,10 +27,11 @@ Independently formalized; no upstream Lean proof text reused.
 
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
-namespace PartyGate
+namespace Lattice.PartyCircuit.PartyGate
 
 /-- The absolute coefficient sum of an actual gate list is at most its length
 times an individual coefficient bound. Source: polynomial-PEPS Theorem 5.2,
@@ -59,8 +60,8 @@ theorem sum_norm_coefficients_le_of_power_bounds {a b : Layout P}
       mul_le_mul_of_nonneg_right hK (by positivity)
     _ = _ := by rw [pow_add]; ring
 
-end PartyGate
-namespace OriginalCircuit
+end Lattice.PartyCircuit.PartyGate
+namespace Lattice.PartyCircuit.OriginalCircuit
 
 /-- Each actual monomial of every original nonprivate gate has at most `r`
 pair effects and scalar coefficient of norm at most `C`. Allowedness of its local
@@ -108,5 +109,5 @@ theorem isExpansionBounded_of_termwise_power_bounds {a b : Layout P}
       mul_le_mul_of_nonneg_right hKbound (by positivity)
     _ = _ := by rw [pow_add]; ring
 
-end OriginalCircuit
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.OriginalCircuit
+end TNLean

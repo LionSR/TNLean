@@ -3,10 +3,10 @@
 
 \begin{definition}[A trivial pair source]
     \label{def:peps_unit_pair_source}
-    \lean{TNLean.PEPS.PairEffect.PairSource.unit}
-    \lean{TNLean.PEPS.PairEffect.PairSource.partyPair_unit}
-    \lean{TNLean.PEPS.PairEffect.PairSource.norm_unit_vector}
-    \lean{TNLean.PEPS.PairEffect.PairSource.finrank_unit_spaces}
+    \lean{TNLean.Lattice.PartyCircuit.PairSource.unit}
+    \lean{TNLean.Lattice.PartyCircuit.PairSource.partyPair_unit}
+    \lean{TNLean.Lattice.PartyCircuit.PairSource.norm_unit_vector}
+    \lean{TNLean.Lattice.PartyCircuit.PairSource.finrank_unit_spaces}
     \leanok
     \uses{def:peps_source_inventory}
     For distinct parties $p,q$, the trivial pair source has the complex line
@@ -19,9 +19,9 @@
 
 \begin{theorem}[Removing a trivial pair source]
     \label{thm:peps_remove_unit_pair_source}
-    \lean{TNLean.PEPS.PairEffect.Word.eraseUnitPair}
-    \lean{TNLean.PEPS.PairEffect.Word.eraseUnitPair_spec}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.Expands.unit_cons}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eraseUnitPair}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eraseUnitPair_spec}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.Expands.unit_cons}
     \leanok
     \uses{def:peps_unit_pair_source}
     A trivial pair source can be removed by an allowed composition of
@@ -50,8 +50,8 @@
 
 \begin{theorem}[A source on every pair]
     \label{thm:peps_complete_pair_sources}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_complete_extension}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.exists_complete}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.exists_complete_extension}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.exists_complete}
     \leanok
     \uses{def:peps_source_inventory,def:peps_unit_pair_source}
     Let $P$ be a finite set of parties. Suppose that $S$ is a normalized
@@ -81,8 +81,8 @@
 
 \begin{theorem}[Local factorization with every pair present]
     \label{thm:peps_complete_prepared_party_maps}
-    \lean{TNLean.PEPS.PairEffect.Word.exists_complete_source_preparation}
-    \lean{TNLean.PEPS.PairEffect.Word.exists_complete_prepared_tensorPartyMaps}
+    \lean{TNLean.Lattice.PartyCircuit.Word.exists_complete_source_preparation}
+    \lean{TNLean.Lattice.PartyCircuit.Word.exists_complete_prepared_tensorPartyMaps}
     \leanok
     \uses{def:peps_source_inventory,def:peps_party_registers,def:peps_party_partition}
     Let $P$ be the prescribed finite set of gate parties, with a fixed

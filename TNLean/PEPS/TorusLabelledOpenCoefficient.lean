@@ -19,7 +19,7 @@ noncomputable section
 open scoped BigOperators
 
 namespace TNLean.PEPS
-open DependentBondNetwork
+open DependentBondNetwork TNLean.Lattice.DependentBondNetwork
 
 variable {width height : ℕ} [NeZero width] [NeZero height]
 variable {V : Type*} [Fintype V] [DecidableEq V]

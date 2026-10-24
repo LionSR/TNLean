@@ -9,9 +9,9 @@ trace-norm estimates do not involve private dimensions.
 
 \begin{definition}[Original operators on a fixed chronology]
     \label{def:peps_approximate_original_operators}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.GateMaps}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.evalWithGateMaps}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsGateApproximation}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.GateMaps}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.evalWithGateMaps}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsGateApproximation}
     \leanok
     Fix a chronological circuit whose gate occurrence $g$ carries an
     ordered expansion $T_g=\sum_j c_{g,j}M_{g,j}$. Assign an original
@@ -27,8 +27,8 @@ trace-norm estimates do not involve private dimensions.
 
 \begin{theorem}[Contractivity of the original chronology]
     \label{thm:peps_original_operator_contraction}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.norm_evalWithGateMaps_le_one}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.norm_eval_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.norm_evalWithGateMaps_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.norm_eval_le_one}
     \leanok
     \uses{def:peps_approximate_original_operators}
     Under these local hypotheses, $\|W_G\|\le1$. The same assertion
@@ -43,8 +43,8 @@ trace-norm estimates do not involve private dimensions.
 
 \begin{definition}[Rescaling an approximate expansion]
     \label{def:peps_rescaled_original}
-    \lean{TNLean.PEPS.PairEffect.rescalePartyGate}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.rescaledOriginal}
+    \lean{TNLean.Lattice.PartyCircuit.rescalePartyGate}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.rescaledOriginal}
     \leanok
     \uses{def:peps_approximate_original_operators}
     Replacing each coefficient $c_{g,j}$ by $c_{g,j}/(1+\delta)$ defines
@@ -54,10 +54,10 @@ trace-norm estimates do not involve private dimensions.
 \end{definition}
 \begin{proof}
     \leanok
-    \lean{TNLean.PEPS.PairEffect.monomials_rescalePartyGate}
-    \lean{TNLean.PEPS.PairEffect.gate_rescalePartyGate}
-    \lean{TNLean.PEPS.PairEffect.sum_norm_rescalePartyGate_le}
-    \lean{TNLean.PEPS.PairEffect.isAllowed_rescalePartyGate}
+    \lean{TNLean.Lattice.PartyCircuit.monomials_rescalePartyGate}
+    \lean{TNLean.Lattice.PartyCircuit.gate_rescalePartyGate}
+    \lean{TNLean.Lattice.PartyCircuit.sum_norm_rescalePartyGate_le}
+    \lean{TNLean.Lattice.PartyCircuit.isAllowed_rescalePartyGate}
     The ordered monomial list is unchanged. Linearity gives the displayed
     local operator, and $\|T_g\|\le\|G_g\|+\delta\le1+\delta$
     proves its contractivity. Each monomial remains allowed, while
@@ -70,8 +70,8 @@ trace-norm estimates do not involve private dimensions.
 
 \begin{definition}[Occurrences and monomial counts after rescaling]
     \label{def:peps_rescaled_occurrences}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.rescaledLocationsEquiv}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.monomialCount}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.rescaledLocationsEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.monomialCount}
     \leanok
     \uses{def:peps_rescaled_original}
     Matching every gate of $\widetilde W_\delta$ to the same original
@@ -81,11 +81,11 @@ trace-norm estimates do not involve private dimensions.
 
 \begin{theorem}[Preservation of the original resource bounds]
     \label{thm:peps_rescaled_resources}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.nonprivateCount_rescaledOriginal}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.participants_rescaledOriginal}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.participationCount_rescaledOriginal}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.isExpansionBounded_rescaledOriginal}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.isMonomialBounded_rescaledOriginal}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.nonprivateCount_rescaledOriginal}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.participants_rescaledOriginal}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.participationCount_rescaledOriginal}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.isExpansionBounded_rescaledOriginal}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.isMonomialBounded_rescaledOriginal}
     \leanok
     \uses{def:peps_rescaled_occurrences}
     Rescaling preserves the number $N$ of nonprivate occurrences, their
@@ -104,7 +104,7 @@ trace-norm estimates do not involve private dimensions.
 
 \begin{theorem}[Two-factor telescoping estimate]
     \label{thm:peps_contraction_composition_error}
-    \lean{TNLean.PEPS.PairEffect.norm_comp_sub_comp_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.norm_comp_sub_comp_le_one}
     \leanok
     Let $A,C:E\to F$ and $B,D:F\to G$ be bounded linear maps between
     complex inner-product spaces. If $\|B\|,\|C\|\le1$, then
@@ -118,7 +118,7 @@ trace-norm estimates do not involve private dimensions.
 
 \begin{theorem}[Chronological operator error]
     \label{thm:peps_approximate_chronological_error}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.norm_rescaledOriginal_sub_evalWithGateMaps_le}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.norm_rescaledOriginal_sub_evalWithGateMaps_le}
     \leanok
     \uses{def:peps_rescaled_original}
     If the local approximation error is at most $\delta\ge0$ and the
@@ -142,7 +142,7 @@ trace-norm estimates do not involve private dimensions.
 
 \begin{definition}[Physical output of the original operators]
     \label{def:peps_original_gate_density}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.physicalDensityWithGateMaps}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.physicalDensityWithGateMaps}
     \leanok
     \uses{def:peps_approximate_original_operators}
     Given an isometric identification $K$ of the final memory with
@@ -154,8 +154,8 @@ trace-norm estimates do not involve private dimensions.
 
 \begin{theorem}[Physical error of approximate original gates]
     \label{thm:peps_approximate_physical_error}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.rectangularTraceNorm_rescaledOriginal_density_sub_le}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.rectangularTraceNorm_rescaledOriginal_density_sub_le_budget}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.rectangularTraceNorm_rescaledOriginal_density_sub_le}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.rectangularTraceNorm_rescaledOriginal_density_sub_le_budget}
     \leanok
     \uses{def:peps_original_gate_density}
     If $\|x\|\le1$, then
@@ -186,8 +186,8 @@ trace-norm estimates do not involve private dimensions.
 
 \begin{theorem}[Natural inverse-power accuracy]
     \label{thm:peps_approximate_natural_accuracy}
-    \lean{TNLean.PEPS.PairEffect.gateApproximation_error_inv_pow_le}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.rectangularTraceNorm_rescaledOriginal_density_sub_le_inv_pow}
+    \lean{TNLean.Lattice.PartyCircuit.gateApproximation_error_inv_pow_le}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.rectangularTraceNorm_rescaledOriginal_density_sub_le_inv_pow}
     \uses{def:peps_original_gate_density}
     \leanok
     Let $N\le CL^n$, where $n,p$ are nonnegative integers and
@@ -205,7 +205,7 @@ trace-norm estimates do not involve private dimensions.
 
 \begin{theorem}[One fixed accuracy exponent for approximate gates]
     \label{thm:peps_approximate_gate_real_accuracy}
-    \lean{TNLean.PEPS.PairEffect.gateApproximation_error_real_pow_le}
+    \lean{TNLean.Lattice.PartyCircuit.gateApproximation_error_real_pow_le}
     \leanok
     Let $L\ge2$, let $N,n$ be nonnegative integers, and suppose
     $N\le C L^n$. For a real target exponent $p$, set
@@ -233,7 +233,7 @@ trace-norm estimates do not involve private dimensions.
 
 \begin{theorem}[Approximate original gates at real inverse-power accuracy]
     \label{thm:peps_approximate_original_real_accuracy}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.rectangularTraceNorm_rescaledOriginal_density_sub_le_real_pow}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.rectangularTraceNorm_rescaledOriginal_density_sub_le_real_pow}
     \leanok
     Suppose a chronological contraction circuit has $N\le C L^n$ nonprivate
     gate occurrences, where $L\ge2$. Fix a real exponent $p$, and choose $q$
@@ -256,7 +256,7 @@ trace-norm estimates do not involve private dimensions.
 
 \begin{definition}[Termwise bounds on the original gate expansions]
     \label{def:peps_original_termwise_bounds}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.IsTermwiseBounded}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.IsTermwiseBounded}
     \leanok
     An original contraction circuit has termwise bounds $(r,C)$ if, at
     every nonprivate gate occurrence, each monomial in its prescribed
@@ -267,8 +267,8 @@ trace-norm estimates do not involve private dimensions.
 
 \begin{theorem}[Coefficient sums of gate expansions]
     \label{thm:peps_gate_coefficient_sum}
-    \lean{TNLean.PEPS.PairEffect.PartyGate.sum_norm_coefficients_le}
-    \lean{TNLean.PEPS.PairEffect.PartyGate.sum_norm_coefficients_le_of_power_bounds}
+    \lean{TNLean.Lattice.PartyCircuit.PartyGate.sum_norm_coefficients_le}
+    \lean{TNLean.Lattice.PartyCircuit.PartyGate.sum_norm_coefficients_le_of_power_bounds}
     \leanok
     For a prescribed gate expansion $\sum_{j=1}^{k}c_jM_j$ satisfying
     $|c_j|\leq C$ for every listed term,
@@ -291,8 +291,8 @@ trace-norm estimates do not involve private dimensions.
 
 \begin{theorem}[Uniform coefficient sums for the original circuit]
     \label{thm:peps_original_coefficient_sum}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_of_isTermwiseBounded}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_of_termwise_power_bounds}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isExpansionBounded_of_isTermwiseBounded}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isExpansionBounded_of_termwise_power_bounds}
     \uses{def:peps_original_termwise_bounds}
     \leanok
     Suppose an original circuit has at most $K$ monomials at each

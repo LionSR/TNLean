@@ -13,17 +13,17 @@ followed by merging the two registers of each party into one, are a single pair 
 regrouped vector `η ⊗ η'`, whose norm is `‖η‖ ‖η'‖` (`eval_combineSources`).  This is the
 tensor-product identity that the proof of Lemma 5.1 `lem:effects` gives for its last clause.
 The use of this identity in Lemma 5.1, and what of that clause is formalized, are described in
-`TNLean.PEPS.Approximation.PartyLayout`.
+`TNLean.Lattice.PartyCircuit.PartyLayout`.
 
 ## Main definitions
 
-* `PairEffect.pairRegroup` : the regrouping `(U ⊗ V) ⊗ (U' ⊗ V') ≅ (U ⊗ U') ⊗ (V ⊗ V')`.
-* `PairEffect.combineSources` : two pair sources followed by merging the registers of each
+* `PartyCircuit.pairRegroup` : the regrouping `(U ⊗ V) ⊗ (U' ⊗ V') ≅ (U ⊗ U') ⊗ (V ⊗ V')`.
+* `PartyCircuit.combineSources` : two pair sources followed by merging the registers of each
   party.
 
 ## Main results
 
-* `PairEffect.eval_combineSources` : two adjacent sources on one pair of parties combine into
+* `PartyCircuit.eval_combineSources` : two adjacent sources on one pair of parties combine into
   one.
 
 ## References
@@ -36,7 +36,7 @@ noncomputable section
 
 open scoped InnerProductSpace TensorProduct
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 open ContinuousLinearMap
 
@@ -98,7 +98,7 @@ regrouped vector `η ⊗ η'`, whose norm is `‖η‖ ‖η'‖`.
 
 This is the two-source tensor-product identity behind the last clause of Lemma 5.1. The
 combination of all sources on one pair of parties, in any order, is
-`PairEffect.partyPairEffectElimination_with_grouped_sources`.
+`PartyCircuit.partyPairEffectElimination_with_grouped_sources`.
 
 Polynomial-PEPS manuscript (September 24, 2026), Lemma 5.1, `04-compression.tex`, lines
 68–70 and 125–127. -/
@@ -121,4 +121,4 @@ theorem eval_combineSources {p q : P} (hpq : p ≠ q) (U V U' V' : HSpace) (η :
           simp only [assocL_tmul, leftCommL_tmul, lTensor_tmul, pairRegroup_tmul]
           rw [eval_localMap_mergeIso, lTensor_tmul, eval_localMap_mergeIso]
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

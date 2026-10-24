@@ -13,8 +13,8 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 
 \begin{definition}[Party tensor bases]
     \label{def:peps_party_tensor_basis}
-    \lean{TNLean.PEPS.PairEffect.partyListBasis,
-        TNLean.PEPS.PairEffect.partyLabelledBasis}
+    \lean{TNLean.Lattice.PartyCircuit.partyListBasis,
+        TNLean.Lattice.PartyCircuit.partyLabelledBasis}
     \leanok
     \uses{def:peps_party_layout}
     For each $p$, let $b_p$ be an orthonormal basis of $M(a_p)$,
@@ -26,7 +26,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 
 \begin{definition}[Party bases on the original register order]
     \label{def:peps_party_grouped_basis}
-    \lean{TNLean.PEPS.PairEffect.partyGroupedBasis}
+    \lean{TNLean.Lattice.PartyCircuit.partyGroupedBasis}
     \leanok
     \uses{def:peps_party_tensor_basis}
     Pull back the ordered party basis by $G_a^{-1}$. Its column on the
@@ -40,10 +40,10 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 
 \begin{definition}[Original local physical dimensions]
     \label{def:peps_family_physical_output}
-    \lean{TNLean.PEPS.PairEffect.familyPhysicalLayout,
-        TNLean.PEPS.PairEffect.familyPhysicalOutputLayout,
-        TNLean.PEPS.PairEffect.familyPhysicalListBasis,
-        TNLean.PEPS.PairEffect.familyLabelledPhysicalBasis}
+    \lean{TNLean.Lattice.PartyCircuit.familyPhysicalLayout,
+        TNLean.Lattice.PartyCircuit.familyPhysicalOutputLayout,
+        TNLean.Lattice.PartyCircuit.familyPhysicalListBasis,
+        TNLean.Lattice.PartyCircuit.familyLabelledPhysicalBasis}
     \leanok
     \uses{def:peps_party_layout}
     Let the physical space at $p$ be $H_p=\C^{d_p}$, where $d_p$
@@ -59,7 +59,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 
 \begin{theorem}[Prescribed physical columns under an owner map]
     \label{thm:peps_physical_owner_columns}
-    \lean{TNLean.PEPS.PairEffect.mapOwnerIso_familyPhysicalListBasis_apply_heq}
+    \lean{TNLean.Lattice.PartyCircuit.mapOwnerIso_familyPhysicalListBasis_apply_heq}
     \leanok
     \uses{def:peps_family_physical_output}
     Let $P,Q$ be arbitrary sets, let $f:P\to Q$, and let
@@ -97,7 +97,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 
 \begin{theorem}[Singleton physical memory of each party]
     \label{thm:peps_singleton_physical_memory}
-    \lean{TNLean.PEPS.PairEffect.atParty_familyPhysicalLayout_of_mem}
+    \lean{TNLean.Lattice.PartyCircuit.atParty_familyPhysicalLayout_of_mem}
     \leanok
     Let an ordered list of parties have no repetitions. For any party
     $p$ in this list, selecting its physical registers gives
@@ -113,7 +113,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 
 \begin{definition}[Physical basis at an individual party]
     \label{def:peps_singleton_physical_basis}
-    \lean{TNLean.PEPS.PairEffect.familyPhysicalPartyBasis}
+    \lean{TNLean.Lattice.PartyCircuit.familyPhysicalPartyBasis}
     \leanok
     \uses{thm:peps_singleton_physical_memory}
     Let $p$ occur in an ordered physical list with no repetitions.
@@ -125,7 +125,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 
 \begin{theorem}[Partitioning a single selected register]
     \label{thm:peps_selected_head_partition}
-    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_selectedHead_of_tail_excluded_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_selectedHead_of_tail_excluded_heq}
     \leanok
     Let the first register have owner $p$ and Hilbert space $H$, and
     let every remaining register have an owner different from $p$.
@@ -147,7 +147,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 
 \begin{theorem}[Grouping prescribed physical columns in arbitrary local coordinates]
     \label{thm:peps_basis_physical_columns_local_coordinates}
-    \lean{TNLean.PEPS.PairEffect.groupByPartyIso_familyPhysicalListBasis_eq_partyListBasis}
+    \lean{TNLean.Lattice.PartyCircuit.groupByPartyIso_familyPhysicalListBasis_eq_partyListBasis}
     \leanok
     \uses{def:peps_family_physical_output,def:peps_party_tensor_basis}
     Let $P$ be an arbitrary set of parties, let $d_p$ be arbitrary
@@ -194,7 +194,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 
 \begin{theorem}[Compatibility of physical and party coordinates]
     \label{thm:peps_family_physical_party_basis}
-    \lean{TNLean.PEPS.PairEffect.familyLabelledPhysicalBasis_eq_partyGroupedBasis}
+    \lean{TNLean.Lattice.PartyCircuit.familyLabelledPhysicalBasis_eq_partyGroupedBasis}
     \leanok
     Let the physical register list $a$ and the singleton bases $b_p$
     be as above. For every physical assignment $x$,
@@ -224,7 +224,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 
 \begin{definition}[Joint physical and private basis of one party]
     \label{def:peps_party_local_output_basis}
-    \lean{TNLean.PEPS.PairEffect.partyLocalOutputBasis}
+    \lean{TNLean.Lattice.PartyCircuit.partyLocalOutputBasis}
     \leanok
     For register lists $a,c$, choose orthonormal bases $b_p$ of
     $M(a_p)$ and $f_p$ of $M(c_p)$, indexed respectively by finite
@@ -237,7 +237,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 
 \begin{theorem}[Concatenating physical and private party bases]
     \label{thm:peps_party_grouped_basis_append}
-    \lean{TNLean.PEPS.PairEffect.partyGroupedBasis_append}
+    \lean{TNLean.Lattice.PartyCircuit.partyGroupedBasis_append}
     \leanok
     With the joint local bases just defined, let $B^{a+c}$ denote
     their party basis on $M(a\mathbin{+\!+}c)$, and let $B^a,B^c$
@@ -269,9 +269,9 @@ These coordinate identities apply to the local contractions in
 
 \begin{theorem}[Party memories after selecting all original parties]
     \label{thm:peps_selected_physical_party_layouts}
-    \lean{TNLean.PEPS.PairEffect.Layout.atParty_none_mapOwner_all}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.atParty_none_mapOwner_all}
     \leanok
-    \lean{TNLean.PEPS.PairEffect.Layout.atParty_some_mapOwner_all}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.atParty_some_mapOwner_all}
     \uses{def:peps_affected_owner,def:peps_party_registers,def:peps_owner_layout}
     Let $P$ be any party set, let
     $Q=P\sqcup\{*\}$, and let $\iota:P\to Q$
@@ -293,9 +293,9 @@ These coordinate identities apply to the local contractions in
 
 \begin{definition}[Selected physical coordinate families and party bases]
     \label{def:peps_selected_family_physical_basis}
-    \lean{TNLean.PEPS.PairEffect.selectedFamilyPhysicalIndex}
+    \lean{TNLean.Lattice.PartyCircuit.selectedFamilyPhysicalIndex}
     \leanok
-    \lean{TNLean.PEPS.PairEffect.selectedFamilyPhysicalPartyBasis}
+    \lean{TNLean.Lattice.PartyCircuit.selectedFamilyPhysicalPartyBasis}
     \uses{thm:peps_selected_physical_party_layouts,def:peps_singleton_physical_basis}
     Let $d:P\to\mathbb N$ specify the original physical dimensions,
     and let $\mathbf p$ list every original party exactly once. Set
@@ -312,9 +312,9 @@ These coordinate identities apply to the local contractions in
 
 \begin{theorem}[Original physical columns after selecting all parties]
     \label{thm:peps_selected_family_physical_columns}
-    \lean{TNLean.PEPS.PairEffect.selectedFamilyPhysicalPartyBasis_none_apply_heq}
+    \lean{TNLean.Lattice.PartyCircuit.selectedFamilyPhysicalPartyBasis_none_apply_heq}
     \leanok
-    \lean{TNLean.PEPS.PairEffect.selectedFamilyPhysicalPartyBasis_some_apply_heq}
+    \lean{TNLean.Lattice.PartyCircuit.selectedFamilyPhysicalPartyBasis_some_apply_heq}
     \uses{def:peps_selected_family_physical_basis}
     Under these memory identifications,
     $b^{\mathrm{sel}}_{*,\bullet}=1$ and
@@ -335,9 +335,9 @@ These coordinate identities apply to the local contractions in
 
 \begin{definition}[Physical and private columns at a selected owner]
     \label{def:peps_selected_physical_private_basis}
-    \lean{TNLean.PEPS.PairEffect.selectedPhysicalPrivateBasis}
+    \lean{TNLean.Lattice.PartyCircuit.selectedPhysicalPrivateBasis}
     \leanok
-    \lean{TNLean.PEPS.PairEffect.selectedPhysicalPrivateBasis_apply_heq}
+    \lean{TNLean.Lattice.PartyCircuit.selectedPhysicalPrivateBasis_apply_heq}
     \uses{def:peps_selected_family_physical_basis,def:peps_party_local_output_basis}
     Write $a$ for the original physical register list and $c$ for the private
     output list. For each selected owner $q$, choose an orthonormal basis
@@ -361,7 +361,7 @@ These coordinate identities apply to the local contractions in
 
 \begin{definition}[Original physical configurations]
     \label{def:peps_selected_physical_configurations}
-    \lean{TNLean.PEPS.PairEffect.selectedFamilyPhysicalConfigEquiv}
+    \lean{TNLean.Lattice.PartyCircuit.selectedFamilyPhysicalConfigEquiv}
     \leanok
     \uses{def:peps_selected_family_physical_basis}
     The bijection
@@ -375,7 +375,7 @@ These coordinate identities apply to the local contractions in
 
 \begin{theorem}[The exterior scalar in original physical configurations]
     \label{thm:peps_selected_physical_product_scalar}
-    \lean{TNLean.PEPS.PairEffect.partyProductMatrix_selectedFamilyPhysicalConfig}
+    \lean{TNLean.Lattice.PartyCircuit.partyProductMatrix_selectedFamilyPhysicalConfig}
     \leanok
     \uses{def:peps_selected_physical_configurations}
     Let $P$ be finite, and let $M_q$ be arbitrary complex matrices
@@ -401,10 +401,10 @@ These coordinate identities apply to the local contractions in
 
 \begin{definition}[The selected party order]
     \label{def:peps_selected_party_order}
-    \lean{TNLean.PEPS.PairEffect.selectedPartyOrder}
+    \lean{TNLean.Lattice.PartyCircuit.selectedPartyOrder}
     \leanok
-    \lean{TNLean.PEPS.PairEffect.selectedPartyOrder_nodup}
-    \lean{TNLean.PEPS.PairEffect.mem_selectedPartyOrder}
+    \lean{TNLean.Lattice.PartyCircuit.selectedPartyOrder_nodup}
+    \lean{TNLean.Lattice.PartyCircuit.mem_selectedPartyOrder}
     \uses{thm:peps_selected_physical_party_layouts}
     From the original order $\mathbf p=(p_0,\ldots,p_{m-1})$, form
     $\mathbf q=(*,\iota(p_0),\ldots,\iota(p_{m-1}))$.
@@ -416,7 +416,7 @@ These coordinate identities apply to the local contractions in
 
 \begin{theorem}[The grouped basis in original physical configurations]
     \label{thm:peps_selected_physical_basis_grouped}
-    \lean{TNLean.PEPS.PairEffect.selectedFamilyPhysicalPartyBasis_grouped}
+    \lean{TNLean.Lattice.PartyCircuit.selectedFamilyPhysicalPartyBasis_grouped}
     \leanok
     \uses{def:peps_selected_party_order,def:peps_selected_family_physical_basis,
         def:peps_selected_physical_configurations,def:peps_party_grouped_basis,
@@ -453,7 +453,7 @@ These coordinate identities apply to the local contractions in
 
 \begin{theorem}[Separating the physical and private grouped bases]
     \label{thm:peps_selected_physical_private_basis_grouped}
-    \lean{TNLean.PEPS.PairEffect.selectedPhysicalPrivateBasis_grouped}
+    \lean{TNLean.Lattice.PartyCircuit.selectedPhysicalPrivateBasis_grouped}
     \leanok
     \uses{def:peps_selected_physical_private_basis,def:peps_party_grouped_basis,
         thm:peps_party_grouped_basis_append}

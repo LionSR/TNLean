@@ -22,8 +22,8 @@ original branch counts. It is an auxiliary finite-cardinality estimate.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 565–588.
 -/
 
-namespace TNLean.PEPS.PairEffect.SourceCircuit
-open TNLean.PEPS.Approximation
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.Lattice.Compression
 variable {P : Type} {a b : Layout P}
 
 open Classical in
@@ -80,4 +80,4 @@ theorem distributedLinkParties_source_subset (w : SourceCircuit a b)
     (fun g ↦ w.participants g.1) (sourceGateRoot w)
     (fun g _ ↦ sourceGateRoot_mem w g) e.2
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

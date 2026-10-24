@@ -34,7 +34,7 @@ a four-block nonuniform-physical parent is asserted here.
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS
-open DependentBondNetwork
+open DependentBondNetwork TNLean.Lattice.DependentBondNetwork
 
 variable {width height : ℕ} [NeZero width] [NeZero height]
 variable [Fact (2 < width)] [Fact (2 < height)]

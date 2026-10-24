@@ -11,7 +11,7 @@ import Lean.Util.CollectAxioms
 
 set_option linter.hashCommand false
 
-open TNLean.PEPS.PairEffect.SourceInventory
+open TNLean.Lattice.PartyCircuit.SourceInventory
 
 run_cmd do
   let decls := #[``endpointRegisterData, ``endpointRegisterWord,

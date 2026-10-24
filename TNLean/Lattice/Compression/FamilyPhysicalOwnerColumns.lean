@@ -18,7 +18,8 @@ Source: polynomial-PEPS manuscript, proof of Theorem 5.2,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
+open TNLean.Lattice.PartyCircuit
 
 open scoped TensorProduct
 
@@ -101,4 +102,4 @@ theorem mapOwnerIso_familyPhysicalListBasis_apply_heq
   exact (Layout.mapOwnerIso_apply_heq f _ _).trans
     (familyPhysicalListBasis_owner_column_heq f δ ps y)
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

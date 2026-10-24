@@ -27,7 +27,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.PartyGate
+namespace TNLean.Lattice.PartyCircuit.PartyGate
 variable {P : Type} {a b c : Layout P}
 
 /-- The literal ordered expansion of the second gate after the first. -/
@@ -97,4 +97,4 @@ theorem effectCount_comp_le (L : PartyGate a b) (K : PartyGate b c) {r s : ℕ}
   obtain ⟨l, hl, k, hk, rfl⟩ := mem_comp.mp hq
   exact (PartyChain.effectCount_comp l.2 k.2).trans_le (Nat.add_le_add (hL l hl) (hK k hk))
 
-end TNLean.PEPS.PairEffect.PartyGate
+end TNLean.Lattice.PartyCircuit.PartyGate

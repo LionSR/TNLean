@@ -21,7 +21,7 @@ noncomputable section
 
 open scoped InnerProductSpace TensorProduct
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 open ContinuousLinearMap
 
@@ -88,4 +88,4 @@ theorem eval_swap_reversedSource {p q : P} (hpq : p ≠ q) (U V : HSpace)
   simp only [comp_apply, isoL_apply, TensorProduct.commIsometry_apply,
     TensorProduct.comm_tmul, appendRight_apply, assocL_tmul, leftCommL_tmul]
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

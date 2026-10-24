@@ -30,14 +30,14 @@ constants.
 
 ## Main results
 
-* `TNLean.PEPS.Approximation.norm_trajectory_sub_reference_le`: the accumulated vector error
+* `TNLean.Lattice.PartyCircuit.norm_trajectory_sub_reference_le`: the accumulated vector error
   of a chain of contractions is at most the sum of the step errors.
-* `TNLean.PEPS.Approximation.norm_trajectory_le`: a chain of contractions does not increase
+* `TNLean.Lattice.PartyCircuit.norm_trajectory_le`: a chain of contractions does not increase
   the norm.
-* `TNLean.PEPS.Approximation.norm_protocol_sub_reference_le`: the `C L⁻¹⁷` vector error.
-* `TNLean.PEPS.Approximation.rectangularTraceNorm_protocol_density_sub_le`:
+* `TNLean.Lattice.PartyCircuit.norm_protocol_sub_reference_le`: the `C L⁻¹⁷` vector error.
+* `TNLean.Lattice.PartyCircuit.rectangularTraceNorm_protocol_density_sub_le`:
   `eq:protocol-density`.
-* `TNLean.PEPS.Approximation.rectangularTraceNorm_compressed_density_sub_le`:
+* `TNLean.Lattice.PartyCircuit.rectangularTraceNorm_compressed_density_sub_le`:
   `eq:compressed-density`.
 
 ## References
@@ -51,7 +51,7 @@ open scoped Matrix
 
 noncomputable section
 
-namespace TNLean.PEPS.Approximation
+namespace TNLean.Lattice.PartyCircuit
 
 section Trajectory
 
@@ -261,4 +261,4 @@ theorem rectangularTraceNorm_compressed_density_sub_le
 
 end Density
 
-end TNLean.PEPS.Approximation
+end TNLean.Lattice.PartyCircuit

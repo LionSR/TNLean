@@ -15,7 +15,7 @@ Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized from the manuscript; no upstream Lean proof text reused.
 -/
 
-namespace TNLean.PEPS.PairEffect.Layout
+namespace TNLean.Lattice.PartyCircuit.Layout
 
 /-- If no participating party is affected, every placed register has exterior owner.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–381. -/
@@ -27,4 +27,4 @@ theorem affectedOwner_mapOwner_eq_none {P C : Type} (A : P → Bool) (owner : C 
   exact (affectedOwner_eq_none A _).mpr
     (Bool.eq_false_iff.mpr (fun hp ↦ h ⟨s.owner, hp⟩))
 
-end TNLean.PEPS.PairEffect.Layout
+end TNLean.Lattice.PartyCircuit.Layout

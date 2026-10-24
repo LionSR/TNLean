@@ -43,7 +43,7 @@ noncomputable section
 
 open EuclideanSpace
 open scoped TensorProduct
-open TNLean.PEPS.EncodedFrame TNLean.PEPS.PairEffect
+open TNLean.Lattice.Sheet TNLean.Lattice.PartyCircuit
 
 namespace TNLean.Lattice
 

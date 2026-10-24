@@ -11,7 +11,7 @@ import Lean.Util.CollectAxioms
 
 set_option linter.hashCommand false
 
-open TNLean.PEPS.PairEffect.Word
+open TNLean.Lattice.PartyCircuit.Word
 
 run_cmd do
   let decl := ``restrict_localPart_mapOwner_eval_heq_of_singleton_fiber

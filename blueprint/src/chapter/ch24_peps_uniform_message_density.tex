@@ -24,8 +24,8 @@ occurrence and preserves the operator of that list exactly.
 
 \begin{definition}[Message expansions at the original gate occurrences]
     \label{def:peps_message_gate_lists}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.MessageGateLists}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.expandMessageGateLists}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.MessageGateLists}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.expandMessageGateLists}
     \leanok
     At each original nonprivate gate occurrence, prescribe a finite ordered
     sum of monomials containing finite-dimensional messages. Replace each
@@ -37,7 +37,7 @@ occurrence and preserves the operator of that list exactly.
 
 \begin{definition}[Local approximation by message-containing monomials]
     \label{def:peps_message_gate_approximation}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsMessageGateApproximation}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsMessageGateApproximation}
     \leanok
     Fix one original operator at every nonprivate gate occurrence. A
     prescribed message-containing expansion is a local approximation with
@@ -50,7 +50,7 @@ occurrence and preserves the operator of that list exactly.
 
 \begin{definition}[Original monomial and message bounds]
     \label{def:peps_message_gate_resources}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsMessageResourceBounded}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsMessageResourceBounded}
     \leanok
     Bounds $(r,m,K,D,C)$ mean that every prescribed original gate expansion
     contains at most $K$ monomials, and each monomial contains at most $r$
@@ -62,10 +62,10 @@ occurrence and preserves the operator of that list exactly.
 
 \begin{theorem}[Enlarging local bounds]
     \label{thm:peps_message_gate_bounds_mono}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsMessageGateApproximation.mono}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsMessageResourceBounded.mono_dimension}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsMessageResourceBounded.mono_coefficient}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsTermwiseBounded.mono_coefficient}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsMessageGateApproximation.mono}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsMessageResourceBounded.mono_dimension}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsMessageResourceBounded.mono_coefficient}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsTermwiseBounded.mono_coefficient}
     \leanok
     Increasing the local approximation tolerance, the message-dimension
     bound, or the coefficient bound preserves the corresponding conditions on the same original
@@ -80,7 +80,7 @@ occurrence and preserves the operator of that list exactly.
 
 \begin{theorem}[Message expansion preserves each local approximation]
     \label{thm:peps_message_expand_gate_approximation}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.isGateApproximation_expandMessageGateLists}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.isGateApproximation_expandMessageGateLists}
     \leanok
     \uses{def:peps_message_gate_lists,def:peps_message_gate_approximation}
     A prescribed local approximation with tolerance $\delta$ remains a local
@@ -99,7 +99,7 @@ occurrence and preserves the operator of that list exactly.
 
 \begin{theorem}[Term counts after bounded message expansion]
     \label{thm:peps_message_expand_monomial_count}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.monomialCount_expandMessageGateLists_le}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.monomialCount_expandMessageGateLists_le}
     \leanok
     \uses{def:peps_message_gate_resources}
     Suppose the original bounds are $(r,m,K,D,C)$ and $D\geq1$. After
@@ -118,7 +118,7 @@ occurrence and preserves the operator of that list exactly.
 
 \begin{theorem}[Individual coefficient bounds after message expansion]
     \label{thm:peps_message_expand_termwise_bound}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.isTermwiseBounded_expandMessageGateLists}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.isTermwiseBounded_expandMessageGateLists}
     \leanok
     \uses{def:peps_message_gate_resources,def:peps_message_gate_approximation}
     Suppose the original bounds are $(r,m,K,D,C)$ with $D\geq1$ and
@@ -139,7 +139,7 @@ occurrence and preserves the operator of that list exactly.
 
 \begin{theorem}[Uniform compression of original message-containing gates]
     \label{thm:peps_uniform_original_message_compression}
-    \lean{TNLean.PEPS.PairEffect.GateMapConstruction.exists_uniform_message_sampled_network}
+    \lean{TNLean.Lattice.PartyCircuit.GateMapConstruction.exists_uniform_message_sampled_network}
     \leanok
     \uses{def:peps_original_gate_construction,def:peps_message_gate_lists,def:peps_message_gate_approximation,def:peps_message_gate_resources}
     Fix a family of original distributed constructions on finite nonempty
@@ -224,7 +224,7 @@ occurrence and preserves the operator of that list exactly.
 
 \begin{theorem}[Uniform compression of exact original message expansions]
     \label{thm:peps_uniform_exact_original_message_compression}
-    \lean{TNLean.PEPS.PairEffect.GateMapConstruction.exists_uniform_exact_message_sampled_network}
+    \lean{TNLean.Lattice.PartyCircuit.GateMapConstruction.exists_uniform_exact_message_sampled_network}
     \leanok
     \uses{def:peps_original_gate_construction,def:peps_message_gate_lists,def:peps_message_gate_approximation,def:peps_message_gate_resources}
     Fix a family of original distributed constructions on finite nonempty

@@ -14,13 +14,13 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{definition}[Changing register owners]
     \label{def:peps_owner_layout}
-    \lean{TNLean.PEPS.PairEffect.Layout.mapOwner}
-    \lean{TNLean.PEPS.PairEffect.Layout.mapOwner_nil}
-    \lean{TNLean.PEPS.PairEffect.Layout.mapOwner_cons}
-    \lean{TNLean.PEPS.PairEffect.Layout.mapOwner_append}
-    \lean{TNLean.PEPS.PairEffect.Layout.mapOwnerIso}
-    \lean{TNLean.PEPS.PairEffect.Layout.mapOwnerIso_nil_apply}
-    \lean{TNLean.PEPS.PairEffect.Layout.mapOwnerIso_cons_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwner}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwner_nil}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwner_cons}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwner_append}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwnerIso}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwnerIso_nil_apply}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwnerIso_cons_tmul}
     \leanok
     \uses{def:peps_party_registers}
     If $\ell=((p_1,H_1),\ldots,(p_n,H_n))$ is a register list,
@@ -40,8 +40,8 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{theorem}[Compatibility with concatenation]
     \label{thm:peps_owner_concatenation}
-    \lean{TNLean.PEPS.PairEffect.Layout.mapOwnerIso_append_tmul}
-    \lean{TNLean.PEPS.PairEffect.Layout.mapOwnerIso_append}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwnerIso_append_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwnerIso_append}
     \leanok
     \uses{def:peps_owner_layout}
     Write $C_{\ell,m}:\mathcal H_{\ell m}\to
@@ -71,11 +71,11 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{definition}[Sources remaining between distinct owners]
     \label{def:peps_owner_sources}
-    \lean{TNLean.PEPS.PairEffect.PairSource.mapOwner}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.mapOwner}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.mapOwner_nil}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.mapOwner_cons}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.mapOwner_append}
+    \lean{TNLean.Lattice.PartyCircuit.PairSource.mapOwner}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.mapOwner}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.mapOwner_nil}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.mapOwner_cons}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.mapOwner_append}
     \leanok
     \uses{def:peps_source_inventory}
     A source $s=(p,q;U,V;\eta)$ remains between distinct owners
@@ -88,9 +88,9 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{theorem}[Surviving pair labels after grouping]
     \label{thm:peps_owner_source_pairs}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.mem_mapOwner}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.map_partyPair_mapOwner}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.mem_partyPair_mapOwner}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.mem_mapOwner}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.map_partyPair_mapOwner}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.mem_partyPair_mapOwner}
     \leanok
     \uses{def:peps_owner_sources}
     The unordered pair labels of $S_f$ are obtained by applying $f$
@@ -109,8 +109,8 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{theorem}[Normalization and the absence of crossing sources]
     \label{thm:peps_owner_sources_internal}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.IsNormalized.mapOwner}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.mapOwner_eq_nil_iff}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.IsNormalized.mapOwner}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.mapOwner_eq_nil_iff}
     \leanok
     \uses{def:peps_owner_sources}
     If the vectors of $S$ are normalized, then those of $S_f$ are
@@ -126,7 +126,7 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{definition}[Preparing an internal pair]
     \label{def:peps_internal_pair_preparation}
-    \lean{TNLean.PEPS.PairEffect.Word.localPairSource}
+    \lean{TNLean.Lattice.PartyCircuit.Word.localPairSource}
     \leanok
     \uses{def:peps_party_layout}
     For $q\in Q$ and $\eta\in U\otimes V$, prepare two fresh
@@ -139,8 +139,8 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{theorem}[The internal preparation operator]
     \label{thm:peps_internal_pair_preparation}
-    \lean{TNLean.PEPS.PairEffect.Word.localPairSource_spec}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_localPairSource}
+    \lean{TNLean.Lattice.PartyCircuit.Word.localPairSource_spec}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_localPairSource}
     \leanok
     \uses{def:peps_internal_pair_preparation}
     The operation in Definition~\ref{def:peps_internal_pair_preparation}
@@ -160,7 +160,7 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{definition}[Changing the owners of a composition]
     \label{def:peps_owner_composition}
-    \lean{TNLean.PEPS.PairEffect.Word.mapOwner}
+    \lean{TNLean.Lattice.PartyCircuit.Word.mapOwner}
     \leanok
     \uses{def:peps_owner_layout,def:peps_internal_pair_preparation}
     Let $F:\mathcal H_\ell\to\mathcal H_{\ell'}$ be a
@@ -177,10 +177,10 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{theorem}[Exact preservation of an allowed composition]
     \label{thm:peps_owner_composition}
-    \lean{TNLean.PEPS.PairEffect.Word.isAllowed_mapOwner}
-    \lean{TNLean.PEPS.PairEffect.Word.sources_mapOwner}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_mapOwner}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_mapOwner_comp}
+    \lean{TNLean.Lattice.PartyCircuit.Word.isAllowed_mapOwner}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sources_mapOwner}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_mapOwner}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_mapOwner_comp}
     \leanok
     \uses{def:peps_owner_composition,def:peps_owner_sources}
     The operators of $F$ and $F^f$ satisfy
@@ -210,7 +210,7 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{theorem}[Two contractions when every source is internal]
     \label{thm:peps_internal_source_factorization}
-    \lean{TNLean.PEPS.PairEffect.Word.exists_partition_of_sources_internal}
+    \lean{TNLean.Lattice.PartyCircuit.Word.exists_partition_of_sources_internal}
     \leanok
     % The statement below is an auxiliary result with its internal-source hypothesis explicit.
     \uses{def:peps_owner_composition,def:peps_party_partition}

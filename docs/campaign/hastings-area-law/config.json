@@ -1,0 +1,173 @@
+{
+  "slug": "hastings-area-law",
+  "pageTitle": "Hastings' Area Law · TNLean",
+  "heading": "Hastings' area law for gapped one-dimensional ground states",
+  "lede": "In 2007 Hastings proved that the ground state of a gapped one-dimensional quantum chain has bounded entanglement: the entropy of every block of sites is at most a constant independent of the length of the chain, and the ground state is well approximated by a matrix product state. The proof writes the ground-state projector approximately as a product of operators that act on the two sides of a cut and on a window around it, and uses that factorization to show that the mutual information across a cut cannot keep doubling. This page tracks the Lean 4 formalization of that proof, a second proof of a theorem that TNLean already proves by a shorter argument.",
+  "description": "Progress of the Lean 4 formalization of Hastings' proof of the one-dimensional area law, arXiv:0705.2024.",
+  "tabs": [
+    {
+      "slug": "openai-area-law-peps-proof",
+      "label": "Two-dimensional area law and PEPS"
+    },
+    {
+      "slug": "one-dimensional-area-law-mps",
+      "label": "One-dimensional area law and MPS"
+    },
+    {
+      "slug": "hastings-area-law",
+      "label": "One-dimensional area law after Hastings"
+    },
+    {
+      "slug": "lvv-ground-state-algorithm",
+      "label": "Ground states in polynomial time"
+    }
+  ],
+  "label": "0705.2024",
+  "since": "2026-10-21",
+  "scope": "tracker",
+  "repos": [
+    {
+      "name": "TNLean",
+      "slug": "LionSR/TNLean",
+      "checkout": ".",
+      "primary": true,
+      "homepage": "https://sirui-lu.com/TNLean/",
+      "description": "Tensor-network theory in Lean 4: the fundamental theorem of matrix product states, canonical forms, parent Hamiltonians, matrix-product density operators, projected entangled pair states and local circuits."
+    },
+    {
+      "name": "QICLean",
+      "slug": "LionSR/QICLean",
+      "checkout": "../QICLean",
+      "checkoutEnv": "QICLEAN_DIR",
+      "prefix": "Q",
+      "homepage": "https://sirui-lu.com/QICLean/",
+      "description": "Quantum information and channels in Lean 4, following Wolf's Quantum Channels & Operations: channel representations, Kadison–Schwarz theory, quantum Perron–Frobenius and spectral theory, GKSL semigroups and entropy."
+    }
+  ],
+  "tracker": 9829,
+  "streams": [
+    9829
+  ],
+  "streamNames": {
+    "9829": "Hastings' area law"
+  },
+  "papers": {
+    "hastings": {
+      "name": "Hastings 2007",
+      "stream": 9829
+    }
+  },
+  "sources": "https://arxiv.org/abs/0705.2024v4",
+  "citationPattern": "hastings07|Hastings2007AreaLaw|0705\\.2024",
+  "excludePathPattern": "ch35_one_dimensional_chain\\.tex$",
+  "leanDirs": [
+    "TNLean/MPS/AreaLaw/Hastings"
+  ],
+  "routes": [
+    {
+      "id": "area",
+      "paper": "hastings",
+      "eyebrow": "Part I · The area law",
+      "heading": "How Hastings proves the area law",
+      "intro": "The chain has <i>N</i> sites of local dimension <i>D</i>, nearest-neighbour terms of norm at most <i>J</i>, and a unique ground state Ψ<sub>0</sub> with gap Δ<i>E</i>. Set ξ = max(2<i>v</i>/Δ<i>E</i>, ξ<sub><i>C</i></sub>), using the Lieb–Robinson velocity <i>v</i> and decay length ξ<sub><i>C</i></sub>. The paper sets ξ′ = 6ξ. The restricted construction instead uses ξ<sub>ch</sub> = 8 max(2<i>v</i><sub>0</sub>/Δ<i>E</i>, 1), where <i>v</i><sub>0</sub> comes from the available chain localization estimate, and reaches ξ′ &gt; 6ξ<sub>ch</sub>. Identifying a Lieb–Robinson pair with the source’s support dependence, the endpoint rate and a prefactor polynomial in ξ remain open. The stages below explain the consequences of a factorization error ε(<i>l</i>) = <i>C</i><sub>1</sub>e<sup>−<i>l</i>/ξ′</sup>, keeping these restrictions explicit.",
+      "stages": [
+        {
+          "title": "Approximate factorization of the ground-state projector",
+          "issues": [
+            9811,
+            9810
+          ],
+          "physics": "Fix a cut between sites <i>j</i> and <i>j</i> + 1 and a length <i>l</i>. The construction underlying Lemma 1 produces three contractions: <i>O<sub>L</sub></i> acting left of the cut, <i>O<sub>R</sub></i> acting right of it, and <i>O<sub>B</sub></i> acting on the window of 2<i>l</i> sites around it, whose product is within ε(<i>l</i>) = <i>C</i><sub>1</sub> e<sup>−<i>l</i>/ξ′</sup> of the projector <i>P</i><sub>0</sub> onto Ψ<sub>0</sub> in operator norm. The construction splits <i>H</i> into a left part, a buffer and a right part, centres each at the ground state, and averages each under the time evolution against a Gaussian whose width is set by the gap. The averaged parts nearly annihilate Ψ<sub>0</sub>; the Lieb–Robinson bound makes them nearly local again. <i>O<sub>L</sub></i> and <i>O<sub>R</sub></i> are spectral projections of the localized left and right parts onto eigenvalues of small absolute value, and <i>O<sub>B</sub></i> is a localized Gaussian average of the evolution in the interaction picture. As the note added to the paper records, this <i>O<sub>B</sub></i> need not be positive; Lemma 4 repairs that by passing to <i>O<sub>B</sub></i><sup>†</sup><i>O<sub>B</sub></i>, at the cost of replacing ε by a constant times √ε.",
+          "delivers": "The assembled bound is ‖<i>O<sub>B</sub> O<sub>L</sub> O<sub>R</sub></i> − <i>P</i><sub>0</sub>‖ ≤ (<i>a</i> + <i>b</i>√<i>l</i>)e<sup>−<i>l</i>/(6ξ<sub>ch</sub>)</sup>, hence ≤ <i>C</i><sub>1</sub>e<sup>−<i>l</i>/ξ′</sup> for any ξ′ &gt; 6ξ<sub>ch</sub>. The left and right factors are orthogonal projections; the window factor is a contraction. The endpoint ξ′ = 6ξ, a Lieb–Robinson estimate with a numerical prefactor and arbitrary second support, and polynomial dependence of <i>C</i><sub>1</sub> on ξ remain unresolved. Making the window factor positive by Lemma 4 changes the error to order √ε(<i>l</i>), with rate e<sup>−<i>l</i>/(2ξ′)</sup>."
+        },
+        {
+          "title": "The bootstrap: entropy from overlap with low Schmidt rank",
+          "issues": [
+            9813
+          ],
+          "physics": "Suppose a mixture ρ of states of Schmidt rank at most <i>k</i> across the cut has overlap <i>P</i> with the ground state. Applying the factorization at window length <i>m</i> multiplies the Schmidt rank by at most <i>D</i><sup>2<i>m</i></sup>, since <i>O<sub>B</sub></i> acts on 2<i>m</i> sites, and leaves a state close to Ψ<sub>0</sub>. By the variational characterization of the Schmidt coefficients, the weight of Ψ<sub>0</sub> beyond its first <i>k D</i><sup>2<i>m</i></sup> Schmidt coefficients is then at most 2<i>C</i><sub>1</sub><sup>2</sup>e<sup>−2<i>m</i>/ξ′</sup>/<i>P</i> for every <i>m</i>. Maximizing the entropy subject to this whole family of geometric tail constraints bounds the entropy of the half chain.",
+          "delivers": "Lemma 2: <i>S</i>(ρ<sup>0</sup><sub>1,<i>j</i></sub>) ≤ ln <i>k</i> + ξ′ ln(2<i>C</i><sub>1</sub><sup>2</sup>/<i>P</i>) ln <i>D</i> + <i>F</i>(ξ′, <i>D</i>), with <i>F</i>(ξ′, <i>D</i>) = (ξ′ + 4) ln <i>D</i> + 1 + ln(<i>D</i><sup>2</sup> − 1) + ln(ξ′/2 + 1)."
+        },
+        {
+          "title": "Mutual information across a cut",
+          "issues": [
+            9812
+          ],
+          "physics": "Assume that the high-entropy hypothesis and the bootstrap give <i>p</i> = Tr(<i>P</i><sub>0</sub>σ) ≤ 2ε, where σ is the product of the two half-chain marginals. The window effect is <i>E</i> = <i>O<sub>B</sub></i><sup>†</sup><i>O<sub>B</sub></i>, as in the note added to the paper; <i>O<sub>L</sub>O<sub>R</sub></i> supplies an auxiliary projection, not the measurement on the window. On the ground state, the expectation of <i>E</i> is at least 1 − 4ε. On σ it is at most 20ε when ε ≤ 1/136. Set η = 2ε. A measurement cannot increase relative entropy, and relative entropy with respect to the product of the marginals is mutual information. The resulting binary relative entropy gives the lower bound below; nonnegativity handles larger η.",
+          "delivers": "Under this overlap hypothesis, the mutual information of the two halves of the window is at least (1 − 2η(<i>l</i>)) <i>l</i>/ξ′ − ln(2<i>C</i><sub>1</sub>) − 7, where η(<i>l</i>) = 2<i>C</i><sub>1</sub>e<sup>−<i>l</i>/ξ′</sup> and 4<i>C</i><sub>1</sub> &gt; 1. This retains the exponential rate without replacing the window factor in the factorization by its positive repair. It is a conditional step in the high-entropy contradiction, not a lower bound for every gapped ground state."
+        },
+        {
+          "title": "The doubling argument",
+          "issues": [
+            9814
+          ],
+          "physics": "Suppose some half chain had entropy above a large value <i>S</i><sub>max</sub>. Then the entropy stays above 2<i>S</i><sub>max</sub>/3 along a whole window of length <i>l</i><sub>0</sub> of order <i>S</i><sub>max</sub>/ln <i>D</i>. Let <i>S<sub>l</sub></i> be the largest entropy of an interval of length <i>l</i> in that window. Subadditivity alone gives <i>S</i><sub>2<i>l</i></sub> ≤ 2<i>S<sub>l</sub></i>; combining the bootstrap with the mutual-information bound sharpens this to <i>S</i><sub>2<i>l</i></sub> ≤ 2<i>S<sub>l</sub></i> − (1 − 4<i>C</i><sub>1</sub>e<sup>−<i>l</i>/ξ′</sup>) <i>l</i>/ξ′ + ln(2<i>C</i><sub>1</sub>) + 7. Each doubling therefore lowers the entropy per site by a fixed amount, while it starts at most at ln <i>D</i> and can never become negative. Only a bounded number of doublings fit, which bounds <i>l</i><sub>0</sub>, contradicting the choice of <i>S</i><sub>max</sub>.",
+          "delivers": "The source-form target, with the corrected doubling constant, is <i>S</i>(ρ<sup>0</sup><sub>1,<i>i</i></sub>) ≤ <i>c</i><sub>0</sub> ξ′ ln ξ′ ln <i>D</i> · 4<sup>ξ′ ln <i>D</i></sup> for every <i>i</i>, with a numerical constant <i>c</i><sub>0</sub>. The paper prints 2<sup>ξ′ ln <i>D</i></sup>; the iteration needs twice as many doublings as printed. Deriving this source-form constant still requires the endpoint rate and polynomial prefactor described above. The constant is exponential in ξ′, hence in <i>J</i>/Δ<i>E</i>; the proof of the other one-dimensional tab gives a constant linear in <i>J</i>/Δ."
+        }
+      ]
+    },
+    {
+      "id": "mps",
+      "paper": "hastings",
+      "eyebrow": "Part II · Consequences",
+      "heading": "Matrix product states and correlations",
+      "intro": "The same factorization controls more than the entropy. It bounds the small Schmidt coefficients that a matrix product state approximation discards, and it limits how strongly an operator far from a cut can correlate with an operator diagonal in the Schmidt basis of that cut.",
+      "stages": [
+        {
+          "title": "Decay of the Schmidt coefficients and matrix product states",
+          "issues": [
+            9815
+          ],
+          "physics": "Order the Schmidt coefficients of Ψ<sub>0</sub> across a cut by size. The first <i>k</i><sub>0</sub> = e<sup>2<i>S</i></sup>/2 of them carry weight at least one half, where <i>S</i> is the entropy of the half chain, so the bootstrap applies with <i>P</i> = 1/2 and bounds the weight beyond <i>k</i><sub>0</sub><i>D</i><sup>2<i>m</i></sup> by 4<i>C</i><sub>1</sub><sup>2</sup>e<sup>−2<i>m</i>/ξ′</sup>. Rewritten in terms of the number <i>k</i>′ of coefficients kept, the discarded weight decays like a power of <i>k</i>′/<i>k</i><sub>0</sub>. Truncating every cut of the chain to <i>k</i>′ Schmidt vectors then gives a matrix product state of bond dimension <i>k</i>′. The conditional source argument assumes a uniform entropy bound. For the whole chain, choose one integer <i>k</i><sub>0</sub> at least exp(2<i>S</i>)/2 at every cut. The remaining Hamiltonian application must supply both this bound and the factorization with constants uniform in the chain length.",
+          "delivers": "The Schmidt weight beyond the first <i>k</i>′ coefficients is at most 4<i>C</i><sub>1</sub><sup>2</sup> e<sup>2/ξ′</sup> (<i>k</i>′/<i>k</i><sub>0</sub>)<sup>−1/(ξ′ ln <i>D</i>)</sup>, so sequential truncation gives an unnormalized matrix product vector Φ of bond dimension at most <i>k</i>′ with squared Hilbert-space error ‖Φ − Ψ<sub>0</sub>‖² of order (<i>N</i> − 1) (<i>k</i>′/<i>k</i><sub>0</sub>)<sup>−1/(ξ′ ln <i>D</i>)</sup>. The norm error is the square root of this bound. For fixed chain parameters, polynomial bond dimension therefore gives polynomial accuracy. For <i>N</i> &lt; 2 no cut is truncated and Φ = Ψ<sub>0</sub>; the displayed power-law expression is used for <i>N</i> ≥ 2."
+        },
+        {
+          "title": "Correlations of Schmidt-diagonal operators",
+          "issues": [
+            9816
+          ],
+          "physics": "An operator <i>B<sub>L</sub></i> acting on the left half and diagonal in the Schmidt basis of Ψ<sub>0</sub> has a mirror image <i>B<sub>R</sub></i> on the right half with <i>B<sub>L</sub></i>Ψ<sub>0</sub> = <i>B<sub>R</sub></i>Ψ<sub>0</sub>. Let <i>A</i> act at distance at least <i>l</i> from the cut. Each factor of the approximate factorization nearly fixes Ψ<sub>0</sub> and commutes with one of <i>A</i>, <i>B<sub>L</sub></i>, <i>B<sub>R</sub></i> by its support, so a chain of triangle inequalities moves <i>B<sub>L</sub></i> past <i>A</i> at a small cost. Hastings uses this to show that certain expander matrix product states, whose correlations of this kind stay large, are not ground states of gapped chains.",
+          "delivers": "Lemma 3: |⟨Ψ<sub>0</sub>, <i>A B<sub>L</sub></i> Ψ<sub>0</sub>⟩ − ⟨Ψ<sub>0</sub>, <i>A</i> Ψ<sub>0</sub>⟩⟨Ψ<sub>0</sub>, <i>B<sub>L</sub></i> Ψ<sub>0</sub>⟩| ≤ 3√(2ε(<i>l</i>)) + ε(<i>l</i>) for contractions <i>A</i> and <i>B<sub>L</sub></i>. This is proved from positive approximate factorization. The current Hamiltonian specialization uses a decay length greater than 12ξ<sub>ch</sub>; the source rate and polynomial prefactor remain open."
+        }
+      ]
+    }
+  ],
+  "glossary": [
+    [
+      "Entanglement entropy",
+      "S(ρ<sub>1,i</sub>) = −Tr ρ log ρ for the reduced density matrix ρ of the ground state on the first i sites, measuring the entanglement across the cut after site i."
+    ],
+    [
+      "Spectral gap",
+      "The ground state Ψ<sub>0</sub> is unique and every other eigenvalue of H exceeds the ground energy by at least ΔE."
+    ],
+    [
+      "Lieb–Robinson bound",
+      "A bound on how far, in a given time, the evolution under a local Hamiltonian can spread an operator acting on a few sites; on a chain it holds with a velocity v and a decay length ξ<sub>C</sub>."
+    ],
+    [
+      "Approximate factorization",
+      "A product O<sub>B</sub>O<sub>L</sub>O<sub>R</sub> approximating the ground-state projector in operator norm. The left and right factors are projections and the window factor is a contraction. Replacing it by O<sub>B</sub><sup>†</sup>O<sub>B</sub> makes all factors positive but incurs a square-root loss in the error."
+    ],
+    [
+      "Schmidt rank",
+      "The number of nonzero terms in the Schmidt decomposition of a vector across a cut, that is, the rank of the reduced density matrix of either side."
+    ],
+    [
+      "Schmidt-diagonal operator",
+      "An operator on one side of a cut that is diagonal in the Schmidt basis of the ground state across that cut."
+    ],
+    [
+      "Mutual information",
+      "I(X : Y) = S(X) + S(Y) − S(X ∪ Y), the relative entropy of the state on X ∪ Y to the product of its marginals."
+    ],
+    [
+      "Lindblad–Uhlmann monotonicity",
+      "Relative entropy cannot increase under a quantum channel, in particular under a measurement."
+    ],
+    [
+      "Matrix product state",
+      "A vector on a chain written as a contraction of one tensor per site, with open ends. Every internal Schmidt rank is at most the corresponding bond dimension. For a nonzero vector on a chain of at least two sites, the minimal possible maximal bond dimension equals the largest Schmidt rank across internal cuts; an arbitrary representation may have larger bonds."
+    ]
+  ]
+}

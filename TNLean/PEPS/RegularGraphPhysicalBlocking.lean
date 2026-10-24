@@ -26,13 +26,6 @@ variable (K : Type*) [Fintype K] [DecidableEq K]
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
 
-/-- The bundled representation is simultaneous translation in the physical
-coordinate basis. Source: SCP10, lines 1830–1848. -/
-theorem regularBundleMatrix_apply (g : G) (x y : G × (K → G)) :
-    regularBundleMatrix K g x y = if x = g • y then 1 else 0 := by
-  simp [regularBundleMatrix, Matrix.permMatrixHom_apply, Equiv.Perm.permMatrix,
-    PEquiv.toMatrix_apply, MulAction.toPerm_symm_apply, eq_inv_smul_iff, eq_comm]
-
 /-- Both orientations of a regular bundled leg have the same simultaneous
 translation action on their coordinate labels. Source: SCP10, lines 1830–1864. -/
 theorem graphIncidentMatrix_regularBundle_apply (v : V) (g : G)

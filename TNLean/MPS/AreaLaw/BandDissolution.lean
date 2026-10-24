@@ -40,7 +40,7 @@ or side is a different stack occurrence, preserved among the spectators until ac
 noncomputable section
 
 open Matrix
-open TNLean.Lattice TNLean.PEPS.EncodedFrame TNLean.PEPS.PairEffect
+open TNLean.Lattice TNLean.Lattice.Sheet TNLean.Lattice.PartyCircuit
 open scoped InnerProductSpace
 
 namespace TNLean.MPS.AreaLaw.OneBand

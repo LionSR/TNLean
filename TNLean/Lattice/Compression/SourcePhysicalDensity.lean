@@ -33,7 +33,7 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 
 noncomputable section
 open scoped TensorProduct Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 
 /-- The fixed physical and garbage bases give coordinates on the actual final layout. -/
 private def physicalOutputBasis {P x d : Type} [Fintype x] [Fintype d]
@@ -150,4 +150,4 @@ theorem rectangularTraceNorm_physicalSourceReplacedDensity_sub_le {P n x d : Typ
   rw [physicalSourceReplacedDensity_sub_exact]
   exact Matrix.rectangularTraceNorm_sum_le _ _
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

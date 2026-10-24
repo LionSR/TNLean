@@ -25,7 +25,7 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 variable {P : Type}
 namespace EffectCircuit
 /-- The original chronological circuit with the fixed auxiliary preparation
@@ -40,7 +40,7 @@ def referenceEval (m : ℕ) : {a b : Layout P} → (w : EffectCircuit a b) →
   | _, _, @EffectCircuit.gate _ _ _ owner a b L tail =>
       castOutputMap (gate_auxiliary_layout owner m L tail)
         (gateMemoryMap owner a (gateOut m L) tail
-          ((prepGate m L).eval ∘L PairEffect.gate (toGate L)))
+          ((prepGate m L).eval ∘L PartyCircuit.gate (toGate L)))
   | _, _, .swap t u tail => (Word.swap t u tail).eval
   | _, _, .frame t w => (SourceCircuit.exchangeBlocks [t] (w.auxiliary m) _).eval ∘L
       (w.referenceEval m).lTensor t.space
@@ -61,7 +61,7 @@ theorem norm_referenceEval_le_one {a b : Layout P} (w : EffectCircuit a b)
   | @gate C _ owner a b L tail =>
       exact (norm_castOutputMap (gate_auxiliary_layout owner m L tail)
         (gateMemoryMap owner a (gateOut m L) tail
-          ((prepGate m L).eval ∘L PairEffect.gate (toGate L)))).trans_le
+          ((prepGate m L).eval ∘L PartyCircuit.gate (toGate L)))).trans_le
             ((norm_gateMemoryMap_le _ _ _ _ _).trans
               (norm_comp_le_one (Word.norm_eval_le_one _ (isAllowed_prepGate m L hw.1)) hw.2))
   | swap t u tail => exact Word.norm_eval_le_one (.swap t u tail) trivial
@@ -328,10 +328,10 @@ theorem norm_replacement_sub_reference_le {r : ℕ} {S δ : ℝ} (hδ : 0 < δ)
       apply (SourceCircuit.norm_eval_castLayouts_sub
         (SourceCircuit.gate owner G tail) (gate_auxiliary_layout owner m L tail)
         (gateMemoryMap owner a (gateOut m L) tail
-          ((prepGate m L).eval ∘L PairEffect.gate (toGate L)))).trans_le
+          ((prepGate m L).eval ∘L PartyCircuit.gate (toGate L)))).trans_le
       change ‖gateMemoryMap owner a (gateOut m L) tail G.eval -
         gateMemoryMap owner a (gateOut m L) tail
-          ((prepGate m L).eval ∘L PairEffect.gate (toGate L))‖ ≤ 2 * δ * (1 : ℕ)
+          ((prepGate m L).eval ∘L PartyCircuit.gate (toGate L))‖ ≤ 2 * δ * (1 : ℕ)
       rw [← gateMemoryMap_sub, Nat.cast_one, mul_one]
       exact (norm_gateMemoryMap_le _ _ _ _ _).trans hGe.2
   | swap t u tail =>
@@ -353,4 +353,4 @@ theorem norm_replacement_sub_reference_le {r : ℕ} {S δ : ℝ} (hδ : 0 < δ)
           exact norm_lTensor_le _ _
         _ ≤ _ := ih hw hb
 end EffectCircuit
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

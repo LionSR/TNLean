@@ -40,13 +40,14 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 
 variable {P : Type}
 
 /-! ### Pair sources of a word using selected parties -/
 
-namespace Word
+namespace Lattice.PartyCircuit.Word
 
 /-- Every pair source of a word that uses only selected parties joins two selected parties. -/
 theorem sources_selected_of_usesOnly {f : P → Bool} {ℓ ℓ' : Layout P} (w : Word ℓ ℓ')
@@ -67,9 +68,9 @@ theorem sources_selected_of_usesOnly {f : P → Bool} {ℓ ℓ' : Layout P} (w :
   | swap => simp [sources]
   | frame r w ih => exact ih hw
 
-end Word
+end Lattice.PartyCircuit.Word
 
-namespace SourceInventory
+namespace Lattice.PartyCircuit.SourceInventory
 
 theorem owner_selected_of_mem_layout {f : P → Bool} {S : SourceInventory P}
     (hS : ∀ s ∈ S, f s.left = true ∧ f s.right = true) : ∀ r ∈ S.layout, f r.owner = true := by
@@ -94,11 +95,11 @@ theorem restrict_not_layout_append {f : P → Bool} {S : SourceInventory P}
     List.filter_eq_nil_iff.mpr fun r hr => by simp [owner_selected_of_mem_layout hS r hr]
   rw [Layout.restrict_append, h, List.nil_append]
 
-end SourceInventory
+end Lattice.PartyCircuit.SourceInventory
 
 /-! ### The selected and complementary parts -/
 
-namespace Word
+namespace Lattice.PartyCircuit.Word
 
 /-- The selected part of a word whose pair sources join selected parties: prepare the pair
 sources, then apply the selected restriction of the source-free remainder.
@@ -127,8 +128,9 @@ theorem isAllowed_selectedPart (f : P → Bool) {ℓ ℓ' : Layout P} (w : Word 
   ⟨(SourceInventory.isAllowed_prepare_iff _ _).2 (w.isNormalized_sources hw),
     (isAllowed_castInput _ _).2 (isAllowed_restrict f _ _ (isAllowed_localPart w hw))⟩
 
-end Word
+end Lattice.PartyCircuit.Word
 
+namespace Lattice.PartyCircuit
 /-- A layout whose registers are all selected is its own selected part, and the complementary
 part is the empty memory. -/
 theorem Layout.partitionIso_append_selected_tmul (f : P → Bool) (a ℓ : Layout P)
@@ -173,7 +175,8 @@ private theorem mapL_eval_apply_of_heq {X₁ Y₁ Z₁ X₂ Y₂ Z₂ : Layout P
   cases hu
   rfl
 
-namespace Word
+end Lattice.PartyCircuit
+namespace Lattice.PartyCircuit.Word
 
 /-- **Factorization of a word using selected parties.** In the canonical partition of the
 registers into selected and complementary ones, a word whose pair sources join selected parties
@@ -214,6 +217,6 @@ theorem partitionIso_eval_of_usesOnly (f : P → Bool) {ℓ ℓ' : Layout P} (w 
         isoL (Layout.partitionIso f ℓ) :=
   w.partitionIso_eval_of_sources_selected f _
 
-end Word
+end Lattice.PartyCircuit.Word
 
-end TNLean.PEPS.PairEffect
+end TNLean

@@ -28,7 +28,7 @@ noncomputable section
 
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
 /-- If every original source is internal to one side, the two actual restricted
 compositions are source-free contractions whose tensor product is the original
@@ -61,4 +61,4 @@ theorem exists_partition_of_sources_internal {P : Type} (f : P → Bool)
   have hp := partitionIso_eval (fun b : Bool ↦ b) (w.mapOwner f) hs
   rw [comp_assoc, ← eval_mapOwner_comp, ← comp_assoc, hp, comp_assoc]
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

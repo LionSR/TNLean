@@ -16,7 +16,7 @@ nonemptiness of $P$ is assumed.
 
 \begin{theorem}[Exact dimensions of the original density links]
     \label{thm:peps_source_density_link_card}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_alphabet_source_density}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_alphabet_source_density}
     \leanok
     \uses{def:peps_source_gate_root,def:compression_distributed_links,
         def:compression_operator_alphabets}
@@ -46,7 +46,7 @@ nonemptiness of $P$ is assumed.
 
 \begin{theorem}[A conditional uniform bound for the original density links]
     \label{thm:peps_source_density_link_card_bound}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_alphabet_source_density_le}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_alphabet_source_density_le}
     \leanok
     \uses{def:peps_source_gate_root,def:compression_distributed_links,
         def:compression_operator_alphabets}
@@ -70,7 +70,7 @@ nonemptiness of $P$ is assumed.
 
 \begin{theorem}[The endpoints are original participants of the owner gate]
     \label{thm:peps_source_density_link_locality}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.distributedLinkParties_source_subset}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.distributedLinkParties_source_subset}
     \leanok
     \uses{def:peps_source_gate_root,def:compression_distributed_links,
         def:compression_distributed_link_parties}
@@ -101,7 +101,7 @@ pair-sample links. Parallel links are retained as distinct links.
 
 \begin{theorem}[The retained occurrences preserve participation counts]
     \label{thm:peps_nonempty_gate_participation}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_incidentNonemptyGates_eq_participationCount}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_incidentNonemptyGates_eq_participationCount}
     \leanok
     \uses{def:compression_lifetime_gates}
     Tracking the original participation count in
@@ -122,7 +122,7 @@ pair-sample links. Parallel links are retained as distinct links.
 
 \begin{theorem}[Constant incidence of the density links]
     \label{thm:peps_actual_density_link_incidence}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_incidentSourceDensityLinks_le}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_incidentSourceDensityLinks_le}
     \leanok
     \uses{def:peps_source_gate_root,def:compression_distributed_links,
         thm:peps_nonempty_gate_participation}
@@ -157,7 +157,7 @@ They require no numerical bound on a private register dimension.
 
 \begin{theorem}[Finite endpoint registers in fixed source slots]
     \label{thm:peps_finite_source_slot_registers}
-    \lean{TNLean.PEPS.PairEffect.SourceInventory.finiteDimensional_registers_slotLayout}
+    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.finiteDimensional_registers_slotLayout}
     \leanok
     \uses{def:peps_source_slots}
     Let $R$ be a finite ordered list of pair-source occurrences. For each
@@ -178,7 +178,7 @@ They require no numerical bound on a private register dimension.
 
 \begin{theorem}[Finite registers in the all-party source layout]
     \label{thm:peps_finite_all_party_source_registers}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.finiteDimensional_allResidualSource_registers}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.finiteDimensional_allResidualSource_registers}
     \leanok
     \uses{def:peps_all_party_source_registers,thm:peps_finite_source_slot_registers}
     Let $W$ be an original chronological source composition with arbitrary
@@ -197,7 +197,7 @@ They require no numerical bound on a private register dimension.
 
 \begin{definition}[Finite orthonormal coordinates of a local source memory]
     \label{def:peps_all_party_local_source_basis}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allResidualSourceBasis}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allResidualSourceBasis}
     \leanok
     \uses{thm:peps_finite_all_party_source_registers,
         thm:peps_finite_register_memories,def:peps_party_registers}
@@ -213,7 +213,7 @@ They require no numerical bound on a private register dimension.
 
 \begin{definition}[Finite orthonormal coordinates of a local discarded memory]
     \label{def:peps_all_party_local_discard_basis}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allPartyDiscardBasis}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allPartyDiscardBasis}
     \leanok
     \uses{thm:peps_finite_register_memories,def:peps_affected_owner,
         def:peps_party_registers}
@@ -239,7 +239,7 @@ on the private memory dimensions.
 
 \begin{theorem}[Distributed physical approximation from local gate expansions]
     \label{thm:peps_approximate_sampled_distributed_error}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.exists_sampled_contractedOperator_approximate_error_le}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.exists_sampled_contractedOperator_approximate_error_le}
     \leanok
     \uses{def:peps_approximate_original_operators,
         thm:peps_approximate_source_sample,
@@ -359,7 +359,7 @@ set is required.
 
 \begin{theorem}[Real power bounds for the density alphabets]
     \label{thm:peps_actual_density_alphabet_power}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_alphabet_source_density_le_of_power_bounds}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_alphabet_source_density_le_of_power_bounds}
     \leanok
     \uses{thm:peps_source_density_link_card,def:peps_source_gate_root}
     Let $R$ be a chronological source composition on an arbitrary party
@@ -386,7 +386,7 @@ set is required.
 
 \begin{theorem}[Original polynomial bounds for the contraction alphabets]
     \label{thm:peps_actual_physicalFirst_density_polynomial}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_physicalFirstDensityAlphabet_le_power}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_physicalFirstDensityAlphabet_le_power}
     \leanok
     \uses{thm:peps_actual_density_alphabet_power,
         thm:peps_physical_first_branch_polynomial,
@@ -435,7 +435,7 @@ set is required.
 
 \begin{theorem}[Original incidence bound for the contraction]
     \label{thm:peps_actual_physicalFirst_density_incidence}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_incidentPhysicalFirstDensityLinks_le}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_incidentPhysicalFirstDensityLinks_le}
     \leanok
     \uses{thm:peps_actual_density_link_incidence,
         def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality,
@@ -467,7 +467,7 @@ set is required.
 
 \begin{theorem}[A common original gate for the contraction endpoints]
     \label{thm:peps_actual_physicalFirst_density_locality}
-    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.exists_original_gate_of_physicalFirst_density_link}
+    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.exists_original_gate_of_physicalFirst_density_link}
     \leanok
     \uses{thm:peps_source_density_link_locality,
         def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality}
@@ -492,7 +492,7 @@ set is required.
 
 \begin{definition}[Termwise bounds for prescribed approximate gate expansions]
     \label{def:peps_effect_termwise_bounds}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsTermwiseBounded}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsTermwiseBounded}
     \leanok
     For each nonprivate gate occurrence, retain its prescribed ordered
     monomial expansion. Termwise bounds $(r,C)$ mean that every listed
@@ -504,8 +504,8 @@ set is required.
 
 \begin{theorem}[A polynomial coefficient majorant for approximate gate lists]
     \label{thm:peps_effect_coefficient_majorant}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.isExpansionBounded_of_isTermwiseBounded}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.exists_one_le_isExpansionBounded_of_termwise_power_bounds}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.isExpansionBounded_of_isTermwiseBounded}
+    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.exists_one_le_isExpansionBounded_of_termwise_power_bounds}
     \leanok
     \uses{def:peps_effect_termwise_bounds,thm:peps_gate_coefficient_sum}
     Suppose each prescribed expansion at an original nonprivate gate
@@ -532,7 +532,7 @@ set is required.
 
 \begin{theorem}[Absorbing a scalar into one distributed local matrix]
     \label{thm:peps_distributed_operator_scalar_absorption}
-    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.contractedOperator_smul_at_party}
+    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.contractedOperator_smul_at_party}
     \leanok
     \uses{thm:compression_operator_matrix_sum,thm:peps_party_product_scalar}
     Let $P$ be a finite party set and let $\mathcal C(T)$ be the

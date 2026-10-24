@@ -35,6 +35,13 @@ private def evalWordMarkedLast (A B : Fin d → Matrix (Fin D) (Fin D) ℂ) :
   | [i] => B i
   | i :: j :: w => A i * evalWordMarkedLast A B (j :: w)
 
+private theorem ofFn_ne_nil_of_pos {N : ℕ} (hN : 0 < N) (σ : Fin N → Fin d) :
+    List.ofFn σ ≠ [] := by
+  intro h
+  have := congrArg List.length h
+  simp only [List.length_ofFn, List.length_nil] at this
+  omega
+
 private theorem mul_evalWord_eq_mul_evalWordMarkedLast
     (A B : Fin d → Matrix (Fin D) (Fin D) ℂ)
     (hcross : ∀ i j, B i * A j = A i * B j) :
@@ -87,11 +94,6 @@ private theorem exists_factor_of_cross_mul_eq_of_isNBlkInjective
     ∑ σ : Fin N → Fin d, Kraus.blockDecompositionMap hA 1 σ •
       evalWordMarkedLast A B (List.ofFn σ)
   refine ⟨C, fun i ↦ ?_⟩
-  have hword_ne (σ : Fin N → Fin d) : List.ofFn σ ≠ [] := by
-    intro h
-    have := congrArg List.length h
-    simp only [List.length_ofFn, List.length_nil] at this
-    omega
   calc
     B i = B i * 1 := by rw [Matrix.mul_one]
     _ = B i * ∑ σ : Fin N → Fin d,
@@ -105,7 +107,7 @@ private theorem exists_factor_of_cross_mul_eq_of_isNBlkInjective
         (A i * evalWordMarkedLast A B (List.ofFn σ)) := by
       congr 1
       funext σ
-      rw [mul_evalWord_eq_mul_evalWordMarkedLast A B hcross i _ (hword_ne σ)]
+      rw [mul_evalWord_eq_mul_evalWordMarkedLast A B hcross i _ (ofFn_ne_nil_of_pos hNpos σ)]
     _ = A i * C := by
       simp only [C, Finset.mul_sum, Matrix.mul_smul]
 
@@ -143,11 +145,7 @@ private theorem eq_smul_of_factor_of_cross_mul_eq
     have hword (σ : Fin N → Fin d) :
         Kraus.evalWord A (List.ofFn σ) * (C * A j) =
           Kraus.evalWord A (List.ofFn σ) * (A j * C) := by
-      apply hword_nonempty
-      intro h
-      have := congrArg List.length h
-      simp only [List.length_ofFn, List.length_nil] at this
-      omega
+      exact hword_nonempty _ (ofFn_ne_nil_of_pos hNpos σ)
     calc
       C * A j = 1 * (C * A j) := by rw [Matrix.one_mul]
       _ = (∑ σ : Fin N → Fin d,

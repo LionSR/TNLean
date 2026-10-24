@@ -31,7 +31,7 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.Lattice.PartyCircuit
 
 /-- The common finite source data of a contraction, with the original scalar
 coefficients fixed as a parameter. Source: polynomial-PEPS Theorem 5.2,
@@ -147,4 +147,4 @@ theorem Word.exists_preparedSourceGate {P ι : Type} [Finite P] [Fintype ι]
   refine ⟨G, ?_⟩
   simp only [PreparedSourceGate.eval, PreparedSourceGate.branchWord, Word.eval_comp, G, ← he]
 
-end TNLean.PEPS.PairEffect
+end TNLean.Lattice.PartyCircuit

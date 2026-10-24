@@ -37,7 +37,7 @@ open scoped InnerProductSpace TensorProduct
 
 namespace TNLean.PEPS.EncodedFrame
 
-open PairEffect ContinuousLinearMap EuclideanSpace
+open TNLean.Lattice.PartyCircuit ContinuousLinearMap EuclideanSpace
 
 variable {ι : Type} {q : ℕ} {Party : Type}
 

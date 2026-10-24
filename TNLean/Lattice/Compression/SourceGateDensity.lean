@@ -29,8 +29,10 @@ noncomputable section
 
 open scoped ComplexConjugate Matrix TensorProduct
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 
+namespace Lattice.PartyCircuit
 /-- The matrix of an actual branch after preparing its pair sources, in prescribed
 orthonormal bases of the input and output memories.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 233–267 and 279–317. -/
@@ -200,4 +202,5 @@ theorem Word.preparedMatrix_gate_density_eq_sum_basis {P m n ι : Type}
   rw [(v ξ).preparedMatrix_density_eq_sum_basis R U V
     (bU ξ) (bV ξ) (bU ζ) (bV ζ) (η ξ) (η ζ) ℓ (v ζ) bIn bOut ρ]
 
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit
+end TNLean

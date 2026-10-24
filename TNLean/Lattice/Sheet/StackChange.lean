@@ -21,28 +21,28 @@ This file packages these properties into one predicate and proves that the opera
 schedule preserve it, for sheets of an arbitrary type, each sheet `F` with registers `regs F`
 and a reference vector `ref F` of norm at most one.
 
-* `PairEffect.OriginalCircuit.IsBoundedChange` : an original circuit with at most one
+* `PartyCircuit.OriginalCircuit.IsBoundedChange` : an original circuit with at most one
   nonprivate gate, participants in a set `S`, expansion and monomial bounds, and an error at
   most `ε` from a vector `x` to a vector `y`.
 * `Lattice.HasBoundedChange` : a bounded change between two lists of sheets, followed by the
   same idle registers, from the reference vector of the first list to that of the second.
 
 A circuit without nonprivate gates meets every gate bound
-(`PairEffect.OriginalCircuit.isExpansionBounded_of_nonprivateCount_eq_zero`,
-`PairEffect.OriginalCircuit.isMonomialBounded_of_nonprivateCount_eq_zero`,
-`PairEffect.OriginalCircuit.participants_subset_of_nonprivateCount_eq_zero`). The closure
+(`PartyCircuit.OriginalCircuit.isExpansionBounded_of_nonprivateCount_eq_zero`,
+`PartyCircuit.OriginalCircuit.isMonomialBounded_of_nonprivateCount_eq_zero`,
+`PartyCircuit.OriginalCircuit.participants_subset_of_nonprivateCount_eq_zero`). The closure
 properties of bounded changes are:
 
 * reorderings of the sheets, before or after a change, and identity changes
   (`Lattice.hasBoundedChange_of_perm`, `Lattice.HasBoundedChange.perm_left`,
-  `Lattice.HasBoundedChange.perm_right`, `PairEffect.OriginalCircuit.isBoundedChange_id`);
+  `Lattice.HasBoundedChange.perm_right`, `PartyCircuit.OriginalCircuit.isBoundedChange_id`);
 * a change of one sheet or of two adjacent sheets, lifted to the whole stack
   (`Lattice.hasBoundedChange_liftOne`, `Lattice.hasBoundedChange_liftTwo`);
 * the activation of an auxiliary sheet: a reordering that brings an idle copy next to the main
   sheet, followed by a lifted change of the two sheets (`Lattice.hasBoundedChange_activate`);
 * the bounded words of the births and exchanges, and the bounded chains of the deaths
-  (`PairEffect.Word.isBoundedChange_toOriginalCircuit`,
-  `PairEffect.PartyChain.isBoundedChange_toOriginalCircuit`).
+  (`PartyCircuit.Word.isBoundedChange_toOriginalCircuit`,
+  `PartyCircuit.PartyChain.isBoundedChange_toOriginalCircuit`).
 
 ## References
 
@@ -56,9 +56,9 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS
+namespace TNLean.Lattice
 
-namespace PairEffect
+namespace PartyCircuit
 
 variable {P : Type}
 
@@ -242,13 +242,13 @@ theorem PartyChain.isBoundedChange_toOriginalCircuit {S : Set P} {r K : ℕ} {ε
   isMonomialBounded := M.isMonomialBounded_toOriginalCircuit hM hK
   norm_eval_sub_le := by rwa [M.eval_toOriginalCircuit]
 
-end PairEffect
+end PartyCircuit
 
-end TNLean.PEPS
+end TNLean.Lattice
 
 namespace TNLean.Lattice
 
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
 variable {κ : Type*} {Party : Type}
 
@@ -260,7 +260,7 @@ variable {regs : κ → Layout Party} (ref : (F : κ) → Mem (regs F))
 
 /-- **A bounded change of the sheets.** There is an original circuit from the registers of the
 sheets `Fs`, followed by the idle registers `ℓ`, to those of `Fs'`, followed by `ℓ`, that is a
-bounded change, in the sense of `PairEffect.OriginalCircuit.IsBoundedChange`, from the reference
+bounded change, in the sense of `PartyCircuit.OriginalCircuit.IsBoundedChange`, from the reference
 vector of `Fs` with idle vector `ξ` to that of `Fs'`.
 
 Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, items 2 and 4,

@@ -36,9 +36,9 @@ These are original proofs; no OpenAI Lean code is copied or adapted.
 
 ## Main results
 
-* `EncodedFrame.exists_frontBirthWord`, `EncodedFrame.exists_frontDeathChain`.
-* `EncodedFrame.blockRenameWord`, `EncodedFrame.eval_blockRenameWord`.
-* `EncodedFrame.norm_act_sheetBufferCorrection_mul_sheetSwapOp_sub_le`.
+* `Sheet.exists_frontBirthWord`, `Sheet.exists_frontDeathChain`.
+* `Sheet.blockRenameWord`, `Sheet.eval_blockRenameWord`.
+* `Sheet.norm_act_sheetBufferCorrection_mul_sheetSwapOp_sub_le`.
 
 ## References
 
@@ -52,9 +52,9 @@ noncomputable section
 open Matrix ContinuousLinearMap EuclideanSpace
 open scoped InnerProductSpace TensorProduct Kronecker Matrix.Norms.L2Operator
 
-namespace TNLean.PEPS.EncodedFrame
+namespace TNLean.Lattice.Sheet
 
-open PairEffect
+open PartyCircuit
 
 /-! ### The reference error of the net map of an exchange -/
 
@@ -268,4 +268,4 @@ theorem eval_blockRenameWord (o₁ i₁ o₂ i₂ : Layout Party) (own₁ own₂
 
 end Rename
 
-end TNLean.PEPS.EncodedFrame
+end TNLean.Lattice.Sheet

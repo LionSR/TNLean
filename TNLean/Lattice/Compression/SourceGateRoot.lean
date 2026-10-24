@@ -15,7 +15,7 @@ occurrences requires no selection.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 565–579.
 -/
 
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type}
 
 /-- Select one participant at each original nonempty gate occurrence.
@@ -31,4 +31,4 @@ theorem sourceGateRoot_mem {a b : Layout P} (w : SourceCircuit a b)
     sourceGateRoot w g ∈ w.participants g.1 :=
   Classical.choose_spec g.2
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

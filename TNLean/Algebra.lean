@@ -109,6 +109,7 @@ import TNLean.Algebra.MatrixDensitySum
 import TNLean.Algebra.MatrixEntryNorm
 import TNLean.Algebra.MatrixFixedSection
 import TNLean.Algebra.MatrixGramLeftInverse
+import TNLean.Algebra.MatrixHermitianSum
 import TNLean.Algebra.MatrixIdempotentFactorization
 import TNLean.Algebra.MatrixInvolutionConjugation
 import TNLean.Algebra.MatrixKroneckerContraction
@@ -201,6 +202,7 @@ import TNLean.Algebra.TailRadiusWeights
 import TNLean.Algebra.TensorProductContraction
 import TNLean.Algebra.TensorProductRegrouping
 import TNLean.Algebra.ThreeOperatorPerturbation
+import TNLean.Algebra.ToEuclideanCLM
 import TNLean.Algebra.ToEuclideanLinApply
 import TNLean.Algebra.TraceInvariantSubmodule
 import TNLean.Algebra.TranslatedCharacterOrthogonality

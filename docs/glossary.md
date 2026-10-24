@@ -389,7 +389,7 @@ normalizations.
 
 ### PEPS predicates
 
-#### `TNLean.PEPS.PairEffect.SourceInventory.IsNormalized`
+#### `TNLean.Lattice.PartyCircuit.SourceInventory.IsNormalized`
 
 - **Defined in:** `TNLean/Lattice/PartyCircuit/SourcePreparation.lean`.
 - **Meaning:** every recorded pair-source vector has norm one. The list records
@@ -400,7 +400,7 @@ normalizations.
   `Word.isNormalized_sources` identify normalization with allowed preparation
   and derive it from an allowed composition.
 
-#### `TNLean.PEPS.PairEffect.SourceInventory.Expands`
+#### `TNLean.Lattice.PartyCircuit.SourceInventory.Expands`
 
 - **Defined in:** `TNLean/Lattice/PartyCircuit/PairSourceGrouping.lean`.
 - **Meaning:** `G.Expands S` means that, beside any spectator registers,
@@ -3293,6 +3293,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.AreaLaw.exists_latticeCutBudget_le_log` | The cut budget at radius `⌈C₁ (log n)²⌉` is at most `C n D (log n)¹²` when `b_X ≤ C₂ n D` | Area-law Proposition 4.5, last sentence; `C` depends only on `q, R, C₁, C₂`. |
 | `Matrix.IsGappedGroundState`, `Matrix.isGappedGroundState_iff` | Unit eigenvector `HΩ = E₀Ω` of a complex square matrix with the full-system projector-gap inequality; the characterization restates the eigen-equation as `H *ᵥ Ω = E₀ • Ω` on coordinate vectors | Shared by the area-law and polynomial-PEPS models, which specialize it. |
 | `TNLean.Lattice.IsGappedGroundState` | Unit eigenvector with a full-system positive projector-gap inequality | Area-law Theorem 1.1; the checked ground/uniqueness equivalence is tracked in #8739. |
+| `TNLean.Lattice.LowEnergyExample.IsGround` | Example-specific: a configuration of the `m + 3`-site spin-1/2 chain of Hastings' Appendix B example with spin `1` up, every spin `i ≥ 2` down and spin `0` free; `energy_eq_groundEnergy_iff` and `hamiltonian_mulVec_eq_iff` identify these with the ground space of `H = −S^z_1 + ∑_{i≥2} S^z_i` | Hastings, arXiv:cond-mat/0508554v3, lines 1655–1676, with the corrected sum (`docs/paper-gaps/hastings05_low_energy_example.tex`); not a general lattice predicate, and no bridge to `IsGappedGroundState` is stated. |
 | `TNLean.PEPS.AreaLaw.relabelState` | The same physical vector in configuration coordinates transported by a site bijection | Area-law Section 2; Euclidean norm is preserved, reductions are covariant and regional entropy is invariant when the bijection preserves the cut. |
 | `TNLean.PEPS.AreaLaw.UniformAreaLaw` | A uniform boundary entropy bound over every finite induced domain and cut | Area-law Theorem 1.1; proved, with the source's hypotheses, as `TNLean.PEPS.AreaLaw.uniformAreaLaw`. |
 | `TNLean.PEPS.AreaLaw.innerBoundary` | Sites in the cut adjacent to its complement within the induced domain | Area-law Corollary 1.2; every cut has at most four crossing edges per inner-boundary site. |
@@ -3353,7 +3354,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 ### Equality of selected remaining operations
 
-- **Declaration:** `TNLean.PEPS.PairEffect.Word.IsSelectedLocalPartComparison`.
+- **Declaration:** `TNLean.Lattice.PartyCircuit.Word.IsSelectedLocalPartComparison`.
 - **Defined in:** `TNLean/Lattice/Compression/AllPartySingletonComparison.lean`.
 - **Meaning:** For a Boolean owner selector and two chronological words, the
   predicate is the heterogeneous equality of their remaining evaluations after
@@ -3365,7 +3366,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   states*, September 24, 2026, proof of Theorem 5.2,
   `04-compression.tex:351–434,565–588`,
   [immutable manuscript](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex#L351-L434).
-- **Sanctioned bridges:** In `TNLean.PEPS.PairEffect.SourceCircuit`,
+- **Sanctioned bridges:** In `TNLean.Lattice.PartyCircuit.SourceCircuit`,
   `isSelectedLocalPartComparison_partialWord_all_gate` derives this comparison
   for the actual all-party gate word and its lifted singleton projection.
   `restrict_partialWord_all_localPart_eval_heq_singleton_projection` gives the
@@ -3378,7 +3379,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 ### Corrected source positions and whole-lifetime gate participation
 
-- **Declarations:** `TNLean.PEPS.Approximation.sourceEndpoints`, `correctedParties`,
+- **Declarations:** `TNLean.Lattice.Compression.sourceEndpoints`, `correctedParties`,
   `incidentGates` and `gatesTouching` in the same namespace.
 - **Defined in:** `TNLean/Lattice/Compression/DistributedLifetime.lean`.
 - **Meaning:** A source position has two party endpoints. For a finite set `S`
@@ -3405,7 +3406,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 ### Star and pair-sample virtual links
 
-- **Declarations:** `TNLean.PEPS.Approximation.pairSampleLabels`, `gateLinkLabels`,
+- **Declarations:** `TNLean.Lattice.Compression.pairSampleLabels`, `gateLinkLabels`,
   `gateLinkParties`, `linksAtGate`, `distributedLinks`, `distributedLinkParties`,
   `incidentDistributedLinks`, `incidentGateLinkLabels` and `incidentLinksAtGate`.
 - **Defined in:** `TNLean/Lattice/Compression/DistributedLinks.lean`.
@@ -3433,7 +3434,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 ### Weighted cost of affected coefficient and physical-entry choices
 
-- **Declarations:** `TNLean.PEPS.Approximation.ketBraCoefficientCost` and
+- **Declarations:** `TNLean.Lattice.Compression.ketBraCoefficientCost` and
   `correctedPositionChoiceCost`.
 - **Defined in:** `TNLean/Lattice/Compression/CorrectedPositionCost.lean`.
 - **Meaning:** `ketBraCoefficientCost` is the square of the sum of nonnegative
@@ -3460,7 +3461,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 ### Individual coefficients and pair-effect counts
 
-- **Declaration:** `TNLean.PEPS.PairEffect.EffectCircuit.IsTermwiseBounded r C`.
+- **Declaration:** `TNLean.Lattice.PartyCircuit.EffectCircuit.IsTermwiseBounded r C`.
 - **Defined in:** `TNLean/Lattice/Compression/EffectCircuitTermwiseCoefficientBounds.lean`.
 - **Meaning:** Every monomial in each prescribed nonprivate gate expansion has
   at most $r$ pair effects and scalar coefficient of norm at most $C$.
@@ -3481,7 +3482,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 ### Message-containing approximation of the original gates
 
 - **Declaration:**
-  `TNLean.PEPS.PairEffect.EffectCircuit.IsMessageGateApproximation δ lists G`.
+  `TNLean.Lattice.PartyCircuit.EffectCircuit.IsMessageGateApproximation δ lists G`.
 - **Defined in:** `TNLean/Lattice/Compression/MessageGateLists.lean`.
 - **Meaning:** Each original private map and each prescribed original gate is
   a contraction. At a nonprivate gate occurrence the participant index has
@@ -3502,7 +3503,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 ### Counts and dimensions before expanding messages
 
 - **Declaration:**
-  `TNLean.PEPS.PairEffect.EffectCircuit.IsMessageResourceBounded r m K D C lists`.
+  `TNLean.Lattice.PartyCircuit.EffectCircuit.IsMessageResourceBounded r m K D C lists`.
 - **Defined in:** `TNLean/Lattice/Compression/MessageGateLists.lean`.
 - **Meaning:** Each original nonprivate gate list has at most $K$ monomials.
   Each term has at most $r$ pair effects, a scalar coefficient of norm at
@@ -3843,7 +3844,7 @@ source's Proposition 4.1.
 
 ### Comparison of chronological word evaluations
 
-- **Declaration:** `TNLean.PEPS.PairEffect.Word.IsEvalComparison`.
+- **Declaration:** `TNLean.Lattice.PartyCircuit.Word.IsEvalComparison`.
 - **Defined in:** `TNLean/Lattice/Compression/WordEvalComparison.lean`.
 - **Meaning:** For two chronological words, possibly with different owner types
   and register lists, the predicate is literally heterogeneous equality of
