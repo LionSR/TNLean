@@ -21,6 +21,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 namespace TNLean.PEPS.DependentBondNetwork
+open TNLean.Lattice.DependentBondNetwork
 variable {Vertex Edge : Type} [Fintype Vertex] [Fintype Edge] [DecidableEq Vertex]
 variable [DecidableEq Edge] {Phys : Vertex → Type}
 variable (tail head : Edge → Vertex) (D : Edge → Type) [∀ e, Fintype (D e)]

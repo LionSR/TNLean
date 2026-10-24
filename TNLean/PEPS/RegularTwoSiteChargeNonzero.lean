@@ -29,6 +29,18 @@ namespace TNLean.PEPS
 variable {G : Type*} [Group G] [Fintype G] [DecidableEq G]
 variable {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq ι] [DecidableEq κ]
 
+omit [Fintype G] [DecidableEq G] in
+private theorem fun_eq_smul_self_iff {β : Type*} (e : β) (t : β → G) (x : G) :
+    t = x • t ↔ x = 1 := by
+  constructor
+  · intro h
+    have he := congrFun h e
+    change t e = x * t e at he
+    apply mul_right_cancel (b := t e)
+    simpa using he.symm
+  · rintro rfl
+    simp
+
 /-- A boundary leg at each endpoint resolves both unknown local translations.
 Source: SCP10, two-site charge coordinates, lines 2470–2486. -/
 theorem regularTwoSiteChargeColumn_diagonal (i : ι) (j : κ)
@@ -39,24 +51,8 @@ theorem regularTwoSiteChargeColumn_diagonal (i : ι) (j : κ)
       ((Equiv.funSplitAt i G).symm (k, θ.1), (Equiv.funSplitAt j G).symm (k, θ.2)) =
         (Fintype.card G : ℂ)⁻¹ ^ 2 * χ (p * k) := by
   classical
-  have hx (x : G) : θ.1 = x • θ.1 ↔ x = 1 := by
-    constructor
-    · intro h
-      have he := congrFun h e
-      change θ.1 e = x * θ.1 e at he
-      apply mul_right_cancel (b := θ.1 e)
-      simpa using he.symm
-    · rintro rfl
-      simp
-  have hy (y : G) : θ.2 = y • θ.2 ↔ y = 1 := by
-    constructor
-    · intro h
-      have hf := congrFun h f
-      change θ.2 f = y * θ.2 f at hf
-      apply mul_right_cancel (b := θ.2 f)
-      simpa using hf.symm
-    · rintro rfl
-      simp
+  have hx (x : G) : θ.1 = x • θ.1 ↔ x = 1 := fun_eq_smul_self_iff e θ.1 x
+  have hy (y : G) : θ.2 = y • θ.2 ↔ y = 1 := fun_eq_smul_self_iff f θ.2 y
   have hi : (Equiv.funSplitAt i G).symm (k, θ.1) i = k := by simp
   have hj : (Equiv.funSplitAt j G).symm (k, θ.2) j = k := by simp
   have hrI : (fun d : {e : ι // e ≠ i} =>

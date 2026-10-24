@@ -21,7 +21,7 @@ and empty families are included. The physical matrix indices are arbitrary.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 565–588.
 -/
 
-namespace TNLean.PEPS.Approximation.DistributedOperatorContraction
+namespace TNLean.Lattice.Compression.DistributedOperatorContraction
 open scoped ComplexConjugate
 variable {Party G : Type} [Fintype Party] [Fintype G]
 variable {Ket Bra : G → Type} [∀ g, Fintype (Ket g)] [∀ g, Fintype (Bra g)]
@@ -102,4 +102,4 @@ theorem contractedOperator_densityPair_univ_eq_double_sum
     γ • Z) hNetwork).trans hAveraging.symm
   exact h
 
-end TNLean.PEPS.Approximation.DistributedOperatorContraction
+end TNLean.Lattice.Compression.DistributedOperatorContraction

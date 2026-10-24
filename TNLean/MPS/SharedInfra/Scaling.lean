@@ -69,8 +69,7 @@ theorem spectralRadius_transferMap_smul [Nonempty (Fin D)]
     (c := c * starRingEnd ℂ c) (mul_ne_zero hc (star_ne_zero.mpr hc))
   rw [hrad]
   rw [nnnorm_mul]
-  have hcstar : ‖starRingEnd ℂ c‖₊ = ‖c‖₊ := by
-    exact nnnorm_star c
+  have hcstar : ‖starRingEnd ℂ c‖₊ = ‖c‖₊ := nnnorm_star c
   rw [hcstar, ENNReal.coe_mul, pow_two]
 
 /-- Unit-norm scaling preserves left-canonical normalization. -/
@@ -113,8 +112,7 @@ theorem norm_eq_one_of_leftCanonical_smul [NeZero D] (c : ℂ) (A : MPSTensor d 
       (Complex.normSq_eq_conj_mul_self (z := c)).symm
   have hsq_complex : ((‖c‖ ^ 2 : ℝ) : ℂ) = 1 := by
     rw [← hnormSq, hstar_mul]
-  have hsq_real : ‖c‖ ^ 2 = 1 := by
-    exact Complex.ofReal_injective hsq_complex
+  have hsq_real : ‖c‖ ^ 2 = 1 := Complex.ofReal_injective hsq_complex
   nlinarith [norm_nonneg c]
 
 /-- Appendix-A scalar normalization in the form used after product-one phase

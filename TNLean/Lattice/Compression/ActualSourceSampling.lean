@@ -33,7 +33,7 @@ noncomputable section
 open MeasureTheory QICLean.ComplexGaussian
 open scoped Matrix ComplexConjugate NNReal
 namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 
 open Classical in
 /-- An actual allowed source-only circuit admits original-source Schmidt data

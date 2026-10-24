@@ -15,7 +15,7 @@ extracts its coefficients when both edge representations are semi-regular.
 
 noncomputable section
 open scoped BigOperators Matrix
-open TNLean.PEPS TNLean.PEPS.DependentBondNetwork
+open TNLean.PEPS TNLean.PEPS.DependentBondNetwork TNLean.Lattice.DependentBondNetwork
 namespace TNLeanTest.DependentCutBondSupport
 
 private abbrev edgeDim (e : Bool) := Fin (if e then 3 else 2)

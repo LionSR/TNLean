@@ -11,7 +11,7 @@ import Lean.Util.CollectAxioms
 /-! # Axiom checks for common original data and the two original operator descriptions -/
 
 set_option linter.hashCommand false
-open TNLean.PEPS.PairEffect
+open TNLean.Lattice.PartyCircuit
 
 run_cmd do
   let declarations := #[``DistributedConstructionData, ``DistributedConstruction,
