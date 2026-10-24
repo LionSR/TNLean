@@ -1441,6 +1441,17 @@ this would make `ρ(β, C)` a multiple of `e^{−βH}`, which fails already for 
 The intended form, used by `percb2`, has `‖O‖ Tr e^{−βH}` on the right, and that is
 what is formalized.
 
+### Local solution of gapped Hamiltonians: the boundary of a cluster
+
+[hastings05_cluster_boundary.tex](hastings05_cluster_boundary.tex)
+(local correction, resolved) records that the boundary `B(C)` of Hastings, *Solving gapped
+Hamiltonians locally* (arXiv:cond-mat/0508554v3, source lines 1130–1133), the terms acting on a
+site of `C`, is too small for the claim at lines 1134–1138 that a term containing `H_C` and
+avoiding `H_{B(C)}` has the sites of `H_C` as a cluster. On a chain with `H_i` acting on
+`{i − 1, i, i + 1}`, the term `H_1 H_3` avoids `B({1}) = {0, 2}` but overlaps `H_1`. The
+formalization uses the terms whose support meets the support of `H_C`; then `S` in equation
+`percb2` counts the sites within `2R` of a site.
+
 ### Local solution of gapped Hamiltonians: cluster size in the percolation bound
 
 [hastings05_percolation_cluster_size.tex](hastings05_percolation_cluster_size.tex)
