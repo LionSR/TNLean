@@ -1,0 +1,89 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{The Error of the Localized Filtered Parts in Hastings' Lemma~1}
+\author{}
+\date{October 22, 2026}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source statement}
+
+In~\cite{Hastings2007AreaLaw} (arXiv:0705.2024v4, \path{law16.tex},
+lines~85--143), the chain has sites $1,\dots,N$, the Hamiltonian is
+$H=\sum_iH_{i,i+1}$ with $H_{i,i+1}$ supported on the sites $i,i+1$ and
+$\Vert H_{i,i+1}\Vert\le J$, $\Delta E$ is the spectral gap above the unique
+ground state $\Psi_0$, $v$ and $\xi_C$ are the velocity and length scale of the
+Lieb--Robinson bound, and $\xi=\max(2v/\Delta E,\xi_C)$. For integers $a\le b$,
+$X_{a,b}$ is the set of sites $i$ with $a\le i\le b$. Lemma~1 concerns a site
+$j$ and a length $l$.
+
+In the appendix of the source (lines~774--792), the Hamiltonian is split as
+$H=H_L+H_B+H_R$, where $H_L$ is the sum of the terms $H_{i,i+1}$ with $i\le
+j-l/3$, $H_R$ the sum of those with $i\ge j+1+l/3$, and $H_B$ the rest, and constants are added to the three parts so that their
+ground-state expectations vanish (lines~781--782). Each
+part is filtered with a Gaussian in time,
+$\tilde H_L^0=(\Delta E/\sqrt{2\pi q})\int H_L(t)e^{-(t\Delta E)^2/2q}\,dt$
+with $q=(l/3)\Delta E/(2v)$, and the source states (lines~816--828) that, by the
+Lieb--Robinson bound, the filtered parts can be approximated by operators
+$M_L,M_B,M_R$ with $M_L-H_L$ supported on $X_{j-2l/3,j}$ and
+\begin{align}
+    \Vert M_L-H_L\Vert\le\mathcal O(\Delta E^{-1}J^2e^{-l/3\xi}),
+    \label{eq:hastings07_localized_parts_source}
+\end{align}
+and similarly for $M_B$ and $M_R$. From eq.~\texttt{tighter} (line~797), which bounds
+$|\tilde H_L^0\Psi_0|$, it then concludes
+\begin{align}
+    |M_L\Psi_0|\le\mathcal O(\Delta E^{-1}J^2e^{-l/3\xi}).
+    \label{eq:hastings07_localized_parts_ground_state}
+\end{align}
+
+\section{The point at issue}
+
+The printed bound on $\Vert M_L-H_L\Vert$ cannot hold in general: $\tilde
+H_L^0-H_L$ is the Gaussian average of $H_L(t)-H_L$, which is not small, and
+$M_L-H_L$ is supported near the cut while $\tilde H_L^0-H_L$ need not be small
+there. The next step, $|M_L\Psi_0|\le|\tilde H_L^0\Psi_0|+\Vert M_L-\tilde
+H_L^0\Vert$, uses the distance to the filtered part. The intended statement is
+\begin{align}
+    \Vert M_L-\tilde H_L^0\Vert\le\mathcal O(\Delta E^{-1}J^2e^{-l/3\xi}),
+    \label{eq:hastings07_localized_parts_intended}
+\end{align}
+with $M_L-H_L$ supported near the cut.
+
+\section{The statement proved}
+
+For any operator $W$, write $\tau_t(W)=W(t)=e^{iHt}We^{-iHt}$, let $\tilde W$ be
+the Gaussian average of $\tau_t(W)$ with the weight used for $\tilde H_L^0$, and
+set $M=W+E_K(\tilde W-W)$, where $E_K$ is the normalized partial trace onto a
+set of sites $K$. Then $M-W$ acts on $K$, and if the evolved
+commutator $\tau_s(i[H,W])$ is within $\varepsilon$ of its partial trace onto
+$K$ for $|s|\le T$,
+\begin{align}
+    \Vert\tilde W-M\Vert\le T\varepsilon
+      +2\Vert[H,W]\Vert\sqrt{2h/\pi}\,e^{-T^2/(2h)},\qquad h=q/\Delta E^2.
+    \label{eq:hastings07_localized_parts_proved}
+\end{align}
+The bound involves $[H,W]$ and not $W$: by the Duhamel formula,
+$\Vert\tau_t(W)-W\Vert\le|t|\,\Vert[H,W]\Vert$. For $W=H_L$ the commutator is
+supported near the cut, and the chain Lieb--Robinson bound supplies an
+$\varepsilon$ independent of the length of the chain.\footnote{%
+\leanid{TNLean.Lattice.norm_gaussianFilteredTerm_sub_localized_le} in
+\path{TNLean/Lattice/GaussianFilteredIncrement.lean}.}
+
+\section{Conclusion}
+
+The correction replaces the printed bound (\ref{eq:hastings07_localized_parts_source})
+by the intended one (\ref{eq:hastings07_localized_parts_intended}), which follows from
+(\ref{eq:hastings07_localized_parts_proved}) with $W=H_L$. The bound used by the rest
+of the proof, (\ref{eq:hastings07_localized_parts_ground_state}), follows as in
+the source.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

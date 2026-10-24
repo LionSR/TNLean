@@ -35,6 +35,7 @@ or a sum of such terms.
 * `TNLean.Lattice.norm_sub_starProjection_gaussianFilteredTerm_le`: the bound
   on the excited component of `W_tilde ψ`.
 * `TNLean.Lattice.gaussianFilteredTerm_self`, `gaussianFilteredTerm_sum`,
+  `gaussianFilteredTerm_sub_smul_one`, `gaussianFilteredTerm_sub_smul_one_sub`,
   `inner_gaussianFilteredTerm_ground`, `norm_gaussianFilteredTerm_le`.
 
 ## References
@@ -99,6 +100,12 @@ theorem norm_gaussianFilteredTerm_le (q ΔE : ℝ) {H : Matrix n n ℂ} (hH : H.
     (W : Matrix n n ℂ) : ‖gaussianFilteredTerm q ΔE H W‖ ≤ ‖W‖ :=
   norm_gaussianIntertwiner_le _ hH hH W
 
+/-- A filtered Hermitian operator is Hermitian. -/
+theorem isHermitian_gaussianFilteredTerm (q ΔE : ℝ) {H W : Matrix n n ℂ} (hH : H.IsHermitian)
+    (hW : W.IsHermitian) : (gaussianFilteredTerm q ΔE H W).IsHermitian := by
+  change (gaussianIntertwiner _ H H W)ᴴ = gaussianIntertwiner _ H H W
+  rw [gaussianIntertwiner_conjTranspose _ hH hH W, hW.eq]
+
 /-- Filtering is additive in the filtered operator. -/
 theorem gaussianFilteredTerm_sum {ι : Type*} (s : Finset ι) (q ΔE : ℝ) {H : Matrix n n ℂ}
     (hH : H.IsHermitian) (W : ι → Matrix n n ℂ) :
@@ -117,6 +124,28 @@ theorem gaussianFilteredTerm_self (q ΔE : ℝ) (H : Matrix n n ℂ) :
     rw [← hc.eq, mul_assoc, SpectralFilter.hermitianUnitaryPath_mul_neg, mul_one]
   simp [gaussianFilteredTerm, gaussianIntertwiner, hconst]
 
+/-- Filtering fixes scalars: the filter of `W - c • 1` is the filter of `W` minus `c • 1`.
+This is what lets Hastings center `H_L` at its ground-state expectation without changing
+`W_tilde - W`, arXiv:0705.2024v4, `law16.tex`, lines 779–782. -/
+theorem gaussianFilteredTerm_sub_smul_one (q ΔE : ℝ) {H : Matrix n n ℂ} (hH : H.IsHermitian)
+    (W : Matrix n n ℂ) (c : ℂ) :
+    gaussianFilteredTerm q ΔE H (W - c • 1) = gaussianFilteredTerm q ΔE H W - c • 1 := by
+  have hU (t : ℝ) : hermitianUnitaryPath H t * (W - c • 1) * hermitianUnitaryPath H (-t) =
+      hermitianUnitaryPath H t * W * hermitianUnitaryPath H (-t) - c • 1 := by
+    rw [mul_sub, sub_mul, mul_smul_comm, mul_one, smul_mul_assoc, ← hermitianUnitaryPath_add,
+      add_neg_cancel, hermitianUnitaryPath_zero]
+  simp only [gaussianFilteredTerm, gaussianIntertwiner, hU]
+  rw [MeasureTheory.integral_sub (integrable_intertwinerIntegrand _ hH hH W)
+    (MeasureTheory.integrable_const _), MeasureTheory.integral_const,
+    MeasureTheory.probReal_univ, one_smul]
+
+/-- Shifting `W` by a scalar does not change `W_tilde - W`. -/
+theorem gaussianFilteredTerm_sub_smul_one_sub (q ΔE : ℝ) {H : Matrix n n ℂ}
+    (hH : H.IsHermitian) (W : Matrix n n ℂ) (c : ℂ) :
+    gaussianFilteredTerm q ΔE H (W - c • 1) - (W - c • 1) =
+      gaussianFilteredTerm q ΔE H W - W := by
+  rw [gaussianFilteredTerm_sub_smul_one q ΔE hH, sub_sub_sub_cancel_right]
+
 /-- If `∑ i ∈ s, H i = H`, then the filtered terms also sum to `H`. Hastings,
 arXiv:cond-mat/0508554v3, eq. `hsum` (lines 247–249). -/
 theorem sum_gaussianFilteredTerm {ι : Type*} (s : Finset ι) (q ΔE : ℝ) {H : Matrix n n ℂ}
@@ -129,6 +158,7 @@ noncomputable abbrev groundEigenspace (H : Matrix n n ℂ) (E₀ : ℝ) :
     Submodule ℂ (EuclideanSpace ℂ n) :=
   Module.End.eigenspace (toEuclideanLin H) (E₀ : ℂ)
 
+/-- A vector lies in the ground eigenspace exactly when `H` acts on its coordinates as `E₀`. -/
 theorem mem_groundEigenspace_iff {H : Matrix n n ℂ} {E₀ : ℝ} {v : EuclideanSpace ℂ n} :
     v ∈ groundEigenspace H E₀ ↔ H *ᵥ WithLp.ofLp v = (E₀ : ℂ) • WithLp.ofLp v := by
   rw [groundEigenspace, Module.End.mem_eigenspace_iff]

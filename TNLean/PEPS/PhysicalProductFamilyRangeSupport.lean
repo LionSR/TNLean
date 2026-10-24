@@ -25,6 +25,7 @@ Section 7, lines 2992–3019.
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS
+open TNLean.Lattice
 
 variable {Site In Out : Type*} [Fintype Site] [DecidableEq Site]
 

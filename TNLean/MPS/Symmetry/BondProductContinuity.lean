@@ -41,8 +41,8 @@ theorem continuous_bondPenaltyAt {q N : ℕ} (hN : 1 ≤ N) (i : Fin N) :
 its bond vector. Source: arXiv:1010.3732, Section II.F.2,
 `eq:sym:omega-gamma`. -/
 theorem continuous_bondProductParentHamiltonian {q N : ℕ} (hN : 1 ≤ N) :
-    Continuous (fun η : Fin q → ℂ => bondProductParentHamiltonian η hN) := by
-  exact continuous_finsetSum _ fun i _ => continuous_bondPenaltyAt hN i
+    Continuous (fun η : Fin q → ℂ => bondProductParentHamiltonian η hN) :=
+  continuous_finsetSum _ fun i _ => continuous_bondPenaltyAt hN i
 
 /-- Encoding the normalized bond by a single physical index preserves
 continuity. Source: arXiv:1010.3732, Section II.F.2, `eq:sym:omega-gamma`. -/

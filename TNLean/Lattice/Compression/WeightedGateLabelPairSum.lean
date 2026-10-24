@@ -17,7 +17,7 @@ weights, empty label types and empty gate families are permitted.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 568–588.
 -/
 
-namespace TNLean.PEPS.Approximation
+namespace TNLean.Lattice.Compression
 open scoped ComplexConjugate
 variable {G : Type} [Fintype G] {Ket Bra : G → Type}
 variable [∀ g, Fintype (Ket g)] [∀ g, Fintype (Bra g)] {m n : Type}
@@ -44,4 +44,4 @@ theorem weighted_sum_gateLabels_eq_exterior_smul_orderedGateLabelPairs
   rw [smul_smul, ← Finset.prod_mul_distrib]
   simp only [mul_assoc]
 
-end TNLean.PEPS.Approximation
+end TNLean.Lattice.Compression

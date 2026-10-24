@@ -35,8 +35,8 @@ private theorem euclideanSubmoduleIsometry_inner {ι κ : Type*} [Fintype ι] [F
     (I : Submodule ℂ (EuclideanSpace ℂ ι)) (R : Submodule ℂ (EuclideanSpace ℂ κ))
     (J : I ≃ₗᵢ[ℂ] R) (x y : I) :
     inner ℂ (J x : EuclideanSpace ℂ κ) (J y : EuclideanSpace ℂ κ) =
-      inner ℂ (x : EuclideanSpace ℂ ι) (y : EuclideanSpace ℂ ι) := by
-  exact LinearIsometryEquiv.inner_map_map (𝕜 := ℂ) (E := I) (E' := R) J x y
+      inner ℂ (x : EuclideanSpace ℂ ι) (y : EuclideanSpace ℂ ι) :=
+  LinearIsometryEquiv.inner_map_map (𝕜 := ℂ) (E := I) (E' := R) J x y
 
 variable {G ι κ : Type*} [Group G] [Finite G] [Fintype ι] [Fintype κ]
 variable {ρ : Representation ℂ G (ι → ℂ)} {T : (ι → ℂ) →ₗ[ℂ] (κ → ℂ)}

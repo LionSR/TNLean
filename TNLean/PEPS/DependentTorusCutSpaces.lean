@@ -19,6 +19,7 @@ noncomputable section
 open scoped BigOperators
 
 namespace TNLean.PEPS.DependentTorus
+open TNLean.Lattice
 
 abbrev Vertex := TorusVertex 2 2
 abbrev Bond := TorusLabelledBond 2 2
