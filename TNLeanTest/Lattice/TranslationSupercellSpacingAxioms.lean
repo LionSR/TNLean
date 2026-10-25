@@ -14,8 +14,8 @@ run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[
       ``TNLean.Lattice.pow_mem_supercell,
-      ``SimpleGraph.ringNorm_sub_le_edist,
-      ``SimpleGraph.exists_lt_ringNorm_add,
+      ``SimpleGraph.natAbs_valMinAbs_sub_le_edist,
+      ``TNLean.Lattice.exists_lt_natAbs_valMinAbs_add,
       ``TNLean.Lattice.exists_mem_supercell_lt_edist_add,
       ``TNLean.Lattice.exists_mem_supercell_lt_edist_add_ring] do
     unless (← Lean.getEnv).contains decl do
