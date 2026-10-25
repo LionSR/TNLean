@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Lattice.LowEnergyCommutatorSum
 import TNLean.Lattice.TranslationSupercellDecay
 import TNLean.Lattice.TranslationSupercellSpacing
 
@@ -143,15 +144,8 @@ theorem norm_groundCompression_commutator_le_of_norm_sub_le [NeZero d]
     ‖groundCompression H E₀ Mi * groundCompression H E₀ Mj -
         groundCompression H E₀ Mj * groundCompression H E₀ Mi‖ ≤
       B + 2 * εi * ‖hj‖ + 2 * ‖hi‖ * εj := by
-  have hC (W : Matrix (ι → Fin d) (ι → Fin d) ℂ) : ‖groundCompression H E₀ W‖ ≤ ‖W‖ := by
-    have hP := (groundEigenspace H E₀).starProjection_norm_le
-    unfold groundCompression
-    calc _ ≤ ‖(groundEigenspace H E₀).starProjection‖ *
-          ‖toEuclideanCLM (n := ι → Fin d) (𝕜 := ℂ) W‖ *
-          ‖(groundEigenspace H E₀).starProjection‖ :=
-          (norm_mul_le _ _).trans (mul_le_mul_of_nonneg_right (norm_mul_le _ _) (norm_nonneg _))
-      _ ≤ 1 * ‖W‖ * 1 := by rw [l2_opNorm_toEuclideanCLM]; gcongr
-      _ = ‖W‖ := by ring
+  have hC (W : Matrix (ι → Fin d) (ι → Fin d) ℂ) : ‖groundCompression H E₀ W‖ ≤ ‖W‖ :=
+    norm_groundCompression_le H E₀ W
   have hsub (W W' : Matrix (ι → Fin d) (ι → Fin d) ℂ) :
       groundCompression H E₀ W - groundCompression H E₀ W' = groundCompression H E₀ (W - W') := by
     unfold groundCompression
