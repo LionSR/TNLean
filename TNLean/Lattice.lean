@@ -21,6 +21,7 @@ import TNLean.Lattice.GaussianFilteredLocality
 import TNLean.Lattice.GaussianFilteredTerm
 import TNLean.Lattice.GaussianFilteredTermLocalization
 import TNLean.Lattice.GaussianFilteredTruncation
+import TNLean.Lattice.GaussianFilteredTruncationDecay
 import TNLean.Lattice.GaussianFilteredTruncationGround
 import TNLean.Lattice.GaussianTail
 import TNLean.Lattice.GaussianTailMoment

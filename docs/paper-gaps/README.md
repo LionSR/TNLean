@@ -1534,7 +1534,7 @@ from the von Neumann Lemma 2 by `S_α ≤ S`, the concavity of the logarithm.
 ### Local solution of gapped Hamiltonians: the truncated dynamics of `M_i`
 
 [hastings05_truncated_dynamics.tex](hastings05_truncated_dynamics.tex)
-(local correction, resolved) records how the approximation `M_i` of Hastings,
+(scope restriction, resolved) records how the approximation `M_i` of Hastings,
 *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, eqs. `mid` and
 `apb`, source lines 285–320, proved at lines 1458–1533), is formalized. The
 truncation keeps any family of terms acting inside a set `K` that contains the
@@ -1542,7 +1542,9 @@ support of `H_i`; the shell is the set of omitted terms meeting `K`, whose numbe
 at most `N(l_proj)` for the source's choice. The time integral of the
 Lieb–Robinson bound, which the source absorbs into `g(t, l_proj)`, is bounded by `T`
 times its value at `T`, and the constants are explicit. The weight of eq. `mid` is
-read as that of eq. `thd`.
+read as that of eq. `thd`. The exponential form `J O(e^{-l_proj/l_fac})` of eq. `facld`
+(lines 322–349) is formalized under an explicit polynomial bound on the number of omitted
+terms meeting `K` (scope restriction), with `l_fac = 2 / min(c₁ΔE, μ − c₁v)`.
 
 ### One-dimensional area law after Hastings: the decay length of Lemma 1
 
