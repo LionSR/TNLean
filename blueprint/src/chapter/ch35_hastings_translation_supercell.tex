@@ -86,6 +86,72 @@ graph, this gives the decay across supercell translations.
     separated operators to $h_i$ and $h_{g\cdot j}$.
 \end{proof}
 
+For an abelian group the subgroup $S$ need not be assumed: it is determined
+by the momenta of the ground states.
+
+\begin{definition}[Momentum sector]
+    \label{def:hastings_momentum_sector}
+    \lean{TNLean.Lattice.momentumSector}
+    \leanok
+    \uses{def:hastings_site_permutation}
+    For a character $\chi$ of $G$, a homomorphism from $G$ to the multiplicative
+    group $\mathbb{C}^\times$, the
+    momentum sector of $\chi$ is the set of vectors $v$ in the eigenspace of $H$
+    for $E_0$ with $P_gv=\chi(g)v$ for every $g\in G$. For the ground states of
+    momentum $\vec k_a$ in \cite[lines 1613--1618]{Hastings2006Solving},
+    $\chi(\vec x)=e^{i\vec x\cdot\vec k_a}$.
+\end{definition}
+
+\begin{theorem}[The momentum sectors span the ground space]
+    \label{thm:hastings_momentum_sectors_span}
+    \lean{TNLean.Lattice.iSup_momentumSector}
+    \leanok
+    \uses{def:hastings_momentum_sector,def:hastings_site_invariant}
+    Let $G$ be abelian and $H$ invariant. Then the eigenspace of $H$ for $E_0$ is
+    the sum of the momentum sectors of the characters of $G$.
+\end{theorem}
+\begin{proof}\leanok
+    Since $H$ is invariant, each $P_g$ maps the eigenspace into itself. A
+    permutation has finite order, so $P_g^N=1$ for some $N\ge1$, and since
+    $X^N-1$ has no repeated roots the restriction of $P_g$ is diagonalizable.
+    These restrictions commute, so they are simultaneously diagonalizable: the
+    eigenspace is the sum of the joint eigenspaces on which each $P_g$ acts as
+    a scalar $\chi(g)$. On a nonzero joint eigenspace,
+    $P_{gh}=P_gP_h$ and $P_1=1$ give $\chi(gh)=\chi(g)\chi(h)$ and $\chi(1)=1$,
+    so $\chi$ is a character and the joint eigenspace lies in its momentum
+    sector.
+\end{proof}
+
+\begin{definition}[The supercell of the momenta]
+    \label{def:hastings_supercell_of_momenta}
+    \lean{TNLean.Lattice.supercell}
+    \leanok
+    \uses{def:hastings_momentum_sector}
+    The supercell of $H$ at $E_0$ is the intersection of the kernels of the
+    characters of $G$ whose momentum sector is nonzero, a subgroup of $G$.
+\end{definition}
+
+\begin{theorem}[The supercell fixes the ground space]
+    \label{thm:hastings_supercell_of_momenta}
+    \lean{TNLean.Lattice.mem_supercell_iff,
+        TNLean.Lattice.sitePermMatrix_mulVec_eq_of_mem_supercell}
+    \leanok
+    \uses{def:hastings_supercell_of_momenta,def:hastings_site_invariant}
+    Let $G$ be abelian and $H$ invariant. Then $g$ lies in the supercell if and
+    only if $P_gv=v$ for every $v$ in the eigenspace of $H$ for $E_0$. So the
+    supercell is a subgroup $S$ with the property assumed above, the
+    translations by whole supercells of
+    \cite[lines 1626--1630]{Hastings2006Solving}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_momentum_sectors_span}
+    If $g$ lies in the supercell, then $P_g$ fixes every vector of each nonzero
+    momentum sector, hence of their sum, which is the eigenspace by
+    Theorem~\ref{thm:hastings_momentum_sectors_span}. Conversely, if $P_g$ fixes
+    the eigenspace and $v\ne0$ lies in the sector of $\chi$, then
+    $\chi(g)v=P_gv=v$, so $\chi(g)=1$.
+\end{proof}
+
 Choosing $g\in S$ that carries $X_j$ to distance of order the linear size of
 the system from $X_i$ gives the source's conclusion. At line
 1638 the source writes the first site as $(\vec x_1,y_2)$ where
