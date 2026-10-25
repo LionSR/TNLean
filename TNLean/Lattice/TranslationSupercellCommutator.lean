@@ -129,8 +129,8 @@ theorem norm_groundCompression_commutator_le_of_momenta [NeZero d]
 
 
 /-- **Truncated terms near filtered terms.** If the low-energy commutator of the filtered terms
-`H_tilde_i`, `H_tilde_j` is at most `B`, and the operators `M_i`, `M_j` are within `ε_i`, `ε_j` of them
-with `‖M_j‖ ≤ ‖h_j‖`, then `‖[P M_i P, P M_j P]‖ ≤ B + 2 ε_i ‖h_j‖ + 2 ‖h_i‖ ε_j`. -/
+`H_tilde_i`, `H_tilde_j` is at most `B`, and the operators `M_i`, `M_j` are within `ε_i`, `ε_j`
+of them with `‖M_j‖ ≤ ‖h_j‖`, then `‖[P M_i P, P M_j P]‖ ≤ B + 2 ε_i ‖h_j‖ + 2 ‖h_i‖ ε_j`. -/
 theorem norm_groundCompression_commutator_le_of_norm_sub_le [NeZero d]
     {H : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hH : H.IsHermitian) (E₀ r ΔE : ℝ) (hr : 0 ≤ r)
     {hi hj Mi Mj : Matrix (ι → Fin d) (ι → Fin d) ℂ} {B εi εj : ℝ}
@@ -192,8 +192,8 @@ theorem norm_groundCompression_commutator_le_of_norm_sub_le [NeZero d]
 `norm_groundCompression_commutator_le_of_momenta`, let `M_k` be the filter of `h_k` under the
 truncated Hamiltonian `∑_{k' ∈ s_k} h_{k'}`, the operator of eq. `mid` (Hastings,
 arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 285–307), and let `ε_i`, `ε_j` bound
-`‖H_tilde_i - M_i‖`, `‖H_tilde_j - M_j‖`, as eq. `apb` does (`norm_gaussianFilteredTerm_sub_truncated_le`).
-Then `‖[P M_i P, P M_j P]‖` is at most the bound of
+`‖H_tilde_i - M_i‖`, `‖H_tilde_j - M_j‖`, as eq. `apb` does
+(`norm_gaussianFilteredTerm_sub_truncated_le`). Then `‖[P M_i P, P M_j P]‖` is at most the bound of
 `norm_groundCompression_commutator_le_of_momenta` plus `2 ε_i ‖h_j‖ + 2 ‖h_i‖ ε_j`. With `l`
 of order `n` and the truncation of eq. `apb`, this is the conclusion of lines 1634–1641 for
 the source's `M_i`. -/
