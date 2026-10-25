@@ -99,6 +99,36 @@ space by a full proof of the source's iteration over further compressions
 $M_k$, and sum the commutator bound over $i$ with the growth constants of the
 graph.
 
+\section{The summed bound, eq.~\texttt{oibu}}
+
+The compression $PM_iP$ of a filtered term equals $Ph_iP$ for every $q\ge0$, so
+eq.~\texttt{blecm} may be applied to each pair $(i,j)$ with its own time
+window. If $X_i$ is disjoint from the sites within graph distance $l$ of $X_j$,
+the choice $T=l/(4v)$ and $q=T\Delta E$, with $v=2v_R|b_0|e^{2R}+1$, gives
+\begin{align}
+  \lVert[Ph_jP,Ph_iP]\rVert\le C\lVert h_j\rVert\,\lVert h_i\rVert\,e^{-\gamma l},
+  \qquad \gamma=\min\Bigl(\frac14,\frac{\Delta E}{8v}\Bigr),
+  \label{eq:hastings05_two_dim_ground_basis_blecm_exp}
+\end{align}
+with an explicit constant $C$; for anchors at distance $D$ the separation is
+at least $D-2R-1$. Grouping the terms by their anchors, the norm budget $b_0$
+of each site and the polynomial growth $K_g(r+1)^k$ of the graph spheres give
+\begin{align}
+  \sum_i\lVert[Ph_jP,Ph_iP]\rVert
+  \le Ce^{\gamma(2R+1)}\,|b_0|\,K_g\,
+    \frac{k!\,(2/\gamma)^ke^{\gamma/2}}{1-e^{-\gamma/2}}\,\lVert h_j\rVert,
+  \label{eq:hastings05_two_dim_ground_basis_oibu}
+\end{align}
+independently of the number of sites, so that $\sum_io(i)$ is at most $(n-1)/\delta$
+times this in an eigenbasis of $PM_jP$ with spacing at least
+$\delta$.\footnote{\leanid{TNLean.Lattice.norm_groundCompression_commutator_le_exp},
+    \leanid{TNLean.Lattice.sum_norm_groundCompression_commutator_le} and
+    \leanid{TNLean.Lattice.sum_norm_offDiagonalPartFamily_le_oibu} in
+    \doclink{TNLean/Lattice/LowEnergyCommutatorSum}.}
+This is eq.~\texttt{oibu} with explicit constants; the source's
+$O(J^2/(c_1l\Delta E\,\delta\lambda_j))$ corresponds to $\lVert h_j\rVert\le J$
+and $|b_0|$ of order $J$.
+
 \section{Formalization}
 
 \leanid{TNLean.Lattice.norm_offDiagonalPart_le_norm_commutator_div} and
