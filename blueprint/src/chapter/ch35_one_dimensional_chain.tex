@@ -1751,6 +1751,59 @@ for an arbitrary finite set of sites and are instantiated here directly.
     integers.
 \end{definition}
 
+\begin{lemma}[Interaction norm budget on a finite integer domain]
+    \label{lem:domain_site_norm_budget}
+    \lean{TNLean.MPS.AreaLaw.IsDomainSupport.singleton,
+        TNLean.MPS.AreaLaw.DomainSupport.toChainSupport,
+        TNLean.MPS.AreaLaw.DomainSupport.toChainSupport_injective,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.toChain_term,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.norm_bound_nonneg,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.sum_norm_terms_containing_le}\leanok
+    \uses{def:domain_model}
+    In the setting of Definition~\ref{def:domain_model}, every site $x$ satisfies
+    $J\ge0$ and
+    \begin{align}
+        \sum_{X\ni x}\|h_X\| & \le 2^{2R+1}J.\notag
+    \end{align}
+    The sum ranges over the original admissible domain supports.
+    This is a consequence of the interaction assumptions
+    in~\cite[Part~I]{TNLean2026OneDimensional}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:domain_model,lem:chain_site_norm_budget}
+    The singleton $\{x\}$ is admissible, so
+    $0\le\|h_{\{x\}}\|\le J$.
+    Extend the interactions by zero to the chain of increasing labels.
+    The inclusion of domain supports into chain supports is injective and
+    preserves both the terms and membership of $x$.
+    Restricting the nonnegative chain sum of
+    Lemma~\ref{lem:chain_site_norm_budget} gives the bound.
+\end{proof}
+
+\begin{lemma}[Crossing count on a finite integer domain]
+    \label{lem:domain_crossing_count}
+    \lean{TNLean.MPS.AreaLaw.card_domain_crossingTerms_le_mul_card_boundaryEdges,
+        TNLean.MPS.AreaLaw.card_domain_crossingTerms_mul_two_le}\leanok
+    \uses{def:domain_model}
+    In the setting of Definition~\ref{def:domain_model}, let $D$ be any set of
+    labelled sites and let $\mathcal C$ be the original admissible supports
+    meeting both $D$ and its complement. Write $\partial_{\mathrm{ch}}D$
+    for the edge boundary of $D$ in the chain of increasing labels and put
+    $N_R=2\cdot2^{2R}$. Then
+    \begin{align}
+        |\mathcal C|  & \le 2^{2R}|\partial_{\mathrm{ch}}D|,\notag \\
+        2|\mathcal C| & \le N_R|\Lambda|.\notag
+    \end{align}
+    The chain boundary is used only for this upper bound; it need not equal
+    the physical edge boundary in $\Lambda$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:domain_model,lem:domain_site_norm_budget,lem:chain_boundary_crossing_count}
+    As in the proof of Lemma~\ref{lem:domain_site_norm_budget}, the inclusion
+    into chain supports is injective and preserves both crossing witnesses. Apply Lemma~\ref{lem:chain_boundary_crossing_count}, then use
+    $|\partial_{\mathrm{ch}}D|\le |\Lambda|$ and multiply by two.
+\end{proof}
+
 \begin{theorem}[Connected components of an induced integer graph]
     \label{thm:chain_integer_domain_components}
     \lean{
