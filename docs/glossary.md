@@ -2438,6 +2438,38 @@ in `MPS/Preparation/` uses it.
   one cutting into blocks; see
   `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
 
+## Efficient approximation of one-dimensional families
+
+### `TNLean.MPS.AreaLaw.IsEfficientlyApproximableByMPS`
+
+- **Declaration:**
+  `TNLean.MPS.AreaLaw.IsEfficientlyApproximableByMPS {q : ℕ} {lengths : Set ℕ} (ψ : ∀ N : lengths, EuclideanSpace ℂ (Fin N.val → Fin q)) : Prop`,
+  for a family of vectors on open chains indexed by an arbitrary set of chain
+  lengths.
+- **Defined in:** `TNLean/MPS/AreaLaw/EntropyScaling/EfficientApproximation.lean`.
+- **Meaning:** for every accuracy `δ > 0` there are `C > 0` and `m : ℕ`,
+  chosen after `δ` and uniform over all chain lengths in the index set, such
+  that each `ψ N` has an open-boundary matrix product approximant `φ` of bond
+  dimension `D ≤ C (N + 1)^m` with
+  `‖|ψ N⟩⟨ψ N| - |φ⟩⟨φ|‖₁ ≤ δ`. The error is the full trace norm, without a
+  factor one half. The approximant need not be normalized, and no consistency
+  between different chain lengths is required; finitely many exceptional
+  lengths are absorbed into `C`.
+- **Source:** Schuch–Wolf–Verstraete–Cirac, arXiv:0705.0292v2,
+  `paper_v2.tex`, lines 198–210 (definition) and lines 160–173 (unnormalized
+  approximants).
+- **Sanctioned bridges:**
+  `TNLean.MPS.AreaLaw.isEfficientlyApproximableByMPS_of_renyiEntropy_le`
+  (the source's sufficient condition, lines 271–276: for unit vectors, a
+  bound `S_α ≤ c log N + c'` at a fixed order `0 ≤ α < 1` on every internal
+  prefix marginal implies the predicate; the construction supplies normalized
+  approximants). The finite-chain inputs are
+  `exists_normalized_isOpenMPS_of_renyiEntropy_le` for `0 < α < 1` and
+  `isOpenMPS_of_regionState_rank_le` for order zero.
+- **Caveat:** no converse is asserted. The predicate fixes the accuracy before
+  the polynomial; it is not a statement about a single chain length, and it is
+  not the half-trace-norm convention.
+
 ## Worked examples
 
 ### `MPSTensor.IsPeriodicWState`

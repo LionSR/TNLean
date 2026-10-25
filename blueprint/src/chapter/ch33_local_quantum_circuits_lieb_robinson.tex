@@ -13,6 +13,31 @@
 \section{Lieb--Robinson propagation on finite graphs}
 \label{sec:qc_lieb_robinson}
 
+\begin{theorem}[Extended distance under graph maps]
+    \label{thm:qc_graph_edist_transport}
+    \lean{SimpleGraph.Hom.edist_le, SimpleGraph.Iso.edist_eq,
+        SimpleGraph.ConnectedComponent.edist_eq}
+    \leanok
+    Let $G$ and $H$ be simple graphs on arbitrary vertex sets. A graph
+    homomorphism $f:G\to H$ satisfies
+    $d_H(f(x),f(y))\le d_G(x,y)$ for all vertices $x,y$.
+    Equality holds when $f$ is a graph isomorphism. If $C$ is a connected
+    component of $G$, the distance in the graph induced on $C$ is the
+    ambient distance: $d_{G[C]}(x,y)=d_G(x,y)$ for $x,y\in C$.
+    All distances take values in $\mathbb N\cup\{\infty\}$; no finiteness
+    hypothesis on either vertex set is imposed.
+\end{theorem}
+\begin{proof}
+    \leanok
+    A homomorphism maps each walk to a walk of the same length. Taking
+    infima over walk lengths proves the inequality, with the infimum of
+    the empty set equal to infinity. Applying this twice, to an isomorphism
+    and its inverse, gives equality. Every vertex on an ambient walk from
+    $x\in C$ is connected to $x$, so a walk with endpoints in $C$ stays in
+    $C$. It therefore gives a walk of the same length in the induced graph.
+    The two infimum comparisons give the component assertion.
+\end{proof}
+
 Let $I$ be a finite set of sites of local dimension $q$, and write
 $\mathcal A_X$ for the operators on $(\C^q)^{\otimes I}$ acting on
 $X\subseteq I$. All norms are Hilbert-space operator norms. For an operator
@@ -387,6 +412,24 @@ with every tensor factor at its original site.
     properties follow.
 \end{proof}
 
+\begin{theorem}[Comparison with a supported approximant]
+    \label{thm:qc_site_expectation_supported_approximant}
+    \lean{QuantumCircuit.norm_sub_siteExpectation_le_two_mul_norm_sub_of_mem_supportedOperators}
+    \leanok
+    \uses{def:qc_site_expectation}
+    For $q\ge1$, let $A$ be any operator on a finite set of sites and let
+    $A_0$ be supported on $B$. Then
+    \begin{align}
+        \|A-E_B(A)\| & \le2\|A-A_0\|.\notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:qc_site_expectation_properties}
+    Since $E_B(A_0)=A_0$, linearity gives
+    $A-E_B(A)=(A-A_0)-E_B(A-A_0)$. The triangle inequality and
+    contractivity of $E_B$ give the bound.
+\end{proof}
+
 \begin{lemma}[Localization error through on-site commutators]
     \label{lem:qc_site_expectation_commutator}
     \lean{QuantumCircuit.norm_sub_siteExpectation_le}\leanok
@@ -507,4 +550,48 @@ space with the graph interaction hypotheses.
     propagation with $\mu=1$), grouping the sites outside the ball by their
     distance $d>l$, and using $(d+1)^k\leq2^kk!\,e^{(d+1)/2}$ together with a
     geometric series yields $Ce^{v|t|-l/2}\|A\|$.
+\end{proof}
+
+\begin{lemma}[Strict margins contain closed graph balls]
+    \label{lem:qc_graph_ball_strict_margin}
+    \lean{QuantumCircuit.graphBall_subset_of_finite_distance_margin}\leanok
+    Let $G$ be a finite graph, $D$ a vertex set, $x$ a vertex, $w\in\mathbb R$
+    and $m\in\mathbb N$ with $m\le w$.
+    Suppose $w<d_G(x,y)$ whenever $y\notin D$ and $d_G(x,y)<\infty$.
+    Then $\{y:d_G(x,y)\le m\}\subseteq D$.
+\end{lemma}
+\begin{proof}\leanok
+    If $d_G(x,y)\le m$, this distance has a finite integer value $d\le m$.
+    If $y\notin D$, the margin assumption would give $w<d\le m\le w$.
+\end{proof}
+
+\begin{theorem}[Crossing supports avoid interior cores]
+    \label{thm:qc_graph_support_separation}
+    \lean{QuantumCircuit.reset_graphNeighborhood_disjoint_cores}\leanok
+    Let $G$ be a finite graph on $I$, with extended graph distance $d_G$, and let
+    $(X_j)_{j\in J}$ be a finite family of vertex subsets, each of diameter
+    at most $R$, where $R,\ell\in\mathbb N$.
+    Let $D,C$ be disjoint vertex sets and let $R_0,C_0$ be two further sets.
+    Suppose $N_{\ell+R}(\{r\})\subseteq D$ for every $r\in R_0$ and
+    $N_{\ell+R}(\{c\})\subseteq C$ for every $c\in C_0$. Put
+    \begin{align}
+        Q          & =(D\cup C)^c,\notag                 \\
+        \mathcal C & =\{j\in J:X_j\cap D\ne\varnothing,
+        \ X_j\setminus D\ne\varnothing\},\notag          \\
+        Z          & =\bigcup_{j\in\mathcal C}X_j.\notag
+    \end{align}
+    Then $N_\ell(Q\cup Z)\cap(R_0\cup C_0)=\varnothing$.
+    This is the support argument in the proof of the information-reset lemma
+    of \cite[Part~II]{TNLean2026OneDimensional}, stated on a finite graph.
+\end{theorem}
+\begin{proof}\leanok
+    Suppose $a\in R_0\cup C_0$ and $d_G(a,z)\le\ell$ for some
+    $z\in Q\cup Z$. If $z\in Q$, then $z\in N_{\ell+R}(\{a\})$,
+    contradicting the relevant containment in $D$ or $C$.
+    Otherwise $z\in X_j$ for a crossing support. Choose
+    $x\in X_j\cap D$ and $y\in X_j\setminus D$.
+    If $a\in R_0$, then
+    $d_G(a,y)\le d_G(a,z)+d_G(z,y)\le\ell+R$, so $y\in D$, a contradiction.
+    If $a\in C_0$, the same inequality with $x$ gives $x\in C$,
+    contradicting $x\in D$ and $D\cap C=\varnothing$.
 \end{proof}

@@ -5,7 +5,7 @@
 \input{command}
 \title{Connected Domains in the One-Dimensional Area Law}
 \author{}
-\date{October 18, 2026}
+\date{October 21, 2026}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{resolved}
@@ -88,37 +88,48 @@ bound on a chain'' (\texttt{part2a\_mps\_information.tex}, lines~260--309).
 Neither that lemma nor the subsequent reset and separation lemmas explicitly
 returns to quantification over arbitrary finite domains.
 
-The proved contiguous-chain estimates therefore have the domain required by
-this argument. Versions for arbitrary finite induced-path domains are
-additional results. The commutator estimate below is such an extension;
-the finite-domain localization and information estimates are separate.
-This distinction adds no hypothesis to either headline theorem: Theorem~A
-is proved on every finite domain, and Theorem~B is stated on a chain in
-the source.
+The proved contiguous-chain estimates have the domain required by the source
+argument. The following commutator and localization estimates extend them to
+arbitrary finite induced integer domains. The information-reset and
+logarithmic-separation extensions are separate results. Neither headline
+theorem gains a hypothesis: Theorem~A holds on every finite domain, and
+Theorem~B is stated on a chain in the source.
 
-\subsection{Extension of the commutator estimate}
+\subsection{Finite-domain locality estimates}
 
-The commutator estimate is proved for arbitrary finite induced integer domains.
-For a finite family of Hermitian terms supported on nonempty sets of graph
-diameter at most $R$, with per-site norm sum at most $b_0$, one may take
+Both estimates are proved for arbitrary finite induced integer domains,
+with the same uniform constants as on the contiguous chain. Put
 \begin{align}
-    C & = 2+4|b_0|e^{2R},      &
-    v & = 2(R+1)|b_0|e^{2R}+1.
+    C   & = 2+4|b_0|e^{2R}, & v  & = 2(R+1)|b_0|e^{2R}+1, \notag \\
+    \mu & = \tfrac12,       & C' & = \frac{2Ce}{1-e^{-1/2}}.
     \label{eq:tnlean_one_dimensional_connected_domain_scope_domain_constants}
 \end{align}
-The bound is $C|S|\|A\|\|B_y\|e^{v|t|-d_\Lambda(S,y)/2}$ for every
-finite initial support $S$, with the exponential factor interpreted as zero
-at infinite distance. No connectedness, ground-state or spectral-gap
-hypothesis is imposed; $S$ may be empty.\footnote{Declaration:
-    \leanid{TNLean.MPS.AreaLaw.norm_heisenberg_commutator_le_domainDistance}.}
-The support-cardinality bound $R+1$ gives the constants in
-(\ref{eq:tnlean_one_dimensional_connected_domain_scope_domain_constants})
-from the general graph estimate. Infinite separation gives exact commutation.
+For every finite labelled family of Hermitian terms on nonempty supports
+of induced-graph diameter at most $R$, with per-site norm sum at most $b_0$,
+the commutator bound holds on every finite initial support $S$. The
+localization bound holds for $q\ge1$ and every real radius $\ell\ge0$, with
+neighborhood
+$N_\ell(S)=\bigcup_{x\in S}\{y:d_\Lambda(x,y)\le\lfloor\ell\rfloor\}$.
+Neither estimate assumes connectedness, a ground state or a spectral gap;
+empty $S$ is allowed.\footnote{Declarations:
+    \leanid{TNLean.MPS.AreaLaw.norm_heisenberg_commutator_le_domainDistance},
+    \leanid{TNLean.MPS.AreaLaw.norm_heisenberg_sub_siteExpectation_domainNeighborhood_le}.}
 
-The finite-domain localization, information-reset and logarithmic-separation
-extensions are separate results. The additional geometric input for localization
-is that each finite-distance sphere has at most two vertices. Extending these
-local estimates requires no product decomposition of ground vectors.
+The increasing enumeration identifies the domain graph with the induced
+integer Hasse graph. Each component is a finite path, and its inclusion
+preserves extended graph distance. A sphere of finite radius therefore has
+at most two vertices, while a support of diameter at most $R$ has at most
+$R+1$ sites.\footnote{Declarations:
+    \leanid{SimpleGraph.ConnectedComponent.nonempty_pathGraph_iso_hasse_int_induce_finset},
+    \leanid{TNLean.MPS.AreaLaw.domainGraphIsoHasse},
+    \leanid{TNLean.MPS.AreaLaw.domainGraph_card_sphere_le_two}.}
+The general graph estimates apply with sphere coefficient $2$ and exponent
+zero. Passing from the natural radius $\lfloor\ell\rfloor$ to $\ell$
+contributes the factor $e^{1/2}$ in the coefficient $C'$ of
+(\ref{eq:tnlean_one_dimensional_connected_domain_scope_domain_constants}). Operators at
+infinite separation commute exactly; infinite distances are not replaced
+by coordinate distances across a missing integer. This proves the finite-domain extensions of the propagation and localization
+estimates without using a ground-state decomposition.
 
 \section{Information reset on the contiguous chain}
 
@@ -137,10 +148,10 @@ proof.\footnote{Declaration:
     \leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.information_reset}.}
 
 The blueprint states and marks the contiguous-chain theorem proved here.
-An extension to arbitrary finite induced-path domains would require the
-corresponding locality and support geometry described above. Such an extension
-is not used in Theorem~A or Theorem~B and is not claimed. No additional
-spectral or product-marginal hypothesis is part of the chain theorem.
+A finite-domain information-reset theorem additionally uses the domain
+locality estimates and support geometry. That extension is separate here;
+no additional spectral or product-marginal hypothesis is part of the chain
+theorem.
 
 \section{Information at logarithmic separation}
 

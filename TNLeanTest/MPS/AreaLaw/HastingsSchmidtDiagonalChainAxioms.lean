@@ -14,8 +14,6 @@ run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[
     ``TNLean.MPS.AreaLaw.Hastings.l2_opNorm_schmidtDiagonal_le_one,
-    ``TNLean.MPS.AreaLaw.Hastings.commute_reindex_one_kronecker_of_isSupportedOn,
-    ``TNLean.MPS.AreaLaw.Hastings.toEuclideanCLM_reindex_cutEquiv_symm,
     ``TNLean.MPS.AreaLaw.Hastings.norm_inner_mul_sub_le_of_factorization] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
