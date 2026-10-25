@@ -7054,6 +7054,20 @@ spectral split → block extraction → MPV calculation → strict bounds
   `v T₀ + 15 + r ≤ K / 2`, which concludes the displayed inequality for any `‖W‖ ≤ 1`.
 - **Notes:** promote at a third occurrence, for example a reset filter on another domain.
 
+### Hermitian partial sums of terms Hermitian on a set — candidate (2026-10-25)
+- **Pattern:**
+  ```lean
+  have hsumH : ∀ T ⊆ B ∪ C, (∑ k ∈ T, h k).IsHermitian := fun T hT ↦
+    Matrix.isHermitian_sum T fun k hk ↦ hh k (hT hk)
+  ```
+  from `hh : ∀ k ∈ B ∪ C, (h k).IsHermitian`.
+- **Seen:** 5 occurrences across 3 files: `TNLean/Lattice/ClusterExpansion/ClusterPart.lean`
+  (three), `TNLean/Lattice/ClusterExpansion/ThermalProduct.lean` and
+  `TNLean/Lattice/ClusterExpansion/TruncatedPositivity.lean`.
+- **Abstraction:** proposed `Matrix.isHermitian_sum_of_subset (hh : ∀ k ∈ s, (h k).IsHermitian)
+  (hT : T ⊆ s) : (∑ k ∈ T, h k).IsHermitian` in `TNLean/Algebra/MatrixHermitianSum.lean`.
+- **Notes:** meets the rule of three; the refactor of the five call sites is a separate change.
+
 ## Rejected
 
 ### Lower bound for a logarithmic cut budget — rejected (2026-10-19)
