@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.DomainRelativeGeneratorLocalization
 import TNLean.Circuit.SupportedGaussianIntegral
+import TNLean.Algebra.ExpMulSubMonotone
 
 /-!
 # Supported Gaussian averaging on finite integer domains
@@ -87,7 +88,7 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
           d * (Λ.card : ℝ) * Real.exp (v * T - (m : ℝ) / 2) :=
     (h.norm_relativeGenerator_sub_siteExpectation_le D hq m s).trans
       (mul_le_mul_of_nonneg_left
-        (Real.exp_le_exp.mpr (sub_le_sub_right (mul_le_mul_of_nonneg_left hs hv.le) _))
+        (Real.exp_mul_sub_le_exp_mul_sub hv.le hs)
         (mul_nonneg hd (Nat.cast_nonneg _)))
   have hnear (t : ℝ) (ht : |t| ≤ T) :
       ‖heisenbergEvolution K' t W -
@@ -112,7 +113,7 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
       _ ≤ a * (Q.card : ℝ) ^ 2 * ‖W‖ * Real.exp (v * |t| - (m : ℝ) / 2) := hloc
       _ ≤ a * (Q.card : ℝ) ^ 2 * ‖W‖ * Real.exp (v * T - (m : ℝ) / 2) :=
         mul_le_mul_of_nonneg_left
-          (Real.exp_le_exp.mpr (sub_le_sub_right (mul_le_mul_of_nonneg_left ht hv.le) _))
+          (Real.exp_mul_sub_le_exp_mul_sub hv.le ht)
           (by positivity)
       _ ≤ a * (Λ.card : ℝ) ^ 2 * ‖W‖ * Real.exp (v * T - (m : ℝ) / 2) := by
         apply mul_le_mul_of_nonneg_right _ (Real.exp_pos _).le

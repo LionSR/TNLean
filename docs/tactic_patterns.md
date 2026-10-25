@@ -24,6 +24,29 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Raising a time bound inside a light-cone exponential — promoted (2026-10-25)
+
+- **Pattern:**
+  ```lean
+  Real.exp_le_exp.mpr (sub_le_sub_right (mul_le_mul_of_nonneg_left hs hv) _)
+  ```
+  turning `hs : |s| ≤ T` and `hv : 0 ≤ v` into
+  `Real.exp (v * |s| - c) ≤ Real.exp (v * T - c)`.
+- **Defined in:** `TNLean/Algebra/ExpMulSubMonotone.lean`,
+  `Real.exp_mul_sub_le_exp_mul_sub (hv : 0 ≤ v) (hx : x ≤ T) :
+  exp (v * x - c) ≤ exp (v * T - c)`.
+- **Use when:** A Lieb–Robinson factor `exp (v |t| - c)` must be bounded
+  uniformly on `[-T, T]`; pass `x = |t|`.
+- **Refactored occurrences:** six terms across four files:
+  `MPS/AreaLaw/SupportedGaussianIntegral.lean` (two),
+  `MPS/AreaLaw/DomainSupportedGaussianIntegral.lean` (two),
+  `MPS/AreaLaw/Hastings/ChainLocalizedParts.lean` and
+  `MPS/AreaLaw/Hastings/BoundaryLocalization.lean`.
+- **Notes:** The variants without the subtracted constant in
+  `Circuit/LiebRobinson/GraphPropagation.lean` and
+  `PEPS/AreaLaw/Amplification/GraphChannelSpatialOmission.lean` bound
+  `exp (v x)` with a further step and are not rewritten.
+
 ### Replica-swap entropy comparison — promoted (2026-10-21)
 
 - **Pattern:** Two identical normalized replicas, a regional swap, and a unitary supported away from two cores imply a mutual-information bound from the vector approximation error.
@@ -4879,26 +4902,6 @@ three-plaquette output measurement, and the routed reunion measurement.
   `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
 
 ## Candidates
-
-### Raising a time bound inside a Gaussian-tail exponential — candidate (2026-10-24)
-
-- **Pattern:**
-  ```lean
-  Real.exp_le_exp.mpr (sub_le_sub_right (mul_le_mul_of_nonneg_left hs hv) _)
-  ```
-  turning `hs : |s| ≤ T` and `hv : 0 ≤ v` into
-  `Real.exp (v * |s| - c) ≤ Real.exp (v * T - c)`.
-- **Seen:** 6 occurrences across 4 files:
-  `MPS/AreaLaw/SupportedGaussianIntegral.lean` (two),
-  `MPS/AreaLaw/DomainSupportedGaussianIntegral.lean` (two),
-  `MPS/AreaLaw/Hastings/ChainLocalizedParts.lean` and
-  `MPS/AreaLaw/Hastings/BoundaryLocalization.lean`.
-- **Abstraction (proposed):** a scalar lemma
-  `Real.exp_mul_abs_sub_le_exp_mul_sub (hv : 0 ≤ v) (hs : |s| ≤ T)`
-  in a small algebra file, with the six call sites refactored.
-- **Notes:** Above the promotion threshold. The finite-domain supported Gaussian
-  change mirrors the chain proof line for line and does not refactor the two
-  Hastings files; promotion is left to a separate refactor of all four files.
 
 ### Infimum over walk lengths under graph maps — candidate (2026-10-21)
 
