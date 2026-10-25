@@ -1593,3 +1593,11 @@ form remains open under issue #9811.
   state disproves the printed norm estimate. The note compares the corrected
   squared-norm bound with the stronger proved sequential-truncation estimate;
   the Rényi family theorem remains open in #9855.
+
+- [`swvc08_qutrit_copy_constant.tex`](swvc08_qutrit_copy_constant.tex)
+  (local correction, resolved) compares the printed bond-dimension bound
+  `D ≥ 2^N(1 - 8T) + 1` for repeated qutrit states (arXiv:0705.0292v2, lines
+  471–479) with the constant `2√2` its printed ingredients give and the
+  constant two proved formally. The formal amplification estimate needs only
+  product error below one, not the printed single-copy smallness hypothesis;
+  the full trace-norm form follows for unnormalized approximants.

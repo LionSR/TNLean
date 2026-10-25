@@ -1781,6 +1781,75 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $|\partial_{\mathrm{ch}}D|\le |\Lambda|$ and multiply by two.
 \end{proof}
 
+\begin{definition}[Doubled domain interactions and regional swaps]
+    \label{def:domain_doubled_swapped_hamiltonian}
+    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.doubled,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.doubled_operator,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.swappedDoubled,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.swappedDoubled_operator}\leanok
+    \uses{def:domain_model,def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
+    Let $H=\sum_Xh_X$ be an admissible domain Hamiltonian and let
+    $D\subseteq V=\{0,\ldots,|\Lambda|-1\}$. Let $p$ pair the two replica
+    coordinates at each site and put $F=p_*F_D$. Define
+    \begin{align}
+        \widehat h_X  & =p_*(h_X\otimes\mathbb 1+\mathbb 1\otimes h_X),\notag                \\
+        \widehat h'_X & =F\widehat h_XF^\dagger,\notag                                       \\
+        \widehat H    & =\sum_X\widehat h_X=p_*(H\otimes\mathbb 1+\mathbb 1\otimes H),\notag \\
+        \widehat H'   & =\sum_X\widehat h'_X=F\widehat H F^\dagger.
+        \label{eq:domain_doubled_swapped}
+    \end{align}
+    Both families are indexed by the original admissible domain supports.
+    Their terms are Hermitian, supported on $X$, and have norm at most $2J$.
+    Thus they have local dimension $q^2$, range $R$ and interaction bound $2J$.
+    Empty domains and $q=0$ are allowed. These are the two-replica operators
+    in \cite[Part~IIa]{TNLean2026OneDimensional}.
+\end{definition}
+\begin{proof}\leanok
+    \uses{def:domain_model,def:chain_doubled_hamiltonian,
+        def:chain_swapped_doubled_hamiltonian,lem:domain_site_norm_budget,
+        thm:peps_sheet_swap_conjugate_support}
+    At each original nonempty support $X$, choose a site of $X$ to obtain
+    $J\ge0$. Extending the original interactions by zero to the chain of
+    increasing labels preserves the term at $X$ and its support. The
+    doubled and swapped chain estimates therefore apply at that same $X$.
+    Conjugation preserves Hermiticity and the regional swap preserves support.
+    Distributing the finite sums proves (\ref{eq:domain_doubled_swapped}).
+\end{proof}
+
+\begin{theorem}[Crossing decomposition for a domain regional swap]
+    \label{thm:domain_partial_swap_crossing}
+    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.partialSwap_term_difference_spec,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.partialSwap_difference_eq_sum_crossing}\leanok
+    \uses{def:domain_doubled_swapped_hamiltonian,lem:domain_crossing_count}
+    With the notation of Definition~\ref{def:domain_doubled_swapped_hamiltonian},
+    put $T_{X,0}=p_*(h_X\otimes\mathbb 1)$,
+    $T_{X,1}=p_*(\mathbb 1\otimes h_X)$, and
+    $K_{X,b}=FT_{X,b}F^\dagger-T_{X,b}$.
+    Every $K_{X,b}$ is Hermitian, supported on $X$, and satisfies
+    $\|K_{X,b}\|\le2J$. Let $\mathcal C$ be the original admissible supports
+    meeting both $D$ and $V\setminus D$, and put $N_R=2\cdot2^{2R}$. Then
+    \begin{align}
+        \widehat H'-\widehat H
+                      & =\sum_{X\in\mathcal C}\sum_{b\in\{0,1\}}K_{X,b},\notag \\
+        2|\mathcal C| & \le N_R|\Lambda|.\notag
+    \end{align}
+    The count here is a bound by the total number of domain sites.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:domain_doubled_swapped_hamiltonian,thm:chain_partial_swap_boundary,
+        thm:peps_sheet_swap_doubled_cancellation,lem:domain_crossing_count}
+    The per-replica support, Hermiticity and norm estimates follow from
+    the corresponding chain estimates at the same original support.
+    If $X\subseteq D$ or $X\cap D=\varnothing$, then
+    \begin{align*}
+        F(T_{X,0}+T_{X,1})F^\dagger=T_{X,0}+T_{X,1}.
+    \end{align*}
+    Thus $K_{X,0}+K_{X,1}=0$ for every noncrossing support.
+    Restrict the finite sum to crossing supports, then distribute conjugation
+    over the two replica terms. Lemma~\ref{lem:domain_crossing_count} gives
+    the displayed count.
+\end{proof}
+
 \begin{theorem}[Intrinsic neighborhoods of order intervals]
     \label{thm:domain_interval_neighborhood}
     \lean{TNLean.MPS.AreaLaw.domainNeighborhood_eq_interval_of_ordConnected,
@@ -1812,6 +1881,49 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Thus $N_m(I)$ is order-convex. If it is nonempty, take $a$ to be its
     least label and $b$ one plus its greatest label; if it is empty, take
     $a=b=0$.
+\end{proof}
+
+\begin{theorem}[Entropy of intrinsic neighborhoods of interval unions]
+    \label{thm:domain_interval_neighborhood_entropy}
+    \lean{TNLean.MPS.AreaLaw.regionEntropy_domainNeighborhood_biUnion_intervals_le,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.regionEntropy_neighborhood_biUnion_intervals_le}
+    \leanok
+    \uses{def:domain_model}
+    Let $\Omega$ be a normalized vector on the finite domain of
+    Definition~\ref{def:domain_model}. Suppose that every relative interval has
+    entropy at most $c$. For any finite index set $s$, relative intervals
+    $I_\alpha$ and $m\in\mathbb N$,
+    \begin{align}
+        S_\Omega\left(N_m\left(\bigcup_{\alpha\in s}I_\alpha\right)\right)
+         & \le |s|c.\notag
+    \end{align}
+    The intervals may overlap or be empty, and $s$ may be empty.
+    If $\Omega$ is the original gapped ground vector of an admissible domain
+    Hamiltonian, with $q\ge1$, $J\ge0$ and $\Delta>0$, one may take
+    $c=C_{\mathrm{int}}(q,R,J,\Delta)$.
+    This is the interval-neighborhood entropy estimate used in
+    \cite[Part~IIa]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:domain_interval_neighborhood,thm:chain_area_law,
+        lem:zero_entropy_flip,lem:chain_entropy_inequalities,def:domain_model}
+    Submodularity and nonnegativity of reduced-state entropy give
+    $S_\Omega(X\cup Y)\le S_\Omega(X)+S_\Omega(Y)$.
+    Since $S_\Omega(\varnothing)=0$, finite subadditivity gives
+    \begin{align}
+        S_\Omega\left(\bigcup_{\alpha\in s}N_m(I_\alpha)\right)
+         & \le\sum_{\alpha\in s}S_\Omega(N_m(I_\alpha))\le |s|c.\notag
+    \end{align}
+    Each $N_m(I_\alpha)$ is itself a relative interval by
+    Theorem~\ref{thm:domain_interval_neighborhood}, and
+    \begin{align}
+        N_m\left(\bigcup_{\alpha\in s}I_\alpha\right)
+         & =\bigcup_{\alpha\in s}N_m(I_\alpha).\notag
+    \end{align}
+    For a domain Hamiltonian, extend its terms by zero to the
+    chain of increasing labels. Its operator and original ground vector
+    are unchanged, so Theorem~\ref{thm:chain_area_law} supplies the interval
+    entropy bound.
 \end{proof}
 
 \begin{theorem}[Connected components of an induced integer graph]
@@ -5302,3 +5414,5 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
 
 \input{chapter/ch35_product_replacement}
 \input{chapter/ch35_copy_region_entropy}
+
+\input{chapter/ch35_entropy_scaling_qutrit_copies}
