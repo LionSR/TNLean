@@ -167,3 +167,48 @@ indices at a site is not established~\cite{gap:hastings05_planar_domain_scope}.
     $X_k$. Each factor therefore has a matrix product form of range $R$, and
     so does the product and its $n$-th power.
 \end{proof}
+
+\begin{theorem}[The truncated operator in matrix product form]
+    \label{thm:hastings_truncated_product_form}
+    \lean{TNLean.Lattice.ClusterExpansion.IsLargeWalk,
+        TNLean.Lattice.ClusterExpansion.noncommProd_apply_of_pairwiseDisjoint,
+        TNLean.Lattice.ClusterExpansion.noLargeCluster_iff_filter,
+        TNLean.Lattice.ClusterExpansion.truncatedExp_eq_mul,
+        TNLean.Lattice.ClusterExpansion.sum_clusterOp_apply,
+        TNLean.Lattice.ClusterExpansion.isLocalCoefficient_clusterCoeff,
+        TNLean.Lattice.ClusterExpansion.sum_prod_clusterCoeff,
+        TNLean.Lattice.ClusterExpansion.hasProductForm_sum_clusterOp,
+        TNLean.Lattice.ClusterExpansion.hasProductForm_truncatedExp}
+    \leanok
+    \uses{def:hastings_product_form, def:hastings_truncated_expansion,
+        def:hastings_cluster_of_terms}
+    Let the domain be nonempty, let every term $H_k$ act only on a set $S_k$ of
+    sites, let two terms be adjacent when their sets of sites meet, and call a
+    set of terms large when its sites contain two sites at walk distance larger
+    than $l$. Then the truncated operator $\rho(\beta,l)$ is in matrix product
+    form of range $l$. This is the matrix product form at high temperature
+    of~\cite[lines 1256--1279]{Hastings2006Solving}, on a planar domain with
+    walk distance; the count of index values is not
+    established~\cite{gap:hastings05_planar_domain_scope}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:hastings_truncation_cluster_products,
+        thm:hastings_cluster_operator_support,
+        thm:hastings_product_form_supported_radius, thm:hastings_product_form_mul}
+    By Theorem~\ref{thm:hastings_truncation_cluster_products},
+    $\rho(\beta,l)=\sum_A\prod_CE_C$. The terms acting on no site contribute a
+    factor that is a multiple of the identity, which has a product form centred
+    at any site; the rest is a sum over families of clusters of terms acting on
+    sites, with pairwise disjoint sets of sites, none of them large. The index
+    at a site records the cluster containing it, if any, and a pair of matrix
+    unit labels. The coefficient at a site checks that its cluster is valid,
+    contains the site, and is recorded at every site of the cluster, all of
+    which lie within distance $l$; a chosen site of each cluster also carries
+    the matrix element of $E_C$, which acts only on the sites of the cluster
+    (Theorem~\ref{thm:hastings_cluster_operator_support}). A site in no cluster
+    carries a diagonal matrix unit. Summing over the indices recovers
+    $\sum_A\prod_CE_C$, and the two factors combine by
+    Theorem~\ref{thm:hastings_product_form_mul}.
+\end{proof}
