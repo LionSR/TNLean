@@ -34,8 +34,10 @@ lattice. Here the polynomial growth `N l ≤ K_g (l + 1)^k` of the number of omi
 the projection region is an explicit hypothesis. Documented in
 `docs/paper-gaps/hastings05_truncated_dynamics.tex`.
 
-Both theorems also assume `0 ≤ J`. The source's `J` bounds the norms of the terms, so it is
-nonnegative; the hypothesis matters only when there are no terms, where `‖h k‖ ≤ J` is vacuous.
+**Local fix (nonnegative interaction bound):** both theorems assume `0 ≤ J`. The source's `J`
+bounds the norms of the terms, so it is nonnegative; the hypothesis matters only when there
+are no terms, where `‖h k‖ ≤ J` is vacuous. Documented in
+`docs/paper-gaps/hastings05_truncated_dynamics.tex`.
 
 ## References
 
