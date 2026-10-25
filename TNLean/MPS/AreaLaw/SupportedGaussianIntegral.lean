@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.RelativeGeneratorLocalization
-import TNLean.Circuit.ProjectedRelativeEvolution
-import QICLean.Analysis.GaussianFilter.MatrixIntegral
+import TNLean.Circuit.SupportedGaussianIntegral
+import TNLean.Algebra.ExpMulSubMonotone
 
 /-!
 # Supported Gaussian averaging on a contiguous chain
@@ -85,9 +85,9 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
   intro q hq L h D ℓ hℓ K K' crossing Z N
   have hqq : 1 ≤ q * q := by nlinarith
   have : NeZero (q * q) := ⟨by omega⟩
-  obtain ⟨U, hU0, hU, hunit, hsupport, _, hcompare⟩ :=
-    exists_supported_projected_relative_evolution (q * q) (N Z)
-      (h.swappedDoubled D).operator_isHermitian h.doubled.operator_isHermitian
+  obtain ⟨U, hU0, hU, hunit, hsupport, haverage⟩ :=
+    exists_supported_gaussian_integral_of_projection_bounds (q * q)
+      (h.swappedDoubled D).operator_isHermitian h.doubled.operator_isHermitian (N Z)
   refine ⟨U, hU0, hU, hunit, hsupport, ?_⟩
   intro Q W hW η T hT B M
   have hgen (s : ℝ) (hs : |s| ≤ T) :
@@ -96,14 +96,8 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
           d * (L : ℝ) * Real.exp (v * T - ℓ / 2) :=
     (h.norm_relativeGenerator_sub_siteExpectation_le D hq ℓ hℓ s).trans
       (mul_le_mul_of_nonneg_left
-        (Real.exp_le_exp.mpr (sub_le_sub_right (mul_le_mul_of_nonneg_left hs hv.le) _))
+        (Real.exp_mul_sub_le_exp_mul_sub hv.le hs)
         (mul_nonneg hd (Nat.cast_nonneg _)))
-  have hrelative (t : ℝ) (ht : |t| ≤ T) :
-      ‖Matrix.hermitianUnitaryPath K' t * Matrix.hermitianUnitaryPath K (-t) - U t‖ ≤
-        (d * (L : ℝ) * Real.exp (v * T - ℓ / 2)) * |t| :=
-    hcompare t _ (fun s hs ↦ hgen s
-      ((show |s| ≤ |t| by
-        simpa only [sub_zero] using Set.abs_sub_left_of_mem_uIcc hs).trans ht))
   have hnear (t : ℝ) (ht : |t| ≤ T) :
       ‖heisenbergEvolution K' t W -
         siteExpectation (q * q) (N Q) (heisenbergEvolution K' t W)‖ ≤
@@ -121,23 +115,13 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
       _ ≤ a * (Q.card : ℝ) ^ 2 * ‖W‖ * Real.exp (v * |t| - ℓ / 2) := hloc
       _ ≤ a * (Q.card : ℝ) ^ 2 * ‖W‖ * Real.exp (v * T - ℓ / 2) :=
         mul_le_mul_of_nonneg_left
-          (Real.exp_le_exp.mpr (sub_le_sub_right (mul_le_mul_of_nonneg_left ht hv.le) _))
+          (Real.exp_mul_sub_le_exp_mul_sub hv.le ht)
           (by positivity)
       _ ≤ a * (L : ℝ) ^ 2 * ‖W‖ * Real.exp (v * T - ℓ / 2) := by
         apply mul_le_mul_of_nonneg_right _ (Real.exp_pos _).le
         apply mul_le_mul_of_nonneg_right _ (norm_nonneg W)
         exact mul_le_mul_of_nonneg_left (pow_le_pow_left₀ (Nat.cast_nonneg _) hc 2) ha.le
       _ = _ := by ring
-  have hfactor (t : ℝ) :
-      heisenbergEvolution K' t W *
-          (Matrix.hermitianUnitaryPath K' t * Matrix.hermitianUnitaryPath K (-t)) =
-        Matrix.hermitianUnitaryPath K' t * W * Matrix.hermitianUnitaryPath K (-t) := by
-    rw [heisenbergEvolution_eq_hermitianUnitaryPath,
-      Matrix.mul_assoc (Matrix.hermitianUnitaryPath K' t * W),
-      ← Matrix.mul_assoc (Matrix.hermitianUnitaryPath K' (-t))
-        (Matrix.hermitianUnitaryPath K' t),
-      ← Matrix.hermitianUnitaryPath_add, neg_add_cancel,
-      Matrix.hermitianUnitaryPath_zero, Matrix.one_mul]
   have hLsq : (L : ℝ) ≤ (L : ℝ) ^ 2 := by
     rcases Nat.eq_zero_or_pos L with hL | hL
     · norm_num [hL]
@@ -152,74 +136,22 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
       _ ≤ _ := by
         nlinarith [mul_nonneg hd (sq_nonneg (L : ℝ)),
           mul_nonneg (mul_nonneg ha.le (sq_nonneg (L : ℝ))) hT]
-  have hpoint (t : ℝ) (ht : |t| ≤ T) :
-      ‖siteExpectation (q * q) (N Q) (heisenbergEvolution K' t W) * U t -
-        Matrix.hermitianUnitaryPath K' t * W * Matrix.hermitianUnitaryPath K (-t)‖ ≤
-          ‖W‖ * (a + d) * (L : ℝ) ^ 2 * (1 + T) * Real.exp (v * T - ℓ / 2) := by
-    refine (hfactor t) ▸ (norm_sub_le_norm_sub_add_norm_sub
-      (siteExpectation (q * q) (N Q) (heisenbergEvolution K' t W) * U t)
-      (heisenbergEvolution K' t W * U t)
-      (heisenbergEvolution K' t W *
-        (Matrix.hermitianUnitaryPath K' t * Matrix.hermitianUnitaryPath K (-t)))).trans ?_
-    rw [← sub_mul, ← mul_sub, CStarRing.norm_mul_mem_unitary _ (hunit t),
-      norm_sub_rev (siteExpectation (q * q) (N Q) (heisenbergEvolution K' t W))
-        (heisenbergEvolution K' t W)]
-    refine (add_le_add (hnear t ht)
-      (norm_mul_le_of_le
-        (show ‖heisenbergEvolution K' t W‖ ≤ ‖W‖ from
-          (SpectralFilter.norm_hermitianUnitaryPath_conj
-            (h.swappedDoubled D).operator_isHermitian W t).le)
-        ((norm_sub_rev (U t)
-          (Matrix.hermitianUnitaryPath K' t * Matrix.hermitianUnitaryPath K (-t))).trans_le
-            (hrelative t ht)))).trans ?_
-    calc
-      _ = ‖W‖ * (a * (L : ℝ) ^ 2 + d * (L : ℝ) * |t|) *
-          Real.exp (v * T - ℓ / 2) := by ring
-      _ ≤ ‖W‖ * ((a + d) * (L : ℝ) ^ 2 * (1 + T)) *
-          Real.exp (v * T - ℓ / 2) :=
-        mul_le_mul_of_nonneg_right
-          (mul_le_mul_of_nonneg_left (hscale t ht) (norm_nonneg W)) (Real.exp_pos _).le
-      _ = _ := by ring
-  let f := fun t : ℝ ↦ siteExpectation (q * q) (N Q) (heisenbergEvolution K' t W) * U t
-  have hnorm (t : ℝ) : ‖f t‖ ≤ ‖W‖ :=
-    (CStarRing.norm_mul_mem_unitary _ (hunit t)).trans_le
-      (MatrixEvolution.norm_projectedGenerator_le (siteExpectationLM (q * q) (N Q))
-        (norm_siteExpectation_le (N Q)) (h.swappedDoubled D).operator_isHermitian W t)
-  have hcont : Continuous f :=
-    (MatrixEvolution.contDiff_projectedGenerator (siteExpectationLM (q * q) (N Q))
-      K' W 0).continuous.mul
-      (show Differentiable ℝ U from fun t ↦ (hU t).differentiableAt).continuous
-  have hint : Integrable f (gaussianReal 0 η) :=
-    (integrable_const ‖W‖).mono' hcont.aestronglyMeasurable
-      (Filter.Eventually.of_forall hnorm)
   have hmono {S S' : Finset (Fin L)} (hSS' : S ⊆ S') : N S ⊆ N S' := by
     intro y hy
     obtain ⟨x, hx, hxy⟩ := (Finset.mem_filter.mp hy).2
     exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, x, hSS' hx, hxy⟩
-  have hfix (t : ℝ) : siteExpectation (q * q) B (f t) = f t :=
-    siteExpectation_of_mem_supportedOperators B (mul_mem_supportedOperators
-      (supportedOperators_mono
-        (Finset.coe_subset.mpr (hmono (Finset.subset_union_left : Q ⊆ Q ∪ Z)))
-        (siteExpectation_mem_supportedOperators (N Q) _))
-      (supportedOperators_mono
-        (Finset.coe_subset.mpr (hmono (Finset.subset_union_right : Z ⊆ Q ∪ Z)))
-        (hsupport t)))
-  have hMint : siteExpectation (q * q) B M = M :=
-    ((siteExpectationLM (q * q) B).toContinuousLinearMap.integral_comp_comm
-      (hint.restrict (s := Set.Icc (-T) T))).symm.trans
-      (integral_congr_ae (Filter.Eventually.of_forall hfix))
-  refine ⟨hMint ▸ siteExpectation_mem_supportedOperators B _, ?_, ?_⟩
-  · exact (norm_setIntegral_le_of_norm_le_const (measure_lt_top _ _)
-      (fun t _ ↦ hnorm t)).trans
-        (mul_le_of_le_one_right (norm_nonneg W) measureReal_le_one)
-  · change ‖(∫ t : ℝ in Set.Icc (-T) T, f t ∂gaussianReal 0 η) -
-      GaussianFilter.gaussianIntertwinerTruncated η T K' K W‖ ≤ _
-    rw [GaussianFilter.gaussianIntertwinerTruncated,
-      ← integral_sub (hint.restrict (s := Set.Icc (-T) T))
-        (GaussianFilter.integrable_intertwinerIntegrand_restrict η T
-          (h.swappedDoubled D).operator_isHermitian h.doubled.operator_isHermitian W)]
-    exact (norm_setIntegral_le_of_norm_le_const (measure_lt_top _ _)
-      (fun t ht ↦ hpoint t (abs_le.mpr ht))).trans
-        (mul_le_of_le_one_right (by positivity) measureReal_le_one)
+  obtain ⟨hMsupport, hMnorm, hMerror⟩ := haverage (N Q) B
+    (hmono (Finset.subset_union_left : Q ⊆ Q ∪ Z))
+    (hmono (Finset.subset_union_right : Z ⊆ Q ∪ Z)) W η T hT
+    (a * (L : ℝ) ^ 2 * Real.exp (v * T - ℓ / 2))
+    (d * (L : ℝ) * Real.exp (v * T - ℓ / 2)) (by positivity) (by positivity)
+    (fun t ht ↦ by simpa only [mul_assoc] using hnear t ht) hgen
+  refine ⟨hMsupport, hMnorm, hMerror.trans ?_⟩
+  have hscaleT : a * (L : ℝ) ^ 2 + d * (L : ℝ) * T ≤
+      (a + d) * (L : ℝ) ^ 2 * (1 + T) := by
+    simpa only [abs_of_nonneg hT] using hscale T (le_of_eq (abs_of_nonneg hT))
+  nlinarith only [mul_le_mul_of_nonneg_right
+    (mul_le_mul_of_nonneg_left hscaleT (norm_nonneg W))
+    (Real.exp_pos (v * T - ℓ / 2)).le]
 
 end TNLean.MPS.AreaLaw

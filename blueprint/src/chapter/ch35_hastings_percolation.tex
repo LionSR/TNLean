@@ -172,3 +172,86 @@ $l=\lfloor l_{\rm proj}/(2R)\rfloor$
     \leanok
     The left side is continuous in $\beta$ and vanishes at $\beta=0$.
 \end{proof}
+
+\begin{definition}[Clusters of large diameter]
+    \label{def:hastings_large_diameter}
+    \lean{TNLean.Lattice.ClusterExpansion.IsLargeDiam}
+    \leanok
+    \uses{def:hastings_cluster_of_terms}
+    Let the terms $H_k$ act on supports in a metric space of sites. A set $C$
+    of terms is large when the support of $H_C$ contains two sites at distance
+    larger than $l_{\mathrm{proj}}$. The truncated operator for this notion of
+    large keeps the terms of the power series of $e^{-\beta H}$ in which no
+    cluster contains two sites at distance larger than $l_{\mathrm{proj}}$, as
+    in~\cite[lines 1104--1107]{Hastings2006Solving}.
+\end{definition}
+
+\begin{theorem}[Size and number of clusters of large diameter]
+    \label{thm:hastings_large_diameter_count}
+    \lean{TNLean.Lattice.ClusterExpansion.dist_le_of_walk,
+        TNLean.Lattice.ClusterExpansion.dist_le_of_mem_biUnion_of_connected,
+        TNLean.Lattice.ClusterExpansion.card_ge_of_isLargeDiam,
+        TNLean.Lattice.ClusterExpansion.card_add_card_boundary_le}
+    \leanok
+    \uses{def:hastings_large_diameter}
+    Let every support have diameter at most $2R$, with $R>0$, and let every
+    term overlap at most $\Delta$ others. Then a connected set of $n$ terms has
+    support of diameter at most $2Rn$, so a connected set of large diameter has
+    at least $\lfloor l_{\mathrm{proj}}/(2R)\rfloor+1$ terms. A set $C$ of terms and its boundary
+    together have at most $(\Delta+1)n_C$ terms. The size threshold replaces
+    the start $l_{\mathrm{proj}}+1$ of the sum
+    in~\cite[line 1235]{Hastings2006Solving}
+    \cite{gap:hastings05_percolation_cluster_size}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Two sites of the support lie in supports of terms joined by a walk of
+    length at most $n-1$ in the overlap graph; consecutive supports share a
+    site, so the distance is at most $2R$ times the number of supports on the
+    walk. Every boundary term overlaps a term of $C$.
+\end{proof}
+
+\begin{theorem}[The percolation bound for clusters of large diameter]
+    \label{thm:hastings_percolation_large_diameter}
+    \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_le_isLargeDiam,
+        TNLean.Lattice.ClusterExpansion.exp_neg_floor_div_le,
+        TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_le_isLargeDiam_dist}
+    \leanok
+    \uses{thm:hastings_large_diameter_count, thm:hastings_truncation_trace_bound,
+        thm:hastings_percolation_connected}
+    In the setting of Theorem~\ref{thm:hastings_large_diameter_count}, let
+    $H=\sum_kH_k$ be Hermitian with Hermitian terms of norm at most $J$, let
+    $\beta\ge0$, put $N$ for the number of terms, $x=\max(1,\Delta^2)$ and
+    $y=(e^{J\beta}-1)e^{(\Delta+1)J\beta}$, and let
+    $0<xy\le1/2$. Then for every operator $O$, with
+    $\rho(\beta,l_{\mathrm{proj}})$ the truncated operator for clusters of
+    large diameter,
+    \begin{align*}
+        \bigl|\operatorname{tr}\bigl(O(e^{-\beta H}-\rho(\beta,l_{\mathrm{proj}}))\bigr)\bigr|
+        \le\|O\|\bigl(\exp(Ne^{-l/\xi})-1\bigr)Z
+        \le\|O\|\bigl(\exp(N(xy)^{-1}e^{-l_{\mathrm{proj}}/\xi_{\mathrm{perc}}})-1\bigr)Z,
+    \end{align*}
+    with $Z=\operatorname{tr}e^{-\beta H}$, $l=\lfloor l_{\mathrm{proj}}/(2R)\rfloor$,
+    $\xi=1/\ln(1/(xy))$ and
+    $\xi_{\mathrm{perc}}=2R/\ln(1/(xy))$. This is eq.~(perc2)
+    of~\cite[lines 1227--1254]{Hastings2006Solving}, with the constant
+    $N(xy)^{-1}$ in place of $N$ \cite{gap:hastings05_percolation_cluster_size}
+    and the boundary of
+    Definition~\ref{def:hastings_cluster_of_terms}
+    \cite{gap:hastings05_cluster_boundary}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:hastings_large_diameter_count, thm:hastings_truncation_trace_bound,
+        thm:hastings_percolation_connected}
+    Theorem~\ref{thm:hastings_truncation_trace_bound} with $S=\Delta+1$ bounds
+    the left side by $\|O\|Z$ times the sum over the nonempty admissible
+    families of large connected sets of $\prod_{C\in U}y^{n_C}$. These families
+    are among the nonempty sets of large connected sets, each connected, and
+    Theorem~\ref{thm:hastings_percolation_connected}, with the size threshold of
+    Theorem~\ref{thm:hastings_large_diameter_count}, bounds that sum by
+    $\exp(Ne^{-l/\xi})-1$. Since $l\ge l_{\mathrm{proj}}/(2R)-1$, $e^{-l/\xi}\le
+        (xy)^{-1}e^{-l_{\mathrm{proj}}/\xi_{\mathrm{perc}}}$.
+\end{proof}

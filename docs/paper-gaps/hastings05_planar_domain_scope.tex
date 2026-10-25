@@ -59,6 +59,24 @@ components only to sites touched by a factor and uses the bound $S$ on each
 radius-$R$ ball. These extensions are part of
 \href{https://github.com/LionSR/TNLean/issues/9854}{issue 9854}.
 
+\section{The truncated operator}
+Lines 1256--1279 of the source state that the truncated operator
+$\rho(\beta,l_{\mathrm{proj}})$ of the high-temperature expansion is exactly
+in the matrix product form of range $l_{\mathrm{proj}}$. On a finite planar
+domain with walk distance this is
+\leanid{TNLean.Lattice.ClusterExpansion.hasProductForm_truncatedExp}, for
+terms supported on arbitrary sets of sites (empty supports included), with a
+cluster counted as large when two of its sites are joined by no walk of length
+at most $l_{\mathrm{proj}}$. The domain is assumed nonempty, as the
+source's lattice of $N$ sites is. On the empty domain the product form can
+only represent the identity: there is exactly one index function, and both the
+product of coefficients and the Kronecker product are empty. Every operator
+there is a scalar, and the truncated operator of a single term $H=1$ is
+$e^{-\beta}\ne1$ for $\beta\ne0$, so it has no product form there, while
+on a nonempty domain the scalar factor of the terms acting on no site is put
+into the coefficient of one site. The source's count of index values at a site
+(lines 1273--1275) is not established for this construction either.
+
 \section{What is not claimed}
 
 The formalization proves the existence of the product form with range $R$ for
