@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.LowEnergyCommutator
-import TNLean.Lattice.LowEnergyBasisSimpleSpectrum
+import TNLean.Lattice.LowEnergyBasisIteration
 
 /-!
 # The sum of the low-energy commutators over all terms
@@ -522,6 +522,71 @@ theorem sum_norm_offDiagonalPartFamily_le_oibu [NeZero d] (Kg : ℝ) (kg : ℕ)
   gcongr
   exact sum_norm_groundCompression_commutator_le G X a ha h hHerm hSupport R hDiam vR hCard b₀
     hBudget Kg kg hGrowth hΔE hH hgap j
+
+/-- A compression to the ground space maps every vector into the ground space, so in an
+orthonormal basis `v` of the ground space it is determined by its matrix elements. -/
+theorem groundCompression_apply_eq_sum {E₀ : ℝ} {m : ℕ} {v : Fin m → EuclideanSpace ℂ (ι → Fin d)}
+    (hspan : ∀ u ∈ groundEigenspace (∑ k, h k) E₀, u = ∑ c, ⟪v c, u⟫_ℂ • v c)
+    (W : Matrix (ι → Fin d) (ι → Fin d) ℂ) (x : EuclideanSpace ℂ (ι → Fin d)) :
+    groundCompression (∑ k, h k) E₀ W x =
+      ∑ c, ⟪v c, groundCompression (∑ k, h k) E₀ W x⟫_ℂ • v c :=
+  hspan _ ((groundEigenspace (∑ k, h k) E₀).starProjection_apply_mem _)
+
+/-- **Eq. `oibu` for a degenerate ground space.** Let `v : Fin m → E` be an orthonormal basis of
+the ground space, and record the source's iteration by labels `r ℓ` and the terms `j ℓ` whose
+compressions `A ℓ = P h_{j ℓ} P` act diagonally on the classes of level `ℓ`, every pair of basis
+vectors being separated below level `L` and every `j ℓ` being one of `j 0, …, j (L - 1)`. If all
+terms have norm at most `J`, then the off-diagonal parts of the compressions of all filtered terms
+satisfy `∑_i o(i) ≤ (m - 1) β_{L-1} ∑_{ℓ < L} C' ‖h_{j ℓ}‖`, where `β_{L-1} = levelBoundB` with
+`K = 2 J²` and `K_B = 1`, and `C'` is the constant of `sum_norm_groundCompression_commutator_le`.
+The bound does not depend on the number of sites or terms. Hastings, arXiv:cond-mat/0508554v3,
+`proj3new.tex`, eq. `oibu` (lines 1689–1694) and the iteration of lines 1695–1708. -/
+theorem sum_norm_offDiagonalPartFamily_le_oibu_levels [NeZero d] (Kg : ℝ) (kg : ℕ)
+    (hGrowth : ∀ x (r : ℕ),
+      ((Finset.univ.filter fun y => G.edist x y = r).card : ℝ) ≤ Kg * ((r : ℝ) + 1) ^ kg)
+    {q ΔE : ℝ} (hq : 0 ≤ q) (hΔE : 0 < ΔE) (hH : (∑ k, h k).IsHermitian) {E₀ : ℝ}
+    (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k) {J : ℝ}
+    (hJ : ∀ k, ‖h k‖ ≤ J) {m : ℕ} [NeZero m] {v : Fin m → EuclideanSpace ℂ (ι → Fin d)}
+    (hv : Orthonormal ℂ v)
+    (hspan : ∀ u ∈ groundEigenspace (∑ k, h k) E₀, u = ∑ c, ⟪v c, u⟫_ℂ • v c)
+    {L : ℕ} (j : ℕ → κ) (hj : ∀ ℓ, ∃ ℓ' < L, j ℓ' = j ℓ) (r : ℕ → Fin m → ℝ)
+    (hdiag : ∀ ℓ a, ∀ c ∈ labelClass r ℓ a, ∀ e ∈ labelClass r ℓ a,
+      ⟪v c, groundCompression (∑ k, h k) E₀ (h (j ℓ)) (v e)⟫_ℂ =
+        if c = e then (r ℓ c : ℂ) else 0)
+    (hsep : ∀ a b, a ≠ b → ∃ ℓ < L, r ℓ a ≠ r ℓ b) :
+    ∑ i, ‖offDiagonalPartFamily v
+        (groundCompression (∑ k, h k) E₀ (gaussianFilteredTerm q ΔE (∑ k, h k) (h i)))‖ ≤
+      (m - 1 : ℕ) * levelBoundB m r (2 * J ^ 2) 1 (L - 1) *
+        ∑ ℓ ∈ Finset.range L, commutatorConst R vR b₀ Kg kg *
+          Real.exp (commutatorRate R vR b₀ ΔE * (2 * R + 1)) * ‖h (j ℓ)‖ *
+            (|b₀| * (Kg * shellSumConst (commutatorRate R vR b₀ ΔE) kg)) := by
+  simp only [groundCompression_gaussianFilteredTerm hq hH]
+  set A : ℕ → _ := fun ℓ => groundCompression (∑ k, h k) E₀ (h (j ℓ))
+  set B : κ → _ := fun i => groundCompression (∑ k, h k) E₀ (h i)
+  set KB : κ → ℝ := fun i => ∑ ℓ ∈ Finset.range L, ‖A ℓ * B i - B i * A ℓ‖
+  have hKA : ∀ ℓ ℓ', ‖A ℓ * A ℓ' - A ℓ' * A ℓ‖ ≤ 2 * J ^ 2 := fun ℓ ℓ' => by
+    refine (norm_groundCompression_commutator_le_two_mul _ E₀ _ _).trans ?_
+    have h1 := hJ (j ℓ)
+    have h2 := hJ (j ℓ')
+    nlinarith [norm_nonneg (h (j ℓ)), norm_nonneg (h (j ℓ'))]
+  have hKBB : ∀ i ℓ, ‖A ℓ * B i - B i * A ℓ‖ ≤ KB i := fun i ℓ => by
+    obtain ⟨ℓ', hℓ', hjj⟩ := hj ℓ
+    have hA : A ℓ = A ℓ' := by simp only [A, hjj]
+    rw [hA]
+    exact Finset.single_le_sum (f := fun ℓ => ‖A ℓ * B i - B i * A ℓ‖)
+      (fun _ _ => norm_nonneg _) (Finset.mem_range.mpr hℓ')
+  have h := sum_norm_offDiagonalPartFamily_le_levelBoundB A r hv
+    (fun ℓ b => groundCompression_apply_eq_sum h hspan _ _) hdiag (by positivity) hKA
+    Finset.univ B (fun i b => groundCompression_apply_eq_sum h hspan _ _) KB
+    (fun i => Finset.sum_nonneg fun _ _ => norm_nonneg _) hKBB hsep
+  refine h.trans ?_
+  gcongr
+  · exact mul_nonneg (Nat.cast_nonneg _)
+      (levelBoundB_nonneg r (by positivity) zero_le_one _)
+  · simp only [KB]
+    rw [Finset.sum_comm]
+    exact Finset.sum_le_sum fun ℓ _ => sum_norm_groundCompression_commutator_le G X a ha h
+      hHerm hSupport R hDiam vR hCard b₀ hBudget Kg kg hGrowth hΔE hH hgap (j ℓ)
 
 end Graph
 
