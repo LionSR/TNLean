@@ -90,6 +90,51 @@ for an arbitrary finite set of sites and are instantiated here directly.
     crossing supports $D_u$ and $D_v$ share the single middle site.
 \end{proof}
 
+\begin{theorem}[Frequency vectors with two prescribed coordinates]
+    \label{thm:chain_two_fixed_frequencies}
+    \lean{Nat.card_fun_sum_eq_and_two_eq,
+        Nat.card_fun_sum_eq_and_two_eq_of_lt,
+        Nat.card_fun_sum_eq_and_two_eq_of_total}
+    \leanok
+    Let $I$ be a finite set, let $u,v\in I$ be distinct, and let
+    $r,i,j$ be natural numbers. Define
+    \begin{align}
+        \mathcal F_{r,i,j}
+         & =\left\{\alpha:I\to\mathbb N:
+        \sum_{a\in I}\alpha(a)=r,\quad
+        \alpha(u)=i,\quad\alpha(v)=j\right\}.\label{eq:chain_fixed_frequency_set}
+    \end{align}
+    If $r<i+j$, then the set in~(\ref{eq:chain_fixed_frequency_set}) is empty.
+    If $|I|=s+3$ for a natural number $s$, then
+    \begin{align}
+        |\mathcal F_{r,i,j}|
+         & =\begin{cases}
+                \displaystyle\binom{r-i-j+s}{s}, & i+j\le r, \\
+                0,                               & r<i+j.
+            \end{cases}\label{eq:chain_fixed_frequency_count}
+    \end{align}
+    Taking $r=m+i+j$ in~(\ref{eq:chain_fixed_frequency_count}) gives
+    $|\mathcal F_{m+i+j,i,j}|=\binom{m+s}{s}$
+    for every natural number $m$.
+    Thus the count is one when $s=0$, provided $i+j\le r$,
+    and also when $r=i+j$.
+    The grouped alphabet in \cite[Section~4.1]{Arad2016RigorousRG}
+    has two windows of $2\ell$ bond labels and three bulk labels;
+    for this alphabet the formula applies with $s=4\ell$.
+\end{theorem}
+\begin{proof}\leanok
+    For every $\alpha:I\to\mathbb N$,
+    $\alpha(u)+\alpha(v)\le\sum_{a\in I}\alpha(a)$,
+    proving the empty case.
+    When the total is $m+i+j$, restricting to $I\setminus\{u,v\}$
+    is a bijection between $\mathcal F_{m+i+j,i,j}$ and the
+    nonnegative integer functions on $s+1$ labels whose sum is $m$.
+    Its inverse reinserts $i$ at $u$ and $j$ at $v$.
+    Identifying these functions with multisets of cardinality $m$
+    gives $\binom{m+s}{s}$.
+    When $i+j\le r$, substituting $m=r-i-j$ gives~(\ref{eq:chain_fixed_frequency_count}).
+\end{proof}
+
 \begin{lemma}[Distance and spheres on a finite path]
     \label{lem:chain_path_metric_spheres}
     \lean{SimpleGraph.pathGraph_edist, SimpleGraph.pathGraph_card_sphere_le_two}

@@ -37,6 +37,7 @@ import TNLean.MPS.AreaLaw.DomainSupportedGaussianIntegral
 import TNLean.MPS.AreaLaw.DoubledHamiltonian
 import TNLean.MPS.AreaLaw.EntropyInequalities
 import TNLean.MPS.AreaLaw.EntropyScaling
+import TNLean.MPS.AreaLaw.FrequencyCounts
 import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.Hastings
 import TNLean.MPS.AreaLaw.InformationReset
