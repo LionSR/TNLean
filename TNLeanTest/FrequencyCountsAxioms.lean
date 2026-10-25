@@ -1,4 +1,4 @@
-import TNLean.MPS.AreaLaw.FrequencyCounts
+import TNLean.Algebra.FrequencyCounts
 
 /-- info:
 'Nat.card_fun_sum_eq_and_two_eq' depends on axioms:

@@ -1,4 +1,4 @@
-import TNLean.MPS.AreaLaw.FrequencyCounts
+import TNLean.Algebra.FrequencyCounts
 
 open scoped BigOperators
 
