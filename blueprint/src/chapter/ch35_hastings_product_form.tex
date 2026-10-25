@@ -10,15 +10,20 @@ every site carries one index, every site carries an operator acting on it
 alone, and the coefficients are products of functions of finite range. Every
 Trotter product of a finite-range Hamiltonian has this form exactly. The error
 between a Trotter product and the Gibbs operator is not estimated here. The
-source works on an arbitrary lattice; here the sites form a finite domain of
-the square lattice with the walk distance. The term supports lie in balls of
-radius $R$ about specified centres, as in the source. The original
-diameter-bounded statement follows as a corollary. The source's count of the
-indices at a site is not established~\cite{gap:hastings05_planar_domain_scope}.
+sites may be any finite metric space, with physical dimension $d_j$ at site
+$j$. The term supports lie in balls of radius $R$ about specified centres,
+as in the source. The count of indices in a sweep containing each centre
+once is proved in Section~\ref{sec:hastings_active_indices}. The walk-local
+statements on finite planar domains are specializations. The separate
+truncated expansion retains the restrictions described below.
 
 \begin{definition}[Matrix product form]
     \label{def:hastings_product_form}
     \lean{
+        TNLean.Lattice.Locality.ProductForm,
+        TNLean.Lattice.Locality.HasProductForm,
+        TNLean.Lattice.Locality.productFormOfSiteIndices,
+        TNLean.Lattice.Locality.HasProductForm.mono,
         TNLean.Lattice.IsLocalCoefficient,
         TNLean.Lattice.ProductForm,
         TNLean.Lattice.HasProductForm,
@@ -26,50 +31,59 @@ indices at a site is not established~\cite{gap:hastings05_planar_domain_scope}.
         TNLean.Lattice.HasProductForm.mono
     }
     \leanok
-    \uses{def:area_law_hamiltonian}
-    Let $\Lambda$ be a finite domain with local dimension $q$, and let $l\ge0$.
-    An operator $\rho$ on $\mathcal H_\Lambda$ has a matrix product form of
-    range $l$ if there are a finite set $\mathcal A$, operators
-    $\rho_j(a)$ on the site $j$ for every site $j$ and every
-    $a\in\mathcal A$, and functions $F_i\colon\mathcal A^\Lambda\to\mathbb C$
-    for every site $i$, such that $F_i(\alpha)$ depends only on the indices
-    $\alpha_j$ with $d_\Lambda(i,j)\le l$ and
+    Let $V$ be a finite set of sites, with local spaces
+    $\mathcal H_j=\mathbb C^{d_j}$, and prescribe a neighbourhood
+    $U_i\subseteq V$ at each site. An operator $\rho$ on
+    $\bigotimes_{j\in V}\mathcal H_j$ has a product form for these
+    neighbourhoods if there are a finite set $\mathcal A$, operators
+    $\rho_j(a)$ on $\mathcal H_j$, and functions
+    $F_i\colon\mathcal A^V\to\mathbb C$ such that $F_i(\alpha)$
+    depends only on $\alpha|_{U_i}$ and
     \begin{align}
         \label{eq:hastings_mpf}
-        \rho=\sum_{\alpha\in\mathcal A^\Lambda}
-        \Bigl(\prod_{i\in\Lambda}F_i(\alpha)\Bigr)
-        \bigotimes_{j\in\Lambda}\rho_j(\alpha_j).
+        \rho=\sum_{\alpha\in\mathcal A^V}
+        \Bigl(\prod_{i\in V}F_i(\alpha)\Bigr)
+        \bigotimes_{j\in V}\rho_j(\alpha_j).
     \end{align}
     This is the right-hand side of the product-form identity in~\cite[lines
         1024--1039]{Hastings2006Solving}. The index set is the same at every site;
-    a smaller index set at one site is padded with values on which the
-    function at that site vanishes. A product form of range $l$ has every
-    larger range.
+    if $i\in U_i$, smaller nonempty site-dependent index sets can be padded
+    to a common finite set by making the coefficient at a site vanish on its
+    unused values. Enlarging the neighbourhoods preserves the product form.
+    On a metric space, range $l\ge0$ means $U_i=\{j:d(i,j)\le l\}$.
+    On a finite planar domain $\Lambda$, take constant dimension $q$ and
+    the sets of sites reached from $i$ by walks of length at most $l$.
 \end{definition}
 
 \begin{theorem}[Operators supported near a specified centre]
     \label{thm:hastings_product_form_supported_radius}
-    \lean{TNLean.Lattice.hasProductForm_of_mem_supportedOperators_radius}
+    \lean{TNLean.Lattice.Locality.hasProductForm_of_isSupportedOn,
+        TNLean.Lattice.Locality.productFormOfSupported,
+        TNLean.Lattice.hasProductForm_of_mem_supportedOperators_radius}
     \leanok
     \uses{def:hastings_product_form}
-    Fix $i_0\in\Lambda$ and $X\subseteq\Lambda$ such that
-    $d_\Lambda(i_0,j)\le R$ for every $j\in X$.
-    Every operator supported on $X$ has a matrix product form of range $R$.
+    Suppose $i\in U_i$ for every $i\in V$. Fix $i_0\in V$ and
+    $X\subseteq U_{i_0}$. Every operator supported on $X$ has a product
+    form for the neighbourhoods $U_i$. In particular, support within
+    distance $R$ of $i_0$ gives a product form of range $R$.
     The centre need not belong to $X$, and $X$ may be empty.
-    This is the finite planar-domain case of the supported-factor expansion
+    This is the supported-factor expansion
     in~\cite[lines 1053--1061]{Hastings2006Solving}.
 \end{theorem}
 \begin{proof}\leanok
-    Take $\mathcal A=\{1,\dots,q\}^2$ and let the single-site operators be
-    the matrix units $|a_j\rangle\langle b_j|$. Attach to $i_0$ the matrix
-    element between the configurations equal to $a$ and $b$ on $X$ and
-    equal to $a_{i_0}$ off $X$. At every site outside $X$, multiply the
-    coefficient by the indicator of $a_j=b_j$, including at $i_0$ if
-    $i_0\notin X$. The matrix element reads only indices on $X$ and at
-    $i_0$, all within radius $R$; each diagonal indicator reads only its
-    own index. Supported operators vanish between configurations differing
-    off $X$, and their other entries depend only on the labels on $X$.
-    Thus~(\ref{eq:hastings_mpf}) holds entry by entry.
+    First suppose each local space has positive dimension. Choose a fixed
+    physical configuration $x^0$. At site $j$, use the matrix units
+    $|a_j\rangle\langle b_j|$, with $1\le a_j,b_j\le d_j$.
+    Attach to $i_0$ the matrix element between the configurations equal to
+    $a$ and $b$ on $X$ and equal to $x^0$ off $X$. At every site outside
+    $X$, multiply the coefficient by the indicator of $a_j=b_j$.
+    The central matrix element reads only indices in $X$, while the
+    indicators read only their own indices. Supported operators vanish
+    between configurations differing off $X$; their other entries depend
+    only on the labels on $X$. Thus (\ref{eq:hastings_mpf}) holds entry
+    by entry. Pad the local index sets to a common finite set. If a local
+    space has dimension zero, the global space is zero-dimensional, so
+    every operator equals the identity and the assertion is immediate.
 \end{proof}
 
 \begin{theorem}[Operators supported on a small set]
@@ -77,7 +91,8 @@ indices at a site is not established~\cite{gap:hastings05_planar_domain_scope}.
     \lean{TNLean.Lattice.hasProductForm_of_mem_supportedOperators}
     \leanok
     \uses{thm:hastings_product_form_supported_radius}
-    Let $X\subseteq\Lambda$ be nonempty with $d_\Lambda(x,y)\le R$ for all
+    On a finite planar domain $\Lambda$ with constant local dimension $q$,
+    let $X\subseteq\Lambda$ be nonempty with $d_\Lambda(x,y)\le R$ for all
     $x,y\in X$. Every operator supported on $X$ has a matrix product form of
     range $R$.
 \end{theorem}
@@ -88,6 +103,11 @@ indices at a site is not established~\cite{gap:hastings05_planar_domain_scope}.
 \begin{theorem}[Products of matrix product forms]
     \label{thm:hastings_product_form_mul}
     \lean{
+        TNLean.Lattice.Locality.HasProductForm.mul,
+        TNLean.Lattice.Locality.hasProductForm_one,
+        TNLean.Lattice.Locality.hasProductForm_list_prod,
+        TNLean.Lattice.Locality.HasProductForm.pow,
+        TNLean.Lattice.Locality.productEntries_mul,
         TNLean.Lattice.HasProductForm.mul,
         TNLean.Lattice.hasProductForm_one,
         TNLean.Lattice.hasProductForm_list_prod,
@@ -95,10 +115,11 @@ indices at a site is not established~\cite{gap:hastings05_planar_domain_scope}.
     }
     \leanok
     \uses{def:hastings_product_form}
-    If $\rho$ and $\sigma$ have matrix product forms of range $l$, then so does
-    $\rho\sigma$. The identity has a matrix product form of every range, and
-    hence so does every finite ordered product and every power of operators
-    with matrix product forms of range $l$.
+    If $\rho$ and $\sigma$ have product forms for neighbourhoods $U_i$,
+    then so does $\rho\sigma$. The identity has a product form for every
+    choice of neighbourhoods, and hence so does every finite ordered
+    product and every power of operators with product forms for those
+    neighbourhoods.
 \end{theorem}
 \begin{proof}\leanok
     With index sets $\mathcal A$ and $\mathcal B$, group the two indices at
@@ -111,11 +132,15 @@ indices at a site is not established~\cite{gap:hastings05_planar_domain_scope}.
 
 \begin{theorem}[Trotter products with prescribed centres]
     \label{thm:hastings_trotter_product_form_radius}
-    \lean{TNLean.Lattice.hasProductForm_trotterProduct_of_radius}
+    \lean{TNLean.Lattice.Locality.hasProductForm_trotterProduct_of_metric,
+        TNLean.Lattice.Locality.hasProductForm_trotterProduct,
+        TNLean.Lattice.Locality.isSupportedOn_exp_smul,
+        TNLean.Lattice.hasProductForm_trotterProduct_of_radius}
     \leanok
     \uses{thm:hastings_product_form_supported_radius,thm:hastings_product_form_mul}
-    For each $i\in\Lambda$, let $H_i$ be an operator supported on
-    $X_i\subseteq\{j:d_\Lambda(i,j)\le R\}$. For any ordered list
+    Let $V$ be a finite metric site set with local dimensions $d_j$, and
+    let $R\ge0$. For each $i\in V$, let $H_i$ be an operator supported on
+    $X_i\subseteq\{j:d(i,j)\le R\}$. For any ordered list
     $i_1,\ldots,i_m$, real $\beta$, and integer $n\ge1$,
     \begin{align}
         \label{eq:hastings_trotter_product_radius}
@@ -125,7 +150,8 @@ indices at a site is not established~\cite{gap:hastings05_planar_domain_scope}.
     nonempty supports are required. With the separate convention that the
     zero-step product is the identity, the conclusion also holds for $n=0$.
     This proves the radius-based construction of~\cite[lines
-        1053--1077]{Hastings2006Solving} on the stated planar domains.
+        1053--1077]{Hastings2006Solving}. More generally, the conclusion holds
+    for any neighbourhoods $U_i$ with $i\in U_i$ and $X_i\subseteq U_i$.
 \end{theorem}
 \begin{proof}\leanok
     The supported operators form a finite-dimensional closed algebra, so
@@ -147,7 +173,7 @@ indices at a site is not established~\cite{gap:hastings05_planar_domain_scope}.
         thm:hastings_product_form_supported,
         thm:hastings_product_form_mul
     }
-    Let $H=\sum_Xh_X$ be a Hamiltonian on $\Lambda$ whose nonempty term
+    Let $H=\sum_Xh_X$ be a Hamiltonian on a finite planar domain $\Lambda$ whose nonempty term
     supports have diameter at most $R$, let
     $X_1,\dots,X_m$ be any finite sequence of supports, let $\beta$ be real
     and let $n\ge1$. The Trotter product
@@ -182,7 +208,8 @@ indices at a site is not established~\cite{gap:hastings05_planar_domain_scope}.
     \leanok
     \uses{def:hastings_product_form, def:hastings_truncated_expansion,
         def:hastings_cluster_of_terms}
-    Let the domain be nonempty, let every term $H_k$ act only on a set $S_k$ of
+    Let $\Lambda$ be a nonempty finite planar domain with constant local
+    dimension $q$, let every term $H_k$ act only on a set $S_k$ of
     sites, let two terms be adjacent when their sets of sites meet, and call a
     set of terms large when its sites contain two sites at walk distance larger
     than $l$. Then the truncated operator $\rho(\beta,l)$ is in matrix product

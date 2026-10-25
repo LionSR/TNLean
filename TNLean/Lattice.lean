@@ -38,6 +38,7 @@ import TNLean.Lattice.PartyCircuit
 import TNLean.Lattice.PhysicalBufferCoordinates
 import TNLean.Lattice.ProductForm
 import TNLean.Lattice.ProductForm.Basic
+import TNLean.Lattice.ProductForm.Metric
 import TNLean.Lattice.ProductForm.Supported
 import TNLean.Lattice.ProductFormActiveIndices
 import TNLean.Lattice.ProductGroundState

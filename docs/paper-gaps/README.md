@@ -1568,19 +1568,17 @@ form remains open under issue #9811.
 ## Hastings' high-temperature matrix product form, arXiv:cond-mat/0508554
 
 - [`hastings05_planar_domain_scope.tex`](hastings05_planar_domain_scope.tex)
-  (scope restriction, open) records that the matrix product form of Trotter
-  products in Section IV of Hastings (arXiv:cond-mat/0508554v3, lines
-  1017–1079), stated there for an arbitrary lattice and metric, is formalized for
-  finite domains of `ℤ²` with the walk distance of the local Hamiltonians of the
-  two-dimensional area law. The centre-indexed theorem preserves the source's
-  radius bound, including centres outside their supports; the original
-  diameter-bounded statement is a corollary. The source's count of at most
-  `nS` index components per site remains unproved: for a product of `m`
-  factors the construction carries `m` components of `q²` values at every site,
-  one for every factor wherever it acts, so the `n`-th power `ρₙ` carries `n m`.
-  The truncated operator of the high-temperature expansion (lines 1256–1279) has
-  the product form on every nonempty such domain; on the empty domain only the
-  identity has a product form. Its index count is not established either.
+  (scope restriction, open) records the remaining planar geometry and local
+  index-range restrictions of the truncated cluster expansion in Hastings,
+  arXiv:cond-mat/0508554v3, lines 1256–1279. The finite Trotter product result
+  at lines 1053–1077 now holds on arbitrary finite metric site sets with varying
+  physical dimensions. Its construction gives at most `nS` index components
+  per site when each centre appears once per sweep; repeated lists count
+  occurrences with multiplicity. This replaces the earlier `nm` count, which
+  retained an index at every site for each of the `m` factors. The truncated
+  operator remains formalized on nonempty planar domains with walk locality;
+  its cluster-label count is a separate unresolved question. On an empty site
+  set only the identity has a product form.
 
 ## Rényi entropy and matrix product state approximation
 

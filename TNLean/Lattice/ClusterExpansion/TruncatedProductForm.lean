@@ -598,8 +598,11 @@ theorem hasProductForm_sum_clusterOp
             siteOp := fun _ a ↦ single a.2.1 a.2.2 1
             coeff := fun i α ↦ clusterCoeff acts l h β i fun j ↦ ((α j).1.map e.symm, (α j).2)
             coeff_local := fun i α α' hαα' ↦
-              isLocalCoefficient_clusterCoeff h β i _ _ fun j hj ↦ by rw [hαα' j hj]
+              isLocalCoefficient_clusterCoeff h β i (fun j hj ↦ by rw [hαα' j hj])
             eq_sum := ?_ }⟩
+  change _ = ∑ α : Site Λ → Option (Fin (Fintype.card (Finset κ))) × (Fin q × Fin q),
+    (∏ i, clusterCoeff acts l h β i fun j ↦ ((α j).1.map e.symm, (α j).2)) •
+      rectKronecker fun j ↦ single (α j).2.1 (α j).2.2 1
   ext u v
   rw [sum_clusterOp_apply hh β u v, ← sum_prod_clusterCoeff hh β u v,
     sum_smul_rectKronecker_single_apply]

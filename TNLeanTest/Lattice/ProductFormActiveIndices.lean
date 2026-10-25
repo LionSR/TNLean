@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.ProductFormActiveIndices
+import TNLean.Lattice.ProductForm.Metric
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
@@ -53,10 +54,30 @@ example : Fintype.card
 -- A repeated list is counted with multiplicity, rather than treated as one sweep.
 example : ([0, 0, 0] : List (Fin 1)).countP (fun _ ↦ true) = 3 := by decide
 
+-- Unequal local dimensions are retained throughout the actual product expansion.
+-- Two full-support factors need at most (3²)² = 81 common index values.
+private def unequalDimensions (j : Fin 2) : ℕ := if j = 0 then 2 else 3
+
+example (A : Fin 2 → Matrix ((j : Fin 2) → Fin (unequalDimensions j))
+    ((j : Fin 2) → Fin (unequalDimensions j)) ℂ)
+    (hA : ∀ i, Entropy.IsSupportedOn (A i) Finset.univ) :
+    ∃ P : Locality.ProductForm (fun _ : Fin 2 ↦ Set.univ) unequalDimensions
+      (A 0 * A 1), Fintype.card P.Index = 81 := by
+  obtain ⟨P, hP⟩ := exists_productForm_list_pow_of_isSupportedOn
+    (fun _ : Fin 2 ↦ Set.univ) unequalDimensions (by simp)
+    (fun _ ↦ Finset.univ) (by simp) A hA [0, 1] 1 81
+    (by intro j; fin_cases j <;> decide)
+  exact ⟨{ P with eq_sum := by simpa using P.eq_sum }, hP⟩
+
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[
     ``TNLean.Lattice.card_trotterActiveIndices,
+    ``TNLean.Lattice.Locality.productFormOfSiteIndices,
+    ``TNLean.Lattice.Locality.productFormOfSupported,
+    ``TNLean.Lattice.Locality.HasProductForm.mul,
+    ``TNLean.Lattice.Locality.isSupportedOn_exp_smul,
+    ``TNLean.Lattice.Locality.hasProductForm_trotterProduct_of_metric,
     ``TNLean.Lattice.Locality.exists_productForm_list_pow_of_isSupportedOn,
     ``TNLean.Lattice.Locality.exists_productForm_trotter_card_bound,
     ``TNLean.Lattice.Locality.exists_productForm_metric_trotter_card_bound] do

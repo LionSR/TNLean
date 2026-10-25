@@ -1,12 +1,13 @@
 \documentclass{article}
+\usepackage[margin=25mm]{geometry}
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 \input{./command}
 \providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
-\title{Hastings' High-Temperature Product Form on Planar Domains}
+\title{Hastings' Product Forms: Finite Trotter Products and the Truncated Expansion}
 \author{}
-\date{October 23, 2026}
+\date{October 25, 2026}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
@@ -24,40 +25,39 @@ every Trotter product $\rho_n=[\prod_i e^{-\beta H_i/n}]^n$ has this form
 exactly, with range $R$, and that after grouping the indices of all factors at
 a site each site carries at most $nS$ indices (lines 1069--1075).
 
-\section{The formalized setting}
+\section{Finite Trotter products: geometry and index count resolved}
 
-The sites form a finite domain $\Lambda\subseteq\mathbb Z^2$, with locality
-measured by walks in its nearest-neighbour graph. For a specified centre
-$i\in\Lambda$, every operator supported on a set $X$ whose sites are joined
-to $i$ by walks of length at most $R$ has a product form of range $R$.
-The support may be empty and need not contain its centre. The expansion
-attaches the matrix-element coefficient to $i$ and retains the diagonal
-identity factor at every site off $X$, including $i$ when $i\notin X$.
-Thus the radius condition in the source is now preserved without increasing
-$R$ to $2R$. The earlier diameter-bounded theorem follows by choosing any
-site of a nonempty support as its centre.
+The product form is now defined on arbitrary finite sites with physical
+spaces $\mathbb C^{d_j}$ and prescribed coefficient neighbourhoods $U_i$.
+Its finite auxiliary index set is common to all sites. Coefficient locality
+means dependence only on the indices in $U_i$. The original planar
+walk-local definition is a specialization, not a second notion.
 
-For a family of operators $H_i$ with these centred supports, every finite
-ordered Trotter product has a product form of the same range $R$, by closure
-under exponentials, products and powers. The centre-indexed statement does
-not require a Hamiltonian with diameter-bounded supports.\footnote{Declarations:
-    \leanid{TNLean.Lattice.hasProductForm_of_mem_supportedOperators_radius},
-    \leanid{TNLean.Lattice.hasProductForm_trotterProduct_of_radius}, and the
-    corollary \leanid{TNLean.Lattice.hasProductForm_of_mem_supportedOperators},
-    in \doclink{TNLean/Lattice/ProductForm}.}
-The remaining geometric restriction is the use of finite planar domains
-with walk locality in place of arbitrary metric site sets.
+If $i\in U_i$ and $X_i\subseteq U_i$, a supported factor admits a
+single-site matrix-unit expansion. Products preserve the order of the
+operators at each site. The counted construction assigns a pair of physical
+labels only to sites touched by the factor. In $n$ sweeps, each containing
+every centre once, site $j$ therefore carries
+$n\#\{i:j\in X_i\}$ such pairs. Put
+$D=\max(1,\max_j d_j)$ and
+$S=\max_j\#\{i:d(j,i)\le R\}$, taking an empty maximum to be zero.
+For $X_i\subseteq\{j:d(i,j)\le R\}$, symmetry of the metric bounds the
+number of pairs by $nS$. Padding yields a common auxiliary index set of
+cardinality $(D^2)^{nS}$ for the actual finite Trotter product.\footnote{Declarations:
+    \leanid{TNLean.Lattice.Locality.ProductForm},
+    \leanid{TNLean.Lattice.Locality.hasProductForm_trotterProduct_of_metric}, and
+    \leanid{TNLean.Lattice.Locality.exists_productForm_metric_trotter_card_bound}.}
 
-\paragraph{Elimination plan.} Define the product form on an arbitrary finite
-metric site set, with coefficient locality measured by its given metric.
-Repeat the supported-operator expansion with a specified centre and support
-inside its radius-$R$ ball, then prove product closure and the centre-indexed
-Trotter theorem in this setting. These proofs require no planar embedding;
-the present walk-local statements remain specializations. The source's
-index-component count requires a separate construction that assigns
-components only to sites touched by a factor and uses the bound $S$ on each
-radius-$R$ ball. These extensions are part of
-\href{https://github.com/LionSR/TNLean/issues/9854}{issue 9854}.
+This proves the finite-site assertion at source lines 1053--1077 without a
+planar embedding or constant physical dimension. Empty supports, zero local
+dimensions and the empty site set are included. At zero steps the product
+is the identity. For an arbitrary list of centres, each factor is counted
+with its multiplicity; the bound $nS$ applies to one occurrence per centre
+in a sweep. The older construction assigned labels at every site for every
+factor, giving $nm$ components for $m$ factors per sweep. The new
+construction removes those inactive components. No convergence estimate
+between the Trotter product and the Gibbs operator follows from this
+finite-product identity alone.
 
 \section{The truncated operator}
 Lines 1256--1279 of the source state that the truncated operator
@@ -77,19 +77,18 @@ on a nonempty domain the scalar factor of the terms acting on no site is put
 into the coefficient of one site. The source's count of index values at a site
 (lines 1273--1275) is not established for this construction either.
 
-\section{What is not claimed}
+\section{Remaining restrictions and elimination plan}
 
-The formalization proves the existence of the product form with range $R$ for
-every centre-indexed Trotter product whose term supports lie within radius
-$R$ of their centres. It does not establish the source's count of the indices
-at a site. The source groups at each site one index component for every
-occurrence of a factor acting near that site, at most $nS$ components. Here
-each factor $e^{-\beta H_i/n}$ is expanded in single-site matrix units at every
-site. On local dimension $q$, a product of $m$ factors therefore carries $m$
-components at each site, one for every factor wherever it acts, each with
-$q^2$ values, and its $n$-th power, the Trotter product $\rho_n$, carries
-$nm$ such components. Any later use of the
-product form that needs the index count must establish it separately.
+Only the truncated-operator result retains the planar geometry restriction
+and an unproved quantitative bound on the local index range. Its current
+index records a set of interaction terms and a pair of physical labels;
+the finite Trotter count does not bound the number of such cluster labels.
+To remove these restrictions, express the cluster construction on arbitrary
+finite metric sites and replace the recorded global term set by local data
+whose number can be bounded as in source lines 1273--1275. Preserve the
+nonempty-site hypothesis needed to represent scalar factors from terms
+acting on no site. These tasks remain part of
+\href{https://github.com/LionSR/TNLean/issues/9854}{issue 9854}.
 
 \bibliographystyle{unsrt}
 \bibliography{references}
