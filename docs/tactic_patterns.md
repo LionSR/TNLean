@@ -4930,7 +4930,6 @@ three-plaquette output measurement, and the routed reunion measurement.
   `TNLean/Algebra/GraphDistanceTransport.lean`.
 
 
-
 ### Passing from a natural localization radius to a real radius — candidate (2026-10-21)
 
 - **Pattern:** Use the floor inequality to bound
@@ -5027,7 +5026,6 @@ no additional helper is proposed.
   `MPSPreparation.cutCoefficientMatrix_adjacent`; it is not reproved.
 
 
-
 ### Interval membership in the chain stage assignments — candidate (2026-10-18)
 
 - **Pattern:** Unfold a half-open target interval, separate its endpoint
@@ -5070,7 +5068,6 @@ no additional helper is proposed.
   `stage_right_margin` and `twenty_mul_stageCount_le`.
 - **Abstraction:** The existing `Nat.zero_le` supplies the needed fact. The
   two occurrences in one file do not justify another arithmetic lemma or tactic.
-
 
 
 ### Product-basis vectors under a map of labels — candidate (2026-10-18)
@@ -5187,7 +5184,6 @@ no additional helper is proposed.
   the pattern occurs in a second file and meets the promotion threshold.
 
 
-
 ### Dyadic padding bounds — candidate (2026-10-16)
 
 - **Pattern:** Combine the lower and strict upper bounds for
@@ -5230,7 +5226,6 @@ no additional helper is proposed.
   consolidates those splits through `guideFrame_eq_changeOwner_of_ne`.
 - **Abstraction:** a lemma returning the readings, vertex sets and facts for the surrounding
   guide, if a third occurrence appears.
-
 
 
 ### Supported terms in rectangle coordinates — candidate (2026-10-15)
@@ -7274,7 +7269,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   module. The two occurrences in `TNLean/PEPS/NormalEdgeSingleCrossing.lean` are a
   different shape — the open-lattice memberships need no negation normalization and the
   branches close by `omega` alone — and are left as they are.
-
 
 
 ### encoded boundary conditions inside region sums — resolved
