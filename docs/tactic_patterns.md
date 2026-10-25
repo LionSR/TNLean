@@ -127,7 +127,9 @@ abstracted — record why, so it is not re-proposed).
   `MPS/AreaLaw/Hamiltonian.lean`; all three arguments use this lemma.
   For finite induced domains, `DomainHamiltonian.norm_bound_nonneg` in
   `MPS/AreaLaw/DomainInteractionBudget.lean` uses the admissible singleton
-  and is reused by the domain per-site budget.
+  and is reused by the domain per-site budget. The domain doubled, swapped
+  and per-replica perturbation proofs also use it at a member of each
+  original nonempty support.
 - **Notes:** An actual site is essential. The empty-chain branch retains
   the original real interaction bound. No positivity hypothesis on the
   interaction bound is added to the logarithmic-separation theorem.
@@ -9133,6 +9135,17 @@ spectral split → block extraction → MPV calculation → strict bounds
   built on `Lattice.Sheet.birth_bounded`, `Real.rpow_neg_ofNat` and
   `Lattice.hasSourceBoundedChange_liftOne`. The stage births call it with an
   empty prefix and the scalar idle vector; the former private copy is removed.
+
+### Cancellation outside crossing supports — candidate (2026-10-22)
+
+- **Pattern:** Apply conjugation minus the identity to the doubled Hamiltonian,
+  cancel terms whose supports do not cross the exchanged region, and split the
+  remaining pair sum over the two replicas.
+- **Seen:** `ChainHamiltonian.partialSwap_difference_eq_sum_crossing` in
+  `MPS/AreaLaw/PartialSwap.lean` and its finite-domain counterpart in
+  `MPS/AreaLaw/DomainPartialSwap.lean`.
+- **Decision:** Two occurrences. A third use should share the common finite-sum
+  cancellation argument, retaining the distinct support geometries.
 
 ### Comparing vectors through one cut matrix — candidate (2026-10-23)
 

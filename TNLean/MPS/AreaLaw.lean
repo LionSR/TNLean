@@ -29,6 +29,7 @@ import TNLean.MPS.AreaLaw.DomainInteractionBudget
 import TNLean.MPS.AreaLaw.DomainIntervalNeighborhood
 import TNLean.MPS.AreaLaw.DomainIntervalNeighborhoodEntropy
 import TNLean.MPS.AreaLaw.DomainLiebRobinson
+import TNLean.MPS.AreaLaw.DomainPartialSwap
 import TNLean.MPS.AreaLaw.DoubledHamiltonian
 import TNLean.MPS.AreaLaw.EntropyInequalities
 import TNLean.MPS.AreaLaw.EntropyScaling
