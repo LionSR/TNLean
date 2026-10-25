@@ -24,12 +24,42 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Raising a time bound inside a light-cone exponential — promoted (2026-10-25)
+
+- **Pattern:**
+  ```lean
+  Real.exp_le_exp.mpr (sub_le_sub_right (mul_le_mul_of_nonneg_left hs hv) _)
+  ```
+  turning `hs : |s| ≤ T` and `hv : 0 ≤ v` into
+  `Real.exp (v * |s| - c) ≤ Real.exp (v * T - c)`.
+- **Defined in:** `TNLean/Algebra/ExpMulSubMonotone.lean`,
+  `Real.exp_mul_sub_le_exp_mul_sub (hv : 0 ≤ v) (hx : x ≤ T) :
+  exp (v * x - c) ≤ exp (v * T - c)`.
+- **Use when:** A Lieb–Robinson factor `exp (v |t| - c)` must be bounded
+  uniformly on `[-T, T]`; pass `x = |t|`.
+- **Refactored occurrences:** six terms across four files:
+  `MPS/AreaLaw/SupportedGaussianIntegral.lean` (two),
+  `MPS/AreaLaw/DomainSupportedGaussianIntegral.lean` (two),
+  `MPS/AreaLaw/Hastings/ChainLocalizedParts.lean` and
+  `MPS/AreaLaw/Hastings/BoundaryLocalization.lean`.
+- **Notes:** The variants without the subtracted constant in
+  `Circuit/LiebRobinson/GraphPropagation.lean` and
+  `PEPS/AreaLaw/Amplification/GraphChannelSpatialOmission.lean` bound
+  `exp (v x)` with a further step and are not rewritten.
+
+### Replica-swap entropy comparison — promoted (2026-10-21)
+
+- **Pattern:** Two identical normalized replicas, a regional swap, and a unitary supported away from two cores imply a mutual-information bound from the vector approximation error.
+- **Defined in:** `Lattice/RegionalResetEntropy.lean`, `TNLean.Lattice.mutualInformation_cores_le_of_reset_unitary`.
+- **Refactored occurrences:** Both the contiguous-chain and arbitrary finite-domain information-reset proofs use the shared finite-site theorem. The former loses its repeated 80-line local entropy argument.
+- **Notes:** Replica normalization and the product marginal after the swap are proved internally. No product-marginal hypothesis is supplied by either caller. The theorem is independent of a Hamiltonian, gap, dimension of the underlying lattice, and connectedness.
+
 ### Supported Gaussian averaging — promoted (2026-10-21)
 
 - **Pattern:** Factor the two-Hamiltonian integrand into an evolved observable and relative evolution, localize the two factors on possibly different regions, and integrate against the restricted Gaussian measure.
 - **Defined in:** `TNLean/Circuit/SupportedGaussianIntegral.lean`, `QuantumCircuit.exists_supported_gaussian_integral_of_projection_bounds`.
 - **Use when:** Actual observable and generator projection estimates give scalar errors on a symmetric time interval. The theorem constructs one supported path before the observable and averaging data, retains the two projection regions and a common containing output region, and supplies support, norm and error bounds for the average.
-- **Refactored occurrences:** `MPS/AreaLaw/SupportedGaussianIntegral.lean` and `PEPS/AreaLaw/SupportedGaussianIntegral.lean`. Their physical localization estimates and constants remain at the callers; their repeated integration arguments are removed.
+- **Refactored occurrences:** `MPS/AreaLaw/SupportedGaussianIntegral.lean` and `PEPS/AreaLaw/SupportedGaussianIntegral.lean`. Their physical localization estimates and constants remain at the callers; their repeated integration arguments are removed. The finite-domain caller in `MPS/AreaLaw/DomainSupportedGaussianIntegral.lean` uses the same theorem with intrinsic graph neighborhoods.
 - **Notes:** The restricted measure is not renormalized. Zero variance, zero cutoff and the empty site set are retained. The bound is `‖W‖ (εobs + T εgen)`, without an additional factor of two. The two caller files lose 146 lines in total.
 
 
@@ -4864,6 +4894,15 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Regional expectation compared with a supported approximant — candidate (2026-10-21)
+
+- **Pattern:** For a contractive regional expectation fixing a supported approximant, rewrite the projection error as the difference between the approximation error and its expectation.
+- **Defined in:** `Circuit/SiteExpectation.lean`, `QuantumCircuit.norm_sub_siteExpectation_le_two_mul_norm_sub_of_mem_supportedOperators`.
+- **Use when:** An approximant is supported on the output region; the error of projecting the original operator is at most twice its distance to that approximant.
+- **Refactored occurrences:** The chain relative-generator proof and the finite-domain relative-generator proof use this same inequality. The finite-family bounds use the existing `map_sum` and `norm_sum_le` lemmas.
+- **Notes:** No state, Hermiticity or nonempty-region assumption is required.
+- **Status:** Two occurrences in two files; the shared lemma is kept, and the entry is promoted when a third consumer lands.
+
 ### Infimum over walk lengths under graph maps — candidate (2026-10-21)
 
 - **Pattern:** Rewrite extended graph distance as the infimum of walk lengths,
@@ -4880,7 +4919,6 @@ three-plaquette output measurement, and the routed reunion measurement.
   promotion threshold. The mathematical transport theorems should be reused;
   no additional tactic or abstraction is proposed. Both comparisons are in
   `TNLean/Algebra/GraphDistanceTransport.lean`.
-
 
 
 ### Passing from a natural localization radius to a real radius — candidate (2026-10-21)
@@ -4979,7 +5017,6 @@ no additional helper is proposed.
   `MPSPreparation.cutCoefficientMatrix_adjacent`; it is not reproved.
 
 
-
 ### Interval membership in the chain stage assignments — candidate (2026-10-18)
 
 - **Pattern:** Unfold a half-open target interval, separate its endpoint
@@ -5022,7 +5059,6 @@ no additional helper is proposed.
   `stage_right_margin` and `twenty_mul_stageCount_le`.
 - **Abstraction:** The existing `Nat.zero_le` supplies the needed fact. The
   two occurrences in one file do not justify another arithmetic lemma or tactic.
-
 
 
 ### Product-basis vectors under a map of labels — candidate (2026-10-18)
@@ -5139,7 +5175,6 @@ no additional helper is proposed.
   the pattern occurs in a second file and meets the promotion threshold.
 
 
-
 ### Dyadic padding bounds — candidate (2026-10-16)
 
 - **Pattern:** Combine the lower and strict upper bounds for
@@ -5182,7 +5217,6 @@ no additional helper is proposed.
   consolidates those splits through `guideFrame_eq_changeOwner_of_ne`.
 - **Abstraction:** a lemma returning the readings, vertex sets and facts for the surrounding
   guide, if a third occurrence appears.
-
 
 
 ### Supported terms in rectangle coordinates — candidate (2026-10-15)
@@ -7027,6 +7061,20 @@ spectral split → block extraction → MPV calculation → strict bounds
   `v T₀ + 15 + r ≤ K / 2`, which concludes the displayed inequality for any `‖W‖ ≤ 1`.
 - **Notes:** promote at a third occurrence, for example a reset filter on another domain.
 
+### Hermitian partial sums of terms Hermitian on a set — candidate (2026-10-25)
+- **Pattern:**
+  ```lean
+  have hsumH : ∀ T ⊆ B ∪ C, (∑ k ∈ T, h k).IsHermitian := fun T hT ↦
+    Matrix.isHermitian_sum T fun k hk ↦ hh k (hT hk)
+  ```
+  from `hh : ∀ k ∈ B ∪ C, (h k).IsHermitian`.
+- **Seen:** 5 occurrences across 3 files: `TNLean/Lattice/ClusterExpansion/ClusterPart.lean`
+  (three), `TNLean/Lattice/ClusterExpansion/ThermalProduct.lean` and
+  `TNLean/Lattice/ClusterExpansion/TruncatedPositivity.lean`.
+- **Abstraction:** proposed `Matrix.isHermitian_sum_of_subset (hh : ∀ k ∈ s, (h k).IsHermitian)
+  (hT : T ⊆ s) : (∑ k ∈ T, h k).IsHermitian` in `TNLean/Algebra/MatrixHermitianSum.lean`.
+- **Notes:** meets the rule of three; the refactor of the five call sites is a separate change.
+
 ## Rejected
 
 ### Lower bound for a logarithmic cut budget — rejected (2026-10-19)
@@ -7226,7 +7274,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   module. The two occurrences in `TNLean/PEPS/NormalEdgeSingleCrossing.lean` are a
   different shape — the open-lattice memberships need no negation normalization and the
   branches close by `omega` alone — and are left as they are.
-
 
 
 ### encoded boundary conditions inside region sums — resolved
@@ -9136,6 +9183,43 @@ spectral split → block extraction → MPV calculation → strict bounds
   `Lattice.hasSourceBoundedChange_liftOne`. The stage births call it with an
   empty prefix and the scalar idle vector; the former private copy is removed.
 
+### Gaussian approximation and polar correction for a regional reset — candidate (2026-10-22)
+
+- **Pattern:** Choose the Gaussian variance, time cutoff and spatial radius;
+  compare the actual truncated Gaussian operator with its supported approximation;
+  obtain a supported unitary from the two-sided vector estimates; apply the
+  common finite-site entropy comparison to that same unitary.
+- **Seen:** `ChainHamiltonian.information_reset` in
+  `MPS/AreaLaw/InformationReset.lean` and `DomainHamiltonian.information_reset`
+  in `MPS/AreaLaw/DomainInformationReset.lean`.
+- **Existing reuse:** The Gaussian estimates,
+  `exists_supported_unitary_of_two_sided`, and
+  `mutualInformation_cores_le_of_reset_unitary` are shared already. The narrower
+  scalar estimate is recorded under “Absorbing a localization coefficient with
+  spare decay”.
+- **Possible abstraction:** A common finite-site theorem whose inputs are the
+  original doubled Hamiltonians, the actual supported Gaussian approximation
+  and the required geometric disjointness. Two complete applications are
+  recorded; no new theorem or tactic is introduced here.
+
+### Mutual information at logarithmic separation — candidate (2026-10-22)
+
+- **Pattern:** Bound the entropy of an interval neighborhood, choose a radius
+  proportional to the logarithm of the number of sites, prove the two core
+  complements are disjoint, and apply the regional information-reset estimate.
+- **Seen:** `ChainHamiltonian.mutualInformation_le_of_logarithmic_separation`
+  in `MPS/AreaLaw/LogarithmicSeparation.lean` and
+  `DomainHamiltonian.mutualInformation_le_of_logarithmic_separation` in
+  `MPS/AreaLaw/DomainLogarithmicSeparation.lean`.
+- **Existing reuse:** Both proofs use the same interval entropy constant,
+  numerical separation estimate and ceiling bounds. The narrower neighborhood
+  membership arguments are recorded under “Real-radius chain neighborhood
+  comparisons”.
+- **Possible abstraction:** Share the numerical choice and the final reset
+  application while leaving the chain and intrinsic-domain distance comparisons
+  in their respective modules. There are two applications, below the promotion
+  threshold; the public geometric hypotheses remain unchanged.
+
 ### Cancellation outside crossing supports — candidate (2026-10-22)
 
 - **Pattern:** Apply conjugation minus the identity to the doubled Hamiltonian,
@@ -9244,3 +9328,40 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Status:** Two independent calculations in two modules; below the promotion
   threshold. The qutrit proof reuses the existing Ky Fan overlap theorem and
   the actual MPS cut-rank bound rather than repeating their proofs.
+
+### Linear bounds for regional-entropy suprema — candidate (2026-10-17)
+
+- **Pattern:** apply `Real.sSup_le` with a nonnegative linear target, unpack
+  a physical entropy witness, and use its rectangle-size bound to increase
+  the scale to the scale of the supremum.
+- **Seen:** `exists_initialBuffer_and_real_boxEntropy_recurrence` in
+  `PEPS/AreaLaw/SafeRectangleAreaLaw.lean` and
+  `exists_uniform_boxEntropy_improvement_real` in
+  `PEPS/AreaLaw/Scan/RealBoxEntropyImprovement.lean`.
+- **Abstraction:** both uses apply Mathlib's `Real.sSup_le` directly and
+  share the pointwise theorem
+  `exists_regionalEntropy_safe_rect_le_linear`. A further helper is
+  deferred until another proof repeats this physical collection.
+- **Notes:** the nonnegative target also covers the empty collection.
+  The earlier monotonicity candidate uses the same Mathlib theorem with
+  inclusion of collections in place of a pointwise linear estimate.
+
+### Candidate: logarithms of zero-padded integer rank budgets (2026-10-23)
+
+`EntropyScaling.RenyiApproximationLowerBound` and
+`EntropyScaling.VonNeumannApproximationLowerBound` both use
+`log (max 1 D) = log D` for a natural rank budget, including zero.
+The latter shares one private lemma between its prefix and block bounds,
+using Mathlib's `Real.posLog_eq_log_max_one` and
+`Real.log_natCast_nonneg`; it does not repeat the earlier case split.
+A further independent use should place this elementary identity in a shared
+mathematical module and replace the existing local proofs.
+
+### Candidate: polynomial bond bounds and logarithmic entropy remainders (2026-10-23)
+
+`EntropyScaling.RenyiObstruction` and `EntropyScaling.VonNeumannObstruction`
+both convert `D ≤ C * (N + 1)^m` to a logarithmic bound, including `D = 0`,
+and use a little-o estimate to compare the logarithmic remainder with positive
+entropy growth. There are two independent occurrences. A third consumer should
+share the logarithmic integer-budget lemma and the elementary eventual comparison;
+there is no need for a new tactic.

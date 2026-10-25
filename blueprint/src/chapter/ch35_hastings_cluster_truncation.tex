@@ -17,7 +17,7 @@ $\rho(\beta,C_1,\dots,C_m)$ over families of $m$ large clusters. This section
 proves that identity for a finite set of terms. Which clusters count as large
 is an arbitrary property of sets of terms. The boundary of a cluster is the set
 of terms whose support meets the support of the cluster, which corrects the
-boundary of~\cite[lines 1130--1133]{Hastings2006Solving}; with the printed
+boundary of~\cite[lines 1131--1134]{Hastings2006Solving}; with the printed
 boundary the identity fails~\cite{gap:hastings05_cluster_boundary}.
 
 \begin{definition}[Clusters of a set of terms]
@@ -211,4 +211,72 @@ boundary the identity fails~\cite{gap:hastings05_cluster_boundary}.
     second identity of Theorem~\ref{thm:hastings_truncation_inclusion_exclusion};
     the members of an admissible family are pairwise disjoint by
     Theorem~\ref{thm:hastings_clusters_meet}.
+\end{proof}
+
+\begin{definition}[The operator of a set of terms]
+    \label{def:hastings_cluster_operator}
+    \lean{TNLean.Lattice.ClusterExpansion.clusterOp,
+        TNLean.Lattice.ClusterExpansion.clusterOp_eq_clusterPart,
+        TNLean.Lattice.ClusterExpansion.hasSum_words_clusterOp}
+    \leanok
+    \uses{thm:hastings_cluster_part_words}
+    For a set $A$ of terms put
+    \begin{align*}
+        E_A=\sum_{D\subseteq A}(-1)^{|A\setminus D|}e^{-\beta H_D},
+    \end{align*}
+    where $H_D=\sum_{k\in D}H_k$. It is the sum of the terms of the power series of $e^{-\beta H}$ whose set
+    of letters is exactly $A$. When $A$ is a cluster, this is the operator
+    that~\cite[lines 1268--1269]{Hastings2006Solving} describes as ``the sum
+    of all terms which include a given cluster''.
+\end{definition}
+
+\begin{theorem}[The truncated operator as a sum of products over clusters]
+    \label{thm:hastings_truncation_cluster_products}
+    \lean{TNLean.Lattice.ClusterExpansion.truncatedExp_eq_sum_clusterOp,
+        TNLean.Lattice.ClusterExpansion.clusterOp_union,
+        TNLean.Lattice.ClusterExpansion.clusters,
+        TNLean.Lattice.ClusterExpansion.biUnion_clusters,
+        TNLean.Lattice.ClusterExpansion.clusterOp_eq_noncommProd_clusters,
+        TNLean.Lattice.ClusterExpansion.truncatedExp_eq_sum_noncommProd_clusters,
+        TNLean.Lattice.ClusterExpansion.commute_of_not_adj_overlapGraph,
+        TNLean.Lattice.ClusterExpansion.truncatedExp_eq_sum_noncommProd_clusters_overlapGraph}
+    \leanok
+    \uses{def:hastings_cluster_operator, def:hastings_truncated_expansion,
+        def:hastings_cluster_of_terms}
+    The truncated operator is $\rho(\beta,l)=\sum_AE_A$, summed over the sets
+    $A$ of terms none of whose clusters is large. If terms that are not
+    adjacent commute, then for every set $A$ of terms, $E_A$ is the product of
+    the commuting operators $E_C$ over the clusters $C$ of $A$. This holds
+    when every term $H_k$ acts only on a set $S_k$ of sites and two terms are
+    adjacent when their sets of sites meet: terms that are not adjacent act on
+    disjoint sets of sites and commute. Thus each term of $\rho(\beta,l)$ is a
+    product of operators, one for each cluster, as
+    in~\cite[lines 1108--1110]{Hastings2006Solving}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:hastings_cluster_operator, thm:hastings_clusters_meet}
+    Group the words of each order by their set of letters. If $A$ and $B$ are
+    disjoint and every term of $A$ commutes with every term of $B$, then
+    $e^{-\beta H_{D_1\cup D_2}}=e^{-\beta H_{D_1}}e^{-\beta H_{D_2}}$ for
+    $D_1\subseteq A$ and $D_2\subseteq B$, and the signs multiply, so
+    $E_{A\cup B}=E_AE_B$. The clusters of $A$ partition $A$, distinct clusters
+    have no adjacent terms, and induction over the clusters gives the product.
+\end{proof}
+
+\begin{theorem}[The operator of a cluster acts on its sites]
+    \label{thm:hastings_cluster_operator_support}
+    \lean{TNLean.Lattice.ClusterExpansion.clusterOp_mem_supportedOperators}
+    \leanok
+    \uses{def:hastings_cluster_operator, thm:hastings_trotter_product_form}
+    If every term $H_k$ acts only on a set $S_k$ of sites, then $E_C$ acts
+    only on $\bigcup_{k\in C}S_k$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:hastings_trotter_product_form}
+    Each $H_D$ with $D\subseteq C$ acts on that union, and so do its
+    exponential and the sum $E_C$.
 \end{proof}
