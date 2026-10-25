@@ -231,6 +231,7 @@ import TNLean.PEPS.Approximation.SquarePatchIntegerCoordinates
 import TNLean.PEPS.Approximation.SquarePatchRelabel
 import TNLean.PEPS.Approximation.SquareZeroFloorOptimizer
 import TNLean.PEPS.Approximation.SupportedPhysicalBufferGaussian
+import TNLean.PEPS.Approximation.SwappedDoubledEdgeBoundary
 import TNLean.PEPS.Approximation.SwappedLocalHamiltonian
 import TNLean.PEPS.Approximation.SwappedSquareHamiltonianBoundary
 import TNLean.PEPS.Approximation.SwappedSquareHamiltonianInteraction

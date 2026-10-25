@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.SpectralCutoff
+import TNLean.MPS.AreaLaw.LocalSolution.FinalStateCount
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute
 
 /-!
@@ -98,11 +99,11 @@ variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 section Projection
 
-/-- For an orthogonal projection `P`, `re ⟨ψ, P ψ⟩ = ‖P ψ‖²`. -/
+/-- For an orthogonal projection `P`, `re ⟨ψ, P ψ⟩ = ‖P ψ‖²`. This is
+`re_inner_toEuclideanCLM_eq_norm_sq` for the linear-map wrapper `toEuclideanLin`. -/
 theorem re_inner_toEuclideanLin_eq_norm_sq {P : Matrix ι ι ℂ} (hP : IsStarProjection P)
-    (ψ : EuclideanSpace ℂ ι) : (⟪ψ, toEuclideanLin P ψ⟫_ℂ).re = ‖toEuclideanLin P ψ‖ ^ 2 := by
-  rw [Entropy.norm_toEuclideanLin_sq, ← star_eq_conjTranspose, hP.isSelfAdjoint.star_eq,
-    hP.isIdempotentElem.eq]
+    (ψ : EuclideanSpace ℂ ι) : (⟪ψ, toEuclideanLin P ψ⟫_ℂ).re = ‖toEuclideanLin P ψ‖ ^ 2 :=
+  re_inner_toEuclideanCLM_eq_norm_sq hP ψ
 
 /-- Pythagoras for an orthogonal projection: `‖P ψ‖² + ‖ψ - P ψ‖² = ‖ψ‖²`. -/
 theorem norm_sq_add_norm_sub_sq {P : Matrix ι ι ℂ} (hP : IsStarProjection P)
