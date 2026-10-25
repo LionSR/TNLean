@@ -1517,7 +1517,7 @@ from the von Neumann Lemma 2 by `S_α ≤ S`, the concavity of the logarithm.
 ### Local solution of gapped Hamiltonians: the truncated dynamics of `M_i`
 
 [hastings05_truncated_dynamics.tex](hastings05_truncated_dynamics.tex)
-(local correction, resolved) records how the approximation `M_i` of Hastings,
+(scope restriction, resolved) records how the approximation `M_i` of Hastings,
 *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, eqs. `mid` and
 `apb`, source lines 285–320, proved at lines 1458–1533), is formalized. The
 truncation keeps any family of terms acting inside a set `K` that contains the
