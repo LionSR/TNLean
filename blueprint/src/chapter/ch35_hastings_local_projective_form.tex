@@ -577,9 +577,12 @@ dimension.
     \end{align*}
     independently of the number of sites and terms. Consequently, in an
     eigenbasis of $PM_jP$ with eigenvalues pairwise at least $\delta>0$ apart,
-    $\sum_io(i)$ is at most $(n-1)/\delta$ times this bound. This is
-    eq.~(oibu) of~\cite[lines 1689--1694]{Hastings2006Solving}, with explicit
-    constants~\cite{gap:hastings05_two_dim_ground_basis}.
+    $\sum_io(i)$ is at most $(n-1)/\delta$ times this bound. This proves the
+    size independence of eq.~(oibu) of~\cite[lines 1689--1694]{Hastings2006Solving},
+    with an explicit constant; the printed dependence
+    $O(J^2/(c_1l\Delta E\,\delta\lambda_j))$ is not established, since the
+    constant contains neither $c_1$ nor $l$ and grows like $(v/\Delta E)^{k+1}$
+    for small gaps~\cite{gap:hastings05_two_dim_ground_basis}.
 \end{theorem}
 \begin{proof}\leanok
     Group the terms by their anchor: the terms anchored at $x$ contain $x$, so
@@ -590,4 +593,34 @@ dimension.
     statement is Theorem~\ref{thm:hastings05_simple_spectrum_basis} with
     $PM_iP=Ph_iP$.
 \end{proof}
-||||||| 0cd0d91ef8
+
+\begin{theorem}[Eq.~(oibu) for a degenerate ground space]
+    \label{thm:hastings05_oibu_levels}
+    \lean{TNLean.Lattice.levelBoundB_eq_mul,
+        TNLean.Lattice.sum_norm_offDiagonalPartFamily_le_levelBoundB,
+        TNLean.Lattice.groundCompression_apply_eq_sum,
+        TNLean.Lattice.sum_norm_offDiagonalPartFamily_le_oibu_levels}
+    \leanok
+    \uses{thm:hastings05_basis_levels, thm:hastings05_oibu}
+    In the setting of Theorem~\ref{thm:hastings05_basis_levels}, let $v_0,\dots,v_{n-1}$
+    be an orthonormal basis of the ground space, let the operator of level
+    $\ell$ be $A_\ell=Ph_{j_\ell}P$, with every $j_\ell$ among
+    $j_0,\dots,j_{L-1}$ and every pair of basis vectors separated below level
+    $L$, and let all terms have norm at most $J$. Then
+    \begin{align*}
+        \sum_io(i)\le(n-1)\,\beta_{L-1}\sum_{\ell<L}Ce^{\gamma(2R+1)}\,|b_0|\,K_g\,
+        S_{\gamma,k}\,\|h_{j_\ell}\|,
+    \end{align*}
+    where $\beta_{L-1}$ is the bound of
+    Theorem~\ref{thm:hastings05_basis_levels} with $K=2J^2$ and $K_B=1$,
+    independently of the number of sites and terms. This is the size independence
+    of eq.~(oibu)~\cite[lines 1689--1708]{Hastings2006Solving} for a ground space of
+    any dimension.
+\end{theorem}
+\begin{proof}\leanok
+    The bound of Theorem~\ref{thm:hastings05_basis_levels} is homogeneous of
+    degree one in $K_B$. Take for $K_B(i)$ the sum over $\ell<L$ of
+    $\|[A_\ell,Ph_iP]\|$, which bounds the commutator at every level since every
+    $j_\ell$ is among the first $L$, and $K=2J^2$. Exchanging the sums over $i$ and
+    $\ell$, Theorem~\ref{thm:hastings05_oibu} bounds each sum over $i$.
+\end{proof}

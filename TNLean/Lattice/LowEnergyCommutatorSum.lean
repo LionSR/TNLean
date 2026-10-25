@@ -12,8 +12,10 @@ import TNLean.Lattice.LowEnergyBasisIteration
 Hastings, *Solving gapped Hamiltonians locally*, arXiv:cond-mat/0508554v3,
 `References/cond-mat_0508554/proj3new.tex`, lines 1689–1694, sums the bound
 `o(i) ≤ ‖[P M_i P, P M_j P]‖ / δλ_j` over all `i`: by eq. `blecm` the commutator decays
-exponentially in `d(i, j)`, so `∑_i o(i) ≤ O(J² / (c₁ l ΔE δλ_j))` independently of the system
-size (eq. `oibu`).
+exponentially in `d(i, j)`, so `∑_i o(i)` is bounded independently of the system size, of order
+`J² / (c₁ l ΔE δλ_j)` as printed (eq. `oibu`). Here the size independence is proved with an
+explicit constant; the printed dependence is not established, since the constant contains
+neither `c₁` nor `l` and grows like `(v/ΔE)^{k+1}` for small gaps.
 
 The compression `P M_i P` of a filtered term equals that of `h_i` for every `q ≥ 0`
 (`groundCompression_gaussianFilteredTerm`), so the graph form of eq. `blecm` may be applied to
@@ -32,6 +34,8 @@ norm budget `b₀` of each site and the polynomial growth of the graph spheres b
   separation `l`.
 * `norm_groundCompression_commutator_le_exp_edist`: the same in the distance of the anchors.
 * `sum_norm_groundCompression_commutator_le`: the sum over all terms.
+* `sum_norm_offDiagonalPartFamily_le_oibu_levels`: eq. `oibu` for a degenerate ground space, by
+  the iteration of `LowEnergyBasisIteration.lean` with any number of levels.
 * `sum_norm_offDiagonalPartFamily_le_oibu`: eq. `oibu`, the sum of the off-diagonal parts in an
   eigenbasis of `P M_j P`.
 -/
@@ -190,6 +194,15 @@ theorem isSelfAdjoint_groundCompression (H : Matrix n n ℂ) (E₀ : ℝ) {W : M
     (hW.isSelfAdjoint).map toEuclideanCLM
   unfold groundCompression
   exact hT.conjugate_self (isSelfAdjoint_starProjection _)
+
+/-- A compression to the ground space maps every vector into the ground space, so in an
+orthonormal basis `v` of the ground space it is determined by its matrix elements. -/
+theorem groundCompression_apply_eq_sum {H : Matrix n n ℂ} {E₀ : ℝ} {m : ℕ}
+    {v : Fin m → EuclideanSpace ℂ n}
+    (hspan : ∀ u ∈ groundEigenspace H E₀, u = ∑ c, ⟪v c, u⟫_ℂ • v c) (W : Matrix n n ℂ)
+    (x : EuclideanSpace ℂ n) :
+    groundCompression H E₀ W x = ∑ c, ⟪v c, groundCompression H E₀ W x⟫_ℂ • v c :=
+  hspan _ ((groundEigenspace H E₀).starProjection_apply_mem _)
 
 end Compression
 
@@ -523,15 +536,6 @@ theorem sum_norm_offDiagonalPartFamily_le_oibu [NeZero d] (Kg : ℝ) (kg : ℕ)
   exact sum_norm_groundCompression_commutator_le G X a ha h hHerm hSupport R hDiam vR hCard b₀
     hBudget Kg kg hGrowth hΔE hH hgap j
 
-/-- A compression to the ground space maps every vector into the ground space, so in an
-orthonormal basis `v` of the ground space it is determined by its matrix elements. -/
-theorem groundCompression_apply_eq_sum {E₀ : ℝ} {m : ℕ} {v : Fin m → EuclideanSpace ℂ (ι → Fin d)}
-    (hspan : ∀ u ∈ groundEigenspace (∑ k, h k) E₀, u = ∑ c, ⟪v c, u⟫_ℂ • v c)
-    (W : Matrix (ι → Fin d) (ι → Fin d) ℂ) (x : EuclideanSpace ℂ (ι → Fin d)) :
-    groundCompression (∑ k, h k) E₀ W x =
-      ∑ c, ⟪v c, groundCompression (∑ k, h k) E₀ W x⟫_ℂ • v c :=
-  hspan _ ((groundEigenspace (∑ k, h k) E₀).starProjection_apply_mem _)
-
 /-- **Eq. `oibu` for a degenerate ground space.** Let `v : Fin m → E` be an orthonormal basis of
 the ground space, and record the source's iteration by labels `r ℓ` and the terms `j ℓ` whose
 compressions `A ℓ = P h_{j ℓ} P` act diagonally on the classes of level `ℓ`, every pair of basis
@@ -575,18 +579,19 @@ theorem sum_norm_offDiagonalPartFamily_le_oibu_levels [NeZero d] (Kg : ℝ) (kg 
     rw [hA]
     exact Finset.single_le_sum (f := fun ℓ => ‖A ℓ * B i - B i * A ℓ‖)
       (fun _ _ => norm_nonneg _) (Finset.mem_range.mpr hℓ')
-  have h := sum_norm_offDiagonalPartFamily_le_levelBoundB A r hv
-    (fun ℓ b => groundCompression_apply_eq_sum h hspan _ _) hdiag (by positivity) hKA
-    Finset.univ B (fun i b => groundCompression_apply_eq_sum h hspan _ _) KB
+  have hsum := sum_norm_offDiagonalPartFamily_le_levelBoundB A r hv
+    (fun ℓ b => groundCompression_apply_eq_sum hspan _ _) hdiag (by positivity) hKA
+    Finset.univ B (fun i b => groundCompression_apply_eq_sum hspan _ _) KB
     (fun i => Finset.sum_nonneg fun _ _ => norm_nonneg _) hKBB hsep
-  refine h.trans ?_
+  refine hsum.trans ?_
   gcongr
   · exact mul_nonneg (Nat.cast_nonneg _)
       (levelBoundB_nonneg r (by positivity) zero_le_one _)
-  · simp only [KB]
+  · simp only [KB, A, B]
     rw [Finset.sum_comm]
-    exact Finset.sum_le_sum fun ℓ _ => sum_norm_groundCompression_commutator_le G X a ha h
-      hHerm hSupport R hDiam vR hCard b₀ hBudget Kg kg hGrowth hΔE hH hgap (j ℓ)
+    refine Finset.sum_le_sum fun ℓ _ => ?_
+    exact sum_norm_groundCompression_commutator_le G X a ha h hHerm hSupport R hDiam vR hCard b₀
+      hBudget Kg kg hGrowth hΔE hH hgap (j ℓ)
 
 end Graph
 

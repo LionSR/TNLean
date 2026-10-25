@@ -19,7 +19,9 @@ run_cmd do
       ``norm_groundCompression_commutator_le_two_mul, ``isSelfAdjoint_groundCompression,
       ``norm_groundCompression_commutator_le_exp, ``disjoint_biUnion_graphBall_of_lt_edist,
       ``norm_groundCompression_commutator_le_exp_edist,
-      ``sum_norm_groundCompression_commutator_le, ``sum_norm_offDiagonalPartFamily_le_oibu] do
+      ``sum_norm_groundCompression_commutator_le, ``sum_norm_offDiagonalPartFamily_le_oibu,
+      ``groundCompression_apply_eq_sum, ``sum_norm_offDiagonalPartFamily_le_oibu_levels,
+      ``levelBoundB_eq_mul, ``sum_norm_offDiagonalPartFamily_le_levelBoundB] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl

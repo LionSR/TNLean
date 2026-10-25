@@ -33,9 +33,8 @@ A ground space of any dimension, by the source's iteration over further compress
 (lines 1695–1705), is treated in `LowEnergyBasisIteration.lean`. The choice of `j` maximizing
 `δλ_j` is not made, since every bound here holds for any `j`.
 
-**Scope restriction (summed bound):** the summation of the decaying commutator bound over `i`
-into eq. `oibu`, which the source states only to order of magnitude, is left as the sum of the
-commutators. Documented in `docs/paper-gaps/hastings05_two_dim_ground_basis.tex`.
+The summation of the decaying commutator bound over `i` into eq. `oibu` is carried out in
+`LowEnergyCommutatorSum.lean`.
 -/
 
 open scoped InnerProductSpace

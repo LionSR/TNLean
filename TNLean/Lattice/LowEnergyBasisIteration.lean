@@ -40,6 +40,8 @@ bound is written out (`norm_inner_le_of_two_levels`).
 * `norm_inner_le_of_mem_labelClass`: the bound at the first level separating two basis vectors.
 * `levelBoundA`, `levelBoundB`, `norm_inner_A_le_levelBoundA`, `norm_inner_le_levelBoundB`,
   `norm_offDiagonalPartFamily_le_levelBoundB`: every level, by induction.
+* `levelBoundB_eq_mul`, `sum_norm_offDiagonalPartFamily_le_levelBoundB`: the bound is linear in
+  `K_B`, and the sum of the off-diagonal parts over a family.
 * `norm_inner_le_of_two_levels`, `norm_offDiagonalPartFamily_le_of_two_levels`: two levels, with
   the bound written out.
 
@@ -379,7 +381,7 @@ theorem levelBoundB_eq_mul {K KB : ℝ} (hKB : 0 ≤ KB) :
   | 0 => by simp only [levelBoundB]; ring
   | ℓ + 1 => by
       simp only [levelBoundB]
-      rw [levelBoundB_eq_mul hKB ℓ, ← mul_max_of_nonneg _ _ hKB]
+      rw [levelBoundB_eq_mul hKB ℓ, mul_max_of_nonneg _ _ hKB]
       congr 1
       ring
 
