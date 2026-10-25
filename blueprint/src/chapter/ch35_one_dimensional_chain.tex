@@ -1093,8 +1093,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \leanok
     \uses{thm:peps_reset_regional_filter,thm:chain_supported_gaussian_integral,
         thm:peps_reset_polar_step,lem:chain_reset_support_separation,
-        thm:peps_reset_paired_support,thm:peps_reset_exchanged_cores,
-        lem:lattice_supported_unitary_entropy,thm:peps_reset_entropy_scalar}
+        thm:regional_reset_cores_entropy,thm:peps_reset_entropy_scalar}
     Set $r=2p+10$. Choose the Gaussian constants $A,T_0>0$ from
     Theorem~\ref{thm:peps_reset_regional_filter} once, and choose the locality
     constants $C,v>0$ from Theorem~\ref{thm:chain_supported_gaussian_integral}.
@@ -1145,10 +1144,9 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $\ell+R<C_pB_*=w$.
     Lemma~\ref{lem:chain_reset_support_separation} makes $S$ disjoint from
     both cores, so $V$ acts trivially on their joint marginal in each
-    replica. By Theorem~\ref{thm:peps_reset_exchanged_cores}, the two cores
-    of the first replica of $\Phi$ are uncorrelated. Transporting paired
-    coordinates to the two replicas and applying the entropy comparison of
-    Lemma~\ref{lem:lattice_supported_unitary_entropy} yields
+    replica. The entropy comparison of
+    Theorem~\ref{thm:regional_reset_cores_entropy}, applied to the unitary
+    $V$ supported on $S$, yields
     \begin{align}
         I_\Omega(R_0:C_0)
          & \le8\sqrt\delta\,\log(e q^{|R_0|})\notag \\
@@ -1958,6 +1956,115 @@ for an arbitrary finite set of sites and are instantiated here directly.
     The restricted Gaussian measure is not renormalized.
 \end{proof}
 
+\begin{theorem}[Entropy comparison after a regional replica swap]
+    \label{thm:regional_reset_cores_entropy}
+    \lean{TNLean.Lattice.mutualInformation_cores_le_of_reset_unitary}\leanok
+    Let $V$ be a finite site set, let $q\ge1$, and let $\Omega$ be a unit
+    vector in $(\mathbb C^q)^{\otimes V}$. Suppose $R_0\subseteq D\subseteq V$
+    and $C_0\cap D=\varnothing$. On two replicas put
+    $\Psi=\Omega\otimes\Omega$ and $\Phi=F_D\Psi$, where $F_D$ exchanges
+    the replicas at the sites of $D$.
+    Let $U$ be a unitary supported on $S\subseteq V$ in paired-site coordinates,
+    with $S\cap(R_0\cup C_0)=\varnothing$.
+    If $\|U\Psi-\Phi\|\le\delta$ for a real $\delta$, then
+    \begin{align}
+        I_\Omega(R_0:C_0) & \le8\sqrt\delta\log(e q^{|R_0|}).\notag
+    \end{align}
+    This is the entropy comparison in the information-reset argument of
+    \cite[Part~IIa]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:lattice_supported_unitary_entropy,thm:peps_reset_exchanged_cores,
+        thm:peps_reset_paired_support}
+    Both replicas are normalized, and $F_D$ is unitary. The first-replica
+    marginal of $\Phi$ on $R_0\cup C_0$ is a product, by
+    Theorem~\ref{thm:peps_reset_exchanged_cores}.
+    Put $E=\{0,\ldots,q-1\}$. Let
+    $P:E^V\times E^V\to(E\times E)^V$ be the pairing bijection
+    $P(c_1,c_2)(v)=(c_1(v),c_2(v))$. Write $\psi$ and $F$ for the
+    paired-coordinate forms of $\Psi$ and $F_D$, respectively. Then
+    \begin{align}
+        \Psi(c_1,c_2) & =\psi(P(c_1,c_2))=\Omega(c_1)\Omega(c_2),\notag \\
+        \Phi(c_1,c_2) & =(F\psi)(P(c_1,c_2)).\notag
+    \end{align}
+    The support assumption means that $U$ acts trivially on both cores.
+    The supported-unitary entropy comparison of
+    Lemma~\ref{lem:lattice_supported_unitary_entropy}, and the first core dimension
+    $q^{|R_0|}$, give the assertion. Nonnegativity of the norm bound implies
+    $\delta\ge0$.
+\end{proof}
+
+\begin{theorem}[Information reset on a finite integer domain]
+    \label{thm:domain_information_reset}
+    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.information_reset}\leanok
+    \uses{def:domain_model}
+    Fix $q\ge1$, a natural range $R$, a real interaction bound $J$, a gap
+    $\Delta>0$ and an exponent $p>0$. There exist $C_p>0$ and a natural
+    $L_0\ge1$, depending only on these parameters, such that the following
+    holds for every finite integer domain $\Lambda$ with $L=|\Lambda|\ge L_0$.
+    Let $H$ be an admissible domain Hamiltonian and $\Omega$ a unit ground
+    vector with energy $E_0$ and full-system gap at least $\Delta$.
+    Let $D,C\subseteq\Lambda$ be disjoint, $R_0\subseteq D$, $C_0\subseteq C$,
+    and $b\in\mathbb R$ with $I_\Omega(D:C)\le b$. Put
+    $w=C_p(1+b+\log L)$. Suppose
+    \begin{align}
+        w & <d_\Lambda(x,y) &  & (x\in R_0,\ y\notin D),\notag \\
+        w & <d_\Lambda(x,y) &  & (x\in C_0,\ y\notin C),\notag
+    \end{align}
+    where $d_\Lambda$ is the intrinsic extended graph distance. Then
+    $I_\Omega(R_0:C_0)\le L^{-p}$.
+    Infinite distances satisfy either margin automatically; empty cores are
+    allowed. This extends the chain information-reset
+    lemma in \cite[Part~IIa]{TNLean2026OneDimensional}; see also
+    \cite{gap:tnlean_one_dimensional_connected_domain_scope}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:domain_supported_gaussian_integral,thm:peps_reset_regional_filter,
+        thm:peps_reset_polar_step,lem:qc_graph_ball_strict_margin,
+        thm:qc_graph_support_separation,thm:regional_reset_cores_entropy,
+        thm:peps_reset_entropy_scalar}
+    Set $r=2p+10$. Choose the filter constants $A,T_0>0$ and the domain
+    locality constants $C,v>0$, and put
+    \begin{align}
+        P                & =C(1+T_0),\notag                                \\
+        K_{\mathrm{loc}} & =4(vT_0+15+r+P),\notag                          \\
+        C_p              & =K_{\mathrm{loc}}+R+4,\notag                    \\
+        L_0              & =\max\{1,\lceil8\sqrt8(1+\log q)\rceil\}.\notag
+    \end{align}
+    Write $B_*=1+b+\log L$, $\varepsilon=e^{-10b}L^{-r}$ and
+    $\ell=\lceil K_{\mathrm{loc}}B_*\rceil$.
+    Nonnegativity of mutual information gives $b\ge0$ and $B_*\ge1$.
+    For $Q=\Lambda\setminus(D\cup C)$, put
+    $\Psi=\Omega\otimes\Omega$ and $\Phi=F_D\Psi$.
+    The regional filter theorem, applied directly to the original global gap,
+    constructs a contraction $W$ supported on $Q$ and a real $z\ge e^{-2b}$.
+    Its truncated Gaussian integral $M_0$, with variance $AB_*$ and cutoff
+    $T_0B_*$, has both residuals at most $3\varepsilon$:
+    \begin{align}
+        \|M_0\Psi-z\Phi\|   & \le3\varepsilon,\notag \\
+        \|M_0^*\Phi-z\Psi\| & \le3\varepsilon.\notag
+    \end{align}
+    Let $Z$ be the union of the original supports crossing $D$.
+    Domain Gaussian localization gives $M$ supported on
+    $S=N_\ell(Q\cup Z)$ with $\|M-M_0\|\le\varepsilon$.
+    Indeed, reserve one quarter of the exponential decay to absorb $P$,
+    using $\ell/4\ge P$ and $Pe^{-P}\le1$; the remaining decay absorbs the
+    polynomial prefactor as in the contiguous-chain estimate.
+    The two residuals for $M$ are at most $4\varepsilon$.
+    The same-support polar correction gives a unitary $U$ supported on $S$
+    with $\|U\Psi-\Phi\|\le8L^{-r}$.
+
+    The ceiling bound gives $\ell+R<w$. Each closed graph ball of radius
+    $\ell+R$ about a core site therefore lies in its outer region, by
+    Lemma~\ref{lem:qc_graph_ball_strict_margin}.
+    Every interaction support has intrinsic diameter at most $R$, so
+    Theorem~\ref{thm:qc_graph_support_separation} gives
+    $S\cap(R_0\cup C_0)=\varnothing$.
+    Apply Theorem~\ref{thm:regional_reset_cores_entropy} and then
+    Theorem~\ref{thm:peps_reset_entropy_scalar}. The choice of $L_0$ and
+    $r=2p+10$ bounds the resulting entropy error by $L^{-p}$.
+\end{proof}
+
 \begin{theorem}[Intrinsic neighborhoods of order intervals]
     \label{thm:domain_interval_neighborhood}
     \lean{TNLean.MPS.AreaLaw.domainNeighborhood_eq_interval_of_ordConnected,
@@ -2014,7 +2121,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:domain_interval_neighborhood,thm:chain_area_law,
-        lem:zero_entropy_flip,lem:chain_entropy_inequalities,def:domain_model}
+        lem:chain_entropy_inequalities,lem:zero_entropy_flip,def:domain_model}
     Submodularity and nonnegativity of reduced-state entropy give
     $S_\Omega(X\cup Y)\le S_\Omega(X)+S_\Omega(Y)$.
     Since $S_\Omega(\varnothing)=0$, finite subadditivity gives
@@ -2032,6 +2139,61 @@ for an arbitrary finite set of sites and are instantiated here directly.
     chain of increasing labels. Its operator and original ground vector
     are unchanged, so Theorem~\ref{thm:chain_area_law} supplies the interval
     entropy bound.
+\end{proof}
+
+\begin{theorem}[Information at logarithmic physical separation on a finite domain]
+    \label{thm:domain_logarithmic_separation}
+    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.mutualInformation_le_of_logarithmic_separation}
+    \leanok
+    \uses{def:domain_model,def:chain_model}
+    Fix $q\ge1$, a natural range $R$, a real interaction bound $J$, a gap
+    $\Delta>0$, an exponent $p>0$ and a natural $k_0\ge1$.
+    There exist $D_p>0$ and a natural $L_0\ge1$, depending only on these
+    parameters, with the following property. Let $\Lambda\subset\mathbb Z$
+    be finite with $L=|\Lambda|\ge L_0$, and let $H$ be an admissible
+    domain Hamiltonian with unit ground vector $\Omega$, energy $E_0$ and
+    full-system gap at least $\Delta$.
+    Suppose $T$ is a union of at most $k_0$ relative intervals in the
+    increasing order on $\Lambda$. If $E\subseteq\Lambda$ satisfies
+    $D_p\log L\le|x-y|$ for every $x\in T$ and $y\in E$, using the original
+    integer positions, then $I_\Omega(T:E)\le L^{-p}$.
+    The interval family may overlap or contain empty members.
+    This extends the chain logarithmic-separation lemma in
+    \cite[Part~IIa]{TNLean2026OneDimensional}; see also
+    \cite{gap:tnlean_one_dimensional_connected_domain_scope}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:domain_information_reset,thm:domain_interval_neighborhood_entropy,
+        lem:domain_site_norm_budget}
+    Put $c=\max\{0,C_{\mathrm{int}}\}$ and $b=4k_0c$, where
+    $C_{\mathrm{int}}$ is the interval entropy bound.
+    Choose $C_p,L_{\mathrm{reset}}$ from
+    Theorem~\ref{thm:domain_information_reset}, and take
+    \begin{align}
+        D_p & =3C_p(2+b)+4,\notag                               \\
+        L_0 & =\max\{L_{\mathrm{reset}},\lceil e\rceil\}.\notag
+    \end{align}
+    Write $w=C_p(1+b+\log L)$ and $n=\lceil w+1\rceil$.
+    Then $w+1\le n<w+2$ and $2n+w<3w+4\le D_p\log L$.
+    Use intrinsic natural-radius neighborhoods to define
+    $D=N_n(T)$ and $C=\Lambda\setminus N_{2n}(T)$.
+    We have $D\cap C=\varnothing$ and $T\subseteq D$.
+
+    Whenever $d_\Lambda(x,y)\le m<\infty$, a shortest walk gives
+    $|x-y|\le m$ in the original integer coordinates.
+    This comparison and physical separation give $E\subseteq C$.
+    If $x\in T$, $y\notin D$, and $d_\Lambda(x,y)=d<\infty$, then $d>n>w$.
+    If $e\in E$, $y\notin C$, and $d_\Lambda(e,y)=d<\infty$, choose
+    $x\in T$ with $d_\Lambda(x,y)\le2n$. The triangle inequality gives
+    $|x-e|\le2n+d$. Thus $d\le w$ would contradict
+    $2n+w<D_p\log L\le|x-e|$.
+    Both strict reset margins follow, including pairs at infinite distance.
+
+    The size threshold supplies a site, whose singleton interaction implies
+    $J\ge0$. Theorem~\ref{thm:domain_interval_neighborhood_entropy} gives
+    $S_\Omega(D)\le k_0c$, and hence
+    $I_\Omega(D:C)\le2S_\Omega(D)\le b$.
+    Applying Theorem~\ref{thm:domain_information_reset} proves the claim.
 \end{proof}
 
 \begin{theorem}[Connected components of an induced integer graph]
@@ -2702,6 +2864,32 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $d_0=d_L=1$. The converse is
     Theorem~\ref{thm:chain_mps_of_cut_rank}, which includes empty and
     one-site chains.
+\end{proof}
+
+\begin{theorem}[Reduced states at a chain cut]
+    \label{thm:chain_reduced_state_rank_error}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.rank_regionState_leftBlock_le,
+        TNLean.MPS.AreaLaw.rectangularTraceNorm_regionState_leftBlock_sub_le}
+    \leanok
+    For vectors $\psi,\phi$ on a finite chain, write
+    $\rho_k=\operatorname{Tr}_{k+1,\ldots,L}|\psi\rangle\langle\psi|$ and
+    $\sigma_k=\operatorname{Tr}_{k+1,\ldots,L}|\phi\rangle\langle\phi|$.
+    Then $\|\rho_k-\sigma_k\|_1\le
+        \bigl\||\psi\rangle\langle\psi|-|\phi\rangle\langle\phi|\bigr\|_1$.
+    If $\phi$ is an open-boundary MPS of bond dimension at most $D$,
+    then $\operatorname{rank}\sigma_k\le D$ at every internal cut.
+    Neither assertion requires normalized vectors. These are the partial-trace
+    and rank estimates used in the approximation lower bound
+    of~\cite{Schuch2008EntropyScaling}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_cut_rank_of_mps}
+    In cut coordinates the reduced state is $CC^\dagger$, where $C$ is
+    the coefficient matrix of $\phi$. Thus
+    $\operatorname{rank}\sigma_k=\operatorname{rank}C\le D$.
+    Reindexing configurations preserves the full trace norm, and partial
+    trace contracts it. Apply these two facts to
+    $|\psi\rangle\langle\psi|-|\phi\rangle\langle\phi|$.
 \end{proof}
 
 \begin{theorem}[Growth of chain cut ranks]

@@ -30,8 +30,8 @@ the ground energy.
 
 The blocks of one level act on disjoint sets of supersites, so the projections of the two halves
 of a block commute. As in `HierarchyLevels.lean`, that commutation is a hypothesis here;
-`mem_supportedOperators_hierarchy` and `disjoint_levelBlock_two_mul` derive it from the
-supersite grouping of lines 609–628.
+`commute_supersiteHierarchy` derives it from the supersite grouping of lines 609–628, and
+`SupersiteFinalState.lean` restates the results below without it.
 
 **Scope restriction (open chain):** the source's chain of supersites is periodic (lines 626–628).
 The tree of joining operators covers the `N - 1` links `(k, k+1)` of the open chain, and the
