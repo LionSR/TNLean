@@ -31,6 +31,16 @@ over the words,
 and `∑_U ∏_{C ∈ U} y^{n_C} ≤ exp(∑_C y^{n_C})` over the large connected sets `C`. This is the
 source's estimate of `∑_{m ≥ 1} ρ_m` by `∑_{m ≥ 1} (1/m!) (∑_C n y^{n_C})^m`.
 
+**Local fix (number of factors):** the source prints the final bound (lines 1342–1347) with
+`β/β₀` in the exponent, where its bound on `ρ_m` (lines 1334–1341) gives the number `n` of
+factors. For the source's `n`, the smallest even integer with `β/n ≤ β₀`, one has
+`β/β₀ ≤ n < β/β₀ + 2`, so the printed bound does not follow. The bound here has `n` and holds for
+every `n > 0`. Documented in `docs/paper-gaps/hastings05_temperature_factor_count.tex`.
+
+**Local fix (size threshold):** the percolation form takes the threshold `l` on the number of
+terms of a large connected set, not on its diameter. Documented in
+`docs/paper-gaps/hastings05_percolation_cluster_size.tex`.
+
 ## Main results
 
 * `TNLean.Lattice.ClusterExpansion.sum_prod_le_exp_of_subset_powerset`: for families of subsets
@@ -180,8 +190,9 @@ theorem norm_trace_mul_exp_sub_truncatedExp_pow_le {H : Matrix ι ι ℂ} (hHerm
 terms, let there be at most `N x^k` large connected sets of `k` terms, and let
 `0 < x y ≤ 1/2` with `y = (e^{Jβ/n} - 1) e^{SJβ/n}`. Then
 `|Tr (O (e^{-βH} - ρ(β/n, l)^n))| ≤ ‖O‖ (exp(n N e^{-l/ξ}) - 1) Tr e^{-βH}` with
-`ξ = 1 / ln(1/(xy))`. With `n` the number of factors, of order `β/β₀`, this is the source's
-`{exp[(β/β₀) N exp(-l/ξ_perc)] - 1} ‖O‖` after division by `Z = Tr e^{-βH}`. -/
+`ξ = 1 / ln(1/(xy))`. After division by `Z = Tr e^{-βH}`, this is the source's
+`{exp[(β/β₀) N exp(-l/ξ_perc)] - 1} ‖O‖` with the number `n` of factors in place of `β/β₀`
+(see the module docstring). -/
 theorem norm_trace_mul_exp_sub_truncatedExp_pow_le_percolation {H : Matrix ι ι ℂ}
     (hHerm : H.IsHermitian) {h : κ → Matrix ι ι ℂ} (hH : H = ∑ k, h k)
     (hh : ∀ k, (h k).IsHermitian) {J : ℝ} (hJ : ∀ k, ‖h k‖ ≤ J) (O : Matrix ι ι ℂ) {β : ℝ}

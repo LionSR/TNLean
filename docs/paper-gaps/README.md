@@ -1473,6 +1473,15 @@ avoiding `H_{B(C)}` has the sites of `H_C` as a cluster. On a chain with `H_i` a
 formalization uses the terms whose support meets the support of `H_C`; then `S` in equation
 `percb2` counts the sites within `2R` of a site.
 
+### Local solution of gapped Hamiltonians: the number of factors in the error bound
+
+[hastings05_temperature_factor_count.tex](hastings05_temperature_factor_count.tex)
+(local correction, resolved) records that Hastings' error bound at every temperature
+(arXiv:cond-mat/0508554v3, source lines 1342–1347) prints `β/β₀` in the exponent where the
+source's bound on `ρ_m` (lines 1334–1341) gives the number `n` of factors, the smallest even
+integer with `β/n ≤ β₀`. Since `β/β₀ ≤ n < β/β₀ + 2`, the printed bound does not follow. The
+formalization proves the bound with `n`, for every `n ≥ 1`.
+
 ### Local solution of gapped Hamiltonians: cluster size in the percolation bound
 
 [hastings05_percolation_cluster_size.tex](hastings05_percolation_cluster_size.tex)

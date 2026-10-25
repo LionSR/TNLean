@@ -14,7 +14,8 @@ $Z=\operatorname{tr}e^{-\beta H}$.
 
 \begin{theorem}[The error of the product of truncated factors]
     \label{thm:hastings_temperature_error}
-    \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_pow_le}
+    \lean{TNLean.Lattice.ClusterExpansion.sum_prod_le_exp_of_subset_powerset,
+        TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_pow_le}
     \leanok
     \uses{thm:hastings_truncation_inclusion_exclusion,
         thm:hastings_cluster_part_product, thm:hastings_percolation_exp}
@@ -32,8 +33,8 @@ $Z=\operatorname{tr}e^{-\beta H}$.
 \begin{proof}
     \leanok
     \uses{thm:hastings_truncation_inclusion_exclusion,
-        thm:hastings_cluster_part_product, thm:hastings_percolation_exp,
-        thm:hastings_clusters_meet}
+        thm:hastings_words_inclusion_exclusion, thm:hastings_cluster_part_product,
+        thm:hastings_percolation_exp, thm:hastings_clusters_meet}
     By Theorem~\ref{thm:hastings_truncation_inclusion_exclusion} at the inverse
     temperature $\beta/n$, each factor is $\sum_U(-1)^{|U|}\rho(\beta/n,U)$ over
     the admissible families $U$ of large connected sets, and the empty family
@@ -50,10 +51,12 @@ $Z=\operatorname{tr}e^{-\beta H}$.
     families are among the nonempty sets of large connected sets, so
     Theorem~\ref{thm:hastings_percolation_exp} gives
     $\sum_Uf(U)\le\exp(\sum_Cy^{n_C})$, and the $n$-th power of this is the
-    exponential in~(\ref{eq:hastings_temperature_error}). Grouping the sequences
-    by their total number $m$ of large clusters recovers the bound
-    $(1/m!)(n\sum_Cy^{n_C})^m$ on the operator $\rho_m$ of the source.
+    exponential in~(\ref{eq:hastings_temperature_error}).
 \end{proof}
+
+Grouping the sequences by their total number $m$ of large clusters recovers the
+bound $(1/m!)(n\sum_Cy^{n_C})^m$ on the operator $\rho_m$
+of~\cite[lines 1334--1341]{Hastings2006Solving}.
 
 \begin{theorem}[The error at every temperature, percolation form]
     \label{thm:hastings_temperature_error_percolation}
@@ -69,10 +72,17 @@ $Z=\operatorname{tr}e^{-\beta H}$.
         \bigl|\operatorname{tr}\bigl(O(e^{-\beta H}-\rho(\beta/n,l)^n)\bigr)\bigr|
         \le\|O\|\bigl(\exp(nNe^{-l/\xi})-1\bigr)Z.
     \end{align*}
-    With $n$ of order $\beta/\beta_0$, this is the bound
+    The source prints the bound
     $\{\exp[(\beta/\beta_0)Ne^{-l/\xi}]-1\}\|O\|$ on
     $Z^{-1}|\operatorname{tr}O\rho(\beta)-\operatorname{tr}O\rho(\beta,l)|$
-    of~\cite[lines 1342--1347]{Hastings2006Solving}.
+    \cite[lines 1342--1347]{Hastings2006Solving}, with $\beta/\beta_0$ in place of
+    the number $n$ of factors. Its $n$, the smallest even integer with
+    $\beta/n\le\beta_0$, satisfies $\beta/\beta_0\le n<\beta/\beta_0+2$, and its bound
+    on $\rho_m$ gives the exponent with $n$, which is the bound proved here
+    \cite{gap:hastings05_temperature_factor_count}. The threshold $l$ counts the
+    terms of a large connected set rather than its diameter, as in
+    Theorem~\ref{thm:hastings_percolation}
+    \cite{gap:hastings05_percolation_cluster_size}.
 \end{theorem}
 
 \begin{proof}
