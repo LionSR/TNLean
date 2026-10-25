@@ -40,8 +40,6 @@ is supplied.
 
 * `TNLean.MPS.AreaLaw.Hastings.l2_opNorm_schmidtDiagonal_le_one`: it is a contraction when
   `ψ` is orthonormal and `|O α| ≤ 1`.
-* `TNLean.MPS.AreaLaw.Hastings.commute_reindex_one_kronecker_of_isSupportedOn`: an operator
-  supported inside a region commutes with every operator acting on its complement only.
 * `TNLean.MPS.AreaLaw.Hastings.norm_inner_mul_sub_le_of_factorization`: the stage form of
   Hastings' Lemma 3 on the chain.
 
@@ -99,45 +97,6 @@ theorem l2_opNorm_schmidtDiagonal_le_one {O : κ → ℂ} (hO : ∀ α, ‖O α�
   exact (pow_le_pow_iff_left₀ (norm_nonneg _) (norm_nonneg _) two_ne_zero).mp hsq
 
 end Diagonal
-
-section Cut
-
-variable {V : Type*} [Fintype V] [DecidableEq V] {n : V → ℕ}
-
-/-- An operator supported inside `B` commutes with every operator that acts, in the cut
-coordinates of `B`, as the identity on `B` tensored with a matrix on the complement. -/
-theorem commute_reindex_one_kronecker_of_isSupportedOn
-    {X : Matrix (Entropy.SiteConfig n) (Entropy.SiteConfig n) ℂ} {D B : Finset V}
-    (hX : Entropy.IsSupportedOn X D) (hDB : D ⊆ B) (σ₀ : Entropy.SiteConfig n)
-    (K : Matrix ((v : {v // v ∉ B}) → Fin (n v)) ((v : {v // v ∉ B}) → Fin (n v)) ℂ) :
-    Commute X (reindex (Entropy.cutEquiv n B).symm (Entropy.cutEquiv n B).symm
-      ((1 : Matrix _ _ ℂ) ⊗ₖ K)) := by
-  set e := Entropy.cutEquiv n B
-  have hXe : X = reindex e.symm e.symm (Entropy.cutOperator B X) := by
-    simp [Entropy.cutOperator, e]
-  rw [hXe, hX.cutOperator_eq_kronecker_one hDB (e σ₀).2]
-  have hc (M : Matrix ((v : {v // v ∈ B}) → Fin (n v)) ((v : {v // v ∈ B}) → Fin (n v)) ℂ) :
-      Commute (M ⊗ₖ (1 : Matrix _ _ ℂ)) ((1 : Matrix _ _ ℂ) ⊗ₖ K) :=
-    Entropy.kronecker_one_mul_one_kronecker_comm M K
-  exact (hc _).map (reindexAlgEquiv ℂ ℂ e.symm)
-
-/-- In cut coordinates, an operator `reindex M` acts on `Ω` as `M` acts on the cut vector. -/
-theorem toEuclideanCLM_reindex_cutEquiv_symm (B : Finset V)
-    (M : Matrix (((v : {v // v ∈ B}) → Fin (n v)) × ((v : {v // v ∉ B}) → Fin (n v)))
-      (((v : {v // v ∈ B}) → Fin (n v)) × ((v : {v // v ∉ B}) → Fin (n v))) ℂ)
-    (Ω : EuclideanSpace ℂ (Entropy.SiteConfig n)) :
-    toEuclideanCLM (𝕜 := ℂ) (reindex (Entropy.cutEquiv n B).symm (Entropy.cutEquiv n B).symm M)
-        Ω = WithLp.toLp 2 ((M *ᵥ WithLp.ofLp (Entropy.cutVector B Ω)) ∘ Entropy.cutEquiv n B) := by
-  set e := Entropy.cutEquiv n B
-  have hΩ : WithLp.ofLp Ω = WithLp.ofLp (Entropy.cutVector B Ω) ∘ e := by
-    ext σ
-    change WithLp.ofLp Ω σ = WithLp.ofLp Ω (e.symm (e σ))
-    rw [Equiv.symm_apply_apply]
-  ext σ
-  rw [ofLp_toEuclideanCLM, reindex_apply, Equiv.symm_symm, hΩ, submatrix_mulVec_equiv,
-    Function.comp_assoc, Equiv.self_comp_symm, Function.comp_id]
-
-end Cut
 
 section Chain
 
@@ -211,7 +170,7 @@ theorem norm_inner_mul_sub_le_of_factorization {j l : ℕ}
       (schmidtDiagonal O ψL)) :=
     Entropy.commute_of_isSupportedOn_disjoint hsR (Entropy.isSupportedOn_localLift _)
       hSR.symm σ₀
-  have hBRL := (commute_reindex_one_kronecker_of_isSupportedOn hsL hSL σ₀
+  have hBRL := (Entropy.commute_reindex_one_kronecker_of_isSupportedOn hsL hSL σ₀
     (schmidtDiagonal O ψR)).symm
   have hLR : Commute OL OR :=
     Entropy.commute_of_isSupportedOn_disjoint hsL hsR
@@ -228,8 +187,8 @@ theorem norm_inner_mul_sub_le_of_factorization {j l : ℕ}
       (schmidtDiagonal O ψL)) Ω = T (reindex (Entropy.cutEquiv (fun _ : Fin L ↦ q)
         (leftBlock L j)).symm (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L j)).symm
       ((1 : Matrix _ _ ℂ) ⊗ₖ schmidtDiagonal O ψR)) Ω := by
-    rw [Entropy.localLift, toEuclideanCLM_reindex_cutEquiv_symm,
-      toEuclideanCLM_reindex_cutEquiv_symm, hdec]
+    rw [Entropy.localLift, Entropy.toEuclideanCLM_reindex_cutEquiv_symm,
+      Entropy.toEuclideanCLM_reindex_cutEquiv_symm, hdec]
     exact congrArg (fun f ↦ WithLp.toLp 2 (f ∘ Entropy.cutEquiv _ _))
       (kronecker_one_mulVec_schmidt_eq_one_kronecker_mulVec a O
         (fun α ↦ WithLp.ofLp (ψL α)) (fun α ↦ WithLp.ofLp (ψR α)) hL hR)
