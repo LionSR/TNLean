@@ -56,6 +56,20 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** The restricted measure is not renormalized. Zero variance, zero cutoff and the empty site set are retained. The bound is `‖W‖ (εobs + T εgen)`, without an additional factor of two. The two caller files lose 146 lines in total.
 
 
+### Hermitian partial sums of terms Hermitian on a set — promoted (2026-10-25)
+
+- **Pattern:** `Matrix.isHermitian_sum T fun i hi ↦ hh i (hT hi)` for `hT : T ⊆ S`.
+- **Seen:** Four occurrences on main across two files: three in
+  `TNLean/Lattice/ClusterExpansion/ClusterPart.lean` and one in
+  `TNLean/Lattice/ClusterExpansion/ThermalProduct.lean`.
+- **Abstraction:** `Matrix.isHermitian_sum_of_subset` in
+  `TNLean/Algebra/MatrixHermitianSum.lean`; all four occurrences use the theorem.
+- **Notes:** Retains the additive/star assumptions of `Matrix.isHermitian_sum`;
+  no finiteness assumption on the matrix index type is needed. The source line count
+  at these call sites is unchanged. Issue #10156 also identifies a fifth occurrence
+  in the pending `TruncatedPositivity.lean` contribution #10155; that branch is not
+  changed here and its call site remains to be updated after integration.
+
 ### Hermitian sum of pointwise-Hermitian terms — promoted (2026-10-23)
 - **Pattern:**
   ```lean
