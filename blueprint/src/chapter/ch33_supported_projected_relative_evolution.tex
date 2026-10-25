@@ -43,3 +43,61 @@
     $B$, and the commutant characterization of the supported-operator algebra
     concludes that $U(t)$ acts on $K$ for every real time $t$.
 \end{proof}
+
+
+\begin{theorem}[Supported Gaussian averaging from projection estimates]
+    \label{thm:qc_supported_gaussian_projection_bounds}
+    \lean{QuantumCircuit.exists_supported_gaussian_integral_of_projection_bounds}\leanok
+    \uses{def:qc_site_expectation}
+    Let $I$ be a finite site set, let $q\ge1$ be an integer, and let $H',H$
+    be Hermitian operators on $(\C^q)^{\otimes I}$.
+    Put $D=H'-H$ and $\tau_t(A)=e^{itH'}Ae^{-itH'}$.
+    Fix $B_g\subseteq I$. There is a differentiable unitary path $U$, supported
+    on $B_g$ at every real time, satisfying
+    \begin{align}
+        U(0)  & =1,\notag                       \\
+        U'(t) & =iE_{B_g}(\tau_t(D))U(t).\notag
+    \end{align}
+    The path is chosen before the following data: regions $B_o,B$ with
+    $B_o,B_g\subseteq B$, an operator $W$, a variance $\eta\ge0$, a cutoff
+    $T\ge0$, and nonnegative numbers $\varepsilon_o,\varepsilon_g$.
+    Suppose that for $|t|\le T$,
+    \begin{align}
+        \|\tau_t(W)-E_{B_o}(\tau_t(W))\| & \le\|W\|\varepsilon_o,\notag \\
+        \|\tau_t(D)-E_{B_g}(\tau_t(D))\| & \le\varepsilon_g.\notag
+    \end{align}
+    For the centered Gaussian measure $\gamma_\eta$ of variance $\eta$, put
+    \begin{align}
+        M            & =\int_{[-T,T]}E_{B_o}(\tau_t(W))U(t)\,d\gamma_\eta(t),\notag \\
+        \widetilde M & =\int_{[-T,T]}e^{itH'}We^{-itH}\,d\gamma_\eta(t).\notag
+    \end{align}
+    Then $M$ acts on $B$, and
+    \begin{align}
+        \|M\|              & \le\|W\|,\notag                         \\
+        \|M-\widetilde M\| & \le\|W\|(\varepsilon_o+T\varepsilon_g).
+        \label{eq:qc_gaussian_projection_error}
+    \end{align}
+    This is the averaging argument used in the information-reset proofs
+    of~\cite{OpenAI2026PolynomialPEPS,TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:qc_supported_projected_relative_evolution,
+        lem:qc_site_expectation_properties}
+    The projected relative-evolution theorem constructs $U$ from $H',H,B_g$.
+    Its comparison bound gives
+    $\|e^{itH'}e^{-itH}-U(t)\|\le\varepsilon_g|t|$ for $|t|\le T$.
+    The identity
+    $\tau_t(W)e^{itH'}e^{-itH}=e^{itH'}We^{-itH}$, unitarity and the two
+    projection estimates therefore give
+    \begin{align}
+        \|E_{B_o}(\tau_t(W))U(t)-e^{itH'}We^{-itH}\|
+         & \le\|W\|(\varepsilon_o+|t|\varepsilon_g)\notag \\
+         & \le\|W\|(\varepsilon_o+T\varepsilon_g).\notag
+    \end{align}
+    Each localized integrand acts on $B$ and has norm at most $\|W\|$.
+    Continuity and this bound imply Gaussian integrability. The expectation
+    onto $B$ commutes with integration and fixes the integrand, proving
+    support of $M$. Integrate the norm and error bounds and use
+    $\gamma_\eta([-T,T])\le1$ to obtain
+    (\ref{eq:qc_gaussian_projection_error}). This also includes $\eta=0$ and $T=0$.
+\end{proof}
