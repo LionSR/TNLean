@@ -4903,6 +4903,15 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Regional expectation compared with a supported approximant — candidate (2026-10-21)
+
+- **Pattern:** For a contractive regional expectation fixing a supported approximant, rewrite the projection error as the difference between the approximation error and its expectation.
+- **Defined in:** `Circuit/SiteExpectation.lean`, `QuantumCircuit.norm_sub_siteExpectation_le_two_mul_norm_sub_of_mem_supportedOperators`.
+- **Use when:** An approximant is supported on the output region; the error of projecting the original operator is at most twice its distance to that approximant.
+- **Refactored occurrences:** The chain relative-generator proof and the finite-domain relative-generator proof use this same inequality. The finite-family bounds use the existing `map_sum` and `norm_sum_le` lemmas.
+- **Notes:** No state, Hermiticity or nonempty-region assumption is required.
+- **Status:** Two occurrences in two files; the shared lemma is kept, and the entry is promoted when a third consumer lands.
+
 ### Infimum over walk lengths under graph maps — candidate (2026-10-21)
 
 - **Pattern:** Rewrite extended graph distance as the infimum of walk lengths,
