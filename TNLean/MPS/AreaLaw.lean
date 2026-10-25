@@ -38,7 +38,6 @@ import TNLean.MPS.AreaLaw.EntropyScaling
 import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.Hastings
 import TNLean.MPS.AreaLaw.InformationReset
-import TNLean.MPS.AreaLaw.IntegerComponents
 import TNLean.MPS.AreaLaw.InteractionBudget
 import TNLean.MPS.AreaLaw.IntervalNeighborhoodEntropy
 import TNLean.MPS.AreaLaw.IntervalSlice
