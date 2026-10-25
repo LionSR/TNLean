@@ -1700,6 +1700,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
         TNLean.MPS.AreaLaw.IsDomainSupport.subset_or_disjoint_of_gap,
         TNLean.MPS.AreaLaw.DomainHamiltonian,
         TNLean.MPS.AreaLaw.DomainHamiltonian.operator,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.operator_isHermitian,
         TNLean.MPS.AreaLaw.DomainHamiltonian.toChain,
         TNLean.MPS.AreaLaw.DomainHamiltonian.toChain_operator,
         TNLean.MPS.AreaLaw.domainBoundaryEdges,
@@ -1721,7 +1722,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $\Lambda$ a Hermitian term $h_X$ acting as the identity off $X$ with
     operator norm at most $J$, zero terms allowed; with zero terms on the
     remaining supports of the chain it is a finite-range Hamiltonian on the
-    chain with the same sum. The \emph{edge boundary} $\partial_\Lambda A$ of a
+    chain with the same Hermitian sum. The \emph{edge boundary} $\partial_\Lambda A$ of a
     set $A\subseteq\mathbb Z$ is the set of edges $\{x,x+1\}\subseteq\Lambda$
     with exactly one endpoint in $A$; these edges correspond to the boundary
     edges, on the chain, of the sites in $A$ that join sites at consecutive
@@ -1893,6 +1894,68 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Linearity of evolution and expectation permits summing over the exact
     crossing decomposition. The bound
     $2|\mathcal C_D|\le N_R|\Lambda|$ finishes the estimate.
+\end{proof}
+
+\begin{theorem}[Supported Gaussian averaging on a finite integer domain]
+    \label{thm:domain_supported_gaussian_integral}
+    \lean{TNLean.MPS.AreaLaw.exists_supported_gaussian_integral_domain}\leanok
+    \uses{def:domain_doubled_swapped_hamiltonian,def:qc_site_expectation}
+    For every range $R$ and real interaction bound $J$ there are constants
+    $C,v>0$ with the following property. Let $q\ge1$, let $H$ be an admissible
+    Hamiltonian on a finite integer domain $\Lambda$, let $D\subseteq V$, and
+    let $m\in\mathbb N$. Put $K=\widehat H$, $K'=\widehat H'$ and
+    $Z=\bigcup_{X\in\mathcal C_D}X$. Write $N_m$ for the intrinsic graph
+    neighborhood of radius $m$.
+
+    There is a differentiable path $U:\mathbb R\to M_{q^{2|\Lambda|}}(\mathbb C)$
+    of unitary matrices, supported on $N_m(Z)$ at every real time, satisfying
+    \begin{align}
+        U(0)      & =\mathbb 1,\notag                                          \\
+        \dot U(t) & =iE_{N_m(Z)}\bigl(e^{itK'}(K'-K)e^{-itK'}\bigr)U(t).\notag
+    \end{align}
+    The same path works for every set $Q\subseteq V$, operator $W$ supported
+    on $Q$, variance $\eta\ge0$ and cutoff $T\ge0$. For the centered Gaussian
+    probability measure $\gamma_\eta$, define
+    \begin{align}
+        M   & =\int_{[-T,T]}E_{N_m(Q)}(e^{itK'}We^{-itK'})U(t)\,d\gamma_\eta(t),\notag \\
+        M_0 & =\int_{[-T,T]}e^{itK'}We^{-itK}\,d\gamma_\eta(t).\notag
+    \end{align}
+    Then $M$ is supported on $N_m(Q\cup Z)$, has $\|M\|\le\|W\|$, and
+    \begin{align}
+        \|M-M_0\| & \le\|W\|C|\Lambda|^2(1+T)e^{vT-m/2}.\notag
+    \end{align}
+    This includes empty domains, zero variance and zero cutoff.
+    It is the supported averaging step in
+    \cite[Part~IIa]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:domain_doubled_swapped_hamiltonian,
+        thm:qc_supported_gaussian_projection_bounds,
+        thm:domain_relative_generator_localization,thm:domain_lieb_robinson_localization,
+        lem:domain_site_norm_budget}
+    Use the constants $a,v$ from the domain generator estimate and put
+    $d=4|J|a(R+1)^2N_R$, $C=a+d$. The actual doubled and swapped operators
+    are Hermitian because their terms are Hermitian.
+    Theorem~\ref{thm:qc_supported_gaussian_projection_bounds} constructs $U$
+    before the observable and averaging data.
+    Put
+    \begin{align*}
+        \varepsilon_g=d|\Lambda|e^{vT-m/2}, \\
+        \varepsilon_o=a|\Lambda|^2e^{vT-m/2}.
+    \end{align*}
+    On $|t|\le T$, the observable projection error is at most
+    $\|W\|\varepsilon_o$ and the generator projection error is at most
+    $\varepsilon_g$. Both projection regions lie in $N_m(Q\cup Z)$.
+    The common averaging theorem gives support, contraction and
+    \begin{align*}
+        \|M-M_0\|\le\|W\|(\varepsilon_o+T\varepsilon_g).
+    \end{align*}
+    Since $|\Lambda|\le|\Lambda|^2$ for every finite domain and $a,d,T\ge0$,
+    \begin{align*}
+        a|\Lambda|^2+d|\Lambda|T\le(a+d)|\Lambda|^2(1+T).
+    \end{align*}
+    This proves the stated estimate with $C=a+d$.
+    The restricted Gaussian measure is not renormalized.
 \end{proof}
 
 \begin{theorem}[Intrinsic neighborhoods of order intervals]

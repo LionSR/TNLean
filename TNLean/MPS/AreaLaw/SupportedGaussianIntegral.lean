@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.RelativeGeneratorLocalization
 import TNLean.Circuit.SupportedGaussianIntegral
+import TNLean.Algebra.ExpMulSubMonotone
 
 /-!
 # Supported Gaussian averaging on a contiguous chain
@@ -95,7 +96,7 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
           d * (L : ℝ) * Real.exp (v * T - ℓ / 2) :=
     (h.norm_relativeGenerator_sub_siteExpectation_le D hq ℓ hℓ s).trans
       (mul_le_mul_of_nonneg_left
-        (Real.exp_le_exp.mpr (sub_le_sub_right (mul_le_mul_of_nonneg_left hs hv.le) _))
+        (Real.exp_mul_sub_le_exp_mul_sub hv.le hs)
         (mul_nonneg hd (Nat.cast_nonneg _)))
   have hnear (t : ℝ) (ht : |t| ≤ T) :
       ‖heisenbergEvolution K' t W -
@@ -114,7 +115,7 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
       _ ≤ a * (Q.card : ℝ) ^ 2 * ‖W‖ * Real.exp (v * |t| - ℓ / 2) := hloc
       _ ≤ a * (Q.card : ℝ) ^ 2 * ‖W‖ * Real.exp (v * T - ℓ / 2) :=
         mul_le_mul_of_nonneg_left
-          (Real.exp_le_exp.mpr (sub_le_sub_right (mul_le_mul_of_nonneg_left ht hv.le) _))
+          (Real.exp_mul_sub_le_exp_mul_sub hv.le ht)
           (by positivity)
       _ ≤ a * (L : ℝ) ^ 2 * ‖W‖ * Real.exp (v * T - ℓ / 2) := by
         apply mul_le_mul_of_nonneg_right _ (Real.exp_pos _).le
