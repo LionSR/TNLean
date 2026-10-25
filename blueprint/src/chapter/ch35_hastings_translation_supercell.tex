@@ -176,56 +176,62 @@ For a character this reads $\chi(g)^q=1$.
     distance of $a$ from $0$ is $\min(a,n-a)$.
 \end{definition}
 
-\begin{theorem}[Distance on a ring]
+For the geometry, let $\pi(v)\in\mathbb{Z}/n$ be the coordinate of the unit
+cell of the site $v$ along one direction of the lattice, which has $n$ cells
+in that direction, and let $e\in G$ be the translation by one cell in that
+direction, so $\pi(e\cdot v)=\pi(v)+1$. Suppose every edge of the graph joins
+sites whose cell coordinates differ by at most one. On the ring of $n$ sites
+with its rotations, $\pi$ is the identity.
+
+\begin{theorem}[Distance and cell coordinates]
     \label{thm:ring_circular_distance_le}
-    \lean{SimpleGraph.ringNorm_sub_le_edist_cycleGraph}
+    \lean{SimpleGraph.ringNorm_sub_le_edist}
     \leanok
     \uses{def:ring_circular_distance}
-    On the ring of $n$ sites the graph distance from $x$ to $y$ is at least the
-    circular distance of $y-x$.
+    The graph distance from $x$ to $y$ is at least the circular distance of
+    $\pi(y)-\pi(x)$.
 \end{theorem}
 \begin{proof}\leanok
-    Along an edge the circular distance to $x$ changes by at most one, so along
-    a walk from $x$ to $y$ it grows by at most the length of the walk.
+    Along an edge the circular distance to $\pi(x)$ changes by at most one, so
+    along a walk from $x$ to $y$ it grows by at most the length of the walk.
 \end{proof}
 
-\begin{theorem}[Rotations by multiples of $q$ reach far]
+\begin{theorem}[Multiples of $q$ reach far]
     \label{thm:ring_rotation_far}
-    \lean{SimpleGraph.exists_lt_edist_add_cycleGraph}
+    \lean{SimpleGraph.exists_lt_ringNorm_add}
     \leanok
-    \uses{thm:ring_circular_distance_le}
-    On the ring of $n$ sites, for $q\ge1$ and sites $x$, $y$ there is $t\ge0$
-    such that the rotation by $qt$ carries $y$ to graph distance more than
-    $\lfloor n/2\rfloor-q$ from $x$.
+    \uses{def:ring_circular_distance}
+    For $q\ge1$ and $a,b\in\mathbb{Z}/n$ there is $t\ge0$ such that $b+qt-a$
+    has circular distance more than $\lfloor n/2\rfloor-q$.
 \end{theorem}
 \begin{proof}\leanok
-    The points $y+qt-x$ for $t\ge0$ meet every arc of $q$ consecutive residues.
-    Choose $t$ with $y+qt-x$ among the $q$ residues ending at $\lfloor n/2\rfloor$;
-    its circular distance exceeds $\lfloor n/2\rfloor-q$.
+    The residues $b+qt-a$ for $t\ge0$ meet every arc of $q$ consecutive
+    residues. Choose $t$ with $b+qt-a$ among the $q$ residues ending at
+    $\lfloor n/2\rfloor$.
 \end{proof}
 
 \begin{theorem}[A supercell translation carries a site far away]
     \label{thm:hastings_supercell_far}
-    \lean{TNLean.Lattice.exists_mem_supercell_lt_edist_add}
+    \lean{TNLean.Lattice.exists_mem_supercell_lt_edist_add,
+        TNLean.Lattice.exists_mem_supercell_lt_edist_add_ring}
     \leanok
-    \uses{thm:hastings_supercell_pow,thm:ring_rotation_far}
-    Let $G=\mathbb{Z}/n$ act on the ring of $n$ sites by rotation, let $H$ be
-    invariant, and let $\chi(g)^q=1$ for every $g$ and every character $\chi$ with
-    a nonzero momentum sector, where $q\ge1$. For sites $x$, $y$ some $g$ in the
-    supercell carries $y$ to graph distance more than $\lfloor n/2\rfloor-q$ from
-    $x$. This is the choice of $\vec x'$ in
-    \cite[lines 1634--1641]{Hastings2006Solving} restricted to a ring, a
-    one-dimensional lattice; the source's $d$-dimensional case is not
-    formalized \cite{gap:hastings05_translation_supercell}.
+    \uses{thm:hastings_supercell_pow,thm:ring_circular_distance_le,
+        thm:ring_rotation_far}
+    Let $G$ be abelian, let $H$ be invariant, let $\pi$ and $e$ be as above, and
+    let $\chi(g)^q=1$ for every $g$ and every character $\chi$ with a nonzero
+    momentum sector, where $q\ge1$. For sites $x$, $y$ some $g$ in the supercell
+    carries $y$ to graph distance more than $\lfloor n/2\rfloor-q$ from $x$. This
+    is the choice of $\vec x'$ in \cite[lines 1634--1641]{Hastings2006Solving}.
 \end{theorem}
 \begin{proof}\leanok
-    Take $g=(qt)$ with $t$ from Theorem~\ref{thm:ring_rotation_far}; it is the
-    $q$-th power of $t$, so it lies in the supercell by
-    Theorem~\ref{thm:hastings_supercell_pow}.
+    Take $t$ from Theorem~\ref{thm:ring_rotation_far} for $a=\pi(x)$ and
+    $b=\pi(y)$, and $g=(e^t)^q$, which lies in the supercell by
+    Theorem~\ref{thm:hastings_supercell_pow}. Then $\pi(g\cdot y)=\pi(y)+qt$, and
+    Theorem~\ref{thm:ring_circular_distance_le} bounds the distance.
 \end{proof}
 
 Choosing $g\in S$ that carries $X_j$ to distance of order the linear size of
-the system from $X_i$ gives the source's conclusion; on a ring,
+the system from $X_i$ gives the source's conclusion;
 Theorem~\ref{thm:hastings_supercell_far} provides such a $g$. At line
 1638 the source writes the first site as $(\vec x_1,y_2)$ where
 $(\vec x_1,y_1)$ is meant \cite{gap:hastings05_translation_supercell}.

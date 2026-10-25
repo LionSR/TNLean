@@ -52,8 +52,7 @@ applies at $(i,j)$. For an abelian group the subgroup is then constructed from
 the momenta, as in the first step of the elimination plan below. The geometric
 statement that some $g\in S$ moves $j$ to a distance of order the linear size
 from $i$, which is where the source uses the rational momenta, is formalized
-for a ring of sites, the one-dimensional case, and not for higher-dimensional
-lattices.
+as well, as described below.
 
 \section{Elimination plan}
 For an abelian group $G$, such as the translations of a finite torus, the
@@ -70,15 +69,19 @@ space.\footnote{\leanid{TNLean.Lattice.iSup_momentumSector},
     \doclink{TNLean/Lattice/TranslationMomentum}.}
 The size-independent denominators of lines 1620--1625 are what make the
 cosets of this $S$ boundedly spaced, which gives the geometric statement
-above. For a ring of $n$ sites this second step is formalized: if
-$\chi(g)^q=1$ for every character with a nonzero sector, then every $q$-th
-power lies in $S$, and some rotation by a multiple of $q$ carries any site to
-distance more than $\lfloor n/2\rfloor-q$ from any other.\footnote{\leanid{TNLean.Lattice.pow_mem_supercell},
-    \leanid{SimpleGraph.exists_lt_edist_add_cycleGraph} and
-    \leanid{TNLean.Lattice.exists_mem_supercell_lt_edist_add} in
+above. This second step is formalized for a lattice with $n$ cells along
+one direction, through the cell coordinate $\pi$ along that direction and the
+unit translation $e$ in it, for a graph whose edges join cells at distance at
+most one: if $\chi(g)^q=1$ for every character with a nonzero sector, then
+every $q$-th power lies in $S$, and some translation $(e^t)^q$ carries any site
+to graph distance more than $\lfloor n/2\rfloor-q$ from any
+other.\footnote{\leanid{TNLean.Lattice.pow_mem_supercell},
+    \leanid{SimpleGraph.ringNorm_sub_le_edist},
+    \leanid{TNLean.Lattice.exists_mem_supercell_lt_edist_add} and its ring case
+    \leanid{TNLean.Lattice.exists_mem_supercell_lt_edist_add_ring} in
     \doclink{TNLean/Lattice/TranslationSupercellSpacing}.}
-The same argument on each coordinate of a $d$-dimensional torus would remove
-the restriction there.
+What remains is to state the composite bound, that the low-energy commutator
+is exponentially small in $n$, as one theorem.
 
 \section{A slip}
 At line 1638 the source writes the distance ``between $(\vec x_1,y_2)$ and

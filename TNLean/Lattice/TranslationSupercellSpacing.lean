@@ -11,34 +11,36 @@ import TNLean.Lattice.TranslationMomentum
 # Supercell translations that carry a site far away
 
 Hastings, *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, `proj3new.tex`,
-lines 1620–1641), assumes that every momentum of a ground state is a rational multiple
-`2πp/q` of `2π` whose denominator does not depend on the system size. Then translation by a
-supercell of bounded size leaves every ground state unchanged, and such a translation can carry
-any site to a distance of order the linear size of the system from any other site.
+lines 1603–1641), treats a translationally invariant system on a `d`-dimensional lattice, with
+sites `(x, y)` for a unit cell `x` and a site `y` within it. He assumes that every momentum of a
+ground state has components that are rational multiples `2πp/q` of `2π` with denominators that do
+not depend on the system size. Then translation by a supercell, whose side in each direction is
+the least common multiple of the denominators, leaves every ground state unchanged, and such a
+translation can carry any site to a distance of order the linear size of the system from any
+other site.
 
-For a character this hypothesis reads `χ(g)^q = 1`. If it holds for every character with a
-nonzero momentum sector, then every `q`-th power lies in the supercell
-(`pow_mem_supercell`). On a ring of `n` sites, the rotations by multiples of `q` carry any site
-`y` to distance more than `n / 2 - q` from any site `x` (`exists_lt_edist_add_cycleGraph`). So
-some element of the supercell does this (`exists_mem_supercell_lt_edist_add`).
-
-**Scope restriction (ring):** the source's system is a `d`-dimensional lattice (lines 1603–1612).
-The geometric step here, that some supercell translation carries a site to distance of order the
-linear size (`exists_lt_edist_add_cycleGraph`, `exists_mem_supercell_lt_edist_add`), is proved
-for the rotations of a ring of sites, the one-dimensional case; `pow_mem_supercell` holds for any
-abelian group. Documented in `docs/paper-gaps/hastings05_translation_supercell.tex`.
+For a character this hypothesis reads `χ(g)^q = 1`, with `q` the common multiple of the
+denominators. If it holds for every character with a nonzero momentum sector, then every `q`-th
+power lies in the supercell (`pow_mem_supercell`). For the geometry, let `π : V → ℤ/n` be the
+coordinate of the unit cell along one lattice direction, with `n` cells in that direction, such
+that every edge of the graph joins cells whose coordinates differ by at most one, and let `e` be
+the unit translation in that direction. Then the graph distance is at least the circular distance
+`min(a, n - a)` of the coordinate difference `a`, and the translations `e^{qt}` carry any site
+to distance more than `n / 2 - q` from any other (`exists_mem_supercell_lt_edist_add`). The ring
+of `n` sites with its rotations is the case `π = id` (`exists_mem_supercell_lt_edist_add_ring`).
 
 ## Main results
 
 * `TNLean.Lattice.pow_mem_supercell`: with momenta of denominator `q`, every `q`-th power lies in
   the supercell.
-* `SimpleGraph.ringNorm_sub_le_edist_cycleGraph`: the graph distance on the ring is at least the
-  circular distance `min(a, n - a)` of the displacement `a`.
-* `SimpleGraph.exists_lt_edist_add_cycleGraph`: some rotation by a multiple of `q` carries `y` to
-  distance more than `n / 2 - q` from `x`.
-* `TNLean.Lattice.exists_mem_supercell_lt_edist_add`: for the rotations of a ring with momenta of
-  denominator `q`, some element of the supercell carries `y` to distance more than `n / 2 - q`
-  from `x`.
+* `SimpleGraph.ringNorm_sub_le_edist`: the graph distance is at least the circular distance of
+  the cell coordinates.
+* `SimpleGraph.exists_lt_ringNorm_add`: some multiple of `q` added to a cell coordinate puts it
+  at circular distance more than `n / 2 - q` from any other.
+* `TNLean.Lattice.exists_mem_supercell_lt_edist_add`: with momenta of denominator `q`, some
+  element of the supercell carries any site to graph distance more than `n / 2 - q` from any
+  other.
+* `TNLean.Lattice.exists_mem_supercell_lt_edist_add_ring`: the same for the rotations of a ring.
 -/
 
 open Matrix
@@ -73,68 +75,103 @@ theorem ringNorm_le_add_one_add_one {n : ℕ} [NeZero n] (a : Fin n) :
 private theorem eq_one_of_val_eq_one {n : ℕ} [NeZero n] {a : Fin n} (h : a.val = 1) : a = 1 :=
   Fin.ext (by rw [h, Fin.val_one', Nat.mod_eq_of_lt (by have := a.isLt; omega)])
 
-/-- Along an edge of the ring the circular distance to a fixed site changes by at most one. -/
-theorem ringNorm_sub_le_of_adj {n : ℕ} [NeZero n] {u v : Fin n} (huv : (cycleGraph n).Adj u v)
-    (x : Fin n) : ringNorm (v - x) ≤ ringNorm (u - x) + 1 := by
-  rcases cycleGraph_adj'.mp huv with h | h
-  · have hu : u - x = (v - x) + 1 := by rw [← eq_one_of_val_eq_one h]; abel
-    rw [hu]; exact ringNorm_le_add_one_add_one _
-  · have hv : v - x = (u - x) + 1 := by rw [← eq_one_of_val_eq_one h]; abel
-    rw [hv]; exact ringNorm_add_one_le _
+/-- A coordinate step of circular size at most one is `0`, `1` or `-1`. -/
+private theorem eq_zero_or_eq_one_or_add_one_eq_zero {n : ℕ} [NeZero n] {a : Fin n}
+    (ha : ringNorm a ≤ 1) : a = 0 ∨ a = 1 ∨ a + 1 = 0 := by
+  have hn := NeZero.pos n
+  have hlt := a.isLt
+  rcases Nat.lt_or_ge a.val 2 with h | h
+  · rcases Nat.lt_succ_iff.mp h |>.lt_or_eq with h | h
+    · exact Or.inl (Fin.ext (by rw [Fin.val_zero]; omega))
+    · exact Or.inr (Or.inl (eq_one_of_val_eq_one h))
+  · have : a.val = n - 1 := by simp only [ringNorm] at ha; omega
+    refine Or.inr (Or.inr (Fin.ext ?_))
+    rw [Fin.val_add, this, Fin.val_one', Fin.val_zero]
+    rcases Nat.lt_or_ge 1 n with h1 | h1
+    · rw [Nat.mod_eq_of_lt h1, Nat.sub_add_cancel hn, Nat.mod_self]
+    · omega
 
-theorem ringNorm_sub_le_length {n : ℕ} [NeZero n] (x : Fin n) {u y : Fin n}
-    (p : (cycleGraph n).Walk u y) : ringNorm (y - x) ≤ ringNorm (u - x) + p.length := by
+variable {V : Type*} {Γ : SimpleGraph V}
+
+/-- Along an edge whose cell coordinates differ by at most one, the circular distance to a fixed
+coordinate changes by at most one. -/
+theorem ringNorm_sub_le_of_step {n : ℕ} [NeZero n] (π : V → Fin n) {u v : V}
+    (h : ringNorm (π v - π u) ≤ 1) (c : Fin n) : ringNorm (π v - c) ≤ ringNorm (π u - c) + 1 := by
+  rcases eq_zero_or_eq_one_or_add_one_eq_zero h with h | h | h
+  · rw [sub_eq_zero.mp h]; omega
+  · have : π v - c = (π u - c) + 1 := by rw [← h]; abel
+    rw [this]; exact ringNorm_add_one_le _
+  · have : π u - c = (π v - c) + 1 := by
+      have := congrArg (· + (π u - c)) h
+      simp only [zero_add] at this
+      rw [← this]; abel
+    rw [this]; exact ringNorm_le_add_one_add_one _
+
+theorem ringNorm_sub_le_length {n : ℕ} [NeZero n] (π : V → Fin n)
+    (hπ : ∀ u v, Γ.Adj u v → ringNorm (π v - π u) ≤ 1) (c : Fin n) {u y : V} (p : Γ.Walk u y) :
+    ringNorm (π y - c) ≤ ringNorm (π u - c) + p.length := by
   induction p with
   | nil => simp
   | cons h p ih =>
     rw [Walk.length_cons]
-    have := ringNorm_sub_le_of_adj h x
+    have := ringNorm_sub_le_of_step π (hπ _ _ h) c
     omega
 
-/-- **Distance on a ring.** The graph distance from `x` to `y` on the ring of `n` sites is at
-least the circular distance `min(a, n - a)` of the displacement `a = y - x`. -/
-theorem ringNorm_sub_le_edist_cycleGraph {n : ℕ} [NeZero n] (x y : Fin n) :
-    (ringNorm (y - x) : ℕ∞) ≤ (cycleGraph n).edist x y := by
-  rcases eq_or_ne ((cycleGraph n).edist x y) ⊤ with h | h
+/-- **Distance and cell coordinates.** If every edge of `Γ` joins sites whose cell coordinates
+differ by at most one, the graph distance from `x` to `y` is at least the circular distance
+`min(a, n - a)` of the coordinate difference `a = π y - π x`. -/
+theorem ringNorm_sub_le_edist {n : ℕ} [NeZero n] (π : V → Fin n)
+    (hπ : ∀ u v, Γ.Adj u v → ringNorm (π v - π u) ≤ 1) (x y : V) :
+    (ringNorm (π y - π x) : ℕ∞) ≤ Γ.edist x y := by
+  rcases eq_or_ne (Γ.edist x y) ⊤ with h | h
   · simp [h]
   obtain ⟨p, hp⟩ := exists_walk_of_edist_ne_top h
   rw [← hp]
-  have := ringNorm_sub_le_length x p
+  have := ringNorm_sub_le_length π hπ (π x) p
   rw [sub_self, ringNorm_zero, zero_add] at this
   exact_mod_cast this
 
-/-- **Rotations by multiples of `q` reach far.** On a ring of `n` sites, for `q ≥ 1` and any
-sites `x`, `y`, some rotation by a multiple of `q` carries `y` to graph distance more than
-`n / 2 - q` from `x`. -/
-theorem exists_lt_edist_add_cycleGraph {n : ℕ} [NeZero n] {q : ℕ} (hq : 0 < q) (x y : Fin n) :
-    ∃ t : ℕ, ((n / 2 : ℕ) : ℕ∞) < (cycleGraph n).edist x (((q * t : ℕ) : Fin n) + y) + q := by
-  suffices ∃ t : ℕ, n / 2 < ringNorm (((q * t : ℕ) : Fin n) + y - x) + q by
-    obtain ⟨t, ht⟩ := this
-    have h1 : ((n / 2 : ℕ) : ℕ∞) < (ringNorm (((q * t : ℕ) : Fin n) + y - x) : ℕ∞) + q := by
-      exact_mod_cast ht
-    exact ⟨t, h1.trans_le (add_le_add_left (ringNorm_sub_le_edist_cycleGraph x _) _)⟩
+theorem ringNorm_neg {n : ℕ} [NeZero n] (a : Fin n) : ringNorm (-a) = ringNorm a := by
+  have := a.isLt
+  simp only [ringNorm, Fin.val_neg]
+  split_ifs with h
+  · simp [h]
+  · omega
+
+/-- Every edge of the ring joins coordinates at circular distance one. -/
+theorem ringNorm_sub_le_one_of_adj_cycleGraph {n : ℕ} [NeZero n] (u v : Fin n)
+    (h : (cycleGraph n).Adj u v) : ringNorm (id v - id u) ≤ 1 := by
+  simp only [id]
+  rcases cycleGraph_adj'.mp h with h | h
+  · rw [← neg_sub, ringNorm_neg, ringNorm, h]; omega
+  · rw [ringNorm, h]; omega
+
+/-- **Multiples of `q` reach far.** For `q ≥ 1` and coordinates `a`, `b` in `ℤ/n`, some
+`b + qt` lies at circular distance more than `n / 2 - q` from `a`. -/
+theorem exists_lt_ringNorm_add {n : ℕ} [NeZero n] {q : ℕ} (hq : 0 < q) (a b : Fin n) :
+    ∃ t : ℕ, n / 2 < ringNorm (b + ((q * t : ℕ) : Fin n) - a) + q := by
   have hn := NeZero.pos n
-  set a := (y - x).val with ha
-  have haL : a < n := (y - x).isLt
+  set c := (b - a).val with hc
+  have hcL : c < n := (b - a).isLt
   set h := n / 2 with hh
   have hhn : h ≤ n - h := by omega
-  have hval (t : ℕ) : (((q * t : ℕ) : Fin n) + y - x).val = (q * t + a) % n := by
-    rw [add_sub_assoc, Fin.val_add, Fin.val_natCast, ha, Nat.mod_add_mod]
+  have hval (t : ℕ) : (b + ((q * t : ℕ) : Fin n) - a).val = (q * t + c) % n := by
+    rw [add_sub_right_comm, add_comm, Fin.val_add, Fin.val_natCast, hc, Nat.mod_add_mod]
   by_cases hsmall : h < q
   · exact ⟨0, by omega⟩
   replace hsmall := not_lt.mp hsmall
-  by_cases hah : a ≤ h
-  · refine ⟨(h - a) / q, ?_⟩
-    have h1 := Nat.div_mul_le_self (h - a) q
-    have h2 := Nat.lt_div_mul_add (a := h - a) hq
+  by_cases hch : c ≤ h
+  · refine ⟨(h - c) / q, ?_⟩
+    have h1 := Nat.div_mul_le_self (h - c) q
+    have h2 := Nat.lt_div_mul_add (a := h - c) hq
     rw [mul_comm] at h1 h2
-    rw [ringNorm, hval, Nat.mod_eq_of_lt (show q * ((h - a) / q) + a < n by omega)]
+    rw [ringNorm, hval, Nat.mod_eq_of_lt (show q * ((h - c) / q) + c < n by omega)]
     omega
-  · refine ⟨(n + h - a) / q, ?_⟩
-    have h1 := Nat.div_mul_le_self (n + h - a) q
-    have h2 := Nat.lt_div_mul_add (a := n + h - a) hq
+  · refine ⟨(n + h - c) / q, ?_⟩
+    have h1 := Nat.div_mul_le_self (n + h - c) q
+    have h2 := Nat.lt_div_mul_add (a := n + h - c) hq
     rw [mul_comm] at h1 h2
-    set s := q * ((n + h - a) / q) + a
+    set s := q * ((n + h - c) / q) + c
     have hs : s % n = s - n := by
       rw [Nat.mod_eq_sub_mod (by omega), Nat.mod_eq_of_lt (by omega)]
     rw [ringNorm, hval, hs]
@@ -157,23 +194,45 @@ theorem pow_mem_supercell {H : Matrix (V → Fin d) (V → Fin d) ℂ} {E₀ : �
   simp only [supercell, Subgroup.mem_iInf, MonoidHom.mem_ker, map_pow]
   exact fun χ hχ ↦ hden χ hχ g
 
-open scoped Fin.CommRing in
-/-- **A supercell translation carries a site far away.** For the rotations of a ring of `n`
-sites, an invariant `H`, and momenta of denominator `q ≥ 1`, any site `y` is carried by some
-element of the supercell to graph distance more than `n / 2 - q` from any site `x`. Hastings,
-arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1620–1641: "we can pick `x'` such that the
-distance ... is of order the linear size of the system". -/
-theorem exists_mem_supercell_lt_edist_add {n : ℕ} [NeZero n]
+/-- **A supercell translation carries a site far away.** Let an abelian group `Γ` act on the
+sites, let `H` be invariant, and let every character with a nonzero momentum sector satisfy
+`χ(g)^q = 1`, where `q ≥ 1`. Let `π` be the cell coordinate along one lattice direction, with
+`n` cells, such that every edge of the graph `G` joins cells at circular distance at most one,
+and let `e` translate by one cell in that direction. Then any site `y` is carried by some element
+of the supercell to graph distance more than `n / 2 - q` from any site `x`. Hastings,
+arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1620–1641: "By choosing `x'` correctly, we can
+make the distance ... of order the linear size of the system". -/
+theorem exists_mem_supercell_lt_edist_add {Γ : Type*} [CommGroup Γ] [MulAction Γ V]
+    {H : Matrix (V → Fin d) (V → Fin d) ℂ} {E₀ : ℝ} {q : ℕ} (hq : 0 < q)
+    (hden : ∀ χ : Γ →* ℂ, momentumSector Γ d H E₀ χ ≠ ⊥ → ∀ g, χ g ^ q = 1)
+    (G : SimpleGraph V) {n : ℕ} [NeZero n] (π : V → Fin n)
+    (hπ : ∀ u v, G.Adj u v → SimpleGraph.ringNorm (π v - π u) ≤ 1)
+    (e : Γ) (he : ∀ v, π (e • v) = π v + 1) (x y : V) :
+    ∃ g ∈ supercell Γ d H E₀, ((n / 2 : ℕ) : ℕ∞) < G.edist x (g • y) + q := by
+  have hpow (k : ℕ) (v : V) : π (e ^ k • v) = π v + ((k : ℕ) : Fin n) := by
+    induction k with
+    | zero => simp
+    | succ k ih => rw [pow_succ', mul_smul, he, ih, Nat.cast_succ]; abel
+  obtain ⟨t, ht⟩ := SimpleGraph.exists_lt_ringNorm_add hq (π x) (π y)
+  refine ⟨(e ^ t) ^ q, pow_mem_supercell hden _, ?_⟩
+  rw [← pow_mul, mul_comm]
+  have hdist := SimpleGraph.ringNorm_sub_le_edist π hπ x (e ^ (q * t) • y)
+  rw [hpow] at hdist
+  have h1 : ((n / 2 : ℕ) : ℕ∞) < (SimpleGraph.ringNorm (π y + ((q * t : ℕ) : Fin n) - π x) : ℕ∞)
+      + q := by exact_mod_cast ht
+  exact h1.trans_le (add_le_add_left hdist _)
+
+/-- **A supercell rotation of a ring carries a site far away.** The case of
+`exists_mem_supercell_lt_edist_add` for the rotations of a ring of `n` sites. -/
+theorem exists_mem_supercell_lt_edist_add_ring {n : ℕ} [NeZero n]
     {H : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ} {E₀ : ℝ} {q : ℕ} (hq : 0 < q)
     (hden : ∀ χ : Multiplicative (Fin n) →* ℂ,
       momentumSector (Multiplicative (Fin n)) d H E₀ χ ≠ ⊥ → ∀ g, χ g ^ q = 1)
     (x y : Fin n) :
     ∃ g ∈ supercell (Multiplicative (Fin n)) d H E₀,
-      ((n / 2 : ℕ) : ℕ∞) < (SimpleGraph.cycleGraph n).edist x (g • y) + q := by
-  obtain ⟨t, ht⟩ := SimpleGraph.exists_lt_edist_add_cycleGraph hq x y
-  refine ⟨Multiplicative.ofAdd ((t : ℕ) : Fin n) ^ q, pow_mem_supercell hden _, ?_⟩
-  convert ht using 3
-  change (Multiplicative.ofAdd ((t : ℕ) : Fin n) ^ q).toAdd + y = _
-  rw [toAdd_pow, toAdd_ofAdd, nsmul_eq_mul, Nat.cast_mul]
+      ((n / 2 : ℕ) : ℕ∞) < (SimpleGraph.cycleGraph n).edist x (g • y) + q :=
+  exists_mem_supercell_lt_edist_add hq hden (SimpleGraph.cycleGraph n) id
+    SimpleGraph.ringNorm_sub_le_one_of_adj_cycleGraph (Multiplicative.ofAdd 1)
+    (fun v ↦ by change 1 + v = v + 1; abel) x y
 
 end TNLean.Lattice
