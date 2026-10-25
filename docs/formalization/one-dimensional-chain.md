@@ -194,8 +194,12 @@ as the contiguous chain. At a real radius ℓ ≥ 0 its neighborhood is exactly
 `S.biUnion (fun x ↦ QuantumCircuit.graphBall (domainGraph Λ) x ⌊ℓ⌋₊)`.
 The bound retains |S|², allows empty S, and requires neither a ground state
 nor a spectral gap. This completes the two propagation/localization
-estimates on finite domains. The information-reset and full physical
-protocol statements retain their existing scope.
+estimates on finite domains. The additional theorems
+`MPS.AreaLaw.DomainHamiltonian.information_reset` and
+`MPS.AreaLaw.DomainHamiltonian.mutualInformation_le_of_logarithmic_separation`
+establish reset and logarithmic physical separation on the original finite
+domain, using only its original global gap. Their constants precede the domain
+and instance data. The chain preparation protocol uses only the chain versions.
 
 For an arbitrary region D of the contiguous chain,
 `MPS.AreaLaw.IsChainSupport.exists_boundary_window_of_split` places every
@@ -264,8 +268,10 @@ Gaussian filter, its supported approximation, a unitary on the same support
 and the product marginal after the actual regional replica swap. Only the
 original full-system ground-state gap is assumed. The additive constant in
 log(e q^|R₀|) is retained, including q = 1. This is the chain setting of
-Part II. An additional version on an arbitrary finite induced-path domain is
-not asserted; see the connected-domain scope note.
+Part II. The additional theorem
+`MPS.AreaLaw.DomainHamiltonian.information_reset` proves reset on arbitrary
+finite induced-path domains, with intrinsic extended-distance margins and no
+additional physical hypothesis; see the connected-domain scope note.
 
 The theorem
 `MPS.AreaLaw.ChainHamiltonian.mutualInformation_le_of_logarithmic_separation`
@@ -284,9 +290,12 @@ D = N_(w+1)(T) and C = complement N_(2w+2)(T). Their mutual information
 is at most 2S(D) ≤ b, and Dₚ = 3Cₚ(2+b)+3 gives both strict reset
 margins once log L ≥ 1. `MPS.AreaLaw.ChainHamiltonian.norm_bound_nonneg`
 supplies the sign of J from an actual singleton interaction.
-These Part II estimates concern the chain used in Theorem B. Versions on
-disconnected induced-path domains would be additional results and are not
-claimed. The arbitrary-domain entropy theorem above is already proved.
+These Part II estimates concern the chain used in Theorem B. The additional
+theorem `MPS.AreaLaw.DomainHamiltonian.mutualInformation_le_of_logarithmic_separation`
+proves the same decay for finite integer domains, with separation in their
+original integer positions. Its natural-neighborhood geometry and domain
+information-reset theorem retain the original global gap. The arbitrary-domain
+entropy theorem above is also proved.
 
 ## Constants
 

@@ -1,0 +1,196 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import Mathlib.Combinatorics.SimpleGraph.CycleGraph
+import Mathlib.Combinatorics.SimpleGraph.Metric
+import Mathlib.Data.ZMod.ValMinAbs
+import TNLean.Lattice.TranslationMomentum
+
+/-!
+# Supercell translations that carry a site far away
+
+Hastings, *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, `proj3new.tex`,
+lines 1603–1641), treats a translationally invariant system on a `d`-dimensional lattice, with
+sites `(x, y)` for a unit cell `x` and a site `y` within it. He assumes that every momentum of a
+ground state has components that are rational multiples `2πp/q` of `2π` with denominators that do
+not depend on the system size. Then translation by a supercell, whose side in each direction is
+the least common multiple of the denominators, leaves every ground state unchanged, and such a
+translation can carry any site to a distance of order the linear size of the system from any
+other site.
+
+For a character this hypothesis reads `χ(g)^q = 1`, with `q` the common multiple of the
+denominators. If it holds for every character with a nonzero momentum sector, then every `q`-th
+power lies in the supercell (`pow_mem_supercell`). For the geometry, let `π : V → ℤ/n` be the
+coordinate of the unit cell along one lattice direction, with `n` cells in that direction, such
+that every edge of the graph joins cells whose coordinates differ by at most one, and let `e` be
+the unit translation in that direction. Then the graph distance is at least the circular distance
+`min(a, n - a)` of the coordinate difference `a`, and the translations `e^{qt}` carry any site
+to distance more than `n / 2 - q` from any other (`exists_mem_supercell_lt_edist_add`). The ring
+of `n` sites with its rotations is the case `π = id` (`exists_mem_supercell_lt_edist_add_ring`).
+
+## Main results
+
+* `TNLean.Lattice.pow_mem_supercell`: with momenta of denominator `q`, every `q`-th power lies in
+  the supercell.
+* `SimpleGraph.natAbs_valMinAbs_sub_le_edist`: the graph distance is at least the circular
+  distance `|π y - π x|` of the cell coordinates in `ℤ/n`.
+* `TNLean.Lattice.exists_lt_natAbs_valMinAbs_add`: some multiple of `q` added to a residue puts it
+  at circular distance more than `n / 2 - q` from any other.
+* `TNLean.Lattice.exists_mem_supercell_lt_edist_add`: with momenta of denominator `q`, some
+  element of the supercell carries any site to graph distance more than `n / 2 - q` from any
+  other.
+* `TNLean.Lattice.exists_mem_supercell_lt_edist_add_ring`: the same for the rotations of a ring.
+-/
+
+open Matrix
+
+namespace SimpleGraph
+
+variable {V : Type*} {Γ : SimpleGraph V}
+
+/-- **Distance and cell coordinates.** Let `π : V → ℤ/n` be a cell coordinate such that every
+edge of `Γ` joins sites whose coordinates differ by at most one. Then the graph distance from
+`x` to `y` is at least the circular distance `|π y - π x|`, the absolute value of the least
+residue. -/
+theorem natAbs_valMinAbs_sub_le_edist {n : ℕ} (π : V → ZMod n)
+    (hπ : ∀ u v, Γ.Adj u v → (π v - π u).valMinAbs.natAbs ≤ 1) (x y : V) :
+    ((π y - π x).valMinAbs.natAbs : ℕ∞) ≤ Γ.edist x y := by
+  have hwalk : ∀ {u : V} (p : Γ.Walk u y),
+      (π y - π x).valMinAbs.natAbs ≤ (π u - π x).valMinAbs.natAbs + p.length := by
+    intro u p
+    induction p with
+    | nil => simp
+    | @cons u w _ h p ih =>
+      have hstep : (π w - π x).valMinAbs.natAbs ≤ (π u - π x).valMinAbs.natAbs + 1 := by
+        rw [show π w - π x = (π u - π x) + (π w - π u) by abel]
+        exact (ZMod.natAbs_valMinAbs_add_le _ _).trans
+          ((Int.natAbs_add_le _ _).trans (by have := hπ u w h; omega))
+      rw [Walk.length_cons]
+      omega
+  rcases eq_or_ne (Γ.edist x y) ⊤ with h | h
+  · simp [h]
+  obtain ⟨p, hp⟩ := exists_walk_of_edist_ne_top h
+  rw [← hp]
+  have := hwalk p
+  rw [sub_self, ZMod.valMinAbs_zero, Int.natAbs_zero, zero_add] at this
+  exact_mod_cast this
+
+end SimpleGraph
+
+namespace TNLean.Lattice
+
+/-- **Multiples of `q` reach far.** For `q ≥ 1` and residues `a`, `b` modulo `n`, some
+`b + qt` lies at circular distance more than `n / 2 - q` from `a`. -/
+theorem exists_lt_natAbs_valMinAbs_add {n : ℕ} [NeZero n] {q : ℕ} (hq : 0 < q)
+    (a b : ZMod n) :
+    ∃ t : ℕ, n / 2 < (b + ((q * t : ℕ) : ZMod n) - a).valMinAbs.natAbs + q := by
+  have hn := NeZero.pos n
+  set c := (b - a).val with hc
+  have hcL : c < n := ZMod.val_lt (b - a)
+  set h := n / 2 with hh
+  have hhn : h ≤ n - h := by omega
+  have hval (t : ℕ) : (b + ((q * t : ℕ) : ZMod n) - a).val = (q * t + c) % n := by
+    rw [← ZMod.val_natCast, Nat.cast_add, hc, ZMod.natCast_zmod_val]
+    congr 1
+    abel
+  simp only [ZMod.valMinAbs_natAbs_eq_min]
+  by_cases hsmall : h < q
+  · exact ⟨0, by omega⟩
+  replace hsmall := not_lt.mp hsmall
+  by_cases hch : c ≤ h
+  · refine ⟨(h - c) / q, ?_⟩
+    have h1 := Nat.div_mul_le_self (h - c) q
+    have h2 := Nat.lt_div_mul_add (a := h - c) hq
+    rw [mul_comm] at h1 h2
+    rw [hval, Nat.mod_eq_of_lt (show q * ((h - c) / q) + c < n by omega)]
+    omega
+  · refine ⟨(n + h - c) / q, ?_⟩
+    have h1 := Nat.div_mul_le_self (n + h - c) q
+    have h2 := Nat.lt_div_mul_add (a := n + h - c) hq
+    rw [mul_comm] at h1 h2
+    set s := q * ((n + h - c) / q) + c
+    have hs : s % n = s - n := by
+      rw [Nat.mod_eq_sub_mod (by omega), Nat.mod_eq_of_lt (by omega)]
+    rw [hval, hs]
+    omega
+
+/-- The coordinate of a site of the ring, as a residue: subtraction of sites is subtraction of
+residues. -/
+private theorem natCast_val_sub {n : ℕ} [NeZero n] (u v : Fin n) :
+    (((v - u : Fin n) : ℕ) : ZMod n) = ((v : ℕ) : ZMod n) - ((u : ℕ) : ZMod n) := by
+  rw [Fin.val_sub, ZMod.natCast_mod, Nat.cast_add, Nat.cast_sub u.isLt.le, ZMod.natCast_self]
+  ring
+
+/-- Every edge of the ring joins residues at circular distance one. -/
+private theorem natAbs_valMinAbs_sub_le_one_of_adj_cycleGraph {n : ℕ} [NeZero n] (u v : Fin n)
+    (h : (SimpleGraph.cycleGraph n).Adj u v) :
+    (((v : ℕ) : ZMod n) - ((u : ℕ) : ZMod n)).valMinAbs.natAbs ≤ 1 := by
+  have hone : ((1 : ZMod n)).valMinAbs.natAbs ≤ 1 := by
+    rw [ZMod.valMinAbs_natAbs_eq_min]
+    exact (min_le_left _ _).trans (by rw [ZMod.val_one_eq_one_mod]; exact Nat.mod_le 1 n)
+  rcases SimpleGraph.cycleGraph_adj'.mp h with h | h
+  · rw [← neg_sub, ZMod.natAbs_valMinAbs_neg, ← natCast_val_sub, h, Nat.cast_one]; exact hone
+  · rw [← natCast_val_sub, h, Nat.cast_one]; exact hone
+
+variable {V : Type*} [Fintype V] [DecidableEq V] {G : Type*} [CommGroup G] [MulAction G V]
+  {d : ℕ}
+
+/-- **Momenta of denominator `q`.** If every character with a nonzero momentum sector satisfies
+`χ(g)^q = 1`, then every `q`-th power lies in the supercell. For the translations of a lattice
+these are the momenta `2πp/q` of Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`,
+lines 1620–1625, and `g^q` is a translation by whole supercells (lines 1626–1630). -/
+theorem pow_mem_supercell {H : Matrix (V → Fin d) (V → Fin d) ℂ} {E₀ : ℝ} {q : ℕ}
+    (hden : ∀ χ : G →* ℂ, momentumSector G d H E₀ χ ≠ ⊥ → ∀ g, χ g ^ q = 1) (g : G) :
+    g ^ q ∈ supercell G d H E₀ := by
+  simp only [supercell, Subgroup.mem_iInf, MonoidHom.mem_ker, map_pow]
+  exact fun χ hχ ↦ hden χ hχ g
+
+/-- **A supercell translation carries a site far away.** Let an abelian group `Γ` act on the
+sites, let `H` be invariant, and let every character with a nonzero momentum sector satisfy
+`χ(g)^q = 1`, where `q ≥ 1`. Let `π` be the cell coordinate along one lattice direction, with
+`n` cells, such that every edge of the graph `G` joins cells at circular distance at most one,
+and let `e` translate by one cell in that direction. Then any site `y` is carried by some element
+of the supercell to graph distance more than `n / 2 - q` from any site `x`. Hastings,
+arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1620–1641: "By choosing `x'` correctly, we can
+make the distance ... of order the linear size of the system". -/
+theorem exists_mem_supercell_lt_edist_add {Γ : Type*} [CommGroup Γ] [MulAction Γ V]
+    {H : Matrix (V → Fin d) (V → Fin d) ℂ} {E₀ : ℝ} {q : ℕ} (hq : 0 < q)
+    (hden : ∀ χ : Γ →* ℂ, momentumSector Γ d H E₀ χ ≠ ⊥ → ∀ g, χ g ^ q = 1)
+    (G : SimpleGraph V) {n : ℕ} [NeZero n] (π : V → ZMod n)
+    (hπ : ∀ u v, G.Adj u v → (π v - π u).valMinAbs.natAbs ≤ 1)
+    (e : Γ) (he : ∀ v, π (e • v) = π v + 1) (x y : V) :
+    ∃ g ∈ supercell Γ d H E₀, ((n / 2 : ℕ) : ℕ∞) < G.edist x (g • y) + q := by
+  have hpow (k : ℕ) (v : V) : π (e ^ k • v) = π v + (k : ZMod n) := by
+    induction k with
+    | zero => simp
+    | succ k ih => rw [pow_succ', mul_smul, he, ih, Nat.cast_succ]; abel
+  obtain ⟨t, ht⟩ := exists_lt_natAbs_valMinAbs_add hq (π x) (π y)
+  refine ⟨(e ^ t) ^ q, pow_mem_supercell hden _, ?_⟩
+  rw [← pow_mul, mul_comm]
+  have hdist := SimpleGraph.natAbs_valMinAbs_sub_le_edist π hπ x (e ^ (q * t) • y)
+  rw [hpow] at hdist
+  have h1 : ((n / 2 : ℕ) : ℕ∞) <
+      ((π y + ((q * t : ℕ) : ZMod n) - π x).valMinAbs.natAbs : ℕ∞) + q := by
+    exact_mod_cast ht
+  exact h1.trans_le (add_le_add_left hdist _)
+
+/-- **A supercell rotation of a ring carries a site far away.** The case of
+`exists_mem_supercell_lt_edist_add` for the rotations of a ring of `n` sites, with the
+coordinate of a site as a residue modulo `n`. -/
+theorem exists_mem_supercell_lt_edist_add_ring {n : ℕ} [NeZero n]
+    {H : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ} {E₀ : ℝ} {q : ℕ} (hq : 0 < q)
+    (hden : ∀ χ : Multiplicative (Fin n) →* ℂ,
+      momentumSector (Multiplicative (Fin n)) d H E₀ χ ≠ ⊥ → ∀ g, χ g ^ q = 1)
+    (x y : Fin n) :
+    ∃ g ∈ supercell (Multiplicative (Fin n)) d H E₀,
+      ((n / 2 : ℕ) : ℕ∞) < (SimpleGraph.cycleGraph n).edist x (g • y) + q :=
+  exists_mem_supercell_lt_edist_add hq hden (SimpleGraph.cycleGraph n)
+    (fun x : Fin n ↦ ((x : ℕ) : ZMod n)) natAbs_valMinAbs_sub_le_one_of_adj_cycleGraph
+    (Multiplicative.ofAdd 1) (fun v ↦ by
+      change (((1 + v : Fin n) : ℕ) : ZMod n) = _
+      rw [Fin.val_add, ZMod.natCast_mod, Nat.cast_add, Fin.val_one', ZMod.natCast_mod,
+        Nat.cast_one, add_comm]) x y
+
+end TNLean.Lattice

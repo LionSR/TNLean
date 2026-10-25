@@ -47,36 +47,21 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_region_localization,
-        thm:qc_supported_projected_relative_evolution,
-        lem:qc_site_expectation_properties,
+        thm:qc_supported_gaussian_projection_bounds,
         def:area_graph_ball_localization_constants}
-    Take constants $C,v,c$ of Theorem~\ref{thm:area_region_localization}
-    with $C,v\geq0$; for $J\geq0$ these may be $2C_0(R)$, $v(R,J)$ and $1/2$.
-    Applying
-    Theorem~\ref{thm:qc_supported_projected_relative_evolution} to the
-    projection region $B$ constructs the path $U$ from $H',H,B$
-    independently of $\eta$ and $T$. Setting
-    $A_B(t)=E_B(e^{itH'}We^{-itH'})$, both $A_B(t)$ and $U(t)$ act on
-    $B$, and expectation contractivity together with unitarity gives
-    $\|A_B(t)U(t)\|\leq\|W\|$.
-    Continuity and this bound imply Gaussian integrability.
-    The expectation onto $B$ commutes with integration and fixes the
-    integrand in (\ref{eq:supported_gaussian_integral}), proving the
-    asserted support, while the restricted Gaussian mass is at most one,
-    which proves the norm bound.
-
-    Both $W$ and $D$ act on $Q\cup Z$. For $|t|\leq T$, the region
-    estimate and the relative-evolution comparison give
-    \begin{align*}
-        \|e^{itH'}We^{-itH'}-A_B(t)\|
-         & \leq \|W\|C|\Lambda|e^{vT-cl},   \\
-        \|e^{itH'}e^{-itH}-U(t)\|
-         & \leq \|D\|C|\Lambda|T e^{vT-cl}.
-    \end{align*}
-    Factoring $e^{itH'}We^{-itH}$ as
-    $(e^{itH'}We^{-itH'})(e^{itH'}e^{-itH})$ and subtracting
-    $A_B(t)U(t)$ in this order yields the claimed error for the
-    integrands by submultiplicativity. Integrating and using again that
-    the restricted mass is at most one proves the comparison with
-    (\ref{eq:supported_gaussian_original}).
+    Take constants $C,v,c$ from Theorem~\ref{thm:area_region_localization}
+    with $C,v\ge0$; when $J\ge0$, take $2C_0(R)$, $v(R,J)$ and $1/2$.
+    Both $W$ and $D$ act on $Q\cup Z$. Regional localization on
+    $B=N_l(Q\cup Z)$ gives the projection estimates with
+    \begin{align}
+        \varepsilon_o & =C|\Lambda|e^{vT-cl},\notag      \\
+        \varepsilon_g & =\|D\|C|\Lambda|e^{vT-cl}.\notag
+    \end{align}
+    Apply Theorem~\ref{thm:qc_supported_gaussian_projection_bounds} with all
+    three regions equal to $B$. It constructs the required path before
+    $\eta,T$, and gives the support and norm assertions. Its error bound is
+    \begin{align}
+        \|W\|(\varepsilon_o+T\varepsilon_g)
+         & =\|W\|C|\Lambda|(1+\|D\|T)e^{vT-cl}.\notag
+    \end{align}
 \end{proof}
