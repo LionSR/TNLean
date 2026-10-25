@@ -49,6 +49,7 @@ import TNLean.Lattice.SupportedPolarUnitary
 import TNLean.Lattice.SupportedUnitaryEntropy
 import TNLean.Lattice.TranslationMomentum
 import TNLean.Lattice.TranslationSupercell
+import TNLean.Lattice.TranslationSupercellCommutator
 import TNLean.Lattice.TranslationSupercellDecay
 import TNLean.Lattice.TranslationSupercellSpacing
 import TNLean.Lattice.VariationalLowerBound

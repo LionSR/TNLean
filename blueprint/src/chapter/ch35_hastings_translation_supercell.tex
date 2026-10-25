@@ -10,10 +10,11 @@ determine a basis of ground states. For a translation-invariant system,
 exponentially small in the linear size of the system. The source assumes that
 the momenta of the ground states are rational multiples of $2\pi$ with
 denominators independent of the system size, and derives from this a
-supercell whose translations leave every ground state unchanged. Here such a
-subgroup of translations is assumed directly; the step from rational momenta to
-the supercell, and the geometry placing a translated site far away, are not
-formalized \cite{gap:hastings05_translation_supercell}.
+supercell whose translations leave every ground state unchanged. The first
+results below assume such a subgroup of translations; it is then constructed
+from the momenta, its translations are shown to carry a site far away, and the
+three steps combine into the source's conclusion
+\cite{gap:hastings05_translation_supercell}.
 
 Throughout, $G$ acts on the finite set of sites, $H$ is Hermitian and
 invariant, $P$ is the orthogonal projection onto the eigenspace of $H$ for an
@@ -189,7 +190,9 @@ with its rotations, $\pi$ is the identity.
     \leanok
     \uses{def:ring_circular_distance}
     The graph distance from $x$ to $y$ is at least the circular distance of
-    $\pi(y)-\pi(x)$.
+    $\pi(y)-\pi(x)$. Here $\pi$ is the unit-cell coordinate $\vec x$ of the sites
+    $(\vec x,y)$ of \cite[lines 1603--1612]{Hastings2006Solving} along one
+    direction.
 \end{theorem}
 \begin{proof}\leanok
     Along an edge the circular distance to $\pi(x)$ changes by at most one, so
@@ -220,8 +223,10 @@ with its rotations, $\pi$ is the identity.
     Let $G$ be abelian, let $H$ be invariant, let $\pi$ and $e$ be as above, and
     let $\chi(g)^q=1$ for every $g$ and every character $\chi$ with a nonzero
     momentum sector, where $q\ge1$. For sites $x$, $y$ some $g$ in the supercell
-    carries $y$ to graph distance more than $\lfloor n/2\rfloor-q$ from $x$. This
-    is the choice of $\vec x'$ in \cite[lines 1634--1641]{Hastings2006Solving}.
+    carries $y$ to graph distance more than $\lfloor n/2\rfloor-q$ from $x$. With
+    $q$ the least common multiple of the denominators of the momenta, this is the
+    supercell of \cite[lines 1620--1630]{Hastings2006Solving} and the choice of
+    $\vec x'$ in lines 1634--1641.
 \end{theorem}
 \begin{proof}\leanok
     Take $t$ from Theorem~\ref{thm:ring_rotation_far} for $a=\pi(x)$ and
@@ -230,8 +235,36 @@ with its rotations, $\pi$ is the identity.
     Theorem~\ref{thm:ring_circular_distance_le} bounds the distance.
 \end{proof}
 
-Choosing $g\in S$ that carries $X_j$ to distance of order the linear size of
-the system from $X_i$ gives the source's conclusion;
-Theorem~\ref{thm:hastings_supercell_far} provides such a $g$. At line
-1638 the source writes the first site as $(\vec x_1,y_2)$ where
+\begin{theorem}[Low-energy commutators of a translation-invariant lattice]
+    \label{thm:hastings_supercell_commutator_small}
+    \lean{TNLean.Lattice.norm_groundCompression_commutator_le_of_momenta}
+    \leanok
+    \uses{def:hastings_supercell_of_momenta,thm:hastings05_blecm,
+        def:ring_circular_distance}
+    Let the terms $h_k$ be indexed by the sites, with $h_k$ acting on a set
+    $X_k\ni k$ of diameter at most $R$ in the lattice graph, let $G$ be an abelian
+    group of translations with $h_{g\cdot k}=P_gh_kP_g^\dagger$, and let every
+    eigenvalue of $H=\sum_kh_k$ equal $E_0$ or be at least $E_0+\Delta E$. Let
+    $\chi(g)^q=1$ for every $g$ and every character $\chi$ with a nonzero
+    momentum sector, and let $\pi$, $e$ and $n$ be as above. Then for every $l$
+    with $2R+l+q\le\lfloor n/2\rfloor$ the low-energy commutator of the filtered
+    terms at $i$ and $j$ obeys the bound of
+    Theorem~\ref{thm:hastings05_blecm} at separation $l$, with the norms of $h_i$
+    and $h_j$. Taking $l=\lfloor n/2\rfloor-q-2R$ makes it exponentially small in
+    $n$, which is the conclusion of
+    \cite[lines 1603--1641]{Hastings2006Solving}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_supercell_of_momenta,thm:hastings_supercell_far,
+        thm:hastings_supercell_decay}
+    The sum of covariant terms is invariant. By
+    Theorem~\ref{thm:hastings_supercell_far} some $g$ in the supercell carries
+    $j$ to distance more than $\lfloor n/2\rfloor-q\ge2R+l$ from $i$, so the
+    sites within distance $l$ of $X_i$ miss $X_{g\cdot j}$. The supercell fixes the
+    ground space by Theorem~\ref{thm:hastings_supercell_of_momenta}, so
+    Theorem~\ref{thm:hastings_supercell_decay} applies, and
+    $\|h_{g\cdot j}\|=\|P_gh_jP_g^\dagger\|=\|h_j\|$.
+\end{proof}
+
+At line 1638 the source writes the first site as $(\vec x_1,y_2)$ where
 $(\vec x_1,y_1)$ is meant \cite{gap:hastings05_translation_supercell}.
