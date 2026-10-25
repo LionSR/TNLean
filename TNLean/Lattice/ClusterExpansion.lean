@@ -16,6 +16,7 @@ import TNLean.Lattice.ClusterExpansion.PercolationSource
 import TNLean.Lattice.ClusterExpansion.TemperatureError
 import TNLean.Lattice.ClusterExpansion.ThermalProduct
 import TNLean.Lattice.ClusterExpansion.TraceNorm
+import TNLean.Lattice.ClusterExpansion.TruncatedAllTemperatures
 import TNLean.Lattice.ClusterExpansion.TruncatedPositivity
 import TNLean.Lattice.ClusterExpansion.TruncatedProductForm
 import TNLean.Lattice.ClusterExpansion.Truncation
