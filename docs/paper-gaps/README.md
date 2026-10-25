@@ -1321,15 +1321,19 @@ the degenerate case. Its closed neighbourhood must be strictly smaller than
 the support separation; the decay estimate also requires a positive time-window
 slope `c₁` with `v c₁ < 1/2`.
 
-### Local solution of gapped Hamiltonians: a basis of a two-dimensional ground space
+### Local solution of gapped Hamiltonians: a basis of a degenerate ground space
 
 [hastings05_two_dim_ground_basis.tex](hastings05_two_dim_ground_basis.tex)
 (scope restriction, open) records the treatment of a degenerate ground space in Hastings,
 *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, lines 1678–1705). In an
 eigenbasis of `P M_j P` with eigenvalues `r ≠ s`, the off-diagonal part of `P M_i P` has norm
 at most `‖[P M_i P, P M_j P]‖ / |r - s|`, and a ground state is an approximate eigenvector of
-`M_i` up to that off-diagonal part. Only a ground space of dimension two is treated, with the
-eigenbasis given, and eq. `oibu` is left as the sum of the commutators.
+`M_i` up to that off-diagonal part. Every dimension is treated: one compression with simple
+spectrum gives `(n - 1) ‖[P M_i P, P M_j P]‖ / δ`, and repeated eigenvalues are resolved by the
+source's iteration over further compressions, made rigorous by an identity for the matrix
+elements at each level and assembled by induction over any number of levels; the cross terms the
+sketch omits are kept (a local correction). The
+basis is given, and eq. `oibu` is left as the sum of the commutators.
 
 ### One-dimensional area law after Hastings: the entropy gain constants
 
@@ -1482,6 +1486,15 @@ avoiding `H_{B(C)}` has the sites of `H_C` as a cluster. On a chain with `H_i` a
 `{i − 1, i, i + 1}`, the term `H_1 H_3` avoids `B({1}) = {0, 2}` but overlaps `H_1`. The
 formalization uses the terms whose support meets the support of `H_C`; then `S` in equation
 `percb2` counts the sites within `2R` of a site.
+
+### Local solution of gapped Hamiltonians: the number of factors in the error bound
+
+[hastings05_temperature_factor_count.tex](hastings05_temperature_factor_count.tex)
+(local correction, resolved) records that Hastings' error bound at every temperature
+(arXiv:cond-mat/0508554v3, source lines 1342–1347) prints `β/β₀` in the exponent where the
+source's bound on `ρ_m` (lines 1334–1341) gives the number `n` of factors, the smallest even
+integer with `β/n ≤ β₀`. Since `β/β₀ ≤ n < β/β₀ + 2`, the printed bound does not follow. The
+formalization proves the bound with `n`, for every `n ≥ 1`.
 
 ### Local solution of gapped Hamiltonians: cluster size in the percolation bound
 

@@ -86,7 +86,146 @@ graph, this gives the decay across supercell translations.
     separated operators to $h_i$ and $h_{g\cdot j}$.
 \end{proof}
 
+For an abelian group the subgroup $S$ need not be assumed: it is determined
+by the momenta of the ground states.
+
+\begin{definition}[Momentum sector]
+    \label{def:hastings_momentum_sector}
+    \lean{TNLean.Lattice.momentumSector}
+    \leanok
+    \uses{def:hastings_site_permutation}
+    For a character $\chi$ of $G$, a homomorphism from $G$ to the multiplicative
+    group $\mathbb{C}^\times$, the
+    momentum sector of $\chi$ is the set of vectors $v$ in the eigenspace of $H$
+    for $E_0$ with $P_gv=\chi(g)v$ for every $g\in G$. For the ground states of
+    momentum $\vec k_a$ in \cite[lines 1613--1618]{Hastings2006Solving},
+    $\chi(\vec x)=e^{i\vec x\cdot\vec k_a}$.
+\end{definition}
+
+\begin{theorem}[The momentum sectors span the ground space]
+    \label{thm:hastings_momentum_sectors_span}
+    \lean{TNLean.Lattice.iSup_momentumSector}
+    \leanok
+    \uses{def:hastings_momentum_sector,def:hastings_site_invariant}
+    Let $G$ be abelian and $H$ invariant. Then the eigenspace of $H$ for $E_0$ is
+    the sum of the momentum sectors of the characters of $G$.
+\end{theorem}
+\begin{proof}\leanok
+    Since $H$ is invariant, each $P_g$ maps the eigenspace into itself. A
+    permutation has finite order, so $P_g^N=1$ for some $N\ge1$, and since
+    $X^N-1$ has no repeated roots the restriction of $P_g$ is diagonalizable.
+    These restrictions commute, so they are simultaneously diagonalizable: the
+    eigenspace is the sum of the joint eigenspaces on which each $P_g$ acts as
+    a scalar $\chi(g)$. On a nonzero joint eigenspace,
+    $P_{gh}=P_gP_h$ and $P_1=1$ give $\chi(gh)=\chi(g)\chi(h)$ and $\chi(1)=1$,
+    so $\chi$ is a character and the joint eigenspace lies in its momentum
+    sector.
+\end{proof}
+
+\begin{definition}[The supercell of the momenta]
+    \label{def:hastings_supercell_of_momenta}
+    \lean{TNLean.Lattice.supercell}
+    \leanok
+    \uses{def:hastings_momentum_sector}
+    The supercell of $H$ at $E_0$ is the intersection of the kernels of the
+    characters of $G$ whose momentum sector is nonzero, a subgroup of $G$.
+\end{definition}
+
+\begin{theorem}[The supercell fixes the ground space]
+    \label{thm:hastings_supercell_of_momenta}
+    \lean{TNLean.Lattice.mem_supercell_iff,
+        TNLean.Lattice.sitePermMatrix_mulVec_eq_of_mem_supercell}
+    \leanok
+    \uses{def:hastings_supercell_of_momenta,def:hastings_site_invariant}
+    Let $G$ be abelian and $H$ invariant. Then $g$ lies in the supercell if and
+    only if $P_gv=v$ for every $v$ in the eigenspace of $H$ for $E_0$. So the
+    supercell is a subgroup $S$ with the property assumed above, the
+    translations by whole supercells of
+    \cite[lines 1626--1630]{Hastings2006Solving}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_momentum_sectors_span}
+    If $g$ lies in the supercell, then $P_g$ fixes every vector of each nonzero
+    momentum sector, hence of their sum, which is the eigenspace by
+    Theorem~\ref{thm:hastings_momentum_sectors_span}. Conversely, if $P_g$ fixes
+    the eigenspace and $v\ne0$ lies in the sector of $\chi$, then
+    $\chi(g)v=P_gv=v$, so $\chi(g)=1$.
+\end{proof}
+
+The source assumes that each momentum is a rational multiple $2\pi p/q$ with
+$q$ independent of the system size \cite[lines 1620--1625]{Hastings2006Solving}.
+For a character this reads $\chi(g)^q=1$.
+
+\begin{theorem}[Momenta of bounded denominator]
+    \label{thm:hastings_supercell_pow}
+    \lean{TNLean.Lattice.pow_mem_supercell}
+    \leanok
+    \uses{def:hastings_supercell_of_momenta}
+    If $\chi(g)^q=1$ for every $g\in G$ and every character $\chi$ with a nonzero
+    momentum sector, then $g^q$ lies in the supercell for every $g\in G$.
+\end{theorem}
+\begin{proof}\leanok
+    $\chi(g^q)=\chi(g)^q=1$ for each such $\chi$.
+\end{proof}
+
+For the geometry, recall that the sites are pairs $(\vec x,y)$ of a unit cell
+$\vec x$ and a site $y$ within it \cite[lines 1607--1612]{Hastings2006Solving}.
+Let $\pi(v)\in\mathbb{Z}/n$ be the coordinate of the unit cell of the site $v$
+along one direction of the lattice, which has $n$ cells in that direction, and
+let $e\in G$ be the translation by one cell in that direction, so
+$\pi(e\cdot v)=\pi(v)+1$. For $a\in\mathbb{Z}/n$ write $|a|_n=\min(a,n-a)$
+for its circular distance from $0$, with $0\le a<n$ the representative.
+Suppose every edge of the graph joins sites $u$, $v$ with
+$|\pi(v)-\pi(u)|_n\le1$. On the ring of $n$ sites with its rotations, $\pi$ is
+the residue of the site.
+
+\begin{theorem}[Distance and cell coordinates]
+    \label{thm:hastings_cell_distance_le}
+    \lean{SimpleGraph.natAbs_valMinAbs_sub_le_edist}
+    \leanok
+    The graph distance from $x$ to $y$ is at least the circular distance of
+    $\pi(y)-\pi(x)$.
+\end{theorem}
+\begin{proof}\leanok
+    Along an edge the circular distance to $\pi(x)$ changes by at most one, so
+    along a walk from $x$ to $y$ it grows by at most the length of the walk.
+\end{proof}
+
+\begin{theorem}[Multiples of $q$ reach far]
+    \label{thm:hastings_multiples_reach_far}
+    \lean{TNLean.Lattice.exists_lt_natAbs_valMinAbs_add}
+    \leanok
+    For $q\ge1$ and $a,b\in\mathbb{Z}/n$ there is $t\ge0$ such that $b+qt-a$
+    has circular distance more than $\lfloor n/2\rfloor-q$.
+\end{theorem}
+\begin{proof}\leanok
+    The residues $b+qt-a$ for $t\ge0$ meet every arc of $q$ consecutive
+    residues. Choose $t$ with $b+qt-a$ among the $q$ residues ending at
+    $\lfloor n/2\rfloor$.
+\end{proof}
+
+\begin{theorem}[A supercell translation carries a site far away]
+    \label{thm:hastings_supercell_far}
+    \lean{TNLean.Lattice.exists_mem_supercell_lt_edist_add,
+        TNLean.Lattice.exists_mem_supercell_lt_edist_add_ring}
+    \leanok
+    \uses{thm:hastings_supercell_pow,thm:hastings_cell_distance_le,
+        thm:hastings_multiples_reach_far}
+    Let $G$ be abelian, let $H$ be invariant, let $\pi$ and $e$ be as above, and
+    let $\chi(g)^q=1$ for every $g$ and every character $\chi$ with a nonzero
+    momentum sector, where $q\ge1$. For sites $x$, $y$ some $g$ in the supercell
+    carries $y$ to graph distance more than $\lfloor n/2\rfloor-q$ from $x$. This
+    is the choice of $\vec x'$ in \cite[lines 1634--1641]{Hastings2006Solving}.
+\end{theorem}
+\begin{proof}\leanok
+    Take $t$ from Theorem~\ref{thm:hastings_multiples_reach_far} for $a=\pi(x)$ and
+    $b=\pi(y)$, and $g=(e^t)^q$, which lies in the supercell by
+    Theorem~\ref{thm:hastings_supercell_pow}. Then $\pi(g\cdot y)=\pi(y)+qt$, and
+    Theorem~\ref{thm:hastings_cell_distance_le} bounds the distance.
+\end{proof}
+
 Choosing $g\in S$ that carries $X_j$ to distance of order the linear size of
-the system from $X_i$ gives the source's conclusion. At line
+the system from $X_i$ gives the source's conclusion;
+Theorem~\ref{thm:hastings_supercell_far} provides such a $g$. At line
 1638 the source writes the first site as $(\vec x_1,y_2)$ where
 $(\vec x_1,y_1)$ is meant \cite{gap:hastings05_translation_supercell}.

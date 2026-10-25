@@ -149,3 +149,138 @@ this section are natural. The norm $\|\cdot\|_1$ is the full trace norm.
     of the rank. The same threshold yields rank at most $D_N$ at every
     internal cut, and the exact-representation theorem applies.
 \end{proof}
+
+\begin{theorem}[Rényi lower bound at a chain cut]
+    \label{thm:chain_cut_renyi_approximation_lower_bound}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.renyiEntropy_leftBlock_add_log_error_le_log}
+    \leanok
+    Let $\psi$ be a unit vector on a chain of $L$ sites, and let $\phi$ be an
+    open-boundary matrix product state of bond dimension at most $D$.
+    The vector $\phi$ need not be normalized. Suppose $0<k<L$, $\alpha>1$,
+    $\delta<1$, and
+    $\lVert\ketbra{\psi}{\psi}-\ketbra{\phi}{\phi}\rVert_1\le\delta$.
+    If $\rho_k$ is the reduced density matrix of $\psi$ on the first $k$ sites,
+    then
+    \begin{align}
+        \label{eq:chain_cut_renyi_approximation_lower_bound}
+        S_\alpha(\rho_k)+\frac{\alpha}{\alpha-1}\log(1-\delta) & \le\log D.
+    \end{align}
+    This is the prefix form of the Rényi approximation lower bound
+    in~\cite{Schuch2008EntropyScaling}, with the sign correction documented
+    in~\cite{gap:swvc08_renyi_bond_dimension_sign}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_reduced_state_rank_error}
+    The reduced matrix of $\phi$ has rank at most $D$, and partial trace
+    contracts the full trace norm. Apply the finite-dimensional Rényi
+    approximation inequality to the two reduced matrices. Only the target
+    matrix has trace one, which follows from $\lVert\psi\rVert=1$.
+\end{proof}
+
+
+\begin{theorem}[Rényi lower bound on an arbitrary contiguous block]
+    \label{thm:chain_block_renyi_approximation_lower_bound}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.rank_regionState_sdiff_leftBlock_le_sq,
+        TNLean.MPS.AreaLaw.IsOpenMPS.rank_regionState_leftBlock_le_max,
+        TNLean.MPS.AreaLaw.IsOpenMPS.rank_regionState_sdiff_leftBlock_le_max_sq,
+        TNLean.MPS.AreaLaw.IsOpenMPS.renyiEntropy_sdiff_leftBlock_add_log_error_le_two_log}
+    \leanok
+    Let $\psi$ be a unit vector on a finite chain, and let $\phi$ be an
+    open-boundary MPS of bond dimension at most $D$, without normalization.
+    Suppose $\alpha>1$, $\delta<1$, and
+    $\lVert\ketbra{\psi}{\psi}-\ketbra{\phi}{\phi}\rVert_1\le\delta$.
+    For every contiguous block $B$,
+    \begin{align}
+        \label{eq:chain_block_renyi_approximation_lower_bound}
+        S_\alpha(\rho_{\psi,B})
+        +\frac{\alpha}{\alpha-1}\log(1-\delta) & \le2\log D.
+    \end{align}
+    Empty blocks and the whole chain are included. The zero bond budget is
+    included with the convention $\log0=0$.
+    The factor two corrects the single-bond expression for interior blocks
+    in~\cite{Schuch2008EntropyScaling}; see
+    \cite{gap:swvc08_interior_block_bond_rank}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_reduced_state_rank_error}
+    Write $B=T\setminus R$ for nested prefixes. The complement is the disjoint
+    union $R\cup T^c$. Equality of complementary ranks and the product bound
+    for ranks on disjoint unions give
+    \begin{align}
+        \label{eq:chain_block_rank_product}
+        \operatorname{rank}\rho_{\phi,B}
+         & \le\operatorname{rank}\rho_{\phi,R}
+        \operatorname{rank}\rho_{\phi,T}.
+    \end{align}
+    At an internal cut each rank is at most $D$; at an endpoint it is at most
+    one. Thus the block rank is at most $\max(1,D)^2$, including chains of
+    length zero or one. Regional reduction contracts the full trace-norm
+    error, so the finite-dimensional Rényi inequality bounds the left side
+    by $\log(\max(1,D)^2)$. For $D>0$ this is $2\log D$; for $D=0$ both
+    expressions vanish under the stated logarithm convention.
+\end{proof}
+
+
+\begin{theorem}[Logarithmic Rényi bound for efficiently approximable families]
+    \label{thm:efficient_mps_renyi_logarithmic_bound}
+    \lean{TNLean.MPS.AreaLaw.IsEfficientlyApproximableByMPS.exists_logarithmic_renyi_bound,
+        TNLean.MPS.AreaLaw.not_isEfficientlyApproximableByMPS_of_superlogarithmic_renyi}
+    \leanok
+    Let $(\psi_N)_{N\in\mathcal N}$ be unit vectors on chains indexed by a set
+    $\mathcal N\subseteq\mathbb N$ of lengths. Suppose this family admits
+    efficient approximation by MPS, in the full trace norm. Fix $\alpha>1$
+    and a contiguous block $B_N$ in each chain. Then there are $K\in\mathbb R$
+    and $m\in\mathbb N$, independent of $N$, such that
+    \begin{align}
+        \label{eq:efficient_mps_renyi_logarithmic_bound}
+        S_\alpha(\rho_{N,B_N}) & \le K+m\log(N+1)
+        \qquad(N\in\mathcal N).
+    \end{align}
+    Consequently, absence of any such uniform logarithmic bound rules out
+    efficient approximation. No consistency between chain lengths is assumed,
+    and the approximating vectors need not be normalized.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_block_renyi_approximation_lower_bound}
+    Fix accuracy $\delta=1/2$. The polynomial bond bound has the form
+    $D_N\le C(N+1)^r$ with $C>0$ and $r\in\mathbb N$. The finite-chain
+    inequality gives
+    \begin{align}
+        \label{eq:efficient_mps_renyi_fixed_accuracy}
+        S_\alpha(\rho_{N,B_N})
+         & \le2|\log C|+2r\log(N+1)
+        -\frac{\alpha}{\alpha-1}\log(1/2).
+    \end{align}
+    For $D_N>0$, take logarithms of the bond bound; for $D_N=0$, the same
+    estimate follows from $\log0=0$ and nonnegativity of the right side.
+    The constants are uniform in $N$.
+\end{proof}
+
+\begin{theorem}[Power-law Rényi obstruction]
+    \label{thm:mps_renyi_power_growth_obstruction}
+    \lean{TNLean.MPS.AreaLaw.not_isEfficientlyApproximableByMPS_of_renyi_power_growth}
+    \leanok
+    Let $\mathcal N\subseteq\mathbb N$ be infinite, and let
+    $(\psi_N)_{N\in\mathcal N}$ be unit vectors on chains of length $N$.
+    Fix $\alpha>1$. Suppose there are $c,\kappa,\eta>0$ and contiguous blocks
+    $B_N$ such that, for all sufficiently large $N\in\mathcal N$,
+    \begin{align}
+        \label{eq:mps_renyi_power_growth_hypotheses}
+        |B_N| & \ge\eta N,
+              & S_\alpha(\rho_{N,B_N}) & \ge c|B_N|^\kappa.
+    \end{align}
+    Then the family cannot be efficiently approximated by MPS.
+    This is the Rényi entropy obstruction in
+    \cite{Schuch2008EntropyScaling}, source lines 309--315, including
+    arbitrary permitted chain lengths and finitely many exceptional lengths.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:efficient_mps_renyi_logarithmic_bound}
+    For $N\ge1$, the block-size bound implies
+    $|B_N|\ge(\eta/2)(N+1)$. Thus the entropy is at least
+    $c(\eta/2)^\kappa(N+1)^\kappa$ for all sufficiently large permitted
+    lengths. Every function $K+m\log x$ is eventually smaller than a positive
+    multiple of $x^\kappa$, since $\log x=o(x^\kappa)$ when $\kappa>0$.
+    An infinite set of natural lengths is unbounded, so the logarithmic bound
+    from efficient approximation gives a contradiction.
+\end{proof}

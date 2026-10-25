@@ -28,6 +28,8 @@ import TNLean.Lattice.GaussianTailMoment
 import TNLean.Lattice.HeisenbergDuhamel
 import TNLean.Lattice.LocalHamiltonian
 import TNLean.Lattice.LowEnergyBasis
+import TNLean.Lattice.LowEnergyBasisIteration
+import TNLean.Lattice.LowEnergyBasisSimpleSpectrum
 import TNLean.Lattice.LowEnergyCommutator
 import TNLean.Lattice.LowEnergyCommutatorExample
 import TNLean.Lattice.MarginalTails
@@ -48,7 +50,9 @@ import TNLean.Lattice.SiteRelabelEntropy
 import TNLean.Lattice.SiteSymmetry
 import TNLean.Lattice.SupportedPolarUnitary
 import TNLean.Lattice.SupportedUnitaryEntropy
+import TNLean.Lattice.TranslationMomentum
 import TNLean.Lattice.TranslationSupercell
 import TNLean.Lattice.TranslationSupercellDecay
+import TNLean.Lattice.TranslationSupercellSpacing
 import TNLean.Lattice.VariationalLowerBound
 import TNLean.Lattice.ZeroEntropy
