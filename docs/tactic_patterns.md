@@ -24,6 +24,15 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Supported Gaussian averaging — promoted (2026-10-21)
+
+- **Pattern:** Factor the two-Hamiltonian integrand into an evolved observable and relative evolution, localize the two factors on possibly different regions, and integrate against the restricted Gaussian measure.
+- **Defined in:** `TNLean/Circuit/SupportedGaussianIntegral.lean`, `QuantumCircuit.exists_supported_gaussian_integral_of_projection_bounds`.
+- **Use when:** Actual observable and generator projection estimates give scalar errors on a symmetric time interval. The theorem constructs one supported path before the observable and averaging data, retains the two projection regions and a common containing output region, and supplies support, norm and error bounds for the average.
+- **Refactored occurrences:** `MPS/AreaLaw/SupportedGaussianIntegral.lean` and `PEPS/AreaLaw/SupportedGaussianIntegral.lean`. Their physical localization estimates and constants remain at the callers; their repeated integration arguments are removed.
+- **Notes:** The restricted measure is not renormalized. Zero variance, zero cutoff and the empty site set are retained. The bound is `‖W‖ (εobs + T εgen)`, without an additional factor of two. The two caller files lose 146 lines in total.
+
+
 ### Hermitian sum of pointwise-Hermitian terms — promoted (2026-10-23)
 - **Pattern:**
   ```lean
@@ -116,6 +125,11 @@ abstracted — record why, so it is not re-proposed).
   `MPS/AreaLaw/LogarithmicSeparation.lean`.
 - **Abstraction:** `ChainHamiltonian.norm_bound_nonneg` in
   `MPS/AreaLaw/Hamiltonian.lean`; all three arguments use this lemma.
+  For finite induced domains, `DomainHamiltonian.norm_bound_nonneg` in
+  `MPS/AreaLaw/DomainInteractionBudget.lean` uses the admissible singleton
+  and is reused by the domain per-site budget. The domain doubled, swapped
+  and per-replica perturbation proofs also use it at a member of each
+  original nonempty support.
 - **Notes:** An actual site is essential. The empty-chain branch retains
   the original real interaction bound. No positivity hypothesis on the
   interaction bound is added to the logarithmic-separation theorem.
@@ -4850,6 +4864,47 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Regional expectation compared with a supported approximant — candidate (2026-10-21)
+
+- **Pattern:** For a contractive regional expectation fixing a supported approximant, rewrite the projection error as the difference between the approximation error and its expectation.
+- **Defined in:** `Circuit/SiteExpectation.lean`, `QuantumCircuit.norm_sub_siteExpectation_le_two_mul_norm_sub_of_mem_supportedOperators`.
+- **Use when:** An approximant is supported on the output region; the error of projecting the original operator is at most twice its distance to that approximant.
+- **Refactored occurrences:** The chain relative-generator proof and the finite-domain relative-generator proof use this same inequality. The finite-family bounds use the existing `map_sum` and `norm_sum_le` lemmas.
+- **Notes:** No state, Hermiticity or nonempty-region assumption is required.
+- **Status:** Two occurrences in two files; the shared lemma is kept, and the entry is promoted when a third consumer lands.
+
+### Infimum over walk lengths under graph maps — candidate (2026-10-21)
+
+- **Pattern:** Rewrite extended graph distance as the infimum of walk lengths,
+  bound the target distance for each source walk, and preserve the length by
+  mapping or inducing that walk.
+- **Seen:** `SimpleGraph.Hom.edist_le` maps walks;
+  `SimpleGraph.ConnectedComponent.edist_eq` induces ambient walks after
+  proving that their support remains in the component. The isomorphism
+  theorem applies the homomorphism result twice.
+- **Existing lemmas:** Public Mathlib `Walk.length_map`, `Walk.induce` and
+  `Walk.map_induce` supply the transport identities. The component argument
+  uses public `Walk.takeUntil`, not the private component-walk construction.
+- **Notes:** These are two related comparisons in one module, below the
+  promotion threshold. The mathematical transport theorems should be reused;
+  no additional tactic or abstraction is proposed. Both comparisons are in
+  `TNLean/Algebra/GraphDistanceTransport.lean`.
+
+
+
+### Passing from a natural localization radius to a real radius — candidate (2026-10-21)
+
+- **Pattern:** Use the floor inequality to bound
+  `exp (a - (⌊ℓ⌋₊ : ℝ) / 2)` by `exp (1 / 2) * exp (a - ℓ / 2)`;
+  combine this factor with the coefficient of the natural-radius estimate.
+- **Seen:** The chain localization theorem in `MPS/AreaLaw/LiebRobinson.lean`
+  and the domain localization theorem in `MPS/AreaLaw/DomainLiebRobinson.lean`.
+- **Existing lemmas:** `Nat.lt_floor_add_one`, `Nat.floor_lt`,
+  `Real.exp_le_exp` and `Real.exp_add`.
+- **Notes:** Two occurrences in two files. A third occurrence would warrant
+  extracting the scalar inequality, independently of the graph and Hamiltonian.
+
+
 ### Restricting an operator Schmidt decomposition at a fixed configuration — candidate (2026-10-23)
 
 - **Pattern:** Choose an actual configuration in the region carrying an identity
@@ -5047,20 +5102,6 @@ no additional helper is proposed.
   crossing witnesses. A boundary-endpoint summary can lose an extra site and
   does not replace the direct diameter estimate.
 
-### Supported Gaussian averaging — candidate (2026-10-18)
-
-- **Pattern:** Factor the actual two-Hamiltonian integrand into an evolved
-  observable and relative evolution; prove support of its localized average
-  by commuting a supported-operator expectation with the integral; bound its
-  norm and error using the Gaussian measure's mass at most one.
-- **Seen:** Two occurrences, in `PEPS/AreaLaw/SupportedGaussianIntegral.lean`
-  and `MPS/AreaLaw/SupportedGaussianIntegral.lean`.
-- **Abstraction:** Both arguments already use one-parameter unitary identities,
-  `ContinuousLinearMap.integral_comp_comm` and standard integral norm bounds.
-  Assess the weakest additional finite-site lemma if a third consumer appears.
-- **Notes:** Keep the physical Hamiltonian and locality estimates at each
-  caller. The chain argument uses separate observable and generator regions
-  and retains zero variance, zero cutoff and the empty chain.
 
 ### Conjugation by a contraction — candidate (2026-10-18)
 
@@ -8970,6 +9011,29 @@ spectral split → block extraction → MPV calculation → strict bounds
   the finite path is connected, whereas an induced domain uses exact
   commutation across components. No further abstraction is proposed yet.
 
+### Opposite-side witnesses for reset supports — candidate (2026-10-21)
+
+- **Pattern:** For a support crossing a region, choose one vertex inside and
+  one outside. Use the outside witness for the first interior core and the
+  inside witness for the disjoint second region. The diameter bound transfers
+  the core margin to every vertex of the support.
+- **Seen:** `chain_reset_support_separation` in
+  `MPS/AreaLaw/ResetSupportSeparation.lean` and
+  `reset_graphNeighborhood_disjoint_cores` in
+  `Circuit/LiebRobinson/SupportSeparation.lean`.
+- **Abstraction:** The graph theorem expresses the common geometric argument
+  with natural ball containments. The chain theorem also gives a real-distance
+  lower bound and retains its present proof.
+- **Notes:** Two occurrences; below the promotion threshold. A conversion
+  through rounded radii would lengthen the existing chain proof.
+
+### Entropy of finite unions from submodularity — candidate (2026-10-21)
+
+- **Pattern:** Submodularity and nonnegative reduced-state entropy give binary union subadditivity; the empty region has entropy zero.
+- **Seen:** `MPS/AreaLaw/IntervalNeighborhoodEntropy.lean` and `MPS/AreaLaw/DomainIntervalNeighborhoodEntropy.lean`.
+- **Existing abstraction:** Mathlib's `Finset.apply_sup_le_sum` already extends a binary inequality to a finite union and is used in the domain proof.
+- **Notes:** The intervals may overlap. Entropy monotonicity is not used. If a further occurrence appears, extract the site-generic entropy statement and replace the remaining direct finite-family argument.
+
 ### Transport of a tensor factor through a layout equality — candidate (2026-10-18)
 
 - **Pattern:** An equality of the second tensor-factor spaces and a heterogeneous
@@ -9081,6 +9145,40 @@ spectral split → block extraction → MPV calculation → strict bounds
   `Lattice.hasSourceBoundedChange_liftOne`. The stage births call it with an
   empty prefix and the scalar idle vector; the former private copy is removed.
 
+### Cancellation outside crossing supports — candidate (2026-10-22)
+
+- **Pattern:** Apply conjugation minus the identity to the doubled Hamiltonian,
+  cancel terms whose supports do not cross the exchanged region, and split the
+  remaining pair sum over the two replicas.
+- **Seen:** `ChainHamiltonian.partialSwap_difference_eq_sum_crossing` in
+  `MPS/AreaLaw/PartialSwap.lean` and its finite-domain counterpart in
+  `MPS/AreaLaw/DomainPartialSwap.lean`.
+- **Decision:** Two occurrences. A third use should share the common finite-sum
+  cancellation argument, retaining the distinct support geometries.
+
+### Comparing vectors through one cut matrix — candidate (2026-10-23)
+
+- **Pattern:** Prove equality of chain vectors by applying injectivity of the
+  coefficient matrix at a fixed cut, then use a matrix multiplication identity.
+- **Seen:** The left-supported and right-supported product replacements in
+  `MPS/AreaLaw/ProductReplacement.lean` (two occurrences in one file).
+- **Abstraction:** Both use the local `cutMatrix_injective` helper. The common
+  step is a coordinate equivalence; no new tactic is needed. A further use in
+  another file would justify making the injectivity lemma public.
+
+### Membership of consecutive block coordinates — candidate (2026-10-23)
+
+- **Pattern:** Convert membership of the site `L * i + j` in a prefix or
+  interval into inequalities on the block index, using `j < L`.
+- **Seen:** `copySite_mem_leftBlock_iff` in `MPS/AreaLaw/CopyProduct.lean`
+  and `copyConfigurationEquiv_insertInterval` in `MPS/AreaLaw/CopyMPSFactor.lean`.
+- **Existing reuse:** The first proof is shared within the copy-boundary
+  factorization. The interval proof compares two block indices and uses
+  `Nat.mul_le_mul_right` with `nlinarith` for the two strict-order cases.
+- **Decision:** Two related uses do not yet justify a public coordinate
+  theorem or a tactic. Reconsider a common arithmetic lemma when another
+  block-coordinate argument repeats the same inequalities.
+
 ### Distinguished symbol versus an embedded finite alphabet — candidate (2026-10-23)
 
 - **Pattern:** Evaluate an equality of finite words at one site, take the
@@ -9129,3 +9227,46 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Existing simplification:** `mem_interval` and `Fin.ext_iff` already express the
   required normal form. The occurrences are in one file; no additional helper or
   tactic is proposed at this stage.
+
+### Logarithmic bounds on a natural rank — candidate (2026-10-23)
+
+- **Pattern:** Split a natural rank into zero and positive cases, then apply
+  `Real.log_le_log_iff` and `exact_mod_cast` to obtain a rank bound from a
+  logarithmic bound with positive cutoff.
+- **Seen:** Twice in `MPS/AreaLaw/EntropyScaling/RenyiApproximation.lean`, in
+  the ordinary family theorem and the finite smoothed-entropy criterion.
+- **Abstraction:** Below the promotion threshold. A further occurrence in
+  another file would justify a scalar lemma in the appropriate shared library;
+  the present proofs use the existing logarithm monotonicity lemma directly.
+
+### Squared fidelity of unit vectors — candidate (2026-10-23)
+
+- **Pattern:** Apply Cauchy--Schwarz, rewrite both unit norms, and square the
+  resulting nonnegative inequality to place squared fidelity in `[0,1]`.
+- **Seen:** The private `sq_norm_inner_mem_Icc` in
+  `TNLean/MPS/AreaLaw/CopyErrorAmplification.lean` and
+  `qutritFamily_scalar_error_lower_bound` in
+  `TNLean/MPS/AreaLaw/EntropyScaling/QutritApproximation.lean`.
+- **Abstraction:** A shared inner-product lemma in QICLean would replace both
+  calculations if another independent use appears. The first module already
+  reuses its private lemma throughout the product argument.
+- **Status:** Two independent calculations in two modules; below the promotion
+  threshold. The qutrit proof reuses the existing Ky Fan overlap theorem and
+  the actual MPS cut-rank bound rather than repeating their proofs.
+
+### Linear bounds for regional-entropy suprema — candidate (2026-10-17)
+
+- **Pattern:** apply `Real.sSup_le` with a nonnegative linear target, unpack
+  a physical entropy witness, and use its rectangle-size bound to increase
+  the scale to the scale of the supremum.
+- **Seen:** `exists_initialBuffer_and_real_boxEntropy_recurrence` in
+  `PEPS/AreaLaw/SafeRectangleAreaLaw.lean` and
+  `exists_uniform_boxEntropy_improvement_real` in
+  `PEPS/AreaLaw/Scan/RealBoxEntropyImprovement.lean`.
+- **Abstraction:** both uses apply Mathlib's `Real.sSup_le` directly and
+  share the pointwise theorem
+  `exists_regionalEntropy_safe_rect_le_linear`. A further helper is
+  deferred until another proof repeats this physical collection.
+- **Notes:** the nonnegative target also covers the empty collection.
+  The earlier monotonicity candidate uses the same Mathlib theorem with
+  inclusion of collections in place of a pointwise linear estimate.

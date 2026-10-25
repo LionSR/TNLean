@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Combinatorics.SimpleGraph.CycleGraph
 import Mathlib.Combinatorics.SimpleGraph.Metric
+import Mathlib.Data.ZMod.ValMinAbs
 import TNLean.Lattice.TranslationMomentum
 
 /-!
@@ -33,9 +34,9 @@ of `n` sites with its rotations is the case `π = id` (`exists_mem_supercell_lt_
 
 * `TNLean.Lattice.pow_mem_supercell`: with momenta of denominator `q`, every `q`-th power lies in
   the supercell.
-* `SimpleGraph.ringNorm_sub_le_edist`: the graph distance is at least the circular distance of
-  the cell coordinates.
-* `SimpleGraph.exists_lt_ringNorm_add`: some multiple of `q` added to a cell coordinate puts it
+* `SimpleGraph.natAbs_valMinAbs_sub_le_edist`: the graph distance is at least the circular
+  distance `|π y - π x|` of the cell coordinates in `ℤ/n`.
+* `TNLean.Lattice.exists_lt_natAbs_valMinAbs_add`: some multiple of `q` added to a residue puts it
   at circular distance more than `n / 2 - q` from any other.
 * `TNLean.Lattice.exists_mem_supercell_lt_edist_add`: with momenta of denominator `q`, some
   element of the supercell carries any site to graph distance more than `n / 2 - q` from any
@@ -44,119 +45,57 @@ of `n` sites with its rotations is the case `π = id` (`exists_mem_supercell_lt_
 -/
 
 open Matrix
-open scoped Fin.NatCast
 
 namespace SimpleGraph
 
-/-- The circular distance `min(a, n - a)` from `0` to `a` on a ring of `n` sites. -/
-def ringNorm {n : ℕ} (a : Fin n) : ℕ := min a.val (n - a.val)
-
-private theorem exists_eq_succ (n : ℕ) [NeZero n] : ∃ m, n = m + 1 :=
-  ⟨n - 1, (Nat.succ_pred_eq_of_pos (NeZero.pos n)).symm⟩
-
-theorem ringNorm_zero {n : ℕ} [NeZero n] : ringNorm (0 : Fin n) = 0 := by simp [ringNorm]
-
-theorem ringNorm_add_one_le {n : ℕ} [NeZero n] (a : Fin n) : ringNorm (a + 1) ≤ ringNorm a + 1 := by
-  obtain ⟨m, rfl⟩ := exists_eq_succ n
-  have ha := a.isLt
-  simp only [ringNorm, Fin.val_add_one]
-  split_ifs <;> omega
-
-theorem ringNorm_le_add_one_add_one {n : ℕ} [NeZero n] (a : Fin n) :
-    ringNorm a ≤ ringNorm (a + 1) + 1 := by
-  obtain ⟨m, rfl⟩ := exists_eq_succ n
-  have ha := a.isLt
-  simp only [ringNorm, Fin.val_add_one]
-  split_ifs with h
-  · have : a.val = m := by rw [h]; rfl
-    omega
-  · omega
-
-private theorem eq_one_of_val_eq_one {n : ℕ} [NeZero n] {a : Fin n} (h : a.val = 1) : a = 1 :=
-  Fin.ext (by rw [h, Fin.val_one', Nat.mod_eq_of_lt (by have := a.isLt; omega)])
-
-/-- A coordinate step of circular size at most one is `0`, `1` or `-1`. -/
-private theorem eq_zero_or_eq_one_or_add_one_eq_zero {n : ℕ} [NeZero n] {a : Fin n}
-    (ha : ringNorm a ≤ 1) : a = 0 ∨ a = 1 ∨ a + 1 = 0 := by
-  have hn := NeZero.pos n
-  have hlt := a.isLt
-  rcases Nat.lt_or_ge a.val 2 with h | h
-  · rcases Nat.lt_succ_iff.mp h |>.lt_or_eq with h | h
-    · exact Or.inl (Fin.ext (by rw [Fin.val_zero]; omega))
-    · exact Or.inr (Or.inl (eq_one_of_val_eq_one h))
-  · have : a.val = n - 1 := by simp only [ringNorm] at ha; omega
-    refine Or.inr (Or.inr (Fin.ext ?_))
-    rw [Fin.val_add, this, Fin.val_one', Fin.val_zero]
-    rcases Nat.lt_or_ge 1 n with h1 | h1
-    · rw [Nat.mod_eq_of_lt h1, Nat.sub_add_cancel hn, Nat.mod_self]
-    · omega
-
 variable {V : Type*} {Γ : SimpleGraph V}
 
-/-- Along an edge whose cell coordinates differ by at most one, the circular distance to a fixed
-coordinate changes by at most one. -/
-theorem ringNorm_sub_le_of_step {n : ℕ} [NeZero n] (π : V → Fin n) {u v : V}
-    (h : ringNorm (π v - π u) ≤ 1) (c : Fin n) : ringNorm (π v - c) ≤ ringNorm (π u - c) + 1 := by
-  rcases eq_zero_or_eq_one_or_add_one_eq_zero h with h | h | h
-  · rw [sub_eq_zero.mp h]; omega
-  · have : π v - c = (π u - c) + 1 := by rw [← h]; abel
-    rw [this]; exact ringNorm_add_one_le _
-  · have : π u - c = (π v - c) + 1 := by
-      have := congrArg (· + (π u - c)) h
-      simp only [zero_add] at this
-      rw [← this]; abel
-    rw [this]; exact ringNorm_le_add_one_add_one _
-
-theorem ringNorm_sub_le_length {n : ℕ} [NeZero n] (π : V → Fin n)
-    (hπ : ∀ u v, Γ.Adj u v → ringNorm (π v - π u) ≤ 1) (c : Fin n) {u y : V} (p : Γ.Walk u y) :
-    ringNorm (π y - c) ≤ ringNorm (π u - c) + p.length := by
-  induction p with
-  | nil => simp
-  | cons h p ih =>
-    rw [Walk.length_cons]
-    have := ringNorm_sub_le_of_step π (hπ _ _ h) c
-    omega
-
-/-- **Distance and cell coordinates.** If every edge of `Γ` joins sites whose cell coordinates
-differ by at most one, the graph distance from `x` to `y` is at least the circular distance
-`min(a, n - a)` of the coordinate difference `a = π y - π x`. -/
-theorem ringNorm_sub_le_edist {n : ℕ} [NeZero n] (π : V → Fin n)
-    (hπ : ∀ u v, Γ.Adj u v → ringNorm (π v - π u) ≤ 1) (x y : V) :
-    (ringNorm (π y - π x) : ℕ∞) ≤ Γ.edist x y := by
+/-- **Distance and cell coordinates.** Let `π : V → ℤ/n` be a cell coordinate such that every
+edge of `Γ` joins sites whose coordinates differ by at most one. Then the graph distance from
+`x` to `y` is at least the circular distance `|π y - π x|`, the absolute value of the least
+residue. -/
+theorem natAbs_valMinAbs_sub_le_edist {n : ℕ} (π : V → ZMod n)
+    (hπ : ∀ u v, Γ.Adj u v → (π v - π u).valMinAbs.natAbs ≤ 1) (x y : V) :
+    ((π y - π x).valMinAbs.natAbs : ℕ∞) ≤ Γ.edist x y := by
+  have hwalk : ∀ {u : V} (p : Γ.Walk u y),
+      (π y - π x).valMinAbs.natAbs ≤ (π u - π x).valMinAbs.natAbs + p.length := by
+    intro u p
+    induction p with
+    | nil => simp
+    | @cons u w _ h p ih =>
+      have hstep : (π w - π x).valMinAbs.natAbs ≤ (π u - π x).valMinAbs.natAbs + 1 := by
+        rw [show π w - π x = (π u - π x) + (π w - π u) by abel]
+        exact (ZMod.natAbs_valMinAbs_add_le _ _).trans
+          ((Int.natAbs_add_le _ _).trans (by have := hπ u w h; omega))
+      rw [Walk.length_cons]
+      omega
   rcases eq_or_ne (Γ.edist x y) ⊤ with h | h
   · simp [h]
   obtain ⟨p, hp⟩ := exists_walk_of_edist_ne_top h
   rw [← hp]
-  have := ringNorm_sub_le_length π hπ (π x) p
-  rw [sub_self, ringNorm_zero, zero_add] at this
+  have := hwalk p
+  rw [sub_self, ZMod.valMinAbs_zero, Int.natAbs_zero, zero_add] at this
   exact_mod_cast this
 
-theorem ringNorm_neg {n : ℕ} [NeZero n] (a : Fin n) : ringNorm (-a) = ringNorm a := by
-  have := a.isLt
-  simp only [ringNorm, Fin.val_neg]
-  split_ifs with h
-  · simp [h]
-  · omega
+end SimpleGraph
 
-/-- Every edge of the ring joins coordinates at circular distance one. -/
-theorem ringNorm_sub_le_one_of_adj_cycleGraph {n : ℕ} [NeZero n] (u v : Fin n)
-    (h : (cycleGraph n).Adj u v) : ringNorm (id v - id u) ≤ 1 := by
-  simp only [id]
-  rcases cycleGraph_adj'.mp h with h | h
-  · rw [← neg_sub, ringNorm_neg, ringNorm, h]; omega
-  · rw [ringNorm, h]; omega
+namespace TNLean.Lattice
 
-/-- **Multiples of `q` reach far.** For `q ≥ 1` and coordinates `a`, `b` in `ℤ/n`, some
+/-- **Multiples of `q` reach far.** For `q ≥ 1` and residues `a`, `b` modulo `n`, some
 `b + qt` lies at circular distance more than `n / 2 - q` from `a`. -/
-theorem exists_lt_ringNorm_add {n : ℕ} [NeZero n] {q : ℕ} (hq : 0 < q) (a b : Fin n) :
-    ∃ t : ℕ, n / 2 < ringNorm (b + ((q * t : ℕ) : Fin n) - a) + q := by
+theorem exists_lt_natAbs_valMinAbs_add {n : ℕ} [NeZero n] {q : ℕ} (hq : 0 < q)
+    (a b : ZMod n) :
+    ∃ t : ℕ, n / 2 < (b + ((q * t : ℕ) : ZMod n) - a).valMinAbs.natAbs + q := by
   have hn := NeZero.pos n
   set c := (b - a).val with hc
-  have hcL : c < n := (b - a).isLt
+  have hcL : c < n := ZMod.val_lt (b - a)
   set h := n / 2 with hh
   have hhn : h ≤ n - h := by omega
-  have hval (t : ℕ) : (b + ((q * t : ℕ) : Fin n) - a).val = (q * t + c) % n := by
-    rw [add_sub_right_comm, add_comm, Fin.val_add, Fin.val_natCast, hc, Nat.mod_add_mod]
+  have hval (t : ℕ) : (b + ((q * t : ℕ) : ZMod n) - a).val = (q * t + c) % n := by
+    rw [← ZMod.val_natCast, Nat.cast_add, hc, ZMod.natCast_zmod_val]
+    congr 1
+    abel
+  simp only [ZMod.valMinAbs_natAbs_eq_min]
   by_cases hsmall : h < q
   · exact ⟨0, by omega⟩
   replace hsmall := not_lt.mp hsmall
@@ -165,7 +104,7 @@ theorem exists_lt_ringNorm_add {n : ℕ} [NeZero n] {q : ℕ} (hq : 0 < q) (a b 
     have h1 := Nat.div_mul_le_self (h - c) q
     have h2 := Nat.lt_div_mul_add (a := h - c) hq
     rw [mul_comm] at h1 h2
-    rw [ringNorm, hval, Nat.mod_eq_of_lt (show q * ((h - c) / q) + c < n by omega)]
+    rw [hval, Nat.mod_eq_of_lt (show q * ((h - c) / q) + c < n by omega)]
     omega
   · refine ⟨(n + h - c) / q, ?_⟩
     have h1 := Nat.div_mul_le_self (n + h - c) q
@@ -174,12 +113,26 @@ theorem exists_lt_ringNorm_add {n : ℕ} [NeZero n] {q : ℕ} (hq : 0 < q) (a b 
     set s := q * ((n + h - c) / q) + c
     have hs : s % n = s - n := by
       rw [Nat.mod_eq_sub_mod (by omega), Nat.mod_eq_of_lt (by omega)]
-    rw [ringNorm, hval, hs]
+    rw [hval, hs]
     omega
 
-end SimpleGraph
+/-- The coordinate of a site of the ring, as a residue: subtraction of sites is subtraction of
+residues. -/
+private theorem natCast_val_sub {n : ℕ} [NeZero n] (u v : Fin n) :
+    (((v - u : Fin n) : ℕ) : ZMod n) = ((v : ℕ) : ZMod n) - ((u : ℕ) : ZMod n) := by
+  rw [Fin.val_sub, ZMod.natCast_mod, Nat.cast_add, Nat.cast_sub u.isLt.le, ZMod.natCast_self]
+  ring
 
-namespace TNLean.Lattice
+/-- Every edge of the ring joins residues at circular distance one. -/
+private theorem natAbs_valMinAbs_sub_le_one_of_adj_cycleGraph {n : ℕ} [NeZero n] (u v : Fin n)
+    (h : (SimpleGraph.cycleGraph n).Adj u v) :
+    (((v : ℕ) : ZMod n) - ((u : ℕ) : ZMod n)).valMinAbs.natAbs ≤ 1 := by
+  have hone : ((1 : ZMod n)).valMinAbs.natAbs ≤ 1 := by
+    rw [ZMod.valMinAbs_natAbs_eq_min]
+    exact (min_le_left _ _).trans (by rw [ZMod.val_one_eq_one_mod]; exact Nat.mod_le 1 n)
+  rcases SimpleGraph.cycleGraph_adj'.mp h with h | h
+  · rw [← neg_sub, ZMod.natAbs_valMinAbs_neg, ← natCast_val_sub, h, Nat.cast_one]; exact hone
+  · rw [← natCast_val_sub, h, Nat.cast_one]; exact hone
 
 variable {V : Type*} [Fintype V] [DecidableEq V] {G : Type*} [CommGroup G] [MulAction G V]
   {d : ℕ}
@@ -205,25 +158,27 @@ make the distance ... of order the linear size of the system". -/
 theorem exists_mem_supercell_lt_edist_add {Γ : Type*} [CommGroup Γ] [MulAction Γ V]
     {H : Matrix (V → Fin d) (V → Fin d) ℂ} {E₀ : ℝ} {q : ℕ} (hq : 0 < q)
     (hden : ∀ χ : Γ →* ℂ, momentumSector Γ d H E₀ χ ≠ ⊥ → ∀ g, χ g ^ q = 1)
-    (G : SimpleGraph V) {n : ℕ} [NeZero n] (π : V → Fin n)
-    (hπ : ∀ u v, G.Adj u v → SimpleGraph.ringNorm (π v - π u) ≤ 1)
+    (G : SimpleGraph V) {n : ℕ} [NeZero n] (π : V → ZMod n)
+    (hπ : ∀ u v, G.Adj u v → (π v - π u).valMinAbs.natAbs ≤ 1)
     (e : Γ) (he : ∀ v, π (e • v) = π v + 1) (x y : V) :
     ∃ g ∈ supercell Γ d H E₀, ((n / 2 : ℕ) : ℕ∞) < G.edist x (g • y) + q := by
-  have hpow (k : ℕ) (v : V) : π (e ^ k • v) = π v + ((k : ℕ) : Fin n) := by
+  have hpow (k : ℕ) (v : V) : π (e ^ k • v) = π v + (k : ZMod n) := by
     induction k with
     | zero => simp
     | succ k ih => rw [pow_succ', mul_smul, he, ih, Nat.cast_succ]; abel
-  obtain ⟨t, ht⟩ := SimpleGraph.exists_lt_ringNorm_add hq (π x) (π y)
+  obtain ⟨t, ht⟩ := exists_lt_natAbs_valMinAbs_add hq (π x) (π y)
   refine ⟨(e ^ t) ^ q, pow_mem_supercell hden _, ?_⟩
   rw [← pow_mul, mul_comm]
-  have hdist := SimpleGraph.ringNorm_sub_le_edist π hπ x (e ^ (q * t) • y)
+  have hdist := SimpleGraph.natAbs_valMinAbs_sub_le_edist π hπ x (e ^ (q * t) • y)
   rw [hpow] at hdist
-  have h1 : ((n / 2 : ℕ) : ℕ∞) < (SimpleGraph.ringNorm (π y + ((q * t : ℕ) : Fin n) - π x) : ℕ∞)
-      + q := by exact_mod_cast ht
+  have h1 : ((n / 2 : ℕ) : ℕ∞) <
+      ((π y + ((q * t : ℕ) : ZMod n) - π x).valMinAbs.natAbs : ℕ∞) + q := by
+    exact_mod_cast ht
   exact h1.trans_le (add_le_add_left hdist _)
 
 /-- **A supercell rotation of a ring carries a site far away.** The case of
-`exists_mem_supercell_lt_edist_add` for the rotations of a ring of `n` sites. -/
+`exists_mem_supercell_lt_edist_add` for the rotations of a ring of `n` sites, with the
+coordinate of a site as a residue modulo `n`. -/
 theorem exists_mem_supercell_lt_edist_add_ring {n : ℕ} [NeZero n]
     {H : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ} {E₀ : ℝ} {q : ℕ} (hq : 0 < q)
     (hden : ∀ χ : Multiplicative (Fin n) →* ℂ,
@@ -231,8 +186,11 @@ theorem exists_mem_supercell_lt_edist_add_ring {n : ℕ} [NeZero n]
     (x y : Fin n) :
     ∃ g ∈ supercell (Multiplicative (Fin n)) d H E₀,
       ((n / 2 : ℕ) : ℕ∞) < (SimpleGraph.cycleGraph n).edist x (g • y) + q :=
-  exists_mem_supercell_lt_edist_add hq hden (SimpleGraph.cycleGraph n) id
-    SimpleGraph.ringNorm_sub_le_one_of_adj_cycleGraph (Multiplicative.ofAdd 1)
-    (fun v ↦ by change 1 + v = v + 1; abel) x y
+  exists_mem_supercell_lt_edist_add hq hden (SimpleGraph.cycleGraph n)
+    (fun x : Fin n ↦ ((x : ℕ) : ZMod n)) natAbs_valMinAbs_sub_le_one_of_adj_cycleGraph
+    (Multiplicative.ofAdd 1) (fun v ↦ by
+      change (((1 + v : Fin n) : ℕ) : ZMod n) = _
+      rw [Fin.val_add, ZMod.natCast_mod, Nat.cast_add, Fin.val_one', ZMod.natCast_mod,
+        Nat.cast_one, add_comm]) x y
 
 end TNLean.Lattice

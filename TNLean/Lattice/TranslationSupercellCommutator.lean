@@ -78,8 +78,8 @@ theorem norm_groundCompression_commutator_le_of_momenta [NeZero d]
     {E₀ : ℝ} (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k)
     {N : ℕ} (hN : 0 < N)
     (hden : ∀ χ : Γ →* ℂ, momentumSector Γ d (∑ k, h k) E₀ χ ≠ ⊥ → ∀ g, χ g ^ N = 1)
-    {n : ℕ} [NeZero n] (π : ι → Fin n)
-    (hπ : ∀ u v, G.Adj u v → SimpleGraph.ringNorm (π v - π u) ≤ 1)
+    {n : ℕ} [NeZero n] (π : ι → ZMod n)
+    (hπ : ∀ u v, G.Adj u v → (π v - π u).valMinAbs.natAbs ≤ 1)
     (e : Γ) (he : ∀ v, π (e • v) = π v + 1)
     (i j : ι) (l : ℕ) (hl : 2 * R + l + N ≤ n / 2) {T : ℝ} (hT : 0 ≤ T) :
     ‖groundCompression (∑ k, h k) E₀ (gaussianFilteredTerm r ΔE (∑ k, h k) (h i)) *

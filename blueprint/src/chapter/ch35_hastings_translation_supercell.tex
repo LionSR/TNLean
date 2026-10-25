@@ -169,30 +169,23 @@ For a character this reads $\chi(g)^q=1$.
     $\chi(g^q)=\chi(g)^q=1$ for each such $\chi$.
 \end{proof}
 
-\begin{definition}[Circular distance]
-    \label{def:ring_circular_distance}
-    \lean{SimpleGraph.ringNorm}
-    \leanok
-    For $a\in\mathbb{Z}/n$ with representative $0\le a<n$, the circular
-    distance of $a$ from $0$ is $\min(a,n-a)$.
-\end{definition}
-
-For the geometry, let $\pi(v)\in\mathbb{Z}/n$ be the coordinate of the unit
-cell of the site $v$ along one direction of the lattice, which has $n$ cells
-in that direction, and let $e\in G$ be the translation by one cell in that
-direction, so $\pi(e\cdot v)=\pi(v)+1$. Suppose every edge of the graph joins
-sites whose cell coordinates differ by at most one. On the ring of $n$ sites
-with its rotations, $\pi$ is the identity.
+For the geometry, recall that the sites are pairs $(\vec x,y)$ of a unit cell
+$\vec x$ and a site $y$ within it \cite[lines 1607--1612]{Hastings2006Solving}.
+Let $\pi(v)\in\mathbb{Z}/n$ be the coordinate of the unit cell of the site $v$
+along one direction of the lattice, which has $n$ cells in that direction, and
+let $e\in G$ be the translation by one cell in that direction, so
+$\pi(e\cdot v)=\pi(v)+1$. For $a\in\mathbb{Z}/n$ write $|a|_n=\min(a,n-a)$
+for its circular distance from $0$, with $0\le a<n$ the representative.
+Suppose every edge of the graph joins sites $u$, $v$ with
+$|\pi(v)-\pi(u)|_n\le1$. On the ring of $n$ sites with its rotations, $\pi$ is
+the residue of the site.
 
 \begin{theorem}[Distance and cell coordinates]
-    \label{thm:ring_circular_distance_le}
-    \lean{SimpleGraph.ringNorm_sub_le_edist}
+    \label{thm:hastings_cell_distance_le}
+    \lean{SimpleGraph.natAbs_valMinAbs_sub_le_edist}
     \leanok
-    \uses{def:ring_circular_distance}
     The graph distance from $x$ to $y$ is at least the circular distance of
-    $\pi(y)-\pi(x)$. Here $\pi$ is the unit-cell coordinate $\vec x$ of the sites
-    $(\vec x,y)$ of \cite[lines 1603--1612]{Hastings2006Solving} along one
-    direction.
+    $\pi(y)-\pi(x)$.
 \end{theorem}
 \begin{proof}\leanok
     Along an edge the circular distance to $\pi(x)$ changes by at most one, so
@@ -200,10 +193,9 @@ with its rotations, $\pi$ is the identity.
 \end{proof}
 
 \begin{theorem}[Multiples of $q$ reach far]
-    \label{thm:ring_rotation_far}
-    \lean{SimpleGraph.exists_lt_ringNorm_add}
+    \label{thm:hastings_multiples_reach_far}
+    \lean{TNLean.Lattice.exists_lt_natAbs_valMinAbs_add}
     \leanok
-    \uses{def:ring_circular_distance}
     For $q\ge1$ and $a,b\in\mathbb{Z}/n$ there is $t\ge0$ such that $b+qt-a$
     has circular distance more than $\lfloor n/2\rfloor-q$.
 \end{theorem}
@@ -218,8 +210,8 @@ with its rotations, $\pi$ is the identity.
     \lean{TNLean.Lattice.exists_mem_supercell_lt_edist_add,
         TNLean.Lattice.exists_mem_supercell_lt_edist_add_ring}
     \leanok
-    \uses{thm:hastings_supercell_pow,thm:ring_circular_distance_le,
-        thm:ring_rotation_far}
+    \uses{thm:hastings_supercell_pow,thm:hastings_cell_distance_le,
+        thm:hastings_multiples_reach_far}
     Let $G$ be abelian, let $H$ be invariant, let $\pi$ and $e$ be as above, and
     let $\chi(g)^q=1$ for every $g$ and every character $\chi$ with a nonzero
     momentum sector, where $q\ge1$. For sites $x$, $y$ some $g$ in the supercell
@@ -229,18 +221,17 @@ with its rotations, $\pi$ is the identity.
     $\vec x'$ in lines 1634--1641.
 \end{theorem}
 \begin{proof}\leanok
-    Take $t$ from Theorem~\ref{thm:ring_rotation_far} for $a=\pi(x)$ and
+    Take $t$ from Theorem~\ref{thm:hastings_multiples_reach_far} for $a=\pi(x)$ and
     $b=\pi(y)$, and $g=(e^t)^q$, which lies in the supercell by
     Theorem~\ref{thm:hastings_supercell_pow}. Then $\pi(g\cdot y)=\pi(y)+qt$, and
-    Theorem~\ref{thm:ring_circular_distance_le} bounds the distance.
+    Theorem~\ref{thm:hastings_cell_distance_le} bounds the distance.
 \end{proof}
 
 \begin{theorem}[Low-energy commutators of a translation-invariant lattice]
     \label{thm:hastings_supercell_commutator_small}
     \lean{TNLean.Lattice.norm_groundCompression_commutator_le_of_momenta}
     \leanok
-    \uses{def:hastings_supercell_of_momenta,thm:hastings05_blecm,
-        def:ring_circular_distance}
+    \uses{def:hastings_supercell_of_momenta,thm:hastings05_blecm}
     Let the terms $h_k$ be indexed by the sites, with $h_k$ acting on a set
     $X_k\ni k$ of diameter at most $R$ in the lattice graph, let $G$ be an abelian
     group of translations with $h_{g\cdot k}=P_gh_kP_g^\dagger$, and let every

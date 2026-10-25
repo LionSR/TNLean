@@ -3,9 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.ProjectedRelativeEvolution
+import TNLean.Circuit.SupportedGaussianIntegral
 import TNLean.PEPS.AreaLaw.RegionOperatorLocalization
-import QICLean.Analysis.GaussianFilter.MatrixIntegral
 
 /-!
 # A supported Gaussian approximation between two Hamiltonians
@@ -71,41 +70,9 @@ private theorem supported_gaussian_integral_of_localization {q : ℕ} (hq : 1 �
   classical
   intro B
   have : NeZero q := ⟨by omega⟩
-  obtain ⟨U, hU0, hU, hunit, hsupport, huniq, hcompare⟩ :=
-    exists_supported_projected_relative_evolution q B g.operator_isHermitian hH
+  obtain ⟨U, hU0, hU, hunit, hsupport, haverage⟩ :=
+    exists_supported_gaussian_integral_of_projection_bounds q g.operator_isHermitian hH B
   refine ⟨U, hU0, hU, hunit, hsupport, fun η T hT ↦ ?_⟩
-  have hnorm (t : ℝ) :
-      ‖siteExpectation q B (heisenbergEvolution g.operator t W) * U t‖ ≤ ‖W‖ :=
-    (CStarRing.norm_mul_mem_unitary _ (hunit t)).trans_le
-      (MatrixEvolution.norm_projectedGenerator_le (siteExpectationLM q B)
-        (norm_siteExpectation_le B) g.operator_isHermitian W t)
-  have hcont : Continuous (fun t : ℝ ↦
-      siteExpectation q B (heisenbergEvolution g.operator t W) * U t) :=
-    (MatrixEvolution.contDiff_projectedGenerator (siteExpectationLM q B)
-      g.operator W 0).continuous.mul
-      (show Differentiable ℝ U from fun t ↦ (hU t).differentiableAt).continuous
-  have hint : Integrable (fun t : ℝ ↦
-      siteExpectation q B (heisenbergEvolution g.operator t W) * U t)
-      (gaussianReal 0 η) :=
-    (integrable_const ‖W‖).mono' hcont.aestronglyMeasurable
-      (Filter.Eventually.of_forall hnorm)
-  have hfix (t : ℝ) : siteExpectation q B
-      (siteExpectation q B (heisenbergEvolution g.operator t W) * U t) =
-      siteExpectation q B (heisenbergEvolution g.operator t W) * U t :=
-    siteExpectation_of_mem_supportedOperators B
-      (mul_mem_supportedOperators (siteExpectation_mem_supportedOperators B _) (hsupport t))
-  have hMint : siteExpectation q B
-      (∫ t : ℝ in Set.Icc (-T) T,
-        siteExpectation q B (heisenbergEvolution g.operator t W) * U t ∂gaussianReal 0 η) =
-      ∫ t : ℝ in Set.Icc (-T) T,
-        siteExpectation q B (heisenbergEvolution g.operator t W) * U t ∂gaussianReal 0 η :=
-    ((siteExpectationLM q B).toContinuousLinearMap.integral_comp_comm
-      (hint.restrict (s := Set.Icc (-T) T))).symm.trans
-      (integral_congr_ae (Filter.Eventually.of_forall hfix))
-  refine ⟨hMint ▸ siteExpectation_mem_supportedOperators B _,
-    (norm_setIntegral_le_of_norm_le_const (measure_lt_top _ _)
-      (fun t _ ↦ hnorm t)).trans
-      (mul_le_of_le_one_right (norm_nonneg W) measureReal_le_one), ?_⟩
   have hnear (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
       (hA : A ∈ supportedOperators q ((Q ∪ Z : Finset (Site Λ)) : Set (Site Λ)))
       (t : ℝ) (ht : |t| ≤ T) :
@@ -120,60 +87,16 @@ private theorem supported_gaussian_integral_of_localization {q : ℕ} (hq : 1 �
               (sub_le_sub_right (mul_le_mul_of_nonneg_left ht hv) _))
             (mul_nonneg hC (Nat.cast_nonneg _))))
         (norm_nonneg A))
-  have hrelative (t : ℝ) (ht : |t| ≤ T) :
-      ‖Matrix.hermitianUnitaryPath g.operator t * Matrix.hermitianUnitaryPath H (-t) -
-        U t‖ ≤ ‖g.operator - H‖ *
-          (C * (Λ.card : ℝ) * Real.exp (v * T - c * l)) * |t| :=
-    hcompare t _ (fun s hs ↦ hnear (g.operator - H)
-      (supportedOperators_mono (fun _ hx ↦ Finset.mem_union_right Q hx) hD) s
-      ((show |s| ≤ |t| by
-        simpa only [sub_zero] using Set.abs_sub_left_of_mem_uIcc hs).trans ht))
-  have hfactor (t : ℝ) :
-      heisenbergEvolution g.operator t W *
-          (Matrix.hermitianUnitaryPath g.operator t * Matrix.hermitianUnitaryPath H (-t)) =
-        Matrix.hermitianUnitaryPath g.operator t * W * Matrix.hermitianUnitaryPath H (-t) := by
-    rw [heisenbergEvolution_eq_hermitianUnitaryPath,
-      Matrix.mul_assoc (Matrix.hermitianUnitaryPath g.operator t * W),
-      ← Matrix.mul_assoc (Matrix.hermitianUnitaryPath g.operator (-t))
-        (Matrix.hermitianUnitaryPath g.operator t),
-      ← Matrix.hermitianUnitaryPath_add, neg_add_cancel,
-      Matrix.hermitianUnitaryPath_zero, Matrix.one_mul]
-  have hpoint (t : ℝ) (ht : |t| ≤ T) :
-      ‖siteExpectation q B (heisenbergEvolution g.operator t W) * U t -
-        Matrix.hermitianUnitaryPath g.operator t * W * Matrix.hermitianUnitaryPath H (-t)‖ ≤
-        ‖W‖ * C * (Λ.card : ℝ) * (1 + ‖g.operator - H‖ * T) *
-          Real.exp (v * T - c * l) := by
-    refine (hfactor t) ▸ (norm_sub_le_norm_sub_add_norm_sub
-      (siteExpectation q B (heisenbergEvolution g.operator t W) * U t)
-      (heisenbergEvolution g.operator t W * U t)
-      (heisenbergEvolution g.operator t W *
-        (Matrix.hermitianUnitaryPath g.operator t * Matrix.hermitianUnitaryPath H (-t)))).trans ?_
-    rw [← sub_mul, ← mul_sub, CStarRing.norm_mul_mem_unitary _ (hunit t),
-      norm_sub_rev (siteExpectation q B (heisenbergEvolution g.operator t W))
-        (heisenbergEvolution g.operator t W)]
-    refine (add_le_add
-      (hnear W (supportedOperators_mono (fun _ hx ↦ Finset.mem_union_left Z hx) hW) t ht)
-      (norm_mul_le_of_le
-        (show ‖heisenbergEvolution g.operator t W‖ ≤ ‖W‖ from
-          (SpectralFilter.norm_hermitianUnitaryPath_conj g.operator_isHermitian W t).le)
-        ((norm_sub_rev (U t)
-          (Matrix.hermitianUnitaryPath g.operator t * Matrix.hermitianUnitaryPath H (-t))).trans_le
-            (hrelative t ht)))).trans ?_
-    refine (add_le_add le_rfl
-      (mul_le_mul_of_nonneg_left
-        (mul_le_mul_of_nonneg_left ht
-          (mul_nonneg (norm_nonneg (g.operator - H))
-            (mul_nonneg (mul_nonneg hC (Nat.cast_nonneg Λ.card))
-              (Real.exp_pos (v * T - c * l)).le)))
-        (norm_nonneg W))).trans_eq ?_
-    ring
-  rw [GaussianFilter.gaussianIntertwinerTruncated,
-    ← integral_sub (hint.restrict (s := Set.Icc (-T) T))
-      (GaussianFilter.integrable_intertwinerIntegrand_restrict
-        η T g.operator_isHermitian hH W)]
-  exact (norm_setIntegral_le_of_norm_le_const (measure_lt_top _ _)
-    (fun t ht ↦ hpoint t (abs_le.mpr ht))).trans
-      (mul_le_of_le_one_right (by positivity) measureReal_le_one)
+  obtain ⟨hMsupport, hMnorm, hMerror⟩ := haverage B B
+    (fun _ hx ↦ hx) (fun _ hx ↦ hx) W η T hT
+    (C * (Λ.card : ℝ) * Real.exp (v * T - c * l))
+    (‖g.operator - H‖ * (C * (Λ.card : ℝ) * Real.exp (v * T - c * l)))
+    (by positivity) (by positivity)
+    (hnear W (supportedOperators_mono (fun _ hx ↦ Finset.mem_union_left Z hx) hW))
+    (hnear (g.operator - H)
+      (supportedOperators_mono (fun _ hx ↦ Finset.mem_union_right Q hx) hD))
+  refine ⟨hMsupport, hMnorm, hMerror.trans_eq ?_⟩
+  ring
 
 
 /-- **The supported Gaussian approximation, with explicit constants.** For a Hamiltonian of
