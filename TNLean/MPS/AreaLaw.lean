@@ -24,6 +24,7 @@ import TNLean.MPS.AreaLaw.CopyProduct
 import TNLean.MPS.AreaLaw.CopyRegionEntropy
 import TNLean.MPS.AreaLaw.Counting
 import TNLean.MPS.AreaLaw.CutMatrixGrowth
+import TNLean.MPS.AreaLaw.DomainGraphGeometry
 import TNLean.MPS.AreaLaw.DomainLiebRobinson
 import TNLean.MPS.AreaLaw.DoubledHamiltonian
 import TNLean.MPS.AreaLaw.EntropyInequalities
@@ -31,6 +32,7 @@ import TNLean.MPS.AreaLaw.EntropyScaling
 import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.Hastings
 import TNLean.MPS.AreaLaw.InformationReset
+import TNLean.MPS.AreaLaw.IntegerComponents
 import TNLean.MPS.AreaLaw.InteractionBudget
 import TNLean.MPS.AreaLaw.IntervalNeighborhoodEntropy
 import TNLean.MPS.AreaLaw.IntervalSlice
