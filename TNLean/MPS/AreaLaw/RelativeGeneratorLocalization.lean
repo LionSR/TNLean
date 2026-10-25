@@ -93,24 +93,11 @@ theorem ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
       intro y hy
       obtain ⟨x, hx, hxy⟩ := (Finset.mem_filter.mp hy).2
       exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, x, hS hx, hxy⟩
-    let τA := heisenbergEvolution K' t A
-    let A₀ := siteExpectation (q * q) N τA
-    let P := siteExpectationLM (q * q) B
-    have hfix : P A₀ = A₀ :=
-      siteExpectation_of_mem_supportedOperators B
-        (supportedOperators_mono (Finset.coe_subset.mpr hNB)
-          (siteExpectation_mem_supportedOperators N τA))
-    have heq : τA - P τA = (τA - A₀) - P (τA - A₀) := by
-      rw [map_sub, hfix]
-      abel
-    calc
-      _ = ‖(τA - A₀) - P (τA - A₀)‖ := congrArg norm heq
-      _ ≤ ‖τA - A₀‖ + ‖P (τA - A₀)‖ := norm_sub_le _ _
-      _ ≤ 2 * ‖τA - A₀‖ := by
-        have := norm_siteExpectation_le B (τA - A₀)
-        change ‖P (τA - A₀)‖ ≤ ‖τA - A₀‖ at this
-        linarith
-      _ ≤ _ := mul_le_mul_of_nonneg_left (hloc S A hA) (by norm_num)
+    exact (norm_sub_siteExpectation_le_two_mul_norm_sub_of_mem_supportedOperators B
+      (heisenbergEvolution K' t A) (siteExpectation (q * q) N (heisenbergEvolution K' t A))
+      (supportedOperators_mono (Finset.coe_subset.mpr hNB)
+        (siteExpectation_mem_supportedOperators N (heisenbergEvolution K' t A)))).trans
+          (mul_le_mul_of_nonneg_left (hloc S A hA) (by norm_num))
   let e := sitePairConfigurationEquiv (Fin L) q q
   let F := Matrix.reindex e e (sheetSwapOp q D)
   let T (X : ChainSupport L R) (b : Bool) := Matrix.reindex e e

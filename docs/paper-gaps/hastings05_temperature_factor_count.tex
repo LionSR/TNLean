@@ -1,0 +1,72 @@
+\documentclass{article}
+\usepackage[margin=28mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\title{The Number of Factors in Hastings' Error Bound at Every Temperature}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source statement}
+Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
+\href{https://arxiv.org/abs/cond-mat/0508554v3}{arXiv:cond-mat/0508554v3},
+source \path{proj3new.tex}, lines 1303--1314, sets
+$\rho(\beta,l_{\mathrm{proj}})=\rho(\beta/n,l_{\mathrm{proj}})^n$ for
+$\beta>\beta_0$ (eq.~(mplt)), with $n$ the smallest even integer such that
+$\beta/n\le\beta_0$. Lines 1334--1341 bound the operator $\rho_m$ of the terms
+with at least $m$ large clusters across the $n$ factors by
+\begin{align}
+  Z^{-1}\operatorname{Tr}(O\rho_m)\le\frac1{m!}
+  \Bigl(\sum_{\mathrm{clusters}}ny^{n_C}\Bigr)^m\lVert O\rVert,
+  \label{eq:hastings05_temperature_factor_count_rhom}
+\end{align}
+and lines 1342--1347 conclude, ``following the same arguments as before'',
+\begin{align}
+  Z^{-1}\bigl|\operatorname{Tr}[O\rho(\beta)]
+  -\operatorname{Tr}[O\rho(\beta,l_{\mathrm{proj}})]\bigr|
+  \le\bigl\{\exp[(\beta/\beta_0)Ne^{-l_{\mathrm{proj}}/\xi_{\mathrm{perc}}}]
+  -1\bigr\}\lVert O\rVert.
+  \label{eq:hastings05_temperature_factor_count_printed}
+\end{align}
+
+\section{The point at issue}
+Summing (\ref{eq:hastings05_temperature_factor_count_rhom}) over $m\ge1$ and
+bounding $\sum_Cy^{n_C}$ by $Ne^{-l_{\mathrm{proj}}/\xi_{\mathrm{perc}}}$ as
+at lines 1227--1254 gives
+\begin{align}
+  \bigl\{\exp[nNe^{-l_{\mathrm{proj}}/\xi_{\mathrm{perc}}}]-1\bigr\}
+  \lVert O\rVert,
+  \label{eq:hastings05_temperature_factor_count_n}
+\end{align}
+with the number $n$ of factors in the exponent. The minimality of $n$ gives
+$\beta/\beta_0\le n<\beta/\beta_0+2$, so $n$ may exceed $\beta/\beta_0$ by
+almost $2$, and the printed bound
+(\ref{eq:hastings05_temperature_factor_count_printed}) is smaller than
+(\ref{eq:hastings05_temperature_factor_count_n}). The source's argument does
+not give the printed bound; the factor $\beta/\beta_0$ stands for $n$.
+
+\section{The statement proved}
+The formalization proves (\ref{eq:hastings05_temperature_factor_count_n}) for
+every number $n\ge1$ of factors. For the source's $n$ this is at most
+$\{\exp[(\beta/\beta_0+2)Ne^{-l_{\mathrm{proj}}/\xi_{\mathrm{perc}}}]-1\}
+\lVert O\rVert$. The conclusion the source draws, that $l_{\mathrm{proj}}$
+growing logarithmically in the system size suffices for a good approximation
+(lines 1348--1349), is unchanged.
+
+\section{Formalization}
+The bound (\ref{eq:hastings05_temperature_factor_count_n}) is
+\leanid{TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_pow_le_percolation},
+derived from
+\leanid{TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_pow_le}.
+There the size threshold counts the terms of a large connected set rather
+than its diameter, as recorded in the note on cluster size and diameter in
+the percolation bound.
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}

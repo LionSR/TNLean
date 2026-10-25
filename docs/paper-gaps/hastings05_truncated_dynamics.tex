@@ -10,7 +10,7 @@
 \date{}
 \begin{document}
 \maketitle
-\gapnote{local-correction}{resolved}
+\gapnote{scope-restriction}{resolved}
 
 \section{The printed estimate}
 Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
@@ -82,6 +82,34 @@ the estimate.
 \end{enumerate}
 The support of $M_i$, the bound $\|M_i\|\le\|H_i\|$ and the hermiticity of
 $M_i$ hold as stated in the source.
+
+\section{The exponential form of eq.~(facld)}
+Let $H=\sum_k h_k$ have ground energy $E_0$ and a positive spectral gap
+$\Delta E$. Write $P_{high}$ for the orthogonal projection onto the complement
+of its ground eigenspace and $\Psi_a$ for a normalized ground eigenvector.
+The source states eq.~(facld), $|P_{high}M_i\Psi_a\rangle|\le
+J\,O(e^{-l_{proj}/l_{fac}})$, only to order of magnitude, with the size of the
+shell left implicit: spheres in a finite-dimensional lattice have polynomial
+size. The formalization obtains this form under an explicit hypothesis on the
+shell, a scope restriction: at projection radius $l$, let $M_l$ be the
+Gaussian-filtered approximation of $W$ with $q=c_1l\Delta E$, evolved under
+the terms of a family $s_l$ supported inside $K_l\supseteq S$. Assume that
+the number $N_l$ of omitted terms meeting $K_l$ is at most $K_g(l+1)^k$, for
+fixed $K_g\ge0$ and $k\in\mathbb N$. For every ground vector $\psi$ of $H$,
+with $\mu>0$, $0<c_1v<\mu$ and $m=l-3R$, it gives
+\begin{align}
+  |P_{high}M_l\psi\rangle|\le\|W\|\,(3+C'J)\,e^{-l/l_{fac}}\,\|\psi\|,
+  \qquad
+  l_{fac}=\frac{2}{\min(c_1\Delta E,\ \mu-c_1v)},
+  \label{eq:hastings05_truncated_dynamics_facld_decay}
+\end{align}
+with $C'$ independent of $l$, using $(x+1)^kx\le(k+1)!\,e^{a}a^{-(k+1)}e^{ax}$
+for $a=1/l_{fac}$ to absorb the polynomial factor. A subexponential bound
+$N_l\le C_\varepsilon e^{\varepsilon l}$ would suffice with $l_{fac}$ adjusted;
+the polynomial form is the one formalized. The bound also assumes $J\ge0$,
+which holds for the source's $J$, a bound on norms: if there is any term,
+$0\le\|h_k\|\le J$ implies it. The explicit assumption only adds a convention
+for the empty family of terms, where the termwise norm bound is vacuous.
 \bibliographystyle{unsrt}
 \bibliography{references}
 \end{document}

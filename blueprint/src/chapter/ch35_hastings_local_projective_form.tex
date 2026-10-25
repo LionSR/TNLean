@@ -164,8 +164,9 @@ bounded through the partial trace of
 Theorem~\ref{thm:hastings05_filtered_approximation_graph}, so the term
 $N_Mg(c_1l,l)$ of eq.~(lc) is replaced by the localization term of that
 theorem~\cite{gap:hastings05_filtered_term_approximation}. The translation
-invariant case~\cite[lines 1603--1642]{Hastings2006Solving} and the example at
-lines 1655--1676 are not treated here. The summed bound eq.~(oibu), which the
+invariant case~\cite[lines 1603--1642]{Hastings2006Solving} is treated in
+Section~\ref{sec:hastings_translation_supercell}, and the example at
+lines 1655--1676 in Section~\ref{sec:hastings_low_energy_example}. The summed bound eq.~(oibu), which the
 source states only to order of magnitude, is kept as the sum of the
 commutators in Theorem~\ref{thm:hastings05_two_dim_basis}.
 
@@ -336,4 +337,290 @@ commutators in Theorem~\ref{thm:hastings05_two_dim_basis}.
     $PMv=\langle v,PMv\rangle v+\langle w,PMv\rangle w$ and
     $\langle v,PMv\rangle=\langle v,Mv\rangle$, the second term is
     $\langle w,PMPv\rangle w=o_{PMP}v$.
+\end{proof}
+
+For a ground space of dimension $n>2$ the source sketches the choice of basis
+by iteration~\cite[lines 1695--1705]{Hastings2006Solving}. The case in which
+one compression has $n$ eigenvalues that are pairwise at least $\delta>0$ apart
+comes first; repeated eigenvalues are treated by the iteration after it.
+
+\begin{theorem}[The off-diagonal part for a compression with simple spectrum]
+    \label{thm:hastings05_simple_spectrum_basis}
+    \lean{TNLean.Lattice.shiftPart,
+        TNLean.Lattice.shiftPart_apply,
+        TNLean.Lattice.norm_shiftPart_le,
+        TNLean.Lattice.offDiagonalPartFamily,
+        TNLean.Lattice.norm_offDiagonalPartFamily_le,
+        TNLean.Lattice.norm_offDiagonalPartFamily_le_norm_commutator_div,
+        TNLean.Lattice.sum_norm_offDiagonalPartFamily_le}
+    \leanok
+    \uses{thm:hastings05_offdiagonal_commutator}
+    Let $v_0,\dots,v_{n-1}$ be orthonormal, and let the off-diagonal part of
+    $B$ be $o_B=\sum_{a\ne b}\langle v_a,Bv_b\rangle\lvert v_a\rangle\langle v_b\rvert$.
+    If every off-diagonal element satisfies $|\langle v_a,Bv_b\rangle|\le m$,
+    then $\|o_B\|\le(n-1)m$. If moreover $A$ is self-adjoint with
+    $Av_a=r_av_a$ and $|r_a-r_b|\ge\delta>0$ for all $a\ne b$, then
+    \begin{align}
+        \|o_B\|\le(n-1)\frac{\|[A,B]\|}{\delta},
+        \qquad
+        \sum_i\|o_{B_i}\|\le(n-1)\frac{\sum_i\|[A,B_i]\|}{\delta}
+    \end{align}
+    for every $B$ and every finite family $B_i$. With $A=PM_jP$ and
+    $B_i=PM_iP$ this bounds $o(i)$ and the sum behind
+    eq.~(oibu)~\cite[lines 1678--1705]{Hastings2006Solving} when $PM_jP$ has
+    simple spectrum on the ground space, with the eigenbasis
+    given~\cite{gap:hastings05_two_dim_ground_basis}.
+\end{theorem}
+\begin{proof}\leanok
+    Indices are taken modulo $n$. For $k\ne0$ let
+    $S_k=\sum_a\langle v_a,Bv_{a+k}\rangle\lvert v_a\rangle\langle v_{a+k}\rvert$, so that
+    $o_B=\sum_{k\ne0}S_k$. The terms of $S_kx$ are multiples of the orthonormal
+    $v_a$, so $\|S_kx\|^2=\sum_a|\langle v_a,Bv_{a+k}\rangle|^2|\langle v_{a+k},x\rangle|^2
+        \le m^2\|x\|^2$ by Bessel's inequality, and the $n-1$ shifts give
+    $(n-1)m$. Theorem~\ref{thm:hastings05_offdiagonal_commutator} bounds each
+    element by $\|[A,B]\|/|r_a-r_b|\le\|[A,B]\|/\delta$.
+\end{proof}
+
+\begin{theorem}[Ground states as approximate eigenvectors, any dimension]
+    \label{thm:hastings05_low_up_to_offdiagonal_family}
+    \lean{TNLean.Lattice.offDiagonalPartFamily_apply_self,
+        TNLean.Lattice.norm_apply_sub_inner_smul_le_add_offDiagonalPartFamily}
+    \leanok
+    \uses{thm:hastings05_simple_spectrum_basis}
+    Let $v_0,\dots,v_{n-1}$ be an orthonormal basis of a subspace with
+    orthogonal projection $P$, so that $Pu=\sum_b\langle v_b,u\rangle v_b$.
+    Then for every $M$ and every $a$,
+    \begin{align}
+        \|Mv_a-\langle v_a,Mv_a\rangle v_a\|\le\|(1-P)Mv_a\|+\|o_{PMP}\|.
+    \end{align}
+    This is eq.~(low) up to $o(i)$~\cite[lines 476--491]{Hastings2006Solving}
+    for every basis vector.
+\end{theorem}
+\begin{proof}\leanok
+    Write $Mv_a-\langle v_a,Mv_a\rangle v_a=(1-P)Mv_a+(PMv_a-\langle v_a,Mv_a\rangle v_a)$.
+    Since $\langle v_b,PMv_a\rangle=\langle v_b,PMPv_a\rangle$, the second term is
+    $\sum_{b\ne a}\langle v_b,PMPv_a\rangle v_b=o_{PMP}v_a$.
+\end{proof}
+
+The source resolves repeated eigenvalues of $PM_jP$ by passing to a further
+compression $PM_kP$ among the eigenvectors that share an eigenvalue, and
+proceeds in this way until every off-diagonal element is
+bounded~\cite[lines 1695--1705]{Hastings2006Solving}. Let
+$v_0,\dots,v_{n-1}$ be an orthonormal basis of the ground space and record the
+iteration by real labels $r_\ell(a)$ at levels $\ell=0,1,\dots$: the class of
+$a$ at level $\ell$ is the set of $c$ with $r_m(c)=r_m(a)$ for every $m<\ell$,
+and the operator $A_\ell=PM_{j_\ell}P$ of level $\ell$ satisfies
+$\langle v_c,A_\ell v_d\rangle=r_\ell(c)\,\delta_{cd}$ for $c$, $d$ in one class.
+Let $\delta_\ell$ be the smallest difference $|r_\ell(a)-r_\ell(b)|>0$ between
+labels of level $\ell$ of two indices in one class, which is positive in finite
+dimension.
+
+\begin{theorem}[One level of the iteration]
+    \label{thm:hastings05_basis_iteration_step}
+    \lean{TNLean.Lattice.inner_commutator_apply_eq_sum,
+        TNLean.Lattice.abs_sub_mul_norm_inner_le}
+    \leanok
+    Let $v_0,\dots,v_{n-1}$ be orthonormal, let $A$ and $B$ map each $v_b$ into
+    their span, and let $\langle v_c,Av_d\rangle=r_c\,\delta_{cd}$ for $c$, $d$
+    in a set $S$. Then for $a,b\in S$,
+    \begin{align*}
+        |r_a-r_b|\,|\langle v_a,Bv_b\rangle|
+        \le\|[A,B]\|+\sum_{c\notin S}\bigl(|\langle v_a,Av_c\rangle|\,
+        |\langle v_c,Bv_b\rangle|+|\langle v_a,Bv_c\rangle|\,
+        |\langle v_c,Av_b\rangle|\bigr).
+    \end{align*}
+\end{theorem}
+\begin{proof}\leanok
+    Expanding both products in the basis,
+    $\langle v_a,[A,B]v_b\rangle=\sum_c\bigl(\langle v_a,Av_c\rangle
+        \langle v_c,Bv_b\rangle-\langle v_a,Bv_c\rangle\langle v_c,Av_b\rangle\bigr)$.
+    The terms with $c\in S$ sum to $(r_a-r_b)\langle v_a,Bv_b\rangle$.
+\end{proof}
+
+\begin{definition}[The levels of the iteration]
+    \label{def:hastings05_basis_iteration_levels}
+    \lean{TNLean.Lattice.labelClass,
+        TNLean.Lattice.levelPairs,
+        TNLean.Lattice.levelGap}
+    \leanok
+    The class of $a$ at level $\ell$, the pairs separated first at level $\ell$,
+    and the smallest difference $\delta_\ell$ of their labels of level $\ell$
+    (equal to $1$ when no pair is separated at level $\ell$).
+\end{definition}
+
+\begin{theorem}[The bound at the first separating level]
+    \label{thm:hastings05_basis_iteration}
+    \lean{TNLean.Lattice.levelGap_pos,
+        TNLean.Lattice.levelGap_le,
+        TNLean.Lattice.norm_inner_le_of_mem_labelClass}
+    \leanok
+    \uses{thm:hastings05_basis_iteration_step,
+        def:hastings05_basis_iteration_levels}
+    $\delta_\ell>0$. If $b$ lies in the class of $a$ at level $\ell$ and
+    $r_\ell(a)\ne r_\ell(b)$, then $|\langle v_a,Bv_b\rangle|$ is at most
+    $\delta_\ell^{-1}$ times the right side of
+    Theorem~\ref{thm:hastings05_basis_iteration_step} with $A=A_\ell$ and $S$
+    the class, whose terms involve only indices separated from $a$ and $b$ at
+    an earlier level~\cite{gap:hastings05_two_dim_ground_basis}.
+\end{theorem}
+\begin{proof}\leanok
+    The pair is one of those defining $\delta_\ell$, so
+    $|r_\ell(a)-r_\ell(b)|\ge\delta_\ell$.
+\end{proof}
+
+\begin{theorem}[Two levels]
+    \label{thm:hastings05_basis_two_levels}
+    \lean{TNLean.Lattice.norm_inner_le_of_two_levels,
+        TNLean.Lattice.norm_offDiagonalPartFamily_le_of_two_levels}
+    \leanok
+    \uses{thm:hastings05_basis_iteration, thm:hastings05_simple_spectrum_basis}
+    Suppose that any two distinct indices have different labels at level $0$ or
+    at level $1$. Then every off-diagonal element of $B$ is at most
+    \begin{align*}
+        \max\Bigl(\frac{\|[A_0,B]\|}{\delta_0},\
+        \frac{1}{\delta_1}\Bigl(\|[A_1,B]\|
+        +2n\frac{\|[A_0,A_1]\|\,\|[A_0,B]\|}{\delta_0^2}\Bigr)\Bigr),
+    \end{align*}
+    and the off-diagonal part of $B$ has norm at most $n-1$ times this. With
+    $A_0=PM_jP$, $A_1=PM_kP$ and $B=PM_iP$, this is the step from $M_j$ to $M_k$
+    of~\cite[lines 1695--1705]{Hastings2006Solving}.
+\end{theorem}
+\begin{proof}\leanok
+    A pair separated at level $0$ is bounded by
+    Theorem~\ref{thm:hastings05_basis_iteration} with an empty complement. For a
+    pair separated at level $1$, every index outside its class is separated from
+    both at level $0$, so each of the at most $n$ cross terms is at most
+    $2\|[A_0,A_1]\|\,\|[A_0,B]\|/\delta_0^2$. The norm bound is
+    Theorem~\ref{thm:hastings05_simple_spectrum_basis}.
+\end{proof}
+
+\begin{theorem}[Every level]
+    \label{thm:hastings05_basis_levels}
+    \lean{TNLean.Lattice.exists_lt_mem_labelClass_ne,
+        TNLean.Lattice.sum_cross_le,
+        TNLean.Lattice.levelBoundA,
+        TNLean.Lattice.levelBoundB,
+        TNLean.Lattice.norm_inner_A_le_levelBoundA,
+        TNLean.Lattice.norm_inner_le_levelBoundB,
+        TNLean.Lattice.norm_offDiagonalPartFamily_le_levelBoundB}
+    \leanok
+    \uses{thm:hastings05_basis_iteration, thm:hastings05_simple_spectrum_basis}
+    Let every commutator $[A_\ell,A_m]$ be at most $K$ and every $[A_\ell,B]$ at
+    most $K_B$. Put $\alpha_0=K/\delta_0$, $\beta_0=K_B/\delta_0$,
+    $\alpha_{\ell+1}=\max(\alpha_\ell,(K+2n\alpha_\ell^2)/\delta_{\ell+1})$ and
+    $\beta_{\ell+1}=\max(\beta_\ell,(K_B+2n\alpha_\ell\beta_\ell)/\delta_{\ell+1})$.
+    Then every element of $B$ between two indices separated first at level
+    $\ell$ is at most $\beta_\ell$. If every pair of distinct indices is
+    separated at some level below $L$, the off-diagonal part of $B$ has norm at
+    most $(n-1)\beta_{L-1}$. The iteration
+    of~\cite[lines 1695--1708]{Hastings2006Solving} ends when every off-diagonal
+    element is bounded, that is, when every pair is separated.
+\end{theorem}
+\begin{proof}\leanok
+    Induction on the level. An index $c$ outside the class of $a$ at level
+    $\ell+1$ is separated from $a$, and from $b$, at a first level $m\le\ell$, so
+    each cross term of Theorem~\ref{thm:hastings05_basis_iteration} is at most
+    $2\alpha_\ell\beta_\ell$, and there are at most $n$ of them. The elements of
+    the $A_m$ are bounded first, with $B=A_m$.
+\end{proof}
+
+\begin{theorem}[The low-energy commutators decay exponentially]
+    \label{thm:hastings05_blecm_exp}
+    \lean{TNLean.Lattice.lrVelocity,
+        TNLean.Lattice.commutatorRate,
+        TNLean.Lattice.commutatorConst,
+        TNLean.Lattice.norm_groundCompression_le,
+        TNLean.Lattice.norm_groundCompression_commutator_le_two_mul,
+        TNLean.Lattice.norm_groundCompression_commutator_le_exp,
+        TNLean.Lattice.disjoint_biUnion_graphBall_of_lt_edist,
+        TNLean.Lattice.norm_groundCompression_commutator_le_exp_edist}
+    \leanok
+    \uses{thm:hastings05_blecm, thm:hastings05_low_energy_commutator}
+    In the setting of Theorem~\ref{thm:hastings05_blecm}, let
+    $v=2v_R|b_0|e^{2R}+1$ and $\gamma=\min(1/4,\Delta E/(8v))$. If $X_i$ is
+    disjoint from the sites within graph distance $l$ of $X_j$, then
+    $\|[Ph_jP,Ph_iP]\|\le C\|h_j\|\,\|h_i\|\,e^{-\gamma l}$ with an explicit
+    constant $C$. In particular, if the anchors $a_j$, $a_i$ are at graph
+    distance $D$, the commutator is at most
+    $Ce^{\gamma(2R+1)}\|h_j\|\,\|h_i\|\,e^{-\gamma D}$, and it vanishes at
+    infinite distance.
+\end{theorem}
+\begin{proof}\leanok
+    The compression of a filtered term does not depend on $q$, so
+    Theorem~\ref{thm:hastings05_blecm} may be applied to the pair with
+    $T=l/(4v)$ and $q=T\Delta E$. Then $vT-l/2=-l/4$ and
+    $(T\Delta E)^2/(2q)=q/2=l\Delta E/(8v)$, so each of the three terms is at most
+    a multiple of $e^{-\gamma l}$. If $a_j$ and $a_i$ are more than $2R+l$ apart,
+    the triangle inequality makes $X_i$ disjoint from the $l$-neighbourhood of
+    $X_j$; for nearby anchors the commutator is at most
+    $2\|h_j\|\,\|h_i\|\le C\|h_j\|\,\|h_i\|$.
+\end{proof}
+
+\begin{theorem}[The sum over all terms, eq.~(oibu)]
+    \label{thm:hastings05_oibu}
+    \lean{TNLean.Lattice.add_one_pow_mul_exp_neg_le,
+        TNLean.Lattice.shellSumConst,
+        TNLean.Lattice.sum_add_one_pow_mul_exp_neg_le,
+        TNLean.Lattice.sum_exp_neg_edist_le,
+        TNLean.Lattice.isSelfAdjoint_groundCompression,
+        TNLean.Lattice.sum_norm_groundCompression_commutator_le,
+        TNLean.Lattice.sum_norm_offDiagonalPartFamily_le_oibu}
+    \leanok
+    \uses{thm:hastings05_blecm_exp, thm:hastings05_simple_spectrum_basis}
+    Let the spheres of the graph satisfy
+    $|\{y:d(x,y)=r\}|\le K_g(r+1)^k$. Then for every term $j$,
+    \begin{align*}
+        \sum_i\|[Ph_jP,Ph_iP]\|
+        \le Ce^{\gamma(2R+1)}\,|b_0|\,K_g\,S_{\gamma,k}\,\|h_j\|,
+        \qquad
+        S_{\gamma,k}=\frac{k!\,(2/\gamma)^ke^{\gamma/2}}{1-e^{-\gamma/2}},
+    \end{align*}
+    independently of the number of sites and terms. Consequently, in an
+    eigenbasis of $PM_jP$ with eigenvalues pairwise at least $\delta>0$ apart,
+    $\sum_io(i)$ is at most $(n-1)/\delta$ times this bound. This proves the
+    size independence of eq.~(oibu) of~\cite[lines 1689--1694]{Hastings2006Solving},
+    with an explicit constant; the printed dependence
+    $O(J^2/(c_1l\Delta E\,\delta\lambda_j))$ is not established, since the
+    constant contains neither $c_1$ nor $l$ and grows like $(v/\Delta E)^{k+1}$
+    for small gaps~\cite{gap:hastings05_two_dim_ground_basis}.
+\end{theorem}
+\begin{proof}\leanok
+    Group the terms by their anchor: the terms anchored at $x$ contain $x$, so
+    their norms sum to at most $b_0$. The sum over the sites of
+    $e^{-\gamma d(a_j,x)}$ is a sum over spheres, at most
+    $K_g\sum_r(r+1)^ke^{-\gamma r}\le K_gS_{\gamma,k}$, using
+    $(r+1)^ke^{-\gamma r}\le k!(2/\gamma)^ke^{\gamma/2}e^{-\gamma r/2}$. The second
+    statement is Theorem~\ref{thm:hastings05_simple_spectrum_basis} with
+    $PM_iP=Ph_iP$.
+\end{proof}
+
+\begin{theorem}[Eq.~(oibu) for a degenerate ground space]
+    \label{thm:hastings05_oibu_levels}
+    \lean{TNLean.Lattice.levelBoundB_eq_mul,
+        TNLean.Lattice.sum_norm_offDiagonalPartFamily_le_levelBoundB,
+        TNLean.Lattice.groundCompression_apply_eq_sum,
+        TNLean.Lattice.sum_norm_offDiagonalPartFamily_le_oibu_levels}
+    \leanok
+    \uses{thm:hastings05_basis_levels, thm:hastings05_oibu}
+    In the setting of Theorem~\ref{thm:hastings05_basis_levels}, let $v_0,\dots,v_{n-1}$
+    be an orthonormal basis of the ground space, let the operator of level
+    $\ell$ be $A_\ell=Ph_{j_\ell}P$, with every $j_\ell$ among
+    $j_0,\dots,j_{L-1}$ and every pair of basis vectors separated below level
+    $L$, and let all terms have norm at most $J$. Then
+    \begin{align*}
+        \sum_io(i)\le(n-1)\,\beta_{L-1}\sum_{\ell<L}Ce^{\gamma(2R+1)}\,|b_0|\,K_g\,
+        S_{\gamma,k}\,\|h_{j_\ell}\|,
+    \end{align*}
+    where $\beta_{L-1}$ is the bound of
+    Theorem~\ref{thm:hastings05_basis_levels} with $K=2J^2$ and $K_B=1$,
+    independently of the number of sites and terms. This is the size independence
+    of eq.~(oibu)~\cite[lines 1689--1708]{Hastings2006Solving} for a ground space of
+    any dimension.
+\end{theorem}
+\begin{proof}\leanok
+    The bound of Theorem~\ref{thm:hastings05_basis_levels} is homogeneous of
+    degree one in $K_B$. Take for $K_B(i)$ the sum over $\ell<L$ of
+    $\|[A_\ell,Ph_iP]\|$, which bounds the commutator at every level since every
+    $j_\ell$ is among the first $L$, and $K=2J^2$. Exchanging the sums over $i$ and
+    $\ell$, Theorem~\ref{thm:hastings05_oibu} bounds each sum over $i$.
 \end{proof}
