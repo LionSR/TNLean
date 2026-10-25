@@ -1,0 +1,77 @@
+\section{Gluing a left state at a cut of the chain}
+\label{sec:chain_gluing}
+
+Fix the cut after $k$ sites of a chain. Splitting off the last site left of
+the cut, a configuration has coordinates $((x,y),z)$, with $x$ on the first
+$k-1$ sites, $y$ on site $k-1$ and $z$ on the sites right of the cut. This is
+the setting of the boundary contractions and the gluing lemma of Landau,
+Vazirani and Vidick~\cite[lines 409--447]{Landau2015Polynomial}, proved in the
+companion quantum-channel
+volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'',
+    ``Three-way cut coordinates'']{QICLean2026Blueprint}.
+
+\begin{definition}[Cut coordinates at a cut of the chain]
+    \label{def:chain_gluing_cut}
+    \lean{TNLean.MPS.AreaLaw.leftBlock_sub_one_subset, TNLean.MPS.AreaLaw.CutLeft,
+        TNLean.MPS.AreaLaw.CutSite, TNLean.MPS.AreaLaw.CutRight,
+        TNLean.MPS.AreaLaw.gluingCut, TNLean.MPS.AreaLaw.leftCutOperator,
+        TNLean.MPS.AreaLaw.rightCutOperator}
+    \leanok
+    The coordinates $((x,y),z)$ of a configuration of the chain at the cut
+    after $k$ sites. For an operator $H_L$ supported on the first $k$ sites,
+    $H_L'$ is its restriction to them; for an operator $K$ supported off the
+    first $k-1$ sites, $K'$ is its restriction to site $k-1$ and the sites right
+    of the cut.
+\end{definition}
+
+\begin{theorem}[The Hamiltonian at a cut]
+    \label{thm:chain_gluing_split}
+    \lean{TNLean.MPS.AreaLaw.reindex_gluingCut_eq}
+    \leanok
+    \uses{def:chain_gluing_cut}
+    If $H_L$ is supported on the first $k$ sites and $K$ off the first $k-1$
+    sites, then in the cut coordinates $H_L+K=H_L'\otimes1+1\otimes K'$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    An operator supported on a set of sites acts as the identity on the
+    configuration of the other sites.
+\end{proof}
+
+\begin{theorem}[The leading eigenvector at a cut of the chain]
+    \label{thm:chain_leading_eigenvector}
+    \lean{TNLean.MPS.AreaLaw.exists_leading_eigenvector_chain}
+    \leanok
+    \uses{thm:chain_gluing_split}
+    Let $H=H_L+K$ with $H_L$ supported on the first $k$ sites and $K$ off the
+    first $k-1$ sites have a gapped ground state $\Gamma$ with energy $E_0$ and
+    gap $\Delta$. Let $W$ be an isometry from a bond $\mathbb C^m$ into the
+    sites right of the cut, and let $w=(1\otimes W)x$ in the cut coordinates
+    have energy at most $E_0+e$. Let $\sigma$ be a density matrix on the first
+    $k$ sites and the bond with
+    $\operatorname{Re}\operatorname{tr}(\sigma(H_L'\otimes1))\le
+        \operatorname{Re}\operatorname{tr}(\lvert x\rangle\langle x\rvert(H_L'\otimes1))$
+    and
+    $\lVert\operatorname{tr}_{[1,k-1]}\sigma-\operatorname{tr}_{[1,k-1]}
+        \lvert x\rangle\langle x\rvert\rVert_1\le\tau$. If
+    $4(e+\lVert K\rVert\tau)<\Delta$, then $\sigma$ has a unit eigenvector $u$
+    with eigenvalue larger than $\tfrac12$ such that $(1\otimes W)u$, read on
+    the chain, has energy at most $E_0+2(e+\lVert K\rVert\tau)$ and overlap at
+    least $1-2(e+\lVert K\rVert\tau)/\Delta$ with $\Gamma$.
+
+    This is Lemma~l:leading of~\cite[lines 493--505]{Landau2015Polynomial} on
+    the chain, with $H_L=H_1+\cdots+H_{i-1}$ and $K=H_i+H_R$; the energy excess
+    $e$ of the trimmed state of Lemma~l:within is corrected
+    in~\cite{gap:lvv13_trimming_energy}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:chain_gluing_split}
+    In the cut coordinates the Hamiltonian, the ground state and $w$ satisfy
+    the hypotheses of the leading-eigenvector theorem of the companion volume,
+    with $\lVert K'\rVert\le\lVert K\rVert$ since $K'$ is a corner of
+    $1\otimes K'$. Energies and overlaps are unchanged by the change of
+    coordinates.
+\end{proof}
