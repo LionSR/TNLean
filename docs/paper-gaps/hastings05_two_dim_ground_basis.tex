@@ -11,7 +11,7 @@
 \providecommand{\leanid}[1]{\nolinkurl{#1}}
 \providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
 
-\title{A Basis of a Two-Dimensional Ground Space in Hastings' Local Solution
+\title{A Basis of a Degenerate Ground Space in Hastings' Local Solution
   of Gapped Hamiltonians}
 \author{}
 \date{2026-10-24}
@@ -56,18 +56,48 @@ bounds the first term.
 
 \section{The restriction}
 
-The formalization is a scope restriction in three respects. It treats only
-$n=2$; the source only sketches $n>2$ (lines~1695--1705). It takes the
-eigenbasis $v,w$ as given, its existence being the spectral theorem, and does
+The formalization is a scope restriction in three respects. It treats $n=2$,
+and $n>2$ only when one compression has simple spectrum on the ground space
+(next section); the source only sketches $n>2$ (lines~1695--1705). It takes the
+eigenbasis as given, its existence being the spectral theorem, and does
 not choose the $j$ maximizing $\delta\lambda_j$, since the bounds hold for
 every $j$. And it leaves eq.~\texttt{oibu} as
 $\sum_io(i)\le\sum_i\lVert[PM_iP,PM_jP]\rVert/\delta\lambda_j$: the
 source sums the decaying commutator bound over $i$ only to order of magnitude,
 and the resulting constant depends on the growth of the graph.
 
-Elimination plan: treat a ground space of any dimension $n$, following the
-sketch at lines~1695--1705, and sum the commutator bound over $i$ with the
-growth constants of the graph.
+\section{A compression with simple spectrum}
+
+For $n>2$ the source finds the $M_j$ with the largest spread of eigenvalues,
+bounds the off-diagonal elements between its eigenvectors, and passes to
+further $M_k$ for eigenvectors sharing an eigenvalue of $M_j$
+(lines~1695--1705). Because the compressions commute only approximately, this
+iteration is not a proof as stated. When one compression $A=PM_jP$ has $n$
+eigenvalues on the ground space that are pairwise at least $\delta>0$ apart,
+its orthonormal eigenbasis $v_0,\dots,v_{n-1}$ needs no iteration. With indices
+modulo $n$, the off-diagonal part $o_B$ of any $B$ is the sum over $k\ne0$ of
+the shifts
+$S_k=\sum_a\langle v_a,Bv_{a+k}\rangle\lvert v_a\rangle\langle v_{a+k}\rvert$.
+By Bessel's inequality each shift has norm at most its largest element, and
+each element is at most $\lVert[A,B]\rVert/\delta$, so
+\begin{align}
+  o(i)\le(n-1)\frac{\lVert[PM_iP,PM_jP]\rVert}{\delta},
+  \label{eq:hastings05_two_dim_ground_basis_simple}
+\end{align}
+which for $n=2$ is~\eqref{eq:hastings05_two_dim_ground_basis_oi}. The bound
+\eqref{eq:hastings05_two_dim_ground_basis_low} holds for every basis vector
+$v_a$.\footnote{\leanid{TNLean.Lattice.norm_offDiagonalPartFamily_le_norm_commutator_div},
+    \leanid{TNLean.Lattice.sum_norm_offDiagonalPartFamily_le} and
+    \leanid{TNLean.Lattice.norm_apply_sub_inner_smul_le_add_offDiagonalPartFamily}
+    in \doclink{TNLean/Lattice/LowEnergyBasisSimpleSpectrum}.}
+This is a scope restriction: the simple spectrum of one compression is a
+hypothesis the source does not make, and the factor $n-1$ and the spacing
+$\delta$ appear explicitly.
+
+Elimination plan: treat a compression with repeated eigenvalues on the ground
+space by a full proof of the source's iteration over further compressions
+$M_k$, and sum the commutator bound over $i$ with the growth constants of the
+graph.
 
 \section{Formalization}
 

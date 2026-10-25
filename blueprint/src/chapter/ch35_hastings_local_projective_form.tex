@@ -164,8 +164,9 @@ bounded through the partial trace of
 Theorem~\ref{thm:hastings05_filtered_approximation_graph}, so the term
 $N_Mg(c_1l,l)$ of eq.~(lc) is replaced by the localization term of that
 theorem~\cite{gap:hastings05_filtered_term_approximation}. The translation
-invariant case~\cite[lines 1603--1642]{Hastings2006Solving} and the example at
-lines 1655--1676 are not treated here. The summed bound eq.~(oibu), which the
+invariant case~\cite[lines 1603--1642]{Hastings2006Solving} is treated in
+Section~\ref{sec:hastings_translation_supercell}, and the example at
+lines 1655--1676 in Section~\ref{sec:hastings_low_energy_example}. The summed bound eq.~(oibu), which the
 source states only to order of magnitude, is kept as the sum of the
 commutators in Theorem~\ref{thm:hastings05_two_dim_basis}.
 
@@ -336,4 +337,68 @@ commutators in Theorem~\ref{thm:hastings05_two_dim_basis}.
     $PMv=\langle v,PMv\rangle v+\langle w,PMv\rangle w$ and
     $\langle v,PMv\rangle=\langle v,Mv\rangle$, the second term is
     $\langle w,PMPv\rangle w=o_{PMP}v$.
+\end{proof}
+
+For a ground space of dimension $n>2$ the source only sketches the choice of
+basis~\cite[lines 1695--1705]{Hastings2006Solving}. The case in which one
+compression has $n$ eigenvalues on the ground space that are pairwise at least
+$\delta>0$ apart is proved below; a compression with repeated eigenvalues is
+not treated~\cite{gap:hastings05_two_dim_ground_basis}.
+
+\begin{theorem}[The off-diagonal part for a compression with simple spectrum]
+    \label{thm:hastings05_simple_spectrum_basis}
+    \lean{TNLean.Lattice.shiftPart,
+        TNLean.Lattice.shiftPart_apply,
+        TNLean.Lattice.norm_shiftPart_le,
+        TNLean.Lattice.offDiagonalPartFamily,
+        TNLean.Lattice.norm_offDiagonalPartFamily_le,
+        TNLean.Lattice.norm_offDiagonalPartFamily_le_norm_commutator_div,
+        TNLean.Lattice.sum_norm_offDiagonalPartFamily_le}
+    \leanok
+    \uses{thm:hastings05_offdiagonal_commutator}
+    Let $v_0,\dots,v_{n-1}$ be orthonormal, and let the off-diagonal part of
+    $B$ be $o_B=\sum_{a\ne b}\langle v_a,Bv_b\rangle\lvert v_a\rangle\langle v_b\rvert$.
+    If every off-diagonal element satisfies $|\langle v_a,Bv_b\rangle|\le m$,
+    then $\|o_B\|\le(n-1)m$. If moreover $A$ is self-adjoint with
+    $Av_a=r_av_a$ and $|r_a-r_b|\ge\delta>0$ for all $a\ne b$, then
+    \begin{align}
+        \|o_B\|\le(n-1)\frac{\|[A,B]\|}{\delta},
+        \qquad
+        \sum_i\|o_{B_i}\|\le(n-1)\frac{\sum_i\|[A,B_i]\|}{\delta}
+    \end{align}
+    for every $B$ and every finite family $B_i$. With $A=PM_jP$ and
+    $B_i=PM_iP$ this bounds $o(i)$ and the sum behind
+    eq.~(oibu)~\cite[lines 1678--1705]{Hastings2006Solving} when $PM_jP$ has
+    simple spectrum on the ground space, with the eigenbasis
+    given~\cite{gap:hastings05_two_dim_ground_basis}.
+\end{theorem}
+\begin{proof}\leanok
+    Indices are taken modulo $n$. For $k\ne0$ let
+    $S_k=\sum_a\langle v_a,Bv_{a+k}\rangle\lvert v_a\rangle\langle v_{a+k}\rvert$, so that
+    $o_B=\sum_{k\ne0}S_k$. The terms of $S_kx$ are multiples of the orthonormal
+    $v_a$, so $\|S_kx\|^2=\sum_a|\langle v_a,Bv_{a+k}\rangle|^2|\langle v_{a+k},x\rangle|^2
+        \le m^2\|x\|^2$ by Bessel's inequality, and the $n-1$ shifts give
+    $(n-1)m$. Theorem~\ref{thm:hastings05_offdiagonal_commutator} bounds each
+    element by $\|[A,B]\|/|r_a-r_b|\le\|[A,B]\|/\delta$.
+\end{proof}
+
+\begin{theorem}[Ground states as approximate eigenvectors, any dimension]
+    \label{thm:hastings05_low_up_to_offdiagonal_family}
+    \lean{TNLean.Lattice.offDiagonalPartFamily_apply_self,
+        TNLean.Lattice.norm_apply_sub_inner_smul_le_add_offDiagonalPartFamily}
+    \leanok
+    \uses{thm:hastings05_simple_spectrum_basis}
+    Let $v_0,\dots,v_{n-1}$ be an orthonormal basis of a subspace with
+    orthogonal projection $P$, so that $Pu=\sum_b\langle v_b,u\rangle v_b$.
+    Then for every $M$ and every $a$,
+    \begin{align}
+        \|Mv_a-\langle v_a,Mv_a\rangle v_a\|\le\|(1-P)Mv_a\|+\|o_{PMP}\|.
+    \end{align}
+    This is eq.~(low) up to $o(i)$~\cite[lines 476--491]{Hastings2006Solving}
+    for every basis vector.
+\end{theorem}
+\begin{proof}\leanok
+    Write $Mv_a-\langle v_a,Mv_a\rangle v_a=(1-P)Mv_a+(PMv_a-\langle v_a,Mv_a\rangle v_a)$.
+    Since $\langle v_b,PMv_a\rangle=\langle v_b,PMPv_a\rangle$, the second term is
+    $\sum_{b\ne a}\langle v_b,PMPv_a\rangle v_b=o_{PMP}v_a$.
 \end{proof}

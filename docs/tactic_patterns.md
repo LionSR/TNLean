@@ -24,12 +24,35 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Raising a time bound inside a light-cone exponential — promoted (2026-10-25)
+
+- **Pattern:**
+  ```lean
+  Real.exp_le_exp.mpr (sub_le_sub_right (mul_le_mul_of_nonneg_left hs hv) _)
+  ```
+  turning `hs : |s| ≤ T` and `hv : 0 ≤ v` into
+  `Real.exp (v * |s| - c) ≤ Real.exp (v * T - c)`.
+- **Defined in:** `TNLean/Algebra/ExpMulSubMonotone.lean`,
+  `Real.exp_mul_sub_le_exp_mul_sub (hv : 0 ≤ v) (hx : x ≤ T) :
+  exp (v * x - c) ≤ exp (v * T - c)`.
+- **Use when:** A Lieb–Robinson factor `exp (v |t| - c)` must be bounded
+  uniformly on `[-T, T]`; pass `x = |t|`.
+- **Refactored occurrences:** six terms across four files:
+  `MPS/AreaLaw/SupportedGaussianIntegral.lean` (two),
+  `MPS/AreaLaw/DomainSupportedGaussianIntegral.lean` (two),
+  `MPS/AreaLaw/Hastings/ChainLocalizedParts.lean` and
+  `MPS/AreaLaw/Hastings/BoundaryLocalization.lean`.
+- **Notes:** The variants without the subtracted constant in
+  `Circuit/LiebRobinson/GraphPropagation.lean` and
+  `PEPS/AreaLaw/Amplification/GraphChannelSpatialOmission.lean` bound
+  `exp (v x)` with a further step and are not rewritten.
+
 ### Supported Gaussian averaging — promoted (2026-10-21)
 
 - **Pattern:** Factor the two-Hamiltonian integrand into an evolved observable and relative evolution, localize the two factors on possibly different regions, and integrate against the restricted Gaussian measure.
 - **Defined in:** `TNLean/Circuit/SupportedGaussianIntegral.lean`, `QuantumCircuit.exists_supported_gaussian_integral_of_projection_bounds`.
 - **Use when:** Actual observable and generator projection estimates give scalar errors on a symmetric time interval. The theorem constructs one supported path before the observable and averaging data, retains the two projection regions and a common containing output region, and supplies support, norm and error bounds for the average.
-- **Refactored occurrences:** `MPS/AreaLaw/SupportedGaussianIntegral.lean` and `PEPS/AreaLaw/SupportedGaussianIntegral.lean`. Their physical localization estimates and constants remain at the callers; their repeated integration arguments are removed.
+- **Refactored occurrences:** `MPS/AreaLaw/SupportedGaussianIntegral.lean` and `PEPS/AreaLaw/SupportedGaussianIntegral.lean`. Their physical localization estimates and constants remain at the callers; their repeated integration arguments are removed. The finite-domain caller in `MPS/AreaLaw/DomainSupportedGaussianIntegral.lean` uses the same theorem with intrinsic graph neighborhoods.
 - **Notes:** The restricted measure is not renormalized. Zero variance, zero cutoff and the empty site set are retained. The bound is `‖W‖ (εobs + T εgen)`, without an additional factor of two. The two caller files lose 146 lines in total.
 
 
@@ -4891,7 +4914,6 @@ three-plaquette output measurement, and the routed reunion measurement.
   `TNLean/Algebra/GraphDistanceTransport.lean`.
 
 
-
 ### Passing from a natural localization radius to a real radius — candidate (2026-10-21)
 
 - **Pattern:** Use the floor inequality to bound
@@ -4988,7 +5010,6 @@ no additional helper is proposed.
   `MPSPreparation.cutCoefficientMatrix_adjacent`; it is not reproved.
 
 
-
 ### Interval membership in the chain stage assignments — candidate (2026-10-18)
 
 - **Pattern:** Unfold a half-open target interval, separate its endpoint
@@ -5031,7 +5052,6 @@ no additional helper is proposed.
   `stage_right_margin` and `twenty_mul_stageCount_le`.
 - **Abstraction:** The existing `Nat.zero_le` supplies the needed fact. The
   two occurrences in one file do not justify another arithmetic lemma or tactic.
-
 
 
 ### Product-basis vectors under a map of labels — candidate (2026-10-18)
@@ -5148,7 +5168,6 @@ no additional helper is proposed.
   the pattern occurs in a second file and meets the promotion threshold.
 
 
-
 ### Dyadic padding bounds — candidate (2026-10-16)
 
 - **Pattern:** Combine the lower and strict upper bounds for
@@ -5191,7 +5210,6 @@ no additional helper is proposed.
   consolidates those splits through `guideFrame_eq_changeOwner_of_ne`.
 - **Abstraction:** a lemma returning the readings, vertex sets and facts for the surrounding
   guide, if a third occurrence appears.
-
 
 
 ### Supported terms in rectangle coordinates — candidate (2026-10-15)
@@ -7036,6 +7054,20 @@ spectral split → block extraction → MPV calculation → strict bounds
   `v T₀ + 15 + r ≤ K / 2`, which concludes the displayed inequality for any `‖W‖ ≤ 1`.
 - **Notes:** promote at a third occurrence, for example a reset filter on another domain.
 
+### Hermitian partial sums of terms Hermitian on a set — candidate (2026-10-25)
+- **Pattern:**
+  ```lean
+  have hsumH : ∀ T ⊆ B ∪ C, (∑ k ∈ T, h k).IsHermitian := fun T hT ↦
+    Matrix.isHermitian_sum T fun k hk ↦ hh k (hT hk)
+  ```
+  from `hh : ∀ k ∈ B ∪ C, (h k).IsHermitian`.
+- **Seen:** 5 occurrences across 3 files: `TNLean/Lattice/ClusterExpansion/ClusterPart.lean`
+  (three), `TNLean/Lattice/ClusterExpansion/ThermalProduct.lean` and
+  `TNLean/Lattice/ClusterExpansion/TruncatedPositivity.lean`.
+- **Abstraction:** proposed `Matrix.isHermitian_sum_of_subset (hh : ∀ k ∈ s, (h k).IsHermitian)
+  (hT : T ⊆ s) : (∑ k ∈ T, h k).IsHermitian` in `TNLean/Algebra/MatrixHermitianSum.lean`.
+- **Notes:** meets the rule of three; the refactor of the five call sites is a separate change.
+
 ## Rejected
 
 ### Lower bound for a logarithmic cut budget — rejected (2026-10-19)
@@ -7235,7 +7267,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   module. The two occurrences in `TNLean/PEPS/NormalEdgeSingleCrossing.lean` are a
   different shape — the open-lattice memberships need no negation normalization and the
   branches close by `omega` alone — and are left as they are.
-
 
 
 ### encoded boundary conditions inside region sums — resolved
