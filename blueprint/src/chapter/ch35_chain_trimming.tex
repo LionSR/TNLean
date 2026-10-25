@@ -81,3 +81,139 @@ Schmidt rank across any other cut (lines 544--553).
     paired with $w$ captures at most $D$ times the $(m+1)$-st eigenvalue of
     $CC^{*}$, which is at most $\|\psi\|^2/(m+1)$.
 \end{proof}
+
+\subsection{Constant rank across one cut}
+
+Landau, Vazirani and Vidick~\cite{Landau2015Polynomial} (lines 342--364)
+use that the ground state of a gapped chain can be trimmed across one cut to
+a bond dimension independent of the length of the chain, and that trimming a
+vector of low energy keeps its energy low. The bond dimension they state,
+$\exp(O(\varepsilon^{-1}\log^3d\log(1/\delta)))$, comes from Arad, Kitaev,
+Landau and Vazirani~\cite{Arad2013AreaLaw}; the one below comes from the
+area law of this chapter and has different constants
+\cite{gap:lvv13_constant_bond}. The energy bound after trimming is the
+corrected one of \cite{gap:lvv13_trimming_energy}.
+
+\begin{definition}[A constant bond dimension]
+    \label{def:chain_constant_bond}
+    \lean{TNLean.MPS.AreaLaw.constantCutBond}
+    \leanok
+    \uses{def:chain_model}
+    For a chain of local dimension $q$ with range $R$, term norms at most $J$
+    and gap $\Delta>0$, let $C_{\mathrm{int}}$ be the interval entropy bound,
+    $s=\sqrt{(1+J/\Delta)B_R}$, and $0<\delta\le1$. Put
+    \begin{align}
+        B_\delta=\Bigl\lfloor\exp\Bigl(C_{\mathrm{int}}
+        +32s\log\frac{2e^{e/2}}{\delta}\Bigr)\Bigr\rfloor. \notag
+    \end{align}
+    It depends neither on the length of the chain nor on a cut.
+\end{definition}
+
+\begin{theorem}[Trimming the ground state to a constant bond dimension]
+    \label{thm:chain_constant_bond_overlap}
+    \lean{
+        TNLean.MPS.AreaLaw.ChainHamiltonian.one_sub_le_re_inner_chainTrim,
+        TNLean.MPS.AreaLaw.inner_normalized_chainTrim,
+        TNLean.MPS.AreaLaw.cutVector_normalized_chainTrim,
+        TNLean.MPS.AreaLaw.regionState_leftBlock_eq_leftMarginal
+    }
+    \leanok
+    \uses{def:chain_trim, def:chain_constant_bond}
+    Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
+    finite-range Hamiltonian with term norms at most $J\ge0$ on a chain of
+    local dimension $q\ge1$, and let $0<\delta\le1$. For every cut $k$ and
+    every trimming projection $P$ of $\Omega$ at $B_\delta$ across the cut $k$,
+    the vector $v=\operatorname{trim}^k_P\Omega/
+        \|\operatorname{trim}^k_P\Omega\|$ satisfies
+    $\operatorname{Re}\langle v,\Omega\rangle\ge1-\delta$, and the overlap is
+    real and nonnegative. This is the statement of the source with the bond
+    dimension of Definition~\ref{def:chain_constant_bond} in place of the
+    stated one \cite{gap:lvv13_constant_bond}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_prefix_spectral_bounds}
+    The reduced state $\rho$ of $\Omega$ on the first $k$ sites is $CC^{*}$
+    for the coefficient matrix $C$ at the cut. Take
+    $w=32s\log(2e^{e/2}/\delta)$ in
+    Theorem~\ref{thm:chain_prefix_spectral_bounds}: the spectral projection
+    there has rank at most $B_\delta$ and discards mass at most $\delta$. By
+    Ky Fan's maximum principle the sum of the $B_\delta$ largest eigenvalues
+    of $\rho$ is at least $1-\delta$. This sum is
+    $\|\operatorname{trim}^k_P\Omega\|^2$, and
+    $\langle v,\Omega\rangle=\|\operatorname{trim}^k_P\Omega\|\ge
+        \sqrt{1-\delta}\ge1-\delta$.
+\end{proof}
+
+\begin{theorem}[The energy after trimming]
+    \label{thm:chain_trim_energy}
+    \lean{
+        TNLean.MPS.AreaLaw.re_inner_normalized_chainTrim_le,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.re_inner_normalized_chainTrim_le,
+        TNLean.MPS.AreaLaw.rank_cutMatrix_normalized_chainTrim_le,
+        TNLean.MPS.AreaLaw.norm_normalized_chainTrim_eq_one,
+        Matrix.IsGappedGroundState.posSemidef_sub_smul_one
+    }
+    \leanok
+    \uses{def:chain_trim, thm:chain_constant_bond_overlap}
+    Let $H=H_L+H_R+K$ on a chain, with $H_L$ supported on the first $k$
+    sites, $H_R$ on the remaining sites and $0\le K\le1$, and let $\Omega$
+    be a gapped ground vector of $H$ with energy $E_0$ and gap $\Delta>0$.
+    Let $B$ be a bond dimension and $P_\Omega$ a trimming projection of
+    $\Omega$ at $B$ across the cut $k$ whose normalized trimmed vector $u$
+    satisfies $\operatorname{Re}\langle u,\Omega\rangle\ge1-\delta_B$. Let
+    $w$ be a unit vector with $\operatorname{Re}\langle w,Hw\rangle\le
+        E_0+\delta$, and $P$ a trimming projection of $w$ at $B$ across the cut
+    $k$. If $\eta\ge2(\delta/\Delta+\delta_B)$ and $2\eta<1$, the normalized
+    trimmed vector $v$ of $w$ satisfies
+    \begin{align}
+        \operatorname{Re}\langle v,Hv\rangle
+        \le E_0+\frac{\delta+2\sqrt{2\eta}}{1-2\eta}. \notag
+    \end{align}
+    For a finite-range chain Hamiltonian that splits in this way at the cut
+    $k$, this holds at $B=B_{\delta_B}$ for every $0<\delta_B\le1$. In the
+    source $H$ is a sum of nearest-neighbour terms $0\le H_i\le1$ and $K$ is
+    the term across the cut; its printed bound $E_0+6\sqrt\delta$ does not
+    follow from its argument \cite{gap:lvv13_trimming_energy}.
+\end{theorem}
+\begin{proof}\leanok
+    The gap gives $H\ge E_0$, so $\delta\ge0$, and
+    $|\langle\Omega,w\rangle|\ge1-\delta/\Delta$. Since $u$, $w$ and $\Omega$
+    are unit vectors, the overlap estimate for three unit vectors gives
+    $|\langle u,w\rangle|\ge1-2(\delta_B+\delta/\Delta)\ge1-\eta$. In the
+    coordinates of the cut $k$, which preserve norms and inner products,
+    $H_L$ becomes $A\otimes1$, $H_R$ becomes $1\otimes B'$, and $u$ has
+    Schmidt rank at most $B$. The bipartite energy estimate for trimmed
+    vectors then gives the bound: the trimming projection commutes with the
+    left marginal of $w$, so $A\otimes1+1\otimes B'$ has no cross terms
+    between the trimmed part and the discarded part, the cross term of $K$ is
+    at most twice the norm of the discarded part, and by the Eckart--Young
+    theorem the squared norm of the discarded part is at most $2\eta$.
+\end{proof}
+
+\begin{theorem}[A state of constant rank across one cut]
+    \label{thm:chain_constant_rank_state}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_rank_cutMatrix_le_constantCutBond}
+    \leanok
+    \uses{def:chain_constant_bond}
+    Let $\Omega$ be a gapped ground vector, with energy $E_0$ and gap
+    $\Delta>0$, of a finite-range chain Hamiltonian with term norms at most
+    $J\ge0$ and local dimension $q\ge1$, which splits at the cut $k$ as in
+    Theorem~\ref{thm:chain_trim_energy}, and let $0<\delta<1/4$. There is a
+    unit vector $v$ with $\operatorname{rank}M_k(v)\le B_\delta$,
+    $\operatorname{Re}\langle v,\Omega\rangle\ge1-\delta$, and
+    \begin{align}
+        \operatorname{Re}\langle v,Hv\rangle\le
+        E_0+\frac{4\sqrt\delta}{1-4\delta}. \notag
+    \end{align}
+    The source states the energy bound $E_0+6\sqrt\delta$
+    \cite{gap:lvv13_trimming_energy}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_constant_bond_overlap, thm:chain_trim_energy}
+    Take $v$ the normalized trimmed vector of $\Omega$ at $B_\delta$. Its
+    overlap is Theorem~\ref{thm:chain_constant_bond_overlap}, which also
+    shows that the trimmed vector is nonzero, and its rank across the cut is
+    at most $B_\delta$. Theorem~\ref{thm:chain_trim_energy} with $w=\Omega$,
+    energy excess $0$, $\delta_B=\delta$ and $\eta=2\delta$ gives
+    $E_0+2\sqrt{4\delta}/(1-4\delta)$.
+\end{proof}
