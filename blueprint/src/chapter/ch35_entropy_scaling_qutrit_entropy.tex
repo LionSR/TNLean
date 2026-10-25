@@ -19,10 +19,24 @@ $H_2(p)=-p\log p-(1-p)\log(1-p)$, with $0\log0=0$.
     The defining sum gives
     $\ket{\psi_{2N}(p)}=\sqrt{1-p}\ket{\psi_{2N}(0)}
         +\sqrt p\ket{\psi_{2N}(1)}$.
-    Choose a site outside $A$. The flag has letter $2$ at that site, whereas
-    every binary word has letter $0$ or $1$. Thus the partial trace of each
-    cross term between the flag and binary states is zero. Squaring the two coefficients gives
-    (\ref{eq:qutrit_entropy_scaling_region_mixture}), also at $p=0,1$.
+    Let $C_A(p)$ be the coefficient matrix of $\ket{\psi_{2N}(p)}$ across
+    $A\mid A^c$, with rows indexed by the configurations of $A$ and columns by
+    those of $A^c$, so that $\rho_A(p)=C_A(p)C_A(p)^\dagger$ and
+    $C_A(p)=\sqrt{1-p}\,C_A(0)+\sqrt p\,C_A(1)$. The flag
+    $\ket{\psi_{2N}(0)}=\ket{2\cdots2}$ has a single nonzero entry, in the
+    column of the all-$2$ configuration of $A^c$. Choose a site outside $A$.
+    Every binary word has letter $0$ or $1$ at that site, so that column of
+    $C_A(1)$ vanishes, and
+    \begin{align}
+        C_A(0)C_A(1)^\dagger=0,
+        \qquad
+        C_A(1)C_A(0)^\dagger=\bigl(C_A(0)C_A(1)^\dagger\bigr)^\dagger=0.
+        \label{eq:qutrit_entropy_scaling_region_cross}
+    \end{align}
+    Expanding $C_A(p)C_A(p)^\dagger$, the cross terms vanish by
+    (\ref{eq:qutrit_entropy_scaling_region_cross}), and squaring the two
+    coefficients gives (\ref{eq:qutrit_entropy_scaling_region_mixture}), also
+    at $p=0,1$.
 \end{proof}
 
 \begin{theorem}[Entropy bound on every region]

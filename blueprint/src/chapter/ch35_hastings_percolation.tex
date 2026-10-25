@@ -93,9 +93,13 @@ $l=\lfloor l_{\rm proj}/(2R)\rfloor$
 \begin{proof}
     \leanok
     Group the clusters by their number of sites $k\ge l+1$: the clusters with
-    $k$ sites contribute at most $Nx^ky^k$. A finite sum of $(xy)^k$ over
-    exponents $k\ge l+1$ is at most $(xy)^{l+1}/(1-xy)$, the geometric series
-    starting at $k=l+1$.
+    $k$ sites contribute at most $Nx^ky^k$. For a finite set $K$ of exponents
+    $k\ge l+1$ and $0\le r<1$, the sum is at most the geometric series starting
+    at $k=l+1$,
+    \begin{align}
+        \sum_{k\in K}r^k\le\sum_{k\ge l+1}r^k=\frac{r^{l+1}}{1-r},
+    \end{align}
+    which with $r=xy$ gives the bound.
 \end{proof}
 
 \begin{theorem}[The percolation bound]
