@@ -983,50 +983,27 @@ for an arbitrary finite set of sites and are instantiated here directly.
     on a contiguous chain; the domain distinction is recorded
     in~\cite{gap:tnlean_one_dimensional_connected_domain_scope}.
 \end{theorem}
-\begin{proof}
-    \leanok
+\begin{proof}\leanok
     \uses{def:chain_swapped_doubled_hamiltonian,
         thm:chain_relative_generator_localization,thm:chain_lieb_robinson,
         lem:chain_site_norm_budget,thm:area_law_supported_identity,
-        thm:qc_supported_projected_relative_evolution,
-        lem:qc_site_expectation_properties}
-    Let $a,v$ be the constants in
-    Theorem~\ref{thm:chain_relative_generator_localization}, and put
+        thm:qc_supported_gaussian_projection_bounds}
+    Let $a,v$ be the localization constants, put
     $d=4|J|a(R+1)^2N_R$ and $C=a+d>0$.
-    Construct the supported projected relative evolution on $N(Z)$.
-    Its equation uses only $K,K'$ and $N(Z)$, so this choice precedes
-    $Q,W,\eta,T$.
-    For $|t|\le T$, the generator estimate and the evolution comparison give
+    Apply Theorem~\ref{thm:qc_supported_gaussian_projection_bounds} with
+    $B_g=N(Z)$, $B_o=N(Q)$ and output region $B=N(Q\cup Z)$.
+    The path is chosen from $K,K',N(Z)$ before $Q,W,\eta,T$.
+    The physical generator and observable estimates, with $|Q|\le L$, give
     \begin{align}
-        \|e^{itK'}e^{-itK}-U(t)\|
-        \le dL|t|e^{vT-\ell/2}.
+        \varepsilon_g & =dLe^{vT-\ell/2},\notag   \\
+        \varepsilon_o & =aL^2e^{vT-\ell/2}.\notag
     \end{align}
-    The separately localized observable has error at most
-    $a|Q|^2\|W\|e^{vT-\ell/2}$.
-    Using the exact factorization
+    Since $L\le L^2$ for every natural $L$ and $a,d,T\ge0$,
     \begin{align}
-        \bigl(e^{itK'}We^{-itK'}\bigr)
-        \bigl(e^{itK'}e^{-itK}\bigr)=e^{itK'}We^{-itK},
+        aL^2+dLT & \le(a+d)L^2(1+T).\notag
     \end{align}
-    insert $e^{itK'}We^{-itK'}U(t)$ between the two integrands.
-    Unitarity of $U(t)$, invariance of the observable norm under evolution,
-    and the two estimates bound their difference by
-    \begin{align}
-        \|W\|\bigl(a|Q|^2+dL|t|\bigr)e^{vT-\ell/2}
-         & \le\|W\|(a+d)L^2(1+T)e^{vT-\ell/2}.
-    \end{align}
-    Here $|Q|\le L$ and $L\le L^2$ for every natural $L$; the latter is
-    zero at $L=0$ and follows from $1\le L$ otherwise.
-
-    Both factors of the localized integrand act on $B$, and its norm is
-    at most $\|W\|$. The integrands are continuous and bounded, hence
-    integrable for every $\gamma_\eta$. Since the expectation $E_B$ is
-    continuous and linear, commutes with integration, and fixes the
-    localized integrand, it also fixes $M_{\mathrm{loc}}$.
-    This proves its support. Finally,
-    $\gamma_\eta([-T,T])\le1$ gives both the contraction bound and,
-    upon integrating the pointwise difference, the asserted error.
-    The Gaussian mass is not renormalized.
+    Substitution in (\ref{eq:qc_gaussian_projection_error}) gives the stated
+    error. The same theorem gives the support and norm bounds.
 \end{proof}
 
 \begin{lemma}[Separation of the reset support from the cores]

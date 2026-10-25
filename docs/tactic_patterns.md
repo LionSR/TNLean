@@ -24,6 +24,15 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Supported Gaussian averaging — promoted (2026-10-21)
+
+- **Pattern:** Factor the two-Hamiltonian integrand into an evolved observable and relative evolution, localize the two factors on possibly different regions, and integrate against the restricted Gaussian measure.
+- **Defined in:** `TNLean/Circuit/SupportedGaussianIntegral.lean`, `QuantumCircuit.exists_supported_gaussian_integral_of_projection_bounds`.
+- **Use when:** Actual observable and generator projection estimates give scalar errors on a symmetric time interval. The theorem constructs one supported path before the observable and averaging data, retains the two projection regions and a common containing output region, and supplies support, norm and error bounds for the average.
+- **Refactored occurrences:** `MPS/AreaLaw/SupportedGaussianIntegral.lean` and `PEPS/AreaLaw/SupportedGaussianIntegral.lean`. Their physical localization estimates and constants remain at the callers; their repeated integration arguments are removed.
+- **Notes:** The restricted measure is not renormalized. Zero variance, zero cutoff and the empty site set are retained. The bound is `‖W‖ (εobs + T εgen)`, without an additional factor of two. The two caller files lose 146 lines in total.
+
+
 ### Hermitian sum of pointwise-Hermitian terms — promoted (2026-10-23)
 - **Pattern:**
   ```lean
@@ -5082,20 +5091,6 @@ no additional helper is proposed.
   crossing witnesses. A boundary-endpoint summary can lose an extra site and
   does not replace the direct diameter estimate.
 
-### Supported Gaussian averaging — candidate (2026-10-18)
-
-- **Pattern:** Factor the actual two-Hamiltonian integrand into an evolved
-  observable and relative evolution; prove support of its localized average
-  by commuting a supported-operator expectation with the integral; bound its
-  norm and error using the Gaussian measure's mass at most one.
-- **Seen:** Two occurrences, in `PEPS/AreaLaw/SupportedGaussianIntegral.lean`
-  and `MPS/AreaLaw/SupportedGaussianIntegral.lean`.
-- **Abstraction:** Both arguments already use one-parameter unitary identities,
-  `ContinuousLinearMap.integral_comp_comm` and standard integral norm bounds.
-  Assess the weakest additional finite-site lemma if a third consumer appears.
-- **Notes:** Keep the physical Hamiltonian and locality estimates at each
-  caller. The chain argument uses separate observable and generator regions
-  and retains zero variance, zero cutoff and the empty chain.
 
 ### Conjugation by a contraction — candidate (2026-10-18)
 
