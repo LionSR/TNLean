@@ -92,6 +92,64 @@ for an arbitrary finite set of sites and are instantiated here directly.
     in every summand.
 \end{proof}
 
+\begin{definition}[Two-window grouping of a bond family]
+    \label{def:chain_two_window_family}
+    \lean{Fin.twoWindowFamily}
+    \leanok
+    Let $A$ be an additive commutative monoid, and let
+    $h_0,\ldots,h_{N-1}\in A$. For the two-window decomposition of
+    \cite{Arad2016RigorousRG}, take natural numbers $a,b,\ell$ with
+    \begin{align}
+        a+2\ell & \le b, & b+2\ell & \le N.
+        \label{eq:chain_two_window_admissibility}
+    \end{align}
+    Put $W=\{r\in\mathbb N:r<2\ell\}$ and form the disjoint union
+    \begin{align}
+        I & =(W\sqcup W)\sqcup\{L,M,R\}.
+        \label{eq:chain_two_window_alphabet}
+    \end{align}
+    Write $\iota_L,\iota_R$ for the two window injections and
+    $\kappa$ for the bulk injection. Thus $|I|=4\ell+3$, and the two
+    window injections have disjoint images. Define $F:I\to A$ by
+    \begin{align}
+        F_{\iota_L(r)} & =h_{a+r},\notag                  \\
+        F_{\iota_R(r)} & =h_{b+r},\notag                  \\
+        F_{\kappa(L)}  & =\sum_{0\le t<a}h_t,\notag       \\
+        F_{\kappa(M)}  & =\sum_{a+2\ell\le t<b}h_t,\notag \\
+        F_{\kappa(R)}  & =\sum_{b+2\ell\le t<N}h_t.
+        \label{eq:chain_two_window_family_values}
+    \end{align}
+    The three bulk labels remain distinct when their sums vanish.
+\end{definition}
+
+\begin{theorem}[Sum of the grouped bond family]
+    \label{thm:chain_two_window_family_sum}
+    \lean{Fin.sum_twoWindowFamily}
+    \leanok
+    \uses{def:chain_two_window_family}
+    The family in Definition~\ref{def:chain_two_window_family} satisfies
+    \begin{align}
+        \sum_{\alpha\in I}F_\alpha & =\sum_{t=0}^{N-1}h_t.
+        \label{eq:chain_two_window_family_sum}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_two_window_family,thm:chain_two_window_sum}
+    Put $S_L=\sum_{r\in W}h_{a+r}$, $S_R=\sum_{r\in W}h_{b+r}$ and
+    $B_\nu=F_{\kappa(\nu)}$ for $\nu\in\{L,M,R\}$.
+    Expanding~(\ref{eq:chain_two_window_family_values}) gives
+    \begin{align}
+        \sum_{\alpha\in I}F_\alpha
+         & =(S_L+S_R)+(B_L+B_M+B_R)\notag \\
+         & =B_L+S_L+B_M+S_R+B_R.
+        \label{eq:chain_two_window_regrouping}
+    \end{align}
+    Theorem~\ref{thm:chain_two_window_sum} identifies the expression
+    in~(\ref{eq:chain_two_window_regrouping}) with the original sum,
+    proving~(\ref{eq:chain_two_window_family_sum}). Empty intervals
+    cause no exception.
+\end{proof}
+
 \begin{theorem}[Nearest-neighbour supports at two cuts]
     \label{thm:chain_two_cut_edge_supports}
     \lean{TNLean.MPS.AreaLaw.interval_edge_classification_of_lt}
