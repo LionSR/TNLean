@@ -9,8 +9,11 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw.EntropyScaling
 
 import TNLean.MPS.AreaLaw.EntropyScaling.EfficientApproximation
+import TNLean.MPS.AreaLaw.EntropyScaling.QutritApproximation
+import TNLean.MPS.AreaLaw.EntropyScaling.QutritCopies
 import TNLean.MPS.AreaLaw.EntropyScaling.QutritEntropy
 import TNLean.MPS.AreaLaw.EntropyScaling.QutritFamily
 import TNLean.MPS.AreaLaw.EntropyScaling.QutritMiddleTail
+import TNLean.MPS.AreaLaw.EntropyScaling.QutritPolynomialObstruction
 import TNLean.MPS.AreaLaw.EntropyScaling.RenyiApproximation
 import TNLean.MPS.AreaLaw.EntropyScaling.SmoothApproximation
