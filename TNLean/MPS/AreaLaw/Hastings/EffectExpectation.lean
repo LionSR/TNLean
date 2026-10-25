@@ -4,8 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.TraceMulBound
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
-import Mathlib.Analysis.Matrix.Order
 
 /-!
 # The expectation of the effect in the product of the marginals
@@ -17,11 +15,11 @@ added begins at line 912 and offers two repairs for an `O_B` that is not positiv
 follows the first, route 1 (lines 916–925): the effect is `E = O_Bᴴ O_B` and the product bound
 of Lemma 1 becomes `‖Z E Z − P₀‖ ≤ 2ε + ε²` for the projection `Z = O_L O_R`. This file bounds
 `x` by the overlap `tr(σ P₀)`, that error, and `1 − y` with `y = tr(σ Z)`, through the
-Cauchy–Schwarz inequality for the expectation in `σ` (lines 445–453).
+Cauchy–Schwarz inequality for the expectation in `σ` (lines 445–453), QICLean's
+`Matrix.PosSemidef.norm_trace_mul_mul_le`, and `Matrix.PosSemidef.re_trace_mul_mul_self_le`.
 
 ## Main results
 
-* `Matrix.PosSemidef.norm_trace_mul_mul_le`: `|tr(σ A B)| ≤ √(Re tr(σ A Aᴴ)) √(Re tr(σ Bᴴ B))`.
 * `TNLean.MPS.AreaLaw.Hastings.re_trace_mul_le_of_projection_sandwich`:
   `x ≤ p + δ + √(1 − y) (√x + √(p + δ))`.
 
@@ -33,41 +31,6 @@ Cauchy–Schwarz inequality for the expectation in `σ` (lines 445–453).
 -/
 
 open scoped ComplexOrder
-
-namespace Matrix
-
-variable {n : Type*} [Fintype n] [DecidableEq n]
-
-omit [DecidableEq n] in
-/-- Cauchy–Schwarz for the expectation in a positive semidefinite matrix `σ`:
-`|tr(σ A B)| ≤ √(Re tr(σ A Aᴴ)) √(Re tr(σ Bᴴ B))`. -/
-theorem PosSemidef.norm_trace_mul_mul_le {σ A B : Matrix n n ℂ} (hσ : σ.PosSemidef) :
-    ‖(σ * A * B).trace‖ ≤
-      Real.sqrt (σ * A * Aᴴ).trace.re * Real.sqrt (σ * Bᴴ * B).trace.re := by
-  let _ := σ.toMatrixSeminormedAddCommGroup hσ
-  let _ := σ.toMatrixInnerProductSpace hσ
-  have hinner (X Y : Matrix n n ℂ) : inner ℂ X Y = (σ * Xᴴ * Y).trace := by
-    change (Y * σ * Xᴴ).trace = _
-    rw [Matrix.mul_assoc, trace_mul_comm]
-  have hnorm (X : Matrix n n ℂ) : ‖X‖ = Real.sqrt (σ * Xᴴ * X).trace.re := by
-    rw [norm_eq_sqrt_re_inner (𝕜 := ℂ), hinner X X]
-    rfl
-  calc ‖(σ * A * B).trace‖ = ‖inner ℂ Aᴴ B‖ := by rw [hinner, conjTranspose_conjTranspose]
-    _ ≤ ‖Aᴴ‖ * ‖B‖ := norm_inner_le_norm _ _
-    _ = _ := by rw [hnorm, hnorm, conjTranspose_conjTranspose]
-
-open scoped Matrix.Norms.L2Operator MatrixOrder in
-/-- For a positive semidefinite `σ` and a positive semidefinite contraction `A`,
-`Re tr(σ A A) ≤ Re tr(σ A)`, since `A A ≤ A`. -/
-theorem PosSemidef.re_trace_mul_mul_self_le {σ A : Matrix n n ℂ} (hσ : σ.PosSemidef)
-    (hA : A.PosSemidef) (hA1 : ‖A‖ ≤ 1) :
-    (σ * A * A).trace.re ≤ (σ * A).trace.re := by
-  have hle : A * A ≤ A := CStarAlgebra.mul_self_le_of_nonneg_of_norm_le_one hA.nonneg hA1
-  have h := (Complex.nonneg_iff.mp (hσ.trace_mul_nonneg (Matrix.le_iff.mp hle))).1
-  rw [Matrix.mul_sub, trace_sub, Complex.sub_re, ← Matrix.mul_assoc] at h
-  simpa using h
-
-end Matrix
 
 namespace TNLean.MPS.AreaLaw.Hastings
 

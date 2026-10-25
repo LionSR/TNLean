@@ -207,6 +207,27 @@ theorem IsOpenMPS.smul {L q D : ℕ} {ψ : (Fin L → Fin q) → ℂ} (h : IsOpe
   change c * ψ x = _
   rw [hψ x, mul_assoc]
 
+/-- Normalizing a nonzero vector at most doubles its distance to a unit vector:
+`‖Φ / ‖Φ‖ - ψ‖ ≤ |1 - ‖Φ‖| + ‖Φ - ψ‖ ≤ 2 ‖Φ - ψ‖`. -/
+theorem norm_inv_norm_smul_sub_le_two_mul {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E]
+    {ψ Φ : E} (hψ : ‖ψ‖ = 1) (hΦ : Φ ≠ 0) :
+    ‖(‖Φ‖ : ℂ)⁻¹ • Φ - ψ‖ ≤ 2 * ‖Φ - ψ‖ := by
+  have hpos : 0 < ‖Φ‖ := norm_pos_iff.mpr hΦ
+  have hdiff : ‖(‖Φ‖ : ℂ)⁻¹ • Φ - Φ‖ = |1 - ‖Φ‖| := by
+    have hs : (‖Φ‖ : ℂ)⁻¹ • Φ - Φ = ((‖Φ‖⁻¹ - 1 : ℝ) : ℂ) • Φ := by
+      simp [sub_smul]
+    rw [hs, norm_smul, Complex.norm_real, Real.norm_eq_abs,
+      ← abs_of_nonneg (norm_nonneg Φ), ← abs_mul]
+    congr 1
+    rw [abs_of_nonneg (norm_nonneg Φ)]
+    field_simp
+  have hle : |1 - ‖Φ‖| ≤ ‖Φ - ψ‖ := by
+    have h := abs_norm_sub_norm_le ψ Φ
+    rwa [hψ, norm_sub_rev] at h
+  calc ‖(‖Φ‖ : ℂ)⁻¹ • Φ - ψ‖ ≤ ‖(‖Φ‖ : ℂ)⁻¹ • Φ - Φ‖ + ‖Φ - ψ‖ :=
+        norm_sub_le_norm_sub_add_norm_sub _ _ _
+    _ ≤ 2 * ‖Φ - ψ‖ := by rw [hdiff]; linarith
+
 /-- The square root `√(2 e^{e/2})` of the prefactor of the marginal tail bound. -/
 noncomputable def tailPrefactorRoot : ℝ := Real.sqrt (2 * Real.exp (Real.exp 1 / 2))
 
@@ -313,30 +334,12 @@ private theorem exists_isOpenMPS_norm_sub_le_of_prefix_bounds
     have := norm_sub_norm_le Ω Φ₀
     linarith
   have hΦ₀pos : 0 < ‖Φ₀‖ := by linarith
-  set c : ℂ := ((‖Φ₀‖⁻¹ : ℝ) : ℂ)
-  set Φ₁ : EuclideanSpace ℂ (Fin L → Fin q) := c • Φ₀ with hΦ₁def
-  have hΦ₁norm : ‖Φ₁‖ = 1 := by
-    rw [hΦ₁def, norm_smul, Complex.norm_real, Real.norm_eq_abs, abs_of_pos (inv_pos.mpr hΦ₀pos),
-      inv_mul_cancel₀ hΦ₀pos.ne']
+  set Φ₁ : EuclideanSpace ℂ (Fin L → Fin q) := (‖Φ₀‖ : ℂ)⁻¹ • Φ₀ with hΦ₁def
+  have hΦ₁norm : ‖Φ₁‖ = 1 := norm_smul_inv_norm (𝕜 := ℂ) (norm_pos_iff.mp hΦ₀pos)
   have hΦ₁dist : ‖Φ₁ - Ω‖ ≤ ε := by
-    have h1 : ‖Φ₁ - Φ₀‖ = |1 - ‖Φ₀‖| := by
-      have hsub : Φ₁ - Φ₀ = ((‖Φ₀‖⁻¹ - 1 : ℝ) : ℂ) • Φ₀ := by
-        rw [hΦ₁def, Complex.ofReal_sub, Complex.ofReal_one, sub_smul, one_smul]
-      rw [hsub, norm_smul, Complex.norm_real, Real.norm_eq_abs,
-        show |‖Φ₀‖⁻¹ - 1| * ‖Φ₀‖ = |(‖Φ₀‖⁻¹ - 1) * ‖Φ₀‖| by
-          rw [abs_mul, abs_of_pos hΦ₀pos]]
-      congr 1
-      field_simp
-    have h2 : |1 - ‖Φ₀‖| ≤ ε / 2 := by
-      rw [abs_le]
-      have := norm_sub_norm_le Φ₀ Ω
-      rw [norm_sub_rev] at this
-      constructor <;> linarith
-    calc ‖Φ₁ - Ω‖ = ‖(Φ₁ - Φ₀) + (Φ₀ - Ω)‖ := by congr 1; abel
-      _ ≤ ‖Φ₁ - Φ₀‖ + ‖Φ₀ - Ω‖ := norm_add_le _ _
-      _ ≤ ε / 2 + ε / 2 := by
-          rw [h1, norm_sub_rev]; exact add_le_add h2 hδ
-      _ = ε := by ring
+    have h := norm_inv_norm_smul_sub_le_two_mul hΩ (norm_pos_iff.mp hΦ₀pos)
+    rw [← hΦ₁def, norm_sub_rev Φ₀ Ω] at h
+    linarith
   -- the matrix product structure
   have hD : ∀ k, (cutMatrix Φ₀ k).rank ≤ ⌊Real.exp (C + w)⌋₊ := by
     intro k
@@ -346,7 +349,7 @@ private theorem exists_isOpenMPS_norm_sub_le_of_prefix_bounds
     · exact Real.exp_le_exp.mpr (by linarith [hS k])
   have hmps₀ := isOpenMPS_of_cutMatrix_rank_le Φ₀ hD
   refine ⟨Φ₁, hΦ₁norm, ?_, hΦ₁dist⟩
-  have := hmps₀.smul c
+  have := hmps₀.smul (‖Φ₀‖ : ℂ)⁻¹
   convert this using 2 with x
   simp [hΦ₁def]
 
