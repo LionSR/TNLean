@@ -27,22 +27,6 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 #guard_msgs (whitespace := lax) in
 #print axioms QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finset
 
-/--
-info: 'QuantumCircuit.heisenbergCommutatorNorm_le_graphDistance_finset_numeric' depends on axioms: [propext, Classical.choice, Quot.sound]
----
-info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms QuantumCircuit.heisenbergCommutatorNorm_le_graphDistance_finset_numeric
-
-/--
-info: 'QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finset_numeric' depends on axioms: [propext, Classical.choice, Quot.sound]
----
-info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finset_numeric
-
 open scoped Matrix.Norms.L2Operator
 
 -- A zero interaction budget and arbitrary real time are admitted, even with no terms.
@@ -59,12 +43,12 @@ example (S : Finset Unit)
       simp
     rw [hset]
     exact QuantumCircuit.mem_supportedOperators_univ B
-  have h := QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finset_numeric
+  have h := QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finsets_numeric
     (q := 2) (κ := Fin 0) (⊥ : SimpleGraph Unit) (fun _ => ∅) (fun _ => ())
     (fun k => Fin.elim0 k) (fun _ => 0) (fun k => Fin.elim0 k)
     (fun k => Fin.elim0 k) 0 (fun k => Fin.elim0 k) 1 (by decide)
-    (fun k => Fin.elim0 k) 0 (by simp) S hA () hB 1 (by norm_num)
-    0 (by simp) t
+    (fun k => Fin.elim0 k) 0 (by simp) S hA {()}
+    (by simpa only [Finset.coe_singleton] using hB) 1 (by norm_num) 0 (by simp) t
   simpa using h
 
 /--

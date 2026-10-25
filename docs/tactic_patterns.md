@@ -5130,9 +5130,9 @@ no additional helper is proposed.
 - **Pattern:** Apply the nonnegative-time estimate to the interaction family
   `fun k ↦ -h k` at time `-t`, preserve its Hermiticity, supports and norm
   budget, and rewrite with `heisenbergCommutatorNorm_neg_time`.
-- **Seen:** Four occurrences in `Circuit/LiebRobinson/GraphPropagation.lean`,
+- **Seen:** Three occurrences in `Circuit/LiebRobinson/GraphPropagation.lean`,
   in `heisenbergCommutatorNorm_le_graphDistance`,
-  `heisenbergCommutatorNorm_le_graphDistance_finset`, its `_numeric` variant,
+  `heisenbergCommutatorNorm_le_graphDistance_finset`,
   and `heisenbergCommutatorNorm_le_graphDistance_finsets_numeric`
   (updated 2026-10-25).
 - **Abstraction:** The common identity is already the public lemma
