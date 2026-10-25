@@ -1324,15 +1324,18 @@ slope `c₁` with `v c₁ < 1/2`.
 ### Local solution of gapped Hamiltonians: a basis of a degenerate ground space
 
 [hastings05_two_dim_ground_basis.tex](hastings05_two_dim_ground_basis.tex)
-(scope restriction, open) records the treatment of a degenerate ground space in Hastings,
+(local correction, resolved) records the treatment of a degenerate ground space in Hastings,
 *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, lines 1678–1705). In an
 eigenbasis of `P M_j P` with eigenvalues `r ≠ s`, the off-diagonal part of `P M_i P` has norm
 at most `‖[P M_i P, P M_j P]‖ / |r - s|`, and a ground state is an approximate eigenvector of
-`M_i` up to that off-diagonal part. A ground space of dimension two is treated, and a ground
-space of any dimension `n` when one compression `P M_j P` has `n` eigenvalues pairwise at least
-`δ > 0` apart, with the bound `(n - 1) ‖[P M_i P, P M_j P]‖ / δ`. The eigenbasis is given, a
-compression with repeated eigenvalues is not treated, and eq. `oibu` is left as the sum of the
-commutators.
+`M_i` up to that off-diagonal part. Every dimension is treated: one compression with simple
+spectrum gives `(n - 1) ‖[P M_i P, P M_j P]‖ / δ`, and repeated eigenvalues are resolved by the
+source's iteration over further compressions, made rigorous by an identity for the matrix
+elements at each level and assembled by induction over any number of levels; the cross terms the
+sketch omits are kept (a local correction). The basis is given. Eq. `oibu` is proved with an
+explicit constant independent of the size of the system, for any number of levels; its printed
+dependence `O(J²/(c₁ l ΔE δλ_j))` is not established, the constant growing like `(v/ΔE)^D` on a
+lattice of dimension `D`.
 
 ### One-dimensional area law after Hastings: the entropy gain constants
 
@@ -1529,7 +1532,7 @@ from the von Neumann Lemma 2 by `S_α ≤ S`, the concavity of the logarithm.
 ### Local solution of gapped Hamiltonians: the truncated dynamics of `M_i`
 
 [hastings05_truncated_dynamics.tex](hastings05_truncated_dynamics.tex)
-(local correction, resolved) records how the approximation `M_i` of Hastings,
+(scope restriction, resolved) records how the approximation `M_i` of Hastings,
 *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, eqs. `mid` and
 `apb`, source lines 285–320, proved at lines 1458–1533), is formalized. The
 truncation keeps any family of terms acting inside a set `K` that contains the
@@ -1537,7 +1540,9 @@ support of `H_i`; the shell is the set of omitted terms meeting `K`, whose numbe
 at most `N(l_proj)` for the source's choice. The time integral of the
 Lieb–Robinson bound, which the source absorbs into `g(t, l_proj)`, is bounded by `T`
 times its value at `T`, and the constants are explicit. The weight of eq. `mid` is
-read as that of eq. `thd`.
+read as that of eq. `thd`. The exponential form `J O(e^{-l_proj/l_fac})` of eq. `facld`
+(lines 322–349) is formalized under an explicit polynomial bound on the number of omitted
+terms meeting `K` (scope restriction), with `l_fac = 2 / min(c₁ΔE, μ − c₁v)`.
 
 ### One-dimensional area law after Hastings: the decay length of Lemma 1
 
@@ -1573,6 +1578,9 @@ form remains open under issue #9811.
   `nS` index components per site remains unproved: for a product of `m`
   factors the construction carries `m` components of `q²` values at every site,
   one for every factor wherever it acts, so the `n`-th power `ρₙ` carries `n m`.
+  The truncated operator of the high-temperature expansion (lines 1256–1279) has
+  the product form on every nonempty such domain; on the empty domain only the
+  identity has a product form. Its index count is not established either.
 
 ## Rényi entropy and matrix product state approximation
 

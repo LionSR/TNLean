@@ -47,6 +47,13 @@ abstracted — record why, so it is not re-proposed).
   `PEPS/AreaLaw/Amplification/GraphChannelSpatialOmission.lean` bound
   `exp (v x)` with a further step and are not rewritten.
 
+### Replica-swap entropy comparison — promoted (2026-10-21)
+
+- **Pattern:** Two identical normalized replicas, a regional swap, and a unitary supported away from two cores imply a mutual-information bound from the vector approximation error.
+- **Defined in:** `Lattice/RegionalResetEntropy.lean`, `TNLean.Lattice.mutualInformation_cores_le_of_reset_unitary`.
+- **Refactored occurrences:** Both the contiguous-chain and arbitrary finite-domain information-reset proofs use the shared finite-site theorem. The former loses its repeated 80-line local entropy argument.
+- **Notes:** Replica normalization and the product marginal after the swap are proved internally. No product-marginal hypothesis is supplied by either caller. The theorem is independent of a Hamiltonian, gap, dimension of the underlying lattice, and connectedness.
+
 ### Supported Gaussian averaging — promoted (2026-10-21)
 
 - **Pattern:** Factor the two-Hamiltonian integrand into an evolved observable and relative evolution, localize the two factors on possibly different regions, and integrate against the restricted Gaussian measure.
@@ -9177,6 +9184,43 @@ spectral split → block extraction → MPV calculation → strict bounds
   `Lattice.hasSourceBoundedChange_liftOne`. The stage births call it with an
   empty prefix and the scalar idle vector; the former private copy is removed.
 
+### Gaussian approximation and polar correction for a regional reset — candidate (2026-10-22)
+
+- **Pattern:** Choose the Gaussian variance, time cutoff and spatial radius;
+  compare the actual truncated Gaussian operator with its supported approximation;
+  obtain a supported unitary from the two-sided vector estimates; apply the
+  common finite-site entropy comparison to that same unitary.
+- **Seen:** `ChainHamiltonian.information_reset` in
+  `MPS/AreaLaw/InformationReset.lean` and `DomainHamiltonian.information_reset`
+  in `MPS/AreaLaw/DomainInformationReset.lean`.
+- **Existing reuse:** The Gaussian estimates,
+  `exists_supported_unitary_of_two_sided`, and
+  `mutualInformation_cores_le_of_reset_unitary` are shared already. The narrower
+  scalar estimate is recorded under “Absorbing a localization coefficient with
+  spare decay”.
+- **Possible abstraction:** A common finite-site theorem whose inputs are the
+  original doubled Hamiltonians, the actual supported Gaussian approximation
+  and the required geometric disjointness. Two complete applications are
+  recorded; no new theorem or tactic is introduced here.
+
+### Mutual information at logarithmic separation — candidate (2026-10-22)
+
+- **Pattern:** Bound the entropy of an interval neighborhood, choose a radius
+  proportional to the logarithm of the number of sites, prove the two core
+  complements are disjoint, and apply the regional information-reset estimate.
+- **Seen:** `ChainHamiltonian.mutualInformation_le_of_logarithmic_separation`
+  in `MPS/AreaLaw/LogarithmicSeparation.lean` and
+  `DomainHamiltonian.mutualInformation_le_of_logarithmic_separation` in
+  `MPS/AreaLaw/DomainLogarithmicSeparation.lean`.
+- **Existing reuse:** Both proofs use the same interval entropy constant,
+  numerical separation estimate and ceiling bounds. The narrower neighborhood
+  membership arguments are recorded under “Real-radius chain neighborhood
+  comparisons”.
+- **Possible abstraction:** Share the numerical choice and the final reset
+  application while leaving the chain and intrinsic-domain distance comparisons
+  in their respective modules. There are two applications, below the promotion
+  threshold; the public geometric hypotheses remain unchanged.
+
 ### Cancellation outside crossing supports — candidate (2026-10-22)
 
 - **Pattern:** Apply conjugation minus the identity to the doubled Hamiltonian,
@@ -9302,3 +9346,23 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** the nonnegative target also covers the empty collection.
   The earlier monotonicity candidate uses the same Mathlib theorem with
   inclusion of collections in place of a pointwise linear estimate.
+
+### Candidate: logarithms of zero-padded integer rank budgets (2026-10-23)
+
+`EntropyScaling.RenyiApproximationLowerBound` and
+`EntropyScaling.VonNeumannApproximationLowerBound` both use
+`log (max 1 D) = log D` for a natural rank budget, including zero.
+The latter shares one private lemma between its prefix and block bounds,
+using Mathlib's `Real.posLog_eq_log_max_one` and
+`Real.log_natCast_nonneg`; it does not repeat the earlier case split.
+A further independent use should place this elementary identity in a shared
+mathematical module and replace the existing local proofs.
+
+### Candidate: polynomial bond bounds and logarithmic entropy remainders (2026-10-23)
+
+`EntropyScaling.RenyiObstruction` and `EntropyScaling.VonNeumannObstruction`
+both convert `D ≤ C * (N + 1)^m` to a logarithmic bound, including `D = 0`,
+and use a little-o estimate to compare the logarithmic remainder with positive
+entropy growth. There are two independent occurrences. A third consumer should
+share the logarithmic integer-budget lemma and the elementary eventual comparison;
+there is no need for a new tactic.
