@@ -34,7 +34,6 @@ import TNLean.MPS.AreaLaw.Hastings.MainTheorem
 import TNLean.MPS.AreaLaw.Hastings.MovedEstimate
 import TNLean.MPS.AreaLaw.Hastings.PartCommutators
 import TNLean.MPS.AreaLaw.Hastings.PositiveFactorization
-import TNLean.MPS.AreaLaw.Hastings.PowerExponential
 import TNLean.MPS.AreaLaw.Hastings.ProductStateExpectation
 import TNLean.MPS.AreaLaw.Hastings.ProjectorFactorization
 import TNLean.MPS.AreaLaw.Hastings.ProjectorFactorizationScaling
