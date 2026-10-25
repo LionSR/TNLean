@@ -983,50 +983,27 @@ for an arbitrary finite set of sites and are instantiated here directly.
     on a contiguous chain; the domain distinction is recorded
     in~\cite{gap:tnlean_one_dimensional_connected_domain_scope}.
 \end{theorem}
-\begin{proof}
-    \leanok
+\begin{proof}\leanok
     \uses{def:chain_swapped_doubled_hamiltonian,
         thm:chain_relative_generator_localization,thm:chain_lieb_robinson,
         lem:chain_site_norm_budget,thm:area_law_supported_identity,
-        thm:qc_supported_projected_relative_evolution,
-        lem:qc_site_expectation_properties}
-    Let $a,v$ be the constants in
-    Theorem~\ref{thm:chain_relative_generator_localization}, and put
+        thm:qc_supported_gaussian_projection_bounds}
+    Let $a,v$ be the localization constants, put
     $d=4|J|a(R+1)^2N_R$ and $C=a+d>0$.
-    Construct the supported projected relative evolution on $N(Z)$.
-    Its equation uses only $K,K'$ and $N(Z)$, so this choice precedes
-    $Q,W,\eta,T$.
-    For $|t|\le T$, the generator estimate and the evolution comparison give
+    Apply Theorem~\ref{thm:qc_supported_gaussian_projection_bounds} with
+    $B_g=N(Z)$, $B_o=N(Q)$ and output region $B=N(Q\cup Z)$.
+    The path is chosen from $K,K',N(Z)$ before $Q,W,\eta,T$.
+    The physical generator and observable estimates, with $|Q|\le L$, give
     \begin{align}
-        \|e^{itK'}e^{-itK}-U(t)\|
-        \le dL|t|e^{vT-\ell/2}.
+        \varepsilon_g & =dLe^{vT-\ell/2},\notag   \\
+        \varepsilon_o & =aL^2e^{vT-\ell/2}.\notag
     \end{align}
-    The separately localized observable has error at most
-    $a|Q|^2\|W\|e^{vT-\ell/2}$.
-    Using the exact factorization
+    Since $L\le L^2$ for every natural $L$ and $a,d,T\ge0$,
     \begin{align}
-        \bigl(e^{itK'}We^{-itK'}\bigr)
-        \bigl(e^{itK'}e^{-itK}\bigr)=e^{itK'}We^{-itK},
+        aL^2+dLT & \le(a+d)L^2(1+T).\notag
     \end{align}
-    insert $e^{itK'}We^{-itK'}U(t)$ between the two integrands.
-    Unitarity of $U(t)$, invariance of the observable norm under evolution,
-    and the two estimates bound their difference by
-    \begin{align}
-        \|W\|\bigl(a|Q|^2+dL|t|\bigr)e^{vT-\ell/2}
-         & \le\|W\|(a+d)L^2(1+T)e^{vT-\ell/2}.
-    \end{align}
-    Here $|Q|\le L$ and $L\le L^2$ for every natural $L$; the latter is
-    zero at $L=0$ and follows from $1\le L$ otherwise.
-
-    Both factors of the localized integrand act on $B$, and its norm is
-    at most $\|W\|$. The integrands are continuous and bounded, hence
-    integrable for every $\gamma_\eta$. Since the expectation $E_B$ is
-    continuous and linear, commutes with integration, and fixes the
-    localized integrand, it also fixes $M_{\mathrm{loc}}$.
-    This proves its support. Finally,
-    $\gamma_\eta([-T,T])\le1$ gives both the contraction bound and,
-    upon integrating the pointwise difference, the asserted error.
-    The Gaussian mass is not renormalized.
+    Substitution in (\ref{eq:qc_gaussian_projection_error}) gives the stated
+    error. The same theorem gives the support and norm bounds.
 \end{proof}
 
 \begin{lemma}[Separation of the reset support from the cores]
@@ -1751,6 +1728,291 @@ for an arbitrary finite set of sites and are instantiated here directly.
     integers.
 \end{definition}
 
+\begin{lemma}[Interaction norm budget on a finite integer domain]
+    \label{lem:domain_site_norm_budget}
+    \lean{TNLean.MPS.AreaLaw.IsDomainSupport.singleton,
+        TNLean.MPS.AreaLaw.DomainSupport.toChainSupport,
+        TNLean.MPS.AreaLaw.DomainSupport.toChainSupport_injective,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.toChain_term,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.norm_bound_nonneg,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.sum_norm_terms_containing_le}\leanok
+    \uses{def:domain_model}
+    In the setting of Definition~\ref{def:domain_model}, every site $x$ satisfies
+    $J\ge0$ and
+    \begin{align}
+        \sum_{X\ni x}\|h_X\| & \le 2^{2R+1}J.\notag
+    \end{align}
+    The sum ranges over the original admissible domain supports.
+    This is a consequence of the interaction assumptions
+    in~\cite[Part~I]{TNLean2026OneDimensional}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:domain_model,lem:chain_site_norm_budget}
+    The singleton $\{x\}$ is admissible, so
+    $0\le\|h_{\{x\}}\|\le J$.
+    Extend the interactions by zero to the chain of increasing labels.
+    The inclusion of domain supports into chain supports is injective and
+    preserves both the terms and membership of $x$.
+    Restricting the nonnegative chain sum of
+    Lemma~\ref{lem:chain_site_norm_budget} gives the bound.
+\end{proof}
+
+\begin{lemma}[Crossing count on a finite integer domain]
+    \label{lem:domain_crossing_count}
+    \lean{TNLean.MPS.AreaLaw.card_domain_crossingTerms_le_mul_card_boundaryEdges,
+        TNLean.MPS.AreaLaw.card_domain_crossingTerms_mul_two_le}\leanok
+    \uses{def:domain_model}
+    In the setting of Definition~\ref{def:domain_model}, let $D$ be any set of
+    labelled sites and let $\mathcal C$ be the original admissible supports
+    meeting both $D$ and its complement. Write $\partial_{\mathrm{ch}}D$
+    for the edge boundary of $D$ in the chain of increasing labels and put
+    $N_R=2\cdot2^{2R}$. Then
+    \begin{align}
+        |\mathcal C|  & \le 2^{2R}|\partial_{\mathrm{ch}}D|,\notag \\
+        2|\mathcal C| & \le N_R|\Lambda|.\notag
+    \end{align}
+    The chain boundary is used only for this upper bound; it need not equal
+    the physical edge boundary in $\Lambda$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:domain_model,lem:domain_site_norm_budget,lem:chain_boundary_crossing_count}
+    As in the proof of Lemma~\ref{lem:domain_site_norm_budget}, the inclusion
+    into chain supports is injective and preserves both crossing witnesses. Apply Lemma~\ref{lem:chain_boundary_crossing_count}, then use
+    $|\partial_{\mathrm{ch}}D|\le |\Lambda|$ and multiply by two.
+\end{proof}
+
+\begin{definition}[Doubled domain interactions and regional swaps]
+    \label{def:domain_doubled_swapped_hamiltonian}
+    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.doubled,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.doubled_operator,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.swappedDoubled,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.swappedDoubled_operator}\leanok
+    \uses{def:domain_model,def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
+    Let $H=\sum_Xh_X$ be an admissible domain Hamiltonian and let
+    $D\subseteq V=\{0,\ldots,|\Lambda|-1\}$. Let $p$ pair the two replica
+    coordinates at each site and put $F=p_*F_D$. Define
+    \begin{align}
+        \widehat h_X  & =p_*(h_X\otimes\mathbb 1+\mathbb 1\otimes h_X),\notag                \\
+        \widehat h'_X & =F\widehat h_XF^\dagger,\notag                                       \\
+        \widehat H    & =\sum_X\widehat h_X=p_*(H\otimes\mathbb 1+\mathbb 1\otimes H),\notag \\
+        \widehat H'   & =\sum_X\widehat h'_X=F\widehat H F^\dagger.
+        \label{eq:domain_doubled_swapped}
+    \end{align}
+    Both families are indexed by the original admissible domain supports.
+    Their terms are Hermitian, supported on $X$, and have norm at most $2J$.
+    Thus they have local dimension $q^2$, range $R$ and interaction bound $2J$.
+    Empty domains and $q=0$ are allowed. These are the two-replica operators
+    in \cite[Part~IIa]{TNLean2026OneDimensional}.
+\end{definition}
+\begin{proof}\leanok
+    \uses{def:domain_model,def:chain_doubled_hamiltonian,
+        def:chain_swapped_doubled_hamiltonian,lem:domain_site_norm_budget,
+        thm:peps_sheet_swap_conjugate_support}
+    At each original nonempty support $X$, choose a site of $X$ to obtain
+    $J\ge0$. Extending the original interactions by zero to the chain of
+    increasing labels preserves the term at $X$ and its support. The
+    doubled and swapped chain estimates therefore apply at that same $X$.
+    Conjugation preserves Hermiticity and the regional swap preserves support.
+    Distributing the finite sums proves (\ref{eq:domain_doubled_swapped}).
+\end{proof}
+
+\begin{theorem}[Crossing decomposition for a domain regional swap]
+    \label{thm:domain_partial_swap_crossing}
+    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.partialSwap_term_difference_spec,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.partialSwap_difference_eq_sum_crossing}\leanok
+    \uses{def:domain_doubled_swapped_hamiltonian,lem:domain_crossing_count}
+    With the notation of Definition~\ref{def:domain_doubled_swapped_hamiltonian},
+    put $T_{X,0}=p_*(h_X\otimes\mathbb 1)$,
+    $T_{X,1}=p_*(\mathbb 1\otimes h_X)$, and
+    $K_{X,b}=FT_{X,b}F^\dagger-T_{X,b}$.
+    Every $K_{X,b}$ is Hermitian, supported on $X$, and satisfies
+    $\|K_{X,b}\|\le2J$. Let $\mathcal C$ be the original admissible supports
+    meeting both $D$ and $V\setminus D$, and put $N_R=2\cdot2^{2R}$. Then
+    \begin{align}
+        \widehat H'-\widehat H
+                      & =\sum_{X\in\mathcal C}\sum_{b\in\{0,1\}}K_{X,b},\notag \\
+        2|\mathcal C| & \le N_R|\Lambda|.\notag
+    \end{align}
+    The count here is a bound by the total number of domain sites.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:domain_doubled_swapped_hamiltonian,thm:chain_partial_swap_boundary,
+        thm:peps_sheet_swap_doubled_cancellation,lem:domain_crossing_count}
+    The per-replica support, Hermiticity and norm estimates follow from
+    the corresponding chain estimates at the same original support.
+    If $X\subseteq D$ or $X\cap D=\varnothing$, then
+    \begin{align*}
+        F(T_{X,0}+T_{X,1})F^\dagger=T_{X,0}+T_{X,1}.
+    \end{align*}
+    Thus $K_{X,0}+K_{X,1}=0$ for every noncrossing support.
+    Restrict the finite sum to crossing supports, then distribute conjugation
+    over the two replica terms. Lemma~\ref{lem:domain_crossing_count} gives
+    the displayed count.
+\end{proof}
+
+\begin{theorem}[Intrinsic neighborhoods of order intervals]
+    \label{thm:domain_interval_neighborhood}
+    \lean{TNLean.MPS.AreaLaw.domainNeighborhood_eq_interval_of_ordConnected,
+        TNLean.MPS.AreaLaw.domainNeighborhood_interval_eq}\leanok
+    \uses{def:domain_model,def:chain_model}
+    In the setting of Definition~\ref{def:domain_model}, identify the domain
+    with its increasing labels $V=\{0,\ldots,|\Lambda|-1\}$.
+    For $m\in\N$ and $I\subseteq V$, put
+    \begin{align}
+        N_m(I) & =\bigcup_{x\in I}\{y\in V:d_\Lambda(x,y)\le m\}.\notag
+    \end{align}
+    If $I$ is order-convex in $V$, there exist natural numbers $a,b$ such that
+    $N_m(I)=[a,b)$, with the interval taken in $V$.
+    In particular, the intrinsic neighborhood of a relative interval is
+    again a relative interval. Empty domains and empty intervals are allowed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:domain_model,def:chain_model}
+    Every edge of the induced graph joins consecutive labels. Induction on
+    a walk therefore shows that it visits every label between its endpoints.
+    If $d_\Lambda(x,y)\le m$ and $z$ lies between $x$ and $y$, the initial
+    segment of a shortest walk ending at $z$ gives $d_\Lambda(x,z)\le m$.
+
+    Let $u\le z\le v$ with $u,v\in N_m(I)$, and choose $x,y\in I$ with
+    $d_\Lambda(x,u)\le m$ and $d_\Lambda(y,v)\le m$.
+    If $z<x$, use the walk from $x$ to $u$.
+    Otherwise, if $z\le y$, order convexity gives $z\in I$.
+    In the remaining case $y<z$, use the walk from $y$ to $v$.
+    Thus $N_m(I)$ is order-convex. If it is nonempty, take $a$ to be its
+    least label and $b$ one plus its greatest label; if it is empty, take
+    $a=b=0$.
+\end{proof}
+
+\begin{theorem}[Entropy of intrinsic neighborhoods of interval unions]
+    \label{thm:domain_interval_neighborhood_entropy}
+    \lean{TNLean.MPS.AreaLaw.regionEntropy_domainNeighborhood_biUnion_intervals_le,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.regionEntropy_neighborhood_biUnion_intervals_le}
+    \leanok
+    \uses{def:domain_model}
+    Let $\Omega$ be a normalized vector on the finite domain of
+    Definition~\ref{def:domain_model}. Suppose that every relative interval has
+    entropy at most $c$. For any finite index set $s$, relative intervals
+    $I_\alpha$ and $m\in\mathbb N$,
+    \begin{align}
+        S_\Omega\left(N_m\left(\bigcup_{\alpha\in s}I_\alpha\right)\right)
+         & \le |s|c.\notag
+    \end{align}
+    The intervals may overlap or be empty, and $s$ may be empty.
+    If $\Omega$ is the original gapped ground vector of an admissible domain
+    Hamiltonian, with $q\ge1$, $J\ge0$ and $\Delta>0$, one may take
+    $c=C_{\mathrm{int}}(q,R,J,\Delta)$.
+    This is the interval-neighborhood entropy estimate used in
+    \cite[Part~IIa]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:domain_interval_neighborhood,thm:chain_area_law,
+        lem:zero_entropy_flip,lem:chain_entropy_inequalities,def:domain_model}
+    Submodularity and nonnegativity of reduced-state entropy give
+    $S_\Omega(X\cup Y)\le S_\Omega(X)+S_\Omega(Y)$.
+    Since $S_\Omega(\varnothing)=0$, finite subadditivity gives
+    \begin{align}
+        S_\Omega\left(\bigcup_{\alpha\in s}N_m(I_\alpha)\right)
+         & \le\sum_{\alpha\in s}S_\Omega(N_m(I_\alpha))\le |s|c.\notag
+    \end{align}
+    Each $N_m(I_\alpha)$ is itself a relative interval by
+    Theorem~\ref{thm:domain_interval_neighborhood}, and
+    \begin{align}
+        N_m\left(\bigcup_{\alpha\in s}I_\alpha\right)
+         & =\bigcup_{\alpha\in s}N_m(I_\alpha).\notag
+    \end{align}
+    For a domain Hamiltonian, extend its terms by zero to the
+    chain of increasing labels. Its operator and original ground vector
+    are unchanged, so Theorem~\ref{thm:chain_area_law} supplies the interval
+    entropy bound.
+\end{proof}
+
+\begin{theorem}[Connected components of an induced integer graph]
+    \label{thm:chain_integer_domain_components}
+    \lean{
+        SimpleGraph.hasse_int_induce_reachable_iff,
+        SimpleGraph.ConnectedComponent.ordConnected_image_hasse_int_induce,
+        SimpleGraph.ConnectedComponent.nonempty_pathGraph_iso_hasse_int_induce_finset
+    }
+    \leanok
+    Let $S\subseteq\mathbb Z$, and let $G$ be the graph on $S$ in which two
+    vertices are adjacent exactly when their integer coordinates differ by one.
+    For any $x,y\in S$,
+    \begin{align}
+        x\text{ and }y\text{ are joined by a walk in }G
+        \quad\Longleftrightarrow\quad
+        \lbrack\min\{x,y\},\max\{x,y\}\rbrack\cap\mathbb Z\subseteq S.
+    \end{align}
+    The coordinate image of each connected component is order-convex:
+    if $x,y$ belong to that image, every integer between $x$ and $y$ belongs to
+    the same image. No finiteness assumption on $S$ is needed.
+
+    If $S$ is finite, the graph induced on each connected component $C$ is
+    isomorphic to the path $P_{|C|}$ on $|C|$ vertices. Here $P_n$ has vertices
+    $0,\ldots,n-1$ and edges between consecutive vertices. This includes
+    singleton components and requires no further hypothesis on a component.
+    This is the induced integer geometry used in the reduction to connected
+    domains in \cite[Part~I]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Fix an integer $z\notin S$. If two vertices are adjacent, their integer
+    coordinates are consecutive and neither equals $z$. Thus either both
+    coordinates are less than $z$, or neither is. This property is preserved
+    along a walk. A walk therefore cannot join vertices on opposite sides of
+    a missing integer, which proves the forward implication.
+
+    Conversely, suppose first that $x\le y$ and that every integer in $[x,y]$
+    belongs to $S$. Induction by integer successors joins $x$ to each integer
+    $n$ with $x\le n\le y$: the first vertex is $x$, and the step uses the
+    edge from $n$ to $n+1$ when $n+1\le y$. This reaches $y$. Reversing the
+    walk handles $y\le x$.
+
+    If $x,y$ are in one connected component and $z$ lies between them, the
+    criterion places $z$ in $S$. Every integer between $x$ and $z$ is also
+    between $x$ and $y$, so the reverse implication joins $x$ to $z$. Hence
+    $z$ lies in that same component.
+
+    For finite $S$, give a component $C$ the order inherited from the integers.
+    Its coordinate map is an order embedding with order-convex image, so it
+    preserves and reflects the covering relation. The increasing enumeration
+    of the finite linear order $C$ is an order isomorphism from
+    $\{0,\ldots,|C|-1\}$ to $C$. In either graph, adjacency is the symmetric
+    covering relation. This enumeration is therefore a graph isomorphism
+    from $P_{|C|}$ to the graph induced on $C$.
+\end{proof}
+
+\begin{theorem}[Distance spheres in a finite integer domain]
+    \label{thm:domain_graph_spheres}
+    \lean{TNLean.MPS.AreaLaw.domainGraph_card_sphere_le_two,
+        TNLean.MPS.AreaLaw.domainGraphIsoHasse}
+    \leanok
+    \uses{def:domain_model}
+    Let $\Lambda\subset\mathbb Z$ be finite. Its increasing enumeration
+    identifies its labelled induced path graph with the graph induced on
+    $\Lambda$ from the integer graph joining consecutive integers.
+    For every $x\in\Lambda$ and every natural number $d$,
+    \begin{align}
+        \bigl|\{y\in\Lambda:d_\Lambda(x,y)=d\}\bigr|\le2.\notag
+    \end{align}
+    In particular the sphere-growth coefficient is $2$, with exponent zero,
+    independently of the number and lengths of the components.
+    This uses the induced integer geometry of
+    \cite[Part~I]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_integer_domain_components,thm:qc_graph_edist_transport,
+        lem:chain_path_metric_spheres}
+    The enumeration preserves adjacency because it records the original
+    integer coordinates. A vertex at finite distance from $x$ belongs to
+    its connected component. This component is a finite path by
+    Theorem~\ref{thm:chain_integer_domain_components}, and both its inclusion
+    and its path isomorphism preserve extended distance by
+    Theorem~\ref{thm:qc_graph_edist_transport}. Its sphere therefore has at
+    most two vertices. At distance zero there is just $x$; vertices in
+    other components have infinite distance and are not counted.
+\end{proof}
+
 \begin{theorem}[Propagation on a finite integer domain]
     \label{thm:domain_lieb_robinson_commutator}
     \lean{TNLean.MPS.AreaLaw.norm_heisenberg_commutator_le_domainDistance}
@@ -1790,6 +2052,54 @@ for an arbitrary finite set of sites and are instantiated here directly.
     vanishes. All distances are those of the
     induced graph; sites separated by a hole are not identified with
     consecutive sites of a longer chain.
+\end{proof}
+
+\begin{theorem}[Localization on a finite integer domain]
+    \label{thm:domain_lieb_robinson_localization}
+    \lean{TNLean.MPS.AreaLaw.norm_heisenberg_sub_siteExpectation_domainNeighborhood_le}
+    \leanok
+    \uses{def:domain_model,def:qc_site_expectation}
+    Let $\Lambda\subset\mathbb Z$ be finite, let $q,R\in\mathbb N$ with $q\ge1$,
+    and let $H=\sum_kh_k$ be a finite labelled sum of Hermitian operators.
+    Each $h_k$ is supported on a nonempty set $X_k$ of induced-graph diameter
+    at most $R$. Suppose $\sum_{k:x\in X_k}\|h_k\|\le b_0$ for every site $x$.
+    Put
+    \begin{align}
+        C  & =2+4|b_0|e^{2R},\notag         \\
+        v  & =2(R+1)|b_0|e^{2R}+1,\notag    \\
+        C' & =\frac{2Ce}{1-e^{-1/2}}.\notag
+    \end{align}
+    For $m\in\mathbb N$ write
+    $B_m(x)=\{y\in\Lambda:d_\Lambda(x,y)\le m\}$.
+    For a real $\ell\ge0$ and $S\subseteq\Lambda$, define
+    $N_\ell(S)=\bigcup_{x\in S}B_{\lfloor\ell\rfloor}(x)$.
+    Let $E_{N_\ell(S)}$ be the normalized partial-trace expectation onto
+    operators supported on this set. Every operator $A$ supported on $S$
+    satisfies, for every real $t$,
+    \begin{align}
+        \|\tau_t(A)-E_{N_\ell(S)}(\tau_t(A))\|
+        \le C'|S|^2\|A\|e^{v|t|-\ell/2}.\notag
+    \end{align}
+    Empty $S$ is allowed. No connectedness, ground-state or spectral-gap
+    hypothesis is imposed. The neighborhood uses the induced graph and
+    never joins sites across a missing integer. This is the finite-domain
+    extension of the localization conclusion in the Lieb--Robinson lemma
+    of \cite[Part~II]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:domain_graph_spheres,thm:qc_graph_neighborhood_localization,
+        thm:area_law_supported_identity}
+    Each interaction support has at most $R+1$ sites. Apply graph
+    localization with this support-size bound, sphere coefficient $2$,
+    sphere exponent zero, and natural radius $m=\lfloor\ell\rfloor$.
+    Its neighborhood is precisely the displayed union of closed balls.
+    Graph distances are integers when finite, and
+    $e^{-m/2}\le e^{1/2}e^{-\ell/2}$.
+    The natural-radius coefficient is $2Ce^{1/2}/(1-e^{-1/2})$;
+    multiplication by this rounding factor gives $C'$.
+    The graph localization theorem includes the empty union and its
+    vanishing factor $|S|^2$.
 \end{proof}
 
 \begin{lemma}[A cut that splits no term]
@@ -5101,3 +5411,8 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     This gives (\ref{eq:chain_sharp_physical_outputs}) on the same
     tensor entries and tagged alphabets.
 \end{proof}
+
+\input{chapter/ch35_product_replacement}
+\input{chapter/ch35_copy_region_entropy}
+
+\input{chapter/ch35_entropy_scaling_qutrit_copies}
