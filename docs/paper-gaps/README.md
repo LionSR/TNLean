@@ -1574,6 +1574,9 @@ form remains open under issue #9811.
   `nS` index components per site remains unproved: for a product of `m`
   factors the construction carries `m` components of `q²` values at every site,
   one for every factor wherever it acts, so the `n`-th power `ρₙ` carries `n m`.
+  The truncated operator of the high-temperature expansion (lines 1256–1279) has
+  the product form on every nonempty such domain; on the empty domain only the
+  identity has a product form. Its index count is not established either.
 
 ## Rényi entropy and matrix product state approximation
 
