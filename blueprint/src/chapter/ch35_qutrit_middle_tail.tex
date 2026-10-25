@@ -1,0 +1,71 @@
+\section{Discarded middle-cut mass of the qutrit family}
+
+\begin{theorem}[Projection overlap with the middle marginal]
+    \label{thm:qutrit_middle_projection_bound}
+    \lean{TNLean.MPS.AreaLaw.EntropyScaling.qutritMiddleMarginal_posSemidef,
+        TNLean.MPS.AreaLaw.EntropyScaling.trace_qutritMiddleMarginal,
+        TNLean.MPS.AreaLaw.EntropyScaling.trace_projection_qutritMiddleMarginal_le}
+    \leanok
+    \uses{def:qutrit_entropy_scaling_middle}
+    Let $N>0$, $0\le p\le1$, and $t=p/2^N\le1-p$.
+    The middle marginal $\rho$ is positive semidefinite with trace one.
+    For every orthogonal projection $P$ of rank $r$,
+    \begin{align}
+        \operatorname{Re}\tr(P\rho)\le1-p+(r-1)t.
+        \label{eq:qutrit_middle_projection_bound}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:qutrit_entropy_scaling_orthonormal,
+        thm:qutrit_entropy_scaling_marginal,
+        thm:qutrit_entropy_scaling_normalization}
+    Write $a=1-p$ and $x_i=\langle w_i,Pw_i\rangle$.
+    The explicit marginal gives
+    $\operatorname{Re}\tr(P\rho)=a x_\star+t\sum_{i\ne\star}x_i$.
+    Since the words are distinct computational-basis vectors,
+    $0\le x_i\le1$ and $\sum_i x_i\le\tr P=r$. Hence
+    \begin{align}
+        \operatorname{Re}\tr(P\rho)
+        =t\sum_i x_i+(a-t)x_\star
+        \le t r+a-t.
+        \label{eq:qutrit_middle_projection_estimate}
+    \end{align}
+    Positivity follows from $\rho=CC^\dagger$, and its trace is the sum
+    of the Schmidt weights, namely one.
+\end{proof}
+
+\begin{theorem}[Discarded middle-cut mass]
+    \label{thm:qutrit_middle_discarded_mass}
+    \lean{TNLean.MPS.AreaLaw.EntropyScaling.kyFanNorm_qutritMiddleMarginal_le,
+        TNLean.MPS.AreaLaw.EntropyScaling.one_sub_kyFanNorm_qutritMiddleMarginal_ge,
+        TNLean.MPS.AreaLaw.EntropyScaling.qutritFamily_flagWeight_ge,
+        TNLean.MPS.AreaLaw.EntropyScaling.one_sub_kyFanNorm_qutritFamily_ge,
+        TNLean.MPS.AreaLaw.EntropyScaling.one_sub_kyFanNorm_qutritMiddleMarginal_zero}
+    \leanok
+    \uses{def:qutrit_entropy_scaling_middle}
+    Under the hypotheses of Theorem~\ref{thm:qutrit_middle_projection_bound},
+    let $\|\rho\|_{(D)}$ denote the sum of its largest $D$ eigenvalues,
+    with zero eigenvalues appended when $D>3^N$.
+    For every integer $D\ge0$,
+    \begin{align}
+        \|\rho\|_{(D)}   & \le1-p+(D-1)\frac{p}{2^N},
+        \label{eq:qutrit_middle_kyfan_bound}                      \\
+        1-\|\rho\|_{(D)} & \ge\bigl(2^N-(D-1)\bigr)\frac{p}{2^N}.
+        \label{eq:qutrit_middle_tail_bound}
+    \end{align}
+    In particular, for $p=1/N$ and $N\ge2$, the discarded mass is at least
+    $\bigl(2^N-(D-1)\bigr)/(N2^N)$, as used
+    in~\cite{Schuch2008EntropyScaling}.
+    At $D=0$ the discarded mass is one. For $D\ge1+2^N$, the lower
+    bound in~(\ref{eq:qutrit_middle_tail_bound}) is nonpositive.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:qutrit_middle_projection_bound}
+    A maximizing spectral projection has rank $\min(D,3^N)$ and
+    captures $\|\rho\|_{(D)}$. Apply
+    (\ref{eq:qutrit_middle_projection_bound}) and use $t\ge0$.
+    Subtract from one to obtain~(\ref{eq:qutrit_middle_tail_bound}).
+    For $N\ge2$, one has $1/N\le1/2$ and
+    $1/(N2^N)\le1/N\le1-1/N$, so the flag weight is largest.
+    The empty eigenvalue sum is zero, giving the stated $D=0$ value.
+\end{proof}

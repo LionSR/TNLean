@@ -170,11 +170,6 @@ theorem holeRadius_pos {ε₀ n t : ℝ} (hε : 0 < ε₀) (hn : 0 < n) (ht : 0 
     0 < holeRadius ε₀ n t :=
   mul_pos hε (lt_min hn ht)
 
-/-- A hole radius is nonnegative for nonnegative `ε₀`, `n` and `t`. -/
-theorem holeRadius_nonneg {ε₀ n t : ℝ} (hε : 0 ≤ ε₀) (hn : 0 ≤ n) (ht : 0 ≤ t) :
-    0 ≤ holeRadius ε₀ n t :=
-  mul_nonneg hε (le_min hn ht)
-
 theorem two_mul_patchRadius (ν s : ℝ) : 2 * patchRadius ν s = ν * s := by
   rw [patchRadius]; ring
 

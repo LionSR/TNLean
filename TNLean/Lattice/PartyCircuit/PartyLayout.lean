@@ -112,9 +112,6 @@ def gateIso : (L : PartyGate ℓX ℓY) → Mem (gateOut m L) ≃ₗᵢ[ℂ] Mem
       (((gateIso L).rTensor _).trans ((TensorProduct.assocIsometry ℂ _ _ _).trans
         ((TensorProduct.commIsometry ℂ _ _).lTensor _)))
 
-theorem gateIso_nil (x : Mem ℓY) : gateIso m ([] : PartyGate ℓX ℓY) x = x ⊗ₜ (1 : ℂ) :=
-  rfl
-
 theorem gateIso_cons (p : ℂ × PartyChain ℓX ℓY) (L : PartyGate ℓX ℓY)
     (z : Mem (gateOut m (p :: L))) :
     gateIso m (p :: L) z =
@@ -124,16 +121,6 @@ theorem gateIso_cons (p : ℂ × PartyChain ℓX ℓY) (L : PartyGate ℓX ℓY)
           (p.2.toEffectChain.stackSpace m)
           ((gateIso m L).rTensor (p.2.toEffectChain.stackSpace m)
             (p.2.stackAppIso m (gateOut m L) z))) :=
-  rfl
-
-theorem gateIso_cons_clm (p : ℂ × PartyChain ℓX ℓY) (L : PartyGate ℓX ℓY) :
-    isoL (gateIso m (p :: L)) =
-      isoL ((TensorProduct.commIsometry ℂ (inventory m (toGate L))
-          (p.2.toEffectChain.stackSpace m)).lTensor (Mem ℓY)) ∘L
-        isoL (TensorProduct.assocIsometry ℂ (Mem ℓY) (inventory m (toGate L))
-          (p.2.toEffectChain.stackSpace m)) ∘L
-        isoL ((gateIso m L).rTensor (p.2.toEffectChain.stackSpace m)) ∘L
-        isoL (p.2.stackAppIso m (gateOut m L)) :=
   rfl
 
 /-- Preparation of the common garbage vector `Γ_m` by pair sources. -/

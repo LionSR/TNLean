@@ -20,17 +20,19 @@ chain of $L$ sites numbered $0,\dots,L-1$ of
 Section~\ref{sec:hastings_three_way_splitting}, where the cut $j$ has the
 sites $i<j$ on its left, this is the shift of every site down by one, with
 $N=L$, so $X_{1,j}$ becomes $\{0,\dots,j-1\}$ and $X_{j+1,N}$ becomes
-$\{j,\dots,L-1\}$. The decay length is that of the main theorem of
-\cite[lines 124--144]{Hastings2007AreaLaw},
+$\{j,\dots,L-1\}$. The main theorem of
+\cite[lines 124--144]{Hastings2007AreaLaw} uses the decay length
 \begin{align*}
     \xi=\max(2v/\Delta E,\xi_C),
 \end{align*}
 where $v$ and $\xi_C$ are the velocity and length scale of the Lieb--Robinson
 bound \cite[lines 96--112]{Hastings2007AreaLaw}. The source puts $\xi'=6\xi$.
-The argument below gives the factorization at every rate $\xi'>6\xi$ but does
-not reach $\xi'=6\xi$ itself, so in this chapter $\xi'$ denotes any number
-with $\xi'>6\xi$, except in Lemma~\ref{lem:hastings_lemma1}, which is stated
-as printed with $\xi'=6\xi$.
+For a fixed length $\xi$, the argument below gives the factorization at
+every rate $\xi'>6\xi$ but does not reach $\xi'=6\xi$ itself, so in this
+chapter $\xi'$ denotes any number with $\xi'>6\xi$, except in
+Lemma~\ref{lem:hastings_lemma1}, which is stated as printed with
+$\xi'=6\xi$, and in Theorem~\ref{thm:hastings_lemma1_endpoint}, which reaches
+$\xi'=6\xi$ for a length obtained by raising the velocity.
 
 From the filtering on, $H_L$, $H_B$, $H_R$ denote the parts of
 Section~\ref{sec:hastings_three_way_splitting} centered by their ground-state
@@ -447,11 +449,23 @@ $X_{j-l+1,j+l}$.
 
 \subsection*{The factorization and its positive version}
 
-% Lean statement pending.
-% Planned: TNLean.MPS.AreaLaw.Hastings.ChainHamiltonian.exists_projectorFactorization and
-% ..._posSemidef.
 \begin{theorem}[Approximate factorization without positivity]
     \label{thm:hastings_projector_factorization}
+    \lean{TNLean.MPS.AreaLaw.exists_projectorFactorization,
+        TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef,
+        TNLean.MPS.AreaLaw.exists_isFactorizationAt_sqrt_decay,
+        TNLean.MPS.AreaLaw.lemmaOneLength,
+        TNLean.MPS.AreaLaw.Hastings.lemmaOne_errorBudget,
+        TNLean.MPS.AreaLaw.Hastings.lemmaOneBudgetA,
+        TNLean.MPS.AreaLaw.Hastings.lemmaOneBudgetB,
+        TNLean.MPS.AreaLaw.lemmaOneSqrtA,
+        TNLean.MPS.AreaLaw.lemmaOneSqrtB,
+        TNLean.MPS.AreaLaw.lemmaOneConst,
+        TNLean.MPS.AreaLaw.lemmaOneConst_nonneg,
+        TNLean.MPS.AreaLaw.exists_isFactorizationAt_lemmaOneConst,
+        TNLean.MPS.AreaLaw.isFactorizationAt_zero_one_one,
+        Matrix.IsGappedGroundState.sub_smul_one}
+    \leanok
     \uses{thm:hastings_three_way_splitting_sum,
         thm:hastings_three_way_splitting_supports,
         thm:hastings_filtered_no_ground_component,
@@ -462,18 +476,19 @@ $X_{j-l+1,j+l}$.
     Let $H$ be a finite-range Hamiltonian of range $R$ with terms of norm at
     most $J$, with a unique ground state $\Psi_0$ and a gap $\Delta E>0$ to
     the first excited state, and let $P_0=|\Psi_0\rangle\langle\Psi_0|$.
-    Take the variance parameter
+    Set $\xi=8\max(2v_0/\Delta E,1)$, where $v_0$ is the velocity in the
+    chain localization estimate. Take the variance parameter
     \begin{align*}
-        q=\frac l3\,\frac{\Delta E}{v}
+        q=\frac{2l}{3\xi}
     \end{align*}
-    in the filtered parts and in the time averages, twice the value printed
-    in \cite[line 792]{Hastings2007AreaLaw}. Since $\xi\ge2v/\Delta E$, this
-    gives $q/2=l\Delta E/(6v)\ge l/(3\xi)$, so $e^{-q/2}\le e^{-l/(3\xi)}$,
-    the bound used for $\|P_q-P_0\|$ in
+    in the filtered parts and in the time averages. When $\xi=2v/\Delta E$
+    this is $(l/3)\Delta E/v$, twice the value printed in
+    \cite[line 792]{Hastings2007AreaLaw}. It gives $q/2=l/(3\xi)$, so
+    $e^{-q/2}=e^{-l/(3\xi)}$, the bound used for $\|P_q-P_0\|$ in
     \cite[line 848]{Hastings2007AreaLaw}; the printed value gives only
     $e^{-q/2}\le e^{-l/(6\xi)}$. Let $\xi'>6\xi$. Then there is a constant
-    $C_1$, depending on $\xi'-6\xi$, on $R$, $J$ and $\Delta E$, and on the
-    local dimension, such that for every cut $j$ and every $l$ there are
+    $C_1$, depending only on $\xi'-6\xi$ and on $R$, $J$ and $\Delta E$, such
+    that for every cut $j$ and every $l$ there are
     operators $O_B$, $O_L$, $O_R$ with the following properties:
     \begin{enumerate}
         \item $O_L$ and $O_R$ are commuting orthogonal projections, $O_L$
@@ -489,12 +504,175 @@ $X_{j-l+1,j+l}$.
     absorbs the polynomial, but the rate $\xi'=6\xi$ of
     \cite[lines 124--144]{Hastings2007AreaLaw} does not follow; both the
     doubled $q$ and the condition $\xi'>6\xi$ are recorded in
-    \cite{gap:hastings07_gaussian_average_exponent}. This is
-    Lemma~\ref{lem:hastings_lemma1} without the positivity of $O_B$; the note
+    \cite{gap:hastings07_gaussian_average_exponent}. This is a quantitatively
+    weaker version of Lemma~\ref{lem:hastings_lemma1}, also without the
+    positivity of $O_B$; the note
     added to \cite{Hastings2007AreaLaw} (lines 912--913) records that the
     construction need not give a Hermitian positive $O_B$, while its other
     properties hold.
+
+    Here the length is $\xi=8\max(2v_0/\Delta E,1)$, with $v_0$ the
+    velocity in the chain localization estimate. The commutator bound behind
+    that estimate is linear in the size of the support, as in the source. The
+    quadratic factor of the localization enters with supports of at most $6R$
+    sites for the parts and of $O(R+l)$ sites for the boundary operator, where
+    the faster decay of that term absorbs the resulting polynomial in $l$; it
+    changes the constant, not the length or the rate. It differs from the source's Lieb--Robinson bound in that its
+    prefactor grows with $J$ and the second operator acts on one site, so
+    $(v_0,2)$ is not shown to be a Lieb--Robinson pair in the source's
+    sense~\cite{gap:hastings07_lemma1_decay_length}. The constant $C_1$
+    depends only on $R$, $J$, $\Delta E$ and $\xi'$: it is the same for every
+    length of the chain, every local dimension and every gapped ground state.
+    No polynomial bound on $C_1$ in $\xi$ alone is asserted here, unlike
+    Lemma~\ref{lem:hastings_lemma1}.
+    Replacing $O_B$ by $O_B^\dagger O_B$ gives the positive version at the rate
+    $e^{-l/(2\xi')}$, as in Theorem~\ref{thm:hastings_positive_factorization}.
 \end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_cutoff_pair, thm:hastings_moved_estimate,
+        thm:hastings_boundary_factorization, thm:hastings_decay_slack,
+        thm:hastings_positive_factorization, thm:hastings_factorization_rate,
+        thm:hastings_positive_factorization_rate}
+    Shift $H$ by its ground energy. For $l\ge12R+8$ take $s=2l/(3\xi)$,
+    $\theta=e^{-s/4}$, $T=s/\Delta E$, $k=\lceil l/4\rceil$, $m=R+k$ and
+    $\ell'=l-3R-2k$. Theorem~\ref{thm:hastings_cutoff_pair} gives $O_L$,
+    $O_R$ and $H_0=M_L+M_R$. Theorem~\ref{thm:hastings_moved_estimate}, with
+    the shifted Hamiltonian in both places, bounds the time average next to
+    $O_LO_R$, and Theorem~\ref{thm:hastings_boundary_factorization} produces
+    $O_B$ on the sites within $m+2R+k+\ell'=l$ of the cut. Each of the
+    resulting error terms is at most $(a+b\sqrt l)e^{-l/(6\xi)}$ with $a$,
+    $b$ depending only on $R$, $J$ and $\Delta E$; the polynomial factors are
+    absorbed by the slack between the rates $l/8$ and $l/(6\xi)\le l/48$. For
+    $l<12R+8$ the factorization $O_B=0$, $O_L=O_R=1$ has error $1$, which the
+    constant absorbs. Theorem~\ref{thm:hastings_decay_slack} converts the
+    square-root bound into $C_1e^{-l/\xi'}$ for every $\xi'>6\xi$.
+\end{proof}
+
+\begin{theorem}[Approximate factorization in units of the gap]
+    \label{thm:hastings_projector_factorization_scaled}
+    \lean{TNLean.MPS.AreaLaw.exists_projectorFactorization_div,
+        TNLean.MPS.AreaLaw.lemmaOneLength_div,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.smul,
+        Matrix.IsGappedGroundState.smul,
+        Entropy.IsSupportedOn.smul}
+    \leanok
+    \uses{thm:hastings_projector_factorization}
+    Under the assumptions of
+    Theorem~\ref{thm:hastings_projector_factorization}, let
+    $c_R=2(R+1)2^{2R+1}e^{2R}$, so that $v_0=1+c_RJ$, and set
+    \begin{align*}
+        \hat\xi=16\Bigl(1+\frac{c_RJ}{\Delta E}\Bigr)
+        \le2\max\Bigl(\frac{2v}{\Delta E},16\Bigr),\qquad v=8c_RJ.
+    \end{align*}
+    For every $\xi'>6\hat\xi$ there is a constant $C_1$, depending only on
+    $R$, $J/\Delta E$ and $\xi'$, such that for every cut $j$ and every $l$
+    there are operators $O_B$, $O_L$, $O_R$ with the properties of
+    Theorem~\ref{thm:hastings_projector_factorization} and
+    $\|O_BO_LO_R-P_0\|\le C_1e^{-l/\xi'}$. The length $\hat\xi$, unlike the
+    length of Theorem~\ref{thm:hastings_projector_factorization}, depends on
+    $J$ and $\Delta E$ only through $J/\Delta E$, as the source's
+    $\max(2v/\Delta E,\xi_C)$ with $v$ proportional to $J$ does
+    \cite[lines 96--112, 139--142]{Hastings2007AreaLaw}. The other
+    restrictions of Theorem~\ref{thm:hastings_projector_factorization}
+    remain~\cite{gap:hastings07_lemma1_decay_length}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_projector_factorization}
+    The operators $O_B$, $O_L$, $O_R$ and the error do not involve the
+    Hamiltonian. The Hamiltonian $H/\Delta E$ has range $R$, terms of norm at
+    most $J/\Delta E$, the same ground state and gap $1$, so
+    Theorem~\ref{thm:hastings_projector_factorization} applies to it with the
+    length $8\max(2(1+c_RJ/\Delta E),1)=\hat\xi$.
+\end{proof}
+
+\begin{theorem}[A polynomial bound on the constant of the factorization]
+    \label{thm:hastings_lemma1_polynomial_constant}
+    \lean{TNLean.MPS.AreaLaw.exists_projectorFactorization_pow,
+        TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef_pow,
+        TNLean.MPS.AreaLaw.lemmaOneConst_le_pow,
+        TNLean.MPS.AreaLaw.sixteen_le_lemmaOneLength_and_le}
+    \leanok
+    \uses{thm:hastings_projector_factorization_scaled,
+        thm:hastings_positive_factorization}
+    Let $\kappa>6$. There is a constant $K\ge0$, depending only on $R$ and
+    $\kappa$, with the following property. Under the assumptions of
+    Theorem~\ref{thm:hastings_projector_factorization}, with $\hat\xi$ the
+    length of Theorem~\ref{thm:hastings_projector_factorization_scaled}, for
+    every cut $j$ and every $l$ there are operators $O_B$, $O_L$, $O_R$ with
+    the properties of Theorem~\ref{thm:hastings_projector_factorization} and
+    \begin{align*}
+        \|O_BO_LO_R-P_0\|\le K\hat\xi^3e^{-l/(\kappa\hat\xi)}.
+    \end{align*}
+    The same holds with $O_B$ positive semidefinite, with another such constant
+    and the rate $e^{-l/(2\kappa\hat\xi)}$, as in
+    Theorem~\ref{thm:hastings_positive_factorization}
+    and~\cite{gap:hastings07_lemma1_positivity_rate}.
+    So the constant of the factorization at the rate $\xi'=\kappa\hat\xi$ is
+    bounded by a polynomial in $\hat\xi$, as Lemma~\ref{lem:hastings_lemma1}
+    requires~\cite[lines 258--262]{Hastings2007AreaLaw}. For the source's
+    nearest-neighbour terms ($R=1$) the constant $K$ depends only on
+    $\kappa$. The rate $\xi'=6\hat\xi$ is not reached at $\hat\xi$ itself, and
+    $\hat\xi$ is not shown to come from a Lieb--Robinson pair in the source's
+    sense~\cite{gap:hastings07_lemma1_decay_length,
+        gap:hastings07_gaussian_average_exponent}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_projector_factorization_scaled,
+        thm:hastings_projector_factorization,
+        thm:hastings_positive_factorization_rate,
+        thm:hastings_factorization_mono}
+    Apply Theorem~\ref{thm:hastings_projector_factorization} to $H/\Delta E$
+    at the rate $\kappa\hat\xi$, and write $x=J/\Delta E$. The constant is
+    $a+b/\sqrt{2e(1/(6\hat\xi)-1/(\kappa\hat\xi))}$, where $a$ is the larger
+    of the constant term of the error budget and $e^{(12R+8)/(6\hat\xi)}$,
+    and $b$ is the coefficient of $\sqrt l$. Since $\hat\xi\ge16$ and
+    $x\le\hat\xi$, the Lieb--Robinson prefactor is at most a multiple of
+    $\hat\xi$ and the commutator constant at most a multiple of $\hat\xi^2$.
+    So the constant term of the budget is at most a multiple of $\hat\xi^3$,
+    $e^{(12R+8)/(6\hat\xi)}\le e^{(12R+8)/6}$, and $b$ is at most a multiple of
+    $\hat\xi^2$. Finally,
+    $1/\sqrt{2e(1/(6\hat\xi)-1/(\kappa\hat\xi))}=\sqrt{\hat\xi/\beta}\le\hat\xi/\sqrt\beta$
+    with $\beta=2e(\kappa-6)/(6\kappa)$.
+\end{proof}
+
+\begin{theorem}[The factorization at the printed rate, for a raised velocity]
+    \label{thm:hastings_lemma1_endpoint}
+    \lean{TNLean.MPS.AreaLaw.exists_projectorFactorization_endpoint,
+        TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef_endpoint,
+        TNLean.MPS.AreaLaw.lemmaOneEndpointLength,
+        TNLean.MPS.AreaLaw.lemmaOneEndpointLength_eq}
+    \leanok
+    \uses{thm:hastings_lemma1_polynomial_constant}
+    In units of the gap let $v_0=1+c_RJ/\Delta E$ be the velocity of the
+    chain estimate, so that $\hat\xi=8\max(2v_0,1)$, and let
+    $\tilde\xi=8\max(2v',1)$ be the length for the raised velocity
+    $v'=\tfrac54v_0$; thus $\tilde\xi=\tfrac54\hat\xi$. There is a constant
+    $K\ge0$, depending only on $R$, with the following property. Under the
+    assumptions of Theorem~\ref{thm:hastings_projector_factorization}, for
+    every cut $j$ and every $l$ there are operators $O_B$, $O_L$, $O_R$ with
+    the properties of Theorem~\ref{thm:hastings_projector_factorization} and
+    \begin{align*}
+        \|O_BO_LO_R-P_0\|\le K\tilde\xi^3e^{-l/(6\tilde\xi)}.
+    \end{align*}
+    The same holds with $O_B$ positive semidefinite, with another such
+    constant and the rate $e^{-l/(12\tilde\xi)}$. This is the printed rate
+    $\xi'=6\xi$ of \cite[lines 141--142]{Hastings2007AreaLaw} for the length
+    $\xi=\tilde\xi$, reached by choosing the length anew and not at
+    $\hat\xi$. The choice is admissible because the source fixes
+    $\xi=\max(2v/\Delta E,\xi_C)$ only through some Lieb--Robinson pair
+    $(v,\xi_C)$ \cite[lines 96--112]{Hastings2007AreaLaw}, and a bound valid
+    for $|t|\le l/v$ remains valid for $|t|\le l/v'$ when
+    $v'\ge v$~\cite{gap:hastings07_lemma1_decay_length}. The same holds for
+    the chain estimate, so $\tilde\xi$ carries the restriction of $\hat\xi$:
+    the chain estimate is not shown to give a Lieb--Robinson pair in the
+    source's sense.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_lemma1_polynomial_constant}
+    Since $6\tilde\xi=\tfrac{15}2\hat\xi$, this is
+    Theorem~\ref{thm:hastings_lemma1_polynomial_constant} with
+    $\kappa=15/2$, together with $\hat\xi^3\le\tilde\xi^3$.
+\end{proof}
 
 \begin{theorem}[An effect operator from an approximate factorization]
     \label{thm:hastings_effect_from_factorization}
@@ -540,7 +718,9 @@ printed in the body of the paper.
     \label{lem:hastings_lemma1}
     \uses{thm:hastings_projector_factorization,
         thm:hastings_effect_from_factorization,
-        thm:hastings_positive_factorization}
+        thm:hastings_positive_factorization,
+        thm:hastings_lemma1_polynomial_constant,
+        thm:hastings_lemma1_endpoint}
     This is Lemma~1 of \cite{Hastings2007AreaLaw}. Let $H$ be a Hamiltonian
     that satisfies the finite range, finite interaction strength, and gap
     conditions. Then for any $j$ and any $l$
@@ -570,6 +750,11 @@ Theorem~\ref{thm:hastings_positive_repair} bounds the new error by
 $\mathcal O(\sqrt{\varepsilon(l)})$, which decays only at the rate
 $e^{-l/(2\xi')}$; this is the version of the note added
 \cite[lines 932--940]{Hastings2007AreaLaw}. Neither statement gives
-positive definite operators or a positive $O_B$ at the rate $e^{-l/\xi'}$,
-and neither reaches the rate $\xi'=6\xi$: the printed version does not
+positive definite operators or a positive $O_B$ at the rate $e^{-l/\xi'}$.
+At a fixed length neither reaches the rate $\xi'=6\xi$; that rate is reached
+only after the length is raised, as in
+Theorem~\ref{thm:hastings_lemma1_endpoint}. In units of the gap the constant
+is bounded by a polynomial in the length, as the lemma requires, at every rate
+$\xi'=\kappa\hat\xi$ with $\kappa>6$
+(Theorem~\ref{thm:hastings_lemma1_polynomial_constant}). The printed version does not
 follow from this argument.

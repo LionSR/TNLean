@@ -19,7 +19,6 @@ replacement separates a chain into consecutive blocks.
 -/
 
 noncomputable section
-open Matrix
 namespace TNLean.MPS.AreaLaw
 
 variable {T L q : ℕ}

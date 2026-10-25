@@ -148,7 +148,6 @@ theorem exists_regularClosedWalkIdentityFilter
     exact h p
   simpa only [hone, ↓reduceIte] using heigen (fun _ => 1) ψ hψ'
 
-
 /-- The regional identity-holonomy filter fixes every global vector satisfying
 the original parent constraint and selects precisely the inserted closed
 states with identity holonomy. Source: SCP10, the local closure constraints

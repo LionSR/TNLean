@@ -177,7 +177,6 @@ theorem IsGInjective.inf_parentKernel_span_torusGClosureClass_eq_commutingSpan
     rintro Ψ ⟨p, rfl⟩
     exact Submodule.subset_span ⟨pairConjugacyClass G p.1, rfl⟩
 
-
 /-- The parent kernel within the full native closure span has exactly the
 commuting pair-class dimension. Source: SCP10, Theorems 5.5 and 5.9,
 lines 1440–1514 and 1582–1621; finite closure-span statement. -/

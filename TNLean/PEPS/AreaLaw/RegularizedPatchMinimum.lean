@@ -86,8 +86,7 @@ feasible space is nonempty without an extra local-dimension hypothesis. -/
 theorem regularizedPatchDomain_nonempty
     (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1)) (hΩ : ‖Ω‖ = 1) :
     (regularizedPatchDomain (Out := Out) regions).Nonempty := by
-  have hΩne : Ω ≠ 0 := by
-    exact norm_ne_zero_iff.mp (hΩ.trans_ne one_ne_zero)
+  have hΩne : Ω ≠ 0 := norm_ne_zero_iff.mp (hΩ.trans_ne one_ne_zero)
   obtain ⟨σ, _⟩ := Function.ne_iff.mp (show (Ω : _ → ℂ) ≠ 0 from by
     intro h; apply hΩne; simpa using congrArg (WithLp.toLp 2) h)
   have hn (j : Fin m) : Nonempty ((v : regions j) → Out v.1) :=
