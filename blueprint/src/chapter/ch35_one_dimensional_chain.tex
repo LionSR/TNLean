@@ -2704,6 +2704,32 @@ for an arbitrary finite set of sites and are instantiated here directly.
     one-site chains.
 \end{proof}
 
+\begin{theorem}[Reduced states at a chain cut]
+    \label{thm:chain_reduced_state_rank_error}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.rank_regionState_leftBlock_le,
+        TNLean.MPS.AreaLaw.rectangularTraceNorm_regionState_leftBlock_sub_le}
+    \leanok
+    For vectors $\psi,\phi$ on a finite chain, write
+    $\rho_k=\operatorname{Tr}_{k+1,\ldots,L}|\psi\rangle\langle\psi|$ and
+    $\sigma_k=\operatorname{Tr}_{k+1,\ldots,L}|\phi\rangle\langle\phi|$.
+    Then $\|\rho_k-\sigma_k\|_1\le
+        \bigl\||\psi\rangle\langle\psi|-|\phi\rangle\langle\phi|\bigr\|_1$.
+    If $\phi$ is an open-boundary MPS of bond dimension at most $D$,
+    then $\operatorname{rank}\sigma_k\le D$ at every internal cut.
+    Neither assertion requires normalized vectors. These are the partial-trace
+    and rank estimates used in the approximation lower bound
+    of~\cite{Schuch2008EntropyScaling}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_cut_rank_of_mps}
+    In cut coordinates the reduced state is $CC^\dagger$, where $C$ is
+    the coefficient matrix of $\phi$. Thus
+    $\operatorname{rank}\sigma_k=\operatorname{rank}C\le D$.
+    Reindexing configurations preserves the full trace norm, and partial
+    trace contracts it. Apply these two facts to
+    $|\psi\rangle\langle\psi|-|\phi\rangle\langle\phi|$.
+\end{proof}
+
 \begin{theorem}[Growth of chain cut ranks]
     \label{thm:chain_cut_rank_growth}
     \lean{
