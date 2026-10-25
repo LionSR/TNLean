@@ -61,6 +61,35 @@ for an arbitrary finite set of sites and are instantiated here directly.
     both $A$ and its complement; it is at least one.
 \end{definition}
 
+\begin{theorem}[Nearest-neighbour supports at two cuts]
+    \label{thm:chain_two_cut_edge_supports}
+    \lean{TNLean.MPS.AreaLaw.interval_edge_classification_of_lt}
+    \leanok
+    \uses{def:chain_model}
+    Let $L,u,v$ be natural numbers with $u<v$ and $v+1<L$.
+    Place the cuts immediately after sites $u$ and $v$, as in
+    \cite{Arad2016RigorousRG}. Set $T=\{0,\ldots,u\}$, $E=\{u+1,\ldots,v\}$
+    and $U=\{0,\ldots,L-1\}\setminus(T\cup E)$.
+    For an edge $r$ with $r+1<L$, write $D_r=\{r,r+1\}$.
+    Then $D_u\subseteq T\cup E$, $D_u\cap T=\{u\}$,
+    $D_v\cap T=\varnothing$ and $D_v\cap E=\{v\}$.
+    Every other edge has its support contained in $T$, in $E$, or in $U$.
+    Adjacent cuts, $v=u+1$, are included.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_model}
+    Membership in $T\cup E$ is equivalent to having coordinate less than
+    $v+1$; membership in $U$ is equivalent to having coordinate at least
+    $v+1$. Comparing the endpoints gives the four assertions for $D_u,D_v$.
+    For any other edge, either $r<u$, $u<r<v$, or $v<r$.
+    These cases give $r+2\le u+1$, the pair of inequalities
+    $u+1\le r$ and $r+2\le v+1$, or $v+1\le r$, respectively.
+    The corresponding interval containment places $D_r$ in $T$, $E$, or $U$.
+    For adjacent cuts, $E=\{u+1\}=\{v\}$. The first two assertions give
+    $D_u\cap E=\{u+1\}$ and the fourth gives $D_v\cap E=\{v\}$, so the
+    crossing supports $D_u$ and $D_v$ share the single middle site.
+\end{proof}
+
 \begin{lemma}[Distance and spheres on a finite path]
     \label{lem:chain_path_metric_spheres}
     \lean{SimpleGraph.pathGraph_edist, SimpleGraph.pathGraph_card_sphere_le_two}
@@ -1721,6 +1750,47 @@ for an arbitrary finite set of sites and are instantiated here directly.
     edges, on the chain, of the sites in $A$ that join sites at consecutive
     integers.
 \end{definition}
+
+\begin{theorem}[Propagation on a finite integer domain]
+    \label{thm:domain_lieb_robinson_commutator}
+    \lean{TNLean.MPS.AreaLaw.norm_heisenberg_commutator_le_domainDistance}
+    \leanok
+    \uses{def:domain_model}
+    Let $\Lambda\subset\mathbb Z$ be finite, with its induced path graph,
+    and let $q,R\in\mathbb N$. Let $(h_k)_k$ be a finite labelled family of
+    Hermitian operators, each supported on a nonempty set $X_k$ of graph
+    diameter at most $R$. Suppose $b_0\in\mathbb R$ satisfies
+    $\sum_{k:x\in X_k}\|h_k\|\le b_0$ for every site $x$.
+    Put $H=\sum_k h_k$ and
+    \begin{align}
+        C & =2+4|b_0|e^{2R},\notag      \\
+        v & =2(R+1)|b_0|e^{2R}+1.\notag
+    \end{align}
+    Let $A$ be supported on $S\subseteq\Lambda$ and $B$ at $y\in\Lambda$.
+    Set $\delta=\inf_{x\in S}d_\Lambda(x,y)$, with
+    $\inf\varnothing=\infty$ and $e^{-\infty/2}=0$. For every real $t$,
+    \begin{align}
+        \|[\tau_t(A),B]\|
+        \le C|S|\|A\|\|B\|e^{v|t|}e^{-\delta/2}.\notag
+    \end{align}
+    This extends the commutator estimate of the Lieb--Robinson lemma in
+    \cite[Part~II]{TNLean2026OneDimensional} to arbitrary finite integer
+    domains. No connectivity, positive local dimension, ground-state or
+    spectral-gap hypothesis is required.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:domain_model,thm:qc_graph_lieb_robinson_finset,
+        thm:qc_graph_lieb_robinson_zero_finset}
+    Every range-$R$ support has at most $R+1$ sites. For finite $\delta$,
+    the graph propagation estimate with exponential weight parameter one
+    gives the stronger decay $e^{-\delta}$, which is at most
+    $e^{-\delta/2}$. For infinite $\delta$, every $x\in S$ has
+    $d_\Lambda(x,y)=\infty$, so $[\tau_t(A),B]=0$ by
+    Theorem~\ref{thm:qc_graph_lieb_robinson_zero_finset} and the left side
+    vanishes. All distances are those of the
+    induced graph; sites separated by a hole are not identified with
+    consecutive sites of a longer chain.
+\end{proof}
 
 \begin{lemma}[A cut that splits no term]
     \label{lem:zero_entropy_cut}

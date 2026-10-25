@@ -53,8 +53,8 @@ def sampledEndpointWord (ξ ζ : Choices (fun _ => true) w)
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–309 and 565–588. -/
 theorem sources_sampledEndpointWord (ξ ζ : Choices (fun _ => true) w)
     (j : w.sourceLocations → Fin k) (ω : SourceGaussianSamples w k) :
-    (sampledEndpointWord w k lam E F ξ ζ j ω).sources = [] := by
-  exact SourceInventory.sources_endpointWord ..
+    (sampledEndpointWord w k lam E F ξ ζ j ω).sources = [] :=
+  SourceInventory.sources_endpointWord ..
 
 /-- The actual sampled source product is the average of the literal sampled
 endpoint words. This assertion concerns arbitrary sampled operators.

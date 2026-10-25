@@ -48,7 +48,8 @@ Spins are encoded by `Fin 2`, with `0` for up and `1` for down.
 -/
 
 open Matrix Complex
-open QuantumCircuit (siteOp siteOp_apply siteOp_add siteOp_neg siteOp_sub siteOp_diagonal)
+open QuantumCircuit (siteOp siteOp_apply siteOp_add siteOp_neg siteOp_sub siteOp_diagonal
+  siteOp_mul)
 
 namespace TNLean.Lattice.LowEnergyExample
 
@@ -242,35 +243,6 @@ theorem isGround_groundConfig (a : Fin 2) : IsGround m (groundConfig m a) := fun
 
 theorem groundConfig_zero (a : Fin 2) : groundConfig m a 0 = a := by simp [groundConfig]
 
-theorem eq_groundConfig_of_isGround {ρ : Fin (m + 3) → Fin 2} (hρ : IsGround m ρ) :
-    ρ = groundConfig m (ρ 0) := by
-  funext i
-  by_cases hi : i = 0
-  · subst hi; simp [groundConfig]
-  · simp [groundConfig, hi, hρ i hi]
-
-/-- Summing over the ground configurations is summing over the spin of site `0`. -/
-theorem sum_isGround (f : Fin 2 → ℂ) :
-    ∑ ρ : Fin (m + 3) → Fin 2, (if IsGround m ρ then f (ρ 0) else 0) = ∑ a, f a := by
-  have h : ∀ ρ : Fin (m + 3) → Fin 2,
-      (if IsGround m ρ then f (ρ 0) else 0) = ∑ a, if ρ = groundConfig m a then f a else 0 := by
-    intro ρ
-    by_cases hρ : IsGround m ρ
-    · simp only [hρ, ↓reduceIte]
-      rw [Finset.sum_eq_single (ρ 0)]
-      · simp only [← eq_groundConfig_of_isGround m hρ, ↓reduceIte]
-      · intro b _ hb
-        have : ρ ≠ groundConfig m b := fun h ↦ hb (by rw [h, groundConfig_zero])
-        simp only [this, ↓reduceIte]
-      · simp
-    · simp only [hρ, ↓reduceIte]
-      refine (Finset.sum_eq_zero fun a _ ↦ ?_).symm
-      have : ρ ≠ groundConfig m a := by rintro rfl; exact hρ (isGround_groundConfig m a)
-      simp only [this, ↓reduceIte]
-  simp only [h]
-  rw [Finset.sum_comm]
-  simp
-
 /-- The compression `P X P` of a matrix to the ground space. -/
 noncomputable def compress (X : Matrix (Fin (m + 3) → Fin 2) (Fin (m + 3) → Fin 2) ℂ) :
     Matrix (Fin (m + 3) → Fin 2) (Fin (m + 3) → Fin 2) ℂ :=
@@ -292,19 +264,34 @@ theorem compress_siteOp_zero_apply (X : Matrix (Fin 2) (Fin 2) ℂ) (σ τ : Fin
     rw [siteOp_apply, ite_eq_left_of_eq_true _ _ (eq_true hag)]
   · rfl
 
+theorem groundProj_mul_self : groundProj m * groundProj m = groundProj m := by
+  rw [groundProj, diagonal_mul_diagonal]
+  congr 1; funext σ; split_ifs <;> simp
+
+/-- The ground projection constrains only the sites `i ≠ 0`, so it commutes with every operator
+on site `0`. -/
+theorem groundProj_commute_siteOp_zero (X : Matrix (Fin 2) (Fin 2) ℂ) :
+    Commute (groundProj m) (siteOp 0 X) := by
+  ext σ τ
+  simp only [groundProj, diagonal_mul, mul_diagonal, siteOp_apply]
+  by_cases hστ : ∀ i, i ≠ 0 → σ i = τ i
+  · have h : IsGround m σ ↔ IsGround m τ :=
+      forall₂_congr fun i hi ↦ by rw [hστ i hi]
+    simp only [h]
+    split_ifs <;> simp
+  · simp [hστ]
+
 theorem compress_siteOp_zero_mul (X Y : Matrix (Fin 2) (Fin 2) ℂ) :
     compress m (siteOp 0 X) * compress m (siteOp 0 Y) = compress m (siteOp 0 (X * Y)) := by
-  ext σ τ
-  rw [mul_apply, compress_siteOp_zero_apply]
-  simp only [compress_siteOp_zero_apply]
-  by_cases hσ : IsGround m σ <;> by_cases hτ : IsGround m τ <;> simp only [hσ, hτ, and_true,
-    true_and, and_false, false_and, ↓reduceIte, zero_mul, mul_zero, Finset.sum_const_zero]
-  have : ∀ ρ : Fin (m + 3) → Fin 2,
-      ((if IsGround m ρ then X (σ 0) (ρ 0) else 0) * if IsGround m ρ then Y (ρ 0) (τ 0) else 0) =
-        if IsGround m ρ then X (σ 0) (ρ 0) * Y (ρ 0) (τ 0) else 0 := by
-    intro ρ; split_ifs <;> simp
-  simp only [this]
-  rw [sum_isGround m (fun a ↦ X (σ 0) a * Y a (τ 0)), mul_apply]
+  set P := groundProj m
+  have hP : P * P = P := groundProj_mul_self m
+  calc P * siteOp 0 X * P * (P * siteOp 0 Y * P)
+      = P * siteOp 0 X * (P * P) * siteOp 0 Y * P := by simp only [Matrix.mul_assoc]
+    _ = P * siteOp 0 X * (P * siteOp 0 Y) * P := by rw [hP]; simp only [Matrix.mul_assoc]
+    _ = P * siteOp 0 X * (siteOp 0 Y * P) * P := by
+        rw [(groundProj_commute_siteOp_zero m Y).eq]
+    _ = P * (siteOp 0 X * siteOp 0 Y) * (P * P) := by simp only [Matrix.mul_assoc]
+    _ = P * siteOp 0 (X * Y) * P := by rw [hP, siteOp_mul]
 
 /-- On the ground space, the operator `S^z_k` on a site `k ≠ 0` is a scalar. -/
 theorem compress_siteOp_spinZ {k : Fin (m + 3)} (hk : k ≠ 0) :

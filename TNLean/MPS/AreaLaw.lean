@@ -23,6 +23,7 @@ import TNLean.MPS.AreaLaw.CopyMPSFactor
 import TNLean.MPS.AreaLaw.CopyProduct
 import TNLean.MPS.AreaLaw.Counting
 import TNLean.MPS.AreaLaw.CutMatrixGrowth
+import TNLean.MPS.AreaLaw.DomainLiebRobinson
 import TNLean.MPS.AreaLaw.DoubledHamiltonian
 import TNLean.MPS.AreaLaw.EntropyInequalities
 import TNLean.MPS.AreaLaw.EntropyScaling
@@ -73,4 +74,5 @@ import TNLean.MPS.AreaLaw.SharpPhysicalCompression
 import TNLean.MPS.AreaLaw.SupportedCutRank
 import TNLean.MPS.AreaLaw.SupportedGaussianIntegral
 import TNLean.MPS.AreaLaw.SwappedDoubledHamiltonian
+import TNLean.MPS.AreaLaw.TwoCutEdgeSupports
 import TNLean.MPS.AreaLaw.WindowCounting

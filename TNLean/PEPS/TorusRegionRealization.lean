@@ -90,8 +90,8 @@ theorem torusVertexPoint_intCast (a : ℤ × ℤ) :
 /-- Native residue coordinates give the original site center in the real torus. -/
 theorem torusVertexPoint_eq_projection [NeZero width] [NeZero height]
     (v : TorusVertex width height) :
-    torusVertexPoint v = torusRealProjection width height ((v.1.val : ℝ), (v.2.val : ℝ)) := by
-  exact Prod.ext (coordinatePoint_val width v.1) (coordinatePoint_val height v.2)
+    torusVertexPoint v = torusRealProjection width height ((v.1.val : ℝ), (v.2.val : ℝ)) :=
+  Prod.ext (coordinatePoint_val width v.1) (coordinatePoint_val height v.2)
 
 /-- Rightward addition by one projects to the native neighboring vertex. -/
 theorem torusVertexPoint_right (v : TorusVertex width height) :
