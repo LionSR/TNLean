@@ -17,7 +17,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{local-correction}{resolved}
 
 \section{The source statement}
 
@@ -72,7 +72,7 @@ $\lVert\operatorname{trim}\Omega\rVert^2$, and the overlap in
 (\ref{eq:lvv13_constant_bond_overlap}) is $\lVert\operatorname{trim}\Omega
     \rVert\ge\sqrt{1-\delta}\ge1-\delta$.
 
-\section{The restriction}
+\section{The constant}
 
 The bound (\ref{eq:lvv13_constant_bond_formal}) has the structure of
 (\ref{eq:lvv13_constant_bond_source}): it depends on neither the length of
@@ -82,14 +82,18 @@ intercept involves $C$, both taken from the area law proved in the library,
 not the dependence $\varepsilon^{-1}\log^3d$ of
 (\ref{eq:lvv13_constant_bond_source}). The later steps of the source use
 only that $B_\delta$ is independent of $n$ and of the cut, so the
-restriction affects the explicit running time, not the conclusions.
+different constant affects the explicit running time, not the conclusions.
+The theorems hold under the source's hypotheses: its nearest-neighbour
+Hamiltonian with $0\le H_i\le1$ is a chain Hamiltonian of range $1$ and
+strength $1$.
 
-\section{Elimination plan}
+\section{The source's constant}
 
-Formalize the bound of Arad, Kitaev, Landau and Vazirani,
+The explicit dependence $\varepsilon^{-1}\log^3d$ is not formalized. It would
+follow from the bound of Arad, Kitaev, Landau and Vazirani,
 arXiv:1301.1162~\cite{Arad2013AreaLaw}, which gives the Schmidt rank in
-(\ref{eq:lvv13_constant_bond_source}), and derive the source statement with
-that constant by the argument of the previous section.
+(\ref{eq:lvv13_constant_bond_source}), by the argument of the previous
+sections.
 
 \bibliographystyle{alpha}
 \bibliography{references}

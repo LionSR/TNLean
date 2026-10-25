@@ -1605,11 +1605,12 @@ form remains open under issue #9811.
 ## Landau, Vazirani and Vidick's one-dimensional algorithm, arXiv:1307.5143
 
 - [`lvv13_constant_bond.tex`](lvv13_constant_bond.tex)
-  (scope restriction, open) records that the constant bond dimension of Lemma
+  (local correction, resolved) records that the constant bond dimension of Lemma
   `constantbondapprox` (arXiv:1307.5143v1, lines 342–345) is formalized with
   `B_δ = ⌊exp(C + 32 s log(2e^{e/2}/δ))⌋`, taken from the area law of the
   library, in place of the stated `exp(O(ε⁻¹ log³ d log 1/δ))`. Both are
   independent of the chain length and the cut, which is all the later steps of
-  the source use. Elimination: formalize the bound of Arad, Kitaev, Landau and
+  the source use, and the theorems hold under the source's hypotheses. The
+  source's constant would follow from the bound of Arad, Kitaev, Landau and
   Vazirani, arXiv:1301.1162. The energy bound after trimming is corrected in the
   QICLean note `lvv13_trimming_energy`.
