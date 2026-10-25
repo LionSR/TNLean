@@ -14,8 +14,8 @@ Hastings' hierarchical construction (arXiv:cond-mat/0508554v3, `proj3new.tex`, l
 assume that the projections of the two halves of every block commute. On the chain of
 supersites of lines 609–628 each pair operator `M_{k,k+1}` acts on the block it joins, so by
 `commute_supersiteHierarchy` the two halves act on disjoint blocks and commute. This file
-restates those theorems with the commutation derived from the supports, so that their
-hypotheses are those of the source's construction.
+restates those theorems with the commutation derived from the supports, so that they no
+longer assume it; the deviations below remain.
 
 ## Main results
 
@@ -31,6 +31,14 @@ hypotheses are those of the source's construction.
   `TNLean.MPS.AreaLaw.LocalSolution.re_inner_supersiteHierarchySum_add_le_add`,
   `TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_supersiteClosingLink`: the same
   for the window of the link closing the periodic chain.
+
+**Scope restriction (open chain):** `abs_re_inner_supersiteHierarchySum_sub_le`,
+`re_inner_supersiteHierarchySum_le_add` and `card_le_two_mul_re_trace_of_supersiteHierarchy`
+concern the sum `hierarchySum M h 0` of the joining operators of the binary tree, which covers
+the `N - 1` links of the open chain but not the link `(N, 1)` of the source's periodic chain
+(lines 626–628). The count therefore assumes the gap of this open-chain sum, not of the periodic
+`∑_i M_i`, and the periodic gap does not supply it. The closing-link results below remove this
+restriction. Documented in `docs/paper-gaps/hastings05_hierarchical_energy.tex`.
 
 The closing-link results inherit the **Local fix (closing-link window)** of `ClosingLink.lean`:
 the final states are those kept by one further window for the link `(N, 1)`, which the source
