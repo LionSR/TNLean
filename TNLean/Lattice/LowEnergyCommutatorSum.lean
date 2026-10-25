@@ -26,6 +26,10 @@ the separation is at least `d(a_j, a_i) - 2R - 1`. Grouping the terms by their a
 norm budget `b₀` of each site and the polynomial growth of the graph spheres bound the sum over
 `i` by a constant that does not depend on the number of sites or terms.
 
+**Local fix (constant of eq. `oibu`):** the size independence of eq. `oibu` is proved with the
+explicit constant above; the printed dependence `O(J²/(c₁ l ΔE δλ_j))` is not established.
+Documented in `docs/paper-gaps/hastings05_two_dim_ground_basis.tex`.
+
 ## Main results
 
 * `add_one_pow_mul_exp_neg_le`, `sum_add_one_pow_mul_exp_neg_le`,
