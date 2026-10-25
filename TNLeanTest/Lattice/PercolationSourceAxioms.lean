@@ -14,11 +14,10 @@ run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[
     ``TNLean.Lattice.ClusterExpansion.dist_le_of_mem_biUnion_of_connected,
-    ``TNLean.Lattice.ClusterExpansion.card_ge_of_largeDiam,
-    ``TNLean.Lattice.ClusterExpansion.card_largeDiam_le,
+    ``TNLean.Lattice.ClusterExpansion.card_ge_of_isLargeDiam,
     ``TNLean.Lattice.ClusterExpansion.card_add_card_boundary_le,
-    ``TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_le_largeDiam,
-    ``TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_le_largeDiam_dist] do
+    ``TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_le_isLargeDiam,
+    ``TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_le_isLargeDiam_dist] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl

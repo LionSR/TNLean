@@ -22,21 +22,21 @@ This file states and proves that bound in the source's terms. The terms `h_k` of
 `H = ∑_k h_k` act on supports `acts k` in a pseudometric space of sites, each support of diameter
 at most `2R` (a term acting on the sites within `R` of its centre), and a set `C` of terms is
 large when the support of `H_C` contains two sites at distance larger than `l_proj`
-(`largeDiam`). The overlap graph of the supports has maximum degree `Δ`.
+(`IsLargeDiam`). The overlap graph of the supports has maximum degree `Δ`.
 
 * A connected set of `n` terms has support of diameter at most `2Rn`, so a large connected set
   has at least `⌊l_proj/(2R)⌋ + 1` terms.
 * There are at most `N x^n` connected sets of `n` terms, with `N` the number of terms and
-  `x = max(1, Δ²)` (the lattice-animal count, lines 1234–1236).
+  `x = max(1, Δ²)` (the lattice-animal count, lines 1227–1229).
 * A set `C` of terms and its boundary together have at most `(Δ + 1) n_C` terms.
 
 With `y = (e^{βJ} - 1) e^{(Δ+1)Jβ}` and `0 < xy ≤ 1/2`, the error is at most
 `‖O‖ (exp(N e^{-l/ξ}) - 1) Z` with `l = ⌊l_proj/(2R)⌋` and `ξ = 1/ln(1/(xy))`, and hence at most
 `‖O‖ (exp(N (xy)^{-1} e^{-l_proj/ξ_perc}) - 1) Z` with `ξ_perc = 2R/ln(1/(xy))`, of order the
-interaction range as the source states (line 1250).
+interaction range as the source states (line 1247).
 
 **Local fix (size threshold):** the source starts the sum over cluster sizes at
-`n = l_proj + 1` (line 1240), which presumes that a cluster of diameter larger than `l_proj` has
+`n = l_proj + 1` (line 1235), which presumes that a cluster of diameter larger than `l_proj` has
 more than `l_proj` sites. With terms of range `R` only `n ≥ ⌊l_proj/(2R)⌋ + 1` holds, which is the
 threshold used here; in units of distance this changes the constant `N` to `N (xy)^{-1}`.
 Documented in `docs/paper-gaps/hastings05_percolation_cluster_size.tex`.
@@ -48,18 +48,16 @@ overlap neighbours. Documented in `docs/paper-gaps/hastings05_cluster_boundary.t
 
 ## Main results
 
-* `TNLean.Lattice.ClusterExpansion.largeDiam`: a set of terms whose support has diameter larger
-  than `l_proj` (lines 1101–1104).
+* `TNLean.Lattice.ClusterExpansion.IsLargeDiam`: a set of terms whose support has diameter larger
+  than `l_proj` (lines 1104–1107).
 * `TNLean.Lattice.ClusterExpansion.dist_le_of_mem_biUnion_of_connected`: a connected set of `n`
   terms has support of diameter at most `2Rn`.
-* `TNLean.Lattice.ClusterExpansion.card_ge_of_largeDiam`: a large connected set has at least
+* `TNLean.Lattice.ClusterExpansion.card_ge_of_isLargeDiam`: a large connected set has at least
   `⌊l_proj/(2R)⌋ + 1` terms.
-* `TNLean.Lattice.ClusterExpansion.card_largeDiam_le`: the count `N x^n` of large connected sets
-  of `n` terms.
 * `TNLean.Lattice.ClusterExpansion.card_add_card_boundary_le`: `n_C + n_{∂C} ≤ (Δ + 1) n_C`.
-* `TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_le_largeDiam`: equation
+* `TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_le_isLargeDiam`: equation
   `perc2` with the decay length `ξ = 1/ln(1/(xy))` in units of cluster size.
-* `TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_le_largeDiam_dist`:
+* `TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_le_isLargeDiam_dist`:
   equation `perc2` with the decay length `ξ_perc = 2R/ln(1/(xy))` in units of distance.
 
 ## References
@@ -80,8 +78,8 @@ section Diameter
 /-- A set `C` of terms is *large* when the support `⋃_{k ∈ C} acts k` of `H_C` contains two sites
 at distance larger than `l_proj`. The truncation `ρ(β, l_proj)` keeps the terms of the power
 series with no large cluster. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`,
-lines 1101–1104. -/
-def largeDiam (acts : κ → Finset σ) (lproj : ℝ) (C : Finset κ) : Prop :=
+lines 1104–1107. -/
+def IsLargeDiam (acts : κ → Finset σ) (lproj : ℝ) (C : Finset κ) : Prop :=
   ∃ a ∈ C.biUnion acts, ∃ b ∈ C.biUnion acts, lproj < dist a b
 
 variable {acts : κ → Finset σ} {R : ℝ}
@@ -105,7 +103,7 @@ theorem dist_le_of_walk (hR : ∀ k, ∀ a ∈ acts k, ∀ b ∈ acts k, dist a 
 
 /-- **The diameter of a connected set of terms.** If every support has diameter at most `2R` and
 the terms of `C` are connected in the overlap graph, the support of `H_C` has diameter at most
-`2R n_C`. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1094–1099 (active bonds have
+`2R n_C`. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1097–1100 (active bonds have
 length at most `2R`). -/
 theorem dist_le_of_mem_biUnion_of_connected (hR0 : 0 ≤ R)
     (hR : ∀ k, ∀ a ∈ acts k, ∀ b ∈ acts k, dist a b ≤ 2 * R) {C : Finset κ}
@@ -125,11 +123,11 @@ variable [Fintype κ] [DecidableEq κ]
 
 /-- **The size threshold.** If every support has diameter at most `2R` with `R > 0`, a large
 connected set of terms has at least `⌊l_proj/(2R)⌋ + 1` terms. Hastings,
-arXiv:cond-mat/0508554v3, `proj3new.tex`, line 1240, starts the sum at `l_proj + 1` instead; see
+arXiv:cond-mat/0508554v3, `proj3new.tex`, line 1235, starts the sum at `l_proj + 1` instead; see
 the module docstring. -/
-theorem card_ge_of_largeDiam (hR0 : 0 < R)
+theorem card_ge_of_isLargeDiam (hR0 : 0 < R)
     (hR : ∀ k, ∀ a ∈ acts k, ∀ b ∈ acts k, dist a b ≤ 2 * R) {lproj : ℝ} {C : Finset κ}
-    (hC : C ∈ largeConnected (overlapGraph acts) (largeDiam acts lproj)) :
+    (hC : C ∈ largeConnected (overlapGraph acts) (IsLargeDiam acts lproj)) :
     ⌊lproj / (2 * R)⌋₊ + 1 ≤ #C := by
   obtain ⟨hconn, a, ha, b, hb, hab⟩ := (mem_largeConnected _).1 hC
   have hd := dist_le_of_mem_biUnion_of_connected hR0.le hR hconn ha hb
@@ -137,20 +135,6 @@ theorem card_ge_of_largeDiam (hR0 : 0 < R)
   have hne : #C ≠ 0 := (card_pos.2 ⟨i, hi⟩).ne'
   rw [Nat.add_one_le_iff, Nat.floor_lt' hne, div_lt_iff₀ (by positivity)]
   linarith [mul_comm (2 * R) (#C : ℝ)]
-
-/-- **The count of large connected sets.** If every term overlaps at most `Δ` others, there are at
-most `N x^n` large connected sets of `n` terms, with `N` the number of terms and
-`x = max(1, Δ²)`. This is the lattice-animal count cited by Hastings, arXiv:cond-mat/0508554v3,
-`proj3new.tex`, lines 1234–1236. -/
-theorem card_largeDiam_le {Δ : ℕ} (hΔ : ∀ k, (overlapGraph acts).degree k ≤ Δ) (lproj : ℝ)
-    (n : ℕ) :
-    #{C ∈ largeConnected (overlapGraph acts) (largeDiam acts lproj) | #C = n} ≤
-      Fintype.card κ * (max 1 (Δ ^ 2)) ^ n := by
-  classical
-  refine (card_le_card fun C hC ↦ ?_).trans
-    (card_connected_induce_le_exponential (overlapGraph acts) hΔ n)
-  obtain ⟨hCT, hCn⟩ := mem_filter.1 hC
-  exact mem_filter.2 ⟨mem_univ _, hCn, ((mem_largeConnected _).1 hCT).1⟩
 
 end Diameter
 
@@ -186,8 +170,9 @@ open Classical in
 keeps the terms of the power series with no cluster of diameter larger than `l_proj`, satisfies
 `|Tr (O (e^{-βH} - ρ(β, l_proj)))| ≤ ‖O‖ (exp(N e^{-l/ξ}) - 1) Tr e^{-βH}`, with `N` the number
 of terms, `l = ⌊l_proj/(2R)⌋` and `ξ = 1/ln(1/(xy))`. Hastings, arXiv:cond-mat/0508554v3,
-`proj3new.tex`, lines 1227–1254, with the size threshold of the module docstring. -/
-theorem norm_trace_mul_exp_sub_truncatedExp_le_largeDiam (hR0 : 0 < R)
+`proj3new.tex`, lines 1227–1254, with the size threshold of the module docstring. The hypothesis
+`0 < xy` only excludes `β J = 0`, where the truncation is exact and `ξ` is undefined. -/
+theorem norm_trace_mul_exp_sub_truncatedExp_le_isLargeDiam (hR0 : 0 < R)
     (hR : ∀ k, ∀ a ∈ acts k, ∀ b ∈ acts k, dist a b ≤ 2 * R) {Δ : ℕ}
     (hΔ : ∀ k, (overlapGraph acts).degree k ≤ Δ) (lproj : ℝ) {H : Matrix ι ι ℂ}
     (hHerm : H.IsHermitian) {h : κ → Matrix ι ι ℂ} (hH : H = ∑ k, h k)
@@ -198,21 +183,19 @@ theorem norm_trace_mul_exp_sub_truncatedExp_le_largeDiam (hR0 : 0 < R)
     (hxy : ((max 1 (Δ ^ 2) : ℕ) : ℝ) *
       ((Real.exp (β * J) - 1) * Real.exp (((Δ : ℝ) + 1) * J * β)) ≤ 1 / 2) :
     ‖(O * (NormedSpace.exp (-(β • H)) -
-        truncatedExp (overlapGraph acts) (largeDiam acts lproj) h β)).trace‖ ≤
+        truncatedExp (overlapGraph acts) (IsLargeDiam acts lproj) h β)).trace‖ ≤
       ‖O‖ * (Real.exp (Fintype.card κ * Real.exp (-(⌊lproj / (2 * R)⌋₊ /
           (Real.log (((max 1 (Δ ^ 2) : ℕ) : ℝ) *
             ((Real.exp (β * J) - 1) * Real.exp (((Δ : ℝ) + 1) * J * β)))⁻¹)⁻¹))) - 1) *
         (NormedSpace.exp (-(β • H))).trace.re := by
   set G := overlapGraph acts
-  set T := largeConnected G (largeDiam acts lproj)
-  set x : ℝ := ((max 1 (Δ ^ 2) : ℕ) : ℝ) with hxdef
+  set T := largeConnected G (IsLargeDiam acts lproj)
   set y := (Real.exp (β * J) - 1) * Real.exp (((Δ : ℝ) + 1) * J * β)
   have hS : ∀ C ∈ T, ((#C : ℝ) + #(boundary G C)) ≤ ((Δ : ℝ) + 1) * #C := fun C _ ↦ by
     exact_mod_cast card_add_card_boundary_le G hΔ C
   refine (norm_trace_mul_exp_sub_truncatedExp_le G _ hHerm hH hh hJ O hβ hS).trans ?_
   have hZ := (hHerm.smul (IsSelfAdjoint.all β)).neg.re_trace_exp_nonneg
-  have hx : 0 ≤ x := Nat.cast_nonneg _
-  have hy : 0 ≤ y := (pos_of_mul_pos_right hxy0 hx).le
+  have hy : 0 ≤ y := (pos_of_mul_pos_right hxy0 (Nat.cast_nonneg _)).le
   rw [← sum_mul, ← mul_sum]
   gcongr
   calc ∑ U ∈ T.powerset with IsAdmissible G U ∧ U.Nonempty, ∏ C ∈ U, y ^ #C
@@ -221,11 +204,10 @@ theorem norm_trace_mul_exp_sub_truncatedExp_le_largeDiam (hR0 : 0 < R)
           obtain ⟨hUT, -, hne⟩ := mem_filter.1 hU
           exact mem_erase.2 ⟨hne.ne_empty, hUT⟩)
           fun _ _ _ ↦ prod_nonneg fun _ _ ↦ pow_nonneg hy _
-    _ ≤ _ := sum_nonempty_powerset_prod_le_percolation (n := fun C ↦ #C)
-        (fun C hC ↦ card_ge_of_largeDiam hR0 hR hC)
-        (fun k ↦ by
-          rw [hxdef]; exact_mod_cast card_largeDiam_le hΔ lproj k) (Nat.cast_nonneg _) hx hy
-        hxy0 hxy (fun _ _ ↦ pow_nonneg hy _) fun _ _ ↦ le_rfl
+    _ ≤ _ := sum_nonempty_powerset_prod_le_percolation_connected G hΔ
+        (fun C hC ↦ ((mem_largeConnected G).1 hC).1)
+        (fun C hC ↦ card_ge_of_isLargeDiam hR0 hR hC) hy hxy0 hxy
+        (fun _ _ ↦ pow_nonneg hy _) fun _ _ ↦ le_rfl
 
 /-- `e^{-l/ξ} ≤ r^{-1} e^{-l_proj/ξ_perc}` for `l = ⌊l_proj/(2R)⌋`, `ξ = 1/ln(1/r)` and
 `ξ_perc = 2R/ln(1/r)`, when `0 < r < 1` and `R > 0`: the passage from cluster size to distance,
@@ -246,13 +228,13 @@ theorem exp_neg_floor_div_le {r : ℝ} (hr0 : 0 < r) (hr1 : r < 1) (hR0 : 0 < R)
 
 open Classical in
 /-- **Equation `perc2`, in units of distance.** Under the hypotheses of
-`norm_trace_mul_exp_sub_truncatedExp_le_largeDiam`,
+`norm_trace_mul_exp_sub_truncatedExp_le_isLargeDiam`,
 `|Tr (O (e^{-βH} - ρ(β, l_proj)))| ≤ ‖O‖ (exp(N (xy)^{-1} e^{-l_proj/ξ_perc}) - 1) Tr e^{-βH}`
 with `ξ_perc = 2R/ln(1/(xy))`, of order the interaction range. After division by
 `Z = Tr e^{-βH}` this is the source's `{exp[N exp(-l_proj/ξ_perc)] - 1} ‖O‖` with the constant
 `N (xy)^{-1}` in place of `N` (see the module docstring). Hastings, arXiv:cond-mat/0508554v3,
 `proj3new.tex`, lines 1246–1254. -/
-theorem norm_trace_mul_exp_sub_truncatedExp_le_largeDiam_dist (hR0 : 0 < R)
+theorem norm_trace_mul_exp_sub_truncatedExp_le_isLargeDiam_dist (hR0 : 0 < R)
     (hR : ∀ k, ∀ a ∈ acts k, ∀ b ∈ acts k, dist a b ≤ 2 * R) {Δ : ℕ}
     (hΔ : ∀ k, (overlapGraph acts).degree k ≤ Δ) (lproj : ℝ) {H : Matrix ι ι ℂ}
     (hHerm : H.IsHermitian) {h : κ → Matrix ι ι ℂ} (hH : H = ∑ k, h k)
@@ -263,14 +245,14 @@ theorem norm_trace_mul_exp_sub_truncatedExp_le_largeDiam_dist (hR0 : 0 < R)
     (hxy : ((max 1 (Δ ^ 2) : ℕ) : ℝ) *
       ((Real.exp (β * J) - 1) * Real.exp (((Δ : ℝ) + 1) * J * β)) ≤ 1 / 2) :
     ‖(O * (NormedSpace.exp (-(β • H)) -
-        truncatedExp (overlapGraph acts) (largeDiam acts lproj) h β)).trace‖ ≤
+        truncatedExp (overlapGraph acts) (IsLargeDiam acts lproj) h β)).trace‖ ≤
       ‖O‖ * (Real.exp (Fintype.card κ *
           ((((max 1 (Δ ^ 2) : ℕ) : ℝ) *
             ((Real.exp (β * J) - 1) * Real.exp (((Δ : ℝ) + 1) * J * β)))⁻¹ *
           Real.exp (-(lproj / (2 * R / Real.log (((max 1 (Δ ^ 2) : ℕ) : ℝ) *
             ((Real.exp (β * J) - 1) * Real.exp (((Δ : ℝ) + 1) * J * β)))⁻¹))))) - 1) *
         (NormedSpace.exp (-(β • H))).trace.re := by
-  refine (norm_trace_mul_exp_sub_truncatedExp_le_largeDiam hR0 hR hΔ lproj hHerm hH hh hJ O
+  refine (norm_trace_mul_exp_sub_truncatedExp_le_isLargeDiam hR0 hR hΔ lproj hHerm hH hh hJ O
     hβ hxy0 hxy).trans ?_
   have hZ := (hHerm.smul (IsSelfAdjoint.all β)).neg.re_trace_exp_nonneg
   have key := exp_neg_floor_div_le hxy0 (by linarith) hR0 lproj
