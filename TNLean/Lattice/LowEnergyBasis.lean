@@ -29,13 +29,13 @@ diagonal, but whose off-diagonal elements are the same as" those of `B` (lines 4
 * `sum_norm_offDiagonalPart_le`: the sum of the `o(i)` over any finite family.
 * `norm_apply_sub_inner_smul_le_add_offDiagonalPart`: eq. `low` up to `o(i)`.
 
-**Scope restriction (two-dimensional ground space, summed bound):** only the case `n = 2` is
-treated, as in the source, which only sketches `n > 2` (lines 1695–1705). The pair `v`, `w` is
-taken as an orthonormal eigenbasis of `A = P M_j P` on the ground space, whose existence is the
-spectral theorem; the choice of `j` maximizing `δλ_j` is not made, since every bound here holds
-for any `j`. The summation of the decaying commutator bound over `i` into eq. `oibu`, which the
-source states only to order of magnitude, is left as the sum of the commutators. Documented in
-`docs/paper-gaps/hastings05_two_dim_ground_basis.tex`.
+A ground space of any dimension, by the source's iteration over further compressions
+(lines 1695–1705), is treated in `LowEnergyBasisIteration.lean`. The choice of `j` maximizing
+`δλ_j` is not made, since every bound here holds for any `j`.
+
+**Scope restriction (summed bound):** the summation of the decaying commutator bound over `i`
+into eq. `oibu`, which the source states only to order of magnitude, is left as the sum of the
+commutators. Documented in `docs/paper-gaps/hastings05_two_dim_ground_basis.tex`.
 -/
 
 open scoped InnerProductSpace
