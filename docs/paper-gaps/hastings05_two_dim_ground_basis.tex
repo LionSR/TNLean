@@ -11,7 +11,7 @@
 \providecommand{\leanid}[1]{\nolinkurl{#1}}
 \providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
 
-\title{A Basis of a Two-Dimensional Ground Space in Hastings' Local Solution
+\title{A Basis of a Degenerate Ground Space in Hastings' Local Solution
   of Gapped Hamiltonians}
 \author{}
 \date{2026-10-24}
@@ -56,18 +56,104 @@ bounds the first term.
 
 \section{The restriction}
 
-The formalization is a scope restriction in three respects. It treats only
-$n=2$; the source only sketches $n>2$ (lines~1695--1705). It takes the
-eigenbasis $v,w$ as given, its existence being the spectral theorem, and does
-not choose the $j$ maximizing $\delta\lambda_j$, since the bounds hold for
-every $j$. And it leaves eq.~\texttt{oibu} as
+Every dimension $n$ is treated, by the source's iteration over further
+compressions with any number of levels (the last two sections), ending when
+every pair of basis vectors is separated, as the source's iteration ends. The basis is taken as given, as the
+source chooses it, and the $j$ maximizing $\delta\lambda_j$ is not chosen,
+since the bounds hold for every $j$. One restriction remains: the
+formalization leaves eq.~\texttt{oibu} as
 $\sum_io(i)\le\sum_i\lVert[PM_iP,PM_jP]\rVert/\delta\lambda_j$: the
 source sums the decaying commutator bound over $i$ only to order of magnitude,
 and the resulting constant depends on the growth of the graph.
 
-Elimination plan: treat a ground space of any dimension $n$, following the
-sketch at lines~1695--1705, and sum the commutator bound over $i$ with the
-growth constants of the graph.
+\section{A compression with simple spectrum}
+
+For $n>2$ the source finds the $M_j$ with the largest spread of eigenvalues,
+bounds the off-diagonal elements between its eigenvectors, and passes to
+further $M_k$ for eigenvectors sharing an eigenvalue of $M_j$
+(lines~1695--1705). Because the compressions commute only approximately, this
+iteration is not a proof as stated. When one compression $A=PM_jP$ has $n$
+eigenvalues on the ground space that are pairwise at least $\delta>0$ apart,
+its orthonormal eigenbasis $v_0,\dots,v_{n-1}$ needs no iteration. With indices
+modulo $n$, the off-diagonal part $o_B$ of any $B$ is the sum over $k\ne0$ of
+the shifts
+$S_k=\sum_a\langle v_a,Bv_{a+k}\rangle\lvert v_a\rangle\langle v_{a+k}\rvert$.
+By Bessel's inequality each shift has norm at most its largest element, and
+each element is at most $\lVert[A,B]\rVert/\delta$, so
+\begin{align}
+  o(i)\le(n-1)\frac{\lVert[PM_iP,PM_jP]\rVert}{\delta},
+  \label{eq:hastings05_two_dim_ground_basis_simple}
+\end{align}
+which for $n=2$ is~\eqref{eq:hastings05_two_dim_ground_basis_oi}. The bound
+\eqref{eq:hastings05_two_dim_ground_basis_low} holds for every basis vector
+$v_a$.\footnote{\leanid{TNLean.Lattice.norm_offDiagonalPartFamily_le_norm_commutator_div},
+    \leanid{TNLean.Lattice.sum_norm_offDiagonalPartFamily_le} and
+    \leanid{TNLean.Lattice.norm_apply_sub_inner_smul_le_add_offDiagonalPartFamily}
+    in \doclink{TNLean/Lattice/LowEnergyBasisSimpleSpectrum}.}
+This is the first level of the iteration of the next section, with $\delta$ a
+given lower bound on the spacing.
+
+\section{Repeated eigenvalues: the iteration}
+
+Record the source's iteration by real labels $r_\ell(a)$ of the basis vectors at
+levels $\ell=0,1,\dots$: the class of $a$ at level $\ell$ is the set of $c$
+with $r_m(c)=r_m(a)$ for every $m<\ell$, and the compression $A_\ell=PM_{j_\ell}P$
+of level $\ell$ acts diagonally on each class,
+$\langle v_c,A_\ell v_d\rangle=r_\ell(c)\delta_{cd}$. Expanding both products in
+the basis gives, for $a$, $b$ in one class $C$ at level $\ell$,
+\begin{align}
+  (r_\ell(a)-r_\ell(b))\langle v_a,Bv_b\rangle
+  =\langle v_a,[A_\ell,B]v_b\rangle
+  -\sum_{c\notin C}\bigl(\langle v_a,A_\ell v_c\rangle\langle v_c,Bv_b\rangle
+    -\langle v_a,Bv_c\rangle\langle v_c,A_\ell v_b\rangle\bigr).
+  \label{eq:hastings05_two_dim_ground_basis_iteration}
+\end{align}
+The indices $c\notin C$ are separated from $a$ and $b$ at an earlier level, so
+the sum is a product of matrix elements already bounded there. Dividing by the
+smallest difference $\delta_\ell>0$ of distinct labels of level $\ell$ within a
+class, which is positive in finite dimension and is the source's
+$\delta\lambda$ at that level, bounds every off-diagonal element at the first
+level separating its two vectors. With two levels, $M_j$ and then $M_k$, every
+off-diagonal element of $PM_iP$ is at most
+\begin{align}
+  \max\Bigl(\frac{\lVert[A_0,B]\rVert}{\delta_0},\
+  \frac{1}{\delta_1}\Bigl(\lVert[A_1,B]\rVert
+    +2n\frac{\lVert[A_0,A_1]\rVert\,\lVert[A_0,B]\rVert}{\delta_0^2}\Bigr)\Bigr),
+  \label{eq:hastings05_two_dim_ground_basis_two_levels}
+\end{align}
+and $o(i)$ is at most $n-1$ times this. For any number of levels, let every
+commutator $[A_\ell,A_m]$ be at most $K$ and every $[A_\ell,B]$ at most $K_B$.
+By induction on the level, the elements of the $A_m$ separated at level $\ell$
+are at most $\alpha_\ell$, and those of $B$ at most $\beta_\ell$, where
+$\alpha_0=K/\delta_0$, $\beta_0=K_B/\delta_0$ and
+\begin{align}
+  \alpha_{\ell+1}=\max\Bigl(\alpha_\ell,\frac{K+2n\alpha_\ell^2}{\delta_{\ell+1}}\Bigr),
+  \qquad
+  \beta_{\ell+1}=\max\Bigl(\beta_\ell,\frac{K_B+2n\alpha_\ell\beta_\ell}{\delta_{\ell+1}}\Bigr).
+  \label{eq:hastings05_two_dim_ground_basis_levels}
+\end{align}
+The source's iteration ends once every off-diagonal element is bounded
+(lines~1707--1708), that is, once every pair of basis vectors is separated at
+some level; after $L$ such levels, $o(i)\le(n-1)\beta_{L-1}$.\footnote{\leanid{TNLean.Lattice.abs_sub_mul_norm_inner_le},
+    \leanid{TNLean.Lattice.norm_inner_le_of_mem_labelClass},
+    \leanid{TNLean.Lattice.norm_inner_le_levelBoundB},
+    \leanid{TNLean.Lattice.norm_offDiagonalPartFamily_le_levelBoundB},
+    \leanid{TNLean.Lattice.norm_inner_le_of_two_levels} and
+    \leanid{TNLean.Lattice.norm_offDiagonalPartFamily_le_of_two_levels} in
+    \doclink{TNLean/Lattice/LowEnergyBasisIteration}.}
+The bound $\beta_\ell$ is linear in $K_B$, and with two levels every term decays
+in $d(i,j)$ or $d(i,k)$, so the sum over $i$ behind eq.~\texttt{oibu} stays
+bounded.
+
+This is a local correction of the sketch. The source states that the further
+compressions bound the remaining off-diagonal elements, but the commutator of
+the compression of $M_k$ to a class with that of $B$ differs from $[M_k,B]$ by
+the cross terms of~\eqref{eq:hastings05_two_dim_ground_basis_iteration}, which
+the sketch omits and which are kept here.
+
+Elimination plan for the remaining restriction: sum the commutator bound over
+$i$ with the growth constants of the graph, giving eq.~\texttt{oibu}
+explicitly.
 
 \section{Formalization}
 
