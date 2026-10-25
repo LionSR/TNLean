@@ -125,16 +125,6 @@ theorem translate_param_unique_up (hh : 2 < height) (p : TorusVertex width heigh
 
 /-! ### The endpoint geometry of a translated boundary edge -/
 
-/-- A boundary edge whose first stored endpoint lies in the region has its second stored
-endpoint outside the region. -/
-theorem boundary_snd_notMem {R : Finset (TorusVertex width height)}
-    {f : Edge (torusGraph width height)}
-    (hf : IsRegionBoundaryEdge (G := torusGraph width height) R f) (hmem : f.1.1 ∈ R) :
-    f.1.2 ∉ R := by
-  rcases hf with ⟨_, h2⟩ | ⟨h1, _⟩
-  · exact h2
-  · exact absurd hmem h1
-
 /-- The first stored endpoint of a translated boundary edge is the translate of one of the two
 stored endpoints of the original edge. -/
 theorem boundaryEdgeMap_translate_fst_or
@@ -167,7 +157,7 @@ theorem boundaryEdgeMap_translate_fst_mem_iff
     constructor
     · intro hmem2
       rw [mem_Region_map_apply] at hmem2
-      exact absurd hmem2 (boundary_snd_notMem f.2 hmem)
+      exact absurd hmem2 (boundary_right_not_mem R f.2 hmem)
     · intro heq
       exact absurd ((translate a b).toEquiv.injective heq).symm hne
 

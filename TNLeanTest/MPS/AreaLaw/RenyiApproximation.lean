@@ -7,6 +7,8 @@ import TNLean.MPS.AreaLaw.EntropyScaling.RenyiApproximation
 
 /-! # Boundary chains and axioms for Rényi family approximation -/
 
+set_option linter.hashCommand false
+
 open TNLean.MPS.AreaLaw
 
 -- Empty and one-site chains need no internal rank hypothesis, even at bond zero.
@@ -17,8 +19,6 @@ example {q : ℕ} (ψ : EuclideanSpace ℂ (Fin 0 → Fin q)) (hψ : ‖ψ‖ = 
 example {q : ℕ} (ψ : EuclideanSpace ℂ (Fin 1 → Fin q)) (hψ : ‖ψ‖ = 1) :
     IsOpenMPS 1 q 0 (fun x ↦ ψ x) :=
   isOpenMPS_of_regionState_rank_le ψ hψ (by simp)
-
-set_option linter.hashCommand false
 
 /-- info: 'TNLean.MPS.AreaLaw.one_sub_kyFanNorm_le_of_renyiEntropy_le' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in

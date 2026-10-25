@@ -5,7 +5,7 @@
 \input{command}
 \title{Connected Domains in the One-Dimensional Area Law}
 \author{}
-\date{October 18, 2026}
+\date{October 21, 2026}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{resolved}
@@ -36,14 +36,14 @@ The formalization first states the model on the chain of $L$ sites, with sites
 $\{0,\ldots,L-1\}$, supports of range $R$ the nonempty sets of sites of
 diameter at most $R$, and the Hamiltonian, gapped ground vector, regional
 entropies and boundary edges as in the note.\footnote{Declarations:
-\leanid{TNLean.MPS.AreaLaw.IsChainSupport},
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian},
-\leanid{TNLean.MPS.AreaLaw.boundaryEdges}.} Theorem~A is proved on this
+    \leanid{TNLean.MPS.AreaLaw.IsChainSupport},
+    \leanid{TNLean.MPS.AreaLaw.ChainHamiltonian},
+    \leanid{TNLean.MPS.AreaLaw.boundaryEdges}.} Theorem~A is proved on this
 chain for every subset $A$, with the explicit constant
 $C_0(q,R)(1+J/\Delta)$.\footnote{Declarations:
-\leanid{TNLean.MPS.AreaLaw.regionEntropy_interval_le},
-\leanid{TNLean.MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges},
-\leanid{TNLean.MPS.AreaLaw.chainAreaLaw}.} Theorem~B of the note is stated on
+    \leanid{TNLean.MPS.AreaLaw.regionEntropy_interval_le},
+    \leanid{TNLean.MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges},
+    \leanid{TNLean.MPS.AreaLaw.chainAreaLaw}.} Theorem~B of the note is stated on
 the chain of $L$ sites in the note itself, so it carries no restriction.
 
 \section{Resolution: arbitrary finite domains}
@@ -51,10 +51,10 @@ the chain of $L$ sites in the note itself, so it carries no restriction.
 Theorem~A is now formalized for every finite $\Lambda\subset\mathbb Z$, with
 no hypothesis beyond the source's and with the constant
 $C_0(q,R)(1+J/\Delta)$ of the chain case.\footnote{Declarations:
-\leanid{TNLean.MPS.AreaLaw.DomainHamiltonian},
-\leanid{TNLean.MPS.AreaLaw.domainBoundaryEdges},
-\leanid{TNLean.MPS.AreaLaw.regionEntropy_le_mul_card_domainBoundaryEdges},
-\leanid{TNLean.MPS.AreaLaw.domainAreaLaw}.} The sites of $\Lambda$ are
+    \leanid{TNLean.MPS.AreaLaw.DomainHamiltonian},
+    \leanid{TNLean.MPS.AreaLaw.domainBoundaryEdges},
+    \leanid{TNLean.MPS.AreaLaw.regionEntropy_le_mul_card_domainBoundaryEdges},
+    \leanid{TNLean.MPS.AreaLaw.domainAreaLaw}.} The sites of $\Lambda$ are
 labelled $0,\ldots,|\Lambda|-1$ in increasing order, the supports are the
 nonempty sets of graph diameter at most $R$ in the induced path graph, and
 $\partial_\Lambda A$ is the set of edges $\{x,x+1\}\subseteq\Lambda$ with
@@ -88,22 +88,48 @@ bound on a chain'' (\texttt{part2a\_mps\_information.tex}, lines~260--309).
 Neither that lemma nor the subsequent reset and separation lemmas explicitly
 returns to quantification over arbitrary finite domains.
 
-The proved contiguous-chain estimates therefore have the domain required by
-this argument. Versions for arbitrary finite induced-path domains would be
-additional results. They are not asserted by the present formalization;
-in particular, reading one of the local lemmas in isolation with an
-unrestricted $\Lambda$ is not covered by the chain theorem. This distinction
-does not add a hypothesis to either headline theorem: Theorem~A is proved
-on every finite domain, and Theorem~B is stated on a chain in the source.
+The proved contiguous-chain estimates have the domain required by the source
+argument. The following commutator and localization estimates extend them to
+arbitrary finite induced integer domains. The information-reset and
+logarithmic-separation extensions are separate results. Neither headline
+theorem gains a hypothesis: Theorem~A holds on every finite domain, and
+Theorem~B is stated on a chain in the source.
 
-For an arbitrary finite $\Lambda\subset\mathbb Z$, the additional geometric
-argument is to identify distances inside each component, bound each distance
-sphere by two vertices, and bound a support of graph diameter at most $R$ by
-$R+1$ sites. Supports of finite graph diameter lie in one component; operators
-at infinite separation commute exactly. These facts allow the general graph
-estimates to be applied with the same uniform constants. This extension of
-the local estimates does not require a product decomposition of ground
-vectors.
+\subsection{Finite-domain locality estimates}
+
+Both estimates are proved for arbitrary finite induced integer domains,
+with the same uniform constants as on the contiguous chain. Put
+\begin{align}
+    C   & = 2+4|b_0|e^{2R}, & v  & = 2(R+1)|b_0|e^{2R}+1, \notag \\
+    \mu & = \tfrac12,       & C' & = \frac{2Ce}{1-e^{-1/2}}.
+    \label{eq:tnlean_one_dimensional_connected_domain_scope_domain_constants}
+\end{align}
+For every finite labelled family of Hermitian terms on nonempty supports
+of induced-graph diameter at most $R$, with per-site norm sum at most $b_0$,
+the commutator bound holds on every finite initial support $S$. The
+localization bound holds for $q\ge1$ and every real radius $\ell\ge0$, with
+neighborhood
+$N_\ell(S)=\bigcup_{x\in S}\{y:d_\Lambda(x,y)\le\lfloor\ell\rfloor\}$.
+Neither estimate assumes connectedness, a ground state or a spectral gap;
+empty $S$ is allowed.\footnote{Declarations:
+    \leanid{TNLean.MPS.AreaLaw.norm_heisenberg_commutator_le_domainDistance},
+    \leanid{TNLean.MPS.AreaLaw.norm_heisenberg_sub_siteExpectation_domainNeighborhood_le}.}
+
+The increasing enumeration identifies the domain graph with the induced
+integer Hasse graph. Each component is a finite path, and its inclusion
+preserves extended graph distance. A sphere of finite radius therefore has
+at most two vertices, while a support of diameter at most $R$ has at most
+$R+1$ sites.\footnote{Declarations:
+    \leanid{SimpleGraph.ConnectedComponent.nonempty_pathGraph_iso_hasse_int_induce_finset},
+    \leanid{TNLean.MPS.AreaLaw.domainGraphIsoHasse},
+    \leanid{TNLean.MPS.AreaLaw.domainGraph_card_sphere_le_two}.}
+The general graph estimates apply with sphere coefficient $2$ and exponent
+zero. Passing from the natural radius $\lfloor\ell\rfloor$ to $\ell$
+contributes the factor $e^{1/2}$ in the coefficient $C'$ of
+(\ref{eq:tnlean_one_dimensional_connected_domain_scope_domain_constants}). Operators at
+infinite separation commute exactly; infinite distances are not replaced
+by coordinate distances across a missing integer. This proves the finite-domain extensions of the propagation and localization
+estimates without using a ground-state decomposition.
 
 \section{Information reset on the contiguous chain}
 
@@ -119,13 +145,13 @@ Nonnegativity of $b$ is derived, and only the original full-system gap is
 assumed. The Gaussian filter, supported approximation, polar unitary and
 independence after the regional replica swap are constructed within the
 proof.\footnote{Declaration:
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.information_reset}.}
+    \leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.information_reset}.}
 
 The blueprint states and marks the contiguous-chain theorem proved here.
-An extension to arbitrary finite induced-path domains would require the
-corresponding locality and support geometry described above. Such an extension
-is not used in Theorem~A or Theorem~B and is not claimed. No additional
-spectral or product-marginal hypothesis is part of the chain theorem.
+A finite-domain information-reset theorem additionally uses the domain
+locality estimates and support geometry. That extension is separate here;
+no additional spectral or product-marginal hypothesis is part of the chain
+theorem.
 
 \section{Information at logarithmic separation}
 
@@ -139,7 +165,7 @@ large $L$. The interval family may overlap or contain empty members.
 Neither disjointness nor a sign hypothesis on the original real $J$ is
 added. The sign needed for the interval area law follows from the norm
 bound of an actual singleton interaction.\footnote{Declaration:
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.mutualInformation_le_of_logarithmic_separation}.}
+    \leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.mutualInformation_le_of_logarithmic_separation}.}
 
 The proof combines the contiguous interval area law, exact real-radius
 neighborhoods of intervals, and the contiguous reset theorem. It establishes

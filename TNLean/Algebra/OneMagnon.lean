@@ -46,14 +46,6 @@ theorem singleDown_injective : Function.Injective (singleDown (ι := ι)) := by
     oneMagnon f (singleDown j) = f j := by
   simp [oneMagnon, singleDown_injective.eq_iff]
 
-/-- A nonzero coefficient function gives a nonzero one-magnon vector. -/
-theorem oneMagnon_ne_zero {f : ι → ℂ} (hf : f ≠ 0) : oneMagnon f ≠ 0 := by
-  intro h
-  apply hf
-  funext j
-  have hj := congrFun h (singleDown j)
-  simpa using hj
-
 omit [Fintype ι] in
 /-- Relabelling a one-down-spin configuration moves its distinguished site. -/
 theorem singleDown_comp_perm (e : Equiv.Perm ι) (j : ι) :

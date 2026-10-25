@@ -69,21 +69,11 @@ private theorem exists_normalized_isOpenMPS_of_sq_error {L q D : ℕ}
     have hn := norm_sub_norm_le ψ Φ
     rw [hψ, norm_sub_rev] at hn
     linarith
-  let c : ℂ := (‖Φ‖ : ℂ)⁻¹
-  let χ : EuclideanSpace ℂ (Fin L → Fin q) := c • Φ
+  let χ : EuclideanSpace ℂ (Fin L → Fin q) := (‖Φ‖ : ℂ)⁻¹ • Φ
   have hχ : ‖χ‖ = 1 := norm_smul_inv_norm (𝕜 := ℂ) (norm_pos_iff.mp hpos)
-  have hdiff : ‖χ - Φ‖ = |1 - ‖Φ‖| := by
-    have hs : χ - Φ = ((‖Φ‖⁻¹ - 1 : ℝ) : ℂ) • Φ := by
-      simp [χ, c, sub_smul]
-    rw [hs, norm_smul, Complex.norm_real, Real.norm_eq_abs,
-      ← abs_of_nonneg (norm_nonneg Φ), ← abs_mul]
-    congr 1
-    rw [abs_of_nonneg (norm_nonneg Φ)]
-    field_simp
-  have hdiff_le : ‖χ - Φ‖ ≤ ‖Φ - ψ‖ := by
-    simpa [hdiff, hψ, norm_sub_rev] using abs_norm_sub_norm_le ψ Φ
-  have hdist : ‖χ - ψ‖ ≤ δ / 2 := (norm_sub_le_norm_sub_add_norm_sub χ Φ ψ).trans (by linarith)
-  refine ⟨χ, hχ, hΦ.smul c,
+  have hdist : ‖χ - ψ‖ ≤ δ / 2 :=
+    (norm_inv_norm_smul_sub_le_two_mul hψ (norm_pos_iff.mp hpos)).trans (by linarith)
+  refine ⟨χ, hχ, hΦ.smul (‖Φ‖ : ℂ)⁻¹,
     (rectangularTraceNorm_pure_density_sub_le_two ψ χ hψ.le hχ.le).trans ?_⟩
   nlinarith [norm_sub_rev ψ χ]
 

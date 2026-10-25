@@ -38,8 +38,8 @@ def IsInverseNormalized (β : ScalarCocycle G) : Prop :=
 
 /-- The identity fusion scalar is inverse-normalized. -/
 @[simp]
-theorem isInverseNormalized_one : IsInverseNormalized (1 : ScalarCocycle G) := by
-  exact ⟨⟨fun _ => rfl, fun _ => rfl⟩, fun _ => rfl⟩
+theorem isInverseNormalized_one : IsInverseNormalized (1 : ScalarCocycle G) :=
+  ⟨⟨fun _ => rfl, fun _ => rfl⟩, fun _ => rfl⟩
 
 /-- Pointwise multiplication preserves the restricted fusion convention. -/
 theorem IsInverseNormalized.mul {β₁ β₂ : ScalarCocycle G}

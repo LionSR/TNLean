@@ -194,17 +194,12 @@ noncomputable def algebraicLocalTranslation (d : ℕ) (a : ℤ) :
   StarAlgEquiv.ofBijective (algebraicLocalTranslationHom d a) ⟨
     fun A B hAB ↦ by
       have h := congrArg (algebraicLocalTranslationHom d (-a)) hAB
-      have hA : algebraicLocalTranslationHom d (-a)
-          (algebraicLocalTranslationHom d a A) = A := by
+      have hinv (C : AlgebraicLocalAlgebra d) : algebraicLocalTranslationHom d (-a)
+          (algebraicLocalTranslationHom d a C) = C := by
         rw [← StarAlgHom.comp_apply, algebraicLocalTranslationHom_add,
           add_neg_cancel, algebraicLocalTranslationHom_zero]
         rfl
-      have hB : algebraicLocalTranslationHom d (-a)
-          (algebraicLocalTranslationHom d a B) = B := by
-        rw [← StarAlgHom.comp_apply, algebraicLocalTranslationHom_add,
-          add_neg_cancel, algebraicLocalTranslationHom_zero]
-        rfl
-      rwa [hA, hB] at h,
+      rwa [hinv A, hinv B] at h,
     fun A ↦ ⟨algebraicLocalTranslationHom d (-a) A, by
       rw [← StarAlgHom.comp_apply, algebraicLocalTranslationHom_add,
         neg_add_cancel, algebraicLocalTranslationHom_zero]
