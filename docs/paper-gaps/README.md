@@ -1321,7 +1321,7 @@ the degenerate case. Its closed neighbourhood must be strictly smaller than
 the support separation; the decay estimate also requires a positive time-window
 slope `c₁` with `v c₁ < 1/2`.
 
-### Local solution of gapped Hamiltonians: a basis of a two-dimensional ground space
+### Local solution of gapped Hamiltonians: a basis of a degenerate ground space
 
 [hastings05_two_dim_ground_basis.tex](hastings05_two_dim_ground_basis.tex)
 (scope restriction, open) records the treatment of a degenerate ground space in Hastings,

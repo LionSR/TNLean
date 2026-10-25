@@ -11,7 +11,7 @@
 \providecommand{\leanid}[1]{\nolinkurl{#1}}
 \providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
 
-\title{A Basis of a Two-Dimensional Ground Space in Hastings' Local Solution
+\title{A Basis of a Degenerate Ground Space in Hastings' Local Solution
   of Gapped Hamiltonians}
 \author{}
 \date{2026-10-24}
@@ -56,9 +56,10 @@ bounds the first term.
 
 \section{The restriction}
 
-The formalization is a scope restriction in three respects. It treats only
-$n=2$; the source only sketches $n>2$ (lines~1695--1705). It takes the
-eigenbasis $v,w$ as given, its existence being the spectral theorem, and does
+The formalization is a scope restriction in three respects. It treats $n=2$,
+and $n>2$ only when one compression has simple spectrum on the ground space
+(next section); the source only sketches $n>2$ (lines~1695--1705). It takes the
+eigenbasis as given, its existence being the spectral theorem, and does
 not choose the $j$ maximizing $\delta\lambda_j$, since the bounds hold for
 every $j$. And it leaves eq.~\texttt{oibu} as
 $\sum_io(i)\le\sum_i\lVert[PM_iP,PM_jP]\rVert/\delta\lambda_j$: the
