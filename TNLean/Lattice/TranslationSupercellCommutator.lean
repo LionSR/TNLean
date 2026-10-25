@@ -14,7 +14,7 @@ lines 1603–1641), shows that for a translationally invariant system on a `d`-d
 lattice whose ground-state momenta have bounded denominators, the low-energy commutator
 `[P M_i P, P M_j P]` is exponentially small in the linear size of the system. There `M_i` is
 the truncated filtered term of eq. `mid` (lines 285–307). The argument has three steps, each
-formalized separately, for the filtered terms `H̃_i`:
+formalized separately, for the filtered terms `H_tilde_i`:
 
 * the commutator is unchanged when `j` is translated by a supercell
   (`groundCompression_commutator_eq_of_mem_supercell`), and the supercell is the subgroup fixing
@@ -30,7 +30,7 @@ formalized separately, for the filtered terms `H̃_i`:
   sites, covariant under an abelian group of translations, with momenta of denominator `N`, the
   low-energy commutator at `i` and `j` obeys the bound of eq. `blecm` at every separation `l`
   with `2R + l + N ≤ n / 2`. Taking `l = n / 2 - N - 2R` makes it exponentially small in `n`.
-  This is the statement for the filtered terms `H̃_i`.
+  This is the statement for the filtered terms `H_tilde_i`.
 * `TNLean.Lattice.norm_groundCompression_commutator_le_of_norm_sub_le`: the commutator moves by
   at most `2 ε_i ‖h_j‖ + 2 ‖h_i‖ ε_j` when the filtered terms are replaced by operators within
   `ε_i`, `ε_j` of them.
@@ -69,7 +69,7 @@ cell coordinate along one lattice direction, with `n` cells, such that edges joi
 one apart, and let `e` translate by one cell in that direction. Then for every `l` with
 `2R + l + N ≤ n / 2`, the low-energy commutator of the filtered terms at `i` and `j` obeys the
 bound of eq. `blecm` at separation `l` with the norms of `h_i` and `h_j`. This is the
-conclusion of lines 1634–1641 for the filtered terms `H̃_i`; for the source's truncated `M_i`
+conclusion of lines 1634–1641 for the filtered terms `H_tilde_i`; for the source's truncated `M_i`
 see `norm_groundCompression_commutator_truncated_le_of_momenta`. -/
 theorem norm_groundCompression_commutator_le_of_momenta [NeZero d]
     (G : SimpleGraph ι) (X : ι → Finset ι) (hX : ∀ k, k ∈ X k)
@@ -129,7 +129,7 @@ theorem norm_groundCompression_commutator_le_of_momenta [NeZero d]
 
 
 /-- **Truncated terms near filtered terms.** If the low-energy commutator of the filtered terms
-`H̃_i`, `H̃_j` is at most `B`, and the operators `M_i`, `M_j` are within `ε_i`, `ε_j` of them
+`H_tilde_i`, `H_tilde_j` is at most `B`, and the operators `M_i`, `M_j` are within `ε_i`, `ε_j` of them
 with `‖M_j‖ ≤ ‖h_j‖`, then `‖[P M_i P, P M_j P]‖ ≤ B + 2 ε_i ‖h_j‖ + 2 ‖h_i‖ ε_j`. -/
 theorem norm_groundCompression_commutator_le_of_norm_sub_le [NeZero d]
     {H : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hH : H.IsHermitian) (E₀ r ΔE : ℝ) (hr : 0 ≤ r)
@@ -192,7 +192,7 @@ theorem norm_groundCompression_commutator_le_of_norm_sub_le [NeZero d]
 `norm_groundCompression_commutator_le_of_momenta`, let `M_k` be the filter of `h_k` under the
 truncated Hamiltonian `∑_{k' ∈ s_k} h_{k'}`, the operator of eq. `mid` (Hastings,
 arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 285–307), and let `ε_i`, `ε_j` bound
-`‖H̃_i - M_i‖`, `‖H̃_j - M_j‖`, as eq. `apb` does (`norm_gaussianFilteredTerm_sub_truncated_le`).
+`‖H_tilde_i - M_i‖`, `‖H_tilde_j - M_j‖`, as eq. `apb` does (`norm_gaussianFilteredTerm_sub_truncated_le`).
 Then `‖[P M_i P, P M_j P]‖` is at most the bound of
 `norm_groundCompression_commutator_le_of_momenta` plus `2 ε_i ‖h_j‖ + 2 ‖h_i‖ ε_j`. With `l`
 of order `n` and the truncation of eq. `apb`, this is the conclusion of lines 1634–1641 for
