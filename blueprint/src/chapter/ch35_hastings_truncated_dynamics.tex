@@ -247,3 +247,44 @@ eq.~(thd) \cite{gap:hastings05_truncated_dynamics}.
     $l_{proj}$, which is the form $JO(e^{-l_{proj}/l_{fac}})$ of
     eq.~(facld) \cite{gap:hastings05_truncated_dynamics}.
 \end{remark}
+
+\begin{theorem}[The exponential decay of eq.~(facld)]
+    \label{thm:hastings_truncated_facld_decay}
+    \lean{TNLean.Lattice.exists_norm_sub_starProjection_truncated_apply_le_exp,
+        TNLean.Lattice.exists_norm_truncated_apply_sub_inner_smul_le_exp,
+        Real.add_one_pow_mul_le_mul_exp}
+    \leanok
+    \uses{thm:hastings_truncated_facld}
+    In the setting of Theorem~\ref{thm:hastings_truncated_facld}, let $J\ge0$,
+    fix $\mu>0$ and $c_1>0$ with $c_1v<\mu$, and set
+    $l_{fac}=2/\min(c_1\Delta E,\ \mu-c_1v)$. For each projection radius
+    $l\in\mathbb{N}$ let $M_l$ be the truncated filter of $W$ at
+    $q=c_1l\Delta E$, built from the terms of a set $s_l$ acting inside a
+    region $K_l\supseteq S$, such that every omitted term meeting $K_l$ lies at
+    distance at least $m=l-3R$ from $S$. Suppose the number $N_l$ of omitted
+    terms meeting $K_l$ satisfies $N_l\le K_g(l+1)^k$. Then there is a constant
+    $C'\ge0$, independent of $l$, such that for every $l$ and every ground
+    vector $\psi$ the component of $M_l\psi$ orthogonal to the ground space
+    has norm at most $\|W\|(3+C'J)e^{-l/l_{fac}}\|\psi\|$, and, if $\Omega$ is
+    a unique ground state with gap $\Delta E$,
+    $\|M_l\Omega-\langle\Omega,M_l\Omega\rangle\Omega\|\le
+        \|W\|(3+C'J)e^{-l/l_{fac}}$. This is the form $JO(e^{-l_{proj}/l_{fac}})$
+    of eq.~(facld) of \cite[lines 322--349]{Hastings2006Solving}, with the
+    polynomial growth of the shell as an explicit hypothesis
+    \cite{gap:hastings05_truncated_dynamics}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:hastings_truncated_facld}
+    Write $\delta=\min(c_1\Delta E,\ \mu-c_1v)>0$. At $q=c_1l\Delta E$ one has
+    $q/\Delta E=c_1l$, so the first term of the bound of
+    Theorem~\ref{thm:hastings_truncated_facld} is
+    $3\|W\|e^{-c_1\Delta El/2}\le3\|W\|e^{-\delta l/2}$. Since
+    $\mu m\ge\mu l-3\mu R$, the exponential of the second term is at most
+    $e^{3\mu R}e^{-(\mu-c_1v)l}\le e^{3\mu R}e^{-\delta l}$. For $a>0$ and
+    $x\ge0$, the inequality $y^{k+1}/(k+1)!\le e^{y}$ at $y=a(x+1)$ gives
+    $(x+1)^kx\le(k+1)!\,e^{a}a^{-(k+1)}e^{ax}$. With $a=\delta/2$ this bounds
+    $N_l\,l$ by a constant times $e^{\delta l/2}$, so the second term is at
+    most $\|W\|C'Je^{-\delta l/2}$.
+\end{proof}

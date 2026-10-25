@@ -1525,7 +1525,9 @@ support of `H_i`; the shell is the set of omitted terms meeting `K`, whose numbe
 at most `N(l_proj)` for the source's choice. The time integral of the
 Lieb–Robinson bound, which the source absorbs into `g(t, l_proj)`, is bounded by `T`
 times its value at `T`, and the constants are explicit. The weight of eq. `mid` is
-read as that of eq. `thd`.
+read as that of eq. `thd`. The exponential form `J O(e^{-l_proj/l_fac})` of eq. `facld`
+(lines 322–349) is formalized under an explicit polynomial bound on the number of omitted
+terms meeting `K` (scope restriction), with `l_fac = 2 / min(c₁ΔE, μ − c₁v)`.
 
 ### One-dimensional area law after Hastings: the decay length of Lemma 1
 

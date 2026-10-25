@@ -82,6 +82,26 @@ the estimate.
 \end{enumerate}
 The support of $M_i$, the bound $\|M_i\|\le\|H_i\|$ and the hermiticity of
 $M_i$ hold as stated in the source.
+
+\section{The exponential form of eq.~(facld)}
+The source states eq.~(facld), $|P_{high}M_i\Psi_a\rangle|\le
+J\,O(e^{-l_{proj}/l_{fac}})$, only to order of magnitude, with the size of the
+shell left implicit: spheres in a finite-dimensional lattice have polynomial
+size. The formalization obtains this form under an explicit hypothesis on the
+shell, a scope restriction: the number $N_l$ of omitted terms meeting $K$ at
+projection radius $l$ is at most $K_g(l+1)^k$. With $\mu>0$, $0<c_1v<\mu$,
+$q=c_1l\Delta E$ and $m=l-3R$, it gives
+\begin{align}
+  |P_{high}M_l\psi\rangle|\le\|W\|\,(3+C'J)\,e^{-l/l_{fac}}\,\|\psi\|,
+  \qquad
+  l_{fac}=\frac{2}{\min(c_1\Delta E,\ \mu-c_1v)},
+  \label{eq:hastings05_truncated_dynamics_facld_decay}
+\end{align}
+with $C'$ independent of $l$, using $(x+1)^kx\le(k+1)!\,e^{a}a^{-(k+1)}e^{ax}$
+for $a=1/l_{fac}$ to absorb the polynomial factor. A subexponential bound
+$N_l\le C_\varepsilon e^{\varepsilon l}$ would suffice with $l_{fac}$ adjusted;
+the polynomial form is the one formalized. The bound also assumes $J\ge0$,
+which holds for the source's $J$, a bound on norms.
 \bibliographystyle{unsrt}
 \bibliography{references}
 \end{document}
