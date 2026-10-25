@@ -10,7 +10,7 @@
 \date{}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{resolved}
+\gapnote{scope-restriction}{open}
 
 \section{The source argument}
 Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
@@ -60,7 +60,7 @@ $H_{g\cdot j}$.\footnote{\leanid{TNLean.Lattice.groundCompression_sitePermMatrix
 These results still take $S$ as a hypothesis; they are the steps of the
 argument below.
 
-\section{The resolution}
+\section{Removing the supercell assumption}
 The restriction was removed in two steps.
 
 \emph{The supercell from the momenta.} For an abelian group $G$, such as the
@@ -100,13 +100,22 @@ $l=\lfloor n/2\rfloor-N-2R$ makes it exponentially small in $n$. This is first
 proved for the filtered terms $\tilde H_i$, whose compressions equal those of
 the $h_i$. For the source's truncated terms $M_i$ of eq.~\texttt{mid}, within
 $\varepsilon_i$ of $\tilde H_i$ by eq.~\texttt{apb}, the commutator moves by at
-most $2\varepsilon_i\lVert h_j\rVert+2\lVert h_i\rVert\varepsilon_j$, which gives the
-conclusion of lines 1634--1641 for the
-$M_i$.\footnote{\leanid{TNLean.Lattice.norm_groundCompression_commutator_le_of_momenta},
+most $2\varepsilon_i\lVert h_j\rVert+2\lVert h_i\rVert\varepsilon_j$.\footnote{\leanid{TNLean.Lattice.norm_groundCompression_commutator_le_of_momenta},
     \leanid{TNLean.Lattice.norm_groundCompression_commutator_le_of_norm_sub_le} and
     \leanid{TNLean.Lattice.norm_groundCompression_commutator_truncated_le_of_momenta}
     in \doclink{TNLean/Lattice/TranslationSupercellCommutator}.}
 No hypothesis beyond the source's is assumed.
+
+\section{The remaining restriction}
+The errors $\varepsilon_i$ of eq.~\texttt{apb} depend on the truncation radius
+$l_{proj}$ and not on $n$, so the bound for the truncated $M_i$ is not
+exponentially small in $n$. The source avoids this by applying the Gaussian
+filter a second time to $M_i$ itself: $P\tilde M_i^0P=PM_iP$, and the
+low-energy commutator of the $M_i$ obeys eq.~\texttt{blecm} directly
+(lines 1555--1601). Elimination: state eq.~\texttt{blecm} for the $M_i$ as
+operators supported within $l_{proj}$ of $i$, require the truncations to be
+covariant, $s_{g\cdot k}=g\cdot s_k$, so that $M_{g\cdot k}=P_gM_kP_g^\dagger$,
+and run the supercell argument above on the $M_i$.
 
 \section{A slip}
 At line 1638 the source writes the distance ``between $(\vec x_1,y_2)$ and

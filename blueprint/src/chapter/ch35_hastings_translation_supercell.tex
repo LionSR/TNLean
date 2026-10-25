@@ -257,7 +257,7 @@ the residue of the site.
     $\|h_{g\cdot j}\|=\|P_gh_jP_g^\dagger\|=\|h_j\|$.
 \end{proof}
 
-\begin{theorem}[The source's truncated terms]
+\begin{theorem}[The truncated terms up to their truncation errors]
     \label{thm:hastings_supercell_commutator_truncated}
     \lean{TNLean.Lattice.norm_groundCompression_commutator_le_of_norm_sub_le,
         TNLean.Lattice.norm_groundCompression_commutator_truncated_le_of_momenta}
@@ -271,9 +271,10 @@ the residue of the site.
     $\lVert\tilde H_j-M_j\rVert\le\varepsilon_j$, as eq.~\texttt{apb} provides.
     Then $\lVert[PM_iP,PM_jP]\rVert$ is at most the bound of
     Theorem~\ref{thm:hastings_supercell_commutator_small} plus
-    $2\varepsilon_i\lVert h_j\rVert+2\lVert h_i\rVert\varepsilon_j$. This is the
-    conclusion of \cite[lines 1634--1641]{Hastings2006Solving} for the
-    source's $M_i$.
+    $2\varepsilon_i\lVert h_j\rVert+2\lVert h_i\rVert\varepsilon_j$. The errors of
+    eq.~\texttt{apb} do not decrease with $n$, so this does not yet give the
+    exponential smallness in $n$ of \cite[lines 1634--1641]{Hastings2006Solving}
+    for the $M_i$ \cite{gap:hastings05_translation_supercell}.
 \end{theorem}
 \begin{proof}\leanok
     Write $A=P\tilde H_iP$, $A'=PM_iP$, $B=P\tilde H_jP$ and $B'=PM_jP$. Then
