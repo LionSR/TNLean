@@ -17,7 +17,9 @@ run_cmd do
   for decl in #[``exp_neg_sq_div_eq_of_time_eq,
       ``norm_gaussianFilteredTerm_sub_truncated_le_of_time,
       ``norm_sub_starProjection_truncated_apply_le,
-      ``norm_truncated_apply_sub_inner_smul_le] do
+      ``norm_truncated_apply_sub_inner_smul_le,
+      ``norm_sum_truncated_sub_le,
+      ``norm_sum_truncated_sub_le_card] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl

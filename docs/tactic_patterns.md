@@ -9314,3 +9314,20 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Status:** Two independent calculations in two modules; below the promotion
   threshold. The qutrit proof reuses the existing Ky Fan overlap theorem and
   the actual MPS cut-rank bound rather than repeating their proofs.
+
+### Linear bounds for regional-entropy suprema — candidate (2026-10-17)
+
+- **Pattern:** apply `Real.sSup_le` with a nonnegative linear target, unpack
+  a physical entropy witness, and use its rectangle-size bound to increase
+  the scale to the scale of the supremum.
+- **Seen:** `exists_initialBuffer_and_real_boxEntropy_recurrence` in
+  `PEPS/AreaLaw/SafeRectangleAreaLaw.lean` and
+  `exists_uniform_boxEntropy_improvement_real` in
+  `PEPS/AreaLaw/Scan/RealBoxEntropyImprovement.lean`.
+- **Abstraction:** both uses apply Mathlib's `Real.sSup_le` directly and
+  share the pointwise theorem
+  `exists_regionalEntropy_safe_rect_le_linear`. A further helper is
+  deferred until another proof repeats this physical collection.
+- **Notes:** the nonnegative target also covers the empty collection.
+  The earlier monotonicity candidate uses the same Mathlib theorem with
+  inclusion of collections in place of a pointwise linear estimate.
