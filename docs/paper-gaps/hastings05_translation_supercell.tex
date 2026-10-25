@@ -17,8 +17,9 @@ Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
 \href{https://arxiv.org/abs/cond-mat/0508554v3}{arXiv:cond-mat/0508554v3},
 source \path{proj3new.tex}, lines 1603--1642, considers a translationally
 invariant system on a $d$-dimensional lattice with $n$ ground states, and the
-filtered local terms $M_i$ with their compressions $P M_i P$ to the ground
-space. Choosing the ground states as eigenvectors of the translations, with
+local terms $M_i$ with their compressions $P M_i P$ to the ground space. Here
+$M_i$ is the truncated filtered term of eq.~\texttt{mid} (lines 285--307),
+within the error of eq.~\texttt{apb} of the filtered term $\tilde H_i$. Choosing the ground states as eigenvectors of the translations, with
 momenta $\vec k_a$, the matrix elements satisfy
 $(M_{\vec x,y})_{ab}=(M_{\vec x+\vec x',y})_{ab}
 \exp[i\vec x'\cdot(\vec k_a-\vec k_b)]$ (lines 1613--1618).
@@ -95,9 +96,15 @@ diameter at most $R$ containing their sites, covariant under an abelian
 translation group with momenta of denominator $N$, and a gap above $E_0$, the
 low-energy commutator at $i$ and $j$ obeys the bound of eq.~\texttt{blecm} at
 every separation $l$ with $2R+l+N\le\lfloor n/2\rfloor$. Taking
-$l=\lfloor n/2\rfloor-N-2R$ makes it exponentially small in $n$, which is the
-conclusion of lines
-1634--1641.\footnote{\leanid{TNLean.Lattice.norm_groundCompression_commutator_le_of_momenta}
+$l=\lfloor n/2\rfloor-N-2R$ makes it exponentially small in $n$. This is first
+proved for the filtered terms $\tilde H_i$, whose compressions equal those of
+the $h_i$. For the source's truncated terms $M_i$ of eq.~\texttt{mid}, within
+$\varepsilon_i$ of $\tilde H_i$ by eq.~\texttt{apb}, the commutator moves by at
+most $2\varepsilon_i\lVert h_j\rVert+2\lVert h_i\rVert\varepsilon_j$, which gives the
+conclusion of lines 1634--1641 for the
+$M_i$.\footnote{\leanid{TNLean.Lattice.norm_groundCompression_commutator_le_of_momenta},
+    \leanid{TNLean.Lattice.norm_groundCompression_commutator_le_of_norm_sub_le} and
+    \leanid{TNLean.Lattice.norm_groundCompression_commutator_truncated_le_of_momenta}
     in \doclink{TNLean/Lattice/TranslationSupercellCommutator}.}
 No hypothesis beyond the source's is assumed.
 

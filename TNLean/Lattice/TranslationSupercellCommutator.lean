@@ -12,8 +12,9 @@ import TNLean.Lattice.TranslationSupercellSpacing
 Hastings, *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, `proj3new.tex`,
 lines 1603–1641), shows that for a translationally invariant system on a `d`-dimensional
 lattice whose ground-state momenta have bounded denominators, the low-energy commutator
-`[P M_i P, P M_j P]` of the filtered terms is exponentially small in the linear size of the
-system. The argument has three steps, each formalized separately:
+`[P M_i P, P M_j P]` is exponentially small in the linear size of the system. There `M_i` is
+the truncated filtered term of eq. `mid` (lines 285–307). The argument has three steps, each
+formalized separately, for the filtered terms `H̃_i`:
 
 * the commutator is unchanged when `j` is translated by a supercell
   (`groundCompression_commutator_eq_of_mem_supercell`), and the supercell is the subgroup fixing
@@ -29,6 +30,13 @@ system. The argument has three steps, each formalized separately:
   sites, covariant under an abelian group of translations, with momenta of denominator `N`, the
   low-energy commutator at `i` and `j` obeys the bound of eq. `blecm` at every separation `l`
   with `2R + l + N ≤ n / 2`. Taking `l = n / 2 - N - 2R` makes it exponentially small in `n`.
+  This is the statement for the filtered terms `H̃_i`.
+* `TNLean.Lattice.norm_groundCompression_commutator_le_of_norm_sub_le`: the commutator moves by
+  at most `2 ε_i ‖h_j‖ + 2 ‖h_i‖ ε_j` when the filtered terms are replaced by operators within
+  `ε_i`, `ε_j` of them.
+* `TNLean.Lattice.norm_groundCompression_commutator_truncated_le_of_momenta`: the same bound,
+  up to the truncation errors of eq. `apb`, for the truncated terms `M_i` of eq. `mid`, the
+  source's conclusion.
 -/
 
 open Matrix GaussianFilter QuantumCircuit
@@ -61,7 +69,8 @@ cell coordinate along one lattice direction, with `n` cells, such that edges joi
 one apart, and let `e` translate by one cell in that direction. Then for every `l` with
 `2R + l + N ≤ n / 2`, the low-energy commutator of the filtered terms at `i` and `j` obeys the
 bound of eq. `blecm` at separation `l` with the norms of `h_i` and `h_j`. This is the
-conclusion of lines 1634–1641. -/
+conclusion of lines 1634–1641 for the filtered terms `H̃_i`; for the source's truncated `M_i`
+see `norm_groundCompression_commutator_truncated_le_of_momenta`. -/
 theorem norm_groundCompression_commutator_le_of_momenta [NeZero d]
     (G : SimpleGraph ι) (X : ι → Finset ι) (hX : ∀ k, k ∈ X k)
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
@@ -117,5 +126,116 @@ theorem norm_groundCompression_commutator_le_of_momenta [NeZero d]
     (supercell Γ d (∑ k, h k) E₀)
     (fun g hg v hv ↦ sitePermMatrix_mulVec_eq_of_mem_supercell hInv hg v hv) hg i j l hsep hT
   rwa [hcov, norm_sitePermMatrix_mul_mul_conjTranspose] at hmain
+
+
+/-- **Truncated terms near filtered terms.** If the low-energy commutator of the filtered terms
+`H̃_i`, `H̃_j` is at most `B`, and the operators `M_i`, `M_j` are within `ε_i`, `ε_j` of them
+with `‖M_j‖ ≤ ‖h_j‖`, then `‖[P M_i P, P M_j P]‖ ≤ B + 2 ε_i ‖h_j‖ + 2 ‖h_i‖ ε_j`. -/
+theorem norm_groundCompression_commutator_le_of_norm_sub_le [NeZero d]
+    {H : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hH : H.IsHermitian) (E₀ r ΔE : ℝ) (hr : 0 ≤ r)
+    {hi hj Mi Mj : Matrix (ι → Fin d) (ι → Fin d) ℂ} {B εi εj : ℝ}
+    (hB : ‖groundCompression H E₀ (gaussianFilteredTerm r ΔE H hi) *
+          groundCompression H E₀ (gaussianFilteredTerm r ΔE H hj) -
+        groundCompression H E₀ (gaussianFilteredTerm r ΔE H hj) *
+          groundCompression H E₀ (gaussianFilteredTerm r ΔE H hi)‖ ≤ B)
+    (hεi : ‖gaussianFilteredTerm r ΔE H hi - Mi‖ ≤ εi)
+    (hεj : ‖gaussianFilteredTerm r ΔE H hj - Mj‖ ≤ εj) (hMj : ‖Mj‖ ≤ ‖hj‖) :
+    ‖groundCompression H E₀ Mi * groundCompression H E₀ Mj -
+        groundCompression H E₀ Mj * groundCompression H E₀ Mi‖ ≤
+      B + 2 * εi * ‖hj‖ + 2 * ‖hi‖ * εj := by
+  have hC (W : Matrix (ι → Fin d) (ι → Fin d) ℂ) : ‖groundCompression H E₀ W‖ ≤ ‖W‖ := by
+    have hP := (groundEigenspace H E₀).starProjection_norm_le
+    unfold groundCompression
+    calc _ ≤ ‖(groundEigenspace H E₀).starProjection‖ *
+          ‖toEuclideanCLM (n := ι → Fin d) (𝕜 := ℂ) W‖ *
+          ‖(groundEigenspace H E₀).starProjection‖ :=
+          (norm_mul_le _ _).trans (mul_le_mul_of_nonneg_right (norm_mul_le _ _) (norm_nonneg _))
+      _ ≤ 1 * ‖W‖ * 1 := by rw [l2_opNorm_toEuclideanCLM]; gcongr
+      _ = ‖W‖ := by ring
+  have hsub (W W' : Matrix (ι → Fin d) (ι → Fin d) ℂ) :
+      groundCompression H E₀ W - groundCompression H E₀ W' = groundCompression H E₀ (W - W') := by
+    unfold groundCompression
+    rw [map_sub, mul_sub, sub_mul]
+  set A := groundCompression H E₀ (gaussianFilteredTerm r ΔE H hi)
+  set Bc := groundCompression H E₀ (gaussianFilteredTerm r ΔE H hj)
+  set A' := groundCompression H E₀ Mi
+  set B' := groundCompression H E₀ Mj
+  have hA : ‖A‖ ≤ ‖hi‖ := by
+    simp only [A, groundCompression_gaussianFilteredTerm hr hH]; exact hC hi
+  have hB' : ‖B'‖ ≤ ‖hj‖ := (hC Mj).trans hMj
+  have hdA : ‖A' - A‖ ≤ εi := by
+    rw [norm_sub_rev, hsub]; exact (hC _).trans hεi
+  have hdB : ‖B' - Bc‖ ≤ εj := by
+    rw [norm_sub_rev, hsub]; exact (hC _).trans hεj
+  have key : A' * B' - B' * A' =
+      (A * Bc - Bc * A) + ((A' - A) * B' - B' * (A' - A)) + (A * (B' - Bc) - (B' - Bc) * A) := by
+    simp only [sub_mul, mul_sub]
+    abel
+  have hnc {x y : EuclideanSpace ℂ (ι → Fin d) →L[ℂ] EuclideanSpace ℂ (ι → Fin d)} :
+      ‖x * y - y * x‖ ≤ 2 * ‖x‖ * ‖y‖ :=
+    (norm_sub_le _ _).trans (by
+      have := norm_mul_le x y; have := norm_mul_le y x; nlinarith [norm_nonneg x, norm_nonneg y])
+  rw [key]
+  have e1 : ‖(A' - A) * B' - B' * (A' - A)‖ ≤ 2 * εi * ‖hj‖ := by
+    have h1 := mul_le_mul hdA hB' (norm_nonneg _) ((norm_nonneg _).trans hdA)
+    have := hnc (x := A' - A) (y := B')
+    nlinarith
+  have e2 : ‖A * (B' - Bc) - (B' - Bc) * A‖ ≤ 2 * ‖hi‖ * εj := by
+    have h1 := mul_le_mul hA hdB (norm_nonneg _) (norm_nonneg _)
+    have := hnc (x := A) (y := B' - Bc)
+    nlinarith
+  have h3 := norm_add₃_le (a := A * Bc - Bc * A) (b := (A' - A) * B' - B' * (A' - A))
+    (c := A * (B' - Bc) - (B' - Bc) * A)
+  linarith
+
+/-- **The low-energy commutator of Hastings' truncated terms.** In the setting of
+`norm_groundCompression_commutator_le_of_momenta`, let `M_k` be the filter of `h_k` under the
+truncated Hamiltonian `∑_{k' ∈ s_k} h_{k'}`, the operator of eq. `mid` (Hastings,
+arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 285–307), and let `ε_i`, `ε_j` bound
+`‖H̃_i - M_i‖`, `‖H̃_j - M_j‖`, as eq. `apb` does (`norm_gaussianFilteredTerm_sub_truncated_le`).
+Then `‖[P M_i P, P M_j P]‖` is at most the bound of
+`norm_groundCompression_commutator_le_of_momenta` plus `2 ε_i ‖h_j‖ + 2 ‖h_i‖ ε_j`. With `l`
+of order `n` and the truncation of eq. `apb`, this is the conclusion of lines 1634–1641 for
+the source's `M_i`. -/
+theorem norm_groundCompression_commutator_truncated_le_of_momenta [NeZero d]
+    (G : SimpleGraph ι) (X : ι → Finset ι) (hX : ∀ k, k ∈ X k)
+    (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
+    (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
+    (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
+    (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
+    (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
+    {Γ : Type*} [CommGroup Γ] [MulAction Γ ι]
+    (hcov : ∀ (g : Γ) k, h (g • k) = sitePermMatrix d g * h k * (sitePermMatrix d g)ᴴ)
+    (Kg : ℝ) (kg : ℕ)
+    (hGrowth : ∀ x (r : ℕ),
+      ((Finset.univ.filter fun y => G.edist x y = r).card : ℝ) ≤ Kg * ((r : ℝ) + 1) ^ kg)
+    {r q ΔE : ℝ} (hr : 0 ≤ r) (hq : 0 ≤ q) (hΔE : 0 < ΔE) (hH : (∑ k, h k).IsHermitian)
+    {E₀ : ℝ} (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k)
+    {N : ℕ} (hN : 0 < N)
+    (hden : ∀ χ : Γ →* ℂ, momentumSector Γ d (∑ k, h k) E₀ χ ≠ ⊥ → ∀ g, χ g ^ N = 1)
+    {n : ℕ} [NeZero n] (π : ι → ZMod n)
+    (hπ : ∀ u v, G.Adj u v → (π v - π u).valMinAbs.natAbs ≤ 1)
+    (e : Γ) (he : ∀ v, π (e • v) = π v + 1)
+    (i j : ι) (l : ℕ) (hl : 2 * R + l + N ≤ n / 2) {T : ℝ} (hT : 0 ≤ T)
+    (s : ι → Finset ι) {εi εj : ℝ}
+    (hεi : ‖gaussianFilteredTerm r ΔE (∑ k, h k) (h i) -
+      gaussianFilteredTerm r ΔE (∑ k ∈ s i, h k) (h i)‖ ≤ εi)
+    (hεj : ‖gaussianFilteredTerm r ΔE (∑ k, h k) (h j) -
+      gaussianFilteredTerm r ΔE (∑ k ∈ s j, h k) (h j)‖ ≤ εj) :
+    ‖groundCompression (∑ k, h k) E₀ (gaussianFilteredTerm r ΔE (∑ k ∈ s i, h k) (h i)) *
+          groundCompression (∑ k, h k) E₀ (gaussianFilteredTerm r ΔE (∑ k ∈ s j, h k) (h j)) -
+        groundCompression (∑ k, h k) E₀ (gaussianFilteredTerm r ΔE (∑ k ∈ s j, h k) (h j)) *
+          groundCompression (∑ k, h k) E₀ (gaussianFilteredTerm r ΔE (∑ k ∈ s i, h k) (h i))‖ ≤
+      (2 * ‖h j‖ *
+          ((2 + 4 * |b₀| * Real.exp (2 * R)) * ((X i).card : ℝ) ^ 2 * ‖h i‖ * Kg *
+              (2 ^ kg * kg.factorial * Real.exp (1 / 2) / (1 - Real.exp (-(1 / 2)))) *
+              Real.exp ((2 * vR * |b₀| * Real.exp (2 * R) + 1) * T - l / 2) +
+            2 * ‖h i‖ * Real.exp (-(T * ΔE) ^ 2 / (2 * q))) +
+        2 * ‖h i‖ * ‖h j‖ * Real.exp (-q / 2))
+        + 2 * εi * ‖h j‖ + 2 * ‖h i‖ * εj :=
+  norm_groundCompression_commutator_le_of_norm_sub_le hH E₀ r ΔE hr
+    (norm_groundCompression_commutator_le_of_momenta G X hX h hHerm hSupport R hDiam vR hCard b₀
+      hBudget hcov Kg kg hGrowth hr hq hΔE hH hgap hN hden π hπ e he i j l hl hT) hεi hεj
+    (norm_gaussianFilteredTerm_le _ _ (Matrix.isHermitian_sum _ fun k _ ↦ hHerm k) _)
 
 end TNLean.Lattice

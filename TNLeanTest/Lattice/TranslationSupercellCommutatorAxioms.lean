@@ -14,7 +14,9 @@ run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[
       ``TNLean.Lattice.norm_sitePermMatrix_mul_mul_conjTranspose,
-      ``TNLean.Lattice.norm_groundCompression_commutator_le_of_momenta] do
+      ``TNLean.Lattice.norm_groundCompression_commutator_le_of_momenta,
+      ``TNLean.Lattice.norm_groundCompression_commutator_le_of_norm_sub_le,
+      ``TNLean.Lattice.norm_groundCompression_commutator_truncated_le_of_momenta] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl

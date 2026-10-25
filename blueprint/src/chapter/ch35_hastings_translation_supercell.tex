@@ -242,8 +242,8 @@ the residue of the site.
     terms at $i$ and $j$ obeys the bound of
     Theorem~\ref{thm:hastings05_blecm} at separation $l$, with the norms of $h_i$
     and $h_j$. Taking $l=\lfloor n/2\rfloor-q-2R$ makes it exponentially small in
-    $n$, which is the conclusion of
-    \cite[lines 1603--1641]{Hastings2006Solving}.
+    $n$. This is the conclusion of \cite[lines 1603--1641]{Hastings2006Solving}
+    for the filtered terms $\tilde H_i$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_supercell_of_momenta,thm:hastings_supercell_far,
@@ -255,6 +255,32 @@ the residue of the site.
     ground space by Theorem~\ref{thm:hastings_supercell_of_momenta}, so
     Theorem~\ref{thm:hastings_supercell_decay} applies, and
     $\|h_{g\cdot j}\|=\|P_gh_jP_g^\dagger\|=\|h_j\|$.
+\end{proof}
+
+\begin{theorem}[The source's truncated terms]
+    \label{thm:hastings_supercell_commutator_truncated}
+    \lean{TNLean.Lattice.norm_groundCompression_commutator_le_of_norm_sub_le,
+        TNLean.Lattice.norm_groundCompression_commutator_truncated_le_of_momenta}
+    \leanok
+    \uses{thm:hastings_supercell_commutator_small}
+    In the setting of Theorem~\ref{thm:hastings_supercell_commutator_small}, let
+    $M_k$ be the filter of $h_k$ under a truncated Hamiltonian
+    $\sum_{k'\in s_k}h_{k'}$, the term of eq.~\texttt{mid} of
+    \cite[lines 285--307]{Hastings2006Solving}, and let
+    $\lVert\tilde H_i-M_i\rVert\le\varepsilon_i$ and
+    $\lVert\tilde H_j-M_j\rVert\le\varepsilon_j$, as eq.~\texttt{apb} provides.
+    Then $\lVert[PM_iP,PM_jP]\rVert$ is at most the bound of
+    Theorem~\ref{thm:hastings_supercell_commutator_small} plus
+    $2\varepsilon_i\lVert h_j\rVert+2\lVert h_i\rVert\varepsilon_j$. This is the
+    conclusion of \cite[lines 1634--1641]{Hastings2006Solving} for the
+    source's $M_i$.
+\end{theorem}
+\begin{proof}\leanok
+    Write $A=P\tilde H_iP$, $A'=PM_iP$, $B=P\tilde H_jP$ and $B'=PM_jP$. Then
+    $[A',B']=[A,B]+[A'-A,B']+[A,B'-B]$. Compression by $P$ does not increase
+    the norm, $\lVert B'\rVert\le\lVert M_j\rVert\le\lVert h_j\rVert$, and
+    $\lVert A\rVert\le\lVert h_i\rVert$, so the last two commutators are at most
+    $2\varepsilon_i\lVert h_j\rVert$ and $2\lVert h_i\rVert\varepsilon_j$.
 \end{proof}
 
 At line 1638 the source writes the first site as $(\vec x_1,y_2)$ where
