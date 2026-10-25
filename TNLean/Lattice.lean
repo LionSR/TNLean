@@ -52,5 +52,6 @@ import TNLean.Lattice.SupportedUnitaryEntropy
 import TNLean.Lattice.TranslationMomentum
 import TNLean.Lattice.TranslationSupercell
 import TNLean.Lattice.TranslationSupercellDecay
+import TNLean.Lattice.TranslationSupercellSpacing
 import TNLean.Lattice.VariationalLowerBound
 import TNLean.Lattice.ZeroEntropy
