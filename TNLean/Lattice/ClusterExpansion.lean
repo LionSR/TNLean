@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Lattice.ClusterExpansion
 
 import TNLean.Lattice.ClusterExpansion.AllTemperatures
+import TNLean.Lattice.ClusterExpansion.ClusterFactorization
 import TNLean.Lattice.ClusterExpansion.ClusterPart
 import TNLean.Lattice.ClusterExpansion.Percolation
 import TNLean.Lattice.ClusterExpansion.TemperatureError

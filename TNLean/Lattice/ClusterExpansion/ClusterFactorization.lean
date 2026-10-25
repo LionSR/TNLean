@@ -17,13 +17,15 @@ cluster", and in the matrix product construction (lines 1256–1279) uses that "
 which include a given cluster is some operator acting on the sites in the cluster". This file
 proves the algebraic content of these two remarks.
 
-The terms are labelled by `κ`, a graph `G` on `κ` records which terms overlap, and terms that do
-not overlap commute. For a set `A` of terms let `E_A = clusterOp h A β` be the sum of the terms of
-the power series of `e^{-βH}` whose set of letters is exactly `A`; by inclusion and exclusion,
+The terms are labelled by `κ`, and a graph `G` on `κ` records which terms overlap; the product
+results assume that terms that do not overlap commute. For a set `A` of terms let
+`E_A = clusterOp h A β` be the sum of the terms of the power series of `e^{-βH}` whose set of
+letters is exactly `A`; by inclusion and exclusion,
 `E_A = ∑_{D ⊆ A} (-1)^{|A \ D|} e^{-β H_D}`. Then
 
 * `ρ(β, l) = ∑_A E_A`, the sum over the sets `A` of terms none of whose clusters is large;
-* `E_{A ∪ B} = E_A E_B` when the terms of `A` commute with those of `B`;
+* `E_{A ∪ B} = E_A E_B` when `A` and `B` are disjoint and the terms of `A` commute with those of
+  `B`;
 * hence `E_A` is the product, in any order, of `E_C` over the clusters `C` of `A`, and
   `ρ(β, l) = ∑_A ∏_{C cluster of A} E_C`;
 * `E_C` acts on the sites of the terms of `C`.
@@ -170,7 +172,7 @@ theorem clusterOp_union (h : κ → Matrix ι ι ℂ) {A B : Finset κ} (hAB : D
     simp only [mem_product, mem_powerset] at hp
     obtain ⟨D₁, D₂⟩ := p
     have h1 : D₂ ∩ A = ∅ :=
-      disjoint_iff_inter_eq_empty.1 ((hAB.symm.mono_left hp.2))
+      disjoint_iff_inter_eq_empty.1 (hAB.symm.mono_left hp.2)
     have h2 : D₁ ∩ B = ∅ := disjoint_iff_inter_eq_empty.1 (hAB.mono_left hp.1)
     simp only [union_inter_distrib_right, h1, h2, union_empty, empty_union,
       inter_eq_left.2 hp.1, inter_eq_left.2 hp.2]
@@ -232,8 +234,8 @@ section Clusters
 variable {κ : Type*} [Fintype κ] [DecidableEq κ] (G : SimpleGraph κ) [DecidableRel G.Adj]
 
 open Classical in
-/-- The clusters of a set `A` of terms: the connected subsets of `A` that no other term of `A`
-overlaps. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1096–1102. -/
+/-- The clusters of a set `A` of terms: the connected subsets of `A` to which no other term of `A`
+is adjacent. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1096–1102. -/
 noncomputable def clusters (A : Finset κ) : Finset (Finset κ) :=
   {C ∈ A.powerset | IsCluster G A C}
 
