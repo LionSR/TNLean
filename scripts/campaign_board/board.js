@@ -19,6 +19,20 @@
   };
   const GAP_STATUS = { open: ["Open", "st-draft"], "resolved-pending": ["Resolved in an open PR", "st-review"], resolved: ["Resolved", "st-done"] };
 
+  /* ---------- paper result metadata ---------- */
+  const resultHeading = r => [r.kind, r.num].filter(Boolean).join(" ");
+  const resultName = (r, names = {}) => r.name || (r.label && names[r.label]) || r.label || resultHeading(r);
+  const resultSection = r => {
+    const section = r.num ? Number(r.num.split(".")[0]) : NaN;
+    return Number.isFinite(section) && section > 0 ? section : null;
+  };
+  const resultGapMatches = (r, g) => {
+    if (g.paper !== r.paper) return false;
+    const prefixes = [r.num && `${r.kind} ${r.num}`, r.label && `${r.kind} ${r.label}`].filter(Boolean);
+    if (!r.num && r.kind === "Theorem" && /^(?:Main theorem|Theorem)(?=\s*[,(:—]|$)/i.test(g.result || "")) return true;
+    return prefixes.some(prefix => new RegExp("^" + prefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b", "i").test(g.result || ""));
+  };
+
   /* ---------- time ---------- */
   const generated = new Date(D.generatedAt);
   const now = new Date(Math.max(Date.now(), +generated));
@@ -91,7 +105,7 @@
   };
   /** Open gap entries, other than conventions, whose result field begins with this paper result, as "Lemma 8.2, ...". */
   const gapsOf = r => (((D.gaps || {}).entries || []).filter(g => g.paper === r.paper && (g.status || "open") === "open" && g.kind !== "convention"
-    && new RegExp(`^${r.kind} ${r.num.replace(/\./g, "\\.")}\\b`).test(g.result || "")));
+    && resultGapMatches(r, g)));
   /** Status of a paper result: all its issues closed counts as proved only when no open gap entry names it. */
   const resultStatus = r => {
     const s = leastStatus(r.issues);
@@ -423,7 +437,7 @@
         const results = D.results.filter(r => r.paper === route.paper && !assigned.has(r) && r.issues.some(n => st.issues.includes(n))
           && (!st.results || st.results.includes(r.label)));
         results.forEach(r => assigned.add(r));
-        const sections = [...new Set(results.map(r => +r.num.split(".")[0]).filter(Number.isFinite))].sort((a, b) => a - b);
+        const sections = [...new Set(results.map(resultSection).filter(n => n !== null))].sort((a, b) => a - b);
         const prs = [...new Set([...items.flatMap(i => i.prs), ...direct])];
         // Dependency bumps and CI changes are not part of the stage's mathematics.
         const landed = prs.filter(p => p.kind === "merged" && !ROUTINE.test(p.title)).sort((a, b) => new Date(a.mergedAt) - new Date(b.mergedAt));
@@ -433,8 +447,8 @@
 
         const resultList = el("ul", { class: "results" }, ...results.map(r => {
           const rs = resultStatus(r);
-          const name = r.name || (C.resultNames || {})[r.label] || r.label;
-          const li = el("li", {}, el("i", { class: "rd st-" + rs, title: STATUS[rs] + (gapsOf(r).length ? "; an open gap entry names this result" : "") }), el("span", {}, r.url ? ext(r.url, name) : name, " ", el("span", { class: "rn", text: `${r.kind} ${r.num}` })));
+          const name = resultName(r, C.resultNames);
+          const li = el("li", {}, el("i", { class: "rd st-" + rs, title: STATUS[rs] + (gapsOf(r).length ? "; an open gap entry names this result" : "") }), el("span", {}, r.url ? ext(r.url, name) : name, " ", el("span", { class: "rn", text: resultHeading(r) })));
           if (r.gate) li.title = r.gate;
           return li;
         }));

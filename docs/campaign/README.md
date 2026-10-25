@@ -47,6 +47,19 @@ their tracker (`scope: "tracker"`).
 
 ## Building a board locally
 
+Tracker result tables may use the explicit columns `Result`, `Label/name in the
+source`, `Issues`, and `Completion` (with further explanatory columns afterward).
+The first cell names the printed result, such as `Lemma 1.7` or `Claim 2.1`;
+an unnumbered theorem is written `Unnumbered theorem`, without an invented number.
+The second cell may start with its actual backticked source label, including a
+bare label such as `ble`, followed by an em dash and a descriptive name. Leave
+that label absent when the paper has none; an equation label inside a theorem
+need not be treated as the theorem's label. The third cell contains the work
+issue numbers, rather than pull requests mentioned in coverage descriptions.
+Equations, conjectures and imported-reference rows whose first cell does not
+name a result are not counted. Existing tables retain their earlier parsing
+rules. Run `python3 scripts/test_campaign_results.py` to check both formats.
+
 From the TNLean checkout root, with `gh` authenticated and a QICLean clone at
 `../QICLean`:
 
