@@ -21,6 +21,7 @@ Source: arXiv:0705.0292v2, `paper_v2.tex`, lines 471–479.
 
 namespace TNLean.MPS.AreaLaw.EntropyScaling
 open Matrix
+open scoped ComplexOrder
 
 /-- The optimized scalar error dominates the lost squared fidelity. -/
 private theorem one_sub_le_error {f : ℝ} (hf₀ : 0 ≤ f) (hf₁ : f ≤ 1) :
