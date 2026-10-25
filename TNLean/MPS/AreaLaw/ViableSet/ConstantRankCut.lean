@@ -36,14 +36,14 @@ QICLean gives the energy bound `E₀ + (δ + 2 √(2η)) / (1 - 2η)` when `2η 
 Third (Corollary `c:1`), taking `w = Ω` gives a unit vector of rank at most `B_δ` across the
 cut, with overlap at least `1 - δ` with `Ω` and energy at most `E₀ + 4 √δ / (1 - 4δ)`.
 
-**Scope restriction (constant B_δ):** the source states `B_δ = exp (O (1/ε log³ d log 1/δ))`,
-quoting Hastings and Arad, Kitaev, Landau and Vazirani. The bond dimension here is
-`⌊exp (C + 32 s log (2 e^{e/2} / δ))⌋`, with `C` the interval entropy bound and
-`s = √((1 + J/Δ) b)` from the area law of this library. It has the same structure, independent
-of `L` and of the cut and the exponential of an affine function of `log 1/δ`, but different
-constants; and the Hamiltonian is a chain Hamiltonian of range `R` and strength `J` rather than
-a nearest-neighbour sum with `0 ≤ H_i ≤ 1`. Documented in
-`docs/paper-gaps/lvv13_constant_bond.tex`.
+**Local fix (constant B_δ):** the source states `B_δ = exp (O (1/ε log³ d log 1/δ))`, quoting
+Hastings and Arad, Kitaev, Landau and Vazirani. The theorems here hold under the source's
+hypotheses with the bond dimension `⌊exp (C + 32 s log (2 e^{e/2} / δ))⌋` in its place, where
+`C` is the interval entropy bound and `s = √((1 + J/Δ) b)` comes from the area law of this
+library. It has the same structure: it is independent of `L` and of the cut, and it is the
+exponential of an affine function of `log 1/δ`. Only the constants differ. The source's
+nearest-neighbour Hamiltonian with `0 ≤ H_i ≤ 1` is the case `R = 1`, `J = 1` of the chain
+Hamiltonians used here. Documented in `docs/paper-gaps/lvv13_constant_bond.tex`.
 
 **Local fix (energy after trimming):** the proof of Lemma `l:2` in the source drops three
 constants and the printed bound `ε₀ + 6 √δ` does not follow from it. The bound here is
