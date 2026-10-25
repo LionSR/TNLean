@@ -102,7 +102,7 @@ smaller trimming error recovers the energy bound of the source's corollary.
     \uses{def:chain_model}
     For a chain of local dimension $q$ with range $R$, term norms at most $J$
     and gap $\Delta>0$, let $C_{\mathrm{int}}$ be the interval entropy bound,
-    $s=\sqrt{(1+J/\Delta)B_R}$, and $0<\delta\le1$. Put
+    $s=\sqrt{(1+J/\Delta)B_R}$, and $\delta>0$. Put
     \begin{align}
         B_\delta=\Bigl\lfloor\exp\Bigl(C_{\mathrm{int}}
         +32s\log\frac{2e^{e/2}}{\delta}\Bigr)\Bigr\rfloor. \notag
@@ -122,7 +122,7 @@ smaller trimming error recovers the energy bound of the source's corollary.
     \uses{def:chain_trim, def:chain_constant_bond}
     Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
     finite-range Hamiltonian with term norms at most $J\ge0$ on a chain of
-    local dimension $q\ge1$, and let $0<\delta\le1$. For every cut $k$ and
+    local dimension $q\ge1$, and let $\delta>0$. For every cut $k$ and
     every trimming projection $P$ of $\Omega$ at $B_\delta$ across the cut $k$,
     the vector $v=\operatorname{trim}^k_P\Omega/
         \|\operatorname{trim}^k_P\Omega\|$ satisfies
@@ -171,7 +171,7 @@ smaller trimming error recovers the energy bound of the source's corollary.
         \le E_0+\frac{\delta+2\sqrt{2\eta}}{1-2\eta}. \notag
     \end{align}
     For a finite-range chain Hamiltonian that splits in this way at the cut
-    $k$, this holds at $B=B_{\delta_B}$ for every $0<\delta_B\le1$. In the
+    $k$, this holds at $B=B_{\delta_B}$ for every $\delta_B>0$. In the
     source $H$ is a sum of nearest-neighbour terms $0\le H_i\le1$ and $K$ is
     the term across the cut; its printed bound $E_0+6\sqrt\delta$ does not
     follow from its argument \cite{gap:lvv13_trimming_energy}.

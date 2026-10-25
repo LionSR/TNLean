@@ -1632,7 +1632,7 @@ form remains open under issue #9811.
   independent of the chain length and the cut, which is all the later steps of
   the source use, and the theorems hold under the source's hypotheses. The
   source's constant would follow from the bound of Arad, Kitaev, Landau and
-  Vazirani, arXiv:1301.1162. The lemma is formalized for `0 < δ ≤ 1`.
+  Vazirani, arXiv:1301.1162. The lemma is formalized for every `δ > 0`.
   Corollary `c:1` holds for every `δ > 0`, with the source's energy bound
   `E₀ + 6√δ` and bond dimension `B_{min(δ, 1/12)}`. The energy bound after
   trimming a general low-energy vector is corrected in the QICLean note
