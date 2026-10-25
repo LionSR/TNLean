@@ -86,9 +86,8 @@ theorem supportAlgebras_commute_of_overlappingLifts_commute
     constructor
     · exact (middleSlices_commute_of_overlappingLifts_commute
         X Y (hComm hX hY) i i' k k').symm
-    · have hAdjoint := (middleSlices_commute_of_overlappingLifts_commute
+    · exact (middleSlices_commute_of_overlappingLifts_commute
         X Yᴴ (hComm hX (A₂.star_mem' hY)) i i' k' k).symm
-      exact hAdjoint
   have hLeft :
       leftSupportAlgebra A₂ ≤
         StarSubalgebra.centralizer ℂ (rightSupportAlgebra A₁ : Set (Matrix b b ℂ)) := by

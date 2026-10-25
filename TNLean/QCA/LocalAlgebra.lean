@@ -207,15 +207,15 @@ lemma localInclusion_injective [NeZero d] {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ) :
 Source: arXiv:1703.09188, Appendix, lines 2285--2300. -/
 lemma localInclusion_norm [NeZero d] {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ)
     (A : LocalAlgebra d Λ) :
-    ‖localInclusion h A‖ = ‖A‖ := by
-  exact NonUnitalStarAlgHom.norm_map (localInclusion h) (localInclusion_injective h) A
+    ‖localInclusion h A‖ = ‖A‖ :=
+  NonUnitalStarAlgHom.norm_map (localInclusion h) (localInclusion_injective h) A
 
 /-- The local identity-tensor inclusion is an operator-norm isometry.
 
 Source: arXiv:1703.09188, Appendix, lines 2285--2300. -/
 lemma localInclusion_isometry [NeZero d] {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ) :
-    Isometry (localInclusion (d := d) h) := by
-  exact NonUnitalStarAlgHom.isometry (localInclusion h) (localInclusion_injective h)
+    Isometry (localInclusion (d := d) h) :=
+  NonUnitalStarAlgHom.isometry (localInclusion h) (localInclusion_injective h)
 
 /-- Inclusion of a finite region into itself is the identity map.
 

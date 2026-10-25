@@ -59,7 +59,6 @@ private theorem ofReal_sum_norm_sq_row (A : Matrix n n ℂ) (a : n) :
   refine Finset.sum_congr rfl fun k _ => ?_
   rw [RCLike.star_def, Complex.mul_conj']
 
-open scoped Matrix.Norms.L2Operator in
 /-- **Entrywise bound for a Sylvester equation.** Let `P, S` be positive semidefinite, `λ > 0`
 with `λ R Rᴴ ≤ P²`, and let `X = P W₁ + W₂ S` satisfy `P X + X S = R Z`. Then
 `‖X‖ ≤ n² λ^{-1/2} ‖Z‖`, where `n` is the dimension.

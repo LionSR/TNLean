@@ -217,8 +217,8 @@ bulk case of SCP10, Lemma 6.14. -/
 theorem rectDualPath_homotopy (x : ZMod width) (y : ZMod height)
     {a b : ℕ × ℕ} (p q : @Quiver.Path (ℕ × ℕ) (rectDualQuiver W H) a b) :
     TorusDualHomotopy (torusRectInterior x y W H)
-      (rectDualPathToTorus x y p) (rectDualPathToTorus x y q) := by
-  exact TorusDualHomotopy.cancel_prefix (torusRectComb x y a.1 a.2)
+      (rectDualPathToTorus x y p) (rectDualPathToTorus x y q) :=
+  TorusDualHomotopy.cancel_prefix (torusRectComb x y a.1 a.2)
     ((rectDualPath_comb x y p).trans (rectDualPath_comb x y q).symm)
 
 /-- An explicitly embedded finite rectangular patch. The side bounds forbid

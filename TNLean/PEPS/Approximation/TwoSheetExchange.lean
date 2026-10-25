@@ -167,9 +167,7 @@ theorem liftTags_mul_kronecker [NeZero q] {l₁ l₂ : List (Hole pos q Party)}
     ((ι → Fin q) × (ι → Fin q)) ℂ := fun t => rawProd l₁ t.1 ⊗ₖ rawProd l₂ t.2
   have hS : ((1 : Matrix (TagSpace l₁ × TagSpace l₂) (TagSpace l₁ × TagSpace l₂) ℂ) ⊗ₖ G) *
       stack S = stack S * G := one_kronecker_mul_stack fun t => hG t.1 t.2
-  rw [hK, liftTags]
-  rw [submatrix_mul_equiv]
-  rw [hS]
+  rw [hK, liftTags, submatrix_mul_equiv, hS]
   conv_rhs => rw [← submatrix_id_id G, ← Equiv.coe_refl, submatrix_mul_equiv]
 
 namespace TwoSheetExchange

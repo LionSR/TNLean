@@ -3816,6 +3816,26 @@ three-plaquette output measurement, and the routed reunion measurement.
   same mathematical objects after the stated rewrites. This command does not
   repair incompatible index data or prove an additional hypothesis.
 
+### Exact commutation across an infinite graph distance — promoted (2026-10-21)
+
+- **Pattern:** Finite interaction-support diameter makes the sites not reachable
+  from the final site interaction-closed. This set contains the entire initial
+  support and is disjoint from the final site. Exact locality then gives zero
+  commutator for every time.
+- **Abstraction:**
+  `QuantumCircuit.heisenberg_commutator_eq_zero_of_forall_edist_eq_top` in
+  `Circuit/LiebRobinson/GraphPropagation.lean` states the arbitrary-support result.
+  It needs neither anchors nor Hermiticity, a norm budget, a support-cardinality
+  bound, positive local dimension, or nonempty initial support.
+- **Seen:** The anchored theorem
+  `heisenberg_commutator_eq_zero_of_edist_eq_top`, the infinite-distance branch of
+  `norm_heisenberg_commutator_le_graph_kernel_sum` in `GraphLocalization.lean`,
+  and `MPS/AreaLaw/DomainLiebRobinson.lean`,
+  `norm_heisenberg_commutator_le_domainDistance`.
+- **Notes:** Both existing closed-region arguments and the finite-domain
+  specialization use the shared theorem. The existing public statements are
+  retained. No tactic or global attribute is introduced.
+
 ## Completed refactors
 
 ### Chain neighborhood of a region — completed (2026-10-21)
@@ -4830,6 +4850,38 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Infimum over walk lengths under graph maps — candidate (2026-10-21)
+
+- **Pattern:** Rewrite extended graph distance as the infimum of walk lengths,
+  bound the target distance for each source walk, and preserve the length by
+  mapping or inducing that walk.
+- **Seen:** `SimpleGraph.Hom.edist_le` maps walks;
+  `SimpleGraph.ConnectedComponent.edist_eq` induces ambient walks after
+  proving that their support remains in the component. The isomorphism
+  theorem applies the homomorphism result twice.
+- **Existing lemmas:** Public Mathlib `Walk.length_map`, `Walk.induce` and
+  `Walk.map_induce` supply the transport identities. The component argument
+  uses public `Walk.takeUntil`, not the private component-walk construction.
+- **Notes:** These are two related comparisons in one module, below the
+  promotion threshold. The mathematical transport theorems should be reused;
+  no additional tactic or abstraction is proposed. Both comparisons are in
+  `TNLean/Algebra/GraphDistanceTransport.lean`.
+
+
+
+### Passing from a natural localization radius to a real radius — candidate (2026-10-21)
+
+- **Pattern:** Use the floor inequality to bound
+  `exp (a - (⌊ℓ⌋₊ : ℝ) / 2)` by `exp (1 / 2) * exp (a - ℓ / 2)`;
+  combine this factor with the coefficient of the natural-radius estimate.
+- **Seen:** The chain localization theorem in `MPS/AreaLaw/LiebRobinson.lean`
+  and the domain localization theorem in `MPS/AreaLaw/DomainLiebRobinson.lean`.
+- **Existing lemmas:** `Nat.lt_floor_add_one`, `Nat.floor_lt`,
+  `Real.exp_le_exp` and `Real.exp_add`.
+- **Notes:** Two occurrences in two files. A third occurrence would warrant
+  extracting the scalar inequality, independently of the graph and Hamiltonian.
+
+
 ### Restricting an operator Schmidt decomposition at a fixed configuration — candidate (2026-10-23)
 
 - **Pattern:** Choose an actual configuration in the region carrying an identity
@@ -5086,37 +5138,6 @@ no additional helper is proposed.
   support and distance hypotheses. Keep their short arguments explicit until
   the pattern occurs in a second file and meets the promotion threshold.
 
-
-### Exact commutation across an infinite graph distance — candidate (2026-10-19)
-
-- **Pattern:** Derive reachability inside each interaction support from the
-  diameter bound, take a reachability-closed set `C` on one side of the
-  separation, show that every support lies in `C` or is disjoint from it,
-  and close with `commute_heisenbergEvolution_of_closed`:
-
-  ```lean
-  have hReach : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.Reachable x z :=
-    fun k x hx z hz => SimpleGraph.reachable_of_edist_ne_top
-      (ne_top_of_le_ne_top (ENat.natCast_ne_top R) (hDiam k x hx z hz))
-  have hClosed (k : κ) : (X k : Set ι) ⊆ C ∨ Disjoint (X k : Set ι) C := ...
-  have hCy : Disjoint C ({y} : Set ι) := Set.disjoint_singleton_right.mpr ...
-  exact commute_heisenbergEvolution_of_closed h (fun k => (X k : Set ι))
-    hSupport C {y} hClosed hCy ...
-  ```
-
-- **Seen:** Two occurrences in two files:
-  `Circuit/LiebRobinson/GraphPropagation.lean`,
-  `heisenberg_commutator_eq_zero_of_edist_eq_top`, with
-  `C = {x | G.Reachable (a i) x}`; and
-  `Circuit/LiebRobinson/GraphLocalization.lean`, the infinite-distance branch
-  of `norm_heisenberg_commutator_le_graph_kernel_sum`, with
-  `C = {x | ¬G.Reachable x y}`.
-- **Possible abstraction:** A lemma stating that a reachability-closed set
-  separates finite-diameter supports, parameterized by which side of the
-  separation defines `C`, so that both proofs reduce to one call before
-  `commute_heisenbergEvolution_of_closed`.
-- **Notes:** Below the rule of three; the two closed sets are dual. Promote at
-  a third use.
 
 
 ### Dyadic padding bounds — candidate (2026-10-16)
@@ -8967,6 +8988,36 @@ spectral split → block extraction → MPV calculation → strict bounds
   the clearance and physical data. These are two occurrences across two
   files; no promotion or proof refactor is proposed.
 
+### Commutator decay from the least support distance — candidate (2026-10-21)
+
+- **Pattern:** Choose anchors from nonempty interaction supports, take the
+  infimum of distances from the initial support to the observed site, separate
+  infinite distance from finite distance, and weaken exponential decay from
+  exponent one to one half.
+- **Seen:** `norm_heisenberg_commutator_le_chainDistance` in
+  `MPS/AreaLaw/LiebRobinson.lean` and
+  `norm_heisenberg_commutator_le_domainDistance` in
+  `MPS/AreaLaw/DomainLiebRobinson.lean`.
+- **Notes:** Two occurrences. Their infinite-distance arguments differ:
+  the finite path is connected, whereas an induced domain uses exact
+  commutation across components. No further abstraction is proposed yet.
+
+### Opposite-side witnesses for reset supports — candidate (2026-10-21)
+
+- **Pattern:** For a support crossing a region, choose one vertex inside and
+  one outside. Use the outside witness for the first interior core and the
+  inside witness for the disjoint second region. The diameter bound transfers
+  the core margin to every vertex of the support.
+- **Seen:** `chain_reset_support_separation` in
+  `MPS/AreaLaw/ResetSupportSeparation.lean` and
+  `reset_graphNeighborhood_disjoint_cores` in
+  `Circuit/LiebRobinson/SupportSeparation.lean`.
+- **Abstraction:** The graph theorem expresses the common geometric argument
+  with natural ball containments. The chain theorem also gives a real-distance
+  lower bound and retains its present proof.
+- **Notes:** Two occurrences; below the promotion threshold. A conversion
+  through rounded radii would lengthen the existing chain proof.
+
 ### Transport of a tensor factor through a layout equality — candidate (2026-10-18)
 
 - **Pattern:** An equality of the second tensor-factor spaces and a heterogeneous
@@ -9078,6 +9129,29 @@ spectral split → block extraction → MPV calculation → strict bounds
   `Lattice.hasSourceBoundedChange_liftOne`. The stage births call it with an
   empty prefix and the scalar idle vector; the former private copy is removed.
 
+### Comparing vectors through one cut matrix — candidate (2026-10-23)
+
+- **Pattern:** Prove equality of chain vectors by applying injectivity of the
+  coefficient matrix at a fixed cut, then use a matrix multiplication identity.
+- **Seen:** The left-supported and right-supported product replacements in
+  `MPS/AreaLaw/ProductReplacement.lean` (two occurrences in one file).
+- **Abstraction:** Both use the local `cutMatrix_injective` helper. The common
+  step is a coordinate equivalence; no new tactic is needed. A further use in
+  another file would justify making the injectivity lemma public.
+
+### Membership of consecutive block coordinates — candidate (2026-10-23)
+
+- **Pattern:** Convert membership of the site `L * i + j` in a prefix or
+  interval into inequalities on the block index, using `j < L`.
+- **Seen:** `copySite_mem_leftBlock_iff` in `MPS/AreaLaw/CopyProduct.lean`
+  and `copyConfigurationEquiv_insertInterval` in `MPS/AreaLaw/CopyMPSFactor.lean`.
+- **Existing reuse:** The first proof is shared within the copy-boundary
+  factorization. The interval proof compares two block indices and uses
+  `Nat.mul_le_mul_right` with `nlinarith` for the two strict-order cases.
+- **Decision:** Two related uses do not yet justify a public coordinate
+  theorem or a tactic. Reconsider a common arithmetic lemma when another
+  block-coordinate argument repeats the same inequalities.
+
 ### Distinguished symbol versus an embedded finite alphabet — candidate (2026-10-23)
 
 - **Pattern:** Evaluate an equality of finite words at one site, take the
@@ -9115,3 +9189,14 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Abstraction:** None yet; the two proofs have different support hypotheses and are below
   the promotion threshold. The supported expansion is shared through
   `hasProductForm_of_mem_supportedOperators_radius`; the diameter theorem is its corollary.
+
+### Intersecting a nearest-neighbour support with a cut interval — candidate (2026-10-23)
+
+- **Pattern:** Apply finite-set extensionality, simplify interval membership and
+  equality of finite indices with `Fin.ext_iff`, then close the endpoint arithmetic
+  with `omega`.
+- **Seen:** Two three-line arguments in
+  `MPS/AreaLaw/TwoCutEdgeSupports.lean`, proving the two singleton intersections.
+- **Existing simplification:** `mem_interval` and `Fin.ext_iff` already express the
+  required normal form. The occurrences are in one file; no additional helper or
+  tactic is proposed at this stage.
