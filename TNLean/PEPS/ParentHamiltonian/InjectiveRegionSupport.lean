@@ -200,8 +200,8 @@ CPGSV21, Section IV.C.1, lines 2003–2044. -/
 theorem rank_regionReducedDensity_of_isInjective
     (A : Tensor Γ d) (R : Finset V) (hA : A.IsInjective) :
     (regionReducedDensity A R).rank =
-      ∏ e : {e : Edge Γ // IsRegionBoundaryEdge R e}, A.bondDim e.1 := by
-  exact rank_regionReducedDensity_of_injective_open_cut A R
+      ∏ e : {e : Edge Γ // IsRegionBoundaryEdge R e}, A.bondDim e.1 :=
+  rank_regionReducedDensity_of_injective_open_cut A R
     (openRegionMap_injective_of_isInjective A R hA)
     (openRegionMap_injective_of_isInjective A (Finset.univ \ R) hA)
 

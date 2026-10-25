@@ -1,0 +1,400 @@
+\section{One level of Hastings' hierarchical projection}
+\label{sec:hastings05_hierarchical_projection}
+
+% Hastings, arXiv:cond-mat/0508554v3, proj3new.tex, lines 596--756.
+
+Section~II of~\cite{Hastings2006Solving} builds a state close to a ground
+state $\Psi_a$ of a gapped Hamiltonian from local spectral projections. Each
+pair operator $M=M_{k,k+1}$ nearly has $\Psi_a$ as an eigenvector,
+$\lVert(M-c)\Psi_a\rVert\le\epsilon$ with $c=\langle\Psi_a,M\Psi_a\rangle$.
+The first level projects onto the eigenvectors of $M$ with eigenvalue within
+$x$ of $c$; each later level projects the normalized output of the previous
+one with the pair operator compressed to the range of the level below, the
+window still centred at $c$, and the
+source states a recurrence for the deficiencies over $h=\log_2N$ levels.
+This section proves the estimates of one level and bounds the printed
+scalar recurrence. Applying that recurrence to the entire hierarchy
+requires a further argument. The deficiency of a level is measured in norm: the source states
+it as an expectation, which alone would not give the normalization bound it
+uses at the next level~\cite{gap:hastings05_hierarchical_projection}. Norms of
+operators are operator norms.
+
+The supersite grouping, the final energy bound, the count of the final states
+and the extensions to higher dimensions
+(\cite[lines 609--628 and 709--756]{Hastings2006Solving}) are not part of this
+section. The bound over all $h$ levels is in
+Section~\ref{sec:hastings05_hierarchy_levels}.
+
+\begin{definition}[Window projection]
+    \label{def:hastings05_window_projection}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.windowProjection}
+    \leanok
+    \uses{def:hastings_spectral_cutoff}
+    For a Hermitian matrix $M$ and real numbers $c$ and $x$, the window
+    projection $P_x(M,c)$ is the spectral projection of $M$ onto its
+    eigenvalues $\lambda$ with $\lvert\lambda-c\rvert\le x$, that is the
+    spectral cut-off of $M-c$ at $x$. This is the projection $P^1_k$
+    of~\cite[lines 640--642]{Hastings2006Solving} for
+    $c=\langle\Psi_a,M\Psi_a\rangle$.
+\end{definition}
+
+\begin{theorem}[The shifted operator]
+    \label{thm:hastings05_shifted_hermitian}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.isHermitian_sub_ofReal_smul_one,
+        TNLean.MPS.AreaLaw.LocalSolution.ofReal_smul_one_eq_algebraMap,
+        TNLean.MPS.AreaLaw.LocalSolution.isStarProjection_windowProjection}
+    \leanok
+    \uses{def:hastings05_window_projection,thm:hastings_spectral_cutoff_projection}
+    For a Hermitian matrix $M$ and a real number $c$, the matrix $M-c$ is
+    Hermitian, and every window projection of $M$ is an orthogonal
+    projection.
+\end{theorem}
+\begin{proof}\leanok
+    The scalar $c$ is real, and the spectral cut-off of a Hermitian matrix is
+    an orthogonal projection.
+\end{proof}
+
+\begin{theorem}[Deficiency and expectation of a projection]
+    \label{thm:hastings05_projection_deficiency}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.re_inner_toEuclideanLin_eq_norm_sq,
+        TNLean.MPS.AreaLaw.LocalSolution.norm_sq_add_norm_sub_sq,
+        TNLean.MPS.AreaLaw.LocalSolution.re_inner_eq_one_sub_norm_sub_sq,
+        TNLean.MPS.AreaLaw.LocalSolution.one_sub_le_re_inner_of_norm_sub_le,
+        TNLean.MPS.AreaLaw.LocalSolution.one_sub_sq_le_re_inner_of_norm_sub_le,
+        TNLean.MPS.AreaLaw.LocalSolution.norm_sub_mul_sq_le_of_isStarProjection}
+    \leanok
+    Let $P$ be an orthogonal projection and $\Psi$ a unit vector. Then
+    $\langle\Psi,P\Psi\rangle=\lVert P\Psi\rVert^2=1-\lVert\Psi-P\Psi\rVert^2$.
+    If $\lVert\Psi-P\Psi\rVert\le\delta$, then
+    $\langle\Psi,P\Psi\rangle\ge1-\delta^2$ and
+    $\langle\Psi,P\Psi\rangle\ge1-\delta$. For every matrix $P'$ and every
+    vector $\Psi$,
+    \begin{align}
+        \lVert\Psi-PP'\Psi\rVert^2
+         & \le\lVert\Psi-P\Psi\rVert^2+\lVert\Psi-P'\Psi\rVert^2.
+        \label{eq:hastings05_two_projections_sq}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_final_state_bessel}
+    The identity $\langle\Psi,P\Psi\rangle=\lVert P\Psi\rVert^2$ is that of
+    Theorem~\ref{thm:hastings_final_state_bessel}. The vectors $P\Psi$ and
+    $\Psi-P\Psi$ are orthogonal. With
+    $d=\lVert\Psi-P\Psi\rVert$, the expectation $1-d^2$ is nonnegative, so
+    $d\le1$ and $d^2\le d\le\delta$. For the last bound,
+    $\Psi-PP'\Psi=(\Psi-P\Psi)+P(\Psi-P'\Psi)$ is a sum of orthogonal vectors,
+    and $P$ does not increase norms.
+\end{proof}
+
+\begin{theorem}[One level]
+    \label{thm:hastings05_one_level}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_windowProjection_le,
+        TNLean.MPS.AreaLaw.LocalSolution.one_sub_div_le_re_inner_windowProjection,
+        TNLean.MPS.AreaLaw.LocalSolution.one_sub_div_sq_le_re_inner_windowProjection}
+    \leanok
+    \uses{def:hastings05_window_projection,thm:hastings05_shifted_hermitian,
+        thm:hastings05_projection_deficiency,thm:hastings_spectral_cutoff_obd}
+    Let $M$ be Hermitian, $c$ real, $x>0$ and $P=P_x(M,c)$. For every vector
+    $\Psi$,
+    \begin{align}
+        \lVert\Psi-P\Psi\rVert
+         & \le\frac{\lVert(M-c)\Psi\rVert}{x},
+        \label{eq:hastings05_one_level}
+    \end{align}
+    and for a unit vector $\Psi$,
+    $\langle\Psi,P\Psi\rangle\ge1-\lVert(M-c)\Psi\rVert/x$ and
+    $\langle\Psi,P\Psi\rangle\ge1-(\lVert(M-c)\Psi\rVert/x)^2$. With
+    $\lVert(M-c)\Psi_a\rVert\le\epsilon$ and $x=\epsilon^{1/h}$ this is the
+    bound $\langle\Psi_a,P^1_k\Psi_a\rangle\ge1-b_1$,
+    $b_1=\epsilon^{1-1/h}$,
+    of~\cite[lines 645--657]{Hastings2006Solving}, with the deficiency
+    $\lVert\Psi_a-P^1_k\Psi_a\rVert\le b_1$ in norm.
+\end{theorem}
+\begin{proof}\leanok
+    Apply Theorem~\ref{thm:hastings_spectral_cutoff_obd} to $M-c$ and
+    Theorem~\ref{thm:hastings05_projection_deficiency}.
+\end{proof}
+
+\begin{theorem}[An eigenvalue in the window]
+    \label{thm:hastings05_eigenvalue_in_window}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.exists_mem_spectrum_abs_sub_le,
+        TNLean.MPS.AreaLaw.LocalSolution.windowProjection_eq_zero}
+    \leanok
+    \uses{thm:hastings05_one_level}
+    Let $M$ be Hermitian, $c$ real and $x>0$. If a nonzero vector $\Psi$
+    satisfies $\lVert(M-c)\Psi\rVert<x\lVert\Psi\rVert$, then $M$ has an
+    eigenvalue $\lambda$ with $\lvert\lambda-c\rvert\le x$. This is the
+    conclusion of~\cite[lines 658--667]{Hastings2006Solving} that at least one
+    state survives the projection.
+\end{theorem}
+\begin{proof}\leanok
+    Otherwise $P_x(M,c)=0$, and~(\ref{eq:hastings05_one_level}) gives
+    $\lVert\Psi\rVert\le\lVert(M-c)\Psi\rVert/x<\lVert\Psi\rVert$.
+\end{proof}
+
+\begin{theorem}[Normalization]
+    \label{thm:hastings05_normalization}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_inv_norm_smul_sub_le,
+        TNLean.MPS.AreaLaw.LocalSolution.norm_inv_norm_smul_toEuclideanLin_sub_sq_le,
+        TNLean.MPS.AreaLaw.LocalSolution.norm_inv_norm_smul_sub_le_two_mul}
+    \leanok
+    \uses{thm:hastings05_projection_deficiency}
+    Let $\Psi$ be a unit vector. For every vector $v$,
+    $\lVert v/\lVert v\rVert-\Psi\rVert\le2\lVert v-\Psi\rVert$. For an
+    orthogonal projection $Q$,
+    $\lVert Q\Psi/\lVert Q\Psi\rVert-\Psi\rVert^2\le2\lVert\Psi-Q\Psi\rVert^2$.
+    If $P$ and $P'$ are commuting orthogonal projections with
+    $\lVert\Psi-P\Psi\rVert\le b$ and $\lVert\Psi-P'\Psi\rVert\le b$, then
+    \begin{align}
+        \Bigl\lVert\frac{PP'\Psi}{\lVert PP'\Psi\rVert}-\Psi\Bigr\rVert
+         & \le2b.
+        \label{eq:hastings05_normalization}
+    \end{align}
+    This is $\lVert\Psi^1_a-\Psi_a\rVert\le2b_1$
+    of~\cite[lines 686--689]{Hastings2006Solving}. A vector $0/0$ is read as
+    $0$.
+\end{theorem}
+\begin{proof}\leanok
+    The first bound follows from
+    $\lvert1-\lVert v\rVert\rvert\le\lVert v-\Psi\rVert$. For the second, with
+    $0<t=\lVert Q\Psi\rVert\le1$, the left side is $2-2t$ and the right
+    side is $2-2t^2$. If $Q\Psi=0$, the two sides are $1$ and $2$. For the third, $PP'$ is an orthogonal projection,
+    and~(\ref{eq:hastings05_two_projections_sq}) gives
+    $\lVert\Psi-PP'\Psi\rVert^2\le2b^2$.
+\end{proof}
+
+\begin{theorem}[Nested projections]
+    \label{thm:hastings05_nested_projections}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_sq_le_of_mul_eq}
+    \leanok
+    \uses{thm:hastings05_projection_deficiency}
+    Let $P$ and $Q$ be orthogonal projections with $PQ=P$, let $\Psi$ be a
+    unit vector and $\Psi'=Q\Psi/\lVert Q\Psi\rVert$. Then
+    \begin{align}
+        \lVert\Psi-P\Psi\rVert^2
+         & \le\lVert\Psi-Q\Psi\rVert^2+\lVert\Psi'-P\Psi'\rVert^2.
+    \end{align}
+    The projection of level $m$ lies below the product of the two
+    projections of level $m-1$~\cite[lines 671--676]{Hastings2006Solving},
+    and this bound combines the deficiencies of consecutive levels.
+\end{theorem}
+\begin{proof}\leanok
+    With $t=\lVert Q\Psi\rVert$ and $s=\lVert P\Psi'\rVert$, both at most one,
+    $\lVert P\Psi\rVert=ts$, and the claim is $1-t^2s^2\le(1-t^2)+(1-s^2)$,
+    that is $(1-t^2)(1-s^2)\ge0$. If $Q\Psi=0$, then $P\Psi=0$ and both sides
+    are at least one.
+\end{proof}
+
+\begin{theorem}[The residual of a nearby vector]
+    \label{thm:hastings05_residual}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_toEuclideanLin_le_add,
+        TNLean.MPS.AreaLaw.LocalSolution.norm_sub_ofReal_smul_one_le,
+        TNLean.MPS.AreaLaw.LocalSolution.norm_sub_smul_one_le_two_mul,
+        TNLean.MPS.AreaLaw.LocalSolution.abs_re_inner_toEuclideanLin_le}
+    \leanok
+    For every matrix $N$ and vectors $\phi$, $\psi$,
+    $\lVert N\phi\rVert\le\lVert N\psi\rVert+\lVert N\rVert\,\lVert\phi-\psi\rVert$.
+    For every matrix $M$ and real $c$,
+    $\lVert M-c\rVert\le\lVert M\rVert+\lvert c\rvert$, which is at most
+    $2\lVert M\rVert$ when $\lvert c\rvert\le\lVert M\rVert$; for a unit
+    vector $\psi$,
+    $\lvert\operatorname{Re}\langle\psi,M\psi\rangle\rvert\le\lVert M\rVert$.
+    The source bounds the residual of $\Psi^1_a$ by
+    $\epsilon+2b_1J\,l_{\mathrm{proj}}$~\cite[lines 690--695]{Hastings2006Solving},
+    which is the first bound with $\lVert M-c\rVert\le J\,l_{\mathrm{proj}}$.
+    In general the factor is $\lVert M-c\rVert\le2\lVert M\rVert$.
+\end{theorem}
+\begin{proof}\leanok
+    Write $N\phi=N\psi+N(\phi-\psi)$, and use $\lVert1\rVert\le1$ and the
+    Cauchy--Schwarz inequality.
+\end{proof}
+
+\begin{theorem}[One level combined]
+    \label{thm:hastings05_one_level_combined}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_windowProjection_le_of_norm_sub_le}
+    \leanok
+    \uses{thm:hastings05_one_level,thm:hastings05_residual}
+    Let $M$ be Hermitian, $c$ real and $x>0$. If
+    $\lVert(M-c)\psi\rVert\le\epsilon$ and $\lVert\phi-\psi\rVert\le\eta$, then
+    \begin{align}
+        \lVert\phi-P_x(M,c)\phi\rVert
+         & \le\frac{\epsilon+\lVert M-c\rVert\,\eta}{x}.
+    \end{align}
+    With $\psi=\Psi_a$, $\phi=\Psi^1_a$ and $\eta=2b_1$ this is the estimate
+    behind the deficiency $b_2$ of~\cite[lines 690--699]{Hastings2006Solving}.
+    The source's second-level projection restricts the spectral window of
+    $QMQ$ to the range of $Q=P^1_kP^1_{k+2}$ (lines 673--685).
+    Its corresponding estimate is Theorem~\ref{thm:hastings05_compressed_window_bound}.
+\end{theorem}
+\begin{proof}\leanok
+    Combine~(\ref{eq:hastings05_one_level}) for $\phi$ with
+    Theorem~\ref{thm:hastings05_residual}.
+\end{proof}
+
+\begin{theorem}[The residual under a compression]
+    \label{thm:hastings05_compression}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_toEuclideanLin_compress_sub_le}
+    \leanok
+    Let $Q$ be an orthogonal projection, $M$ a matrix, $c$ real and $\phi$ a
+    vector with $Q\phi=\phi$. Then
+    $\lVert(QMQ-c)\phi\rVert\le\lVert(M-c)\phi\rVert$. At the second level
+    the source projects with $P^1_kP^1_{k+2}M_{k+1,k+2}P^1_{k+2}P^1_k$, and
+    $\Psi^1_a$ lies in the range of
+    $P^1_kP^1_{k+2}$~\cite[lines 673--689]{Hastings2006Solving}.
+\end{theorem}
+\begin{proof}\leanok
+    Since $Q\phi=\phi$, $(QMQ-c)\phi=Q(M-c)\phi$, and $Q$ does not increase
+    norms.
+\end{proof}
+
+\begin{definition}[Window projection in the preceding subspace]
+    \label{def:hastings05_compressed_window}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.compressedWindowProjection}
+    \leanok
+    \uses{def:hastings05_window_projection}
+    Let $Q$ be an orthogonal projection, $M$ Hermitian and $c,x$ real.
+    Set $P=QP_x(QMQ,c)$. This is the spectral window of the restriction of
+    $QMQ$ to $\operatorname{ran}Q$, extended by zero on $\ker Q$.
+    It is the projection used at later levels
+    in~\cite[lines 673--685]{Hastings2006Solving}.
+\end{definition}
+
+\begin{theorem}[Restriction to the preceding subspace]
+    \label{thm:hastings05_compressed_window_projection}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.commute_windowProjection_compress,
+        TNLean.MPS.AreaLaw.LocalSolution.isStarProjection_compressedWindowProjection,
+        TNLean.MPS.AreaLaw.LocalSolution.compressedWindowProjection_mul,
+        TNLean.MPS.AreaLaw.LocalSolution.toEuclideanLin_compressedWindowProjection_of_mem,
+        TNLean.MPS.AreaLaw.LocalSolution.toEuclideanLin_compressedWindowProjection_eq_zero}
+    \leanok
+    \uses{def:hastings05_compressed_window,thm:hastings05_shifted_hermitian}
+    With the hypotheses of Definition~\ref{def:hastings05_compressed_window},
+    $W=P_x(QMQ,c)$ commutes with $Q$. The matrix $P=QW$ is an orthogonal
+    projection with $PQ=P$. If $Q\phi=\phi$, then $P\phi=W\phi$;
+    if $Q\phi=0$, then $P\phi=0$. These statements hold even when
+    $|c|\le x$, in which case the ambient projection $W$ includes $\ker Q$.
+\end{theorem}
+\begin{proof}\leanok
+    The identity $Q^2=Q$ gives $(QMQ)Q=Q(QMQ)$. Functional calculus
+    preserves this commutation, so $WQ=QW$. The product of commuting
+    orthogonal projections is an orthogonal projection, and
+    $PQ=QWQ=Q^2W=P$. Also $P\phi=WQ\phi$, giving both action identities.
+\end{proof}
+
+\begin{theorem}[One level inside the preceding subspace]
+    \label{thm:hastings05_compressed_window_bound}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_compressedWindowProjection_le,
+        TNLean.MPS.AreaLaw.LocalSolution.norm_sub_compressedWindowProjection_le_of_norm_sub_le}
+    \leanok
+    \uses{thm:hastings05_compressed_window_projection,thm:hastings05_one_level,
+        thm:hastings05_compression,thm:hastings05_residual}
+    Let $Q$ be an orthogonal projection, $M$ Hermitian, $c$ real and $x>0$.
+    Put $P=QP_x(QMQ,c)$. For every $\phi$ with $Q\phi=\phi$,
+    \begin{align}
+        \lVert\phi-P\phi\rVert
+         & \le \frac{\lVert(M-c)\phi\rVert}{x}.
+    \end{align}
+    If also $\lVert(M-c)\psi\rVert\le\epsilon$ and
+    $\lVert\phi-\psi\rVert\le\eta$, then
+    \begin{align}
+        \lVert\phi-P\phi\rVert
+         & \le\frac{\epsilon+\lVert M-c\rVert\,\eta}{x}.
+    \end{align}
+    No membership condition is imposed on $\psi$. Taking $\psi=\Psi_a$,
+    $\phi=\Psi^1_a$ and $\eta=2b_1$ gives the second-level estimate with
+    the window centred at $c=\langle\Psi_a,M\Psi_a\rangle$
+    as in~\cite[lines 673--699]{Hastings2006Solving}.
+\end{theorem}
+\begin{proof}\leanok
+    Since $Q\phi=\phi$, $P\phi=P_x(QMQ,c)\phi$. Apply the one-level
+    estimate to $QMQ$ and use
+    $\lVert(QMQ-c)\phi\rVert\le\lVert(M-c)\phi\rVert$.
+    The second bound follows from
+    $\lVert(M-c)\phi\rVert\le\lVert(M-c)\psi\rVert+
+        \lVert M-c\rVert\,\lVert\phi-\psi\rVert$.
+\end{proof}
+
+\begin{definition}[The scalar recurrence]
+    \label{def:hastings05_level_deficiency}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency,
+        TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_zero,
+        TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_succ}
+    \leanok
+    For real numbers $\epsilon$, $a$ and $s$, let $b_0=0$ and
+    $b_{m+1}=(\epsilon+ab_m)^s$. The source takes $a=2$ and $s=1-1/h$, so
+    that $b_1=\epsilon^{1-1/h}$~\cite[lines 696--704]{Hastings2006Solving}.
+    This scalar sequence is considered independently of the projection
+    hierarchy.
+\end{definition}
+
+\begin{theorem}[Nonnegativity of the recurrence]
+    \label{thm:hastings05_level_deficiency_nonneg}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_nonneg}
+    \leanok
+    \uses{def:hastings05_level_deficiency}
+    For $\epsilon\ge0$, $a\ge0$ and real $s$, every $b_m$ is nonnegative.
+\end{theorem}
+\begin{proof}\leanok
+    By induction on $m$: $b_0=0$, and if $b_m\ge0$ then $\epsilon+ab_m\ge0$,
+    so its real power $b_{m+1}$ is nonnegative.
+\end{proof}
+
+\begin{theorem}[The recursion]
+    \label{thm:hastings05_recursion}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_le,
+        TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_two_le}
+    \leanok
+    \uses{def:hastings05_level_deficiency,thm:hastings05_level_deficiency_nonneg}
+    Let $0<\epsilon\le1$, $a\ge0$ and $0\le s\le1$. Then for every $m$,
+    \begin{align}
+        b_m & \le\Bigl(\sum_{j<m}a^j\Bigr)\epsilon^{s^m},
+    \end{align}
+    and for $a=2$, $b_m\le(2^m-1)\epsilon^{s^m}$.
+\end{theorem}
+\begin{proof}\leanok
+    By induction on $m$. With $C=\sum_{j<m}a^j$, the inequality
+    $\epsilon\le\epsilon^{s^m}$ gives
+    $\epsilon+ab_m\le(1+aC)\epsilon^{s^m}$, and $1+aC=\sum_{j<m+1}a^j\ge1$, so
+    $(1+aC)^s\le1+aC$ and
+    $b_{m+1}\le(1+aC)\epsilon^{s^{m+1}}$.
+\end{proof}
+
+\begin{theorem}[The exponent]
+    \label{thm:hastings05_exponent}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.one_sub_inv_natCast_mem_Icc,
+        TNLean.MPS.AreaLaw.LocalSolution.quarter_le_one_sub_inv_pow}
+    \leanok
+    For every natural number $h$, $0\le1-1/h\le1$, with $1/0$ read as $0$.
+    For $h\ge2$, $(1-1/h)^h\ge1/4$.
+\end{theorem}
+\begin{proof}\leanok
+    The cases $h=2,3$ are direct. For $h=n+1\ge4$,
+    $1-1/h\ge e^{-1/n}$ because $1+1/n\le e^{1/n}$, so
+    $(1-1/h)^n\ge e^{-1}\ge1/3$, and $1-1/h\ge3/4$.
+\end{proof}
+
+\begin{theorem}[The bound after $h$ iterations]
+    \label{thm:hastings05_final_bound}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_self_le,
+        TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_exp_le,
+        TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_le_rpow_quarter}
+    \leanok
+    \uses{thm:hastings05_recursion,thm:hastings05_exponent}
+    Let $0<\epsilon\le1$, $h$ a natural number, $a=2$ and $s=1-1/h$. Then
+    $b_h\le(2^h-1)\epsilon^{(1-1/h)^h}$. For $\epsilon=e^{-t}$ with $t\ge0$,
+    \begin{align}
+        b_h & \le2^h\exp\bigl(-t(1-1/h)^h\bigr),
+    \end{align}
+    which for $N=2^h$ and $t=l_{\mathrm{proj}}/l_{\mathrm{fac}}$ is the bound
+    $N\exp[-(l_{\mathrm{proj}}/l_{\mathrm{fac}})(1-1/h)^h]$
+    of~\cite[lines 705--707]{Hastings2006Solving}. For $h\ge2$,
+    $b_h\le(2^h-1)\epsilon^{1/4}$. The source's further estimate
+    $N\exp(-l_{\mathrm{proj}}/(e\,l_{\mathrm{fac}}))$ uses the limit
+    $(1-1/h)^h\to1/e$, which is approached from below, so here the constant
+    $1/4$ takes its place~\cite{gap:hastings05_hierarchical_projection}.
+\end{theorem}
+\begin{proof}\leanok
+    Theorem~\ref{thm:hastings05_recursion} with $s=1-1/h$ and
+    Theorem~\ref{thm:hastings05_exponent}; for the exponential form,
+    $(e^{-t})^y=e^{-ty}$.
+\end{proof}

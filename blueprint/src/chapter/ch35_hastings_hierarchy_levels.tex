@@ -1,0 +1,207 @@
+\section{All levels of Hastings' hierarchical projection}
+\label{sec:hastings05_hierarchy_levels}
+
+% Hastings, arXiv:cond-mat/0508554v3, proj3new.tex, lines 668--707.
+
+The hierarchy of~\cite[lines 668--707]{Hastings2006Solving} projects, at
+level $m+1$, onto the window of the pair operator joining the two halves of a
+block of $2^{m+1}$ supersites, inside the range of the product of the two
+projections of level $m$. This section bounds the deficiency of every level.
+Each deficiency is measured against the ground state $\Psi_a$ itself, rather
+than against the normalized vector of the level below as in the source; this
+replaces the printed recurrence by a recurrence for squared deficiencies, with
+coefficient $3^m-1$ in place of
+$2^m-1$~\cite{gap:hastings05_hierarchical_projection}. The two halves of a
+block act on disjoint supersites, so their projections commute; here this is
+a hypothesis.
+
+\begin{theorem}[One level against the ground state]
+    \label{thm:hastings05_level_against_ground_state}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_compressedWindowProjection_mul_sq_le}
+    \leanok
+    \uses{thm:hastings05_projection_deficiency,
+        thm:hastings05_nested_projections,thm:hastings05_normalization,
+        thm:hastings05_compressed_window_projection,
+        thm:hastings05_compressed_window_bound}
+    Let $P,P'$ be commuting orthogonal projections, $M$ Hermitian, $c$ real,
+    $x>0$, and $\psi$ a unit vector with $\lVert(M-c)\psi\rVert\le\epsilon$,
+    $\lVert\psi-P\psi\rVert\le D$ and $\lVert\psi-P'\psi\rVert\le D$. Let $R$
+    be the window of $M$ at $c$ with radius $x$ inside the range of $PP'$.
+    Then
+    \begin{align}
+        \lVert\psi-R\psi\rVert^2
+         & \le2D^2+\Bigl(\frac{\epsilon+2\lVert M-c\rVert D}{x}\Bigr)^2 .
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Put $Q=PP'$ and $\psi'=Q\psi/\lVert Q\psi\rVert$. The vectors
+    $\psi-P\psi$ and $P(\psi-P'\psi)$ are orthogonal, so
+    $\lVert\psi-Q\psi\rVert^2\le2D^2$. The vector $\psi'$ lies in the range
+    of $Q$ and $\lVert\psi'-\psi\rVert\le2D$, so the window moves it by at
+    most $(\epsilon+2\lVert M-c\rVert D)/x$. Since $RQ=R$, the nested
+    projection bound combines the two.
+\end{proof}
+
+\begin{definition}[The deficiency bound of a level]
+    \label{def:hastings05_hierarchy_deficiency}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_zero,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_succ}
+    \leanok
+    For real $\epsilon$, $K$ and radii $x_0,x_1,\dots$, put $D_0=0$ and
+    \begin{align}
+        D_{m+1} & =\Bigl(2D_m^2+\Bigl(\frac{\epsilon+2KD_m}{x_m}\Bigr)^2
+        \Bigr)^{1/2}.
+    \end{align}
+\end{definition}
+
+\begin{theorem}[All levels]
+    \label{thm:hastings05_hierarchy_levels}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.isStarProjection_hierarchy,
+        TNLean.MPS.AreaLaw.LocalSolution.norm_sub_hierarchy_le}
+    \leanok
+    \uses{thm:hastings05_level_against_ground_state,
+        def:hastings05_hierarchy_deficiency}
+    Let $P_k^0=1$ for every block $k$, and let $P_k^{m+1}$ be the window of
+    the Hermitian pair operator $M_k^m$ at $c_k^m$ with radius $x_m>0$ inside
+    the range of $P_{2k}^mP_{2k+1}^m$. Suppose $P_{2k}^m$ and $P_{2k+1}^m$
+    commute, and that $\lVert(M_k^m-c_k^m)\psi\rVert\le\epsilon$ and
+    $\lVert M_k^m-c_k^m\rVert\le K$ for all $m$ and $k$, where $\psi$ is a
+    unit vector. Then every $P_k^m$ is an orthogonal projection and
+    $\lVert\psi-P_k^m\psi\rVert\le D_m$. In the source $\psi=\Psi_a$ and
+    $c_k^m=\langle\Psi_a,M_k^m\Psi_a\rangle$
+    \cite[lines 668--707]{Hastings2006Solving}.
+\end{theorem}
+\begin{proof}\leanok
+    Induction on $m$, applying
+    Theorem~\ref{thm:hastings05_level_against_ground_state} to the two
+    halves of each block and using that the right side is increasing in
+    $\lVert M-c\rVert$.
+\end{proof}
+
+\begin{definition}[The majorant for the source's radii]
+    \label{def:hastings05_hierarchy_majorant}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_zero,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_succ}
+    \leanok
+    For real $e$ and $s$, put $\beta_0=0$ and
+    $\beta_{m+1}=\bigl(2\beta_m^2+(e+2\beta_m)^{2s}\bigr)^{1/2}$.
+\end{definition}
+
+\begin{theorem}[The source's radii]
+    \label{thm:hastings05_hierarchy_source_radii}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_nonneg,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_le_hierarchyMajorant}
+    \leanok
+    \uses{def:hastings05_hierarchy_deficiency,def:hastings05_hierarchy_majorant}
+    Let $K>0$ and $e>0$. With $\epsilon=Ke$ and the radii
+    $x_m=K(e+2\beta_m)^{1-s}$ of~\cite[lines 676--681]{Hastings2006Solving},
+    $D_m\le\beta_m$ and $0\le\beta_m$ for every $m$.
+\end{theorem}
+\begin{proof}\leanok
+    By induction, $(\epsilon+2KD_m)/x_m\le(e+2\beta_m)/(e+2\beta_m)^{1-s}
+        =(e+2\beta_m)^s$.
+\end{proof}
+
+\begin{theorem}[The closed form]
+    \label{thm:hastings05_hierarchy_closed_form}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_le,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_le_rpow_quarter}
+    \leanok
+    \uses{def:hastings05_hierarchy_majorant,thm:hastings05_exponent}
+    For $0<e\le1$ and $0\le s\le1$, $\beta_m\le(3^m-1)e^{s^m}$. For the
+    source's $s=1-1/h$, $N=2^h$ supersites and $h\ge2$, the majorant of the
+    last level satisfies $\beta_h\le(3^h-1)e^{1/4}$, in place of the printed
+    $N\exp[-(l_{\mathrm{proj}}/l_{\mathrm{fac}})(1-1/h)^h]$
+    for $e=\exp(-l_{\mathrm{proj}}/l_{\mathrm{fac}})$
+    \cite[lines 705--707]{Hastings2006Solving}.
+\end{theorem}
+\begin{proof}\leanok
+    Write $\beta_m\le C_me^{s^m}$ with $C_m=3^m-1$. Since $e\le e^{s^m}\le
+        e^{s^{m+1}}$ and $y^s\le y$ for $y\ge1$,
+    $(e+2\beta_m)^s\le(1+2C_m)e^{s^{m+1}}$, and
+    $2C_m^2+(1+2C_m)^2\le(3C_m+2)^2=C_{m+1}^2$. For $s=1-1/h$ and $m=h$,
+    $(1-1/h)^h\ge1/4$ by Theorem~\ref{thm:hastings05_exponent}, and
+    $e^{(1-1/h)^h}\le e^{1/4}$ since $e\le1$.
+\end{proof}
+
+\subsection{The supersite grouping}
+
+The source groups the sites into supersites of $2l_{\mathrm{proj}}$ sites, so
+that each $M_i$ acts on at most two neighbouring supersites, and lets
+$M_{k,k+1}$ be the sum of the $M_i$ acting on supersites $k$ and
+$k+1$~\cite[lines 609--628]{Hastings2006Solving}. Block $k$ of level $m$
+consists of the sites whose supersite has quotient $k$ by $2^m$.
+
+\begin{theorem}[Spectral windows keep supports]
+    \label{thm:hastings05_window_support}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.cfc_mem_supportedOperators,
+        TNLean.MPS.AreaLaw.LocalSolution.windowProjection_mem_supportedOperators,
+        TNLean.MPS.AreaLaw.LocalSolution.compressedWindowProjection_mem_supportedOperators}
+    \leanok
+    \uses{def:hastings05_window_projection,def:hastings05_compressed_window}
+    If an operator $A$ acts on a set of sites $S$, so does $f(A)$ for every
+    real function $f$. In particular the window of $M$, and the window of
+    $M$ inside the range of $Q$, act on $S$ when $M$ and $Q$ do.
+\end{theorem}
+\begin{proof}\leanok
+    The operators acting on $S$ form a closed $*$-subalgebra containing $A$,
+    and $f(A)$ lies in every such subalgebra.
+\end{proof}
+
+\begin{definition}[Blocks of a level]
+    \label{def:hastings05_level_block}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.levelBlock}
+    \leanok
+    Given the supersite $\sigma(i)\in\mathbb N$ of each site $i$, block $k$ of
+    level $m$ is the set of sites $i$ with $\lfloor\sigma(i)/2^m\rfloor=k$.
+\end{definition}
+
+\begin{theorem}[Halves of a block]
+    \label{thm:hastings05_level_block_halves}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.levelBlock_two_mul_subset,
+        TNLean.MPS.AreaLaw.LocalSolution.levelBlock_two_mul_add_one_subset,
+        TNLean.MPS.AreaLaw.LocalSolution.disjoint_levelBlock_two_mul}
+    \leanok
+    \uses{def:hastings05_level_block}
+    Blocks $2k$ and $2k+1$ of level $m$ are disjoint and contained in block $k$
+    of level $m+1$.
+\end{theorem}
+\begin{proof}\leanok
+    $\lfloor\sigma/2^{m+1}\rfloor=\lfloor\lfloor\sigma/2^m\rfloor/2\rfloor$.
+\end{proof}
+
+\begin{theorem}[All levels on supersites]
+    \label{thm:hastings05_supersite_hierarchy}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.mem_supportedOperators_hierarchy,
+        TNLean.MPS.AreaLaw.LocalSolution.norm_sub_supersiteHierarchy_le}
+    \leanok
+    \uses{thm:hastings05_hierarchy_levels,thm:hastings05_window_support,
+        thm:hastings05_level_block_halves}
+    In the setting of Theorem~\ref{thm:hastings05_hierarchy_levels}, suppose
+    each pair operator $M_k^m$ acts on block $k$ of level $m+1$ instead of
+    assuming that the halves commute. Then every $P_k^m$ acts on block $k$ of
+    level $m$, and the conclusion of
+    Theorem~\ref{thm:hastings05_hierarchy_levels} holds.
+\end{theorem}
+\begin{proof}\leanok
+    By induction each $P_k^m$ acts on its block, by
+    Theorems~\ref{thm:hastings05_window_support}
+    and~\ref{thm:hastings05_level_block_halves}. The halves act on disjoint
+    sites, so they commute.
+\end{proof}
+
+\begin{theorem}[The residual of a sum]
+    \label{thm:hastings05_sum_residual}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_toEuclideanLin_sum_sub_le}
+    \leanok
+    For operators $M_i$ and reals $c_i$,
+    $\lVert(\sum_iM_i-\sum_ic_i)\psi\rVert\le\sum_i\lVert(M_i-c_i)\psi\rVert$.
+    With $c_i=\langle\Psi_a,M_i\Psi_a\rangle$, this bounds the residual of
+    $M_{k,k+1}$ by eq.~(low) for its summands
+    \cite[lines 628--639]{Hastings2006Solving}.
+\end{theorem}
+\begin{proof}\leanok
+    The triangle inequality.
+\end{proof}

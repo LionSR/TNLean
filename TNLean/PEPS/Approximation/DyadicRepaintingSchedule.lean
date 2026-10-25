@@ -235,9 +235,6 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:215–220`. 
 noncomputable def mainSteps : List (BandOperation ι) :=
   [mainDeathC A B C, mainDeathA A B C, mainBirthC B C, mainDeathB B C]
 
-theorem edgeOperations_eq_append : edgeOperations A B C = auxSteps A B C ++ mainSteps A B C :=
-  rfl
-
 /-- The auxiliary births start from the uniform word `C`, each one starts from the word left by
 the previous one, and they end at the auxiliary word `eq:geometry-aux-word`.
 

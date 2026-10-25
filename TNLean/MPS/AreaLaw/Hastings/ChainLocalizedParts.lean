@@ -105,10 +105,8 @@ Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828. -/
 theorem isHermitian_localized [NeZero d] (q' ΔE : ℝ) {H W : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hH : H.IsHermitian) (hW : W.IsHermitian) (K : Finset ι) :
     (W + siteExpectation d K (gaussianFilteredTerm q' ΔE H W - W)).IsHermitian := by
-  have hG : (gaussianFilteredTerm q' ΔE H W).IsHermitian := by
-    change (gaussianIntertwiner _ H H W)ᴴ = gaussianIntertwiner _ H H W
-    rw [gaussianIntertwiner_conjTranspose _ hH hH W, hW.eq]
-  exact hW.add (isHermitian_siteExpectation K (hG.sub hW))
+  exact hW.add (isHermitian_siteExpectation K
+    ((isHermitian_gaussianFilteredTerm q' ΔE hH hW).sub hW))
 
 end Localized
 
