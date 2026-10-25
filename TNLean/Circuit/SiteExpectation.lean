@@ -431,6 +431,27 @@ theorem norm_siteExpectation_le [NeZero q] (K : Finset ι)
         exact_mod_cast card_weylLabels_nat (ι := ι) q
       rw [hc, ← mul_assoc, inv_mul_cancel₀ (pow_ne_zero _ hq.ne'), one_mul]
 
+/-- A contractive regional expectation is within twice the distance to any
+operator supported on that region. This is the common-region comparison used
+in the localization argument of the one-dimensional note, part2a_mps_information.tex,
+lines 381–393. -/
+theorem norm_sub_siteExpectation_le_two_mul_norm_sub_of_mem_supportedOperators
+    [NeZero q]
+    (B : Finset ι)
+    (A A₀ : Matrix (ι → Fin q) (ι → Fin q) ℂ)
+    (hA₀ : A₀ ∈ supportedOperators q (B : Set ι)) :
+    ‖A - siteExpectation q B A‖ ≤ 2 * ‖A - A₀‖ := by
+  have hfix := siteExpectation_of_mem_supportedOperators B hA₀
+  have heq : A - siteExpectation q B A =
+      (A - A₀) - siteExpectation q B (A - A₀) := by
+    change A - siteExpectationLM q B A = (A - A₀) - siteExpectationLM q B (A - A₀)
+    rw [map_sub]
+    simp only [siteExpectationLM_apply, hfix]
+    abel
+  rw [heq]
+  exact (norm_sub_le _ _).trans (by
+    linarith [norm_siteExpectation_le B (A - A₀)])
+
 /-- The expectation is completely positive and trace preserving, with the
 rescaled Weyl products as Kraus operators. Source: area law,
 `03-quasilocal.tex`, line 28 (positivity). -/

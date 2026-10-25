@@ -4864,6 +4864,15 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Regional expectation compared with a supported approximant — candidate (2026-10-21)
+
+- **Pattern:** For a contractive regional expectation fixing a supported approximant, rewrite the projection error as the difference between the approximation error and its expectation.
+- **Defined in:** `Circuit/SiteExpectation.lean`, `QuantumCircuit.norm_sub_siteExpectation_le_two_mul_norm_sub_of_mem_supportedOperators`.
+- **Use when:** An approximant is supported on the output region; the error of projecting the original operator is at most twice its distance to that approximant.
+- **Refactored occurrences:** The chain relative-generator proof and the finite-domain relative-generator proof use this same inequality. The finite-family bounds use the existing `map_sum` and `norm_sum_le` lemmas.
+- **Notes:** No state, Hermiticity or nonempty-region assumption is required.
+- **Status:** Two occurrences in two files; the shared lemma is kept, and the entry is promoted when a third consumer lands.
+
 ### Infimum over walk lengths under graph maps — candidate (2026-10-21)
 
 - **Pattern:** Rewrite extended graph distance as the infimum of walk lengths,
@@ -9244,3 +9253,20 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Status:** Two independent calculations in two modules; below the promotion
   threshold. The qutrit proof reuses the existing Ky Fan overlap theorem and
   the actual MPS cut-rank bound rather than repeating their proofs.
+
+### Linear bounds for regional-entropy suprema — candidate (2026-10-17)
+
+- **Pattern:** apply `Real.sSup_le` with a nonnegative linear target, unpack
+  a physical entropy witness, and use its rectangle-size bound to increase
+  the scale to the scale of the supremum.
+- **Seen:** `exists_initialBuffer_and_real_boxEntropy_recurrence` in
+  `PEPS/AreaLaw/SafeRectangleAreaLaw.lean` and
+  `exists_uniform_boxEntropy_improvement_real` in
+  `PEPS/AreaLaw/Scan/RealBoxEntropyImprovement.lean`.
+- **Abstraction:** both uses apply Mathlib's `Real.sSup_le` directly and
+  share the pointwise theorem
+  `exists_regionalEntropy_safe_rect_le_linear`. A further helper is
+  deferred until another proof repeats this physical collection.
+- **Notes:** the nonnegative target also covers the empty collection.
+  The earlier monotonicity candidate uses the same Mathlib theorem with
+  inclusion of collections in place of a pointwise linear estimate.

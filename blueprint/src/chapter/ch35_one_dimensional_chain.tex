@@ -911,7 +911,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \leanok
     \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,
         lem:chain_site_norm_budget,thm:chain_lieb_robinson,
-        lem:qc_site_expectation_properties}
+        lem:qc_site_expectation_properties,thm:qc_site_expectation_supported_approximant}
     The swapped doubled interactions have range $R$ and bound $2J$.
     Their per-site norm sum is at most $b_0$. The chain localization
     estimate therefore has constants $a,v$ as displayed.
@@ -1848,6 +1848,51 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Restrict the finite sum to crossing supports, then distribute conjugation
     over the two replica terms. Lemma~\ref{lem:domain_crossing_count} gives
     the displayed count.
+\end{proof}
+
+\begin{theorem}[Relative-generator localization on a finite integer domain]
+    \label{thm:domain_relative_generator_localization}
+    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le}
+    \leanok
+    \uses{def:domain_doubled_swapped_hamiltonian,thm:domain_partial_swap_crossing,
+        def:qc_site_expectation,thm:domain_interval_neighborhood}
+    Let $H$ be an admissible domain Hamiltonian with local dimension $q\ge1$,
+    range $R$ and real interaction bound $J$. For $D\subseteq V$, put
+    $K=\widehat H$, $K'=\widehat H'$ and
+    $Z=\bigcup_{X\in\mathcal C_D}X$, using the original crossing supports.
+    For $m\in\mathbb N$ and $t\in\mathbb R$, define
+    $B=N_m(Z)$ using intrinsic graph distance and
+    $G(t)=e^{itK'}(K'-K)e^{-itK'}$. Put
+    \begin{align}
+        b_0 & =2^{2R+1}(2J),\notag                          \\
+        a   & =\frac{2(2+4|b_0|e^{2R})e}{1-e^{-1/2}},\notag \\
+        v   & =2(R+1)|b_0|e^{2R}+1,\notag                   \\
+        N_R & =2\cdot2^{2R}.\notag
+    \end{align}
+    Then
+    \begin{align}
+        \|G(t)-E_B(G(t))\|
+         & \le4|J|a(R+1)^2N_R|\Lambda|e^{v|t|-m/2}.\notag
+    \end{align}
+    Empty domains and crossing families are allowed. This is an auxiliary
+    generator estimate in the localization argument of
+    \cite[Part~IIa]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:domain_partial_swap_crossing,lem:domain_site_norm_budget,
+        thm:domain_lieb_robinson_localization,
+        lem:qc_site_expectation_properties,thm:qc_site_expectation_supported_approximant}
+    The swapped domain family has interaction bound $2J$, so its per-site
+    norm budget is $b_0$. Domain localization gives an error
+    $a|X|^2\|A_{X,b}\|e^{v|t|-m/2}$ for each evolved replica perturbation
+    at its own neighborhood $N_m(X)$.
+    Since $X\subseteq Z$, that approximant is supported on $B$.
+    Theorem~\ref{thm:qc_site_expectation_supported_approximant},
+    $|X|\le R+1$ and $\|A_{X,b}\|\le2J\le2|J|$ bound its projection error by
+    $4|J|a(R+1)^2e^{v|t|-m/2}$.
+    Linearity of evolution and expectation permits summing over the exact
+    crossing decomposition. The bound
+    $2|\mathcal C_D|\le N_R|\Lambda|$ finishes the estimate.
 \end{proof}
 
 \begin{theorem}[Intrinsic neighborhoods of order intervals]

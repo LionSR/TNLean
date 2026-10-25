@@ -20,6 +20,9 @@ Gaussian tail `e^{-(TΔE)²/(2q)}` into `e^{-q/2}`.
   `(3 ‖W‖ e^{-q/2} + C (q/ΔE) e^{v q/ΔE - μ m}) ‖ψ‖`.
 * `norm_truncated_apply_sub_inner_smul_le`: for a unique gapped ground state `Ω`,
   `‖M_i Ω - ⟨Ω, M_i Ω⟩ Ω‖` has the same bound (lines 375–387).
+* `norm_sum_truncated_sub_le`, `norm_sum_truncated_sub_le_card`: `‖∑ᵢ M_i - H‖` is at most
+  the sum of the truncation errors, hence at most the number of terms times a uniform bound
+  (lines 343–374).
 
 The constants `C` and `v` are those of `norm_gaussianFilteredTerm_sub_truncated_le`, and the
 module inherits its **Local fix (the truncated approximation `M_i`, eqs. `mid`, `apb`,
@@ -37,7 +40,8 @@ of eq. `facld`.
 ## References
 
 Hastings, *Solving Gapped Hamiltonians Locally*, arXiv:cond-mat/0508554v3, `proj3new.tex`:
-eq. `facld` and the choice of `q` (lines 322–348), and the unique ground state (lines 375–387).
+eq. `facld` and the choice of `q` (lines 322–348), the sum `M = ∑ᵢ M_i` (lines 343–374), and
+the unique ground state (lines 375–387).
 -/
 
 open GaussianFilter Matrix QuantumCircuit
@@ -137,6 +141,59 @@ theorem norm_truncated_apply_sub_inner_smul_le [NeZero d] [DecidableEq κ] {q Δ
   have hb := norm_gaussianFilteredTerm_sub_truncated_le_of_time G X a ha h hHerm hSupport R hDiam
     vR hCard b₀ hBudget hq hΔE s K hsK S hSK hW J hJ μ hμ m hm
   linarith
+
+/-- **The sum of the truncated approximations.** For each term `hᵢ` let `Mᵢ = H_tilde_{s i}` be
+its filter under the truncated Hamiltonian `∑_{k ∈ s i} hₖ`, where the terms of `s i` act on a
+set `K i ⊇ Xᵢ` and the omitted terms meeting `K i` are at distance at least `m` from `Xᵢ`. Then
+`‖∑ᵢ Mᵢ - H‖ ≤ ∑ᵢ ‖H_tilde_i - Mᵢ‖`, and each summand has the bound of
+`norm_gaussianFilteredTerm_sub_truncated_le_of_time`. Hastings, arXiv:cond-mat/0508554v3,
+`proj3new.tex`, lines 359–374: the difference between `H` and `M = ∑ᵢ Mᵢ` is at most the sum
+of the errors of eq. `apb`, with `q` free and `T = q / ΔE`. -/
+theorem norm_sum_truncated_sub_le [NeZero d] [DecidableEq κ] {q ΔE : ℝ} (hq : 0 ≤ q)
+    (hΔE : 0 < ΔE) (hH : (∑ k, h k).IsHermitian) (s : κ → Finset κ) (K : κ → Finset ι)
+    (hsK : ∀ i, ∀ k ∈ s i, X k ⊆ K i) (hXK : ∀ i, X i ⊆ K i) (J : ℝ) (hJ : ∀ k, ‖h k‖ ≤ J)
+    (μ : ℝ) (hμ : 0 ≤ μ) (m : ℕ)
+    (hm : ∀ i, ∀ k ∉ s i, ¬Disjoint (X k) (K i) → ∀ x ∈ X i, ∀ y ∈ X k,
+      (m : ℕ∞) ≤ G.edist x y) :
+    ‖∑ i, gaussianFilteredTerm q ΔE (∑ k ∈ s i, h k) (h i) - ∑ k, h k‖ ≤
+      ∑ i, (2 * vR * (2 + 4 * |b₀| * Real.exp (2 * μ * R)) * ((X i).card : ℝ) * ‖h i‖ * J *
+          (((s i)ᶜ.filter (fun k => ¬Disjoint (X k) (K i))).card : ℝ) * (q / ΔE) *
+          Real.exp ((2 * vR * |b₀| * Real.exp (2 * μ * R) + 1) * (q / ΔE) - μ * m) +
+        2 * ‖h i‖ * Real.exp (-q / 2)) :=
+  (norm_sum_sub_le_of_sum_eq Finset.univ q ΔE hH (W := h) rfl).trans <|
+    Finset.sum_le_sum fun i _ ↦ norm_gaussianFilteredTerm_sub_truncated_le_of_time G X a ha h
+      hHerm hSupport R hDiam vR hCard b₀ hBudget hq hΔE (s i) (K i) (hsK i) (X i) (hXK i)
+      (hSupport i) J hJ μ hμ m (hm i)
+
+/-- **The sum of the truncated approximations, uniform form.** Under the hypotheses of
+`norm_sum_truncated_sub_le`, if at most `N₀` omitted terms meet each `K i`, then
+`‖∑ᵢ Mᵢ - H‖` is at most the number of terms times
+`2 v_R C v_R J² N₀ (q/ΔE) e^{v q/ΔE - μ m} + 2 J e^{-q/2}`. Hastings,
+arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 343–374: the number of terms times the bound
+on `‖H_tilde_i⁰ - M_i‖`, with `q` free and `T = q / ΔE`. -/
+theorem norm_sum_truncated_sub_le_card [NeZero d] [DecidableEq κ] {q ΔE : ℝ} (hq : 0 ≤ q)
+    (hΔE : 0 < ΔE) (hH : (∑ k, h k).IsHermitian) (s : κ → Finset κ) (K : κ → Finset ι)
+    (hsK : ∀ i, ∀ k ∈ s i, X k ⊆ K i) (hXK : ∀ i, X i ⊆ K i) (J : ℝ) (hJ : ∀ k, ‖h k‖ ≤ J)
+    (μ : ℝ) (hμ : 0 ≤ μ) (m : ℕ)
+    (hm : ∀ i, ∀ k ∉ s i, ¬Disjoint (X k) (K i) → ∀ x ∈ X i, ∀ y ∈ X k,
+      (m : ℕ∞) ≤ G.edist x y)
+    (N₀ : ℕ) (hN₀ : ∀ i, ((s i)ᶜ.filter (fun k => ¬Disjoint (X k) (K i))).card ≤ N₀) :
+    ‖∑ i, gaussianFilteredTerm q ΔE (∑ k ∈ s i, h k) (h i) - ∑ k, h k‖ ≤
+      Fintype.card κ * (2 * vR * (2 + 4 * |b₀| * Real.exp (2 * μ * R)) * (vR : ℝ) * J * J *
+          (N₀ : ℝ) * (q / ΔE) *
+          Real.exp ((2 * vR * |b₀| * Real.exp (2 * μ * R) + 1) * (q / ΔE) - μ * m) +
+        2 * J * Real.exp (-q / 2)) := by
+  refine (norm_sum_truncated_sub_le G X a ha h hHerm hSupport R hDiam vR hCard b₀ hBudget hq hΔE
+    hH s K hsK hXK J hJ μ hμ m hm).trans ?_
+  rw [← nsmul_eq_mul, ← Finset.card_univ]
+  refine Finset.sum_le_card_nsmul _ _ _ fun i _ ↦ ?_
+  have hJ0 : 0 ≤ J := (norm_nonneg _).trans (hJ i)
+  have hqΔE : 0 ≤ q / ΔE := div_nonneg hq hΔE.le
+  gcongr
+  · exact_mod_cast hCard i
+  · exact hJ i
+  · exact_mod_cast hN₀ i
+  · exact hJ i
 
 end Graph
 
