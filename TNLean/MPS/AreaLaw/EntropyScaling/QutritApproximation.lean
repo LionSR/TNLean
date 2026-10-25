@@ -17,6 +17,13 @@ normalized MPS. Applying the amplification estimate to the repeated family
 then gives an exponential lower bound on its approximating bond dimension.
 
 Source: arXiv:0705.0292v2, `paper_v2.tex`, lines 471–479.
+
+**Local fix (constant):** The bond-dimension bounds of this module have the
+constant two where the source prints `D ≥ 2^N(1 - 8T) + 1`, and they use the
+amplification `√(K/4) T(f) ≤ T(f^K)` under product error below one in place
+of the printed `√(K/8)` estimate with its single-copy smallness hypothesis.
+The printed bound follows. Documented in
+`docs/paper-gaps/swvc08_qutrit_copy_constant.tex`.
 -/
 
 namespace TNLean.MPS.AreaLaw.EntropyScaling
@@ -83,7 +90,6 @@ theorem qutritFamily_scalar_error_lower_bound {N D : ℕ} (hN : 2 ≤ N)
     simpa only [one_pow] using pow_le_pow_left₀ (norm_nonneg _) hinner 2
   exact (one_sub_kyFanNorm_qutritFamily_ge hN D).trans
     ((sub_le_sub_left ho 1).trans (one_sub_le_error (sq_nonneg _) hf))
-
 
 /-- Combining the one-copy tail and the square-root amplification bound. -/
 private theorem bond_bound_of_amplification {N D : ℕ} (hN : 0 < N) {s δ : ℝ}
