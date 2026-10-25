@@ -35,13 +35,13 @@ satisfy eq. `low` up to `o` (lines 476–491). For `n = 2` the bound is that of
 * `norm_apply_sub_inner_smul_le_add_offDiagonalPartFamily`: eq. `low` up to `o` for every basis
   vector.
 
-**Scope restriction (simple spectrum):** the basis diagonalizes one compression `A = P M_j P`
-whose `n` eigenvalues on the ground space are pairwise at least `δ > 0` apart, and the bound
-carries the factor `n - 1` and the spacing `δ`. The source's sketch for `n > 2`
-(lines 1695–1705), which handles repeated eigenvalues of `M_j` by passing to further
-compressions `M_k`, is not formalized; the eigenbasis is taken as given, and eq. `oibu` is left
-as the sum of the commutators. Documented in
-`docs/paper-gaps/hastings05_two_dim_ground_basis.tex`.
+These results are the one-level case of the source's iteration (lines 1695–1705), with `δ` a given
+lower bound on the eigenvalue spacing; repeated eigenvalues of `M_j`, resolved by further
+compressions `M_k`, are treated in `LowEnergyBasisIteration.lean`.
+
+**Scope restriction (summed bound):** the summation of the decaying commutator bound over `i`
+into eq. `oibu`, which the source states only to order of magnitude, is left as the sum of the
+commutators. Documented in `docs/paper-gaps/hastings05_two_dim_ground_basis.tex`.
 -/
 
 open scoped InnerProductSpace

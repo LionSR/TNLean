@@ -339,11 +339,10 @@ commutators in Theorem~\ref{thm:hastings05_two_dim_basis}.
     $\langle w,PMPv\rangle w=o_{PMP}v$.
 \end{proof}
 
-For a ground space of dimension $n>2$ the source only sketches the choice of
-basis~\cite[lines 1695--1705]{Hastings2006Solving}. The case in which one
-compression has $n$ eigenvalues on the ground space that are pairwise at least
-$\delta>0$ apart is proved below; a compression with repeated eigenvalues is
-not treated~\cite{gap:hastings05_two_dim_ground_basis}.
+For a ground space of dimension $n>2$ the source sketches the choice of basis
+by iteration~\cite[lines 1695--1705]{Hastings2006Solving}. The case in which
+one compression has $n$ eigenvalues that are pairwise at least $\delta>0$ apart
+comes first; repeated eigenvalues are treated by the iteration after it.
 
 \begin{theorem}[The off-diagonal part for a compression with simple spectrum]
     \label{thm:hastings05_simple_spectrum_basis}
@@ -401,4 +400,96 @@ not treated~\cite{gap:hastings05_two_dim_ground_basis}.
     Write $Mv_a-\langle v_a,Mv_a\rangle v_a=(1-P)Mv_a+(PMv_a-\langle v_a,Mv_a\rangle v_a)$.
     Since $\langle v_b,PMv_a\rangle=\langle v_b,PMPv_a\rangle$, the second term is
     $\sum_{b\ne a}\langle v_b,PMPv_a\rangle v_b=o_{PMP}v_a$.
+\end{proof}
+
+The source resolves repeated eigenvalues of $PM_jP$ by passing to a further
+compression $PM_kP$ among the eigenvectors that share an eigenvalue, and
+proceeds in this way until every off-diagonal element is
+bounded~\cite[lines 1695--1705]{Hastings2006Solving}. Let
+$v_0,\dots,v_{n-1}$ be an orthonormal basis of the ground space and record the
+iteration by real labels $r_\ell(a)$ at levels $\ell=0,1,\dots$: the class of
+$a$ at level $\ell$ is the set of $c$ with $r_m(c)=r_m(a)$ for every $m<\ell$,
+and the operator $A_\ell=PM_{j_\ell}P$ of level $\ell$ satisfies
+$\langle v_c,A_\ell v_d\rangle=r_\ell(c)\,\delta_{cd}$ for $c$, $d$ in one class.
+Let $\delta_\ell$ be the smallest difference $|r_\ell(a)-r_\ell(b)|>0$ between
+labels of level $\ell$ of two indices in one class, which is positive in finite
+dimension.
+
+\begin{theorem}[One level of the iteration]
+    \label{thm:hastings05_basis_iteration_step}
+    \lean{TNLean.Lattice.inner_commutator_apply_eq_sum,
+        TNLean.Lattice.abs_sub_mul_norm_inner_le}
+    \leanok
+    Let $v_0,\dots,v_{n-1}$ be orthonormal, let $A$ and $B$ map each $v_b$ into
+    their span, and let $\langle v_c,Av_d\rangle=r_c\,\delta_{cd}$ for $c$, $d$
+    in a set $S$. Then for $a,b\in S$,
+    \begin{align*}
+        |r_a-r_b|\,|\langle v_a,Bv_b\rangle|
+        \le\|[A,B]\|+\sum_{c\notin S}\bigl(|\langle v_a,Av_c\rangle|\,
+        |\langle v_c,Bv_b\rangle|+|\langle v_a,Bv_c\rangle|\,
+        |\langle v_c,Av_b\rangle|\bigr).
+    \end{align*}
+\end{theorem}
+\begin{proof}\leanok
+    Expanding both products in the basis,
+    $\langle v_a,[A,B]v_b\rangle=\sum_c\bigl(\langle v_a,Av_c\rangle
+        \langle v_c,Bv_b\rangle-\langle v_a,Bv_c\rangle\langle v_c,Av_b\rangle\bigr)$.
+    The terms with $c\in S$ sum to $(r_a-r_b)\langle v_a,Bv_b\rangle$.
+\end{proof}
+
+\begin{definition}[The levels of the iteration]
+    \label{def:hastings05_basis_iteration_levels}
+    \lean{TNLean.Lattice.labelClass,
+        TNLean.Lattice.levelPairs,
+        TNLean.Lattice.levelGap}
+    \leanok
+    The class of $a$ at level $\ell$, the pairs separated first at level $\ell$,
+    and the smallest difference $\delta_\ell$ of their labels of level $\ell$
+    (equal to $1$ when no pair is separated at level $\ell$).
+\end{definition}
+
+\begin{theorem}[The bound at the first separating level]
+    \label{thm:hastings05_basis_iteration}
+    \lean{TNLean.Lattice.levelGap_pos,
+        TNLean.Lattice.levelGap_le,
+        TNLean.Lattice.norm_inner_le_of_mem_labelClass}
+    \leanok
+    \uses{thm:hastings05_basis_iteration_step,
+        def:hastings05_basis_iteration_levels}
+    $\delta_\ell>0$. If $b$ lies in the class of $a$ at level $\ell$ and
+    $r_\ell(a)\ne r_\ell(b)$, then $|\langle v_a,Bv_b\rangle|$ is at most
+    $\delta_\ell^{-1}$ times the right side of
+    Theorem~\ref{thm:hastings05_basis_iteration_step} with $A=A_\ell$ and $S$
+    the class, whose terms involve only indices separated from $a$ and $b$ at
+    an earlier level~\cite{gap:hastings05_two_dim_ground_basis}.
+\end{theorem}
+\begin{proof}\leanok
+    The pair is one of those defining $\delta_\ell$, so
+    $|r_\ell(a)-r_\ell(b)|\ge\delta_\ell$.
+\end{proof}
+
+\begin{theorem}[Two levels]
+    \label{thm:hastings05_basis_two_levels}
+    \lean{TNLean.Lattice.norm_inner_le_of_two_levels,
+        TNLean.Lattice.norm_offDiagonalPartFamily_le_of_two_levels}
+    \leanok
+    \uses{thm:hastings05_basis_iteration, thm:hastings05_simple_spectrum_basis}
+    Suppose that any two distinct indices have different labels at level $0$ or
+    at level $1$. Then every off-diagonal element of $B$ is at most
+    \begin{align*}
+        \max\Bigl(\frac{\|[A_0,B]\|}{\delta_0},\
+        \frac{1}{\delta_1}\Bigl(\|[A_1,B]\|
+        +2n\frac{\|[A_0,A_1]\|\,\|[A_0,B]\|}{\delta_0^2}\Bigr)\Bigr),
+    \end{align*}
+    and the off-diagonal part of $B$ has norm at most $n-1$ times this. With
+    $A_0=PM_jP$, $A_1=PM_kP$ and $B=PM_iP$, this is the step from $M_j$ to $M_k$
+    of~\cite[lines 1695--1705]{Hastings2006Solving}.
+\end{theorem}
+\begin{proof}\leanok
+    A pair separated at level $0$ is bounded by
+    Theorem~\ref{thm:hastings05_basis_iteration} with an empty complement. For a
+    pair separated at level $1$, every index outside its class is separated from
+    both at level $0$, so each of the at most $n$ cross terms is at most
+    $2\|[A_0,A_1]\|\,\|[A_0,B]\|/\delta_0^2$. The norm bound is
+    Theorem~\ref{thm:hastings05_simple_spectrum_basis}.
 \end{proof}

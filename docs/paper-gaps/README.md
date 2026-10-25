@@ -1328,11 +1328,11 @@ slope `c₁` with `v c₁ < 1/2`.
 *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, lines 1678–1705). In an
 eigenbasis of `P M_j P` with eigenvalues `r ≠ s`, the off-diagonal part of `P M_i P` has norm
 at most `‖[P M_i P, P M_j P]‖ / |r - s|`, and a ground state is an approximate eigenvector of
-`M_i` up to that off-diagonal part. A ground space of dimension two is treated, and a ground
-space of any dimension `n` when one compression `P M_j P` has `n` eigenvalues pairwise at least
-`δ > 0` apart, with the bound `(n - 1) ‖[P M_i P, P M_j P]‖ / δ`. The eigenbasis is given, a
-compression with repeated eigenvalues is not treated, and eq. `oibu` is left as the sum of the
-commutators.
+`M_i` up to that off-diagonal part. Every dimension is treated: one compression with simple
+spectrum gives `(n - 1) ‖[P M_i P, P M_j P]‖ / δ`, and repeated eigenvalues are resolved by the
+source's iteration over further compressions, made rigorous by an identity for the matrix
+elements at each level; the cross terms the sketch omits are kept (a local correction). The
+basis is given, and eq. `oibu` is left as the sum of the commutators.
 
 ### One-dimensional area law after Hastings: the entropy gain constants
 
