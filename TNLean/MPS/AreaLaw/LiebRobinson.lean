@@ -26,10 +26,10 @@ on the range and the per-site interaction budget. Explicitly, they are
 * `norm_heisenberg_sub_siteExpectation_chainNeighborhood_le`: localization
   onto the exact real-radius neighborhood of that support.
 
-**Scope restriction (contiguous chains):** These estimates use the path on
-`Fin L`, as needed for the application to Theorem B of the one-dimensional
-note. The standing finite domain of the source may have gaps; its unrestricted
-local lemma is not asserted here. See
+**Source convention (contiguous chains):** The note fixes a contiguous chain in
+`part1_arealaw.tex`, lines 91–93, before the Part II argument. The sites here
+are `Fin L`, as in that argument. Additional finite-domain extensions are
+discussed in
 `docs/paper-gaps/tnlean_one_dimensional_connected_domain_scope.tex`.
 
 Source: TNLean one-dimensional note, `part2a_mps_information.tex`, Lemma

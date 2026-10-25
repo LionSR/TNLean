@@ -340,23 +340,24 @@ theorem linearIndependent_matterKet_pair {x y : Fin 4 → ZMod 2} (hxy : x ≠ y
     simpa [dotProduct_add, dotProduct_smul, star_matterKet_dotProduct_matterKet,
       Ne.symm hxy] using h
 
-theorem finrank_evenTarget : Module.finrank ℂ evenTarget = 2 := by
-  have hli : LinearIndependent ℂ ![matterKet ![0, 0, 0, 0], matterKet ![1, 1, 1, 1]] :=
-    linearIndependent_matterKet_pair (by decide)
-  have hrange : Set.range ![matterKet ![0, 0, 0, 0], matterKet ![1, 1, 1, 1]] =
-      {matterKet ![0, 0, 0, 0], matterKet ![1, 1, 1, 1]} :=
+/-- Two distinct computational basis vectors of the two-site matter space span
+a plane. -/
+private theorem finrank_span_matterKet_pair {x y : Fin 4 → ZMod 2} (hxy : x ≠ y) :
+    Module.finrank ℂ (Submodule.span ℂ {matterKet x, matterKet y}) = 2 := by
+  have hli : LinearIndependent ℂ ![matterKet x, matterKet y] :=
+    linearIndependent_matterKet_pair hxy
+  have hrange : Set.range ![matterKet x, matterKet y] = {matterKet x, matterKet y} :=
     Matrix.range_cons_cons_empty _ _ _
-  rw [evenTarget, ← hrange, finrank_span_eq_card hli]
+  rw [← hrange, finrank_span_eq_card hli]
   simp
 
+theorem finrank_evenTarget : Module.finrank ℂ evenTarget = 2 := by
+  rw [evenTarget]
+  exact finrank_span_matterKet_pair (by decide)
+
 theorem finrank_oddTarget : Module.finrank ℂ oddTarget = 2 := by
-  have hli : LinearIndependent ℂ ![matterKet ![1, 1, 0, 0], matterKet ![0, 0, 1, 1]] :=
-    linearIndependent_matterKet_pair (by decide)
-  have hrange : Set.range ![matterKet ![1, 1, 0, 0], matterKet ![0, 0, 1, 1]] =
-      {matterKet ![1, 1, 0, 0], matterKet ![0, 0, 1, 1]} :=
-    Matrix.range_cons_cons_empty _ _ _
-  rw [oddTarget, ← hrange, finrank_span_eq_card hli]
-  simp
+  rw [oddTarget]
+  exact finrank_span_matterKet_pair (by decide)
 
 /-- Every CZX defect domain is a plane. -/
 theorem finrank_defectDomain (a b : Multiplicative (ZMod 2)) :

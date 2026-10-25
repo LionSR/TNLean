@@ -189,7 +189,7 @@ private lemma supportedCount_eq_x (n : ℕ) (α β : Fin 2) :
   | zero =>
       fin_cases α <;> fin_cases β <;> simp [x]
   | succ n ih =>
-      rw [show n + 1 = n + 1 by rfl, supportedCount_succ]
+      rw [supportedCount_succ]
       fin_cases α <;> fin_cases β <;>
         simp only [ih]
       all_goals simp [x, pow_succ', B, Matrix.mul_apply, Fin.sum_univ_two]

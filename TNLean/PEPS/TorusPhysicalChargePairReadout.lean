@@ -45,7 +45,6 @@ private abbrev e₁ (v : X) := (verticalTwoPlaquetteCycleBond v 1).1
 private abbrev A (a : G → G → G → G → Fin d → ℂ) :=
   torusIncidentSite (width := width) (height := height) a
 
-
 open scoped Classical in
 /-- Two complete measurements, each supported on the two spins of its chosen
 horizontal bond, read out the actual six-spin prepared correlated charge pair.

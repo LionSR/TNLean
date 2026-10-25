@@ -94,8 +94,8 @@ theorem norm_interactionPropagator_sub_le {A B H H₀ : Matrix n n ℂ} (hA : A.
   refine (norm_add_le _ _).trans ?_
   rw [CStarRing.norm_mul_mem_unitary _ (SpectralFilter.hermitianUnitaryPath_mem_unitary hA _),
     CStarRing.norm_mem_unitary_mul _ (SpectralFilter.hermitianUnitaryPath_mem_unitary hH _)]
-  have h1 := norm_hermitianUnitaryPath_sub_le (hA.add hB) hH t
-  have h2 := norm_hermitianUnitaryPath_sub_le hA hH₀ (-t)
+  have h1 := Matrix.norm_hermitianUnitaryPath_sub_le (hA.add hB) hH t
+  have h2 := Matrix.norm_hermitianUnitaryPath_sub_le hA hH₀ (-t)
   rw [abs_neg] at h2
   rw [mul_add]
   linarith [mul_comm ‖A + B - H‖ |t|, mul_comm ‖A - H₀‖ |t|]
@@ -217,7 +217,7 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
     refine (norm_integral_le_of_norm_le hgint (Filter.Eventually.of_forall hpoint)).trans ?_
     rw [integral_add (habs.mul_const ε) hind, integral_mul_const,
       integral_indicator_const _ measurableSet_Icc.compl, smul_eq_mul]
-    have hm := integral_abs_gaussianReal_le η
+    have hm := Lattice.integral_abs_gaussianReal_le η
     have ht := GaussianFilter.measure_compl_Icc_le η hT
     nlinarith
 

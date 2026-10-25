@@ -1,0 +1,171 @@
+\section{Correlations of Schmidt-diagonal operators in Hastings' area law}
+\label{sec:hastings_schmidt_diagonal}
+
+% Hastings, arXiv:0705.2024v4, law16.tex, lines 627--692 (Lemma 3,
+% equation fwdback).
+
+Lemma~3 of \cite{Hastings2007AreaLaw} bounds the correlation between an
+operator that is diagonal in the Schmidt basis across a cut and an operator
+supported away from a buffer around the cut. Its proof uses only the
+approximate factorization of the ground-state projector supplied by Lemma~1.
+The two statements below take that factorization as a hypothesis, with an
+error $\varepsilon$ that is left free.
+
+\begin{theorem}[Correlation bound under an approximate factorization]
+    \label{thm:hastings_schmidt_diagonal_operator}
+    \lean{TNLean.MPS.AreaLaw.Hastings.norm_inner_sub_le_of_projector_factorization}
+    \leanok
+    Let $\Omega$ be a unit vector and $P=|\Omega\rangle\langle\Omega|$. Let
+    $O_B,O_L,O_R$ be positive semidefinite operators of norm at most one with
+    $\|O_BO_LO_R-P\|\le\varepsilon$, and let $A,B_L,B_R$ be operators of norm
+    at most one. Suppose that $O_B$ commutes with $A$, $O_R$ with $B_L$, $B_R$
+    with $O_L$ and $O_L$ with $O_R$, and that $B_L\Omega=B_R\Omega$. Then
+    \begin{align}
+        \bigl|\langle\Omega,AB_L\Omega\rangle-\langle\Omega,A\Omega\rangle
+        \langle\Omega,B_L\Omega\rangle\bigr|
+         & \le3\sqrt{2\varepsilon}+\varepsilon.
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Since $\|O_BO_LO_R\Omega-\Omega\|\le\varepsilon$ and the factors are
+    positive contractions, $\|(O_B-1)\Omega\|$, $\|(O_L-1)\Omega\|$ and
+    $\|(O_R-1)\Omega\|$ are at most $\delta=\sqrt{2\varepsilon}$. Writing
+    $x\approx_\eta y$ for $|x-y|\le\eta$,
+    \begin{align*}
+        \langle\Omega,AB_L\Omega\rangle
+         & \approx_\delta\langle\Omega,AB_LO_R\Omega\rangle
+        \approx_\delta\langle\Omega,O_BAB_LO_R\Omega\rangle
+        =\langle\Omega,AO_BO_RB_R\Omega\rangle                    \\
+         & \approx_\delta\langle\Omega,AO_BO_RB_RO_L\Omega\rangle
+        =\langle\Omega,A(O_BO_LO_R)B_R\Omega\rangle
+        \approx_\varepsilon\langle\Omega,APB_R\Omega\rangle .
+    \end{align*}
+    The first three steps use $\|(O_R-1)\Omega\|$, $\|(O_B-1)\Omega\|$ and
+    $\|(O_L-1)\Omega\|$ with norms at most one, the two equalities use the
+    commutations and $B_L\Omega=B_R\Omega$, and the last uses
+    $\|O_BO_LO_R-P\|\le\varepsilon$. Finally
+    $\langle\Omega,APB_R\Omega\rangle=\langle\Omega,A\Omega\rangle
+        \langle\Omega,B_R\Omega\rangle=\langle\Omega,A\Omega\rangle
+        \langle\Omega,B_L\Omega\rangle$, and the total cost is
+    $3\sqrt{2\varepsilon}+\varepsilon$.
+\end{proof}
+
+\begin{theorem}[Schmidt-diagonal operators are contractions]
+    \label{thm:hastings_schmidt_diagonal_norm}
+    \lean{TNLean.MPS.AreaLaw.Hastings.l2_opNorm_schmidtDiagonal_le_one}
+    \leanok
+    Let $(\psi(\alpha))_\alpha$ be an orthonormal family and $|O(\alpha)|\le1$.
+    Then $\sum_\alpha O(\alpha)\,|\psi(\alpha)\rangle\langle\psi(\alpha)|$ has
+    norm at most one.
+\end{theorem}
+\begin{proof}\leanok
+    By Bessel's inequality,
+    $\|\sum_\alpha O(\alpha)\langle\psi(\alpha),v\rangle\psi(\alpha)\|^2
+        =\sum_\alpha|O(\alpha)|^2|\langle\psi(\alpha),v\rangle|^2\le\|v\|^2$.
+\end{proof}
+
+\begin{theorem}[Correlations of a Schmidt-diagonal operator under an
+        approximate factorization]
+    \label{thm:hastings_schmidt_diagonal_chain}
+    \lean{TNLean.MPS.AreaLaw.Hastings.norm_inner_mul_sub_le_of_factorization}
+    \leanok
+    \uses{def:chain_model}
+    Let $\Omega$ be a unit vector on a chain of $L$ sites, with Schmidt
+    decomposition
+    $\Omega=\sum_\alpha a_\alpha\,\psi_L(\alpha)\otimes\psi_R(\alpha)$ across
+    the cut after $j$ sites. Let
+    $B_L=\sum_\alpha O(\alpha)\,|\psi_L(\alpha)\rangle\langle\psi_L(\alpha)|
+        \otimes1$ with $|O(\alpha)|\le1$, and let $A$ be an operator of norm
+    at most one supported away from the buffer, the sites among
+    $j-l,\dots,j+l-1$ that lie in the chain (fewer than $2l$ of them when the
+    cut is within $l$ sites of an end of the chain). Suppose there are
+    positive semidefinite operators $O_B,O_L,O_R$ of norm at most one,
+    supported on the buffer, on the first $j$ sites and on the remaining
+    sites respectively, with
+    $\|O_BO_LO_R-|\Omega\rangle\langle\Omega|\|\le\varepsilon$. Then
+    \begin{align}
+        \bigl|\langle\Omega,AB_L\Omega\rangle-\langle\Omega,A\Omega\rangle
+        \langle\Omega,B_L\Omega\rangle\bigr|
+         & \le3\sqrt{2\varepsilon}+\varepsilon.
+        \notag
+    \end{align}
+    This is a stage of the argument: the factorization is a hypothesis. With
+    the factorization of Lemma~1 for a gapped chain it is Lemma~3 of
+    \cite{Hastings2007AreaLaw}, equation (fwdback), with the error of that
+    factorization in place of $\varepsilon$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_schmidt_diagonal_operator,
+        thm:hastings_schmidt_diagonal_norm}
+    The operator $B_R=1\otimes\sum_\alpha O(\alpha)\,
+        |\psi_R(\alpha)\rangle\langle\psi_R(\alpha)|$ satisfies
+    \begin{align*}
+        B_L\Omega=\sum_\alpha a_\alpha O(\alpha)\,
+        \psi_L(\alpha)\otimes\psi_R(\alpha)=B_R\Omega
+    \end{align*}
+    by the Schmidt decomposition and orthonormality, and both $B_L$ and
+    $B_R$ have norm at most one by
+    Theorem~\ref{thm:hastings_schmidt_diagonal_norm}.
+    Operators supported on disjoint sets of sites commute, so the supports
+    give the four commutations of
+    Theorem~\ref{thm:hastings_schmidt_diagonal_operator}, which then applies.
+\end{proof}
+
+\begin{theorem}[The correlation lemma]
+    \label{thm:hastings_fwdback}
+    \lean{TNLean.MPS.AreaLaw.exists_norm_inner_mul_sub_le}
+    \leanok
+    \uses{def:chain_model, thm:hastings_lemma1_endpoint}
+    Let $R$ be a range. There is a constant $K\ge0$, depending only on $R$,
+    with the following property. Let $H$ be a Hamiltonian on a chain of $L$
+    sites, a sum of terms of range $R$ and norm at most $J\ge0$, whose ground
+    state $\Psi_0$ is unique with gap $\Delta E>0$ above the ground energy, let
+    $\tilde\xi$ be the length of Theorem~\ref{thm:hastings_lemma1_endpoint},
+    and let
+    $\Psi_0=\sum_\alpha a_\alpha\,\psi_L(\alpha)\otimes\psi_R(\alpha)$ with
+    orthonormal $\psi_L(\alpha)$ on the first $j$ sites and orthonormal
+    $\psi_R(\alpha)$ on the rest. Let
+    $B_L=\sum_\alpha O(\alpha)\,|\psi_L(\alpha)\rangle\langle\psi_L(\alpha)|
+        \otimes1$ with $|O(\alpha)|\le1$, and let $A$ be an operator of norm
+    at most one supported away from the sites $j-l,\dots,j+l-1$. Then
+    \begin{align}
+        \bigl|\langle\Psi_0,AB_L\Psi_0\rangle-\langle\Psi_0,A\Psi_0\rangle
+        \langle\Psi_0,B_L\Psi_0\rangle\bigr|
+         & \le3\sqrt{2\epsilon(l)}+\epsilon(l),
+         & \epsilon(l)                          & =K\tilde\xi^3e^{-l/(12\tilde\xi)}.
+        \notag
+    \end{align}
+    This is a quantitatively restricted form of
+    \cite[Lemma~3]{Hastings2007AreaLaw}, equation (fwdback), lines 627--646,
+    with Lemma~1 at the printed rate $\xi'=6\tilde\xi$ and the constant
+    $C_1=K\tilde\xi^3$ bounded by a polynomial in the length. The length
+    $\tilde\xi$ may stand in for the source's $\xi$: the source fixes
+    $\xi=\max(2v/\Delta E,\xi_C)$ only through some Lieb--Robinson pair, and a
+    bound valid for $|t|\le l/v$ stays valid for a larger velocity
+    \cite[lines 96--112]{Hastings2007AreaLaw}, so raising the velocity of the
+    chain estimate is a legitimate choice
+    \cite{gap:hastings07_lemma1_decay_length}.
+    The proof needs $O_B$ positive, and the positive form of Lemma~1 decays at
+    half the rate, so $\epsilon(l)$ decays at the rate $12\tilde\xi$
+    \cite{gap:hastings07_lemma1_positivity_rate}. It also inherits the
+    remaining restriction of the formalized Lemma~1: the length $\tilde\xi$
+    comes from the chain Lieb--Robinson estimate with raised velocity, and is
+    not shown to be the source's $\max(2v/\Delta E,\xi_C)$ for a
+    Lieb--Robinson pair in the source's sense
+    \cite{gap:hastings07_lemma1_decay_length,
+        gap:hastings07_gaussian_average_exponent}. The bound is on the modulus
+    of the difference, which is stronger than the printed one-sided bound.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_lemma1_endpoint,
+        thm:hastings_schmidt_diagonal_chain}
+    The positive form in Theorem~\ref{thm:hastings_lemma1_endpoint}
+    gives, at the cut $j$ and length $l$, a positive semidefinite $O_B$ of
+    norm at most one on the sites $j-l,\dots,j+l-1$ and commuting orthogonal
+    projections $O_L$, $O_R$ on the two sides of the cut with
+    $\|O_BO_LO_R-P_0\|\le\epsilon(l)$. Orthogonal projections are positive
+    semidefinite contractions, so
+    Theorem~\ref{thm:hastings_schmidt_diagonal_chain} applies with
+    $\varepsilon=\epsilon(l)$.
+\end{proof}

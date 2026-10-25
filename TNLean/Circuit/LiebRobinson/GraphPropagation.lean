@@ -55,6 +55,8 @@ the chain and localization statements are separate specializations.
 * `QuantumCircuit.heisenbergCommutatorNorm_le_graphDistance_finset` and
   `QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finset`: the bounds
   for arbitrary finite initial supports.
+* `QuantumCircuit.heisenberg_commutator_eq_zero_of_forall_edist_eq_top`: exact
+  commutation for an arbitrary initial support separated from the observed site.
 * `QuantumCircuit.heisenberg_commutator_eq_zero_of_edist_eq_top`: exact
   vanishing between different connected components.
 * `QuantumCircuit.exists_graph_lieb_robinson`: the bound with constants chosen
@@ -487,6 +489,41 @@ theorem norm_heisenberg_commutator_le_graphDistance {κ : Type*} [Fintype κ]
       rw [sub_eq_add_neg, Real.exp_add]
       ring
 
+/-- Exact commutation when every initial site is at infinite graph distance from `y`.
+This is the disconnected-domain extension of the TNLean one-dimensional note,
+`part2a_mps_information.tex`, Lemma `lem:LR`, lines 267–309; the closed-region argument
+is the exact-vanishing step of OpenAI, *A two-dimensional area law from a global
+spectral gap*, Lemma 4.1, `03-quasilocal.tex`, lines 63 and 113–114. -/
+theorem heisenberg_commutator_eq_zero_of_forall_edist_eq_top
+    {κ : Type*} [Fintype κ]
+    (G : SimpleGraph ι) (X : κ → Finset ι)
+    (h : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ)
+    (hSupport : ∀ k, h k ∈ supportedOperators q (X k : Set ι))
+    (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
+    (S : Finset ι) {A B : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (hA : A ∈ supportedOperators q (S : Set ι)) (y : ι)
+    (hB : B ∈ supportedOperators q ({y} : Set ι))
+    (hy : ∀ x ∈ S, G.edist x y = ⊤) (t : ℝ) :
+    heisenbergEvolution (∑ k, h k) t A * B -
+      B * heisenbergEvolution (∑ k, h k) t A = 0 := by
+  classical
+  let C : Set ι := {x | ¬G.Reachable x y}
+  have hReach : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.Reachable x z :=
+    fun k x hx z hz ↦ SimpleGraph.reachable_of_edist_ne_top
+      (ne_top_of_le_ne_top (ENat.natCast_ne_top R) (hDiam k x hx z hz))
+  have hClosed (k : κ) : (X k : Set ι) ⊆ C ∨ Disjoint (X k : Set ι) C :=
+    (Classical.em (∃ x ∈ X k, G.Reachable x y)).elim
+      (fun ⟨x, hx, hxy⟩ ↦ Or.inr (Set.disjoint_left.mpr fun z hz hzC ↦
+        hzC ((hReach k z hz x hx).trans hxy)))
+      (fun hk ↦ Or.inl fun z hz hzy ↦ hk ⟨z, hz, hzy⟩)
+  have hSC : (S : Set ι) ⊆ C := fun x hx hxy ↦
+    (SimpleGraph.edist_ne_top_iff_reachable.mpr hxy) (hy x hx)
+  have hCy : Disjoint C ({y} : Set ι) :=
+    Set.disjoint_singleton_right.mpr (fun hyC ↦ hyC (SimpleGraph.Reachable.refl y))
+  exact sub_eq_zero.mpr (commute_heisenbergEvolution_of_closed
+    h (fun k ↦ (X k : Set ι)) hSupport C {y} hClosed hCy
+    (supportedOperators_mono hSC hA) hB t).eq
+
 /-- **Exact vanishing at infinite graph distance.** If the anchor of the
 support of `A` and the site `y` lie in different connected components of the
 graph, then `τ_t(A)` commutes with every on-site operator at `y`, for all
@@ -504,23 +541,14 @@ theorem heisenberg_commutator_eq_zero_of_edist_eq_top {κ : Type*} [Fintype κ]
     (hB : B ∈ supportedOperators q ({y} : Set ι))
     (hy : G.edist (a i) y = ⊤) (t : ℝ) :
     heisenbergEvolution (∑ k, h k) t A * B - B * heisenbergEvolution (∑ k, h k) t A = 0 := by
-  let C : Set ι := {x | G.Reachable (a i) x}
-  have hReach : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.Reachable x z := fun k x hx z hz =>
-    SimpleGraph.reachable_of_edist_ne_top
-      (ne_top_of_le_ne_top (ENat.natCast_ne_top R) (hDiam k x hx z hz))
-  have hClosed : ∀ k, (X k : Set ι) ⊆ C ∨ Disjoint (X k : Set ι) C := by
-    intro k
-    by_cases hk : ∃ x ∈ X k, G.Reachable (a i) x
-    · obtain ⟨x, hx, hax⟩ := hk
-      exact Or.inl fun z hz => hax.trans (hReach k x hx z hz)
-    · push Not at hk
-      exact Or.inr (Set.disjoint_left.mpr fun x hx hxC => hk x hx hxC)
-  have hXi : (X i : Set ι) ⊆ C := fun z hz => hReach i (a i) (ha i) z hz
-  have hyC : Disjoint C ({y} : Set ι) := by
-    refine Set.disjoint_singleton_right.mpr fun hyC => ?_
-    exact (SimpleGraph.edist_ne_top_iff_reachable.mpr hyC) hy
-  exact sub_eq_zero.mpr (commute_heisenbergEvolution_of_closed h (fun k => (X k : Set ι))
-    hSupport C {y} hClosed hyC (supportedOperators_mono hXi hA) hB t).eq
+  have hNo (x : ι) (hx : x ∈ X i) : G.edist x y = ⊤ := by
+    by_contra hxy
+    have hax : G.Reachable (a i) x := SimpleGraph.reachable_of_edist_ne_top
+      (ne_top_of_le_ne_top (ENat.natCast_ne_top R) (hDiam i (a i) (ha i) x hx))
+    exact (SimpleGraph.edist_ne_top_iff_reachable.mpr
+      (hax.trans (SimpleGraph.reachable_of_edist_ne_top hxy))) hy
+  exact heisenberg_commutator_eq_zero_of_forall_edist_eq_top
+    G X h hSupport R hDiam (X i) hA y hB hNo t
 
 /-- **Graph-distance propagation with constants fixed in advance.** For given
 support diameter `R`, support size `v_R` and per-site budget `b₀`, there are

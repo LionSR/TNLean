@@ -64,8 +64,8 @@ theorem regionVertexLeftInverse_comp_regionVertexTensorMap
     regionVertexLeftInverse A hA R ∘ₗ regionVertexTensorMap A R = LinearMap.id := by
   classical
   rw [regionVertexLeftInverse, regionVertexTensorMap, regionPhysicalMap_comp]
-  have hcomp (v : V) : localLeftInverse A hA v ∘ₗ localTensorMap A v = LinearMap.id := by
-    exact localLeftInverseAt_comp_localTensorMap A (hA v)
+  have hcomp (v : V) : localLeftInverse A hA v ∘ₗ localTensorMap A v = LinearMap.id :=
+    localLeftInverseAt_comp_localTensorMap A (hA v)
   simp only [← LinearMap.toMatrix'_comp, hcomp, LinearMap.toMatrix'_id,
     regionPhysicalMap, regionPhysicalProductMatrix_one, Matrix.mulVecLin_one]
 

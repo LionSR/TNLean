@@ -13,10 +13,10 @@ This file proves the statements of Lemma 5.1 `lem:effects` about parties for gat
 expansions into monomials placed on parties: the replaced gate has an expansion using only
 local contractions and normalized pair sources, and its additional registers are owned by the
 endpoint parties of the eliminated effects.  Registers, source-only words and stacks of pair
-registers are defined in `TNLean.PEPS.Approximation.PartyWord`; allowed monomials on parties
+registers are defined in `TNLean.Lattice.PartyCircuit.PartyWord`; allowed monomials on parties
 (`PartyChain`), their replaced terms and their stacks in
-`TNLean.PEPS.Approximation.PartyChain`; the combination of two adjacent pair sources in
-`TNLean.PEPS.Approximation.PairSourceCombination`.
+`TNLean.Lattice.PartyCircuit.PartyChain`; the combination of two adjacent pair sources in
+`TNLean.Lattice.PartyCircuit.PairSourceCombination`.
 
 In the replacement, the stack of an effect occurrence on `(p, q)` consists of `m` pair
 registers `ℂ^α ⊗ ℂ^β`, the `ℂ^α` half owned by `p` and the `ℂ^β` half owned by `q`.  The
@@ -26,7 +26,7 @@ vector with a product of pair sources (`gateIso_prepGate`), and the additional r
 the stacks (`gateOut_eq`).
 
 The combination of arbitrary sources on one unordered pair, including sources separated
-by local operations, is proved in `TNLean.PEPS.Approximation.PairEffectSourcePreparation`.
+by local operations, is proved in `TNLean.Lattice.PartyCircuit.PairEffectSourcePreparation`.
 That module proves `partyPairEffectElimination_with_grouped_sources`, which retains all
 conclusions here and includes the last clause of Lemma 5.1. The earlier restriction and
 its resolution are recorded in `docs/paper-gaps/polypeps_pair_effects_party_layout.tex`.
@@ -112,9 +112,6 @@ def gateIso : (L : PartyGate ℓX ℓY) → Mem (gateOut m L) ≃ₗᵢ[ℂ] Mem
       (((gateIso L).rTensor _).trans ((TensorProduct.assocIsometry ℂ _ _ _).trans
         ((TensorProduct.commIsometry ℂ _ _).lTensor _)))
 
-theorem gateIso_nil (x : Mem ℓY) : gateIso m ([] : PartyGate ℓX ℓY) x = x ⊗ₜ (1 : ℂ) :=
-  rfl
-
 theorem gateIso_cons (p : ℂ × PartyChain ℓX ℓY) (L : PartyGate ℓX ℓY)
     (z : Mem (gateOut m (p :: L))) :
     gateIso m (p :: L) z =
@@ -124,16 +121,6 @@ theorem gateIso_cons (p : ℂ × PartyChain ℓX ℓY) (L : PartyGate ℓX ℓY)
           (p.2.toEffectChain.stackSpace m)
           ((gateIso m L).rTensor (p.2.toEffectChain.stackSpace m)
             (p.2.stackAppIso m (gateOut m L) z))) :=
-  rfl
-
-theorem gateIso_cons_clm (p : ℂ × PartyChain ℓX ℓY) (L : PartyGate ℓX ℓY) :
-    isoL (gateIso m (p :: L)) =
-      isoL ((TensorProduct.commIsometry ℂ (inventory m (toGate L))
-          (p.2.toEffectChain.stackSpace m)).lTensor (Mem ℓY)) ∘L
-        isoL (TensorProduct.assocIsometry ℂ (Mem ℓY) (inventory m (toGate L))
-          (p.2.toEffectChain.stackSpace m)) ∘L
-        isoL ((gateIso m L).rTensor (p.2.toEffectChain.stackSpace m)) ∘L
-        isoL (p.2.stackAppIso m (gateOut m L)) :=
   rfl
 
 /-- Preparation of the common garbage vector `Γ_m` by pair sources. -/

@@ -83,10 +83,8 @@ theorem sheetSwapOp_mul_sheetSwapOp {A Y T : Finset ι} (hT : ∀ x, x ∈ T ↔
   rw [toMatrix_toPEquiv_submatrix, sheetSwapOp]
   congr 2
   ext r x
-  · by_cases hxA : x ∈ A
-    · simp [sheetSwap, hxA, hA hxA, (hT x).not.mpr (fun h => h.2 hxA)]
-    · by_cases hxY : x ∈ Y <;> simp [sheetSwap, hxA, hxY, hT x]
-  · by_cases hxA : x ∈ A
+  all_goals
+    by_cases hxA : x ∈ A
     · simp [sheetSwap, hxA, hA hxA, (hT x).not.mpr (fun h => h.2 hxA)]
     · by_cases hxY : x ∈ Y <;> simp [sheetSwap, hxA, hxY, hT x]
 

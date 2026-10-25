@@ -342,11 +342,12 @@ private theorem IsMPU.normalized_fixed_points_simple1_of_stabilization
           (fun i ↦ data.left (finProdFinEquiv.symm i) *
             data.right (finProdFinEquiv.symm i))
       _ = 1 := by simpa [dotProduct, mul_comm] using data.pairing_eq_one
-  have hErho : E *ᵥ ρ = ρ := by
-    rw [show E = (transferMatrix
+  have hEsub : E = (transferMatrix
       (Kraus.transferMap U.normalizedFlattening)).submatrix
-        finProdFinEquiv.symm finProdFinEquiv.symm by
-      exact normalizedDiagonal_doubleLayerTensor U]
+        finProdFinEquiv.symm finProdFinEquiv.symm := by
+    exact normalizedDiagonal_doubleLayerTensor U
+  have hErho : E *ᵥ ρ = ρ := by
+    rw [hEsub]
     rw [Matrix.submatrix_mulVec_equiv]
     simp only [Equiv.symm_symm]
     have hρ : ρ ∘ finProdFinEquiv = data.right := by
@@ -356,10 +357,7 @@ private theorem IsMPU.normalized_fixed_points_simple1_of_stabilization
     rw [hρ, data.right_fixed]
     rfl
   have hEΦ : Matrix.vecMul Φ E = Φ := by
-    rw [show E = (transferMatrix
-      (Kraus.transferMap U.normalizedFlattening)).submatrix
-        finProdFinEquiv.symm finProdFinEquiv.symm by
-      exact normalizedDiagonal_doubleLayerTensor U]
+    rw [hEsub]
     rw [Matrix.submatrix_vecMul_equiv]
     simp only [Equiv.symm_symm]
     have hΦ : Φ ∘ finProdFinEquiv = data.left := by
@@ -829,7 +827,7 @@ common positive direct blocking at which both are simple. This combines the
 bounded simple blocking of arXiv:1703.09188, Proposition III.3(ii), with its
 all-later-blockings corollary (lines 442--446). -/
 theorem IsMPU.exists_common_blockTensor_isMPUSimple
-    [NeZero d] [NeZero D] [NeZero e] [NeZero E]
+    {e E : ℕ} [NeZero d] [NeZero D] [NeZero e] [NeZero E]
     {U : MPOTensor d D} {V : MPOTensor e E} (hU : IsMPU U) (hV : IsMPU V) :
     ∃ k : ℕ, 0 < k ∧
       IsMPUSimple (MPOTensor.blockTensor U k) ∧
@@ -844,7 +842,7 @@ common positive direct blocking at which all three are simple. This is the
 finite three-tensor consequence of arXiv:1703.09188, Proposition III.3(ii)
 and its all-later-blockings corollary (lines 442--446). -/
 theorem IsMPU.exists_common_blockTensor_isMPUSimple_three
-    [NeZero d] [NeZero D] [NeZero e] [NeZero E] [NeZero f] [NeZero F]
+    {e E f F : ℕ} [NeZero d] [NeZero D] [NeZero e] [NeZero E] [NeZero f] [NeZero F]
     {U : MPOTensor d D} {V : MPOTensor e E} {W : MPOTensor f F}
     (hU : IsMPU U) (hV : IsMPU V) (hW : IsMPU W) :
     ∃ k : ℕ, 0 < k ∧

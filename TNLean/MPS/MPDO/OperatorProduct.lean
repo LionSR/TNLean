@@ -161,16 +161,6 @@ theorem mulTensor_smul_smul (a b : ℂ) (M : MPOTensor d D₁) (N : MPOTensor d 
     Matrix.smul_apply, Matrix.kroneckerMap_apply, smul_eq_mul, Finset.mul_sum]
   exact Finset.sum_congr rfl fun j _ ↦ by ring
 
-/-- Rescaling the first factor of a bond-space product rescales the product. -/
-theorem mulTensor_smul_left (a : ℂ) (M : MPOTensor d D₁) (N : MPOTensor d D₂) :
-    mulTensor (a • M) N = a • mulTensor M N := by
-  simpa using mulTensor_smul_smul a 1 M N
-
-/-- Rescaling the second factor of a bond-space product rescales the product. -/
-theorem mulTensor_smul_right (b : ℂ) (M : MPOTensor d D₁) (N : MPOTensor d D₂) :
-    mulTensor M (b • N) = b • mulTensor M N := by
-  simpa using mulTensor_smul_smul 1 b M N
-
 /-- The canonical reassociation equivalence of three bond spaces,
 \(((\mathbb C^{D_1}\otimes\mathbb C^{D_2})\otimes\mathbb C^{D_3})\) with
 \(\mathbb C^{D_1}\otimes(\mathbb C^{D_2}\otimes\mathbb C^{D_3})\).
