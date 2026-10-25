@@ -16,7 +16,10 @@ run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[``inner_commutator_apply_eq_sum, ``abs_sub_mul_norm_inner_le, ``labelClass,
       ``levelGap, ``levelGap_pos, ``levelGap_le, ``norm_inner_le_of_mem_labelClass,
-      ``norm_inner_le_of_two_levels, ``norm_offDiagonalPartFamily_le_of_two_levels] do
+      ``norm_inner_le_of_two_levels, ``norm_offDiagonalPartFamily_le_of_two_levels,
+      ``exists_lt_mem_labelClass_ne, ``sum_cross_le, ``levelBoundA, ``levelBoundB,
+      ``norm_inner_A_le_levelBoundA, ``norm_inner_le_levelBoundB,
+      ``norm_offDiagonalPartFamily_le_levelBoundB] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl

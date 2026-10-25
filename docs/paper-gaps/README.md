@@ -1331,7 +1331,8 @@ at most `‖[P M_i P, P M_j P]‖ / |r - s|`, and a ground state is an approxima
 `M_i` up to that off-diagonal part. Every dimension is treated: one compression with simple
 spectrum gives `(n - 1) ‖[P M_i P, P M_j P]‖ / δ`, and repeated eigenvalues are resolved by the
 source's iteration over further compressions, made rigorous by an identity for the matrix
-elements at each level; the cross terms the sketch omits are kept (a local correction). The
+elements at each level and assembled by induction over any number of levels; the cross terms the
+sketch omits are kept (a local correction). The
 basis is given, and eq. `oibu` is left as the sum of the commutators.
 
 ### One-dimensional area law after Hastings: the entropy gain constants

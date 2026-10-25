@@ -493,3 +493,33 @@ dimension.
     $2\|[A_0,A_1]\|\,\|[A_0,B]\|/\delta_0^2$. The norm bound is
     Theorem~\ref{thm:hastings05_simple_spectrum_basis}.
 \end{proof}
+
+\begin{theorem}[Every level]
+    \label{thm:hastings05_basis_levels}
+    \lean{TNLean.Lattice.exists_lt_mem_labelClass_ne,
+        TNLean.Lattice.sum_cross_le,
+        TNLean.Lattice.levelBoundA,
+        TNLean.Lattice.levelBoundB,
+        TNLean.Lattice.norm_inner_A_le_levelBoundA,
+        TNLean.Lattice.norm_inner_le_levelBoundB,
+        TNLean.Lattice.norm_offDiagonalPartFamily_le_levelBoundB}
+    \leanok
+    \uses{thm:hastings05_basis_iteration, thm:hastings05_simple_spectrum_basis}
+    Let every commutator $[A_\ell,A_m]$ be at most $K$ and every $[A_\ell,B]$ at
+    most $K_B$. Put $\alpha_0=K/\delta_0$, $\beta_0=K_B/\delta_0$,
+    $\alpha_{\ell+1}=\max(\alpha_\ell,(K+2n\alpha_\ell^2)/\delta_{\ell+1})$ and
+    $\beta_{\ell+1}=\max(\beta_\ell,(K_B+2n\alpha_\ell\beta_\ell)/\delta_{\ell+1})$.
+    Then every element of $B$ between two indices separated first at level
+    $\ell$ is at most $\beta_\ell$. If every pair of distinct indices is
+    separated at some level below $L$, the off-diagonal part of $B$ has norm at
+    most $(n-1)\beta_{L-1}$. The iteration
+    of~\cite[lines 1695--1708]{Hastings2006Solving} ends when every off-diagonal
+    element is bounded, that is, when every pair is separated.
+\end{theorem}
+\begin{proof}\leanok
+    Induction on the level. An index $c$ outside the class of $a$ at level
+    $\ell+1$ is separated from $a$, and from $b$, at a first level $m\le\ell$, so
+    each cross term of Theorem~\ref{thm:hastings05_basis_iteration} is at most
+    $2\alpha_\ell\beta_\ell$, and there are at most $n$ of them. The elements of
+    the $A_m$ are bounded first, with $B=A_m$.
+\end{proof}
