@@ -26,8 +26,6 @@ right generator `0` and input `1`.
 * `TNLean.MPS.AreaLaw.Hastings.norm_gaussianTimeAverage_sub_groundProjector_le`: if `Ω` is a
   gapped ground vector of `H` with energy `0` and gap `ΔE > 0`, then
   `‖P_q(H) - |Ω⟩⟨Ω|‖ ≤ exp(-q/2)` (`law16.tex`, line 848).
-* `TNLean.MPS.AreaLaw.Hastings.norm_hermitianUnitaryPath_sub_le`: the Duhamel bound
-  `‖e^{iMt} - e^{iHt}‖ ≤ ‖M - H‖ |t|` for Hermitian `M` and `H`.
 * `TNLean.MPS.AreaLaw.Hastings.norm_gaussianTimeAverage_sub_le`: for Hermitian `M` and `H`
   and `ΔE > 0`, `‖P_q(M) - P_q(H)‖ ≤ √q / ΔE · ‖M - H‖`.
 * `TNLean.MPS.AreaLaw.Hastings.norm_gaussianTimeAverage_sub_groundProjector_le_add`: the
@@ -131,20 +129,6 @@ theorem norm_gaussianTimeAverage_sub_groundProjector_le {H : Matrix n n ℂ}
   rw [happly]
   exact hmain.trans (mul_le_mul_of_nonneg_right hexp (norm_nonneg x))
 
-/-- **Duhamel bound.** For Hermitian `M` and `H`, `‖e^{iMt} - e^{iHt}‖ ≤ ‖M - H‖ |t|`.
-This is the elementary estimate behind the perturbation step of Hastings,
-arXiv:0705.2024v4, `law16.tex`, lines 849–864. -/
-theorem norm_hermitianUnitaryPath_sub_le {M H : Matrix n n ℂ} (hM : M.IsHermitian)
-    (hH : H.IsHermitian) (t : ℝ) :
-    ‖hermitianUnitaryPath M t - hermitianUnitaryPath H t‖ ≤ ‖M - H‖ * |t| := by
-  have hderiv (A : Matrix n n ℂ) (s : ℝ) :
-      HasDerivAt (hermitianUnitaryPath A) ((I • A) * hermitianUnitaryPath A s) s :=
-    hasDerivAt_exp_smul_const' (𝕂 := ℝ) (I • A) s
-  exact MatrixEvolution.norm_sub_le_of_generator_bound (G := fun _ => M) (H := fun _ => H)
-    continuous_const continuous_const (fun _ => hM) (fun _ => hH)
-    (hermitianUnitaryPath_zero M) (hermitianUnitaryPath_zero H) (hderiv M) (hderiv H) t _
-    (fun _ _ => le_rfl)
-
 /-- **Perturbation stability.** For Hermitian `M` and `H` and `ΔE > 0`,
 `‖P_q(M) - P_q(H)‖ ≤ √q / ΔE · ‖M - H‖`. The constant bounds the first absolute moment
 `(ΔE/√(2πq)) ∫ |t| e^{-(tΔE)²/2q} dt = √(2/π) √q / ΔE` of the Gaussian weight.
@@ -166,7 +150,7 @@ theorem norm_gaussianTimeAverage_sub_le {M H : Matrix n n ℂ} (hM : M.IsHermiti
   calc
     _ ≤ ∫ t, ‖M - H‖ * |t| ∂gaussianReal 0 h :=
       norm_integral_le_of_norm_le habs
-        (Filter.Eventually.of_forall (norm_hermitianUnitaryPath_sub_le hM hH))
+        (Filter.Eventually.of_forall (Matrix.norm_hermitianUnitaryPath_sub_le hM hH))
     _ = ‖M - H‖ * ∫ t, |t| ∂gaussianReal 0 h := integral_const_mul _ _
     _ ≤ ‖M - H‖ * Real.sqrt h :=
       mul_le_mul_of_nonneg_left (Lattice.integral_abs_gaussianReal_le h) (norm_nonneg _)

@@ -1321,6 +1321,16 @@ the degenerate case. Its closed neighbourhood must be strictly smaller than
 the support separation; the decay estimate also requires a positive time-window
 slope `c₁` with `v c₁ < 1/2`.
 
+### Local solution of gapped Hamiltonians: a basis of a two-dimensional ground space
+
+[hastings05_two_dim_ground_basis.tex](hastings05_two_dim_ground_basis.tex)
+(scope restriction, open) records the treatment of a degenerate ground space in Hastings,
+*Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, lines 1678–1705). In an
+eigenbasis of `P M_j P` with eigenvalues `r ≠ s`, the off-diagonal part of `P M_i P` has norm
+at most `‖[P M_i P, P M_j P]‖ / |r - s|`, and a ground state is an approximate eigenvector of
+`M_i` up to that off-diagonal part. Only a ground space of dimension two is treated, with the
+eigenbasis given, and eq. `oibu` is left as the sum of the commutators.
+
 ### One-dimensional area law after Hastings: the entropy gain constants
 
 [hastings07_relent_constants.tex](hastings07_relent_constants.tex)
