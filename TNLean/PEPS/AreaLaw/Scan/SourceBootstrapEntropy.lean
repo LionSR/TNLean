@@ -40,6 +40,8 @@ open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation F
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open SpectralFilter
@@ -105,27 +107,56 @@ private theorem restored_entropy_le_of_selected_rough_comparisons
   norm_num only [show 2 * (3 : ℝ) = 6 by norm_num] at htyp
   linarith only [htyp, ht]
 
+/-- The explicit threshold of the rough bootstrap entropy improvement at the bootstrap scanner
+exponents `F` of `e₀`: the rough source-selection threshold, the scale-facts threshold of the
+selected density, the principal energy threshold with coefficients
+`actualChargeEnergyCoefficient`, `roughSelectedDensityCoefficient` and the transport logarithmic
+coefficients, the target continuity threshold, the rounded admissibility and fixed-weight
+transport thresholds, the comparison-loss and restored-budget thresholds, `n^ν ≥ 4`, and
+`n ≥ 3` (`08-scanner.tex`, lines 693--792). -/
+noncomputable def sourceBootstrapEntropyThreshold (q R : ℕ) {e₀ : ℝ} (he₀ : 0 < e₀)
+    (he₀₁ : e₀ < 1) (Ctr ct Cent eent Cen een g C₁ C_T Ce : ℝ) (multiplicity : ℕ) : ℕ :=
+  let F := BootstrapParameters.scannerExponents e₀ he₀ he₀₁
+  max (F.sourceRoughSelectionThreshold q R Ctr g C₁ C_T multiplicity 100)
+    (max F.scaleFactsThreshold
+      (max (bootstrapPrincipalEnergyThreshold he₀ he₀₁
+          (2 * actualChargeEnergyCoefficient q Ctr multiplicity Cen een / (g / 2))
+          (roughSelectedDensityCoefficient q Ce C₁
+            (transportLogCoefficient q Ctr Cent eent Cen een))
+          (transportLogExponent een (een + 1 / 8)) (transportLogExponent eent een))
+        (max (truncationEntropyThreshold q g (C_T + 1))
+          (max (F.roundedAdmissibilityThreshold Ctr)
+            (max (F.fixedWeightTransportThreshold q Ctr ct)
+              (max (bootstrapComparisonLossThreshold 6 (1 + (g / 2)⁻¹) e₀)
+                (max (bootstrapComparisonBudgetThreshold e₀)
+                  (max (Real.natRpowThreshold F.nu 4) 3))))))))
+
 open Classical in
-/-- The actual rough-only bootstrap improves the entropy exponent on the
-original target. The source entropy premises retain the current exponent;
-the output exponent is multiplied by `1 - ell e₀`. Source:
-`08-scanner.tex`, lines 693--792. -/
-theorem exists_sourceBootstrap_entropy_improvement
+/-- The actual rough-only bootstrap improvement of
+`exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound` at the named
+truncation constant `Ctr = latticeTruncationRadiusConstant R J Δ (C_T + 1)`, which depends only
+on `R, J, Δ, C_T`. Source: `08-scanner.tex`, lines 693--792. -/
+theorem sourceBootstrap_entropy_improvement_explicit
     {q : ℕ} [NeZero q] (hq : 1 ≤ q) (R : ℕ)
-    {J Δ C_T C₁ e₀ Ce : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    {J Δ C_T C₁ e₀ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (hC_T : 0 ≤ C_T) (hC₁ : 0 < C₁) (multiplicity : ℕ)
     (hmultiplicity : 3 * (multiplicity : ℝ) ≤ C₁)
-    (he₀ : (Exponents.boxError : ℝ) < e₀) (he₀₁ : e₀ < 1) (hCe : 0 ≤ Ce) :
+    (he₀ : (Exponents.boxError : ℝ) < e₀) (he₀₁ : e₀ < 1)
+    {ct Cent eent Cen een : ℝ} (hct : 0 < ct)
+    (htransport : FiniteFamilyTransportBound ct Cent eent Cen een)
+    {Ctr : ℝ} (hCtrEq : Ctr = latticeTruncationRadiusConstant R J Δ (C_T + 1)) :
     let he₀pos : 0 < e₀ := lt_trans (by norm_num [Exponents.boxError]) he₀
     let F := BootstrapParameters.scannerExponents e₀ he₀pos he₀₁
-    ∃ Ctr Cout : ℝ, 0 < Ctr ∧ 0 < Cout ∧ ∃ N : ℕ, 2 ≤ N ∧
+    ∀ Ce : ℝ, 0 ≤ Ce →
       ∀ η : ℝ, (Exponents.boxError : ℝ) < η → η ≤ e₀ →
       ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
         (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
         (Ω : StateSpace Λ q),
         IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-        S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
+        S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+        sourceBootstrapEntropyThreshold q R he₀pos he₀₁ Ctr ct Cent eent Cen een
+          (Δ / positiveNormalization 1 (Δ / 2) J) C₁ C_T Ce multiplicity ≤ S.n →
         S.r₀ = roundedLogRadius Ctr S.n →
         S.m = F.m S.n → S.D = F.D S.n → S.K = F.K S.n →
         S.C₁ = C₁ → (T.card : ℝ) ≤ C_T * (S.n : ℝ) ^ 2 →
@@ -141,42 +172,57 @@ theorem exists_sourceBootstrap_entropy_improvement
           regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
             Ce * ((S.n : ℝ) * (F.L S.n : ℝ) ^ η + S.n)) →
         regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
-          Cout * (S.n : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * η) := by
+          bootstrapRestoredBudgetCoefficient q Ce *
+            (S.n : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * η) := by
   intro he₀pos F
-  obtain ⟨Ctr, Ctarget, ct, Cent, eent, Cen, een, hCtr, _, hct, hsource⟩ :=
-    exists_sourceTarget_selected_actualCharge_rough_comparison
-      hq R hJ hΔ hC_T hC₁ multiplicity hmultiplicity 100
-  obtain ⟨C, Cl, hC, _, Ns, hNs, hsource⟩ := hsource F
-  obtain ⟨Ct, Clt, hCt, _, hcap⟩ :=
-    exists_transport_coefficients_log_bound hq hCtr.le Cent eent Cen een
-  obtain ⟨Cδ, hCδ, Nd, _, hdensity⟩ :=
-    F.exists_rough_selectedDensity_principal hq Ce C₁ Ct Clt hCe hC₁
-      (zero_le_one.trans hCt)
+  have hsource := sourceTarget_selected_actualCharge_rough_comparison_explicit
+    hq R hJ hΔ hC_T hC₁ multiplicity hmultiplicity 100 htransport hCtrEq
+  have hCtr : 0 < Ctr := by
+    rw [hCtrEq]; exact latticeTruncationRadiusConstant_pos R hΔ (by positivity)
+  have hsource := hsource F
+  intro Ce hCe
+  let C := actualChargeEnergyCoefficient q Ctr multiplicity Cen een
+  let Cl := transportLogExponent een (een + 1 / 8)
+  let Ct := transportLogCoefficient q Ctr Cent eent Cen een
+  let Clt := transportLogExponent eent een
+  let Cδ := roughSelectedDensityCoefficient q Ce C₁ Ct
+  have hC : 1 ≤ C := one_le_mul_of_one_le_of_one_le (by norm_num)
+    (transport_coefficients_log_bound hq hCtr.le
+      (10 * (10 * (multiplicity : ℝ)) ^ (7 / 8 : ℝ) * |Cen|) een
+      (50 * (multiplicity : ℝ) * (2 : ℝ) ^ (1 / 8 : ℝ) * |Cen|) (een + 1 / 8)).1
+  obtain ⟨hCt, _, hcap⟩ := transport_coefficients_log_bound hq hCtr.le Cent eent Cen een
+  have hdensity := fun n (hn : F.scaleFactsThreshold ≤ n) =>
+    F.rough_selectedDensity_principal_of_threshold_le hq Ce C₁ Ct Clt hCe hC₁
+      (zero_le_one.trans hCt) hn
+  have hCδ : 0 ≤ Cδ := by
+    have hlq : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
+    have hCt0 : 0 ≤ Ct := zero_le_one.trans hCt
+    dsimp only [Cδ]; unfold roughSelectedDensityCoefficient; positivity
   let g := Δ / positiveNormalization 1 (Δ / 2) J
   have hg : 0 < g := div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J)
-  obtain ⟨Ne, _, henergy⟩ := exists_bootstrap_selected_energy_bound
-    he₀pos he₀₁ C Cδ Cl Clt (g / 2) (zero_le_one.trans hC) hCδ.le (half_pos hg)
-  obtain ⟨Nt, htarget⟩ := eventually_atTop.mp
-    (eventually_abs_regionalEntropy_sub_le_of_truncation q hq g (C_T + 1) hg)
-  obtain ⟨Na, _, hadmissible⟩ := F.exists_rounded_admissibility hCtr.le
-  obtain ⟨Nsmall, _, hsmall⟩ :=
-    F.exists_fixedWeightFour_transport_smallness hq hCtr.le hct
-  obtain ⟨Nloss, _, hloss⟩ := exists_bootstrap_comparison_loss_threshold
-    6 (1 + (g / 2)⁻¹) he₀pos he₀₁
-  obtain ⟨Cout, hCout, Nb, _, hbudget⟩ :=
-    exists_bootstrap_restored_entropy_budget he₀ he₀₁ hq Ce hCe
-  obtain ⟨Ni, hinterval⟩ := eventually_atTop.mp (eventually_le_natCast_rpow F.nu_pos 4)
-  obtain ⟨Nl, hlog⟩ := eventually_atTop.mp
-    ((Real.tendsto_log_atTop.comp tendsto_natCast_atTop_atTop).eventually_ge_atTop 1)
-  refine ⟨Ctr, Cout, hCtr, hCout,
-    max Ns (max Nd (max Ne (max Nt (max Na (max Nsmall (max Nloss (max Nb (max Ni Nl)))))))),
-    hNs.trans (le_max_left _ _), ?_⟩
+  have henergy := fun n
+      (hn : bootstrapPrincipalEnergyThreshold he₀pos he₀₁ (2 * C / (g / 2)) Cδ Cl Clt ≤ n) =>
+    bootstrap_selected_energy_bound_of_threshold_le he₀pos he₀₁ C Cδ Cl Clt (g / 2)
+      (zero_le_one.trans hC) hCδ (half_pos hg) hn
+  have htarget := fun n (hn : truncationEntropyThreshold q g (C_T + 1) ≤ n) =>
+    abs_regionalEntropy_sub_le_of_truncationEntropyThreshold_le q hq g (C_T + 1) hg hn
+  have hadmissible := fun n (hn : F.roundedAdmissibilityThreshold Ctr ≤ n) =>
+    F.rounded_admissibility_of_threshold_le hCtr.le hn
+  have hsmall := fun n (hn : F.fixedWeightTransportThreshold q Ctr ct ≤ n) =>
+    F.fixedWeightFour_transport_smallness_of_threshold_le hq hCtr.le hct hn
+  have hloss := fun n (hn : bootstrapComparisonLossThreshold 6 (1 + (g / 2)⁻¹) e₀ ≤ n) =>
+    bootstrap_comparison_loss_of_threshold_le 6 (1 + (g / 2)⁻¹) he₀pos he₀₁ hn
+  have hbudget := fun n (hn : bootstrapComparisonBudgetThreshold e₀ ≤ n) =>
+    bootstrap_restored_entropy_budget_of_threshold_le he₀ he₀₁ hq Ce hCe hn
+  have hinterval := fun n (hn : Real.natRpowThreshold F.nu 4 ≤ n) =>
+    Real.le_natCast_rpow_of_natRpowThreshold_le F.nu_pos hn
+  have hlog := fun n (hn : 3 ≤ n) => Real.one_le_log_natCast_of_three_le hn
   intro η hη hηe₀ Λ T _ hT h S E₀ Ω hgs hgraph hanchor hn hr hmScale hDScale hKScale
     hCeq hsize hdepth hrows hmult hclear htargetEntropy hprefix
   have hthresholds := hn
-  simp only [max_le_iff] at hthresholds
+  simp only [sourceBootstrapEntropyThreshold, max_le_iff] at hthresholds
   obtain ⟨hnS, hnD, hnE, hnT, hnA, hnSmall, hnLoss, hnB, hnI, hnLog⟩ := hthresholds
-  have hn2 : 2 ≤ S.n := hNs.trans hnS
+  have hn2 : 2 ≤ S.n := (le_max_left _ _).trans ((le_max_left _ _).trans hnS)
   have hn1 : (1 : ℝ) ≤ S.n := by exact_mod_cast ((by decide : 1 ≤ 2).trans hn2)
   have hnpos : (0 : ℝ) < S.n := zero_lt_one.trans_le hn1
   have hadm := hadmissible S.n hnA
@@ -346,5 +392,146 @@ theorem exists_sourceBootstrap_entropy_improvement
   rw [← hKExplicit, ← hDExplicit, ← hLExplicit] at hbudgetN
   exact hbudgetN η hη hηe₀ (regionalEntropy Λ q Ω X) z τ hwindow.2.2.1 hwindow.2.1
     hτ.le (hτhalf.le.trans (by norm_num)) hrestored
+
+open Classical in
+/-- The actual rough-only bootstrap improvement of
+`exists_sourceBootstrap_entropy_improvement_of_threshold_le` at any transport constants
+`ct, C_ent, e_ent, C_en, e_en` with `0 < ct` satisfying the finite-family transport bound, such
+as QICLean's universal transport constants, which depend on none of `q, R, J, Δ`. Only the
+truncation constant `Ctr` remains existential, chosen before the entropy coefficient `Ce`.
+Source: `08-scanner.tex`, lines 693--792. -/
+theorem exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound
+    {q : ℕ} [NeZero q] (hq : 1 ≤ q) (R : ℕ)
+    {J Δ C_T C₁ e₀ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (hC_T : 0 ≤ C_T) (hC₁ : 0 < C₁) (multiplicity : ℕ)
+    (hmultiplicity : 3 * (multiplicity : ℝ) ≤ C₁)
+    (he₀ : (Exponents.boxError : ℝ) < e₀) (he₀₁ : e₀ < 1)
+    {ct Cent eent Cen een : ℝ} (hct : 0 < ct)
+    (htransport : FiniteFamilyTransportBound ct Cent eent Cen een) :
+    let he₀pos : 0 < e₀ := lt_trans (by norm_num [Exponents.boxError]) he₀
+    let F := BootstrapParameters.scannerExponents e₀ he₀pos he₀₁
+    ∃ Ctr : ℝ, 0 < Ctr ∧ ∀ Ce : ℝ, 0 ≤ Ce →
+      ∀ η : ℝ, (Exponents.boxError : ℝ) < η → η ≤ e₀ →
+      ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
+        (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
+        (Ω : StateSpace Λ q),
+        IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+        sourceBootstrapEntropyThreshold q R he₀pos he₀₁ Ctr ct Cent eent Cen een
+          (Δ / positiveNormalization 1 (Δ / 2) J) C₁ C_T Ce multiplicity ≤ S.n →
+        S.r₀ = roundedLogRadius Ctr S.n →
+        S.m = F.m S.n → S.D = F.D S.n → S.K = F.K S.n →
+        S.C₁ = C₁ → (T.card : ℝ) ≤ C_T * (S.n : ℝ) ^ 2 →
+        S.depth = (fun x ↦ ambientDepth T hT x.val) →
+        (∀ r : ℕ, 1 ≤ r → r ≤ F.L S.n →
+          (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
+        (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
+        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+        regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+          Ce * (S.n : ℝ) ^ (1 + η) →
+        (∀ j : ℕ, j ≤ F.L S.n →
+          regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+            Ce * ((S.n : ℝ) * (F.L S.n : ℝ) ^ η + S.n)) →
+        regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+          bootstrapRestoredBudgetCoefficient q Ce *
+            (S.n : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * η) := by
+  intro he₀pos F
+  exact ⟨_, latticeTruncationRadiusConstant_pos R hΔ (by positivity : (0 : ℝ) ≤ C_T + 1),
+    sourceBootstrap_entropy_improvement_explicit hq R hJ hΔ hC_T hC₁ multiplicity hmultiplicity
+      he₀ he₀₁ hct htransport rfl⟩
+
+open Classical in
+/-- The actual rough-only bootstrap improves the entropy exponent on the original target at every
+`S.n` from the explicit threshold `sourceBootstrapEntropyThreshold` on, with the explicit output
+coefficient `bootstrapRestoredBudgetCoefficient q Ce`. The truncation constant `Ctr` and the
+transport constants `ct, Cent, eent, Cen, een` remain existential; they are chosen before the
+entropy coefficient `Ce`, so one choice serves every `Ce`. Source: `08-scanner.tex`,
+lines 693--792. -/
+theorem exists_sourceBootstrap_entropy_improvement_of_threshold_le
+    {q : ℕ} [NeZero q] (hq : 1 ≤ q) (R : ℕ)
+    {J Δ C_T C₁ e₀ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (hC_T : 0 ≤ C_T) (hC₁ : 0 < C₁) (multiplicity : ℕ)
+    (hmultiplicity : 3 * (multiplicity : ℝ) ≤ C₁)
+    (he₀ : (Exponents.boxError : ℝ) < e₀) (he₀₁ : e₀ < 1) :
+    let he₀pos : 0 < e₀ := lt_trans (by norm_num [Exponents.boxError]) he₀
+    let F := BootstrapParameters.scannerExponents e₀ he₀pos he₀₁
+    ∃ Ctr ct Cent eent Cen een : ℝ, 0 < Ctr ∧ 0 < ct ∧ ∀ Ce : ℝ, 0 ≤ Ce →
+      ∀ η : ℝ, (Exponents.boxError : ℝ) < η → η ≤ e₀ →
+      ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
+        (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
+        (Ω : StateSpace Λ q),
+        IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+        sourceBootstrapEntropyThreshold q R he₀pos he₀₁ Ctr ct Cent eent Cen een
+          (Δ / positiveNormalization 1 (Δ / 2) J) C₁ C_T Ce multiplicity ≤ S.n →
+        S.r₀ = roundedLogRadius Ctr S.n →
+        S.m = F.m S.n → S.D = F.D S.n → S.K = F.K S.n →
+        S.C₁ = C₁ → (T.card : ℝ) ≤ C_T * (S.n : ℝ) ^ 2 →
+        S.depth = (fun x ↦ ambientDepth T hT x.val) →
+        (∀ r : ℕ, 1 ≤ r → r ≤ F.L S.n →
+          (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
+        (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
+        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+        regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+          Ce * (S.n : ℝ) ^ (1 + η) →
+        (∀ j : ℕ, j ≤ F.L S.n →
+          regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+            Ce * ((S.n : ℝ) * (F.L S.n : ℝ) ^ η + S.n)) →
+        regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+          bootstrapRestoredBudgetCoefficient q Ce *
+            (S.n : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * η) := by
+  intro he₀pos F
+  exact exists_of_finiteFamilyTransportBound fun _ _ _ _ _ hct htransport ↦
+    exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound
+      hq R hJ hΔ hC_T hC₁ multiplicity hmultiplicity he₀ he₀₁ hct htransport
+
+open Classical in
+/-- The actual rough-only bootstrap improves the entropy exponent on the
+original target. The source entropy premises retain the current exponent;
+the output exponent is multiplied by `1 - ell e₀`. Source:
+`08-scanner.tex`, lines 693--792. -/
+theorem exists_sourceBootstrap_entropy_improvement
+    {q : ℕ} [NeZero q] (hq : 1 ≤ q) (R : ℕ)
+    {J Δ C_T C₁ e₀ Ce : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (hC_T : 0 ≤ C_T) (hC₁ : 0 < C₁) (multiplicity : ℕ)
+    (hmultiplicity : 3 * (multiplicity : ℝ) ≤ C₁)
+    (he₀ : (Exponents.boxError : ℝ) < e₀) (he₀₁ : e₀ < 1) (hCe : 0 ≤ Ce) :
+    let he₀pos : 0 < e₀ := lt_trans (by norm_num [Exponents.boxError]) he₀
+    let F := BootstrapParameters.scannerExponents e₀ he₀pos he₀₁
+    ∃ Ctr Cout : ℝ, 0 < Ctr ∧ 0 < Cout ∧ ∃ N : ℕ, 2 ≤ N ∧
+      ∀ η : ℝ, (Exponents.boxError : ℝ) < η → η ≤ e₀ →
+      ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
+        (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
+        (Ω : StateSpace Λ q),
+        IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
+        S.r₀ = roundedLogRadius Ctr S.n →
+        S.m = F.m S.n → S.D = F.D S.n → S.K = F.K S.n →
+        S.C₁ = C₁ → (T.card : ℝ) ≤ C_T * (S.n : ℝ) ^ 2 →
+        S.depth = (fun x ↦ ambientDepth T hT x.val) →
+        (∀ r : ℕ, 1 ≤ r → r ≤ F.L S.n →
+          (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
+        (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
+        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+        regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+          Ce * (S.n : ℝ) ^ (1 + η) →
+        (∀ j : ℕ, j ≤ F.L S.n →
+          regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+            Ce * ((S.n : ℝ) * (F.L S.n : ℝ) ^ η + S.n)) →
+        regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+          Cout * (S.n : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * η) := by
+  intro he₀pos F
+  obtain ⟨Ctr, ct, Cent, eent, Cen, een, hCtr, hct, hall⟩ :=
+    exists_sourceBootstrap_entropy_improvement_of_threshold_le hq R hJ hΔ hC_T hC₁ multiplicity
+      hmultiplicity he₀ he₀₁
+  exact ⟨Ctr, _, hCtr, mul_pos (show (0 : ℝ) < 8 * Ce + 12 * Real.log q + 30 by
+      linarith [Real.log_nonneg (show (1 : ℝ) ≤ q by exact_mod_cast hq)]) (by positivity), _,
+    (le_max_left _ _).trans ((le_max_left _ _).trans (le_max_left _ _)), hall Ce hCe⟩
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

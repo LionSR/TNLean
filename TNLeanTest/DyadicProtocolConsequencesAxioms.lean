@@ -16,3 +16,31 @@ open TNLean.PEPS.Approximation in
 depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint
+
+open TNLean.PEPS.Approximation in
+/-- info:
+'TNLean.PEPS.Approximation.largeSizeDyadicProtocol_of_le_of_adaptivePatchConstraint'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms largeSizeDyadicProtocol_of_le_of_adaptivePatchConstraint
+
+open TNLean.PEPS.Approximation in
+/-- info:
+'TNLean.PEPS.Approximation.largeSizeDyadicProtocolBounds_of_adaptivePatchConstraint'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms largeSizeDyadicProtocolBounds_of_adaptivePatchConstraint
+
+open TNLean.PEPS.Approximation in
+/-- info:
+'TNLean.PEPS.Approximation.LargeSizeDyadicProtocolBounds.largeSizeDyadicProtocolConsequences'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms LargeSizeDyadicProtocolBounds.largeSizeDyadicProtocolConsequences
+
+open TNLean.PEPS.Approximation in
+/-- info:
+'TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.mono'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms DyadicProtocol.IsDistributionProtocol.mono

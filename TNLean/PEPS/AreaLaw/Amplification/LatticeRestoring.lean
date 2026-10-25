@@ -64,6 +64,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open Matrix
 open scoped Kronecker ComplexOrder MatrixOrder InnerProductSpace Matrix.Norms.L2Operator
+open TNLean.Lattice
 
 namespace Matrix
 
@@ -672,7 +673,7 @@ theorem restoringOperator_estimates (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
       (norm_restoringCutProjection_restoringVector_sub_le Ω hΩ X Y hXY w δ hδS)
 
 /-- The square root of `n^(-2K)` is `n^(-K)`. -/
-private theorem sqrt_rpow_neg_two_mul (n K : ℕ) :
+theorem sqrt_rpow_neg_two_mul (n K : ℕ) :
     √((n : ℝ) ^ (-(2 * K : ℝ))) = ((n : ℝ) ^ K)⁻¹ := by
   rw [Real.rpow_neg (Nat.cast_nonneg n),
     show (2 * K : ℝ) = ((2 * K : ℕ) : ℝ) by push_cast; ring, Real.rpow_natCast, pow_mul',

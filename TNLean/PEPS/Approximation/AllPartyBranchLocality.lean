@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.IncidentGateLabels
-import TNLean.PEPS.Approximation.SourceResidualCoordinates
-import TNLean.PEPS.Approximation.LocalPartRestrictionCongruence
-import TNLean.PEPS.Approximation.NonincidentAllGateRestriction
+import TNLean.Lattice.Compression.IncidentGateLabels
+import TNLean.Lattice.Compression.SourceResidualCoordinates
+import TNLean.Lattice.Compression.LocalPartRestrictionCongruence
+import TNLean.Lattice.Compression.NonincidentAllGateRestriction
 
 /-!
 # Dependence of an actual branch on incident gate choices
@@ -22,7 +22,8 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
 /-- Equality of the already selected remaining operators, formed before
@@ -168,4 +169,4 @@ theorem restrict_partialWord_all_localPart_eval_heq_of_projectAllChoices_eq
         (partialWord (fun _ : P => true) w ξ) (partialWord (fun _ : P => true) w ζ)
         rfl rfl (selected_sources_partialWord_all_eq w f ξ ζ) (ih ξ ζ h)
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

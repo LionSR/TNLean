@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.DependentBondCut
+import TNLean.Lattice.Compression.DependentBondCut
 import TNLean.PEPS.DependentBondProjectorExpansion
-import TNLean.PEPS.DependentPhysicalProductRangeSupport
+import TNLean.Lattice.Compression.DependentPhysicalProductRangeSupport
 
 /-!
 # Local inverses with dependent virtual and physical dimensions
@@ -20,6 +20,7 @@ site alphabets may vary.
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS.DependentBondNetwork
+open TNLean.Lattice.DependentBondNetwork TNLean.Lattice
 
 variable {Vertex Edge : Type*} [Fintype Vertex] [Fintype Edge]
 variable [DecidableEq Vertex] [DecidableEq Edge]

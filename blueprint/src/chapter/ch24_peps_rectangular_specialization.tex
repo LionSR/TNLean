@@ -7,11 +7,12 @@ Either side length may be zero. The following reduction is the
 rectangular and vertex-boundary implication in
 \cite[Corollary~1.2]{OpenAI2026AreaLaw}.
 
-\begin{theorem}[Rectangles and vertex boundaries]
-    \label{thm:area_law_rectangles}
+\begin{corollary}[Rectangles and vertex boundaries]
+    \label{cor:rectangles}
     \lean{TNLean.PEPS.AreaLaw.rectangularEntropyAreaLaw,
-        TNLean.PEPS.AreaLaw.vertex_boundary_bounds}
+        TNLean.PEPS.AreaLaw.uniformAreaLaw_vertex_boundary_bounds}
     \leanok
+    \uses{def:rectangular_entropy_area_law,def:area_law_vertex_boundaries}
     For fixed $q\ge1$ and $J,\Delta>0$, there is a uniform finite constant
     $C$ such that every subset of a finite rectangular square lattice with
     bounded on-site and nearest-neighbor interactions and a unique ground
@@ -20,16 +21,18 @@ rectangular and vertex-boundary implication in
     For arbitrary range $R$, every finite induced domain covered by the
     area-law theorem also satisfies the two vertex bounds
     $S_\Omega(A)\le4C|\partial_{\rm in}A|$ and
-    $S_\Omega(A)\le2C|Z_A|$, with that theorem's constant $C(q,R,J,\Delta)$.
-    This is \cite[Corollary~1.2]{OpenAI2026AreaLaw}.
-\end{theorem}
+    $S_\Omega(A)\le2C|Z_A|$, with that theorem's constant $C(q,R,J,\Delta)$,
+    as stated in \cite[Corollary~1.2]{OpenAI2026AreaLaw}.
+\end{corollary}
 \begin{proof}
     \leanok
     \uses{thm:openai_uniform_area_law,thm:rectangular_entropy_from_uniform,
         thm:area_law_conditional_vertex_bounds}
-    Apply the uniform finite-domain area law and its rectangular reduction
-    at range one. For arbitrary interaction range, the vertex-boundary
-    reduction gives the factors four and two with the same uniform constant.
+    Theorem~\ref{thm:openai_uniform_area_law} supplies the uniform constant.
+    Theorem~\ref{thm:rectangular_entropy_from_uniform} applies it at range
+    one to the rectangle, and
+    Theorem~\ref{thm:area_law_conditional_vertex_bounds} gives the two vertex
+    bounds on every finite induced domain.
 \end{proof}
 
 \begin{definition}[Native rectangular interaction family]
@@ -172,8 +175,8 @@ rectangular and vertex-boundary implication in
 \begin{proof}
     \leanok
     \uses{thm:rectangular_domain_hamiltonian,thm:rectangular_boundary_transport}
-    Choose the uniform constant at range one before the rectangle and
-    physical instance. Apply the finite-domain theorem to $UHU^*$ and
+    With the uniform constant chosen at range one before the rectangle and
+    physical instance, the finite-domain theorem applies to $UHU^*$ and
     $U\Omega$. Relabeling tensor factors preserves the regional entropy,
     and the boundary bijections preserve all three cardinalities.
     Multiplication of the two counting inequalities by $C\ge0$ gives
@@ -192,6 +195,7 @@ rectangular and vertex-boundary implication in
 \begin{proof}
     \leanok
     \uses{def:rectangular_hamiltonian,def:rectangular_entropy_area_law}
-    Put $w=h=L$, keep the original site and edge matrices, and take the
-    edge-boundary component of~(\ref{eq:rectangular_entropy_bounds}).
+    Setting $w=h=L$ and keeping the original site and edge matrices specializes
+    the edge-boundary component of~(\ref{eq:rectangular_entropy_bounds}) to
+    the square-grid statement.
 \end{proof}

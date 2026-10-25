@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.ActualSampledEndpointInputWord
+import TNLean.Lattice.Compression.ActualSampledEndpointInputWord
 import TNLean.PEPS.Approximation.EndpointWordRestrictionCongruence
 
 /-! # Local dependence of the actual endpoint samples
@@ -19,7 +19,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 -/
 
 noncomputable section
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} {a b : Layout P}
 
 /-- The actual sampled source-input operator restricted to selected owners
@@ -76,4 +76,4 @@ theorem restrict_sampledEndpointInputWord_eval_eq_of_incident_samples
       (sources_sampledEndpointWord w k lam L R ξ ζ j' ω')]
   simp only [Word.eval_castLayouts, hWord]
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

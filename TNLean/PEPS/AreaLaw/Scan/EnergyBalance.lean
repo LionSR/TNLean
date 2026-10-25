@@ -13,10 +13,12 @@ leaves by Hölder's inequality against the charge defect, old bad leaves by the 
 Lemma 9.1(4), and new leaves by their total weight `p ≤ ε`. The coefficient
 `a² (D/m) KnD = W² n D²/(mK) ≤ C W² n^ℓ D²` contains no total-volume factor.
 
-**Scope restriction (inputs as hypotheses):** the results of this module stated over `ScanData`
-are proved from its fields, which record the conclusions of Lemma 9.1, Propositions 7.4
-and 8.1, and Lemmas 2.1 and 2.3 for one scan rather than deriving them. Documented in
-`docs/paper-gaps/arealaw2d_scanner_inputs.tex`.
+The results of this module stated over `ScanData` are proved from its fields, which record
+the conclusions of Lemma 9.1, Propositions 7.4 and 8.1, and Lemmas 2.1 and 3.1 for one scan;
+this route is auxiliary and these results are conditional steps, not source statements. The
+source statement of Proposition 9.2 is proved for the original physical system as
+`TNLean.PEPS.AreaLaw.Scan.CollarScan.scannerStatement`, without these fields as hypotheses
+(`docs/paper-gaps/arealaw2d_scanner_inputs.tex`, which records its output-coefficient convention).
 
 ## Main results
 
@@ -296,35 +298,6 @@ end ScanRound
 namespace ScanData
 
 variable {X : ScannerExponents} {κ : ScanConstants} {n : ℕ} (S : ScanData X κ n)
-
-/-- Old-leaf eighth-root integrals are nonnegative. -/
-lemma integral_etaOld_rpow_nonneg (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) (i : S.ι)
-    (h : (S.round r).H) :
-    0 ≤ ∫ θ, (S.round r).etaOld i h θ ^ (1 / 8 : ℝ) ∂((S.round r).μOld k p h) :=
-  integral_nonneg fun θ ↦ Real.rpow_nonneg (S.histories.etaOld_nonneg r i h θ) _
-
-/-- New-leaf eighth-root integrals are nonnegative. -/
-lemma integral_etaNew_rpow_nonneg (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) (i : S.ι)
-    (h : (S.round r).H) (c : (S.round r).Ch h) :
-    0 ≤ ∫ θ, (S.round r).etaNew i h c θ ^ (1 / 8 : ℝ) ∂((S.round r).μNew k p h c) :=
-  integral_nonneg fun θ ↦ Real.rpow_nonneg (S.histories.etaNew_nonneg r i h c θ) _
-
-open Classical in
-/-- The leaf sum of one term is nonnegative for `p ∈ (0, 1)`. -/
-lemma termEnergy_nonneg (r : Fin (X.rounds n)) (k : ℕ) {p : ℝ} (hp : p ∈ Ioo (0 : ℝ) 1)
-    (i : S.ι) : 0 ≤ (S.round r).termEnergy k p i := by
-  unfold ScanRound.termEnergy
-  refine add_nonneg (Finset.sum_nonneg fun h _ ↦ ?_)
-    (Finset.sum_nonneg fun h _ ↦ Finset.sum_nonneg fun c _ ↦ ?_)
-  · split_ifs
-    · exact mul_nonneg (mul_nonneg (by linarith [hp.2]) (S.histories.w_nonneg r h))
-        (S.integral_etaOld_rpow_nonneg r k p i h)
-    · exact le_rfl
-  · split_ifs
-    · exact mul_nonneg (mul_nonneg (mul_nonneg hp.1.le (S.histories.w_nonneg r h))
-        (S.histories.q_nonneg r h c))
-        (S.integral_etaNew_rpow_nonneg r k p i h c)
-    · exact le_rfl
 
 open Classical in
 /-- Old good leaves: Hölder's inequality over histories, split terms and `θ` at an interior

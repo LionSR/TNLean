@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.MonomialFixesOutside
 import TNLean.PEPS.Approximation.PartyGateSourceBound
 import TNLean.PEPS.Approximation.PatchRewriteMonomials
-import TNLean.PEPS.Approximation.SampledOriginalCircuit
+import TNLean.Lattice.Compression.SampledOriginalCircuit
 
 /-!
 # The small-patch rewrite as one gate of the specified parties
@@ -51,8 +51,9 @@ open Matrix ContinuousLinearMap
 open scoped Matrix.Norms.L2Operator
 
 namespace TNLean.PEPS.EncodedFrame
+open TNLean.Lattice.Sheet
 
-open PairEffect
+open TNLean.Lattice.PartyCircuit
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ} {Party : Type}
 

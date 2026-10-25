@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.ActualSampledPartyContraction
-import TNLean.PEPS.Approximation.ActualSampledEndpointInputWord
+import TNLean.Lattice.Compression.ActualSampledPartyContraction
+import TNLean.Lattice.Compression.ActualSampledEndpointInputWord
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
@@ -16,8 +16,8 @@ logical axioms. The finite sampled sum retains the original joint assignment.
 
 set_option linter.hashCommand false
 
-open TNLean.PEPS.PairEffect TNLean.PEPS.PairEffect.SourceCircuit
-  TNLean.PEPS.PairEffect.SourceInventory in
+open TNLean.Lattice.PartyCircuit TNLean.Lattice.PartyCircuit.SourceCircuit
+  TNLean.Lattice.PartyCircuit.SourceInventory in
 run_cmd do
   let decls := #[
     ``slotVector_eq_sum_slotBasis,

@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.DistributedOperatorContraction
+import TNLean.Lattice.Compression.DistributedOperatorContraction
 import TNLean.PEPS.Approximation.PartyColumnRouting
 
 /-!
@@ -23,6 +23,7 @@ and Lemma 8.2, `07-assembly.tex`, lines 96–177. Source revision:
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS.Approximation.DistributedOperatorContraction
+open TNLean.Lattice.Compression TNLean.Lattice.Compression.DistributedOperatorContraction
 
 variable {Party Gate : Type*} [Fintype Party]
   [DecidableEq Party] [DecidableEq Gate]

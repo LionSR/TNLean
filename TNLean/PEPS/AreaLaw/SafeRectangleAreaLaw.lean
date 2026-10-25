@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.UniformAreaLaw
+import TNLean.PEPS.AreaLaw.AreaLawTheorem
 import TNLean.PEPS.AreaLaw.InitialBufferReal
 import TNLean.PEPS.AreaLaw.Geometry.TemplateCutBoundary
 
@@ -28,6 +28,8 @@ the safe-box entropy at lines 590–594, and the recurrence
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized; no upstream Lean proof text reused.
 -/
+
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 

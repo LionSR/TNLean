@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.FamilyPhysicalOwnerColumns
+import TNLean.Lattice.Compression.FamilyPhysicalOwnerColumns
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
@@ -16,7 +16,7 @@ on the standard logical axioms.
 set_option linter.hashCommand false
 
 run_cmd do
-  let decl := ``TNLean.PEPS.PairEffect.mapOwnerIso_familyPhysicalListBasis_apply_heq
+  let decl := ``TNLean.Lattice.PartyCircuit.mapOwnerIso_familyPhysicalListBasis_apply_heq
   let env ← Lean.getEnv
   unless env.contains decl do
     throwError "Missing declaration {decl}"

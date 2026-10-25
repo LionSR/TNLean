@@ -22,6 +22,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, Lemma 9.1(2), lines 243–257, at `openai/math@adc7f124`.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- The scanner clearance excludes actual cut endpoints from every permitted dilation.

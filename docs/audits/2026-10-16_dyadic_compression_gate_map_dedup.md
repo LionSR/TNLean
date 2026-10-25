@@ -3,7 +3,7 @@
 This audit records the public declarations removed from
 `TNLean/PEPS/Approximation/DyadicProtocolCompression.lean`. That module now reads a dyadic
 protocol as a distributed construction and applies the general compression theorem for
-distributed constructions in `TNLean/PEPS/Approximation/DistributedGateMapConstruction.lean`.
+distributed constructions in `TNLean/Lattice/Compression/DistributedGateMapConstruction.lean`.
 This is the audit note required by `docs/project_conventions.md` §Style. Every non-`Archive` use
 on `main` has been migrated, and no open pull request uses the removed names. Blueprint
 `\lean{...}` tags now cite the replacements, and no compatibility alias is kept.
@@ -33,3 +33,10 @@ One step of the old proof is genuinely different from the general API, and it is
 `PairEffect.OriginalCircuit.IsExpansionBounded.isTermwiseBounded`. The protocol records the
 absolute coefficient sum of each gate expansion, while the general theorem takes individual
 coefficient bounds. A sum bound `S ≤ S'` bounds every coefficient by `S'`.
+
+**Update (2026-10-18).** `PairEffect.OriginalCircuit.IsExpansionBounded.isTermwiseBounded` has
+since been removed. The general theorem now also takes coefficient sums
+(`PairEffect.DistributedConstruction.uniform_sampled_network_of_sum_le`, with
+`PairEffect.OriginalCircuit.isExpansionBounded_reexpand_expansionGateLists`), and the protocol
+passes its coefficient-sum bound to it directly. Converting that sum to individual coefficients
+and summing back had doubled the coefficient-sum degree.

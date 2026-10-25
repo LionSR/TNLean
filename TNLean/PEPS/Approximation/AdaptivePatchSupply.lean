@@ -53,10 +53,12 @@ here are formalized independently from the manuscript; no upstream Lean text was
 -/
 
 open Matrix
+open TNLean.Lattice (siteLift)
 
 noncomputable section
 
 namespace TNLean.PEPS.EncodedFrame
+open TNLean.Lattice.Sheet
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
 
@@ -143,13 +145,6 @@ def translate (w : ℝ × ℝ) : SquarePatch (fun x => pos x + w) q where
 
 @[simp] theorem translate_center (w : ℝ × ℝ) : (p.translate w).center = p.center + w := rfl
 
-@[simp] theorem translate_scale (w : ℝ × ℝ) : (p.translate w).scale = p.scale := rfl
-
-@[simp] theorem translate_dim (w : ℝ × ℝ) : (p.translate w).dim = p.dim := rfl
-
-theorem translate_outer (w : ℝ × ℝ) : (p.translate w).outer = p.outer :=
-  (squareSample_translate pos w p.center _).symm
-
 theorem cylSum_translate (w : ℝ × ℝ) : (p.translate w).cylSum = p.cylSum := by
   refine Finset.sum_congr rfl fun s _ => ?_
   exact siteLift_rankOne_castSiteVec (squareSample_translate pos w p.center (p.radius s.1))
@@ -228,7 +223,7 @@ end TNLean.PEPS.EncodedFrame
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame
+open EncodedFrame TNLean.Lattice.Sheet
 
 /-- The position of a site of `Λ_L = {1, …, L}²`: the zero-based coordinates `(i, j)` are the
 point `(i + 1, j + 1)`.
@@ -256,15 +251,16 @@ with bounds `J` and every gapped unit ground vector `Ω` with gap `Δ`, every ce
 plane and every `0 < u ≤ B₀ log L` admit nested-cylinder data with radii between `u` and `2u`, at
 most `C L^c` cylinder terms, and cylinder projector `P` with `‖(1 - P)Ω‖ ≤ L^{-p}`.
 
-No proof of this proposition is asserted here; it enters the dyadic protocol as a hypothesis.
+It enters the dyadic protocol as a hypothesis here; the proposition is proved as
+`adaptivePatchConstraint` in `TNLean.PEPS.Approximation.PolynomialPEPSTheorem`.
 
 Polynomial-PEPS manuscript, Proposition 4.1 `prop:patch`, `03-patches.tex`, lines 26–49, with
 the parameters of Theorem 1.1 fixed as in `01-preliminaries.tex`, lines 3–10. -/
 def AdaptivePatchConstraint : Prop :=
   ∀ q : ℕ, 2 ≤ q → ∀ J Δ : ℝ, 0 < J → 0 < Δ → ∀ B₀ p : ℝ, 0 < B₀ → 0 < p →
     ∃ C c : ℝ, 0 < C ∧ 0 < c ∧
-      ∀ L : ℕ, 2 ≤ L → ∀ h : SquareHamiltonian L q J, ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
-        h.IsGappedGroundState E₀ Ω Δ → AdaptivePatchSupply (latticePos L) Ω B₀ C c p L
+      ∀ L : ℕ, 2 ≤ L → ∀ Ω : StateSpace L q,
+        IsSquareGroundState q J Δ L Ω → AdaptivePatchSupply (latticePos L) Ω B₀ C c p L
 
 /-- Translating the sites to the cell centers preserves the supply of patches. -/
 theorem AdaptivePatchSupply.cellCenterPos {L q : ℕ} {Ω : StateSpace L q} {B₀ C c p : ℝ}
@@ -284,10 +280,10 @@ Polynomial-PEPS manuscript, `03-patches.tex`, lines 26–49, and `06-geometry.te
 theorem AdaptivePatchConstraint.supply_cellCenterPos (H : AdaptivePatchConstraint) {q : ℕ}
     (hq : 2 ≤ q) {J Δ : ℝ} (hJ : 0 < J) (hΔ : 0 < Δ) {B₀ p : ℝ} (hB₀ : 0 < B₀) (hp : 0 < p) :
     ∃ C c : ℝ, 0 < C ∧ 0 < c ∧
-      ∀ L : ℕ, 2 ≤ L → ∀ h : SquareHamiltonian L q J, ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
-        h.IsGappedGroundState E₀ Ω Δ → AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c p L := by
+      ∀ L : ℕ, 2 ≤ L → ∀ Ω : StateSpace L q,
+        IsSquareGroundState q J Δ L Ω → AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c p L := by
   obtain ⟨C, c, hC, hc, hall⟩ := H q hq J Δ hJ hΔ B₀ p hB₀ hp
-  exact ⟨C, c, hC, hc, fun L hL h E₀ Ω hΩ =>
-    AdaptivePatchSupply.cellCenterPos (hall L hL h E₀ Ω hΩ)⟩
+  exact ⟨C, c, hC, hc, fun L hL Ω hΩ =>
+    AdaptivePatchSupply.cellCenterPos (hall L hL Ω hΩ)⟩
 
 end TNLean.PEPS.Approximation

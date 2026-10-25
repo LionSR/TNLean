@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.WordSelectedOwnerLocalPart
+import TNLean.Lattice.Compression.WordSelectedOwnerLocalPart
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
@@ -11,7 +11,7 @@ import Lean.Util.CollectAxioms
 
 set_option linter.hashCommand false
 
-open TNLean.PEPS.PairEffect.Word
+open TNLean.Lattice.PartyCircuit.Word
 
 run_cmd do
   let decl := ``restrict_localPart_mapOwner_eval_heq_of_singleton_fiber

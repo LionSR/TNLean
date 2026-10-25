@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.ActualPureSourceReplacement
-import TNLean.PEPS.Approximation.ActualSampledExteriorScalar
-import TNLean.PEPS.Approximation.ActualSampledPhysicalFactors
+import TNLean.Lattice.Compression.ActualPureSourceReplacement
+import TNLean.Lattice.Compression.ActualSampledExteriorScalar
+import TNLean.Lattice.Compression.ActualSampledPhysicalFactors
 import TNLean.PEPS.Approximation.DistributedPhysicalPrivateTrace
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
@@ -14,15 +14,15 @@ import Lean.Util.CollectAxioms
 
 set_option linter.hashCommand false
 
-open TNLean.PEPS.PairEffect.SourceCircuit in
+open TNLean.Lattice.PartyCircuit.SourceCircuit in
 run_cmd do
   let decls := #[
-    ``TNLean.PEPS.PairEffect.SourceCircuit.sourceReplacedDensity_pure_eq_sum_actualColumns,
+    ``TNLean.Lattice.PartyCircuit.SourceCircuit.sourceReplacedDensity_pure_eq_sum_actualColumns,
     ``partialSourceWord_sampled_none_partialTrace_eq_scalar,
     ``sampledPhysicalFactor,
     ``partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_physicalFactors,
-    ``TNLean.PEPS.PairEffect.selectedPhysicalPrivateBasis_partialTrace_mixed,
-    ``TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity_eq_grouped_partialTrace]
+    ``TNLean.Lattice.PartyCircuit.selectedPhysicalPrivateBasis_partialTrace_mixed,
+    ``TNLean.Lattice.PartyCircuit.DistributedConstruction.physicalDensity_eq_grouped_partialTrace]
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
   for decl in decls do

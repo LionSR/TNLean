@@ -23,6 +23,8 @@ Independently proved from the manuscript; no upstream Lean proof text is reused.
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 private def shiftedPitchOrigin (o : ℝ × ℝ) (ℓ : ℕ) (a b : ℤ) : ℝ × ℝ :=

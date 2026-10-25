@@ -44,11 +44,10 @@
     \lean{TNLean.PEPS.AreaLaw.Geometry.cappedDyadicPartition}
     \leanok
     \uses{def:area_law_lattice_dyadic_square}
-    For a finite set $S\subseteq\Z^2$ and $K\in\N$, let $\mathcal P_K(S)$
+    In the covering selection of \cite[Lemma~9.4]{OpenAI2026AreaLaw}, for a
+    finite set $S\subseteq\Z^2$ and $K\in\N$, let $\mathcal P_K(S)$
     consist of the pairs $(k,z)$ with $k\le K$, $C_{k,z}\subseteq S$, and
     either $k=K$ or $C_{k+1,\lfloor z/2\rfloor}\not\subseteq S$.
-    This is the selection in the covering argument of
-    \cite[Lemma~9.4]{OpenAI2026AreaLaw}.
 \end{definition}
 
 \begin{theorem}[Exact capped partition]
@@ -76,20 +75,20 @@
 \begin{proof}\leanok
     \uses{thm:area_law_lattice_dyadic_nesting,def:area_law_capped_dyadic_partition}
     For each $x\in S$, the unit square $C_{0,x}=\{x\}$ is contained in $S$.
-    Choose
+    With
     \begin{align}
-        k & =\max\bigl\{j\le K:C_{j,\lfloor x/2^j\rfloor}\subseteq S\bigr\}.
+        k & =\max\bigl\{j\le K:C_{j,\lfloor x/2^j\rfloor}\subseteq S\bigr\},
     \end{align}
-    If $k<K$, maximality shows that the parent
+    if $k<K$, maximality shows that the parent
     $C_{k+1,\lfloor x/2^{k+1}\rfloor}$ is not contained in $S$, so
     $(k,\lfloor x/2^k\rfloor)\in\mathcal P_K(S)$. Conversely, every
-    selected square is contained in $S$. Let $(k,u),(l,v)\in\mathcal P_K(S)$
-    with $k<l$ and $C_{k,u}\cap C_{l,v}\neq\varnothing$. Nesting gives
+    selected square is contained in $S$. For $(k,u),(l,v)\in\mathcal P_K(S)$
+    with $k<l$ and $C_{k,u}\cap C_{l,v}\neq\varnothing$, nesting gives
     \begin{align}
         C_{k+1,\lfloor u/2\rfloor}\subseteq C_{l,v}\subseteq S,
     \end{align}
-    and $k<l\le K$, contradicting the selection of $(k,u)$. At equal scales the common site forces equal indices.
-    Counting the disjoint union gives the sum identity; restricting its
+    and $k<l\le K$, contradicting the selection of $(k,u)$, while at equal scales the common site forces equal indices.
+    Counting the disjoint union gives the sum identity, and restricting its
     nonnegative summands to scale $K$ gives the cap bound.
 \end{proof}
 
@@ -113,9 +112,9 @@
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    The interval contains $\lfloor b/u\rfloor-\lfloor a/u\rfloor+1$ integers.
-    Apply $u\lfloor b/u\rfloor\le b$ and
-    $a<u(\lfloor a/u\rfloor+1)$.
+    The interval contains $\lfloor b/u\rfloor-\lfloor a/u\rfloor+1$ integers,
+    and the inequalities $u\lfloor b/u\rfloor\le b$ and
+    $a<u(\lfloor a/u\rfloor+1)$ yield the bound.
 \end{proof}
 
 \begin{theorem}[Mixed dyadic squares of an integer rectangle]
@@ -123,29 +122,29 @@
     \lean{TNLean.PEPS.AreaLaw.IntRect.card_mixedDyadicIndices_toFinset_le}
     \leanok
     \uses{def:area_law_safe_rectangle,def:area_law_mixed_dyadic_square}
-    Let $Q=[x_0,x_1]\times[y_0,y_1]\cap\mathbb Z^2$ be a nonempty integer
+    In the boundary-line count of
+    \cite[proof of Proposition~9.5, lines~717--729]{OpenAI2026AreaLaw}, let
+    $Q=[x_0,x_1]\times[y_0,y_1]\cap\mathbb Z^2$ be a nonempty integer
     rectangle, and put $u=2^k$ for $k\in\mathbb N$.
     If $M_k(Q)$ is the set of indices of dyadic squares meeting both $Q$
     and its complement, then
     \begin{align}
         u\,\#M_k(Q)\le4\operatorname{size}(Q)+8u.
     \end{align}
-    This is the boundary-line count used in
-    \cite[proof of Proposition~9.5, lines~717--729]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:area_law_safe_rectangle,thm:area_law_lattice_dyadic_nesting,
         thm:area_law_capped_mixed_parents,thm:area_law_quotient_interval_count}
-    Set $X=[\lfloor x_0/u\rfloor,\lfloor x_1/u\rfloor]\cap\mathbb Z$ and
-    $Y=[\lfloor y_0/u\rfloor,\lfloor y_1/u\rfloor]\cap\mathbb Z$.
-    An inside point places a mixed square's index in $X\times Y$.
-    An outside point in the same square crosses one of the four sides of $Q$.
+    Setting $X=[\lfloor x_0/u\rfloor,\lfloor x_1/u\rfloor]\cap\mathbb Z$ and
+    $Y=[\lfloor y_0/u\rfloor,\lfloor y_1/u\rfloor]\cap\mathbb Z$,
+    an inside point places a mixed square's index in $X\times Y$, while
+    an outside point in the same square crosses one of the four sides of $Q$.
     Monotonicity of integer division then forces the corresponding index
     coordinate to equal an endpoint of $X$ or $Y$. Consequently
     \begin{align}
-        \#M_k(Q)\le2\#X+2\#Y.
+        \#M_k(Q)\le2\#X+2\#Y,
     \end{align}
-    The quotient-interval estimate gives
+    and the quotient-interval estimate gives
     $u\,\#M_k(Q)\le2(x_1-x_0)+2(y_1-y_0)+8u\le4\operatorname{size}(Q)+8u$.
 \end{proof}
 

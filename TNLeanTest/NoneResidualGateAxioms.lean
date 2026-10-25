@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.NoneResidualGate
+import TNLean.Lattice.Compression.NoneResidualGate
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
@@ -15,7 +15,7 @@ depend only on the standard logical axioms.
 
 set_option linter.hashCommand false
 
-open TNLean.PEPS.PairEffect.SourceCircuit in
+open TNLean.Lattice.PartyCircuit.SourceCircuit in
 run_cmd do
   let decl := ``restrict_partialWord_localPart_gate_heq_coeffSum_of_isEmpty
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]

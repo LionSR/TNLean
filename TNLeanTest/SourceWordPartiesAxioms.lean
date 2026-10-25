@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.SourceWordParties
+import TNLean.Lattice.Compression.SourceWordParties
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
@@ -13,7 +13,7 @@ The two party-set identities and their exterior restriction consequence must
 exist and depend only on the standard logical axioms.
 -/
 
-open TNLean.PEPS.PairEffect.Word in
+open TNLean.Lattice.PartyCircuit.Word in
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv

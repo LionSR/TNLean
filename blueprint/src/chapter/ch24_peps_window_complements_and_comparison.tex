@@ -17,7 +17,7 @@
     The complement is the union of a full-height band with
     $w-L-1\geq L$ columns and an $(L+1)$-column band with
     $h-K\geq K$ rows. Each band is a union of cyclic $L\times K$
-    windows, so each belongs to $\mathcal I$. Apply union closure.
+    windows, so each belongs to $\mathcal I$, and union closure places the complement in $\mathcal I$.
 \end{proof}
 
 \begin{theorem}[Complement of a vertical consecutive-window union]%
@@ -96,9 +96,9 @@
     \uses{thm:peps_positive_staircase_comparison,
         thm:peps_positive_vertical_staircase_comparison,
         thm:peps_corner_extension_linear_transitive}
-    Use the horizontal comparison when $j<L$ and the vertical comparison
-    otherwise. Extend~(\ref{eq:peps_positive_union_comparison}) from
-    $U_j$ to $P$. Transitivity of corner extension gives
+    Applying the horizontal comparison when $j<L$ and the vertical comparison
+    otherwise gives~(\ref{eq:peps_positive_union_comparison}) on $U_j$, and extending from
+    $U_j$ to $P$ by transitivity of corner extension yields
     (\ref{eq:peps_positive_patch_step}).
 \end{proof}
 
@@ -115,15 +115,14 @@
          & =\Ext_{W_n\subseteq P}(C_n).
         \label{eq:peps_positive_patch_chain}
     \end{align}
-    In particular, the extensions of the two end-window inserts agree,
-    by taking $n=L+K-1$.
-    These comparisons implement the overlapping-window argument
+    In particular, taking $n=L+K-1$ equates the extensions of the two end-window inserts,
+    implementing the overlapping-window argument
     of~\cite{Molnar2018NormalPEPS} for every positive pair $L,K$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_positive_staircase_patch_step}
-    Induct on $n$. The case $n=0$ is immediate. At the induction step,
-    the common-state hypothesis gives equality of the states on
-    $W_n$ and $W_{n+1}$. Apply~(\ref{eq:peps_positive_patch_step})
-    and compose it with the induction hypothesis.
+    By induction on $n$, the case $n=0$ is immediate, and at the induction step
+    the common-state hypothesis equates the states on
+    $W_n$ and $W_{n+1}$, so~(\ref{eq:peps_positive_patch_step})
+    composes with the induction hypothesis.
 \end{proof}

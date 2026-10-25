@@ -18,11 +18,11 @@ source: the sublinear collar bound (Proposition 9.6), its amplification
 templates (Proposition 11.2). This module states the three propositions as
 predicates and proves that together they imply `UniformAreaLaw`.
 
-The implication in this module is conditional. The physical sublinear collar
-bound is proved separately by `sublinearCollarBound_real`, and the amplification
-proposition is also proved separately. The two-family decomposition is an
-assumption of this implication. The unconditional result is established in
-`TNLean.PEPS.AreaLaw.UniformAreaLaw`. Zero boundary is handled by the
+The implication in this module takes the three propositions as hypotheses. The
+physical sublinear collar bound is proved by `sublinearCollarBound_real`, the
+amplification proposition by `amplificationBound`, and the two-family
+decomposition by `twoFamilyDecomposition`; the unconditional Theorem 1.1 is
+`uniformAreaLaw` in `TNLean.PEPS.AreaLaw.AreaLawTheorem`. Zero boundary is handled by the
 proved factorization theorem, and the positive-boundary case by the proved
 two-family entropy cancellation and the regional dimension bound.
 
@@ -31,9 +31,14 @@ two-family entropy cancellation and the regional dimension bound.
 * `SublinearCollarBound`: Proposition 9.6 (`prop:collar`).
 * `AmplificationBound`: Proposition 10.2 (`prop:amplification`).
 * `TwoFamilyDecomposition`: Proposition 11.2 (`prop:two-families`).
+* `SublinearCollarBoundAt`, `AmplificationBoundAt`: Propositions 9.6 and 10.2 at a given
+  constant and threshold.
 
 ## Main statements
 
+* `regionalEntropy_le_of_collar_amplification_twoFamilies_constants`: the
+  proof of Theorem 1.1 at given constants and thresholds of the three
+  propositions, with the constant `uniformAreaLawConstantOf`.
 * `uniformAreaLaw_of_collar_amplification_twoFamilies`: the three propositions
   imply the uniform area law, by the proof of Theorem 1.1.
 
@@ -48,6 +53,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open scoped BigOperators
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -130,6 +136,93 @@ def AmplificationBound (q R : ℕ) (J Δ : ℝ) : Prop :=
                     (A.filter fun x ↦ x.val ∈ ambientDilation T
                       ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) ⊆ A)
 
+/-- **Proposition 9.6 at a given constant and threshold** (`prop:collar`, `08-scanner.tex`
+lines 808–827). The assertion of `SublinearCollarBound` with its constant `C` and threshold
+`N` fixed: for every template `T` with parameters `(n, s₀)`, `n ≥ N`, separated from the cut,
+with `L = ⌊n^(1-ε)⌋ ≤ s₀`, `X = A ∩ T` and `S₀ = A ∩ T_L`, one has
+`I_Ω(X : Λ ∖ S₀) ≤ C n^(1-ε)`, the cuts of `X`, `S₀` and `S₀ ∖ X` have at most `C n` edges,
+and `|S₀| ≤ C n²`. -/
+def SublinearCollarBoundAt (q R : ℕ) (J Δ D₀ Ctpl C : ℝ) (N : ℕ) : Prop :=
+  ∀ n s₀ : ℕ, N ≤ n →
+    ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
+      ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
+          T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
+          ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
+          FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+              (A.filter fun x ↦ x.val ∈ T.points)
+              (A.filter fun x ↦ x.val ∈ ambientDilation T.points
+                ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
+            C * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) ∧
+          ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤ C * n ∧
+          ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T.points
+              ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
+            C * n ∧
+          ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
+              ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
+              A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤ C * n ∧
+          ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
+              ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
+            C * (n : ℝ) ^ 2
+
+/-- The sublinear collar bound is the existence of a constant and a threshold at which it
+holds. Source: `08-scanner.tex`, lines 808–827. -/
+theorem sublinearCollarBound_iff_exists_sublinearCollarBoundAt {q R : ℕ} {J Δ D₀ Ctpl : ℝ} :
+    SublinearCollarBound q R J Δ D₀ Ctpl ↔
+      ∃ C : ℝ, ∃ N : ℕ, SublinearCollarBoundAt q R J Δ D₀ Ctpl C N :=
+  Iff.rfl
+
+/-- **Proposition 10.2 at a given input constant, order, constant and threshold**
+(`prop:amplification`, `09-amplification.tex` lines 261–296). The assertion of
+`AmplificationBound` for the input constant `C₀` and the integer `M`, with its constant `C` and
+threshold `N` fixed: at every scale `n ≥ max 2 N`, under the size, cut and information
+hypotheses with constant `C₀`, there is a radius `r ≤ C n^((1-ε)/α)` such that every subset of
+`X` has mutual information at most `C n^(-M)` with every set avoiding `N_{2r}(S₀)`, and
+`N_{2r}(S₀) ⊆ A` when `dist_∞(T, Z) > L + n^β`. -/
+def AmplificationBoundAt (q R : ℕ) (J Δ C₀ : ℝ) (M : ℕ) (C : ℝ) (N : ℕ) : Prop :=
+  ∀ n : ℕ, 2 ≤ n → N ≤ n →
+    ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
+      ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ∀ (A : Finset (Site Λ)) (T : Finset (ℤ × ℤ)),
+          ((A.filter fun x ↦ x.val ∈ ambientDilation T
+              ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
+            C₀ * (n : ℝ) ^ 2 →
+          ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
+          ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T
+              ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
+              A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
+          ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T
+              ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
+            C₀ * n →
+          FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+              (A.filter fun x ↦ x.val ∈ T)
+              (A.filter fun x ↦ x.val ∈ ambientDilation T
+                ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
+            C₀ * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) →
+          ∃ r : ℕ, (r : ℝ) ≤ C * (n : ℝ) ^ (Exponents.radiusExponent : ℝ) ∧
+            (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset (Site Λ),
+              Disjoint Jset (graphNeighborhood Λ (2 * r)
+                (A.filter fun x ↦ x.val ∈ ambientDilation T
+                  ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)) →
+              FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X Jset ≤
+                C * ((n : ℝ) ^ M)⁻¹) ∧
+            ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+                (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
+                    (n : ℝ) ^ (Exponents.beta : ℝ) <
+                  (Scan.ambientSupDistance t z : ℝ)) →
+              graphNeighborhood Λ (2 * r)
+                  (A.filter fun x ↦ x.val ∈ ambientDilation T
+                    ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) ⊆ A)
+
+/-- The amplification bound is, for every admissible input constant and order, the existence
+of a constant and a threshold at which it holds. Source: `09-amplification.tex`,
+lines 261–296. -/
+theorem amplificationBound_iff_forall_exists_amplificationBoundAt {q R : ℕ} {J Δ : ℝ} :
+    AmplificationBound q R J Δ ↔
+      ∀ C₀ : ℝ, 0 < C₀ → ∀ M : ℕ, 1 ≤ M →
+        ∃ C : ℝ, ∃ N : ℕ, AmplificationBoundAt q R J Δ C₀ M C N :=
+  Iff.rfl
+
 /-- **Proposition 11.2** (`prop:two-families`, `10-geometry.tex` lines 98–140),
 for the template constants `D₀, Ctpl` of Definition 9.3. For every lower scale
 threshold `n_* ≥ 1` there is a constant `C` such that every cut `A` of a finite
@@ -177,60 +270,157 @@ theorem exists_ambientSupDistance_le_of_mem_graphNeighborhood
   have hp' : (p.length : ℤ) ≤ k := by exact_mod_cast hp
   omega
 
-/-- **Theorem 1.1 from Propositions 9.6, 10.2 and 11.2.** If, for every choice of
-Hamiltonian parameters, the sublinear collar bound and the two-family decomposition
-hold for common template constants and the amplification bound holds, then the
-uniform area law holds. This is the source proof of Theorem 1.1
-(`10-geometry.tex` lines 803–857), expressed as an implication from the
-collar, amplification and two-family propositions. -/
-theorem uniformAreaLaw_of_collar_amplification_twoFamilies
-    (hconst : ∀ q : ℕ, 1 ≤ q → ∀ R : ℕ, ∀ J Δ : ℝ, 0 < J → 0 < Δ →
-      ∃ D₀ Ctpl : ℝ, SublinearCollarBound q R J Δ D₀ Ctpl ∧ TwoFamilyDecomposition D₀ Ctpl)
-    (hamp : ∀ q : ℕ, 1 ≤ q → ∀ R : ℕ, ∀ J Δ : ℝ, 0 < J → 0 < Δ →
-      AmplificationBound q R J Δ) :
-    UniformAreaLaw := by
+/-- The constant `c_D log q + c_M c_D / 2` of the proof of Theorem 1.1, with
+`c_D = max C₃ 0` for the constant `C₃` of the two-family decomposition and
+`c_M = max C₂ 0` for the constant `C₂` of the amplification bound. The source
+asserts only that a constant exists; this is the constant its proof produces.
+Source: proof of Theorem 1.1, `10-geometry.tex`, lines 840–857. -/
+noncomputable def uniformAreaLawConstantOf (q : ℕ) (C₂ C₃ : ℝ) : ℝ :=
+  max C₃ 0 * Real.log q + max C₂ 0 * max C₃ 0 / 2
+
+/-- The constant of the proof of Theorem 1.1 is nonnegative. -/
+theorem uniformAreaLawConstantOf_nonneg {q : ℕ} (hq : 1 ≤ q) (C₂ C₃ : ℝ) :
+    0 ≤ uniformAreaLawConstantOf q C₂ C₃ := by
+  have hlog : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
+  have hD : 0 ≤ max C₃ 0 := le_max_right _ _
+  have hM : 0 ≤ max C₂ 0 := le_max_right _ _
+  unfold uniformAreaLawConstantOf
+  positivity
+
+/-- The lower scale `n_* = max N₁ (max N₂ N₃)` of the proof of Theorem 1.1, for the
+thresholds `N₁` of the sublinear collar bound and `N₂` of the amplification bound,
+and the collar radius threshold `N₃ = Exponents.collarRadiusThreshold C₂ 1` at the
+amplification constant `C₂`. Source: proof of Theorem 1.1, `10-geometry.tex`,
+lines 803–832. -/
+noncomputable def uniformAreaLawScale (N₁ N₂ : ℕ) (C₂ : ℝ) : ℕ :=
+  max N₁ (max N₂ (Exponents.collarRadiusThreshold C₂ 1))
+
+/-- The lower scale of the proof of Theorem 1.1 is at least `2`. -/
+theorem two_le_uniformAreaLawScale (N₁ N₂ : ℕ) (C₂ : ℝ) : 2 ≤ uniformAreaLawScale N₁ N₂ C₂ :=
+  (le_max_left 2 _).trans ((le_max_right _ _).trans (le_max_right _ _))
+
+/-- **The proof of Theorem 1.1 at given constants and thresholds.** Let the
+sublinear collar bound hold with constant `C₁` from the threshold `N₁` on, let the
+amplification bound for the input constant `max C₁ 1` and the order `100` hold with
+constant `C₂` from the threshold `N₂` on, and let `C₃` be a constant of the
+two-family decomposition at the lower scale `n_* = uniformAreaLawScale N₁ N₂ C₂`.
+Then every cut `A` of every finite induced domain, for every gapped ground state,
+has regional entropy at most `uniformAreaLawConstantOf q C₂ C₃` times the number of
+cut edges. The source asserts only that some constant exists; this statement
+records the constant its proof produces from those of Propositions 9.6, 10.2
+and 11.2. Source: proof of Theorem 1.1, `10-geometry.tex`, lines 803–857. -/
+theorem regionalEntropy_le_of_collar_amplification_twoFamilies_constants
+    {q R : ℕ} (hq : 1 ≤ q) {J Δ D₀ Ctpl C₁ C₂ C₃ : ℝ} {N₁ N₂ : ℕ} (hΔ : 0 < Δ)
+    (hcol : ∀ n s₀ : ℕ, N₁ ≤ n →
+      ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
+        ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
+            T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
+            ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
+            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+                (A.filter fun x ↦ x.val ∈ T.points)
+                (A.filter fun x ↦ x.val ∈ ambientDilation T.points
+                  ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
+              C₁ * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) ∧
+            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤ C₁ * n ∧
+            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T.points
+                ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
+              C₁ * n ∧
+            ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
+                ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
+                A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤ C₁ * n ∧
+            ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
+                ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
+              C₁ * (n : ℝ) ^ 2)
+    (hamp : ∀ n : ℕ, 2 ≤ n → N₂ ≤ n →
+      ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
+        ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ∀ (A : Finset (Site Λ)) (T : Finset (ℤ × ℤ)),
+            ((A.filter fun x ↦ x.val ∈ ambientDilation T
+                ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
+              max C₁ 1 * (n : ℝ) ^ 2 →
+            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ max C₁ 1 * n →
+            ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T
+                ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
+                A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ max C₁ 1 * n →
+            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T
+                ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
+              max C₁ 1 * n →
+            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+                (A.filter fun x ↦ x.val ∈ T)
+                (A.filter fun x ↦ x.val ∈ ambientDilation T
+                  ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
+              max C₁ 1 * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) →
+            ∃ r : ℕ, (r : ℝ) ≤ C₂ * (n : ℝ) ^ (Exponents.radiusExponent : ℝ) ∧
+              (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset (Site Λ),
+                Disjoint Jset (graphNeighborhood Λ (2 * r)
+                  (A.filter fun x ↦ x.val ∈ ambientDilation T
+                    ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)) →
+                FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X Jset ≤
+                  C₂ * ((n : ℝ) ^ 100)⁻¹) ∧
+              ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+                  (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
+                      (n : ℝ) ^ (Exponents.beta : ℝ) <
+                    (Scan.ambientSupDistance t z : ℝ)) →
+                graphNeighborhood Λ (2 * r)
+                    (A.filter fun x ↦ x.val ∈ ambientDilation T
+                      ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) ⊆ A))
+    (htwo : ∀ Λ : Finset (ℤ × ℤ), ∀ A : Finset (Site Λ), 0 < (edgeBoundary Λ A).card →
+      ∃ P : Geometry.OrderedTwoFamilyPartition A, ∃ n s : Fin P.pieceCount → ℕ,
+        ∃ T : ∀ i, Geometry.Template Ctpl (n i) (s i),
+          (P.residual.card : ℝ) ≤ C₃ * (edgeBoundary Λ A).card ∧
+          (∀ i, (P.piece i).Nonempty) ∧
+          (∀ i, P.piece i ⊆ A.filter fun x ↦ x.val ∈ (T i).points) ∧
+          (∀ i, (T i).IsSeparated D₀ (Geometry.boundaryEndpoints Λ A)) ∧
+          (∀ i, ⌊(n i : ℝ) ^ (1 - (Exponents.geometryEll : ℝ))⌋₊ ≤ s i) ∧
+          (∀ i, uniformAreaLawScale N₁ N₂ C₂ ≤ n i) ∧
+          (∀ i, ∀ t ∈ (T i).points, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+            2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t z : ℝ)) ∧
+          (∀ i, ∀ t ∈ (T i).points, ∀ x ∈ P.earlierSameFamily i,
+            2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t x.val : ℝ)) ∧
+          ∑ i, ((n i : ℝ) ^ 100)⁻¹ ≤ C₃ * (edgeBoundary Λ A).card) :
+    ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
+      IsGappedGroundState Λ q h.operator E₀ Ω Δ → ∀ A : Finset (Site Λ),
+        regionalEntropy Λ q Ω A ≤ uniformAreaLawConstantOf q C₂ C₃ * (edgeBoundary Λ A).card := by
   classical
-  intro q hq R J Δ hJ hΔ
-  obtain ⟨D₀, Ctpl, ⟨C₁, N₁, hcol⟩, htwo⟩ := hconst q hq R J Δ hJ hΔ
-  obtain ⟨C₂, N₂, hampl⟩ :=
-    hamp q hq R J Δ hJ hΔ (max C₁ 1) (lt_max_of_lt_right one_pos) 100 (by norm_num)
-  obtain ⟨N₃, hN₃, hrad⟩ := Exponents.exists_collar_radius_threshold C₂ 1 one_pos
-  obtain ⟨C₃, hdec⟩ := htwo (max (max N₁ N₂) N₃) (by omega)
   set cD := max C₃ 0 with hcD
   set cM := max C₂ 0 with hcM
-  have hcD0 : 0 ≤ cD := le_max_right _ _
   have hcM0 : 0 ≤ cM := le_max_right _ _
-  have hlog : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
-  refine ⟨cD * Real.log q + cM * cD / 2, by positivity, ?_⟩
+  have hN₁ : N₁ ≤ uniformAreaLawScale N₁ N₂ C₂ := le_max_left _ _
+  have hN₂ : N₂ ≤ uniformAreaLawScale N₁ N₂ C₂ := (le_max_left _ _).trans (le_max_right _ _)
+  have hN₃ : Exponents.collarRadiusThreshold C₂ 1 ≤ uniformAreaLawScale N₁ N₂ C₂ :=
+    (le_max_right _ _).trans (le_max_right _ _)
+  have h2 := two_le_uniformAreaLawScale N₁ N₂ C₂
   intro Λ h E₀ Ω hΩ A
   rcases Nat.eq_zero_or_pos (edgeBoundary Λ A).card with hb | hb
   · rw [regionalEntropy_eq_zero_of_edgeBoundary_eq_empty h hΔ hΩ
       (Finset.card_eq_zero.mp hb), hb]
     simp
-  obtain ⟨P, n, s, T, hD, -, hsub, hsep, hL, hn, hcut, hord, hsum⟩ := hdec Λ A hb
+  obtain ⟨P, n, s, T, hD, -, hsub, hsep, hL, hn, hcut, hord, hsum⟩ := htwo Λ A hb
   have hell : (Exponents.geometryEll : ℝ) = Exponents.amplificationEpsilon := by
     norm_num [Exponents.geometryEll, Exponents.amplificationEpsilon]
   have hpiece : ∀ i, FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
       (P.piece i) (Aᶜ ∪ P.earlierSameFamily i) ≤ cM * ((n i : ℝ) ^ 100)⁻¹ := by
     intro i
     have hni := hn i
-    have h2 : 2 ≤ n i := by omega
     have hnpos : (0 : ℝ) < n i := by exact_mod_cast (by omega : 0 < n i)
     have hLs := hL i
     rw [hell] at hLs
     obtain ⟨hI, hX, hS, hY, hcard⟩ :=
-      hcol (n i) (s i) (by omega) Λ h E₀ Ω hΩ A (T i) (hsep i) hLs
+      hcol (n i) (s i) (hN₁.trans hni) Λ h E₀ Ω hΩ A (T i) (hsep i) hLs
     have hC₁ : C₁ ≤ max C₁ 1 := le_max_left _ _
     have hn2 : (0 : ℝ) ≤ (n i : ℝ) ^ 2 := by positivity
     have hnε : (0 : ℝ) ≤ (n i : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) := by
       positivity
-    obtain ⟨r, hr, hinfo, hclear⟩ := hampl (n i) h2 (by omega) Λ h E₀ Ω hΩ A (T i).points
-      (hcard.trans (mul_le_mul_of_nonneg_right hC₁ hn2))
-      (hX.trans (mul_le_mul_of_nonneg_right hC₁ hnpos.le))
-      (hY.trans (mul_le_mul_of_nonneg_right hC₁ hnpos.le))
-      (hS.trans (mul_le_mul_of_nonneg_right hC₁ hnpos.le))
-      (hI.trans (mul_le_mul_of_nonneg_right hC₁ hnε))
-    have hsmall := hrad (n i) (by omega) r hr
+    obtain ⟨r, hr, hinfo, hclear⟩ :=
+      hamp (n i) (h2.trans hni) (hN₂.trans hni) Λ h E₀ Ω hΩ A (T i).points
+        (hcard.trans (mul_le_mul_of_nonneg_right hC₁ hn2))
+        (hX.trans (mul_le_mul_of_nonneg_right hC₁ hnpos.le))
+        (hY.trans (mul_le_mul_of_nonneg_right hC₁ hnpos.le))
+        (hS.trans (mul_le_mul_of_nonneg_right hC₁ hnpos.le))
+        (hI.trans (mul_le_mul_of_nonneg_right hC₁ hnε))
+    have hsmall :=
+      Exponents.collar_radius_lt_of_collarRadiusThreshold_le one_pos (hN₃.trans hni) r hr
     have hβ : 0 < (n i : ℝ) ^ (Exponents.beta : ℝ) := Real.rpow_pos_of_pos hnpos _
     have hr0 : (0 : ℝ) ≤ r := Nat.cast_nonneg r
     have hA := hclear fun t ht z hz ↦ by
@@ -260,9 +450,29 @@ theorem uniformAreaLaw_of_collar_amplification_twoFamilies
     rw [← Finset.mul_sum, mul_assoc]
     exact mul_le_mul_of_nonneg_left
       (hsum.trans (mul_le_mul_of_nonneg_right (le_max_left _ _) hbR)) hcM0
-  have hmain := regionalEntropy_le_boundary_of_partition_estimates Λ q hq Ω hΩ.1 A P
+  exact regionalEntropy_le_boundary_of_partition_estimates Λ q hq Ω hΩ.1 A P
     (fun i ↦ cM * ((n i : ℝ) ^ 100)⁻¹) hpiece cD (cM * cD) hD' hE
-  calc regionalEntropy Λ q Ω A
-      ≤ (cD * Real.log q + cM * cD / 2) * (edgeBoundary Λ A).card := hmain
+
+/-- **Theorem 1.1 from Propositions 9.6, 10.2 and 11.2.** If, for every choice of
+Hamiltonian parameters, the sublinear collar bound and the two-family decomposition
+hold for common template constants and the amplification bound holds, then the
+uniform area law holds. This is the source proof of Theorem 1.1
+(`10-geometry.tex` lines 803–857). The three propositions are proved
+separately, and `uniformAreaLaw` combines them into the unconditional
+Theorem 1.1. -/
+theorem uniformAreaLaw_of_collar_amplification_twoFamilies
+    (hconst : ∀ q : ℕ, 1 ≤ q → ∀ R : ℕ, ∀ J Δ : ℝ, 0 < J → 0 < Δ →
+      ∃ D₀ Ctpl : ℝ, SublinearCollarBound q R J Δ D₀ Ctpl ∧ TwoFamilyDecomposition D₀ Ctpl)
+    (hamp : ∀ q : ℕ, 1 ≤ q → ∀ R : ℕ, ∀ J Δ : ℝ, 0 < J → 0 < Δ →
+      AmplificationBound q R J Δ) :
+    UniformAreaLaw := by
+  intro q hq R J Δ hJ hΔ
+  obtain ⟨D₀, Ctpl, ⟨C₁, N₁, hcol⟩, htwo⟩ := hconst q hq R J Δ hJ hΔ
+  obtain ⟨C₂, N₂, hampl⟩ :=
+    hamp q hq R J Δ hJ hΔ (max C₁ 1) (lt_max_of_lt_right one_pos) 100 (by norm_num)
+  obtain ⟨C₃, hdec⟩ := htwo (uniformAreaLawScale N₁ N₂ C₂)
+    (one_le_two.trans (two_le_uniformAreaLawScale N₁ N₂ C₂))
+  exact ⟨_, uniformAreaLawConstantOf_nonneg hq C₂ C₃,
+    regionalEntropy_le_of_collar_amplification_twoFamilies_constants hq hΔ hcol hampl hdec⟩
 
 end TNLean.PEPS.AreaLaw

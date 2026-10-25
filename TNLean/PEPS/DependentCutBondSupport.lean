@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.DependentBondCoefficients
-import TNLean.PEPS.DependentBondCut
+import TNLean.Lattice.Compression.DependentBondCut
 import TNLean.PEPS.DependentBondProjectorExpansion
-import TNLean.PEPS.DependentPhysicalProductRangeSupport
+import TNLean.Lattice.Compression.DependentPhysicalProductRangeSupport
 
 /-!
 # Coherent bond expansions forced by complementary cuts
@@ -26,6 +26,7 @@ Source: SCP10, arXiv:1001.3807, Theorem 5.5 and Lemma 4.6.
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS.DependentBondNetwork
+open TNLean.Lattice.DependentBondNetwork TNLean.Lattice
 
 section CoordinateSlices
 variable {Site : Type*} [Fintype Site] [DecidableEq Site] {Out : Site → Type*}

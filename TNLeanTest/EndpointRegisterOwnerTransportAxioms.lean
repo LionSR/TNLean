@@ -3,14 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.EndpointRegisterOwnerTransport
+import TNLean.Lattice.Compression.EndpointRegisterOwnerTransport
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
 /-! # Axiom check for owner and layout transport of endpoint registers -/
 
 set_option linter.hashCommand false
-open TNLean.PEPS.PairEffect.SourceInventory
+open TNLean.Lattice.PartyCircuit.SourceInventory
 
 run_cmd do
   let decl := ``endpointRegisterWord_eval_heq_mapOwner_castLayouts

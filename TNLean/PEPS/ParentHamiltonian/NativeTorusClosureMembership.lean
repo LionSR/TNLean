@@ -23,8 +23,10 @@ Source: SCP10, Theorem 5.7 and equation `eq:2d:move-strings`.
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS
+open TNLean.Lattice
 
 namespace DependentBondNetwork
+open TNLean.Lattice.DependentBondNetwork
 variable {Vertex Edge : Type*} [Fintype Vertex] [Fintype Edge]
 variable [DecidableEq Vertex] [DecidableEq Edge]
 variable (tail head : Edge → Vertex) (D : Edge → Type*)
@@ -100,7 +102,7 @@ theorem isTorusFlat_nativeClosure (g h : G) (hgh : Commute g h) :
   split_ifs <;> simp_all [hgh.inv_left.eq]
 
 variable [Finite G] {d : ℕ}
-open DependentBondNetwork
+open DependentBondNetwork TNLean.Lattice.DependentBondNetwork
 
 /-- Each slice of an actual commuting closure lies in the original plaquette
 range, for arbitrary bond dimensions and local invariant tensors.

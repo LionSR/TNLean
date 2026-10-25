@@ -8,6 +8,8 @@ The threshold is uniform over positive safety parameters. Selected cells
 include cap zero and negative coordinates; empty cuts impose no extra premise.
 -/
 
+open TNLean.Lattice
+
 open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Geometry TNLean.PEPS.AreaLaw.Scan
 
 -- Zero truncation constant is included, with a fixed nonintegral row multiplier.

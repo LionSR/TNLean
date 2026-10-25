@@ -13,35 +13,33 @@ This file assembles the Section 8 consequences of Proposition 7.1 of the polynom
 manuscript at every large size. The angular information bound of Proposition 3.4 is the theorem
 `angularInformationBound`; the adaptive patch constraint of Proposition 4.1 is taken as a
 hypothesis in the form in which the manuscript states it (`06-geometry.tex`, lines 12–53 and
-559–681). The constants are fixed in the order of
-the source: `K₀ = 20`, a small `ε₀`, a small mesh ratio `ν`, the clearance `a = a₀ / 2`, the
-information scale `D` of Proposition 3.4 at that clearance, and `B₀ = K₀ D`; then Proposition 4.1
-supplies the patch constants.
+559–681). The constants are fixed in the order of the source: `K₀ = 20`, a small `ε₀`, the mesh
+ratio `ν = 1 / 600000000`, the clearance `a = a₀ / 2`, the information scale `D` of
+Proposition 3.4 at that clearance, and `B₀ = K₀ D`; then Proposition 4.1 supplies the patch
+constants.
 
-**Scope restriction (consequences of Proposition 7.1):**
-`largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint` proves the weaker
-`LargeSizeDyadicProtocolConsequences` interface used in Section 8, not full Proposition 7.1.
-The interface omits the following clauses of the proposition:
-
-* at least one party on every hierarchy square, including the root;
-* a designated party holding the main copy of `Ω` and private initialization of each auxiliary
-  copy at its designated party, rather than arbitrary normalized product initialization;
-* factorization of every intermediate reference vector into main and auxiliary encoded frames,
-  with every factor of norm at most one;
-* the repainting-event scale and grid address for each additional party;
-* pre-expansion pair-source and message bounds for each monomial, beyond pair-effect counts;
-* accuracy at every prescribed inverse power of `L`, rather than one contraction per change
-  with error `C L⁻²⁰`.
-
-These omissions and the retained Section 8 consequences are recorded in
-`docs/paper-gaps/polypeps_prop71_consequences_interface.tex`. To eliminate this restriction,
-construct a certificate carrying all omitted clauses, prove full Proposition 7.1 for it, and
-project to the present interface. The angular-scale and dyadic-padding lemmas in this module
-are not part of this restriction.
+`largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint` proves
+`LargeSizeDyadicProtocolConsequences`, which carries every clause of Proposition 7.1, from the
+adaptive patch constraint of Proposition 4.1; with that constraint proved, it gives
+`largeSizeDyadicProtocolConsequences` without hypotheses. The former scope restriction of this
+interface is resolved in `docs/paper-gaps/polypeps_prop71_consequences_interface.tex`.
 
 * `IsAngularScale.mono` : a larger information scale and threshold are again admissible;
-* `largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint` : the consequences of
-  Proposition 7.1 used in §8.
+* `DyadicProtocol.IsDistributionProtocol.mono` : larger count, expansion and error constants are
+  again admissible;
+* `protocolMeshRatio` : the mesh ratio `ν = 1 / 600000000` of the protocol, the smallest of the
+  explicit ratios of the resizings, the point treatments and the direct repaintings;
+* `protocolCountConstant`, `protocolExpansionConstant`, `protocolErrorConstant`,
+  `protocolExpansionExponent`, `protocolLifetimeBound` : the named constants of the protocol, with
+  the mesh ratio `ν` and the patch constants of Proposition 4.1 as parameters;
+* `largeSizeDyadicProtocol_of_angularScale` : Proposition 7.1 for one model, at a given
+  information scale and threshold of Proposition 3.4 and given patch constants of
+  Proposition 4.1, at the mesh ratio `protocolMeshRatio`;
+* `largeSizeDyadicProtocol_of_le_of_adaptivePatchConstraint` : Proposition 7.1 at every count,
+  expansion and error constant at least the named ones;
+* `largeSizeDyadicProtocolBounds_of_adaptivePatchConstraint` and
+  `largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint` : the consequences of
+  Proposition 7.1 used in §8, with separate constants and with one constant.
 
 ## References
 
@@ -61,13 +59,13 @@ open EncodedFrame
 stronger.
 
 Polynomial-PEPS manuscript, `02-information.tex`, lines 635–658. -/
-theorem IsAngularScale.mono {q : ℕ} {J Δ a A₀ : ℝ} {m₀ p : ℕ} {D L₀ D' : ℝ}
-    (h : IsAngularScale q J Δ a A₀ m₀ p D L₀) (ha : 0 ≤ a) (hD : D ≤ D') :
-    IsAngularScale q J Δ a A₀ m₀ p D' (max L₀ 1) := by
-  intro L hL h' E₀ Ω hΩ pos c hpos V hV X E hXE n hn hnL hdiam hsep
+theorem IsAngularScale.mono {q : ℕ} {G : ∀ L : ℕ, StateSpace L q → Prop} {a A₀ : ℝ} {m₀ p : ℕ}
+    {D L₀ D' : ℝ} (h : IsAngularScale q G a A₀ m₀ p D L₀) (ha : 0 ≤ a) (hD : D ≤ D') :
+    IsAngularScale q G a A₀ m₀ p D' (max L₀ 1) := by
+  intro L hL Ω hΩ pos c hpos V hV X E hXE n hn hnL hdiam hsep
   have hlog : 0 ≤ Real.log L := Real.log_nonneg (le_of_max_le_right hL)
   have ht : D * Real.log L ≤ D' * Real.log L := mul_le_mul_of_nonneg_right hD hlog
-  refine h L (le_of_max_le_left hL) h' E₀ Ω hΩ pos c hpos V hV X E hXE n (ht.trans hn) hnL hdiam
+  refine h L (le_of_max_le_left hL) Ω hΩ pos c hpos V hV X E hXE n (ht.trans hn) hnL hdiam
     fun x hx y hy => le_trans ?_ (hsep x hx y hy)
   exact mul_le_mul_of_nonneg_left (max_le_max ht le_rfl) ha
 
@@ -75,87 +73,283 @@ theorem IsAngularScale.mono {q : ℕ} {J Δ a A₀ : ℝ} {m₀ p : ℕ} {D L₀
 theorem le_two_pow_clog_lt {L : ℕ} (hL : 2 ≤ L) :
     1 ≤ Nat.clog 2 L ∧ L ≤ 2 ^ Nat.clog 2 L ∧ 2 ^ Nat.clog 2 L < 2 * L := by
   have h1 := Nat.clog_pos (b := 2) (by norm_num) (by omega : 1 < L)
-  refine ⟨h1, Nat.le_pow_clog (by norm_num) L, ?_⟩
-  have h2 := Nat.pow_pred_clog_lt_self (b := 2) (by norm_num) (by omega : 1 < L)
-  rw [Nat.pred_eq_sub_one] at h2
-  have : 2 ^ Nat.clog 2 L = 2 * 2 ^ (Nat.clog 2 L - 1) := by
-    rw [← pow_succ']; congr 1; omega
-  omega
+  exact ⟨h1, le_paddedSide L, paddedSide_lt_two_mul (by omega)⟩
 
-/-- **Proposition 7.1 in the form used in §8, from Proposition 4.1.** Assume the adaptive patch
-constraint of Proposition 4.1; the angular information bound of Proposition 3.4 is
-`angularInformationBound`. Then for every `q ≥ 2` and `J, Δ > 0` there are constants
-`C`, `b`, `k`, `r`
-and a threshold `L₀` such that every gapped ground vector of a square Hamiltonian of side
-`L ≥ max 2 L₀` has a dyadic distribution protocol with the bounds of
-`DyadicProtocol.IsDistributionProtocol`.
+namespace DyadicProtocol.IsDistributionProtocol
+
+variable {L q : ℕ} {P : Type} [Fintype P] {D : DyadicProtocol L q P} {Ω : StateSpace L q}
+  {C_N C_K C_E : ℝ} {b k r : ℕ}
+
+/-- **Larger constants are admissible.** The bounds of §8 with constants `C_N`, `C_K`, `C_E`
+hold with any larger constants `C_N' ≥ C_N`, `C_K' ≥ C_K` and `C_E' ≥ C_E`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`,
+`06-geometry.tex:17–52`. -/
+theorem mono (h : D.IsDistributionProtocol Ω C_N C_K C_E b k r) {C_N' C_K' C_E' : ℝ}
+    (hN : C_N ≤ C_N') (hK : C_K ≤ C_K') (hE : C_E ≤ C_E') :
+    D.IsDistributionProtocol Ω C_N' C_K' C_E' b k r := by
+  have hpow : C_K * (L : ℝ) ^ k ≤ C_K' * (L : ℝ) ^ k :=
+    mul_le_mul_of_nonneg_right hK (by positivity)
+  obtain ⟨Ξ, hΞ, hlower, href⟩ := h.reference_changes
+  exact { h with
+    card_le := h.card_le.trans (by gcongr)
+    changes_le := h.changes_le.trans (by gcongr)
+    monomialBounded := fun t ht ↦ Lattice.PartyCircuit.OriginalCircuit.isMonomialBounded_mono _
+      (h.monomialBounded t ht) (Nat.floor_le_floor hpow)
+    expansionBounded := fun t ht ↦ Lattice.PartyCircuit.OriginalCircuit.isExpansionBounded_mono _
+      (h.expansionBounded t ht) le_rfl hpow
+    reference_step := fun t ht ↦ (h.reference_step t ht).trans (by gcongr)
+    reference_changes := ⟨Ξ, hΞ, le_trans (by gcongr) hlower, href⟩ }
+
+end DyadicProtocol.IsDistributionProtocol
+
+/-- The separate-constant consequences of Proposition 7.1 give the single-constant ones, with
+the largest of the three constants (`06-geometry.tex:12–53`). -/
+theorem LargeSizeDyadicProtocolBounds.largeSizeDyadicProtocolConsequences
+    (h : LargeSizeDyadicProtocolBounds) : LargeSizeDyadicProtocolConsequences := by
+  intro q hq J Δ hJ hΔ
+  obtain ⟨C_N, C_K, C_E, b, k, r, L₀, hall⟩ := h q hq J Δ hJ hΔ
+  refine ⟨max C_N (max C_K C_E), b, k, r, L₀, fun L hL hL₀ Ω hΩ => ?_⟩
+  obtain ⟨P, hP, D, hD⟩ := hall L hL hL₀ Ω hΩ
+  exact ⟨P, hP, D, hD.mono (le_max_left _ _) ((le_max_left _ _).trans (le_max_right _ _))
+    ((le_max_right _ _).trans (le_max_right _ _))⟩
+
+/-! ### The named constants of the protocol -/
+
+/-- The hole ratio `ε₀ = 1 / 30000` of the protocol: the holes at scale `n` have radius
+`ε₀ min(n, t)`, `t = D log L`. It satisfies `2 ε₀ (a₀ + 1) ≤ a₀ / 2` for `a₀ = 1 / 5000`.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 102–107, 349–351 and 408–415. -/
+noncomputable def protocolHoleRatio : ℝ := 1 / 30000
+
+/-- **The mesh ratio of the protocol**, at the hole ratio `ε₀ = protocolHoleRatio` and `K₀ = 20`:
+the smaller of the point-treatment ratio `ν₂ = min(ε₀, 1) / 20000` and the direct-repainting
+ratio `ν₃ = min(ε₀ / max(K₀, 1), 1) / 4`. It is also at most the resizing ratio
+`ν₁ = min(ε₀, 1) / 8` and at most `1 / 6`, so it serves all three kinds of small-patch rewrites
+of the protocol and the smallness condition of its constants. Its value is `1 / 600000000`.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 447–541 and 559–570. -/
+noncomputable def protocolMeshRatio : ℝ :=
+  min (pointTreatmentRatio protocolHoleRatio) (directRepaintingRatio 20 protocolHoleRatio)
+
+/-- The hole ratio of the protocol is positive (`06-geometry.tex:102–107`). -/
+theorem protocolHoleRatio_pos : 0 < protocolHoleRatio := by norm_num [protocolHoleRatio]
+
+/-- The mesh ratio of the protocol is positive (`06-geometry.tex:559–563`). -/
+theorem protocolMeshRatio_pos : 0 < protocolMeshRatio :=
+  lt_min (pointTreatmentRatio_pos protocolHoleRatio_pos)
+    (directRepaintingRatio_pos 20 protocolHoleRatio_pos)
+
+/-- The mesh ratio of the protocol is at most the point-treatment ratio
+(`06-geometry.tex:481–505`). -/
+theorem protocolMeshRatio_le_pointTreatmentRatio :
+    protocolMeshRatio ≤ pointTreatmentRatio protocolHoleRatio :=
+  min_le_left _ _
+
+/-- The mesh ratio of the protocol is at most the direct-repainting ratio
+(`06-geometry.tex:507–527`). -/
+theorem protocolMeshRatio_le_directRepaintingRatio :
+    protocolMeshRatio ≤ directRepaintingRatio 20 protocolHoleRatio :=
+  min_le_right _ _
+
+/-- The mesh ratio of the protocol is at most the resizing ratio (`06-geometry.tex:529–541`). -/
+theorem protocolMeshRatio_le_resizeRatio : protocolMeshRatio ≤ resizeRatio protocolHoleRatio := by
+  have h := protocolMeshRatio_le_pointTreatmentRatio
+  have h0 := lt_min protocolHoleRatio_pos one_pos
+  unfold pointTreatmentRatio at h
+  unfold resizeRatio
+  linarith
+
+/-- The mesh ratio of the protocol is at most `1 / 6` (`06-geometry.tex:559–570`). -/
+theorem protocolMeshRatio_le_one_sixth : protocolMeshRatio ≤ 1 / 6 := by
+  have := protocolMeshRatio_le_pointTreatmentRatio.trans (pointTreatmentRatio_le _)
+  linarith
+
+/-- The mesh ratio of the protocol is `1 / 600000000`: the point-treatment ratio
+`(1 / 30000) / 20000`, below the direct-repainting ratio `(1 / 30000) / 20 / 4`
+(`06-geometry.tex:481–527`). -/
+theorem protocolMeshRatio_eq : protocolMeshRatio = 1 / 600000000 := by
+  have h1 : pointTreatmentRatio protocolHoleRatio = 1 / 600000000 := by
+    rw [pointTreatmentRatio, protocolHoleRatio, min_eq_left (by norm_num : (1 / 30000 : ℝ) ≤ 1)]
+    norm_num
+  have h2 : directRepaintingRatio 20 protocolHoleRatio = 1 / 2400000 := by
+    rw [directRepaintingRatio, protocolHoleRatio, max_eq_left (by norm_num : (1 : ℝ) ≤ 20),
+      min_eq_left (by norm_num : (1 / 30000 : ℝ) / 20 ≤ 1)]
+    norm_num
+  rw [protocolMeshRatio, h1, h2, min_eq_left (by norm_num : (1 : ℝ) / 600000000 ≤ 1 / 2400000)]
+
+/-- At the hole ratio and the mesh ratio of the protocol, the patch bound is
+`b = ⌈((4 + 8 ε₀ + 2 ν) / ν + 1)²⌉ = 2400160003² = 5760768040000960009`.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 498–499, 520–521 and 535–538. -/
+theorem protocolPatchBound_protocolMeshRatio :
+    protocolPatchBound protocolHoleRatio protocolMeshRatio = 5760768040000960009 := by
+  have h : ((4 + 8 * protocolHoleRatio + 2 * protocolMeshRatio) / protocolMeshRatio + 1) ^ 2 =
+      (5760768040000960009 : ℝ) := by
+    rw [protocolMeshRatio_eq, protocolHoleRatio]
+    norm_num
+  rw [protocolPatchBound, h, Nat.ceil_ofNat]
+  exact max_eq_right (by norm_num)
+
+/-- The prefactor `G = (C' + 1) ^ (3 b) (16 b² (C' + 1) ^ (6 b) + 1) ^ (2 b)` of the bound
+`G L ^ k_K` on the number of monomials and on the coefficient sum of a small-patch rewrite with
+`b` patches and tag counts at most `C' L ^ c'`.
+
+Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 188–218 and
+331–344. -/
+def rewriteGatePrefactor (C' b : ℕ) : ℕ :=
+  (C' + 1) ^ (3 * b) * (16 * b ^ 2 * (C' + 1) ^ (6 * b) + 1) ^ (2 * b)
+
+/-- The exponent `k_K = 3 b c' + 4 b (3 b c' + 30)` of the bound `G L ^ k_K` on the number of
+monomials and on the coefficient sum of a small-patch rewrite with `b` patches and tag counts at
+most `C' L ^ c'`.
+
+Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 188–218 and
+331–344. -/
+def rewriteGateExponent (c' b : ℕ) : ℕ := 3 * b * c' + 4 * b * (3 * b * c' + 30)
+
+/-- The bound of a small-patch rewrite is its prefactor times `L` to its exponent
+(`05-frames.tex`, lines 331–344). -/
+theorem rewriteGateBound_eq (C' c' b L : ℕ) :
+    rewriteGateBound C' c' b L = rewriteGatePrefactor C' b * L ^ rewriteGateExponent c' b :=
+  rfl
+
+/-- The count constant `5042` of the protocol: at most `5042 L²` parties and at most
+`5042 L³` changes, from the `5040 L³` changes of the schedule and the initial and final
+changes.
+
+Polynomial-PEPS manuscript, Proposition 7.1, items 1 and 2, `06-geometry.tex`, lines 18–25, and
+the counts of the proof, lines 649–652. -/
+noncomputable def protocolCountConstant : ℝ := 5042
+
+/-- The bound `b_prot = 64 · 189` on the lifetime participation, the parties per gate, the gates
+per change, the parties per square, and the address distances of the protocol: at most `64`
+events use one party, and each event has at most `189` changes.
+
+Polynomial-PEPS manuscript, Proposition 7.1, items 1–3, `06-geometry.tex`, lines 19–37, and the
+lifetime argument, lines 572–631. -/
+def protocolLifetimeBound : ℕ := 64 * 189
+
+/-- The expansion constant of the protocol at mesh ratio `ν` and patch constant `C` of
+Proposition 4.1: the prefactor `G` of the small-patch rewrites with `b = protocolPatchBound ε₀ ν`
+patches and tag constant `⌈C⌉`. It bounds the number of monomials and the coefficient sum of
+every gate by `G L ^ k_K`.
+
+Polynomial-PEPS manuscript, Proposition 7.1, item 2, `06-geometry.tex`, lines 25–30 and
+572–583; Lemma 6.3, `05-frames.tex`, lines 331–344. -/
+noncomputable def protocolExpansionConstant (ν C : ℝ) : ℝ :=
+  rewriteGatePrefactor ⌈C⌉₊ (protocolPatchBound protocolHoleRatio ν)
+
+/-- The exponent `k_K` of the expansions of the protocol at mesh ratio `ν` and patch exponent
+`c` of Proposition 4.1.
+
+Polynomial-PEPS manuscript, Proposition 7.1, item 2, `06-geometry.tex`, lines 25–30 and
+572–583; Lemma 6.3, `05-frames.tex`, lines 331–344. -/
+noncomputable def protocolExpansionExponent (ν c : ℝ) : ℕ :=
+  rewriteGateExponent ⌈c⌉₊ (protocolPatchBound protocolHoleRatio ν)
+
+/-- The error constant `max 10080 (2 b + 1)` of the protocol at mesh ratio `ν`, with
+`b = protocolPatchBound ε₀ ν`: each change has reference error at most `(2 b + 1) L⁻²⁰`, and the
+frozen auxiliary frames carry at most `10080 L³` holes, at most two for each of the
+`5040 L³` changes, so that `1 - 10080 L⁻⁵⁷ ≤ ‖Ξ‖`.
+
+Polynomial-PEPS manuscript, Proposition 7.1, item 4, `06-geometry.tex`, lines 38–46, and its
+proof, lines 581–583, 653–656 and 668–678. -/
+noncomputable def protocolErrorConstant (ν : ℝ) : ℝ :=
+  max 10080 (2 * protocolPatchBound protocolHoleRatio ν + 1)
+
+/-- **Proposition 7.1 with explicit constants, for a family of unit states.** Fix `q ≥ 2` and a
+family `G` of unit states. Let `D ≥ 1` be an information scale with threshold `L_ang` of
+Proposition 3.4 for `G` at the clearance `a = a₀ / 2`, diameter ratio `1`, at most `4` marked
+points and power `60`, and let `C > 0` and `c` be patch constants with which Proposition 4.1
+supplies adaptive patches for every state of `G` on the cell-center sites at the radius constant
+`B₀ = 20 D` and power `60`. Let `ν = protocolMeshRatio`
+`= 1 / 600000000` and `b = protocolPatchBound ε₀ ν`. Then for all constants
+
+* `C_N ≥ protocolCountConstant = 5042`,
+* `C_K ≥ protocolExpansionConstant ν C`, the prefactor of the small-patch rewrites,
+* `C_E ≥ protocolErrorConstant ν = max 10080 (2 b + 1)`,
+
+every state of `G` on the square of side `L ≥ 2` with `⌈max L_ang 1⌉ ≤ L` has a dyadic
+distribution protocol with the bounds of `DyadicProtocol.IsDistributionProtocol` at the
+count constant `C_N`, the expansion constant `C_K`, the error constant `C_E`, the bound
+`protocolLifetimeBound = 64 · 189`, the exponent `protocolExpansionExponent ν c` and `2 b` pair
+effects. Proposition 7.1 itself is the family `IsSquareGroundState q J Δ` of gapped ground
+vectors of the model.
 
 Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol` and its proof, `06-geometry.tex`,
-lines 12–53 and 559–681, with Proposition 3.4 (`02-information.tex`, lines 635–658) and
-Proposition 4.1 (`03-patches.tex`, lines 26–49) at the power `60` (`07-assembly.tex`, line 11). -/
-theorem largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint
-    (hpatch : AdaptivePatchConstraint) : LargeSizeDyadicProtocolConsequences := by
+lines 12–53 and 559–681, with the mesh ratio of lines 447–541 and 559–570, Proposition 3.4
+(`02-information.tex`, lines 635–658) and Proposition 4.1 (`03-patches.tex`, lines 26–49) at
+the power `60` (`07-assembly.tex`, line 11). -/
+theorem largeSizeDyadicProtocol_of_angularScale {q : ℕ} (hq : 2 ≤ q)
+    {G : ∀ L : ℕ, StateSpace L q → Prop} (hG : ∀ L Ω, G L Ω → ‖Ω‖ = 1) {D L_ang C c : ℝ}
+    (hD1 : 1 ≤ D) (hD₁ : IsAngularScale q G (angularConstant / 2) 1 4 60 D L_ang)
+    (hC : 0 < C)
+    (hsupply : ∀ L : ℕ, 2 ≤ L → ∀ Ω : StateSpace L q,
+      G L Ω → AdaptivePatchSupply (cellCenterPos L) Ω (20 * D) C c 60 L)
+    {C_N C_K C_E : ℝ} (hCN : protocolCountConstant ≤ C_N)
+    (hCK : protocolExpansionConstant protocolMeshRatio C ≤ C_K)
+    (hCE : protocolErrorConstant protocolMeshRatio ≤ C_E) :
+    DyadicProtocolBoundsAt q G C_N C_K C_E protocolLifetimeBound
+      (protocolExpansionExponent protocolMeshRatio c)
+      (2 * protocolPatchBound protocolHoleRatio protocolMeshRatio) ⌈max L_ang 1⌉₊ := by
   classical
-  intro q hq J Δ hJ hΔ
   have : NeZero q := ⟨by omega⟩
   have ha₀ : angularConstant = 1 / 5000 := rfl
   -- the constants of the protocol, in the order of the source
-  set ε₀ : ℝ := 1 / 30000 with hε₀_def
-  have hε : 0 < ε₀ := by norm_num
-  have hε16 : ε₀ ≤ 1 / 16 := by norm_num
+  set ε₀ : ℝ := protocolHoleRatio with hε₀_def
+  have hε : 0 < ε₀ := by norm_num [hε₀_def, protocolHoleRatio]
+  have hε16 : ε₀ ≤ 1 / 16 := by norm_num [hε₀_def, protocolHoleRatio]
   set K₀ : ℝ := 20 with hK₀_def
-  obtain ⟨ν₁, hν₁, H₁⟩ := exists_isDistributionProtocol_of_largeRepaintings hε hε16
-  obtain ⟨ν₂, hν₂, H₂⟩ := exists_pointTreatment_hasSourceBoundedChange hε hε16
-  obtain ⟨ν₃, hν₃, H₃⟩ := exists_isDirectRepaintingRatio K₀ hε
-  set ν := min (min ν₁ ν₂) (min ν₃ (1 / 6)) with hν_def
-  have hν : 0 < ν := lt_min (lt_min hν₁ hν₂) (lt_min hν₃ (by norm_num))
-  have hνν₁ : ν ≤ ν₁ := (min_le_left _ _).trans (min_le_left _ _)
-  have hνν₂ : ν ≤ ν₂ := (min_le_left _ _).trans (min_le_right _ _)
-  have hνν₃ : ν ≤ ν₃ := (min_le_right _ _).trans (min_le_left _ _)
-  have hν6 : ν ≤ 1 / 6 := (min_le_right _ _).trans (min_le_right _ _)
+  have H₁ := exists_isDistributionProtocol_of_largeRepaintings_of_le hε hε16
+  have H₂ := pointTreatment_hasSourceBoundedChange_of_le hε hε16
+  set ν := protocolMeshRatio with hν_def
+  have hν : 0 < ν := protocolMeshRatio_pos
+  have hνν₁ : ν ≤ resizeRatio ε₀ := protocolMeshRatio_le_resizeRatio
+  have hνν₂ : ν ≤ pointTreatmentRatio ε₀ := protocolMeshRatio_le_pointTreatmentRatio
+  have H₃ : IsDirectRepaintingRatio K₀ ε₀ ν :=
+    isDirectRepaintingRatio_of_le K₀ hε protocolMeshRatio_le_directRepaintingRatio
+  have hν6 : ν ≤ 1 / 6 := protocolMeshRatio_le_one_sixth
   set a : ℝ := angularConstant / 2 with ha_def
   have ha : 0 < a := by rw [ha_def, ha₀]; norm_num
-  obtain ⟨D₁, L₁, hD₁⟩ :=
-    (angularInformationBound (q := q) (J := J) (by omega) hJ.le hΔ).exists_isAngularScale
-      ha le_rfl 4 (p := 60) (by norm_num)
-  set D : ℝ := max D₁ 1 with hD_def
-  have hD := hD₁.mono ha.le (le_max_left D₁ 1)
+  have hD := hD₁.mono ha.le (le_refl D)
   set B₀ : ℝ := K₀ * D with hB₀_def
-  have hDpos : 0 < D := lt_of_lt_of_le one_pos (le_max_right _ _)
+  have hDpos : 0 < D := lt_of_lt_of_le one_pos hD1
   have hc : IsProtocolConstants K₀ ε₀ ν a D B₀ :=
     { twenty_le_K₀ := le_rfl
       ε₀_pos := hε
-      ε₀_small := by rw [hε₀_def, ha₀]; norm_num
+      ε₀_small := by rw [hε₀_def, ha₀]; norm_num [protocolHoleRatio]
       ν_pos := hν
-      ν_small := by rw [hε₀_def]; linarith [hν6]
+      ν_small := by rw [hε₀_def, protocolHoleRatio]; linarith [hν6]
       a_pos := ha
       a_le := le_rfl
       D_pos := hDpos
       B₀_ge := le_rfl }
-  -- the patch constants of Proposition 4.1
-  obtain ⟨C, c, hC, hcpos, hsupply⟩ := hpatch.supply_cellCenterPos hq hJ hΔ (B₀ := B₀)
-    (p := 60) (mul_pos (by norm_num) hDpos) (by norm_num)
+  intro L hL hL₁ Ω hΩ
   set b := protocolPatchBound ε₀ ν with hb_def
   have hb : 18 ≤ b := eighteen_le_protocolPatchBound ε₀ ν
   set C' := ⌈C⌉₊ with hC'_def
   set c' := ⌈c⌉₊ with hc'_def
   have hC' : 1 ≤ C' := Nat.one_le_iff_ne_zero.2 (Nat.ceil_pos.2 hC).ne'
-  set kK := 3 * b * c' + 4 * b * (3 * b * c' + 30) with hkK_def
-  set G : ℕ := (C' + 1) ^ (3 * b) * (16 * b ^ 2 * (C' + 1) ^ (6 * b) + 1) ^ (2 * b) with hG_def
-  set C₁ : ℝ := max 10080 (max (G : ℝ) (2 * b + 1)) with hC₁_def
-  refine ⟨C₁, 64 * 189, kK, 2 * b, ⌈max L₁ 1⌉₊, fun L hL hL₁ h E₀ Ω hΩ => ?_⟩
+  set kK := rewriteGateExponent c' b with hkK_def
+  set Gr : ℕ := rewriteGatePrefactor C' b with hGr_def
+  have hGC : (Gr : ℝ) ≤ C_K := hCK
+  have hCE10080 : (10080 : ℝ) ≤ C_E := (le_max_left _ _).trans hCE
+  have hCEb : (2 * b + 1 : ℝ) ≤ C_E := by
+    have := (le_max_right _ _).trans hCE
+    exact_mod_cast this
   obtain ⟨hk1, hkL, hk2⟩ := le_two_pow_clog_lt hL
   set k := Nat.clog 2 L with hk_def
-  have hΩ1 : ‖Ω‖ = 1 := hΩ.1
-  have hLL : max L₁ 1 ≤ (L : ℝ) := (Nat.le_ceil _).trans (by exact_mod_cast hL₁)
+  have hΩ1 : ‖Ω‖ = 1 := hG L Ω hΩ
+  have hLL : max L_ang 1 ≤ (L : ℝ) := Nat.ceil_le.1 hL₁
   have hℓ : 0 < Real.log L := Real.log_pos (by exact_mod_cast hL)
   have ht : 0 < D * Real.log L := mul_pos hDpos hℓ
   have hB : ε₀ * (D * Real.log L) ≤ B₀ * Real.log L := by
     rw [hB₀_def, mul_assoc]
-    exact mul_le_mul_of_nonneg_right (by norm_num) ht.le
+    exact mul_le_mul_of_nonneg_right (hε16.trans (by rw [hK₀_def]; norm_num)) ht.le
   have hr : ∀ _ : ℝ × ℝ, 0 < ε₀ * (D * Real.log L) ∧ ε₀ * (D * Real.log L) ≤ B₀ * Real.log L :=
     fun _ => ⟨mul_pos hε ht, hB⟩
-  have P := hsupply L hL h E₀ Ω hΩ
+  have P := hsupply L hL Ω hΩ
   set rank : GuideLabel → ℕ := fun _ => 0
   set R₀ : RepaintedSquare k := ⟨⟨⟨0, by omega⟩, ⟨0, by positivity⟩, ⟨0, by positivity⟩⟩,
     by change 0 < k; omega⟩
@@ -169,11 +363,11 @@ theorem largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint
           (protocolFrozen P rank hr) protocolAuxOwner (i + 1) ∧
         ∀ j < 189, HasSourceBoundedChange Ω (seg j) (seg (j + 1)) (ℓ := []) (1 : ℂ)
           {p | EventUses (.inl S) p} (2 * b) (rewriteGateBound C' c' b L) (2 * b)
-          ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) := by
+          ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) ∧ seg (j + 1) ≠ [] := by
     intro i hi S he hl
     have hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (S.1 : ℕ) := by
       simpa [largeSquare] using hl
-    exact exists_largeRepainting_segment hD hLL hΩ le_rfl le_rfl hc hL hkL hk2 P rank R₀ ht
+    exact exists_largeRepainting_segment hD hLL hΩ hΩ1 le_rfl le_rfl hc hL hkL hk2 P rank R₀ ht
       hB (protocolFrozen P rank hr) protocolAuxOwner hi he hl (by omega) hK1
       (fun hS => by
         intro g hg M M' Q₀ hQ hM L₀ hL₀
@@ -182,7 +376,7 @@ theorem largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint
       (fun hS e => protocolFrozen_auxInit P rank hr hi he hS e)
       (fun hS e => protocolAuxOwner_auxInit hi he hS e)
   have hholes : ((auxIndices k (largeSquare K₀ (D * Real.log L))).map fun x =>
-      ((protocolFrozen (q := q) P rank hr x).holes.length : ℝ)).sum ≤ C₁ * (L : ℝ) ^ 3 := by
+      ((protocolFrozen (q := q) P rank hr x).holes.length : ℝ)).sum ≤ C_E * (L : ℝ) ^ 3 := by
     have h2 : ∀ y ∈ (auxIndices k (largeSquare K₀ (D * Real.log L))).map fun x =>
         ((protocolFrozen (q := q) P rank hr x).holes.length : ℝ), y ≤ 2 := by
       intro y hy
@@ -196,24 +390,104 @@ theorem largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint
         (length_protocolSchedule_le_cube hk2 _)
     have hsum := List.sum_le_length_nsmul _ 2 h2
     rw [List.length_map, nsmul_eq_mul] at hsum
-    have hC₁ : (10080 : ℝ) ≤ C₁ := le_max_left _ _
     have hL3 : (0 : ℝ) ≤ (L : ℝ) ^ 3 := by positivity
     nlinarith
-  obtain ⟨D', hD', -⟩ := H₁ ν hν hνν₁ hc (H₃ ν hν hνν₃) P hL hkL hk2 hΩ1 rank R₀
-    (protocolFrozen P rank hr) protocolAuxOwner (C' := C') (c' := c') (kK := kK) (C₁ := C₁)
+  obtain ⟨D', hD'⟩ := H₁ ν hν hνν₁ hc H₃ P hL hkL hk2 hΩ1 rank R₀
+    (protocolFrozen P rank hr) protocolAuxOwner (C' := C') (c' := c') (kK := kK) (C_N := C_N)
+    (C_K := C_K) (C_E := C_E)
     (Nat.le_ceil C) hC' (Nat.le_ceil c) hseg
     (fun x _ _ hh => norm_act_proj_sub_le_of_mem_holes_protocolFrozen P rank hr (by omega) x hh)
-    hholes ((by norm_num : (5042 : ℝ) ≤ 10080).trans (le_max_left _ _))
+    hholes hCN
     (by
-      have hpow : (0 : ℝ) ≤ (L : ℝ) ^ kK := by positivity
-      have hGC : (G : ℝ) ≤ C₁ := (le_max_left _ _).trans (le_max_right _ _)
-      have hRG : (rewriteGateBound C' c' b L : ℝ) = (G : ℝ) * (L : ℝ) ^ kK := by
-        rw [show rewriteGateBound C' c' b L = G * L ^ kK from rfl]
-        push_cast
-        ring
-      rw [hRG]
-      exact mul_le_mul_of_nonneg_right hGC hpow)
-    ((le_max_right _ _).trans (le_max_right _ _))
+      rw [rewriteGateBound_eq]
+      push_cast
+      exact mul_le_mul_of_nonneg_right hGC (by positivity))
+    hCEb
   exact ⟨ProtocolParty k, inferInstance, D', hD'⟩
+
+/-- **Proposition 7.1 with explicit constants, from Proposition 4.1.** Assume the adaptive patch
+constraint of Proposition 4.1. For every `q ≥ 2` and `J, Δ > 0` there are an information scale
+`D ≥ 1`, patch constants `C, c > 0` of Proposition 4.1 at the radius constant `B₀ = 20 D` and
+power `60`, and a threshold `L₁`, such that, at the mesh ratio `ν = protocolMeshRatio`
+`= 1 / 600000000`, for all constants
+
+* `C_N ≥ protocolCountConstant = 5042`,
+* `C_K ≥ protocolExpansionConstant ν C`, the prefactor `G` of the small-patch rewrites,
+* `C_E ≥ protocolErrorConstant ν = max 10080 (2 b + 1)`,
+
+every gapped ground vector of a square Hamiltonian of side `L ≥ 2` with `L₁ ≤ L` has a dyadic
+distribution protocol with the bounds of `DyadicProtocol.IsDistributionProtocol` at the count
+constant `C_N`, the expansion constant `C_K`, the error constant `C_E`, the bound
+`protocolLifetimeBound = 64 · 189`, the exponent `protocolExpansionExponent ν c` and `2 b` pair
+effects, where `b = protocolPatchBound ε₀ ν`. The prefactor `G` enters only the expansion
+constant; the threshold `L₁` is that of Proposition 3.4. The proof is
+`largeSizeDyadicProtocol_of_angularScale` at the scale of Proposition 3.4 and the patch
+constants of Proposition 4.1.
+
+Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol` and its proof, `06-geometry.tex`,
+lines 12–53 and 559–681, with Proposition 3.4 (`02-information.tex`, lines 635–658) and
+Proposition 4.1 (`03-patches.tex`, lines 26–49) at the power `60` (`07-assembly.tex`, line 11). -/
+theorem largeSizeDyadicProtocol_of_le_of_adaptivePatchConstraint
+    (hpatch : AdaptivePatchConstraint) {q : ℕ} (hq : 2 ≤ q) {J Δ : ℝ} (hJ : 0 < J)
+    (hΔ : 0 < Δ) :
+    ∃ D C c L₁ : ℝ, 1 ≤ D ∧ 0 < C ∧ 0 < c ∧
+      (∀ L : ℕ, 2 ≤ L → ∀ Ω : StateSpace L q, IsSquareGroundState q J Δ L Ω →
+        AdaptivePatchSupply (cellCenterPos L) Ω (20 * D) C c 60 L) ∧
+      ∀ C_N C_K C_E : ℝ, protocolCountConstant ≤ C_N →
+        protocolExpansionConstant protocolMeshRatio C ≤ C_K →
+        protocolErrorConstant protocolMeshRatio ≤ C_E →
+        ∀ L : ℕ, 2 ≤ L → L₁ ≤ L → ∀ Ω : StateSpace L q, IsSquareGroundState q J Δ L Ω →
+          ∃ (P : Type) (_ : Fintype P) (D' : DyadicProtocol L q P),
+            D'.IsDistributionProtocol Ω C_N C_K C_E protocolLifetimeBound
+              (protocolExpansionExponent protocolMeshRatio c)
+              (2 * protocolPatchBound protocolHoleRatio protocolMeshRatio) := by
+  have ha₀ : angularConstant = 1 / 5000 := rfl
+  have ha : (0 : ℝ) < angularConstant / 2 := by rw [ha₀]; norm_num
+  obtain ⟨D₁, L₁, hD₁⟩ :=
+    (angularInformationBound (q := q) (J := J) (by omega) hJ.le hΔ).exists_isAngularScale
+      ha le_rfl 4 (p := 60) (by norm_num)
+  have hD1 : (1 : ℝ) ≤ max D₁ 1 := le_max_right _ _
+  have hD := hD₁.mono ha.le (le_max_left D₁ 1)
+  obtain ⟨C, c, hC, hcpos, hsupply⟩ := hpatch.supply_cellCenterPos hq hJ hΔ
+    (B₀ := 20 * max D₁ 1) (p := 60) (mul_pos (by norm_num) (lt_of_lt_of_le one_pos hD1))
+    (by norm_num)
+  refine ⟨max D₁ 1, C, c, max L₁ 1, hD1, hC, hcpos, hsupply,
+    fun C_N C_K C_E hCN hCK hCE L hL hL₁ Ω hΩ => ?_⟩
+  exact largeSizeDyadicProtocol_of_angularScale hq (fun _ _ hΩ ↦ hΩ.norm_eq_one) hD1 hD hC
+    hsupply hCN hCK hCE L hL (Nat.ceil_le.2 (max_le hL₁ ((le_max_right L₁ 1).trans hL₁))) Ω hΩ
+
+/-- **Proposition 7.1 with separate constants, from Proposition 4.1.** The constants are those of
+`largeSizeDyadicProtocol_of_le_of_adaptivePatchConstraint`.
+
+Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol` and its proof, `06-geometry.tex`,
+lines 12–53 and 559–681. -/
+theorem largeSizeDyadicProtocolBounds_of_adaptivePatchConstraint
+    (hpatch : AdaptivePatchConstraint) : LargeSizeDyadicProtocolBounds := by
+  intro q hq J Δ hJ hΔ
+  obtain ⟨-, C, c, L₁, -, -, -, -, H⟩ :=
+    largeSizeDyadicProtocol_of_le_of_adaptivePatchConstraint hpatch hq hJ hΔ
+  refine ⟨protocolCountConstant, protocolExpansionConstant protocolMeshRatio C,
+    protocolErrorConstant protocolMeshRatio, protocolLifetimeBound,
+    protocolExpansionExponent protocolMeshRatio c,
+    2 * protocolPatchBound protocolHoleRatio protocolMeshRatio, ⌈L₁⌉₊, ?_⟩
+  intro L hL hL₀
+  exact H _ _ _ le_rfl le_rfl le_rfl L hL ((Nat.le_ceil _).trans (by exact_mod_cast hL₀))
+
+/-- **Proposition 7.1 in the form used in §8, from Proposition 4.1.** Assume the adaptive patch
+constraint of Proposition 4.1; the angular information bound of Proposition 3.4 is
+`angularInformationBound`. Then for every `q ≥ 2` and `J, Δ > 0` there are constants
+`C`, `b`, `k`, `r`
+and a threshold `L₀` such that every gapped ground vector of a square Hamiltonian of side
+`L ≥ max 2 L₀` has a dyadic distribution protocol with the bounds of
+`DyadicProtocol.IsDistributionProtocol`. The constants are those of
+`largeSizeDyadicProtocol_of_le_of_adaptivePatchConstraint`, with `C` the largest of the three.
+
+Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol` and its proof, `06-geometry.tex`,
+lines 12–53 and 559–681, with Proposition 3.4 (`02-information.tex`, lines 635–658) and
+Proposition 4.1 (`03-patches.tex`, lines 26–49) at the power `60` (`07-assembly.tex`, line 11). -/
+theorem largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint
+    (hpatch : AdaptivePatchConstraint) : LargeSizeDyadicProtocolConsequences :=
+  (largeSizeDyadicProtocolBounds_of_adaptivePatchConstraint
+    hpatch).largeSizeDyadicProtocolConsequences
 
 end TNLean.PEPS.Approximation

@@ -15,13 +15,13 @@
 \providecommand{\gapnote}[2]{%
     \par\noindent\textbf{Verdict:} #1 (#2).\par}
 
-\title{The Consequences of the Distribution Protocol Used in the Assembly}
+\title{The Distribution Protocol of Proposition 7.1}
 \author{}
-\date{2026-10-15}
+\date{2026-10-18}
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source proposition}
 
@@ -44,9 +44,15 @@ describe:
 
 \section{The formal statement}
 
-Proposition~7.1 is not yet proved in the formal development. Instead, the
-formal statement defines the subset of properties of Proposition~7.1 that the
-PEPS assembly of Section~8 uses. A protocol is formalized as a distributed
+The formal statement was first introduced as the subset of properties of
+Proposition~7.1 that the PEPS assembly of Section~8 uses; it now carries every
+clause of the proposition. The existence of such a protocol is proved without
+hypotheses, from the adaptive patch constraint of Proposition~4.1 and the
+angular information bound of Proposition~3.4 of
+Ref.~\cite{OpenAI2026PolynomialPEPS}, both of which are
+proved.\footnote{The theorem is
+    \leanid{TNLean.PEPS.Approximation.largeSizeDyadicProtocolConsequences}.}
+A protocol is formalized as a distributed
 construction in the sense of Theorem~5.2 of Ref.~\cite{OpenAI2026PolynomialPEPS}
 whose chronology is divided into $n$ changes, with each party attached to a
 square of the padded dyadic hierarchy and with a reference vector $r_t$ at each
@@ -55,12 +61,32 @@ $C > 0$ be a scale coefficient and let $b, k, r \in \mathbb N$ be fixed degree
 and exponent bounds. The retained properties are:
 \begin{enumerate}
 \item there are at most $C L^2$ parties in total, and at most $b$ parties are
-  attached to any square of the padded hierarchy;
+  attached to any square of the padded hierarchy; a different party is
+  assigned to each aligned square of the padded hierarchy, including the root
+  square, at the scale and address of that square (\path{06-geometry.tex},
+  lines~18--20 and~64--67); every other party is an additional party with the
+  scale and address of a non-root square of the hierarchy, and it takes part
+  only in changes of the repainting of that square (lines~19--22 and~35--37).
+  Each change records the square of the repainting it belongs to, if any; the
+  changes of the repainting of a square form one contiguous segment of the
+  schedule, and every party acted on in such a change has the scale of the
+  square or an adjacent one and an address within $b$ times the side of the
+  square of its address. The source bounds the additional parties of each
+  repainting; the retained bound on the parties at each square implies this,
+  since the additional parties of a repainting are placed at its square;
+\item initialization is a pure product of copies of $\Omega$: the initial
+  encoded frames are the main frame followed by the auxiliary frames, each
+  without holes and held entirely by one party, and the initial memory and
+  vector of each party are those of the copies it holds (\path{06-geometry.tex},
+  lines~21--23); the initial product vector $r_0$ is carried by private maps
+  alone to the reference vector of these
+  frames;\footnote{\leanid{TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.exists_originalCircuit_initialCopies}.}
 \item there are at most $C L^3$ changes, each change contains at most $b$
   nonprivate gates acting on at most $b$ parties each, and each party
   participates in at most $b$ changes over its lifetime;
 \item each gate is a sum of at most $C L^k$ monomials with absolute coefficient
-  sum at most $C L^k$ and at most $r$ pair effects per monomial;
+  sum at most $C L^k$, at most $r$ pair effects and at most $r$ pair sources per
+  monomial;
 \item any two parties acted on by a gate have equal or adjacent dyadic scales
   and grid addresses separated by at most $b$ times either endpoint scale;
 \item if $W_t$ denotes the contraction of stage $t$, the reference vectors
@@ -76,6 +102,17 @@ and exponent bounds. The retained properties are:
           &\le \lVert \Xi\rVert \le 1.
       \label{eq:prop71_junk_norm}
   \end{align}
+\item every intermediate reference vector $r_t$ is the product of the
+  reference vectors of the encoded frames of $\Omega$ at that stage, at least
+  one, the main encoded frame and the auxiliary encoded frames, all of norm at
+  most one
+  (\path{06-geometry.tex}, lines~38--40); before the readout the raw registers
+  of the main frame are held by the parties of the genuine sites. Read per
+  stage, being the main copy carries no content beyond these designations at
+  the initial stage and before the readout. The last stage
+  is described by (\ref{eq:prop71_terminal_factorization}); in the
+  constructed protocol the last change is the readout of the physical and
+  discarded registers, which has no counterpart in the source.
 \end{enumerate}
 From these properties and (\ref{eq:prop71_step_error})--(\ref{eq:prop71_junk_norm}),
 the formal development proves the gate-density estimate of Section~8.1, the
@@ -86,50 +123,67 @@ gates.\footnote{The protocol predicate is
     the large-size existence hypothesis is
     \leanid{TNLean.PEPS.Approximation.LargeSizeDyadicProtocolConsequences}.}
 
+The formal predicate carries three constants in place of $C$: a count constant
+for the parties and changes, an expansion constant for the monomial counts and
+coefficient sums, and an error constant for
+(\ref{eq:prop71_step_error}) and (\ref{eq:prop71_junk_norm}). The source's
+reading is the case where all three equal $C$. Every clause is monotone in
+each constant, so the existence statement with one constant and the one with
+three constants are equivalent. Keeping them apart lets the error constant of
+Section~8 avoid the prefactor of the small-patch
+rewrites.\footnote{\leanid{TNLean.PEPS.Approximation.LargeSizeDyadicProtocolBounds}
+    and \leanid{TNLean.PEPS.Approximation.largeSizeDyadicProtocol_of_le}.}
+
 \section{Omitted clauses}
 
-Six clauses of Proposition~7.1 are omitted from the formal predicate:
+No clause of Proposition~7.1 is omitted from the formal predicate. The last
+omitted clause, that every intermediate reference vector $r_t$, $0 < t < n$,
+has at least one frame (\path{06-geometry.tex}, lines~38--40), is now stated
+and proved for the construction: every change of the schedule keeps the main
+sheet. Read per stage, being the main copy carries no content beyond the
+designations at the initial stage and before the readout. The formal statement
+is therefore Proposition~7.1, and it is proved.
+
+\section{Clauses carried by the formal statement}
+
+Two further clauses of Proposition~7.1 hold for the formal predicate.
 \begin{enumerate}
-\item Every square of the hierarchy, including the root, carries at least one
-  party (\path{06-geometry.tex}, lines~64--67). The formal placement bounds the
-  number of parties per square from above only.
-\item One party holds the main copy of $\Omega$, and every auxiliary copy is
-  initialized privately at its designated party (\path{06-geometry.tex},
-  lines~22--23). The formal initialization is an arbitrary tensor product of
-  normalized party vectors.
-\item Each reference vector $r_t$ is formed from the main encoded frame and the
-  auxiliary encoded frames, and all its factors have norm at most one
-  (\path{06-geometry.tex}, lines~39--41). The step error
-  (\ref{eq:prop71_step_error}) and endpoint relations
-  (\ref{eq:prop71_terminal_factorization})--(\ref{eq:prop71_junk_norm}) alone
-  do not imply that the intermediate reference vectors $r_t$ have norm at most
-  one.
-\item Each additional party takes the dyadic scale and grid address of its
-  repainting event (\path{06-geometry.tex}, lines~36--37).
-\item Item~3 of Theorem~5.2 (\path{04-compression.tex}, lines~143--147) also
-  bounds the pair sources and the messages of each monomial before expansion.
-  The formal statement counts only pair effects.
-\item The paper provides expansions accurate to any prescribed inverse power of
-  $L$, whereas (\ref{eq:prop71_step_error}) fixes a single contraction $W_t$
-  per change with error $C L^{-20}$.
+\item Item~3 of Theorem~5.2 (\path{04-compression.tex}, lines~143--147) bounds
+  the pair sources, the pair effects and the polynomial-dimensional messages of
+  each monomial by one constant $r$. The pair-source bound is a field of the
+  formal predicate,\footnote{\leanid{TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.sourceBounded}.}
+  with the constant $r$ of the pair effects. The recorded
+  monomials of the formal gates contain no messages: messages are expanded
+  before a gate is recorded (\path{04-compression.tex}, lines~42--45), and the
+  formal monomials are built from local contractions, pair sources and pair
+  effects only.
+\item Item~2 of Proposition~7.1 provides expansions accurate to any fixed inverse power of $L$ in
+  operator norm where an approximation is needed (\path{06-geometry.tex},
+  lines~29--30), with constants that may depend on the accuracy exponent
+  (\path{04-compression.tex}, line~17). The gates $W_t$ of the formal protocol
+  are the selected contractions, as in the instantiation of Section~8
+  (\path{07-assembly.tex}, lines~29--34), and each formal nonprivate gate $G$
+  equals its recorded expansion,\footnote{By the definition of
+    \leanid{TNLean.Lattice.PartyCircuit.OriginalCircuit.eval} on a nonprivate gate,
+    which evaluates the sum of its recorded monomials.}
+  $G = \sum_{\xi} c_{\xi} M_{\xi}$, so
+  $\lVert G - \sum_{\xi} c_{\xi} M_{\xi}\rVert = 0 \le L^{-a}$ for every
+  $a$. These expansions are therefore exact at every accuracy,
+  with bounds independent of the accuracy exponent. The selected gates are
+  contractions acting on their participating parties, with contractive
+  constituent maps, which are the only conditions the source places on the
+  gates of a change (\path{06-geometry.tex}, lines~25--27;
+  \path{04-compression.tex}, lines~28 and~143--147). The source asserts no
+  smaller reference error and no separate exact gate: the reference error of
+  each change is as in (\ref{eq:prop71_step_error}) (\path{06-geometry.tex},
+  lines~41--42 and~580--583).
 \end{enumerate}
-None of these six clauses is needed for the Section~8 assembly: the gate-density
-bound, the routing separation hypothesis, and the lifetime gate count depend
-only on the retained bounds, while the message and replacement-slot bounds used
-in compression follow from the message expansion and the nonprivate gate count
-and arity. The formal statement is therefore a weaker consequence of
-Proposition~7.1 sufficient for Section~8, while Proposition~7.1 itself remains
-unproved.
 
-\section{Elimination}
+\section{Resolution}
 
-Formalize the full statement of Proposition~7.1 including the map from
-hierarchy squares to parties, the registers of the main and auxiliary copies of
-$\Omega$, the frame factorization and unit-norm bounds of the intermediate
-reference vectors $r_t$, the assignment of repainting scales and addresses, and
-the pre-expansion counts of pair sources and messages for arbitrary inverse-power
-accuracy. Proving Proposition~7.1 in that stronger form then implies the
-present existence hypothesis by projection onto the retained fields.
+The restriction is resolved: every clause of Proposition~7.1 is a field of the
+formal predicate and is proved for the constructed protocol, and the existence
+of the protocol is proved without hypotheses. Nothing remains.
 
 \bibliographystyle{alpha}
 \bibliography{references}

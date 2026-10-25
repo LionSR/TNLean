@@ -119,8 +119,8 @@ theorem eq_auxInit_of_mem_auxIndices {large : DyadicSquare k → Bool}
 
 /-! ### The segment -/
 
-variable {q : ℕ} [NeZero q] {J Δ a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
-  {h : SquareHamiltonian L q J} {E₀ : ℝ} {Ω : StateSpace L q} {K₀ ε₀ ν B₀ C c : ℝ}
+variable {q : ℕ} [NeZero q] {a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
+  {G : ∀ L : ℕ, StateSpace L q → Prop} {Ω : StateSpace L q} {K₀ ε₀ ν B₀ C c : ℝ}
 
 /-- **The memory through a large-scale repainting, conditional on Proposition 3.4.** At the
 constants of the protocol with `L ≤ 2 ^ k < 2 L`, let the event number `i` repaint a square `S` of
@@ -131,8 +131,8 @@ construction. Then `189` bounded changes with the bounds of the small-patch rewr
 memory from its state before the event to its state after it.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 82–100, 142–221, 572–583 and 653–667. -/
-theorem exists_largeRepainting_segment (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀')
-    (hLL : L₀' ≤ L) (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hm₀ : 4 ≤ m₀)
+theorem exists_largeRepainting_segment (hD : IsAngularScale q G a A₀ m₀ 60 D L₀')
+    (hLL : L₀' ≤ L) (hΩ : G L Ω) (hΩ₁ : ‖Ω‖ = 1) (hm₀ : 4 ≤ m₀)
     (hA₀ : 1 ≤ A₀) (hc : IsProtocolConstants K₀ ε₀ ν a D B₀) (hL : 2 ≤ L) (hkL : L ≤ 2 ^ k)
     (hk2 : 2 ^ k < 2 * L) (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L)
     (rank : GuideLabel → ℕ) (R₀ : RepaintedSquare k) (ht : 0 < D * Real.log L)
@@ -155,7 +155,8 @@ theorem exists_largeRepainting_segment (hD : IsAngularScale q J Δ a A₀ m₀ 6
       seg 189 = protocolState P rank R₀ hc.ε₀_pos ht hB (largeSquare K₀ (D * Real.log L)) frozen
         auxOwner (i + 1) ∧
       ∀ j < 189, HasSourceBoundedChange Ω (seg j) (seg (j + 1)) (ℓ := []) (1 : ℂ)
-        {p | EventUses (.inl S) p} (2 * b) K (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) := by
+        {p | EventUses (.inl S) p} (2 * b) K (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) ∧
+          seg (j + 1) ≠ [] := by
   classical
   have hS : (S.1 : ℕ) < k := by
     have := isScheduled_getElem hi; rw [he] at this; exact this
@@ -184,7 +185,7 @@ theorem exists_largeRepainting_segment (hD : IsAngularScale q J Δ a A₀ m₀ 6
     unfold auxState
     rw [ite_eq_right hnotin]
     exact congrArg Frame.raw (funext fun _ => howner hS e)
-  obtain ⟨seg, h0, h1, hseg⟩ := isStepChain_largeRepainting hD hLL hΩ hm₀ hA₀ hc hL hk2 P
+  obtain ⟨seg, h0, h1, hseg⟩ := isStepChain_largeRepainting hD hLL hΩ hΩ₁ hm₀ hA₀ hc hL hk2 P
     rank R hl done hr hb hK (hpt hS) (nodup_auxIndices large) xs hxs hinj hA
     (repaintBaseline R done).oldLabel (repaintBaseline R done).oldLabel
   refine ⟨seg, ?_, ?_, hseg⟩

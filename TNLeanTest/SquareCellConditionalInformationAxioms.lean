@@ -12,11 +12,13 @@ import Lean.Util.CollectAxioms
 open TNLean.PEPS.Approximation in
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
-  let decl :=
-    ``exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBound
-  unless (← Lean.getEnv).contains decl do
-    throwError "Missing declaration {decl}"
-  let axioms ← Lean.collectAxioms decl
-  unless axioms.all (allowed.contains ·) do
-    throwError "Unexpected axioms for {decl}: {axioms}"
-  Lean.logInfo m!"{decl}: {axioms}"
+  let decls := #[
+    ``cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt,
+    ``exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBound]
+  for decl in decls do
+    unless (← Lean.getEnv).contains decl do
+      throwError "Missing declaration {decl}"
+    let axioms ← Lean.collectAxioms decl
+    unless axioms.all (allowed.contains ·) do
+      throwError "Unexpected axioms for {decl}: {axioms}"
+    Lean.logInfo m!"{decl}: {axioms}"

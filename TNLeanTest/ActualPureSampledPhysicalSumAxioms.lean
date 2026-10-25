@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.ActualPureSampledPhysicalSum
+import TNLean.Lattice.Compression.ActualPureSampledPhysicalSum
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
@@ -11,7 +11,7 @@ import Lean.Util.CollectAxioms
 
 set_option linter.hashCommand false
 
-open TNLean.PEPS.PairEffect.SourceCircuit in
+open TNLean.Lattice.PartyCircuit.SourceCircuit in
 run_cmd do
   let decls := #[``physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_physicalSum]
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]

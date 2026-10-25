@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.DistributedGateMapConstruction
+import TNLean.Lattice.Compression.DistributedGateMapConstruction
 
 /-!
 # Exact local operators of an original distributed circuit
@@ -20,7 +20,7 @@ lines 21–43 and 137–151, revision
 
 noncomputable section
 
-namespace TNLean.PEPS.PairEffect.OriginalCircuit
+namespace TNLean.Lattice.PartyCircuit.OriginalCircuit
 
 variable {P : Type}
 
@@ -53,4 +53,4 @@ theorem isGateApproximation_zero_canonicalGateMaps {a b : Layout P}
   | swap => trivial
   | frame r w ih => exact ih
 
-end TNLean.PEPS.PairEffect.OriginalCircuit
+end TNLean.Lattice.PartyCircuit.OriginalCircuit

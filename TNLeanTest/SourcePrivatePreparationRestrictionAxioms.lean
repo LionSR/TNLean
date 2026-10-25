@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.SourcePrivatePreparationRestriction
+import TNLean.Lattice.Compression.SourcePrivatePreparationRestriction
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
@@ -15,12 +15,13 @@ and depend only on the standard logical axioms.
 
 set_option linter.hashCommand false
 
+open TNLean.Lattice.PartyCircuit in
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
   for decl in #[
-    ``TNLean.PEPS.PairEffect.partySelector_none,
-    ``TNLean.PEPS.PairEffect.SourceCircuit.restrict_sourcePrivatePreparation_none_eval_heq_id] do
+    ``TNLean.Lattice.PartyCircuit.partySelector_none,
+    ``SourceCircuit.restrict_sourcePrivatePreparation_none_eval_heq_id] do
     unless env.contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl

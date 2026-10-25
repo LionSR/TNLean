@@ -68,9 +68,8 @@ The proof orients each two-element orbit using a classical well-order. This
 formalizes the sign choice in arXiv:2502.20257, `eq:defects_Z2b`, lines
 2979--2981. -/
 theorem hasAnomalousInvolutionSign_of_fixedPointFree (hf : Function.Involutive f)
-    (hfixed : ∀ x, f x ≠ x) : HasAnomalousInvolutionSign f := by
-  refine ⟨orientedSign f, orientedSign_isSign, ?_⟩
-  exact orientedSign_mul_apply hf hfixed
+    (hfixed : ∀ x, f x ≠ x) : HasAnomalousInvolutionSign f :=
+  ⟨orientedSign f, orientedSign_isSign, orientedSign_mul_apply hf hfixed⟩
 
 /-- A fixed point obstructs the anomalous product equation for every genuinely
 `{±1}`-valued complex-unit function. The range hypothesis is essential:

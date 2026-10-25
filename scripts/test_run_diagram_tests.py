@@ -46,7 +46,7 @@ class RunnerTest(unittest.TestCase):
             self.write(name, PASS)
         listed = self.run_runner("--list").stdout.split("\n")
         names = sorted(Path(line.split()[1]).name for line in listed if line)
-        self.assertEqual(names, ["check_c_blueprint.py", "test_b_diagram.py", "test_tenkz_a.py"])
+        self.assertEqual(names, ["test_b_diagram.py", "test_tenkz_a.py"])
 
     def test_output_dir_only_for_tests_that_declare_it(self) -> None:
         self.write("test_tenkz_plain.py", PASS)

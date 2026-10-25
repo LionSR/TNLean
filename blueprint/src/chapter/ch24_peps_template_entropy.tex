@@ -181,7 +181,8 @@ The clearance parameter in the following estimate is real.
     \label{thm:area_template_safe_box_entropy}
     \lean{TNLean.PEPS.AreaLaw.Geometry.template_entropy_bounds_of_real_safe_box}
     \leanok
-    \uses{def:area_law_template,def:area_law_ground_entropy,def:area_law_cell_counts}
+    \uses{def:area_law_template,def:area_law_ground_entropy,def:area_law_cell_counts,
+        def:area_law_safe_rectangle}
     Fix a finite physical domain $\Lambda$, a cut $A\subseteq\Lambda$,
     a unit vector $\Omega$, and a local dimension $q\ge1$. Let $Z$ be the
     endpoints of the edges crossing the cut. Fix real numbers $D_0\ge1$,
@@ -201,7 +202,7 @@ The clearance parameter in the following estimate is real.
         S_\Omega(A\cap(T_j\setminus T))
         \le C_+\left(2+\frac{14}{2^e-1}\right)nL^e.
     \end{align}
-    If $1\le j\le L$ and $Y\subseteq T_j\setminus T_{j-1}$, then
+    If $1\le j\le L\le s_0$ and $Y\subseteq T_j\setminus T_{j-1}$, then
     \begin{align}
         S_\Omega\bigl(A\cap((T_{j-1}\setminus T)\cup Y)\bigr)
         \le C_+\left(2+\frac{14}{2^e-1}\right)nL^e+n\log q.
@@ -213,20 +214,11 @@ The clearance parameter in the following estimate is real.
 \end{theorem}
 \begin{proof}\leanok
     \lean{TNLean.PEPS.AreaLaw.cast_supDist}
-    \uses{thm:area_template_physical_dyadic_entropy,
-        lem:area_law_template_dyadic_clearance,
+    \uses{lem:area_law_template_dyadic_clearance,
         thm:area_law_template_weighted_core_cover,thm:area_template_weighted_shell,
-        thm:area_template_partial_row}
-    In the conditional entropy step of \cite[Lemma~9.4]{OpenAI2026AreaLaw},
-    every selected square is safe by separation and the scale bounds.
-    Applying the safe-box estimate to its physical rectangle region, summing by
-    subadditivity, and using the weighted core and shell estimates gives the
-    core and shell bounds; for a prefix, the shell estimate at depth $j-1$
-    combines with the partial-row cost $n\log q$.
-    The uniform constant is chosen from the safe-box hypothesis before any
-    template or scale is selected, with caps
-    $\lfloor\log_2 s_0\rfloor$ and $\lfloor\log_2 L\rfloor$.
-
+        thm:area_template_partial_row,thm:area_template_dyadic_rectangle,
+        thm:area_law_capped_dyadic_partition,
+        thm:area_law_capped_dyadic_entropy_cover_of_forall}
     The lattice sup-norm distance, viewed as a real number, is the maximum
     of the absolute coordinate differences. Increasing $C$ to $C_+$
     preserves every box bound. Partition the core

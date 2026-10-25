@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS
 
+import TNLean.MPS.AreaLaw
 import TNLean.MPS.BNT
 import TNLean.MPS.CanonicalForm
 import TNLean.MPS.Chain

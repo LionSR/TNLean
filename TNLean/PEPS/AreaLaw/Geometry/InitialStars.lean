@@ -41,6 +41,8 @@ Independently proved from the manuscript; no upstream Lean proof text is reused.
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- Scaling the second vector by a positive factor does not change whether two

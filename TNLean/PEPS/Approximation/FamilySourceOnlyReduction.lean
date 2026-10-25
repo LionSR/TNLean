@@ -3,8 +3,8 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.PEPS.Approximation.FamilyPhysicalReadout
-import TNLean.PEPS.Approximation.SourceOnlyReduction
+import TNLean.Lattice.PartyCircuit.FamilyPhysicalReadout
+import TNLean.Lattice.PartyCircuit.SourceOnlyReduction
 
 /-! # Source-only physical density with original local dimensions
 
@@ -25,7 +25,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.OriginalCircuit
+namespace TNLean.Lattice.PartyCircuit.OriginalCircuit
 variable {P : Type} [Fintype P] [DecidableEq P]
 
 /-- The actual source-only density reduction for arbitrary original local
@@ -52,4 +52,4 @@ theorem rectangularTraceNorm_sourceOnly_family_regional_density_sub_le_half
     (familyRegionalPhysicalReadout d Finset.univ.toList (Finset.nodup_toList _)
       (fun p ↦ Finset.mem_toList.mpr (Finset.mem_univ p)) priv A) _
     (ProductInput.norm_vector _).le
-end TNLean.PEPS.PairEffect.OriginalCircuit
+end TNLean.Lattice.PartyCircuit.OriginalCircuit

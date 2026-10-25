@@ -98,20 +98,40 @@ theorem summable_polynomial_dyadic_decay (p : ℝ) :
   rw [heq]
   exact hK k hk
 
+/-- The numerical budget `1 + ∑_k (k + 1) ^ p 2 ^ (-δ₀ k / 2)` of the polynomially
+weighted sparse-belt decay. It is one plus the value of a convergent series of
+explicit terms, and depends only on `p` and the fixed geometric exponent `δ₀`.
+Auxiliary to the explicit constant of Theorem 1.1
+(`docs/notes/arealaw2d_explicit_constant.tex`, row 41).
+Source: Section 11, `geometry:total-repairs`, lines 668–692. -/
+noncomputable def polynomialDyadicBudget (p : ℝ) : ℝ :=
+  1 + ∑' k : ℕ, ((k : ℝ) + 1) ^ p *
+    (2 : ℝ) ^ (-(Exponents.geometryDelta : ℝ) * (k : ℝ) / 2)
+
+/-- The polynomial dyadic budget is positive. -/
+theorem polynomialDyadicBudget_pos (p : ℝ) : 0 < polynomialDyadicBudget p :=
+  add_pos_of_pos_of_nonneg zero_lt_one (tsum_nonneg fun k => mul_nonneg
+    (Real.rpow_nonneg (by positivity) _) (Real.rpow_nonneg (by norm_num) _))
+
+/-- **Explicit budget.** Every finite subsum of the polynomially weighted
+sparse-belt decay is at most `polynomialDyadicBudget p`.
+Source: Section 11, `geometry:total-repairs`, lines 668–692. -/
+theorem sum_le_polynomialDyadicBudget (p : ℝ) (F : Finset ℕ) :
+    ∑ k ∈ F, ((k : ℝ) + 1) ^ p *
+      (2 : ℝ) ^ (-(Exponents.geometryDelta : ℝ) * (k : ℝ) / 2) ≤
+        polynomialDyadicBudget p :=
+  ((summable_polynomial_dyadic_decay p).sum_le_tsum F fun k _ => mul_nonneg
+    (Real.rpow_nonneg (by positivity) _) (Real.rpow_nonneg (by norm_num) _)).trans
+    (le_add_of_nonneg_left zero_le_one)
+
 /-- Every finite collection of scales has one strictly positive numerical budget.
-The bound depends only on the real exponent and the fixed geometric constants.
+The bound depends only on the real exponent and the fixed geometric constants;
+it is `polynomialDyadicBudget p`.
 Source: Section 11, `geometry:total-repairs`, lines 668–692. -/
 theorem exists_uniform_polynomial_dyadic_sum_bound (p : ℝ) :
     ∃ B : ℝ, 0 < B ∧ ∀ F : Finset ℕ,
       ∑ k ∈ F, ((k : ℝ) + 1) ^ p *
-        (2 : ℝ) ^ (-(Exponents.geometryDelta : ℝ) * (k : ℝ) / 2) ≤ B := by
-  let w : ℕ → ℝ := fun k => ((k : ℝ) + 1) ^ p *
-    (2 : ℝ) ^ (-(Exponents.geometryDelta : ℝ) * (k : ℝ) / 2)
-  have hw : ∀ k, 0 ≤ w k := fun k => mul_nonneg
-    (Real.rpow_nonneg (by positivity) _) (Real.rpow_nonneg (by norm_num) _)
-  refine ⟨1 + ∑' k, w k, ?_, fun F => ?_⟩
-  · exact add_pos_of_pos_of_nonneg zero_lt_one (tsum_nonneg hw)
-  · have hsum := (summable_polynomial_dyadic_decay p).sum_le_tsum F (fun k _ => hw k)
-    exact hsum.trans (by linarith)
+        (2 : ℝ) ^ (-(Exponents.geometryDelta : ℝ) * (k : ℝ) / 2) ≤ B :=
+  ⟨_, polynomialDyadicBudget_pos p, sum_le_polynomialDyadicBudget p⟩
 
 end TNLean.PEPS.AreaLaw.Geometry

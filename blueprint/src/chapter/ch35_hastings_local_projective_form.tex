@@ -1,0 +1,283 @@
+\section{Locality of Gaussian-filtered terms on a finite graph}
+\label{sec:hastings_local_projective_form}
+
+% Hastings, arXiv:cond-mat/0508554v3, proj3new.tex, lines 169--190 (setting),
+% 266--387 (eqs. lbnd, mid, odef, hpdef, apb, facld and the unique ground
+% state), proofs in the appendix at lines 1419--1533.
+
+The approximate local projective form of~\cite{Hastings2006Solving} replaces
+each term $H_i$ of a gapped Hamiltonian by its Gaussian-filtered version
+$\widetilde H_i$ (Definition~\ref{def:hastings_gaussian_filtered_term}), and
+then by an operator $M_i$ of finite range. This section proves the locality
+of the filtered terms on a finite graph and an analogous approximation
+constructed by partial trace. The Hamiltonian is $H=\sum_kh_k$, with the finite-range
+interaction assumptions of Theorem~\ref{thm:qc_graph_lieb_robinson_finset}:
+each $h_k$ is Hermitian and acts on a set $X_k$ of diameter at most $R$ and
+at most $v_R$ sites, and the norms of the terms containing any one site sum
+to at most $b_0$. The source's $M_i$ evolves $H_i$ under the terms near $i$
+only~\cite[lines 285--307]{Hastings2006Solving}. Here $M_i$ is the normalized
+partial trace of $\widetilde H_i$ onto a neighbourhood of the support of
+$H_i$, which gives a support bound, the norm bound
+$\|M_i\|\le J$, and an analogous localization estimate. The radius of this
+neighbourhood is measured from the support of $H_i$, rather than from $i$. The Gaussian weight printed in
+eq.~(mid) as $e^{-(t\Delta E)^2/2}$ is read as $e^{-(t\Delta E)^2/(2q)}$. Both
+changes are recorded in~\cite{gap:hastings05_filtered_term_approximation}.
+
+For the locality estimates below, the parameter $\Delta E$ may be any real
+number. For $q\ge0$ and $\Delta E\ne0$, define $\widetilde W$ by averaging
+$e^{iHt}We^{-iHt}$ against the centered Gaussian of variance $q/(\Delta E)^2$.
+If $q=0$ or $\Delta E=0$, set $\widetilde W=W$. The Gaussian tail factor in
+the estimates is then $1$. For $q>0$ and $\Delta E>0$, this is precisely the
+filter of Definition~\ref{def:hastings_gaussian_filtered_term}.
+
+\begin{theorem}[Locality of a filtered term on a graph]
+    \label{thm:hastings05_filtered_locality_graph}
+    \lean{TNLean.Lattice.norm_commutator_gaussianFilteredTerm_le_graphDistance}
+    \leanok
+    \uses{thm:hastings_filtered_locality,thm:qc_graph_lieb_robinson_finset}
+    Let $l\in\mathbb N$, let $W$ act on a set $S$ of sites and $B$ on one
+    site $y$ with $d_G(x,y)\ge l$ for every $x\in S$. Let $q\ge0$, $\Delta E\in\mathbb R$,
+    $\mu\ge0$ and $T\ge0$, and
+    let $C$ and $v$ be the constants of
+    Theorem~\ref{thm:qc_graph_lieb_robinson_finset}. Then
+    \begin{align}
+        \|[\widetilde W,B]\|\le C|S|\,\|W\|\,\|B\|\,e^{vT-\mu l}
+        +2\|W\|\,\|B\|\,e^{-(T\Delta E)^2/(2q)}.
+        \label{eq:hastings05_filtered_graph_commutator}
+    \end{align}
+    This is eq.~(lbnd) of~\cite{Hastings2006Solving}, lines 266--283, with
+    $T=c_1l$ and the Lieb--Robinson term in place of $g(c_1l,l)$.
+\end{theorem}
+\begin{proof}\leanok
+    By Theorem~\ref{thm:qc_graph_lieb_robinson_finset},
+    $\|[e^{iHt}We^{-iHt},B]\|\le C|S|\,\|W\|\,\|B\|\,e^{vT-\mu l}$ for
+    $|t|\le T$. Theorem~\ref{thm:hastings_filtered_locality} adds the
+    Gaussian tail.
+\end{proof}
+
+\begin{theorem}[The finite-range approximation of a filtered term]
+    \label{thm:hastings05_filtered_approximation_graph}
+    \lean{TNLean.Lattice.norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood,
+        TNLean.Lattice.exists_local_approx_gaussianFilteredTerm,
+        TNLean.Lattice.isHermitian_gaussianFilteredTerm}
+    \leanok
+    \uses{thm:hastings_filtered_partial_trace,thm:qc_graph_neighborhood_localization,
+        lem:qc_site_expectation_properties,lem:al_site_expectation_order,
+        thm:hastings_gaussian_filtered_spectral}
+    Assume that for every vertex $x$ and integer $r\ge0$ at most $K_g(r+1)^k$
+    vertices have graph distance exactly $r$ from $x$, and let $C$, $v$ and
+    $T_k$ be the constants of
+    Theorem~\ref{thm:qc_graph_neighborhood_localization}. Let $W$ act on a set
+    $S$ of sites, let $l\in\mathbb N$, and let $N_l(S)$ be the set of sites
+    within graph distance $l$ of $S$. For positive local dimension, $q\ge0$,
+    $\Delta E\in\mathbb R$ and $T\ge0$, there is an
+    operator $M$ acting on $N_l(S)$ with $\|M\|\le\|W\|$, Hermitian when $W$
+    is, and
+    \begin{align}
+        \|\widetilde W-M\|\le C|S|^2\,\|W\|\,K_gT_k\,e^{vT-l/2}
+        +2\|W\|\,e^{-(T\Delta E)^2/(2q)}.
+        \label{eq:hastings05_filtered_graph_approximation}
+    \end{align}
+    If $W=H_i$ is supported within distance $R$ of $i$, then $N_l(S)$ is
+    contained in the ball of radius $l+R$ about $i$. Thus, for integer radii
+    $l_{\mathrm{proj}}\ge R$, choosing $l=l_{\mathrm{proj}}-R$ gives the
+    support radius used in~\cite[lines 285--320]{Hastings2006Solving} and
+    $\|M_i\|\le J$. The localization exponential is then
+    $e^{vT-(l_{\mathrm{proj}}-R)/2}$. This is an analogue of the source's
+    approximation estimate, with a different construction and constants;
+    it does not identify the two quantitative estimates
+    \cite{gap:hastings05_filtered_term_approximation}.
+    Every finite graph satisfies the growth assumption with $K_g$ the number
+    of vertices and $k=0$; the assumption only enters the constant.
+\end{theorem}
+\begin{proof}\leanok
+    Take $M=\mathbb E_{N_l(S)}(\widetilde W)$. It acts on $N_l(S)$, the partial
+    trace and the filter do not increase the norm, and both preserve
+    Hermitian operators. Theorem~\ref{thm:qc_graph_neighborhood_localization}
+    bounds the localization error of $e^{iHt}We^{-iHt}$ for $|t|\le T$, and
+    Theorem~\ref{thm:hastings_filtered_partial_trace} adds the Gaussian tail.
+\end{proof}
+
+\begin{theorem}[Ground vectors are nearly invariant under the approximation]
+    \label{thm:hastings05_facld}
+    \lean{TNLean.Lattice.norm_sub_starProjection_apply_le_of_gaussianFilteredTerm,
+        TNLean.Lattice.norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm}
+    \leanok
+    \uses{thm:hastings_gaussian_filtered_spectral,
+        thm:hastings_filtered_no_ground_component,thm:area_law_ground_eigenspace}
+    Let $H$ be Hermitian, $q\ge0$ and $\Delta E>0$. Let every eigenvalue of $H$ equal $E_0$ or be at least $E_0+\Delta E$, let
+    $\psi$ be a ground vector, and let $W$ and $M$ be arbitrary operators. Then the component
+    of $M\psi$ orthogonal to the ground space has norm at most
+    $(\|W\|e^{-q/2}+\|\widetilde W-M\|)\|\psi\|$. If $\Omega$ is a unit vector spanning the
+    ground space, then
+    \begin{align}
+        \|M\Omega-\langle\Omega,M\Omega\rangle\Omega\|
+        \le\|W\|e^{-q/2}+\|\widetilde W-M\|.
+        \label{eq:hastings05_filtered_ground_vector}
+    \end{align}
+    With $M=M_i$ as in
+    Theorem~\ref{thm:hastings05_filtered_approximation_graph} and
+    $q=c_1l_{\mathrm{proj}}\Delta E$, these are eq.~(facld)
+    of~\cite[lines 322--348]{Hastings2006Solving} and the bound for a unique
+    ground state at lines 375--387.
+\end{theorem}
+\begin{proof}\leanok
+    Write $M\psi=\widetilde W\psi+(M-\widetilde W)\psi$. The excited component
+    of $\widetilde W\psi$ has norm at most $\|W\|e^{-q/2}\|\psi\|$ by
+    Theorem~\ref{thm:hastings_gaussian_filtered_spectral}, and that of
+    $(M-\widetilde W)\psi$ at most $\|\widetilde W-M\|\,\|\psi\|$. For a unique
+    ground state the projection onto the ground space is
+    $\phi\mapsto\langle\Omega,\phi\rangle\Omega$.
+\end{proof}
+
+\begin{theorem}[The sum of the approximations]
+    \label{thm:hastings05_sum_approximation}
+    \lean{TNLean.Lattice.norm_sum_sub_le_of_sum_eq}
+    \leanok
+    \uses{thm:hastings_gaussian_filtered_spectral}
+    If $H$ is Hermitian and $\sum_iW_i=H$, then any operators $M_i$ satisfy
+    $\|\sum_iM_i-H\|\le\sum_i\|\widetilde W_i-M_i\|$. This is the comparison of
+    $H$ with $M=\sum_iM_i$ in~\cite[lines 359--374]{Hastings2006Solving}. The
+    consequence drawn there, that the ground state of $M$ overlaps that of $H$
+    once $N\|\widetilde H_i-M_i\|$ is small compared with $\Delta E$, is stated
+    only to order of magnitude.
+\end{theorem}
+\begin{proof}\leanok
+    The filtered terms sum to $H$ by
+    Theorem~\ref{thm:hastings_gaussian_filtered_spectral}, so
+    $\sum_iM_i-H=\sum_i(M_i-\widetilde W_i)$.
+\end{proof}
+
+\subsection*{Degenerate ground spaces}
+
+% Hastings, arXiv:cond-mat/0508554v3, proj3new.tex, lines 395--491 (degenerate
+% ground space), Appendix B at lines 1535--1708 (eqs. lc, blecm, oibu).
+
+When the ground space is degenerate, the ground states are approximate
+eigenvectors of the $M_i$ only in a basis that diagonalizes the compressions
+$PM_iP$ together, where $P$ is the orthogonal projection onto the ground
+space~\cite[lines 395--491]{Hastings2006Solving}. Such a basis exists
+approximately when these compressions nearly commute. In this subsection every
+eigenvalue of $H$ equals $E_0$ or is at least $E_0+\Delta E$, with $\Delta E>0$,
+and $q\ge0$. The commutator of $\widetilde W$ with a separated operator is
+bounded through the partial trace of
+Theorem~\ref{thm:hastings05_filtered_approximation_graph}, so the term
+$N_Mg(c_1l,l)$ of eq.~(lc) is replaced by the localization term of that
+theorem~\cite{gap:hastings05_filtered_term_approximation}. The translation
+invariant case~\cite[lines 1603--1642]{Hastings2006Solving}, the example at
+lines 1655--1676, and the summed bound eq.~(oibu), which the source states
+only to order of magnitude, are not formalized.
+
+\begin{theorem}[Low-energy commutators]
+    \label{thm:hastings05_low_energy_commutator}
+    \lean{TNLean.Lattice.groundCompression,
+        TNLean.Lattice.groundCompression_gaussianFilteredTerm,
+        TNLean.Lattice.norm_one_sub_starProjection_mul_gaussianFilteredTerm_mul_le,
+        TNLean.Lattice.norm_starProjection_mul_gaussianFilteredTerm_mul_one_sub_le,
+        TNLean.Lattice.norm_groundCompression_commutator_le}
+    \leanok
+    \uses{thm:hastings_gaussian_filtered_spectral}
+    For all operators $W$ and $B$,
+    $P\widetilde WP=PWP$,
+    $\|(1-P)\widetilde WP\|\le\|W\|e^{-q/2}$,
+    $\|P\widetilde W(1-P)\|\le\|W\|e^{-q/2}$, and
+    \begin{align}
+        \|[PWP,PBP]\|\le\|[\widetilde W,B]\|+2\|W\|\,\|B\|\,e^{-q/2}.
+        \label{eq:hastings05_low_energy_bound}
+    \end{align}
+    With $W=M_i$ and $B=M_j$ this is the triangle inequality
+    of~\cite[lines 1562--1593]{Hastings2006Solving}.
+\end{theorem}
+\begin{proof}\leanok
+    The first identity holds because $\widetilde W$ and $W$ have the same
+    matrix elements between ground vectors. The second bound is the bound on
+    the excited component of $\widetilde W\psi$ applied to $\psi=Px$, and the
+    third follows by taking adjoints, since the adjoint of $\widetilde W$ is
+    the filtered operator of $W^\dagger$. Writing $Q=1-P$,
+    \begin{align}
+        [P\widetilde WP,PBP]=P[\widetilde W,B]P-P\widetilde WQBP
+        +PBQ\widetilde WP,
+        \label{eq:hastings05_compressed_commutator_split}
+    \end{align}
+    and $\|P\|\le1$.
+\end{proof}
+
+\begin{theorem}[The commutator with a separated operator]
+    \label{thm:hastings05_lc}
+    \lean{TNLean.Lattice.norm_commutator_gaussianFilteredTerm_le_of_disjoint}
+    \leanok
+    \uses{thm:hastings05_filtered_approximation_graph}
+    Under the assumptions of
+    Theorem~\ref{thm:hastings05_filtered_approximation_graph}, let $W$ act on
+    $S$ and $B$ on a set disjoint from $N_l(S)$. Assume $q>0$. Then
+    \begin{align}
+        \|[\widetilde W,B]\|\le2\|B\|\Bigl(C|S|^2\,\|W\|\,K_gT_k\,e^{vT-l/2}
+        +2\|W\|\,e^{-(T\Delta E)^2/(2q)}\Bigr)
+        \label{eq:hastings05_separated_commutator}
+    \end{align}
+    for every $T\ge0$. At $q=0$, the bound holds with $\widetilde W=W$
+    and the Gaussian tail factor replaced by $1$.
+    This is an analogue of the separated-operator bound
+    in~\cite[lines 1548--1561]{Hastings2006Solving}. Since $N_l(S)$ is a
+    closed neighbourhood, the support separation must exceed $l$; if it is
+    at least an integer $s\ge1$, one may choose $l=s-1$.
+\end{theorem}
+\begin{proof}\leanok
+    The partial trace $\mathbb E_{N_l(S)}(\widetilde W)$ acts on $N_l(S)$ and
+    so commutes with $B$. Hence
+    $[\widetilde W,B]=[\widetilde W-\mathbb E_{N_l(S)}(\widetilde W),B]$, whose
+    norm is at most $2\|B\|$ times the bound of
+    Theorem~\ref{thm:hastings05_filtered_approximation_graph}.
+\end{proof}
+
+\begin{theorem}[Low-energy commutators of separated operators]
+    \label{thm:hastings05_blecm}
+    \lean{TNLean.Lattice.norm_groundCompression_commutator_le_graphNeighborhood}
+    \leanok
+    \uses{thm:hastings05_low_energy_commutator,thm:hastings05_lc}
+    Under the assumptions of Theorem~\ref{thm:hastings05_lc}, with
+    $H=\sum_kh_k$ gapped as above,
+    \begin{align}
+        \|[PWP,PBP]\|\le2\|B\|\Bigl(C|S|^2\,\|W\|\,K_gT_k\,e^{vT-l/2}
+        +2\|W\|\,e^{-(T\Delta E)^2/(2q)}\Bigr)+2\|W\|\,\|B\|\,e^{-q/2}.
+        \label{eq:hastings05_separated_compression}
+    \end{align}
+    At $q=0$, replace the Gaussian tail factor by $1$ and set
+    $\widetilde W=W$. For $l>0$, choose $c_1>0$ with $vc_1<1/2$, and set
+    $T=c_1l$ and $q=c_1l\Delta E$. The right-hand side of~(\ref{eq:hastings05_separated_compression}) becomes
+    \begin{align}
+        2C|S|^2\|W\|\,\|B\|K_gT_k e^{-(1/2-vc_1)l}
+        +6\|W\|\,\|B\|e^{-c_1l\Delta E/2}.
+        \label{eq:hastings05_exponential_commutator_decay}
+    \end{align}
+    For fixed prefactors this decays exponentially in $l$. With $W=M_i$
+    and $B=M_j$, it is an analogue of the low-energy estimate
+    in~\cite[lines 1562--1601]{Hastings2006Solving}, with the different
+    localization constants and separation convention described above.
+\end{theorem}
+\begin{proof}\leanok
+    Combine Theorems~\ref{thm:hastings05_low_energy_commutator}
+    and~\ref{thm:hastings05_lc}.
+\end{proof}
+
+\begin{theorem}[Off-diagonal elements from a commutator]
+    \label{thm:hastings05_offdiagonal_commutator}
+    \lean{TNLean.Lattice.abs_sub_mul_norm_inner_le_norm_commutator,
+        TNLean.Lattice.norm_inner_le_norm_commutator_div}
+    \leanok
+    Let $A$ be self-adjoint with $Av=rv$ and $Aw=sw$ for real $r\ne s$. Then
+    for every operator $B$,
+    \begin{align}
+        |\langle v,Bw\rangle|\le\frac{\|[A,B]\|\,\|v\|\,\|w\|}{|r-s|}.
+        \label{eq:hastings05_offdiagonal_bound}
+    \end{align}
+    With $A=PM_jP$, $B=PM_iP$ and $v$, $w$ unit ground vectors, this is the
+    bound $o(i)\le\|[PM_iP,PM_jP]\|/\delta\lambda_j$
+    of~\cite[lines 1678--1690]{Hastings2006Solving} on the off-diagonal
+    elements of $M_i$ in a basis of the ground space that diagonalizes $M_j$.
+\end{theorem}
+\begin{proof}\leanok
+    Since $A$ is self-adjoint and $r$ is real,
+    $\langle v,[A,B]w\rangle=(r-s)\langle v,Bw\rangle$, and
+    $|\langle v,[A,B]w\rangle|\le\|[A,B]\|\,\|v\|\,\|w\|$.
+\end{proof}

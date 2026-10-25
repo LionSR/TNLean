@@ -14,7 +14,6 @@ run_cmd do
     `TNLean.PEPS.AreaLaw.Geometry.repairStageOldInclusion_injective,
     `TNLean.PEPS.AreaLaw.Geometry.repairStageOldInclusion_dummy,
     `TNLean.PEPS.AreaLaw.Geometry.exists_repairStageOldInclusion_of_repairStageBirthRank_eq_zero,
-    `TNLean.PEPS.AreaLaw.Geometry.repairStage_birth_oldInclusion,
     `TNLean.PEPS.AreaLaw.Geometry.repairStage_color_oldInclusion,
     `TNLean.PEPS.AreaLaw.Geometry.repairStageCharacteristicLength_oldInclusion,
     `TNLean.PEPS.AreaLaw.Geometry.existsUnique_initialPrimary_of_repairStageBirthRank_eq_zero

@@ -1,0 +1,14 @@
+% alt: Six wires, the two replica copies of R, of Q and of C; the evolution e^{-it HH} on all six wires, then the contraction W on the two copies of Q only, then the evolution e^{it HH'} on all six wires, averaged against the Gaussian g_h(t) and written as M.
+% Section 8.2, proof of Lemma lem:reset (part2a_mps_information.tex, paragraph "Two-sided Gaussian filtering"): M = int_R g_h(t) e^{it HH'} W e^{-it HH} dt with HH = H (x) I + I (x) H, HH' = F_R HH F_R and W = (V^dagger (x) V^dagger) F_{B_R} (V (x) V) on the two replicas of Q = Lambda \ (R u C).
+% Ink-to-index: wires R^{(1)}, R^{(2)} are the two replica copies of R, Q^{(1)}, Q^{(2)} those of Q, C^{(1)}, C^{(2)} those of C; the six-wire gates are e^{-it HH} and e^{it HH'}, the two-wire gate W acts on Q^{(1)}, Q^{(2)} only. Read left to right: e^{-it HH} acts first (rightmost factor of the integrand), then W, then e^{it HH'}; all wires are open (M is an operator on the doubled chain, applied to Psi and Phi^dagger in eq:twosided).
+\[
+  M=\int_{\mathbb R}g_h(t)\,dt\;
+  \begin{quantikz}[row sep={0.55cm,between origins}]
+    \lstick{$R^{(1)}$} & \gate[6]{e^{-it\mathbb H}} & & \gate[6]{e^{it\mathbb H'}} & \\
+    \lstick{$R^{(2)}$} & & & & \\
+    \lstick{$Q^{(1)}$} & & \gate[2]{W} & & \\
+    \lstick{$Q^{(2)}$} & & & & \\
+    \lstick{$C^{(1)}$} & & & & \\
+    \lstick{$C^{(2)}$} & & & &
+  \end{quantikz}
+\]

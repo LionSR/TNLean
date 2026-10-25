@@ -26,6 +26,8 @@ in `02-initial.tex`, lines 223–228. Revision:
 Independently formalized from the manuscript; no upstream Lean proof text reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The core, shell and prefix entropy estimates of Lemma 9.4 for real
@@ -64,9 +66,8 @@ theorem template_entropy_bounds_of_real_safe_box
       regionalEntropy Λ q Ω (A.filter fun x ↦ x.1 ∈ S) ≤
         max C 0 * (cappedDyadicPartition S K).sum
           (fun c ↦ ((2 : ℝ) ^ c.1) ^ (1 + e)) := by
-    refine (regionalEntropy_filter_le_sum_rectRegion Λ q Ω hΩ A S K).trans ?_
-    rw [Finset.mul_sum]
-    refine Finset.sum_le_sum fun c hc ↦ ?_
+    refine regionalEntropy_filter_le_weighted_cover_of_forall Λ q Ω hΩ A S K e
+      (max C 0) fun c hc ↦ ?_
     obtain ⟨hk, hsub, _⟩ := (mem_cappedDyadicPartition S K c.1 c.2).mp hc
     have hsize : (latticeDyadicRect c.1 c.2).size ≤ s₀ := by
       simpa only [size_latticeDyadicRect] using
@@ -78,10 +79,9 @@ theorem template_entropy_bounds_of_real_safe_box
       simpa only [cast_supDist] using
         hsep.side_lt_dist_of_mem_ambientDilation hD hj hsize
           (hS (hsub (by simpa only [toFinset_latticeDyadicRect] using hx))) hz
-    simpa only [size_latticeDyadicRect, Nat.cast_pow, Nat.cast_ofNat] using
-      (hbox (latticeDyadicRect c.1 c.2) hclear).trans
-        (mul_le_mul_of_nonneg_right (le_max_left C 0)
-          (Real.rpow_nonneg (Nat.cast_nonneg _) _))
+    exact (hbox (latticeDyadicRect c.1 c.2) hclear).trans
+      (mul_le_mul_of_nonneg_right (le_max_left C 0)
+        (Real.rpow_nonneg (Nat.cast_nonneg _) _))
   have hshell (j L : ℕ) (hLpos : 1 ≤ L) (hj : j ≤ L) (hL : L ≤ s₀) :
       regionalEntropy Λ q Ω
         (A.filter fun x ↦ x.1 ∈ ambientDilation T.points j \ T.points) ≤

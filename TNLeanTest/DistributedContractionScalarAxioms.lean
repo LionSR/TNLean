@@ -3,14 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.DistributedContractionScalar
+import TNLean.Lattice.Compression.DistributedContractionScalar
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
 /-! # Axiom check for scalar absorption in a distributed contraction -/
 
 set_option linter.hashCommand false
-open TNLean.PEPS.Approximation.DistributedOperatorContraction
+open TNLean.Lattice.Compression.DistributedOperatorContraction
 
 run_cmd do
   let decl := ``contractedOperator_smul_at_party

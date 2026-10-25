@@ -8,11 +8,10 @@
     Let $L,S$ be disjoint vertex regions of a finite simple graph.
     Their joining bonds are the bonds internal to $L\cup S$ but internal
     to neither part. For joining labels $\mu$ and prescribed outer boundary
-    labels $\theta$, let $\beta_L(\mu,\theta)$ and $\beta_S(\mu,\theta)$
-    read the original crossing labels of the two parts: they equal $\mu$
-    on joining bonds and $\theta$ on the exterior boundary.
-    These are the labels in the two-column blocking of
-    \cite{Schuch2010PEPS}, lines 2489--2507.
+    labels $\theta$, in the two-column blocking of
+    \cite{Schuch2010PEPS}, lines 2489--2507, $\beta_L(\mu,\theta)$ and
+    $\beta_S(\mu,\theta)$ read the original crossing labels of the two parts:
+    they equal $\mu$ on joining bonds and $\theta$ on the exterior boundary.
 \end{definition}
 
 \begin{theorem}[Joining two open contractions]
@@ -32,9 +31,9 @@
     exactly once. No factorization identity is assumed.
 \end{theorem}
 \begin{proof}\leanok
-    Split the internal labels of the union into the internal labels of
-    $L$, the internal labels of $S$, and the joining labels. The vertex
-    product splits over the disjoint union. Summing each internal family
+    Splitting the internal labels of the union into the internal labels of
+    $L$, the internal labels of $S$, and the joining labels factors the vertex
+    product over the disjoint union, and summing each internal family
     gives its original open-region contraction.
 \end{proof}
 
@@ -42,11 +41,11 @@
     \label{def:peps_boundary_register_permutation}
     \lean{TNLean.PEPS.regularBoundaryRegisterPermutation}
     \leanok
-    For a rooted spanning tree of a connected region, permute its accessible
-    boundary registers by $y_b\mapsto y_{\tau b}$ and retain all internal
-    reference, normalized vertex and cycle registers. This is the boundary
-    exchange in the two independent column operations of
-    \cite{Schuch2010PEPS}, lines 2489--2507.
+    For a rooted spanning tree of a connected region, the boundary exchange in
+    the two independent column operations of \cite{Schuch2010PEPS}, lines
+    2489--2507, permutes the accessible boundary registers by
+    $y_b\mapsto y_{\tau b}$ and retains all internal reference, normalized
+    vertex, and cycle registers.
 \end{definition}
 
 \begin{theorem}[Original-spin implementation of a boundary exchange]
@@ -83,16 +82,16 @@
     \uses{thm:peps_graph_open_region_gluing}
     A diagonal insertion $\operatorname{diag}\chi(p\cdot)$ on a joining
     bond $e$ contributes exactly one factor $\chi(p\mu_e)$ to the joined
-    contraction. On its tail part this is the prescribed boundary weight;
-    on the other part no site factor changes. Thus
+    contraction. In the explicit charge insertion of \cite{Schuch2010PEPS},
+    Section~6.6, source lines 2432--2453, this is the prescribed boundary
+    weight on its tail part and leaves every site factor on the other part
+    unchanged, giving
     \[
         \Psi_{L\cup S}^{e,\chi,p}(\theta)
         =\sum_\mu\chi(p\mu_e)
         \Psi_L(\beta_L(\mu,\theta))\otimes
         \Psi_S(\beta_S(\mu,\theta)).
     \]
-    This is the explicit charge insertion of \cite{Schuch2010PEPS},
-    Section~6.6, source lines 2432--2453.
 \end{theorem}
 \begin{proof}\leanok
     The ordered tail occurs in exactly one part. Its scalar character
@@ -128,10 +127,10 @@
     coordinates by the disjoint-union coordinate equivalence.
 \end{theorem}
 \begin{proof}\leanok
-    Exchange the two joining boundary registers in each part and fix all
-    its other crossing registers. The two independent Gram-preserving
-    exchanges replace $\mu$ by its common transposition. Relabel this
-    finite sum: the single character weight then moves from $e$ to $f$,
+    Exchanging the two joining boundary registers in each part while fixing all
+    other crossing registers, the two independent Gram-preserving
+    exchanges replace $\mu$ by its common transposition. Relabeling this
+    finite sum moves the single character weight from $e$ to $f$,
     with $\chi,p$ and every external label retained.
 \end{proof}
 
@@ -187,9 +186,9 @@
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
 \end{theorem}
 \begin{proof}\leanok
-    Use the derived native column geometry and genuine joining bonds in
-    the preceding independent-operation theorem. Numbering the group
+    Applying the preceding independent-operation theorem to the derived native
+    column geometry and genuine joining bonds, numbering the group
     labels identifies its coefficient formula with the ordinary open
-    contraction of the original charge-inserted site tensors. Each
-    column Gram form and the contraction identity are derived internally.
+    contraction of the original charge-inserted site tensors, with each
+    column Gram form and the contraction identity derived internally.
 \end{proof}

@@ -54,6 +54,28 @@ decomposition are separate steps.
 
 open scoped Matrix Kronecker
 
+/-- A block-diagonal matrix with blocks `1 ⊗ P γ` is a star projection when
+every `P γ` is a star projection. -/
+private theorem isStarProjection_blockDiagonal'_one_kronecker
+    {Λ : Type*} [Fintype Λ] [DecidableEq Λ] (m n : Λ → ℕ)
+    (P : ∀ γ : Λ, Matrix (Fin (n γ)) (Fin (n γ)) ℂ)
+    (hP : ∀ γ : Λ, IsStarProjection (P γ)) :
+    IsStarProjection (Matrix.blockDiagonal' fun γ =>
+      (1 : Matrix (Fin (m γ)) (Fin (m γ)) ℂ) ⊗ₖ P γ) := by
+  rw [isStarProjection_iff']
+  constructor
+  · rw [← Matrix.blockDiagonal'_mul]
+    congr 1
+    funext γ
+    rw [← Matrix.mul_kronecker_mul, Matrix.one_mul, (hP γ).isIdempotentElem.eq]
+  · rw [Matrix.star_eq_conjTranspose, Matrix.blockDiagonal'_conjTranspose]
+    congr 1
+    funext γ
+    rw [Matrix.conjTranspose_kronecker, Matrix.conjTranspose_one]
+    have hPγ : (P γ)ᴴ = P γ := by
+      simpa [Matrix.star_eq_conjTranspose] using (hP γ).isSelfAdjoint.star_eq
+    rw [hPγ]
+
 namespace MPOTensor.BNTFusionCoisometryFamily
 
 variable {Λ : Type*} [Fintype Λ] [DecidableEq Λ] {p : ℕ}
@@ -141,19 +163,8 @@ theorem projectorQBlock_isStarProjection
     (α β : Λ) :
     IsStarProjection (Fam.projectorQBlock P α β) := by
   rw [Fam.projectorQBlock_eq_unweighted c hχ hLI]
-  rw [isStarProjection_iff']
-  constructor
-  · rw [← Matrix.blockDiagonal'_mul]
-    congr 1
-    funext γ
-    rw [← Matrix.mul_kronecker_mul, Matrix.one_mul, (hP γ).isIdempotentElem.eq]
-  · rw [Matrix.star_eq_conjTranspose, Matrix.blockDiagonal'_conjTranspose]
-    congr 1
-    funext γ
-    rw [Matrix.conjTranspose_kronecker, Matrix.conjTranspose_one]
-    have hPγ : (P γ)ᴴ = P γ := by
-      simpa [Matrix.star_eq_conjTranspose] using (hP γ).isSelfAdjoint.star_eq
-    rw [hPγ]
+  exact isStarProjection_blockDiagonal'_one_kronecker
+    (fun γ => Fam.chi.dim α β γ) Fam.bondDim P hP
 
 /-- The active fusion-layer operator transported to the product bond space by
 the fusion coisometry.
@@ -254,19 +265,8 @@ theorem projectorQBlock_isStarProjection
     (α β : Fin g) :
     IsStarProjection (Fam.projectorQBlock P α β) := by
   rw [Fam.projectorQBlock_eq_unweighted c hχ hLI]
-  rw [isStarProjection_iff']
-  constructor
-  · rw [← Matrix.blockDiagonal'_mul]
-    congr 1
-    funext γ
-    rw [← Matrix.mul_kronecker_mul, Matrix.one_mul, (hP γ).isIdempotentElem.eq]
-  · rw [Matrix.star_eq_conjTranspose, Matrix.blockDiagonal'_conjTranspose]
-    congr 1
-    funext γ
-    rw [Matrix.conjTranspose_kronecker, Matrix.conjTranspose_one]
-    have hPγ : (P γ)ᴴ = P γ := by
-      simpa [Matrix.star_eq_conjTranspose] using (hP γ).isSelfAdjoint.star_eq
-    rw [hPγ]
+  exact isStarProjection_blockDiagonal'_one_kronecker
+    (fun γ => Fam.chi.dim α β γ) Fam.bondDim P hP
 
 /-- The fusion-layer operator transported to the product bond space by the
 fusion map.

@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.UnivDensityPairContraction
+import TNLean.Lattice.Compression.UnivDensityPairContraction
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
@@ -11,7 +11,7 @@ import Lean.Util.CollectAxioms
 
 set_option linter.hashCommand false
 
-open TNLean.PEPS.Approximation.DistributedOperatorContraction
+open TNLean.Lattice.Compression.DistributedOperatorContraction
 
 run_cmd do
   let decl := ``contractedOperator_densityPair_univ_eq_double_sum

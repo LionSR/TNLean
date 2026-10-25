@@ -62,49 +62,85 @@ theorem mem_supportedOperators_reachable_of_forall_tail
   rw [← hk, ← coe_graphBall_eq_reachable_of_sup_dist_le G a le_rfl]
   exact siteExpectation_mem_supportedOperators _ k
 
-/-- Uniform spatial decay for the expectation of the full/retained
-operator-norm defect. Every constant is chosen before the graph, all finite
-types, physical effects, retained predicate, cutoff, observable and time.
-The initial observable may be non-Hermitian and the finite spectator may be
-empty. The same localization constants generate the event shells, physical
-oscillation kernel, retained-word growth and omitted-anchor tail.
-Source: area law, `09-amplification.tex`, lines 139–215. -/
-theorem exists_integrable_and_integral_channelWordOmissionDefect_le
+/-- The prefactor `2 A₀ L` of the spatial omission bound, with `A₀ = 2 + 8 √C e^{c/2}` and
+`L = omittedAnchorTailConstant K μ (c / 2) (c / (4 · 2^α)) α`. Source: area law,
+`09-amplification.tex`, lines 139–215. -/
+noncomputable def channelOmissionPrefactor (C K μ c α : ℝ) : ℝ :=
+  2 * (2 + 8 * Real.sqrt C * Real.exp (c / 2)) *
+    omittedAnchorTailConstant K μ (c / 2) (c / (4 * (2 : ℝ) ^ α)) α
+
+/-- The time rate `v + 1` of the spatial omission bound, where `v` is the row constant
+`channelEventRowConstant C K μ c α`. Source: area law, `09-amplification.tex`,
+lines 139–215. -/
+noncomputable def channelOmissionRate (C K μ c α : ℝ) : ℝ :=
+  channelEventRowConstant C K μ c α + 1
+
+/-- The spatial exponent `γ = min (c / 2) (c / (4 · 2^α)) / 2` of the omission bound.
+Source: area law, `09-amplification.tex`, lines 188–215. -/
+noncomputable def channelOmissionExponent (c α : ℝ) : ℝ :=
+  min (c / 2) (c / (4 * (2 : ℝ) ^ α)) / 2
+
+/-- The omission prefactor is nonnegative. -/
+theorem channelOmissionPrefactor_nonneg {μ : ℝ} (hμ : 0 ≤ μ) (C K c α : ℝ) :
+    0 ≤ channelOmissionPrefactor C K μ c α :=
+  mul_nonneg (by positivity) (omittedAnchorTailConstant_nonneg hμ _ _ _ _)
+
+/-- The omission rate is positive. -/
+theorem channelOmissionRate_pos {μ : ℝ} (hμ : 0 ≤ μ) (C K c α : ℝ) :
+    0 < channelOmissionRate C K μ c α :=
+  add_pos_of_nonneg_of_pos (channelEventRowConstant_nonneg hμ C K c α) one_pos
+
+/-- The omission exponent is positive. -/
+theorem channelOmissionExponent_pos {c : ℝ} (hc : 0 < c) (α : ℝ) :
+    0 < channelOmissionExponent c α := by
+  unfold channelOmissionExponent
+  positivity
+
+/-- **Uniform spatial decay of the omission defect, with explicit constants.** For every
+graph, finite family of component-supported effects with localization tails `C e^{-c l^α}`,
+retained predicate, spectator operator `B` on `S` and time `T`, the full/retained defect is
+integrable with expectation at most `D T |S| ‖B‖ e^{v T - γ r^α}`, where
+`D = channelOmissionPrefactor C K μ c α`, `v = channelOmissionRate C K μ c α` and
+`γ = channelOmissionExponent c α`. Source: area law, `09-amplification.tex`, lines 139–215. -/
+theorem graph_integrable_and_integral_channelWordOmissionDefect_le
     {C K μ c α : ℝ} (hC : 0 ≤ C) (hK : 0 ≤ K) (hμ : 0 ≤ μ)
     (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1) :
-    ∃ D v γ : ℝ, 0 ≤ D ∧ 0 < v ∧ 0 < γ ∧
-      γ = min (c / 2) (c / (4 * (2 : ℝ) ^ α)) / 2 ∧
-      ∀ (ι κ Aux : Type*) [Fintype ι] [DecidableEq ι] [Fintype κ]
-        [Fintype Aux] [DecidableEq Aux] (q : ℕ) [NeZero q]
-        (G : SimpleGraph ι) (a : κ → ι) (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ),
-        (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
-        (∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x}) →
-        (∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
-        (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
-        ∀ (N : ℕ), (∀ i, Finset.univ.sup (G.dist (a i)) ≤ N) →
-        (∀ i l, l ≤ N → ‖k i - siteExpectation q (graphBall G (a i) l) (k i)‖ ≤
-          C * Real.exp (-(c * (l : ℝ) ^ α))) →
-        ∀ (P : κ → Prop) [DecidablePred P] (S : Finset ι)
-          (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ),
-          (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
-            supportedOperators q (S : Set ι)) →
-          ∀ (r : ℝ), 0 ≤ r →
-            (∀ i, ¬ P i → ∀ s ∈ S, ENNReal.ofReal r < (G.edist (a i) s : ℝ≥0∞)) →
-            ∀ T : ℝ≥0,
-              Integrable (fun w : PoissonWord.Word κ =>
-                channelWordOmissionDefect k P (List.ofFn w.2) B) (PoissonWord.measure κ T) ∧
-              (∫ w : PoissonWord.Word κ,
-                channelWordOmissionDefect k P (List.ofFn w.2) B ∂PoissonWord.measure κ T) ≤
-                D * T * S.card * ‖B‖ * Real.exp (v * T - γ * r ^ α) := by
-  obtain ⟨v, hv, hkernel⟩ := exists_graphChannelEventKernel_bounds_of_component_support
-    hC hK hμ hc hα hα₁
+    ∀ (ι κ Aux : Type*) [Fintype ι] [DecidableEq ι] [Fintype κ]
+      [Fintype Aux] [DecidableEq Aux] (q : ℕ) [NeZero q]
+      (G : SimpleGraph ι) (a : κ → ι) (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ),
+      (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
+      (∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x}) →
+      (∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
+      (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
+      ∀ (N : ℕ), (∀ i, Finset.univ.sup (G.dist (a i)) ≤ N) →
+      (∀ i l, l ≤ N → ‖k i - siteExpectation q (graphBall G (a i) l) (k i)‖ ≤
+        C * Real.exp (-(c * (l : ℝ) ^ α))) →
+      ∀ (P : κ → Prop) [DecidablePred P] (S : Finset ι)
+        (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ),
+        (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
+          supportedOperators q (S : Set ι)) →
+        ∀ (r : ℝ), 0 ≤ r →
+          (∀ i, ¬ P i → ∀ s ∈ S, ENNReal.ofReal r < (G.edist (a i) s : ℝ≥0∞)) →
+          ∀ T : ℝ≥0,
+            Integrable (fun w : PoissonWord.Word κ =>
+              channelWordOmissionDefect k P (List.ofFn w.2) B) (PoissonWord.measure κ T) ∧
+            (∫ w : PoissonWord.Word κ,
+              channelWordOmissionDefect k P (List.ofFn w.2) B ∂PoissonWord.measure κ T) ≤
+              channelOmissionPrefactor C K μ c α * T * S.card * ‖B‖ *
+                Real.exp (channelOmissionRate C K μ c α * T -
+                  channelOmissionExponent c α * r ^ α) := by
+  have hkernel := graphChannelEventKernel_bounds_of_component_support hC hK hμ hc hα hα₁
+  have hv : 0 ≤ channelEventRowConstant C K μ c α := channelEventRowConstant_nonneg hμ C K c α
   have hβ : 0 < c / (4 * (2 : ℝ) ^ α) := by positivity
-  obtain ⟨L, γ, hL, hγ, hγeq, htail⟩ :=
-    exists_sum_omitted_graphBall_exponentialDistanceProfile_le
-      hK hμ (half_pos hc) hβ hα hα₁
-  let A₀ := 2 + 8 * Real.sqrt C * Real.exp (c / 2)
-  have hA₀ : 0 ≤ A₀ := by dsimp [A₀]; positivity
-  refine ⟨2 * A₀ * L, v + 1, γ, by positivity, by linarith, hγ, hγeq, ?_⟩
+  have htail := sum_omitted_graphBall_exponentialDistanceProfile_le
+    hK hμ (half_pos hc) hβ hα hα₁
+  unfold channelOmissionPrefactor channelOmissionRate channelOmissionExponent
+  set v := channelEventRowConstant C K μ c α
+  set L := omittedAnchorTailConstant K μ (c / 2) (c / (4 * (2 : ℝ) ^ α)) α
+  set γ := min (c / 2) (c / (4 * (2 : ℝ) ^ α)) / 2
+  set A₀ := 2 + 8 * Real.sqrt C * Real.exp (c / 2)
+  have hA₀ : 0 ≤ A₀ := by positivity
+  have hL : 0 ≤ L := omittedAnchorTailConstant_nonneg hμ _ _ _ _
   intro ι κ Aux _ _ _ _ _ q _ G a k hk₀ hk₁ hk hball hfiber N hN hε
     P _ S B hB r hr hfar T
   classical
@@ -211,5 +247,43 @@ theorem exists_integrable_and_integral_channelWordOmissionDefect_le
     _ = _ := by
       rw [setIntegral_const, Real.volume_real_Ioc_of_le T.coe_nonneg, sub_zero, smul_eq_mul]
       ring
+
+/-- Uniform spatial decay for the expectation of the full/retained
+operator-norm defect. Every constant is chosen before the graph, all finite
+types, physical effects, retained predicate, cutoff, observable and time.
+The initial observable may be non-Hermitian and the finite spectator may be
+empty. The same localization constants generate the event shells, physical
+oscillation kernel, retained-word growth and omitted-anchor tail.
+Source: area law, `09-amplification.tex`, lines 139–215. -/
+theorem exists_integrable_and_integral_channelWordOmissionDefect_le
+    {C K μ c α : ℝ} (hC : 0 ≤ C) (hK : 0 ≤ K) (hμ : 0 ≤ μ)
+    (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1) :
+    ∃ D v γ : ℝ, 0 ≤ D ∧ 0 < v ∧ 0 < γ ∧
+      γ = min (c / 2) (c / (4 * (2 : ℝ) ^ α)) / 2 ∧
+      ∀ (ι κ Aux : Type*) [Fintype ι] [DecidableEq ι] [Fintype κ]
+        [Fintype Aux] [DecidableEq Aux] (q : ℕ) [NeZero q]
+        (G : SimpleGraph ι) (a : κ → ι) (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ),
+        (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
+        (∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x}) →
+        (∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
+        (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
+        ∀ (N : ℕ), (∀ i, Finset.univ.sup (G.dist (a i)) ≤ N) →
+        (∀ i l, l ≤ N → ‖k i - siteExpectation q (graphBall G (a i) l) (k i)‖ ≤
+          C * Real.exp (-(c * (l : ℝ) ^ α))) →
+        ∀ (P : κ → Prop) [DecidablePred P] (S : Finset ι)
+          (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ),
+          (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
+            supportedOperators q (S : Set ι)) →
+          ∀ (r : ℝ), 0 ≤ r →
+            (∀ i, ¬ P i → ∀ s ∈ S, ENNReal.ofReal r < (G.edist (a i) s : ℝ≥0∞)) →
+            ∀ T : ℝ≥0,
+              Integrable (fun w : PoissonWord.Word κ =>
+                channelWordOmissionDefect k P (List.ofFn w.2) B) (PoissonWord.measure κ T) ∧
+              (∫ w : PoissonWord.Word κ,
+                channelWordOmissionDefect k P (List.ofFn w.2) B ∂PoissonWord.measure κ T) ≤
+                D * T * S.card * ‖B‖ * Real.exp (v * T - γ * r ^ α) :=
+  ⟨_, _, _, channelOmissionPrefactor_nonneg hμ C K c α, channelOmissionRate_pos hμ C K c α,
+    channelOmissionExponent_pos hc α, rfl,
+    graph_integrable_and_integral_channelWordOmissionDefect_le hC hK hμ hc hα hα₁⟩
 
 end TNLean.PEPS.AreaLaw

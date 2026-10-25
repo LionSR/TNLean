@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.PhysicalProductRangeSupport
-import TNLean.PEPS.DependentPhysicalProductRangeSupport
+import TNLean.Lattice.Compression.DependentPhysicalProductRangeSupport
 
 /-!
 # Ranges of site-dependent products of physical maps
@@ -25,6 +25,7 @@ Section 7, lines 2992–3019.
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS
+open TNLean.Lattice
 
 variable {Site In Out : Type*} [Fintype Site] [DecidableEq Site]
 

@@ -16,10 +16,9 @@ second sampling or contraction argument.
 
 The conclusion is a literal operator tensor network.
 
-**Local fix (nonempty parties):** The exterior scalar is absorbed using the
-original nonempty-party convention recorded in
-`docs/paper-gaps/polypeps_nonempty_parties.tex`; no output normalization or
-numerical bound on private dimensions is introduced.
+The exterior scalar is absorbed at an existing party: the construction data carry the
+nonempty-party convention, a degenerate-case reading of the source recorded in
+`docs/paper-gaps/polypeps_nonempty_parties.tex` and marked on `DistributedConstruction`.
 
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 32–43,
 137–175 and 565–588.
@@ -27,8 +26,9 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 32–43,
 
 noncomputable section
 open scoped Matrix ComplexConjugate NNReal
-namespace TNLean.PEPS.PairEffect.GateMapConstruction
-open TNLean.PEPS.Approximation
+namespace TNLean.Lattice.PartyCircuit.GateMapConstruction
+open TNLean.Lattice.PartyCircuit
+open TNLean.Lattice.Compression
 attribute [local instance] Classical.propDecidable
 
 /-- Exact original message-containing expansions yield uniform literal operator
@@ -157,4 +157,4 @@ theorem exists_uniform_exact_message_sampled_network
   exact exists_uniform_message_sampled_network size hsize P C₀ b n d C_N C_D
     hN₀ hphysical₀ harity₀ hlifetime₀ hAvailability p hp
 
-end TNLean.PEPS.PairEffect.GateMapConstruction
+end TNLean.Lattice.PartyCircuit.GateMapConstruction

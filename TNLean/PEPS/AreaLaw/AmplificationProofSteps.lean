@@ -42,6 +42,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open Matrix QuantumCircuit
 open scoped Kronecker Matrix.Norms.L2Operator
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 

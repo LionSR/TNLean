@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.PureSourceMatrix
+import TNLean.Lattice.Compression.PureSourceMatrix
 import QICLean.Channel.PartialTrace
 
 /-!
@@ -18,7 +18,7 @@ rem:compression-retained-norm, manuscript revision adc7f1241b42e322a6451854ab7e4
 
 noncomputable section
 open scoped BigOperators TensorProduct Matrix ComplexConjugate
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
 /-- The physical entry of a mixed prepared coefficient is the sum of the ket
 and conjugated bra output columns over their common discarded coordinate.
@@ -51,4 +51,4 @@ theorem preparedDensityCoefficient_pure_partialTrace_apply
       ((bPhysical.tensorProduct bGarbage).map (appendIso physical garbage).symm)
       ψ x y)
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

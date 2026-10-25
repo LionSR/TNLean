@@ -3,14 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.ApproximateSampledNetworkApproximation
+import TNLean.Lattice.Compression.ApproximateSampledNetworkApproximation
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
 /-! # Axiom check for the physical-density contraction approximation from local gate expansions -/
 
 set_option linter.hashCommand false
-open TNLean.PEPS.PairEffect.EffectCircuit
+open TNLean.Lattice.PartyCircuit.EffectCircuit
 
 run_cmd do
   let decl := ``exists_sampled_contractedOperator_approximate_error_le

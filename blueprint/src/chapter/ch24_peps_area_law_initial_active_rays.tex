@@ -22,11 +22,9 @@ Thus, for every $i\in\mathcal I$,
      & =\bigcup_{\substack{s\in\mathcal J \\\sigma(s)=i}}P_s.
     \label{eq:active_radial_decomposition}
 \end{align}
-An oriented neighboring pair $(s,t)$ is active when
-$b_s^+=b_t^-$ and $\sigma(s)\ne\sigma(t)$.
-Let $\mathcal A$ be the set of such pairs. This describes the radial
-boundaries in the local construction of
-\cite[Section~11]{OpenAI2026AreaLaw}.
+In the local radial-boundary construction of
+\cite[Section~11]{OpenAI2026AreaLaw}, an oriented neighboring pair $(s,t)$ is active when
+$b_s^+=b_t^-$ and $\sigma(s)\ne\sigma(t)$; let $\mathcal A$ be the set of such pairs.
 
 % Source: 10-geometry.tex, geometry:initial-stars, lines 333--370,
 % especially 352--370, and prop:two-families, lines 308--323;
@@ -62,23 +60,23 @@ boundaries in the local construction of
         thm:area_law_initial_sector_no_active,
         thm:area_law_fan_triangle_contact,
         thm:area_law_cell_fan_intersections}
-    Put $K=\sigma(\mathcal J)$ and, for each $i\in K$, put
-    $E_i=\bigcup_{\sigma(s)=i}P_s$.
-    This is a finite closed family covering
+    With $K=\sigma(\mathcal J)$ and
+    $E_i=\bigcup_{\sigma(s)=i}P_s$ for each $i\in K$, the sets $E_i$ form
+    a finite closed family covering
     $\overline B_\infty(v,r)$.
     By~(\ref{eq:active_radial_decomposition}), $X_i^0$ and $E_i$
-    agree on a neighborhood of every point of $B_\infty(v,r)$.
-    Their interior membership therefore agrees there. An index
+    agree on a neighborhood of every point of $B_\infty(v,r)$, so
+    their interior membership agrees there, while an index
     outside $K$ has no birth-region point in this neighborhood.
 
     Suppose that $x\in\partial X_i^0$ and $x\ne v$.
     The finite-cover frontier bound gives a distinct index
-    $j\in K$ with $x\in E_i\cap E_j$; its outer-boundary alternative
+    $j\in K$ with $x\in E_i\cap E_j$, since its outer-boundary alternative
     is excluded by $x\in B_\infty(v,r)$.
-    Choose $s,t\in\mathcal J$ with $\sigma(s)=i$, $\sigma(t)=j$
+    Hence there are $s,t\in\mathcal J$ with $\sigma(s)=i$, $\sigma(t)=j$
     and $x\in P_s\cap P_t$.
     Both triangles also contain $v$, so their intersection is
-    nontrivial. The fan-triangle contact classification gives, after
+    nontrivial, and the fan-triangle contact classification gives, after
     interchanging $s$ and $t$ if necessary,
     $b_s^+=b_t^-$ and $P_s\cap P_t=[v,b_s^+]$.
     Since $i\ne j$, this pair is active.

@@ -60,8 +60,9 @@ open Matrix ContinuousLinearMap EuclideanSpace
 open scoped InnerProductSpace TensorProduct Kronecker
 
 namespace TNLean.PEPS.EncodedFrame
+open TNLean.Lattice.Sheet
 
-open PairEffect
+open TNLean.Lattice.PartyCircuit
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ}
 
@@ -338,20 +339,19 @@ theorem exists_braVertexBlock (l : List (Hole pos q Party)) (own : ι → Party)
       simp [inner_self_eq_norm_sq_to_K, hf]
     obtain ⟨b, hbE, hbK, hbB, M, m₁, m₂, m₆, m₃, m₄, m₅⟩ := exists_groupBlock l own S O hne
       ⟨P, hP, fun x hx => (hPO x hx).1⟩ (fun x hx => (hPO x hx).2) (zeroGroupVec O)
-      (WholeGroup.conjFamily (fun _ : Unit => f) ()) (norm_zeroGroupVec O)
-      ((WholeGroup.orthonormal_conjFamily hfo).1 ())
+      (Lattice.WholeGroup.conjFamily (fun _ : Unit => f) ()) (norm_zeroGroupVec O)
+      ((Lattice.WholeGroup.orthonormal_conjFamily hfo).1 ())
     refine ⟨b, 1, by simp, hbE, fun c => by rw [hbK, zeroGroupVec_apply], fun c => ?_, M, m₁,
       m₂, m₆, by simpa [hne] using m₃, by simpa [hne] using m₄, m₅⟩
     rw [hbB]
-    simp [WholeGroup.conjFamily]
+    simp [Lattice.WholeGroup.conjFamily]
   · refine ⟨emptyBlock, f fun x => (0 : ι → Fin q) x.1, ?_, fun x => ?_, fun c => ?_,
       fun c => ?_, .final (.id _), trivial, trivial, fun _ _ => trivial, Nat.zero_le _,
       Nat.zero_le _, fun z => ?_⟩
     · rw [← hf]
       exact PiLp.norm_apply_le f _
     · simpa [emptyBlock] using fun h => hne ⟨x, h⟩
-    · rw [emptyBlock_ketAt]
-      rw [ite_eq_left fun x h => absurd ⟨x, h⟩ hne]
+    · rw [emptyBlock_ketAt, ite_eq_left fun x h => absurd ⟨x, h⟩ hne]
     · rw [emptyBlock_braAt, star_one, mul_one]
       exact congrArg (fun d => f d) (funext fun (x : {x // O x}) => absurd ⟨x.1, x.2⟩ hne)
     · rw [emptyBlock_op, one_kronecker_one, act_one]
@@ -387,8 +387,7 @@ theorem exists_ketVertexBlock (l : List (Hole pos q Party)) (own : ι → Party)
     · rw [← hf]
       exact PiLp.norm_apply_le f _
     · simpa [emptyBlock] using fun h => hne ⟨x, h⟩
-    · rw [emptyBlock_braAt]
-      rw [ite_eq_left fun x h => absurd ⟨x, h⟩ hne]
+    · rw [emptyBlock_braAt, ite_eq_left fun x h => absurd ⟨x, h⟩ hne]
     · rw [emptyBlock_ketAt, mul_one]
       exact congrArg (fun d => f d) (funext fun (x : {x // O x}) => absurd ⟨x.1, x.2⟩ hne)
     · rw [emptyBlock_op, one_kronecker_one, act_one]
@@ -402,7 +401,7 @@ end TNLean.PEPS.EncodedFrame
 
 namespace TNLean.PEPS.SiteChain
 
-open EncodedFrame
+open EncodedFrame TNLean.Lattice.Sheet
 
 section OpenLegs
 

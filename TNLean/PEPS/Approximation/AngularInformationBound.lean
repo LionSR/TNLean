@@ -24,10 +24,13 @@ use the proposition as a premise independently of its proof.
   physical sites form `Λ_L = {1, …, L}²`.
 * `AngularInformationBound`: Proposition 3.4, for fixed `q`, `J` and `Δ`.
 * `IsAngularScale`: the conclusion of Proposition 3.4 at one integer accuracy `p`, for one slope
-  `D` and one size threshold `L₀`, and for sites placed at any common translation of `Λ_L`.
+  `D` and one size threshold `L₀`, for every state of a family `G`, and for sites placed at any
+  common translation of `Λ_L`.
 
 ## Main results
 
+* `IsAngularScale.of_sitePosition`: the conclusion of Proposition 3.4 for one slope and threshold
+  at the sites `Λ_L` gives an angular scale.
 * `AngularInformationBound.exists_isAngularScale`: Proposition 3.4 supplies such a slope and
   threshold. Section 7 places the sites at the cell centers `(i + 1/2, j + 1/2)`
   (`06-geometry.tex`, lines 62–63), a translation of `Λ_L`; the statement is invariant under a
@@ -82,17 +85,18 @@ def AngularInformationBound (q : ℕ) (J Δ : ℝ) : Prop :=
             (L : ℝ) ^ (-p)
 
 /-- **One slope and one threshold for Proposition 3.4 at accuracy `L^{-p}`.** For every
-`L ≥ L₀`, every Hamiltonian of the model with gapped unit ground vector `Ω`, every placement
+`L ≥ L₀`, every state `Ω` of the family `G`, every placement
 `pos` of the sites at a common translation `c` of `Λ_L`, every set `V` of at most `m₀` marked
 points and all disjoint `X`, `E` and `n` as in Proposition 3.4, the angular separation measured
-with `pos` gives `I_Ω(X : E) ≤ L^{-p}`.
+with `pos` gives `I_Ω(X : E) ≤ L^{-p}`. The statement of Proposition 3.4 is the family
+`IsSquareGroundState q J Δ` of unit gapped ground vectors of the model.
 
 Source: `02-information.tex`, lines 635–658, used at `p = 60` in `06-geometry.tex`,
 lines 440–445. -/
-def IsAngularScale (q : ℕ) (J Δ a A₀ : ℝ) (m₀ p : ℕ) (D L₀ : ℝ) : Prop :=
+def IsAngularScale (q : ℕ) (G : ∀ L : ℕ, StateSpace L q → Prop) (a A₀ : ℝ) (m₀ p : ℕ)
+    (D L₀ : ℝ) : Prop :=
   ∀ L : ℕ, L₀ ≤ L →
-    ∀ h : SquareHamiltonian L q J, ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
-      h.IsGappedGroundState E₀ Ω Δ →
+    ∀ Ω : StateSpace L q, G L Ω →
       ∀ (pos : SquareLatticeVertex L L → ℝ × ℝ) (c : ℝ × ℝ),
         (∀ v, pos v = sitePosition L v + c) →
       ∀ V : Finset (ℝ × ℝ), V.card ≤ m₀ →
@@ -103,22 +107,31 @@ def IsAngularScale (q : ℕ) (J Δ a A₀ : ℝ) (m₀ p : ℕ) (D L₀ : ℝ) :
         FiniteProduct.mutualInformation (fun _ : SquareLatticeVertex L L ↦ Fin q) Ω X E ≤
           (L : ℝ) ^ (-(p : ℤ))
 
-/-- **Proposition 3.4 supplies a slope and a threshold at every positive integer accuracy,** for
-sites placed at any common translation of `Λ_L`. The marked points are translated with the
-sites. Source: `02-information.tex`, lines 635–658; `06-geometry.tex`, lines 62–63 and
-440–445. -/
-theorem AngularInformationBound.exists_isAngularScale {q : ℕ} {J Δ : ℝ}
-    (hang : AngularInformationBound q J Δ) {a A₀ : ℝ} (ha : 0 < a) (hA₀ : 1 ≤ A₀) (m₀ : ℕ)
-    {p : ℕ} (hp : 0 < p) : ∃ D L₀ : ℝ, IsAngularScale q J Δ a A₀ m₀ p D L₀ := by
+/-- **A slope and threshold of Proposition 3.4 at the sites `Λ_L` give an angular scale.** If
+the conclusion of Proposition 3.4 at accuracy `L^{-p}` holds for the slope `D` and threshold
+`L₀` for every state of a family `G` with the sites placed at `Λ_L`, then it holds for sites
+placed at any common translation of `Λ_L`; the marked points are translated with the sites.
+Source: `02-information.tex`, lines 635–658; `06-geometry.tex`, lines 62–63 and 440–445. -/
+theorem IsAngularScale.of_sitePosition {q : ℕ} {G : ∀ L : ℕ, StateSpace L q → Prop}
+    {a A₀ D L₀ : ℝ} {m₀ p : ℕ}
+    (hD : ∀ L : ℕ, L₀ ≤ L →
+      ∀ Ω : StateSpace L q, G L Ω →
+        ∀ V : Finset (ℝ × ℝ), V.card ≤ m₀ →
+        ∀ X E : Finset (SquareLatticeVertex L L), Disjoint X E →
+        ∀ n : ℝ, D * Real.log L ≤ n → n ≤ A₀ * L →
+          (∀ x ∈ X, ∀ y ∈ X, dist (sitePosition L x) (sitePosition L y) ≤ A₀ * n) →
+          AngularSeparation (sitePosition L '' X) (sitePosition L '' E) n (D * Real.log L) a V →
+          FiniteProduct.mutualInformation (fun _ : SquareLatticeVertex L L ↦ Fin q) Ω X E ≤
+            (L : ℝ) ^ (-(p : ℝ))) :
+    IsAngularScale q G a A₀ m₀ p D L₀ := by
   classical
-  obtain ⟨D, L₀, hD⟩ := hang a A₀ ha hA₀ m₀ p (by exact_mod_cast hp)
-  refine ⟨D, L₀, fun L hL h E₀ Ω hΩ pos c hpos V hV X E hXE n hn hnL hdiam hsep => ?_⟩
+  intro L hL Ω hΩ pos c hpos V hV X E hXE n hn hnL hdiam hsep
   have himage : ∀ S : Set (SquareLatticeVertex L L),
       (· + -c) '' (pos '' S) = sitePosition L '' S := by
     intro S
     rw [image_image]
     exact image_congr fun v _ => by rw [hpos, add_neg_cancel_right]
-  have hI := hD L hL h E₀ Ω hΩ (V.image (· + -c)) ((Finset.card_image_le).trans hV) X E hXE n
+  have hI := hD L hL Ω hΩ (V.image (· + -c)) ((Finset.card_image_le).trans hV) X E hXE n
     hn hnL (fun x hx y hy => by simpa only [hpos, dist_add_right] using hdiam x hx y hy)
     (by simpa only [himage] using hsep.translate (-c))
   have hpow : (L : ℝ) ^ (-(p : ℝ)) = (L : ℝ) ^ (-(p : ℤ)) := by
@@ -126,5 +139,16 @@ theorem AngularInformationBound.exists_isAngularScale {q : ℕ} {J Δ : ℝ}
     push_cast
     rfl
   rwa [hpow] at hI
+
+/-- **Proposition 3.4 supplies a slope and a threshold at every positive integer accuracy,** for
+sites placed at any common translation of `Λ_L`. The marked points are translated with the
+sites. Source: `02-information.tex`, lines 635–658; `06-geometry.tex`, lines 62–63 and
+440–445. -/
+theorem AngularInformationBound.exists_isAngularScale {q : ℕ} {J Δ : ℝ}
+    (hang : AngularInformationBound q J Δ) {a A₀ : ℝ} (ha : 0 < a) (hA₀ : 1 ≤ A₀) (m₀ : ℕ)
+    {p : ℕ} (hp : 0 < p) :
+    ∃ D L₀ : ℝ, IsAngularScale q (IsSquareGroundState q J Δ) a A₀ m₀ p D L₀ := by
+  obtain ⟨D, L₀, hD⟩ := hang a A₀ ha hA₀ m₀ p (by exact_mod_cast hp)
+  exact ⟨D, L₀, IsAngularScale.of_sitePosition fun L hL Ω ⟨h, E₀, hΩ⟩ ↦ hD L hL h E₀ Ω hΩ⟩
 
 end TNLean.PEPS.Approximation

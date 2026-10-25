@@ -5,7 +5,7 @@
 \input{command}
 \title{Rectangular and Vertex-Boundary Reduction to the Uniform Area Law}
 \author{}
-\date{October 17, 2026}
+\date{October 14, 2026}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{resolved}
@@ -45,11 +45,12 @@ vanishes.\footnote{Source: \texttt{openai/math} revision
 is also stated in the polynomial-PEPS manuscript, \texttt{00-introduction.tex},
 lines 36--49.}
 
-\section{The rectangular reduction}
+\section{What is proved and the extra hypothesis}
 
-Theorem~1.1 gives a uniform area law on arbitrary finite subsets of
-$\mathbb Z^2$. The rectangular reduction applies this theorem to the grid $V$.
-It embeds $V$ into $\mathbb Z^2$,
+The formalization proves that Theorem~1.1 of the paper (the uniform area law on
+arbitrary finite subsets of $\mathbb Z^2$) implies Corollary~1.2, taking
+Theorem~1.1 as an explicit hypothesis. To reduce the rectangular lattice to the
+general $\mathbb Z^2$ setting, the formal proof embeds $V$ into $\mathbb Z^2$,
 replaces each site and edge term by its Hermitian part on the corresponding
 singleton or pair support in $\mathbb Z^2$, and sets the interaction to zero on
 all other supports. Under the configuration isometry $U$ between the two
@@ -67,29 +68,41 @@ grid.\footnote{Declarations:
 \leanid{TNLean.PEPS.AreaLaw.card_innerBoundary_rectangular}, and
 \leanid{TNLean.PEPS.AreaLaw.card_endpointBoundary_rectangular}.}
 
-The uniform finite-domain area law is proved from the spectral-gap hypotheses.
-Applying the rectangular reduction therefore proves Corollary~1.2 from the
-lattice Hamiltonian hypotheses alone, with no area-law assumption.
-The vertex-boundary inequalities also hold on arbitrary finite induced
-domains.\footnote{Declarations:
-\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw},
-\leanid{TNLean.PEPS.AreaLaw.rectangularEntropyAreaLaw}, and
-\leanid{TNLean.PEPS.AreaLaw.vertex_boundary_bounds}. The rectangular reduction
-is \leanid{TNLean.PEPS.AreaLaw.UniformAreaLaw.rectangularEntropyAreaLaw}.}
-Setting $w=h=L$ gives the square-grid area-law statement used by the
-polynomial-PEPS construction, with its stated local dimension $q\ge2$ and no
-further assumptions.\footnote{Declaration:
+Consequently, Corollary~1.2 is proved conditionally on the uniform
+finite-domain area law of Theorem~1.1, rather than unconditionally from the
+lattice Hamiltonian hypotheses alone.\footnote{Declarations:
+\leanid{TNLean.PEPS.AreaLaw.UniformAreaLaw},
+\leanid{TNLean.PEPS.AreaLaw.UniformAreaLaw.rectangularEntropyAreaLaw}, and
+\leanid{TNLean.PEPS.AreaLaw.RectangularEntropyAreaLaw}.}
+Setting $w=h=L$ recovers the square-grid area-law statement used by the
+polynomial-PEPS construction without further assumptions.\footnote{Declaration:
+\leanid{TNLean.PEPS.AreaLaw.RectangularEntropyAreaLaw.squareEntropyAreaLaw}.}
+
+\section{Effect on the paper}
+
+This note records a stage of the formalization, not a flaw in the paper: the
+deduction of Corollary~1.2 from Theorem~1.1 introduces no extra geometric or
+physical conditions.
+
+\section{Resolution}
+
+The uniform finite-domain area law of Theorem~1.1 is now proved from the
+spectral-gap hypotheses alone. Its proof combines the sublinear collar bound
+(Proposition~9.6), its amplification (Proposition~10.2) and the two-family
+decomposition with separated birth templates
+(Proposition~11.2).\footnote{Declarations:
+\leanid{TNLean.PEPS.AreaLaw.sublinearCollarBound_real},
+\leanid{TNLean.PEPS.AreaLaw.amplificationBound},
+\leanid{TNLean.PEPS.AreaLaw.twoFamilyDecomposition}, and
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw}.}
+Applying the reduction above to it discharges the explicit hypothesis, so
+Corollary~1.2 holds unconditionally in all three forms of
+(\ref{eq:rectangular_scope_bounds}), on rectangles and, for the two vertex
+forms, on every finite induced domain. The square-grid statement used by the
+polynomial-PEPS construction follows at $w=h=L$.\footnote{Declarations:
+\leanid{TNLean.PEPS.AreaLaw.rectangularEntropyAreaLaw},
+\leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw_vertex_boundary_bounds}, and
 \leanid{TNLean.PEPS.AreaLaw.squareEntropyAreaLaw}.}
-
-\section{Resolution of the restriction}
-
-An earlier stage of the formalization took the uniform finite-domain area law
-as an explicit assumption. The proof of Theorem~1.1 removes that assumption;
-its geometric decomposition and collar amplification are established within
-the argument. The resulting proofs of Corollary~1.2 and the square-grid area
-law require no geometric or physical hypotheses beyond those in their source
-statements. This note records the removal of an earlier restriction in the
-formalization; it does not identify an error in the paper.
 
 \bibliographystyle{alpha}
 \bibliography{references}

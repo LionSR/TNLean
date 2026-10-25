@@ -12,8 +12,9 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairCharacteristicLength
 The old-identifier inclusions are injective and retain the distinguished
 dummy. A fresh replacement always has positive birth rank, so every
 rank-zero identifier at a later generation is the retained image of a
-rank-zero identifier at each earlier generation. Remembered births, colours,
-and characteristic lengths are unchanged by retention. Consequently every
+rank-zero identifier at each earlier generation. Colours and characteristic
+lengths are unchanged by retention, as are remembered births
+(`repairStage_birth_oldInclusion`, in `RepairBirthLatticePoint`). Consequently every
 rank-zero identifier other than the dummy comes from one unique original
 primary, with the same jointly chosen residues as the actual initial stage.
 
@@ -23,6 +24,8 @@ Section 11, `10-geometry.tex`, retention and replacement creation,
 lines 398–409, and the ordering and dummy exclusion, lines 565–571.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
+
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -67,15 +70,6 @@ lemma exists_repairStageOldInclusion_of_repairStageBirthRank_eq_zero
       obtain ⟨y, hy, hxy⟩ := ih x hx
       exact ⟨y, hy, congrArg Sum.inl hxy⟩
     | inr x => exact Nat.noConfusion hx
-
-/-- Retaining an identifier does not change its remembered closed birth.
-Auxiliary to area-law Section 11, `10-geometry.tex`, retention and replacement
-creation, lines 398–409, and remembered births, lines 558–561. -/
-lemma repairStage_birth_oldInclusion (j n : ℕ) (i : (𝔇 j).regionIndex) :
-    (𝔇 (j + n)).birth
-      (repairStageOldInclusion o Λ A C k₀ hC h₀ Sstar j n i) = (𝔇 j).birth i := by
-  classical
-  exact Nat.rec rfl (fun _ ih ↦ ih) n
 
 /-- Retaining an identifier preserves its binary label.
 Auxiliary to area-law Section 11, `10-geometry.tex`, retention and the labels

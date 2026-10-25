@@ -1,16 +1,16 @@
 \section{The regulator trace at a patch minimum}
 \label{sec:peps_actual_patch_regulator_trace}
 
-Use the finite local coordinates, nested regions, and positive weights
-$a_j>0$ of Theorem~\ref{thm:peps_actual_patch_minimum_stationarity}, and suppose now
-that $\|\Omega\|=1$. Write $b=e^{-R}$ and let $x$ be a feasible minimum
+In the setting of the finite local coordinates, nested regions, and positive weights
+$a_j>0$ of Theorem~\ref{thm:peps_actual_patch_minimum_stationarity}, suppose now
+that $\|\Omega\|=1$. For $b=e^{-R}$, let $x$ be a feasible minimum
 of the same ordered norm objective. For an index $j$, let $\sigma_j$ be
-the marginal of the original vector $\Omega$ on $X_j$, and let $\rho_j$
-be the marginal of the normalized minimizing output, and set
+the marginal of the original vector $\Omega$ on $X_j$, let $\rho_j$
+be the marginal of the normalized minimizing output, and define
 $T_j=b\rho_j(x_j+bI_{X_j})^{-1}$.
 The next implication isolates the spectral estimate in the
-\href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L362-L418}{regulator argument}.
-The entropy and distance bounds are explicit assumptions; deriving them
+\href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L362-L418}{regulator argument},
+taking the entropy and distance bounds as explicit assumptions whose derivation
 from the physical area law and Hamiltonian gap remains a separate step.
 
 \begin{theorem}[Regulator trace from the original marginal]
@@ -18,11 +18,10 @@ from the physical area law and Hamiltonian gap remains a separate step.
     \lean{TNLean.PEPS.trace_regularizedPatchRegulator_le_quarter_of_isMinOn}
     \leanok
     Let $C>0$, $u\ge0$, and
-    $R\ge(16C+\log8)(1+u)$. Suppose that
-    $S(\sigma_j)\le C(1+u)$ and
-    $\|\rho_j-\sigma_j\|_1\le\tfrac1{16}$.
-    Then $\operatorname{tr}T_j\le\tfrac14$.
-    The trace norm here is the full trace norm.
+    $R\ge(16C+\log8)(1+u)$. If
+    $S(\sigma_j)\le C(1+u)$ and the full trace-norm distance satisfies
+    $\|\rho_j-\sigma_j\|_1\le\tfrac1{16}$,
+    then $\operatorname{tr}T_j\le\tfrac14$.
 \end{theorem}
 \begin{proof}
     \leanok

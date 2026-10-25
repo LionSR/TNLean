@@ -17,9 +17,10 @@ true vertices with the radius `h_n = ε₀ t` and the patches supplied by Propos
 raw owners and tags are read through the party map of the repainting.
 
 * `treatedGuide`, `treatedFrame` : this guide and its frame;
-* `exists_pointTreatment_hasSourceBoundedChange` : adding or removing one marked corner of `S` is
+* `pointTreatment_hasSourceBoundedChange_of_le` : adding or removing one marked corner of `S` is
   a bounded change of the frame whose participants the repainting uses, with the bounds of the
-  small-patch rewrites, for every mesh ratio below a threshold depending only on `ε₀`.
+  small-patch rewrites, for every mesh ratio `ν ≤ pointTreatmentRatio ε₀ = min(ε₀, 1) / 20000`;
+  `exists_pointTreatment_hasSourceBoundedChange` states this with an existential threshold.
 
 ## References
 
@@ -34,7 +35,7 @@ open Set Metric
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame PairEffect
+open EncodedFrame TNLean.Lattice.PartyCircuit
 
 variable {k : ℕ}
 
@@ -202,25 +203,24 @@ theorem fiftyThree_le_protocolPatchBound {ε₀ ν : ℝ} (hε : 0 ≤ ε₀) (h
   have h' : (53 : ℝ) ≤ protocolPatchBound ε₀ ν := by linarith
   exact_mod_cast h'
 
-/-- **A point treatment as a change of a sheet.** Fix `0 < ε₀ ≤ 1/16`. There is a threshold
-`ν' > 0` such that for every mesh ratio `0 < ν ≤ ν'` and constants of the protocol the following
-holds. For `L ≥ 2`, `q ≥ 1` and a unit vector `Ω`, fix an adaptive patch supply with exponent
-`60`, size `L`, parameters `B₀, C, c` and any label rank. For any hierarchy depth and any set
-of already repainted blocks, let `R` be a repaintable square of side `n = 2 ^ j > K₀ t`,
-`t = D log L`, let `g` be an unmodified guide of its repainting, and let `L₀` be the new label
-or a current label of one of the nine blocks centered on `R`,
-and let `M`, `M'` be finite sets of grid corners differing at most at one corner `Q₀` of `R`.
-Then passing
-from the frame of the treated sheet with the marks `M` to that with the marks `M'` is a bounded
-change whose participants the repainting uses. For natural `C′, c′` with `C ≤ C′`, `1 ≤ C′`
-and `c ≤ c′`, its pair-effect and pair-source bounds are `2 * b`, its monomial bound is
-`rewriteGateBound C′ c′ b L`, and its error is `(2 * b + 1) * L⁻²⁰`, where
+/-- **A point treatment as a change of a sheet, at the explicit mesh ratio.** Fix
+`0 < ε₀ ≤ 1/16`. For every mesh ratio `0 < ν ≤ pointTreatmentRatio ε₀ = min(ε₀, 1) / 20000` and
+constants of the protocol the following holds. For `L ≥ 2`, `q ≥ 1` and a unit vector `Ω`, fix
+an adaptive patch supply with exponent `60`, size `L`, parameters `B₀, C, c` and any label rank.
+For any hierarchy depth and any set of already repainted blocks, let `R` be a repaintable
+square of side `n = 2 ^ j > K₀ t`, `t = D log L`, let `g` be an unmodified guide of its
+repainting, let `L₀` be the new label or a current label of one of the nine blocks centered on
+`R`, and let `M`, `M'` be finite sets of grid corners differing at most at one corner `Q₀` of
+`R`. Then passing from the frame of the treated sheet with the marks `M` to that with the marks
+`M'` is a bounded change whose participants the repainting uses. For natural `C′, c′` with
+`C ≤ C′`, `1 ≤ C′` and `c ≤ c′`, its pair-effect and pair-source bounds are `2 * b`, its
+monomial bound is `rewriteGateBound C′ c′ b L`, and its error is `(2 * b + 1) * L⁻²⁰`, where
 `b = protocolPatchBound ε₀ ν`. The two mark sets may be equal.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 328–339, 481–505, 559–570 and 572–596. -/
-theorem exists_pointTreatment_hasSourceBoundedChange {ε₀ : ℝ} (hε : 0 < ε₀)
+theorem pointTreatment_hasSourceBoundedChange_of_le {ε₀ : ℝ} (hε : 0 < ε₀)
     (hε₀ : ε₀ ≤ 1 / 16) :
-    ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {k : ℕ} {K₀ a D B₀ : ℝ},
+    ∀ ν : ℝ, 0 < ν → ν ≤ pointTreatmentRatio ε₀ → ∀ {k : ℕ} {K₀ a D B₀ : ℝ},
       ∀ hc : IsProtocolConstants K₀ ε₀ ν a D B₀, ∀ {L q : ℕ} [NeZero q] {Ω : StateSpace L q}
       {C c : ℝ}, ∀ hL : 2 ≤ L, ‖Ω‖ = 1 →
       ∀ (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
@@ -239,9 +239,9 @@ theorem exists_pointTreatment_hasSourceBoundedChange {ε₀ : ℝ} (hε : 0 < ε
           M' L₀ g) {p | EventUses (.inl R.1) p}
         (2 * protocolPatchBound ε₀ ν) (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L)
         (2 * protocolPatchBound ε₀ ν) ((2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹) := by
-  obtain ⟨ν', hν', H⟩ := exists_pointTreatment_step_supplied hε hε₀
-  refine ⟨ν', hν', fun ν hν hνν' {k K₀ a D B₀} hc {L q} _ {Ω C c} hL hΩ P rank R hlarge done g hg
-    {M M'} Q₀ hQ₀ hM L₀ hL₀ {C' c'} hC hC' hcc => ?_⟩
+  have H := pointTreatment_step_supplied_of_le hε hε₀
+  refine fun ν hν hνν' {k K₀ a D B₀} hc {L q} _ {Ω C c} hL hΩ P rank R hlarge done g hg
+    {M M'} Q₀ hQ₀ hM L₀ hL₀ {C' c'} hC hC' hcc => ?_
   classical
   have hr := hc.treatedRadius_bounds hL
   obtain ⟨hfM, hmemM, hdM, hFM⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done hg M L₀
@@ -273,5 +273,35 @@ theorem exists_pointTreatment_hasSourceBoundedChange {ε₀ : ℝ} (hε : 0 < ε
     P hΩ hL hr hu hdM hdM' hC hC' hcc hb hb53
   exact ⟨w, ⟨h₁, fun γ => (h₂ γ).trans (coe_blockParties_subset_eventUses R done), h₃, h₄, h₅⟩,
     h₆⟩
+
+/-- **A point treatment as a change of a sheet.** Fix `0 < ε₀ ≤ 1/16`. There is a threshold
+`ν' > 0` such that for every mesh ratio `0 < ν ≤ ν'` the conclusion of
+`pointTreatment_hasSourceBoundedChange_of_le` holds; the threshold
+`ν' = pointTreatmentRatio ε₀` serves.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 328–339, 481–505, 559–570 and 572–596. -/
+theorem exists_pointTreatment_hasSourceBoundedChange {ε₀ : ℝ} (hε : 0 < ε₀)
+    (hε₀ : ε₀ ≤ 1 / 16) :
+    ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {k : ℕ} {K₀ a D B₀ : ℝ},
+      ∀ hc : IsProtocolConstants K₀ ε₀ ν a D B₀, ∀ {L q : ℕ} [NeZero q] {Ω : StateSpace L q}
+      {C c : ℝ}, ∀ hL : 2 ≤ L, ‖Ω‖ = 1 →
+      ∀ (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
+        (R : RepaintedSquare k), K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ) →
+      ∀ (done : Set (ℤ × ℤ)) {g : ℝ × ℝ → GuideLabel},
+        (blockBaseline (n := (2 : ℝ) ^ (R.1.1 : ℕ)) (by positivity)
+          (protocolLevelLabels k R.1.1 done) R.1.index
+          (newParty Sum.inl R.1.1 R.1.index)).IsUnmodifiedGuide g →
+      ∀ {M M' : Finset (ℤ × ℤ)} (Q₀ : ℤ × ℤ), IsBlockCornerOf R.1.index Q₀ →
+        (∀ Q, Q ≠ Q₀ → (Q ∈ M ↔ Q ∈ M')) → ∀ L₀ : GuideLabel,
+        (L₀ = newParty Sum.inl R.1.1 R.1.index ∨
+          ∃ R' ∈ blockWindow 1, L₀ = protocolLevelLabels k R.1.1 done (R' + R.1.index)) →
+      ∀ {C' c' : ℕ}, C ≤ C' → 1 ≤ C' → c ≤ c' →
+      HasFrameChange Ω (treatedFrame (q := q) P rank R (hc.treatedRadius_bounds hL) M L₀ g)
+        (treatedFrame (q := q) P rank R (hc.treatedRadius_bounds hL)
+          M' L₀ g) {p | EventUses (.inl R.1) p}
+        (2 * protocolPatchBound ε₀ ν) (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L)
+        (2 * protocolPatchBound ε₀ ν) ((2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹) :=
+  ⟨pointTreatmentRatio ε₀, pointTreatmentRatio_pos hε,
+    pointTreatment_hasSourceBoundedChange_of_le hε hε₀⟩
 
 end TNLean.PEPS.Approximation

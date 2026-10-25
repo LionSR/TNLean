@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.FiniteDomain
+import TNLean.Lattice.FiniteDomain
 import Mathlib.Basic.Real.Basic
 import Mathlib.Algebra.Order.Floor.Ring
 import Mathlib.Algebra.Order.Archimedean.Real.Basic
@@ -26,6 +26,8 @@ crossing edges by `8 * r + 4`, without connectedness or unclipped-square assumpt
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -105,7 +107,8 @@ private theorem card_rectangleBoundaryEdges_le (a b : ℤ × ℤ) :
         (f := fun z ↦ s((z, b.2), (z, b.2 + 1)))
       omega
 
-private theorem card_integerInterval_le (c r : ℝ) (hr : 0 ≤ r) :
+/-- A closed real interval of radius `r ≥ 0` contains at most `2 r + 1` integers. -/
+theorem card_integerInterval_le (c r : ℝ) (hr : 0 ≤ r) :
     ((Finset.Icc ⌈c - r⌉ ⌊c + r⌋).card : ℝ) ≤ 2 * r + 1 := by
   rw [Int.card_Icc, ← Int.cast_natCast, Int.toNat_eq_max, Int.cast_max]
   push_cast

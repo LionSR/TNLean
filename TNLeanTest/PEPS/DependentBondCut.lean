@@ -3,13 +3,13 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.DependentBondCut
+import TNLean.Lattice.Compression.DependentBondCut
 
 /-! # Regressions for unequal-dimensional labelled bonds and joint boundaries -/
 
 noncomputable section
 open scoped BigOperators
-open TNLean.PEPS.DependentBondNetwork
+open TNLean.Lattice.DependentBondNetwork
 set_option linter.hashCommand false
 
 namespace DependentBondCutTest
@@ -101,17 +101,17 @@ example (A : (v : Unit) → LocalConfig (fun e : Empty ↦ e.elim)
   mem_cutSpace_iff _ _ _ _ _ _
 
 /--
-info: 'TNLean.PEPS.DependentBondNetwork.cutMap_single_eq_network' depends on axioms:
+info: 'TNLean.Lattice.DependentBondNetwork.cutMap_single_eq_network' depends on axioms:
 [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.DependentBondNetwork.cutMap_single_eq_network
+#print axioms TNLean.Lattice.DependentBondNetwork.cutMap_single_eq_network
 
 /--
-info: 'TNLean.PEPS.DependentBondNetwork.cutSpace_eq_span_single' depends on axioms:
+info: 'TNLean.Lattice.DependentBondNetwork.cutSpace_eq_span_single' depends on axioms:
 [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.DependentBondNetwork.cutSpace_eq_span_single
+#print axioms TNLean.Lattice.DependentBondNetwork.cutSpace_eq_span_single
 
 end DependentBondCutTest

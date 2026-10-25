@@ -3,14 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.ReindexedLocalSourceSamples
+import TNLean.Lattice.Compression.ReindexedLocalSourceSamples
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
 /-! # Axiom check for restriction of the reindexed common samples -/
 
 set_option linter.hashCommand false
-open TNLean.PEPS.PairEffect.SourceCircuit
+open TNLean.Lattice.PartyCircuit.SourceCircuit
 
 run_cmd do
   let decl := ``restrict_reindexedSourceSampleAssignment_eq

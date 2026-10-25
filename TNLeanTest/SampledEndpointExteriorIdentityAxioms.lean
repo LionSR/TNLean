@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.SampledEndpointExteriorIdentity
+import TNLean.Lattice.Compression.SampledEndpointExteriorIdentity
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
@@ -11,7 +11,7 @@ import Lean.Util.CollectAxioms
 
 set_option linter.hashCommand false
 
-open TNLean.PEPS.PairEffect.SourceCircuit in
+open TNLean.Lattice.PartyCircuit.SourceCircuit in
 run_cmd do
   let decls := #[``sampledEndpointWord_none_eval_heq_id,
     ``sampledEndpointInputWord_none_eval_heq_id]

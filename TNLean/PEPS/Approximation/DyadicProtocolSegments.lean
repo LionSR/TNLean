@@ -35,7 +35,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame PairEffect
+open EncodedFrame TNLean.Lattice.Sheet TNLean.Lattice.PartyCircuit
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {pos : ι → ℝ × ℝ}
   {Party : Type} {Ω : EuclideanSpace ℂ (ι → Fin q)} {ℓ : Layout Party} {ξ : Mem ℓ}
@@ -47,25 +47,29 @@ for each event, stacks `seg i j` lead from `b i` to `b (i + 1)` through as many 
 with at most `rs` pair sources in each monomial as the event has changes, with participants in `U`
 of the event, then one sequence of stacks leads from `b 0` to the stack after the last event. Its
 change number `t` has the same pair-source bound and participants in `U` of the event of the change
-number `t` of the schedule.
+number `t` of the schedule. Every stack of the sequence is a stack of some event, so a property
+`Q` of all these stacks holds along the whole sequence.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 82–100, 127–131 and 572–583. -/
-theorem exists_frames_of_segments {E α : Type*} (U : E → Set Party) (ops : E → List α) :
+theorem exists_frames_of_segments {E α : Type*} (U : E → Set Party) (ops : E → List α)
+    (Q : List (Frame pos q Party) → Prop) :
     ∀ (es : List E) (b : ℕ → List (Frame pos q Party))
       (seg : ℕ → ℕ → List (Frame pos q Party)), (∀ i, seg i 0 = b i) →
       (∀ i (hi : i < es.length), seg i (ops es[i]).length = b (i + 1)) →
       (∀ i (hi : i < es.length), ∀ j < (ops es[i]).length,
         HasSourceBoundedChange Ω (seg i j) (seg i (j + 1)) ξ (U es[i]) r K rs ε) →
+      (∀ i, Q (b i)) → (∀ i (hi : i < es.length), ∀ j ≤ (ops es[i]).length, Q (seg i j)) →
       ∃ st : ℕ → List (Frame pos q Party), st 0 = b 0 ∧
         st (es.flatMap fun e => (ops e).map (e, ·)).length = b es.length ∧
-        ∀ t (ht : t < (es.flatMap fun e => (ops e).map (e, ·)).length),
+        (∀ t (ht : t < (es.flatMap fun e => (ops e).map (e, ·)).length),
           HasSourceBoundedChange Ω (st t) (st (t + 1)) ξ
-            (U ((es.flatMap fun e => (ops e).map (e, ·))[t]).1) r K rs ε
-  | [], b, _, _, _, _ => ⟨b, rfl, rfl, fun t ht => absurd ht (by simp)⟩
-  | e :: es, b, seg, h0, hm, hstep => by
-    obtain ⟨st', h0', hm', hstep'⟩ := exists_frames_of_segments U ops es (fun i => b (i + 1))
-      (fun i => seg (i + 1)) (fun i => h0 (i + 1)) (fun i hi => hm (i + 1) (by simpa using hi))
-      (fun i hi => hstep (i + 1) (by simpa using hi))
+            (U ((es.flatMap fun e => (ops e).map (e, ·))[t]).1) r K rs ε) ∧ ∀ t, Q (st t)
+  | [], b, _, _, _, _, hQb, _ => ⟨b, rfl, rfl, fun t ht => absurd ht (by simp), hQb⟩
+  | e :: es, b, seg, h0, hm, hstep, hQb, hQ => by
+    obtain ⟨st', h0', hm', hstep', hQ'⟩ := exists_frames_of_segments U ops Q es
+      (fun i => b (i + 1)) (fun i => seg (i + 1)) (fun i => h0 (i + 1))
+      (fun i hi => hm (i + 1) (by simpa using hi)) (fun i hi => hstep (i + 1) (by simpa using hi))
+      (fun i => hQb (i + 1)) (fun i hi => hQ (i + 1) (by simpa using hi))
     set m := (ops e).length with hm_def
     have hseg : seg 0 m = st' 0 := by rw [h0']; exact hm 0 (by simp)
     let st : ℕ → List (Frame pos q Party) := fun t => if t ≤ m then seg 0 t else st' (t - m)
@@ -76,9 +80,15 @@ theorem exists_frames_of_segments {E α : Type*} (U : E → Set Party) (ops : E 
     have hlen : ((e :: es).flatMap fun e => (ops e).map (e, ·)).length =
         m + (es.flatMap fun e => (ops e).map (e, ·)).length := by
       simp [List.flatMap_cons, hm_def]
-    refine ⟨st, by simp only [st, Nat.zero_le, ite_true, h0], ?_, fun t ht => ?_⟩
+    refine ⟨st, by simp only [st, Nat.zero_le, ite_true, h0], ?_, fun t ht => ?_, fun t => ?_⟩
     · rw [hlen, hst _ (Nat.le_add_right _ _), Nat.add_sub_cancel_left, hm']
       rfl
+    swap
+    · by_cases htm : t ≤ m
+      · simp only [st, htm, ite_true]
+        exact hQ 0 (by simp) t htm
+      · simp only [st, htm, ite_false]
+        exact hQ' _
     · rw [hlen] at ht
       simp only [List.flatMap_cons]
       rcases Nat.lt_or_ge t m with htm | htm
@@ -94,7 +104,8 @@ theorem exists_frames_of_segments {E α : Type*} (U : E → Set Party) (ops : E 
 
 /-- **A protocol from the existence of the changes.** The form of
 `exists_isDistributionProtocol_of_frames` in which each change of the schedule is a bounded change
-of the sheets with at most `rs` pair sources in each monomial, given by its existence.
+of the sheets with at most `r` pair effects and at most `r` pair sources in each monomial, given by
+its existence.
 
 Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, `06-geometry.tex`, lines 12–53,
 and its proof, lines 572–681; Theorem 5.2, item 3, `04-compression.tex`, lines 143–147. -/
@@ -102,28 +113,29 @@ theorem exists_isDistributionProtocol_of_hasSourceBoundedChange {L k : ℕ} (hL 
     (hkL : L ≤ 2 ^ k) (hk2 : 2 ^ k < 2 * L) (large : DyadicSquare k → Bool)
     {Ω : StateSpace L q} (hΩ : ‖Ω‖ = 1)
     (st : ℕ → List (Frame (cellCenterPos L) q (ProtocolParty k)))
+    (hne : ∀ t ≤ (protocolSchedule k large).length, st t ≠ [])
     (holder : Frame (cellCenterPos L) q (ProtocolParty k) → ProtocolParty k)
     (hraw : ∀ F ∈ st 0, F.holes = []) (hown : ∀ F ∈ st 0, ∀ x, F.owner x = holder F)
-    {kK : ℕ} {C : ℝ}
+    {kK : ℕ} {C_N C_K C_E : ℝ}
     (hc : ∀ t (ht : t < (protocolSchedule k large).length),
       HasSourceBoundedChange Ω (st t) (st (t + 1)) (ℓ := []) (1 : ℂ)
-        {p | EventUses ((protocolSchedule k large)[t]).1 p} r K rs ε)
+        {p | EventUses ((protocolSchedule k large)[t]).1 p} r K r ε)
     (M : Frame (cellCenterPos L) q (ProtocolParty k))
     (Fs : List (Frame (cellCenterPos L) q (ProtocolParty k)))
     (hfin : st (protocolSchedule k large).length = M :: Fs)
     (hMown : ∀ v, M.owner v = .inl (unitSquare hkL v)) (hM : ∀ h ∈ M.holes, h.patch.outer = ∅)
     (hε : ∀ F ∈ Fs, ∀ h ∈ F.holes, ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
-    (hholes : (Fs.map fun F => (F.holes.length : ℝ)).sum ≤ C * (L : ℝ) ^ 3)
-    (hC : 5042 ≤ C) (hK : (K : ℝ) ≤ C * (L : ℝ) ^ kK) (hεC : ε ≤ C / (L : ℝ) ^ 20) :
+    (hholes : (Fs.map fun F => (F.holes.length : ℝ)).sum ≤ C_E * (L : ℝ) ^ 3)
+    (hC : 5042 ≤ C_N) (hK : (K : ℝ) ≤ C_K * (L : ℝ) ^ kK) (hεC : ε ≤ C_E / (L : ℝ) ^ 20) :
     ∃ D : DyadicProtocol L q (ProtocolParty k),
-      D.IsDistributionProtocol Ω C (64 * 189) kK r ∧
-        ∀ t < D.changes, (D.step t).IsSourceBounded rs := by
+      D.IsDistributionProtocol Ω C_N C_K C_E (64 * 189) kK r := by
   classical
+  have hCE : 0 ≤ C_E := nonneg_of_sum_map_natCast_le_mul hholes (by positivity)
   set n := (protocolSchedule k large).length with hn
   set st' : ℕ → List (Frame (cellCenterPos L) q (ProtocolParty k)) := fun t => st (min t n)
   have hst' : ∀ t ≤ n, st' t = st t := fun t ht => by simp only [st', min_eq_left ht]
   have hall : ∀ t, HasSourceBoundedChange Ω (st' t) (st' (t + 1)) (ℓ := []) (1 : ℂ)
-      (if h : t < n then {p | EventUses ((protocolSchedule k large)[t]).1 p} else ∅) r K rs
+      (if h : t < n then {p | EventUses ((protocolSchedule k large)[t]).1 p} else ∅) r K r
       (max ε 0) := fun t => by
     by_cases h : t < n
     · rw [hst' t h.le, hst' (t + 1) h]
@@ -133,10 +145,12 @@ theorem exists_isDistributionProtocol_of_hasSourceBoundedChange {L k : ℕ} (hL 
       have h2 : st' (t + 1) = st n := by simp only [st', min_eq_right (by omega : n ≤ t + 1)]
       rw [h1, h2]
       exact hasSourceBoundedChange_refl _ _ _ _ _ _ (le_max_right _ _)
-  refine exists_isDistributionProtocol_of_frames hL hkL hk2 large hΩ st' holder
+  refine exists_isDistributionProtocol_of_frames hL hkL hk2 large hΩ st'
+    (fun t ht => by rw [hst' t ht]; exact hne t ht)
+    holder
     (by simpa [st'] using hraw) (by simpa [st'] using hown) (fun t => (hall t).choose)
     (fun t ht => ?_) (fun t ht => ?_) M Fs (by rw [hst' n le_rfl]; exact hfin) hMown hM hε
-    hholes hC hK (max_le hεC (by positivity))
+    hholes hC hK (max_le hεC (div_nonneg hCE (by positivity)))
   · have ht' : t < n := ht
     exact (hall t).choose_spec.1.mono (fun p hp => by simpa [ht'] using hp) le_rfl le_rfl le_rfl
   · exact (hall t).choose_spec.2

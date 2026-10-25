@@ -1,11 +1,37 @@
 \section{A supported Gaussian operator for the physical buffer}
 
+\begin{definition}[Localization constants of the doubled square Hamiltonian]
+    \label{def:peps_square_localization_constants}
+    \lean{TNLean.PEPS.Approximation.squareLocalizationPrefactor,
+        TNLean.PEPS.Approximation.squareLocalizationVelocity,
+        TNLean.PEPS.Approximation.squareLocalizationPrefactor_pos,
+        TNLean.PEPS.Approximation.squareLocalizationVelocity_nonneg,
+        TNLean.PEPS.Approximation.squareLocalizationPrefactor_eq,
+        TNLean.PEPS.Approximation.squareLocalizationVelocity_eq}
+    \leanok
+    \uses{def:area_graph_ball_localization_constants}
+    For a real number $J$, put $C_\square=2C_0(1)$ and
+    $v_\square(J)=v(1,2J)$, with $C_0$ and $v$ as in
+    Definition~\ref{def:area_graph_ball_localization_constants}. These are the
+    constants for range one and term-norm bound $2J$, and
+    \begin{align*}
+        C_\square    & =\frac{64e^{3/2}}{1-e^{-1/2}}, &
+        v_\square(J) & =320e^2J.
+    \end{align*}
+    Thus $C_\square>0$, and $v_\square(J)\geq0$ when $J\geq0$. They are the
+    constants $C$ and $v$ of the Lieb--Robinson and localization bounds of
+    \cite{OpenAI2026PolynomialPEPS}, \texttt{02-information.tex}, lines
+    486--508, with decay rate $\mu=1/2$.
+\end{definition}
+
 \begin{theorem}[Supported Gaussian approximation of the physical buffer]
     \label{thm:peps_supported_physical_buffer_gaussian}
-    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_supported_buffer_gaussian_integral}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_supported_buffer_gaussian_integral,
+        TNLean.PEPS.Approximation.SquareHamiltonian.supported_buffer_gaussian_integral}
     \leanok
     \uses{def:polynomial_peps_model,def:qc_site_pair_coordinates,
-        def:peps_frame_sheet_swap,def:qc_site_expectation}
+        def:peps_frame_sheet_swap,def:qc_site_expectation,
+        def:peps_square_localization_constants}
     Fix an integer $q\ge1$ and a real number $J\ge0$.
     There are positive constants $C,v,c$ with the following property.
     Let $L\ge0$ be an integer and let
@@ -70,22 +96,26 @@
         \|M_{\eta,T}-\widetilde M_{\eta,T}\|
                        & \le\|W\|CL^2(1+8JL^2T)e^{vT-c\ell}.
     \end{align*}
-    The integrals retain the original restricted Gaussian measure.
-    Empty grids and regions, zero variance and zero cutoff are included.
-    This is the spatial Gaussian approximation in
-    \cite{OpenAI2026PolynomialPEPS}.
+    The integrals retain the original restricted Gaussian measure, and this
+    spatial Gaussian approximation of \cite{OpenAI2026PolynomialPEPS} includes
+    empty grids and regions, zero variance, and zero cutoff.
+    The estimate holds with $C=C_\square$, $v=v_\square(J)$ and $c=1/2$, the
+    constants of Definition~\ref{def:peps_square_localization_constants}.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_physical_buffer_coordinates,
         thm:peps_swapped_doubled_boundary_bound,
         thm:swapped_square_hamiltonian_interaction,
-        thm:area_supported_gaussian_integral}
-    Choose $C,v,c$ from Theorem~\ref{thm:area_supported_gaussian_integral}
-    at local dimension $q^2$, range one and interaction bound $2J$.
+        thm:area_supported_gaussian_integral,
+        def:peps_square_localization_constants}
+    Take $C=C_\square$, $v=v_\square(J)$ and $c=1/2$, which are the explicit
+    constants of Theorem~\ref{thm:area_supported_gaussian_integral}
+    at local dimension $q^2$, range one, and interaction bound $2J\geq0$.
+    The existence of positive constants follows by replacing $v$ by $v+1$.
     Theorem~\ref{thm:swapped_square_hamiltonian_interaction} constructs
-    a local interaction family with these parameters and total $K'$.
-    It uses the Hermitian parts of the original interactions, whose
+    a local interaction family with these parameters and total $K'$,
+    using the Hermitian parts of the original interactions whose
     sum is the given Hermitian operator $H$.
 
     Theorem~\ref{thm:peps_physical_buffer_coordinates} identifies $V$
@@ -95,15 +125,155 @@
     $\|K'-K\|\le8JL^2$. Coordinate reindexing preserves norms, while
     the tensor-product norm inequality gives $\|V\|\le\|W\|$.
 
-    Apply Theorem~\ref{thm:area_supported_gaussian_integral} to these
-    operators and the common neighbourhood $B$. It constructs
+    Applying Theorem~\ref{thm:area_supported_gaussian_integral} to these
+    operators and the common neighbourhood $B$ constructs
     the path $U$ independently of $\eta$ and $T$, and hence the integral
     $M_{\eta,T}$. Its support and norm conclusions give the first
-    assertion. Since $|\Lambda|=L^2$ and $T\ge0$, its error estimate
+    assertion, and since $|\Lambda|=L^2$ and $T\ge0$, its error estimate
     yields
     \begin{align*}
         \|M_{\eta,T}-\widetilde M_{\eta,T}\|
          & \le\|V\|CL^2(1+\|K'-K\|T)e^{vT-c\ell} \\
          & \le\|W\|CL^2(1+8JL^2T)e^{vT-c\ell}.
     \end{align*}
+\end{proof}
+
+\subsection{The partially swapped Hamiltonian at interaction range $R$}
+
+The source treats only site and nearest-neighbour terms, which is
+interaction range one. The statements of this subsection extend the
+boundary estimate and the supported Gaussian approximation to a Hamiltonian
+of range $R$ on a finite domain; the range-one statements on the open square
+above are unchanged.
+
+\begin{definition}[Crossing supports and the swap coefficient]
+    \label{def:peps_crossing_supports}
+    \lean{TNLean.Lattice.crossingSites,
+        TNLean.Lattice.swapBoundaryCoefficient}
+    \leanok
+    \uses{def:area_law_hamiltonian}
+    Let $\Lambda$ be a finite domain, $R\ge0$ an integer and
+    $A\subseteq\Lambda$. A support of range $R$ \emph{crosses} $A$ if it meets
+    $A$ and is not contained in $A$; let $Z_R(A)$ be the union of the
+    crossing supports. With $v_R=1+2R(R+1)$ and $\mu_R=2^{v_R-1}$, put
+    $c_R=4\mu_R$.
+\end{definition}
+
+\begin{lemma}[Crossing supports lie near both sides and are few]
+    \label{lem:peps_crossing_supports_near_and_few}
+    \lean{TNLean.Lattice.exists_walks_of_mem_crossingSites,
+        TNLean.Lattice.card_admissibleSupport_le}
+    \leanok
+    \uses{def:peps_crossing_supports}
+    Every site of $Z_R(A)$ is joined by walks of length at most $R$ to a site
+    of $A$ and to a site outside $A$. There are at most $\mu_R|\Lambda|$
+    supports of range $R$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_crossing_supports}
+    A site $z$ of $Z_R(A)$ lies in a crossing support $X$, which contains a
+    site $x\in A$ and a site $y\notin A$. Any two sites of a support of range
+    $R$ are joined by a walk of length at most $R$, so this holds for $z,x$
+    and for $z,y$. Every support is nonempty, and at most $\mu_R$ supports
+    contain a given site by Theorem~\ref{thm:area_law_crossing_supports}, so
+    summing over the sites gives at most $\mu_R|\Lambda|$ supports.
+\end{proof}
+
+\begin{theorem}[The partially swapped Hamiltonian at range $R$]
+    \label{thm:peps_swapped_local_hamiltonian}
+    \lean{TNLean.Lattice.LocalHamiltonian.swappedDoubled,
+        TNLean.Lattice.LocalHamiltonian.swappedDoubled_operator,
+        TNLean.Lattice.LocalHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing,
+        TNLean.Lattice.LocalHamiltonian.swapped_doubled_boundary_bound}
+    \leanok
+    \uses{def:area_law_hamiltonian,def:qc_site_pair_coordinates,
+        def:peps_frame_sheet_swap,def:peps_crossing_supports}
+    Let $H=\sum_Xh_X$ be a Hamiltonian of range $R$ on a finite domain
+    $\Lambda$ with Hermitian terms of norm at most $J\ge0$, let
+    $A\subseteq\Lambda$, and in paired-site coordinates let
+    $K=H\otimes I+I\otimes H$ and $K'=F_AKF_A^*$. Then $K'$ is a Hamiltonian
+    of range $R$ with local dimension $q^2$, the same supports and terms of
+    norm at most $2J$. Moreover $K'-K$ is the sum of the corresponding
+    differences over the supports crossing $A$, so it is supported on
+    $Z_R(A)$ and
+    \begin{align*}
+        \|K'-K\| & \le c_RJ|\Lambda|.
+    \end{align*}
+    This extends the range-one estimate of
+    Theorem~\ref{thm:peps_swapped_doubled_boundary_bound}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:peps_crossing_supports_near_and_few}
+    Conjugating a doubled term by the swap keeps its support, and changes its
+    norm by a factor at most two. A term supported inside $A$ or disjoint
+    from it commutes with the swap after doubling, so only crossing supports
+    remain. Each remaining difference has norm at most $4J$, and there are at
+    most $\mu_R|\Lambda|$ of them.
+\end{proof}
+
+\begin{theorem}[Edge-boundary norm of the partially swapped Hamiltonian]
+    \label{thm:peps_swapped_doubled_edge_boundary}
+    \lean{TNLean.Lattice.LocalHamiltonian.swapped_doubled_boundary_bound_edgeBoundary}
+    \leanok
+    \uses{def:area_law_hamiltonian,def:qc_site_pair_coordinates,
+        def:peps_frame_sheet_swap,def:peps_crossing_supports}
+    Let $H=\sum_Xh_X$ be a Hamiltonian of range $R$ on a finite domain
+    $\Lambda$, with Hermitian terms of norm at most $J\ge0$.
+    For $A\subseteq\Lambda$, let $\partial_\Lambda A$ be its edge boundary
+    in the induced nearest-neighbour graph. In paired-site coordinates,
+    put $K=H\otimes I+I\otimes H$ and $K'=F_AKF_A^*$. Then
+    \begin{align*}
+        \|K'-K\| & \le c_Rv_RJ|\partial_\Lambda A|.
+    \end{align*}
+    This is a finite-range extension of the boundary estimate in
+    \cite{OpenAI2026PolynomialPEPS}, \texttt{02-information.tex},
+    lines 416--424 and 513--524.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_swapped_local_hamiltonian,
+        thm:peps_sheet_swap_doubled_term_norm,thm:area_law_crossing_supports}
+    Only supports crossing $A$ contribute to $K'-K$. By
+    Theorem~\ref{thm:peps_sheet_swap_doubled_term_norm} and $\|h_X\|\le J$,
+    each difference has norm at most $4J$.
+    By Theorem~\ref{thm:area_law_crossing_supports},
+    there are at most $v_R\mu_R|\partial_\Lambda A|$ such supports.
+    The triangle inequality and $c_R=4\mu_R$ give the estimate.
+    Pairing the site coordinates preserves the operator norm.
+\end{proof}
+
+\begin{theorem}[Supported Gaussian approximation of the physical buffer at range $R$]
+    \label{thm:peps_supported_physical_buffer_gaussian_range}
+    \lean{TNLean.Lattice.LocalHamiltonian.supported_buffer_gaussian_integral}
+    \leanok
+    \uses{thm:peps_swapped_local_hamiltonian,
+        thm:peps_physical_buffer_coordinates,
+        thm:area_supported_gaussian_integral,
+        def:area_graph_ball_localization_constants}
+    Fix $q\ge1$ and $J\ge0$, and let $H$ be a Hamiltonian of range $R$ on a
+    finite domain $\Lambda$ with terms of norm at most $J$. Let
+    $A,C\subseteq\Lambda$ be disjoint with buffer $Q=(A\cup C)^c$, and define
+    $K$, $K'$ and $V$ as in
+    Theorem~\ref{thm:peps_supported_physical_buffer_gaussian}, now directly
+    in the coordinates of $\Lambda$. For each integer $\ell\ge0$ put
+    $B=N_\ell(Q\cup Z_R(A))$. Then the conclusions of
+    Theorem~\ref{thm:peps_supported_physical_buffer_gaussian} hold, with the
+    error bound
+    \begin{align*}
+        \|M_{\eta,T}-\widetilde M_{\eta,T}\|
+         & \le\|W\|\,2C_0(R)|\Lambda|(1+c_RJ|\Lambda|T)e^{v(R,2J)T-\ell/2}.
+    \end{align*}
+    This extends Theorem~\ref{thm:peps_supported_physical_buffer_gaussian},
+    which treats range one on the open square, to range $R$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Theorem~\ref{thm:peps_swapped_local_hamiltonian} writes $K'$ as a
+    Hamiltonian of range $R$ with term bound $2J$, with $K'-K$ supported on
+    $Z_R(A)$ of norm at most $c_RJ|\Lambda|$, and
+    Theorem~\ref{thm:peps_physical_buffer_coordinates} places $V$ on $Q$
+    with $\|V\|\le\|W\|$. Theorem~\ref{thm:area_supported_gaussian_integral}
+    at range $R$ and term bound $2J$ then gives the claim.
 \end{proof}

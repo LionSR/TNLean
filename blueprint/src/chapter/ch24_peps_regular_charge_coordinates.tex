@@ -41,7 +41,8 @@
     At a row $r$, only $g=x^{-1}r$ contributes to the matrix-unit sum.
     The surviving column is $yx^{-1}r$. Different relative translations
     give distinct surviving columns at every row, so their support pairing
-    vanishes. When they agree, sum the surviving entries.
+    vanishes; when they agree, summing the surviving entries gives the
+    displayed formula.
 \end{proof}
 
 \begin{theorem}[Orthogonality and norm of the accessible charge matrices]
@@ -64,8 +65,9 @@
     constructing the complete original-spin detector remains separate.
 \end{theorem}
 \begin{proof}\leanok
-    For equal relative translations, apply translated character orthogonality
-    with parameters $px^{-1}$ and $q(x')^{-1}$. For the norm,
+    For equal relative translations, translated character orthogonality
+    with parameters $px^{-1}$ and $q(x')^{-1}$ gives the vanishing inner
+    product. For the norm,
     the same character appears on both sides and its translated squared norm
     is $|G|$.
 \end{proof}
@@ -87,8 +89,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Cancel $q q^{-1}$ and $p^{-1}p$ in the relative column coordinate and
-    character argument of every matrix entry.
+    Cancelling $q q^{-1}$ and $p^{-1}p$ in the relative column coordinate and
+    character argument of every matrix entry gives the identity.
 \end{proof}
 
 \begin{theorem}[Independent translation covariance and nonvanishing]
@@ -110,6 +112,7 @@
     \cite[charge detection]{Schuch2010PEPS}, lines 2470--2486.
 \end{theorem}
 \begin{proof}\leanok
-    Substitute the translated row and column coordinates and cancel the
-    inverse translations. For nonvanishing, the squared norm is $|G|>0$.
+    Substituting the translated row and column coordinates and cancelling the
+    inverse translations gives the covariance formula, while
+    $\|A_\chi(p;x,y)\|^2=|G|>0$ ensures nonvanishing.
 \end{proof}

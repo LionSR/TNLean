@@ -74,16 +74,34 @@ theorem exists_transportLogDimBound_log_four {q : ℕ} {Cr : ℝ}
   have hqlog : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
   positivity
 
-/-- Two fixed transport coefficients admit one logarithmic-power bound,
-chosen before the system size and every physical subsystem. The coefficients
-and exponents may have either sign. The physical dimension and radius
-coefficient remain fixed, as in `08-scanner.tex`, lines 49 and 358–359. -/
-theorem exists_transport_coefficients_log_bound {q : ℕ} {Cr : ℝ}
+/-- The explicit coefficient `1 + (|C_ent| + |C_en|) A ^ E` of the common logarithmic-power
+bound of two transport coefficients, where `A = 1 + (2 C_r + 3)² log q` bounds the physical
+transport cap by `A log⁴ n` and `E = max 0 (max e_ent e_en)` (`08-scanner.tex`, lines 49 and
+358–359). -/
+noncomputable def transportLogCoefficient (q : ℕ) (Cr Cent eent Cen een : ℝ) : ℝ :=
+  1 + (|Cent| + |Cen|) * (1 + (2 * Cr + 3) ^ 2 * Real.log q) ^ max 0 (max eent een)
+
+/-- The explicit logarithmic exponent `4 max 0 (max e_ent e_en)` of the common
+logarithmic-power bound of two transport coefficients (`08-scanner.tex`, lines 49 and
+358–359). -/
+noncomputable def transportLogExponent (eent een : ℝ) : ℝ :=
+  4 * max 0 (max eent een)
+
+/-- Two fixed transport coefficients admit the logarithmic-power bound with the explicit
+coefficient `transportLogCoefficient q Cr Cent eent Cen een` and exponent
+`transportLogExponent eent een`, on the full physical interval `1 ≤ ℓ ≤ ℓ_q(r₀)` whenever
+`log n ≥ 1`. Source: `08-scanner.tex`, lines 49 and 358–359. -/
+theorem transport_coefficients_log_bound {q : ℕ} {Cr : ℝ}
     (hq : 1 ≤ q) (hCr : 0 ≤ Cr) (Cent eent Cen een : ℝ) :
-    ∃ C Cl : ℝ, 1 ≤ C ∧ 0 ≤ Cl ∧ ∀ n : ℕ, 1 ≤ Real.log n →
+    1 ≤ transportLogCoefficient q Cr Cent eent Cen een ∧ 0 ≤ transportLogExponent eent een ∧
+      ∀ n : ℕ, 1 ≤ Real.log n →
       ∀ ℓ : ℝ, 1 ≤ ℓ → ℓ ≤ transportLogDimBound q (roundedLogRadius Cr n) →
-        Cent * ℓ ^ eent ≤ C * (Real.log n) ^ Cl ∧
-          Cen * ℓ ^ een ≤ C * (Real.log n) ^ Cl := by
+        Cent * ℓ ^ eent ≤
+            transportLogCoefficient q Cr Cent eent Cen een * (Real.log n) ^
+              transportLogExponent eent een ∧
+          Cen * ℓ ^ een ≤
+            transportLogCoefficient q Cr Cent eent Cen een * (Real.log n) ^
+              transportLogExponent eent een := by
   let E := max 0 (max eent een)
   let A := 1 + (2 * Cr + 3) ^ 2 * Real.log q
   let C := 1 + (|Cent| + |Cen|) * A ^ E
@@ -93,7 +111,7 @@ theorem exists_transport_coefficients_log_bound {q : ℕ} {Cr : ℝ}
   have hC : 1 ≤ C := by
     exact le_add_of_nonneg_right
       (mul_nonneg (add_nonneg (abs_nonneg _) (abs_nonneg _)) (Real.rpow_nonneg hA E))
-  refine ⟨C, 4 * E, hC, mul_nonneg (by norm_num) hE, ?_⟩
+  refine ⟨hC, mul_nonneg (by norm_num) hE, ?_⟩
   intro n hn ℓ hℓ hcap
   have hn0 : 0 ≤ Real.log n := zero_le_one.trans hn
   have hℓ0 : 0 ≤ ℓ := zero_le_one.trans hℓ
@@ -122,6 +140,18 @@ theorem exists_transport_coefficients_log_bound {q : ℕ} {Cr : ℝ}
       ((le_max_left _ _).trans (le_max_right _ _)),
     hbound Cen een (le_add_of_nonneg_left (abs_nonneg _))
       ((le_max_right _ _).trans (le_max_right _ _))⟩
+
+/-- Two fixed transport coefficients admit one logarithmic-power bound,
+chosen before the system size and every physical subsystem. The coefficients
+and exponents may have either sign. The physical dimension and radius
+coefficient remain fixed, as in `08-scanner.tex`, lines 49 and 358–359. -/
+theorem exists_transport_coefficients_log_bound {q : ℕ} {Cr : ℝ}
+    (hq : 1 ≤ q) (hCr : 0 ≤ Cr) (Cent eent Cen een : ℝ) :
+    ∃ C Cl : ℝ, 1 ≤ C ∧ 0 ≤ Cl ∧ ∀ n : ℕ, 1 ≤ Real.log n →
+      ∀ ℓ : ℝ, 1 ≤ ℓ → ℓ ≤ transportLogDimBound q (roundedLogRadius Cr n) →
+        Cent * ℓ ^ eent ≤ C * (Real.log n) ^ Cl ∧
+          Cen * ℓ ^ een ≤ C * (Real.log n) ^ Cl :=
+  ⟨_, _, transport_coefficients_log_bound hq hCr Cent eent Cen een⟩
 
 /-- The physical logarithmic dimension is at most a fixed multiple of the
 squared radius, provided the radius is positive. This is the conversion used

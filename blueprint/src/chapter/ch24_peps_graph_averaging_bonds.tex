@@ -23,7 +23,8 @@
     alphabet identifies this contraction with the original tensor coefficient.
 \end{theorem}
 \begin{proof}\leanok
-    Reindex the virtual summation by the product of the alphabet numberings.
+    Reindexing the virtual summation by the product of the alphabet numberings
+    yields the original tensor coefficient.
 \end{proof}
 
 \begin{definition}[Regrouping physical coordinates by bonds]%
@@ -32,8 +33,8 @@
         TNLean.PEPS.graphBondRegrouping,
         TNLean.PEPS.graphBondRegroupingIsometry}
     \leanok
-    Orient every edge from its smaller endpoint $t(e)$ to its larger endpoint
-    $h(e)$. The site coordinates $\sigma_v:E(v)\to X$ are equivalently the bond
+    With every edge oriented from its smaller endpoint $t(e)$ to its larger endpoint
+    $h(e)$, the site coordinates $\sigma_v:E(v)\to X$ are equivalently the bond
     pairs $\beta_e=(\sigma_{h(e)}(e),\sigma_{t(e)}(e))$.
     This bijection induces a linear equivalence of coefficient spaces and its
     corresponding Hilbert-space coordinate isometry.
@@ -52,8 +53,8 @@
     coefficient at these recovered coordinates and preserves every inner product.
 \end{theorem}
 \begin{proof}\leanok
-    Each half-edge occurs once in the endpoint pairs. Reindex the finite inner
-    product by this bijection.
+    Each half-edge occurs once in the endpoint pairs, so reindexing the finite
+    inner product by this bijection preserves every inner product.
 \end{proof}
 
 \begin{definition}[Oriented averaging sites and virtual weights]%
@@ -67,12 +68,12 @@
     Let $G$ be finite and $U$ a matrix representation on $\mathbb C^X$.
     The local averaging site is $|G|^{-1}\sum_g$ of the product of
     $U(g)$ at head legs and $U(g^{-1})^{\mathsf T}$ at tail legs.
-    Inserting a matrix $W$ on every virtual leg means summing the original
+    Inserting a matrix $W$ on every virtual leg sums the original
     site coefficient against the product of its oriented endpoint entries.
-    Apply this insertion to the averaging site to obtain the dressed tensor;
-    taking $W=\Theta$ gives the fourth-root-weighted tensor.
-    These are the finite-graph local contractions underlying
-    \cite[Section~7]{Schuch2010PEPS}, with normalized site averages.
+    On the averaging site, this insertion yields the dressed tensor
+    (with $W=\Theta$ giving the fourth-root-weighted tensor) and forms
+    the finite-graph local contractions with normalized site averages
+    underlying \cite[Section~7]{Schuch2010PEPS}.
 \end{definition}
 
 \begin{theorem}[Weighted graph coefficients]%
@@ -96,9 +97,9 @@
     No connectedness, valence, or topological assumption is required.
 \end{theorem}
 \begin{proof}\leanok
-    Expand the local convolution to obtain $WU(g^{-1})$ on tail legs and
-    $U(g)W$ on head legs. Expand the site averages into one group label per
-    vertex and regroup the half-edge product into its endpoint factors.
+    Expanding the local convolution gives $WU(g^{-1})$ on tail legs and
+    $U(g)W$ on head legs; expanding the site averages into one group label per
+    vertex then regroups the half-edge product into its endpoint factors.
     The remaining virtual summation factors by edges. Each edge contraction
     gives $U(q_h)W^2U(q_t^{-1})=W^2U(q_hq_t^{-1})$.
     For $W=\Theta$, commutation follows from the character-projector definition.
@@ -121,10 +122,10 @@
     \end{align}
     sends this state to the averaging-site graph state for
     $\bigoplus_i(D_i\otimes I_{d_i})$.
-    Support and the state equality are conclusions, not hypotheses.
-    This is the finite-simple-graph bond calculation of
-    \cite[Section~7]{Schuch2010PEPS}; group-derived Fourier choices and
-    full-domain physical isometries are separate consequences.
+    This finite-simple-graph bond calculation of
+    \cite[Section~7]{Schuch2010PEPS} establishes both the support and the
+    state equality as conclusions rather than hypotheses, while group-derived
+    Fourier choices and full-domain physical isometries are separate consequences.
 \end{theorem}
 \begin{proof}\leanok
     The two endpoint weights give

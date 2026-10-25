@@ -52,7 +52,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open Set Filter Topology EncodedFrame PairEffect
+open Set Filter Topology EncodedFrame TNLean.Lattice.PartyCircuit
 
 variable {k : ℕ}
 

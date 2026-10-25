@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.ActualSourceSampling
-import TNLean.PEPS.Approximation.SourceSamplingPolynomial
+import TNLean.Lattice.Compression.ActualSourceSampling
+import TNLean.Lattice.Compression.SourceSamplingPolynomial
 
 /-!
 # Polynomial sample count for an actual circuit
@@ -29,8 +29,8 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open MeasureTheory QICLean.ComplexGaussian
 open scoped Matrix ComplexConjugate NNReal
-namespace TNLean.PEPS.PairEffect.SourceCircuit
-open TNLean.PEPS.Approximation
+namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+open TNLean.Lattice.Compression
 
 open Classical in
 /-- The actual sampled physical operator has inverse-power accuracy with an
@@ -94,4 +94,4 @@ theorem exists_sourceSample_polynomial_error_le
     (L ^ q)⁻¹ hε hεone p₀ hp₀ hp₀s bIn bPhysical bDiscard
   exact ⟨lam, E, F, hframes, ω, hω.trans (div_le_div_of_nonneg_right hsmall (by norm_num))⟩
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end TNLean.Lattice.PartyCircuit.SourceCircuit

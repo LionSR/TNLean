@@ -3,10 +3,10 @@
     \lean{TNLean.PEPS.torusChargeMeasurementEdge}
     \leanok
     \uses{def:peps_regular_edge_charge_contraction}
-    On a finite simple torus, choose either the right edge or the up edge of a
-    native vertex $v$. Its ordered endpoints form the measured two-site region.
-    The diagonal insertion is $\chi(pk)$ on this shared bond, including
-    bonds that cross either coordinate seam.
+    On a finite simple torus, the measured two-site region consists of the
+    ordered endpoints of either the right edge or the up edge of a native
+    vertex $v$, with diagonal insertion $\chi(pk)$ on this shared bond,
+    including bonds that cross either coordinate seam.
 \end{definition}
 
 \begin{theorem}[Nonzero native two-spin charged columns]
@@ -22,11 +22,11 @@
     This asserts no nonvanishing under an arbitrary global exterior contraction.
 \end{theorem}
 \begin{proof}\leanok
-    At each endpoint a perpendicular incident edge differs from the shared edge.
-    Thus both sites have remaining boundary legs. Native incident-edge coordinates
-    preserve regular $G$-isometry, and hence $G$-injectivity. The nonzero charged
-    column theorem applies; the contraction identity and physical endpoint
-    bijection preserve nonvanishing.
+    At each endpoint a perpendicular incident edge differs from the shared edge,
+    so both sites have remaining boundary legs. Because native incident-edge
+    coordinates preserve regular $G$-isometry and hence $G$-injectivity, the
+    nonzero charged column theorem applies, and the contraction identity and
+    physical endpoint bijection preserve nonvanishing.
 \end{proof}
 
 \begin{theorem}[Native complete two-spin charge detection]
@@ -53,9 +53,9 @@
     no parent-Hamiltonian assertion.
 \end{theorem}
 \begin{proof}\leanok
-    Use the complete physical pair measurement in native incident-edge
-    coordinates. Its action holds on every original open-region column. The
-    region-complement contraction expresses the cut matrix as the open
-    matrix times the transpose of the complementary matrix, so the same
-    indicator action holds on the cut for arbitrary exterior tensors.
+    For the complete physical pair measurement in native incident-edge
+    coordinates, the indicator action holds on every original open-region
+    column. Because the region-complement contraction expresses the cut matrix
+    as the open matrix times the transpose of the complementary matrix, the
+    same indicator action holds on the cut for arbitrary exterior tensors.
 \end{proof}

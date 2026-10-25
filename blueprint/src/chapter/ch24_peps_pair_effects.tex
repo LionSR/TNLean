@@ -1,9 +1,11 @@
 \section{Elimination of normalized pair effects}
 \label{sec:peps_pair_effects}
-This section treats \cite[Lemma~5.1]{OpenAI2026PolynomialPEPS},
-September 24, 2026, \texttt{04-compression.tex}, lines 53--127, together with
-the choice of the stack length and the rescaling in the proof of
-\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, lines 201--212. The estimates
+Eliminating normalized pair effects
+(\cite[Lemma~5.1]{OpenAI2026PolynomialPEPS}, September 24, 2026,
+\texttt{04-compression.tex}, lines 53--127), together with the stack-length
+selection and rescaling in the proof of
+\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} (lines 201--212), replaces each
+pair effect by a cyclic insertion into a fresh register stack. The estimates
 are first proved for monomials written as chains of recorded pair effects
 between arbitrary contractions. The statements about parties are then proved
 after assigning every register to a party. Preparing the sources before the
@@ -12,7 +14,7 @@ conclusion of the source lemma.
 
 \begin{lemma}[Elimination of normalized pair effects]
     \label{lem:peps_pair_effects_source}
-    \lean{TNLean.PEPS.PairEffect.partyPairEffectElimination_with_grouped_sources}
+    \lean{TNLean.Lattice.PartyCircuit.partyPairEffectElimination_with_grouped_sources}
     \leanok
     \uses{def:peps_party_monomial}
     Let $G$ be a contraction with an expansion $G=\sum_\xi c_\xi M_\xi$ into
@@ -23,18 +25,17 @@ conclusion of the source lemma.
     $\|\widetilde G_m-G\otimes|\Gamma_m\rangle\|\le(r/\sqrt m)\sum_\xi|c_\xi|$.
     The gate $\widetilde G_m$ has an expansion using only local contractions
     and normalized pair sources, with at most $Km^r$ monomials and absolute
-    coefficient sum at most $\sum_\xi|c_\xi|$. Its additional registers are
-    owned by the original participating parties, and all sources on the same
-    pair of parties may be combined into one normalized pair source. This is
-    \cite[Lemma~5.1]{OpenAI2026PolynomialPEPS}.
+    coefficient sum at most $\sum_\xi|c_\xi|$. As in \cite[Lemma~5.1]{OpenAI2026PolynomialPEPS}, its additional registers
+    are owned by the original participating parties, and all sources on the same
+    pair of parties may be combined into one normalized pair source.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_pair_effects_party,thm:peps_grouped_sources}
     The error, normalization, expansion, and ownership conclusions follow
-    from Theorem~\ref{thm:peps_pair_effects_party}. Apply
-    Theorem~\ref{thm:peps_grouped_sources} to each monomial in this expansion.
-    It replaces all sources on a given unordered pair by one normalized
+    from Theorem~\ref{thm:peps_pair_effects_party}. Applying
+    Theorem~\ref{thm:peps_grouped_sources} to each monomial in this expansion
+    replaces all sources on a given unordered pair by one normalized
     source and recovers the original registers by local isometries and
     exchanges. The operator of each monomial is unchanged, as are the
     number of monomials, their coefficients, and their common output space.
@@ -42,7 +43,7 @@ conclusion of the source lemma.
 
 \begin{theorem}[Elimination of pair effects on parties]
     \label{thm:peps_pair_effects_party}
-    \lean{TNLean.PEPS.PairEffect.partyPairEffectElimination}
+    \lean{TNLean.Lattice.PartyCircuit.partyPairEffectElimination}
     \leanok
     \uses{def:peps_party_monomial}
     Let $G=\sum_\xi c_\xi M_\xi$ be an expansion into $K$ allowed monomials on
@@ -134,7 +135,7 @@ and $m\ge1$.
     \lean{CyclicInsertion.norm_rTensor_cyclicInsertion_sub_ideal_le}
     \leanok
     \uses{def:peps_cyclic_insertion}
-    For every $v\perp\eta$ one has $\|T_mv\|=\|v\|/\sqrt m$. Consequently
+    Every $v\perp\eta$ satisfies $\|T_mv\|=\|v\|/\sqrt m$. Consequently
     $\|T_m-P_m\|\le m^{-1/2}$, with equality when the orthogonal complement of
     $\eta$ is nonzero, and $T_m=P_m$ when it is zero. The same upper bound
     holds for $(T_m-P_m)\otimes\mathbf 1_{\mathcal S}$ on any spectator space
@@ -156,11 +157,11 @@ and $m\ge1$.
 
 \begin{definition}[Monomials with recorded pair effects]
     \label{def:peps_effect_chain}
-    \lean{TNLean.PEPS.PairEffect.effectMap}
-    \lean{TNLean.PEPS.PairEffect.EffectChain}
-    \lean{TNLean.PEPS.PairEffect.EffectChain.eval}
-    \lean{TNLean.PEPS.PairEffect.EffectChain.effectCount}
-    \lean{TNLean.PEPS.PairEffect.EffectChain.IsAllowed}
+    \lean{TNLean.Lattice.PartyCircuit.effectMap}
+    \lean{TNLean.Lattice.PartyCircuit.EffectChain}
+    \lean{TNLean.Lattice.PartyCircuit.EffectChain.eval}
+    \lean{TNLean.Lattice.PartyCircuit.EffectChain.effectCount}
+    \lean{TNLean.Lattice.PartyCircuit.EffectChain.IsAllowed}
     \leanok
     A monomial with $n$ recorded pair effects is a composition
     \begin{align}
@@ -177,15 +178,15 @@ and $m\ge1$.
 
 \begin{definition}[Replaced monomial and replaced gate]
     \label{def:peps_replaced_gate}
-    \lean{TNLean.PEPS.PairEffect.EffectChain.stackVector}
-    \lean{TNLean.PEPS.PairEffect.EffectChain.replace}
-    \lean{TNLean.PEPS.PairEffect.EffectChain.replaceTerm}
-    \lean{TNLean.PEPS.PairEffect.GateExpansion}
-    \lean{TNLean.PEPS.PairEffect.gate}
-    \lean{TNLean.PEPS.PairEffect.inventory}
-    \lean{TNLean.PEPS.PairEffect.inventoryVector}
-    \lean{TNLean.PEPS.PairEffect.replaceGate}
-    \lean{TNLean.PEPS.PairEffect.termList}
+    \lean{TNLean.Lattice.PartyCircuit.EffectChain.stackVector}
+    \lean{TNLean.Lattice.PartyCircuit.EffectChain.replace}
+    \lean{TNLean.Lattice.PartyCircuit.EffectChain.replaceTerm}
+    \lean{TNLean.Lattice.PartyCircuit.GateExpansion}
+    \lean{TNLean.Lattice.PartyCircuit.gate}
+    \lean{TNLean.Lattice.PartyCircuit.inventory}
+    \lean{TNLean.Lattice.PartyCircuit.inventoryVector}
+    \lean{TNLean.Lattice.PartyCircuit.replaceGate}
+    \lean{TNLean.Lattice.PartyCircuit.termList}
     \leanok
     \uses{def:peps_cyclic_insertion,def:peps_effect_chain}
     Give each effect occurrence $E_i$ of a monomial $M$ its own output stack
@@ -205,10 +206,10 @@ and $m\ge1$.
 
 \begin{theorem}[Error of one replaced monomial]
     \label{thm:peps_replaced_monomial_error}
-    \lean{TNLean.PEPS.PairEffect.EffectChain.norm_replace_sub_le}
-    \lean{TNLean.PEPS.PairEffect.EffectChain.norm_eval_le_one}
-    \lean{TNLean.PEPS.PairEffect.EffectChain.norm_stackVector}
-    \lean{TNLean.PEPS.PairEffect.EffectChain.norm_replace_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.EffectChain.norm_replace_sub_le}
+    \lean{TNLean.Lattice.PartyCircuit.EffectChain.norm_eval_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.EffectChain.norm_stackVector}
+    \lean{TNLean.Lattice.PartyCircuit.EffectChain.norm_replace_le_one}
     \leanok
     \uses{def:peps_replaced_gate}
     For an allowed monomial $M$ with $n$ recorded pair effects, $M$ and
@@ -240,8 +241,8 @@ and $m\ge1$.
 
 \begin{theorem}[Expansion of a replaced monomial]
     \label{thm:peps_replaced_monomial_expansion}
-    \lean{TNLean.PEPS.PairEffect.EffectChain.replace_eq_sum}
-    \lean{TNLean.PEPS.PairEffect.EffectChain.norm_replaceTerm_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.EffectChain.replace_eq_sum}
+    \lean{TNLean.Lattice.PartyCircuit.EffectChain.norm_replaceTerm_le_one}
     \leanok
     \uses{def:peps_replaced_gate}
     The replaced monomial with $n$ recorded pair effects equals
@@ -252,20 +253,20 @@ and $m\ge1$.
 
 \begin{proof}\leanok
     \uses{def:peps_cyclic_insertion}
-    Expand each average $T_m$ by linearity and collect the $m^n$ choices of
-    positions, by induction on $n$. Each term composes the contractions
+    Expanding each average $T_m$ by linearity and inducting on $n$ collects
+    the $m^n$ choices of positions. Each term composes the contractions
     $F_i$ with the isometries $I_{\kappa_i}$ and tensor rearrangements.
 \end{proof}
 
 \begin{theorem}[Pair-effect elimination, operator estimates]
     \label{thm:peps_pair_effects_operator}
-    \lean{TNLean.PEPS.PairEffect.pairEffectElimination}
-    \lean{TNLean.PEPS.PairEffect.norm_inventoryVector}
-    \lean{TNLean.PEPS.PairEffect.norm_replaceGate_sub_le}
-    \lean{TNLean.PEPS.PairEffect.replaceGate_eq_sum_termList}
-    \lean{TNLean.PEPS.PairEffect.length_termList_le}
-    \lean{TNLean.PEPS.PairEffect.sum_norm_coeff_termList}
-    \lean{TNLean.PEPS.PairEffect.norm_term_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.pairEffectElimination}
+    \lean{TNLean.Lattice.PartyCircuit.norm_inventoryVector}
+    \lean{TNLean.Lattice.PartyCircuit.norm_replaceGate_sub_le}
+    \lean{TNLean.Lattice.PartyCircuit.replaceGate_eq_sum_termList}
+    \lean{TNLean.Lattice.PartyCircuit.length_termList_le}
+    \lean{TNLean.Lattice.PartyCircuit.sum_norm_coeff_termList}
+    \lean{TNLean.Lattice.PartyCircuit.norm_term_le_one}
     \leanok
     \uses{def:peps_replaced_gate}
     Let $G=\sum_\xi c_\xi M_\xi$ be an expansion into $K$ allowed monomials,
@@ -328,12 +329,12 @@ and $m\ge1$.
 
 \begin{definition}[Registers of parties and source-only compositions]
     \label{def:peps_party_layout}
-    \lean{TNLean.PEPS.PairEffect.Reg}
-    \lean{TNLean.PEPS.PairEffect.Mem}
-    \lean{TNLean.PEPS.PairEffect.Word}
-    \lean{TNLean.PEPS.PairEffect.Word.eval}
-    \lean{TNLean.PEPS.PairEffect.Word.IsAllowed}
-    \lean{TNLean.PEPS.PairEffect.IsSourceOnly}
+    \lean{TNLean.Lattice.PartyCircuit.Reg}
+    \lean{TNLean.Lattice.PartyCircuit.Mem}
+    \lean{TNLean.Lattice.PartyCircuit.Word}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval}
+    \lean{TNLean.Lattice.PartyCircuit.Word.IsAllowed}
+    \lean{TNLean.Lattice.PartyCircuit.IsSourceOnly}
     \leanok
     A register is a Hilbert space together with the party that owns it. The
     memory of a finite list of registers is the tensor product of their
@@ -350,12 +351,12 @@ and $m\ge1$.
 
 \begin{definition}[Allowed monomials on parties]
     \label{def:peps_party_monomial}
-    \lean{TNLean.PEPS.PairEffect.PartyChain}
-    \lean{TNLean.PEPS.PairEffect.PartyChain.toEffectChain}
-    \lean{TNLean.PEPS.PairEffect.PartyChain.IsAllowed}
-    \lean{TNLean.PEPS.PairEffect.PartyChain.effectParties}
-    \lean{TNLean.PEPS.PairEffect.PartyGate}
-    \lean{TNLean.PEPS.PairEffect.toGate}
+    \lean{TNLean.Lattice.PartyCircuit.PartyChain}
+    \lean{TNLean.Lattice.PartyCircuit.PartyChain.toEffectChain}
+    \lean{TNLean.Lattice.PartyCircuit.PartyChain.IsAllowed}
+    \lean{TNLean.Lattice.PartyCircuit.PartyChain.effectParties}
+    \lean{TNLean.Lattice.PartyCircuit.PartyGate}
+    \lean{TNLean.Lattice.PartyCircuit.toGate}
     \leanok
     \uses{def:peps_party_layout,def:peps_effect_chain}
     An allowed monomial on parties is a chain of source-only compositions
@@ -371,18 +372,18 @@ and $m\ge1$.
     source-only composition. As an operator it is a
     monomial with recorded pair effects in the sense of
     Definition~\ref{def:peps_effect_chain}, whose pieces between effects are
-    source-only. This is the notion of allowed monomial of
+    source-only. Together these conditions define the allowed monomials of
     \cite[Section~5.1]{OpenAI2026PolynomialPEPS}, lines 32--35.
 \end{definition}
 
 \begin{theorem}[Insertion by pair sources]
     \label{thm:peps_insertion_by_sources}
-    \lean{TNLean.PEPS.PairEffect.stackIso_prepWord}
-    \lean{TNLean.PEPS.PairEffect.stackIso_insWord}
-    \lean{TNLean.PEPS.PairEffect.pairsOn}
-    \lean{TNLean.PEPS.PairEffect.stackIso}
-    \lean{TNLean.PEPS.PairEffect.prepWord}
-    \lean{TNLean.PEPS.PairEffect.insWord}
+    \lean{TNLean.Lattice.PartyCircuit.stackIso_prepWord}
+    \lean{TNLean.Lattice.PartyCircuit.stackIso_insWord}
+    \lean{TNLean.Lattice.PartyCircuit.pairsOn}
+    \lean{TNLean.Lattice.PartyCircuit.stackIso}
+    \lean{TNLean.Lattice.PartyCircuit.prepWord}
+    \lean{TNLean.Lattice.PartyCircuit.insWord}
     \leanok
     \uses{def:peps_cyclic_insertion,def:peps_party_layout}
     Let $\eta\in\mathbb C^\alpha\otimes\mathbb C^\beta$ be a unit vector on the
@@ -403,14 +404,14 @@ and $m\ge1$.
 
 \begin{theorem}[The expansion is source-only]
     \label{thm:peps_party_terms_source_only}
-    \lean{TNLean.PEPS.PairEffect.PartyChain.replaceTerm_toEffectChain}
-    \lean{TNLean.PEPS.PairEffect.termList_toGate}
-    \lean{TNLean.PEPS.PairEffect.isSourceOnly_termList}
-    \lean{TNLean.PEPS.PairEffect.gateIso_prepGate}
-    \lean{TNLean.PEPS.PairEffect.PartyChain.replaceWord}
-    \lean{TNLean.PEPS.PairEffect.wordList}
-    \lean{TNLean.PEPS.PairEffect.gateIso}
-    \lean{TNLean.PEPS.PairEffect.prepGate}
+    \lean{TNLean.Lattice.PartyCircuit.PartyChain.replaceTerm_toEffectChain}
+    \lean{TNLean.Lattice.PartyCircuit.termList_toGate}
+    \lean{TNLean.Lattice.PartyCircuit.isSourceOnly_termList}
+    \lean{TNLean.Lattice.PartyCircuit.gateIso_prepGate}
+    \lean{TNLean.Lattice.PartyCircuit.PartyChain.replaceWord}
+    \lean{TNLean.Lattice.PartyCircuit.wordList}
+    \lean{TNLean.Lattice.PartyCircuit.gateIso}
+    \lean{TNLean.Lattice.PartyCircuit.prepGate}
     \leanok
     \uses{def:peps_party_monomial,def:peps_replaced_gate}
     Let $G=\sum_\xi c_\xi M_\xi$ be an expansion into allowed monomials on
@@ -434,11 +435,11 @@ and $m\ge1$.
 
 \begin{theorem}[Ownership of the additional registers]
     \label{thm:peps_party_ownership}
-    \lean{TNLean.PEPS.PairEffect.pairRegs_eq}
-    \lean{TNLean.PEPS.PairEffect.PartyChain.owner_stackRegs}
-    \lean{TNLean.PEPS.PairEffect.gateOut_eq}
-    \lean{TNLean.PEPS.PairEffect.PartyChain.stackRegs}
-    \lean{TNLean.PEPS.PairEffect.gateOut}
+    \lean{TNLean.Lattice.PartyCircuit.pairRegs_eq}
+    \lean{TNLean.Lattice.PartyCircuit.PartyChain.owner_stackRegs}
+    \lean{TNLean.Lattice.PartyCircuit.gateOut_eq}
+    \lean{TNLean.Lattice.PartyCircuit.PartyChain.stackRegs}
+    \lean{TNLean.Lattice.PartyCircuit.gateOut}
     \leanok
     \uses{def:peps_party_monomial}
     The output registers of $\widetilde G_m$ are the output registers of $G$
@@ -453,10 +454,10 @@ and $m\ge1$.
 
 \begin{theorem}[Combining pair sources on one pair of parties]
     \label{thm:peps_party_combine_sources}
-    \lean{TNLean.PEPS.PairEffect.eval_combineSources}
-    \lean{TNLean.PEPS.PairEffect.isAllowed_combineSources}
-    \lean{TNLean.PEPS.PairEffect.pairRegroup}
-    \lean{TNLean.PEPS.PairEffect.combineSources}
+    \lean{TNLean.Lattice.PartyCircuit.eval_combineSources}
+    \lean{TNLean.Lattice.PartyCircuit.isAllowed_combineSources}
+    \lean{TNLean.Lattice.PartyCircuit.pairRegroup}
+    \lean{TNLean.Lattice.PartyCircuit.combineSources}
     \leanok
     \uses{def:peps_party_layout}
     Let $\eta\in\mathcal U\otimes\mathcal V$ and
@@ -478,10 +479,10 @@ and $m\ge1$.
 
 \begin{corollary}[Stack length and rescaling]
     \label{cor:peps_pair_effects_rescaling}
-    \lean{TNLean.PEPS.PairEffect.stackLength}
-    \lean{TNLean.PEPS.PairEffect.stackLength_spec}
-    \lean{TNLean.PEPS.PairEffect.replaceGate_rescaled}
-    \lean{TNLean.PEPS.PairEffect.replaceGate_rescaled_stackLength}
+    \lean{TNLean.Lattice.PartyCircuit.stackLength}
+    \lean{TNLean.Lattice.PartyCircuit.stackLength_spec}
+    \lean{TNLean.Lattice.PartyCircuit.replaceGate_rescaled}
+    \lean{TNLean.Lattice.PartyCircuit.replaceGate_rescaled_stackLength}
     \leanok
     \uses{thm:peps_pair_effects_operator}
     In the setting of Theorem~\ref{thm:peps_pair_effects_operator}, suppose

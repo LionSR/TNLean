@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.DistributedOperatorContraction
+import TNLean.Lattice.Compression.DistributedOperatorContraction
 import TNLean.PEPS.Approximation.DyadicRouting
 
 
@@ -21,6 +21,7 @@ lines 581–588, and Section 8.1, `07-assembly.tex`, lines 61–62; revision
 -/
 
 namespace TNLean.PEPS.Approximation.DistributedOperatorContraction
+open TNLean.Lattice.Compression TNLean.Lattice.Compression.DistributedOperatorContraction
 
 /-- The incidence count of the actual tagged link family is its routing degree.
 Source: polynomial-PEPS manuscript, Theorem 5.2, 04-compression.tex,

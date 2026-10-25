@@ -65,6 +65,10 @@ namespace IsReduction
 variable {B : MPSTensor d D_B} {A : MPSTensor d D_A}
   {V : Matrix (Fin D_A) (Fin D_B) ℂ} {W : Matrix (Fin D_B) (Fin D_A) ℂ}
 
+private theorem eq_reductionResidual_add (i : Fin d) :
+    B i = reductionResidual B A V W i + W * A i * V := by
+  simp [reductionResidual]
+
 private lemma evalWord_eq_prod_map (K : MPSTensor d D_B) (w : List (Fin d)) :
     Kraus.evalWord K w = (w.map K).prod := by
   induction w with
@@ -176,6 +180,13 @@ private theorem mul_strictWindowSum_eq_mul_initialWindowSum
       have hzero := h.evalWord_reductionResidual_mul_strictWindowSum_eq_zero [i] w (by simp)
       simpa [Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_assoc] using hzero
 
+private theorem letter_mul_strictWindowSum_eq_letter_mul_initialWindowSum
+    (h : IsReduction B A V W) (i : Fin d) (w : List (Fin d)) :
+    W * A i * V * reductionStrictWindowSum B A V W w =
+      W * A i * V * reductionInitialWindowSum B A V W w := by
+  simpa only [Matrix.mul_assoc] using
+    congrArg (fun X ↦ W * A i * X) (h.mul_strictWindowSum_eq_mul_initialWindowSum w)
+
 /-- Recursive precursor of the corrected residual expansion.  The theorem
 `evalWord_eq_reductionResidual_add_strictWindowRangeSum` below identifies its
 recursive window term with the explicit strict range.
@@ -193,12 +204,7 @@ theorem evalWord_eq_reductionResidual_add_strictWindowSum
   | cons i w ih =>
       rw [Kraus.evalWord_cons, ih, reductionStrictWindowSum,
         reductionInitialWindowSum, reductionResidual]
-      have hmerge := congrArg (fun X ↦ W * A i * X)
-        (h.mul_strictWindowSum_eq_mul_initialWindowSum w)
-      have hmerge' :
-          W * A i * V * reductionStrictWindowSum B A V W w =
-            W * A i * V * reductionInitialWindowSum B A V W w := by
-        simpa only [Matrix.mul_assoc] using hmerge
+      have hmerge' := h.letter_mul_strictWindowSum_eq_letter_mul_initialWindowSum i w
       simp only [Kraus.evalWord_cons, reductionResidual, Matrix.mul_add]
       noncomm_ring [hmerge']
 
@@ -207,12 +213,7 @@ private theorem reductionInitialWindowSum_cons
     reductionInitialWindowSum B A V W (i :: w) =
       W * A i * V * Kraus.evalWord B w := by
   rw [reductionInitialWindowSum, h.evalWord_eq_reductionResidual_add_strictWindowSum w]
-  have hmerge := congrArg (fun X ↦ W * A i * X)
-    (h.mul_strictWindowSum_eq_mul_initialWindowSum w)
-  have hmerge' :
-      W * A i * V * reductionStrictWindowSum B A V W w =
-        W * A i * V * reductionInitialWindowSum B A V W w := by
-    simpa only [Matrix.mul_assoc] using hmerge
+  have hmerge' := h.letter_mul_strictWindowSum_eq_letter_mul_initialWindowSum i w
   simp only [Matrix.mul_add]
   noncomm_ring [hmerge']
 
@@ -243,8 +244,7 @@ theorem mul_evalWord_eq_reductionLeftContractedSum
             A i * V * reductionStrictWindowSum B A V W w := by
         simpa only [Matrix.mul_assoc, Matrix.one_mul] using hcompressS
       have hdecomp :
-          B i = reductionResidual B A V W i + W * A i * V := by
-        simp [reductionResidual]
+          B i = reductionResidual B A V W i + W * A i * V := eq_reductionResidual_add i
       have hzero' :
           V * (reductionResidual B A V W i *
             reductionStrictWindowSum B A V W w) = 0 := by
@@ -280,8 +280,7 @@ theorem evalWord_mul_eq_reductionRightContractedSum
             W * A i * Kraus.evalWord A w := by
         simpa only [Matrix.mul_assoc] using hcompressed
       have hdecomp :
-          B i = reductionResidual B A V W i + W * A i * V := by
-        simp [reductionResidual]
+          B i = reductionResidual B A V W i + W * A i * V := eq_reductionResidual_add i
       rw [hdecomp, Matrix.add_mul, Matrix.add_mul, hcompressed']
       simp only [Matrix.mul_assoc]
       ac_rfl
@@ -795,8 +794,8 @@ private theorem mul_evalWord_mul_reductionResidual_mul_evalWord_eq_zero_of_bound
       simp
   | cons i q ih =>
       rw [Kraus.evalWord_cons]
-      have hdecomp : B i = reductionResidual B A V W i + W * A i * V := by
-        simp [reductionResidual]
+      have hdecomp : B i = reductionResidual B A V W i + W * A i * V :=
+        eq_reductionResidual_add i
       rw [hdecomp, Matrix.add_mul, Matrix.mul_add]
       have hresidual :
           V * Kraus.evalWord B p * Kraus.evalWord (reductionResidual B A V W) u *
@@ -883,8 +882,8 @@ private theorem mul_evalWord_append_eq_mul_evalWord_of_right_buffer
   | nil => simp
   | cons i c ih =>
       simp only [List.cons_append, Kraus.evalWord_cons]
-      have hdecomp : B i = reductionResidual B A V W i + W * A i * V := by
-        simp [reductionResidual]
+      have hdecomp : B i = reductionResidual B A V W i + W * A i * V :=
+        eq_reductionResidual_add i
       rw [hdecomp, Matrix.add_mul, Matrix.mul_add]
       have hresidual := h.mul_evalWord_mul_reductionResidual_mul_evalWord_eq_zero_of_bound
         hBound [] [i] (c ++ q) (by simp) (by simp at hq ⊢; omega)
@@ -922,8 +921,8 @@ theorem evalWord_mul_reduced_exterior_eq_evalWord_append
       Kraus.evalWord B (p ++ c ++ q) := by
   obtain ⟨i, c, rfl⟩ := List.exists_cons_of_ne_nil hc
   simp only [Kraus.evalWord_cons, Kraus.evalWord_append]
-  have hdecomp : B i = reductionResidual B A V W i + W * A i * V := by
-    simp [reductionResidual]
+  have hdecomp : B i = reductionResidual B A V W i + W * A i * V :=
+    eq_reductionResidual_add i
   rw [hdecomp, Matrix.add_mul, Matrix.mul_add]
   have hresidual := h.evalWord_mul_reductionResidual_mul_evalWord_eq_zero_of_buffers
     hBound p (c ++ q) i hp (by simp at hq ⊢; omega)

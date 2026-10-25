@@ -6,7 +6,8 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.InitialBuffer
 import TNLean.PEPS.AreaLaw.RotatedChainRule
 import TNLean.PEPS.AreaLaw.SafeBoxChildren
-import TNLean.PEPS.AreaLaw.EntropyDimension
+import TNLean.Lattice.EntropyDimension
+import TNLean.PEPS.AreaLaw.TwoFamilies
 import QICLean.Analysis.ScaleRecurrence
 
 /-!
@@ -16,8 +17,14 @@ import QICLean.Analysis.ScaleRecurrence
 domains with gapped ground vectors, all cuts `A`, and all safe rectangles `Q` of size at most
 `r`, at fixed `q, R, J, Δ` and safety parameter `D₀`. Proposition 3.3 of the area-law
 manuscript bounds it by `C r^{1 + e₀}` with `e₀ ∈ (0, 1)`. The constants depend only
-on `q, R, J, Δ` and work for every admissible safety parameter: the entropy decreases
-as `D₀` increases, so the estimate at `D₀ = 2 * R + 11` suffices.
+on `q, R, J, Δ` and work for every natural-number safety parameter `D₀ > 2 R + 10`: the
+entropy decreases as `D₀` increases, so the estimate at `D₀ = 2 * R + 11` suffices.
+
+**Scope restriction (integer safety parameter):** the theorems of this file take `D₀ : ℕ`,
+whereas the source allows every real `D₀ > 2 R + 10`. The real case is the clearance transfer
+`boxEntropy_power_le_of_succ_clearance` and `exists_regionalEntropy_safe_rect_le_boxError`,
+recorded in `docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`, section "Arbitrary real
+clearance".
 
 A safe parent of size at most `M r` is partitioned into at most `M²` children of size at most
 `r`. With `P = 2 C_pad + 1`, color the children by their chunk positions modulo `P`; the
@@ -38,6 +45,9 @@ same lower bound `1/N` on the frequency of the buffer event.
 ## Main results
 
 * `boxEntropy_le_of_scale`: the scale recurrence `eq:initial-box-recursion`.
+* `boxEntropy_le_initialBoxConstant_mul_rpow_of_scaleRecurrence`: Proposition 3.3 at the named
+  constants `initialBoxConstant` and `initialBoxExponent`, built from `initialBoxScale`,
+  `initialBoxRatio` and `initialBoxProb`.
 * `exists_boxEntropy_le_rpow`: Proposition 3.3 (`prop:initial-box`).
 
 ## References
@@ -48,6 +58,8 @@ same lower bound `1/N` on the frequency of the buffer event.
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -376,73 +388,189 @@ theorem boxEntropy_le_of_scale (hq : 1 ≤ q) {Cpad : ℕ} {Cbuf : ℝ} (hCbuf :
       positivity
     positivity
 
-/-- The safe-box estimate at a fixed safety parameter. This auxiliary form follows the
-scale-recurrence argument of Proposition 3.3 (`prop:initial-box`, `02-initial.tex`,
-lines 606–669). The estimate uniform in the safety parameter is stated separately below. -/
-private theorem exists_boxEntropy_le_rpow_fixed (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J)
-    (hΔ : 0 < Δ) (D₀ : ℕ) (hD₀ : 2 * R + 10 < D₀) :
-    ∃ C e₀ : ℝ, 0 < e₀ ∧ e₀ < 1 ∧
-      ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤ C * (r : ℝ) ^ (1 + e₀) := by
-  obtain ⟨Cpad, hCpad, Cbuf, hCbuf, hbuf⟩ := exists_condEntropy_le_initialBuffer q R hq hJ hΔ
-  set p : ℝ := 1 / (2 * (((2 * Cpad + 1) ^ 2 : ℕ) : ℝ))
-  set M : ℕ := 8 * (Cpad + 1)
-  set lam : ℝ := (1 - p / 2) * M ^ 2
-  have hN1 : (1 : ℝ) ≤ ((2 * Cpad + 1) ^ 2 : ℕ) := by
-    exact_mod_cast Nat.one_le_pow _ _ (by omega)
-  have hp0 : 0 < p := by positivity
-  have hp1 : p ≤ 1 / 2 := by
-    simp only [p]; rw [div_le_div_iff₀ (by positivity) two_pos]; linarith
-  have hM : 2 ≤ M := by omega
-  have hC1 : (1 : ℝ) ≤ Cpad := by exact_mod_cast hCpad
-  have hM' : (16 : ℝ) ≤ M := by simp only [M]; push_cast; linarith
-  have hp34 : (3 / 4 : ℝ) ≤ 1 - p / 2 := by linarith
-  have hMlam : (M : ℝ) < lam := by
-    have h1 : (12 : ℝ) ≤ (1 - p / 2) * M := by nlinarith
-    have h2 : (12 : ℝ) * M ≤ (1 - p / 2) * M * M :=
-      mul_le_mul_of_nonneg_right h1 (by positivity)
-    have h3 : lam = (1 - p / 2) * M * M := by simp only [lam]; ring
-    rw [h3]; linarith
-  have hlamM2 : lam < (M : ℝ) ^ 2 := by
-    have : 0 < (M : ℝ) ^ 2 := by positivity
-    simp only [lam]; nlinarith
-  have hF := boxEntropy_mono (q := q) (R := R) (J := J) (Δ := Δ) (D₀ := D₀) hq
-  have hrec : ∀ r, 1 ≤ r → boxEntropy q R J Δ D₀ (M * r) ≤
-      lam * boxEntropy q R J Δ D₀ r + Cbuf * M ^ 2 * r := by
-    intro r hr
-    refine (boxEntropy_le_of_scale hq hCbuf (hbuf D₀ hD₀) M hr).trans ?_
-    have hF0 := boxEntropy_nonneg (q := q) (R := R) (J := J) (Δ := Δ) (D₀ := D₀) r
-    gcongr
-    -- `(1 - p) M² + p · 2 (2 C_pad + 1) M ≤ (1 - p/2) M²` since `2 (2 C_pad + 1) ≤ M/2`
-    have hB : 2 * (2 * (Cpad : ℝ) + 1) * M ≤ (M : ℝ) ^ 2 / 2 := by
-      have : 2 * (2 * (Cpad : ℝ) + 1) ≤ M / 2 := by
-        simp only [M]; push_cast; linarith
-      nlinarith
-    change (1 - p) * M ^ 2 + p * (2 * (2 * Cpad + 1) * M) ≤ lam
-    simp only [lam]
-    nlinarith
-  obtain ⟨C, hC⟩ := Entropy.exists_le_mul_rpow_of_scale_recurrence hF hM hMlam
-    (by positivity) hrec
-  have hexp := Entropy.one_lt_log_div_log_lt_two (by exact_mod_cast hM) hMlam hlamM2
-  refine ⟨C, Real.log lam / Real.log M - 1, by linarith [hexp.1], by linarith [hexp.2],
-    fun r hr ↦ ?_⟩
-  rw [add_sub_cancel]
-  exact hC r hr
+/-! ### The constants of Proposition 3.3 -/
 
+/-- **The frequency of the buffer event** `p = 1/(2 (2 C_pad + 1)²)`, with
+`C_pad = initialPaddingConst q R J Δ`. In the source this is `p₀/2` with
+`p₀ = (2 C_pad + 5)^{-2}`, from a random order of the children; the cyclic color rotations used
+here give `1/(2 C_pad + 1)²` in place of `p₀`. Source: `02-initial.tex`, lines 624–646. -/
+noncomputable def initialBoxProb (q R : ℕ) (J Δ : ℝ) : ℝ :=
+  1 / (2 * (((2 * initialPaddingConst q R J Δ + 1) ^ 2 : ℕ) : ℝ))
+
+/-- **The scale factor** `M = 8 (C_pad + 1)` of the recurrence, with
+`C_pad = initialPaddingConst q R J Δ`. It makes the `2 (2 C_pad + 1) M` noninterior children
+at most `M²/2`. The source takes `M ≥ 16 (C_pad + 2)` for its count `4 (C_pad + 2) M`.
+Source: `02-initial.tex`, lines 614–622 and 651. -/
+noncomputable def initialBoxScale (q R : ℕ) (J Δ : ℝ) : ℕ :=
+  8 * (initialPaddingConst q R J Δ + 1)
+
+/-- **The growth ratio** `λ = (1 - p/2) M²` of the recurrence, with `p = initialBoxProb q R J Δ`
+and `M = initialBoxScale q R J Δ`. It satisfies `M < λ < M²`.
+Source: `02-initial.tex`, lines 651–656. -/
+noncomputable def initialBoxRatio (q R : ℕ) (J Δ : ℝ) : ℝ :=
+  (1 - initialBoxProb q R J Δ / 2) * (initialBoxScale q R J Δ : ℝ) ^ 2
+
+/-- **The initial exponent** `e₀ = log_M λ - 1`, with `M = initialBoxScale q R J Δ` and
+`λ = initialBoxRatio q R J Δ`. Equivalently `1 - e₀ = -log (1 - p/2) / log M`, which is of
+order `p / (2 log M)` with `p = 1/(2 (2 C_pad + 1)²)` and `M = 8 (C_pad + 1)`. Since
+`C_pad ≈ (R + 3) e^{(R+1) Z}` for the padding scale `Z`, and `Z` grows linearly in `J/Δ` once
+`J/Δ` is large, the gain `1 - e₀` is roughly `e^{-2 (R+1) Z}`, exponentially small in `J/Δ`.
+Source: `02-initial.tex`, lines 660–663. -/
+noncomputable def initialBoxExponent (q R : ℕ) (J Δ : ℝ) : ℝ :=
+  Real.log (initialBoxRatio q R J Δ) / Real.log (initialBoxScale q R J Δ) - 1
+
+/-- **The initial constant** `C₀ = C_sc(log q, C_buf M², λ, M)`, where `C_sc` is the constant of
+the power bound from a scale recurrence, evaluated at the bound `log q ≥ F_box(1)`, the
+inhomogeneity `C_buf M²` with `C_buf = initialBufferConst q R J Δ`, the ratio
+`λ = initialBoxRatio q R J Δ` and the scale `M = initialBoxScale q R J Δ`. The QICLean constant
+is `Entropy.scaleRecurrenceConst B K λ M = (B + K/(λ - M)) M^{log_M λ}`, so
+`C₀ = (log q + C_buf M²/(λ - M)) M^{1 + e₀}`. It is a parameter `scaleConst` until TNLean
+pins a QICLean release that contains that definition, after which `scaleConst` is
+`Entropy.scaleRecurrenceConst`. Source: `02-initial.tex`, lines 657–667. -/
+noncomputable def initialBoxConstant (scaleConst : ℝ → ℝ → ℝ → ℕ → ℝ) (q R : ℕ) (J Δ : ℝ) :
+    ℝ :=
+  scaleConst (Real.log q) (initialBufferConst q R J Δ * (initialBoxScale q R J Δ : ℝ) ^ 2)
+    (initialBoxRatio q R J Δ) (initialBoxScale q R J Δ)
+
+/-- `0 < p ≤ 1/2` for the frequency of the buffer event. Source: `02-initial.tex`,
+lines 624–646. -/
+theorem initialBoxProb_pos_and_le_half (q R : ℕ) (J Δ : ℝ) :
+    0 < initialBoxProb q R J Δ ∧ initialBoxProb q R J Δ ≤ 1 / 2 := by
+  have hN1 : (1 : ℝ) ≤ ((2 * initialPaddingConst q R J Δ + 1) ^ 2 : ℕ) := by
+    exact_mod_cast Nat.one_le_pow _ _ (by omega)
+  unfold initialBoxProb
+  exact ⟨by positivity, by rw [div_le_div_iff₀ (by positivity) two_pos]; linarith⟩
+
+/-- The scale factor is at least `16`. Source: `02-initial.tex`, line 651. -/
+theorem sixteen_le_initialBoxScale (q R : ℕ) (J Δ : ℝ) : 16 ≤ initialBoxScale q R J Δ := by
+  have := one_le_initialPaddingConst q R J Δ
+  unfold initialBoxScale; omega
+
+/-- The real scale factor exceeds one, so its logarithm is positive. -/
+theorem one_lt_initialBoxScale (q R : ℕ) (J Δ : ℝ) :
+    (1 : ℝ) < initialBoxScale q R J Δ := by
+  exact_mod_cast (show 1 < initialBoxScale q R J Δ from
+    lt_of_lt_of_le (by norm_num) (sixteen_le_initialBoxScale q R J Δ))
+
+/-- `M < λ < M²` for the scale factor and growth ratio. Source: `02-initial.tex`,
+lines 651–656. -/
+theorem initialBoxScale_lt_initialBoxRatio_and_lt_sq (q R : ℕ) (J Δ : ℝ) :
+    (initialBoxScale q R J Δ : ℝ) < initialBoxRatio q R J Δ ∧
+      initialBoxRatio q R J Δ < (initialBoxScale q R J Δ : ℝ) ^ 2 := by
+  obtain ⟨hp0, hp1⟩ := initialBoxProb_pos_and_le_half q R J Δ
+  set p := initialBoxProb q R J Δ
+  set M := initialBoxScale q R J Δ
+  have hM' : (16 : ℝ) ≤ M := by exact_mod_cast sixteen_le_initialBoxScale q R J Δ
+  have hlam : initialBoxRatio q R J Δ = (1 - p / 2) * M * M := by
+    simp only [initialBoxRatio, p, M]; ring
+  have hp34 : (3 / 4 : ℝ) ≤ 1 - p / 2 := by linarith
+  have h1 : (12 : ℝ) ≤ (1 - p / 2) * M := by nlinarith
+  have hM0 : (0 : ℝ) < M := by linarith
+  rw [hlam]
+  constructor
+  · nlinarith
+  · have : (1 - p / 2) * M < M := by nlinarith
+    nlinarith
+
+/-- `e₀ ∈ (0, 1)`. Source: `02-initial.tex`, lines 660–663. -/
+theorem initialBoxExponent_pos_and_lt_one (q R : ℕ) (J Δ : ℝ) :
+    0 < initialBoxExponent q R J Δ ∧ initialBoxExponent q R J Δ < 1 := by
+  obtain ⟨h1, h2⟩ := initialBoxScale_lt_initialBoxRatio_and_lt_sq q R J Δ
+  have hM := one_lt_initialBoxScale q R J Δ
+  have hexp := Entropy.one_lt_log_div_log_lt_two hM h1 h2
+  unfold initialBoxExponent
+  constructor <;> linarith [hexp.1, hexp.2]
+
+/-- **The scale recurrence at the named constants**:
+`F_box(M r) ≤ λ F_box(r) + C_buf M² r` for `r ≥ 1`, with `M = initialBoxScale q R J Δ`,
+`λ = initialBoxRatio q R J Δ` and `C_buf = initialBufferConst q R J Δ`.
+Source: `02-initial.tex`, lines 629–656. -/
+theorem boxEntropy_le_initialBoxRatio_mul (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (hD₀ : 2 * R + 10 < D₀) {r : ℕ} (hr : 1 ≤ r) :
+    boxEntropy q R J Δ D₀ (initialBoxScale q R J Δ * r) ≤
+      initialBoxRatio q R J Δ * boxEntropy q R J Δ D₀ r +
+        initialBufferConst q R J Δ * (initialBoxScale q R J Δ : ℝ) ^ 2 * r := by
+  obtain ⟨hp0, hp1⟩ := initialBoxProb_pos_and_le_half q R J Δ
+  set Cpad := initialPaddingConst q R J Δ
+  set p := initialBoxProb q R J Δ
+  set M := initialBoxScale q R J Δ
+  refine (boxEntropy_le_of_scale hq (initialBufferConst_nonneg q R hJ hΔ)
+    (fun _ h _ _ hgs _ _ hsafe _ hr _ hQ₀ hpad ↦
+      condEntropy_le_initialBufferConst q R hq hJ hΔ hD₀ h hgs hsafe hr hQ₀ hpad) M hr).trans ?_
+  have hF0 := boxEntropy_nonneg (q := q) (R := R) (J := J) (Δ := Δ) (D₀ := D₀) r
+  gcongr
+  -- `(1 - p) M² + p · 2 (2 C_pad + 1) M ≤ (1 - p/2) M²` since `2 (2 C_pad + 1) ≤ M/2`
+  have hB : 2 * (2 * (Cpad : ℝ) + 1) * M ≤ (M : ℝ) ^ 2 / 2 := by
+    have : 2 * (2 * (Cpad : ℝ) + 1) ≤ M / 2 := by
+      simp only [M, initialBoxScale]; push_cast; linarith
+    nlinarith
+  change (1 - p) * M ^ 2 + p * (2 * (2 * Cpad + 1) * M) ≤ initialBoxRatio q R J Δ
+  simp only [initialBoxRatio]
+  nlinarith
+
+/-- **Proposition 3.3 at the named constants** (`prop:initial-box`, `02-initial.tex`,
+lines 596–669): for every safety parameter `D₀ > 2R + 10` and every `r ≥ 1`,
+`F_box(r) ≤ C₀ r^{1 + e₀}` with `C₀ = initialBoxConstant scaleConst q R J Δ` and
+`e₀ = initialBoxExponent q R J Δ`.
+
+The hypothesis `hscale` is the power bound from a scale recurrence at a named constant
+`scaleConst B K λ M`, for any bound `B ≥ |F 1|`. At `scaleConst = Entropy.scaleRecurrenceConst`,
+`hscale` is `Entropy.le_scaleRecurrenceConst_mul_rpow`, whose exponent
+`Entropy.scaleRecurrenceExponent M λ` is by definition `Real.log λ / Real.log M`; see
+`boxEntropy_le_initialBoxConstant_mul_rpow`. -/
+theorem boxEntropy_le_initialBoxConstant_mul_rpow_of_scaleRecurrence
+    (scaleConst : ℝ → ℝ → ℝ → ℕ → ℝ)
+    (hscale : ∀ {F : ℕ → ℝ} {M : ℕ} {lam K : ℝ}, Monotone F → 2 ≤ M → (M : ℝ) < lam →
+      0 ≤ K → (∀ r, 1 ≤ r → F (M * r) ≤ lam * F r + K * r) → ∀ {B : ℝ}, |F 1| ≤ B →
+        ∀ r : ℕ, 1 ≤ r → F r ≤ scaleConst B K lam M * (r : ℝ) ^ (Real.log lam / Real.log M))
+    (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hD₀ : 2 * R + 10 < D₀) {r : ℕ} (hr : 1 ≤ r) :
+    boxEntropy q R J Δ D₀ r ≤
+      initialBoxConstant scaleConst q R J Δ * (r : ℝ) ^ (1 + initialBoxExponent q R J Δ) := by
+  have hF1 : |boxEntropy q R J Δ D₀ 1| ≤ Real.log q := by
+    rw [abs_of_nonneg (boxEntropy_nonneg 1)]
+    simpa using boxEntropy_le_sq_mul_log (R := R) (J := J) (Δ := Δ) (D₀ := D₀) hq 1
+  have hK : 0 ≤ initialBufferConst q R J Δ * (initialBoxScale q R J Δ : ℝ) ^ 2 :=
+    mul_nonneg (initialBufferConst_nonneg q R hJ hΔ) (sq_nonneg _)
+  have h := hscale (boxEntropy_mono hq)
+    (le_trans (by norm_num) (sixteen_le_initialBoxScale q R J Δ))
+    (initialBoxScale_lt_initialBoxRatio_and_lt_sq q R J Δ).1 hK
+    (fun _ hr ↦ boxEntropy_le_initialBoxRatio_mul hq hJ hΔ hD₀ hr) hF1 r hr
+  rwa [initialBoxExponent, add_sub_cancel]
+
+/-- **The initial constant at the QICLean scale-recurrence constant**:
+`C₀ = initialBoxConstant Entropy.scaleRecurrenceConst q R J Δ
+= (log q + C_buf M² / (λ - M)) M^{log_M λ}`, with `C_buf = initialBufferConst q R J Δ`,
+`M = initialBoxScale q R J Δ` and `λ = initialBoxRatio q R J Δ`. It depends only on
+`q, R, J, Δ`. Source: proof of Proposition 3.3, `02-initial.tex`, lines 657–667. -/
+noncomputable def initialBoxConstantExplicit (q R : ℕ) (J Δ : ℝ) : ℝ :=
+  initialBoxConstant Entropy.scaleRecurrenceConst q R J Δ
+
+/-- **Proposition 3.3 at the named constants** (`prop:initial-box`, `02-initial.tex`,
+lines 596–669): for every safety parameter `D₀ > 2R + 10` and every `r ≥ 1`,
+`F_box(r) ≤ C₀ r^{1 + e₀}` with `C₀ = initialBoxConstantExplicit q R J Δ` and
+`e₀ = initialBoxExponent q R J Δ`. -/
+theorem boxEntropy_le_initialBoxConstant_mul_rpow (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (hD₀ : 2 * R + 10 < D₀) {r : ℕ} (hr : 1 ≤ r) :
+    boxEntropy q R J Δ D₀ r ≤
+      initialBoxConstantExplicit q R J Δ * (r : ℝ) ^ (1 + initialBoxExponent q R J Δ) :=
+  boxEntropy_le_initialBoxConstant_mul_rpow_of_scaleRecurrence Entropy.scaleRecurrenceConst
+    (fun hF hM hlam hK hrec _ hB s hs =>
+      Entropy.le_scaleRecurrenceConst_mul_rpow hF hM hlam hK hrec hB s hs) hq hJ hΔ hD₀ hr
 
 /-- **Proposition 3.3: the initial safe-box estimate** (area-law manuscript,
 `prop:initial-box`, `02-initial.tex`, lines 596–604). For local dimension `q ≥ 1`, range `R`,
 term norm bound `J ≥ 0` and gap `Δ > 0`, there are constants `C` and `e₀ ∈ (0, 1)`,
 depending only on `q, R, J, Δ`, such that for every safety parameter `D₀ > 2R + 10`
-one has `F_box(r) ≤ C r^{1 + e₀}` for every `r ≥ 1`. -/
+one has `F_box(r) ≤ C r^{1 + e₀}` for every `r ≥ 1`. The constants are
+`C = initialBoxConstantExplicit q R J Δ` and `e₀ = initialBoxExponent q R J Δ`, by the scale
+recurrence of the proof (lines 606–669). -/
 theorem exists_boxEntropy_le_rpow (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J)
     (hΔ : 0 < Δ) :
     ∃ C e₀ : ℝ, 0 < e₀ ∧ e₀ < 1 ∧
       ∀ D₀ : ℕ, 2 * R + 10 < D₀ →
         ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤ C * (r : ℝ) ^ (1 + e₀) := by
-  obtain ⟨C, e₀, he₀, he₀', hbound⟩ :=
-    exists_boxEntropy_le_rpow_fixed q R hq hJ hΔ (2 * R + 11) (by omega)
-  refine ⟨C, e₀, he₀, he₀', fun D₀ hD₀ r hr ↦ ?_⟩
-  exact (boxEntropy_antitone (R := R) (J := J) (Δ := Δ) hq r
-    (show 2 * R + 11 ≤ D₀ by omega)).trans (hbound r hr)
+  obtain ⟨he₀, he₀'⟩ := initialBoxExponent_pos_and_lt_one q R J Δ
+  exact ⟨initialBoxConstantExplicit q R J Δ, initialBoxExponent q R J Δ, he₀, he₀',
+    fun _ hD₀ _ hr ↦ boxEntropy_le_initialBoxConstant_mul_rpow hq hJ hΔ hD₀ hr⟩
 
 end TNLean.PEPS.AreaLaw

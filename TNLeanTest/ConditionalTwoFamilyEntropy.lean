@@ -9,6 +9,8 @@ import Mathlib.Tactic.NormNum
 
 /-! Labelled conditional-family regressions with nonempty external systems. -/
 
+open TNLean.Lattice
+
 open scoped BigOperators
 open TNLean.PEPS.AreaLaw
 open TNLean.PEPS.AreaLaw.Geometry
