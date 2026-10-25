@@ -94,7 +94,8 @@ by the momenta of the ground states.
     \lean{TNLean.Lattice.momentumSector}
     \leanok
     \uses{def:hastings_site_permutation}
-    For a character $\chi$ of $G$, a group homomorphism $G\to\mathbb{C}$, the
+    For a character $\chi$ of $G$, a homomorphism from $G$ to the multiplicative
+    group $\mathbb{C}^\times$, the
     momentum sector of $\chi$ is the set of vectors $v$ in the eigenspace of $H$
     for $E_0$ with $P_gv=\chi(g)v$ for every $g\in G$. For the ground states of
     momentum $\vec k_a$ in \cite[lines 1613--1618]{Hastings2006Solving},
@@ -135,7 +136,7 @@ by the momenta of the ground states.
     \lean{TNLean.Lattice.mem_supercell_iff,
         TNLean.Lattice.sitePermMatrix_mulVec_eq_of_mem_supercell}
     \leanok
-    \uses{def:hastings_supercell_of_momenta}
+    \uses{def:hastings_supercell_of_momenta,def:hastings_site_invariant}
     Let $G$ be abelian and $H$ invariant. Then $g$ lies in the supercell if and
     only if $P_gv=v$ for every $v$ in the eigenspace of $H$ for $E_0$. So the
     supercell is a subgroup $S$ with the property assumed above, the
