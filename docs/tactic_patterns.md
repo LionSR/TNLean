@@ -9016,6 +9016,13 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** Two occurrences; below the promotion threshold. A conversion
   through rounded radii would lengthen the existing chain proof.
 
+### Entropy of finite unions from submodularity — candidate (2026-10-21)
+
+- **Pattern:** Submodularity and nonnegative reduced-state entropy give binary union subadditivity; the empty region has entropy zero.
+- **Seen:** `MPS/AreaLaw/IntervalNeighborhoodEntropy.lean` and `MPS/AreaLaw/DomainIntervalNeighborhoodEntropy.lean`.
+- **Existing abstraction:** Mathlib's `Finset.apply_sup_le_sum` already extends a binary inequality to a finite union and is used in the domain proof.
+- **Notes:** The intervals may overlap. Entropy monotonicity is not used. If a further occurrence appears, extract the site-generic entropy statement and replace the remaining direct finite-family argument.
+
 ### Transport of a tensor factor through a layout equality — candidate (2026-10-18)
 
 - **Pattern:** An equality of the second tensor-factor spaces and a heterogeneous

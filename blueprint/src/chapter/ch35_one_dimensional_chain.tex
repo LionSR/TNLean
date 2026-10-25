@@ -1814,6 +1814,49 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $a=b=0$.
 \end{proof}
 
+\begin{theorem}[Entropy of intrinsic neighborhoods of interval unions]
+    \label{thm:domain_interval_neighborhood_entropy}
+    \lean{TNLean.MPS.AreaLaw.regionEntropy_domainNeighborhood_biUnion_intervals_le,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.regionEntropy_neighborhood_biUnion_intervals_le}
+    \leanok
+    \uses{def:domain_model}
+    Let $\Omega$ be a normalized vector on the finite domain of
+    Definition~\ref{def:domain_model}. Suppose that every relative interval has
+    entropy at most $c$. For any finite index set $s$, relative intervals
+    $I_\alpha$ and $m\in\mathbb N$,
+    \begin{align}
+        S_\Omega\left(N_m\left(\bigcup_{\alpha\in s}I_\alpha\right)\right)
+         & \le |s|c.\notag
+    \end{align}
+    The intervals may overlap or be empty, and $s$ may be empty.
+    If $\Omega$ is the original gapped ground vector of an admissible domain
+    Hamiltonian, with $q\ge1$, $J\ge0$ and $\Delta>0$, one may take
+    $c=C_{\mathrm{int}}(q,R,J,\Delta)$.
+    This is the interval-neighborhood entropy estimate used in
+    \cite[Part~IIa]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:domain_interval_neighborhood,thm:chain_area_law,
+        lem:zero_entropy_flip,lem:chain_entropy_inequalities,def:domain_model}
+    Submodularity and nonnegativity of reduced-state entropy give
+    $S_\Omega(X\cup Y)\le S_\Omega(X)+S_\Omega(Y)$.
+    Since $S_\Omega(\varnothing)=0$, finite subadditivity gives
+    \begin{align}
+        S_\Omega\left(\bigcup_{\alpha\in s}N_m(I_\alpha)\right)
+         & \le\sum_{\alpha\in s}S_\Omega(N_m(I_\alpha))\le |s|c.\notag
+    \end{align}
+    Each $N_m(I_\alpha)$ is itself a relative interval by
+    Theorem~\ref{thm:domain_interval_neighborhood}, and
+    \begin{align}
+        N_m\left(\bigcup_{\alpha\in s}I_\alpha\right)
+         & =\bigcup_{\alpha\in s}N_m(I_\alpha).\notag
+    \end{align}
+    For a domain Hamiltonian, extend its terms by zero to the
+    chain of increasing labels. Its operator and original ground vector
+    are unchanged, so Theorem~\ref{thm:chain_area_law} supplies the interval
+    entropy bound.
+\end{proof}
+
 \begin{theorem}[Connected components of an induced integer graph]
     \label{thm:chain_integer_domain_components}
     \lean{
