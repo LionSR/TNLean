@@ -18,7 +18,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{local-correction}{resolved}
 
 Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
 \href{https://arxiv.org/abs/cond-mat/0508554v3}{arXiv:cond-mat/0508554v3},
@@ -54,17 +54,19 @@ $\langle v,PM_iv\rangle=\langle v,M_iv\rangle$,
 which is eq.~\texttt{low} up to $o(i)$ (lines~476--491); eq.~\texttt{facld}
 bounds the first term.
 
-\section{The restriction}
+\section{Status}
 
 Every dimension $n$ is treated, by the source's iteration over further
-compressions with any number of levels (the last two sections), ending when
-every pair of basis vectors is separated, as the source's iteration ends. The basis is taken as given, as the
-source chooses it, and the $j$ maximizing $\delta\lambda_j$ is not chosen,
-since the bounds hold for every $j$. One restriction remains: the
-formalization leaves eq.~\texttt{oibu} as
-$\sum_io(i)\le\sum_i\lVert[PM_iP,PM_jP]\rVert/\delta\lambda_j$: the
-source sums the decaying commutator bound over $i$ only to order of magnitude,
-and the resulting constant depends on the growth of the graph.
+compressions with any number of levels (the last three sections), ending when
+every pair of basis vectors is separated, as the source's iteration ends. The
+basis is taken as given, as the source chooses it, and the $j$ maximizing
+$\delta\lambda_j$ is not chosen, since the bounds hold for every $j$. The sum of
+eq.~\texttt{oibu} is bounded independently of the size of the system, for the
+iteration with any number of levels. Two differences from the source remain,
+both local corrections: the cross terms of the iteration, which the sketch omits,
+are kept; and the constant in eq.~\texttt{oibu} is explicit but does not have the
+printed form $O(J^2/(c_1l\Delta E\,\delta\lambda_j))$, which is not established
+here.
 
 \section{A compression with simple spectrum}
 
@@ -151,9 +153,55 @@ the compression of $M_k$ to a class with that of $B$ differs from $[M_k,B]$ by
 the cross terms of~\eqref{eq:hastings05_two_dim_ground_basis_iteration}, which
 the sketch omits and which are kept here.
 
-Elimination plan for the remaining restriction: sum the commutator bound over
-$i$ with the growth constants of the graph, giving eq.~\texttt{oibu}
-explicitly.
+
+\section{The summed bound, eq.~\texttt{oibu}}
+
+The compression $PM_iP$ of a filtered term equals $Ph_iP$ for every $q\ge0$, so
+eq.~\texttt{blecm} may be applied to each pair $(i,j)$ with its own time
+window. If $X_i$ is disjoint from the sites within graph distance $l$ of $X_j$,
+the choice $T=l/(4v)$ and $q=T\Delta E$, with $v=2v_R|b_0|e^{2R}+1$, gives
+\begin{align}
+  \lVert[Ph_jP,Ph_iP]\rVert\le C\lVert h_j\rVert\,\lVert h_i\rVert\,e^{-\gamma l},
+  \qquad \gamma=\min\Bigl(\frac14,\frac{\Delta E}{8v}\Bigr),
+  \label{eq:hastings05_two_dim_ground_basis_blecm_exp}
+\end{align}
+with an explicit constant $C$; for anchors at distance $D$ the separation is
+at least $D-2R-1$. Grouping the terms by their anchors, the norm budget $b_0$
+of each site and the polynomial growth $K_g(r+1)^k$ of the graph spheres give
+\begin{align}
+  \sum_i\lVert[Ph_jP,Ph_iP]\rVert
+  \le Ce^{\gamma(2R+1)}\,|b_0|\,K_g\,
+    \frac{k!\,(2/\gamma)^ke^{\gamma/2}}{1-e^{-\gamma/2}}\,\lVert h_j\rVert,
+  \label{eq:hastings05_two_dim_ground_basis_oibu}
+\end{align}
+independently of the number of sites, so that $\sum_io(i)$ is at most $(n-1)/\delta$
+times this in an eigenbasis of $PM_jP$ with spacing at least $\delta$.
+For the iteration, the bound $\beta_\ell$ of~\eqref{eq:hastings05_two_dim_ground_basis_levels}
+is homogeneous of degree one in $K_B$. Taking for $K_B(i)$ the sum over the
+levels $\ell<L$ of $\lVert[A_\ell,Ph_iP]\rVert$, with $A_\ell=Ph_{j_\ell}P$ and
+$K=2J^2$ for terms of norm at most $J$, gives
+\begin{align}
+  \sum_io(i)\le(n-1)\,\beta_{L-1}(1)\sum_{\ell<L}Ce^{\gamma(2R+1)}\,|b_0|\,K_g\,
+    \frac{k!\,(2/\gamma)^ke^{\gamma/2}}{1-e^{-\gamma/2}}\,\lVert h_{j_\ell}\rVert,
+  \label{eq:hastings05_two_dim_ground_basis_oibu_levels}
+\end{align}
+again independently of the number of sites, for a ground space of any
+dimension.\footnote{\leanid{TNLean.Lattice.norm_groundCompression_commutator_le_exp},
+    \leanid{TNLean.Lattice.sum_norm_groundCompression_commutator_le},
+    \leanid{TNLean.Lattice.sum_norm_offDiagonalPartFamily_le_oibu} and
+    \leanid{TNLean.Lattice.sum_norm_offDiagonalPartFamily_le_oibu_levels} in
+    \doclink{TNLean/Lattice/LowEnergyCommutatorSum};
+    \leanid{TNLean.Lattice.levelBoundB_eq_mul} and
+    \leanid{TNLean.Lattice.sum_norm_offDiagonalPartFamily_le_levelBoundB} in
+    \doclink{TNLean/Lattice/LowEnergyBasisIteration}.}
+The size independence of the source's eq.~\texttt{oibu} is thus proved. Its
+printed dependence $O(J^2/(c_1l\Delta E\,\delta\lambda_j))$ is not established:
+the constant here contains neither $c_1$ nor $l$, and since
+$k!\,(2/\gamma)^k/(1-e^{-\gamma/2})$ grows like $\gamma^{-(k+1)}$ with
+$\gamma=\Delta E/(8v)$ for small gaps, it scales like $(v/\Delta E)^{k+1}$.
+On a chain, where the spheres have bounded size and $k=0$, this is the source's
+$1/\Delta E$; on a lattice of dimension $D$, where $k=D-1$, it is
+$(v/\Delta E)^D$.
 
 \section{Formalization}
 

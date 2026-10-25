@@ -40,6 +40,8 @@ bound is written out (`norm_inner_le_of_two_levels`).
 * `norm_inner_le_of_mem_labelClass`: the bound at the first level separating two basis vectors.
 * `levelBoundA`, `levelBoundB`, `norm_inner_A_le_levelBoundA`, `norm_inner_le_levelBoundB`,
   `norm_offDiagonalPartFamily_le_levelBoundB`: every level, by induction.
+* `levelBoundB_eq_mul`, `sum_norm_offDiagonalPartFamily_le_levelBoundB`: the bound is linear in
+  `K_B`, and the sum of the off-diagonal parts over a family.
 * `norm_inner_le_of_two_levels`, `norm_offDiagonalPartFamily_le_of_two_levels`: two levels, with
   the bound written out.
 
@@ -372,6 +374,17 @@ theorem levelBoundB_mono (K KB : ℝ) {m ℓ : ℕ} (h : m ≤ ℓ) :
   | refl => exact le_rfl
   | step _ ih => exact ih.trans (le_max_left _ _)
 
+/-- `levelBoundB` is homogeneous of degree one in `K_B`: `β_ℓ(K_B) = K_B β_ℓ(1)` for
+`K_B ≥ 0`. -/
+theorem levelBoundB_eq_mul {K KB : ℝ} (hKB : 0 ≤ KB) :
+    ∀ ℓ, levelBoundB n r K KB ℓ = KB * levelBoundB n r K 1 ℓ
+  | 0 => by simp only [levelBoundB]; ring
+  | ℓ + 1 => by
+      simp only [levelBoundB]
+      rw [levelBoundB_eq_mul hKB ℓ, mul_max_of_nonneg _ _ hKB]
+      congr 1
+      ring
+
 section Assembly
 
 variable {v : Fin n → E} (hv : Orthonormal 𝕜 v)
@@ -475,6 +488,25 @@ theorem norm_offDiagonalPartFamily_le_levelBoundB [NeZero n] {K KB : ℝ} (hK : 
       exact ⟨m, hm.le, hbm, hrm⟩
   exact (norm_inner_le_levelBoundB A r hv hA hdiag hK hKB hKA B hB hKBB m a b hbm hrm).trans
     (levelBoundB_mono r K KB (by omega))
+
+/-- **The summed off-diagonal parts after `L` levels.** For a finite family `B i` whose
+commutators with every compression are at most `K_B i`, the off-diagonal parts satisfy
+`∑ᵢ o(B i) ≤ (n - 1) β_{L-1}(1) ∑ᵢ K_B i`, since `β` is homogeneous in `K_B`. With
+`B i = P M_i P` this is the sum behind eq. `oibu`, Hastings, arXiv:cond-mat/0508554v3,
+`proj3new.tex`, lines 1689–1705. -/
+theorem sum_norm_offDiagonalPartFamily_le_levelBoundB [NeZero n] {K : ℝ} (hK : 0 ≤ K)
+    (hKA : ∀ ℓ m, ‖A ℓ * A m - A m * A ℓ‖ ≤ K) {ι : Type*} (t : Finset ι)
+    (B : ι → E →L[𝕜] E) (hB : ∀ i b, B i (v b) = ∑ c, ⟪v c, B i (v b)⟫_𝕜 • v c)
+    (KB : ι → ℝ) (hKB0 : ∀ i, 0 ≤ KB i) (hKBB : ∀ i ℓ, ‖A ℓ * B i - B i * A ℓ‖ ≤ KB i) {L : ℕ}
+    (hsep : ∀ a b, a ≠ b → ∃ ℓ < L, r ℓ a ≠ r ℓ b) :
+    ∑ i ∈ t, ‖offDiagonalPartFamily v (B i)‖ ≤
+      (n - 1 : ℕ) * levelBoundB n r K 1 (L - 1) * ∑ i ∈ t, KB i := by
+  rw [Finset.mul_sum]
+  refine Finset.sum_le_sum fun i _ => ?_
+  have h := norm_offDiagonalPartFamily_le_levelBoundB A r hv hA hdiag hK (hKB0 i) hKA (B i)
+    (hB i) (hKBB i) hsep
+  rw [levelBoundB_eq_mul r (hKB0 i)] at h
+  linarith [h]
 
 end Assembly
 

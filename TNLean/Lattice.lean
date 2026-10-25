@@ -31,6 +31,7 @@ import TNLean.Lattice.LowEnergyBasisIteration
 import TNLean.Lattice.LowEnergyBasisSimpleSpectrum
 import TNLean.Lattice.LowEnergyCommutator
 import TNLean.Lattice.LowEnergyCommutatorExample
+import TNLean.Lattice.LowEnergyCommutatorSum
 import TNLean.Lattice.MarginalTails
 import TNLean.Lattice.PartyCircuit
 import TNLean.Lattice.PhysicalBufferCoordinates

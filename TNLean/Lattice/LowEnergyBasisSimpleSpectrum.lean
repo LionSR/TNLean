@@ -39,9 +39,8 @@ These results are the one-level case of the source's iteration (lines 1695–170
 lower bound on the eigenvalue spacing; repeated eigenvalues of `M_j`, resolved by further
 compressions `M_k`, are treated in `LowEnergyBasisIteration.lean`.
 
-**Scope restriction (summed bound):** the summation of the decaying commutator bound over `i`
-into eq. `oibu`, which the source states only to order of magnitude, is left as the sum of the
-commutators. Documented in `docs/paper-gaps/hastings05_two_dim_ground_basis.tex`.
+The summation of the decaying commutator bound over `i` into eq. `oibu` is carried out in
+`LowEnergyCommutatorSum.lean`.
 -/
 
 open scoped InnerProductSpace
