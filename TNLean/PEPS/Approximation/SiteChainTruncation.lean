@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.GroupTruncation
+import TNLean.Lattice.Compression.GroupTruncation
 import TNLean.PEPS.Approximation.SiteChainNetwork
 
 /-!
@@ -47,7 +47,7 @@ noncomputable section
 
 namespace TNLean.PEPS.SiteChain
 
-open EncodedFrame WholeGroup
+open EncodedFrame TNLean.Lattice.WholeGroup
 
 variable {ι : Type*} {q : ℕ} [NeZero q] {n : ℕ} (st : Fin n → Step ι q)
 

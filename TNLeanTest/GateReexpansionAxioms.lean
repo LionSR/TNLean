@@ -3,14 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.GateReexpansion
+import TNLean.Lattice.Compression.GateReexpansion
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
 /-! # Axiom checks for changing the monomial lists of a fixed chronology -/
 
 set_option linter.hashCommand false
-open TNLean.PEPS.PairEffect.EffectCircuit
+open TNLean.Lattice.PartyCircuit.EffectCircuit
 
 run_cmd do
   let declarations := #[``GateLists, ``reexpand, ``reexpandGateMaps,

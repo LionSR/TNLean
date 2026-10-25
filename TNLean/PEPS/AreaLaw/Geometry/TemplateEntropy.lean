@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.TemplateLayers
-import TNLean.PEPS.AreaLaw.EntropyDimension
+import TNLean.Lattice.EntropyDimension
+import TNLean.Lattice.RegionEntropyInequalities
+import TNLean.PEPS.AreaLaw.TwoFamilies
 
 /-!
 # Entropy cost of a partial template depth row
@@ -22,6 +24,8 @@ at `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- Adding a disjoint region changes entropy by at most its entropy.
@@ -32,21 +36,9 @@ theorem abs_regionalEntropy_union_sub_le (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (hRB : Disjoint R B) :
     |regionalEntropy Λ q Ω (R ∪ B) - regionalEntropy Λ q Ω R| ≤
       regionalEntropy Λ q Ω B := by
-  classical
-  simp only [regionalEntropy_eq_finiteProduct]
-  let β := fun _ : Site Λ ↦ Fin q
-  have hu := FiniteProduct.entropy_union_le β Ω hΩ R B hRB
-  have hd : Disjoint (R ∪ B)ᶜ B := by
-    apply Finset.disjoint_left.mpr
-    intro x hx hb
-    exact Finset.mem_compl.mp hx (Finset.mem_union_right R hb)
-  have he : (R ∪ B)ᶜ ∪ B = Rᶜ := by
-    ext x
-    have hn : x ∈ R → x ∉ B := fun hx ↦ Finset.disjoint_left.mp hRB hx
-    simp only [Finset.mem_union, Finset.mem_compl]
-    tauto
-  have hl := FiniteProduct.entropy_union_le β Ω hΩ (R ∪ B)ᶜ B hd
-  rw [he, FiniteProduct.entropy_compl, FiniteProduct.entropy_compl] at hl
+  simp only [regionalEntropy_eq_regionEntropy]
+  have hu := regionEntropy_union_le hΩ hRB
+  have hl := regionEntropy_le_union_add hΩ hRB
   exact abs_le.mpr ⟨by linarith, by linarith⟩
 
 /-- Adding the sites of a region `Y` disjoint from `X` to the actual sites of

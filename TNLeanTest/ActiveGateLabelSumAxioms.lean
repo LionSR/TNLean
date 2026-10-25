@@ -3,14 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.ActiveGateLabelSum
+import TNLean.Lattice.Compression.ActiveGateLabelSum
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
 /-! # Axiom check for label sums on the universal active-gate set -/
 
 set_option linter.hashCommand false
-open TNLean.PEPS.Approximation.DistributedOperatorContraction
+open TNLean.Lattice.Compression.DistributedOperatorContraction
 
 run_cmd do
   let decl := ``sum_eq_sum_gateLabels_univ

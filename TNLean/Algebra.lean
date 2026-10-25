@@ -51,10 +51,12 @@ import TNLean.Algebra.EuclideanFiberwiseMap
 import TNLean.Algebra.EuclideanFiberwiseProjection
 import TNLean.Algebra.EventuallyConstantCycleWeights
 import TNLean.Algebra.ExpectationOverlap
+import TNLean.Algebra.ExplicitThresholds
 import TNLean.Algebra.ExponentialSumWindow
 import TNLean.Algebra.FinCyclicInduction
 import TNLean.Algebra.FinKronecker
 import TNLean.Algebra.FinOrderedProduct
+import TNLean.Algebra.FinSpanOfFinrank
 import TNLean.Algebra.FinStepOrbit
 import TNLean.Algebra.FinSumPermutation
 import TNLean.Algebra.FinTupleEquiv
@@ -106,6 +108,7 @@ import TNLean.Algebra.MatrixDensitySum
 import TNLean.Algebra.MatrixEntryNorm
 import TNLean.Algebra.MatrixFixedSection
 import TNLean.Algebra.MatrixGramLeftInverse
+import TNLean.Algebra.MatrixHermitianSum
 import TNLean.Algebra.MatrixIdempotentFactorization
 import TNLean.Algebra.MatrixInvolutionConjugation
 import TNLean.Algebra.MatrixKroneckerContraction
@@ -135,6 +138,7 @@ import TNLean.Algebra.OrderedIdempotentTracePerturbation
 import TNLean.Algebra.OrthogonalKernelGap
 import TNLean.Algebra.OrthogonalResolution
 import TNLean.Algebra.OrthogonalSymplecticKroneckerDeterminant
+import TNLean.Algebra.PathGraphDistance
 import TNLean.Algebra.PermutationMatrixCommutation
 import TNLean.Algebra.PermutationMatrixUnitary
 import TNLean.Algebra.PiMatrixRepresentation
@@ -193,9 +197,12 @@ import TNLean.Algebra.SwapMatrix
 import TNLean.Algebra.SymmetryParity
 import TNLean.Algebra.SymplecticOrthogonalFour
 import TNLean.Algebra.TailPowerSumUniqueness
+import TNLean.Algebra.TailRadiusWeights
 import TNLean.Algebra.TensorProductContraction
 import TNLean.Algebra.TensorProductRegrouping
 import TNLean.Algebra.ThreeOperatorPerturbation
+import TNLean.Algebra.ToEuclideanCLM
+import TNLean.Algebra.ToEuclideanLinApply
 import TNLean.Algebra.TraceInvariantSubmodule
 import TNLean.Algebra.TranslatedCharacterOrthogonality
 import TNLean.Algebra.TwistedRegularProjective

@@ -146,7 +146,8 @@ point.
 
 \begin{theorem}[Retained regions have lattice points in their births]
     \label{thm:area_law_retained_birth_lattice_point}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.repairStage_exists_integerPoint_mem_birth,
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairStage_birth_oldInclusion,
+        TNLean.PEPS.AreaLaw.Geometry.repairStage_exists_integerPoint_mem_birth,
         TNLean.PEPS.AreaLaw.Geometry.repairStage_exists_integerPoint_mem_birth_of_oldInclusion,
         TNLean.PEPS.AreaLaw.Geometry.repairStage_retained_exists_integerPoint_mem_birth}
     \leanok
@@ -161,8 +162,7 @@ point.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:area_law_repair_retention_identities,
-        thm:area_law_repair_current_birth_containment}
+    \uses{thm:area_law_repair_current_birth_containment}
     Each step keeps the births of old identifiers, so the birth at
     generation $j'$ is the birth at generation $j$. A point of $A$ in the
     current region is a lattice point, and the current region lies in the

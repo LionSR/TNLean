@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.SelectiveSourceFactorization
+import TNLean.Lattice.Compression.SelectiveSourceFactorization
 
 /-!
 # Selective factorization of the original sources of a composition
@@ -25,16 +25,17 @@ reused.
 noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 variable {P : Type}
-namespace SourceInventory
+namespace Lattice.PartyCircuit.SourceInventory
 
 /-- Enumerating the entries of an inventory recovers the original source records.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 246–251. -/
 private theorem ofSlots_actual (R : SourceInventory P) :
     ofSlots R (fun i ↦ (R.get i).leftSpace) (fun i ↦ (R.get i).rightSpace)
-      (fun i ↦ (R.get i).vector) = R := by
-  exact List.ofFn_get R
+      (fun i ↦ (R.get i).vector) = R :=
+  List.ofFn_get R
 
 /-- The slots of the original sources have precisely their original register layout.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 246–251. -/
@@ -58,10 +59,10 @@ private theorem prepareSlots_actual (R : SourceInventory P) (ℓ : Layout P) :
     cases h
     rfl
   exact hc _ (ofSlots_actual R) _ _ _
-end SourceInventory
+end Lattice.PartyCircuit.SourceInventory
 
-namespace Word
-open SourceInventory
+namespace Lattice.PartyCircuit.Word
+open TNLean.Lattice.PartyCircuit.SourceInventory
 
 /-- Preparing the original ordered source list recovers an allowed composition
 through an allowed composition containing no pair sources.
@@ -182,5 +183,5 @@ theorem exists_selective_partition_of_word (f : P → Bool) {ℓ ℓ' : Layout P
     (fun i ↦ (w.sources.get i).vector)
     (fun i ↦ isNormalized_sources w hw (w.sources.get i) (List.get_mem w.sources i))
     free hmask ℓ v hv hs w.eval he
-end Word
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit.Word
+end TNLean

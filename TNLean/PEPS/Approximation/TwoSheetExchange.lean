@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.SheetSwapCorrection
+import TNLean.Lattice.Sheet.FrontChanges
+import TNLean.PEPS.Approximation.HomogeneousOwnership
 
 /-!
 # Exchanging assignments between two sheets
@@ -18,7 +19,7 @@ buffer correction `D_U = (V^{⊗2})ᴴ F_{B_T} V^{⊗2}` on the two copies of `U
 error at most `4 L^{-30}`.
 
 The swaps `F_S` of the two sheets and the buffer correction `D_U` are constructed in
-`TNLean.PEPS.Approximation.SheetSwapCorrection`.
+`TNLean.Lattice.Sheet.SwapCorrection`.
 
 ## Main definitions
 
@@ -71,10 +72,15 @@ the manuscript; no upstream Lean proof text was reused.
 open Matrix QuantumCircuit
 open EuclideanSpace (vecKron)
 open scoped BigOperators Kronecker Matrix.Norms.L2Operator
+open TNLean.Lattice (apply_eq_submatrix_apply commute_sheetSwapOp_kronecker
+  exists_kronecker_one_of_mem_supportedOperators exists_one_kronecker_of_mem_supportedOperators
+  mul_submatrix_sheetSplit norm_sheetSwapOp_le_one sheetSplit sheetSplit_sheetSwap_fst
+  sheetSplit_sheetSwap_snd sheetSwap sheetSwapOp sheetSwapOp_mul_sheetSwapOp sheetSwap_symm)
 
 noncomputable section
 
 namespace TNLean.PEPS.EncodedFrame
+open TNLean.Lattice.Sheet
 
 /-! ### Exchange data -/
 
@@ -161,9 +167,7 @@ theorem liftTags_mul_kronecker [NeZero q] {l₁ l₂ : List (Hole pos q Party)}
     ((ι → Fin q) × (ι → Fin q)) ℂ := fun t => rawProd l₁ t.1 ⊗ₖ rawProd l₂ t.2
   have hS : ((1 : Matrix (TagSpace l₁ × TagSpace l₂) (TagSpace l₁ × TagSpace l₂) ℂ) ⊗ₖ G) *
       stack S = stack S * G := one_kronecker_mul_stack fun t => hG t.1 t.2
-  rw [hK, liftTags]
-  rw [submatrix_mul_equiv]
-  rw [hS]
+  rw [hK, liftTags, submatrix_mul_equiv, hS]
   conv_rhs => rw [← submatrix_id_id G, ← Equiv.coe_refl, submatrix_mul_equiv]
 
 namespace TwoSheetExchange
@@ -484,19 +488,8 @@ theorem exchange [NeZero q] {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖�
       act (X.newFrame₁.encoder ⊗ₖ X.newFrame₂.encoder) (vecKron Ω Ω) :=
     (act_kronecker_vecKron _ _ _ _).symm
   rw [hin, hout, ← act_mul, X.exchangeOp_mul_encoder P σ, act_mul, ← act_sub_right]
-  refine (norm_act_le_of_norm_le_one hKout _).trans ?_
-  rw [sheetSwapOp_eq_submatrix h, sheetBufferCorrection, submatrix_mul_equiv,
-    norm_act_submatrix_sub]
-  set ω : EuclideanSpace ℂ _ := WithLp.toLp 2 (splitVec h Ω)
-  have hω : (WithLp.toLp 2 (⇑(vecKron Ω Ω) ∘ (threeSplit₂ h).symm) : EuclideanSpace ℂ _) =
-      vecKron ω ω := rfl
-  have hω1 : ‖ω‖ = 1 :=
-    norm_toLp_eq_one_of_star_dotProduct (star_splitVec_dotProduct_splitVec h hΩ)
-  rw [hω]
-  refine (norm_act_bufferCorrection_mul_tSwap_sub_le σ.isIsometry σ.star_s σ.star_s' hω1).trans ?_
-  have he : ‖act ((1 : Matrix _ _ ℂ) ⊗ₖ σ.V) ω - WithLp.toLp 2 (tensorPurification σ.s σ.s')‖ =
-      σ.error h Ω := rfl
-  rw [he]
+  refine (norm_act_le_of_norm_le_one hKout _).trans
+    ((norm_act_sheetBufferCorrection_mul_sheetSwapOp_sub_le h σ hΩ).trans ?_)
   linarith
 
 /-! ### Frames with holes in any order -/

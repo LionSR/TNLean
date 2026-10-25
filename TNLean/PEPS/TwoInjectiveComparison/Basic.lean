@@ -668,6 +668,5 @@ theorem exists_bondGauge_of_fullContraction
     have := hg2 ν (η₂, σ₂)
     simpa using this
 
-
 end PEPS
 end TNLean

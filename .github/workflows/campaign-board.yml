@@ -1,12 +1,16 @@
 name: Campaign Board
 
-# Hourly progress page for a formalization campaign. The campaign is described
-# by docs/campaign/openai-area-law-peps-proof/ (the two-dimensional area law and polynomial PEPS
-# approximation, label `openai-math`, tracker #8733). The job reads issues and
-# pull requests of TNLean and QICLean, both public, so the default token
-# suffices. It renders a self-contained page, uploads it as the `site-campaign`
-# component and redeploys Pages, which serves it at /openai-area-law-peps-proof/. It calls no
-# model and writes nothing to either repository.
+# Hourly progress pages for the formalization campaigns, one per directory of
+# docs/campaign/ (see docs/campaign/README.md): the two-dimensional area law and
+# polynomial PEPS approximation (tracker #8733) and the one-dimensional area law
+# and matrix product state approximation (tracker #9547), both under the label
+# `openai-math`; Hastings' proof of the one-dimensional area law (tracker #9829,
+# label `0705.2024`); and the polynomial-time ground-state algorithm of Landau,
+# Vazirani and Vidick (tracker #9832, label `1307.5143`). The job reads issues and pull requests of TNLean and QICLean,
+# both public, so the default token suffices. It renders one self-contained page
+# per campaign into campaign-output/<slug>/, uploads them together as the
+# `site-campaign` component and redeploys Pages, which serves each at /<slug>/.
+# It calls no model and writes nothing to either repository.
 
 on:
   schedule:
@@ -50,20 +54,22 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Fetch the published snapshot
-        # Unchanged pull requests reuse its file statistics, which keeps the
-        # job within the token's hourly quota. A missing snapshot is fine.
-        run: curl -fsSL --retry 3 --retry-delay 10 --retry-all-errors https://sirui-lu.com/TNLean/openai-area-law-peps-proof/data.json -o previous.json || true
-
-      - name: Collect the snapshot
+      - name: Collect and render every campaign
+        # Each campaign reuses the file statistics of its published snapshot for
+        # unchanged pull requests, which keeps the job within the token's hourly
+        # quota. A missing snapshot is fine.
         env:
           GH_TOKEN: ${{ github.token }}
           QICLEAN_DIR: qiclean
-          PREVIOUS_SNAPSHOT: previous.json
-        run: python3 scripts/campaign_board/collect.py docs/campaign/openai-area-law-peps-proof campaign-data.json
-
-      - name: Render the page
-        run: python3 scripts/campaign_board/render.py docs/campaign/openai-area-law-peps-proof campaign-data.json campaign-output/openai-area-law-peps-proof
+        run: |
+          set -euo pipefail
+          for config in docs/campaign/*/config.json; do
+            dir=$(dirname "$config")
+            slug=$(python3 -c 'import json, sys; print(json.load(open(sys.argv[1]))["slug"])' "$config")
+            curl -fsSL --retry 3 --retry-delay 10 --retry-all-errors "https://sirui-lu.com/TNLean/$slug/data.json" -o "previous-$slug.json" || rm -f "previous-$slug.json"
+            PREVIOUS_SNAPSHOT="previous-$slug.json" python3 scripts/campaign_board/collect.py "$dir" "campaign-data-$slug.json"
+            python3 scripts/campaign_board/render.py "$dir" "campaign-data-$slug.json" "campaign-output/$slug"
+          done
 
       - name: Upload campaign component
         uses: actions/upload-artifact@v7

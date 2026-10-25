@@ -8,7 +8,7 @@ of size at most $r$ (Definition~\ref{def:area_law_safe_rectangle}).
 The supremum and scale recurrence in this section use integer clearance.
 The source permits real clearance; its initial entropy bound is recovered in
 Theorem~\ref{thm:arealaw-physical-safe-rectangle-real}. The comparison is explained
-in~\cite{gap:arealaw2d_safe_box_collar_scope}. The initial argument in this section uses only integer clearance.
+in~\cite{gap:arealaw2d_safe_box_collar_scope}.
 The printed recurrence at arbitrary real clearance is recovered subsequently
 in Theorem~\ref{thm:area_law_real_box_recurrence_after_area_law} as a consequence
 of the completed area law.
@@ -154,7 +154,7 @@ of the completed area law.
     \label{thm:area_law_initial_box}
     \lean{TNLean.PEPS.AreaLaw.exists_boxEntropy_le_rpow}
     \leanok
-    \uses{thm:area_law_box_recurrence, thm:area_law_box_entropy_safety}
+    \uses{def:area_law_box_entropy}
     For fixed $q\ge1$, $R$, $J\ge0$ and $\Delta>0$, there are constants $C$ and
     $e_0\in(0,1)$, depending only on $q,R,J,\Delta$, such that for every
     integer $D_0>2R+10$ and every integer $r\ge1$,
@@ -164,15 +164,15 @@ of the completed area law.
     follows from Theorem~\ref{thm:arealaw-physical-safe-rectangle-real}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:area_law_box_recurrence, thm:area_law_box_entropy_safety,
-        thm:area_law_box_entropy_bounds}
-    First take the safety parameter $2R+11$. Choose
-    $M=8(C_{\mathrm{pad}}+1)$, so $2PM\le M^2/2$ and the coefficient is
-    at most $\lambda=(1-p/2)M^2$, with $M<\lambda<M^2$. Iterating the
-    recurrence at powers of $M$ and using monotonicity gives
-    $F_{\mathrm{box},2R+11}(r)\le Cr^{\log_M\lambda}$, with
-    $1<\log_M\lambda<2$. Theorem~\ref{thm:area_law_box_entropy_safety}
-    gives the same bound at every integer safety parameter $D_0>2R+10$.
+    \uses{thm:area_law_box_recurrence, thm:area_law_box_entropy_bounds}
+    Fix an integer $D_0>2R+10$. Choose $M=8(C_{\mathrm{pad}}+1)$, so
+    $2PM\le M^2/2$ and the coefficient of the recurrence is at most
+    $\lambda=(1-p/2)M^2$, with $M<\lambda<M^2$. Iterating the recurrence at
+    powers of $M$, starting from $F_{\mathrm{box},D_0}(1)\le\log q$, and using
+    monotonicity in $r$ gives $F_{\mathrm{box},D_0}(r)\le Cr^{\log_M\lambda}$,
+    with $1<\log_M\lambda<2$. The constants $M$, $\lambda$ and $C$ depend only
+    on $q,R,J,\Delta$, so the bound holds with the same $C$ and
+    $e_0=\log_M\lambda-1$ at every such $D_0$.
 \end{proof}
 
 \begin{theorem}[Safety inside a dilated rectangle]

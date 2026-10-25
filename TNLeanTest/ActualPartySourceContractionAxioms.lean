@@ -3,11 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.AllPartialGate
-import TNLean.PEPS.Approximation.NoneResidualScalar
-import TNLean.PEPS.Approximation.NoneSourceWordScalar
-import TNLean.PEPS.Approximation.ActualPartySourceMatrix
-import TNLean.PEPS.Approximation.EndpointWordEvaluation
+import TNLean.Lattice.Compression.AllPartialGate
+import TNLean.Lattice.Compression.NoneResidualScalar
+import TNLean.Lattice.Compression.NoneSourceWordScalar
+import TNLean.Lattice.Compression.ActualPartySourceMatrix
+import TNLean.Lattice.Compression.EndpointWordEvaluation
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
@@ -19,10 +19,10 @@ logical axioms. The guard includes the endpoint word used in source coordinates.
 
 set_option linter.hashCommand false
 
-open TNLean.PEPS.PairEffect.SourceCircuit TNLean.PEPS.PairEffect.SourceInventory in
+open TNLean.Lattice.PartyCircuit.SourceCircuit TNLean.Lattice.PartyCircuit.SourceInventory in
 run_cmd do
   let decls := #[
-    ``TNLean.PEPS.PairEffect.partySelector_none,
+    ``TNLean.Lattice.PartyCircuit.partySelector_none,
     ``restrict_partialWord_all_gate_localPart_eval_heq_id,
     ``restrict_partialWord_all_localPart_eval_heq_emptyGateScalar,
     ``restrict_partialResidual_all_eval_heq_emptyGateScalar,

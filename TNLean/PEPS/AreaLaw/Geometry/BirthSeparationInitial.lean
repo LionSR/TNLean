@@ -60,6 +60,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 
@@ -372,16 +374,30 @@ theorem exists_beltAtom_subset_initialBirthRegion
 
 end Core
 
+/-- **The birth-template separation constant** `c₁ = 1/112`: a quarter of
+`birthSeparationConstant`, since belt cells are normalized to side `4`. It is
+the constant of the birth-template separation lemma for the initial belt
+tiles, and it is also at most the constant `1/28` of the replacements.
+Source: area-law Section 11, `geometry:birth-separation`, lines 573–659. -/
+def birthTemplateSeparationConstant : ℝ := birthSeparationConstant / 4
+
+theorem birthTemplateSeparationConstant_pos : 0 < birthTemplateSeparationConstant := by
+  unfold birthTemplateSeparationConstant; linarith [birthSeparationConstant_pos]
+
+theorem birthTemplateSeparationConstant_le :
+    birthTemplateSeparationConstant ≤ birthSeparationConstant := by
+  unfold birthTemplateSeparationConstant; linarith [birthSeparationConstant_pos]
+
 /-- **Birth separation of an initial belt tile from its comparison regions.**
-There is one fixed `c₁ > 0` with the following property. Let `x` be an initial
-belt tile in a belt cell of side `u = t_k`, and let `y` be another initial
-identifier of the same label other than the dummy: a primary or another initial
-belt tile. Let `Y` lie in the open region of `y` and avoid, at sup distance
+With `c₁ = birthTemplateSeparationConstant = 1/112` the following holds. Let
+`x` be an initial belt tile in a belt cell of side `u = t_k`, and let `y` be
+another initial identifier of the same label other than the dummy: a primary or
+another initial belt tile. Let `Y` lie in the open region of `y` and avoid, at sup distance
 `u^ρ₀ / 4`, the nine marks of the cell, as the first trim guarantees. Then every
 point of the closed birth of `x` has distance at least `c₁ u^ρ₀` from `Y`.
 Source: area-law Section 11, `geometry:birth-separation`, lines 573–659. -/
-theorem exists_initialBeltRun_birth_separation :
-    ∃ c₁ > 0, ∀ (o : ℝ × ℝ) (k₀ : ℕ) (Z : Finset (ℤ × ℤ)) (C : ℕ)
+theorem initialBeltRun_birth_separation :
+    ∀ (o : ℝ × ℝ) (k₀ : ℕ) (Z : Finset (ℤ × ℤ)) (C : ℕ)
       (a b : (k : ℕ) → Fin (2 ^ (pitchScaleIndex k - fineScaleIndex k)))
       (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (k : ℕ) (hk : k₀ ≤ k) (z : ℤ × ℤ)
       (hz : z ∈ beltCellIndices (fineLayerIndices o k (fineScaleIndex k) Z C)
@@ -396,9 +412,13 @@ theorem exists_initialBeltRun_birth_separation :
       (∀ v ∈ beltCellMarks o (fineScaleIndex k) z, ∀ w ∈ Y,
         ((2 : ℝ) ^ fineScaleIndex k) ^ (Exponents.rho : ℝ) / 4 < dist w v) →
       ∀ p ∈ initialBirthRegion o k₀ Z C a b hC h₀ (initialBeltRun k hk z hz R), ∀ w ∈ Y,
-        c₁ * ((2 : ℝ) ^ fineScaleIndex k) ^ (Exponents.rho : ℝ) ≤ dist p w := by
-  obtain ⟨η, hη, hη1, hdich⟩ := exists_beltAtom_dichotomy
-  refine ⟨min (η / 4) (1 / 8), lt_min (by positivity) (by norm_num), ?_⟩
+        birthTemplateSeparationConstant * ((2 : ℝ) ^ fineScaleIndex k) ^ (Exponents.rho : ℝ) ≤
+          dist p w := by
+  unfold birthTemplateSeparationConstant
+  have hdich := beltAtom_dichotomy
+  set η := birthSeparationConstant
+  have hη : 0 < η := birthSeparationConstant_pos
+  have hη8 : η / 4 ≤ 1 / 8 := by linarith [birthSeparationConstant_le_quarter]
   intro o k₀ Z C a b hC h₀ k hk z hz R y hyx hyd hcol Y hY htrim p hp w hw
   set u : ℝ := (2 : ℝ) ^ fineScaleIndex k
   set N := beltNormalize o (fineScaleIndex k) z
@@ -409,8 +429,8 @@ theorem exists_initialBeltRun_birth_separation :
           Real.rpow_le_rpow_of_exponent_le hu1 rho_pos_lt_one.2.le
       _ = u := Real.rpow_one u
   have hρ0 : 0 ≤ u ^ (Exponents.rho : ℝ) := Real.rpow_nonneg hu0.le _
-  have hc₁ : min (η / 4) (1 / 8) * u ^ (Exponents.rho : ℝ) ≤ u ^ (Exponents.rho : ℝ) / 8 :=
-    by nlinarith [min_le_right (η / 4) (1 / 8)]
+  have hc₁ : (η / 4) * u ^ (Exponents.rho : ℝ) ≤ u ^ (Exponents.rho : ℝ) / 8 :=
+    by nlinarith [hη8]
   have hnorm (p q : ℝ × ℝ) : ‖N p - N q‖ = 4 / u * dist p q := by
     rw [norm_beltNormalize_sub, dist_eq_norm]
   by_cases hfar : u ≤ dist p w
@@ -442,7 +462,7 @@ theorem exists_initialBeltRun_birth_separation :
     have : η * u ≤ 4 * dist p w := by
       have := mul_le_mul_of_nonneg_right hd hu0.le
       rwa [show 4 / u * dist p w * u = 4 * dist p w by field_simp] at this
-    nlinarith [min_le_left (η / 4) (1 / 8)]
+    nlinarith
   · -- near a contact, which is a mark of the cell
     obtain ⟨i, j, rfl⟩ := hAB q hqA hqB
     have hvx : N.symm ((i : ℝ), (j : ℝ)) ∈
@@ -458,6 +478,34 @@ theorem exists_initialBeltRun_birth_separation :
       have h4 : 0 < 4 / u := by positivity
       nlinarith
     linarith
+
+/-- **Birth separation of an initial belt tile from its comparison regions.**
+There is one fixed `c₁ > 0` with the following property. Let `x` be an initial
+belt tile in a belt cell of side `u = t_k`, and let `y` be another initial
+identifier of the same label other than the dummy: a primary or another initial
+belt tile. Let `Y` lie in the open region of `y` and avoid, at sup distance
+`u^ρ₀ / 4`, the nine marks of the cell, as the first trim guarantees. Then every
+point of the closed birth of `x` has distance at least `c₁ u^ρ₀` from `Y`. One
+may take `c₁ = 1/112` (`initialBeltRun_birth_separation`).
+Source: area-law Section 11, `geometry:birth-separation`, lines 573–659. -/
+theorem exists_initialBeltRun_birth_separation :
+    ∃ c₁ > 0, ∀ (o : ℝ × ℝ) (k₀ : ℕ) (Z : Finset (ℤ × ℤ)) (C : ℕ)
+      (a b : (k : ℕ) → Fin (2 ^ (pitchScaleIndex k - fineScaleIndex k)))
+      (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (k : ℕ) (hk : k₀ ≤ k) (z : ℤ × ℤ)
+      (hz : z ∈ beltCellIndices (fineLayerIndices o k (fineScaleIndex k) Z C)
+        (2 ^ (pitchScaleIndex k - fineScaleIndex k)) (a k) (b k))
+      (R : CellFanRun o (fineScaleIndex k) z (fineLayerSplitMask o k₀ k Z C z)
+        (beltCellFanColor o k₀ Z C a b k z hC h₀ hk hz))
+      (y : InitialRegionIndex o k₀ Z C a b hC h₀),
+      y ≠ initialBeltRun k hk z hz R → y ≠ .inl () →
+      initialRegionColor o k₀ Z C a b hC h₀ y =
+        initialRegionColor o k₀ Z C a b hC h₀ (initialBeltRun k hk z hz R) →
+      ∀ Y ⊆ initialOpenRegion o k₀ Z C a b hC h₀ y,
+      (∀ v ∈ beltCellMarks o (fineScaleIndex k) z, ∀ w ∈ Y,
+        ((2 : ℝ) ^ fineScaleIndex k) ^ (Exponents.rho : ℝ) / 4 < dist w v) →
+      ∀ p ∈ initialBirthRegion o k₀ Z C a b hC h₀ (initialBeltRun k hk z hz R), ∀ w ∈ Y,
+        c₁ * ((2 : ℝ) ^ fineScaleIndex k) ^ (Exponents.rho : ℝ) ≤ dist p w :=
+  ⟨_, birthTemplateSeparationConstant_pos, initialBeltRun_birth_separation⟩
 
 /-! ### The actual initial stage -/
 
@@ -512,19 +560,20 @@ private theorem quarter_rpow_le_repairHalfSide {u S : ℝ} (hu : 1 ≤ u) (hS : 
     nlinarith [Real.rpow_nonneg hu0.le (Exponents.rho : ℝ)]
   linarith
 
-/-- **Birth-template separation of the initial belt tiles.** There is one fixed
-`c₁ > 0` such that, for all domains, cuts, origins, layer widths, lower layer
-indices and stopping scales, the closed birth of every initial belt tile of
-side `u = t_k` has distance at least `c₁ u^ρ₀` from the final actual region of
-every primary and every other initial belt tile with the same label.
+/-- **Birth-template separation of the initial belt tiles.** With
+`c₁ = birthTemplateSeparationConstant = 1/112`, for all domains, cuts, origins,
+layer widths, lower layer indices and stopping scales, the closed birth of
+every initial belt tile of side `u = t_k` has distance at least `c₁ u^ρ₀` from
+the final actual region of every primary and every other initial belt tile with
+the same label.
 Source: area-law Section 11, `geometry:birth-separation`, lines 573–659, for
 the births of initial belt tiles. -/
-theorem exists_isInitialBirthSeparated :
-    ∃ c₁ > 0, ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ)
-      (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ),
-      IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ := by
-  obtain ⟨c₁, hc₁, hcore⟩ := exists_initialBeltRun_birth_separation
-  refine ⟨c₁, hc₁, fun o Λ A C k₀ hC h₀ Sstar x y ℓ hx hyx hyd hcol p hp w hw ↦ ?_⟩
+theorem isInitialBirthSeparated_birthTemplateSeparationConstant (o : ℝ × ℝ)
+    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
+    (Sstar : ℝ) :
+    IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar birthTemplateSeparationConstant := by
+  have hcore := initialBeltRun_birth_separation
+  intro x y ℓ hx hyx hyd hcol p hp w hw
   let h := (Classical.choose_spec exists_uniform_separated_initial_marks).2 o Λ A C k₀ hC h₀
   let hb := Classical.choose_spec h
   let hab := Classical.choose_spec hb
@@ -570,6 +619,20 @@ theorem exists_isInitialBirthSeparated :
   have := quarter_rpow_le_repairHalfSide (one_le_pow₀ (by norm_num : (1 : ℝ) ≤ 2)) hS
   linarith
 
+/-- **Birth-template separation of the initial belt tiles.** There is one fixed
+`c₁ > 0` such that, for all domains, cuts, origins, layer widths, lower layer
+indices and stopping scales, the closed birth of every initial belt tile of
+side `u = t_k` has distance at least `c₁ u^ρ₀` from the final actual region of
+every primary and every other initial belt tile with the same label.
+Source: area-law Section 11, `geometry:birth-separation`, lines 573–659, for
+the births of initial belt tiles. One may take `c₁ = 1/112`. -/
+theorem exists_isInitialBirthSeparated :
+    ∃ c₁ > 0, ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ)
+      (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ),
+      IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ :=
+  ⟨_, birthTemplateSeparationConstant_pos,
+    isInitialBirthSeparated_birthTemplateSeparationConstant⟩
+
 theorem IsInitialBirthSeparated.mono {o : ℝ × ℝ} {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)}
     {C k₀ : ℕ} {hC : 2 ≤ C} {h₀ : 50000000 ≤ k₀} {Sstar c c' : ℝ}
     (h : IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar c) (hc : c' ≤ c) :
@@ -586,25 +649,42 @@ theorem IsRepairBirthSeparated.mono {o : ℝ × ℝ} {Λ : Finset (ℤ × ℤ)} 
     (mul_le_mul_of_nonneg_right hc (Real.rpow_nonneg (repairHalfSide_pos _).le _)).trans
       (h j x y m hxm hyx hcol p hp w hw)
 
+/-- **Birth-template separation, from Lemma 11.4, with the explicit constant.**
+If the uniform repair induction holds, `c₁ = birthTemplateSeparationConstant =
+1/112` serves both cases of the birth-separation lemma, the births of the
+initial belt tiles and the births of the replacements, for every sufficiently
+large stopping scale and lower layer index.
+Source: area-law Section 11, `geometry:birth-separation`, lines 573–659, from
+`geometry:repair-induction`, lines 471–485. -/
+theorem exists_threshold_birthSeparation_of_uniformRepairInductionStatement
+    (h : UniformRepairInductionStatement) :
+    ∃ T : ℝ, ∀ Sstar, T ≤ Sstar → ∀ C : ℕ, ∃ K : ℕ,
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ)
+        (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
+          IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar birthTemplateSeparationConstant ∧
+            IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar birthTemplateSeparationConstant := by
+  obtain ⟨T, hT⟩ := exists_threshold_isRepairBirthSeparated_of_uniformRepairInductionStatement h
+  refine ⟨T, fun Sstar hS C ↦ ?_⟩
+  obtain ⟨K, hK⟩ := hT Sstar hS C
+  exact ⟨K, fun o Λ A k₀ hC h₀ hk ↦
+    ⟨isInitialBirthSeparated_birthTemplateSeparationConstant o Λ A C k₀ hC h₀ Sstar,
+      (hK o Λ A k₀ hC h₀ hk).mono birthTemplateSeparationConstant_le⟩⟩
+
 /-- **Birth-template separation, from Lemma 11.4.** If the uniform repair
 induction holds, one fixed `c₁ > 0` serves both cases of the birth-separation
 lemma: the births of the initial belt tiles and the births of the replacements,
 for every sufficiently large stopping scale and lower layer index.
 Source: area-law Section 11, `geometry:birth-separation`, lines 573–659, from
-`geometry:repair-induction`, lines 471–485. -/
+`geometry:repair-induction`, lines 471–485. One may take `c₁ = 1/112`. -/
 theorem exists_birthSeparation_of_uniformRepairInductionStatement
     (h : UniformRepairInductionStatement) :
     ∃ c₁ > 0, ∃ T : ℝ, ∀ Sstar, T ≤ Sstar → ∀ C : ℕ, ∃ K : ℕ,
       ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ)
         (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
           IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ ∧
-            IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ := by
-  obtain ⟨c₂, hc₂, T, hT⟩ := exists_isRepairBirthSeparated_of_uniformRepairInductionStatement h
-  obtain ⟨c₃, hc₃, hI⟩ := exists_isInitialBirthSeparated
-  refine ⟨min c₂ c₃, lt_min hc₂ hc₃, T, fun Sstar hS C ↦ ?_⟩
-  obtain ⟨K, hK⟩ := hT Sstar hS C
-  exact ⟨K, fun o Λ A k₀ hC h₀ hk ↦ ⟨(hI o Λ A C k₀ hC h₀ Sstar).mono (min_le_right _ _),
-    (hK o Λ A k₀ hC h₀ hk).mono (min_le_left _ _)⟩⟩
+            IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ :=
+  ⟨_, birthTemplateSeparationConstant_pos,
+    exists_threshold_birthSeparation_of_uniformRepairInductionStatement h⟩
 
 /-- **Birth-template separation, from Lemma 11.3.** If the jointly chosen initial
 stage has isolated stars (the conclusion of Lemma 11.3 used by Lemma 11.4), one
@@ -639,5 +719,39 @@ theorem exists_birthSeparation :
           IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ ∧
             IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ :=
   exists_birthSeparation_of_initialIsolatedStars initialIsolatedStarsStatement_holds
+
+/-- **Birth-template separation, from Lemma 11.3, with the explicit constant.**
+If the jointly chosen initial stage has isolated stars,
+`c₁ = birthTemplateSeparationConstant = 1/112` serves both cases of the
+birth-separation lemma, for every sufficiently large stopping scale and lower
+layer index.
+Source: area-law Section 11, `geometry:birth-separation`, lines 573–659, from
+`geometry:initial-stars`, lines 332–349, and `geometry:repair-induction`,
+lines 471–543. -/
+theorem exists_threshold_birthSeparation_of_initialIsolatedStars
+    (h : InitialIsolatedStarsStatement) :
+    ∃ T : ℝ, ∀ Sstar, T ≤ Sstar → ∀ C : ℕ, ∃ K : ℕ,
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ)
+        (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
+          IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar birthTemplateSeparationConstant ∧
+            IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar birthTemplateSeparationConstant :=
+  exists_threshold_birthSeparation_of_uniformRepairInductionStatement
+    (uniformRepairInductionStatement_of_initialIsolatedStars h)
+
+/-- **Birth-template separation with the explicit constant** (Lemma 11.5). The
+constant `c₁ = birthTemplateSeparationConstant = 1/112` serves both cases of the
+lemma, for every sufficiently large stopping scale and lower layer index: the
+closed birth of an initial belt tile of side `u = t_k`, or of a replacement whose
+removal square has half-side `u`, is at distance at least `c₁ u^ρ₀` from the
+final actual region of every earlier or peer identifier of the same label.
+Source: area-law Section 11, `geometry:birth-separation`, lines 573–582, with
+the proof in lines 584–659. -/
+theorem exists_threshold_birthSeparation :
+    ∃ T : ℝ, ∀ Sstar, T ≤ Sstar → ∀ C : ℕ, ∃ K : ℕ,
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ)
+        (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
+          IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar birthTemplateSeparationConstant ∧
+            IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar birthTemplateSeparationConstant :=
+  exists_threshold_birthSeparation_of_initialIsolatedStars initialIsolatedStarsStatement_holds
 
 end TNLean.PEPS.AreaLaw.Geometry

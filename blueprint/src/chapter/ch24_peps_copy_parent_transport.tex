@@ -45,8 +45,8 @@ Irreducibility of $D_i$ is not required.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Multiply within each diagonal block. Its scalar weight commutes
-    with every matrix, and $(m_i^{1/4})^2=\sqrt{m_i}$.
+    Within each diagonal block, the scalar weight $m_i^{1/4}$ commutes
+    with $D_i(g)$ and satisfies $(m_i^{1/4})^2=\sqrt{m_i}$.
 \end{proof}
 
 \begin{definition}[Regional copy transformations]%
@@ -117,7 +117,7 @@ Irreducibility of $D_i$ is not required.
     $\sqrt{m_i}$ in each block, canceled by the normalized copy map.
     Its adjoint sums $m_i$ equal-copy terms with coefficient
     $m_i^{-1/2}$, recovering the same factor.
-    At a crossing, use $W_mD(q_t^{-1})$ when the tail lies in $R$
+    At a crossing, the bond factor is $W_mD(q_t^{-1})$ when the tail lies in $R$
     and $D(q_h)W_m$ when the head lies in $R$.
     The sparse coefficient of $B_z$ fixes the base coordinate and
     copy label; moving the remaining $w_y$ to the virtual boundary
@@ -156,11 +156,11 @@ Irreducibility of $D_i$ is not required.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_copy_open_factors,def:peps_parent_support_open_factors}
-    Expand each open contraction as $|G|^{-|R|}$ times a sum over
-    $q:R\to G$ of the product of its crossing and internal factors.
-    Apply Theorem~\ref{thm:peps_copy_open_factors} to each factor.
-    Distributing the crossing sums gives
-    (\ref{eq:peps_copy_open_forward}); collecting their scalar
+    Expanding each open contraction as $|G|^{-|R|}$ times a sum over
+    $q:R\to G$ of the product of its crossing and internal factors and
+    applying Theorem~\ref{thm:peps_copy_open_factors} to each factor,
+    distributing the crossing sums gives
+    (\ref{eq:peps_copy_open_forward}) while collecting their scalar
     coefficients gives~(\ref{eq:peps_copy_open_adjoint}).
     The transformation never restricts the original virtual boundary.
 \end{proof}
@@ -216,9 +216,9 @@ Irreducibility of $D_i$ is not required.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_oriented_copy_parent_inverses}
-    This is the case of
-    Theorem~\ref{thm:peps_oriented_copy_parent_inverses} in which no
-    edge is reversed: when every $o_e=0$, the oriented tensors
+    In the case of
+    Theorem~\ref{thm:peps_oriented_copy_parent_inverses} with no
+    edge reversed ($o_e=0$ for every $e$), the oriented tensors
     $A^{D,W_m,o}$ and $A^{D^{[m]},1,o}$ are the ordered tensors $A_m$
     and $B_m$, and the oriented product of the bond maps $F_m$ is $M_m$.
     Taking $m=d$ gives the dimension-multiplicity inclusions.
@@ -246,12 +246,12 @@ Irreducibility of $D_i$ is not required.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_oriented_copy_parent_inverses}
-    Take every $o_e=0$ in
-    Theorem~\ref{thm:peps_oriented_copy_parent_inverses}. The oriented
-    tensors are then the ordered tensors $A_m$ and $B_m$, and the
-    identities~(\ref{eq:peps_oriented_copy_left_inverse})
-    and~(\ref{eq:peps_oriented_copy_right_inverse}) become
-    exactly~(\ref{eq:peps_copy_parent_inverses}), together with
+    Setting $o_e=0$ for every $e$ in
+    Theorem~\ref{thm:peps_oriented_copy_parent_inverses} identifies the oriented
+    tensors with the ordered tensors $A_m$ and $B_m$, reducing
+    (\ref{eq:peps_oriented_copy_left_inverse})
+    and~(\ref{eq:peps_oriented_copy_right_inverse}) to
+    (\ref{eq:peps_copy_parent_inverses}), together with
     injectivity on the source parent space.
     Taking $m=d$ gives the dimension-multiplicity identities.
 \end{proof}
@@ -375,11 +375,12 @@ Irreducibility of $D_i$ is not required.
 \begin{proof}\leanok
     \uses{thm:peps_copy_physical_filter,thm:peps_copy_parent_equivalence,
         thm:peps_region_parent_common_kernel}
-    First apply $C$ using~(\ref{eq:peps_copy_filter_parent}), then apply
-    $M_m$ using~(\ref{eq:peps_copy_parent_equivalence}).
-    Both restrictions are isomorphisms, so their composition preserves
-    dimensions. Reverse the comparison for $m$ and follow it by the
-    comparison for $n$. The kernel statement again follows from
+    Composing the isomorphism $C$ of~(\ref{eq:peps_copy_filter_parent}) with
+    the isomorphism $M_m$ of~(\ref{eq:peps_copy_parent_equivalence}) maps
+    $\mathcal P_{\mathcal R}(A_0)$ onto $\mathcal P_{\mathcal R}(B_m)$ and
+    preserves dimensions; inverting the comparison for $m$ and composing with
+    that for $n$ identifies the parent spaces of any two positive multiplicity
+    families. The kernel statement again follows from
     positivity and the exact local-kernel hypotheses.
 \end{proof}
 

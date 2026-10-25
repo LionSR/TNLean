@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.SourceSelectedSharpComparison
+import Lean.Elab.Command
+import Lean.Util.CollectAxioms
 
 /-! # Kernel dependencies of the common physical selected comparison -/
 
@@ -16,3 +18,19 @@ open TNLean.PEPS.AreaLaw.Scan.CollarScan in
 depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms exists_sourceTarget_selected_actualCharge_sharp_comparison
+
+/-! The selected sharp comparison at the named truncation constant -/
+
+open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan.CollarScan in
+run_cmd do
+  let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
+  let declarations := #[
+    ``sourceTarget_selected_actualCharge_sharp_comparison_explicit,
+    ``exists_sourceTarget_selected_actualCharge_sharp_comparison_of_finiteFamilyTransportBound]
+  for decl in declarations do
+    unless (← Lean.getEnv).contains decl do
+      throwError "Missing declaration {decl}"
+    let axioms ← Lean.collectAxioms decl
+    unless axioms.all (allowed.contains ·) do
+      throwError "Unexpected axioms for {decl}: {axioms}"
+    Lean.logInfo m!"{decl}: {axioms}"

@@ -68,7 +68,7 @@ end Approximation
 
 namespace EncodedFrame
 
-open PairEffect
+open TNLean.Lattice.PartyCircuit
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {Party : Type}
   {pos : ι → ℝ × ℝ} {Ω : EuclideanSpace ℂ (ι → Fin q)} {ℓ : Layout Party} {ξ : Mem ℓ}
@@ -87,27 +87,6 @@ theorem hasSourceBoundedChange_main {M M' : Frame pos q Party} (Fs : List (Frame
     HasSourceBoundedChange Ω (M :: Fs) (M' :: Fs) ξ S r K rs ε :=
   hasSourceBoundedChange_liftOne [] Fs hc hs hΩ hξ
 
-/-- Updating the auxiliary value at a selected index in a duplicate-free list lets that value
-move before the main value, leaving the other auxiliary values in their original order. -/
-theorem perm_map_update_cons {Y : Type*} (M : Y) {l : List X} (hl : l.Nodup) {x : X} (hx : x ∈ l)
-    (A : X → Y) (F : Y) :
-    (M :: l.map (Function.update A x F)).Perm (F :: M :: (l.erase x).map A) := by
-  have hp := (List.perm_cons_erase hx).map (Function.update A x F)
-  rw [List.map_cons, Function.update_self] at hp
-  have he : (l.erase x).map (Function.update A x F) = (l.erase x).map A :=
-    List.map_congr_left fun y hy => Function.update_of_ne
-      (fun h => (hl.mem_erase_iff.1 (h ▸ hy)).1 rfl) _ _
-  rw [he] at hp
-  exact (hp.cons M).trans (List.Perm.swap _ _ _)
-
-/-- A selected auxiliary value may move before the main value, leaving the values of the index
-list with the selected index erased once. -/
-theorem perm_map_cons {Y : Type*} (M : Y) {l : List X} {x : X} (hx : x ∈ l) (A : X → Y) :
-    (M :: l.map A).Perm (A x :: M :: (l.erase x).map A) := by
-  have hp := (List.perm_cons_erase hx).map A
-  rw [List.map_cons] at hp
-  exact (hp.cons M).trans (List.Perm.swap _ _ _)
-
 /-- **A change of one auxiliary sheet.** For a list `l` of distinct auxiliary indices and an
 index `x` of `l`, a bounded change of the frame `A x` into `F` with at most `rs` pair sources in
 each monomial is such a change of the memory `M :: l.map A` into
@@ -121,7 +100,7 @@ theorem hasSourceBoundedChange_aux (M : Frame pos q Party) {l : List X} (hl : l.
     (hΩ : ‖Ω‖ ≤ 1) (hξ : ‖ξ‖ ≤ 1) :
     HasSourceBoundedChange Ω (M :: l.map A) (M :: l.map (Function.update A x F)) ξ S r K rs ε :=
   ((hasSourceBoundedChange_liftOne [] (M :: (l.erase x).map A) hc hs hΩ hξ).perm_left
-    (perm_map_cons M hx A)).perm_right (perm_map_update_cons M hl hx A F).symm
+    (Lattice.perm_map_cons M hx A)).perm_right (Lattice.perm_map_update_cons M hl hx A F).symm
 
 /-- **A change of the main sheet and one auxiliary sheet.** For a list `l` of distinct auxiliary
 indices and an index `x` of `l`, a bounded change of the two frames `M`, `A x` into `M'`, `F` with
@@ -136,10 +115,10 @@ theorem hasSourceBoundedChange_mainAux {M M' : Frame pos q Party} {l : List X} (
     (hs : c.IsSourceBounded rs) (hΩ : ‖Ω‖ ≤ 1) (hξ : ‖ξ‖ ≤ 1) :
     HasSourceBoundedChange Ω (M :: l.map A) (M' :: l.map (Function.update A x F)) ξ S r K rs ε := by
   have hp : (M :: l.map A).Perm ([] ++ M :: A x :: (l.erase x).map A) := by
-    have h := (perm_map_cons M hx A)
+    have h := (Lattice.perm_map_cons M hx A)
     exact h.trans ((List.Perm.swap _ _ _).symm)
   have hp' : ([] ++ M' :: F :: (l.erase x).map A).Perm (M' :: l.map (Function.update A x F)) :=
-    (((perm_map_update_cons M' hl hx A F).trans (List.Perm.swap _ _ _)).symm)
+    (((Lattice.perm_map_update_cons M' hl hx A F).trans (List.Perm.swap _ _ _)).symm)
   exact (hasSourceBoundedChange_activate hp hc hs hΩ hξ).perm_right hp'
 
 end EncodedFrame

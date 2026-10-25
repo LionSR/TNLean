@@ -50,7 +50,7 @@ safe-box estimate itself remains a genuine analytic hypothesis.
 
 \begin{theorem}[Conditional final information for separated templates]
     \label{thm:template-final-information}
-    \lean{TNLean.PEPS.AreaLaw.Scan.exists_template_final_mutualInformation_of_boxEntropy}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_template_final_mutualInformation_of_boxEntropy,TNLean.PEPS.AreaLaw.Scan.collarMultiplicity,TNLean.PEPS.AreaLaw.Scan.collarConstant,TNLean.PEPS.AreaLaw.Scan.collarThreshold,TNLean.PEPS.AreaLaw.Scan.exists_template_final_mutualInformation_of_boxEntropy_of_threshold_le}
     \leanok
     Fix the physical parameters $q\geq1$, $R$, $J\geq0$, $\Delta>0$,
     an integer safe-box clearance $D_0\geq1$, and $C_{\rm tpl}\geq24$.
@@ -82,13 +82,13 @@ safe-box estimate itself remains a genuine analytic hypothesis.
         thm:final-template-scanner-truncation,
         thm:template-final-source-entropy,
         thm:al_lattice_counts}
-    Fix the original interaction multiplicity
-    $\mu_R=2^{(1+2R(R+1))-1}$ and $C_1=3\mu_R$, independently of all
-    entropy coefficients and physical instances.  The anchor-fiber
+    With the original interaction multiplicity
+    $\mu_R=2^{(1+2R(R+1))-1}$ and $C_1=3\mu_R$ fixed independently of all
+    entropy coefficients and physical instances, the anchor-fiber
     bound applies to the support-member anchors of the constructed scanner.
-    Choose the radius coefficient from the physical source theorem.  The
+    For the radius coefficient from the physical source theorem, the
     uniform safe-box-to-template entropy theorem gives a single $C_e$
-    before the domain, Hamiltonian, ground vector, cut, target and collar.
+    before the domain, Hamiltonian, ground vector, cut, target, and collar.
 
     The template scale inequality gives $s_0\leq n$, and its
     cardinality bound gives $|T|\leq9ns_0\leq9n^2$.  The
@@ -103,10 +103,10 @@ safe-box estimate itself remains a genuine analytic hypothesis.
     strict cut-clearance condition.  One maximum threshold precedes all
     physical instances.
 
-    Apply the conditional physical information theorem to this
-    scanner and the two entropy estimates already derived from the single
-    safe-box input.  Its state and all intermediate objects are retained.
-    The exact region identity above converts the conclusion to the original
+    Applying the conditional physical information theorem to this
+    scanner and the two entropy estimates derived from the single
+    safe-box input retains its state and all intermediate objects,
+    and the exact region identity above converts the conclusion to the original
     template collar.  The fixed-instance replica limit was taken in the
     preceding physical theorem; no new limit is introduced or exchanged.
 \end{proof}

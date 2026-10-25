@@ -1,0 +1,53 @@
+% alt: Two lines. First, the Schmidt decomposition of Omega across X: a wide box Omega with legs X, T_1, T_2 minus T_1 and Lambda minus X_2 equals a sum over i of sqrt(p_i) times a box u_i on the X leg beside a box w_i on the other three legs. Second, the pinned trial filters: the projector onto u_i on the X leg and the flank filters M_1 on T_1 and M_2 on T_1 and T_2 minus T_1, stacked over Omega, equal sqrt(p_i) times u_i on X beside M_2 M_1 applied to w_i.
+% Section 4 (part1_arealaw.tex, proof of Lemma lem:buffer, paragraph "Lower bound on the optimum by Schmidt pinning"): Omega = sum_i sqrt(p_i) u_i (x) w_i is the Schmidt decomposition across X, and the trial filters L_j = |u_i><u_i| (x) M_j with M_j >= 0 on H_{T_j} give L_m ... L_1 Omega = sqrt(p_i) u_i (x) M_m ... M_1 w_i, hence N >= sqrt(p_i) N_i; drawn for m = 2 with the nested flanks T_1 contained in T_2.
+% Ink-to-index: the wide box Omega is the ground state on Lambda, its four legs from left to right the sites of X, of the flank T_1, of the outer flank layer T_2 minus T_1, and of Lambda minus X_2; u_i is a Schmidt vector of X (one leg, X) and w_i its partner on Lambda minus X (three legs); the box |u_i><u_i| acts on the X leg only, M_1 on the T_1 leg only, M_2 on the T_1 and T_2 minus T_1 legs; in the second line the X leg of Omega is contracted with the projector, the T_1 leg with M_1, the T_2 minus T_1 leg with M_2, the output of M_1 with M_2, while the Lambda minus X_2 leg passes untouched; all top legs are open and labelled by their regions.
+\[
+\begin{aligned}
+  &\begin{tenkz}[rows={wire}, cols=6, bonds=none]
+    \tn[at=(1,1), skin=box, wide=6, name=o,
+        ports={90@1:physical:$X$, 90@3:physical:$T_1$,
+               90@4:physical:$T_2\setminus T_1$, 90@6:physical:$\Lambda\setminus X_2$}]{\Omega}
+  \end{tenkz}
+  \;=\;\sum_i\sqrt{p_i}\;\;
+  \begin{tenkz}[rows={wire}, cols=6, bonds=none]
+    \tn[at=(1,1), skin=box, name=u, ports={90:physical:$X$}]{u_i}
+    \tn[at=(1,3), skin=box, wide=4, name=w,
+        ports={90@1:physical:$T_1$, 90@2:physical:$T_2\setminus T_1$,
+               90@4:physical:$\Lambda\setminus X_2$}]{w_i}
+  \end{tenkz}
+  \\[2ex]
+  &\begin{tenkz}[rows={wire,wire,wire}, cols=6, bonds=none]
+    \tn[at=(3,1), skin=box, wide=6, name=o,
+        ports={90@1:physical, 90@3:physical, 90@4:physical, 90@6:physical}]{\Omega}
+    \tn[at=(1,6), skin=none, name=ox, ports={270:physical, 90:physical:$\Lambda\setminus X_2$}]{}
+    \tnwire{o.90@6}{ox.270}
+    \tn[at=(1,1), skin=box, wide=2, name=p,
+        ports={270@1:physical, 90@1:physical:$X$}]{\lvert u_i\rangle\langle u_i\rvert}
+    \tn[at=(2,3), skin=box, name=m1,
+        ports={270:physical, 90:physical}]{M_1}
+    \tn[at=(1,3), skin=box, wide=2, name=m2,
+        ports={270@1:physical, 270@2:physical,
+               90@1:physical:$T_1$, 90@2:physical:$T_2\setminus T_1$}]{M_2}
+    \tnwire{o.90@1}{p.270@1}
+    \tnwire{o.90@3}{m1.270} \tnwire{m1.90}{m2.270@1}
+    \tnwire{o.90@4}{m2.270@2}
+  \end{tenkz}
+  \;=\;\sqrt{p_i}\;\;
+  \begin{tenkz}[rows={wire,wire,wire}, cols=6, bonds=none]
+    \tn[at=(3,1), skin=box, name=u, ports={90:physical}]{u_i}
+    \tn[at=(1,1), skin=none, name=ux, ports={270:physical, 90:physical:$X$}]{}
+    \tnwire{u.90}{ux.270}
+    \tn[at=(3,3), skin=box, wide=4, name=w,
+        ports={90@1:physical, 90@2:physical, 90@4:physical}]{w_i}
+    \tn[at=(1,6), skin=none, name=wx, ports={270:physical, 90:physical:$\Lambda\setminus X_2$}]{}
+    \tnwire{w.90@4}{wx.270}
+    \tn[at=(2,3), skin=box, name=m1,
+        ports={270:physical, 90:physical}]{M_1}
+    \tn[at=(1,3), skin=box, wide=2, name=m2,
+        ports={270@1:physical, 270@2:physical,
+               90@1:physical:$T_1$, 90@2:physical:$T_2\setminus T_1$}]{M_2}
+    \tnwire{w.90@1}{m1.270} \tnwire{m1.90}{m2.270@1}
+    \tnwire{w.90@2}{m2.270@2}
+  \end{tenkz}
+\end{aligned}
+\]

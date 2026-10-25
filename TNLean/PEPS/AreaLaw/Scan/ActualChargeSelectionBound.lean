@@ -22,11 +22,71 @@ OpenAI, *A two-dimensional area law from a global spectral gap*, September 24,
 `08-scanner.tex`, lines 442–490.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open scoped BigOperators
 open Matrix Set Filter Topology MeasureTheory PermutationRepresentation Entropy
 open TensorPower TensorPower.ReplicaTransport
+
+/-- The selection of one actual charge stage and one common parameter at any constants `c₀,
+C_ent, e_ent, C_en, e_en` satisfying the finite-family transport bound, such as QICLean's
+universal transport constants, which depend on none of `q, R, J, Δ`. Source: `08-scanner.tex`,
+lines 442–490. -/
+theorem actualCharges_selection_domainGraph_of_finiteFamilyTransportBound
+    {c₀ Cent eent Cen een : ℝ} (htransport : FiniteFamilyTransportBound c₀ Cent eent Cen een) :
+    ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
+      [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
+      (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
+      (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
+      (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
+      S.graph = domainGraph Λ →
+      S.depth = (fun x => ambientDepth T hT x.val) →
+      (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
+      ∀ {L μ : ℕ} (hn : 2 ≤ S.n), 2 * S.r₀ ≤ S.D →
+      ∀ (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m),
+      8 * S.K * S.m ≤ L → ∀ (hCpos : 0 < S.C₁), 3 * (μ : ℝ) ≤ S.C₁ →
+      (∀ d : ℕ, 1 ≤ d → d ≤ L →
+        (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
+      (∀ x, (Finset.univ.filter fun i => S.anchor i = x).card ≤ μ) →
+      (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+      ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
+      let hm : 0 < S.m := by omega
+      let hM : 0 < S.M := chargeSlotCount_pos hCpos (Nat.le_trans (by decide) hn) hDpos
+      let n := augmentedDimensions (V := Site Λ) q aux
+      let E := S.actualEnergyTerms h Ω Δ L aux
+      let ℓ := transportLogDimBound q S.r₀
+      ∃ (β : ℕ → ℝ) (Cβ : ℝ), 0 ≤ Cβ ∧
+        (∀ k, 0 ≤ β k) ∧ (∀ k, β k ≤ Cβ * Real.log (k + 2)) ∧
+        ∀ (k : ℕ) (pre : Config k (fun v => Fin (n v)) → ℂ),
+          0 < k → pre ∈ symmetricSubspace k (fun v => Fin (n v)) → pre ≠ 0 →
+          ∀ p₀ p₁ : ℝ, 0 ≤ p₀ → p₀ < p₁ → p₁ ≤ 1 →
+            let ρ := (k : ℝ) * a *
+              ((1 / (2 * (S.C₁ + 1))) / ((S.n : ℝ) * S.D))
+            let B := Real.log (Transport.filteredNormSq
+              ((S.actualFillData hm hM 0).rootPath n (a / 2) k 0) pre) -
+              Real.log (Transport.filteredNormSq
+                ((S.actualFillData hm hM (S.n * S.m)).rootPath n (a / 2) k 0) pre) +
+              (2 * S.n * S.m : ℕ) *
+                (Cent * k * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent + β k)
+            ∃ s : Fin (S.n * S.m), ∃ p ∈ Icc p₀ p₁,
+              S.actualChargeEntropyDefect hm hM s.val n E (a / 2) k pre p ≤
+                B / (ρ * ((S.n * S.m : ℕ) : ℝ) * (p₁ - p₀)) := by
+  intro Λ T q R J Δ _ _ aux _ h Ω S hT hgraph hdepth hanchor hΔ hΩ
+    L μ hn hr hDpos hD hL hCpos hC hrows hmult hclear a ha haℓ hm hM n E ℓ
+  obtain ⟨β, Cβ, hCβ, hβ0, hβ, hsum⟩ :=
+    actualCharges_integral_bound_domainGraph_of_finiteFamilyTransportBound htransport aux h Ω S
+      hT hgraph hdepth hanchor hΔ hΩ hn hr hDpos hD hL hCpos hC
+      hrows hmult hclear ha haℓ
+  refine ⟨β, Cβ, hCβ, hβ0, hβ, fun k pre hk hpre hne p₀ p₁ h0 h01 h1 ↦ ?_⟩
+  exact S.exists_actualCharge_point_of_sum_integral_le hm hM (by omega) n E ha.le k pre
+    h0 h01 h1
+    (mul_pos (mul_pos (Nat.cast_pos.mpr hk) ha)
+      (div_pos (one_div_pos.mpr (mul_pos zero_lt_two (add_pos hCpos zero_lt_one)))
+        (mul_pos (Nat.cast_pos.mpr (show 0 < S.n by omega)) (Nat.cast_pos.mpr hDpos))))
+    (hsum k pre hpre hne p₀ p₁ h0 h01.le h1)
 
 /-- The established all-charge integral bound selects a literal actual charge
 stage and a common parameter on every nondegenerate subinterval of `[0,1]`.
@@ -76,19 +136,8 @@ theorem actualCharges_selection_domainGraph :
               ∃ s : Fin (S.n * S.m), ∃ p ∈ Icc p₀ p₁,
                 S.actualChargeEntropyDefect hm hM s.val n E (a / 2) k pre p ≤
                   B / (ρ * ((S.n * S.m : ℕ) : ℝ) * (p₁ - p₀)) := by
-  obtain ⟨c₀, Cent, eent, hc₀, hbound⟩ := actualCharges_integral_bound_domainGraph
-  refine ⟨c₀, Cent, eent, hc₀, ?_⟩
-  intro Λ T q R J Δ _ _ aux _ h Ω S hT hgraph hdepth hanchor hΔ hΩ
-    L μ hn hr hDpos hD hL hCpos hC hrows hmult hclear a ha haℓ hm hM n E ℓ
-  obtain ⟨β, Cβ, hCβ, hβ0, hβ, hsum⟩ :=
-    hbound aux h Ω S hT hgraph hdepth hanchor hΔ hΩ hn hr hDpos hD hL hCpos hC
-      hrows hmult hclear ha haℓ
-  refine ⟨β, Cβ, hCβ, hβ0, hβ, fun k pre hk hpre hne p₀ p₁ h0 h01 h1 ↦ ?_⟩
-  exact S.exists_actualCharge_point_of_sum_integral_le hm hM (by omega) n E ha.le k pre
-    h0 h01 h1
-    (mul_pos (mul_pos (Nat.cast_pos.mpr hk) ha)
-      (div_pos (one_div_pos.mpr (mul_pos zero_lt_two (add_pos hCpos zero_lt_one)))
-        (mul_pos (Nat.cast_pos.mpr (show 0 < S.n by omega)) (Nat.cast_pos.mpr hDpos))))
-    (hsum k pre hpre hne p₀ p₁ h0 h01.le h1)
+  obtain ⟨c₀, Cent, eent, Cen, een, hc₀, htransport⟩ := exists_finiteFamilyTransportBound
+  exact ⟨c₀, Cent, eent, hc₀,
+    actualCharges_selection_domainGraph_of_finiteFamilyTransportBound htransport⟩
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

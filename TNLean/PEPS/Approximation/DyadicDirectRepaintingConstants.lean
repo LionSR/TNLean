@@ -20,10 +20,16 @@ radius `u = ν n / 2`, so that `2 u = ν n`, and combines it with the separation
 (`ProtocolSeparations`):
 
 * `IsDirectRepaintingRatio K₀ ε₀ ν` states the conclusion of
-  `exists_directRepainting_footprintRatio_reading` with the ratio `ν`; every sufficiently small
-  `ν > 0` satisfies it (`exists_isDirectRepaintingRatio`), a smallness condition on `ν` given
-  `K₀` and `ε₀` of the kind met by `exists_isProtocolConstants`, so constants in the source's
-  order exist with this property (`exists_isProtocolConstants_isDirectRepaintingRatio`);
+  `exists_directRepainting_footprintRatio_reading` with the ratio `ν`; every
+  `ν ≤ directRepaintingRatio K₀ ε₀ = min(ε₀ / max(K₀, 1), 1) / 4` satisfies it
+  (`isDirectRepaintingRatio_of_le`), since three labels of a block guide near a footprint meet at
+  a grid corner within twice the footprint radius, which is less than the hole radius
+  (`IsDisplacedReading.hasTwoOwnerFootprints_blockGuide`); this explicit value replaces the
+  compactness minimum of the source;
+* hence every sufficiently small `ν > 0` satisfies it (`exists_isDirectRepaintingRatio`), a
+  smallness condition on `ν` given `K₀` and `ε₀` of the kind met by `exists_isProtocolConstants`,
+  so constants in the source's order exist with this property
+  (`exists_isProtocolConstants_isDirectRepaintingRatio`);
 * it gives the two-owner hypotheses of the direct repainting
   (`IsDirectRepaintingRatio.hasTwoOwnerFootprints`);
 * hence the direct repainting is one gate with the patch bound `b = protocolPatchBound ε₀ ν`,
@@ -45,7 +51,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame PairEffect
+open EncodedFrame TNLean.Lattice.Sheet TNLean.Lattice.PartyCircuit
 
 /-- **An admissible ratio for the direct repaintings.** For every generic displacement `v`, every
 level `0 < n ≤ K₀ t` and every reading `g'` after `v` of a guide uniform on the `n`-blocks, `g'`
@@ -62,17 +68,64 @@ def IsDirectRepaintingRatio (K₀ ε₀ ν : ℝ) : Prop :=
       {c | c ∈ closedBall (blockCorner n Q) (3 * n) ∧ IsTrueVertex g' c}
       (holeRadius ε₀ n t) (ν * n)
 
+/-- **The mesh ratio of the direct repaintings.** The explicit ratio
+`ν₃ = min(ε₀ / max(K₀, 1), 1) / 4`, in place of the compactness minimum of the source. Twice the
+footprint radius `ν₃ n` is at most half the smallest hole radius `ε₀ n / max(K₀, 1)` of
+`eq:geometry-small-radius`, and at most half the side `n`. The bound is crude: it uses only that
+three labels of a block guide meet at grid corners.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 447–479, 507–527 and 559–563. -/
+noncomputable def directRepaintingRatio (K₀ ε₀ : ℝ) : ℝ := min (ε₀ / max K₀ 1) 1 / 4
+
+/-- The mesh ratio of the direct repaintings is positive.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 559–563. -/
+theorem directRepaintingRatio_pos (K₀ : ℝ) {ε₀ : ℝ} (hε : 0 < ε₀) :
+    0 < directRepaintingRatio K₀ ε₀ := by
+  have : 0 < ε₀ / max K₀ 1 := div_pos hε (lt_of_lt_of_le one_pos (le_max_right _ _))
+  unfold directRepaintingRatio
+  positivity
+
+/-- **Every ratio up to `directRepaintingRatio K₀ ε₀` is admissible for the direct
+repaintings.** Three distinct labels of a reading of a block guide within a footprint come from
+three blocks about one grid corner, which is then a true vertex within twice the footprint radius
+of a footprint point; that is less than the hole radius `h_n ≥ ε₀ n / max(K₀, 1)`.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 447–479 and 507–527. -/
+theorem isDirectRepaintingRatio_of_le (K₀ : ℝ) {ε₀ ν : ℝ} (hε : 0 < ε₀)
+    (hν : ν ≤ directRepaintingRatio K₀ ε₀) : IsDirectRepaintingRatio K₀ ε₀ ν := by
+  intro v _ κ n t hn ht hK lab Q g' hg'
+  have hm : 0 < ε₀ / max K₀ 1 := div_pos hε (lt_of_lt_of_le one_pos (le_max_right _ _))
+  have hν₁ : ν ≤ ε₀ / max K₀ 1 / 4 :=
+    hν.trans (div_le_div_of_nonneg_right (min_le_left _ _) (by norm_num))
+  have hν₂ : ν ≤ 1 / 4 := hν.trans (div_le_div_of_nonneg_right (min_le_right _ _) (by norm_num))
+  have hr := (le_div_iff₀ hn).1 (holeRadius_div_mem_Icc hε.le hn ht hK).1
+  refine hg'.hasTwoOwnerFootprints_blockGuide hn ?_ ?_ ?_
+  · intro c w hw hcw htv
+    refine ⟨?_, htv⟩
+    rw [mem_closedBall] at hw ⊢
+    linarith [dist_triangle c w (blockCorner n Q)]
+  · nlinarith
+  · nlinarith
+
+/-- **The direct repaintings at the explicit mesh ratio.** The ratio `directRepaintingRatio K₀ ε₀`
+is admissible for the direct repaintings.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 447–479, 507–527 and 559–563. -/
+theorem isDirectRepaintingRatio_directRepaintingRatio (K₀ : ℝ) {ε₀ : ℝ} (hε : 0 < ε₀) :
+    IsDirectRepaintingRatio K₀ ε₀ (directRepaintingRatio K₀ ε₀) :=
+  isDirectRepaintingRatio_of_le K₀ hε le_rfl
+
 /-- **Every sufficiently small ratio is admissible.** For `ε₀ > 0` and any `K₀` there is `ν' > 0`
 such that every `ν ∈ (0, ν']` is an admissible ratio for the direct repaintings: the ratio of the
-compactness observation, since the two-owner condition survives shrinking the footprint.
+compactness observation, since the two-owner condition survives shrinking the footprint. The
+threshold `ν' = directRepaintingRatio K₀ ε₀` serves (`isDirectRepaintingRatio_of_le`).
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 464–479, 520–525 and 559–563. -/
 theorem exists_isDirectRepaintingRatio (K₀ : ℝ) {ε₀ : ℝ} (hε : 0 < ε₀) :
-    ∃ ν' > 0, ∀ ν, 0 < ν → ν ≤ ν' → IsDirectRepaintingRatio K₀ ε₀ ν := by
-  obtain ⟨ν', hν', H⟩ := exists_directRepainting_footprintRatio_reading.{0} (K₀ := K₀) hε
-  refine ⟨ν', hν', fun ν _ hle v hv κ n t hn ht hK lab Q g' hg' => ?_⟩
-  have h := (H hv hn ht hK lab Q g' hg').mono (mul_le_mul_of_nonneg_right hle hn.le)
-  rwa [mul_comm n 2, show n * (2 + 1) = 3 * n by ring] at h
+    ∃ ν' > 0, ∀ ν, 0 < ν → ν ≤ ν' → IsDirectRepaintingRatio K₀ ε₀ ν :=
+  ⟨directRepaintingRatio K₀ ε₀, directRepaintingRatio_pos K₀ hε,
+    fun _ _ hle => isDirectRepaintingRatio_of_le K₀ hε hle⟩
 
 /-- **Constants in the source's order with an admissible ratio.** The constants of the protocol
 can be chosen in the source's order so that the mesh parameter `ν` is also an admissible ratio

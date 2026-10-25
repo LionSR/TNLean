@@ -27,6 +27,8 @@ isolated-star properties are not part of these definitions or estimates.
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The center, four corners and four side midpoints of a dyadic belt cell.

@@ -1,0 +1,154 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.9in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\title{Lattice Interfaces and Output Registers in the Chain Sweep}
+\author{}
+\date{October 18, 2026}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\paragraph{Source.}
+The one-dimensional note~\cite{TNLean2026OneDimensional}, Part~II,
+Construction \texttt{con:band} and Proposition \texttt{prop:sweep}
+(\path{part2b_mps_protocol.tex} at revision
+\href{https://github.com/LionSR/TNLean/blob/65a8026e8489243b870c70daf872eed5c5f6cfc6/docs/notes/one_dimensional_note/part2b_mps_protocol.tex}{65a8026},
+lines~248--276 and 349--360),
+requires two local corrections. Neither introduces a new hypothesis.
+
+\paragraph{Setting.}
+We recall the terms of the source (lines~31--44 and 67--80). The chain
+$\Lambda=\{1,\dots,L\}$ carries site registers $\mathbb C^q$ and a
+normalised ground vector $\Omega$. A \emph{party} is a holder of a
+collection of registers; a map acting only on the registers of one party
+is private. A \emph{sheet} is a complete copy
+$\bigotimes_{x\in\Lambda}\mathbb C^q$ of the chain registers together
+with an assignment of an owning party to each site; its reference vector is
+a copy of $\Omega$ on those registers. The construction has one
+distinguished \emph{main sheet}, and each band dissolution prepares one
+\emph{auxiliary sheet}, a fresh copy of $\Omega$ held privately by one
+party. A \emph{birth} hands a set $T$ of sites of a sheet from its owner
+$P$ to another party $Q$, under the condition that $T$ has small mutual
+information in $\Omega$ with the sites not owned by $P$. A \emph{death}
+is the reverse transfer, returning $T$ to $P$, under the same condition
+imposed after the move. A \emph{two-sheet exchange} inside an interval $Y$
+interchanges the ownership assignments of two sheets on $Y$ without moving
+any register between parties. A \emph{band} is an interval of $w$
+consecutive sites being dissolved, and for a band starting at $a$ the scaled
+coordinate of a site $y$ is $(y-a)/w$. Finally, $\Xi$ denotes the tensor
+product of the retired auxiliary copies of $\Omega$ in their final
+registers (lines~356--358), so that $\|\Xi\|=1$.
+\paragraph{Lattice interfaces.}
+The source fixes an integer width $w\ge1$ and initially specifies
+$[a,a+w)$, but writes the subsequent scaled bands as open intervals.
+Choose an interior band with $8w\le a$ and $a+2w\le L$.
+Then $0<a-3w<L$, so $z=a-3w$ is an actual chain site with scaled
+coordinate $-3$. It is initially held by $C$ and lies outside the exchange
+window $(-7,-7/2)$. The first two main-sheet deaths send it to $A$ and
+then $B$. It belongs to neither $(-3,0)$ nor $(-6,-3)$, so remains at
+$B$, contrary to the asserted final $C$ ownership left of zero. This
+witness persists at every positive integer width; it is not a degenerate
+case.
+
+Interpret integer-ended bands as half-open lattice intervals $[u,v)$,
+including their first sites, consistently with the initial band and the
+inclusive sweep intervals (lines~333--342). Retain the open real exchange
+window $(-7,-7/2)$; no parity assumption on $w$ is needed. The ownership
+calculation then restores the original main-sheet owner outside
+$[a,a+w)$ and assigns that band to $B$. The auxiliary sheet ends at $A$
+on $[a-3w,a-2w)$, at $B$ on $[a-2w,a-w)$, and at $C$ elsewhere.
+The seven information margins and the exchange margin are at least $w$.
+
+\paragraph{Distinguished physical outputs.}
+The source explicitly retains auxiliary registers at their actual owners
+(lines~271--272), yet later says that each output party holds precisely
+its block registers and no other party holds any raw register
+(lines~355--360). The auxiliary ownership just computed contradicts that
+all-register assertion. Restrict the block ownership and dimension bound
+$q^{|B_i|}\le q^{4t}$ to the distinguished main sheet. Retain every
+auxiliary register at its actual owner. Their reference factor $\Xi$ is a
+tensor product across copies, not necessarily across parties.
+
+\paragraph{Constructed terminal readout.}
+The terminal regrouping is implemented by a word of party-private operations.
+At each owner it encodes the main registers into the physical block, gives
+a scalar physical output when that block is empty, and retains every
+auxiliary copy-site label privately at its actual owner. The evaluation of
+this word is the prescribed coordinate isometry. For every terminal vector,
+its physical density is exactly the partial trace over the original
+auxiliary labels, expressed in the main-block coordinates. This identity
+requires neither normalization nor a product assumption on that vector.\footnote{
+    Declarations \leanid{TNLean.MPS.AreaLaw.ChainSweep.eval_terminalRegroupingWord}
+    and \leanid{TNLean.MPS.AreaLaw.ChainSweep.physicalDensity_terminalRegrouping}.}
+
+For $q\ge1$, the specified reference has the exact readout
+$\Omega\otimes\Xi$, where
+$\Xi$ is the product of the original labelled auxiliary copies. A unit
+$\Omega$ gives $\|\Xi\|=1$, including the empty family of copies. Thus
+\begin{align}
+    \operatorname{Tr}_{\rm aux}
+    \bigl|\Omega\otimes\Xi\bigr\rangle
+    \bigl\langle\Omega\otimes\Xi\bigr|
+     & =|\Omega\rangle\langle\Omega|.
+    \label{eq:tnlean_one_dimensional_band_sweep_corrections_reference_partial_trace}
+\end{align}
+The normalization and this identity are proved for the constructed reference,
+without requiring a product across final parties.\footnote{Declaration
+    \leanid{TNLean.MPS.AreaLaw.ChainSweep.partialTrace_terminalStackReference}.}
+
+\paragraph{Physical preparation and compression.}
+For fixed $q,R,J,\Delta$ with $q\ge1$ and $\Delta>0$, the full physical
+preparation chooses its logarithmic width constant and a length cutoff
+before the length, Hamiltonian and ground vector.
+Above that cutoff, the original full-system gapped-ground-state assumption
+constructs the actual private initialization, local operations, chronological
+composition and terminal regrouping. No circuit family, marginal identity,
+or information bound is supplied as an additional physical hypothesis.\footnote{
+    Declaration \leanid{TNLean.MPS.AreaLaw.ChainSweep.exists_preparation_of_gappedGroundState}.}
+In the specified main/auxiliary coordinates the prepared vector obeys
+\begin{align}
+    \|\widehat\Psi-\Omega\otimes\Xi\| & \le26L^{-11}.
+    \label{eq:tnlean_one_dimensional_band_sweep_corrections_vector_error}
+\end{align}
+If $U$ is the fixed identification of the original main sites with the
+physical blocks, the actual physical density satisfies
+\begin{align}
+    \bigl\|\rho_{\rm phys}-|U\Omega\rangle\langle U\Omega|\bigr\|_1
+     & \le52L^{-11}.
+    \label{eq:tnlean_one_dimensional_band_sweep_corrections_density_error}
+\end{align}
+The underlying prepared vector has norm at most one. The circuit has
+participation at most forty, at most three parties per nonprivate gate,
+and polynomially bounded physical dimensions, uniformly in the instance.
+
+These constructions form one uniform family to which compression applies.
+One actual nonzero product-basis column is chosen before all cuts; its
+normalization gives the simultaneous block-prefix rank bounds. The inverse
+main-coordinate map then gives one unit, nonzero open-boundary matrix
+product state. With constants chosen before the length, Hamiltonian and
+ground vector, its bond dimension is at most $CL^n$ and its phase error is
+at most $1/L$ for every $L\ge2$. The finitely many lengths below the
+preparation cutoff have exact representations and are absorbed into the
+same constant.\footnote{Declarations
+    \leanid{TNLean.MPS.AreaLaw.ChainSweep.exists_uniform_sampled_block_column}
+    and \leanid{TNLean.MPS.AreaLaw.ChainSweep.exists_protocol_isOpenMPS_norm_sub_phase_le}.}
+Compression bounds only the distinguished physical outputs. Private spaces
+remain finite-dimensional without an additional numerical size bound.
+
+\paragraph{Information exponent and width.}
+The local birth and death estimates use information at exponent $24$ and
+error at exponent $12$; the exchange has error at most $4L^{-12}$.
+The width constant is chosen from logarithmic separation at exponent $24$,
+before the length and all physical data, and may be enlarged to meet the
+geometric bounds. There are at most $L$ operations, so their total vector
+error is at most $4L^{-11}\le26L^{-11}$. The same preparation and compression
+therefore give the stated existential constants in Theorem~B.
+The nondegenerate lattice witness and the correction to the all-register
+output assertion remain valid and are retained above.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

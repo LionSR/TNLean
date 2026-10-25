@@ -109,8 +109,11 @@ All intermediate hypotheses of the scanner chain are eliminated in five steps
 leading to (\ref{eq:safe_box_collar_conditional_template}).\footnote{The
     conditional template mutual-information theorem is
     \leanid{TNLean.PEPS.AreaLaw.Scan.exists_template_final_mutualInformation_of_boxEntropy},
-    tracked in \href{https://github.com/LionSR/TNLean/issues/8756}{issue~8756}
-    and \href{https://github.com/LionSR/TNLean/issues/9334}{issue~9334}.}
+    whose tracking issues
+    \href{https://github.com/LionSR/TNLean/issues/8756}{issue~8756}
+    and \href{https://github.com/LionSR/TNLean/issues/9334}{issue~9334} were
+    resolved by
+    \href{https://github.com/LionSR/TNLean/pull/9463}{pull request~9463}.}
 
 \paragraph{1. Post-replica collar mutual information from the sharp comparison.}
 Fix the final scanner exponents $\mu = 1/4$, $\ell = 10^{-5}$,
@@ -409,7 +412,9 @@ with no assumed safe-box estimate or mutual-information inequality.
 
 This resolves the safe-box and collar restrictions described here.
 The two-family repair construction of Proposition~11.2 and its use in
-Theorem~1.1 remain separate mathematical requirements.
+Theorem~1.1 are proved separately.\footnote{The theorems are
+    \leanid{TNLean.PEPS.AreaLaw.twoFamilyDecomposition} and
+    \leanid{TNLean.PEPS.AreaLaw.uniformAreaLaw}.}
 
 \bibliographystyle{alpha}
 \bibliography{references}

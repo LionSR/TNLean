@@ -31,11 +31,11 @@ points and assign to each point its smallest incident cell side; see
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_sparse_dyadic_belts,thm:area_law_polynomial_summability}
-    Choose a sparse pair of residues at each scale. The integer counts
+    Under a sparse pair of residues at each scale, the integer counts
     $|F_k|$ are dominated by a fixed multiple of a summable geometric
     sequence. Their real-valued series is therefore summable, so its
-    terms tend to zero. Eventually $|F_k|<1$, which forces $F_k$ to be
-    empty. Only finitely many indices remain.
+    terms tend to zero and $|F_k|<1$ eventually, forcing $F_k$ to be
+    empty outside finitely many indices.
 \end{proof}
 
 \begin{theorem}[Uniform count of all initial marks]
@@ -62,11 +62,11 @@ points and assign to each point its smallest incident cell side; see
     \uses{thm:area_law_finite_sparse_belt_family,thm:area_law_belt_mark_count,
         thm:area_law_polynomial_finite_sums}
     Let $B_0>0$ be the uniform finite-sum constant for the zero polynomial
-    exponent, and take $B=576B_0$. Form the union of the marks
-    over the finite support restricted to $k\ge k_0$. Its membership is
-    exactly the stated condition. A finite union has at most the sum of
-    the individual cardinalities, and each cell contributes at most
-    nine marks. Thus its count is at most
+    exponent, and set $B=576B_0$. The union of the marks
+    over the finite support restricted to $k\ge k_0$ has the stated
+    membership condition. Since a finite union has at most the sum of
+    the individual cardinalities and each cell contributes at most
+    nine marks, its count is at most
     \begin{align}
         9\sum_{k\ge k_0}|F_k|
          & \le576(2C_0+1)^2|\partial_\Lambda A|
@@ -125,11 +125,10 @@ points and assign to each point its smallest incident cell side; see
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_adjacent_fine_meshes}
-    For each $v\in M$, take the least layer index $k(v)\ge k_0$
-    with an incident cell, and put $s(v)=2^{\ell_{k(v)}}$.
-    The exponent $\ell_k$ is nondecreasing in $k$, so $s(v)$ is a
-    smallest incident side. It is realized at the chosen layer and
-    is positive.
+    For each $v\in M$, the least layer index $k(v)\ge k_0$
+    with an incident cell defines $s(v)=2^{\ell_{k(v)}}>0$.
+    Because the exponent $\ell_k$ is nondecreasing in $k$, $s(v)$ is a
+    smallest incident side realized at layer $k(v)$.
 \end{proof}
 
 \begin{theorem}[Counted and separated initial marks]
@@ -155,10 +154,11 @@ points and assign to each point its smallest incident cell side; see
     \uses{thm:area_law_uniform_initial_mark_count,
         thm:area_law_least_incident_mark_scales,
         thm:area_law_fine_layer_mark_separation}
-    Choose the counted finite union and residues from the preceding
-    construction. For each point of $M$, take the least layer index
-    admitting an incident selected cell. The fine-cell exponent is
-    nondecreasing, so this gives a positive smallest incident side.
-    Apply fine-layer mark separation to the two cells realizing $s(v)$ and $s(w)$.
-    When $M$ is empty the assignment and pairwise condition are empty.
+    For the counted finite union and residues from the uniform initial-mark
+    bound, taking the least
+    layer index admitting an incident selected cell at each point of $M$
+    gives a positive smallest incident side because the fine-cell exponent is
+    nondecreasing.
+    Applying fine-layer mark separation to the two cells realizing $s(v)$ and $s(w)$
+    then gives the pairwise distance bound (which is vacuous when $M$ is empty).
 \end{proof}

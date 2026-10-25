@@ -30,6 +30,8 @@ independently of the area law.
 Independently formalized; no upstream Lean proof text reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- A bound with exponent `1 + e` implies the scanner's improved exponent

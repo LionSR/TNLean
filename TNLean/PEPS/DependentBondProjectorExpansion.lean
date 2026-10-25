@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.DependentBondNetwork
+import TNLean.Lattice.Compression.DependentBondNetwork
 import TNLean.PEPS.GInjective
 import TNLean.Algebra.RepresentationTensorProduct
 
@@ -28,6 +28,7 @@ noncomputable section
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS.DependentBondNetwork
+open TNLean.Lattice.DependentBondNetwork
 
 variable {Vertex Edge : Type*} [Fintype Edge] [DecidableEq Edge] [DecidableEq Vertex]
 variable (tail head : Edge → Vertex) (D : Edge → Type*)

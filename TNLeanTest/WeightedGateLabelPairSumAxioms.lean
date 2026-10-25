@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.WeightedGateLabelPairSum
+import TNLean.Lattice.Compression.WeightedGateLabelPairSum
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
@@ -11,7 +11,7 @@ import Lean.Util.CollectAxioms
 
 set_option linter.hashCommand false
 
-open TNLean.PEPS.Approximation
+open TNLean.Lattice.Compression
 
 run_cmd do
   let decl := ``weighted_sum_gateLabels_eq_exterior_smul_orderedGateLabelPairs

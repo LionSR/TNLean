@@ -23,15 +23,13 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 492--533 and 693--755, revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Original formalization from the manuscript; no upstream Lean proof text reused.
-
-Validation and inherited-dependency scope:
-`docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
 -/
 
 noncomputable section
 
 open Matrix Set TensorPower TensorPower.ReplicaTransport
 open scoped BigOperators Matrix ComplexOrder MatrixOrder
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -103,8 +101,8 @@ theorem actualCharge_defect_le_of_density_energy_bound_at_exponent
   have ha : 0 ≤ a := div_nonneg hW (Nat.cast_nonneg S.K)
   have herr : 0 ≤ err := S.actualCharge_energyError_nonneg hm hM s dims E ha k (pre k) p
   have hℓ : 0 ≤ ℓ := zero_le_one.trans (one_le_transportLogDimBound (NeZero.pos q) S.r₀)
-  have hcoef : Cen * a ^ 2 * ℓ ^ een * err ≤ |Cen| * a ^ 2 * ℓ ^ een * err := by
-    exact mul_le_mul_of_nonneg_right
+  have hcoef : Cen * a ^ 2 * ℓ ^ een * err ≤ |Cen| * a ^ 2 * ℓ ^ een * err :=
+    mul_le_mul_of_nonneg_right
       (mul_le_mul_of_nonneg_right
         (mul_le_mul_of_nonneg_right (le_abs_self Cen) (sq_nonneg a))
         (Real.rpow_nonneg hℓ een)) herr

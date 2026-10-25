@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.WordOwnerRestriction
-import TNLean.PEPS.Approximation.WordAppendTailRestriction
-import TNLean.PEPS.Approximation.LayoutExcludedOwners
-import TNLean.PEPS.Approximation.PartyTensorMaps
+import TNLean.Lattice.Compression.WordOwnerRestriction
+import TNLean.Lattice.Compression.WordAppendTailRestriction
+import TNLean.Lattice.Compression.LayoutExcludedOwners
+import TNLean.Lattice.PartyCircuit.PartyTensorMaps
 
 /-!
 # Spectators at an excluded owner
@@ -22,7 +22,8 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 
 noncomputable section
 open scoped TensorProduct
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
+open TNLean.Lattice.PartyCircuit
 open ContinuousLinearMap
 
 private theorem appendTail_eval_heq_id_of_empty_layouts {P : Type}
@@ -72,4 +73,4 @@ theorem restrict_mapOwner_appendTail_eval_heq_id_of_disjoint {C P : Type}
     (Layout.restrict (partySelector p) tail)
   exact hrestriction.trans hspectator
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

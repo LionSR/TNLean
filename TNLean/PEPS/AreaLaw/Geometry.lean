@@ -12,6 +12,7 @@ import TNLean.PEPS.AreaLaw.Geometry.ActualSideMatching
 import TNLean.PEPS.AreaLaw.Geometry.AdjacentScales
 import TNLean.PEPS.AreaLaw.Geometry.AllowedSlopeAffineLine
 import TNLean.PEPS.AreaLaw.Geometry.AmbientBoundary
+import TNLean.PEPS.AreaLaw.Geometry.BeltFacetSeparation
 import TNLean.PEPS.AreaLaw.Geometry.BeltFanColors
 import TNLean.PEPS.AreaLaw.Geometry.BeltMarks
 import TNLean.PEPS.AreaLaw.Geometry.BeltReplacementTemplates
@@ -110,6 +111,7 @@ import TNLean.PEPS.AreaLaw.Geometry.PrimaryFineCellCover
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryFragments
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryRegions
 import TNLean.PEPS.AreaLaw.Geometry.QuotientIntervals
+import TNLean.PEPS.AreaLaw.Geometry.RangeNestedPatches
 import TNLean.PEPS.AreaLaw.Geometry.RectangleMixedSquares
 import TNLean.PEPS.AreaLaw.Geometry.RectangleShellCounts
 import TNLean.PEPS.AreaLaw.Geometry.RectangleShellWeightedCover
@@ -154,10 +156,8 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairRankZeroAncestry
 import TNLean.PEPS.AreaLaw.Geometry.RepairRegionDisjointness
 import TNLean.PEPS.AreaLaw.Geometry.RepairReplacementLatticeCoverage
 import TNLean.PEPS.AreaLaw.Geometry.RepairReplacementRegions
-import TNLean.PEPS.AreaLaw.Geometry.RepairRetainedErrorSum
 import TNLean.PEPS.AreaLaw.Geometry.RepairRetainedNonprimaryErrorSum
 import TNLean.PEPS.AreaLaw.Geometry.RepairRetainedPrefixCount
-import TNLean.PEPS.AreaLaw.Geometry.RepairRetainedPrimaryErrorSum
 import TNLean.PEPS.AreaLaw.Geometry.RepairRootPrefixCount
 import TNLean.PEPS.AreaLaw.Geometry.RepairStabilization
 import TNLean.PEPS.AreaLaw.Geometry.RepairStage
@@ -169,7 +169,6 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairTerminalPrefixSites
 import TNLean.PEPS.AreaLaw.Geometry.RepairTerminalSquareCount
 import TNLean.PEPS.AreaLaw.Geometry.RepairTermination
 import TNLean.PEPS.AreaLaw.Geometry.RepairTotalMarkPrefixCount
-import TNLean.PEPS.AreaLaw.Geometry.RepairUniformExceptionalSites
 import TNLean.PEPS.AreaLaw.Geometry.ScaleSeparation
 import TNLean.PEPS.AreaLaw.Geometry.SegmentBallClipping
 import TNLean.PEPS.AreaLaw.Geometry.SideEndpoints
@@ -196,4 +195,5 @@ import TNLean.PEPS.AreaLaw.Geometry.TemplateRows
 import TNLean.PEPS.AreaLaw.Geometry.TemplateSafeRectangles
 import TNLean.PEPS.AreaLaw.Geometry.TemplateShellCover
 import TNLean.PEPS.AreaLaw.Geometry.Templates
-import TNLean.PEPS.AreaLaw.Geometry.TwoFamilyDecomposition
+import TNLean.PEPS.AreaLaw.Geometry.TwoFamilyAssembly
+import TNLean.PEPS.AreaLaw.Geometry.TwoFamilyExplicitThresholds

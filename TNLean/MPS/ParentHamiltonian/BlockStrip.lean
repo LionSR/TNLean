@@ -73,7 +73,7 @@ private theorem exists_right_factor_of_block_letter_compatibility
     fun σ => Kraus.evalWord A (List.ofFn σ)
   have hSurj : Function.Surjective (Fintype.linearCombination ℂ gen) := by
     apply (span_range_eq_top_iff_surjective_fintypeLinearCombination ℂ gen).mp
-    simpa [gen, Kraus.wordSpan, Kraus.wordSpan] using
+    simpa [gen, Kraus.wordSpan] using
       (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
   obtain ⟨c, hc⟩ := hSurj (1 : Matrix (Fin D) (Fin D) ℂ)
   have hc' : ∑ τ, c τ • gen τ = (1 : Matrix (Fin D) (Fin D) ℂ) := by
@@ -124,8 +124,7 @@ theorem exists_right_factor_of_block_word_compatibility
           refine ⟨Yτ, ?_⟩
           intro σ
           simpa [Zi, List.ofFn_cons, Kraus.evalWord, Matrix.mul_assoc] using hYτ σ
-        obtain ⟨Xi, hXi⟩ := ih hCompatZi
-        exact ⟨Xi, hXi⟩
+        exact ih hCompatZi
       exact exists_right_factor_of_block_letter_compatibility hInj hL₀ hCompat1
 
 /-- If a family has a common right boundary matrix after multiplication by every
@@ -204,7 +203,7 @@ theorem commutes_block_words_of_commutes_long_words_of_isNBlkInjective
     fun σ => Kraus.evalWord A (List.ofFn σ)
   have hSurj : Function.Surjective (Fintype.linearCombination ℂ gen) := by
     apply (span_range_eq_top_iff_surjective_fintypeLinearCombination ℂ gen).mp
-    simpa [gen, Kraus.wordSpan, Kraus.wordSpan] using
+    simpa [gen, Kraus.wordSpan] using
       (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
   obtain ⟨c, hc⟩ := hSurj (1 : Matrix (Fin D) (Fin D) ℂ)
   have hc' : ∑ σ, c σ • gen σ = (1 : Matrix (Fin D) (Fin D) ℂ) := by
@@ -237,7 +236,7 @@ theorem commutes_all_of_commutes_long_words_of_isNBlkInjective
   have hφ : LinearMap.mulLeft ℂ X = LinearMap.mulRight ℂ X := by
     apply LinearMap.ext_on_range
       (v := fun σ : Fin L₀ → Fin d => Kraus.evalWord A (List.ofFn σ))
-    · simpa [Kraus.wordSpan, Kraus.wordSpan] using
+    · simpa [Kraus.wordSpan] using
         (wordSpan_eq_top_iff_isNBlkInjective A L₀).mpr hInj
     · intro σ
       simpa [LinearMap.mulLeft_apply, LinearMap.mulRight_apply] using hBlock σ

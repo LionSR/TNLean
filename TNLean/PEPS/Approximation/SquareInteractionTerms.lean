@@ -25,17 +25,17 @@ namespace TNLean.PEPS.Approximation
 singleton and nearest-neighbor supports in the integer rectangle.
 Source: polynomial-PEPS `eq:model` and `03-patches.tex`, lines 213–336. -/
 theorem SquareHamiltonian.exists_nearestNeighbor_terms {L q : ℕ} {J : ℝ}
-    (h : SquareHamiltonian L q J) (hJ : 0 ≤ J)
-    [LinearOrder (AreaLaw.Site (AreaLaw.rectangularDomain L L))] :
-    ∃ T : (AreaLaw.Site (AreaLaw.rectangularDomain L L) ⊕
-        Edge (AreaLaw.domainGraph (AreaLaw.rectangularDomain L L))) →
-        Matrix (AreaLaw.Configuration (AreaLaw.rectangularDomain L L) q)
-          (AreaLaw.Configuration (AreaLaw.rectangularDomain L L) q) ℂ,
+    (h : SquareHamiltonian L q J)
+    [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))] :
+    ∃ T : (Lattice.Site (AreaLaw.rectangularDomain L L) ⊕
+        Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L))) →
+        Matrix (Lattice.Configuration (AreaLaw.rectangularDomain L L) q)
+          (Lattice.Configuration (AreaLaw.rectangularDomain L L) q) ℂ,
       (∀ i, Entropy.IsSupportedOn
-        (n := fun _ : AreaLaw.Site (AreaLaw.rectangularDomain L L) ↦ q)
+        (n := fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
         (T i) (AreaLaw.nearestNeighborSupport i)) ∧
       (∀ i, (T i).IsHermitian) ∧ (∀ i, ‖T i‖ ≤ J) ∧
-      (∑ i, T i) = (h.toAreaLawHamiltonian hJ).operator := by
+      (∑ i, T i) = h.toAreaLawHamiltonian.operator := by
   let e := Equiv.sumCongr (AreaLaw.rectangleSiteEquiv L L)
     ((forwardSquareEdgeEquiv L).trans (Edge.equiv (AreaLaw.rectangleGraphIso L L)))
   let cfg := AreaLaw.rectangleConfigurationEquiv L L q
@@ -61,6 +61,6 @@ theorem SquareHamiltonian.exists_nearestNeighbor_terms {L q : ℕ} {J : ℝ}
         (map_sum (Matrix.reindexAlgEquiv ℂ ℂ cfg) h.hermitianTerm Finset.univ).symm
       _ = Matrix.reindex cfg cfg h.operator :=
         congrArg (Matrix.reindex cfg cfg) h.sum_hermitianTerm
-      _ = _ := (h.toAreaLawHamiltonian_operator hJ).symm
+      _ = _ := h.toAreaLawHamiltonian_operator.symm
 
 end TNLean.PEPS.Approximation

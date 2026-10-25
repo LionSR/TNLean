@@ -179,8 +179,8 @@ and does not add edges to the induced graph.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_square_crossing_interval}
-    Write $e=\{x,y\}$ with $x\in K(c,r)$ and $y\notin K(c,r)$.
-    If either site belonged to $K(c,s)$, the nearest-neighbour enlargement
+    For $e=\{x,y\}$ with $x\in K(c,r)$ and $y\notin K(c,r)$,
+    if either site belonged to $K(c,s)$, the nearest-neighbour enlargement
     would put $y$ in $K(c,s+1)\subseteq K(c,r)$, a contradiction.
     Conversely, $x\in K(c,r)$ implies $y\in K(c,r+1)$, so both sites
     belong to every $K(c,t)$ with $r+1\le t$.
@@ -206,8 +206,8 @@ and does not add edges to the induced graph.
     \uses{thm:peps_nested_patch_sizes,thm:peps_square_crossing_support}
     Earlier and later radii differ from $r_j$ by at least two, so the
     separated-radius support statements apply. If an edge crossed two
-    patches, order their distinct indices. Crossing the earlier patch places
-    both sites in the later patch, contradicting crossing of the later one.
+    patches with indices $i<k$, crossing $K_i$ would place both sites in
+    $K_k$, contradicting $e\in\partial_\Lambda K_k$.
 \end{proof}
 
 The following finite example uses
@@ -255,6 +255,198 @@ physical sites; they are not the boundaries of the ambient real squares.
 % The uniform quadratic sum establishes a geometric coefficient only. It
 % does not identify this sum with a Hamiltonian energy increment.
 
+\subsection{Patches for interactions of range \texorpdfstring{$R$}{R}}
+\label{sec:peps_range_nested_patches}
+
+The source treats on-site and nearest-neighbour interactions. The following
+statements extend the patch geometry to interactions whose supports have
+graph diameter at most a nonnegative integer $R$; they are not in
+\cite{OpenAI2026PolynomialPEPS}. At $R=1$ they select the patches of
+Definition~\ref{def:peps_nested_patches}.
+
+\begin{definition}[Nested square patches at range $R$]
+    \label{def:peps_range_nested_patches}
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.rangePatchSpacing,
+        TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatchCount,
+        TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatchRadius,
+        TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatch
+    }
+    \leanok
+    \uses{def:peps_closed_square_sample}
+    For a nonnegative integer $R$, put $s_R=2\lceil R/2\rceil$. For $R\ge1$
+    and $u\ge0$, put $m_R=\lfloor u/s_R\rfloor+1$, and for $0\le j<m_R$
+    define
+    \begin{align}
+        r_j & =u+s_Rj,\qquad K_j=K(c,r_j).
+        \label{eq:peps_range_nested_patches}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Spacing, number and radii of the range-$R$ patches]
+    \label{thm:peps_range_nested_patch_sizes}
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.le_rangePatchSpacing,
+        TNLean.PEPS.AreaLaw.Geometry.rangePatchSpacing_le,
+        TNLean.PEPS.AreaLaw.Geometry.two_le_rangePatchSpacing,
+        TNLean.PEPS.AreaLaw.Geometry.rangePatchSpacing_one,
+        TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatchCount_one,
+        TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatchRadius_one,
+        TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatch_one,
+        TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatchCount_pos,
+        TNLean.PEPS.AreaLaw.Geometry.div_lt_rangeNestedPatchCount,
+        TNLean.PEPS.AreaLaw.Geometry.le_rangeNestedPatchRadius,
+        TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatchRadius_le_two_mul,
+        TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatchRadius_add_spacing_le,
+        TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatchRadius_mono,
+        TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatch_mono
+    }
+    \leanok
+    \uses{def:peps_range_nested_patches,def:peps_nested_patches}
+    One has $R\le s_R\le R+1$, and $s_R\ge2$ when $R\ge1$. At $R=1$ the
+    count, radii and patches are those of
+    Definition~\ref{def:peps_nested_patches}. The family has $m_R\ge1$
+    patches and $m_R>u/s_R$. If $u\ge0$, every radius satisfies
+    $u\le r_j\le2u$. For $i<j$ one has $r_i+s_R\le r_j$, and for $i\le j$
+    one has $K_i\subseteq K_j$.
+\end{theorem}
+\begin{proof}\leanok
+    The bounds on $s_R$ are integer arithmetic. The floor inequalities give
+    $u/s_R<m_R$ and, when $s_R>0$, $s_Rj\le s_R\lfloor u/s_R\rfloor\le u$
+    for $j<m_R$; when $s_R=0$ all radii equal $u$. Increasing the index by
+    at least one increases the radius by at least $s_R$.
+\end{proof}
+
+\begin{theorem}[A range-$R$ support is split by at most one patch]
+    \label{thm:peps_range_nested_patch_split}
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.abs_squareRadius_sub_le_length,
+        TNLean.PEPS.AreaLaw.Geometry.abs_squareRadius_sub_le_of_isAdmissibleSupport,
+        TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatch_split_unique
+    }
+    \leanok
+    \uses{def:peps_range_nested_patches,def:peps_square_radius,
+        def:area_law_hamiltonian}
+    The endpoints $x,y$ of a walk of length $\ell$ in the induced graph
+    satisfy $|\rho(x)-\rho(y)|\le\ell$. Hence any two sites of a support of
+    graph diameter at most $R$ satisfy $|\rho(x)-\rho(y)|\le R$. If the
+    values of $\rho$ on a set $X$ differ pairwise by at most $R$, then at
+    most one patch $K_j$ of
+    Definition~\ref{def:peps_range_nested_patches} both meets $X$ and misses
+    a site of $X$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_square_crossing_interval,thm:peps_range_nested_patch_sizes}
+    Along each edge $\rho$ changes by at most one, so along a walk it
+    changes by at most the length. Suppose $X$ is split by $K_i$ and $K_j$
+    with $i<j$. Then some $z\in X$ has $\rho(z)\le r_i$ and some $y\in X$
+    has $\rho(y)>r_j\ge r_i+s_R\ge r_i+R$, so $\rho(y)-\rho(z)>R$, a
+    contradiction.
+\end{proof}
+
+\begin{definition}[Inner layer of a square]
+    \label{def:peps_square_layer}
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.squareLayer,
+        TNLean.PEPS.AreaLaw.Geometry.mem_squareLayer
+    }
+    \leanok
+    \uses{def:peps_square_radius}
+    For $r\in\mathbb R$ and a nonnegative integer $R$, let
+    $\mathcal N(c,r,R)=\{x\in\Lambda:r-R<\rho(x)\le r\}$.
+\end{definition}
+
+\begin{theorem}[Size of the inner layer]
+    \label{thm:peps_square_layer}
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.mem_squareLayer_of_split,
+        TNLean.PEPS.AreaLaw.Geometry.card_integerInterval_le,
+        TNLean.PEPS.AreaLaw.Geometry.card_squareLayer_le,
+        TNLean.PEPS.AreaLaw.Geometry.card_squareLayer_rangeNestedPatch_le
+    }
+    \leanok
+    \uses{def:peps_closed_square_sample,def:peps_square_layer,
+        def:peps_range_nested_patches}
+    If the values of $\rho$ on
+    $X$ differ pairwise by at most $R$, and $X$ has a site $y$ outside
+    $K(c,r)$, then every site of $X$ in $K(c,r)$ lies in $\mathcal N(c,r,R)$. If
+    $r\ge0$, then $|\mathcal N(c,r,R)|\le R(8r+4)$, and for the patches of
+    Definition~\ref{def:peps_range_nested_patches} with $u\ge0$,
+    $|\mathcal N(c,r_j,R)|\le R(16u+4)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_range_nested_patch_sizes}
+    A site $x$ of $X$ in $K(c,r)$ has $\rho(x)\ge\rho(y)-R>r-R$. A site of
+    $\mathcal N(c,r,R)$ lies in one of four strips, such as
+    $c_1+r-R<x_1\le c_1+r$ with $|x_2-c_2|\le r$. A half-open interval of
+    length $R$ contains exactly $R$ integers and a closed interval of length
+    $2r$ at most $2r+1$, so each strip has at most $R(2r+1)$ sites. For the
+    patches, $r_j\le2u$.
+\end{proof}
+
+\begin{theorem}[Quadratic coefficient at range $R$]
+    \label{thm:peps_range_nested_patch_quadratic_sum}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatch_quadratic_budget}
+    \leanok
+    \uses{def:peps_range_nested_patches}
+    Let $R\ge1$, $u\ge0$ and $\kappa\in\mathbb R$, and assign each patch of
+    Definition~\ref{def:peps_range_nested_patches} the weight
+    $t_j=\kappa/m_R$. Then
+    \begin{align}
+        (16u+4)\sum_{j=0}^{m_R-1}t_j^2 & \le18s_R\kappa^2.
+        \label{eq:peps_range_nested_patch_budget}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_range_nested_patch_sizes}
+    Since $u<s_Rm_R$ and $s_Rm_R\ge2$, one has
+    $16u+4\le16s_Rm_R+2s_Rm_R=18s_Rm_R$, and
+    $\sum_jt_j^2=\kappa^2/m_R$.
+\end{proof}
+
+\begin{lemma}[Entropy of a sampled square at a given area-law constant]
+    \label{lem:peps_closed_square_entropy_explicit}
+    \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLawAt.closedSquareSample_entropy_le}
+    \leanok
+    \uses{def:square_entropy_area_law_at,def:area_law_ground_entropy,
+        def:square_area_law_state,def:peps_closed_square_sample}
+    Assume the square-grid entropy area law for a family of states with
+    constant $C_A$, and put $C_S=\max\{1,16C_A\}$. For every $L$, every state
+    $\Omega$ of the family, every centre $c$ and all reals $u,r$ with
+    $0\le r\le2u$, the sampled square $K(c,r)$ in the integer square of side
+    $L$ satisfies $S_{U\Omega}(K(c,r))\le C_S(1+u)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:finite_product_entropy_relabel,thm:square_edge_boundary_card,
+        thm:peps_closed_square_boundary}
+    The area law gives $S_{U\Omega}(K(c,r))\le C_A|\partial_\Lambda K(c,r)|$,
+    and $|\partial_\Lambda K(c,r)|\le8r+4\le16u+4\le16(1+u)$.
+\end{proof}
+
+\begin{theorem}[Entropy of the selected squares at a given area-law constant]
+    \label{thm:peps_nested_patch_entropy_explicit}
+    \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLawAt.nestedPatch_entropy_le}
+    \leanok
+    \uses{def:square_entropy_area_law_at,def:polynomial_peps_model,
+        def:area_law_ground_entropy,def:square_area_law_state,
+        def:peps_nested_patches}
+    Assume the square-grid entropy area law for a family of states with
+    constant $C_A$, and put $C_S=\max\{1,16C_A\}$. For every $L$, every
+    state $\Omega$ of the family, every centre $c$, every
+    $u\ge0$, and every $0\le j<m$, the nested patch $K_j$ in the integer square
+    of side $L$ satisfies $S_{U\Omega}(K_j)\le C_S(1+u)$. This is the
+    entropy bound in the
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L362-L368}{proof of Proposition 4.1}
+    with its constant explicit.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:peps_closed_square_entropy_explicit,thm:peps_nested_patch_sizes}
+    The radius of $K_j$ lies between $u$ and $2u$, so
+    Lemma~\ref{lem:peps_closed_square_entropy_explicit} applies.
+\end{proof}
+
 \begin{theorem}[Entropy of the selected squares under the square area law]
     \label{thm:peps_nested_patch_entropy}
     \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLaw.exists_nestedPatch_entropy_le}
@@ -268,7 +460,8 @@ physical sites; they are not the boundaries of the ambient real squares.
     bound $J$, every unit vector $\Omega$ and real $E_0$ with
     $H\Omega=E_0\Omega$ and $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$,
     every centre $c$, every $u\ge0$, and every $0\le j<m$, the nested patch
-    $K_j$ in the integer square of side $L$ satisfies
+    $K_j$ in the integer square of side $L$ satisfies the entropy bound in the
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L362-L374}{proof of Proposition 4.1}:
     \begin{align}
         S_{U\Omega}(K_j) & \le C_S(1+u).
         \label{eq:peps_nested_patch_entropy}
@@ -276,17 +469,12 @@ physical sites; they are not the boundaries of the ambient real squares.
     The constant is chosen before $L$, $H$, $\Omega$, $c$ and $u$. The area
     law is a hypothesis here; its derivation from the spectral gap is the
     separate rectangular specialization of the finite-domain area law,
-    which is not yet established. This is the
-    entropy bound in the
-    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L362-L374}{proof of Proposition 4.1}.
+    which is not yet established.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:finite_product_entropy_relabel,thm:square_edge_boundary_card,
-        thm:peps_nested_patch_sizes}
-    Let $C_A\ge0$ be the area-law constant and put
-    $C_S=\max\{1,16C_A\}$. Transport $K_j$ to the original grid. The entropy
-    and the edge boundary are unchanged by the site relabelling, so the area
-    law gives $S_{U\Omega}(K_j)\le C_A|\partial_\Lambda K_j|$. The boundary
-    bound $|\partial_\Lambda K_j|\le16u+4\le16(1+u)$ completes the proof.
+    \uses{def:square_entropy_area_law_at,thm:peps_nested_patch_entropy_explicit}
+    The area law supplies a constant $C_A\ge0$ at $q$, $J$, $\Delta$. Take
+    $C_S=\max\{1,16C_A\}$ and apply
+    Theorem~\ref{thm:peps_nested_patch_entropy_explicit}.
 \end{proof}

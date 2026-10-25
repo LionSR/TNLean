@@ -3,13 +3,13 @@
 \begin{theorem}[Entropy bounded by the number of sites]
     \label{thm:area_law_entropy_dimension}
     \leanok
-    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_le_card_mul_log}
+    \lean{TNLean.Lattice.regionalEntropy_le_card_mul_log}
     \uses{def:area_law_ground_entropy}
-    Let $\Lambda\subset\mathbb Z^2$ be finite, let $q\in\mathbb N$, and let
+    In the regional dimension estimate used in the proof of
+    \cite[Theorem~1.1]{OpenAI2026AreaLaw}, let $\Lambda\subset\mathbb Z^2$ be
+    finite, let $q\in\mathbb N$, and let
     $\Omega\in\bigotimes_{v\in\Lambda}\mathbb C^q$ be a unit vector.
     Every region $A\subseteq\Lambda$ satisfies $S_\Omega(A)\le |A|\log q$.
-    This is the regional dimension estimate used in the proof of
-    \cite[Theorem~1.1]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -38,6 +38,6 @@
     \uses{thm:area_law_two_family_entropy, thm:area_law_entropy_dimension}
     Two-family entropy cancellation gives
     $S_\Omega(A)\le S_\Omega(D)+\frac12\sum_i\varepsilon_i$.
-    Apply the regional dimension bound to $D$. Since $\log q\ge0$,
-    substituting the two assumed bounds proves the claimed inequality.
+    Applying the regional dimension bound to $D$ and substituting the two assumed
+    bounds with $\log q\ge0$ proves the claimed inequality.
 \end{proof}

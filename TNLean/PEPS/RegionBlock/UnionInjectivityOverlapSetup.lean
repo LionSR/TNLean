@@ -312,13 +312,6 @@ instance (R₁ R₂ : Finset V) (eg : Edge G) :
   unfold IsOverlapCrossingEdge; infer_instance
 
 omit [Fintype V] [DecidableRel G.Adj] in
-/-- Both endpoints of a `P₁`--`P₀` crossing edge lie in `R₁`. -/
-theorem isOverlapCrossingEdge_both_mem_R₁ {R₁ R₂ : Finset V} {eg : Edge G}
-    (h : IsOverlapCrossingEdge (G := G) R₁ R₂ eg) : eg.1.1 ∈ R₁ ∧ eg.1.2 ∈ R₁ := by
-  simp only [IsOverlapCrossingEdge, Finset.mem_inter, Finset.mem_sdiff] at h
-  grind
-
-omit [Fintype V] [DecidableRel G.Adj] in
 /-- A `P₁`--`P₀` crossing edge is not a boundary edge of the union `R₁ ∪ R₂`: both
 endpoints lie in `R₁ ⊆ R₁ ∪ R₂`. -/
 theorem not_isRegionBoundaryEdge_union_of_overlapCrossing {R₁ R₂ : Finset V} {eg : Edge G}

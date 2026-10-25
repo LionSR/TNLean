@@ -16,6 +16,7 @@ these same data; no scanner hypothesis is replaced by a supplied certificate.
 set_option autoImplicit false
 
 open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan
+open TNLean.Lattice
 
 namespace TNLeanTest.ActualBandGeometryData
 noncomputable section

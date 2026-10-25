@@ -16,6 +16,7 @@ import TNLean.Circuit.CoherentEncoder
 import TNLean.Circuit.Composition
 import TNLean.Circuit.ConfigurationLayers
 import TNLean.Circuit.EmbeddedProduct
+import TNLean.Circuit.EntropySupport
 import TNLean.Circuit.ExactAmplificationBudget
 import TNLean.Circuit.ExactSubspaceAmplification
 import TNLean.Circuit.ExpectationBounds
@@ -43,6 +44,7 @@ import TNLean.Circuit.SiteEmbedding
 import TNLean.Circuit.SiteExpectation
 import TNLean.Circuit.SiteExpectationOrder
 import TNLean.Circuit.SiteOscillation
+import TNLean.Circuit.SitePermutationSupport
 import TNLean.Circuit.SitewiseTensorSupport
 import TNLean.Circuit.SpectatorOscillationSupport
 import TNLean.Circuit.SpectatorSiteExpectation

@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.FrontRegisters
-import TNLean.PEPS.Approximation.PartyPartition
-import TNLean.PEPS.Approximation.OriginalCircuitLift
+import TNLean.Lattice.PartyCircuit.FrontRegisters
+import TNLean.Lattice.PartyCircuit.PartyPartition
+import TNLean.Lattice.PartyCircuit.OriginalCircuitLift
 
 /-!
 # Collecting the selected registers in front
@@ -28,11 +28,12 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 
 variable {P : Type}
 
-namespace Layout
+namespace Lattice.PartyCircuit.Layout
 
 /-- Collect the selected registers of a layout in front of the others, each in their original
 order. -/
@@ -216,6 +217,6 @@ theorem eval_unpartitionWord_appendIso_symm (f : P → Bool) :
                 rw [hc, Word.eval_moveHead_appendIso_symm, lTensor_tmul,
                   eval_unpartitionWord_appendIso_symm f ℓ]
 
-end Layout
+end Lattice.PartyCircuit.Layout
 
-end TNLean.PEPS.PairEffect
+end TNLean

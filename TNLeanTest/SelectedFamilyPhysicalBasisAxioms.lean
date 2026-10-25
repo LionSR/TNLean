@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.SelectedFamilyPhysicalBasis
+import TNLean.Lattice.Compression.SelectedFamilyPhysicalBasis
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
@@ -13,12 +13,12 @@ set_option linter.hashCommand false
 
 run_cmd do
   let decls := #[
-    ``TNLean.PEPS.PairEffect.Layout.atParty_none_mapOwner_all,
-    ``TNLean.PEPS.PairEffect.Layout.atParty_some_mapOwner_all,
-    ``TNLean.PEPS.PairEffect.selectedFamilyPhysicalIndex,
-    ``TNLean.PEPS.PairEffect.selectedFamilyPhysicalPartyBasis,
-    ``TNLean.PEPS.PairEffect.selectedFamilyPhysicalPartyBasis_none_apply_heq,
-    ``TNLean.PEPS.PairEffect.selectedFamilyPhysicalPartyBasis_some_apply_heq]
+    ``TNLean.Lattice.PartyCircuit.Layout.atParty_none_mapOwner_all,
+    ``TNLean.Lattice.PartyCircuit.Layout.atParty_some_mapOwner_all,
+    ``TNLean.Lattice.PartyCircuit.selectedFamilyPhysicalIndex,
+    ``TNLean.Lattice.PartyCircuit.selectedFamilyPhysicalPartyBasis,
+    ``TNLean.Lattice.PartyCircuit.selectedFamilyPhysicalPartyBasis_none_apply_heq,
+    ``TNLean.Lattice.PartyCircuit.selectedFamilyPhysicalPartyBasis_some_apply_heq]
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
   for decl in decls do

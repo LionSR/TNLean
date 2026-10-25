@@ -1,0 +1,287 @@
+\section{The constants produced by the proof of the polynomial PEPS approximation}
+\label{sec:polynomial_peps_explicit_constants}
+
+Theorem~1.1 of \cite{OpenAI2026PolynomialPEPS} asserts that its constants
+exist. Its proof in Section~8 fixes them in a definite order
+(\texttt{07-assembly.tex}, lines 179--214). This section writes the constants
+of the large sizes as functions of three inputs: the constant of the square
+area law, and the slope and the threshold of Proposition~3.4. Every other
+choice is a fixed number.
+
+% Status: these are auxiliary results. The source asserts only that the
+% constants exist; the statement of Theorem 1.1 is thm:openai_polynomial_peps.
+
+% Source: 06-geometry.tex, lines 12--53 and 559--681.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{lemma}[The distribution protocol at a given slope and given patch constants]
+    \label{lem:peps_dyadic_protocol_at_given_scale}
+    \lean{TNLean.PEPS.Approximation.largeSizeDyadicProtocol_of_angularScale}
+    \leanok
+    \uses{def:peps_dyadic_protocol,def:peps_angular_scale,
+        lem:peps_adaptive_patch_supply,
+        lem:peps_dyadic_protocol_mesh_ratio}
+    Fix $q\ge2$ and a family of unit states, consisting for each side $L$ of
+    some unit vectors on the square of side $L$. Let $\epsilon_0=1/30000$,
+    $\nu=1/600000000$, $a_0=1/5000$ and
+    $b=\max\{18,\lceil((4+8\epsilon_0+2\nu)/\nu+1)^2\rceil\}$. Let $D\ge1$ and
+    $L_{\rm ang}$ be a slope and a threshold at accuracy $L^{-60}$ for the
+    family, the clearance $a_0/2$, the diameter ratio $1$ and at most $4$ marked
+    points. Let $C>0$ and $c$ be constants with which adaptive patches, in the
+    sense of Proposition~4.1, are supplied on the cell-center sites at the
+    radius constant $B_0=20D$ and power $60$, for every state of the family of
+    side $L\ge2$. Put $C'=\lceil C\rceil$,
+    $c'=\lceil c\rceil$,
+    \begin{align}
+        G   & =(C'+1)^{3b}\bigl(16b^2(C'+1)^{6b}+1\bigr)^{2b}, &
+        k_K & =3bc'+4b(3bc'+30).
+    \end{align}
+    Then for every count constant $C_N\ge5042$, expansion constant $C_K\ge G$
+    and error constant $C_E\ge\max\{10080,2b+1\}$, every $L\ge2$ with
+    $L\ge\lceil\max\{L_{\rm ang},1\}\rceil$ and every state $\Omega$ of the
+    family of side $L$, there is a protocol with
+    the Section~8 bounds of Definition~\ref{def:peps_dyadic_protocol} at the
+    constants $C_N$, $C_K$, $C_E$, the bound $64\cdot189$, the exponent $k_K$
+    and $2b$ pair effects.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:peps_dyadic_protocol_parties,
+        def:peps_protocol_frozen_frames,
+        thm:peps_angular_scale_monotonicity,
+        thm:peps_dyadic_direct_repainting_constants,
+        thm:peps_dyadic_padding_bounds,
+        thm:peps_dyadic_protocol_schedule_counts,
+        thm:peps_protocol_constants,
+        thm:peps_protocol_from_large_repaintings,
+        thm:peps_protocol_frozen_frame_bounds,
+        thm:peps_protocol_large_repainting_segment,
+        thm:peps_protocol_level_events,
+        thm:peps_protocol_point_treatment_change}
+    This is the argument of
+    Theorem~\ref{thm:peps_protocol_from_angular_and_patch_bounds}, with the
+    slope and the patch constants given instead of chosen. The mesh ratio $\nu$
+    serves the resizes, the point treatments and the direct repaintings at once,
+    so the constants $K_0=20$, $\epsilon_0$, $\nu$, $a=a_0/2$, $D$ and
+    $B_0=K_0D$ satisfy the conditions of the protocol constants. For
+    $L\ge\lceil\max\{L_{\rm ang},1\}\rceil$ the slope applies at side $L$.
+\end{proof}
+
+% Source: 07-assembly.tex, lines 45--63, 122--177 and 197--206.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{definition}[The constants of the polynomial PEPS approximation for large sizes]
+    \label{def:polynomial_peps_explicit_constants}
+    \lean{TNLean.PEPS.Approximation.pepsLinkExponentOf,
+        TNLean.PEPS.Approximation.pepsLinkPrefactorOf,
+        TNLean.PEPS.Approximation.pepsCongestion,
+        TNLean.PEPS.Approximation.pepsCongestion_eq,
+        TNLean.PEPS.Approximation.pepsNetworkErrorConstant,
+        TNLean.PEPS.Approximation.pepsSizeThresholdOf,
+        TNLean.PEPS.Approximation.pepsBondExponentOf,
+        TNLean.PEPS.Approximation.pepsLargeSizePrefactorOf,
+        TNLean.PEPS.Approximation.pepsLargeSizePrefactorOf_pos,
+        TNLean.PEPS.Approximation.pepsBondExponentOf_pos,
+        TNLean.PEPS.Approximation.pepsLinkExponentOfPatch,
+        TNLean.PEPS.Approximation.pepsBondExponentOfPatch,
+        TNLean.PEPS.Approximation.pepsBondExponentOfPatch_pos,
+        TNLean.PEPS.Approximation.pepsBondExponentOf_eq_ofPatch}
+    \leanok
+    \uses{def:peps_adaptive_patch_constants,def:peps_compression_constants,
+        def:peps_sampled_network_constants,
+        thm:peps_dyadic_protocol_explicit_constants}
+    Fix an integer $q$ and reals $J,\Delta,C_A,D,L_{\rm ang}$. Let
+    $\epsilon_0=1/30000$, $\nu=1/600000000$, $b_{\rm prot}=64\cdot189$ and
+    \begin{align}
+        b=\max\{18,\lceil((4+8\epsilon_0+2\nu)/\nu+1)^2\rceil\}
+        =5760768040000960009.
+    \end{align}
+    Let $C=\max\{q^{81},1+10D\}$ and $c$ be the constants of
+    Definition~\ref{def:peps_adaptive_patch_constants} at $B_0=20D$, $p=60$
+    and $C_A$, and let $G$ and $k_K$ be as in
+    Theorem~\ref{thm:peps_dyadic_protocol_explicit_constants}, with
+    $C'=\lceil C\rceil$ and $c'=\lceil c\rceil$. Let
+    $C_E=\max\{10080,2b+1\}$. The link exponent and the link prefactor are
+    \begin{align}
+        k   & =\max\bigl\{2(k_K+4b(8+k_K)),\,2(8+4b_{\rm prot}k_K)\bigr\},   &
+        C_1 & =C_\Sigma(2b,b_{\rm prot},5042\,b_{\rm prot},q,\max\{G,0\},G),
+    \end{align}
+    the constants of Definition~\ref{def:peps_sampled_network_constants} and
+    Definition~\ref{def:peps_compression_constants} at $2b$ pair effects,
+    arity $b_{\rm prot}$, gate-count exponent $3$, physical-dimension exponent
+    $0$, monomial and coefficient-sum exponent $k_K$ and accuracy $L^{-5}$. Put
+    \begin{align}
+        \chi        & =8(2b_{\rm prot}+1)\,b_{\rm prot}\cdot2b_{\rm prot}(b_{\rm prot}-1)
+        =685013510424821760,                                                              \\
+        C_{\rm net} & =1+2\cdot5042\,C_E+2C_E,                                            \\
+        L_0         & =\max\bigl\{\lceil\max\{L_{\rm ang},1\}\rceil,
+        \lceil2C_{\rm net}\rceil\bigr\}.
+    \end{align}
+    The bond exponent and the bond prefactor for large sizes are
+    \begin{align}
+        c_{\rm PEPS}  & =k\chi+1,              &
+        C_{\rm large} & =\max\{C_1,1\}^{\chi}.
+    \end{align}
+    Both are positive. Only $c_{\rm PEPS}$ depends on $C_A$; $C_{\rm large}$
+    depends on $q$ and $D$, and $L_0$ on $L_{\rm ang}$ alone. More generally,
+    for a real $c$ write $k(c)$ and $c_{\rm PEPS}(c)=k(c)\chi+1$ for the link
+    and bond exponents obtained in the same way with $c$ in place of the patch
+    exponent; then $c_{\rm PEPS}=c_{\rm PEPS}(c(q,J,\Delta,20D,60,C_A))$, and
+    $c_{\rm PEPS}(c)>0$.
+\end{definition}
+
+% Source: 07-assembly.tex, lines 9--206.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[The polynomial PEPS approximation from angular and patch bounds]
+    \label{thm:polynomial_peps_of_patch_supply}
+    \lean{TNLean.PEPS.Approximation.hasPEPSApproximation_of_patchSupply}
+    \leanok
+    \uses{def:polynomial_peps_explicit_constants,def:peps_angular_scale,
+        def:peps_adaptive_patch_constraint,def:peps_adaptive_patch_constants}
+    Fix an integer $q\ge2$ and a family of unit vectors on the $L\times L$
+    grids. Let $D\ge1$ and $L_{\rm ang}$ be a slope and a threshold at accuracy
+    $L^{-60}$ for this family, the clearance $a_0/2$, $a_0=1/5000$, the
+    diameter ratio $1$ and at most $4$ marked points, and let $c$ be a real
+    such that every member of the family on a grid of side $L\ge2$ has
+    adaptive patches on the cell-center sites at $B_0=20D$, power $60$,
+    prefactor $C(q,20D)$ and exponent $c$. Then every member $\Omega$ of the
+    family on a grid of side $L\ge2$ with $L\ge L_0$ has a nonzero PEPS $\Phi$
+    on the $L\times L$ grid with $D_e\le C_{\rm large}L^{c_{\rm PEPS}(c)}$ for
+    every edge $e$ and
+    \begin{align}
+        \min_{\theta\in\mathbb R}
+        \left\|\frac{\Phi}{\|\Phi\|}-e^{i\theta}\Omega\right\| & \le L^{-1}.
+    \end{align}
+    The proof of Theorem~\ref{thm:openai_polynomial_peps} uses the
+    Hamiltonian only through the slope and the patches, so this form applies
+    to any family for which both are available.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_dyadic_protocol_at_given_scale,
+        thm:peps_large_size_network_from_protocol,
+        thm:peps_ground_state_approximation_conditional}
+    Lemma~\ref{lem:peps_dyadic_protocol_at_given_scale} at $C_N=5042$, $C_K=G$
+    and $C_E=\max\{10080,2b+1\}$ gives the protocol for
+    $L\ge\lceil\max\{L_{\rm ang},1\}\rceil$. Compression at accuracy $L^{-5}$,
+    as in Theorem~\ref{thm:peps_large_size_network_from_protocol}, gives an
+    operator network with error $C_{\rm net}L^{-5}$, link dimensions at most
+    $C_1L^{k(c)}$, at most $b_{\rm prot}$ parties per block, at most
+    $2b_{\rm prot}(b_{\rm prot}-1)$ links per party and separations at most
+    $b_{\rm prot}$. For $L\ge\lceil2C_{\rm net}\rceil$ the routing argument of
+    Theorem~\ref{thm:peps_ground_state_approximation_conditional} gives bonds at
+    most $\max\{C_1,1\}^\chi L^{k(c)\chi+1}$ and error at most $L^{-1}$.
+\end{proof}
+
+% Source: 07-assembly.tex, lines 9--206.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[The polynomial PEPS approximation at given area-law and angular constants]
+    \label{thm:polynomial_peps_of_ratios}
+    \lean{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_ratios}
+    \leanok
+    \uses{def:polynomial_peps_explicit_constants,def:polynomial_peps_model,
+        def:square_entropy_area_law_at,def:peps_angular_scale}
+    Fix an integer $q\ge2$ and reals $J,\Delta>0$. Assume the square-grid
+    entropy area law for the ground states of the model at $J$ and $\Delta$
+    with constant $C_A$, and let $D\ge1$ and $L_{\rm ang}$ be a slope and a
+    threshold at accuracy $L^{-60}$ for these ground states, the
+    clearance $a_0/2$, $a_0=1/5000$, the diameter ratio $1$ and at most $4$
+    marked points. Let $c_{\rm PEPS}$, $C_{\rm large}$ and $L_0$ be the
+    constants of Definition~\ref{def:polynomial_peps_explicit_constants}. Then
+    for every $L\ge2$ with $L\ge L_0$, every Hamiltonian of the model of
+    Theorem~\ref{thm:openai_polynomial_peps} and every unit ground vector
+    $\Omega$ with gap $\Delta$, there is a nonzero PEPS $\Phi$ on the
+    $L\times L$ grid with $D_e\le C_{\rm large}L^{c_{\rm PEPS}}$ for every edge
+    $e$ and
+    \begin{align}
+        \min_{\theta\in\mathbb R}
+        \left\|\frac{\Phi}{\|\Phi\|}-e^{i\theta}\Omega\right\| & \le L^{-1}.
+    \end{align}
+    The area law and the slope are inputs of the proof of
+    Theorem~\ref{thm:openai_polynomial_peps}, not hypotheses of that theorem,
+    and the sizes $L<L_0$ are not covered here.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_adaptive_patch_supply_of_area_law_at,
+        thm:polynomial_peps_of_patch_supply}
+    By Theorem~\ref{thm:peps_adaptive_patch_supply_of_area_law_at} the area law
+    supplies adaptive patches at $B_0=20D$ and power $60$ with the constants
+    $C$ and $c$; moving them to the cell-center sites keeps the constants. The
+    ground states of the model are unit vectors, and
+    Theorem~\ref{thm:polynomial_peps_of_patch_supply} at this $c$ gives the
+    approximation, since $c_{\rm PEPS}=c_{\rm PEPS}(c)$.
+\end{proof}
+
+% Status: auxiliary result. Theorem 1.1 of the source asserts only that the
+% constants exist; that statement is thm:openai_polynomial_peps.
+% Source: 00-introduction.tex, Theorem 1.1, and its proof in 07-assembly.tex,
+% lines 9--214.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{definition}[The constants of the polynomial PEPS approximation]
+    \label{def:polynomial_peps_closed_constants}
+    \lean{TNLean.PEPS.Approximation.pepsAreaLawConstant,
+        TNLean.PEPS.Approximation.pepsAngularScale,
+        TNLean.PEPS.Approximation.pepsAngularThreshold,
+        TNLean.PEPS.Approximation.pepsSizeThreshold,
+        TNLean.PEPS.Approximation.pepsBondExponent,
+        TNLean.PEPS.Approximation.pepsBondPrefactor,
+        TNLean.PEPS.Approximation.pepsBondExponent_pos,
+        TNLean.PEPS.Approximation.pepsBondPrefactor_pos}
+    \leanok
+    \uses{def:polynomial_peps_explicit_constants,def:area_law_closed_constant,
+        def:peps_angular_information_constants,
+        def:peps_closed_information_constants}
+    Fix an integer $q$ and reals $J,\Delta$, and let $a_0=1/5000$. Let
+    $C_A=C_{\rm AL}(q,1,J,\Delta)$ be the area-law constant of
+    Definition~\ref{def:area_law_closed_constant} at range one. Let
+    $D=D_{\rm ang}(J,\Delta,a_0/2,60)$ and
+    $L_{\rm ang}=L_{\rm ang}(q,J,\Delta,a_0/2,1,4,60)$ be the angular slope and
+    the angular size threshold of
+    Definition~\ref{def:peps_closed_information_constants}. With $L_0$,
+    $c_{\rm PEPS}$ and $C_{\rm large}$ the constants of
+    Definition~\ref{def:polynomial_peps_explicit_constants} at $C_A$, $D$ and
+    $L_{\rm ang}$, put
+    \begin{align}
+        C_{\rm PEPS} & =\max\bigl\{C_{\rm large},\,q^{L_0^2}\bigr\}.
+    \end{align}
+    Both $C_{\rm PEPS}$ and $c_{\rm PEPS}$ are positive, and they depend only
+    on $q$, $J$ and $\Delta$.
+\end{definition}
+
+% Status: auxiliary result with no hypothesis beyond those of Theorem 1.1,
+% whose statement is thm:openai_polynomial_peps.
+% Source: 00-introduction.tex, Theorem 1.1, and its proof in 07-assembly.tex,
+% lines 9--214.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Polynomial PEPS approximation with explicit constants]
+    \label{thm:polynomial_peps_explicit_constants}
+    \lean{TNLean.PEPS.Approximation.polynomialPEPSApproximation_explicit}
+    \leanok
+    \uses{def:polynomial_peps_closed_constants,def:polynomial_peps_model}
+    Fix an integer $q\ge2$ and reals $J,\Delta>0$, and let $C_{\rm PEPS}$ and
+    $c_{\rm PEPS}$ be the constants of
+    Definition~\ref{def:polynomial_peps_closed_constants}. For every $L\ge2$,
+    every Hamiltonian of the model of
+    Theorem~\ref{thm:openai_polynomial_peps} and every unit ground vector
+    $\Omega$ with gap $\Delta$, there is a nonzero PEPS $\Phi$ on the
+    $L\times L$ grid with $D_e\le C_{\rm PEPS}L^{c_{\rm PEPS}}$ for every edge
+    $e$ and
+    \begin{align}
+        \min_{\theta\in\mathbb R}
+        \left\|\frac{\Phi}{\|\Phi\|}-e^{i\theta}\Omega\right\| & \le L^{-1}.
+    \end{align}
+    The source theorem asserts only that such constants exist.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:square_area_law_closed_constant,
+        thm:peps_information_from_gap_closed,thm:polynomial_peps_of_ratios,
+        lem:peps_remove_small_sizes_named}
+    By Theorem~\ref{thm:square_area_law_closed_constant} the square-grid
+    entropy area law holds with the constant $C_A$. By
+    Theorem~\ref{thm:peps_information_from_gap_closed}, $D$ and $L_{\rm ang}$
+    are a slope and a threshold at accuracy $L^{-60}$, and $D\ge1$. Then
+    Theorem~\ref{thm:polynomial_peps_of_ratios} gives the approximation with
+    the prefactor $C_{\rm large}$ for $L\ge L_0$, and
+    Lemma~\ref{lem:peps_remove_small_sizes_named} extends it to every $L\ge2$
+    with the prefactor $C_{\rm PEPS}$.
+\end{proof}

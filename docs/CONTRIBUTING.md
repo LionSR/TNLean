@@ -422,8 +422,6 @@ The following workflows run automatically:
 | **Blueprint Lint** (`pr-ci.yml`, `blueprint` job) | PRs touching blueprint or Lean files | Validates LaTeX blueprint for broken labels and references |
 | **Lean Module Policy** (`pr-ci.yml`, `file-length` job) | PRs and main pushes touching Lean policy paths | Blocks ordinary files above 1000 lines and new numbered-sequel production modules; validates exact import-only aggregator exemptions |
 | **Import Completeness** (`pr-ci.yml`, `file-length` job) | PRs and main pushes touching TNLean sources or generator files | Tests the import-aggregator generator and checks that the generated aggregators are current |
-| **Lean Linter-Warning Sweep** (`housekeeping.yml`, `linter-sweep` job) | Weekly + manual dispatch | Captures Lean compiler/linter warnings and uploads a report for maintainer triage |
-| **Lean Linter-Warning Auto-Fix** (`lean-linter-warning-autofix.yml`) | Manual dispatch | Runs the warning sweep and can open a guarded Lean-only PR when explicitly requested |
 
 ### Generated import aggregators
 

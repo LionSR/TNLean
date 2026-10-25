@@ -10,9 +10,9 @@ the subsequent separation and second-moment arguments.
 
 \begin{definition}[A chronological composition]
     \label{def:peps_source_circuit}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.IsAllowed}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.IsAllowed}
     \leanok
     \uses{def:peps_prepared_source_gate,def:peps_party_registers}
     Let $P$ be any set of parties. A chronological composition from
@@ -30,7 +30,7 @@ the subsequent separation and second-moment arguments.
 
 \begin{theorem}[Norm of the complete composition]
     \label{thm:peps_source_circuit_norm}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.norm_eval_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.norm_eval_le_one}
     \leanok
     \uses{def:peps_source_circuit}
     Every allowed chronological composition satisfies $\|W\|\leq1$.
@@ -46,16 +46,16 @@ the subsequent separation and second-moment arguments.
 
 \begin{definition}[Gate occurrences and source positions]
     \label{def:peps_source_circuit_positions}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.gateLocations}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.gateLocationsFintype}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.slotCount}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceLocations}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceLocationsFintype}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.participants}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.endpoints}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.branchLabels}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.branchLabelsFintype}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.branchCoefficient}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.gateLocations}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.gateLocationsFintype}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.slotCount}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceLocations}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceLocationsFintype}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.participants}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.endpoints}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.branchLabels}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.branchLabelsFintype}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.branchCoefficient}
     \leanok
     \uses{def:peps_source_circuit}
     Let $\mathcal G$ be the finite set of occurrences of nonprivate
@@ -72,8 +72,8 @@ the subsequent separation and second-moment arguments.
 
 \begin{theorem}[Incidence of the original source positions]
     \label{thm:peps_source_circuit_incidence}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.endpoints_mem_participants}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.endpoints_ne}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.endpoints_mem_participants}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.endpoints_ne}
     \leanok
     \uses{def:peps_source_circuit_positions}
     The two endpoints of $(g,e)$ are distinct and both belong to $C_g$.
@@ -89,13 +89,13 @@ the subsequent separation and second-moment arguments.
 
 \begin{definition}[The partial branch choices]
     \label{def:peps_partial_source_choices}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.IsTouched}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isTouched_gate_iff}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.Choices}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.choicesFintype}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialWord}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.coefficient}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.expandedEval}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.IsTouched}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isTouched_gate_iff}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.Choices}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.choicesFintype}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.coefficient}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.expandedEval}
     \leanok
     \uses{def:peps_source_circuit_positions,def:peps_affected_owner}
     Fix affected parties $\mathcal A\subseteq P$. A gate occurrence
@@ -114,10 +114,10 @@ the subsequent separation and second-moment arguments.
 
 \begin{theorem}[Allowed partial branches and their retained sources]
     \label{thm:peps_partial_source_inventory}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isAllowed_partialWord}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.expandedSources}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_partialWord}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.mem_sources_partialWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isAllowed_partialWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.expandedSources}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sources_partialWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.mem_sources_partialWord}
     \leanok
     \uses{def:peps_partial_source_choices}
     If the original composition is allowed, each partial branch is
@@ -140,11 +140,11 @@ the subsequent separation and second-moment arguments.
 
 \begin{theorem}[Exact chronological operator identity]
     \label{thm:peps_partial_source_evaluation}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_sum_appendTail}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_partial_gate}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.expandedEval_comp}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.expandedEval_frame}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.expandedEval_mapOwner}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_sum_appendTail}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_partial_gate}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.expandedEval_comp}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.expandedEval_frame}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.expandedEval_mapOwner}
     \leanok
     \uses{def:peps_partial_source_choices}
     Let $I_a,I_b$ be the isometries identifying the input
@@ -159,24 +159,24 @@ the subsequent separation and second-moment arguments.
 \begin{proof}
     \leanok
     \uses{thm:peps_grouped_gate_sum,thm:peps_prepared_gate_grouped,thm:peps_grouped_block_map,def:peps_source_circuit}
-    At a touched gate, sum its original branch expansion and extend
-    the sum by the spectator identity. At an untouched gate, the
-    single partial branch is its aggregate operator. The resulting
-    identity is compatible with consecutive composition, since the
-    two independent finite sums distribute and their coefficients
-    multiply. It is also compatible with adjoining idle registers.
-    Induction gives (\ref{eq:peps_partial_source_evaluation}).
+    At a touched gate, summing the original branch expansion and extending
+    the sum by the spectator identity reproduces the gate operator, while at
+    an untouched gate the single partial branch is already its aggregate
+    operator. Because the two independent finite sums distribute with
+    multiplying coefficients under consecutive composition and commute with
+    adjoining idle registers, induction gives
+    (\ref{eq:peps_partial_source_evaluation}).
 \end{proof}
 
 \begin{theorem}[Local contributions to the scalar cost]
     \label{thm:peps_partial_source_local_cost}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_gate_of_touches}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_gate_of_exterior}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_comp}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_frame}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_id}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_localMap}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_swap}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_gate_of_touches}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_gate_of_exterior}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_comp}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_frame}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_id}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_localMap}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_swap}
     \leanok
     \uses{def:peps_partial_source_choices}
     A touched gate contributes $\sum_{\xi\in\Xi_g}|c_{g,\xi}|$ to
@@ -189,17 +189,18 @@ the subsequent separation and second-moment arguments.
 \begin{proof}
     \leanok
     \uses{def:peps_partial_source_choices}
-    Use the defining choice set at each elementary operation. For
-    consecutive compositions, apply $|cd|=|c|\,|d|$ and distribute the
-    sum over the Cartesian product of the two choice sets.
+    Evaluating the defining choice set at each elementary operation gives
+    the elementary costs, and for consecutive compositions applying
+    $|cd|=|c|\,|d|$ and distributing the sum over the Cartesian product of
+    the two choice sets multiplies the factors.
 \end{proof}
 
 \begin{theorem}[The exact product of the gate costs]
     \label{thm:peps_partial_source_product_cost}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_eq_prod}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_le_pow_card}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_mul_conj_eq_prod_sq}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_mul_conj_le_pow_card}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_eq_prod}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_le_pow_card}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_mul_conj_eq_prod_sq}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_mul_conj_le_pow_card}
     \leanok
     \uses{def:peps_partial_source_choices}
     Let $\mathcal G_{\mathcal A}$ denote the touched gate occurrences
@@ -221,17 +222,17 @@ the subsequent separation and second-moment arguments.
     \leanok
     \uses{thm:peps_partial_source_local_cost,def:peps_partial_source_choices}
     Induction on the chronological composition gives the product
-    formula from the local contributions. Bound each nonnegative
-    factor by $B$. The ket and bra sums are independent, and complex
-    conjugation preserves absolute value, so their total cost is the
+    formula from the local contributions, and bounding each nonnegative
+    factor by $B$ yields $B^t$; since the ket and bra sums are independent
+    and complex conjugation preserves absolute value, their total cost is the
     square of the first sum.
 \end{proof}
 
 \begin{theorem}[The density expansion in orthonormal coordinates]
     \label{thm:peps_partial_source_density}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.expandedEval_eq_mapOwner}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.toMatrix_eval_eq_sum_partialWord}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.density_eval_eq_sum_partialWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.expandedEval_eq_mapOwner}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.toMatrix_eval_eq_sum_partialWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.density_eval_eq_sum_partialWord}
     \leanok
     \uses{thm:peps_partial_source_evaluation}
     Choose finite orthonormal bases of the grouped input and output
@@ -254,25 +255,26 @@ the subsequent separation and second-moment arguments.
 \begin{proof}
     \leanok
     \uses{thm:peps_partial_source_evaluation}
-    Compose (\ref{eq:peps_partial_source_evaluation}) with $I_a^{-1}$
-    and take matrices. Distribute the finite sums in $M\rho M^\dagger$.
-    Taking the adjoint conjugates each bra coefficient.
+    Composing (\ref{eq:peps_partial_source_evaluation}) with $I_a^{-1}$
+    and taking matrices gives the matrix expansion, and distributing the
+    finite sums in $M\rho M^\dagger$ while conjugating each bra coefficient
+    under the adjoint gives the density expansion.
 \end{proof}
 
 \begin{theorem}[Fixed positions for every partial source inventory]
     \label{thm:peps_partial_source_order}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceOrder}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.mem_sourceOrder}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.nodup_sourceOrder}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceOrder_gate}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceDims}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceAt}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceAt_isSome_iff}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceAt_eq_some_spec}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.filterMap_sourceAt_comp}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.filterMap_sourceAt_gate}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_partialWord_eq_filterMap}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.layout_sources_partialWord}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceOrder}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.mem_sourceOrder}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.nodup_sourceOrder}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceOrder_gate}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceDims}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceAt}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceAt_isSome_iff}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceAt_eq_some_spec}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.filterMap_sourceAt_comp}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.filterMap_sourceAt_gate}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sources_partialWord_eq_filterMap}
+    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.layout_sources_partialWord}
     \leanok
     \uses{def:peps_source_circuit_positions,def:peps_partial_source_choices}
     The positions $\mathcal E$ admit a fixed exhaustive ordered list
@@ -292,12 +294,12 @@ the subsequent separation and second-moment arguments.
 \begin{proof}
     \leanok
     \uses{thm:peps_partial_source_inventory,thm:peps_affected_source_occurrences}
-    Induct on the chronological composition. The two occurrence sets
+    By induction on the chronological composition, the two occurrence sets
     of consecutive compositions are disjoint, so concatenating their
-    lists preserves uniqueness. At a gate, list its prescribed slots.
-    The participant injection preserves their distinct endpoints, and
-    grouping owners removes a slot exactly when both endpoints are
-    exterior. Each retained position carries its prescribed spaces and
-    branch vector, so the register layout is
+    lists preserves uniqueness, while at a gate listing its prescribed slots
+    preserves distinct endpoints under the participant injection and removes
+    a slot under owner grouping exactly when both endpoints are exterior.
+    Because each retained position carries its prescribed spaces and
+    branch vector, the register layout is
     determined solely by the original positions and $\mathcal A$.
 \end{proof}

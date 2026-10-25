@@ -22,7 +22,9 @@ information bounds.
 ## Main statements
 
 * `exists_threshold_graphNeighborhood_collar_subset`: the cut-clearance clause of
-  Proposition 10.2 for every radius obeying `eq:amplification-radius`.
+  Proposition 10.2 for every radius obeying `eq:amplification-radius`;
+  `graphNeighborhood_collar_subset_of_threshold_le` gives it from the explicit threshold
+  `Exponents.collarRadiusThreshold C 1`.
 * `amplificationBound_of_radius_output`: the radius and output bounds of
   Proposition 10.2 imply `AmplificationBound`.
 
@@ -37,7 +39,37 @@ information bounds.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw
+
+/-- **The cut-clearance clause of Proposition 10.2, with an explicit threshold.** For every
+radius constant `C`, at every scale `n ≥ Exponents.collarRadiusThreshold C 1` and for every
+radius `r ≤ C n^((1-ε)/α)`, the clearance `dist_∞(T, Z) > L + n^β` of
+`eq:amplification-cut-clearance` gives `N_{2r}(S₀) ⊆ A`, where `L = ⌊n^(1-ε)⌋` and
+`S₀ = A ∩ T_L`. Source: `09-amplification.tex`, lines 289–295 and 563–575. -/
+theorem graphNeighborhood_collar_subset_of_threshold_le (C : ℝ) {n : ℕ}
+    (hn : Exponents.collarRadiusThreshold C 1 ≤ n) (r : ℕ)
+    (hr : (r : ℝ) ≤ C * (n : ℝ) ^ (Exponents.radiusExponent : ℝ))
+    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (T : Finset (ℤ × ℤ))
+    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+      (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
+          (n : ℝ) ^ (Exponents.beta : ℝ) <
+        (Scan.ambientSupDistance t z : ℝ)) :
+    graphNeighborhood Λ (2 * r)
+        (A.filter fun x ↦ x.val ∈ ambientDilation T
+          ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) ⊆ A := by
+  refine (graphNeighborhood_subset_of_cut_clearance Λ T A _ (2 * r) ?_).trans
+    (Finset.filter_subset _ _)
+  intro t ht z hz
+  have hsmall := Exponents.collar_radius_lt_of_collarRadiusThreshold_le one_pos hn r hr
+  have hL : (0 : ℝ) ≤
+      (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) := Nat.cast_nonneg _
+  have hlt : ((⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ + 2 * r : ℕ) : ℝ) <
+      (Scan.ambientSupDistance t z : ℝ) := by
+    push_cast
+    linarith only [hclear t ht z hz, hsmall, hL]
+  exact_mod_cast hlt
 
 /-- **The cut-clearance clause of Proposition 10.2.** For every radius constant `C` there
 is a threshold `N` such that, at every scale `n ≥ N` and for every radius
@@ -55,20 +87,8 @@ theorem exists_threshold_graphNeighborhood_collar_subset (C : ℝ) :
             (Scan.ambientSupDistance t z : ℝ)) →
         graphNeighborhood Λ (2 * r)
             (A.filter fun x ↦ x.val ∈ ambientDilation T
-              ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) ⊆ A := by
-  obtain ⟨N, -, hN⟩ := Exponents.exists_collar_radius_threshold C 1 one_pos
-  refine ⟨N, fun n hn r hr Λ A T hclear ↦
-    (graphNeighborhood_subset_of_cut_clearance Λ T A _ (2 * r) ?_).trans
-      (Finset.filter_subset _ _)⟩
-  intro t ht z hz
-  have hsmall := hN n hn r hr
-  have hL : (0 : ℝ) ≤
-      (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) := Nat.cast_nonneg _
-  have hlt : ((⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ + 2 * r : ℕ) : ℝ) <
-      (Scan.ambientSupDistance t z : ℝ) := by
-    push_cast
-    linarith only [hclear t ht z hz, hsmall, hL]
-  exact_mod_cast hlt
+              ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) ⊆ A :=
+  ⟨_, fun _ hn r hr Λ A T ↦ graphNeighborhood_collar_subset_of_threshold_le C hn r hr Λ A T⟩
 
 /-- **Reduction of Proposition 10.2 to its radius and output bounds.** If, under the
 hypotheses of Proposition 10.2, every large scale admits a radius obeying

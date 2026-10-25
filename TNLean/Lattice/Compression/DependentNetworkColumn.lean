@@ -1,0 +1,136 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.Lattice.Compression.ColumnSelection
+import TNLean.Lattice.Compression.DependentBondNetwork
+
+/-!
+# Extracting one ket column from an edge-dependent operator network
+
+An operator tensor network carries an output and an input physical index at
+every vertex. Fixing the input index separately at every vertex gives a ket
+tensor network on the same directed multigraph, with the same virtual alphabet
+on every edge and the same inserted bond matrices. Its contraction is the column
+`σ|z⟩` of the contracted operator `σ` at the product-basis vector `|z⟩`.
+
+The networks are the edge-dependent contractions of
+`TNLean.Lattice.DependentBondNetwork`, which allow parallel edges, heterogeneous
+physical spaces, edge-dependent virtual alphabets and arbitrary inserted bond
+matrices. No positivity or Hermiticity of the contracted operator is assumed.
+The same extraction for tensors on a finite simple graph is in
+`TNLean.PEPS.Approximation.VectorColumn`.
+
+## Main results
+
+* `TNLean.Lattice.Compression.network_fixInput` and
+  `TNLean.Lattice.Compression.operatorNetworkMatrix_mulVec_single` — fixing the
+  input indices selects the column of the contracted operator.
+* `TNLean.Lattice.Compression.exists_fixInput_network_of_traceNorm_sub_pure_le`
+  — Lemma 8.1 for edge-dependent operator networks.
+
+## References
+
+Polynomial-PEPS approximation manuscript (September 24, 2026), Lemma 8.1
+`lem:columns`, `07-assembly.tex`, lines 67–94, in particular the final
+sentence of the statement (lines 76–77) and of the proof (lines 91–93);
+openai/math commit `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+-/
+
+noncomputable section
+
+open scoped BigOperators Matrix
+
+namespace TNLean.Lattice.Compression
+
+open TNLean.Lattice.DependentBondNetwork
+
+section Dependent
+
+variable {Vertex Edge : Type*} (tail head : Edge → Vertex) (D : Edge → Type*)
+variable [Fintype Vertex] [Fintype Edge] [DecidableEq Vertex] [DecidableEq Edge]
+  [∀ e, Fintype (D e)]
+variable {Out In : Vertex → Type*}
+
+/-- The operator contracted from an edge-dependent operator tensor network.
+The local physical index at `v` is an output-input pair, and the operator has
+rows indexed by output configurations and columns by input configurations.
+
+Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, lines 76–77. -/
+def operatorNetworkMatrix (A : (v : Vertex) → LocalConfig tail head D v → Out v × In v → ℂ)
+    (B : (e : Edge) → Matrix (D e) (D e) ℂ) :
+    Matrix ((v : Vertex) → Out v) ((v : Vertex) → In v) ℂ :=
+  fun τ ρ ↦ network tail head D A B fun v ↦ (τ v, ρ v)
+
+/-- The ket tensors obtained by fixing the input index `z v` at every vertex `v`.
+The local virtual configurations, hence all virtual alphabets, are those of
+the operator tensors.
+
+Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, lines 91–92. -/
+def fixInput (A : (v : Vertex) → LocalConfig tail head D v → Out v × In v → ℂ)
+    (z : (v : Vertex) → In v) : (v : Vertex) → LocalConfig tail head D v → Out v → ℂ :=
+  fun v η s ↦ A v η (s, z v)
+
+omit [DecidableEq Vertex] in
+/-- Fixing the input index locally selects the corresponding entry of the
+contracted operator, with the same graph, virtual alphabets and bond matrices.
+
+Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, lines 91–92. -/
+theorem network_fixInput
+    (A : (v : Vertex) → LocalConfig tail head D v → Out v × In v → ℂ)
+    (B : (e : Edge) → Matrix (D e) (D e) ℂ) (z : (v : Vertex) → In v)
+    (τ : (v : Vertex) → Out v) :
+    network tail head D (fixInput tail head D A z) B τ =
+      operatorNetworkMatrix tail head D A B τ z :=
+  rfl
+
+/-- The contraction of the input-fixed network is the column `σ|z⟩` of the
+contracted operator `σ` at the product-basis vector `|z⟩`.
+
+Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, lines 91–92. -/
+theorem operatorNetworkMatrix_mulVec_single [∀ v, Fintype (In v)] [∀ v, DecidableEq (In v)]
+    (A : (v : Vertex) → LocalConfig tail head D v → Out v × In v → ℂ)
+    (B : (e : Edge) → Matrix (D e) (D e) ℂ) (z : (v : Vertex) → In v) :
+    (operatorNetworkMatrix tail head D A B) *ᵥ Pi.single z 1 =
+      network tail head D (fixInput tail head D A z) B := by
+  ext τ
+  simp [network_fixInput]
+
+variable {P : Vertex → Type*} [∀ v, Fintype (P v)] [∀ v, DecidableEq (P v)]
+
+/-- **Polynomial-PEPS Lemma 8.1 for edge-dependent operator networks.**
+
+Let `σ` be the operator contracted from an edge-dependent operator tensor
+network on a directed multigraph, with local physical space `P v` at each
+vertex, and let `Ω` be a unit vector with `‖σ - |Ω⟩⟨Ω|‖₁ ≤ η < 1`, the trace
+norm being evaluated along an arbitrary enumeration `e` of the product basis.
+Then fixing a suitable product-basis input `z` locally at every vertex gives a
+ket network, on the same multigraph with the same virtual alphabets `D` and
+bond matrices `B`, whose contraction `ψ = σ|z⟩` is nonzero and satisfies
+`‖ψ / ‖ψ‖ - e^{iθ} Ω‖ ≤ 2η` for some real `θ`.
+
+The operator `σ` is not assumed positive or Hermitian.
+
+Polynomial-PEPS manuscript (September 24, 2026), Lemma 8.1 `lem:columns`,
+`07-assembly.tex`, lines 67–94. -/
+theorem exists_fixInput_network_of_traceNorm_sub_pure_le
+    (A : (v : Vertex) → LocalConfig tail head D v → P v × P v → ℂ)
+    (B : (e : Edge) → Matrix (D e) (D e) ℂ) {n : ℕ} (e : ((v : Vertex) → P v) ≃ Fin n)
+    (Ω : EuclideanSpace ℂ ((v : Vertex) → P v)) (hΩ : ‖Ω‖ = 1) {η : ℝ}
+    (hσ : Matrix.traceNorm (Matrix.reindex e e
+      (operatorNetworkMatrix tail head D A B - Matrix.vecMulVec (⇑Ω) (star ⇑Ω))) ≤ η)
+    (hη : η < 1) :
+    ∃ z : (v : Vertex) → P v, ∃ ψ : EuclideanSpace ℂ ((v : Vertex) → P v),
+      (∀ τ, ψ τ = network tail head D (fixInput tail head D A z) B τ) ∧
+      ψ = Matrix.toEuclideanLin (operatorNetworkMatrix tail head D A B)
+        (EuclideanSpace.single z 1) ∧
+      ψ ≠ 0 ∧ ∃ θ : ℝ, ‖((‖ψ‖ : ℂ)⁻¹) • ψ - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * η := by
+  obtain ⟨z, hz, θ, hθ⟩ :=
+    exists_column_ne_zero_of_traceNorm_sub_pure_le e _ Ω hΩ hσ hη
+  refine ⟨z, _, fun τ ↦ ?_, rfl, hz, θ, hθ⟩
+  rw [Matrix.toEuclideanLin_single_one_apply, network_fixInput]
+
+end Dependent
+
+end TNLean.Lattice.Compression

@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.DependentBondNetwork
+import TNLean.Lattice.Compression.DependentBondNetwork
 
 /-! # Absorbing a scalar into one party tensor
 
@@ -21,6 +21,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 namespace TNLean.PEPS.DependentBondNetwork
+open TNLean.Lattice.DependentBondNetwork
 variable {Vertex Edge : Type} [Fintype Vertex] [Fintype Edge] [DecidableEq Vertex]
 variable [DecidableEq Edge] {Phys : Vertex → Type}
 variable (tail head : Edge → Vertex) (D : Edge → Type) [∀ e, Fintype (D e)]

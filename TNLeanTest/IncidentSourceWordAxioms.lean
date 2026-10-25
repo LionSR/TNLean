@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.IncidentSourceWord
+import TNLean.Lattice.Compression.IncidentSourceWord
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
@@ -13,8 +13,8 @@ set_option linter.hashCommand false
 
 run_cmd do
   let decls := #[
-    ``TNLean.PEPS.PairEffect.SourceCircuit.incidentSourceWord,
-    ``TNLean.PEPS.PairEffect.SourceCircuit.sources_incidentSourceWord
+    ``TNLean.Lattice.PartyCircuit.SourceCircuit.incidentSourceWord,
+    ``TNLean.Lattice.PartyCircuit.SourceCircuit.sources_incidentSourceWord
   ]
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv

@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.GateCoefficientBounds
+import TNLean.Lattice.Compression.GateCoefficientBounds
 
 /-!
 # A positive coefficient majorant from the original polynomial bounds
@@ -27,7 +27,7 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open scoped NNReal
-namespace TNLean.PEPS.PairEffect.OriginalCircuit
+namespace TNLean.Lattice.PartyCircuit.OriginalCircuit
 variable {P : Type} {a b : Layout P}
 
 /-- Original polynomial monomial and individual coefficient bounds yield a
@@ -55,4 +55,4 @@ theorem exists_one_le_isExpansionBounded_of_termwise_power_bounds
     _ ≤ (1 + C_K * C_C) * L ^ (u + v) :=
       mul_le_mul_of_nonneg_right (le_add_of_nonneg_left zero_le_one) (by positivity)
 
-end TNLean.PEPS.PairEffect.OriginalCircuit
+end TNLean.Lattice.PartyCircuit.OriginalCircuit

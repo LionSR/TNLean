@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.FamilyPhysicalReadout
+import TNLean.Lattice.PartyCircuit.FamilyPhysicalReadout
+import TNLean.Lattice.Sheet.StackChange
 import TNLean.PEPS.Approximation.SheetStackEndpoints
 
 /-!
@@ -39,10 +40,6 @@ The value of the circuit on the reference vector is computed in
 
 ## Main results
 
-* `OriginalCircuit.isExpansionBounded_of_nonprivateCount_eq_zero`,
-  `OriginalCircuit.isMonomialBounded_of_nonprivateCount_eq_zero`,
-  `OriginalCircuit.participants_subset_of_nonprivateCount_eq_zero`: a circuit without
-  nonprivate gates meets every gate bound.
 * `EncodedFrame.Frame.regRef_of_outer_eq_empty`: a frame with trivial holes has reference
   vector `Ω` on its raw registers.
 * `EncodedFrame.eval_siteCircuit`, `EncodedFrame.nonprivateCount_readoutCircuit`.
@@ -60,62 +57,10 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 
-/-! ### Circuits without nonprivate gates -/
-
-namespace TNLean.PEPS.PairEffect.OriginalCircuit
-
-variable {P : Type}
-
-theorem isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero :
-    {a b : Layout P} → (c : OriginalCircuit a b) → c.nonprivateCount = 0 →
-      IsEmpty c.nonprivateLocations
-  | _, _, .id _, _ => inferInstanceAs (IsEmpty Empty)
-  | _, _, .comp w v, h => by
-      have h' : w.nonprivateCount + v.nonprivateCount = 0 := h
-      have := isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero w (by omega)
-      have := isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero v (by omega)
-      exact inferInstanceAs (IsEmpty (w.nonprivateLocations ⊕ v.nonprivateLocations))
-  | _, _, .privateMap .., _ => inferInstanceAs (IsEmpty Empty)
-  | _, _, @OriginalCircuit.nonprivateGate _ _ _ _ _ _ _ _ _ _ _, h => absurd h one_ne_zero
-  | _, _, .swap .., _ => inferInstanceAs (IsEmpty Empty)
-  | _, _, .frame _ w, h => isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero w h
-
-theorem participants_subset_of_nonprivateCount_eq_zero {a b : Layout P}
-    (c : OriginalCircuit a b) (h : c.nonprivateCount = 0) (S : Set P) (g) :
-    (↑(c.participants g) : Set P) ⊆ S :=
-  ((isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero c h).false g).elim
-
-theorem isExpansionBounded_of_nonprivateCount_eq_zero (r : ℕ) (s : ℝ) :
-    {a b : Layout P} → (c : OriginalCircuit a b) → c.nonprivateCount = 0 →
-      c.IsExpansionBounded r s
-  | _, _, .id _, _ => trivial
-  | _, _, .comp w v, h => by
-      have h' : w.nonprivateCount + v.nonprivateCount = 0 := h
-      exact ⟨isExpansionBounded_of_nonprivateCount_eq_zero r s w (by omega),
-        isExpansionBounded_of_nonprivateCount_eq_zero r s v (by omega)⟩
-  | _, _, .privateMap .., _ => trivial
-  | _, _, @OriginalCircuit.nonprivateGate _ _ _ _ _ _ _ _ _ _ _, h => absurd h one_ne_zero
-  | _, _, .swap .., _ => trivial
-  | _, _, .frame _ w, h => isExpansionBounded_of_nonprivateCount_eq_zero r s w h
-
-theorem isMonomialBounded_of_nonprivateCount_eq_zero (K : ℕ) :
-    {a b : Layout P} → (c : OriginalCircuit a b) → c.nonprivateCount = 0 →
-      c.IsMonomialBounded K
-  | _, _, .id _, _ => trivial
-  | _, _, .comp w v, h => by
-      have h' : w.nonprivateCount + v.nonprivateCount = 0 := h
-      exact ⟨isMonomialBounded_of_nonprivateCount_eq_zero K w (by omega),
-        isMonomialBounded_of_nonprivateCount_eq_zero K v (by omega)⟩
-  | _, _, .privateMap .., _ => trivial
-  | _, _, @OriginalCircuit.nonprivateGate _ _ _ _ _ _ _ _ _ _ _, h => absurd h one_ne_zero
-  | _, _, .swap .., _ => trivial
-  | _, _, .frame _ w, h => isMonomialBounded_of_nonprivateCount_eq_zero K w h
-
-end TNLean.PEPS.PairEffect.OriginalCircuit
-
 namespace TNLean.PEPS.EncodedFrame
+open TNLean.Lattice.Sheet
 
-open PairEffect
+open TNLean.Lattice.PartyCircuit
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {Party : Type} {pos : ι → ℝ × ℝ}
 

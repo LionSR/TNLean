@@ -20,7 +20,7 @@ Source: SCP10, arXiv:1001.3807, Theorem 5.4.
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS.ThreeBlockDependent
-open DependentBondNetwork
+open DependentBondNetwork TNLean.Lattice.DependentBondNetwork
 
 /-- The three physical sites of the open region. -/
 abbrev CoreVertex := {v : Vertex // v ∈ coreVertices}

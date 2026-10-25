@@ -62,12 +62,14 @@ the manuscript; no upstream Lean proof text was reused.
 
 open Matrix QuantumCircuit
 open scoped BigOperators Kronecker Matrix.Norms.L2Operator
+open TNLean.Lattice (siteLift siteLift_conjTranspose)
 
 noncomputable section
 
 namespace TNLean.PEPS.EncodedFrame
+open TNLean.Lattice.Sheet
 
-open SiteChain WholeGroup
+open SiteChain TNLean.Lattice.WholeGroup
 
 variable {ι : Type*} {q : ℕ}
 

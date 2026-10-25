@@ -9,22 +9,23 @@ import TNLean.PEPS.Approximation.DyadicReadingFootprints
 /-!
 # The point treatments with one footprint ratio
 
-The compactness observation gives one footprint ratio `ν` for the two-owner condition of the
-readings of the temporary guides near a mark at a corner of the repainted block, whether or not
-that mark is treated (`exists_pointTreatment_footprintRatio_homogenize_reading`): near the mark,
-the homogenization about all marks is the homogenization about that mark alone, or no
-homogenization at all (`homogenize_iUnion_eq_of_notMem`); every smaller ratio also works. For
-every ratio `ν` below a threshold `ν'`, as fixed by the protocol constants, this file takes the
+The explicit ratio `pointTreatmentRatio ε₀ = min(ε₀, 1) / 20000`, in place of the compactness
+minimum of the source, gives the two-owner condition of the readings of the temporary guides near
+a mark at a corner of the repainted block, whether or not that mark is treated
+(`pointTreatment_footprintRatio_homogenize_reading_of_le`): near the mark, the homogenization
+about all marks is the homogenization about that mark alone, or no homogenization at all
+(`homogenize_iUnion_eq_of_notMem`); every smaller ratio also works. For every ratio
+`0 < ν ≤ pointTreatmentRatio ε₀`, this file takes the
 hole radius `ε₀ t`, the patches of radius `u = ν t / 2`, so that `2 u = ν t`, and every `b`
 bounding the number of net patches, and so turns every point treatment and every removal into one
-gate (`exists_pointTreatment_step_reading`), with the two-owner hypotheses of `pointTreatment_step`
+gate (`pointTreatment_step_reading_of_le`), with the two-owner hypotheses of `pointTreatment_step`
 discharged.
 
 ## Main results
 
-* `Approximation.exists_pointTreatment_footprintRatio_homogenize_reading`.
-* `Approximation.exists_pointTreatment_step_reading_isSourceBounded`,
-  `Approximation.exists_pointTreatment_step_reading`: with and without the bound of `2b` pair
+* `Approximation.pointTreatment_footprintRatio_homogenize_reading_of_le`.
+* `Approximation.pointTreatment_step_reading_isSourceBounded_of_le`,
+  `Approximation.pointTreatment_step_reading_of_le`: with and without the bound of `2b` pair
   sources in every monomial.
 
 ## References
@@ -40,7 +41,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame PairEffect
+open EncodedFrame TNLean.Lattice.Sheet TNLean.Lattice.PartyCircuit
 
 /-- Near a grid corner that is not a mark, homogenizing about the marks changes nothing, when the
 marks are at distance at least `n > 8 t` apart. -/
@@ -61,16 +62,16 @@ theorem homogenize_iUnion_eq_of_notMem {ι : Type*} {n t : ℝ} (hn : 0 < n) (ht
     linarith [dist_nonneg (x := q) (y := blockCorner n Q)]
   linarith
 
-/-- **One footprint ratio for the temporary guides near a mark.** Fix `ε₀ > 0`. There is a threshold
-`ν' > 0` such that, for every ratio `0 < ν ≤ ν'` and every generic displacement `v`, every reading
+/-- **One footprint ratio for the temporary guides near a mark.** Fix `ε₀ > 0`. For every ratio
+`0 < ν ≤ pointTreatmentRatio ε₀` and every generic displacement `v`, every reading
 of an unmodified guide of the repainting of a block, homogenized on the open squares of radius
 `t < n / 8` about the corners of a finite set of marks to `B` or a label of the nine blocks
 around the block, satisfies the two-owner condition near every corner of the block, treated or
 not, with holes of radius `ε₀ t` at its true vertices and footprints of radius `ν t`.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 328–339, 447–479 and 481–505. -/
-theorem exists_pointTreatment_footprintRatio_homogenize_reading {ε₀ : ℝ} (hε : 0 < ε₀) :
-    ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {v : ℝ × ℝ}, IsGenericDisplacement v →
+theorem pointTreatment_footprintRatio_homogenize_reading_of_le {ε₀ : ℝ} (hε : 0 < ε₀) :
+    ∀ ν : ℝ, 0 < ν → ν ≤ pointTreatmentRatio ε₀ → ∀ {v : ℝ × ℝ}, IsGenericDisplacement v →
       ∀ {κ : Type} {n t : ℝ} (hn : 0 < n), 0 < t → 8 * t < n →
       ∀ {lab : ℤ × ℤ → κ} {S : ℤ × ℤ} {B : κ} {g : ℝ × ℝ → κ},
       (blockBaseline hn lab S B).IsUnmodifiedGuide g → ∀ (M : Finset (ℤ × ℤ)) {Q : ℤ × ℤ},
@@ -79,33 +80,31 @@ theorem exists_pointTreatment_footprintRatio_homogenize_reading {ε₀ : ℝ} (h
         (homogenize (⋃ Q' ∈ M, ball (blockCorner n Q') t) P (shiftGuide (blockCorner n S) g)) v →
       HasTwoOwnerFootprints g' (closedBall (blockCorner n Q) (2 * t))
         {c | c ∈ closedBall (blockCorner n Q) (3 * t) ∧ IsTrueVertex g' c} (ε₀ * t) (ν * t) := by
-  obtain ⟨ν', hν', H⟩ := exists_template_footprintRatio_reading.{0} hε
-  refine ⟨ν', hν', fun ν _ hνν' {v} hv {κ n t} hn ht htn {lab S B g} hg M {Q} hQ P hP g' hg' => ?_⟩
+  intro ν _ hνν' v hv κ n t hn ht htn lab S B g hg M Q hQ P hP g' hg'
+  have H := @template_footprintRatio_reading_of_le.{0} ε₀ hε ν hνν' v hv
   by_cases hQM : Q ∈ M
   · obtain ⟨i, hinj, heq⟩ :=
       exists_template_injOn hn hg hQ ht htn (some P) fun x hx => Option.mem_some_iff.1 hx ▸ hP
-    refine (H hv ht i _ hinj _ _ g' (fun q hq => ?_) hg').mono
-      (mul_le_mul_of_nonneg_right hνν' ht.le)
+    refine H ht i _ hinj _ _ g' (fun q hq => ?_) hg'
     rw [homogenize_iUnion_eq_of_mem_ball hn htn M hQM P _ hq]
     exact heq q hq
   · obtain ⟨i, hinj, heq⟩ := exists_template_injOn hn hg hQ ht htn none (fun x hx => by
       simp at hx)
-    refine (H hv ht i _ hinj _ _ g' (fun q hq => ?_) hg').mono
-      (mul_le_mul_of_nonneg_right hνν' ht.le)
+    refine H ht i _ hinj _ _ g' (fun q hq => ?_) hg'
     rw [homogenize_iUnion_eq_of_notMem hn htn M hQM P _ hq]
     exact heq q hq
 
 variable {κ Party : Type}
 
 /-- **The point treatments as gates, with one footprint ratio and their pair sources.** The
-conclusion of `exists_pointTreatment_step_reading`, together with the bound of `2b` pair sources
+conclusion of `pointTreatment_step_reading_of_le`, together with the bound of `2b` pair sources
 in every monomial of each gate.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 328–339, 447–505 and 559–570; Theorem 5.2,
 item 3, `04-compression.tex`, lines 143–147. -/
-theorem exists_pointTreatment_step_reading_isSourceBounded {ε₀ : ℝ} (hε : 0 < ε₀)
+theorem pointTreatment_step_reading_isSourceBounded_of_le {ε₀ : ℝ} (hε : 0 < ε₀)
     (hε₀ : ε₀ ≤ 1 / 16) :
-    ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {v : ℝ × ℝ}, IsGenericDisplacement v →
+    ∀ ν : ℝ, 0 < ν → ν ≤ pointTreatmentRatio ε₀ → ∀ {v : ℝ × ℝ}, IsGenericDisplacement v →
       ∀ {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {pos : ι → ℝ × ℝ}
       {κ Party : Type} {n t : ℝ} (hn : 0 < n), 0 < t → 8 * t < n →
       ∀ {lab : ℤ × ℤ → κ} {S : ℤ × ℤ} {B : κ} {g : ℝ × ℝ → κ},
@@ -148,13 +147,12 @@ theorem exists_pointTreatment_step_reading_isSourceBounded {ε₀ : ℝ} (hε : 
             ((guideFrame pos q g₂ own ph rank V' hole hpV').refVec Ω)‖ ≤
           (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ ∧
         w.IsSourceBounded (2 * b) := by
-  obtain ⟨ν₀, hν₀, H⟩ := exists_pointTreatment_footprintRatio_homogenize_reading hε
-  refine ⟨min ν₀ (1 / 4), lt_min hν₀ (by norm_num), fun ν hν hνν' {v} hv
+  have H := pointTreatment_footprintRatio_homogenize_reading_of_le hε
+  refine fun ν hν hνν {v} hv
     {ι _ _ q _ pos κ Party n t} hn ht htn {lab S B g} hg
     {M₁ M₂} Q₀ hQ₀ hM L₀ hL₀ {g₁ g₂} hg₁ hg₂ own ph rank {V V'} hV hV' hVc hVc' hVV'
-    hole patch hhole hpatch hpV hpV' {C c b L} hL hcHole hcPatch hb hb53 {Ω} hΩ hεp hεh htag => ?_⟩
-  have hνle : ν ≤ 1 / 4 := hνν'.trans (min_le_right _ _)
-  have hνν : ν ≤ ν₀ := hνν'.trans (min_le_left _ _)
+    hole patch hhole hpatch hpV hpV' {C c b L} hL hcHole hcPatch hb hb53 {Ω} hΩ hεp hεh htag => ?_
+  have hνle : ν ≤ 1 / 4 := hνν.trans ((pointTreatmentRatio_le ε₀).trans (by norm_num))
   have hQS : blockCorner n Q₀ ∈ closedBlock n S := by
     obtain ⟨h1, h2⟩ := hQ₀
     refine mem_closedSquare.2 ?_
@@ -180,8 +178,8 @@ theorem exists_pointTreatment_step_reading_isSourceBounded {ε₀ : ℝ} (hε : 
     ((H ν hν hνν hv hn ht htn hg M₂ hQ₀ L₀ hL₀ g₂ hg₂).mono hδ) hL hcHole hcPatch hb'
     hb53 hΩ hεp hεh htag
 
-/-- **The point treatments as gates, with one footprint ratio.** Fix `0 < ε₀ ≤ 1/16`. There is a
-threshold `ν' > 0` such that, for every ratio `0 < ν ≤ ν'`, every generic displacement `v` and every
+/-- **The point treatments as gates, with one footprint ratio.** Fix `0 < ε₀ ≤ 1/16`. For every
+ratio `0 < ν ≤ pointTreatmentRatio ε₀`, every generic displacement `v` and every
 `0 < t` with
 `8 t < n`, the point treatment, or its removal, of a corner `Q₀` of the block `S`, between the
 readings `g₁`, `g₂` along `v` of an unmodified guide homogenized about two sets of marks that
@@ -190,8 +188,8 @@ within `3 t` of `Q₀`, and patches of radius `ν t / 2`, is a circuit as in `po
 for every `b ≥ 53` with `(2 (2 + 4 ε₀ + ν) / ν + 1)² ≤ b`.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 328–339, 447–505 and 559–570. -/
-theorem exists_pointTreatment_step_reading {ε₀ : ℝ} (hε : 0 < ε₀) (hε₀ : ε₀ ≤ 1 / 16) :
-    ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {v : ℝ × ℝ}, IsGenericDisplacement v →
+theorem pointTreatment_step_reading_of_le {ε₀ : ℝ} (hε : 0 < ε₀) (hε₀ : ε₀ ≤ 1 / 16) :
+    ∀ ν : ℝ, 0 < ν → ν ≤ pointTreatmentRatio ε₀ → ∀ {v : ℝ × ℝ}, IsGenericDisplacement v →
       ∀ {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {pos : ι → ℝ × ℝ}
       {κ Party : Type} {n t : ℝ} (hn : 0 < n), 0 < t → 8 * t < n →
       ∀ {lab : ℤ × ℤ → κ} {S : ℤ × ℤ} {B : κ} {g : ℝ × ℝ → κ},
@@ -233,10 +231,10 @@ theorem exists_pointTreatment_step_reading {ε₀ : ℝ} (hε : 0 < ε₀) (hε�
           (guideFrame pos q g₂ own ph rank V' hole hpV').regIso.symm
             ((guideFrame pos q g₂ own ph rank V' hole hpV').refVec Ω)‖ ≤
           (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ := by
-  obtain ⟨ν', hν', H⟩ := exists_pointTreatment_step_reading_isSourceBounded hε hε₀
-  refine ⟨ν', hν', fun ν hν hνν' {v} hv {ι _ _ q _ pos κ Party n t} hn ht htn {lab S B g} hg
+  have H := pointTreatment_step_reading_isSourceBounded_of_le hε hε₀
+  refine fun ν hν hνν' {v} hv {ι _ _ q _ pos κ Party n t} hn ht htn {lab S B g} hg
     {M₁ M₂} Q₀ hQ₀ hM L₀ hL₀ {g₁ g₂} hg₁ hg₂ own ph rank {V V'} hV hV' hVc hVc' hVV'
-    hole patch hhole hpatch hpV hpV' {C c b L} hL hcHole hcPatch hb hb53 {Ω} hΩ hεp hεh htag => ?_⟩
+    hole patch hhole hpatch hpV hpV' {C c b L} hL hcHole hcPatch hb hb53 {Ω} hΩ hεp hεh htag => ?_
   obtain ⟨w, h₁, h₂, h₃, h₄, h₅, -⟩ := H ν hν hνν' hv hn ht htn hg Q₀ hQ₀ hM L₀ hL₀ hg₁ hg₂ own ph
     rank hV hV' hVc hVc' hVV' hole patch hhole hpatch hpV hpV' hL hcHole hcPatch hb hb53 hΩ hεp hεh
     htag

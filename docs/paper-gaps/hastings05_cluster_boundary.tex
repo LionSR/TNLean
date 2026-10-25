@@ -1,0 +1,89 @@
+\documentclass{article}
+\usepackage[margin=28mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\title{The Boundary of a Cluster in Hastings' High-Temperature Expansion}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source statement}
+Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
+\href{https://arxiv.org/abs/cond-mat/0508554v3}{arXiv:cond-mat/0508554v3},
+source \path{proj3new.tex}, lines 1130--1138, reads:
+``Let $C$ be some set of sites $i$. Define $H_C=\sum_{i\in C}H_i$. Define
+$B(C)$ to be equal to the set of all sites $j$ such that $j\neq i$ for any
+$i\in C$ and such that $H_j$ acts on a site $i$ for some site $i\in C$. [\dots]
+Then, if a given term in the power series expansion for $\exp(-\beta H)$
+includes $H_i$ for every $i\in C$, but does not include $H_j$ for all $j\in
+B(C)$, then this term in the power series expansion has a cluster which
+includes exactly the sites acted on by $H_i$ for all $i\in C$.''
+The terms are indexed by sites, and $H_i$ acts only on sites within the
+interaction range $R$ of $i$ (lines 181--183). The operator $\rho(\beta,C)$
+(lines 1174--1177) and the inclusion--exclusion sum
+$\rho-\rho_1+\rho_2-\cdots$ of the remark at lines 1218--1224 rest on this
+claim.
+
+\section{The point at issue}
+The claim fails for the boundary as defined. Take a chain with $R=1$, so that
+$H_i$ acts on the sites $\{i-1,i,i+1\}$, and $C=\{1\}$. The terms acting on the
+site $1$ are $H_0$, $H_1$ and $H_2$, so $B(C)=\{0,2\}$. The term $H_1H_3$ of
+the power series contains $H_1$ and avoids $H_0$ and $H_2$, but $H_3$ acts on
+$\{2,3,4\}$, which meets the sites $\{0,1,2\}$ of $H_1$ at the site $2$. The
+active bonds of this term therefore join $\{0,\dots,4\}$ into one cluster, and
+no cluster consists of exactly the sites of $H_1$. The same happens with
+$H_i$ acting on $\{i,i+1\}$: then $B(\{1\})=\{0\}$, and $H_1H_2$ avoids it
+while $H_2$ meets $H_1$ at the site $2$.
+
+With this boundary, $\rho(\beta,C)$ counts terms in which $C$ is not a
+cluster, and the inclusion--exclusion sum over families of large clusters
+does not reproduce $\rho(\beta,l_{\mathrm{proj}})$.
+
+\section{The correction}
+The boundary is taken to be the set of terms $j\notin C$ whose support meets
+the support of $H_C$:
+\begin{align}
+  \partial C=\Bigl\{j\notin C:\ \operatorname{supp}H_j\cap
+  \bigcup_{i\in C}\operatorname{supp}H_i\neq\emptyset\Bigr\}.
+  \label{eq:hastings05_cluster_boundary_overlap}
+\end{align}
+These are the neighbours of $C$ in the graph on the terms in which two
+distinct terms are adjacent when their supports meet. For a set $C$ of terms
+that is connected in this graph, a word containing every $H_i$ with $i\in C$
+and no $H_j$ with $j\in\partial C$ has the terms of $C$ as one of its
+clusters, and conversely. A set $C$ that is not connected splits into several
+clusters, so the claim is used only for connected $C$, which are the
+clusters of the expansion.
+
+\section{The effect downstream}
+The second inequality of line 1186, $n_C+n_{B(C)}\le Sn_C$, is unchanged in
+form but $S$ changes meaning. With the boundary
+(\ref{eq:hastings05_cluster_boundary_overlap}), $S$ must bound, for each term,
+the number of terms whose support meets its support, together with the term
+itself. When every support lies within $R$ of its centre, these are terms
+whose centres lie within $2R$, so $S$ counts the sites within distance $2R$ of
+a site rather than within $R$. The weight $y=(e^{J\beta}-1)e^{SJ\beta}$ of
+equation (percb2), and with it the temperature $\beta_0$ below which
+$xy\le1/2$ (line 1244), change accordingly. The percolation length
+$\xi_{\mathrm{perc}}$ changes only through $y$ and remains of order the
+interaction range $R$, as the source states (line 1250).
+
+\section{Formalization}
+The overlap graph and the boundary
+(\ref{eq:hastings05_cluster_boundary_overlap}) are
+\leanid{TNLean.Lattice.ClusterExpansion.overlapGraph} and
+\leanid{TNLean.Lattice.ClusterExpansion.mem_boundary_overlapGraph}. Clusters of
+a set of terms are
+\leanid{TNLean.Lattice.ClusterExpansion.IsCluster}, and the
+inclusion--exclusion identity is
+\leanid{TNLean.Lattice.ClusterExpansion.hasSum_truncatedExpTerm}. The bounds on
+$\rho(\beta,C)$ are stated for an arbitrary boundary, so they apply unchanged.
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.InitialBuffer
-import TNLean.PEPS.AreaLaw.MarginalTails
+import TNLean.Lattice.MarginalTails
 
 /-!
 # The marginal-tail parameter of a general cut
@@ -44,6 +44,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open Matrix
+open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -204,7 +205,7 @@ finite-range Hamiltonian with local dimension `q ≥ 1`, every cut `A`, every `n
 `C_M √(1 + |∂_Λ A|) log (n + 2)` of `S_Ω(A)` carry mass at least `1 - (n + 2)^{-M}`, with
 `C_M = typicalWidthConstant q R J Δ M`. The manuscript states `n ≥ 1` and `M > 0`.
 Source: `02-initial.tex`, lines 207–212. -/
-theorem LocalHamiltonian.one_sub_rpow_le_typicalMass_edgeBoundary
+theorem _root_.TNLean.Lattice.LocalHamiltonian.one_sub_rpow_le_typicalMass_edgeBoundary
     (h : LocalHamiltonian Λ q R J) (hq : 1 ≤ q) (hJ : 0 ≤ J) {E₀ Δ : ℝ} {Ω : StateSpace Λ q}
     (hΔ : 0 < Δ) (hgs : IsGappedGroundState Λ q h.operator E₀ Ω Δ) (A : Finset (Site Λ))
     (n : ℕ) {M : ℝ} (hM : 0 ≤ M) :

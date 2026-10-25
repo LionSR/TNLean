@@ -1,0 +1,86 @@
+\documentclass{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{./command}
+\setlength{\emergencystretch}{2em}
+\title{The Squared Error of Sequential Truncation}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{false-source}{resolved}
+
+\section{The printed inequality}
+
+Let $\psi$ be a unit vector on an open chain of $N$ sites. At each internal
+cut $k$, let $\epsilon_k(D)$ be the sum of the eigenvalues beyond the $D$
+largest eigenvalues of the reduced density matrix.
+Schuch, Wolf, Verstraete and Cirac~\cite{Schuch2008EntropyScaling} assert
+that there is a matrix product state $\phi_D$ of bond dimension at most $D$
+with
+\begin{align}
+    \|\psi-\phi_D\|_2 & \le 2\sum_{k=1}^{N-1}\epsilon_k(D).
+    \label{eq:swvc08_truncation_printed}
+\end{align}
+The left-hand side is missing a square.\footnote{arXiv:0705.0292v2,
+    \path{paper_v2.tex}, lines 239--245.}
+The cited result of Verstraete and Cirac~\cite[Lemma~1]{VerstraeteCirac2006Faithfully}
+has the squared norm on the left.\footnote{arXiv:cond-mat/0505140v6,
+    \path{convexPRA2.tex}, first lemma.}
+
+\section{A two-qubit counterexample}
+
+Take $\psi=(\sqrt{15}/4)|00\rangle+(1/4)|11\rangle$ and $D=1$.
+There is one internal cut, with reduced eigenvalues $15/16$ and $1/16$,
+so $\epsilon_1(1)=1/16$. A bond-one open-boundary matrix product state is
+a product vector, without a normalization requirement.
+For unit one-qubit vectors $u,v$, first bound both coefficients by
+$\sqrt{15}/4$, and then apply Cauchy--Schwarz to their absolute coordinates:
+\begin{align}
+    |\langle u\otimes v,\psi\rangle|
+     & \le\frac{\sqrt{15}}4|u_0v_0|+\frac14|u_1v_1|\notag      \\
+     & \le\frac{\sqrt{15}}4\bigl(|u_0v_0|+|u_1v_1|\bigr)\notag \\
+     & \le\frac{\sqrt{15}}4
+    \sqrt{|u_0|^2+|u_1|^2}\sqrt{|v_0|^2+|v_1|^2}
+    =\frac{\sqrt{15}}4.
+    \label{eq:swvc08_truncation_overlap}
+\end{align}
+Optimizing the scalar coefficient and using
+(\ref{eq:swvc08_truncation_overlap}) gives
+\begin{align}
+    \inf_{c\in\mathbb C}\|\psi-c(u\otimes v)\|_2^2
+     & =1-|\langle u\otimes v,\psi\rangle|^2\ge\frac1{16}.
+    \label{eq:swvc08_truncation_product}
+\end{align}
+Equality is attained by the product vector $(\sqrt{15}/4)|00\rangle$.
+Thus the best bond-one error is $1/4$, whereas
+(\ref{eq:swvc08_truncation_printed}) would require $1/4\le1/8$.
+The counterexample also excludes normalized product approximants.
+
+\newpage
+\section{The corrected bound and its formalization}
+
+The squared-norm bound of Verstraete and Cirac~\cite[Lemma~1]{VerstraeteCirac2006Faithfully} is
+$\|\psi-\phi_D\|_2^2\le2\sum_k\epsilon_k(D)$.
+For the unnormalized vector $\Phi$ obtained by sequential projection onto
+the leading eigenspaces, the formalization proves the stronger estimate
+\begin{align}
+    \|\psi-\Phi\|_2^2 & \le\sum_{k=1}^{N-1}\epsilon_k(D).
+    \label{eq:swvc08_truncation_corrected}
+\end{align}
+The same vector is an open-boundary matrix product state of bond dimension
+at most $D$.\footnote{\leanid{TNLean.MPS.AreaLaw.norm_sequentialTruncation_leadingEigenprojection_sub_sq_le}
+    and \leanid{TNLean.MPS.AreaLaw.isOpenMPS_sequentialTruncation_leadingEigenprojection}
+    in \doclink{TNLean/MPS/AreaLaw/SequentialTruncation}.}
+No normalization of $\Phi$ is asserted. The older estimate
+$\|\psi-\Phi\|_2\le\sum_k\sqrt{\epsilon_k(D)}$ is weaker than
+(\ref{eq:swvc08_truncation_corrected}).
+This note resolves the missing square; the deduction of efficient
+approximation from a family of R\'enyi entropy bounds remains open in
+\ghissue{9855}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

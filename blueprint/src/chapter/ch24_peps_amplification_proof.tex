@@ -124,8 +124,9 @@ comparison treats the two copies as additional sites.
 \begin{proof}
     \leanok
     \uses{thm:al_amp_ancilla_transport}
-    Transfer the estimates of Theorem~\ref{thm:al_amp_restoring_estimates} along
-    $\mathcal W$. Unitary equivalence preserves norms of vectors and of operators. An operator
+    Transferring the estimates of Theorem~\ref{thm:al_amp_restoring_estimates} along
+    $\mathcal W$ gives the bounds, since unitary equivalence preserves norms of
+    vectors and of operators. An operator
     on $X\otimes Y$ in the eigenbasis tensored with $I_{Z'}$ acts on $X\cup Y$ in
     the original coordinates, since the basis change acts on $X$ alone.
 \end{proof}
@@ -211,8 +212,8 @@ comparison treats the two copies as additional sites.
 \begin{proof}
     \leanok
     The vector $\varphi$ is $\Omega\otimes a\otimes b$ relabelled by the swap, and
-    the swap maps the copy of $X'$ to $X'$ and fixes $J$. Apply
-    Theorem~\ref{thm:al_amp_site_entropy}.
+    the swap maps the copy of $X'$ to $X'$ and fixes $J$, so
+    Theorem~\ref{thm:al_amp_site_entropy} gives the equality.
 \end{proof}
 
 \begin{theorem}[The local unitary and the entropy comparison on a region]
@@ -220,7 +221,7 @@ comparison treats the two copies as additional sites.
     \lean{QuantumCircuit.embedOp_val_eq_kronecker_one_submatrix,
         QuantumCircuit.kronecker_one_submatrix_mem_supportedOperators,
         TNLean.PEPS.AreaLaw.exists_supported_unitary_of_good_realization,
-        TNLean.PEPS.AreaLaw.mutualInformation_le_inv_pow_of_supported_unitary}
+        TNLean.Lattice.mutualInformation_le_inv_pow_of_supported_unitary}
     \leanok
     \uses{thm:area_law_amplification_unitary_error,thm:al_amp_entropy_comparison_scale}
     On a finite set of sites with local dimension $q$, let $R_0$ and $L'$ act on
@@ -236,9 +237,9 @@ comparison treats the two copies as additional sites.
     \leanok
     An operator acting on $S$ is $A\otimes I$ in the coordinates of $S$ and its
     complement, and an operator acting on a region disjoint from $X\cup J$ is
-    $I\otimes A$ in the coordinates of $X\cup J$ and its complement. Apply the
+    $I\otimes A$ in the coordinates of $X\cup J$ and its complement. Applying the
     polar correction in the first coordinates and the entropy comparison in the
-    second.
+    second gives both assertions.
 \end{proof}
 
 \begin{theorem}[The local unitary and the entropy comparison on the enlarged sites]
@@ -261,9 +262,9 @@ comparison treats the two copies as additional sites.
 \end{theorem}
 \begin{proof}
     \leanok
-    Relabel the enlarged configurations as physical configurations together with
-    the configurations of $s'$ and $e'$, and apply
-    Theorem~\ref{thm:al_amp_supported_polar} on the enlarged sites. For the entropy
+    Relabelling the enlarged configurations as physical configurations together with
+    the configurations of $s'$ and $e'$ makes
+    Theorem~\ref{thm:al_amp_supported_polar} applicable on the enlarged sites. For the entropy
     comparison, $\eta$ is $\Omega$ tensored with a unit ancillary vector, so it has
     no mutual information between $e'$ and a physical region, and the copy of
     each $X'\subseteq X$ in $e'$ carries $I_\Omega(X':J)$ by
@@ -283,9 +284,9 @@ comparison treats the two copies as additional sites.
 \end{theorem}
 \begin{proof}
     \leanok
-    Bound $n^{3/5}$ and $\log n$ by multiples of $n^{1-\varepsilon}$, so that
-    $C'(t_*+K\log n)\le C'Bn^{1-\varepsilon}$, raise to the power $1/\alpha$, and
-    absorb the rounding into $n^{(1-\varepsilon)/\alpha}\ge1$.
+    Bounding $n^{3/5}$ and $\log n$ by multiples of $n^{1-\varepsilon}$ gives
+    $C'(t_*+K\log n)\le C'Bn^{1-\varepsilon}$, and raising to the power $1/\alpha$
+    absorbs the rounding into $n^{(1-\varepsilon)/\alpha}\ge1$.
 \end{proof}
 
 \begin{theorem}[Proposition 10.2: amplification]
@@ -293,8 +294,8 @@ comparison treats the two copies as additional sites.
     \lean{TNLean.PEPS.AreaLaw.amplificationBound}
     \leanok
     \uses{def:area_law_amplification_bound}
-    For every $q,R,J$ and every gap $\Delta>0$ the amplification bound holds.
-    This is Proposition~10.2 of \cite{OpenAI2026AreaLaw}.
+    In Proposition~10.2 of \cite{OpenAI2026AreaLaw}, for every $q,R,J$ and every
+    gap $\Delta>0$ the amplification bound holds.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -332,6 +333,27 @@ comparison treats the two copies as additional sites.
     Theorem~\ref{thm:area_law_amplification_of_radius_output}.
 \end{proof}
 
+\begin{theorem}[Amplification at the constants of its proof]
+    \label{thm:area_law_amplification_explicit}
+    \lean{TNLean.PEPS.AreaLaw.amplificationBound_explicit,
+        TNLean.PEPS.AreaLaw.amplificationBoundAt_explicit}
+    \leanok
+    \uses{def:area_law_amplification_bound}
+    Let $q,R\in\mathbb N$, $J\in\mathbb R$, $\Delta>0$, $C_0>0$ and
+    $M\in\mathbb N$. Let $C_2$ and $N_2$ be the constant and the threshold
+    produced by the proof of Theorem~\ref{thm:area_law_amplification} at
+    $C_0$ and $M$, with the locality constant and rate of the positive
+    constraints at the power $p=10^6$. Then the amplification bound at the
+    input constant $C_0$ and the order $M$ holds with constant $C_2$ and
+    threshold the larger of $N_2$ and the radius threshold of $C_2$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_amplification}
+    The proof of Theorem~\ref{thm:area_law_amplification} produces these
+    constant and threshold.
+\end{proof}
+
 \begin{theorem}[Uniform area law from the collar and two-family bounds]
     \label{thm:area_law_conditional_collar_two_families}
     \lean{TNLean.PEPS.AreaLaw.uniformAreaLaw_of_collar_twoFamilies}
@@ -340,12 +362,12 @@ comparison treats the two copies as additional sites.
     Suppose that for all $q\ge1$, $R\ge0$ and $J,\Delta>0$ there are template
     constants $D_0,C_{\rm tpl}$ for which the sublinear collar bound and the
     two-family decomposition hold. Then the conclusion of
-    Theorem~\ref{thm:openai_uniform_area_law} holds. This proves Theorem~1.1 of
-    \cite{OpenAI2026AreaLaw} only conditionally on Propositions~9.6 and~11.2.
+    Theorem~\ref{thm:openai_uniform_area_law} holds, proving Theorem~1.1 of
+    \cite{OpenAI2026AreaLaw} conditionally on Propositions~9.6 and~11.2.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:area_law_conditional_assembly,thm:area_law_amplification}
-    Apply Theorem~\ref{thm:area_law_conditional_assembly} with the amplification
-    bound of Theorem~\ref{thm:area_law_amplification}.
+    Applying Theorem~\ref{thm:area_law_conditional_assembly} with the amplification
+    bound of Theorem~\ref{thm:area_law_amplification} gives the conclusion.
 \end{proof}

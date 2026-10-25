@@ -6,13 +6,27 @@ cases recorded before it in Section~2 of that preprint.
 
 \begin{theorem}[Gapped ground vectors of a sum of factor Hamiltonians]
     \label{thm:area_law_product_ground_state}
-    \lean{TNLean.PEPS.AreaLaw.exists_eq_mul_of_gap, TNLean.PEPS.AreaLaw.vonNeumannEntropy_partialTraceRight_eq_zero_of_gap}
+    \lean{TNLean.Lattice.exists_isGappedGroundState_factors_of_kronecker_sum, TNLean.Lattice.exists_eq_mul_of_gap, TNLean.Lattice.vonNeumannEntropy_partialTraceRight_eq_zero_of_gap}
     \leanok
     Let $H=H_A\otimes I+I\otimes H_B$ with $H_A,H_B$ Hermitian. If a unit
     vector $\omega$ satisfies $H\omega=E_0\omega$ and
     $H-E_0I\ge\Delta(I-|\omega\rangle\langle\omega|)$ with $\Delta>0$, then
     $\omega$ is a product vector, and its reduced state on the first factor has
     zero entropy.
+
+    More precisely, there are real numbers $a,b$ and normalized factor
+    vectors $u,v$ such that
+    \begin{align}
+        \omega & =u\otimes v,                            & E_0   & =a+b,\notag \\
+        \|u\|  & =1,                                     & \|v\| & =1,\notag   \\
+        H_Au   & =au,                                    & H_Bv  & =bv,\notag  \\
+        H_A-aI & \ge\Delta(I-|u\rangle\langle u|),       &
+        H_B-bI & \ge\Delta(I-|v\rangle\langle v|).\notag
+    \end{align}
+    The phase is included in the chosen factors, so the product equality
+    is exact. Both factors retain the same lower gap bound $\Delta$.
+    These factor gap inequalities are the spectral step in the reduction
+    to connected domains in \cite[Part~I]{TNLean2026OneDimensional}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -22,11 +36,62 @@ cases recorded before it in Section~2 of that preprint.
     $\Delta(1-|\langle\omega,u\otimes v\rangle|^2)\le a+b-E_0\le0$, hence
     $|\langle\omega,u\otimes v\rangle|=1$ and $\omega$ is a multiple of
     $u\otimes v$. The reduced state is then a rank-one projection.
+
+    The equality $|\langle\omega,u\otimes v\rangle|=1$, together with
+    the two energy comparisons, also gives $E_0=a+b$.
+    Write $z=\langle\omega,u\otimes v\rangle$.
+    The exact relation is $\omega=\overline z\,u\otimes v$ with $|z|=1$.
+    Replacing $u$ by $\overline z\,u$ preserves its norm, eigenvalue
+    equation and rank-one projection and makes $\omega=u\otimes v$.
+    For the isometric inclusion $B_v\xi=\xi\otimes v$, direct compression
+    of the gap defect gives
+    \begin{align}
+         & B_v^*\bigl(H-E_0I-\Delta(I-|\omega\rangle\langle\omega|)\bigr)B_v
+        \notag                                                               \\
+         & \qquad=H_A-(E_0-b)I-\Delta(I-|u\rangle\langle u|)
+        =H_A-aI-\Delta(I-|u\rangle\langle u|).\notag
+    \end{align}
+    Positivity is preserved under rectangular compression, so the last
+    operator is positive semidefinite. Compressing instead along
+    $B_u\eta=u\otimes\eta$ gives the second factor inequality.
+    No factor is lost in $\Delta$, since both inclusions are isometries.
+\end{proof}
+
+\begin{theorem}[Gapped ground vectors of a sum over finitely many factors]
+    \label{thm:area_law_product_ground_state_family}
+    \lean{TNLean.Lattice.factorOperator, TNLean.Lattice.exists_isGappedGroundState_factors_of_sum_factorOperator}
+    \leanok
+    \uses{thm:area_law_product_ground_state}
+    Let $k\ge1$, and for $i=1,\dots,k$ let $H_i$ be a Hermitian operator on a
+    finite-dimensional space $\mathcal H_i$. Put $H=\sum_iH_i$ on
+    $\bigotimes_i\mathcal H_i$, each $H_i$ acting on its own factor. If a unit
+    vector $\omega$ satisfies $H\omega=E_0\omega$ and
+    $H-E_0I\ge\Delta(I-|\omega\rangle\langle\omega|)$ with $\Delta>0$, then
+    there are real numbers $a_i$ and unit vectors $\omega_i$ such that
+    \begin{align}
+        \omega      & =\bigotimes_i\omega_i,                               & E_0 & =\sum_ia_i,\notag \\
+        H_i\omega_i & =a_i\omega_i,                                        &
+        H_i-a_iI    & \ge\Delta(I-|\omega_i\rangle\langle\omega_i|).\notag
+    \end{align}
+    Every factor keeps the gap $\Delta$. This is the statement in the
+    reduction to connected domains of \cite[Part~I, Lemma~2.1]{TNLean2026OneDimensional}
+    that each component Hamiltonian inherits the gap inequality with the same
+    gap.
+\end{theorem}
+
+\begin{proof}\leanok
+    Induct on $k$. For $k=1$ there is nothing to prove. For $k\ge2$, write
+    $H=H_1\otimes I+I\otimes H'$ with $H'=\sum_{i\ge2}H_i$, which is
+    Hermitian. Theorem~\ref{thm:area_law_product_ground_state} gives
+    $\omega=\omega_1\otimes\omega'$ and $E_0=a_1+b$, with $\omega_1$ a
+    gapped ground vector of $H_1$ at $a_1$ and $\omega'$ a gapped ground
+    vector of $H'$ at $b$, both with gap $\Delta$. The induction hypothesis
+    applied to $\omega'$ factors it over $i\ge2$ with $b=\sum_{i\ge2}a_i$.
 \end{proof}
 
 \begin{theorem}[Supports and components]
     \label{thm:area_law_support_components}
-    \lean{TNLean.PEPS.AreaLaw.IsAdmissibleSupport.reachable, TNLean.PEPS.AreaLaw.subset_or_disjoint_of_edgeBoundary_eq_empty, TNLean.PEPS.AreaLaw.edgeBoundary_connectedComponents_eq_empty, TNLean.PEPS.AreaLaw.edgeBoundary_connectedComponent_eq_empty}
+    \lean{TNLean.Lattice.IsAdmissibleSupport.reachable, TNLean.PEPS.AreaLaw.subset_or_disjoint_of_edgeBoundary_eq_empty, TNLean.PEPS.AreaLaw.edgeBoundary_connectedComponents_eq_empty, TNLean.PEPS.AreaLaw.edgeBoundary_connectedComponent_eq_empty}
     \leanok
     \uses{def:area_law_domain,def:area_law_hamiltonian}
     Every support of finite induced-graph diameter lies in one connected
@@ -52,12 +117,10 @@ cases recorded before it in Section~2 of that preprint.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:area_law_product_ground_state}
-    Every term of the Hamiltonian acts inside $A$ or inside its complement, so
-    across the cut $H=H_A\otimes I+I\otimes H_{\Lambda\setminus A}$;
-    replacing both factors by their Hermitian parts preserves this decomposition.
-    Hence the ground vector is a
-    product vector across the cut and its reduced state on $A$ has zero entropy.
+    \uses{lem:zero_entropy_cut}
+    Every term of the Hamiltonian acts inside $A$ or inside its complement.
+    This is the hypothesis of Lemma~\ref{lem:zero_entropy_cut} for the finite
+    set of sites $\Lambda$, which gives $S_\Omega(A)=0$.
 \end{proof}
 
 \begin{theorem}[A cut with no crossing edge]
@@ -91,7 +154,7 @@ cases recorded before it in Section~2 of that preprint.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:area_law_unsplit_supports, thm:area_law_zero_boundary, thm:area_law_support_components}
+    \uses{thm:area_law_unsplit_supports, thm:area_law_zero_boundary, thm:area_law_support_components, thm:chain_entropy_dim_one}
     For $R=0$ every support is a single site and so is never split by a cut,
     so Theorem~\ref{thm:area_law_unsplit_supports} applies.
     For $q=1$ or $\Lambda=\varnothing$ the regional Hilbert space is

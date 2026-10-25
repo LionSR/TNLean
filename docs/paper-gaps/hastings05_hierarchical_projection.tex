@@ -1,0 +1,275 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+% Fallbacks keep this note compilable when a different command.tex is found first.
+\providecommand{\leanid}[1]{\nolinkurl{#1}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{The Deficiency of a Level in Hastings' Hierarchical Projection}
+\author{}
+\date{2026-10-23}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source passage}
+
+Section~II of Hastings' \emph{Solving gapped Hamiltonians
+    locally}~\cite{Hastings2006Solving} (arXiv:cond-mat/0508554v3,
+\texttt{proj3new.tex}) builds a state close to a ground state $\Psi_a$ from
+local spectral projections. There $J$ bounds the norms of the local terms,
+$\lVert H_i\rVert\le J$ (line 180), each approximate term $M_i$ acts within
+distance $l_{\mathrm{proj}}$ of site $i$ (lines 284--307), and
+$l_{\mathrm{fac}}$ is the factorization length, the error of the
+approximation being of order $e^{-l_{\mathrm{proj}}/l_{\mathrm{fac}}}$
+(lines 344--349). For a pair operator $M=M_{k,k+1}$ the ground state
+is an approximate eigenvector,
+\begin{align}\label{eq:hastings05_hierarchical_projection_ground_state_residual}
+    \bigl\lVert(M-c)\Psi_a\bigr\rVert\le\epsilon,
+    \qquad c=\langle\Psi_a,M\Psi_a\rangle,
+\end{align}
+by eq.~(low) (lines 633--639). The projection $P^1$ onto the eigenvectors of
+$M$ with eigenvalue in $[c-x,c+x]$ then satisfies (lines 645--657)
+\begin{align}\label{eq:hastings05_hierarchical_projection_projection_expectation}
+    x\,\langle\Psi_a,(1-P^1)\Psi_a\rangle\le\epsilon,
+    \qquad\langle\Psi_a,P^1\Psi_a\rangle\ge1-b_1,
+    \qquad b_1=\epsilon/x .
+\end{align}
+At the next level the source sets
+$\Psi^1_a=P^1_kP^1_{k+2}\Psi_a/\lVert P^1_kP^1_{k+2}\Psi_a\rVert$ and states
+(line 689)
+\begin{align}\label{eq:hastings05_hierarchical_projection_normalized_projection_distance}
+    \lVert\Psi^1_a-\Psi_a\rVert\le2b_1 .
+\end{align}
+From this it bounds the residual of $\Psi^1_a$ by $\epsilon+2b_1J\,l_{\mathrm{proj}}$
+(lines 690--695) and obtains the recursion
+$b_m=(\epsilon+2b_{m-1})^{1-1/h}$ with $h=\log_2N$ levels (lines 696--704).
+
+\section{The deficiency in norm}
+
+An expectation bound does not give~(\ref{eq:hastings05_hierarchical_projection_normalized_projection_distance}). If
+$\langle\Psi,(1-P)\Psi\rangle\le b$ for an orthogonal projection $P$ and a unit
+vector $\Psi$, then only
+\begin{align}\label{eq:hastings05_hierarchical_projection_sqrt_deficiency}
+    \lVert(1-P)\Psi\rVert=\langle\Psi,(1-P)\Psi\rangle^{1/2}\le\sqrt b ,
+\end{align}
+and a normalized image can lie at distance of order $\sqrt b$, not $b$. Read
+with~(\ref{eq:hastings05_hierarchical_projection_projection_expectation}) alone, the recursion would have $\sqrt{b_{m-1}}$ in
+place of $b_{m-1}$.
+
+The spectral step proves more than~(\ref{eq:hastings05_hierarchical_projection_projection_expectation}). Write
+$N=M-c$. On the range of $1-P^1$ every eigenvalue of $N$ has absolute value
+greater than $x$, so
+\begin{align}\label{eq:hastings05_hierarchical_projection_projection_residual}
+    \lVert\Psi-P^1\Psi\rVert\le\lVert N\Psi\rVert/x\le\epsilon/x .
+\end{align}
+The formalization measures the deficiency of a level in norm,
+$b=\lVert\Psi-P\Psi\rVert$. This implies~(\ref{eq:hastings05_hierarchical_projection_projection_expectation}): with
+$d=\lVert\Psi-P\Psi\rVert\le1$,
+\begin{align}\label{eq:hastings05_hierarchical_projection_expectation_norm}
+    \langle\Psi,P\Psi\rangle=1-d^2\ge1-d .
+\end{align}
+With $b$ in norm,~(\ref{eq:hastings05_hierarchical_projection_normalized_projection_distance}) holds as printed. For commuting
+orthogonal projections $P,P'$ the vectors $\Psi-P\Psi$ and $P(\Psi-P'\Psi)$
+are orthogonal, so
+$\lVert\Psi-PP'\Psi\rVert^2\le\lVert\Psi-P\Psi\rVert^2+\lVert\Psi-P'\Psi\rVert^2\le2b^2$.
+For an orthogonal projection $Q$ and a unit vector $\Psi$ with
+$t=\lVert Q\Psi\rVert>0$,
+\begin{align}\label{eq:hastings05_hierarchical_projection_normalization_sq}
+    \Bigl\lVert\frac{Q\Psi}{t}-\Psi\Bigr\rVert^2=2-2t\le2(1-t^2)
+    =2\lVert\Psi-Q\Psi\rVert^2 .
+\end{align}
+With $Q=PP'$, (\ref{eq:hastings05_hierarchical_projection_normalization_sq}) and
+$\lVert\Psi-PP'\Psi\rVert^2\le2b^2$ give
+$\lVert\Psi^1_a-\Psi_a\rVert\le2b$, so
+the residual at the second level and the printed $b_2$ follow as in the
+source. If the projected vector vanishes, normalization is interpreted as
+zero and the corresponding inequality follows directly.
+
+From the third level on, the window stays centred at the expectation in
+$\Psi_a$. Thus the residual of a later normalized vector must be compared
+with $\Psi_a$. If consecutive normalized vectors differ by at most $2b_j$,
+the triangle inequality gives
+$\lVert\Psi^{m-1}_a-\Psi_a\rVert\le2\sum_{j<m}b_j$. Under this assumption,
+an accumulated scalar majorant has the recurrence
+\begin{align}\label{eq:hastings05_hierarchical_projection_accumulated_recurrence}
+    \beta_0=0,\qquad
+    \beta_m=\Bigl(\epsilon+2\sum_{1\le j<m}\beta_j\Bigr)^{1-1/h}.
+\end{align}
+For $0<\epsilon\le1$ and $h\ge1$, the coefficient estimate
+$\beta_m\le c_m\epsilon^{(1-1/h)^m}$ has
+$c_1=1$ and $c_m=1+2\sum_{1\le j<m}c_j=3^{m-1}$.
+This remains polynomial in $N=2^h$. It does not prove the printed
+recurrence with only the preceding deficiency, nor rule out a sharper
+argument giving that recurrence. The Lean
+recurrence theorems establish inequalities for the printed scalar sequence;
+they do not identify it with deficiencies beyond the second level. The
+complete hierarchy is instead controlled by measuring every deficiency
+against $\Psi_a$; see
+Section~\ref{sec:hastings05_hierarchical_projection_all_levels}.
+
+\newpage
+\section{The restricted spectral window}
+
+At the second level the source takes eigenvectors of $QMQ$ inside
+$\operatorname{ran}Q$, where $Q=P^1_kP^1_{k+2}$
+\cite[lines 673--685]{Hastings2006Solving}.
+Let $W=P_x(QMQ,c)$ denote the spectral window on the whole ambient space.
+Since $QMQ$ vanishes on $\ker Q$, the projection $W$ includes $\ker Q$
+whenever $|c|\le x$. Thus the later-level projection is $P=QW$, not $W$.
+For example, with $Q=\operatorname{diag}(1,0)$, $M=0$, $c=0$ and $x=1$,
+one has $W=1$ whereas $P=Q$.
+
+The matrices $Q$ and $QMQ$ commute, so functional calculus gives $QW=WQ$.
+Consequently $P$ is an orthogonal projection with $PQ=P$ and annihilates
+$\ker Q$. On a vector $\phi$ with $Q\phi=\phi$, it agrees with $W$, and
+\begin{align}\label{eq:hastings05_hierarchical_projection_restricted_error}
+    \lVert\phi-P\phi\rVert
+     & \le\frac{\lVert(QMQ-c)\phi\rVert}{x}
+    \le\frac{\lVert(M-c)\phi\rVert}{x}.
+\end{align}
+Here $x>0$, and the second inequality in
+(\ref{eq:hastings05_hierarchical_projection_restricted_error}) follows from
+$(QMQ-c)\phi=Q(M-c)\phi$. This implements the subspace specified by the
+source without imposing $|c|>x$. It establishes the required nesting of a
+single level, but does not establish the full hierarchy or its recurrence.
+
+\section{The residual and the recursion}
+
+The centres in the source's second-level calculation differ: the spectral
+window is centred at $c=\langle\Psi_a,M\Psi_a\rangle$ (line 681), whereas
+the displayed residual uses $c'=\langle\Psi^1_a,M\Psi^1_a\rangle$
+(lines 692--694). A residual bound about $c'$ alone does not give the same
+bound about $c$: the triangle inequality adds $|c'-c|$ for a unit vector.
+The formalized perturbation estimate instead keeps $c$ fixed throughout,
+as required by that spectral window. Its coefficient is $\lVert M-c\rVert$;
+identifying it with the printed $J l_{\mathrm{proj}}$ requires the
+corresponding operator-norm bound.
+
+For any vectors $\phi,\psi$,
+$\lVert N\phi\rVert\le\lVert N\psi\rVert+\lVert N\rVert\,\lVert\phi-\psi\rVert$,
+and $\lVert N\rVert\le\lVert M\rVert+|c|\le2\lVert M\rVert$ since
+$|c|\le\lVert M\rVert$. The source's term $2b_1J\,l_{\mathrm{proj}}$ reads
+$\lVert N\rVert\le J\,l_{\mathrm{proj}}$. The formalization keeps
+$\lVert N\rVert$ in the bound and states the recursion with a general
+coefficient $a\ge0$:
+\begin{align}\label{eq:hastings05_hierarchical_projection_scalar_recurrence}
+    b_0=0,\qquad b_{m+1}=(\epsilon+ab_m)^s,\qquad
+    b_m\le\Bigl(\sum_{j<m}a^j\Bigr)\epsilon^{s^m}
+\end{align}
+for $0<\epsilon\le1$ and $0\le s\le1$. The induction uses
+$\epsilon\le\epsilon^{s^m}$ and $C^s\le C$ for $C\ge1$. For the source's $a=2$
+and $s=1-1/h$,
+\begin{align}\label{eq:hastings05_hierarchical_projection_scalar_recurrence_bound}
+    b_h\le(2^h-1)\,\epsilon^{(1-1/h)^h},
+\end{align}
+which for $N=2^h$ and $\epsilon=e^{-l_{\mathrm{proj}}/l_{\mathrm{fac}}}$ is
+below the source's $N\exp[-(l_{\mathrm{proj}}/l_{\mathrm{fac}})(1-1/h)^h]$
+(lines 705--707). No constant is lost. The source continues with
+$\sim N\exp(-l_{\mathrm{proj}}/(e\,l_{\mathrm{fac}}))$. Since $(1-1/h)^h$
+increases to $1/e$, this is the limiting order of magnitude and not an upper
+bound. The formalization proves $(1-1/h)^h\ge1/4$ for $h\ge2$, so
+$b_h\le(2^h-1)\epsilon^{1/4}$.
+
+\section{What is not formalized}
+
+The energy bound eq.~(hchy) and the count of at most $2n$ final states
+(lines 709--730), which the source states only with ``one may show'', and the
+extensions to higher dimensions (lines 745--756) are not part of this note.
+
+\section{All levels against the ground state}
+\label{sec:hastings05_hierarchical_projection_all_levels}
+
+The source projects at level $m$ inside the
+range of the two projections of level $m-1$ (lines 671--676). For orthogonal
+projections $P\le Q$ and a unit vector $\Psi$ with
+$\Psi'=Q\Psi/\lVert Q\Psi\rVert$, the formalization proves
+\begin{align}\label{eq:hastings05_hierarchical_projection_nested_deficiency}
+    \lVert\Psi-P\Psi\rVert^2\le\lVert\Psi-Q\Psi\rVert^2
+    +\lVert\Psi'-P\Psi'\rVert^2,
+\end{align}
+which combines the deficiencies of consecutive levels. Along such a chain the
+deficiency of $\Psi_a$ under a projection of level $m$ collects the squared
+deficiencies of the earlier levels in addition to $b_m^2$.
+
+The formalization therefore measures every deficiency against $\Psi_a$
+itself. Let $P_k^m$ be the projection of level $m$ on block $k$, with
+$P_k^0=1$, and let $P_k^{m+1}$ be the window of the pair operator $M$ joining
+the two halves of block $k$, centred at $c=\langle\Psi_a,M\Psi_a\rangle$ with
+radius $x_m$, inside the range of $Q=P_{2k}^mP_{2k+1}^m$. The two halves act
+on disjoint supersites, so their projections commute. Suppose
+$\lVert(M-c)\Psi_a\rVert\le\epsilon$ and $\lVert M-c\rVert\le K$ for every
+pair operator, and let each half move $\Psi_a$ by at most $D_m$. Then
+$\lVert\Psi_a-Q\Psi_a\rVert^2\le2D_m^2$, and the normalized image
+$\Psi'=Q\Psi_a/\lVert Q\Psi_a\rVert$ lies in the range of $Q$ at distance at
+most $2D_m$ from $\Psi_a$. By the restricted window bound,
+$\lVert\Psi'-P_k^{m+1}\Psi'\rVert\le(\epsilon+2KD_m)/x_m$, and
+(\ref{eq:hastings05_hierarchical_projection_nested_deficiency}) gives
+\begin{align}\label{eq:hastings05_hierarchical_projection_ground_recurrence}
+    D_0=0,\qquad
+    D_{m+1}^2\le2D_m^2+\Bigl(\frac{\epsilon+2KD_m}{x_m}\Bigr)^2 .
+\end{align}
+With $K>0$, $e>0$, $\epsilon=Ke$ and the source's radius
+$x_m=K(e+2\beta_m)^{1-s}$ (lines 676--681), where $\beta_0=0$ and
+$\beta_{m+1}^2=2\beta_m^2+(e+2\beta_m)^{2s}$, induction gives
+$D_m\le\beta_m$. For $0<e\le1$ and $0\le s\le1$,
+\begin{align}\label{eq:hastings05_hierarchical_projection_ground_bound}
+    \beta_m\le(3^m-1)\,e^{s^m},
+\end{align}
+since $C_{m+1}^2=2C_m^2+(1+2C_m)^2\le(3C_m+2)^2$ for the coefficients. This
+replaces the printed recurrence and its coefficient $2^h-1$ by
+(\ref{eq:hastings05_hierarchical_projection_ground_recurrence}) and $3^h-1$,
+which is still polynomial in $N=2^h$. With $s=1-1/h$ and $h\ge2$ the final
+deficiency is at most $(3^h-1)e^{1/4}$.
+
+\section{Formalization}
+
+The spectral residual bound (\ref{eq:hastings05_hierarchical_projection_projection_residual}) and its expectation consequence
+(\ref{eq:hastings05_hierarchical_projection_projection_expectation}) are formalized, as is the normalization bound
+(\ref{eq:hastings05_hierarchical_projection_normalized_projection_distance}) with deficiency measured in norm.\footnote{Declarations:
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_windowProjection_le},
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.one_sub_div_le_re_inner_windowProjection}, and
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.norm_inv_norm_smul_sub_le_two_mul}.}
+
+The restricted spectral window $P=QP_x(QMQ,c)$ satisfies $PQ=P$.
+Its residual estimate combines with the distance to a reference vector
+to give the second-level bound.\footnote{Declarations:
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.compressedWindowProjection},
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.compressedWindowProjection_mul}, and
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_compressedWindowProjection_le_of_norm_sub_le}.}
+
+The bounds for the scalar recurrence in (\ref{eq:hastings05_hierarchical_projection_scalar_recurrence}) and
+(\ref{eq:hastings05_hierarchical_projection_scalar_recurrence_bound}) are formalized independently of the complete
+hierarchy.\footnote{Declarations:
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_le} and
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_self_le}.}
+
+The bound over all levels,
+(\ref{eq:hastings05_hierarchical_projection_ground_recurrence}) and
+(\ref{eq:hastings05_hierarchical_projection_ground_bound}), is
+formalized.\footnote{Declarations:
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_hierarchy_le},
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_le_hierarchyMajorant}, and
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_le}.}
+The commutation of the two halves of each block, which the bound over all
+levels takes as a hypothesis, is derived from the supersite grouping of lines
+609--628: a spectral window keeps the support of its operator, so every
+projection of level $m$ acts on its block of $2^m$ supersites, and the two
+halves of a block act on disjoint sites. The residual of a pair operator is
+at most the sum of the residuals of its summands $M_i$, with centre the sum of
+their expectations.\footnote{Declarations:
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_supersiteHierarchy_le},
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.mem_supportedOperators_hierarchy}, and
+    \leanid{TNLean.MPS.AreaLaw.LocalSolution.norm_toEuclideanLin_sum_sub_le}.}
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

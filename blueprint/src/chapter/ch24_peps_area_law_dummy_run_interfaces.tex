@@ -27,7 +27,7 @@ layer $k$.
 \begin{proof}\leanok
     \uses{thm:area_law_dummy_corner_elementary_side,
         thm:area_law_dummy_layer_disjoint}
-    Choose a coarse cell in $N_0$ whose closure contains $x$. Its interior is
+    Because $x\in\overline{N_0}$, some coarse cell in $N_0$ contains $x$ in its closure, and its interior is
     disjoint from the interior of the reference fine cell. After
     interchanging coordinates if necessary, $e_i$ is vertical. Since
     $x\in(a_i,b_i)$, disjointness forces the normal coordinate of $e_i$
@@ -81,9 +81,9 @@ layer $k$.
         thm:area_law_elementary_open_dummy_contact,
         thm:area_law_belt_fan_dummy_color,thm:area_law_fan_run_color}
     Since the shared segment has infinitely many points and the fan has
-    finitely many elementary endpoints, choose a point $x$ on the shared
-    segment that is not an elementary endpoint, and choose a constituent
-    triangle $P_i$ of $R$ containing $x$. Because $P_i\cap\overline{N_0}=e_i\cap\overline{N_0}$,
+    finitely many elementary endpoints, the shared segment contains a point $x$
+    that is not an elementary endpoint and lies in some constituent
+    triangle $P_i$ of $R$. Because $P_i\cap\overline{N_0}=e_i\cap\overline{N_0}$,
     $x$ lies on the open base
     segment $(a_i,b_i)$ of $P_i$, which gives $e_i\subseteq\overline{N_0}$.
     The dummy-contact color rule assigns $P_i$ label $k_0$

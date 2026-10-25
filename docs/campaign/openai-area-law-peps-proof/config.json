@@ -4,6 +4,12 @@
   "heading": "Area law and PEPS approximation for gapped two-dimensional ground states",
   "lede": "Two preprints posted on September 24, 2026 prove an entanglement area law and a polynomial-bond-dimension PEPS approximation for gapped quantum spin systems on the square lattice, assuming only that the full Hamiltonian has a spectral gap. This page tracks the Lean 4 formalization of both proofs.",
   "description": "Progress of the Lean 4 formalization of the two-dimensional area law and polynomial PEPS approximation.",
+  "tabs": [
+    {"slug": "openai-area-law-peps-proof", "label": "Two-dimensional area law and PEPS"},
+    {"slug": "one-dimensional-area-law-mps", "label": "One-dimensional area law and MPS"},
+    {"slug": "hastings-area-law", "label": "One-dimensional area law after Hastings"},
+    {"slug": "lvv-ground-state-algorithm", "label": "Ground states in polynomial time"}
+  ],
   "label": "openai-math",
   "since": "2026-10-06",
   "repos": [
@@ -26,6 +32,9 @@
     }
   ],
   "tracker": 8733,
+  "excludeTrackers": [9547],
+  "excludePathPattern": "one_dimensional",
+  "excludePRs": {"TNLean": [9533]},
   "streamNames": {
     "8734": "Foundations",
     "8735": "Area law",

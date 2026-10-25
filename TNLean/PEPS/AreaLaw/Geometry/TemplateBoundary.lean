@@ -18,6 +18,8 @@ Original formalization from the mathematical manuscript; no upstream Lean
 proof text is reused. Physical cut clearance and entropy remain separate.
 -/
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The actual unordered ambient boundary of every permitted template dilation

@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.SourcePreparationCoordinates
-import TNLean.PEPS.Approximation.WordEvaluationTransport
+import TNLean.Lattice.Compression.SourcePreparationCoordinates
+import TNLean.Lattice.PartyCircuit.WordEvaluationTransport
 
 /-!
 # Local maps on all source slots
@@ -26,12 +26,14 @@ noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean
+open TNLean.Lattice.PartyCircuit
 
-open SourceInventory
+open TNLean.Lattice.PartyCircuit.SourceInventory
 
 variable {P : Type}
 
+namespace Lattice.PartyCircuit
 /-- Apply the prescribed endpoint maps in every source slot, leaving the original
 input registers untouched. This word does not depend on the source vectors.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–355 and 409–427. -/
@@ -103,4 +105,5 @@ theorem Word.eval_mapSourceSlots_prepareSlots (R : SourceInventory P)
       (fun i ↦ U' i.succ) (fun i ↦ V' i.succ)
       (fun i ↦ f i.succ) (fun i ↦ g i.succ) ℓ).eval, ih]
 
-end TNLean.PEPS.PairEffect
+end Lattice.PartyCircuit
+end TNLean

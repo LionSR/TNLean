@@ -183,12 +183,12 @@ noncomputable def markovAmplitude : Matrix (Fin 4) (Fin 4) ℝ := fun i j ↦
   Real.sqrt (realMarkovMatrix i j)
 
 /-- Squaring an amplitude recovers its transition probability. -/
-theorem markovAmplitude_sq (i j : Fin 4) : markovAmplitude i j ^ 2 = realMarkovMatrix i j := by
-  exact Real.sq_sqrt (realMarkovMatrix_pos i j).le
+theorem markovAmplitude_sq (i j : Fin 4) : markovAmplitude i j ^ 2 = realMarkovMatrix i j :=
+  Real.sq_sqrt (realMarkovMatrix_pos i j).le
 
 /-- Every matrix-unit amplitude is strictly positive. -/
-theorem markovAmplitude_pos (i j : Fin 4) : 0 < markovAmplitude i j := by
-  exact Real.sqrt_pos.2 (realMarkovMatrix_pos i j)
+theorem markovAmplitude_pos (i j : Fin 4) : 0 < markovAmplitude i j :=
+  Real.sqrt_pos.2 (realMarkovMatrix_pos i j)
 
 /-- The remainder after removing the uniform stationary projection. -/
 def remainderMatrix : Matrix (Fin 4) (Fin 4) ℚ := markovMatrix - uniformMatrix

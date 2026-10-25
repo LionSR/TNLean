@@ -50,9 +50,8 @@ theorem physicalDeform_physicalDeform_eq_of_leftInverse (A : Tensor Γ d)
     physicalDeform (physicalDeform A F) L = A := by
   have hcomp : (physicalDeform (physicalDeform A F) L).component = A.component := by
     funext v η s
-    have h := congrFun (hLF v (A.component v η)
+    exact congrFun (hLF v (A.component v η)
       ⟨Pi.single η 1, localTensorMap_apply_single A v η⟩) s
-    exact h
   cases A with
   | mk D a => exact congrArg (Tensor.mk D) hcomp
 

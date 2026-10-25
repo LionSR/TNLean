@@ -36,12 +36,12 @@ boundary tensors on the original lattice.
     \label{thm:peps_native_parent_regional_cut}
     \lean{TNLean.PEPS.regionParentGroundSpace_le_iInf_cutSpace,
         TNLean.PEPS.exists_cutBoundary_of_mem_regionParentKernel,
-        TNLean.PEPS.DependentBondNetwork.headTailConfigEquiv,
-        TNLean.PEPS.DependentBondNetwork.diagonalEndpointConfig,
-        TNLean.PEPS.DependentBondNetwork.sum_identityWeight_mul,
-        TNLean.PEPS.DependentBondNetwork.cutIdentityWeight,
-        TNLean.PEPS.DependentBondNetwork.cutIdentityWeight_mul_interior,
-        TNLean.PEPS.DependentBondNetwork.sum_cutIdentityWeight_mul,
+        TNLean.Lattice.DependentBondNetwork.headTailConfigEquiv,
+        TNLean.Lattice.DependentBondNetwork.diagonalEndpointConfig,
+        TNLean.Lattice.DependentBondNetwork.sum_identityWeight_mul,
+        TNLean.Lattice.DependentBondNetwork.cutIdentityWeight,
+        TNLean.Lattice.DependentBondNetwork.cutIdentityWeight_mul_interior,
+        TNLean.Lattice.DependentBondNetwork.sum_cutIdentityWeight_mul,
         TNLean.PEPS.sum_regionBoundaryLabel_mul_eq_openRegionMap,
         TNLean.PEPS.outsidePhysicalToComplement,TNLean.PEPS.graphRegionalCutBoundary,
         TNLean.PEPS.liftedCutMap_graphRegionalCutBoundary,
@@ -56,10 +56,10 @@ boundary tensors on the original lattice.
     Neither injectivity nor a common bond dimension is required.
 \end{theorem}
 \begin{proof}\leanok
-    Positivity gives every regional slice in the corresponding open-region
-    range. Select its virtual boundary jointly with the omitted physical
-    coordinates. Close both endpoints of each additional cut bond by an
-    identity matrix. The endpoint sum is exactly the original graph sum;
+    Positivity places every regional slice in the corresponding open-region
+    range, with a virtual boundary chosen jointly with the omitted physical
+    coordinates. Closing both endpoints of each additional cut bond by an
+    identity matrix makes the endpoint sum equal to the original graph sum;
     its exterior factor is $\prod_{e\cap R_i=\varnothing}D_e$, which is
     nonzero and can be divided out. The resulting vector lies in the
     lifted regional range. Coverage forces every physical site slice into
@@ -92,8 +92,8 @@ boundary tensors on the original lattice.
 \end{theorem}
 \begin{proof}\leanok
     Semi-regularity gives a nonzero invariant vector on each bond, so every
-    bond alphabet is nonempty. Apply the genuine local inverses to the boundaries obtained in
-    Theorem~\ref{thm:peps_native_parent_regional_cut}. Every uncut bond
+    bond alphabet is nonempty, and the genuine local inverses apply to the
+    boundaries obtained in Theorem~\ref{thm:peps_native_parent_regional_cut}. Every uncut bond
     has representation-matrix support. Edge coverage and the product-range
     characterization give one coherent bond expansion. The trace-dual
     identities extract its coefficients. A nonzero extracted coefficient
@@ -134,7 +134,7 @@ boundary tensors on the original lattice.
     The plaquettes cover all vertices and edges. For each nonzero coefficient
     in (\ref{eq:peps_native_parent_coefficients}), regional vertex labels
     telescope around every plaquette, giving identity holonomy.
-    Translate the tree gauge to the chosen origin $(c,r)$; it sends all
+    Translating the tree gauge to the chosen origin $(c,r)$ sends all
     labels outside $C_{c,r}$ to the identity. Applying the product of
     the local averages therefore turns each supported bond product into
     a cut contraction. The coherent sum lies in the same cut
@@ -179,7 +179,8 @@ boundary tensors on the original lattice.
     extensions and restrictions. Vertex-covering parent constraints
     yield a cut representation of every ambient kernel vector;
     hence it lies in the product extension range. The product left
-    inverse gives recovery and uniqueness. Apply
-    Theorem~\ref{thm:peps_native_parent_seam_boundary} to $B$ and restrict
-    its boundary tensors to the original independent physical spaces.
+    inverse gives recovery and uniqueness. Applying
+    Theorem~\ref{thm:peps_native_parent_seam_boundary} to $B$ and restricting
+    its boundary tensors to the original independent physical spaces yields
+    the seam representations for $\psi$.
 \end{proof}

@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.SquareAreaLawHamiltonian
-import TNLean.PEPS.Approximation.SheetSwapCorrection
-import TNLean.PEPS.Approximation.SheetSwapConjugateSupport
+import TNLean.Lattice.Sheet.SwapCorrection
+import TNLean.Lattice.RegionalSwapSupport
 import TNLean.Circuit.SitewiseTensorSupport
 import QICLean.Analysis.DoubledSystemGap
 
@@ -31,6 +31,8 @@ open scoped BigOperators Matrix.Norms.L2Operator
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.Approximation
 
 /-- The actual local interaction family of the swapped doubled Hamiltonian.
@@ -45,9 +47,9 @@ theorem SquareHamiltonian.exists_swapped_doubled_localHamiltonian
     (R : Finset (SquareLatticeVertex L L)) :
     let p := QuantumCircuit.sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
     let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
-    let F := Matrix.reindex p p (EncodedFrame.sheetSwapOp q R)
+    let F := Matrix.reindex p p (TNLean.Lattice.sheetSwapOp q R)
     let K := Matrix.reindex p p (Matrix.doubledHamiltonian h.operator)
-    ∃ g : AreaLaw.LocalHamiltonian (AreaLaw.rectangularDomain L L) (q * q) 1 (2 * J),
+    ∃ g : Lattice.LocalHamiltonian (AreaLaw.rectangularDomain L L) (q * q) 1 (2 * J),
       g.term = Function.extend (squareAreaLawSupport L)
         (fun i : SquareInteraction L =>
           Matrix.reindex e e
@@ -59,11 +61,11 @@ theorem SquareHamiltonian.exists_swapped_doubled_localHamiltonian
     F * Matrix.reindex p p (Matrix.doubledHamiltonian (h.hermitianTerm i)) * Fᴴ
   have hBsupport (i : SquareInteraction L) : B i ∈
       QuantumCircuit.supportedOperators (q * q) (squareInteractionSupport i : Set (Vertex L)) :=
-    EncodedFrame.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators R
+    TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators R
       (squareInteractionSupport i) (h.hermitianTerm_mem_supportedOperators i)
   have hFn : ‖F‖ ≤ 1 :=
-    (Matrix.l2_opNorm_reindex_equiv p (EncodedFrame.sheetSwapOp q R)).le.trans
-      (EncodedFrame.norm_sheetSwapOp_le_one R)
+    (Matrix.l2_opNorm_reindex_equiv p (TNLean.Lattice.sheetSwapOp q R)).le.trans
+      (TNLean.Lattice.norm_sheetSwapOp_le_one R)
   have hDn (i : SquareInteraction L) : ‖Matrix.doubledHamiltonian (h.hermitianTerm i)‖ ≤
       J + J :=
     (norm_add_le _ _).trans (add_le_add
@@ -140,7 +142,7 @@ theorem SquareHamiltonian.exists_swapped_doubled_localHamiltonian
       simpa only [Pi.zero_apply, norm_zero] using mul_nonneg (by norm_num : (0 : ℝ) ≤ 2) hJ
   · let T := fun i : SquareInteraction L => Matrix.reindex e e (B i)
     have hsum : (∑ i : SquareInteraction L, T i) =
-        ∑ X : AreaLaw.AdmissibleSupport (AreaLaw.rectangularDomain L L) 1,
+        ∑ X : Lattice.AdmissibleSupport (AreaLaw.rectangularDomain L L) 1,
           Function.extend (squareAreaLawSupport L) T 0 X := by
       apply Finset.sum_of_injOn (squareAreaLawSupport L)
         (squareAreaLawSupport_injective L).injOn (fun _ _ => Finset.mem_univ _)

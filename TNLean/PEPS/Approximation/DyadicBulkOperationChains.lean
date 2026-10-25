@@ -32,8 +32,8 @@ namespace TNLean.PEPS.Approximation
 
 open EncodedFrame PairEffect
 
-variable {k q : ℕ} [NeZero q] {J Δ a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
-  {h : SquareHamiltonian L q J} {E₀ : ℝ} {Ω : StateSpace L q} {K₀ ε₀ ν B₀ C c : ℝ}
+variable {k q : ℕ} [NeZero q] {a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
+  {G : ∀ L : ℕ, StateSpace L q → Prop} {Ω : StateSpace L q} {K₀ ε₀ ν B₀ C c : ℝ}
 
 /-- The party of a local label is used by the repainting. -/
 theorem IsLocalLabel.eventUses {R : RepaintedSquare k} {done : Set (ℤ × ℤ)} {l : GuideLabel}
@@ -47,8 +47,8 @@ bounded changes from the frame of the starting guide to that of the guide after 
 with the bounds of the small-patch rewrites.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 155–160 and 328–339. -/
-theorem isStepChain_centralBirth (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀') (hLL : L₀' ≤ L)
-    (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hm₀ : 4 ≤ m₀) (hA₀ : 1 ≤ A₀)
+theorem isStepChain_centralBirth (hD : IsAngularScale q G a A₀ m₀ 60 D L₀') (hLL : L₀' ≤ L)
+    (hΩ : G L Ω) (hΩ₁ : ‖Ω‖ = 1) (hm₀ : 4 ≤ m₀) (hA₀ : 1 ≤ A₀)
     (hc : IsProtocolConstants K₀ ε₀ ν a D B₀) (hL : 2 ≤ L) (hk2 : 2 ^ k < 2 * L)
     (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
     (R : RepaintedSquare k) (hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ))
@@ -63,7 +63,7 @@ theorem isStepChain_centralBirth (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
         (repaintBaseline R done).guide)
       (treatedFrame P rank R hr ∅ (repaintBaseline R done).oldLabel
         (repaintBaseline R done).centralGuide) := by
-  have hb := centralBirth_hasFrameChange hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done
+  have hb := centralBirth_hasFrameChange hD hLL hΩ hΩ₁ hm₀ hA₀ hc hL hk2 P rank R hlarge done
     (S := {p | EventUses (.inl R.1) p}) (IsLocalLabel.eventUses (isHomogenizing_oldLabel R done))
     (IsLocalLabel.eventUses (isHomogenizing_finalLabel R done)) (r := 2 * b) (rs := 2 * b) hK
     (by omega)
@@ -81,8 +81,8 @@ point treatments with the surrounding label, the bulk step and the removal of th
 `5` bounded changes, with the bounds of the small-patch rewrites.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 183–221, 328–339 and 375–387. -/
-theorem isStepChain_bandOperation (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀') (hLL : L₀' ≤ L)
-    (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hm₀ : 2 ≤ m₀) (hA₀ : 1 ≤ A₀)
+theorem isStepChain_bandOperation (hD : IsAngularScale q G a A₀ m₀ 60 D L₀') (hLL : L₀' ≤ L)
+    (hΩ : G L Ω) (hΩ₁ : ‖Ω‖ = 1) (hm₀ : 2 ≤ m₀) (hA₀ : 1 ≤ A₀)
     (hc : IsProtocolConstants K₀ ε₀ ν a D B₀) (hL : 2 ≤ L) (hk2 : 2 ^ k < 2 * L)
     (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
     (R : RepaintedSquare k) (hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ))
@@ -110,9 +110,9 @@ theorem isStepChain_bandOperation (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L
         (bandUpdate ((2 : ℝ) ^ (R.1.1 : ℕ)) e op.after g₀)) {p | EventUses (.inl R.1) p}
       (2 * b) K (2 * b) ((L : ℝ) ^ (-30 : ℤ)) := by
     rcases hop.surrounding_eq with hs | hs
-    · exact bandBirth_hasFrameChange hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done hop hs e
+    · exact bandBirth_hasFrameChange hD hLL hΩ hΩ₁ hm₀ hA₀ hc hL hk2 P rank R hlarge done hop hs e
         hgb hga hlab.eventUses hQ.eventUses hK (by omega)
-    · exact bandDeath_hasFrameChange hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done hop hs e
+    · exact bandDeath_hasFrameChange hD hLL hΩ hΩ₁ hm₀ hA₀ hc hL hk2 P rank R hlarge done hop hs e
         hgb hga hlab.eventUses hQ.eventUses (by omega) hK (by omega)
   rw [← e.toFinset_endpointList] at hbulk
   have h := isStepChain_sheetOperation P rank R hpt hgb hga hlab (e.endpointList R.1.index)

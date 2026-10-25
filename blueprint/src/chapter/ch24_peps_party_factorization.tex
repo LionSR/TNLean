@@ -3,17 +3,17 @@
 
 \begin{definition}[The registers of a party]
     \label{def:peps_party_registers}
-    \lean{TNLean.PEPS.PairEffect.Word.parties}
-    \lean{TNLean.PEPS.PairEffect.Word.owners_mem_parties}
-    \lean{TNLean.PEPS.PairEffect.Layout.atParty}
-    \lean{TNLean.PEPS.PairEffect.partyLayout}
-    \lean{TNLean.PEPS.PairEffect.tensorPartyMaps}
-    \lean{TNLean.PEPS.PairEffect.tensorPartyMaps_cons_tmul}
-    \lean{TNLean.PEPS.PairEffect.partyLayout_eq_of_atParty_eq}
-    \lean{TNLean.PEPS.PairEffect.tensorPartyMaps_heq}
-    \lean{TNLean.PEPS.PairEffect.Layout.conj_memCongr_heq}
-    \lean{TNLean.PEPS.PairEffect.Layout.norm_conj_memCongr}
-    \lean{TNLean.PEPS.PairEffect.Layout.eq_conj_memCongr_of_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.parties}
+    \lean{TNLean.Lattice.PartyCircuit.Word.owners_mem_parties}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.atParty}
+    \lean{TNLean.Lattice.PartyCircuit.partyLayout}
+    \lean{TNLean.Lattice.PartyCircuit.tensorPartyMaps}
+    \lean{TNLean.Lattice.PartyCircuit.tensorPartyMaps_cons_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.partyLayout_eq_of_atParty_eq}
+    \lean{TNLean.Lattice.PartyCircuit.tensorPartyMaps_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.conj_memCongr_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.norm_conj_memCongr}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.eq_conj_memCongr_of_heq}
     \leanok
     \uses{def:peps_party_layout}
     For an ordered list of registers $\ell$ and a party $p$, let $\ell_p$
@@ -26,42 +26,42 @@
     this is the identity on $\mathbb C$. Equal register lists are identified
     by the identity on their memories, preserving operator norms.
 
-    The parties of a composition include every register owner and the party
-    assigned to each local operation. In particular, a scalar operation
-    $\mathbb C\to\mathbb C$ retains its assigned party when both its input
-    and output register lists are empty. These are the local spaces and
-    operations in \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    \texttt{04-compression.tex}, lines 233--251.
+    In the local-space and local-operation setup of
+    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, \texttt{04-compression.tex},
+    lines 233--251, the parties of a composition include every register owner
+    and the party assigned to each local operation; in particular, a scalar
+    operation $\mathbb C\to\mathbb C$ retains its assigned party when both its
+    input and output register lists are empty.
 \end{definition}
 
 \begin{definition}[Register partitions and grouping]
     \label{def:peps_party_partition}
-    \lean{TNLean.PEPS.PairEffect.Layout.restrict}
-    \lean{TNLean.PEPS.PairEffect.Layout.restrict_nil}
-    \lean{TNLean.PEPS.PairEffect.Layout.restrict_cons}
-    \lean{TNLean.PEPS.PairEffect.Layout.restrict_append}
-    \lean{TNLean.PEPS.PairEffect.Layout.restrict_eq_self_of_owner}
-    \lean{TNLean.PEPS.PairEffect.Layout.restrict_eq_nil_of_owner}
-    \lean{TNLean.PEPS.PairEffect.Layout.memCongr}
-    \lean{TNLean.PEPS.PairEffect.Layout.memCongr_rfl}
-    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso}
-    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_cons_true}
-    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_cons_false}
-    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_cons_true_tmul}
-    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_cons_false_tmul}
-    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_append_true_tmul}
-    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_append_false_tmul}
-    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_cons_cons_true_true_tmul}
-    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_cons_cons_true_false_tmul}
-    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_cons_cons_false_true_tmul}
-    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_cons_cons_false_false_tmul}
-    \lean{TNLean.PEPS.PairEffect.Layout.withoutParty}
-    \lean{TNLean.PEPS.PairEffect.Layout.atParty_withoutParty}
-    \lean{TNLean.PEPS.PairEffect.Layout.mem_withoutParty}
-    \lean{TNLean.PEPS.PairEffect.Layout.owners_withoutParty}
-    \lean{TNLean.PEPS.PairEffect.partyLayout_withoutParty}
-    \lean{TNLean.PEPS.PairEffect.groupByPartyIso}
-    \lean{TNLean.PEPS.PairEffect.groupByPartyIso_cons}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.restrict}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.restrict_nil}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.restrict_cons}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.restrict_append}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.restrict_eq_self_of_owner}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.restrict_eq_nil_of_owner}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.memCongr}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.memCongr_rfl}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_cons_true}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_cons_false}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_cons_true_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_cons_false_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_append_true_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_append_false_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_cons_cons_true_true_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_cons_cons_true_false_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_cons_cons_false_true_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_cons_cons_false_false_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.withoutParty}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.atParty_withoutParty}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.mem_withoutParty}
+    \lean{TNLean.Lattice.PartyCircuit.Layout.owners_withoutParty}
+    \lean{TNLean.Lattice.PartyCircuit.partyLayout_withoutParty}
+    \lean{TNLean.Lattice.PartyCircuit.groupByPartyIso}
+    \lean{TNLean.Lattice.PartyCircuit.groupByPartyIso_cons}
     \leanok
     \uses{def:peps_party_registers}
     For a choice of parties $A$, there is a prescribed isometric
@@ -83,12 +83,12 @@
 \end{definition}
 
 \begin{proof}\leanok
-    Induct on $\ell$. For the empty list, $U_{A,\emptyset}(z)=1\otimes z$
-    on $\mathbb C$. Let $r$ be a register with vector $x$, let
+    We proceed by induction on $\ell$. For the empty list, $U_{A,\emptyset}(z)=1\otimes z$
+    on $\mathbb C$. For a register $r$ with vector $x$ and
     $y\in\mathcal H_\ell$ with $U_{A,\ell}(y)=a\otimes b$, where
-    $a\in\mathcal H_{\ell|_A}$ and $b\in\mathcal H_{\ell|_{A^c}}$.
-    For the list $(r,\ell)$ consisting of $r$ followed by $\ell$, define
-    $U_{A,(r,\ell)}$ by linearity from
+    $a\in\mathcal H_{\ell|_A}$ and $b\in\mathcal H_{\ell|_{A^c}}$,
+    the list $(r,\ell)$ consisting of $r$ followed by $\ell$ has
+    $U_{A,(r,\ell)}$ defined by linearity from
     \begin{align*}
         U_{A,(r,\ell)}(x\otimes y)
         =\begin{cases}
@@ -99,31 +99,31 @@
     The first case is the inverse associativity map and the second the
     exchange of $x$ past $a$, each applied after
     $\operatorname{id}_r\otimes U_{A,\ell}$. For the second assertion,
-    successively separate the registers of $p_1,\ldots,p_s$.
-    Distinctness prevents any register from being repeated, and coverage
-    makes the final remaining register list empty.
+    successively separating the registers of $p_1,\ldots,p_s$ uses
+    distinctness to prevent any register from being repeated and coverage
+    to make the final remaining register list empty.
 \end{proof}
 
 \begin{theorem}[Restriction to selected parties]
     \label{thm:peps_party_restriction}
-    \lean{TNLean.PEPS.PairEffect.Word.castLayouts}
-    \lean{TNLean.PEPS.PairEffect.Word.sources_castLayouts}
-    \lean{TNLean.PEPS.PairEffect.Word.isAllowed_castLayouts}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_castLayouts_heq}
-    \lean{TNLean.PEPS.PairEffect.Word.eval_castLayouts}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict}
-    \lean{TNLean.PEPS.PairEffect.Word.sources_restrict}
-    \lean{TNLean.PEPS.PairEffect.Word.isAllowed_restrict}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_localMap_true_eval_heq}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_localMap_false_eval_heq}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_swap_true_true_eval_heq}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_swap_true_false_eval_heq}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_swap_false_true_eval_heq}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_swap_false_false_eval_heq}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_frame_true_eval_heq}
-    \lean{TNLean.PEPS.PairEffect.Word.restrict_frame_false_eval_heq}
-    \lean{TNLean.PEPS.PairEffect.Word.parties_castLayouts}
-    \lean{TNLean.PEPS.PairEffect.Word.parties_restrict}
+    \lean{TNLean.Lattice.PartyCircuit.Word.castLayouts}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sources_castLayouts}
+    \lean{TNLean.Lattice.PartyCircuit.Word.isAllowed_castLayouts}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_castLayouts_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eval_castLayouts}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict}
+    \lean{TNLean.Lattice.PartyCircuit.Word.sources_restrict}
+    \lean{TNLean.Lattice.PartyCircuit.Word.isAllowed_restrict}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_localMap_true_eval_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_localMap_false_eval_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_swap_true_true_eval_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_swap_true_false_eval_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_swap_false_true_eval_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_swap_false_false_eval_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_frame_true_eval_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_frame_false_eval_heq}
+    \lean{TNLean.Lattice.PartyCircuit.Word.parties_castLayouts}
+    \lean{TNLean.Lattice.PartyCircuit.Word.parties_restrict}
     \leanok
     \uses{def:peps_party_registers,def:peps_party_partition}
     Let $F$ be a composition containing no pair-source preparations.
@@ -135,16 +135,16 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Retain a local operation exactly when its assigned party belongs to $A$.
-    Restrict every exchange to the retained registers, and restrict
-    compositions and untouched registers recursively. The local
-    contraction bounds are unchanged. Induction on the composition proves
+    Retaining a local operation exactly when its assigned party belongs to $A$,
+    restricting every exchange to the retained registers, and restricting
+    compositions and untouched registers recursively leaves the local
+    contraction bounds unchanged, and induction on the composition proves
     the assertion about its parties, including scalar local operations.
 \end{proof}
 
 \begin{theorem}[Factorization across a partition of the parties]
     \label{thm:peps_party_binary_factorization}
-    \lean{TNLean.PEPS.PairEffect.Word.partitionIso_eval}
+    \lean{TNLean.Lattice.PartyCircuit.Word.partitionIso_eval}
     \leanok
     \uses{def:peps_party_partition,thm:peps_party_restriction}
     If $F:\mathcal H_\ell\to\mathcal H_{\ell'}$ contains no pair-source
@@ -158,7 +158,7 @@
 
 \begin{proof}\leanok
     \uses{def:peps_party_partition,thm:peps_party_restriction}
-    Induct on the composition. Let a local operation $L$ at party $p$ act
+    By induction on the composition, let a local operation $L$ at party $p$ act
     on registers $a$, all owned by $p$, in front of a list $\ell$, and let
     $J_{a,\ell}$ identify the memory of $a$ followed by $\ell$ with
     $\mathcal H_a\otimes\mathcal H_\ell$. For $s\in\mathcal H_a$,
@@ -177,9 +177,9 @@
     the second otherwise, while the other restriction is the identity.
     Let $S_{r,t,\ell}$ exchange the first two registers $r,t$, whose
     owners are $p_r,p_t$, and write $S_A,S_{A^c}$ for its restrictions.
-    For $u\in\mathcal H_r$ and $v\in\mathcal H_t$, put
-    $w=u\otimes(v\otimes U_{A,\ell}^{-1}(x\otimes y))$.
-    The four cases give
+    For $u\in\mathcal H_r$ and $v\in\mathcal H_t$, with
+    $w=u\otimes(v\otimes U_{A,\ell}^{-1}(x\otimes y))$,
+    the four cases give
     \begin{align}
         U_{A,(t,r,\ell)}S_{r,t,\ell}w
          & =(S_A\otimes S_{A^c})U_{A,(r,t,\ell)}w   \\
@@ -199,21 +199,24 @@
     them and the other restriction is the identity. When their owners
     belong to different parts, both restrictions are identities on the
     selected register lists. Elementary tensors span the memories, so
-    (\ref{eq:peps_party_exchange}) proves the exchange case.
-    Tensoring with an untouched register and composition preserve the
+    (\ref{eq:peps_party_exchange}) proves the exchange case, and
+    tensoring with an untouched register and composition preserve the
     identity.
 \end{proof}
 
 \begin{theorem}[Tensor product of the local maps]
     \label{thm:peps_party_factorization}
-    \lean{TNLean.PEPS.PairEffect.norm_tensorPartyMaps_le_one}
-    \lean{TNLean.PEPS.PairEffect.Word.exists_tensorPartyMaps}
-    \lean{TNLean.PEPS.PairEffect.Word.exists_tensorPartyMaps_parties}
-    \lean{TNLean.PEPS.PairEffect.Word.eq_nil_and_eval_eq_id_of_parties_eq_empty}
+    \lean{TNLean.Lattice.PartyCircuit.norm_tensorPartyMaps_le_one}
+    \lean{TNLean.Lattice.PartyCircuit.Word.exists_tensorPartyMaps}
+    \lean{TNLean.Lattice.PartyCircuit.Word.exists_tensorPartyMaps_parties}
+    \lean{TNLean.Lattice.PartyCircuit.Word.eq_nil_and_eval_eq_id_of_parties_eq_empty}
     \leanok
     \uses{def:peps_party_registers,def:peps_party_partition}
-    Let $F:\mathcal H_\ell\to\mathcal H_{\ell'}$ be an allowed composition
-    containing no pair-source preparations. Let $p_1,\ldots,p_s$ be distinct
+    In the collection of local maps of
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 233--251, let
+    $F:\mathcal H_\ell\to\mathcal H_{\ell'}$ be an allowed composition
+    containing no pair-source preparations, and let $p_1,\ldots,p_s$ be distinct
     parties containing every party of this composition. There are
     contractions $B_{p_j}:\mathcal H_{\ell,p_j}\to
         \mathcal H_{\ell',p_j}$ such that
@@ -227,24 +230,21 @@
     by composing the local operations at its party. A composition without
     parties has empty input and output register lists and is the identity
     on $\mathbb C$; this is the case $s=0$.
-    This is the collection of local maps in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    \texttt{04-compression.tex}, lines 233--251.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_party_binary_factorization,thm:peps_party_restriction}
-    Apply (\ref{eq:peps_party_binary_factorization}) successively with
-    $A=\{p_j\}$. The remaining
-    composition has no parties once all $p_j$ have been removed and is the
+    Applying (\ref{eq:peps_party_binary_factorization}) successively with
+    $A=\{p_j\}$ leaves a remaining
+    composition with no parties once all $p_j$ have been removed, which is the
     identity on $\mathbb C$. The restriction to each party is allowed, so
-    its operator has norm at most one. The tensor product of the resulting
+    its operator has norm at most one, and the tensor product of the resulting
     contractions gives (\ref{eq:peps_party_factorization}).
 \end{proof}
 
 \begin{theorem}[Prepared pair sources and local contractions]
     \label{thm:peps_prepared_party_maps}
-    \lean{TNLean.PEPS.PairEffect.Word.exists_prepared_tensorPartyMaps}
+    \lean{TNLean.Lattice.PartyCircuit.Word.exists_prepared_tensorPartyMaps}
     \leanok
     \uses{def:peps_source_inventory,def:peps_party_registers,def:peps_party_partition}
     Let $P$ be the prescribed finite set of parties of a gate, and use a
@@ -270,19 +270,22 @@
     \uses{thm:peps_grouped_sources,thm:peps_party_factorization}
     Theorem~\ref{thm:peps_grouped_sources} gives
     $F=V\circ P_{S,\mathcal H_{\rm in}}$ with $V$ allowed and containing no
-    sources. Every party named by $V$ belongs to the prescribed set $P$.
-    Apply (\ref{eq:peps_party_factorization}) to $V$ with all parties of $P$,
-    and compose on the right with the preparation map.
+    sources, where every party named by $V$ belongs to the prescribed set $P$;
+    applying (\ref{eq:peps_party_factorization}) to $V$ with all parties of $P$
+    and composing on the right with the preparation map yields the factorization.
 \end{proof}
 
 
 \begin{theorem}[Factorization by singleton restrictions]
     \label{thm:peps_actual_singleton_factorization}
-    \lean{TNLean.PEPS.PairEffect.Word.groupByPartyIso_eval_eq_tensorRestrictions}
+    \lean{TNLean.Lattice.PartyCircuit.Word.groupByPartyIso_eval_eq_tensorRestrictions}
     \leanok
     \uses{def:peps_party_registers,def:peps_party_partition,
         thm:peps_party_restriction}
-    Let $W:\mathcal H_\ell\to\mathcal H_m$ be a source-free
+    In the local-map construction of
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 233--251 and 351--381, let
+    $W:\mathcal H_\ell\to\mathcal H_m$ be a source-free
     composition, and let $p_1,\ldots,p_s$ be a list of distinct
     parties containing every party named by $W$. This includes
     parties assigned scalar operations on empty memories. Let
@@ -296,27 +299,24 @@
     Thus each factor is the operator of the singleton
     restriction. No norm bound, nonvanishing condition or
     finite-dimensionality assumption on the register spaces is
-    required. Zero maps and the empty party list are included.
-    This is an auxiliary identity for the local-map construction in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    \texttt{04-compression.tex}, lines 233--251 and 351--381.
+    required, and zero maps and the empty party list are included.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_party_binary_factorization,thm:peps_party_factorization,
         thm:peps_party_restriction,thm:peps_singleton_after_excluded_party}
-    Induct on the ordered party list. For an empty list, the
+    We proceed by induction on the ordered party list. For an empty list, the
     composition has no named parties, hence has empty input and
-    output lists and is the identity on $\C$, by the no-party clause
+    output lists and is the identity on $\C$ by the no-party clause
     of Theorem~\ref{thm:peps_party_factorization}.
-    For a list beginning with $p$, split the registers into those
-    owned by $p$ and the complementary registers. Specializing
+    For a list beginning with $p$, splitting the registers into those
+    owned by $p$ and the complementary registers and specializing
     (\ref{eq:peps_party_binary_factorization}) with $A=\{p\}$ splits $W$
-    into $W|_{\{p\}}$ and $W|_{P\setminus\{p\}}$. Apply the induction hypothesis to
-    the latter composition. For each remaining party $q\ne p$,
+    into $W|_{\{p\}}$ and $W|_{P\setminus\{p\}}$. Applying the induction hypothesis to
+    the latter composition, for each remaining party $q\ne p$
     its singleton factor agrees with $W|_{\{q\}}$ by
     (\ref{eq:peps_singleton_after_excluded_party}). The
     grouping isometries identify this split with the stated
-    party order. Tensoring and composing the resulting operator
+    party order, so tensoring and composing the resulting operator
     identities proves (\ref{eq:peps_actual_singleton_factorization}).
 \end{proof}

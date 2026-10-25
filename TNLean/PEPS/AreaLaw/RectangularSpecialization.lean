@@ -9,7 +9,7 @@ import TNLean.PEPS.AreaLaw.VertexBoundaryCorollaries
 import TNLean.PEPS.Approximation.SquareAreaLawSpecialization
 
 /-!
-# Conditional entropy area law on arbitrary native rectangles
+# Entropy area law on arbitrary native rectangles from the uniform area law
 
 The uniform finite-domain area law is the sole analytic hypothesis. The
 constant is chosen before both side lengths, the native site and edge terms,
@@ -17,11 +17,11 @@ the ground vector, and the cut. The conclusion uses native configuration
 entropy and the actual native edge and vertex boundaries, for every `q ≥ 1`.
 Zero sides, one-site rectangles, strips, and empty boundaries are included.
 
-**Scope restriction (conditional area law):** The implication
-`UniformAreaLaw.rectangularEntropyAreaLaw` retains the uniform finite-domain
-area law as an explicit, substantive premise. It proves the reduction and does
-not assert the unconditional Corollary 1.2. This restriction is documented in
-`docs/paper-gaps/arealaw2d_rectangular_specialization_scope.tex`.
+The implication `UniformAreaLaw.rectangularEntropyAreaLaw` takes the uniform
+finite-domain area law as its premise. The unconditional Corollary 1.2 for
+rectangles is `rectangularEntropyAreaLaw` in
+`TNLean.PEPS.AreaLaw.AreaLawTheorem`, which discharges that premise with
+`uniformAreaLaw`.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 September 24, 2026, Theorem 1.1 and Corollary 1.2 (`cor:rectangles`), and
@@ -32,11 +32,13 @@ Independently formalized from the manuscripts; no upstream Lean proof text is re
 
 noncomputable section
 
+open TNLean.Lattice
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- Native rectangular entropy, with one constant for the edge and both
-vertex-boundary forms. Source: Corollary 1.2. This is a proposition specifying
-the conclusion, not a proof of the unconditional source corollary. -/
+vertex-boundary forms. Source: Corollary 1.2. This proposition states the
+conclusion; `rectangularEntropyAreaLaw` proves it. -/
 def RectangularEntropyAreaLaw : Prop :=
   ∀ q : ℕ, 1 ≤ q → ∀ J Δ : ℝ, 0 < J → 0 < Δ →
     ∃ C : ℝ, 0 ≤ C ∧
@@ -101,7 +103,7 @@ theorem RectangularEntropyAreaLaw.squareEntropyAreaLaw (harea : RectangularEntro
     Approximation.SquareEntropyAreaLaw := by
   intro q hq J Δ hJ hΔ
   obtain ⟨C, hC, hbound⟩ := harea q (by omega) J Δ hJ hΔ
-  refine ⟨C, hC, fun L h E₀ Ω hΩ A ↦ ?_⟩
-  exact (hbound L L h.toRectangularHamiltonian E₀ Ω hΩ A).1
+  exact ⟨C, hC, fun L Ω ⟨h, E₀, hΩ⟩ A ↦
+    (hbound L L h.toRectangularHamiltonian E₀ Ω hΩ A).1⟩
 
 end TNLean.PEPS.AreaLaw

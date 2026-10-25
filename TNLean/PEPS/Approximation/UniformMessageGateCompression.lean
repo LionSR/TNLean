@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.CeilScaling
-import TNLean.PEPS.Approximation.UniformApproximateSampledNetwork
-import TNLean.PEPS.Approximation.MessageGateLists
+import TNLean.Lattice.Compression.UniformApproximateSampledNetwork
+import TNLean.Lattice.Compression.MessageGateLists
 
 /-!
 # Uniform compression of original gates containing bounded messages
@@ -22,10 +22,9 @@ networks with uniform polynomial virtual dimensions and constant incidence,
 approximating the full original physical density without normalization.
 No private-dimension or Schmidt-rank bound is imposed.
 
-**Local fix (nonempty parties):** The shared original construction data retain
-the existing nonempty-party convention in
-`docs/paper-gaps/polypeps_nonempty_parties.tex`. Scalar absorption uses that
-existing party and introduces no further premise.
+The exterior scalar is absorbed at an existing party: the construction data carry the
+nonempty-party convention, a degenerate-case reading of the source recorded in
+`docs/paper-gaps/polypeps_nonempty_parties.tex` and marked on `DistributedConstruction`.
 
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 32–43,
 137–175, 199–229, 565–588 and 590–600.
@@ -33,8 +32,9 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 32–43,
 
 noncomputable section
 open scoped Matrix ComplexConjugate NNReal
-namespace TNLean.PEPS.PairEffect.GateMapConstruction
-open TNLean.PEPS.Approximation
+namespace TNLean.Lattice.PartyCircuit.GateMapConstruction
+open TNLean.Lattice.PartyCircuit
+open TNLean.Lattice.Compression
 attribute [local instance] Classical.propDecidable
 
 /-- Original message-containing expansions available at every fixed
@@ -207,4 +207,4 @@ theorem exists_uniform_message_sampled_network
   exact exists_uniform_approximate_sampled_network size hsize P C₀ b n d C_N C_D
     hN₀ hphysical₀ harity₀ hlifetime₀ hExpandedAvailability p hp
 
-end TNLean.PEPS.PairEffect.GateMapConstruction
+end TNLean.Lattice.PartyCircuit.GateMapConstruction

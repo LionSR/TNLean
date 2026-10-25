@@ -11,21 +11,21 @@
     Put $P_i=\bigcup_{j<i,\,f_j=f_i}X_j$.
     Assume $I_\Omega(X_i:C\cup B\cup P_i)\le\varepsilon_i$ when $f_i=0$ and
     $I_\Omega(X_i:(G\cup B)^c\cup P_i)\le\varepsilon_i$ when $f_i=1$.
-    Then
+    Then, as in the entropy estimate preceding the geometric counting argument
+    in \cite[Lemma~3.2]{OpenAI2026PolynomialPEPS},
     \begin{align}
         S_\Omega(G\cup B)+S_\Omega(C\cup B)-S_\Omega(B)-S_\Omega(G\cup C\cup B)
         \le 2S_\Omega(D)+\sum_i\varepsilon_i.
         \notag
     \end{align}
-    This is the entropy estimate used before the geometric counting argument in
-    \cite[Lemma~3.2]{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}\leanok
-    Filter the common order by the two labels. In each family, its preceding union
-    is exactly $P_i$. Since $C$ is disjoint from $G\cup B$,
-    $C\cup(G\cup B\cup C)^c=(G\cup B)^c$, so the second-family hypothesis has
-    the required complementary-exterior form. Apply the generic pure-state
-    conditional two-family bound and combine the two disjoint index sums.
+    Filtering the common order by the two labels identifies each family's
+    preceding union with $P_i$. Since $C$ is disjoint from $G\cup B$,
+    $C\cup(G\cup B\cup C)^c=(G\cup B)^c$, giving the second-family hypothesis
+    the required complementary-exterior form; the generic pure-state
+    conditional two-family bound and the combined disjoint index sums then
+    yield the displayed inequality.
     The finite-domain regional entropies agree with the corresponding generic
     finite-product reduced-state entropies.
 \end{proof}
@@ -68,8 +68,8 @@
     \end{align}
 \end{corollary}
 \begin{proof}\leanok
-    Apply Corollary~\ref{cor:peps_cell_information_counting_form} to the
-    partition of $G$ with no pieces and remainder $G$.
+    Applying Corollary~\ref{cor:peps_cell_information_counting_form} to the
+    partition of $G$ with no pieces and remainder $G$ gives the stated bound.
 \end{proof}
 
 % Source: OpenAI2026PolynomialPEPS, Lemma 3.2 (lem:cell-cmi), 02-information.tex,
@@ -77,14 +77,23 @@
 \begin{theorem}[Generation count of the cell recursion]
     \label{thm:peps_cell_generation_count}
     \lean{TNLean.PEPS.Approximation.cellChildSide,
+        TNLean.PEPS.Approximation.cellPowerThreshold,
+        TNLean.PEPS.Approximation.one_lt_cellPowerThreshold,
+        TNLean.PEPS.Approximation.const_mul_rpow_le_rpow_of_cellPowerThreshold_le,
         TNLean.PEPS.Approximation.exists_cellChildSide_le_rpow,
         TNLean.PEPS.Approximation.exists_cell_generation_bound,
+        TNLean.PEPS.Approximation.cellGenerationCountConstant,
+        TNLean.PEPS.Approximation.cellGenerationCountConstant_pos,
+        TNLean.PEPS.Approximation.cell_generation_count_bound,
         TNLean.PEPS.Approximation.exists_cell_generation_count_bound}
     \leanok
     \uses{thm:area_law_power_recursion_depth}
     In the recursion for one cell, an active square of side $u$ has children
-    of side $u'=8u^{\gamma}$. If $\gamma<\gamma'$, there is $u_*>1$ with
-    $8u^{\gamma}\le u^{\gamma'}$ for all $u\ge u_*$. Let $0<\gamma'<1$ and let
+    of side $u'=8u^{\gamma}$. For $K>0$ and $\gamma<\delta$ put
+    $U(K,\gamma,\delta)=\max\{2,K^{1/(\delta-\gamma)}\}$; then
+    $Ku^{\gamma}\le u^{\delta}$ for all $u\ge U(K,\gamma,\delta)$.
+    In particular, if $\gamma<\gamma'$, then $u_*=U(8,\gamma,\gamma')>1$
+    satisfies $8u^{\gamma}\le u^{\gamma'}$ for all $u\ge u_*$. Let $0<\gamma'<1$ and let
     $u_*>1$ be any such threshold. There is a constant $C>0$ such that, for
     every initial side $s>0$ and every $m$ for which the sides of the
     generations $0,\dots,m-1$ are at least $u_*$,
@@ -98,6 +107,10 @@
         \sum_{j=0}^{m}b^{j} & \le C(1+\log s)^{C}.
         \notag
     \end{align}
+    One may take $C=\max\{C_g2^{C_g},C_g\}$, where $C_g$ is the
+    generation-count constant of
+    Theorem~\ref{thm:area_law_power_recursion_depth} for $\rho=\gamma'$,
+    $S_*=u_*$ and branching bound $b$.
 \end{theorem}
 \begin{proof}\leanok
     For $u\ge u_*$, the inequality $8u^{\gamma}\le u^{\gamma'}$ amounts to
@@ -201,13 +214,94 @@
 \end{proof}
 
 % Source: OpenAI2026PolynomialPEPS, Lemma 3.2 (lem:cell-cmi), 02-information.tex,
+% lines 220--245 and 300--311.
+\begin{definition}[Constants of the two-family partition of a cell]
+    \label{def:peps_cell_partition_constants}
+    \lean{TNLean.PEPS.Approximation.CellPartition.cellIntermediateExponent,
+        TNLean.PEPS.Approximation.CellPartition.cellStopScale,
+        TNLean.PEPS.Approximation.CellPartition.cellPartitionExponent,
+        TNLean.PEPS.Approximation.CellPartition.cellPartitionConstant}
+    \leanok
+    \uses{thm:peps_cell_generation_count}
+    Fix $\gamma,u_0\in\mathbb R$, and let $U(K,\gamma,\delta)$ and the
+    tile-count constant be as in Theorem~\ref{thm:peps_cell_generation_count}.
+    The intermediate exponent is $\gamma'=(\max\{\gamma,0\}+1)/2$. The stopping
+    scale is
+    \begin{align}
+        u_*(\gamma,u_0) & =\max\{U(1000,\gamma,1),U(8,\gamma,\gamma'),u_0,2\}.
+        \notag
+    \end{align}
+    The partition exponent $K(\gamma,u_0)$ is the tile-count constant for the
+    exponent $\gamma'$, the stopping threshold $u_*(\gamma,u_0)$ and branching
+    bound $25$, and the partition prefactor is
+    $C(\gamma,u_0)=(2+(u_*(\gamma,u_0)+1)^2)K(\gamma,u_0)$.
+\end{definition}
+
+\begin{theorem}[Bounds on the partition constants]
+    \label{thm:peps_cell_partition_constants_bounds}
+    \lean{TNLean.PEPS.Approximation.CellPartition.cellIntermediateExponent_bounds,
+        TNLean.PEPS.Approximation.CellPartition.le_cellStopScale,
+        TNLean.PEPS.Approximation.CellPartition.one_lt_cellStopScale,
+        TNLean.PEPS.Approximation.CellPartition.cellPartitionExponent_pos,
+        TNLean.PEPS.Approximation.CellPartition.cellPartitionConstant_pos}
+    \leanok
+    \uses{def:peps_cell_partition_constants}
+    For all $\gamma,u_0\in\mathbb R$ one has $u_0\le u_*(\gamma,u_0)$ and
+    $u_*(\gamma,u_0)>1$, and $C(\gamma,u_0)$ and $K(\gamma,u_0)$ are positive.
+    If $\gamma<1$, then $\gamma<\gamma'$ and $0<\gamma'<1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_cell_generation_count}
+    The scale bounds hold because $u_*$ is a maximum containing $u_0$ and $2$.
+    The tile-count constant of Theorem~\ref{thm:peps_cell_generation_count} is
+    positive, hence so are $K$ and $C$. For $\gamma<1$, $\gamma'$ is the midpoint
+    of $\max\{\gamma,0\}$ and $1$.
+\end{proof}
+
+% Source: OpenAI2026PolynomialPEPS, Lemma 3.2 (lem:cell-cmi), 02-information.tex,
+% lines 181--196 and 224--311.
+\begin{theorem}[Two-family partition of a cell with explicit constants]
+    \label{thm:peps_cell_two_family_partition_explicit}
+    \lean{TNLean.PEPS.Approximation.CellPartition.cell_twoFamily_partition}
+    \leanok
+    \uses{def:peps_cell_partition_constants,def:area_law_two_family_partition}
+    Fix $\gamma<1$ and $u_0$, and let $u_*=u_*(\gamma,u_0)$, $C=C(\gamma,u_0)$
+    and $K=K(\gamma,u_0)$ be the constants of
+    Definition~\ref{def:peps_cell_partition_constants}. Tile the plane by an
+    axis-parallel grid of squares of side $s\ge1$, choose one cell, and give
+    every other cell a forbidden colour $0$ or $1$. The lattice sample of the
+    chosen cell has an ordered two-family partition in which every piece has a
+    scale $u\in[u_*,s]$ such that the piece is a union of at most $66^2$ closed
+    lattice rectangles of sup diameter at most $u$, and every point of the
+    piece is at sup distance greater than $u^{\gamma}$ from every lattice point
+    of an exterior cell whose colour is the family of the piece and from every
+    earlier piece of the same family. The pieces and the remainder sites
+    number at most $C(1+\log s)^{K}$ in total.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:peps_cell_partition_constants,lem:peps_cell_generation_invariant,
+        thm:peps_cell_generation_count,thm:peps_cell_partition_constants_bounds}
+    Iterating the recursion of Lemma~\ref{lem:peps_cell_generation_invariant}
+    from the chosen cell until the side drops below $u_*$ (for which
+    $1000u^{\gamma}\le u$ and $8u^{\gamma}\le u^{\gamma'}$ hold for $u\ge u_*$,
+    by the choice of the two power thresholds) terminates after finitely
+    many generations by Theorem~\ref{thm:peps_cell_generation_count}. The tiles of all generations are the pieces, and the
+    sites still allowed are the remainder. Each active square has at most
+    $25$ children, so there are at most $25^{g}$ active squares in generation
+    $g$, two tiles per active square, and at most $(u_*+1)^2$ lattice points
+    in a terminal square. Theorem~\ref{thm:peps_cell_generation_count} with
+    branching bound $25$ bounds the total.
+\end{proof}
+
+% Source: OpenAI2026PolynomialPEPS, Lemma 3.2 (lem:cell-cmi), 02-information.tex,
 % lines 181--196 and 224--311.
 \begin{theorem}[Two-family partition of a cell]
     \label{thm:peps_cell_two_family_partition}
     \lean{TNLean.PEPS.Approximation.CellPartition.exists_cell_twoFamily_partition}
     \leanok
-    \uses{lem:peps_cell_generation_invariant, thm:peps_cell_generation_count,
-        def:area_law_two_family_partition}
+    \uses{def:area_law_two_family_partition}
     Fix $\gamma<1$ and $u_0$. There are $u_*\ge u_0$ with $u_*>1$ and constants
     $C,K$ with the following property. Tile the plane by an axis-parallel grid
     of squares of side $s\ge1$, choose one cell, and give every other cell a
@@ -221,15 +315,9 @@
     number at most $C(1+\log s)^{K}$ in total.
 \end{theorem}
 \begin{proof}\leanok
-    Run the recursion of Lemma~\ref{lem:peps_cell_generation_invariant} from
-    the chosen cell until the side drops below $u_*$, where $u_*$ is so large
-    that $1000u^{\gamma}\le u$ and $8u^{\gamma}\le u^{\gamma'}$ for $u\ge u_*$,
-    with $\gamma<\gamma'<1$ and $\gamma'>0$. By
-    Theorem~\ref{thm:peps_cell_generation_count} this happens after finitely
-    many generations. The tiles of all generations are the pieces, and the
-    sites still allowed are the remainder. Each active square has at most
-    $25$ children, so there are at most $25^{g}$ active squares in generation
-    $g$, two tiles per active square, and at most $(u_*+1)^2$ lattice points
-    in a terminal square. Theorem~\ref{thm:peps_cell_generation_count} with
-    branching bound $25$ bounds the total.
+    \uses{thm:peps_cell_two_family_partition_explicit,
+        def:peps_cell_partition_constants,thm:peps_cell_partition_constants_bounds}
+    Take $u_*$, $C$ and $K$ from
+    Definition~\ref{def:peps_cell_partition_constants} and apply
+    Theorem~\ref{thm:peps_cell_two_family_partition_explicit}.
 \end{proof}

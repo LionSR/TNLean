@@ -5,6 +5,8 @@ Concrete source exponents and the probability exponent 200, finite polynomial
 accounting, and guarded axiom checks for the actual asymptotic history theorem.
 -/
 
+open TNLean.Lattice
+
 open Filter TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Scan
 open scoped BigOperators
 
@@ -18,12 +20,12 @@ example : (0 : ℝ) < 1 / 4 ∧ (0 : ℝ) < 1 / 8 ∧
 open Classical in
 example :
     ∀ᶠ n : ℕ in atTop, ∀ (I : Type) [Fintype I] [LinearOrder I]
-      (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty) (S : CollarScan (TNLean.PEPS.AreaLaw.Site Λ) I),
+      (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty) (S : CollarScan (TNLean.Lattice.Site Λ) I),
       S.n = n → S.m = ⌊(n : ℝ) ^ (1 / 2 : ℝ)⌋₊ →
       S.K = ⌊(n : ℝ) ^ (1 - (1 / 4 : ℝ))⌋₊ / (8 * S.m) →
       S.D = ⌈(n : ℝ) ^ (1 / 8 : ℝ)⌉₊ → S.r₀ = roundedLogRadius 1 n →
       S.M = ⌈(1 : ℝ) * n * S.D⌉₊ → (T.card : ℝ) ≤ 1 * (n : ℝ) ^ 2 →
-      S.graph = TNLean.PEPS.AreaLaw.domainGraph Λ →
+      S.graph = TNLean.Lattice.domainGraph Λ →
       S.depth = (fun x ↦ ambientDepth T hT x.val) →
       (∀ t ∈ T, ∀ z ∈ TNLean.PEPS.AreaLaw.Geometry.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - (1 / 4 : ℝ))⌋₊ + 10 * S.r₀ : ℕ) : ℤ) <

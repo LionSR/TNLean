@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.PreparedMatrixNorm
-import TNLean.PEPS.Approximation.SourceSlotBasis
+import TNLean.Lattice.Compression.SourceSlotBasis
 
 /-!
 # Joint contraction of free source inputs
@@ -27,7 +27,7 @@ noncomputable section
 open scoped TensorProduct Matrix Matrix.Norms.L2Operator
 open ContinuousLinearMap
 
-namespace TNLean.PEPS.PairEffect.Word
+namespace TNLean.Lattice.PartyCircuit.Word
 
 variable {P m n : Type} [Fintype m] [Fintype n]
     (R : SourceInventory P) (U V : Fin R.length → HSpace)
@@ -165,4 +165,4 @@ theorem trace_preparedDensityCoefficient_eq_freeSourceMatrix
   exact trace_preparedMatrix_mul_conjTranspose_eq R U V bU bV ℓ
     R U V bU' bV' ℓ v v' bIn bIn bOut ρ a b
 
-end TNLean.PEPS.PairEffect.Word
+end TNLean.Lattice.PartyCircuit.Word

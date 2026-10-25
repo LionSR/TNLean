@@ -20,8 +20,10 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open scoped BigOperators Matrix
+open TNLean.Lattice (siteLift)
 
 namespace TNLean.PEPS.EncodedFrame
+open TNLean.Lattice.Sheet
 
 variable {V : Type*} [Fintype V] [LinearOrder V] {q m : ℕ}
 

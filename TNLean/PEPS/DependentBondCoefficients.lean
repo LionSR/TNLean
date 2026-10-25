@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.DependentBondNetwork
+import TNLean.Lattice.Compression.DependentBondNetwork
 import TNLean.PEPS.TorusProjectorExtraction
 
 /-!
@@ -22,6 +22,7 @@ Source: SCP10, arXiv:1001.3807, Lemma 4.6 and Theorem 5.5, lines 1488–1513.
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS.DependentBondNetwork
+open TNLean.Lattice.DependentBondNetwork
 
 variable {Vertex Edge : Type*} (tail head : Edge → Vertex) (D : Edge → Type*)
 

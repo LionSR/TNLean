@@ -118,8 +118,8 @@ theorem tendsto_roughLowerRemainder_of_label_dimension
     (hdim : Asymptotics.IsLittleO atTop
       (fun k : ℕ => Real.log (ell k).dim - (k : ℝ) * Sent)
       (fun k : ℕ => (k : ℝ))) (Kband : ℕ) (c Cf : ℝ) :
-    Tendsto (roughLowerRemainder Kband c Cf ell Sent) atTop (𝓝 0) := by
-  exact tendsto_roughLowerRemainderAtWeight_of_label_dimension
+    Tendsto (roughLowerRemainder Kband c Cf ell Sent) atTop (𝓝 0) :=
+  tendsto_roughLowerRemainderAtWeight_of_label_dimension
     ell Sent hdim Kband (4 / (Kband : ℝ)) c Cf
 
 /-- For any positive error allowance, one replica threshold controls the

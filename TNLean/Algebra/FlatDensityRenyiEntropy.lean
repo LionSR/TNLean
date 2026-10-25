@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.FlatDensityEntropy
 import QICLean.Analysis.TraceCFC
+import QICLean.Entropy.Renyi.Defs
 
 /-!
 # Rényi entropies of a flat density
@@ -27,14 +28,6 @@ open scoped BigOperators Matrix ComplexOrder
 open Matrix
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
-
-/-- The finite-order Rényi entropy, with the standard rank convention at zero
-and von Neumann convention at one. For positive order away from one the real
-power is the Hermitian spectral functional calculus. -/
-noncomputable def renyiEntropy (ρ : Matrix ι ι ℂ) (hρ : ρ.IsHermitian) (α : ℝ) : ℝ :=
-  if α = 0 then Real.log (ρ.rank : ℝ)
-  else if α = 1 then vonNeumannEntropy ρ hρ
-  else (1 - α)⁻¹ * Real.log ((hρ.cfc (fun x => x ^ α)).trace.re)
 
 /-- The trace of a positive spectral power of a flat density is `r^(1-α)`.
 Source: SCP10, lines 2027–2037 and 2062–2072. -/

@@ -78,7 +78,7 @@ private theorem allZero_contradiction [NeZero D]
       have hright : LinearMap.mulRight ℂ (Kraus.evalWord A w₂) = 0 := by
         apply LinearMap.ext_on_range
           (v := fun σ : Fin L₀ → Fin d => Kraus.evalWord A (List.ofFn σ))
-          (hv := by simpa only [Kraus.wordSpan, Kraus.wordSpan] using hws)
+          (hv := by simpa only [Kraus.wordSpan] using hws)
         intro σ₁
         simp [LinearMap.mulRight_apply, hmul_zero σ₁]
       -- Taking M = 1: Kraus.evalWord A w₂ = 0.
@@ -119,7 +119,7 @@ theorem mpv_ne_zero_of_isNBlkInjective {A : MPSTensor d D} [NeZero D]
         (LinearMap.mulRight ℂ (Kraus.evalWord A w₂)) = 0 := by
       apply LinearMap.ext_on_range
         (v := fun σ : Fin L₀ → Fin d => Kraus.evalWord A (List.ofFn σ))
-        (hv := by simpa only [Kraus.wordSpan, Kraus.wordSpan] using hws)
+        (hv := by simpa only [Kraus.wordSpan] using hws)
       intro σ₁
       simp only [LinearMap.comp_apply, LinearMap.mulRight_apply,
         Matrix.traceLinearMap_apply]

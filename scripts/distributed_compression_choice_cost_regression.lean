@@ -8,7 +8,7 @@ import TNLean.PEPS.Approximation
 /-!
 # Corrected-position cost regressions
 
-Run after building `TNLean.PEPS.Approximation.CorrectedPositionCost`:
+Run after building `TNLean.Lattice.Compression.CorrectedPositionCost`:
 `lake env lean scripts/distributed_compression_choice_cost_regression.lean`.
 
 The second gate acts on a disjoint party pair. Its absolute coefficient and its
@@ -18,6 +18,7 @@ arbitrary coefficient families because no gate is expanded.
 -/
 
 namespace TNLean.PEPS.Approximation.CorrectedPositionCostRegression
+open TNLean.Lattice.Compression
 
 open scoped NNReal
 
