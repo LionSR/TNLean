@@ -13,3 +13,4 @@ import TNLean.MPS.AreaLaw.EntropyScaling.QutritEntropy
 import TNLean.MPS.AreaLaw.EntropyScaling.QutritFamily
 import TNLean.MPS.AreaLaw.EntropyScaling.QutritMiddleTail
 import TNLean.MPS.AreaLaw.EntropyScaling.RenyiApproximation
+import TNLean.MPS.AreaLaw.EntropyScaling.SmoothApproximation
