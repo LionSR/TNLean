@@ -9002,6 +9002,22 @@ spectral split → block extraction → MPV calculation → strict bounds
   the finite path is connected, whereas an induced domain uses exact
   commutation across components. No further abstraction is proposed yet.
 
+### Opposite-side witnesses for reset supports — candidate (2026-10-21)
+
+- **Pattern:** For a support crossing a region, choose one vertex inside and
+  one outside. Use the outside witness for the first interior core and the
+  inside witness for the disjoint second region. The diameter bound transfers
+  the core margin to every vertex of the support.
+- **Seen:** `chain_reset_support_separation` in
+  `MPS/AreaLaw/ResetSupportSeparation.lean` and
+  `reset_graphNeighborhood_disjoint_cores` in
+  `Circuit/LiebRobinson/SupportSeparation.lean`.
+- **Abstraction:** The graph theorem expresses the common geometric argument
+  with natural ball containments. The chain theorem also gives a real-distance
+  lower bound and retains its present proof.
+- **Notes:** Two occurrences; below the promotion threshold. A conversion
+  through rounded radii would lengthen the existing chain proof.
+
 ### Transport of a tensor factor through a layout equality — candidate (2026-10-18)
 
 - **Pattern:** An equality of the second tensor-factor spaces and a heterogeneous
