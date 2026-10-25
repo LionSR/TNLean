@@ -20,9 +20,10 @@ in product form of range `l` (`hasProductForm_truncatedExp`) and Hermitian when 
 **Local fix (positivity at every temperature):** the source states positive definiteness; the
 result is positive semidefiniteness. Documented in `docs/paper-gaps/hastings05_mplt_positivity.tex`.
 
-**Scope restriction (geometry):** the product form is on a nonempty finite planar domain with walk
-distance, and the source's count of index values (lines 1318–1320) is not established. Documented
-in `docs/paper-gaps/hastings05_planar_domain_scope.tex`.
+**Scope restriction (geometry):** in `hasProductForm_truncatedExp_pow_of_even` the product form is
+on a nonempty finite planar domain with walk distance, and the source's count of index values
+(lines 1318–1320) is not established. Documented in
+`docs/paper-gaps/hastings05_planar_domain_scope.tex`.
 
 ## Main results
 

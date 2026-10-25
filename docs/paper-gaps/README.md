@@ -1484,7 +1484,7 @@ what is formalized.
 
 [hastings05_cluster_boundary.tex](hastings05_cluster_boundary.tex)
 (local correction, resolved) records that the boundary `B(C)` of Hastings, *Solving gapped
-Hamiltonians locally* (arXiv:cond-mat/0508554v3, source lines 1130–1133), the terms acting on a
+Hamiltonians locally* (arXiv:cond-mat/0508554v3, source lines 1131–1134), the terms acting on a
 site of `C`, is too small for the claim at lines 1134–1138 that a term containing `H_C` and
 avoiding `H_{B(C)}` has the sites of `H_C` as a cluster. On a chain with `H_i` acting on
 `{i − 1, i, i + 1}`, the term `H_1 H_3` avoids `B({1}) = {0, 2}` but overlaps `H_1`. The
