@@ -22,6 +22,12 @@ nonzero momentum sector, then every `q`-th power lies in the supercell
 `y` to distance more than `n / 2 - q` from any site `x` (`exists_lt_edist_add_cycleGraph`). So
 some element of the supercell does this (`exists_mem_supercell_lt_edist_add`).
 
+**Scope restriction (ring):** the source's system is a `d`-dimensional lattice (lines 1603–1612).
+The geometric step here, that some supercell translation carries a site to distance of order the
+linear size (`exists_lt_edist_add_cycleGraph`, `exists_mem_supercell_lt_edist_add`), is proved
+for the rotations of a ring of sites, the one-dimensional case; `pow_mem_supercell` holds for any
+abelian group. Documented in `docs/paper-gaps/hastings05_translation_supercell.tex`.
+
 ## Main results
 
 * `TNLean.Lattice.pow_mem_supercell`: with momenta of denominator `q`, every `q`-th power lies in
