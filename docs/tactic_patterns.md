@@ -47,15 +47,6 @@ abstracted — record why, so it is not re-proposed).
   `PEPS/AreaLaw/Amplification/GraphChannelSpatialOmission.lean` bound
   `exp (v x)` with a further step and are not rewritten.
 
-### Regional expectation compared with a supported approximant — promoted (2026-10-21)
-
-- **Pattern:** For a contractive regional expectation fixing a supported approximant, rewrite the projection error as the difference between the approximation error and its expectation.
-- **Defined in:** `Circuit/SiteExpectation.lean`, `QuantumCircuit.norm_sub_siteExpectation_le_two_mul_norm_sub_of_mem_supportedOperators`.
-- **Use when:** An approximant is supported on the output region; the error of projecting the original operator is at most twice its distance to that approximant.
-- **Refactored occurrences:** The chain relative-generator proof and the finite-domain relative-generator proof use this same inequality. The finite-family bounds use the existing `map_sum` and `norm_sum_le` lemmas.
-- **Notes:** No state, Hermiticity or nonempty-region assumption is required.
-
-
 ### Supported Gaussian averaging — promoted (2026-10-21)
 
 - **Pattern:** Factor the two-Hamiltonian integrand into an evolved observable and relative evolution, localize the two factors on possibly different regions, and integrate against the restricted Gaussian measure.
@@ -4923,7 +4914,6 @@ three-plaquette output measurement, and the routed reunion measurement.
   `TNLean/Algebra/GraphDistanceTransport.lean`.
 
 
-
 ### Passing from a natural localization radius to a real radius — candidate (2026-10-21)
 
 - **Pattern:** Use the floor inequality to bound
@@ -5020,7 +5010,6 @@ no additional helper is proposed.
   `MPSPreparation.cutCoefficientMatrix_adjacent`; it is not reproved.
 
 
-
 ### Interval membership in the chain stage assignments — candidate (2026-10-18)
 
 - **Pattern:** Unfold a half-open target interval, separate its endpoint
@@ -5063,7 +5052,6 @@ no additional helper is proposed.
   `stage_right_margin` and `twenty_mul_stageCount_le`.
 - **Abstraction:** The existing `Nat.zero_le` supplies the needed fact. The
   two occurrences in one file do not justify another arithmetic lemma or tactic.
-
 
 
 ### Product-basis vectors under a map of labels — candidate (2026-10-18)
@@ -5180,7 +5168,6 @@ no additional helper is proposed.
   the pattern occurs in a second file and meets the promotion threshold.
 
 
-
 ### Dyadic padding bounds — candidate (2026-10-16)
 
 - **Pattern:** Combine the lower and strict upper bounds for
@@ -5223,7 +5210,6 @@ no additional helper is proposed.
   consolidates those splits through `guideFrame_eq_changeOwner_of_ne`.
 - **Abstraction:** a lemma returning the readings, vertex sets and facts for the surrounding
   guide, if a third occurrence appears.
-
 
 
 ### Supported terms in rectangle coordinates — candidate (2026-10-15)
@@ -7267,7 +7253,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   module. The two occurrences in `TNLean/PEPS/NormalEdgeSingleCrossing.lean` are a
   different shape — the open-lattice memberships need no negation normalization and the
   branches close by `omega` alone — and are left as they are.
-
 
 
 ### encoded boundary conditions inside region sums — resolved
