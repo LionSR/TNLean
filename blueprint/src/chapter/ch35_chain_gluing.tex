@@ -36,14 +36,20 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
 \begin{proof}
     \leanok
     An operator supported on a set of sites acts as the identity on the
-    configuration of the other sites.
+    configuration of the other sites. Thus, in the cut coordinates, with
+    the reassociation $((x,y),z)\leftrightarrow(x,(y,z))$ for $K$,
+    \begin{align}
+        H_L & =H_L'\otimes1, \\
+        K   & =1\otimes K'.
+    \end{align}
+    Adding gives the asserted decomposition of $H_L+K$.
 \end{proof}
 
 \begin{theorem}[The leading eigenvector at a cut of the chain]
     \label{thm:chain_leading_eigenvector}
     \lean{TNLean.MPS.AreaLaw.exists_leading_eigenvector_chain}
     \leanok
-    \uses{thm:chain_gluing_split}
+    \uses{def:chain_gluing_cut}
     Let $H=H_L+K$ with $H_L$ supported on the first $k$ sites and $K$ off the
     first $k-1$ sites have a gapped ground state $\Gamma$ with energy $E_0$ and
     gap $\Delta$. Let $W$ be an isometry from a bond $\mathbb C^m$ into the
@@ -72,6 +78,18 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     In the cut coordinates the Hamiltonian, the ground state and $w$ satisfy
     the hypotheses of the leading-eigenvector theorem of the companion volume,
     with $\lVert K'\rVert\le\lVert K\rVert$ since $K'$ is a corner of
-    $1\otimes K'$. Energies and overlaps are unchanged by the change of
-    coordinates.
+    $1\otimes K'$. Let $E$ be the cut-coordinate bijection and $U$ the
+    unitary map $U\psi=\psi\circ E^{-1}$. For chain vectors $\phi,\psi$ and
+    an operator $M$,
+    \begin{align}
+        \langle U\phi,U\psi\rangle
+         & =\langle\phi,\psi\rangle,
+        \label{eq:chain_gluing_inner} \\
+        \langle U\phi,(UMU^*)U\psi\rangle
+         & =\langle\phi,M\psi\rangle.
+        \label{eq:chain_gluing_energy}
+    \end{align}
+    Applying~(\ref{eq:chain_gluing_inner}) and~(\ref{eq:chain_gluing_energy})
+    to the ground state and the eigenvector
+    extension carries the energy and overlap bounds back to the chain.
 \end{proof}
