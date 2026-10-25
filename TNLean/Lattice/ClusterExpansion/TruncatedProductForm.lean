@@ -330,12 +330,14 @@ theorem sum_clusterOp_apply {h : κ → Matrix (Configuration Λ q) (Configurati
       noncommProd_apply_of_pairwiseDisjoint _ _ _
         (fun C _ ↦ clusterOp_mem_supportedOperators hh C β) (pairwiseDisjoint_clusters A)]
 
-variable [Nonempty (Site Λ)] (acts l)
+variable (acts l)
 
 /-- The *anchor* of a set of terms: a chosen site of the union of their supports, at which the
-coefficient carrying the matrix element of `E_C` is placed. -/
-noncomputable def anchor (C : Finset κ) : Site Λ :=
-  Classical.epsilon (· ∈ C.biUnion acts)
+coefficient carrying the matrix element of `E_C` is placed. When the supports are empty, which
+does not happen for a valid cluster, it is the given site `i`, so no site of the domain need be
+chosen in advance. -/
+noncomputable def anchor (C : Finset κ) (i : Site Λ) : Site Λ :=
+  if hC : (C.biUnion acts).Nonempty then hC.choose else i
 
 open Classical in
 /-- The coefficient function at site `i`. The index at a site records the cluster containing it,
@@ -348,7 +350,7 @@ noncomputable def clusterCoeff (h : κ → Matrix (Configuration Λ q) (Configur
     (β : ℝ) (i : Site Λ) (α : Site Λ → Option (Finset κ) × (Fin q × Fin q)) : ℂ :=
   (α i).1.elim (if (α i).2.1 = (α i).2.2 then 1 else 0) fun C ↦
     if IsValidCluster acts l C ∧ i ∈ C.biUnion acts ∧ ∀ j ∈ C.biUnion acts, (α j).1 = some C then
-      if i = anchor acts C then
+      if i = anchor acts C i then
         clusterOp h C β (fun j ↦ if j ∈ C.biUnion acts then (α j).2.1 else (α i).2.1)
           (fun j ↦ if j ∈ C.biUnion acts then (α j).2.2 else (α i).2.1)
       else 1
@@ -394,7 +396,6 @@ theorem isLocalCoefficient_clusterCoeff
           ∀ j ∈ C.biUnion acts, (γ j).1 = some C) := fun _ h ↦ hv ⟨h.1, h.2.1⟩
     simp only [hn, ↓reduceIte]
 
-omit [Nonempty (Site Λ)] in
 /-- The entries of a sum `∑_α F(α) ⊗_j |a_j⟩⟨b_j|` over indices carrying a matrix-unit label:
 the labels are forced to be the row and column configurations. -/
 theorem sum_smul_rectKronecker_single_apply {I : Type*} [Fintype I]
@@ -419,10 +420,10 @@ theorem sum_smul_rectKronecker_single_apply {I : Type*} [Fintype I]
   · simp
 
 omit [Fintype κ] [DecidableEq κ] in
-/-- The anchor of a valid cluster lies in its supports. -/
-theorem anchor_mem {C : Finset κ} (hC : IsValidCluster acts l C) :
-    anchor acts C ∈ C.biUnion acts :=
-  Classical.epsilon_spec hC.nonempty_biUnion
+/-- The anchor of a valid cluster is a fixed site of its supports, independent of `i`. -/
+theorem anchor_eq {C : Finset κ} (hC : IsValidCluster acts l C) (i : Site Λ) :
+    anchor acts C i = hC.nonempty_biUnion.choose :=
+  dite_eq_left hC.nonempty_biUnion
 
 variable (acts l)
 
@@ -444,13 +445,12 @@ noncomputable def clusterAssignment (S : Finset (Finset κ)) (i : Site Λ) : Opt
 
 variable {acts l}
 
-omit [Nonempty (Site Λ)] in
 theorem mem_recordedClusters {c : Site Λ → Option (Finset κ)} {C : Finset κ} :
     C ∈ recordedClusters c ↔ ∃ i, c i = some C := by
   classical
   simp [recordedClusters]
 
-omit [Fintype κ] [DecidableEq κ] [Nonempty (Site Λ)] in
+omit [Fintype κ] [DecidableEq κ] in
 theorem clusterAssignment_eq_some_of_mem {S : Finset (Finset κ)}
     (hS : (S : Set (Finset κ)).PairwiseDisjoint (·.biUnion acts)) {C : Finset κ} (hC : C ∈ S)
     {i : Site Λ} (hi : i ∈ C.biUnion acts) : clusterAssignment acts S i = some C := by
@@ -461,7 +461,7 @@ theorem clusterAssignment_eq_some_of_mem {S : Finset (Finset κ)}
     exact disjoint_left.1 (hS hC' hC fun h ↦ hne (congrArg some h)) hi' hi
   · exact absurd ⟨C, hC, hi⟩ hex
 
-omit [Fintype κ] [DecidableEq κ] [Nonempty (Site Λ)] in
+omit [Fintype κ] [DecidableEq κ] in
 theorem clusterAssignment_eq_some {S : Finset (Finset κ)} {C : Finset κ} {i : Site Λ}
     (h : clusterAssignment acts S i = some C) : C ∈ S ∧ i ∈ C.biUnion acts := by
   unfold clusterAssignment at h
@@ -469,7 +469,7 @@ theorem clusterAssignment_eq_some {S : Finset (Finset κ)} {C : Finset κ} {i : 
   · obtain rfl := Option.some.inj h
     exact hex.choose_spec
 
-omit [Fintype κ] [DecidableEq κ] [Nonempty (Site Λ)] in
+omit [Fintype κ] [DecidableEq κ] in
 theorem clusterAssignment_eq_none {S : Finset (Finset κ)} {i : Site Λ}
     (h : ∀ C ∈ S, i ∉ C.biUnion acts) : clusterAssignment acts S i = none := by
   unfold clusterAssignment
@@ -478,7 +478,6 @@ theorem clusterAssignment_eq_none {S : Finset (Finset κ)} {i : Site Λ}
     exact absurd hi (h C hC)
   · rfl
 
-omit [Nonempty (Site Λ)] in
 theorem recordedClusters_mem_validFamilies {c : Site Λ → Option (Finset κ)}
     (hc : IsClusterAssignment acts l c) : recordedClusters c ∈ validFamilies acts l := by
   rw [mem_validFamilies]
@@ -527,16 +526,16 @@ theorem sum_prod_clusterCoeff {h : κ → Matrix (Configuration Λ q) (Configura
         fun i hi ↦ clusterAssignment_eq_some_of_mem hS.2 hC hi
       have hcoeff : ∀ i ∈ C.biUnion acts,
           clusterCoeff acts l h β i (fun j ↦ (clusterAssignment acts S j, (u j, v j))) =
-            if i = anchor acts C then
+            if i = (hS.1 C hC).nonempty_biUnion.choose then
               clusterOp h C β (fun j ↦ if j ∈ C.biUnion acts then u j else u i)
                 (fun j ↦ if j ∈ C.biUnion acts then v j else u i)
             else 1 := by
         intro i hi
         have hcnd : IsValidCluster acts l C ∧ i ∈ C.biUnion acts ∧
             ∀ j ∈ C.biUnion acts, clusterAssignment acts S j = some C := ⟨hS.1 C hC, hi, hc⟩
-        simp only [clusterCoeff, hc i hi, Option.elim]
+        simp only [clusterCoeff, hc i hi, Option.elim, anchor_eq (hS.1 C hC)]
         split_ifs <;> rfl
-      have hanc := anchor_mem (hS.1 C hC)
+      have hanc := (hS.1 C hC).nonempty_biUnion.choose_spec
       rw [Finset.prod_congr rfl hcoeff, Finset.prod_ite_eq']
       simp only [hanc, ↓reduceIte]
       refine apply_eq_apply_of_mem_supportedOperators (clusterOp_mem_supportedOperators hh C β)
