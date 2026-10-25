@@ -9,6 +9,7 @@ import TNLean.MPS.AreaLaw.LiebRobinson
 import TNLean.MPS.AreaLaw.InteractionBudget
 import TNLean.Circuit.ProjectedRelativeEvolution
 import QICLean.Analysis.RectangularTraceNorm
+import TNLean.Algebra.ExpMulSubMonotone
 
 /-!
 # Localizing the boundary operator `P_B` in Hastings' Lemma 1
@@ -155,7 +156,7 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
       (fun X : ChainSupport L R ↦ X) h.term h.hermitian h.supported b₀
       h.sum_norm_terms_containing_le hq Z hZ ℓ hℓ s
     refine hloc.trans (mul_le_mul_of_nonneg_left
-      (Real.exp_le_exp.mpr (sub_le_sub_right (mul_le_mul_of_nonneg_left hs hv) _))
+      (Real.exp_mul_sub_le_exp_mul_sub hv hs)
       (by positivity))
   have hrel (t : ℝ) (ht : |t| ≤ T) :
       ‖hermitianUnitaryPath H t * hermitianUnitaryPath H₀ (-t) - U t‖ ≤ E₃ * |t| :=
