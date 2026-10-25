@@ -23,4 +23,3 @@ set_option linter.hashCommand false in
 #guard_msgs (whitespace := lax) in
 set_option linter.hashCommand false in
 #print axioms Nat.card_fun_sum_eq_and_two_eq_of_total
-
