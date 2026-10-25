@@ -61,6 +61,35 @@ for an arbitrary finite set of sites and are instantiated here directly.
     both $A$ and its complement; it is at least one.
 \end{definition}
 
+\begin{theorem}[Nearest-neighbour supports at two cuts]
+    \label{thm:chain_two_cut_edge_supports}
+    \lean{TNLean.MPS.AreaLaw.interval_edge_classification_of_lt}
+    \leanok
+    \uses{def:chain_model}
+    Let $L,u,v$ be natural numbers with $u<v$ and $v+1<L$.
+    Place the cuts immediately after sites $u$ and $v$, as in
+    \cite{Arad2016RigorousRG}. Set $T=\{0,\ldots,u\}$, $E=\{u+1,\ldots,v\}$
+    and $U=\{0,\ldots,L-1\}\setminus(T\cup E)$.
+    For an edge $r$ with $r+1<L$, write $D_r=\{r,r+1\}$.
+    Then $D_u\subseteq T\cup E$, $D_u\cap T=\{u\}$,
+    $D_v\cap T=\varnothing$ and $D_v\cap E=\{v\}$.
+    Every other edge has its support contained in $T$, in $E$, or in $U$.
+    Adjacent cuts, $v=u+1$, are included.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_model}
+    Membership in $T\cup E$ is equivalent to having coordinate less than
+    $v+1$; membership in $U$ is equivalent to having coordinate at least
+    $v+1$. Comparing the endpoints gives the four assertions for $D_u,D_v$.
+    For any other edge, either $r<u$, $u<r<v$, or $v<r$.
+    These cases give $r+2\le u+1$, the pair of inequalities
+    $u+1\le r$ and $r+2\le v+1$, or $v+1\le r$, respectively.
+    The corresponding interval containment places $D_r$ in $T$, $E$, or $U$.
+    For adjacent cuts, $E=\{u+1\}=\{v\}$. The first two assertions give
+    $D_u\cap E=\{u+1\}$ and the fourth gives $D_v\cap E=\{v\}$, so the
+    crossing supports $D_u$ and $D_v$ share the single middle site.
+\end{proof}
+
 \begin{lemma}[Distance and spheres on a finite path]
     \label{lem:chain_path_metric_spheres}
     \lean{SimpleGraph.pathGraph_edist, SimpleGraph.pathGraph_card_sphere_le_two}
@@ -882,7 +911,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \leanok
     \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,
         lem:chain_site_norm_budget,thm:chain_lieb_robinson,
-        lem:qc_site_expectation_properties}
+        lem:qc_site_expectation_properties,thm:qc_site_expectation_supported_approximant}
     The swapped doubled interactions have range $R$ and bound $2J$.
     Their per-site norm sum is at most $b_0$. The chain localization
     estimate therefore has constants $a,v$ as displayed.
@@ -954,50 +983,27 @@ for an arbitrary finite set of sites and are instantiated here directly.
     on a contiguous chain; the domain distinction is recorded
     in~\cite{gap:tnlean_one_dimensional_connected_domain_scope}.
 \end{theorem}
-\begin{proof}
-    \leanok
+\begin{proof}\leanok
     \uses{def:chain_swapped_doubled_hamiltonian,
         thm:chain_relative_generator_localization,thm:chain_lieb_robinson,
         lem:chain_site_norm_budget,thm:area_law_supported_identity,
-        thm:qc_supported_projected_relative_evolution,
-        lem:qc_site_expectation_properties}
-    Let $a,v$ be the constants in
-    Theorem~\ref{thm:chain_relative_generator_localization}, and put
+        thm:qc_supported_gaussian_projection_bounds}
+    Let $a,v$ be the localization constants, put
     $d=4|J|a(R+1)^2N_R$ and $C=a+d>0$.
-    Construct the supported projected relative evolution on $N(Z)$.
-    Its equation uses only $K,K'$ and $N(Z)$, so this choice precedes
-    $Q,W,\eta,T$.
-    For $|t|\le T$, the generator estimate and the evolution comparison give
+    Apply Theorem~\ref{thm:qc_supported_gaussian_projection_bounds} with
+    $B_g=N(Z)$, $B_o=N(Q)$ and output region $B=N(Q\cup Z)$.
+    The path is chosen from $K,K',N(Z)$ before $Q,W,\eta,T$.
+    The physical generator and observable estimates, with $|Q|\le L$, give
     \begin{align}
-        \|e^{itK'}e^{-itK}-U(t)\|
-        \le dL|t|e^{vT-\ell/2}.
+        \varepsilon_g & =dLe^{vT-\ell/2},\notag   \\
+        \varepsilon_o & =aL^2e^{vT-\ell/2}.\notag
     \end{align}
-    The separately localized observable has error at most
-    $a|Q|^2\|W\|e^{vT-\ell/2}$.
-    Using the exact factorization
+    Since $L\le L^2$ for every natural $L$ and $a,d,T\ge0$,
     \begin{align}
-        \bigl(e^{itK'}We^{-itK'}\bigr)
-        \bigl(e^{itK'}e^{-itK}\bigr)=e^{itK'}We^{-itK},
+        aL^2+dLT & \le(a+d)L^2(1+T).\notag
     \end{align}
-    insert $e^{itK'}We^{-itK'}U(t)$ between the two integrands.
-    Unitarity of $U(t)$, invariance of the observable norm under evolution,
-    and the two estimates bound their difference by
-    \begin{align}
-        \|W\|\bigl(a|Q|^2+dL|t|\bigr)e^{vT-\ell/2}
-         & \le\|W\|(a+d)L^2(1+T)e^{vT-\ell/2}.
-    \end{align}
-    Here $|Q|\le L$ and $L\le L^2$ for every natural $L$; the latter is
-    zero at $L=0$ and follows from $1\le L$ otherwise.
-
-    Both factors of the localized integrand act on $B$, and its norm is
-    at most $\|W\|$. The integrands are continuous and bounded, hence
-    integrable for every $\gamma_\eta$. Since the expectation $E_B$ is
-    continuous and linear, commutes with integration, and fixes the
-    localized integrand, it also fixes $M_{\mathrm{loc}}$.
-    This proves its support. Finally,
-    $\gamma_\eta([-T,T])\le1$ gives both the contraction bound and,
-    upon integrating the pointwise difference, the asserted error.
-    The Gaussian mass is not renormalized.
+    Substitution in (\ref{eq:qc_gaussian_projection_error}) gives the stated
+    error. The same theorem gives the support and norm bounds.
 \end{proof}
 
 \begin{lemma}[Separation of the reset support from the cores]
@@ -1722,6 +1728,425 @@ for an arbitrary finite set of sites and are instantiated here directly.
     integers.
 \end{definition}
 
+\begin{lemma}[Interaction norm budget on a finite integer domain]
+    \label{lem:domain_site_norm_budget}
+    \lean{TNLean.MPS.AreaLaw.IsDomainSupport.singleton,
+        TNLean.MPS.AreaLaw.DomainSupport.toChainSupport,
+        TNLean.MPS.AreaLaw.DomainSupport.toChainSupport_injective,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.toChain_term,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.norm_bound_nonneg,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.sum_norm_terms_containing_le}\leanok
+    \uses{def:domain_model}
+    In the setting of Definition~\ref{def:domain_model}, every site $x$ satisfies
+    $J\ge0$ and
+    \begin{align}
+        \sum_{X\ni x}\|h_X\| & \le 2^{2R+1}J.\notag
+    \end{align}
+    The sum ranges over the original admissible domain supports.
+    This is a consequence of the interaction assumptions
+    in~\cite[Part~I]{TNLean2026OneDimensional}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:domain_model,lem:chain_site_norm_budget}
+    The singleton $\{x\}$ is admissible, so
+    $0\le\|h_{\{x\}}\|\le J$.
+    Extend the interactions by zero to the chain of increasing labels.
+    The inclusion of domain supports into chain supports is injective and
+    preserves both the terms and membership of $x$.
+    Restricting the nonnegative chain sum of
+    Lemma~\ref{lem:chain_site_norm_budget} gives the bound.
+\end{proof}
+
+\begin{lemma}[Crossing count on a finite integer domain]
+    \label{lem:domain_crossing_count}
+    \lean{TNLean.MPS.AreaLaw.card_domain_crossingTerms_le_mul_card_boundaryEdges,
+        TNLean.MPS.AreaLaw.card_domain_crossingTerms_mul_two_le}\leanok
+    \uses{def:domain_model}
+    In the setting of Definition~\ref{def:domain_model}, let $D$ be any set of
+    labelled sites and let $\mathcal C$ be the original admissible supports
+    meeting both $D$ and its complement. Write $\partial_{\mathrm{ch}}D$
+    for the edge boundary of $D$ in the chain of increasing labels and put
+    $N_R=2\cdot2^{2R}$. Then
+    \begin{align}
+        |\mathcal C|  & \le 2^{2R}|\partial_{\mathrm{ch}}D|,\notag \\
+        2|\mathcal C| & \le N_R|\Lambda|.\notag
+    \end{align}
+    The chain boundary is used only for this upper bound; it need not equal
+    the physical edge boundary in $\Lambda$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:domain_model,lem:domain_site_norm_budget,lem:chain_boundary_crossing_count}
+    As in the proof of Lemma~\ref{lem:domain_site_norm_budget}, the inclusion
+    into chain supports is injective and preserves both crossing witnesses. Apply Lemma~\ref{lem:chain_boundary_crossing_count}, then use
+    $|\partial_{\mathrm{ch}}D|\le |\Lambda|$ and multiply by two.
+\end{proof}
+
+\begin{definition}[Doubled domain interactions and regional swaps]
+    \label{def:domain_doubled_swapped_hamiltonian}
+    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.doubled,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.doubled_operator,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.swappedDoubled,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.swappedDoubled_operator}\leanok
+    \uses{def:domain_model,def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
+    Let $H=\sum_Xh_X$ be an admissible domain Hamiltonian and let
+    $D\subseteq V=\{0,\ldots,|\Lambda|-1\}$. Let $p$ pair the two replica
+    coordinates at each site and put $F=p_*F_D$. Define
+    \begin{align}
+        \widehat h_X  & =p_*(h_X\otimes\mathbb 1+\mathbb 1\otimes h_X),\notag                \\
+        \widehat h'_X & =F\widehat h_XF^\dagger,\notag                                       \\
+        \widehat H    & =\sum_X\widehat h_X=p_*(H\otimes\mathbb 1+\mathbb 1\otimes H),\notag \\
+        \widehat H'   & =\sum_X\widehat h'_X=F\widehat H F^\dagger.
+        \label{eq:domain_doubled_swapped}
+    \end{align}
+    Both families are indexed by the original admissible domain supports.
+    Their terms are Hermitian, supported on $X$, and have norm at most $2J$.
+    Thus they have local dimension $q^2$, range $R$ and interaction bound $2J$.
+    Empty domains and $q=0$ are allowed. These are the two-replica operators
+    in \cite[Part~IIa]{TNLean2026OneDimensional}.
+\end{definition}
+\begin{proof}\leanok
+    \uses{def:domain_model,def:chain_doubled_hamiltonian,
+        def:chain_swapped_doubled_hamiltonian,lem:domain_site_norm_budget,
+        thm:peps_sheet_swap_conjugate_support}
+    At each original nonempty support $X$, choose a site of $X$ to obtain
+    $J\ge0$. Extending the original interactions by zero to the chain of
+    increasing labels preserves the term at $X$ and its support. The
+    doubled and swapped chain estimates therefore apply at that same $X$.
+    Conjugation preserves Hermiticity and the regional swap preserves support.
+    Distributing the finite sums proves (\ref{eq:domain_doubled_swapped}).
+\end{proof}
+
+\begin{theorem}[Crossing decomposition for a domain regional swap]
+    \label{thm:domain_partial_swap_crossing}
+    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.partialSwap_term_difference_spec,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.partialSwap_difference_eq_sum_crossing}\leanok
+    \uses{def:domain_doubled_swapped_hamiltonian,lem:domain_crossing_count}
+    With the notation of Definition~\ref{def:domain_doubled_swapped_hamiltonian},
+    put $T_{X,0}=p_*(h_X\otimes\mathbb 1)$,
+    $T_{X,1}=p_*(\mathbb 1\otimes h_X)$, and
+    $K_{X,b}=FT_{X,b}F^\dagger-T_{X,b}$.
+    Every $K_{X,b}$ is Hermitian, supported on $X$, and satisfies
+    $\|K_{X,b}\|\le2J$. Let $\mathcal C$ be the original admissible supports
+    meeting both $D$ and $V\setminus D$, and put $N_R=2\cdot2^{2R}$. Then
+    \begin{align}
+        \widehat H'-\widehat H
+                      & =\sum_{X\in\mathcal C}\sum_{b\in\{0,1\}}K_{X,b},\notag \\
+        2|\mathcal C| & \le N_R|\Lambda|.\notag
+    \end{align}
+    The count here is a bound by the total number of domain sites.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:domain_doubled_swapped_hamiltonian,thm:chain_partial_swap_boundary,
+        thm:peps_sheet_swap_doubled_cancellation,lem:domain_crossing_count}
+    The per-replica support, Hermiticity and norm estimates follow from
+    the corresponding chain estimates at the same original support.
+    If $X\subseteq D$ or $X\cap D=\varnothing$, then
+    \begin{align*}
+        F(T_{X,0}+T_{X,1})F^\dagger=T_{X,0}+T_{X,1}.
+    \end{align*}
+    Thus $K_{X,0}+K_{X,1}=0$ for every noncrossing support.
+    Restrict the finite sum to crossing supports, then distribute conjugation
+    over the two replica terms. Lemma~\ref{lem:domain_crossing_count} gives
+    the displayed count.
+\end{proof}
+
+\begin{theorem}[Relative-generator localization on a finite integer domain]
+    \label{thm:domain_relative_generator_localization}
+    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le}
+    \leanok
+    \uses{def:domain_doubled_swapped_hamiltonian,thm:domain_partial_swap_crossing,
+        def:qc_site_expectation,thm:domain_interval_neighborhood}
+    Let $H$ be an admissible domain Hamiltonian with local dimension $q\ge1$,
+    range $R$ and real interaction bound $J$. For $D\subseteq V$, put
+    $K=\widehat H$, $K'=\widehat H'$ and
+    $Z=\bigcup_{X\in\mathcal C_D}X$, using the original crossing supports.
+    For $m\in\mathbb N$ and $t\in\mathbb R$, define
+    $B=N_m(Z)$ using intrinsic graph distance and
+    $G(t)=e^{itK'}(K'-K)e^{-itK'}$. Put
+    \begin{align}
+        b_0 & =2^{2R+1}(2J),\notag                          \\
+        a   & =\frac{2(2+4|b_0|e^{2R})e}{1-e^{-1/2}},\notag \\
+        v   & =2(R+1)|b_0|e^{2R}+1,\notag                   \\
+        N_R & =2\cdot2^{2R}.\notag
+    \end{align}
+    Then
+    \begin{align}
+        \|G(t)-E_B(G(t))\|
+         & \le4|J|a(R+1)^2N_R|\Lambda|e^{v|t|-m/2}.\notag
+    \end{align}
+    Empty domains and crossing families are allowed. This is an auxiliary
+    generator estimate in the localization argument of
+    \cite[Part~IIa]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:domain_partial_swap_crossing,lem:domain_site_norm_budget,
+        thm:domain_lieb_robinson_localization,
+        lem:qc_site_expectation_properties,thm:qc_site_expectation_supported_approximant}
+    The swapped domain family has interaction bound $2J$, so its per-site
+    norm budget is $b_0$. Domain localization gives an error
+    $a|X|^2\|A_{X,b}\|e^{v|t|-m/2}$ for each evolved replica perturbation
+    at its own neighborhood $N_m(X)$.
+    Since $X\subseteq Z$, that approximant is supported on $B$.
+    Theorem~\ref{thm:qc_site_expectation_supported_approximant},
+    $|X|\le R+1$ and $\|A_{X,b}\|\le2J\le2|J|$ bound its projection error by
+    $4|J|a(R+1)^2e^{v|t|-m/2}$.
+    Linearity of evolution and expectation permits summing over the exact
+    crossing decomposition. The bound
+    $2|\mathcal C_D|\le N_R|\Lambda|$ finishes the estimate.
+\end{proof}
+
+\begin{theorem}[Intrinsic neighborhoods of order intervals]
+    \label{thm:domain_interval_neighborhood}
+    \lean{TNLean.MPS.AreaLaw.domainNeighborhood_eq_interval_of_ordConnected,
+        TNLean.MPS.AreaLaw.domainNeighborhood_interval_eq}\leanok
+    \uses{def:domain_model,def:chain_model}
+    In the setting of Definition~\ref{def:domain_model}, identify the domain
+    with its increasing labels $V=\{0,\ldots,|\Lambda|-1\}$.
+    For $m\in\N$ and $I\subseteq V$, put
+    \begin{align}
+        N_m(I) & =\bigcup_{x\in I}\{y\in V:d_\Lambda(x,y)\le m\}.\notag
+    \end{align}
+    If $I$ is order-convex in $V$, there exist natural numbers $a,b$ such that
+    $N_m(I)=[a,b)$, with the interval taken in $V$.
+    In particular, the intrinsic neighborhood of a relative interval is
+    again a relative interval. Empty domains and empty intervals are allowed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:domain_model,def:chain_model}
+    Every edge of the induced graph joins consecutive labels. Induction on
+    a walk therefore shows that it visits every label between its endpoints.
+    If $d_\Lambda(x,y)\le m$ and $z$ lies between $x$ and $y$, the initial
+    segment of a shortest walk ending at $z$ gives $d_\Lambda(x,z)\le m$.
+
+    Let $u\le z\le v$ with $u,v\in N_m(I)$, and choose $x,y\in I$ with
+    $d_\Lambda(x,u)\le m$ and $d_\Lambda(y,v)\le m$.
+    If $z<x$, use the walk from $x$ to $u$.
+    Otherwise, if $z\le y$, order convexity gives $z\in I$.
+    In the remaining case $y<z$, use the walk from $y$ to $v$.
+    Thus $N_m(I)$ is order-convex. If it is nonempty, take $a$ to be its
+    least label and $b$ one plus its greatest label; if it is empty, take
+    $a=b=0$.
+\end{proof}
+
+\begin{theorem}[Entropy of intrinsic neighborhoods of interval unions]
+    \label{thm:domain_interval_neighborhood_entropy}
+    \lean{TNLean.MPS.AreaLaw.regionEntropy_domainNeighborhood_biUnion_intervals_le,
+        TNLean.MPS.AreaLaw.DomainHamiltonian.regionEntropy_neighborhood_biUnion_intervals_le}
+    \leanok
+    \uses{def:domain_model}
+    Let $\Omega$ be a normalized vector on the finite domain of
+    Definition~\ref{def:domain_model}. Suppose that every relative interval has
+    entropy at most $c$. For any finite index set $s$, relative intervals
+    $I_\alpha$ and $m\in\mathbb N$,
+    \begin{align}
+        S_\Omega\left(N_m\left(\bigcup_{\alpha\in s}I_\alpha\right)\right)
+         & \le |s|c.\notag
+    \end{align}
+    The intervals may overlap or be empty, and $s$ may be empty.
+    If $\Omega$ is the original gapped ground vector of an admissible domain
+    Hamiltonian, with $q\ge1$, $J\ge0$ and $\Delta>0$, one may take
+    $c=C_{\mathrm{int}}(q,R,J,\Delta)$.
+    This is the interval-neighborhood entropy estimate used in
+    \cite[Part~IIa]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:domain_interval_neighborhood,thm:chain_area_law,
+        lem:zero_entropy_flip,lem:chain_entropy_inequalities,def:domain_model}
+    Submodularity and nonnegativity of reduced-state entropy give
+    $S_\Omega(X\cup Y)\le S_\Omega(X)+S_\Omega(Y)$.
+    Since $S_\Omega(\varnothing)=0$, finite subadditivity gives
+    \begin{align}
+        S_\Omega\left(\bigcup_{\alpha\in s}N_m(I_\alpha)\right)
+         & \le\sum_{\alpha\in s}S_\Omega(N_m(I_\alpha))\le |s|c.\notag
+    \end{align}
+    Each $N_m(I_\alpha)$ is itself a relative interval by
+    Theorem~\ref{thm:domain_interval_neighborhood}, and
+    \begin{align}
+        N_m\left(\bigcup_{\alpha\in s}I_\alpha\right)
+         & =\bigcup_{\alpha\in s}N_m(I_\alpha).\notag
+    \end{align}
+    For a domain Hamiltonian, extend its terms by zero to the
+    chain of increasing labels. Its operator and original ground vector
+    are unchanged, so Theorem~\ref{thm:chain_area_law} supplies the interval
+    entropy bound.
+\end{proof}
+
+\begin{theorem}[Connected components of an induced integer graph]
+    \label{thm:chain_integer_domain_components}
+    \lean{
+        SimpleGraph.hasse_int_induce_reachable_iff,
+        SimpleGraph.ConnectedComponent.ordConnected_image_hasse_int_induce,
+        SimpleGraph.ConnectedComponent.nonempty_pathGraph_iso_hasse_int_induce_finset
+    }
+    \leanok
+    Let $S\subseteq\mathbb Z$, and let $G$ be the graph on $S$ in which two
+    vertices are adjacent exactly when their integer coordinates differ by one.
+    For any $x,y\in S$,
+    \begin{align}
+        x\text{ and }y\text{ are joined by a walk in }G
+        \quad\Longleftrightarrow\quad
+        \lbrack\min\{x,y\},\max\{x,y\}\rbrack\cap\mathbb Z\subseteq S.
+    \end{align}
+    The coordinate image of each connected component is order-convex:
+    if $x,y$ belong to that image, every integer between $x$ and $y$ belongs to
+    the same image. No finiteness assumption on $S$ is needed.
+
+    If $S$ is finite, the graph induced on each connected component $C$ is
+    isomorphic to the path $P_{|C|}$ on $|C|$ vertices. Here $P_n$ has vertices
+    $0,\ldots,n-1$ and edges between consecutive vertices. This includes
+    singleton components and requires no further hypothesis on a component.
+    This is the induced integer geometry used in the reduction to connected
+    domains in \cite[Part~I]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Fix an integer $z\notin S$. If two vertices are adjacent, their integer
+    coordinates are consecutive and neither equals $z$. Thus either both
+    coordinates are less than $z$, or neither is. This property is preserved
+    along a walk. A walk therefore cannot join vertices on opposite sides of
+    a missing integer, which proves the forward implication.
+
+    Conversely, suppose first that $x\le y$ and that every integer in $[x,y]$
+    belongs to $S$. Induction by integer successors joins $x$ to each integer
+    $n$ with $x\le n\le y$: the first vertex is $x$, and the step uses the
+    edge from $n$ to $n+1$ when $n+1\le y$. This reaches $y$. Reversing the
+    walk handles $y\le x$.
+
+    If $x,y$ are in one connected component and $z$ lies between them, the
+    criterion places $z$ in $S$. Every integer between $x$ and $z$ is also
+    between $x$ and $y$, so the reverse implication joins $x$ to $z$. Hence
+    $z$ lies in that same component.
+
+    For finite $S$, give a component $C$ the order inherited from the integers.
+    Its coordinate map is an order embedding with order-convex image, so it
+    preserves and reflects the covering relation. The increasing enumeration
+    of the finite linear order $C$ is an order isomorphism from
+    $\{0,\ldots,|C|-1\}$ to $C$. In either graph, adjacency is the symmetric
+    covering relation. This enumeration is therefore a graph isomorphism
+    from $P_{|C|}$ to the graph induced on $C$.
+\end{proof}
+
+\begin{theorem}[Distance spheres in a finite integer domain]
+    \label{thm:domain_graph_spheres}
+    \lean{TNLean.MPS.AreaLaw.domainGraph_card_sphere_le_two,
+        TNLean.MPS.AreaLaw.domainGraphIsoHasse}
+    \leanok
+    \uses{def:domain_model}
+    Let $\Lambda\subset\mathbb Z$ be finite. Its increasing enumeration
+    identifies its labelled induced path graph with the graph induced on
+    $\Lambda$ from the integer graph joining consecutive integers.
+    For every $x\in\Lambda$ and every natural number $d$,
+    \begin{align}
+        \bigl|\{y\in\Lambda:d_\Lambda(x,y)=d\}\bigr|\le2.\notag
+    \end{align}
+    In particular the sphere-growth coefficient is $2$, with exponent zero,
+    independently of the number and lengths of the components.
+    This uses the induced integer geometry of
+    \cite[Part~I]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_integer_domain_components,thm:qc_graph_edist_transport,
+        lem:chain_path_metric_spheres}
+    The enumeration preserves adjacency because it records the original
+    integer coordinates. A vertex at finite distance from $x$ belongs to
+    its connected component. This component is a finite path by
+    Theorem~\ref{thm:chain_integer_domain_components}, and both its inclusion
+    and its path isomorphism preserve extended distance by
+    Theorem~\ref{thm:qc_graph_edist_transport}. Its sphere therefore has at
+    most two vertices. At distance zero there is just $x$; vertices in
+    other components have infinite distance and are not counted.
+\end{proof}
+
+\begin{theorem}[Propagation on a finite integer domain]
+    \label{thm:domain_lieb_robinson_commutator}
+    \lean{TNLean.MPS.AreaLaw.norm_heisenberg_commutator_le_domainDistance}
+    \leanok
+    \uses{def:domain_model}
+    Let $\Lambda\subset\mathbb Z$ be finite, with its induced path graph,
+    and let $q,R\in\mathbb N$. Let $(h_k)_k$ be a finite labelled family of
+    Hermitian operators, each supported on a nonempty set $X_k$ of graph
+    diameter at most $R$. Suppose $b_0\in\mathbb R$ satisfies
+    $\sum_{k:x\in X_k}\|h_k\|\le b_0$ for every site $x$.
+    Put $H=\sum_k h_k$ and
+    \begin{align}
+        C & =2+4|b_0|e^{2R},\notag      \\
+        v & =2(R+1)|b_0|e^{2R}+1.\notag
+    \end{align}
+    Let $A$ be supported on $S\subseteq\Lambda$ and $B$ at $y\in\Lambda$.
+    Set $\delta=\inf_{x\in S}d_\Lambda(x,y)$, with
+    $\inf\varnothing=\infty$ and $e^{-\infty/2}=0$. For every real $t$,
+    \begin{align}
+        \|[\tau_t(A),B]\|
+        \le C|S|\|A\|\|B\|e^{v|t|}e^{-\delta/2}.\notag
+    \end{align}
+    This extends the commutator estimate of the Lieb--Robinson lemma in
+    \cite[Part~II]{TNLean2026OneDimensional} to arbitrary finite integer
+    domains. No connectivity, positive local dimension, ground-state or
+    spectral-gap hypothesis is required.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:domain_model,thm:qc_graph_lieb_robinson_finset,
+        thm:qc_graph_lieb_robinson_zero_finset}
+    Every range-$R$ support has at most $R+1$ sites. For finite $\delta$,
+    the graph propagation estimate with exponential weight parameter one
+    gives the stronger decay $e^{-\delta}$, which is at most
+    $e^{-\delta/2}$. For infinite $\delta$, every $x\in S$ has
+    $d_\Lambda(x,y)=\infty$, so $[\tau_t(A),B]=0$ by
+    Theorem~\ref{thm:qc_graph_lieb_robinson_zero_finset} and the left side
+    vanishes. All distances are those of the
+    induced graph; sites separated by a hole are not identified with
+    consecutive sites of a longer chain.
+\end{proof}
+
+\begin{theorem}[Localization on a finite integer domain]
+    \label{thm:domain_lieb_robinson_localization}
+    \lean{TNLean.MPS.AreaLaw.norm_heisenberg_sub_siteExpectation_domainNeighborhood_le}
+    \leanok
+    \uses{def:domain_model,def:qc_site_expectation}
+    Let $\Lambda\subset\mathbb Z$ be finite, let $q,R\in\mathbb N$ with $q\ge1$,
+    and let $H=\sum_kh_k$ be a finite labelled sum of Hermitian operators.
+    Each $h_k$ is supported on a nonempty set $X_k$ of induced-graph diameter
+    at most $R$. Suppose $\sum_{k:x\in X_k}\|h_k\|\le b_0$ for every site $x$.
+    Put
+    \begin{align}
+        C  & =2+4|b_0|e^{2R},\notag         \\
+        v  & =2(R+1)|b_0|e^{2R}+1,\notag    \\
+        C' & =\frac{2Ce}{1-e^{-1/2}}.\notag
+    \end{align}
+    For $m\in\mathbb N$ write
+    $B_m(x)=\{y\in\Lambda:d_\Lambda(x,y)\le m\}$.
+    For a real $\ell\ge0$ and $S\subseteq\Lambda$, define
+    $N_\ell(S)=\bigcup_{x\in S}B_{\lfloor\ell\rfloor}(x)$.
+    Let $E_{N_\ell(S)}$ be the normalized partial-trace expectation onto
+    operators supported on this set. Every operator $A$ supported on $S$
+    satisfies, for every real $t$,
+    \begin{align}
+        \|\tau_t(A)-E_{N_\ell(S)}(\tau_t(A))\|
+        \le C'|S|^2\|A\|e^{v|t|-\ell/2}.\notag
+    \end{align}
+    Empty $S$ is allowed. No connectedness, ground-state or spectral-gap
+    hypothesis is imposed. The neighborhood uses the induced graph and
+    never joins sites across a missing integer. This is the finite-domain
+    extension of the localization conclusion in the Lieb--Robinson lemma
+    of \cite[Part~II]{TNLean2026OneDimensional}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:domain_graph_spheres,thm:qc_graph_neighborhood_localization,
+        thm:area_law_supported_identity}
+    Each interaction support has at most $R+1$ sites. Apply graph
+    localization with this support-size bound, sphere coefficient $2$,
+    sphere exponent zero, and natural radius $m=\lfloor\ell\rfloor$.
+    Its neighborhood is precisely the displayed union of closed balls.
+    Graph distances are integers when finite, and
+    $e^{-m/2}\le e^{1/2}e^{-\ell/2}$.
+    The natural-radius coefficient is $2Ce^{1/2}/(1-e^{-1/2})$;
+    multiplication by this rounding factor gives $C'$.
+    The graph localization theorem includes the empty union and its
+    vanishing factor $|S|^2$.
+\end{proof}
+
 \begin{lemma}[A cut that splits no term]
     \label{lem:zero_entropy_cut}
     \lean{
@@ -2225,7 +2650,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $\rho_k=\operatorname{Tr}_{k+1,\ldots,L}|\psi\rangle\langle\psi|$ and
     $\sigma_k=\operatorname{Tr}_{k+1,\ldots,L}|\phi\rangle\langle\phi|$.
     Then $\|\rho_k-\sigma_k\|_1\le
-    \bigl\||\psi\rangle\langle\psi|-|\phi\rangle\langle\phi|\bigr\|_1$.
+        \bigl\||\psi\rangle\langle\psi|-|\phi\rangle\langle\phi|\bigr\|_1$.
     If $\phi$ is an open-boundary MPS of bond dimension at most $D$,
     then $\operatorname{rank}\sigma_k\le D$ at every internal cut.
     Neither assertion requires normalized vectors. These are the partial-trace
@@ -5058,271 +5483,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     tensor entries and tagged alphabets.
 \end{proof}
 
+\input{chapter/ch35_product_replacement}
+\input{chapter/ch35_copy_region_entropy}
 
-\begin{theorem}[Rényi lower bound at a chain cut]
-  \label{thm:chain_cut_renyi_approximation_lower_bound}
-  \lean{TNLean.MPS.AreaLaw.IsOpenMPS.renyiEntropy_leftBlock_add_log_error_le_log}
-  \leanok
-  Let $\psi$ be a unit vector on a chain of $L$ sites, and let $\phi$ be an
-  open-boundary matrix product state of bond dimension at most $D$.
-  The vector $\phi$ need not be normalized. Suppose $0<k<L$, $\alpha>1$,
-  $\delta<1$, and
-  $\lVert\ketbra{\psi}{\psi}-\ketbra{\phi}{\phi}\rVert_1\le\delta$.
-  If $\rho_k$ is the reduced density matrix of $\psi$ on the first $k$ sites,
-  then
-  \begin{align}
-    \label{eq:chain_cut_renyi_approximation_lower_bound}
-    S_\alpha(\rho_k)+\frac{\alpha}{\alpha-1}\log(1-\delta)&\le\log D.
-  \end{align}
-  This is the prefix form of the Rényi approximation lower bound
-  in~\cite{Schuch2008EntropyScaling}, with the sign correction documented
-  in~\cite{gap:swvc08_renyi_bond_dimension_sign}.
-\end{theorem}
-\begin{proof}\leanok
-  \uses{thm:chain_reduced_state_rank_error}
-  The reduced matrix of $\phi$ has rank at most $D$, and partial trace
-  contracts the full trace norm. Apply the finite-dimensional Rényi
-  approximation inequality to the two reduced matrices. Only the target
-  matrix has trace one, which follows from $\lVert\psi\rVert=1$.
-\end{proof}
-
-
-\begin{theorem}[Rényi lower bound on an arbitrary contiguous block]
-  \label{thm:chain_block_renyi_approximation_lower_bound}
-  \lean{TNLean.MPS.AreaLaw.IsOpenMPS.rank_regionState_sdiff_leftBlock_le_sq,
-    TNLean.MPS.AreaLaw.IsOpenMPS.rank_regionState_leftBlock_le_max,
-    TNLean.MPS.AreaLaw.IsOpenMPS.rank_regionState_sdiff_leftBlock_le_max_sq,
-    TNLean.MPS.AreaLaw.IsOpenMPS.renyiEntropy_sdiff_leftBlock_add_log_error_le_two_log}
-  \leanok
-  Let $\psi$ be a unit vector on a finite chain, and let $\phi$ be an
-  open-boundary MPS of bond dimension at most $D$, without normalization.
-  Suppose $\alpha>1$, $\delta<1$, and
-  $\lVert\ketbra{\psi}{\psi}-\ketbra{\phi}{\phi}\rVert_1\le\delta$.
-  For every contiguous block $B$,
-  \begin{align}
-    \label{eq:chain_block_renyi_approximation_lower_bound}
-    S_\alpha(\rho_{\psi,B})
-      +\frac{\alpha}{\alpha-1}\log(1-\delta)&\le2\log D.
-  \end{align}
-  Empty blocks and the whole chain are included. The zero bond budget is
-  included with the convention $\log0=0$.
-  The factor two corrects the single-bond expression for interior blocks
-  in~\cite{Schuch2008EntropyScaling}; see
-  \cite{gap:swvc08_interior_block_bond_rank}.
-\end{theorem}
-\begin{proof}\leanok
-  \uses{thm:chain_reduced_state_rank_error}
-  Write $B=T\setminus R$ for nested prefixes. The complement is the disjoint
-  union $R\cup T^c$. Equality of complementary ranks and the product bound
-  for ranks on disjoint unions give
-  \begin{align}
-    \label{eq:chain_block_rank_product}
-    \operatorname{rank}\rho_{\phi,B}
-      &\le\operatorname{rank}\rho_{\phi,R}
-        \operatorname{rank}\rho_{\phi,T}.
-  \end{align}
-  At an internal cut each rank is at most $D$; at an endpoint it is at most
-  one. Thus the block rank is at most $\max(1,D)^2$, including chains of
-  length zero or one. Regional reduction contracts the full trace-norm
-  error, so the finite-dimensional Rényi inequality bounds the left side
-  by $\log(\max(1,D)^2)$. For $D>0$ this is $2\log D$; for $D=0$ both
-  expressions vanish under the stated logarithm convention.
-\end{proof}
-
-
-\begin{theorem}[Logarithmic Rényi bound for efficiently approximable families]
-  \label{thm:efficient_mps_renyi_logarithmic_bound}
-  \lean{TNLean.MPS.AreaLaw.IsEfficientlyApproximableByMPS.exists_logarithmic_renyi_bound,
-    TNLean.MPS.AreaLaw.not_isEfficientlyApproximableByMPS_of_superlogarithmic_renyi}
-  \leanok
-  Let $(\psi_N)_{N\in\mathcal N}$ be unit vectors on chains indexed by a set
-  $\mathcal N\subseteq\mathbb N$ of lengths. Suppose this family admits
-  efficient approximation by MPS, in the full trace norm. Fix $\alpha>1$
-  and a contiguous block $B_N$ in each chain. Then there are $K\in\mathbb R$
-  and $m\in\mathbb N$, independent of $N$, such that
-  \begin{align}
-    \label{eq:efficient_mps_renyi_logarithmic_bound}
-    S_\alpha(\rho_{N,B_N})&\le K+m\log(N+1)
-      \qquad(N\in\mathcal N).
-  \end{align}
-  Consequently, absence of any such uniform logarithmic bound rules out
-  efficient approximation. No consistency between chain lengths is assumed,
-  and the approximating vectors need not be normalized.
-\end{theorem}
-\begin{proof}\leanok
-  \uses{thm:chain_block_renyi_approximation_lower_bound}
-  Fix accuracy $\delta=1/2$. The polynomial bond bound has the form
-  $D_N\le C(N+1)^r$ with $C>0$ and $r\in\mathbb N$. The finite-chain
-  inequality gives
-  \begin{align}
-    \label{eq:efficient_mps_renyi_fixed_accuracy}
-    S_\alpha(\rho_{N,B_N})
-      &\le2|\log C|+2r\log(N+1)
-        -\frac{\alpha}{\alpha-1}\log(1/2).
-  \end{align}
-  For $D_N>0$, take logarithms of the bond bound; for $D_N=0$, the same
-  estimate follows from $\log0=0$ and nonnegativity of the right side.
-  The constants are uniform in $N$.
-\end{proof}
-
-\begin{theorem}[Power-law Rényi obstruction]
-  \label{thm:mps_renyi_power_growth_obstruction}
-  \lean{TNLean.MPS.AreaLaw.not_isEfficientlyApproximableByMPS_of_renyi_power_growth}
-  \leanok
-  Let $\mathcal N\subseteq\mathbb N$ be infinite, and let
-  $(\psi_N)_{N\in\mathcal N}$ be unit vectors on chains of length $N$.
-  Fix $\alpha>1$. Suppose there are $c,\kappa,\eta>0$ and contiguous blocks
-  $B_N$ such that, for all sufficiently large $N\in\mathcal N$,
-  \begin{align}
-    \label{eq:mps_renyi_power_growth_hypotheses}
-    |B_N|&\ge\eta N,
-    & S_\alpha(\rho_{N,B_N})&\ge c|B_N|^\kappa.
-  \end{align}
-  Then the family cannot be efficiently approximated by MPS.
-  This is the Rényi entropy obstruction in
-  \cite{Schuch2008EntropyScaling}, source lines 309--315, including
-  arbitrary permitted chain lengths and finitely many exceptional lengths.
-\end{theorem}
-\begin{proof}\leanok
-  \uses{thm:efficient_mps_renyi_logarithmic_bound}
-  For $N\ge1$, the block-size bound implies
-  $|B_N|\ge(\eta/2)(N+1)$. Thus the entropy is at least
-  $c(\eta/2)^\kappa(N+1)^\kappa$ for all sufficiently large permitted
-  lengths. Every function $K+m\log x$ is eventually smaller than a positive
-  multiple of $x^\kappa$, since $\log x=o(x^\kappa)$ when $\kappa>0$.
-  An infinite set of natural lengths is unbounded, so the logarithmic bound
-  from efficient approximation gives a contradiction.
-\end{proof}
-
-\begin{theorem}[Regional entropy from a spectral tail]
-  \label{thm:chain_von_neumann_spectral_tail}
-  \lean{TNLean.MPS.AreaLaw.regionEntropy_le_log_rank_add_spectral_tail}
-  \leanok
-  Let $\psi$ be a unit vector on a chain of local dimension $q$, and let
-  $R$ be any region. Suppose that the mass outside the first $D$ ordered
-  eigenvalues of $\rho_R$ is at most $\varepsilon$. Then
-  \begin{align}
-    \label{eq:chain_von_neumann_spectral_tail}
-    S_\psi(R)&\le\log D+\varepsilon |R|\log q+\log2.
-  \end{align}
-  The budget $D$ may be zero or exceed the regional dimension, with
-  $\log0=0$ and empty tails equal to zero.
-\end{theorem}
-\begin{proof}\leanok
-  The regional configuration space has dimension $q^{|R|}$. Apply the
-  finite spectral-concentration entropy estimate of
-  \cite[``Spectral concentration and von Neumann entropy]{QICLean2026Blueprint}
-  and use
-  $\log(q^{|R|})=|R|\log q$.
-\end{proof}
-
-This is an auxiliary implication for the entropy obstruction in
-\cite{Schuch2008EntropyScaling}, lines 278--305 of the source.
-It assumes the spectral-tail estimate rather than deducing it from an
-approximation error. A tail bound $\varepsilon\le\delta/2$ yields the
-half-error coefficient. The rank budget is separate from an MPS bond
-bound: an interior block has two boundaries and generally uses the square
-of that bound.
-
-\begin{theorem}[Single-boundary entropy bound at small approximation error]
-  \label{thm:chain_von_neumann_prefix_error}
-  \lean{TNLean.MPS.AreaLaw.IsOpenMPS.regionEntropy_leftBlock_le_log_add_half_error}
-  \leanok
-  Let $\psi$ be a unit vector on a chain of local dimension $q$ and let
-  $\phi$ be an open-boundary MPS of bond dimension at most $D$. Suppose
-  that the full trace error between their rank-one matrices is at most
-  $\delta<1$. For every prefix $R$,
-  \begin{align}
-    \label{eq:chain_von_neumann_prefix_error}
-    S_\psi(R)&\le\log D+\frac{\delta}{2}|R|\log q+\log2.
-  \end{align}
-  The approximant $\phi$ need not be normalized. Empty and full prefixes,
-  and chains of length zero or one, are included, with $\log0=0$.
-\end{theorem}
-\begin{proof}\leanok
-  \uses{thm:chain_reduced_state_rank_error,thm:chain_von_neumann_spectral_tail}
-  The approximant's prefix reduction has rank at most $\max(1,D)$.
-  Apply the half-error marginal-tail theorem of
-  \cite[``Discarded marginal spectrum at small pure-state error'']{QICLean2026Blueprint}
-  and the regional spectral-concentration estimate. Finally,
-  $\log\max(1,D)=\log D$ for an integer $D\ge0$ under the stated convention.
-\end{proof}
-
-\begin{theorem}[Two-boundary entropy bound at small approximation error]
-  \label{thm:chain_von_neumann_block_error}
-  \lean{TNLean.MPS.AreaLaw.IsOpenMPS.regionEntropy_sdiff_leftBlock_le_two_log_add_half_error}
-  \leanok
-  Under the same hypotheses, every contiguous block $R$ satisfies
-  \begin{align}
-    \label{eq:chain_von_neumann_block_error}
-    S_\psi(R)&\le2\log D+\frac{\delta}{2}|R|\log q+\log2.
-  \end{align}
-  Empty blocks, boundary blocks, whole chains, and chains of length zero
-  or one are included.
-\end{theorem}
-\begin{proof}\leanok
-  \uses{thm:chain_von_neumann_spectral_tail,thm:chain_block_renyi_approximation_lower_bound}
-  The approximant's block reduction has rank at most $\max(1,D)^2$.
-  The same half-error spectral-tail estimate applies. Its logarithmic
-  rank contribution is $\log(\max(1,D)^2)=2\log D$.
-\end{proof}
-
-These are the corrected small-error forms of the entropy estimate in
-\cite{Schuch2008EntropyScaling}, lines 269--305 of the source.
-The range correction is documented in
-\cite{gap:swvc08_von_neumann_error_range}; the two-boundary rank correction
-is documented in \cite{gap:swvc08_interior_block_bond_rank}.
-The unrestricted printed entropy statement is not asserted here.
-
-\begin{theorem}[Arbitrarily small linear entropy bounds]
-  \label{thm:efficient_mps_von_neumann_bound}
-  \lean{TNLean.MPS.AreaLaw.IsEfficientlyApproximableByMPS.exists_vonNeumann_bound}
-  \leanok
-  Let $(\psi_N)$ be a family of unit chain vectors of fixed local dimension,
-  indexed by any set of lengths, and let $R_N$ be chosen contiguous blocks.
-  If the family is efficiently approximable by MPS, then for every
-  $\varepsilon>0$ there are $K\in\mathbb R$ and $m\in\mathbb N$ such that
-  \begin{align}
-    \label{eq:efficient_mps_von_neumann_bound}
-    S_{\psi_N}(R_N)&\le K+m\log(N+1)+\varepsilon N
-  \end{align}
-  for every permitted length $N$.
-\end{theorem}
-\begin{proof}\leanok
-  \uses{thm:chain_von_neumann_block_error}
-  Choose the approximation accuracy
-  $\delta=\min(1/2,\varepsilon/(\log q+1))$.
-  Then $0<\delta<1$ and $(\delta/2)\log q\le\varepsilon$.
-  The polynomial bond bound gives
-  $\log D_N\le|\log C|+m_0\log(N+1)$, including $D_N=0$ under
-  $\log0=0$. Apply the block entropy bound and $|R_N|\le N$.
-\end{proof}
-
-\begin{theorem}[Linear von Neumann entropy obstructs efficient approximation]
-  \label{thm:mps_linear_von_neumann_obstruction}
-  \lean{TNLean.MPS.AreaLaw.not_isEfficientlyApproximableByMPS_of_linear_vonNeumann_growth}
-  \leanok
-  Let $(\psi_N)$ be a family of unit vectors indexed by an infinite set of
-  chain lengths. Suppose that there are constants $c,\eta>0$ and contiguous
-  blocks $R_N$ such that, for all sufficiently large permitted lengths,
-  \begin{align}
-    \label{eq:mps_linear_von_neumann_obstruction_hypotheses}
-    |R_N|&\ge\eta N,
-      &S_{\psi_N}(R_N)&\ge c|R_N|.
-  \end{align}
-  Then the family is not efficiently approximable by MPS.
-  No consistency between different lengths is assumed.
-\end{theorem}
-\begin{proof}\leanok
-  \uses{thm:efficient_mps_von_neumann_bound}
-  Efficient approximation, with $\varepsilon=c\eta/2$, would give
-  $c\eta N\le K+m\log(N+1)+(c\eta/2)N$.
-  Since $\log x=o(x)$, this is impossible for sufficiently large $N$.
-  An infinite set of natural lengths is unbounded.
-\end{proof}
-
-This proves the qualitative obstruction discussed in
-\cite{Schuch2008EntropyScaling}, lines 278--305 of the source, using the
-corrected finite estimates. The range and boundary corrections described in
-\cite{gap:swvc08_von_neumann_error_range,gap:swvc08_interior_block_bond_rank}
-do not change the qualitative conclusion.
+\input{chapter/ch35_entropy_scaling_qutrit_copies}

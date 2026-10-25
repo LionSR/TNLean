@@ -106,19 +106,6 @@ theorem list_prod {K : ℕ} (l : List (Matrix (Fin n → Fin d) (Fin n → Fin d
     rw [List.prod_cons, List.length_cons, Nat.succ_mul, Nat.add_comm]
     exact (hl X (by simp)).mul (ih fun Y h => hl Y (by simp [h]))
 
-theorem finset_prod {ι : Type*} (s : Finset ι) {K : ℕ}
-    (f : ι → Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) (hf : ∀ i ∈ s, IsPairProduct d n K (f i))
-    (hcomm : (s : Set ι).Pairwise (Function.onFun Commute f)) :
-    IsPairProduct d n (s.card * K) (s.noncommProd f hcomm) := by
-  classical
-  induction s using Finset.induction_on with
-  | empty => simpa using one 0
-  | insert a s ha ih =>
-    rw [Finset.noncommProd_insert_of_notMem _ _ _ _ ha, Finset.card_insert_of_notMem ha,
-      Nat.succ_mul, Nat.add_comm]
-    exact (hf a (by simp)).mul (ih (fun i hi => hf i (by simp [hi]))
-      (hcomm.mono (by simp)))
-
 end IsPairProduct
 
 theorem embedOp_list_prod {e : Fin m → Fin n} (he : Function.Injective e)

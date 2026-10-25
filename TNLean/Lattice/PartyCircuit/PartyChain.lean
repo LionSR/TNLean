@@ -11,17 +11,17 @@ import TNLean.Lattice.PartyCircuit.PartyWord
 This file places the monomials of `TNLean.Lattice.PartyCircuit` on parties.  An allowed monomial
 (`PartyChain`) consists of source-only words separated by pair effects: an effect contracts a
 register `ℂ^α` of a party `p` and a register `ℂ^β` of another party `q` with a normalized bra.
-Its operator is the `EffectChain` of `TNLean.PEPS.Approximation.PairEffectElimination`
+Its operator is the `EffectChain` of `TNLean.Lattice.PartyCircuit.PairEffectElimination`
 (`PartyChain.toEffectChain`), so the error, count and coefficient bounds proved there apply.
 Registers, source-only words and stacks of pair registers are defined in
-`TNLean.PEPS.Approximation.PartyWord`.
+`TNLean.Lattice.PartyCircuit.PartyWord`.
 
 In the replacement of Lemma 5.1, the stack of an effect occurrence on `(p, q)` consists of `m`
 pair registers `ℂ^α ⊗ ℂ^β`, the `ℂ^α` half owned by `p` and the `ℂ^β` half owned by `q`.  The
 insertions are source-only words (`stackIso_insWord`), so each term of a replaced monomial is
 the operator of a source-only word (`PartyChain.replaceTerm_toEffectChain`), and the ideal
 content of the stacks is prepared by pair sources (`PartyChain.stackAppIso_prepStack`).  The
-expansion of a whole gate is assembled in `TNLean.PEPS.Approximation.PartyLayout`.
+expansion of a whole gate is assembled in `TNLean.Lattice.PartyCircuit.PartyLayout`.
 
 ## Main definitions
 
@@ -175,10 +175,6 @@ def stackAppIso : {ℓX ℓY : Layout P} → (M : PartyChain ℓX ℓY) → (ℓ
   | _, _, effect (p := p) (q := q) _ α β _ _ _ rest, ℓ =>
       ((stackIso p q α β m (stackApp m rest ℓ)).trans ((stackAppIso rest ℓ).lTensor _)).trans
         (leftCommIso _ _ _)
-
-theorem stackAppIso_final {ℓX ℓY : Layout P} (w : Word ℓX ℓY) (ℓ : Layout P) (x : Mem ℓ) :
-    (final w).stackAppIso m ℓ x = x ⊗ₜ (1 : ℂ) :=
-  rfl
 
 theorem stackAppIso_effect {ℓX ℓY : Layout P} {p q : P} (hpq : p ≠ q) (α β : Type)
     [Fintype α] [Fintype β] (ℓS : Layout P) (w : Word ℓX (⟨p, euc α⟩ :: ⟨q, euc β⟩ :: ℓS))

@@ -106,13 +106,6 @@ theorem twoLevel_mem_unitary [Fintype ι] (hab : a ≠ b) {g : Matrix (Fin 2) (F
   rw [twoLevel_conjTranspose, twoLevel_mul hab, twoLevel_mul hab, hg.1, hg.2, twoLevel_one]
   exact ⟨rfl, rfl⟩
 
-/-- Relabelling the basis by a permutation `σ` moves the two-level block to `σ⁻¹ a, σ⁻¹ b`. -/
-theorem twoLevel_submatrix (σ : Equiv.Perm ι) (g : Matrix (Fin 2) (Fin 2) ℂ) :
-    (twoLevel a b g).submatrix σ σ = twoLevel (σ.symm a) (σ.symm b) g := by
-  ext x y
-  simp only [submatrix_apply, twoLevel, of_apply, twoLevelIdx, Equiv.eq_symm_apply,
-    EmbeddingLike.apply_eq_iff_eq]
-
 /-- The two-level operator applied to a vector. -/
 theorem twoLevel_mulVec_apply [Fintype ι] (hab : a ≠ b) (g : Matrix (Fin 2) (Fin 2) ℂ) (v : ι → ℂ)
     (x : ι) : (twoLevel a b g *ᵥ v) x =

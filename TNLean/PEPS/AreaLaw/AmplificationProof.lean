@@ -73,13 +73,6 @@ private theorem sqrt_inv_pow_eq_rpow (n K : ℕ) :
     ← Real.rpow_mul (Nat.cast_nonneg n)]
   ring_nf
 
-/-- The square root of `n^(-2K)` is `(n^K)⁻¹`. -/
-private theorem sqrt_rpow_neg_two_mul' (n K : ℕ) :
-    √((n : ℝ) ^ (-(2 * K : ℝ))) = ((n : ℝ) ^ K)⁻¹ := by
-  rw [Real.rpow_neg (Nat.cast_nonneg n),
-    show (2 * K : ℝ) = ((2 * K : ℕ) : ℝ) by push_cast; ring, Real.rpow_natCast, pow_mul',
-    ← inv_pow, Real.sqrt_sq (by positivity)]
-
 /-- A unit blank vector on a nonempty finite set. -/
 private theorem norm_toLp_single_eq_one {α : Type*} [Fintype α] [DecidableEq α] (a : α) :
     ‖WithLp.toLp 2 (fun x : α => if x = a then (1 : ℂ) else 0)‖ = 1 := by
@@ -381,7 +374,7 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
   have hRn : ‖Rp‖ ≤ M₀ := hRn
   have hBn : ‖Bp‖ ≤ M₀ := hBn
   have hcol : Rp *ᵥ φ = Bp *ᵥ fun c => Ω c.1 * ξb c.2 := hcol
-  rw [sqrt_rpow_neg_two_mul'] at hadj
+  rw [sqrt_rpow_neg_two_mul] at hadj
   -- The supports of `B₀` and `R₀`.
   obtain ⟨PB, AB, hPB, hBsum⟩ :=
     restoringTransport_restoringColumnGlobal_eq_sum Ω X Y hXY E p blank blank Q Tq

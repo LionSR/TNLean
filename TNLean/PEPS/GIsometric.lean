@@ -451,8 +451,7 @@ theorem IsGIsometric.exists_unitary_comp_eq [Finite G] (hT : IsGIsometric ρ T)
     ∃ U ∈ Matrix.unitaryGroup κ ℂ, Matrix.toLin' U ∘ₗ T = T ∘ₗ Matrix.toLin' V := by
   have := Fintype.ofFinite G
   obtain ⟨-, L, hL⟩ := (isGInjective_iff_exists_leftInverse ρ T).1 hT.toIsGInjective
-  obtain ⟨c, hc, hcT⟩ := hT.exists_inner_eq
-  have hc' : (c : ℂ) ≠ 0 := Complex.ofReal_ne_zero.2 hc.ne'
+  obtain ⟨c, -, hcT⟩ := hT.exists_inner_eq
   -- `V` preserves the invariant subspace.
   have hVinv : ∀ x ∈ ρ.invariants, V *ᵥ x ∈ ρ.invariants := fun x hx g => by
     have := LinearMap.congr_fun (hVρ g) x

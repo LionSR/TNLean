@@ -114,16 +114,6 @@ theorem rectangularKrausMap_rectKronecker_rectKronecker {r : ι → ℕ}
   simp only [rectKronecker_conjTranspose, rectKronecker_mul]
   exact sum_rectKronecker fun i j ↦ K i j * m i * (K i j)ᴴ
 
-/-- The chain form of `rectangularKrausMap_rectKronecker_rectKronecker`, for the sites
-`Fin N`. -/
-theorem rectangularKrausMap_rectKronecker_finKronecker {N : ℕ} {r : Fin N → ℕ}
-    (K : (i : Fin N) → Fin (r i) → Matrix (Fin e) (Fin d) ℂ)
-    (m : Fin N → Matrix (Fin d) (Fin d) ℂ) :
-    rectangularKrausMap (fun J : (i : Fin N) → Fin (r i) ↦ rectKronecker fun i ↦ K i (J i))
-        (finKronecker m) =
-      finKronecker fun i ↦ rectangularKrausMap (K i) (m i) :=
-  rectangularKrausMap_rectKronecker_rectKronecker K m
-
 /-! ### Onsite channels -/
 
 /-- An *onsite channel* from `d`-level to `e`-level sites on a finite set of sites `ι`: at each
@@ -550,8 +540,8 @@ protocol … (where ancillas are traced out at the end), defines a quantum chann
 theorem isLocalChannelConversion_circuit {d' T : ℕ} (In : OnsiteChannel d e (Fin N))
     (Ls : List (ChannelLayer e N)) (hLs : Ls.length ≤ T) (Out : OnsiteChannel e d' (Fin N))
     (ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :
-    IsLocalChannelConversion T ρ (Out.map (channelCircuitMap Ls (In.map ρ))) := by
-  exact ⟨0 + Ls.length, by omega, _,
+    IsLocalChannelConversion T ρ (Out.map (channelCircuitMap Ls (In.map ρ))) :=
+  ⟨0 + Ls.length, by omega, _,
     ((IsLocalChannelProtocol.onsite In).channelCircuitMap_comp Ls).onsite_comp Out, rfl⟩
 
 /-- A density matrix prepared from a product density by a local channel circuit of depth `T`

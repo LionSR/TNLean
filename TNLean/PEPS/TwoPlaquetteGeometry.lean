@@ -98,8 +98,8 @@ theorem twoPlaquetteCycleBond_injective : Function.Injective twoPlaquetteCycleBo
 SCP10, lines 2271–2305. -/
 theorem twoPlaquetteCycleBond_surjective_non_tree (e : Edge twoPlaquetteGraph)
     (he : ¬ twoPlaquetteTree.Adj e.1.1 e.1.2) :
-    ∃ i, twoPlaquetteCycleBond i = e := by
-  exact (by decide : ∀ e : Edge twoPlaquetteGraph,
+    ∃ i, twoPlaquetteCycleBond i = e :=
+  (by decide : ∀ e : Edge twoPlaquetteGraph,
     ¬ twoPlaquetteTree.Adj e.1.1 e.1.2 → ∃ i, twoPlaquetteCycleBond i = e) e he
 
 private def twoPlaquetteX : Fin 6 → ℕ := ![0, 1, 2, 2, 1, 0]

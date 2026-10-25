@@ -1,0 +1,57 @@
+\documentclass{article}
+\usepackage[margin=28mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{The Number of Final States in Hastings' Hierarchical Construction}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{clarification}{resolved}
+
+\section{The asserted count}
+Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
+\href{https://arxiv.org/abs/cond-mat/0508554v3}{arXiv:cond-mat/0508554v3},
+source \path{proj3new.tex}, lines 722--730, ends the hierarchical construction
+of Section~II with the assertion that, once every final state $\alpha^h$ lies
+within energy $\Delta E/2$ of the ground state, ``it can then be shown that
+the number of distinct $\alpha^h$ is at most $2n$, where $n$ is the number of
+ground states''. No argument is given. This note supplies one and records the
+form in which the hypothesis is used.
+
+\section{The argument}
+Let $P$ be the orthogonal projection onto the ground states, so that
+$\operatorname{tr}P=n$, and suppose that the Hamiltonian $H$ has gap $\Delta E$
+above the ground energy $E_0$ in the sense
+\begin{align}
+ H-E_0\ge\Delta E\,(1-P).
+ \label{eq:hastings05_final_state_count_gap}
+\end{align}
+Let $\phi_1,\dots,\phi_K$ be orthonormal with
+$\langle\phi_k,H\phi_k\rangle\le E_0+\theta\Delta E$ for some $\theta<1$. By
+(\ref{eq:hastings05_final_state_count_gap}),
+$\Delta E\,(1-\langle\phi_k,P\phi_k\rangle)\le\theta\Delta E$, so
+$\langle\phi_k,P\phi_k\rangle\ge1-\theta$. Since $P$ is an orthogonal
+projection, $\langle\phi_k,P\phi_k\rangle=\|P\phi_k\|^2$, and Bessel's
+inequality in the standard basis $e_j$ gives
+\begin{align}
+ \sum_{k=1}^K\|P\phi_k\|^2
+ =\sum_j\sum_{k=1}^K|\langle\phi_k,Pe_j\rangle|^2
+ \le\sum_j\|Pe_j\|^2=\operatorname{tr}P=n.
+ \label{eq:hastings05_final_state_count_bessel}
+\end{align}
+Hence $(1-\theta)K\le n$. For $\theta=1/2$ this is the asserted $K\le2n$.
+
+\section{Scope}
+The argument needs orthonormal states and their energy under $H$. In the source
+the $\alpha^h$ are eigenvectors of the last compressed pair operator, so they
+are orthonormal. Their energy under $H$ is what the final energy estimate,
+eq.~(hchy) at lines 709--720, provides after the comparison of
+$\sum_iM_i$ with $H$; the count is therefore stated with the energy under $H$
+as a hypothesis.
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}

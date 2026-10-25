@@ -297,8 +297,8 @@ lines 1276--1282 (specifically line 1279). GNVW cites the fact as known; it is n
 homogeneous QCA appendix of arXiv:1703.09188, lines 2292--2298. -/
 theorem existsUnique_eq_smul_one_of_commute {d : ℕ} [NeZero d]
     (z : QuasiLocalAlgebra d) (hz : ∀ a, Commute z a) :
-    ∃! c : ℂ, z = c • 1 := by
-  exact existsUnique_eq_smul_one_of_commute_quasiLocalObservable z fun Γ A ↦
+    ∃! c : ℂ, z = c • 1 :=
+  existsUnique_eq_smul_one_of_commute_quasiLocalObservable z fun Γ A ↦
     hz (quasiLocalObservable d Γ A)
 
 /-- The homogeneous quasi-local spin-chain algebra is central over ℂ in Mathlib's sense.

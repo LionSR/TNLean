@@ -45,13 +45,6 @@ theorem siteProduct_one :
     simp only [hab, ↓reduceIte]
     exact Finset.prod_eq_zero (Finset.mem_univ x) (by simp [hx])
 
-/-- The sitewise product of a conjugate transpose is the conjugate transpose of the sitewise
-product. -/
-theorem siteProduct_conjTranspose (A : Matrix (Fin ℓ × Fin r) (Fin ℓ × Fin r) ℂ) :
-    siteProduct (N := N) Aᴴ = (siteProduct (N := N) A)ᴴ := by
-  ext a b
-  simp [siteProduct, Matrix.conjTranspose_apply, star_prod]
-
 /-- The unshifted layer of `G * u` is the sitewise product of `G` times the unshifted layer of
 `u`. -/
 theorem twoSiteUnshiftedLayer_mul_left (G : Matrix (Fin ℓ × Fin r) (Fin ℓ × Fin r) ℂ)

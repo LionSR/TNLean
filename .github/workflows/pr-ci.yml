@@ -910,12 +910,23 @@ jobs:
             sleep 5
           done
           sudo dpkg --configure -a || true
+          # A crawling Azure mirror is the usual cause; fetch the retry from the
+          # main archive instead.
+          # Ubuntu runners list the mirror in apt-mirrors.txt and point the
+          # sources at it with mirror+file:, so rewrite both.
+          for f in /etc/apt/apt-mirrors.txt /etc/apt/sources.list \
+              /etc/apt/sources.list.d/*.list /etc/apt/sources.list.d/*.sources; do
+            if [ -f "$f" ]; then
+              sudo sed -i \
+                's#http://azure\.archive\.ubuntu\.com/ubuntu#http://archive.ubuntu.com/ubuntu#g' "$f"
+            fi
+          done
 
       - name: Install blueprint system dependencies (retry)
         if: (env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true') && steps.blueprint-system-deps-1.outcome == 'failure'
         # A slow mirror can need more than one attempt; the packages fetched by the
         # first attempt stay in the archive directory, so the retry resumes.
-        timeout-minutes: 20
+        timeout-minutes: 45
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:
           cache-suffix: web-v3
@@ -1161,7 +1172,7 @@ jobs:
     needs: changes
     if: "!cancelled() && github.event_name == 'pull_request' && needs.changes.result == 'success' && (needs.changes.outputs.blueprint_pdf == 'true' || needs.changes.outputs.workflow == 'true')"
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
     env:
       PRINT_AUX_FILES: |
         blueprint/print/*.aux
@@ -1202,12 +1213,23 @@ jobs:
             sleep 5
           done
           sudo dpkg --configure -a || true
+          # A crawling Azure mirror is the usual cause; fetch the retry from the
+          # main archive instead.
+          # Ubuntu runners list the mirror in apt-mirrors.txt and point the
+          # sources at it with mirror+file:, so rewrite both.
+          for f in /etc/apt/apt-mirrors.txt /etc/apt/sources.list \
+              /etc/apt/sources.list.d/*.list /etc/apt/sources.list.d/*.sources; do
+            if [ -f "$f" ]; then
+              sudo sed -i \
+                's#http://azure\.archive\.ubuntu\.com/ubuntu#http://archive.ubuntu.com/ubuntu#g' "$f"
+            fi
+          done
 
       - name: Install blueprint system dependencies (retry)
         if: steps.blueprint-system-deps-2.outcome == 'failure'
         # A slow mirror can need more than one attempt; the packages fetched by the
         # first attempt stay in the archive directory, so the retry resumes.
-        timeout-minutes: 20
+        timeout-minutes: 45
         uses: texra-ai/lean-env-action/blueprint-system-deps@v1
         with:
           cache-suffix: web-v3

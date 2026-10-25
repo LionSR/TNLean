@@ -75,8 +75,8 @@ def cycleRotate (hn : 3 ≤ n) :
 Source: arXiv:1804.04964, Applications section, lines 1815--1827 of
 `Papers/1804.04964/paper_normal.tex`. -/
 @[simp] theorem cycleRotate_apply (hn : 3 ≤ n) (v : Fin n) :
-    cycleRotate hn v = v + 1 := by
-  exact finRotate_apply v
+    cycleRotate hn v = v + 1 :=
+  finRotate_apply v
 
 /-- Rotating the cycle carries the bond from `v` to `v + 1` to the next bond,
 from `v + 1` to `v + 2`.

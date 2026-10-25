@@ -55,6 +55,21 @@ theorem parameter_bounds {e0 : ℝ} (h0 : 0 < e0) (h1 : e0 < 1) :
   norm_num [g0, ell, nu, kappa, Exponents.boxError, lt_min_iff]
   exact ⟨h1, by linarith, h1, by linarith, h1⟩
 
+/-- The improvement fraction lies below the fixed gap, `ℓ < g₀`.
+Source: `scanner:bootstrap-parameters`. -/
+theorem ell_lt_g0 {e0 : ℝ} (h0 : 0 < e0) (h1 : e0 < 1) : ell e0 < g0 e0 := by
+  obtain ⟨hg₀, -⟩ := parameter_bounds h0 h1
+  exact (div_lt_self (div_pos hg₀ (by norm_num : (0 : ℝ) < 1000))
+    (by norm_num : (1 : ℝ) < 100)).trans
+    (div_lt_self hg₀ (by norm_num : (1 : ℝ) < 1000))
+
+/-- The separation exponent lies below the window exponent, `κ < μ`.
+Source: `scanner:bootstrap-parameters`. -/
+theorem kappa_lt_mu {e0 : ℝ} (h0 : 0 < e0) (h1 : e0 < 1) : kappa e0 < mu e0 := by
+  obtain ⟨-, hg₀half, -⟩ := parameter_bounds h0 h1
+  linarith [ell_lt_g0 h0 h1, show kappa e0 ≤ ell e0 from min_le_left _ _,
+    show mu e0 = 1 - g0 e0 from rfl]
+
 /-- The two density-error exponents have a strict margin below `-0.24 g₀`, uniformly
 for every current entropy exponent `e ≤ e₀`.
 Source: proof of `prop:small-box`, `08-scanner.tex`, lines 737–744. -/

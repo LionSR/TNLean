@@ -246,6 +246,31 @@ theorem siteOp_diagonal (t : ι) (f : Fin d → ℂ) :
       simp [h2]
     · rw [ite_eq_right h1]
 
+/-- Entrywise, `u` at the site `t` has the entry `u (x t) (y t)` between configurations that
+agree off `t`, and `0` between the others. -/
+theorem siteOp_apply (t : ι) (u : Matrix (Fin d) (Fin d) ℂ) (x y : ι → Fin d) :
+    siteOp t u x y = if ∀ i, i ≠ t → x i = y i then u (x t) (y t) else 0 := by
+  have hag : AgreeOff ![t] x y ↔ ∀ i, i ≠ t → x i = y i :=
+    forall_congr' fun i => by simp [eq_comm]
+  simp only [siteOp, embedOp_apply, submatrix_apply, Function.comp_apply,
+    Equiv.funUnique_apply, Fin.default_eq_zero, Matrix.cons_val_zero, hag]
+
+theorem siteOp_add (t : ι) (u v : Matrix (Fin d) (Fin d) ℂ) :
+    siteOp t (u + v) = siteOp t u + siteOp t v := by
+  ext x y
+  simp only [siteOp_apply, Matrix.add_apply]
+  split_ifs <;> simp
+
+theorem siteOp_neg (t : ι) (u : Matrix (Fin d) (Fin d) ℂ) :
+    siteOp t (-u) = -siteOp t u := by
+  ext x y
+  simp only [siteOp_apply, Matrix.neg_apply]
+  split_ifs <;> simp
+
+theorem siteOp_sub (t : ι) (u v : Matrix (Fin d) (Fin d) ℂ) :
+    siteOp t (u - v) = siteOp t u - siteOp t v := by
+  rw [sub_eq_add_neg, siteOp_add, siteOp_neg, ← sub_eq_add_neg]
+
 /-- The controlled operator: `u` at the site `t` when the sites of `S` are in the configuration
 `c`, the identity otherwise.
 
@@ -314,13 +339,5 @@ theorem ctrlOp_insert_commutator {S : Finset ι} {s t : ι} (ht : t ∉ S)
     (commute_ctrlProj_siteOp hts c w) ?_ ?_).symm
   · rw [siteOp_mul, Unitary.mul_star_self_of_mem hv, siteOp_one]
   · rw [siteOp_mul, Unitary.mul_star_self_of_mem hw, siteOp_one]
-
-/-- A controlled diagonal operator is diagonal. -/
-theorem ctrlOp_diagonal (S : Finset ι) (c : ι → Fin d) (t : ι) (f : Fin d → ℂ) :
-    ctrlOp S c t (diagonal f) =
-      diagonal fun x : (ι → Fin d) => if ∀ i ∈ S, x i = c i then f (x t) else 1 := by
-  rw [ctrlOp, ctrlElem, siteOp_diagonal, ctrlProj, diagonal_mul_diagonal, ← diagonal_one,
-    diagonal_sub, diagonal_add]
-  congr 1; funext x; split_ifs <;> simp
 
 end QuantumCircuit

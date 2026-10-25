@@ -12,7 +12,7 @@ import TNLean.Lattice.PartyCircuit.WordOwnerMap
 
 An allowed monomial of Theorem 5.2 is a composition of local contractions, normalized pair
 sources and normalized pair effects. Read operation by operation, it is an original circuit in
-the sense of `TNLean.PEPS.Approximation.OriginalCircuit`: every local contraction is a private
+the sense of `TNLean.Lattice.PartyCircuit.OriginalCircuit`: every local contraction is a private
 map of its party, every pair source and every pair effect is a nonprivate gate whose two
 participants are the endpoint parties, and the exchanges of tensor factors are kept.
 
@@ -68,21 +68,6 @@ def pairOwner {p q : P} (hpq : p ≠ q) : Bool ↪ P where
     cases a <;> cases b <;> first | rfl | exact absurd h hpq | exact absurd h.symm hpq
 
 theorem card_bool_ne_one : Fintype.card Bool ≠ 1 := by decide
-
-/-- The participants of a two-party gate are its two endpoint parties. -/
-theorem univ_map_pairOwner [DecidableEq P] {p q : P} (hpq : p ≠ q) :
-    Finset.univ.map (pairOwner hpq) = {p, q} := by
-  ext x
-  simp only [Finset.mem_map, Finset.mem_univ, true_and, Finset.mem_insert,
-    Finset.mem_singleton]
-  constructor
-  · rintro ⟨b, rfl⟩
-    cases b
-    · exact Or.inl rfl
-    · exact Or.inr rfl
-  · rintro (rfl | rfl)
-    · exact ⟨false, rfl⟩
-    · exact ⟨true, rfl⟩
 
 theorem coe_univ_map_pairOwner_subset {p q : P} (hpq : p ≠ q) {S : Set P} (hp : p ∈ S)
     (hq : q ∈ S) : (↑(Finset.univ.map (pairOwner hpq)) : Set P) ⊆ S := by

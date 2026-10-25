@@ -17,7 +17,7 @@ Hastings' proof of the one-dimensional area law (arXiv:0705.2024v4) rests on eq.
 (lines 234–242): the mutual information of the two intervals of `l` sites beside a cut is at
 least `(1 − 2ε) l/ξ' − ln C₁ − C₂`, with `ε = C₁ e^{-l/ξ'}`. This file proves eq. `relent` for
 one pair of adjacent intervals on the chain, following lines 413–503 with route 1 of the note
-added (lines 911–925).
+added (lines 916–925).
 
 The inputs are Lemma 1's projector factorization `‖O_B O_L O_R − P₀‖ ≤ ε` in its
 corollary-(a) form, taken as the hypothesis `hfact` until Lemma 1 is formalized, and the
@@ -41,7 +41,7 @@ eq. `LU` on the chain, the monotonicity of the binary relative entropy, and
 
 * M. B. Hastings, *An area law for one-dimensional quantum systems*, J. Stat. Mech. (2007)
   P08024, arXiv:0705.2024v4, `References/0705.2024/law16.tex`, lines 234–242, 413–503, and
-  911–925.
+  916–925.
 -/
 
 open Matrix
@@ -65,7 +65,7 @@ in `Ω` below by `1 − 2ε'` and its expectation in `σ` above by `36 ε'`, and
 on the chain with the monotonicity of the binary relative entropy and `le_of_lindbladUhlmann`.
 
 Hastings, arXiv:0705.2024v4, `law16.tex` lines 234–242 and 413–503, with route 1 of the note
-added, lines 911–925. -/
+added, lines 916–925. -/
 theorem relent_of_projectorFactorization
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) {c l : ℕ}
     {ξ' C₁ : ℝ} (hξ : 0 < ξ') (hC₁ : 1 ≤ C₁)
@@ -109,11 +109,8 @@ theorem relent_of_projectorFactorization
   have hεeq : 2 * C₁ * Real.exp (-(l / ξ')) = 2 * ε := by rw [hεdef]; ring
   rw [hεeq] at hsmall ⊢
   have hε0 : 0 < ε := mul_pos hC₀ (Real.exp_pos _)
-  obtain ⟨σ₀⟩ : Nonempty (Fin L → Fin q) := by
-    by_contra h
-    rw [not_nonempty_iff] at h
-    rw [Subsingleton.elim Ω 0, norm_zero] at hΩ
-    exact zero_ne_one hΩ
+  obtain ⟨σ₀, _⟩ := Function.ne_iff.mp
+    ((WithLp.ofLp_eq_zero (x := Ω)).not.mpr (norm_ne_zero_iff.mp (by simp [hΩ])))
   -- the projection `Z = O_L O_R` and the effect `E = O_Bᴴ O_B`
   have hZ : IsStarProjection (OL * OR) :=
     ⟨hOL.isIdempotentElem.mul_of_commute hcomm hOR.isIdempotentElem, by
@@ -159,7 +156,7 @@ theorem relent_of_projectorFactorization
     have h := Matrix.norm_mul_conjTranspose_mul_self_mul_sub_le hP₀ hZ hprodZ
     rwa [Matrix.mul_assoc (OL * OR) OBᴴ OB] at h
   have hx := re_trace_mul_le_of_projection_sandwich hσ hσ1 hE hEn hZ hZEZ
-  have hy := one_sub_two_mul_sq_le_re_trace_cutProductState_mul hΩ hOL hOR hcomm
+  have hy := one_sub_two_mul_sq_le_re_trace_cutProductState_mul hΩ hOL hOR
     (hSL.mono hSLc)
     (hSR.mono fun v hv ↦ Finset.mem_compl.mpr (Finset.disjoint_left.mp hSRc hv)) hprod
   have hx1 : (cutProductState L q c Ω * (OBᴴ * OB)).trace.re ≤ 1 := by

@@ -87,9 +87,6 @@ theorem isWindowGate_of_le {Z : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ} 
 
 namespace IsWindowProduct
 
-theorem one (K : ℕ) : IsWindowProduct d n m K 1 :=
-  ⟨[], by simp, by simp, by simp⟩
-
 theorem mono {K K' : ℕ} (hK : K ≤ K') {X : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ}
     (hX : IsWindowProduct d n m K X) : IsWindowProduct d n m K' X := by
   obtain ⟨l, hl, hg, rfl⟩ := hX

@@ -1,71 +1,74 @@
 \documentclass{article}
+\usepackage[a4paper,margin=25mm]{geometry}
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
-\input{command}
+\input{./command}
 \setlength{\emergencystretch}{2em}
-\title{The Error-Term Sign in the R\'enyi Approximation Bound of SWVC08}
+\title{A Sign in the R\'enyi Bond-Dimension Bound}
 \author{}
 \date{October 23, 2026}
 \begin{document}
 \maketitle
-\gapnote{local-correction}{resolved}
+\gapnote{false-source}{resolved}
 
-\section{The source statement}
+\section{The printed inequality}
 
-The simulability argument of~\cite{Schuch2008EntropyScaling} bounds the
-$\alpha$-R\'enyi entropy of a block of a state $\psi$ that is approximated, in
-the trace norm of the rank-one matrices, by a matrix product state $\phi$ of
-bond dimension $D$. With $\varepsilon=\lVert\ketbra{\psi}{\psi}-\ketbra{\phi}{\phi}\rVert_1$,
-order $\alpha>1$, and $\rho_k$ the reduced matrix of $\psi$ on a prefix of $k$
-sites, the printed bound reads
+Let $\rho$ be the reduced density matrix of a pure chain state across a single bond cut,
+let $\alpha>1$, and let $\delta\in[0,1)$ bound its approximation error by a
+normalized open-boundary matrix product state of bond dimension $D\ge1$,
+measured in the
+trace norm of the difference of the two pure-state density matrices.
+All logarithms in this note have base two, and
+$S_\alpha(\rho)=(1-\alpha)^{-1}\log\tr(\rho^\alpha)$.
+Schuch, Wolf, Verstraete and Cirac~\cite{Schuch2008EntropyScaling}
+print the lower bound
 \begin{align}
-    S_\alpha(\rho_k)
-      &\le\log D+\frac{\alpha}{\alpha-1}\log(1-\varepsilon).
-    \label{eq:swvc08_renyi_source}
+    \log D &\ge S_\alpha(\rho)
+      +\frac{\alpha}{\alpha-1}|\log(1-\delta)|.
+    \label{eq:swvc08_renyi_printed}
 \end{align}
-The approximant's prefix reduction has rank at most
-$D$.\footnote{\path{paper_v2.tex}, lines~333--345, and Eq.~(eps-lower),
-    lines~269--270.}
+The sign before the absolute value is incorrect.\footnote{arXiv:0705.0292v2,
+    source file \path{paper_v2.tex}, lines 333--345; the final displayed
+    inequality in the discussion of orders $\alpha>1$ is unnumbered.}
 
-\section{The point at issue}
+\section{The correction}
 
-For $\alpha>1$ the prefactor $\alpha/(\alpha-1)$ is positive, and for
-$0\le\varepsilon<1$ the logarithm $\log(1-\varepsilon)$ is nonpositive.
-Read literally, (\ref{eq:swvc08_renyi_source}) subtracts a nonnegative
-quantity from $\log D$, so it asserts an entropy bound strictly below the
-exact-rank value $\log D$. This is the wrong direction: a nonzero
-approximation error can only weaken the bound, never sharpen it. The error
-logarithm must sit on the entropy side of the inequality, equivalently with
-the opposite sign on the right.
-
-\section{The corrected statement}
-
-The finite-dimensional R\'enyi approximation inequality keeps the error
-logarithm on the left:
+Write $p_1\ge p_2\ge\cdots\ge0$ for the eigenvalues of $\rho$, padded by
+zeros, and put $\varepsilon=\sum_{i>D}p_i$. The source~\cite{Schuch2008EntropyScaling} proves
+$\varepsilon\le\delta$ and
+$S_\alpha(\rho)\le\log D-\frac{\alpha}{\alpha-1}\log(1-\varepsilon)$
+before stating (\ref{eq:swvc08_renyi_printed}). Independently, convexity gives
+$\sum_i p_i^\alpha\ge D^{1-\alpha}(1-\varepsilon)^\alpha$, which yields
+the same entropy inequality because $1-\alpha<0$. Rearranging it and using
+$\varepsilon\le\delta<1$ gives
 \begin{align}
-    S_\alpha(\rho_k)+\frac{\alpha}{\alpha-1}\log(1-\varepsilon)
-      &\le\log D.
+    \log D
+      &\ge S_\alpha(\rho)+\frac{\alpha}{\alpha-1}\log(1-\varepsilon)
+        \notag\\
+      &\ge S_\alpha(\rho)+\frac{\alpha}{\alpha-1}\log(1-\delta)
+        \notag\\
+      &= S_\alpha(\rho)-\frac{\alpha}{\alpha-1}|\log(1-\delta)|.
     \label{eq:swvc08_renyi_corrected}
 \end{align}
-Since $\log(1-\varepsilon)\le0$, (\ref{eq:swvc08_renyi_corrected}) reads
-$S_\alpha(\rho_k)\le\log D-\frac{\alpha}{\alpha-1}\log(1-\varepsilon)$, an
-upward correction that grows as $\varepsilon\to1$. Only the target vector is
-normalized; the approximant $\phi$ need not be. Partial trace contracts the
-full trace norm, so the inequality follows from the two reduced matrices and
-the rank bound.\footnote{\leanid{TNLean.MPS.AreaLaw.IsOpenMPS.renyiEntropy_leftBlock_add_log_error_le_log}
-    in \doclink{TNLean/MPS/AreaLaw/EntropyScaling/RenyiApproximationLowerBound}.}
-The interior-block form, with $2\log D$ in place of $\log D$, is recorded in
-the companion note \path{swvc08_interior_block_bond_rank.tex}.
+
+For a counterexample to (\ref{eq:swvc08_renyi_printed}), take the two-qubit
+state $(|00\rangle+|11\rangle)/\sqrt2$. It has an exact matrix product state
+representation of bond dimension $D=2$, and $S_\alpha(\rho)=1$ for every
+$\alpha>1$. Its error is zero, hence at most any $0<\delta<1$.
+The printed inequality would require
+$1\ge1+\frac{\alpha}{\alpha-1}|\log(1-\delta)|>1$.
 
 \section{Conclusion}
 
-The verdict is a resolved local correction: the printed
-(\ref{eq:swvc08_renyi_source}) carries the error logarithm with the wrong
-sign, and the formalized (\ref{eq:swvc08_renyi_corrected}) places it so that
-the bound weakens with the approximation error.
+The printed inequality is false on nondegenerate data. Replacing its plus
+sign by a minus sign gives (\ref{eq:swvc08_renyi_corrected}). For fixed
+$\alpha>1$ and $\delta<1$, the subtracted term is independent of chain
+length, so super-logarithmic entropy growth still rules out polynomial bond
+dimension. This note resolves the sign discrepancy, not the formalization
+of that approximation obstruction, which remains tracked in issue
+\href{https://github.com/LionSR/TNLean/issues/9857}{\#9857}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
-
 \end{document}

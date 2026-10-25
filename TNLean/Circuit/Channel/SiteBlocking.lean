@@ -116,12 +116,6 @@ theorem blockSites_apply (A : Matrix (Fin (M * k) → Fin d) (Fin (M * k) → Fi
       A ((groupedConfigurations M k d).symm a) ((groupedConfigurations M k d).symm b) :=
   rfl
 
-theorem blockSites_symm_apply (B : Matrix (Fin M → Fin (d ^ k)) (Fin M → Fin (d ^ k)) ℂ)
-    (x y : Fin (M * k) → Fin d) :
-    (blockSites M k d).symm B x y =
-      B (groupedConfigurations M k d x) (groupedConfigurations M k d y) :=
-  rfl
-
 @[simp] theorem groupedConfigurations_symm_apply_finProdFinEquiv (a : Fin M → Fin (d ^ k))
     (j : Fin M) (t : Fin k) :
     (groupedConfigurations M k d).symm a (finProdFinEquiv (j, t)) =

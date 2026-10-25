@@ -26,12 +26,14 @@ open Matrix
 
 namespace TNLean.MPS.AreaLaw
 
+/-- Join the bond indices strictly to the left and right of a cut with its fixed bond index. -/
 private def joinBondPath {L : ℕ} (B : Fin (L + 1) → Type*) (k : Fin (L + 1))
     (z : B k) (l : (j : {j : Fin (L + 1) // j < k}) → B j)
     (r : (j : {j : Fin (L + 1) // k < j}) → B j) (j : Fin (L + 1)) : B j :=
   if h : j < k then l ⟨j, h⟩ else
     if h' : j = k then h'.symm ▸ z else r ⟨j, lt_of_le_of_ne (le_of_not_gt h) (Ne.symm h')⟩
 
+/-- A bond path is determined by its index at the cut and its restrictions to either side. -/
 private def bondPathEquiv {L : ℕ} (B : Fin (L + 1) → Type*) (k : Fin (L + 1)) :
     ((j : Fin (L + 1)) → B j) ≃
       B k × ((j : {j : Fin (L + 1) // j < k}) → B j) ×
@@ -48,16 +50,19 @@ private def bondPathEquiv {L : ℕ} (B : Fin (L + 1) → Type*) (k : Fin (L + 1)
     rintro ⟨z, l, r⟩
     simp +contextual [joinBondPath, funext_iff, lt_asymm, ne_of_gt]
 
+/-- Extend the left bond path to the cut by assigning the prescribed cut index. -/
 private def leftBondPath {L : ℕ} (B : Fin (L + 1) → Type*) (k : Fin (L + 1))
     (z : B k) (l : (j : {j : Fin (L + 1) // j < k}) → B j)
     (j : Fin (L + 1)) (hj : j ≤ k) : B j :=
   if h : j < k then l ⟨j, h⟩ else (le_antisymm hj (le_of_not_gt h)).symm ▸ z
 
+/-- Extend the right bond path to the cut by assigning the prescribed cut index. -/
 private def rightBondPath {L : ℕ} (B : Fin (L + 1) → Type*) (k : Fin (L + 1))
     (z : B k) (r : (j : {j : Fin (L + 1) // k < j}) → B j)
     (j : Fin (L + 1)) (hj : k ≤ j) : B j :=
   if h : k < j then r ⟨j, h⟩ else (le_antisymm (le_of_not_gt h) hj).symm ▸ z
 
+/-- On or to the left of the cut, the joined path agrees with the extended left path. -/
 private theorem joinBondPath_of_le {L : ℕ} (B : Fin (L + 1) → Type*)
     (k : Fin (L + 1)) (z : B k)
     (l : (j : {j : Fin (L + 1) // j < k}) → B j)
@@ -70,6 +75,7 @@ private theorem joinBondPath_of_le {L : ℕ} (B : Fin (L + 1) → Type*)
     subst j
     simp [joinBondPath, leftBondPath]
 
+/-- On or to the right of the cut, the joined path agrees with the extended right path. -/
 private theorem joinBondPath_of_ge {L : ℕ} (B : Fin (L + 1) → Type*)
     (k : Fin (L + 1)) (z : B k)
     (l : (j : {j : Fin (L + 1) // j < k}) → B j)
@@ -81,6 +87,7 @@ private theorem joinBondPath_of_ge {L : ℕ} (B : Fin (L + 1) → Type*)
   · obtain rfl := le_antisymm (le_of_not_gt h) hj
     simp [joinBondPath, rightBondPath]
 
+/-- Contract the tensors strictly to the left of the cut, keeping its bond index fixed. -/
 private noncomputable def leftContraction {L q D : ℕ} (A : OBCChainTensor q D L)
     (k : Fin (L + 1)) (a : (v : {v : Fin L // v ∈ leftBlock L k}) → Fin q)
     (z : Fin (A.bondDim k)) : ℂ :=
@@ -94,6 +101,7 @@ private noncomputable def leftContraction {L q D : ℕ} (A : OBCChainTensor q D 
           (by simpa only [Fin.le_def, Fin.val_castSucc, Fin.val_succ] using
             (Nat.succ_le_of_lt (mem_leftBlock.mp i.2))))
 
+/-- Contract the tensors on the right of the cut, keeping its bond index fixed. -/
 private noncomputable def rightContraction {L q D : ℕ} (A : OBCChainTensor q D L)
     (k : Fin (L + 1)) (b : (v : {v : Fin L // v ∉ leftBlock L k}) → Fin q)
     (z : Fin (A.bondDim k)) : ℂ :=
@@ -107,6 +115,8 @@ private noncomputable def rightContraction {L q D : ℕ} (A : OBCChainTensor q D
           (by simpa only [Fin.le_def, Fin.val_castSucc, Fin.val_succ] using
             (Nat.le_succ_of_le (Nat.le_of_not_lt (mt mem_leftBlock.mpr i.2)))))
 
+/-- The full contraction is the sum over the cut bond of the two partial contractions.
+This is the bond splitting underlying SWVC07, arXiv:0705.0292v2, lines 234–264. -/
 private theorem coeff_eq_sum_left_mul_right {L q D : ℕ} (A : OBCChainTensor q D L)
     (k : Fin (L + 1)) (a : (v : {v : Fin L // v ∈ leftBlock L k}) → Fin q)
     (b : (v : {v : Fin L // v ∉ leftBlock L k}) → Fin q) :
@@ -121,14 +131,16 @@ private theorem coeff_eq_sum_left_mul_right {L q D : ℕ} (A : OBCChainTensor q 
   rw [← Fintype.prod_subtype_mul_prod_subtype (fun i : Fin L ↦ i ∈ leftBlock L k)]
   congr 1
   · refine Finset.prod_congr (congrArg (@Finset.univ _) (Subsingleton.elim _ _)) fun i _ ↦ ?_
-    erw [Entropy.cutEquiv_symm_apply_mem (n := fun _ : Fin L ↦ q) a b i.2]
+    rw [Entropy.cutEquiv_symm_apply_mem (n := fun _ : Fin L ↦ q) a b i.2]
     exact congrArg₂ (fun x y ↦ A.tensor i (a i) x y)
       (joinBondPath_of_le _ _ _ _ _ _ _) (joinBondPath_of_le _ _ _ _ _ _ _)
   · refine Finset.prod_congr rfl fun i _ ↦ ?_
-    erw [Entropy.cutEquiv_symm_apply_not_mem (n := fun _ : Fin L ↦ q) a b i.2]
+    rw [Entropy.cutEquiv_symm_apply_not_mem (n := fun _ : Fin L ↦ q) a b i.2]
     exact congrArg₂ (fun x y ↦ A.tensor i (b i) x y)
       (joinBondPath_of_ge _ _ _ _ _ _ _) (joinBondPath_of_ge _ _ _ _ _ _ _)
 
+/-- The cut matrix factors through the virtual bond space, with any overall scalar absorbed
+into the left factor. Source: SWVC07, arXiv:0705.0292v2, lines 234–264. -/
 private theorem exists_cutMatrix_factorization {L q D : ℕ}
     (A : OBCChainTensor q D L) (c : ℂ)
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (hψ : ∀ x, ψ x = c * A.coeff x)
