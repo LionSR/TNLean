@@ -9299,3 +9299,18 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Abstraction:** Below the promotion threshold. A further occurrence in
   another file would justify a scalar lemma in the appropriate shared library;
   the present proofs use the existing logarithm monotonicity lemma directly.
+
+### Squared fidelity of unit vectors — candidate (2026-10-23)
+
+- **Pattern:** Apply Cauchy--Schwarz, rewrite both unit norms, and square the
+  resulting nonnegative inequality to place squared fidelity in `[0,1]`.
+- **Seen:** The private `sq_norm_inner_mem_Icc` in
+  `TNLean/MPS/AreaLaw/CopyErrorAmplification.lean` and
+  `qutritFamily_scalar_error_lower_bound` in
+  `TNLean/MPS/AreaLaw/EntropyScaling/QutritApproximation.lean`.
+- **Abstraction:** A shared inner-product lemma in QICLean would replace both
+  calculations if another independent use appears. The first module already
+  reuses its private lemma throughout the product argument.
+- **Status:** Two independent calculations in two modules; below the promotion
+  threshold. The qutrit proof reuses the existing Ky Fan overlap theorem and
+  the actual MPS cut-rank bound rather than repeating their proofs.
