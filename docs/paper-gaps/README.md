@@ -1582,6 +1582,16 @@ form remains open under issue #9811.
   the product form on every nonempty such domain; on the empty domain only the
   identity has a product form. Its index count is not established either.
 
+## Viable sets of Landau, Vazirani and Vidick, arXiv:1307.5143
+
+- [`lvv13_bond_dimension_zero.tex`](lvv13_bond_dimension_zero.tex)
+  (local correction, resolved) records that the remark in the proof of Claim
+  `c:ext` (source line 399), that appending a site does not raise the bond
+  dimension, fails at bond dimension `0`: a vector on one site has bond dimension
+  `0`, but a nonzero product vector on two sites does not. The source's bond
+  dimensions are positive, and the formalization reads bond dimension at most `b`
+  as at most `max 1 b` in `IsLeftOpenMPS`.
+
 ## Rényi entropy and matrix product state approximation
 
 - [`swvc08_von_neumann_error_range.tex`](swvc08_von_neumann_error_range.tex)

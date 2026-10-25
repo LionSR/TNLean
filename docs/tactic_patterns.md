@@ -7075,6 +7075,20 @@ spectral split → block extraction → MPV calculation → strict bounds
   (hT : T ⊆ s) : (∑ k ∈ T, h k).IsHermitian` in `TNLean/Algebra/MatrixHermitianSum.lean`.
 - **Notes:** meets the rule of three; the refactor of the five call sites is a separate change.
 
+### Matrix of an orthogonal projection is a star projection — candidate (2026-10-25)
+- **Pattern:** `Matrix.toEuclideanLin.symm W.starProjection.toLinearMap` for a submodule `W` of
+  `EuclideanSpace`, followed by the same proof that it is a star projection (Hermitian and
+  idempotent) via `Submodule.isIdempotentElem_starProjection` and self-adjointness.
+- **Seen:** 5 or more occurrences across 4 or more files:
+  `TNLean/MPS/AreaLaw/SequentialTruncation.lean` (`prefixBasisProjection` and its private
+  star-projection lemma), `TNLean/MPS/AreaLaw/ViableSet/Basic.lean` (`spanProjection`,
+  `isStarProjection_spanProjection`), `TNLean/MPS/ParentHamiltonian/PrimitiveQuasiLocalUniqueness.lean`,
+  and the matrix constructions in `StationarySplitting`, `RegionParentHamiltonian` and
+  `CoordinateRangeProjector`.
+- **Abstraction:** proposed `Submodule.starProjectionMatrix W` with
+  `isStarProjection_starProjectionMatrix` in `TNLean/Algebra/`.
+- **Notes:** meets the rule of three; the refactor of the call sites is a separate change.
+
 ## Rejected
 
 ### Lower bound for a logarithmic cut budget — rejected (2026-10-19)

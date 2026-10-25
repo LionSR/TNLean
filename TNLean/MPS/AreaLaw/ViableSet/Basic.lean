@@ -27,11 +27,12 @@ exactly when every column of `M` lies in `Span(S)`: this is the subspace
 The extension step of the algorithm appends one site: `S ⊗ {|1⟩, …, |q⟩}` is `(i, q s, b, δ)`-
 viable when `S` is `(i - 1, s, b, δ)`-viable, with the same witness (Claim `c:ext`).
 
-**Positive bond dimension.** The extension statement assumes `0 < b`. Under the
-library's convention for `IsOpenMPS`, every vector on one site is a matrix product state of bond
-dimension `0`, while a nonzero product vector on two sites is not, so the extension of a
-bond-dimension-`0` set from one site to two sites fails. The source treats bond dimension as
-unchanged by the extension (algo53.tex, line 399), which holds for `b ≥ 1`.
+**Local fix (bond dimension zero):** a matrix product state of bond dimension at most `b` is read
+as one of bond dimension at most `max 1 b` (`IsLeftOpenMPS`). Bond dimension `0` is degenerate:
+under `IsOpenMPS` every vector on one site has it while a nonzero product vector on two sites does
+not, so the source's remark that the extension does not raise the bond dimension (algo53.tex,
+line 399) fails at `b = 0` and holds for `b ≥ 1`. The source's bond dimensions are positive
+polynomials. Documented in `docs/paper-gaps/lvv13_bond_dimension_zero.tex`.
 
 ## Main definitions
 
@@ -50,10 +51,10 @@ unchanged by the extension (algo53.tex, line 399), which holds for `b ≥ 1`.
   `TNLean.MPS.AreaLaw.spanProjection_mul_cutMatrix_eq_iff`,
   `TNLean.MPS.AreaLaw.leftApply_spanProjection_cutVector_eq_iff`: the support condition in
   density, matrix and vector form.
-* `TNLean.MPS.AreaLaw.isViable_iff_le_norm_starProjection`: `S` is `(i, δ)`-viable iff
-  `‖P_{Span(S) ⊗ H_R} Γ‖ ≥ 1 - δ`.
-* `TNLean.MPS.AreaLaw.isViable_iff_forall_mem_span_singleton`: viability as closeness of
-  `Span(S) ⊗ H_R` to `span {Γ}`.
+* `TNLean.MPS.AreaLaw.isViable_iff_le_norm_starProjection`: for `δ < 1`, `S` is
+  `(i, δ)`-viable iff `‖P_{Span(S) ⊗ H_R} Γ‖ ≥ 1 - δ`.
+* `TNLean.MPS.AreaLaw.isViable_iff_forall_mem_span_singleton`: for a unit vector `Γ` and
+  `δ < 1`, viability as closeness of `Span(S) ⊗ H_R` to `span {Γ}`.
 * `TNLean.MPS.AreaLaw.IsOpenMPS.snoc`: appending a site with an independent tensor.
 * `TNLean.MPS.AreaLaw.IsViable.extend`, `TNLean.MPS.AreaLaw.IsViableMPS.extend`: Claim `c:ext`.
 
@@ -100,18 +101,9 @@ condition on the reduced density. -/
 noncomputable def leftSupportSubmodule {k : ℕ} (S : Set (LeftBlockVector L q k)) :
     Submodule ℂ (EuclideanSpace ℂ (Fin L → Fin q)) where
   carrier := {ψ | ∀ b, cutColumn ψ k b ∈ Submodule.span ℂ S}
-  add_mem' {ψ ψ'} hψ hψ' b := by
-    have : cutColumn (ψ + ψ') k b = cutColumn ψ k b + cutColumn ψ' k b := rfl
-    rw [this]
-    exact add_mem (hψ b) (hψ' b)
-  zero_mem' b := by
-    have : cutColumn (0 : EuclideanSpace ℂ (Fin L → Fin q)) k b = 0 := rfl
-    rw [this]
-    exact zero_mem _
-  smul_mem' c ψ hψ b := by
-    have : cutColumn (c • ψ) k b = c • cutColumn ψ k b := rfl
-    rw [this]
-    exact Submodule.smul_mem _ c (hψ b)
+  add_mem' hψ hψ' b := add_mem (hψ b) (hψ' b)
+  zero_mem' _ := zero_mem _
+  smul_mem' c _ hψ b := Submodule.smul_mem _ c (hψ b)
 
 /-- Membership in `Span(S) ⊗ H_R`: every cut-matrix column lies in `Span(S)`. -/
 theorem mem_leftSupportSubmodule {k : ℕ} {S : Set (LeftBlockVector L q k)}
@@ -292,8 +284,9 @@ theorem isViable_iff_le_norm_starProjection {Γ : EuclideanSpace ℂ (Fin L → 
 
 /-- **Viability as closeness.** If `S` is `(i, δ)`-viable for a unit vector `Γ` with `δ ≤ 1`,
 every `t ∈ span {Γ}` satisfies `(1 - δ') ‖t‖² ≤ ‖P_{Span(S) ⊗ H_R} t‖²` with
-`δ' = 1 - (1 - δ)²`. This is the vector form (`Submodule.isCloseTo_iff`, QICLean) of
-`Submodule.IsCloseTo δ' (Span(S) ⊗ H_R) (span {Γ})`: `S` is `δ'`-viable for `span {Γ}` in the
+`δ' = 1 - (1 - δ)²`. This is the vector form (`Submodule.isCloseTo_iff`, QICLean main, not yet
+pinned here) of
+`Submodule.IsCloseTo δ' (Span(S) ⊗ H_R) (span {Γ})`: `Span(S)` is `δ'`-viable for `span {Γ}` in the
 sense of Arad, Landau, Vazirani and Vidick (arXiv:1602.08828v2, Definitions `d:vs` and
 `d:close`). -/
 theorem IsViable.forall_mem_span_singleton {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
@@ -333,21 +326,12 @@ def leftConfigOfFin {k : ℕ} (x : Fin k → Fin q) :
     Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) :=
   fun v ↦ x ⟨v.1.val, mem_leftBlock.mp v.2⟩
 
-/-- For `k ≤ L` the configurations of `Fin k` are those of the left block of the cut after `k`
-sites. -/
-def leftConfigEquiv {k : ℕ} (hk : k ≤ L) :
-    (Fin k → Fin q) ≃ Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) where
-  toFun := leftConfigOfFin
-  invFun y j := y ⟨⟨j.val, lt_of_lt_of_le j.2 hk⟩, mem_leftBlock.mpr j.2⟩
-  left_inv _ := rfl
-  right_inv _ := rfl
-
 /-- A vector on the first `k` sites is a matrix product state of bond dimension at most `b`
 (arXiv:1307.5143v1, algo53.tex, line 243): read on `Fin k → Fin q` through
-`leftConfigOfFin`, a bijection when `k ≤ L` (`leftConfigEquiv`), it is an open-boundary matrix
-product state of bond dimension at most `b`. -/
+`leftConfigOfFin`, a bijection when `k ≤ L`, it is an open-boundary matrix product state of bond
+dimension at most `max 1 b`; see the module docstring for `b = 0`. -/
 def IsLeftOpenMPS (b : ℕ) {k : ℕ} (v : LeftBlockVector L q k) : Prop :=
-  IsOpenMPS k q b fun x ↦ v (leftConfigOfFin x)
+  IsOpenMPS k q (max 1 b) fun x ↦ v (leftConfigOfFin x)
 
 /-- **`(i, s, b, δ)`-viable sets** (Landau, Vazirani, Vidick, arXiv:1307.5143v1, algo53.tex,
 Definition `def:viable`, lines 240–244). `S` has at most `s` members, each a matrix product
@@ -359,7 +343,7 @@ def IsViableMPS (Γ : EuclideanSpace ℂ (Fin L → Fin q)) (s b : ℕ) (δ : �
 /-- **Appending a site.** If `w` is an open-boundary matrix product state of bond dimension at
 most `b` on `n` sites and `0 < b`, then `x ↦ w (x₀, …, x_{n-1}) f (x_n)` is one on `n + 1`
 sites: the new internal bond carries rank at most one (arXiv:1307.5143v1, algo53.tex,
-lines 391 and 399). -/
+lines 393 and 399). -/
 theorem IsOpenMPS.snoc {n b : ℕ} (hb : 0 < b) {w : (Fin n → Fin q) → ℂ}
     (hw : IsOpenMPS n q b w) (f : Fin q → ℂ) :
     IsOpenMPS (n + 1) q b fun x ↦ w (Fin.init x) * f (x (Fin.last n)) := by
@@ -533,27 +517,27 @@ theorem IsViable.extend {Γ : EuclideanSpace ℂ (Fin L → Fin q)} {δ : ℝ} {
   obtain ⟨φ, h1, h2, h3⟩ := h
   exact ⟨φ, h1, h2, leftSupportSubmodule_le_extend hi0 hiL S h3⟩
 
-/-- **Claim `c:ext`, bond dimension** (arXiv:1307.5143v1, algo53.tex, lines 391 and 399). For
-`1 ≤ i ≤ L` and `0 < b`, if `v` is a matrix product state of bond dimension at most `b` on the
+/-- **Claim `c:ext`, bond dimension** (arXiv:1307.5143v1, algo53.tex, lines 393 and 399). For
+`1 ≤ i ≤ L`, if `v` is a matrix product state of bond dimension at most `b` on the
 first `i - 1` sites, so is `v ⊗ |k⟩` on the first `i` sites. -/
-theorem IsLeftOpenMPS.extendSite {i b : ℕ} (hi0 : 0 < i) (hiL : i ≤ L) (hb : 0 < b)
+theorem IsLeftOpenMPS.extendSite {i b : ℕ} (hi0 : 0 < i) (hiL : i ≤ L)
     {v : LeftBlockVector L q (i - 1)} (hv : IsLeftOpenMPS b v) (k : Fin q) :
     IsLeftOpenMPS b (AreaLaw.extendSite i k v) := by
   obtain ⟨n, rfl⟩ : ∃ n, i = n + 1 := ⟨i - 1, by omega⟩
-  have hv' : IsOpenMPS n q b fun x ↦ v (leftConfigOfFin x) := hv
-  have h := hv'.snoc hb fun y ↦ if y = k then 1 else 0
+  have hv' : IsOpenMPS n q (max 1 b) fun x ↦ v (leftConfigOfFin x) := hv
+  have h := hv'.snoc (lt_of_lt_of_le Nat.one_pos (le_max_left 1 b)) fun y ↦
+    if y = k then 1 else 0
   unfold IsLeftOpenMPS
   convert h using 1
   funext x
   rw [extendSite_apply hi0 hiL, mul_ite, mul_one, mul_zero]
   rfl
 
-/-- **Claim `c:ext`** (arXiv:1307.5143v1, algo53.tex, lines 379–400). For `1 ≤ i ≤ L` and
-`0 < b`, if `S` is `(i - 1, s, b, δ)`-viable for `Γ`, then `S ⊗ {|1⟩, …, |q⟩}` is
-`(i, q s, b, δ)`-viable for `Γ`. The source states this for `δ = c_ε / n`; the argument does
-not use the value of `δ`. -/
+/-- **Claim `c:ext`** (arXiv:1307.5143v1, algo53.tex, lines 379–400). For `1 ≤ i ≤ L`, if `S` is
+`(i - 1, s, b, δ)`-viable for `Γ`, then `S ⊗ {|1⟩, …, |q⟩}` is `(i, q s, b, δ)`-viable for `Γ`.
+The source states this for `δ = c_ε / n`; the argument does not use the value of `δ`. -/
 theorem IsViableMPS.extend {Γ : EuclideanSpace ℂ (Fin L → Fin q)} {s b : ℕ} {δ : ℝ} {i : ℕ}
-    (hi0 : 0 < i) (hiL : i ≤ L) (hb : 0 < b) {S : Finset (LeftBlockVector L q (i - 1))}
+    (hi0 : 0 < i) (hiL : i ≤ L) {S : Finset (LeftBlockVector L q (i - 1))}
     (h : IsViableMPS Γ s b δ S) : IsViableMPS Γ (q * s) b δ (AreaLaw.extend i S) := by
   classical
   obtain ⟨hs, hmps, hv⟩ := h
@@ -561,6 +545,6 @@ theorem IsViableMPS.extend {Γ : EuclideanSpace ℂ (Fin L → Fin q)} {s b : �
     hv.extend hi0 hiL⟩
   unfold AreaLaw.extend at hw
   obtain ⟨v, hvS, k, -, rfl⟩ := Finset.mem_image₂.mp hw
-  exact (hmps v hvS).extendSite hi0 hiL hb k
+  exact (hmps v hvS).extendSite hi0 hiL k
 
 end TNLean.MPS.AreaLaw
