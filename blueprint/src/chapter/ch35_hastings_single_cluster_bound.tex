@@ -265,3 +265,46 @@
     Theorem~\ref{thm:hastings_cluster_exp_count}, with $\beta/n$ in place of
     $\beta$, bounds $e^{(n_C+n_{B(C)})J\beta/n}$ by $e^{SJ\beta n_C/n}$.
 \end{proof}
+
+\begin{theorem}[Products of cluster parts]
+    \label{thm:hastings_cluster_part_product}
+    \lean{TNLean.Lattice.ClusterExpansion.clusterPart_empty_empty,
+        TNLean.Lattice.ClusterExpansion.norm_trace_mul_list_prod_clusterPart_le_pow}
+    \leanok
+    \uses{def:hastings_cluster_part}
+    Let $H$ be a Hermitian Hamiltonian, let $\beta\ge0$, and put
+    $Z=\operatorname{tr}e^{-\beta H}$. Let $n\ge1$, and for each $j<n$ let $C_j$ be a
+    cluster with boundary $B_j$ such that the terms $H_k$ with $k\in C_j\cup B_j$ are
+    Hermitian with $\|H_k\|\le J$, and $n_{C_j}+n_{B_j}\le Sn_{C_j}$. With
+    $y=(e^{J\beta/n}-1)e^{SJ\beta/n}$, for every operator $O$,
+    \begin{align}
+        \left|\operatorname{tr}\bigl(O\rho(\beta/n,C_0)\rho(\beta/n,C_1)\cdots
+        \rho(\beta/n,C_{n-1})\bigr)\right|
+        \le\|O\|y^{\sum_jn_{C_j}}Z.
+        \label{eq:hastings_cluster_part_product}
+    \end{align}
+    A factor with $C_j=B_j=\emptyset$ is the thermal factor $e^{-\beta H/n}$, so this bounds
+    every product of thermal factors and cluster parts in the operator $\rho_m$
+    of~\cite[lines 1334--1341]{Hastings2006Solving}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:hastings_cluster_part, thm:hastings_cluster_removal_trace,
+        thm:hastings_cluster_exp_count}
+    Put $Y_j=\beta(H-H_{C_j}-H_{B_j})$, so that $\rho(\beta/n,C_j)$ is the alternating sum of
+    the $e^{-(Y_j+\sum_{i\in E}\beta H_i)/n}$ over $E\subseteq C_j$. The bound for products of
+    alternating sums in the companion quantum-channel
+    volume~\cite[``Products of alternating sums, uniform form'']{QICLean2026Blueprint}, with
+    the operator $O$ before the first factor, the identity before the others, the weight $1/n$
+    on every factor and the terms $\beta H_i$ of norm at most $\beta J$, gives
+    \begin{align*}
+        \left|\operatorname{tr}\bigl(O\rho(\beta/n,C_0)\cdots\rho(\beta/n,C_{n-1})\bigr)\right|
+        \le\|O\|\prod_j\bigl(e^{J\beta/n}-1\bigr)^{n_{C_j}}
+        \bigl(\operatorname{tr}e^{-Y_j}\bigr)^{1/n}.
+    \end{align*}
+    Theorems~\ref{thm:hastings_cluster_removal_trace} and~\ref{thm:hastings_cluster_exp_count},
+    the latter with $\beta/n$ in place of $\beta$, give
+    $(\operatorname{tr}e^{-Y_j})^{1/n}\le e^{Sn_{C_j}J\beta/n}Z^{1/n}$, and the $n$ factors
+    $Z^{1/n}$ multiply to $Z$.
+\end{proof}
