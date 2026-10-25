@@ -7,19 +7,27 @@ import TNLean.MPS.AreaLaw.EntropyScaling.EfficientApproximation
 import TNLean.MPS.AreaLaw.MPSApproximation
 import TNLean.Algebra.FlatDensityRenyiEntropy
 import QICLean.Entropy.RenyiTail
+import QICLean.Entropy.Renyi.Smooth
+import TNLean.MPS.AreaLaw.EntropyScaling.SmoothApproximation
 import QICLean.Analysis.SubnormalizedPureStateError
+import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
 
 /-!
 # Matrix product state approximation from Rényi entropy bounds
 
 Source: Schuch–Wolf–Verstraete–Cirac, arXiv:0705.0292v2, `paper_v2.tex`,
-lines 198–210 and 271–276; Verstraete–Cirac, arXiv:cond-mat/0505140v6, Lemmas 1 and 2.
-The approximants are normalized, and the error is the full trace norm of the
-pure-density difference. The accuracy is fixed before choosing the polynomial
-bond bound, which is uniform over the family. Order zero is treated by rank.
+lines 198–210, 271–276 and 539–559; Verstraete–Cirac, arXiv:cond-mat/0505140v6,
+Lemmas 1 and 2. Both ordinary and infimally smoothed entropy bounds give efficient
+family approximation. The finite-chain theorems produce normalized vectors,
+and the error uses the full trace norm of the pure-density difference.
+The accuracy is fixed before choosing the polynomial bond bound, uniform over
+the family. At order zero the ordinary bound gives exact MPS representations;
+the smooth bound controls the ranks of independently chosen nearby marginals.
+The smoothing radius is the full trace norm, and finite exceptional lengths
+are absorbed into the accuracy-dependent constant.
 -/
 
-open scoped BigOperators ComplexOrder
+open scoped BigOperators ComplexOrder Topology
 open Matrix
 
 namespace TNLean.MPS.AreaLaw
@@ -190,5 +198,155 @@ theorem isEfficientlyApproximableByMPS_of_renyiEntropy_le
   · obtain ⟨φ, _hφ, hmps, herr⟩ := exists_normalized_isOpenMPS_of_renyiEntropy_le
       (ψ N) (hψ N) (lt_of_le_of_ne ha (Ne.symm ha0)) ha1 hD hε (min_le_right _ _) hcut
     exact ⟨_, φ, by simp, hmps, herr.trans (min_le_left _ _)⟩
+
+open Filter in
+private theorem exists_smoothing_length_threshold {ε δ : ℝ} (hε : 0 < ε) (hδ : 0 < δ) :
+    ∃ N₀ : ℕ, 0 < N₀ ∧ ∀ N : ℕ, N₀ ≤ N →
+      (N : ℝ) * (N : ℝ) ^ (-(1 + ε)) / 2 ≤ δ ^ 2 / 32 := by
+  have hlim : Tendsto (fun N : ℕ ↦ (N : ℝ) ^ (-ε)) atTop (𝓝 0) :=
+    (tendsto_rpow_neg_atTop hε).comp tendsto_natCast_atTop_atTop
+  obtain ⟨M, hM⟩ := eventually_atTop.mp
+    (hlim.eventually (gt_mem_nhds (by positivity : (0 : ℝ) < δ ^ 2 / 16)))
+  refine ⟨max M 1, by omega, fun N hN ↦ ?_⟩
+  have hpos : (0 : ℝ) < N := by exact_mod_cast (show 0 < N by omega)
+  have heq : (N : ℝ) * (N : ℝ) ^ (-(1 + ε)) = (N : ℝ) ^ (-ε) := by
+    calc
+      _ = (N : ℝ) ^ (1 + -(1 + ε)) := by rw [Real.rpow_add hpos, Real.rpow_one]
+      _ = _ := by congr 1; ring
+  rw [heq]
+  linarith [hM N ((le_max_left M 1).trans hN)]
+
+private theorem isOpenMPS_bond_pow_succ {L q : ℕ} (ψ : EuclideanSpace ℂ (Fin L → Fin q)) :
+    IsOpenMPS L q ((q + 1) ^ L) (fun x ↦ ψ x) := by
+  apply isOpenMPS_of_internal_cutMatrix_rank_le ψ
+  intro k hk hkL
+  have hr := (cutMatrix ψ k).rank_le_card_height
+  simp only [Fintype.card_fun, Fintype.card_fin, Fintype.card_coe] at hr
+  apply hr.trans
+  gcongr
+  · omega
+  · omega
+  · simpa using Finset.card_le_univ (leftBlock L k)
+
+private theorem isEfficientlyApproximableByMPS_of_eventually
+    {q : ℕ} {lengths : Set ℕ}
+    (ψ : ∀ N : lengths, EuclideanSpace ℂ (Fin N.val → Fin q))
+    (h : ∀ δ : ℝ, 0 < δ → ∃ C : ℝ, 0 < C ∧ ∃ m N₀ : ℕ,
+      ∀ N : lengths, N₀ ≤ N.val →
+      ∃ D : ℕ, ∃ φ : EuclideanSpace ℂ (Fin N.val → Fin q),
+        (D : ℝ) ≤ C * ((N.val : ℝ) + 1) ^ m ∧
+        IsOpenMPS N.val q D (fun x ↦ φ x) ∧
+        rectangularTraceNorm (euclideanOuterProduct (ψ N) (ψ N) -
+          euclideanOuterProduct φ φ) ≤ δ) :
+    IsEfficientlyApproximableByMPS ψ := by
+  intro δ hδ
+  obtain ⟨C, hC, m, N₀, hN⟩ := h δ hδ
+  refine ⟨C + ((q + 1 : ℕ) : ℝ) ^ N₀, by positivity, m, fun N ↦ ?_⟩
+  by_cases hN₀ : N₀ ≤ N.val
+  · obtain ⟨D, φ, hD, hφ, herr⟩ := hN N hN₀
+    refine ⟨D, φ, ?_, hφ, herr⟩
+    exact hD.trans (mul_le_mul_of_nonneg_right
+      (le_add_of_nonneg_right (by positivity)) (by positivity))
+  · refine ⟨(q + 1) ^ N.val, ψ N, ?_, isOpenMPS_bond_pow_succ (ψ N),
+      by simpa using hδ.le⟩
+    have hr : (((q + 1) ^ N.val : ℕ) : ℝ) ≤ ((q + 1 : ℕ) : ℝ) ^ N₀ := by
+      exact_mod_cast (Nat.pow_le_pow_right (by omega : 0 < q + 1)
+        (by omega : N.val ≤ N₀))
+    refine hr.trans ((le_add_of_nonneg_left hC.le).trans ?_)
+    exact le_mul_of_one_le_right (by positivity)
+      (one_le_pow₀ (by have := Nat.cast_nonneg (α := ℝ) N.val; linarith))
+
+
+/-- Finite-chain smoothing criterion in Schuch–Wolf–Verstraete–Cirac,
+arXiv:0705.0292v2, lines 539–559. Strict entropy thresholds permit independent
+approximate minimizers at each cut. The error is the full trace norm and the
+resulting matrix product vector is normalized. -/
+theorem exists_normalized_isOpenMPS_of_smoothRenyiEntropy_lt {L q D : ℕ}
+    (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (hψ : ‖ψ‖ = 1)
+    {a δ : ℝ} (ha : 0 ≤ a) (ha1 : a < 1) (hD : 0 < D)
+    (hδ : 0 < δ) (hδ1 : δ ≤ 1) (T η : ℕ → ℝ)
+    (hT : ∀ k ∈ Finset.Ico 1 L, 0 < T k)
+    (hη : ∀ k ∈ Finset.Ico 1 L, 0 ≤ η k)
+    (hbudget : (∑ k ∈ Finset.Ico 1 L, (T k + η k / 2)) ≤ (δ / 4) ^ 2)
+    (hS : ∀ k ∈ Finset.Ico 1 L,
+      smoothRenyiEntropy (Entropy.regionState (leftBlock L k) ψ) a (η k) <
+        Real.log ((D : ℝ) / (1 - a)) + a / (1 - a) * Real.log (T k)) :
+    ∃ χ : EuclideanSpace ℂ (Fin L → Fin q), ‖χ‖ = 1 ∧
+      IsOpenMPS L q D (fun x ↦ χ x) ∧
+      rectangularTraceNorm (euclideanOuterProduct ψ ψ - euclideanOuterProduct χ χ) ≤ δ := by
+  apply exists_normalized_isOpenMPS_of_sq_error hψ
+    (isOpenMPS_sequentialTruncation_leadingEigenprojection ψ hψ D).1 hδ hδ1
+  refine (norm_sequentialTruncation_leadingEigenprojection_sub_sq_le_of_smoothing
+    ψ hψ T η ?_).trans hbudget
+  intro k hk
+  obtain ⟨σ, hσ, htr, hclose, hσS⟩ := exists_densityMatrix_renyiEntropy_lt
+    (Entropy.regionState_posSemidef (leftBlock L k) ψ)
+    (Entropy.trace_regionState_eq_one hψ) a (hη k hk) (hS k hk)
+  refine ⟨σ, hσ, htr, hclose, ?_⟩
+  by_cases ha0 : a = 0
+  · have hl : Real.log (σ.rank : ℝ) ≤ Real.log (D : ℝ) := by
+      simpa [ha0, renyiEntropy] using hσS.le
+    have hrank : σ.rank ≤ D := by
+      rcases Nat.eq_zero_or_pos σ.rank with hr | hr
+      · simp [hr]
+      · exact_mod_cast (Real.log_le_log_iff (by exact_mod_cast hr)
+          (by exact_mod_cast hD)).mp hl
+    have he := hσ.isHermitian.sum_eigenvalues₀_filter_le D
+    rw [hσ.eigenvalue_tail_eq_zero_of_rank_le hrank, htr, Complex.one_re] at he
+    rw [← he]
+    exact (hT k hk).le
+  · exact one_sub_kyFanNorm_le_of_renyiEntropy_le hσ htr
+      (lt_of_le_of_ne ha (Ne.symm ha0)) ha1 hD (hT k hk) hσS.le
+
+/-- Schuch–Wolf–Verstraete–Cirac, arXiv:0705.0292v2, lines 539–559:
+a logarithmic bound on smoothed Rényi entropy at a fixed order below one gives
+efficient MPS approximation. Smoothing uses the full trace norm and independent
+marginal witnesses. The infimum formulation needs no attainment assumption;
+finite exceptional lengths are absorbed into the accuracy-dependent constant. -/
+theorem isEfficientlyApproximableByMPS_of_smoothRenyiEntropy_le
+    {q : ℕ} {lengths : Set ℕ}
+    (ψ : ∀ N : lengths, EuclideanSpace ℂ (Fin N.val → Fin q))
+    (hψ : ∀ N, ‖ψ N‖ = 1) {a c c' ε : ℝ}
+    (ha : 0 ≤ a) (ha1 : a < 1) (hc : 0 ≤ c) (hε : 0 < ε)
+    (hS : ∀ (N : lengths) (k : ℕ), k ∈ Finset.Ico 1 N.val →
+      smoothRenyiEntropy (Entropy.regionState (leftBlock N.val k) (ψ N)) a
+        ((N.val : ℝ) ^ (-(1 + ε))) ≤ c * Real.log (N.val : ℝ) + c') :
+    IsEfficientlyApproximableByMPS ψ := by
+  apply isEfficientlyApproximableByMPS_of_eventually ψ
+  intro δ hδ
+  let γ := min δ 1
+  have hγ : 0 < γ := lt_min hδ zero_lt_one
+  obtain ⟨K, m, hK, hbound⟩ := exists_polynomial_renyi_cutoff
+    (c := c) (c' := c' + 1) ha1 (half_pos hγ)
+  obtain ⟨N₀, hN₀, hsmooth⟩ := exists_smoothing_length_threshold hε hγ
+  refine ⟨K, by exact_mod_cast hK, m, N₀, fun N hN ↦ ?_⟩
+  let D := K * (N.val + 1) ^ m
+  let T := (γ / 2) ^ 2 / (16 * ((N.val : ℝ) + 1))
+  let η := (N.val : ℝ) ^ (-(1 + ε))
+  have hD : 0 < D := Nat.mul_pos hK (pow_pos (Nat.succ_pos _) _)
+  have hNpos : 0 < N.val := hN₀.trans_le hN
+  have hlog : c * Real.log (N.val : ℝ) ≤ c * Real.log ((N.val : ℝ) + 1) :=
+    mul_le_mul_of_nonneg_left (Real.log_le_log (by exact_mod_cast hNpos) (by linarith)) hc
+  have hcut (k : ℕ) (hk : k ∈ Finset.Ico 1 N.val) :
+      smoothRenyiEntropy (Entropy.regionState (leftBlock N.val k) (ψ N)) a η <
+        Real.log ((D : ℝ) / (1 - a)) + a / (1 - a) * Real.log T :=
+    (hS N k hk).trans_lt (lt_of_lt_of_le (by linarith) (hbound N.val))
+  have hbudget : (∑ _k ∈ Finset.Ico 1 N.val, (T + η / 2)) ≤ (γ / 4) ^ 2 := by
+    simp only [Finset.sum_const, Nat.card_Ico, nsmul_eq_mul]
+    have hcard : ((N.val - 1 : ℕ) : ℝ) ≤ (N.val : ℝ) := by
+      exact_mod_cast Nat.sub_le N.val 1
+    have htail : ((N.val - 1 : ℕ) : ℝ) * T ≤ γ ^ 2 / 64 := by
+      refine (mul_le_mul_of_nonneg_right (by linarith :
+        ((N.val - 1 : ℕ) : ℝ) ≤ (N.val : ℝ) + 1) (by positivity : 0 ≤ T)).trans_eq ?_
+      dsimp [T]
+      field_simp
+      ring
+    have hηN : (N.val : ℝ) * η / 2 ≤ γ ^ 2 / 32 := hsmooth N.val hN
+    have hm := mul_le_mul_of_nonneg_right hcard (by positivity : 0 ≤ η)
+    nlinarith only [htail, hηN, hm, sq_nonneg γ]
+  obtain ⟨φ, _hφ, hmps, herr⟩ := exists_normalized_isOpenMPS_of_smoothRenyiEntropy_lt
+    (ψ N) (hψ N) ha ha1 hD hγ (min_le_right _ _) (fun _ ↦ T) (fun _ ↦ η)
+    (by intros; positivity) (by intros; positivity) hbudget hcut
+  exact ⟨D, φ, by simp [D], hmps, herr.trans (min_le_left _ _)⟩
 
 end TNLean.MPS.AreaLaw
