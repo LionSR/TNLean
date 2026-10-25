@@ -19,6 +19,8 @@ run_cmd do
     ``TNLean.Lattice.ClusterExpansion.biUnion_clusters,
     ``TNLean.Lattice.ClusterExpansion.clusterOp_eq_noncommProd_clusters,
     ``TNLean.Lattice.ClusterExpansion.truncatedExp_eq_sum_noncommProd_clusters,
+    ``TNLean.Lattice.ClusterExpansion.commute_of_not_adj_overlapGraph,
+    ``TNLean.Lattice.ClusterExpansion.truncatedExp_eq_sum_noncommProd_clusters_overlapGraph,
     ``TNLean.Lattice.ClusterExpansion.clusterOp_mem_supportedOperators] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"

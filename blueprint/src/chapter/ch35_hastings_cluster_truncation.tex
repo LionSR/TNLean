@@ -237,15 +237,20 @@ boundary the identity fails~\cite{gap:hastings05_cluster_boundary}.
         TNLean.Lattice.ClusterExpansion.clusters,
         TNLean.Lattice.ClusterExpansion.biUnion_clusters,
         TNLean.Lattice.ClusterExpansion.clusterOp_eq_noncommProd_clusters,
-        TNLean.Lattice.ClusterExpansion.truncatedExp_eq_sum_noncommProd_clusters}
+        TNLean.Lattice.ClusterExpansion.truncatedExp_eq_sum_noncommProd_clusters,
+        TNLean.Lattice.ClusterExpansion.commute_of_not_adj_overlapGraph,
+        TNLean.Lattice.ClusterExpansion.truncatedExp_eq_sum_noncommProd_clusters_overlapGraph}
     \leanok
     \uses{def:hastings_cluster_operator, def:hastings_truncated_expansion,
         def:hastings_cluster_of_terms}
     The truncated operator is $\rho(\beta,l)=\sum_AE_A$, summed over the sets
     $A$ of terms none of whose clusters is large. If terms that are not
     adjacent commute, then for every set $A$ of terms, $E_A$ is the product of
-    the commuting operators $E_C$ over the clusters $C$ of $A$. Thus each term
-    of $\rho(\beta,l)$ is a product of operators, one for each cluster, as
+    the commuting operators $E_C$ over the clusters $C$ of $A$. This holds
+    when every term $H_k$ acts only on a set $S_k$ of sites and two terms are
+    adjacent when their sets of sites meet: terms that are not adjacent act on
+    disjoint sets of sites and commute. Thus each term of $\rho(\beta,l)$ is a
+    product of operators, one for each cluster, as
     in~\cite[lines 1108--1110]{Hastings2006Solving}.
 \end{theorem}
 
