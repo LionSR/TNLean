@@ -89,21 +89,24 @@ strength $1$.
 
 \section{The range of \texorpdfstring{$\delta$}{delta}}
 
-The source states Lemma \texttt{constantbondapprox} and Corollary
-\texttt{c:1} for any constant $\delta$. The formalization assumes
-$0<\delta\le1$ in the lemma, where the conclusion
-$\langle v,\Omega\rangle\ge1-\delta$ is not vacuous, and $0<\delta<1/4$ in
-the corollary, where its energy bound
+The source states Lemma \path{constantbondapprox} and Corollary
+\path{c:1} for any constant $\delta$. The formalization assumes
+$0<\delta\le1$ in the lemma. No upper bound on $\delta$ is needed in the
+corollary, because the approximation can be chosen at a smaller error.
+
+For Corollary \path{c:1} of the source (lines~361--364), let $\delta>0$
+and apply the constant bond dimension at $\delta_0=\min\{\delta,1/12\}$.
+Writing $E_0$ for the ground-state energy, the corrected trimming-energy
+estimate gives
 \begin{align}
-    E_0+\frac{4\sqrt\delta}{1-4\delta}
-    \label{eq:lvv13_constant_bond_corollary_energy}
+    \langle v,Hv\rangle
+    \le E_0+\frac{4\sqrt{\delta_0}}{1-4\delta_0}
+    \le E_0+6\sqrt{\delta_0}\le E_0+6\sqrt\delta. \notag
 \end{align}
-is defined. The source's own proof of \texttt{c:1} applies Lemma
-\texttt{l:2}, whose hypothesis $\delta(1+1/\varepsilon)\le1/2$ also restricts
-$\delta$. That condition is stronger than $\delta<1/4$ when $\varepsilon<1$
-and weaker when $\varepsilon>1$, so the printed corollary is itself
-restricted, though only implicitly. The algorithm uses the corollary only
-for small constant $\delta$.
+The overlap is at least $1-\delta_0\ge1-\delta$, and the bond dimension
+$B_{\delta_0}$ remains independent of the chain length and cut. Thus the
+corollary retains its stated energy and overlap bounds for every
+$\delta>0$, despite the correction needed in Lemma \path{l:2}.
 
 \section{The source's constant}
 
