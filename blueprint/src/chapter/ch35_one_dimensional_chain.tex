@@ -1751,6 +1751,47 @@ for an arbitrary finite set of sites and are instantiated here directly.
     integers.
 \end{definition}
 
+\begin{theorem}[Propagation on a finite integer domain]
+    \label{thm:domain_lieb_robinson_commutator}
+    \lean{TNLean.MPS.AreaLaw.norm_heisenberg_commutator_le_domainDistance}
+    \leanok
+    \uses{def:domain_model}
+    Let $\Lambda\subset\mathbb Z$ be finite, with its induced path graph,
+    and let $q,R\in\mathbb N$. Let $(h_k)_k$ be a finite labelled family of
+    Hermitian operators, each supported on a nonempty set $X_k$ of graph
+    diameter at most $R$. Suppose $b_0\in\mathbb R$ satisfies
+    $\sum_{k:x\in X_k}\|h_k\|\le b_0$ for every site $x$.
+    Put $H=\sum_k h_k$ and
+    \begin{align}
+        C & =2+4|b_0|e^{2R},\notag      \\
+        v & =2(R+1)|b_0|e^{2R}+1.\notag
+    \end{align}
+    Let $A$ be supported on $S\subseteq\Lambda$ and $B$ at $y\in\Lambda$.
+    Set $\delta=\inf_{x\in S}d_\Lambda(x,y)$, with
+    $\inf\varnothing=\infty$ and $e^{-\infty/2}=0$. For every real $t$,
+    \begin{align}
+        \|[\tau_t(A),B]\|
+        \le C|S|\|A\|\|B\|e^{v|t|}e^{-\delta/2}.\notag
+    \end{align}
+    This extends the commutator estimate of the Lieb--Robinson lemma in
+    \cite[Part~II]{TNLean2026OneDimensional} to arbitrary finite integer
+    domains. No connectivity, positive local dimension, ground-state or
+    spectral-gap hypothesis is required.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:domain_model,thm:qc_graph_lieb_robinson_finset,
+        thm:qc_graph_lieb_robinson_zero_finset}
+    Every range-$R$ support has at most $R+1$ sites. For finite $\delta$,
+    the graph propagation estimate with exponential weight parameter one
+    gives the stronger decay $e^{-\delta}$, which is at most
+    $e^{-\delta/2}$. For infinite $\delta$, every $x\in S$ has
+    $d_\Lambda(x,y)=\infty$, so $[\tau_t(A),B]=0$ by
+    Theorem~\ref{thm:qc_graph_lieb_robinson_zero_finset} and the left side
+    vanishes. All distances are those of the
+    induced graph; sites separated by a hole are not identified with
+    consecutive sites of a longer chain.
+\end{proof}
+
 \begin{lemma}[A cut that splits no term]
     \label{lem:zero_entropy_cut}
     \lean{

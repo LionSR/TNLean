@@ -44,7 +44,9 @@ a hypothesis.
 
 \begin{definition}[The deficiency bound of a level]
     \label{def:hastings05_hierarchy_deficiency}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_zero,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_succ}
     \leanok
     For real $\epsilon$, $K$ and radii $x_0,x_1,\dots$, put $D_0=0$ and
     \begin{align}
@@ -79,7 +81,9 @@ a hypothesis.
 
 \begin{definition}[The majorant for the source's radii]
     \label{def:hastings05_hierarchy_majorant}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_zero,
+        TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_succ}
     \leanok
     For real $e$ and $s$, put $\beta_0=0$ and
     $\beta_{m+1}=\bigl(2\beta_m^2+(e+2\beta_m)^{2s}\bigr)^{1/2}$.
