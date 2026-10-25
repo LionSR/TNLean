@@ -46,8 +46,11 @@ TNLean one-dimensional note, Lemma `lem:LR`
 (`docs/notes/one_dimensional_note/part2a_mps_information.tex`, lines 267–309);
 the chain and localization statements are separate specializations.
 If `1 ≤ v_R`, one may instead take the numerical prefactor `C = 4` and
-velocity `v = 4 v_R |b₀| exp(2μR)`. This numerical choice of prefactor still
-requires the second observable to be supported on one site.
+velocity `v = 4 v_R |b₀| exp(2μR)`. The same constants also hold when the
+second observable is supported on any finite set `Y`, provided every site of
+`S` is at distance at least `n` from every site of `Y`. There is no `|Y|`
+factor. This graph estimate is separate from identifying the chain velocity
+and length pair in Hastings arXiv:0705.2024, eq. `lrb`, lines 96–112.
 
 ## Main results
 
