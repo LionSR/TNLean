@@ -76,7 +76,10 @@ Section~\ref{sec:hastings05_hierarchy_levels}.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    The vectors $P\Psi$ and $\Psi-P\Psi$ are orthogonal. With
+    \uses{thm:hastings_final_state_bessel}
+    The identity $\langle\Psi,P\Psi\rangle=\lVert P\Psi\rVert^2$ is that of
+    Theorem~\ref{thm:hastings_final_state_bessel}. The vectors $P\Psi$ and
+    $\Psi-P\Psi$ are orthogonal. With
     $d=\lVert\Psi-P\Psi\rVert$, the expectation $1-d^2$ is nonnegative, so
     $d\le1$ and $d^2\le d\le\delta$. For the last bound,
     $\Psi-PP'\Psi=(\Psi-P\Psi)+P(\Psi-P'\Psi)$ is a sum of orthogonal vectors,
