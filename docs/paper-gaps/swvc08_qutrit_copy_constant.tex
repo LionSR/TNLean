@@ -1,0 +1,152 @@
+\documentclass{article}
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{./command}
+\setlength{\emergencystretch}{2em}
+\title{The Constant in the Bond-Dimension Bound\newline
+for Repeated Qutrit States}
+\author{}
+\date{October 25, 2026}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The printed bound}
+
+Fix an integer $N\ge2$ and let $\psi$ be the unit qutrit state on $2N$ sites
+with parameter $p_N=1/N$. Put $K=N^2$ and let $\chi=\psi^{\otimes K}$ be the
+unit vector on $M=2N^3$ sites. For unit vectors $\eta,\phi$ write
+$f=|\langle\eta,\phi\rangle|^2$ for the squared fidelity and
+\begin{align}
+    T(f) & =
+    \begin{cases}
+        2\sqrt{f(1-f)}, & f\ge1/2, \\
+        1,              & f<1/2,
+    \end{cases}
+    \label{eq:swvc08_qutrit_optimized_error}
+\end{align}
+for the optimized pure-state trace error. Schuch, Wolf, Verstraete and
+Cirac~\cite{Schuch2008EntropyScaling} define this error as the infimum of
+$\lVert|\eta\rangle\langle\eta|-\alpha|\phi\rangle\langle\phi|\rVert_1$ over
+scalars $\alpha$, which equals $\sin2\theta$ when $\cos\theta=\sqrt f$ and
+$0\le\theta\le\pi/4$.\footnote{arXiv:0705.0292v2, \path{paper_v2.tex},
+    lines 160--173.}
+It is invariant under rescaling of $\phi$.
+We write $T(\eta,\phi)$ for the value of
+(\ref{eq:swvc08_qutrit_optimized_error}) at the squared fidelity of $\eta$
+with $\phi/\lVert\phi\rVert$.
+
+The argument of~\cite{Schuch2008EntropyScaling} combines two estimates. For
+unit vectors $\eta,\phi$ and $K\ge1$, the first asserts
+\begin{align}
+    T(\eta^{\otimes K},\phi^{\otimes K})
+     & \ge\sqrt{K/8}\,T(\eta,\phi)
+    \qquad\text{whenever }T(\eta,\phi)^2\le2/K.
+    \label{eq:swvc08_qutrit_printed_amplification}
+\end{align}
+The second asserts, for every matrix product state $\phi$ of bond dimension
+at most $D$ on $2N$ sites,
+\begin{align}
+    T(\psi,\phi) & \ge\frac{2^N-(D-1)}{N2^N}.
+    \label{eq:swvc08_qutrit_single_copy}
+\end{align}
+After reducing to a product approximant $\phi^{\otimes K}$, the source
+concludes that every matrix product state $\Phi$ on $M$ sites of bond
+dimension at most $D$ satisfies
+\begin{align}
+    D & \ge2^N\bigl(1-8T(\chi,\Phi)\bigr)+1.
+    \label{eq:swvc08_qutrit_printed_bound}
+\end{align}
+The three displays occur at lines 471--479 of the source.
+
+\section{What the printed estimates give}
+
+Set $t=T(\chi,\Phi)$. When the hypothesis of
+(\ref{eq:swvc08_qutrit_printed_amplification}) holds for the factor $\phi$,
+combining it with (\ref{eq:swvc08_qutrit_single_copy}) and
+$\sqrt{K/8}=N/(2\sqrt2)$ gives
+\begin{align}
+    \frac{2^N-(D-1)}{2\sqrt2\,2^N} & \le t,
+    \label{eq:swvc08_qutrit_printed_combination} \\
+    D                              & \ge2^N\bigl(1-2\sqrt2\,t\bigr)+1.
+    \label{eq:swvc08_qutrit_sqrt_eight_bound}
+\end{align}
+Thus the printed constant eight is larger than the constant $2\sqrt2$ that
+the printed ingredients yield. Since $t\ge0$,
+(\ref{eq:swvc08_qutrit_sqrt_eight_bound}) implies
+(\ref{eq:swvc08_qutrit_printed_bound}), so the printed bound is true but not
+sharp for its argument. The argument also leaves the smallness hypothesis of
+(\ref{eq:swvc08_qutrit_printed_amplification}) unchecked for the extracted
+factor.
+
+\section{The formal bound}
+
+The formalization replaces (\ref{eq:swvc08_qutrit_printed_amplification}) by a
+scalar estimate without a single-copy smallness hypothesis. For
+$0\le f\le1$ and $K\ge1$,
+\begin{align}
+    T(f^K)<1 & \Longrightarrow\sqrt{K/4}\,T(f)\le T(f^K).
+    \label{eq:swvc08_qutrit_formal_amplification}
+\end{align}
+Indeed, $T(f^K)<1$ forces $f\ge f^K>1/2$, and then
+$Kf(1-f)\le4f^K(1-f^K)$, which is the square of
+(\ref{eq:swvc08_qutrit_formal_amplification}).\footnote{%
+    \leanid{Real.sqrt_mul_optimizedPureTraceError_le_pow_of_lt_one}, in the
+    QICLean dependency.}
+Squared fidelities of tensor products multiply, and the largest factor
+fidelity $f_i$ of a product approximant satisfies $f_i^K\ge\prod_jf_j$.
+Since $T$ is nonincreasing on $[1/2,1]$ and equal to one below $1/2$, this
+gives $T(f_i^K)\le t$. A unit matrix product state $\Phi$ of bond dimension at
+most $D$ on $M$ sites therefore yields a unit block state $\phi$ of bond
+dimension at most $D$ on $2N$ sites with $(N/2)\,T(\psi,\phi)\le t$ whenever
+$t<1$.\footnote{\leanid{TNLean.MPS.AreaLaw.IsOpenMPS.exists_copy_error_amplification}
+    in \doclink{TNLean/MPS/AreaLaw/CopyErrorAmplification}.}
+Combining this with (\ref{eq:swvc08_qutrit_single_copy}) gives
+\begin{align}
+    \frac{2^N-(D-1)}{2\cdot2^N} & \le t,
+    \label{eq:swvc08_qutrit_formal_combination} \\
+    D                           & \ge2^N(1-2t)+1.
+    \label{eq:swvc08_qutrit_formal_bound}
+\end{align}
+For $t=1$, the right-hand side of (\ref{eq:swvc08_qutrit_formal_bound}) is
+$1-2^N<0$, so (\ref{eq:swvc08_qutrit_formal_bound}) holds for every unit
+approximant.\footnote{\leanid{TNLean.MPS.AreaLaw.EntropyScaling.bondDimension_qutritCopies_ge_of_scalar_error_lt_one}
+    in \doclink{TNLean/MPS/AreaLaw/EntropyScaling/QutritApproximation}.}
+It implies (\ref{eq:swvc08_qutrit_sqrt_eight_bound}) and
+(\ref{eq:swvc08_qutrit_printed_bound}).
+
+The approximation criterion of the source is the full trace-norm error
+$\delta=\lVert|\chi\rangle\langle\chi|-|\Phi\rangle\langle\Phi|\rVert_1$ of
+a possibly unnormalized vector $\Phi$.\footnote{arXiv:0705.0292v2,
+    \path{paper_v2.tex}, lines 151--157.}
+When $\Phi\ne0$, taking $\alpha=\lVert\Phi\rVert^2$ in the infimum that
+defines $T(\chi,\Phi/\lVert\Phi\rVert)$ shows $T(\chi,\Phi)\le\delta$. If $\delta<1$, then $\Phi\ne0$, because the zero vector has
+error one. Hence
+\begin{align}
+    D & \ge2^N(1-2\delta)+1
+    \label{eq:swvc08_qutrit_full_error_bound}
+\end{align}
+for every matrix product state $\Phi$ of bond dimension at most $D$; for
+$\delta\ge1$ the right-hand side is negative.\footnote{%
+    \leanid{TNLean.MPS.AreaLaw.EntropyScaling.bondDimension_qutritCopies_ge}
+    in \doclink{TNLean/MPS/AreaLaw/EntropyScaling/QutritApproximation}.}
+The resulting obstruction to polynomial bond dimension is stated for
+$\delta<1/8$, the threshold of (\ref{eq:swvc08_qutrit_printed_bound}), although
+(\ref{eq:swvc08_qutrit_full_error_bound}) would permit any $\delta<1/2$.
+
+\section{Verdict}
+
+The printed bound (\ref{eq:swvc08_qutrit_printed_bound}) is true. Its
+constant is not the one its printed ingredients give, and the smallness
+hypothesis of (\ref{eq:swvc08_qutrit_printed_amplification}) is not verified
+in the cited argument. The formalization proves the stronger bound
+(\ref{eq:swvc08_qutrit_formal_bound}) by the amplification estimate
+(\ref{eq:swvc08_qutrit_formal_amplification}), which needs only $t<1$. This is
+a local correction of the constant and of the amplification step, with no
+change to the hypotheses of the source.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

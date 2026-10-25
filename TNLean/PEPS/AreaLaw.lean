@@ -91,6 +91,7 @@ import TNLean.PEPS.AreaLaw.RegularizedPatchStationarity
 import TNLean.PEPS.AreaLaw.RotatedChainRule
 import TNLean.PEPS.AreaLaw.RoundedShellEntropy
 import TNLean.PEPS.AreaLaw.SafeBoxChildren
+import TNLean.PEPS.AreaLaw.SafeRectangleAreaLaw
 import TNLean.PEPS.AreaLaw.SafeRectangleDilation
 import TNLean.PEPS.AreaLaw.Scan
 import TNLean.PEPS.AreaLaw.SelectedSchmidtEntropyBounds
