@@ -1,0 +1,83 @@
+\section{Trimming across one cut}
+
+Landau, Vazirani and Vidick~\cite{Landau2015Polynomial} (arXiv:1307.5143v1,
+lines 330--333) trim a chain vector across a cut by keeping the Schmidt terms
+with the largest coefficients. Trimming across one cut does not increase the
+Schmidt rank across any other cut (lines 544--553).
+
+\begin{definition}[Trimming a chain vector]
+    \label{def:chain_trim}
+    \lean{TNLean.MPS.AreaLaw.chainTrim}
+    \leanok
+    \uses{def:chain_open_mps}
+    Let $\psi$ be a vector on $L$ sites of local dimension $q$, let $i$ and
+    $m$ be natural numbers, and write $C=M_i(\psi)$ for the coefficient matrix
+    at the cut $i$. A \emph{trimming projection} of $\psi$ at $m$ across the
+    cut $i$ is an orthogonal projection $P$ on $\mathcal H_{[0,i)}$ of rank at
+    most $m$ with $\operatorname{tr}(PCC^{*})$ equal to the sum of the $m$
+    largest eigenvalues of $CC^{*}$. The \emph{trimmed vector} is
+    $\operatorname{trim}^i_P\psi=(P\otimes1)\psi$, whose coefficient matrix
+    at the cut $i$ is $PC$. When a Schmidt coefficient is repeated, every
+    choice of kept eigenvectors gives a trimming projection.
+\end{definition}
+
+\begin{theorem}[Trimming does not increase cut ranks]
+    \label{thm:chain_trim_cut_ranks}
+    \lean{
+        TNLean.MPS.AreaLaw.cutMatrix_chainTrim,
+        TNLean.MPS.AreaLaw.cutVector_chainTrim,
+        TNLean.MPS.AreaLaw.rank_cutMatrix_chainTrim_self_le,
+        TNLean.MPS.AreaLaw.rank_cutMatrix_chainTrim_le
+    }
+    \leanok
+    \uses{def:chain_trim}
+    Let $P$ be a trimming projection of $\psi$ at $m$ across the cut $i$.
+    The coefficient matrix of $\operatorname{trim}^i_P\psi$ at the cut $i$ is
+    $PM_i(\psi)$, so $\operatorname{rank}M_i(\operatorname{trim}^i_P\psi)\le m$, and
+    $\operatorname{rank}M_j(\operatorname{trim}^i_P\psi)\le
+        \operatorname{rank}M_j(\psi)$ at every cut $j$. No assumption on $L$
+    or $q$ is needed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_supported_cut_rank}
+    The first bound holds because $PC$ has rank at most that of $P$. For
+    $j\ge i$ the operator $P\otimes1$ acts on sites to the left of the cut
+    $j$. For $j\le i$, the projection $P$ commutes with $CC^{*}$, since it
+    maximizes $\operatorname{tr}(RCC^{*})$ among orthogonal projections $R$
+    of the same trace. Hence $PC=CQ^{\mathsf T}$, where $Q^{\mathsf T}$ is the
+    support projection of $C^{*}PC$, so $(P\otimes1)\psi=(1\otimes Q)\psi$
+    with $Q$ acting on sites to the right of the cut $j$. In both cases the
+    operator acts on one side of the cut $j$ and cannot increase its rank.
+    If there are no configurations, both coefficient matrices are empty.
+\end{proof}
+
+\begin{theorem}[Trimming error on the chain]
+    \label{thm:chain_trim_error}
+    \lean{
+        TNLean.MPS.AreaLaw.norm_chainTrim_le,
+        TNLean.MPS.AreaLaw.norm_inner_sub_chainTrim_le
+    }
+    \leanok
+    \uses{def:chain_trim}
+    Let $P$ be a trimming projection of $\psi$ at $m$ across the cut $i$,
+    and let $w$ be a vector with $\operatorname{rank}M_i(w)\le D$. Then
+    $\|\operatorname{trim}^i_P\psi\|\le\|\psi\|$ and
+    \begin{align}
+        |\langle\psi-\operatorname{trim}^i_P\psi,w\rangle|
+        \le\|\psi\|\,\|w\|\sqrt{\frac{D}{m+1}}. \notag
+    \end{align}
+    The source states error $\epsilon$ for $m=D/\epsilon$, which is false;
+    the bound above gives error $\epsilon$ for $m+1\ge D/\epsilon^2$
+    \cite{gap:lvv13_trimming_radius}.
+\end{theorem}
+\begin{proof}\leanok
+    The cut coordinates at $i$ preserve norms and inner products, and in
+    them the trimmed vector is $(P\otimes1)$ applied to the cut vector of
+    $\psi$. The squared norm of $(P\otimes1)\psi$ is the sum of the $m$
+    largest eigenvalues of $CC^{*}$, at most their total $\|\psi\|^2$. For the
+    second bound, let $T$ be the support projection of the part of $M_i(w)$
+    orthogonal to the range of $P$. Then $P+T$ is an orthogonal projection of
+    rank at most $m+D$, so by Ky Fan's maximum principle the discarded part
+    paired with $w$ captures at most $D$ times the $(m+1)$-st eigenvalue of
+    $CC^{*}$, which is at most $\|\psi\|^2/(m+1)$.
+\end{proof}

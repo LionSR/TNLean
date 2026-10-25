@@ -37,15 +37,6 @@ namespace TNLean.MPS.AreaLaw
 
 variable {L q : ℕ}
 
-private theorem cutMatrix_injective (k : ℕ) :
-    Function.Injective (fun ψ : EuclideanSpace ℂ (Fin L → Fin q) ↦ cutMatrix ψ k) := by
-  intro ψ φ h
-  ext x
-  have hx := congrArg (fun M ↦ M
-    ((Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k)) x).1
-    ((Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k)) x).2) h
-  simpa only [cutMatrix_apply, Prod.mk.eta, Equiv.symm_apply_apply] using hx
-
 private theorem cutMatrix_localLift (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ)
     (K : Matrix (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k))
       (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k)) ℂ) :
