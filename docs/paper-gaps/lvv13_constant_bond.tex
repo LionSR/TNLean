@@ -87,6 +87,24 @@ The theorems hold under the source's hypotheses: its nearest-neighbour
 Hamiltonian with $0\le H_i\le1$ is a chain Hamiltonian of range $1$ and
 strength $1$.
 
+\section{The range of \texorpdfstring{$\delta$}{delta}}
+
+The source states Lemma \texttt{constantbondapprox} and Corollary
+\texttt{c:1} for any constant $\delta$. The formalization assumes
+$0<\delta\le1$ in the lemma, where the conclusion
+$\langle v,\Omega\rangle\ge1-\delta$ is not vacuous, and $0<\delta<1/4$ in
+the corollary, where its energy bound
+\begin{align}
+    E_0+\frac{4\sqrt\delta}{1-4\delta}
+    \label{eq:lvv13_constant_bond_corollary_energy}
+\end{align}
+is defined. The source's own proof of \texttt{c:1} applies Lemma
+\texttt{l:2}, whose hypothesis $\delta(1+1/\varepsilon)\le1/2$ also restricts
+$\delta$. That condition is stronger than $\delta<1/4$ when $\varepsilon<1$
+and weaker when $\varepsilon>1$, so the printed corollary is itself
+restricted, though only implicitly. The algorithm uses the corollary only
+for small constant $\delta$.
+
 \section{The source's constant}
 
 The explicit dependence $\varepsilon^{-1}\log^3d$ is not formalized. It would

@@ -45,6 +45,14 @@ exponential of an affine function of `log 1/δ`. Only the constants differ. The 
 nearest-neighbour Hamiltonian with `0 ≤ H_i ≤ 1` is the case `R = 1`, `J = 1` of the chain
 Hamiltonians used here. Documented in `docs/paper-gaps/lvv13_constant_bond.tex`.
 
+**Scope restriction (range of δ):** the source states Lemma `constantbondapprox` and Corollary
+`c:1` for any constant `δ`. Here `ChainHamiltonian.one_sub_le_re_inner_chainTrim` assumes
+`0 < δ ≤ 1`, where the conclusion `1 - δ ≤ Re ⟨v, Ω⟩` is not vacuous, and
+`ChainHamiltonian.exists_rank_cutMatrix_le_constantCutBond` assumes `0 < δ < 1/4`, where the
+energy bound `E₀ + 4 √δ / (1 - 4δ)` is defined. The source's proof of `c:1` goes through
+`l:2`, which needs `δ (1 + 1/ε) ≤ 1/2`, so the printed corollary is also restricted, implicitly.
+Documented in `docs/paper-gaps/lvv13_constant_bond.tex`.
+
 **Local fix (energy after trimming):** the proof of Lemma `l:2` in the source drops three
 constants and the printed bound `ε₀ + 6 √δ` does not follow from it. The bound here is
 `E₀ + (δ + 2 √(2η)) / (1 - 2η)` with `η = 2 (δ/Δ + δ_B)`, which depends on `1/Δ`, under

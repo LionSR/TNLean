@@ -1632,5 +1632,7 @@ form remains open under issue #9811.
   independent of the chain length and the cut, which is all the later steps of
   the source use, and the theorems hold under the source's hypotheses. The
   source's constant would follow from the bound of Arad, Kitaev, Landau and
-  Vazirani, arXiv:1301.1162. The energy bound after trimming is corrected in the
+  Vazirani, arXiv:1301.1162. The lemma is formalized for `0 < δ ≤ 1` and Corollary
+  `c:1` for `0 < δ < 1/4`; the source's own proof of `c:1` also restricts `δ`,
+  through the hypothesis `δ(1 + 1/ε) ≤ 1/2` of Lemma `l:2`. The energy bound after trimming is corrected in the
   QICLean note `lvv13_trimming_energy`.
