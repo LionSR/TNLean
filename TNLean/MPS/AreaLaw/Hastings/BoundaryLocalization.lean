@@ -95,8 +95,8 @@ theorem norm_interactionPropagator_sub_le {A B H H₀ : Matrix n n ℂ} (hA : A.
   refine (norm_add_le _ _).trans ?_
   rw [CStarRing.norm_mul_mem_unitary _ (SpectralFilter.hermitianUnitaryPath_mem_unitary hA _),
     CStarRing.norm_mem_unitary_mul _ (SpectralFilter.hermitianUnitaryPath_mem_unitary hH _)]
-  have h1 := norm_hermitianUnitaryPath_sub_le (hA.add hB) hH t
-  have h2 := norm_hermitianUnitaryPath_sub_le hA hH₀ (-t)
+  have h1 := Matrix.norm_hermitianUnitaryPath_sub_le (hA.add hB) hH t
+  have h2 := Matrix.norm_hermitianUnitaryPath_sub_le hA hH₀ (-t)
   rw [abs_neg] at h2
   rw [mul_add]
   linarith [mul_comm ‖A + B - H‖ |t|, mul_comm ‖A - H₀‖ |t|]
