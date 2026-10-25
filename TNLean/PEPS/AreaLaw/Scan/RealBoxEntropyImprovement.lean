@@ -35,7 +35,7 @@ open TNLean.Lattice
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- A bound with exponent `1 + e` implies the scanner's improved exponent
-`1 + (1 - ell e₀) * e` for the literal supremum at the same real clearance.
+`1 + (1 - ℓ(e₀)) * e` for the literal supremum at the same real clearance.
 The output coefficient is chosen before the intermediate exponent, clearance
 and every physical instance. The initial exponent and improvement fraction
 remain fixed throughout the implication.
