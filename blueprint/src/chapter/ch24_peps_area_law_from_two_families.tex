@@ -167,3 +167,48 @@ constants for all admissible real clearances.
     \end{align}
     All constants were chosen before $d$ and the physical data.
 \end{proof}
+
+\begin{theorem}[Improvement of the exponent at fixed real clearance]
+    \label{thm:area_law_real_box_improvement_after_area_law}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_uniform_boxEntropy_improvement_real}
+    \leanok
+    \uses{thm:area_law_real_box_recurrence_after_area_law,
+        def:area_law_bootstrap_parameters}
+    Fix integers $q\ge1$, $R\ge0$ and reals $J\ge0$, $\Delta>0$.
+    Fix $e_0$ with $e_*<e_0<1$, where $e_*=2\cdot10^{-6}$, and fix
+    $C_{\rm box}\ge0$. Put $\ell=\ell(e_0)$ as in
+    Definition~\ref{def:area_law_bootstrap_parameters}.
+    There is a constant $C>0$ such that the following implication holds
+    for every $e$ with $e_*<e\le e_0$ and every real $d>2R+10$.
+
+    Let $F_d(r)$ be the supremum over the physical instances and safe
+    rectangles at fixed $q,R,J,\Delta,d$ specified in
+    Theorem~\ref{thm:area_law_real_box_recurrence_after_area_law}.
+    If $F_d(r)\le C_{\rm box}r^{1+e}$ for every integer $r\ge1$, then
+    $F_d(r)\le Cr^{1+(1-\ell)e}$ for every integer $r\ge1$.
+    The constant $C$ is chosen before $e,d$ and all physical instances.
+    This gives the exponent improvement in the proof of
+    \cite[Proposition~9.5]{OpenAI2026AreaLaw} as a consequence of the
+    uniform area law.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_safe_rectangle_linear_entropy,
+        thm:area_law_bootstrap_margins}
+    Choose $K\ge0$ from the linear safe-rectangle estimate and set
+    $C=\max\{K,1\}>0$. These constants precede $e$ and $d$.
+    Fix admissible $e,d$ and an integer $r\ge1$.
+    Every entropy in the defining collection for $F_d(r)$ is at most
+    $Ks\le Kr$, where $s\le r$ is the size of its rectangle.
+    Since $Kr\ge0$, this also bounds an empty collection under the
+    stated supremum convention. Thus $F_d(r)\le Kr$.
+
+    The parameter bounds give $0<\ell<1$; hence
+    $e'=(1-\ell)e>0$. Since $r\ge1$, one has $r\le r^{1+e'}$,
+    and therefore
+    \begin{align}
+        F_d(r)\le Kr\le Cr\le Cr^{1+e'}.\notag
+    \end{align}
+    The linear bound proves the conclusion uniformly, including every
+    instance satisfying the assumed bound with coefficient $C_{\rm box}$.
+\end{proof}
