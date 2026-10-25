@@ -54,52 +54,13 @@ section Shift
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
-/-- The unitary path of a real scalar is a scalar. -/
-theorem hermitianUnitaryPath_smul_one (c : ℝ) (t : ℝ) :
-    hermitianUnitaryPath ((c : ℂ) • (1 : Matrix n n ℂ)) t =
-      Complex.exp (t * Complex.I * c) • (1 : Matrix n n ℂ) := by
-  have h : t • (Complex.I • ((c : ℂ) • (1 : Matrix n n ℂ))) =
-      diagonal (fun _ : n ↦ (t * Complex.I * c : ℂ)) := by
-    ext i j
-    by_cases hij : i = j <;> simp [hij, diagonal, one_apply, mul_comm, mul_left_comm]
-  unfold hermitianUnitaryPath
-  rw [h, exp_diagonal]
-  ext i j
-  by_cases hij : i = j <;> simp [hij, diagonal, one_apply, ← Complex.exp_eq_exp_ℂ]
-
-/-- Shifting a generator by a real scalar multiplies its unitary path by a phase. -/
-theorem hermitianUnitaryPath_add_smul_one (X : Matrix n n ℂ) (c t : ℝ) :
-    hermitianUnitaryPath (X + (c : ℂ) • 1) t =
-      Complex.exp (t * Complex.I * c) • hermitianUnitaryPath X t := by
-  have hc : Commute (t • (Complex.I • X)) (t • (Complex.I • ((c : ℂ) • (1 : Matrix n n ℂ)))) :=
-    ((Commute.one_right X).smul_right (c : ℂ)).smul_right Complex.I |>.smul_right t
-      |>.smul_left Complex.I |>.smul_left t
-  unfold hermitianUnitaryPath
-  rw [smul_add, smul_add, Matrix.exp_add_of_commute _ _ hc]
-  have := hermitianUnitaryPath_smul_one (n := n) c t
-  unfold hermitianUnitaryPath at this
-  rw [this, mul_smul_comm, mul_one]
-
-/-- The Gaussian intertwiner is unchanged when both generators are shifted by the same real
-scalar: the phases cancel. -/
-theorem gaussianIntertwiner_add_smul_one (h : NNReal) (H' H W : Matrix n n ℂ) (c : ℝ) :
-    GaussianFilter.gaussianIntertwiner h (H' + (c : ℂ) • 1) (H + (c : ℂ) • 1) W =
-      GaussianFilter.gaussianIntertwiner h H' H W := by
-  unfold GaussianFilter.gaussianIntertwiner
-  congr 1
-  funext t
-  rw [hermitianUnitaryPath_add_smul_one, hermitianUnitaryPath_add_smul_one, smul_mul_assoc,
-    smul_mul_assoc, mul_smul_comm, smul_smul, ← Complex.exp_add]
-  have : (t * Complex.I * c + (↑(-t) * Complex.I * c) : ℂ) = 0 := by push_cast; ring
-  rw [this, Complex.exp_zero, one_smul]
-
 /-- The interaction-picture average is unchanged when `A` is shifted by a real scalar: the
 phases of `e^{i(A+B)t}` and `e^{-iAt}` cancel. -/
 theorem interactionAverage_add_smul_one (η : ℝ≥0) (A B : Matrix n n ℂ) (c : ℝ) :
     interactionAverage η (A + (c : ℂ) • 1) B = interactionAverage η A B := by
   unfold interactionAverage
   rw [show A + (c : ℂ) • 1 + B = A + B + (c : ℂ) • 1 by abel]
-  exact gaussianIntertwiner_add_smul_one η (A + B) A 1 c
+  exact GaussianFilter.gaussianIntertwiner_add_smul_one η (A + B) A 1 c
 
 end Shift
 
