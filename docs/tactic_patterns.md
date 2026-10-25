@@ -4850,6 +4850,38 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Infimum over walk lengths under graph maps — candidate (2026-10-21)
+
+- **Pattern:** Rewrite extended graph distance as the infimum of walk lengths,
+  bound the target distance for each source walk, and preserve the length by
+  mapping or inducing that walk.
+- **Seen:** `SimpleGraph.Hom.edist_le` maps walks;
+  `SimpleGraph.ConnectedComponent.edist_eq` induces ambient walks after
+  proving that their support remains in the component. The isomorphism
+  theorem applies the homomorphism result twice.
+- **Existing lemmas:** Public Mathlib `Walk.length_map`, `Walk.induce` and
+  `Walk.map_induce` supply the transport identities. The component argument
+  uses public `Walk.takeUntil`, not the private component-walk construction.
+- **Notes:** These are two related comparisons in one module, below the
+  promotion threshold. The mathematical transport theorems should be reused;
+  no additional tactic or abstraction is proposed. Both comparisons are in
+  `TNLean/Algebra/GraphDistanceTransport.lean`.
+
+
+
+### Passing from a natural localization radius to a real radius — candidate (2026-10-21)
+
+- **Pattern:** Use the floor inequality to bound
+  `exp (a - (⌊ℓ⌋₊ : ℝ) / 2)` by `exp (1 / 2) * exp (a - ℓ / 2)`;
+  combine this factor with the coefficient of the natural-radius estimate.
+- **Seen:** The chain localization theorem in `MPS/AreaLaw/LiebRobinson.lean`
+  and the domain localization theorem in `MPS/AreaLaw/DomainLiebRobinson.lean`.
+- **Existing lemmas:** `Nat.lt_floor_add_one`, `Nat.floor_lt`,
+  `Real.exp_le_exp` and `Real.exp_add`.
+- **Notes:** Two occurrences in two files. A third occurrence would warrant
+  extracting the scalar inequality, independently of the graph and Hamiltonian.
+
+
 ### Restricting an operator Schmidt decomposition at a fixed configuration — candidate (2026-10-23)
 
 - **Pattern:** Choose an actual configuration in the region carrying an identity
@@ -8969,6 +9001,22 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** Two occurrences. Their infinite-distance arguments differ:
   the finite path is connected, whereas an induced domain uses exact
   commutation across components. No further abstraction is proposed yet.
+
+### Opposite-side witnesses for reset supports — candidate (2026-10-21)
+
+- **Pattern:** For a support crossing a region, choose one vertex inside and
+  one outside. Use the outside witness for the first interior core and the
+  inside witness for the disjoint second region. The diameter bound transfers
+  the core margin to every vertex of the support.
+- **Seen:** `chain_reset_support_separation` in
+  `MPS/AreaLaw/ResetSupportSeparation.lean` and
+  `reset_graphNeighborhood_disjoint_cores` in
+  `Circuit/LiebRobinson/SupportSeparation.lean`.
+- **Abstraction:** The graph theorem expresses the common geometric argument
+  with natural ball containments. The chain theorem also gives a real-distance
+  lower bound and retains its present proof.
+- **Notes:** Two occurrences; below the promotion threshold. A conversion
+  through rounded radii would lengthen the existing chain proof.
 
 ### Transport of a tensor factor through a layout equality — candidate (2026-10-18)
 
