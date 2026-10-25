@@ -31,6 +31,7 @@ import TNLean.Lattice.LowEnergyBasisIteration
 import TNLean.Lattice.LowEnergyBasisSimpleSpectrum
 import TNLean.Lattice.LowEnergyCommutator
 import TNLean.Lattice.LowEnergyCommutatorExample
+import TNLean.Lattice.LowEnergyCommutatorSum
 import TNLean.Lattice.MarginalTails
 import TNLean.Lattice.PartyCircuit
 import TNLean.Lattice.PhysicalBufferCoordinates
@@ -41,6 +42,7 @@ import TNLean.Lattice.RegionSplit
 import TNLean.Lattice.RegionalEntropy
 import TNLean.Lattice.RegionalEntropyBridge
 import TNLean.Lattice.RegionalReset
+import TNLean.Lattice.RegionalResetEntropy
 import TNLean.Lattice.RegionalSwap
 import TNLean.Lattice.RegionalSwapSupport
 import TNLean.Lattice.ReplicaSwap
