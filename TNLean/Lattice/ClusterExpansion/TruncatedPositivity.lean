@@ -12,9 +12,10 @@ import TNLean.Lattice.ClusterExpansion.Truncation
 Hastings, *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3,
 `References/cond-mat_0508554/proj3new.tex`, lines 1303–1314), sets
 `ρ(β, l_proj) = ρ(β/n, l_proj)^n` (eq. `mplt`) with `n` even, and states that the even power is
-positive definite. The positivity of even powers in `AllTemperatures.lean` applies to Hermitian operators.
-This file shows that the truncated operator `ρ(β, l)` of the cluster expansion is Hermitian when
-the terms `H_k` are, so the even power of the actual truncated operator is positive semidefinite.
+positive definite. The positivity of even powers in `AllTemperatures.lean` applies to Hermitian
+operators. This file shows that the truncated operator `ρ(β, l)` of the cluster expansion is
+Hermitian when the terms `H_k` are, so the even power of the actual truncated operator is positive
+semidefinite.
 
 `ρ(β, l)` is the finite inclusion–exclusion sum `∑_U (-1)^{|U|} ρ(β, U)` (`truncatedExp_eq_sum`),
 and each `ρ(β, C) = ∑_{D ⊆ C} (-1)^{|D|} e^{-β (H - H_B - H_D)}` is a sum of exponentials of
