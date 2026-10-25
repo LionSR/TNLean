@@ -1,0 +1,151 @@
+\section{Entropy scaling and efficient approximation}
+
+For a unit vector $\psi_N\in(\mathbb C^q)^{\otimes N}$, write
+$\rho_{N,k}$ for its marginal on the first $k$ sites. All logarithms in
+this section are natural. The norm $\|\cdot\|_1$ is the full trace norm.
+
+\begin{definition}[Efficient approximation by matrix product states]
+    \label{def:efficient_mps_approximation}
+    \lean{TNLean.MPS.AreaLaw.IsEfficientlyApproximableByMPS}
+    \leanok
+    \uses{def:chain_open_mps}
+    Let $\mathcal N\subseteq\mathbb N$ and let $(\psi_N)_{N\in\mathcal N}$
+    be a family of vectors. Following~\cite{Schuch2008EntropyScaling},
+    the family is efficiently approximable by matrix product states if, for
+    every $\delta>0$, there are $C_\delta>0$ and $m_\delta\in\mathbb N$
+    such that each $N\in\mathcal N$ admits a matrix product vector
+    $\phi_N$ with bond dimension at most $D_N$ satisfying
+    \begin{align}
+        D_N                                    & \le C_\delta(N+1)^{m_\delta}, &
+        \bigl\||\psi_N\rangle\langle\psi_N|
+        -|\phi_N\rangle\langle\phi_N|\bigr\|_1 & \le\delta.
+        \label{eq:efficient_mps_approximation}
+    \end{align}
+    The approximants need not be normalized. No relation between vectors at
+    different lengths is required.
+\end{definition}
+
+\begin{theorem}[An entropy threshold for the discarded weight]
+    \label{thm:renyi_entropy_tail_threshold}
+    \lean{TNLean.MPS.AreaLaw.one_sub_kyFanNorm_le_of_renyiEntropy_le}
+    \leanok
+    Let $\rho$ be a density matrix, $0<\alpha<1$, $D\ge1$, and $T>0$.
+    Write $\tau_D(\rho)$ for the sum of its eigenvalues beyond the $D$
+    largest, counting multiplicity. If
+    \begin{align}
+        S_\alpha(\rho)\le
+        \log\frac{D}{1-\alpha}+\frac{\alpha}{1-\alpha}\log T,
+        \label{eq:renyi_tail_threshold}
+    \end{align}
+    then $\tau_D(\rho)\le T$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The assertion is immediate when the tail is zero. Otherwise,
+    Lemma~2 of~\cite{VerstraeteCirac2006Faithfully} gives
+    \begin{align}
+        \log\tau_D(\rho)
+        \le\frac{1-\alpha}{\alpha}
+        \left(S_\alpha(\rho)-\log\frac{D}{1-\alpha}\right)
+        \le\log T.
+        \label{eq:renyi_tail_log_bound}
+    \end{align}
+    Exponentiating~(\ref{eq:renyi_tail_log_bound}) proves the claim.
+\end{proof}
+
+\begin{theorem}[Normalized approximation on a finite chain]
+    \label{thm:renyi_finite_mps_approximation}
+    \lean{TNLean.MPS.AreaLaw.exists_normalized_isOpenMPS_of_renyiEntropy_le}
+    \leanok
+    \uses{def:chain_open_mps}
+    Let $\psi_N$ be a unit vector, $0<\alpha<1$, $D\ge1$, and
+    $0<\delta\le1$. Suppose every internal prefix marginal satisfies
+    \begin{align}
+        S_\alpha(\rho_{N,k})\le
+        \log\frac{D}{1-\alpha}
+        +\frac{\alpha}{1-\alpha}\log\frac{\delta^2}{16(N+1)}.
+        \label{eq:renyi_finite_entropy_threshold}
+    \end{align}
+    There is a unit matrix product vector $\phi_N$ of bond dimension at
+    most $D$ whose pure density matrix differs from that of $\psi_N$
+    by at most $\delta$ in full trace norm.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:renyi_entropy_tail_threshold,thm:chain_sequential_truncation_eigen,
+        thm:chain_sequential_truncation_sq}
+    By~(\ref{eq:renyi_finite_entropy_threshold}), each discarded weight is
+    at most $\delta^2/[16(N+1)]$.
+    Squared-error sequential truncation gives a matrix product vector $\Phi$
+    with $\|\Phi-\psi_N\|^2\le\delta^2/16$. In particular $\Phi\ne0$.
+    Set $\phi_N=\Phi/\|\Phi\|$. Scaling preserves the bond bound, and
+    \begin{align}
+        \|\phi_N-\psi_N\|
+         & \le |1-\|\Phi\||+\|\Phi-\psi_N\|
+        \le2\|\Phi-\psi_N\|\le\delta/2.
+        \label{eq:renyi_normalized_vector_error}
+    \end{align}
+    The full trace norm of the difference of two unit pure densities is
+    at most twice the distance between their vectors,
+    so~(\ref{eq:renyi_normalized_vector_error}) gives the claim.
+\end{proof}
+
+\begin{theorem}[Exact representation from marginal ranks]
+    \label{thm:renyi_zero_exact_mps}
+    \lean{TNLean.MPS.AreaLaw.isOpenMPS_of_regionState_rank_le}
+    \leanok
+    \uses{def:chain_open_mps}
+    If every internal prefix marginal of a unit vector $\psi_N$ has rank
+    at most $D$, then $\psi_N$ is a matrix product vector of bond dimension
+    at most $D$. Empty and one-site chains have no internal rank condition.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_sequential_truncation_eigen,thm:chain_sequential_truncation_sq}
+    All discarded spectral weights vanish. The squared-error bound for
+    sequential truncation is therefore zero, so the truncated vector
+    equals $\psi_N$.
+\end{proof}
+
+\begin{theorem}[Logarithmic R\'enyi entropy implies efficient approximation]
+    \label{thm:renyi_family_mps_approximation}
+    \lean{TNLean.MPS.AreaLaw.isEfficientlyApproximableByMPS_of_renyiEntropy_le}
+    \leanok
+    \uses{def:efficient_mps_approximation}
+    Let $(\psi_N)_{N\in\mathcal N}$ be a family of unit vectors. Suppose
+    there are $0\le\alpha<1$, $c\ge0$, and $c'\in\mathbb R$, independent
+    of $N$, such that every internal prefix marginal satisfies
+    $S_\alpha(\rho_{N,k})\le c\log N+c'$.
+    Then the family is efficiently approximable by matrix product states.
+    In particular, this proves the assertion
+    of~\cite{Schuch2008EntropyScaling}, which assumes the bound for
+    all reduced blocks and positive $c,c'$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:renyi_finite_mps_approximation,thm:renyi_zero_exact_mps}
+    Fix $\delta>0$ and put $\varepsilon=\min(\delta,1)$ and
+    $t=\alpha/(1-\alpha)$. Choose
+    \begin{align}
+        m                                   & =\lceil c+t\rceil, &
+        K                                   & =1+\left\lceil
+        \exp\left(c'+t\log\frac{16}{\varepsilon^2}
+        +\log(1-\alpha)\right)\right\rceil, &
+        D_N                                 & =K(N+1)^m.
+        \label{eq:renyi_family_parameters}
+    \end{align}
+    The choices in~(\ref{eq:renyi_family_parameters}) imply
+    \begin{align}
+        c\log(N+1)+c'\le
+        \log\frac{D_N}{1-\alpha}
+        +t\log\frac{\varepsilon^2}{16(N+1)}.
+        \label{eq:renyi_family_entropy_threshold}
+    \end{align}
+    If an internal cut exists, then $N>0$ and
+    $c\log N\le c\log(N+1)$. For $0<\alpha<1$, the finite-chain theorem
+    together with~(\ref{eq:renyi_family_entropy_threshold}) gives the required
+    normalized approximant with error at most
+    $\varepsilon\le\delta$. For $\alpha=0$, the entropy is the logarithm
+    of the rank. The same threshold yields rank at most $D_N$ at every
+    internal cut, and the exact-representation theorem applies.
+\end{proof}
