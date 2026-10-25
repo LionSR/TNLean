@@ -34,6 +34,7 @@ periodic.
 * `cfc_mem_supportedOperators`, `windowProjection_mem_supportedOperators`,
   `compressedWindowProjection_mem_supportedOperators`: support of spectral windows.
 * `mem_supportedOperators_hierarchy`: the level-`m` projection acts on its block.
+* `commute_supersiteHierarchy`: the projections of the two halves of a block commute.
 * `norm_sub_supersiteHierarchy_le`: the bound over all levels, with the commutation of the
   halves derived from the supports of the pair operators.
 * `norm_toEuclideanLin_sum_sub_le`: the residual of a sum.
@@ -136,6 +137,21 @@ theorem mem_supportedOperators_hierarchy (blk : ι → ℕ)
           (ih (2 * k + 1))))
       (hMsupp m k) _ _
 
+/-- **The halves of a block commute.** In the hierarchy of `mem_supportedOperators_hierarchy`,
+the projections of the two halves of each block act on the disjoint blocks `2k` and `2k + 1` of
+their level, so they commute. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`,
+lines 609–628 and 668–685. -/
+theorem commute_supersiteHierarchy (blk : ι → ℕ)
+    (P M : ℕ → ℕ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (c : ℕ → ℕ → ℝ) (x : ℕ → ℝ)
+    (hP0 : ∀ k, P 0 k = 1)
+    (hstep : ∀ m k, P (m + 1) k =
+      compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
+    (hMsupp : ∀ m k, M m k ∈ supportedOperators d (levelBlock blk (m + 1) k)) :
+    ∀ m k, Commute (P m (2 * k)) (P m (2 * k + 1)) := by
+  have hsupp := mem_supportedOperators_hierarchy blk P M c x hP0 hstep hMsupp
+  exact fun m k ↦ commute_of_mem_supportedOperators (disjoint_levelBlock_two_mul blk m k)
+    (hsupp m (2 * k)) (hsupp m (2 * k + 1))
+
 /-- **All levels on supersites.** The bound of `norm_sub_hierarchy_le`, with the commutation of
 the two halves of each block derived from the supports: each pair operator `M m k` acts on the
 block `k` of level `m + 1`, as the operators `M_{k,k+1}` joining two neighbouring supersites
@@ -151,11 +167,9 @@ theorem norm_sub_supersiteHierarchy_le (blk : ι → ℕ)
     (hres : ∀ m k, ‖toEuclideanLin (M m k - (c m k : ℂ) • 1) ψ‖ ≤ ε)
     (hK : ∀ m k, ‖M m k - (c m k : ℂ) • 1‖ ≤ K) :
     ∀ m k, IsStarProjection (P m k) ∧
-      ‖ψ - toEuclideanLin (P m k) ψ‖ ≤ hierarchyDeficiency ε K x m := by
-  have hsupp := mem_supportedOperators_hierarchy blk P M c x hP0 hstep hMsupp
-  exact norm_sub_hierarchy_le P M c x hP0 hstep
-    (fun m k ↦ commute_of_mem_supportedOperators (disjoint_levelBlock_two_mul blk m k)
-      (hsupp m (2 * k)) (hsupp m (2 * k + 1))) hM hx hψ hres hK
+      ‖ψ - toEuclideanLin (P m k) ψ‖ ≤ hierarchyDeficiency ε K x m :=
+  norm_sub_hierarchy_le P M c x hP0 hstep
+    (commute_supersiteHierarchy blk P M c x hP0 hstep hMsupp) hM hx hψ hres hK
 
 end Supersites
 
