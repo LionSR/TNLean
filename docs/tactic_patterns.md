@@ -24,15 +24,6 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
-### Regional expectation compared with a supported approximant — promoted (2026-10-21)
-
-- **Pattern:** For a contractive regional expectation fixing a supported approximant, rewrite the projection error as the difference between the approximation error and its expectation.
-- **Defined in:** `Circuit/SiteExpectation.lean`, `QuantumCircuit.norm_sub_siteExpectation_le_two_mul_norm_sub_of_mem_supportedOperators`.
-- **Use when:** An approximant is supported on the output region; the error of projecting the original operator is at most twice its distance to that approximant.
-- **Refactored occurrences:** The chain relative-generator proof and the finite-domain relative-generator proof use this same inequality. The finite-family bounds use the existing `map_sum` and `norm_sum_le` lemmas.
-- **Notes:** No state, Hermiticity or nonempty-region assumption is required.
-
-
 ### Supported Gaussian averaging — promoted (2026-10-21)
 
 - **Pattern:** Factor the two-Hamiltonian integrand into an evolved observable and relative evolution, localize the two factors on possibly different regions, and integrate against the restricted Gaussian measure.
@@ -4872,6 +4863,15 @@ three-plaquette output measurement, and the routed reunion measurement.
   `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
 
 ## Candidates
+
+### Regional expectation compared with a supported approximant — candidate (2026-10-21)
+
+- **Pattern:** For a contractive regional expectation fixing a supported approximant, rewrite the projection error as the difference between the approximation error and its expectation.
+- **Defined in:** `Circuit/SiteExpectation.lean`, `QuantumCircuit.norm_sub_siteExpectation_le_two_mul_norm_sub_of_mem_supportedOperators`.
+- **Use when:** An approximant is supported on the output region; the error of projecting the original operator is at most twice its distance to that approximant.
+- **Refactored occurrences:** The chain relative-generator proof and the finite-domain relative-generator proof use this same inequality. The finite-family bounds use the existing `map_sum` and `norm_sum_le` lemmas.
+- **Notes:** No state, Hermiticity or nonempty-region assumption is required.
+- **Status:** Two occurrences in two files; the shared lemma is kept, and the entry is promoted when a third consumer lands.
 
 ### Infimum over walk lengths under graph maps — candidate (2026-10-21)
 
