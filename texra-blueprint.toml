@@ -34,6 +34,7 @@ hastings07 = "Hastings, An area law for one-dimensional quantum systems, J. Stat
 hjpw04  = "Hayden, Jozsa, Petz, Winter (2004)"
 knabe88 = "Knabe, J. Stat. Phys. 52 (1988)"
 lmsvkl25 = "arXiv:2509.03600 (bialgebraic structures in MPO symmetries)"
+lvv13   = "Landau, Vazirani and Vidick, A polynomial-time algorithm for the ground state of 1D gapped local Hamiltonians, arXiv:1307.5143"
 mgsc18  = "arXiv:1706.07329 (semi-injective PEPS and MPS reductions)"
 mpu     = "arXiv:1703.09188 (matrix product unitaries)"
 mswc24  = "arXiv:2307.01696 (log-depth preparation of matrix product states)"
