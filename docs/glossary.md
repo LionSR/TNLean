@@ -3900,3 +3900,24 @@ source's Proposition 4.1.
 - **Verification:** The predicate and both fixed-layout bridges passed the
   hosted Lean build and their named axiom checks at commit
   `c05b1ee03e2d24d1f93390ada1aa7b7912b0cfba`.
+
+## Hastings' high-temperature cluster expansion
+
+The cluster expansion of Hastings, *Solving gapped Hamiltonians locally*
+(arXiv:cond-mat/0508554v3, `References/cond-mat_0508554/proj3new.tex`, Section IV), is
+formalized in `TNLean/Lattice/ClusterExpansion/`. The terms `h k` of `H = ∑_k h_k` are indexed by
+a finite type `κ`, and a graph `G` on `κ` says which terms overlap. For terms acting on sets of
+sites `acts k`, it is `overlapGraph acts` (adjacent when the supports meet). The truncation,
+the bounds and the product form take a predicate `large` on sets of terms. Two instances
+realize the source's "diameter larger than `l_proj`": one in a metric space of sites and one in
+walk distance on a planar domain.
+
+| Declaration | Mathematical meaning | Source and status |
+|---|---|---|
+| `TNLean.Lattice.ClusterExpansion.IsCluster G A C` | `C ⊆ A` is connected in `G` and no other term of `A` is adjacent to it: a connected component of `A`, a cluster of the words with letter set `A` | Lines 1096–1102 (active bonds and clusters). The boundary is the set of overlap neighbours, not the source's `B(C)` (lines 1130–1133); see `docs/paper-gaps/hastings05_cluster_boundary.tex`. `exists_isCluster_mem`, `biUnion_clusters` and `pairwise_clusters` show the clusters of `A` partition it and are pairwise non-adjacent. |
+| `TNLean.Lattice.ClusterExpansion.IsAdmissible G U` | The union of a family `U` of sets of terms avoids the union of their boundaries, so all members can be clusters of one set | Lines 1197–1225 (inclusion and exclusion). For connected members, `pairwiseDisjoint_of_admissible` gives disjointness; the admissible families index `truncatedExp_eq_sum`. |
+| `TNLean.Lattice.ClusterExpansion.NoLargeCluster G large A` | No cluster of `A` satisfies `large` | Lines 1103–1107 (the terms kept in `ρ(β, l_proj)`); it defines `truncatedExp`. `noLargeCluster_iff_filter` shows that terms acting on no site do not affect it. |
+| `TNLean.Lattice.ClusterExpansion.IsLargeDiam acts l_proj C` | The supports of the terms of `C`, in a pseudometric space of sites, contain two sites at distance greater than `l_proj` | Lines 1103–1107; used for eq. `perc2` in source terms (`norm_trace_mul_exp_sub_truncatedExp_le_isLargeDiam`). A connected large set has at least `⌊l_proj/(2R)⌋ + 1` terms (`card_ge_of_isLargeDiam`; `docs/paper-gaps/hastings05_percolation_cluster_size.tex`). |
+| `TNLean.Lattice.ClusterExpansion.IsLargeWalk l acts C` | The supports of the terms of `C`, on a finite planar domain, contain two sites joined by no domain walk of length at most `l` | Lines 1103–1107 in the walk distance of `TNLean.Lattice.ProductForm`, the largeness for which `hasProductForm_truncatedExp` holds (lines 1256–1279). It is `IsLargeDiam` for the walk distance; no bridge between the two is stated. The planar geometry is a scope restriction (`docs/paper-gaps/hastings05_planar_domain_scope.tex`). |
+| `TNLean.Lattice.ClusterExpansion.IsValidCluster acts l C` | Every term of `C` acts on some site, `C` is connected in the overlap graph, and `C` is not `IsLargeWalk` | Internal to the product-form construction (lines 1259–1272); the clusters that a site index may record. A cluster of a set of terms acting on sites, none large, is valid (`isCluster_of_mem_validFamilies` and `sum_clusterOp_apply`). |
+| `TNLean.Lattice.ClusterExpansion.IsClusterAssignment acts l c` | Every cluster recorded at a site is valid, contains the site in its supports, and is recorded at every site of its supports | Internal to the product-form construction (lines 1259–1272); the index functions with nonzero coefficient product. `recordedClusters` and `clusterAssignment` identify consistent assignments with families of valid clusters with disjoint supports. |
