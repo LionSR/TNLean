@@ -37,3 +37,15 @@ example : Nat.card {α : Fin 2 → ℕ //
     (∑ a, α a) = 2 ∧ α 0 = 2 ∧ α 1 = 1} = 0 := by
   exact Nat.card_fun_sum_eq_and_two_eq_of_lt (0 : Fin 2) 1 (by decide)
     2 2 1 (by decide)
+
+/-- At total zero the uniform bound is one, including two free labels. -/
+example :
+    Nat.card {α : Fin 4 → ℕ // (∑ a, α a) = 0 ∧ α 0 = 0 ∧ α 1 = 0} ≤ 1 := by
+  simpa using Nat.card_fun_sum_eq_and_two_eq_le (s := 1)
+    (by decide) (0 : Fin 4) 1 (by decide) 0 0 0
+
+/-- With one free label the bound is one for all prescribed frequencies. -/
+example (r i j : ℕ) :
+    Nat.card {α : Fin 3 → ℕ // (∑ a, α a) = r ∧ α 0 = i ∧ α 1 = j} ≤ 1 := by
+  simpa using Nat.card_fun_sum_eq_and_two_eq_le (s := 0)
+    (by decide) (0 : Fin 3) 1 (by decide) r i j

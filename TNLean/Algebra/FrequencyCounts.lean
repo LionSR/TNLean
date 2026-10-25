@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
 import Mathlib.Data.Finsupp.Multiset
+import Mathlib.Data.Nat.Choose.Bounds
 import Mathlib.Data.Sym.Card
 import Mathlib.SetTheory.Cardinal.Finite
 
@@ -123,3 +124,20 @@ theorem Nat.card_fun_sum_eq_and_two_eq_of_total
     simpa only [hres] using
       Nat.card_fun_sum_eq_and_two_eq hcard u v huv (r - i - j) i j
   · exact Nat.card_fun_sum_eq_and_two_eq_of_lt u v huv r i j (by omega)
+
+/-- The number of frequency vectors with two prescribed coordinates is
+bounded by a finite box. This is a full-alphabet counting bound for ALVV,
+arXiv:1602.08828v2, `eq:H-mid-cut`, lines 810–821, and
+`prop:Cheby-AGSP-eff`, lines 1324–1332. For the two-window alphabet,
+s = 4ℓ. No selection condition is imposed on the counted vectors. -/
+theorem Nat.card_fun_sum_eq_and_two_eq_le
+    {I : Type*} [Fintype I] {s : ℕ} (hcard : Fintype.card I = s + 3)
+    (u v : I) (huv : u ≠ v) (r i j : ℕ) :
+    Nat.card {α : I → ℕ // (∑ a, α a) = r ∧ α u = i ∧ α v = j} ≤
+      (r + 1) ^ s := by
+  rw [Nat.card_fun_sum_eq_and_two_eq_of_total hcard u v huv r i j]
+  split_ifs
+  · exact (Nat.choose_add_le_add_one_pow (r - i - j) s).trans
+      (Nat.pow_le_pow_left
+        (Nat.add_le_add_right ((Nat.sub_le (r - i) j).trans (Nat.sub_le r i)) 1) s)
+  · exact Nat.zero_le _
