@@ -113,7 +113,7 @@ const main = {paper:'hastings',kind:'Theorem',num:'',label:null,name:'Area law'}
 assert.equal(f.resultHeading(main), 'Theorem');
 assert.equal(f.resultName(main), 'Area law');
 assert.equal(f.resultSection(main), null);
-assert.equal(f.resultSection({num:'0.1'}), null);
+assert.equal(f.resultSection({num:'0.1'}), 0);
 assert.equal(f.resultSection({num:'2.14'}), 2);
 assert.equal(f.resultSection({num:'A'}), null);
 assert.equal(f.resultName({kind:'Lemma',num:'4',label:null}), 'Lemma 4');
@@ -124,6 +124,11 @@ const trim = {paper:'lvv',kind:'Lemma',num:'1.8',label:'l:2'};
 assert(f.resultGapMatches(trim, {paper:'lvv',result:'Lemma l:2, energy of a trimmed state'}));
 assert(f.resultGapMatches(trim, {paper:'lvv',result:'Lemma 1.8, energy of a trimmed state'}));
 assert(!f.resultGapMatches(trim, {paper:'lvv',result:'Lemma 1.80, another result'}));
+assert(!f.resultGapMatches(trim, {paper:'lvv',result:'Lemma 1.8.1, another result'}));
+assert(!f.resultGapMatches(trim, {paper:'lvv',result:'Lemma l:2.1, another result'}));
+const firstLemma = {paper:'hastings',kind:'Lemma',num:'1',label:null};
+assert(f.resultGapMatches(firstLemma, {paper:'hastings',result:'Lemma 1, decay length'}));
+assert(!f.resultGapMatches(firstLemma, {paper:'hastings',result:'Lemma 1.2, another result'}));
 console.log('Campaign result browser metadata: passed');
 """
         run = subprocess.run(["node", "-e", js, str(board)], capture_output=True, text=True)

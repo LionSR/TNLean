@@ -24,13 +24,13 @@
   const resultName = (r, names = {}) => r.name || (r.label && names[r.label]) || r.label || resultHeading(r);
   const resultSection = r => {
     const section = r.num ? Number(r.num.split(".")[0]) : NaN;
-    return Number.isFinite(section) && section > 0 ? section : null;
+    return Number.isFinite(section) ? section : null;
   };
   const resultGapMatches = (r, g) => {
     if (g.paper !== r.paper) return false;
     const prefixes = [r.num && `${r.kind} ${r.num}`, r.label && `${r.kind} ${r.label}`].filter(Boolean);
     if (!r.num && r.kind === "Theorem" && /^(?:Main theorem|Theorem)(?=\s*[,(:—]|$)/i.test(g.result || "")) return true;
-    return prefixes.some(prefix => new RegExp("^" + prefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b", "i").test(g.result || ""));
+    return prefixes.some(prefix => new RegExp("^" + prefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "(?=$|[\\s,(:;—])", "i").test(g.result || ""));
   };
 
   /* ---------- time ---------- */
