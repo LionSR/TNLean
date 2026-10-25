@@ -9132,6 +9132,29 @@ spectral split → block extraction → MPV calculation → strict bounds
   `Lattice.hasSourceBoundedChange_liftOne`. The stage births call it with an
   empty prefix and the scalar idle vector; the former private copy is removed.
 
+### Comparing vectors through one cut matrix — candidate (2026-10-23)
+
+- **Pattern:** Prove equality of chain vectors by applying injectivity of the
+  coefficient matrix at a fixed cut, then use a matrix multiplication identity.
+- **Seen:** The left-supported and right-supported product replacements in
+  `MPS/AreaLaw/ProductReplacement.lean` (two occurrences in one file).
+- **Abstraction:** Both use the local `cutMatrix_injective` helper. The common
+  step is a coordinate equivalence; no new tactic is needed. A further use in
+  another file would justify making the injectivity lemma public.
+
+### Membership of consecutive block coordinates — candidate (2026-10-23)
+
+- **Pattern:** Convert membership of the site `L * i + j` in a prefix or
+  interval into inequalities on the block index, using `j < L`.
+- **Seen:** `copySite_mem_leftBlock_iff` in `MPS/AreaLaw/CopyProduct.lean`
+  and `copyConfigurationEquiv_insertInterval` in `MPS/AreaLaw/CopyMPSFactor.lean`.
+- **Existing reuse:** The first proof is shared within the copy-boundary
+  factorization. The interval proof compares two block indices and uses
+  `Nat.mul_le_mul_right` with `nlinarith` for the two strict-order cases.
+- **Decision:** Two related uses do not yet justify a public coordinate
+  theorem or a tactic. Reconsider a common arithmetic lemma when another
+  block-coordinate argument repeats the same inequalities.
+
 ### Distinguished symbol versus an embedded finite alphabet — candidate (2026-10-23)
 
 - **Pattern:** Evaluate an equality of finite words at one site, take the
