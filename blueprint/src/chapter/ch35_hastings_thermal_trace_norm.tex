@@ -90,3 +90,30 @@ $\|D\|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
     into one (Theorem~\ref{thm:hastings_product_form_mul}). For the number of
     factors take $m=2(\lceil\beta/\beta_0\rceil+1)$.
 \end{proof}
+
+\begin{theorem}[Positivity of the truncated operator at every temperature]
+    \label{thm:hastings_truncated_positivity}
+    \lean{TNLean.Lattice.ClusterExpansion.isHermitian_clusterPart,
+        TNLean.Lattice.ClusterExpansion.isHermitian_truncatedExp,
+        TNLean.Lattice.ClusterExpansion.posSemidef_truncatedExp_pow}
+    \leanok
+    \uses{def:hastings_truncated_expansion, def:hastings_cluster_part}
+    Let $H=\sum_kH_k$ with Hermitian terms $H_k$. Then every cluster part
+    $\rho(\beta,C)$ and the truncated operator $\rho(\beta,l)$ are Hermitian, and
+    for every even $m$ the power $\rho(\beta,l)^m$ is positive semidefinite. With
+    $\beta/m$ in place of $\beta$, this is the positivity of
+    $\rho(\beta,l_{\mathrm{proj}})=\rho(\beta/m,l_{\mathrm{proj}})^m$ in
+    eq.~(mplt) of \cite[lines 1303--1314]{Hastings2006Solving}, with positive
+    semidefiniteness in place of positive
+    definiteness~\cite{gap:hastings05_mplt_positivity}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_truncation_inclusion_exclusion,
+        thm:hastings_thermal_all_temperatures}
+    Each $\rho(\beta,C)$ is a sum of the exponentials $e^{-\beta(H-H_B-H_D)}$ of
+    Hermitian operators with coefficients $\pm1$, hence Hermitian. By
+    Theorem~\ref{thm:hastings_truncation_inclusion_exclusion}, $\rho(\beta,l)$ is a
+    sum of the $\rho(\beta,U)$ with coefficients $\pm1$, hence Hermitian, and
+    Theorem~\ref{thm:hastings_thermal_all_temperatures} gives the positivity of
+    its even powers.
+\end{proof}
