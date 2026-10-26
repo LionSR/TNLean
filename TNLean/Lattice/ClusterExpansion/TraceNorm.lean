@@ -42,7 +42,9 @@ variable {n : Type*} [Fintype n] [DecidableEq n]
 `|Tr O ρ − Tr O σ| ≤ ε ‖O‖ Tr ρ` for every matrix `O`, then the trace norm of `ρ − σ` is at
 most `ε Tr ρ`. For the thermal state `ρ = ρ(β) = e^{-βH}`, which is positive, `Tr ρ = Z` is its
 trace norm `|ρ(β)|₁`, and this is Hastings' bound
-`|ρ(β) − ρ(β, l_proj)|₁ ≤ ε |ρ(β)|₁` with `ε = exp(N e^{-l_proj/ξ_perc}) − 1`.
+`|ρ(β) − ρ(β, l_proj)|₁ ≤ ε |ρ(β)|₁` with
+`ε = exp(N (xy)⁻¹ e^{-l_proj/ξ_perc}) − 1` after the size-threshold correction recorded in
+`docs/paper-gaps/hastings05_percolation_cluster_size.tex`.
 Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1281–1301. -/
 theorem re_trace_sqrt_sub_le_of_forall_norm_trace_mul_sub_le {ρ σ : Matrix n n ℂ} {ε : ℝ}
     (hε : 0 ≤ ε) (hρ : 0 ≤ ρ.trace.re)

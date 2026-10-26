@@ -73,6 +73,7 @@ import TNLean.Algebra.FixedPointFreeInvolutionSign
 import TNLean.Algebra.FlagBlockTriangular
 import TNLean.Algebra.FlatDensityEntropy
 import TNLean.Algebra.FlatDensityRenyiEntropy
+import TNLean.Algebra.FrequencyCounts
 import TNLean.Algebra.GappedGroundState
 import TNLean.Algebra.GaussProjector
 import TNLean.Algebra.GaussRepresentation
@@ -85,6 +86,7 @@ import TNLean.Algebra.IdempotentRankContinuity
 import TNLean.Algebra.IdempotentTracePerturbation
 import TNLean.Algebra.InjectivePositiveMapRank
 import TNLean.Algebra.InjectiveRangeProjectorContinuity
+import TNLean.Algebra.IntegerHasseGraph
 import TNLean.Algebra.IsNilpotentOfTracePow
 import TNLean.Algebra.IsingCrossingCoefficients
 import TNLean.Algebra.IsometricFrameEmbedding
@@ -142,7 +144,6 @@ import TNLean.Algebra.OrthogonalResolution
 import TNLean.Algebra.OrthogonalSymplecticKroneckerDeterminant
 import TNLean.Algebra.PathGraphDistance
 import TNLean.Algebra.PermutationMatrixCommutation
-import TNLean.Algebra.PermutationMatrixUnitary
 import TNLean.Algebra.PiMatrixRepresentation
 import TNLean.Algebra.PiMulSingleInduction
 import TNLean.Algebra.PiSigmaEquiv
