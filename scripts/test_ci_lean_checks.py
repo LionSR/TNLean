@@ -167,6 +167,92 @@ class SelectTest(unittest.TestCase):
         self.assertEqual(tests, ["TNLeanTest/UsesTest.lean",
                                  "scripts/core_regression.lean"])
 
+    def resolve_base(self, base, pr_head):
+        cwd = Path.cwd()
+        try:
+            import os
+            os.chdir(self.root)
+            return ci.selection_base(base, pr_head)
+        finally:
+            os.chdir(cwd)
+
+    def synthetic_merge(self, pr_changes_manifest=False):
+        git(self.root, "branch", "topic")
+        self.change("lake-manifest.json", '{"base": true}\n')
+        base_parent = git(self.root, "rev-parse", "HEAD")
+        git(self.root, "checkout", "-q", "topic")
+        self.change("TNLean/Core.lean", "import Mathlib\n-- PR edit\n")
+        if pr_changes_manifest:
+            self.change("lean-toolchain", "leanprover/lean4:test\n")
+        pr_head = git(self.root, "rev-parse", "HEAD")
+        git(self.root, "checkout", "-q", "--detach", base_parent)
+        git(self.root, "-c", "user.email=t@t", "-c", "user.name=t",
+            "merge", "--no-ff", "-qm", "synthetic PR merge", pr_head)
+        return base_parent, pr_head
+
+    def test_stale_event_base_excludes_base_only_manifest_change(self):
+        base_parent, pr_head = self.synthetic_merge()
+        # A merge-base with the stale event base still returns the stale base.
+        self.assertEqual(git(self.root, "merge-base", self.base, "HEAD"), self.base)
+        old_tests = self.select(self.base)[2]
+        self.assertIn("TNLeanTest/Unrelated.lean", old_tests)
+        resolved = self.resolve_base(self.base, pr_head)
+        self.assertEqual(resolved, base_parent)
+        early, sources, tests = self.select(resolved)
+        self.assertEqual(early, ["TNLean.Core"])
+        self.assertEqual(sources, ["TNLean/Core.lean"])
+        self.assertEqual(tests, ["TNLeanTest/UsesTest.lean",
+                                 "scripts/core_regression.lean"])
+
+    def test_pr_owned_full_run_change_still_selects_every_test(self):
+        _, pr_head = self.synthetic_merge(pr_changes_manifest=True)
+        tests = self.select(self.resolve_base(self.base, pr_head))[2]
+        self.assertIn("TNLeanTest/Unrelated.lean", tests)
+        self.assertIn("TNLeanTest/FixtureTest.lean", tests)
+
+    def test_push_merge_keeps_previous_head_base(self):
+        self.synthetic_merge()
+        self.assertEqual(self.resolve_base(self.base, None), self.base)
+        self.assertIn("TNLeanTest/Unrelated.lean", self.select(self.base)[2])
+
+    def test_wrong_pr_head_falls_back_to_all_tests(self):
+        self.synthetic_merge()
+        resolved = self.resolve_base(self.base, self.base)
+        self.assertIsNone(resolved)
+        self.assertIn("TNLeanTest/Unrelated.lean", self.select(resolved)[2])
+
+    def test_nonmerge_pr_checkout_falls_back_to_all_tests(self):
+        self.assertIsNone(self.resolve_base(self.base, self.base))
+
+    def test_unknown_event_base_uses_verified_merge_parent(self):
+        base_parent, pr_head = self.synthetic_merge()
+        self.assertEqual(self.resolve_base(None, pr_head), base_parent)
+
+    def test_cli_uses_verified_parent_for_selection(self):
+        import sys
+        _, pr_head = self.synthetic_merge()
+        result = subprocess.run(
+            [sys.executable, str(Path(__file__).with_name("ci_lean_checks.py")),
+             "list", "--root", str(self.root), "--base", self.base,
+             "--pr-head", pr_head], check=True, capture_output=True, text=True)
+        self.assertIn("source TNLean/Core.lean", result.stdout)
+        self.assertIn("test TNLeanTest/UsesTest.lean", result.stdout)
+        self.assertNotIn("TNLeanTest/Unrelated.lean", result.stdout)
+
+    def test_shallow_merge_checkout_falls_back_to_all_tests(self):
+        _, pr_head = self.synthetic_merge()
+        git(self.root, "branch", "shallow-tip")
+        with tempfile.TemporaryDirectory() as tmp:
+            shallow = Path(tmp) / "clone"
+            git(self.root, "clone", "-q", "--depth", "1", "--branch", "shallow-tip",
+                self.root.as_uri(), str(shallow))
+            root = self.root
+            try:
+                self.root = shallow
+                self.assertIsNone(self.resolve_base(self.base, pr_head))
+            finally:
+                self.root = root
+
     def test_mixed_leaf_and_aggregator_preserve_strict_tests_and_graph(self) -> None:
         self.change("TNLean/Core.lean", "import Mathlib\ndef answer := 42\n")
         self.change("TNLean/Uses.lean", "import TNLean.Core\nimport TNLean.Other\n")
