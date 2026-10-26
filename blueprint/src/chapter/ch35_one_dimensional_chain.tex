@@ -122,7 +122,7 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
     \leanok
     \uses{def:chain_model}
     If a support $X$ of range one contains sites on both sides of the cut
-    after the first $k$ sites, then $X=[k-1,k+1)$.
+    after the first $k$ sites, then $X=\lbrack k-1,k+1)$.
 \end{theorem}
 \begin{proof}\leanok
     The support contains distinct sites $x<k\le y$, so it has at least two
@@ -137,10 +137,11 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
     \uses{def:chain_model}
     Let $H=\sum_Xh_X$ be a range-one Hamiltonian whose terms are positive
     semidefinite and satisfy $\|h_X\|\le1$. For every natural number $k$,
-    let $A=[0,k)$ be the interval clipped to the chain. There is a
+    let $A=\lbrack0,k)$ be the interval clipped to the chain. There is a
     decomposition
     \begin{align}
-        H=H_L+H_R+K,\qquad 0\le K\le I, \notag
+        H & =H_L+H_R+K,\notag \\
+        0 & \le K\le I.\notag
     \end{align}
     where $H_L$ is supported on $A$ and $H_R$ on its complement.
     This gives the decomposition used for nearest-neighbour interactions
@@ -149,12 +150,17 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_range_one_crossing_support}
-    Sum the interactions supported on the left, those supported on the
-    right, and the interactions crossing the cut. The first two sums
-    have the required supports. By
-    Theorem~\ref{thm:chain_range_one_crossing_support}, at most one support
-    crosses the cut. Thus the crossing sum $K$ is either zero or one
-    positive semidefinite term of norm at most one, and $0\le K\le I$.
+    Let $C$ be the set of interaction supports meeting both $A$ and $A^{\mathsf c}$.
+    Partitioning the nonempty interaction supports gives
+    \begin{align}
+        H & =\underbrace{\sum_{X\subseteq A}h_X}_{H_L}
+        +\underbrace{\sum_{X\subseteq A^{\mathsf c}}h_X}_{H_R}
+        +\underbrace{\sum_{X\in C}h_X}_{K}.\notag
+    \end{align}
+    The first two sums have the required supports. By
+    Theorem~\ref{thm:chain_range_one_crossing_support}, $|C|\le1$.
+    Thus $K$ is either zero or one positive semidefinite term of norm at
+    most one, and $0\le K\le I$.
 \end{proof}
 
 \begin{theorem}[Nearest-neighbour supports at two cuts]
