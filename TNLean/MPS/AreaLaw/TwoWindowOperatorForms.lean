@@ -30,7 +30,7 @@ namespace TNLean.MPS.AreaLaw
 /-- Simultaneous regional forms for the two-window family of ALVV,
 arXiv:1602.08828v2, `eq:H-mid-cut`, lines 810–821. The three bulk operators
 are independently supplied; no equality with complementary bond sums is required. -/
-theorem exists_threeSplit_twoWindow_factors
+theorem exists_threeSplit_two_window_factors
     {L q ℓ a b : ℕ}
     (F : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
       Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
