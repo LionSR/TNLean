@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw.ViableSet
 
 import TNLean.MPS.AreaLaw.ViableSet.Basic
+import TNLean.MPS.AreaLaw.ViableSet.BoundaryNet
 import TNLean.MPS.AreaLaw.ViableSet.ConstantRankCut
 import TNLean.MPS.AreaLaw.ViableSet.FiniteBoundarySelection
 import TNLean.MPS.AreaLaw.ViableSet.Gluing

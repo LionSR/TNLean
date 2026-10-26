@@ -9419,3 +9419,12 @@ there is no need for a new tactic.
   `Matrix.mulVec_mulVec`, `Matrix.mulVec_smul` and `smul_right_injective`.
 - **Decision:** These existing lemmas give the new argument in three lines;
   no separate scalar-inverse calculation or custom tactic is needed.
+
+### Enlarging a covering bound by its dimension — reused Mathlib (2026-10-26)
+
+- **Seen:** `MPS/AreaLaw/ViableSet/BoundaryNet.lean`.
+- **Pattern:** A net on matrices of size `c` has a bound whose grid size and exponent both
+  increase with `c`; replace `c` by a geometric upper bound without changing the net.
+- **Reuse:** `Nat.pow_le_pow_left`, `Nat.ceil_mono` and `pow_le_pow` give the comparison,
+  with the larger base at least one. They also cover zero dimension and exponent.
+- **Decision:** The proof needs no separate scalar declaration or tactic.
