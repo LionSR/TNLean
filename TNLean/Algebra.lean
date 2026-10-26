@@ -73,6 +73,7 @@ import TNLean.Algebra.FixedPointFreeInvolutionSign
 import TNLean.Algebra.FlagBlockTriangular
 import TNLean.Algebra.FlatDensityEntropy
 import TNLean.Algebra.FlatDensityRenyiEntropy
+import TNLean.Algebra.FrequencyCounts
 import TNLean.Algebra.GappedGroundState
 import TNLean.Algebra.GaussProjector
 import TNLean.Algebra.GaussRepresentation
@@ -210,6 +211,7 @@ import TNLean.Algebra.TraceInvariantSubmodule
 import TNLean.Algebra.TranslatedCharacterOrthogonality
 import TNLean.Algebra.TwistedRegularProjective
 import TNLean.Algebra.TwistedRegularRepresentation
+import TNLean.Algebra.TwoWindowRankBounds
 import TNLean.Algebra.UniformSelectionBounds
 import TNLean.Algebra.UnimodularPowerSum
 import TNLean.Algebra.UnitaryAdjointKronecker

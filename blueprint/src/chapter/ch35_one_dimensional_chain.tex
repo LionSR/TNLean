@@ -90,6 +90,179 @@ for an arbitrary finite set of sites and are instantiated here directly.
     crossing supports $D_u$ and $D_v$ share the single middle site.
 \end{proof}
 
+\begin{theorem}[Frequency vectors with two prescribed coordinates]
+    \label{thm:chain_two_fixed_frequencies}
+    \lean{Nat.card_fun_sum_eq_and_two_eq,
+        Nat.card_fun_sum_eq_and_two_eq_of_lt,
+        Nat.card_fun_sum_eq_and_two_eq_of_total}
+    \leanok
+    Let $I$ be a finite set, let $u,v\in I$ be distinct, and let
+    $r,i,j$ be natural numbers. Define
+    \begin{align}
+        \mathcal F_{r,i,j}
+         & =\left\{\alpha:I\to\mathbb N:
+        \sum_{a\in I}\alpha(a)=r,\quad
+        \alpha(u)=i,\quad\alpha(v)=j\right\}.\label{eq:chain_fixed_frequency_set}
+    \end{align}
+    If $r<i+j$, then the set in~(\ref{eq:chain_fixed_frequency_set}) is empty.
+    If $|I|=s+3$ for a natural number $s$, then
+    \begin{align}
+        |\mathcal F_{r,i,j}|
+         & =\begin{cases}
+                \displaystyle\binom{r-i-j+s}{s}, & i+j\le r, \\
+                0,                               & r<i+j.
+            \end{cases}\label{eq:chain_fixed_frequency_count}
+    \end{align}
+    Taking $r=m+i+j$ in~(\ref{eq:chain_fixed_frequency_count}) gives
+    $|\mathcal F_{m+i+j,i,j}|=\binom{m+s}{s}$
+    for every natural number $m$.
+    Thus the count is one when $s=0$, provided $i+j\le r$,
+    and also when $r=i+j$.
+    The grouped alphabet in \cite[Section~4.1]{Arad2016RigorousRG}
+    has two windows of $2\ell$ bond labels and three bulk labels;
+    for this alphabet the formula applies with $s=4\ell$.
+\end{theorem}
+\begin{proof}\leanok
+    For every $\alpha:I\to\mathbb N$,
+    $\alpha(u)+\alpha(v)\le\sum_{a\in I}\alpha(a)$,
+    proving the empty case.
+    When the total is $m+i+j$, restricting to $I\setminus\{u,v\}$
+    is a bijection between $\mathcal F_{m+i+j,i,j}$ and the
+    nonnegative integer functions on $s+1$ labels whose sum is $m$.
+    Its inverse reinserts $i$ at $u$ and $j$ at $v$.
+    Identifying these functions with multisets of cardinality $m$
+    gives $\binom{m+s}{s}$.
+    When $i+j\le r$, substituting $m=r-i-j$ gives~(\ref{eq:chain_fixed_frequency_count}).
+\end{proof}
+
+\begin{theorem}[Uniform bound for frequency slices]
+    \label{thm:chain_fixed_frequency_uniform_bound}
+    \lean{Nat.card_fun_sum_eq_and_two_eq_le}
+    \leanok
+    Let $I$ have cardinality $s+3$, and let $u,v\in I$ be distinct.
+    For natural numbers $r,i,j$, let $\mathcal F_{r,i,j}$ be the set
+    in~(\ref{eq:chain_fixed_frequency_set}). Then
+    \begin{align}
+        |\mathcal F_{r,i,j}| & \le (r+1)^s.
+        \label{eq:chain_fixed_frequency_uniform_bound}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_two_fixed_frequencies}
+    If $r<i+j$, the set is empty. Otherwise put $m=r-i-j$.
+    The exact count in~(\ref{eq:chain_fixed_frequency_count}) and the
+    elementary binomial estimate give
+    \begin{align}
+        |\mathcal F_{r,i,j}|=\binom{m+s}{s}
+         & \le (m+1)^s\le(r+1)^s.
+        \label{eq:chain_frequency_binomial_bound}
+    \end{align}
+    Combining~(\ref{eq:chain_frequency_binomial_bound}) with the empty case
+    proves~(\ref{eq:chain_fixed_frequency_uniform_bound}).
+\end{proof}
+
+\begin{theorem}[Frequency slices through a prescribed degree]
+    \label{thm:chain_fixed_frequency_degree_sum}
+    \lean{Nat.sum_card_fun_sum_eq_and_two_eq_le}
+    \leanok
+    Let $I$ be a finite set of cardinality $s+3$, with $s\in\mathbb N$,
+    and let $u,v\in I$ be distinct. For natural numbers $k,i,j$, use
+    $\mathcal F_{r,i,j}$ from~(\ref{eq:chain_fixed_frequency_set}). Then
+    \begin{align}
+        \sum_{r=0}^{k}|\mathcal F_{r,i,j}|
+         & \le (k+1)^{s+1}.
+        \label{eq:chain_frequency_degree_sum}
+    \end{align}
+    All degrees from $0$ through $k$ are included. For an alphabet of
+    $4\ell+3$ labels, the exponent is $4\ell+1$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_fixed_frequency_uniform_bound}
+    For each $0\le r\le k$,
+    Theorem~\ref{thm:chain_fixed_frequency_uniform_bound} gives
+    $|\mathcal F_{r,i,j}|\le(r+1)^s\le(k+1)^s$.
+    Summing over the $k+1$ degrees gives
+    $(k+1)(k+1)^s=(k+1)^{s+1}$.
+\end{proof}
+
+The following scalar estimates are auxiliaries for the two-window argument
+of \cite[Proposition~5.7]{Arad2016RigorousRG}. For natural
+$k,d,\ell,b$, write
+\begin{align}
+    C_{k,d,\ell,b}
+     & =(2\ell)^2(b+1)^2(k+1)^{4\ell+1}\notag            \\
+     & \qquad\cdot\bigl(2(k+1)\bigr)^{4b+2}d^{4b+4\ell}.
+    \label{eq:chain_two_window_count_factor}
+\end{align}
+The full alphabet of $4\ell+3$ labels is retained, consisting of the two
+windows and the three bulk labels.
+
+\begin{theorem}[Summing the two-window counting factors]
+    \label{thm:chain_two_window_count_sum}
+    \lean{Nat.two_window_rank_sum_le_factor}
+    \leanok
+    Let $k,d,\ell,b\in\mathbb N$ with $d\ge1$ and $b\le k$. Then
+    \begin{align}
+         & (2\ell)^2
+        \sum_{\substack{0\le r\le k  \\0\le i,j\le b}}
+        (r+1)^{4\ell}
+        \binom{r+i+1}{2i+1}\binom{r+j+1}{2j+1}
+        d^{2(i+j)+4\ell}\notag       \\
+         & \qquad\le C_{k,d,\ell,b}.
+        \label{eq:chain_two_window_count_sum}
+    \end{align}
+    The sum ranges over every natural triple in the indicated ranges,
+    including degree zero. The binomial factors retain the upper arguments
+    $r+i+1$ and $r+j+1$ printed in
+    \cite[Proposition~5.7]{Arad2016RigorousRG}; the count of commuting gaps
+    is recorded in~\cite{gap:aklv13_interpolation_and_word_count}.
+\end{theorem}
+\begin{proof}\leanok
+    For $r\le k$ and $i\le b\le k$, the elementary binomial estimate gives
+    \begin{align}
+        \binom{r+i+1}{2i+1}
+         & \le (r+i+1)^{2i+1}
+        \le\bigl(2(k+1)\bigr)^{2b+1}.
+        \label{eq:chain_two_window_gap_bound}
+    \end{align}
+    Apply~(\ref{eq:chain_two_window_gap_bound}) to both binomials.
+    Also $(r+1)^{4\ell}\le(k+1)^{4\ell}$ and
+    $d^{2(i+j)+4\ell}\le d^{4b+4\ell}$, since $d\ge1$.
+    Each summand is therefore at most
+    $(k+1)^{4\ell}\bigl(2(k+1)\bigr)^{4b+2}d^{4b+4\ell}$.
+    There are $(k+1)(b+1)^2$ triples. Multiplying by this number and by
+    $(2\ell)^2$ gives the product
+    (\ref{eq:chain_two_window_count_factor}).
+\end{proof}
+
+\begin{theorem}[An explicit bound for the counting product]
+    \label{thm:chain_two_window_count_power}
+    \lean{Nat.two_window_rank_factor_le_pow}
+    \leanok
+    Let $k,d,\ell,b\in\mathbb N$ with $k\ge1$, $d\ge2$,
+    $\ell\ge1$ and $b\le k$. For the product in
+    (\ref{eq:chain_two_window_count_factor}),
+    \begin{align}
+        C_{k,d,\ell,b}
+         & \le(dk)^{17(\ell+b)}.
+        \label{eq:chain_two_window_count_power}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Put $X=dk\ge2$. The hypotheses give $d\le X$,
+    $b+1\le k+1\le X$, $2\ell\le2^\ell\le X^\ell$ and
+    $2(k+1)\le X^2$. Substituting these bounds into
+    (\ref{eq:chain_two_window_count_factor}) yields
+    \begin{align}
+        C_{k,d,\ell,b}
+         & \le X^{10\ell+12b+7}
+        \le X^{17(\ell+b)}.
+        \label{eq:chain_two_window_count_exponent}
+    \end{align}
+    The last step uses $\ell\ge1$, which implies
+    $10\ell+12b+7\le17(\ell+b)$.
+\end{proof}
+
 \begin{lemma}[Distance and spheres on a finite path]
     \label{lem:chain_path_metric_spheres}
     \lean{SimpleGraph.pathGraph_edist, SimpleGraph.pathGraph_card_sphere_le_two}
