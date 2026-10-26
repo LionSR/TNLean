@@ -170,10 +170,11 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
     \uses{def:chain_model}
     Let $H=\sum_Xh_X$ be a range-one Hamiltonian on $L$ sites with
     $\lVert h_X\rVert\le1$. For every natural number $k$, put
-    $A=[0,k)$ and $D=[0,\max\{k-1,0\})^{\mathsf c}$, with intervals clipped
+    $A=\lbrack0,k)$ and $D=\lbrack0,\max\{k-1,0\})^{\mathsf c}$, with intervals clipped
     to the chain. There exist matrices $H_L$ and $B$ such that
     \begin{align}
-        H=H_L+B,\qquad \lVert B\rVert\le2L, \notag
+        H              & =H_L+B,\notag \\
+        \lVert B\rVert & \le2L.\notag
     \end{align}
     where $H_L$ is supported on $A$ and $B$ on $D$.
     This supplies the decomposition $H=H_L+(H_R+H_i)$ used
@@ -182,14 +183,16 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_range_one_support_count}
-    Let $H_L$ be the sum over supports contained in $A$, and let $B$ be
-    the sum over the remaining supports. Then $H=H_L+B$, and $H_L$ is
+    Put $H_L=\sum_{X\subseteq A}h_X$ and
+    $B=\sum_{X\nsubseteq A}h_X$. Then $H=H_L+B$, and $H_L$ is
     supported on $A$. Every support in the second sum contains a site
     $y\ge k$. For each of its sites $x$, the range-one condition gives
     $y\le x+1$, so $k\le x+1$ and $x\in D$. Thus $B$ is supported on $D$.
     By Theorem~\ref{thm:chain_range_one_support_count}, there are at most
-    $2L$ supports. The triangle inequality and $\lVert h_X\rVert\le1$
-    therefore give $\lVert B\rVert\le2L$.
+    $2L$ supports. The triangle inequality and $\lVert h_X\rVert\le1$ give
+    \begin{align}
+        \lVert B\rVert & \le\sum_{X\nsubseteq A}\lVert h_X\rVert\le2L.\notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Nearest-neighbour supports at two cuts]
