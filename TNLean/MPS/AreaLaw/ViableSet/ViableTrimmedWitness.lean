@@ -24,8 +24,7 @@ This is an auxiliary version of Landau, Vazirani and Vidick, arXiv:1307.5143v1,
 **Scope restriction (nontrivial chains and bond bound):** The result assumes `0 < L` and
 `2 ≤ q` and uses `constantCutBond q 1 1 Δ c` from this library's area law. The source's
 quantitative dependence `exp(O(Δ⁻¹ log³ q log(1/c)))` is not established here. See
-`docs/paper-gaps/lvv13_constant_bond.tex`; the quantitative source bound is tracked in
-#9819, and the source witness construction in #9820.
+`docs/paper-gaps/lvv13_constant_bond.tex`.
 -/
 
 open Matrix
