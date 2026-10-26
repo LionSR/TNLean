@@ -1,0 +1,51 @@
+\documentclass{article}
+\usepackage[margin=28mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\title{Bond Dimension Zero in the Viable Sets of Landau, Vazirani and Vidick}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source statement}
+Landau, Vazirani and Vidick~\cite{Landau2015Polynomial},
+\href{https://arxiv.org/abs/1307.5143v1}{arXiv:1307.5143v1}, source
+\path{algo53.tex}, line 243, call a set $S$ of vectors on the first $i$ sites
+$(i,s,b,\delta)$-viable if, among other conditions, every vector of $S$ is a
+matrix product state of bond dimension at most $b$. In the proof of Claim
+\texttt{c:ext} (line 399) they observe that appending one site in a basis state
+does not raise the bond dimension.
+
+\section{The point at issue}
+Read literally, the observation fails at $b=0$ under the library's notion of an
+open matrix product state, in which a vector on one site has no internal bond
+and so has bond dimension $0$, while a nonzero vector on two sites has an
+internal bond of dimension at least $1$. Appending a basis state to the vector
+$\lvert0\rangle$ on one site gives the nonzero product vector
+$\lvert0\rangle\lvert k\rangle$ on two sites, which has bond dimension $1$, not
+$0$. For $b\ge1$ the observation holds: the new internal bond carries a vector
+of rank one.
+
+\section{The convention}
+The source allows $b=0$ only at the initialization $i=0$ (line 372), where
+$\{1\}$ is a $(0,\delta)$-viable set for every $b\ge0$; the bond dimensions
+of the later iterations are positive polynomials in the number of sites. The
+formalization adopts the convention that ``bond dimension at most $b$'' means
+``bond dimension at most $\max(1,b)$'', in the definition of a matrix product
+state on the first sites. This leaves every bound with $b\ge1$ unchanged and
+makes the extension of the zero-budget initial set valid, so no theorem
+carries a hypothesis $b>0$.
+
+\section{Formalization}
+The definition is \leanid{TNLean.MPS.AreaLaw.IsLeftOpenMPS}, and the extension
+step is \leanid{TNLean.MPS.AreaLaw.IsLeftOpenMPS.extendSite} and
+\leanid{TNLean.MPS.AreaLaw.IsViableMPS.extend}.
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}
