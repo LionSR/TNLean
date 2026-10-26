@@ -106,6 +106,43 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     three-way coordinates.
 \end{proof}
 
+\begin{theorem}[A trace-norm net on a chain boundary]
+    \label{thm:chain_boundary_trace_norm_net}
+    \lean{TNLean.MPS.AreaLaw.exists_finset_boundary_rectangularTraceNorm_net}
+    \leanok
+    \uses{def:chain_gluing_left_coordinates}
+    Let $L,q,k,m,D$ be natural numbers with $q\ge1$ and $m\le D$, and let
+    $\eta>0$. Use the clipped regions $A=\lbrack0,k-1)$ and $B=\lbrack0,k)$ of
+    Definition~\ref{def:chain_gluing_left_coordinates}, and put
+    $K=\mathcal C_{B\setminus A}\times\{0,\ldots,m-1\}$.
+    There is a finite set $\mathcal N\subseteq\mathbb C^{K\times K}$ such that
+    \begin{align}
+        |\mathcal N|\le
+        \bigl(2\lceil(qD)^2/\eta\rceil+1\bigr)^{2(qD)^2}. \notag
+    \end{align}
+    Every matrix $Y\in\mathbb C^{K\times K}$ with $\|Y\|_1\le1$ admits an
+    $X\in\mathcal N$ with $\|Y-X\|_1\le\eta$.
+    This is the boundary-space specialization of
+    \cite[Lemma~2.4, source lines 451--460]{Landau2015Polynomial}, with the
+    corrected grid and quadratic exponent recorded in~\cite{gap:lvv13_trace_norm_net}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_gluing_site_dimension}
+    Theorem~\ref{thm:chain_gluing_site_dimension} gives
+    $c=|K|=|\mathcal C_{B\setminus A}|m\le qD$.
+    Apply the trace-norm net theorem of the companion
+    volume~\cite[``A trace-norm net'']{QICLean2026Blueprint} to matrices of size $c$.
+    It gives the covering property and
+    \begin{align}
+        |\mathcal N|
+        \le\bigl(2\lceil c^2/\eta\rceil+1\bigr)^{2c^2}
+        \le\bigl(2\lceil(qD)^2/\eta\rceil+1\bigr)^{2(qD)^2}. \notag
+    \end{align}
+    The second inequality follows from $c^2\le(qD)^2$ and monotonicity of
+    the ceiling and of natural powers with base at least one.
+\end{proof}
+
 \begin{theorem}[The Hamiltonian at a cut]
     \label{thm:chain_gluing_split}
     \lean{TNLean.MPS.AreaLaw.reindex_gluingCut_eq}
