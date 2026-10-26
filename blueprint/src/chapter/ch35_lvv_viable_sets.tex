@@ -231,3 +231,29 @@ whose range is the span of the columns of $M_i(\psi)$.
     identity gives $P_SC_i=C_i$, hence $P_Su_{i,j}=u_{i,j}$ for every
     retained column. The range of $P_S$ is $\operatorname{Span}(S)$.
 \end{proof}
+
+
+\begin{theorem}[Left support after extending the right factor]
+    \label{thm:lvv_left_columns_right_extension}
+    \lean{TNLean.MPS.AreaLaw.rightApply_mem_leftSupportSubmodule_leftColumns}
+    \leanok
+    \uses{def:lvv_finite_left_columns,def:lvv_viable_set}
+    Let $T$ be the finite set of left columns in
+    Definition~\ref{def:lvv_finite_left_columns}, and write $\mathcal R$
+    for the Hilbert space of configurations to the right of the cut.
+    For every $i\in I$ and every linear map $W:\mathbb C^m\to\mathcal R$,
+    the chain vector obtained from $(I_{\mathcal L}\otimes W)u_i$ by the
+    cut identification belongs to $\operatorname{Span}(T)\otimes\mathcal R$.
+    This is the support step used
+    in~\cite[Claim~2.7, source lines 520--527]{Landau2015Polynomial}.
+\end{theorem}
+\begin{proof}\leanok
+    Let $C_i$ be the coefficient matrix of $u_i$. The extended vector has
+    coefficient matrix $C_iW^{\mathsf T}$. Its column at a right
+    configuration $b$ is
+    \begin{align}
+        \sum_{j<m}W_{b,j}u_{i,j}.\notag
+    \end{align}
+    Each $u_{i,j}$ belongs to $T$, so every such column lies in
+    $\operatorname{Span}(T)$.
+\end{proof}
