@@ -34,7 +34,7 @@ namespace MPOTensor
 /-- Contracting the physical middle index site by site multiplies the two
 nonuniform trace-form operators. The closing matrix is the Kronecker product
 of their supplied closing matrices. All chain and bond dimensions may be zero.
-This is the site-dependent form of CPSV17, arXiv:1606.00608, Section 4.5,
+This is the site-dependent form of CPSV16, arXiv:1606.00608, Section 4.5,
 lines 986–993, supporting the stacked tensors in ALVV Proposition 5.7. -/
 theorem trace_prod_mulTensor {L q D₁ D₂ : ℕ}
     (A : Fin L → MPOTensor q D₁) (B : Fin L → MPOTensor q D₂)
@@ -64,7 +64,7 @@ theorem trace_prod_mulTensor {L q D₁ D₂ : ℕ}
 
 /-- With identity closing matrices, the site-dependent product tensor has the
 ordinary trace coefficients of the product operator. No translation-invariance
-assumption is imposed. CPSV17, arXiv:1606.00608, Section 4.5, lines 986–993. -/
+assumption is imposed. CPSV16, arXiv:1606.00608, Section 4.5, lines 986–993. -/
 theorem trace_prod_mulTensor_one {L q D₁ D₂ : ℕ}
     (A : Fin L → MPOTensor q D₁) (B : Fin L → MPOTensor q D₂)
     (σ τ : Fin L → Fin q) :
