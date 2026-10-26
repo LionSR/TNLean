@@ -193,6 +193,35 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
     positive semidefinite term of norm at most one, and $0\le K\le I$.
 \end{proof}
 
+\begin{theorem}[Decomposition for boundary gluing]
+    \label{thm:chain_gluing_hamiltonian_decomposition}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_gluing_decomposition_of_range_one}
+    \leanok
+    \uses{def:chain_model}
+    Let $H=\sum_Xh_X$ be a range-one Hamiltonian on $L$ sites with
+    $\lVert h_X\rVert\le1$. For every natural number $k$, put
+    $A=[0,k)$ and $D=[0,\max\{k-1,0\})^{\mathsf c}$, with intervals clipped
+    to the chain. There exist matrices $H_L$ and $B$ such that
+    \begin{align}
+        H=H_L+B,\qquad \lVert B\rVert\le2L, \notag
+    \end{align}
+    where $H_L$ is supported on $A$ and $B$ on $D$.
+    This supplies the decomposition $H=H_L+(H_R+H_i)$ used
+    in~\cite[lines 409--410]{Landau2015Polynomial} for the native range-one
+    model, which also allows Hermitian one-site terms.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_range_one_support_count}
+    Let $H_L$ be the sum over supports contained in $A$, and let $B$ be
+    the sum over the remaining supports. Then $H=H_L+B$, and $H_L$ is
+    supported on $A$. Every support in the second sum contains a site
+    $y\ge k$. For each of its sites $x$, the range-one condition gives
+    $y\le x+1$, so $k\le x+1$ and $x\in D$. Thus $B$ is supported on $D$.
+    By Theorem~\ref{thm:chain_range_one_support_count}, there are at most
+    $2L$ supports. The triangle inequality and $\lVert h_X\rVert\le1$
+    therefore give $\lVert B\rVert\le2L$.
+\end{proof}
+
 \begin{theorem}[Nearest-neighbour supports at two cuts]
     \label{thm:chain_two_cut_edge_supports}
     \lean{TNLean.MPS.AreaLaw.interval_edge_classification_of_lt}
