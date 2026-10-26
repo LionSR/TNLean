@@ -33,10 +33,14 @@ $0$. For $b\ge1$ the observation holds: the new internal bond carries a vector
 of rank one.
 
 \section{The convention}
-The bond dimensions in the source are positive polynomials in the number of
-sites, so $b=0$ never occurs. The formalization reads ``bond dimension at most
-$b$'' as ``bond dimension at most $\max(1,b)$'', in the definition of a matrix
-product state on the first sites, so no theorem carries a hypothesis $b>0$.
+The source allows $b=0$ only at the initialization $i=0$ (line 372), where
+$\{1\}$ is a $(0,\delta)$-viable set for every $b\ge0$; the bond dimensions
+of the later iterations are positive polynomials in the number of sites. The
+formalization adopts the convention that ``bond dimension at most $b$'' means
+``bond dimension at most $\max(1,b)$'', in the definition of a matrix product
+state on the first sites. This leaves every bound with $b\ge1$ unchanged and
+makes the extension of the zero-budget initial set valid, so no theorem
+carries a hypothesis $b>0$.
 
 \section{Formalization}
 The definition is \leanid{TNLean.MPS.AreaLaw.IsLeftOpenMPS}, and the extension

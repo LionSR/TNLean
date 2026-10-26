@@ -1588,9 +1588,9 @@ form remains open under issue #9811.
   (local correction, resolved) records that the remark in the proof of Claim
   `c:ext` (source line 399), that appending a site does not raise the bond
   dimension, fails at bond dimension `0`: a vector on one site has bond dimension
-  `0`, but a nonzero product vector on two sites does not. The source's bond
-  dimensions are positive, and the formalization reads bond dimension at most `b`
-  as at most `max 1 b` in `IsLeftOpenMPS`.
+  `0`, but a nonzero product vector on two sites does not. The source allows
+  `b = 0` only at the initialization (line 372), and the formalization reads bond
+  dimension at most `b` as at most `max 1 b` in `IsLeftOpenMPS`.
 
 ## Rényi entropy and matrix product state approximation
 

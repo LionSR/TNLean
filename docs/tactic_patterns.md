@@ -7087,7 +7087,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   `CoordinateRangeProjector`.
 - **Abstraction:** proposed `Submodule.starProjectionMatrix W` with
   `isStarProjection_starProjectionMatrix` in `TNLean/Algebra/`.
-- **Notes:** meets the rule of three; the refactor of the call sites is a separate change.
+- **Notes:** meets the rule of three; the refactor of the call sites is tracked in #10192.
 
 ## Rejected
 

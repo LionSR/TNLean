@@ -31,8 +31,9 @@ viable when `S` is `(i - 1, s, b, δ)`-viable, with the same witness (Claim `c:e
 as one of bond dimension at most `max 1 b` (`IsLeftOpenMPS`). Bond dimension `0` is degenerate:
 under `IsOpenMPS` every vector on one site has it while a nonzero product vector on two sites does
 not, so the source's remark that the extension does not raise the bond dimension (algo53.tex,
-line 399) fails at `b = 0` and holds for `b ≥ 1`. The source's bond dimensions are positive
-polynomials. Documented in `docs/paper-gaps/lvv13_bond_dimension_zero.tex`.
+line 399) fails at `b = 0` and holds for `b ≥ 1`. The source allows `b = 0` only at the
+initialization `i = 0` (line 372); later bond dimensions are positive polynomials. Documented in
+`docs/paper-gaps/lvv13_bond_dimension_zero.tex`.
 
 ## Main definitions
 
