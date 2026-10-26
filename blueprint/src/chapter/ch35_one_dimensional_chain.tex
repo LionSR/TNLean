@@ -116,6 +116,47 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
     \]
 \end{proof}
 
+\begin{theorem}[A range-one support crossing a cut]
+    \label{thm:chain_range_one_crossing_support}
+    \lean{TNLean.MPS.AreaLaw.IsChainSupport.eq_interval_of_splits_of_range_one}
+    \leanok
+    \uses{def:chain_model}
+    If a support $X$ of range one contains sites on both sides of the cut
+    after the first $k$ sites, then $X=[k-1,k+1)$.
+\end{theorem}
+\begin{proof}\leanok
+    The support contains distinct sites $x<k\le y$, so it has at least two
+    sites. Its diameter is at most one, hence it consists of two adjacent
+    sites. These must be $k-1$ and $k$.
+\end{proof}
+
+\begin{theorem}[The Hamiltonian at one cut]
+    \label{thm:chain_range_one_cut_decomposition}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_cut_decomposition_of_range_one}
+    \leanok
+    \uses{def:chain_model}
+    Let $H=\sum_Xh_X$ be a range-one Hamiltonian whose terms are positive
+    semidefinite and satisfy $\|h_X\|\le1$. For every natural number $k$,
+    let $A=[0,k)$ be the interval clipped to the chain. There is a
+    decomposition
+    \begin{align}
+        H=H_L+H_R+K,\qquad 0\le K\le I, \notag
+    \end{align}
+    where $H_L$ is supported on $A$ and $H_R$ on its complement.
+    This gives the decomposition used for nearest-neighbour interactions
+    in~\cite[lines 283 and 409--410]{Landau2015Polynomial}; positive
+    one-site terms are also allowed here.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_range_one_crossing_support}
+    Sum the interactions supported on the left, those supported on the
+    right, and the interactions crossing the cut. The first two sums
+    have the required supports. By
+    Theorem~\ref{thm:chain_range_one_crossing_support}, at most one support
+    crosses the cut. Thus the crossing sum $K$ is either zero or one
+    positive semidefinite term of norm at most one, and $0\le K\le I$.
+\end{proof}
+
 \begin{theorem}[Nearest-neighbour supports at two cuts]
     \label{thm:chain_two_cut_edge_supports}
     \lean{TNLean.MPS.AreaLaw.interval_edge_classification_of_lt}
