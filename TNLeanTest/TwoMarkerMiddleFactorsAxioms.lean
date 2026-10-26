@@ -1,6 +1,13 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
 import TNLean.Algebra.TwoMarkerMiddleFactors
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
+
+/-! # Kernel dependencies of prescribed middle-factor coefficients -/
 
 run_cmd do
   let expected := #[``propext, ``Classical.choice, ``Quot.sound]
