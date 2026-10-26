@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixRankOfFactor
-import TNLean.Algebra.PermutationMatrixUnitary
+import QICLean.Algebra.PermutationMatrixUnitary
 import TNLean.MPS.MPDO.OperatorCyclicSum
 import TNLean.MPS.MPU.Basic
 import TNLean.MPS.MPU.SourceCuts

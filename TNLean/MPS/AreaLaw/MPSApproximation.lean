@@ -199,14 +199,6 @@ theorem ChainHamiltonian.spectralProjectionGE_leftBlock_bounds
   apply Real.exp_le_exp.mpr
   exact neg_le_neg (div_le_div_of_nonneg_right hwv (by positivity))
 
-/-- Scaling a matrix product state multiplies its scalar endpoint cap. -/
-theorem IsOpenMPS.smul {L q D : ℕ} {ψ : (Fin L → Fin q) → ℂ} (h : IsOpenMPS L q D ψ) (c : ℂ) :
-    IsOpenMPS L q D fun x ↦ c * ψ x := by
-  obtain ⟨A, a, hA, hψ⟩ := h
-  refine ⟨A, c * a, hA, fun x ↦ ?_⟩
-  change c * ψ x = _
-  rw [hψ x, mul_assoc]
-
 /-- Normalizing a nonzero vector at most doubles its distance to a unit vector:
 `‖Φ / ‖Φ‖ - ψ‖ ≤ |1 - ‖Φ‖| + ‖Φ - ψ‖ ≤ 2 ‖Φ - ψ‖`. -/
 theorem norm_inv_norm_smul_sub_le_two_mul {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E]

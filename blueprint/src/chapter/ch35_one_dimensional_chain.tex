@@ -92,6 +92,27 @@ for an arbitrary finite set of sites and are instantiated here directly.
     in every summand.
 \end{proof}
 
+\begin{theorem}[The number of range-one supports]
+    \label{thm:chain_range_one_support_count}
+    \lean{
+        TNLean.MPS.AreaLaw.card_chainSupport_range_one_le,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_operator_le_of_range_one
+    }
+    \leanok
+    \uses{def:chain_model}
+    A chain of $L$ sites has at most $2L$ supports of range one.
+    Consequently, a range-one Hamiltonian whose terms have norm at most
+    $J$ satisfies $\|H\|\le2LJ$.
+\end{theorem}
+\begin{proof}\leanok
+    A support of range one is a singleton or a pair of adjacent sites.
+    It is therefore determined by its least site and its cardinality,
+    which is either one or two. This gives the bound $2L$.
+    If $L>0$, the norm bound on a singleton term implies $J\ge0$, and the
+    triangle inequality gives $\|H\|\le\sum_X\|h_X\|\le2LJ$.
+    If $L=0$, there are no interaction terms and both sides vanish.
+\end{proof}
+
 \begin{theorem}[Nearest-neighbour supports at two cuts]
     \label{thm:chain_two_cut_edge_supports}
     \lean{TNLean.MPS.AreaLaw.interval_edge_classification_of_lt}
@@ -119,6 +140,77 @@ for an arbitrary finite set of sites and are instantiated here directly.
     For adjacent cuts, $E=\{u+1\}=\{v\}$. The first two assertions give
     $D_u\cap E=\{u+1\}$ and the fourth gives $D_v\cap E=\{v\}$, so the
     crossing supports $D_u$ and $D_v$ share the single middle site.
+\end{proof}
+
+\begin{theorem}[Frequency vectors with two prescribed coordinates]
+    \label{thm:chain_two_fixed_frequencies}
+    \lean{Nat.card_fun_sum_eq_and_two_eq,
+        Nat.card_fun_sum_eq_and_two_eq_of_lt,
+        Nat.card_fun_sum_eq_and_two_eq_of_total}
+    \leanok
+    Let $I$ be a finite set, let $u,v\in I$ be distinct, and let
+    $r,i,j$ be natural numbers. Define
+    \begin{align}
+        \mathcal F_{r,i,j}
+         & =\left\{\alpha:I\to\mathbb N:
+        \sum_{a\in I}\alpha(a)=r,\quad
+        \alpha(u)=i,\quad\alpha(v)=j\right\}.\label{eq:chain_fixed_frequency_set}
+    \end{align}
+    If $r<i+j$, then the set in~(\ref{eq:chain_fixed_frequency_set}) is empty.
+    If $|I|=s+3$ for a natural number $s$, then
+    \begin{align}
+        |\mathcal F_{r,i,j}|
+         & =\begin{cases}
+                \displaystyle\binom{r-i-j+s}{s}, & i+j\le r, \\
+                0,                               & r<i+j.
+            \end{cases}\label{eq:chain_fixed_frequency_count}
+    \end{align}
+    Taking $r=m+i+j$ in~(\ref{eq:chain_fixed_frequency_count}) gives
+    $|\mathcal F_{m+i+j,i,j}|=\binom{m+s}{s}$
+    for every natural number $m$.
+    Thus the count is one when $s=0$, provided $i+j\le r$,
+    and also when $r=i+j$.
+    The grouped alphabet in \cite[Section~4.1]{Arad2016RigorousRG}
+    has two windows of $2\ell$ bond labels and three bulk labels;
+    for this alphabet the formula applies with $s=4\ell$.
+\end{theorem}
+\begin{proof}\leanok
+    For every $\alpha:I\to\mathbb N$,
+    $\alpha(u)+\alpha(v)\le\sum_{a\in I}\alpha(a)$,
+    proving the empty case.
+    When the total is $m+i+j$, restricting to $I\setminus\{u,v\}$
+    is a bijection between $\mathcal F_{m+i+j,i,j}$ and the
+    nonnegative integer functions on $s+1$ labels whose sum is $m$.
+    Its inverse reinserts $i$ at $u$ and $j$ at $v$.
+    Identifying these functions with multisets of cardinality $m$
+    gives $\binom{m+s}{s}$.
+    When $i+j\le r$, substituting $m=r-i-j$ gives~(\ref{eq:chain_fixed_frequency_count}).
+\end{proof}
+
+\begin{theorem}[Uniform bound for frequency slices]
+    \label{thm:chain_fixed_frequency_uniform_bound}
+    \lean{Nat.card_fun_sum_eq_and_two_eq_le}
+    \leanok
+    Let $I$ have cardinality $s+3$, and let $u,v\in I$ be distinct.
+    For natural numbers $r,i,j$, let $\mathcal F_{r,i,j}$ be the set
+    in~(\ref{eq:chain_fixed_frequency_set}). Then
+    \begin{align}
+        |\mathcal F_{r,i,j}| & \le (r+1)^s.
+        \label{eq:chain_fixed_frequency_uniform_bound}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_two_fixed_frequencies}
+    If $r<i+j$, the set is empty. Otherwise put $m=r-i-j$.
+    The exact count in~(\ref{eq:chain_fixed_frequency_count}) and the
+    elementary binomial estimate give
+    \begin{align}
+        |\mathcal F_{r,i,j}|=\binom{m+s}{s}
+         & \le (m+1)^s\le(r+1)^s.
+        \label{eq:chain_frequency_binomial_bound}
+    \end{align}
+    Combining~(\ref{eq:chain_frequency_binomial_bound}) with the empty case
+    proves~(\ref{eq:chain_fixed_frequency_uniform_bound}).
 \end{proof}
 
 \begin{lemma}[Distance and spheres on a finite path]
@@ -2817,6 +2909,85 @@ for an arbitrary finite set of sites and are instantiated here directly.
     rank across the cut.
 \end{definition}
 
+\begin{theorem}[Products of one-site coefficients]
+    \label{thm:chain_site_product_mps}
+    \lean{TNLean.MPS.AreaLaw.isOpenMPS_prod,
+        TNLean.MPS.AreaLaw.isOpenMPS_operator_entries_prod,
+        TNLean.MPS.AreaLaw.isOpenMPS_operator_entries_rectKronecker,
+        TNLean.MPS.AreaLaw.isOpenMPS_operator_entries_embed_one_site,
+        TNLean.MPS.AreaLaw.isOpenMPS_operator_entries_of_supported_singleton}
+    \leanok
+    \uses{def:chain_open_mps,def:qc_local_circuit}
+    Let $L,q$ be natural numbers and let $Q$ be an alphabet with
+    $q$ elements. Given complex functions $f_i$ on $Q$, one at each site, the vector
+    $\phi(w)=\prod_{i=0}^{L-1}f_i(w_i)$ has internal bond bound one.
+    For a complex operator $M$, regard its entries as a vector on the
+    paired local alphabet by putting
+    \begin{align}
+        v_M\bigl((x_0,y_0),\ldots,(x_{L-1},y_{L-1})\bigr)
+         & =M_{x,y}. \notag
+    \end{align}
+    If $M=M_0\otimes\cdots\otimes M_{L-1}$ for one-site matrices
+    $M_i$, then $v_M$ has internal bond bound one. The same is true
+    for every operator supported on a single site, including the
+    placement of an arbitrary one-site matrix with the identity at
+    all other sites. Empty products and zero local dimension are
+    included; a single-site placement presupposes a site in the chain.
+    These identities give the bond-one ingredients for
+    \cite[Proposition~5.7]{Arad2016RigorousRG}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_open_mps,lem:qc_placed_operators,
+        thm:qc_supported_operator_placement}
+    For a site product take the scalar multiplying the contraction
+    to be one, all virtual dimensions to be one, and
+    $A_i(s)_{0,0}=f_i(s)$. The unique virtual path gives $\phi(w)$.
+    For tensor products of operators apply this construction to
+    $f_i(x_i,y_i)=(M_i)_{x_i,y_i}$. An operator supported on one site
+    is the placement of a one-site matrix; its other one-site factors
+    are identities, so the same construction applies.
+\end{proof}
+
+\begin{theorem}[Bond-one states are scalar multiples of site products]
+    \label{thm:chain_bond_one_products}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.exists_eq_mul_prod,
+        TNLean.MPS.AreaLaw.IsOpenMPS.exists_operator_entries_eq_mul_prod,
+        TNLean.MPS.AreaLaw.isOpenMPS_one_iff_exists_eq_mul_prod}
+    \leanok
+    \uses{def:chain_open_mps}
+    A complex vector $\psi$ on $L$ sites of local dimension $q$ has an
+    open-boundary matrix product representation with internal bond
+    bound one if and only if there are a scalar $c\in\mathbb C$ and
+    one-site functions $f_i$ such that
+    \begin{align}
+        \psi(w) & =c\prod_{i=0}^{L-1}f_i(w_i). \notag
+    \end{align}
+    In particular, if the paired entries of a complex operator $M$
+    have bond bound one, then there are one-site matrices $A_i$ and
+    a scalar $c$ such that
+    \begin{align}
+        M_{x,y} & =c\prod_{i=0}^{L-1}(A_i)_{x_i,y_i}. \notag
+    \end{align}
+    The statements include the zero vector, empty alphabets and the
+    empty chain. For the empty chain the product is one and the
+    scalar $c$ is unrestricted.
+    These identities give the bond-one ingredients for
+    \cite[Proposition~5.7]{Arad2016RigorousRG}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_open_mps,thm:chain_site_product_mps}
+    Choose an open-boundary representation. If one virtual bond has
+    dimension zero, there is no virtual path and $\psi=0$; take
+    $c=0$ and all $f_i=1$. Otherwise every virtual dimension is one.
+    Put $f_i(s)=A_i(s)_{0,0}$. The unique virtual path gives
+    $\psi(w)=c\prod_{i=0}^{L-1}f_i(w_i)$. The converse follows from
+    Theorem~\ref{thm:chain_site_product_mps}, followed by multiplication
+    by $c$. For the operator assertion, pair the two physical labels
+    at each site and take $(A_i)_{a,b}=f_i(a,b)$. The pairing and
+    unpairing are inverse bijections, so the row and column labels
+    are recovered without conjugation.
+\end{proof}
+
 \begin{theorem}[Bounded internal cut ranks give a matrix product state]
     \label{thm:chain_mps_of_cut_rank}
     \lean{
@@ -2921,6 +3092,36 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Reindexing configurations preserves the full trace norm, and partial
     trace contracts it. Apply these two facts to
     $|\psi\rangle\langle\psi|-|\phi\rangle\langle\phi|$.
+\end{proof}
+
+\begin{theorem}[Spectral-tail lower bound for MPS approximation]
+    \label{thm:chain_spectral_tail_lower_bound}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.sum_descEigenvalue_leftBlock_tail_le_traceNorm}
+    \leanok
+    Let $\psi$ be a unit vector on a chain of $L$ sites, and let $\phi$
+    be an open-boundary matrix product state of bond dimension at most $D$.
+    At an internal cut $0<k<L$, let $\lambda_1\ge\cdots\ge\lambda_M\ge0$
+    be the eigenvalues of the prefix reduction $\rho_k$ of $\psi$. Then
+    \begin{align}
+        \sum_{j=D+1}^{M}\lambda_j
+         & \le\bigl\||\psi\rangle\langle\psi|
+        -|\phi\rangle\langle\phi|\bigr\|_1.
+        \label{eq:chain_spectral_tail_lower_bound}
+    \end{align}
+    The sum is zero when $D\ge M$. Neither normalization of $\phi$ nor
+    a small-error assumption is required. This is the approximation lower
+    bound of~\cite[Eq.~(eps-lower), source lines 246--264]{Schuch2008EntropyScaling}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_reduced_state_rank_error}
+    Denote the trace error in (\ref{eq:chain_spectral_tail_lower_bound}) by $E$.
+    The prefix reduction of $\phi$ has rank at most $D$.
+    If $E<1$, the optimized pure-state error and Ky Fan overlap estimates
+    bound the discarded mass by $E/2\le E$; see
+    \cite[``Discarded marginal spectrum at small pure-state error'']{QICLean2026Blueprint}.
+    If $E\ge1$, positivity and $\operatorname{tr}\rho_k=1$ bound the
+    discarded mass by $1\le E$. This proves
+    (\ref{eq:chain_spectral_tail_lower_bound}) in both cases.
 \end{proof}
 
 \begin{theorem}[Growth of chain cut ranks]
@@ -5742,5 +5943,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
 \input{chapter/ch35_product_replacement}
 \input{chapter/ch35_copy_region_entropy}
 \input{chapter/ch35_chain_trimming}
+\input{chapter/ch35_lvv_viable_sets}
+\input{chapter/ch35_chain_gluing}
 
 \input{chapter/ch35_entropy_scaling_qutrit_copies}
