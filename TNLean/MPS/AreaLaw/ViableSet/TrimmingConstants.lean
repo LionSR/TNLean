@@ -18,8 +18,9 @@ They do not assert the existence of a trimmed witness.
 namespace TNLean.MPS.AreaLaw
 
 /-- An auxiliary numerical estimate for the trimming energy in LVV13, Lemma `l:within`
-(`References/1307.5143/algo53.tex`, lines 509–515): an input energy excess `8c` and overlap
-loss `4c` give an energy excess at most `6√c` when `0 ≤ c ≤ 1/1600`. -/
+(`References/1307.5143/algo53.tex`, lines 509–515). Substituting energy excess `δ = 8c`
+and overlap loss `η = 4c` into `(δ + 2√(2η))/(1 - 2η)` gives
+`(8c + 4√(2c))/(1 - 8c)`. This quantity is at most `6√c` when `0 ≤ c ≤ 1/1600`. -/
 theorem trimming_energy_fraction_le_six_mul_sqrt {c : ℝ} (hc0 : 0 ≤ c)
     (hc : c ≤ 1 / 1600) :
     (8 * c + 4 * √(2 * c)) / (1 - 8 * c) ≤ 6 * √c := by
