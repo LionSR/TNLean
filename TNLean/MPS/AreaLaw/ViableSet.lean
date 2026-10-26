@@ -10,3 +10,4 @@ Authors: TNLean contributors
 
 import TNLean.MPS.AreaLaw.ViableSet.ConstantRankCut
 import TNLean.MPS.AreaLaw.ViableSet.Trimming
+import TNLean.MPS.AreaLaw.ViableSet.TrimmingConstants
