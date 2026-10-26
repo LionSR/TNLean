@@ -4894,6 +4894,17 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Uniform bounds for sums of natural powers — candidate (2026-10-26)
+
+- **Pattern:** Bound each term by monotonicity of natural powers, then replace
+  a finite sum by its cardinality times that bound.
+- **Seen:** The degree sum in `Algebra/FrequencyCounts.lean` and the iterated
+  sum in `Algebra/TwoWindowRankBounds.lean`.
+- **Abstraction:** Existing Mathlib lemmas suffice: `Finset.sum_le_sum`,
+  `Finset.sum_le_card_nsmul` and `Finset.sum_const`.
+- **Notes:** Two arguments across two files; no new tactic is needed. The
+  degree sum and the three nested ranges have different cardinality factors.
+
 ### Regional expectation compared with a supported approximant — candidate (2026-10-21)
 
 - **Pattern:** For a contractive regional expectation fixing a supported approximant, rewrite the projection error as the difference between the approximation error and its expectation.
