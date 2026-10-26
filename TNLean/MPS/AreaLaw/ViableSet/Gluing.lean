@@ -29,13 +29,13 @@ overlap at least `1 - 2 (e + ‖K‖ τ)/Δ` with the ground state.
 ## Main definitions
 
 * `TNLean.MPS.AreaLaw.CutLeft`, `TNLean.MPS.AreaLaw.CutSite`,
-  `TNLean.MPS.AreaLaw.CutRight`: configurations on the first `k - 1` sites, site `k - 1`,
-  and the sites right of the cut, respectively.
+  `TNLean.MPS.AreaLaw.CutRight`: configurations on the first `k - 1` sites, the intervening
+  site when present, and the sites right of the cut, respectively.
 * `TNLean.MPS.AreaLaw.gluingCut`: the three-way cut coordinates at the cut after `k` sites.
 * `TNLean.MPS.AreaLaw.leftCutOperator`: the operator `H_L'` on the first `k` sites of a matrix
   supported there.
-* `TNLean.MPS.AreaLaw.rightCutOperator`: the operator on site `k - 1` and the sites right
-  of the cut of a matrix supported off the first `k - 1` sites.
+* `TNLean.MPS.AreaLaw.rightCutOperator`: the restriction of a matrix supported off the first
+  `k - 1` sites to the intervening site, when present, and the sites right of the cut.
 
 ## Main results
 
