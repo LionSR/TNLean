@@ -35,9 +35,9 @@ ground state $\Psi_0$.
     $m\in\N$, define the Hermitian parts and ground-state centering in $\Psi_0$
     \cite[lines 774--782]{Hastings2007AreaLaw}:
     \begin{align}
-        H_L          & =\sum_{X\subseteq[0,j-m)}h_X,\qquad
-        H_R=\sum_{X\subseteq[j+m,L)}h_X,\qquad
-        H_B=\sum_{X\not\subseteq[0,j-m),\,X\not\subseteq[j+m,L)}h_X,
+        H_L          & =\sum_{X\subseteq\lbrack0,j-m)}h_X,\qquad
+        H_R=\sum_{X\subseteq\lbrack j+m,L)}h_X,\qquad
+        H_B=\sum_{X\not\subseteq\lbrack0,j-m),\,X\not\subseteq\lbrack j+m,L)}h_X,
         \label{eq:hastings_three_way_parts}                                 \\
         \widetilde M & =M-\operatorname{Re}\langle\Psi_0,M\Psi_0\rangle\,1.
         \label{eq:hastings_ground_centered}
@@ -68,7 +68,7 @@ ground state $\Psi_0$.
     energy $0$ and gap $\Delta$ \cite[lines 766--782]{Hastings2007AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
-    Since $X\ne\emptyset$ and $[0,j-m)\cap[j+m,L)=\emptyset$, the three support
+    Since $X\ne\emptyset$ and $\lbrack0,j-m)\cap\lbrack j+m,L)=\emptyset$, the three support
     classes partition the terms of $H$, giving $H=H_L+H_B+H_R$. Additivity of
     (\ref{eq:hastings_ground_centered}) and
     $\operatorname{Re}\langle\Psi_0,H\Psi_0\rangle=E_0$ give
@@ -88,14 +88,14 @@ ground state $\Psi_0$.
     }
     \leanok
     \uses{def:hastings_three_way_splitting}
-    The operators $H_L,\widetilde H_L$ are supported on $[0,j-m)$,
-    $H_R,\widetilde H_R$ on $[j+m,L)$, and $H_B,\widetilde H_B$ on
-    $[j-m-R,j+m+R)\cap[0,L)$ \cite[lines 774--778]{Hastings2007AreaLaw}.
+    The operators $H_L,\widetilde H_L$ are supported on $\lbrack0,j-m)$,
+    $H_R,\widetilde H_R$ on $\lbrack j+m,L)$, and $H_B,\widetilde H_B$ on
+    $\lbrack j-m-R,j+m+R)\cap\lbrack0,L)$ \cite[lines 774--778]{Hastings2007AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
     Each buffer support $X$ in~(\ref{eq:hastings_three_way_parts}) meets both
-    $[j-m,L)$ and $[0,j+m)$; since $\operatorname{diam}(X)\le R$,
-    $X\subseteq[j-m-R,j+m+R)$. Subtracting a scalar multiple of $1$ in
+    $\lbrack j-m,L)$ and $\lbrack0,j+m)$; since $\operatorname{diam}(X)\le R$,
+    $X\subseteq\lbrack j-m-R,j+m+R)$. Subtracting a scalar multiple of $1$ in
     (\ref{eq:hastings_ground_centered}) preserves supports.
 \end{proof}
 

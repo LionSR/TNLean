@@ -16,8 +16,8 @@ unit vector $\Omega$ on the chain of $L$ sites.
     \uses{def:chain_model}
     For $c,l\in\N$ and $\epsilon\in\R$, $(O_B,O_L,O_R)$ is an \emph{approximate
         factorization} at $(c,l)$ with error $\epsilon$ if $O_L,O_R$ are commuting
-    orthogonal projections supported on $[0,c)$ and $[c,L)$, $O_B$ is supported
-    on $[c-l,c+l)\cap[0,L)$ with $\Vert O_B\Vert\le1$, and
+    orthogonal projections supported on $\lbrack0,c)$ and $\lbrack c,L)$, $O_B$ is supported
+    on $\lbrack c-l,c+l)\cap\lbrack0,L)$ with $\Vert O_B\Vert\le1$, and
     \begin{align}
         \Vert O_BO_LO_R-P_0\Vert & \le\epsilon.
         \label{eq:hastings_factorization_at}
@@ -127,11 +127,11 @@ unit vector $\Omega$ on the chain of $L$ sites.
     \leanok
     \uses{def:hastings_factorization_at}
     An approximate factorization at $(j,m)$ with error $\epsilon$ has $O_B$
-    supported on $[0,j+m)$, $O_L$ on $[0,j)$, and $O_R$ on $[j,L)$
+    supported on $\lbrack0,j+m)$, $O_L$ on $\lbrack0,j)$, and $O_R$ on $\lbrack j,L)$
     satisfying~(\ref{eq:hastings_factorization_at}), supplying the scale-$m$
     hypothesis of Theorem~\ref{thm:hastings_bootstrap_scale}.
 \end{theorem}
 \begin{proof}\leanok
-    Since $[j-m,j+m)\cap[0,L)\subseteq[0,j+m)\cap[0,L)$, support on
-    $[j-m,j+m)\cap[0,L)$ implies support on $[0,j+m)\cap[0,L)$.
+    Since $\lbrack j-m,j+m)\cap\lbrack0,L)\subseteq\lbrack0,j+m)\cap\lbrack0,L)$, support on
+    $\lbrack j-m,j+m)\cap\lbrack0,L)$ implies support on $\lbrack0,j+m)\cap\lbrack0,L)$.
 \end{proof}
