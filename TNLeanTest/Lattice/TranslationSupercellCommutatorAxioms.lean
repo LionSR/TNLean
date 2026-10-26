@@ -13,7 +13,7 @@ lattice. -/
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[
-      ``TNLean.Lattice.norm_sitePermMatrix_mul_mul_conjTranspose,
+      ``Matrix.norm_sitePermMatrix_mul_mul_conjTranspose,
       ``TNLean.Lattice.norm_groundCompression_commutator_le_of_momenta,
       ``TNLean.Lattice.norm_groundCompression_commutator_le_of_norm_sub_le,
       ``TNLean.Lattice.norm_groundCompression_commutator_truncated_le_of_momenta] do

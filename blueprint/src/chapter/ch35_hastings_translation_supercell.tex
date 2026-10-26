@@ -231,7 +231,7 @@ the residue of the site.
 \begin{theorem}[Low-energy commutators of a translation-invariant lattice]
     \label{thm:hastings_supercell_commutator_small}
     \lean{TNLean.Lattice.norm_groundCompression_commutator_le_of_momenta,
-        TNLean.Lattice.norm_sitePermMatrix_mul_mul_conjTranspose}
+        Matrix.norm_sitePermMatrix_mul_mul_conjTranspose}
     \leanok
     \uses{def:hastings_supercell_of_momenta,thm:hastings05_blecm}
     Let the terms $h_k$ be indexed by the sites, with $h_k$ acting on a set
@@ -264,7 +264,8 @@ the residue of the site.
     \lean{TNLean.Lattice.norm_groundCompression_commutator_le_of_norm_sub_le,
         TNLean.Lattice.norm_groundCompression_commutator_truncated_le_of_momenta}
     \leanok
-    \uses{thm:hastings_supercell_commutator_small}
+    \uses{thm:hastings_supercell_commutator_small, thm:hastings05_blecm_exp,
+        thm:hastings_gaussian_filtered_spectral}
     In the setting of Theorem~\ref{thm:hastings_supercell_commutator_small}, let
     $M_k$ be the filter of $h_k$ under a truncated Hamiltonian
     $\sum_{k'\in s_k}h_{k'}$, the term of eq.~\texttt{mid} of
