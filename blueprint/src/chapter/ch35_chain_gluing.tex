@@ -136,7 +136,7 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     \label{thm:lvv_viable_trimmed_witness_library_bond}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_trimmed_witness_of_isViable}
     \leanok
-    \uses{def:chain_model,def:lvv_viable_set,def:chain_constant_bond}
+    \uses{def:chain_model,def:lvv_viable_set,def:chain_constant_bond,def:chain_gluing_cut}
     Let $L\ge1$ and $q\ge2$, and let $H$ be a range-one Hamiltonian on the
     chain whose interaction terms are positive semidefinite and have
     operator norm at most one. Let $\Gamma$ be a gapped ground vector of
@@ -149,6 +149,14 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
         \operatorname{rank}M_k(w)            & \le B_c,                 &
         \operatorname{Re}\langle w,Hw\rangle & \le E_0+6\sqrt c. \notag
     \end{align}
+    There are also $m\le B_c$, an isometry $W:\mathbb C^m\to\mathcal H_R$
+    and a vector $x$ on the left sites and $\mathbb C^m$ such that, in the
+    cut coordinates of Definition~\ref{def:chain_gluing_cut},
+    \begin{align}
+        w & =(I\otimes W)x, & (P_S\otimes I)x & =x, \notag
+    \end{align}
+    where $P_S$ is the orthogonal projection onto $\operatorname{Span}(S)$,
+    expressed in the corresponding left coordinates.
     Here $B_c$ is the bound of Definition~\ref{def:chain_constant_bond} at
     $R=J=1$. The energy and support conclusions are those of
     \cite[Lemma~2.6, source lines 509--515]{Landau2015Polynomial}; the
@@ -176,4 +184,7 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
         E_0+\frac{8c+4\sqrt{2c}}{1-8c}\le E_0+6\sqrt c, \notag
     \end{align}
     by Theorem~\ref{thm:chain_numerical_trim_bound}.
+    The same application of Theorem~\ref{thm:chain_trimmed_witness} gives
+    $W^\dagger W=I$, $m\le B_c$, $w=(I\otimes W)x$ and the retained support
+    condition $(P_S\otimes I)x=x$.
 \end{proof}

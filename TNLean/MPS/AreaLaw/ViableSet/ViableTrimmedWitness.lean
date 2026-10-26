@@ -17,6 +17,8 @@ A viable set with overlap tolerance `c/L`, where `c = (Δ/169)²`, admits a unit
 of energy at most `E₀ + 8c` whose left support lies in its span. Comparing this vector directly
 with a trimmed ground vector gives a low-rank approximation with overlap at least `1 - 4c`.
 Trimming preserves the viable left support and gives energy at most `E₀ + 6√c`.
+The construction retains an isometry from the actual bond space and the corresponding left
+state, whose left factor remains in the span of the viable set.
 
 This is an auxiliary version of Landau, Vazirani and Vidick, arXiv:1307.5143v1,
 `References/1307.5143/algo53.tex`, Lemma `l:within`, lines 509–515.
@@ -28,7 +30,7 @@ quantitative dependence `exp(O(Δ⁻¹ log³ q log(1/c)))` is not established he
 -/
 
 open Matrix
-open scoped InnerProductSpace ComplexOrder
+open scoped InnerProductSpace Matrix Kronecker ComplexOrder
 
 namespace TNLean.MPS.AreaLaw
 
@@ -36,7 +38,9 @@ variable {L q : ℕ}
 
 /-- A viable set admits a normalized trimmed witness with the library's constant bond
 bound and energy excess at most `6√c`, where `c = (Δ/169)²`. This is the auxiliary form of
-LVV13, `algo53.tex`, Lemma `l:within`, lines 509–515, under the scope of this module. -/
+LVV13, `algo53.tex`, Lemma `l:within`, lines 509–515, under the scope of this module.
+The bond isometry and the left state retain the support condition used in Lemma `l:leading`,
+lines 493–505. -/
 theorem ChainHamiltonian.exists_trimmed_witness_of_isViable
     (h : ChainHamiltonian L q 1 1) (hpos : ∀ X, (h.term X).PosSemidef)
     (hL : 0 < L) (hq : 2 ≤ q) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
@@ -44,10 +48,19 @@ theorem ChainHamiltonian.exists_trimmed_witness_of_isViable
     (hgs : IsGappedGroundState h.operator E₀ Γ Δ) {k : ℕ}
     {S : Set (LeftBlockVector L q k)}
     (hviable : IsViable Γ (((Δ / 169) ^ 2) / L) S) :
-    ∃ w : EuclideanSpace ℂ (Fin L → Fin q),
+    ∃ (w : EuclideanSpace ℂ (Fin L → Fin q)) (m : ℕ)
+      (W : Matrix (CutRight L q k) (Fin m) ℂ)
+      (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ),
       ‖w‖ = 1 ∧ w ∈ leftSupportSubmodule S ∧
       (cutMatrix w k).rank ≤ constantCutBond q 1 1 Δ ((Δ / 169) ^ 2) ∧
-      (⟪w, toEuclideanLin h.operator w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2) := by
+      (⟪w, toEuclideanLin h.operator w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2) ∧
+      Wᴴ * W = 1 ∧ m ≤ constantCutBond q 1 1 Δ ((Δ / 169) ^ 2) ∧
+      WithLp.ofLp w ∘ (gluingCut L q k).symm =
+        ((1 : Matrix (CutLeft L q k × CutSite L q k)
+          (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ x ∧
+      (reindex (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_sub_one_subset k))
+          (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_sub_one_subset k))
+          (spanProjection S) ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ x = x := by
   classical
   let c : ℝ := (Δ / 169) ^ 2
   have hΔ4 : Δ ≤ 4 := by
@@ -82,12 +95,13 @@ theorem ChainHamiltonian.exists_trimmed_witness_of_isViable
     ext i
     simp [interval, leftBlock]
   rw [hblock] at hHL hHR
-  obtain ⟨w, m, W, x, hw, hwD, hwE, hwPV, -⟩ :=
+  obtain ⟨w, m, W, x, hw, hwD, hwE, hwPV, hW, hmD, hwx, hxPV⟩ :=
     exists_trimmed_witness_chain hsplit hHL hHR hK0 hK1
       (hgs.posSemidef_sub_smul_one hΔ.le) hψ hE hu huD huψ
       (by linarith : 2 * (4 * c) < 1)
       ((spanProjection_mul_cutMatrix_eq_iff (S := S)).mpr hψS)
-  refine ⟨w, hw, (spanProjection_mul_cutMatrix_eq_iff (S := S)).mp hwPV, hwD, ?_⟩
+  refine ⟨w, m, W, x, hw, (spanProjection_mul_cutMatrix_eq_iff (S := S)).mp hwPV,
+    hwD, ?_, hW, hmD, hwx, hxPV⟩
   have hsqrt4 : √(4 : ℝ) = 2 := by
     rw [show (4 : ℝ) = 2 ^ 2 by norm_num, Real.sqrt_sq (by norm_num)]
   have hsqrt : √(2 * (4 * c)) = 2 * √(2 * c) := by
