@@ -61,6 +61,27 @@ for an arbitrary finite set of sites and are instantiated here directly.
     both $A$ and its complement; it is at least one.
 \end{definition}
 
+\begin{theorem}[The number of range-one supports]
+    \label{thm:chain_range_one_support_count}
+    \lean{
+        TNLean.MPS.AreaLaw.card_chainSupport_range_one_le,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_operator_le_of_range_one
+    }
+    \leanok
+    \uses{def:chain_model}
+    A chain of $L$ sites has at most $2L$ supports of range one.
+    Consequently, a range-one Hamiltonian whose terms have norm at most
+    $J$ satisfies $\|H\|\le2LJ$.
+\end{theorem}
+\begin{proof}\leanok
+    A support of range one is a singleton or a pair of adjacent sites.
+    It is therefore determined by its least site and its cardinality,
+    which is either one or two. This gives the bound $2L$.
+    If $L>0$, the norm bound on a singleton term implies $J\ge0$, and the
+    triangle inequality gives $\|H\|\le\sum_X\|h_X\|\le2LJ$.
+    If $L=0$, there are no interaction terms and both sides vanish.
+\end{proof}
+
 \begin{theorem}[Nearest-neighbour supports at two cuts]
     \label{thm:chain_two_cut_edge_supports}
     \lean{TNLean.MPS.AreaLaw.interval_edge_classification_of_lt}
