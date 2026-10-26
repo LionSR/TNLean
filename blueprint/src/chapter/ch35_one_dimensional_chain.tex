@@ -176,6 +176,92 @@ for an arbitrary finite set of sites and are instantiated here directly.
     These are~(\ref{eq:chain_two_cut_crossing_forms}), including $q=0$.
 \end{proof}
 
+\begin{theorem}[Regional forms of two windows and three bulk operators]
+    \label{thm:chain_two_window_factors}
+    \lean{TNLean.MPS.AreaLaw.exists_threeSplit_twoWindow_factors}
+    \leanok
+    \uses{def:chain_model,lem:peps_frame_split_forms}
+    Let $L,q,\ell,a,b$ be natural numbers with $a+2\ell\le b$ and
+    $b+2\ell\le L-1$. Consider the $4\ell+3$ distinct labels
+    \begin{align}
+        \mathcal I
+         & =\{x_r:0\le r<2\ell\}\sqcup\{y_r:0\le r<2\ell\}
+        \sqcup\{\lambda,\mu,\rho\}.
+        \label{eq:chain_two_window_alphabet}
+    \end{align}
+    For each $\alpha\in\mathcal I$, let $F_\alpha$ be a complex operator
+    on the chain. Suppose that $F_{x_r}$ is supported on $[a+r,a+r+2)$
+    and $F_{y_r}$ on $[b+r,b+r+2)$, and that the three independently
+    given bulk operators satisfy
+    \begin{align}
+        F_\lambda & \text{ is supported on }[0,a+1),\notag       \\
+        F_\mu     & \text{ is supported on }[a+2\ell,b+1),\notag \\
+        F_\rho    & \text{ is supported on }[b+2\ell,L).
+        \label{eq:chain_two_window_bulk_supports}
+    \end{align}
+    The labels remain distinct when operators coincide or vanish.
+    Choose integers $0\le p,s<2\ell$, put $u=a+p$ and $v=b+s$, and set
+    \begin{align}
+        T & =[0,u+1), & E & =[u+1,v+1), & U & =[v+1,L).
+        \label{eq:chain_two_window_regions}
+    \end{align}
+    Write $\widetilde F_\alpha$ for $F_\alpha$ in the three-region
+    coordinates of Lemma~\ref{lem:peps_frame_split_forms}.
+    There are families $F^{\mathrm L}_\alpha,F^{\mathrm M}_\alpha,
+        F^{\mathrm R}_\alpha$ of operators on $\mathcal H_T,\mathcal H_E,
+        \mathcal H_U$, respectively, and operators $A$ on
+    $\mathcal H_T\otimes\mathcal H_E$ and $B$ on
+    $\mathcal H_E\otimes\mathcal H_U$, chosen simultaneously, such that
+    for every $\alpha\ne x_p,y_s$,
+    \begin{align}
+        \widetilde F_\alpha
+         & =(F^{\mathrm L}_\alpha\otimes\id_E)\otimes\id_U
+        +(\id_T\otimes F^{\mathrm M}_\alpha)\otimes\id_U\notag \\
+         & \quad+\id_{TE}\otimes F^{\mathrm R}_\alpha.
+        \label{eq:chain_two_window_ordinary_forms}
+    \end{align}
+    The same $A$ and $B$ satisfy
+    \begin{align}
+        \widetilde F_{x_p}    & =A\otimes\id_U,\notag  \\
+        \operatorname{OSR}(A) & \le q^2,\notag         \\
+        \widetilde F_{y_s}    & =\id_T\otimes B,\notag \\
+        \operatorname{OSR}(B) & \le q^2.
+        \label{eq:chain_two_window_crossing_forms}
+    \end{align}
+    All tensors use the same left-associated coordinates, with canonical
+    reassociation for $\id_T\otimes B$. The local dimension may be zero.
+    When $a+2\ell=b$, the middle bulk support is the singleton $\{b\}$.
+    This is a tensor decomposition for the two-window grouping in
+    \cite[Sections~4.1 and~5.2]{Arad2016RigorousRG}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_two_cut_edge_supports,lem:peps_frame_split_forms,
+        thm:peps_supported_left_factor_rank,thm:peps_supported_right_factor_rank}
+    The hypotheses give $u<v$ and $v+1<L$.
+    Theorem~\ref{thm:chain_two_cut_edge_supports} places each window edge
+    other than $u,v$ wholly in one of $T,E,U$.
+    The three bulk supports satisfy
+    \begin{align}
+        [0,a+1)       & \subseteq T,\notag \\
+        [a+2\ell,b+1) & \subseteq E,\notag \\
+        [b+2\ell,L)   & \subseteq U.
+        \label{eq:chain_two_window_bulk_containments}
+    \end{align}
+    Thus every operator other than $F_{x_p},F_{y_s}$ is supported in one
+    region. Apply the corresponding single-region form of
+    Lemma~\ref{lem:peps_frame_split_forms}, putting zero in the other two
+    regional factors. Choosing these factors over $\mathcal I$ gives the
+    three families in~(\ref{eq:chain_two_window_ordinary_forms}).
+
+    The first crossing support is contained in $T\cup E$ and meets $T$
+    in the single site $u$. Theorem~\ref{thm:peps_supported_left_factor_rank}
+    supplies $A$ with both its tensor identity and the bound $q^2$.
+    The second crossing support is disjoint from $T$ and meets $E$ in
+    the single site $v$. Theorem~\ref{thm:peps_supported_right_factor_rank}
+    supplies $B$ with both its tensor identity and the bound $q^2$.
+    These are~(\ref{eq:chain_two_window_crossing_forms}), including $q=0$.
+\end{proof}
+
 \begin{lemma}[Marginal moment and tail bounds at a cut]
     \label{lem:chain_marginal_tail}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.surprisalTail_regionState_le,
