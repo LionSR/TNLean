@@ -20,33 +20,6 @@ this estimate; no common smoothing state is assumed.
 open scoped BigOperators ComplexOrder
 open Matrix
 
-namespace Matrix
-
-private theorem IsHermitian.kyFanNorm_eq_trace_re_of_card_le
-    {ι : Type*} [Fintype ι] [DecidableEq ι] {ρ : Matrix ι ι ℂ}
-    (hρ : ρ.IsHermitian) {D : ℕ} (hD : Fintype.card ι ≤ D) :
-    hρ.kyFanNorm D = ρ.trace.re := by
-  rw [← hρ.kyFanNorm_card_eq_trace_re, hρ.kyFanNorm_eq_sum_fin,
-    hρ.kyFanNorm_eq_sum_fin]
-  exact Finset.sum_congr rfl fun i _ ↦ by simp [i.isLt, i.isLt.trans_le hD]
-
-private theorem IsHermitian.trace_sub_kyFanNorm_le_add_traceDistance
-    {ι : Type*} [Fintype ι] [DecidableEq ι] {ρ σ : Matrix ι ι ℂ}
-    (hρ : ρ.IsHermitian) (hσ : σ.IsHermitian) (htrace : ρ.trace = σ.trace) (D : ℕ) :
-    ρ.trace.re - hρ.kyFanNorm D ≤
-      σ.trace.re - hσ.kyFanNorm D + traceDistance ρ σ := by
-  by_cases hD : D ≤ Fintype.card ι
-  · have h := hρ.sum_descEigenvalue_tail_le_add_traceDistance hσ htrace D
-    rw [Finset.sum_Ico_eq_sub _ hD, Finset.sum_Ico_eq_sub _ hD] at h
-    change hρ.kyFanNorm (Fintype.card ι) - hρ.kyFanNorm D ≤
-      hσ.kyFanNorm (Fintype.card ι) - hσ.kyFanNorm D + traceDistance ρ σ at h
-    simpa only [hρ.kyFanNorm_card_eq_trace_re, hσ.kyFanNorm_card_eq_trace_re] using h
-  · rw [hρ.kyFanNorm_eq_trace_re_of_card_le (by omega),
-      hσ.kyFanNorm_eq_trace_re_of_card_le (by omega)]
-    simpa using traceDistance_nonneg ρ σ
-
-end Matrix
-
 namespace TNLean.MPS.AreaLaw
 
 /-- The squared truncation error is bounded by the tails of independently
