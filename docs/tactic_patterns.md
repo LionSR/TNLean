@@ -24,6 +24,29 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Matrices of submodule orthogonal projections — promoted (2026-10-26)
+
+- **Pattern:** Form `Matrix.toEuclideanLin.symm W.starProjection.toLinearMap`
+  and prove that it is Hermitian and idempotent, either separately or by
+  transporting `isStarProjection_starProjection` through `Matrix.toEuclideanCLM`.
+- **Defined in:** `TNLean/Algebra/SubmoduleStarProjectionMatrix.lean`,
+  `Submodule.starProjectionMatrix`, `Submodule.isStarProjection_starProjectionMatrix`,
+  and the evaluation lemma `Submodule.toEuclideanLin_starProjectionMatrix`.
+- **Refactored occurrences:** five existing modules:
+  `MPS/AreaLaw/SequentialTruncation.lean`,
+  `MPS/ParentHamiltonian/PrimitiveQuasiLocalUniqueness.lean`,
+  `MPS/FundamentalTheorem/Reduction/StationarySplitting.lean`,
+  `PEPS/ParentHamiltonian/CoordinateRangeProjector.lean`, and
+  `PEPS/ParentHamiltonian/RegionParentHamiltonian.lean`.
+- **Notes:** The helper keeps the linear-map definition used by rank and range
+  calculations. Public wrappers retain their existing linear- or continuous-map
+  definitions for downstream explicit rewrites; their star-projection proofs use
+  the same helper by definitional equality. Public statements are unchanged.
+  The five consumer files shrink by 31 lines; the 41-line helper and one generated
+  aggregator import give a net production increase of 11 lines, plus regression
+  coverage. The `ViableSet/Basic.lean` consumer and candidate entry introduced by
+  PR #10182 remain for a later integration after that branch lands. Tracked in #10192.
+
 ### Raising a time bound inside a light-cone exponential — promoted (2026-10-25)
 
 - **Pattern:**
