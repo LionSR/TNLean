@@ -87,11 +87,11 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.re_inner_sub_le_of_overlap_of_range_one,
         TNLean.MPS.AreaLaw.ChainHamiltonian.re_inner_le_of_overlap_div_of_range_one}
     \leanok
-    \uses{def:chain_model,thm:chain_range_one_support_count}
+    \uses{def:chain_model}
     Let $H$ be a range-one Hamiltonian on a chain of $L$ sites, with each
     interaction term of norm at most one. Let $E_0,\Delta$ be real and let
     $\Omega$ be a unit vector satisfying $H\Omega=E_0\Omega$ and
-    $H-E_0\ge\Delta(I-|\Omega\rangle\langle\Omega|)$.
+    $H-E_0\ge\Delta(1-|\Omega\rangle\langle\Omega|)$.
     If $v$ is a unit vector with $|\langle\Omega,v\rangle|\ge1-\delta$, then
     \begin{align}
         \operatorname{Re}\langle v,Hv\rangle-E_0
@@ -111,7 +111,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \uses{thm:chain_range_one_support_count}
     The support count gives $\|H\|\le2L$. The eigenvector equation and
     $\|\Omega\|=1$ give $|E_0|\le\|H\|$, hence
-    $\|H-E_0I\|\le\|H\|+|E_0|\le4L$.
+    $\|H-E_0\,1\|\le\|H\|+|E_0|\le4L$.
     The energy estimate from overlap with an eigenvector in
     \cite[``Energy bound from overlap with an eigenvector'']{QICLean2026Blueprint}
     now gives (\ref{eq:chain_range_one_overlap_energy}). Substituting
