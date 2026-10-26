@@ -188,6 +188,41 @@ coefficient spaces and cut ranks.
     and absorb any nonzero scalar into the overall MPS coefficient.
 \end{proof}
 
+\begin{theorem}[Extension by a fixed exterior configuration]
+    \label{thm:chain_fixed_configuration_extension}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.extend_interval_by_configuration}
+    \uses{def:chain_open_mps}
+    Let $a,L,T$ be nonnegative integers with $a+L\leq T$, and let
+    $I=\{a,\ldots,a+L-1\}$ be the corresponding interval in a chain
+    of $T$ sites of common local dimension $q$,
+    and fix a configuration $\eta$ on its complement $E$.
+    If $\psi$ is an open-boundary matrix product state on $I$ with internal
+    bond dimensions at most $D$, define the full-chain vector by
+    \begin{align}
+        \chi(\sigma) & =
+        \begin{cases}
+            \psi(\sigma|_I), & \sigma|_E=\eta,   \\
+            0,               & \text{otherwise}.
+        \end{cases}
+        \notag
+    \end{align}
+    Then $\chi$ has open-boundary bond dimensions at most $\max\{1,D\}$.
+    In particular, the bound remains $D$ when $D\geq1$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:chain_cut_rank_of_mps,thm:chain_mps_of_cut_rank}
+    At a cut after $j$ sites, put $k=\min\{L,(j-a)_+\}$.
+    Restriction to $I$ maps the left and right configurations to the
+    corresponding configurations at the cut after $k$ interior sites.
+    Write $M_k$ for the interior coefficient matrix, $f,g$ for these maps,
+    and $u,v$ for the two exterior matching indicators. The full coefficient
+    matrix is $\operatorname{diag}(u)M_k[f,g]\operatorname{diag}(v)$,
+    where $M_k[f,g]_{x,y}=M_k(f(x),g(y))$. Its rank is therefore at most $\operatorname{rank}M_k$.
+    This is at most $D$ for an internal cut and at most one at either endpoint.
+    The cut-rank characterization gives the assertion, including empty and
+    one-site intervals.
+\end{proof}
+
 \begin{theorem}[Bond bounds for normalized block factors]
     \label{thm:chain_copy_product_factor_mps}
     \lean{TNLean.MPS.AreaLaw.IsOpenMPS.copyProduct_factor}
