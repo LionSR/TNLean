@@ -71,11 +71,13 @@ The size-independent denominators of lines 1620--1625 are what make the
 cosets of this $S$ boundedly spaced, which gives the geometric statement
 above. This second step is formalized for a lattice with $n$ cells along
 one direction, through the cell coordinate $\pi$ along that direction and the
-unit translation $e$ in it, for a graph whose edges join cells at distance at
-most one: if $\chi(g)^q=1$ for every character with a nonzero sector, then
-every $q$-th power lies in $S$, and some translation $(e^t)^q$ carries any site
-to graph distance more than $\lfloor n/2\rfloor-q$ from any
-other.\footnote{\leanid{TNLean.Lattice.pow_mem_supercell},
+unit translation $e$ in it, for a graph whose edges change the cell coordinate
+by at most a positive integer $R$: if $\chi(g)^q=1$ for every character with a
+nonzero sector, then every $q$-th power lies in $S$, and for any sites $x,y$
+some translation $g=(e^t)^q$ satisfies $\lfloor n/2\rfloor<R\,d(x,g\cdot y)+q$,
+with $d$ the graph distance.
+For a ring, whose edges join cells at distance at most one, $R=1$ and the
+graph distance exceeds $\lfloor n/2\rfloor-q$.\footnote{\leanid{TNLean.Lattice.pow_mem_supercell},
     \leanid{SimpleGraph.natAbs_valMinAbs_sub_le_edist},
     \leanid{TNLean.Lattice.exists_mem_supercell_lt_edist_add} and its ring case
     \leanid{TNLean.Lattice.exists_mem_supercell_lt_edist_add_ring} in

@@ -53,6 +53,8 @@ namespace SimpleGraph
 
 variable {V : Type*} {Γ : SimpleGraph V} {n R : ℕ}
 
+/-- One step of the triangle inequality: crossing an edge changes the circular displacement
+from a fixed site by at most \(R\). -/
 private theorem natAbs_valMinAbs_sub_le_add_of_adj (π : V → ZMod n)
     (hπ : ∀ u v, Γ.Adj u v → (π v - π u).valMinAbs.natAbs ≤ R)
     (u w x : V) (h : Γ.Adj u w) :
@@ -61,6 +63,8 @@ private theorem natAbs_valMinAbs_sub_le_add_of_adj (π : V → ZMod n)
     (ZMod.natAbs_valMinAbs_add_le (π u - π x) (π w - π u)).trans
       ((Int.natAbs_add_le _ _).trans (Nat.add_le_add_left (hπ u w h) _))
 
+/-- Accumulating the one-edge step along a walk: the circular displacement grows by at most
+\(R\) times the length of the walk. -/
 private theorem natAbs_valMinAbs_sub_le_add_length_mul (π : V → ZMod n)
     (hπ : ∀ u v, Γ.Adj u v → (π v - π u).valMinAbs.natAbs ≤ R)
     (x : V) {u y : V} (p : Γ.Walk u y) :
