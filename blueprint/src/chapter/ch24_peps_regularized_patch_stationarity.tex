@@ -77,8 +77,10 @@ with marginals taken in the final normalized vector of
     \end{align}
 
     With $D_j=\widehat{BK_j-K_jB}_{X_j}$ and
-    $\Delta_j=P_j^+D_jP_j^-\Omega$, every wire below carries $\mathcal H_V$:
+    $\Delta_j=P_j^+D_jP_j^-\Omega$, every line below carries the full space $\mathcal H_V$:
     \input{figures/peps_patch_first_variation}
+    Starting at $\Omega$ on the right, $P_j^-$ acts first, $D_j$ second,
+    and $P_j^+$ last ($P_j^\pm$ need not be supported on $X_j$).
 \end{theorem}
 \begin{proof}
     \leanok
@@ -280,13 +282,14 @@ with marginals taken in the final normalized vector of
     \leanok
     \uses{def:peps_patch_canonical_marginal,
         thm:peps_regional_basis_relabelling}
-    Under the sitewise relabellings $E_X$ of Theorem~\ref{thm:peps_regional_basis_relabelling}, the marginal $\rho_X$ of $\phi=\widehat\Psi(x)$ satisfies
+    Under the sitewise relabellings $E_X$ of Theorem~\ref{thm:peps_regional_basis_relabelling}, the marginal $\rho_X$ of the same final vector $\phi=\widehat\Psi(x)$ satisfies
     \begin{align}
         E_X\rho_XE_X^*
          & =\operatorname{Tr}_{V\setminus X}
-        \ketbra{E_V\phi}{E_V\phi}.
+        \ketbra{E_V\phi}{E_V\phi}
         \label{eq:peps_patch_marginal_relabelling}
     \end{align}
+    for every tuple $x$ and every choice of weights and regulator.
 \end{theorem}
 \begin{proof}
     \leanok

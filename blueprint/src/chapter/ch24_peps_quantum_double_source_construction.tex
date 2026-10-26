@@ -173,7 +173,7 @@ Grouping the four corner A plaquettes into blocked sites $K_{NW},K_{NE},K_{SE},K
 \end{tenkzequation}
 
 \paragraph{Clockwise physical coordinates.}
-With B colors $(p,q,r,s)$ at $(\text{N},\text{E},\text{S},\text{W})$, the original spin tuple at $(\text{NE},\text{SE},\text{SW},\text{NW})$ is $(qp^{-1},rq^{-1},sr^{-1},ps^{-1})$. Applying the basis involution $J\ket g=\ket{g^{-1}}$ (which satisfies $JL_uJ=R_u$ and $JR_uJ=L_u$, reversing spin arrows) gives the clockwise coordinates
+With B colors $(p,q,r,s)$ at $(\text{N},\text{E},\text{S},\text{W})$, the original spin values at $(\text{NE},\text{SE},\text{SW},\text{NW})$ are $(qp^{-1},rq^{-1},sr^{-1},ps^{-1})$. Applying the basis involution $J\ket g=\ket{g^{-1}}$ (which satisfies $JL_uJ=R_u$ and $JR_uJ=L_u$, reversing spin arrows) gives the clockwise coordinates
 $(a,b,c,d)=(pq^{-1},qr^{-1},rs^{-1},sp^{-1})$.
 % Source anchors: paper_v3.tex:2873--2876 (L/R), 2889--2894 (two colors),
 % 2896--2908 (clockwise K); original arrows from tc-lattice.pdf.
@@ -193,7 +193,7 @@ In clockwise coordinates on left--right and top--bottom pairs, the horizontal an
 % carry published declaration links. This source illustration adds none.
 
 \paragraph{A controlled plaquette loop and its two layers.}
-With $U_s\in\{L_s,R_s\}$ and $P=\sum_{s,k}U_s\ket{k}_{\rm out}\bra{k}_{\rm in}\otimes\ket{s}_v\bra{s}_v$, contracting four copies of $P$ around a B plaquette gives
+For $U_s\in\{L_s,R_s\}$ on a spin adjacent to a B plaquette, the elementary tensor is $P=\sum_{s,k}U_s\ket{k}_{\rm out}\bra{k}_{\rm in}\otimes\ket{s}_v\bra{s}_v$, and contracting four copies around one plaquette gives
 \begin{align}
     \operatorname{Loop}(P) & =\sum_{s\in G}
     U_s^{NW}\otimes U_s^{NE}\otimes U_s^{SE}\otimes U_s^{SW}
@@ -223,7 +223,7 @@ With $U_s\in\{L_s,R_s\}$ and $P=\sum_{s,k}U_s\ket{k}_{\rm out}\bra{k}_{\rm in}\o
     \end{tenkz}
 \end{tenkzequation}
 
-Each spin belongs to two B plaquettes from disjoint layers, whose actions $L_r$ and $R_s$ commute ($L_rR_s=R_sL_r$) and map $\ket1$ to $\ket{rs^{-1}}$ (at the SE spin of a blocked A plaquette in clockwise coordinates, or $\ket{r+s}$ for $G=\mathbb Z_2$), defining the four-virtual-leg site tensor $T$:
+Each spin belongs to two B plaquettes from disjoint layers, whose actions $L_r$ and $R_s$ commute ($L_rR_s=R_sL_r$) and map $\ket1$ to $\ket{rs^{-1}}$ ($\ket{r+s}$ for $G=\mathbb Z_2$). At the southeast spin of a blocked A plaquette in clockwise coordinates, in the original arrow convention this same spin is $sr^{-1}$; applying $J$ gives $rs^{-1}$, defining the four-virtual-leg site tensor $T$:
 % Source: paper_v3.tex:2724--2749,2886--2894; tc-tensor-orientation.pdf.
 % Ink: lower P^R_s and upper P^L_r have opposite virtual directions.
 % One physical wire joins them, and a second joins P^R_s to |1>.

@@ -43,9 +43,9 @@ Definition~\ref{def:peps_two_by_two_tensor} is
         \tnmark[form=label, label pos=w]{on reblockX3 0.5}{$x_3$}
     \end{tenkz}
 \end{tenkzequation}
-For arbitrary fine tensors and any positive coarse period, contracting
+For arbitrary fine tensors and every positive coarse period, contracting
 these blocks around the torus gives $W\Psi_f=\Psi_B$ with scalar factor
-$1$, where $W$ regroups the four physical registers per block. For
+one, where $W$ regroups the four physical registers per block. For
 regular $G$-isometric fine tensors with local factors $c_i>0$,
 Theorem~\ref{thm:peps_two_by_two_gram} gives the Gram identity
 $B^*B=c_BP_8$ with $c_B=|G|\prod_i c_i$ (the internal cycle contributes
@@ -85,7 +85,7 @@ relative-coordinate step in \cite[Observation~6.5]{Schuch2010PEPS}:
 \end{tenkzequation}
 The lower contraction is $\sum_{r\in G}|r,r\rangle=\sqrt d\,\omega$ for
 the unit vector $\omega=d^{-1/2}\sum_{r\in G}|r,r\rangle$ on the two
-distinct endpoint registers (without assuming $G$ is abelian).
+distinct endpoint registers. No commutativity of $G$ is assumed.
 
 \paragraph{The original tensor and the four surplus registers.}
 When every fine site carries the same regular $G$-isometric tensor $A$,
@@ -121,8 +121,8 @@ isometry factor $c_{A,v}$, while each surplus virtual edge contracts two
 identity tensors into $\sqrt d\,\omega$.
 
 \paragraph{The normalized fixed-point state.}
-On an untwisted coarse torus of periods $w,h\geq3$ (fine periods
-$2w,2h$), let $S_f=W^{-1}\operatorname{ran}(\bigotimes_v B_v)$ and let
+On a coarse torus of periods $w,h\geq3$ (fine periods
+$2w,2h$) where every bond is untwisted, let $S_f=W^{-1}\operatorname{ran}(\bigotimes_v B_v)$ and let
 $Q$ regroup the original and surplus output registers. Then
 $I=Q(\bigotimes_vF_v)W|_{S_f}$ is an isometry on $S_f$, and for
 $\Omega=\bigotimes_{e\in E(\Gamma)}\omega_e$ and
@@ -152,7 +152,7 @@ Theorem~\ref{thm:peps_two_by_two_original_normalized} gives
             ports={0:physical:$\tau$}]{\Omega}
     \end{tenkz}
 \end{tenkzequation}
-where $\widehat\Psi_c$ uses the same tensor $A$, $I$ is an isometry on
-$S_f$ (without assuming surjectivity onto the ambient physical spaces),
+where $\widehat\Psi_c$ uses the same original tensor $A$, $I$ is an isometry on
+$S_f$ (no surjectivity onto either ambient physical space is assumed),
 and the Bell-separation and normalization claims retain the untwisted
 $w,h\geq3$ hypotheses (whereas $W\Psi_f=\Psi_B$ also holds for $w,h\in\{1,2\}$).
