@@ -8,9 +8,9 @@ import TNLean.MPS.AreaLaw.TwoWindowOperatorForms
 /-! # Axiom audit for the independently supplied two-window family -/
 
 /-- info:
-'TNLean.MPS.AreaLaw.exists_threeSplit_twoWindow_factors' depends on axioms:
+'TNLean.MPS.AreaLaw.exists_threeSplit_two_window_factors' depends on axioms:
 [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
 set_option linter.hashCommand false in
-#print axioms TNLean.MPS.AreaLaw.exists_threeSplit_twoWindow_factors
+#print axioms TNLean.MPS.AreaLaw.exists_threeSplit_two_window_factors

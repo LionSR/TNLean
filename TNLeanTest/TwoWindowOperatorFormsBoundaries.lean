@@ -24,7 +24,7 @@ private noncomputable def middleOnlyFamily (q : ℕ) :
 
 -- The two windows touch, and the selected crossing edges are adjacent.
 private noncomputable abbrev adjacentWindowsIndependentMiddle (q : ℕ) :=
-  exists_threeSplit_twoWindow_factors (L := 5) (q := q) (ℓ := 1) (a := 0) (b := 2)
+  exists_threeSplit_two_window_factors (L := 5) (q := q) (ℓ := 1) (a := 0) (b := 2)
     (middleOnlyFamily q)
     (by intro r; simp [middleOnlyFamily])
     (by intro r; simp [middleOnlyFamily])
