@@ -1482,7 +1482,7 @@ what is formalized.
 
 [hastings05_cluster_boundary.tex](hastings05_cluster_boundary.tex)
 (local correction, resolved) records that the boundary `B(C)` of Hastings, *Solving gapped
-Hamiltonians locally* (arXiv:cond-mat/0508554v3, source lines 1130–1133), the terms acting on a
+Hamiltonians locally* (arXiv:cond-mat/0508554v3, source lines 1131–1134), the terms acting on a
 site of `C`, is too small for the claim at lines 1134–1138 that a term containing `H_C` and
 avoiding `H_{B(C)}` has the sites of `H_C` as a cluster. On a chain with `H_i` acting on
 `{i − 1, i, i + 1}`, the term `H_1 H_3` avoids `B({1}) = {0, 2}` but overlaps `H_1`. The
@@ -1621,3 +1621,19 @@ form remains open under issue #9811.
   constant two proved formally. The formal amplification estimate needs only
   product error below one, not the printed single-copy smallness hypothesis;
   the full trace-norm form follows for unnormalized approximants.
+
+## Landau, Vazirani and Vidick's one-dimensional algorithm, arXiv:1307.5143
+
+- [`lvv13_constant_bond.tex`](lvv13_constant_bond.tex)
+  (local correction, resolved) records that the constant bond dimension of Lemma
+  `constantbondapprox` (arXiv:1307.5143v1, lines 342–345) is formalized with
+  `B_δ = ⌊exp(C + 32 s log(2e^{e/2}/δ))⌋`, taken from the area law of the
+  library, in place of the stated `exp(O(ε⁻¹ log³ d log 1/δ))`. Both are
+  independent of the chain length and the cut, which is all the later steps of
+  the source use, and the theorems hold under the source's hypotheses. The
+  source's constant would follow from the bound of Arad, Kitaev, Landau and
+  Vazirani, arXiv:1301.1162. The lemma is formalized for every `δ > 0`.
+  Corollary `c:1` holds for every `δ > 0`, with the source's energy bound
+  `E₀ + 6√δ` and bond dimension `B_{min(δ, 1/12)}`. The energy bound after
+  trimming a general low-energy vector is corrected in the QICLean note
+  `lvv13_trimming_energy`.

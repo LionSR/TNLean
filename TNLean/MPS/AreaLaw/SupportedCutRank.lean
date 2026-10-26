@@ -26,6 +26,8 @@ most `D^{2m}`.
 ## Main results
 
 * `TNLean.MPS.AreaLaw.rank_schmidtCoeffMatrix_mulVec_le_of_isOneSided`: the bipartite statement.
+* `TNLean.MPS.AreaLaw.cutMatrix_injective`, `TNLean.MPS.AreaLaw.inner_cutVector`: cut
+  coordinates determine a chain vector and preserve inner products.
 * `TNLean.MPS.AreaLaw.rank_cutMatrix_toEuclideanLin_le_of_subset_leftBlock`,
   `TNLean.MPS.AreaLaw.rank_cutMatrix_toEuclideanLin_le_of_disjoint_leftBlock`: one-sided
   operators on the chain.
@@ -59,6 +61,24 @@ theorem cutMatrix_toEuclideanLin (X : Matrix (Fin L → Fin q) (Fin L → Fin q)
   simp only [toLpLin_apply, PiLp.toLp_apply, schmidtCoeffMatrix_apply, mulVec, dotProduct,
     reindex_apply, submatrix_apply]
   exact (Equiv.sum_comp (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k)).symm _).symm
+
+/-- A chain vector is determined by its cut matrix at any cut. -/
+theorem cutMatrix_injective (k : ℕ) :
+    Function.Injective (fun ψ : EuclideanSpace ℂ (Fin L → Fin q) ↦ cutMatrix ψ k) := by
+  intro ψ φ h
+  ext x
+  have hx := congrArg (fun M ↦ M
+    ((Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k)) x).1
+    ((Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k)) x).2) h
+  simpa only [cutMatrix_apply, Prod.mk.eta, Equiv.symm_apply_apply] using hx
+
+/-- Passing to cut coordinates preserves the inner product. -/
+theorem inner_cutVector (k : ℕ) (ψ φ : EuclideanSpace ℂ (Fin L → Fin q)) :
+    inner ℂ (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) ψ)
+      (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) φ) = inner ℂ ψ φ := by
+  simp only [EuclideanSpace.inner_eq_star_dotProduct, dotProduct]
+  exact Equiv.sum_comp (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k)).symm
+    (fun x ↦ φ x * star (ψ x))
 
 /-- An operator supported on one side of the cut after `k` sites does not increase the
 rank of the cut matrix. -/
