@@ -7,7 +7,7 @@ import Mathlib.Algebra.Group.Action.End
 import Mathlib.Algebra.Group.Action.Pi
 import Mathlib.Algebra.Group.Action.Prod
 import Mathlib.LinearAlgebra.Matrix.Kronecker
-import TNLean.Algebra.PermutationMatrixUnitary
+import QICLean.Algebra.PermutationMatrixUnitary
 
 /-!
 # Blocking copies of the left regular representation

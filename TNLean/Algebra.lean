@@ -143,7 +143,6 @@ import TNLean.Algebra.OrthogonalResolution
 import TNLean.Algebra.OrthogonalSymplecticKroneckerDeterminant
 import TNLean.Algebra.PathGraphDistance
 import TNLean.Algebra.PermutationMatrixCommutation
-import TNLean.Algebra.PermutationMatrixUnitary
 import TNLean.Algebra.PiMatrixRepresentation
 import TNLean.Algebra.PiMulSingleInduction
 import TNLean.Algebra.PiSigmaEquiv
