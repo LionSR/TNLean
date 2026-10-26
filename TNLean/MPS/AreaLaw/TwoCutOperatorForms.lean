@@ -35,14 +35,6 @@ noncomputable section
 
 namespace TNLean.MPS.AreaLaw
 
-/-- The prefix ending at a cut is disjoint from the interval beginning there.
-Supporting geometry for ALVV, arXiv:1602.08828v2, `eq:H-mid-cut`, lines 810–821. -/
-theorem disjoint_interval_zero_interval (L a b : ℕ) :
-    Disjoint (interval L 0 a) (interval L a b) := by
-  rw [Finset.disjoint_left]
-  intro x hx hy
-  exact (mem_interval.mp hx).2.not_ge (mem_interval.mp hy).1
-
 /-- Actual two crossing factors and three regional families of an original
 nearest-neighbour bond family, all in one three-region partition.
 Supporting locality algebra for ALVV, arXiv:1602.08828v2, eq:H-mid-cut,
