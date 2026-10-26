@@ -143,6 +143,56 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     the ceiling and of natural powers with base at least one.
 \end{proof}
 
+\begin{theorem}[Polynomial growth of the boundary-net bound]
+    \label{thm:chain_boundary_net_polynomial_bound}
+    \lean{TNLean.MPS.AreaLaw.boundaryNet_card_bound_le_polynomial}
+    \leanok
+    Let $L,q,D$ be natural numbers with $L\ge1$, and let $c>0$.
+    Put $p=2(qD)^2$ and $A=\lceil2(qD)^2/c\rceil$. The boundary-net bound
+    at radius $c/(2L)$ satisfies
+    \begin{align}
+        K_L & =\bigl(2\lceil(qD)^2/(c/(2L))\rceil+1\bigr)^p,\notag \\
+        K_L & \le(2A+1)^pL^p.\notag
+    \end{align}
+    For fixed $q,D,c$, the coefficient and degree are independent of $L$.
+    This is the net contribution to the polynomial size in
+    \cite[Claim~2.7, source lines 519--527]{Landau2015Polynomial}, with the
+    corrected exponent recorded in~\cite{gap:lvv13_trace_norm_net}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Put $t=2(qD)^2/c$. Since $t\le A$ and $L\ge0$, one has $Lt\le LA$,
+    hence $\lceil Lt\rceil\le LA$. Thus
+    $2\lceil Lt\rceil+1\le L(2A+1)$ by $L\ge1$.
+    Taking the $p$th power gives the bound, since
+    $\bigl((2A+1)L\bigr)^p=(2A+1)^pL^p$.
+\end{proof}
+
+\begin{theorem}[A boundary net of polynomial size]
+    \label{thm:chain_boundary_net_polynomial}
+    \lean{TNLean.MPS.AreaLaw.exists_finset_boundary_rectangularTraceNorm_net_polynomial}
+    \leanok
+    \uses{thm:chain_boundary_trace_norm_net,thm:chain_boundary_net_polynomial_bound}
+    Let $L,q,k,m,D$ be natural numbers with $L\ge1$, $q\ge1$ and $m\le D$,
+    and let $c>0$. Put $p=2(qD)^2$ and $A=\lceil2(qD)^2/c\rceil$.
+    Let $A_0=\lbrack0,k-1)$ and $B_0=\lbrack0,k)$, intersecting both regions with
+    the chain, and set $K=\mathcal C_{B_0\setminus A_0}\times\{0,\ldots,m-1\}$.
+    There is a finite set $\mathcal N\subseteq\mathbb C^{K\times K}$ with
+    \begin{align}
+        |\mathcal N|\le(2A+1)^pL^p.\notag
+    \end{align}
+    Every $Y\in\mathbb C^{K\times K}$ with $\|Y\|_1\le1$ admits an
+    $X\in\mathcal N$ with $\|Y-X\|_1\le c/(2L)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_boundary_trace_norm_net,thm:chain_boundary_net_polynomial_bound}
+    The radius $c/(2L)$ is positive. Theorem~\ref{thm:chain_boundary_trace_norm_net}
+    supplies a net with the stated covering property and size at most $K_L$.
+    Theorem~\ref{thm:chain_boundary_net_polynomial_bound} bounds its size by
+    $(2A+1)^pL^p$.
+\end{proof}
+
 \begin{theorem}[The Hamiltonian at a cut]
     \label{thm:chain_gluing_split}
     \lean{TNLean.MPS.AreaLaw.reindex_gluingCut_eq}

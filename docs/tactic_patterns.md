@@ -9428,3 +9428,12 @@ there is no need for a new tactic.
 - **Reuse:** `Nat.pow_le_pow_left`, `Nat.ceil_mono` and `pow_le_pow` give the comparison,
   with the larger base at least one. They also cover zero dimension and exponent.
 - **Decision:** The proof needs no separate scalar declaration or tactic.
+
+### A ceiling bound with a natural factor — reused Mathlib (2026-10-26)
+
+- **Seen:** `MPS/AreaLaw/ViableSet/BoundaryNetPolynomial.lean`.
+- **Pattern:** Bound `ceil(L t)` by `L ceil(t)` for a natural factor, then raise a grid-size
+  comparison to a fixed natural degree.
+- **Reuse:** `Nat.le_ceil`, multiplication by a nonnegative factor and `Nat.ceil_le` give
+  the ceiling bound. Applying `mul_pow` directly keeps the symbolic degree intact.
+- **Decision:** One occurrence; no separate general ceiling lemma or tactic is introduced.
