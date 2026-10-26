@@ -108,6 +108,7 @@ reconstruction from full-support isometries.
 \begin{theorem}[Products of site-dependent matrix product operators]%
     \label{thm:mpdo_sitewise_operator_product}
     \lean{MPOTensor.trace_prod_mulTensor, MPOTensor.trace_prod_mulTensor_one}
+    \leanok
     \uses{def:mpdo_operator_product}
     At each site $0\leq v<L$, let $A_v$ and $B_v$ be MPO tensors with
     physical dimension $q$ and bond dimensions $D_1$ and $D_2$, respectively.
@@ -128,7 +129,7 @@ reconstruction from full-support isometries.
     extension of the product construction in
     \cite[Section~4.5]{Cirac2016MPDO_arXiv}.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The bond identification preserves the identity matrix and multiplication,
     and hence ordered products. The mixed-product identity gives
     \begin{align}
