@@ -1,0 +1,124 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+% Fallbacks keep this note compilable when a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{The Constant Bond Dimension in the Algorithm of Landau, Vazirani and Vidick}
+\author{}
+\date{2026-10-25}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source statement}
+
+Landau, Vazirani and Vidick~\cite{Landau2015Polynomial} consider
+$H=\sum_{i=1}^{n-1}H_i$ on $n$ qudits of dimension $d$, with $H_i$ acting on
+the sites $i,i+1$ and $0\le H_i\le 1$, ground state $\Gamma$ and gap
+$\varepsilon$ (arXiv:1307.5143v1, \path{algo53.tex}, line~283). Quoting
+Hastings~\cite{Hastings2007AreaLaw} and Arad, Kitaev, Landau and
+Vazirani~\cite{Arad2013AreaLaw}, they state (lines~342--345) that for every
+cut $(i,i+1)$ and every $\delta$ there is a constant
+\begin{align}
+    B_\delta=\exp\Bigl(O\bigl(\tfrac1\varepsilon\log^3d\,\log\tfrac1\delta\bigr)\Bigr)
+    \label{eq:lvv13_constant_bond_source}
+\end{align}
+such that the normalized trimmed vector
+$v=\operatorname{trim}^i_{B_\delta}\Gamma/
+    \lVert\operatorname{trim}^i_{B_\delta}\Gamma\rVert$ satisfies
+$\lvert\langle\Gamma,v\rangle\rvert\ge1-\delta$. No proof is given in the
+source.
+
+\section{What is formalized}
+
+The formalized statement concerns a chain Hamiltonian $H=\sum_Xh_X$ on $L$
+sites of dimension $q\ge1$, with Hermitian terms supported on sets of
+diameter at most $R$ and $\lVert h_X\rVert\le J$, and a gapped ground state
+$\Omega$ with gap $\Delta>0$. The source Hamiltonian is the case $R=1$,
+$J=1$. Let $C$ be the bound on the entropy of an interval given by the
+one-dimensional area law of the library, let $b$ be its cut budget constant,
+which depends on $q$ and $R$ only, and let
+$s=\sqrt{(1+J/\Delta)\,b}$. For $\delta>0$ put
+\begin{align}
+    B_\delta=\Bigl\lfloor\exp\Bigl(C+32\,s\log\frac{2e^{e/2}}{\delta}\Bigr)
+    \Bigr\rfloor .
+    \label{eq:lvv13_constant_bond_formal}
+\end{align}
+Then for every cut $k$ and every choice of the kept Schmidt vectors, the
+normalized trimmed vector $v$ satisfies
+\begin{align}
+    \operatorname{Re}\langle v,\Omega\rangle\ge1-\delta ;
+    \label{eq:lvv13_constant_bond_overlap}
+\end{align}
+the overlap is real and nonnegative.\footnote{\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.one_sub_le_re_inner_chainTrim}
+    in \doclink{TNLean/MPS/AreaLaw/ViableSet/ConstantRankCut}.}
+
+The proof is short. The marginal tail bound of the area law gives, at every
+cut and every $w\ge0$, a spectral projection of the left marginal $\rho$ of
+rank at most $e^{C+w}$ discarding mass at most $2e^{e/2}e^{-w/(32s)}$. The
+choice $w=32\,s\log(2e^{e/2}/\delta)$ makes this mass equal to $\delta$ and
+the rank at most $B_\delta$. By Ky Fan's maximum principle the sum of the
+$B_\delta$ largest eigenvalues of $\rho$ is at least $1-\delta$; this sum is
+$\lVert\operatorname{trim}\Omega\rVert^2$, and the overlap in
+(\ref{eq:lvv13_constant_bond_overlap}) is $\lVert\operatorname{trim}\Omega
+    \rVert\ge\sqrt{1-\delta}\ge1-\delta$.
+
+\section{The constant}
+
+The bound (\ref{eq:lvv13_constant_bond_formal}) has the structure of
+(\ref{eq:lvv13_constant_bond_source}): it depends on neither the length of
+the chain nor the cut, and it is the exponential of an affine function of
+$\log(1/\delta)$, rounded down. Its constants are different. The slope is $32s$ and the
+intercept involves $C$, both taken from the area law proved in the library,
+not the dependence $\varepsilon^{-1}\log^3d$ of
+(\ref{eq:lvv13_constant_bond_source}). The later steps of the source use
+only that $B_\delta$ is independent of $n$ and of the cut, so the
+different constant affects the explicit running time, not the conclusions.
+The theorems hold under the source's hypotheses: its nearest-neighbour
+Hamiltonian with $0\le H_i\le1$ is a chain Hamiltonian of range $1$ and
+strength $1$.
+
+\section{The range of \texorpdfstring{$\delta$}{delta}}
+
+The source states Lemma \path{constantbondapprox} and Corollary
+\path{c:1} for any constant $\delta$, and both are formalized for every
+$\delta>0$. In the lemma, for $\delta\ge1$ the conclusion holds because the
+overlap is nonnegative. No upper bound on $\delta$ is needed in the
+corollary, because the approximation can be chosen at a smaller error.
+
+For Corollary \path{c:1} of the source (lines~361--364), let $\delta>0$
+and apply the constant bond dimension at $\delta_0=\min\{\delta,1/12\}$.
+Writing $E_0$ for the ground-state energy, the corrected trimming-energy
+estimate gives
+\begin{align}
+    \langle v,Hv\rangle
+    \le E_0+\frac{4\sqrt{\delta_0}}{1-4\delta_0}
+    \le E_0+6\sqrt{\delta_0}\le E_0+6\sqrt\delta.
+    \label{eq:lvv13_constant_bond_corollary_energy}
+\end{align}
+The overlap is at least $1-\delta_0\ge1-\delta$, and the bond dimension
+$B_{\delta_0}$ remains independent of the chain length and cut. Thus the
+corollary retains its stated energy and overlap bounds for every
+$\delta>0$, despite the correction needed in Lemma \path{l:2}.
+
+\section{The source's constant}
+
+The explicit dependence $\varepsilon^{-1}\log^3d$ is not formalized. It would
+follow from the bound of Arad, Kitaev, Landau and Vazirani,
+arXiv:1301.1162~\cite{Arad2013AreaLaw}, which gives the Schmidt rank in
+(\ref{eq:lvv13_constant_bond_source}), by the argument of the previous
+sections.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

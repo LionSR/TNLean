@@ -59,7 +59,7 @@ theorem isHermitian_clusterPart {H : Matrix ι ι ℂ} (hH : H.IsHermitian) {h :
     (clusterPart H h B C β).IsHermitian := by
   refine Matrix.isHermitian_sum _ fun D hD ↦ isHermitian_neg_one_pow_smul ?_ _
   have hsum : ∀ T ⊆ B ∪ C, (∑ k ∈ T, h k).IsHermitian := fun T hT ↦
-    Matrix.isHermitian_sum T fun k hk ↦ hh k (hT hk)
+    Matrix.isHermitian_sum_of_subset hh hT
   have hD' : D ⊆ B ∪ C := (mem_powerset.1 hD).trans subset_union_right
   exact (((hH.sub (hsum B subset_union_left)).sub (hsum D hD')).smul
     (IsSelfAdjoint.all β)).neg.exp
