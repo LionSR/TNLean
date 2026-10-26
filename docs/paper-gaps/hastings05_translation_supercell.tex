@@ -21,8 +21,12 @@ local terms $M_i$ with their compressions $P M_i P$ to the ground space. Here
 $M_i$ is the truncated filtered term of eq.~\texttt{mid} (lines 285--307),
 within the error of eq.~\texttt{apb} of the filtered term $\tilde H_i$.
 For $H=\sum_kh_k$ with gap $\Delta E$ above $E_0$ and a width $q>0$,
-$\tilde H_i=\frac{\Delta E}{\sqrt{2\pi q}}\int dt\,e^{iHt}h_ie^{-iHt}
-    e^{-(t\Delta E)^2/(2q)}$, and $M_i$ evolves $h_i$ under the sum $H_{loc}$ of
+\begin{align}
+    \tilde H_i=\frac{\Delta E}{\sqrt{2\pi q}}\int dt\,e^{iHt}h_ie^{-iHt}
+    e^{-(t\Delta E)^2/(2q)},
+    \label{eq:hastings05_translation_supercell_filtered_term}
+\end{align}
+and $M_i$ evolves $h_i$ under the sum $H_{loc}$ of
 the $h_k$ near $i$ instead of $H$. Both are those of the note
 \path{hastings05_filtered_term_approximation.tex} on the filtered terms, where
 $\tilde H_i$ is written $\tilde H_i^0$. Choosing the ground states as eigenvectors of the translations, with
@@ -117,7 +121,12 @@ The errors $\varepsilon_i$ of eq.~\texttt{apb} depend on the truncation radius
 $l_{proj}$ and not on $n$, so the bound for the truncated $M_i$ is not
 exponentially small in $n$. The source avoids this by applying the Gaussian
 filter a second time to $M_i$ itself: the filter $\tilde M_i^0$ of $M_i$
-under $H$ satisfies $P\tilde M_i^0P=PM_iP$, and the
+under $H$ satisfies
+\begin{align}
+    P\tilde M_i^0P=PM_iP,
+    \label{eq:hastings05_translation_supercell_second_filter}
+\end{align}
+and the
 low-energy commutator of the $M_i$ obeys eq.~\texttt{blecm} directly
 (lines 1555--1601). Elimination: state eq.~\texttt{blecm} for the $M_i$ as
 operators supported within $l_{proj}$ of $i$, require the truncations to be
