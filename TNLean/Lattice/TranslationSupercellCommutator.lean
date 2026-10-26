@@ -48,18 +48,6 @@ open scoped Matrix.Norms.L2Operator
 
 namespace TNLean.Lattice
 
-/-- Conjugation by a site permutation preserves the operator norm. -/
-theorem norm_sitePermMatrix_mul_mul_conjTranspose {V : Type*} [Fintype V] [DecidableEq V]
-    {Γ : Type*} [Group Γ] [MulAction Γ V] (d : ℕ) (g : Γ)
-    (A : Matrix (V → Fin d) (V → Fin d) ℂ) :
-    ‖sitePermMatrix d g * A * (sitePermMatrix d g)ᴴ‖ = ‖A‖ := by
-  let U : unitary (Matrix (V → Fin d) (V → Fin d) ℂ) :=
-    ⟨sitePermMatrix d g, sitePermMatrix_mem_unitaryGroup d g⟩
-  calc ‖sitePermMatrix d g * A * (sitePermMatrix d g)ᴴ‖
-      = ‖(U : Matrix _ _ ℂ) * A * ((star U : unitary _) : Matrix _ _ ℂ)‖ := by
-        rfl
-    _ = ‖A‖ := by rw [CStarRing.norm_mul_coe_unitary, CStarRing.norm_coe_unitary_mul]
-
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 /-- **The low-energy commutator of a translation-invariant lattice is exponentially small in its
@@ -129,7 +117,7 @@ theorem norm_groundCompression_commutator_le_of_momenta [NeZero d]
     hSupport R hDiam vR hCard b₀ hBudget hcov Kg kg hGrowth hr hq hΔE hH hgap
     (supercell Γ d (∑ k, h k) E₀)
     (fun g hg v hv ↦ sitePermMatrix_mulVec_eq_of_mem_supercell hInv hg v hv) hg i j l hsep hT
-  rwa [hcov, norm_sitePermMatrix_mul_mul_conjTranspose] at hmain
+  rwa [hcov, Matrix.norm_sitePermMatrix_mul_mul_conjTranspose] at hmain
 
 
 /-- **Truncated terms near filtered terms.** If the low-energy commutator of the filtered terms
@@ -147,8 +135,6 @@ theorem norm_groundCompression_commutator_le_of_norm_sub_le [NeZero d]
     ‖groundCompression H E₀ Mi * groundCompression H E₀ Mj -
         groundCompression H E₀ Mj * groundCompression H E₀ Mi‖ ≤
       B + 2 * εi * ‖hj‖ + 2 * ‖hi‖ * εj := by
-  have hC (W : Matrix (ι → Fin d) (ι → Fin d) ℂ) : ‖groundCompression H E₀ W‖ ≤ ‖W‖ :=
-    norm_groundCompression_le H E₀ W
   have hsub (W W' : Matrix (ι → Fin d) (ι → Fin d) ℂ) :
       groundCompression H E₀ W - groundCompression H E₀ W' = groundCompression H E₀ (W - W') := by
     unfold groundCompression
@@ -157,29 +143,28 @@ theorem norm_groundCompression_commutator_le_of_norm_sub_le [NeZero d]
   set Bc := groundCompression H E₀ (gaussianFilteredTerm r ΔE H hj)
   set A' := groundCompression H E₀ Mi
   set B' := groundCompression H E₀ Mj
-  have hA : ‖A‖ ≤ ‖hi‖ := by
-    simp only [A, groundCompression_gaussianFilteredTerm hr hH]; exact hC hi
-  have hB' : ‖B'‖ ≤ ‖hj‖ := (hC Mj).trans hMj
-  have hdA : ‖A' - A‖ ≤ εi := by
-    rw [norm_sub_rev, hsub]; exact (hC _).trans hεi
-  have hdB : ‖B' - Bc‖ ≤ εj := by
-    rw [norm_sub_rev, hsub]; exact (hC _).trans hεj
   have key : A' * B' - B' * A' =
       (A * Bc - Bc * A) + ((A' - A) * B' - B' * (A' - A)) + (A * (B' - Bc) - (B' - Bc) * A) := by
     simp only [sub_mul, mul_sub]
     abel
-  have hnc {x y : EuclideanSpace ℂ (ι → Fin d) →L[ℂ] EuclideanSpace ℂ (ι → Fin d)} :
-      ‖x * y - y * x‖ ≤ 2 * ‖x‖ * ‖y‖ :=
-    (norm_sub_le _ _).trans (by
-      have := norm_mul_le x y; have := norm_mul_le y x; nlinarith [norm_nonneg x, norm_nonneg y])
   rw [key]
   have e1 : ‖(A' - A) * B' - B' * (A' - A)‖ ≤ 2 * εi * ‖hj‖ := by
-    have h1 := mul_le_mul hdA hB' (norm_nonneg _) ((norm_nonneg _).trans hdA)
-    have := hnc (x := A' - A) (y := B')
+    have hc := norm_groundCompression_commutator_le_two_mul H E₀
+      (Mi - gaussianFilteredTerm r ΔE H hi) Mj
+    rw [← hsub] at hc
+    have hε : ‖Mi - gaussianFilteredTerm r ΔE H hi‖ ≤ εi := by rw [norm_sub_rev]; exact hεi
+    have h1 := mul_le_mul hε hMj (norm_nonneg _) ((norm_nonneg _).trans hε)
+    change ‖(A' - A) * B' - B' * (A' - A)‖ ≤ _ at hc
     nlinarith
   have e2 : ‖A * (B' - Bc) - (B' - Bc) * A‖ ≤ 2 * ‖hi‖ * εj := by
-    have h1 := mul_le_mul hA hdB (norm_nonneg _) (norm_nonneg _)
-    have := hnc (x := A) (y := B' - Bc)
+    have hc := norm_groundCompression_commutator_le_two_mul H E₀ hi
+      (Mj - gaussianFilteredTerm r ΔE H hj)
+    have hAeq : A = groundCompression H E₀ hi := by
+      simp only [A, groundCompression_gaussianFilteredTerm hr hH]
+    rw [← hsub, ← hAeq] at hc
+    have hε : ‖Mj - gaussianFilteredTerm r ΔE H hj‖ ≤ εj := by rw [norm_sub_rev]; exact hεj
+    have h1 := mul_le_mul (le_refl ‖hi‖) hε (norm_nonneg _) (norm_nonneg _)
+    change ‖A * (B' - Bc) - (B' - Bc) * A‖ ≤ _ at hc
     nlinarith
   have h3 := norm_add₃_le (a := A * Bc - Bc * A) (b := (A' - A) * B' - B' * (A' - A))
     (c := A * (B' - Bc) - (B' - Bc) * A)

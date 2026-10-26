@@ -19,10 +19,16 @@ source \path{proj3new.tex}, lines 1603--1642, considers a translationally
 invariant system on a $d$-dimensional lattice with $n$ ground states, and the
 local terms $M_i$ with their compressions $P M_i P$ to the ground space. Here
 $M_i$ is the truncated filtered term of eq.~\texttt{mid} (lines 285--307),
-within the error of eq.~\texttt{apb} of the filtered term $\tilde H_i$. Choosing the ground states as eigenvectors of the translations, with
+within the error of eq.~\texttt{apb} of the filtered term $\tilde H_i$.
+For $H=\sum_kh_k$ with gap $\Delta E$ above $E_0$ and a width $q>0$,
+$\tilde H_i=\frac{\Delta E}{\sqrt{2\pi q}}\int dt\,e^{iHt}h_ie^{-iHt}
+    e^{-(t\Delta E)^2/(2q)}$, and $M_i$ evolves $h_i$ under the sum $H_{loc}$ of
+the $h_k$ near $i$ instead of $H$. Both are those of the note
+\path{hastings05_filtered_term_approximation.tex} on the filtered terms, where
+$\tilde H_i$ is written $\tilde H_i^0$. Choosing the ground states as eigenvectors of the translations, with
 momenta $\vec k_a$, the matrix elements satisfy
 $(M_{\vec x,y})_{ab}=(M_{\vec x+\vec x',y})_{ab}
-\exp[i\vec x'\cdot(\vec k_a-\vec k_b)]$ (lines 1613--1618).
+    \exp[i\vec x'\cdot(\vec k_a-\vec k_b)]$ (lines 1613--1618).
 
 The source then assumes the ``simplest case'' (lines 1620--1625): every
 component of every momentum is a rational multiple $2\pi p/q$ whose
@@ -44,9 +50,9 @@ the ground space, which is the conclusion of lines 1626--1630. From this it
 proved, for covariant terms $H_{g\cdot k}=P_gH_kP_g^\dagger$ and an invariant
 Hamiltonian,
 \begin{align}
-    PM_{g\cdot j}P&=PM_jP,
-    \label{eq:hastings05_translation_supercell_compression}\\
-    [PM_iP,PM_jP]&=[PM_iP,PM_{g\cdot j}P]\qquad(g\in S),
+    PM_{g\cdot j}P & =PM_jP,
+    \label{eq:hastings05_translation_supercell_compression} \\
+    [PM_iP,PM_jP]  & =[PM_iP,PM_{g\cdot j}P]\qquad(g\in S),
     \label{eq:hastings05_translation_supercell_commutator}
 \end{align}
 and, in the setting of eq.~\texttt{blecm}, the decay of the low-energy
@@ -110,7 +116,8 @@ No hypothesis beyond the source's is assumed.
 The errors $\varepsilon_i$ of eq.~\texttt{apb} depend on the truncation radius
 $l_{proj}$ and not on $n$, so the bound above for the truncated $M_i$ is not
 exponentially small in $n$. The source avoids this by applying the Gaussian
-filter a second time to $M_i$ itself: $P\tilde M_i^0P=PM_iP$, and the
+filter a second time to $M_i$ itself: the filter $\tilde M_i^0$ of $M_i$
+under $H$ satisfies $P\tilde M_i^0P=PM_iP$, and the
 low-energy commutator of the $M_i$ obeys eq.~\texttt{blecm} directly
 (lines 1555--1601). This is formalized. Each $M_i$ acts on a set $K_i\ni i$ of
 diameter at most $R'$; with covariant truncations, $s_{g\cdot k}=g\cdot s_k$,
