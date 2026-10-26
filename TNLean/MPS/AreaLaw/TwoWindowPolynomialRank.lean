@@ -433,7 +433,7 @@ private theorem operatorSchmidtRank_two_window_source_full_counts_le
       F hleft hright hL hM hR hab hb p s r i j weight J
     have hgeometry :
         ((interval L (a + p.val + 1) (b + s.val + 1)) ∆ J).card ≤ 2 * ℓ :=
-      card_twoWindow_middle_symmDiff_le (L := L) (a := a) (b := b) p s δ
+      card_two_window_middle_symmDiff_le (L := L) (a := a) (b := b) p s δ
     have hcost : q ^ (2 * ((interval L (a + p.val + 1) (b + s.val + 1)) ∆ J).card) ≤
         q ^ (4 * ℓ) := Nat.pow_le_pow_right (by omega) (by omega)
     refine (hraw.trans (Nat.mul_le_mul_right _ hcost)).trans_eq ?_
