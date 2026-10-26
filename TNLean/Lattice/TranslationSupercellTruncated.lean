@@ -145,6 +145,6 @@ theorem norm_groundCompression_truncatedTerm_commutator_le_of_momenta [NeZero d]
   have hmain := norm_groundCompression_commutator_le_graphNeighborhood G X id hX h hHerm
     hSupport R hDiam vR hCard b₀ hBudget Kg kg hGrowth hq hΔE hH hgap (K i) (hMsupp i) l _ hsep
     (hMsupp (g • j)) hT
-  rwa [hcomp, hMg, norm_sitePermMatrix_mul_mul_conjTranspose] at hmain
+  rwa [hcomp, hMg, Matrix.norm_sitePermMatrix_mul_mul_conjTranspose] at hmain
 
 end TNLean.Lattice
