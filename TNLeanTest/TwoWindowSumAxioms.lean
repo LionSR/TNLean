@@ -1,5 +1,11 @@
 import TNLean.Algebra.TwoWindowSum
 
+/-!
+# Axioms of the two-window sum identities
+
+The guarded results use only the standard logical axioms.
+-/
+
 /-- info:
 'Finset.sum_range_eq_five_parts_of_two_windows' depends on axioms:
 [propext, Classical.choice, Quot.sound]

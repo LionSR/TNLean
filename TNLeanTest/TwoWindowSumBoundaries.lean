@@ -1,5 +1,12 @@
 import TNLean.Algebra.TwoWindowSum
 
+/-!
+# Boundary cases for two-window sums
+
+The examples include adjacent windows, empty complementary intervals and
+windows of length zero.
+-/
+
 open scoped BigOperators
 
 -- Adjacent windows exhaust the right endpoint, with an empty middle and tail.
