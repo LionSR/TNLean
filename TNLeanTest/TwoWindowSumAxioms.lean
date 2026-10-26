@@ -1,4 +1,11 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
 import TNLean.Algebra.TwoWindowSum
+
+/-! Executable stock-axiom assertions for the two-window sum decomposition. -/
 
 /-- info:
 'Finset.sum_range_eq_five_parts_of_two_windows' depends on axioms:
