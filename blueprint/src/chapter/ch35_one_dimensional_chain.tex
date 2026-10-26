@@ -2810,9 +2810,12 @@ for an arbitrary finite set of sites and are instantiated here directly.
     placement of an arbitrary one-site matrix with the identity at
     all other sites. Empty products and zero local dimension are
     included; a single-site placement presupposes a site in the chain.
+    These identities give the bond-one ingredients for
+    \cite[Proposition~5.7]{Arad2016RigorousRG}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:chain_open_mps,lem:qc_placed_operators}
+    \uses{def:chain_open_mps,lem:qc_placed_operators,
+        thm:qc_supported_operator_placement}
     For a site product take the scalar multiplying the contraction
     to be one, all virtual dimensions to be one, and
     $A_i(s)_{0,0}=f_i(s)$. The unique virtual path gives $\phi(w)$.
@@ -2845,14 +2848,16 @@ for an arbitrary finite set of sites and are instantiated here directly.
     The statements include the zero vector, empty alphabets and the
     empty chain. For the empty chain the product is one and the
     scalar $c$ is unrestricted.
+    These identities give the bond-one ingredients for
+    \cite[Proposition~5.7]{Arad2016RigorousRG}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:chain_open_mps,thm:chain_site_product_mps}
     Choose an open-boundary representation. If one virtual bond has
     dimension zero, there is no virtual path and $\psi=0$; take
     $c=0$ and all $f_i=1$. Otherwise every virtual dimension is one.
-    There is exactly one virtual path, and its entries define the
-    $f_i$ in the product formula. The converse follows from
+    Put $f_i(s)=A_i(s)_{0,0}$. The unique virtual path gives
+    $\psi(w)=c\prod_{i=0}^{L-1}f_i(w_i)$. The converse follows from
     Theorem~\ref{thm:chain_site_product_mps}, followed by multiplication
     by $c$. For the operator assertion, pair the two physical labels
     at each site and take $(A_i)_{a,b}=f_i(a,b)$. The pairing and
