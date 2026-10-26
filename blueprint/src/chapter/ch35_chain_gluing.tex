@@ -97,6 +97,39 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     extension carries the energy and overlap bounds back to the chain.
 \end{proof}
 
+\begin{theorem}[Bounds for every dominant eigenvector on the chain]
+    \label{thm:chain_leading_eigenvector_uniform_bounds}
+    \lean{TNLean.MPS.AreaLaw.leading_eigenvector_bounds_chain}
+    \leanok
+    \uses{thm:chain_leading_eigenvector}
+    Under the hypotheses of Theorem~\ref{thm:chain_leading_eigenvector},
+    let $u$ be any unit eigenvector of $\sigma$ with real eigenvalue
+    $\mu>1/2$. Extend $u$ by $I\otimes W$ and read the resulting vector
+    $v$ in the chain coordinates. Then
+    \begin{align}
+        \operatorname{Re}\langle v,(H_L+K)v\rangle
+         & \le E_0+2(e+\|K\|\tau),\notag     \\
+        |\langle\Gamma,v\rangle|
+         & \ge1-2(e+\|K\|\tau)/\Delta.\notag
+    \end{align}
+    This is an auxiliary statement for the arbitrary choice of leading
+    eigenvector in~\cite[Lemma~2.5, source lines 493--505]{Landau2015Polynomial}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_leading_eigenvector}
+    Theorem~\ref{thm:chain_leading_eigenvector} supplies a unit eigenvector
+    $u_0$ with eigenvalue greater than one half and the two bounds for its
+    physical extension $v_0$.
+    Uniqueness up to a unit phase in the companion
+    volume~\cite[``Uniqueness of an eigenvector above one half'']{QICLean2026Blueprint}
+    gives $u=zu_0$ with $|z|=1$. The physical extension is linear, so
+    $v=zv_0$ and
+    \begin{align}
+        \langle v,(H_L+K)v\rangle & =\langle v_0,(H_L+K)v_0\rangle,\notag \\
+        |\langle\Gamma,v\rangle|  & =|\langle\Gamma,v_0\rangle|.\notag
+    \end{align}
+\end{proof}
+
 \begin{theorem}[The trimmed witness at a cut of the chain]
     \label{thm:chain_trimmed_witness}
     \lean{TNLean.MPS.AreaLaw.exists_trimmed_witness_chain}
