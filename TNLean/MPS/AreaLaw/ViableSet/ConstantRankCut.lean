@@ -33,8 +33,9 @@ Second (Lemma `l:2`), if `H = H_L + H_R + K` with `H_L` supported on the first `
 coordinates of the cut the Hamiltonian is `A ⊗ 1 + 1 ⊗ B + K'`, and the bipartite estimate of
 QICLean gives the energy bound `E₀ + (δ + 2 √(2η)) / (1 - 2η)` when `2η < 1`.
 
-Third (Corollary `c:1`), taking `w = Ω` gives a unit vector of rank at most `B_δ` across the
-cut, with overlap at least `1 - δ` with `Ω` and energy at most `E₀ + 4 √δ / (1 - 4δ)`.
+Third (Corollary `c:1`), taking `w = Ω` and trimming at accuracy
+`δ₀ = min δ (1/12)` gives, for every `δ > 0`, a unit vector of rank at most `B_δ₀` across the
+cut, with overlap at least `1 - δ` with `Ω` and energy at most `E₀ + 6 √δ`.
 
 **Local fix (constant B_δ):** the source states `B_δ = exp (O (1/ε log³ d log 1/δ))`, quoting
 Hastings and Arad, Kitaev, Landau and Vazirani. The theorems here hold under the source's
@@ -48,8 +49,9 @@ Hamiltonians used here. Documented in `docs/paper-gaps/lvv13_constant_bond.tex`.
 **Local fix (energy after trimming):** the proof of Lemma `l:2` in the source drops three
 constants and the printed bound `ε₀ + 6 √δ` does not follow from it. The bound here is
 `E₀ + (δ + 2 √(2η)) / (1 - 2η)` with `η = 2 (δ/Δ + δ_B)`, which depends on `1/Δ`, under
-`2η < 1` in place of `δ (1 + 1/ε) ≤ 1/2`; Corollary `c:1` reads `E₀ + 4 √δ / (1 - 4δ)` in
-place of `ε₀ + 6 √δ`. Documented in the QICLean note
+`2η < 1` in place of `δ (1 + 1/ε) ≤ 1/2`. For the ground state itself, trimming at
+`δ₀ = min δ (1/12)` recovers the source's Corollary `c:1` with energy `E₀ + 6 √δ` for every
+`δ > 0`. Documented in the QICLean note
 <https://sirui-lu.com/QICLean/paper-gaps/lvv13_trimming_energy.pdf>.
 
 ## Main definitions
@@ -66,7 +68,7 @@ place of `ε₀ + 6 √δ`. Documented in the QICLean note
 * `TNLean.MPS.AreaLaw.ChainHamiltonian.re_inner_normalized_chainTrim_le`: the corrected Lemma
   `l:2` at the bond dimension `B_δ`.
 * `TNLean.MPS.AreaLaw.ChainHamiltonian.exists_rank_cutMatrix_le_constantCutBond`: the
-  corrected Corollary `c:1`.
+  Corollary `c:1`.
 
 ## References
 
@@ -137,7 +139,7 @@ noncomputable def constantCutBond (q R : ℕ) (J Δ δ : ℝ) : ℕ :=
       Real.log (2 * Real.exp (Real.exp 1 / 2) / δ))⌋₊
 
 /-- **Lemma `constantbondapprox`**, chain form (arXiv:1307.5143v1, algo53.tex,
-lines 342–345). Let `Ω` be a gapped ground state of a chain Hamiltonian and `0 < δ ≤ 1`. For
+lines 342–345). Let `Ω` be a gapped ground state of a chain Hamiltonian and `0 < δ`. For
 every cut `k` and every trimming projection `P` of `Ω` at `B_δ = constantCutBond q R J Δ δ`
 across that cut, the normalized trimmed vector `v` satisfies `1 - δ ≤ Re ⟨v, Ω⟩`; the overlap
 is real and nonnegative. The bond dimension depends neither on `L` nor on `k`. The proof
@@ -146,10 +148,15 @@ Ky Fan's maximum principle. -/
 theorem ChainHamiltonian.one_sub_le_re_inner_chainTrim {R : ℕ} {J Δ : ℝ}
     (h : ChainHamiltonian L q R J) (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ) {E₀ : ℝ}
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hgs : IsGappedGroundState h.operator E₀ Ω Δ)
-    {δ : ℝ} (hδ0 : 0 < δ) (hδ1 : δ ≤ 1) (k : ℕ) {P : LeftBlockMatrix L q k}
+    {δ : ℝ} (hδ0 : 0 < δ) (k : ℕ) {P : LeftBlockMatrix L q k}
     (hP : IsTrimmingProjection (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω)
       (constantCutBond q R J Δ δ) P) :
     1 - δ ≤ (⟪‖chainTrim Ω k P‖⁻¹ • chainTrim Ω k P, Ω⟫_ℂ).re := by
+  rcases le_or_gt δ 1 with hδ1 | hδ1
+  swap
+  · -- For `δ > 1` the bound is below `0`, and the overlap is a square root.
+    rw [inner_normalized_chainTrim hP, Complex.ofReal_re]
+    exact (by linarith : 1 - δ ≤ 0).trans (Real.sqrt_nonneg _)
   set c := 2 * Real.exp (Real.exp 1 / 2) with hc
   set s := √((1 + J / Δ) * chainBudgetConst q R) with hs
   set w := 32 * s * Real.log (c / δ) with hw
@@ -371,7 +378,7 @@ theorem ChainHamiltonian.re_inner_normalized_chainTrim_le {R : ℕ} {J Δ : ℝ}
     (hHR : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HR (leftBlock L k)ᶜ)
     (hK0 : K.PosSemidef) (hK1 : (1 - K).PosSemidef) {E₀ : ℝ}
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hgs : IsGappedGroundState h.operator E₀ Ω Δ)
-    {δB : ℝ} (hδB0 : 0 < δB) (hδB1 : δB ≤ 1) {w : EuclideanSpace ℂ (Fin L → Fin q)}
+    {δB : ℝ} (hδB0 : 0 < δB) {w : EuclideanSpace ℂ (Fin L → Fin q)}
     (hw : ‖w‖ = 1) {δ : ℝ} (hE : (⟪w, toEuclideanLin h.operator w⟫_ℂ).re ≤ E₀ + δ)
     {P : LeftBlockMatrix L q k}
     (hP : IsTrimmingProjection (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) w)
@@ -383,12 +390,14 @@ theorem ChainHamiltonian.re_inner_normalized_chainTrim_le {R : ℕ} {J Δ : ℝ}
   obtain ⟨PΩ, hPΩ⟩ := exists_isTrimmingProjection
     (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω) (constantCutBond q R J Δ δB)
   exact TNLean.MPS.AreaLaw.re_inner_normalized_chainTrim_le hsplit hHL hHR hK0 hK1 hΔ hgs hPΩ
-    (h.one_sub_le_re_inner_chainTrim hq hJ hΔ hgs hδB0 hδB1 k hPΩ) hw hE hP hη hη2
+    (h.one_sub_le_re_inner_chainTrim hq hJ hΔ hgs hδB0 k hPΩ) hw hE hP hη hη2
 
-/-- **Corollary `c:1`**, chain form, corrected (arXiv:1307.5143v1, algo53.tex, lines 361–364).
-If the chain Hamiltonian splits at the cut `k` as in Lemma `l:2` and `0 < δ < 1/4`, there is a
-unit vector of rank at most `B_δ` across the cut, with overlap `Re ⟨v, Ω⟩ ≥ 1 - δ` and energy
-at most `E₀ + 4 √δ / (1 - 4δ)`; the source states `ε₀ + 6 √δ`. -/
+/-- **Corollary `c:1`**, chain form (arXiv:1307.5143v1, algo53.tex, lines 361–364).
+If the chain Hamiltonian splits at the cut `k` as in Lemma `l:2` and `δ > 0`, there is a unit
+vector of rank at most `B_δ₀` across the cut, with overlap `Re ⟨v, Ω⟩ ≥ 1 - δ` and energy
+at most `E₀ + 6 √δ`, where `δ₀ = min δ (1/12)`. The bond dimension is fixed independently of
+the chain length and the cut. Applying the corrected trimming-energy estimate to `Ω` at
+accuracy `δ₀` gives `4 √δ₀ / (1 - 4δ₀) ≤ 6 √δ₀ ≤ 6 √δ`. -/
 theorem ChainHamiltonian.exists_rank_cutMatrix_le_constantCutBond {R : ℕ} {J Δ : ℝ}
     (h : ChainHamiltonian L q R J) (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     {HL HR K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} {k : ℕ}
@@ -397,23 +406,40 @@ theorem ChainHamiltonian.exists_rank_cutMatrix_le_constantCutBond {R : ℕ} {J �
     (hHR : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HR (leftBlock L k)ᶜ)
     (hK0 : K.PosSemidef) (hK1 : (1 - K).PosSemidef) {E₀ : ℝ}
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hgs : IsGappedGroundState h.operator E₀ Ω Δ)
-    {δ : ℝ} (hδ0 : 0 < δ) (hδ4 : 4 * δ < 1) :
+    {δ : ℝ} (hδ0 : 0 < δ) :
     ∃ v : EuclideanSpace ℂ (Fin L → Fin q), ‖v‖ = 1 ∧
-      (cutMatrix v k).rank ≤ constantCutBond q R J Δ δ ∧ 1 - δ ≤ (⟪v, Ω⟫_ℂ).re ∧
-      (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤ E₀ + 4 * √δ / (1 - 4 * δ) := by
-  obtain ⟨P, hP⟩ := exists_isTrimmingProjection
-    (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω) (constantCutBond q R J Δ δ)
-  have hov := h.one_sub_le_re_inner_chainTrim hq hJ hΔ hgs hδ0 (by linarith) k hP
-  have hEΩ : (⟪Ω, toEuclideanLin h.operator Ω⟫_ℂ).re ≤ E₀ + 0 := by
-    have h2 : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω := hgs.2.1
-    rw [h2, inner_smul_right, inner_self_eq_norm_sq_to_K, hgs.1]
-    simp
-  have hE := h.re_inner_normalized_chainTrim_le hq hJ hΔ hsplit hHL hHR hK0 hK1 hgs hδ0
-    (by linarith) hgs.1 hEΩ hP (η := 2 * δ) (by rw [zero_div, zero_add]) (by linarith)
-  refine ⟨_, norm_normalized_chainTrim_eq_one (by linarith) hov,
-    rank_cutMatrix_normalized_chainTrim_le hP, hov, hE.trans (le_of_eq ?_)⟩
-  rw [show 2 * (2 * δ) = 2 ^ 2 * δ by ring, Real.sqrt_mul (by norm_num),
-    Real.sqrt_sq (by norm_num)]
-  ring
+      (cutMatrix v k).rank ≤ constantCutBond q R J Δ (min δ (1 / 12)) ∧
+      1 - δ ≤ (⟪v, Ω⟫_ℂ).re ∧
+      (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤ E₀ + 6 * √δ := by
+  have hsmall {d : ℝ} (hd0 : 0 < d) (hd4 : 4 * d < 1) :
+      ∃ v : EuclideanSpace ℂ (Fin L → Fin q), ‖v‖ = 1 ∧
+        (cutMatrix v k).rank ≤ constantCutBond q R J Δ d ∧
+        1 - d ≤ (⟪v, Ω⟫_ℂ).re ∧
+        (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤ E₀ + 4 * √d / (1 - 4 * d) := by
+    obtain ⟨P, hP⟩ := exists_isTrimmingProjection
+      (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω) (constantCutBond q R J Δ d)
+    have hov := h.one_sub_le_re_inner_chainTrim hq hJ hΔ hgs hd0 k hP
+    have hEΩ : (⟪Ω, toEuclideanLin h.operator Ω⟫_ℂ).re ≤ E₀ + 0 := by
+      have h2 : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω := hgs.2.1
+      rw [h2, inner_smul_right, inner_self_eq_norm_sq_to_K, hgs.1]
+      simp
+    have hE := h.re_inner_normalized_chainTrim_le hq hJ hΔ hsplit hHL hHR hK0 hK1 hgs hd0
+      hgs.1 hEΩ hP (η := 2 * d) (by rw [zero_div, zero_add]) (by linarith)
+    refine ⟨_, norm_normalized_chainTrim_eq_one (by linarith) hov,
+      rank_cutMatrix_normalized_chainTrim_le hP, hov, hE.trans (le_of_eq ?_)⟩
+    rw [show 2 * (2 * d) = 2 ^ 2 * d by ring, Real.sqrt_mul (by norm_num),
+      Real.sqrt_sq (by norm_num)]
+    ring
+  obtain ⟨v, hv, hrank, hov, hE⟩ := hsmall (d := min δ (1 / 12))
+    (lt_min hδ0 (by norm_num)) (by have := min_le_right δ (1 / 12 : ℝ); linarith)
+  refine ⟨v, hv, hrank, (sub_le_sub_left (min_le_left _ _) 1).trans hov,
+    hE.trans (add_le_add_right ?_ E₀)⟩
+  calc
+    _ ≤ 6 * √(min δ (1 / 12)) := by
+      apply (div_le_iff₀ (by have := min_le_right δ (1 / 12 : ℝ); linarith)).mpr
+      nlinarith [mul_le_mul_of_nonneg_right (min_le_right δ (1 / 12 : ℝ))
+        (Real.sqrt_nonneg (min δ (1 / 12)))]
+    _ ≤ _ := mul_le_mul_of_nonneg_left
+      (Real.sqrt_le_sqrt (min_le_left _ _)) (by norm_num)
 
 end TNLean.MPS.AreaLaw
