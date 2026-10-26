@@ -56,7 +56,6 @@ initialization `i = 0` (line 372); later bond dimensions are positive polynomial
   `(i, δ)`-viable iff `‖P_{Span(S) ⊗ H_R} Γ‖ ≥ 1 - δ`.
 * `TNLean.MPS.AreaLaw.isViable_iff_forall_mem_span_singleton`: for a unit vector `Γ` and
   `δ < 1`, viability as closeness of `Span(S) ⊗ H_R` to `span {Γ}`.
-* `TNLean.MPS.AreaLaw.IsOpenMPS.snoc`: appending a site with an independent tensor.
 * `TNLean.MPS.AreaLaw.IsViable.extend`, `TNLean.MPS.AreaLaw.IsViableMPS.extend`: Claim `c:ext`.
 
 ## References
@@ -340,52 +339,6 @@ state of bond dimension at most `b`, and is `(i, δ)`-viable for `Γ`. -/
 def IsViableMPS (Γ : EuclideanSpace ℂ (Fin L → Fin q)) (s b : ℕ) (δ : ℝ) {i : ℕ}
     (S : Finset (LeftBlockVector L q i)) : Prop :=
   S.card ≤ s ∧ (∀ v ∈ S, IsLeftOpenMPS b v) ∧ IsViable Γ δ (S : Set (LeftBlockVector L q i))
-
-/-- **Appending a site.** If `w` is an open-boundary matrix product state of bond dimension at
-most `b` on `n` sites and `0 < b`, then `x ↦ w (x₀, …, x_{n-1}) f (x_n)` is one on `n + 1`
-sites: the new internal bond carries rank at most one (arXiv:1307.5143v1, algo53.tex,
-lines 393 and 399). -/
-theorem IsOpenMPS.snoc {n b : ℕ} (hb : 0 < b) {w : (Fin n → Fin q) → ℂ}
-    (hw : IsOpenMPS n q b w) (f : Fin q → ℂ) :
-    IsOpenMPS (n + 1) q b fun x ↦ w (Fin.init x) * f (x (Fin.last n)) := by
-  classical
-  set W : EuclideanSpace ℂ (Fin n → Fin q) := WithLp.toLp 2 w
-  set W' : EuclideanSpace ℂ (Fin (n + 1) → Fin q) :=
-    WithLp.toLp 2 fun x ↦ w (Fin.init x) * f (x (Fin.last n))
-  have hW : IsOpenMPS n q b fun x ↦ W x := hw
-  refine isOpenMPS_of_internal_cutMatrix_rank_le W' fun j hj0 hjn ↦ ?_
-  have hlast : Fin.last n ∉ leftBlock (n + 1) j := by
-    simp only [mem_leftBlock, Fin.val_last]
-    omega
-  let ra : Entropy.RegionConfig (fun _ : Fin (n + 1) ↦ q) (leftBlock (n + 1) j) →
-      Entropy.RegionConfig (fun _ : Fin n ↦ q) (leftBlock n j) :=
-    fun a v ↦ a ⟨v.1.castSucc, by simpa only [mem_leftBlock, Fin.val_castSucc] using v.2⟩
-  let rb : ((v : {v : Fin (n + 1) // v ∉ leftBlock (n + 1) j}) → Fin q) →
-      ((v : {v : Fin n // v ∉ leftBlock n j}) → Fin q) :=
-    fun b v ↦ b ⟨v.1.castSucc, by simpa only [mem_leftBlock, Fin.val_castSucc] using v.2⟩
-  let Lm : Matrix (Entropy.RegionConfig (fun _ : Fin (n + 1) ↦ q) (leftBlock (n + 1) j))
-      (Entropy.RegionConfig (fun _ : Fin n ↦ q) (leftBlock n j)) ℂ :=
-    Matrix.of fun a a' ↦ if a' = ra a then 1 else 0
-  let R : Matrix ((v : {v : Fin n // v ∉ leftBlock n j}) → Fin q)
-      ((v : {v : Fin (n + 1) // v ∉ leftBlock (n + 1) j}) → Fin q) ℂ :=
-    Matrix.of fun c b ↦ if c = rb b then f (b ⟨Fin.last n, hlast⟩) else 0
-  have hcut : cutMatrix W' j = Lm * cutMatrix W j * R := by
-    ext a b
-    rw [Matrix.mul_apply, Finset.sum_eq_single (rb b) (fun c _ hc ↦ by simp [R, hc]) (by simp),
-      Matrix.mul_apply, Finset.sum_eq_single (ra a) (fun a' _ ha ↦ by simp [Lm, ha]) (by simp)]
-    simp only [Lm, R, Matrix.of_apply, ite_true, one_mul, cutMatrix_apply]
-    change w _ * f _ = w _ * f _
-    congr 1
-    · congr 1
-      funext v
-      simp only [Fin.init, Equiv.piEquivPiSubtypeProd_symm_apply, mem_leftBlock,
-        Fin.val_castSucc, ra, rb]
-    · simp [Equiv.piEquivPiSubtypeProd_symm_apply, hlast]
-  rw [hcut]
-  refine ((rank_mul_le_left _ _).trans (rank_mul_le_right _ _)).trans ?_
-  rcases lt_or_eq_of_le (Nat.lt_succ_iff.mp hjn) with hjn' | rfl
-  · exact hW.rank_cutMatrix_le hj0 hjn'
-  · exact (rank_cutMatrix_le_one_of_le le_rfl W).trans hb
 
 /-! ### Claim `c:ext` -/
 
