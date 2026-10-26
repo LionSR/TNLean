@@ -100,7 +100,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $h_0,\ldots,h_{N-1}\in A$. For the two-window decomposition of
     \cite{Arad2016RigorousRG}, take natural numbers $a,b,\ell$ with
     \begin{align}
-        a+2\ell & \le b, & b+2\ell & \le N.
+        a+2\ell & \le b,\notag \\
+        b+2\ell & \le N.
         \label{eq:chain_two_window_admissibility}
     \end{align}
     Put $W=\{r\in\mathbb N:r<2\ell\}$ and form the disjoint union
@@ -148,6 +149,24 @@ for an arbitrary finite set of sites and are instantiated here directly.
     in~(\ref{eq:chain_two_window_regrouping}) with the original sum,
     proving~(\ref{eq:chain_two_window_family_sum}). Empty intervals
     cause no exception.
+\end{proof}
+
+\begin{theorem}[Additive maps and the grouped bond family]
+    \label{thm:chain_two_window_family_map}
+    \lean{Fin.twoWindowFamily_map}
+    \leanok
+    \uses{def:chain_two_window_family}
+    Let $A,B$ be additive commutative monoids, let $\varphi:A\to B$ be a
+    homomorphism of additive monoids, and let $F:I\to A$ be the family in
+    Definition~\ref{def:chain_two_window_family}. Form $F':I\to B$ from the
+    array $\varphi(h_0),\ldots,\varphi(h_{N-1})$ using the same windows.
+    Then $F'_\alpha=\varphi(F_\alpha)$ for every $\alpha\in I$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_two_window_family}
+    For a window label the assertion follows from the definition.
+    For each of the three bulk labels, apply preservation of finite sums
+    by $\varphi$ to the corresponding complementary interval.
 \end{proof}
 
 \begin{theorem}[Nearest-neighbour supports at two cuts]

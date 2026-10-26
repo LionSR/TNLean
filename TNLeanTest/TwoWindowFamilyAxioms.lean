@@ -14,3 +14,11 @@ among its dependencies.
 #guard_msgs (whitespace := lax) in
 set_option linter.hashCommand false in
 #print axioms Fin.sum_twoWindowFamily
+
+/-- info:
+'Fin.twoWindowFamily_map' depends on axioms:
+[propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+set_option linter.hashCommand false in
+#print axioms Fin.twoWindowFamily_map

@@ -34,3 +34,25 @@ example {ℓ : ℕ} (p q : Fin (2 * ℓ)) :
     (Sum.inl (Sum.inl p) : (Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) ≠
       Sum.inl (Sum.inr q) := by
   simp
+
+/-- A nonzero projection that discards the second coordinate. -/
+private def firstCoordinate : (ℤ × ℤ) →+ ℤ where
+  toFun := Prod.fst
+  map_zero' := rfl
+  map_add' _ _ := rfl
+
+example : ¬ Function.Injective firstCoordinate := by
+  intro h
+  exact (zero_ne_one : (0 : ℤ) ≠ 1)
+    (congrArg Prod.snd (h (show firstCoordinate (0, 0) = firstCoordinate (0, 1) from rfl)))
+
+/-- The same grouped array is preserved by a noninjective coordinate map. -/
+example (α : (Fin 2 ⊕ Fin 2) ⊕ Fin 3) :
+    Fin.twoWindowFamily (fun r : Fin 5 ↦ (r.val : ℤ))
+      1 3 1 (by decide) (by decide) α =
+        firstCoordinate (Fin.twoWindowFamily
+          (fun r : Fin 5 ↦ ((r.val : ℤ), (r.val : ℤ) + 1))
+          1 3 1 (by decide) (by decide) α) := by
+  exact Fin.twoWindowFamily_map
+    (fun r : Fin 5 ↦ ((r.val : ℤ), (r.val : ℤ) + 1)) firstCoordinate
+    1 3 1 (by decide) (by decide) α

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Data.Fin.VecNotation
+import Mathlib.Tactic.FinCases
 import TNLean.Algebra.TwoWindowSum
 
 /-!
@@ -52,3 +53,18 @@ theorem Fin.sum_twoWindowFamily
   simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two,
     Matrix.head_cons, Matrix.tail_cons]
   ac_rfl
+
+/-- Additive maps preserve the literal two-window grouping. This is the
+finite-sum compatibility used with the decomposition in ALVV,
+arXiv:1602.08828v2, `eq:H-mid-cut`, lines 810–821. -/
+theorem Fin.twoWindowFamily_map
+    {A B : Type*} [AddCommMonoid A] [AddCommMonoid B] {N : ℕ}
+    (f : Fin N → A) (φ : A →+ B)
+    (a b ℓ : ℕ) (hab : a + 2 * ℓ ≤ b) (hbN : b + 2 * ℓ ≤ N)
+    (α : (Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) :
+    Fin.twoWindowFamily (fun r ↦ φ (f r)) a b ℓ hab hbN α =
+      φ (Fin.twoWindowFamily f a b ℓ hab hbN α) := by
+  rcases α with (r | r) | t
+  · rfl
+  · rfl
+  · fin_cases t <;> simp [Fin.twoWindowFamily]
