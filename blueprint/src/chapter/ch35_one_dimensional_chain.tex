@@ -158,7 +158,7 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
     \leanok
     \uses{def:chain_model}
     If a support $X$ of range one contains sites on both sides of the cut
-    after the first $k$ sites, then $X=[k-1,k+1)$.
+    after the first $k$ sites, then $X=\lbrack k-1,k+1)$.
 \end{theorem}
 \begin{proof}\leanok
     The support contains distinct sites $x<k\le y$, so it has at least two
@@ -173,10 +173,11 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
     \uses{def:chain_model}
     Let $H=\sum_Xh_X$ be a range-one Hamiltonian whose terms are positive
     semidefinite and satisfy $\|h_X\|\le1$. For every natural number $k$,
-    let $A=[0,k)$ be the interval clipped to the chain. There is a
+    let $A=\lbrack0,k)$ be the interval clipped to the chain. There is a
     decomposition
     \begin{align}
-        H=H_L+H_R+K,\qquad 0\le K\le I, \notag
+        H & =H_L+H_R+K,\notag \\
+        0 & \le K\le I.\notag
     \end{align}
     where $H_L$ is supported on $A$ and $H_R$ on its complement.
     This gives the decomposition used for nearest-neighbour interactions
@@ -185,12 +186,17 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_range_one_crossing_support}
-    Sum the interactions supported on the left, those supported on the
-    right, and the interactions crossing the cut. The first two sums
-    have the required supports. By
-    Theorem~\ref{thm:chain_range_one_crossing_support}, at most one support
-    crosses the cut. Thus the crossing sum $K$ is either zero or one
-    positive semidefinite term of norm at most one, and $0\le K\le I$.
+    Let $C$ be the set of interaction supports meeting both $A$ and $A^{\mathsf c}$.
+    Partitioning the nonempty interaction supports gives
+    \begin{align}
+        H & =\underbrace{\sum_{X\subseteq A}h_X}_{H_L}
+        +\underbrace{\sum_{X\subseteq A^{\mathsf c}}h_X}_{H_R}
+        +\underbrace{\sum_{X\in C}h_X}_{K}.\notag
+    \end{align}
+    The first two sums have the required supports. By
+    Theorem~\ref{thm:chain_range_one_crossing_support}, $|C|\le1$.
+    Thus $K$ is either zero or one positive semidefinite term of norm at
+    most one, and $0\le K\le I$.
 \end{proof}
 
 \begin{theorem}[Decomposition for boundary gluing]
@@ -200,26 +206,29 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
     \uses{def:chain_model}
     Let $H=\sum_Xh_X$ be a range-one Hamiltonian on $L$ sites with
     $\lVert h_X\rVert\le1$. For every natural number $k$, put
-    $A=[0,k)$ and $D=[0,\max\{k-1,0\})^{\mathsf c}$, with intervals clipped
+    $A=\lbrack0,k)$ and $D=\lbrack0,\max\{k-1,0\})^{\mathsf c}$, with intervals clipped
     to the chain. There exist matrices $H_L$ and $B$ such that
     \begin{align}
-        H=H_L+B,\qquad \lVert B\rVert\le2L, \notag
+        H              & =H_L+B,\notag \\
+        \lVert B\rVert & \le2L.\notag
     \end{align}
     where $H_L$ is supported on $A$ and $B$ on $D$.
     This supplies the decomposition $H=H_L+(H_R+H_i)$ used
-    in~\cite[lines 409--410]{Landau2015Polynomial} for the native range-one
-    model, which also allows Hermitian one-site terms.
+    in~\cite[lines 409--410]{Landau2015Polynomial} for the range-one model
+    of Definition~\ref{def:chain_model}, which also allows Hermitian one-site terms.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_range_one_support_count}
-    Let $H_L$ be the sum over supports contained in $A$, and let $B$ be
-    the sum over the remaining supports. Then $H=H_L+B$, and $H_L$ is
+    Put $H_L=\sum_{X\subseteq A}h_X$ and
+    $B=\sum_{X\nsubseteq A}h_X$. Then $H=H_L+B$, and $H_L$ is
     supported on $A$. Every support in the second sum contains a site
     $y\ge k$. For each of its sites $x$, the range-one condition gives
     $y\le x+1$, so $k\le x+1$ and $x\in D$. Thus $B$ is supported on $D$.
     By Theorem~\ref{thm:chain_range_one_support_count}, there are at most
-    $2L$ supports. The triangle inequality and $\lVert h_X\rVert\le1$
-    therefore give $\lVert B\rVert\le2L$.
+    $2L$ supports. The triangle inequality and $\lVert h_X\rVert\le1$ give
+    \begin{align}
+        \lVert B\rVert & \le\sum_{X\nsubseteq A}\lVert h_X\rVert\le2L.\notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Nearest-neighbour supports at two cuts]
