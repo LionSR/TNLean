@@ -1599,6 +1599,16 @@ and [#9847](https://github.com/LionSR/TNLean/issues/9847).
   the product form on every nonempty such domain; on the empty domain only the
   identity has a product form. Its index count is not established either.
 
+## Viable sets of Landau, Vazirani and Vidick, arXiv:1307.5143
+
+- [`lvv13_bond_dimension_zero.tex`](lvv13_bond_dimension_zero.tex)
+  (local correction, resolved) records that the remark in the proof of Claim
+  `c:ext` (source line 399), that appending a site does not raise the bond
+  dimension, fails at bond dimension `0`: a vector on one site has bond dimension
+  `0`, but a nonzero product vector on two sites does not. The source allows
+  `b = 0` only at the initialization (line 372), and the formalization reads bond
+  dimension at most `b` as at most `max 1 b` in `IsLeftOpenMPS`.
+
 ## Rényi entropy and matrix product state approximation
 
 - [`swvc08_von_neumann_error_range.tex`](swvc08_von_neumann_error_range.tex)
@@ -1638,3 +1648,19 @@ and [#9847](https://github.com/LionSR/TNLean/issues/9847).
   constant two proved formally. The formal amplification estimate needs only
   product error below one, not the printed single-copy smallness hypothesis;
   the full trace-norm form follows for unnormalized approximants.
+
+## Landau, Vazirani and Vidick's one-dimensional algorithm, arXiv:1307.5143
+
+- [`lvv13_constant_bond.tex`](lvv13_constant_bond.tex)
+  (local correction, resolved) records that the constant bond dimension of Lemma
+  `constantbondapprox` (arXiv:1307.5143v1, lines 342–345) is formalized with
+  `B_δ = ⌊exp(C + 32 s log(2e^{e/2}/δ))⌋`, taken from the area law of the
+  library, in place of the stated `exp(O(ε⁻¹ log³ d log 1/δ))`. Both are
+  independent of the chain length and the cut, which is all the later steps of
+  the source use, and the theorems hold under the source's hypotheses. The
+  source's constant would follow from the bound of Arad, Kitaev, Landau and
+  Vazirani, arXiv:1301.1162. The lemma is formalized for every `δ > 0`.
+  Corollary `c:1` holds for every `δ > 0`, with the source's energy bound
+  `E₀ + 6√δ` and bond dimension `B_{min(δ, 1/12)}`. The energy bound after
+  trimming a general low-energy vector is corrected in the QICLean note
+  `lvv13_trimming_energy`.
