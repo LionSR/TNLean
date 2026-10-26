@@ -196,3 +196,39 @@ whose range is the span of the columns of $M_i(\psi)$.
     $|R(S)|\le |S|$. Theorem~\ref{thm:open_mps_finite_span} gives a bond
     bound $|R(S)|\beta\le |S|\beta\le\max\{1,|S|\beta\}$.
 \end{proof}
+
+\begin{definition}[Left columns of a finite family]
+    \label{def:lvv_finite_left_columns}
+    \lean{TNLean.MPS.AreaLaw.leftColumns}
+    \leanok
+    \uses{def:chain_open_mps}
+    Let $I$ be a finite index set and let $m$ be a natural number. Write
+    $\mathcal L$ for the Hilbert space of configurations on the left block
+    of a cut. For vectors $u_i\in\mathcal L\otimes\mathbb C^m$, write
+    $u_i=\sum_{j<m}u_{i,j}\otimes|j\rangle$ in the standard basis of the
+    bond space, and define
+    \begin{align}
+        T=\{u_{i,j}:i\in I,\ j<m\}.\notag
+    \end{align}
+    This is the column construction used in the size-trimming step
+    of~\cite[Claim~2.7, source lines 472--477 and 520--527]{Landau2015Polynomial}.
+\end{definition}
+
+\begin{theorem}[Number and support of the left columns]
+    \label{thm:lvv_finite_left_columns}
+    \lean{TNLean.MPS.AreaLaw.card_leftColumns_le,
+        TNLean.MPS.AreaLaw.leftColumns_subset_span}
+    \leanok
+    \uses{def:lvv_finite_left_columns}
+    The finite set $T$ satisfies $|T|\le |I|m$.
+    Let $S\subseteq\mathcal L$, and let $P_S$ be the orthogonal projection
+    onto $\operatorname{Span}(S)$. If $(P_S\otimes I_m)u_i=u_i$ for every
+    $i\in I$, then $T\subseteq\operatorname{Span}(S)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:lvv_viable_projection}
+    The set $T$ is the image of $I\times\{0,\ldots,m-1\}$, so its cardinality
+    is at most $|I|m$. Let $C_i$ have columns $u_{i,j}$. The fixed-vector
+    identity gives $P_SC_i=C_i$, hence $P_Su_{i,j}=u_{i,j}$ for every
+    retained column. The range of $P_S$ is $\operatorname{Span}(S)$.
+\end{proof}
