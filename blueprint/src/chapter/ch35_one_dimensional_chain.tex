@@ -2786,6 +2786,78 @@ for an arbitrary finite set of sites and are instantiated here directly.
     rank across the cut.
 \end{definition}
 
+\begin{theorem}[Products of one-site coefficients]
+    \label{thm:chain_site_product_mps}
+    \lean{TNLean.MPS.AreaLaw.isOpenMPS_prod,
+        TNLean.MPS.AreaLaw.isOpenMPS_operator_entries_prod,
+        TNLean.MPS.AreaLaw.isOpenMPS_operator_entries_rectKronecker,
+        TNLean.MPS.AreaLaw.isOpenMPS_operator_entries_embed_one_site,
+        TNLean.MPS.AreaLaw.isOpenMPS_operator_entries_of_supported_singleton}
+    \uses{def:chain_open_mps,def:qc_local_circuit}
+    Let $L,q$ be natural numbers and let $Q$ be an alphabet with
+    $q$ elements. Given complex functions $f_i$ on $Q$, one at each site, the vector
+    $\phi(w)=\prod_{i=0}^{L-1}f_i(w_i)$ has internal bond bound one.
+    For a complex operator $M$, regard its entries as a vector on the
+    paired local alphabet by putting
+    \begin{align}
+        v_M\bigl((x_0,y_0),\ldots,(x_{L-1},y_{L-1})\bigr)
+         & =M_{x,y}. \notag
+    \end{align}
+    If $M=M_0\otimes\cdots\otimes M_{L-1}$ for one-site matrices
+    $M_i$, then $v_M$ has internal bond bound one. The same is true
+    for every operator supported on a single site, including the
+    placement of an arbitrary one-site matrix with the identity at
+    all other sites. Empty products and zero local dimension are
+    included; a single-site placement presupposes a site in the chain.
+\end{theorem}
+\begin{proof}
+    \uses{def:chain_open_mps,lem:qc_placed_operators}
+    For a site product take the scalar multiplying the contraction
+    to be one, all virtual dimensions to be one, and
+    $A_i(s)_{0,0}=f_i(s)$. The unique virtual path gives $\phi(w)$.
+    For tensor products of operators apply this construction to
+    $f_i(x_i,y_i)=(M_i)_{x_i,y_i}$. An operator supported on one site
+    is the placement of a one-site matrix; its other one-site factors
+    are identities, so the same construction applies.
+\end{proof}
+
+\begin{theorem}[Bond-one states are scalar multiples of site products]
+    \label{thm:chain_bond_one_products}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.exists_eq_mul_prod,
+        TNLean.MPS.AreaLaw.IsOpenMPS.exists_operator_entries_eq_mul_prod,
+        TNLean.MPS.AreaLaw.isOpenMPS_one_iff_exists_eq_mul_prod}
+    \uses{def:chain_open_mps}
+    A complex vector $\psi$ on $L$ sites of local dimension $q$ has an
+    open-boundary matrix product representation with internal bond
+    bound one if and only if there are a scalar $c\in\mathbb C$ and
+    one-site functions $f_i$ such that
+    \begin{align}
+        \psi(w) & =c\prod_{i=0}^{L-1}f_i(w_i). \notag
+    \end{align}
+    In particular, if the paired entries of a complex operator $M$
+    have bond bound one, then there are one-site matrices $A_i$ and
+    a scalar $c$ such that
+    \begin{align}
+        M_{x,y} & =c\prod_{i=0}^{L-1}(A_i)_{x_i,y_i}. \notag
+    \end{align}
+    The statements include the zero vector, empty alphabets and the
+    empty chain. For the empty chain the product is one and the
+    scalar $c$ is unrestricted.
+\end{theorem}
+\begin{proof}
+    \uses{def:chain_open_mps,thm:chain_site_product_mps}
+    Choose an open-boundary representation. If one virtual bond has
+    dimension zero, there is no virtual path and $\psi=0$; take
+    $c=0$ and all $f_i=1$. Otherwise every virtual dimension is one.
+    There is exactly one virtual path, and its entries define the
+    $f_i$ in the product formula. The converse follows from
+    Theorem~\ref{thm:chain_site_product_mps}, followed by multiplication
+    by $c$. For the operator assertion, pair the two physical labels
+    at each site and take $(A_i)_{a,b}=f_i(a,b)$. The pairing and
+    unpairing are inverse bijections, so the row and column labels
+    are recovered without conjugation.
+\end{proof}
+
 \begin{theorem}[Bounded internal cut ranks give a matrix product state]
     \label{thm:chain_mps_of_cut_rank}
     \lean{
