@@ -289,42 +289,56 @@ contains any given site sum to at most $b_0$.
     (\ref{eq:qc_lr_finset_commutator}).
 \end{proof}
 
-% Numerical-prefactor part of Hastings' eq. lrb (law16.tex, lines 96--112).
-% The second observable is still single-site; this does not establish the
-% arbitrary-second-support statement.
-\begin{theorem}[Propagation with numerical prefactor]
-    \label{thm:qc_lr_finset_numeric}
-    \lean{QuantumCircuit.heisenbergCommutatorNorm_le_graphDistance_finset_numeric,
-        QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finset_numeric}\leanok
+% Finite-second-support graph ingredient for Hastings' eq. lrb, not the chain
+% velocity/length-pair identification or the source's printed time-cone formula.
+\begin{theorem}[Propagation between finite supports]
+    \label{thm:qc_lr_finsets_numeric}
+    \lean{QuantumCircuit.heisenbergCommutatorNorm_le_graphDistance_finsets_numeric,
+        QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finsets_numeric}\leanok
     \uses{aux:restricted-commutator-norm}
     Under the finite-range interaction assumptions of
-    Theorem~\ref{thm:qc_graph_lieb_robinson_finset}, suppose also $v_R\geq1$.
-    Let $S$ be a finite set, $A\in\mathcal A_S$ and
-    $B\in\mathcal A_{\{y\}}$. For $\mu\geq0$ and an integer $n\geq0$ with
-    $n\leq d_G(x,y)$ for all $x\in S$, put $u=4v_R|b_0|e^{2\mu R}$.
+    Theorem~\ref{thm:qc_graph_lieb_robinson_finset}, suppose $v_R\geq1$.
+    Let $S,Y$ be finite sets, $A\in\mathcal A_S$, and $B\in\mathcal A_Y$.
+    Fix $\mu\geq0$ and an integer $n\geq0$ such that $n\leq d_G(x,y)$
+    for every $x\in S$ and $y\in Y$. Put $u=4v_R|b_0|e^{2\mu R}$.
     For every real $t$,
     \begin{align}
         C_B(S,t)          & \leq4|S|\|B\|e^{u|t|-\mu n},\notag      \\
         \|[\tau_t(A),B]\| & \leq4|S|\|A\|\|B\|e^{u|t|-\mu n}.\notag
     \end{align}
-    Empty initial supports and zero interaction budget are allowed.
+    Neither bound has a factor $|Y|$. Both supports may be empty, and
+    zero interaction budget is allowed. This is a graph propagation
+    estimate with the support dependence of equation~(1) of
+    \cite{Hastings2007AreaLaw}; identifying a chain velocity and length
+    pair for the source's time-cone bound is a separate statement.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{aux:restricted-commutator-recursion,thm:qc_graph_lieb_robinson,
+    \uses{aux:weighted-volterra-comparison,aux:restricted-commutator-recursion,
         aux:restricted-initial-commutator-bound,
         aux:restricted-initial-commutator-vanishing,
         aux:restricted-commutator-continuity,
         aux:restricted-commutator-evaluation,
         aux:restricted-commutator-negative-time}
-    Write $b=|b_0|$, $\lambda=2v_Rbe^{2\mu R}$ and first take $t\geq0$.
-    The same single recursion and initial bound as in the proof of
-    Theorem~\ref{thm:qc_graph_lieb_robinson_finset} give
-    $C_B(S,t)\leq|S|\|B\|e^{-\mu n}(2+4be^{2\mu R}t e^{\lambda t})$.
-    Since $v_R\geq1$, one has $4be^{2\mu R}t\leq2\lambda t\leq2e^{\lambda t}$.
-    Together with $1\leq e^{\lambda t}$ this bounds the parenthesis by
-    $4e^{2\lambda t}$. Neither step divides by $b$ or $t$.
-    Replacing $H$ by $-H$ gives negative times; evaluation on $A$ gives
-    the observable estimate.
+    Define $\delta_Y(x)=\min_{y\in Y}d_G(x,y)$, taking the value $\infty$
+    when $Y$ is empty, and truncate this distance at $n$.
+    If $d_G(x,z)\leq r$, the triangle inequality gives
+    $\delta_Y(x)\leq\delta_Y(z)+r$; for nonempty $Y$, choose a point
+    attaining the minimum at $z$, and for empty $Y$ the assertion is immediate.
+    Thus the weights $e^{-\mu\min(n,\delta_Y(a_k))}$ for intersecting
+    interaction supports differ by at most $e^{2\mu R}$.
+    If $X_k$ meets $Y$, its anchor has distance at most $R$ from $Y$;
+    otherwise the initial commutator vanishes. The weighted Volterra
+    argument therefore gives the same interaction-support estimate as
+    before, without a factor depending on $Y$.
+    One further recursion from $S$ gives
+    $|S|\|B\|e^{-\mu n}(2+4|b_0|e^{2\mu R}t e^{\lambda t})$
+    for $t\geq0$, where $\lambda=2v_R|b_0|e^{2\mu R}$.
+    Indeed, if $S$ meets $Y$, the separation hypothesis forces $n=0$;
+    otherwise the initial term vanishes. Since $v_R\geq1$,
+    $4|b_0|e^{2\mu R}t\leq2\lambda t\leq2e^{\lambda t}$. Together
+    with $1\leq e^{\lambda t}$, this bounds the parenthesis by
+    $4e^{2\lambda t}$ without dividing by the budget or time. Negating the Hamiltonian gives negative times, and
+    evaluation on $A$ gives the observable estimate.
 \end{proof}
 
 \begin{theorem}[Exact commutation across disconnected components]
