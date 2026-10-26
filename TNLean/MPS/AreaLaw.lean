@@ -44,6 +44,7 @@ import TNLean.MPS.AreaLaw.IntegerComponents
 import TNLean.MPS.AreaLaw.InteractionBudget
 import TNLean.MPS.AreaLaw.IntervalNeighborhoodEntropy
 import TNLean.MPS.AreaLaw.IntervalSlice
+import TNLean.MPS.AreaLaw.IntervalSymmDiff
 import TNLean.MPS.AreaLaw.LiebRobinson
 import TNLean.MPS.AreaLaw.LocalSolution
 import TNLean.MPS.AreaLaw.LogarithmicAreaLaw
