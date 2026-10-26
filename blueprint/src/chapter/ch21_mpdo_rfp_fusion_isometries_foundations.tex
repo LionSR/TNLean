@@ -104,6 +104,47 @@ reconstruction from full-support isometries.
     \cite[Theorem~4.14(iii)]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
+% This site-dependent product identity awaits ordinary-package verification.
+\begin{theorem}[Products of site-dependent matrix product operators]%
+    \label{thm:mpdo_sitewise_operator_product}
+    \lean{MPOTensor.trace_prod_mulTensor, MPOTensor.trace_prod_mulTensor_one}
+    \uses{def:mpdo_operator_product}
+    At each site $0\leq v<L$, let $A_v$ and $B_v$ be MPO tensors with
+    physical dimension $q$ and bond dimensions $D_1$ and $D_2$, respectively.
+    Let $C_1\in\MN{D_1}$ and $C_2\in\MN{D_2}$ be arbitrary closing matrices.
+    For configurations $\sigma,\tau\in\{0,\ldots,q-1\}^L$, one has
+    \begin{align}
+        \tr\!\left((C_1\otimes C_2)
+        \prod_{v=0}^{L-1}(A_v\mathbin{\cdot}B_v)^{\sigma_v\tau_v}\right)
+         & =\sum_{\rho\in\{0,\ldots,q-1\}^L}
+        \tr\!\left(C_1\prod_{v=0}^{L-1}A_v^{\sigma_v\rho_v}\right)
+        \tr\!\left(C_2\prod_{v=0}^{L-1}B_v^{\rho_v\tau_v}\right).
+        \label{eq:rfp_sitewise_product}
+    \end{align}
+    The bond space is identified with $\C^{D_1}\otimes\C^{D_2}$ in this
+    formula. In particular, setting $C_1=C_2=\Id$ gives the product identity
+    with identity closing matrices. No positivity or translation invariance
+    is assumed, and all dimensions may vanish. This is the site-dependent
+    extension of the product construction in
+    \cite[Section~4.5]{Cirac2016MPDO_arXiv}.
+\end{theorem}
+\begin{proof}
+    The bond identification preserves the identity matrix and multiplication,
+    and hence ordered products. The mixed-product identity gives
+    \begin{align}
+        \prod_{v=0}^{L-1}(F_v\otimes G_v)
+         & =\left(\prod_{v=0}^{L-1}F_v\right)
+        \otimes\left(\prod_{v=0}^{L-1}G_v\right)
+        \notag
+    \end{align}
+    for arbitrary square matrices $F_v$ and $G_v$ of the respective dimensions.
+    Expand each product tensor by (\ref{eq:rfp_product_tensor}), and distribute
+    the ordered product over the choices of $\rho$. Each summand is thus the
+    tensor product of the two ordered products with their closing matrices.
+    Taking traces uses $\tr(X\otimes Y)=\tr(X)\tr(Y)$ and gives
+    (\ref{eq:rfp_sitewise_product}).
+\end{proof}
+
 \begin{definition}[Canonical reassociation of three bond spaces]%
     \label{def:mpdo_operator_product_associator}
     \lean{MPOTensor.mulTensorAssocEquiv}
