@@ -119,11 +119,11 @@ whose range is the span of the columns of $M_i(\psi)$.
         TNLean.MPS.AreaLaw.IsViableMPS.extend}
     \leanok
     \uses{def:lvv_viable_mps}
-    Let $1\le i\le L$, let $d$ be the local dimension, and let $S'$ be the set
+    Let $1\le i\le L$, let $q$ be the local dimension, and let $S'$ be the set
     of vectors $v\otimes|k\rangle$ on the first $i$ sites, for $v\in S$ on the
     first $i-1$ sites and $k$ a basis state. If $S$ is
     $(i-1,s,b,\delta)$-viable for $\Gamma$, then $S'$ is
-    $(i,ds,b,\delta)$-viable for $\Gamma$, with the same witness. This is
+    $(i,qs,b,\delta)$-viable for $\Gamma$, with the same witness. This is
     Claim~c:ext of~\cite[lines 379--400]{Landau2015Polynomial}, stated there
     for $\delta=c_\varepsilon/n$.
 \end{theorem}
@@ -131,7 +131,7 @@ whose range is the span of the columns of $M_i(\psi)$.
 \begin{proof}
     \leanok
     \uses{def:lvv_viable_mps}
-    $S'$ has at most $d|S|$ members. Let $w$ be an open matrix product state on
+    $S'$ has at most $q|S|$ members. Let $w$ be an open matrix product state on
     $n$ sites with bond dimension at most $b'=\max(1,b)$, and let $f$ be a
     vector on one site. For a cut after $j<n$ sites,
     \[
