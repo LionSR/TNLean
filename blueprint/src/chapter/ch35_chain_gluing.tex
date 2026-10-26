@@ -93,3 +93,41 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     to the ground state and the eigenvector
     extension carries the energy and overlap bounds back to the chain.
 \end{proof}
+
+\begin{theorem}[The trimmed witness at a cut of the chain]
+    \label{thm:chain_trimmed_witness}
+    \lean{TNLean.MPS.AreaLaw.exists_trimmed_witness_chain}
+    \leanok
+    \uses{def:chain_open_mps, def:chain_gluing_cut}
+    Let $H=H_L+H_R+K$ with $H_L$ supported on the first $k$ sites, $H_R$ on
+    the others, $0\le K\le1$ and $H\ge E_0$. Let $\psi$ be a unit vector with
+    $\operatorname{Re}\langle\psi,H\psi\rangle\le E_0+\delta$ whose cut matrix
+    $C$ satisfies $P_VC=C$ for a matrix $P_V$ on the first $k$ sites, and let a
+    unit vector of rank at most $D$ across the cut have overlap at least
+    $1-\eta$ with $\psi$, where $2\eta<1$. Then there is a unit vector $w$ of
+    rank at most $D$ across the cut, with
+    $\operatorname{Re}\langle w,Hw\rangle\le E_0+(\delta+2\sqrt{2\eta})/(1-2\eta)$
+    and $P_VC_w=C_w$, together with an isometry $W$ from $\mathbb C^m$, $m\le D$,
+    into the sites right of the cut and a vector $x$ with $w=(1\otimes W)x$ in
+    the cut coordinates of Definition~\ref{def:chain_gluing_cut}, whose left
+    factor is again in the range of $P_V$.
+
+    This is Lemma~l:within of~\cite[lines 509--515]{Landau2015Polynomial} on
+    the chain, with $P_V$ the projection onto the span of a viable set. The
+    energy bound is the corrected one; the energy
+    $\varepsilon_0+6\sqrt{c_\varepsilon}$ printed there is not established by its
+    argument~\cite{gap:lvv13_trimming_energy}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:chain_open_mps, def:chain_gluing_cut}
+    In the cut coordinates after $k$ sites the Hamiltonian is
+    $A\otimes1+1\otimes A'+K'$ with $0\le K'\le1$, and the trimmed witness of
+    the companion volume~\cite[``A trimmed low-energy witness on a
+        subspace'']{QICLean2026Blueprint} gives $w$, $W$ and $x$ there. The cut
+    coordinates after $k$ sites, followed by the split of the first $k$ sites
+    into the first $k-1$ and site $k-1$, are the coordinates of
+    Definition~\ref{def:chain_gluing_cut}, which carries $w=(1\otimes W)x$ and the
+    range condition on $x$ over.
+\end{proof}

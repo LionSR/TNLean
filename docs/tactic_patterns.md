@@ -4896,6 +4896,21 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Splitting a chain Hamiltonian at one cut — candidate (2026-10-26)
+
+- **Pattern:** From `H = HL + HR + K` with `HL` supported on `leftBlock L k`, `HR` on its
+  complement, `0 ≤ K ≤ 1` and `H ≥ E₀`, pass to the cut coordinates with
+  `cutOperator_eq_kronecker_one` and `cutOperator_eq_one_kronecker`, obtain
+  `cutOperator H = A ⊗ₖ 1 + 1 ⊗ₖ A' + cutOperator K`, and derive
+  `(1 - cutOperator K).PosSemidef` and `(cutOperator H - E₀ • 1).PosSemidef`.
+- **Seen:** 2 occurrences in 2 files: `TNLean/MPS/AreaLaw/ViableSet/ConstantRankCut.lean`
+  (energy of a trimmed low-energy state) and `TNLean/MPS/AreaLaw/ViableSet/TrimmedWitness.lean`
+  (`exists_trimmed_witness_chain`).
+- **Abstraction:** proposed: one lemma returning `A`, `A'`, the Kronecker split and the two
+  positivity facts from the six hypotheses on `H`, `HL`, `HR`, `K` and `E₀`.
+- **Notes:** about 25 lines per occurrence. Promote when a third consumer at a cut of the chain
+  lands (the later steps of the same source argument are the expected one).
+
 ### Regional expectation compared with a supported approximant — candidate (2026-10-21)
 
 - **Pattern:** For a contractive regional expectation fixing a supported approximant, rewrite the projection error as the difference between the approximation error and its expectation.
