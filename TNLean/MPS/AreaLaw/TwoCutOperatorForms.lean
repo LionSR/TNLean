@@ -35,6 +35,14 @@ noncomputable section
 
 namespace TNLean.MPS.AreaLaw
 
+/-- The prefix ending at a cut is disjoint from the interval beginning there.
+Supporting geometry for ALVV, arXiv:1602.08828v2, `eq:H-mid-cut`, lines 810–821. -/
+private theorem disjoint_interval_zero_interval (L a b : ℕ) :
+    Disjoint (interval L 0 a) (interval L a b) := by
+  rw [Finset.disjoint_left]
+  intro x hx hy
+  exact (mem_interval.mp hx).2.not_ge (mem_interval.mp hy).1
+
 /-- Actual two crossing factors and three regional families of an original
 nearest-neighbour bond family, all in one three-region partition.
 Supporting locality algebra for ALVV, arXiv:1602.08828v2, eq:H-mid-cut,
@@ -47,12 +55,8 @@ theorem exists_threeSplit_edge_factors
     (u v : Fin (L - 1)) (huv : u.val < v.val) :
     let T := interval L 0 (u.val + 1)
     let E := interval L (u.val + 1) (v.val + 1)
-    let hTE : Disjoint T E := by
-      rw [Finset.disjoint_left]
-      intro x hx hx'
-      simp only [T, E, mem_interval] at hx hx'
-      omega
-    let g := threeSplit q T E hTE
+    let g := threeSplit q T E
+      (disjoint_interval_zero_interval L (u.val + 1) (v.val + 1))
     ∃ (HL : Fin (L - 1) → Matrix (T → Fin q) (T → Fin q) ℂ)
       (HM : Fin (L - 1) → Matrix (E → Fin q) (E → Fin q) ℂ)
       (HR : Fin (L - 1) → Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ)
@@ -78,7 +82,9 @@ theorem exists_threeSplit_edge_factors
             (↥(T ∪ E)ᶜ → Fin q)).symm ∧
       operatorSchmidtRank UL ≤ q ^ 2 ∧ operatorSchmidtRank VR ≤ q ^ 2 := by
   classical
-  intro T E hTE g
+  intro T E g
+  have hTE : Disjoint T E :=
+    disjoint_interval_zero_interval L (u.val + 1) (v.val + 1)
   have hv : v.val + 1 < L := by omega
   obtain ⟨huD, huT, hvD, hvE, hord⟩ :=
     interval_edge_classification_of_lt (L := L) huv hv
