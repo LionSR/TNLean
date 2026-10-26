@@ -223,7 +223,7 @@ private theorem operatorSchmidtRank_two_window_full_counts_le
   classical
   intro T E hTE g H u v A B C assoc e S coefficient
   obtain ⟨HL, HM, HR, U, V, hlocal, hu, hv, hU, hV⟩ :=
-    exists_threeSplit_twoWindow_factors F hleft hright hL hM hR hab hb p s
+    exists_threeSplit_two_window_factors F hleft hright hL hM hR hab hb p s
   have hqic := operatorSchmidtRank_middle_sum_smul_full_counts_le
     H HL HM HR u v (by simp [u, v]) U V (rU := q ^ 2) (rV := q ^ 2)
   simp only [one_eq_classical] at hqic hlocal hu hv
