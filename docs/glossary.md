@@ -3921,3 +3921,19 @@ walk distance on a planar domain.
 | `TNLean.Lattice.ClusterExpansion.IsLargeWalk l acts C` | The supports of the terms of `C`, on a finite planar domain, contain two sites joined by no domain walk of length at most `l` | Lines 1103–1107 in the walk distance of `TNLean.Lattice.ProductForm`, the largeness for which `hasProductForm_truncatedExp` holds (lines 1256–1279). It is `IsLargeDiam` for the walk distance; no bridge between the two is stated. The planar geometry is a scope restriction (`docs/paper-gaps/hastings05_planar_domain_scope.tex`). |
 | `TNLean.Lattice.ClusterExpansion.IsValidCluster acts l C` | Every term of `C` acts on some site, `C` is connected in the overlap graph, and `C` is not `IsLargeWalk` | Internal to the product-form construction (lines 1259–1272); the clusters that a site index may record. The members of a family of valid clusters with disjoint supports are the clusters of its union (`isCluster_of_mem_validFamilies`), and `sum_clusterOp_apply` identifies the sets of terms acting on sites with no large cluster with such families. |
 | `TNLean.Lattice.ClusterExpansion.IsClusterAssignment acts l c` | Every cluster recorded at a site is valid, contains the site in its supports, and is recorded at every site of its supports | Internal to the product-form construction (lines 1259–1272); the index functions with nonzero coefficient product. `recordedClusters` and `clusterAssignment` identify consistent assignments with families of valid clusters with disjoint supports. |
+
+## Viable sets of Landau, Vazirani and Vidick
+
+The viable sets of Landau, Vazirani and Vidick, *A polynomial-time algorithm for the ground state
+of 1D gapped local Hamiltonians* (arXiv:1307.5143v1, `References/1307.5143/algo53.tex`), are
+formalized in `TNLean/MPS/AreaLaw/ViableSet/`. Vectors live on the chain `Fin L → Fin q`, and a
+vector on the first `i` sites is a function of the left-block configurations of the cut after
+`i` sites. `leftSupportSubmodule S` is `Span(S) ⊗ H_R`, the vectors whose columns across that
+cut lie in `Span(S)`, that is, whose reduced density on the first `i` sites is supported on
+`Span(S)`.
+
+| Declaration | Mathematical meaning | Source and status |
+|---|---|---|
+| `TNLean.MPS.AreaLaw.IsViable Γ δ S` | Some unit vector `φ ∈ Span(S) ⊗ H_R` has `‖⟨φ, Γ⟩‖ ≥ 1 - δ` | Definition `def:viable`, lines 240–242, with the overlap itself (not its square) bounded below. For `δ < 1`, `isViable_iff_le_norm_starProjection` makes it `‖P_{Span(S) ⊗ H_R} Γ‖ ≥ 1 - δ`; at `δ = 1` with `Span(S) = 0` this fails. For a unit `Γ`, `IsViable.forall_mem_span_singleton` (all `δ ≤ 1`) and `isViable_iff_forall_mem_span_singleton` (`δ < 1`) identify it with the vector form of QICLean's `Submodule.IsCloseTo (1 - (1 - δ)²)` for `span {Γ}`, the squared-overlap closeness of arXiv:1602.08828v2 (Definitions `d:vs`, `d:close`); the parameter changes from `δ` to `1 - (1 - δ)²`. |
+| `TNLean.MPS.AreaLaw.IsLeftOpenMPS b v` | The vector `v` on the first `k` sites, read on `Fin k → Fin q`, is an open-boundary matrix product state of bond dimension at most `max 1 b` | Line 243. Bond dimension `0` is read as `1`, a local fix recorded in `docs/paper-gaps/lvv13_bond_dimension_zero.tex`; it makes `IsLeftOpenMPS.extendSite` hold with no hypothesis `0 < b`. |
+| `TNLean.MPS.AreaLaw.IsViableMPS Γ s b δ S` | `S` has at most `s` members, each `IsLeftOpenMPS b`, and is `IsViable Γ δ` | Definition `def:viable`, lines 240–244. Claim `c:ext` (lines 379–400) is `IsViableMPS.extend`: appending one site in every basis state gives an `(i, q s, b, δ)`-viable set with the same witness. |
