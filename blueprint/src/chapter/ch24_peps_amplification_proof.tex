@@ -22,19 +22,19 @@ comparison treats the two copies as additional sites.
         Matrix.contractionWord_mul_vecMulVec_self,
         Matrix.conjTranspose_contractionWord_mulVec_self}
     \leanok
-    Let $k_i$ be positive contractions on a finite-dimensional Hilbert space and
-    $G_i=(I-k_i)^{1/2}$. For a finite word $w=(i_1,\dots,i_m)$ the chronological
-    product $G_{i_m}\cdots G_{i_1}$ is the product over the reversed list of
-    letters. The product over the letters of $w$ satisfying a predicate $P$
-    equals the product over the list of letters of $w$ filtered by $P$. If
-    every $k_i$ annihilates a vector $\Omega$, then every such product $D$
-    satisfies $D|\Omega\rangle\langle\Omega|=|\Omega\rangle\langle\Omega|$
-    and $D^\dagger\Omega=\Omega$.
+    Let $0\le k_i\le I$ on a finite-dimensional Hilbert space and
+    $G_i=(I-k_i)^{1/2}$. For a word $w=(i_1,\dots,i_m)$, the chronological
+    product $G(w)=G_{i_m}\cdots G_{i_1}$ equals the product over the reversed
+    list $w^{\mathrm{rev}}$, and the product over the letters of $w$ satisfying
+    a predicate $P$ equals $G(w|_P)$ for the filtered subword $w|_P$. If
+    $k_i\Omega=0$ for all $i$, then every such product $D=G(u)$ satisfies
+    $D|\Omega\rangle\langle\Omega|=|\Omega\rangle\langle\Omega|$ and
+    $D^\dagger\Omega=\Omega$.
 \end{theorem}
 \begin{proof}
     \leanok
-    We induct on the length of the word. Each factor is self-adjoint and fixes
-    $\Omega$ because $k_i\Omega=0$.
+    Induct on $|w|$; since $k_i\Omega=0$ and $G_i^\dagger=G_i$, each factor
+    satisfies $G_i\Omega=G_i^\dagger\Omega=\Omega$.
 \end{proof}
 
 \begin{definition}[Coordinate change placing the ancillas as spectators]
@@ -44,13 +44,12 @@ comparison treats the two copies as additional sites.
         TNLean.PEPS.AreaLaw.restoringTransport}
     \leanok
     \uses{def:al_amp_restoring_coordinates}
-    Let $U$ be the unitary whose columns are a full eigenbasis $\{|x\rangle\}$
-    of $\rho_X$. The unitary $\mathcal W$ maps the coordinates
-    $((s',e'),(X,Y)),Z'$ of the restoring operator to the coordinates
-    $\Lambda\times(s',e')$: it reorders the factors, undoes the basis change on
-    the physical target, and applies the same basis change on $e'$. An operator
-    $M$ on $X\otimes Y$ in the eigenbasis gives the physical operator
-    $((U\otimes I)M(U\otimes I)^\dagger)\otimes I_{Z'}$.
+    Let $U$ be the unitary whose columns form an eigenbasis $\{|x\rangle\}$ of
+    $\rho_X$. The unitary $\mathcal W$ maps the restoring coordinates
+    $((s',e')\times(X\times Y))\times Z'$ to $\Lambda\times(s',e')$ by
+    reordering factors, conjugating $X$ by $U$, and conjugating $e'$ by $U$;
+    an operator $M$ on $X\otimes Y$ in the eigenbasis lifts to the physical
+    operator $L(M)=((U\otimes I_Y)M(U\otimes I_Y)^\dagger)\otimes I_{Z'}$.
 \end{definition}
 
 \begin{theorem}[Restoring data under $\mathcal W$]
@@ -68,26 +67,31 @@ comparison treats the two copies as additional sites.
         TNLean.PEPS.AreaLaw.ancillaTransport_conj_restoringColumnGlobal}
     \leanok
     \uses{def:al_amp_ancilla_transport}
-    The map $\mathcal W$ is unitary. It maps a physical operator written in
-    the eigenbasis of the target to the operator $L\otimes I$ on the original
-    physical coordinates, and $(A\otimes M)\otimes I_{Z'}$ to the physical operator
-    obtained from $M$ tensored with $A$ rotated on $e'$. The restored vector
-    becomes $\Omega$ tensored with the ancillary vector
-    $(I\otimes U)\sum_x\sqrt{p_x}|x,x\rangle$, the vector with blanks on both
-    ancillas becomes $\Omega$ tensored with the blanks, and the copied vector
-    becomes the vector whose value at a configuration $c$ and an ancillary pair
-    $(s,e)$ is $|0\rangle(s)\,(U|0\rangle)(c_X)\,\Omega(c')$, with $c'$ equal to $c$
-    off $X$ and to $e$ on $X$. The restoring operator is a sum over the selected
-    indices of physical operators on $X\cup Y$ tensored with
-    $p_x^{-1/2}|x\rangle\langle0|_{s'}\otimes I_{e'}$, and the column operator is a
-    sum of physical operators on $X\cup Y$ tensored with operators on the
-    ancillas.
+    The map $\mathcal W$ is unitary and satisfies
+    \begin{align}
+        \mathcal W\bigl((A\otimes M)\otimes I_{Z'}\bigr)\mathcal W^\dagger
+         & =L(M)\otimes\bigl((I_{s'}\otimes U)A(I_{s'}\otimes U)^\dagger\bigr), \notag \\
+        (\mathcal W\varphi_{\rm copy})(c,(s,e))
+         & =\langle s|0\rangle\,\langle c_X|U|0\rangle\,\Omega(c|_{X^c},e), \notag     \\
+        \mathcal W\eta_{\rm rest}
+         & =\Omega\otimes(I_{s'}\otimes U)\sum_x\sqrt{p_x}\,|x,x\rangle,
+        \qquad
+        \mathcal W\psi_{\rm init}=\Omega\otimes(|0\rangle\otimes U|0\rangle),
+        \label{eq:al_amp_ancilla_transport}
+    \end{align}
+    where $(c|_{X^c},e)$ agrees with $c$ off $X$ and equals $e$ on $X$. Under
+    conjugation by $\mathcal W$, the restoring operator $R_0$ and column
+    operator $B_0$ expand as sums over the selected indices of physical
+    operators supported on $X\cup Y$ tensored with
+    $p_x^{-1/2}|x\rangle\langle0|_{s'}\otimes I_{e'}$ and with ancilla
+    operators on $(s',e')$, respectively.
 \end{theorem}
 \begin{proof}
     \leanok
-    The map $\mathcal W$ is a reindexing followed by a Kronecker product of unitaries.
-    Each image follows from the mixed-product rule for Kronecker products, the
-    identity $UU^\dagger=I$, and direct substitution in the copied vector.
+    Since $\mathcal W$ is a coordinate permutation composed with a Kronecker
+    product of unitaries, (\ref{eq:al_amp_ancilla_transport}) and the sum
+    expansions follow from the mixed-product property, $UU^\dagger=I$, and
+    direct evaluation on basis configurations.
 \end{proof}
 
 \begin{theorem}[The restoring estimates with the ancillas as spectators]
@@ -107,28 +111,34 @@ comparison treats the two copies as additional sites.
         TNLean.PEPS.AreaLaw.mulVec_mulVec_eq_conj}
     \leanok
     \uses{thm:al_amp_restoring_estimates}
-    Let $\Omega$ be a unit vector, let $X,Y$ be disjoint with $S_0=X\cup Y$, and
-    suppose that the typical projections of $X$, $Y$ and $S_0$ fail with
-    probability at most $\delta$. In the coordinates $\Lambda\times(s',e')$ the
-    vectors $\varphi$ and $\eta$ are unit vectors,
-    $\|R_0\|,\|B_0\|\le M_0=e^{(\mathcal I+3w)/2}$, the column identity
-    $R_0\varphi=B_0(\Omega\otimes\xi)$ holds for the image $\xi$ of the blank pair,
-    the physical ground component of $R_0\varphi$ has norm at most one, and
-    \begin{align*}
-        \|((L'\otimes I)R_0)^\dagger\eta-\varphi\| & \le3\sqrt\delta+
-        \|(L')^\dagger\Omega-\Omega\|
-    \end{align*}
-    for every physical operator $L'$. The column operator acts on $S_0$ and the
-    ancillas, and the restoring operator on $S_0$ and $s'$.
+    Let $\|\Omega\|=1$, let $X,Y$ be disjoint with $S_0=X\cup Y$, and suppose
+    the typical projections of $X$, $Y$, and $S_0$ fail with probability at
+    most $\delta$. In the coordinates $\Lambda\times(s',e')$, with
+    $\xi=|0\rangle\otimes U|0\rangle$, the transported vectors $\varphi,\eta$
+    and operators $R_0,B_0$ satisfy
+    \begin{align}
+        \|\varphi\|=\|\eta\|=1,\qquad
+        \|R_0\|,\|B_0\|\le M_0=e^{(\mathcal I+3w)/2},\qquad
+        R_0\varphi=B_0(\Omega\otimes\xi),\qquad
+        \|(|\Omega\rangle\langle\Omega|\otimes I)R_0\varphi\|\le 1,
+        \label{eq:al_amp_restoring_transport_norms}
+    \end{align}
+    and, for every physical operator $L'$,
+    \begin{align}
+        \|((L'\otimes I)R_0)^\dagger\eta-\varphi\|
+         & \le3\sqrt\delta+\|(L')^\dagger\Omega-\Omega\|.
+        \label{eq:al_amp_restoring_transport_adj}
+    \end{align}
+    Moreover, $B_0$ acts on $S_0\times(s',e')$ and $R_0$ acts on $S_0\times s'$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:al_amp_ancilla_transport}
-    Transferring the estimates of Theorem~\ref{thm:al_amp_restoring_estimates} along
-    $\mathcal W$ gives the bounds, since unitary equivalence preserves norms of
-    vectors and of operators. An operator
-    on $X\otimes Y$ in the eigenbasis tensored with $I_{Z'}$ acts on $X\cup Y$ in
-    the original coordinates, since the basis change acts on $X$ alone.
+    Conjugating Theorem~\ref{thm:al_amp_restoring_estimates} by the unitary
+    $\mathcal W$ via (\ref{eq:al_amp_ancilla_transport}) preserves vector and
+    operator norms, giving (\ref{eq:al_amp_restoring_transport_norms}) and
+    (\ref{eq:al_amp_restoring_transport_adj}). Since $U$ acts only on $X$,
+    each summand $L(M)$ is supported on $S_0=X\cup Y$.
 \end{proof}
 
 \begin{definition}[Relabelled and product vectors on finite site sets]
@@ -137,11 +147,9 @@ comparison treats the two copies as additional sites.
         FiniteProduct.complRelabel, FiniteProduct.sumSitesProduct,
         FiniteProduct.disjSumRegionEquiv, FiniteProduct.disjSumComplEquiv}
     \leanok
-    For a bijection $\sigma$ between finite site sets with a common local
-    alphabet, a vector $\psi$ is moved along $\sigma$ by reading each
-    configuration through $\sigma^{-1}$. For vectors $f$ on the sites $A$ and $g$
-    on the sites $B$, the product vector $f\otimes g$ lives on the sites
-    $A\sqcup B$.
+    For a bijection $\sigma:A\to B$ between finite site sets with a common local
+    alphabet, $(\sigma_*\psi)(c)=\psi(c\circ\sigma)$. For vectors $f$ on $A$
+    and $g$ on $B$, the product vector $f\otimes g$ lives on $A\sqcup B$.
 \end{definition}
 
 \begin{theorem}[Regional entropies of relabelled and product vectors]
@@ -155,19 +163,21 @@ comparison treats the two copies as additional sites.
         FiniteProduct.mutualInformation_sumSitesProduct_inr_inl}
     \leanok
     \uses{def:al_amp_site_relabel}
-    Relabelling the sites along $\sigma$ moves every regional entropy along
-    $\sigma$. For unit vectors $f$ and $g$, the region $R\sqcup T$ of $f\otimes g$
-    has entropy $S_f(R)+S_g(T)$. Consequently adjoining sites in a product state
-    does not change the mutual information of two regions of $A$, and a region of
-    $B$ has no mutual information with a region of $A$.
+    For any bijection $\sigma:A\to A'$ and $R\subseteq A$,
+    $S_{\sigma_*\psi}(\sigma(R))=S_\psi(R)$. For unit vectors $f$ on $A$ and
+    $g$ on $B$, and regions $R,R'\subseteq A$ and $T\subseteq B$,
+    \begin{align}
+        S_{f\otimes g}(R\sqcup T)=S_f(R)+S_g(T),\qquad
+        I_{f\otimes g}(R:R')=I_f(R:R'),\qquad
+        I_{f\otimes g}(T:R)=0. \notag
+    \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
-    The reduced state of the relabelled vector is the reduced state of the
-    original vector on the image region, after relabelling configurations. The
-    reduced state of $f\otimes g$ on $R\sqcup T$ is the Kronecker product of the
-    two reduced states, and von Neumann entropy is additive on Kronecker products
-    of density matrices.
+    Relabelling conjugates the reduced density matrix by the induced
+    configuration bijection, while $\rho_{f\otimes g,R\sqcup T}=\rho_{f,R}\otimes\rho_{g,T}$,
+    so additivity of von Neumann entropy on tensor products gives all three
+    identities.
 \end{proof}
 
 \begin{definition}[The physical sites enlarged by two copies of the target]
@@ -177,11 +187,10 @@ comparison treats the two copies as additional sites.
         TNLean.PEPS.AreaLaw.ancillaPhysicalRegion,
         TNLean.PEPS.AreaLaw.ancillaSwapFun, TNLean.PEPS.AreaLaw.ancillaSwap}
     \leanok
-    The enlarged site set is $\Lambda\sqcup(X\sqcup X)$, where the two copies of
-    $X$ are the ancillas $s'$ and $e'$, each site carrying the local dimension
-    $q$. Its configurations are a physical configuration together with
-    configurations of $s'$ and of $e'$. The swap exchanges each site of $X$ with
-    its copy in $e'$ and fixes all other sites.
+    The enlarged site set is $\widetilde\Lambda=\Lambda\sqcup(s'\sqcup e')$,
+    where $s',e'$ are two copies of $X$ with local dimension $q$. The involution
+    $\tau:\widetilde\Lambda\to\widetilde\Lambda$ swaps each site of $X\subseteq\Lambda$
+    with its copy in $e'$ and fixes $\Lambda\setminus X$ and $s'$.
 \end{definition}
 
 \begin{theorem}[The enlarged sites]
@@ -197,23 +206,24 @@ comparison treats the two copies as additional sites.
         TNLean.PEPS.AreaLaw.mutualInformation_ancillaCopy_eq}
     \leanok
     \uses{def:al_amp_ancilla_sites,thm:al_amp_site_entropy}
-    On the enlarged sites, an operator $P\otimes(b\otimes I_{e'})$ with $P$
-    acting on a physical region $S$ and $b$ acting on $s'$ acts on $S\sqcup s'$,
-    and a physical operator on $S$ tensored with the identity on both copies acts
-    on $S$. For unit vectors $\Omega$ and $\chi$, the vector $\Omega\otimes\chi$
-    has no mutual information between $e'$ and any physical region. Let $\varphi$
-    be the vector whose value at a configuration $c$ and an ancillary pair
-    $(s,e)$ is $a(s)\,b(c_X)\,\Omega(c')$, with $c'$ equal to $c$ off $X$ and to
-    $e$ on $X$, for unit vectors $a,b$ and a unit vector $\Omega$. For every
-    $X'\subseteq X$ and every physical region $J$ disjoint from $X$, the mutual
-    information of $\varphi$ between the copy of $X'$ in $e'$ and $J$ is
-    $I_\Omega(X':J)$.
+    On $\widetilde\Lambda=\Lambda\sqcup(s'\sqcup e')$, if $P$ is supported on
+    $S\subseteq\Lambda$ and $b$ acts on $s'$, then $P\otimes(b\otimes I_{e'})$
+    is supported on $S\sqcup s'$ and $P\otimes I_{s'\sqcup e'}$ is supported on
+    $S$. For unit vectors $\Omega$ on $\Lambda$ and $\chi$ on $s'\sqcup e'$,
+    $I_{\Omega\otimes\chi}(e':J)=0$ for every $J\subseteq\Lambda$. If
+    $\varphi(c,(s,e))=a(s)b(c_X)\Omega(c|_{X^c},e)$ with $\|a\|=\|b\|=\|\Omega\|=1$,
+    then for every $X'\subseteq X$ (with copy $X'_{e'}\subseteq e'$) and
+    $J\subseteq\Lambda\setminus X$,
+    \begin{align}
+        I_\varphi(X'_{e'}:J)=I_\Omega(X':J).
+        \label{eq:al_amp_ancilla_copy_mi}
+    \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
-    The vector $\varphi$ is $\Omega\otimes a\otimes b$ relabelled by the swap, and
-    the swap maps the copy of $X'$ to $X'$ and fixes $J$, so
-    Theorem~\ref{thm:al_amp_site_entropy} gives the equality.
+    Since $\varphi=\tau_*(\Omega\otimes a\otimes b)$ with $\tau(X')=X'_{e'}$ and
+    $\tau(J)=J$, Theorem~\ref{thm:al_amp_site_entropy} yields
+    $I_{\Omega\otimes\chi}(e':J)=0$ and (\ref{eq:al_amp_ancilla_copy_mi}).
 \end{proof}
 
 \begin{theorem}[The local unitary and the entropy comparison on a region]
@@ -224,22 +234,24 @@ comparison treats the two copies as additional sites.
         TNLean.Lattice.mutualInformation_le_inv_pow_of_supported_unitary}
     \leanok
     \uses{thm:area_law_amplification_unitary_error,thm:al_amp_entropy_comparison_scale}
-    On a finite set of sites with local dimension $q$, let $R_0$ and $L'$ act on
-    a region $S$. Under the hypotheses of the deterministic steps after the
-    choice of a good realization, there is a unitary acting on $S$ with
-    $\|U\varphi-\eta\|\le a+\sqrt{2a+6\varepsilon+9\varepsilon^2}$. If a unitary acts
-    on a region disjoint from $X\cup J$, $I_\eta(X:J)=0$,
-    $\|U\varphi-\eta\|\le C_1n^{-K/2}$ with $K\ge4(M+2)$ and
-    $\log\dim\mathcal H_X\le C_2n^2$, then every part of $X$ has mutual
-    information at most $8\sqrt{C_1}\,(1+C_2)\,n^{-M}$ with $J$ in $\varphi$.
+    On a finite site set with local dimension $q$, suppose $R_0$ and $L'$ are
+    supported on $S$ and satisfy the hypotheses of
+    Theorem~\ref{thm:area_law_amplification_unitary_error}. Then there is a
+    unitary $U$ supported on $S$ with
+    $\|U\varphi-\eta\|\le a+\sqrt{2a+6\varepsilon+9\varepsilon^2}$. If $U$ is a
+    unitary supported on a region disjoint from $X\cup J$, $I_\eta(X:J)=0$,
+    $\|U\varphi-\eta\|\le C_1n^{-K/2}$ with $K\ge4(M+2)$, and
+    $\log\dim\mathcal H_X\le C_2n^2$, then every $X'\subseteq X$ satisfies
+    $I_\varphi(X':J)\le 8\sqrt{C_1}\,(1+C_2)\,n^{-M}$.
 \end{theorem}
 \begin{proof}
     \leanok
-    An operator acting on $S$ is $A\otimes I$ in the coordinates of $S$ and its
-    complement, and an operator acting on a region disjoint from $X\cup J$ is
-    $I\otimes A$ in the coordinates of $X\cup J$ and its complement. Applying the
-    polar correction in the first coordinates and the entropy comparison in the
-    second gives both assertions.
+    In the tensor decomposition of $S$ and its complement (respectively
+    $X\cup J$ and its complement), an operator supported on $S$ has the form
+    $A\otimes I$ (respectively $I\otimes A$). Applying
+    Theorem~\ref{thm:area_law_amplification_unitary_error} in the first
+    decomposition and Theorem~\ref{thm:al_amp_entropy_comparison_scale} in the
+    second gives both claims.
 \end{proof}
 
 \begin{theorem}[The local unitary and the entropy comparison on the enlarged sites]
@@ -248,27 +260,30 @@ comparison treats the two copies as additional sites.
         TNLean.PEPS.AreaLaw.mutualInformation_le_of_ancilla_unitary}
     \leanok
     \uses{thm:al_amp_ancilla_sites,thm:al_amp_supported_polar}
-    Work on the physical sites enlarged by the two copies $s',e'$ of $X$. Let the
-    restoring operator $R_0$ act on $N\sqcup s'$ and the truncated product $L'$ act
-    on a physical region $N$. Under the hypotheses of the deterministic steps after
-    the choice of a good realization, with the physical operators tensored with
-    the identity on both copies, there is a unitary acting on $N\sqcup s'$ with
-    $\|U\varphi-\eta\|\le a+\sqrt{2a+6\varepsilon+9\varepsilon^2}$. If $X\subseteq N$,
-    $\varphi$ is the copied vector built from unit blank vectors, $\varphi$ and
-    $\eta$ have unit norm, $\|U\varphi-\eta\|\le C_1n^{-K/2}$ with $K\ge4(M+2)$ and
-    $|X|\log q\le C_2n^2$, then every part of $X$ has mutual information at most
-    $8\sqrt{C_1}\,(1+C_2)\,n^{-M}$ in $\Omega$ with every physical region avoiding
-    $N$.
+    On $\widetilde\Lambda=\Lambda\sqcup(s'\sqcup e')$, suppose $R_0$ is
+    supported on $N\sqcup s'$, $L'\otimes I_{s'\sqcup e'}$ is supported on
+    $N\subseteq\Lambda$, and the hypotheses of
+    Theorem~\ref{thm:area_law_amplification_unitary_error} hold. Then there is a
+    unitary $U$ supported on $N\sqcup s'$ with
+    $\|U\varphi-\eta\|\le a+\sqrt{2a+6\varepsilon+9\varepsilon^2}$. If
+    $X\subseteq N$, $\varphi=\mathcal W\varphi_{\rm copy}$ and
+    $\eta=\mathcal W\eta_{\rm rest}$ have unit norm,
+    $\|U\varphi-\eta\|\le C_1n^{-K/2}$ with $K\ge4(M+2)$, and
+    $|X|\log q\le C_2n^2$, then for every $X'\subseteq X$ and
+    $J\subseteq\Lambda\setminus N$,
+    \begin{align}
+        I_\Omega(X':J)\le 8\sqrt{C_1}\,(1+C_2)\,n^{-M}.
+        \label{eq:al_amp_enlarged_mi_bound}
+    \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
-    Relabelling the enlarged configurations as physical configurations together with
-    the configurations of $s'$ and $e'$ makes
-    Theorem~\ref{thm:al_amp_supported_polar} applicable on the enlarged sites. For the entropy
-    comparison, $\eta$ is $\Omega$ tensored with a unit ancillary vector, so it has
-    no mutual information between $e'$ and a physical region, and the copy of
-    each $X'\subseteq X$ in $e'$ carries $I_\Omega(X':J)$ by
-    Theorem~\ref{thm:al_amp_ancilla_sites}.
+    Applying Theorem~\ref{thm:al_amp_supported_polar} on $\widetilde\Lambda$
+    with $S=N\sqcup s'$ gives $U$. Since $N\sqcup s'$ is disjoint from
+    $e'\sqcup J$, $I_\eta(e':J)=0$ by (\ref{eq:al_amp_ancilla_transport}) and
+    Theorem~\ref{thm:al_amp_ancilla_sites}, and $I_\varphi(X'_{e'}:J)=I_\Omega(X':J)$
+    by (\ref{eq:al_amp_ancilla_copy_mi}), Theorem~\ref{thm:al_amp_supported_polar}
+    applied to $e'$ and $J$ yields (\ref{eq:al_amp_enlarged_mi_bound}).
 \end{proof}
 
 \begin{theorem}[The amplification radius is a power of the scale]
@@ -276,17 +291,17 @@ comparison treats the two copies as additional sites.
     \lean{TNLean.PEPS.AreaLaw.exists_amplificationRadius_le}
     \leanok
     \uses{def:area_law_amplification_time_radius}
-    Let $g>0$, $C'\ge0$, $C_0\ge0$, $0<\alpha$, $0<\varepsilon\le2/5$ and let $K$ be
-    an integer. There is $C$ such that at every scale $n\ge1$ and for every
-    $0\le\mathcal I\le C_0n^{1-\varepsilon}$ the radius of
-    Definition~\ref{def:area_law_amplification_time_radius}, chosen with
-    $w=n^{3/5}$, is at most $Cn^{(1-\varepsilon)/\alpha}$.
+    Let $g>0$, $C'\ge0$, $C_0\ge0$, $\alpha>0$, $0<\varepsilon\le2/5$, and
+    $K\in\mathbb Z$. There exists $C$ such that for all $n\ge1$ and
+    $0\le\mathcal I\le C_0n^{1-\varepsilon}$, the radius $r$ of
+    Definition~\ref{def:area_law_amplification_time_radius} with $w=n^{3/5}$
+    satisfies $r\le Cn^{(1-\varepsilon)/\alpha}$.
 \end{theorem}
 \begin{proof}
     \leanok
-    Bounding $n^{3/5}$ and $\log n$ by multiples of $n^{1-\varepsilon}$ gives
-    $C'(t_*+K\log n)\le C'Bn^{1-\varepsilon}$, and raising to the power $1/\alpha$
-    absorbs the rounding into $n^{(1-\varepsilon)/\alpha}\ge1$.
+    Since $w=n^{3/5}\le n^{1-\varepsilon}$ and $\log n\le n^{1-\varepsilon}$ for
+    $n\ge1$, $C'(t_*+K\log n)\le C'Bn^{1-\varepsilon}$, and raising to the
+    power $1/\alpha$ gives $r\le Cn^{(1-\varepsilon)/\alpha}$.
 \end{proof}
 
 \begin{theorem}[Proposition 10.2: amplification]
@@ -305,32 +320,32 @@ comparison treats the two copies as additional sites.
         thm:area_law_amplification_scale_bounds,thm:al_amp_typical_projectors,
         thm:al_amp_ancilla_sites,thm:al_amp_supported_polar,thm:al_amp_enlarged_steps,
         thm:al_amp_radius_bound}
-    If $q=0$ or $J<0$, a gapped ground vector exists only on the empty domain,
-    where every part of the target is empty. Otherwise fix $p=10^6$,
-    $\alpha=p/(p+1)$ and $K=4(M+2)$, and take the constants of the excited-state
-    decay, the omission and truncation estimates, the good realization and the
-    typical projectors. At the scale $n$, let $w=n^{3/5}$ and
-    $\mathcal I=I_\Omega(X:\Lambda\setminus S_0)$, and choose $t_*$ and $r$ as in
-    Definition~\ref{def:area_law_amplification_time_radius}; the radius bound holds by
-    Theorem~\ref{thm:al_amp_radius_bound}. With blank vectors on the ancillas,
-    Theorem~\ref{thm:al_amp_restoring_transport} gives the restoring operator,
-    the column operator and the vectors $\varphi,\eta$ with the ancillas as
-    spectators, at failure probability $\delta=n^{-2K}$. On the clock words of
-    time $t_*$, the excited-state decay bounds the excited component of
-    $\zeta=R_0\varphi$, the omission estimate applied through the column identity
-    bounds the omitted events, and the truncation estimate bounds the radius
-    truncation; Theorem~\ref{thm:al_amp_constraint_word_lists} identifies the
-    retained products of the two estimates. A good realization makes all three
-    at most $n^{-K}$. On the enlarged sites, $R_0$ acts on $S_0\sqcup s'$ and the
-    truncated product on $N_{2r}^\Lambda(S_0)$, so
-    Theorem~\ref{thm:al_amp_supported_polar} gives a unitary on
-    $N_{2r}^\Lambda(S_0)\sqcup s'$ with $\|U\varphi-\eta\|\le9n^{-K/2}$. For
-    $J$ avoiding $N_{2r}^\Lambda(S_0)$, the vector $\eta$ has no mutual
-    information between $e'$ and $J$, and the copy of each $X'\subseteq X$ in
-    $e'$ carries $I_\Omega(X':J)$ by Theorem~\ref{thm:al_amp_ancilla_sites}.
-    Since $\log\dim e'=|X|\log q\le C_0n^2\log q$, the entropy comparison gives
-    $I_\Omega(X':J)\le24(1+C_0\log q)\,n^{-M}$. The cut-clearance clause is
-    Theorem~\ref{thm:area_law_amplification_of_radius_output}.
+    If $q=0$ or $J<0$, a gapped ground vector exists only on $\Lambda=\varnothing$.
+    Otherwise fix $p=10^6$, $\alpha=p/(p+1)$, and $K=4(M+2)$. At scale $n$, set
+    $w=n^{3/5}$, $\mathcal I=I_\Omega(X:\Lambda\setminus S_0)$, and $\delta=n^{-2K}$,
+    and choose $t_*$ and $r$ as in
+    Definition~\ref{def:area_law_amplification_time_radius}, so
+    $r\le Cn^{(1-\varepsilon)/\alpha}$ by Theorem~\ref{thm:al_amp_radius_bound}.
+    Theorem~\ref{thm:al_amp_typical_projectors} and
+    Theorem~\ref{thm:al_amp_restoring_transport} provide $R_0,B_0,\varphi,\eta$
+    satisfying (\ref{eq:al_amp_restoring_transport_norms}) and
+    (\ref{eq:al_amp_restoring_transport_adj}). On clock words at time $t_*$,
+    Theorem~\ref{thm:al_lattice_excited_decay} bounds the excited component of
+    $\zeta=R_0\varphi$, Theorem~\ref{thm:al_lattice_constraint_omission} applied
+    via $R_0\varphi=B_0(\Omega\otimes\xi)$ bounds the omitted events,
+    Theorem~\ref{thm:al_lattice_product_truncation} bounds the radius-$r$
+    truncation $L'$ supported on $N_{2r}^\Lambda(S_0)$, and
+    Theorem~\ref{thm:al_amp_constraint_word_lists} matches the filtered clock
+    products. By Theorem~\ref{thm:area_law_amplification_scale_bounds}, a good
+    realization makes all three errors at most $n^{-K}$. Applying
+    Theorem~\ref{thm:al_amp_enlarged_steps} with $N=N_{2r}^\Lambda(S_0)$,
+    $C_1=9$, and $C_2=C_0\log q$ gives a unitary $U$ on
+    $N_{2r}^\Lambda(S_0)\sqcup s'$ with $\|U\varphi-\eta\|\le 9n^{-K/2}$ and,
+    via (\ref{eq:al_amp_enlarged_mi_bound}),
+    $I_\Omega(X':J)\le 24(1+C_0\log q)\,n^{-M}$ for every $X'\subseteq X$ and
+    $J\subseteq\Lambda\setminus N_{2r}^\Lambda(S_0)$. Finally,
+    Theorem~\ref{thm:area_law_amplification_of_radius_output} yields the
+    cut-clearance form.
 \end{proof}
 
 \begin{theorem}[Amplification at the constants of its proof]
@@ -339,19 +354,19 @@ comparison treats the two copies as additional sites.
         TNLean.PEPS.AreaLaw.amplificationBoundAt_explicit}
     \leanok
     \uses{def:area_law_amplification_bound}
-    Let $q,R\in\mathbb N$, $J\in\mathbb R$, $\Delta>0$, $C_0>0$ and
-    $M\in\mathbb N$. Let $C_2$ and $N_2$ be the constant and the threshold
-    produced by the proof of Theorem~\ref{thm:area_law_amplification} at
-    $C_0$ and $M$, with the locality constant and rate of the positive
-    constraints at the power $p=10^6$. Then the amplification bound at the
-    input constant $C_0$ and the order $M$ holds with constant $C_2$ and
-    threshold the larger of $N_2$ and the radius threshold of $C_2$.
+    Let $q,R\in\mathbb N$, $J\in\mathbb R$, $\Delta>0$, $C_0>0$, and
+    $M\in\mathbb N$. With $p=10^6$, let $C_2$ and $N_2$ be the constant and
+    threshold constructed in the proof of
+    Theorem~\ref{thm:area_law_amplification} at $(C_0,M)$, and let $N_{\rm rad}(C_2)$
+    be the corresponding radius threshold. Then the amplification bound at
+    $(C_0,M)$ holds with constant $C_2$ and threshold
+    $\max\{N_2,N_{\rm rad}(C_2)\}$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:area_law_amplification}
-    The proof of Theorem~\ref{thm:area_law_amplification} produces these
-    constant and threshold.
+    Unfold the constant $C_2$ and threshold $\max\{N_2,N_{\rm rad}(C_2)\}$
+    constructed in the proof of Theorem~\ref{thm:area_law_amplification}.
 \end{proof}
 
 \begin{theorem}[Uniform area law from the collar and two-family bounds]
@@ -359,15 +374,16 @@ comparison treats the two copies as additional sites.
     \lean{TNLean.PEPS.AreaLaw.uniformAreaLaw_of_collar_twoFamilies}
     \leanok
     \uses{def:area_law_collar_bound,def:area_law_two_family_decomposition}
-    Suppose that for all $q\ge1$, $R\ge0$ and $J,\Delta>0$ there are template
-    constants $D_0,C_{\rm tpl}$ for which the sublinear collar bound and the
-    two-family decomposition hold. Then the conclusion of
+    Suppose that for all $q\ge1$, $R\ge0$, and $J,\Delta>0$ there exist template
+    constants $D_0,C_{\rm tpl}$ satisfying the sublinear collar bound
+    (Definition~\ref{def:area_law_collar_bound}) and the two-family
+    decomposition (Definition~\ref{def:area_law_two_family_decomposition}). Then
     Theorem~\ref{thm:openai_uniform_area_law} holds, proving Theorem~1.1 of
     \cite{OpenAI2026AreaLaw} conditionally on Propositions~9.6 and~11.2.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:area_law_conditional_assembly,thm:area_law_amplification}
-    Applying Theorem~\ref{thm:area_law_conditional_assembly} with the amplification
-    bound of Theorem~\ref{thm:area_law_amplification} gives the conclusion.
+    Combine Theorem~\ref{thm:area_law_conditional_assembly} with
+    Theorem~\ref{thm:area_law_amplification}.
 \end{proof}

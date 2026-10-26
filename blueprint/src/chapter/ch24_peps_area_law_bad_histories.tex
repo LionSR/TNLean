@@ -1,13 +1,9 @@
 \section{Bad-history probability}
 \label{sec:al_scan_bad_histories}
 
-Keep the finite histories and physical graph from the preceding section.
-Write $r=r_0$ and $M=\lceil C_1nD\rceil$. Time below counts completed
+Retain the finite histories and physical graph from Section~\ref{sec:al_finite_scan_histories}, writing $r=r_0$ and $M=\lceil C_1nD\rceil$. Time counts completed
 fill--charge pairs, so the charge at index $t$ sees the front after $t+1$ fills.
-All probabilities in this section are classical finite-history probabilities.
-The estimates formalize the finite ancestry argument of
-\cite[Section~9, charge ancestry and availability]{OpenAI2026AreaLaw}; the
-asymptotic scale specialization is proved below.
+All probabilities below are classical finite-history probabilities (\cite[Section~9, charge ancestry and availability]{OpenAI2026AreaLaw}).
 
 \begin{theorem}[Ancestry extracted from assignments]
     \label{thm:al_scan_actual_ancestry}
@@ -26,23 +22,12 @@ asymptotic scale specialization is proved below.
         TNLean.PEPS.AreaLaw.Scan.CollarScan.bad_bandState_has_long_chargeAncestry_domainGraph}
     \leanok
     \uses{def:al_scan_actual_histories}
-    Suppose the target is nonempty, $8Km\le L$, and the cut endpoints
-    have ambient distance greater than $2L+10r$ from the target.
-    Every assigned site of $A$ has a chronological selected-charge path rooted
-    at an initially assigned site or a scheduled fill slot. Its charge times
-    are strictly increasing. For a nonempty path, its endpoint lies in its last charge ball, and
-    successive anchors are at graph distance at most $2r$.
-    Initial assignments persist. A bad endpoint was initially middle and lies
-    in $A\cap T_L$. A scheduled fill cannot create a bad lead.
+    Assume $T\ne\varnothing$, $8Km\le L$, and $\operatorname{dist}_\infty(T,Z)>2L+10r$.
+    Every assigned site $x\in A$ has a selected-charge path with strictly increasing times rooted at an initially assigned site or scheduled fill slot; if nonempty, $x$ lies in the last charge ball and successive anchors have graph distance $\le 2r$.
+    Initial assignments persist, a scheduled fill cannot create a bad lead, and every bad endpoint was initially in $Y$ and lies in $A\cap T_L$.
 \end{theorem}
 \begin{proof}\leanok
-    We proceed by induction on the fill--charge evaluation. If the last charge makes a new
-    assignment, we select a same-side predecessor in that ball. Because the ball meets the
-    old middle, the cut clearance places the whole ball inside $A$, including far-side
-    predecessors despite the exterior initially being far. Repeating this step for an earlier
-    assignment or stopping at the preceding fill yields the path, whose ambient family also
-    permits selected charges that made no move since only containment of the evaluated
-    assignments is used.
+    By induction on the fill--charge steps: if a charge assigns $x$, choose a same-side predecessor in that ball (which lies in $A$ by $\operatorname{dist}_\infty(T,Z)>2L+10r$). Iterating back to an initial assignment or scheduled fill yields the path.
 \end{proof}
 
 \begin{theorem}[Length and time window of a bad ancestry]
@@ -54,21 +39,19 @@ asymptotic scale specialization is proved below.
         TNLean.PEPS.AreaLaw.Scan.CollarScan.ChargeAncestry.bad_length_and_time}
     \leanok
     \uses{thm:al_scan_actual_ancestry}
-    The fronts are monotone. For $n>0$ and pair times $a\le b$,
+    Fronts $j(t)$ are monotone, and for $n>0$ and pair times $a\le b$,
     \begin{align}
         b-a\le 2n\bigl(j(b)-j(a)+2\bigr).
+        \label{eq:al_scan_front_speed}
     \end{align}
-    If an assigned endpoint has lead greater than $D/2$, its ancestry is
-    nonempty. For its length $s$ and every recorded charge time $t$,
+    If an assigned endpoint at time $k$ has lead $>D/2$, its ancestry has length $s\ge1$ and every recorded charge time $t$ satisfies
     \begin{align}
         D<4rs,\qquad k-(t+1)\le 4n(rs+1).
+        \label{eq:al_scan_bad_window}
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Each charge changes oriented depth by at most $2r$. Retaining the front at the
-    first charge as the reference front, rather than replacing it by the final
-    front, allows the exact padded fill counts to yield the displayed speed estimate with
-    both floor errors included. Combining the two inequalities gives the stated bounds.
+    Each charge shifts oriented depth by at most $2r$, so lead $>D/2$ gives $D/2<2rs-(j(k)-j(t))$ and $j(k)-j(t)<2rs$; combining with (\ref{eq:al_scan_front_speed}) at $a=t,b=k$ yields (\ref{eq:al_scan_bad_window}).
 \end{proof}
 
 \begin{theorem}[Probability of prescribed labelled hits]
@@ -76,22 +59,13 @@ asymptotic scale specialization is proved below.
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_chargeWeight_selected_le,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_chargePathWeight_le_of_selected,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_chargePathWeight_le_of_selected_list,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_chargePathWeight_le_sum_of_selected_cover,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_chargePathWeight_le_sum_of_selected_list_cover}
     \leanok
     \uses{def:al_scan_actual_histories}
-    Assume $M>0$ and fix all initial offsets. Requiring a specified side and label in one band
-    at each of $s$ distinct times has probability at most $(2M)^{-s}$.
-    The same upper bound holds after imposing arbitrary additional conditions.
-    For a finite family of such prescriptions covering an event, the event's
-    probability is at most the sum of these bounds.
+    For $M>0$ and fixed initial offsets, prescribing a side and label in one band at $s$ distinct times has probability at most $(2M)^{-s}$, and a union of such prescriptions is bounded by the sum of $(2M)^{-s}$.
 \end{theorem}
 \begin{proof}\leanok
-    Sorted labelled candidate lists contain a label at most once, even when
-    different labels share an anchor, so one required hit constrains at most
-    one side--slot coordinate. Factoring the finite product of independent choices
-    and taking a union bound yields the estimate, because successful physical moves
-    need not be independent to lie inside the selected-coordinate events.
+    Each sorted candidate list contains a label at most once, so each hit fixes at most one of $2M$ choices; independence across distinct times and the union bound give the result.
 \end{proof}
 
 \begin{theorem}[Counting spatial label paths]
@@ -105,20 +79,14 @@ asymptotic scale specialization is proved below.
         TNLean.PEPS.AreaLaw.Scan.card_chargeAnchorPaths_domainGraph_le}
     \leanok
     \uses{thm:al_scan_actual_ancestry}
-    Let $B$ bound the number of labels whose anchors lie within graph distance
-    $2r$ of any site. The number of reversed label paths of length $s$ from a
-    fixed endpoint is at most $B^s$. In an induced square-lattice domain with
-    anchor multiplicity at most $\mu$, one may take
+    If at most $B$ labels have anchors within graph distance $2r$ of any site, there are at most $B^s$ reversed label paths of length $s$ from a fixed endpoint; for anchor multiplicity $\le\mu$, one may take
     \begin{align}
         B=\mu\bigl(1+2(2r)(2r+1)\bigr).
+        \label{eq:al_scan_anchor_branching}
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Choosing a nearby labelled anchor inductively leaves a finite
-    union of at most $B$ choices at each step. Fiber counting retains label
-    multiplicity while an induced graph ball injects into the ambient lattice
-    diamond, and counting labels alone suffices because predecessor choices do
-    not enter the selected-coordinate probability.
+    Each step has at most $B$ choices inside a graph $2r$-ball, which contains at most $1+2(2r)(2r+1)$ sites.
 \end{proof}
 
 \begin{theorem}[Distinct charge times in a terminal interval]
@@ -135,17 +103,10 @@ asymptotic scale specialization is proved below.
         TNLean.PEPS.AreaLaw.Scan.card_ancestry_time_window_le}
     \leanok
     \uses{thm:al_scan_ancestry_window}
-    A terminal window specified by $k-(t+1)\le W$ and $0\le t<k$ contains
-    at most $W+1$ indices. Choosing $s$ of its $v$ indices and a reversed label
-    path from a finite family of size $b$ gives at most $\binom vs b$
-    chronologically labelled paths. Their times are distinct.
-    For $n,r,s>0$ and $W=4n(rs+1)$, one has $v\le 9nrs$.
+    The window $\{0\le t<k:k-(t+1)\le W\}$ has size $v\le\min\{k,W+1\}$ (with $v\le 9nrs$ for $n,r,s>0$ and $W=4n(rs+1)$), and pairing $s$-element subsets with a label family of size $b$ yields at most $\binom vs b$ chronologically ordered paths.
 \end{theorem}
 \begin{proof}\leanok
-    Sorting the subsets of cardinality $s$ and pairing their times with the
-    label path in chronological order cannot increase cardinality.
-    Keeping the inclusive endpoint produces $W+1$, and positivity absorbs both this term and
-    the additive rounding terms into $9nrs$.
+    There are $\binom vs$ strictly increasing $s$-tuples of times in the window, and $4n(rs+1)+1\le 9nrs$ for $n,r,s\ge1$.
 \end{proof}
 
 \begin{theorem}[Finite cover of bad ancestries]
@@ -162,21 +123,16 @@ asymptotic scale specialization is proved below.
         TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_badChargePaths_le}
     \leanok
     \uses{thm:al_scan_actual_ancestry,thm:al_scan_ancestry_window,thm:al_scan_anchor_path_count,thm:al_scan_timed_path_count}
-    For a fixed endpoint and pair time $k$, all bad ancestries lie in the finite
-    union of the timed spatial path families with $0\le s\le k$ and $D<4rs$.
-    Every path in this family has valid distinct times. For every $q\ge0$, its
-    sum of weights $q^s$ is at most
+    For a fixed endpoint and pair time $k$, all bad ancestries belong to the timed spatial path families with $0\le s\le k$ and $D<4rs$, and for any $q\ge0$ the sum of $q^s$ over this cover is at most
     \begin{align}
         \sum_{\substack{0\le s\le k \\D<4rs}}
         \binom{v_s(k)}s(Bq)^s,
         \qquad v_s(k)=\min\{k,4n(rs+1)+1\}.
+        \label{eq:al_scan_bad_path_cover}
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    The reversed labels satisfy the spatial chain relation, and strict time order
-    bounds the path length by $k$, placing each path into its sorted-time
-    family. Because families of different lengths are disjoint, summing their
-    cardinality bounds gives the displayed estimate.
+    Combine Theorems~\ref{thm:al_scan_actual_ancestry}, \ref{thm:al_scan_ancestry_window}, \ref{thm:al_scan_anchor_path_count}, and~\ref{thm:al_scan_timed_path_count} over $0\le s\le k$ with $D<4rs$.
 \end{proof}
 
 \begin{theorem}[Binomial cancellation]
@@ -189,11 +145,11 @@ asymptotic scale specialization is proved below.
     \begin{align}
         \binom vs\le (ev/s)^s,\qquad
         \binom vs a^s\le(eCa)^s.
+        \label{eq:al_scan_binomial_cancellation}
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Combining $\binom vs\le v^s/s!$ with $s^s/s!\le e^s$ cancels the factorial
-    against the ancestry length in the time-window estimate.
+    Use $\binom vs\le v^s/s!$ and $s^s/s!\le e^s$.
 \end{proof}
 
 \begin{theorem}[Compact collar cardinality]
@@ -202,15 +158,11 @@ asymptotic scale specialization is proved below.
         TNLean.PEPS.AreaLaw.Scan.card_compact_collar_le}
     \leanok
     \uses{def:al_scan_actual_histories}
-    If every positive ambient layer through $L$ has at most $n$ sites, then
-    \begin{align}
-        |A\cap T_L|\le |T_L|\le |T|+nL.
-    \end{align}
+    If $|T_d\setminus T_{d-1}|\le n$ for $1\le d\le L$, then
+    $|A\cap T_L|\le |T_L|\le |T|+nL$.
 \end{theorem}
 \begin{proof}\leanok
-    Because the zero dilation is $T$, summing the cardinalities of successive dilation
-    differences and injecting physical collar sites into the ambient dilation gives the bound
-    without introducing any volume from $\Lambda\setminus A$.
+    Sum $|T_d\setminus T_{d-1}|\le n$ over $1\le d\le L$ from $T_0=T$.
 \end{proof}
 
 \begin{theorem}[Exact prefix-history marginals]
@@ -221,15 +173,10 @@ asymptotic scale specialization is proved below.
         TNLean.PEPS.AreaLaw.Scan.sum_historyWeight_mul_prefix}
     \leanok
     \uses{def:al_scan_actual_histories}
-    Restricting a full history to its first $j$ pairs preserves its offsets and
-    earlier charge coordinates. For $j\le N$ and $M>0$, every real-valued
-    function of this prefix has the same expectation under length-$N$ history
-    weights as under length-$j$ history weights.
+    For $j\le N$ and $M>0$, any function of the length-$j$ prefix history has the same expectation under length-$N$ and length-$j$ history weights.
 \end{theorem}
 \begin{proof}\leanok
-    Appending a charge preserves all earlier prefixes, so summing the appended independent
-    choices of total weight one and inducting from $j$ to $N$ establishes the identity; empty
-    offset spaces give zero on both sides without extra conventions.
+    Each appended step has total weight $1$; induct from $j$ to $N$.
 \end{proof}
 
 \begin{theorem}[Finite bad-endpoint bound]
@@ -239,18 +186,15 @@ asymptotic scale specialization is proved below.
         TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_chargePathWeight_bad_endpoint_domainGraph_le}
     \leanok
     \uses{thm:al_scan_bad_path_cover,thm:al_scan_selected_chain_probability,thm:al_scan_anchor_path_count}
-    Fix the offsets, a band, a side, and an endpoint in $A$. Under the
-    cut-clearance hypotheses and $n,M>0$, the probability that the endpoint is
-    assigned with lead greater than $D/2$ is at most
+    For fixed offsets, band, side, and endpoint in $A$, under the hypotheses of Theorem~\ref{thm:al_scan_actual_ancestry} and $n,M>0$, the probability of assignment with lead $>D/2$ at time $k$ is at most
     \begin{align}
         R_k=\sum_{\substack{0\le s\le k \\D<4rs}}
         \binom{v_s(k)}s\left(\frac{B}{2M}\right)^s.
+        \label{eq:al_scan_bad_endpoint_tail}
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Extracting the ancestry from the evaluated physical history places it in the finite
-    cover, where the selected-coordinate probability bound applies to each path while
-    the graph and ambient depth provide the spatial variation and diamond count.
+    Apply Theorem~\ref{thm:al_scan_selected_chain_probability} to the cover (\ref{eq:al_scan_bad_path_cover}) with $q=(2M)^{-1}$.
 \end{proof}
 
 \begin{theorem}[Bands, sides, compact endpoints, and offsets]
@@ -262,15 +206,10 @@ asymptotic scale specialization is proved below.
         TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_historyWeight_bad_old_domainGraph_le}
     \leanok
     \uses{thm:al_scan_bad_endpoint_probability,thm:al_scan_actual_ancestry}
-    For $m>0$, the total weight of bad completed histories at time $k$ is at most
-    $2K|A\cap T_L|R_k$. The same bound holds for old charge histories after
-    their preceding fill.
+    For $m>0$, both the bad completed-history probability at time $k$ and the bad old-history probability after the preceding fill are at most $2K|A\cap T_L|R_k$.
 \end{theorem}
 \begin{proof}\leanok
-    Because every bad endpoint belongs to the compact collar, taking a union bound over the collar,
-    both sides, and all bands and averaging over the normalized initial offsets gives the
-    completed-history estimate. Since a fill cannot create a bad lead, old charge states
-    satisfy the same bound.
+    By Theorem~\ref{thm:al_scan_actual_ancestry}, every bad endpoint lies in $A\cap T_L$ and fills cannot create a bad lead; union-bound (\ref{eq:al_scan_bad_endpoint_tail}) over $K$ bands, $2$ sides, and $A\cap T_L$, and average over offsets.
 \end{proof}
 
 \begin{theorem}[All times on one full history]
@@ -280,18 +219,11 @@ asymptotic scale specialization is proved below.
         TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_historyWeight_bad_through_domainGraph_le}
     \leanok
     \uses{thm:al_scan_bad_history_probability,thm:al_scan_prefix_marginal,thm:al_scan_compact_collar_card}
-    Under the source ambient layer bound, the probability that some completed
-    prefix of one length-$N$ history is bad is at most
-    \begin{align}
-        2K(|T|+nL)\sum_{k=0}^N R_k.
-    \end{align}
-    Goodness of these completed prefixes also guarantees goodness after every
-    intervening deterministic fill.
+    Under the layer bound of Theorem~\ref{thm:al_scan_compact_collar_card}, the probability that some prefix ($k\le N$) of a length-$N$ history is bad (either completed or after a fill) is at most
+    $2K(|T|+nL)\sum_{k=0}^N R_k$.
 \end{theorem}
 \begin{proof}\leanok
-    Taking the finite union over prefix times and substituting their exact marginals
-    together with the compact collar cardinality bound yields the estimate, where all tests
-    concern the same full history rather than independently sampled histories at different times.
+    Combine Theorems~\ref{thm:al_scan_bad_history_probability}, \ref{thm:al_scan_prefix_marginal}, and~\ref{thm:al_scan_compact_collar_card} with a union bound over $0\le k\le N$.
 \end{proof}
 
 \begin{theorem}[Finite geometric bad-history tail]
@@ -303,23 +235,15 @@ asymptotic scale specialization is proved below.
         TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_historyWeight_bad_through_geometric_domainGraph_le}
     \leanok
     \uses{thm:al_scan_bad_all_times,thm:al_scan_binomial_cancellation,thm:al_scan_timed_path_count}
-    If additionally $r>0$, set
-    \begin{align}
-        \rho=\frac{9e\,nrB}{2M}.
-    \end{align}
-    The probability of a bad prefix is at most
+    For $r>0$ and $\rho=9e\,nrB/(2M)$, the bad-prefix probability of Theorem~\ref{thm:al_scan_bad_all_times} is at most
     \begin{align}
         2K(|T|+nL)(N+1)
         \sum_{\substack{0\le s\le N \\D<4rs}}\rho^s.
+        \label{eq:al_scan_bad_geometric_tail}
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Applying the binomial cancellation with $v_s(k)\le9nrs$ and using the monotonicity of the
-    nonnegative length sum in the observation horizon gives the bound. The label-only count
-    produces a ratio of order $r^3/D$ when $M$ has the source scale $nD$
-    with uniformly bounded anchor multiplicity and fixed positive $C_1$,
-    whereas counting predecessor sites as well gives the manuscript's looser $r^5/D$;
-    no asymptotic limit or quantum measure enters.
+    Apply (\ref{eq:al_scan_binomial_cancellation}) with $v_s(k)\le 9nrs$ (Theorem~\ref{thm:al_scan_timed_path_count}) to (\ref{eq:al_scan_bad_endpoint_tail}) for each $0\le k\le N$.
 \end{proof}
 
 \begin{figure}[ht]
@@ -376,18 +300,11 @@ asymptotic scale specialization is proved below.
         TNLean.PEPS.AreaLaw.Scan.eventually_const_mul_roundedLogRadius_cube_le_rpow,
         TNLean.PEPS.AreaLaw.Scan.eventually_one_le_roundedLogRadius}
     \leanok
-    Fix $C_r\ge0$ and $r(n)=\lceil C_r(\log n)^2\rceil$.
-    For every $\varepsilon>0$, one has $r(n)=o(n^\varepsilon)$.
-    Consequently, for every fixed real $A$, both
-    $Ar(n)\le n^\varepsilon$ and $Ar(n)^3\le n^\varepsilon$
-    hold for sufficiently large $n$. If $C_r>0$, then $r(n)\ge1$
-    for sufficiently large $n$.
+    For $C_r\ge0$ and $r(n)=\lceil C_r(\log n)^2\rceil$, every $\varepsilon>0$ and $A\in\mathbb R$ satisfy $r(n)=o(n^\varepsilon)$ and eventually
+    $Ar(n)\le n^\varepsilon$ and $Ar(n)^3\le n^\varepsilon$ (and $r(n)\ge1$ when $C_r>0$).
 \end{lemma}
 \begin{proof}\leanok
-    Because the ceiling differs from the nonnegative squared logarithm by less than one and
-    every fixed power of the logarithm is negligible relative to any positive
-    power of $n$, applying this growth bound first with exponent $\varepsilon$ and then with
-    exponent $\varepsilon/3$ before cubing yields the claims.
+    Follows from $(\log n)^2=o(n^{\varepsilon/3})$.
 \end{proof}
 
 \begin{lemma}[A fixed ancestry cutoff]
@@ -399,28 +316,18 @@ asymptotic scale specialization is proved below.
         TNLean.PEPS.AreaLaw.Scan.CollarScan.badHistory_power_le}
     \leanok
     \uses{thm:al_scan_bad_geometric_tail}
-    Write $b$ for the fixed anchor multiplicity bound. For $n,D,r>0$ and
-    $M\ge C_1nD$, where $C_1>0$, the ratio satisfies
+    For anchor multiplicity $\le b$, $n,D,r>0$, and $M\ge C_1nD$ ($C_1>0$),
     \begin{align}
         0\le\rho\le \frac{117e b}{2C_1}\frac{r^3}{D}.
+        \label{eq:al_scan_bad_ratio_cube}
     \end{align}
     If $n\ge1$, $a\ge0$, $4rJ\le D$, and $\rho\le n^{-a}$, then
-    \begin{align}
-        \sum_{\substack{0\le s\le N \\D<4rs}}\rho^s
-        \le (N+1)n^{-aJ}.
-    \end{align}
-    If in addition $K,L,m\le n$, $|T|\le C_Tn^2$, $C_T\ge0$, and $N=nm$, then
-    \begin{align}
-        2K(|T|+nL)(N+1)^2\le8(C_T+1)n^7.
-    \end{align}
-    For $n\ge8(C_T+1)$ and $p+8\le aJ$, this prefactor times
-    $n^{-aJ}$ is at most $n^{-p}$.
+    $\sum_{0\le s\le N,\,D<4rs}\rho^s\le (N+1)n^{-aJ}$.
+    If moreover $K,L,m\le n$, $|T|\le C_Tn^2$ ($C_T\ge0$), and $N=nm$, then
+    $2K(|T|+nL)(N+1)^2\le8(C_T+1)n^7$, so for $n\ge8(C_T+1)$ and $p+8\le aJ$, (\ref{eq:al_scan_bad_geometric_tail}) is at most $n^{-p}$.
 \end{lemma}
 \begin{proof}\leanok
-    For $r\ge1$, the lattice diamond factor is at most $13r^2$, and $n$ cancels
-    against the padded capacity. Since every retained length is at least
-    $J$ across at most $N+1$ terms, bounding $N+1$ by $2n^2$ and absorbing
-    the remaining fixed constant into one additional power of $n$ completes the estimate.
+    Use $1+2(2r)(2r+1)\le 13r^2$ ($r\ge1$) for (\ref{eq:al_scan_bad_ratio_cube}); $4rJ\le D<4rs$ implies $s\ge J$ and $\rho^s\le n^{-aJ}$; and $N+1\le 2n^2$ bounds the prefactor by $8(C_T+1)n^7\le n^8$.
 \end{proof}
 
 \begin{theorem}[Bad-history probability at the source scales]
@@ -431,28 +338,19 @@ asymptotic scale specialization is proved below.
     \uses{thm:al_scan_bad_geometric_tail,lem:al_scan_rounded_radius,
         lem:al_scan_fixed_ancestry_cutoff}
     Fix $0<\ell$, $0<\kappa<\mu<1-\ell$, $C_r,C_1>0$, $C_T\ge0$,
-    a finite anchor multiplicity bound $b$, and a real exponent $p$.
-    Set
+    anchor multiplicity bound $b$, and $p\in\mathbb R$, and set
     \begin{align}
-        r & =\lceil C_r(\log n)^2\rceil, & D                      & =\lceil n^\kappa\rceil,
-          & m                            & =\lfloor n^\mu\rfloor,                           \\
-        L & =\lfloor n^{1-\ell}\rfloor,  & K                      & =\lfloor L/(8m)\rfloor,
+        r & =\lceil C_r(\log n)^2\rceil, & D                                                       & =\lceil n^\kappa\rceil,
+          & m                            & =\lfloor n^\mu\rfloor,                           \notag                           \\
+        L & =\lfloor n^{1-\ell}\rfloor,  & K                                                       & =\lfloor L/(8m)\rfloor,
           & M                            & =\lceil C_1nD\rceil.
+        \label{eq:al_scan_bad_history_scales}
     \end{align}
-    For all sufficiently large $n$, uniformly over finite lattice domains,
-    nonempty targets with $|T|\le C_Tn^2$, and scanners satisfying
-    the ambient row bound, the cut clearance above, and anchor multiplicity
-    at most $b$, the probability that any prefix through $nm$ fill--charge
-    pairs has bad lead on either side in any band is at most $n^{-p}$.
-    In particular $p=200$ gives the bad-history exponent in Lemma~9.1.
+    For all sufficiently large $n$, uniformly over finite domains,
+    nonempty $T$ with $|T|\le C_Tn^2$, and scanners satisfying Theorem~\ref{thm:al_scan_compact_collar_card}, $\operatorname{dist}_\infty(T,Z)>2L+10r$, and anchor multiplicity $\le b$, the probability that any prefix through $nm$ pairs is bad is at most $n^{-p}$ (giving $n^{-200}$ at $p=200$ in \cite[Lemma~9.1]{OpenAI2026AreaLaw}).
 \end{theorem}
 \begin{proof}\leanok
-    Fixing an integer $J$ with $p+8\le\kappa J/2$ before choosing $n$ or
-    the physical domain, the rounded-radius estimates eventually give
-    $\rho\le n^{-\kappa/2}$ and $4rJ\le D$, while the source floors give
-    $K,L,m\le n$. Applying the fixed-cutoff estimate to the finite-history
-    union bound then controls both completed prefixes and old-charge states,
-    since a scheduled fill cannot create a bad lead.
+    Choose $J\in\mathbb N$ with $p+8\le\kappa J/2$; Lemma~\ref{lem:al_scan_rounded_radius} and (\ref{eq:al_scan_bad_ratio_cube}) eventually yield $\rho\le n^{-\kappa/2}$ and $4rJ\le D$, so Theorem~\ref{thm:al_scan_bad_geometric_tail} and Lemma~\ref{lem:al_scan_fixed_ancestry_cutoff} give the bound $n^{-p}$.
 \end{proof}
 
 \begin{theorem}[Geometry and probabilities of the scan]
@@ -467,59 +365,21 @@ asymptotic scale specialization is proved below.
         thm:al_scan_physical_prefix_approximation,thm:al_scan_status_cuts,
         thm:al_scan_bad_history_inverse_power,
         thm:al_scan_uniform_bad_old,lem:al_scan_rounded_radius}
-    Fix $0<\ell$, $0<\kappa<\mu<1-\ell$, $C_r,C_1>0$, $C_T\ge0$, a bound $b$ on
-    the number of labels with a fixed anchor, $3b\le C_1$, and a real exponent
-    $p$. Take the source scales $L,m,K,D,M$ above with $r_0=r$, let $Z$ be
-    the set of endpoints of cut edges, and suppose
+    Under the hypotheses and scales (\ref{eq:al_scan_bad_history_scales}) of Theorem~\ref{thm:al_scan_bad_history_inverse_power} with $r_0=r$ and $3b\le C_1$, assume that for all $1\le d\le L$,
     \begin{align}
         |T|\le C_Tn^2,\qquad
-        |T_d\setminus T_{d-1}|\le n\quad(1\le d\le L),\qquad
+        |T_d\setminus T_{d-1}|\le n,\qquad
         \operatorname{dist}_\infty(T,Z)>2L+10r_0.
+        \label{eq:al_scan_histories_geom}
     \end{align}
-    For all sufficiently large $n$, making explicit the constants in \cite[Lemma~9.1]{OpenAI2026AreaLaw},
-    the following hold uniformly over finite lattice domains,
-    cuts, nonempty targets, labels and scanners
-    for completed statuses after $k\le nm$ fill--charge pairs and for
-    pre-charge statuses with $k+1\le nm$, where all probabilities are classical path probabilities of the history tree:
+    For all sufficiently large $n$ (\cite[Lemma~9.1]{OpenAI2026AreaLaw}), uniformly over finite domains, cuts, nonempty targets, labels, and scanners for completed statuses ($k\le nm$) and pre-charge statuses ($k+1\le nm$):
     \begin{enumerate}
-        \item Every splitting designated support is the graph $r_0$-ball of its
-              anchor and lies in $A$. It splits at most one band, where it meets
-              $Y$ and exactly one side and lies in one part of every other band.
-              The metrics of all statuses of distinct bands commute on the
-              symmetric replica space.
-        \item Every assigned site of $A$ has oriented depth at most
-              $j+D+r_0$ on its side. One has
-              $Q_{j_N-1}\subseteq U$ and $UY\subseteq Q_{-j_F}$, and both
-              symmetric differences have at most $3nD$ sites. The cuts of
-              $U,UY,Y,P_0,V$ have at most $40nD$ edges, and at most $10bKnD$
-              labelled terms split.
-        \item For every label, every fill or charge round and every common
-              $p'\in[0,1]$, the terminal-leaf probability that the label splits
-              is at most $10D/m$.
-        \item The probability that a full history fails to be good at some time
-              is at most $n^{-p}$. At a charge round on a good old history, each
-              split term is sampled on its splitting side with probability at
-              least $1/[2(C_1+1)nD]$, and the sampled move is exactly the old
-              $Y$-part of its designated support.
+        \item Every splitting designated support is the graph $r_0$-ball of its anchor in $A$, splits at most one band (meeting $Y$ and one side there, and lying in one part of every other band), and metrics of distinct bands commute on $\mathcal H_{\rm sym}$.
+        \item Every assigned site in $A$ has oriented depth $\le j+D+r_0$; $Q_{j_N-1}\subseteq U$ and $UY\subseteq Q_{-j_F}$ with $|U\setminus Q_{j_N-1}|,|Q_{-j_F}\setminus UY|\le 3nD$; $|\partial_\Lambda W|\le 40nD$ for $W\in\{U,UY,Y,P_0,V\}$; and at most $10bKnD$ labelled terms split.
+        \item At each round and $p'\in[0,1]$, each label splits with terminal-leaf probability $\le 10D/m$.
+        \item A full history fails to be good at some time with probability $\le n^{-p}$; at a charge round on a good old history, each split term is sampled on its splitting side with probability $\ge[2(C_1+1)nD]^{-1}$ and move equal to the old $Y$-part of its designated support.
     \end{enumerate}
 \end{theorem}
 \begin{proof}\leanok
-    The source scales eventually give $n\ge2$, $1\le D$, $2r_0\le D$,
-    $4(D+2r_0)\le m$ and $8Km\le L$, and the padded capacity is
-    $M=\lceil C_1nD\rceil$. With these finite inequalities, item~1 follows
-    from Theorems~\ref{thm:al_scan_designated_sampling},
-    \ref{thm:al_scan_terminal_split} and~\ref{thm:al_scan_nested_band_metrics}
-    together with the cut clearance of graph balls meeting the compact collar.
-    Item~2 follows from
-    Theorems~\ref{thm:al_scan_unconditional_split_interval},
-    \ref{thm:al_scan_physical_prefix_approximation},
-    \ref{thm:al_scan_status_cuts} and~\ref{thm:al_scan_split_count}.
-    Item~3 is Theorem~\ref{thm:al_scan_designated_dilution}. The bad-history
-    bound is Theorem~\ref{thm:al_scan_bad_history_inverse_power}, and the
-    good-history sampling bound is
-    Theorem~\ref{thm:al_scan_designated_sampling}.
+    Eventually $n\ge2$, $1\le 2r_0\le D$, $4(D+2r_0)\le m$, and $8Km\le L$. Combine Theorems~\ref{thm:al_scan_designated_sampling}, \ref{thm:al_scan_terminal_split}, and~\ref{thm:al_scan_nested_band_metrics} for (1); Theorems~\ref{thm:al_scan_unconditional_split_interval}, \ref{thm:al_scan_physical_prefix_approximation}, \ref{thm:al_scan_status_cuts}, and~\ref{thm:al_scan_split_count} for (2); Theorem~\ref{thm:al_scan_designated_dilution} for (3); and Theorems~\ref{thm:al_scan_bad_history_inverse_power} and~\ref{thm:al_scan_designated_sampling} for (4).
 \end{proof}
-
-Identifying the entropy gains and constructing the remaining scanner
-inputs are separate mathematical steps. The probability estimate concerns
-classical histories and does not identify their quantum entropy costs.

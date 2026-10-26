@@ -5,14 +5,13 @@
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.qutritCopies,TNLean.MPS.AreaLaw.EntropyScaling.qutritCopies_length}
     \leanok
     \uses{def:qutrit_entropy_scaling_state,def:chain_copy_product}
-    For a positive integer $N$, let $\psi_{2N}$ be the qutrit state with
-    parameter $p_N=1/N$. Following~\cite{Schuch2008EntropyScaling},
-    lines 421--425, define
+    For $N\ge1$ and $\psi_{2N}=\psi_{2N}(1/N)$
+    (Definition~\ref{def:qutrit_entropy_scaling_state}), define on consecutive
+    $2N$-site blocks~\cite[lines 421--425]{Schuch2008EntropyScaling}:
     \begin{align}
         \label{eq:qutrit_entropy_scaling_copies}
         \chi_M=\psi_{2N}^{\otimes N^2},\qquad M=N^2(2N)=2N^3.
     \end{align}
-    The copies occupy consecutive blocks in their natural order.
 \end{definition}
 
 \begin{theorem}[Normalization of the repeated family]
@@ -20,11 +19,13 @@
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.norm_qutritCopies}
     \leanok
     \uses{def:qutrit_entropy_scaling_copies}
-    For every positive integer $N$, the vector $\chi_M$ has norm one.
+    For every $N\ge1$, $\|\chi_M\|=1$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:qutrit_entropy_scaling_normalization,thm:chain_copy_product_inner}
-    The norm of a tensor product is the product of the norms of its factors.
+    By Theorems~\ref{thm:qutrit_entropy_scaling_normalization}
+    and~\ref{thm:chain_copy_product_inner},
+    $\|\chi_M\|=\|\psi_{2N}\|^{N^2}=1$.
 \end{proof}
 
 \begin{theorem}[A uniform four-bit entropy bound]
@@ -32,15 +33,15 @@
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.regionEntropy_interval_qutritCopies_le}
     \leanok
     \uses{def:qutrit_entropy_scaling_copies}
-    For every positive integer $N$ and every contiguous region $I$ of the
-    chain of $M=2N^3$ sites, $S_{\chi_M}(I)\le4\log2$.
-    Entropy is measured using natural logarithms.
+    For every $N\ge1$ and every interval $I\subseteq[0,M)$,
+    $S_{\chi_M}(I)\le4\log2$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:qutrit_entropy_scaling_family_entropy,thm:chain_copy_interval_entropy,thm:qutrit_entropy_scaling_normalization}
-    Every region in one copy has entropy at most $2\log2$.
-    At most two copies are partially intersected by $I$, so the interval
-    entropy estimate gives $S_{\chi_M}(I)\le2(2\log2)=4\log2$.
+    By Theorem~\ref{thm:qutrit_entropy_scaling_family_entropy} each single-copy
+    region has entropy at most $2\log2$, and $I$ partially intersects at most
+    two copies, so Theorem~\ref{thm:chain_copy_interval_entropy} gives
+    $S_{\chi_M}(I)\le2(2\log2)=4\log2$.
 \end{proof}
 
 \begin{theorem}[The single-copy overlap obstruction]
@@ -48,18 +49,20 @@
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.normSq_overlap_qutritFamily_le_kyFan}
     \leanok
     \uses{def:qutrit_entropy_scaling_state,def:qutrit_entropy_scaling_middle,def:chain_open_mps}
-    Let $N>0$ and let $\phi$ be a unit MPS on $2N$ qutrits with bond dimension
-    at most $D$. If $\rho_N$ is the middle-cut marginal of $\psi_{2N}$ and
-    $\|\rho_N\|_{(D)}$ is the sum of its $D$ largest eigenvalues, then
-    $|\langle\psi_{2N},\phi\rangle|^2\le\|\rho_N\|_{(D)}$.
-    Eigenvalues beyond the dimension are interpreted as zero.
+    For $N\ge1$, any unit MPS $\phi$ on $2N$ qutrits of bond dimension at most
+    $D$, and the middle-cut marginal $\rho_N$ of $\psi_{2N}$ with Ky Fan
+    $D$-norm $\|\rho_N\|_{(D)}$,
+    \begin{align}
+        |\langle\psi_{2N},\phi\rangle|^2\le\|\rho_N\|_{(D)}.
+        \label{eq:qutrit_entropy_scaling_kyfan}
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_cut_rank_of_mps}
-    The coefficient matrix of $\phi$ at the middle cut has rank at most $D$.
-    The variational characterization of the largest Schmidt coefficients
-    gives the claim when $D<3^N$. For $D\ge3^N$, the right-hand side is one,
-    and the claim follows from Cauchy--Schwarz.
+    By Theorem~\ref{thm:chain_cut_rank_of_mps} the middle-cut coefficient
+    matrix of $\phi$ has rank at most $D$, so Eckart--Young gives
+    (\ref{eq:qutrit_entropy_scaling_kyfan}) for $D<3^N$, while for $D\ge3^N$
+    Cauchy--Schwarz gives $|\langle\psi_{2N},\phi\rangle|^2\le1=\|\rho_N\|_{(D)}$.
 \end{proof}
 
 \begin{theorem}[The single-copy scalar error obstruction]
@@ -67,9 +70,9 @@
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.qutritFamily_scalar_error_lower_bound}
     \leanok
     \uses{def:qutrit_entropy_scaling_state,def:chain_open_mps}
-    Let $N\ge2$ and let $\phi$ be a unit MPS of bond dimension at most $D$.
-    Set $f=|\langle\psi_{2N},\phi\rangle|^2$ and
-    $T(f)=2\sqrt{f(1-f)}$ for $f\ge1/2$, and $T(f)=1$ otherwise. Then
+    For $N\ge2$ and any unit MPS $\phi$ of bond dimension at most $D$, set
+    $f=|\langle\psi_{2N},\phi\rangle|^2$ and $T(f)=2\sqrt{f(1-f)}$ for
+    $f\ge1/2$ ($T(f)=1$ for $f<1/2$). Then
     \begin{align}
         \label{eq:qutrit_entropy_scaling_scalar_tail}
         \frac{2^N-(D-1)}{N2^N}\le T(f).
@@ -77,9 +80,9 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:qutrit_entropy_scaling_copy_overlap,thm:qutrit_middle_discarded_mass,thm:qutrit_entropy_scaling_normalization}
-    The middle-cut tail is at least the left-hand side of
-    (\ref{eq:qutrit_entropy_scaling_scalar_tail}). The overlap bound gives
-    $1-\|\rho_N\|_{(D)}\le1-f$, and $1-f\le T(f)$ for $0\le f\le1$.
+    By Theorem~\ref{thm:qutrit_middle_discarded_mass} and
+    (\ref{eq:qutrit_entropy_scaling_kyfan}),
+    $(2^N-(D-1))/(N2^N)\le1-\|\rho_N\|_{(D)}\le1-f\le T(f)$.
 \end{proof}
 
 \begin{theorem}[Exponential bond dimension from scalar error]
@@ -87,19 +90,19 @@
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.bondDimension_qutritCopies_ge_of_scalar_error_lt_one}
     \leanok
     \uses{def:qutrit_entropy_scaling_copies,def:chain_open_mps}
-    Let $N\ge2$ and let $\Phi$ be a unit MPS on $2N^3$ sites with bond
-    dimension at most $D$. If $t=T(|\langle\chi_M,\Phi\rangle|^2)<1$, then
-    $D\ge2^N(1-2t)+1$. The bound printed
-    in~\cite{Schuch2008EntropyScaling}, lines 475--479, has the constant
-    eight in place of two~\cite{gap:swvc08_qutrit_copy_constant}.
+    For $N\ge2$ and any unit MPS $\Phi$ on $M=2N^3$ sites of bond dimension at
+    most $D$, if $t=T(|\langle\chi_M,\Phi\rangle|^2)<1$, then
+    $D\ge2^N(1-2t)+1$ (with constant $2$ in place of the printed $8$ of
+    \cite[lines 475--479]{Schuch2008EntropyScaling};
+    see~\cite{gap:swvc08_qutrit_copy_constant}).
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_mps_copy_error_amplification,thm:qutrit_entropy_scaling_copy_scalar_error,thm:qutrit_entropy_scaling_normalization}
-    Product replacement and amplification give a unit single-copy MPS
-    $\phi$ of bond dimension at most $D$ with
-    $(N/2)T(|\langle\psi_{2N},\phi\rangle|^2)\le t$.
-    Combining this with (\ref{eq:qutrit_entropy_scaling_scalar_tail}) gives
-    $(2^N-(D-1))/(2\cdot2^N)\le t$, which rearranges to the claimed bound.
+    Theorem~\ref{thm:chain_mps_copy_error_amplification} yields a unit
+    single-copy MPS $\phi$ of bond dimension at most $D$ with
+    $(N/2)T(|\langle\psi_{2N},\phi\rangle|^2)\le t$, so
+    (\ref{eq:qutrit_entropy_scaling_scalar_tail}) gives
+    $(2^N-(D-1))/(2\cdot2^N)\le t$.
 \end{proof}
 
 \begin{theorem}[Exponential bond dimension from full trace error]
@@ -107,31 +110,30 @@
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.bondDimension_qutritCopies_ge}
     \leanok
     \uses{def:qutrit_entropy_scaling_copies,def:chain_open_mps}
-    Let $N\ge2$ and let $\Phi$ be any MPS on $M=2N^3$ sites with bond
-    dimension at most $D$. Write
-    $\delta=\|\lvert\chi_M\rangle\langle\chi_M\rvert-
-        \lvert\Phi\rangle\langle\Phi\rvert\|_1$ for the full trace-norm error.
-    Then $D\ge2^N(1-2\delta)+1$. The bound printed
-    in~\cite{Schuch2008EntropyScaling}, lines 475--479, has the constant eight
-    in place of two and the optimized error, which is at most $\delta$, in
-    place of $\delta$~\cite{gap:swvc08_qutrit_copy_constant}. The approximating
-    vector need not have norm one.
+    For $N\ge2$, any MPS $\Phi$ on $M=2N^3$ sites of bond dimension at most
+    $D$, and $\delta=\|\lvert\chi_M\rangle\langle\chi_M\rvert-\lvert\Phi\rangle\langle\Phi\rvert\|_1$,
+    \begin{align}
+        D\ge2^N(1-2\delta)+1
+        \label{eq:qutrit_entropy_scaling_trace_dim}
+    \end{align}
+    (with constant $2$ and unnormalized error $\delta$ in place of $8$ and the
+    optimized error of \cite[lines 475--479]{Schuch2008EntropyScaling};
+    see~\cite{gap:swvc08_qutrit_copy_constant}).
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:qutrit_entropy_scaling_scalar_dimension,thm:qutrit_entropy_scaling_copies_norm}
-    If $\delta\ge1$, the asserted lower bound is nonpositive. Otherwise
-    $\Phi\ne0$, since the zero vector has error one. Set
-    $\widehat\Phi=\Phi/\|\Phi\|$. Scaling the scalar endpoint coefficient
-    preserves the MPS bond dimension. The optimized pure-state trace formula,
-    applied with density coefficient one, gives
+    For $\delta\ge1$, $2^N(1-2\delta)+1\le0\le D$. For $\delta<1$, $\Phi\ne0$
+    and $\widehat\Phi=\Phi/\|\Phi\|$ is a unit MPS of bond dimension at most $D$
+    with
     \begin{align}
         \label{eq:qutrit_entropy_scaling_actual_error}
         T\bigl(|\langle\chi_M,\widehat\Phi\rangle|^2\bigr)
         \le\bigl\|\lvert\chi_M\rangle\langle\chi_M\rvert-
-        \lvert\Phi\rangle\langle\Phi\rvert\bigr\|_1=\delta<1.
+        \lvert\Phi\rangle\langle\Phi\rvert\bigr\|_1=\delta<1,
     \end{align}
-    Apply the scalar bond-dimension bound and then
-    (\ref{eq:qutrit_entropy_scaling_actual_error}).
+    so Theorem~\ref{thm:qutrit_entropy_scaling_scalar_dimension} and
+    (\ref{eq:qutrit_entropy_scaling_actual_error}) give
+    (\ref{eq:qutrit_entropy_scaling_trace_dim}).
 \end{proof}
 
 \begin{theorem}[No polynomial bond bound at fixed accuracy]
@@ -139,20 +141,17 @@
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.eventually_no_polynomial_mps_approximation_qutritCopies}
     \leanok
     \uses{def:qutrit_entropy_scaling_copies,def:chain_open_mps}
-    Fix $\delta<1/8$, a real number $C$, and a nonnegative integer $k$.
-    For every sufficiently large $N$, no MPS $\Phi$ on $M=2N^3$ sites has
-    both bond dimension $D\le CM^k$ and full trace-norm error at most
-    $\delta$ from $\chi_M$. No normalization of $\Phi$ is required.
+    For any $\delta<1/8$, $C\in\R$, and $k\in\N$, and all sufficiently large
+    $N$, no MPS $\Phi$ on $M=2N^3$ sites satisfies both $D\le CM^k$ and
+    $\|\lvert\chi_M\rangle\langle\chi_M\rvert-\lvert\Phi\rangle\langle\Phi\rvert\|_1\le\delta$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:qutrit_entropy_scaling_trace_dimension}
-    Since $1-2\delta>0$ and every fixed power of $N$ is of smaller order
-    than $2^N$, for every sufficiently large $N$ one has
+    Since $1-2\delta>0$, for all sufficiently large $N$
+    Theorem~\ref{thm:qutrit_entropy_scaling_trace_dimension} gives
     \begin{align}
         \label{eq:qutrit_entropy_scaling_polynomial_contradiction}
-        C(2N^3)^k<2^N(1-2\delta)+1\le D.
+        C(2N^3)^k<2^N(1-2\delta)+1\le D,
     \end{align}
-    This contradicts the assumed polynomial bond bound. Together with the
-    four-bit interval entropy estimate, this proves that a uniform
-    von Neumann area law does not imply polynomial MPS approximation.
+    contradicting $D\le CM^k$.
 \end{proof}

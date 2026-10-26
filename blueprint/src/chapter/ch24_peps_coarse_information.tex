@@ -1,20 +1,18 @@
 \section{Coarse information outside a sublinear collar}
 
 The first information estimate of \cite[Section~3]{OpenAI2026PolynomialPEPS}
-concerns the lattice sample $T$ of a bounded union of rectangles. Its proof
-reads $T$ as a template of the area-law companion, with the whole domain as
-the cut, and then applies the sublinear collar bound and its amplification.
-The physical collar theorem provides the required bound from the original
-Hamiltonian and its full-system gap. Conditional forms are stated separately.
+bounds the mutual information of the lattice sample $T$ of a bounded union of
+rectangles by reading $T$ as a template on the cut $\Lambda$ and applying the
+sublinear collar bound (\cite[Proposition~9.6]{OpenAI2026AreaLaw}) and its
+amplification.
 
 \begin{definition}[Bounded unions of lattice boxes]
     \label{def:peps_box_union}
     \lean{TNLean.PEPS.Approximation.IsBoxUnion}
     \leanok
-    A finite set $T\subseteq\mathbb Z^2$ is a union of at most $N_0$ boxes when
-    there are $k\le N_0$ and points $\ell_a,h_a\in\mathbb Z^2$ with
-    $T=\bigcup_{a<k}[\ell_a,h_a]$, where $[\ell,h]$ is the set of lattice
-    points $x$ with $\ell\le x\le h$ in both coordinates. A box may be empty.
+    A finite set $T\subseteq\mathbb Z^2$ is a union of at most $N_0$ boxes if
+    $T=\bigcup_{a<k}[\ell_a,h_a]$ for some $k\le N_0$ and $\ell_a,h_a\in\mathbb Z^2$,
+    where $[\ell,h]:=\{x\in\mathbb Z^2:\ell_i\le x_i\le h_i\ (i=1,2)\}$ (possibly empty).
 \end{definition}
 
 \begin{lemma}[Lattice samples of rectangles]
@@ -22,18 +20,11 @@ Hamiltonian and its full-system gap. Conditional forms are stated separately.
     \lean{TNLean.PEPS.Approximation.isBoxUnion_of_ordConnected}
     \leanok
     \uses{def:peps_box_union}
-    Let $I_a,J_a\subseteq\mathbb R$, $a<k\le N_0$, be intervals, each of
-    which may be open, closed or half-open. If a finite set $T$ is the set of
-    lattice points of $\bigcup_a I_a\times J_a$, then $T$ is a union of at most
-    $N_0$ boxes.
+    For real intervals $I_a,J_a\subseteq\mathbb R$ ($a<k\le N_0$, open, closed, or half-open), any finite set $T=\mathbb Z^2\cap\bigcup_{a<k}(I_a\times J_a)$ is a union of at most $N_0$ boxes (Definition~\ref{def:peps_box_union}).
 \end{lemma}
 \begin{proof}
     \leanok
-    The integers in a real interval form an interval of integers. If both
-    integer intervals of $I_a\times J_a$ are nonempty, they are bounded by the
-    finiteness of $T$, so each is the closed interval between its infimum and
-    supremum. Otherwise the sample of $I_a\times J_a$ is empty, and an empty
-    box replaces it.
+    Since $T$ is finite, each nonempty factor $(I_a\cap\mathbb Z)\times(J_a\cap\mathbb Z)$ equals $[\ell_a,h_a]$ with $\ell_a=(\min(I_a\cap\mathbb Z),\min(J_a\cap\mathbb Z))$ and $h_a=(\max(I_a\cap\mathbb Z),\max(J_a\cap\mathbb Z))$, while an empty factor is replaced by an empty box.
 \end{proof}
 
 \begin{lemma}[Translations and templates]
@@ -42,19 +33,11 @@ Hamiltonian and its full-system gap. Conditional forms are stated separately.
         TNLean.PEPS.Approximation.IsBoxUnion.exists_template}
     \leanok
     \uses{def:peps_box_union,def:area_law_template}
-    An integer translate of a union of at most $N_0$ boxes is again such a union. Let
-    $T$ be a nonempty union of at most $N_0$ boxes with sup-norm diameter at
-    most $D$. If $D+1\le s_0$, $D\le n$ and
-    $\max(C_{\rm tpl},0)N_0(s_0+1)\le n$, then $T$ is a template with
-    parameters $(n,s_0)$ whose pieces are closed rectangles.
+    If $T$ is a union of at most $N_0$ boxes, so is $T+d$ for any $d\in\mathbb Z^2$. If $T\ne\varnothing$ has $\operatorname{diam}_\infty T\le D$ with $D+1\le s_0$, $D\le n$, and $\max(C_{\rm tpl},0)N_0(s_0+1)\le n$, then $T$ is an $(n,s_0)$-template (Definition~\ref{def:area_law_template}) with closed-rectangle pieces.
 \end{lemma}
 \begin{proof}
     \leanok
-    A nonempty box $[\ell,h]$ is the lattice sample of the closed rectangle
-    with corners $\ell-(\tfrac14,\tfrac14)$ and $h+(\tfrac14,\tfrac14)$, whose
-    diameter is at most $D+\tfrac12$. An empty box is the lattice sample of the
-    square $[-\tfrac14,-\tfrac18]^2$. The template inequalities are the
-    hypotheses.
+    Each nonempty box $[\ell,h]$ is $\mathbb Z^2\cap[\ell-(\tfrac14,\tfrac14),h+(\tfrac14,\tfrac14)]$ (of $\ell_\infty$-diameter at most $D+\tfrac12<s_0$), and an empty box is $\mathbb Z^2\cap[-\tfrac14,-\tfrac18]^2$.
 \end{proof}
 
 \begin{theorem}[Coarse information outside a sublinear collar]
@@ -64,19 +47,13 @@ Hamiltonian and its full-system gap. Conditional forms are stated separately.
     \leanok
     \uses{def:peps_box_union,def:polynomial_peps_model,
         thm:peps_coarse_information_of_collar,thm:area_law_sublinear_collar}
-    In Proposition~3.1 of \cite{OpenAI2026PolynomialPEPS}, fix an integer
-    $N_0\ge1$ and a constant $A_0\ge1$. There are $\beta<1$,
-    $C<\infty$ and $u_0<\infty$ such that the following holds. Let $u\ge u_0$
-    and let $T$ be the full ambient lattice sample of a union of at most $N_0$
-    axis-parallel rectangles, with $\operatorname{diam}_\infty T\le A_0u$. For
-    every physical set $E\subseteq\Lambda$ with
-    $\operatorname{dist}_\infty(E,T)>u^\beta$,
-    \begin{align*}
-        I_\Omega(\Lambda\cap T:E) & \le C.
-    \end{align*}
-    The same holds for every subset of $\Lambda\cap T$ in the first argument,
-    for rectangles with consistently assigned open or closed sides, and after a
-    common translation of the lattice coordinates.
+    In \cite[Proposition~3.1]{OpenAI2026PolynomialPEPS}, for every integer
+    $N_0\ge1$ and $A_0\ge1$ there exist $\beta<1$ and $C,u_0<\infty$ such that for every $u\ge u_0$, every lattice sample $T=\mathbb Z^2\cap\bigcup_{a<k}R_a$ of $k\le N_0$ axis-parallel rectangles with $\operatorname{diam}_\infty T\le A_0u$, every $X\subseteq\Lambda\cap T$, and every $E\subseteq\Lambda$ with $\operatorname{dist}_\infty(E,T)>u^\beta$,
+    \begin{align}
+        I_\Omega(X:E) & \le C,
+        \label{eq:peps_coarse_information}
+    \end{align}
+    including for $X=\Lambda\cap T$, consistently open or closed rectangle sides, and after any common coordinate translation.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -84,27 +61,19 @@ Hamiltonian and its full-system gap. Conditional forms are stated separately.
         thm:peps_coarse_information_of_collar,
         thm:peps_coarse_information_square,lem:peps_box_union_of_intervals,
         lem:peps_box_union_template}
-    By Lemma~\ref{lem:peps_box_union_of_intervals}, the lattice sample $T$ is
-    a union of at most $N_0$ boxes. For a common real translation $d$,
-    pulling both the physical coordinates and the rectangles back by $-d$
-    before taking lattice samples retains the same interval
-    sides and preserves all diameters and separation distances. The
-    square-grid estimate together with the physical
-    collar theorem, Proposition~9.6 of \cite{OpenAI2026AreaLaw}, at
-    $D_0=13$ and $C_{\rm tpl}=24$ then yields the bound.
+    Lemma~\ref{lem:peps_box_union_of_intervals} shows that $T$ (or its pullback by a translation $d$) is a union of at most $N_0$ boxes, so combining Theorem~\ref{thm:peps_coarse_information_square} with Theorem~\ref{thm:area_law_sublinear_collar} (\cite[Proposition~9.6]{OpenAI2026AreaLaw}) at $D_0=13$ and $C_{\rm tpl}=24$ gives (\ref{eq:peps_coarse_information}).
 \end{proof}
 
 \begin{lemma}[The coarse exponent is below one]
     \label{lem:peps_coarse_exponent_lt_one}
     \lean{TNLean.PEPS.Approximation.beta_lt_one}
     \leanok
-    The exponent $\beta_0$ fixed by the amplification exponents satisfies
-    $\beta_0<1$.
+    The amplification exponent $\beta_0$ satisfies $\beta_0<1$.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    This is a numerical evaluation of the amplification exponents.
+    Direct numerical evaluation of $\beta_0$.
 \end{proof}
 
 % Source: OpenAI2026PolynomialPEPS, proof of Proposition 3.1 (prop:coarse),
@@ -115,24 +84,13 @@ Hamiltonian and its full-system gap. Conditional forms are stated separately.
         TNLean.PEPS.Approximation.coarseInformationThreshold}
     \leanok
     \uses{thm:area_law_uniform_collar_threshold}
-    Fix a template constant $C_{\rm tpl}$, an integer $N_0$ and $A_0\in\mathbb R$.
-    The scale factor is
+    For $C_{\rm tpl},A_0\in\mathbb R$, $N_0\in\mathbb Z$, collar threshold $N$, and amplification constants $(C_a,N_a)$, let $N_r$ be the threshold of Theorem~\ref{thm:area_law_uniform_collar_threshold} for $C_a$ and $\eta=K_{\rm c}^{-\beta_0}$ (so $\lfloor n^{1-\varepsilon}\rfloor+2r<K_{\rm c}^{-\beta_0}n^{\beta_0}$ for $n\ge N_r$ and $0\le r\le C_an^{(1-\varepsilon)/\alpha}$), where
     \begin{align}
-        K_{\rm c}(C_{\rm tpl},N_0,A_0) & =(\max\{C_{\rm tpl},0\}+1)(N_0+1)
-        (\max\{A_0,1\}+4).
-        \notag
-    \end{align}
-    For a collar threshold $N$, an amplification constant $C_a$ and an
-    amplification threshold $N_a$, let $N_r$ be the threshold of
-    Theorem~\ref{thm:area_law_uniform_collar_threshold} for the constant $C_a$
-    and $\eta=K_{\rm c}^{-\beta_0}$, so that
-    $\lfloor n^{1-\varepsilon}\rfloor+2r<K_{\rm c}^{-\beta_0}n^{\beta_0}$ for
-    $n\ge N_r$ and every integer $0\le r\le C_an^{(1-\varepsilon)/\alpha}$.
-    The coarse threshold is
-    \begin{align}
+        K_{\rm c}(C_{\rm tpl},N_0,A_0)     & =(\max\{C_{\rm tpl},0\}+1)(N_0+1)
+        (\max\{A_0,1\}+4), \notag                                              \\
         u_0(C_{\rm tpl},N_0,A_0,N,C_a,N_a) & =
         \max\{N,N_a,N_r,2,K_{\rm c}^{1/\varepsilon}\}.
-        \notag
+        \label{eq:peps_coarse_information_constants}
     \end{align}
 \end{definition}
 
@@ -142,44 +100,16 @@ Hamiltonian and its full-system gap. Conditional forms are stated separately.
     \leanok
     \uses{def:peps_box_union,def:area_law_collar_bound,
         def:area_law_amplification_bound,def:peps_coarse_information_constants}
-    Fix $q,R,J,\Delta$ and template constants $D_0,C_{\rm tpl}$. Suppose that
-    the sublinear collar bound holds with constant $C$ and threshold $N$, and
-    that the amplification bound holds at $(\max\{C,1\},1)$ with constant $C_a$
-    and threshold $N_a$. Fix $N_0$ and $A_0$, and let
-    $u_0=u_0(C_{\rm tpl},N_0,A_0,N,C_a,N_a)$ be the coarse threshold of
-    Definition~\ref{def:peps_coarse_information_constants}. Let $u\ge u_0$, let
-    $\Omega$ be a unit ground vector with full-system gap $\Delta$ of an
-    admissible Hamiltonian of range $R$ and bound $J$ on a finite induced
-    domain $\Lambda$, and let $T$ be a union of at most $N_0$ boxes with
-    $\operatorname{diam}_\infty T\le A_0u$. Then
-    $I_\Omega(X:E)\le\max\{C_a,0\}$ for every $X\subseteq\Lambda\cap T$ and
-    every $E\subseteq\Lambda$ with
-    $\operatorname{dist}_\infty(E,T)>u^{\beta_0}$.
+    Suppose the sublinear collar bound (Definition~\ref{def:area_law_collar_bound}) holds at $(q,R,J,\Delta,D_0,C_{\rm tpl})$ with $(C,N)$, and the amplification bound (Definition~\ref{def:area_law_amplification_bound}) holds at $(\max\{C,1\},1)$ with $(C_a,N_a)$. For $u\ge u_0(C_{\rm tpl},N_0,A_0,N,C_a,N_a)$ from (\ref{eq:peps_coarse_information_constants}), any unit ground vector $\Omega$ with gap $\Delta$ of an admissible range-$R$, bound-$J$ Hamiltonian on a finite induced domain $\Lambda$, any union $T$ of at most $N_0$ boxes with $\operatorname{diam}_\infty T\le A_0u$, any $X\subseteq\Lambda\cap T$, and any $E\subseteq\Lambda$ with $\operatorname{dist}_\infty(E,T)>u^{\beta_0}$,
+    \begin{align}
+        I_\Omega(X:E) & \le \max\{C_a,0\}. \notag
+    \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{lem:peps_box_union_template,def:peps_coarse_information_constants,
         thm:area_law_uniform_collar_threshold}
-    Set $\beta=\beta_0$. If $T$ is empty, so is $X$, and the information
-    vanishes. Otherwise put $A=\max(A_0,1)$, $s_0=\lceil Au\rceil+1$ and
-    $n=\lceil c_1(Au+3)\rceil$ with
-    $c_1=(\max(C_{\rm tpl},0)+1)(N_0+1)$. Then $T$ is a template with
-    parameters $(n,s_0)$, and $u\le n\le Ku$ with $K=c_1(A+4)=K_{\rm c}$ once
-    $u\ge2$.
-    The cut is $A=\Lambda$, whose crossing-edge endpoint set is empty, so the
-    template is separated from it. When $u^\varepsilon\ge K$,
-    \begin{align*}
-        n^{1-\varepsilon}\le K^{1-\varepsilon}u^{1-\varepsilon}
-        \le u^\varepsilon u^{1-\varepsilon}=u\le s_0,
-    \end{align*}
-    so the collar bound applies and satisfies every hypothesis of the
-    amplification bound with $M=1$ and the common constant $\max(C,1)$. Its
-    radius $r$ satisfies
-    $\lfloor n^{1-\varepsilon}\rfloor+2r<K^{-\beta_0}n^{\beta_0}\le u^{\beta_0}$
-    because $n\ge u\ge N_r$. A walk of length at most $2r$ moves by at most $2r$ in
-    sup norm, so every point of the graph neighborhood $N_{2r}(S_0)$ lies within
-    $\lfloor n^{1-\varepsilon}\rfloor+2r$ of $T$. Hence $E$ avoids
-    $N_{2r}(S_0)$, and $I_\Omega(X:E)\le C_an^{-1}\le\max(C_a,0)$.
+    For $T\ne\varnothing$, set $A=\max(A_0,1)$, $c_1=(\max(C_{\rm tpl},0)+1)(N_0+1)$, $s_0=\lceil Au\rceil+1$, and $n=\lceil c_1(Au+3)\rceil$. Since $u\ge u_0\ge\max\{2,K_{\rm c}^{1/\varepsilon}\}$, Lemma~\ref{lem:peps_box_union_template} makes $T$ an $(n,s_0)$-template separated from the empty boundary of the cut $\Lambda$, with $u\le n\le K_{\rm c}u$ and $n^{1-\varepsilon}\le K_{\rm c}^{1-\varepsilon}u^{1-\varepsilon}\le u\le s_0$. Applying the collar bound and the amplification bound at $(\max(C,1),1)$ with $n\ge u\ge N_r$ gives $\lfloor n^{1-\varepsilon}\rfloor+2r<K_{\rm c}^{-\beta_0}n^{\beta_0}\le u^{\beta_0}$ by Theorem~\ref{thm:area_law_uniform_collar_threshold}, so $E\cap N_{2r}(S_0)=\varnothing$ and $I_\Omega(X:E)\le C_an^{-1}\le\max(C_a,0)$.
 \end{proof}
 
 \begin{theorem}[Coarse information, assuming the sublinear collar bound]
@@ -189,27 +119,13 @@ Hamiltonian and its full-system gap. Conditional forms are stated separately.
     \uses{def:peps_box_union,def:area_law_collar_bound,
         thm:area_law_amplification,lem:peps_box_union_template,
         thm:area_law_uniform_collar_threshold}
-    Fix $q,R,J$ and $\Delta>0$, and assume the sublinear collar bound for some
-    template constants $D_0,C_{\rm tpl}$. Fix $N_0$ and $A_0$. There are
-    $\beta<1$, $C$ and $u_0$ with the following property. Let $u\ge u_0$, let
-    $\Omega$ be a unit ground vector with full-system gap $\Delta$ of an
-    admissible Hamiltonian of range $R$ and bound $J$ on a finite induced
-    domain $\Lambda$, and let $T$ be a union of at most $N_0$ boxes with
-    $\operatorname{diam}_\infty T\le A_0u$. Then $I_\Omega(X:E)\le C$ for every
-    $X\subseteq\Lambda\cap T$ and every $E\subseteq\Lambda$ with
-    $\operatorname{dist}_\infty(E,T)>u^\beta$. The constants are chosen before
-    $u$, $\Lambda$, the Hamiltonian, $T$, $X$ and $E$.
+    Fix $q,R,J$, $\Delta>0$, $N_0$, and $A_0$, and assume the sublinear collar bound (Definition~\ref{def:area_law_collar_bound}) for some $D_0,C_{\rm tpl}$. Then there exist $\beta<1$, $C$, and $u_0$ such that for every $u\ge u_0$, unit ground vector $\Omega$ with gap $\Delta$ of an admissible range-$R$, bound-$J$ Hamiltonian on a finite induced domain $\Lambda$, union $T$ of at most $N_0$ boxes with $\operatorname{diam}_\infty T\le A_0u$, $X\subseteq\Lambda\cap T$, and $E\subseteq\Lambda$ with $\operatorname{dist}_\infty(E,T)>u^\beta$, one has $I_\Omega(X:E)\le C$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_coarse_information_of_collar_explicit,thm:area_law_amplification,
         def:peps_coarse_information_constants,lem:peps_coarse_exponent_lt_one}
-    Choose a constant $C$ and a threshold $N$ for the collar bound, and by
-    Theorem~\ref{thm:area_law_amplification} a constant $C_a$ and a threshold
-    $N_a$ for the amplification bound at $(\max\{C,1\},1)$.
-    Theorem~\ref{thm:peps_coarse_information_of_collar_explicit} gives the
-    claim with $\beta=\beta_0<1$, the constant $\max\{C_a,0\}$ and the coarse
-    threshold of Definition~\ref{def:peps_coarse_information_constants}.
+    Combine the assumed collar constants $(C,N)$ with the amplification constants $(C_a,N_a)$ of Theorem~\ref{thm:area_law_amplification} at $(\max\{C,1\},1)$, Lemma~\ref{lem:peps_coarse_exponent_lt_one} ($\beta=\beta_0<1$), and Theorem~\ref{thm:peps_coarse_information_of_collar_explicit}.
 \end{proof}
 
 \begin{theorem}[Coarse information on the square grid, assuming the collar bound]
@@ -219,22 +135,11 @@ Hamiltonian and its full-system gap. Conditional forms are stated separately.
     \leanok
     \uses{thm:peps_coarse_information_of_collar,def:polynomial_peps_model,
         lem:peps_box_union_template}
-    Fix $q$, $J\in\mathbb R$ and $\Delta>0$, and assume the sublinear collar bound at
-    range one. Fix $N_0$ and $A_0$. There are $\beta<1$, $C$ and $u_0$ such
-    that for every $u\ge u_0$, every open square grid with a Hamiltonian of the
-    model, every unit ground vector $\Omega$ with full-system gap $\Delta$,
-    every translation $c\in\mathbb Z^2$ of the lattice coordinates, every union
-    $T$ of at most $N_0$ boxes with $\operatorname{diam}_\infty T\le A_0u$,
-    every set $X$ of sites whose translated coordinates lie in $T$, and every
-    set $E$ of sites whose translated coordinates are at distance greater than
-    $u^\beta$ from $T$, one has $I_\Omega(X:E)\le C$.
+    Fix $q$, $J\in\mathbb R$, $\Delta>0$, $N_0$, and $A_0$, and assume the range-$1$ sublinear collar bound. There exist $\beta<1$, $C$, and $u_0$ such that for every $u\ge u_0$, open square grid with a model Hamiltonian (Definition~\ref{def:polynomial_peps_model}), unit ground vector $\Omega$ with gap $\Delta$, translation $c\in\mathbb Z^2$, union $T$ of at most $N_0$ boxes with $\operatorname{diam}_\infty T\le A_0u$, and site sets $X,E$ with $X+c\subseteq T$ and $\operatorname{dist}_\infty(E+c,T)>u^\beta$, one has $I_\Omega(X:E)\le C$.
 \end{theorem}
 \begin{proof}
     \leanok
-    Translating $T$ by $-c$ and placing the Hamiltonian on the integer
-    rectangle preserves the ground vector, the gap, and the entropies of
-    relabelled regions, so mutual information is preserved as well and
-    Theorem~\ref{thm:peps_coarse_information_of_collar} applies.
+    Translating $T$ by $-c$ preserves box-union structure (Lemma~\ref{lem:peps_box_union_template}), diameters, distances, and regional entropies, reducing the claim to Theorem~\ref{thm:peps_coarse_information_of_collar} at $R=1$.
 \end{proof}
 
 \begin{theorem}[Coarse information on finite induced domains]
@@ -242,25 +147,12 @@ Hamiltonian and its full-system gap. Conditional forms are stated separately.
     \lean{TNLean.PEPS.Approximation.coarse_mutualInformation_le}
     \leanok
     \uses{def:peps_box_union,def:area_law_hamiltonian}
-    Fix integers $q\ge1$, $R\ge0$ and $N_0\ge0$, real numbers
-    $J\ge0$, $\Delta>0$ and $A_0$. There are $\beta<1$, $C$ and $u_0$
-    with the following property. Let $u\ge u_0$, let $\Lambda$ be a finite
-    induced domain, and let $\Omega$ be a normalized ground vector with
-    full-system gap $\Delta$ of an admissible Hamiltonian of range $R$
-    and bound $J$ on $\Lambda$. Let $T$ be a union of at most $N_0$ lattice
-    boxes with $\operatorname{diam}_\infty T\le A_0u$. Then
-    $I_\Omega(X:E)\le C$ whenever $X\subseteq\Lambda\cap T$,
-    $E\subseteq\Lambda$ and $\operatorname{dist}_\infty(T,E)>u^\beta$.
-    The constants precede the scale, domain, Hamiltonian, ground vector,
-    rectangle union and physical regions. Empty sampled regions are included.
+    For integers $q\ge1$, $R,N_0\ge0$ and reals $J\ge0$, $\Delta>0$, $A_0$, there exist $\beta<1$, $C$, and $u_0$ such that for every $u\ge u_0$, finite induced domain $\Lambda$, unit ground vector $\Omega$ with gap $\Delta$ of an admissible range-$R$, bound-$J$ Hamiltonian on $\Lambda$, union $T$ of at most $N_0$ boxes with $\operatorname{diam}_\infty T\le A_0u$, $X\subseteq\Lambda\cap T$, and $E\subseteq\Lambda$ with $\operatorname{dist}_\infty(T,E)>u^\beta$, one has $I_\Omega(X:E)\le C$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_coarse_information_of_collar,thm:area_law_sublinear_collar}
-    With $D_0=2R+11$ and $C_{\rm tpl}=24$ in the physical collar theorem,
-    Theorem~\ref{thm:peps_coarse_information_of_collar} applies to the cut
-    given by the whole physical domain, whose crossing-edge endpoint set is
-    empty.
+    Apply Theorem~\ref{thm:area_law_sublinear_collar} at $D_0=2R+11$ and $C_{\rm tpl}=24$, followed by Theorem~\ref{thm:peps_coarse_information_of_collar}.
 \end{proof}
 
 \begin{definition}[Closed-form collar constants at range $R$]
@@ -270,15 +162,7 @@ Hamiltonian and its full-system gap. Conditional forms are stated separately.
         TNLean.PEPS.Approximation.collarThresholdClosed}
     \leanok
     \uses{def:area_law_collar_bound}
-    For $q,R\in\mathbb N$ and $J,\Delta\in\mathbb R$, let
-    $C_{\rm box}(q,R,J,\Delta)$ be the safe-box constant of
-    \cite[Proposition~9.5]{OpenAI2026AreaLaw} at range $R$, at the transport
-    constants with threshold $1/8$, entropy constant $200000$ with exponent
-    $2$, and energy constant $3(18\pi^2+6144e^{\pi^2+1})$ with exponent $4$.
-    Let $C(q,R,J,\Delta)$ and $N(q,R,J,\Delta)$ be the constant and threshold
-    of the sublinear collar bound of \cite[Proposition~9.6]{OpenAI2026AreaLaw}
-    at range $R$, at this safe-box constant, the truncation constant at the
-    factor $10$ and these transport constants.
+    For $q,R\in\mathbb N$ and $J,\Delta\in\mathbb R$, let $C_{\rm box}(q,R,J,\Delta)$ be the safe-box constant of \cite[Proposition~9.5]{OpenAI2026AreaLaw} at range $R$ with transport constants $(\text{threshold }1/8,\ \text{entropy }200000\text{ of degree }2,\ \text{energy }3(18\pi^2+6144e^{\pi^2+1})\text{ of degree }4)$, and let $C(q,R,J,\Delta),N(q,R,J,\Delta)$ be the resulting collar constant and threshold of \cite[Proposition~9.6]{OpenAI2026AreaLaw} at truncation factor $10$.
 \end{definition}
 
 \begin{theorem}[The sublinear collar bound at range $R$ at closed-form constants]
@@ -286,20 +170,13 @@ Hamiltonian and its full-system gap. Conditional forms are stated separately.
     \lean{TNLean.PEPS.Approximation.sublinearCollarBoundAt_closed}
     \leanok
     \uses{def:area_law_collar_bound,def:peps_closed_collar_constants}
-    Fix $q,R\in\mathbb N$ with $q\ge1$, $J\ge0$, $\Delta>0$ and $D_0>2R+10$.
-    The sublinear collar bound at range $R$, clearance $D_0$ and template
-    constant $24$ holds with constant $C(q,R,J,\Delta)$ and threshold
-    $N(q,R,J,\Delta)$. Neither depends on $D_0$.
+    For $q,R\in\mathbb N$ with $q\ge1$, $J\ge0$, $\Delta>0$, and $D_0>2R+10$, the sublinear collar bound (Definition~\ref{def:area_law_collar_bound}) at $(R,D_0,C_{\rm tpl}=24)$ holds with $C(q,R,J,\Delta)$ and $N(q,R,J,\Delta)$ of Definition~\ref{def:peps_closed_collar_constants}.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:area_law_sublinear_collar_explicit,
         thm:area_law_transport_bound_explicit}
-    The stated transport constants satisfy the common step-error bound by
-    Theorem~\ref{thm:area_law_transport_bound_explicit}, and
-    Theorem~\ref{thm:area_law_sublinear_collar_explicit} at these constants
-    and $C_{\rm tpl}=24$ gives the collar bound with constant $C$ and
-    threshold $N$.
+    Combine Theorem~\ref{thm:area_law_transport_bound_explicit} with Theorem~\ref{thm:area_law_sublinear_collar_explicit} at $C_{\rm tpl}=24$.
 \end{proof}
 
 \begin{definition}[Closed-form coarse constants at range $R$]
@@ -310,13 +187,11 @@ Hamiltonian and its full-system gap. Conditional forms are stated separately.
     \uses{def:peps_closed_collar_constants,
         def:peps_collar_amplification_constants,
         def:peps_coarse_information_constants}
-    For $q,R,N_0\in\mathbb N$ and $J,\Delta,A_0\in\mathbb R$, put
-    $C=C(q,R,J,\Delta)$ and $N=N(q,R,J,\Delta)$, and let
-    $C_a=C_a(q,R,J,\Delta,C)$ and $N_a=N_a(q,R,J,\Delta,C)$ be the
-    amplification constants at the collar constant. The closed coarse constant
-    is $C_{\rm coarse}(q,R,J,\Delta)=\max\{C_a,0\}$, and the closed coarse
-    threshold $u_0(q,R,J,\Delta,N_0,A_0)$ is the coarse threshold at the
-    template constant $24$, the threshold $N$ and $(C_a,N_a)$.
+    For $q,R,N_0\in\mathbb N$ and $J,\Delta,A_0\in\mathbb R$, with $C,N$ from Definition~\ref{def:peps_closed_collar_constants} and $C_a=C_a(q,R,J,\Delta,C)$, $N_a=N_a(q,R,J,\Delta,C)$ from Definition~\ref{def:peps_collar_amplification_constants}, define via (\ref{eq:peps_coarse_information_constants}):
+    \begin{align}
+        C_{\rm coarse}(q,R,J,\Delta) & := \max\{C_a,0\},                    &
+        u_0(q,R,J,\Delta,N_0,A_0)    & := u_0(24,N_0,A_0,N,C_a,N_a). \notag
+    \end{align}
 \end{definition}
 
 % Status: auxiliary result. Proposition 3.1 of the polynomial-PEPS source
@@ -330,27 +205,11 @@ Hamiltonian and its full-system gap. Conditional forms are stated separately.
     \leanok
     \uses{def:peps_box_union,def:area_law_hamiltonian,
         def:peps_closed_coarse_constants}
-    Fix $q,R,N_0\in\mathbb N$ with $q\ge1$, real numbers $J\ge0$, $\Delta>0$
-    and $A_0$, and put $u_0=u_0(q,R,J,\Delta,N_0,A_0)$. Let $u\ge u_0$, let
-    $\Lambda$ be a finite induced domain, and let $\Omega$ be a normalized
-    ground vector with full-system gap $\Delta$ of an admissible Hamiltonian
-    of range $R$ and bound $J$ on $\Lambda$. Let $T$ be a union of at most
-    $N_0$ lattice boxes with $\operatorname{diam}_\infty T\le A_0u$. Then
-    $I_\Omega(X:E)\le C_{\rm coarse}(q,R,J,\Delta)$ whenever
-    $X\subseteq\Lambda\cap T$, $E\subseteq\Lambda$ and
-    $\operatorname{dist}_\infty(T,E)>u^{\beta_0}$. The source states
-    \cite[Proposition~3.1]{OpenAI2026PolynomialPEPS} for site and
-    nearest-neighbour terms only, which is range one; this extends it to
-    range $R$.
+    For $q,R,N_0\in\mathbb N$ ($q\ge1$), $J\ge0$, $\Delta>0$, $A_0\in\mathbb R$, $u\ge u_0(q,R,J,\Delta,N_0,A_0)$, any unit ground vector $\Omega$ with gap $\Delta$ of an admissible range-$R$, bound-$J$ Hamiltonian on a finite induced domain $\Lambda$, any union $T$ of at most $N_0$ boxes with $\operatorname{diam}_\infty T\le A_0u$, any $X\subseteq\Lambda\cap T$, and any $E\subseteq\Lambda$ with $\operatorname{dist}_\infty(T,E)>u^{\beta_0}$, one has $I_\Omega(X:E)\le C_{\rm coarse}(q,R,J,\Delta)$ (extending \cite[Proposition~3.1]{OpenAI2026PolynomialPEPS} from $R=1$ to general $R$).
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_coarse_information_of_collar_explicit,thm:peps_collar_closed,
         thm:peps_collar_amplification_bound}
-    By Theorem~\ref{thm:peps_collar_closed} at the clearance $2R+11$, the
-    collar bound holds with constant $C$ and threshold $N$, and by
-    Theorem~\ref{thm:peps_collar_amplification_bound} the amplification bound
-    at $(\max\{C,1\},1)$ holds with constant $C_a$ and threshold $N_a$.
-    Theorem~\ref{thm:peps_coarse_information_of_collar_explicit} then gives
-    the claim.
+    Combine Theorem~\ref{thm:peps_collar_closed} (at $D_0=2R+11$) and Theorem~\ref{thm:peps_collar_amplification_bound} with Theorem~\ref{thm:peps_coarse_information_of_collar_explicit}.
 \end{proof}

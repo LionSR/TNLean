@@ -1,10 +1,9 @@
 \section{Exact elimination of finite-dimensional messages}
 \label{sec:peps_message_expansion}
 
-The next identities justify the preliminary message expansion in
-\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}. They act on the
-original transmitted register and arbitrary spectator memory. In particular,
-no bound on the spectator dimension occurs.
+The identities below justify the preliminary message expansion in
+\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} on the transmitted register and an
+arbitrary spectator memory, with no bound on the spectator dimension.
 
 \begin{definition}[A local bra and a message summand]
     \label{def:peps_local_message_summand}
@@ -12,11 +11,10 @@ no bound on the spectator dimension occurs.
     \lean{TNLean.Lattice.PartyCircuit.Word.transferTerm}
     \leanok
     \uses{def:peps_party_layout}
-    For a vector $u\in H$ at a party $a$, the local bra is
-    $\langle u|\otimes I$, acting on $H\otimes K$ and discarding the $H$
-    register. For parties $a,b$ and an orthonormal basis $(e_i)_{i\in I}$
-    of $H$, the $i$th message summand first applies the local bra
-    $\langle e_i|$ at $a$, then prepares $e_i$ at $b$.
+    For $u\in H$ at party $a$, the local bra is
+    $\langle u|\otimes I_K:H\otimes K\to K$. For parties $a,b$ and an
+    orthonormal basis $(e_i)_{i\in I}$ of $H$, the $i$-th message summand
+    applies $\langle e_i|_a\otimes I_K$ and then prepares $|e_i\rangle_b$.
 \end{definition}
 
 \begin{theorem}[Local message summands]
@@ -27,41 +25,40 @@ no bound on the spectator dimension occurs.
     \lean{TNLean.Lattice.PartyCircuit.Word.sources_transferTerm}
     \lean{TNLean.Lattice.PartyCircuit.Word.eval_transferTerm_tmul}
     \leanok
-    A local bra defined by a normalized vector has norm at most one. Every message summand is an allowed product of local
-    contractions, containing no pair source. On $x\otimes y$ its action is
+    For $\|u\|=1$, $\|\langle u|\otimes I_K\|\le 1$. Each message summand is an
+    allowed source-free composition of local contractions sending
     \begin{align}
         x\otimes y\longmapsto \langle e_i,x\rangle e_i\otimes y,
         \label{eq:peps_message_summand_action}
     \end{align}
-    where the first output register is assigned to the receiver.
+    with the first output register owned by $b$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:peps_local_message_summand}
-    The bra has norm at most $\|e_i\|=1$, and preparation of $e_i$ is an
-    isometry. Their composition has the action~(\ref{eq:peps_message_summand_action}). Both operations
-    are local at their prescribed parties.
+    Since $\|e_i\|=1$, $\langle e_i|_a\otimes I_K$ is a contraction and
+    preparing $|e_i\rangle_b$ is an isometry, with composite action
+    (\ref{eq:peps_message_summand_action}).
 \end{proof}
 
 \begin{theorem}[The exact message identity]
     \label{thm:peps_exact_message_identity}
     \lean{TNLean.Lattice.PartyCircuit.Word.sum_eval_transferTerm}
     \leanok
-    Summing the message summands over an orthonormal basis gives exactly the
-    identity transfer from sender to receiver, tensored with the identity
-    on the spectator memory:
+    Summing the message summands over $(e_i)_{i\in I}$ gives the identity
+    transfer from $a$ to $b$:
     \begin{align}
         \sum_{i\in I} |e_i\rangle_b\langle e_i|_a\otimes I_K
         =I_{H\otimes K}.
         \label{eq:peps_exact_message_identity}
     \end{align}
-    This includes zero-dimensional transmitted spaces.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_local_message_summands}
-    The orthonormal-basis expansion gives $\sum_i\langle e_i,x\rangle e_i=x$.
-    The asserted equality follows first on pure tensors and then by linearity.
+    By (\ref{eq:peps_message_summand_action}) and Parseval's identity
+    $\sum_{i\in I}\langle e_i,x\rangle e_i=x$, both sides agree on elementary
+    tensors $x\otimes y$.
 \end{proof}
 
 \begin{definition}[Prepending and composing monomials]
@@ -69,9 +66,10 @@ no bound on the spectator dimension occurs.
     \lean{TNLean.Lattice.PartyCircuit.PartyChain.prependWord}
     \lean{TNLean.Lattice.PartyCircuit.PartyChain.comp}
     \leanok
-    Prepend a word to the initial word of a monomial. To compose two monomials
-    with matching intermediate registers, retain the first monomial's effects
-    in their original order and append the second monomial at its final word.
+    Prepending a word to a monomial composes it with the monomial's initial
+    segment. Composing two monomials with matching intermediate registers
+    concatenates their effect chains by prepending the first monomial's final
+    segment to the second monomial.
 \end{definition}
 
 \begin{theorem}[Operators and pair effects of composed monomials]
@@ -84,20 +82,16 @@ no bound on the spectator dimension occurs.
     \lean{TNLean.Lattice.PartyCircuit.PartyChain.effectCount_comp}
     \leanok
     \uses{def:peps_compose_actual_monomials}
-    An allowed monomial may be preceded by an allowed word containing no pair
-    effects, without changing its number of pair effects. More generally,
-    two monomials with matching intermediate registers have a chronological
-    composition. Its operator is the composition of their operators, its
-    pair-effect count is the sum of their counts, and it is allowed whenever
-    both original monomials are allowed.
+    Prepending an allowed source-only word to an allowed monomial preserves its
+    allowedness and pair-effect count. For composable monomials $M,N$, their
+    composition $N\circ M$ has operator $N\circ M$, pair-effect count
+    $r_{N\circ M}=r_N+r_M$, and is allowed whenever $M$ and $N$ are allowed.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:peps_compose_actual_monomials}
-    Prepend the word to the initial word of the monomial. For composition,
-    retain the first monomial's successive effects in their original order
-    and append the second monomial at its final word. Induction on the first
-    monomial proves the operator identity, allowedness and the exact count.
+    Induct on the effect chain of $M$ using
+    Definition~\ref{def:peps_compose_actual_monomials}.
 \end{proof}
 
 \begin{theorem}[The finite expansion of a message]
@@ -109,20 +103,16 @@ no bound on the spectator dimension occurs.
     \lean{TNLean.Lattice.PartyCircuit.PartyGate.sum_norm_coeff_transfer}
     \lean{TNLean.Lattice.PartyCircuit.PartyGate.eval_transfer}
     \leanok
-    The finite expansion consisting of the message summands, each with
-    coefficient one, has $\dim H$ terms and absolute coefficient sum
-    $\dim H$. Every term is allowed and has no pair effect. The operator of
-    this expansion is the transmitted identity operator.
-    For $\dim H=0$ the expansion is empty and represents the zero operator
-    on the zero space.
+    The unit-weighted list of message summands for $H$ has length $\dim H$,
+    absolute coefficient sum $\dim H$, allowed terms with $0$ pair effects, and
+    evaluated operator $I_{H\otimes K}$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_exact_message_identity}
-    The expansion is indexed once by each basis vector. Its operator is the
-    sum of the weighted monomial operators, so~(\ref{eq:peps_exact_message_identity})
-    applies directly. Counting the unit coefficients proves both assertions
-    about size.
+    Each of the $\dim H$ basis elements contributes one allowed, effect-free
+    summand with coefficient $1$, and (\ref{eq:peps_exact_message_identity})
+    gives the sum $I_{H\otimes K}$.
 \end{proof}
 
 \begin{definition}[Composition of gate expansions]
@@ -131,10 +121,9 @@ no bound on the spectator dimension occurs.
     \lean{TNLean.Lattice.PartyCircuit.PartyGate.mem_comp}
     \leanok
     \uses{def:peps_compose_actual_monomials}
-    Let $L=((c_j,M_j))_j$ and $K=((d_k,N_k))_k$ be ordered gate
-    expansions with matching intermediate memories. Their chronological
-    composition lists $(c_jd_k,N_kM_j)$ in lexicographic order on $(j,k)$.
-    Each composed occurrence comes from one occurrence in each original list.
+    For ordered gate expansions $L=((c_j,M_j))_j$ and $K=((d_k,N_k))_k$ with
+    matching intermediate memories, their chronological composition $K\circ L$
+    lists $(c_jd_k,N_k\circ M_j)$ in lexicographic order on $(j,k)$.
 \end{definition}
 
 \begin{theorem}[Operator and resources of composed expansions]
@@ -146,21 +135,20 @@ no bound on the spectator dimension occurs.
     \lean{TNLean.Lattice.PartyCircuit.PartyGate.effectCount_comp_le}
     \leanok
     \uses{def:peps_composed_gate_expansion}
-    The composed list evaluates to the second gate operator after the
-    first. Its length is $|L||K|$, and its absolute coefficient sum is
-    $(\sum_j|c_j|)(\sum_k|d_k|)$. If the original monomials are allowed,
-    so are their compositions. Bounds $r,s$ on their pair-effect counts
-    give the bound $r+s$ on every composed occurrence.
+    The composition $K\circ L$ evaluates to $G_K G_L$, has length $|L||K|$,
+    and has coefficient sum $(\sum_j|c_j|)(\sum_k|d_k|)$. If all terms of $L$
+    and $K$ are allowed with at most $r$ and $s$ pair effects, respectively,
+    then all terms of $K\circ L$ are allowed with at most $r+s$ pair effects.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_compose_actual_monomials}
-    Distribute the two finite operator sums and use the operator
-    identity for monomial composition. Counting the ordered pairs gives
-    the length formula. Since $|c_jd_k|=|c_j||d_k|$, the coefficient
-    sums multiply. The local contractions and pair effects remain in
-    their original order, so allowedness is preserved and effect counts add.
+    Bilinearity and Theorem~\ref{thm:peps_compose_actual_monomials} give
+    $\sum_{j,k}c_jd_k(N_k\circ M_j)=G_K G_L$, $|K\circ L|=|L||K|$,
+    $\sum_{j,k}|c_jd_k|=(\sum_j|c_j|)(\sum_k|d_k|)$, allowedness, and the effect
+    bound $r+s$.
 \end{proof}
+
 \begin{definition}[Monomials with finite-dimensional messages]
     \label{def:peps_message_monomial}
     \lean{TNLean.Lattice.PartyCircuit.MessageMonomial}
@@ -171,17 +159,12 @@ no bound on the spectator dimension occurs.
     \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.expand}
     \leanok
     \uses{def:peps_party_monomial}
-    A monomial with messages is a chronological composition of the
-    existing source-and-effect monomials and finite-dimensional register
-    transfers. A transfer is the identity on a register's Hilbert space,
-    changing its owner from the sender to the receiver and leaving all
-    spectators unchanged. The monomial is allowed when all its original
-    source-and-effect segments are allowed.
-    Record its message dimensions $d_1,\ldots,d_s$ in chronological order
-    and let $r_M$ count its original pair effects. Choose an orthonormal
-    basis of each message space and expand its identity as the sum of
-    sender bras followed by receiver kets. Compose these finite lists in
-    the original order to obtain an expansion $\mathcal E(M)$.
+    A monomial with messages $M$ is a chronological composition of party
+    monomials (Definition~\ref{def:peps_party_monomial}) and register transfers
+    of dimensions $d_1,\ldots,d_s$, with total pair-effect count $r_M$; it is
+    allowed when all its party-monomial segments are allowed. Expanding each
+    transfer in an orthonormal basis and composing the resulting gate lists
+    defines the message-free expansion $\mathcal E(M)$.
 \end{definition}
 
 \begin{theorem}[Exact expansion and resources of bounded messages]
@@ -191,26 +174,22 @@ no bound on the spectator dimension occurs.
     \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.isAllowed_effectCount_expand}
     \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.expansion_size}
     \leanok
-    The expansion $\mathcal E(M)$ evaluates to the original
-    monomial. If $M$ is allowed, every term is an allowed existing
-    monomial with $r_M$ pair effects, and
+    The expansion $\mathcal E(M)$ evaluates to $M$. If $M$ is allowed, every
+    term of $\mathcal E(M)$ is an allowed party monomial with $r_M$ pair
+    effects, and
     \begin{align}
         |\mathcal E(M)|
         =\sum_{(c,N)\in\mathcal E(M)}|c|
         =\prod_{j=1}^{s}d_j.
         \label{eq:peps_message_expansion_size}
     \end{align}
-    These statements include zero-dimensional transfers and the empty
-    list of message occurrences.
 \end{theorem}
 \begin{proof}
     \uses{thm:peps_message_expansion_count,thm:peps_composed_gate_resources}
     \leanok
-    The basis expansion of a transfer has one unit-coefficient local
-    monomial for each basis vector and introduces no pair effect.
-    Composition multiplies the list lengths and absolute coefficient
-    sums, adds the original effect counts, and preserves the evaluated
-    operator. Induction over the monomial gives the assertions.
+    Induct over the segments and transfers of $M$ using
+    Theorems~\ref{thm:peps_message_expansion_count}
+    and~\ref{thm:peps_composed_gate_resources}.
 \end{proof}
 
 \begin{theorem}[Polynomial cost of boundedly many messages]
@@ -218,29 +197,23 @@ no bound on the spectator dimension occurs.
     \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.expansion_size_le}
     \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.expansion_size_le_of_power_bounds}
     \leanok
-    Suppose $M$ contains at most $m$ messages, each of dimension at most
-    $D\geq1$. Both the number of expanded monomials and their absolute
-    coefficient sum are at most $D^m$. In particular, if
-    $d_j\leq C_D L^v$, where $C_D,L\geq1$ and $v$ is a nonnegative
-    integer, both quantities are at most $C_D^mL^{vm}$.
-    Thus boundedly many polynomial-dimensional messages change a gate
-    expansion by only a polynomial factor, as required in Theorem~5.2,
-    assumption~3, and the preliminary reduction in its proof.
+    If $M$ contains $s\le m$ messages of dimensions $d_j\le D$ ($D\ge 1$), then
+    $|\mathcal E(M)|=\sum_{(c,N)\in\mathcal E(M)}|c|\le D^m$. If
+    $d_j\le C_DL^v$ ($C_D,L\ge 1$, $v\in\N$), both quantities are at most
+    $C_D^mL^{vm}$, as in Theorem~5.2, assumption~3.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_message_expansion}
-    Bound each factor in~(\ref{eq:peps_message_expansion_size}) by $D$.
-    Since $D\geq1$, replacing the message count by $m$ can only
-    increase this upper bound. Substitute
-    $D=C_D L^v$ for the final assertion.
+    By (\ref{eq:peps_message_expansion_size}),
+    $\prod_{j=1}^s d_j\le D^s\le D^m$, and setting $D=C_DL^v$ gives $C_D^mL^{vm}$.
 \end{proof}
+
 \section{Gates containing bounded messages}
 \label{sec:peps_message_gate_expansion}
 
-Let $H_a,H_b$ be the input and output memories of a fixed finite set of
-participating parties. We use the monomials that permit local contractions,
-normalized pair sources and effects, and finite-dimensional transfers, as in
+Let $H_a,H_b$ be the input and output memories of a finite set of participating
+parties, using message monomials as in
 % Source: 04-compression.tex, lines 32--43.
 \cite[Proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
 
@@ -250,10 +223,9 @@ normalized pair sources and effects, and finite-dimensional transfers, as in
         TNLean.Lattice.PartyCircuit.MessageGate.eval}
     \leanok
     \uses{def:peps_message_monomial}
-    A weighted gate list is a finite ordered list
-    $L=((c_j,M_j))_{j=0}^{K-1}$, where each $M_j:H_a\to H_b$ is such a
-    monomial and $c_j\in\C$. Its operator is $G_L=\sum_j c_jM_j$.
-    Occurrences are retained separately when two monomials agree.
+    A weighted message-gate list is a finite ordered list
+    $L=((c_j,M_j))_{j=0}^{K-1}$ of message monomials $M_j:H_a\to H_b$ with
+    $c_j\in\C$ and operator $G_L=\sum_j c_jM_j$.
 \end{definition}
 
 \begin{definition}[Expanding all messages in a gate]
@@ -262,12 +234,9 @@ normalized pair sources and effects, and finite-dimensional transfers, as in
         TNLean.Lattice.PartyCircuit.MessageGate.mem_expand}
     \leanok
     \uses{def:peps_message_gate}
-    Write the coordinate expansion of the messages in $M_j$ as the ordered
-    list $((a_{j,t},N_{j,t}))_t$. Replace the occurrence $(c_j,M_j)$ by
-    $((c_ja_{j,t},N_{j,t}))_t$ and concatenate these lists in their original
-    order. Thus every resulting occurrence has coefficient $c_ja_{j,t}$
-    and monomial $N_{j,t}$ for an original occurrence $j$ and one of its
-    coordinate choices $t$.
+    For $L=((c_j,M_j))_{j=0}^{K-1}$ with $\mathcal E(M_j)=((a_{j,t},N_{j,t}))_t$,
+    define the expanded gate list $\widetilde L$ by concatenating
+    $((c_ja_{j,t},N_{j,t}))_t$ over $j=0,\ldots,K-1$.
 \end{definition}
 
 % Source: 04-compression.tex, allowed monomials and message expansion,
@@ -280,26 +249,15 @@ normalized pair sources and effects, and finite-dimensional transfers, as in
     \leanok
     \uses{def:peps_party_monomial,def:peps_message_monomial,
         def:peps_message_gate_expand}
-    Let $A=((c_j,M_j))_{j=0}^{K-1}$ be a finite ordered list of
-    party monomials with common input and output memories and complex
-    coefficients. Regard each $M_j$ as a single segment containing no
-    messages. Expanding the resulting weighted list gives exactly
-    the original list:
-    \begin{align}
-        \widetilde A & =A.\notag
-    \end{align}
-    This identity imposes no allowedness condition on the monomials.
-    It preserves the order, repeated occurrences and zero coefficients,
-    and includes the empty list.
+    Viewing a list $A=((c_j,M_j))_{j=0}^{K-1}$ of message-free party monomials
+    as single-segment message monomials gives $\widetilde A=A$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{def:peps_message_monomial,def:peps_message_gate_expand}
-    A segment $M_j$ expands to the singleton list $((1,M_j))$.
-    Its original coefficient therefore gives the singleton
-    $((c_j\cdot1,M_j))=((c_j,M_j))$. Concatenating these singletons
-    in the original order recovers $A$.
+    Each segment $M_j$ has $\mathcal E(M_j)=((1,M_j))$, so concatenating
+    $((c_j\cdot 1,M_j))$ recovers $A$.
 \end{proof}
 
 \begin{theorem}[Operator and effect count under message expansion]
@@ -309,17 +267,16 @@ normalized pair sources and effects, and finite-dimensional transfers, as in
         TNLean.Lattice.PartyCircuit.MessageGate.effectCount_expand_le}
     \leanok
     \uses{def:peps_message_gate_expand}
-    The expanded list has operator $G_L$. If every $M_j$ is allowed, so is
-    every resulting monomial. If every $M_j$ is allowed and has at most $r$ pair effects,
-    the same bound holds for every resulting monomial.
+    The expanded list $\widetilde L$ evaluates to $G_L$. If every $M_j$ is
+    allowed with at most $r$ pair effects, then every term of $\widetilde L$ is
+    allowed with at most $r$ pair effects.
 \end{theorem}
 \begin{proof}
     \uses{thm:peps_message_expansion}
     \leanok
-    Each coordinate expansion satisfies $\sum_t a_{j,t}N_{j,t}=M_j$.
-    Hence $\sum_{j,t}c_ja_{j,t}N_{j,t}=\sum_jc_jM_j$. Its factors are the
-    original allowed factors and the local coordinate maps of the transfers.
-    The latter introduce no pair effects.
+    By Theorem~\ref{thm:peps_message_expansion},
+    $\sum_t a_{j,t}N_{j,t}=M_j$ and each $N_{j,t}$ is allowed with $r_{M_j}\le r$
+    pair effects, so $\sum_{j,t}c_ja_{j,t}N_{j,t}=\sum_j c_jM_j=G_L$.
 \end{proof}
 
 \begin{theorem}[Term count and coefficient sum]
@@ -329,26 +286,24 @@ normalized pair sources and effects, and finite-dimensional transfers, as in
         TNLean.Lattice.PartyCircuit.MessageGate.expansion_size_le_of_coeff_le}
     \leanok
     \uses{def:peps_message_gate_expand}
-    Let $d_{j,1},\ldots,d_{j,m_j}$ be the dimensions of the messages in
-    $M_j$, and put $q_j=\prod_{t=1}^{m_j}d_{j,t}$. The number of resulting
-    occurrences and their absolute coefficient sum are respectively
-    $\sum_jq_j$ and $\sum_j|c_j|q_j$.
-    If $|L|\le K$, $m_j\le m$, and $d_{j,t}\le D$ with $D\ge1$, then
+    If $M_j$ has message dimensions $d_{j,1},\ldots,d_{j,m_j}$ and
+    $q_j=\prod_{t=1}^{m_j}d_{j,t}$, then $|\widetilde L|=\sum_j q_j$ and
+    $\sum_{(c,N)\in\widetilde L}|c|=\sum_j|c_j|q_j$. If $|L|\le K$,
+    $m_j\le m$, and $d_{j,t}\le D$ ($D\ge 1$), then
     \begin{align}
-        |\widetilde L| & \le KD^m,                    \\
+        |\widetilde L| & \le KD^m,                    &
         \sum_{(c,N)\in\widetilde L}|c|
-                       & \le D^m\sum_{(c,M)\in L}|c|.
+                       & \le D^m\sum_{(c,M)\in L}|c|,
+        \label{eq:peps_message_gate_size}
     \end{align}
-    In particular, $|c_j|\le C$ with $C\ge0$ gives the bound $KCD^m$.
+    and if $|c_j|\le C$ ($C\ge 0$), then $\sum_{(c,N)\in\widetilde L}|c|\le KCD^m$.
 \end{theorem}
 \begin{proof}
     \uses{thm:peps_message_expansion}
     \leanok
-    A monomial with message dimensions $d_{j,t}$ has $q_j$
-    coordinate choices, and the absolute coefficient sum of its expansion
-    is $q_j$. Multiplication by $c_j$ scales this sum by $|c_j|$.
-    Summing proves the formulas. The inequalities follow from
-    $q_j\le D^{m_j}\le D^m$ and $\sum_j|c_j|\le KC$.
+    By (\ref{eq:peps_message_expansion_size}), $|\mathcal E(M_j)|=\sum_t|a_{j,t}|=q_j\le D^m$;
+    summing over $j$ gives $|\widetilde L|=\sum_j q_j\le KD^m$ and
+    $\sum_{j,t}|c_ja_{j,t}|=\sum_j|c_j|q_j\le D^m\sum_j|c_j|\le KCD^m$.
 \end{proof}
 
 \begin{definition}[The corresponding original circuit gate]
@@ -356,11 +311,10 @@ normalized pair sources and effects, and finite-dimensional transfers, as in
     \lean{TNLean.Lattice.PartyCircuit.MessageGate.toOriginalCircuit}
     \leanok
     \uses{thm:peps_message_gate_eval}
-    Suppose the local participant set $C$ has $|C|\ne1$, its embedding in
-    the global parties is $\iota:C\hookrightarrow P$, all monomials are
-    allowed, and $\|G_L\|\le1$. Insert the expanded list as one nonprivate
-    gate with the same participant embedding and the same spectator memory.
-    Empty participant sets are included.
+    For a participant set $C$ with $|C|\ne1$, embedding $\iota:C\hookrightarrow P$,
+    allowed monomials $M_j$, and $\|G_L\|\le1$, define the original-circuit gate
+    by inserting $\widetilde L$ as a single nonprivate gate with participant
+    embedding $\iota$ and unchanged spectator memory.
 \end{definition}
 
 \begin{theorem}[Operator and occurrences of the constructed gate]
@@ -370,18 +324,16 @@ normalized pair sources and effects, and finite-dimensional transfers, as in
         TNLean.Lattice.PartyCircuit.MessageGate.participants_toOriginalCircuit}
     \leanok
     \uses{def:peps_message_gate_circuit}
-    The constructed gate's operator is the relabelling of
-    $G_L\otimes I$. It has one nonprivate occurrence, with participant
-    set $\iota(C)$.
+    The gate of Definition~\ref{def:peps_message_gate_circuit} has operator
+    equal to the relabelling of $G_L\otimes I$, nonprivate gate count $1$, and
+    participant set $\iota(C)$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_message_gate_eval}
-    The expanded list has the original operator, so adjoining the spectator
-    identity and relabelling the participant registers gives the stated
-    operator. Its norm bound follows from equality of the expanded and
-    original operators. The construction inserts one nonprivate
-    occurrence with the prescribed participant embedding.
+    By Theorem~\ref{thm:peps_message_gate_eval}, $\widetilde L$ evaluates to
+    $G_L$ with $\|G_L\|\le 1$, and Definition~\ref{def:peps_message_gate_circuit}
+    inserts one nonprivate occurrence on $\iota(C)$.
 \end{proof}
 
 \begin{theorem}[Resource bounds for the constructed gate]
@@ -390,17 +342,15 @@ normalized pair sources and effects, and finite-dimensional transfers, as in
         TNLean.Lattice.PartyCircuit.MessageGate.isMonomialBounded_toOriginalCircuit}
     \leanok
     \uses{def:peps_message_gate_circuit}
-    Under the dimension and message-count bounds of
-    Theorem~\ref{thm:peps_message_gate_size}, if the original coefficient
-    sum is at most $S$ and every original monomial has at most $r$ pair
-    effects, the constructed gate has the same effect bound and coefficient
-    sum at most $SD^m$. If the original list has at most $K$ terms, it has
-    at most $\lceil KD^m\rceil$ terms.
+    Under the hypotheses of Theorem~\ref{thm:peps_message_gate_size}, if
+    $\sum_{(c,M)\in L}|c|\le S$, each $M_j$ has at most $r$ pair effects, and
+    $|L|\le K$, then the gate of Definition~\ref{def:peps_message_gate_circuit}
+    has at most $r$ pair effects per monomial, coefficient sum at most $SD^m$,
+    and at most $\lceil KD^m\rceil$ terms.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_message_gate_eval,thm:peps_message_gate_size}
-    Apply the effect-count preservation and the two size estimates to the
-    expanded list used in the gate. The ceiling converts its real
-    upper bound into an integer bound.
+    Apply Theorems~\ref{thm:peps_message_gate_eval}
+    and~\ref{thm:peps_message_gate_size} to $\widetilde L$.
 \end{proof}

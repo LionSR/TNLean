@@ -10,7 +10,7 @@
         \MN{D_B(e)},\qquad
         \forall \sigma,\ \forall X\in\MN{D_A(e)},\quad
         C_A(e,\sigma,X)=C_B(e,\sigma,\Phi_e(X)).
-        \notag
+        \label{eq:peps_edge_blocked_insertion_alg_iso}
     \end{align}
 \end{definition}
 
@@ -19,21 +19,10 @@
     \lean{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism}
     \leanok
     \uses{def:peps_edgeBlockedInsertionAlgebraIsomorphism_property, thm:peps_edgeBlockedThreeSiteInjective, thm:peps_virtualInsertionPhysicalRealization, thm:peps_edgeInsertedCoeff_endpointPhysicalRealization, thm:peps_edgeInsertedCoeff_injective, thm:peps_physical_to_virtual_insertion, thm:peps_sameState_edgeBlockedCoeff_eq, def:peps_edgeInsertedCoeff}
-    Suppose the two edge-blocked three-site chains associated to $A$ and $B$ at
-    the edge $e$ are injective, suppose every virtual bond of $A$ and $B$ has
-    positive dimension, and suppose the two PEPS tensors define the same state.
+    If the edge-blocked three-site chains of $A$ and $B$ at $e$ are injective, $D_A,D_B>0$, and $A$ and $B$ define the same PEPS state, then (\ref{eq:peps_edge_blocked_insertion_alg_iso}) holds.
     % Scope restriction: the unrestricted Section 3 statement requires deriving
     % positive bond dimensions from injectivity; see
     % docs/paper-gaps/peps_injective_ft_section3_route.tex.
-    Then
-    \begin{align}
-        \exists \Phi_e:\MN{D_A(e)}
-        \simeq_{\mathrm{alg}}
-        \MN{D_B(e)},\qquad
-        \forall \sigma,\ \forall X\in\MN{D_A(e)},\quad
-        C_A(e,\sigma,X)=C_B(e,\sigma,\Phi_e(X)).
-        \notag
-    \end{align}
     This is the edge-blocked form of the algebra isomorphism $X\mapsto Y$ in
     \cite[Section~3]{Molnar2018NormalPEPS}:
     % Formula: C_A(e,X;sigma)=C_B(e,Y;sigma) for the corresponding three-site
@@ -60,96 +49,31 @@
     \end{center}
 \end{theorem}
 \begin{proof}\leanok
-    For a matrix $X\in\MN{D_A(e)}$, realize the insertion of $X$ at the two
-    endpoints of the first edge-blocked chain by physical operators $O_1,O_2$.
-    Write $C_{\mathrm{mid}}^A$ and $C_{\mathrm{mid}}^B$ for the open middle
-    weights of the two edge-blocked chains. For every physical configuration
-    $\sigma$, endpoint realization of $X$ and equality of the PEPS states give
+    For $X\in\MN{D_A(e)}$, realize the insertion of $X$ at the endpoints $u,v$ of $A$'s edge-blocked chain by physical operators $O_1,O_2$ (Theorem~\ref{thm:peps_edgeInsertedCoeff_endpointPhysicalRealization}). With open middle weights $C_{\mathrm{mid}}^A,C_{\mathrm{mid}}^B$, equality of PEPS states (Theorem~\ref{thm:peps_sameState_edgeBlockedCoeff_eq}) gives
     \begin{align}
         C_A(e,\sigma,X)
-         & =
-        \sum_{\beta}
-        O_1(A_u(\beta_u))_{\sigma_u}
-        C_{\mathrm{mid}}^A(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})
-        (A_v(\beta_v))_{\sigma_v}
-        \notag \\
-         & =
-        \sum_{\beta}
-        O_1(B_u(\beta_u))_{\sigma_u}
-        C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})
-        (B_v(\beta_v))_{\sigma_v},
+         & =\sum_{\beta}O_1(B_u(\beta_u))_{\sigma_u}C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})(B_v(\beta_v))_{\sigma_v}
+        =\sum_{\beta}(B_u(\beta_u))_{\sigma_u}C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})O_2(B_v(\beta_v))_{\sigma_v}.
         \notag
     \end{align}
-    and
+    Theorem~\ref{thm:peps_physical_to_virtual_insertion} on $B$'s chain yields $Y=T(X)\in\MN{D_B(e)}$ with $C_A(e,\sigma,X)=C_B(e,\sigma,T(X))$. Linearity and two-endpoint realization give
     \begin{align}
-        C_A(e,\sigma,X)
-         & =
-        \sum_{\beta}
-        (A_u(\beta_u))_{\sigma_u}
-        C_{\mathrm{mid}}^A(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})
-        O_2(A_v(\beta_v))_{\sigma_v}
-        \notag \\
-         & =
-        \sum_{\beta}
-        (B_u(\beta_u))_{\sigma_u}
-        C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})
-        O_2(B_v(\beta_v))_{\sigma_v}.
+        C_B(e,\sigma,T(X+X')) & =C_B(e,\sigma,T(X)+T(X')), &
+        C_B(e,\sigma,T(XX'))  & =C_B(e,\sigma,T(X)T(X')),  &
+        C_B(e,\sigma,T(1))    & =C_B(e,\sigma,1),
         \notag
     \end{align}
-    Therefore, for every physical configuration $\sigma$,
-    \begin{align}
-        \sum_{\beta}
-        O_1(B_u(\beta_u))_{\sigma_u}
-        C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})
-        (B_v(\beta_v))_{\sigma_v}
-         & =
-        \sum_{\beta}
-        (B_u(\beta_u))_{\sigma_u}
-        C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})
-        O_2(B_v(\beta_v))_{\sigma_v}.
-        \notag
-    \end{align}
-    The positive-bond physical-to-virtual recovery applied to the second
-    edge-blocked chain gives a matrix $Y\in\MN{D_B(e)}$ such that
-    $C_A(e,\sigma,X)=C_B(e,\sigma,Y)$ for every physical configuration
-    $\sigma$.
-    Thus $X\mapsto Y$ gives the required coefficient correspondence. Denote
-    this correspondence by $T$. For every physical configuration $\sigma$,
-    \begin{align}
-        C_B(e,\sigma,T(X+X'))
-         & =C_A(e,\sigma,X+X')
-        \notag                               \\
-         & =C_A(e,\sigma,X)+C_A(e,\sigma,X')
-        \notag                               \\
-         & =C_B(e,\sigma,T(X)+T(X')).
-        \notag
-    \end{align}
-    Similarly, $T(cX)=cT(X)$. The multiplicative identity is read from
-    the inserted two-endpoint realization:
-    \begin{align}
-        C_B(e,\sigma,T(XX'))
-        =C_A(e,\sigma,XX')
-        =C_B(e,\sigma,T(X)T(X')).
-        \notag
-    \end{align}
-    The unit satisfies
-    $C_B(e,\sigma,T(1))=C_A(e,\sigma,1)=C_B(e,\sigma,1)$.
-    Theorem~\ref{thm:peps_edgeInsertedCoeff_injective} identifies the inserted
-    matrices in these coefficient identities. Exchanging $A$ and $B$ gives the
-    inverse correspondence, hence a $\C$-algebra isomorphism.
+    and $T(cX)=cT(X)$ by Theorem~\ref{thm:peps_edgeInsertedCoeff_injective}; exchanging $A$ and $B$ supplies $T^{-1}$.
 \end{proof}
 
 \begin{theorem}[Matrix-algebra isomorphisms preserve size]%
     \label{thm:matrixAlgEquiv_fin_eq}
     \lean{Matrix.matrixAlgEquiv_fin_eq}
     \leanok
-    If the full matrix algebras $\MN{D}$ and $\MN{E}$ are isomorphic as
-    $\C$-algebras, then $D=E$.
+    If $\MN{D}\simeq_{\mathrm{alg}}\MN{E}$ as $\C$-algebras, then $D=E$.
 \end{theorem}
-
 \begin{proof}\leanok
-    The isomorphism preserves complex vector-space dimension, and
-    $\dim_{\C}\MN{D}=D^2$ and $\dim_{\C}\MN{E}=E^2$, so $D=E$.
+    $D^2=\dim_{\C}\MN{D}=\dim_{\C}\MN{E}=E^2$, so $D=E$.
 \end{proof}
 
 \begin{theorem}[Matrix-algebra isomorphisms are inner after identifying size]%
@@ -157,20 +81,10 @@
     \lean{Matrix.matrixAlgEquiv_inner_of_fin}
     \leanok
     \uses{thm:matrixAlgEquiv_fin_eq}
-    Let $\varphi:\MN{D}\to\MN{E}$ be a $\C$-algebra isomorphism. Then
-    $D=E$; let $h$ denote this equality and
-    $\iota_h:\MN{D}\to\MN{E}$ the canonical index-relabelling isomorphism.
-    There is $X\in\GL_E(\C)$ with
-    $\varphi(M)=X\iota_h(M)X^{-1}$ for all $M\in\MN{D}$.
+    For any $\C$-algebra isomorphism $\varphi:\MN{D}\to\MN{E}$, one has $h:D=E$, and with the canonical reindexing $\iota_h:\MN{D}\to\MN{E}$ there exists $X\in\GL_E(\C)$ such that $\varphi(M)=X\iota_h(M)X^{-1}$ for all $M\in\MN{D}$.
 \end{theorem}
-
 \begin{proof}\leanok
-    By Theorem~\ref{thm:matrixAlgEquiv_fin_eq}, $D=E$, so $\iota_h$ is defined.
-    Then $\varphi\circ\iota_h^{-1}$ is a $\C$-algebra automorphism of
-    $\MN{E}$, and Skolem--Noether
-    (Theorem~\cite[``Skolem--Noether'']{QICLean2026Blueprint}) gives $X\in\GL_E(\C)$ with
-    $(\varphi\circ\iota_h^{-1})(N)=XNX^{-1}$. Evaluating at
-    $N=\iota_h(M)$ gives $\varphi(M)=X\iota_h(M)X^{-1}$.
+    Theorem~\ref{thm:matrixAlgEquiv_fin_eq} gives $h:D=E$, and applying Skolem--Noether (Theorem~\cite[``Skolem--Noether'']{QICLean2026Blueprint}) to $\varphi\circ\iota_h^{-1}\in\mathrm{Aut}_{\mathrm{alg}}(\MN{E})$ yields $X\in\GL_E(\C)$ with $\varphi(M)=X\iota_h(M)X^{-1}$.
 \end{proof}
 
 \begin{theorem}[Edge gauge from the insertion algebra isomorphism]%
@@ -178,32 +92,14 @@
     \lean{TNLean.PEPS.edgeGaugeFromInsertionAlgebraIsomorphism}
     \leanok
     \uses{thm:matrixAlgEquiv_inner_of_fin}
-    In the finite-dimensional matrix-algebra step of
-    \cite[Section~3]{Molnar2018NormalPEPS}, suppose the edge insertion
-    correspondence is a $\C$-algebra isomorphism
-    between the two full matrix algebras on the chosen bond. Then the two bond
-    dimensions on that edge are equal. If $h_e:D_A(e)=D_B(e)$ is this
-    equality, and if
-    $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_B(e)}$ is the induced algebra
-    isomorphism, then, for an invertible edge matrix $Z_e$, the insertion
-    correspondence is
+    In \cite[Section~3]{Molnar2018NormalPEPS}, if the edge insertion correspondence on $e$ is a $\C$-algebra isomorphism $\MN{D_A(e)}\simeq_{\mathrm{alg}}\MN{D_B(e)}$, then $h_e:D_A(e)=D_B(e)$ and there exists $Z_e\in\GL(D_B(e))$ such that, with the induced isomorphism $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_B(e)}$, the correspondence takes the form
     % Formula/source: Papers/1804.04964/paper_normal.tex, lines 254--279
     % and 576--582, identifies the bond insertion map as an algebra
     % isomorphism and writes its inner-conjugation form Y=ZXZ^{-1}.
-    % Ink-to-index map: exact algebra is used here because X, phi_h_e(X),
-    % and Y are bond endomorphisms, not local tensors with physical legs.
-    % Contraction set: the two ordinary matrix products sum the two intermediate
-    % bond indices; there are no physical or PEPS lattice contractions.
-    % Type verdict: an endomorphism of the B-side edge bond space.
-    % Boundary signature: not applicable to the displayed algebra; no tensor
-    % boundary is asserted by this formula.
     $Y=Z_e\phi_{h_e}(X)Z_e^{-1}$.
 \end{theorem}
-
 \begin{proof}\leanok
-    Applying Theorem~\ref{thm:matrixAlgEquiv_inner_of_fin} to the full matrix
-    algebras determined by the two edge bond spaces gives the dimension equality
-    and the conjugating matrix $Z_e$.
+    Apply Theorem~\ref{thm:matrixAlgEquiv_inner_of_fin} to the bond matrix algebras on $e$.
 \end{proof}
 
 \begin{theorem}[Per-edge gauge family from insertion algebra isomorphisms]%
@@ -211,27 +107,10 @@
     \lean{TNLean.PEPS.exists_edgeGaugeFamily}
     \leanok
     \uses{thm:peps_edgeBlockedThreeSiteInjective, thm:peps_edgeBlockedInsertionAlgebraIsomorphism, thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism}
-    Let $A$ and $B$ be vertex-injective PEPS tensors with the same PEPS state.
-    Suppose the corresponding virtual bond dimensions are equal and every
-    virtual bond of $A$ has positive dimension. Then there is a family
-    $X_e\in\GL(D_A(e))$ such that, for every edge $e$, there is a
-    $\C$-algebra isomorphism
-    $\Phi_e:\MN{D_A(e)}\to\MN{D_B(e)}$ satisfying
-    $C_A(e,\sigma,M)=C_B(e,\sigma,\Phi_e(M))$ for every physical configuration
-    $\sigma$ and matrix $M$. Writing
-    $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_B(e)}$ for the algebra
-    isomorphism induced by the dimension equality on $e$, one has
-    $\Phi_e(M)=\phi_{h_e}(X_eMX_e^{-1})$.
+    Let $A$ and $B$ be vertex-injective PEPS tensors defining the same state with $D_A=D_B>0$. Then there exist $X_e\in\GL(D_A(e))$ and $\C$-algebra isomorphisms $\Phi_e:\MN{D_A(e)}\to\MN{D_B(e)}$ for every edge $e$ such that $C_A(e,\sigma,M)=C_B(e,\sigma,\Phi_e(M))$ and $\Phi_e(M)=\phi_{h_e}(X_eMX_e^{-1})$ for all $\sigma$ and $M$, where $\phi_{h_e}$ is induced by $h_e:D_A(e)=D_B(e)$.
 \end{theorem}
-
 \begin{proof}\leanok
-    Vertex injectivity and positivity give edge-blocked three-site injectivity
-    for $A$ and $B$ at each edge.
-    Theorem~\ref{thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
-    gives the algebra isomorphism $\Phi_e$ preserving inserted coefficients.
-    Theorem~\ref{thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism} realizes
-    $\Phi_e$ by conjugation, and the bond-dimension equality carries the
-    conjugating matrix to the $A$-side bond.
+    Combine Theorem~\ref{thm:peps_edgeBlockedThreeSiteInjective}, Theorem~\ref{thm:peps_edgeBlockedInsertionAlgebraIsomorphism}, and Theorem~\ref{thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism} on each edge $e$.
 \end{proof}
 
 % Specializations of the per-edge gauge to the translated interior edges of the
@@ -242,64 +121,24 @@
     \lean{TNLean.PEPS.exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge}
     \leanok
     \uses{lem:peps_normalSquareHorizontalTranslatedEdge_blockingData}
-    Let $A$ and $B$ be normal PEPS on the open $W\times H$ square lattice that
-    satisfy the rectangular-injectivity hypotheses with union closure, have
-    positive physical dimension $d>0$, have equal and everywhere-positive virtual
-    bond dimensions, and define the same PEPS state. Fix a translated horizontal
-    interior frame with two rows and two
-    columns of margin, that is $2\le x_0$, $2\le y_0$, $x_0+8\le W$, and
-    $y_0+8\le H$, and let $e$ be the distinguished horizontal edge of that frame.
-    Then the bond dimensions agree on $e$, $D_A(e)=D_B(e)$, and there are an
-    invertible edge matrix $Z\in\GL(D_B(e))$ and a forward map $\mathrm{fwd}$
-    given by the conjugation
-    $\mathrm{fwd}(M)=Z\phi_{h_e}(M)Z^{-1}$, where
-    $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_B(e)}$ is the reindexing induced by the
-    bond-dimension equality on $e$. No single-vertex injectivity is used; the
-    only injectivity hypotheses are the blocked-region injectivities of the
-    interior blocking data and the red and host injectivities of $B$.
+    Let $A$ and $B$ be normal PEPS on the open $W\times H$ square lattice satisfying the rectangular-injectivity hypotheses with union closure, with $d>0$, $D_A=D_B>0$, and the same PEPS state. For any translated horizontal interior frame with $2\le x_0$, $2\le y_0$, $x_0+8\le W$, $y_0+8\le H$ and distinguished horizontal edge $e$, one has $h_e:D_A(e)=D_B(e)$ and there exist $Z\in\GL(D_B(e))$ and a forward map $\mathrm{fwd}(M)=Z\phi_{h_e}(M)Z^{-1}$, where $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_B(e)}$ is induced by $h_e$.
 \end{theorem}
-
 \begin{proof}\leanok
-    The translated horizontal frame gives, for both $A$ and $B$, the one-edge
-    interior blocking datum. Because the red, blue, and complementary blocks are
-    coordinate regions, independent of the tensor, the two data share them:
-    $R_A=R_B$, $B_A=B_B$, and $C_A=C_B$.
-    The distinguished edge $e$ is the unique crossing edge of the red and
-    blue blocks. Applying the per-edge gauge construction from a one-edge
-    blocking datum to the two blocking data yields the bond-dimension equality on
-    $e$ and the conjugating gauge $Z$.
+    By Lemma~\ref{lem:peps_normalSquareHorizontalTranslatedEdge_blockingData}, the translated horizontal frame supplies a common one-edge interior blocking datum $(R_A,B_A,C_A)=(R_B,B_B,C_B)$ with unique crossing edge $e$ between the red and blue blocks, and the one-edge blocking gauge construction yields $h_e:D_A(e)=D_B(e)$ and $Z\in\GL(D_B(e))$.
 \end{proof}
 
 \begin{theorem}[Per-edge gauge at a translated vertical interior edge]%
     \label{thm:peps_exists_regionEdgeGauge_normalSquareVerticalTranslatedEdge}
     \lean{TNLean.PEPS.exists_regionEdgeGauge_normalSquareVerticalTranslatedEdge}
     \leanok
-    As the coordinate-swap counterpart of
-    Theorem~\ref{thm:peps_exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge},
-    under the same hypotheses on $A$ and $B$, for a translated vertical interior
-    frame with two rows and two columns of margin, that is $2\le x_0$,
-    $2\le y_0$, $x_0+8\le W$, and $y_0+8\le H$, with distinguished vertical
-    edge $e$, the bond dimensions agree on $e$, $D_A(e)=D_B(e)$, and there are an
-    invertible edge matrix $Z\in\GL(D_B(e))$ and a forward map $\mathrm{fwd}$
-    given by the conjugation
-    $\mathrm{fwd}(M)=Z\phi_{h_e}(M)Z^{-1}$, with
-    $\phi_{h_e}:\MN{D_A(e)}\to\MN{D_B(e)}$ the reindexing induced by the
-    bond-dimension equality on $e$.
+    Under the hypotheses of Theorem~\ref{thm:peps_exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge}, for any translated vertical interior frame with $2\le x_0$, $2\le y_0$, $x_0+8\le W$, $y_0+8\le H$ and distinguished vertical edge $e$, one has $h_e:D_A(e)=D_B(e)$ and there exist $Z\in\GL(D_B(e))$ and a forward map $\mathrm{fwd}(M)=Z\phi_{h_e}(M)Z^{-1}$.
 \end{theorem}
-
 \begin{proof}
     \lean{TNLean.PEPS.Region_map_squareLatticeCoordinateSwap_verticalTranslatedEdgeRed}
     \lean{TNLean.PEPS.Region_map_squareLatticeCoordinateSwap_verticalTranslatedEdgeBlue}
     \leanok
     \uses{thm:peps_exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge}
-    Interchanging the two lattice coordinates gives a graph isomorphism that sends
-    the vertical translated frame to the horizontal translated frame, transposes
-    the rectangular injectivity hypotheses, and sends the distinguished vertical
-    edge to the distinguished horizontal edge. Applying
-    Theorem~\ref{thm:peps_exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge}
-    to the coordinate-swapped tensors and pulling its bond-dimension equality and
-    conjugating gauge back along the inverse coordinate swap gives the required
-    equality on $e$ and the matrix $Z$.
+    Swapping the two lattice coordinates maps the vertical translated frame and its rectangular-injectivity hypotheses to the horizontal translated frame, reducing the claim to Theorem~\ref{thm:peps_exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge}.
 \end{proof}
 
 \begin{definition}[Factorized local gauge datum]%
@@ -307,39 +146,28 @@
     \lean{TNLean.PEPS.HasFactorizedLocalGauge}
     \leanok
     \uses{def:peps_localTensorMap, def:peps_localLeftInverse}
-    For the local output required from the blocked-middle reduction in
-    \cite[Section~3]{Molnar2018NormalPEPS}, fix $A$, $B$, a bond-dimension
-    equality, and a vertex $v$. Let
-    $\mathcal T^A_v$ be the local tensor map of $A$, let $L^A_v$ be the
-    chosen left inverse of $\mathcal T^A_v$, and let
-    $\Pi^A_v=\mathcal T^A_vL^A_v$. The factorized local gauge datum consists
-    of the following two identities for local virtual configurations
-    $\eta,\eta'$:
+    In \cite[Section~3]{Molnar2018NormalPEPS}, for $A,B$ with $D_A=D_B$ at a vertex $v$, let $\mathcal T^A_v$ be the local tensor map of $A$, $L^A_v$ its left inverse, and $\Pi^A_v=\mathcal T^A_vL^A_v$. A factorized local gauge datum at $v$ consists of $X_e\in\GL(D_A(e))$ ($e\ni v$) such that for all local virtual configurations $\eta,\eta'$,
     \begin{align}
         \Pi^A_v B_v(\eta,-)
-         & =B_v(\eta,-),
-        \notag                                 \\
+         & =B_v(\eta,-),                       &
         L^A_vB_v(\eta,-)(\eta')
-         & =\prod_{e\ni v}X_e(\eta_e,\eta'_e),
-        \notag
+         & =\prod_{e\ni v}X_e(\eta_e,\eta'_e).
+        \label{eq:peps_has_factorized_local_gauge}
     \end{align}
-    with $X_e\in\GL(D_A(e))$ on each incident edge.
 \end{definition}
 
 \begin{definition}[Blocked-middle local gauge formula]%
     \label{def:peps_blockedMiddleGaugeFormula}
     \lean{TNLean.PEPS.BlockedMiddleGaugeFormula}
     \leanok
-    The blocked-middle local gauge formula at $v$ is the assertion that there
-    are matrices $X_e\in\GL(D_A(e))$, one on each incident edge, such that for
-    all local virtual configurations $\eta$ and physical indices $\sigma$,
+    The blocked-middle local gauge formula at $v$ asserts the existence of $X_e\in\GL(D_A(e))$ ($e\ni v$) such that for all local virtual configurations $\eta$ and physical indices $\sigma$,
     \begin{align}
         B_v(\eta,\sigma)
         =
         \sum_{\eta'}
         \left(\prod_{e\ni v}X_e(\eta_e,\eta'_e)\right)
         A_v(\eta',\sigma).
-        \notag
+        \label{eq:peps_blocked_middle_gauge_formula}
     \end{align}
 \end{definition}
 
@@ -348,29 +176,12 @@
     \lean{TNLean.PEPS.hasFactorizedLocalGauge_of_localGaugeFormula}
     \leanok
     \uses{def:peps_blockedMiddleGaugeFormula, def:peps_hasFactorizedLocalGauge}
-    If the blocked-middle local gauge formula holds at $v$ with matrices
-    $X_e$, then the factorized local gauge datum holds at $v$ with the same
-    matrices.
+    If (\ref{eq:peps_blocked_middle_gauge_formula}) holds at $v$ with matrices $X_e$, then (\ref{eq:peps_has_factorized_local_gauge}) holds at $v$ with the same $X_e$.
     % Open: derive the displayed blocked-middle formula from equality of PEPS
     % states by the edge-centred three-site reduction.
 \end{theorem}
 \begin{proof}\leanok
-    For fixed $\eta$, set
-    $c_\eta(\eta')=\prod_{e\ni v}X_e(\eta_e,\eta'_e)$. The displayed
-    blocked-middle formula is precisely
-    $B_v(\eta,-)=\mathcal T^A_vc_\eta$. Hence
-    \begin{align}
-        \Pi^A_vB_v(\eta,-)
-         & =\Pi^A_v\mathcal T^A_vc_\eta
-        =\mathcal T^A_vc_\eta
-        =B_v(\eta,-),
-        \notag                               \\
-        L^A_vB_v(\eta,-)(\eta')
-         & =L^A_v\mathcal T^A_vc_\eta(\eta')
-        =c_\eta(\eta')
-        =\prod_{e\ni v}X_e(\eta_e,\eta'_e).
-        \notag
-    \end{align}
+    With $c_\eta(\eta'):=\prod_{e\ni v}X_e(\eta_e,\eta'_e)$, (\ref{eq:peps_blocked_middle_gauge_formula}) reads $B_v(\eta,-)=\mathcal T^A_vc_\eta$, so $\Pi^A_vB_v(\eta,-)=\mathcal T^A_vc_\eta=B_v(\eta,-)$ and $L^A_vB_v(\eta,-)(\eta')=c_\eta(\eta')$.
 \end{proof}
 
 \begin{theorem}[Blocked-middle formula gives a local gauge formula]%
@@ -378,37 +189,8 @@
     \lean{TNLean.PEPS.localGauge_exists_of_blockedMiddleGaugeFormula}
     \leanok
     \uses{def:peps_blockedMiddleGaugeFormula, thm:peps_hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula, thm:localGauge_exists}
-    Suppose that the edge-centred three-site reduction yields invertible
-    matrices $X_e$ on the incident edges of $v$ such that, for all local virtual
-    configurations $\eta$ and physical indices $\sigma$,
-    \begin{align}
-        B_v(\eta,\sigma)
-        =
-        \sum_{\eta'}
-        \left(\prod_{e\ni v}X_e(\eta_e,\eta'_e)\right)
-        A_v(\eta',\sigma).
-        \notag
-    \end{align}
-    Then the same family $X_e$ is a local gauge at $v$:
-    % Formula: the displayed component identity above is the local gauge formula.
-    % Ink-to-index/type verdict: its boundary is (V,P)=(deg(v),1).  No matching
-    % standalone picture occurs in paper_normal.tex, and the old picture hard-coded
-    % five virtual legs, so the valence-independent equation is authoritative.
-    % Open: derive the blocked-middle formula from SameState
-    % by the edge-centred three-site reduction.
+    If $X_e\in\GL(D_A(e))$ ($e\ni v$) satisfy (\ref{eq:peps_blocked_middle_gauge_formula}), then $(X_e)_{e\ni v}$ is a local gauge at $v$.
 \end{theorem}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula},
-    $L^A_vB_v(\eta,-)(\eta')=\prod_{e\ni v}X_e(\eta_e,\eta'_e)$. Since
-    $\Pi^A_vB_v(\eta,-)=B_v(\eta,-)$ and
-    $\Pi^A_v=\mathcal T^A_vL^A_v$,
-    \begin{align}
-        B_v(\eta,\sigma)
-         & =\sum_{\eta'}L^A_vB_v(\eta,-)(\eta')A_v(\eta',\sigma)
-        \notag                                                   \\
-         & =\sum_{\eta'}
-        \left(\prod_{e\ni v}X_e(\eta_e,\eta'_e)\right)
-        A_v(\eta',\sigma).
-        \notag
-    \end{align}
+    By Theorem~\ref{thm:peps_hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula}, (\ref{eq:peps_has_factorized_local_gauge}) holds, and expanding $B_v(\eta,-)=\Pi^A_vB_v(\eta,-)=\mathcal T^A_v(L^A_vB_v(\eta,-))$ recovers (\ref{eq:peps_blocked_middle_gauge_formula}).
 \end{proof}

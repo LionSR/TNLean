@@ -1,37 +1,35 @@
 \section{Sampling an original construction}
 \label{sec:peps_original_compression_sampling}
 
-We now combine the local approximation, pair-effect replacement and source
-sampling estimates for the original gate maps. These are the approximation
-steps in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+We now combine the local approximation, pair-effect replacement, and source-sampling
+estimates for the original gate maps in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
 % Source: 04-compression.tex, lines 137--175, 199--229 and 590--600.
-The sampled physical operator need not be positive. Its identification with a
-contraction of local tensors is a separate assertion.
+The sampled physical operator need not be positive; its identification with a
+contraction of local tensors is proved separately.
 
 \begin{definition}[Distributed construction]
     \label{def:peps_distributed_construction}
     \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction}
     \leanok
     \uses{def:peps_original_circuit}
-    A distributed construction has a finite nonempty set $P$ of parties.
-    For each $p\in P$, it specifies a finite-dimensional initial private
-    memory $H_p$ and a unit vector $x_p\in H_p$. It also specifies a physical
-    dimension $d_p$, an ordering of the parties without repetition, a finite
-    ordered collection $R$ of finite-dimensional private output registers,
-    and a contraction circuit
+    A distributed construction consists of a finite nonempty party set $P$
+    ordered without repetition, finite-dimensional initial private memories
+    $H_p$ with unit vectors $x_p\in H_p$ and physical dimensions $d_p$ for
+    $p\in P$, a finite ordered list $R$ of finite-dimensional private output
+    registers, and a contraction circuit
     \begin{align}
         W:\bigotimes_{p\in P}H_p
         \longrightarrow
-        \left(\bigotimes_{p\in P}\mathbb C^{d_p}\right)\otimes\mathcal H_R.
+        \left(\bigotimes_{p\in P}\mathbb C^{d_p}\right)\otimes\mathcal H_R
+        \label{eq:peps_distributed_construction_map}
     \end{align}
-    The circuit retains the original gate expansions and participant labels.
-    There is no numerical bound on private dimensions in this definition.
-    Resource estimates and approximation conclusions are separate statements.
+    retaining the original gate expansions and participant labels, with no
+    numerical bound on $\dim H_p$ or $\dim\mathcal H_R$.
 
-    The nonempty-party convention permits scalar factors to be absorbed in
-    an existing local tensor, as in the proof of Theorem~5.2. It does not
-    exclude gates with no participating parties. The zero-party scalar
-    boundary case is recorded in \cite{gap:polypeps_nonempty_parties}.
+    Assuming $P\neq\varnothing$ permits scalar factors to be absorbed into a
+    local tensor as in the proof of Theorem~5.2 without excluding empty-participant
+    gates; the $P=\varnothing$ scalar boundary case is recorded in
+    \cite{gap:polypeps_nonempty_parties}.
 \end{definition}
 
 \begin{definition}[Original input and physical density]
@@ -40,15 +38,16 @@ contraction of local tensors is a separate assertion.
         TNLean.Lattice.PartyCircuit.DistributedConstruction.physicalDensity}
     \leanok
     \uses{def:peps_distributed_construction}
-    The input of a distributed construction is the normalized product
-    $\psi=\bigotimes_{p\in P}x_p$. Its physical density is
+    The input of a distributed construction is the unit product vector
+    $\psi=\bigotimes_{p\in P}x_p$, and its unnormalized physical density in the
+    party-indexed physical coordinates is
     \begin{align}
         \rho=\operatorname{Tr}_{\mathcal H_R}
         \bigl(|W\psi\rangle\langle W\psi|\bigr),
+        \label{eq:peps_distributed_construction_density}
     \end{align}
-    expressed in the physical coordinates indexed by the original parties.
-    The private trace uses a finite orthonormal basis of the retained
-    registers. No normalization by $\|W\psi\|$ is performed.
+    where $\operatorname{Tr}_{\mathcal H_R}$ is taken in a finite orthonormal
+    basis of $\mathcal H_R$.
 \end{definition}
 
 \begin{theorem}[Subnormalized physical density]
@@ -57,37 +56,34 @@ contraction of local tensors is a separate assertion.
         TNLean.Lattice.PartyCircuit.DistributedConstruction.trace_physicalDensity_le_one}
     \leanok
     \uses{def:peps_distributed_construction_density}
-    The physical density of a distributed construction is positive
-    semidefinite and satisfies $\operatorname{Tr}\rho\leq1$.
+    The physical density $\rho$ in Definition~\ref{def:peps_distributed_construction_density}
+    satisfies $\rho\ge 0$ and $\operatorname{Tr}\rho\leq1$.
 \end{theorem}
 \begin{proof}
     \leanok
-    The outer product of the original output vector is positive semidefinite,
-    and partial trace preserves positivity. Partial trace also preserves the
-    full trace, so $\operatorname{Tr}\rho=\|W\psi\|^2$. Each gate is a
-    contraction and $\|\psi\|=1$, giving the asserted bound.
+    Since $|W\psi\rangle\langle W\psi|\ge 0$ and $\operatorname{Tr}_{\mathcal H_R}$
+    is positive and trace-preserving, $\rho\ge 0$ and
+    $\operatorname{Tr}\rho=\|W\psi\|^2\le\|\psi\|^2=1$ because $\|W\|\le 1$ and
+    $\|x_p\|=1$.
 \end{proof}
 
 \begin{theorem}[A fixed inverse power meets the per-gate error tolerance]
     \label{thm:peps_fixed_power_gate_budget}
     \lean{TNLean.Lattice.PartyCircuit.inversePower_le_sourceGateBudget_half}
     \leanok
-    Let $L\ge2$, $C\ge1$, $M\le CL^n$, where $M,n$ are nonnegative
-    integers, and let $p$ be real. Set
-    $q=n+\lceil p\rceil_++\lceil16C\rceil_+$. Then
+    For $L\ge2$, $C\ge1$, $M,n\in\mathbb N$ with $M\le CL^n$, and $p\in\mathbb R$,
+    setting $q=n+\lceil p\rceil_++\lceil16C\rceil_+$ gives
     \begin{align}
         L^{-q}\le \frac{L^{-p}}{16\max\{1,M\}}.
+        \label{eq:peps_fixed_power_gate_budget}
     \end{align}
-    The exponent is fixed by the original count bound and the target accuracy,
-    and works simultaneously at every size $L\ge2$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_approximate_gate_real_accuracy}
-    The bound $\max\{1,M\}\le CL^n$ follows from $C,L\ge1$, and
-    applying Theorem~\ref{thm:peps_approximate_gate_real_accuracy}
-    with this enlarged count
-    and dividing by its positive denominator gives the bound.
+    Since $C,L\ge1$, we have $1\le\max\{1,M\}\le CL^n$; applying
+    Theorem~\ref{thm:peps_approximate_gate_real_accuracy} to $\max\{1,M\}$ and
+    dividing by $16\max\{1,M\}>0$ yields~(\ref{eq:peps_fixed_power_gate_budget}).
 \end{proof}
 
 \begin{theorem}[Monotonicity in the local approximation tolerance]
@@ -95,43 +91,39 @@ contraction of local tensors is a separate assertion.
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsGateApproximation.mono}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.isGateApproximation_budget_of_power_bound}
     \leanok
-    Increasing the permitted local approximation error preserves the original
-    operators, approximate monomial lists and all contraction and allowedness
-    conditions. Consequently, under the preceding count assumptions, gate
-    expansions available at accuracy $L^{-q}$ satisfy the local error tolerance
-    $L^{-p}/(16\max\{1,M\})$ required to reserve one quarter of the final
-    physical error for this approximation step.
+    If local gate expansions approximate the original gates within $\delta_1\le\delta_2$,
+    they also do so within $\delta_2$ with the same operators, monomial lists,
+    contraction bounds, and allowedness. Under the hypotheses of
+    Theorem~\ref{thm:peps_fixed_power_gate_budget}, expansions at accuracy
+    $\delta_1=L^{-q}$ satisfy the per-gate tolerance
+    $\delta_2=L^{-p}/(16\max\{1,M\})$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_fixed_power_gate_budget}
-    Only the inequality bounding each local operator difference changes;
-    applying Theorem~\ref{thm:peps_fixed_power_gate_budget} and transitivity
-    at every original occurrence gives the tolerance, while all the other local hypotheses are unchanged.
+    Each local operator-norm bound $\|G_g-\widetilde G_g\|\le\delta_1$ implies
+    $\|G_g-\widetilde G_g\|\le\delta_2$ by transitivity and~(\ref{eq:peps_fixed_power_gate_budget}).
 \end{proof}
 
 \begin{theorem}[A positive polynomial coefficient bound]
     \label{thm:peps_original_coefficient_majorant}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.exists_one_le_isExpansionBounded_of_termwise_power_bounds}
     \leanok
-    Let $L\geq1$. Suppose every nonprivate gate of the original circuit
-    has at most $K\leq C_KL^u$ monomials, each with at most $r$ pair
-    effects and coefficient of absolute value at most $C_CL^v$, where
-    $C_K,C_C\geq0$ and $u,v$ are nonnegative integers. Then there is
-    a bound $B\geq1$ for the absolute coefficient sum of every gate,
-    with the same effect bound $r$, such that
+    Let $L\geq1$, $C_K,C_C\geq0$, and $u,v\in\mathbb N$. If every nonprivate gate
+    of an original circuit has at most $K\leq C_KL^u$ monomials, each with at
+    most $r$ pair effects and coefficient modulus $|c_\xi|\le C_CL^v$, then the
+    absolute coefficient sum at every gate is bounded by $B\ge 1$ with
     \begin{align}
-        B\leq (1+C_KC_C)L^{u+v}.
+        B=(1+C_KC_C)L^{u+v}.
+        \label{eq:peps_original_coefficient_majorant}
     \end{align}
-    Thus the lower bound $B\geq1$ required in the source-sampling
-    estimate follows from the original polynomial assumptions.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_original_coefficient_sum}
-    Choosing $B=(1+C_KC_C)L^{u+v}$ gives $B\geq1$ since $L\geq1$, and
-    each coefficient sum is at most
-    $K C_CL^v\leq C_KC_CL^{u+v}\leq B$.
+    Since $L\ge 1$, $B\ge 1$, and by Theorem~\ref{thm:peps_original_coefficient_sum}
+    each gate's coefficient sum satisfies
+    $\sum_\xi|c_\xi|\le K C_CL^v\le C_KC_CL^{u+v}\le B$.
 \end{proof}
 
 \begin{theorem}[Finite expansion bounds and replacement coefficients]
@@ -140,21 +132,20 @@ contraction of local tensors is a separate assertion.
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.exists_isMonomialBounded}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.sum_norm_branchCoefficient_physicalFirstReplacement_le}
     \leanok
-    Every finite original circuit has an integer $K$ bounding the lengths
-    of all its gate expansions. Any larger integer is also such a bound.
-    Suppose its monomials contain at most $r$ pair effects and the absolute
-    coefficient sum at every gate is at most $B$. For any positive
-    replacement accuracy, every gate of the source replacement,
-    with the physical output registers placed first, has absolute branch
-    coefficient sum at most $B$.
+    Every finite original circuit admits $K\in\mathbb N$ (and hence any
+    $K'\ge K$) bounding all its gate-expansion lengths. If each monomial has at
+    most $r$ pair effects and each gate has coefficient sum $\sum_\xi|c_\xi|\le B$,
+    then for any replacement accuracy $\delta>0$, every gate of the physical-first
+    source replacement $R$ has branch-coefficient sum at most $B$.
 \end{theorem}
 \begin{proof}
     \uses{thm:peps_physical_first_occurrences,thm:peps_source_only_resources}
     \leanok
-    Taking a common bound on the finitely many original gate lists, the
-    coefficient estimate of Theorem~\ref{thm:peps_physical_first_occurrences}
-    gives the bound, and the final exchange of physical and auxiliary registers
-    introduces no gate and changes no coefficient.
+    Finiteness of the gate list yields a common length bound $K$.
+    The coefficient sum bound $\le B$ follows from
+    Theorem~\ref{thm:peps_physical_first_occurrences} and
+    Theorem~\ref{thm:peps_source_only_resources}, as the final exchange of
+    physical and auxiliary registers adds no gate and alters no coefficient.
 \end{proof}
 
 \begin{theorem}[Physical approximation after replacement and sampling]
@@ -163,22 +154,17 @@ contraction of local tensors is a separate assertion.
     \leanok
     In the density-approximation steps of
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    let $W$ be a circuit on a finite party set $P$, with initial vector
-    $\psi=\bigotimes_{p\in P}\psi_p$, where each $\psi_p$ is normalized
-    in the whole initial private memory of party $p$. The final physical
-    register at $p$ has dimension $d_p$, and every discarded private
-    register is finite-dimensional. Suppose that the original nonprivate
-    gate count is at most $M$, each party participates in at most $\ell$
-    nonprivate occurrences, and the original expansion bounds hold with
-    pair-effect bound $r$ and coefficient-sum bound $B\ge1$. Let $D\ge1$
-    satisfy $d_p\le D$ for every $p$.
+    let $W$ be a circuit on a finite party set $P$ with initial unit product
+    vector $\psi=\bigotimes_{p\in P}\psi_p$, physical dimensions $d_p\le D$
+    ($D\ge 1$), and finite-dimensional discarded private registers. Suppose $W$
+    has at most $M$ nonprivate gate occurrences, each party participates in at
+    most $\ell$ of them, and each expansion has at most $r$ pair effects per
+    monomial and coefficient sum at most $B\ge1$.
 
-    Fix finite orthonormal coordinates on the whole initial memory.
-    Fix $0<\varepsilon\le1$. Set
-    $\delta=\varepsilon/(8\max\{1,M\})$, and form the physical-first
-    replacement $R$ using the corresponding prepared stack length.
-    Let $\mathcal E_R$ be its source occurrences and
-    $N_R=|\mathcal E_R|$. Choose
+    Fix finite orthonormal initial-memory coordinates and $0<\varepsilon\le1$.
+    Let $R$ be the physical-first replacement at per-gate tolerance
+    $\delta=\varepsilon/(8\max\{1,M\})$, with source occurrence set
+    $\mathcal E_R$ of cardinality $N_R=|\mathcal E_R|$. Set
     \begin{align}
         Q & =B^{4\ell}D^4, &
         k & =\left\lceil
@@ -186,40 +172,30 @@ contraction of local tensors is a separate assertion.
         \right\rceil+1.
         \label{eq:peps_original_sample_count}
     \end{align}
-    There exist Schmidt data for every source and branch, and
-    one Gaussian sample array $\omega$, such that the sampled physical
-    operator $\widehat\rho_R(\omega)$ satisfies
+    Then there exist Schmidt data for every source and branch and a Gaussian
+    sample array $\omega$ such that the sampled physical operator
+    $\widehat\rho_R(\omega)$ and $\rho_W=\operatorname{Tr}_{\mathrm{priv}}(|W\psi\rangle\langle W\psi|)$
+    satisfy
     \begin{align}
         \|\widehat\rho_R(\omega)-\rho_W\|_1
         \le\frac{3\varepsilon}{4}.
         \label{eq:peps_original_sample_error}
     \end{align}
-    Here $\rho_W$ is the physical partial trace of $|W\psi\rangle
-        \langle W\psi|$, in the original party-labelled coordinates, and
-    no numerical bound on private-memory dimensions is assumed.
     % Source: 04-compression.tex, lines 137--151, 199--229 and 342--381.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_physical_first_exact_sources,thm:peps_actual_source_sampling,
         thm:peps_auxiliary_register_finiteness,thm:peps_original_finite_expansion_bound}
-    Preparing each $\psi_p$ by a local contraction from the scalar space,
-    their chronological composition prepares $\psi$ and introduces no
-    pair source. The replacement is a contraction, preserves the original
-    participating occurrences, and retains coefficient-sum bound $B$.
-    A finite bound on its monomial counts follows from the finite original
-    gate lists; it is not an additional hypothesis. Every auxiliary
-    register is finite-dimensional by its Euclidean construction, so the
-    individual private-register assumption suffices for all discarded
-    registers of $R$.
-
-    Applying Theorem~\ref{thm:peps_actual_source_sampling} to this
-    circuit, preparation, and discarded memory gives original-source
-    Schmidt data and one sample $\omega$ with
-    $\|\widehat\rho_R(\omega)-\rho_R\|_1\le\varepsilon/4$.
-    Theorem~\ref{thm:peps_physical_first_exact_sources} gives
-    $\|\rho_R-\rho_W\|_1\le\varepsilon/2$, and the trace-norm triangle
-    inequality yields~(\ref{eq:peps_original_sample_error}).
+    Preparing each $\psi_p:\mathbb C\to H_p$ locally prepares $\psi$ with no
+    pair source. By Theorems~\ref{thm:peps_auxiliary_register_finiteness}
+    and~\ref{thm:peps_original_finite_expansion_bound}, $R$ is an allowed
+    contraction circuit with finite-dimensional discarded registers, participation
+    bound $\ell$, and coefficient-sum bound $B$.
+    Theorem~\ref{thm:peps_actual_source_sampling} provides Schmidt data and a
+    sample $\omega$ with $\|\widehat\rho_R(\omega)-\rho_R\|_1\le\varepsilon/4$,
+    while Theorem~\ref{thm:peps_physical_first_exact_sources} gives
+    $\|\rho_R-\rho_W\|_1\le\varepsilon/2$. The triangle inequality yields~(\ref{eq:peps_original_sample_error}).
 \end{proof}
 
 
@@ -227,49 +203,46 @@ contraction of local tensors is a separate assertion.
     \label{thm:peps_approximate_source_sample}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.exists_sourceSample_approximate_error_le}
     \leanok
-    Let a finite distributed construction begin in a product of normalized
-    party vectors. Suppose its original gates are contractions, its number of
-    nonprivate gates is at most $M$, and each party participates in at most $\ell$
-    such gates. All private spaces are finite-dimensional, without numerical
-    dimension bounds. Let the physical dimension at each party be at most
-    $D\ge1$.
-
-    Fix $0<\varepsilon\le1$. Suppose the monomial list for each original
-    nonprivate gate approximates that gate in operator norm within
-    $\delta_a=\varepsilon/(16\max(1,M))$. Its monomials are allowed, each has at
-    most $r$ pair effects, and its absolute coefficient sum is at most $B\ge1$.
-    Rescale each such list by $(1+\delta_a)^{-1}$ to obtain a contraction
-    circuit $W$. Set
+    Let a finite distributed construction have normalized initial party vectors,
+    contraction gates, at most $M$ nonprivate gates, party participation bound
+    $\ell$, finite-dimensional private spaces, and physical dimensions $d_p\le D$
+    ($D\ge1$).
+    Fix $0<\varepsilon\le1$. Suppose each nonprivate gate $G_g$ is approximated
+    within $\delta_a=\varepsilon/(16\max(1,M))$ in operator norm by a sum of
+    allowed monomials with at most $r$ pair effects and absolute coefficient sum
+    at most $B\ge1$. Rescale each expansion by $(1+\delta_a)^{-1}$ to form a
+    contraction circuit $W$, and apply the pair-effect replacement of stack
+    length $m$ at tolerance $\delta_e$ with
     \begin{align}
         \delta_e & =\frac{\varepsilon}{8\max(1,M)},                              &
         m        & =\left\lceil\left(\frac{rB}{\delta_e}\right)^2\right\rceil+1.
+        \label{eq:peps_approximate_effect_params}
     \end{align}
-    Apply the constructed pair-effect replacement of length $m$ to $W$, and
-    let $N$ be the number of sources of the resulting circuit. With
+    If $N$ is the source count of the resulting circuit and
     \begin{align}
         Q & =B^{4\ell}D^4,                                                            &
         k & =\left\lceil\left(\frac{8\max(1,N)Q}{\varepsilon}\right)^2\right\rceil+1,
+        \label{eq:peps_approximate_sample_params}
     \end{align}
-    there are normalized Schmidt data for these sources and a Gaussian
-    sample of size $k$ whose sampled physical operator $\widehat\rho$ satisfies
-    $\|\widehat\rho-\rho_G\|_1\le\varepsilon$. Here $\rho_G$ is the physical
-    density computed from the original gate operators, with all private
-    registers traced out.
+    there exist normalized Schmidt data and a size-$k$ Gaussian sample whose
+    sampled physical operator $\widehat\rho$ satisfies
+    $\|\widehat\rho-\rho_G\|_1\le\varepsilon$, where $\rho_G$ is the physical
+    density of the original gate circuit.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_sampled_original_density,thm:peps_approximate_physical_error,thm:peps_finite_whole_party_input}
-    The input coordinates are obtained from finite-dimensionality of the
-    original party memories. Rescaling preserves the original gate
-    occurrences and participating sets, and does not increase the coefficient
-    sums or pair-effect counts. Applying the exact sampled-density bound to $W$
-    therefore gives $\|\widehat\rho-\rho_W\|_1\le3\varepsilon/4$ with the
-    stated replacement and sample counts. The local approximation estimate
-    gives $\|\rho_W-\rho_G\|_1\le4M\delta_a\le\varepsilon/4$. Thus
+    By Theorem~\ref{thm:peps_finite_whole_party_input}, the initial party memories
+    admit finite orthonormal bases. Rescaling by $(1+\delta_a)^{-1}\le 1$
+    preserves participants, pair-effect counts $\le r$, and coefficient sums
+    $\le B$. Theorem~\ref{thm:peps_sampled_original_density} gives
+    $\|\widehat\rho-\rho_W\|_1\le3\varepsilon/4$, and
+    Theorem~\ref{thm:peps_approximate_physical_error} gives
+    $\|\rho_W-\rho_G\|_1\le4M\delta_a\le\varepsilon/4$, so
     \begin{align}
         \|\widehat\rho-\rho_G\|_1
          & \le\|\widehat\rho-\rho_W\|_1+\|\rho_W-\rho_G\|_1
-        \le\varepsilon.
+        \le\frac{3\varepsilon}{4}+\frac{\varepsilon}{4}=\varepsilon.\notag
     \end{align}
 \end{proof}
 
@@ -277,60 +250,51 @@ contraction of local tensors is a separate assertion.
     \label{thm:peps_physical_first_link_polynomial}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_physicalFirstNetworkAlphabet_le_power}
     \leanok
-    Let an original circuit have at most $N$ nonprivate gate occurrences,
-    each with at most $b$ participants. Suppose each gate has at most $K$
-    monomials, at most $r$ pair effects in each monomial, and absolute
-    coefficient sum at most $B$. Let $L\geq1$, and assume
+    Let an original circuit have at most $N$ nonprivate gate occurrences, each
+    with at most $b$ participants, at most $K$ monomials, at most $r$ pair
+    effects per monomial, and coefficient sum at most $B$. For $L\geq1$,
+    $C_K,C_B\geq0$, $C_N\geq1$, and $u,n,s,d,p,\tau\in\mathbb N$, assume
     \begin{align}
         K\leq C_KL^u,\qquad N\leq C_NL^n,\qquad
-        0\leq B\leq C_BL^s,\qquad 0\leq D\leq C_DL^d,
+        0\leq B\leq C_BL^s,\qquad 0\leq D\leq C_DL^d.\notag
     \end{align}
-    where $C_K,C_B\geq0$, $C_N\geq1$, and $u,n,s,d,p$ are nonnegative
-    integers. Use the per-gate error tolerance
-    $\delta=L^{-p}/(8\max(1,N))$, and let $R$ be the resulting source
-    replacement, with the physical output registers ordered first.
-    For any nonnegative integer $\tau$, choose the sample count
+    Let $R$ be the physical-first source replacement at per-gate tolerance
+    $\delta=L^{-p}/(8\max(1,N))$ with sample count
     \begin{align}
         k=\left\lceil
         \bigl(8\max(1,\lvert\operatorname{Sources}(R)\rvert)
         B^{4\tau}D^4L^p\bigr)^2
-        \right\rceil+1.
+        \right\rceil+1,\notag
     \end{align}
-    Define constants and exponents by
+    and define
     \begin{align}
-        C_{\mathrm{src}} & =\max\left(1,C_N\binom b2\right),                          \\
+        C_{\mathrm{src}} & =\max\left(1,C_N\binom b2\right),                          \notag                              \\
         C_{\mathrm{br}}  & =C_K\bigl(64C_N^2(rC_B)^2+2\bigr)^r,
-                         & a_{\mathrm{br}}                      & =u+2r(n+s+p),       \\
+                         & a_{\mathrm{br}}                                                   & =u+2r(n+s+p),       \notag \\
         C_{\mathrm{sam}} & =64C_{\mathrm{src}}^2
         (C_B^{4\tau}C_D^4)^2+2,
-                         & a_{\mathrm{sam}}                     & =2(n+4\tau s+4d+p).
+                         & a_{\mathrm{sam}}                                                  & =2(n+4\tau s+4d+p).
+        \label{eq:peps_physical_first_link_constants}
     \end{align}
-    For every retained set of gate occurrences, every root assignment,
-    and every corresponding star or sample link $e$, its link alphabet
-    $\mathcal A_e$ satisfies
+    Then for every retained occurrence set, root assignment, and star or sample
+    link $e$, its alphabet $\mathcal A_e$ satisfies
     \begin{align}
         \lvert\mathcal A_e\rvert
         \leq (C_{\mathrm{br}}^2+C_{\mathrm{sam}})
         L^{\max(2a_{\mathrm{br}},a_{\mathrm{sam}})}.
+        \label{eq:peps_physical_first_link_bound}
     \end{align}
-    These constants depend only on the displayed uniform resource bounds.
-    No private-memory dimension or source Schmidt rank occurs. This is a
-    dimension estimate for the constructed alphabets; the error estimate
-    and equality with a contraction of local tensors are separate assertions.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_physical_first_branch_polynomial,thm:peps_physical_first_sample_polynomial,thm:peps_source_alphabet_polynomial}
-    Theorem~\ref{thm:peps_physical_first_branch_polynomial} gives at most
-    $C_{\mathrm{br}}L^{a_{\mathrm{br}}}$ branches per gate.
-    There are at most $N\binom b2$ source occurrences, so the
-    estimate of Theorem~\ref{thm:peps_physical_first_sample_polynomial}
-    gives $k<C_{\mathrm{sam}}L^{a_{\mathrm{sam}}}$.
-    A star alphabet has cardinality equal to the square of its gate's
-    branch count, and a sample alphabet has cardinality $k$, so applying the
-    bound of Theorem~\ref{thm:peps_source_alphabet_polynomial}
-    to these two estimates gives the result; the choice
-    $C_{\mathrm{src}}\geq1$ includes circuits without sources.
+    By Theorem~\ref{thm:peps_physical_first_branch_polynomial}, each gate has at
+    most $C_{\mathrm{br}}L^{a_{\mathrm{br}}}$ branches. Since
+    $|\operatorname{Sources}(R)|\le N\binom{b}{2}$,
+    Theorem~\ref{thm:peps_physical_first_sample_polynomial} gives
+    $k<C_{\mathrm{sam}}L^{a_{\mathrm{sam}}}$. Because $|\mathcal A_e|$ is the
+    squared branch count on star links and $k$ on sample links,
+    Theorem~\ref{thm:peps_source_alphabet_polynomial} yields~(\ref{eq:peps_physical_first_link_bound}).
 \end{proof}
 
 \begin{theorem}[Trace bounded by the trace norm]
@@ -342,10 +306,8 @@ contraction of local tensors is a separate assertion.
 \end{theorem}
 \begin{proof}
     \leanok
-    The identity matrix has operator norm at most one, so trace-norm duality
-    gives $\lvert\operatorname{Tr}(X^\dagger\cdot 1)\rvert\le\|X\|_1$, and
-    $\operatorname{Tr}X^\dagger$ is the complex conjugate of
-    $\operatorname{Tr}X$.
+    Since $\|I\|\le 1$, trace-norm duality gives
+    $\lvert\operatorname{Tr}X\rvert=\lvert\overline{\operatorname{Tr}(X^\dagger I)}\rvert\le\|X\|_1$.
 \end{proof}
 
 \begin{theorem}[Adding an absolute error to a pure-state approximation]
@@ -356,18 +318,18 @@ contraction of local tensors is a separate assertion.
     If $\|\sigma-\rho\|_1\le\kappa$ and
     $\|\rho-|\Omega\rangle\langle\Omega|\|_1\le\eta$, then
     \begin{align}
-        \|\sigma-|\Omega\rangle\langle\Omega|\|_1 & \le\kappa+\eta, \\
+        \|\sigma-|\Omega\rangle\langle\Omega|\|_1 & \le\kappa+\eta, &
         \lvert\operatorname{Tr}\rho-1\rvert       & \le\eta.
+        \label{eq:peps_absolute_error_pure_state}
     \end{align}
-    Neither matrix is assumed positive, Hermitian or normalized.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_trace_le_trace_norm}
-    The first bound is the triangle inequality for the trace norm, and the
-    second follows by applying Theorem~\ref{thm:peps_trace_le_trace_norm} to
-    $\rho-|\Omega\rangle\langle\Omega|$ and using
-    $\operatorname{Tr}|\Omega\rangle\langle\Omega|=1$.
+    The first bound in~(\ref{eq:peps_absolute_error_pure_state}) is the triangle
+    inequality; the second follows from Theorem~\ref{thm:peps_trace_le_trace_norm}
+    applied to $\rho-|\Omega\rangle\langle\Omega|$ since
+    $\operatorname{Tr}|\Omega\rangle\langle\Omega|=\|\Omega\|^2=1$.
 \end{proof}
 
 \begin{theorem}[Absolute error and retained norm]
@@ -376,28 +338,25 @@ contraction of local tensors is a separate assertion.
     \leanok
     \uses{def:peps_distributed_construction_density}
     % Source: 04-compression.tex, lines 602--611.
-    As noted in \cite[Remark~5.3]{OpenAI2026PolynomialPEPS},
-    the compression of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}
-    approximates the physical density $\rho$ of a distributed
-    construction, which need not have trace one, and does not normalize it.
-    Let $\sigma$ be any operator with $\|\sigma-\rho\|_1\le\kappa$; it need be
-    neither positive nor Hermitian. If $\Omega$ is a unit vector with
-    $\|\rho-|\Omega\rangle\langle\Omega|\|_1\le\eta$, then
+    As in \cite[Remark~5.3]{OpenAI2026PolynomialPEPS}, let $\rho$ be the
+    unnormalized physical density of a distributed construction
+    (Definition~\ref{def:peps_distributed_construction_density}). For any
+    operator $\sigma$ and unit vector $\Omega$ with $\|\sigma-\rho\|_1\le\kappa$
+    and $\|\rho-|\Omega\rangle\langle\Omega|\|_1\le\eta$,
     \begin{align}
-        \|\sigma-|\Omega\rangle\langle\Omega|\|_1       & \le\kappa+\eta, \\
+        \|\sigma-|\Omega\rangle\langle\Omega|\|_1       & \le\kappa+\eta, &
         1-\eta\le\operatorname{Re}\operatorname{Tr}\rho & \le1.
+        \label{eq:peps_compression_retained_norm}
     \end{align}
-    No bound on private dimensions or on Schmidt ranks of the pair
-    vectors enters, and the compression theorem is used only through its error
-    estimate $\|\sigma-\rho\|_1\le\kappa$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_absolute_error_pure_state,thm:peps_distributed_construction_density}
-    Theorem~\ref{thm:peps_absolute_error_pure_state} gives the trace-norm bound
-    and $\lvert\operatorname{Tr}\rho-1\rvert\le\eta$, hence the lower bound on
-    the real part. The upper bound $\operatorname{Tr}\rho\le1$ is
-    Theorem~\ref{thm:peps_distributed_construction_density}.
+    Theorem~\ref{thm:peps_absolute_error_pure_state} gives
+    $\|\sigma-|\Omega\rangle\langle\Omega|\|_1\le\kappa+\eta$ and
+    $1-\operatorname{Re}\operatorname{Tr}\rho\le\lvert\operatorname{Tr}\rho-1\rvert\le\eta$,
+    while Theorem~\ref{thm:peps_distributed_construction_density} gives
+    $\operatorname{Tr}\rho\le 1$.
 \end{proof}
 
 \begin{definition}[A distributed construction with the operators of its expansions]
@@ -405,11 +364,11 @@ contraction of local tensors is a separate assertion.
     \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction.toGateMapConstruction}
     \leanok
     \uses{def:peps_distributed_construction,def:peps_original_gate_construction}
-    A distributed construction determines a construction with prescribed
-    gate operators: the input, the private maps, the participating sets, the
-    physical outputs and the retained registers are kept, and the operator of
-    each nonprivate gate is the sum $\sum_\xi c_\xi M_\xi$ of its own
-    recorded monomial expansion.
+    A distributed construction determines a gate-map construction
+    (Definition~\ref{def:peps_original_gate_construction}) by keeping the input
+    $\psi$, private maps, participant sets, physical outputs, and retained
+    registers $R$, while setting each nonprivate gate operator to the sum
+    $\sum_\xi c_\xi M_\xi$ of its recorded monomial expansion.
 \end{definition}
 
 \begin{theorem}[The operators of the expansions keep the physical density]
@@ -417,15 +376,15 @@ contraction of local tensors is a separate assertion.
     \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction.physicalDensity_toGateMapConstruction}
     \leanok
     \uses{def:peps_distributed_construction_gate_maps,def:peps_distributed_construction_density,def:peps_original_gate_construction_density}
-    The construction of
-    Definition~\ref{def:peps_distributed_construction_gate_maps} has the
-    physical density of the original distributed construction.
+    The gate-map construction of
+    Definition~\ref{def:peps_distributed_construction_gate_maps} has the same
+    physical density $\rho$ as the original distributed construction.
 \end{theorem}
 \begin{proof}
     \leanok
-    Each recorded expansion sums to its gate, so evaluation with these
-    operators along the same chronology is the original circuit operator, while
-    the input and the retained registers are unchanged.
+    Each recorded expansion sums to its gate operator, so chronological
+    evaluation produces the same circuit operator $W$ on the same input $\psi$
+    and retained registers $R$.
 \end{proof}
 
 \begin{theorem}[Separate arity and lifetime bounds for link incidence]
@@ -436,29 +395,18 @@ contraction of local tensors is a separate assertion.
         TNLean.Lattice.PartyCircuit.OriginalCircuit.card_participants_produce_le_of_arity}
     \leanok
     \uses{def:compression_operator_links,def:compression_operator_incidences}
-    Let $G$ be a finite set of gate occurrences, each with a finite
-    participant set $P_g$ and a root $r_g\in P_g$.
-    Let $a,b\in\mathbb N$ and fix a party $p$.
-    If $|P_g|\le a$ for every $g\in G$ and $p$ belongs to at most
-    $b$ of these sets, then its actual tagged star and sample links satisfy
+    Let $G$ be a finite set of gate occurrences with finite participant sets
+    $P_g$ and roots $r_g\in P_g$. For $a,b\in\mathbb N$ and $p\in P$, if
+    $|P_g|\le a$ for all $g\in G$ and $|\{g\in G:p\in P_g\}|\le b$, then the
+    set $I_p$ of tagged star and sample links incident to $p$ satisfies
     \begin{align}
-        |I_p| & \le2b(a-1).
+        |I_p| & \le2b(a-1),
         \label{eq:peps_separate_arity_incidence}
     \end{align}
-    Here $a-1$ denotes natural subtraction. The bound includes
-    $a=0,1$ and $b=0$, and counts parallel link tags separately.
-
-    For a source circuit, the same bound holds for the link family
-    of its nonempty participant occurrences, if each such occurrence
-    has at most $a$ participants and every party participates at most $b$ times.
-    Reading an original circuit as its recorded expansions preserves
-    the participant set of each occurrence, and hence its arity bound.
-    More precisely, let $W$ have expansion bound $(r,S)$, arity at
-    most $a$ and lifetime at most $b$ at every party. For each
-    $\delta>0$, let $R$ be its constructed physical-output-first
-    replacement at that precision. Then the link family of this same
-    $R$ has $|I_p(R)|\le2b(a-1)$ at every party.
-    These are incidence estimates for the specified tagged links in
+    with natural subtraction $a-1$. The same bound holds for the nonempty-participant
+    occurrences of a source circuit, and for the physical-first replacement $R$
+    at any tolerance $\delta>0$ of an original circuit $W$ with expansion bound
+    $(r,S)$, arity bound $a$, and lifetime bound $b$, as in
     \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}\leanok
@@ -466,22 +414,21 @@ contraction of local tensors is a separate assertion.
         thm:compression_tagging_cardinality,thm:peps_physical_first_original_locality,
         thm:peps_source_only_resources,thm:peps_physical_first_occurrences,
         thm:peps_original_produced_resource_bounds}
-    At a gate containing $p$, at most $|P_g|-1$ star links and
-    $|P_g|-1$ sample links meet $p$. The union over its actual
-    incident gate occurrences therefore gives
+    By Theorems~\ref{thm:compression_incidence_containment},
+    \ref{thm:compression_gate_incidence_bound}, and~\ref{thm:compression_tagging_cardinality},
+    each $g\in G_p=\{g\in G:p\in P_g\}$ contributes at most $|P_g|-1$ star links
+    and $|P_g|-1$ sample links incident to $p$, so
     \begin{align}
         |I_p| & \le\sum_{g\in G_p}2(|P_g|-1)
         \le |G_p|\,2(a-1)\le2b(a-1).\notag
     \end{align}
-    Each link retains its occurrence and kind, so the union does not
-    identify parallel links. Empty participant occurrences contribute
-    to no party's count. The source-circuit count follows by restricting
-    to the nonempty occurrences. For the physical-output-first
-    replacement, the occurrence correspondence preserves the exact
-    participant set, and its lifetime does not exceed the original
-    lifetime. Apply (\ref{eq:peps_separate_arity_incidence}) to that
-    replacement. The recorded expansion correspondence preserves
-    participants without any approximation or precision assumption.
+    Restricting to nonempty occurrences gives the source-circuit bound. By
+    Theorems~\ref{thm:peps_physical_first_original_locality},
+    \ref{thm:peps_source_only_resources}, \ref{thm:peps_physical_first_occurrences},
+    and~\ref{thm:peps_original_produced_resource_bounds}, the physical-first
+    replacement $R$ and recorded-expansion reading preserve participant sets and
+    do not increase party lifetimes, so (\ref{eq:peps_separate_arity_incidence})
+    applies to $R$.
 \end{proof}
 
 \begin{theorem}[Uniform compression with separate arity and lifetime]
@@ -491,69 +438,51 @@ contraction of local tensors is a separate assertion.
     \leanok
     \uses{def:peps_distributed_construction,def:peps_distributed_construction_density,
         def:compression_operator_operator,def:compression_operator_alphabets}
-    Consider the case of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}
-    without messages. Let $(\mathcal C_i)_{i\in I}$ be an arbitrary
-    family of distributed constructions with real sizes $L_i\ge2$.
-    Fix natural $a,b,n,d,r,u,v$ with $a\le b$ and real
-    $C_N,C_D,C_K,C_S$, before all members. Suppose every member has
-    at most $C_NL_i^n$ original nonprivate gates and physical
-    dimensions at most $C_DL_i^d$. Each such gate has at most $a$
-    participants, each party participates in at most $b$ gates, and
-    there is a natural monomial bound $K_i\le C_KL_i^u$.
-    Every recorded monomial has at most $r$ pair effects, and at every
-    original nonprivate gate the moduli of the recorded coefficients sum
-    to at most $C_SL_i^v$.
+    In the message-free case of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    let $(\mathcal C_i)_{i\in I}$ be a family of distributed constructions with
+    sizes $L_i\ge2$. Fix $a,b,n,d,r,u,v\in\mathbb N$ with $a\le b$ and
+    $C_N,C_D,C_K,C_S\in\mathbb R$. Suppose each $\mathcal C_i$ has at most
+    $C_NL_i^n$ nonprivate gates, physical dimensions $d_p\le C_DL_i^d$, gate
+    arity at most $a$, party participation at most $b$, and recorded gate
+    expansions of length at most $K_i\le C_KL_i^u$ whose monomials have at most
+    $r$ pair effects and coefficient sum $\sum_\xi|c_\xi|\le C_SL_i^v$.
 
-    For every $p>0$, there are $C_p\ge0$ and a natural $\alpha>0$
-    before all members, such that each member admits actual finite
-    gate occurrences, roots, branch alphabets, sample count,
-    coefficients and party matrices $T$, whose contraction $\sigma_i$
-    satisfies
+    For every $p>0$, there exist $C_p\ge0$ and $\alpha\in\mathbb N_{>0}$
+    independent of $i$ such that each $\mathcal C_i$ admits a sampled operator
+    tensor network with contraction $\sigma_i$, link alphabets $D_e$, and
+    party-incident link sets $I_j$ satisfying
     \begin{align}
         \|\sigma_i-\rho_i\|_1 & \le L_i^{-p},      &
-        |D_e|                 & \le C_pL_i^\alpha, & |I_j| & \le2b(a-1).
+        |D_e|                 & \le C_pL_i^\alpha, & |I_j| & \le2b(a-1),
         \label{eq:peps_separate_arity_network}
     \end{align}
-    Here $\rho_i$ is the original unnormalized physical density.
-    Both endpoints of every actual tagged link participate in a
-    common original nonprivate gate of $\mathcal C_i$.
-    All these conclusions concern the same contraction and alphabets.
-
-    If additionally unit vectors $\omega_i$ and real errors $\eta_i$
-    satisfy $\|\rho_i-|\omega_i\rangle\langle\omega_i|\|_1\le\eta_i$,
-    the same conclusion can be chosen with
+    where $\rho_i$ is the physical density of $\mathcal C_i$ and both endpoints
+    of every link $e$ belong to a common nonprivate gate of $\mathcal C_i$.
+    If unit vectors $\omega_i$ satisfy
+    $\|\rho_i-|\omega_i\rangle\langle\omega_i|\|_1\le\eta_i$, as in
+    \cite[Remark~5.3]{OpenAI2026PolynomialPEPS}, then also
     \begin{align}
         \|\sigma_i-|\omega_i\rangle\langle\omega_i|\|_1
                  & \le L_i^{-p}+\eta_i,                             &
         1-\eta_i & \le\operatorname{Re}\operatorname{Tr}\rho_i\le1.
         \label{eq:peps_separate_arity_pure}
     \end{align}
-    This is the near-pure-state consequence of
-    \cite[Remark~5.3]{OpenAI2026PolynomialPEPS}. No positivity or
-    normalization of $\sigma_i$ is asserted.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_uniform_approximate_operator_network_of_le,
         thm:peps_distributed_construction_gate_maps_density,
         thm:peps_separate_arity_incidence,thm:peps_compression_retained_norm}
-    Use each gate's own recorded expansion. It gives its original
-    operator exactly, with the stated monomial and coefficient bounds.
-    Since $a\le b$, apply the original-gate sampling theorem with
-    common sampling bound $b$ at its lower construction level.
-    Keep its selected expansion lists, rescaled circuit, actual
-    replacement $R$, sample count, coefficients and local matrices
-    $T$. Its error and alphabet estimates already concern these data.
-    Reexpansion and rescaling preserve each original participant set
-    and lifetime. Theorem~\ref{thm:peps_separate_arity_incidence}
-    therefore gives $2b(a-1)$ for this very replacement's links,
-    without selecting another network. Transporting its common-gate
-    witness through the recorded occurrence correspondence gives an
-    original gate of $\mathcal C_i$ with the same participants.
-    The absorbed exterior scalar changes one local matrix but no link
-    or alphabet. This proves (\ref{eq:peps_separate_arity_network}).
-    Apply the retained-density trace-norm estimate to this same
-    $\sigma_i$ and $\rho_i$ to obtain
-    (\ref{eq:peps_separate_arity_pure}).
+    By Definition~\ref{def:peps_distributed_construction_gate_maps} and
+    Theorem~\ref{thm:peps_distributed_construction_gate_maps_density}, the
+    recorded expansions reproduce each gate operator with zero approximation
+    error and preserve $\rho_i$. Since $a\le b$, applying
+    Theorem~\ref{thm:peps_uniform_approximate_operator_network_of_le} with
+    common bound $b$ yields $\sigma_i$ and $D_e$ satisfying the first two bounds
+    in~(\ref{eq:peps_separate_arity_network}) and the common-gate locality of
+    links. Because reexpansion and rescaling preserve participant sets and
+    lifetimes, Theorem~\ref{thm:peps_separate_arity_incidence} gives
+    $|I_j|\le 2b(a-1)$ on the same replacement network. Finally,
+    Theorem~\ref{thm:peps_compression_retained_norm} yields~(\ref{eq:peps_separate_arity_pure}).
 \end{proof}
 
 \begin{theorem}[Compression of a family of distributed constructions with explicit constants]
@@ -564,98 +493,84 @@ contraction of local tensors is a separate assertion.
     \leanok
     \uses{def:peps_compression_constants}
     Under the hypotheses of
-    Theorem~\ref{thm:peps_distributed_construction_compression}, let $p$ be
-    real. For every $C_p\ge C(r,b,C_N,C_D,C_K,C_C)$ and every integer
-    $\alpha_p\ge\alpha(r,b,n,d,u,v,p)$, with the constants of
-    Definition~\ref{def:peps_compression_constants}, every member admits an
-    operator tensor network $\sigma_L$ as in
+    Theorem~\ref{thm:peps_distributed_construction_compression} and with the
+    constants of Definition~\ref{def:peps_compression_constants}, for every
+    $p\in\mathbb R$, $C_p\ge C(r,b,C_N,C_D,C_K,C_C)$, and integer
+    $\alpha_p\ge\alpha(r,b,n,d,u,v,p)$, every member admits an operator tensor
+    network $\sigma_L$ as in
     Theorem~\ref{thm:peps_distributed_construction_compression} with
-    $\dim\mathcal V_e\le C_pL^{\alpha_p}$. If instead of the bound on the
-    individual coefficients the recorded expansion of every nonprivate gate has
-    absolute coefficient sum at most $C_SL^s$, the same holds for every
-    $C_p\ge C_\Sigma(r,b,C_N,C_D,C_K,C_S)$ and every integer
+    $\dim\mathcal V_e\le C_pL^{\alpha_p}$. If the termwise coefficient bound is
+    replaced by $\sum_\xi|c_\xi|\le C_SL^s$, the same holds for all
+    $C_p\ge C_\Sigma(r,b,C_N,C_D,C_K,C_S)$ and
     $\alpha_p\ge\alpha_{\mathrm{net}}(r,b,n,d,u,s,p)$.
     % Source: 04-compression.tex, lines 137--175, 199--208 and 565--588.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_uniform_approximate_operator_network_of_le,thm:peps_distributed_construction_gate_maps_density}
-    The argument of
-    Theorem~\ref{thm:peps_distributed_construction_compression} applies
-    Theorem~\ref{thm:peps_uniform_approximate_operator_network_of_le} to the
-    exact recorded expansions.
+    Apply Theorem~\ref{thm:peps_uniform_approximate_operator_network_of_le} to
+    the exact recorded-expansion construction of
+    Theorem~\ref{thm:peps_distributed_construction_gate_maps_density}.
 \end{proof}
 
 \begin{theorem}[Compression of a family of distributed constructions]
     \label{thm:peps_distributed_construction_compression}
     \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction.exists_uniform_sampled_network}
     \leanok
-    In the case of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} without messages
-    (the recorded expansions of a distributed construction consist of allowed
-    monomials and carry no messages; the case with messages is not covered by this statement),
-    let $(\mathcal C_i)_{i\in I}$ be a family of distributed constructions,
-    each index carrying a size $L=L_i\ge2$. Suppose that there are constants
-    $b,n,d,r,u,v$ and $C_N,C_D,C_K,C_C$, independent of the index, such that
-    every member has at most $C_NL^n$ nonprivate gates and physical
-    dimensions at most $C_DL^d$; every nonprivate gate involves at most $b$
-    parties and every party participates in at most $b$ nonprivate gates over
-    the whole construction; and the recorded expansion of every nonprivate
-    gate has at most $C_KL^u$ monomials, each with at most $r$ pair effects and
-    a coefficient of modulus at most $C_CL^v$. Then for every $p>0$ there are
-    $C_p\ge0$ and an integer $\alpha_p>0$, chosen before the family member,
-    such that every member admits an operator tensor network $\sigma_L$ with
-    one node per party, the physical ket and bra legs of that party, and
+    In the message-free case of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    let $(\mathcal C_i)_{i\in I}$ be a family of distributed constructions of
+    sizes $L=L_i\ge2$. Suppose there are constants
+    $b,n,d,r,u,v\in\mathbb N$ and $C_N,C_D,C_K,C_C\in\mathbb R$ independent of
+    $i$ such that each $\mathcal C_i$ has at most $C_NL^n$ nonprivate gates,
+    physical dimensions $d_p\le C_DL^d$, at most $b$ participants per
+    nonprivate gate, at most $b$ nonprivate gates per party, and recorded gate
+    expansions of at most $C_KL^u$ monomials, each with at most $r$ pair effects
+    and coefficient modulus $|c_\xi|\le C_CL^v$. Then for every $p>0$ there
+    exist $C_p\ge0$ and $\alpha_p\in\mathbb N_{>0}$ independent of $i$ such that
+    each member admits an operator tensor network $\sigma_L$ with one node per
+    party, physical ket and bra legs of that party, link spaces $\mathcal V_e$,
+    and physical density $\rho_L$ satisfying
     \begin{align}
-        \|\sigma_L-\rho_L\|_1\le L^{-p},\qquad \dim\mathcal V_e\le C_pL^{\alpha_p}
+        \|\sigma_L-\rho_L\|_1\le L^{-p},\qquad \dim\mathcal V_e\le C_pL^{\alpha_p},
+        \label{eq:peps_distributed_construction_compression}
     \end{align}
-    for the physical density $\rho_L$. Every node meets at most
-    $2b(b-1)$ virtual links, and the two endpoints of every link participate
-    in a common nonprivate gate of the original construction.
+    where each node meets at most $2b(b-1)$ virtual links and both endpoints of
+    every link participate in a common nonprivate gate of $\mathcal C_i$.
     % Source: 04-compression.tex, lines 137--175.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_distributed_construction_compression_of_le,def:peps_compression_constants}
-    Take $C_p=C(r,b,C_N,C_D,C_K,C_C)$ and
-    $\alpha_p=\alpha(r,b,n,d,u,v,p)$, the positive constants of
-    Definition~\ref{def:peps_compression_constants}, in
-    Theorem~\ref{thm:peps_distributed_construction_compression_of_le}.
-    Reading every member with the operators of its own expansions, the recorded
-    expansions approximate these operators with error zero, hence at every
-    inverse-power accuracy, and keep the original monomial counts,
-    coefficients, gate occurrences and participating sets. Applying
-    Theorem~\ref{thm:peps_uniform_approximate_operator_network} and using
-    Theorem~\ref{thm:peps_distributed_construction_gate_maps_density}
-    identifies the approximated density with $\rho_L$, while each gate occurrence of
-    the reading corresponds to a nonprivate gate of the original
-    construction with the same participants.
+    Set $C_p=C(r,b,C_N,C_D,C_K,C_C)$ and $\alpha_p=\alpha(r,b,n,d,u,v,p)$ from
+    Definition~\ref{def:peps_compression_constants} and apply
+    Theorem~\ref{thm:peps_distributed_construction_compression_of_le}
+    (via Theorem~\ref{thm:peps_uniform_approximate_operator_network} and
+    Theorem~\ref{thm:peps_distributed_construction_gate_maps_density}) to the
+    exact recorded expansions.
 \end{proof}
 
 \begin{theorem}[The compressed network and the retained norm]
     \label{thm:peps_compression_retained_norm_network}
     \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction.exists_uniform_sampled_network_sub_pure_le}
     \leanok
-    Combining the case of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} without messages with
-    \cite[Remark~5.3]{OpenAI2026PolynomialPEPS}, under the hypotheses of
-    Theorem~\ref{thm:peps_distributed_construction_compression}, let
-    $\Omega_L$ be a unit vector with
-    $\|\rho_L-|\Omega_L\rangle\langle\Omega_L|\|_1\le\eta_L$ for every member.
-    Then for every $p>0$ there are constants, chosen before the family
-    member, such that every member admits an operator tensor network
-    $\sigma_L$ with the properties of
-    Theorem~\ref{thm:peps_distributed_construction_compression} and
+    Combining the message-free case of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}
+    with \cite[Remark~5.3]{OpenAI2026PolynomialPEPS}, under the hypotheses of
+    Theorem~\ref{thm:peps_distributed_construction_compression}, if unit vectors
+    $\Omega_L$ satisfy $\|\rho_L-|\Omega_L\rangle\langle\Omega_L|\|_1\le\eta_L$
+    for every member, then for every $p>0$ the operator tensor network
+    $\sigma_L$ of Theorem~\ref{thm:peps_distributed_construction_compression}
+    also satisfies
     \begin{align}
-        \|\sigma_L-|\Omega_L\rangle\langle\Omega_L|\|_1 & \le L^{-p}+\eta_L,                               \\
-        1-\eta_L                                        & \le\operatorname{Re}\operatorname{Tr}\rho_L\le1,
+        \|\sigma_L-|\Omega_L\rangle\langle\Omega_L|\|_1 & \le L^{-p}+\eta_L,                               &
+        1-\eta_L                                        & \le\operatorname{Re}\operatorname{Tr}\rho_L\le1.
+        \label{eq:peps_compression_retained_norm_network}
     \end{align}
-    where the density $\rho_L$ is not normalized and $\sigma_L$ need be neither
-    positive nor Hermitian.
     % Source: 04-compression.tex, lines 137--175 and 602--611.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_compression_retained_norm,thm:peps_distributed_construction_compression}
-    Applying Theorem~\ref{thm:peps_compression_retained_norm} to the network of
-    Theorem~\ref{thm:peps_distributed_construction_compression} with
-    $\kappa=L^{-p}$ gives the bounds.
+    Apply Theorem~\ref{thm:peps_compression_retained_norm} with $\kappa=L^{-p}$
+    to the network $\sigma_L$ of
+    Theorem~\ref{thm:peps_distributed_construction_compression}.
 \end{proof}

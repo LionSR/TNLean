@@ -21,9 +21,9 @@ The physical local interaction is $h_R=I-\Pi_{\mathcal S_R}$.
         TNLean.PEPS.range_coordinateRangeProjector}
     \leanok
     Equip $\C^I$ with $\langle x,y\rangle=\sum_i\overline{x_i}y_i$.
-    For a subspace $S\subseteq\C^I$, let $\Pi_S$ be its orthogonal
-    projector in the coordinate basis. Then $\Pi_S^2=\Pi_S=\Pi_S^*$,
-    $\operatorname{ran}\Pi_S=S$, and $\Pi_Sx=x$ exactly when $x\in S$.
+    For a subspace $S\subseteq\C^I$, its orthogonal projector $\Pi_S$ in the
+    coordinate basis satisfies $\Pi_S^2=\Pi_S=\Pi_S^*$,
+    $\operatorname{ran}\Pi_S=S$, and $\Pi_Sx=x\iff x\in S$.
 \end{definition}
 
 \begin{theorem}[Range characterization of projections]%
@@ -34,17 +34,15 @@ The physical local interaction is $h_R=I-\Pi_{\mathcal S_R}$.
         TNLean.PEPS.eq_coordinateRangeProjector_of_range}
     \leanok
     \uses{def:peps_coordinate_projector}
-    If $P$ fixes every vector in $\operatorname{ran}Q$, then $PQ=Q$.
-    In particular, this holds if $P^2=P$ and
-    $\operatorname{ran}Q\subseteq\operatorname{ran}P$.
-    Orthogonal projectors with equal ranges are equal; thus any orthogonal
-    projector with range $S$ equals $\Pi_S$.
+    If $Px=x$ for all $x\in\operatorname{ran}Q$ (in particular, if $P^2=P$ and
+    $\operatorname{ran}Q\subseteq\operatorname{ran}P$), then $PQ=Q$.
+    Hence orthogonal projectors $P,Q$ with $\operatorname{ran}P=\operatorname{ran}Q$
+    satisfy $P=Q$, and any orthogonal projector with range $S$ equals $\Pi_S$.
 \end{theorem}
 \begin{proof}\leanok
-    Applying the fixed-vector identity to each column of $Q$ gives $PQ=Q$,
-    and an idempotent fixes its range. For orthogonal projectors with equal
-    ranges, $PQ=Q$ and $QP=P$; taking adjoints in the first identity gives
-    $QP=Q$, hence $P=Q$.
+    Applying $Px=x$ to each column of $Q$ gives $PQ=Q$. If $P^2=P=P^*$,
+    $Q^2=Q=Q^*$, and $\operatorname{ran}P=\operatorname{ran}Q$, then $PQ=Q$ and
+    $QP=P$, so $P=QP=(PQ)^*=Q^*=Q$.
 \end{proof}
 
 \begin{definition}[Extension of regional operators]%
@@ -54,14 +52,11 @@ The physical local interaction is $h_R=I-\Pi_{\mathcal S_R}$.
         TNLean.PEPS.dependentRegionOperatorLift_assemble,
         TNLean.PEPS.dependentRegionOperatorLift_apply}
     \leanok
-    For arbitrary finite coordinate sets $X_v$, put $X_R=\prod_{v\in R}X_v$
-    and $\mathcal H_R=\C^{X_R}$. Write a full configuration
-    as $(\alpha,\tau)\in X_R\times X_{V\setminus R}$.
-    Extend $K$ on $\mathcal H_R$ by
-    $\widehat K_R=K\otimes I_{V\setminus R}$, so that
-    $\widehat K_R((\alpha,\tau),(\beta,\rho))=K(\alpha,\beta)\delta_{\tau,\rho}$.
-    For $R\subseteq U$, its extension inside $U$ is
-    $K\otimes I_{U\setminus R}$.
+    For finite coordinate sets $X_v$, put $X_R=\prod_{v\in R}X_v$,
+    $\mathcal H_R=\C^{X_R}$, and write $(\alpha,\tau)\in X_R\times X_{V\setminus R}$.
+    For $K\in\End(\mathcal H_R)$, define $\widehat K_R=K\otimes I_{V\setminus R}$ by
+    $\widehat K_R((\alpha,\tau),(\beta,\rho))=K(\alpha,\beta)\delta_{\tau,\rho}$,
+    and for $R\subseteq U$, its extension inside $U$ by $K\otimes I_{U\setminus R}$.
 \end{definition}
 
 In the following statement and proof, $X$ denotes the region $R$ of
@@ -104,15 +99,15 @@ notation below.
         \label{eq:peps_marginal_basis_relabelling}
     \end{align}
     The extension on the right of~(\ref{eq:peps_lift_basis_relabelling})
-    uses the relabelled bases. Equivalently,
+    uses the relabelled bases; equivalently,
     $E_V(\widehat K_X\xi)=\widehat{E_XKE_X^*}_XE_V\xi$.
     No Hermiticity or normalization is required; the identities include
     empty regions, empty alphabets, and empty site sets.
 
-    Put $C=V\setminus X$ and $K'=E_XKE_X^*$.
-    Write $I'_C$ for the identity in the relabelled complementary basis.
-    In product coordinates $E_V=E_X\otimes E_C$, and
-    (\ref{eq:peps_lift_basis_relabelling}) is the following equality.
+    Put $C=V\setminus X$ and $K'=E_XKE_X^*$, and write $I'_C$ for the identity
+    in the relabelled complementary basis. In product coordinates
+    $E_V=E_X\otimes E_C$, and (\ref{eq:peps_lift_basis_relabelling}) is the
+    following equality.
     % Formula: (E_X tensor E_C)(K tensor I_C)(E_X^* tensor E_C^*)
     % = (E_X K E_X^*) tensor I'_C = K' tensor I'_C.
     % Ink-to-index map: upper row is H_X, lower row is H_C.
@@ -167,20 +162,17 @@ notation below.
             \tnmark[form=label, label pos=s]{on relabelledcomplementin 0.5}{$\beta$}
         \end{tenkz}
     \end{tenkzequation}
-    The upper and lower lines carry the region and its complement.
-    Both panels represent the same operator after a change of coordinate labels.
+    The upper and lower lines carry the region and its complement; both panels
+    represent the same operator after a change of coordinate labels.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:peps_regional_operator_extension}
-    Restriction to $X$ and $C$ commutes with the sitewise bijections.
-    Thus conjugating $K\otimes I_C$ by $E_X\otimes E_C$ gives
-    $(E_XKE_X^*)\otimes I'_C$, proving
-    (\ref{eq:peps_lift_basis_relabelling}). In the partial trace,
-    $E_C$ only permutes the summed complementary configuration, while
-    $E_X$ relabels the two retained indices, giving
-    (\ref{eq:peps_marginal_basis_relabelling}) for the same vector $\xi$
-    under the
+    Since $E_V=E_X\otimes E_C$,
+    $(E_X\otimes E_C)(K\otimes I_C)(E_X^*\otimes E_C^*)=(E_XKE_X^*)\otimes I'_C$,
+    giving (\ref{eq:peps_lift_basis_relabelling}). In the partial trace,
+    $E_C$ permutes the summed index on $C$ while $E_X$ relabels the retained
+    indices on $X$, giving (\ref{eq:peps_marginal_basis_relabelling}) under the
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L80-L99}{identity-extension and partial-trace conventions}
     of the regularized patch problem.
 \end{proof}
@@ -201,22 +193,22 @@ notation below.
         TNLean.PEPS.exists_dependentRegionOperatorLift_commutator_union}
     \leanok
     \uses{def:peps_regional_operator_extension}
-    Extension preserves identities, products, differences, adjoints, and
-    orthogonal projections. If $x_\tau(\alpha)=x(\alpha,\tau)$, then
-    $(\widehat K_Rx)_\tau=Kx_\tau$; hence $\widehat K_Rx=x$ if and only if
-    $Kx_\tau=x_\tau$ for every $\tau$.
-    Extension through a containing region agrees with direct extension.
-    Products, differences, and commutators of operators extended from $R,S$
-    are extensions of operators on $R\cup S$.
+    The map $K\mapsto\widehat K_R$ is a unital $*$-algebra homomorphism
+    preserving orthogonal projections. Writing $x_\tau(\alpha)=x(\alpha,\tau)$,
+    one has $(\widehat K_Rx)_\tau=Kx_\tau$, so
+    $\widehat K_Rx=x\iff \forall\tau,\ Kx_\tau=x_\tau$.
+    For $R\subseteq U$, $\widehat{(K\otimes I_{U\setminus R})}_U=\widehat K_R$;
+    hence products, differences, and commutators of $\widehat K_R$ and
+    $\widehat L_S$ are extensions from $R\cup S$.
 \end{theorem}
 \begin{proof}\leanok
-    Multiplying the coefficient formula in
-    Definition~\ref{def:peps_regional_operator_extension} and summing over the
-    middle coordinates leaves one slice from the complementary Kronecker delta.
-    For $R\subseteq U$, the two delta conditions on $U\setminus R$ and
-    $V\setminus U$ combine to equality on $V\setminus R$, so
-    extending both operators first to $R\cup S$ expresses their product,
-    difference, or commutator as an extension from $R\cup S$.
+    In Definition~\ref{def:peps_regional_operator_extension}, summing
+    $\widehat K_R((\alpha,\tau),(\beta,\rho))=K(\alpha,\beta)\delta_{\tau,\rho}$
+    over intermediate coordinates leaves a single $\tau$-slice, and for
+    $R\subseteq U$ we have $\delta_{\tau|_{U\setminus R},\rho|_{U\setminus R}}
+        \delta_{\tau|_{V\setminus U},\rho|_{V\setminus U}}=\delta_{\tau,\rho}$.
+    Factoring $\widehat K_R,\widehat L_S$ through $U=R\cup S$ gives the closure
+    properties.
 \end{proof}
 
 \begin{theorem}[Continuity and norm bound for regional extensions]%
@@ -225,28 +217,23 @@ notation below.
         TNLean.PEPS.continuous_dependentRegionOperatorLift}
     \leanok
     \uses{def:peps_regional_operator_extension}
-    For every region $R$, the map $K\mapsto\widehat K_R$ is continuous.
-    For every operator $K$ on $\mathcal H_R$ and every
-    $\xi\in\mathcal H_V$, one has $\|\widehat K_R\xi\|\le\|K\|\,\|\xi\|$.
+    For every region $R$, $K\mapsto\widehat K_R$ is continuous and
+    $\|\widehat K_R\xi\|\le\|K\|\,\|\xi\|$ for all $K\in\End(\mathcal H_R)$ and
+    $\xi\in\mathcal H_V$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:peps_regional_operator_extension}
-    Regroup the coordinates as
-    $\mathcal H_V=\mathcal H_R\otimes\mathcal H_{V\setminus R}$.
-    For each complementary configuration $\tau\in X_{V\setminus R}$,
-    put $\xi_\tau(\alpha)=\xi(\alpha,\tau)$ for $\alpha\in X_R$.
-    The coordinate decomposition is an isometry, and each slice satisfies
-    $(\widehat K_R\xi)_\tau=K\xi_\tau$. Therefore
-    \begin{align*}
+    With $\xi_\tau(\alpha)=\xi(\alpha,\tau)$, we have
+    $(\widehat K_R\xi)_\tau=K\xi_\tau$, so
+    \begin{align}
         \|\widehat K_R\xi\|^2
-         & =\sum_{\tau\in X_{V\setminus R}}\|K\xi_\tau\|^2         \\
-         & \le\|K\|^2\sum_{\tau\in X_{V\setminus R}}\|\xi_\tau\|^2
+         & =\sum_{\tau\in X_{V\setminus R}}\|K\xi_\tau\|^2
+        \le\|K\|^2\sum_{\tau\in X_{V\setminus R}}\|\xi_\tau\|^2
         =\|K\|^2\|\xi\|^2.
-    \end{align*}
-    Taking nonnegative square roots gives the bound. The coefficient formula
-    $\widehat K_R((\alpha,\tau),(\beta,\rho))
-        =K(\alpha,\beta)\delta_{\tau,\rho}$
-    shows that the extension depends linearly, and hence continuously, on $K$.
+        \notag
+    \end{align}
+    Taking square roots gives $\|\widehat K_R\xi\|\le\|K\|\,\|\xi\|$, and
+    linearity of $K\mapsto\widehat K_R$ in finite dimensions gives continuity.
 \end{proof}
 
 \begin{theorem}[Product maps and complementary cancellation]%
@@ -260,27 +247,24 @@ notation below.
         TNLean.PEPS.regionPhysicalProductMatrix_ne_zero}
     \leanok
     \uses{def:peps_regional_operator_extension}
-    For rectangular site matrices $F_v$, put $F_R=\bigotimes_{v\in R}F_v$.
-    In region/complement coordinates,
+    For site matrices $F_v$, put $F_R=\bigotimes_{v\in R}F_v$. In
+    region/complement coordinates,
     \begin{align}
         F_V             & =F_R\otimes F_{V\setminus R},    &
         \widehat K_RF_V & =(KF_R)\otimes F_{V\setminus R}.
         \label{eq:peps_product_split}
     \end{align}
-    Thus $HF_R=F_RK$ implies $\widehat H_RF_V=F_V\widehat K_R$.
-    If $L\ne0$, then $M\otimes L=0$ exactly when $M=0$.
-    Consequently, if $F_{V\setminus R}\ne0$, then
-    $\widehat K_RF_V=0$ exactly when $KF_R=0$. In particular,
-    $\widehat K_RF_V=0$ and $KF_R=K$ imply $K=0$.
-    A product $F_R$ of nonzero site matrices is nonzero, including $R=\varnothing$.
+    Thus $HF_R=F_RK\Longrightarrow\widehat H_RF_V=F_V\widehat K_R$.
+    If $L\ne0$, then $M\otimes L=0\iff M=0$; hence if $F_{V\setminus R}\ne0$,
+    $\widehat K_RF_V=0\iff KF_R=0$ (so $\widehat K_RF_V=0$ and $KF_R=K$ imply
+    $K=0$). Moreover, $\forall v\in R,\ F_v\ne0\Longrightarrow F_R\ne0$.
 \end{theorem}
 \begin{proof}\leanok
-    Splitting the product of entries over $R$ and its complement gives
-    (\ref{eq:peps_product_split}), and tensoring the regional intertwining
-    identity with $F_{V\setminus R}$ proves its global form.
-    Cancelling a nonzero entry $L_{ij}$ from each entry
-    $M_{ab}L_{ij}=0$ gives $M=0$, while choosing one nonzero entry of every $F_v$ gives
-    a nonzero product entry (with the empty product equal to $1$).
+    Splitting the entry product over $R$ and $V\setminus R$ gives
+    (\ref{eq:peps_product_split}), and tensoring $HF_R=F_RK$ with
+    $F_{V\setminus R}$ gives $\widehat H_RF_V=F_V\widehat K_R$.
+    Cancelling a nonzero entry $L_{ij}$ from $M_{ab}L_{ij}=0$ gives $M=0$, and
+    multiplying one nonzero entry from each $F_v$ gives $F_R\ne0$.
 \end{proof}
 
 \begin{theorem}[Single-coordinate generation and fixed spaces]%
@@ -294,27 +278,25 @@ notation below.
         TNLean.PEPS.regularRegionalEdgeAverages_fixed_iff}
     \leanok
     \uses{def:peps_ambient_regional_constraints}
-    A multiplicatively closed subset of a finite product of monoids that
-    contains $1$ and every single-coordinate element is the entire product,
-    without any commutativity assumption.
-    For the half-edge actions, $g\mapsto T_{r^{e,g^{-1}}}$ is a permutation
-    representation. The vertex average $A_v$ fixes precisely the functions
-    invariant under all left translations at $v$, and $B_{R,e}$ fixes
-    precisely those invariant under all shared right translations at $e$.
-    The diagonal $D_R$ fixes precisely the functions vanishing off the flat locus.
-    Being fixed by all $A_v$, $v\in R$, is equivalent to invariance under
-    all regional vertex gauges; being fixed by all internal $B_e$ is
-    equivalent to invariance under all simultaneous internal right translations.
+    Any submonoid of a finite product $\prod_{i\in I}M_i$ containing all
+    single-coordinate elements equals $\prod_{i\in I}M_i$.
+    For the half-edge actions of Definition~\ref{def:peps_ambient_regional_constraints},
+    $g\mapsto T_{r^{e,g^{-1}}}$ is a permutation representation, and
+    \begin{align}
+        A_vx=x     & \iff \forall g\in G,\ L_{k^{v,g}}x=x,                   &
+        B_{R,e}x=x & \iff \forall g\in G,\ T_{r^{e,g}}x=x, \notag                         \\
+        D_Rx=x     & \iff \supp(x)\subseteq\{\alpha:\alpha|_R\text{ flat}\}. &   & \notag
+    \end{align}
+    Consequently, $(\forall v\in R,\ A_vx=x)\iff(\forall k\text{ supported on }R,\ L_kx=x)$,
+    and $(\forall e\in E(R),\ B_{R,e}x=x)\iff(\forall r\text{ supported on }E(R),\ T_rx=x)$.
 \end{theorem}
 \begin{proof}\leanok
-    Adjoin coordinates one at a time, writing a function on an enlarged
-    set as its new single-coordinate factor times the previous function.
-    For a finite-group representation $\rho$, the average
-    $|G|^{-1}\sum_g\rho(g)$ fixes exactly its invariant vectors.
-    Inverse right multiplication is a representation because
-    $(gh)^{-1}=h^{-1}g^{-1}$; reindexing by inversion gives the stated edge average.
-    Apply single-coordinate generation to the vertex and edge assignments.
-    Finally $D_Rx=x$ means $\mathbf1_{\mathrm{flat}}(\alpha)x(\alpha)=x(\alpha)$.
+    Induction on $|I|$ proves single-coordinate generation.
+    For any finite-group representation $\rho$, $|G|^{-1}\sum_{g\in G}\rho(g)x=x
+        \iff\forall g,\ \rho(g)x=x$; applying this to $g\mapsto L_{k^{v,g}}$ and
+    $g\mapsto T_{r^{e,g^{-1}}}$ (with $(gh)^{-1}=h^{-1}g^{-1}$) and invoking
+    single-coordinate generation gives the $A_v$ and $B_{R,e}$ characterizations,
+    while $D_Rx=x\iff\mathbf1_{\mathrm{flat}}(\alpha|_R)x(\alpha)=x(\alpha)$.
 \end{proof}
 
 \begin{definition}[Ambient regional range]%
@@ -329,15 +311,11 @@ notation below.
         TNLean.PEPS.restrictRegularRegionHalfEdges_assemble}
     \leanok
     Let $\mathcal S_R^0$ be the range of the canonical regular open-region
-    matrix. Define $\widehat{\mathcal S}_R^0$ by requiring every complementary
-    slice $x_\tau$ to lie in $\mathcal S_R^0$.
-    Extend a regional gauge by $1$ outside $R$, and retain an edge multiplier
-    only on edges with both ends in $R$. These actions preserve the exterior
-    coordinates: $L_k(\alpha,\tau)=(L_k\alpha,\tau)$ and
-    $T_r(\alpha,\tau)=(T_r\alpha,\tau)$ for internal $r$.
-    Restriction of $(\alpha,\tau)$ to $R$ recovers $\alpha$.
-    If $r=1$ on boundary edges, discarding its exterior values leaves its
-    regional action unchanged.
+    matrix, and set
+    $\widehat{\mathcal S}_R^0=\{x:\forall\tau,\ x_\tau\in\mathcal S_R^0\}$.
+    Extending a regional gauge $k$ by $1$ outside $R$ and restricting an edge
+    multiplier $r$ to $E(R)$ gives $L_k(\alpha,\tau)=(L_k\alpha,\tau)$ and
+    $T_r(\alpha,\tau)=(T_r\alpha,\tau)$, with $(\alpha,\tau)|_R=\alpha$.
 \end{definition}
 
 \begin{theorem}[The commuting product is the regional range projector]%
@@ -351,10 +329,9 @@ notation below.
     \leanok
     \uses{def:peps_ambient_regular_range,def:peps_coordinate_projector,
         def:peps_ambient_regional_constraints}
-    Membership in $\widehat{\mathcal S}_R^0$ is equivalent to invariance under
-    every regional vertex gauge and every internal shared right translation,
-    together with vanishing off regional flatness. Thus, writing
-    $P_R^0=\Pi_{\mathcal S_R^0}$, one has
+    A vector $x$ lies in $\widehat{\mathcal S}_R^0$ if and only if it is fixed by
+    all regional vertex gauges $L_k$, all internal right translations $T_r$, and
+    $D_R$. Writing $P_R^0=\Pi_{\mathcal S_R^0}$, one has
     \begin{align}
         Q_Rx=x          & \ \Longleftrightarrow\ x\in\widehat{\mathcal S}_R^0,
                         & \operatorname{ran}Q_R                                & =\widehat{\mathcal S}_R^0,\notag \\
@@ -362,7 +339,6 @@ notation below.
                         & [\widehat{P_R^0},\widehat{P_S^0}]                    & =0.
         \label{eq:peps_actual_virtual_projection}
     \end{align}
-    No condition is placed on the exterior half-edge labels.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_regional_range_invariant_flat,
@@ -371,12 +347,13 @@ notation below.
         thm:peps_regional_extension_algebra,
         thm:peps_projection_range_unique,
         thm:peps_ambient_regional_constraint_commute}
-    The regional invariant-and-flat characterization applies to each slice because
-    the actions in Definition~\ref{def:peps_ambient_regular_range} leave that
-    slice's exterior label unchanged. The fixed space of the commuting product
-    $Q_R$ is therefore exactly $\widehat{\mathcal S}_R^0$.
-    Both $Q_R$ and $\widehat{P_R^0}$ are orthogonal projections onto this
-    subspace, so they are equal. Commutation of $Q_R,Q_S$ gives the last identity.
+    Applying Theorem~\ref{thm:peps_regional_range_invariant_flat} to each slice
+    $x_\tau$ and combining with Theorem~\ref{thm:peps_regular_constraint_fixed_spaces}
+    and Theorem~\ref{thm:peps_ambient_regional_constraint_projection} gives
+    $\operatorname{ran}Q_R=\widehat{\mathcal S}_R^0=\operatorname{ran}\widehat{P_R^0}$.
+    Theorem~\ref{thm:peps_projection_range_unique} then yields $\widehat{P_R^0}=Q_R$,
+    and Theorem~\ref{thm:peps_ambient_regional_constraint_commute} gives
+    $[\widehat{P_R^0},\widehat{P_S^0}]=[Q_R,Q_S]=0$.
 \end{proof}
 
 \begin{theorem}[Projectors conjugated by scaled partial isometries]%
@@ -386,18 +363,14 @@ notation below.
         TNLean.PEPS.range_smul_mul_mul_conjTranspose_of_gram}
     \leanok
     Let $A$ be rectangular, $c\in\R\setminus\{0\}$, and $A^*A=cE$.
-    If $Q$ is an orthogonal projector with $EQ=Q$, then
-    $c^{-1}AQA^*$ is an orthogonal projector.
-    If instead $QE=Q$, then
-    $(c^{-1}AQA^*)A=AQ$; when $Q$ is also an orthogonal projector,
+    If $Q^2=Q=Q^*$ and $EQ=Q$, then $c^{-1}AQA^*$ is an orthogonal projector.
+    If $QE=Q$, then $(c^{-1}AQA^*)A=AQ$, and if also $Q^2=Q=Q^*$, then
     $\operatorname{ran}(c^{-1}AQA^*)=A(\operatorname{ran}Q)$.
 \end{theorem}
 \begin{proof}\leanok
-    Set $B=AQA^*$. Under the first hypotheses,
-    $B^2=cAQEQ A^*=cB$ and $B^*=B$.
-    Under $QE=Q$, $c^{-1}AQA^*A=AQE=AQ$.
-    Each value $c^{-1}AQA^*x$ lies in $A(\operatorname{ran}Q)$, while
-    $(c^{-1}AQA^*)AQx=AQ^2x=AQx$ gives the reverse inclusion.
+    For $B=AQA^*$, $EQ=Q$ gives $B^2=cAQEQA^*=cB$ and $B^*=B$, while $QE=Q$
+    gives $c^{-1}BA=AQE=AQ$. Then $\operatorname{ran}(c^{-1}B)\subseteq A(\operatorname{ran}Q)$
+    and $(c^{-1}B)AQx=AQ^2x=AQx$ gives the reverse inclusion.
 \end{proof}
 
 \begin{theorem}[Physical regional range and its projector]%
@@ -407,11 +380,10 @@ notation below.
         TNLean.PEPS.regularIsometric_regionRangeProjector_intertwine}
     \leanok
     \uses{thm:peps_regular_actual_projector}
-    For regular $G$-injective site maps,
-    $\mathcal S_R=T_R(\mathcal S_R^0)$. Set $E_R=\bigotimes_{v\in R}E_v$;
-    then $E_RP_R^0=P_R^0$.
-    For regular $G$-isometric site maps and $c_R=\prod_{v\in R}c_v>0$,
-    the orthogonal projector $P_R=\Pi_{\mathcal S_R}$ satisfies
+    For regular $G$-injective site maps, $\mathcal S_R=T_R(\mathcal S_R^0)$ and
+    $E_RP_R^0=P_R^0$, where $E_R=\bigotimes_{v\in R}E_v$.
+    For regular $G$-isometric site maps with $c_R=\prod_{v\in R}c_v>0$, the
+    orthogonal projector $P_R=\Pi_{\mathcal S_R}$ satisfies
     \begin{align}
         T_R^*T_R & =c_RE_R,                &
         P_R      & =c_R^{-1}T_RP_R^0T_R^*, &
@@ -422,15 +394,11 @@ notation below.
 \begin{proof}\leanok
     \uses{thm:peps_scaled_partial_isometry_projector_transport,thm:peps_projection_range_unique,
         thm:peps_regional_range_invariant_flat}
-    The physical product map takes each canonical open-region column to the
-    original tensor's column with the same boundary labels. Their spans give
-    $\mathcal S_R=T_R(\mathcal S_R^0)$.
-    Every vector in $\mathcal S_R^0$ is fixed by the product of local regular
-    averages, proving $E_RP_R^0=P_R^0$; adjoints give $P_R^0E_R=P_R^0$.
-    Tensoring the local Gram identities and applying
-    Theorem~\ref{thm:peps_scaled_partial_isometry_projector_transport} produces an
-    orthogonal projector with range $\mathcal S_R$, which uniqueness
-    identifies with $P_R$ to give (\ref{eq:peps_physical_projector_transport}).
+    Factoring the open-region map through $T_R$ gives $\mathcal S_R=T_R(\mathcal S_R^0)$,
+    and local gauge invariance (Theorem~\ref{thm:peps_regional_range_invariant_flat})
+    gives $E_RP_R^0=P_R^0=(P_R^0E_R)^*$. Tensoring $T_v^*T_v=c_vE_v$ gives
+    $T_R^*T_R=c_RE_R$, and Theorems~\ref{thm:peps_scaled_partial_isometry_projector_transport}
+    and~\ref{thm:peps_projection_range_unique} yield (\ref{eq:peps_physical_projector_transport}).
 \end{proof}
 
 \begin{theorem}[Nonzero physical site images]%
@@ -439,23 +407,19 @@ notation below.
         TNLean.PEPS.exists_regularIsometric_siteImageProjectors,
         TNLean.PEPS.product_siteImages_mul_regionRangeProjector}
     \leanok
-    For regular $G$-isometric site maps, set
-    $L_v=c_v^{-1}T_v^*$ and $J_v=T_vL_v$.
-    Then $J_v$ is a nonzero orthogonal projector,
-    $L_vT_v=E_v$, and $J_vT_v=T_v$.
-    More generally, for regular $G$-injective site maps and any matrices
-    $J_v$ satisfying $J_vT_v=T_v$, one has $J_RP_R=P_R$, where
-    $J_R=\bigotimes_{v\in R}J_v$.
+    For regular $G$-isometric site maps, $L_v=c_v^{-1}T_v^*$ and $J_v=T_vL_v$
+    satisfy $J_v^2=J_v=J_v^*\ne0$, $L_vT_v=E_v$, and $J_vT_v=T_v$.
+    More generally, for regular $G$-injective site maps and any matrices $J_v$
+    with $J_vT_v=T_v$, the product $J_R=\bigotimes_{v\in R}J_v$ satisfies
+    $J_RP_R=P_R$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_physical_regional_projector,thm:peps_projection_range_unique}
-    The constant function $1$ is a nonzero invariant vector, even when the
-    incident-leg set is empty; hence $E_v\ne0$.
-    The Gram identity gives $L_vT_v=E_v$, and $T_vE_v=T_v$ gives
-    $J_vT_v=T_v$ and $J_v^2=J_v$. The scalar $c_v$ is real, so $J_v^*=J_v$.
-    If $J_v=0$, then $T_v=J_vT_v=0$, contradicting $L_vT_v=E_v\ne0$.
-    Finally $J_RT_R=T_R$ fixes every vector of
-    $\mathcal S_R=T_R(\mathcal S_R^0)$ and therefore gives $J_RP_R=P_R$.
+    Since $E_v1=1\ne0$, we have $E_v\ne0$. From $T_v^*T_v=c_vE_v$ and
+    $T_vE_v=T_v$ we get $L_vT_v=E_v$, $J_vT_v=T_v$, $J_v^2=J_v=J_v^*$, and
+    $J_v\ne0$ (else $E_v=L_vJ_vT_v=0$). Finally, $J_RT_R=T_R$ fixes
+    $\mathcal S_R=T_R(\mathcal S_R^0)$, so Theorem~\ref{thm:peps_projection_range_unique}
+    gives $J_RP_R=P_R$.
 \end{proof}
 
 \begin{definition}[Products of site-image projections]%
@@ -468,12 +432,10 @@ notation below.
         TNLean.PEPS.regionPhysicalProductMatrix_productSiteMask_mul,
         TNLean.PEPS.regionPhysicalProductMatrix_productSiteMask_isStarProjection}
     \leanok
-    For orthogonal site projectors $J_v$, define $J_v^{[U]}=J_v$ on $U$
-    and $J_v^{[U]}=I$ outside $U$. Put
-    $M_U=\bigotimes_{v\in V}J_v^{[U]}=\widehat{J_U}$.
-    Every selected-site product is an orthogonal projector,
-    $M_RM_S=M_{R\cup S}$, and
-    $(\bigotimes_{v\in R}J_v^{[U]})J_R=J_R$.
+    For orthogonal site projectors $J_v$, define $J_v^{[U]}=J_v$ for $v\in U$
+    and $J_v^{[U]}=I$ for $v\notin U$, and set
+    $M_U=\bigotimes_{v\in V}J_v^{[U]}=\widehat{J_U}$. Then $M_U^2=M_U=M_U^*$,
+    $M_RM_S=M_{R\cup S}$, and $(\bigotimes_{v\in R}J_v^{[U]})J_R=J_R$.
 \end{definition}
 
 \begin{theorem}[Support under products of site projections]%
@@ -484,19 +446,17 @@ notation below.
         TNLean.PEPS.dependentRegionOperatorLift_mul_absorbs_union}
     \leanok
     \uses{def:peps_site_image_products,def:peps_regional_operator_extension}
-    If $H_R$ is an orthogonal projector and $J_RH_R=H_R$, then
-    $H_RJ_R=H_R$, $\widehat H_RM_R=\widehat H_R$, and
-    $[\widehat H_R,M_U]=0$ for every $U$.
-    For two such supported regional projectors,
+    If $H_R^2=H_R=H_R^*$ and $J_RH_R=H_R$, then $H_RJ_R=H_R$,
+    $\widehat H_RM_R=\widehat H_R$, and $[\widehat H_R,M_U]=0$ for every $U\subseteq V$.
+    If also $H_S^2=H_S=H_S^*$ with $J_SH_S=H_S$, then
     $(\widehat H_R\widehat H_S)M_{R\cup S}=\widehat H_R\widehat H_S$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_regional_product_cancellation,thm:peps_regional_extension_algebra}
-    Taking adjoints gives right support. Every partial site product on $R$
-    fixes $J_R$, hence fixes $H_R$ on both sides.
-    Extending that equality through the complementary product gives
-    commutation with $M_U$; writing $M_{R\cup S}=M_RM_S$, commuting $M_R$
-    past $\widehat H_S$, and absorbing each regional factor gives the product identity.
+    Adjoints give $H_RJ_R=(J_RH_R)^*=H_R$, so $\bigotimes_{v\in R}J_v^{[U]}$
+    absorbs into $J_R$ on both sides of $H_R$, which extends by
+    Theorem~\ref{thm:peps_regional_product_cancellation} to $[\widehat H_R,M_U]=0$.
+    Then $(\widehat H_R\widehat H_S)M_RM_S=\widehat H_RM_R\widehat H_SM_S=\widehat H_R\widehat H_S$.
 \end{proof}
 
 \begin{theorem}[Commutation through rectangular product maps]%
@@ -504,29 +464,26 @@ notation below.
     \lean{TNLean.PEPS.commute_dependentRegionOperatorLift_of_productSiteTransport}
     \leanok
     \uses{def:peps_site_image_products,def:peps_regional_operator_extension}
-    Let $A_v,L_v$ be rectangular maps with $A_vL_v=J_v$, where $J_v$ are
-    nonzero orthogonal projectors. Suppose $H_R,H_S$ are orthogonal projectors
-    supported by $J_R,J_S$, respectively, and
-    $H_RA_R=A_RK_R$, $H_SA_S=A_SK_S$.
-    If $[\widehat K_R,\widehat K_S]=0$, then
+    Let $A_vL_v=J_v$ with $J_v^2=J_v=J_v^*\ne0$. If orthogonal projectors
+    $H_R,H_S$ satisfy $J_RH_R=H_R$, $J_SH_S=H_S$, $H_RA_R=A_RK_R$,
+    $H_SA_S=A_SK_S$, and $[\widehat K_R,\widehat K_S]=0$, then
     $[\widehat H_R,\widehat H_S]=0$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_regional_product_cancellation,thm:peps_site_image_support,
         thm:peps_regional_extension_algebra}
-    Put $U=R\cup S$ and $D=[\widehat H_R,\widehat H_S]$.
-    Extend both intertwining identities to obtain
-    $DA_V=A_V[\widehat K_R,\widehat K_S]=0$.
-    Multiplying by $L_V$ gives $DJ_V=0$, while support gives $DM_U=D$.
-    Write $D=\widehat F_U$. Splitting across $U$ gives
+    Put $U=R\cup S$ and $D=[\widehat H_R,\widehat H_S]=\widehat F_U$
+    (Theorem~\ref{thm:peps_regional_extension_algebra}). Intertwining gives
+    $DA_V=A_V[\widehat K_R,\widehat K_S]=0$, so $DJ_V=DA_VL_V=0$, while
+    Theorem~\ref{thm:peps_site_image_support} gives $DM_U=D$. By
+    (\ref{eq:peps_product_split}),
     \begin{align}
         0=DJ_V & =(FJ_U)\otimes J_{V\setminus U}, &
         DM_U   & =\widehat{FJ_U}_U=D.
         \label{eq:peps_spectator_cancellation}
     \end{align}
-    Each $J_v\ne0$, so $J_{V\setminus U}\ne0$.
-    Cancel this factor in (\ref{eq:peps_spectator_cancellation}) to get
-    $FJ_U=0$ and then $D=0$.
+    Since $J_{V\setminus U}\ne0$, Theorem~\ref{thm:peps_regional_product_cancellation}
+    gives $FJ_U=0$, hence $D=0$ by (\ref{eq:peps_spectator_cancellation}).
 \end{proof}
 
 \begin{theorem}[Canonical interactions are complementary projections]%
@@ -537,19 +494,17 @@ notation below.
         TNLean.PEPS.dependentRegionOperatorLift_one_sub}
     \leanok
     \uses{def:peps_coordinate_projector,def:peps_regional_operator_extension}
-    For any graph PEPS tensor, its canonical regional interaction is an
-    orthogonal projector with $h_R=I-\Pi_{\mathcal S_R}$.
-    Its extension to the physical configuration space agrees with the
-    region/complement extension under the natural coordinate identification;
-    in particular $\widehat h_R=I-\widehat{\Pi_{\mathcal S_R}}$.
+    For any graph PEPS tensor, the canonical regional interaction
+    $h_R=\Pi_{\mathcal S_R^\perp}$ is an orthogonal projector satisfying
+    $h_R=I-\Pi_{\mathcal S_R}$ and $\widehat h_R=I-\widehat{\Pi_{\mathcal S_R}}$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_projection_range_unique,thm:peps_regional_extension_algebra}
-    By definition $h_R$ projects orthogonally onto $\mathcal S_R^\perp$.
-    Thus $I-h_R$ is an orthogonal projector with range
-    $\ker h_R=\mathcal S_R$, and uniqueness identifies it with $\Pi_{\mathcal S_R}$.
-    Both extension conventions have coefficient
-    $h_R(\alpha,\beta)\delta_{\tau,\rho}$. Extension preserves $I$ and subtraction.
+    Since $h_R=\Pi_{\mathcal S_R^\perp}$, $I-h_R$ is an orthogonal projector
+    with range $\ker h_R=\mathcal S_R$, so
+    Theorem~\ref{thm:peps_projection_range_unique} gives $I-h_R=\Pi_{\mathcal S_R}$,
+    and Theorem~\ref{thm:peps_regional_extension_algebra} gives
+    $\widehat h_R=I-\widehat{\Pi_{\mathcal S_R}}$.
 \end{proof}
 
 \begin{theorem}[Commuting physical parent interactions]%
@@ -574,12 +529,12 @@ notation below.
     \uses{thm:peps_nonzero_site_images,thm:peps_physical_regional_projector,
         thm:peps_regular_actual_projector,thm:peps_product_transport_commutation,
         thm:peps_canonical_complement_projection}
-    Local $G$-isometry yields $L_v,J_v$ with $T_vL_v=J_v\ne0$ and
-    $J_RP_R=P_R$, equation~(\ref{eq:peps_physical_projector_transport})
-    gives $P_RT_R=T_RP_R^0$, and
-    (\ref{eq:peps_actual_virtual_projection}) gives commuting virtual extensions.
-    Theorem~\ref{thm:peps_product_transport_commutation} with $A_v=T_v$ then gives $[\widehat P_R,\widehat P_S]=0$,
-    so $[I-\widehat P_R,I-\widehat P_S]=[\widehat P_R,\widehat P_S]=0$.
-    The complementary-factor argument applies in the full physical space,
-    even when the site maps have proper images.
+    Combining $T_vL_v=J_v\ne0$ and $J_RP_R=P_R$
+    (Theorem~\ref{thm:peps_nonzero_site_images}), $P_RT_R=T_RP_R^0$ from
+    (\ref{eq:peps_physical_projector_transport}), and
+    $[\widehat{P_R^0},\widehat{P_S^0}]=0$ from
+    (\ref{eq:peps_actual_virtual_projection}),
+    Theorem~\ref{thm:peps_product_transport_commutation} gives
+    $[\widehat P_R,\widehat P_S]=0$, and Theorem~\ref{thm:peps_canonical_complement_projection}
+    yields $[\widehat h_R,\widehat h_S]=[I-\widehat P_R,I-\widehat P_S]=0$.
 \end{proof}

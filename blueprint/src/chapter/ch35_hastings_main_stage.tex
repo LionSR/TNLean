@@ -4,17 +4,12 @@
 % Hastings, arXiv:0705.2024v4, law16.tex, lines 124--232 (main theorem,
 % equations entbd, smd, l0def, sbnd, claim).
 
-The main theorem of~\cite{Hastings2007AreaLaw} bounds the entropy of every
-initial segment of the chain by a constant $S_{\max}$ that does not depend on
-the length of the chain. Its proof runs by contradiction. If an initial
-segment had entropy above $S_{\max}$, then removing sites one at a time would
-keep the entropy of every cut in a window of length $l_0$, where
-$S_{\max}=3l_0\ln D$, above $2S_{\max}/3$. On that window the strengthened
-doubling inequality holds, and the doubling argument of Section~\ref{sec:hastings_doubling} bounds
-$l_0$ above, which contradicts the choice of $S_{\max}$. The statements
-below carry out this argument with the window facts and the doubling
-inequality as hypotheses. The value of $S_{\max}$ is the one forced by the
-corrected doubling iteration of~\cite{gap:hastings07_doubling_constants}.
+The main theorem of~\cite{Hastings2007AreaLaw} bounds the cut entropy $S_i$ by
+a chain-independent constant $S_{\max}=3l_0\ln D$: if $S_i>S_{\max}$, then
+$S_k\ge2S_{\max}/3$ for $k\in[i,i+l_0]$, so the strengthened doubling
+inequality holds on the window and Section~\ref{sec:hastings_doubling} forces
+$l_0<\lceil\xi_0\rceil_+2^M=l_0$, with $S_{\max}$ set by the corrected doubling
+iteration~\cite{gap:hastings07_doubling_constants}.
 
 \begin{definition}[Window length and entropy bound]
     \label{def:hastings_max_entropy_bound}
@@ -23,16 +18,16 @@ corrected doubling iteration of~\cite{gap:hastings07_doubling_constants}.
         TNLean.MPS.AreaLaw.Hastings.maxEntropyBound_nonneg}
     \leanok
     \uses{def:hastings_doubling_constants}
-    With $\xi_0$ and $M$ as in
-    Definition~\ref{def:hastings_doubling_constants}, put
-    \begin{align*}
-        l_0      & =\lceil\xi_0\rceil_+\,2^M, \\
-        S_{\max} & =3l_0\ln D .
-    \end{align*}
-    If $D\ge1$, then $S_{\max}\ge0$.
+    With $\xi_0$ and $M$ from Definition~\ref{def:hastings_doubling_constants},
+    define
+    \begin{align}
+        l_0 & =\lceil\xi_0\rceil_+\,2^M, \qquad
+        S_{\max} =3l_0\ln D\ge0\quad(D\ge1).
+        \label{eq:hastings_max_entropy_bound}
+    \end{align}
 \end{definition}
 \begin{proof}\leanok
-    Both $l_0$ and $\ln D$ are nonnegative when $D\ge1$.
+    Both $l_0\ge0$ and $\ln D\ge0$ for $D\ge1$.
 \end{proof}
 
 \begin{theorem}[Size of the entropy bound]
@@ -41,28 +36,26 @@ corrected doubling iteration of~\cite{gap:hastings07_doubling_constants}.
         TNLean.MPS.AreaLaw.Hastings.maxEntropyBound_le_of_one_le}
     \leanok
     \uses{def:hastings_max_entropy_bound}
-    Let $\xi'>0$, $2C_1>1$, $D\ge1$ and $C_2\ge-2$. Then
-    \begin{align*}
+    For $\xi'>0$, $2C_1>1$, $D\ge1$, and $C_2\ge-2$,
+    \begin{align}
         S_{\max}\le6\ln D\,(\xi_0+1)\,
         2^{2(\xi'\ln D+(2+C_2)\xi'/\xi_0)+1},
-    \end{align*}
-    and if moreover $C_1\ge1$, then
-    \begin{align*}
+        \notag
+    \end{align}
+    and if $C_1\ge1$,
+    \begin{align}
         S_{\max}\le6\ln D\,(\xi_0+1)\,4^{\xi'\ln D}\,
-        2^{(2+C_2)/\ln2+1}.
-    \end{align*}
-    The source's bound $S_{\max}=c_0\xi'\ln\xi'\ln D\,2^{\xi'\ln D}$
-    of~\cite[equation (smd)]{Hastings2007AreaLaw} has the base $2$ in place of
-    $4$. The larger base is the correction recorded
-    in~\cite{gap:hastings07_doubling_constants}. Requiring $C_1\ge1$ loses
-    nothing, since enlarging $C_1$ only weakens Lemma~1 of the source.
+        2^{(2+C_2)/\ln2+1},
+        \notag
+    \end{align}
+    with base $4^{\xi'\ln D}$ in place of $2^{\xi'\ln D}$ in
+    \cite[eq.~(smd)]{Hastings2007AreaLaw}~\cite{gap:hastings07_doubling_constants}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:hastings_doubling_constants,def:hastings_max_entropy_bound}
-    Since $M\le2(\xi'\ln D+(2+C_2)\xi'/\xi_0+1/2)+1$ and
-    $\lceil\xi_0\rceil_+\le\xi_0+1$, the first bound follows from the
-    definition. For $C_1\ge1$ we have $\ln(2C_1)\ge\ln2$, so
-    $(2+C_2)\xi'/\xi_0=(2+C_2)/(2\ln(2C_1))\le(2+C_2)/(2\ln2)$.
+    Substitute $M\le2(\xi'\ln D+(2+C_2)\xi'/\xi_0+1/2)+1$ and
+    $\lceil\xi_0\rceil_+\le\xi_0+1$ into~(\ref{eq:hastings_max_entropy_bound});
+    for $C_1\ge1$, $(2+C_2)\xi'/\xi_0=(2+C_2)/(2\ln(2C_1))\le(2+C_2)/(2\ln2)$.
 \end{proof}
 
 \begin{theorem}[Entropy of an initial segment]
@@ -71,14 +64,14 @@ corrected doubling iteration of~\cite{gap:hastings07_doubling_constants}.
         TNLean.MPS.AreaLaw.Hastings.regionEntropy_interval_zero_le}
     \leanok
     \uses{def:chain_model}
-    For a unit vector on a chain of $L$ sites with local dimension $q\ge1$,
-    the entropy of the first $i$ sites is at most $(L-i)\ln q$.
+    For any unit vector on a chain of $L$ sites with local dimension $q\ge1$,
+    $S(\lbrack0,i))\le(L-i)\ln q$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:chain_entropy_inequalities}
-    The complement of the first $i$ sites is the set of the remaining $L-i$
-    sites. A pure state has equal entropies on complementary regions, and
-    the entropy of a region of $L-i$ sites is at most $(L-i)\ln q$.
+    Since $[0,i)^c=[i,L)$ has $L-i$ sites, purity and dimension bounds
+    (Lemma~\ref{lem:chain_entropy_inequalities}) give
+    $S([0,i))=S([i,L))\le(L-i)\ln q$.
 \end{proof}
 
 \begin{theorem}[The contradiction argument, with the window facts as
@@ -87,40 +80,32 @@ corrected doubling iteration of~\cite{gap:hastings07_doubling_constants}.
     \lean{TNLean.MPS.AreaLaw.Hastings.regionEntropy_prefix_le_of_windowClaim}
     \leanok
     \uses{def:chain_model,def:hastings_max_entropy_bound}
-    Let $\Omega$ be a gapped ground vector of a finite-range Hamiltonian on a
-    chain of $L$ sites with local dimension $q\ge1$. Let $\xi'>0$, $2C_1>1$
-    and $\ln C_1+C_2\ge0$, and let $l_0$ and $S_{\max}$ be as in
-    Definition~\ref{def:hastings_max_entropy_bound} with $D=q$. Write $S_k$
-    for the entropy of the first $k$ sites, and let $W_i(l)$ be real numbers,
-    standing for the largest entropy of an interval of $l$ sites in the
-    window of length $l_0$ starting at site $i$. Assume:
+    Let $\Omega$ be a gapped ground vector on a chain of $L$ sites with local
+    dimension $q\ge1$, let $\xi'>0$, $2C_1>1$, and $\ln C_1+C_2\ge0$, and let
+    $l_0,S_{\max}$ be given by~(\ref{eq:hastings_max_entropy_bound}) with $D=q$.
+    Set $S_k=S([0,k))$ and assume $W_i:\N\to\R$ satisfies:
     \begin{enumerate}
-        \item $S_i-(k-i)\ln q\le S_k$ for every $i$ and $k$ with
-              $i\le k\le L$;
-        \item $0\le W_i(l)\le l\ln q$ for every $i$ and $l$ with
-              $l\le l_0$ and $i+l_0\le L$;
-        \item for every $i$ with $i+l_0\le L$ such that $S_k\ge2S_{\max}/3$
-              for all $k$ with $i\le k\le i+l_0$,
-              \begin{align*}
+        \item $S_i-(k-i)\ln q\le S_k$ for all $0\le i\le k\le L$;
+        \item $0\le W_i(l)\le l\ln q$ for all $l\le l_0$ and $i+l_0\le L$;
+        \item if $i+l_0\le L$ and $S_k\ge2S_{\max}/3$ for all $k\in[i,i+l_0]$,
+              then for all $2l\le l_0$,
+              \begin{align}
                   W_i(2l)\le2W_i(l)-\bigl(1-2C_1e^{-l/\xi'}\bigr)
-                  \frac{l}{\xi'}+\ln C_1+C_2
-              \end{align*}
-              whenever $2l\le l_0$.
+                  \frac{l}{\xi'}+\ln C_1+C_2.
+                  \notag
+              \end{align}
     \end{enumerate}
-    Then $S_i\le S_{\max}$ for every $i$.
-    This is a stage of the argument: the three items are hypotheses. Once
-    they are established for the ground vector, it is the main theorem
-    of~\cite{Hastings2007AreaLaw}, equation (entbd), with $S_{\max}$
-    corrected as in~\cite{gap:hastings07_doubling_constants}.
+    Then $S_i\le S_{\max}$ for every $i$ (\cite[eq.~(entbd)]{Hastings2007AreaLaw}
+    with $S_{\max}$ from~\cite{gap:hastings07_doubling_constants}).
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_doubling_window,thm:hastings_prefix_entropy_le,
         def:hastings_max_entropy_bound}
-    Suppose $S_i>S_{\max}$. If $i+l_0>L$, then
+    Suppose $S_i>S_{\max}$. If $i+l_0>L$,
     Theorem~\ref{thm:hastings_prefix_entropy_le} gives
-    $S_i\le(L-i)\ln q\le l_0\ln q\le S_{\max}$, a contradiction. Otherwise
-    the first item gives $S_k\ge S_{\max}-l_0\ln q=2S_{\max}/3$ for every
-    $k$ with $i\le k\le i+l_0$. The second and third items then are the
-    hypotheses of Theorem~\ref{thm:hastings_doubling_window} for the sequence
-    $W_i$, which gives $l_0<\lceil\xi_0\rceil_+2^M=l_0$.
+    $S_i\le(L-i)\ln q\le l_0\ln q\le S_{\max}$, a contradiction. If
+    $i+l_0\le L$, item~(1) gives $S_k\ge S_{\max}-l_0\ln q=2S_{\max}/3$ for
+    $k\in[i,i+l_0]$, so items~(2)--(3) and
+    Theorem~\ref{thm:hastings_doubling_window} give
+    $l_0<\lceil\xi_0\rceil_+2^M=l_0$, a contradiction.
 \end{proof}

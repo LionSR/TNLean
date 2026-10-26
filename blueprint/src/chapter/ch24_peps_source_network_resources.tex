@@ -1,18 +1,13 @@
 \section{Dimensions and locality of the original source network}
 \label{sec:peps_source_network_dimensions}
 
-Let $\mathcal W:a\to b$ be a chronological source circuit on an arbitrary
-party set $P$. Write $G$ for its original gate occurrences with nonempty
-participant sets $C_g$, and $\Xi_g$ for their finite branch sets. Let
-$r_g\in C_g$ be the root chosen from the recorded participant set.
-At each occurrence, the star joins $r_g$ to every other member of $C_g$
-and shares the complete ordered ket and bra label in $\Xi_g\times\Xi_g$.
-Every unordered pair of distinct members of $C_g$ also has its original
-source sample link, with sample alphabet $[k]=\{0,\ldots,k-1\}$.
-Links retain their original occurrence and kind, including parallel links.
-Write $g(e)$ for the occurrence owning $e$, $D_e$ for its virtual alphabet,
-and $\partial e$ for its set of incident parties. Neither finiteness nor
-nonemptiness of $P$ is assumed.
+Let $\mathcal W:a\to b$ be a chronological source circuit on a party set $P$.
+Let $G$ be its gate occurrences with nonempty participant sets $C_g$, finite
+branch sets $\Xi_g$, and roots $r_g\in C_g$. At each $g\in G$, the star joins
+$r_g$ to $C_g\setminus\{r_g\}$ with virtual alphabet $\Xi_g\times\Xi_g$, and
+each unordered pair in $C_g$ has its source sample link with alphabet
+$[k]=\{0,\ldots,k-1\}$. For each tagged link $e$, let $g(e)\in G$ be its owner
+occurrence, $D_e$ its virtual alphabet, and $\partial e$ its incident party set.
 
 \begin{theorem}[Exact dimensions of the original density links]
     \label{thm:peps_source_density_link_card}
@@ -20,10 +15,8 @@ nonemptiness of $P$ is assumed.
     \leanok
     \uses{def:peps_source_gate_root,def:compression_distributed_links,
         def:compression_operator_alphabets}
-    As an auxiliary cardinality identity for
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, for any sample
-    size $k\in\N$ and any constructed link $e$, including empty branch sets,
-    $k=0$, and an empty link family,
+    For any $k\in\N$ and any constructed link $e$ in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \begin{align}
         |D_e| & =
         \begin{cases}
@@ -38,10 +31,9 @@ nonemptiness of $P$ is assumed.
 \begin{proof}
     \leanok
     \uses{thm:compression_operator_alphabet_card}
-    Because a star carries $\Xi_{g(e)}\times\Xi_{g(e)}$ of cardinality
-    $|\Xi_{g(e)}|^2$ and a source sample link carries $[k]$,
-    substituting these cardinalities into the exact alphabet formula gives
-    the stated formula.
+    Apply Theorem~\ref{thm:compression_operator_alphabet_card} with star
+    alphabet $\Xi_{g(e)}\times\Xi_{g(e)}$ of cardinality $|\Xi_{g(e)}|^2$ and
+    sample alphabet $[k]$ of cardinality $k$.
 \end{proof}
 
 \begin{theorem}[A conditional uniform bound for the original density links]
@@ -50,11 +42,8 @@ nonemptiness of $P$ is assumed.
     \leanok
     \uses{def:peps_source_gate_root,def:compression_distributed_links,
         def:compression_operator_alphabets}
-    For the cardinality estimate used in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, let $k,M\in\N$
-    and assume the explicit uniform bound $|\Xi_g|\le M$ for every original
-    nonempty gate occurrence $g\in G$, without requiring positivity of
-    $M,k$ or the branch counts. Then every constructed link satisfies
+    For $k,M\in\N$ in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, if
+    $|\Xi_g|\le M$ for all $g\in G$, then every constructed link $e$ satisfies
     $|D_e|\le\max\{M^2,k\}$.
     % Source: 04-compression.tex, lines 565--588.
 \end{theorem}
@@ -62,10 +51,9 @@ nonemptiness of $P$ is assumed.
 \begin{proof}
     \leanok
     \uses{thm:compression_operator_alphabet_bound}
-    Monotonicity of multiplication in $\N$ gives
-    $|\Xi_g\times\Xi_g|=|\Xi_g|^2\le M^2$, so applying the uniform
-    alphabet bound with gate alphabet bound $M^2$ and sample size $k$
-    yields the inequality.
+    Since $|\Xi_g\times\Xi_g|=|\Xi_g|^2\le M^2$,
+    Theorem~\ref{thm:compression_operator_alphabet_bound} gives
+    $|D_e|\le\max\{M^2,k\}$.
 \end{proof}
 
 \begin{theorem}[The endpoints are original participants of the owner gate]
@@ -74,50 +62,40 @@ nonemptiness of $P$ is assumed.
     \leanok
     \uses{def:peps_source_gate_root,def:compression_distributed_links,
         def:compression_distributed_link_parties}
-    For the locality of the original links in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, with repeated
-    occurrences and parallel links distinguished and root membership
-    inherited from each nonempty participant set rather than assumed
-    separately, every constructed link satisfies $\partial e\subseteq C_{g(e)}$.
+    In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, every constructed
+    link $e$ satisfies $\partial e\subseteq C_{g(e)}$.
     % Source: 04-compression.tex, lines 581--588.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_source_gate_root_mem,thm:compression_original_gate_locality}
-    Because the chosen root satisfies $r_g\in C_g$ at every original
-    occurrence, original-gate locality of the distributed link
-    construction applies with these derived root memberships.
+    Since $r_g\in C_g$ for all $g\in G$ by Theorem~\ref{thm:peps_source_gate_root_mem},
+    Theorem~\ref{thm:compression_original_gate_locality} yields
+    $\partial e\subseteq C_{g(e)}$.
 \end{proof}
 
 \section{Incidence of the density links}
 \label{sec:peps_source_density_link_incidence}
 
-Let $\mathcal W:a\to c$ be a chronological source circuit on a party set
-$P$. Write $G$ for its original nonempty gate occurrences and $C_g$ for
-the participant set of occurrence $g$. The star root belongs to $C_g$.
-At each occurrence the density network has its star links and its original
-pair-sample links. Parallel links are retained as distinct links.
+Let $\mathcal W:a\to c$ be a chronological source circuit on $P$ with nonempty
+gate occurrences $G$, participant sets $C_g$, and roots $r_g\in C_g$.
 
 \begin{theorem}[The retained occurrences preserve participation counts]
     \label{thm:peps_nonempty_gate_participation}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_incidentNonemptyGates_eq_participationCount}
     \leanok
     \uses{def:compression_lifetime_gates}
-    Tracking the original participation count in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS} without assuming
-    finiteness or nonemptiness of the party set, the number of occurrences
-    $g\in G$ with $p\in C_g$ for any party $p$ equals its full
-    participation count in $\mathcal W$.
+    In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, for every $p\in P$,
+    $|\{g\in G:p\in C_g\}|$ equals the full participation count of $p$ in
+    $\mathcal W$ (Definition~\ref{def:compression_lifetime_gates}).
     % Source: 04-compression.tex, lines 140--142 and 581--588.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Removing an occurrence with empty participant set removes no occurrence
-    involving $p$. Conversely, an occurrence involving $p$ has nonempty
-    participant set. These two maps give a bijection preserving the original
-    occurrence, and hence preserve the count.
+    Every occurrence $g$ with $p\in C_g$ satisfies $C_g\neq\varnothing$, so
+    filtering out $C_g=\varnothing$ preserves $\{g:p\in C_g\}$.
 \end{proof}
 
 \begin{theorem}[Constant incidence of the density links]
@@ -126,13 +104,10 @@ pair-sample links. Parallel links are retained as distinct links.
     \leanok
     \uses{def:peps_source_gate_root,def:compression_distributed_links,
         thm:peps_nonempty_gate_participation}
-    For the incidence estimate in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, suppose $b\in\N$,
-    every occurrence $g\in G$ has $|C_g|\le b$, and every party has full
-    participation count at most $b$. Counting star and sample links
-    (including parallel links) separately without any additional
-    root-membership hypothesis, the number of density-network links
-    incident to any party is at most $2b(b-1)$.
+    In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, if $b\in\N$,
+    $|C_g|\le b$ for all $g\in G$, and every party participates in at most $b$
+    gate occurrences, then at most $2b(b-1)$ density-network links are incident
+    to any party $p\in P$.
     % Source: 04-compression.tex, lines 581--588.
 \end{theorem}
 
@@ -140,40 +115,35 @@ pair-sample links. Parallel links are retained as distinct links.
     \leanok
     \uses{thm:peps_source_gate_root_mem,thm:peps_nonempty_gate_participation,
         thm:compression_distributed_incidence_bound}
-    The chosen root lies in its original participant set. Each incident
-    occurrence contributes at most $2(b-1)$ star and sample links, and at
-    most $b$ occurrences involve the party. Multiplying the two bounds
-    gives the result. An empty gate family is included.
+    By Theorems~\ref{thm:peps_source_gate_root_mem}
+    and~\ref{thm:peps_nonempty_gate_participation}, $r_g\in C_g$ and
+    $|\{g\in G:p\in C_g\}|\le b$, so
+    Theorem~\ref{thm:compression_distributed_incidence_bound} gives the bound
+    $2b(b-1)$.
 \end{proof}
 
 \section{Finite coordinates for the local memories}
 
-The coordinate spaces in this section are the memories of the original
-ordered registers. The assertions are auxiliary consequences of finite
-dimensionality for the construction in
+The coordinate spaces below are the memories of the ordered registers in
 \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-\texttt{04-compression.tex}, lines 17--19, 253--267, 409--434 and 565--588.
-They require no numerical bound on a private register dimension.
+\texttt{04-compression.tex}, lines 17--19, 253--267, 409--434 and 565--588,
+with no numerical bound on private register dimensions.
 
 \begin{theorem}[Finite endpoint registers in fixed source slots]
     \label{thm:peps_finite_source_slot_registers}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.finiteDimensional_registers_slotLayout}
     \leanok
     \uses{def:peps_source_slots}
-    Let $R$ be a finite ordered list of pair-source occurrences. For each
-    occurrence $i$, let $U_i$ and $V_i$ be finite-dimensional complex
-    Hilbert spaces. Every register in the fixed ordered list consisting
-    of the left register with space $U_i$ followed by the right register
-    with space $V_i$, for each $i$ in order, is finite dimensional.
+    For a finite ordered list $R$ of pair-source occurrences with
+    finite-dimensional endpoint spaces $U_i,V_i$, every register in the slot
+    layout of Definition~\ref{def:peps_source_slots} is finite-dimensional.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{def:peps_source_slots}
-    We proceed by induction on the list of occurrences: the empty list has
-    no registers, while removing the first occurrence removes its two
-    endpoint registers with spaces $U_0$ and $V_0$ and leaves the
-    remaining registers to the induction hypothesis.
+    By induction on $R$: the empty list has no registers, and adjoining $i$
+    prepends two registers with finite-dimensional spaces $U_i,V_i$.
 \end{proof}
 
 \begin{theorem}[Finite registers in the all-party source layout]
@@ -181,18 +151,17 @@ They require no numerical bound on a private register dimension.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.finiteDimensional_allResidualSource_registers}
     \leanok
     \uses{def:peps_all_party_source_registers,thm:peps_finite_source_slot_registers}
-    Let $W$ be an original chronological source composition with arbitrary
-    party set $P$, and let $R_W$ be its fixed all-party source layout.
-    Every register in $R_W$ is finite dimensional. The original endpoint
-    dimensions may be zero, and the source inventory may be empty.
+    For any chronological source composition $W$ on $P$, every register in the
+    all-party source layout $R_W$ (Definition~\ref{def:peps_all_party_source_registers})
+    is finite-dimensional.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{def:peps_all_party_source_registers,thm:peps_finite_source_slot_registers}
-    Because each endpoint space is an original Euclidean space
-    $\C^{u_e}$ or $\C^{v_e}$, applying the preceding theorem in the
-    original order of source occurrences establishes finite dimensionality.
+    Each source occurrence $e$ has finite-dimensional halfspaces
+    $\C^{u_e},\C^{v_e}$, so Theorem~\ref{thm:peps_finite_source_slot_registers}
+    applies.
 \end{proof}
 
 \begin{definition}[Finite orthonormal coordinates of a local source memory]
@@ -201,14 +170,11 @@ They require no numerical bound on a private register dimension.
     \leanok
     \uses{thm:peps_finite_all_party_source_registers,
         thm:peps_finite_register_memories,def:peps_party_registers}
-    With $W$ and $R_W$ as above, write $Q=P\sqcup\{*\}$ for the grouped
-    owner set. For $q\in Q$, let $R_W(q)$ be the ordered sublist of source
-    registers owned by $q$, and let $H_q=\mathcal H_{R_W(q)}$ be its
-    tensor-product memory. Choose an orthonormal basis
-    \begin{align}
-        (b_{q,i})_{0\le i<\dim_{\C}H_q}
-    \end{align}
-    of $H_q$. This is a finite basis of the selected memory.
+    For $q\in Q=P\sqcup\{*\}$, let $R_W(q)$ be the sublist of $R_W$ owned by $q$
+    (Definition~\ref{def:peps_party_registers}) and $H_q=\mathcal H_{R_W(q)}$.
+    By Theorems~\ref{thm:peps_finite_all_party_source_registers}
+    and~\ref{thm:peps_finite_register_memories}, choose a finite orthonormal
+    basis $(b_{q,i})_{0\le i<\dim_{\C}H_q}$ of $H_q$.
 \end{definition}
 
 \begin{definition}[Finite orthonormal coordinates of a local discarded memory]
@@ -217,25 +183,13 @@ They require no numerical bound on a private register dimension.
     \leanok
     \uses{thm:peps_finite_register_memories,def:peps_affected_owner,
         def:peps_party_registers}
-    Let $G$ be the original finite ordered list of discarded registers,
-    and suppose that the space of every register in $G$ is finite
-    dimensional. Relabel each original owner $p$ by its copy in
-    $Q=P\sqcup\{*\}$. For $q\in Q$, let $G(q)$ be the ordered sublist
-    of the relabelled registers owned by $q$, and put
-    $K_q=\mathcal H_{G(q)}$. Choose an orthonormal basis
-    \begin{align}
-        (c_{q,j})_{0\le j<\dim_{\C}K_q}
-    \end{align}
-    of $K_q$. Relabelling leaves every register space unchanged, and
-    selection preserves finite dimensionality of the tensor-product
-    memory, so this basis requires only the stated per-register
-    finite-dimensionality assumption.
+    Let $G$ be a finite ordered list of finite-dimensional discarded registers.
+    Relabeling each owner $p\in P$ into $Q=P\sqcup\{*\}$
+    (Definition~\ref{def:peps_affected_owner}) and restricting to $q\in Q$ gives
+    sublist $G(q)$ and finite-dimensional memory $K_q=\mathcal H_{G(q)}$
+    (Theorem~\ref{thm:peps_finite_register_memories}); choose a finite
+    orthonormal basis $(c_{q,j})_{0\le j<\dim_{\C}K_q}$ of $K_q$.
 \end{definition}
-
-A zero-dimensional memory has an empty basis. By contrast, the memory
-of an empty register list is $\C$, and its basis has one element.
-The dimensions appearing in these basis index sets are not estimates
-on the private memory dimensions.
 
 \begin{theorem}[Distributed physical approximation from local gate expansions]
     \label{thm:peps_approximate_sampled_distributed_error}
@@ -245,88 +199,44 @@ on the private memory dimensions.
         thm:peps_approximate_source_sample,
         thm:peps_actual_sampled_distributed_contraction,
         def:peps_all_party_local_source_basis,def:peps_all_party_local_discard_basis}
-    Let $P$ be a finite party set, and list its members without repetition.
-    For each $p\in P$, let $H_p$ be its finite-dimensional whole initial
-    memory and let $x_p\in H_p$ satisfy $\|x_p\|=1$. Put
-    $\psi=\bigotimes_{p\in P}x_p$. Retain the original chronological
-    composition and its gate operators $G_g$. Its output has the original
-    physical register of dimension $d_p$ at each party, followed by a
-    finite ordered list of discarded private registers, each with a
-    finite-dimensional space.
+    Let $P$ be a finite party set listed without repetition, with
+    finite-dimensional initial memories $H_p$, unit vectors $x_p\in H_p$, input
+    $\psi=\bigotimes_{p\in P}x_p$, contraction gates $G_g$, physical dimensions
+    $d_p\le D$ ($D\ge 1$), and finite-dimensional discarded private registers.
+    Suppose there are at most $M$ nonprivate gate occurrences, each party
+    participates in at most $\ell$ of them, and for $0<\varepsilon\le 1$ and
+    $\delta_a=\varepsilon/(16\max\{1,M\})$ each gate expansion satisfies
+    Definition~\ref{def:peps_approximate_original_operators} at accuracy
+    $\delta_a$ with at most $r$ pair effects per monomial and coefficient sum at
+    most $B\ge 1$.
 
-    Suppose that the original number of nonprivate occurrences is at
-    most $M$ and that each party participates in at most $\ell$ such
-    occurrences. Let $B,D\geq1$, with $d_p\leq D$ for every party.
-    Fix $0<\varepsilon\leq1$ and put
+    Rescale each expansion by $(1+\delta_a)^{-1}$ to form $W$, and let $R$ be
+    its physical-first source replacement with $N_R$ sources, stack length $m$,
+    and sample size $k$ given by
     \begin{align}
-        \delta_a=\frac{\varepsilon}{16\max\{1,M\}}.
+        \delta_e & =\frac{\varepsilon}{8\max\{1,M\}},                                            &
+        m        & =\left\lceil\left(\frac{rB}{\delta_e}\right)^2\right\rceil+1, \notag            \\
+        Q        & =B^{4\ell}D^4,                                                                &
+        k        & =\left\lceil\left(\frac{8\max\{1,N_R\}Q}{\varepsilon}\right)^2\right\rceil+1.
+        \label{eq:peps_approximate_sampled_distributed_params}
     \end{align}
-    Suppose the monomial list at each gate is given at this
-    accuracy: its monomials are allowed, each contains at most $r$ pair
-    effects, their absolute coefficient sum is at most $B$, and their
-    sum differs from $G_g$ in operator norm by at most $\delta_a$.
-    Assume that the original private operations and the original $G_g$
-    are contractions. Retain the prescribed participating sets, whose
-    cardinalities are different from one; the empty set is permitted.
-    These are the local approximation conditions of
-    Definition~\ref{def:peps_approximate_original_operators}.
-
-    Rescale every monomial list by $(1+\delta_a)^{-1}$ to obtain the
-    original contraction circuit $W$. Set
-    \begin{align}
-        \delta_e=\frac{\varepsilon}{8\max\{1,M\}},
-        \qquad
-        m=\left\lceil\left(\frac{rB}{\delta_e}\right)^2\right\rceil+1,
-    \end{align}
-    and form its physical-first source replacement $R$ with stack
-    length $m$. If $N_R$ is the number of source occurrences in
-    $R$, set
-    \begin{align}
-        Q=B^{4\ell}D^4,
-        \qquad
-        k=\left\lceil
-        \left(\frac{8\max\{1,N_R\}Q}{\varepsilon}\right)^2
-        \right\rceil+1.
-    \end{align}
-    Choose the local source and discarded-memory orthonormal bases of
-    Definitions~\ref{def:peps_all_party_local_source_basis} and
-    \ref{def:peps_all_party_local_discard_basis}. The discarded list is
-    the auxiliary list of $W$ followed by the original private
-    list; its register-wise finite dimensionality follows from the
-    original construction and the given assumptions.
-
-    There exist normalized Schmidt coefficients and two isometric
-    endpoint frames for every source occurrence and branch of
-    $R$, representing its original source vector in its original
-    endpoint dimensions. There is one Gaussian sample array $\omega$,
-    with $k$ samples per source occurrence, such that the following
-    holds. Construct the incident physical matrices, derived gate roots,
-    and distributed contraction $\mathcal C_R(\omega)$ of
-    Theorem~\ref{thm:peps_actual_sampled_distributed_contraction}. Its gate
-    labels are ordered ket and bra branch pairs, and the coefficient at
-    a nonempty occurrence $g$ is
-    \begin{align}
-        c_g(\xi,\zeta)
-        =k^{-\binom{|C_g|}{2}}
-        a_g(\xi)\overline{a_g(\zeta)}.
-    \end{align}
-    Every source sample assignment is common to its two endpoints.
-    Let $\lambda_R$ be the scalar contributed by the empty-participant
-    gate occurrences and put $\gamma_R=\lambda_R\overline{\lambda_R}$.
-    For the given local lists at the prescribed accuracy in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
+    In the local bases of Definitions~\ref{def:peps_all_party_local_source_basis}
+    and~\ref{def:peps_all_party_local_discard_basis}, there exist normalized
+    Schmidt data and a Gaussian sample $\omega$ such that the distributed
+    contraction $\mathcal C_R(\omega)$ of
+    Theorem~\ref{thm:peps_actual_sampled_distributed_contraction} with weights
+    $c_g(\xi,\zeta)=k^{-\binom{|C_g|}{2}}a_g(\xi)\overline{a_g(\zeta)}$ and
+    zero-party scalar factor $\gamma_R=\lambda_R\overline{\lambda_R}$ satisfies,
+    as in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
     (\texttt{04-compression.tex}, lines 17--19, 137--175, 199--229,
-    342--381, 565--588 and 590--600), with no numerical bound on the
-    original private dimensions and with the scalar remaining
-    multiplicative even when it vanishes,
+    342--381, 565--588 and 590--600),
     \begin{align}
         \bigl\|\gamma_R\mathcal C_R(\omega)-\rho_G\bigr\|_1
         \leq\varepsilon,
+        \label{eq:peps_approximate_sampled_distributed_error}
     \end{align}
-    where $\rho_G$ is the physical partial trace of the original
-    chronological output on $\psi$, evaluated with the original
-    operators $G_g$ and expressed in the original party-labelled
-    physical coordinates.
+    where $\rho_G$ is the physical partial trace of the original circuit output
+    on $\psi$.
 \end{theorem}
 
 \begin{proof}
@@ -335,53 +245,43 @@ on the private memory dimensions.
         thm:peps_actual_sampled_distributed_contraction,
         thm:peps_finite_whole_party_input,thm:peps_auxiliary_register_finiteness,
         def:peps_all_party_local_source_basis,def:peps_all_party_local_discard_basis}
-    Finite dimensionality of the whole initial party memories yields
-    finite orthonormal input coordinates, allowing
-    Theorem~\ref{thm:peps_approximate_source_sample} to be applied with
-    the recorded local approximations. That theorem provides the
-    normalized Schmidt data and the sample array for which the sampled
-    physical operator differs from $\rho_G$ in trace norm by at most
-    $\varepsilon$. In the stated finite local bases, the exact
-    contraction identity of
-    Theorem~\ref{thm:peps_actual_sampled_distributed_contraction}
-    identifies this same sampled operator with
-    $\gamma_R\mathcal C_R(\omega)$, and substituting this equality into
-    the physical error estimate completes the proof.
+    By Theorems~\ref{thm:peps_finite_whole_party_input}
+    and~\ref{thm:peps_auxiliary_register_finiteness}, the initial and discarded
+    memories are finite-dimensional. Theorem~\ref{thm:peps_approximate_source_sample}
+    provides normalized Schmidt data and a sample $\omega$ whose sampled
+    physical operator $\widehat\rho$ satisfies
+    $\|\widehat\rho-\rho_G\|_1\le\varepsilon$, and
+    Theorem~\ref{thm:peps_actual_sampled_distributed_contraction} identifies
+    $\widehat\rho=\gamma_R\mathcal C_R(\omega)$ in the bases of
+    Definitions~\ref{def:peps_all_party_local_source_basis}
+    and~\ref{def:peps_all_party_local_discard_basis}.
 \end{proof}
 
 \section{Original resources of the sampled contraction}
 
-The network in this section is the same network used in the sampled
-physical-density identity: its gates are the original nonempty occurrences,
-its roots are chosen from their recorded participant sets, and its links
-retain their original occurrence and kind. No root on an empty participant
-set is required.
+The network below is that of
+Theorem~\ref{thm:peps_actual_sampled_distributed_contraction}, with nonempty
+gate occurrences $G$, roots $r_g\in C_g$, and tagged star and sample links.
 
 \begin{theorem}[Real power bounds for the density alphabets]
     \label{thm:peps_actual_density_alphabet_power}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_alphabet_source_density_le_of_power_bounds}
     \leanok
     \uses{thm:peps_source_density_link_card,def:peps_source_gate_root}
-    Let $R$ be a chronological source composition on an arbitrary party
-    set. Write $\Xi_g$ for the branch labels of its nonempty gate occurrence
-    $g$, and use the recorded roots and pair-sample links. Suppose
-    $L\geq1$, $C_M,C_k\geq0$, $u,v\in\N$, and $k\in\N$ satisfy
-    $|\Xi_g|\leq C_M L^u$ for every such $g$ and $k\leq C_k L^v$.
-    Then, as used in
+    For a chronological source composition $R$, if $L\geq1$, $C_M,C_k\geq0$,
+    $u,v,k\in\N$, $|\Xi_g|\leq C_M L^u$ for all $g\in G$, and $k\leq C_k L^v$,
+    then every link alphabet $D_e$ in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
-    (\texttt{04-compression.tex}, lines 565--588) and including empty
-    branch alphabets, $k=0$, and an empty gate family, every alphabet
-    $D_e$ of this density network satisfies
+    (\texttt{04-compression.tex}, lines 565--588) satisfies
     $|D_e|\leq(C_M^2+C_k)L^{\max\{2u,v\}}$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_source_density_link_card}
-    On a star, $|D_e|=|\Xi_{g(e)}|^2\leq C_M^2 L^{2u}$.
-    On a sample link, $|D_e|=k\leq C_k L^v$.
-    Since $L\geq1$, each is bounded by
-    $(C_M^2+C_k)L^{\max\{2u,v\}}$.
+    By (\ref{eq:peps_source_density_link_card}), $|D_e|=|\Xi_{g(e)}|^2\le C_M^2 L^{2u}$
+    on star links and $|D_e|=k\le C_k L^v$ on sample links, and both are at most
+    $(C_M^2+C_k)L^{\max\{2u,v\}}$ since $L\ge 1$.
 \end{proof}
 
 \begin{theorem}[Original polynomial bounds for the contraction alphabets]
@@ -392,19 +292,14 @@ set is required.
         thm:peps_physical_first_branch_polynomial,
         thm:peps_physical_first_sample_polynomial}
     Let $W:a\to H_{\mathrm{phys}}\otimes H_{\mathrm{priv}}$ be an original
-    chronological circuit. Suppose its monomial lists have at most $K$
-    terms, at most $r$ pair effects per term, and absolute coefficient
-    sum at most $B$. Suppose its nonprivate gate count is at most $N$,
-    and every original participant set has cardinality at most $b$.
-    Let $L\geq1$, $B,D\geq0$, $C_K,C_B\geq0$, $C_N\geq1$, and
-    $C_D\in\R$ satisfy
-    $K\leq C_KL^u$, $N\leq C_NL^n$, $B\leq C_BL^s$ and
-    $D\leq C_DL^d$, where $u,n,s,d,p\in\N$.
-    Put $\delta=(L^p)^{-1}/(8\max\{1,N\})$ and suppose $\delta>0$.
-    Form the physical-first replacement $R$ at tolerance $\delta$.
-    For any natural parameter $\ell$, use the sample count prescribed
-    by $Q=B^{4\ell}D^4$ and accuracy $(L^p)^{-1}$.
-    Define
+    chronological circuit with at most $N$ nonprivate gates, at most $b$
+    participants per gate, at most $K$ monomials per gate, at most $r$ pair
+    effects per monomial, and coefficient sum at most $B$. Suppose $L\geq1$,
+    $B,D,C_K,C_B\geq0$, $C_N\geq1$, $C_D\in\R$, and $u,n,s,d,p,\ell\in\N$
+    satisfy $K\leq C_KL^u$, $N\leq C_NL^n$, $B\leq C_BL^s$, and $D\leq C_DL^d$.
+    Form the physical-first replacement $R$ at tolerance
+    $\delta=L^{-p}/(8\max\{1,N\})>0$ with sample count $k$ for $Q=B^{4\ell}D^4$
+    and accuracy $L^{-p}$, and set
     \begin{align}
         C_s & =\max\{1,C_N\tbinom b2\},                  &
         C_b & =C_K\bigl(64C_N^2(rC_B)^2+2\bigr)^r,\notag   \\
@@ -412,12 +307,9 @@ set is required.
         E   & =\max\{2(u+2r(n+s+p)),2(n+4\ell s+4d+p)\}.
         \label{eq:peps_actual_density_power_constants}
     \end{align}
-    Then, for the auxiliary resource estimate in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
-    (\texttt{04-compression.tex}, lines 137--175, 199--229 and 565--588),
-    without any numerical bound on a private dimension or a source
-    Schmidt rank, every alphabet of the density network on the nonempty
-    occurrences of $R$ satisfies $|D_e|\leq(C_b^2+C_k)L^E$.
+    Then in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
+    (\texttt{04-compression.tex}, lines 137--175, 199--229 and 565--588), every
+    link alphabet $D_e$ of $R$ satisfies $|D_e|\leq(C_b^2+C_k)L^E$.
 \end{theorem}
 
 \begin{proof}
@@ -425,12 +317,11 @@ set is required.
     \uses{thm:peps_actual_density_alphabet_power,
         thm:peps_physical_first_branch_polynomial,
         thm:peps_physical_first_sample_polynomial}
-    Applying the proved original branch-count bound at the ambient
-    occurrence of each retained nonempty gate and the proved sample
-    bound to this same replacement and sample count gives
-    $|\Xi_g|\leq C_b L^{u+2r(n+s+p)}$ and
-    $k\leq C_k L^{2(n+4\ell s+4d+p)}$, from which the preceding theorem
-    yields the stated bound.
+    Theorems~\ref{thm:peps_physical_first_branch_polynomial}
+    and~\ref{thm:peps_physical_first_sample_polynomial} give
+    $|\Xi_g|\leq C_b L^{u+2r(n+s+p)}$ and $k\leq C_k L^{2(n+4\ell s+4d+p)}$,
+    so Theorem~\ref{thm:peps_actual_density_alphabet_power} yields
+    $|D_e|\leq(C_b^2+C_k)L^E$.
 \end{proof}
 
 \begin{theorem}[Original incidence bound for the contraction]
@@ -440,16 +331,12 @@ set is required.
     \uses{thm:peps_actual_density_link_incidence,
         def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality,
         thm:peps_physical_first_occurrences,thm:peps_source_only_resources}
-    Let $W$ be an original chronological circuit with expansion bound
-    $(r,S)$ and let $\delta>0$. Form its physical-first source
-    replacement $R$ at tolerance $\delta$. Suppose every original gate has
-    at most $b$ participants and every party's original whole-lifetime
-    participation count is at most $b$. As an auxiliary consequence of
-    the original incidence bound in
+    For an original circuit $W$ with expansion bound $(r,S)$, gate arity at most
+    $b$, and party participation at most $b$, the physical-first source
+    replacement $R$ at any tolerance $\delta>0$ in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
-    (\texttt{04-compression.tex}, lines 140--142 and 581--588), even when
-    the party set is infinite or empty, at most $2b(b-1)$ links of the
-    density network of $R$ are incident to any party.
+    (\texttt{04-compression.tex}, lines 140--142 and 581--588) has at most
+    $2b(b-1)$ density-network links incident to any party.
 \end{theorem}
 
 \begin{proof}
@@ -457,12 +344,12 @@ set is required.
     \uses{thm:peps_actual_density_link_incidence,
         def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality,
         thm:peps_physical_first_occurrences,thm:peps_source_only_resources}
-    The original occurrence correspondence preserves participant sets and
-    hence the arity bound, while the physical-first output exchange
-    preserves participation counts so that the source replacement inherits
-    the original participation bound. Applying the incidence estimate for
-    the nonempty-occurrence network, whose roots already belong to their
-    recorded participant sets, completes the proof.
+    By Definition~\ref{def:peps_physical_first_original_locality} and
+    Theorems~\ref{thm:peps_physical_first_original_locality},
+    \ref{thm:peps_physical_first_occurrences}, and~\ref{thm:peps_source_only_resources},
+    $R$ inherits the gate arity and party participation bounds $\le b$, so
+    Theorem~\ref{thm:peps_actual_density_link_incidence} gives the bound
+    $2b(b-1)$.
 \end{proof}
 
 \begin{theorem}[A common original gate for the contraction endpoints]
@@ -471,35 +358,30 @@ set is required.
     \leanok
     \uses{thm:peps_source_density_link_locality,
         def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality}
-    With $W,R,\delta$ and the expansion bound as above, take any link of
-    the density network of $R$ and two parties incident to it.
-    Then, as used in
+    For $W,R,\delta$ as in Theorem~\ref{thm:peps_actual_physicalFirst_density_incidence},
+    any two parties incident to a density-network link of $R$ in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
-    (\texttt{04-compression.tex}, lines 581--588) without requiring
-    finiteness or nonemptiness of the party set, some original nonprivate
-    occurrence of $W$ contains both parties in its participant set.
+    (\texttt{04-compression.tex}, lines 581--588) belong to the participant set
+    of a common nonprivate gate occurrence of $W$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_source_density_link_locality,
         def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality}
-    Because both endpoints belong to the retained link's original owner
-    gate in $R$ and the original occurrence correspondence preserves the
-    entire participant set, the inverse of that ambient occurrence in $W$
-    contains both parties.
+    By Theorem~\ref{thm:peps_source_density_link_locality}, $\partial e\subseteq C_{g(e)}$
+    in $R$, and the occurrence bijection of
+    Definition~\ref{def:peps_physical_first_original_locality} and
+    Theorem~\ref{thm:peps_physical_first_original_locality} preserves $C_{g(e)}$.
 \end{proof}
 
 \begin{definition}[Termwise bounds for prescribed approximate gate expansions]
     \label{def:peps_effect_termwise_bounds}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsTermwiseBounded}
     \leanok
-    For each nonprivate gate occurrence, retain its prescribed ordered
-    monomial expansion. Termwise bounds $(r,C)$ mean that every listed
-    monomial contains at most $r$ pair effects and has scalar coefficient
-    of modulus at most $C$. These conditions do not assert a bound on the
-    sum of the coefficient moduli. The contraction conditions and the
-    approximation to the original gate are specified separately.
+    Prescribed gate expansions have termwise bounds $(r,C)$ if every listed
+    monomial at every nonprivate gate occurrence has at most $r$ pair effects
+    and scalar coefficient modulus $|c_\xi|\le C$.
 \end{definition}
 
 \begin{theorem}[A polynomial coefficient majorant for approximate gate lists]
@@ -508,26 +390,17 @@ set is required.
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.exists_one_le_isExpansionBounded_of_termwise_power_bounds}
     \leanok
     \uses{def:peps_effect_termwise_bounds,thm:peps_gate_coefficient_sum}
-    Suppose each prescribed expansion at an original nonprivate gate
-    occurrence has at most $K$ terms and has termwise bounds $(r,C)$,
-    where $C\geq0$. Its absolute coefficient sum is at most $KC$.
-    In particular, let $L\geq1$, let $C_K,C_C\geq0$, and let $u,v$ be
-    nonnegative integers. If $K\leq C_KL^u$ and the termwise bounds are
-    $(r,C_CL^v)$, then all these sums admit the common bound
+    If each prescribed nonprivate gate expansion has at most $K$ terms and
+    termwise bounds $(r,C)$ ($C\ge 0$), its coefficient sum is at most $KC$.
+    In particular, if $L\geq1$, $C_K,C_C\geq0$, $u,v\in\N$, $K\leq C_KL^u$, and
+    $C=C_CL^v$, then every gate's coefficient sum is bounded by
     $B=(1+C_KC_C)L^{u+v}\geq1$.
-    This bound is fixed by the original polynomial constants and
-    exponents. It is independent of private dimensions and of the
-    subsequent effect-elimination expansion. Empty lists are permitted.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_gate_coefficient_sum}
-    Summing the individual coefficient inequalities over each original
-    ordered list, multiplying its length bound by the nonnegative
-    individual bound, and combining the powers of $L$ produces the
-    displayed majorant, which is at least one because $L\geq1$;
-    composition and the addition of spectator registers preserve the same
-    local bounds.
+    By Theorem~\ref{thm:peps_gate_coefficient_sum},
+    $\sum_\xi|c_\xi|\le KC\le C_KC_CL^{u+v}\le B$, and $B\ge 1$ since $L\ge 1$.
 \end{proof}
 
 \begin{theorem}[Absorbing a scalar into one distributed local matrix]
@@ -535,27 +408,20 @@ set is required.
     \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.contractedOperator_smul_at_party}
     \leanok
     \uses{thm:compression_operator_matrix_sum,thm:peps_party_product_scalar}
-    Let $P$ be a finite party set and let $\mathcal C(T)$ be the
-    distributed star-and-sample contraction with a given finite
-    gate collection, participant sets, participating roots, finite
-    gate alphabets, and sample size $k\in\N$. Let the local rectangular
-    matrices $T_v(\xi,j)$ have arbitrary fixed row and column index sets.
-    For a given party $v_0\in P$ and $\mu\in\C$, put
-    $T'_v(\xi,j)=\mu T_v(\xi,j)$ when $v=v_0$ and
-    $T'_v(\xi,j)=T_v(\xi,j)$ otherwise.
-    Then, as used in
+    For a finite party set $P$, a distributed star-and-sample contraction
+    $\mathcal C(T)$ with local matrices $T_v(\xi,j)$, a party $v_0\in P$, and
+    $\mu\in\C$, setting $T'_{v_0}(\xi,j)=\mu T_{v_0}(\xi,j)$ and
+    $T'_v(\xi,j)=T_v(\xi,j)$ for $v\neq v_0$ as in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
-    (\texttt{04-compression.tex}, lines 573--579) and including $\mu=0$,
-    empty gate alphabets, and $k=0$, the link family and its alphabets
-    are unchanged and $\mathcal C(T')=\mu\mathcal C(T)$.
+    (\texttt{04-compression.tex}, lines 573--579) preserves the links and
+    alphabets and satisfies $\mathcal C(T')=\mu\mathcal C(T)$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:compression_operator_matrix_sum,thm:peps_party_product_scalar}
-    Expanding the contraction as the sum over common gate labels and
-    sample indices of the weighted product of local matrices, scaling the
-    matrix at $v_0$ multiplies every summand by $\mu$. Distributing this
-    scalar through both finite sums and commuting it with each gate
-    coefficient yields the identity without division.
+    By Theorem~\ref{thm:compression_operator_matrix_sum} and
+    Theorem~\ref{thm:peps_party_product_scalar}, scaling $T_{v_0}(\xi,j)$ by
+    $\mu$ multiplies each party-product summand by $\mu$, so
+    $\mathcal C(T')=\mu\mathcal C(T)$.
 \end{proof}

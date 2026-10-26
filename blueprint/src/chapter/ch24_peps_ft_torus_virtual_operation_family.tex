@@ -8,9 +8,8 @@ correspondence in the proof sketch of the two-dimensional corollary
     \label{def:peps_region_partial_state}
     \lean{TNLean.PEPS.regionPartialState}
     \leanok
-    For a region $R$ and a physical configuration $\tau$ on its complement,
-    define the partial state $\psi^\tau_{A,R}$ on the physical space of $R$
-    by
+    For $R\subseteq V$ and a physical configuration $\tau$ on $V\setminus R$,
+    define $\psi^\tau_{A,R}$ on the physical space of $R$ by
     \begin{align}
         \psi^\tau_{A,R}(\sigma)
          & =c_A(\omega_{R,\sigma,\tau}).
@@ -23,15 +22,13 @@ correspondence in the proof sketch of the two-dimensional corollary
     \lean{TNLean.PEPS.regionPartialState_sameState}
     \leanok
     \uses{def:peps_region_partial_state}
-    If $A$ and $B$ generate the same closed state, then, for every region
-    $R$ and every complement configuration $\tau$,
-    $\psi^\tau_{A,R}=\psi^\tau_{B,R}$.
+    If $c_A=c_B$, then $\psi^\tau_{A,R}=\psi^\tau_{B,R}$ for every $R\subseteq V$
+    and $\tau$.
 \end{theorem}
 \begin{proof}
     \leanok
-    Evaluating both functions at a physical configuration $\sigma$ on $R$ and
-    applying the equality of the two closed-state coefficients at
-    $\omega_{R,\sigma,\tau}$ gives the identity.
+    By Definition~\ref{def:peps_region_partial_state},
+    $\psi^\tau_{A,R}(\sigma)=c_A(\omega_{R,\sigma,\tau})=c_B(\omega_{R,\sigma,\tau})=\psi^\tau_{B,R}(\sigma)$.
 \end{proof}
 
 \begin{theorem}[Blocked-tensor expansion of a partial state]%
@@ -40,9 +37,8 @@ correspondence in the proof sketch of the two-dimensional corollary
     \leanok
     \uses{def:peps_region_partial_state,
         def:peps_regionComplementBoundaryConfig}
-    Let $P_A(R)=\prod_{e\notin\partial R}D_A(e)$ be the product
-    of the dimensions of all non-boundary bonds, both within $R$ and within
-    $V\setminus R$. For every complement configuration $\tau$,
+    With $P_A(R)=\prod_{e\notin\partial R}D_A(e)$, every complement
+    configuration $\tau$ satisfies
     \begin{align}
         P_A(R)\psi^\tau_{A,R}
          & =\sum_{\mu\in\partial R}
@@ -52,16 +48,10 @@ correspondence in the proof sketch of the two-dimensional corollary
 \end{theorem}
 \begin{proof}
     \leanok
-    Splitting the closed contraction across $R$ shows that if $\mu$ and $\nu$ are boundary
-    labels on $R$, the complement-boundary identification satisfies
-    \begin{align}
-        \bar\mu=\bar\nu
-         & \quad\Longleftrightarrow\quad \mu=\nu.
-        \notag
-    \end{align}
-    Hence the double boundary sum collapses to its diagonal, which gives the
-    sum in~(\ref{eq:peps_partial_state_blocked_expansion}); each non-boundary
-    bond contributes its dimension to the factor $P_A(R)$.
+    Since $\bar\mu=\bar\nu\iff\mu=\nu$ on $\partial R$, the double boundary sum
+    collapses to the diagonal $\mu=\nu$, and the non-boundary bonds contribute
+    $\prod_{e\notin\partial R}D_A(e)=P_A(R)$, giving
+    (\ref{eq:peps_partial_state_blocked_expansion}).
 \end{proof}
 
 \begin{definition}[Physical operator of a region insert]%
@@ -69,10 +59,9 @@ correspondence in the proof sketch of the two-dimensional corollary
     \lean{TNLean.PEPS.physicalOpOfRegionInsert}
     \leanok
     \uses{def:peps_region_out_endpoint_block_inverse}
-    Let $R$ be an injective region and let
-    $C=\{C(\mu)\}_{\mu\in\partial R}$ be any family in its physical
-    space, indexed by the virtual boundary configurations.  If $L_{A,R}$
-    is a left inverse of the blocked tensor map, define
+    For an injective region $R$, a physical family
+    $C=\{C(\mu)\}_{\mu\in\partial R}$, and a left inverse $L_{A,R}$ of the
+    blocked tensor map, define
     \begin{align}
         O_C
          & =\left(c\longmapsto\sum_{\mu}c_\mu C(\mu)\right)L_{A,R}.
@@ -85,31 +74,22 @@ correspondence in the proof sketch of the two-dimensional corollary
     \lean{TNLean.PEPS.physicalOpOfRegionInsert_realizes}
     \leanok
     \uses{def:peps_physical_operator_of_region_insert}
-    For every virtual boundary configuration $\mu$,
-    \begin{align}
-        O_C\bigl(T_{A,R}(\mu)\bigr) & =C(\mu).
-        \notag
-    \end{align}
-    Thus the insert is obtained from the genuine region block by one
-    physical operator before the region is contracted with its complement.
+    For every $\mu\in\partial R$, $O_C(T_{A,R}(\mu))=C(\mu)$.
 \end{theorem}
 \begin{proof}
     \leanok
-    The left inverse sends $T_{A,R}(\mu)$ to the standard basis vector
-    indexed by $\mu$, and the displayed linear combination sends that basis
-    vector to $C(\mu)$.
+    Since $L_{A,R}(T_{A,R}(\mu))=e_\mu$ by
+    Definition~\ref{def:peps_region_out_endpoint_block_inverse},
+    Definition~\ref{def:peps_physical_operator_of_region_insert} gives
+    $O_C(T_{A,R}(\mu))=C(\mu)$.
 \end{proof}
 
 \begin{definition}[Region insert of a physical operator]%
     \label{def:peps_region_insert_of_physical_operator}
     \lean{TNLean.PEPS.regionInsertOfPhysicalOp}
     \leanok
-    Let $O$ be a physical operator on the physical space of a region $R$.
-    Its action on the genuine open-boundary blocks defines the insert
-    \begin{align}
-        C^O_{A,R}(\mu) & =O\bigl(T_{A,R}(\mu)\bigr).
-        \notag
-    \end{align}
+    For a physical operator $O$ on $R$, define the insert
+    $C^O_{A,R}(\mu)=O(T_{A,R}(\mu))$.
 \end{definition}
 
 \begin{theorem}[Closed state of a physical operator]%
@@ -118,8 +98,7 @@ correspondence in the proof sketch of the two-dimensional corollary
     \leanok
     \uses{def:peps_region_insert_of_physical_operator,
         thm:peps_region_partial_state_blocked_expansion}
-    For a complement physical configuration $\tau$, let
-    $\psi^\tau_{A,R}$ be the partial state across the cut. Then
+    For every complement physical configuration $\tau$,
     \begin{align}
         \Psi_{A,R,C^O_{A,R}}(\sigma,\tau)
          & =\bigl[O\bigl(P_A(R)\psi^\tau_{A,R}\bigr)\bigr](\sigma).
@@ -128,8 +107,8 @@ correspondence in the proof sketch of the two-dimensional corollary
 \end{theorem}
 \begin{proof}
     \leanok
-    Applying $O$ to~(\ref{eq:peps_partial_state_blocked_expansion}) and evaluating
-    at $\sigma$ proves~(\ref{eq:peps_physical_op_partial_state}).
+    Apply $O$ to (\ref{eq:peps_partial_state_blocked_expansion}) by linearity
+    and evaluate at $\sigma$.
 \end{proof}
 
 \begin{theorem}[Physical operator transferred between equal closed states]%
@@ -138,20 +117,18 @@ correspondence in the proof sketch of the two-dimensional corollary
     \leanok
     \uses{thm:peps_closed_state_of_physical_operator,
         thm:peps_region_partial_state_same_state}
-    If $A$ and $B$ generate the same closed state, then
+    If $c_A=c_B$, then
     \begin{align}
         P_B(R)\Psi_{A,R,C^O_{A,R}}(\sigma,\tau)
          & =P_A(R)\Psi_{B,R,C^O_{B,R}}(\sigma,\tau).
         \label{eq:peps_physical_op_same_state}
     \end{align}
-    The two virtual boundary spaces need not be identified.
 \end{theorem}
 \begin{proof}
     \leanok
-    Equality of the closed states gives
-    $\psi^\tau_{A,R}=\psi^\tau_{B,R}$. Applying
-    (\ref{eq:peps_physical_op_partial_state}) to both tensors and
-    cross-multiplying the two interior-bond products yields the identity.
+    By Theorem~\ref{thm:peps_region_partial_state_same_state},
+    $\psi^\tau_{A,R}=\psi^\tau_{B,R}$, so (\ref{eq:peps_physical_op_partial_state})
+    gives (\ref{eq:peps_physical_op_same_state}).
 \end{proof}
 
 \begin{definition}[Interior-bond region insert]%
@@ -159,10 +136,8 @@ correspondence in the proof sketch of the two-dimensional corollary
     \lean{TNLean.PEPS.interiorBondInsertedRegionInsert}
     \leanok
     \uses{def:peps_bond_inserted_region_insert, def:peps_corner_extension}
-    Let $e=\{u,w\}$ be an ordered edge whose two endpoints lie in a region
-    $R$, with $u$ its ordered left endpoint, and let
-    $X\in\MN{D_A(e)}$.  Write $U=\{u\}$ and let $I_{A,U,e,X}$ be the
-    boundary-bond insert on $U$.  The interior-bond insert on $R$ is
+    For an ordered edge $e=(u,w)$ with $u,w\in R$, $u<w$, and
+    $X\in\MN{D_A(e)}$, put $U=\{u\}$ and define the interior-bond insert on $R$ by
     \begin{align}
         I^{\mathrm{int}}_{A,R,e,X}
          & =
@@ -170,9 +145,6 @@ correspondence in the proof sketch of the two-dimensional corollary
         \Ext_{U\subseteq R}(I_{A,U,e,X}).
         \notag
     \end{align}
-    Thus the genuine tensors at the vertices of $R\setminus U$ are adjoined
-    to a boundary insertion of $X$ on $e$, with the normalization changed
-    from the non-boundary bond product of $U$ to that of $R$.
 \end{definition}
 
 \begin{theorem}[Closed state of an interior-bond insert]%
@@ -180,8 +152,8 @@ correspondence in the proof sketch of the two-dimensional corollary
     \lean{TNLean.PEPS.deformedRegionStateAssembled_interiorBondInserted_eq_smul_edgeInsertedCoeff}
     \leanok
     \uses{def:peps_interior_bond_inserted_region_insert, thm:peps_corner_extension_state_preserves, thm:peps_deformedRegionStateAssembled_bondInserted_eq_smul_edgeInsertedCoeff}
-    Suppose all bond dimensions are positive.  For every global physical
-    configuration $\omega$,
+    If $D_A(g)>0$ for all $g$, then for every global physical configuration
+    $\omega$,
     \begin{align}
         \Psi^{\mathrm{as}}_{A,R,I^{\mathrm{int}}_{A,R,e,X}}(\omega)
          & =P_A(R)E_A(e,\omega,X).
@@ -190,11 +162,10 @@ correspondence in the proof sketch of the two-dimensional corollary
 \end{theorem}
 \begin{proof}
     \leanok
-    Corner extension preserves the closed state.  On the singleton $U$, the
-    boundary orientation is the identity because $U$ contains the ordered
-    left endpoint of $e$.  Hence its boundary insert has deformed state
-    $P_A(U)E_A(e,\omega,X)$.  The factor $P_A(R)/P_A(U)$ cancels $P_A(U)$
-    and gives~(\ref{eq:peps_interior_insert_state}).
+    Since $u\in U=\{u\}$, $\mathcal O_{U,e}(X)=X$, so state preservation under
+    $\Ext_{U\subseteq R}$ gives
+    $\Psi^{\mathrm{as}}_{A,R,\Ext_{U\subseteq R}(I_{A,U,e,X})}(\omega)=P_A(U)E_A(e,\omega,X)$;
+    multiplying by $P_A(R)/P_A(U)$ yields (\ref{eq:peps_interior_insert_state}).
 \end{proof}
 
 \begin{definition}[Staircase family for one virtual operation]%
@@ -202,9 +173,8 @@ correspondence in the proof sketch of the two-dimensional corollary
     \lean{TNLean.PEPS.staircaseVirtualOperationInsert}
     \leanok
     \uses{def:peps_bond_inserted_region_insert, def:peps_interior_bond_inserted_region_insert, lem:peps_reference_edge_boundary_windows, lem:peps_reference_edge_interior_windows}
-    Let $e$ be the horizontal reference edge and let
-    $X\in\MN{D_B(e)}$.  Define an insert $C_j(X)$ on each staircase window
-    $W_j$, for $0\le j<L+K$, by
+    For the horizontal reference edge $e$ and $X\in\MN{D_B(e)}$, define the
+    insert $C_j(X)$ on the staircase window $W_j$ ($0\le j<L+K$) by
     \begin{align}
         C_j(X)
          & =
@@ -215,10 +185,9 @@ correspondence in the proof sketch of the two-dimensional corollary
         \end{cases}
         \notag
     \end{align}
-    The first window contains only the ordered right endpoint of $e$, the
-    middle windows contain both endpoints, and the remaining windows contain
-    only the ordered left endpoint.  The transpose in the first case makes
-    all three boundary orientations represent the same matrix $X$.
+    Here $W_0$ contains only the right endpoint of $e$, $W_1,\ldots,W_{L-1}$
+    contain both endpoints, and $W_L,\ldots,W_{L+K-1}$ contain only the left
+    endpoint.
 \end{definition}
 
 \begin{theorem}[Physical operators on the staircase windows]%
@@ -227,21 +196,19 @@ correspondence in the proof sketch of the two-dimensional corollary
     \lean{TNLean.PEPS.staircaseVirtualOperationPhysicalOp_realizes}
     \leanok
     \uses{def:peps_staircase_virtual_operation_insert, def:peps_physical_operator_of_region_insert, thm:peps_physical_operator_of_region_insert_realizes}
-    Suppose every $L\times K$ window is injective.  For every
-    $0\leq j<L+K$, there is a physical operator $O_j(X)$ on the physical
-    space of $W_j$ such that
+    If every $L\times K$ window is injective, then for each $0\leq j<L+K$ there
+    is a physical operator $O_j(X)=O_{C_j(X)}$ on $W_j$ satisfying
     \begin{align}
         O_j(X)\bigl(T_{B,W_j}(\mu)\bigr) & =C_j(X)(\mu)
         \qquad (\mu\in\partial W_j).
         \notag
     \end{align}
-    Hence the virtual operation is realized locally on each window, before
-    any contraction with the complementary tensor network.
 \end{theorem}
 \begin{proof}
     \leanok
-    Each staircase window is an $L\times K$ translate and is therefore
-    injective, so applying the open-boundary realization theorem to $C_j(X)$ yields $O_j(X)$.
+    Each $W_j$ is an injective $L\times K$ translate, so
+    Theorem~\ref{thm:peps_physical_operator_of_region_insert_realizes} yields
+    $O_j(X)=O_{C_j(X)}$.
 \end{proof}
 
 \begin{lemma}[The two end inserts of the staircase family]%
@@ -250,7 +217,8 @@ correspondence in the proof sketch of the two-dimensional corollary
     \lean{TNLean.PEPS.staircaseVirtualOperationInsert_last}
     \leanok
     \uses{def:peps_staircase_virtual_operation_insert}
-    The end members of the family are
+    The end inserts of Definition~\ref{def:peps_staircase_virtual_operation_insert}
+    are
     \begin{align}
         C_0(X)       & =I_{B,W_0,e,X^{\mathsf T}},
         \label{eq:peps_staircase_first}            \\
@@ -260,9 +228,8 @@ correspondence in the proof sketch of the two-dimensional corollary
 \end{lemma}
 \begin{proof}
     \leanok
-    Identity~(\ref{eq:peps_staircase_first}) is the $j=0$ case of
-    Definition~\ref{def:peps_staircase_virtual_operation_insert}.  Since $K>0$,
-    the last index satisfies $L\le L+K-1$, which yields~(\ref{eq:peps_staircase_last}).
+    Evaluate Definition~\ref{def:peps_staircase_virtual_operation_insert} at
+    $j=0$ and at $j=L+K-1\ge L$ (for $K>0$).
 \end{proof}
 
 \begin{theorem}[Common state of the staircase virtual-operation family]%
@@ -270,24 +237,21 @@ correspondence in the proof sketch of the two-dimensional corollary
     \lean{TNLean.PEPS.deformedRegionStateAssembled_staircaseVirtualOperationInsert}
     \leanok
     \uses{def:peps_staircase_virtual_operation_insert, lem:peps_staircase_virtual_operation_end_inserts, lem:peps_reference_edge_left_endpoint_staircase_window, thm:peps_interior_bond_inserted_state, thm:peps_deformedRegionStateAssembled_bondInserted_eq_smul_edgeInsertedCoeff, thm:peps_regionInteriorBondProd_staircaseWindow_eq}
-    Let $B$ be translation invariant and suppose all its bond dimensions are
-    positive.  Then for $0\le j<L+K$ and every global physical configuration
-    $\omega$,
+    If $B$ is translation invariant with $D_B(g)>0$ for all $g$, then for
+    $0\le j<L+K$ and every global physical configuration $\omega$,
     \begin{align}
         \Psi^{\mathrm{as}}_{B,W_j,C_j(X)}(\omega)
          & =P_B(W_0)E_B(e,\omega,X).
         \notag
     \end{align}
-    In particular, all $L+K$ inserts have one common deformed state.
 \end{theorem}
 \begin{proof}
     \leanok
-    On $W_0$, the boundary orientation sends $X^{\mathsf T}$ to $X$.
-    On $W_1,\ldots,W_{L-1}$, the interior-bond identity applies, while on the
-    remaining windows the ordered left endpoint lies in the window so the
-    boundary orientation fixes $X$.  Each case gives
-    $P_B(W_j)E_B(e,\omega,X)$, and translation invariance identifies
-    $P_B(W_j)$ with $P_B(W_0)$.
+    Since $\mathcal O_{W_0,e}(X^{\mathsf T})=X$ and
+    $\mathcal O_{W_j,e}(X)=X$ for $L\le j<L+K$, while
+    (\ref{eq:peps_interior_insert_state}) covers $1\le j<L$, each case gives
+    $\Psi^{\mathrm{as}}_{B,W_j,C_j(X)}(\omega)=P_B(W_j)E_B(e,\omega,X)$, and
+    translation invariance gives $P_B(W_j)=P_B(W_0)$.
 \end{proof}
 
 \begin{theorem}[Common staircase state transferred between tensors]%
@@ -298,45 +262,30 @@ correspondence in the proof sketch of the two-dimensional corollary
         thm:peps_staircase_virtual_operation_physical_realization,
         thm:peps_staircase_virtual_operation_common_state,
         thm:peps_regionInteriorBondProd_staircaseWindow_eq}
-    Let $L,K>0$, and choose staircase coordinates $(a,b)$ with
-    $a+2L\leq\mathrm{width}$ and $2K\leq\mathrm{height}$. Let $A$ and $B$
-    be translation invariant tensors with the same physical dimension and the
-    same closed state. Suppose every cyclic $L\times K$ window of $A$ is
-    injective and $D_A(g)>0$ for every edge $g$. For
-    $X\in\MN{D_A(e)}$, let $O_j^A(X)$ be the physical operators obtained from
-    the staircase insert family of $A$, and define inserts on the windows of
-    $B$ by
-    \begin{align}
-        C_j^{A\to B}(X)(\mu)
-         & =O_j^A(X)\bigl(T_{B,W_j}(\mu)\bigr).
-        \notag
-    \end{align}
-    Then, for all $j,j'\in\mathbb{N}$,
+    Let $L,K>0$, $a+2L\leq\mathrm{width}$, and $2K\leq\mathrm{height}$. Let
+    $A,B$ be translation-invariant tensors with $c_A=c_B$, every cyclic
+    $L\times K$ window of $A$ injective, and $D_A(g)>0$ for all $g$. For
+    $X\in\MN{D_A(e)}$, put
+    $C_j^{A\to B}(X)(\mu)=O_j^A(X)(T_{B,W_j}(\mu))$. Then for all
+    $j,j'\in\mathbb{N}$ (with $W_j=W_{L+K-1}$ for $j\geq L+K-1$),
     \begin{align}
         \Psi^{\mathrm{as}}_{B,W_j,C_j^{A\to B}(X)}
          & =\Psi^{\mathrm{as}}_{B,W_{j'},C_{j'}^{A\to B}(X)}.
         \notag
     \end{align}
-    The source family has $0\leq j<L+K$. In the definition used here the
-    truncated offsets stabilize at $W_{L+K-1}$ for $j\geq L+K-1$; the indices
-    are not read modulo $L+K$. No equality between the edge-dependent bond
-    dimensions of $A$ and $B$, and no positivity assumption on those of $B$,
-    is required.
 \end{theorem}
 \begin{proof}
     \leanok
-    For each $j$, (\ref{eq:peps_physical_op_same_state}) and the
-    open-boundary realization of $O_j^A(X)$ give
+    By (\ref{eq:peps_physical_op_same_state}) and
+    Theorem~\ref{thm:peps_staircase_virtual_operation_physical_realization},
     \begin{align}
         P_B(W_j)\Psi^{\mathrm{as}}_{A,W_j,C_j^A(X)}
          & =P_A(W_j)\Psi^{\mathrm{as}}_{B,W_j,C_j^{A\to B}(X)}.
         \notag
     \end{align}
-    The staircase family of $A$ has one common deformed state. Translation
-    invariance gives $P_A(W_j)=P_A(W_0)$ and
-    $P_B(W_j)=P_B(W_0)$. Hence the right-hand side is independent of $j$.
-    Positivity of the bond dimensions makes $P_A(W_0)$ nonzero, so it may be
-    cancelled.
+    By Theorem~\ref{thm:peps_staircase_virtual_operation_common_state} and
+    translation invariance ($P_A(W_j)=P_A(W_0)>0$, $P_B(W_j)=P_B(W_0)$), the
+    left-hand side is independent of $j$; cancelling $P_A(W_0)$ gives the claim.
 \end{proof}
 
 \begin{definition}[The left staircase end operation $O_1^A(X)$]%
@@ -344,9 +293,8 @@ correspondence in the proof sketch of the two-dimensional corollary
     \lean{TNLean.PEPS.staircaseO1PhysicalOp}
     \leanok
     \uses{thm:peps_staircase_virtual_operation_physical_realization}
-    For $X\in\MN{D_A(e)}$, define
-    $O_1^A(X)=O_{L+K-1}^A(X)$ after identifying the last staircase
-    window with the left end window.
+    For $X\in\MN{D_A(e)}$, define $O_1^A(X)=O_{L+K-1}^A(X)$ under the
+    identification $W_{L+K-1}=W_{\mathrm L}$.
 \end{definition}
 
 \begin{definition}[The underlying right staircase end operation $O_3^A(X)$]%
@@ -354,11 +302,10 @@ correspondence in the proof sketch of the two-dimensional corollary
     \lean{TNLean.PEPS.staircaseO3PhysicalOp}
     \leanok
     \uses{thm:peps_staircase_virtual_operation_physical_realization}
-    For $X\in\MN{D_A(e)}$, define $O_3^A(X)=O_0^A(X)$ after identifying
-    the first staircase window with the right end window.
-    The relation (\ref{eq:peps_staircase_o3_cross_tensor_relation}) has the
-    paper's transposed $O_3^{\mathsf T}$ orientation; no transpose is chosen
-    on the abstract physical endomorphism space.
+    For $X\in\MN{D_A(e)}$, define $O_3^A(X)=O_0^A(X)$ under the identification
+    $W_0=W_{\mathrm R}$; (\ref{eq:peps_staircase_o3_cross_tensor_relation})
+    encodes the paper's $O_3^{\mathsf T}$ orientation without choosing a
+    physical-space transpose.
 \end{definition}
 
 \begin{theorem}[Cross-tensor virtual operation on the staircase edge]%
@@ -367,8 +314,7 @@ correspondence in the proof sketch of the two-dimensional corollary
     \leanok
     \uses{def:peps_staircase_O1_physical_operation,
         def:peps_staircase_O3_physical_operation}
-    Let $L,K>0$, and choose the displayed non-wrapping horizontal
-    staircase coordinates $(a,b)$ with
+    Let $L,K>0$ and choose staircase coordinates $(a,b)$ satisfying
     \begin{align}
         1    & \leq a,
              & a+2L                 & \leq \mathrm{width},
@@ -378,12 +324,10 @@ correspondence in the proof sketch of the two-dimensional corollary
              & 2K+1                 & \leq \mathrm{height}.
         \notag
     \end{align}
-    Suppose that $A$ and $B$ are translation invariant, generate the same
-    closed state, every cyclic $L\times K$ window of either tensor is
-    injective, and every bond dimension of either tensor is positive. For
-    $X\in\MN{D_A(e)}$, there is a unique $Y\in\MN{D_B(e)}$ such that, for
-    every external boundary configuration $\eta_{\mathrm L}$ and
-    $\eta_{\mathrm R}$, and every reference-edge index $k$,
+    Suppose $A,B$ are translation invariant with $c_A=c_B$, every cyclic
+    $L\times K$ window of $A$ and of $B$ is injective, and $D_A(g),D_B(g)>0$
+    for all $g$. For each $X\in\MN{D_A(e)}$, there is a unique
+    $Y\in\MN{D_B(e)}$ such that for all $\eta_{\mathrm L},\eta_{\mathrm R},k$,
     \begin{align}
         O_1^A(X)\bigl(T_{B,W_{\mathrm L}}(k,\eta_{\mathrm L})\bigr)
          & =\sum_jY_{jk}T_{B,W_{\mathrm L}}(j,\eta_{\mathrm L}),
@@ -392,10 +336,6 @@ correspondence in the proof sketch of the two-dimensional corollary
          & =\sum_jY_{kj}T_{B,W_{\mathrm R}}(j,\eta_{\mathrm R}).
         \label{eq:peps_staircase_o3_cross_tensor_relation}
     \end{align}
-    Thus the relation (\ref{eq:peps_staircase_o3_cross_tensor_relation}) has the
-    paper's $O_3^{\mathsf T}$ orientation.
-    No equality between $D_A(e)$ and $D_B(e)$ is assumed or concluded, and
-    this statement contains no multiplication or gauge assertion.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -403,13 +343,13 @@ correspondence in the proof sketch of the two-dimensional corollary
         thm:peps_staircase_pair_insert_eq_open,
         thm:peps_existsUnique_virtualOperation_of_horizontal_staircase_end_pair,
         thm:peps_regionInjectivityUnionClosure_of_overlap}
-    The transferred physical inserts form one common $B$-state. The
-    overlapping-union lemma gives the union closure needed to compare
-    consecutive staircase windows, and corner completion gives equality of
-    the two end inserts with open boundary. At the two ends these inserts are
-    precisely the actions of $O_3^A(X)$ and $O_1^A(X)$ on the genuine
-    $B$-window tensors. Injectivity of those two windows and the two-end
-    comparison give the displayed relations and the uniqueness of $Y$.
+    By Theorem~\ref{thm:peps_staircase_physical_operation_same_state}, the
+    inserts $C_j^{A\to B}(X)$ share one closed $B$-state. Overlapping-union
+    injectivity and corner completion identify the open-boundary end inserts
+    $C_0^{A\to B}(X)=O_3^A(X)\circ T_{B,W_{\mathrm R}}$ and
+    $C_{L+K-1}^{A\to B}(X)=O_1^A(X)\circ T_{B,W_{\mathrm L}}$, so the two-end
+    comparison theorem yields the unique $Y\in\MN{D_B(e)}$ satisfying
+    (\ref{eq:peps_staircase_o1_cross_tensor_relation})--(\ref{eq:peps_staircase_o3_cross_tensor_relation}).
 \end{proof}
 
 \begin{theorem}[Composition of the canonical staircase end operations]%
@@ -419,37 +359,27 @@ correspondence in the proof sketch of the two-dimensional corollary
     \leanok
     \uses{def:peps_staircase_O1_physical_operation,
         def:peps_staircase_O3_physical_operation}
-    Let $L,K>0$, and choose staircase coordinates $(a,b)$ with
-    $a+2L\leq\mathrm{width}$ and $2K\leq\mathrm{height}$. Suppose every
-    cyclic $L\times K$ window of $A$ is injective. For matrices
-    $X,Y\in\MN{D_A(e)}$, the canonical end operations satisfy
+    Let $L,K>0$, $a+2L\leq\mathrm{width}$, and $2K\leq\mathrm{height}$, and
+    suppose every cyclic $L\times K$ window of $A$ is injective. For all
+    $X,Y\in\MN{D_A(e)}$,
     \begin{align}
         O_1^A(XY) & =O_1^A(X)O_1^A(Y),
         \notag                         \\
         O_3^A(XY) & =O_3^A(Y)O_3^A(X).
         \notag
     \end{align}
-    Thus the right relation preserves multiplication in ordinary order after
-    passing to the orientation $(O_3^A)^{\mathsf T}$ used in Lemma~5.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{lem:peps_staircase_virtual_operation_end_inserts,
         thm:peps_lemma5_end_operation_multiplication}
-    Splitting the virtual boundary of either end window into the reference-edge
-    coordinate and the remaining external coordinates via a map $E$,
-    write $C_M$ for insertion of $M$ on the reference edge.
-    On every fixed external fibre,
-    \begin{align}
-        C_M\bigl(E^{-1}(j,\eta)\bigr)
-         & =\sum_i M_{ij}\,T_{A,W}\bigl(E^{-1}(i,\eta)\bigr).
-        \notag
-    \end{align}
-    The chosen left inverse of the injective blocked tensor is a left inverse
-    on the whole boundary-coordinate space, so this identity gives
-    $O_W(M)O_W(N)=O_W(MN)$.  The first window carries $X^{\mathsf T}$; hence
-    $(XY)^{\mathsf T}=Y^{\mathsf T}X^{\mathsf T}$ reverses the order of the
-    underlying right operations.
+    Under the boundary split $E$, the reference-edge insert $C_M$ on an end
+    window $W$ satisfies
+    $C_M(E^{-1}(j,\eta))=\sum_i M_{ij}T_{A,W}(E^{-1}(i,\eta))$, so
+    $L_{A,W}\circ T_{A,W}=\Id$ gives $O_W(M)O_W(N)=O_W(MN)$. By
+    Lemma~\ref{lem:peps_staircase_virtual_operation_end_inserts}, $O_1^A$ uses
+    $M=X$ while $O_3^A$ uses $M=X^{\mathsf T}$, and
+    $(XY)^{\mathsf T}=Y^{\mathsf T}X^{\mathsf T}$.
 \end{proof}
 
 \begin{definition}[Canonical cross-tensor matrix assignment]%
@@ -459,19 +389,10 @@ correspondence in the proof sketch of the two-dimensional corollary
     \leanok
     \uses{thm:peps_cross_tensor_virtual_operation_of_staircase}
     Under the hypotheses of
-    Theorem~\ref{thm:peps_cross_tensor_virtual_operation_of_staircase}, in the
-    paper's notation the input and uniquely recovered matrices are
-    called $X$ and $Y$.  Writing $Y_{A\to B}(X)$ only to distinguish the two
-    tensor families, define
-    \begin{align}
-        Y_{A\to B}(X) & \in\MN{D_B(e)}
-        \notag
-    \end{align}
-    to be the unique matrix satisfying
+    Theorem~\ref{thm:peps_cross_tensor_virtual_operation_of_staircase}, define
+    $Y_{A\to B}(X)\in\MN{D_B(e)}$ to be the unique matrix $Y$ satisfying
     (\ref{eq:peps_staircase_o1_cross_tensor_relation}) and
-    (\ref{eq:peps_staircase_o3_cross_tensor_relation}) for every left and
-    right external boundary configuration.  This definition makes no choice
-    of an external boundary configuration.
+    (\ref{eq:peps_staircase_o3_cross_tensor_relation}).
 \end{definition}
 
 \begin{theorem}[Multiplicativity of the cross-tensor assignment]%
@@ -492,28 +413,26 @@ correspondence in the proof sketch of the two-dimensional corollary
     \leanok
     \uses{thm:peps_staircase_end_physical_operation_multiplication,
         thm:peps_lemma5_end_operation_multiplication}
-    Set $Y_r=Y_{A\to B}(X_r)$ for $r=1,2$.  For every left external
-    boundary configuration, the two $O_1$ relations compose in ordinary order:
+    Set $Y_r=Y_{A\to B}(X_r)$ for $r=1,2$. Iterating
+    (\ref{eq:peps_staircase_o1_cross_tensor_relation}) and
+    (\ref{eq:peps_staircase_o3_cross_tensor_relation}) gives
     \begin{align}
         O_1^A(X_1)\Bigl(O_1^A(X_2)
         \bigl(T_{B,W_{\mathrm L}}(k,\eta_{\mathrm L})\bigr)\Bigr)
          & =\sum_i (Y_1Y_2)_{ik}\,
-        T_{B,W_{\mathrm L}}(i,\eta_{\mathrm L}).
-        \notag
-    \end{align}
-    For every right external boundary configuration, the underlying $O_3$
-    operations compose in reverse order:
-    \begin{align}
+        T_{B,W_{\mathrm L}}(i,\eta_{\mathrm L}),
+        \notag                     \\
         O_3^A(X_2)\Bigl(O_3^A(X_1)
         \bigl(T_{B,W_{\mathrm R}}(k,\eta_{\mathrm R})\bigr)\Bigr)
          & =\sum_j (Y_1Y_2)_{kj}\,
         T_{B,W_{\mathrm R}}(j,\eta_{\mathrm R}).
         \notag
     \end{align}
-    This is ordinary multiplication in the $O_3^{\mathsf T}$ orientation.  The
-    preceding theorem identifies the left sides with the canonical operations
-    for $X_1X_2$.  Both end relations therefore realize $Y_1Y_2$, and global
-    uniqueness identifies this product with $Y_{A\to B}(X_1X_2)$.
+    By Theorem~\ref{thm:peps_staircase_end_physical_operation_multiplication},
+    the left-hand sides equal $O_1^A(X_1X_2)(T_{B,W_{\mathrm L}}(k,\eta_{\mathrm L}))$
+    and $O_3^A(X_1X_2)(T_{B,W_{\mathrm R}}(k,\eta_{\mathrm R}))$, so uniqueness
+    in Theorem~\ref{thm:peps_cross_tensor_virtual_operation_of_staircase} gives
+    $Y_{A\to B}(X_1X_2)=Y_1Y_2$.
 \end{proof}
 
 \begin{theorem}[End-window identity for one virtual operation]%
@@ -521,9 +440,8 @@ correspondence in the proof sketch of the two-dimensional corollary
     \lean{TNLean.PEPS.regionInsertedCoeff_endWindows_eq_staircaseVirtualOperation}
     \leanok
     \uses{lem:peps_assembleRegionSigma_restrict, lem:peps_reference_edge_left_endpoint_staircase_window, thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff, thm:peps_regionInteriorBondProd_staircaseWindow_eq}
-    Suppose the tensor is translation invariant and the staircase satisfies
-    the stated size bounds.  Then for every $X\in\MN{D_B(e)}$ and every
-    global physical configuration $\omega$,
+    If $B$ is translation invariant and the staircase satisfies the size bounds,
+    then for every $X\in\MN{D_B(e)}$ and $\omega$,
     \begin{align}
         C_B(W_0,e,X^{\mathsf T};\omega|_{W_0},
         \omega|_{V\setminus W_0})
@@ -535,10 +453,10 @@ correspondence in the proof sketch of the two-dimensional corollary
 \end{theorem}
 \begin{proof}
     \leanok
-    The region-to-edge identity sends both sides to the edge coefficient
-    with $X$ on the same reference edge: the first boundary orientation
-    transposes $X^{\mathsf T}$, while the last fixes $X$.  Translation
-    invariance identifies the two non-boundary bond products.
+    By Theorem~\ref{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff},
+    both sides equal $P_B(W_0)E_B(e,\omega,X)$ since
+    $\mathcal O_{W_0,e}(X^{\mathsf T})=X$, $\mathcal O_{W_{L+K-1},e}(X)=X$, and
+    $P_B(W_{L+K-1})=P_B(W_0)$.
 \end{proof}
 
 \paragraph{The algebra isomorphism on the displayed staircase edge.}
@@ -547,9 +465,8 @@ correspondence in the proof sketch of the two-dimensional corollary
     \label{def:peps_boundary_split}
     \lean{TNLean.PEPS.regionBoundaryConfigSplitAt}
     \leanok
-    For $f\in\partial R$, identify a boundary configuration $\mu$ with
-    $(\mu_f,\mu|_{\partial R\setminus\{f\}})$. Denote the resulting
-    bijection by $E_f$.
+    For $f\in\partial R$, let $E_f:\mu\mapsto(\mu_f,\mu|_{\partial R\setminus\{f\}})$
+    be the boundary coordinate split.
 \end{definition}
 
 \begin{theorem}[A bond insertion in separated coordinates]%
@@ -557,7 +474,7 @@ correspondence in the proof sketch of the two-dimensional corollary
     \lean{TNLean.PEPS.bondInsertedRegionInsert_splitAt}
     \leanok
     \uses{def:peps_boundary_split, def:peps_bond_inserted_region_insert}
-    For every exterior configuration $\eta$ and every bond index $j$,
+    For every exterior configuration $\eta$ and bond index $j$,
     \begin{align}
         I_{A,R,f,M}\bigl(E_f^{-1}(j,\eta)\bigr)
          & =\sum_i M_{ij}T_{A,R}\bigl(E_f^{-1}(i,\eta)\bigr).
@@ -566,9 +483,10 @@ correspondence in the proof sketch of the two-dimensional corollary
 \end{theorem}
 \begin{proof}
     \leanok
-    In the defining sum, configurations agreeing away from $f$ have the
-    same exterior coordinate. The sum over that coordinate therefore
-    reduces to $\eta$.
+    Under $E_f$, $\mu|_{\partial R\setminus\{f\}}=E_f^{-1}(j,\eta)|_{\partial R\setminus\{f\}}$
+    fixes the exterior coordinate to $\eta$, reducing the sum in
+    Definition~\ref{def:peps_bond_inserted_region_insert} to
+    (\ref{eq:peps_bond_insert_split}).
 \end{proof}
 
 \begin{definition}[Identification of physical operations and inserts]%
@@ -576,9 +494,8 @@ correspondence in the proof sketch of the two-dimensional corollary
     \lean{TNLean.PEPS.regionPhysicalOperationCongr}
     \lean{TNLean.PEPS.regionInsertCongr}
     \leanok
-    An equality $R=S$ identifies their physical and boundary spaces.
-    Write $O|_S$ and $C|_S$ for a physical operation and a boundary-indexed
-    physical tensor under these identifications.
+    An equality $R=S$ transports a physical operation $O$ and a region insert
+    $C$ on $R$ to $O|_S$ and $C|_S$ on $S$.
 \end{definition}
 
 \begin{theorem}[Physical realization under region identification]%
@@ -591,7 +508,7 @@ correspondence in the proof sketch of the two-dimensional corollary
 \end{theorem}
 \begin{proof}
     \leanok
-    Identifying $R$ with $S$ and evaluating both sides at a boundary configuration gives the equality.
+    Substitute $R=S$ in Definition~\ref{def:peps_region_insert_of_physical_operator}.
 \end{proof}
 
 \begin{theorem}[Blocked images of equal states]%
@@ -599,36 +516,36 @@ correspondence in the proof sketch of the two-dimensional corollary
     \lean{TNLean.PEPS.range_regionBlockedTensorMap_eq_span}
     \lean{TNLean.PEPS.range_regionBlockedTensorMap_eq_of_sameState}
     \leanok
-    The image of the blocked tensor map on $R$ is
-    $\operatorname{span}\{T_{A,R}(\mu):\mu\text{ a boundary configuration}\}$.
-    If $A$ and $B$ generate the same closed state, both tensors are
-    injective on $V\setminus R$, and their bond dimensions are positive,
-    these two images coincide.
+    The blocked tensor map $\mathcal T_{A,R}$ has image
+    $\operatorname{im}\mathcal T_{A,R}=\operatorname{span}\{T_{A,R}(\mu):\mu\in\partial R\}$.
+    If $c_A=c_B$, $A$ and $B$ are injective on $V\setminus R$, and
+    $D_A(g),D_B(g)>0$ for all $g$, then
+    $\operatorname{im}\mathcal T_{A,R}=\operatorname{im}\mathcal T_{B,R}$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_region_partial_state_same_state}
-    The blocked tensor map sends a coefficient vector to the corresponding
-    linear combination of the tensors $T_{A,R}(\mu)$. Inverting the blocked
-    tensor on the complementary region identifies this image with the
-    span of the partial states of the closed state. Equality of the closed
-    states then identifies the two images.
+    Applying the left inverse of $\mathcal T_{A,V\setminus R}$ to
+    (\ref{eq:peps_partial_state_blocked_expansion}) identifies
+    $\operatorname{im}\mathcal T_{A,R}$ with $\operatorname{span}_\tau\{\psi^\tau_{A,R}\}$,
+    and Theorem~\ref{thm:peps_region_partial_state_same_state} gives
+    $\psi^\tau_{A,R}=\psi^\tau_{B,R}$.
 \end{proof}
 
 \begin{theorem}[Agreement of physical operations on a common blocked image]%
     \label{thm:peps_physical_operations_common_image}
     \lean{TNLean.PEPS.physicalOps_eq_on_blocks_of_sameState}
     \leanok
-    Under the equal-state, complement-injectivity, and positive-dimension
-    hypotheses of Theorem~\ref{thm:peps_common_blocked_image}, if
-    $OT_{A,R}(\mu)=PT_{A,R}(\mu)$ for every $\mu$, then
-    $OT_{B,R}(\nu)=PT_{B,R}(\nu)$ for every $\nu$.
+    Under the hypotheses of Theorem~\ref{thm:peps_common_blocked_image}, if
+    $OT_{A,R}(\mu)=PT_{A,R}(\mu)$ for all $\mu\in\partial R$, then
+    $OT_{B,R}(\nu)=PT_{B,R}(\nu)$ for all $\nu\in\partial R$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_common_blocked_image}
-    By linearity, $O$ and $P$ agree on the span of the $A$-blocks.
-    Every $B$-block belongs to the same span.
+    By Theorem~\ref{thm:peps_common_blocked_image},
+    $T_{B,R}(\nu)\in\operatorname{im}\mathcal T_{B,R}=\operatorname{im}\mathcal T_{A,R}=\operatorname{span}\{T_{A,R}(\mu)\}$,
+    where $O$ and $P$ agree by linearity.
 \end{proof}
 
 \begin{theorem}[Linearity and identity for boundary insertions]%
@@ -637,7 +554,7 @@ correspondence in the proof sketch of the two-dimensional corollary
     \lean{TNLean.PEPS.bondInsertedRegionInsert_smul}
     \lean{TNLean.PEPS.bondInsertedRegionInsert_one}
     \leanok
-    For every $c\in\mathbb C$ and every boundary configuration $\mu$,
+    For every $c\in\mathbb C$ and $\mu\in\partial R$,
     $I_{A,R,f,M+N}=I_{A,R,f,M}+I_{A,R,f,N}$,
     $I_{A,R,f,cM}=cI_{A,R,f,M}$, and
     $I_{A,R,f,1}(\mu)=T_{A,R}(\mu)$.
@@ -645,25 +562,25 @@ correspondence in the proof sketch of the two-dimensional corollary
 \begin{proof}
     \leanok
     \uses{thm:peps_bond_insert_split}
-    Distributing the finite insertion sum over addition and scalar
-    multiplication gives linearity, and for the identity matrix the sum in
-    (\ref{eq:peps_bond_insert_split}) reduces to its $i=j$ term.
+    Linearity in $M$ and the specialization $M_{ij}=\delta_{ij}$ in
+    (\ref{eq:peps_bond_insert_split}) give all three identities.
 \end{proof}
 
 \begin{theorem}[Boundary insertions determine the bond matrix]%
     \label{thm:peps_bond_insert_injective}
     \lean{TNLean.PEPS.bondInsertedRegionInsert_injective}
     \leanok
-    If $A$ is injective on $R$ and $V\setminus R$, and its bond
-    dimensions are positive, then $I_{A,R,f,M}=I_{A,R,f,N}$ implies $M=N$.
+    If $A$ is injective on $R$ and $V\setminus R$ with $D_A(g)>0$ for all $g$,
+    then $I_{A,R,f,M}=I_{A,R,f,N}$ implies $M=N$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_regionInsertedCoeff_injective,
         thm:peps_deformedRegionState_bondInsertedRegionInsert}
-    Contracting the two equal boundary-indexed tensors with the complementary
-    blocked tensor shows that their inserted coefficients coincide, so the inserted
-    matrices coincide.
+    By Theorem~\ref{thm:peps_deformedRegionState_bondInsertedRegionInsert},
+    $I_{A,R,f,M}=I_{A,R,f,N}$ implies
+    $C_A(R,f,M;\sigma,\tau)=C_A(R,f,N;\sigma,\tau)$, so
+    Theorem~\ref{thm:peps_regionInsertedCoeff_injective} gives $M=N$.
 \end{proof}
 
 \begin{theorem}[Left staircase realization and linearity]%
@@ -672,14 +589,12 @@ correspondence in the proof sketch of the two-dimensional corollary
     \lean{TNLean.PEPS.staircaseO1PhysicalOp_add}
     \lean{TNLean.PEPS.staircaseO1PhysicalOp_smul}
     \leanok
-    Let $L,K>0$ and choose the non-wrapping staircase coordinates with
-    $1\leq a$, $a+2L\leq\mathrm{width}$,
-    $b+2K-1\leq\mathrm{height}$, and $2K\leq\mathrm{height}$.
-    Suppose every $L\times K$ window of $A$ is injective.
-    Then $O_1^A(X)T_{A,W_{\mathrm L}}(\mu)=I_{A,W_{\mathrm L},e,X}(\mu)$
-    for every boundary configuration $\mu$, and
-    $O_1^A(X+Y)=O_1^A(X)+O_1^A(Y)$,
-    $O_1^A(cX)=cO_1^A(X)$ for every $c\in\mathbb C$.
+    Let $L,K>0$, $1\leq a$, $a+2L\leq\mathrm{width}$,
+    $b+2K-1\leq\mathrm{height}$, and $2K\leq\mathrm{height}$, and suppose every
+    $L\times K$ window of $A$ is injective. Then for all $\mu\in\partial W_{\mathrm L}$
+    and $c\in\mathbb C$,
+    $O_1^A(X)T_{A,W_{\mathrm L}}(\mu)=I_{A,W_{\mathrm L},e,X}(\mu)$,
+    $O_1^A(X+Y)=O_1^A(X)+O_1^A(Y)$, and $O_1^A(cX)=cO_1^A(X)$.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -687,10 +602,10 @@ correspondence in the proof sketch of the two-dimensional corollary
         lem:peps_staircase_virtual_operation_end_inserts,
         thm:peps_realization_identification, thm:peps_bond_insert_algebra,
         def:peps_physical_operator_of_region_insert}
-    Identifying the last staircase window with $W_{\mathrm L}$ and using its
-    prescribed boundary insertion shows that the physical operator is the linear
-    combination of that insertion followed by a fixed left inverse, so
-    it preserves addition and scalar multiplication.
+    Combine Theorem~\ref{thm:peps_staircase_virtual_operation_physical_realization},
+    (\ref{eq:peps_staircase_last}), and Theorem~\ref{thm:peps_bond_insert_algebra}
+    with the linearity of $C\mapsto O_C$ in
+    Definition~\ref{def:peps_physical_operator_of_region_insert}.
 \end{proof}
 
 \begin{theorem}[A global left end relation is a boundary insertion]%
@@ -698,19 +613,15 @@ correspondence in the proof sketch of the two-dimensional corollary
     \lean{TNLean.PEPS.leftEnd_regionInsertOfPhysicalOp_eq_bondInserted}
     \leanok
     Let $L,K>0$, $1\leq a$, $a+2L\leq\mathrm{width}$, and
-    $b+2K-1\leq\mathrm{height}$. Suppose that
+    $b+2K-1\leq\mathrm{height}$. If
     $OT_{A,W_{\mathrm L}}(j,\eta)=\sum_i M_{ij}T_{A,W_{\mathrm L}}(i,\eta)$
-    for every $j$ and every exterior boundary configuration $\eta$.
-    Then $C^O_{A,W_{\mathrm L}}=I_{A,W_{\mathrm L},e,M}$.
-    Injectivity of $A$ is not required for this identity.
+    for all $j,\eta$, then $C^O_{A,W_{\mathrm L}}=I_{A,W_{\mathrm L},e,M}$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_bond_insert_split}
-    The staircase boundary bijection differs from $E_e$ only by a
-    bijection on the exterior coordinates; cancelling that bijection at the coordinates of any
-    fixed boundary configuration and applying
-    (\ref{eq:peps_bond_insert_split}) yields the identity.
+    Compare the hypothesis with (\ref{eq:peps_bond_insert_split}) under the
+    bijection identifying $(j,\eta)$ with $E_e(\mu)$.
 \end{proof}
 
 \begin{theorem}[Cross-tensor realization and normalized coefficients]%
@@ -720,9 +631,9 @@ correspondence in the proof sketch of the two-dimensional corollary
     \leanok
     Under the hypotheses of
     Theorem~\ref{thm:peps_cross_tensor_virtual_operation_of_staircase},
-    write $F_{AB}(X)=Y_{A\to B}(X)$. For every boundary configuration $\nu$,
-    $O_1^A(X)T_{B,W_{\mathrm L}}(\nu)=I_{B,W_{\mathrm L},e,F_{AB}(X)}(\nu)$.
-    In addition, for every pair of physical configurations $\sigma,\tau$,
+    write $F_{AB}(X)=Y_{A\to B}(X)$. Then for all $\nu\in\partial W_{\mathrm L}$
+    and $\sigma,\tau$,
+    $O_1^A(X)T_{B,W_{\mathrm L}}(\nu)=I_{B,W_{\mathrm L},e,F_{AB}(X)}(\nu)$ and
     \begin{align}
         P_B(W_{\mathrm L})C_A(W_{\mathrm L},e,X;\sigma,\tau)
          & =P_A(W_{\mathrm L})C_B(W_{\mathrm L},e,F_{AB}(X);\sigma,\tau).
@@ -735,9 +646,13 @@ correspondence in the proof sketch of the two-dimensional corollary
         thm:peps_global_left_relation_insert, thm:peps_staircase_left_realization,
         thm:peps_physical_operator_same_state_transfer,
         thm:peps_deformedRegionState_bondInsertedRegionInsert}
-    The globally quantified left end relation gives the boundary insertion;
-    applying the same-state physical-operator identity to $O_1^A(X)$ and
-    substituting its two insertion realizations yields the claim.
+    Apply Theorem~\ref{thm:peps_global_left_relation_insert} to
+    (\ref{eq:peps_staircase_o1_cross_tensor_relation}) to get
+    $C^{O_1^A(X)}_{B,W_{\mathrm L}}=I_{B,W_{\mathrm L},e,F_{AB}(X)}$, and combine
+    with $C^{O_1^A(X)}_{A,W_{\mathrm L}}=I_{A,W_{\mathrm L},e,X}$ from
+    Theorem~\ref{thm:peps_staircase_left_realization} in
+    (\ref{eq:peps_physical_op_same_state}) and
+    Theorem~\ref{thm:peps_deformedRegionState_bondInsertedRegionInsert}.
 \end{proof}
 
 \begin{theorem}[Injectivity of a single-window complement]%
@@ -745,17 +660,17 @@ correspondence in the proof sketch of the two-dimensional corollary
     \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.windowComplement_injective}
     \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.regionBlockedTensorInjective_windowComplement}
     \leanok
-    Let $L,K>0$, $2L+1\leq\mathrm{width}$, and
-    $2K+1\leq\mathrm{height}$. Suppose every cyclic $L\times K$ window
-    is injective and injectivity is closed under unions of two regions.
-    The complement of any cyclic $L\times K$ window is then injective.
+    If $L,K>0$, $2L+1\leq\mathrm{width}$, $2K+1\leq\mathrm{height}$, every
+    cyclic $L\times K$ window is injective, and injectivity is closed under
+    binary unions, then $V\setminus W$ is injective for every cyclic $L\times K$
+    window $W$.
 \end{theorem}
 \begin{proof}
     \leanok
-    The complement is the union of a full-height band of
-    $\mathrm{width}-L\geq L+1$ columns and an $L$-column band of
-    $\mathrm{height}-K\geq K+1$ rows. Each band is a union of translates
-    of injective $L\times K$ windows; union closure gives the result.
+    Decompose $V\setminus W$ as the union of a full-height band of width
+    $\mathrm{width}-L\geq L+1$ and an $L$-column band of height
+    $\mathrm{height}-K\geq K+1$, each covered by translates of $L\times K$
+    windows, and apply union closure.
 \end{proof}
 
 \begin{theorem}[The cross-tensor algebraic laws and inverse]%
@@ -766,10 +681,10 @@ correspondence in the proof sketch of the two-dimensional corollary
     \lean{TNLean.PEPS.staircaseCrossTensorVirtualOperation_reverse}
     \leanok
     Under the hypotheses of
-    Theorem~\ref{thm:peps_cross_tensor_virtual_operation_of_staircase},
-    the assignment $F_{AB}$ preserves addition, complex scalar
-    multiplication, and the identity. It also satisfies
-    $F_{BA}(F_{AB}(X))=X$ for every $X\in\MN{D_A(e)}$.
+    Theorem~\ref{thm:peps_cross_tensor_virtual_operation_of_staircase}, for all
+    $X,X'\in\MN{D_A(e)}$ and $c\in\mathbb C$,
+    $F_{AB}(X+X')=F_{AB}(X)+F_{AB}(X')$, $F_{AB}(cX)=cF_{AB}(X)$,
+    $F_{AB}(1)=1$, and $F_{BA}(F_{AB}(X))=X$.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -779,13 +694,15 @@ correspondence in the proof sketch of the two-dimensional corollary
         thm:peps_torus_window_complement_injectivity,
         thm:peps_regionInjectivityUnionClosure_of_overlap,
         lem:peps_horizontal_staircase_window_injectivity}
-    The realization identities and insertion injectivity give addition
-    and scalar multiplication. The operation $O_1^A(1)$ fixes every
-    $A$-block, hence every $B$-block in their common image; insertion
-    injectivity gives $F_{AB}(1)=1$.
-    For $Y=F_{AB}(X)$, the operations $O_1^B(Y)$ and $O_1^A(X)$ agree on
-    every $B$-block. They therefore agree on every $A$-block. Their two
-    insertion realizations give $F_{BA}(Y)=X$.
+    Linearity follows from Theorems~\ref{thm:peps_staircase_left_realization},
+    \ref{thm:peps_cross_tensor_realization_coefficients},
+    \ref{thm:peps_bond_insert_algebra}, and~\ref{thm:peps_bond_insert_injective}
+    (using Theorem~\ref{thm:peps_torus_window_complement_injectivity} for
+    injectivity on $V\setminus W_{\mathrm L}$). Since $O_1^A(1)$ fixes
+    $T_{A,W_{\mathrm L}}(\mu)$, Theorem~\ref{thm:peps_physical_operations_common_image}
+    shows it fixes $T_{B,W_{\mathrm L}}(\nu)$, giving $F_{AB}(1)=1$. Similarly,
+    $O_1^B(F_{AB}(X))$ and $O_1^A(X)$ agree on $T_{B,W_{\mathrm L}}(\nu)$ and
+    hence on $T_{A,W_{\mathrm L}}(\mu)$, giving $F_{BA}(F_{AB}(X))=X$.
 \end{proof}
 
 \begin{definition}[The staircase cross-tensor algebra isomorphism]%
@@ -796,8 +713,7 @@ correspondence in the proof sketch of the two-dimensional corollary
         thm:peps_staircase_cross_tensor_virtual_operation_multiplication}
     Under the hypotheses of
     Theorem~\ref{thm:peps_cross_tensor_virtual_operation_of_staircase},
-    the algebra isomorphism $\MN{D_A(e)}\to\MN{D_B(e)}$ is $F_{AB}$,
-    and its inverse is $F_{BA}$.
+    $F_{AB}:\MN{D_A(e)}\simeq_{\mathrm{alg}}\MN{D_B(e)}$ has inverse $F_{BA}$.
 \end{definition}
 
 \begin{theorem}[Equality of the displayed staircase bond dimensions]%
@@ -806,15 +722,15 @@ correspondence in the proof sketch of the two-dimensional corollary
     \leanok
     Under the hypotheses of
     Theorem~\ref{thm:peps_cross_tensor_virtual_operation_of_staircase},
-    the displayed horizontal bond satisfies $D_A(e)=D_B(e)$.
+    $D_A(e)=D_B(e)$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:peps_staircase_cross_tensor_algebra_isomorphism,
         thm:matrixAlgEquiv_fin_eq}
-    The algebra isomorphism identifies the complex dimensions
-    $D_A(e)^2$ and $D_B(e)^2$. The two nonnegative matrix sizes are
-    therefore equal.
+    By Definition~\ref{def:peps_staircase_cross_tensor_algebra_isomorphism},
+    $D_A(e)^2=\dim_{\mathbb C}\MN{D_A(e)}=\dim_{\mathbb C}\MN{D_B(e)}=D_B(e)^2$,
+    so $D_A(e)=D_B(e)$.
 \end{proof}
 
 \begin{theorem}[The conjugating gauge on the displayed staircase bond]%
@@ -823,26 +739,24 @@ correspondence in the proof sketch of the two-dimensional corollary
     \leanok
     Under the hypotheses of
     Theorem~\ref{thm:peps_cross_tensor_virtual_operation_of_staircase},
-    there are an identification $h:D_A(e)=D_B(e)$ and an invertible
-    matrix $Z\in\mathrm{GL}(D_B(e),\mathbb C)$ such that, for every
-    $X\in\MN{D_A(e)}$ and every pair of physical configurations
-    $\sigma,\tau$,
+    there exist $h:D_A(e)=D_B(e)$ and $Z\in\mathrm{GL}(D_B(e),\mathbb C)$ such
+    that for all $X\in\MN{D_A(e)}$ and $\sigma,\tau$,
     \begin{align}
         P_B(W_{\mathrm L})C_A(W_{\mathrm L},e,X;\sigma,\tau)
          & =P_A(W_{\mathrm L})
-        C_B(W_{\mathrm L},e,Z\iota_h(X)Z^{-1};\sigma,\tau).
+        C_B(W_{\mathrm L},e,Z\iota_h(X)Z^{-1};\sigma,\tau),
+        \notag
     \end{align}
-    Here $\iota_h$ identifies the two matrix algebras by $h$, and
-    $P_A(W_{\mathrm L})$ is the product of the dimensions of all bonds
-    outside the window boundary. These products are retained on both
-    sides.
+    where $\iota_h:\MN{D_A(e)}\to\MN{D_B(e)}$ is the reindexing induced by $h$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:peps_staircase_cross_tensor_algebra_isomorphism,
         thm:matrixAlgEquiv_inner_of_fin,
         thm:peps_cross_tensor_realization_coefficients}
-    The Skolem--Noether theorem expresses $F_{AB}(X)$ as $Z\iota_h(X)Z^{-1}$,
-    and substituting this expression into
-    (\ref{eq:peps_cross_tensor_normalized_coefficients}) gives the identity.
+    By the Skolem--Noether theorem
+    (Theorem~\ref{thm:matrixAlgEquiv_inner_of_fin}),
+    $F_{AB}(X)=Z\iota_h(X)Z^{-1}$ for some $Z\in\mathrm{GL}(D_B(e),\mathbb C)$;
+    substituting into (\ref{eq:peps_cross_tensor_normalized_coefficients}) gives
+    the claim.
 \end{proof}

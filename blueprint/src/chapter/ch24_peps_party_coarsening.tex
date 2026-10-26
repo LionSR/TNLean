@@ -1,11 +1,11 @@
 \section{Grouping parties into two sides}
 \label{sec:peps_party_coarsening}
 
-Let $f:P\to Q$ be an arbitrary map of party labels. We group all parties
-with the same image while retaining every register and every operation.
-This is the owner identification used for the affected and exterior
-systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-\texttt{04-compression.tex}, lines 383--427.
+For an arbitrary map $f:P\to Q$ of party labels, we group all parties with
+the same image while retaining every register and operation, providing the
+owner identification for the affected and exterior systems in
+\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
+(\texttt{04-compression.tex}, lines 383--427).
 
 % The two-side result below assumes the explicit internal-source condition.
 % The chronological construction that frees corrected and crossing registers
@@ -23,19 +23,17 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwnerIso_cons_tmul}
     \leanok
     \uses{def:peps_party_registers}
-    If $\ell=((p_1,H_1),\ldots,(p_n,H_n))$ is a register list,
-    let $\ell^f=((f(p_1),H_1),\ldots,(f(p_n),H_n))$.
-    Empty lists and concatenation are preserved. The owner-relabelling isometry
-    $R_{f,\ell}:\mathcal H_\ell\to\mathcal H_{\ell^f}$ is the
-    tensor product of the identities on the original register spaces.
-    On the empty list it is the identity of $\C$, and on an elementary
-    tensor it satisfies
+    For a register list $\ell=((p_1,H_1),\ldots,(p_n,H_n))$ (with no
+    injectivity or finiteness assumption on $f,P,Q$), put
+    $\ell^f=((f(p_1),H_1),\ldots,(f(p_n),H_n))$, preserving empty lists and
+    concatenation. The owner-relabelling isometry
+    $R_{f,\ell}:\mathcal H_\ell\to\mathcal H_{\ell^f}$ acts as $\Id_\C$ on the
+    empty list and satisfies
     \begin{align}
         R_{f,(p,H)\ell}(x\otimes y)
          & =x\otimes R_{f,\ell}y.
         \label{eq:peps_owner_head}
     \end{align}
-    No injectivity or finiteness assumption on $f$, $P$, or $Q$ is imposed.
 \end{definition}
 
 \begin{theorem}[Compatibility with concatenation]
@@ -44,29 +42,22 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwnerIso_append}
     \leanok
     \uses{def:peps_owner_layout}
-    Write $C_{\ell,m}:\mathcal H_{\ell m}\to
-        \mathcal H_\ell\otimes\mathcal H_m$ for the
-    concatenation isometry. Under the identification
-    $(\ell m)^f=\ell^f m^f$, for $x\in\mathcal H_\ell$
-    and $y\in\mathcal H_m$ one has
+    With $C_{\ell,m}:\mathcal H_{\ell m}\to\mathcal H_\ell\otimes\mathcal H_m$
+    the concatenation isometry and $(\ell m)^f=\ell^f m^f$, every
+    $x\in\mathcal H_\ell$ and $y\in\mathcal H_m$ satisfy
     \begin{align}
         R_{f,\ell m}C_{\ell,m}^{-1}(x\otimes y)
          & =C_{\ell^f,m^f}^{-1}
-        (R_{f,\ell}x\otimes R_{f,m}y).
+        (R_{f,\ell}x\otimes R_{f,m}y),
         \label{eq:peps_owner_concatenation}
     \end{align}
-    Equivalently,
-    $R_{f,\ell m}C_{\ell,m}^{-1}
-        =C_{\ell^f,m^f}^{-1}(R_{f,\ell}\otimes R_{f,m})$.
+    or equivalently $R_{f,\ell m}C_{\ell,m}^{-1}=C_{\ell^f,m^f}^{-1}(R_{f,\ell}\otimes R_{f,m})$.
 \end{theorem}
 
 \begin{proof}\leanok
-    By induction on $\ell$, the assertion for the empty list is scalar
-    linearity. For a nonempty list, separating the leading register of a tensor
-    and applying (\ref{eq:peps_owner_head})
-    together with the induction hypothesis on the remaining registers gives
-    the equality, which extends by additivity to arbitrary vectors and yields
-    the operator identity.
+    Induction on $\ell$ using (\ref{eq:peps_owner_head}) gives
+    (\ref{eq:peps_owner_concatenation}) on elementary tensors, and linearity
+    gives the operator identity.
 \end{proof}
 
 \begin{definition}[Sources remaining between distinct owners]
@@ -78,12 +69,10 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.mapOwner_append}
     \leanok
     \uses{def:peps_source_inventory}
-    A source $s=(p,q;U,V;\eta)$ remains between distinct owners
-    exactly when $f(p)\ne f(q)$. Its new record is then
-    $(f(p),f(q);U,V;\eta)$, with the same spaces and vector.
-    For an ordered source list $S$, let $S_f$ be the list of these
-    surviving records in their original order. This operation preserves
-    the empty list and concatenation.
+    A source $s=(p,q;U,V;\eta)$ remains between distinct owners iff
+    $f(p)\ne f(q)$, with new record $(f(p),f(q);U,V;\eta)$. For an ordered
+    source list $S$, let $S_f$ be the sublist of surviving records in their
+    original order, preserving the empty list and concatenation.
 \end{definition}
 
 \begin{theorem}[Surviving pair labels after grouping]
@@ -93,18 +82,15 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.mem_partyPair_mapOwner}
     \leanok
     \uses{def:peps_owner_sources}
-    The unordered pair labels of $S_f$ are obtained by applying $f$
-    to both endpoints of each original pair and removing the diagonal
-    images. Their multiplicities are retained: different original pairs
-    may acquire the same new label. Thus a pair $k$ occurs in $S_f$
-    exactly when it is non-diagonal and is the image of some pair
-    occurring in $S$.
+    The unordered pair labels of $S_f$ are obtained (with multiplicity) by
+    applying $f$ to both endpoints of each pair in $S$ and discarding diagonal
+    images $f(p)=f(q)$; in particular, a pair $k$ occurs in $S_f$ iff $k$ is
+    non-diagonal and $k=\{f(p),f(q)\}$ for some $\{p,q\}$ occurring in $S$.
 \end{theorem}
 
 \begin{proof}\leanok
-    By induction on $S$, a source with endpoints $p,q$ contributes the label
-    $\{f(p),f(q)\}$ precisely when $f(p)\ne f(q)$, and nothing otherwise;
-    concatenation of lists corresponds to concatenation of label lists.
+    By induction on $S$ using Definition~\ref{def:peps_owner_sources}, a
+    source with endpoints $p,q$ contributes $\{f(p),f(q)\}$ iff $f(p)\ne f(q)$.
 \end{proof}
 
 \begin{theorem}[Normalization and the absence of crossing sources]
@@ -113,15 +99,13 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.mapOwner_eq_nil_iff}
     \leanok
     \uses{def:peps_owner_sources}
-    If the vectors of $S$ are normalized, then those of $S_f$ are
-    normalized, and $S_f$ is empty if and only if
-    $f(p)=f(q)$ for the two endpoints of every source in $S$.
+    If the vectors of $S$ are normalized, then those of $S_f$ are normalized,
+    and $S_f$ is empty iff $f(p)=f(q)$ for every source $(p,q;U,V;\eta)$ in $S$.
 \end{theorem}
 
 \begin{proof}\leanok
-    Surviving records have unchanged vectors. A source is removed
-    precisely when its two new owners agree, which proves the second
-    assertion.
+    By Definition~\ref{def:peps_owner_sources}, surviving records keep the
+    same vectors $\eta$, and a record is removed iff $f(p)=f(q)$.
 \end{proof}
 
 \begin{definition}[Preparing an internal pair]
@@ -129,12 +113,10 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \lean{TNLean.Lattice.PartyCircuit.Word.localPairSource}
     \leanok
     \uses{def:peps_party_layout}
-    For $q\in Q$ and $\eta\in U\otimes V$, prepare two fresh
-    registers $U,V$ at the single owner $q$ by the local map
-    $c\mapsto\eta\otimes c$ from $\C$ to
-    $U\otimes(V\otimes\C)$, with the associativity
-    identification. Tensor this map with the identity on all spectator
-    registers.
+    For $q\in Q$ and $\eta\in U\otimes V$, prepare two fresh registers $U,V$
+    at owner $q$ by tensoring the local map $\C\to U\otimes(V\otimes\C)$,
+    $c\mapsto\eta\otimes c$ (under standard associativity) with the identity
+    on all spectator registers.
 \end{definition}
 
 \begin{theorem}[The internal preparation operator]
@@ -143,19 +125,16 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \lean{TNLean.Lattice.PartyCircuit.Word.eval_localPairSource}
     \leanok
     \uses{def:peps_internal_pair_preparation}
-    The operation in Definition~\ref{def:peps_internal_pair_preparation}
-    maps a spectator vector $x$ to $\eta\otimes x$, under tensor-product
-    associativity. If $\|\eta\|=1$, it is an allowed local operation
-    and creates no pair source between distinct owners.
+    The operation of Definition~\ref{def:peps_internal_pair_preparation} maps
+    every spectator vector $x$ to $\eta\otimes x$, and when $\|\eta\|=1$ it is
+    an allowed local operation creating no pair source between distinct owners.
 \end{theorem}
 
 \begin{proof}\leanok
-    The preparation map has norm at most $\|\eta\|$, and the
-    associativity identification is isometric, so tensoring with the
-    spectator identity preserves the contraction bound. Separating
-    an elementary tensor in $\eta$, applying the
-    concatenation isometries, and extending by linearity gives the operator
-    identity.
+    The map $c\mapsto\eta\otimes c$ has norm $\|\eta\|$, so tensoring with the
+    spectator identity and the associativity isometry preserves contractivity
+    when $\|\eta\|=1$ and acts as $x\mapsto\eta\otimes x$ by linearity on
+    elementary tensors of $\eta$.
 \end{proof}
 
 \begin{definition}[Changing the owners of a composition]
@@ -163,16 +142,14 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \lean{TNLean.Lattice.PartyCircuit.Word.mapOwner}
     \leanok
     \uses{def:peps_owner_layout,def:peps_internal_pair_preparation}
-    Let $F:\mathcal H_\ell\to\mathcal H_{\ell'}$ be a
-    composition of local maps, pair preparations, exchanges, and
-    operations beside untouched registers. Its composition $F^f$ on
-    the new owners is defined in the same chronological order.
-    A local map $A:\mathcal H_a\to\mathcal H_b$ becomes
-    $R_{f,b}AR_{f,a}^{-1}$, acting at its new owner. Exchanges and
-    untouched registers retain their original spaces. A pair source
-    retains its vector and spaces; it remains a pair source when its
-    new owners differ, and becomes the internal local preparation when
-    they agree.
+    For a composition $F:\mathcal H_\ell\to\mathcal H_{\ell'}$, define
+    $F^f:\mathcal H_{\ell^f}\to\mathcal H_{(\ell')^f}$ in the same
+    chronological order by replacing each local map $A:\mathcal H_a\to\mathcal H_b$
+    with $R_{f,b}AR_{f,a}^{-1}$, retaining exchanges and untouched registers on
+    their original spaces, keeping each pair source $(p,q;U,V;\eta)$ with
+    $f(p)\ne f(q)$ as $(f(p),f(q);U,V;\eta)$, and replacing each pair source
+    with $f(p)=f(q)$ by the internal preparation of
+    Definition~\ref{def:peps_internal_pair_preparation}.
 \end{definition}
 
 \begin{theorem}[Exact preservation of an allowed composition]
@@ -183,29 +160,22 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \lean{TNLean.Lattice.PartyCircuit.Word.eval_mapOwner_comp}
     \leanok
     \uses{def:peps_owner_composition,def:peps_owner_sources}
-    The operators of $F$ and $F^f$ satisfy
+    Without assuming norm bounds, $F$ and $F^f$ satisfy
     \begin{align}
         R_{f,\ell'}F & =F^fR_{f,\ell}.
         \label{eq:peps_owner_composition}
     \end{align}
-    This identity does not require norm bounds. If $F$ is allowed,
-    then $F^f$ is allowed. Its pair-source list is $S_f$,
-    where $S$ is the pair-source list of $F$.
+    If $F$ is allowed with pair-source list $S$, then $F^f$ is allowed with
+    pair-source list $S_f$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_owner_concatenation,thm:peps_internal_pair_preparation}
-    By induction on the chronological composition, for a local map
-    (\ref{eq:peps_owner_concatenation}) moves the owner identifications
-    through its local and spectator factors, and the conjugating isometries
-    cancel. An internal source has the same preparation operator by
-    Theorem~\ref{thm:peps_internal_pair_preparation}, while a surviving
-    source has the same vector and endpoint spaces. Exchanges and
-    operations beside untouched registers commute with the tensor
-    product of identities, and composition preserves the equality.
-    Isometric conjugation preserves each local contraction bound, and
-    an internal normalized source is an allowed local preparation;
-    the description of the source list follows by the same induction.
+    By induction on $F$, Theorem~\ref{thm:peps_owner_concatenation} intertwines
+    local maps, Theorem~\ref{thm:peps_internal_pair_preparation} intertwines
+    internal pair preparations, and surviving sources, exchanges, and untouched
+    registers commute with $R_{f,\cdot}$, giving (\ref{eq:peps_owner_composition}),
+    preservation of local contraction bounds, and source list $S_f$.
 \end{proof}
 
 \begin{theorem}[Two contractions when every source is internal]
@@ -214,33 +184,28 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \leanok
     % The statement below is an auxiliary result with its internal-source hypothesis explicit.
     \uses{def:peps_owner_composition,def:peps_party_partition}
-    Let $f:P\to\{0,1\}$, and suppose $F$ is allowed. Assume that
-    $f(p)=f(q)$ for the endpoints of every pair source occurring in
-    $F$. Let $\mathcal H_{\ell,+}$ and $\mathcal H_{\ell,-}$ be
-    the memories of the registers with owner images $1$ and $0$,
-    respectively, in their original relative order. Let
-    $J_{f,\ell}:\mathcal H_\ell\to
-        \mathcal H_{\ell,+}\otimes\mathcal H_{\ell,-}$ first
-    change the owner labels and then partition the two owners.
-    There are two allowed compositions $A_+,A_-$ on the respective
-    memories, each containing no pair sources and each having operator
-    norm at most one, such that
+    Let $f:P\to\{0,1\}$, let $F:\mathcal H_\ell\to\mathcal H_{\ell'}$ be an
+    allowed composition with $f(p)=f(q)$ for every pair source $(p,q;U,V;\eta)$
+    in $F$, and let
+    $J_{f,\ell}:\mathcal H_\ell\to\mathcal H_{\ell,+}\otimes\mathcal H_{\ell,-}$
+    compose $R_{f,\ell}$ with the binary partition of
+    Definition~\ref{def:peps_party_partition} into the memories of owner images
+    $1$ and $0$. Then the owner restrictions $A_+,A_-$ of $F^f$ are allowed
+    source-free compositions with $\|A_+\|,\|A_-\|\le1$ and
     \begin{align}
         J_{f,\ell'}F
          & =(A_+\otimes A_-)J_{f,\ell}.
         \label{eq:peps_internal_source_factorization}
     \end{align}
-    The two compositions are the restrictions of $F^f$ to
-    the two owners.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_owner_sources_internal,thm:peps_owner_composition,
         thm:peps_party_binary_factorization,thm:peps_party_restriction}
-    The internal-source condition makes $S_f$ empty, so $F^f$
-    contains no pair preparations while remaining an allowed
-    composition. Applying Theorem~\ref{thm:peps_party_binary_factorization}
-    to its two owners and composing the resulting identity with
-    (\ref{eq:peps_owner_composition}) gives the factorization, and its two
-    restricted compositions are allowed and therefore have norm at most one.
+    By Theorems~\ref{thm:peps_owner_sources_internal} and
+    \ref{thm:peps_owner_composition}, $F^f$ is allowed with empty source list
+    $S_f$; applying Theorems~\ref{thm:peps_party_binary_factorization} and
+    \ref{thm:peps_party_restriction} to $F^f$ and composing with
+    (\ref{eq:peps_owner_composition}) yields
+    (\ref{eq:peps_internal_source_factorization}) with $\|A_+\|,\|A_-\|\le1$.
 \end{proof}

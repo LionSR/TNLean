@@ -6,24 +6,24 @@
 
 The proof of \cite[Lemma~2]{Hastings2007AreaLaw} ends by extending the entropy
 bound of Theorem~\ref{thm:hastings_geometric_tail_entropy} to the Rényi
-entropies $S_\alpha=(1-\alpha)^{-1}\ln\sum_ap_a^\alpha$ of sufficiently large
-order $\alpha$. For $\alpha\ge1$ the Rényi entropy is at most the von Neumann
-entropy, so the content of the extension lies in the orders $0<\alpha<1$ for
-which the relevant geometric series converges.
+entropies $S_\alpha=(1-\alpha)^{-1}\ln\sum_ap_a^\alpha$. Since
+$S_\alpha\le S$ for $\alpha\ge1$, the nontrivial regime is $0<\alpha<1$ with
+convergent geometric ratio $r=(D^2)^{1-\alpha}e^{-2\alpha/\xi'}<1$.
 
 \begin{theorem}[Power sums on a finite set]
     \label{thm:hastings_power_sum_card}
     \lean{TNLean.MPS.AreaLaw.Hastings.sum_rpow_le_card_rpow_mul_sum_rpow}
     \leanok
     Let $p_1,\dots,p_c\ge0$ and $0\le\alpha\le1$. Then
-    \begin{align*}
+    \begin{align}
         \sum_{i=1}^cp_i^\alpha\le c^{1-\alpha}\Bigl(\sum_{i=1}^cp_i\Bigr)^\alpha.
-    \end{align*}
+        \label{eq:hastings_power_sum_card}
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    The map $t\mapsto t^\alpha$ is concave on $[0,\infty)$, so by Jensen's
-    inequality the mean of the $p_i^\alpha$ is at most the $\alpha$-th power of
-    the mean of the $p_i$. Multiplying by $c$ gives the claim.
+    Concavity of $t\mapsto t^\alpha$ on $[0,\infty)$ gives
+    $c^{-1}\sum_{i=1}^cp_i^\alpha\le\bigl(c^{-1}\sum_{i=1}^cp_i\bigr)^\alpha$,
+    and multiplying by $c$ yields~(\ref{eq:hastings_power_sum_card}).
 \end{proof}
 
 \begin{theorem}[Rényi entropy under geometric tail constraints]
@@ -34,41 +34,40 @@ which the relevant geometric series converges.
         TNLean.MPS.AreaLaw.Hastings.renyiEntropy_le_of_scale_tails
     }
     \leanok
-    Let $p_0,\dots,p_{N-1}$ be a probability vector and let $K\ge1$, $D\ge2$
-    and $x\ge0$. Suppose that for every $n\ge0$ the mass of the entries of
-    index at least $KD^{2n}$ is at most $x^{n+1}$. Let $0<\alpha<1$ with
-    $r=(D^2)^{1-\alpha}x^\alpha<1$. Then
+    Let $(p_0,\dots,p_{N-1})$ be a probability vector and let $K\ge1$, $D\ge2$,
+    and $x\ge0$ satisfy $\sum_{a\ge KD^{2n}}p_a\le x^{n+1}$ for all $n\ge0$.
+    For $0<\alpha<1$ with $r=(D^2)^{1-\alpha}x^\alpha<1$,
     \begin{align}
         \frac1{1-\alpha}\ln\sum_ap_a^\alpha\le\ln K-\frac{\ln(1-r)}{1-\alpha}.
         \label{eq:hastings_renyi_tail_entropy}
     \end{align}
-    In particular, with $x=e^{-2/\xi'}$ and $K=kD^{2m+2}$ for $k\ge1$ and a
-    natural number $m$, the bound holds whenever
-    $e^{-2\alpha/\xi'}(D^2)^{1-\alpha}<1$, and reads
-    \begin{align*}
+    In particular, for $x=e^{-2/\xi'}$ and $K=kD^{2m+2}$ ($k\ge1$, $m\in\N$)
+    with $r=(D^2)^{1-\alpha}e^{-2\alpha/\xi'}<1$,
+    \begin{align}
         \frac1{1-\alpha}\ln\sum_ap_a^\alpha\le\ln k+(2m+2)\ln D
         -\frac{\ln\bigl(1-(D^2)^{1-\alpha}e^{-2\alpha/\xi'}\bigr)}{1-\alpha}.
-    \end{align*}
-    This is the extension to Rényi entropies in the proof of
-    \cite[Lemma~2]{Hastings2007AreaLaw}, lines 392--410, with the convergence
-    condition of line 406; it differs from the von Neumann bound only in the
-    term replacing $F(\xi',D)$. The source's maximization at lines 400--402
-    keeps a factor $(1-e^{-2/\xi'})^\alpha$ inside the logarithm, from the
-    exact masses of the saturating blocks; bounding each block mass by its tail
-    drops that factor, so the bound here is slightly weaker but of the same form.
+        \label{eq:hastings_renyi_scale_tails}
+    \end{align}
+    This is the Rényi extension in \cite[Lemma~2, lines 392--410]{Hastings2007AreaLaw}
+    under the convergence condition $r<1$ of line 406, with $F(\xi',D)$ replaced
+    by the last term of~(\ref{eq:hastings_renyi_scale_tails}) (dropping the
+    saturating-block factor $(1-e^{-2/\xi'})^\alpha$ of lines 400--402).
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_power_sum_card}
-    Group the indices into the block $[0,K)$ and the blocks
-    $[KD^{2(n-1)},KD^{2n})$ for $n\ge1$. The $n$-th block has at most $KD^{2n}$
-    entries and mass at most $x^n$: for $n\ge1$ by the tail constraint at
-    $n-1$, and for $n=0$ because the total mass is $1$. Theorem~\ref{thm:hastings_power_sum_card} bounds
-    its contribution to $\sum_ap_a^\alpha$ by
-    $(KD^{2n})^{1-\alpha}x^{n\alpha}=K^{1-\alpha}r^n$, so
-    $\sum_ap_a^\alpha\le K^{1-\alpha}/(1-r)$. Taking logarithms and dividing by
-    $1-\alpha>0$ gives (\ref{eq:hastings_renyi_tail_entropy}). With
-    $x=e^{-2/\xi'}$ one has $x^\alpha=e^{-2\alpha/\xi'}$ and
-    $\ln K=\ln k+(2m+2)\ln D$.
+    Partition $\{0,\dots,N-1\}$ into $B_0=[0,K)$ and
+    $B_n=[KD^{2(n-1)},KD^{2n})$ for $n\ge1$. Each $B_n$ has
+    $|B_n|\le KD^{2n}$ and $\sum_{a\in B_n}p_a\le x^n$. By
+    Theorem~\ref{thm:hastings_power_sum_card},
+    \begin{align}
+        \sum_ap_a^\alpha=\sum_{n\ge0}\sum_{a\in B_n}p_a^\alpha
+        \le\sum_{n\ge0}(KD^{2n})^{1-\alpha}x^{n\alpha}
+        =\frac{K^{1-\alpha}}{1-r},
+        \notag
+    \end{align}
+    and taking $(1-\alpha)^{-1}\ln(\cdot)$ gives~(\ref{eq:hastings_renyi_tail_entropy}).
+    Substituting $x=e^{-2/\xi'}$ and $\ln K=\ln k+(2m+2)\ln D$
+    gives~(\ref{eq:hastings_renyi_scale_tails}).
 \end{proof}
 
 \begin{theorem}[Rényi entropy from mixtures of bounded Schmidt rank]
@@ -76,25 +75,26 @@ which the relevant geometric series converges.
     \lean{TNLean.MPS.AreaLaw.Hastings.renyiEntropy_le_of_schmidtRank_mixtures,
         TNLean.MPS.AreaLaw.Hastings.renyiEntropy_eq_log_sum_eigenvalues₀_rpow}
     \leanok
-    Let $\Psi$ be a unit vector of a bipartite space with reduced density
-    matrix $\rho$ on the first factor, and let $k\ge1$, $D\ge2$, $\xi'>0$ and
-    $c\ge1$. Suppose that at every scale $s$ with $ce^{-2s/\xi'}<1$ some
-    mixture of pure states of Schmidt rank at most $kD^{2s}$, of positive total
-    weight, has normalized overlap with $\Psi$ at least $1-ce^{-2s/\xi'}$. Then for $0<\alpha<1$ with
-    $r=(D^2)^{1-\alpha}e^{-2\alpha/\xi'}<1$,
-    \begin{align*}
+    Let $\Psi$ be a bipartite unit vector with first-factor marginal $\rho$,
+    and let $k\ge1$, $D\ge2$, $\xi'>0$, and $c\ge1$. Suppose that for every
+    $s\in\N$ with $ce^{-2s/\xi'}<1$ there is a positive-weight mixture $\sigma_s$
+    of pure states of Schmidt rank at most $kD^{2s}$ with
+    $(\operatorname{tr}\sigma_s)^{-1}\langle\Psi,\sigma_s\Psi\rangle\ge1-ce^{-2s/\xi'}$.
+    Then for $0<\alpha<1$ with $r=(D^2)^{1-\alpha}e^{-2\alpha/\xi'}<1$,
+    \begin{align}
         S_\alpha(\rho)\le\ln k+\xi'\ln(c)\ln D+4\ln D-\frac{\ln(1-r)}{1-\alpha}.
-    \end{align*}
-    This is the Rényi version of the stage of \cite[Lemma~2]{Hastings2007AreaLaw}
-    for one cut, lines 333--356 and 392--410.
+        \label{eq:hastings_renyi_schmidt_stage}
+    \end{align}
+    This is the single-cut Rényi stage of \cite[Lemma~2, lines 333--356 and
+        392--410]{Hastings2007AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_renyi_tail_entropy, thm:hastings_bootstrap_schmidt_tail}
-    By Theorem~\ref{thm:hastings_bootstrap_schmidt_tail} the eigenvalues of
-    $\rho$ in decreasing order form a probability vector and, for some $m'$,
-    satisfy the tail constraints of Theorem~\ref{thm:hastings_renyi_tail_entropy}
-    at the scales $m'+1+n$. That theorem gives the bound with $(2m'+2)\ln D$, and
-    $2m'<\xi'\ln c+2$.
+    By Theorem~\ref{thm:hastings_bootstrap_schmidt_tail}, the decreasing
+    eigenvalues of $\rho$ satisfy the scale-$m'+1+n$ tail constraints of
+    Theorem~\ref{thm:hastings_renyi_tail_entropy} for some $m'\in\N$ with
+    $2m'<\xi'\ln c+2$, so~(\ref{eq:hastings_renyi_scale_tails}) yields
+    (\ref{eq:hastings_renyi_schmidt_stage}).
 \end{proof}
 
 \begin{theorem}[The Rényi bound from the factorization at one cut]
@@ -104,30 +104,27 @@ which the relevant geometric series converges.
     \leanok
     \uses{def:hastings_factorization_at}
     Let $\Omega$ be a unit vector on a chain of $L$ sites with local dimension
-    $D\ge2$, and suppose that at the cut $j$ and every length $m$ there is an
-    approximate factorization of $|\Omega\rangle\langle\Omega|$ with error
-    $C_1e^{-m/\xi'}$, where $\xi'>0$ and $C_1\ge1$. Let $\rho$ be a mixture of
-    unit trace of pure states of Schmidt rank at most $k\ge1$ across the cut
-    with $\langle\Omega,\rho\Omega\rangle=P>0$. For $0<\alpha<1$ with
-    $r=(D^2)^{1-\alpha}e^{-2\alpha/\xi'}<1$, the Rényi entropy of order
-    $\alpha$ of the first $j$ sites satisfies
-    \begin{align*}
+    $D\ge2$, satisfying Definition~\ref{def:hastings_factorization_at} at cut
+    $j$ and every length $m$ with error $C_1e^{-m/\xi'}$ ($\xi'>0$, $C_1\ge1$).
+    Let $\rho$ be a unit-trace mixture of pure states of Schmidt rank at most
+    $k\ge1$ across $j$ with $P=\langle\Omega,\rho\Omega\rangle>0$. For
+    $0<\alpha<1$ with $r=(D^2)^{1-\alpha}e^{-2\alpha/\xi'}<1$,
+    \begin{align}
         S_\alpha(\rho^0_{1,j})\le\ln k+\xi'\ln\bigl(2C_1^2/P\bigr)\ln D+4\ln D
-        -\frac{\ln(1-r)}{1-\alpha}.
-    \end{align*}
-    For $D=1$ the Rényi entropy of order $0<\alpha<1$ of the first $j$ sites
-    is at most $0$.
+        -\frac{\ln(1-r)}{1-\alpha},
+        \label{eq:hastings_renyi_bootstrap}
+    \end{align}
+    while for $D=1$ and $0<\alpha<1$, $S_\alpha(\rho^0_{1,j})\le0$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_renyi_schmidt_rank_stage,
         thm:hastings_bootstrap_chain_stage}
     As in Theorem~\ref{thm:hastings_bootstrap_chain_stage}, the factorization
-    supplies at every scale $s$ a mixture of Schmidt rank at most $kD^{2s}$
-    with normalized overlap at least $1-(2C_1^2/P)e^{-2s/\xi'}$, and
-    $2C_1^2/P\ge1$. Theorem~\ref{thm:hastings_renyi_schmidt_rank_stage} with
-    $c=2C_1^2/P$ gives the bound. For $D=1$ the reduced density matrix acts on
-    a space of dimension one, so its single eigenvalue is $1$ and
-    $\sum_a\lambda_a^\alpha=1$.
+    gives mixtures of Schmidt rank at most $kD^{2s}$ with normalized overlap at
+    least $1-ce^{-2s/\xi'}$ for $c=2C_1^2/P\ge1$, so
+    Theorem~\ref{thm:hastings_renyi_schmidt_rank_stage} gives
+    (\ref{eq:hastings_renyi_bootstrap}). For $D=1$, $\rho^0_{1,j}$ has
+    single eigenvalue $1$, so $S_\alpha(\rho^0_{1,j})=0$.
 \end{proof}
 
 \begin{theorem}[The Rényi form of the bootstrap lemma]
@@ -135,40 +132,35 @@ which the relevant geometric series converges.
     \lean{TNLean.MPS.AreaLaw.exists_renyiEntropy_le_of_overlap_schmidtRank_mixture}
     \leanok
     \uses{def:chain_model, thm:hastings_lemma1_endpoint}
-    Let $R$ be a range. There is a constant $K\ge1$, depending only on $R$,
-    with the following property. Let $H$ be a Hamiltonian on a chain of $L$
-    sites with local dimension $D$, a sum of terms of range $R$ and norm at
-    most $J\ge0$, whose ground state $\Psi_0$ is unique with gap $\Delta E>0$.
-    Let $\tilde\xi$ be the length of Theorem~\ref{thm:hastings_lemma1_endpoint},
-    and set $\xi'=6\tilde\xi$ and $C_1=K\tilde\xi^3$. Let $0<\alpha<1$ with
-    $r=(D^2)^{1-\alpha}e^{-2\alpha/\xi'}<1$, and let $\rho$ be a mixture of unit
-    trace of pure states of Schmidt rank at most $k\ge1$ across the cut between
-    sites $j$ and $j+1$ with $\langle\Psi_0,\rho\Psi_0\rangle=P>0$. Then
-    \begin{align*}
-        S_\alpha(\rho^0_{1,j})\le\ln k+\xi'\ln\bigl(2C_1^2/P\bigr)\ln D+4\ln D
-        -\frac{\ln(1-r)}{1-\alpha}.
-    \end{align*}
-    This is the Rényi form of \cite[Lemma~2]{Hastings2007AreaLaw},
-    lines 392--410, with the same quantitative restriction as
-    Theorem~\ref{thm:hastings_bootstrap}: the length $\tilde\xi$ comes from the
-    chain Lieb--Robinson estimate with raised velocity and is not shown to be
-    the source's $\max(2v/\Delta E,\xi_C)$ for a Lieb--Robinson pair in the
-    source's sense \cite{gap:hastings07_lemma1_decay_length,
-        gap:hastings07_gaussian_average_exponent}. It is proved here for orders $0<\alpha<1$; order $1$ is the von Neumann
-    entropy of Theorem~\ref{thm:hastings_bootstrap}, and orders $\alpha>1$ are
-    Theorem~\ref{thm:hastings_renyi_bootstrap_above_one}
-    \cite{gap:hastings07_renyi_bootstrap_orders}.
+    For every range $R\in\N$ there is a constant $K\ge1$ depending only on $R$
+    with the following property. Let $H$ be a range-$R$ Hamiltonian on a chain
+    of $L$ sites with local dimension $D$ and term norms at most $J\ge0$, with
+    unique ground state $\Psi_0$ and gap $\Delta E>0$. Let $\tilde\xi$ be the
+    length of Theorem~\ref{thm:hastings_lemma1_endpoint}, and set
+    $\xi'=6\tilde\xi$ and $C_1=K\tilde\xi^3$. For $0<\alpha<1$ with
+    $r=(D^2)^{1-\alpha}e^{-2\alpha/\xi'}<1$ and any unit-trace mixture $\rho$
+    of pure states of Schmidt rank at most $k\ge1$ across cut $j$ with
+    $P=\langle\Psi_0,\rho\Psi_0\rangle>0$, the bound
+    (\ref{eq:hastings_renyi_bootstrap}) holds.
+
+    This is the $0<\alpha<1$ Rényi form of \cite[Lemma~2, lines
+        392--410]{Hastings2007AreaLaw}, with the same $\tilde\xi$ scope restriction
+    as Theorem~\ref{thm:hastings_bootstrap}~\cite{gap:hastings07_lemma1_decay_length,
+        gap:hastings07_gaussian_average_exponent}; $\alpha=1$ is
+    Theorem~\ref{thm:hastings_bootstrap} and $\alpha>1$ is
+    Theorem~\ref{thm:hastings_renyi_bootstrap_above_one}~\cite{gap:hastings07_renyi_bootstrap_orders}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_lemma1_endpoint,
         thm:hastings_renyi_bootstrap_factorization_at,
         thm:hastings_factorization_mono}
-    Theorem~\ref{thm:hastings_lemma1_endpoint} gives a constant $K_0\ge0$ and the
-    factorization with error $K_0\tilde\xi^3e^{-m/(6\tilde\xi)}$ at every cut and
-    length; it also holds with $K=\max(K_0,1)$, and $C_1=K\tilde\xi^3\ge1$
-    since $\tilde\xi\ge20$. Theorem~\ref{thm:hastings_renyi_bootstrap_factorization_at}
-    gives the bound for $D\ge2$ and the value at most $0$ for $D=1$, where the
-    right side is nonnegative.
+    Theorem~\ref{thm:hastings_lemma1_endpoint} and
+    Theorem~\ref{thm:hastings_factorization_mono} provide the factorization at
+    every $(j,m)$ with $K=\max(K_0,1)$ and $C_1=K\tilde\xi^3\ge1$ (as
+    $\tilde\xi\ge20$). Theorem~\ref{thm:hastings_renyi_bootstrap_factorization_at}
+    then yields~(\ref{eq:hastings_renyi_bootstrap}) for $D\ge2$, and
+    $S_\alpha(\rho^0_{1,j})\le0$ (while the right-hand side is nonnegative) for
+    $D=1$.
 \end{proof}
 
 \begin{theorem}[The Rényi form of the bootstrap lemma, orders above one]
@@ -178,23 +170,21 @@ which the relevant geometric series converges.
     \leanok
     \uses{thm:hastings_bootstrap}
     In the setting of Theorem~\ref{thm:hastings_bootstrap}, with the same
-    constant $K$, for every order $\alpha>1$
-    \begin{align*}
+    constant $K$, for every $\alpha>1$,
+    \begin{align}
         S_\alpha(\rho^0_{1,j})\le\ln k+\xi'\ln\bigl(2C_1^2/P\bigr)\ln D+F(\xi',D).
-    \end{align*}
+        \notag
+    \end{align}
     For $\alpha>1$ the convergence condition of
-    \cite[line 406]{Hastings2007AreaLaw} always holds, and the function
-    replacing $F(\xi',D)$ is $F(\xi',D)$ itself; together with
-    Theorem~\ref{thm:hastings_renyi_bootstrap} this covers the orders of
-    \cite[lines 392--410]{Hastings2007AreaLaw}.
+    \cite[line 406]{Hastings2007AreaLaw} holds unconditionally with remainder
+    $F(\xi',D)$; together with Theorem~\ref{thm:hastings_renyi_bootstrap} this
+    covers all orders of \cite[lines 392--410]{Hastings2007AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_bootstrap}
-    For a density matrix with eigenvalues $p_i$ and $\alpha>1$, the concavity of
-    the logarithm with weights $p_i$ gives
-    $\ln\sum_ip_i^\alpha\ge(\alpha-1)\sum_ip_i\ln p_i$, so dividing by
-    $1-\alpha<0$ gives $S_\alpha\le S$ (the bound of Rényi entropies of order
-    above one in the companion quantum-channel
-    volume~\cite[``Rényi entropy of order above one'']{QICLean2026Blueprint}).
-    Theorem~\ref{thm:hastings_bootstrap} bounds $S$.
+    For eigenvalues $(p_i)$ and $\alpha>1$, concavity of $\ln$ with weights
+    $p_i$ gives $\ln\sum_ip_i^\alpha\ge(\alpha-1)\sum_ip_i\ln p_i$; dividing by
+    $1-\alpha<0$ yields $S_\alpha(\rho^0_{1,j})\le S(\rho^0_{1,j})$
+    \cite[``Rényi entropy of order above one'']{QICLean2026Blueprint}, and
+    Theorem~\ref{thm:hastings_bootstrap} bounds $S(\rho^0_{1,j})$.
 \end{proof}

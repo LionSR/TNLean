@@ -1,37 +1,34 @@
 \section{Entropy scaling and efficient approximation}
 
 For a unit vector $\psi_N\in(\mathbb C^q)^{\otimes N}$, write
-$\rho_{N,k}$ for its marginal on the first $k$ sites. All logarithms in
-this section are natural. The norm $\|\cdot\|_1$ is the full trace norm.
+$\rho_{N,k}$ for its marginal on the first $k$ sites. All logarithms are
+natural, and $\|\cdot\|_1$ denotes the trace norm.
 
 \begin{definition}[Efficient approximation by matrix product states]
     \label{def:efficient_mps_approximation}
     \lean{TNLean.MPS.AreaLaw.IsEfficientlyApproximableByMPS}
     \leanok
     \uses{def:chain_open_mps}
-    Let $\mathcal N\subseteq\mathbb N$ and let $(\psi_N)_{N\in\mathcal N}$
-    be a family of vectors. Following~\cite{Schuch2008EntropyScaling},
-    the family is efficiently approximable by matrix product states if, for
-    every $\delta>0$, there are $C_\delta>0$ and $m_\delta\in\mathbb N$
-    such that each $N\in\mathcal N$ admits a matrix product vector
-    $\phi_N$ with bond dimension at most $D_N$ satisfying
+    Following~\cite{Schuch2008EntropyScaling}, a family
+    $(\psi_N)_{N\in\mathcal N}$ ($\mathcal N\subseteq\mathbb N$) is
+    \emph{efficiently approximable by matrix product states} if for every
+    $\delta>0$ there exist $C_\delta>0$ and $m_\delta\in\mathbb N$ such that
+    each $N\in\mathcal N$ admits an (unnormalized) MPS $\phi_N$ of bond
+    dimension at most $D_N$ with
     \begin{align}
         D_N                                    & \le C_\delta(N+1)^{m_\delta}, &
         \bigl\||\psi_N\rangle\langle\psi_N|
         -|\phi_N\rangle\langle\phi_N|\bigr\|_1 & \le\delta.
         \label{eq:efficient_mps_approximation}
     \end{align}
-    The approximants need not be normalized. No relation between vectors at
-    different lengths is required.
 \end{definition}
 
 \begin{theorem}[An entropy threshold for the discarded weight]
     \label{thm:renyi_entropy_tail_threshold}
     \lean{TNLean.MPS.AreaLaw.one_sub_kyFanNorm_le_of_renyiEntropy_le}
     \leanok
-    Let $\rho$ be a density matrix, $0<\alpha<1$, $D\ge1$, and $T>0$.
-    Write $\tau_D(\rho)$ for the sum of its eigenvalues beyond the $D$
-    largest, counting multiplicity. If
+    For a density matrix $\rho$, $0<\alpha<1$, $D\ge1$, $T>0$, and tail weight
+    $\tau_D(\rho)=1-\|\rho\|_{(D)}$, if
     \begin{align}
         S_\alpha(\rho)\le
         \log\frac{D}{1-\alpha}+\frac{\alpha}{1-\alpha}\log T,
@@ -41,8 +38,8 @@ this section are natural. The norm $\|\cdot\|_1$ is the full trace norm.
 \end{theorem}
 \begin{proof}
     \leanok
-    The assertion is immediate when the tail is zero. Otherwise,
-    Lemma~2 of~\cite{VerstraeteCirac2006Faithfully} gives
+    For $\tau_D(\rho)>0$, Lemma~2 of~\cite{VerstraeteCirac2006Faithfully} and
+    (\ref{eq:renyi_tail_threshold}) give
     \begin{align}
         \log\tau_D(\rho)
         \le\frac{1-\alpha}{\alpha}
@@ -50,7 +47,6 @@ this section are natural. The norm $\|\cdot\|_1$ is the full trace norm.
         \le\log T.
         \label{eq:renyi_tail_log_bound}
     \end{align}
-    Exponentiating~(\ref{eq:renyi_tail_log_bound}) proves the claim.
 \end{proof}
 
 \begin{theorem}[Normalized approximation on a finite chain]
@@ -58,36 +54,34 @@ this section are natural. The norm $\|\cdot\|_1$ is the full trace norm.
     \lean{TNLean.MPS.AreaLaw.exists_normalized_isOpenMPS_of_renyiEntropy_le}
     \leanok
     \uses{def:chain_open_mps}
-    Let $\psi_N$ be a unit vector, $0<\alpha<1$, $D\ge1$, and
-    $0<\delta\le1$. Suppose every internal prefix marginal satisfies
+    Let $\|\psi_N\|=1$, $0<\alpha<1$, $D\ge1$, and $0<\delta\le1$. If for every
+    $0<k<N$,
     \begin{align}
         S_\alpha(\rho_{N,k})\le
         \log\frac{D}{1-\alpha}
-        +\frac{\alpha}{1-\alpha}\log\frac{\delta^2}{16(N+1)}.
+        +\frac{\alpha}{1-\alpha}\log\frac{\delta^2}{16(N+1)},
         \label{eq:renyi_finite_entropy_threshold}
     \end{align}
-    There is a unit matrix product vector $\phi_N$ of bond dimension at
-    most $D$ whose pure density matrix differs from that of $\psi_N$
-    by at most $\delta$ in full trace norm.
+    then there exists a unit MPS $\phi_N$ of bond dimension at most $D$ with
+    $\||\psi_N\rangle\langle\psi_N|-|\phi_N\rangle\langle\phi_N|\|_1\le\delta$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:renyi_entropy_tail_threshold,thm:chain_sequential_truncation_eigen,
         thm:chain_sequential_truncation_sq}
-    By~(\ref{eq:renyi_finite_entropy_threshold}), each discarded weight is
-    at most $\delta^2/[16(N+1)]$.
-    Squared-error sequential truncation gives a matrix product vector $\Phi$
-    with $\|\Phi-\psi_N\|^2\le\delta^2/16$. In particular $\Phi\ne0$.
-    Set $\phi_N=\Phi/\|\Phi\|$. Scaling preserves the bond bound, and
+    By Theorem~\ref{thm:renyi_entropy_tail_threshold} and
+    (\ref{eq:renyi_finite_entropy_threshold}), $\tau_D(\rho_{N,k})\le\delta^2/[16(N+1)]$.
+    Theorems~\ref{thm:chain_sequential_truncation_eigen}
+    and~\ref{thm:chain_sequential_truncation_sq} give an MPS $\Phi\ne0$ with
+    $\|\Phi-\psi_N\|^2\le\delta^2/16$. Setting $\phi_N=\Phi/\|\Phi\|$ yields
     \begin{align}
         \|\phi_N-\psi_N\|
          & \le |1-\|\Phi\||+\|\Phi-\psi_N\|
-        \le2\|\Phi-\psi_N\|\le\delta/2.
+        \le2\|\Phi-\psi_N\|\le\delta/2,
         \label{eq:renyi_normalized_vector_error}
     \end{align}
-    The full trace norm of the difference of two unit pure densities is
-    at most twice the distance between their vectors,
-    so~(\ref{eq:renyi_normalized_vector_error}) gives the claim.
+    and $\||\psi_N\rangle\langle\psi_N|-|\phi_N\rangle\langle\phi_N|\|_1
+        \le2\|\phi_N-\psi_N\|\le\delta$.
 \end{proof}
 
 \begin{theorem}[Exact representation from marginal ranks]
@@ -95,16 +89,15 @@ this section are natural. The norm $\|\cdot\|_1$ is the full trace norm.
     \lean{TNLean.MPS.AreaLaw.isOpenMPS_of_regionState_rank_le}
     \leanok
     \uses{def:chain_open_mps}
-    If every internal prefix marginal of a unit vector $\psi_N$ has rank
-    at most $D$, then $\psi_N$ is a matrix product vector of bond dimension
-    at most $D$. Empty and one-site chains have no internal rank condition.
+    If $\|\psi_N\|=1$ and $\operatorname{rank}\rho_{N,k}\le D$ for every
+    $0<k<N$, then $\psi_N$ is an MPS of bond dimension at most $D$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:chain_sequential_truncation_eigen,thm:chain_sequential_truncation_sq}
-    All discarded spectral weights vanish. The squared-error bound for
-    sequential truncation is therefore zero, so the truncated vector
-    equals $\psi_N$.
+    Since $\tau_D(\rho_{N,k})=0$ for all $0<k<N$, sequential truncation
+    (Theorems~\ref{thm:chain_sequential_truncation_eigen}
+    and~\ref{thm:chain_sequential_truncation_sq}) gives $\|\Phi-\psi_N\|^2=0$.
 \end{proof}
 
 \begin{theorem}[Logarithmic R\'enyi entropy implies efficient approximation]
@@ -112,20 +105,16 @@ this section are natural. The norm $\|\cdot\|_1$ is the full trace norm.
     \lean{TNLean.MPS.AreaLaw.isEfficientlyApproximableByMPS_of_renyiEntropy_le}
     \leanok
     \uses{def:efficient_mps_approximation}
-    Let $(\psi_N)_{N\in\mathcal N}$ be a family of unit vectors. Suppose
-    there are $0\le\alpha<1$, $c\ge0$, and $c'\in\mathbb R$, independent
-    of $N$, such that every internal prefix marginal satisfies
-    $S_\alpha(\rho_{N,k})\le c\log N+c'$.
-    Then the family is efficiently approximable by matrix product states.
-    In particular, this proves the assertion
-    of~\cite{Schuch2008EntropyScaling}, which assumes the bound for
-    all reduced blocks and positive $c,c'$.
+    If $(\psi_N)_{N\in\mathcal N}$ are unit vectors satisfying
+    $S_\alpha(\rho_{N,k})\le c\log N+c'$ for all $0<k<N$, with $0\le\alpha<1$,
+    $c\ge0$, and $c'\in\mathbb R$ independent of $N$, then
+    $(\psi_N)_{N\in\mathcal N}$ is efficiently approximable by MPS
+    \cite{Schuch2008EntropyScaling}.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:renyi_finite_mps_approximation,thm:renyi_zero_exact_mps}
-    Fix $\delta>0$ and put $\varepsilon=\min(\delta,1)$ and
-    $t=\alpha/(1-\alpha)$. Choose
+    For $\delta>0$, set $\varepsilon=\min(\delta,1)$, $t=\alpha/(1-\alpha)$, and
     \begin{align}
         m                                   & =\lceil c+t\rceil, &
         K                                   & =1+\left\lceil
@@ -134,49 +123,39 @@ this section are natural. The norm $\|\cdot\|_1$ is the full trace norm.
         D_N                                 & =K(N+1)^m.
         \label{eq:renyi_family_parameters}
     \end{align}
-    The choices in~(\ref{eq:renyi_family_parameters}) imply
+    Then (\ref{eq:renyi_family_parameters}) implies
     \begin{align}
         c\log(N+1)+c'\le
         \log\frac{D_N}{1-\alpha}
         +t\log\frac{\varepsilon^2}{16(N+1)}.
         \label{eq:renyi_family_entropy_threshold}
     \end{align}
-    If an internal cut exists, then $N>0$ and
-    $c\log N\le c\log(N+1)$. For $0<\alpha<1$, the finite-chain theorem
-    together with~(\ref{eq:renyi_family_entropy_threshold}) gives the required
-    normalized approximant with error at most
-    $\varepsilon\le\delta$. For $\alpha=0$, the entropy is the logarithm
-    of the rank. The same threshold yields rank at most $D_N$ at every
-    internal cut, and the exact-representation theorem applies.
+    Apply Theorem~\ref{thm:renyi_finite_mps_approximation} for $0<\alpha<1$ and
+    Theorem~\ref{thm:renyi_zero_exact_mps} for $\alpha=0$ (where
+    $S_0(\rho_{N,k})=\log\operatorname{rank}\rho_{N,k}\le\log D_N$).
 \end{proof}
 
 \begin{theorem}[Rényi lower bound at a chain cut]
     \label{thm:chain_cut_renyi_approximation_lower_bound}
     \lean{TNLean.MPS.AreaLaw.IsOpenMPS.renyiEntropy_leftBlock_add_log_error_le_log}
     \leanok
-    Let $\psi$ be a unit vector on a chain of $L$ sites, and let $\phi$ be an
-    open-boundary matrix product state of bond dimension at most $D$.
-    The vector $\phi$ need not be normalized. Suppose $0<k<L$, $\alpha>1$,
-    $\delta<1$, and
-    $\lVert\ketbra{\psi}{\psi}-\ketbra{\phi}{\phi}\rVert_1\le\delta$.
-    If $\rho_k$ is the reduced density matrix of $\psi$ on the first $k$ sites,
-    then
+    Let $\|\psi\|=1$ on $L$ sites, $\phi$ be an (unnormalized) open-boundary MPS
+    of bond dimension at most $D$, $0<k<L$, $\alpha>1$, $\delta<1$, and
+    $\lVert\ketbra{\psi}{\psi}-\ketbra{\phi}{\phi}\rVert_1\le\delta$. For
+    $\rho_k=\operatorname{tr}_{\{k,\dots,L-1\}}\ketbra{\psi}{\psi}$,
     \begin{align}
         \label{eq:chain_cut_renyi_approximation_lower_bound}
-        S_\alpha(\rho_k)+\frac{\alpha}{\alpha-1}\log(1-\delta) & \le\log D.
+        S_\alpha(\rho_k)+\frac{\alpha}{\alpha-1}\log(1-\delta) & \le\log D
     \end{align}
-    This is the prefix form of the Rényi approximation lower bound
-    in~\cite{Schuch2008EntropyScaling}, with the sign correction documented
-    in~\cite{gap:swvc08_renyi_bond_dimension_sign}.
+    \cite{Schuch2008EntropyScaling,gap:swvc08_renyi_bond_dimension_sign}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_reduced_state_rank_error}
-    The reduced matrix of $\phi$ has rank at most $D$, and partial trace
-    contracts the full trace norm. Apply the finite-dimensional Rényi
-    approximation inequality to the two reduced matrices. Only the target
-    matrix has trace one, which follows from $\lVert\psi\rVert=1$.
+    By Theorem~\ref{thm:chain_reduced_state_rank_error}, the prefix marginal of
+    $\phi$ has rank at most $D$ and trace-norm distance at most $\delta$ from
+    $\rho_k$; the finite-dimensional Rényi approximation inequality gives
+    (\ref{eq:chain_cut_renyi_approximation_lower_bound}).
 \end{proof}
-
 
 \begin{theorem}[Rényi lower bound on an arbitrary contiguous block]
     \label{thm:chain_block_renyi_approximation_lower_bound}
@@ -185,235 +164,178 @@ this section are natural. The norm $\|\cdot\|_1$ is the full trace norm.
         TNLean.MPS.AreaLaw.IsOpenMPS.rank_regionState_sdiff_leftBlock_le_max_sq,
         TNLean.MPS.AreaLaw.IsOpenMPS.renyiEntropy_sdiff_leftBlock_add_log_error_le_two_log}
     \leanok
-    Let $\psi$ be a unit vector on a finite chain, and let $\phi$ be an
-    open-boundary MPS of bond dimension at most $D$, without normalization.
-    Suppose $\alpha>1$, $\delta<1$, and
-    $\lVert\ketbra{\psi}{\psi}-\ketbra{\phi}{\phi}\rVert_1\le\delta$.
-    For every contiguous block $B$,
+    Let $\|\psi\|=1$, $\phi$ be an (unnormalized) open-boundary MPS of bond
+    dimension at most $D\ge0$ (with $\log0=0$), $\alpha>1$, $\delta<1$, and
+    $\lVert\ketbra{\psi}{\psi}-\ketbra{\phi}{\phi}\rVert_1\le\delta$. For every
+    contiguous block $B$,
     \begin{align}
         \label{eq:chain_block_renyi_approximation_lower_bound}
         S_\alpha(\rho_{\psi,B})
-        +\frac{\alpha}{\alpha-1}\log(1-\delta) & \le2\log D.
+        +\frac{\alpha}{\alpha-1}\log(1-\delta) & \le2\log D
     \end{align}
-    Empty blocks and the whole chain are included. The zero bond budget is
-    included with the convention $\log0=0$.
-    The factor two corrects the single-bond expression for interior blocks
-    in~\cite{Schuch2008EntropyScaling}; see
-    \cite{gap:swvc08_interior_block_bond_rank}.
+    \cite{Schuch2008EntropyScaling,gap:swvc08_interior_block_bond_rank}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_reduced_state_rank_error}
-    Write $B=T\setminus R$ for nested prefixes. The complement is the disjoint
-    union $R\cup T^c$. Equality of complementary ranks and the product bound
-    for ranks on disjoint unions give
+    Writing $B=T\setminus R$ for nested prefixes $R\subseteq T$, complementary
+    rank equality and submultiplicativity on $B^c=R\sqcup T^c$ give
     \begin{align}
         \label{eq:chain_block_rank_product}
         \operatorname{rank}\rho_{\phi,B}
          & \le\operatorname{rank}\rho_{\phi,R}
-        \operatorname{rank}\rho_{\phi,T}.
+        \operatorname{rank}\rho_{\phi,T}\le\max(1,D)^2.
     \end{align}
-    At an internal cut each rank is at most $D$; at an endpoint it is at most
-    one. Thus the block rank is at most $\max(1,D)^2$, including chains of
-    length zero or one. Regional reduction contracts the full trace-norm
-    error, so the finite-dimensional Rényi inequality bounds the left side
-    by $\log(\max(1,D)^2)$. For $D>0$ this is $2\log D$; for $D=0$ both
-    expressions vanish under the stated logarithm convention.
+    Contracting the trace-norm error to $B$ and applying the finite-dimensional
+    Rényi inequality yields $\log(\max(1,D)^2)=2\log D$.
 \end{proof}
-
 
 \begin{theorem}[Logarithmic Rényi bound for efficiently approximable families]
     \label{thm:efficient_mps_renyi_logarithmic_bound}
     \lean{TNLean.MPS.AreaLaw.IsEfficientlyApproximableByMPS.exists_logarithmic_renyi_bound,
         TNLean.MPS.AreaLaw.not_isEfficientlyApproximableByMPS_of_superlogarithmic_renyi}
     \leanok
-    Let $(\psi_N)_{N\in\mathcal N}$ be unit vectors on chains indexed by a set
-    $\mathcal N\subseteq\mathbb N$ of lengths. Suppose this family admits
-    efficient approximation by MPS, in the full trace norm. Fix $\alpha>1$
-    and a contiguous block $B_N$ in each chain. Then there are $K\in\mathbb R$
-    and $m\in\mathbb N$, independent of $N$, such that
+    If $(\psi_N)_{N\in\mathcal N}$ is efficiently approximable by MPS, then for
+    every $\alpha>1$ and contiguous blocks $B_N$ there exist $K\in\mathbb R$ and
+    $m\in\mathbb N$ independent of $N$ such that
     \begin{align}
         \label{eq:efficient_mps_renyi_logarithmic_bound}
         S_\alpha(\rho_{N,B_N}) & \le K+m\log(N+1)
         \qquad(N\in\mathcal N).
     \end{align}
-    Consequently, absence of any such uniform logarithmic bound rules out
-    efficient approximation. No consistency between chain lengths is assumed,
-    and the approximating vectors need not be normalized.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_block_renyi_approximation_lower_bound}
-    Fix accuracy $\delta=1/2$. The polynomial bond bound has the form
-    $D_N\le C(N+1)^r$ with $C>0$ and $r\in\mathbb N$. The finite-chain
-    inequality gives
+    Taking $\delta=1/2$ and $D_N\le C(N+1)^r$ in
+    (\ref{eq:chain_block_renyi_approximation_lower_bound}) gives
     \begin{align}
         \label{eq:efficient_mps_renyi_fixed_accuracy}
         S_\alpha(\rho_{N,B_N})
          & \le2|\log C|+2r\log(N+1)
         -\frac{\alpha}{\alpha-1}\log(1/2).
     \end{align}
-    For $D_N>0$, take logarithms of the bond bound; for $D_N=0$, the same
-    estimate follows from $\log0=0$ and nonnegativity of the right side.
-    The constants are uniform in $N$.
 \end{proof}
 
 \begin{theorem}[Power-law Rényi obstruction]
     \label{thm:mps_renyi_power_growth_obstruction}
     \lean{TNLean.MPS.AreaLaw.not_isEfficientlyApproximableByMPS_of_renyi_power_growth}
     \leanok
-    Let $\mathcal N\subseteq\mathbb N$ be infinite, and let
-    $(\psi_N)_{N\in\mathcal N}$ be unit vectors on chains of length $N$.
-    Fix $\alpha>1$. Suppose there are $c,\kappa,\eta>0$ and contiguous blocks
-    $B_N$ such that, for all sufficiently large $N\in\mathcal N$,
+    Let $\mathcal N\subseteq\mathbb N$ be infinite, $\alpha>1$, and
+    $c,\kappa,\eta>0$. If contiguous blocks $B_N$ satisfy, for all sufficiently
+    large $N\in\mathcal N$,
     \begin{align}
         \label{eq:mps_renyi_power_growth_hypotheses}
         |B_N| & \ge\eta N,
-              & S_\alpha(\rho_{N,B_N}) & \ge c|B_N|^\kappa.
+              & S_\alpha(\rho_{N,B_N}) & \ge c|B_N|^\kappa,
     \end{align}
-    Then the family cannot be efficiently approximated by MPS.
-    This is the Rényi entropy obstruction in
-    \cite{Schuch2008EntropyScaling}, source lines 309--315, including
-    arbitrary permitted chain lengths and finitely many exceptional lengths.
+    then $(\psi_N)_{N\in\mathcal N}$ is not efficiently approximable by MPS
+    \cite[lines 309--315]{Schuch2008EntropyScaling}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:efficient_mps_renyi_logarithmic_bound}
-    For $N\ge1$, the block-size bound implies
-    $|B_N|\ge(\eta/2)(N+1)$. Thus the entropy is at least
-    $c(\eta/2)^\kappa(N+1)^\kappa$ for all sufficiently large permitted
-    lengths. Every function $K+m\log x$ is eventually smaller than a positive
-    multiple of $x^\kappa$, since $\log x=o(x^\kappa)$ when $\kappa>0$.
-    An infinite set of natural lengths is unbounded, so the logarithmic bound
-    from efficient approximation gives a contradiction.
+    For $N\ge1$, (\ref{eq:mps_renyi_power_growth_hypotheses}) gives
+    $S_\alpha(\rho_{N,B_N})\ge c(\eta/2)^\kappa(N+1)^\kappa$, which contradicts
+    (\ref{eq:efficient_mps_renyi_logarithmic_bound}) as $N\to\infty$ since
+    $\log(N+1)=o((N+1)^\kappa)$.
 \end{proof}
 
 \begin{theorem}[Regional entropy from a spectral tail]
     \label{thm:chain_von_neumann_spectral_tail}
     \lean{TNLean.MPS.AreaLaw.regionEntropy_le_log_rank_add_spectral_tail}
     \leanok
-    Let $\psi$ be a unit vector on a chain of local dimension $q$, and let
-    $R$ be any region. Suppose that the mass outside the first $D$ ordered
-    eigenvalues of $\rho_R$ is at most $\varepsilon$. Then
+    For $\|\psi\|=1$ on a chain of local dimension $q$ and any region $R$, if
+    $\tau_D(\rho_R)\le\varepsilon$ ($D\ge0$ with $\log0=0$), then
     \begin{align}
         \label{eq:chain_von_neumann_spectral_tail}
-        S_\psi(R) & \le\log D+\varepsilon |R|\log q+\log2.
+        S_\psi(R) & \le\log D+\varepsilon |R|\log q+\log2
     \end{align}
-    The budget $D$ may be zero or exceed the regional dimension, with
-    $\log0=0$ and empty tails equal to zero.
+    \cite[lines 278--305]{Schuch2008EntropyScaling}.
 \end{theorem}
 \begin{proof}\leanok
-    The regional configuration space has dimension $q^{|R|}$. Apply the
-    finite spectral-concentration entropy estimate of
-    \cite[``Spectral concentration and von Neumann entropy]{QICLean2026Blueprint}
-    and use
-    $\log(q^{|R|})=|R|\log q$.
+    Apply the spectral-concentration entropy bound of
+    \cite[``Spectral concentration and von Neumann entropy'']{QICLean2026Blueprint}
+    on $\dim\mathcal H_R=q^{|R|}$.
 \end{proof}
-
-This is an auxiliary implication for the entropy obstruction in
-\cite{Schuch2008EntropyScaling}, lines 278--305 of the source.
-It assumes the spectral-tail estimate rather than deducing it from an
-approximation error. A tail bound $\varepsilon\le\delta/2$ yields the
-half-error coefficient. The rank budget is separate from an MPS bond
-bound: an interior block has two boundaries and generally uses the square
-of that bound.
 
 \begin{theorem}[Single-boundary entropy bound at small approximation error]
     \label{thm:chain_von_neumann_prefix_error}
     \lean{TNLean.MPS.AreaLaw.IsOpenMPS.regionEntropy_leftBlock_le_log_add_half_error}
     \leanok
-    Let $\psi$ be a unit vector on a chain of local dimension $q$ and let
-    $\phi$ be an open-boundary MPS of bond dimension at most $D$. Suppose
-    that the full trace error between their rank-one matrices is at most
-    $\delta<1$. For every prefix $R$,
+    Let $\|\psi\|=1$ on a chain of local dimension $q$ and $\phi$ be an
+    (unnormalized) open-boundary MPS of bond dimension at most $D\ge0$ with
+    $\|\ketbra{\psi}{\psi}-\ketbra{\phi}{\phi}\|_1\le\delta<1$. For every prefix
+    $R$,
     \begin{align}
         \label{eq:chain_von_neumann_prefix_error}
         S_\psi(R) & \le\log D+\frac{\delta}{2}|R|\log q+\log2.
     \end{align}
-    The approximant $\phi$ need not be normalized. Empty and full prefixes,
-    and chains of length zero or one, are included, with $\log0=0$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_reduced_state_rank_error,thm:chain_von_neumann_spectral_tail}
-    The approximant's prefix reduction has rank at most $\max(1,D)$.
-    Apply the half-error marginal-tail theorem of
+    Since $\operatorname{rank}\rho_{\phi,R}\le\max(1,D)$, the half-error
+    marginal-tail bound of
     \cite[``Discarded marginal spectrum at small pure-state error'']{QICLean2026Blueprint}
-    and the regional spectral-concentration estimate. Finally,
-    $\log\max(1,D)=\log D$ for an integer $D\ge0$ under the stated convention.
+    gives $\tau_{\max(1,D)}(\rho_{\psi,R})\le\delta/2$; apply
+    (\ref{eq:chain_von_neumann_spectral_tail}) with $\log\max(1,D)=\log D$.
 \end{proof}
 
 \begin{theorem}[Two-boundary entropy bound at small approximation error]
     \label{thm:chain_von_neumann_block_error}
     \lean{TNLean.MPS.AreaLaw.IsOpenMPS.regionEntropy_sdiff_leftBlock_le_two_log_add_half_error}
     \leanok
-    Under the same hypotheses, every contiguous block $R$ satisfies
+    Under the hypotheses of Theorem~\ref{thm:chain_von_neumann_prefix_error},
+    every contiguous block $R$ satisfies
     \begin{align}
         \label{eq:chain_von_neumann_block_error}
-        S_\psi(R) & \le2\log D+\frac{\delta}{2}|R|\log q+\log2.
+        S_\psi(R) & \le2\log D+\frac{\delta}{2}|R|\log q+\log2
     \end{align}
-    Empty blocks, boundary blocks, whole chains, and chains of length zero
-    or one are included.
+    \cite[lines 269--305]{Schuch2008EntropyScaling},
+    \cite{gap:swvc08_von_neumann_error_range,gap:swvc08_interior_block_bond_rank}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_von_neumann_spectral_tail,thm:chain_block_renyi_approximation_lower_bound}
-    The approximant's block reduction has rank at most $\max(1,D)^2$.
-    The same half-error spectral-tail estimate applies. Its logarithmic
-    rank contribution is $\log(\max(1,D)^2)=2\log D$.
+    By (\ref{eq:chain_block_rank_product}),
+    $\operatorname{rank}\rho_{\phi,R}\le\max(1,D)^2$; apply the half-error
+    marginal-tail bound and (\ref{eq:chain_von_neumann_spectral_tail}) with
+    $\log(\max(1,D)^2)=2\log D$.
 \end{proof}
-
-These are the corrected small-error forms of the entropy estimate in
-\cite{Schuch2008EntropyScaling}, lines 269--305 of the source.
-The range correction is documented in
-\cite{gap:swvc08_von_neumann_error_range}; the two-boundary rank correction
-is documented in \cite{gap:swvc08_interior_block_bond_rank}.
-The unrestricted printed entropy statement is not asserted here.
 
 \begin{theorem}[Arbitrarily small linear entropy bounds]
     \label{thm:efficient_mps_von_neumann_bound}
     \lean{TNLean.MPS.AreaLaw.IsEfficientlyApproximableByMPS.exists_vonNeumann_bound}
     \leanok
-    Let $(\psi_N)$ be a family of unit chain vectors of fixed local dimension,
-    indexed by any set of lengths, and let $R_N$ be chosen contiguous blocks.
-    If the family is efficiently approximable by MPS, then for every
-    $\varepsilon>0$ there are $K\in\mathbb R$ and $m\in\mathbb N$ such that
+    If $(\psi_N)_{N\in\mathcal N}$ is efficiently approximable by MPS and $R_N$
+    are contiguous blocks, then for every $\varepsilon>0$ there exist
+    $K\in\mathbb R$ and $m\in\mathbb N$ such that for all $N\in\mathcal N$,
     \begin{align}
         \label{eq:efficient_mps_von_neumann_bound}
-        S_{\psi_N}(R_N) & \le K+m\log(N+1)+\varepsilon N
+        S_{\psi_N}(R_N) & \le K+m\log(N+1)+\varepsilon N.
     \end{align}
-    for every permitted length $N$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_von_neumann_block_error}
-    Choose the approximation accuracy
-    $\delta=\min(1/2,\varepsilon/(\log q+1))$.
-    Then $0<\delta<1$ and $(\delta/2)\log q\le\varepsilon$.
-    The polynomial bond bound gives
-    $\log D_N\le|\log C|+m_0\log(N+1)$, including $D_N=0$ under
-    $\log0=0$. Apply the block entropy bound and $|R_N|\le N$.
+    Apply (\ref{eq:chain_von_neumann_block_error}) with
+    $\delta=\min(1/2,\varepsilon/(\log q+1))$, $D_N\le C_\delta(N+1)^{m_\delta}$,
+    and $|R_N|\le N$.
 \end{proof}
 
 \begin{theorem}[Linear von Neumann entropy obstructs efficient approximation]
     \label{thm:mps_linear_von_neumann_obstruction}
     \lean{TNLean.MPS.AreaLaw.not_isEfficientlyApproximableByMPS_of_linear_vonNeumann_growth}
     \leanok
-    Let $(\psi_N)$ be a family of unit vectors indexed by an infinite set of
-    chain lengths. Suppose that there are constants $c,\eta>0$ and contiguous
-    blocks $R_N$ such that, for all sufficiently large permitted lengths,
+    Let $\mathcal N\subseteq\mathbb N$ be infinite and $c,\eta>0$. If contiguous
+    blocks $R_N$ satisfy, for all sufficiently large $N\in\mathcal N$,
     \begin{align}
         \label{eq:mps_linear_von_neumann_obstruction_hypotheses}
         |R_N| & \ge\eta N,
-              & S_{\psi_N}(R_N) & \ge c|R_N|.
+              & S_{\psi_N}(R_N) & \ge c|R_N|,
     \end{align}
-    Then the family is not efficiently approximable by MPS.
-    No consistency between different lengths is assumed.
+    then $(\psi_N)_{N\in\mathcal N}$ is not efficiently approximable by MPS
+    \cite[lines 278--305]{Schuch2008EntropyScaling},
+    \cite{gap:swvc08_von_neumann_error_range,gap:swvc08_interior_block_bond_rank}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:efficient_mps_von_neumann_bound}
-    Efficient approximation, with $\varepsilon=c\eta/2$, would give
-    $c\eta N\le K+m\log(N+1)+(c\eta/2)N$.
-    Since $\log x=o(x)$, this is impossible for sufficiently large $N$.
-    An infinite set of natural lengths is unbounded.
+    Choosing $\varepsilon=c\eta/2$ in (\ref{eq:efficient_mps_von_neumann_bound})
+    against (\ref{eq:mps_linear_von_neumann_obstruction_hypotheses}) gives
+    $(c\eta/2)N\le K+m\log(N+1)$, impossible as $N\to\infty$.
 \end{proof}
-
-This proves the qualitative obstruction discussed in
-\cite{Schuch2008EntropyScaling}, lines 278--305 of the source, using the
-corrected finite estimates. The range and boundary corrections described in
-\cite{gap:swvc08_von_neumann_error_range,gap:swvc08_interior_block_bond_rank}
-do not change the qualitative conclusion.

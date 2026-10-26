@@ -5,14 +5,14 @@
 % 413--503 (its proof), and 916--925 (note added, route 1).
 
 The doubling step of \cite{Hastings2007AreaLaw} rests on a lower bound for the
-mutual information of the two intervals of $l$ sites beside a cut. The
-approximate factorization of the ground-state projector of
-\cite[Lemma~1]{Hastings2007AreaLaw} yields an effect with a large expectation in
-the ground state and a small expectation in the product of the two marginals,
-and the monotonicity of the relative entropy turns this into the bound. The
-effect is $E=O_B^\dagger O_B$, as in the note added to the source
-(route~1). The constants are explicit: $C_1$ is replaced by $2C_1$ and the
-constant $C_2$ is $7$, as recorded in~\cite{gap:hastings07_relent_constants}.
+mutual information $I(A:B)=S(A)+S(B)-S(A\cup B)$ of the two intervals of $l$
+sites beside a cut $c$. The approximate factorization of the ground-state
+projector $P_0=|\Omega\rangle\langle\Omega|$ in
+\cite[Lemma~1]{Hastings2007AreaLaw} yields the effect $E=O_B^\dagger O_B$
+(note added, route~1) with large expectation $\operatorname{tr}(P_0 E)$ and
+small product-marginal expectation $\operatorname{tr}(\sigma E)$, so relative
+entropy monotonicity bounds $I(A:B)$ from below, with constants $2C_1$ and
+$C_2=7$ as recorded in~\cite{gap:hastings07_relent_constants}.
 
 \begin{theorem}[The entropy gain from the factorization, stage form]
     \label{thm:hastings_relent_projector}
@@ -20,21 +20,18 @@ constant $C_2$ is $7$, as recorded in~\cite{gap:hastings07_relent_constants}.
     \leanok
     \uses{def:chain_model}
     Let $\Omega$ be a unit vector on the chain of $L$ sites with local
-    dimension $q$, let $c$ be a cut, let $l$ be a natural number, and let
-    $\xi'>0$ and $C_1\ge1$. Write $A$ for the $l$ sites before the cut and
-    $B$ for the $l$ sites after it, cut short at the ends of the chain when
-    fewer than $l$ sites remain there, $P_0=|\Omega\rangle\langle\Omega|$, and
-    $\epsilon=C_1e^{-l/\xi'}$. Suppose there are commuting orthogonal
-    projections $O_L$ supported on the first $c$ sites and $O_R$ supported on
-    the sites after them, and an operator $O_B$ of norm at most one supported
-    on $A\cup B$, with
+    dimension $q$, let $c,l\in\N$, $\xi'>0$, and $C_1\ge1$. Set
+    $A=[c-l,c)\cap[0,L)$, $B=[c,c+l)\cap[0,L)$,
+    $P_0=|\Omega\rangle\langle\Omega|$, $\epsilon=C_1e^{-l/\xi'}$, and
+    $\sigma=\rho_{[0,c)}\otimes\rho_{[c,L)}$. Suppose commuting orthogonal
+    projections $O_L$ on $[0,c)$ and $O_R$ on $[c,L)$ and an operator $O_B$ on
+    $A\cup B$ with $\|O_B\|\le1$ satisfy
     \begin{align}
-        \|O_BO_LO_R-P_0\|\le\epsilon.
+        \|O_BO_LO_R-P_0\|\le\epsilon,\qquad
+        \operatorname{tr}(\sigma P_0)\le2\epsilon.
+        \label{eq:hastings_relent_hyp}
     \end{align}
-    Let $\sigma=\rho_{<c}\otimes\rho_{\ge c}$ be the product of the two
-    marginals of $P_0$ across the cut, and suppose
-    $\operatorname{tr}(\sigma P_0)\le2\epsilon$. Then, with
-    $\epsilon'=2C_1e^{-l/\xi'}$,
+    Then, with $\epsilon'=2\epsilon=2C_1e^{-l/\xi'}$,
     \begin{align}
         S(A)+S(B)-S(A\cup B)\ge\bigl(1-2\epsilon'\bigr)\frac{l}{\xi'}
         -\ln(2C_1)-7.
@@ -43,33 +40,38 @@ constant $C_2$ is $7$, as recorded in~\cite{gap:hastings07_relent_constants}.
     This is a stage of eq.~(relent) of~\cite{Hastings2007AreaLaw},
     lines 234--242, with the constants
     of~\cite{gap:hastings07_relent_constants}: the factorization of Lemma~1
-    and the bound on the overlap are hypotheses.
+    and the overlap bound in~(\ref{eq:hastings_relent_hyp}) are hypotheses.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:chain_entropy_inequalities}
-    The mutual information $S(A)+S(B)-S(A\cup B)$ is nonnegative by
-    subadditivity. If $\epsilon'>1/68$, the right side
-    of~(\ref{eq:hastings_relent}) is negative and there is nothing to prove.
-    Let $\epsilon'\le1/68$ and $E=O_B^\dagger O_B$. Its expectation in $\Omega$ is
-    $\|O_B\Omega\|^2\ge(1-2\epsilon)^2\ge1-2\epsilon'$. The product
-    $Z=O_LO_R$ is a projection with $\|ZEZ-P_0\|\le2\epsilon+\epsilon^2$ and
-    $\operatorname{tr}(\sigma Z)\ge1-2\epsilon^2$, and the Cauchy--Schwarz
-    inequality for the expectation in $\sigma$ bounds
-    $x=\operatorname{tr}(\sigma E)$ by $36\epsilon'$. Write $\rho=P_0$ for the
-    ground state, with marginals $\rho_{A\cup B}$, $\rho_A$ and $\rho_B$. Since
-    $E$ is supported on $A\cup B$, its expectations in $\rho$ and $\sigma$ are
-    those in the marginal $\rho_{A\cup B}$ and in $\rho_A\otimes\rho_B$. The
-    support of $\rho_{A\cup B}$ lies in the tensor product of the supports of
-    $\rho_A$ and $\rho_B$, so the positive expectation of $E$ in
-    $\rho_{A\cup B}$ makes its expectation $x$ in $\rho_A\otimes\rho_B$
-    positive as well. The monotonicity of
-    the relative entropy under the two-outcome measurement $\{E,1-E\}$ bounds
-    $S(A)+S(B)-S(A\cup B)$ below by the binary relative entropy of the two
-    expectations, which is decreasing in $x$ and increasing in the
-    ground-state expectation on the relevant range. Evaluated at
-    $1-2\epsilon'$ and $36\epsilon'\le36/68$, its two terms are at least
-    $(1-2\epsilon')\ln(1/\epsilon')-5$ and $-1$, which
-    gives~(\ref{eq:hastings_relent}).
+    By subadditivity (Lemma~\ref{lem:chain_entropy_inequalities}),
+    $S(A)+S(B)-S(A\cup B)\ge0$, which gives~(\ref{eq:hastings_relent}) when
+    $\epsilon'>1/68$ since the right-hand side is negative. Assume
+    $\epsilon'\le1/68$ and set $E=O_B^\dagger O_B$ and $Z=O_LO_R$. From
+    (\ref{eq:hastings_relent_hyp}),
+    \begin{align}
+        \operatorname{tr}(P_0 E)=\|O_B\Omega\|^2\ge(1-2\epsilon)^2\ge1-2\epsilon',
+        \qquad
+        \|ZEZ-P_0\|\le2\epsilon+\epsilon^2,\qquad
+        \operatorname{tr}(\sigma Z)\ge1-2\epsilon^2,
+        \notag
+    \end{align}
+    and Cauchy--Schwarz for $\sigma$ yields
+    $x=\operatorname{tr}(\sigma E)\le36\epsilon'\le36/68$. Since $E$ is
+    supported on $A\cup B$, $\operatorname{tr}(P_0 E)=\operatorname{tr}(\rho_{A\cup B}E)$
+    and $x=\operatorname{tr}((\rho_A\otimes\rho_B)E)$, with $x>0$ because
+    $\operatorname{supp}\rho_{A\cup B}\subseteq\operatorname{supp}\rho_A\otimes\operatorname{supp}\rho_B$
+    and $\operatorname{tr}(\rho_{A\cup B}E)>0$. Monotonicity of relative
+    entropy under $\{E,1-E\}$ and of the binary relative entropy $D_2(p\Vert q)$
+    then gives
+    \begin{align}
+        S(A)+S(B)-S(A\cup B)
+        \ge D_2\bigl(\operatorname{tr}(P_0 E)\,\big\Vert\,x\bigr)
+        \ge D_2(1-2\epsilon'\Vert 36\epsilon')
+        \ge\bigl((1-2\epsilon')\ln(1/\epsilon')-5\bigr)-1,
+        \notag
+    \end{align}
+    which simplifies to~(\ref{eq:hastings_relent}).
 \end{proof}
 
 \begin{theorem}[The entropy gain across a cut of large entropy, stage form]
@@ -77,39 +79,40 @@ constant $C_2$ is $7$, as recorded in~\cite{gap:hastings07_relent_constants}.
     \lean{TNLean.MPS.AreaLaw.Hastings.relent_of_projectorFactorization_of_le_entropy}
     \leanok
     \uses{def:chain_model, def:hastings_bootstrap_remainder}
-    Let $\Omega$, $c$, $l$, $\xi'$, $C_1$, $A$ and $B$ be as in
+    Let $\Omega$, $c$, $l$, $\xi'$, $C_1$, $A$, and $B$ be as in
     Theorem~\ref{thm:hastings_relent_projector}, with $q\ge2$ and
-    $c+l\le L$. Suppose that for every natural number $m$ with $c+m\le L$
-    there are operators $O_B$, $O_L$, $O_R$ as in
-    Theorem~\ref{thm:hastings_relent_projector}, with $O_B$ supported on
-    the $m$ sites on either side of the cut, cut short at the left end of
-    the chain when $m>c$, and $\|O_BO_LO_R-P_0\|\le C_1e^{-m/\xi'}$.
-    Suppose further that the entropy $S_c$ of the first $c$ sites satisfies
+    $c+l\le L$. Suppose that for every $m\in\N$ with $c+m\le L$ there exist
+    $O_B,O_L,O_R$ as in Theorem~\ref{thm:hastings_relent_projector} with $O_B$
+    supported on $[c-m,c+m)\cap[0,L)$ and
+    $\|O_BO_LO_R-P_0\|\le C_1e^{-m/\xi'}$, and that the cut entropy
+    $S_c=S([0,c))$ satisfies
     \begin{align}
-        S_c\ge\bigl(l+\xi'\ln C_1\bigr)\ln q+F(\xi',q),
+        S_c\ge\bigl(l+\xi'\ln C_1\bigr)\ln q+F(\xi',q)
+        \label{eq:hastings_relent_window_cond}
     \end{align}
-    which for $q\ge2$ reads $l\le(S_c-F(\xi',q))/\ln q-\xi'\ln C_1$. This is
-    the window assumption of~\cite{Hastings2007AreaLaw}, line 483, with $l$ in
-    place of $l_0\ge l$, with $S_c\ge S_{\mathrm{cut}}$ in place of
-    $S_{\mathrm{cut}}$, and with the local dimension $D$ written $q$. Both
-    replacements weaken the assumption.
+    (equivalently, $l\le(S_c-F(\xi',q))/\ln q-\xi'\ln C_1$). This is the
+    window assumption of~\cite[line 483]{Hastings2007AreaLaw} with $l$, $S_c$,
+    and $q$ in place of $l_0\ge l$, $S_{\mathrm{cut}}\le S_c$, and $D$.
     Then~(\ref{eq:hastings_relent}) holds. This is a stage of eq.~(relent)
-    of~\cite{Hastings2007AreaLaw} for one pair of intervals, proved at
-    lines 427--503 under that window assumption, with the constants
-    of~\cite{gap:hastings07_relent_constants}. The factorization of Lemma~1
-    at every scale is a hypothesis, and the Hamiltonian does not enter; the
-    source equation remains to be derived from Lemma~1.
+    of~\cite[lines 427--503]{Hastings2007AreaLaw} with the constants
+    of~\cite{gap:hastings07_relent_constants}, taking the factorization of
+    Lemma~1 at every scale $m$ as a hypothesis.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_relent_projector, thm:hastings_bootstrap_chain_stage}
-    The product $\sigma$ of the two marginals is a mixture of pure states of
-    product vectors, each of Schmidt rank one across the cut, so
+    Since $\sigma=\rho_{[0,c)}\otimes\rho_{[c,L)}$ is a mixture of pure product
+    states across $c$ (each of Schmidt rank $k=1$), the overlap is
     $P=\operatorname{tr}(\sigma P_0)=\sum_iw_i|\langle\psi_i,\Omega\rangle|^2$.
-    If $P>2C_1e^{-l/\xi'}$, then $2C_1^2/P<C_1e^{l/\xi'}$, and
+    If $P>2C_1e^{-l/\xi'}$, then $2C_1^2/P<C_1e^{l/\xi'}$, so
     Theorem~\ref{thm:hastings_bootstrap_chain_stage} with $k=1$ gives
-    $S_c\le\xi'\ln(2C_1^2/P)\ln q+F(\xi',q)<(l+\xi'\ln C_1)\ln q+F(\xi',q)$,
-    against the hypothesis. Hence $P\le2C_1e^{-l/\xi'}$, and
-    Theorem~\ref{thm:hastings_relent_projector} applies.
+    \begin{align}
+        S_c\le\xi'\ln(2C_1^2/P)\ln q+F(\xi',q)
+        <\bigl(l+\xi'\ln C_1\bigr)\ln q+F(\xi',q),
+        \notag
+    \end{align}
+    contradicting~(\ref{eq:hastings_relent_window_cond}). Thus
+    $P\le2C_1e^{-l/\xi'}$, and Theorem~\ref{thm:hastings_relent_projector}
+    yields~(\ref{eq:hastings_relent}).
 \end{proof}
 
 \begin{theorem}[The entropy gain across a cut of a gapped chain]
@@ -118,49 +121,37 @@ constant $C_2$ is $7$, as recorded in~\cite{gap:hastings07_relent_constants}.
     \leanok
     \uses{def:chain_model, def:hastings_bootstrap_remainder,
         thm:hastings_lemma1_endpoint}
-    Let $R$ be a natural number. There is a constant $K\ge0$, depending only
-    on $R$, with the following property. Let $\Omega$ be a gapped ground
-    vector, with gap $\Delta E>0$, of a Hamiltonian on the chain of $L$ sites
-    with local dimension $q$, interaction range $R$ and term norms at most
-    $J\ge0$. Let $\tilde\xi$ be the length of
-    Theorem~\ref{thm:hastings_lemma1_endpoint}, $\xi'=6\tilde\xi$ and
-    $C_1=K\tilde\xi^3$. Let $c$ be a cut and $l$ a natural number with
-    $c+l\le L$, and let $A$ and $B$ be the $l$ sites before and after the cut,
-    cut short at the left end of the chain when $l>c$. If the entropy $S_c$
-    of the first $c$ sites satisfies
-    \begin{align}
-        S_c\ge\bigl(l+\xi'\ln C_1\bigr)\ln q+F(\xi',q),
-    \end{align}
-    then, with $\epsilon'=2C_1e^{-l/\xi'}$,
-    \begin{align}
-        S(A)+S(B)-S(A\cup B)\ge\bigl(1-2\epsilon'\bigr)\frac{l}{\xi'}
-        -\ln(2C_1)-7.
-    \end{align}
-    This is eq.~(relent) of~\cite{Hastings2007AreaLaw}, lines 234--242,
-    under the window assumption of line 483, with the constants
-    of~\cite{gap:hastings07_relent_constants}. The rate is the printed
-    $\xi'=6\tilde\xi$ of lines 141--142, and $C_1=K\tilde\xi^3$ is polynomial in
-    $\tilde\xi$, as at lines 258--262. The length $\tilde\xi$ may stand in for
-    the source's $\xi$, because the source fixes $\xi=\max(2v/\Delta E,\xi_C)$
-    only through some Lieb--Robinson pair $(v,\xi_C)$ (lines 96--112), and
-    raising $v$ keeps a pair valid. It has the form of the
-    source's $\max(2v/\Delta E,\xi_C)$, but it comes from a Lieb--Robinson
-    estimate on the chain whose prefactor grows with $J$ and whose second
-    operator acts on one site, and it is not shown to arise from a pair
-    satisfying the bound of lines 96--112. This is recorded
-    in~\cite{gap:hastings07_lemma1_decay_length,
+    For every range $R\in\N$ there is a constant $K\ge0$ depending only on $R$
+    with the following property. Let $\Omega$ be a gapped ground vector with
+    gap $\Delta E>0$ of a range-$R$ Hamiltonian on the chain of $L$ sites with
+    local dimension $q$ and term norms at most $J\ge0$. Let $\tilde\xi$ be the
+    decay length of Theorem~\ref{thm:hastings_lemma1_endpoint}, and set
+    $\xi'=6\tilde\xi$ and $C_1=K\tilde\xi^3$. For every cut $c$ and $l\in\N$
+    with $c+l\le L$, set $A=[c-l,c)\cap[0,L)$ and $B=[c,c+l)$. If $S_c$
+    satisfies~(\ref{eq:hastings_relent_window_cond}), then~(\ref{eq:hastings_relent})
+    holds with $\epsilon'=2C_1e^{-l/\xi'}$.
+
+    This is eq.~(relent) of~\cite[lines 234--242]{Hastings2007AreaLaw} under
+    the window assumption~(\ref{eq:hastings_relent_window_cond}) of line 483,
+    with the constants of~\cite{gap:hastings07_relent_constants}, the printed
+    rate $\xi'=6\tilde\xi$ (lines 141--142), and polynomial prefactor
+    $C_1=K\tilde\xi^3$ (lines 258--262). Here $\tilde\xi$ has the form
+    $\max(2v/\Delta E,\xi_C)$ from a chain Lieb--Robinson estimate with
+    $J$-dependent prefactor, single-site second operator, and raised velocity,
+    rather than a Lieb--Robinson pair $(v,\xi_C)$ in the sense of lines
+    96--112~\cite{gap:hastings07_lemma1_decay_length,
         gap:hastings07_gaussian_average_exponent}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_relent_window, thm:hastings_lemma1_endpoint,
         thm:hastings_factorization_mono, lem:chain_entropy_inequalities}
-    Theorem~\ref{thm:hastings_lemma1_endpoint} gives $K_0\ge0$ such that at
-    every cut and every length $m$ there are operators $O_B$, $O_L$, $O_R$ as
-    in Theorem~\ref{thm:hastings_relent_window} with
-    $\|O_BO_LO_R-P_0\|\le K_0\tilde\xi^3e^{-m/(6\tilde\xi)}$. Take $K=K_0+1$. Since
-    $\tilde\xi\ge8$, the constant $C_1=K\tilde\xi^3$ is at least $1$, and the same
-    operators satisfy the bound with $C_1$ in place of $K_0\tilde\xi^3$. For
-    $q\ge2$ Theorem~\ref{thm:hastings_relent_window} gives the claim. For $q=1$
-    the entropy $S_c$ vanishes while $F(\xi',1)=1+\ln(\xi'/2+1)>0$, so the
-    window assumption cannot hold.
+    Theorem~\ref{thm:hastings_lemma1_endpoint} supplies $K_0\ge0$ and operators
+    $O_B,O_L,O_R$ at every $(c,m)$ with
+    $\|O_BO_LO_R-P_0\|\le K_0\tilde\xi^3e^{-m/(6\tilde\xi)}$. Setting
+    $K=K_0+1$ and using $\tilde\xi\ge8$ gives $C_1=K\tilde\xi^3\ge1$ and
+    $\|O_BO_LO_R-P_0\|\le C_1e^{-m/\xi'}$ by
+    Theorem~\ref{thm:hastings_factorization_mono}. For $q\ge2$,
+    Theorem~\ref{thm:hastings_relent_window} yields~(\ref{eq:hastings_relent});
+    for $q=1$, $S_c=0<1+\ln(\xi'/2+1)=F(\xi',1)$, so
+    (\ref{eq:hastings_relent_window_cond}) is vacuous.
 \end{proof}
