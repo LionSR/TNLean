@@ -1,4 +1,16 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
 import TNLean.MPS.AreaLaw.FrequencyCounts
+
+/-!
+# Boundary-case checks for the two-fixed-coordinate frequency counts
+
+Worked numerical instances of the frequency-count cardinalities with two prescribed
+coordinates, covering the degenerate, generic, and impossible cases.
+-/
 
 open scoped BigOperators
 
