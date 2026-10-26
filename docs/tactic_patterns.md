@@ -9437,3 +9437,29 @@ there is no need for a new tactic.
 - **Reuse:** `Nat.le_ceil`, multiplication by a nonnegative factor and `Nat.ceil_le` give
   the ceiling bound. Applying `mul_pow` directly keeps the symbolic degree intact.
 - **Decision:** One occurrence; no separate general ceiling lemma or tactic is introduced.
+
+
+### Cardinality of a finite union with a uniform bound — reused Mathlib (2026-10-26)
+
+- **Seen:** `MPS/AreaLaw/ViableSet/SizeTrimming.lean`, `exists_size_trimmed_family`.
+- **Pattern:** A finite family of sets has at most the number of indices times a uniform
+  cardinality bound; here the indices are all actual bond dimensions `m : Fin (D + 1)`.
+- **Reuse:** `Finset.card_biUnion_le_card_mul` gives the union bound directly after
+  `m ≤ D` and the net cardinality estimate bound each selected column set by `D * K`.
+- **Decision:** Reuse the existing Mathlib theorem, with no separate counting lemma or tactic.
+
+### Trace of a normalized pure density — existing mathematical lemmas (2026-10-26)
+
+- **Seen:** The pure-state trace arguments in `MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean`
+  and `MPS/AreaLaw/ViableSet/SizeTrimming.lean`, and the companion QICLean module
+  `Channel/BoundaryDensityMinimizer.lean`.
+- **Pattern:** For a unit vector `x`, rewrite the trace of `vecMulVec x (star x)` as its
+  Euclidean inner product, then as the squared norm.
+- **Reuse:** `Matrix.trace_vecMulVec`, `EuclideanSpace.inner_eq_star_dotProduct` and
+  `inner_self_eq_norm_sq_to_K` give this calculation directly; the last step uses normalization.
+- **Existing general statement:** QICLean's `Matrix.trace_euclideanOuterProduct_self` in
+  `Analysis/ChronologicalGarbage.lean` already states the generic trace identity. That module
+  also imports contraction-chain and register-evolution results, so importing it here would
+  add unrelated dependencies. If a shared one-step statement is needed, move that existing
+  mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
+  statement or introduce a new tactic.

@@ -18,6 +18,7 @@ import TNLean.MPS.AreaLaw.ViableSet.GluingBounds
 import TNLean.MPS.AreaLaw.ViableSet.GluingCoordinates
 import TNLean.MPS.AreaLaw.ViableSet.GluingSupport
 import TNLean.MPS.AreaLaw.ViableSet.LeftColumns
+import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming
 import TNLean.MPS.AreaLaw.ViableSet.Span
 import TNLean.MPS.AreaLaw.ViableSet.TrimmedWitness
 import TNLean.MPS.AreaLaw.ViableSet.Trimming
