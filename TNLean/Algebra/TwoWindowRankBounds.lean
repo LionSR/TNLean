@@ -7,7 +7,6 @@ import Mathlib.Algebra.Group.Nat.Defs
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
 import Mathlib.Data.Nat.Basic
 import Mathlib.Data.Nat.Choose.Bounds
-import Mathlib.Tactic.Order
 
 /-!
 # Counting factors in a two-window expansion
