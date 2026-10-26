@@ -9,4 +9,5 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw.ViableSet
 
 import TNLean.MPS.AreaLaw.ViableSet.ConstantRankCut
+import TNLean.MPS.AreaLaw.ViableSet.Gluing
 import TNLean.MPS.AreaLaw.ViableSet.Trimming
