@@ -7,7 +7,7 @@ import TNLean.Algebra.FinSumPermutation
 import TNLean.Algebra.ComplexSqrt
 import Mathlib.GroupTheory.Subgroup.Centralizer
 import TNLean.Algebra.UnitaryVectorSwap
-import TNLean.Algebra.PermutationMatrixUnitary
+import QICLean.Algebra.PermutationMatrixUnitary
 import QICLean.Algebra.MatrixReindexUnitary
 
 

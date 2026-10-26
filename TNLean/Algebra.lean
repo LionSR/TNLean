@@ -86,6 +86,7 @@ import TNLean.Algebra.IdempotentRankContinuity
 import TNLean.Algebra.IdempotentTracePerturbation
 import TNLean.Algebra.InjectivePositiveMapRank
 import TNLean.Algebra.InjectiveRangeProjectorContinuity
+import TNLean.Algebra.IntegerHasseGraph
 import TNLean.Algebra.IsNilpotentOfTracePow
 import TNLean.Algebra.IsingCrossingCoefficients
 import TNLean.Algebra.IsometricFrameEmbedding
@@ -143,7 +144,6 @@ import TNLean.Algebra.OrthogonalResolution
 import TNLean.Algebra.OrthogonalSymplecticKroneckerDeterminant
 import TNLean.Algebra.PathGraphDistance
 import TNLean.Algebra.PermutationMatrixCommutation
-import TNLean.Algebra.PermutationMatrixUnitary
 import TNLean.Algebra.PiMatrixRepresentation
 import TNLean.Algebra.PiMulSingleInduction
 import TNLean.Algebra.PiSigmaEquiv
