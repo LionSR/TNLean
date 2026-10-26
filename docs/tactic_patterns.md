@@ -63,6 +63,20 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** The restricted measure is not renormalized. Zero variance, zero cutoff and the empty site set are retained. The bound is `‖W‖ (εobs + T εgen)`, without an additional factor of two. The two caller files lose 146 lines in total.
 
 
+### Hermitian partial sums of terms Hermitian on a set — promoted (2026-10-25)
+
+- **Pattern:** `Matrix.isHermitian_sum T fun i hi ↦ hh i (hT hi)` for `hT : T ⊆ S`.
+- **Seen:** Five occurrences across three files: three in
+  `TNLean/Lattice/ClusterExpansion/ClusterPart.lean` and one each in
+  `TNLean/Lattice/ClusterExpansion/ThermalProduct.lean` and
+  `TNLean/Lattice/ClusterExpansion/TruncatedPositivity.lean`.
+- **Abstraction:** `Matrix.isHermitian_sum_of_subset` in
+  `TNLean/Algebra/MatrixHermitianSum.lean`; all five occurrences use the theorem.
+- **Notes:** Retains the additive/star assumptions of `Matrix.isHermitian_sum`;
+  no finiteness assumption on the matrix index type is needed. The source line count
+  at these call sites is unchanged. The fifth occurrence was integrated from #10155;
+  its mathematical statements and original authorship are unchanged.
+
 ### Hermitian sum of pointwise-Hermitian terms — promoted (2026-10-23)
 - **Pattern:**
   ```lean
@@ -7080,19 +7094,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   `v T₀ + 15 + r ≤ K / 2`, which concludes the displayed inequality for any `‖W‖ ≤ 1`.
 - **Notes:** promote at a third occurrence, for example a reset filter on another domain.
 
-### Hermitian partial sums of terms Hermitian on a set — candidate (2026-10-25)
-- **Pattern:**
-  ```lean
-  have hsumH : ∀ T ⊆ B ∪ C, (∑ k ∈ T, h k).IsHermitian := fun T hT ↦
-    Matrix.isHermitian_sum T fun k hk ↦ hh k (hT hk)
-  ```
-  from `hh : ∀ k ∈ B ∪ C, (h k).IsHermitian`.
-- **Seen:** 5 occurrences across 3 files: `TNLean/Lattice/ClusterExpansion/ClusterPart.lean`
-  (three), `TNLean/Lattice/ClusterExpansion/ThermalProduct.lean` and
-  `TNLean/Lattice/ClusterExpansion/TruncatedPositivity.lean`.
-- **Abstraction:** proposed `Matrix.isHermitian_sum_of_subset (hh : ∀ k ∈ s, (h k).IsHermitian)
-  (hT : T ⊆ s) : (∑ k ∈ T, h k).IsHermitian` in `TNLean/Algebra/MatrixHermitianSum.lean`.
-- **Notes:** meets the rule of three; the refactor of the five call sites is a separate change.
 
 ## Rejected
 
