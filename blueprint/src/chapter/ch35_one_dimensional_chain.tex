@@ -2793,6 +2793,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
         TNLean.MPS.AreaLaw.isOpenMPS_operator_entries_rectKronecker,
         TNLean.MPS.AreaLaw.isOpenMPS_operator_entries_embed_one_site,
         TNLean.MPS.AreaLaw.isOpenMPS_operator_entries_of_supported_singleton}
+    \leanok
     \uses{def:chain_open_mps,def:qc_local_circuit}
     Let $L,q$ be natural numbers and let $Q$ be an alphabet with
     $q$ elements. Given complex functions $f_i$ on $Q$, one at each site, the vector
@@ -2810,7 +2811,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     all other sites. Empty products and zero local dimension are
     included; a single-site placement presupposes a site in the chain.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:chain_open_mps,lem:qc_placed_operators}
     For a site product take the scalar multiplying the contraction
     to be one, all virtual dimensions to be one, and
@@ -2826,6 +2827,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \lean{TNLean.MPS.AreaLaw.IsOpenMPS.exists_eq_mul_prod,
         TNLean.MPS.AreaLaw.IsOpenMPS.exists_operator_entries_eq_mul_prod,
         TNLean.MPS.AreaLaw.isOpenMPS_one_iff_exists_eq_mul_prod}
+    \leanok
     \uses{def:chain_open_mps}
     A complex vector $\psi$ on $L$ sites of local dimension $q$ has an
     open-boundary matrix product representation with internal bond
@@ -2844,7 +2846,7 @@ for an arbitrary finite set of sites and are instantiated here directly.
     empty chain. For the empty chain the product is one and the
     scalar $c$ is unrestricted.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:chain_open_mps,thm:chain_site_product_mps}
     Choose an open-boundary representation. If one virtual bond has
     dimension zero, there is no virtual path and $\psi=0$; take
