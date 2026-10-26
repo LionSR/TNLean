@@ -169,6 +169,57 @@ for an arbitrary finite set of sites and are instantiated here directly.
     by $\varphi$ to the corresponding complementary interval.
 \end{proof}
 
+\begin{theorem}[Three-region tensor forms after grouping two windows]
+    \label{thm:chain_two_window_tensor_forms}
+    \lean{Matrix.twoWindowFamily_eq_three_region_forms}
+    \leanok
+    \uses{def:chain_two_window_family}
+    Let $X,Y,Z$ be index sets, and let $H_r$, $H^L_r$, $H^M_r$, $H^R_r$
+    be complex matrices indexed respectively by $(X\times Y)\times Z$,
+    $X$, $Y$, $Z$, for $0\le r<N$.
+    Use the windows and alphabet of Definition~\ref{def:chain_two_window_family},
+    and choose $p,s\in W$. For matrices $A,B,C$ on the three factors, put
+    \begin{align}
+        \mathcal E_L(A) & =(A\otimes I_Y)\otimes I_Z,\notag \\
+        \mathcal E_M(B) & =(I_X\otimes B)\otimes I_Z,\notag \\
+        \mathcal E_R(C) & =I_{X\times Y}\otimes C.
+        \label{eq:chain_two_window_embeddings}
+    \end{align}
+    Suppose that, whenever $r\ne a+p$ and $r\ne b+s$,
+    \begin{align}
+        H_r & =\mathcal E_L(H^L_r)+\mathcal E_M(H^M_r)+\mathcal E_R(H^R_r).
+        \label{eq:chain_two_window_ordinary_forms}
+    \end{align}
+    Group each of the four arrays using the same windows, obtaining
+    $F,F^L,F^M,F^R$. Then, for every $\alpha\in I$ other than
+    $\iota_L(p)$ and $\iota_R(s)$,
+    \begin{align}
+        F_\alpha & =\mathcal E_L(F^L_\alpha)+\mathcal E_M(F^M_\alpha)
+        +\mathcal E_R(F^R_\alpha).
+        \label{eq:chain_two_window_grouped_forms}
+    \end{align}
+    This is the additive step in the grouping used in~\cite{Arad2016RigorousRG}; the original tensor identities are hypotheses
+    of the assertion. Empty index sets are allowed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_two_window_family}
+    Each map in~(\ref{eq:chain_two_window_embeddings}) is linear. Hence, for
+    any finite set $J$ of original indices avoiding $a+p$ and $b+s$,
+    \begin{align}
+        \sum_{r\in J}H_r
+         & =\mathcal E_L\left(\sum_{r\in J}H^L_r\right)
+        +\mathcal E_M\left(\sum_{r\in J}H^M_r\right)
+        +\mathcal E_R\left(\sum_{r\in J}H^R_r\right).
+        \label{eq:chain_two_window_sum_forms}
+    \end{align}
+    For a window label different from the two selected labels,
+    use~(\ref{eq:chain_two_window_ordinary_forms}). Each complementary
+    interval avoids both selected indices by
+    (\ref{eq:chain_two_window_admissibility}). Applying
+    (\ref{eq:chain_two_window_sum_forms}) to each of these three intervals
+    proves~(\ref{eq:chain_two_window_grouped_forms}) for the bulk labels.
+\end{proof}
+
 \begin{theorem}[Nearest-neighbour supports at two cuts]
     \label{thm:chain_two_cut_edge_supports}
     \lean{TNLean.MPS.AreaLaw.interval_edge_classification_of_lt}
