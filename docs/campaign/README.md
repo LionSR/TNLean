@@ -213,11 +213,14 @@ number, as `Lemma 8.2, routing ...`, or its kind and source label, as
 `Lemma l:2, energy of a trimmed low-energy state`. The number or label must end
 at a delimiter, so `Lemma 1` does not match `Lemma 1.2`.
 
-For an unnumbered theorem, begin `result` with `Main theorem` or `Theorem`,
-followed by the end of the text or, after optional whitespace, a comma,
-opening parenthesis, colon or em dash. For example,
+For an unnumbered result, begin `result` with `Unnumbered` and its kind,
+as in `Unnumbered Lemma, ...` or `Unnumbered Claim, ...`. An unnumbered theorem
+also accepts `Main theorem` or `Theorem`. Each such prefix must be followed
+by the end of the text or, after optional whitespace, a comma, opening
+parenthesis, colon or em dash. For example,
 `Main theorem, the doubling iteration` associates the gap with Hastings'
-unnumbered area-law theorem; `Area law theorem, ...` does not match it.
+unnumbered area-law theorem; `Area law theorem, ...` and `Theorem 2, ...`
+do not match it. `Main theorem` never matches an unnumbered lemma or claim.
 Result prefixes are matched case-insensitively.
 
 `checked` lists results whose pull requests report that no gap was found, and

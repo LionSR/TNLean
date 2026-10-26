@@ -102,6 +102,12 @@ class ResultTableTests(unittest.TestCase):
         # Evaluate the production metadata functions before any browser rendering.
         # Only the initial JSON read needs a DOM stand-in; the functions are pure.
         board = Path(__file__).resolve().parent / "campaign_board/board.js"
+        kinds = ["Theorem", "Lemma", "Proposition", "Corollary", "Definition", "Remark", "Claim"]
+        unnumbered = result_table(HEADER + "\n" + "\n".join(
+            f"| Unnumbered {kind} (test result) | No source label | #9814 | Open gap |"
+            for kind in kinds))
+        self.assertEqual([r["kind"] for r in unnumbered], kinds)
+        self.assertTrue(all(r["num"] == "" and r["label"] is None for r in unnumbered))
         js = r"""
 const fs = require('fs'), vm = require('vm'), assert = require('node:assert/strict');
 const source = fs.readFileSync(process.argv[1], 'utf8');
@@ -129,9 +135,36 @@ assert(!f.resultGapMatches(trim, {paper:'lvv',result:'Lemma l:2.1, another resul
 const firstLemma = {paper:'hastings',kind:'Lemma',num:'1',label:null};
 assert(f.resultGapMatches(firstLemma, {paper:'hastings',result:'Lemma 1, decay length'}));
 assert(!f.resultGapMatches(firstLemma, {paper:'hastings',result:'Lemma 1.2, another result'}));
+// Exercise every unnumbered kind admitted by the production table parser.
+for (const row of JSON.parse(process.argv[2])) {
+  const r = {...row, paper:'test-paper'};
+  const match = result => f.resultGapMatches(r, {paper:r.paper, result});
+  const prefix = `Unnumbered ${r.kind}`;
+  for (const tail of ['', ', details', ' (details)', ': details', '— details', '   , details', '\t: details']) {
+    assert(match(prefix + tail), `${prefix + tail} should match`);
+  }
+  assert(match(prefix.toLowerCase() + ', details'));
+  for (const tail of ['ish', '.1', ' 2, numbered result', ' extra words', '; details']) {
+    assert(!match(prefix + tail), `${prefix + tail} must not match`);
+  }
+  assert(!match(`Unnumbered ${r.kind === 'Claim' ? 'Lemma' : 'Claim'}, another kind`));
+  assert(!f.resultGapMatches(r, {paper:'another-paper', result:prefix}));
+  assert(!f.resultGapMatches({...r, num:'2'}, {paper:r.paper, result:prefix}));
+  assert(!f.resultGapMatches(r, {paper:r.paper}));
+  assert.equal(match('Main theorem, details'), r.kind === 'Theorem');
+  assert.equal(match('Theorem, details'), r.kind === 'Theorem');
+  if (r.kind !== 'Theorem') assert(!match(`${r.kind}, missing unnumbered qualifier`));
+}
+for (const prefix of ['Main theorem', 'Theorem']) {
+  assert(f.resultGapMatches(main, {paper:main.paper, result:prefix}));
+  for (const tail of ['ish', '.1', ' 2, another result', ' extra words']) {
+    assert(!f.resultGapMatches(main, {paper:main.paper, result:prefix + tail}));
+  }
+}
 console.log('Campaign result browser metadata: passed');
 """
-        run = subprocess.run(["node", "-e", js, str(board)], capture_output=True, text=True)
+        run = subprocess.run(["node", "-e", js, str(board), json.dumps(unnumbered)],
+                             capture_output=True, text=True)
         self.assertEqual(run.returncode, 0, run.stderr)
 
 

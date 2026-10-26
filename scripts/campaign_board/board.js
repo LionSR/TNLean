@@ -27,13 +27,14 @@
     return Number.isFinite(section) ? section : null;
   };
   /** Match a gap in the same paper by "Kind Number" or "Kind sourceLabel", ending at a delimiter.
-   * For an unnumbered theorem use "Main theorem" or "Theorem", followed by the end of the text
-   * or, after optional whitespace, a comma, opening parenthesis, colon or em dash.
-   * Other descriptions of an unnumbered theorem do not match. */
+   * Unnumbered results accept "Unnumbered Kind"; theorems also accept "Main theorem" or "Theorem".
+   * These unnumbered prefixes must end the text or, after optional whitespace, be followed by
+   * a comma, opening parenthesis, colon or em dash. Other descriptions do not match. */
   const resultGapMatches = (r, g) => {
     if (g.paper !== r.paper) return false;
     const prefixes = [r.num && `${r.kind} ${r.num}`, r.label && `${r.kind} ${r.label}`].filter(Boolean);
-    if (!r.num && r.kind === "Theorem" && /^(?:Main theorem|Theorem)(?=\s*[,(:—]|$)/i.test(g.result || "")) return true;
+    const unnumbered = !r.num ? [`Unnumbered ${r.kind}`, ...(r.kind === "Theorem" ? ["Main theorem", "Theorem"] : [])] : [];
+    if (unnumbered.some(prefix => new RegExp("^" + prefix + "(?=\\s*[,(:—]|$)", "i").test(g.result || ""))) return true;
     return prefixes.some(prefix => new RegExp("^" + prefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "(?=$|[\\s,(:;—])", "i").test(g.result || ""));
   };
 

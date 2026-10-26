@@ -219,7 +219,7 @@ def result_table(body: str) -> list[dict]:
     """Read paper results from tracker tables, preserving legacy table conventions.
 
     Explicit ``Result | Label/name in the source | Issues | Completion...`` tables
-    use the first cell's printed kind and number, or ``Unnumbered theorem``.
+    use the first cell's printed kind and number, or ``Unnumbered Kind``.
     The second cell may begin with a genuine source label, including bare labels
     such as ``ble``; an absent label stays absent. Equation labels mentioned later
     in that cell are not taken for theorem labels. Other tables retain the original
