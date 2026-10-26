@@ -199,6 +199,14 @@ The `build` job derives its focused Lean checks from the change set, using
 `scripts/ci_lean_checks.py`; pull requests do not add workflow steps for new
 modules or tests.
 
+For a pull-request checkout, both selectors verify that the synthetic merge's
+second parent is the event's PR head, then compare against its first (base)
+parent. This excludes changes already present on the base branch, even if the
+event's recorded base SHA is stale. Taking a merge-base with that stale ancestor
+would not fix the selection. An unverifiable merge checkout falls back to all
+tests. Pushes and local invocations without a PR-head SHA retain their explicit
+base revision (the previous head for pushes).
+
 - **Early build** (pull requests, before the root build): a fail-fast
   `lake build` of the changed production modules, logged with the root build
   for the compilation-time gate. It is a shortcut with a 20-minute budget: a

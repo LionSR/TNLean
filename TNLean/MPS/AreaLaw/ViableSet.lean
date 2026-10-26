@@ -8,6 +8,8 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.AreaLaw.ViableSet
 
+import TNLean.MPS.AreaLaw.ViableSet.Basic
 import TNLean.MPS.AreaLaw.ViableSet.ConstantRankCut
 import TNLean.MPS.AreaLaw.ViableSet.Gluing
+import TNLean.MPS.AreaLaw.ViableSet.TrimmedWitness
 import TNLean.MPS.AreaLaw.ViableSet.Trimming

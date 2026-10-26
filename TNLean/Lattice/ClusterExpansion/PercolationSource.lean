@@ -13,10 +13,10 @@ import TNLean.Lattice.ClusterExpansion.Truncation
 Hastings, *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3,
 `References/cond-mat_0508554/proj3new.tex`, lines 1090–1114), defines the truncation
 `ρ(β, l_proj)` of `e^{-βH}` by keeping the terms of its power series in which no cluster contains
-two sites at distance larger than `l_proj`, and bounds the error of the truncation by equation
-`perc2` (lines 1227–1254):
+two sites at distance larger than `l_proj`. With the size-threshold correction below, its
+equation `perc2` (lines 1227–1254) gives the metric estimate
 
-`Z⁻¹ |Tr (O ρ(β)) - Tr (O ρ(β, l_proj))| ≤ {exp[N exp(-l_proj/ξ_perc)] - 1} ‖O‖`.
+`Z⁻¹ |Tr (O ρ(β)) - Tr (O ρ(β, l_proj))| ≤ {exp[N (xy)⁻¹ exp(-l_proj/ξ_perc)] - 1} ‖O‖`.
 
 This file states and proves that bound in the source's terms. The terms `h_k` of
 `H = ∑_k h_k` act on supports `acts k` in a pseudometric space of sites, each support of diameter
