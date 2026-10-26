@@ -82,6 +82,42 @@ for an arbitrary finite set of sites and are instantiated here directly.
     If $L=0$, there are no interaction terms and both sides vanish.
 \end{proof}
 
+\begin{theorem}[Energy from ground-state overlap for a range-one chain]
+    \label{thm:chain_range_one_overlap_energy}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.re_inner_sub_le_of_overlap_of_range_one,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.re_inner_le_of_overlap_div_of_range_one}
+    \leanok
+    \uses{def:chain_model,thm:chain_range_one_support_count}
+    Let $H$ be a range-one Hamiltonian on a chain of $L$ sites, with each
+    interaction term of norm at most one. Let $E_0,\Delta$ be real and let
+    $\Omega$ be a unit vector satisfying $H\Omega=E_0\Omega$ and
+    $H-E_0\ge\Delta(I-|\Omega\rangle\langle\Omega|)$.
+    If $v$ is a unit vector with $|\langle\Omega,v\rangle|\ge1-\delta$, then
+    \begin{align}
+        \operatorname{Re}\langle v,Hv\rangle-E_0
+         & \le8L\delta.
+        \label{eq:chain_range_one_overlap_energy}
+    \end{align}
+    In particular, when $L>0$, overlap at least $1-c/L$ gives energy at
+    most $E_0+8c$.
+
+    This is a general norm estimate supporting the first energy inference
+    in \cite[Lemma~2.6, source lines 509--515]{Landau2015Polynomial}.
+    The source assumes positive adjacent-pair terms; here singleton and
+    adjacent-pair terms need only be Hermitian. The correction for
+    unsquared overlap is recorded in \cite{gap:lvv13_witness_energy}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_range_one_support_count}
+    The support count gives $\|H\|\le2L$. The eigenvector equation and
+    $\|\Omega\|=1$ give $|E_0|\le\|H\|$, hence
+    $\|H-E_0I\|\le\|H\|+|E_0|\le4L$.
+    The energy estimate from overlap with an eigenvector in
+    \cite[``Energy bound from overlap with an eigenvector'']{QICLean2026Blueprint}
+    now gives (\ref{eq:chain_range_one_overlap_energy}). Substituting
+    $\delta=c/L$ proves the last assertion.
+\end{proof}
+
 \begin{theorem}[Nearest-neighbour supports at two cuts]
     \label{thm:chain_two_cut_edge_supports}
     \lean{TNLean.MPS.AreaLaw.interval_edge_classification_of_lt}
