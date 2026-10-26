@@ -84,8 +84,15 @@ logarithm of the rank.
     $0<\alpha<1$, its discarded spectral mass is at most $T_k$. For
     $\alpha=0$, its rank is at most $D$, so the discarded mass vanishes.
     By~(\ref{eq:smoothed_truncation_error}) and~(\ref{eq:smooth_renyi_error_budget}), the squared vector error is at most
-    $\delta^2/16$. Normalizing the truncated vector preserves its bond bound
-    and gives vector error at most $\delta/2$. The full trace-norm error
+    $\delta^2/16$. If $\Phi$ denotes the truncated vector, then $\Phi\ne0$,
+    normalization preserves its bond bound, and
+    \begin{align}
+        \left\|\frac{\Phi}{\|\Phi\|}-\psi\right\|
+         & \le |1-\|\Phi\||+\|\Phi-\psi\|
+        \le 2\|\Phi-\psi\|\le\frac{\delta}{2}.
+        \label{eq:smooth_renyi_normalized_vector_error}
+    \end{align}
+    The full trace-norm error
     between the two unit pure states is therefore at most $\delta$.
 \end{proof}
 
@@ -127,7 +134,14 @@ logarithm of the rank.
     at most $3\gamma^2/64\le\gamma^2/16$, and the finite criterion gives
     full trace-norm error at most $\gamma\le\delta$.
     The finitely many remaining lengths admit exact MPS representations
-    with bond dimension at most $(q+1)^N$. Increasing the polynomial
-    coefficient absorbs these lengths. The resulting bound is uniform
+    with bond dimension at most $(q+1)^N$. For $N<N_0$,
+    \begin{align}
+        (q+1)^N
+         & \le (q+1)^{N_0}
+        \le \bigl(K+(q+1)^{N_0}\bigr)(N+1)^m.
+        \label{eq:smooth_renyi_short_length_bond}
+    \end{align}
+    Thus replacing the polynomial coefficient $K$ by
+    $K+(q+1)^{N_0}$ absorbs these lengths. The resulting bound is uniform
     over $\mathcal N$.
 \end{proof}
