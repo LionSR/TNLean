@@ -26,6 +26,10 @@
     const section = r.num ? Number(r.num.split(".")[0]) : NaN;
     return Number.isFinite(section) ? section : null;
   };
+  /** Match a gap in the same paper by "Kind Number" or "Kind sourceLabel", ending at a delimiter.
+   * For an unnumbered theorem use "Main theorem" or "Theorem", followed by the end of the text
+   * or, after optional whitespace, a comma, opening parenthesis, colon or em dash.
+   * Other descriptions of an unnumbered theorem do not match. */
   const resultGapMatches = (r, g) => {
     if (g.paper !== r.paper) return false;
     const prefixes = [r.num && `${r.kind} ${r.num}`, r.label && `${r.kind} ${r.label}`].filter(Boolean);

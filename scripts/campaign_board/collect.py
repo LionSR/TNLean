@@ -234,6 +234,8 @@ def result_table(body: str) -> list[dict]:
         cells = [c.strip() for c in line.strip().strip("|").split("|")]
         if len(cells) < 3:
             continue
+        # This header is literal: rewording it selects legacy parsing, which may
+        # omit Claims, unnumbered results and rows with bare or absent labels.
         if (cells[:3] == ["Result", "Label/name in the source", "Issues"]
                 and len(cells) > 3 and cells[3].startswith("Completion")):
             explicit = True

@@ -206,7 +206,19 @@ Write every entry for a physicist who has read neither the papers nor the rest o
 the page: name each cited result in words, define each object at first use, and
 keep pull-request history out of the prose, since the links appear beside it.
 
-An open entry of kind other than `convention` whose `result` begins with a paper result, as `Lemma 8.2, routing ...`, keeps that result from counting as proved even when every issue of the result is closed.
+An open entry of kind other than `convention` keeps its paper result from
+counting as proved even when every issue of that result is closed. The `paper`
+fields must agree, and `result` must begin with the result's kind and printed
+number, as `Lemma 8.2, routing ...`, or its kind and source label, as
+`Lemma l:2, energy of a trimmed low-energy state`. The number or label must end
+at a delimiter, so `Lemma 1` does not match `Lemma 1.2`.
+
+For an unnumbered theorem, begin `result` with `Main theorem` or `Theorem`,
+followed by the end of the text or, after optional whitespace, a comma,
+opening parenthesis, colon or em dash. For example,
+`Main theorem, the doubling iteration` associates the gap with Hastings'
+unnumbered area-law theorem; `Area law theorem, ...` does not match it.
+Result prefixes are matched case-insensitively.
 
 `checked` lists results whose pull requests report that no gap was found, and
 `reviewedAt` records when the summaries were last compared with the notes. A
