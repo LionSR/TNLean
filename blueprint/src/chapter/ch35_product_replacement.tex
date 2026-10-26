@@ -191,6 +191,7 @@ coefficient spaces and cut ranks.
 \begin{theorem}[Extension by a fixed exterior configuration]
     \label{thm:chain_fixed_configuration_extension}
     \lean{TNLean.MPS.AreaLaw.IsOpenMPS.extend_interval_by_configuration}
+    \leanok
     \uses{def:chain_open_mps}
     Let $a,L,T$ be nonnegative integers with $a+L\leq T$, and let
     $I=\{a,\ldots,a+L-1\}$ be the corresponding interval in a chain
@@ -209,7 +210,7 @@ coefficient spaces and cut ranks.
     Then $\chi$ has open-boundary bond dimensions at most $\max\{1,D\}$.
     In particular, the bound remains $D$ when $D\geq1$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:chain_cut_rank_of_mps,thm:chain_mps_of_cut_rank}
     At a cut after $j$ sites, put $k=\min\{L,(j-a)_+\}$.
     Restriction to $I$ maps the left and right configurations to the
