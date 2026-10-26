@@ -2620,10 +2620,12 @@ three-plaquette output measurement, and the routed reunion measurement.
   `TNLean/MPS/MPU/Examples/ShiftTilde.lean`
   (`shiftPhysicalSwap_mem_unitaryGroup`).
 - **Abstraction:** `Equiv.Perm.permMatrix_mem_unitaryGroup` in
-  `TNLean/Algebra/PermutationMatrixUnitary.lean`.
+  `QICLean/Algebra/PermutationMatrixUnitary.lean` (QICLean dependency).
 - **Notes:** all three call sites now use the common theorem; the
   fundamental-theorem consumer simplifies the coercion of `permGL` to its
-  underlying permutation matrix.
+  underlying permutation matrix. The theorem moved to QICLean on 2026-10-26
+  with its name and proof unchanged; the TNLean copy was deleted to avoid
+  declaring the same theorem twice after the dependency update.
 
 ### non-injectivity from an annihilating linear functional — promoted
 - **Pattern:** exhibit a matrix outside the span of a finite Kraus family by
