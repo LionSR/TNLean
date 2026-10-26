@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Combinatorics.SimpleGraph.CycleGraph
 import Mathlib.Combinatorics.SimpleGraph.Metric
 import Mathlib.LinearAlgebra.Matrix.Permutation
-import TNLean.Algebra.PermutationMatrixUnitary
+import QICLean.Algebra.PermutationMatrixUnitary
 import TNLean.Circuit.SitePermutationSupport
 import TNLean.Lattice.GaussianFilteredTerm
 
