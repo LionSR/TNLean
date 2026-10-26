@@ -124,9 +124,12 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
     after the first $k$ sites, then $X=\lbrack k-1,k+1)$.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:chain_full_support_window}
     The support contains distinct sites $x<k\le y$, so it has at least two
-    sites. Its diameter is at most one, hence it consists of two adjacent
-    sites. These must be $k-1$ and $k$.
+    sites. Its diameter is at most one, so it has exactly two sites. By
+    Theorem~\ref{thm:chain_full_support_window} with $R=1$, it is an interval
+    $\lbrack a,a+2)$ of two adjacent sites, and $a\le x<k\le y\le a+1$ forces
+    $a=k-1$.
 \end{proof}
 
 \begin{theorem}[The Hamiltonian at one cut]
