@@ -38,7 +38,7 @@ Hence the power series of `ρ(β, l)` sums to
 sets, and `e^{-βH} - ρ(β, l)` is the same sum over the nonempty families.
 
 **Local fix (the boundary of a cluster):** the source defines `B(C)` as the terms `j ∉ C` with
-`H_j` acting on a site of `C` (lines 1130–1133), and claims that a word containing `H_C` and
+`H_j` acting on a site of `C` (lines 1131–1134), and claims that a word containing `H_C` and
 avoiding `H_{B(C)}` has a cluster consisting of exactly the sites of `H_C` (lines 1134–1138).
 That fails: on a chain with `H_i` acting on `{i-1, i, i+1}`, `C = {1}` has `B(C) = {0, 2}`, and
 the word `H_1 H_3` avoids `B(C)` while `H_3` overlaps `H_1` at site `2`. The boundary used here
@@ -360,7 +360,7 @@ instance (acts : κ → Finset σ) : DecidableRel (overlapGraph acts).Adj :=
 
 /-- In the overlap graph, the boundary of `C` is the set of terms outside `C` whose support meets
 the support `⋃_{i ∈ C} acts i` of `H_C`. This is the boundary for which a word containing `H_C`
-and avoiding the boundary has `C` as a cluster; the source's `B(C)` (lines 1130–1133) asks only
+and avoiding the boundary has `C` as a cluster; the source's `B(C)` (lines 1131–1134) asks only
 that `H_j` act on a site of `C`. -/
 theorem mem_boundary_overlapGraph (acts : κ → Finset σ) {C : Finset κ} {j : κ} :
     j ∈ boundary (overlapGraph acts) C ↔ j ∉ C ∧ (acts j ∩ C.biUnion acts).Nonempty := by

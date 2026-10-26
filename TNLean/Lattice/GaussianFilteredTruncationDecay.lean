@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.PowerExponential
 import TNLean.Lattice.GaussianFilteredTruncationGround
 
 /-!
@@ -16,8 +17,6 @@ file makes the choices of the source and obtains the single exponential of eq. `
 region grows at most polynomially, `N l ≤ K_g (l + 1)^k`, then the excited component is at most
 `‖W‖ (3 + C' J) e^{-l / l_fac}` times `‖ψ‖`, with `l_fac = 2 / min (c₁ ΔE) (μ - c₁ v)`.
 
-* `Real.add_one_pow_mul_le_mul_exp`: `(x + 1)^k x ≤ ((k + 1)! e^a / a^(k + 1)) e^{a x}` for
-  `a > 0` and `x ≥ 0`, which absorbs the polynomial prefactor.
 * `exists_norm_sub_starProjection_truncated_apply_le_exp`: eq. `facld` for a ground vector.
 * `exists_norm_truncated_apply_sub_inner_smul_le_exp`: the same for a unique gapped ground
   state (lines 375–387).
@@ -48,20 +47,6 @@ eq. `facld` (lines 322–348), the choice of `q` (lines 337–349), and the uniq
 
 open GaussianFilter Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator InnerProductSpace Nat
-
-/-- **A polynomial against an exponential.** For `a > 0` and `x ≥ 0`,
-`(x + 1)^k x ≤ ((k + 1)! e^a / a^(k + 1)) e^{a x}`. This absorbs the polynomial shell count in
-Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, eq. `facld` (lines 322–348). -/
-theorem Real.add_one_pow_mul_le_mul_exp {a : ℝ} (ha : 0 < a) (k : ℕ) {x : ℝ} (hx : 0 ≤ x) :
-    (x + 1) ^ k * x ≤ (k + 1)! * Real.exp a / a ^ (k + 1) * Real.exp (a * x) := by
-  have hfac : (0 : ℝ) < (k + 1)! := by exact_mod_cast Nat.factorial_pos _
-  have hexp := Real.pow_div_factorial_le_exp (x := a * (x + 1)) (by positivity) (k + 1)
-  rw [div_le_iff₀ hfac, mul_pow, mul_add, mul_one, Real.exp_add] at hexp
-  calc (x + 1) ^ k * x ≤ (x + 1) ^ k * (x + 1) := by gcongr; linarith
-    _ = a ^ (k + 1) * (x + 1) ^ (k + 1) / a ^ (k + 1) := by
-      rw [mul_div_cancel_left₀ _ (by positivity)]; ring
-    _ ≤ Real.exp (a * x) * Real.exp a * (k + 1)! / a ^ (k + 1) := by gcongr
-    _ = (k + 1)! * Real.exp a / a ^ (k + 1) * Real.exp (a * x) := by ring
 
 namespace TNLean.Lattice
 

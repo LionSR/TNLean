@@ -150,6 +150,7 @@ import TNLean.Algebra.PiSigmaEquiv
 import TNLean.Algebra.PiTensorProductPhase
 import TNLean.Algebra.PositiveGeneralizedCocycle
 import TNLean.Algebra.PositivePowerSumMoments
+import TNLean.Algebra.PowerExponential
 import TNLean.Algebra.PrimitiveMatrixIdealDimension
 import TNLean.Algebra.ProjectionDefectIsometry
 import TNLean.Algebra.ProjectiveCommutantEigenspace
