@@ -23,15 +23,6 @@ namespace TNLean.MPS.AreaLaw
 
 variable {L q : ℕ}
 
-/-- Passing to cut coordinates preserves the inner product. -/
-private theorem inner_cutVector (k : ℕ)
-    (ψ φ : EuclideanSpace ℂ (Fin L → Fin q)) :
-    inner ℂ (Entropy.cutVector (leftBlock L k) ψ)
-      (Entropy.cutVector (leftBlock L k) φ) = inner ℂ ψ φ := by
-  simp only [EuclideanSpace.inner_eq_star_dotProduct, dotProduct]
-  exact Equiv.sum_comp (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k)).symm
-    (fun x ↦ φ x * star (ψ x))
-
 /-- The inner product of two product vectors factors into the inner products
 of their corresponding factors. -/
 private theorem inner_tensorVector {α β : Type*} [Fintype α] [Fintype β]

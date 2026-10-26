@@ -301,12 +301,13 @@ eq.~(thd) \cite{gap:hastings05_truncated_dynamics}.
     region $K_l\supseteq S$, such that every omitted term meeting $K_l$ lies at
     distance at least $m=l-3R$ from $S$. Suppose the number $N_l$ of omitted
     terms meeting $K_l$ satisfies $N_l\le K_g(l+1)^k$. Then there is a constant
-    $C'\ge0$, independent of $l$, such that for every $l$ and every ground
+    $C_1'\ge0$, independent of $l$, such that for every $l$ and every ground
     vector $\psi$ the component of $M_l\psi$ orthogonal to the ground space
-    has norm at most $\|W\|(3+C'J)e^{-l/l_{fac}}\|\psi\|$, and, if $\Omega$ is
-    a unique ground state with gap $\Delta E$,
+    has norm at most $\|W\|(3+C_1'J)e^{-l/l_{fac}}\|\psi\|$.
+    If $\Omega$ is a unique ground state with gap $\Delta E$, there is also a
+    constant $C_2'\ge0$, independent of $l$, such that for every $l$,
     $\|M_l\Omega-\langle\Omega,M_l\Omega\rangle\Omega\|\le
-        \|W\|(3+C'J)e^{-l/l_{fac}}$. This is the form $JO(e^{-l_{proj}/l_{fac}})$
+        \|W\|(3+C_2'J)e^{-l/l_{fac}}$. This is the form $JO(e^{-l_{proj}/l_{fac}})$
     of eq.~(facld) of \cite[lines 322--349]{Hastings2006Solving}, with the
     polynomial growth of the shell as an explicit hypothesis
     \cite{gap:hastings05_truncated_dynamics}.
@@ -324,5 +325,6 @@ eq.~(thd) \cite{gap:hastings05_truncated_dynamics}.
     $x\ge0$, the inequality $y^{k+1}/(k+1)!\le e^{y}$ at $y=a(x+1)$ gives
     $(x+1)^kx\le(k+1)!\,e^{a}a^{-(k+1)}e^{ax}$. With $a=\delta/2$ this bounds
     $N_l\,l$ by a constant times $e^{\delta l/2}$, so the second term is at
-    most $\|W\|C'Je^{-\delta l/2}$.
+    most $\|W\|C_1'Je^{-\delta l/2}\|\psi\|$ in the ground-space estimate
+    and $\|W\|C_2'Je^{-\delta l/2}$ in the unique-ground-state estimate.
 \end{proof}
