@@ -257,3 +257,49 @@ whose range is the span of the columns of $M_i(\psi)$.
     Each $u_{i,j}$ belongs to $T$, so every such column lies in
     $\operatorname{Span}(T)$.
 \end{proof}
+
+\begin{theorem}[A finite family of minimizing boundary states]
+    \label{thm:lvv_finite_boundary_selection}
+    \lean{TNLean.MPS.AreaLaw.exists_finite_boundary_minimizer_family}
+    \leanok
+    \uses{def:lvv_finite_left_columns,def:chain_gluing_left_coordinates,def:lvv_viable_set}
+    Fix a set $S\subseteq\mathcal L$, a linear operator $H_L$ on $\mathcal L$,
+    a natural number $m$, a real number $\eta$, and a finite set $N$ of
+    matrices on $\mathcal C\otimes\mathbb C^m$, where $\mathcal C$ is the
+    Hilbert space of the region between consecutive clipped left blocks. Identify
+    $\mathcal L=\mathcal A\otimes\mathcal C$ by joining the left coordinates.
+    Let $P_S$ be the orthogonal projection onto $\operatorname{Span}(S)$, and put
+    \begin{align}
+        Q       & =P_S\otimes I_m, \notag                                          \\
+        E(\rho) & =\operatorname{Re}\tr\bigl(\rho(H_L\otimes I_m)\bigr),\notag     \\
+        \mathcal F_X
+                & =\left\{\rho\ge0:\tr\rho=1,\ Q\rho=\rho,\
+        \bigl\|\operatorname{tr}_{\mathcal A}\rho-X\bigr\|_1\le\eta\right\},\notag \\
+        F       & =\{X\in N:\mathcal F_X\ne\varnothing\}.\notag
+    \end{align}
+    For every $X\in F$, one can choose $\sigma_X\in\mathcal F_X$, a unit
+    vector $u_X$ and a real number $\mu_X>0$ such that
+    $E(\sigma_X)\le E(\rho)$ for every $\rho\in\mathcal F_X$,
+    $\sigma_Xu_X=\mu_Xu_X$ and $Qu_X=u_X$.
+    Every real eigenvalue of $\sigma_X$ with a nonzero eigenvector is at
+    most $\mu_X$. After joining the left coordinates, write
+    $u_X=\sum_{j<m}u_{X,j}\otimes|j\rangle$ and define
+    \begin{align}
+        T   & =\{u_{X,j}:X\in F,\ j<m\}.\notag       \\
+        |T| & \le m|N|,\notag                        \\
+        T   & \subseteq\operatorname{Span}(S).\notag
+    \end{align}
+    These choices use only $S,H_L,m,\eta,N$. This is an auxiliary
+    fixed-bond construction for the size-trimming step
+    of~\cite[Claim~2.7, source lines 472--478 and 520--527]{Landau2015Polynomial}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_gluing_left_projection,thm:lvv_finite_left_columns}
+    At every $X\in F$, choose a global minimizer and a leading unit
+    eigenvector by the minimizing-density selection
+    theorem~\cite[``A minimizing density matrix and a leading eigenvector'']{QICLean2026Blueprint}.
+    Its positive eigenvalue gives $Qu_X=u_X$. Joining the left coordinates
+    transports this identity to $(P_S\otimes I_m)u_X=u_X$.
+    Theorem~\ref{thm:lvv_finite_left_columns} gives
+    $T\subseteq\operatorname{Span}(S)$ and $|T|\le m|F|\le m|N|$.
+\end{proof}
