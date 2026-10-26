@@ -1,5 +1,11 @@
 import TNLean.Algebra.FrequencyCounts
 
+/-!
+# Axioms of the frequency-count theorems
+
+The four guarded theorems use only the standard logical axioms.
+-/
+
 /-- info:
 'Nat.card_fun_sum_eq_and_two_eq' depends on axioms:
 [propext, Classical.choice, Quot.sound]

@@ -1,5 +1,12 @@
 import TNLean.Algebra.FrequencyCounts
 
+/-!
+# Boundary cases for frequency counts
+
+The examples include zero residual degree, vanishing fibres and the uniform
+power bound.
+-/
+
 open scoped BigOperators
 
 -- No residual degree and one ordinary coordinate.
