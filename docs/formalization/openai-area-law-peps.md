@@ -186,7 +186,7 @@ filter, and rank arguments remain separate obligations.
 | Area-law `prop:two-families` | Proved (`twoFamilyDecomposition`) for all real `D₀` and `C_tpl`, with no further hypothesis | None. |
 | PEPS `prop:area-law` | Proved (`AreaLaw.squareEntropyAreaLaw`), through the Hermitian-part reduction | None. |
 | PEPS `app:companion` | Each listed companion statement compared with its formal statement; see below | As in the rows for the area-law labels. |
-| PEPS `thm:main` | Proved (`polynomialPEPSApproximation`), with Proposition 4.1 proved as `adaptivePatchConstraint`; the existential phase agrees with the printed minimum (`hasPEPSApproximation_iff_iInf`) | The formal statement of Proposition 7.1 is narrower than the source (#8772); Theorem 1.1 uses only the proved part. |
+| PEPS `thm:main` | Proved (`polynomialPEPSApproximation`), with Proposition 4.1 proved as `adaptivePatchConstraint` and Proposition 7.1 proved as `largeSizeDyadicProtocolConsequences` under the endpoint-coordinate convention ([paper-gap note](../paper-gaps/polypeps_prop71_consequences_interface.tex)); the existential phase agrees with the printed minimum (`hasPEPSApproximation_iff_iInf`) | None. |
 
 ### Appendix A companion statements
 

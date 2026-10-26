@@ -136,13 +136,19 @@ rewrites.\footnote{\leanid{TNLean.PEPS.Approximation.LargeSizeDyadicProtocolBoun
 
 \section{Omitted clauses}
 
-No clause of Proposition~7.1 is omitted from the formal predicate. The last
-omitted clause, that every intermediate reference vector $r_t$, $0 < t < n$,
-has at least one frame (\path{06-geometry.tex}, lines~38--40), is now stated
-and proved for the construction: every change of the schedule keeps the main
-sheet. Read per stage, being the main copy carries no content beyond the
-designations at the initial stage and before the readout. The formal statement
-is therefore Proposition~7.1, and it is proved.
+Under the endpoint-coordinate convention above, no clause of Proposition~7.1 is
+omitted from the formal predicate: strict intermediate references $r_t$
+($0 < t < n$) are products of encoded frames, whereas the terminal reference
+$r_n$ is expressed in physical and private coordinates as $\Omega \otimes \Xi$,
+and the canonical regrouping of the same auxiliary stack is proved for the
+constructed witness rather than retained as a separate field of the public
+protocol predicate. That every intermediate reference vector $r_t$, $0 < t < n$,
+has at least one frame (\path{06-geometry.tex}, lines~38--40) is stated in the
+predicate and proved for the construction: every change of the schedule keeps
+the main sheet. Read per stage, being the main copy carries no content beyond
+the designations at the initial stage and before the readout. Under this
+endpoint-coordinate convention, the formal statement is Proposition~7.1, and it
+is proved.
 
 \section{Clauses carried by the formal statement}
 
@@ -181,9 +187,11 @@ Two further clauses of Proposition~7.1 hold for the formal predicate.
 
 \section{Resolution}
 
-The restriction is resolved: every clause of Proposition~7.1 is a field of the
-formal predicate and is proved for the constructed protocol, and the existence
-of the protocol is proved without hypotheses. Nothing remains.
+The restriction is resolved: under the endpoint-coordinate convention, every
+clause of Proposition~7.1 is carried by the fields of the formal predicate and
+proved for the constructed protocol witness (including the canonical regrouping
+of the terminal auxiliary stack), and the existence of the protocol is proved
+without hypotheses. Nothing remains.
 
 \bibliographystyle{alpha}
 \bibliography{references}

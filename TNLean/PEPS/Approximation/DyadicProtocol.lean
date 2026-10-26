@@ -23,10 +23,10 @@ product initialization; the changes, their gates, and the lifetime participation
 party; the scales and addresses of the parties at a gate; and the reference vectors, with the
 final reference `Ω ⊗ Ξ`.
 
-This module records the consequences of Proposition 7.1 that the assembly of §8 consumes, not
-the proposition itself. A protocol is modelled as a distributed construction in the sense of
-Theorem 5.2 (`thm:compression`) whose chronology is cut into changes, together with a dyadic
-attachment of its parties and a reference vector at every stage:
+This module formalizes the distribution protocol of Proposition 7.1 and proves the
+consequences that the assembly of §8 consumes. A protocol is modelled as a distributed
+construction in the sense of Theorem 5.2 (`thm:compression`) whose chronology is cut into
+changes, together with a dyadic attachment of its parties and a reference vector at every stage:
 
 * the parties form a finite type `P` with a `DyadicPlacement`: the scale and the block indices
   of the square to which each party is attached;
@@ -46,6 +46,10 @@ attachment of its parties and a reference vector at every stage:
 its constants chosen before the size, the Hamiltonian, and the ground vector, is the statement
 `LargeSizeDyadicProtocolConsequences`. This module does not prove that statement.
 
+Under the endpoint-coordinate convention above—where strict intermediate references are products
+of encoded frames and the terminal reference is expressed in physical and private coordinates as
+`Ω ⊗ Ξ`, with the canonical regrouping of the same auxiliary stack proved for the constructed
+witness rather than retained as a separate field of the public protocol predicate—
 `IsDistributionProtocol` carries every clause of Proposition 7.1 (`06-geometry.tex:12–53`); the
 former scope restriction to the consequences used in §8 is resolved in
 `docs/paper-gaps/polypeps_prop71_consequences_interface.tex`.

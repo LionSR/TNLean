@@ -30,10 +30,5 @@ CmdLine
   -n 26  # Space-before-punctuation heuristic; false positive on tenkz range syntax `..`.
   -n 27  # Input-following ("Could not execute LaTeX command"): the chapter aggregators use `\input{chapter/...}` paths that only resolve when a parent is linted first, so linting a chapter file standalone floods this non-actionable warning depending on file order.
   -n 40  # Punctuation around inline math heuristic.
-  -n 44  # Nested-optional-argument bracket heuristic ("optional arguments []
-         # inside optional arguments [] must be enclosed in {}"); a User Regex
-         # class whose inline `% chktex 44` suppression is unreliable, and which
-         # false-positives on math half-open intervals such as [a,b) and on
-         # functional-indexing brackets such as H[h\mapsto C[c\mapsto ...]].
   -n 45  # Display-math delimiter heuristic.
 }
