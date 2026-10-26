@@ -17,9 +17,9 @@ product of the two operators, with bond dimension `D₁ * D₂` and closing matr
 dimensions may vanish.
 
 The main identity is `MPOTensor.trace_prod_mulTensor`; its identity-closing
-specialization is `MPOTensor.trace_prod_mulTensor_one`. Two ordered matrix
-product identities give the coordinate change and Kronecker factorization
-used in the proof.
+specialization is `MPOTensor.trace_prod_mulTensor_one`. Mathlib’s identities
+for monoid homomorphisms and ordered products give the coordinate change and
+Kronecker factorization used in the proof.
 
 This extends the product construction in arXiv:1606.00608, Section 4.5,
 lines 986–993, to site-dependent tensors and supplied closing matrices.
@@ -28,36 +28,6 @@ lines 986–993, to site-dependent tensors and supplied closing matrices.
 open scoped BigOperators Kronecker
 
 noncomputable section
-
-namespace Matrix
-
-/-- A simultaneous coordinate change preserves the ordered matrix product.
-Supporting product algebra for CPSV17, arXiv:1606.00608, §4.5, lines 986–993. -/
-private theorem prod_ofFn_submatrix_equiv {ι κ : Type*} [Fintype ι] [Fintype κ]
-    [DecidableEq ι] [DecidableEq κ] {L : ℕ}
-    (F : Fin L → Matrix ι ι ℂ) (e : κ ≃ ι) :
-    (List.ofFn (fun v ↦ (F v).submatrix e e)).prod =
-      ((List.ofFn F).prod).submatrix e e := by
-  simpa only [List.map_ofFn, Function.comp_def, coe_reindexRingEquiv,
-    reindex_apply, Equiv.symm_symm] using
-    (map_list_prod (reindexRingEquiv ℂ e.symm) (List.ofFn F)).symm
-
-/-- Sitewise Kronecker products preserve the order in each factor.
-Supporting product algebra for CPSV17, arXiv:1606.00608, §4.5, lines 986–993. -/
-private theorem prod_ofFn_kronecker {D₁ D₂ L : ℕ}
-    (A : Fin L → Matrix (Fin D₁) (Fin D₁) ℂ)
-    (B : Fin L → Matrix (Fin D₂) (Fin D₂) ℂ) :
-    (List.ofFn (fun v ↦ A v ⊗ₖ B v)).prod =
-      (List.ofFn A).prod ⊗ₖ (List.ofFn B).prod := by
-  induction L with
-  | zero => simp only [List.ofFn_zero, List.prod_nil, one_kronecker_one]
-  | succ L ih =>
-    simp only [List.ofFn_succ, List.prod_cons]
-    rw [ih (fun v ↦ A v.succ) (fun v ↦ B v.succ)]
-    exact (mul_kronecker_mul (A 0) (List.ofFn (fun v ↦ A v.succ)).prod
-      (B 0) (List.ofFn (fun v ↦ B v.succ)).prod).symm
-
-end Matrix
 
 namespace MPOTensor
 
@@ -78,11 +48,19 @@ theorem trace_prod_mulTensor {L q D₁ D₂ : ℕ}
           Matrix.trace (C₂ * (List.ofFn (fun v ↦ B v (ρ v) (τ v))).prod) := by
   intro e
   simp only [mulTensor_apply]
-  rw [Matrix.prod_ofFn_submatrix_equiv,
-    Matrix.submatrix_mul_equiv _ _ e e e, Matrix.trace_submatrix_equiv]
+  have hcoord := (map_list_prod (Matrix.reindexRingEquiv ℂ e.symm)
+    (List.ofFn (fun v ↦ ∑ j : Fin q, A v (σ v) j ⊗ₖ B v j (τ v)))).symm
+  simp only [List.map_ofFn, Function.comp_def, Matrix.coe_reindexRingEquiv,
+    Matrix.reindex_apply, Equiv.symm_symm] at hcoord
+  rw [hcoord, Matrix.submatrix_mul_equiv _ _ e e e, Matrix.trace_submatrix_equiv]
   rw [List.prod_ofFn_sum, Finset.mul_sum, Matrix.trace_sum]
   refine Finset.sum_congr rfl fun ρ _ ↦ ?_
-  rw [Matrix.prod_ofFn_kronecker, ← Matrix.mul_kronecker_mul, Matrix.trace_kronecker]
+  have hprod := (List.ofFn (fun v : Fin L ↦ v)).prod_hom₂
+    (fun (X : Matrix (Fin D₁) (Fin D₁) ℂ) (Y : Matrix (Fin D₂) (Fin D₂) ℂ) ↦ X ⊗ₖ Y)
+    Matrix.mul_kronecker_mul Matrix.one_kronecker_one
+    (fun v ↦ A v (σ v) (ρ v)) (fun v ↦ B v (ρ v) (τ v))
+  simp only [List.map_ofFn, Function.comp_def] at hprod
+  rw [hprod, ← Matrix.mul_kronecker_mul, Matrix.trace_kronecker]
 
 /-- With identity closing matrices, the site-dependent product tensor has the
 ordinary trace coefficients of the product operator. No translation-invariance

@@ -104,7 +104,6 @@ reconstruction from full-support isometries.
     \cite[Theorem~4.14(iii)]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-% This site-dependent product identity awaits ordinary-package verification.
 \begin{theorem}[Products of site-dependent matrix product operators]%
     \label{thm:mpdo_sitewise_operator_product}
     \lean{MPOTensor.trace_prod_mulTensor, MPOTensor.trace_prod_mulTensor_one}
@@ -139,9 +138,17 @@ reconstruction from full-support isometries.
         \notag
     \end{align}
     for arbitrary square matrices $F_v$ and $G_v$ of the respective dimensions.
-    Expand each product tensor by (\ref{eq:rfp_product_tensor}), and distribute
-    the ordered product over the choices of $\rho$. Each summand is thus the
-    tensor product of the two ordered products with their closing matrices.
+    Expanding each product tensor by (\ref{eq:rfp_product_tensor}) gives
+    \begin{align}
+         & \prod_{v=0}^{L-1}\left(\sum_{j=0}^{q-1}
+        A_v^{\sigma_v j}\otimes B_v^{j\tau_v}\right)\notag \\
+         & \qquad=\sum_{\rho\in\{0,\ldots,q-1\}^L}
+        \left(\prod_{v=0}^{L-1}A_v^{\sigma_v\rho_v}\right)
+        \otimes\left(\prod_{v=0}^{L-1}B_v^{\rho_v\tau_v}\right).
+        \notag
+    \end{align}
+    Multiplying by $C_1\otimes C_2$ inserts the respective closing matrices
+    in the two factors of each summand.
     Taking traces uses $\tr(X\otimes Y)=\tr(X)\tr(Y)$ and gives
     (\ref{eq:rfp_sitewise_product}).
 \end{proof}
