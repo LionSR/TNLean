@@ -1,0 +1,395 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import Mathlib.LinearAlgebra.Isomorphisms
+import Mathlib.RingTheory.SimpleModule.Rank
+import TNLean.Algebra.CoveringMatching
+import TNLean.Algebra.Subquotient
+import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessFlag
+import TNLean.MPS.Symmetry.MPOSymmetry.ZipperUniqueness
+
+/-!
+# The blocks of a multi-block reduction are unique
+
+Let `P` and `Q` be two multi-block compressions of the same tensor `B`, onto normal blocks
+`C s`, `s ∈ S`, with `z` zero slots, and onto normal blocks `C' t`, `t ∈ S'`, with `z'` zero
+slots. The flags `M_k` of `P` and `M'_{k'}` of `Q` are covering chains of invariant subspaces:
+the step `M_k / M_{k-1}` is the word module of the diagonal block at position `k`, which is
+simple. Proposition 4.2 (The matching) of lecture note MultiBlockUniqueness matches the steps of the
+two
+chains: the step `k` goes to the least `k'` with `M_k ∩ M'_{k'} ⊄ M_{k-1}`, and with
+`U = M_k ∩ M'_{k'}`, `K = M_{k-1} ∩ M'_{k'} = M_k ∩ M'_{k'-1}`, the inclusions of `U` induce
+isomorphisms `U / K ≅ M_k / M_{k-1}` and `U / K ≅ M'_{k'} / M'_{k'-1}` of word-algebra modules.
+Isomorphic word modules come from gauge related tensors. A zero slot has all letters zero and a
+normal block has a nonzero letter, so the matching sends zero slots to zero slots and block slots
+to block slots; this is Theorem 4.3 (A: the blocks are unique): `z = z'` and the blocks agree up to
+a bijection of the
+labels and gauge.
+
+## Main definitions
+
+* `MPSTensor.MultiBlockCompression.coveringChain`: the flag of a compression onto normal blocks
+  as a covering chain.
+* `MPSTensor.MultiBlockCompression.matching`: the matching of the positions of two compressions.
+* `MPSTensor.MultiBlockCompression.stepEquivMatching`: the matched diagonal blocks have
+  isomorphic word modules.
+* `MPSTensor.MultiBlockCompression.slotMatching`, `MPSTensor.MultiBlockCompression.labelMatching`:
+  the matching read on the slot labels and on the block labels.
+
+## Main results
+
+* `MPSTensor.MultiBlockCompression.matching_symm`,
+  `MPSTensor.MultiBlockCompression.flag_sup_inf_eq` and its four companion identities:
+  Proposition 4.2 (The matching).
+* `MPSTensor.isGaugeRelated_of_linearEquiv`: isomorphic word modules come from gauge related
+  tensors.
+* `MPSTensor.MultiBlockCompression.matching_inl_iff`, `MPSTensor.MultiBlockCompression.z_eq`,
+  `MPSTensor.MultiBlockCompression.z_eq_and_exists_equiv_isGaugeRelated`: Theorem 4.3 (A: the blocks
+  are unique).
+-/
+
+open scoped Matrix
+
+namespace MPSTensor
+
+open WordAlgebra
+
+section Bridge
+
+variable {d D₁ D₂ : ℕ}
+
+/-- Isomorphic word modules come from gauge related tensors: a word-algebra isomorphism
+`A.WordModule ≃ A'.WordModule` is, in coordinates, an invertible matrix intertwining the letters
+(lecture note MultiBlockUniqueness, Proposition 4.2 (The matching), last clause). -/
+theorem isGaugeRelated_of_linearEquiv {A : MPSTensor d D₁} {A' : MPSTensor d D₂}
+    (e : A.WordModule ≃ₗ[WordAlgebra d] A'.WordModule) : IsGaugeRelated A A' := by
+  let g : (Fin D₂ → ℂ) ≃ₗ[ℂ] (Fin D₁ → ℂ) :=
+    ((WordModule.toVec A').symm.trans (e.symm.restrictScalars ℂ)).trans (WordModule.toVec A)
+  have hg : ∀ (i : Fin d) (w : Fin D₂ → ℂ), g (A' i *ᵥ w) = A i *ᵥ g w := by
+    intro i w
+    obtain ⟨v, rfl⟩ := (WordModule.toVec A').surjective w
+    simp only [g, LinearEquiv.trans_apply, LinearEquiv.restrictScalars_apply,
+      LinearEquiv.symm_apply_apply]
+    rw [← asModuleEquiv_letter_smul, LinearEquiv.symm_apply_apply, map_smul,
+      asModuleEquiv_letter_smul]
+  refine ⟨LinearMap.toMatrix' (g : (Fin D₂ → ℂ) →ₗ[ℂ] (Fin D₁ → ℂ)),
+    LinearMap.toMatrix' (g.symm : (Fin D₁ → ℂ) →ₗ[ℂ] (Fin D₂ → ℂ)), ?_, ?_, fun i => ?_⟩
+  · rw [← LinearMap.toMatrix'_comp, ← LinearMap.toMatrix'_id]
+    congr 1
+    ext w
+    simp
+  · rw [← LinearMap.toMatrix'_comp, ← LinearMap.toMatrix'_id]
+    congr 1
+    ext w
+    simp
+  · refine Matrix.toLin'.injective (LinearMap.ext fun w => ?_)
+    rw [Matrix.toLin'_apply, Matrix.toLin'_apply, ← Matrix.mulVec_mulVec,
+      ← Matrix.mulVec_mulVec, LinearMap.toMatrix'_mulVec, LinearMap.toMatrix'_mulVec,
+      LinearEquiv.coe_coe, hg]
+
+/-- Gauge related tensors have all letters zero together. -/
+theorem IsGaugeRelated.forall_eq_zero_iff {A : MPSTensor d D₁} {A' : MPSTensor d D₂}
+    (h : IsGaugeRelated A A') : (∀ i, A i = 0) ↔ ∀ i, A' i = 0 := by
+  obtain ⟨X, Y, hXY, hYX, hint⟩ := h
+  refine ⟨fun h0 i => ?_, fun h0 i => ?_⟩
+  · calc A' i = Y * (A i * X) := by rw [hint, ← Matrix.mul_assoc, hYX, Matrix.one_mul]
+      _ = 0 := by rw [h0, Matrix.zero_mul, Matrix.mul_zero]
+  · calc A i = X * A' i * Y := by rw [← hint, Matrix.mul_assoc, hXY, Matrix.mul_one]
+      _ = 0 := by rw [h0, Matrix.mul_zero, Matrix.zero_mul]
+
+/-- Gauge related tensors have equal bond dimensions. -/
+theorem IsGaugeRelated.dim_eq {A : MPSTensor d D₁} {A' : MPSTensor d D₂}
+    (h : IsGaugeRelated A A') : D₁ = D₂ := by
+  obtain ⟨X, Y, hXY, hYX, -⟩ := h
+  let e : (Fin D₂ → ℂ) ≃ₗ[ℂ] (Fin D₁ → ℂ) :=
+    LinearEquiv.ofLinearMap (Matrix.toLin' X) (Matrix.toLin' Y)
+      (by rw [← Matrix.toLin'_mul, hXY, Matrix.toLin'_one])
+      (by rw [← Matrix.toLin'_mul, hYX, Matrix.toLin'_one])
+  simpa using e.finrank_eq.symm
+
+end Bridge
+
+section Letters
+
+variable {d D : ℕ}
+
+/-- A one-dimensional module over the word algebra is simple. -/
+theorem isSimpleModule_of_finrank_eq_one {M : Type*} [AddCommGroup M] [Module ℂ M]
+    [Module (WordAlgebra d) M] [IsScalarTower ℂ (WordAlgebra d) M]
+    (h : Module.finrank ℂ M = 1) : IsSimpleModule (WordAlgebra d) M := by
+  have : IsSimpleModule ℂ M := isSimpleModule_iff_finrank_eq_one.2 h
+  have : Nontrivial M := Module.nontrivial_of_finrank_eq_succ h
+  refine (isSimpleModule_iff (WordAlgebra d) M).2 ⟨fun K => ?_⟩
+  rcases IsSimpleOrder.eq_bot_or_eq_top (K.restrictScalars ℂ) with hK | hK
+  · exact Or.inl (Submodule.restrictScalars_injective ℂ _ _ (by simpa using hK))
+  · exact Or.inr (Submodule.restrictScalars_injective ℂ _ _ (by simpa using hK))
+
+end Letters
+
+namespace MultiBlockCompression
+
+variable {d DB : ℕ} {ι κ : Type*} [DecidableEq ι] [DecidableEq κ] {D : ι → ℕ} {D' : κ → ℕ}
+  {B : MPSTensor d DB} {S : Finset ι} {S' : Finset κ} {C : ∀ s, MPSTensor d (D s)}
+  {C' : ∀ t, MPSTensor d (D' t)}
+
+omit [DecidableEq ι] in
+/-- The diagonal block of a slot of a compression onto normal blocks has a simple word module:
+a normal block of positive bond dimension, or a one-dimensional zero slot. -/
+theorem isSimpleModule_slotTensor {z : ℕ} (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
+    (hD : ∀ s ∈ S, 0 < D s) (b : BlockIndex S z) :
+    IsSimpleModule (WordAlgebra d) (slotTensor C b).WordModule := by
+  rcases b with s | t
+  · exact isSimpleModule_wordModule_of_isNormal (C s.1) (hC s.1 s.2) (hD s.1 s.2)
+  · refine isSimpleModule_of_finrank_eq_one ?_
+    rw [(WordModule.toVec (slotTensor C (Sum.inr t : BlockIndex S z))).finrank_eq]
+    simp
+
+omit [DecidableEq ι] in
+/-- On a zero slot every letter of the diagonal block vanishes; on a block slot of a compression
+onto normal blocks some letter does not (lecture note MultiBlockUniqueness, proof of
+Theorem 4.3 (A: the blocks are unique)). -/
+theorem forall_slotTensor_eq_zero_iff {z : ℕ} (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
+    (hD : ∀ s ∈ S, 0 < D s) (b : BlockIndex S z) :
+    (∀ i, slotTensor C b i = 0) ↔ b.isRight := by
+  rcases b with s | t
+  · simp only [Sum.isRight_inl, Bool.false_eq_true, iff_false, not_forall]
+    have : NeZero (D s.1) := ⟨(hD s.1 s.2).ne'⟩
+    exact exists_ne_zero_of_isNormal (hC s.1 s.2)
+  · simp only [Sum.isRight_inr, iff_true]
+    intro i
+    rfl
+
+variable (P : MultiBlockCompression B S C) (Q : MultiBlockCompression B S' C')
+
+/-- The step of the flag at position `k` is the word module of the diagonal block of the slot at
+position `k` (lecture note MultiBlockUniqueness, Proposition 2.3 (Reductions are labelled flags with
+an adapted basis)), indexed by the position. -/
+noncomputable def stepEquivAt (k : Fin (S.card + P.z)) :
+    Submodule.subquot (P.flag k.castSucc) (P.flag k.succ) ≃ₗ[WordAlgebra d]
+      (slotTensor C (P.ord.symm k)).WordModule :=
+  (Submodule.subquotCongr (by rw [P.ord.apply_symm_apply]) (by rw [P.ord.apply_symm_apply])).trans
+    (P.stepEquiv (P.ord.symm k))
+
+/-- The steps of the flag of a compression onto normal blocks are covering pairs: nothing
+invariant lies strictly between `M_{k-1}` and `M_k`, because the step is a simple module
+(lecture note MultiBlockUniqueness, Section 4). -/
+theorem flag_covBy (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
+    (k : Fin (S.card + P.z)) : P.flag k.castSucc ⋖ P.flag k.succ := by
+  have := isSimpleModule_slotTensor hC hD (P.ord.symm k)
+  exact (covBy_iff_quot_is_simple (P.flag_mono (Fin.castSucc_le_succ k))).2
+    (IsSimpleModule.congr (P.stepEquivAt k))
+
+/-- **The flag of a compression onto normal blocks is a covering chain** (lecture note
+MultiBlockUniqueness, Proposition 4.2 (The
+matching)): `⊥ = M_0 ⋖ M_1 ⋖ ⋯ ⋖ M_r = ⊤` in the lattice of
+invariant subspaces of the bond space. -/
+noncomputable def coveringChain (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s) :
+    CoveringMatching.CoveringChain (Submodule (WordAlgebra d) B.WordModule) (S.card + P.z) where
+  M := P.flag
+  M_zero := P.flag_zero
+  M_last := P.flag_last
+  covBy := P.flag_covBy hC hD
+
+variable (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
+  (hC' : ∀ t ∈ S', Kraus.IsNormal (C' t)) (hD' : ∀ t ∈ S', 0 < D' t)
+
+/-- **The matching of two compressions** (lecture note MultiBlockUniqueness, Proposition 4.2 (The
+matching)):
+the position `k` of `P` goes to the least position `k'` of `Q` with
+`M_k ∩ M'_{k'} ⊄ M_{k-1}`. -/
+noncomputable def matching : Fin (S.card + P.z) ≃ Fin (S'.card + Q.z) :=
+  (P.coveringChain hC hD).jumpEquiv (Q.coveringChain hC' hD')
+
+theorem matching_apply (k : Fin (S.card + P.z)) :
+    P.matching Q hC hD hC' hD' k =
+      CoveringMatching.CoveringChain.jump (P.coveringChain hC hD) (Q.coveringChain hC' hD') k :=
+  rfl
+
+/-- Lecture note MultiBlockUniqueness, Proposition 4.2 (The matching): the inverse of the matching
+is the
+matching with the two compressions exchanged. -/
+theorem matching_symm : (P.matching Q hC hD hC' hD').symm = Q.matching P hC' hD' hC hD :=
+  rfl
+
+/-- Lecture note MultiBlockUniqueness, Proposition 4.2 (The matching) with Lemma 4.1 (One step
+against another), part (a): for matched positions
+`k ↦ k'`, `M_{k-1} + (M_k ∩ M'_{k'}) = M_k`. -/
+theorem flag_sup_inf_eq (k : Fin (S.card + P.z)) :
+    P.flag k.castSucc ⊔ (P.flag k.succ ⊓ Q.flag (P.matching Q hC hD hC' hD' k).succ) =
+      P.flag k.succ :=
+  (CoveringMatching.CoveringChain.jump_sup_eq (P.coveringChain hC hD)
+    (Q.coveringChain hC' hD') k).1
+
+/-- Lecture note MultiBlockUniqueness, Proposition 4.2 (The matching) with Lemma 4.1 (One step
+against another), part (b): for matched positions
+`k ↦ k'`, `M'_{k'-1} + (M_k ∩ M'_{k'}) = M'_{k'}`. -/
+theorem flag_sup_inf_eq' (k : Fin (S.card + P.z)) :
+    Q.flag (P.matching Q hC hD hC' hD' k).castSucc ⊔
+        (P.flag k.succ ⊓ Q.flag (P.matching Q hC hD hC' hD' k).succ) =
+      Q.flag (P.matching Q hC hD hC' hD' k).succ :=
+  (CoveringMatching.CoveringChain.jump_sup_eq (P.coveringChain hC hD)
+    (Q.coveringChain hC' hD') k).2.1
+
+/-- Lecture note MultiBlockUniqueness, Proposition 4.2 (The matching) with Lemma 4.1 (One step
+against another), part (c): for matched positions
+`k ↦ k'`, `U ∩ M_{k-1} = K`, where `U = M_k ∩ M'_{k'}` and `K = M_{k-1} ∩ M'_{k'}`. -/
+theorem flag_inf_inf_eq (k : Fin (S.card + P.z)) :
+    P.flag k.succ ⊓ Q.flag (P.matching Q hC hD hC' hD' k).succ ⊓ P.flag k.castSucc =
+      P.flag k.castSucc ⊓ Q.flag (P.matching Q hC hD hC' hD' k).succ :=
+  (CoveringMatching.CoveringChain.jump_sup_eq (P.coveringChain hC hD)
+    (Q.coveringChain hC' hD') k).2.2.1
+
+/-- Lecture note MultiBlockUniqueness, Proposition 4.2 (The matching) with Lemma 4.1 (One step
+against another), part (c): for matched positions
+`k ↦ k'`, `U ∩ M'_{k'-1} = K`, where `U = M_k ∩ M'_{k'}` and `K = M_{k-1} ∩ M'_{k'}`. -/
+theorem flag_inf_inf_eq' (k : Fin (S.card + P.z)) :
+    P.flag k.succ ⊓ Q.flag (P.matching Q hC hD hC' hD' k).succ ⊓
+        Q.flag (P.matching Q hC hD hC' hD' k).castSucc =
+      P.flag k.castSucc ⊓ Q.flag (P.matching Q hC hD hC' hD' k).succ :=
+  (CoveringMatching.CoveringChain.jump_sup_eq (P.coveringChain hC hD)
+    (Q.coveringChain hC' hD') k).2.2.2.1
+
+/-- Lecture note MultiBlockUniqueness, Proposition 4.2 (The matching) with Lemma 4.1 (One step
+against another), part (c): for matched positions
+`k ↦ k'`, `M_{k-1} ∩ M'_{k'} = M_k ∩ M'_{k'-1}`. -/
+theorem flag_inf_eq (k : Fin (S.card + P.z)) :
+    P.flag k.castSucc ⊓ Q.flag (P.matching Q hC hD hC' hD' k).succ =
+      P.flag k.succ ⊓ Q.flag (P.matching Q hC hD hC' hD' k).castSucc :=
+  (CoveringMatching.CoveringChain.jump_sup_eq (P.coveringChain hC hD)
+    (Q.coveringChain hC' hD') k).2.2.2.2
+
+/-- **The matched steps are isomorphic** (lecture note MultiBlockUniqueness, Lemma 4.1 (One step
+against another), part (c) and
+Proposition 4.2 (The
+matching)): with `U = M_k ∩ M'_{k'}` and `K = U ∩ M_{k-1} = U ∩ M'_{k'-1}`, the second
+isomorphism theorem gives `U / K ≅ (U + M_{k-1}) / M_{k-1} = M_k / M_{k-1}` and likewise
+`U / K ≅ M'_{k'} / M'_{k'-1}`. -/
+noncomputable def subquotEquivMatching (k : Fin (S.card + P.z)) :
+    Submodule.subquot (P.flag k.castSucc) (P.flag k.succ) ≃ₗ[WordAlgebra d]
+      Submodule.subquot (Q.flag (P.matching Q hC hD hC' hD' k).castSucc)
+        (Q.flag (P.matching Q hC hD hC' hD' k).succ) :=
+  let U := P.flag k.succ ⊓ Q.flag (P.matching Q hC hD hC' hD' k).succ
+  have hP : U ⊔ P.flag k.castSucc = P.flag k.succ := by
+    rw [sup_comm]; exact P.flag_sup_inf_eq Q hC hD hC' hD' k
+  have hQ : U ⊔ Q.flag (P.matching Q hC hD hC' hD' k).castSucc =
+      Q.flag (P.matching Q hC hD hC' hD' k).succ := by
+    rw [sup_comm]; exact P.flag_sup_inf_eq' Q hC hD hC' hD' k
+  have hUK : U ⊓ P.flag k.castSucc = U ⊓ Q.flag (P.matching Q hC hD hC' hD' k).castSucc :=
+    (P.flag_inf_inf_eq Q hC hD hC' hD' k).trans (P.flag_inf_inf_eq' Q hC hD hC' hD' k).symm
+  have hK : U.comap U.subtype ⊓ (P.flag k.castSucc).comap U.subtype =
+      U.comap U.subtype ⊓ (Q.flag (P.matching Q hC hD hC' hD' k).castSucc).comap U.subtype := by
+    ext x
+    simp only [Submodule.mem_inf, Submodule.mem_comap, Submodule.subtype_apply]
+    exact ⟨fun h => ⟨h.1, (hUK.le ⟨x.2, h.2⟩).2⟩, fun h => ⟨h.1, (hUK.ge ⟨x.2, h.2⟩).2⟩⟩
+  ((Submodule.subquotCongr rfl hP).symm.trans
+    (LinearMap.quotientInfEquivSupQuotient U (P.flag k.castSucc)).symm).trans
+    ((Submodule.quotEquivOfEq _ _ hK).trans
+      ((LinearMap.quotientInfEquivSupQuotient U
+        (Q.flag (P.matching Q hC hD hC' hD' k).castSucc)).trans
+        (Submodule.subquotCongr rfl hQ)))
+
+/-- **The matched diagonal blocks have isomorphic word modules** (lecture note
+MultiBlockUniqueness, Proposition 4.2 (The
+matching)): the step isomorphism of the matching composed with the
+identifications of the two steps with the diagonal blocks at those positions. -/
+noncomputable def stepEquivMatching (k : Fin (S.card + P.z)) :
+    (slotTensor C (P.ord.symm k)).WordModule ≃ₗ[WordAlgebra d]
+      (slotTensor C' (Q.ord.symm (P.matching Q hC hD hC' hD' k))).WordModule :=
+  ((P.stepEquivAt k).symm.trans (P.subquotEquivMatching Q hC hD hC' hD' k)).trans
+    (Q.stepEquivAt (P.matching Q hC hD hC' hD' k))
+
+/-- **The matched diagonal blocks are gauge related** (lecture note MultiBlockUniqueness,
+Proposition 4.2 (The matching)). -/
+theorem isGaugeRelated_matching (k : Fin (S.card + P.z)) :
+    IsGaugeRelated (slotTensor C (P.ord.symm k))
+      (slotTensor C' (Q.ord.symm (P.matching Q hC hD hC' hD' k))) :=
+  isGaugeRelated_of_linearEquiv (P.stepEquivMatching Q hC hD hC' hD' k)
+
+/-- The matching read on the slot labels: the slot at position `k` of `P` goes to the slot at
+the matched position of `Q`. -/
+noncomputable def slotMatching : BlockIndex S P.z ≃ BlockIndex S' Q.z :=
+  P.ord.trans ((P.matching Q hC hD hC' hD').trans Q.ord.symm)
+
+theorem slotMatching_apply (b : BlockIndex S P.z) :
+    P.slotMatching Q hC hD hC' hD' b = Q.ord.symm (P.matching Q hC hD hC' hD' (P.ord b)) :=
+  rfl
+
+/-- **The slots matched with each other carry gauge related diagonal blocks** (lecture note
+MultiBlockUniqueness, Proposition 4.2 (The matching)). -/
+theorem isGaugeRelated_slotMatching (b : BlockIndex S P.z) :
+    IsGaugeRelated (slotTensor C b) (slotTensor C' (P.slotMatching Q hC hD hC' hD' b)) := by
+  have h := P.isGaugeRelated_matching Q hC hD hC' hD' (P.ord b)
+  rw [P.ord.symm_apply_apply] at h
+  exact h
+
+/-- **The matching sends zero slots to zero slots** (lecture note MultiBlockUniqueness, proof of
+Theorem 4.3 (A: the blocks are
+unique)): a zero slot has all letters zero, a normal block has a nonzero letter, and
+gauge related tensors have all letters zero together. -/
+theorem isRight_slotMatching_iff (b : BlockIndex S P.z) :
+    (P.slotMatching Q hC hD hC' hD' b).isRight ↔ b.isRight := by
+  rw [← forall_slotTensor_eq_zero_iff hC hD, ← forall_slotTensor_eq_zero_iff hC' hD',
+    (P.isGaugeRelated_slotMatching Q hC hD hC' hD' b).forall_eq_zero_iff]
+
+/-- **The matching sends block slots to block slots** (lecture note MultiBlockUniqueness, proof of
+Theorem 4.3 (A: the blocks are unique)). -/
+theorem isLeft_slotMatching_iff (b : BlockIndex S P.z) :
+    (P.slotMatching Q hC hD hC' hD' b).isLeft ↔ b.isLeft := by
+  rw [← Sum.not_isRight, ← Sum.not_isRight, P.isRight_slotMatching_iff Q hC hD hC' hD']
+
+/-- **The matching sends block positions to block positions** (lecture note
+MultiBlockUniqueness, proof of Theorem 4.3 (A: the blocks are
+unique)): the position `k` of `P` carries a block of `C`
+exactly when the matched position of `Q` carries a block of `C'`. -/
+theorem matching_inl_iff (k : Fin (S.card + P.z)) :
+    (∃ t, Q.ord.symm (P.matching Q hC hD hC' hD' k) = Sum.inl t) ↔
+      ∃ s, P.ord.symm k = Sum.inl s := by
+  have h := P.isLeft_slotMatching_iff Q hC hD hC' hD' (P.ord.symm k)
+  rw [slotMatching_apply, P.ord.apply_symm_apply] at h
+  rw [← Sum.isLeft_iff, ← Sum.isLeft_iff, h]
+
+include hC hD hC' hD' in
+/-- **The numbers of zero slots agree** (lecture note MultiBlockUniqueness, Theorem 4.3 (A: the
+blocks are unique)). -/
+theorem z_eq : P.z = Q.z :=
+  Fin.equiv_iff_eq.mp ⟨Equiv.sumIsRight.symm.trans
+    (((P.slotMatching Q hC hD hC' hD').subtypeEquiv fun b =>
+      (P.isRight_slotMatching_iff Q hC hD hC' hD' b).symm).trans Equiv.sumIsRight)⟩
+
+/-- The bijection of the block labels induced by the matching. -/
+noncomputable def labelMatching : {s // s ∈ S} ≃ {t // t ∈ S'} :=
+  Equiv.sumIsLeft.symm.trans
+    (((P.slotMatching Q hC hD hC' hD').subtypeEquiv fun b =>
+      (P.isLeft_slotMatching_iff Q hC hD hC' hD' b).symm).trans Equiv.sumIsLeft)
+
+theorem slotMatching_inl (s : {s // s ∈ S}) :
+    P.slotMatching Q hC hD hC' hD' (Sum.inl s) = Sum.inl (P.labelMatching Q hC hD hC' hD' s) := by
+  simp [labelMatching]
+
+include hC hD hC' hD' in
+/-- **Theorem A: the blocks are unique** (lecture note MultiBlockUniqueness, Theorem 4.3 (A: the
+blocks are unique)).
+Two compressions of the same tensor onto normal blocks of positive bond dimension have the same
+number of zero slots, and a bijection of the block labels pairs gauge related blocks. -/
+theorem z_eq_and_exists_equiv_isGaugeRelated :
+    P.z = Q.z ∧ ∃ τ : {s // s ∈ S} ≃ {t // t ∈ S'},
+      ∀ s, IsGaugeRelated (C s.1) (C' (τ s).1) := by
+  refine ⟨P.z_eq Q hC hD hC' hD', P.labelMatching Q hC hD hC' hD', fun s => ?_⟩
+  have h := P.isGaugeRelated_slotMatching Q hC hD hC' hD' (Sum.inl s)
+  rw [slotMatching_inl] at h
+  exact h
+
+/-- Lecture note MultiBlockUniqueness, Theorem 4.3 (A: the blocks are unique): the paired blocks
+have equal bond
+dimensions. -/
+theorem dim_labelMatching (s : {s // s ∈ S}) :
+    D s.1 = D' (P.labelMatching Q hC hD hC' hD' s).1 := by
+  have h := P.isGaugeRelated_slotMatching Q hC hD hC' hD' (Sum.inl s)
+  rw [slotMatching_inl] at h
+  exact h.dim_eq
+
+end MultiBlockCompression
+
+end MPSTensor
