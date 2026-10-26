@@ -111,6 +111,64 @@ for an arbitrary finite set of sites and are instantiated here directly.
     crossing supports $D_u$ and $D_v$ share the single middle site.
 \end{proof}
 
+\begin{theorem}[Changed sites under interval displacement]
+    \label{thm:chain_interval_symmdiff}
+    \lean{TNLean.MPS.AreaLaw.card_interval_symmDiff_le_dist}
+    \leanok
+    \uses{def:chain_model}
+    For natural numbers $L,a,b,c,d$, let
+    $[a,b)_L=\{t\in\{0,\ldots,L-1\}:a\le t<b\}$.
+    Then
+    \begin{align}
+        |{\lbrack a,b)_L}\mathbin{\triangle}{\lbrack c,d)_L}| & \le |a-c|+|b-d|.
+        \label{eq:chain_interval_symmdiff}
+    \end{align}
+    No ordering or containment assumptions on the endpoints are required.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_model}
+    A site belonging to exactly one interval lies between the two left
+    endpoints or between the two right endpoints. Thus
+    \begin{align}
+        {\lbrack a,b)_L}\mathbin{\triangle}{\lbrack c,d)_L}
+         & \subseteq [\min(a,c),\max(a,c))_L\notag \\
+         & \qquad\cup [\min(b,d),\max(b,d))_L.
+        \label{eq:chain_interval_endpoint_strips}
+    \end{align}
+    The two intervals in~(\ref{eq:chain_interval_endpoint_strips}) have at
+    most $\max(a,c)-\min(a,c)=|a-c|$ and
+    $\max(b,d)-\min(b,d)=|b-d|$ sites. Subadditivity of cardinality gives
+    (\ref{eq:chain_interval_symmdiff}).
+\end{proof}
+
+\begin{theorem}[Middle-region displacement within two windows]
+    \label{thm:chain_two_window_middle_displacement}
+    \lean{TNLean.MPS.AreaLaw.card_two_window_middle_symmDiff_le}
+    \leanok
+    \uses{def:chain_model}
+    Let $L,a,b,\ell$ be natural numbers, let $0\le p,s<2\ell$, and let
+    $\delta\in\{0,1\}$. Using the clipped intervals of
+    Theorem~\ref{thm:chain_interval_symmdiff}, set
+    \begin{align}
+        E        & =[a+p+1,b+s+1)_L,\notag      \\
+        E_\delta & =[a+\ell+\delta,b+\ell+1)_L.
+        \label{eq:chain_two_window_middle_regions}
+    \end{align}
+    Then $|E\mathbin{\triangle}E_\delta|\le2\ell$.
+    When $a+\ell+1<b+\ell+1\le L$, write $i_1=a+\ell+1$ and
+    $i_2=b+\ell+1$. In one-based site coordinates, $E_0$ is the block
+    $\{i_1,\ldots,i_2\}$ in~\cite[Proposition~5.7]{Arad2016RigorousRG},
+    whereas $E_1$ is the middle
+    region between the cuts after $i_1$ and $i_2$ in its Theorem~4.2.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_interval_symmdiff}
+    The inequalities $0\le p,s<2\ell$ and $\delta\in\{0,1\}$ give
+    $|(p+1)-(\ell+\delta)|\le\ell$ and $|s-\ell|\le\ell$.
+    Apply~(\ref{eq:chain_interval_symmdiff}) to the two intervals
+    in~(\ref{eq:chain_two_window_middle_regions}) and add these bounds.
+\end{proof}
+
 \begin{theorem}[Frequency vectors with two prescribed coordinates]
     \label{thm:chain_two_fixed_frequencies}
     \lean{Nat.card_fun_sum_eq_and_two_eq,
@@ -180,6 +238,108 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \end{align}
     Combining~(\ref{eq:chain_frequency_binomial_bound}) with the empty case
     proves~(\ref{eq:chain_fixed_frequency_uniform_bound}).
+\end{proof}
+
+\begin{theorem}[Frequency slices through a prescribed degree]
+    \label{thm:chain_fixed_frequency_degree_sum}
+    \lean{Nat.sum_card_fun_sum_eq_and_two_eq_le}
+    \leanok
+    Let $I$ be a finite set of cardinality $s+3$, with $s\in\mathbb N$,
+    and let $u,v\in I$ be distinct. For natural numbers $k,i,j$, use
+    $\mathcal F_{r,i,j}$ from~(\ref{eq:chain_fixed_frequency_set}). Then
+    \begin{align}
+        \sum_{r=0}^{k}|\mathcal F_{r,i,j}|
+         & \le (k+1)^{s+1}.
+        \label{eq:chain_frequency_degree_sum}
+    \end{align}
+    All degrees from $0$ through $k$ are included. For an alphabet of
+    $4\ell+3$ labels, the exponent is $4\ell+1$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_fixed_frequency_uniform_bound}
+    For each $0\le r\le k$,
+    Theorem~\ref{thm:chain_fixed_frequency_uniform_bound} gives
+    $|\mathcal F_{r,i,j}|\le(r+1)^s\le(k+1)^s$.
+    Summing over the $k+1$ degrees gives
+    $(k+1)(k+1)^s=(k+1)^{s+1}$.
+\end{proof}
+
+The following scalar estimates are auxiliaries for the two-window argument
+of \cite[Proposition~5.7]{Arad2016RigorousRG}. For natural
+$k,d,\ell,b$, write
+\begin{align}
+    C_{k,d,\ell,b}
+     & =(2\ell)^2(b+1)^2(k+1)^{4\ell+1}\notag            \\
+     & \qquad\cdot\bigl(2(k+1)\bigr)^{4b+2}d^{4b+4\ell}.
+    \label{eq:chain_two_window_count_factor}
+\end{align}
+The full alphabet of $4\ell+3$ labels is retained, consisting of the two
+windows and the three bulk labels.
+
+\begin{theorem}[Summing the two-window counting factors]
+    \label{thm:chain_two_window_count_sum}
+    \lean{Nat.two_window_rank_sum_le_factor}
+    \leanok
+    Let $k,d,\ell,b\in\mathbb N$ with $d\ge1$ and $b\le k$. Then
+    \begin{align}
+         & (2\ell)^2
+        \sum_{\substack{0\le r\le k  \\0\le i,j\le b}}
+        (r+1)^{4\ell}
+        \binom{r+i+1}{2i+1}\binom{r+j+1}{2j+1}
+        d^{2(i+j)+4\ell}\notag       \\
+         & \qquad\le C_{k,d,\ell,b}.
+        \label{eq:chain_two_window_count_sum}
+    \end{align}
+    The sum ranges over every natural triple in the indicated ranges,
+    including degree zero. The binomial factors retain the upper arguments
+    $r+i+1$ and $r+j+1$ printed in
+    \cite[Proposition~5.7]{Arad2016RigorousRG}; the count of commuting gaps
+    is recorded in~\cite{gap:aklv13_interpolation_and_word_count}.
+\end{theorem}
+\begin{proof}\leanok
+    For $r\le k$ and $i\le b\le k$, the elementary binomial estimate gives
+    \begin{align}
+        \binom{r+i+1}{2i+1}
+         & \le (r+i+1)^{2i+1}
+        \le\bigl(2(k+1)\bigr)^{2b+1}.
+        \label{eq:chain_two_window_gap_bound}
+    \end{align}
+    Apply~(\ref{eq:chain_two_window_gap_bound}) to both binomials.
+    Also $(r+1)^{4\ell}\le(k+1)^{4\ell}$ and
+    $d^{2(i+j)+4\ell}\le d^{4b+4\ell}$, since $d\ge1$.
+    Each summand is therefore at most
+    $(k+1)^{4\ell}\bigl(2(k+1)\bigr)^{4b+2}d^{4b+4\ell}$.
+    There are $(k+1)(b+1)^2$ triples. Multiplying by this number and by
+    $(2\ell)^2$ gives the product
+    (\ref{eq:chain_two_window_count_factor}).
+\end{proof}
+
+\begin{theorem}[An explicit bound for the counting product]
+    \label{thm:chain_two_window_count_power}
+    \lean{Nat.two_window_rank_factor_le_pow}
+    \leanok
+    Let $k,d,\ell,b\in\mathbb N$ with $k\ge1$, $d\ge2$,
+    $\ell\ge1$ and $b\le k$. For the product in
+    (\ref{eq:chain_two_window_count_factor}),
+    \begin{align}
+        C_{k,d,\ell,b}
+         & \le(dk)^{17(\ell+b)}.
+        \label{eq:chain_two_window_count_power}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Put $X=dk\ge2$. The hypotheses give $d\le X$,
+    $b+1\le k+1\le X$, $2\ell\le2^\ell\le X^\ell$ and
+    $2(k+1)\le X^2$. Substituting these bounds into
+    (\ref{eq:chain_two_window_count_factor}) yields
+    \begin{align}
+        C_{k,d,\ell,b}
+         & \le X^{10\ell+12b+7}
+        \le X^{17(\ell+b)}.
+        \label{eq:chain_two_window_count_exponent}
+    \end{align}
+    The last step uses $\ell\ge1$, which implies
+    $10\ell+12b+7\le17(\ell+b)$.
 \end{proof}
 
 \begin{lemma}[Distance and spheres on a finite path]
