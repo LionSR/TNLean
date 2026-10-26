@@ -4937,6 +4937,17 @@ three-plaquette output measurement, and the routed reunion measurement.
   A third occurrence would justify separating this common finite-family
   argument from its geometric support classification.
 
+### Uniform bounds for sums of natural powers — candidate (2026-10-26)
+
+- **Pattern:** Bound each term by monotonicity of natural powers, then replace
+  a finite sum by its cardinality times that bound.
+- **Seen:** The degree sum in `Algebra/FrequencyCounts.lean` and the iterated
+  sum in `Algebra/TwoWindowRankBounds.lean`.
+- **Abstraction:** Existing Mathlib lemmas suffice: `Finset.sum_le_sum`,
+  `Finset.sum_le_card_nsmul` and `Finset.sum_const`.
+- **Notes:** Two arguments across two files; no new tactic is needed. The
+  degree sum and the three nested ranges have different cardinality factors.
+
 ### Splitting a chain Hamiltonian at one cut — candidate (2026-10-26)
 
 - **Pattern:** From `H = HL + HR + K` with `HL` supported on `leftBlock L k`, `HR` on its
