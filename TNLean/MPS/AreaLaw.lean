@@ -40,7 +40,6 @@ import TNLean.MPS.AreaLaw.EntropyScaling
 import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.Hastings
 import TNLean.MPS.AreaLaw.InformationReset
-import TNLean.MPS.AreaLaw.IntegerComponents
 import TNLean.MPS.AreaLaw.InteractionBudget
 import TNLean.MPS.AreaLaw.IntervalNeighborhoodEntropy
 import TNLean.MPS.AreaLaw.IntervalSlice
@@ -51,6 +50,7 @@ import TNLean.MPS.AreaLaw.LogarithmicSeparation
 import TNLean.MPS.AreaLaw.MPSApproximation
 import TNLean.MPS.AreaLaw.OpenMPS
 import TNLean.MPS.AreaLaw.OpenMPSCutRank
+import TNLean.MPS.AreaLaw.OpenMPSProduct
 import TNLean.MPS.AreaLaw.OpenMPSRank
 import TNLean.MPS.AreaLaw.OverlapEnergy
 import TNLean.MPS.AreaLaw.PartialSwap
