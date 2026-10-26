@@ -45,6 +45,9 @@ No diameter bound on `S` is required. This is the propagation estimate in the
 TNLean one-dimensional note, Lemma `lem:LR`
 (`docs/notes/one_dimensional_note/part2a_mps_information.tex`, lines 267–309);
 the chain and localization statements are separate specializations.
+If `1 ≤ v_R`, one may instead take the numerical prefactor `C = 4` and
+velocity `v = 4 v_R |b₀| exp(2μR)`. This numerical choice of prefactor still
+requires the second observable to be supported on one site.
 
 ## Main results
 
@@ -55,6 +58,9 @@ the chain and localization statements are separate specializations.
 * `QuantumCircuit.heisenbergCommutatorNorm_le_graphDistance_finset` and
   `QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finset`: the bounds
   for arbitrary finite initial supports.
+* `QuantumCircuit.heisenbergCommutatorNorm_le_graphDistance_finset_numeric` and
+  `QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finset_numeric`:
+  the numerical-prefactor variants when the support-size bound is positive.
 * `QuantumCircuit.heisenberg_commutator_eq_zero_of_forall_edist_eq_top`: exact
   commutation for an arbitrary initial support separated from the observed site.
 * `QuantumCircuit.heisenberg_commutator_eq_zero_of_edist_eq_top`: exact
@@ -285,7 +291,8 @@ theorem heisenbergCommutatorNorm_le_graphDistance {κ : Type*} [Fintype κ]
 
 /-- Arbitrary finite initial supports in the commutator recursion. Source:
 TNLean one-dimensional note, Lemma `lem:LR`, lines 267–309. -/
-private theorem heisenbergCommutatorNorm_le_graph_finset_of_nonneg {κ : Type*} [Fintype κ]
+private theorem heisenbergCommutatorNorm_le_graph_finset_linear_time_of_nonneg
+    {κ : Type*} [Fintype κ]
     (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
     (h : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
     (hSupport : ∀ k, h k ∈ supportedOperators q (X k : Set ι))
@@ -297,8 +304,9 @@ private theorem heisenbergCommutatorNorm_le_graph_finset_of_nonneg {κ : Type*} 
     (S : Finset ι) (μ : ℝ) (hμ : 0 ≤ μ) (n : ℕ)
     (hn : ∀ x ∈ S, (n : ℕ∞) ≤ G.edist x y) (t : ℝ) (ht : 0 ≤ t) :
     heisenbergCommutatorNorm (∑ k, h k) B S t ≤
-      (2 + 4 * b₀ * Real.exp (2 * μ * R)) * (S.card : ℝ) * ‖B‖ *
-        Real.exp ((2 * vR * b₀ * Real.exp (2 * μ * R) + 1) * t - μ * n) := by
+      (2 + 4 * b₀ * Real.exp (2 * μ * R) * t *
+          Real.exp (2 * vR * b₀ * Real.exp (2 * μ * R) * t)) *
+        (S.card : ℝ) * ‖B‖ * Real.exp (-(μ * n)) := by
   classical
   have hb₀ : 0 ≤ b₀ :=
     (Finset.sum_nonneg fun j _ => norm_nonneg (h j)).trans (hBudget y)
@@ -380,6 +388,31 @@ private theorem heisenbergCommutatorNorm_le_graph_finset_of_nonneg {κ : Type*} 
   have hRec := (heisenbergCommutatorNorm_le_integral h (fun i => (X i : Set ι))
     hHerm hSupport B (S : Set ι) t ht).trans
       (add_le_add hInit (mul_le_mul_of_nonneg_left hSum (show (0 : ℝ) ≤ 2 by norm_num)))
+  simp only [K, sub_eq_add_neg, Real.exp_add] at hRec
+  dsimp only [v] at hRec
+  nlinarith only [hRec]
+
+/-- The original finite-support estimate, retained with its original constants. -/
+private theorem heisenbergCommutatorNorm_le_graph_finset_of_nonneg {κ : Type*} [Fintype κ]
+    (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
+    (h : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
+    (hSupport : ∀ k, h k ∈ supportedOperators q (X k : Set ι))
+    (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
+    (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
+    (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
+    (B : Matrix (ι → Fin q) (ι → Fin q) ℂ) (y : ι)
+    (hB : B ∈ supportedOperators q ({y} : Set ι))
+    (S : Finset ι) (μ : ℝ) (hμ : 0 ≤ μ) (n : ℕ)
+    (hn : ∀ x ∈ S, (n : ℕ∞) ≤ G.edist x y) (t : ℝ) (ht : 0 ≤ t) :
+    heisenbergCommutatorNorm (∑ k, h k) B S t ≤
+      (2 + 4 * b₀ * Real.exp (2 * μ * R)) * (S.card : ℝ) * ‖B‖ *
+        Real.exp ((2 * vR * b₀ * Real.exp (2 * μ * R) + 1) * t - μ * n) := by
+  have hb₀ : 0 ≤ b₀ :=
+    (Finset.sum_nonneg fun j _ => norm_nonneg (h j)).trans (hBudget y)
+  set v : ℝ := 2 * vR * b₀ * Real.exp (2 * μ * R)
+  have hv : 0 ≤ v := by positivity
+  have hRec := heisenbergCommutatorNorm_le_graph_finset_linear_time_of_nonneg G X a ha
+    h hHerm hSupport R hDiam vR hCard b₀ hBudget B y hB S μ hμ n hn t ht
   have hOne : 1 ≤ Real.exp (v * t) * Real.exp t := by
     simpa only [Real.exp_add] using Real.one_le_exp (add_nonneg (mul_nonneg hv ht) ht)
   have hTime : t * Real.exp (v * t) ≤ Real.exp (v * t) * Real.exp t := by
@@ -390,8 +423,51 @@ private theorem heisenbergCommutatorNorm_le_graph_finset_of_nonneg {κ : Type*} 
       (show 0 ≤ 4 * b₀ * Real.exp (2 * μ * R) by positivity)]
   rw [show (v + 1) * t - μ * n = v * t + t + -(μ * n) by ring,
     Real.exp_add, Real.exp_add]
-  simp only [K, sub_eq_add_neg, Real.exp_add] at hRec
+  change heisenbergCommutatorNorm _ _ _ _ ≤
+    (2 + 4 * b₀ * Real.exp (2 * μ * R) * t * Real.exp (v * t)) *
+      (S.card : ℝ) * ‖B‖ * Real.exp (-(μ * n)) at hRec
   nlinarith only [hRec, mul_le_mul_of_nonneg_left hGrowth
+    (show 0 ≤ (S.card : ℝ) * ‖B‖ * Real.exp (-(μ * n)) by positivity)]
+
+/-- Absorb the time factor into the interaction-dependent velocity, not the prefactor. -/
+private theorem heisenbergCommutatorNorm_le_graph_finset_numeric_of_nonneg {κ : Type*} [Fintype κ]
+    (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
+    (h : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
+    (hSupport : ∀ k, h k ∈ supportedOperators q (X k : Set ι))
+    (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
+    (vR : ℕ) (hvR : 1 ≤ vR) (hCard : ∀ k, (X k).card ≤ vR)
+    (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
+    (B : Matrix (ι → Fin q) (ι → Fin q) ℂ) (y : ι)
+    (hB : B ∈ supportedOperators q ({y} : Set ι))
+    (S : Finset ι) (μ : ℝ) (hμ : 0 ≤ μ) (n : ℕ)
+    (hn : ∀ x ∈ S, (n : ℕ∞) ≤ G.edist x y) (t : ℝ) (ht : 0 ≤ t) :
+    heisenbergCommutatorNorm (∑ k, h k) B S t ≤
+      4 * (S.card : ℝ) * ‖B‖ *
+        Real.exp (4 * vR * b₀ * Real.exp (2 * μ * R) * t - μ * n) := by
+  have hb₀ : 0 ≤ b₀ :=
+    (Finset.sum_nonneg fun j _ => norm_nonneg (h j)).trans (hBudget y)
+  set v : ℝ := 2 * vR * b₀ * Real.exp (2 * μ * R)
+  have hv : 0 ≤ v := by positivity
+  have hRec := heisenbergCommutatorNorm_le_graph_finset_linear_time_of_nonneg G X a ha
+    h hHerm hSupport R hDiam vR hCard b₀ hBudget B y hB S μ hμ n hn t ht
+  have hvR' : (1 : ℝ) ≤ vR := by exact_mod_cast hvR
+  have hCoeff : 4 * b₀ * Real.exp (2 * μ * R) * t ≤ 2 * (v * t) := by
+    dsimp only [v]
+    nlinarith [mul_nonneg hb₀ (Real.exp_pos (2 * μ * R)).le,
+      mul_le_mul_of_nonneg_right hvR' (show 0 ≤ b₀ * Real.exp (2 * μ * R) * t by positivity)]
+  have hTime : 4 * b₀ * Real.exp (2 * μ * R) * t ≤ 2 * Real.exp (v * t) :=
+    hCoeff.trans (by linarith [Real.add_one_le_exp (v * t)])
+  have hOne : 1 ≤ Real.exp (v * t) := Real.one_le_exp (mul_nonneg hv ht)
+  have hGrowth : 2 + 4 * b₀ * Real.exp (2 * μ * R) * t * Real.exp (v * t) ≤
+      4 * (Real.exp (v * t) * Real.exp (v * t)) := by
+    nlinarith [mul_le_mul_of_nonneg_right hTime (Real.exp_pos (v * t)).le]
+  change heisenbergCommutatorNorm _ _ _ _ ≤
+    (2 + 4 * b₀ * Real.exp (2 * μ * R) * t * Real.exp (v * t)) *
+      (S.card : ℝ) * ‖B‖ * Real.exp (-(μ * n)) at hRec
+  rw [show 4 * (vR : ℝ) * b₀ * Real.exp (2 * μ * R) * t - μ * n =
+    v * t + v * t + -(μ * n) by dsimp only [v]; ring,
+    Real.exp_add, Real.exp_add]
+  nlinarith only [hRec, mul_le_mul_of_nonneg_right hGrowth
     (show 0 ≤ (S.card : ℝ) * ‖B‖ * Real.exp (-(μ * n)) by positivity)]
 
 /-- Graph-distance propagation from an arbitrary finite support. The prefactor
@@ -451,6 +527,68 @@ theorem norm_heisenberg_commutator_le_graphDistance_finset {κ : Type*} [Fintype
       mul_le_mul_of_nonneg_right
         (heisenbergCommutatorNorm_le_graphDistance_finset G X a ha h hHerm hSupport
           R hDiam vR hCard b₀ hBudget B y hB S μ hμ n hn t) (norm_nonneg A)
+    _ = _ := by ring
+
+/-- Graph-distance propagation from an arbitrary finite support with numerical prefactor `4`.
+The velocity is proportional to the interaction budget; no bound on the initial support's
+diameter is assumed. The observed operator is on a single site. Source: TNLean
+one-dimensional note, Lemma `lem:LR` (`part2a_mps_information.tex`, lines 267–309). -/
+theorem heisenbergCommutatorNorm_le_graphDistance_finset_numeric {κ : Type*} [Fintype κ]
+    (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
+    (h : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
+    (hSupport : ∀ k, h k ∈ supportedOperators q (X k : Set ι))
+    (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
+    (vR : ℕ) (hvR : 1 ≤ vR) (hCard : ∀ k, (X k).card ≤ vR)
+    (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
+    (B : Matrix (ι → Fin q) (ι → Fin q) ℂ) (y : ι)
+    (hB : B ∈ supportedOperators q ({y} : Set ι))
+    (S : Finset ι) (μ : ℝ) (hμ : 0 ≤ μ) (n : ℕ)
+    (hn : ∀ x ∈ S, (n : ℕ∞) ≤ G.edist x y) (t : ℝ) :
+    heisenbergCommutatorNorm (∑ k, h k) B S t ≤
+      4 * (S.card : ℝ) * ‖B‖ *
+        Real.exp ((4 * vR * |b₀| * Real.exp (2 * μ * R)) * |t| - μ * n) := by
+  have hBudget' : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ |b₀| :=
+    fun x => (hBudget x).trans (le_abs_self b₀)
+  rcases le_or_gt 0 t with ht | ht
+  · simpa only [abs_of_nonneg ht] using
+      heisenbergCommutatorNorm_le_graph_finset_numeric_of_nonneg G X a ha h hHerm hSupport
+        R hDiam vR hvR hCard |b₀| hBudget' B y hB S μ hμ n hn t ht
+  · have hBound := heisenbergCommutatorNorm_le_graph_finset_numeric_of_nonneg G X a ha
+      (fun k => -h k) (fun k => (hHerm k).neg)
+      (fun k => Submodule.neg_mem _ (hSupport k)) R hDiam vR hvR hCard |b₀|
+      (by simpa only [norm_neg] using hBudget') B y hB S μ hμ n hn (-t)
+      (le_of_lt (neg_pos.mpr ht))
+    simpa only [Finset.sum_neg_distrib, ← heisenbergCommutatorNorm_neg_time, neg_neg,
+      abs_of_neg ht] using hBound
+
+/-- The graph-distance commutator bound for an observable supported on any
+finite set, with numerical prefactor `4` and velocity proportional to the
+interaction budget. The second observable is still on a single site; this is
+only the numerical-prefactor step toward Hastings arXiv:0705.2024, eq. `lrb`
+(lines 96–112), not its arbitrary-second-support statement. Source: TNLean one-dimensional
+note, Lemma `lem:LR` (`part2a_mps_information.tex`, lines 267–309). -/
+theorem norm_heisenberg_commutator_le_graphDistance_finset_numeric {κ : Type*} [Fintype κ]
+    (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
+    (h : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
+    (hSupport : ∀ k, h k ∈ supportedOperators q (X k : Set ι))
+    (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
+    (vR : ℕ) (hvR : 1 ≤ vR) (hCard : ∀ k, (X k).card ≤ vR)
+    (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
+    (S : Finset ι) {A B : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (hA : A ∈ supportedOperators q (S : Set ι)) (y : ι)
+    (hB : B ∈ supportedOperators q ({y} : Set ι))
+    (μ : ℝ) (hμ : 0 ≤ μ) (n : ℕ) (hn : ∀ x ∈ S, (n : ℕ∞) ≤ G.edist x y) (t : ℝ) :
+    ‖heisenbergEvolution (∑ k, h k) t A * B - B * heisenbergEvolution (∑ k, h k) t A‖ ≤
+      4 * (S.card : ℝ) * ‖A‖ * ‖B‖ *
+        Real.exp ((4 * vR * |b₀| * Real.exp (2 * μ * R)) * |t| - μ * n) := by
+  calc
+    _ ≤ heisenbergCommutatorNorm (∑ k, h k) B S t * ‖A‖ :=
+      norm_heisenberg_commutator_le_heisenbergCommutatorNorm _ B _ t hA
+    _ ≤ (4 * (S.card : ℝ) * ‖B‖ *
+        Real.exp ((4 * vR * |b₀| * Real.exp (2 * μ * R)) * |t| - μ * n)) * ‖A‖ :=
+      mul_le_mul_of_nonneg_right
+        (heisenbergCommutatorNorm_le_graphDistance_finset_numeric G X a ha h hHerm hSupport
+          R hDiam vR hvR hCard b₀ hBudget B y hB S μ hμ n hn t) (norm_nonneg A)
     _ = _ := by ring
 
 /-- **Graph-distance propagation**, explicit form. For an interaction family
