@@ -1321,6 +1321,22 @@ the degenerate case. Its closed neighbourhood must be strictly smaller than
 the support separation; the decay estimate also requires a positive time-window
 slope `c₁` with `v c₁ < 1/2`.
 
+### Local solution of gapped Hamiltonians: a basis of a degenerate ground space
+
+[hastings05_two_dim_ground_basis.tex](hastings05_two_dim_ground_basis.tex)
+(local correction, resolved) records the treatment of a degenerate ground space in Hastings,
+*Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, lines 1678–1705). In an
+eigenbasis of `P M_j P` with eigenvalues `r ≠ s`, the off-diagonal part of `P M_i P` has norm
+at most `‖[P M_i P, P M_j P]‖ / |r - s|`, and a ground state is an approximate eigenvector of
+`M_i` up to that off-diagonal part. Every dimension is treated: one compression with simple
+spectrum gives `(n - 1) ‖[P M_i P, P M_j P]‖ / δ`, and repeated eigenvalues are resolved by the
+source's iteration over further compressions, made rigorous by an identity for the matrix
+elements at each level and assembled by induction over any number of levels; the cross terms the
+sketch omits are kept (a local correction). The basis is given. Eq. `oibu` is proved with an
+explicit constant independent of the size of the system, for any number of levels; its printed
+dependence `O(J²/(c₁ l ΔE δλ_j))` is not established, the constant growing like `(v/ΔE)^D` on a
+lattice of dimension `D`.
+
 ### One-dimensional area law after Hastings: the entropy gain constants
 
 [hastings07_relent_constants.tex](hastings07_relent_constants.tex)
@@ -1377,6 +1393,19 @@ The complete hierarchy is controlled instead by measuring every deficiency
 against the ground state: `D_{m+1}² ≤ 2 D_m² + ((ε + 2 K D_m)/x_m)²`, which with
 the source's window radii gives `D_m ≤ (3^m − 1) e^{s^m}`, still polynomial in `N`.
 
+### Local solution of gapped Hamiltonians: the supercell of the translation-invariant case
+
+[hastings05_translation_supercell.tex](hastings05_translation_supercell.tex)
+(scope restriction, open) concerns the translation-invariant case of Hastings,
+*Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, source lines
+1603–1642). The source assumes ground-state momenta that are rational with
+denominators independent of the system size, and derives a supercell whose
+translations leave every ground state unchanged. The formalization assumes such a
+subgroup directly and proves that the low-energy commutator at `(i, j)` equals the one
+at `(i, g • j)` for every `g` in it. The note sketches how to derive the subgroup from
+the characters of an abelian translation group, records a slip at line 1638, and
+notes that the size-dependent case of lines 1643–1652 is not covered.
+
 ## Polynomial PEPS: zero-floor maximizing filters
 
 - [`polypeps_square_zero_floor_optimizer_scope.tex`](polypeps_square_zero_floor_optimizer_scope.tex)
@@ -1412,14 +1441,15 @@ variational bound is unaffected; the infinite expansion remains unformalized.
 ### Local solution of gapped Hamiltonians: the final state in the energy estimate
 
 [hastings05_hierarchical_energy.tex](hastings05_hierarchical_energy.tex)
-(scope restriction, open) records eq. `hchy` of Hastings, *Solving gapped Hamiltonians
+(local correction, resolved) records eq. `hchy` of Hastings, *Solving gapped Hamiltonians
 locally* (arXiv:cond-mat/0508554v3, source lines 705–720), which the source asserts with
 "one may show". From a norm deficiency `b` of the last projection, the normalized image of
 the ground state has energy within `4 ‖M‖ b`, so `4 N J b_h` for `N` terms of norm at most
 `J`. That state lies in the span of the final states `α^h`. The spectral windows give
 the bound for every final state, with error `∑_m 2^{h-1-m} x_m`, for the links of the open
-chain; the wrap link `(N, 1)` of the periodic chain is the joining operator of no level and
-remains uncontrolled.
+chain. The link `(N, 1)` closing the periodic chain is the joining operator of no level; one
+further window for it inside the final space, whose deficiency is the next step of the same
+recursion, gives eq. `hchy` for the periodic sum with one more radius `x_h`.
 
 ### Local solution of gapped Hamiltonians: the number of final states
 
@@ -1447,6 +1477,26 @@ lines 1174–1184). It is printed with `Tr(O e^{−βH})` on the right; applied 
 this would make `ρ(β, C)` a multiple of `e^{−βH}`, which fails already for one term.
 The intended form, used by `percb2`, has `‖O‖ Tr e^{−βH}` on the right, and that is
 what is formalized.
+
+### Local solution of gapped Hamiltonians: the boundary of a cluster
+
+[hastings05_cluster_boundary.tex](hastings05_cluster_boundary.tex)
+(local correction, resolved) records that the boundary `B(C)` of Hastings, *Solving gapped
+Hamiltonians locally* (arXiv:cond-mat/0508554v3, source lines 1131–1134), the terms acting on a
+site of `C`, is too small for the claim at lines 1134–1138 that a term containing `H_C` and
+avoiding `H_{B(C)}` has the sites of `H_C` as a cluster. On a chain with `H_i` acting on
+`{i − 1, i, i + 1}`, the term `H_1 H_3` avoids `B({1}) = {0, 2}` but overlaps `H_1`. The
+formalization uses the terms whose support meets the support of `H_C`; then `S` in equation
+`percb2` counts the sites within `2R` of a site.
+
+### Local solution of gapped Hamiltonians: the number of factors in the error bound
+
+[hastings05_temperature_factor_count.tex](hastings05_temperature_factor_count.tex)
+(local correction, resolved) records that Hastings' error bound at every temperature
+(arXiv:cond-mat/0508554v3, source lines 1342–1347) prints `β/β₀` in the exponent where the
+source's bound on `ρ_m` (lines 1334–1341) gives the number `n` of factors, the smallest even
+integer with `β/n ≤ β₀`. Since `β/β₀ ≤ n < β/β₀ + 2`, the printed bound does not follow. The
+formalization proves the bound with `n`, for every `n ≥ 1`.
 
 ### Local solution of gapped Hamiltonians: cluster size in the percolation bound
 
@@ -1482,7 +1532,7 @@ from the von Neumann Lemma 2 by `S_α ≤ S`, the concavity of the logarithm.
 ### Local solution of gapped Hamiltonians: the truncated dynamics of `M_i`
 
 [hastings05_truncated_dynamics.tex](hastings05_truncated_dynamics.tex)
-(local correction, resolved) records how the approximation `M_i` of Hastings,
+(scope restriction, resolved) records how the approximation `M_i` of Hastings,
 *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, eqs. `mid` and
 `apb`, source lines 285–320, proved at lines 1458–1533), is formalized. The
 truncation keeps any family of terms acting inside a set `K` that contains the
@@ -1490,7 +1540,9 @@ support of `H_i`; the shell is the set of omitted terms meeting `K`, whose numbe
 at most `N(l_proj)` for the source's choice. The time integral of the
 Lieb–Robinson bound, which the source absorbs into `g(t, l_proj)`, is bounded by `T`
 times its value at `T`, and the constants are explicit. The weight of eq. `mid` is
-read as that of eq. `thd`.
+read as that of eq. `thd`. The exponential form `J O(e^{-l_proj/l_fac})` of eq. `facld`
+(lines 322–349) is formalized under an explicit polynomial bound on the number of omitted
+terms meeting `K` (scope restriction), with `l_fac = 2 / min(c₁ΔE, μ − c₁v)`.
 
 ### One-dimensional area law after Hastings: the decay length of Lemma 1
 
@@ -1526,6 +1578,9 @@ form remains open under issue #9811.
   `nS` index components per site remains unproved: for a product of `m`
   factors the construction carries `m` components of `q²` values at every site,
   one for every factor wherever it acts, so the `n`-th power `ρₙ` carries `n m`.
+  The truncated operator of the high-temperature expansion (lines 1256–1279) has
+  the product form on every nonempty such domain; on the empty domain only the
+  identity has a product form. Its index count is not established either.
 
 ## Rényi entropy and matrix product state approximation
 
@@ -1558,3 +1613,27 @@ form remains open under issue #9811.
   state disproves the printed norm estimate. The note compares the corrected
   squared-norm bound with the stronger proved sequential-truncation estimate;
   the Rényi family theorem remains open in #9855.
+
+- [`swvc08_qutrit_copy_constant.tex`](swvc08_qutrit_copy_constant.tex)
+  (local correction, resolved) compares the printed bond-dimension bound
+  `D ≥ 2^N(1 - 8T) + 1` for repeated qutrit states (arXiv:0705.0292v2, lines
+  471–479) with the constant `2√2` its printed ingredients give and the
+  constant two proved formally. The formal amplification estimate needs only
+  product error below one, not the printed single-copy smallness hypothesis;
+  the full trace-norm form follows for unnormalized approximants.
+
+## Landau, Vazirani and Vidick's one-dimensional algorithm, arXiv:1307.5143
+
+- [`lvv13_constant_bond.tex`](lvv13_constant_bond.tex)
+  (local correction, resolved) records that the constant bond dimension of Lemma
+  `constantbondapprox` (arXiv:1307.5143v1, lines 342–345) is formalized with
+  `B_δ = ⌊exp(C + 32 s log(2e^{e/2}/δ))⌋`, taken from the area law of the
+  library, in place of the stated `exp(O(ε⁻¹ log³ d log 1/δ))`. Both are
+  independent of the chain length and the cut, which is all the later steps of
+  the source use, and the theorems hold under the source's hypotheses. The
+  source's constant would follow from the bound of Arad, Kitaev, Landau and
+  Vazirani, arXiv:1301.1162. The lemma is formalized for every `δ > 0`.
+  Corollary `c:1` holds for every `δ > 0`, with the source's energy bound
+  `E₀ + 6√δ` and bond dimension `B_{min(δ, 1/12)}`. The energy bound after
+  trimming a general low-energy vector is corrected in the QICLean note
+  `lvv13_trimming_energy`.

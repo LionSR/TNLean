@@ -9,6 +9,7 @@ import TNLean.MPS.AreaLaw.LiebRobinson
 import TNLean.MPS.AreaLaw.InteractionBudget
 import TNLean.Circuit.ProjectedRelativeEvolution
 import QICLean.Analysis.RectangularTraceNorm
+import TNLean.Algebra.ExpMulSubMonotone
 
 /-!
 # Localizing the boundary operator `P_B` in Hastings' Lemma 1
@@ -94,8 +95,8 @@ theorem norm_interactionPropagator_sub_le {A B H H₀ : Matrix n n ℂ} (hA : A.
   refine (norm_add_le _ _).trans ?_
   rw [CStarRing.norm_mul_mem_unitary _ (SpectralFilter.hermitianUnitaryPath_mem_unitary hA _),
     CStarRing.norm_mem_unitary_mul _ (SpectralFilter.hermitianUnitaryPath_mem_unitary hH _)]
-  have h1 := norm_hermitianUnitaryPath_sub_le (hA.add hB) hH t
-  have h2 := norm_hermitianUnitaryPath_sub_le hA hH₀ (-t)
+  have h1 := Matrix.norm_hermitianUnitaryPath_sub_le (hA.add hB) hH t
+  have h2 := Matrix.norm_hermitianUnitaryPath_sub_le hA hH₀ (-t)
   rw [abs_neg] at h2
   rw [mul_add]
   linarith [mul_comm ‖A + B - H‖ |t|, mul_comm ‖A - H₀‖ |t|]
@@ -155,7 +156,7 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
       (fun X : ChainSupport L R ↦ X) h.term h.hermitian h.supported b₀
       h.sum_norm_terms_containing_le hq Z hZ ℓ hℓ s
     refine hloc.trans (mul_le_mul_of_nonneg_left
-      (Real.exp_le_exp.mpr (sub_le_sub_right (mul_le_mul_of_nonneg_left hs hv) _))
+      (Real.exp_mul_sub_le_exp_mul_sub hv hs)
       (by positivity))
   have hrel (t : ℝ) (ht : |t| ≤ T) :
       ‖hermitianUnitaryPath H t * hermitianUnitaryPath H₀ (-t) - U t‖ ≤ E₃ * |t| :=

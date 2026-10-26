@@ -2438,6 +2438,38 @@ in `MPS/Preparation/` uses it.
   one cutting into blocks; see
   `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
 
+## Efficient approximation of one-dimensional families
+
+### `TNLean.MPS.AreaLaw.IsEfficientlyApproximableByMPS`
+
+- **Declaration:**
+  `TNLean.MPS.AreaLaw.IsEfficientlyApproximableByMPS {q : ℕ} {lengths : Set ℕ} (ψ : ∀ N : lengths, EuclideanSpace ℂ (Fin N.val → Fin q)) : Prop`,
+  for a family of vectors on open chains indexed by an arbitrary set of chain
+  lengths.
+- **Defined in:** `TNLean/MPS/AreaLaw/EntropyScaling/EfficientApproximation.lean`.
+- **Meaning:** for every accuracy `δ > 0` there are `C > 0` and `m : ℕ`,
+  chosen after `δ` and uniform over all chain lengths in the index set, such
+  that each `ψ N` has an open-boundary matrix product approximant `φ` of bond
+  dimension `D ≤ C (N + 1)^m` with
+  `‖|ψ N⟩⟨ψ N| - |φ⟩⟨φ|‖₁ ≤ δ`. The error is the full trace norm, without a
+  factor one half. The approximant need not be normalized, and no consistency
+  between different chain lengths is required; finitely many exceptional
+  lengths are absorbed into `C`.
+- **Source:** Schuch–Wolf–Verstraete–Cirac, arXiv:0705.0292v2,
+  `paper_v2.tex`, lines 198–210 (definition) and lines 160–173 (unnormalized
+  approximants).
+- **Sanctioned bridges:**
+  `TNLean.MPS.AreaLaw.isEfficientlyApproximableByMPS_of_renyiEntropy_le`
+  (the source's sufficient condition, lines 271–276: for unit vectors, a
+  bound `S_α ≤ c log N + c'` at a fixed order `0 ≤ α < 1` on every internal
+  prefix marginal implies the predicate; the construction supplies normalized
+  approximants). The finite-chain inputs are
+  `exists_normalized_isOpenMPS_of_renyiEntropy_le` for `0 < α < 1` and
+  `isOpenMPS_of_regionState_rank_le` for order zero.
+- **Caveat:** no converse is asserted. The predicate fixes the accuracy before
+  the polynomial; it is not a statement about a single chain length, and it is
+  not the half-trace-norm convention.
+
 ## Worked examples
 
 ### `MPSTensor.IsPeriodicWState`
@@ -3293,6 +3325,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.AreaLaw.exists_latticeCutBudget_le_log` | The cut budget at radius `⌈C₁ (log n)²⌉` is at most `C n D (log n)¹²` when `b_X ≤ C₂ n D` | Area-law Proposition 4.5, last sentence; `C` depends only on `q, R, C₁, C₂`. |
 | `Matrix.IsGappedGroundState`, `Matrix.isGappedGroundState_iff` | Unit eigenvector `HΩ = E₀Ω` of a complex square matrix with the full-system projector-gap inequality; the characterization restates the eigen-equation as `H *ᵥ Ω = E₀ • Ω` on coordinate vectors | Shared by the area-law and polynomial-PEPS models, which specialize it. |
 | `TNLean.Lattice.IsGappedGroundState` | Unit eigenvector with a full-system positive projector-gap inequality | Area-law Theorem 1.1; the checked ground/uniqueness equivalence is tracked in #8739. |
+| `Matrix.IsSiteInvariant` | An operator `H` on the configurations of the sites `V` commuting with every site-permutation unitary `P_g` of a group `G` acting on `V`; for the translations of a lattice, a translation-invariant Hamiltonian. `isSiteInvariant_of_conj` gives it from the conjugation form `P_g H P_g† = H`. `isSiteInvariant_sum_of_covariant` gives it for a sum `∑_k h_k` of covariant terms `h_{g•k} = P_g h_k P_g†`, and `isSiteInvariant_sum_conj` for the sum of the translates of one term over a finite group | Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 862–863 and 1603–1613 ("the Hamiltonian is invariant under translation"); definition in `TNLean/Lattice/SiteSymmetry.lean`. The converse of `isSiteInvariant_of_conj` (invariance implies `P_g H P_g† = H`) holds since `P_g` is unitary, but it is not stated as a separate lemma; it is the hypothesis under which `gaussianFilteredTerm_sitePermMatrix_conj` moves a site permutation through the filter. Invariance of `H` alone does not make its terms covariant, so the supercell results in `TNLean/Lattice/TranslationSupercell.lean` take covariance as a separate hypothesis. |
 | `TNLean.Lattice.LowEnergyExample.IsGround` | Example-specific: a configuration of the `m + 3`-site spin-1/2 chain of Hastings' Appendix B example with spin `1` up, every spin `i ≥ 2` down and spin `0` free; `energy_eq_groundEnergy_iff` and `hamiltonian_mulVec_eq_iff` identify these with the ground space of `H = −S^z_1 + ∑_{i≥2} S^z_i` | Hastings, arXiv:cond-mat/0508554v3, lines 1655–1676, with the corrected sum (`docs/paper-gaps/hastings05_low_energy_example.tex`); not a general lattice predicate, and no bridge to `IsGappedGroundState` is stated. |
 | `TNLean.PEPS.AreaLaw.relabelState` | The same physical vector in configuration coordinates transported by a site bijection | Area-law Section 2; Euclidean norm is preserved, reductions are covariant and regional entropy is invariant when the bijection preserves the cut. |
 | `TNLean.PEPS.AreaLaw.UniformAreaLaw` | A uniform boundary entropy bound over every finite induced domain and cut | Area-law Theorem 1.1; proved, with the source's hypotheses, as `TNLean.PEPS.AreaLaw.uniformAreaLaw`. |
@@ -3867,3 +3900,24 @@ source's Proposition 4.1.
 - **Verification:** The predicate and both fixed-layout bridges passed the
   hosted Lean build and their named axiom checks at commit
   `c05b1ee03e2d24d1f93390ada1aa7b7912b0cfba`.
+
+## Hastings' high-temperature cluster expansion
+
+The cluster expansion of Hastings, *Solving gapped Hamiltonians locally*
+(arXiv:cond-mat/0508554v3, `References/cond-mat_0508554/proj3new.tex`, Section IV), is
+formalized in `TNLean/Lattice/ClusterExpansion/`. The terms `h k` of `H = ∑_k h_k` are indexed by
+a finite type `κ`, and a graph `G` on `κ` says which terms overlap. For terms acting on sets of
+sites `acts k`, it is `overlapGraph acts` (adjacent when the supports meet). The truncation,
+the bounds and the product form take a predicate `large` on sets of terms. Two instances
+realize the source's "diameter larger than `l_proj`": one in a metric space of sites and one in
+walk distance on a planar domain.
+
+| Declaration | Mathematical meaning | Source and status |
+|---|---|---|
+| `TNLean.Lattice.ClusterExpansion.IsCluster G A C` | `C ⊆ A` is connected in `G` and no other term of `A` is adjacent to it: a connected component of `A`, a cluster of the words with letter set `A` | Lines 1096–1102 (active bonds and clusters). The boundary is the set of overlap neighbours, not the source's `B(C)` (lines 1131–1134); see `docs/paper-gaps/hastings05_cluster_boundary.tex`. `exists_isCluster_mem`, `biUnion_clusters` and `pairwise_clusters` show the clusters of `A` partition it and are pairwise non-adjacent. |
+| `TNLean.Lattice.ClusterExpansion.IsAdmissible G U` | The union of a family `U` of sets of terms avoids the union of their boundaries, so all members can be clusters of one set | Lines 1197–1225 (inclusion and exclusion). For connected members, `pairwiseDisjoint_of_admissible` gives disjointness; the admissible families index `truncatedExp_eq_sum`. |
+| `TNLean.Lattice.ClusterExpansion.NoLargeCluster G large A` | No cluster of `A` satisfies `large` | Lines 1103–1107 (the terms kept in `ρ(β, l_proj)`); it defines `truncatedExp`. `noLargeCluster_iff_filter` shows that terms acting on no site do not affect it. |
+| `TNLean.Lattice.ClusterExpansion.IsLargeDiam acts l_proj C` | The supports of the terms of `C`, in a pseudometric space of sites, contain two sites at distance greater than `l_proj` | Lines 1103–1107; used for eq. `perc2` in source terms (`norm_trace_mul_exp_sub_truncatedExp_le_isLargeDiam`). A connected large set has at least `⌊l_proj/(2R)⌋ + 1` terms (`card_ge_of_isLargeDiam`; `docs/paper-gaps/hastings05_percolation_cluster_size.tex`). |
+| `TNLean.Lattice.ClusterExpansion.IsLargeWalk l acts C` | The supports of the terms of `C`, on a finite planar domain, contain two sites joined by no domain walk of length at most `l` | Lines 1103–1107 in the walk distance of `TNLean.Lattice.ProductForm`, the largeness for which `hasProductForm_truncatedExp` holds (lines 1256–1279). It is `IsLargeDiam` for the walk distance; no bridge between the two is stated. The planar geometry is a scope restriction (`docs/paper-gaps/hastings05_planar_domain_scope.tex`). |
+| `TNLean.Lattice.ClusterExpansion.IsValidCluster acts l C` | Every term of `C` acts on some site, `C` is connected in the overlap graph, and `C` is not `IsLargeWalk` | Internal to the product-form construction (lines 1259–1272); the clusters that a site index may record. The members of a family of valid clusters with disjoint supports are the clusters of its union (`isCluster_of_mem_validFamilies`), and `sum_clusterOp_apply` identifies the sets of terms acting on sites with no large cluster with such families. |
+| `TNLean.Lattice.ClusterExpansion.IsClusterAssignment acts l c` | Every cluster recorded at a site is valid, contains the site in its supports, and is recorded at every site of its supports | Internal to the product-form construction (lines 1259–1272); the index functions with nonzero coefficient product. `recordedClusters` and `clusterAssignment` identify consistent assignments with families of valid clusters with disjoint supports. |

@@ -130,7 +130,6 @@ theorem regularizedPatchInsertion_apply (a : Fin m → ℝ) (b : ℝ)
   simp [regularizedPatchInsertion, reverseProductInsertion, dependentRegionLiftLinear,
     Matrix.toEuclideanLin, Matrix.toLpLin_apply, List.ofFn_eq_map, List.map_reverse]
 
-
 open Classical in
 /-- Changing a density changes only the corresponding factor in the ordered filtered output. -/
 theorem regularizedPatchOutput_coordinateUpdate (a : Fin m → ℝ) {b : ℝ} (hb : 0 < b)

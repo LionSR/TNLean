@@ -238,6 +238,44 @@ eq.~(thd) \cite{gap:hastings05_truncated_dynamics}.
     $\|\widetilde W-M\|$.
 \end{proof}
 
+\begin{theorem}[The sum of the truncated approximations]
+    \label{thm:hastings_truncated_sum}
+    \lean{TNLean.Lattice.norm_sum_truncated_sub_le,
+        TNLean.Lattice.norm_sum_truncated_sub_le_card}
+    \leanok
+    \uses{thm:hastings_truncated_approximation_time,
+        thm:hastings05_sum_approximation}
+    In the setting of Theorem~\ref{thm:hastings_truncated_approximation}, let
+    $q\ge0$, $\Delta E>0$ and $\mu\ge0$, and let $H=\sum_ih_i$ be Hermitian. For each
+    term $h_i$, acting on $X_i$, let $s_i$ be a set of terms acting inside a
+    set of sites $K_i\supseteq X_i$, such that the omitted terms meeting $K_i$
+    are at distance at least $m$ from $X_i$. Let $N_i$ be their number, and let
+    $M_i$ be the filter of $h_i$ under $\sum_{k\in s_i}h_k$. Then
+    \begin{align*}
+        \Bigl\|\sum_iM_i-H\Bigr\|\le\sum_i\Bigl(2v_RC\,|X_i|\,\|h_i\|\,J\,N_i\,
+        \frac{q}{\Delta E}\,e^{vq/\Delta E-\mu m}+2\|h_i\|e^{-q/2}\Bigr).
+    \end{align*}
+    If $N_i\le N_0$ for every $i$, the right-hand side is at most the number
+    of terms times
+    $2v_R^2C\,J^2N_0\,(q/\Delta E)\,e^{vq/\Delta E-\mu m}+2Je^{-q/2}$. With
+    one term per site and the choices of
+    Theorem~\ref{thm:hastings_truncated_approximation}, this is the bound on
+    the difference between $H$ and $M=\sum_iM_i$ by the number of sites times
+    $\|\widetilde H_i^0-M_i\|$ in \cite[lines 343--374]{Hastings2006Solving},
+    with explicit constants and $q$ free.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:hastings_truncated_approximation_time,
+        thm:hastings05_sum_approximation}
+    Theorem~\ref{thm:hastings05_sum_approximation} bounds
+    $\|\sum_iM_i-H\|$ by $\sum_i\|\widetilde h_i-M_i\|$, and
+    Theorem~\ref{thm:hastings_truncated_approximation_time} with $W=h_i$ and
+    $S=X_i$ bounds each summand. For the uniform form use $|X_i|\le v_R$,
+    $\|h_i\|\le J$ and $N_i\le N_0$.
+\end{proof}
+
 \begin{remark}
     Take $\mu>0$ fixed, $m=l_{proj}-3R$ and $q=c_1l_{proj}\Delta E$ with
     $0<c_1<\mu/v$, and suppose the number $N$ of omitted terms meeting $K$
@@ -247,3 +285,46 @@ eq.~(thd) \cite{gap:hastings05_truncated_dynamics}.
     $l_{proj}$, which is the form $JO(e^{-l_{proj}/l_{fac}})$ of
     eq.~(facld) \cite{gap:hastings05_truncated_dynamics}.
 \end{remark}
+
+\begin{theorem}[The exponential decay of eq.~(facld)]
+    \label{thm:hastings_truncated_facld_decay}
+    \lean{TNLean.Lattice.exists_norm_sub_starProjection_truncated_apply_le_exp,
+        TNLean.Lattice.exists_norm_truncated_apply_sub_inner_smul_le_exp,
+        Real.add_one_pow_mul_le_mul_exp}
+    \leanok
+    \uses{thm:hastings_truncated_facld}
+    In the setting of Theorem~\ref{thm:hastings_truncated_facld}, let $J\ge0$,
+    fix $\mu>0$ and $c_1>0$ with $c_1v<\mu$, and set
+    $l_{fac}=2/\min(c_1\Delta E,\ \mu-c_1v)$. For each projection radius
+    $l\in\mathbb{N}$ let $M_l$ be the truncated filter of $W$ at
+    $q=c_1l\Delta E$, built from the terms of a set $s_l$ acting inside a
+    region $K_l\supseteq S$, such that every omitted term meeting $K_l$ lies at
+    distance at least $m=l-3R$ from $S$. Suppose the number $N_l$ of omitted
+    terms meeting $K_l$ satisfies $N_l\le K_g(l+1)^k$. Then there is a constant
+    $C_1'\ge0$, independent of $l$, such that for every $l$ and every ground
+    vector $\psi$ the component of $M_l\psi$ orthogonal to the ground space
+    has norm at most $\|W\|(3+C_1'J)e^{-l/l_{fac}}\|\psi\|$.
+    If $\Omega$ is a unique ground state with gap $\Delta E$, there is also a
+    constant $C_2'\ge0$, independent of $l$, such that for every $l$,
+    $\|M_l\Omega-\langle\Omega,M_l\Omega\rangle\Omega\|\le
+        \|W\|(3+C_2'J)e^{-l/l_{fac}}$. This is the form $JO(e^{-l_{proj}/l_{fac}})$
+    of eq.~(facld) of \cite[lines 322--349]{Hastings2006Solving}, with the
+    polynomial growth of the shell as an explicit hypothesis
+    \cite{gap:hastings05_truncated_dynamics}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:hastings_truncated_facld}
+    Write $\delta=\min(c_1\Delta E,\ \mu-c_1v)>0$. At $q=c_1l\Delta E$ one has
+    $q/\Delta E=c_1l$, so the first term of the bound of
+    Theorem~\ref{thm:hastings_truncated_facld} is
+    $3\|W\|e^{-c_1\Delta El/2}\le3\|W\|e^{-\delta l/2}$. Since
+    $\mu m\ge\mu l-3\mu R$, the exponential of the second term is at most
+    $e^{3\mu R}e^{-(\mu-c_1v)l}\le e^{3\mu R}e^{-\delta l}$. For $a>0$ and
+    $x\ge0$, the inequality $y^{k+1}/(k+1)!\le e^{y}$ at $y=a(x+1)$ gives
+    $(x+1)^kx\le(k+1)!\,e^{a}a^{-(k+1)}e^{ax}$. With $a=\delta/2$ this bounds
+    $N_l\,l$ by a constant times $e^{\delta l/2}$, so the second term is at
+    most $\|W\|C_1'Je^{-\delta l/2}\|\psi\|$ in the ground-space estimate
+    and $\|W\|C_2'Je^{-\delta l/2}$ in the unique-ground-state estimate.
+\end{proof}

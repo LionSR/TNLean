@@ -34,8 +34,8 @@ namespace Lattice.PartyCircuit.SourceInventory
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 246–251. -/
 private theorem ofSlots_actual (R : SourceInventory P) :
     ofSlots R (fun i ↦ (R.get i).leftSpace) (fun i ↦ (R.get i).rightSpace)
-      (fun i ↦ (R.get i).vector) = R := by
-  exact List.ofFn_get R
+      (fun i ↦ (R.get i).vector) = R :=
+  List.ofFn_get R
 
 /-- The slots of the original sources have precisely their original register layout.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 246–251. -/

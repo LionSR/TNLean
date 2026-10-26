@@ -7,6 +7,7 @@ import TNLean.MPS.AreaLaw.Hastings.PartCommutators
 import TNLean.MPS.AreaLaw.LiebRobinson
 import TNLean.Lattice.GaussianFilteredIncrement
 import TNLean.Circuit.SiteExpectationOrder
+import TNLean.Algebra.ExpMulSubMonotone
 
 /-!
 # The localized filtered parts of a chain Hamiltonian
@@ -163,7 +164,7 @@ theorem ChainHamiltonian.norm_gaussianFilteredTerm_sub_localized_le_of_commutato
         Real.exp (chainLRVelocity R J * |s| - ℓ / 2) ≤ _
     have hexp : Real.exp (chainLRVelocity R J * |s| - ℓ / 2) ≤
         Real.exp (chainLRVelocity R J * T - ℓ / 2) :=
-      Real.exp_le_exp.mpr (sub_le_sub_right (mul_le_mul_of_nonneg_left hsT hv) _)
+      Real.exp_mul_sub_le_exp_mul_sub hv hsT
     gcongr
   refine (norm_gaussianFilteredTerm_sub_localized_le q' ΔE h.operator_isHermitian W _ hT
     (by positivity) hloc).trans ?_

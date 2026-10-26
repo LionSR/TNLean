@@ -30,16 +30,17 @@ the ground energy.
 
 The blocks of one level act on disjoint sets of supersites, so the projections of the two halves
 of a block commute. As in `HierarchyLevels.lean`, that commutation is a hypothesis here;
-`mem_supportedOperators_hierarchy` and `disjoint_levelBlock_two_mul` derive it from the
-supersite grouping of lines 609–628.
+`commute_supersiteHierarchy` derives it from the supersite grouping of lines 609–628, and
+`SupersiteFinalState.lean` restates the results below without it.
 
 **Scope restriction (open chain):** the source's chain of supersites is periodic (lines 626–628).
 The tree of joining operators covers the `N - 1` links `(k, k+1)` of the open chain, and the
 link `(N, 1)` is the joining operator of no level, so no window controls its energy. The sum
 of the joining operators, `hierarchySum M h 0`, is therefore the open-chain part of
 `∑_i M_i`, and the count of final states assumes the gap for this open-chain sum rather than
-for the periodic `∑_i M_i` of the source. Documented in
-`docs/paper-gaps/hastings05_hierarchical_energy.tex`.
+for the periodic `∑_i M_i` of the source. One further window for that link, inside the range of
+the final projection, removes the restriction (`card_le_two_mul_re_trace_of_closingLink`).
+Documented in `docs/paper-gaps/hastings05_hierarchical_energy.tex`.
 
 ## Main results
 
@@ -147,22 +148,6 @@ theorem abs_re_inner_sub_le_of_compressedWindowProjection {Q M : Matrix ι ι �
   exact abs_re_inner_sub_le_of_windowProjection hQM c hx hW
 
 variable (P M : ℕ → ℕ → Matrix ι ι ℂ) (c : ℕ → ℕ → ℝ) (x : ℕ → ℝ)
-
-/-- Every projection of the hierarchy is an orthogonal projection, and the halves of each block
-commute. -/
-theorem isStarProjection_hierarchy (hP0 : ∀ k, P 0 k = 1)
-    (hstep : ∀ m k, P (m + 1) k =
-      compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
-    (hcomm : ∀ m k, Commute (P m (2 * k)) (P m (2 * k + 1)))
-    (hM : ∀ m k, (M m k).IsHermitian) : ∀ m k, IsStarProjection (P m k) := by
-  intro m
-  induction m with
-  | zero => intro k; rw [hP0]; exact IsStarProjection.one _
-  | succ m ih =>
-    intro k
-    rw [hstep]
-    exact isStarProjection_compressedWindowProjection
-      ((ih (2 * k)).mul (ih (2 * k + 1)) (hcomm m k)) (hM m k) _ _
 
 /-- **eq. `hchy` below one block.** In the hierarchy of `norm_sub_hierarchy_le`, with radii
 `x m ≥ 0`, every vector `φ` kept by the projection of block `k` of level `m` satisfies

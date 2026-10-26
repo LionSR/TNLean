@@ -1,0 +1,80 @@
+\section{Entropy of contiguous regions in a block product}
+
+For the tensor-power construction in~\cite{Schuch2008EntropyScaling}
+(arXiv:0705.0292v2, lines 421--430), complete copies contribute no entropy.
+Only copies partially intersected by the region need be estimated.
+
+\begin{definition}[A region embedded in one copy]
+    \label{def:chain_embedded_copy_region}
+    \lean{TNLean.MPS.AreaLaw.copyRegion,TNLean.MPS.AreaLaw.copyRegionConfigurationEquiv}
+    \leanok
+    \uses{def:chain_copy_product}
+    For a region $R$ in a block of $L$ sites and an index $0\le i<K$, its
+    embedding in copy $i$ is $R_i=\{Li+j:j\in R\}$.
+    Restriction along this embedding identifies the two configuration spaces.
+\end{definition}
+
+\begin{theorem}[The reduced state of a region in one copy]
+    \label{thm:chain_copy_region_state}
+    \lean{TNLean.MPS.AreaLaw.regionState_copyProduct,TNLean.MPS.AreaLaw.regionEntropy_copyProduct}
+    \leanok
+    \uses{def:chain_embedded_copy_region,def:chain_copy_product}
+    Let $\Psi=\bigotimes_{i=0}^{K-1}\eta_i$, where every $\eta_i$ is a unit
+    vector. Under the configuration identification above, the reduced state
+    of $\Psi$ on $R_i$ equals that of $\eta_i$ on $R$. Consequently their
+    entropies agree, including when $R$ is empty or the whole block.
+\end{theorem}
+\begin{proof}\leanok
+    Split a full configuration into its restriction to $R$, its restriction
+    to the complement of $R$ within copy $i$, and its configurations in all
+    other copies. The coefficient of $\Psi$ is the product of the selected
+    copy coefficient and the coefficients in the other copies.
+    In the partial trace, summing over the other copies contributes the
+    product of their squared norms, which is one. The remaining sum is
+    exactly the reduced state of $\eta_i$ on $R$.
+    Entropy is invariant under a bijective change of configuration coordinates.
+\end{proof}
+
+\begin{theorem}[Subadditivity across copies]
+    \label{thm:chain_copy_regions_entropy_sum}
+    \lean{TNLean.MPS.AreaLaw.regionEntropy_copyRegions_le_sum}
+    \leanok
+    \uses{def:chain_embedded_copy_region,def:chain_copy_product}
+    For a unit block product and arbitrary regions $R_i$ in its respective
+    copies, the entropy of the union of their embeddings is at most
+    $\sum_i S_{\eta_i}(R_i)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_copy_region_state}
+    The embedded regions are disjoint. Apply regional subadditivity
+    successively and identify each marginal with its single-copy marginal.
+    The empty family contributes the entropy of the empty region, which is zero.
+\end{proof}
+
+\begin{theorem}[A uniform bound for every contiguous region]
+    \label{thm:chain_copy_interval_entropy}
+    \lean{TNLean.MPS.AreaLaw.regionEntropy_interval_copyProduct_le}
+    \leanok
+    \uses{def:chain_copy_product}
+    Let $\eta$ be a unit vector on $L$ sites, and suppose every regional
+    entropy of $\eta$ is at most $B$. Then for every $K\ge0$ and every
+    contiguous region $I=\{j:a\le j<b\}$ of the chain of $KL$ sites,
+    \begin{align}
+        \label{eq:chain_copy_interval_entropy}
+        S_{\eta^{\otimes K}}(I)\le2B.
+    \end{align}
+    No positivity assumption on $L$ or the local dimension is required.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_copy_regions_entropy_sum}
+    Intersect the interval with each copy and apply the preceding theorem.
+    Empty intersections and whole-copy intersections have zero entropy.
+    Every partially intersected copy contains an endpoint of the interval:
+    its index is $\lfloor a/L\rfloor$ or $\lfloor b/L\rfloor$.
+    Thus at most two terms remain, and each is at most $B$.
+    If $L=0$, there are no partially intersected copies.
+    Finally, $B\ge0$ follows by applying the assumed bound to the empty region.
+\end{proof}
+
+In particular, the single-copy bound $B=2\log2$ gives the source's
+four-bit bound $4\log2$, with entropy measured in natural logarithms here.

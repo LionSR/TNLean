@@ -168,9 +168,38 @@ site is infinity, with decay factor zero. Only localization requires q ≥ 1.
 These are the chain estimates used in Part II. After the reduction to
 connected domains, the note explicitly sets `Λ = {1, …, N}`
 (`part1_arealaw.tex`, lines 91–93); Theorem B itself is stated on a chain.
-Additional versions on arbitrary finite induced-path domains are not asserted;
-see the connected-domain scope note. These chain estimates supply the physical
-protocol above.
+These chain estimates supply the physical protocol above.
+The additional theorem
+`MPS.AreaLaw.norm_heisenberg_commutator_le_domainDistance` gives the same
+commutator estimate on every finite integer domain, using its induced-graph
+distance and treating infinite distance by exact commutation. It imposes no
+diameter bound on the initial support and no connectivity or spectral-gap
+hypothesis.
+
+The components of an induced integer graph are order-connected, and each
+component of a finite domain is a path on its own number of vertices
+(`SimpleGraph.hasse_int_induce_reachable_iff`,
+`SimpleGraph.ConnectedComponent.ordConnected_image_hasse_int_induce`, and
+`SimpleGraph.ConnectedComponent.nonempty_pathGraph_iso_hasse_int_induce_finset`).
+The increasing-coordinate graph isomorphism
+`MPS.AreaLaw.domainGraphIsoHasse`, together with extended-distance
+preservation under isomorphism and component inclusion, gives
+`MPS.AreaLaw.domainGraph_card_sphere_le_two`. Thus every finite-distance
+sphere has at most two sites; no distance is measured across a missing integer.
+
+With q ≥ 1, the extension
+`MPS.AreaLaw.norm_heisenberg_sub_siteExpectation_domainNeighborhood_le`
+gives localization on every finite integer domain with the same C′ and v
+as the contiguous chain. At a real radius ℓ ≥ 0 its neighborhood is exactly
+`S.biUnion (fun x ↦ QuantumCircuit.graphBall (domainGraph Λ) x ⌊ℓ⌋₊)`.
+The bound retains |S|², allows empty S, and requires neither a ground state
+nor a spectral gap. This completes the two propagation/localization
+estimates on finite domains. The additional theorems
+`MPS.AreaLaw.DomainHamiltonian.information_reset` and
+`MPS.AreaLaw.DomainHamiltonian.mutualInformation_le_of_logarithmic_separation`
+establish reset and logarithmic physical separation on the original finite
+domain, using only its original global gap. Their constants precede the domain
+and instance data. The chain preparation protocol uses only the chain versions.
 
 For an arbitrary region D of the contiguous chain,
 `MPS.AreaLaw.IsChainSupport.exists_boundary_window_of_split` places every
@@ -239,8 +268,10 @@ Gaussian filter, its supported approximation, a unitary on the same support
 and the product marginal after the actual regional replica swap. Only the
 original full-system ground-state gap is assumed. The additive constant in
 log(e q^|R₀|) is retained, including q = 1. This is the chain setting of
-Part II. An additional version on an arbitrary finite induced-path domain is
-not asserted; see the connected-domain scope note.
+Part II. The additional theorem
+`MPS.AreaLaw.DomainHamiltonian.information_reset` proves reset on arbitrary
+finite induced-path domains, with intrinsic extended-distance margins and no
+additional physical hypothesis; see the connected-domain scope note.
 
 The theorem
 `MPS.AreaLaw.ChainHamiltonian.mutualInformation_le_of_logarithmic_separation`
@@ -259,9 +290,12 @@ D = N_(w+1)(T) and C = complement N_(2w+2)(T). Their mutual information
 is at most 2S(D) ≤ b, and Dₚ = 3Cₚ(2+b)+3 gives both strict reset
 margins once log L ≥ 1. `MPS.AreaLaw.ChainHamiltonian.norm_bound_nonneg`
 supplies the sign of J from an actual singleton interaction.
-These Part II estimates concern the chain used in Theorem B. Versions on
-disconnected induced-path domains would be additional results and are not
-claimed. The arbitrary-domain entropy theorem above is already proved.
+These Part II estimates concern the chain used in Theorem B. The additional
+theorem `MPS.AreaLaw.DomainHamiltonian.mutualInformation_le_of_logarithmic_separation`
+proves the same decay for finite integer domains, with separation in their
+original integer positions. Its natural-neighborhood geometry and domain
+information-reset theorem retain the original global gap. The arbitrary-domain
+entropy theorem above is also proved.
 
 ## Constants
 

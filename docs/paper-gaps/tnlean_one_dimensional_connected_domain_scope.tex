@@ -5,7 +5,7 @@
 \input{command}
 \title{Connected Domains in the One-Dimensional Area Law}
 \author{}
-\date{October 18, 2026}
+\date{October 21, 2026}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{resolved}
@@ -36,14 +36,14 @@ The formalization first states the model on the chain of $L$ sites, with sites
 $\{0,\ldots,L-1\}$, supports of range $R$ the nonempty sets of sites of
 diameter at most $R$, and the Hamiltonian, gapped ground vector, regional
 entropies and boundary edges as in the note.\footnote{Declarations:
-\leanid{TNLean.MPS.AreaLaw.IsChainSupport},
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian},
-\leanid{TNLean.MPS.AreaLaw.boundaryEdges}.} Theorem~A is proved on this
+    \leanid{TNLean.MPS.AreaLaw.IsChainSupport},
+    \leanid{TNLean.MPS.AreaLaw.ChainHamiltonian},
+    \leanid{TNLean.MPS.AreaLaw.boundaryEdges}.} Theorem~A is proved on this
 chain for every subset $A$, with the explicit constant
 $C_0(q,R)(1+J/\Delta)$.\footnote{Declarations:
-\leanid{TNLean.MPS.AreaLaw.regionEntropy_interval_le},
-\leanid{TNLean.MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges},
-\leanid{TNLean.MPS.AreaLaw.chainAreaLaw}.} Theorem~B of the note is stated on
+    \leanid{TNLean.MPS.AreaLaw.regionEntropy_interval_le},
+    \leanid{TNLean.MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges},
+    \leanid{TNLean.MPS.AreaLaw.chainAreaLaw}.} Theorem~B of the note is stated on
 the chain of $L$ sites in the note itself, so it carries no restriction.
 
 \section{Resolution: arbitrary finite domains}
@@ -51,10 +51,10 @@ the chain of $L$ sites in the note itself, so it carries no restriction.
 Theorem~A is now formalized for every finite $\Lambda\subset\mathbb Z$, with
 no hypothesis beyond the source's and with the constant
 $C_0(q,R)(1+J/\Delta)$ of the chain case.\footnote{Declarations:
-\leanid{TNLean.MPS.AreaLaw.DomainHamiltonian},
-\leanid{TNLean.MPS.AreaLaw.domainBoundaryEdges},
-\leanid{TNLean.MPS.AreaLaw.regionEntropy_le_mul_card_domainBoundaryEdges},
-\leanid{TNLean.MPS.AreaLaw.domainAreaLaw}.} The sites of $\Lambda$ are
+    \leanid{TNLean.MPS.AreaLaw.DomainHamiltonian},
+    \leanid{TNLean.MPS.AreaLaw.domainBoundaryEdges},
+    \leanid{TNLean.MPS.AreaLaw.regionEntropy_le_mul_card_domainBoundaryEdges},
+    \leanid{TNLean.MPS.AreaLaw.domainAreaLaw}.} The sites of $\Lambda$ are
 labelled $0,\ldots,|\Lambda|-1$ in increasing order, the supports are the
 nonempty sets of graph diameter at most $R$ in the induced path graph, and
 $\partial_\Lambda A$ is the set of edges $\{x,x+1\}\subseteq\Lambda$ with
@@ -84,31 +84,57 @@ connected domains, it states explicitly: ``From now on
 $\Lambda=\{1,\ldots,N\}$'' (\texttt{part1\_arealaw.tex}, lines~91--93).
 Part~II develops Theorem~B, whose statement already specifies
 $\Lambda=\{1,\ldots,L\}$. Its locality lemma is titled ``Lieb--Robinson
-bound on a chain'' (\texttt{part2a\_mps\_information.tex}, lines~260--309).
+bound on a chain'' (\path{part2a_mps_information.tex}, lines~260--309).
 Neither that lemma nor the subsequent reset and separation lemmas explicitly
 returns to quantification over arbitrary finite domains.
 
-The proved contiguous-chain estimates therefore have the domain required by
-this argument. Versions for arbitrary finite induced-path domains would be
-additional results. They are not asserted by the present formalization;
-in particular, reading one of the local lemmas in isolation with an
-unrestricted $\Lambda$ is not covered by the chain theorem. This distinction
-does not add a hypothesis to either headline theorem: Theorem~A is proved
-on every finite domain, and Theorem~B is stated on a chain in the source.
+The proved contiguous-chain estimates have the domain required by the source
+argument. The following commutator and localization estimates extend them to
+arbitrary finite induced integer domains. The information-reset and
+logarithmic-separation extensions are established below. Neither headline
+theorem gains a hypothesis: Theorem~A holds on every finite domain, and
+Theorem~B is stated on a chain in the source.
 
-For an arbitrary finite $\Lambda\subset\mathbb Z$, the additional geometric
-argument is to identify distances inside each component, bound each distance
-sphere by two vertices, and bound a support of graph diameter at most $R$ by
-$R+1$ sites. Supports of finite graph diameter lie in one component; operators
-at infinite separation commute exactly. These facts allow the general graph
-estimates to be applied with the same uniform constants. This extension of
-the local estimates does not require a product decomposition of ground
-vectors.
+\subsection{Finite-domain locality estimates}
+
+Both estimates are proved for arbitrary finite induced integer domains,
+with the same uniform constants as on the contiguous chain. Put
+\begin{align}
+    C   & = 2+4|b_0|e^{2R}, & v  & = 2(R+1)|b_0|e^{2R}+1, \notag \\
+    \mu & = \tfrac12,       & C' & = \frac{2Ce}{1-e^{-1/2}}.
+    \label{eq:tnlean_one_dimensional_connected_domain_scope_domain_constants}
+\end{align}
+For every finite labelled family of Hermitian terms on nonempty supports
+of induced-graph diameter at most $R$, with per-site norm sum at most $b_0$,
+the commutator bound holds on every finite initial support $S$. The
+localization bound holds for $q\ge1$ and every real radius $\ell\ge0$, with
+neighborhood
+$N_\ell(S)=\bigcup_{x\in S}\{y:d_\Lambda(x,y)\le\lfloor\ell\rfloor\}$.
+Neither estimate assumes connectedness, a ground state or a spectral gap;
+empty $S$ is allowed.\footnote{Declarations:
+    \leanid{TNLean.MPS.AreaLaw.norm_heisenberg_commutator_le_domainDistance},
+    \leanid{TNLean.MPS.AreaLaw.norm_heisenberg_sub_siteExpectation_domainNeighborhood_le}.}
+
+The increasing enumeration identifies the domain graph with the induced
+integer Hasse graph. Each component is a finite path, and its inclusion
+preserves extended graph distance. A sphere of finite radius therefore has
+at most two vertices, while a support of diameter at most $R$ has at most
+$R+1$ sites.\footnote{Declarations:
+    \leanid{SimpleGraph.ConnectedComponent.nonempty_pathGraph_iso_hasse_int_induce_finset},
+    \leanid{TNLean.MPS.AreaLaw.domainGraphIsoHasse},
+    \leanid{TNLean.MPS.AreaLaw.domainGraph_card_sphere_le_two}.}
+The general graph estimates apply with sphere coefficient $2$ and exponent
+zero. Passing from the natural radius $\lfloor\ell\rfloor$ to $\ell$
+contributes the factor $e^{1/2}$ in the coefficient $C'$ of
+(\ref{eq:tnlean_one_dimensional_connected_domain_scope_domain_constants}). Operators at
+infinite separation commute exactly; infinite distances are not replaced
+by coordinate distances across a missing integer. This proves the finite-domain extensions of the propagation and localization
+estimates without using a ground-state decomposition.
 
 \section{Information reset on the contiguous chain}
 
 Part~II, Lemma~\texttt{lem:reset}
-(\texttt{part2a\_mps\_information.tex}, lines~319--435), is proved on the
+(\path{part2a_mps_information.tex}, lines~319--435), is proved on the
 contiguous chain with the source hypotheses. For every $p>0$ there are
 $C_p>0$ and a natural $L_0\ge1$, chosen before all system and region data,
 such that the following holds for $L\ge L_0$. If $D,C$ are disjoint,
@@ -119,18 +145,75 @@ Nonnegativity of $b$ is derived, and only the original full-system gap is
 assumed. The Gaussian filter, supported approximation, polar unitary and
 independence after the regional replica swap are constructed within the
 proof.\footnote{Declaration:
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.information_reset}.}
+    \leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.information_reset}.}
 
-The blueprint states and marks the contiguous-chain theorem proved here.
-An extension to arbitrary finite induced-path domains would require the
-corresponding locality and support geometry described above. Such an extension
-is not used in Theorem~A or Theorem~B and is not claimed. No additional
-spectral or product-marginal hypothesis is part of the chain theorem.
+\section{Resolution: information reset on finite domains}
+
+The information-reset lemma is now proved on every finite induced integer
+ domain, with the same hypothesis set. The gap remains the original global
+ gap, and the proof constructs the physical buffer, Gaussian approximation
+ and supported polar unitary for the actual doubled and regionally swapped
+ domain operators. No factorization or product-marginal hypothesis is added.
+ The constants $C_p,L_0$ precede the domain and all instance data.\footnote{
+ Declaration: \leanid{TNLean.MPS.AreaLaw.DomainHamiltonian.information_reset}.}
+
+Let $C_{\mathrm{int}},v>0$ be the constants in supported Gaussian averaging,
+and let $T_0>0$ be the time constant in the physical-buffer filter for exponent
+$r=2p+10$. Before choosing the domain or regions, set
+\begin{align}
+    P &= C_{\mathrm{int}}(1+T_0), \notag\\
+    K_{\mathrm{loc}} &= 4(vT_0+15+r+P), \notag\\
+    C_p &= K_{\mathrm{loc}}+R+4.
+    \label{eq:domain_reset_constants}
+\end{align}
+With the constants in~\eqref{eq:domain_reset_constants}, let the domain have
+size $L\ge L_0\ge1$. Nonnegativity of mutual information gives $b\ge0$. Define
+\begin{align}
+    B &= 1+b+\log L\ge1, & w &= C_p B, \notag\\
+    \ell &= \lceil K_{\mathrm{loc}}B\rceil,
+    & \varepsilon &= e^{-10b}L^{-r}.
+    \label{eq:domain_reset_parameters}
+\end{align}
+For the parameters in~\eqref{eq:domain_reset_parameters}, the rounding
+estimate and $B\ge1$ give the strict radius margin
+\begin{align}
+    K_{\mathrm{loc}}B &\le\ell<K_{\mathrm{loc}}B+1, \notag\\
+    \ell+R &<K_{\mathrm{loc}}B+R+1<C_p B=w.
+    \label{eq:domain_reset_radius}
+\end{align}
+These choices make the supported Gaussian approximation error at most
+$\varepsilon$.
+
+Distances in the margins are intrinsic extended graph distances, denoted by
+$d_\Lambda$. For either pair $(F_0,F)=(R_0,D)$ or $(C_0,C)$, let $x\in F_0$
+and $y\notin F$ have finite distance. The margin hypothesis is
+\begin{align}
+    w &<d_\Lambda(x,y).
+    \label{eq:domain_reset_margin}
+\end{align}
+Infinite distances impose no condition. To see why the localization cannot
+reach a core, let $X$ be an interaction support crossing $D$, choose $z\in X$
+and suppose $d_\Lambda(x,z)\le\ell$ for a core site $x$. If $x\in R_0$, take
+$y\in X\setminus D$; if $x\in C_0$, take $y\in X\cap D$, which lies outside
+$C$ by disjointness. Since $X$ has diameter at most $R$, the radius estimate
+\eqref{eq:domain_reset_radius} gives
+\begin{align}
+    d_\Lambda(x,y)
+    &\le d_\Lambda(x,z)+d_\Lambda(z,y)
+    \le\ell+R<w.
+    \label{eq:domain_reset_crossing}
+\end{align}
+The finite-distance bound~\eqref{eq:domain_reset_crossing} contradicts
+\eqref{eq:domain_reset_margin}. The same argument excludes the localization
+of $\Lambda\setminus(D\cup C)$ from both cores. Thus the supported unitary
+acts away from the cores. The regional swap itself yields the required
+product marginal, and entropy continuity completes the proof.\footnote{
+    Declaration: \leanid{TNLean.Lattice.mutualInformation_cores_le_of_reset_unitary}.}
 
 \section{Information at logarithmic separation}
 
 Part~II, Lemma~\texttt{lem:logsep}
-(\texttt{part2a\_mps\_information.tex}, lines~472--488), is also proved on
+(\path{part2a_mps_information.tex}, lines~472--488), is also proved on
 the contiguous chain. For fixed $p>0$ and $k_0\ge1$, positive $D_p$ and a
 natural cutoff are chosen before all system data. If $T$ is a union of at
 most $k_0$ intervals and every pair $x\in T$, $y\in E$ satisfies
@@ -139,15 +222,76 @@ large $L$. The interval family may overlap or contain empty members.
 Neither disjointness nor a sign hypothesis on the original real $J$ is
 added. The sign needed for the interval area law follows from the norm
 bound of an actual singleton interaction.\footnote{Declaration:
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.mutualInformation_le_of_logarithmic_separation}.}
+    \leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.mutualInformation_le_of_logarithmic_separation}.}
 
-The proof combines the contiguous interval area law, exact real-radius
-neighborhoods of intervals, and the contiguous reset theorem. It establishes
-the logarithmic separation used in the chain preparation argument. It does
-not assert the additional version on arbitrary finite induced-path domains;
-that version would require the corresponding domain geometry and reset
-estimates. This analytic theorem alone does not construct a preparation
-protocol.
+\section{Resolution: logarithmic separation on finite domains}
+
+The logarithmic-separation lemma is also proved on arbitrary finite induced
+ integer domains. Relative intervals are intervals in their increasing
+ order, while separation is measured in the original integer positions,
+ not in compressed labels. All constants precede the domain and instance
+ data; no sign condition on $J$ is added.\footnote{Declaration:
+ \leanid{TNLean.MPS.AreaLaw.DomainHamiltonian.mutualInformation_le_of_logarithmic_separation}.}
+
+Let $C_{\mathrm{AL}}=C_{\mathrm{int}}(q,R,J,\Delta)$ be the interval
+entropy constant.
+
+Set $c=\max(0,C_{\mathrm{AL}})$ and choose the reset constants
+$C_p,L_{\mathrm{reset}}$ for the exponent $p$. Before choosing the domain, set
+\begin{align}
+    b &=4k_0c, & D_p&=3C_p(2+b)+4, \notag\\
+    L_0&=\max\bigl(L_{\mathrm{reset}},\lceil e\rceil\bigr).
+    \label{eq:domain_logsep_constants}
+\end{align}
+For the cutoff in~\eqref{eq:domain_logsep_constants}, $L\ge L_0$ implies
+$\log L\ge1$. Define
+\begin{align}
+    w &=C_p(1+b+\log L), & n&=\lceil w+1\rceil, \notag\\
+    D&=N_n(T), & C&=\Lambda\setminus N_{2n}(T),
+    \label{eq:domain_logsep_regions}
+\end{align}
+where $N_j$ is the intrinsic graph neighborhood of radius $j$. For the
+regions in~\eqref{eq:domain_logsep_regions}, the two estimates needed for
+the strict margins follow separately:
+\begin{align}
+    D_p\log L-(3w+4)
+    &=\bigl(3C_p(1+b)+4\bigr)(\log L-1)\ge0, \notag\\
+    w+1&\le n<w+2, \notag\\
+    2n+w&<3w+4\le D_p\log L.
+    \label{eq:domain_logsep_radius}
+\end{align}
+For a finite intrinsic distance, a shortest walk bounds the physical coordinate
+difference by that distance. Together with~\eqref{eq:domain_logsep_radius},
+this gives $T\subseteq D$ and $E\subseteq C$.
+Indeed, a point $y\in E\cap N_{2n}(T)$ would have a point $x\in T$ with
+$|x-y|\le2n<D_p\log L$, contrary to the assumed physical separation.
+For $x\in T$ and $y\notin D$, any finite distance satisfies
+$d_\Lambda(x,y)>n>w$.
+For the other core, take $e\in E$ and $y\notin C$, and choose $x\in T$ with
+$d_\Lambda(x,y)\le2n$. If $d=d_\Lambda(e,y)$ were finite and at most $w$, then
+\begin{align}
+    D_p\log L&\le |x-e|
+    \le d_\Lambda(x,y)+d_\Lambda(y,e)
+    \le2n+d\le2n+w<D_p\log L,
+    \label{eq:domain_logsep_margin}
+\end{align}
+The contradiction in~\eqref{eq:domain_logsep_margin} proves $w<d$ whenever
+that distance is finite; infinite distances require no additional argument.
+
+Each intrinsic neighborhood of a relative interval is again a relative
+interval. Finite subadditivity and the interval area law therefore give
+\begin{align}
+    S_\Omega(D)&\le k_0c, \notag\\
+    I_\Omega(D:C)&\le2S_\Omega(D)\le2k_0c\le b.
+    \label{eq:domain_logsep_entropy}
+\end{align}
+Using~\eqref{eq:domain_logsep_entropy}, the finite-domain reset theorem now
+applies to the two cores $T,E$ and gives
+$I_\Omega(T:E)\le L^{-p}$.
+
+These results extend the two chain information lemmas to arbitrary finite
+ integer domains. The chain preparation protocol is established separately
+ and uses only the chain versions.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -182,8 +182,8 @@ theorem inner_regularizedPatchInsertion_eq_trace_of_outer_commute
           normalizedRegularizedPatchOutput regions a b Ω x := by
     have hreal : regularizedPatchOutput regions a b Ω x =
         regularizedPatchObjective regions a b Ω x •
-          normalizedRegularizedPatchOutput regions a b Ω x := by
-      exact (smul_inv_smul₀ (norm_ne_zero_iff.mpr hzero)
+          normalizedRegularizedPatchOutput regions a b Ω x :=
+      (smul_inv_smul₀ (norm_ne_zero_iff.mpr hzero)
         (regularizedPatchOutput regions a b Ω x)).symm
     exact hreal.trans (RCLike.real_smul_eq_coe_smul (K := ℂ) _ _)
   obtain ⟨σ, -⟩ :=
