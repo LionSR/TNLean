@@ -9511,3 +9511,12 @@ there is no need for a new tactic.
   occurrence should factor it into one lemma beside
   `lvv_trimming_constant_bounds` that takes `Δ`, `c`, `‖B‖` and `L` and
   returns the two error bounds.
+
+### Enlarging a covering bound by its dimension — reused Mathlib (2026-10-26)
+
+- **Seen:** `MPS/AreaLaw/ViableSet/BoundaryNet.lean`.
+- **Pattern:** A net on matrices of size `c` has a bound whose grid size and exponent both
+  increase with `c`; replace `c` by a geometric upper bound without changing the net.
+- **Reuse:** `Nat.pow_le_pow_left`, `Nat.ceil_mono` and `pow_le_pow` give the comparison,
+  with the larger base at least one. They also cover zero dimension and exponent.
+- **Decision:** The proof needs no separate scalar declaration or tactic.
