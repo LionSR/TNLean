@@ -90,6 +90,64 @@ for an arbitrary finite set of sites and are instantiated here directly.
     crossing supports $D_u$ and $D_v$ share the single middle site.
 \end{proof}
 
+\begin{theorem}[Changed sites under interval displacement]
+    \label{thm:chain_interval_symmdiff}
+    \lean{TNLean.MPS.AreaLaw.card_interval_symmDiff_le_dist}
+    \leanok
+    \uses{def:chain_model}
+    For natural numbers $L,a,b,c,d$, let
+    $I_L(a,b)=\{t\in\{0,\ldots,L-1\}:a\le t<b\}$.
+    Then
+    \begin{align}
+        |I_L(a,b)\mathbin{\triangle}I_L(c,d)| & \le |a-c|+|b-d|.
+        \label{eq:chain_interval_symmdiff}
+    \end{align}
+    No ordering or containment assumptions on the endpoints are required.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_model}
+    A site belonging to exactly one interval lies between the two left
+    endpoints or between the two right endpoints. Thus
+    \begin{align}
+        I_L(a,b)\mathbin{\triangle}I_L(c,d)
+         & \subseteq I_L(\min(a,c),\max(a,c))\notag \\
+         & \qquad\cup I_L(\min(b,d),\max(b,d)).
+        \label{eq:chain_interval_endpoint_strips}
+    \end{align}
+    The two intervals in~(\ref{eq:chain_interval_endpoint_strips}) have at
+    most $\max(a,c)-\min(a,c)=|a-c|$ and
+    $\max(b,d)-\min(b,d)=|b-d|$ sites. Subadditivity of cardinality gives
+    (\ref{eq:chain_interval_symmdiff}).
+\end{proof}
+
+\begin{theorem}[Middle-region displacement within two windows]
+    \label{thm:chain_two_window_middle_displacement}
+    \lean{TNLean.MPS.AreaLaw.card_twoWindow_middle_symmDiff_le}
+    \leanok
+    \uses{def:chain_model}
+    Let $L,a,b,\ell$ be natural numbers, let $0\le p,s<2\ell$, and let
+    $\delta\in\{0,1\}$. Using the clipped intervals of
+    Theorem~\ref{thm:chain_interval_symmdiff}, set
+    \begin{align}
+        E        & =I_L(a+p+1,b+s+1),\notag      \\
+        E_\delta & =I_L(a+\ell+\delta,b+\ell+1).
+        \label{eq:chain_two_window_middle_regions}
+    \end{align}
+    Then $|E\mathbin{\triangle}E_\delta|\le2\ell$.
+    When $a+\ell+1<b+\ell+1\le L$, write $i_1=a+\ell+1$ and
+    $i_2=b+\ell+1$. In one-based site coordinates, $E_0$ is the block
+    $\{i_1,\ldots,i_2\}$ in~\cite[Proposition~5.7]{Arad2016RigorousRG},
+    whereas $E_1$ is the middle
+    region between the cuts after $i_1$ and $i_2$ in its Theorem~4.1.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_interval_symmdiff}
+    The inequalities $0\le p,s<2\ell$ and $\delta\in\{0,1\}$ give
+    $|(p+1)-(\ell+\delta)|\le\ell$ and $|s-\ell|\le\ell$.
+    Apply~(\ref{eq:chain_interval_symmdiff}) to the two intervals
+    in~(\ref{eq:chain_two_window_middle_regions}) and add these bounds.
+\end{proof}
+
 \begin{lemma}[Distance and spheres on a finite path]
     \label{lem:chain_path_metric_spheres}
     \lean{SimpleGraph.pathGraph_edist, SimpleGraph.pathGraph_card_sphere_le_two}
