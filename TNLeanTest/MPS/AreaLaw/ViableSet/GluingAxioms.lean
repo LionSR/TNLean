@@ -13,7 +13,7 @@ open TNLean.MPS.AreaLaw
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
-  for decl in #[``leftBlock_sub_one_subset, ``gluingCut, ``leftCutOperator,
+  for decl in #[``leftBlock_mono, ``gluingCut, ``leftCutOperator,
       ``rightCutOperator, ``reindex_gluingCut_eq, ``exists_leading_eigenvector_chain] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"

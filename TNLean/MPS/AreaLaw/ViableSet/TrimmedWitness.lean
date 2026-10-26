@@ -76,8 +76,8 @@ theorem exists_trimmed_witness_chain {k : ℕ}
       WithLp.ofLp w ∘ (gluingCut L q k).symm =
         ((1 : Matrix (CutLeft L q k × CutSite L q k) (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ
           x ∧
-      (reindex (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_sub_one_subset k))
-          (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_sub_one_subset k)) PV ⊗ₖ
+      (reindex (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+          (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1))) PV ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ x = x := by
   classical
   rcases isEmpty_or_nonempty (Fin L → Fin q) with hσ | ⟨⟨σ⟩⟩
@@ -132,7 +132,8 @@ theorem exists_trimmed_witness_chain {k : ℕ}
     simp [w, e]
   have hcm : cutMatrix w k = schmidtCoeffMatrix (WithLp.ofLp wc) := by
     rw [cutMatrix, hwcw]
-  set Ssplit := Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_sub_one_subset (L := L) k)
+  set Ssplit :=
+    Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (L := L) (Nat.sub_le k 1))
   refine ⟨w, m, W, fun p ↦ WithLp.ofLp xc (Ssplit.symm p.1, p.2), ?_, ?_, ?_, ?_, hW, hmD, ?_, ?_⟩
   · rw [← Entropy.norm_cutVector (leftBlock L k), hwcw, hwc1]
   · rw [hcm]; exact hwcD

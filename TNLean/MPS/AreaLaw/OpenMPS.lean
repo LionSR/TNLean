@@ -45,6 +45,10 @@ def leftBlock (L k : ℕ) : Finset (Fin L) := Finset.univ.filter fun i ↦ i.val
 theorem mem_leftBlock {k : ℕ} {i : Fin L} : i ∈ leftBlock L k ↔ i.val < k := by
   simp [leftBlock]
 
+/-- Left blocks grow with the cut. -/
+theorem leftBlock_mono {k k' : ℕ} (h : k ≤ k') : leftBlock L k ⊆ leftBlock L k' :=
+  fun _ hi ↦ mem_leftBlock.mpr (lt_of_lt_of_le (mem_leftBlock.mp hi) h)
+
 /-- The coefficient matrix of a vector across the cut after `k` sites: rows are the
 configurations of the left block, columns those of its complement. -/
 noncomputable def cutMatrix (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ) :
