@@ -9396,3 +9396,15 @@ there is no need for a new tactic.
 - **Decision:** There are two occurrences across the companion libraries.
   Retain the existing lemmas; a third occurrence would justify a shared
   mathematical statement, rather than a custom tactic.
+
+### Eigenvectors in the support of a density matrix — existing Mathlib lemmas (2026-10-26)
+
+- **Seen:** The local `hQu` arguments in
+  `MPS/AreaLaw/ViableSet/ViableLeadingVector.lean` and
+  `MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean`.
+- **Pattern:** From `Q * σ = σ` and `σ *ᵥ u = μ • u`, with `μ ≠ 0`,
+  deduce `Q *ᵥ u = u` by associativity and scalar cancellation.
+- **Reuse:** Apply `congrArg` to the action on `u`, then use
+  `Matrix.mulVec_mulVec`, `Matrix.mulVec_smul` and `smul_right_injective`.
+- **Decision:** These existing lemmas give the new argument in three lines;
+  no separate scalar-inverse calculation or custom tactic is needed.
