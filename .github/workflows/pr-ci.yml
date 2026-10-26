@@ -529,6 +529,7 @@ jobs:
         timeout-minutes: 30
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           set -eo pipefail
           test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
@@ -554,6 +555,7 @@ jobs:
         timeout-minutes: 60
         env:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          PR_HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || '' }}
         run: |
           set -eo pipefail
           case "$BASE_SHA" in 0000000000000000000000000000000000000000) BASE_SHA="" ;; esac
