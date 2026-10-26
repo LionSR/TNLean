@@ -13,6 +13,7 @@ import TNLean.MPS.AreaLaw.BandDissolution
 import TNLean.MPS.AreaLaw.BandInformation
 import TNLean.MPS.AreaLaw.Basic
 import TNLean.MPS.AreaLaw.BoundaryCounting
+import TNLean.MPS.AreaLaw.BoundaryGap
 import TNLean.MPS.AreaLaw.BufferDiscount
 import TNLean.MPS.AreaLaw.ChainNeighborhood
 import TNLean.MPS.AreaLaw.ChainStageIncidence

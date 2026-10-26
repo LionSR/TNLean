@@ -82,6 +82,40 @@ for an arbitrary finite set of sites and are instantiated here directly.
     If $L=0$, there are no interaction terms and both sides vanish.
 \end{proof}
 
+The following upper bound on the gap is an auxiliary estimate for the constant
+comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
+
+\begin{theorem}[An upper bound on the gap of a range-one chain]
+    \label{thm:chain_range_one_gap_upper}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.gap_le_four_mul_of_range_one}
+    \leanok
+    \uses{def:chain_model}
+    Let $L\ge1$, $q\ge2$ and $J\in\mathbb R$, and let $H=\sum_Xh_X$ be a
+    range-one Hamiltonian on the chain with $\lVert h_X\rVert\le J$.
+    Suppose that $\Omega$ is a unit vector, $H\Omega=E_0\Omega$, and
+    $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$ for some $\Delta\in\mathbb R$.
+    Then $\Delta\le4J$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:chain_model}
+    Diagonalize the marginal $\rho_0$ at site $0$, and let $U_0$ cyclically
+    permute an orthonormal eigenbasis. Since $q\ge2$, this permutation has
+    no fixed point, so $\operatorname{tr}(\rho_0U_0)=0$. The lifted unitary
+    $K=U_0\otimes I$ sends $\Omega$ to a unit vector $\varphi$ orthogonal to
+    $\Omega$. Every term supported away from $0$ commutes with $K$ and
+    therefore has the same expectation in $\varphi$ and $\Omega$.
+    At most two range-one supports contain $0$: the singleton $\{0\}$ and,
+    when it exists, the edge $\{0,1\}$. Each expectation changes by at most
+    $2J$. The gap inequality gives
+    \[
+        \Delta\le\langle\varphi,H\varphi\rangle-E_0
+        =\sum_{X\ni0}\bigl(\langle\varphi,h_X\varphi\rangle
+            -\langle\Omega,h_X\Omega\rangle\bigr)\le4J.
+    \]
+\end{proof}
+
 \begin{theorem}[Nearest-neighbour supports at two cuts]
     \label{thm:chain_two_cut_edge_supports}
     \lean{TNLean.MPS.AreaLaw.interval_edge_classification_of_lt}
