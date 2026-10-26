@@ -226,3 +226,52 @@ smaller trimming error recovers the energy bound of the source's corollary.
     \end{align}
     since $0<\delta_0\le1/12$.
 \end{proof}
+
+\subsection{Numerical estimates for trimming}
+
+\begin{theorem}[A numerical trimming bound]
+    \label{thm:chain_numerical_trim_bound}
+    \lean{TNLean.MPS.AreaLaw.trimming_energy_fraction_le_six_mul_sqrt}
+    \leanok
+    If $0\le c\le1/1600$, then
+    \begin{align}
+        \frac{8c+4\sqrt{2c}}{1-8c}\le6\sqrt c. \notag
+    \end{align}
+    This is an auxiliary numerical estimate for the energy bound in
+    \cite[Lemma \texttt{l:within}, lines 509--515]{Landau2015Polynomial}.
+\end{theorem}
+\begin{proof}\leanok
+    Put $r=\sqrt c\le1/40$. Then $\sqrt{2c}\le17r/12$,
+    $8c\le r/5$, and $6r(1-8c)\ge597r/100$. Thus
+    $8c+4\sqrt{2c}\le88r/15\le597r/100\le6r(1-8c)$.
+    The denominator $1-8c$ is positive.
+\end{proof}
+
+\begin{theorem}[The numerical constant for trimming]
+    \label{thm:chain_numerical_trim_constant}
+    \lean{
+        TNLean.MPS.AreaLaw.lvv_trimming_constant_bounds,
+        TNLean.MPS.AreaLaw.lvv_trimming_energy_bounds
+    }
+    \leanok
+    Let $0<\Delta\le4$ and $c=(\Delta/169)^2$. Then $0<c\le1/1600$,
+    and the three inequalities of
+    \cite[equation \texttt{eq:def-ce}, lines 290--293]{Landau2015Polynomial}
+    hold:
+    \begin{align}
+        c(1+1/\Delta)\le\frac12,\qquad
+        \frac{14\sqrt c}{\Delta}<\frac1{12},\qquad
+        \frac{84c}{\Delta}<\frac12. \notag
+    \end{align}
+    The energy estimates also satisfy
+    \begin{align}
+        \frac{8c+4\sqrt{2c}}{1-8c}\le6\sqrt c\le\frac{\Delta}{12}. \notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_numerical_trim_bound}
+    One has $\Delta^2\le16$, $c/\Delta=\Delta/28561$, and
+    $\sqrt c=\Delta/169$. Substitution gives the three stated inequalities
+    and $6\sqrt c\le\Delta/12$. Since $c\le16/28561<1/1600$,
+    Theorem~\ref{thm:chain_numerical_trim_bound} gives the remaining bound.
+\end{proof}
