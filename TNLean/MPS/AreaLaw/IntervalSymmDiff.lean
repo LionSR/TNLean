@@ -18,7 +18,7 @@ Intervals are clipped to the finite chain, including the empty chain.
 ## Main results
 
 - `card_interval_symmDiff_le_dist`: the endpoint displacement bound.
-- `card_twoWindow_middle_symmDiff_le`: the bound for the two middle-region
+- `card_two_window_middle_symmDiff_le`: the bound for the two middle-region
   conventions used in the two-cut operator-Schmidt-rank argument.
 
 ## References
@@ -51,12 +51,11 @@ theorem card_interval_symmDiff_le_dist
       Nat.add_le_add (card_interval_le _ _) (card_interval_le _ _)
     _ = Nat.dist a c + Nat.dist b d := by rw [Nat.dist_eq_max_sub_min, Nat.dist_eq_max_sub_min]
 
-
 /-- Both source target blocks are within 2ℓ sites of the selected middle
 block. ALVV, arXiv:1602.08828v2, `item:small-sr`, lines 830–831, and
 `prop:Cheby-AGSP-eff`, lines 1311–1333. The value δ=0 gives the literal
 block in Proposition 5.7; δ=1 gives the earlier pair of named cuts. -/
-theorem card_twoWindow_middle_symmDiff_le
+theorem card_two_window_middle_symmDiff_le
     {L a b ℓ : ℕ} (p s : Fin (2 * ℓ)) (δ : Fin 2) :
     ((interval L (a + p.val + 1) (b + s.val + 1)) ∆
       (interval L (a + ℓ + δ.val) (b + ℓ + 1))).card ≤ 2 * ℓ := by
