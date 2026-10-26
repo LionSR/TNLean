@@ -175,7 +175,7 @@ open Classical in
 one full-frequency cardinality factor and both ordered-gap factors.
 ALVV, arXiv:1602.08828v2, `eq:H-mid-cut`, lines 810–821,
 and Proposition 5.7, lines 1324–1333. -/
-private theorem operatorSchmidtRank_twoWindow_full_counts_le
+private theorem operatorSchmidtRank_two_window_full_counts_le
     {L q ℓ a b : ℕ}
     (F : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
       Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
@@ -255,7 +255,7 @@ open Classical in
 factor `(r + 1) ^ (4 * ℓ)`. All original `4 * ℓ + 3` labels are retained.
 ALVV, arXiv:1602.08828v2, `eq:H-mid-cut`, lines 810–821,
 and Proposition 5.7, lines 1324–1333. -/
-private theorem operatorSchmidtRank_twoWindow_regional_full_counts_le
+private theorem operatorSchmidtRank_two_window_regional_full_counts_le
     {L q ℓ a b : ℕ}
     (F : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
       Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
@@ -318,7 +318,7 @@ private theorem operatorSchmidtRank_twoWindow_regional_full_counts_le
       ((∑ α ∈ S, weight α • coefficientH α).reindex e e) ≤
       (r + 1) ^ (4 * ℓ) * ((r + i + 1).choose (2 * i + 1) *
         (r + j + 1).choose (2 * j + 1) * (q ^ 2) ^ i * (q ^ 2) ^ j) :=
-    operatorSchmidtRank_twoWindow_full_counts_le
+    operatorSchmidtRank_two_window_full_counts_le
       F hleft hright hL hM hR hab hb p s r i j weight
   rw [hsum] at hbase
   have hrank := middle_threeSplit_rank_eq q T E hTE
@@ -332,7 +332,7 @@ open Classical in
 /-- Moving a weighted slice to a prescribed region costs the squared configuration
 dimension of the symmetric difference with the selected middle region.
 ALVV, arXiv:1602.08828v2, Proposition 5.7, lines 1331–1333. -/
-private theorem operatorSchmidtRank_twoWindow_target_full_counts_le
+private theorem operatorSchmidtRank_two_window_target_full_counts_le
     {L q ℓ a b : ℕ}
     (F : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
       Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
@@ -367,7 +367,7 @@ private theorem operatorSchmidtRank_twoWindow_target_full_counts_le
           (q ^ 2) ^ i * (q ^ 2) ^ j)) := by
   classical
   intro E u v S coefficient
-  have hregional := operatorSchmidtRank_twoWindow_regional_full_counts_le
+  have hregional := operatorSchmidtRank_two_window_regional_full_counts_le
     F hleft hright hL hM hR hab hb p s r i j weight
   have hmove := FiniteProduct.operatorSchmidtRank_splitEquiv_le q E J
     (∑ α ∈ S, weight α • coefficient α)
@@ -380,7 +380,7 @@ The choice `δ = 0` gives the block of ALVV Proposition 5.7; `δ = 1` gives
 its region between the two named cuts. Local dimensions zero and one are included.
 ALVV, arXiv:1602.08828v2, `eq:H-mid-cut`, lines 810–821,
 and Proposition 5.7, lines 1324–1333. -/
-private theorem operatorSchmidtRank_twoWindow_source_full_counts_le
+private theorem operatorSchmidtRank_two_window_source_full_counts_le
     {L q ℓ a b : ℕ}
     (F : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
       Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
@@ -429,7 +429,7 @@ private theorem operatorSchmidtRank_twoWindow_source_full_counts_le
       ext x y
       simp [Matrix.reindex_apply]
     exact hzrank.trans (Nat.zero_le _)
-  · have hraw := operatorSchmidtRank_twoWindow_target_full_counts_le
+  · have hraw := operatorSchmidtRank_two_window_target_full_counts_le
       F hleft hright hL hM hR hab hb p s r i j weight J
     have hgeometry :
         ((interval L (a + p.val + 1) (b + s.val + 1)) ∆ J).card ≤ 2 * ℓ :=
@@ -528,7 +528,7 @@ open Classical in
 with the common cutoff `k / (2 * ℓ)`. The selected regions are transported to `Jδ`
 before their ranks are added.
 ALVV, arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
-private theorem operatorSchmidtRank_twoWindow_pow_le_sum
+private theorem operatorSchmidtRank_two_window_pow_le_sum
     {L q ℓ a b : ℕ}
     (F : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
       Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
@@ -609,7 +609,7 @@ private theorem operatorSchmidtRank_twoWindow_pow_le_sum
       (fun α ↦ (right α : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3)))
       (eL p) (eR s) i j coefficient
     rw [hw]
-    exact operatorSchmidtRank_twoWindow_source_full_counts_le
+    exact operatorSchmidtRank_two_window_source_full_counts_le
       F hleft hright hL hM hR hab hb p s r i j
       (fun α ↦ if (left α : _) = eL p ∧ (right α : _) = eR s then 1 else 0) δ
   have hbinsum (C : ℕ → ℕ → ℕ) :
@@ -677,7 +677,7 @@ open Classical in
 /-- Every degree from zero through `k` contributes to the regional rank estimate
 for a polynomial of degree at most `k`. The frequency cutoff is the same for all degrees.
 ALVV, arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
-private theorem operatorSchmidtRank_twoWindow_aeval_le_sum
+private theorem operatorSchmidtRank_two_window_aeval_le_sum
     {L q ℓ a b : ℕ}
     (F : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
       Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
@@ -720,7 +720,7 @@ private theorem operatorSchmidtRank_twoWindow_aeval_le_sum
       simpa only [Matrix.coe_reindexAlgEquiv] using
         (map_pow (Matrix.reindexAlgEquiv ℂ ℂ g) M r).symm
     rw [hpowmap]
-    exact operatorSchmidtRank_twoWindow_pow_le_sum F hleft hright hL hM hR hab hb
+    exact operatorSchmidtRank_two_window_pow_le_sum F hleft hright hL hM hR hab hb
       hℓ k r (Nat.le_of_lt_succ (Finset.mem_range.mp hr)) δ
   have hsum := hdegree.trans (Finset.sum_le_sum hpowers)
   simpa only [← Finset.mul_sum] using hsum
@@ -736,7 +736,7 @@ The region is `Jδ = [a + ℓ + δ, b + ℓ + 1)`. The choice `δ = 0` gives the
 literal block in Proposition 5.7; `δ = 1` gives the region between its two named cuts.
 Local dimensions zero and one are included. This statement is a regional rank estimate;
 the MPO bond-dimension and computation-time assertions of Proposition 5.7 are separate. -/
-theorem operatorSchmidtRank_aeval_twoWindow_le_pow
+theorem operatorSchmidtRank_aeval_two_window_le_pow
     {L q ℓ a b : ℕ}
     (F : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
       Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
@@ -780,7 +780,7 @@ theorem operatorSchmidtRank_aeval_twoWindow_le_pow
       exact hrank.trans (by
         simpa only [one_mul] using (one_le_pow₀ hk : 1 ≤ k ^ (17 * (ℓ + bnd))))
     · have hq2 : 2 ≤ q := by omega
-      exact (operatorSchmidtRank_twoWindow_aeval_le_sum
+      exact (operatorSchmidtRank_two_window_aeval_le_sum
         F hleft hright hL hM hR hab hb hℓ k P hdeg δ).trans
         ((Nat.two_window_rank_sum_le_factor k q ℓ bnd (by omega) (Nat.div_le_self _ _)).trans
           (Nat.two_window_rank_factor_le_pow k q ℓ bnd hk hq2 hℓ (Nat.div_le_self _ _)))

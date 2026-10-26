@@ -27,7 +27,7 @@ local instance alphabetDecidableEq (ℓ : ℕ) :
 
 -- This includes q=0 and q=1, and P=1 retains a nonzero constant term.
 private noncomputable abbrev constantPolynomialEveryDimension (q : ℕ) (δ : Fin 2) :=
-  operatorSchmidtRank_aeval_twoWindow_le_pow
+  operatorSchmidtRank_aeval_two_window_le_pow
     (L := 5) (q := q) (ℓ := 1) (a := 0) (b := 2)
     (fun _ ↦ (0 : Matrix (Fin 5 → Fin q) (Fin 5 → Fin q) ℂ))
     (fun _ ↦ Submodule.zero_mem _) (fun _ ↦ Submodule.zero_mem _)
@@ -81,7 +81,7 @@ private noncomputable def swapWindows :
 
 -- The same noncommuting physical family is admissible at either source cut.
 private noncomputable abbrev adjacentSwapsPolynomial (δ : Fin 2) :=
-  operatorSchmidtRank_aeval_twoWindow_le_pow
+  operatorSchmidtRank_aeval_two_window_le_pow
     (L := 5) (q := 2) (ℓ := 1) (a := 0) (b := 2) swapWindows
     (by
       intro r
@@ -107,9 +107,9 @@ example : swapWindows (Sum.inl (Sum.inl 0)) ≠ 0 := by
 example : ((2 * 1) ^ (17 * (1 + 1 / (2 * 1))) : ℕ) = 131072 := by decide
 
 /-- info:
-'TNLean.MPS.AreaLaw.operatorSchmidtRank_aeval_twoWindow_le_pow' depends on axioms:
+'TNLean.MPS.AreaLaw.operatorSchmidtRank_aeval_two_window_le_pow' depends on axioms:
 [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
 set_option linter.hashCommand false in
-#print axioms TNLean.MPS.AreaLaw.operatorSchmidtRank_aeval_twoWindow_le_pow
+#print axioms TNLean.MPS.AreaLaw.operatorSchmidtRank_aeval_two_window_le_pow
