@@ -8,6 +8,7 @@ algebra; they impose no ordering or bond bound on the matrices.
 \begin{definition}[Exchange of the middle coordinates]
     \label{def:chain_middle_factor_exchange}
     \lean{Matrix.middleFactorExchangeEquiv,Matrix.exchangedMiddleFactor,Matrix.exchangedMiddleFamily}
+    \leanok
     Let $A,B$ be finite sets, let $C,O$ be arbitrary sets, and let $R$ be a
     semiring. Write $E_{uv}$ for a standard matrix unit. Define the bijection
     \begin{align}
@@ -27,6 +28,7 @@ algebra; they impose no ordering or bond bound on the matrices.
 \begin{theorem}[Matrix-unit expansion after exchanging the middle]
     \label{thm:chain_middle_factor_exchange}
     \lean{Matrix.reindex_kronecker_middleFactorExchange,Matrix.reindex_sum_kronecker_middleFactorExchange}
+    \leanok
     \uses{def:chain_middle_factor_exchange}
     Let $M$ be a matrix on $B\times O$ and $V$ a matrix on $A\times C$,
     both over $R$. Transporting both indices by $\Phi$ gives
@@ -40,7 +42,7 @@ algebra; they impose no ordering or bond bound on the matrices.
     $(\sum_{t\in I}M_t\otimes V_t)^\Phi$ for every family $(M_t)$.
     No commutativity of $R$ or nonemptiness of the index sets is required.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     At row $((a,o),(b,c))$ and column $((a',o'),(b',c'))$, the matrix
     units leave exactly the summand with these four transferred labels.
     Its entry is
@@ -52,13 +54,14 @@ algebra; they impose no ordering or bond bound on the matrices.
     $t$ proves the finite-family assertion.
 \end{proof}
 
-\begin{lemma}[Number of exchanged middle factors]
-    \label{lem:chain_middle_factor_exchange_card}
+\begin{theorem}[Number of exchanged middle factors]
+    \label{thm:chain_middle_factor_exchange_card}
     \lean{Matrix.card_exchangedMiddleFamily_index}
+    \leanok
     \uses{def:chain_middle_factor_exchange}
-    The prescribed family has $|I|\,|A|^2|B|^2$ indexed terms, including
+    If $I$ is finite, the prescribed family has $|I|\,|A|^2|B|^2$ indexed terms, including
     repetitions and zero matrices.
-\end{lemma}
-\begin{proof}
+\end{theorem}
+\begin{proof}\leanok
     Its index set is $I\times(A\times A)\times(B\times B)$; take cardinalities.
 \end{proof}
