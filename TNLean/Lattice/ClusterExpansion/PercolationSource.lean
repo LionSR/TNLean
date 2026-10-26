@@ -26,7 +26,8 @@ large when the support of `H_C` contains two sites at distance larger than `l_pr
 
 * A connected set of `n` terms has support of diameter at most `2Rn`, so a large connected set
   has at least `⌊l_proj/(2R)⌋ + 1` terms.
-* There are at most `N x^n` connected sets of `n` terms, with `N` the number of terms and
+* There are at most `N x^n` connected sets of `n` terms, with `N` the number of terms (the source
+  indexes the terms by sites, so this is its number of sites) and
   `x = max(1, Δ²)` (the lattice-animal count, lines 1227–1229).
 * A set `C` of terms and its boundary together have at most `(Δ + 1) n_C` terms.
 

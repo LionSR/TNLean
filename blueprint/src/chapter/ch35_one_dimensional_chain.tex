@@ -2892,6 +2892,36 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $|\psi\rangle\langle\psi|-|\phi\rangle\langle\phi|$.
 \end{proof}
 
+\begin{theorem}[Spectral-tail lower bound for MPS approximation]
+    \label{thm:chain_spectral_tail_lower_bound}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.sum_descEigenvalue_leftBlock_tail_le_traceNorm}
+    \leanok
+    Let $\psi$ be a unit vector on a chain of $L$ sites, and let $\phi$
+    be an open-boundary matrix product state of bond dimension at most $D$.
+    At an internal cut $0<k<L$, let $\lambda_1\ge\cdots\ge\lambda_M\ge0$
+    be the eigenvalues of the prefix reduction $\rho_k$ of $\psi$. Then
+    \begin{align}
+        \sum_{j=D+1}^{M}\lambda_j
+         & \le\bigl\||\psi\rangle\langle\psi|
+        -|\phi\rangle\langle\phi|\bigr\|_1.
+        \label{eq:chain_spectral_tail_lower_bound}
+    \end{align}
+    The sum is zero when $D\ge M$. Neither normalization of $\phi$ nor
+    a small-error assumption is required. This is the approximation lower
+    bound of~\cite[Eq.~(eps-lower), source lines 246--264]{Schuch2008EntropyScaling}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_reduced_state_rank_error}
+    Denote the trace error in (\ref{eq:chain_spectral_tail_lower_bound}) by $E$.
+    The prefix reduction of $\phi$ has rank at most $D$.
+    If $E<1$, the optimized pure-state error and Ky Fan overlap estimates
+    bound the discarded mass by $E/2\le E$; see
+    \cite[``Discarded marginal spectrum at small pure-state error'']{QICLean2026Blueprint}.
+    If $E\ge1$, positivity and $\operatorname{tr}\rho_k=1$ bound the
+    discarded mass by $1\le E$. This proves
+    (\ref{eq:chain_spectral_tail_lower_bound}) in both cases.
+\end{proof}
+
 \begin{theorem}[Growth of chain cut ranks]
     \label{thm:chain_cut_rank_growth}
     \lean{
