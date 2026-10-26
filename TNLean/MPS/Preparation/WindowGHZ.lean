@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.IsometryUnitaryExtension
-import TNLean.Algebra.PermutationMatrixUnitary
+import QICLean.Algebra.PermutationMatrixUnitary
 import TNLean.MPS.Preparation.ConfigurationLayers
 import TNLean.Circuit.Measurement.Rounds
 import TNLean.Circuit.Gates.Permutation
