@@ -37,7 +37,7 @@ namespace TNLean.MPS.AreaLaw
 
 /-- The prefix ending at a cut is disjoint from the interval beginning there.
 Supporting geometry for ALVV, arXiv:1602.08828v2, `eq:H-mid-cut`, lines 810–821. -/
-private theorem disjoint_interval_zero_interval (L a b : ℕ) :
+theorem disjoint_interval_zero_interval (L a b : ℕ) :
     Disjoint (interval L 0 a) (interval L a b) := by
   rw [Finset.disjoint_left]
   intro x hx hy
@@ -52,11 +52,9 @@ theorem exists_threeSplit_edge_factors
     (H : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsupp : ∀ r, H r ∈ supportedOperators q
       (interval L r.val (r.val + 2) : Set (Fin L)))
-    (u v : Fin (L - 1)) (huv : u.val < v.val) :
-    let T := interval L 0 (u.val + 1)
-    let E := interval L (u.val + 1) (v.val + 1)
-    let g := threeSplit q T E
-      (disjoint_interval_zero_interval L (u.val + 1) (v.val + 1))
+    (u v : Fin (L - 1)) (huv : u.val < v.val)
+    {T E : Finset (Fin L)} (hT : T = interval L 0 (u.val + 1))
+    (hE : E = interval L (u.val + 1) (v.val + 1)) (hTE : Disjoint T E) :
     ∃ (HL : Fin (L - 1) → Matrix (T → Fin q) (T → Fin q) ℂ)
       (HM : Fin (L - 1) → Matrix (E → Fin q) (E → Fin q) ℂ)
       (HR : Fin (L - 1) → Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ)
@@ -65,16 +63,16 @@ theorem exists_threeSplit_edge_factors
       (VR : Matrix ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
         ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ),
       (∀ r, r ≠ u → r ≠ v →
-        (H r).submatrix g.symm g.symm =
+        (H r).submatrix (threeSplit q T E hTE).symm (threeSplit q T E hTE).symm =
           (HL r ⊗ₖ (1 : Matrix (E → Fin q) (E → Fin q) ℂ)) ⊗ₖ
               (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) +
             ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ HM r) ⊗ₖ
               (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) +
             (1 : Matrix ((T → Fin q) × (E → Fin q))
               ((T → Fin q) × (E → Fin q)) ℂ) ⊗ₖ HR r) ∧
-      (H u).submatrix g.symm g.symm =
+      (H u).submatrix (threeSplit q T E hTE).symm (threeSplit q T E hTE).symm =
         UL ⊗ₖ (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) ∧
-      (H v).submatrix g.symm g.symm =
+      (H v).submatrix (threeSplit q T E hTE).symm (threeSplit q T E hTE).symm =
         ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ VR).reindex
           (Equiv.prodAssoc (T → Fin q) (E → Fin q)
             (↥(T ∪ E)ᶜ → Fin q)).symm
@@ -82,9 +80,10 @@ theorem exists_threeSplit_edge_factors
             (↥(T ∪ E)ᶜ → Fin q)).symm ∧
       operatorSchmidtRank UL ≤ q ^ 2 ∧ operatorSchmidtRank VR ≤ q ^ 2 := by
   classical
-  intro T E g
-  have hTE : Disjoint T E :=
-    disjoint_interval_zero_interval L (u.val + 1) (v.val + 1)
+  subst hT hE
+  set T := interval L 0 (u.val + 1)
+  set E := interval L (u.val + 1) (v.val + 1)
+  set g := threeSplit q T E hTE
   have hv : v.val + 1 < L := by omega
   obtain ⟨huD, huT, hvD, hvE, hord⟩ :=
     interval_edge_classification_of_lt (L := L) huv hv
