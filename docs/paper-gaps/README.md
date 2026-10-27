@@ -1666,3 +1666,10 @@ and [#9847](https://github.com/LionSR/TNLean/issues/9847).
   `E₀ + 6√δ` and bond dimension `B_{min(δ, 1/12)}`. The energy bound after
   trimming a general low-energy vector is corrected in the QICLean note
   `lvv13_trimming_energy`.
+
+- [`lvv13_error_reduction_witness_norm.tex`](lvv13_error_reduction_witness_norm.tex)
+  (local correction, resolved) records that the step from `A v` to `K v` in the
+  proof of Claim `c:errorreduction` (arXiv:1307.5143v1, line 589) needs a lower
+  bound on `‖A v‖`; a two-dimensional example disproves it without one. The
+  source's `A` is Hermitian and fixes `Γ`, so `‖A v‖ ≥ 1/2`, and the new error is
+  `δ + 4 ‖K - A‖` in place of `2 δ`, a constant absorbed by the choice of `q(n)`.
