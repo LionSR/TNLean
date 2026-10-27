@@ -42,7 +42,8 @@ theorem trimming_energy_fraction_le_six_mul_sqrt {c : ℝ} (hc0 : 0 ≤ c)
     _ ≤ 6 * √c * (1 - 8 * c) := hdenr
 
 /-- The three inequalities of LVV13, equation `eq:def-ce`
-(`References/1307.5143/algo53.tex`, lines 290–293), together with positivity and the bound
+(`References/1307.5143/algo53.tex`, lines 290–293: the constant is defined on line 290 and the
+display `eq:def-ce` occupies lines 291–293), together with positivity and the bound
 `c ≤ 1/1600`, for `c = (Δ / 169)²` and `0 < Δ ≤ 4`. -/
 theorem lvv_trimming_constant_bounds {Δ : ℝ} (hΔ0 : 0 < Δ) (hΔ4 : Δ ≤ 4) :
     0 < (Δ / 169) ^ 2 ∧ (Δ / 169) ^ 2 ≤ 1 / 1600 ∧
