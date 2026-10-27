@@ -9,6 +9,7 @@ involve the matrices on the second factor.
 \begin{definition}[Retained word coefficients]
     \label{def:core_word_coefficients}
     \lean{Matrix.coreWordCoeff}
+    \leanok
     Let $m$ be a finite set, let $I$ be an arbitrary set, and choose
     $R_a\in\C^{m\times m}$ for $a\in I$. For a finite list $s$ of pairs
     $(K,c)\in\C^{m\times m}\times\C$ and a word $w$ in $I$, define
@@ -27,6 +28,7 @@ involve the matrices on the second factor.
 \begin{theorem}[Expansion over interior words]
     \label{thm:core_word_product}
     \lean{Matrix.prod_coreStep_eq_sum}
+    \leanok
     \uses{def:core_word_coefficients}
     Let $I,m,n$ be finite sets. Choose
     $R_a\in\C^{m\times m}$ and $N_a\in\C^{n\times n}$ for $a\in I$.
@@ -42,7 +44,7 @@ involve the matrices on the second factor.
     identity matrices, and the empty alphabet and empty matrix index sets are
     included. No commutativity assumption is made on the matrices.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:core_word_coefficients}
     Introduce a central formal variable $X$ and the matrix polynomial
     \begin{align}
