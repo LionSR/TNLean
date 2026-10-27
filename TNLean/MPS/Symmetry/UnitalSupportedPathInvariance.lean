@@ -81,6 +81,6 @@ theorem isMulCoboundary₂_div_of_continuous_unital_supported_family
     (fun t₀ ↦ (eventually_cohomologousTo_of_continuous_unital_supported_family
       D ω ρ B hB hUnital σ hσ htrace hfix K hK hsupport A hA hUnitary U hCov
         t₀ (hdim t₀) (hInj t₀)).mono
-          (fun t ht ↦ (ScalarCocycle.cohomologousTo_iff_isMulCoboundary₂_div _ _).mp ht)) 1 0
+          (fun _t ht ↦ (ScalarCocycle.cohomologousTo_iff_isMulCoboundary₂_div _ _).mp ht)) 1 0
 
 end MPSTensor
