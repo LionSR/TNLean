@@ -18,7 +18,8 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
         TNLean.MPS.AreaLaw.rightCutOperator}
     \leanok
     The coordinates $((x,y),z)$ of a configuration of the chain at the cut
-    after $k$ sites. For an operator $H_L$ supported on the first $k$ sites,
+    after $k$ sites, for any local dimension $q$. When $q\ge1$, for an
+    operator $H_L$ supported on the first $k$ sites,
     $H_L'$ is its restriction to them; for an operator $K$ supported off the
     first $k-1$ sites, $K'$ is its restriction to site $k-1$ and the sites right
     of the cut.
@@ -29,6 +30,7 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     \lean{TNLean.MPS.AreaLaw.reindex_gluingCut_eq}
     \leanok
     \uses{def:chain_gluing_cut}
+    Assume that the local dimension satisfies $q\ge1$.
     If $H_L$ is supported on the first $k$ sites and $K$ off the first $k-1$
     sites, then in the cut coordinates $H_L+K=H_L'\otimes1+1\otimes K'$.
 \end{theorem}
@@ -50,6 +52,7 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     \lean{TNLean.MPS.AreaLaw.exists_leading_eigenvector_chain}
     \leanok
     \uses{def:chain_gluing_cut}
+    Assume that the local dimension satisfies $q\ge1$.
     Let $H=H_L+K$ with $H_L$ supported on the first $k$ sites and $K$ off the
     first $k-1$ sites have a gapped ground state $\Gamma$ with energy $E_0$ and
     gap $\Delta$. Let $W$ be an isometry from a bond $\mathbb C^m$ into the
