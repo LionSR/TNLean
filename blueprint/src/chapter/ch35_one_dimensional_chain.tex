@@ -61,6 +61,37 @@ for an arbitrary finite set of sites and are instantiated here directly.
     both $A$ and its complement; it is at least one.
 \end{definition}
 
+\begin{theorem}[A bond sum separated by two windows]
+    \label{thm:chain_two_window_sum}
+    \lean{Finset.sum_range_eq_five_parts_of_two_windows,
+        Fin.sum_univ_eq_five_parts_of_two_windows}
+    \leanok
+    Let $M$ be an abelian monoid written additively, and let
+    $a,b,\ell,N$ be natural numbers with $a+2\ell\le b$ and
+    $b+2\ell\le N$. For a sequence $f:\mathbb N\to M$,
+    \begin{align}
+        \sum_{t<N}f(t)
+         & =\sum_{t<a}f(t)+\sum_{r<2\ell}f(a+r)\notag   \\
+         & \quad+\sum_{r<b-(a+2\ell)}f(a+2\ell+r)\notag \\
+         & \quad+\sum_{r<2\ell}f(b+r)
+        +\sum_{r<N-(b+2\ell)}f(b+2\ell+r).
+        \label{eq:chain_two_window_sum}
+    \end{align}
+    The same identity holds when $f$ is given only on
+    $\{0,\ldots,N-1\}$: every shifted index in~(\ref{eq:chain_two_window_sum})
+    belongs to this set. Empty windows and empty complementary intervals
+    are permitted. Applied to a bond array, this is the additive grouping
+    used in~\cite[Section~4.1]{Arad2016RigorousRG}.
+\end{theorem}
+\begin{proof}\leanok
+    Split the sum successively at $b+2\ell$, $b$, $a+2\ell$ and $a$.
+    The inequalities on the endpoints give the complementary lengths
+    in~(\ref{eq:chain_two_window_sum}). For a finite array, extend $f$ by zero
+    outside its domain and reindex each interval by its finite length.
+    Each shifted index is less than $N$, so the extension agrees with $f$
+    in every summand.
+\end{proof}
+
 \begin{theorem}[The number of range-one supports]
     \label{thm:chain_range_one_support_count}
     \lean{
