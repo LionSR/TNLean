@@ -14,7 +14,6 @@ import Mathlib.Data.FunLike.IsApply
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Analysis.Normed.Group.InfiniteSum
 import Mathlib.Analysis.SpecificLimits.Basic
-import Mathlib.Tactic.Abel
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.Linarith
@@ -42,7 +41,7 @@ variable {n : Type*} [Fintype n] [DecidableEq n]
 /-- Exponentiating left multiplication gives left multiplication by the
 exponential. Supporting the Hadamard identity of AKL14, arXiv:1406.3898,
 low70.tex, lines 795–810. -/
-private theorem exp_leftMultiplication_apply (H O : Matrix n n ℂ) :
+private theorem exp_left_multiplication_apply (H O : Matrix n n ℂ) :
     NormedSpace.exp (ContinuousLinearMap.mul ℂ (Matrix n n ℂ) H) O =
       NormedSpace.exp H * O := by
   let L : Matrix n n ℂ →+* (Matrix n n ℂ →L[ℂ] Matrix n n ℂ) :=
@@ -61,7 +60,7 @@ private theorem exp_leftMultiplication_apply (H O : Matrix n n ℂ) :
 
 /-- The opposite regular representation gives the corresponding right
 multiplication identity. Supporting AKL14, arXiv:1406.3898, lines 795–810. -/
-private theorem exp_rightMultiplication_apply (H O : Matrix n n ℂ) :
+private theorem exp_right_multiplication_apply (H O : Matrix n n ℂ) :
     NormedSpace.exp ((ContinuousLinearMap.mul ℂ (Matrix n n ℂ)).flip H) O =
       O * NormedSpace.exp H := by
   let R : (Matrix n n ℂ)ᵐᵒᵖ →+* (Matrix n n ℂ →L[ℂ] Matrix n n ℂ) :=
@@ -138,7 +137,7 @@ private theorem exp_commutator_apply (H O : Matrix n n ℂ) :
       (ContinuousLinearMap.mul ℂ (Matrix n n ℂ)).flip (-H) :=
     (map_neg (ContinuousLinearMap.mul ℂ (Matrix n n ℂ)).flip H).symm
   rw [exp_commutator_operator H, hneg, mul_apply_eq_comp,
-    exp_rightMultiplication_apply, exp_leftMultiplication_apply, mul_assoc]
+    exp_right_multiplication_apply, exp_left_multiplication_apply, mul_assoc]
 
 end Matrix
 
