@@ -13,6 +13,7 @@ import TNLean.MPS.AreaLaw.BandDissolution
 import TNLean.MPS.AreaLaw.BandInformation
 import TNLean.MPS.AreaLaw.Basic
 import TNLean.MPS.AreaLaw.BoundaryCounting
+import TNLean.MPS.AreaLaw.BoundaryGap
 import TNLean.MPS.AreaLaw.BufferDiscount
 import TNLean.MPS.AreaLaw.ChainNeighborhood
 import TNLean.MPS.AreaLaw.ChainStageIncidence
@@ -38,6 +39,7 @@ import TNLean.MPS.AreaLaw.DoubledHamiltonian
 import TNLean.MPS.AreaLaw.EntropyInequalities
 import TNLean.MPS.AreaLaw.EntropyScaling
 import TNLean.MPS.AreaLaw.FixedConfigurationExtension
+import TNLean.MPS.AreaLaw.GluingHamiltonian
 import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.Hastings
 import TNLean.MPS.AreaLaw.InformationReset
@@ -79,6 +81,7 @@ import TNLean.MPS.AreaLaw.ProtocolTerminalCoordinates
 import TNLean.MPS.AreaLaw.ProtocolTerminalReference
 import TNLean.MPS.AreaLaw.ProtocolTerminalWord
 import TNLean.MPS.AreaLaw.ProtocolUniformPreparation
+import TNLean.MPS.AreaLaw.RangeOneCut
 import TNLean.MPS.AreaLaw.RangeOneSupport
 import TNLean.MPS.AreaLaw.RelativeGeneratorLocalization
 import TNLean.MPS.AreaLaw.RenyiEntropy
