@@ -278,9 +278,8 @@ the residue of the site.
     Then $\lVert[PM_iP,PM_jP]\rVert$ is at most the bound of
     Theorem~\ref{thm:hastings_supercell_commutator_small} plus
     $2\varepsilon_i\lVert h_j\rVert+2\lVert h_i\rVert\varepsilon_j$. The errors of
-    eq.~\texttt{apb} do not decrease with $n$, so this does not yet give the
-    exponential smallness in $n$ of \cite[lines 1634--1641]{Hastings2006Solving}
-    for the $M_i$ \cite{gap:hastings05_translation_supercell}.
+    eq.~\texttt{apb} do not decrease with $n$; the exponential smallness in $n$
+    for the $M_i$ is Theorem~\ref{thm:hastings_supercell_truncated_small}.
 \end{theorem}
 \begin{proof}\leanok
     Write $A=P\tilde H_iP$, $A'=PM_iP$, $B=P\tilde H_jP$ and $B'=PM_jP$. Then
@@ -288,6 +287,36 @@ the residue of the site.
     the norm, $\lVert B'\rVert\le\lVert M_j\rVert\le\lVert h_j\rVert$, and
     $\lVert A\rVert\le\lVert h_i\rVert$, so the last two commutators are at most
     $2\varepsilon_i\lVert h_j\rVert$ and $2\lVert h_i\rVert\varepsilon_j$.
+\end{proof}
+
+\begin{theorem}[The source's truncated terms]
+    \label{thm:hastings_supercell_truncated_small}
+    \lean{TNLean.Lattice.truncatedTerm,
+        TNLean.Lattice.truncatedTerm_smul,
+        TNLean.Lattice.norm_groundCompression_truncatedTerm_commutator_le_of_momenta}
+    \leanok
+    \uses{def:hastings_supercell_of_momenta,thm:hastings05_blecm}
+    In the setting of Theorem~\ref{thm:hastings_supercell_commutator_small}, let
+    $M_k$ be the filter of $h_k$ under $\sum_{k'\in s_k}h_{k'}$, the term of
+    eq.~\texttt{mid} of \cite[lines 285--307]{Hastings2006Solving}, with
+    covariant truncations $s_{g\cdot k}=g\cdot s_k$, and let $h_k$ and the terms of
+    $s_k$ act on a set $K_k\ni k$ of diameter at most $R'$. Then for every $l$
+    with $2R'+l+N\le\lfloor n/2\rfloor$ the low-energy commutator of $M_i$ and
+    $M_j$ obeys the bound of Theorem~\ref{thm:hastings05_blecm} at separation
+    $l$. Taking $l=\lfloor n/2\rfloor-N-2R'$ makes it exponentially small in $n$,
+    which is the conclusion of \cite[lines 1603--1641]{Hastings2006Solving} for
+    the source's $M_i$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_site_invariant_sum,thm:hastings_supercell_compression,
+        thm:hastings_supercell_of_momenta,thm:hastings_supercell_far}
+    Covariance of the terms and of the truncations gives
+    $M_{g\cdot k}=P_gM_kP_g^\dagger$, since conjugation by $P_g$ commutes with
+    the Gaussian filter. Each $M_k$ acts on $K_k$. Take $g$ in the supercell
+    carrying $j$ to distance more than $\lfloor n/2\rfloor-N\ge2R'+l$ from $i$, so
+    that the sites within distance $l$ of $K_i$ miss $K_{g\cdot j}$. Then
+    $PM_{g\cdot j}P=PM_jP$, eq.~\texttt{blecm} applies to $M_i$ and
+    $M_{g\cdot j}$, and $\lVert M_{g\cdot j}\rVert=\lVert M_j\rVert$.
 \end{proof}
 
 At line 1638 the source writes the first site as $(\vec x_1,y_2)$ where

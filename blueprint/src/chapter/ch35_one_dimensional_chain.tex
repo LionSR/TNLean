@@ -208,6 +208,38 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
     most one, and $0\le K\le I$.
 \end{proof}
 
+\begin{theorem}[Decomposition for boundary gluing]
+    \label{thm:chain_gluing_hamiltonian_decomposition}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_gluing_decomposition_of_range_one}
+    \leanok
+    \uses{def:chain_model}
+    Let $H=\sum_Xh_X$ be a range-one Hamiltonian on $L$ sites with
+    $\lVert h_X\rVert\le1$. For every natural number $k$, put
+    $A=\lbrack0,k)$ and $D=\lbrack0,\max\{k-1,0\})^{\mathsf c}$, with intervals clipped
+    to the chain. There exist matrices $H_L$ and $B$ such that
+    \begin{align}
+        H              & =H_L+B,\notag \\
+        \lVert B\rVert & \le2L.\notag
+    \end{align}
+    where $H_L$ is supported on $A$ and $B$ on $D$.
+    This supplies the decomposition $H=H_L+(H_R+H_i)$ used
+    in~\cite[lines 409--410]{Landau2015Polynomial} for the range-one model
+    of Definition~\ref{def:chain_model}, which also allows Hermitian one-site terms.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_range_one_support_count}
+    Put $H_L=\sum_{X\subseteq A}h_X$ and
+    $B=\sum_{X\nsubseteq A}h_X$. Then $H=H_L+B$, and $H_L$ is
+    supported on $A$. Every support in the second sum contains a site
+    $y\ge k$. For each of its sites $x$, the range-one condition gives
+    $y\le x+1$, so $k\le x+1$ and $x\in D$. Thus $B$ is supported on $D$.
+    By Theorem~\ref{thm:chain_range_one_support_count}, there are at most
+    $2L$ supports. The triangle inequality and $\lVert h_X\rVert\le1$ give
+    \begin{align}
+        \lVert B\rVert & \le\sum_{X\nsubseteq A}\lVert h_X\rVert\le2L.\notag
+    \end{align}
+\end{proof}
+
 \begin{theorem}[Energy from ground-state overlap for a range-one chain]
     \label{thm:chain_range_one_overlap_energy}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.re_inner_sub_le_of_overlap_of_range_one,
@@ -6425,6 +6457,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
 \input{chapter/ch35_two_window_polynomial_mpo_family}
 
 \input{chapter/ch35_product_replacement}
+\input{chapter/ch35_matrix_factor_exchange}
 \input{chapter/ch35_copy_region_entropy}
 \input{chapter/ch35_chain_trimming}
 \input{chapter/ch35_lvv_viable_sets}
