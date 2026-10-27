@@ -1,0 +1,144 @@
+\section{Natural coordinates for physical interval operators}
+
+The following identities give the coordinate and placement steps supporting
+\cite[Proposition~5.7]{Arad2016RigorousRG}. All endpoints and dimensions below
+are nonnegative integers. Intervals are half-open and intersected with the
+finite chain. Subtraction of natural numbers is truncated at zero.
+
+\begin{definition}[Increasing coordinates on an interval]
+    \label{def:physical_interval_increasing_coordinates}
+    \lean{TNLean.MPS.AreaLaw.intervalShiftOrderIso}
+    For $a\le b\le T$, the increasing coordinate identification is the
+    order isomorphism
+    \begin{align}
+        e_{a,b}:\{0,\ldots,b-a-1\} & \longrightarrow[a,b), &
+        e_{a,b}(i)                 & =a+i.
+        \label{eq:physical_interval_increasing_coordinates}
+    \end{align}
+    Its inverse sends a site $x$ to $x-a$. Empty intervals are included.
+\end{definition}
+
+\begin{theorem}[A subinterval in increasing coordinates]
+    \label{thm:physical_interval_subinterval_coordinates}
+    \lean{TNLean.MPS.AreaLaw.intervalShiftOrderIso_mem_subinterval}
+    \uses{def:physical_interval_increasing_coordinates}
+    Suppose $c\le d\le T$ and $c\le u$. For each $i<d-c$,
+    \begin{align}
+        e_{c,d}(i)\in[u,v)
+        \quad\Longleftrightarrow\quad
+        u-c\le i<(u-c)+(v-u).
+        \label{eq:physical_interval_subinterval_coordinates}
+    \end{align}
+    No ordering of $u,v$ is required: if $v<u$, both conditions are false.
+\end{theorem}
+\begin{proof}
+    Substitute $e_{c,d}(i)=c+i$ and compare the endpoint inequalities.
+\end{proof}
+
+\begin{theorem}[The length of the natural subinterval]
+    \label{thm:physical_interval_subinterval_length}
+    \lean{TNLean.MPS.AreaLaw.intervalShift_subinterval_length_le}
+    If $c\le u\le d$ and $v\le d$, then
+    \begin{align}
+        (u-c)+(v-u)\le d-c.
+        \label{eq:physical_interval_subinterval_length}
+    \end{align}
+    This includes $v<u$, when the subinterval length is zero.
+\end{theorem}
+\begin{proof}
+    If $u\le v$, the left side equals $v-c$. If $v<u$, it equals $u-c$.
+    Each is at most $d-c$.
+\end{proof}
+
+\begin{definition}[Coordinates on the single retained complement]
+    \label{def:physical_interval_complement_coordinates}
+    \lean{TNLean.MPS.AreaLaw.intervalComplementEquiv}
+    \uses{def:physical_interval_increasing_coordinates,
+        thm:physical_interval_subinterval_coordinates}
+    For $c\le d\le T$ and $c\le u$, restriction of $e_{c,d}$ gives a
+    bijection
+    \begin{align}
+        \{i<d-c:i\notin[u-c,(u-c)+(v-u))\}
+        \longrightarrow
+        [c,d)\setminus
+        [u,v).
+        \label{eq:physical_interval_complement_coordinates}
+    \end{align}
+    The retained sites form one complement; a site belonging to overlapping
+    endpoint regions occurs only once.
+\end{definition}
+
+\begin{definition}[Identity extension of the supplied core tensors]
+    \label{def:physical_interval_identity_extension}
+    \lean{MPOTensor.identityExtendInterval}
+    Let $A_r(i,j)$, $0\le r<L$, be the supplied $B\times B$ site matrices,
+    and suppose $a+L\le T$. Their extension to the $T$-site chain is
+    \begin{align}
+        \widehat A_v(i,j)=
+        \begin{cases}
+            A_{v-a}(i,j),   & a\le v<a+L,     \\
+            \delta_{ij}I_B, & v\notin[a,a+L).
+        \end{cases}
+        \label{eq:physical_interval_identity_extension}
+    \end{align}
+    The virtual space remains the supplied $B$-dimensional space.
+\end{definition}
+
+\begin{theorem}[Reading a nested physical interval in natural coordinates]
+    \label{thm:physical_interval_nested_trace}
+    \lean{MPOTensor.trace_identityExtendInterval_nested_natural}
+    \uses{def:physical_interval_increasing_coordinates,
+        def:physical_interval_identity_extension}
+    Suppose $c\le a\le b\le d\le T$. Let $A_r(i,j)$ be the supplied core
+    tensors on $b-a$ sites, with scalar closing matrix $C$ on the same
+    $B$-dimensional virtual space. Let $H_K$ be their trace-form operator
+    placed on $K=[a,b)$ using $e_{a,b}$, and extend it canonically to
+    $E=[c,d)$. Reading this operator in the increasing coordinates of $E$
+    gives the matrix with entries
+    \begin{align}
+        \operatorname{tr}\left(C\prod_{v=0}^{d-c-1}
+        \widehat A_v(\sigma_v,\tau_v)\right),
+        \label{eq:physical_interval_nested_trace}
+    \end{align}
+    where the identity extension starts at $a-c$ inside the natural chain
+    of length $d-c$. The closing matrix and virtual space are unchanged.
+    Empty intervals and zero physical or virtual dimension are included.
+\end{theorem}
+\begin{proof}
+    When the two physical configurations agree outside the core interval,
+    all exterior letters are identities, and the ordered product is the
+    original core product. Otherwise one exterior letter is zero. This
+    is exactly the canonical extension of the core operator. Composition
+    of the increasing interval inclusions gives the stated physical
+    placement, and reading along the inverse increasing coordinates
+    recovers its natural matrix.
+\end{proof}
+
+\begin{theorem}[A physical complement operator as a retained matrix]
+    \label{thm:physical_interval_retained_matrix}
+    \lean{TNLean.MPS.AreaLaw.exists_retainedMatrix_of_physical_localLift}
+    Let $V$ be a finite physical site set and $e:\{0,\ldots,T-1\}\to V$
+    a bijection. Fix $a,L$ with $a+L\le T$, and suppose the physical set
+    $C_{\rm phys}$ consists exactly of the images under $e$ of the sites
+    outside $[a,a+L)$. Let $K_{\rm phys}$ be any operator on its
+    configuration space, with local dimension $q$.
+    There is a matrix $K_{\rm ret}$ on configurations of the single
+    natural complement such that the canonical extension of $K_{\rm phys}$,
+    first read along $e$ and then split into retained and interior
+    configurations, is
+    \begin{align}
+        K_{\rm ret}\otimes I_{q^L}.
+        \label{eq:physical_interval_retained_matrix}
+    \end{align}
+    The retained matrix is obtained from the supplied regional matrix
+    by this coordinate identification. No interior operator is required.
+\end{theorem}
+\begin{proof}
+    \uses{def:retained_interval_coordinates}
+    Relabel the canonical extension along $e$ using covariance of the
+    regional lift. The resulting natural complement matrix is reindexed
+    by the complement configuration bijection. Splitting a full
+    configuration into its complement and interval parts leaves the
+    complement entry unchanged and contributes an identity entry on the
+    interval.
+\end{proof}

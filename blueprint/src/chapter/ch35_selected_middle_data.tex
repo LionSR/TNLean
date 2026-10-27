@@ -1,0 +1,142 @@
+\section{Fixed middle data for selected windows}
+
+Let the chain have sites $\{0,\ldots,L-1\}$ and local space $\C^q$.
+All intervals below are intersected with this chain. For nonnegative
+integers $a,b,\ell$ and positions $0\le p,s<2\ell$, put
+\begin{align}
+    K & =[a+2\ell,b+1),                      & Z &
+    =[a+2\ell+1,b),\notag                                         \\
+    T & =[0,a+p+1),                          & E &
+    =[a+p+1,b+s+1),\notag                                         \\
+    R & =\{0,\ldots,L-1\}\setminus(T\cup E), & C & =E\setminus Z.
+    \label{eq:selected_middle_regions}
+\end{align}
+These statements provide supporting locality algebra for
+\cite[Proposition~5.7]{Arad2016RigorousRG}.
+
+\begin{theorem}[The central regions lie in the selected middle]
+    \label{thm:selected_middle_core_inclusions}
+    \lean{TNLean.MPS.AreaLaw.core_and_strict_core_subset_selected_middle}
+    For the data above, $K\subseteq E$ and $Z\subseteq E$.
+    No separation assumption on $a,b$ is needed for these inclusions.
+\end{theorem}
+\begin{proof}
+    The inequalities $p<2\ell$ and $s\ge0$ show that the left endpoint of
+    $E$ is no greater than that of $K$, while its right endpoint is no
+    smaller. The same comparison applies to $Z$. Monotonicity of clipped
+    intervals proves the assertions.
+\end{proof}
+
+\begin{theorem}[Cardinality of the selected collars]
+    \label{thm:selected_middle_collar_cardinality}
+    \lean{TNLean.MPS.AreaLaw.card_selected_middle_sdiff_strict_core_le}
+    If $a+2\ell\le b$, then $|C|\le4\ell$.
+\end{theorem}
+\begin{proof}
+    The complement of the strict core within $E$ is
+    \begin{align}
+
+        C=[a+p+1,a+2\ell+1)\cup
+        [b,b+s+1).
+        \label{eq:selected_middle_collar_union}
+    \end{align}
+    The two intervals may overlap when the windows touch. Their cardinalities
+    are at most $2\ell-p$ and $s+1$, respectively. Both are at most $2\ell$,
+    so the cardinality of their union is at most $4\ell$.
+\end{proof}
+
+\begin{theorem}[Middle and crossing factors chosen before the exterior operators]
+    \label{thm:selected_middle_fixed_physical_data}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_selected_window_fixed_middle_data}
+    \uses{thm:selected_middle_core_inclusions,thm:three_region_partial_support,
+        thm:three_region_middle_lift_equality,thm:three_region_middle_embedding,
+        thm:three_region_two_window_collars,thm:three_region_weighted_middle_remainder,
+        thm:two_marker_prescribed_span}
+    Assume $a+2\ell\le b$ and $b+2\ell\le L-1$.
+    Let $W^L_r,W^R_r$, for $0\le r<2\ell$, be operators on the full chain
+    supported on $[a+r,a+r+2)$ and
+    $[b+r,b+r+2)$, respectively.
+    Let $M$ be an arbitrary operator on $K$. Write $P_M$ for its canonical
+    extension to the full chain and $M_E$ for its canonical extension to $E$.
+
+    Use labels $L_r,R_r,B_0,B_1,B_2$, and let $O$ be all labels except
+    $L_p,R_s$. There exist sites $e_L,e_R\in E$, a middle family $H^M$,
+    crossing operators $U,V_0$, and exterior families
+    $A_z\in\operatorname{End}(\mathcal H_T)$,
+    $B_z\in\operatorname{End}(\mathcal H_R)$, indexed by
+    $z\in\{0,\ldots,q^2-1\}$, with the following properties.
+
+    First, the sites are the literal selected endpoints:
+    \begin{align}
+        e_L=a+p+1,\qquad e_R=b+s,
+        \label{eq:selected_middle_endpoints}
+    \end{align}
+    and the central middle factor is $H^M_{B_1}=M_E$.
+    For $z$ corresponding to a pair $(i,j)\in\{0,\ldots,q-1\}^2$,
+    let $N_e(z)$ be the one-site matrix unit $|i\rangle\langle j|$
+    canonically extended from $e$ to $E$.
+    In three-region coordinates the actual selected crossings satisfy
+    \begin{align}
+        (W^L_p)^g & =U\otimes I_R,                 &
+        (W^R_s)^g & =I_T\otimes V_0,\notag           \\
+        U         & =\sum_z A_z\otimes N_{e_L}(z), &
+        V_0       & =\sum_z N_{e_R}(z)\otimes B_z.
+        \label{eq:selected_middle_fixed_crossings}
+    \end{align}
+    Every $N_{e_L}(z)$ and $N_{e_R}(z)$ is supported on $C$.
+    Moreover, for every complex weight family $z_i$ there is an operator
+    $K_z$ supported on $C$ such that
+    \begin{align}
+        \sum_{i\in O}z_iH^M_i=z_{B_1}M_E+K_z.
+        \label{eq:selected_middle_weighted_sum}
+    \end{align}
+
+    All the preceding choices are made before the following exterior data.
+    For every pair of full-chain operators $P_L,P_R$ supported on
+    $[0,a+1)$ and
+    $[b+2\ell,L)$, respectively, set
+    \begin{align}
+        F_{L_r}=W^L_r,\quad F_{R_r}=W^R_r,\quad
+        F_{B_0}=P_L,\quad F_{B_1}=P_M,\quad F_{B_2}=P_R.
+        \label{eq:selected_middle_full_family}
+    \end{align}
+    There are exterior regional families $H^L,H^R$ such that, for $i\in O$,
+    \begin{align}
+        F_i^g=H_i^L\otimes I_E\otimes I_R
+        +I_T\otimes H_i^M\otimes I_R
+        +I_T\otimes I_E\otimes H_i^R,
+        \label{eq:selected_middle_late_exterior}
+    \end{align}
+    with $H^L_{B_1}=H^R_{B_1}=0$.
+    The sites $e_L,e_R$ may coincide. No positive-local-dimension assumption
+    is imposed.
+\end{theorem}
+\begin{proof}
+    \uses{thm:selected_middle_core_inclusions,thm:three_region_partial_support,
+        thm:three_region_middle_lift_equality,thm:three_region_middle_embedding,
+        thm:three_region_two_window_collars,thm:three_region_weighted_middle_remainder,
+        thm:two_marker_prescribed_span}
+    Apply the three-region collar decomposition with both exterior bulk
+    operators set to zero and with central operator $P_M$.
+    The two selected bonds meet $E$ only at $a+p+1$ and $b+s$.
+    Both endpoints lie in $C$, as follows directly from $p,s<2\ell$.
+
+    Canonical placement of $M$ factors through its inclusion into $E$.
+    The chosen central middle factor and $M_E$ therefore have the same
+    identity lift. The endpoint $e_L$ supplies an actual site of $E$, so
+    equality of middle lifts identifies them, including at $q=0$.
+
+    The partial matrix elements of each crossing are supported on its single
+    middle endpoint. An operator supported on one site belongs to the span of
+    the canonically extended matrix units at that site. Retaining these
+    prescribed spanning families in the two product decompositions gives
+    (\ref{eq:selected_middle_fixed_crossings}). Their support lies in $C$.
+    The weighted supported-remainder identity then gives
+    (\ref{eq:selected_middle_weighted_sum}).
+
+    Finally, insert arbitrary $P_L,P_R$ with the stated supports by changing
+    only the corresponding exterior bulk components. The middle family and
+    the exterior components of the window labels remain fixed. This proves
+    (\ref{eq:selected_middle_late_exterior}) with the central exterior
+    components equal to zero.
+\end{proof}

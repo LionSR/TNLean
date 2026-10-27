@@ -1,0 +1,117 @@
+\section{Prescribed middle products of selected coefficients}
+
+The following decomposition is supporting algebra for
+\cite[Proposition~5.7]{Arad2016RigorousRG}.
+It retains the actual central operator and the literal one-site matrix
+units furnished by the selected crossing edges.
+
+\begin{definition}[Grouping the exterior regions]
+    \label{def:selected_exterior_middle_equiv}
+    \lean{TNLean.MPS.AreaLaw.exteriorMiddleEquiv}
+    For sets $X,Y,Z$, define the equivalence
+    \begin{align}
+        \epsilon:(X\times Y)\times Z & \longrightarrow(X\times Z)\times Y, &
+        \epsilon((x,y),z)            & =((x,z),y).
+        \label{eq:selected_exterior_middle_equiv}
+    \end{align}
+    This changes only the grouping of the three factors; the coordinates
+    within each factor retain their original order.
+\end{definition}
+
+\begin{theorem}[One prescribed middle family for all exterior operators]
+    \label{thm:selected_coefficient_prescribed_middle}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_twoMarkerCoefficient_prescribed_middle_decomposition}
+    \uses{def:selected_exterior_middle_equiv,thm:selected_middle_core_inclusions,
+        thm:selected_middle_fixed_physical_data,def:two_marker_middle_index,
+        def:two_marker_middle_product,def:two_marker_coefficient,
+        thm:two_marker_common_middle}
+    Let $L,q,a,b,\ell$ be nonnegative integers with
+    $a+2\ell\le b$ and $b+2\ell\le L-1$.
+    Fix positions $0\le p,s<2\ell$ and full-chain operators $W^L_r,W^R_r$
+    supported on $[a+r,a+r+2)$ and
+    $[b+r,b+r+2)$, respectively.
+    Let $M$ be an operator on $K=[a+2\ell,b+1)$.
+    Every interval is intersected with the chain of $L$ sites.
+    Put
+    \begin{align}
+        T & =[0,a+p+1),                          & E &
+        =[a+p+1,b+s+1),\notag                          \\
+        R & =\{0,\ldots,L-1\}\setminus(T\cup E), &
+        C & =E\setminus[a+2\ell+1,b).
+        \label{eq:selected_coefficient_regions}
+    \end{align}
+    Let $M_E$ and $P_M$ be the canonical extensions of $M$ to $E$ and to the
+    full chain. Use labels $L_r,R_r,B_0,B_1,B_2$, and let $O$ exclude precisely
+    $L_p,R_s$. Fix arbitrary complex weights $z_i$ and nonnegative integers
+    $k,i,j$.
+
+    There are sites $e_L,e_R\in E$ and middle operators $A,K_z$ such that
+    \begin{align}
+        e_L & =a+p+1,          & e_R                    & =b+s,\notag  \\
+        A   & =z_{B_1}M_E+K_z, & \operatorname{supp}K_z & \subseteq C.
+        \label{eq:selected_coefficient_middle_data}
+    \end{align}
+    For each $e\in E$, let $N_e(t)$, $0\le t<q^2$, be the canonical
+    extensions to $E$ of the one-site matrix units, indexed by pairs of local
+    labels. Every $N_{e_L}(t)$ and $N_{e_R}(t)$ is supported on $C$.
+    Define the prescribed middle family by
+    \begin{align}
+        \Psi_f=\Phi_f(A,N_{e_L},N_{e_R}),
+        \qquad f\in\mathcal I_{k,i,j}^{q^2,q^2},
+        \label{eq:selected_coefficient_middle_family}
+    \end{align}
+    where $\Phi$ is the ordered middle product.
+
+    These sites and operators are chosen before the following data.
+    For every pair $P_L,P_R$ supported on $[0,a+1)$ and
+    $[b+2\ell,L)$,
+    set
+    \begin{align}
+        F_{L_r}           & =W^L_r,               & F_{R_r} & =W^R_r,\notag                         \\
+        F_{B_0}           & =P_L,                 & F_{B_1} & =P_M,         & F_{B_2} & =P_R,\notag \\
+        D_{\mathrm{phys}} & =\sum_{t\in O}z_tF_t.
+        \label{eq:selected_coefficient_physical_sum}
+    \end{align}
+    For every complex family $c_0,\ldots,c_k$, there are exterior operators
+    $B_f$ on $\mathcal H_T\otimes\mathcal H_R$ for which
+    \begin{align}
+        \left(\sum_{r=0}^k c_r
+        C_{r,i,j}(D_{\mathrm{phys}},W^L_p,W^R_s)\right)^{g;\epsilon}
+        =\sum_{f\in\mathcal I_{k,i,j}^{q^2,q^2}}B_f\otimes\Psi_f.
+        \label{eq:selected_coefficient_decomposition}
+    \end{align}
+    Here $g$ restricts a full configuration to the three regions, after which
+    $\epsilon$ groups the two exterior configurations together. The notation
+    $C_{r,i,j}$ denotes the two distinguished-frequency coefficient. The
+    selected crossings $W^L_p,W^R_s$ are unweighted; the weights occur only
+    in $D_{\mathrm{phys}}$.
+    The assertion includes zero local dimension and every value of $k,i,j$.
+\end{theorem}
+\begin{proof}
+    \uses{def:selected_exterior_middle_equiv,
+        thm:selected_middle_fixed_physical_data,thm:two_marker_common_middle}
+    Choose the fixed middle and crossing data from the two windows and $M$.
+    Their ordinary weighted middle sum is $A=z_{B_1}M_E+K_z$, with $K_z$
+    supported on $C$. Retain the prescribed one-site matrix-unit families in
+    both crossing decompositions.
+
+    After $P_L,P_R$ are supplied, sum their regional identities with the
+    weights $z_t$. In three-region coordinates the result has ordinary part
+    \begin{align}
+        D_0=L_z\otimes I_E\otimes I_R
+        +I_T\otimes A\otimes I_R
+        +I_T\otimes I_E\otimes R_z.
+        \label{eq:selected_coefficient_ordinary_form}
+    \end{align}
+    The equivalence $\epsilon$ turns this into an exterior operator tensored
+    with $I_E$, plus the exterior identity tensored with $A$. It sends each
+    crossing decomposition to the corresponding sum with the same middle
+    matrix units.
+
+    Reindexing is a ring homomorphism, so it commutes with powers, extraction
+    of the two marked coefficients, and their finite scalar combinations.
+    Apply the prescribed-middle decomposition through degree $k$ to these
+    regrouped operators. Its middle factors are exactly
+    (\ref{eq:selected_coefficient_middle_family}); its exterior coefficients
+    give the operators $B_f$ in (\ref{eq:selected_coefficient_decomposition}).
+\end{proof}

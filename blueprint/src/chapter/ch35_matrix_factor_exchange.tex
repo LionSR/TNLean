@@ -1,0 +1,72 @@
+\subsection{Changing the middle tensor factor}
+
+The change of cuts in~\cite[Proposition~5.7]{Arad2016RigorousRG}
+uses only matrix units to transfer the sites removed from, or added to, the
+middle interval. The following identities isolate this finite-dimensional
+algebra; they impose no ordering or bond bound on the matrices.
+
+\begin{definition}[Exchange of the middle coordinates]
+    \label{def:chain_middle_factor_exchange}
+    \lean{Matrix.middleFactorExchangeEquiv,Matrix.exchangedMiddleFactor,Matrix.exchangedMiddleFamily}
+    \leanok
+    Let $A,B,C,O$ be arbitrary sets. Define the bijection
+    \begin{align}
+        \Phi\colon (B\times O)\times(A\times C)
+                      & \longrightarrow(A\times O)\times(B\times C),\notag \\
+        ((b,o),(a,c)) & \longmapsto((a,o),(b,c)).\notag
+    \end{align}
+    Let $R$ be a set with distinguished elements $0,1$ and a binary
+    multiplication. For arbitrary sets $Y,Z$ and a matrix $X$ on $Y\times Z$
+    over $R$, write $X^{\mathrm R}_{yy'}$ for the matrix on $Z$ with entries
+    $(X^{\mathrm R}_{yy'})_{z,z'}=X_{(y,z),(y',z')}$.
+    Suppose equality on $B$ is decidable, and write $E_{bb'}$ for the
+    standard matrix unit on $B$. For $V$ on $A\times C$, set
+    \begin{align}
+        V_{a,a',b,b'}=E_{bb'}\otimes V^{\mathrm R}_{aa'}.\notag
+    \end{align}
+    For an arbitrary index set $I$ and a family $(V_t)_{t\in I}$, apply
+    this definition to each $V_t$.
+    The resulting family depends only on the original middle matrices.
+\end{definition}
+
+\begin{theorem}[Matrix-unit expansion after exchanging the middle]
+    \label{thm:chain_middle_factor_exchange}
+    \lean{Matrix.reindex_kronecker_middleFactorExchange,Matrix.reindex_sum_kronecker_middleFactorExchange}
+    \leanok
+    \uses{def:chain_middle_factor_exchange}
+    Let $A,B$ be finite sets, let $C,O$ be arbitrary sets, and let $R$ be a
+    semiring. Let $M$ be a matrix on $B\times O$ and $V$ a matrix on $A\times C$,
+    both over $R$. Transporting both indices by $\Phi$ gives
+    \begin{align}
+        (M\otimes V)^\Phi
+         & =\sum_{a,a'\in A}\sum_{b,b'\in B}
+        \bigl(E_{aa'}\otimes M^{\mathrm R}_{bb'}\bigr)\otimes V_{a,a',b,b'}.\notag
+    \end{align}
+    For a finite index set $I$ and prescribed matrices $V_t$, the same
+    family $(V_{t,a,a',b,b'})$ therefore gives such a decomposition of
+    $(\sum_{t\in I}M_t\otimes V_t)^\Phi$ for every family $(M_t)$.
+    No commutativity of $R$ or nonemptiness of the index sets is required.
+\end{theorem}
+\begin{proof}\leanok
+    At row $((a,o),(b,c))$ and column $((a',o'),(b',c'))$, the matrix
+    units leave exactly the summand with these four transferred labels.
+    Its entry is
+    \begin{align}
+        M_{(b,o),(b',o')}\,V_{(a,c),(a',c')},\notag
+    \end{align}
+    which is the corresponding entry on the left, in the same
+    multiplication order. This proves the first identity. Summing it over
+    $t$ proves the finite-family assertion.
+\end{proof}
+
+\begin{theorem}[Number of exchanged middle factors]
+    \label{thm:chain_middle_factor_exchange_card}
+    \lean{Matrix.card_exchangedMiddleFamily_index}
+    \leanok
+    \uses{def:chain_middle_factor_exchange}
+    If $I,A,B$ are finite, the prescribed family has $|I|\,|A|^2|B|^2$ indexed
+    terms, including repetitions and zero matrices.
+\end{theorem}
+\begin{proof}\leanok
+    Its index set is $I\times(A\times A)\times(B\times B)$; take cardinalities.
+\end{proof}

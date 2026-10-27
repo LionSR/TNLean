@@ -1,0 +1,130 @@
+\section{Middle families on actual regions}
+
+The following regional identities give supporting algebra for changing
+the two cuts in
+\cite[Proposition~5.7]{Arad2016RigorousRG}.
+The matrix-factor exchange is the existing construction in
+Definition~\ref{def:chain_middle_factor_exchange} and
+Theorem~\ref{thm:chain_middle_factor_exchange}; its separate cardinality
+identity is Theorem~\ref{thm:chain_middle_factor_exchange_card}.
+No ordering of physical sites or matrix product representation is asserted
+by these regional identities.
+
+\begin{theorem}[From numbered middle coordinates to the actual middle region]
+    \label{thm:regional_middle_from_numbered_three_regions}
+    \lean{TNLean.MPS.AreaLaw.exists_regional_exterior_of_natural_threeSplit_decomposition}
+    \uses{def:selected_exterior_middle_equiv}
+    Let $\Omega$ be a finite site set, let $T,E\subseteq\Omega$ be disjoint,
+    and put $R=\Omega\setminus(T\cup E)$. Fix a local alphabet
+    $\{0,\ldots,q-1\}$, a semiring $\mathbb S$, a finite index set $I$,
+    and a bijection $e_E:\{0,\ldots,N-1\}\to E$.
+    Suppose a full matrix $X$ has a decomposition in the coordinates
+    $((\sigma_T,\sigma_R),x)$, where $x$ is a configuration on
+    $\{0,\ldots,N-1\}$, of the form
+    \begin{align}
+        X\bigl(g^{-1}((l,x\circ e_E^{-1}),r),
+        g^{-1}((l',y\circ e_E^{-1}),r')\bigr)
+        =\sum_{t\in I}B_t((l,r),(l',r'))V_t(x,y).
+        \label{eq:regional_middle_numbered_decomposition}
+    \end{align}
+    Here $g$ restricts a full configuration to $T,E,R$, in that order.
+    Then there are matrices $M_t$ on configurations of $E^c$ such that
+    \begin{align}
+        X(\sigma,\tau)=\sum_{t\in I}
+        M_t(\sigma|_{E^c},\tau|_{E^c})
+        V_t\bigl((\sigma|_E)\circ e_E,(\tau|_E)\circ e_E\bigr).
+        \label{eq:regional_middle_actual_decomposition}
+    \end{align}
+    The middle matrices are the prescribed $V_t$ transported by $e_E$; only
+    the exterior coefficients change. The bijection need not carry any order.
+\end{theorem}
+\begin{proof}
+    The two inverse identities for $e_E$ first turn the given decomposition
+    into one with actual $E$ configurations. Restriction identifies the actual
+    exterior configuration on $E^c$ with its pair of restrictions to $T,R$.
+    Pull each $B_t$ back along this latter identification. The two coordinate
+    descriptions of a full configuration then agree entry by entry, giving
+    (\ref{eq:regional_middle_actual_decomposition}).
+\end{proof}
+
+\begin{definition}[The old and new middle configuration splittings]
+    \label{def:regional_middle_configuration_splittings}
+    \lean{FiniteProduct.changingOldMiddleConfigEquiv,FiniteProduct.changingNewMiddleConfigEquiv}
+    Let $\Omega$ be finite, let $\beta_v$ be any set for each site, and write
+    $\mathcal X_S=\prod_{v\in S}\beta_v$. For regions $E,J\subseteq\Omega$, put
+    \begin{align}
+        A=E\setminus J,\qquad B=J\setminus E,\qquad
+        C=E\cap J,\qquad O=(E\cup J)^c.
+        \label{eq:regional_middle_four_regions}
+    \end{align}
+    The old and new middle splittings are the restriction equivalences
+    \begin{align}
+        \phi_E:\mathcal X_E & \longrightarrow\mathcal X_A\times\mathcal X_C, &
+        \phi_J:\mathcal X_J & \longrightarrow\mathcal X_B\times\mathcal X_C.
+        \label{eq:regional_middle_configuration_splittings}
+    \end{align}
+    Both use the same literal intersection $C$. No nonemptiness or finiteness
+    of the local sets $\beta_v$ is required for these equivalences.
+\end{definition}
+
+\begin{definition}[The prescribed new regional middle family]
+    \label{def:regional_middle_transferred_family}
+    \lean{FiniteProduct.changingRegionalMiddleFamily}
+    \uses{def:regional_middle_configuration_splittings,def:chain_middle_factor_exchange}
+    Let $\mathbb S$ be a semiring, let $I$ be any set, and let $V_t$ be
+    $\mathbb S$-valued matrices on $\mathcal X_E$, indexed by $t\in I$.
+    For $r=(t,(a_0,a_1),(b_0,b_1))$ in
+    \begin{align}
+        I_{\mathrm{new}}=I\times\mathcal X_A^2\times\mathcal X_B^2,
+        \label{eq:regional_middle_new_index}
+    \end{align}
+    write $V_t$ in the coordinates $\phi_E$ and denote its partial matrix
+    element at $a_0,a_1$ by $(V_t^{\phi_E})_{a_0,a_1}$.
+    Define the matrix $\widetilde V_r$ on $\mathcal X_J$ by
+    \begin{align}
+        \widetilde V_r(y,y')=
+        \left(E_{b_0b_1}\otimes (V_t^{\phi_E})_{a_0,a_1}\right)
+        (\phi_J y,\phi_J y').
+        \label{eq:regional_middle_transferred_family}
+    \end{align}
+    Here $E_{b_0b_1}$ is the standard matrix unit with entry $1$ at $(b_0,b_1)$.
+    The family depends only on the old middle matrices and the two regions,
+    before any exterior coefficient matrices are supplied.
+\end{definition}
+
+\begin{theorem}[Transfer of a fixed middle family between regions]
+    \label{thm:regional_middle_exterior_transfer}
+    \lean{FiniteProduct.exists_changingRegional_exterior_family}
+    \uses{def:regional_middle_configuration_splittings,
+        def:regional_middle_transferred_family,thm:chain_middle_factor_exchange}
+    Assume now that $I$ and every local set $\beta_v$ are finite.
+    For every family $M_t$ of $\mathbb S$-valued matrices on
+    $\mathcal X_{E^c}$, there are matrices $M^{\mathrm{new}}_r$ on
+    $\mathcal X_{J^c}$ such that, for all full configurations $\sigma,\tau$,
+    \begin{align}
+        \sum_{t\in I}M_t(\sigma|_{E^c},\tau|_{E^c})
+        V_t(\sigma|_E,\tau|_E)
+        =\sum_{r\in I_{\mathrm{new}}}
+        M^{\mathrm{new}}_r(\sigma|_{J^c},\tau|_{J^c})
+        \widetilde V_r(\sigma|_J,\tau|_J).
+        \label{eq:regional_middle_exterior_transfer}
+    \end{align}
+    The family $\widetilde V$ is the one already prescribed above and is
+    independent of $M$. Empty regions and empty local sets are included.
+\end{theorem}
+\begin{proof}
+    \uses{def:regional_middle_configuration_splittings,
+        def:regional_middle_transferred_family,thm:chain_middle_factor_exchange}
+    The old split into the four regions gives $((\mathcal X_B,\mathcal X_O),(\mathcal X_A,\mathcal X_C))$.
+    The new split gives
+    $((\mathcal X_A,\mathcal X_O),(\mathcal X_B,\mathcal X_C))$.
+    Both descriptions are literal restrictions of the same full configuration,
+    so the existing matrix-factor exchange carries one to the other.
+
+    Apply that exchange to the old sum of Kronecker products. Its new middle
+    factors are precisely (\ref{eq:regional_middle_transferred_family}).
+    Pull the new exterior factors back to configurations on $J^c$ and the new
+    middle factors back to configurations on $J$. Evaluating at the two full
+    configurations proves (\ref{eq:regional_middle_exterior_transfer}), with
+    the multiplication order of the semiring coefficients unchanged.
+\end{proof}

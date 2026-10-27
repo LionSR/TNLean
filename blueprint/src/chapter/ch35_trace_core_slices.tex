@@ -1,0 +1,117 @@
+\section{Trace contractions and interior slices}
+
+The identities below give supporting contraction algebra for
+\cite[Proposition~5.7]{Arad2016RigorousRG}. All matrix entries and scalar
+coefficients are complex. Products retain the displayed order.
+
+\begin{theorem}[Partition of an ordered product]
+    \label{thm:trace_core_product_partition}
+    \lean{TNLean.MPS.AreaLaw.orderedProduct_partition_interval}
+    Let $l$ be a finite list in a monoid, and let $a,r$ be nonnegative
+    integers. Write $l_{<a}$ for its prefix of length at most $a$,
+    $l_{[a,a+r)}$ for the next at most $r$ entries, and $l_{\ge a+r}$ for
+    the remaining suffix. Then
+    \begin{align}
+        \prod l=(\prod l_{<a})(\prod l_{[a,a+r)})(\prod l_{\ge a+r}).
+        \label{eq:trace_core_product_partition}
+    \end{align}
+    These lists are truncated at the length of $l$, so no bound on $a+r$
+    is required.
+\end{theorem}
+\begin{proof}
+    Split the list after its first $a$ entries, split the remaining list
+    after its first $r$ entries, and use associativity.
+\end{proof}
+
+\begin{theorem}[An open representation of a trace-closed chain]
+    \label{thm:trace_core_open_square}
+    \lean{TNLean.MPS.AreaLaw.isOpenMPS_trace_closed_chain}
+    Let $L,q,D$ be nonnegative integers, let $C$ be a $D\times D$ matrix,
+    and let $A_v(i)$ be a $D\times D$ matrix for each site $0\le v<L$
+    and physical letter $0\le i<q$. The coefficient function
+    \begin{align}
+        \psi(w)=\operatorname{tr}\left(C\prod_{v=0}^{L-1}A_v(w_v)\right)
+        \label{eq:trace_core_closed_coefficient}
+    \end{align}
+    has an open-boundary representation with internal bond dimensions at
+    most $D^2$. At length zero its coefficient $\operatorname{tr}C$ is
+    represented by the scalar multiplying the empty tensor product.
+    Zero physical or virtual dimension is allowed.
+\end{theorem}
+\begin{proof}
+    \uses{thm:chain_mps_of_cut_rank}
+    At an internal cut, write the ordered matrix product as $P(x)Q(y)$.
+    The coefficient matrix factors through pairs of virtual indices:
+    \begin{align}
+        \operatorname{tr}(CP(x)Q(y))
+        =\sum_{i,j=0}^{D-1}(CP(x))_{ij}Q(y)_{ji}.
+        \label{eq:trace_core_cut_factorization}
+    \end{align}
+    Every internal cut therefore has rank at most $D^2$. The
+    characterization in Theorem~\ref{thm:chain_mps_of_cut_rank} gives
+    the assertion.
+\end{proof}
+
+\begin{definition}[Interior matrix slices]
+    \label{def:trace_core_matrix_slice}
+    \lean{MPOTensor.interiorMatrixSlice}
+    Let $A_v(i,j)$ be the supplied $B\times B$ site matrices of an operator
+    chain of length $L$ and physical dimension $q$. For virtual indices
+    $a,b$, its exposed interior slice is the operator $N_{ab}$ with entries
+    \begin{align}
+        N_{ab}(\sigma,\tau)
+        =\left(\prod_{v=0}^{L-1}A_v(\sigma_v,\tau_v)\right)_{ab}.
+        \label{eq:trace_core_matrix_slice}
+    \end{align}
+\end{definition}
+
+\begin{definition}[A joint closing matrix for scalar word coefficients]
+    \label{def:trace_core_word_closing}
+    \lean{MPOTensor.stackClosingMatrix}
+    Let $B,p$ be nonnegative integers. Encode a word
+    $u\in\{0,\ldots,B-1\}^p$ by
+    $\iota_p(u)=\sum_{r=0}^{p-1}B^{p-1-r}u_r$, so its last letter is the
+    least significant digit. The empty word has index zero in a
+    one-dimensional space, including when $B=0$.
+    For a scalar function $c$ on words of pairs of virtual indices, define
+    the $B^p\times B^p$ matrix $C(c)$ by
+    \begin{align}
+        C(c)_{\iota_p(v),\iota_p(u)}
+        =c\bigl((u_r,v_r)_{r=0}^{p-1}\bigr).
+        \label{eq:trace_core_word_closing}
+    \end{align}
+    This matrix depends only on $c$, $B$ and $p$.
+\end{definition}
+
+\begin{theorem}[Ordered slice words as a common stacked contraction]
+    \label{thm:trace_core_slice_words}
+    \lean{MPOTensor.sum_word_slices_eq_trace_stackedTensor}
+    \uses{def:trace_core_matrix_slice,def:trace_core_word_closing}
+    For the supplied site matrices $A_v$, let $A_v^{[p]}$ be their
+    $p$-fold sitewise stack: the zero-fold stack is the identity tensor,
+    and each successive layer contracts the intermediate physical index
+    in the displayed operator order. Then, for all physical
+    configurations $\sigma,\tau$,
+    \begin{align}
+         & \sum_{w=((a_r,b_r))_{r=0}^{p-1}}
+        c(w)(N_{a_0b_0}\cdots N_{a_{p-1}b_{p-1}})(\sigma,\tau)\notag \\
+         & \qquad=\operatorname{tr}\left(C(c)
+        \prod_{v=0}^{L-1}A_v^{[p]}(\sigma_v,\tau_v)\right).
+        \label{eq:trace_core_slice_words}
+    \end{align}
+    The same stacked site tensors serve every scalar coefficient function
+    $c$. The closing matrix is chosen independently of the interior
+    tensors. All lengths and dimensions may vanish whenever the displayed
+    configurations exist.
+\end{theorem}
+\begin{proof}
+    For fixed endpoint words $u,v$, induction on the number of layers
+    identifies the ordered product of exposed slices with the entry
+    indexed by $\iota_p(u),\iota_p(v)$ of the stacked contraction.
+    The induction step is the site-dependent operator product identity;
+    the zero-layer case is the identity operator. Separate each word of
+    pairs into its two endpoint words and change to the encoded indices.
+    The reversal of the row and column indices in
+    (\ref{eq:trace_core_word_closing}) gives exactly the trace pairing in
+    (\ref{eq:trace_core_slice_words}).
+\end{proof}

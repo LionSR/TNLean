@@ -1,0 +1,94 @@
+\section{Common scalar recovery of two marked coefficients}
+
+These are the interpolation and ordered-word identities used in
+\cite[Lemma~4.2]{Arad2013AreaLaw} and
+\cite[Proposition~5.7]{Arad2016RigorousRG}.
+Only a spanning family of evaluations is required; the coefficient operators
+need not be linearly independent. The distinction between spanning and a
+basis in the source interpolation argument is recorded in
+\cite{gap:aklv13_interpolation_and_word_count}.
+
+\begin{definition}[Ordinary labels]
+    \label{def:two_marker_ordinary_labels}
+    \lean{MvPolynomial.twoMarkerOrdinaryLabels}
+    For a finite alphabet $I$ and distinguished labels $u,v\in I$, let
+    \begin{align}
+        \mathcal O_{u,v}=I\setminus\{u,v\}.
+        \label{eq:two_marker_ordinary_labels}
+    \end{align}
+    The definition does not require the two labels to be distinct.
+\end{definition}
+
+\begin{definition}[The full-frequency ordered-word coefficient]
+    \label{def:full_frequency_word_coefficient}
+    \lean{WordMultiplicity.wordCoefficient}
+    Let $I$ be finite, let $R$ be a semiring, and let $H_a\in R$ for $a\in I$.
+    For $r\ge0$ and a count vector $\nu:I\to\N$, put
+    \begin{align}
+        \mathcal W_{H,r}(\nu)=
+        \sum_{\substack{w:\{0,\ldots,r-1\}\to I \\
+                |w^{-1}(a)|=\nu(a)\ (a\in I)}}
+        H_{w(0)}H_{w(1)}\cdots H_{w(r-1)}.
+        \label{eq:full_frequency_word_coefficient}
+    \end{align}
+    The factors retain their displayed order. An empty product is $1$, and a
+    sum with no words is zero.
+\end{definition}
+
+\begin{theorem}[One sample family for every degree and frequency slice]
+    \label{thm:two_window_common_scalar_recovery}
+    \lean{Polynomial.exists_twoWindow_wordCoefficient_recovery}
+    \uses{def:two_marker_ordinary_labels,def:full_frequency_word_coefficient}
+    Let $\ell,K$ be nonnegative integers, let
+    \begin{align}
+        I=(\{0,\ldots,2\ell-1\}\sqcup\{0,\ldots,2\ell-1\})
+        \sqcup\{0,1,2\},
+        \label{eq:two_window_scalar_alphabet}
+    \end{align}
+    and choose $0\le p,s<2\ell$.
+    Let $u$ be the label $p$ in the first window and $v$ the label $s$ in the
+    second window. Let $R$ be a ring and a complex algebra, without any
+    commutativity assumption on $R$, and put $N=(K+1)^{4\ell+1}$.
+
+    There are complex sample points $z_t:I\to\C$, $0\le t<N$, with the
+    following property. For every $i,j\ge0$ and every scalar mask
+    $\mu:(I\to\N)\to\C$, there are complex coefficients $\gamma_t$ such
+    that, for every family $H:I\to R$ and every $0\le r\le K$,
+    \begin{align}
+         & \sum_{\substack{\nu:I\to\N         \\ \sum_a\nu(a)=r\\
+                \nu(u)=i,\ \nu(v)=j}}
+        \mu(\nu)\,\mathcal W_{H,r}(\nu)\notag \\
+         & \qquad=\sum_{t=0}^{N-1}\gamma_t
+        [x^iy^j]\left(D_t+yH_v+xH_u\right)^r,
+        \qquad D_t=\sum_{a\in\mathcal O_{u,v}}z_t(a)H_a.
+        \label{eq:two_window_common_scalar_recovery}
+    \end{align}
+    Here $x,y$ are central formal variables and scalar products mean the
+    complex algebra action. The selected terms $H_u,H_v$ remain unweighted.
+    The points precede $i,j,\mu$, while the recovery coefficients precede $H$
+    and every degree $r\le K$. Points for different selected pairs need not
+    coincide. The case $K=0$ is included.
+\end{theorem}
+\begin{proof}
+    \uses{def:two_marker_ordinary_labels,def:full_frequency_word_coefficient}
+    The two distinguished labels are distinct, so the ordinary label set has
+    $4\ell+1$ members. Ordinary count vectors with each coordinate between
+    zero and $K$ form a monomial box of exactly $(K+1)^{4\ell+1}$ elements.
+    Choose the finite interpolation points for this box before the frequencies
+    or mask are supplied.
+
+    Fix $i,j,\mu$. Restore the two distinguished counts in each ordinary box
+    exponent, and use $\mu$ of that restored count vector as its scalar weight.
+    Uniform scalar interpolation gives coefficients $\gamma_t$ before any
+    module-valued coefficient family is supplied. A frequency slice at any
+    $r\le K$ embeds in the same box; set the other coefficients to zero.
+    Every count coordinate in that slice is at most $K$, so restoring and
+    removing the distinguished counts are inverse on the retained slice.
+
+    Apply this recovery identity to the coefficients
+    $\mathcal W_{H,r}(\nu)$. The existing counted-word identity identifies
+    each evaluated ordinary monomial sum with
+    $[x^iy^j](D_t+yH_v+xH_u)^r$, without changing the order of the factors
+    $H_a$. Reindexing the monomial box by its exact cardinality gives
+    (\ref{eq:two_window_common_scalar_recovery}).
+\end{proof}

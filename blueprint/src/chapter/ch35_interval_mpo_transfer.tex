@@ -1,0 +1,86 @@
+\section{A common middle family after a change of interval}
+
+For a finite set of sites $S$, write $\mathcal C(S)=\{0,\ldots,q-1\}^S$.
+Restriction of configurations identifies the full chain with the tensor
+product of a region and its complement. In the identities below the
+complement factor is listed first. Open matrix product representations
+use the paired row and column alphabet, in increasing site order.
+
+\begin{theorem}[Transfer of a common middle family between intervals]
+    \label{thm:interval_mpo_common_family_transfer}
+    \lean{TNLean.MPS.AreaLaw.changingRegionalMiddleFamily_mpo_and_global_decomposition}
+    \uses{def:regional_middle_transferred_family,
+        thm:regional_middle_exterior_transfer,
+        def:physical_interval_increasing_coordinates,
+        thm:physical_interval_subinterval_coordinates}
+    Let $q$ be a positive integer, and let $c,d,u,v,T$ be nonnegative
+    integers satisfying
+    \begin{align}
+        c\le d\le T,\qquad u\le v\le T,\qquad
+        \max(c,u)\le\min(d,v).
+        \label{eq:interval_mpo_transfer_endpoints}
+    \end{align}
+    Put $E={[c,d)}$,
+    $J={[u,v)}$, $A=E\setminus J$, $B=J\setminus E$, and
+    $C=E\cap J$. Let $\iota$ be a finite index set and $D:\iota\to\N$.
+    Suppose that for each
+    $t\in\iota$, the matrix $V_t$ on $\mathcal C(E)$ has an open matrix
+    product representation with internal bond dimensions at most $D_t$.
+
+    Define the prescribed new family, indexed by
+    \begin{align}
+        I=\iota\times\mathcal C(A)^2\times\mathcal C(B)^2,
+        \label{eq:interval_mpo_transfer_index}
+    \end{align}
+    by the entries
+    \begin{align}
+         & W_{t,\alpha_r,\alpha_c,\eta_r,\eta_c}(\sigma,\tau)\notag   \\
+         & \quad=\mathbf1_{\sigma|_B=\eta_r}\mathbf1_{\tau|_B=\eta_c}
+        V_t\bigl(\alpha_r\sqcup\sigma|_C,
+        \alpha_c\sqcup\tau|_C\bigr).
+        \label{eq:interval_mpo_transfer_factor}
+    \end{align}
+    Here $\sigma,\tau\in\mathcal C(J)$, and the disjoint union combines
+    configurations on $A$ and $C$ into a configuration on $E$.
+    Then
+    \begin{align}
+        |I|=|\iota|q^{2|A|+2|B|},
+        \label{eq:interval_mpo_transfer_count}
+    \end{align}
+    and the member indexed by $(t,\alpha_r,\alpha_c,\eta_r,\eta_c)$ has an
+    open matrix product representation on $J$, in increasing site order,
+    with internal bond dimensions at most $\max(1,D_t)$.
+
+    The family $W$ is fixed before any exterior coefficient matrices are
+    supplied. For every family $M_t$ on $\mathcal C(E^c)$ there are
+    matrices $M'_r$ on $\mathcal C(J^c)$ such that the following two
+    expressions define the same whole-chain operator:
+    \begin{align}
+        X & =\sum_{t\in\iota}M_t\otimes V_t
+        =\sum_{r\in I}M'_r\otimes W_r.
+        \label{eq:interval_mpo_transfer_decomposition}
+    \end{align}
+    The two expressions use their respective canonical regional
+    configuration identifications. An empty index set and an overlap of
+    length zero are allowed.
+    This is supporting interval-transport algebra for
+    \cite[Proposition~5.7]{Arad2016RigorousRG}.
+\end{theorem}
+\begin{proof}
+    In natural coordinates, restrict each old matrix to the interval
+    $E\cap J$ by fixing its row and column configurations on $E\setminus J$.
+    Extend the result to $J$ by the indicated fixed row and column
+    configurations on $J\setminus E$. Interval restriction does not
+    increase the open bond bound, and extension gives the bound
+    $\max(1,D_t)$. Positive $q$ supplies a fixed configuration on the
+    common interval when identifying these operations with
+    (\ref{eq:interval_mpo_transfer_factor}). The endpoint inequalities
+    give precisely the increasing coordinates of the overlap, including
+    an overlap of length zero.
+
+    The configuration dimensions are $q^{|A|}$ and $q^{|B|}$, giving
+    (\ref{eq:interval_mpo_transfer_count}). Finally expand the transferred
+    old-only and new-only coordinates in matrix units. Theorem~\ref{thm:regional_middle_exterior_transfer} then gives
+    (\ref{eq:interval_mpo_transfer_decomposition}), with the prescribed
+    middle factors and the exterior coefficients chosen afterwards.
+\end{proof}

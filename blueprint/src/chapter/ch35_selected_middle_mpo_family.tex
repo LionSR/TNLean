@@ -1,0 +1,154 @@
+\section{A common natural family for selected coefficients}
+
+The following results provide supporting algebra and coarse counts for
+\cite[Proposition~5.7]{Arad2016RigorousRG}.
+The number of family members and their open-boundary bond dimensions are
+separate quantities. No sharp source bond or running-time conclusion is
+included.
+
+\begin{theorem}[Natural middle operators chosen before the exterior pair]
+    \label{thm:selected_common_natural_mpo_family}
+    \lean{TNLean.MPS.AreaLaw.exists_common_physical_twoMarkerCoefficient_mpo_family}
+    \uses{thm:selected_coefficient_prescribed_middle,
+        thm:selected_middle_fixed_physical_data,thm:finite_natural_retained_core_family,
+        thm:actual_natural_affine_product,thm:physical_interval_nested_trace,
+        thm:physical_interval_retained_matrix,def:two_marker_middle_index}
+    Let the chain have $L$ sites with local dimension $q\ge0$.
+    Let $a,b,\ell$ be nonnegative integers satisfying
+    $a+2\ell\le b$ and $b+2\ell\le L-1$, and choose $0\le p,s<2\ell$.
+    Use the regions
+    \begin{align}
+        T & ={[0,a+p+1)}, & E &
+        ={[a+p+1,b+s+1)},\notag                 \\
+        R & =(T\cup E)^c, & Z & =[a+2\ell+1,b),
+        \label{eq:selected_common_natural_regions}
+    \end{align}
+    with all intervals clipped to the chain. Set $N=|E|$, and identify $E$
+    with its increasing list of sites. Let $\rho$ be the number of
+    configurations on $E\setminus Z$.
+
+    Suppose the supplied window operators $W^L_r,W^R_r$ are supported on
+    $[a+r,a+r+2)$ and
+    $[b+r,b+r+2)$, respectively.
+    Supply site-dependent core tensors of virtual dimension $B$ on
+    $[a+2\ell,b+1)$ and a closing matrix. Let $P_M$ be their trace contraction,
+    canonically placed on the full chain.
+    Use labels $L_r,R_r,B_0,B_1,B_2$, and put
+    $O=\{L_r,R_r,B_0,B_1,B_2\}\setminus\{L_p,R_s\}$.
+    Fix complex ordinary weights $z_t$ and nonnegative integers $k,i,j$.
+    Write $\mathcal W_{k,i,j}$ for the two-marker middle index set with
+    $q^2$ labels for each marker family, as in
+    Definition~\ref{def:two_marker_middle_index}.
+
+    There exist a finite family of natural-interval operators $V_r$,
+    $0\le r<n$, and degrees $0\le d_r\le k$, such that
+    \begin{align}
+        n & \le |\mathcal W_{k,i,j}|(k+1)\rho^2,
+        \label{eq:selected_common_natural_count}
+    \end{align}
+    and every $V_r$, on the paired physical alphabet, has an open-boundary
+    MPS representation of bond at most $(B^{d_r})^2$ in increasing site order.
+    These choices precede the following exterior data.
+
+    For every supported exterior pair $P_L,P_R$ on $[0,a+1)$ and
+    $[b+2\ell,L)$, respectively, form the full family
+    $F_{L_r}=W^L_r$, $F_{R_r}=W^R_r$,
+    $F_{B_0}=P_L$, $F_{B_1}=P_M$, $F_{B_2}=P_R$, and set
+    \begin{align}
+        D_z & =\sum_{t\in O}z_tF_t.
+        \label{eq:selected_common_natural_ordinary}
+    \end{align}
+    For every complex scalar family $c_0,\ldots,c_k$, there are joint exterior
+    operators $Q_r$ on $\mathcal H_T\otimes\mathcal H_R$ such that
+    \begin{align}
+        \left(\sum_{h=0}^k c_h\,[u^iv^j]
+        (D_z+uW^L_p+vW^R_s)^h\right)^{\mathrm{nat}}
+         & =\sum_{r=0}^{n-1}Q_r\otimes V_r.
+        \label{eq:selected_common_natural_decomposition}
+    \end{align}
+    The superscript first groups the two exterior regions and then reads the
+    middle in its increasing coordinates. The formal variables $u,v$ commute
+    with the matrix coefficients. The two selected crossings are unweighted;
+    only the ordinary sum carries $z$.
+    Zero physical or virtual dimensions, degree zero, and impossible crossing
+    frequencies are included. No factorization of each joint exterior $Q_r$
+    into separate left and right operators is asserted.
+\end{theorem}
+\begin{proof}
+    \uses{thm:selected_coefficient_prescribed_middle,
+        thm:selected_middle_fixed_physical_data,thm:finite_natural_retained_core_family,
+        thm:actual_natural_affine_product,thm:physical_interval_nested_trace,
+        thm:physical_interval_retained_matrix,def:two_marker_middle_index,
+        thm:two_marker_prescribed_span}
+    The prescribed-middle coefficient decomposition first gives one ordered
+    middle factor for every index $w\in\mathcal W_{k,i,j}$, before the exterior
+    pair or the scalars $c_h$ are chosen. Its ordinary factor has the form
+    $z_{B_1}M_E+K_z$, with $K_z$ supported on $E\setminus Z$; its two marker
+    families are also supported there.
+
+    Represent those supported factors on the single retained complement.
+    Replace each ordinary run by its repeated affine steps, with scalar
+    $z_{B_1}$ on each ordinary step and scalar zero on each marker step.
+    The resulting ordered list has length $h_w\le k$ and evaluates to the
+    same middle word. The canonical interval and retained-coordinate
+    identities identify its central trace operator with the supplied core.
+    The finite natural family theorem expresses that word as a sum of exactly
+    $(h_w+1)\rho^2$ natural operators, each with its corresponding square bond.
+
+    Take the disjoint union over $w$ and enumerate it. Its size is at most
+    $|\mathcal W_{k,i,j}|(k+1)\rho^2$, proving
+    (\ref{eq:selected_common_natural_count}). Every prescribed middle word lies
+    in the span of this one family. The prescribed-spanning-family
+    factorization then supplies the exterior coefficients in
+    (\ref{eq:selected_common_natural_decomposition}), without changing the
+    chosen middle operators.
+\end{proof}
+
+\begin{theorem}[A polynomial-base bound for the selected family count]
+    \label{thm:selected_common_natural_cardinality}
+    \lean{TNLean.MPS.AreaLaw.actual_common_physical_mpo_card_le}
+    \uses{thm:selected_middle_collar_cardinality,thm:two_marker_middle_cardinality,
+        def:physical_interval_complement_coordinates}
+    Retain the geometric data and positions above, and suppose $q\ge1$ and
+    $k\ge1$. For arbitrary nonnegative $i,j,n$, the numerical implication
+    \begin{align}
+        n\le |\mathcal W_{k,i,j}|(k+1)\rho^2
+        \quad\Longrightarrow\quad
+        n\le\bigl(q(k+1)\bigr)^{8\ell+2(i+j)+2}
+        \label{eq:selected_common_natural_cardinality}
+    \end{align}
+    holds. No low-frequency restriction is required.
+\end{theorem}
+\begin{proof}
+    \uses{thm:selected_middle_collar_cardinality,thm:two_marker_middle_cardinality,
+        def:physical_interval_complement_coordinates}
+    The collar bound gives $\rho\le q^{4\ell}$, and hence
+    $\rho^2\le q^{8\ell}$. With $m=i+j$ and $v=k+1$, the middle index count is
+    at most $2^m q^{2m}v^{m+1}$. Since $v\ge2$, it is at most
+    $q^{2m}v^{2m+1}$. Multiplication by $v\rho^2$ gives
+    $q^{8\ell+2m}v^{2m+2}$.
+    Increasing both exponents to $8\ell+2m+2$ proves
+    (\ref{eq:selected_common_natural_cardinality}).
+\end{proof}
+
+\begin{theorem}[The low-frequency numerical consequence]
+    \label{thm:selected_common_natural_low_frequency_cardinality}
+    \lean{TNLean.MPS.AreaLaw.actual_common_physical_mpo_card_low_frequency_le}
+    Let $q\ge2$, $k\ge1$, $\ell\ge1$, and let $i,j,n$ be nonnegative integers
+    with $i,j\le\lfloor k/(2\ell)\rfloor$. Then
+    \begin{align}
+        n\le\bigl(q(k+1)\bigr)^{8\ell+2(i+j)+2}
+        \quad\Longrightarrow\quad
+        n\le(qk)^{20\ell+4\lfloor k/\ell\rfloor}.
+        \label{eq:selected_common_natural_low_frequency_cardinality}
+    \end{align}
+    This is an arithmetic implication and supplies no further operator or
+    bond assertion.
+\end{theorem}
+\begin{proof}
+    The frequency bounds give $(i+j)\ell\le k$, so
+    $i+j\le\lfloor k/\ell\rfloor$. Since $\ell\ge1$,
+    $8\ell+2(i+j)+2\le10\ell+2\lfloor k/\ell\rfloor$.
+    Moreover $q(k+1)\le(qk)^2$. Substituting this base comparison doubles the
+    last exponent and gives the stated bound.
+\end{proof}
