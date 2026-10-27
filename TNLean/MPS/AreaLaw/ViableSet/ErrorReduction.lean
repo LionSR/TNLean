@@ -101,15 +101,15 @@ theorem cutMatrix_toEuclideanLin (K : Matrix (Fin L → Fin q) (Fin L → Fin q)
     cutMatrix (toEuclideanLin K ψ) i =
       schmidtCoeffMatrix (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K *ᵥ
         WithLp.ofLp (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L i) ψ)) := by
-  ext a b
-  -- CHECK: if `rw [Entropy.cutOperator]` fails because the abbreviation is already unfolded,
-  -- drop it; a single `simp [cutMatrix_apply, Entropy.cutOperator, Entropy.cutVector,
-  -- reindex_apply, submatrix_mulVec_equiv, toLpLin_apply, Function.comp_def]` is the fallback.
-  rw [cutMatrix_apply, schmidtCoeffMatrix_apply, Entropy.cutOperator, reindex_apply,
-    submatrix_mulVec_equiv]
-  -- CHECK: `simp` should close
-  -- `(K *ᵥ ψ) (e.symm (a, b)) = (K *ᵥ (ψ' ∘ e.symm.symm)) (e.symm (a, b))`, `ψ' = ψ ∘ e.symm`.
-  simp [Entropy.cutVector, toLpLin_apply, Function.comp_def]
+  -- `cutMatrix φ i` is `schmidtCoeffMatrix (ofLp (cutVector (leftBlock L i) φ))`; pass the
+  -- operator through the cut with `Entropy.cutVector_toEuclideanLin` and the two sides agree
+  -- definitionally, since `ofLp (toEuclideanLin M v) = M *ᵥ ofLp v`.
+  show schmidtCoeffMatrix (WithLp.ofLp (Entropy.cutVector (n := fun _ : Fin L ↦ q)
+      (leftBlock L i) (toEuclideanLin K ψ))) =
+      schmidtCoeffMatrix (WithLp.ofLp (toEuclideanLin
+        (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K)
+        (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L i) ψ)))
+  rw [Entropy.cutVector_toEuclideanLin]
 
 /-- **The cut matrix of `K ψ`.** If `K = ∑_{j ∈ J} A_j ⊗ B_j` in the coordinates of the cut after
 `i` sites, the cut matrix of `K ψ` is `∑_j A_j M (B_j)ᵀ` for the cut matrix `M` of `ψ`
@@ -180,13 +180,16 @@ theorem toEuclideanLin_mem_leftSupportSubmodule_errorReductionSet {J : Finset ι
   have hcol : cutColumn (toEuclideanLin K ψ) i b =
       ∑ j ∈ J, ∑ b', B j b b' • toEuclideanLin (A j) (cutColumn ψ i b') := by
     ext a
-    -- CHECK: the `simp only` set; it should leave
-    -- `∑ j ∈ J, ∑ b', (∑ x, A j a x * M x b') * B j b b' =
-    --   ∑ j ∈ J, ∑ b', B j b b' * ∑ x, A j a x * M x b'`.
-    simp only [cutColumn, cutMatrix_toEuclideanLin_eq_sum hK, Matrix.sum_apply, Matrix.mul_apply,
-      Matrix.transpose_apply, WithLp.ofLp_toLp, WithLp.ofLp_sum, Finset.sum_apply,
-      WithLp.ofLp_smul, Pi.smul_apply, smul_eq_mul, toLpLin_apply, mulVec, dotProduct]
-    refine Finset.sum_congr rfl fun j _ ↦ Finset.sum_congr rfl fun b' _ ↦ ?_
+    rw [WithLp.ofLp_sum, Finset.sum_apply]
+    -- `ofLp (cutColumn (K ψ) i b) a = cutMatrix (K ψ) i a b`, then `cutMatrix_toEuclideanLin_eq_sum`.
+    show cutMatrix (toEuclideanLin K ψ) i a b = _
+    rw [cutMatrix_toEuclideanLin_eq_sum hK, Matrix.sum_apply]
+    refine Finset.sum_congr rfl fun j _ ↦ ?_
+    rw [WithLp.ofLp_sum, Finset.sum_apply, Matrix.mul_apply]
+    refine Finset.sum_congr rfl fun b' _ ↦ ?_
+    -- each side reduces to `(∑ x, A j a x * cutMatrix ψ i x b')` times `B j b b'`.
+    simp only [cutColumn, Matrix.transpose_apply, WithLp.ofLp_smul, Pi.smul_apply, smul_eq_mul,
+      toLpLin_apply, WithLp.ofLp_toLp, mulVec, dotProduct, Matrix.mul_apply]
     ring
   rw [hcol]
   refine Submodule.sum_mem _ fun j hj ↦ Submodule.sum_mem _ fun b' _ ↦
@@ -220,7 +223,7 @@ theorem mul_norm_le_norm_inner_of_norm_sub_le {E : Type*} [NormedAddCommGroup E]
     have h := norm_add_le x (y - x)
     rw [e] at h
     linarith
-  rcases le_or_lt (1 - ε - 2 * η / c) 0 with ht | ht
+  rcases le_or_gt (1 - ε - 2 * η / c) 0 with ht | ht
   · have h0 := mul_le_mul_of_nonneg_right ht (norm_nonneg y)
     rw [zero_mul] at h0
     exact h0.trans (norm_nonneg _)
