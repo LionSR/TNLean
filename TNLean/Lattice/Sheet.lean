@@ -16,6 +16,7 @@ import TNLean.Lattice.Sheet.FrontChanges
 import TNLean.Lattice.Sheet.LeftSupportedSchmidtRank
 import TNLean.Lattice.Sheet.Monomials
 import TNLean.Lattice.Sheet.Operators
+import TNLean.Lattice.Sheet.RegionalOperatorForms
 import TNLean.Lattice.Sheet.Registers
 import TNLean.Lattice.Sheet.Reordering
 import TNLean.Lattice.Sheet.SheetStack
