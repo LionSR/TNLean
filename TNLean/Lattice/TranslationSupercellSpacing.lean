@@ -20,16 +20,15 @@ the least common multiple of the denominators, leaves every ground state unchang
 translation can carry any site to a distance of order the linear size of the system from any
 other site.
 
-For a character, the momentum hypothesis is \(\chi(g)^q=1\), where \(q\) is a common
-multiple of the denominators. If it holds for every character with a nonzero momentum sector,
-then every \(q\)-th power belongs to the supercell (`pow_mem_supercell`).
+For a character, the momentum hypothesis is `χ g ^ q = 1`, where `q` is a common multiple of
+the denominators. If it holds for every character with a nonzero momentum sector, then every
+`q`-th power belongs to the supercell (`pow_mem_supercell`).
 
-Let \(\pi:V\to\mathbb Z/n\mathbb Z\) be a cell coordinate, and let the positive integer
-\(R\) bound its circular displacement along every graph edge. The circular displacement
-between two sites is at most \(R\) times their graph distance. If \(e\) translates the
-coordinate by one, some translation \(g=(e^t)^q\) in the supercell satisfies
-\(\lfloor n/2\rfloor<R\,d(x,g\cdot y)+q\)
-(`exists_mem_supercell_lt_edist_add`). The rotations of a ring have \(R=1\)
+Let `π : V → ZMod n` be a cell coordinate, and let the positive integer `R` bound its circular
+displacement along every graph edge. The circular displacement between two sites is at most `R`
+times their graph distance. If `e` translates the coordinate by one, some translation
+`g = (e ^ t) ^ q` in the supercell satisfies `n / 2 < R * d(x, g • y) + q`
+(`exists_mem_supercell_lt_edist_add`). The rotations of a ring have `R = 1`
 (`exists_mem_supercell_lt_edist_add_ring`).
 
 ## Main results
@@ -37,13 +36,12 @@ coordinate by one, some translation \(g=(e^t)^q\) in the supercell satisfies
 * `TNLean.Lattice.pow_mem_supercell`: with momenta of denominator `q`, every `q`-th power lies in
   the supercell.
 * `SimpleGraph.natAbs_valMinAbs_sub_le_edist`: the circular displacement of the cell
-  coordinate is at most the edge range times the graph distance.
+  coordinate satisfies `|π y - π x| ≤ R * Γ.edist x y`.
 * `TNLean.Lattice.exists_lt_natAbs_valMinAbs_add`: some multiple of `q` added to a residue puts it
   at circular distance more than `n / 2 - q` from any other.
 * `TNLean.Lattice.exists_mem_supercell_lt_edist_add`: with momenta of denominator `q`, some
-  element of the supercell carries any site to graph distance more than
-  \((\lfloor n/2\rfloor-q)/R\) from any
-  other.
+  element of the supercell carries any site to graph distance more than `(n / 2 - q) / R` from
+  any other.
 * `TNLean.Lattice.exists_mem_supercell_lt_edist_add_ring`: the same for the rotations of a ring.
 -/
 
