@@ -92,6 +92,134 @@ for an arbitrary finite set of sites and are instantiated here directly.
     in every summand.
 \end{proof}
 
+\begin{definition}[Two-window grouping of a bond family]
+    \label{def:chain_two_window_family}
+    \lean{Fin.twoWindowFamily}
+    \leanok
+    Let $A$ be an additive commutative monoid, and let
+    $h_0,\ldots,h_{N-1}\in A$. For the two-window decomposition of
+    \cite{Arad2016RigorousRG}, take natural numbers $a,b,\ell$ with
+    \begin{align}
+        a+2\ell & \le b,\notag \\
+        b+2\ell & \le N.
+        \label{eq:chain_two_window_admissibility}
+    \end{align}
+    Put $W=\{r\in\mathbb N:r<2\ell\}$ and form the disjoint union
+    \begin{align}
+        I & =(W\sqcup W)\sqcup\{L,M,R\}.
+        \label{eq:chain_two_window_family_alphabet}
+    \end{align}
+    Write $\iota_L,\iota_R$ for the two window injections and
+    $\kappa$ for the bulk injection. Thus $|I|=4\ell+3$, and the two
+    window injections have disjoint images. Define $F:I\to A$ by
+    \begin{align}
+        F_{\iota_L(r)} & =h_{a+r},\notag                  \\
+        F_{\iota_R(r)} & =h_{b+r},\notag                  \\
+        F_{\kappa(L)}  & =\sum_{0\le t<a}h_t,\notag       \\
+        F_{\kappa(M)}  & =\sum_{a+2\ell\le t<b}h_t,\notag \\
+        F_{\kappa(R)}  & =\sum_{b+2\ell\le t<N}h_t.
+        \label{eq:chain_two_window_family_values}
+    \end{align}
+    The three bulk labels remain distinct when their sums vanish.
+\end{definition}
+
+\begin{theorem}[Sum of the grouped bond family]
+    \label{thm:chain_two_window_family_sum}
+    \lean{Fin.sum_twoWindowFamily}
+    \leanok
+    \uses{def:chain_two_window_family}
+    The family in Definition~\ref{def:chain_two_window_family} satisfies
+    \begin{align}
+        \sum_{\alpha\in I}F_\alpha & =\sum_{t=0}^{N-1}h_t.
+        \label{eq:chain_two_window_family_sum}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_two_window_family,thm:chain_two_window_sum}
+    Put $S_L=\sum_{r\in W}h_{a+r}$, $S_R=\sum_{r\in W}h_{b+r}$ and
+    $B_\nu=F_{\kappa(\nu)}$ for $\nu\in\{L,M,R\}$.
+    Expanding~(\ref{eq:chain_two_window_family_values}) gives
+    \begin{align}
+        \sum_{\alpha\in I}F_\alpha
+         & =(S_L+S_R)+(B_L+B_M+B_R)\notag \\
+         & =B_L+S_L+B_M+S_R+B_R.
+        \label{eq:chain_two_window_regrouping}
+    \end{align}
+    Theorem~\ref{thm:chain_two_window_sum} identifies the expression
+    in~(\ref{eq:chain_two_window_regrouping}) with the original sum,
+    proving~(\ref{eq:chain_two_window_family_sum}). Empty intervals
+    cause no exception.
+\end{proof}
+
+\begin{theorem}[Additive maps and the grouped bond family]
+    \label{thm:chain_two_window_family_map}
+    \lean{Fin.twoWindowFamily_map}
+    \leanok
+    \uses{def:chain_two_window_family}
+    Let $A,B$ be additive commutative monoids, let $\varphi:A\to B$ be a
+    homomorphism of additive monoids, and let $F:I\to A$ be the family in
+    Definition~\ref{def:chain_two_window_family}. Form $F':I\to B$ from the
+    array $\varphi(h_0),\ldots,\varphi(h_{N-1})$ using the same windows.
+    Then $F'_\alpha=\varphi(F_\alpha)$ for every $\alpha\in I$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_two_window_family}
+    For a window label the assertion follows from the definition.
+    For each of the three bulk labels, apply preservation of finite sums
+    by $\varphi$ to the corresponding complementary interval.
+\end{proof}
+
+\begin{theorem}[Three-region tensor forms after grouping two windows]
+    \label{thm:chain_two_window_tensor_forms}
+    \lean{Matrix.twoWindowFamily_eq_three_region_forms}
+    \leanok
+    \uses{def:chain_two_window_family}
+    Let $X,Y,Z$ be index sets, and let $H_r$, $H^L_r$, $H^M_r$, $H^R_r$
+    be complex matrices indexed respectively by $(X\times Y)\times Z$,
+    $X$, $Y$, $Z$, for $0\le r<N$.
+    Use the windows and alphabet of Definition~\ref{def:chain_two_window_family},
+    and choose $p,s\in W$. For matrices $A,B,C$ on the three factors, put
+    \begin{align}
+        \mathcal E_L(A) & =(A\otimes I_Y)\otimes I_Z,\notag \\
+        \mathcal E_M(B) & =(I_X\otimes B)\otimes I_Z,\notag \\
+        \mathcal E_R(C) & =I_{X\times Y}\otimes C.
+        \label{eq:chain_two_window_embeddings}
+    \end{align}
+    Suppose that, whenever $r\ne a+p$ and $r\ne b+s$,
+    \begin{align}
+        H_r & =\mathcal E_L(H^L_r)+\mathcal E_M(H^M_r)+\mathcal E_R(H^R_r).
+        \label{eq:chain_two_window_family_ordinary_forms}
+    \end{align}
+    Group each of the four arrays using the same windows, obtaining
+    $F,F^L,F^M,F^R$. Then, for every $\alpha\in I$ other than
+    $\iota_L(p)$ and $\iota_R(s)$,
+    \begin{align}
+        F_\alpha & =\mathcal E_L(F^L_\alpha)+\mathcal E_M(F^M_\alpha)
+        +\mathcal E_R(F^R_\alpha).
+        \label{eq:chain_two_window_grouped_forms}
+    \end{align}
+    This is the additive step in the grouping used in~\cite{Arad2016RigorousRG}; the original tensor identities are hypotheses
+    of the assertion. Empty index sets are allowed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_two_window_family}
+    Each map in~(\ref{eq:chain_two_window_embeddings}) is linear. Hence, for
+    any finite set $J$ of original indices avoiding $a+p$ and $b+s$,
+    \begin{align}
+        \sum_{r\in J}H_r
+         & =\mathcal E_L\left(\sum_{r\in J}H^L_r\right)
+        +\mathcal E_M\left(\sum_{r\in J}H^M_r\right)
+        +\mathcal E_R\left(\sum_{r\in J}H^R_r\right).
+        \label{eq:chain_two_window_sum_forms}
+    \end{align}
+    For a window label different from the two selected labels,
+    use~(\ref{eq:chain_two_window_family_ordinary_forms}). Each complementary
+    interval avoids both selected indices by
+    (\ref{eq:chain_two_window_admissibility}). Applying
+    (\ref{eq:chain_two_window_sum_forms}) to each of these three intervals
+    proves~(\ref{eq:chain_two_window_grouped_forms}) for the bulk labels.
+\end{proof}
+
 \begin{theorem}[The number of range-one supports]
     \label{thm:chain_range_one_support_count}
     \lean{
@@ -132,54 +260,30 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
     \uses{def:chain_model}
     Diagonalize the marginal $\rho_0$ at site $0$, and let $U_0$ cyclically
     permute an orthonormal eigenbasis. Since $q\ge2$, this permutation has
-    no fixed point, so $\operatorname{tr}(\rho_0U_0)=0$. The lifted unitary
-    $K=U_0\otimes I$ sends $\Omega$ to a unit vector $\varphi$ orthogonal to
-    $\Omega$. Every term supported away from $0$ commutes with $K$ and
-    therefore has the same expectation in $\varphi$ and $\Omega$.
+    no fixed point, so $\operatorname{tr}(\rho_0U_0)=0$. Put $K=U_0\otimes I$
+    and $\varphi=K\Omega$. Since $K$ acts only on site $0$ and is unitary,
+    \begin{align}
+        \langle\Omega,\varphi\rangle & =\langle\Omega,K\Omega\rangle
+        =\operatorname{tr}(\rho_0U_0)=0,\notag                       \\
+        \lVert\varphi\rVert          & =\lVert K\Omega\rVert
+        =\lVert\Omega\rVert=1.\notag
+    \end{align}
+    If $0\notin X$, then $h_X$ acts as the identity on site $0$, so
+    $K^\dagger h_XK=h_X$ and
+    \begin{align}
+        \langle\varphi,h_X\varphi\rangle
+        =\langle K\Omega,h_XK\Omega\rangle
+        =\langle\Omega,K^\dagger h_XK\Omega\rangle
+        =\langle\Omega,h_X\Omega\rangle.\notag
+    \end{align}
     At most two range-one supports contain $0$: the singleton $\{0\}$ and,
     when it exists, the edge $\{0,1\}$. Each expectation changes by at most
     $2J$. The gap inequality gives
-    \[
+    \begin{align}
         \Delta\le\langle\varphi,H\varphi\rangle-E_0
         =\sum_{X\ni0}\bigl(\langle\varphi,h_X\varphi\rangle
-        -\langle\Omega,h_X\Omega\rangle\bigr)\le4J.
-    \]
-\end{proof}
-
-\begin{theorem}[Energy from ground-state overlap for a range-one chain]
-    \label{thm:chain_range_one_overlap_energy}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.re_inner_sub_le_of_overlap_of_range_one,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.re_inner_le_of_overlap_div_of_range_one}
-    \leanok
-    \uses{def:chain_model}
-    Let $H$ be a range-one Hamiltonian on a chain of $L$ sites, with each
-    interaction term of norm at most one. Let $E_0,\Delta$ be real and let
-    $\Omega$ be a unit vector satisfying $H\Omega=E_0\Omega$ and
-    $H-E_0\ge\Delta(1-|\Omega\rangle\langle\Omega|)$.
-    If $v$ is a unit vector with $|\langle\Omega,v\rangle|\ge1-\delta$, then
-    \begin{align}
-        \operatorname{Re}\langle v,Hv\rangle-E_0
-         & \le8L\delta.
-        \label{eq:chain_range_one_overlap_energy}
+        -\langle\Omega,h_X\Omega\rangle\bigr)\le4J.\notag
     \end{align}
-    In particular, when $L>0$, overlap at least $1-c/L$ gives energy at
-    most $E_0+8c$.
-
-    This is a general norm estimate supporting the first energy inference
-    in Lemma~l:within of~\cite[lines 509--515]{Landau2015Polynomial}.
-    The source assumes positive adjacent-pair terms; here singleton and
-    adjacent-pair terms need only be Hermitian. The correction for
-    unsquared overlap is recorded in \cite{gap:lvv13_witness_energy}.
-\end{theorem}
-\begin{proof}\leanok
-    \uses{thm:chain_range_one_support_count}
-    The support count gives $\|H\|\le2L$. The eigenvector equation and
-    $\|\Omega\|=1$ give $|E_0|\le\|H\|$, hence
-    $\|H-E_0\,1\|\le\|H\|+|E_0|\le4L$.
-    The energy estimate from overlap with an eigenvector in
-    \cite[``Energy bound from overlap with an eigenvector'']{QICLean2026Blueprint}
-    now gives (\ref{eq:chain_range_one_overlap_energy}). Substituting
-    $\delta=c/L$ proves the last assertion.
 \end{proof}
 
 \begin{theorem}[A range-one support crossing a cut]
@@ -262,6 +366,42 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
     \begin{align}
         \lVert B\rVert & \le\sum_{X\nsubseteq A}\lVert h_X\rVert\le2L.\notag
     \end{align}
+\end{proof}
+
+\begin{theorem}[Energy from ground-state overlap for a range-one chain]
+    \label{thm:chain_range_one_overlap_energy}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.re_inner_sub_le_of_overlap_of_range_one,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.re_inner_le_of_overlap_div_of_range_one}
+    \leanok
+    \uses{def:chain_model}
+    Let $H$ be a range-one Hamiltonian on a chain of $L$ sites, with each
+    interaction term of norm at most one. Let $E_0,\Delta$ be real and let
+    $\Omega$ be a unit vector satisfying $H\Omega=E_0\Omega$ and
+    $H-E_0\ge\Delta(1-|\Omega\rangle\langle\Omega|)$.
+    If $v$ is a unit vector with $|\langle\Omega,v\rangle|\ge1-\delta$, then
+    \begin{align}
+        \operatorname{Re}\langle v,Hv\rangle-E_0
+         & \le8L\delta.
+        \label{eq:chain_range_one_overlap_energy}
+    \end{align}
+    In particular, when $L>0$, overlap at least $1-c/L$ gives energy at
+    most $E_0+8c$.
+
+    This is a general norm estimate supporting the first energy inference
+    in Lemma~l:within of~\cite[lines 509--515]{Landau2015Polynomial}.
+    The source assumes positive adjacent-pair terms; here singleton and
+    adjacent-pair terms need only be Hermitian. The correction for
+    unsquared overlap is recorded in \cite{gap:lvv13_witness_energy}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_range_one_support_count}
+    The support count gives $\|H\|\le2L$. The eigenvector equation and
+    $\|\Omega\|=1$ give $|E_0|\le\|H\|$, hence
+    $\|H-E_0\,1\|\le\|H\|+|E_0|\le4L$.
+    The energy estimate from overlap with an eigenvector in
+    \cite[``Energy bound from overlap with an eigenvector'']{QICLean2026Blueprint}
+    now gives (\ref{eq:chain_range_one_overlap_energy}). Substituting
+    $\delta=c/L$ proves the last assertion.
 \end{proof}
 
 \begin{theorem}[Nearest-neighbour supports at two cuts]
@@ -608,6 +748,94 @@ windows and the three bulk labels.
     $B_v$ for its associated tensor identity and its bound
     $q^{2|D_v\cap E|}=q^2$.
     These are~(\ref{eq:chain_two_cut_crossing_forms}), including $q=0$.
+\end{proof}
+
+\begin{theorem}[Regional forms of two windows and three bulk operators]
+    \label{thm:chain_two_window_factors}
+    \lean{TNLean.MPS.AreaLaw.exists_threeSplit_two_window_factors}
+    \leanok
+    \uses{def:chain_model,lem:peps_frame_split_forms}
+    Let $L,q,\ell,a,b$ be natural numbers with $a+2\ell\le b$ and
+    $b+2\ell\le L-1$. Consider the $4\ell+3$ distinct labels
+    \begin{align}
+        \mathcal I
+         & =\{x_r:0\le r<2\ell\}\sqcup\{y_r:0\le r<2\ell\}
+        \sqcup\{\lambda,\mu,\rho\}.
+        \label{eq:chain_two_window_alphabet}
+    \end{align}
+    For each $\alpha\in\mathcal I$, let $F_\alpha$ be a complex operator
+    on the chain. Suppose that $F_{x_r}$ is supported on $[a+r,a+r+2)$
+    and $F_{y_r}$ on $[b+r,b+r+2)$, and that the three independently
+    given bulk operators satisfy
+    \begin{align}
+        F_\lambda & \text{ is supported on }[0,a+1),\notag       \\
+        F_\mu     & \text{ is supported on }[a+2\ell,b+1),\notag \\
+        F_\rho    & \text{ is supported on }[b+2\ell,L).
+        \label{eq:chain_two_window_bulk_supports}
+    \end{align}
+    The labels remain distinct when operators coincide or vanish.
+    Choose integers $0\le p,s<2\ell$, put $u=a+p$ and $v=b+s$, and set
+    \begin{align}
+        T & =[0,u+1),\notag   \\
+        E & =[u+1,v+1),\notag \\
+        U & =[v+1,L).
+        \label{eq:chain_two_window_regions}
+    \end{align}
+    Write $\widetilde F_\alpha$ for $F_\alpha$ in the three-region
+    coordinates of Lemma~\ref{lem:peps_frame_split_forms}.
+    There are families $F^{\mathrm L}_\alpha,F^{\mathrm M}_\alpha,
+        F^{\mathrm R}_\alpha$ of operators on $\mathcal H_T,\mathcal H_E,
+        \mathcal H_U$, respectively, and operators $A$ on
+    $\mathcal H_T\otimes\mathcal H_E$ and $B$ on
+    $\mathcal H_E\otimes\mathcal H_U$, chosen simultaneously, such that
+    for every $\alpha\ne x_p,y_s$,
+    \begin{align}
+        \widetilde F_\alpha
+         & =(F^{\mathrm L}_\alpha\otimes\id_E)\otimes\id_U
+        +(\id_T\otimes F^{\mathrm M}_\alpha)\otimes\id_U\notag \\
+         & \quad+\id_{TE}\otimes F^{\mathrm R}_\alpha.
+        \label{eq:chain_two_window_ordinary_forms}
+    \end{align}
+    The same $A$ and $B$ satisfy
+    \begin{align}
+        \widetilde F_{x_p}    & =A\otimes\id_U,\notag  \\
+        \operatorname{OSR}(A) & \le q^2,\notag         \\
+        \widetilde F_{y_s}    & =\id_T\otimes B,\notag \\
+        \operatorname{OSR}(B) & \le q^2.
+        \label{eq:chain_two_window_crossing_forms}
+    \end{align}
+    All tensors use the same left-associated coordinates, with canonical
+    reassociation for $\id_T\otimes B$. The local dimension may be zero.
+    When $a+2\ell=b$, the middle bulk support is the singleton $\{b\}$.
+    This is a tensor decomposition for the two-window grouping in
+    \cite[Sections~4.1 and~5.2]{Arad2016RigorousRG}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_two_cut_edge_supports,lem:peps_frame_split_forms,
+        thm:peps_supported_left_factor_rank,thm:peps_supported_right_factor_rank}
+    The hypotheses give $u<v$ and $v+1<L$.
+    Theorem~\ref{thm:chain_two_cut_edge_supports} places each window edge
+    other than $u,v$ wholly in one of $T,E,U$.
+    The three bulk supports satisfy
+    \begin{align}
+        {[0,a+1)}       & \subseteq T,\notag \\
+        {[a+2\ell,b+1)} & \subseteq E,\notag \\
+        {[b+2\ell,L)}   & \subseteq U.
+        \label{eq:chain_two_window_bulk_containments}
+    \end{align}
+    Thus every operator other than $F_{x_p},F_{y_s}$ is supported in one
+    region. Apply the corresponding single-region form of
+    Lemma~\ref{lem:peps_frame_split_forms}, putting zero in the other two
+    regional factors. Choosing these factors over $\mathcal I$ gives the
+    three families in~(\ref{eq:chain_two_window_ordinary_forms}).
+
+    The first crossing support is contained in $T\cup E$ and meets $T$
+    in the single site $u$. Theorem~\ref{thm:peps_supported_left_factor_rank}
+    supplies $A$ with both its tensor identity and the bound $q^2$.
+    The second crossing support is disjoint from $T$ and meets $E$ in
+    the single site $v$. Theorem~\ref{thm:peps_supported_right_factor_rank}
+    supplies $B$ with both its tensor identity and the bound $q^2$.
+    These are~(\ref{eq:chain_two_window_crossing_forms}), including $q=0$.
 \end{proof}
 
 \begin{lemma}[Marginal moment and tail bounds at a cut]
@@ -6311,7 +6539,10 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     tensor entries and tagged alphabets.
 \end{proof}
 
+\input{chapter/ch35_two_marker_middle_factors}
+
 \input{chapter/ch35_product_replacement}
+\input{chapter/ch35_matrix_factor_exchange}
 \input{chapter/ch35_copy_region_entropy}
 \input{chapter/ch35_chain_trimming}
 \input{chapter/ch35_lvv_viable_sets}
