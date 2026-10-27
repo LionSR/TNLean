@@ -1,0 +1,180 @@
+\section{Prescribed middle factors of polynomial coefficients}
+
+The algebraic statements in this section describe the ordered
+products used in \cite[Proposition~5.7]{Arad2016RigorousRG}.
+The middle operators are specified before the coefficients on the exterior
+factor. All products retain their order.
+An interval $\{0,\ldots,h-1\}$ is empty when $h=0$.
+
+For a matrix $M$ indexed by a product $m\times n$, use the right operator
+blocks and left coefficient slices
+\begin{align}
+    M^{\mathrm R}_{ab}(x,y) & =M((a,x),(b,y)),\notag \\
+    M^{\mathrm L}_{xy}(a,b) & =M((a,x),(b,y)).
+    \label{eq:two_marker_operator_blocks}
+\end{align}
+Here $a,b\in m$ and $x,y\in n$; the right blocks are indexed by $n$
+and the left slices by $m$.
+
+\begin{theorem}[Prescribed factors from operator blocks]
+    \label{thm:two_marker_prescribed_span}
+    \lean{Matrix.exists_left_factors_of_operatorBlock_mem_span,Matrix.exists_right_factors_of_left_blocks_mem_span}
+    \leanok
+    Let $\mathcal I$ be finite, let $m,n$ be arbitrary sets, and let
+    $C_\alpha$ be complex matrices indexed by $n$. Suppose that
+    $M^{\mathrm R}_{ab}\in\spn_{\C}\{C_\alpha:\alpha\in\mathcal I\}$ for every $a,b\in m$.
+    There are matrices $L_\alpha$ indexed by $m$ such that
+    \begin{align}
+        M=\sum_{\alpha\in\mathcal I}L_\alpha\otimes C_\alpha.
+        \label{eq:two_marker_prescribed_span}
+    \end{align}
+    For the opposite orientation, let $C_\alpha\in\C^{m\times m}$ for
+    $\alpha\in\mathcal I$. If
+    $M^{\mathrm L}_{xy}\in\spn_{\C}\{C_\alpha:\alpha\in\mathcal I\}$
+    for every $x,y\in n$, then
+    $M=\sum_{\alpha\in\mathcal I}C_\alpha\otimes R_\alpha$ for suitable
+    matrices $R_\alpha$ indexed by $n$.
+\end{theorem}
+\begin{proof}\leanok
+    For each $a,b$, choose coefficients $\lambda_{ab,\alpha}$ with
+    $M^{\mathrm R}_{ab}=\sum_\alpha\lambda_{ab,\alpha}C_\alpha$, and set
+    $(L_\alpha)_{ab}=\lambda_{ab,\alpha}$. Comparing matrix entries gives
+    (\ref{eq:two_marker_prescribed_span}). The opposite orientation follows by
+    the same argument with the two pairs of indices exchanged.
+\end{proof}
+
+\begin{definition}[Crossing words and ordinary run lengths]
+    \label{def:two_marker_middle_index}
+    \lean{TNLean.MPS.AreaLaw.TwoMarkerMiddleIndex}
+    \leanok
+    For nonnegative integers $r,i,j,u,v$, let $\mathcal I_{r,i,j}^{u,v}$ consist
+    of pairs $(w,g)$ with
+    \begin{align}
+        w & :\{0,\ldots,i+j-1\}\longrightarrow
+        \{0,\ldots,u-1\}\sqcup\{0,\ldots,v-1\},\notag       \\
+        g & :\{0,\ldots,i+j\}\longrightarrow\{0,\ldots,r\}.
+        \label{eq:two_marker_index_data}
+    \end{align}
+    The word has $i$ letters in the first summand and $j$ in the second, with
+    $\sum_{h=0}^{i+j}g_h+i+j\le r$.
+\end{definition}
+
+\begin{definition}[Ordered middle product]
+    \label{def:two_marker_middle_product}
+    \lean{TNLean.MPS.AreaLaw.twoMarkerMiddleFactor}
+    \leanok
+    \uses{def:two_marker_middle_index}
+    Let $A$ be an element of a monoid, and let $U_0,\ldots,U_{u-1}$ and
+    $V_0,\ldots,V_{v-1}$ belong to the same monoid. For
+    $(w,g)\in\mathcal I_{r,i,j}^{u,v}$, put $T(\operatorname{inl}s)=U_s$,
+    $T(\operatorname{inr}t)=V_t$, and define
+    \begin{align}
+        \Phi_{w,g}(A,U,V)
+        =\left(\prod_{h=0}^{i+j-1} A^{g_h}T(w_h)\right)A^{g_{i+j}}.
+        \label{eq:two_marker_middle_product}
+    \end{align}
+    The product over $h$ is in increasing order; an empty product is the
+    identity.
+\end{definition}
+
+\begin{definition}[Two distinguished frequencies]
+    \label{def:two_marker_coefficient}
+    \lean{TNLean.MPS.AreaLaw.twoMarkerCoefficient}
+    \leanok
+    Let $D,U,V$ belong to a semiring. With two central formal variables $x,y$,
+    define
+    \begin{align}
+        C_{r,i,j}(D,U,V)=[x^i y^j](D+yV+xU)^r.
+        \label{eq:two_marker_coefficient}
+    \end{align}
+    The variable $x$ counts $U$ and $y$ counts $V$; the coefficients $D,U,V$
+    need not commute.
+\end{definition}
+
+\begin{theorem}[Operator blocks of sums and tensor products]
+    \label{thm:two_marker_block_identities}
+    \lean{TNLean.MPS.AreaLaw.operatorBlock_sum,TNLean.MPS.AreaLaw.operatorBlock_kronecker_eq_smul}
+    \leanok
+    For a finite family of matrices $M_\alpha$ indexed by $m\times n$, and
+    matrices $E$ and $W$ indexed by $m$ and $n$, respectively,
+    \begin{align}
+        \left(\sum_\alpha M_\alpha\right)^{\mathrm R}_{ab}
+                                      & =\sum_\alpha(M_\alpha)^{\mathrm R}_{ab},\notag \\
+        (E\otimes W)^{\mathrm R}_{ab} & =E_{ab}W.
+        \label{eq:two_marker_block_identities}
+    \end{align}
+    No finiteness assumption on $m$ or $n$ is required.
+\end{theorem}
+\begin{proof}\leanok
+    Both identities follow by comparing the entry indexed by $x,y\in n$.
+\end{proof}
+
+\begin{theorem}[A common prescribed middle family through a degree bound]
+    \label{thm:two_marker_common_middle}
+    \lean{TNLean.MPS.AreaLaw.exists_sum_twoMarkerCoefficient_decomposition}
+    \leanok
+    \uses{def:two_marker_middle_index,def:two_marker_middle_product,def:two_marker_coefficient}
+    Let $m,n$ be finite sets. Choose complex matrices $E,E_s^U,E_t^V$ indexed
+    by $m$ and $A,U_s^M,V_t^M$ indexed by $n$, with $0\le s<u$ and $0\le t<v$.
+    Put
+    \begin{align}
+        D & =E\otimes I+I\otimes A,\notag              \\
+        U & =\sum_{s=0}^{u-1}E_s^U\otimes U_s^M,\notag \\
+        V & =\sum_{t=0}^{v-1}E_t^V\otimes V_t^M.
+        \label{eq:two_marker_split_letters}
+    \end{align}
+    For all nonnegative integers $k,i,j$ and all complex numbers
+    $c_0,\ldots,c_k$, there are matrices $B_{w,g}$ indexed by $m$ such that
+    \begin{align}
+        \sum_{r=0}^k c_r C_{r,i,j}(D,U,V)
+        =\sum_{(w,g)\in\mathcal I_{k,i,j}^{u,v}}
+        B_{w,g}\otimes\Phi_{w,g}(A,U^M,V^M).
+        \label{eq:two_marker_common_middle}
+    \end{align}
+    The displayed middle family depends only on $A,U^M,V^M,k,i,j$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:two_marker_prescribed_span,thm:two_marker_block_identities,def:two_marker_middle_index,def:two_marker_middle_product,def:two_marker_coefficient}
+    Induction on $r$ shows that every right operator block of
+    $C_{r,i,j}(D,U,V)$ belongs to the span of the products indexed by
+    $\mathcal I_{r,i,j}^{u,v}$. At degree zero, the coefficient is $I$ for
+    $i=j=0$ and zero otherwise. The positive-frequency recurrence is
+    \begin{align}
+        C_{r+1,i+1,j+1}
+        =C_{r,i+1,j+1}D+C_{r,i+1,j}V+C_{r,i,j+1}U.
+        \label{eq:two_marker_right_recurrence}
+    \end{align}
+    When one frequency vanishes, the corresponding last-letter term is absent.
+    Right multiplication by $E\otimes I$ preserves a middle word and enlarges
+    its degree bound. Right multiplication by $I\otimes A$ increases its final
+    ordinary run. The $U$ and $V$ terms append the corresponding crossing
+    letter, retaining the order in (\ref{eq:two_marker_middle_product}).
+    Theorem~\ref{thm:two_marker_prescribed_span} and
+    (\ref{eq:two_marker_block_identities}) justify these span operations.
+
+    If $r\le k$, the same crossing letters and run lengths define an element
+    of $\mathcal I_{k,i,j}^{u,v}$ with the same ordered product. Thus all the
+    right operator blocks in the left side of
+    (\ref{eq:two_marker_common_middle}) belong to the span of the one displayed
+    middle family. Apply Theorem~\ref{thm:two_marker_prescribed_span} once more
+    to obtain the matrices $B_{w,g}$.
+\end{proof}
+
+\begin{theorem}[Number of prescribed middle factors]
+    \label{thm:two_marker_middle_cardinality}
+    \lean{TNLean.MPS.AreaLaw.card_twoMarkerMiddleIndex_square_le}
+    \leanok
+    \uses{def:two_marker_middle_index}
+    For all nonnegative integers $r,i,j,q$,
+    \begin{align}
+        |\mathcal I_{r,i,j}^{q^2,q^2}|
+        \le 2^{i+j}q^{2(i+j)}(r+1)^{i+j+1}.
+        \label{eq:two_marker_middle_cardinality}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:two_marker_middle_index}
+    There are at most $(2q^2)^{i+j}$ choices for the decorated word and
+    $(r+1)^{i+j+1}$ choices for its run lengths. Discarding the frequency and
+    total-length restrictions gives their product as an upper bound.
+\end{proof}
