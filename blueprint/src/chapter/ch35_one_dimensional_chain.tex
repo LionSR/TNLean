@@ -6539,6 +6539,8 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     tensor entries and tagged alphabets.
 \end{proof}
 
+\input{chapter/ch35_core_word_coefficients}
+\input{chapter/ch35_three_region_support}
 \input{chapter/ch35_two_marker_middle_factors}
 
 \input{chapter/ch35_two_marker_middle_index_cardinality}
@@ -6568,10 +6570,8 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     \end{align*}
 \end{proof}
 
-\input{chapter/ch35_three_region_support}
 \input{chapter/ch35_selected_middle_data}
 \input{chapter/ch35_selected_coefficient_decomposition}
-\input{chapter/ch35_core_word_coefficients}
 \input{chapter/ch35_trace_core_slices}
 \input{chapter/ch35_trace_chain_operator}
 \input{chapter/ch35_retained_core_families}
@@ -6596,3 +6596,29 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
 \input{chapter/ch35_chain_gluing}
 
 \input{chapter/ch35_entropy_scaling_qutrit_copies}
+
+\begin{theorem}[The actual two-window alphabet sums to the original Hamiltonian]
+    \label{thm:actual_two_window_alphabet_sum}
+    \lean{Fin.sum_univ_eq_actual_two_window_alphabet}
+    \uses{def:five_region_bond_partition}
+    Let $a+2\ell\le b$ and $b+2\ell\le L-1$.
+    For arbitrary values $h_i$ in an additive commutative monoid, use the
+    cuts $(0,a+1,a+2\ell,b+1,b+2\ell,L)$ and put
+    $W_r^{\mathrm L}=h_{a+r}$, $W_r^{\mathrm R}=h_{b+r}$ for $0\le r<2\ell$.
+    Then
+    \begin{align}
+        \sum_{i\in\mathcal B_L}h_i
+        =A_0+\sum_{r=0}^{2\ell-1}W_r^{\mathrm L}
+             +A_2+\sum_{r=0}^{2\ell-1}W_r^{\mathrm R}+A_4.
+    \end{align}
+    No support, positivity or spectral assumption is used. Empty windows
+    are included.
+\end{theorem}
+\begin{proof}
+    \uses{thm:five_region_additive_partition}
+    Each finite window enumerates precisely its interval of bond starts.
+    Partition all bond starts into the left bulk, first complete window,
+    middle bulk, second complete window and right bulk, and sum in each part.
+    This retains the original alphabet of
+    \cite[eq:H-mid-cut, lines 810--821]{Arad2016RigorousRG}.
+\end{proof}

@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.AreaLaw
 
+import TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily
 import TNLean.MPS.AreaLaw.AreaLaw
 import TNLean.MPS.AreaLaw.BandDissolution
 import TNLean.MPS.AreaLaw.BandInformation
@@ -39,6 +40,8 @@ import TNLean.MPS.AreaLaw.DomainSupportedGaussianIntegral
 import TNLean.MPS.AreaLaw.DoubledHamiltonian
 import TNLean.MPS.AreaLaw.EntropyInequalities
 import TNLean.MPS.AreaLaw.EntropyScaling
+import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
+import TNLean.MPS.AreaLaw.FiveRegionTruncationResidual
 import TNLean.MPS.AreaLaw.FixedConfigurationExtension
 import TNLean.MPS.AreaLaw.GluingHamiltonian
 import TNLean.MPS.AreaLaw.Hamiltonian
@@ -54,16 +57,20 @@ import TNLean.MPS.AreaLaw.LocalSolution
 import TNLean.MPS.AreaLaw.LogarithmicAreaLaw
 import TNLean.MPS.AreaLaw.LogarithmicSeparation
 import TNLean.MPS.AreaLaw.MPSApproximation
+import TNLean.MPS.AreaLaw.NearestNeighbourImaginaryTime
 import TNLean.MPS.AreaLaw.OpenMPS
 import TNLean.MPS.AreaLaw.OpenMPSCutRank
 import TNLean.MPS.AreaLaw.OpenMPSProduct
 import TNLean.MPS.AreaLaw.OpenMPSRank
+import TNLean.MPS.AreaLaw.OpenMPSSpan
 import TNLean.MPS.AreaLaw.OverlapEnergy
 import TNLean.MPS.AreaLaw.PartialSwap
 import TNLean.MPS.AreaLaw.PhysicalChebyshevViability
+import TNLean.MPS.AreaLaw.PhysicalDGViability
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.PhysicalPeriodicPolynomialFamily
 import TNLean.MPS.AreaLaw.PhysicalPolynomialTensorFamily
+import TNLean.MPS.AreaLaw.PolynomialFilterParameters
 import TNLean.MPS.AreaLaw.ProductCutIteration
 import TNLean.MPS.AreaLaw.ProductReplacement
 import TNLean.MPS.AreaLaw.ProtocolConditionalPreparation
@@ -90,6 +97,7 @@ import TNLean.MPS.AreaLaw.ProtocolUniformPreparation
 import TNLean.MPS.AreaLaw.RangeOneCut
 import TNLean.MPS.AreaLaw.RangeOneSupport
 import TNLean.MPS.AreaLaw.RegionalMiddleFactors
+import TNLean.MPS.AreaLaw.RegionalTruncationResidual
 import TNLean.MPS.AreaLaw.RelativeGeneratorLocalization
 import TNLean.MPS.AreaLaw.RenyiEntropy
 import TNLean.MPS.AreaLaw.ResetSupportSeparation
@@ -101,6 +109,7 @@ import TNLean.MPS.AreaLaw.SelectedMiddleMPOFamily
 import TNLean.MPS.AreaLaw.SequentialTruncation
 import TNLean.MPS.AreaLaw.SharpChainCompression
 import TNLean.MPS.AreaLaw.SharpPhysicalCompression
+import TNLean.MPS.AreaLaw.ShortRegionViableFamily
 import TNLean.MPS.AreaLaw.SupportedCutRank
 import TNLean.MPS.AreaLaw.SupportedGaussianIntegral
 import TNLean.MPS.AreaLaw.SwappedDoubledHamiltonian

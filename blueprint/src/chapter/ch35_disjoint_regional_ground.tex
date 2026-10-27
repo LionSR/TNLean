@@ -1,0 +1,42 @@
+\section{Common ground vectors on disjoint regions}
+
+Let $\mathcal H_{L,q}=(\C^q)^{\otimes L}$, with $q\ge1$ and $L\in\N$.
+Support on a site set means that the operator is the identity on its
+complement, as in Definition~\ref{def:chain_model}. Empty regions and the
+empty chain are allowed.
+
+\begin{theorem}[One set of original minima for every clipping subset]
+    \label{thm:disjoint_regional_clipping}
+    \lean{Matrix.exists_disjoint_regional_clipping_structure}
+    \uses{def:chain_model}
+    Let $(R_i)_{i\in I}$ be a finite family of pairwise disjoint site sets,
+    and let $A_i$ be supported on $R_i$ with $0\le A_i\le c_i\Id$,
+    where $c_i\in\N$. Let $0\le Y\le C\Id$ with $C\in\N$.
+    There are real numbers $e_i$ and a unit vector $x$ with
+    $A_ix=e_ix$ and $A_i\ge e_i\Id$ for every $i$ such that the following
+    assertions hold for every $t\ge0$ and every subset $K\subseteq I$.
+    Put
+    \begin{align}
+        F_i&=\begin{cases}\min(A_i,e_i+t),&i\in K,\\A_i,&i\notin K,\end{cases}
+        &X&=\sum_i(F_i-e_i\Id),\notag\\
+        b&=\sum_{i\in K}t+\sum_{i\notin K}c_i+C.
+    \end{align}
+    Then $X\ge0$, $Xx=0$, and $X$ commutes with every $A_j$.
+    For every $j$ and $0\le u\le t$,
+    $u\mathbf1_{\{\lambda\ge e_j+u\}}(A_j)\le X$.
+    Moreover $X+Y\le b\Id$ and $\|X+Y\|\le b$.
+    There are a unit vector $z$ and a real number $E$ satisfying
+    $(X+Y)z=Ez$, $X+Y\ge E\Id$ and $0\le E\le C$.
+    The same $e_i,x$ work for every $t,K$; $E,z$ may depend on $t,K$.
+\end{theorem}
+\begin{proof}
+    Induct over the disjoint regions to obtain a common product of regional
+    ground vectors. Their attained energies are the original minima $e_i$.
+    Disjoint supports imply commutation. The centered partial-clipping
+    inequalities in~\cite[``Centered partial clipping of a finite family'']
+    {QICLean2026Blueprint} give the order, high-projection and norm bounds.
+    A minimizing unit eigenvector of $X+Y$ exists in finite dimension.
+    Testing its minimum against $x$ gives $E\le\langle x,Yx\rangle\le C$.
+    This is the disjoint-region construction used in
+    \cite[lines 873--886 and 979--1005]{Arad2016RigorousRG}.
+\end{proof}

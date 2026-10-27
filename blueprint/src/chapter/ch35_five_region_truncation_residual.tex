@@ -1,0 +1,63 @@
+\section{A physical low cluster with the required parameter bounds}
+
+\begin{theorem}[One scale for the original ground space and clipped cluster]
+    \label{thm:five_region_dg_cluster_parameters}
+    \lean{TNLean.MPS.AreaLaw.exists_five_region_dg_cluster_parameters}
+    \uses{def:chain_model,def:five_region_bond_partition}
+    There is a real constant $A\ge21$ with the following property.
+    For every $q\ge2$ and $0<g\le1$, put
+    \begin{align}
+        u&=1+\log q+\log(1/g),&\ell&=\lceil Au^2/g\rceil,\notag\\
+        \mathcal D&=(q\ell^2)^{22\ell},&c_A&=6+2\log(A+1).
+    \end{align}
+    Then $\ell\ge21$, $\mathcal D\ge2$ and
+    $\log\mathcal D\le22(A+1)c_Ag^{-1}u^3$.
+    Let $a+2\ell\le b+1$ and $b+2\ell\le L$, and let
+    $H=\sum_{i\in\mathcal B_L}h_i$ be an original nearest-neighbour
+    Hamiltonian with supported terms $0\le h_i\le\Id$.
+    Suppose $\mu\in\operatorname{spec}(H)$ and
+    $\operatorname{spec}(H)\subseteq\{\mu\}\cup[\mu+g,\infty)$.
+    Write $G=\ker(H-\mu\Id)$, and use the five cuts
+    $(0,a+1,a+2\ell,b+1,b+2\ell,L)$.
+    There are original regional minima $e_j$ with a common unit ground vector
+    and a number $0\le E_0\le4$ with $E_0+\sum_j e_j=\mu$.
+    Put $K=\{0,2,4\}$ and
+    \begin{align}
+        B&=\sum_{j\in K}\bigl(\min(A_j,e_j+\ell)-e_j\Id\bigr)
+             +\sum_{j\notin K}(A_j-e_j\Id)+Y,\notag\\
+        \eta_0&=E_0+g/10,&\eta_1&=E_0+9g/10,\notag\\
+        R&=7\ell-\eta_0,&
+        \Delta&=\bigl(2e^{-2\ell^2\sqrt{(\eta_1-\eta_0)/R}}\bigr)^2.
+    \end{align}
+    One has $\|B\|\le7\ell$, $\eta_0<\eta_1\le7\ell$, $0<R\le8\ell$,
+    $\Delta>0$ and $\mathcal D^{12}\Delta\le10^{-5}$.
+    There is an actual orthonormal eigenbasis of $B$ for which
+    \begin{align}
+        T=\mathbf1_{\{x\le\eta_0\}}(B)\mathcal H_{L,q}
+         =\mathbf1_{\{x\le\eta_1\}}(B)\mathcal H_{L,q}.
+    \end{align}
+    Every closed low cutoff between $E_0+g/20$ and $E_0+19g/20$ gives $T$.
+    Moreover $\dim T=\dim G$, $T,G$ are mutually $1/200$-close, and every
+    eigenvalue of $B$ is at most $\eta_0$ or at least $\eta_1$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:disjoint_regional_clipping,thm:five_region_original_bond_bounds,
+        thm:five_region_seven_ell_budget,thm:consecutive_regional_truncation_low,
+        thm:physical_dg_scalar_parameters,thm:physical_chebyshev_endpoints}
+    The original regional minima and the common vector give the centered
+    ground energy $E_0\in[0,4]$. The two uncut buffers have at most
+    $2\ell-2$ internal bonds each, and at most four bonds cross the cuts;
+    the total clipped budget is therefore $7\ell$.
+    Apply the regional restricted-error estimate at each of the three
+    clipped regions with $s=1/8$ and $u=19+\varepsilon$.
+    The resulting total is at most
+    $288e^{11/8}e^{-(\ell-g)/8}\le10^{-6}g$.
+    The two actual restricted residuals, at the centered original cutoff $E_0+g/40$
+    and the clipped cutoff $E_0+19g/20$, give the equal-rank cluster and
+    mutual closeness by the low-cluster theorem of
+    \cite[``A low cluster from two restricted residuals'']{QICLean2026Blueprint}.
+    Apply the same scalar choice to its Chebyshev endpoints to obtain
+    $\mathcal D^{12}\Delta\le10^{-5}$.
+    The comparison uses the full original ground space and the closed
+    cutoffs described in~\cite{gap:alvv16_spectral_projector_boundary}.
+\end{proof}

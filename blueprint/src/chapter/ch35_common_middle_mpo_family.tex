@@ -8,12 +8,13 @@ The following are supporting geometric and counting results for
 \begin{theorem}[Bounds for the selected and prescribed intervals]
     \label{thm:common_middle_interval_bounds}
     \lean{TNLean.MPS.AreaLaw.selected_middle_fixed_interval_bounds}
+    \leanok
     Let $L,a,b,\ell$ be nonnegative integers with $a+2\ell\le b$ and
     $b+2\ell\le L-1$, and let $0\le p,s<2\ell$. Put
     $c=a+p+1$, $d=b+s+1$, $u=a+\ell$, and $v=b+\ell+1$. Then
     $c\le d\le L$, $u\le v\le L$, and $\max(c,u)<\min(d,v)$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The bounds $p,s<2\ell$, together with the two separation inequalities,
     give each endpoint comparison.
 \end{proof}
@@ -21,6 +22,7 @@ The following are supporting geometric and counting results for
 \begin{theorem}[Low-frequency cardinality on the prescribed interval]
     \label{thm:common_middle_low_frequency_cardinality}
     \lean{TNLean.MPS.AreaLaw.actual_common_fixed_middle_mpo_card_low_frequency_le}
+    \leanok
     \uses{thm:selected_common_natural_cardinality,
         thm:selected_common_natural_low_frequency_cardinality}
     Retain the geometric data and positions above. Set $E=[a+p+1,b+s+1)$,
@@ -35,7 +37,7 @@ The following are supporting geometric and counting results for
         \label{eq:common_middle_low_frequency_count}
     \end{align}
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The chosen position implies $\ell\ge1$. The selected-family count and its
     low-frequency consequence give
     $|\mathcal W_{k,i,j}|(k+1)\rho^2\le(qk)^{20\ell+4\lfloor k/\ell\rfloor}$.
@@ -46,6 +48,7 @@ The following are supporting geometric and counting results for
 \begin{theorem}[A common prescribed-middle family for finite sampling nodes]
     \label{thm:common_middle_grid_mpo_family}
     \lean{TNLean.MPS.AreaLaw.exists_common_fixed_middle_grid_mpo_family}
+    \leanok
     \uses{thm:common_middle_interval_bounds,thm:selected_common_natural_mpo_family,
         thm:regional_middle_from_numbered_three_regions,
         thm:interval_mpo_common_family_transfer,
@@ -124,7 +127,7 @@ The following are supporting geometric and counting results for
     to $J^c$ and $J$; the formal variables commute with matrix coefficients.
     Empty sampling sets, zero virtual dimension, and degree zero are allowed.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:selected_common_natural_mpo_family,
         thm:regional_middle_from_numbered_three_regions,
         thm:interval_mpo_common_family_transfer,

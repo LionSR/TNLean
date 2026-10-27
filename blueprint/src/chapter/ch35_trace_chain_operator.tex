@@ -37,3 +37,21 @@
     Set $A'_0(x,y)=CA_0(x,y)$ and $A'_v(x,y)=A_v(x,y)$ for $1\le v<n$.
     Associativity gives (\ref{eq:trace_chain_closing_absorption}).
 \end{proof}
+
+\begin{theorem}[A trace-chain representation of any finite matrix]
+    \label{thm:finite_matrix_trace_chain}
+    \lean{MPOTensor.exists_traceChainOperator_of_finite_matrix}
+    \uses{def:trace_chain_operator}
+    For every matrix $M$ on $(\C^q)^{\otimes n}$ there are a natural number
+    $B$, site-dependent tensors $A_v(i,j)\in\C^{B\times B}$ and a closing
+    matrix $C\in\C^{B\times B}$ with $M=\mathcal T(A,C)$.
+    The empty chain and zero local dimension are included. No quantitative
+    bound on $B$ or procedure for finding the tensors is asserted.
+\end{theorem}
+\begin{proof}
+    Index the bond by pairs of full configurations. Diagonal entries of
+    each site tensor select their two physical coordinates; put the
+    coefficient of $M$ in a diagonal closing matrix. The trace selects the
+    unique matching pair. The same construction works for $n=0$, when
+    there is one empty configuration pair and bond dimension one.
+\end{proof}

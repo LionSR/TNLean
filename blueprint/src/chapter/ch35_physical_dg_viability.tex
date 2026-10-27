@@ -1,0 +1,78 @@
+\section{A fixed local family improving ground-space viability}
+
+Closeness and viability have the projection meanings of
+\cite[``Closeness and viability of subspaces'']{QICLean2026Blueprint}.
+For an interval $J$, identify the full Hilbert space with
+$\mathcal H_J\otimes\mathcal H_{J^c}$ by restriction of configurations,
+with the interval factor first.
+
+\begin{theorem}[The operator-family conclusion in the gapped case]
+    \label{thm:physical_dg_viable_family}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_viable_family}
+    \uses{def:chain_model}
+    There is a universal real constant $A\ge21$ with the following property.
+    Let $H=\sum_{i\in\mathcal B_L}h_i$ be an original nearest-neighbour
+    Hamiltonian on $(\C^q)^{\otimes L}$, where each $h_i$ is supported on
+    $\{i,i+1\}$ and satisfies $0\le h_i\le\Id$.
+    Suppose that $\mu,\nu\in\operatorname{spec}(H)$, $\mu<\nu$,
+    $\gamma>0$, and
+    \begin{align}
+        \operatorname{spec}(H)\subseteq\{\mu\}\cup[\mu+\gamma,\infty).
+    \end{align}
+    Thus $\mu$ is the original ground energy and the excited spectrum is
+    nonempty. Let $G=\ker(H-\mu\Id)$ be the full original ground space;
+    its dimension is unrestricted. Put
+    \begin{align}
+        g    & =\min(\gamma,1),      & u          & =1+\log q+\log(1/g),\notag \\
+        \ell & =\lceil Au^2/g\rceil, & \mathcal D & =(q\ell^2)^{22\ell},\notag \\
+        c_A  & =6+2\log(A+1).
+    \end{align}
+    Then $\log\mathcal D\le22(A+1)c_Ag^{-1}u^3$.
+    For every interval $J=\{p,\ldots,r-1\}$ with $0\le p\le r\le L$,
+    there are a subspace $T$ of the full Hilbert space, a number $\Delta>0$,
+    and a family of operators $W_0,\ldots,W_{\mathcal D^2-1}$ on
+    $\mathcal H_J$ such that $T,G$ are mutually $1/200$-close and
+    \begin{align}
+        \mathcal D^{12}\Delta\le10^{-5}.
+    \end{align}
+    The same $T,\Delta,(W_j)$ satisfy the following assertion for every
+    subspace $S\subseteq\mathcal H_J$ and every real $\delta<1$:
+    if $S$ is $\delta$-viable for $T$, then
+    \begin{align}
+        S'=\sum_{j=0}^{\mathcal D^2-1}W_jS
+        \quad\text{is }\frac{\Delta}{(1-\delta)^2}\text{-viable for }T.
+    \end{align}
+    The constant $A$ is chosen before the chain, Hamiltonian, gap and interval;
+    the family, $T$ and $\Delta$ are chosen before $S,\delta$.
+    No upper bound on $\gamma$, rank-one ground-space condition or boundary
+    margin for $J$ is assumed. Empty intervals are included.
+    This is the existence and viability part of
+    \cite[Theorem t:ais, lines 1010--1024]{Arad2016RigorousRG}.
+    The comparison with the full ground space and the restriction $\delta<1$
+    follow the source clarification in
+    \cite{gap:alvv16_spectral_projector_boundary}.
+    An efficient matrix-product representation, running-time estimate,
+    entropy consequence and approximation theorem are separate assertions.
+\end{theorem}
+\begin{proof}
+    \uses{thm:short_actual_region_improving_family,thm:inward_effective_cuts,
+        thm:five_region_dg_cluster_parameters,thm:actual_clipped_polynomial_family,
+        thm:physical_dg_collar_budget}
+    The two distinct spectral values imply $q\ge2$. Replace the gap lower
+    bound by $g=\min(\gamma,1)$ without changing $H$ or $G$.
+    Choose the universal scalar constant used for the five-region cluster.
+    If $|J|\le4\ell$, take $T=G$ and apply the short-region matrix-unit
+    family; this also covers an empty interval.
+    Otherwise move the two cuts inward by at most $\ell$ each, leaving an
+    interval $J_0\subseteq J$ with at most $2\ell$ removed sites.
+    The actual five-region clipping construction gives $T$, its closed
+    spectral gap, the mutual closeness and the positive Chebyshev parameter
+    $\Delta$. At degree $\ell^2$, its fixed polynomial family on $J_0$
+    has at most $((q\ell^2)^{20\ell})^2$ members. Transfer that same family
+    to $J$ and absorb the collar factor into $\mathcal D^2$.
+    The actual-cluster Chebyshev estimate of
+    \cite[``An actual matrix cluster and a fixed polynomial family'']
+    {QICLean2026Blueprint} gives the improvement simultaneously for every
+    $S,\delta<1$. Extend the family by zero to exactly $\mathcal D^2$
+    members; its sum of image subspaces is unchanged.
+\end{proof}

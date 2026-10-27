@@ -1,0 +1,128 @@
+\section{Parameters for a polynomial filter}
+
+\begin{theorem}[A joint count and contraction estimate]
+    \label{thm:chain_polynomial_filter_parameters}
+    \lean{Real.exists_dg_scalar_parameters}
+    \leanok
+    For every $C_H>0$ and $M\in\R$, there is a real constant
+    $A\ge\max\{1,21,M,\log400000\}$ with the following properties.
+    For every integer $d\ge2$ and $0<g\le1$, put
+    \begin{align}
+        u    & =1+\log d+\log(1/g),                   &
+        \ell & =\left\lceil Au^2/g\right\rceil,\notag                                           \\
+        c_A  & =6+2\log(A+1),                         & \mathcal D & =(d\ell^2)^{22\ell}.\notag
+    \end{align}
+    Then $Au^2/g\le\ell\le(A+1)u^2/g$, $A\le\ell$,
+    $20\ell+2\lfloor\ell^2/\ell\rfloor=22\ell$, and
+    \begin{align}
+        \log\mathcal D\le22(A+1)c_Ag^{-1}u^3.\notag
+    \end{align}
+    For every $0<R\le2C_H\ell$, define
+    $\Delta=4\exp(-4\ell^2\sqrt{(4g/5)/R})$. One has
+    $\mathcal D^{12}\Delta\le1/100000$.
+    The same $A$ has the following simultaneous tail property. For all
+    $C,c,\varepsilon>0$ and $p\ge0$ satisfying
+    $\max\{0,\log(C/\varepsilon)\}+p+c\le cM$, one has
+    $C\exp(-c(\ell-g))\le\varepsilon g^p$.
+    This is a supporting scalar estimate for the parameter choice
+    in~\cite[lines 1010--1024]{Arad2016RigorousRG}.
+\end{theorem}
+\begin{proof}\leanok
+    Since $\log(A+1)=o(\sqrt A)$, one may choose $A$ above all the prescribed
+    lower bounds so that
+    \begin{align}
+        264\bigl(6+2\log(A+1)\bigr)+1
+         & \le4\sqrt{\frac{2A}{5C_H}}.\notag
+    \end{align}
+    The ceiling bounds follow from $u\ge1$ and $g\le1$. They imply
+    $\log\ell\le\log(A+1)+2\log u+\log(1/g)$. Since $\log u\le u$,
+    one obtains $\log(d\ell^2)\le c_Au$ and
+    $12\log \mathcal D\le264\ell c_Au$.
+    The upper ceiling bound gives the asserted bound on $\log\mathcal D$.
+    Separately, since $\ell>0$, integer division gives
+    $\lfloor\ell^2/\ell\rfloor=\ell$, proving the stated exponent identity.
+
+    From $g\ell\ge Au^2$ and $R\le2C_H\ell$, comparison of nonnegative
+    squares gives
+    $u\sqrt{2A/(5C_H)}\le\ell\sqrt{(4g/5)/R}$. Consequently
+    \begin{align}
+        12\log \mathcal D-4\ell^2\sqrt{\frac{4g/5}{R}}
+                              & \le-\ell u\le-A,\notag                            \\
+        \mathcal D^{12}\Delta & \le4e^{-A}\le\frac4{400000}=\frac1{100000}.\notag
+    \end{align}
+    Finally put $B=\max\{0,\log(C/\varepsilon)\}$. The threshold condition,
+    $\ell\ge Au$, and $u\ge1+\log(1/g)$ give
+    \begin{align}
+        c(\ell-g) & \ge cAu-c\ge(B+p+c)u-c\notag                             \\
+                  & \ge B+p\log(1/g)\ge\log(C/\varepsilon)+p\log(1/g).\notag
+    \end{align}
+    Exponentiation proves the tail estimate with the same $A$.
+\end{proof}
+
+\begin{theorem}[One parameter choice for contraction and the physical tail]
+    \label{thm:physical_dg_scalar_parameters}
+    \lean{Real.exists_physical_dg_scalar_parameters}
+    Let
+    \begin{align}
+        C_*&=288e^{11/8},\notag\\
+        M_*&=8\bigl(\max\{0,\log(C_*/10^{-6})\}+1+1/8\bigr).
+    \end{align}
+    There exists a real $A\ge\max\{1,21,M_*,\log400000\}$ such that,
+    for every integer $d\ge2$ and $0<g\le1$, the quantities
+    \begin{align}
+        u&=1+\log d+\log(1/g),&\ell&=\lceil Au^2/g\rceil,\notag\\
+        \mathcal D&=(d\ell^2)^{22\ell},&c_A&=6+2\log(A+1)
+    \end{align}
+    satisfy $21\le\ell$, $2\le\mathcal D$, $A\le\ell$,
+    $Au^2/g\le\ell\le(A+1)u^2/g$, and
+    \begin{align}
+        \log\mathcal D&\le22(A+1)c_Ag^{-1}u^3,\notag\\
+        C_*e^{-(\ell-g)/8}&\le10^{-6}g.
+    \end{align}
+    For every $0<R\le8\ell$,
+    \begin{align}
+        \mathcal D^{12}\,4e^{-4\ell^2\sqrt{(4g/5)/R}}\le10^{-5}.
+    \end{align}
+    The same $A$ gives both estimates for all $d,g,R$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:chain_polynomial_filter_parameters}
+    Apply the joint scalar parameter theorem with boundary constant $4$
+    and lower threshold $M_*$. Its simultaneous tail estimate applies with
+    $C=C_*$, $c=1/8$, error $10^{-6}$ and power $1$ by the definition of
+    $M_*$. The ceiling lower bound gives $\ell\ge21$ and $\mathcal D\ge2$.
+    This is the scalar choice used for the physical specialization of
+    \cite[Theorem t:ais, lines 1010--1024]{Arad2016RigorousRG}.
+\end{proof}
+
+\begin{theorem}[Endpoints for the five-region Chebyshev interval]
+    \label{thm:physical_chebyshev_endpoints}
+    \lean{Real.physical_chebyshev_endpoints}
+    For $\ell\ge21$, $0\le E_0\le4$ and $0<g\le1$, put
+    $\eta_0=E_0+g/10$, $\eta_1=E_0+9g/10$ and $R=7\ell-\eta_0$.
+    Then $\eta_0<\eta_1\le7\ell$, $0<R\le8\ell$,
+    $\eta_1-\eta_0=4g/5$, and
+    \begin{align}
+        \bigl(2e^{-2\ell^2\sqrt{(\eta_1-\eta_0)/R}}\bigr)^2
+        =4e^{-4\ell^2\sqrt{(4g/5)/R}}.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    Substitute the definitions. The bounds on $E_0,g,\ell$ make the interval
+    nonempty and give the upper bound for $R$. Square the exponential.
+\end{proof}
+
+\begin{theorem}[Absorbing a collar at square polynomial degree]
+    \label{thm:physical_dg_collar_budget}
+    \lean{TNLean.MPS.AreaLaw.collar_card_le_square_at_square_degree}
+    Let $q\ge2$, $\ell\ge1$, $d\le2\ell$ and $n$ be natural numbers.
+    If $n\le((q\ell^2)^{18\ell+2\lfloor\ell^2/\ell\rfloor})^2$, then
+    \begin{align}
+        nq^{2d}\le((q\ell^2)^{22\ell})^2.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    Since $\ell>0$, the original exponent is $20\ell$.
+    The collar contributes $q^{2d}\le(q\ell^2)^{4\ell}$, which is absorbed
+    by the difference between $40\ell$ and $44\ell$ in the squared bound.
+\end{proof}

@@ -1,0 +1,43 @@
+\section{A regional clipping error on the actual low spectral space}
+
+\begin{theorem}[Restricted error of clipping one original regional sum]
+    \label{thm:consecutive_regional_truncation_low}
+    \lean{TNLean.MPS.AreaLaw.norm_consecutive_regional_truncation_low_le}
+    \uses{def:chain_model,def:five_region_bond_partition}
+    Let $k_0\le\cdots\le k_m$ be natural cut positions, and let
+    $0\le h_i\le\Id$ be supported on the original bond $\{i,i+1\}$.
+    Set $A_j=\sum_{i\in I(k_j,k_{j+1})}h_i$ and choose lower bounds
+    $A_j\ge e_j\Id$. For $K\subseteq\{0,\ldots,m-1\}$ and real $t$ put
+    \begin{align}
+        F_j & =\begin{cases}\min(A_j,e_j+t),&j\in K,\\A_j,&j\notin K,\end{cases}
+            & X                                                                  & =\sum_j(F_j-e_j\Id).
+    \end{align}
+    Let $J\subseteq\mathcal B_L$, $Y=\sum_{i\in J}h_i$, and let $(b_v)$
+    be an actual orthonormal eigenbasis of $X+Y$ with eigenvalues $a_v$.
+    Set $G=\operatorname{span}\{b_v:a_v\le\varepsilon\}$.
+    If $0<s\le1/8$, $0\le u\le t$, and $2|J|<u-\varepsilon$, then,
+    for every $j$,
+    \begin{align}
+        \bigl\|(A_j-\min(A_j,e_j+t))|_G\bigr\|
+        \le\frac{e^{-s(t-u)-1}}{s}
+        \frac{2|J|}{u-\varepsilon-2|J|}.
+    \end{align}
+    The $e_j$ need only be lower bounds; their attainment is not assumed.
+\end{theorem}
+\begin{proof}
+    \uses{thm:consecutive_internal_sums_commute,thm:chain_local_imaginary_time}
+    Consecutive regional sums commute, and the centered partial-clipping
+    inequalities give $uQ\le X$ for
+    $Q=\mathbf1_{\{\lambda\ge e_j+u\}}(A_j)$.
+    Apply the weighted restriction argument in
+    \cite[``Restricted weighted Sylvester equation'']{QICLean2026Blueprint}
+    with $W=e^{s(A_j-(e_j+u)\Id)}$. Original-bond imaginary-time bounds give
+    the forcing and perturbation norms at most $2|J|$, while the actual
+    low spectral space gives the upper quadratic bound $\varepsilon$.
+    It follows that $WQ|_G$ has norm at most
+    $2|J|/(u-\varepsilon-2|J|)$. The spectral tail inequality for the
+    clipping excess contributes $e^{-s(t-u)-1}/s$.
+    These are the original-regional-operator estimates used in
+    \cite[lines 909--960]{Arad2016RigorousRG}; the absolute clipping thresholds
+    remain $e_j+u$ and $e_j+t$.
+\end{proof}
