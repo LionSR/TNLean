@@ -156,6 +156,7 @@ import TNLean.Lattice.Compression.PhysicalFirstNetworkResources
 import TNLean.Lattice.Compression.PhysicalFirstPolynomial
 import TNLean.Lattice.Compression.PhysicalFirstReadout
 import TNLean.Lattice.Compression.PhysicalOutputContraction
+import TNLean.Lattice.Compression.PhysicalProductInvariance
 import TNLean.Lattice.Compression.PointwiseChoiceCoefficient
 import TNLean.Lattice.Compression.PreparedSourceContraction
 import TNLean.Lattice.Compression.PreparedSourceCorrections

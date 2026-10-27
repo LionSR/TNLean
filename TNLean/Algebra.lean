@@ -153,6 +153,7 @@ import TNLean.Algebra.PositiveGeneralizedCocycle
 import TNLean.Algebra.PositivePowerSumMoments
 import TNLean.Algebra.PowerExponential
 import TNLean.Algebra.PrimitiveMatrixIdealDimension
+import TNLean.Algebra.ProductFactorUniqueness
 import TNLean.Algebra.ProjectionDefectIsometry
 import TNLean.Algebra.ProjectiveCommutantEigenspace
 import TNLean.Algebra.ProjectiveRepresentation
