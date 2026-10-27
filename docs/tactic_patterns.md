@@ -24,6 +24,20 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Tensor forms from product generators — promoted (2026-10-23)
+
+- **Pattern:** Establish a linear tensor form for every product generator,
+  then extend it to all operators supported on the same set.
+- **Seen:** Four tensor-form proofs in
+  `Lattice/Sheet/Splitting.lean` and
+  `Lattice/Sheet/RegionalOperatorForms.lean`.
+- **Abstraction:** The existing
+  `TNLean.Lattice.Sheet.exists_eq_of_mem_supportedOperators` extends the
+  generator statement by linearity.
+- **Notes:** All four proofs use this declaration. The first- and last-region
+  forms require only the two off-support identity restrictions; they do not
+  repeat the linear-span induction or introduce another tactic.
+
 ### Raising a time bound inside a light-cone exponential — promoted (2026-10-25)
 
 - **Pattern:**

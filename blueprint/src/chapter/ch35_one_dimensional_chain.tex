@@ -368,6 +368,66 @@ windows and the three bulk labels.
     $L=0$ there are no vertices, so the assertions are vacuous.
 \end{proof}
 
+\begin{theorem}[Regional forms of a nearest-neighbour bond array]
+    \label{thm:chain_two_cut_edge_factors}
+    \lean{TNLean.MPS.AreaLaw.exists_threeSplit_edge_factors}
+    \leanok
+    \uses{thm:chain_two_cut_edge_supports,lem:peps_frame_split_forms}
+    Let $L,q,u,v$ be natural numbers with $u<v$ and $v+1<L$.
+    For each bond index $0\le r<L-1$, let $H_r$ be a complex operator
+    supported on $D_r=\{r,r+1\}$. Use the partition $T,E,U$ of
+    Theorem~\ref{thm:chain_two_cut_edge_supports}, and write $\widetilde H_r$
+    for $H_r$ in the three-region coordinates of
+    Lemma~\ref{lem:peps_frame_split_forms}.
+    There are arrays $H^{\mathrm L}_r,H^{\mathrm M}_r,H^{\mathrm R}_r$
+    of operators on $\mathcal H_T,\mathcal H_E,\mathcal H_U$, respectively,
+    and crossing factors $A_u$ on $\mathcal H_T\otimes\mathcal H_E$ and
+    $B_v$ on $\mathcal H_E\otimes\mathcal H_U$ with the following properties.
+    For every $r\ne u,v$,
+    \begin{align}
+        \widetilde H_r
+         & =(H^{\mathrm L}_r\otimes\id_E)\otimes\id_U
+        +(\id_T\otimes H^{\mathrm M}_r)\otimes\id_U\notag \\
+         & \quad+\id_{TE}\otimes H^{\mathrm R}_r.
+        \label{eq:chain_two_cut_ordinary_forms}
+    \end{align}
+    The two distinguished operators satisfy
+    \begin{align}
+        \widetilde H_u & =A_u\otimes\id_U,
+                       & \operatorname{OSR}(A_u) & \le q^2,\notag \\
+        \widetilde H_v & =\id_T\otimes B_v,
+                       & \operatorname{OSR}(B_v) & \le q^2.
+        \label{eq:chain_two_cut_crossing_forms}
+    \end{align}
+    All tensors are read in the same left-associated coordinates, using
+    canonical reassociation for $\id_T\otimes B_v$.
+    The arrays and crossing factors are chosen simultaneously for the given
+    bond array and cuts. The local dimension may be zero, and the cuts may
+    be adjacent. These are tensor forms for the local terms in
+    \cite[Sections~4.1 and~5.2]{Arad2016RigorousRG}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_two_cut_edge_supports,lem:peps_frame_split_forms,
+        thm:peps_supported_left_factor_rank,thm:peps_supported_right_factor_rank}
+    The support classification places every ordinary bond in $T$, $E$ or
+    $U$. Apply the corresponding single-region part of
+    Lemma~\ref{lem:peps_frame_split_forms}, putting zero in the other two
+    array entries. Making these choices over the finite bond index set gives
+    the arrays in~(\ref{eq:chain_two_cut_ordinary_forms}).
+
+    For the first crossing, the classification gives
+    $D_u\subseteq T\cup E$ and $D_u\cap T=\{u\}$.
+    Theorem~\ref{thm:peps_supported_left_factor_rank} therefore supplies
+    the same $A_u$ for its tensor identity and the bound
+    $q^{2|D_u\cap T|}=q^2$.
+    For the second crossing, $D_v\cap T=\varnothing$ and
+    $D_v\cap E=\{v\}$, so
+    Theorem~\ref{thm:peps_supported_right_factor_rank} supplies the same
+    $B_v$ for its associated tensor identity and its bound
+    $q^{2|D_v\cap E|}=q^2$.
+    These are~(\ref{eq:chain_two_cut_crossing_forms}), including $q=0$.
+\end{proof}
+
 \begin{lemma}[Marginal moment and tail bounds at a cut]
     \label{lem:chain_marginal_tail}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.surprisalTail_regionState_le,
