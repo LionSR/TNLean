@@ -32,12 +32,10 @@ step and the transfer of any bound.
 * `TNLean.Lattice.norm_groundCompression_commutator_le_of_mem_supercell`: so a bound `B i j` on
   the low-energy commutators also gives `B i (g • j)` for every `g` in the subgroup.
 
-**Scope restriction (supercell):** the source assumes that the momenta of the ground states are
-rational multiples of `2π` whose denominators do not depend on the system size (lines
-1620–1625), and derives from this a supercell whose translations leave every ground state
-unchanged (lines 1626–1630). The three results in `TNLean.Lattice` above instead assume
-directly a subgroup `S` of the symmetry group with this property. Documented in
-`docs/paper-gaps/hastings05_translation_supercell.tex`.
+The subgroup `S` is a hypothesis here. For an abelian group it is constructed from the momenta
+of the ground states in `TranslationMomentum.lean`, and the source's conclusion, with momenta of
+bounded denominator, is `norm_groundCompression_commutator_le_of_momenta` in
+`TranslationSupercellCommutator.lean`.
 -/
 
 open Matrix GaussianFilter
