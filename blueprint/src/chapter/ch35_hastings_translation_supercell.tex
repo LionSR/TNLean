@@ -210,6 +210,7 @@ the residue of the site.
 \begin{theorem}[A supercell translation carries a site far away]
     \label{thm:hastings_supercell_far}
     \lean{TNLean.Lattice.exists_mem_supercell_lt_edist_add,
+        TNLean.Lattice.exists_mem_supercell_lt_edist,
         TNLean.Lattice.exists_mem_supercell_lt_edist_add_ring}
     \leanok
     \uses{thm:hastings_supercell_pow,thm:hastings_cell_distance_le,
@@ -219,7 +220,9 @@ the residue of the site.
     momentum sector, where $N\ge1$. For sites $x$, $y$ some $g$ in the supercell
     satisfies $\lfloor n/2\rfloor<r\,d(x,g\cdot y)+N$, so it carries $y$ to
     graph distance more than $(\lfloor n/2\rfloor-N)/r$ from $x$. For the ring,
-    and in the theorem below, $r=1$. With $N$ the least common multiple of the
+    and in the theorem below, $r=1$. In this case, whenever
+    $l+N\le\lfloor n/2\rfloor$, the translate can be chosen with
+    $d(x,g\cdot y)>l$. With $N$ the least common multiple of the
     denominators of the momenta, this is the supercell
     of \cite[lines 1620--1630]{Hastings2006Solving} and the choice of
     $\vec x'$ in lines 1634--1641.
@@ -291,6 +294,7 @@ the residue of the site.
 \begin{proof}\leanok
     \uses{thm:hastings_site_invariant_sum,thm:hastings_supercell_of_momenta,
         thm:hastings_supercell_far,thm:hastings_supercell_commutator,
+        thm:hastings_supercell_commutator_small,
         thm:hastings05_low_energy_commutator,thm:hastings05_blecm_exp}
     If $\lfloor n/2\rfloor\ge N+2R$, take
     $l=\lfloor n/2\rfloor-N-2R$.

@@ -97,28 +97,10 @@ theorem norm_groundCompression_commutator_le_of_momenta [NeZero d]
             2 * ‖h i‖ * Real.exp (-(T * ΔE) ^ 2 / (2 * q))) +
         2 * ‖h i‖ * ‖h j‖ * Real.exp (-q / 2) := by
   have hInv := isSiteInvariant_sum_of_covariant d h hcov
-  obtain ⟨g, hg, hdist⟩ : ∃ g ∈ supercell Γ d (∑ k, h k) E₀,
-      ((n / 2 : ℕ) : ℕ∞) < G.edist i (g • j) + N := by
-    simpa only [Nat.cast_one, one_mul] using
-      exists_mem_supercell_lt_edist_add hN hden G (R := 1) Nat.zero_lt_one π hπ e he i j
-  have hsep : Disjoint (((X i).biUnion fun x => graphBall G x l : Finset ι) : Set ι)
-      (X (g • j) : Set ι) := by
-    refine Set.disjoint_left.mpr fun z hz hz' ↦ ?_
-    obtain ⟨x, hx, hzx⟩ := Finset.mem_biUnion.mp (Finset.mem_coe.mp hz)
-    have h1 := hDiam i i (hX i) x hx
-    have h2 := mem_graphBall.mp hzx
-    have h3 := hDiam (g • j) z (Finset.mem_coe.mp hz') (g • j) (hX _)
-    have hle : G.edist i (g • j) ≤ ((2 * R + l : ℕ) : ℕ∞) :=
-      calc G.edist i (g • j) ≤ G.edist i x + G.edist x z + G.edist z (g • j) :=
-            SimpleGraph.edist_triangle.trans (by gcongr; exact SimpleGraph.edist_triangle)
-        _ ≤ R + l + R := add_le_add (add_le_add h1 h2) h3
-        _ = ((2 * R + l : ℕ) : ℕ∞) := by push_cast; ring
-    have hlt : ((n / 2 : ℕ) : ℕ∞) < ((2 * R + l + N : ℕ) : ℕ∞) := by
-      calc ((n / 2 : ℕ) : ℕ∞) < G.edist i (g • j) + N := hdist
-        _ ≤ ((2 * R + l : ℕ) : ℕ∞) + N := by gcongr
-        _ = ((2 * R + l + N : ℕ) : ℕ∞) := by push_cast; ring
-    have := ENat.natCast_lt_natCast.mp hlt
-    omega
+  obtain ⟨g, hg, hfar⟩ :=
+    exists_mem_supercell_lt_edist hN hden G π hπ e he (2 * R + l) hl i j
+  have hsep := disjoint_biUnion_graphBall_of_lt_edist G X id hX R hDiam
+    (g • j) i l hfar
   have hmain := norm_groundCompression_commutator_le_of_supercell_separation G X id hX h hHerm
     hSupport R hDiam vR hCard b₀ hBudget hcov Kg kg hGrowth hr hq hΔE hH hgap
     (supercell Γ d (∑ k, h k) E₀)
@@ -270,20 +252,8 @@ theorem norm_groundCompression_commutator_le_of_momenta_exp [NeZero d]
     have hl : 2 * R + l + N ≤ n / 2 := by
       dsimp only [l]
       omega
-    obtain ⟨g, hg, hdist⟩ : ∃ g ∈ supercell Γ d (∑ k, h k) E₀,
-        ((n / 2 : ℕ) : ℕ∞) < G.edist i (g • j) + N := by
-      simpa only [Nat.cast_one, one_mul] using
-        exists_mem_supercell_lt_edist_add hN hden G (R := 1) Nat.zero_lt_one π hπ e he i j
-    have hfar : ((2 * R + l : ℕ) : ℕ∞) < G.edist i (g • j) := by
-      by_contra hfar
-      have hle := le_of_not_gt hfar
-      have hlt : ((n / 2 : ℕ) : ℕ∞) < ((2 * R + l + N : ℕ) : ℕ∞) := by
-        calc
-          ((n / 2 : ℕ) : ℕ∞) < G.edist i (g • j) + N := hdist
-          _ ≤ ((2 * R + l : ℕ) : ℕ∞) + N := add_le_add hle le_rfl
-          _ = ((2 * R + l + N : ℕ) : ℕ∞) := by push_cast; ring
-      have := ENat.natCast_lt_natCast.mp hlt
-      omega
+    obtain ⟨g, hg, hfar⟩ :=
+      exists_mem_supercell_lt_edist hN hden G π hπ e he (2 * R + l) hl i j
     have hsep := disjoint_biUnion_graphBall_of_lt_edist G X id hX R hDiam
       (g • j) i l hfar
     have hnorm : ‖h (g • j)‖ = ‖h j‖ := by
