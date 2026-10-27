@@ -28,9 +28,14 @@ overlap at least `1 - 2 (e + ‖K‖ τ)/Δ` with the ground state.
 
 ## Main definitions
 
+* `TNLean.MPS.AreaLaw.CutLeft`, `TNLean.MPS.AreaLaw.CutSite`,
+  `TNLean.MPS.AreaLaw.CutRight`: configurations on the first `k - 1` sites, the intervening
+  site when present, and the sites right of the cut, respectively.
 * `TNLean.MPS.AreaLaw.gluingCut`: the three-way cut coordinates at the cut after `k` sites.
 * `TNLean.MPS.AreaLaw.leftCutOperator`: the operator `H_L'` on the first `k` sites of a matrix
   supported there.
+* `TNLean.MPS.AreaLaw.rightCutOperator`: the restriction of a matrix supported off the first
+  `k - 1` sites to the intervening site, when present, and the sites right of the cut.
 
 ## Main results
 
@@ -52,11 +57,6 @@ namespace TNLean.MPS.AreaLaw
 
 variable {L q : ℕ}
 
-theorem leftBlock_sub_one_subset (k : ℕ) : leftBlock L (k - 1) ⊆ leftBlock L k := by
-  intro v hv
-  simp only [leftBlock, Finset.mem_filter, Finset.mem_univ, true_and] at hv ⊢
-  omega
-
 /-- The configurations of the first `k - 1` sites. -/
 abbrev CutLeft (L q k : ℕ) := (v : {v // v ∈ leftBlock L (k - 1)}) → Fin q
 
@@ -69,7 +69,7 @@ abbrev CutRight (L q k : ℕ) := (v : {v // v ∉ leftBlock L k}) → Fin q
 /-- The three-way cut coordinates `((x, y), z)` at the cut after `k` sites. -/
 abbrev gluingCut (L q k : ℕ) :
     (Fin L → Fin q) ≃ (CutLeft L q k × CutSite L q k) × CutRight L q k :=
-  Entropy.threeCutEquiv (fun _ : Fin L ↦ q) (leftBlock_sub_one_subset k)
+  Entropy.threeCutEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1))
 
 /-- The operator on the first `k` sites of a matrix supported there: its slice at the
 configuration `0` of the remaining sites. -/
@@ -230,7 +230,7 @@ theorem exists_leading_eigenvector_chain [NeZero q] {k : ℕ}
     exact hwE
   -- `‖K'‖ ≤ ‖K‖`.
   have hKK : ‖K'‖ ≤ ‖K‖ := by
-    have hr := hK.reindex_threeCutEquiv_eq_one_kronecker (leftBlock_sub_one_subset k) hDA
+    have hr := hK.reindex_threeCutEquiv_eq_one_kronecker (leftBlock_mono (Nat.sub_le k 1)) hDA
       (fun _ ↦ 0)
     have hn : ‖reindex E E K‖ = ‖K‖ := l2_opNorm_reindex_equiv E K
     rw [show reindex E E K = _ from hr, l2_opNorm_reindex_equiv] at hn
