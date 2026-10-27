@@ -62,6 +62,7 @@ open scoped Matrix BigOperators
 namespace MPSTensor
 
 open TNLean.Algebra
+open scoped TNLean.Algebra.ScalarCohomology
 
 variable {d D : ℕ} {G : Type} [Group G]
 
@@ -152,9 +153,9 @@ theorem cor_4_1_projective_rep_cocycle
     (hRigidity : PeriodicProjectiveRigidity A U)
     (hD : 0 < D) :
     ∃ (ω : ScalarCocycle G) (_ρ : ProjectiveRepresentation (D := D) ω),
-      ScalarCocycle.IsCocycle ω := by
+      groupCohomology.IsMulCocycle₂ ω := by
   obtain ⟨ω, ρ, _⟩ := cor_4_1_projective_rep A U hRigidity
-  exact ⟨ω, ρ, ScalarCocycle.isCocycle_of_projRep ρ hD⟩
+  exact ⟨ω, ρ, ScalarCocycle.isMulCocycle₂_of_projRep ρ hD⟩
 
 /-! ## Bundled constructor from the rigidity hypothesis -/
 
@@ -181,8 +182,8 @@ theorem projectiveRep_of_symmetry
             ((ρ.X (g⁻¹) : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *
               twistedTensor A U g i *
               (((ρ.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) ∧
-      (0 < D → ScalarCocycle.IsCocycle ω) := by
+      (0 < D → groupCohomology.IsMulCocycle₂ ω) := by
   obtain ⟨ω, ρ, hIntertwine⟩ := cor_4_1_projective_rep A U hRigidity
-  exact ⟨ω, ρ, hIntertwine, fun hD => ScalarCocycle.isCocycle_of_projRep ρ hD⟩
+  exact ⟨ω, ρ, hIntertwine, fun hD => ScalarCocycle.isMulCocycle₂_of_projRep ρ hD⟩
 
 end MPSTensor

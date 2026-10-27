@@ -18,7 +18,7 @@ whose range is the span of the columns of $M_i(\psi)$.
         TNLean.MPS.AreaLaw.mem_leftSupportSubmodule,
         TNLean.MPS.AreaLaw.IsViable}
     \leanok
-    \uses{def:chain_model, def:chain_open_mps}
+    \uses{def:chain_model}
     Let $\Gamma$ be a vector on the chain, $\delta\in\mathbb R$ and $S$ a set of
     vectors on the first $i$ sites. Then $S$ is $(i,\delta)$-viable for $\Gamma$
     if some unit vector $\phi$ with $|\langle\phi,\Gamma\rangle|\ge1-\delta$ has
@@ -149,4 +149,50 @@ whose range is the span of the columns of $M_i(\psi)$.
     When the columns of $M_{i-1}(\phi)$ lie in $\operatorname{Span}(S)$, each
     summand lies in $\operatorname{Span}(S')$, so the columns of $M_i(\phi)$ do as
     well; the witness $\phi$ is unchanged.
+\end{proof}
+
+\begin{theorem}[Bond dimensions in a finite span]
+    \label{thm:open_mps_finite_span}
+    \lean{TNLean.MPS.AreaLaw.isOpenMPS_of_mem_span}
+    \leanok
+    \uses{def:chain_open_mps}
+    Let $L,q,D$ be natural numbers, and let $S$ be a finite set of vectors
+    on a chain of $L$ sites of local dimension $q$. Suppose that every
+    member of $S$ is an open-boundary matrix product state of bond
+    dimension at most $D$. Every $v\in\operatorname{Span}(S)$ is then an
+    open-boundary matrix product state of bond dimension at most $|S|D$.
+    This is the finite-span estimate used
+    in~\cite[Claim~2.7, source lines 520--527]{Landau2015Polynomial}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_cut_rank_of_mps}
+    Write $v=\sum_{w\in S}a_w w$. At every internal cut $j$,
+    \begin{align}
+        M_j(v)                    & =\sum_{w\in S}a_wM_j(w),\notag \\
+        \operatorname{rank}M_j(v) & \le
+        \sum_{w\in S}\operatorname{rank}(a_wM_j(w))\le |S|D.\notag
+    \end{align}
+    The cut-rank characterization gives the asserted representation,
+    including empty and one-site chains and $D=0$.
+\end{proof}
+
+\begin{theorem}[Bond dimensions in a left span]
+    \label{thm:left_mps_finite_span}
+    \lean{TNLean.MPS.AreaLaw.isLeftOpenMPS_of_mem_span}
+    \leanok
+    \uses{def:lvv_viable_mps}
+    Fix natural numbers $L,q,k,b$, and put $\beta=\max\{1,b\}$.
+    Write $Rv$ for the vector read on $k$ sites by restriction to the left
+    block, so $Rv(a)=v(a|_{\{j<L:j<k\}})$ for a $k$-site configuration $a$.
+    Let $S$ be a finite set of left-block vectors, and suppose that every
+    $Rw$, $w\in S$, is a matrix product state of bond dimension at most
+    $\beta$. For every $v\in\operatorname{Span}(S)$, the vector $Rv$ is a
+    matrix product state of bond dimension at most $\max\{1,|S|\beta\}$.
+    When $S$ is nonempty and $b\ge1$, this bound is $|S|b$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:open_mps_finite_span}
+    The map $R$ is linear, so $Rv\in\operatorname{Span}(R(S))$ and
+    $|R(S)|\le |S|$. Theorem~\ref{thm:open_mps_finite_span} gives a bond
+    bound $|R(S)|\beta\le |S|\beta\le\max\{1,|S|\beta\}$.
 \end{proof}
