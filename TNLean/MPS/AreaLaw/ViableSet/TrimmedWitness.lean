@@ -17,7 +17,7 @@ most `E₀ + δ` whose left factor lies in the range of a matrix `P_V` on the fi
 overlap `ψ` by at least `1 - η`, with `2η < 1`. Trimming `ψ` across the cut to its `D` largest
 Schmidt terms and normalizing gives a unit vector `w` of rank at most `D` across the cut, with
 energy at most `E₀ + (δ + 2√(2η))/(1 - 2η)` and left factor still in the range of `P_V`.
-Moreover `w = (1 ⊗ W) x` in the cut coordinates of `TNLean.MPS.AreaLaw.gluingCut` for an
+This `w` is `(1 ⊗ W) x` in the cut coordinates of `TNLean.MPS.AreaLaw.gluingCut` for an
 isometry `W` from a bond `ℂ^m`, `m ≤ D`, into the sites right of the cut, and a left state `x`
 whose left factor is again in the range of `P_V`. This is the input of Lemma `l:leading` on the
 chain (`TNLean.MPS.AreaLaw.exists_leading_eigenvector_chain`).

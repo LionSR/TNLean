@@ -184,6 +184,10 @@ class FixtureOverlayTests(unittest.TestCase):
         self.assertLess(full, names.index(STEP_NAME))
         self.assertIn('python3 scripts/ci_lean_checks.py strict', strict['run'])
         self.assertIn('python3 scripts/ci_lean_checks.py early', early['run'])
+        self.assertEqual(early['env']['PR_HEAD_SHA'],
+                         '${{ github.event.pull_request.head.sha }}')
+        self.assertEqual(strict['env']['PR_HEAD_SHA'],
+                         "${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || '' }}")
         self.assertIn('"$RUNNER_TEMP/lake-build.log"', early['run'])
         self.assertNotIn('continue-on-error', strict)
         self.assertNotIn('continue-on-error', early)
