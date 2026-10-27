@@ -214,6 +214,7 @@ import TNLean.Algebra.TranslatedCharacterOrthogonality
 import TNLean.Algebra.TwistedRegularProjective
 import TNLean.Algebra.TwistedRegularRepresentation
 import TNLean.Algebra.TwoMarkerMiddleFactors
+import TNLean.Algebra.TwoMarkerMiddleIndexCardinality
 import TNLean.Algebra.TwoMarkerScalarRecovery
 import TNLean.Algebra.TwoWindowPolynomialRecovery
 import TNLean.Algebra.TwoWindowRankBounds

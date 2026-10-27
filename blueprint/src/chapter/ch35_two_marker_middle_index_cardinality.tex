@@ -1,0 +1,48 @@
+\section{A two-binomial count for crossing words}
+
+\begin{theorem}[Counting crossing decorations and ordinary runs]
+    \label{thm:two_marker_index_two_binomial}
+    \lean{TNLean.MPS.AreaLaw.card_twoMarkerMiddleIndex_two_binomial_le}
+    \uses{def:two_marker_middle_index}
+    Let $k,i,j,u,v$ be nonnegative integers, and let
+    $\mathcal I_{k,i,j}^{u,v}$ be the set in
+    Definition~\ref{def:two_marker_middle_index}. Then
+    \begin{align}
+        \bigl|\mathcal I_{k,i,j}^{u,v}\bigr|
+        \le u^i v^j
+        \binom{k+i+1}{2i+1}\binom{k+j+1}{2j+1}.
+    \end{align}
+    In particular, no positivity assumption on $k,u,v$ is required.
+    This is the finite count used in
+    \cite[Proposition~5.7]{Arad2016RigorousRG}.
+\end{theorem}
+\begin{proof}
+    Put $m=i+j$. If $m>k$, the set is empty. Suppose $m\le k$.
+    The left positions form an $i$-element subset of $\{0,\ldots,m-1\}$.
+    Recording this subset and the labels in its two complementary parts
+    determines the crossing word. There are at most $\binom{m}{i}u^i v^j$
+    choices. Adjoining the unused degree to the $m+1$ ordinary run lengths
+    gives a weak composition of $k-m$ into $m+2$ parts. Deleting the added
+    coordinate recovers the run lengths, so their number is at most
+    $\binom{k+1}{m+1}$. Therefore
+    \begin{align}
+        \bigl|\mathcal I_{k,i,j}^{u,v}\bigr|
+        \le u^i v^j\binom{k+1}{m+1}\binom{m}{i}.
+    \end{align}
+    Pascal's identity and the binomial product identity give
+    \begin{align}
+        \binom{k+1}{m+1}\binom{m}{i}
+         & \le\binom{k+1}{m+1}\binom{m+1}{i+1}
+        =\binom{k+1}{i+1}\binom{k-i}{j} \notag  \\
+         & \le\binom{k+1}{i+1}\binom{k+1}{j+1}.
+    \end{align}
+    Symmetry and monotonicity in the upper argument yield
+    \begin{align}
+        \binom{k+1}{i+1}
+        =\binom{k+1}{k-i}
+        \le\binom{k+i+1}{k-i}
+        =\binom{k+i+1}{2i+1}.
+    \end{align}
+    Applying the same inequality to $j$ proves the bound. Empty label sets
+    are included, with $0^0=1$.
+\end{proof}
