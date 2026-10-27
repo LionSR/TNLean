@@ -19,23 +19,27 @@ Construction of the supplied ambient data from a gapped physical path remains
 open; see `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.
 -/
 
-open scoped Matrix ComplexOrder Topology
+open scoped Matrix ComplexOrder Topology TNLean.Algebra.ScalarCohomology
 
 namespace TNLean.Algebra
 
-/-- On a preconnected parameter space, locally constant scalar cohomology
-classes are constant. Applied to the unit interval, this is the local-to-global
-step in SPC11, Appendix C. -/
-theorem ScalarCocycle.cohomologousTo_of_eventually_at_all_points
+/-- On a preconnected parameter space, locally constant classes of arbitrary
+scalar two-cochains modulo coboundaries are constant. Applied to the unit
+interval, this is the local-to-global step in SPC11, Appendix C. -/
+theorem isMulCoboundary₂_div_of_eventually_at_all_points
     {G : Type} [Group G] {T : Type*} [TopologicalSpace T] [PreconnectedSpace T]
-    (ω : T → ScalarCocycle G)
-    (hω : ∀ t₀, ∀ᶠ t in 𝓝 t₀, (ω t).CohomologousTo (ω t₀))
-    (t₁ t₀ : T) : (ω t₁).CohomologousTo (ω t₀) := by
-  let f : T → Quotient (scalarCocycleSetoid (G := G)) := fun t ↦ Quotient.mk' (ω t)
+    (ω : T → G × G → ℂˣ)
+    (hω : ∀ t₀, ∀ᶠ t in 𝓝 t₀, groupCohomology.IsMulCoboundary₂ (ω t / ω t₀))
+    (t₁ t₀ : T) : groupCohomology.IsMulCoboundary₂ (ω t₁ / ω t₀) := by
+  let f : T → (G × G → Rep.ofMulDistribMulAction G ℂˣ) ⧸
+      groupCohomology.coboundaries₂ (Rep.ofMulDistribMulAction G ℂˣ) :=
+    fun t ↦ Submodule.Quotient.mk ((@Additive.ofMul ℂˣ) ∘ ω t)
   have hf : IsLocallyConstant f :=
     (IsLocallyConstant.iff_eventually_eq f).mpr
-      (fun t₀ ↦ (hω t₀).mono (fun t ht ↦ Quotient.sound ht))
-  exact Quotient.exact (hf.apply_eq_of_preconnectedSpace t₁ t₀)
+      (fun t₀ ↦ (hω t₀).mono
+        (fun t ht ↦ (isMulCoboundary₂_div_iff_quotient_mk_eq _ _).mp ht))
+  exact (isMulCoboundary₂_div_iff_quotient_mk_eq _ _).mpr
+    (hf.apply_eq_of_preconnectedSpace t₁ t₀)
 
 end TNLean.Algebra
 
@@ -49,7 +53,7 @@ support compression is injective at every parameter.
 
 This completes the local-to-global step in SPC11, Appendix C, for the explicitly
 supplied unital stationary-support data. -/
-theorem cohomologousTo_of_continuous_unital_supported_family
+theorem isMulCoboundary₂_div_of_continuous_unital_supported_family
     {G : Type} [Group G] {d k : ℕ}
     (D : unitInterval → ℕ) (ω : unitInterval → ScalarCocycle G)
     (ρ : ∀ t, ProjectiveRepresentation (D := D t) (ω t))
@@ -72,10 +76,11 @@ theorem cohomologousTo_of_continuous_unital_supported_family
     (hdim : ∀ t, Module.finrank ℂ
       (LinearMap.ker (LinearMap.id - Kraus.adjointMapLM (B t))) = 1)
     (hInj : ∀ t, Kraus.IsInjective (A t)) :
-    (ω 1).CohomologousTo (ω 0) :=
-  ScalarCocycle.cohomologousTo_of_eventually_at_all_points ω
-    (fun t₀ ↦ eventually_cohomologousTo_of_continuous_unital_supported_family
+    groupCohomology.IsMulCoboundary₂ (ω 1 / ω 0) :=
+  isMulCoboundary₂_div_of_eventually_at_all_points ω
+    (fun t₀ ↦ (eventually_cohomologousTo_of_continuous_unital_supported_family
       D ω ρ B hB hUnital σ hσ htrace hfix K hK hsupport A hA hUnitary U hCov
-        t₀ (hdim t₀) (hInj t₀)) 1 0
+        t₀ (hdim t₀) (hInj t₀)).mono
+          (fun t ht ↦ (ScalarCocycle.cohomologousTo_iff_isMulCoboundary₂_div _ _).mp ht)) 1 0
 
 end MPSTensor

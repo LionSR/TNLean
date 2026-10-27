@@ -165,11 +165,6 @@ theorem equivalence : Equivalence (CohomologousTo (G := G)) :=
 
 end ScalarCocycle.CohomologousTo
 
-/-- The setoid on scalar cocycles induced by cohomologous-to. -/
-scoped instance scalarCocycleSetoid : Setoid (ScalarCocycle G) where
-  r := ScalarCocycle.CohomologousTo
-  iseqv := ScalarCocycle.CohomologousTo.equivalence
-
 /-! ### Mathlib's degree-two group cohomology with coefficients `ℂˣ`
 
 The coefficient group in `Papers/2502.20257/main.tex:1927--1931` is `ℂˣ` with the
@@ -188,6 +183,23 @@ def scalarRepresentationRes {K : Type} [Group K] (f : K →* G) :
   refine ⟨LinearMap.id, ?_⟩
   intro g
   rfl
+
+/-- Two arbitrary scalar two-cochains differ by a coboundary precisely when
+their images in the quotient of all two-cochains by two-coboundaries agree.
+No cocycle condition is required: this quotient is not `H²(G, ℂˣ)`. -/
+theorem isMulCoboundary₂_div_iff_quotient_mk_eq (ω₁ ω₂ : G × G → ℂˣ) :
+    groupCohomology.IsMulCoboundary₂ (ω₁ / ω₂) ↔
+      (Submodule.Quotient.mk ((@Additive.ofMul ℂˣ) ∘ ω₁) :
+        (G × G → Rep.ofMulDistribMulAction G ℂˣ) ⧸
+          groupCohomology.coboundaries₂ (Rep.ofMulDistribMulAction G ℂˣ)) =
+        Submodule.Quotient.mk ((@Additive.ofMul ℂˣ) ∘ ω₂) := by
+  constructor
+  · intro h
+    exact (Submodule.Quotient.eq _).mpr
+      (groupCohomology.coboundariesOfIsMulCoboundary₂ h).property
+  · intro h
+    exact groupCohomology.isMulCoboundary₂_of_mem_coboundaries₂
+      (G := G) (M := ℂˣ) _ ((Submodule.Quotient.eq _).mp h)
 
 /-- Two scalar cochains are cohomologous precisely when their pointwise ratio is a
 Mathlib multiplicative 2-coboundary for the trivial action on `ℂˣ`. -/
