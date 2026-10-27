@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Examples.QuantumDoubleLocalConstraint
 import TNLean.Algebra.RepresentationTensorProduct
 import TNLean.Algebra.FiniteGroupUnitaryAverage
-import TNLean.Algebra.PermutationMatrixUnitary
+import QICLean.Algebra.PermutationMatrixUnitary
 import TNLean.Algebra.PermutationMatrixCommutation
 
 /-!

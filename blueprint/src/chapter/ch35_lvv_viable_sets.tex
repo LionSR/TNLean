@@ -1,0 +1,258 @@
+\section{Viable sets for the ground state of a gapped chain}
+\label{sec:lvv_viable_sets}
+
+Landau, Vazirani and Vidick build an approximation to the ground state
+$\Gamma$ of a gapped chain of $L$ sites cut by cut, keeping at the cut after
+$i$ sites a small set $S$ of vectors on the first $i$ sites that supports the
+left half of a good approximation to
+$\Gamma$~\cite[lines 240--244]{Landau2015Polynomial}. For a vector $\psi$ on
+the chain, write $M_i(\psi)$ for its coefficient matrix across the cut after
+$i$ sites, with rows indexed by the configurations of the first $i$ sites.
+The reduced state of $\psi$ on the first $i$ sites is $M_i(\psi)M_i(\psi)^*$,
+whose range is the span of the columns of $M_i(\psi)$.
+
+\begin{definition}[Viable sets]
+    \label{def:lvv_viable_set}
+    \lean{TNLean.MPS.AreaLaw.cutColumn,
+        TNLean.MPS.AreaLaw.leftSupportSubmodule,
+        TNLean.MPS.AreaLaw.mem_leftSupportSubmodule,
+        TNLean.MPS.AreaLaw.IsViable}
+    \leanok
+    \uses{def:chain_model}
+    Let $\Gamma$ be a vector on the chain, $\delta\in\mathbb R$ and $S$ a set of
+    vectors on the first $i$ sites. Then $S$ is $(i,\delta)$-viable for $\Gamma$
+    if some unit vector $\phi$ with $|\langle\phi,\Gamma\rangle|\ge1-\delta$ has
+    every column of $M_i(\phi)$ in $\operatorname{Span}(S)$, that is, $\phi$ lies
+    in $\operatorname{Span}(S)\otimes\mathcal H_R$ and its reduced state on the
+    first $i$ sites is supported on $\operatorname{Span}(S)$. This is
+    Definition~def:viable of~\cite[lines 240--242]{Landau2015Polynomial}.
+\end{definition}
+
+\begin{theorem}[Support through the projection onto the span]
+    \label{thm:lvv_viable_projection}
+    \lean{TNLean.MPS.AreaLaw.spanProjection,
+        TNLean.MPS.AreaLaw.isStarProjection_spanProjection,
+        TNLean.MPS.AreaLaw.isHermitian_spanProjection,
+        TNLean.MPS.AreaLaw.spanProjection_mul_self,
+        TNLean.MPS.AreaLaw.spanProjection_mul_cutMatrix_eq_iff,
+        TNLean.MPS.AreaLaw.regionState_leftBlock_eq,
+        TNLean.MPS.AreaLaw.spanProjection_mul_regionState_eq_iff,
+        TNLean.MPS.AreaLaw.leftApply_cutVector_eq_iff,
+        TNLean.MPS.AreaLaw.leftApply_spanProjection_cutVector_eq_iff}
+    \leanok
+    \uses{def:lvv_viable_set}
+    Let $P_S$ be the orthogonal projection onto $\operatorname{Span}(S)$, a
+    Hermitian idempotent matrix on the configurations of the first $i$ sites.
+    For every vector $\psi$ the following are equivalent: the columns of
+    $M_i(\psi)$ lie in $\operatorname{Span}(S)$; $P_SM_i(\psi)=M_i(\psi)$;
+    $P_S\rho=\rho$ for the reduced state $\rho=M_i(\psi)M_i(\psi)^*$ of $\psi$ on
+    the first $i$ sites; $(P_S\otimes I)\psi=\psi$, with $\psi$ written in the
+    coordinates of the cut after the first $i$ sites.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    A column $c$ of $M_i(\psi)$ lies in $\operatorname{Span}(S)$ exactly when
+    $P_Sc=c$. The range of $M_i(\psi)M_i(\psi)^*$ is the column space of
+    $M_i(\psi)$. In the coordinates of the cut, $\psi$ is $M_i(\psi)$ read as a
+    vector, and $(P\otimes I)\psi$ is $PM_i(\psi)$, for every matrix $P$.
+\end{proof}
+
+\begin{theorem}[Viable sets and viable subspaces]
+    \label{thm:lvv_viable_closeness}
+    \lean{TNLean.MPS.AreaLaw.IsViable.le_norm_starProjection,
+        TNLean.MPS.AreaLaw.isViable_iff_le_norm_starProjection,
+        TNLean.MPS.AreaLaw.IsViable.forall_mem_span_singleton,
+        TNLean.MPS.AreaLaw.isViable_iff_forall_mem_span_singleton}
+    \leanok
+    \uses{def:lvv_viable_set}
+    Let $U=\operatorname{Span}(S)\otimes\mathcal H_R$ and let $P_U$ be the
+    orthogonal projection onto $U$. If $S$ is $(i,\delta)$-viable for $\Gamma$,
+    then $\|P_U\Gamma\|\ge1-\delta$, and for $\delta<1$ the converse holds. For a
+    unit vector $\Gamma$ and $\delta\le1$, viability gives
+    $(1-\delta')\|t\|^2\le\|P_Ut\|^2$ for every $t$ in the span of $\Gamma$, with
+    $\delta'=1-(1-\delta)^2$, and for $\delta<1$ the converse holds. This is the
+    closeness of $U$ to the span of $\Gamma$ in the sense of the viable subspaces
+    of Arad, Landau, Vazirani and
+    Vidick~\cite[lines 433--440]{Arad2016RigorousRG}, with $\delta'$ in place of
+    $\delta$, since $\delta$ bounds an overlap and $\delta'$ a squared overlap.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    For a unit $\phi\in U$, $|\langle\phi,\Gamma\rangle|
+        =|\langle\phi,P_U\Gamma\rangle|\le\|P_U\Gamma\|$, with equality for
+    $\phi=P_U\Gamma/\|P_U\Gamma\|$ when $P_U\Gamma\ne0$. Squaring gives the second
+    form.
+\end{proof}
+
+\begin{definition}[Viable sets of matrix product states]
+    \label{def:lvv_viable_mps}
+    \lean{TNLean.MPS.AreaLaw.leftConfigOfFin,
+        TNLean.MPS.AreaLaw.IsLeftOpenMPS,
+        TNLean.MPS.AreaLaw.IsViableMPS}
+    \leanok
+    \uses{def:lvv_viable_set, def:chain_open_mps}
+    The set $S$ is $(i,s,b,\delta)$-viable for $\Gamma$ if it is
+    $(i,\delta)$-viable, has at most $s$ members, and each member is an open
+    matrix product state on the first $i$ sites of bond dimension at most
+    $\max(1,b)$~\cite[line 243]{Landau2015Polynomial}. Bond dimension $0$ is read
+    as $1$; the source allows $b=0$ only for the initial set on no
+    sites~\cite{gap:lvv13_bond_dimension_zero}.
+\end{definition}
+
+\begin{theorem}[Extending a viable set by one site]
+    \label{thm:lvv_viable_extension}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.snoc,
+        TNLean.MPS.AreaLaw.restrictLeft,
+        TNLean.MPS.AreaLaw.extendSite,
+        TNLean.MPS.AreaLaw.lastLeftSite,
+        TNLean.MPS.AreaLaw.extendSite_apply,
+        TNLean.MPS.AreaLaw.extend,
+        TNLean.MPS.AreaLaw.extendSite_mem_extend,
+        TNLean.MPS.AreaLaw.card_extend_le,
+        TNLean.MPS.AreaLaw.consRightConfig,
+        TNLean.MPS.AreaLaw.cutColumn_eq_sum_extendSite,
+        TNLean.MPS.AreaLaw.leftSupportSubmodule_le_extend,
+        TNLean.MPS.AreaLaw.IsViable.extend,
+        TNLean.MPS.AreaLaw.IsLeftOpenMPS.extendSite,
+        TNLean.MPS.AreaLaw.IsViableMPS.extend}
+    \leanok
+    \uses{def:lvv_viable_mps}
+    Let $1\le i\le L$, let $q$ be the local dimension, and let $S'$ be the set
+    of vectors $v\otimes|k\rangle$ on the first $i$ sites, for $v\in S$ on the
+    first $i-1$ sites and $k$ a basis state. If $S$ is
+    $(i-1,s,b,\delta)$-viable for $\Gamma$, then $S'$ is
+    $(i,qs,b,\delta)$-viable for $\Gamma$, with the same witness. This is
+    Claim~c:ext of~\cite[lines 379--400]{Landau2015Polynomial}, stated there
+    for $\delta=c_\varepsilon/n$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:lvv_viable_mps}
+    $S'$ has at most $q|S|$ members. Let $w$ be an open matrix product state on
+    $n$ sites with bond dimension at most $b'=\max(1,b)$, and let $f$ be a
+    vector on one site. For a cut after $j<n$ sites,
+    \begin{align}
+        M_j(w\otimes f)  & =M_j(w)\,R_j,              &
+        (R_j)_{z',(z,x)} & =\delta_{z'z}\,f(x),\notag
+    \end{align}
+    so $\operatorname{rank}M_j(w\otimes f)\le\operatorname{rank}M_j(w)\le b'$,
+    while the new cut after $n$ sites gives $M_n(w\otimes f)=wf^{\mathsf T}$, of
+    rank at most $1\le b'$. With $f=|k\rangle$, every member of $S'$ has bond
+    dimension at most $b'$. For the witness, decomposing site $i$ on the basis
+    gives, for each configuration $\beta$ of the sites after $i$,
+    \begin{align}
+        M_i(\phi)_{\cdot,\beta}=\sum_k M_{i-1}(\phi)_{\cdot,(k,\beta)}\otimes|k\rangle.\notag
+    \end{align}
+    When the columns of $M_{i-1}(\phi)$ lie in $\operatorname{Span}(S)$, each
+    summand lies in $\operatorname{Span}(S')$, so the columns of $M_i(\phi)$ do as
+    well; the witness $\phi$ is unchanged.
+\end{proof}
+
+\begin{theorem}[Bond dimensions in a finite span]
+    \label{thm:open_mps_finite_span}
+    \lean{TNLean.MPS.AreaLaw.isOpenMPS_of_mem_span}
+    \leanok
+    \uses{def:chain_open_mps}
+    Let $L,q,D$ be natural numbers, and let $S$ be a finite set of vectors
+    on a chain of $L$ sites of local dimension $q$. Suppose that every
+    member of $S$ is an open-boundary matrix product state of bond
+    dimension at most $D$. Every $v\in\operatorname{Span}(S)$ is then an
+    open-boundary matrix product state of bond dimension at most $|S|D$.
+    This is the finite-span estimate used
+    in~\cite[Claim~2.7, source lines 520--527]{Landau2015Polynomial}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_cut_rank_of_mps}
+    Write $v=\sum_{w\in S}a_w w$. At every internal cut $j$,
+    \begin{align}
+        M_j(v)                    & =\sum_{w\in S}a_wM_j(w),\notag \\
+        \operatorname{rank}M_j(v) & \le
+        \sum_{w\in S}\operatorname{rank}(a_wM_j(w))\le |S|D.\notag
+    \end{align}
+    The cut-rank characterization gives the asserted representation,
+    including empty and one-site chains and $D=0$.
+\end{proof}
+
+\begin{theorem}[Bond dimensions in a left span]
+    \label{thm:left_mps_finite_span}
+    \lean{TNLean.MPS.AreaLaw.isLeftOpenMPS_of_mem_span}
+    \leanok
+    \uses{def:lvv_viable_mps}
+    Fix natural numbers $L,q,k,b$, and put $\beta=\max\{1,b\}$.
+    Write $Rv$ for the vector read on $k$ sites by restriction to the left
+    block, so $Rv(a)=v(a|_{\{j<L:j<k\}})$ for a $k$-site configuration $a$.
+    Let $S$ be a finite set of left-block vectors, and suppose that every
+    $Rw$, $w\in S$, is a matrix product state of bond dimension at most
+    $\beta$. For every $v\in\operatorname{Span}(S)$, the vector $Rv$ is a
+    matrix product state of bond dimension at most $\max\{1,|S|\beta\}$.
+    When $S$ is nonempty and $b\ge1$, this bound is $|S|b$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:open_mps_finite_span,thm:chain_cut_rank_of_mps}
+    The map $R$ is linear, so $Rv\in\operatorname{Span}(R(S))$ and
+    $|R(S)|\le |S|$. Theorem~\ref{thm:open_mps_finite_span} gives a bond
+    bound $|R(S)|\beta\le |S|\beta\le\max\{1,|S|\beta\}$.
+\end{proof}
+
+\begin{definition}[Left columns of a finite family]
+    \label{def:lvv_finite_left_columns}
+    \lean{TNLean.MPS.AreaLaw.leftColumns}
+    \leanok
+    Let $I$ be a finite index set and let $m$ be a natural number. Write
+    $\mathcal L$ for the Hilbert space of configurations on the left block
+    of a cut. For vectors $u_i\in\mathcal L\otimes\mathbb C^m$, write
+    $u_i=\sum_{j<m}u_{i,j}\otimes|j\rangle$ in the standard basis of the
+    bond space, and define
+    \begin{align}
+        T=\{u_{i,j}:i\in I,\ j<m\}.\notag
+    \end{align}
+    This is the column construction used in the size-trimming step
+    of~\cite[Claim~2.7, source lines 472--477 and 520--527]{Landau2015Polynomial}.
+\end{definition}
+
+\begin{theorem}[Number and support of the left columns]
+    \label{thm:lvv_finite_left_columns}
+    \lean{TNLean.MPS.AreaLaw.card_leftColumns_le,
+        TNLean.MPS.AreaLaw.leftColumns_subset_span}
+    \leanok
+    \uses{def:lvv_finite_left_columns}
+    The finite set $T$ satisfies $|T|\le |I|m$.
+    Let $S\subseteq\mathcal L$, and let $P_S$ be the orthogonal projection
+    onto $\operatorname{Span}(S)$. If $(P_S\otimes I_m)u_i=u_i$ for every
+    $i\in I$, then $T\subseteq\operatorname{Span}(S)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:lvv_viable_projection}
+    The set $T$ is the image of $I\times\{0,\ldots,m-1\}$, so its cardinality
+    is at most $|I|m$. Let $C_i$ have columns $u_{i,j}$. The fixed-vector
+    identity gives $P_SC_i=C_i$, hence $P_Su_{i,j}=u_{i,j}$ for every
+    retained column. The range of $P_S$ is $\operatorname{Span}(S)$.
+\end{proof}
+
+
+\begin{theorem}[Left support after extending the right factor]
+    \label{thm:lvv_left_columns_right_extension}
+    \lean{TNLean.MPS.AreaLaw.rightApply_mem_leftSupportSubmodule_leftColumns}
+    \leanok
+    \uses{def:lvv_finite_left_columns,def:lvv_viable_set}
+    Let $T$ be the finite set of left columns in
+    Definition~\ref{def:lvv_finite_left_columns}.
+    For every $i\in I$ and every linear map $W:\mathbb C^m\to\mathcal H_R$,
+    the chain vector obtained from $(I_{\mathcal L}\otimes W)u_i$ by the
+    cut identification belongs to $\operatorname{Span}(T)\otimes\mathcal H_R$.
+    This is the support step used
+    in~\cite[Claim~2.7, source lines 520--527]{Landau2015Polynomial}.
+\end{theorem}
+\begin{proof}\leanok
+    Let $C_i$ be the coefficient matrix of $u_i$. The extended vector has
+    coefficient matrix $C_iW^{\mathsf T}$. Its column at a right
+    configuration $b$ is
+    \begin{align}
+        \sum_{j<m}W_{b,j}u_{i,j}.\notag
+    \end{align}
+    Each $u_{i,j}$ belongs to $T$, so every such column lies in
+    $\operatorname{Span}(T)$.
+\end{proof}

@@ -108,7 +108,7 @@ theorem re_trace_exp_sub_sum_sub_sum_le {H : Matrix ι ι ℂ} (hH : H.IsHermiti
   have hBsub : B ⊆ B ∪ C := Finset.subset_union_left
   have hCsub : C ⊆ B ∪ C := Finset.subset_union_right
   have hsumH : ∀ T ⊆ B ∪ C, (∑ k ∈ T, h k).IsHermitian := fun T hT ↦
-    Matrix.isHermitian_sum T fun k hk ↦ hh k (hT hk)
+    Matrix.isHermitian_sum_of_subset hh hT
   have hsum : ∀ T ⊆ B ∪ C, ‖∑ k ∈ T, h k‖ ≤ T.card * J := fun T hT ↦
     (norm_sum_le _ _).trans <| by
       simpa using Finset.sum_le_sum fun k hk ↦ hJ k (hT hk)
@@ -160,7 +160,7 @@ theorem norm_trace_mul_clusterPart_le {H : Matrix ι ι ℂ} (hH : H.IsHermitian
   have hBsub : B ⊆ B ∪ C := Finset.subset_union_left
   have hCsub : C ⊆ B ∪ C := Finset.subset_union_right
   have hsumH : ∀ T ⊆ B ∪ C, (∑ k ∈ T, h k).IsHermitian := fun T hT ↦
-    Matrix.isHermitian_sum T fun k hk ↦ hh k (hT hk)
+    Matrix.isHermitian_sum_of_subset hh hT
   have hY : (β • (H - ∑ k ∈ B, h k - ∑ k ∈ C, h k)).IsHermitian :=
     ((hH.sub (hsumH B hBsub)).sub (hsumH C hCsub)).smul (IsSelfAdjoint.all β)
   have hg : ∀ k ∈ C, (β • h k).IsHermitian := fun k hk ↦
@@ -280,7 +280,7 @@ theorem norm_trace_mul_exp_mul_clusterPart_mul_exp_le_pow {H : Matrix ι ι ℂ}
   set W := H - ∑ i ∈ B, h i - ∑ i ∈ C, h i with hW
   have hCsub : C ⊆ B ∪ C := Finset.subset_union_right
   have hsumH : ∀ T ⊆ B ∪ C, (∑ i ∈ T, h i).IsHermitian := fun T hT ↦
-    Matrix.isHermitian_sum T fun i hi ↦ hh i (hT hi)
+    Matrix.isHermitian_sum_of_subset hh hT
   have hX : (β • H).IsHermitian := hH.smul (IsSelfAdjoint.all β)
   have hY : (β • W).IsHermitian :=
     ((hH.sub (hsumH B Finset.subset_union_left)).sub (hsumH C hCsub)).smul (IsSelfAdjoint.all β)

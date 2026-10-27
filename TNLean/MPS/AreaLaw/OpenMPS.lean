@@ -45,6 +45,10 @@ def leftBlock (L k : ℕ) : Finset (Fin L) := Finset.univ.filter fun i ↦ i.val
 theorem mem_leftBlock {k : ℕ} {i : Fin L} : i ∈ leftBlock L k ↔ i.val < k := by
   simp [leftBlock]
 
+/-- Left blocks grow with the cut. -/
+theorem leftBlock_mono {k k' : ℕ} (h : k ≤ k') : leftBlock L k ⊆ leftBlock L k' :=
+  fun _ hi ↦ mem_leftBlock.mpr (lt_of_lt_of_le (mem_leftBlock.mp hi) h)
+
 /-- The coefficient matrix of a vector across the cut after `k` sites: rows are the
 configurations of the left block, columns those of its complement. -/
 noncomputable def cutMatrix (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ) :
@@ -89,5 +93,14 @@ def IsOpenMPS (L q D : ℕ) (ψ : (Fin L → Fin q) → ℂ) : Prop :=
   ∃ (A : OBCChainTensor q (max 1 D) L) (c : ℂ),
     (∀ k, 0 < k.val → k.val < L → A.bondDim k ≤ D) ∧
       ∀ x, ψ x = c * A.coeff x
+
+/-- Scaling a matrix product state multiplies its scalar endpoint cap. -/
+theorem IsOpenMPS.smul {L q D : ℕ} {ψ : (Fin L → Fin q) → ℂ}
+    (h : IsOpenMPS L q D ψ) (c : ℂ) :
+    IsOpenMPS L q D fun x ↦ c * ψ x := by
+  obtain ⟨A, a, hA, hψ⟩ := h
+  refine ⟨A, c * a, hA, fun x ↦ ?_⟩
+  change c * ψ x = _
+  rw [hψ x, mul_assoc]
 
 end TNLean.MPS.AreaLaw

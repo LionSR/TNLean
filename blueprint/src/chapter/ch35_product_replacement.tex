@@ -179,6 +179,35 @@ coefficient matrices $M_k(\psi)$ and their ranks.
     Theorem~\ref{thm:chain_mps_of_cut_rank}.
 \end{proof}
 
+\begin{theorem}[Extension by a fixed exterior configuration]
+    \label{thm:chain_fixed_configuration_extension}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.extend_interval_by_configuration}
+    \leanok
+    \uses{def:chain_open_mps}
+    For $a+L\leq T$, $I=\{a,\ldots,a+L-1\}\subseteq\{0,\ldots,T-1\}$,
+    $E=I^{\mathsf c}$, an exterior configuration $\eta\in\{0,\ldots,q-1\}^E$,
+    and an open MPS $\psi$ on $I$ of bond dimension $\le D$, the extension
+    \begin{align}
+        \chi(\sigma) & =
+        \begin{cases}
+            \psi(\sigma|_I), & \sigma|_E=\eta,   \\
+            0,               & \text{otherwise},
+        \end{cases}
+        \notag
+    \end{align}
+    is an open MPS on $\{0,\ldots,T-1\}$ of bond dimension $\le\max\{1,D\}$
+    ($=D$ when $D\geq1$).
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_cut_rank_of_mps,thm:chain_mps_of_cut_rank}
+    At cut $j$, put $k=\min\{L,(j-a)_+\}$; with $f,g$ the restrictions to $I$
+    and $u,v$ the exterior matching indicators,
+    $M_j(\chi)=\operatorname{diag}(u)M_k(\psi)[f,g]\operatorname{diag}(v)$, so
+    $\operatorname{rank}M_j(\chi)\le\operatorname{rank}M_k(\psi)\le\max\{1,D\}$
+    (Theorem~\ref{thm:chain_cut_rank_of_mps}), and
+    Theorem~\ref{thm:chain_mps_of_cut_rank} concludes.
+\end{proof}
+
 \begin{theorem}[Bond bounds for normalized block factors]
     \label{thm:chain_copy_product_factor_mps}
     \lean{TNLean.MPS.AreaLaw.IsOpenMPS.copyProduct_factor}

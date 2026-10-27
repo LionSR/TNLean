@@ -233,6 +233,24 @@ preparation of matrix product states.
     The composition rule follows from $x|_{(f\circ e)(J)^c}=y|_{(f\circ e)(J)^c}\iff x|_{f(I)^c}=y|_{f(I)^c}$ and $(x\circ f)|_{e(J)^c}=(y\circ f)|_{e(J)^c}$. Disjoint ranges give commuting supports, and induction on $K$ collapses the intermediate matrix-product sum to the unique configuration matching the output on the new range and the input elsewhere.
 \end{proof}
 
+\begin{theorem}[Operators supported on a set of sites]
+    \label{thm:qc_supported_operator_placement}
+    \lean{QuantumCircuit.exists_embedOp_eq_of_mem_supportedOperators}
+    \leanok
+    \uses{def:qc_local_circuit,lem:qc_placed_operators}
+    For any injective $e\colon\{0,\ldots,m-1\}\to\{0,\ldots,n-1\}$ ($m,n,d\ge 0$),
+    every $Z\in\operatorname{End}((\C^d)^{\otimes n})$ with
+    $\operatorname{supp}(Z)\subseteq\operatorname{im}(e)$ satisfies
+    $Z=\iota_e(X)$ for some $X\in\operatorname{End}((\C^d)^{\otimes m})$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:qc_local_circuit,lem:qc_placed_operators}
+    Writing $Z$ as a linear combination of $\bigotimes_{i<n}A_i$ with $A_i=I$
+    for $i\notin\operatorname{im}(e)$, Lemma~\ref{lem:qc_placed_operators} gives
+    $\bigotimes_{i<n}A_i=\iota_e\bigl(\bigotimes_{j<m}A_{e(j)}\bigr)$, and
+    linearity of $\iota_e$ concludes.
+\end{proof}
+
 \begin{lemma}[Products of matrices placed on disjoint windows]
     \label{lem:qc_placed_configurations}
     \lean{QuantumCircuit.placeCfg, QuantumCircuit.placeCfg_apply,

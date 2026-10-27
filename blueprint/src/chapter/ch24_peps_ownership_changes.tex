@@ -32,40 +32,36 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.Lattice.exists_one_kronecker_of_mem_supportedOperators,
         TNLean.Lattice.Sheet.exists_threeSplit_eq_kronecker_one,
         TNLean.Lattice.Sheet.exists_threeSplit_eq_one_kronecker_kronecker_one,
-        TNLean.Lattice.Sheet.exists_threeSplit_eq_reindex_one_kronecker}
+        TNLean.Lattice.Sheet.exists_threeSplit_eq_reindex_one_kronecker,
+        TNLean.Lattice.Sheet.exists_threeSplit_eq_kronecker_one_kronecker_one,
+        TNLean.Lattice.Sheet.exists_threeSplit_eq_one_kronecker}
     \leanok
-    Let $\Lambda$ be a finite site set and $q$ any natural number. For
-    $S\subseteq\Lambda$, identify $\mathcal H_\Lambda$ with $\mathcal H_S\otimes\mathcal H_{\Lambda\setminus S}$
+    Let $\Lambda$ be a finite site set and $q\in\mathbb N$. For
+    $S\subseteq\Lambda$, identify $\mathcal H_\Lambda\cong\mathcal H_S\otimes\mathcal H_{\Lambda\setminus S}$
     and, for disjoint $T,E\subseteq\Lambda$ with
-    $U=\Lambda\setminus(T\cup E)$, with $(\mathcal H_T\otimes\mathcal H_E)\otimes
-        \mathcal H_U$. The latter identification reads a configuration $c$ as
-    $((c|_T,c|_E),c|_U)$. An operator acting on the sites of $S$ is
-    $A'\otimes\id$, an
-    operator acting on a set disjoint from $S$ is $\id\otimes A'$, an operator
-    acting on $T\cup E$ is $A'\otimes\id_U$, and an operator acting on a subset
-    of $E$ is $\id_T\otimes A'\otimes\id_U$. An operator supported on a set
-    disjoint from $T$ has the form $\id_T\otimes V$, where $V$ acts on
-    $\mathcal H_E\otimes\mathcal H_U$, after canonical reassociation into
-    the same coordinates. These assertions include $q=0$ and empty regions.
+    $U=\Lambda\setminus(T\cup E)$, identify $\mathcal H_\Lambda\cong(\mathcal H_T\otimes\mathcal H_E)\otimes
+        \mathcal H_U$ via $c\mapsto((c|_T,c|_E),c|_U)$. In these coordinates
+    (including $q=0$ and empty regions):
+    \begin{enumerate}
+        \item $\operatorname{supp}(A)\subseteq S\implies A=A'\otimes\id$, and
+              $\operatorname{supp}(A)\cap S=\emptyset\implies A=\id\otimes A'$;
+        \item $\operatorname{supp}(A)\subseteq T\cup E\implies A=A'\otimes\id_U$,
+              and $\operatorname{supp}(A)\subseteq E\implies A=\id_T\otimes A'\otimes\id_U$;
+        \item $\operatorname{supp}(A)\subseteq T\implies A=(A_T\otimes\id_E)\otimes\id_U$,
+              $\operatorname{supp}(A)\subseteq U\implies A=\id_{TE}\otimes A_U$, and
+              $\operatorname{supp}(A)\cap T=\emptyset\implies A\simeq\id_T\otimes V$
+              ($V\in\operatorname{End}(\mathcal H_E\otimes\mathcal H_U)$).
+    \end{enumerate}
 \end{lemma}
 
 \begin{proof}\leanok
-    A product operator $\bigotimes_xm_x$ is, in these coordinates, the tensor
-    product of its restrictions to the parts, and $m_x=\id$ off the support.
-    Both sides are linear in the operator.
-    For an operator supported disjointly from $T$, first split off $T$ to
-    write it as $\id_T\otimes B$ on
-    $\mathcal H_T\otimes\mathcal H_{\Lambda\setminus T}$.
-    Since $\Lambda\setminus T=E\sqcup U$, express $B$ in the coordinates
-    $\mathcal H_E\otimes\mathcal H_U$ and call the resulting operator $V$.
-    For configurations $t,t'$ on $T$, $e,e'$ on $E$ and $u,u'$ on $U$,
-    the entries in the three-region coordinates are
-    \begin{align}
-        A_{((t,e),u),((t',e'),u')}
-         & =\delta_{t,t'}V_{(e,u),(e',u')}.\notag
-    \end{align}
-    This is precisely $\id_T\otimes V$ after reassociation. The coordinate
-    identities remain valid when a configuration set is empty.
+    By linearity, it suffices to check product operators $\bigotimes_xm_x$ with
+    $m_x=\id$ off the support. When $\operatorname{supp}(A)\cap T=\emptyset$,
+    splitting off $T$ gives $\id_T\otimes B$ on
+    $\mathcal H_T\otimes\mathcal H_{\Lambda\setminus T}$; expressing $B$ on
+    $\mathcal H_E\otimes\mathcal H_U$ as $V$ yields
+    $A_{((t,e),u),((t',e'),u')}=\delta_{t,t'}V_{(e,u),(e',u')}$, i.e.\
+    $\id_T\otimes V$ after reassociation.
 \end{proof}
 
 % ALVV arXiv:1602.08828v2, local_alg_arxiv_v2.tex, eq:H-mid-cut,

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegularTwoSiteChargeDetector
 import TNLean.PEPS.RegularChargeDetectorMatrix
-import TNLean.Algebra.PermutationMatrixUnitary
+import QICLean.Algebra.PermutationMatrixUnitary
 import TNLean.PEPS.RegularTorusGramExpansion
 
 import TNLean.Algebra.PermutationMatrixCommutation

@@ -29,6 +29,8 @@ gauge `γ^x_g = φ(t_k(g,x))⁻¹`.
 No finiteness, normality, or tensor assumption is used.
 -/
 
+open scoped TNLean.Algebra.ScalarCohomology
+
 namespace TNLean.Algebra
 
 variable {G : Type} {X : Type*} [Group G] [MulAction G X] {x₀ : X}
@@ -46,13 +48,13 @@ def inducedLSymbol (K : StabilizerRepresentatives G X x₀)
 three-cochain. This is the `ω = 1` scalar specialization of arXiv:2203.12563,
 Equation (20). -/
 theorem inducedLSymbol_isCompatible (K : StabilizerRepresentatives G X x₀)
-    {ψ : ScalarCocycle (MulAction.stabilizer G x₀)} (hψ : ψ.IsCocycle) :
+    {ψ : ScalarCocycle (MulAction.stabilizer G x₀)} (hψ : groupCohomology.IsMulCocycle₂ ψ) :
     LSymbol.IsCompatible (K.inducedLSymbol ψ) (fun _ _ _ ↦ 1) := by
   intro x g h k
   simp only [inducedLSymbol, one_mul]
   rw [K.transitionElement_mul h k x, K.transitionElement_mul g h (k • x)]
   simpa only [smul_smul] using
-    (hψ (K.transitionElement g ((h * k) • x))
+    ((isMulCocycle₂_iff _).mp hψ (K.transitionElement g ((h * k) • x))
       (K.transitionElement h (k • x)) (K.transitionElement k x)).symm
 
 /-- Restricting the induced L-symbol to the basepoint and stabilizer arguments

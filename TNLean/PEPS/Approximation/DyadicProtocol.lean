@@ -49,9 +49,12 @@ its constants chosen before the size, the Hamiltonian, and the ground vector, is
 Under the endpoint-coordinate convention above—where strict intermediate references are products
 of encoded frames and the terminal reference is expressed in physical and private coordinates as
 `Ω ⊗ Ξ`, with the canonical regrouping of the same auxiliary stack proved for the constructed
-witness rather than retained as a separate field of the public protocol predicate—
-`IsDistributionProtocol` carries every clause of Proposition 7.1 (`06-geometry.tex:12–53`); the
-former scope restriction to the consequences used in §8 is resolved in
+witness (`DyadicProtocol.exists_reference_changes_of_readoutCircuit` in
+`TNLean.PEPS.Approximation.DyadicProtocolFinalReadout`, resting on
+`readout_eval_readoutCircuit_stackVec` in `TNLean.PEPS.Approximation.SheetStackReadout`) rather
+than retained as a separate field of the public protocol predicate—`IsDistributionProtocol`
+carries every clause of Proposition 7.1 (`06-geometry.tex:12–53`); the former scope restriction
+to the consequences used in §8 is resolved in
 `docs/paper-gaps/polypeps_prop71_consequences_interface.tex`.
 
 The bound on pair sources and messages in each monomial (Theorem 5.2, item 3,

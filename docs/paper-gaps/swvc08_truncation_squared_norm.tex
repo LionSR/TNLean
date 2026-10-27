@@ -77,9 +77,15 @@ at most $D$.\footnote{\leanid{TNLean.MPS.AreaLaw.norm_sequentialTruncation_leadi
 No normalization of $\Phi$ is asserted. The older estimate
 $\|\psi-\Phi\|_2\le\sum_k\sqrt{\epsilon_k(D)}$ is weaker than
 (\ref{eq:swvc08_truncation_corrected}).
-This note resolves the missing square; the deduction of efficient
-approximation from a family of R\'enyi entropy bounds remains open in
-\ghissue{9855}.
+This note resolves the missing square. The sufficient criteria for efficient
+matrix product state approximation from logarithmic bounds on ordinary and
+smooth R\'enyi entropy are also proved.\footnote{\leanid{TNLean.MPS.AreaLaw.isEfficientlyApproximableByMPS_of_renyiEntropy_le}
+    and \leanid{TNLean.MPS.AreaLaw.isEfficientlyApproximableByMPS_of_smoothRenyiEntropy_le}
+    in \doclink{TNLean/MPS/AreaLaw/EntropyScaling/RenyiApproximation}.}
+Both criteria use the same approximation notion: for every fixed positive
+full trace-norm accuracy, the bond dimension grows at most polynomially with
+the chain length. Their proofs use the corrected squared-norm estimate
+(\ref{eq:swvc08_truncation_corrected}).
 
 \bibliographystyle{alpha}
 \bibliography{references}
