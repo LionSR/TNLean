@@ -191,3 +191,12 @@ for `convexHull_min`. `MeasurementRound.outputs` and `edgeLens` are marked
 `noncomputable` because their existing definitions use noncomputable Kraus
 operators and real division respectively. These qualifiers change executability,
 not their mathematical values or types; no hypotheses or source references change.
+
+The local reachability sets in `PhysicalSectorTraceMatrix` and
+`SelectedFixedProductSectorVisibility` likewise use `Set.ofPred`. The predicates
+remain exactly the same reflexive-transitive closures; every subsequent proof
+step and all public statements and hypotheses are unchanged.
+
+`intervalJointOutsideFlagSet` in `IntervalJointFlagInitialization` uses the same
+`Set.ofPred` construction for the unchanged joining-flag predicate on the
+complement subtype. Its public type, source reference and later proofs are unchanged.

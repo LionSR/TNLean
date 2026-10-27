@@ -420,7 +420,7 @@ private theorem reflTransGen_of_matrix_family
     Relation.ReflTransGen R q h := by
   classical
   by_contra hreach
-  let S : Set Q := fun r ↦ Relation.ReflTransGen R q r
+  let S : Set Q := Set.ofPred fun r ↦ Relation.ReflTransGen R q r
   let space : Set Q → Submodule ℂ (Matrix (Fin D) (Fin D) ℂ) :=
     fun T ↦ Submodule.span ℂ
       {X | ∃ r, r ∈ T ∧ ∃ i, A r i = X}
