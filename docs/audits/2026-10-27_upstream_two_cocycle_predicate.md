@@ -66,7 +66,7 @@ predicate equivalence, constant cocycles without normalization, the zero
 class of the unit cocycle, the arbitrary-cochain coboundary comparison, and
 class equality with both cocycle hypotheses. These checks use an arbitrary
 group, with neither finiteness nor commutativity assumed.
-`TNLeanTest/UpstreamTwoCocyclePredicateAxioms.lean` guards the axiom reports for
+`TNLeanTest/UpstreamTwoCocyclePredicateAxioms.lean` guards the `#print axioms` reports for
 the orientation theorem, the projective factor-system theorem, and the
 cohomology-class comparison; all use only `propext`, `Classical.choice`, and
 `Quot.sound`.
