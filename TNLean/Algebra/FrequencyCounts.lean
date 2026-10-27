@@ -141,3 +141,22 @@ theorem Nat.card_fun_sum_eq_and_two_eq_le
       (Nat.pow_le_pow_left
         (Nat.add_le_add_right ((Nat.sub_le (r - i) j).trans (Nat.sub_le r i)) 1) s)
   · exact Nat.zero_le _
+
+/-- The complete frequency slices up to degree k, with two prescribed
+coordinates, have total cardinality at most (k+1)^(s+1). This is the
+full-alphabet degree summation in the rank argument of ALVV,
+arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
+theorem Nat.sum_card_fun_sum_eq_and_two_eq_le
+    {I : Type*} [Fintype I] {s : ℕ} (hcard : Fintype.card I = s + 3)
+    (u v : I) (huv : u ≠ v) (k i j : ℕ) :
+    (∑ r ∈ Finset.range (k + 1),
+      Nat.card {α : I → ℕ // (∑ a, α a) = r ∧ α u = i ∧ α v = j}) ≤
+        (k + 1) ^ (s + 1) := by
+  calc
+    _ ≤ ∑ r ∈ Finset.range (k + 1), (r + 1) ^ s :=
+      Finset.sum_le_sum fun r _ ↦ Nat.card_fun_sum_eq_and_two_eq_le hcard u v huv r i j
+    _ ≤ (k + 1) ^ (s + 1) := by
+      simpa only [Finset.card_range, nsmul_eq_mul, Nat.cast_id, pow_succ, Nat.mul_comm] using
+        Finset.sum_le_card_nsmul (Finset.range (k + 1))
+          (fun r : ℕ ↦ (r + 1) ^ s) ((k + 1) ^ s)
+          (fun r hr ↦ Nat.pow_le_pow_left (Nat.succ_le_of_lt (Finset.mem_range.mp hr)) s)

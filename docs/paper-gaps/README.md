@@ -1396,14 +1396,16 @@ the source's window radii gives `D_m ≤ (3^m − 1) e^{s^m}`, still polynomial 
 ### Local solution of gapped Hamiltonians: the supercell of the translation-invariant case
 
 [hastings05_translation_supercell.tex](hastings05_translation_supercell.tex)
-(scope restriction, open) concerns the translation-invariant case of Hastings,
+(scope restriction, resolved) concerns the translation-invariant case of Hastings,
 *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, source lines
 1603–1642). The source assumes ground-state momenta that are rational with
 denominators independent of the system size, and derives a supercell whose
-translations leave every ground state unchanged. The formalization assumes such a
-subgroup directly and proves that the low-energy commutator at `(i, j)` equals the one
-at `(i, g • j)` for every `g` in it. The note sketches how to derive the subgroup from
-the characters of an abelian translation group, records a slip at line 1638, and
+translations leave every ground state unchanged. The first formalization assumed such a
+subgroup directly. The supercell is now derived from the momentum sectors of an abelian
+translation group, its translations are shown to carry any site to a distance of order the
+linear size, and the composite bound proves the low-energy commutator exponentially small in
+that size for the filtered terms, and eq. `blecm` applied to the source's truncated terms `M_i`
+themselves, with covariant truncations, gives it for the `M_i` with no truncation error. The note records a slip at line 1638, and
 notes that the size-dependent case of lines 1643–1652 is not covered.
 
 ## Polynomial PEPS: zero-floor maximizing filters
@@ -1564,6 +1566,23 @@ with `K` depending only on `R` and `κ`, the source's polynomial bound in `ξ`
 allows because it fixes `ξ` only through some pair (lines 96–112); at a fixed
 length the argument needs `ξ' > 6ξ`. A Lieb–Robinson pair in the source's
 form remains open under issue #9811.
+
+## ALVV: the operator-norm cluster approximation
+
+[`alvv16_cluster_approximation.tex`](alvv16_cluster_approximation.tex)
+(false source, open) records two nondegenerate counterexamples to Theorem
+`thm:cluster-approx` of Arad, Landau, Vazirani and Vidick,
+arXiv:1602.08828v2 (source lines 1270–1291 and 1924–1968). On two qubits a
+positive rank-one local projection disproves the printed physical-site cutoff
+bound. On forty qubits negative two-site projections disprove the bound even
+when the cutoff counts interaction labels. The complementary exponential need
+not have norm at most one under the source's explicit allowance of negative
+local terms. A corrected theorem must specify both the cutoff and the energy
+dependence. The printed theorem is not formalized; the existing normalized
+Hastings estimates are unaffected. The analytic approximation used by
+`lem:exp-approx-eff` remains to be corrected, separately from the exact matrix
+product operator construction. Tracked in [#9854](https://github.com/LionSR/TNLean/issues/9854)
+and [#9847](https://github.com/LionSR/TNLean/issues/9847).
 
 ## Hastings' high-temperature matrix product form, arXiv:cond-mat/0508554
 

@@ -16,15 +16,13 @@ The scalar steps of arXiv:2405.00439, Section IV.C (`Papers/2405.00439/MPU-DW.te
 * the interchange product `∏_{k<n} L^{gx}_{g,g^k} / L^x_{g,g^k}` is the inverse cyclic invariant
   `(∏_{k<n} ω(g,g^k,g))⁻¹` when `g^n = 1` (`Intequiv`);
 * the ratio `(a, b) ↦ L^y_{a,b} / L^z_{a,b}` is a two-cocycle on Mathlib's `fixingSubgroup` of
-  `{y, z}`, stated with the existing `TNLean.Algebra.ScalarCocycle.IsCocycle` and with Mathlib's
-  `groupCohomology.IsMulCocycle₂`.
+  `{y, z}`, stated with Mathlib's `groupCohomology.IsMulCocycle₂`.
 
 ## Main results
 
 * `TNLean.Algebra.LSymbol.prod_div_eq_inv_cyclicInvariant`,
   `TNLean.Algebra.LSymbol.prod_Ico_div_eq_inv_cyclicInvariant`
-* `TNLean.Algebra.LSymbol.ratioCocycle_isCocycle`,
-  `TNLean.Algebra.LSymbol.ratioCocycle_isMulCocycle₂`
+* `TNLean.Algebra.LSymbol.ratioCocycle_isMulCocycle₂`
 
 ## References
 - [arXiv:2405.00439](https://arxiv.org/abs/2405.00439) -- Garre-Rubio, Schuch,
@@ -77,8 +75,10 @@ def ratioCocycle (L : LSymbol G X) (y z : X) : ScalarCocycle (fixingSubgroup G (
 `Papers/2405.00439/MPU-DW.tex` lines 2028--2034): if `L` is compatible with `ω`, then
 `(a, b) ↦ L^y_{a,b} / L^z_{a,b}` satisfies the two-cocycle equation on the elements fixing `y`
 and `z`; the three-cocycle cancels in the ratio. -/
-theorem ratioCocycle_isCocycle {L : LSymbol G X} {ω : ScalarThreeCochain G}
-    (hL : IsCompatible L ω) (y z : X) : (ratioCocycle L y z).IsCocycle := by
+theorem ratioCocycle_isMulCocycle₂ {L : LSymbol G X} {ω : ScalarThreeCochain G}
+    (hL : IsCompatible L ω) (y z : X) :
+    groupCohomology.IsMulCocycle₂ (ratioCocycle L y z) := by
+  rw [isMulCocycle₂_iff]
   rintro ⟨a, -⟩ ⟨b, -⟩ ⟨c, hc⟩
   have hy := hL y a b c
   have hz := hL z a b c
@@ -91,14 +91,6 @@ theorem ratioCocycle_isCocycle {L : LSymbol G X} {ω : ScalarThreeCochain G}
     show L z (a * b) c * L z a b = (ω a b c)⁻¹ * (L z a (b * c) * L z b c) by
       rw [mul_comm, hz]; group]
   rw [mul_div_mul_left_eq_div]
-
-/-- The two-cocycle `L^y/L^z` in the form of Mathlib's multiplicative two-cocycles
-(`groupCohomology.IsMulCocycle₂`) for the trivial action, through
-`TNLean.Algebra.ScalarCocycle.isCocycle_iff_isMulCocycle₂`. -/
-theorem ratioCocycle_isMulCocycle₂ {L : LSymbol G X} {ω : ScalarThreeCochain G}
-    (hL : IsCompatible L ω) (y z : X) :
-    groupCohomology.IsMulCocycle₂ (ratioCocycle L y z) :=
-  (ScalarCocycle.isCocycle_iff_isMulCocycle₂ _).mp (ratioCocycle_isCocycle hL y z)
 
 /-- **The interchange product over the source's range.** For normalized L-symbols the factor
 `k = 0` is one, and the product of `TNLean.Algebra.LSymbol.prod_div_eq_inv_cyclicInvariant` is
