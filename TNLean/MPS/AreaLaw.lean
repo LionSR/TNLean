@@ -38,14 +38,15 @@ import TNLean.MPS.AreaLaw.DomainSupportedGaussianIntegral
 import TNLean.MPS.AreaLaw.DoubledHamiltonian
 import TNLean.MPS.AreaLaw.EntropyInequalities
 import TNLean.MPS.AreaLaw.EntropyScaling
+import TNLean.MPS.AreaLaw.FixedConfigurationExtension
 import TNLean.MPS.AreaLaw.GluingHamiltonian
 import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.Hastings
 import TNLean.MPS.AreaLaw.InformationReset
-import TNLean.MPS.AreaLaw.IntegerComponents
 import TNLean.MPS.AreaLaw.InteractionBudget
 import TNLean.MPS.AreaLaw.IntervalNeighborhoodEntropy
 import TNLean.MPS.AreaLaw.IntervalSlice
+import TNLean.MPS.AreaLaw.IntervalSymmDiff
 import TNLean.MPS.AreaLaw.LiebRobinson
 import TNLean.MPS.AreaLaw.LocalSolution
 import TNLean.MPS.AreaLaw.LogarithmicAreaLaw
@@ -53,6 +54,7 @@ import TNLean.MPS.AreaLaw.LogarithmicSeparation
 import TNLean.MPS.AreaLaw.MPSApproximation
 import TNLean.MPS.AreaLaw.OpenMPS
 import TNLean.MPS.AreaLaw.OpenMPSCutRank
+import TNLean.MPS.AreaLaw.OpenMPSProduct
 import TNLean.MPS.AreaLaw.OpenMPSRank
 import TNLean.MPS.AreaLaw.OverlapEnergy
 import TNLean.MPS.AreaLaw.PartialSwap
@@ -91,5 +93,6 @@ import TNLean.MPS.AreaLaw.SupportedCutRank
 import TNLean.MPS.AreaLaw.SupportedGaussianIntegral
 import TNLean.MPS.AreaLaw.SwappedDoubledHamiltonian
 import TNLean.MPS.AreaLaw.TwoCutEdgeSupports
+import TNLean.MPS.AreaLaw.TwoCutOperatorForms
 import TNLean.MPS.AreaLaw.ViableSet
 import TNLean.MPS.AreaLaw.WindowCounting

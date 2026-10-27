@@ -216,19 +216,62 @@ def streams_of(tracker: int, issues: list[dict], names: dict[str, str], explicit
 
 
 def result_table(body: str) -> list[dict]:
-    """Rows of the markdown tables in a tracker body that name a numbered paper result.
+    """Read paper results from tracker tables, preserving legacy table conventions.
 
-    A row qualifies when one of its first two cells names a result such as
-    `Lemma 2.1` or `Theorem A`. The source label is the first backticked `kind:name` token, the
-    issues are the `#NNNN` references in the third cell, and a name, if any,
-    follows an em dash after the label.
+    Explicit ``Result | Label/name in the source | Issues | Completion...`` tables
+    use the first cell's printed kind and number, or ``Unnumbered Kind``.
+    The second cell may begin with a genuine source label, including bare labels
+    such as ``ble``; an absent label stays absent. Equation labels mentioned later
+    in that cell are not taken for theorem labels. Other tables retain the original
+    numbered-result and ``kind:name`` rules.
     """
     rows = []
-    for line in body.splitlines():
+    explicit = False
+    lines = body.splitlines()
+    for index, line in enumerate(lines):
         if not line.startswith("|"):
+            explicit = False
             continue
         cells = [c.strip() for c in line.strip().strip("|").split("|")]
         if len(cells) < 3:
+            continue
+        if all(re.fullmatch(r":?-{3,}:?", cell) for cell in cells):
+            continue
+        # This header is literal: rewording it selects legacy parsing, which may
+        # omit Claims, unnumbered results and rows with bare or absent labels.
+        if (cells[:3] == ["Result", "Label/name in the source", "Issues"]
+                and len(cells) > 3 and cells[3].startswith("Completion")):
+            explicit = True
+            continue
+        if explicit:
+            kinds = THEOREM_KINDS + "|Claim"
+            numbered = re.match(rf"^({kinds}) ({RESULT_NUMBER})(?=\W|$)", cells[0])
+            unnumbered = re.match(rf"^Unnumbered ({kinds})\b", cells[0], re.I)
+            if not numbered and not unnumbered:
+                # A different header followed by a separator starts a new table.
+                if index + 1 < len(lines) and lines[index + 1].startswith("|"):
+                    separators = [
+                        c.strip() for c in lines[index + 1].strip().strip("|").split("|")
+                    ]
+                    if len(separators) == len(cells) and all(
+                        re.fullmatch(r":?-{3,}:?", cell) for cell in separators
+                    ):
+                        explicit = False
+                continue
+            match = numbered or unnumbered
+            kind = match.group(1).capitalize()
+            num = numbered.group(2) if numbered else ""
+            label = re.match(r"^`([A-Za-z][A-Za-z0-9:_.-]*)`", cells[1])
+            name = re.search(r"\s+—\s+(.+)$", cells[1]) if label else None
+            description = cells[0][match.end():].strip(" ():—")
+            link = re.search(r"\]\((https?://[^)\s]+)\)", line)
+            rows.append({
+                "kind": kind, "num": num, "label": label.group(1) if label else None,
+                "url": link.group(1) if link else None,
+                "name": name.group(1).strip() if name else description or f"{kind} {num}".strip(),
+                "issues": [int(n) for n in re.findall(r"#(\d{4,})", cells[2])],
+                "gate": cells[3] if len(cells) > 3 else None,
+            })
             continue
         head = " ".join(cells[:2])
         kind = re.search(rf"\b({THEOREM_KINDS}) ({RESULT_NUMBER})", head)

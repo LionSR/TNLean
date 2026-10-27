@@ -134,7 +134,7 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     \label{thm:chain_trimmed_witness}
     \lean{TNLean.MPS.AreaLaw.exists_trimmed_witness_chain}
     \leanok
-    \uses{def:chain_gluing_cut}
+    \uses{def:chain_open_mps, def:chain_gluing_cut}
     Let $H=H_L+H_R+K$ with $H_L$ supported on the first $k$ sites, $H_R$ on
     the others, $0\le K\le1$ and $H\ge E_0$. Let $\psi$ be a unit vector with
     $\operatorname{Re}\langle\psi,H\psi\rangle\le E_0+\delta$ whose cut matrix
@@ -157,7 +157,7 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
 
 \begin{proof}
     \leanok
-    \uses{def:chain_gluing_cut}
+    \uses{def:chain_open_mps, def:chain_gluing_cut}
     In the cut coordinates after $k$ sites the Hamiltonian is
     $A\otimes1+1\otimes A'+K'$ with $0\le K'\le1$, and the trimmed witness of
     the companion volume~\cite[``A trimmed low-energy witness on a
