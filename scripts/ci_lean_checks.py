@@ -27,7 +27,9 @@ Commands
             file to a fresh overlay directory placed first on ``LEAN_PATH``, so
             a test may import another test (for example ``TNLeanTest.Support``).
 
-Pushes use the previous head as the base. When a dependency pin, the
+Pull-request merge checkouts use their actual base parent after verifying the
+second parent matches the event's PR head. Pushes use the previous head as the base.
+When a dependency pin, the
 toolchain, this script or the workflow changes, ``strict`` checks every test
 file; early selection still applies, and all changed sources remain strict.
 Without a base revision (manual dispatch, an unfetchable base) ``strict``
@@ -168,6 +170,36 @@ def closure(graph: dict[str, set[str]], start: str) -> set[str]:
                 seen.add(d)
                 stack.append(d)
     return seen
+
+
+def selection_base(base: str | None, pr_head: str | None) -> str | None:
+    """Use the tested merge's base parent, not a possibly stale event base.
+
+    GitHub's pull-request checkout has the base as its first parent and the
+    PR head as its second. Verify that shape before narrowing the selection;
+    unknown/shallow/mismatched checkouts must retain the full-suite fallback.
+    Push and local invocations without a PR head keep their explicit base.
+    """
+    if not pr_head:
+        return base
+    result = subprocess.run(
+        ["git", "rev-list", "--parents", "-n", "1", "HEAD"],
+        capture_output=True, text=True,
+    )
+    commits = result.stdout.split()
+    if result.returncode == 0 and len(commits) == 3 and commits[2] == pr_head:
+        parent = commits[1]
+        available = subprocess.run(
+            ["git", "cat-file", "-e", f"{parent}^{{commit}}"],
+            capture_output=True,
+        )
+        if available.returncode == 0:
+            print(f"Selecting changes against tested PR merge base parent {parent}.",
+                  file=sys.stderr)
+            return parent
+    print("::warning::Cannot verify the PR merge parents; checking every test.",
+          file=sys.stderr)
+    return None
 
 
 def changed_paths(base: str | None) -> list[str] | None:
@@ -538,6 +570,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("command", choices=["early", "strict", "list"])
     parser.add_argument("--base", default=os.environ.get("BASE_SHA") or None,
                         help="base revision; omit to check every test")
+    parser.add_argument("--pr-head", default=os.environ.get("PR_HEAD_SHA") or None,
+                        help="event PR head SHA; verify synthetic merge parents")
     parser.add_argument("--root", type=Path, default=Path("."))
     parser.add_argument("--jobs", type=int, default=3)
     parser.add_argument("--timeout", type=int, default=240,
@@ -549,6 +583,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     os.chdir(args.root)
+    args.base = selection_base(args.base, args.pr_head)
     early, sources, tests, graph = select(Path("."), args.base)
 
     if args.command == "list":

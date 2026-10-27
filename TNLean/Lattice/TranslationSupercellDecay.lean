@@ -26,13 +26,11 @@ decays in the separation (eq. `blecm`).
 
 When every `l`-neighbourhood of a support can be avoided by some `g ∈ S` with `l` of order the
 linear size of the system, this bound is exponentially small in that size, which is the
-source's conclusion; that geometric choice is left to the application.
-
-**Scope restriction (supercell):** the source assumes that the momenta of the ground states are
-rational multiples of `2π` whose denominators do not depend on the system size (lines
-1620–1625), and derives from this a supercell whose translations leave every ground state
-unchanged (lines 1626–1630). The theorem here instead assumes such a subgroup `S` directly.
-Documented in `docs/paper-gaps/hastings05_translation_supercell.tex`.
+source's conclusion. The subgroup `S` is a hypothesis here. For an abelian group it is
+constructed from the momenta of the ground states in `TranslationMomentum.lean`, the geometric
+choice of `g` is made in `TranslationSupercellSpacing.lean`, and the source's conclusion, with
+momenta of bounded denominator, is `norm_groundCompression_commutator_le_of_momenta` in
+`TranslationSupercellCommutator.lean`.
 -/
 
 open Matrix GaussianFilter QuantumCircuit
