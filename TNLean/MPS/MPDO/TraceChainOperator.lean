@@ -30,10 +30,6 @@ noncomputable def traceChainOperator {L q D : ℕ}
     Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
   fun σ τ ↦ Matrix.trace (C * (List.ofFn (fun v ↦ A v (σ v) (τ v))).prod)
 
-end MPOTensor
-
-namespace MPOTensor
-
 /-- A closing matrix can be multiplied into the first tensor of a nonempty
 site-dependent chain, with the same virtual dimension. The physical and virtual
 dimensions may vanish. Elementary trace algebra supporting the explicit
@@ -52,10 +48,6 @@ private theorem exists_trace_mul_prod_eq_trace_prod {L q D : ℕ}
     intro σ τ
     simp only [List.ofFn_succ, List.prod_cons, Fin.cons_zero, Fin.cons_succ,
       Matrix.mul_assoc]
-
-end MPOTensor
-
-namespace MPOTensor
 
 /-- On a nonempty site-dependent chain, every supplied closing matrix can be
 replaced by the identity after changing the site tensors at the same virtual
