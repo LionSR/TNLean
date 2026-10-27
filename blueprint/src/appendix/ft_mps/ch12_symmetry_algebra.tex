@@ -322,13 +322,18 @@ $\omega_1,\omega_2:G\times G\to\C^\times$ be arbitrary scalar $2$-cochains.
 
 \begin{theorem}[Cohomologous cochains differ by a coboundary]%
     \label{thm:coboundary_iff_cohomologous_one}
-    \lean{TNLean.Algebra.ScalarCocycle.cohomologousTo_iff_isMulCoboundary₂_div}
+    \lean{TNLean.Algebra.ScalarCocycle.cohomologousTo_iff_isMulCoboundary₂_div,
+        TNLean.Algebra.isMulCoboundary₂_div_iff_quotient_mk_eq}
     \leanok
     \uses{def:is_coboundary, def:cohomologous_to}
     Two scalar $2$-cochains satisfy $\omega_1\sim\omega_2$ if and only if
     the pointwise ratio $\omega_1\omega_2^{-1}$ is a coboundary. In
     particular, $\omega$ is a coboundary if and only if $\omega \sim \Id$,
     where $\Id(g,h)=1$ for all $g,h$.
+    Equivalently, $\omega_1$ and $\omega_2$ have the same image in
+    $C^2(G,\C^\times)/B^2(G,\C^\times)$, where $C^2$ is the group of all
+    scalar two-cochains and $B^2$ its subgroup of coboundaries. This quotient
+    includes arbitrary cochains, not only cocycles.
 \end{theorem}
 
 \begin{proof}\leanok\uses{def:is_coboundary, def:cohomologous_to}
@@ -337,4 +342,6 @@ $\omega_1,\omega_2:G\times G\to\C^\times$ be arbitrary scalar $2$-cochains.
     $\varphi(g)\varphi(h)\varphi(gh)^{-1}$ in the commutative group
     $\C^\times$ identify $\omega_1\omega_2^{-1}$ as a coboundary; for
     $\omega_2=\Id$ the ratio reduces to $\omega_1$ itself.
+    Equality in the quotient by $B^2$ is exactly membership of
+    $\omega_1\omega_2^{-1}$ in $B^2$.
 \end{proof}

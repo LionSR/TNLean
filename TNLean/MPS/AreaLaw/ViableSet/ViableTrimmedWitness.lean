@@ -58,8 +58,8 @@ theorem ChainHamiltonian.exists_trimmed_witness_of_isViable
       WithLp.ofLp w ∘ (gluingCut L q k).symm =
         ((1 : Matrix (CutLeft L q k × CutSite L q k)
           (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ x ∧
-      (reindex (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_sub_one_subset k))
-          (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_sub_one_subset k))
+      (reindex (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+          (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
           (spanProjection S) ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ x = x := by
   classical
   let c : ℝ := (Δ / 169) ^ 2

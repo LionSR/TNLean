@@ -327,10 +327,6 @@ theorem norm_sub_sequentialTruncation_sq_le (hP : ∀ k, IsStarProjection (P k))
     rw [hsplit, sq, hpy]
     nlinarith [ih, hcontr, norm_nonneg (toEuclideanLin (Entropy.localLift D Pj) x)]
 
-/-- Left blocks grow with the cut. -/
-theorem leftBlock_mono {k k' : ℕ} (h : k ≤ k') : leftBlock L k ⊆ leftBlock L k' :=
-  fun _ hi ↦ mem_leftBlock.mpr (lt_of_lt_of_le (mem_leftBlock.mp hi) h)
-
 /-- After the truncation on the cut `L - 1 - i` has been applied, every later truncation
 acts on a smaller left block, so the whole product from step `i` on is the lift of a
 single matrix on the left block of the cut `L - 1 - i`, with the truncation of that cut as
