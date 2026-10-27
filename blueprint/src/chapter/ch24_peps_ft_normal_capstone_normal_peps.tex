@@ -377,14 +377,27 @@ product states, and the square lattice.
 \begin{definition}[A common physical action on a tensor network]%
     \label{def:peps_physical_tensor_action}
     \lean{TNLean.PEPS.physicalTensorAction}
-    \lean{TNLean.PEPS.stateCoeff_physicalTensorAction}
     \leanok
 
+    \uses{def:peps_tensor}
     For a tensor $A$ on a finite simple graph with vertex set $V$ and a
     matrix $U\in\MN{d}$, define $B=U\cdot A$ by keeping all bond spaces
     and setting $B_v(\eta,\sigma)=\sum_\tau U_{\sigma\tau}A_v(\eta,\tau)$.
-    Its state is $\Coeff_B=U^{\otimes V}\Coeff_A$.
 \end{definition}
+
+\begin{theorem}[State of a physical tensor action]%
+    \label{thm:peps_state_physical_tensor_action}
+    \lean{TNLean.PEPS.stateCoeff_physicalTensorAction}
+    \leanok
+
+    \uses{def:peps_physical_tensor_action,
+        def:peps_dependent_physical_product, def:peps_stateCoeff}
+    For a tensor $A$ on a finite simple graph with vertex set $V$ and
+    $U\in\MN{d}$, the tensor $B=U\cdot A$ has state
+    \begin{align}
+        \Coeff_B=U^{\otimes V}\Coeff_A.
+    \end{align}
+\end{theorem}
 \begin{proof}\leanok
     Expand the local matrix products in the contraction and exchange the
     finite sums. The product of the physical coefficients is
@@ -401,10 +414,14 @@ product states, and the square lattice.
     injective, then the common physical dimension $d$ is positive.
 \end{theorem}
 \begin{proof}\leanok
-    Positive bond dimensions give a boundary configuration. The blocked
-    vector at that configuration is nonzero by linear independence.
-    If $d=0$, a nonempty region has no physical configurations, so its
-    physical vector space is zero, a contradiction.
+    Positive bond dimensions give the boundary configuration $\beta_e=0$
+    on every boundary edge. Linear independence gives the nonzero blocked
+    vector $T_{A,R}^{\beta}\ne0$. If $d=0$, the nonempty region $R$ has
+    no physical configurations, so
+    \begin{align}
+        T_{A,R}^{\beta}=0,
+    \end{align}
+    a contradiction.
 \end{proof}
 
 \begin{theorem}[Regional injectivity from the state and bond dimensions]%
@@ -412,12 +429,13 @@ product states, and the square lattice.
     \lean{TNLean.PEPS.regionBlockedTensorInjective_of_sameState_of_bondDim_eq}
     \leanok
 
-    \uses{def:peps_regionInjectivityDataOf, def:peps_region_partial_state}
+    \uses{def:peps_regionInjectivityDataOf, def:peps_same_state}
     Let $A$ and $B$ have the same state and the same positive bond
     dimensions. If a region $R$ and its complement are injective for $A$,
     then $R$ is injective for $B$.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{def:peps_region_partial_state}
     Write $F_{A,R}$ and $F_{B,R}$ for the blocked maps from the common
     boundary space to the physical space of $R$. Injectivity of the
     complement for $A$ identifies the range of $F_{A,R}$ with the span of
@@ -434,7 +452,8 @@ product states, and the square lattice.
     \lean{TNLean.PEPS.normalPairHypothesesOfSameStateOfBondDimEq}
     \leanok
 
-    \uses{def:peps_normalPEPSBlockingHypotheses, def:peps_normalPEPSPairHypotheses}
+    \uses{def:peps_normalPEPSBlockingHypotheses, def:peps_normalPEPSPairHypotheses,
+        def:peps_same_state}
     Suppose $A$ admits the normal blocking regions of
     Definition~\ref{def:peps_normalPEPSBlockingHypotheses}, with nonzero
     virtual spaces. If $B$ has the same state and bond dimensions, the
@@ -472,7 +491,8 @@ product states, and the square lattice.
     in~\cite{gap:peps_gaugeConsistency_connectivity_gap}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:peps_physical_tensor_action, def:peps_normal_pair_blockings_from_state,
+    \uses{def:peps_physical_tensor_action, thm:peps_state_physical_tensor_action,
+        def:peps_normal_pair_blockings_from_state,
         thm:peps_physical_dimension_pos_of_region,
         thm:fundamentalTheorem_normalPEPS_connected}
     Put $B=U\cdot A$. Its state equals that of $A$, and its bond
