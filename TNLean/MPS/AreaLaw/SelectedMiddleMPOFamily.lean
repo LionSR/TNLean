@@ -414,11 +414,7 @@ theorem exists_common_physical_twoMarkerCoefficient_mpo_family
   let Ksites := interval L (a + 2 * ell) (b + 1)
   let T := interval L 0 (a + p.val + 1)
   let E := interval L (a + p.val + 1) (b + s.val + 1)
-  let hTE : Disjoint T E := by
-    rw [Finset.disjoint_left]
-    intro x hx hx'
-    simp only [T, E, mem_interval] at hx hx'
-    omega
+  let hTE : Disjoint T E := disjoint_interval_interval (L := L) 0 _ _
   let g := threeSplit q T E hTE
   let e := exteriorMiddleEquiv (T → Fin q) (E → Fin q) (↥(T ∪ E)ᶜ → Fin q)
   let Nnat := (b + s.val + 1) - (a + p.val + 1)
@@ -467,11 +463,7 @@ theorem exists_common_physical_twoMarkerCoefficient_mpo_family
   let Ksites := interval L (a + 2 * ell) (b + 1)
   let T := interval L 0 (a + p.val + 1)
   let E := interval L (a + p.val + 1) (b + s.val + 1)
-  let hTE : Disjoint T E := by
-    rw [Finset.disjoint_left]
-    intro x hx hx'
-    simp only [T, E, mem_interval] at hx hx'
-    omega
+  let hTE : Disjoint T E := disjoint_interval_interval (L := L) 0 _ _
   let g := threeSplit q T E hTE
   let e := exteriorMiddleEquiv (T → Fin q) (E → Fin q) (↥(T ∪ E)ᶜ → Fin q)
   let Nnat := (b + s.val + 1) - (a + p.val + 1)

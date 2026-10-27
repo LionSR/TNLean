@@ -9438,17 +9438,19 @@ entropy growth. There are two independent occurrences. A third consumer should
 share the logarithmic integer-budget lemma and the elementary eventual comparison;
 there is no need for a new tactic.
 
-### Disjoint adjacent intervals in the common middle family — candidate (2026-10-27)
+### Disjoint adjacent chain intervals — promoted (2026-10-27)
 
-- **Pattern:** Prove disjointness of consecutive chain intervals by expanding
-  membership and comparing the common boundary.
-- **Seen:** Seven occurrences in the 2026-10-27 scan, including
-  `MPS/AreaLaw/CommonMiddleMPOFamily.lean:303`,
-  `MPS/AreaLaw/SelectedCoefficientDecomposition.lean:179`, and
-  `MPS/AreaLaw/SelectedMiddleData.lean:492`.
-- **Abstraction:** Move the existing general result
-  `Hastings.disjoint_interval_interval` from `Hastings/Window.lean` to
-  `MPS/AreaLaw/Basic.lean`, and use it in the common-family constructions.
-- **Notes:** The statement is independent of entropy and of a Hamiltonian.
-  Promotion and replacement of the repeated proofs belong to the immediate
-  following refactoring change; no new tactic is needed.
+- **Pattern:** Prove disjointness of consecutive chain intervals by their common
+  boundary.
+- **Seen:** Seven repeated proofs in `CommonMiddleMPOFamily.lean`,
+  `SelectedCoefficientDecomposition.lean`, `SelectedMiddleData.lean`,
+  `SelectedMiddleMPOFamily.lean` (twice), `ThreeRegionSupport.lean` and
+  `TwoWindowOperatorForms.lean`; two further uses in `Hastings/Window.lean`.
+- **Abstraction:** `TNLean.MPS.AreaLaw.disjoint_interval_interval` in
+  `MPS/AreaLaw/Basic.lean`. The proof applies
+  `Finset.Ico_disjoint_Ico_consecutive` to the natural-number positions.
+- **Notes:** The statement needs no ordering of the endpoints and no positivity
+  of the chain length. The Mathlib theorem is already imported. The former
+  `Hastings.disjoint_interval_interval` is removed rather than retained as an
+  alias, so users of the basic interval result need no entropy module. All seven
+  repeated family proofs and both window uses refer to the common declaration.
