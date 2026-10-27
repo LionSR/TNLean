@@ -71,24 +71,44 @@ basis in the source interpolation argument is recorded in
 \end{theorem}
 \begin{proof}
     \uses{def:two_marker_ordinary_labels,def:full_frequency_word_coefficient}
-    The two distinguished labels are distinct, so the ordinary label set has
-    $4\ell+1$ members. Ordinary count vectors with each coordinate between
-    zero and $K$ form a monomial box of exactly $(K+1)^{4\ell+1}$ elements.
-    Choose the finite interpolation points for this box before the frequencies
-    or mask are supplied.
+    The distinguished labels are distinct, so $\mathcal O=\mathcal O_{u,v}$
+    has $4\ell+1$ members. Put $G=\{0,\ldots,K\}^{\mathcal O}$.
+    For $0\le s,t\le K$, let $V_{s,t}=s^t$.
+    The nodes $0,\ldots,K$ are distinct, so the Vandermonde matrix $V$ is
+    invertible. For $\alpha,g\in G$, define
+    \begin{align}
+        E_{g,\alpha} & =\prod_{a\in\mathcal O}g(a)^{\alpha(a)}, \notag   \\
+        R_{\alpha,g} & =\prod_{a\in\mathcal O}(V^{-1})_{\alpha(a),g(a)}.
+        \label{eq:two_marker_grid_weights}
+    \end{align}
+    Multiplying the one-variable recovery identities over the ordinary labels gives
+    \begin{align}
+        \sum_{g\in G}R_{\alpha,g}E_{g,\beta}=\delta_{\alpha,\beta}.
+        \label{eq:two_marker_grid_recovery}
+    \end{align}
+    Take $z_g:I\to\C$ to agree with $g$ on $\mathcal O$ and to vanish
+    elsewhere. These points depend only on the alphabet, the distinguished
+    labels and $K$.
 
-    Fix $i,j,\mu$. Restore the two distinguished counts in each ordinary box
-    exponent, and use $\mu$ of that restored count vector as its scalar weight.
-    Uniform scalar interpolation gives coefficients $\gamma_t$ before any
-    module-valued coefficient family is supplied. A frequency slice at any
-    $r\le K$ embeds in the same box; set the other coefficients to zero.
-    Every count coordinate in that slice is at most $K$, so restoring and
-    removing the distinguished counts are inverse on the retained slice.
+    Fix $i,j,\mu$. For $\alpha\in G$, let $\nu_{i,j,\alpha}$ be the
+    full count vector obtained by assigning $i$ at $u$, $j$ at $v$, and
+    $\alpha(a)$ at each ordinary label $a$. Define
+    \begin{align}
+        \gamma_g=\sum_{\alpha\in G}\mu(\nu_{i,j,\alpha})R_{\alpha,g}.
+        \label{eq:two_marker_mask_weights}
+    \end{align}
+    These coefficients precede the operator family and the degree.
+    At any degree $r\le K$, extend the coefficients of the prescribed
+    frequency slice by zero to the ordinary monomial box. Every ordinary
+    coordinate in the slice is at most $K$, and restoring and removing the
+    distinguished counts are inverse on that slice. Substituting
+    (\ref{eq:two_marker_grid_recovery}) and exchanging the two finite sums
+    gives recovery with the weights in (\ref{eq:two_marker_mask_weights}).
 
-    Apply this recovery identity to the coefficients
-    $\mathcal W_{H,r}(\nu)$. The existing counted-word identity identifies
-    each evaluated ordinary monomial sum with
-    $[x^iy^j](D_t+yH_v+xH_u)^r$, without changing the order of the factors
-    $H_a$. Reindexing the monomial box by its exact cardinality gives
-    (\ref{eq:two_window_common_scalar_recovery}).
+    Apply this recovery identity to $\mathcal W_{H,r}(\nu)$.
+    The counted-word identity identifies each evaluated ordinary monomial sum
+    with $[x^iy^j](D_g+yH_v+xH_u)^r$, preserving the order of the factors
+    $H_a$. The box has exactly $(K+1)^{4\ell+1}=N$ elements.
+    Reindexing it by $0\le t<N$ gives
+    (\ref{eq:two_window_common_scalar_recovery}). The formulas include $K=0$.
 \end{proof}

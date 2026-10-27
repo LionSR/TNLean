@@ -10,6 +10,11 @@ import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Data.Fintype.Sum
 import Mathlib.Logic.Equiv.Fin.Basic
+import QICLean.Algebra.IntegerGridInterpolation
+import Mathlib.Algebra.MvPolynomial.Eval
+import Mathlib.Algebra.BigOperators.Finsupp.Basic
+import Mathlib.Logic.Equiv.Set
+import Mathlib.Data.Fintype.EquivFin
 
 /-!
 # Common scalar recovery of two marked word coefficients
@@ -139,6 +144,192 @@ end MvPolynomial
 
 namespace MvPolynomial
 
+variable {I : Type*} [Fintype I] [DecidableEq I]
+
+/-- Each ordinary finite-box coordinate is recovered by evaluating its encoded exponent. -/
+private theorem twoMarkerBoxExponent_injective (u v : I) (K : ℕ) :
+    Function.Injective (twoMarkerBoxExponent u v K) := by
+  intro p q hpq
+  funext a
+  apply Fin.ext
+  have h := congrArg (fun β : I →₀ ℕ ↦ β a.val) hpq
+  simpa [twoMarkerBoxExponent, a.property] using h
+
+/-- The fixed box contains exactly one exponent for each ordinary bounded-count vector. -/
+private theorem card_twoMarkerMonomialBox (u v : I) (K : ℕ) :
+    (twoMarkerMonomialBox u v K).card = (K + 1) ^ (twoMarkerOrdinaryLabels u v).card := by
+  classical
+  calc
+    (twoMarkerMonomialBox u v K).card =
+        (Finset.univ : Finset (↥(twoMarkerOrdinaryLabels u v) → Fin (K + 1))).card :=
+      Finset.card_image_of_injective _ (twoMarkerBoxExponent_injective u v K)
+    _ = (K + 1) ^ (twoMarkerOrdinaryLabels u v).card := by
+      simp only [Finset.card_univ, Fintype.card_fun, Fintype.card_fin, Fintype.card_coe]
+
+/-- Removing two distinct labels leaves exactly two fewer ordinary coordinates. -/
+private theorem card_twoMarkerOrdinaryLabels_add_two (u v : I) (huv : u ≠ v) :
+    (twoMarkerOrdinaryLabels u v).card + 2 = Fintype.card I := by
+  have hv : v ∈ (Finset.univ : Finset I).erase u := by simp [huv.symm]
+  have hlast : (twoMarkerOrdinaryLabels u v).card + 1 =
+      ((Finset.univ : Finset I).erase u).card := Finset.card_erase_add_one hv
+  calc
+    (twoMarkerOrdinaryLabels u v).card + 2 =
+        ((twoMarkerOrdinaryLabels u v).card + 1) + 1 := (Nat.add_assoc _ 1 1).symm
+    _ = ((Finset.univ : Finset I).erase u).card + 1 := congrArg (fun m : ℕ ↦ m + 1) hlast
+    _ = Fintype.card I := by
+      simpa only [Finset.card_univ] using
+        (Finset.card_erase_add_one (s := (Finset.univ : Finset I))
+          (a := u) (Finset.mem_univ u))
+
+end MvPolynomial
+
+namespace MvPolynomial
+
+variable {I : Type*} [Fintype I] [DecidableEq I]
+
+/-- Evaluating an encoded box exponent at the prescribed integer point is the
+corresponding product-grid matrix entry. Cutoff zero, an empty ordinary set,
+and coincident distinguished labels are included. Supporting AKLV,
+arXiv:1301.1162v1, Lemma l:agsp, lines 626–644, and ALVV,
+arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
+private theorem eval_twoMarkerBoxExponent_integerGrid (u v : I) (K : ℕ)
+    (g alpha : ↥(twoMarkerOrdinaryLabels u v) → Fin (K + 1)) :
+    let z : I → ℂ := fun a ↦ if h : a ∈ twoMarkerOrdinaryLabels u v
+      then FiniteScalarInterpolation.integerNode K (g ⟨a, h⟩) else 0
+    eval z (monomial (twoMarkerBoxExponent u v K alpha) (1 : ℂ)) =
+      FiniteScalarInterpolation.integerEvaluationGrid
+        ↥(twoMarkerOrdinaryLabels u v) K g alpha := by
+  let O := twoMarkerOrdinaryLabels u v
+  let z : I → ℂ := fun a ↦ if h : a ∈ O
+    then FiniteScalarInterpolation.integerNode K (g ⟨a, h⟩) else 0
+  change eval z (monomial (twoMarkerBoxExponent u v K alpha) (1 : ℂ)) =
+    FiniteScalarInterpolation.integerEvaluationGrid ↥O K g alpha
+  rw [eval_monomial, one_mul, Finsupp.prod_fintype _ _ (fun _ ↦ pow_zero _)]
+  calc
+    (∏ a : I, z a ^ (twoMarkerBoxExponent u v K alpha) a) =
+        ∏ a ∈ O, z a ^ (twoMarkerBoxExponent u v K alpha) a := by
+      symm
+      apply Finset.prod_subset (Finset.subset_univ O)
+      intro a _ha haO
+      change a ∉ twoMarkerOrdinaryLabels u v at haO
+      simp [twoMarkerBoxExponent, haO]
+    _ = ∏ a : ↥O, z a.val ^ (twoMarkerBoxExponent u v K alpha) a.val :=
+      (Finset.prod_coe_sort O (fun a : I ↦ z a ^ (twoMarkerBoxExponent u v K alpha) a)).symm
+    _ = FiniteScalarInterpolation.integerEvaluationGrid ↥O K g alpha := by
+      apply Finset.prod_congr rfl
+      intro a _ha
+      simp [z, twoMarkerBoxExponent, a.property]
+
+
+end MvPolynomial
+
+namespace MvPolynomial
+
+variable {I : Type*} [Fintype I] [DecidableEq I]
+
+open Classical in
+/-- The prescribed integer product grid gives scalar recovery on the existing
+ordinary monomial box. The sample points and recovery weights depend only on
+the alphabet, distinguished labels and cutoff. This includes cutoff zero,
+an empty ordinary set and coincident distinguished labels. Supporting AKLV,
+arXiv:1301.1162v1, Lemma l:agsp, lines 626–644, and ALVV,
+arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
+private theorem exists_twoMarker_integerGrid_scalar_recovery (u v : I) (K : ℕ) :
+    let O := twoMarkerOrdinaryLabels u v
+    let S := twoMarkerMonomialBox u v K
+    ∃ (eBox : (↥O → Fin (K + 1)) ≃ ↥S) (qGrid : (↥O → Fin (K + 1)) ≃ Fin S.card),
+      (∀ alpha : ↥O → Fin (K + 1), (eBox alpha).val = twoMarkerBoxExponent u v K alpha) ∧
+      let z : Fin S.card → I → ℂ := fun s a ↦ if h : a ∈ O
+        then FiniteScalarInterpolation.integerNode K (qGrid.symm s ⟨a, h⟩) else 0
+      let c : ↥S → Fin S.card → ℂ := fun alpha s ↦
+        FiniteScalarInterpolation.integerRecoveryGrid ↥O K
+          (eBox.symm alpha) (qGrid.symm s)
+      ∀ alpha beta : ↥S,
+        (∑ s : Fin S.card, c alpha s * eval (z s) (monomial beta.val (1 : ℂ))) =
+          if alpha = beta then 1 else 0 := by
+  classical
+  let O := twoMarkerOrdinaryLabels u v
+  let G := ↥O → Fin (K + 1)
+  let S := twoMarkerMonomialBox u v K
+  have hrange (beta : I →₀ ℕ) :
+      beta ∈ Set.range (twoMarkerBoxExponent u v K) ↔ beta ∈ S := by
+    simp only [S, twoMarkerMonomialBox, Set.mem_range, Finset.mem_image,
+      Finset.mem_univ, true_and]
+  let eBox : G ≃ ↥S :=
+    (Equiv.ofInjective (twoMarkerBoxExponent u v K)
+      (twoMarkerBoxExponent_injective u v K)).trans
+        (Equiv.subtypeEquivRight hrange)
+  have heBox (alpha : G) :
+      (eBox alpha).val = twoMarkerBoxExponent u v K alpha := rfl
+  have hcard : Fintype.card G = S.card := by
+    calc
+      Fintype.card G = (K + 1) ^ O.card := by
+        simp only [G, Fintype.card_fun, Fintype.card_fin, Fintype.card_coe]
+      _ = S.card := (card_twoMarkerMonomialBox u v K).symm
+  let qGrid : G ≃ Fin S.card := (Fintype.equivFin G).trans (finCongr hcard)
+  refine ⟨eBox, qGrid, heBox, ?_⟩
+  let z : Fin S.card → I → ℂ := fun s a ↦ if h : a ∈ O
+    then FiniteScalarInterpolation.integerNode K (qGrid.symm s ⟨a, h⟩) else 0
+  let c : ↥S → Fin S.card → ℂ := fun alpha s ↦
+    FiniteScalarInterpolation.integerRecoveryGrid ↥O K
+      (eBox.symm alpha) (qGrid.symm s)
+  change ∀ alpha beta : ↥S,
+    (∑ s : Fin S.card, c alpha s * eval (z s) (monomial beta.val (1 : ℂ))) =
+      if alpha = beta then 1 else 0
+  intro alpha beta
+  have hbeta : twoMarkerBoxExponent u v K (eBox.symm beta) = beta.val :=
+    (heBox (eBox.symm beta)).symm.trans
+      (congrArg Subtype.val (eBox.apply_symm_apply beta))
+  have heval (g : G) :
+      eval (fun a ↦ if h : a ∈ O
+        then FiniteScalarInterpolation.integerNode K (g ⟨a, h⟩) else 0)
+        (monomial beta.val (1 : ℂ)) =
+      FiniteScalarInterpolation.integerEvaluationGrid ↥O K g (eBox.symm beta) := by
+    rw [← hbeta]
+    exact eval_twoMarkerBoxExponent_integerGrid u v K g (eBox.symm beta)
+  have hgrid :
+      (∑ g : G, FiniteScalarInterpolation.integerRecoveryGrid ↥O K
+        (eBox.symm alpha) g *
+        FiniteScalarInterpolation.integerEvaluationGrid ↥O K g (eBox.symm beta)) =
+      if alpha = beta then 1 else 0 := by
+    have h := congrArg (fun A : Matrix G G ℂ ↦ A (eBox.symm alpha) (eBox.symm beta))
+      (FiniteScalarInterpolation.integerRecoveryGrid_mul_integerEvaluationGrid ↥O K)
+    have hEq : (fun a b : ↥O ↦ Classical.propDecidable (a = b)) =
+        (inferInstance : DecidableEq ↥O) := Subsingleton.elim _ _
+    rw [hEq] at h
+    simp only [Matrix.mul_apply, Matrix.one_apply] at h
+    by_cases hab : alpha = beta
+    · subst beta
+      simpa only [ite_eq_left rfl] using h
+    · have hne : eBox.symm alpha ≠ eBox.symm beta :=
+        fun hsame ↦ hab (eBox.symm.injective hsame)
+      simpa only [ite_eq_right hne, ite_eq_right hab] using h
+  calc
+    (∑ s : Fin S.card, c alpha s * eval (z s) (monomial beta.val (1 : ℂ))) =
+        ∑ g : G, FiniteScalarInterpolation.integerRecoveryGrid ↥O K
+          (eBox.symm alpha) g *
+          eval (fun a ↦ if h : a ∈ O
+            then FiniteScalarInterpolation.integerNode K (g ⟨a, h⟩) else 0)
+            (monomial beta.val (1 : ℂ)) :=
+      qGrid.symm.sum_comp (fun g : G ↦
+        FiniteScalarInterpolation.integerRecoveryGrid ↥O K (eBox.symm alpha) g *
+          eval (fun a ↦ if h : a ∈ O
+            then FiniteScalarInterpolation.integerNode K (g ⟨a, h⟩) else 0)
+            (monomial beta.val (1 : ℂ)))
+    _ = ∑ g : G, FiniteScalarInterpolation.integerRecoveryGrid ↥O K
+        (eBox.symm alpha) g *
+        FiniteScalarInterpolation.integerEvaluationGrid ↥O K g (eBox.symm beta) := by
+      apply Finset.sum_congr rfl
+      intro g _hg
+      exact congrArg (fun w : ℂ ↦
+        FiniteScalarInterpolation.integerRecoveryGrid ↥O K (eBox.symm alpha) g * w)
+        (heval g)
+    _ = if alpha = beta then 1 else 0 := hgrid
+
+end MvPolynomial
+
+namespace MvPolynomial
+
 /-- A fixed distinguished-frequency slice is the ordinary monomial box with
 zero coefficients outside that slice. This is a finite-sum identity for an
 arbitrary additive coefficient function, independent of ordered words.
@@ -220,11 +411,19 @@ private theorem exists_uniform_twoMarker_masked_slice_recovery
                     (fun ν ↦ ν u = i ∧ ν v = j),
                   (∏ a ∈ twoMarkerOrdinaryLabels u v, z s a ^ ν a) • C ν) := by
   classical
+  let O := twoMarkerOrdinaryLabels u v
   let B := twoMarkerMonomialBox u v K
-  obtain ⟨z, hz⟩ := exists_weighted_monomial_evaluation_recovery (M := M) B
+  obtain ⟨eBox, qGrid, _heBox, hscalar⟩ :=
+    exists_twoMarker_integerGrid_scalar_recovery u v K
+  let z : Fin B.card → I → ℂ := fun s a ↦ if h : a ∈ O
+    then FiniteScalarInterpolation.integerNode K (qGrid.symm s ⟨a, h⟩) else 0
+  let c : ↥B → Fin B.card → ℂ := fun alpha s ↦
+    FiniteScalarInterpolation.integerRecoveryGrid ↥O K
+      (eBox.symm alpha) (qGrid.symm s)
   refine ⟨z, ?_⟩
   intro i j μ
-  obtain ⟨gamma, hgamma⟩ := hz (fun β : ↥B ↦ μ (twoMarkerRestore u v i j β))
+  let gamma : Fin B.card → ℂ := fun s ↦
+    ∑ β : ↥B, μ (twoMarkerRestore u v i j β) * c β s
   refine ⟨gamma, ?_⟩
   intro C r hr
   let T := (Finset.piAntidiag (Finset.univ : Finset I) r).filter
@@ -264,7 +463,14 @@ private theorem exists_uniform_twoMarker_masked_slice_recovery
     (∑ ν ∈ T, μ ν • C ν) =
         ∑ β : ↥B, μ (twoMarkerRestore u v i j β) • f β := hmask
     _ = ∑ s : Fin B.card, gamma s •
-        (∑ β : ↥B, eval (z s) (monomial (β : I →₀ ℕ) (1 : ℂ)) • f β) := hgamma f
+        (∑ β : ↥B, eval (z s) (monomial (β : I →₀ ℕ) (1 : ℂ)) • f β) := by
+      exact weighted_monomial_evaluation_recovery_smul B z c
+        (fun alpha beta ↦ by
+          have h := hscalar alpha beta
+          by_cases hab : alpha = beta
+          · simpa only [ite_eq_left hab] using h
+          · simpa only [ite_eq_right hab] using h)
+        (fun β : ↥B ↦ μ (twoMarkerRestore u v i j β)) f
     _ = ∑ s : Fin B.card, gamma s •
         (∑ ν ∈ T, (∏ a ∈ twoMarkerOrdinaryLabels u v, z s a ^ ν a) • C ν) := by
       apply Finset.sum_congr rfl
@@ -340,46 +546,6 @@ private theorem exists_twoMarker_wordCoefficient_recovery
 
 end Polynomial
 
-namespace MvPolynomial
-
-variable {I : Type*} [Fintype I] [DecidableEq I]
-
-/-- Each ordinary finite-box coordinate is recovered by evaluating its encoded exponent. -/
-private theorem twoMarkerBoxExponent_injective (u v : I) (K : ℕ) :
-    Function.Injective (twoMarkerBoxExponent u v K) := by
-  intro p q hpq
-  funext a
-  apply Fin.ext
-  have h := congrArg (fun β : I →₀ ℕ ↦ β a.val) hpq
-  simpa [twoMarkerBoxExponent, a.property] using h
-
-/-- The fixed box contains exactly one exponent for each ordinary bounded-count vector. -/
-private theorem card_twoMarkerMonomialBox (u v : I) (K : ℕ) :
-    (twoMarkerMonomialBox u v K).card = (K + 1) ^ (twoMarkerOrdinaryLabels u v).card := by
-  classical
-  calc
-    (twoMarkerMonomialBox u v K).card =
-        (Finset.univ : Finset (↥(twoMarkerOrdinaryLabels u v) → Fin (K + 1))).card :=
-      Finset.card_image_of_injective _ (twoMarkerBoxExponent_injective u v K)
-    _ = (K + 1) ^ (twoMarkerOrdinaryLabels u v).card := by
-      simp only [Finset.card_univ, Fintype.card_fun, Fintype.card_fin, Fintype.card_coe]
-
-/-- Removing two distinct labels leaves exactly two fewer ordinary coordinates. -/
-private theorem card_twoMarkerOrdinaryLabels_add_two (u v : I) (huv : u ≠ v) :
-    (twoMarkerOrdinaryLabels u v).card + 2 = Fintype.card I := by
-  have hv : v ∈ (Finset.univ : Finset I).erase u := by simp [huv.symm]
-  have hlast : (twoMarkerOrdinaryLabels u v).card + 1 =
-      ((Finset.univ : Finset I).erase u).card := Finset.card_erase_add_one hv
-  calc
-    (twoMarkerOrdinaryLabels u v).card + 2 =
-        ((twoMarkerOrdinaryLabels u v).card + 1) + 1 := (Nat.add_assoc _ 1 1).symm
-    _ = ((Finset.univ : Finset I).erase u).card + 1 := congrArg (fun m : ℕ ↦ m + 1) hlast
-    _ = Fintype.card I := by
-      simpa only [Finset.card_univ] using
-        (Finset.card_erase_add_one (s := (Finset.univ : Finset I))
-          (a := u) (Finset.mem_univ u))
-
-end MvPolynomial
 
 namespace MvPolynomial
 
