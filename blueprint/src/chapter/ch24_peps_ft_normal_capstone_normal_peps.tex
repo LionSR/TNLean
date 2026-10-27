@@ -483,3 +483,107 @@ product states, and the square lattice.
     nonempty, so Theorem~\ref{thm:peps_physical_dimension_pos_of_region}
     gives $d>0$. Apply the connected normal Fundamental Theorem to this pair.
 \end{proof}
+
+\begin{theorem}[Multiplication of endpoint gauge matrices]%
+    \label{thm:peps_endpoint_gauge_mul}
+    \lean{TNLean.PEPS.edgeGaugeAt_mul}
+
+    \uses{def:edgeGaugeAt}
+    Let $X$ and $Y$ be invertible edge-matrix families, and write
+    $M_{v,e}(X)$ for the endpoint action of $X_e$ at $v$. Then
+    $M_{v,e}(XY)=M_{v,e}(X)M_{v,e}(Y)$.
+\end{theorem}
+\begin{proof}
+    At the first endpoint this is matrix multiplication. At the second,
+    $(XY)^{-\mathsf T}=X^{-\mathsf T}Y^{-\mathsf T}$, where
+    $X^{-\mathsf T}=(X^{-1})^{\mathsf T}$.
+\end{proof}
+
+\begin{theorem}[Composition of virtual gauge actions]%
+    \label{thm:peps_gauge_action_composition}
+    \lean{TNLean.PEPS.gaugeVertex_applyGauge}
+
+    \uses{def:gaugeVertex, def:applyGauge}
+    For invertible edge-matrix families $X$ and $Y$, the vertex tensors
+    satisfy $(A^X)^Y_v=A^{YX}_v$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:peps_endpoint_gauge_mul}
+    Expand both gauge actions and exchange the finite sums. On each
+    incident leg the resulting matrix is
+    $M_{v,e}(Y)M_{v,e}(X)=M_{v,e}(YX)$.
+\end{proof}
+
+\begin{theorem}[Composition of physical tensor actions]%
+    \label{thm:peps_physical_action_composition}
+    \lean{TNLean.PEPS.physicalTensorAction_mul_component}
+
+    \uses{def:peps_physical_tensor_action}
+    For physical matrices $U,W\in\MN{d}$, the vertex tensors satisfy
+    $(U\cdot(W\cdot A))_v=((UW)\cdot A)_v$.
+\end{theorem}
+\begin{proof}
+    Exchange the finite sums over the two physical indices and use
+    $(UW)_{\sigma\kappa}=\sum_\tau U_{\sigma\tau}W_{\tau\kappa}$.
+\end{proof}
+
+\begin{theorem}[Physical and virtual tensor actions commute]%
+    \label{thm:peps_physical_virtual_commute}
+    \lean{TNLean.PEPS.physicalTensorAction_applyGauge_component}
+
+    \uses{def:peps_physical_tensor_action, def:gaugeVertex, def:applyGauge}
+    For a physical matrix $U$ and an invertible edge-matrix family $X$,
+    the vertex tensors satisfy $(U\cdot A^X)_v=(U\cdot A)^X_v$.
+\end{theorem}
+\begin{proof}
+    Exchange the sums over the physical index and virtual indices; their
+    scalar coefficients commute.
+\end{proof}
+
+\begin{theorem}[Projective bond representations of a normal symmetry group]%
+    \label{thm:peps_normal_virtual_representation}
+    \lean{TNLean.PEPS.exists_virtualRepresentation_of_normal_symmetry}
+
+    \uses{def:projective_rep, thm:peps_normal_onsite_symmetry_gauge}
+    Let $A$ satisfy all the graph and blocking hypotheses of
+    Theorem~\ref{thm:peps_normal_onsite_symmetry_gauge}. Let $H$ be a group
+    and $U:H\to\GL_d(\C)$ a representation such that
+    $U(g)^{\otimes V}\Coeff_A=\Coeff_A$ for every $g\in H$.
+    Then each edge $e$ admits a homomorphism
+    $\overline\rho_e:H\to\operatorname{PGL}_{D_e}(\C)$ and invertible lifts
+    $\rho_e(g)\in\GL_{D_e}(\C)$ with
+    $\overline\rho_e(g)=[\rho_e(g)]$. Here
+    $\operatorname{PGL}_{D_e}(\C)=\GL_{D_e}(\C)/\C^\times$.
+    The lifts have a factor system $\omega_e:H\times H\to\C^\times$
+    such that, for all $g,h,k\in H$,
+    \begin{align}
+        \rho_e(g)\rho_e(h)          & =\omega_e(g,h)\rho_e(gh),\notag     \\
+        \omega_e(g,h)\omega_e(gh,k) & =\omega_e(g,hk)\omega_e(h,k).\notag
+    \end{align}
+    At every vertex, $(U(g)\cdot A)_v=A^{X(g)}_v$, where
+    $X(g)_e=\rho_e(g^{-1})$.
+    This proves the projective-representation assertion
+    in~\cite[Applications, line~1713]{Molnar2018NormalPEPS}, with the
+    connectedness correction in~\cite{gap:peps_gaugeConsistency_connectivity_gap}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:peps_normal_onsite_symmetry_gauge,
+        def:peps_normal_pair_blockings_from_state,
+        thm:peps_physical_action_composition, thm:peps_physical_virtual_commute,
+        thm:peps_gauge_action_composition,
+        thm:fundamentalTheorem_normalPEPS_gauge_unique, lem:cocycle_of_assoc}
+    Choose gauges $Z(g)$ from
+    Theorem~\ref{thm:peps_normal_onsite_symmetry_gauge}.
+    Composition and commutation give
+    $(U(gh)\cdot A)_v=A^{Z(h)Z(g)}_v$.
+    The same transformed tensor is also $A^{Z(gh)}_v$.
+    Gauge uniqueness therefore gives nonzero scalars $c_e(g,h)$ with
+    $Z_e(h)Z_e(g)=c_e(g,h)Z_e(gh)$.
+    Set $\rho_e(g)=Z_e(g^{-1})$ and
+    $\omega_e(g,h)=c_e(h^{-1},g^{-1})$.
+    Since $(gh)^{-1}=h^{-1}g^{-1}$, this is the stated projective
+    multiplication law. Passing to projective classes removes its scalar
+    factor and gives the homomorphism $\overline\rho_e$.
+    The bond dimension $D_e$ is positive, so
+    Lemma~\ref{lem:cocycle_of_assoc} gives the cocycle identity.
+\end{proof}
