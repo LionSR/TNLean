@@ -88,7 +88,7 @@ section
 
 open Matrix
 
-open scoped BigOperators Kronecker
+open scoped BigOperators
 
 section
 
