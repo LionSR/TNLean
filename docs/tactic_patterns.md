@@ -9460,3 +9460,18 @@ there is no need for a new tactic.
 - **Decision:** There are two occurrences across the companion libraries.
   Retain the existing lemmas; a third occurrence would justify a shared
   mathematical statement, rather than a custom tactic.
+
+### Supercell translation beyond a prescribed distance — promoted (2026-10-27)
+
+- **Pattern:** Choose a supercell translate with
+  `n / 2 < G.edist x (g • y) + N`, then use `l + N ≤ n / 2` to obtain
+  `l < G.edist x (g • y)`. For supports of diameter at most `R`, apply
+  `disjoint_biUnion_graphBall_of_lt_edist` at `l = 2 * R + s`.
+- **Seen:** Three applications across
+  `Lattice/TranslationSupercellCommutator.lean` (the two filtered bounds) and
+  `Lattice/TranslationSupercellTruncated.lean` (the truncated bound).
+- **Abstraction:** `TNLean.Lattice.exists_mem_supercell_lt_edist` in
+  `Lattice/TranslationSupercellSpacing.lean`.
+- **Notes:** This specializes the existing range-dependent coordinate estimate
+  to displacement at most one along every edge. The original range-dependent
+  theorem and all three commutator statements are unchanged.
