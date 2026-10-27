@@ -9,6 +9,7 @@ import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.NormNum
 import QICLean.Analysis.GroundEnergyBounds
 import TNLean.Circuit.EntropySupport
+import TNLean.Lattice.ZeroEntropy
 import TNLean.MPS.AreaLaw.Basic
 
 /-!
