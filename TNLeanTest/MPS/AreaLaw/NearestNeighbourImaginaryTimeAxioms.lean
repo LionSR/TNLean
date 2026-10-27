@@ -7,14 +7,16 @@ import TNLean.MPS.AreaLaw.NearestNeighbourImaginaryTime
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
-/-! Permitted-axiom check for local imaginary-time conjugation. -/
+/-! Permitted-axiom checks for factorial-growth and local conjugation bounds. -/
 
 run_cmd do
-  let decl := ``TNLean.MPS.AreaLaw.norm_exp_conjugation_nearestNeighbour_shift_le_two
-  unless (← Lean.getEnv).contains decl do
-    throwError "Missing declaration {decl}"
-  let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
-  let axioms ← Lean.collectAxioms decl
-  unless axioms.all (allowed.contains ·) do
-    throwError "Unexpected axioms for {decl}: {axioms}"
-  Lean.logInfo m!"{decl}: {axioms}"
+  let declarations := #[``Matrix.norm_exp_conjugation_le_two,
+    ``TNLean.MPS.AreaLaw.norm_exp_conjugation_nearest_neighbour_shift_le_two]
+  for decl in declarations do
+    unless (← Lean.getEnv).contains decl do
+      throwError "Missing declaration {decl}"
+    let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
+    let axioms ← Lean.collectAxioms decl
+    unless axioms.all (allowed.contains ·) do
+      throwError "Unexpected axioms for {decl}: {axioms}"
+    Lean.logInfo m!"{decl}: {axioms}"
