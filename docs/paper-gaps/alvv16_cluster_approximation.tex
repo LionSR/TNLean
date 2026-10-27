@@ -1,0 +1,173 @@
+\documentclass{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{Support Size and Negative Local Terms in the ALVV Cluster Approximation}
+\author{}
+\date{October 25, 2026}
+\begin{document}
+\maketitle
+\gapnote{false-source}{open}
+
+\section{The printed estimate}
+
+In the section on soft truncation, Arad, Landau, Vazirani and
+Vidick~\cite{Arad2016RigorousRG},
+\href{https://arxiv.org/abs/1602.08828v2}{arXiv:1602.08828v2}, state
+Theorem~\path{thm:cluster-approx} for
+$H=\sum_{i=1}^{n-1}h_i$ on a chain of $n$ qudits, with $h_i$ supported on
+$\{i,i+1\}$ and $\|h_i\|\le1$. The paragraph defining the expansion explicitly
+allows terms that are not nonnegative. For a word $w$ in the interaction
+labels, put
+\begin{align}
+    f(w)=\frac{(-\beta)^{|w|}}{|w|!}h_w,
+    \qquad h_w=h_{w_1}\cdots h_{w_{|w|}}.
+    \label{eq:alvv_cluster_word}
+\end{align}
+The operator $M_r(H)$ keeps the words whose support has connected components
+of fewer than $r$ physical sites. The printed assertion is
+\begin{align}
+    \|e^{-\beta H}-M_r(H)\|
+    \le \exp\bigl(n^2(e^\beta-1)^r\bigr)-1,
+    \qquad 0<\beta<\log2.
+    \label{eq:alvv_cluster_printed}
+\end{align}
+The source locations are \path{local_alg_arxiv_v2.tex}, lines 1270--1291
+(definition and statement), and the appendix \emph{Constructing an MPO for the
+    cluster expansion}, lines 1924--1968 (proof).
+There are two independent obstructions: the proof counts interaction labels
+where the statement counts physical sites, and it bounds a complementary
+exponential by one without assuming positivity.
+
+\section{Two sites: the support cutoff}
+
+Take two qubits and the single term
+$H=h_1=P=|00\rangle\langle00|$, with
+$r=2$ and $\beta=\log(11/10)$. This term is positive, has norm one,
+and acts nontrivially on both qubits. Every nonempty word evaluates to $P$,
+so its connected support has two sites and it is excluded. The empty word
+is retained. Thus
+\begin{align}
+    M_2(H)                  & =I,                 &
+    e^{-\beta P}            & =I+(e^{-\beta}-1)P, &
+    \|e^{-\beta P}-M_2(H)\| & =\frac1{11}.
+    \label{eq:alvv_cluster_two_sites}
+\end{align}
+The right side of (\ref{eq:alvv_cluster_printed}) is
+$\exp(4(1/10)^2)-1=\exp(1/25)-1$. For $0<x<1$, comparison of the
+exponential and geometric series gives $e^x<1/(1-x)$. Consequently
+\begin{align}
+    \exp(1/25)-1<\frac1{24}<\frac1{11}.
+    \label{eq:alvv_cluster_two_sites_comparison}
+\end{align}
+This contradicts the printed bound even for positive local terms. A connected
+interval of $r$ sites requires only $r-1$ distinct nearest-neighbour
+interaction labels. The factor $(e^\beta-1)^{|I|}$ in the appendix counts
+labels, not sites.
+
+\section{Forty sites: negative local terms}
+
+Changing the cutoff to count interaction labels does not resolve the
+unrestricted statement. On forty qubits let
+\begin{align}
+    h_i   & =-P_i,                                                          &
+    P_i   & =|00\rangle\langle00|_{i,i+1}\otimes I_{\{i,i+1\}^{\mathrm c}},
+    \qquad 1\le i\le39,
+    \label{eq:alvv_cluster_negative_terms}                                             \\
+    \beta & =\log(3/2),                                                     & r & =20.
+    \notag
+\end{align}
+These are commuting Hermitian terms of norm one with two-site
+supports. Let $\Omega=|0\rangle^{\otimes40}$. For every word of length $k$,
+\begin{align}
+    f(w)=\frac{\beta^k}{k!}P_{w_1}\cdots P_{w_k},
+    \qquad \langle\Omega,f(w)\Omega\rangle=\frac{\beta^k}{k!}\ge0.
+    \label{eq:alvv_cluster_positive_coefficients}
+\end{align}
+Every nonempty product of the $P_i$ fixes precisely the qubits in the union
+of its edges to zero and is the identity elsewhere. Its actual physical
+support is therefore that union; there is no cancellation of supports.
+
+Consider only words containing each of labels $1,\ldots,20$ at least once,
+with labels $21,\ldots,39$ unrestricted. Each such word has a connected
+component with at least twenty interaction labels and twenty-one physical
+sites. It is omitted for either interpretation of the cutoff $r=20$.
+Moreover,
+\begin{align}
+    \sum_w\|f(w)\|
+    \le\sum_{k=0}^{\infty}\frac{39^k\beta^k}{k!}=e^{39\beta},
+    \label{eq:alvv_cluster_absolute_convergence}
+\end{align}
+so selecting and regrouping these words is justified. At fixed
+multiplicities $m_1,\ldots,m_{39}$, their number is
+$(\sum_i m_i)!/\prod_i m_i!$. Hence their total expectation is
+\begin{align}
+    \prod_{i=1}^{20}\Bigl(\sum_{m_i\ge1}\frac{\beta^{m_i}}{m_i!}\Bigr)
+    \prod_{i=21}^{39}\Bigl(\sum_{m_i\ge0}\frac{\beta^{m_i}}{m_i!}\Bigr)
+     & =(e^\beta-1)^{20}e^{19\beta}
+    =\frac{3^{19}}{2^{39}}.
+    \label{eq:alvv_cluster_selected_weight}
+\end{align}
+All omitted words have nonnegative expectation by
+(\ref{eq:alvv_cluster_positive_coefficients}). Since $\|\Omega\|=1$,
+\begin{align}
+    \|e^{-\beta H}-M_{20}(H)\|
+    \ge\langle\Omega,(e^{-\beta H}-M_{20}(H))\Omega\rangle
+    \ge\frac{3^{19}}{2^{39}}.
+    \label{eq:alvv_cluster_negative_lower_bound}
+\end{align}
+This also holds for the alternative truncation by interaction-label
+components. Put $x=40^2(1/2)^{20}=25/16384$. The proposed upper bound satisfies
+\begin{align}
+    e^x-1<\frac{x}{1-x}=\frac{25}{16359}<\frac{3^{19}}{2^{39}},
+    \label{eq:alvv_cluster_negative_comparison}
+\end{align}
+where the final inequality is the exact integer comparison
+\begin{align}
+    25\cdot2^{39}=13743895347200
+    <19013435338653=16359\cdot3^{19}.
+    \label{eq:alvv_cluster_integer_comparison}
+\end{align}
+Equations (\ref{eq:alvv_cluster_negative_lower_bound}) and
+(\ref{eq:alvv_cluster_negative_comparison}) contradict
+(\ref{eq:alvv_cluster_printed}) under either cutoff convention.
+
+\newpage
+\section{The missing hypotheses and the remaining problem}
+
+The appendix uses $\|e^{-\beta H_{\overline I}}\|\le1$ at line 1948.
+This follows for positive local terms, but not from Hermiticity and
+$\|h_i\|\le1$. If the complementary sum has $m$ terms, these hypotheses
+give only $\|e^{-\beta H_{\overline I}}\|\le e^{\beta m}$. The general
+positive-term convention earlier in the paper (lines 267, 806 and 1175)
+cannot supply the missing assumption here: lines 1271--1272 explicitly
+allow terms that are not nonnegative.
+
+A corrected theorem must specify its cutoff and its energy dependence.
+For positive terms with an interaction-label cutoff, the occupancy factor
+$(e^\beta-1)^r$ has the intended meaning. For a physical-site cutoff, an
+interval of $r$ sites gives only $r-1$ mandatory labels. For arbitrary
+Hermitian terms an additional bound on the complementary exponential is
+needed. Each alternative requires its own statement and proof. Adding
+positivity alone, or changing the cutoff alone, does not repair
+(\ref{eq:alvv_cluster_printed}). Shifting the Hamiltonian by a scalar also
+requires checking the induced change of the word-defined truncation.
+
+The printed theorem is not formalized in TNLean. The existing Hastings
+cluster estimates retain the partition function and the weight
+$(e^{\beta J}-1)e^{SJ\beta}$; they do not assert
+(\ref{eq:alvv_cluster_printed}). Their formalized statements remain
+unaffected. The efficient soft-truncation approximation in
+Lemma~\texttt{lem:exp-approx-eff}, whose proof invokes this theorem, needs
+a corrected analytic estimate before that argument can be formalized.
+The exact matrix product operator construction of the selected expansion
+is a separate algebraic question. The correction is tracked by
+\href{https://github.com/LionSR/TNLean/issues/9854}{issue 9854} and
+\href{https://github.com/LionSR/TNLean/issues/9847}{issue 9847}.
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}
