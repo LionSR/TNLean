@@ -9,7 +9,7 @@ The comparison is from Mathlib `c55e6e786f49471c72fbddbec5415808896aec1e`
 (`v4.35.0-rc3`) to `625d8914199bc567cca9b91f90e8e5afafa5ae51`
 (`v4.36.0-rc1`). TNLean's starting source is
 `56f7f58b5db4f14ba4f550cba22dd05065118df9`. The coordinated QICLean candidate is
-`d5037d843552c55a5919bc21366b2eec2559fe0f`, proposed in
+`bb2a1d33a0bb2ab6900118418fdfa25f88a8fdbe`, proposed in
 [QICLean #974](https://github.com/LionSR/QICLean/pull/974).
 
 The QICLean audit at that candidate examined 529 non-merge commit titles.
@@ -139,3 +139,21 @@ Target-version production builds, strict checks, regressions and axiom
 checks, executable lint, compiled blueprint declaration checks and full
 web/PDF validation remain acceptance requirements. This mathematical source
 audit does not certify those checks or migration completion.
+
+## Continuous extended norm instance compatibility
+
+In `Lattice/Compression/SourceGaussianLaw.lean` and `SourceGaussianDensity.lean`,
+the local matrix `ContinuousENorm` instances now use
+`SeminormedAddGroup.toESeminormedAddMonoid.toContinuousENorm` instead of
+`SeminormedAddGroup.toContinuousENorm`. In the target
+`Mathlib/Analysis/Normed/Group/Continuity.lean`, the additive instance is
+generated from `SeminormedGroup.toESeminormedMonoid`; its continuous-enorm
+field has the same proof as the old direct instance. The new superclass
+projection is declared in `Group/Defs.lean`.
+
+The finite matrix indices, local instance scope and open
+`Matrix.Norms.Elementwise` scope are unchanged. The same seminormed additive
+group supplies the extended norm and topology; no global alias, shadow norm
+or extra hypothesis is introduced. All other bytes of both Lean modules are
+unchanged. Target elaboration and its dependent Gaussian-law checks remain
+required; source comparison alone does not certify instance synthesis.

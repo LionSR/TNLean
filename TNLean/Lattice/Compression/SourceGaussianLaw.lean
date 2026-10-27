@@ -31,7 +31,7 @@ namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 variable {P : Type} {a b : Layout P}
 
 local instance {m n : Type*} [Fintype m] [Fintype n] : ContinuousENorm (Matrix m n ℂ) :=
-  SeminormedAddGroup.toContinuousENorm
+  SeminormedAddGroup.toESeminormedAddMonoid.toContinuousENorm
 
 /-- The Gaussian sample space retains original source positions and local label pairs.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–340. -/
