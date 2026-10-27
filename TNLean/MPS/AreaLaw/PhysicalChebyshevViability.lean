@@ -45,8 +45,8 @@ Theorem `thm:Cheby-AGSP`, lines 789–853, and Lemma `l:er`, lines 606–622.
 **Local fix (spectral boundaries and positivity):** The hypotheses use the
 closed low/high conditions and `δ < 1`. Positivity of the unsquared filter
 is not asserted. See the companion notes:
-https://github.com/LionSR/QICLean/blob/main/docs/paper-gaps/alvv16_spectral_projector_boundary.tex
-https://github.com/LionSR/QICLean/blob/main/docs/paper-gaps/alvv16_chebyshev_filter_positivity.tex
+https://sirui-lu.com/QICLean/paper-gaps/alvv16_spectral_projector_boundary.pdf
+https://sirui-lu.com/QICLean/paper-gaps/alvv16_chebyshev_filter_positivity.pdf
 This supporting result does not assert the source-sharp bond or running time. -/
 theorem exists_common_physical_chebyshev_viable_family_fin
     {L q ell a b B k : ℕ}
