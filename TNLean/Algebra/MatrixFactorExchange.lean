@@ -79,7 +79,7 @@ def exchangedMiddleFamily {R a b c ι : Type*}
     (r : ι × (a × a) × (b × b)) : Matrix (b × c) (b × c) R :=
   exchangedMiddleFactor (V r.1) r.2.1.1 r.2.1.2 r.2.2.1 r.2.2.2
 
-/-- One new family handles all exterior coefficient families. This exact
+/-- One new family covers all exterior coefficient families. This exact
 identity is the finite-dimensional change-of-cuts step of ALVV,
 arXiv:1602.08828v2, Proposition 5.7, lines 1332–1333. -/
 theorem reindex_sum_kronecker_middleFactorExchange
