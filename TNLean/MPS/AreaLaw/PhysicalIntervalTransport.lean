@@ -11,6 +11,9 @@ import QICLean.Entropy.LocalLift
 import QICLean.Entropy.RegionUnion
 import QICLean.Entropy.FilterOutputCovariance
 import Mathlib.Data.List.OfFn
+import Mathlib.Order.Interval.Finset.Nat
+import TNLean.Circuit.PairProduct
+import TNLean.MPS.MPDO.TraceChainOperator
 
 /-!
 # Natural coordinates for physical interval operators
@@ -457,4 +460,128 @@ theorem trace_identityExtendInterval_nested_natural
 
 end MPOTensor
 
+end
+
+
+section
+
+open Matrix
+
+open scoped BigOperators Kronecker
+
+section
+
+namespace TNLean.MPS.AreaLaw
+
+/-- An actual operator supported on a chain interval has the exact nested
+embedding of a finite site-dependent trace core used by the physical viable
+family. Empty intervals and zero local dimensions are permitted. Elementary
+support and coordinate algebra supporting ALVV, arXiv:1602.08828v2,
+Theorem `t:ais`, lines 1010–1024; no efficient bond or running time is asserted. -/
+theorem exists_traceChainOperator_of_supported_interval
+    {L q c d : ℕ} (hcd : c ≤ d) (hd : d ≤ L)
+    (A : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hA : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) A (interval L c d)) :
+    ∃ (B : ℕ) (Acore : Fin (d - c) → MPOTensor q B)
+      (C0 : Matrix (Fin B) (Fin B) ℂ),
+      A = QuantumCircuit.embedOp (Subtype.val : interval L c d → Fin L)
+        (QuantumCircuit.embedOp (intervalShiftOrderIso hcd hd)
+          (MPOTensor.traceChainOperator Acore C0)) := by
+  classical
+  let eI := intervalShiftOrderIso hcd hd
+  let e : Fin (d - c) → Fin L := fun u ↦ (eI u).val
+  have he : Function.Injective e := Subtype.val_injective.comp eI.injective
+  have hrange : Set.range e = (interval L c d : Set (Fin L)) := by
+    ext i
+    constructor
+    · rintro ⟨u, rfl⟩
+      exact (eI u).property
+    · intro hi
+      refine ⟨eI.symm ⟨i, hi⟩, ?_⟩
+      exact congrArg Subtype.val (eI.apply_symm_apply ⟨i, hi⟩)
+  have hs := QuantumCircuit.mem_supportedOperators_of_isSupportedOn hA
+  rw [← hrange] at hs
+  obtain ⟨M, hM⟩ := QuantumCircuit.exists_embedOp_eq_of_mem_supportedOperators he hs
+  obtain ⟨B, Acore, C0, hcore⟩ := MPOTensor.exists_traceChainOperator_of_finite_matrix M
+  refine ⟨B, Acore, C0, ?_⟩
+  rw [hM, hcore]
+  exact (QuantumCircuit.embedOp_embedOp Subtype.val_injective eI
+    (MPOTensor.traceChainOperator Acore C0)).symm
+end TNLean.MPS.AreaLaw
+end
+end
+
+section
+
+namespace TNLean.MPS.AreaLaw
+
+/-- An interval longer than `4 * ell` has inward endpoints with the margins
+required by the two-window bond geometry. Each endpoint moves by at most
+`ell`, and the removed collars contain at most `2 * ell` sites.
+This is an auxiliary interval reduction for ALVV, arXiv:1602.08828v2,
+local `local_alg_arxiv_v2.tex` line 1000 and Proposition 5.7, lines 1311–1333.
+It asserts no operator decomposition or area-law conclusion. -/
+theorem inward_effective_cuts (L ell p q : ℕ)
+    (hell : 1 ≤ ell) (hpq : p ≤ q) (hqL : q ≤ L) (hlong : 4 * ell < q - p) :
+    let p' := max p ell
+    let q' := min q (L - ell)
+    let a := p' - ell
+    let b := q' - ell - 1
+    a + ell = p' ∧ b + ell + 1 = q' ∧
+      a + 2 * ell ≤ b ∧ b + 2 * ell ≤ L - 1 ∧
+      p ≤ p' ∧ p' ≤ q' ∧ q' ≤ q ∧ 2 * ell + 1 ≤ q' - p' ∧
+      p' - p ≤ ell ∧ q - q' ≤ ell ∧ (p' - p) + (q - q') ≤ 2 * ell ∧
+      interval L (a + ell) (b + ell + 1) ⊆ interval L p q ∧
+      (interval L p q \ interval L (a + ell) (b + ell + 1)).card ≤ 2 * ell := by
+  intro p' q' a b
+  have hpp : p ≤ p' := Nat.le_max_left p ell
+  have help : ell ≤ p' := Nat.le_max_right p ell
+  have hqq : q' ≤ q := Nat.min_le_left q (L - ell)
+  have hqLell : q' ≤ L - ell := Nat.min_le_right q (L - ell)
+  have hpUpper : p' ≤ p + ell := by
+    change max p ell ≤ p + ell
+    omega
+  have hqLower : q - ell ≤ q' := by
+    change q - ell ≤ min q (L - ell)
+    omega
+  have hspan : p' + 2 * ell + 1 ≤ q' := by omega
+  have hmidOrder : p' ≤ q' := by omega
+  have hgap : 2 * ell + 1 ≤ q' - p' := by omega
+  have hleft : p' - p ≤ ell := by omega
+  have hright : q - q' ≤ ell := by omega
+  have htotal : (p' - p) + (q - q') ≤ 2 * ell := by omega
+  have haEnd : a + ell = p' := by
+    change p' - ell + ell = p'
+    omega
+  have hbEnd : b + ell + 1 = q' := by
+    change q' - ell - 1 + ell + 1 = q'
+    omega
+  have hleftAPI : a + 2 * ell ≤ b := by
+    change p' - ell + 2 * ell ≤ q' - ell - 1
+    omega
+  have hrightAPI : b + 2 * ell ≤ L - 1 := by
+    change q' - ell - 1 + 2 * ell ≤ L - 1
+    omega
+  have hsub : interval L p' q' ⊆ interval L p q :=
+    interval_mono hpp hqq
+  have hdiff : interval L p q \ interval L p' q' =
+      interval L p p' ∪ interval L q' q := by
+    ext i
+    simp only [Finset.mem_sdiff, mem_interval, Finset.mem_union]
+    omega
+  have hcard : (interval L p q \ interval L p' q').card ≤ 2 * ell := by
+    rw [hdiff]
+    calc
+      (interval L p p' ∪ interval L q' q).card ≤
+          (interval L p p').card + (interval L q' q).card :=
+        Finset.card_union_le _ _
+      _ ≤ (p' - p) + (q - q') :=
+        Nat.add_le_add (card_interval_le (L := L) p p')
+          (card_interval_le (L := L) q' q)
+      _ ≤ 2 * ell := htotal
+  refine ⟨haEnd, hbEnd, hleftAPI, hrightAPI, hpp, hmidOrder, hqq, hgap,
+    hleft, hright, htotal, ?_, ?_⟩
+  · simpa only [haEnd, hbEnd] using hsub
+  · simpa only [haEnd, hbEnd] using hcard
+end TNLean.MPS.AreaLaw
 end

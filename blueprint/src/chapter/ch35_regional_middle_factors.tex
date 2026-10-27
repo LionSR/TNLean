@@ -128,3 +128,31 @@ by these regional identities.
     configurations proves (\ref{eq:regional_middle_exterior_transfer}), with
     the multiplication order of the semiring coefficients unchanged.
 \end{proof}
+
+\begin{theorem}[A finite enumeration of a transferred regional family]
+    \label{thm:changing_regional_family_fin}
+    \lean{FiniteProduct.exists_changingRegional_family_fin}
+    Let $E,J\subseteq\Omega$, where $\Omega$ is finite, let $q\in\N$, and
+    fix matrices $V_i$ on the configurations of $E$, indexed by a finite set
+    $I$. There are $N$ and matrices $W_0,\ldots,W_{N-1}$ on configurations
+    of $J$, chosen before any exterior coefficients, such that
+    \begin{align}
+        N=|I|q^{2|E\setminus J|+2|J\setminus E|}.
+    \end{align}
+    For every family $M_i$ on configurations of $E^c$, there are matrices
+    $M'_r$ on configurations of $J^c$ such that the full-site operators agree:
+    \begin{align}
+        \sum_{i\in I}M_i\otimes V_i=\sum_{r=0}^{N-1}M'_r\otimes W_r.
+    \end{align}
+    Each tensor sum is identified with the original full-site coordinates
+    by restriction to its indicated region and complement. No interval,
+    positivity or nonzero-dimension hypothesis is imposed.
+\end{theorem}
+\begin{proof}
+    \uses{def:regional_middle_transferred_family,thm:regional_middle_exterior_transfer}
+    Enumerate the finite carrier of the regional transfer construction by
+    its cardinality. Transport the fixed middle matrices and, for each
+    exterior family, its corresponding exterior matrices through this
+    enumeration. Its carrier consists of an old index and two configurations
+    on each of $E\setminus J$ and $J\setminus E$, giving the exact value of $N$.
+\end{proof}

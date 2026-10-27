@@ -1,0 +1,27 @@
+\section{A fixed improving family on a short region}
+
+\begin{theorem}[Short regions require no spectral input]
+    \label{thm:short_actual_region_improving_family}
+    \lean{TNLean.MPS.AreaLaw.exists_short_actual_region_improving_family}
+    \uses{def:chain_model}
+    Let $q\ge2$, $\ell\ge1$, and let $J$ contain at most $4\ell$ sites
+    of a chain of $L$ sites. Set $E=\mathcal H_J$ and
+    $\mathcal D=(q\ell^2)^{22\ell}$. For every finite-dimensional complex
+    inner-product space $F$ there are operators
+    $W_0,\ldots,W_{\mathcal D^2-1}$ on $E$ and a real $\Delta>0$ with
+    $\mathcal D^{12}\Delta\le10^{-5}$ such that the following holds for
+    every $T\subseteq E\otimes F$, every subspace $S\subseteq E$, and
+    every real $\delta<1$: if $S$ is $\delta$-viable for $T$, then
+    $\sum_jW_jS$ is $\Delta/(1-\delta)^2$-viable for $T$.
+    The family and $\Delta$ are chosen before $T,S,\delta$; no
+    Hamiltonian or nonzero-target hypothesis is required.
+\end{theorem}
+\begin{proof}
+    The matrix units of $E$ give at most $q^{2|J|}\le\mathcal D^2$ operators.
+    For $T\ne0$, viability with $\delta<1$ implies $S\ne0$; all matrix units
+    applied to $S$ then span $E$, giving zero viability error.
+    For $T=0$ viability is automatic. Extend this fixed family by zero to
+    exactly $\mathcal D^2$ positions and choose a positive
+    $\Delta\le10^{-5}\mathcal D^{-12}$. The three elementary facts used here
+    are stated in~\cite[``Viable subspaces in coordinates'']{QICLean2026Blueprint}.
+\end{proof}

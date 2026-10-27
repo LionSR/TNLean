@@ -1,0 +1,55 @@
+\section{One actual regional family for every polynomial}
+
+For a complex matrix $A$ and real $c$, write $C_c(A)=\min(A,c)$ when $A$
+is Hermitian, using real continuous functional calculus, and put $C_c(A)=0$
+otherwise. This is the same total convention as in
+\cite[``Centered partial clipping of a finite family'']{QICLean2026Blueprint}.
+All matrices in the later physical application are Hermitian.
+
+\begin{theorem}[A fixed regional family for polynomials of the clipped sum]
+    \label{thm:actual_clipped_polynomial_family}
+    \lean{TNLean.MPS.AreaLaw.exists_actual_regional_clipped_polynomial_family_fin}
+    \uses{def:chain_model,def:five_region_bond_partition}
+    Let $q\ge2$, $\ell,k\ge1$, $a+2\ell\le b$ and $b+2\ell\le L-1$.
+    Let $h_i$ be supported on $\{i,i+1\}$, with no positivity assumption.
+    Use the five cuts $(0,a+1,a+2\ell,b+1,b+2\ell,L)$ and their original
+    regional sums $A_j$ and crossing sum $Y$. Choose arbitrary real $e_j,t$,
+    and put
+    \begin{align}
+        B&=\sum_{j\in\{0,2,4\}}(C_{e_j+t}(A_j)-e_j\Id)
+             +\sum_{j\in\{1,3\}}(A_j-e_j\Id)+Y,\notag\\
+        J_0&=\{a+\ell,\ldots,b+\ell\},&
+        \mathcal D_0&=(qk)^{18\ell+2\lfloor k/\ell\rfloor}.
+    \end{align}
+    For any site set $J$, there are matrices $W_0,\ldots,W_{N-1}$ on its
+    configurations, where
+    \begin{align}
+        N\le\mathcal D_0^2q^{2|J_0\setminus J|+2|J\setminus J_0|},
+    \end{align}
+    such that every complex polynomial $Q$ of degree at most $k$ admits
+    matrices $M_r(Q)$ on the complementary configurations with
+    \begin{align}
+        Q(B)=\sum_{r=0}^{N-1}M_r(Q)\otimes W_r,\notag\\
+        T_JQ(B)T_J^{-1}=\sum_{r=0}^{N-1}W_r\otimes M_r(Q).
+    \end{align}
+    The first equality uses complementary-factor-first full-site coordinates;
+    $T_J:\mathcal H_{L,q}\to\mathcal H_J\otimes\mathcal H_{J^c}$ is the
+    standard unitary identification with $J$ first. The same $N,W_r$ work
+    for every polynomial. No efficient representation or sharp source
+    matrix-product bond bound is asserted.
+\end{theorem}
+\begin{proof}
+    \uses{thm:actual_two_window_alphabet_sum,thm:physical_aeval_fin_middle_family,
+        thm:supported_interval_trace_chain,thm:changing_regional_family_fin}
+    Each clipped bulk sum remains supported on its original region, hence
+    has a finite trace-chain representation. Keep all original letters in
+    the two complete windows, and apply the common polynomial-family
+    construction on $J_0$. Its family is fixed before the coefficients of
+    $Q$, with at most $\mathcal D_0^2$ members. Transfer this same family
+    from $J_0$ to $J$, enumerate its finite carrier and use its exact
+    collar count. The tensor-coordinate identity of
+    \cite[``A conjugated tensor sum with the middle factor first'']
+    {QICLean2026Blueprint} gives the second equality without changing factors.
+    This supports the decomposition step of
+    \cite[Proposition 5.7]{Arad2016RigorousRG}.
+\end{proof}

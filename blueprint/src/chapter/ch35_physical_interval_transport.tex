@@ -142,3 +142,46 @@ finite chain. Subtraction of natural numbers is truncated at zero.
     complement entry unchanged and contributes an identity entry on the
     interval.
 \end{proof}
+
+\begin{theorem}[A trace-chain representation on a supported interval]
+    \label{thm:supported_interval_trace_chain}
+    \lean{TNLean.MPS.AreaLaw.exists_traceChainOperator_of_supported_interval}
+    \uses{def:chain_model,def:trace_chain_operator,
+        def:physical_interval_increasing_coordinates}
+    Let $0\le c\le d\le L$ and let $A$ be supported on the interval
+    $J=\{c,\ldots,d-1\}$. There are a finite bond dimension, site tensors
+    on a chain of $d-c$ sites and a closing matrix whose trace contraction,
+    transported by $i\mapsto c+i$ and extended by the identity outside $J$,
+    equals $A$. Empty intervals and zero local dimension are included.
+\end{theorem}
+\begin{proof}
+    \uses{thm:finite_matrix_trace_chain,def:physical_interval_increasing_coordinates}
+    The support hypothesis supplies a matrix on the interval coordinates.
+    Pull it back along the increasing identification, represent that finite
+    matrix by a trace chain, and transport the representation to its sites.
+    This supplies no efficient bond bound.
+\end{proof}
+
+\begin{theorem}[Inward effective cuts with a bounded collar]
+    \label{thm:inward_effective_cuts}
+    \lean{TNLean.MPS.AreaLaw.inward_effective_cuts}
+    \uses{def:chain_model}
+    Let $\ell\ge1$, $0\le p\le r\le L$ and $r-p>4\ell$.
+    Put $p'=\max(p,\ell)$, $r'=\min(r,L-\ell)$,
+    $a=p'-\ell$ and $b=r'-\ell-1$. Then
+    \begin{align}
+        a+\ell&=p',&b+\ell+1&=r',\notag\\
+        a+2\ell&\le b,&b+2\ell&\le L-1,\notag\\
+        p&\le p'\le r'\le r,&r'-p'&\ge2\ell+1,\notag\\
+        p'-p&\le\ell,&r-r'&\le\ell.
+    \end{align}
+    Also $(p'-p)+(r-r')\le2\ell$ and, for
+    $J_0=\{p',\ldots,r'-1\}$ and $J=\{p,\ldots,r-1\}$,
+    $J_0\subseteq J$ and $|J\setminus J_0|\le2\ell$.
+\end{theorem}
+\begin{proof}
+    The long-interval assumption allows moving each endpoint inward by at
+    most $\ell$ while retaining length at least $2\ell+1$.
+    Substitute the definitions in the endpoint inequalities. The removed
+    collar has $(p'-p)+(r-r')$ sites, giving its cardinal bound.
+\end{proof}

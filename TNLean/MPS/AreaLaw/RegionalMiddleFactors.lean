@@ -7,6 +7,7 @@ import TNLean.MPS.AreaLaw.SelectedCoefficientDecomposition
 import TNLean.Algebra.MatrixFactorExchange
 import QICLean.Channel.FiniteProduct
 import TNLean.Lattice.Sheet.Splitting
+import Mathlib.Data.Fintype.EquivFin
 
 /-!
 # Regional middle factors under a change of region
@@ -352,4 +353,64 @@ theorem exists_changingRegional_exterior_family
 
 end FiniteProduct
 
+end
+
+
+section
+
+open Matrix
+
+open scoped BigOperators Kronecker
+
+section
+
+namespace FiniteProduct
+
+/-- A common regional family can be transported and numbered before any
+exterior coefficients are supplied. The cardinality is the exact cost of
+the two configuration spaces transferred across the regional boundary.
+Auxiliary to ALVV, arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333.
+No positivity, interval, spectral, bond-dimension or running-time assertion
+is required for this finite matrix identity. -/
+theorem exists_changingRegional_family_fin
+    {Ω ι : Type*} [Fintype Ω] [DecidableEq Ω] [Fintype ι]
+    (q : ℕ) (E J : Finset Ω)
+    (V : ι → Matrix (E → Fin q) (E → Fin q) ℂ) :
+    ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ),
+      N = Fintype.card ι * q ^ (2 * (E \ J).card + 2 * (J \ E).card) ∧
+      ∀ M : ι → Matrix (↥(Eᶜ) → Fin q) (↥(Eᶜ) → Fin q) ℂ,
+        ∃ Mnew : Fin N → Matrix (↥(Jᶜ) → Fin q) (↥(Jᶜ) → Fin q) ℂ,
+          (∑ t, M t ⊗ₖ V t).submatrix
+              ((splitEquiv (fun _ : Ω ↦ Fin q) E).trans (Equiv.prodComm _ _))
+              ((splitEquiv (fun _ : Ω ↦ Fin q) E).trans (Equiv.prodComm _ _)) =
+            (∑ r, Mnew r ⊗ₖ W r).submatrix
+              ((splitEquiv (fun _ : Ω ↦ Fin q) J).trans (Equiv.prodComm _ _))
+              ((splitEquiv (fun _ : Ω ↦ Fin q) J).trans (Equiv.prodComm _ _)) := by
+  classical
+  let β := fun _ : Ω ↦ Fin q
+  let A := E \ J
+  let B := J \ E
+  let I := ι × (Configuration β A × Configuration β A) ×
+    (Configuration β B × Configuration β B)
+  let Wall := changingRegionalMiddleFamily β E J V
+  let e := Fintype.equivFin I
+  have hcard : Fintype.card I = Fintype.card ι * q ^ (2 * A.card + 2 * B.card) := by
+    calc
+      Fintype.card I = Fintype.card ι * Fintype.card (Configuration β A) ^ 2 *
+          Fintype.card (Configuration β B) ^ 2 := Matrix.card_exchangedMiddleFamily_index
+      _ = Fintype.card ι * q ^ (2 * A.card + 2 * B.card) := by
+        simp only [Configuration, β, Fintype.card_fun, Fintype.card_fin,
+          Fintype.card_coe, ← pow_mul]
+        rw [Nat.mul_assoc, ← pow_add]
+        rw [show A.card * 2 + B.card * 2 = 2 * A.card + 2 * B.card by omega]
+  refine ⟨Fintype.card I, fun r ↦ Wall (e.symm r), hcard, ?_⟩
+  intro M
+  obtain ⟨Mnew, hMnew⟩ := exists_changingRegional_exterior_family β E J V M
+  refine ⟨fun r ↦ Mnew (e.symm r), hMnew.trans ?_⟩
+  exact congrArg (fun P ↦ P.submatrix
+    ((splitEquiv β J).trans (Equiv.prodComm _ _))
+    ((splitEquiv β J).trans (Equiv.prodComm _ _)))
+    (e.symm.sum_comp (fun r ↦ Mnew r ⊗ₖ Wall r)).symm
+end FiniteProduct
+end
 end
