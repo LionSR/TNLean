@@ -15,7 +15,7 @@ involve the matrices on the second factor.
     $(K,c)\in\C^{m\times m}\times\C$ and a word $w$ in $I$, define
     $C_R(s,w)\in\C^{m\times m}$ recursively by
     \begin{align}
-        C_R(\varnothing,\varnothing) & =I_m,\notag                  \\
+        C_R(\varnothing,\varnothing) & =\Id_m,\notag                \\
         C_R(\varnothing,aw)          & =0,\notag                    \\
         C_R((K,c)::s,\varnothing)    & =K C_R(s,\varnothing),\notag \\
         C_R((K,c)::s,aw)             & =K C_R(s,aw)+cR_a C_R(s,w).
@@ -34,7 +34,7 @@ involve the matrices on the second factor.
     $R_a\in\C^{m\times m}$ and $N_a\in\C^{n\times n}$ for $a\in I$.
     For a list $s=((K_0,c_0),\ldots,(K_{h-1},c_{h-1}))$,
     \begin{align}
-        \prod_{j=0}^{h-1}\left(K_j\otimes I_n+
+        \prod_{j=0}^{h-1}\left(K_j\otimes \Id_n+
         \sum_{a\in I}(c_jR_a)\otimes N_a\right)
         =\sum_{t=0}^{h}\ \sum_{w\in I^t}
         C_R(s,w)\otimes\left(\prod_{j=0}^{t-1}N_{w_j}\right).
@@ -49,7 +49,7 @@ involve the matrices on the second factor.
     Introduce a central formal variable $X$ and the matrix polynomial
     \begin{align}
         P_s(X)=\prod_{(K,c)\in s}
-        \left(K\otimes I_n+X\sum_{a\in I}(cR_a)\otimes N_a\right),
+        \left(K\otimes \Id_n+X\sum_{a\in I}(cR_a)\otimes N_a\right),
         \label{eq:core_word_polynomial}
     \end{align}
     with the product in list order. Induction on $s$, using the coefficient
