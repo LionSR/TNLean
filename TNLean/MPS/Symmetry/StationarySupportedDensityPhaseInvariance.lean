@@ -162,7 +162,7 @@ private theorem eventually_class_of_continuousAt_pointwise_compression
     (fun g => U g) (fun t : S => ω t) σ hσUnitary hCovC
   have hNhds : Filter.map ((↑) : S → T) (𝓝 (⟨t₀, ht₀⟩ : S)) = 𝓝 t₀ :=
     map_nhds_subtype_coe_eq_nhds ht₀ (hSopen.mem_nhds ht₀)
-  rw [← hNhds]
+  rw [← hNhds, Filter.eventually_map]
   exact (Filter.eventually_congr (.of_forall fun _ ↦
     H2π_eq_iff_isMulCoboundary₂_div _ _)).mp hClass
 
