@@ -1,0 +1,83 @@
+\section{Tensor decompositions of the common physical family}
+
+Let the chain be $\{0,\ldots,L-1\}$ with local space $\C^q$, and write
+$\mathcal C(S)=\{0,\ldots,q-1\}^S$ for its regional configurations.
+Fix nonnegative integers $a,b,\ell,B,k$ such that
+\begin{align}
+    a+2\ell\le b,\qquad b+2\ell\le L-1,\qquad
+    \ell\ge1,\quad q\ge2,\quad k\ge1.
+    \label{eq:physical_tensor_hypotheses}
+\end{align}
+Supply operators $W^L_r,W^R_r$, $0\le r<2\ell$, supported on
+$[a+r,a+r+2)$ and $[b+r,b+r+2)$, respectively.
+All intervals are intersected with the chain. Set $K=[a+2\ell,b+1)$.
+For each site of $K$, supply matrices $A_t(i,j)\in\C^{B\times B}$ and an
+arbitrary closing matrix $C_0\in\C^{B\times B}$. Let $P_M$ be the identity
+extension to the chain of the operator whose entries, in increasing order
+on $K$, are
+\begin{align}
+    (\sigma,\tau)\longmapsto
+    \operatorname{tr}\left(C_0\prod_{t=0}^{|K|-1}A_t(\sigma_t,\tau_t)\right).
+    \label{eq:physical_tensor_core}
+\end{align}
+Put $J=[a+\ell,b+\ell+1)$ and
+\begin{align}
+    D&=(qk)^{18\ell+2\lfloor k/\ell\rfloor},\notag\\
+    \mathcal B&=(\max(1,B))^{2k}.
+    \label{eq:physical_tensor_bounds}
+\end{align}
+These tensor decompositions support the polynomial argument in
+\cite[Proposition~5.7]{Arad2016RigorousRG}.
+Regard each matrix also as the operator on the corresponding configuration
+Hilbert space. The canonical isometry $\mathcal U$ from the full space to
+$\mathcal H_M\otimes\mathcal H_E$, where
+$\mathcal H_M=\ell^2(\mathcal C(J))$ and
+$\mathcal H_E=\ell^2(\mathcal C(J^c))$, is determined by
+$\mathcal U e_\sigma=e_{\sigma|_J}\otimes e_{\sigma|_{J^c}}$.
+For a matrix on $\mathcal C(J^c)\times\mathcal C(J)$, the superscript
+$\mathrm{phys}$ denotes its pullback by these two restrictions.
+
+\begin{theorem}[A common middle-first tensor decomposition]
+    \label{thm:physical_polynomial_tensor_family}
+    \lean{TNLean.MPS.AreaLaw.exists_common_physical_aeval_mpo_middleFirst_family_fin}
+    \uses{thm:physical_aeval_fin_middle_family}
+    Under the supplied data and hypotheses
+    (\ref{eq:physical_tensor_hypotheses}), there are a nonnegative integer
+    $N\le D^2$ and matrices
+    $W_0,\ldots,W_{N-1}$ on $\mathcal C(J)$, chosen before the following data.
+    Each $W_r$, on the paired physical alphabet in increasing site order on
+    $J$, has an open-boundary matrix product representation whose internal
+    bond dimensions are at most $\mathcal B$.
+
+    Supply arbitrary operators $P_L,P_R$ supported on $[0,a+1)$ and
+    $[b+2\ell,L)$, and set
+    \begin{align}
+        H=P_L+P_M+P_R+\sum_{r=0}^{2\ell-1}(W^L_r+W^R_r).
+        \label{eq:physical_tensor_hamiltonian}
+    \end{align}
+    For every $P\in\C[X]$ of natural degree at most $k$, including the zero
+    polynomial, there are matrices $M_r$ on $\mathcal C(J^c)$ such that
+    \begin{align}
+        P(H)&=\left(\sum_{r=0}^{N-1}M_r\otimes W_r\right)^{\mathrm{phys}},
+        \label{eq:physical_tensor_matrix}\\
+        \mathcal U P(H)&=\left(\sum_{r=0}^{N-1}W_r\otimes M_r\right)\mathcal U,
+        \label{eq:physical_tensor_intertwining}\\
+        \mathcal U P(H)\mathcal U^*&=\sum_{r=0}^{N-1}W_r\otimes M_r.
+        \label{eq:physical_tensor_conjugation}
+    \end{align}
+    The exterior matrices may depend on $P_L,P_R,P$, whereas $N$ and the
+    middle matrices do not. The dimension $B$ may be zero. No symmetry or
+    spectral assumption is imposed on $H$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:physical_aeval_fin_middle_family}
+    Choose the common family from
+    Theorem~\ref{thm:physical_aeval_fin_middle_family}; this gives
+    (\ref{eq:physical_tensor_matrix}) with the same count and bond bounds.
+    In the configuration basis, a Kronecker matrix acts as the tensor product
+    of its two linear operators. Thus the canonical exterior-first coordinate
+    isometry intertwines $P(H)$ with $\sum_r M_r\otimes W_r$.
+    Composing with the tensor exchange gives
+    (\ref{eq:physical_tensor_intertwining}). Right multiplication by
+    $\mathcal U^*$ gives (\ref{eq:physical_tensor_conjugation}).
+\end{proof}
