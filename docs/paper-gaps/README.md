@@ -1400,10 +1400,12 @@ the source's window radii gives `D_m ≤ (3^m − 1) e^{s^m}`, still polynomial 
 *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, source lines
 1603–1642). The source assumes ground-state momenta that are rational with
 denominators independent of the system size, and derives a supercell whose
-translations leave every ground state unchanged. The formalization assumes such a
-subgroup directly and proves that the low-energy commutator at `(i, j)` equals the one
-at `(i, g • j)` for every `g` in it. The note sketches how to derive the subgroup from
-the characters of an abelian translation group, records a slip at line 1638, and
+translations leave every ground state unchanged. The first formalization assumed such a
+subgroup directly. The supercell is now derived from the momentum sectors of an abelian
+translation group, its translations are shown to carry any site to a distance of order the
+linear size, and the composite bound proves the low-energy commutator exponentially small in
+that size for the filtered terms. For the source's truncated terms `M_i` it holds only up to the
+truncation errors of eq. `apb`; the remaining step is eq. `blecm` for the `M_i` themselves. The note records a slip at line 1638, and
 notes that the size-dependent case of lines 1643–1652 is not covered.
 
 ## Polynomial PEPS: zero-floor maximizing filters
