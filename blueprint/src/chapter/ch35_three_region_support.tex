@@ -1,0 +1,170 @@
+\section{Support of three-region operator factors}
+
+Let $V$ be a finite set of sites, with local space $\C^q$ at each site.
+For $S\subseteq V$, write $\mathcal H_S=(\C^q)^{\otimes S}$.
+If $T,E\subseteq V$ are disjoint and $R=V\setminus(T\cup E)$,
+restriction of configurations identifies the full space with
+$\mathcal H_T\otimes\mathcal H_E\otimes\mathcal H_R$.
+Write $P^g$ for an operator in these coordinates. Support on a set $D$
+means that the operator acts trivially on the sites outside $D$.
+The statements below give supporting locality algebra for
+\cite[Proposition~5.7]{Arad2016RigorousRG}.
+
+\begin{theorem}[Support of partial matrix elements]
+    \label{thm:three_region_partial_support}
+    \lean{TNLean.MPS.AreaLaw.operatorBlock_isSupportedOn_of_threeSplit_left,
+        TNLean.MPS.AreaLaw.leftBlock_isSupportedOn_of_threeSplit_right}
+    Suppose that $P$ is supported on $D\subseteq V$.
+    If $P^g=U\otimes I_R$, then for any configurations $a,b$ on $T$,
+    the matrix on $E$ with entries
+    \begin{align}
+        U_{a,b}(x,y)=U((a,x),(b,y))
+        \label{eq:three_region_left_partial}
+    \end{align}
+    is supported on $D\cap E$, viewed as a subset of $E$.
+    If instead $P^g=I_T\otimes V_0$, then for any configurations $r,s$
+    on $R$, the matrix
+    \begin{align}
+        (V_0)_{r,s}(x,y)=V_0((x,r),(y,s))
+        \label{eq:three_region_right_partial}
+    \end{align}
+    has the same support conclusion. The two fixed configurations in either
+    statement need not agree outside $D$.
+\end{theorem}
+\begin{proof}
+    For $q>0$, choose one fixed configuration on the unused region.
+    The displayed partial matrix element is then an entry of $P$ with that
+    configuration on both sides. A disagreement at a site of $E\setminus D$
+    forces the entry to vanish. When the configurations agree there, the
+    dependence on the remaining coordinates follows from the support of $P$.
+    For $q=0$, the configuration set of $E$ is either empty or a singleton;
+    the support assertion follows directly in both cases.
+\end{proof}
+
+\begin{theorem}[Equality from a middle identity lift]
+    \label{thm:three_region_middle_lift_equality}
+    \lean{TNLean.MPS.AreaLaw.eq_of_threeSplit_middle_lift_eq}
+    Suppose that $E$ contains a specified site. If $W,M$ are operators on
+    $\mathcal H_E$ and
+    \begin{align}
+        I_T\otimes W\otimes I_R=I_T\otimes M\otimes I_R,
+        \label{eq:three_region_middle_lift_equality}
+    \end{align}
+    then $W=M$. No positive-local-dimension assumption is required.
+\end{theorem}
+\begin{proof}
+    For $q>0$, evaluate the identity at equal fixed configurations on $T$ and
+    $R$. For $q=0$, a configuration on $E$ would assign an element of the empty
+    local alphabet to the specified site. Thus both matrices have empty index
+    sets and are equal.
+\end{proof}
+
+\begin{theorem}[Canonical placement in the middle region]
+    \label{thm:three_region_middle_embedding}
+    \lean{TNLean.MPS.AreaLaw.embedOp_subtype_val_submatrix_threeSplit}
+    For every operator $W$ on $\mathcal H_E$, its canonical extension to $V$
+    has three-region form
+    \begin{align}
+        (\iota_E(W))^g=I_T\otimes W\otimes I_R.
+        \label{eq:three_region_middle_embedding}
+    \end{align}
+    This includes empty regions and zero local dimension.
+\end{theorem}
+\begin{proof}
+    The extension has entry $W(x,y)$ when the two configurations agree off
+    $E$, and zero otherwise. In three-region coordinates, agreement off $E$
+    is precisely equality of both the $T$ and $R$ configurations. These two
+    equalities give the entries of the two identity matrices.
+\end{proof}
+
+\begin{theorem}[Two-window factors with their collars]
+    \label{thm:three_region_two_window_collars}
+    \lean{TNLean.MPS.AreaLaw.exists_threeSplit_two_window_factors_with_collars}
+    \uses{thm:three_region_partial_support}
+    Consider a chain of $L$ sites and nonnegative integers $a,b,\ell$ with
+    $a+2\ell\le b$ and $b+2\ell\le L-1$.
+    Let the label set consist of $L_r,R_r$ for $0\le r<2\ell$, together
+    with $B_0,B_1,B_2$. Suppose the supplied operator family $F$ satisfies
+    \begin{align}
+        \operatorname{supp}F_{L_r} & \subseteq[a+r,a+r+2),         &
+        \operatorname{supp}F_{R_r} & \subseteq[b+r,b+r+2),\notag     \\
+        \operatorname{supp}F_{B_0} & \subseteq[0,a+1),             &
+        \operatorname{supp}F_{B_1} & \subseteq[a+2\ell,b+1),\notag   \\
+        \operatorname{supp}F_{B_2} & \subseteq[b+2\ell,L).
+        \label{eq:three_region_window_supports}
+    \end{align}
+    Intervals are intersected with the finite chain. Fix $0\le p,s<2\ell$
+    and set
+    \begin{align}
+        T & =[0,a+p+1),                 & E & =[a+p+1,b+s+1), &
+        R & =V\setminus(T\cup E),\notag                         \\
+        C & =E\setminus[a+2\ell+1,b).
+        \label{eq:three_region_selected_regions}
+    \end{align}
+    There are regional families $H^L,H^M,H^R$ and crossing operators $U,V_0$
+    such that, for every label $i\ne L_p,R_s$,
+    \begin{align}
+        F_i^g                   & =H_i^L\otimes I_E\otimes I_R
+        +I_T\otimes H_i^M\otimes I_R
+        +I_T\otimes I_E\otimes H_i^R,\notag                      \\
+        F_{L_p}^g               & =U\otimes I_R,               &
+        F_{R_s}^g               & =I_T\otimes V_0,\notag         \\
+        \operatorname{OSR}(U)   & \le q^2,                     &
+        \operatorname{OSR}(V_0) & \le q^2.
+        \label{eq:three_region_two_window_factors}
+    \end{align}
+    The same choices also satisfy
+    \begin{align}
+        H^M_{B_0}                    & =H^M_{B_2}=0,                   &
+        H^L_{B_1}                    & =H^R_{B_1}=0,\notag               \\
+        H^M_{L_r}                    & =0\quad(r\le p),                &
+        H^M_{R_r}                    & =0\quad(s\le r),\notag            \\
+        \operatorname{supp}H^M_{L_r} & \subseteq C,                    &
+        \operatorname{supp}H^M_{R_r} & \subseteq C\quad(0\le r<2\ell).
+        \label{eq:three_region_collar_conditions}
+    \end{align}
+    The three bulk operators are supplied independently; no identity with
+    complementary sums of bond terms is assumed.
+\end{theorem}
+\begin{proof}
+    \uses{thm:three_region_partial_support}
+    The selected bonds meet each side of their cut at one site, so their
+    crossing operators have operator Schmidt rank at most $q^2$.
+    Every other left-window bond lies either in $T$ or in $E$, according as
+    its position is before or after $p$. Similarly, every other right-window
+    bond lies in $E$ or $R$ according as its position is before or after $s$.
+    Choose zero for every unused regional component, including the two selected
+    middle components. The three bulk supports lie in $T,E,R$, respectively.
+    This gives the identities and zero conditions.
+
+    Each nonzero window middle component inherits its original two-site support
+    restricted to $E$, by the partial-matrix-element argument above applied to
+    an identity lift. The bounds on the window positions place this restricted
+    support in $C$. Monotonicity of support gives the last two assertions.
+\end{proof}
+
+\begin{theorem}[The weighted middle sum and its supported remainder]
+    \label{thm:three_region_weighted_middle_remainder}
+    \lean{TNLean.MPS.AreaLaw.exists_weighted_ordinary_middle_eq_central_add_supported}
+    Let $E$ be any finite set, let $H^M$ be indexed by the labels above, and
+    let $C\subseteq E$. Suppose $H^M_{B_0}=H^M_{B_2}=0$,
+    $H^M_{L_r}=0$ for $r\le p$, and $H^M_{R_r}=0$ for $s\le r$.
+    Suppose also that $H^M_{L_r}$ is supported on $C$ for $p<r$, and that
+    $H^M_{R_r}$ is supported on $C$ for $r<s$.
+    For arbitrary complex weights $z_i$, put
+    $O=\{i:i\ne L_p,R_s\}$. There is an operator $K$ supported on $C$ with
+    \begin{align}
+        \sum_{i\in O}z_iH_i^M=z_{B_1}H^M_{B_1}+K.
+        \label{eq:three_region_weighted_middle_remainder}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    Take
+    \begin{align}
+        K=\sum_{p<r<2\ell}z_{L_r}H^M_{L_r}
+        +\sum_{0\le r<s}z_{R_r}H^M_{R_r}.
+        \label{eq:three_region_weighted_remainder_formula}
+    \end{align}
+    The discarded terms vanish by the stated hypotheses. Support on $C$ is
+    preserved by scalar multiplication and finite addition.
+\end{proof}
