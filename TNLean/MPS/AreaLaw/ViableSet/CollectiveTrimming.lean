@@ -27,8 +27,8 @@ the rank of the chain cut matrix after `j` sites (`rank_cutEnvVector_blockSplit`
 
 **Local fix (the constant of Lemma `lem:trimming`):** the source states `δ' ≤ δ + √(ℓ b s) ξ`
 for `ℓ = i` factors. The bound proved, `δ + 2 ξ √((i - 1) b)`, is the one its argument gives.
-Documented in QICLean's `docs/paper-gaps/alvv16_trimming_constant.tex`
-(https://sirui-lu.com/QICLean/paper-gaps/alvv16_trimming_constant.pdf).
+Documented in the companion library's paper-gap note
+<https://sirui-lu.com/QICLean/paper-gaps/alvv16_trimming_constant.pdf>.
 
 ## Main definitions
 
