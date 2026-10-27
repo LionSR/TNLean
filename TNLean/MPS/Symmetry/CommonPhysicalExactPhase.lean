@@ -92,9 +92,6 @@ theorem isSameExactMPSGappedPhase_of_oneSite_path
     rfl
   · intro g
     simp only [MonoidHom.one_apply, one_smul]
-    change (U g : Matrix (Fin m) (Fin m) ℂ) * E₀.submatrix id (singleBlockEquiv d₀) =
-      E₀.submatrix id (singleBlockEquiv d₀) *
-        blockKron 1 (U₀ g : Matrix (Fin d₀) (Fin d₀) ℂ)
     rw [blockKron_one_eq_submatrix]
     have hL := Matrix.submatrix_mul_equiv (U g : Matrix (Fin m) (Fin m) ℂ) E₀
       id (Equiv.refl _) (singleBlockEquiv d₀)
@@ -105,9 +102,6 @@ theorem isSameExactMPSGappedPhase_of_oneSite_path
         (hCov₀ g)).trans hR.symm)
   · intro g
     simp only [MonoidHom.one_apply, one_smul]
-    change (U g : Matrix (Fin m) (Fin m) ℂ) * E₁.submatrix id (singleBlockEquiv d₁) =
-      E₁.submatrix id (singleBlockEquiv d₁) *
-        blockKron 1 (U₁ g : Matrix (Fin d₁) (Fin d₁) ℂ)
     rw [blockKron_one_eq_submatrix]
     have hL := Matrix.submatrix_mul_equiv (U g : Matrix (Fin m) (Fin m) ℂ) E₁
       id (Equiv.refl _) (singleBlockEquiv d₁)

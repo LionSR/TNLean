@@ -67,7 +67,7 @@ private theorem eventually_class_of_unital_sequence_supported_limit
             apply Nat.pos_of_ne_zero
             intro hk
             subst k
-            simpa only [Matrix.trace_fin_zero, zero_ne_one] using hτTrace))) =
+            simp only [Matrix.trace_fin_zero, zero_ne_one] at hτTrace))) =
       groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
         (groupCohomology.cocyclesOfIsMulCocycle₂
           (ScalarCocycle.isMulCocycle₂_of_projRep ρ₀
@@ -149,7 +149,7 @@ theorem eventually_cohomologousTo_of_tendsto_unital_periodic_lines
             apply Nat.pos_of_ne_zero
             intro hk
             subst k
-            simpa only [Matrix.trace_fin_zero, zero_ne_one] using hτTrace))) =
+            simp only [Matrix.trace_fin_zero, zero_ne_one] at hτTrace))) =
       groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
         (groupCohomology.cocyclesOfIsMulCocycle₂
           (ScalarCocycle.isMulCocycle₂_of_projRep (ρ₀) (NeZero.pos D))) := by
