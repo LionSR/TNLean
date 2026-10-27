@@ -57,5 +57,6 @@ import TNLean.Lattice.TranslationSupercell
 import TNLean.Lattice.TranslationSupercellCommutator
 import TNLean.Lattice.TranslationSupercellDecay
 import TNLean.Lattice.TranslationSupercellSpacing
+import TNLean.Lattice.TranslationSupercellTruncated
 import TNLean.Lattice.VariationalLowerBound
 import TNLean.Lattice.ZeroEntropy
