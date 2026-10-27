@@ -382,6 +382,27 @@ preparation of matrix product states.
     with the input elsewhere.
 \end{proof}
 
+\begin{theorem}[Operators supported on a set of sites]
+    \label{thm:qc_supported_operator_placement}
+    \lean{QuantumCircuit.exists_embedOp_eq_of_mem_supportedOperators}
+    \leanok
+    \uses{def:qc_local_circuit,lem:qc_placed_operators}
+    Let $e\colon\{0,\ldots,m-1\}\to\{0,\ldots,n-1\}$ be injective.
+    Every operator $Z$ on $(\C^d)^{\otimes n}$ supported on the range
+    of $e$ is the placement by $e$ of an operator $X$ on
+    $(\C^d)^{\otimes m}$. Empty chains and zero local dimension are
+    included.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:qc_local_circuit,lem:qc_placed_operators}
+    By the definition of support, $Z$ is a linear combination of
+    products $\bigotimes_{i<n}A_i$ with $A_i=I$ outside the range of
+    $e$. For each such product take $X=\bigotimes_{j<m}A_{e(j)}$.
+    Lemma~\ref{lem:qc_placed_operators} gives its required placement.
+    Placement preserves addition and scalar multiplication, so the
+    same conclusion holds for $Z$.
+\end{proof}
+
 \begin{lemma}[Products of matrices placed on disjoint windows]
     \label{lem:qc_placed_configurations}
     \lean{QuantumCircuit.placeCfg, QuantumCircuit.placeCfg_apply,
