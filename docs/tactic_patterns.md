@@ -24,6 +24,20 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Tensor forms from product generators — promoted (2026-10-23)
+
+- **Pattern:** Establish a linear tensor form for every product generator,
+  then extend it to all operators supported on the same set.
+- **Seen:** Four tensor-form proofs in
+  `Lattice/Sheet/Splitting.lean` and
+  `Lattice/Sheet/RegionalOperatorForms.lean`.
+- **Abstraction:** The existing
+  `TNLean.Lattice.Sheet.exists_eq_of_mem_supportedOperators` extends the
+  generator statement by linearity.
+- **Notes:** All four proofs use this declaration. The first- and last-region
+  forms require only the two off-support identity restrictions; they do not
+  repeat the linear-span induction or introduce another tactic.
+
 ### Raising a time bound inside a light-cone exponential — promoted (2026-10-25)
 
 - **Pattern:**
@@ -62,6 +76,20 @@ abstracted — record why, so it is not re-proposed).
 - **Refactored occurrences:** `MPS/AreaLaw/SupportedGaussianIntegral.lean` and `PEPS/AreaLaw/SupportedGaussianIntegral.lean`. Their physical localization estimates and constants remain at the callers; their repeated integration arguments are removed. The finite-domain caller in `MPS/AreaLaw/DomainSupportedGaussianIntegral.lean` uses the same theorem with intrinsic graph neighborhoods.
 - **Notes:** The restricted measure is not renormalized. Zero variance, zero cutoff and the empty site set are retained. The bound is `‖W‖ (εobs + T εgen)`, without an additional factor of two. The two caller files lose 146 lines in total.
 
+
+### Hermitian partial sums of terms Hermitian on a set — promoted (2026-10-25)
+
+- **Pattern:** `Matrix.isHermitian_sum T fun i hi ↦ hh i (hT hi)` for `hT : T ⊆ S`.
+- **Seen:** Five occurrences across three files: three in
+  `TNLean/Lattice/ClusterExpansion/ClusterPart.lean` and one each in
+  `TNLean/Lattice/ClusterExpansion/ThermalProduct.lean` and
+  `TNLean/Lattice/ClusterExpansion/TruncatedPositivity.lean`.
+- **Abstraction:** `Matrix.isHermitian_sum_of_subset` in
+  `TNLean/Algebra/MatrixHermitianSum.lean`; all five occurrences use the theorem.
+- **Notes:** Retains the additive/star assumptions of `Matrix.isHermitian_sum`;
+  no finiteness assumption on the matrix index type is needed. The source line count
+  at these call sites is unchanged. The fifth occurrence was integrated from #10155;
+  its mathematical statements and original authorship are unchanged.
 
 ### Hermitian sum of pointwise-Hermitian terms — promoted (2026-10-23)
 - **Pattern:**
@@ -2606,10 +2634,12 @@ three-plaquette output measurement, and the routed reunion measurement.
   `TNLean/MPS/MPU/Examples/ShiftTilde.lean`
   (`shiftPhysicalSwap_mem_unitaryGroup`).
 - **Abstraction:** `Equiv.Perm.permMatrix_mem_unitaryGroup` in
-  `TNLean/Algebra/PermutationMatrixUnitary.lean`.
+  `QICLean/Algebra/PermutationMatrixUnitary.lean` (QICLean dependency).
 - **Notes:** all three call sites now use the common theorem; the
   fundamental-theorem consumer simplifies the coercion of `permGL` to its
-  underlying permutation matrix.
+  underlying permutation matrix. The theorem moved to QICLean on 2026-10-26
+  with its name and proof unchanged; the TNLean copy was deleted to avoid
+  declaring the same theorem twice after the dependency update.
 
 ### non-injectivity from an annihilating linear functional — promoted
 - **Pattern:** exhibit a matrix outside the span of a finite Kraus family by
@@ -4894,6 +4924,32 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Uniform bounds for sums of natural powers — candidate (2026-10-26)
+
+- **Pattern:** Bound each term by monotonicity of natural powers, then replace
+  a finite sum by its cardinality times that bound.
+- **Seen:** The degree sum in `Algebra/FrequencyCounts.lean` and the iterated
+  sum in `Algebra/TwoWindowRankBounds.lean`.
+- **Abstraction:** Existing Mathlib lemmas suffice: `Finset.sum_le_sum`,
+  `Finset.sum_le_card_nsmul` and `Finset.sum_const`.
+- **Notes:** Two arguments across two files; no new tactic is needed. The
+  degree sum and the three nested ranges have different cardinality factors.
+
+### Splitting a chain Hamiltonian at one cut — candidate (2026-10-26)
+
+- **Pattern:** From `H = HL + HR + K` with `HL` supported on `leftBlock L k`, `HR` on its
+  complement, `0 ≤ K ≤ 1` and `H ≥ E₀`, pass to the cut coordinates with
+  `cutOperator_eq_kronecker_one` and `cutOperator_eq_one_kronecker`, obtain
+  `cutOperator H = A ⊗ₖ 1 + 1 ⊗ₖ A' + cutOperator K`, and derive
+  `(1 - cutOperator K).PosSemidef` and `(cutOperator H - E₀ • 1).PosSemidef`.
+- **Seen:** 2 occurrences in 2 files: `TNLean/MPS/AreaLaw/ViableSet/ConstantRankCut.lean`
+  (energy of a trimmed low-energy state) and `TNLean/MPS/AreaLaw/ViableSet/TrimmedWitness.lean`
+  (`exists_trimmed_witness_chain`).
+- **Abstraction:** proposed: one lemma returning `A`, `A'`, the Kronecker split and the two
+  positivity facts from the six hypotheses on `H`, `HL`, `HR`, `K` and `E₀`.
+- **Notes:** about 25 lines per occurrence. Promote when a third consumer at a cut of the chain
+  lands (the later steps of the same source argument are the expected one).
+
 ### Regional expectation compared with a supported approximant — candidate (2026-10-21)
 
 - **Pattern:** For a contractive regional expectation fixing a supported approximant, rewrite the projection error as the difference between the approximation error and its expectation.
@@ -7063,19 +7119,20 @@ spectral split → block extraction → MPV calculation → strict bounds
   `v T₀ + 15 + r ≤ K / 2`, which concludes the displayed inequality for any `‖W‖ ≤ 1`.
 - **Notes:** promote at a third occurrence, for example a reset filter on another domain.
 
-### Hermitian partial sums of terms Hermitian on a set — candidate (2026-10-25)
-- **Pattern:**
-  ```lean
-  have hsumH : ∀ T ⊆ B ∪ C, (∑ k ∈ T, h k).IsHermitian := fun T hT ↦
-    Matrix.isHermitian_sum T fun k hk ↦ hh k (hT hk)
-  ```
-  from `hh : ∀ k ∈ B ∪ C, (h k).IsHermitian`.
-- **Seen:** 5 occurrences across 3 files: `TNLean/Lattice/ClusterExpansion/ClusterPart.lean`
-  (three), `TNLean/Lattice/ClusterExpansion/ThermalProduct.lean` and
-  `TNLean/Lattice/ClusterExpansion/TruncatedPositivity.lean`.
-- **Abstraction:** proposed `Matrix.isHermitian_sum_of_subset (hh : ∀ k ∈ s, (h k).IsHermitian)
-  (hT : T ⊆ s) : (∑ k ∈ T, h k).IsHermitian` in `TNLean/Algebra/MatrixHermitianSum.lean`.
-- **Notes:** meets the rule of three; the refactor of the five call sites is a separate change.
+
+### Matrix of an orthogonal projection is a star projection — candidate (2026-10-25)
+- **Pattern:** `Matrix.toEuclideanLin.symm W.starProjection.toLinearMap` for a submodule `W` of
+  `EuclideanSpace`, followed by the same proof that it is a star projection (Hermitian and
+  idempotent) via `Submodule.isIdempotentElem_starProjection` and self-adjointness.
+- **Seen:** 5 or more occurrences across 4 or more files:
+  `TNLean/MPS/AreaLaw/SequentialTruncation.lean` (`prefixBasisProjection` and its private
+  star-projection lemma), `TNLean/MPS/AreaLaw/ViableSet/Basic.lean` (`spanProjection`,
+  `isStarProjection_spanProjection`), `TNLean/MPS/ParentHamiltonian/PrimitiveQuasiLocalUniqueness.lean`,
+  and the matrix constructions in `StationarySplitting`, `RegionParentHamiltonian` and
+  `CoordinateRangeProjector`.
+- **Abstraction:** proposed `Submodule.starProjectionMatrix W` with
+  `isStarProjection_starProjectionMatrix` in `TNLean/Algebra/`.
+- **Notes:** meets the rule of three; the refactor of the call sites is tracked in #10192.
 
 ## Rejected
 

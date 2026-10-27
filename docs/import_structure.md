@@ -49,7 +49,7 @@ The finite-domain commutator and localization estimates in
 the induced path graph and the shared propagation theory in
 `Circuit.LiebRobinson`. Their initial support may meet several connected
 components; infinite distance gives exact commutation. `DomainGraphGeometry`
-uses the component paths of `IntegerComponents` and the extended-distance
+uses the component paths of `Algebra.IntegerHasseGraph` and the extended-distance
 comparisons in `Algebra.GraphDistanceTransport` to bound each finite-radius
 sphere by two sites. This supplies the growth bound for domain localization.
 
