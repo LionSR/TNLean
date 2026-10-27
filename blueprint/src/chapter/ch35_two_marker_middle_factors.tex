@@ -6,29 +6,38 @@ The middle operators are specified before the coefficients on the exterior
 factor. All products retain their order.
 An interval $\{0,\ldots,h-1\}$ is empty when $h=0$.
 
-For a matrix $M$ indexed by a product $m\times n$, write
-$M_{ab}=(M_{(a,x),(b,y)})_{x,y\in n}$ for its partial matrix element.
+For a matrix $M$ indexed by a product $m\times n$, use the right operator
+blocks and left coefficient slices
+\begin{align}
+    M^{\mathrm R}_{ab}(x,y) & =M((a,x),(b,y)),\notag \\
+    M^{\mathrm L}_{xy}(a,b) & =M((a,x),(b,y)).
+    \label{eq:two_marker_operator_blocks}
+\end{align}
+Here $a,b\in m$ and $x,y\in n$; the right blocks are indexed by $n$
+and the left slices by $m$.
 
-\begin{theorem}[Prescribed factors from partial matrix elements]
+\begin{theorem}[Prescribed factors from operator blocks]
     \label{thm:two_marker_prescribed_span}
     \lean{Matrix.exists_left_factors_of_operatorBlock_mem_span,Matrix.exists_right_factors_of_left_blocks_mem_span}
+    \leanok
     Let $\mathcal I$ be finite, let $m,n$ be arbitrary sets, and let
     $C_\alpha$ be complex matrices indexed by $n$. Suppose that
-    $M_{ab}\in\spn_{\C}\{C_\alpha:\alpha\in\mathcal I\}$ for every $a,b\in m$.
+    $M^{\mathrm R}_{ab}\in\spn_{\C}\{C_\alpha:\alpha\in\mathcal I\}$ for every $a,b\in m$.
     There are matrices $L_\alpha$ indexed by $m$ such that
     \begin{align}
         M=\sum_{\alpha\in\mathcal I}L_\alpha\otimes C_\alpha.
         \label{eq:two_marker_prescribed_span}
     \end{align}
-    There is also the opposite orientation: if the matrices
-    $(M_{(a,x),(b,y)})_{a,b\in m}$ belong to the span of a prescribed finite
-    family $C_\alpha$ indexed by $m$, then
-    $M=\sum_\alpha C_\alpha\otimes R_\alpha$ for suitable matrices $R_\alpha$
-    indexed by $n$.
+    For the opposite orientation, let $C_\alpha\in\C^{m\times m}$ for
+    $\alpha\in\mathcal I$. If
+    $M^{\mathrm L}_{xy}\in\spn_{\C}\{C_\alpha:\alpha\in\mathcal I\}$
+    for every $x,y\in n$, then
+    $M=\sum_{\alpha\in\mathcal I}C_\alpha\otimes R_\alpha$ for suitable
+    matrices $R_\alpha$ indexed by $n$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     For each $a,b$, choose coefficients $\lambda_{ab,\alpha}$ with
-    $M_{ab}=\sum_\alpha\lambda_{ab,\alpha}C_\alpha$, and set
+    $M^{\mathrm R}_{ab}=\sum_\alpha\lambda_{ab,\alpha}C_\alpha$, and set
     $(L_\alpha)_{ab}=\lambda_{ab,\alpha}$. Comparing matrix entries gives
     (\ref{eq:two_marker_prescribed_span}). The opposite orientation follows by
     the same argument with the two pairs of indices exchanged.
@@ -37,6 +46,7 @@ $M_{ab}=(M_{(a,x),(b,y)})_{x,y\in n}$ for its partial matrix element.
 \begin{definition}[Crossing words and ordinary run lengths]
     \label{def:two_marker_middle_index}
     \lean{TNLean.MPS.AreaLaw.TwoMarkerMiddleIndex}
+    \leanok
     For nonnegative integers $r,i,j,u,v$, let $\mathcal I_{r,i,j}^{u,v}$ consist
     of pairs $(w,g)$ with
     \begin{align}
@@ -52,6 +62,7 @@ $M_{ab}=(M_{(a,x),(b,y)})_{x,y\in n}$ for its partial matrix element.
 \begin{definition}[Ordered middle product]
     \label{def:two_marker_middle_product}
     \lean{TNLean.MPS.AreaLaw.twoMarkerMiddleFactor}
+    \leanok
     \uses{def:two_marker_middle_index}
     Let $A$ be an element of a monoid, and let $U_0,\ldots,U_{u-1}$ and
     $V_0,\ldots,V_{v-1}$ belong to the same monoid. For
@@ -69,6 +80,7 @@ $M_{ab}=(M_{(a,x),(b,y)})_{x,y\in n}$ for its partial matrix element.
 \begin{definition}[Two distinguished frequencies]
     \label{def:two_marker_coefficient}
     \lean{TNLean.MPS.AreaLaw.twoMarkerCoefficient}
+    \leanok
     Let $D,U,V$ belong to a semiring. With two central formal variables $x,y$,
     define
     \begin{align}
@@ -79,26 +91,28 @@ $M_{ab}=(M_{(a,x),(b,y)})_{x,y\in n}$ for its partial matrix element.
     need not commute.
 \end{definition}
 
-\begin{theorem}[Partial matrix elements of sums and tensor products]
+\begin{theorem}[Operator blocks of sums and tensor products]
     \label{thm:two_marker_block_identities}
     \lean{TNLean.MPS.AreaLaw.operatorBlock_sum,TNLean.MPS.AreaLaw.operatorBlock_kronecker_eq_smul}
+    \leanok
     For a finite family of matrices $M_\alpha$ indexed by $m\times n$, and
     matrices $E$ and $W$ indexed by $m$ and $n$, respectively,
     \begin{align}
-        \left(\sum_\alpha M_\alpha\right)_{ab}
-                          & =\sum_\alpha(M_\alpha)_{ab},\notag \\
-        (E\otimes W)_{ab} & =E_{ab}W.
+        \left(\sum_\alpha M_\alpha\right)^{\mathrm R}_{ab}
+                                      & =\sum_\alpha(M_\alpha)^{\mathrm R}_{ab},\notag \\
+        (E\otimes W)^{\mathrm R}_{ab} & =E_{ab}W.
         \label{eq:two_marker_block_identities}
     \end{align}
     No finiteness assumption on $m$ or $n$ is required.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Both identities follow by comparing the entry indexed by $x,y\in n$.
 \end{proof}
 
 \begin{theorem}[A common prescribed middle family through a degree bound]
     \label{thm:two_marker_common_middle}
     \lean{TNLean.MPS.AreaLaw.exists_sum_twoMarkerCoefficient_decomposition}
+    \leanok
     \uses{def:two_marker_middle_index,def:two_marker_middle_product,def:two_marker_coefficient}
     Let $m,n$ be finite sets. Choose complex matrices $E,E_s^U,E_t^V$ indexed
     by $m$ and $A,U_s^M,V_t^M$ indexed by $n$, with $0\le s<u$ and $0\le t<v$.
@@ -119,9 +133,9 @@ $M_{ab}=(M_{(a,x),(b,y)})_{x,y\in n}$ for its partial matrix element.
     \end{align}
     The displayed middle family depends only on $A,U^M,V^M,k,i,j$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:two_marker_prescribed_span,thm:two_marker_block_identities,def:two_marker_middle_index,def:two_marker_middle_product,def:two_marker_coefficient}
-    Induction on $r$ shows that every partial matrix element of
+    Induction on $r$ shows that every right operator block of
     $C_{r,i,j}(D,U,V)$ belongs to the span of the products indexed by
     $\mathcal I_{r,i,j}^{u,v}$. At degree zero, the coefficient is $I$ for
     $i=j=0$ and zero otherwise. The positive-frequency recurrence is
@@ -140,7 +154,7 @@ $M_{ab}=(M_{(a,x),(b,y)})_{x,y\in n}$ for its partial matrix element.
 
     If $r\le k$, the same crossing letters and run lengths define an element
     of $\mathcal I_{k,i,j}^{u,v}$ with the same ordered product. Thus all the
-    partial matrix elements in the left side of
+    right operator blocks in the left side of
     (\ref{eq:two_marker_common_middle}) belong to the span of the one displayed
     middle family. Apply Theorem~\ref{thm:two_marker_prescribed_span} once more
     to obtain the matrices $B_{w,g}$.
@@ -149,6 +163,7 @@ $M_{ab}=(M_{(a,x),(b,y)})_{x,y\in n}$ for its partial matrix element.
 \begin{theorem}[Number of prescribed middle factors]
     \label{thm:two_marker_middle_cardinality}
     \lean{TNLean.MPS.AreaLaw.card_twoMarkerMiddleIndex_square_le}
+    \leanok
     \uses{def:two_marker_middle_index}
     For all nonnegative integers $r,i,j,q$,
     \begin{align}
@@ -157,7 +172,7 @@ $M_{ab}=(M_{(a,x),(b,y)})_{x,y\in n}$ for its partial matrix element.
         \label{eq:two_marker_middle_cardinality}
     \end{align}
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:two_marker_middle_index}
     There are at most $(2q^2)^{i+j}$ choices for the decorated word and
     $(r+1)^{i+j+1}$ choices for its run lengths. Discarding the frequency and
