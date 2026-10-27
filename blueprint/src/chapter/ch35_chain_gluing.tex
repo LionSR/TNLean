@@ -18,10 +18,11 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
         TNLean.MPS.AreaLaw.rightCutOperator}
     \leanok
     The coordinates $((x,y),z)$ of a configuration of the chain at the cut
-    after $k$ sites. For an operator $H_L$ supported on the first $k$ sites,
-    $H_L'$ is its restriction to them; for an operator $K$ supported off the
-    first $k-1$ sites, $K'$ is its restriction to site $k-1$ and the sites right
-    of the cut.
+    after $k$ sites. Let the local dimension satisfy $q\ge1$, so that each
+    region has a configuration $0$. For an operator $H_L$ supported on the
+    first $k$ sites, $H_L'$ is its restriction to them; for an operator $K$
+    supported off the first $k-1$ sites, $K'$ is its restriction to site $k-1$
+    and the sites right of the cut.
 \end{definition}
 
 \begin{theorem}[The Hamiltonian at a cut]
@@ -29,8 +30,8 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     \lean{TNLean.MPS.AreaLaw.reindex_gluingCut_eq}
     \leanok
     \uses{def:chain_gluing_cut}
-    If $H_L$ is supported on the first $k$ sites and $K$ off the first $k-1$
-    sites, then in the cut coordinates $H_L+K=H_L'\otimes1+1\otimes K'$.
+    Let $q\ge1$. If $H_L$ is supported on the first $k$ sites and $K$ off the
+    first $k-1$ sites, then in the cut coordinates $H_L+K=H_L'\otimes1+1\otimes K'$.
 \end{theorem}
 
 \begin{proof}
@@ -50,12 +51,12 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     \lean{TNLean.MPS.AreaLaw.exists_leading_eigenvector_chain}
     \leanok
     \uses{def:chain_gluing_cut}
-    Let $H=H_L+K$ with $H_L$ supported on the first $k$ sites and $K$ off the
-    first $k-1$ sites have a gapped ground state $\Gamma$ with energy $E_0$ and
-    gap $\Delta$. Let $W$ be an isometry from a bond $\mathbb C^m$ into the
-    sites right of the cut, and let $w=(1\otimes W)x$ in the cut coordinates
-    have energy at most $E_0+e$. Let $\sigma$ be a density matrix on the first
-    $k$ sites and the bond with
+    Let $q\ge1$ and let $H=H_L+K$ with $H_L$ supported on the first $k$ sites
+    and $K$ off the first $k-1$ sites have a gapped ground state $\Gamma$ with
+    energy $E_0$ and gap $\Delta$. Let $W$ be an isometry from a bond
+    $\mathbb C^m$ into the sites right of the cut, and let $w=(1\otimes W)x$ in
+    the cut coordinates have energy at most $E_0+e$. Let $\sigma$ be a density
+    matrix on the first $k$ sites and the bond with
     $\operatorname{Re}\operatorname{tr}(\sigma(H_L'\otimes1))\le
         \operatorname{Re}\operatorname{tr}(\lvert x\rangle\langle x\rvert(H_L'\otimes1))$
     and
