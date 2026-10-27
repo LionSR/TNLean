@@ -9475,3 +9475,28 @@ there is no need for a new tactic.
 - **Notes:** This specializes the existing range-dependent coordinate estimate
   to displacement at most one along every edge. The original range-dependent
   theorem and all three commutator statements are unchanged.
+
+### Eigenvectors in the support of a density matrix — existing Mathlib lemmas (2026-10-26)
+
+- **Seen:** The local `hQu` arguments in
+  `MPS/AreaLaw/ViableSet/ViableLeadingVector.lean` and
+  `MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean`.
+- **Pattern:** From `Q * σ = σ` and `σ *ᵥ u = μ • u`, with `μ ≠ 0`,
+  deduce `Q *ᵥ u = u` by associativity and scalar cancellation.
+- **Reuse:** Apply `congrArg` to the action on `u`, then use
+  `Matrix.mulVec_mulVec`, `Matrix.mulVec_smul` and `smul_right_injective`.
+- **Decision:** These existing lemmas give the new argument in three lines;
+  no separate scalar-inverse calculation or custom tactic is needed.
+
+### Gap-controlled error budget of the viable leading step — candidate (2026-10-27)
+
+- **Seen:** `MPS/AreaLaw/ViableSet/ViableLeadingVector.lean` and
+  `MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean`.
+- **Pattern:** From `Δ ≤ 4`, `c = (Δ / 169) ^ 2`, `‖B‖ ≤ 2 L` and
+  `η = c / (2 L)`, derive `2 c ≤ √c`, `‖B‖ (2 η) ≤ 2 c`,
+  `2 (6 √c + ‖B‖ (2 η)) ≤ 14 √c < Δ / 12` and
+  `4 (6 √c + ‖B‖ (2 η)) < Δ`.
+- **Decision:** Two occurrences of the same twenty-line derivation. A third
+  occurrence should factor it into one lemma beside
+  `lvv_trimming_constant_bounds` that takes `Δ`, `c`, `‖B‖` and `L` and
+  returns the two error bounds.
