@@ -213,8 +213,10 @@ import TNLean.Algebra.TranslatedCharacterOrthogonality
 import TNLean.Algebra.TwistedRegularProjective
 import TNLean.Algebra.TwistedRegularRepresentation
 import TNLean.Algebra.TwoMarkerMiddleFactors
+import TNLean.Algebra.TwoWindowFamily
 import TNLean.Algebra.TwoWindowRankBounds
 import TNLean.Algebra.TwoWindowSum
+import TNLean.Algebra.TwoWindowTensorForms
 import TNLean.Algebra.UniformSelectionBounds
 import TNLean.Algebra.UnimodularPowerSum
 import TNLean.Algebra.UnitaryAdjointKronecker
