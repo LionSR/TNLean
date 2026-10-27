@@ -95,19 +95,20 @@ noncomputable def ScalarCocycle.positiveResidual (ω : ScalarCocycle G) :
 
 /-- Taking pointwise unit phase preserves the scalar cocycle equation. -/
 theorem ScalarCocycle.circlePhase_isMulCocycle₂ {ω : ScalarCocycle G}
-    (hω : ω.IsCocycle) :
+    (hω : groupCohomology.IsMulCocycle₂ ω) :
     @groupCohomology.IsMulCocycle₂ G Circle _ _
       (Circle.trivialMulDistribMulAction (G := G)).toSMul
       ω.circlePhase := by
   intro g h k
   change Complex.unitsPhase (ω (g * h, k)) * Complex.unitsPhase (ω (g, h)) =
     Complex.unitsPhase (ω (h, k)) * Complex.unitsPhase (ω (g, h * k))
-  simpa only [map_mul, mul_comm] using congrArg Complex.unitsPhase (hω g h k)
+  simpa only [map_mul, mul_comm] using
+    congrArg Complex.unitsPhase ((isMulCocycle₂_iff _).mp hω g h k)
 
 /-- The radial residual of a scalar cocycle is a generalized cocycle on the
 one-point block space. -/
 theorem ScalarCocycle.positiveResidual_isGeneralizedCocycle
-    {ω : ScalarCocycle G} (hω : ω.IsCocycle) :
+    {ω : ScalarCocycle G} (hω : groupCohomology.IsMulCocycle₂ ω) :
     LSymbol.IsGeneralizedCocycle ω.positiveResidual := by
   intro x g h k
   change ω.positiveResidual x g (h * k) * ω.positiveResidual x h k =
@@ -115,9 +116,10 @@ theorem ScalarCocycle.positiveResidual_isGeneralizedCocycle
   simp only [one_mul, positiveResidual, circlePhaseInclusion, circlePhase,
     div_mul_div_comm]
   congr 1
-  · exact (hω g h k).symm
+  · exact ((isMulCocycle₂_iff _).mp hω g h k).symm
   · simpa only [map_mul] using (congrArg
-      (fun z : Units ℂ ↦ Circle.toUnits (Complex.unitsPhase z)) (hω g h k)).symm
+      (fun z : Units ℂ ↦ Circle.toUnits (Complex.unitsPhase z))
+      ((isMulCocycle₂_iff _).mp hω g h k)).symm
 
 omit [Group G] in
 /-- The radial residual of any scalar two-cochain takes values in the positive
@@ -137,7 +139,7 @@ This is the finite-discrete algebraic comparison used for
 arXiv:2502.20257, line 1931.  It does not use the sheaf-cohomology argument in
 the source footnote. -/
 theorem ScalarCocycle.cohomologousTo_circlePhaseInclusion [Finite G]
-    {ω : ScalarCocycle G} (hω : ω.IsCocycle) :
+    {ω : ScalarCocycle G} (hω : groupCohomology.IsMulCocycle₂ ω) :
     ω.CohomologousTo ω.circlePhaseInclusion := by
   obtain ⟨χ, _, hχ⟩ := LSymbol.exists_positive_coboundary
     (positiveResidual_isGeneralizedCocycle hω)
@@ -186,17 +188,18 @@ noncomputable def ScalarCocycle.circlePhaseMathlibCocycle {G : Type} [Group G]
 /-- For a finite group, the included pointwise-phase representative of a scalar cocycle `ω`
 and `ω` itself determine the same class in `H²(G, ℂˣ)`. -/
 theorem ScalarCocycle.H2π_map_circlePhaseMathlibCocycle
-    {G : Type} [Group G] [Finite G] {ω : ScalarCocycle G} (hω : ω.IsCocycle) :
+    {G : Type} [Group G] [Finite G] {ω : ScalarCocycle G}
+    (hω : groupCohomology.IsMulCocycle₂ ω) :
     groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
         (groupCohomology.mapCocycles₂ (MonoidHom.id G)
           (circleToComplexUnitsRepHom G)
           (ScalarCocycle.circlePhaseMathlibCocycle
-            (groupCohomology.cocyclesOfIsMulCocycle₂ hω.isMulCocycle₂))) =
+            (groupCohomology.cocyclesOfIsMulCocycle₂ hω))) =
       groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
-        (groupCohomology.cocyclesOfIsMulCocycle₂ hω.isMulCocycle₂) := by
+        (groupCohomology.cocyclesOfIsMulCocycle₂ hω) := by
   have hcoh := ScalarCocycle.cohomologousTo_circlePhaseInclusion hω
-  exact (ScalarCocycle.cohomologousTo_iff_H2π_eq (hω.of_cohomologousTo hcoh.symm) hω).mp
-    hcoh.symm
+  exact (ScalarCocycle.cohomologousTo_iff_H2π_eq
+    (ScalarCocycle.isMulCocycle₂_of_cohomologousTo hω hcoh.symm) hω).mp hcoh.symm
 
 /-- The coefficient-inclusion map
 `H²(G, U(1)) → H²(G, ℂˣ)`. -/
@@ -241,14 +244,14 @@ theorem circleH2ToComplexUnitsH2_surjective (G : Type) [Group G] [Finite G] :
   obtain ⟨ω, hω, rfl⟩ := ScalarCocycle.exists_H2π_eq x
   refine ⟨groupCohomology.H2π (circleH2Representation G)
     (ScalarCocycle.circlePhaseMathlibCocycle
-      (groupCohomology.cocyclesOfIsMulCocycle₂ hω.isMulCocycle₂)), ?_⟩
+      (groupCohomology.cocyclesOfIsMulCocycle₂ hω)), ?_⟩
   change groupCohomology.map (MonoidHom.id G)
       (circleToComplexUnitsRepHom G) 2
         (groupCohomology.H2π (circleH2Representation G)
           (ScalarCocycle.circlePhaseMathlibCocycle
-            (groupCohomology.cocyclesOfIsMulCocycle₂ hω.isMulCocycle₂))) =
+            (groupCohomology.cocyclesOfIsMulCocycle₂ hω))) =
     groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
-      (groupCohomology.cocyclesOfIsMulCocycle₂ hω.isMulCocycle₂)
+      (groupCohomology.cocyclesOfIsMulCocycle₂ hω)
   rw [groupCohomology.H2π_comp_map_apply]
   exact ScalarCocycle.H2π_map_circlePhaseMathlibCocycle hω
 

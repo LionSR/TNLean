@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.ParentHamiltonian.RegionGroundSpace
+import TNLean.Algebra.SubmoduleStarProjectionMatrix
 import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 import Mathlib.Analysis.Matrix.Hermitian
 import QICLean.Algebra.MatrixAux
@@ -76,20 +77,8 @@ Source: arXiv:2011.12127, lines 2003–2011. -/
 theorem canonicalRegionParentInteraction_posSemidef (A : Tensor Γ d) (R : Finset V) :
     (canonicalRegionParentInteraction A R).PosSemidef := by
   classical
-  have hP := Submodule.isSymmetricProjection_starProjection (regionGroundSpaceES A R)ᗮ
-  have hHerm : (canonicalRegionParentInteraction A R).IsHermitian := by
-    apply Matrix.isSymmetric_toEuclideanLin_iff.mp
-    simpa only [canonicalRegionParentInteraction, LinearEquiv.apply_symm_apply] using
-      hP.isSymmetric
-  have hIdem : canonicalRegionParentInteraction A R * canonicalRegionParentInteraction A R =
-      canonicalRegionParentInteraction A R := by
-    apply Matrix.toEuclideanLin.injective
-    rw [Matrix.toLpLin_mul 2 2 2]
-    simp only [canonicalRegionParentInteraction, LinearEquiv.apply_symm_apply]
-    exact hP.isIdempotentElem.eq
   exact Matrix.nonneg_iff_posSemidef.mp
-    (show IsStarProjection (canonicalRegionParentInteraction A R) from
-      (isStarProjection_iff').mpr ⟨hIdem, hHerm⟩).nonneg
+    ((regionGroundSpaceES A R)ᗮ.isStarProjection_starProjectionMatrix).nonneg
 
 /-- The kernel of the canonical regional projector is exactly the local
 PEPS ground space. Source: arXiv:2011.12127, lines 2003–2011. -/

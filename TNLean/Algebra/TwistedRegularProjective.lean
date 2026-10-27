@@ -29,6 +29,8 @@ condition".
 
 open scoped Matrix
 
+open scoped TNLean.Algebra.ScalarCohomology
+
 namespace TNLean.Algebra
 namespace ScalarCocycle
 
@@ -41,10 +43,11 @@ def inverse (ω : ScalarCocycle G) : ScalarCocycle G :=
 omit [Fintype G] [DecidableEq G] in
 /-- Inverting a genuine scalar two-cocycle gives another cocycle. -/
 theorem inverse_isCocycle {ω : ScalarCocycle G}
-    (hω : ω.IsCocycle) : (inverse ω).IsCocycle := by
+    (hω : groupCohomology.IsMulCocycle₂ ω) : groupCohomology.IsMulCocycle₂ (inverse ω) := by
+  apply (isMulCocycle₂_iff _).mpr
   intro g h k
   simpa only [inverse, mul_inv_rev, mul_comm] using
-    congrArg Inv.inv (hω g h k)
+    congrArg Inv.inv ((isMulCocycle₂_iff _).mp hω g h k)
 
 omit [Group G] [Fintype G] [DecidableEq G] in
 /-- The circle-valued phase of the inverse cochain is the inverse of the
@@ -67,7 +70,7 @@ theorem twistedLeftRegularGL_coe (ω : ScalarCocycle G) (g : G) :
 /-- The invertible twisted regular matrices obey the projective law with
 factor system `ω.circlePhaseInclusion⁻¹`. -/
 theorem twistedLeftRegularGL_mul {ω : ScalarCocycle G}
-    (hω : ω.IsCocycle) (g h : G) :
+    (hω : groupCohomology.IsMulCocycle₂ ω) (g h : G) :
     twistedLeftRegularGL ω g * twistedLeftRegularGL ω h =
       Matrix.GeneralLinearGroup.scalar G (ω.circlePhaseInclusion (g, h))⁻¹ *
         twistedLeftRegularGL ω (g * h) := by
@@ -82,7 +85,7 @@ representation on the regular bond space. Its factor system is the inverse
 of the canonical circle representative of the input cocycle, following the
 left-regular convention of arXiv:2502.20257, lines 412–415. -/
 noncomputable def twistedLeftRegularProjective
-    (ω : ScalarCocycle G) (hω : ω.IsCocycle) :
+    (ω : ScalarCocycle G) (hω : groupCohomology.IsMulCocycle₂ ω) :
     ProjectiveRepresentation (D := Fintype.card G)
       (fun p => (ω.circlePhaseInclusion p)⁻¹) where
   X g := Units.map
@@ -103,7 +106,7 @@ noncomputable def twistedLeftRegularProjective
 
 /-- The regular projective representation has unitary virtual matrices. -/
 theorem twistedLeftRegularProjective_mem_unitaryGroup
-    (ω : ScalarCocycle G) (hω : ω.IsCocycle) (g : G) :
+    (ω : ScalarCocycle G) (hω : groupCohomology.IsMulCocycle₂ ω) (g : G) :
     (((ω.twistedLeftRegularProjective hω).X g : GL (Fin (Fintype.card G)) ℂ) :
       Matrix (Fin (Fintype.card G)) (Fin (Fintype.card G)) ℂ) ∈
       Matrix.unitaryGroup (Fin (Fintype.card G)) ℂ := by
@@ -116,7 +119,7 @@ theorem twistedLeftRegularProjective_mem_unitaryGroup
 twisted left-regular matrices. The resulting factor system is the canonical
 circle representative of the requested class. -/
 noncomputable def regularProjectiveForClass
-    (ω : ScalarCocycle G) (hω : ω.IsCocycle) :
+    (ω : ScalarCocycle G) (hω : groupCohomology.IsMulCocycle₂ ω) :
     ProjectiveRepresentation (D := Fintype.card G) ω.circlePhaseInclusion :=
   let σ := (inverse ω).twistedLeftRegularProjective (inverse_isCocycle hω)
   { X := σ.X
@@ -126,7 +129,7 @@ noncomputable def regularProjectiveForClass
 
 /-- The virtual matrices of `regularProjectiveForClass` are unitary. -/
 theorem regularProjectiveForClass_mem_unitaryGroup
-    (ω : ScalarCocycle G) (hω : ω.IsCocycle) (g : G) :
+    (ω : ScalarCocycle G) (hω : groupCohomology.IsMulCocycle₂ ω) (g : G) :
     ((ω.regularProjectiveForClass hω).X g :
       Matrix (Fin (Fintype.card G)) (Fin (Fintype.card G)) ℂ) ∈
       Matrix.unitaryGroup (Fin (Fintype.card G)) ℂ := by
