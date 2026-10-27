@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.BoundaryObservableCompression
 import TNLean.MPS.ParentHamiltonian.LocalObservableQuasiLocalState
 import TNLean.MPS.ParentHamiltonian.QuasiLocalCommutatorLocality
+import TNLean.Algebra.SubmoduleStarProjectionMatrix
 import TNLean.QCA.StateSpace
 import TNLean.QCA.QuasiLocalInterval
 import Mathlib.Analysis.CStarAlgebra.GelfandNaimarkSegal
@@ -73,11 +74,7 @@ noncomputable def groundSpaceProjectionMatrix (A : MPSTensor d D) (N : ℕ) :
 /-- The matrix of the ground-space projection is self-adjoint and idempotent. -/
 theorem isStarProjection_groundSpaceProjectionMatrix (A : MPSTensor d D) (N : ℕ) :
     IsStarProjection (groundSpaceProjectionMatrix A N) :=
-  IsStarProjection.map
-    (A := EuclideanSpace ℂ (Cfg d N) →L[ℂ] EuclideanSpace ℂ (Cfg d N))
-    (B := Matrix (Cfg d N) (Cfg d N) ℂ)
-    (isStarProjection_starProjection (U := groundSpaceES A N))
-    (Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)).symm.toStarAlgHom
+  (groundSpaceES A N).isStarProjection_starProjectionMatrix
 
 variable [NeZero d]
 

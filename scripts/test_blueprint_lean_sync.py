@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Unit tests for Blueprint Lean-declaration source scanning."""
 
+import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
@@ -8,6 +9,7 @@ from blueprint_lean_sync import (
     BlueprintEntry,
     collect_file_lean_decls,
     find_duplicate_lean_tags,
+    run_sync,
     split_tex_lean_decls,
 )
 
@@ -116,9 +118,67 @@ def test_duplicate_lean_tags_are_reported_once_per_declaration() -> None:
     assert find_duplicate_lean_tags(refs[1:]) == []
 
 
+def test_sync_resolves_mathlib_and_qiclean_without_local_wrappers() -> None:
+    with TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        (root / "TNLean").mkdir()
+        (root / "TNLean" / "Example.lean").write_text(
+            "theorem Owner.shared : True := by trivial\n"
+        )
+        blueprint_src = root / "blueprint" / "src"
+        (blueprint_src / "chapter").mkdir(parents=True)
+        chapter = blueprint_src / "chapter" / "example.tex"
+        chapter.write_text(
+            r"\begin{definition}" "\n"
+            r"\lean{groupCohomology.IsMulCocycle₂}\leanok" "\n"
+            r"\end{definition}" "\n"
+            r"\begin{theorem}" "\n"
+            r"\lean{QICLean.result}\leanok" "\n"
+            r"\end{theorem}" "\n"
+        )
+        (root / "lake-manifest.json").write_text(json.dumps({
+            "packagesDir": ".lake/packages",
+            "packages": [{"name": "qiclean"}, {"name": "mathlib"}],
+        }))
+        # Mathlib uses a Lean lakefile and a capitalized library directory;
+        # QICLean declares its library through lakefile.toml.
+        mathlib = root / ".lake" / "packages" / "mathlib"
+        (mathlib / "Mathlib").mkdir(parents=True)
+        (mathlib / "lakefile.lean").write_text("lean_lib Mathlib\n")
+        (mathlib / "Mathlib" / "LowDegree.lean").write_text(
+            "namespace groupCohomology\n"
+            "def IsMulCocycle₂ : Prop := True\n"
+            "end groupCohomology\n"
+            "def Owner.shared : Prop := True\n"
+        )
+        qiclean = root / ".lake" / "packages" / "qiclean"
+        (qiclean / "QICLean").mkdir(parents=True)
+        (qiclean / "lakefile.toml").write_text('[[lean_lib]]\nname = "QICLean"\n')
+        (qiclean / "QICLean" / "Result.lean").write_text(
+            "theorem QICLean.result : True := by trivial\n"
+        )
+
+        report = run_sync(root)
+        assert report.ok
+        assert len(report.blueprint_entries) == 2
+        assert report.lean_decls["groupCohomology.IsMulCocycle₂"].file == "Mathlib/LowDegree.lean"
+        assert report.lean_decls["QICLean.result"].file == "QICLean/Result.lean"
+        assert report.lean_decls["Owner.shared"].file == "TNLean/Example.lean"
+
+        # An upstream namespace is not a blanket allowlist: misspelled names fail.
+        chapter.write_text(chapter.read_text().replace("IsMulCocycle₂", "IsMulCocycleTypo"))
+        report = run_sync(root)
+        assert not report.ok
+        assert len(report.leanok_but_missing) == 1
+        assert [entry.lean_decl for entry in report.missing_in_lean] == [
+            "groupCohomology.IsMulCocycleTypo"
+        ]
+
+
 if __name__ == "__main__":
     test_split_tex_lean_decls_handles_continuations_and_top_level_commas()
     test_structure_fields_are_declarations()
     test_duplicate_lean_tags_are_reported_once_per_declaration()
     test_root_prefixed_decls_escape_namespace()
+    test_sync_resolves_mathlib_and_qiclean_without_local_wrappers()
     print("Blueprint declaration scanner tests passed.")
