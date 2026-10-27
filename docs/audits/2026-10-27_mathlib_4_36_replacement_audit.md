@@ -9,7 +9,7 @@ The comparison is from Mathlib `c55e6e786f49471c72fbddbec5415808896aec1e`
 (`v4.35.0-rc3`) to `625d8914199bc567cca9b91f90e8e5afafa5ae51`
 (`v4.36.0-rc1`). TNLean's starting source is
 `56f7f58b5db4f14ba4f550cba22dd05065118df9`. The coordinated QICLean candidate is
-`92158776b3ed2fdc922ea9a54db9c1bc80c3402a`, proposed in
+`9b6b98a6388dc74d3c05a997aeb5a0871d34c102`, proposed in
 [QICLean #974](https://github.com/LionSR/QICLean/pull/974).
 
 The QICLean audit at that candidate examined 529 non-merge commit titles.
