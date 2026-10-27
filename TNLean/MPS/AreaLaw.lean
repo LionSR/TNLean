@@ -54,6 +54,7 @@ import TNLean.MPS.AreaLaw.OpenMPS
 import TNLean.MPS.AreaLaw.OpenMPSCutRank
 import TNLean.MPS.AreaLaw.OpenMPSProduct
 import TNLean.MPS.AreaLaw.OpenMPSRank
+import TNLean.MPS.AreaLaw.OverlapEnergy
 import TNLean.MPS.AreaLaw.PartialSwap
 import TNLean.MPS.AreaLaw.ProductCutIteration
 import TNLean.MPS.AreaLaw.ProductReplacement
