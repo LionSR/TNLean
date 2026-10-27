@@ -78,10 +78,18 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     \uses{thm:chain_gluing_split}
     In the cut coordinates the Hamiltonian, the ground state and $w$ satisfy
     the hypotheses of the leading-eigenvector theorem of the companion volume,
-    with $\lVert K'\rVert\le\lVert K\rVert$ since $K'$ is a corner of
-    $1\otimes K'$. Let $E$ be the cut-coordinate bijection and $U$ the
-    unitary map $U\psi=\psi\circ E^{-1}$. For chain vectors $\phi,\psi$ and
-    an operator $M$,
+    with $\lVert K'\rVert\le\lVert K\rVert$. Let $E$ be the cut-coordinate
+    bijection and $U$ the unitary map $U\psi=\psi\circ E^{-1}$. Then
+    \begin{align}
+        \lVert K'\rVert=\lVert1\otimes K'\rVert=\lVert UKU^*\rVert
+        =\lVert K\rVert.\notag
+    \end{align}
+    The first equality holds because the first configuration factor is
+    nonempty~\cite[``Operator norm after adjoining an identity factor'']{QICLean2026Blueprint},
+    the second because $UKU^*=1\otimes K'$
+    by Theorem~\ref{thm:chain_gluing_split}, and the third because
+    conjugation by a unitary preserves the operator norm. For chain vectors
+    $\phi,\psi$ and an operator $M$,
     \begin{align}
         \langle U\phi,U\psi\rangle
          & =\langle\phi,\psi\rangle,
@@ -93,6 +101,39 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     Applying~(\ref{eq:chain_gluing_inner}) and~(\ref{eq:chain_gluing_energy})
     to the ground state and the eigenvector
     extension carries the energy and overlap bounds back to the chain.
+\end{proof}
+
+\begin{theorem}[Bounds for every dominant eigenvector on the chain]
+    \label{thm:chain_leading_eigenvector_uniform_bounds}
+    \lean{TNLean.MPS.AreaLaw.leading_eigenvector_bounds_chain}
+    \leanok
+    \uses{thm:chain_leading_eigenvector}
+    Under the hypotheses of Theorem~\ref{thm:chain_leading_eigenvector},
+    let $u$ be any unit eigenvector of $\sigma$ with real eigenvalue
+    $\mu>1/2$. Extend $u$ by $I\otimes W$ and read the resulting vector
+    $v$ in the chain coordinates. Then
+    \begin{align}
+        \operatorname{Re}\langle v,(H_L+K)v\rangle
+         & \le E_0+2(e+\|K\|\tau),\notag     \\
+        |\langle\Gamma,v\rangle|
+         & \ge1-2(e+\|K\|\tau)/\Delta.\notag
+    \end{align}
+    This is an auxiliary statement for the arbitrary choice of leading
+    eigenvector in~\cite[Lemma~2.5, source lines 493--505]{Landau2015Polynomial}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_leading_eigenvector}
+    Theorem~\ref{thm:chain_leading_eigenvector} supplies a unit eigenvector
+    $u_0$ with eigenvalue greater than one half and the two bounds for its
+    physical extension $v_0$.
+    Uniqueness up to a unit phase in the companion
+    volume~\cite[``Uniqueness of an eigenvector above one half'']{QICLean2026Blueprint}
+    gives $u=zu_0$ with $|z|=1$. The physical extension is linear, so
+    $v=zv_0$ and
+    \begin{align}
+        \langle v,(H_L+K)v\rangle & =\langle v_0,(H_L+K)v_0\rangle,\notag \\
+        |\langle\Gamma,v\rangle|  & =|\langle\Gamma,v_0\rangle|.\notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[The trimmed witness at a cut of the chain]

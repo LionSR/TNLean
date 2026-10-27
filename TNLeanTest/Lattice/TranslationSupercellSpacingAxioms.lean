@@ -17,6 +17,7 @@ run_cmd do
       ``SimpleGraph.natAbs_valMinAbs_sub_le_edist,
       ``TNLean.Lattice.exists_lt_natAbs_valMinAbs_add,
       ``TNLean.Lattice.exists_mem_supercell_lt_edist_add,
+      ``TNLean.Lattice.exists_mem_supercell_lt_edist,
       ``TNLean.Lattice.exists_mem_supercell_lt_edist_add_ring] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"

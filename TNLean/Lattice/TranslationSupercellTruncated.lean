@@ -116,28 +116,10 @@ theorem norm_groundCompression_truncatedTerm_commutator_le_of_momenta [NeZero d]
       (Submodule.sum_mem _ fun k' hk' ↦
         supportedOperators_mono (by exact_mod_cast hsK k k' hk') (hSupport k'))
       (supportedOperators_mono (by exact_mod_cast hXK k) (hSupport k))
-  obtain ⟨g, hg, hdist⟩ : ∃ g ∈ supercell Γ d (∑ k, h k) E₀,
-      ((n / 2 : ℕ) : ℕ∞) < G.edist i (g • j) + N := by
-    simpa only [Nat.cast_one, one_mul] using
-      exists_mem_supercell_lt_edist_add hN hden G (R := 1) Nat.zero_lt_one π hπ e he i j
-  have hsep : Disjoint (((K i).biUnion fun x => graphBall G x l : Finset ι) : Set ι)
-      (K (g • j) : Set ι) := by
-    refine Set.disjoint_left.mpr fun z hz hz' ↦ ?_
-    obtain ⟨x, hx, hzx⟩ := Finset.mem_biUnion.mp (Finset.mem_coe.mp hz)
-    have h1 := hKdiam i i (hkK i) x hx
-    have h2 := mem_graphBall.mp hzx
-    have h3 := hKdiam (g • j) z (Finset.mem_coe.mp hz') (g • j) (hkK _)
-    have hle : G.edist i (g • j) ≤ ((2 * R' + l : ℕ) : ℕ∞) :=
-      calc G.edist i (g • j) ≤ G.edist i x + G.edist x z + G.edist z (g • j) :=
-            SimpleGraph.edist_triangle.trans (by gcongr; exact SimpleGraph.edist_triangle)
-        _ ≤ R' + l + R' := add_le_add (add_le_add h1 h2) h3
-        _ = ((2 * R' + l : ℕ) : ℕ∞) := by push_cast; ring
-    have hlt : ((n / 2 : ℕ) : ℕ∞) < ((2 * R' + l + N : ℕ) : ℕ∞) := by
-      calc ((n / 2 : ℕ) : ℕ∞) < G.edist i (g • j) + N := hdist
-        _ ≤ ((2 * R' + l : ℕ) : ℕ∞) + N := by gcongr
-        _ = ((2 * R' + l + N : ℕ) : ℕ∞) := by push_cast; ring
-    have := ENat.natCast_lt_natCast.mp hlt
-    omega
+  obtain ⟨g, hg, hfar⟩ :=
+    exists_mem_supercell_lt_edist hN hden G π hπ e he (2 * R' + l) hl i j
+  have hsep := disjoint_biUnion_graphBall_of_lt_edist G K id hkK R' hKdiam
+    (g • j) i l hfar
   have hMg : M (g • j) = sitePermMatrix d g * M j * (sitePermMatrix d g)ᴴ :=
     truncatedTerm_smul r ΔE hHerm hcov hs g j
   have hcomp : groundCompression (∑ k, h k) E₀ (M (g • j)) =
