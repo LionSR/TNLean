@@ -3,6 +3,7 @@
 \begin{theorem}[Short imaginary-time conjugation on a chain]
     \label{thm:chain_local_imaginary_time}
     \lean{TNLean.MPS.AreaLaw.norm_exp_conjugation_nearestNeighbour_shift_le_two}
+    \leanok
     Let $L,q,c\in\N$, and let $I$ be a set of nearest-neighbour bonds of the
     chain $\{0,\ldots,L-1\}$. For each $i\in I$, let $h_i$ act on
     $\{i,i+1\}$ and satisfy $0\le h_i\le\Id$. Set $H=\sum_{i\in I}h_i$.
@@ -15,7 +16,7 @@
     This is a nearest-neighbour consequence of the commutator argument
     in~\cite[lines 795--880]{Arad2014Connecting}.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Write $O_m=\operatorname{ad}_H^m(O)$. Disjoint supports commute, so $O_m$
     acts on ${[}\max(0,c-m),c+2+m)\cap{[}0,L)$. At most $2m+3$ original bonds
     meet this interval. Since $0\le h_i\le\Id$, centering at $\Id/2$ gives
