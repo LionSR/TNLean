@@ -227,12 +227,15 @@ def result_table(body: str) -> list[dict]:
     """
     rows = []
     explicit = False
-    for line in body.splitlines():
+    lines = body.splitlines()
+    for index, line in enumerate(lines):
         if not line.startswith("|"):
             explicit = False
             continue
         cells = [c.strip() for c in line.strip().strip("|").split("|")]
         if len(cells) < 3:
+            continue
+        if all(re.fullmatch(r":?-{3,}:?", cell) for cell in cells):
             continue
         # This header is literal: rewording it selects legacy parsing, which may
         # omit Claims, unnumbered results and rows with bare or absent labels.
@@ -245,6 +248,15 @@ def result_table(body: str) -> list[dict]:
             numbered = re.match(rf"^({kinds}) ({RESULT_NUMBER})(?=\W|$)", cells[0])
             unnumbered = re.match(rf"^Unnumbered ({kinds})\b", cells[0], re.I)
             if not numbered and not unnumbered:
+                # A different header followed by a separator starts a new table.
+                if index + 1 < len(lines) and lines[index + 1].startswith("|"):
+                    separators = [
+                        c.strip() for c in lines[index + 1].strip().strip("|").split("|")
+                    ]
+                    if len(separators) == len(cells) and all(
+                        re.fullmatch(r":?-{3,}:?", cell) for cell in separators
+                    ):
+                        explicit = False
                 continue
             match = numbered or unnumbered
             kind = match.group(1).capitalize()

@@ -95,8 +95,52 @@ class ResultTableTests(unittest.TestCase):
             ("Lemma", "2.1", "lem:tail", "spectral tail", [9813, 9836])])
 
     def test_explicit_table_does_not_affect_a_following_legacy_table(self):
-        body = HASTINGS + "\n| Other | Source | Issues |\n|---|---|---|\n| Claim 3 | `c:other` | #9823 |"
+        body = HASTINGS.rstrip("\n") + (
+            "\n| Other | Source | Issues |\n|---|---|---|\n"
+            "| Claim 3 | `c:other` | #9823 |"
+        )
         self.assertEqual(len(result_table(body)), 5)
+
+    def test_adjacent_different_headers_end_explicit_parsing(self):
+        for header in ["| Other | Source | Issues |", "| Note | Description | Link |"]:
+            for separator in ["|---|---|---|", "|:---|---:|:---:|", "|---|---|---"]:
+                with self.subTest(header=header, separator=separator):
+                    following = "\n".join([
+                        header, separator,
+                        "| Claim 3 | `c:other` | #9823 |",
+                        "| Unnumbered Theorem | No source label | #9814 |",
+                    ])
+                    body = HASTINGS.rstrip("\n") + "\n" + following
+                    self.assertEqual(result_table(body), result_table(HASTINGS))
+
+    def test_adjacent_legacy_result_table_keeps_legacy_rules(self):
+        following = """| Result | Label/name | Issues | Completion |
+|---|---|---|---|
+| Claim 3 | `c:other` — excluded | #9823 | Pending |
+| Lemma 2 | `ble` — bare label | #9813 | Pending |
+| Theorem A | `thm:area` — area law | #9547 | Pending |
+"""
+        rows = result_table(HASTINGS.rstrip("\n") + "\n" + following)
+        self.assertEqual(rows[:5], result_table(HASTINGS))
+        self.assertEqual([(r["kind"], r["num"], r["label"], r["issues"]) for r in rows[5:]],
+                         [("Theorem", "A", "thm:area", [9547])])
+
+    def test_separator_and_ignored_rows_preserve_explicit_parsing(self):
+        body = HEADER + """
+| Claim 1 | `c:first` — first claim | #9823 | Pending |
+|---|---|---|---|
+|:---|---:|:---:|---|
+| Explanation | Not a source result | — | — |
+| Claim 2 | `c:second` — second claim | #9823 | Pending |
+"""
+        self.assertEqual([r["label"] for r in result_table(body)], ["c:first", "c:second"])
+
+    def test_adjacent_explicit_table_keeps_explicit_rules(self):
+        following = HEADER + "\n| Claim 3 | `c:other` — another claim | #9823 | Pending |"
+        rows = result_table(HASTINGS.rstrip("\n") + "\n" + following)
+        self.assertEqual(rows[:5], result_table(HASTINGS))
+        self.assertEqual([(r["kind"], r["num"], r["label"]) for r in rows[5:]],
+                         [("Claim", "3", "c:other")])
 
     def test_browser_metadata_handles_unnumbered_and_unlabelled_results(self):
         # Evaluate the production metadata functions before any browser rendering.
