@@ -51,6 +51,7 @@ import TNLean.Algebra.DirectedWalkCoboundary
 import TNLean.Algebra.EuclideanFiberwiseMap
 import TNLean.Algebra.EuclideanFiberwiseProjection
 import TNLean.Algebra.EventuallyConstantCycleWeights
+import TNLean.Algebra.ExpConjugation
 import TNLean.Algebra.ExpMulSubMonotone
 import TNLean.Algebra.ExpectationOverlap
 import TNLean.Algebra.ExplicitThresholds
