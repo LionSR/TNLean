@@ -81,7 +81,6 @@ theorem ChainHamiltonian.exists_boundary_minimizer_leading_vector_of_isViable
     (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
     {S : Set (LeftBlockVector L q k)}
     (hviable : IsViable Γ (((Δ / 169) ^ 2) / L) S) :
-    let : NeZero q := ⟨by omega⟩
     let c : ℝ := (Δ / 169) ^ 2
     let D := constantCutBond q 1 1 Δ c
     let P := reindex
