@@ -126,3 +126,57 @@
     The collar contributes $q^{2d}\le(q\ell^2)^{4\ell}$, which is absorbed
     by the difference between $40\ell$ and $44\ell$ in the squared bound.
 \end{proof}
+
+\begin{theorem}[One scalar choice for all accuracy parameters]
+    \label{thm:dg_accuracy_scalar_parameters}
+    \lean{Real.exists_dg_accuracy_scalar_parameters}
+    Put $C_*=288e^{11/8}$, $C_+=C_*e^{1/8}$ and
+    $M_+=8(\max\{0,\log(C_+/10^{-6})\}+1+1/8)$.
+    There is a real constant $A\ge\max\{1,21,M_+,\log400000\}$ such that,
+    for every integer $m\ge2$ and $0<g\le1$, the quantities
+    \begin{align}
+        u_m          & =1+\log m+\log(1/g),     & \ell_m & =\lceil Au_m^2/g\rceil,\notag \\
+        \mathcal D_m & =(m\ell_m^2)^{22\ell_m}, & c_A    & =6+2\log(A+1)
+    \end{align}
+    satisfy $21\le\ell_m$, $m\le\mathcal D_m$, $2\le\mathcal D_m$,
+    $A\le\ell_m$, $Au_m^2/g\le\ell_m\le(A+1)u_m^2/g$, and
+    \begin{align}
+        \log\mathcal D_m     & \le22(A+1)c_Ag^{-1}u_m^3,\notag \\
+        C_*e^{-(\ell_m-g)/8} & \le\frac{g}{10^6m}.
+    \end{align}
+    For every $0<R\le8\ell_m$,
+    $\mathcal D_m^{12}\,4e^{-4\ell_m^2\sqrt{(4g/5)/R}}\le10^{-5}$.
+    One also has $20\ell_m+2\lfloor\ell_m^2/\ell_m\rfloor=22\ell_m$.
+    The same $A$ works for all $m,g,R$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:chain_polynomial_filter_parameters}
+    Apply the joint scalar theorem with boundary constant $4$ and threshold
+    $M_+$. To obtain the accuracy factor, put $g'=g/m$. Then
+    $1+\log(1/g')=u_m$, $Au_m\le\ell_m$ and $0<g'\le1$.
+    The scalar tail estimate with coefficient $C_+$ gives
+    $C_+e^{-(\ell_m-g')/8}\le10^{-6}g'$.
+    Since $g-g'\le1$, the desired tail with coefficient $C_*$ is no larger.
+    The ceiling and logarithmic estimates are those of the joint scalar
+    choice. The separate integer identity follows from $\ell_m>0$.
+    This is a numerical refinement for the physical interval families;
+    it does not change the on-site Hilbert space.
+\end{proof}
+
+\begin{theorem}[A collar count with a larger numerical base]
+    \label{thm:collar_larger_count_base}
+    \lean{TNLean.MPS.AreaLaw.collar_card_le_square_of_larger_count_base}
+    Let $2\le q\le m$, $\ell\ge1$, $d\le2\ell$ and $n$ be natural numbers.
+    If $n\le((q\ell^2)^{18\ell+2\lfloor\ell^2/\ell\rfloor})^2$, then
+    \begin{align}
+        nq^{2d}\le((m\ell^2)^{22\ell})^2.
+    \end{align}
+    Only the numerical bound uses $m$; the physical collar still has $q$
+    states per site.
+\end{theorem}
+\begin{proof}
+    \uses{thm:physical_dg_collar_budget}
+    First absorb the collar using the bound with base $q$.
+    Then increase this numerical base from $q$ to $m$ in its nonnegative
+    integer power.
+\end{proof}

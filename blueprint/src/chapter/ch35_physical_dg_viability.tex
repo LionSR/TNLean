@@ -76,3 +76,108 @@ with the interval factor first.
     $S,\delta<1$. Extend the family by zero to exactly $\mathcal D^2$
     members; its sum of image subspaces is unchanged.
 \end{proof}
+
+\begin{theorem}[A small viable subspace on every interval]
+    \label{thm:physical_interval_bootstrap}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_interval_viable_subspace}
+    \uses{def:chain_model}
+    There is a universal real constant $A\ge21$ with the following property.
+    Let $H=\sum_{i\in\mathcal B_L}h_i$ be the original nearest-neighbour
+    Hamiltonian on $(\C^q)^{\otimes L}$, with $h_i$ supported on
+    $\{i,i+1\}$ and $0\le h_i\le\Id$.
+    Suppose $\mu,\nu\in\operatorname{spec}(H)$, $\mu<\nu$, $\gamma>0$ and
+    $\operatorname{spec}(H)\subseteq\{\mu\}\cup[\mu+\gamma,\infty)$.
+    Write $G=\ker(H-\mu\Id)$, and put
+    \begin{align}
+        g    & =\min(\gamma,1),      & u          & =1+\log q+\log(1/g),\notag \\
+        \ell & =\lceil Au^2/g\rceil, & \mathcal D & =(q\ell^2)^{22\ell},\notag \\
+        c_A  & =6+2\log(A+1).
+    \end{align}
+    Then $\log\mathcal D\le22(A+1)c_Ag^{-1}u^3$.
+    For every interval $J=\{p,\ldots,r-1\}$, $0\le p\le r\le L$,
+    there is $W\subseteq\mathcal H_J$ that is $0.015$-viable for the full
+    original ground space $G$ and satisfies
+    \begin{align}
+        \dim W<(\dim G)\mathcal D^{24}.
+    \end{align}
+    This is the contiguous-interval form of
+    \cite[Proposition 4.10, lines 1062--1075]{Arad2016RigorousRG} used in
+    its area-law proof at line 1080. The printed arbitrary-subset claim is
+    outside this assertion; its spatial scope and numerical corrections
+    are recorded in~\cite{gap:alvv16_bootstrap_constants}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:physical_dg_viable_family}
+    The actual improving family gives a target $T$ mutually $0.005$-close
+    to $G$ and satisfies $\mathcal D^{12}\Delta\le10^{-5}$.
+    Since $\mu$ is a spectral value, $G\ne0$. Mutual closeness gives
+    $\dim T=\dim G\ge1$. Transfer these spaces to the actual interval
+    coordinates and apply the quantitative bootstrap bound of
+    \cite[``A quantitative bootstrap bound'']{QICLean2026Blueprint}.
+    It gives a $0.015$-viable $W$ for $G$ with the stated strict dimension
+    bound. This application uses only the interval family and finite-dimensional
+    sampling argument; it asserts no entropy estimate or efficient construction.
+\end{proof}
+
+\begin{theorem}[One scale for interval bootstrapping and all accuracies]
+    \label{thm:physical_interval_all_accuracy_family}
+    \lean{TNLean.MPS.AreaLaw.exists_accuracy_physical_interval_family_and_bootstrap}
+    \uses{def:chain_model}
+    There is a universal real constant $A\ge21$ with the following property.
+    Let $H,q,\mu,\nu,\gamma,G,J$ satisfy the physical hypotheses of
+    Theorem~\ref{thm:physical_interval_bootstrap}. Set $g=\min(\gamma,1)$,
+    $c_A=6+2\log(A+1)$ and, for each integer $m\ge q$, put
+    \begin{align}
+        u_m          & =1+\log m+\log(1/g),     & \ell_m & =\lceil Au_m^2/g\rceil,\notag \\
+        \mathcal D_m & =(m\ell_m^2)^{22\ell_m}.
+    \end{align}
+    The scale at $m=q$ satisfies $\mathcal D_q\ge2$ and
+    $\log\mathcal D_q\le22(A+1)c_Ag^{-1}u_q^3$.
+    There is one subspace $W_0\subseteq\mathcal H_J$ such that
+    \begin{align}
+        \dim W_0 & <(\dim G)\mathcal D_q^{24},\notag     \\
+        W_0      & \text{ is }0.015\text{-viable for }G.
+    \end{align}
+    This $W_0$ is chosen before every $m\ge q$.
+    For each such $m$, one has $\ell_m\ge21$, $m\le\mathcal D_m$,
+    $\mathcal D_m\ge2$ and
+    $\log\mathcal D_m\le22(A+1)c_Ag^{-1}u_m^3$.
+    There are operators $A^{(m)}_0,\ldots,A^{(m)}_{\mathcal D_m^2-1}$ on
+    the same physical space $\mathcal H_J$, a subspace $T_m$ of the full
+    chain space, and $\Delta_m>0$ such that
+    \begin{align}
+        \dim T_m & =\dim G, & \mathcal D_m^{12}\Delta_m & \le10^{-5}.
+    \end{align}
+    The spaces $T_m,G$ are mutually $1/(200m)$-close.
+    These choices are made before every subspace $S\subseteq\mathcal H_J$
+    and real $\delta<1$: if $S$ is $\delta$-viable for $T_m$, then
+    \begin{align}
+        \sum_{i=0}^{\mathcal D_m^2-1}A^{(m)}_iS
+        \quad\text{is }\frac{\Delta_m}{(1-\delta)^2}\text{-viable for }T_m.
+    \end{align}
+    One and the same $A$ controls $W_0$ and every accuracy family.
+    Varying $m$ changes the numerical count and accuracy, while all physical
+    site spaces remain $\C^q$. The statement is restricted to intervals,
+    as required for the physical use of
+    \cite[Proposition 4.10]{Arad2016RigorousRG}; it supplies no entropy theorem.
+\end{theorem}
+\begin{proof}
+    \uses{thm:dg_accuracy_scalar_parameters,thm:five_region_scaled_low_cluster,
+        thm:actual_clipped_polynomial_family,thm:collar_larger_count_base,
+        thm:short_region_larger_count_base,thm:inward_effective_cuts}
+    Use the single accuracy-dependent scalar choice for every $m$.
+    On a long interval its tail bound is at most $g/(10^6m)$, so the scaled
+    physical cluster with $\tau=1/m$ is mutually $1/(200m)$-close to $G$
+    and has the same dimension. Transfer the actual polynomial family to
+    $J$, absorb its collar using the larger numerical base, and apply
+    the actual-cluster Chebyshev estimate. On a short interval use the
+    fixed configuration matrix-unit family, with the same count base.
+    In both cases extend by zero to exactly $\mathcal D_m^2$ operators.
+    At $m=q$, weaken mutual closeness to $1/200$ and apply the existing
+    quantitative bootstrap bound of
+    \cite[``A quantitative bootstrap bound'']{QICLean2026Blueprint} to obtain
+    $W_0$. Keep that $W_0$ while choosing the families for every other $m$.
+    The interval restriction and the cutoff and viability boundaries are
+    those in~\cite{gap:alvv16_bootstrap_constants,
+        gap:alvv16_spectral_projector_boundary}.
+\end{proof}

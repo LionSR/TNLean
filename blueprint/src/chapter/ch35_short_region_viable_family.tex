@@ -25,3 +25,27 @@
     $\Delta\le10^{-5}\mathcal D^{-12}$. The three elementary facts used here
     are stated in~\cite[``Viable subspaces in coordinates'']{QICLean2026Blueprint}.
 \end{proof}
+
+\begin{theorem}[A short-region family at a larger numerical count base]
+    \label{thm:short_region_larger_count_base}
+    \lean{TNLean.MPS.AreaLaw.exists_short_actual_region_improving_family_of_count_base}
+    \uses{def:chain_model}
+    Let $2\le q\le m$, $\ell\ge1$, and let $J$ be a site set with
+    $|J|\le4\ell$. Put $E=\mathcal H_J$ and
+    $\mathcal D=(m\ell^2)^{22\ell}$.
+    For any finite-dimensional complex inner-product space $F$, there are
+    operators $A_0,\ldots,A_{\mathcal D^2-1}$ on $E$ and $\Delta>0$
+    with $\mathcal D^{12}\Delta\le10^{-5}$ such that, for every
+    $T\subseteq E\otimes F$, every $\delta$-viable $S$ for $T$ with
+    real $\delta<1$, the sum $\sum_iA_iS$ is
+    $\Delta/(1-\delta)^2$-viable for $T$.
+    The same family and $\Delta$ work for every $T,S,\delta$.
+    Physical configurations remain $q$-valued, including when $m>q$.
+\end{theorem}
+\begin{proof}
+    Use the same actual configuration matrix-unit construction as for the
+    short-region family. From every viable $S$ for a nonzero target it spans
+    all of $E$; the zero-target case is automatic. Extend this family by zero
+    to the larger count based on $m$, preserving its image sum. Choose the
+    positive parameter $\Delta=(10^5\mathcal D^{12})^{-1}$.
+\end{proof}
