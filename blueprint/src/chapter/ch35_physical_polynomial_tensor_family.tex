@@ -9,8 +9,8 @@ Fix nonnegative integers $a,b,\ell,B,k$ such that
     \label{eq:physical_tensor_hypotheses}
 \end{align}
 Supply operators $W^L_r,W^R_r$, $0\le r<2\ell$, supported on
-$[a+r,a+r+2)$ and $[b+r,b+r+2)$, respectively.
-All intervals are intersected with the chain. Set $K=[a+2\ell,b+1)$.
+$\lbrack a+r,a+r+2)$ and $\lbrack b+r,b+r+2)$, respectively.
+All intervals are intersected with the chain. Set $K=\lbrack a+2\ell,b+1)$.
 For each site of $K$, supply matrices $A_t(i,j)\in\C^{B\times B}$ and an
 arbitrary closing matrix $C_0\in\C^{B\times B}$. Let $P_M$ be the identity
 extension to the chain of the operator whose entries, in increasing order
@@ -20,7 +20,7 @@ on $K$, are
     \operatorname{tr}\left(C_0\prod_{t=0}^{|K|-1}A_t(\sigma_t,\tau_t)\right).
     \label{eq:physical_tensor_core}
 \end{align}
-Put $J=[a+\ell,b+\ell+1)$ and
+Put $J=\lbrack a+\ell,b+\ell+1)$ and
 \begin{align}
     D          & =(qk)^{18\ell+2\lfloor k/\ell\rfloor},\notag \\
     \mathcal B & =(\max(1,B))^{2k}.
@@ -49,8 +49,8 @@ $\mathrm{phys}$ denotes its pullback by these two restrictions.
     $J$, has an open-boundary matrix product representation whose internal
     bond dimensions are at most $\mathcal B$.
 
-    Supply arbitrary operators $P_L,P_R$ supported on $[0,a+1)$ and
-    $[b+2\ell,L)$, and set
+    Supply arbitrary operators $P_L,P_R$ supported on $\lbrack 0,a+1)$ and
+    $\lbrack b+2\ell,L)$, and set
     \begin{align}
         H=P_L+P_M+P_R+\sum_{r=0}^{2\ell-1}(W^L_r+W^R_r).
         \label{eq:physical_tensor_hamiltonian}
