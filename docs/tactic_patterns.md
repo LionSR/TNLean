@@ -9487,3 +9487,16 @@ there is no need for a new tactic.
   `Matrix.mulVec_mulVec`, `Matrix.mulVec_smul` and `smul_right_injective`.
 - **Decision:** These existing lemmas give the new argument in three lines;
   no separate scalar-inverse calculation or custom tactic is needed.
+
+### Gap-controlled error budget of the viable leading step — candidate (2026-10-27)
+
+- **Seen:** `MPS/AreaLaw/ViableSet/ViableLeadingVector.lean` and
+  `MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean`.
+- **Pattern:** From `Δ ≤ 4`, `c = (Δ / 169) ^ 2`, `‖B‖ ≤ 2 L` and
+  `η = c / (2 L)`, derive `2 c ≤ √c`, `‖B‖ (2 η) ≤ 2 c`,
+  `2 (6 √c + ‖B‖ (2 η)) ≤ 14 √c < Δ / 12` and
+  `4 (6 √c + ‖B‖ (2 η)) < Δ`.
+- **Decision:** Two occurrences of the same twenty-line derivation. A third
+  occurrence should factor it into one lemma beside
+  `lvv_trimming_constant_bounds` that takes `Δ`, `c`, `‖B‖` and `L` and
+  returns the two error bounds.

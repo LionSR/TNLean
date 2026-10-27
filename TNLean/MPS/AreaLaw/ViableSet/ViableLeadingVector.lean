@@ -21,9 +21,10 @@ Source: Landau, Vazirani and Vidick, arXiv:1307.5143v1, `algo53.tex`, equation `
 lines 472–476, and Lemma `l:leading`, lines 493–505, using Lemma `l:within`, lines 509–515.
 
 **Scope restriction (nontrivial chains and bond bound):** The theorem assumes `0 < L` and
-`2 ≤ q` and uses the library bound `constantCutBond q 1 1 Δ c`. Its dependence on dimension
-and gap is documented in `docs/paper-gaps/lvv13_constant_bond.tex`; the source's quantitative
-AKLV bound remains separate.
+`2 ≤ q`, as recorded in `docs/paper-gaps/lvv13_nontrivial_chain.tex`, and uses the library
+bound `constantCutBond q 1 1 Δ c`. Its dependence on dimension and gap is documented in
+`docs/paper-gaps/lvv13_constant_bond.tex`; the source's quantitative AKLV bound remains
+separate.
 
 The theorem concerns any boundary point within the convex program's tolerance of the actual
 boundary state, which includes the closest net element of Lemma `l:leading` (lines 493–495).

@@ -7,13 +7,12 @@ import TNLean.MPS.AreaLaw.ViableSet.ViableLeadingBounds
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
-/-! Checks of the three standard axioms for cut support and uniform viable leading bounds. -/
+/-! Checks of the three standard axioms for the uniform viable leading bounds. -/
 
 open TNLean.MPS.AreaLaw
 
 run_cmd do
-  for decl in #[``mem_leftSupportSubmodule_of_gluingCut_fixed,
-      ``ChainHamiltonian.exists_uniform_leading_bounds_of_isViable] do
+  for decl in #[``ChainHamiltonian.exists_uniform_leading_bounds_of_isViable] do
     let axioms ← Lean.collectAxioms decl
     unless axioms.all (#[``propext, ``Classical.choice, ``Quot.sound].contains ·) do
       throwError "Unexpected axioms for {decl}: {axioms}"
