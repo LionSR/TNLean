@@ -262,6 +262,48 @@ the residue of the site.
     $\|h_{g\cdot j}\|=\|P_gh_jP_g^\dagger\|=\|h_j\|$.
 \end{proof}
 
+\begin{theorem}[A closed exponential bound for filtered low-energy commutators]
+    \label{thm:hastings_supercell_commutator_exp}
+    \lean{TNLean.Lattice.norm_groundCompression_commutator_le_of_momenta_exp}
+    \uses{thm:hastings_supercell_commutator_small,thm:hastings05_blecm_exp}
+    Under the hypotheses of Theorem~\ref{thm:hastings_supercell_commutator_small},
+    let $\tilde H_i$ be the Gaussian-filtered term with any nonnegative
+    filter parameter. Write $K_g(r+1)^{k_g}$ for the sphere-growth bound and set
+    \begin{align}
+        v & =2v_R|b_0|e^{2R}+1, &
+        \gamma & =\min\bigl(1/4,\Delta E/(8v)\bigr),\notag \\
+        C & =2(2+4|b_0|e^{2R})v_R^2K_g
+        \frac{2^{k_g}k_g!e^{1/2}}{1-e^{-1/2}}+6.\notag
+    \end{align}
+    Then
+    \begin{align}
+        \|[P\tilde H_iP,P\tilde H_jP]\|
+        & \le C\|h_i\|\,\|h_j\|
+        e^{-\gamma(\lfloor n/2\rfloor-N-2R)}.
+        \label{eq:hastings_supercell_exp}
+    \end{align}
+    The subtraction in the exponent is real subtraction, and the estimate
+    holds for every system size. This is an explicit bound for the filtered
+    terms in the supercell argument of
+    \cite[lines 1620--1641]{Hastings2006Solving}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:hastings_site_invariant_sum,thm:hastings_supercell_of_momenta,
+        thm:hastings_supercell_far,thm:hastings_supercell_compression,
+        thm:hastings05_blecm_exp}
+    If $\lfloor n/2\rfloor\ge N+2R$, take
+    $l=\lfloor n/2\rfloor-N-2R$.
+    A supercell translation places the second support outside the
+    $l$-neighbourhood of the first. The translated term has the same
+    compression and norm as the original one, so
+    Theorem~\ref{thm:hastings05_blecm_exp} gives
+    (\ref{eq:hastings_supercell_exp}).
+    Otherwise the exponential in (\ref{eq:hastings_supercell_exp}) is at least
+    one. The commutator is at most $2\|h_i\|\,\|h_j\|$, and $C\ge6$.
+    Ground-space compression is unchanged by the Gaussian filtering, so
+    the original nonnegative filter parameter is arbitrary.
+\end{proof}
+
 \begin{theorem}[The truncated terms up to their truncation errors]
     \label{thm:hastings_supercell_commutator_truncated}
     \lean{TNLean.Lattice.norm_groundCompression_commutator_le_of_norm_sub_le,
