@@ -4924,6 +4924,19 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Simultaneous regional factors for a supported family — candidate (2026-10-26)
+
+- **Pattern:** Classify each ordinary term into one of three regions, choose
+  its single-region factor and put zero in the other two positions. Choose
+  these factors over the entire finite family at once.
+- **Seen:** `MPS/AreaLaw/TwoCutOperatorForms.lean` and
+  `MPS/AreaLaw/TwoWindowOperatorForms.lean`.
+- **Abstraction:** Both use the existing three regional factor lemmas and
+  `choose`; there are two occurrences across two files.
+- **Notes:** The latter family has three independently supplied bulk terms.
+  A third occurrence would justify separating this common finite-family
+  argument from its geometric support classification.
+
 ### Uniform bounds for sums of natural powers — candidate (2026-10-26)
 
 - **Pattern:** Bound each term by monotonicity of natural powers, then replace

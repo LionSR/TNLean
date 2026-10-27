@@ -211,6 +211,7 @@ import TNLean.Algebra.TraceInvariantSubmodule
 import TNLean.Algebra.TranslatedCharacterOrthogonality
 import TNLean.Algebra.TwistedRegularProjective
 import TNLean.Algebra.TwistedRegularRepresentation
+import TNLean.Algebra.TwoMarkerMiddleFactors
 import TNLean.Algebra.TwoWindowFamily
 import TNLean.Algebra.TwoWindowRankBounds
 import TNLean.Algebra.TwoWindowSum

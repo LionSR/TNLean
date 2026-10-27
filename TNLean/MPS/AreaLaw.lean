@@ -13,6 +13,7 @@ import TNLean.MPS.AreaLaw.BandDissolution
 import TNLean.MPS.AreaLaw.BandInformation
 import TNLean.MPS.AreaLaw.Basic
 import TNLean.MPS.AreaLaw.BoundaryCounting
+import TNLean.MPS.AreaLaw.BoundaryGap
 import TNLean.MPS.AreaLaw.BufferDiscount
 import TNLean.MPS.AreaLaw.ChainNeighborhood
 import TNLean.MPS.AreaLaw.ChainStageIncidence
@@ -91,5 +92,6 @@ import TNLean.MPS.AreaLaw.SupportedGaussianIntegral
 import TNLean.MPS.AreaLaw.SwappedDoubledHamiltonian
 import TNLean.MPS.AreaLaw.TwoCutEdgeSupports
 import TNLean.MPS.AreaLaw.TwoCutOperatorForms
+import TNLean.MPS.AreaLaw.TwoWindowOperatorForms
 import TNLean.MPS.AreaLaw.ViableSet
 import TNLean.MPS.AreaLaw.WindowCounting
