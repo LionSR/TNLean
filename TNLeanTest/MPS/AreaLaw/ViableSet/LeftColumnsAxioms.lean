@@ -13,7 +13,8 @@ run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[``TNLean.MPS.AreaLaw.leftColumns,
       ``TNLean.MPS.AreaLaw.card_leftColumns_le,
-      ``TNLean.MPS.AreaLaw.leftColumns_subset_span] do
+      ``TNLean.MPS.AreaLaw.leftColumns_subset_span,
+      ``TNLean.MPS.AreaLaw.rightApply_mem_leftSupportSubmodule_leftColumns] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl
