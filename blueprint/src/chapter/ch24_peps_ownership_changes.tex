@@ -32,7 +32,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.Lattice.exists_one_kronecker_of_mem_supportedOperators,
         TNLean.Lattice.Sheet.exists_threeSplit_eq_kronecker_one,
         TNLean.Lattice.Sheet.exists_threeSplit_eq_one_kronecker_kronecker_one,
-        TNLean.Lattice.Sheet.exists_threeSplit_eq_reindex_one_kronecker}
+        TNLean.Lattice.Sheet.exists_threeSplit_eq_reindex_one_kronecker,
+        TNLean.Lattice.Sheet.exists_threeSplit_eq_kronecker_one_kronecker_one,
+        TNLean.Lattice.Sheet.exists_threeSplit_eq_one_kronecker}
     \leanok
     Let $\Lambda$ be a finite site set and $q$ any natural number. For
     $S\subseteq\Lambda$, identify $\mathcal H_\Lambda$ with $\mathcal H_S\otimes\mathcal H_{\Lambda\setminus S}$
@@ -43,7 +45,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $A'\otimes\id$, an
     operator acting on a set disjoint from $S$ is $\id\otimes A'$, an operator
     acting on $T\cup E$ is $A'\otimes\id_U$, and an operator acting on a subset
-    of $E$ is $\id_T\otimes A'\otimes\id_U$. An operator supported on a set
+    of $E$ is $\id_T\otimes A'\otimes\id_U$. An operator supported on a subset
+    of $T$ has the form $(A_T\otimes\id_E)\otimes\id_U$, and an operator
+    supported on a subset of $U$ has the form $\id_{TE}\otimes A_U$.
+    An operator supported on a set
     disjoint from $T$ has the form $\id_T\otimes V$, where $V$ acts on
     $\mathcal H_E\otimes\mathcal H_U$, after canonical reassociation into
     the same coordinates. These assertions include $q=0$ and empty regions.

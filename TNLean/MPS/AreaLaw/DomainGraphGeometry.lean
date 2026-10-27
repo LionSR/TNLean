@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ComponentReduction
-import TNLean.MPS.AreaLaw.IntegerComponents
+import TNLean.Algebra.IntegerHasseGraph
 import TNLean.Algebra.GraphDistanceTransport
 import TNLean.Algebra.PathGraphDistance
 

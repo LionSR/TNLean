@@ -116,7 +116,10 @@ theorem norm_groundCompression_truncatedTerm_commutator_le_of_momenta [NeZero d]
       (Submodule.sum_mem _ fun k' hk' ↦
         supportedOperators_mono (by exact_mod_cast hsK k k' hk') (hSupport k'))
       (supportedOperators_mono (by exact_mod_cast hXK k) (hSupport k))
-  obtain ⟨g, hg, hdist⟩ := exists_mem_supercell_lt_edist_add hN hden G π hπ e he i j
+  obtain ⟨g, hg, hdist⟩ : ∃ g ∈ supercell Γ d (∑ k, h k) E₀,
+      ((n / 2 : ℕ) : ℕ∞) < G.edist i (g • j) + N := by
+    simpa only [Nat.cast_one, one_mul] using
+      exists_mem_supercell_lt_edist_add hN hden G (R := 1) Nat.zero_lt_one π hπ e he i j
   have hsep : Disjoint (((K i).biUnion fun x => graphBall G x l : Finset ι) : Set ι)
       (K (g • j) : Set ι) := by
     refine Set.disjoint_left.mpr fun z hz hz' ↦ ?_

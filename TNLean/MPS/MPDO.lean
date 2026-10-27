@@ -374,6 +374,7 @@ import TNLean.MPS.MPDO.SimpleLocalStructure
 import TNLean.MPS.MPDO.SimpleScaling
 import TNLean.MPS.MPDO.SimpleTensor
 import TNLean.MPS.MPDO.SiteOperatorKernel
+import TNLean.MPS.MPDO.SitewiseOperatorProduct
 import TNLean.MPS.MPDO.SitewisePhysicalMatrix
 import TNLean.MPS.MPDO.SitewisePhysicalRecovery
 import TNLean.MPS.MPDO.SourceBNTBlocking
