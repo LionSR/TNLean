@@ -541,6 +541,29 @@ jobs:
           retention-days: 1
           compression-level: 9
 
+      # Diagnose the PR's direct edits before the full dependency build. Selection
+      # uses the explicit feature head, while checks use this merged checkout.
+      # The root build and complete strict suite below remain mandatory.
+      - name: Check directly changed Lean sources and tests strictly
+        if: github.event_name == 'pull_request'
+        timeout-minutes: 60
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          for revision in "$BASE_SHA" "$PR_HEAD_SHA"; do
+            [[ "$revision" =~ ^[0-9a-f]{40}$ ]]
+            if ! git cat-file -e "$revision^{commit}" 2>/dev/null; then
+              git fetch --no-tags origin "$revision"
+            fi
+            git cat-file -e "$revision^{commit}"
+          done
+          python3 scripts/ci_lean_checks.py focused \
+            --base "$BASE_SHA" --head "$PR_HEAD_SHA" --jobs 3 \
+            --log "$RUNNER_TEMP/lake-build.log"
+
       # Build the changed production modules before the full library so a
       # failure surfaces early. The build is a shortcut: past its budget it
       # stops with a warning and the root build continues. Selection:

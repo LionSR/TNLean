@@ -14,6 +14,10 @@ Commands
             import-only aggregators to the mandatory full library build.
             After a successful build, use the remaining budget for advisory
             changed-fixture diagnostics. All later checks still run.
+``focused`` Check the PR's directly changed sources and tests before the full
+            build. Select against the explicit feature head's merge base, but
+            build and elaborate the actual (possibly merged) checkout. Failures
+            remain failures while independent targets are still diagnosed.
 ``strict``  After the full build, elaborate with warnings as errors
 
             * every changed production source file, and
@@ -256,6 +260,53 @@ def select(
     for t in selected_tests:
         needed |= {test_modules[m] for m in closure(graph, module_of(t)) if m in test_modules}
     return early, sources, order_tests(sorted(needed), graph), graph
+
+
+def select_focused(
+    root: Path, base: str | None, head: str | None
+) -> tuple[list[str], list[str], dict[str, set[str]]]:
+    """Select direct PR edits, without attributing synthetic-merge edits to the PR.
+
+    Deleted files absent from the checkout have no elaboration target; a merge
+    resolution that restores one is checked. Renamed destinations are additions.
+    A file present in the feature head may not silently disappear from the checkout
+    being tested. Dependencies use that checkout, not the feature head's older
+    contents. The full selector above is intentionally unchanged.
+    """
+    if not base or not head:
+        raise ValueError("focused checks require both --base and --head")
+
+    def git(*args: str) -> str:
+        return subprocess.run(["git", *args], check=True, capture_output=True,
+                              text=True).stdout.strip()
+
+    base_commit = git("rev-parse", "--verify", "--end-of-options", f"{base}^{{commit}}")
+    head_commit = git("rev-parse", "--verify", "--end-of-options", f"{head}^{{commit}}")
+    git("merge-base", "--is-ancestor", head_commit, "HEAD")
+    fork = git("merge-base", base_commit, head_commit)
+    changed = [p for p in git("diff", "--name-only", "--no-renames", "-z",
+                             "--diff-filter=ACDMT", fork, head_commit, "--").split("\0") if p]
+    head_files = set(git("ls-tree", "-r", "--name-only", "-z", head_commit).split("\0"))
+    files = lean_files(root)
+    existing = set(files)
+    direct = {p for p in changed if is_production(p) or is_test(p)}
+    missing = sorted((direct & head_files) - existing)
+    if missing:
+        raise ValueError("changed PR targets missing from the checkout: " + ", ".join(missing))
+    sources = sorted(p for p in direct & existing if is_production(p))
+    tests = sorted(p for p in direct & existing if is_test(p))
+    graph = import_graph(root, files)
+    test_modules = {module_of(p): p for p in files if is_test(p)}
+    needed = set(tests)
+    for test in tests:
+        needed.update(test_modules[m] for m in closure(graph, module_of(test))
+                      if m in test_modules)
+    if any(module_of(t) in closure(graph, module_of(t)) for t in needed):
+        raise ValueError("focused test dependency closure contains an import cycle")
+    print(f"Focused PR range: {fork}..{head_commit}; elaborating checkout HEAD.", flush=True)
+    print(f"Focused selection: {len(sources)} direct source(s), {len(tests)} direct test(s), "
+          f"{len(needed)} test(s) including imported fixtures.", flush=True)
+    return sources, order_tests(sorted(needed), graph), graph
 
 
 def order_tests(tests: list[str], graph: dict[str, set[str]]) -> list[str]:
@@ -565,11 +616,76 @@ def early_fixture_diagnostics(
             shutil.rmtree(overlay, ignore_errors=True)
 
 
+def focused_checks(
+    sources: list[str], tests: list[str], graph: dict[str, set[str]],
+    jobs: int, timeout: int, log_path: Path | None,
+) -> int:
+    """Prepare each target, then use the ordinary strict runner and test overlay.
+
+    Preparation has no success-on-timeout shortcut: the surrounding CI step's
+    timeout is the upper bound. A failed preparation blocks its strict check,
+    not independent targets, and always makes the final result nonzero.
+    """
+    failed: list[str] = []
+    prepared: dict[str, bool] = {}
+
+    def prepare(module: str) -> bool:
+        if module not in prepared:
+            print(f"Preparing focused target: {module}", flush=True)
+            # Zero disables the early shortcut's warning-and-success budget.
+            code = early_build([module], log_path, 0)
+            prepared[module] = code == 0
+            if code != 0:
+                failed.append(f"{module}: dependency build exited {code}")
+        return prepared[module]
+
+    for source in sources:
+        if prepare(module_of(source)):
+            failed += run_batch([source], None, jobs, timeout)
+
+    test_modules = {module_of(t) for t in tests}
+    blocked_tests: set[str] = set()
+    overlay = Path(tempfile.mkdtemp(prefix="tnlean-focused-test-overlay-"))
+    try:
+        for batch in levels(tests, graph):
+            ready: list[str] = []
+            for test in batch:
+                module = module_of(test)
+                dependencies = graph.get(module, set())
+                required = closure(graph, module)
+                missing = required - graph.keys()
+                blocked = bool(missing or required & blocked_tests or
+                               any(prepared.get(m) is False for m in required))
+                if not blocked:
+                    # Test imports are already handled by earlier overlay levels.
+                    # Build every immediate production import, including a root
+                    # module if the test actually imports one; no allowlist.
+                    outcomes = [prepare(m) for m in sorted(dependencies - test_modules)]
+                    blocked = not all(outcomes)
+                if blocked:
+                    blocked_tests.add(module)
+                    failed.append(f"{test}: blocked by missing or failed dependencies")
+                else:
+                    ready.append(test)
+            test_failures = run_batch(ready, overlay, jobs, timeout)
+            failed += test_failures
+            blocked_tests.update(module_of(t) for t in test_failures)
+    finally:
+        shutil.rmtree(overlay, ignore_errors=True)
+    if failed:
+        print("Focused checks failed:", *failed, sep="\n  ", flush=True)
+        return 1
+    print("All focused checks passed.", flush=True)
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    parser.add_argument("command", choices=["early", "strict", "list"])
+    parser.add_argument("command", choices=["early", "strict", "list", "focused"])
     parser.add_argument("--base", default=os.environ.get("BASE_SHA") or None,
                         help="base revision; omit to check every test")
+    parser.add_argument("--head", default=os.environ.get("PR_HEAD_SHA") or None,
+                        help="focused: explicit PR feature head contained in checkout HEAD")
     parser.add_argument("--pr-head", default=os.environ.get("PR_HEAD_SHA") or None,
                         help="event PR head SHA; verify synthetic merge parents")
     parser.add_argument("--root", type=Path, default=Path("."))
@@ -583,6 +699,13 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     os.chdir(args.root)
+    if args.command == "focused":
+        try:
+            sources, tests, graph = select_focused(Path("."), args.base, args.head)
+            return focused_checks(sources, tests, graph, args.jobs, args.timeout, args.log)
+        except (ValueError, OSError, subprocess.CalledProcessError) as exc:
+            print(f"::error::Focused checks could not complete: {exc}", file=sys.stderr)
+            return 1
     args.base = selection_base(args.base, args.pr_head)
     early, sources, tests, graph = select(Path("."), args.base)
 

@@ -4,10 +4,12 @@
 from __future__ import annotations
 
 import importlib.util
+import os
 import subprocess
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 from unittest.mock import patch
 
 SPEC = importlib.util.spec_from_file_location(
@@ -406,6 +408,261 @@ class SelectTest(unittest.TestCase):
         batches = ci.levels(tests, graph)
         self.assertIn("TNLeanTest/Support/Fixture.lean", batches[0])
         self.assertIn("TNLeanTest/FixtureTest.lean", batches[1])
+
+
+class FocusedSelectTest(unittest.TestCase):
+    setUp = SelectTest.setUp
+    tearDown = SelectTest.tearDown
+    change = SelectTest.change
+
+    def focused(self, base=None, head=None):
+        cwd = Path.cwd()
+        try:
+            os.chdir(self.root)
+            return ci.select_focused(Path("."), base or self.base,
+                                     head or git(self.root, "rev-parse", "HEAD"))
+        finally:
+            os.chdir(cwd)
+
+    def test_direct_source_does_not_replace_full_affected_test_selector(self):
+        self.change("TNLean/Core.lean", "import Mathlib\n-- feature\n")
+        sources, tests, _ = self.focused()
+        self.assertEqual(sources, ["TNLean/Core.lean"])
+        self.assertEqual(tests, [])
+
+    def test_feature_selection_uses_actual_merged_dependency_contents(self):
+        self.change("TNLean/Core.lean", "import Mathlib\n-- feature\n")
+        feature = git(self.root, "rev-parse", "HEAD")
+        git(self.root, "checkout", "-qb", "updated-main", self.base)
+        self.change("TNLean/MainOwner.lean", "import Mathlib\n")
+        main = git(self.root, "rev-parse", "HEAD")
+        git(self.root, "-c", "user.email=t@t", "-c", "user.name=t", "merge",
+            "--no-ff", "--no-commit", feature)
+        # This is the actual integration tree, not the older feature version.
+        (self.root / "TNLean/Core.lean").write_text("import TNLean.Other\n-- merged\n")
+        git(self.root, "add", "-A")
+        git(self.root, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "merge")
+        sources, tests, graph = self.focused(main, feature)
+        self.assertEqual(sources, ["TNLean/Core.lean"])
+        self.assertEqual(tests, [])
+        self.assertEqual(graph["TNLean.Core"], {"TNLean.Other"})
+
+    def test_direct_test_includes_only_its_test_dependency_closure(self):
+        self.change("TNLeanTest/FixtureTest.lean",
+                    "import TNLeanTest.Support.Fixture\n-- feature\n")
+        sources, tests, graph = self.focused()
+        self.assertEqual(sources, [])
+        self.assertEqual(tests, ["TNLeanTest/Support/Fixture.lean",
+                                 "TNLeanTest/FixtureTest.lean"])
+        self.assertEqual(ci.levels(tests, graph), [[tests[0]], [tests[1]]])
+
+    def test_invalid_and_uncontained_heads_fail_closed(self):
+        for base, head in [("not-a-commit", self.base), (self.base, "not-a-commit")]:
+            with self.subTest(base=base, head=head), self.assertRaises(subprocess.CalledProcessError):
+                self.focused(base, head)
+        self.change("TNLean/Core.lean", "import Mathlib\n-- feature\n")
+        feature = git(self.root, "rev-parse", "HEAD")
+        git(self.root, "checkout", "--detach", self.base)
+        with self.assertRaises(subprocess.CalledProcessError):
+            self.focused(self.base, feature)
+        with self.assertRaises(ValueError):
+            ci.select_focused(self.root, None, self.base)
+        with self.assertRaises(ValueError):
+            ci.select_focused(self.root, self.base, None)
+
+    def test_missing_changed_target_is_not_silently_dropped(self):
+        self.change("TNLean/Core.lean", "import Mathlib\n-- feature\n")
+        (self.root / "TNLean/Core.lean").unlink()
+        with self.assertRaisesRegex(ValueError, "missing from the checkout"):
+            self.focused()
+
+    def test_deletion_has_no_target_and_rename_checks_destination(self):
+        (self.root / "TNLean/Uses.lean").unlink()
+        self.change("README.md", "delete source\n")
+        self.assertEqual(self.focused()[:2], ([], []))
+        git(self.root, "mv", "TNLean/Other.lean", "TNLean/Renamed.lean")
+        self.change("README.md", "rename source\n")
+        self.assertEqual(self.focused()[:2], (["TNLean/Renamed.lean"], []))
+
+    def test_feature_deletion_restored_in_checkout_is_conservatively_checked(self):
+        (self.root / "TNLean/Uses.lean").unlink()
+        self.change("README.md", "delete source\n")
+        (self.root / "TNLean/Uses.lean").write_text("import TNLean.Core\n")
+        self.assertEqual(self.focused()[:2], (["TNLean/Uses.lean"], []))
+
+    def test_pin_trigger_still_runs_all_tests_in_full_selector(self):
+        self.change("lake-manifest.json", "{}\n")
+        self.assertEqual(self.focused()[:2], ([], []))
+        cwd = Path.cwd()
+        try:
+            os.chdir(self.root)
+            self.assertEqual(len(ci.select(Path("."), self.base)[2]), 5)
+        finally:
+            os.chdir(cwd)
+
+    def test_changed_test_cycle_is_rejected(self):
+        self.change("TNLeanTest/FixtureTest.lean", "import TNLeanTest.FixtureTest\n")
+        with self.assertRaisesRegex(ValueError, "cycle"):
+            self.focused()
+
+    def test_invalid_cli_ref_never_falls_back_to_full_selection(self):
+        cwd = Path.cwd()
+        try:
+            with mock.patch.object(ci, "select") as full, \
+                    mock.patch.object(ci, "focused_checks") as run:
+                self.assertEqual(ci.main(["focused", "--root", str(self.root),
+                                          "--base", self.base, "--head", "missing-ref"]), 1)
+            full.assert_not_called()
+            run.assert_not_called()
+        finally:
+            os.chdir(cwd)
+
+
+class FocusedRunnerTest(unittest.TestCase):
+    def run_checks(self, sources, tests, graph, build_codes=None, strict_failures=None):
+        build_codes = build_codes or {}
+        strict_failures = strict_failures or set()
+        self.seen_overlays = []
+
+        def strict(paths, overlay, jobs, timeout):
+            self.assertEqual((jobs, timeout), (3, 240))
+            if overlay is not None:
+                self.assertTrue(overlay.is_dir())
+                self.seen_overlays.append(overlay)
+            return [p for p in paths if p in strict_failures]
+
+        with mock.patch.object(ci, "early_build", side_effect=lambda ms, log, budget:
+                               build_codes.get(ms[0], 0)) as build, \
+                mock.patch.object(ci, "run_batch", side_effect=strict) as runner:
+            code = ci.focused_checks(sources, tests, graph, 3, 240, None)
+        self.assertTrue(all(call.args[2] == 0 for call in build.call_args_list))
+        self.assertTrue(all(not p.exists() for p in self.seen_overlays))
+        return code, build, runner
+
+    def test_build_failure_skips_only_failed_source_and_remains_nonzero(self):
+        code, build, runner = self.run_checks(
+            ["TNLean/Bad.lean", "TNLean/Good.lean"], [], {}, {"TNLean.Bad": 3})
+        self.assertEqual(code, 1)
+        self.assertEqual([c.args[0] for c in build.call_args_list],
+                         [["TNLean.Bad"], ["TNLean.Good"]])
+        self.assertEqual(runner.call_args_list[0].args[:2], (["TNLean/Good.lean"], None))
+        self.assertFalse(any("TNLean/Bad.lean" in c.args[0] for c in runner.call_args_list))
+
+    def test_strict_and_timeout_failures_remain_nonzero(self):
+        source = "TNLean/Good.lean"
+        self.assertEqual(self.run_checks([source], [], {}, strict_failures={source})[0], 1)
+        self.assertEqual(self.run_checks([source], [], {}, {"TNLean.Good": 124})[0], 1)
+
+    def test_test_import_roots_are_prepared_and_overlay_levels_respected(self):
+        tests = ["TNLeanTest/Support.lean", "TNLeanTest/Uses.lean"]
+        graph = {"TNLeanTest.Support": {"TNLean.Core"},
+                 "TNLeanTest.Uses": {"TNLeanTest.Support", "TNLean.Other"},
+                 "TNLean.Core": set(), "TNLean.Other": set()}
+        code, build, runner = self.run_checks([], tests, graph)
+        self.assertEqual(code, 0)
+        self.assertEqual([c.args[0] for c in build.call_args_list],
+                         [["TNLean.Core"], ["TNLean.Other"]])
+        self.assertEqual([c.args[0] for c in runner.call_args_list], [[tests[0]], [tests[1]]])
+        self.assertEqual(len(set(self.seen_overlays)), 1)
+
+    def test_failed_test_blocks_importers_not_independent_tests(self):
+        tests = ["TNLeanTest/Support.lean", "TNLeanTest/Uses.lean", "TNLeanTest/Other.lean"]
+        graph = {"TNLeanTest.Support": set(), "TNLeanTest.Uses": {"TNLeanTest.Support"},
+                 "TNLeanTest.Other": set()}
+        code, _, runner = self.run_checks([], tests, graph, strict_failures={tests[0]})
+        self.assertEqual(code, 1)
+        checked = [p for call in runner.call_args_list for p in call.args[0]]
+        self.assertIn(tests[2], checked)
+        self.assertNotIn(tests[1], checked)
+
+    def test_failed_production_dependency_blocks_test_without_stale_imports(self):
+        test = "TNLeanTest/Uses.lean"
+        graph = {"TNLeanTest.Uses": {"TNLean.Uses"},
+                 "TNLean.Uses": {"TNLean.Core"}, "TNLean.Core": set()}
+        code, _, runner = self.run_checks(["TNLean/Core.lean"], [test], graph,
+                                         {"TNLean.Core": 1})
+        self.assertEqual(code, 1)
+        self.assertFalse(any(test in c.args[0] for c in runner.call_args_list))
+
+    def test_test_preparation_failure_preserves_independent_fixture_diagnostics(self):
+        bad, good = "TNLeanTest/Bad.lean", "TNLeanTest/Good.lean"
+        graph = {"TNLeanTest.Bad": {"TNLean.Bad"}, "TNLeanTest.Good": {"TNLean.Good"},
+                 "TNLean.Bad": set(), "TNLean.Good": set()}
+        code, build, runner = self.run_checks([], [bad, good], graph, {"TNLean.Bad": 1})
+        self.assertEqual(code, 1)
+        self.assertEqual([c.args[0] for c in build.call_args_list],
+                         [["TNLean.Bad"], ["TNLean.Good"]])
+        self.assertEqual([p for c in runner.call_args_list for p in c.args[0]], [good])
+
+    def test_missing_test_dependency_is_blocked_not_ignored(self):
+        test = "TNLeanTest/Uses.lean"
+        code, build, runner = self.run_checks([], [test],
+                                             {"TNLeanTest.Uses": {"TNLeanTest.Deleted"}})
+        self.assertEqual(code, 1)
+        build.assert_not_called()
+        self.assertFalse(any(test in c.args[0] for c in runner.call_args_list))
+
+    def test_required_root_import_is_not_silently_filtered(self):
+        test = "TNLeanTest/Uses.lean"
+        code, build, _ = self.run_checks([], [test],
+                                         {"TNLeanTest.Uses": {"TNLean"}, "TNLean": set()})
+        self.assertEqual(code, 0)
+        self.assertEqual(build.call_args.args[0], ["TNLean"])
+
+
+class FocusedWorkflowTest(unittest.TestCase):
+    def setUp(self):
+        workflow = Path(__file__).resolve().parents[1] / ".github/workflows/pr-ci.yml"
+        block = workflow.read_text().split(
+            "      - name: Check directly changed Lean sources and tests strictly\n", 1)[1]
+        block = block.split("      # Build the changed production modules", 1)[0]
+        self.assertIn("if: github.event_name == 'pull_request'", block)
+        self.assertIn("BASE_SHA: ${{ github.event.pull_request.base.sha }}", block)
+        self.assertIn("PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}", block)
+        self.assertIn("timeout-minutes: 60", block)
+        self.script = "\n".join(line[10:] for line in block.split("        run: |\n", 1)[1]
+                                .splitlines() if line.strip())
+
+    def run_script(self, git_status=0, base="a" * 40, cache=True):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            if cache:
+                artifact = root / ".lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean"
+                artifact.parent.mkdir(parents=True)
+                artifact.touch()
+            for name, body in {
+                "git": f"echo git >> '{root}/calls'\nexit {git_status}\n",
+                "python3": f"echo python >> '{root}/calls'\nexit 0\n",
+            }.items():
+                path = root / name
+                path.write_text("#!/bin/sh\n" + body)
+                path.chmod(0o755)
+            env = dict(os.environ, PATH=f"{root}:{os.environ['PATH']}", BASE_SHA=base,
+                       PR_HEAD_SHA="b" * 40, RUNNER_TEMP=tmp)
+            result = subprocess.run(["bash", "-c", self.script], env=env, cwd=root,
+                                    capture_output=True)
+            calls = (root / "calls").read_text() if (root / "calls").exists() else ""
+            return result.returncode, calls
+
+    def test_refs_are_required_and_fetch_failure_cannot_pass(self):
+        code, calls = self.run_script(git_status=73)
+        self.assertNotEqual(code, 0)
+        self.assertNotIn("python", calls)
+        code, calls = self.run_script(base="")
+        self.assertNotEqual(code, 0)
+        self.assertEqual(calls, "")
+
+    def test_missing_prebuilt_cache_stops_before_git_or_python(self):
+        code, calls = self.run_script(cache=False)
+        self.assertNotEqual(code, 0)
+        self.assertEqual(calls, "")
+
+    def test_valid_refs_run_generic_mode_without_module_lists(self):
+        self.assertEqual(self.run_script()[0], 0)
+        self.assertIn("ci_lean_checks.py focused", self.script)
+        self.assertIn('--base "$BASE_SHA" --head "$PR_HEAD_SHA"', self.script)
+        self.assertNotIn("TNLean.", self.script)
+        self.assertNotIn("||", self.script)
 
 
 class EarlyBuildTest(unittest.TestCase):
