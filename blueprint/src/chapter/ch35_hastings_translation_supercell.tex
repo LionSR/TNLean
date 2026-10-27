@@ -10,10 +10,11 @@ determine a basis of ground states. For a translation-invariant system,
 exponentially small in the linear size of the system. The source assumes that
 the momenta of the ground states are rational multiples of $2\pi$ with
 denominators independent of the system size, and derives from this a
-supercell whose translations leave every ground state unchanged. Here such a
-subgroup of translations is assumed directly; the step from rational momenta to
-the supercell, and the geometry placing a translated site far away, are not
-formalized \cite{gap:hastings05_translation_supercell}.
+supercell whose translations leave every ground state unchanged. The first
+results below assume such a subgroup of translations; it is then constructed
+from the momenta, its translations are shown to carry a site far away, and the
+three steps combine into the source's conclusion
+\cite{gap:hastings05_translation_supercell}.
 
 Throughout, $G$ acts on the finite set of sites, $H$ is Hermitian and
 invariant, $P$ is the orthogonal projection onto the eigenspace of $H$ for an
@@ -154,18 +155,19 @@ by the momenta of the ground states.
 
 The source assumes that each momentum is a rational multiple $2\pi p/q$ with
 $q$ independent of the system size \cite[lines 1620--1625]{Hastings2006Solving}.
-For a character this reads $\chi(g)^q=1$.
+With $N$ the least common multiple of the denominators, a character with a
+nonzero momentum sector satisfies $\chi(g)^N=1$.
 
 \begin{theorem}[Momenta of bounded denominator]
     \label{thm:hastings_supercell_pow}
     \lean{TNLean.Lattice.pow_mem_supercell}
     \leanok
     \uses{def:hastings_supercell_of_momenta}
-    If $\chi(g)^q=1$ for every $g\in G$ and every character $\chi$ with a nonzero
-    momentum sector, then $g^q$ lies in the supercell for every $g\in G$.
+    If $\chi(g)^N=1$ for every $g\in G$ and every character $\chi$ with a nonzero
+    momentum sector, then $g^N$ lies in the supercell for every $g\in G$.
 \end{theorem}
 \begin{proof}\leanok
-    $\chi(g^q)=\chi(g)^q=1$ for each such $\chi$.
+    $\chi(g^N)=\chi(g)^N=1$ for each such $\chi$.
 \end{proof}
 
 For the geometry, recall that the sites are pairs $(\vec x,y)$ of a unit cell
@@ -175,32 +177,33 @@ along one direction of the lattice, which has $n$ cells in that direction, and
 let $e\in G$ be the translation by one cell in that direction, so
 $\pi(e\cdot v)=\pi(v)+1$. For $a\in\mathbb{Z}/n$ write $|a|_n=\min(a,n-a)$
 for its circular distance from $0$, with $0\le a<n$ the representative.
-Suppose every edge of the graph joins sites $u$, $v$ with
-$|\pi(v)-\pi(u)|_n\le1$. On the ring of $n$ sites with its rotations, $\pi$ is
+Fix an integer $r\ge1$ and suppose every edge of the graph joins sites $u$, $v$
+with $|\pi(v)-\pi(u)|_n\le r$. On the ring of $n$ sites with its rotations, $\pi$ is
 the residue of the site.
 
 \begin{theorem}[Distance and cell coordinates]
     \label{thm:hastings_cell_distance_le}
     \lean{SimpleGraph.natAbs_valMinAbs_sub_le_edist}
     \leanok
-    The graph distance from $x$ to $y$ is at least the circular distance of
-    $\pi(y)-\pi(x)$.
+    Writing $d(x,y)$ for graph distance,
+    $|\pi(y)-\pi(x)|_n\le r\,d(x,y)$.
 \end{theorem}
 \begin{proof}\leanok
-    Along an edge the circular distance to $\pi(x)$ changes by at most one, so
-    along a walk from $x$ to $y$ it grows by at most the length of the walk.
+    Along an edge the circular distance to $\pi(x)$ changes by at most $r$,
+    so a walk of length $m$ gives displacement at most $rm$. Take a shortest
+    walk; for disconnected vertices the graph distance is infinite.
 \end{proof}
 
-\begin{theorem}[Multiples of $q$ reach far]
+\begin{theorem}[Multiples of $N$ reach far]
     \label{thm:hastings_multiples_reach_far}
     \lean{TNLean.Lattice.exists_lt_natAbs_valMinAbs_add}
     \leanok
-    For $q\ge1$ and $a,b\in\mathbb{Z}/n$ there is $t\ge0$ such that $b+qt-a$
-    has circular distance more than $\lfloor n/2\rfloor-q$.
+    For $N\ge1$ and $a,b\in\mathbb{Z}/n$ there is $t\ge0$ such that $b+Nt-a$
+    has circular distance more than $\lfloor n/2\rfloor-N$.
 \end{theorem}
 \begin{proof}\leanok
-    The residues $b+qt-a$ for $t\ge0$ meet every arc of $q$ consecutive
-    residues. Choose $t$ with $b+qt-a$ among the $q$ residues ending at
+    The residues $b+Nt-a$ for $t\ge0$ meet every arc of $N$ consecutive
+    residues. Choose $t$ with $b+Nt-a$ among the $N$ residues ending at
     $\lfloor n/2\rfloor$.
 \end{proof}
 
@@ -212,20 +215,80 @@ the residue of the site.
     \uses{thm:hastings_supercell_pow,thm:hastings_cell_distance_le,
         thm:hastings_multiples_reach_far}
     Let $G$ be abelian, let $H$ be invariant, let $\pi$ and $e$ be as above, and
-    let $\chi(g)^q=1$ for every $g$ and every character $\chi$ with a nonzero
-    momentum sector, where $q\ge1$. For sites $x$, $y$ some $g$ in the supercell
-    carries $y$ to graph distance more than $\lfloor n/2\rfloor-q$ from $x$. This
-    is the choice of $\vec x'$ in \cite[lines 1634--1641]{Hastings2006Solving}.
+    let $\chi(g)^N=1$ for every $g$ and every character $\chi$ with a nonzero
+    momentum sector, where $N\ge1$. For sites $x$, $y$ some $g$ in the supercell
+    satisfies $\lfloor n/2\rfloor<r\,d(x,g\cdot y)+N$, so it carries $y$ to
+    graph distance more than $(\lfloor n/2\rfloor-N)/r$ from $x$. For the ring,
+    and in the theorem below, $r=1$. With $N$ the least common multiple of the
+    denominators of the momenta, this is the supercell
+    of \cite[lines 1620--1630]{Hastings2006Solving} and the choice of
+    $\vec x'$ in lines 1634--1641.
 \end{theorem}
 \begin{proof}\leanok
     Take $t$ from Theorem~\ref{thm:hastings_multiples_reach_far} for $a=\pi(x)$ and
-    $b=\pi(y)$, and $g=(e^t)^q$, which lies in the supercell by
-    Theorem~\ref{thm:hastings_supercell_pow}. Then $\pi(g\cdot y)=\pi(y)+qt$, and
+    $b=\pi(y)$, and $g=(e^t)^N$, which lies in the supercell by
+    Theorem~\ref{thm:hastings_supercell_pow}. Then $\pi(g\cdot y)=\pi(y)+Nt$, and
     Theorem~\ref{thm:hastings_cell_distance_le} bounds the distance.
 \end{proof}
 
-Choosing $g\in S$ that carries $X_j$ to distance of order the linear size of
-the system from $X_i$ gives the source's conclusion;
-Theorem~\ref{thm:hastings_supercell_far} provides such a $g$. At line
-1638 the source writes the first site as $(\vec x_1,y_2)$ where
+\begin{theorem}[Low-energy commutators of a translation-invariant lattice]
+    \label{thm:hastings_supercell_commutator_small}
+    \lean{TNLean.Lattice.norm_groundCompression_commutator_le_of_momenta,
+        Matrix.norm_sitePermMatrix_mul_mul_conjTranspose}
+    \leanok
+    \uses{def:hastings_supercell_of_momenta,thm:hastings05_blecm}
+    Let the terms $h_k$ be indexed by the sites, with $h_k$ acting on a set
+    $X_k\ni k$ of diameter at most $R$ in the lattice graph, let $G$ be an abelian
+    group of translations with $h_{g\cdot k}=P_gh_kP_g^\dagger$, and let every
+    eigenvalue of $H=\sum_kh_k$ equal $E_0$ or be at least $E_0+\Delta E$. Let
+    $\chi(g)^N=1$ for every $g$ and every character $\chi$ with a nonzero
+    momentum sector, and let $\pi$, $e$ and $n$ be as above. Then for every $l$
+    with $2R+l+N\le\lfloor n/2\rfloor$ the low-energy commutator of the filtered
+    terms at $i$ and $j$ obeys the bound of
+    Theorem~\ref{thm:hastings05_blecm} at separation $l$, with the norms of $h_i$
+    and $h_j$. Taking $l=\lfloor n/2\rfloor-N-2R$ makes it exponentially small in
+    $n$. This is the conclusion of \cite[lines 1603--1641]{Hastings2006Solving}
+    for the filtered terms $\tilde H_i$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_site_invariant_sum,thm:hastings_supercell_of_momenta,
+        thm:hastings_supercell_far,thm:hastings_supercell_decay}
+    The sum of covariant terms is invariant. By
+    Theorem~\ref{thm:hastings_supercell_far} some $g$ in the supercell carries
+    $j$ to distance more than $\lfloor n/2\rfloor-N\ge2R+l$ from $i$, so the
+    sites within distance $l$ of $X_i$ miss $X_{g\cdot j}$. The supercell fixes the
+    ground space by Theorem~\ref{thm:hastings_supercell_of_momenta}, so
+    Theorem~\ref{thm:hastings_supercell_decay} applies, and
+    $\|h_{g\cdot j}\|=\|P_gh_jP_g^\dagger\|=\|h_j\|$.
+\end{proof}
+
+\begin{theorem}[The truncated terms up to their truncation errors]
+    \label{thm:hastings_supercell_commutator_truncated}
+    \lean{TNLean.Lattice.norm_groundCompression_commutator_le_of_norm_sub_le,
+        TNLean.Lattice.norm_groundCompression_commutator_truncated_le_of_momenta}
+    \leanok
+    \uses{thm:hastings_supercell_commutator_small, thm:hastings05_blecm_exp,
+        thm:hastings_gaussian_filtered_spectral}
+    In the setting of Theorem~\ref{thm:hastings_supercell_commutator_small}, let
+    $M_k$ be the filter of $h_k$ under a truncated Hamiltonian
+    $\sum_{k'\in s_k}h_{k'}$, the term of eq.~\texttt{mid} of
+    \cite[lines 285--307]{Hastings2006Solving}, and let
+    $\lVert\tilde H_i-M_i\rVert\le\varepsilon_i$ and
+    $\lVert\tilde H_j-M_j\rVert\le\varepsilon_j$, as eq.~\texttt{apb} provides.
+    Then $\lVert[PM_iP,PM_jP]\rVert$ is at most the bound of
+    Theorem~\ref{thm:hastings_supercell_commutator_small} plus
+    $2\varepsilon_i\lVert h_j\rVert+2\lVert h_i\rVert\varepsilon_j$. The errors of
+    eq.~\texttt{apb} do not decrease with $n$, so this does not yet give the
+    exponential smallness in $n$ of \cite[lines 1634--1641]{Hastings2006Solving}
+    for the $M_i$ \cite{gap:hastings05_translation_supercell}.
+\end{theorem}
+\begin{proof}\leanok
+    Write $A=P\tilde H_iP$, $A'=PM_iP$, $B=P\tilde H_jP$ and $B'=PM_jP$. Then
+    $[A',B']=[A,B]+[A'-A,B']+[A,B'-B]$. Compression by $P$ does not increase
+    the norm, $\lVert B'\rVert\le\lVert M_j\rVert\le\lVert h_j\rVert$, and
+    $\lVert A\rVert\le\lVert h_i\rVert$, so the last two commutators are at most
+    $2\varepsilon_i\lVert h_j\rVert$ and $2\lVert h_i\rVert\varepsilon_j$.
+\end{proof}
+
+At line 1638 the source writes the first site as $(\vec x_1,y_2)$ where
 $(\vec x_1,y_1)$ is meant \cite{gap:hastings05_translation_supercell}.

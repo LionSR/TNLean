@@ -48,6 +48,20 @@ abstracted — record why, so it is not re-proposed).
   coverage. The `ViableSet/Basic.lean` consumer introduced by PR #10182 is included;
   its former candidate entry is consolidated here. Tracked in #10192.
 
+### Tensor forms from product generators — promoted (2026-10-23)
+
+- **Pattern:** Establish a linear tensor form for every product generator,
+  then extend it to all operators supported on the same set.
+- **Seen:** Four tensor-form proofs in
+  `Lattice/Sheet/Splitting.lean` and
+  `Lattice/Sheet/RegionalOperatorForms.lean`.
+- **Abstraction:** The existing
+  `TNLean.Lattice.Sheet.exists_eq_of_mem_supportedOperators` extends the
+  generator statement by linearity.
+- **Notes:** All four proofs use this declaration. The first- and last-region
+  forms require only the two off-support identity restrictions; they do not
+  repeat the linear-span induction or introduce another tactic.
+
 ### Raising a time bound inside a light-cone exponential — promoted (2026-10-25)
 
 - **Pattern:**
@@ -4933,6 +4947,30 @@ three-plaquette output measurement, and the routed reunion measurement.
   `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
 
 ## Candidates
+
+### Simultaneous regional factors for a supported family — candidate (2026-10-26)
+
+- **Pattern:** Classify each ordinary term into one of three regions, choose
+  its single-region factor and put zero in the other two positions. Choose
+  these factors over the entire finite family at once.
+- **Seen:** `MPS/AreaLaw/TwoCutOperatorForms.lean` and
+  `MPS/AreaLaw/TwoWindowOperatorForms.lean`.
+- **Abstraction:** Both use the existing three regional factor lemmas and
+  `choose`; there are two occurrences across two files.
+- **Notes:** The latter family has three independently supplied bulk terms.
+  A third occurrence would justify separating this common finite-family
+  argument from its geometric support classification.
+
+### Uniform bounds for sums of natural powers — candidate (2026-10-26)
+
+- **Pattern:** Bound each term by monotonicity of natural powers, then replace
+  a finite sum by its cardinality times that bound.
+- **Seen:** The degree sum in `Algebra/FrequencyCounts.lean` and the iterated
+  sum in `Algebra/TwoWindowRankBounds.lean`.
+- **Abstraction:** Existing Mathlib lemmas suffice: `Finset.sum_le_sum`,
+  `Finset.sum_le_card_nsmul` and `Finset.sum_const`.
+- **Notes:** Two arguments across two files; no new tactic is needed. The
+  degree sum and the three nested ranges have different cardinality factors.
 
 ### Splitting a chain Hamiltonian at one cut — candidate (2026-10-26)
 

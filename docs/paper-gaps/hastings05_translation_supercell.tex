@@ -17,11 +17,22 @@ Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
 \href{https://arxiv.org/abs/cond-mat/0508554v3}{arXiv:cond-mat/0508554v3},
 source \path{proj3new.tex}, lines 1603--1642, considers a translationally
 invariant system on a $d$-dimensional lattice with $n$ ground states, and the
-filtered local terms $M_i$ with their compressions $P M_i P$ to the ground
-space. Choosing the ground states as eigenvectors of the translations, with
+local terms $M_i$ with their compressions $P M_i P$ to the ground space. Here
+$M_i$ is the truncated filtered term of eq.~\texttt{mid} (lines 285--307),
+within the error of eq.~\texttt{apb} of the filtered term $\tilde H_i$.
+For $H=\sum_kh_k$ with gap $\Delta E$ above $E_0$ and a width $q>0$,
+\begin{align}
+    \tilde H_i=\frac{\Delta E}{\sqrt{2\pi q}}\int dt\,e^{iHt}h_ie^{-iHt}
+    e^{-(t\Delta E)^2/(2q)},
+    \label{eq:hastings05_translation_supercell_filtered_term}
+\end{align}
+and $M_i$ evolves $h_i$ under the sum $H_{loc}$ of
+the $h_k$ near $i$ instead of $H$. Both are those of the note
+\path{hastings05_filtered_term_approximation.tex} on the filtered terms, where
+$\tilde H_i$ is written $\tilde H_i^0$. Choosing the ground states as eigenvectors of the translations, with
 momenta $\vec k_a$, the matrix elements satisfy
 $(M_{\vec x,y})_{ab}=(M_{\vec x+\vec x',y})_{ab}
-\exp[i\vec x'\cdot(\vec k_a-\vec k_b)]$ (lines 1613--1618).
+    \exp[i\vec x'\cdot(\vec k_a-\vec k_b)]$ (lines 1613--1618).
 
 The source then assumes the ``simplest case'' (lines 1620--1625): every
 component of every momentum is a rational multiple $2\pi p/q$ whose
@@ -35,53 +46,96 @@ sector, and choosing $\vec x'$ to place the second site at a distance of order
 the linear size of the system makes the commutator exponentially small in that
 size (lines 1634--1641).
 
-\section{The restriction}
-The formalization does not assume rational momenta. It assumes directly a
-subgroup $S$ of the symmetry group whose site permutations $P_g$ leave every
-ground vector unchanged, $P_g v=v$ for $g\in S$ and $v$ in the ground space,
-which is the conclusion of lines 1626--1630. From this it proves, for
-covariant terms $H_{g\cdot k}=P_gH_kP_g^\dagger$ and an invariant Hamiltonian,
+\section{The former restriction}
+The first formalization did not derive the supercell from the momenta. It
+assumed directly a subgroup $S$ of the symmetry group whose site permutations
+$P_g$ leave every ground vector unchanged, $P_gv=v$ for $g\in S$ and $v$ in
+the ground space, which is the conclusion of lines 1626--1630. From this it
+proved, for covariant terms $H_{g\cdot k}=P_gH_kP_g^\dagger$ and an invariant
+Hamiltonian,
 \begin{align}
-    PM_{g\cdot j}P&=PM_jP,
-    \label{eq:hastings05_translation_supercell_compression}\\
-    [PM_iP,PM_jP]&=[PM_iP,PM_{g\cdot j}P]\qquad(g\in S),
+    PM_{g\cdot j}P & =PM_jP,
+    \label{eq:hastings05_translation_supercell_compression} \\
+    [PM_iP,PM_jP]  & =[PM_iP,PM_{g\cdot j}P]\qquad(g\in S),
     \label{eq:hastings05_translation_supercell_commutator}
 \end{align}
-so that any bound on the low-energy commutator at the pair $(i,g\cdot j)$
-applies at $(i,j)$. For an abelian group the subgroup is then constructed from
-the momenta, as in the first step of the elimination plan below. The geometric
-statement that some $g\in S$ moves $j$ to a distance of order the linear size
-from $i$, which is where the source uses the rational momenta, is formalized
-as well, as described below.
+and, in the setting of eq.~\texttt{blecm}, the decay of the low-energy
+commutator at any separation $l$ of the supports of $H_i$ and
+$H_{g\cdot j}$.\footnote{\leanid{TNLean.Lattice.groundCompression_sitePermMatrix_conj},
+    \leanid{TNLean.Lattice.groundCompression_commutator_eq_of_mem_supercell},
+    \leanid{TNLean.Lattice.norm_groundCompression_commutator_le_of_mem_supercell}
+    in \doclink{TNLean/Lattice/TranslationSupercell}, and
+    \leanid{TNLean.Lattice.norm_groundCompression_commutator_le_of_supercell_separation}
+    in \doclink{TNLean/Lattice/TranslationSupercellDecay}.}
+These results still take $S$ as a hypothesis; they are the steps of the
+argument below.
 
-\section{Elimination plan}
-For an abelian group $G$, such as the translations of a finite torus, the
-operators $P_g$ commute with $H$ and with one another, so they restrict to
-commuting unitaries on the ground space. A joint eigenbasis gives characters
-$\chi_a$ of $G$, one for each ground state, which are the momenta of the
-source. The subgroup $S=\bigcap_a\ker\chi_a$ then fixes every ground vector,
-with no further hypothesis. This first step is formalized: the momentum
-sectors span the ground space, and the intersection of the kernels of the
-characters with a nonzero sector is exactly the subgroup fixing the ground
-space.\footnote{\leanid{TNLean.Lattice.iSup_momentumSector},
+\section{Removing the supercell assumption}
+The restriction was removed in two steps.
+
+\emph{The supercell from the momenta.} For an abelian group $G$, such as the
+translations of a lattice, the operators $P_g$ commute with an invariant $H$
+and with one another, and each has finite order, so they are simultaneously
+diagonalizable on the ground space. The ground space is the sum of its
+momentum sectors $\{v:P_gv=\chi(g)v\text{ for all }g\}$ over characters
+$\chi$, and the intersection $S$ of the kernels of the characters with a
+nonzero sector is exactly the subgroup fixing every ground
+vector.\footnote{\leanid{TNLean.Lattice.iSup_momentumSector},
     \leanid{TNLean.Lattice.mem_supercell_iff} and
     \leanid{TNLean.Lattice.sitePermMatrix_mulVec_eq_of_mem_supercell} in
     \doclink{TNLean/Lattice/TranslationMomentum}.}
-The size-independent denominators of lines 1620--1625 are what make the
-cosets of this $S$ boundedly spaced, which gives the geometric statement
-above. This second step is formalized for a lattice with $n$ cells along
-one direction, through the cell coordinate $\pi$ along that direction and the
-unit translation $e$ in it, for a graph whose edges join cells at distance at
-most one: if $\chi(g)^q=1$ for every character with a nonzero sector, then
-every $q$-th power lies in $S$, and some translation $(e^t)^q$ carries any site
-to graph distance more than $\lfloor n/2\rfloor-q$ from any
+
+\emph{The spacing of the supercell.} The source's hypothesis of lines
+1620--1625 says that each component of each momentum is $2\pi p/q$ with a
+denominator independent of the system size; with $N$ the least common
+multiple of the denominators, $\chi(g)^N=1$ for every character with a nonzero
+sector, so every $N$-th power lies in $S$. For a lattice with $n$ cells along
+one direction, let $\pi$ be the cell coordinate in that direction, with every
+edge of the lattice graph joining cells at most a positive integer $r$ apart,
+and let $e$ be the unit translation in that direction. The circular distance
+$\min(a,n-a)$ of the coordinate difference $a$ is at most $r$ times the graph
+distance $d$, and for any sites $x,y$ some translation $g=(e^t)^N$ satisfies
+$\lfloor n/2\rfloor<r\,d(x,g\cdot y)+N$. For a ring, and in the composite
+bound below, $r=1$, so $g$ carries any site to graph distance more than
+$\lfloor n/2\rfloor-N$ from any
 other.\footnote{\leanid{TNLean.Lattice.pow_mem_supercell},
     \leanid{SimpleGraph.natAbs_valMinAbs_sub_le_edist},
     \leanid{TNLean.Lattice.exists_mem_supercell_lt_edist_add} and its ring case
     \leanid{TNLean.Lattice.exists_mem_supercell_lt_edist_add_ring} in
     \doclink{TNLean/Lattice/TranslationSupercellSpacing}.}
-What remains is to state the composite bound, that the low-energy commutator
-is exponentially small in $n$, as one theorem.
+
+\emph{The composite bound.} For terms indexed by the sites, with supports of
+diameter at most $R$ containing their sites, covariant under an abelian
+translation group with momenta of denominator $N$, and a gap above $E_0$, the
+low-energy commutator at $i$ and $j$ obeys the bound of eq.~\texttt{blecm} at
+every separation $l$ with $2R+l+N\le\lfloor n/2\rfloor$. Taking
+$l=\lfloor n/2\rfloor-N-2R$ makes it exponentially small in $n$. This is first
+proved for the filtered terms $\tilde H_i$, whose compressions equal those of
+the $h_i$. For the source's truncated terms $M_i$ of eq.~\texttt{mid}, within
+$\varepsilon_i$ of $\tilde H_i$ by eq.~\texttt{apb}, the commutator moves by at
+most $2\varepsilon_i\lVert h_j\rVert+2\lVert h_i\rVert\varepsilon_j$.\footnote{\leanid{TNLean.Lattice.norm_groundCompression_commutator_le_of_momenta},
+    \leanid{TNLean.Lattice.norm_groundCompression_commutator_le_of_norm_sub_le} and
+    \leanid{TNLean.Lattice.norm_groundCompression_commutator_truncated_le_of_momenta}
+    in \doclink{TNLean/Lattice/TranslationSupercellCommutator}.}
+No hypothesis beyond the source's is assumed.
+
+\section{The remaining restriction}
+The errors $\varepsilon_i$ of eq.~\texttt{apb} depend on the truncation radius
+$l_{proj}$ and not on $n$, so the bound for the truncated $M_i$ is not
+exponentially small in $n$. The source avoids this by applying the Gaussian
+filter a second time to $M_i$ itself: the filter $\tilde M_i^0$ of $M_i$
+under $H$ satisfies
+\begin{align}
+    P\tilde M_i^0P=PM_iP,
+    \label{eq:hastings05_translation_supercell_second_filter}
+\end{align}
+and the
+low-energy commutator of the $M_i$ obeys eq.~\texttt{blecm} directly
+(lines 1555--1601). Elimination: state eq.~\texttt{blecm} for the $M_i$ as
+operators supported within $l_{proj}$ of $i$, require the truncations to be
+covariant, $s_{g\cdot k}=g\cdot s_k$, so that $M_{g\cdot k}=P_gM_kP_g^\dagger$,
+and run the supercell argument above on the $M_i$. This step is tracked in
+issue~\#10177 of the TNLean repository.
 
 \section{A slip}
 At line 1638 the source writes the distance ``between $(\vec x_1,y_2)$ and
@@ -93,18 +147,6 @@ which the denominators depend on the system size and the supercell is as
 large as the system. The source states that the commutators are still
 exponentially small there, but does not give the proof. This case is not
 covered.
-
-\section{The formalization}
-The step is formalized for a group acting on the sites of a finite system, a
-subgroup fixing every ground vector, covariant terms and an invariant
-Hermitian Hamiltonian; with the setting of eq.~\texttt{blecm} (local terms on a
-finite graph and a gap above $E_0$) it also gives the decay at separation
-$l$.\footnote{\leanid{TNLean.Lattice.groundCompression_sitePermMatrix_conj},
-    \leanid{TNLean.Lattice.groundCompression_commutator_eq_of_mem_supercell},
-    \leanid{TNLean.Lattice.norm_groundCompression_commutator_le_of_mem_supercell}
-    in \doclink{TNLean/Lattice/TranslationSupercell}, and
-    \leanid{TNLean.Lattice.norm_groundCompression_commutator_le_of_supercell_separation}
-    in \doclink{TNLean/Lattice/TranslationSupercellDecay}.}
 
 \bibliographystyle{alpha}
 \bibliography{references}
