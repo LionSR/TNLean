@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.SequentialTruncation
 import TNLean.MPS.AreaLaw.OpenMPSCutRank
+import TNLean.Algebra.SubmoduleStarProjectionMatrix
 import QICLean.Channel.SchmidtTrimming
 
 /-!
@@ -125,11 +126,7 @@ theorem toEuclideanLin_spanProjection {k : ℕ} (S : Set (LeftBlockVector L q k)
 /-- The projection onto `Span(S)` is an orthogonal projection. -/
 theorem isStarProjection_spanProjection {k : ℕ} (S : Set (LeftBlockVector L q k)) :
     IsStarProjection (spanProjection S) :=
-  (isStarProjection_starProjection (U := Submodule.span ℂ S)).map
-    (A := LeftBlockVector L q k →L[ℂ] LeftBlockVector L q k)
-    (B := LeftBlockMatrix L q k)
-    (Matrix.toEuclideanCLM (n := Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k))
-      (𝕜 := ℂ)).symm.toStarAlgHom
+  (Submodule.span ℂ S).isStarProjection_starProjectionMatrix
 
 /-- The projection onto `Span(S)` is Hermitian. -/
 theorem isHermitian_spanProjection {k : ℕ} (S : Set (LeftBlockVector L q k)) :

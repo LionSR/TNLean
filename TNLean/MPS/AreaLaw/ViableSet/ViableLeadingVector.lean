@@ -23,8 +23,12 @@ lines 472–476, and Lemma `l:leading`, lines 493–505, using Lemma `l:within`,
 **Scope restriction (nontrivial chains and bond bound):** The theorem assumes `0 < L` and
 `2 ≤ q` and uses the library bound `constantCutBond q 1 1 Δ c`. Its dependence on dimension
 and gap is documented in `docs/paper-gaps/lvv13_constant_bond.tex`; the source's quantitative
-AKLV bound remains separate. The theorem concerns a point close to the actual boundary
-state, without a finite-net or viable-set cardinality assertion.
+AKLV bound remains separate.
+
+The theorem concerns any boundary point within the convex program's tolerance of the actual
+boundary state, which includes the closest net element of Lemma `l:leading` (lines 493–495).
+The net and its cardinality bound (Claim `c:2`) remain an open gap, recorded in
+`docs/paper-gaps/lvv13_leading_net_point.tex`.
 -/
 
 open Matrix
@@ -38,14 +42,13 @@ variable {L q k : ℕ}
 low-energy vector. This is the library-bond form of LVV13, `algo53.tex`, equation `eq:conv`,
 lines 472–476, and Lemma `l:leading`, lines 493–505. The boundary point is chosen after the
 witness's actual bond space; no optimizer or witness energy bound is assumed. -/
-theorem ChainHamiltonian.exists_boundary_minimizer_leading_vector_of_isViable
+theorem ChainHamiltonian.exists_boundary_minimizer_leading_vector_of_isViable [NeZero q]
     (h : ChainHamiltonian L q 1 1) (hpos : ∀ X, (h.term X).PosSemidef)
     (hL : 0 < L) (hq : 2 ≤ q) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
     {S : Set (LeftBlockVector L q k)}
     (hviable : IsViable Γ (((Δ / 169) ^ 2) / L) S) :
-    let : NeZero q := ⟨by omega⟩
     let c : ℝ := (Δ / 169) ^ 2
     let D := constantCutBond q 1 1 Δ c
     let P := reindex
@@ -91,7 +94,6 @@ theorem ChainHamiltonian.exists_boundary_minimizer_leading_vector_of_isViable
           (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
           1 - 1 / 12 ≤ ‖⟪Γ, v⟫_ℂ‖ := by
   classical
-  let : NeZero q := ⟨by omega⟩
   let c : ℝ := (Δ / 169) ^ 2
   let D := constantCutBond q 1 1 Δ c
   let P := reindex

@@ -101,6 +101,7 @@ noncomputable section
 namespace MPSTensor
 
 open TNLean.Algebra
+open scoped TNLean.Algebra.ScalarCohomology
 
 variable {D : ℕ}
 
@@ -423,7 +424,7 @@ Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex`
 lines 1147–1157), the fixed point built "starting from any solution of the 1- and
 2-cocycle condition". The character of a finite group has unit modulus because each of
 its values is a root of unity. -/
-theorem exists_unitary_sptFixedPoint_of_isCocycle [Fintype G] (hω : ω.IsCocycle)
+theorem exists_unitary_sptFixedPoint_of_isCocycle [Fintype G] (hω : groupCohomology.IsMulCocycle₂ ω)
     (φ : G →* ℂ) :
     ∃ (η : ScalarCocycle G) (ρ : ProjectiveRepresentation (D := Fintype.card G) η),
       η.CohomologousTo ω ∧

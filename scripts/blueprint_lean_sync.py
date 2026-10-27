@@ -732,12 +732,10 @@ def _fetch_dependency_sources(
 def _resolve_dependency_lean_root(root: Path, package_name: str) -> Path | None:
     """Resolve a Lake dependency's own Lean source root from lake-manifest.json.
 
-    A blueprint entry may cite a declaration that now lives in a separate
-    repository TNLean depends on (QICLean, since the quantum-channel
-    extraction, LionSR/TNLean#6622): the declaration genuinely exists in
-    TNLean's build environment, just not under ``TNLean/``. This walks the
-    checked-out dependency the same way ``collect_lean_decls`` walks
-    ``TNLean/``, so those citations resolve instead of reading as missing.
+    Blueprint entries may cite declarations supplied by QICLean or Mathlib,
+    rather than retained as local wrappers. The declarations exist in TNLean's
+    build environment, just not under ``TNLean/``. This resolves the checked-out
+    dependency's library root so ``collect_lean_decls`` can scan its source.
 
     Returns ``None`` and prints a one-line explanation whenever the manifest,
     the package checkout, or its Lean library directory cannot be found --
@@ -830,24 +828,25 @@ def run_sync(
 
     report = SyncReport(duplicate_tags_are_errors=report_duplicate_tags)
 
-    # 1. Collect Lean declarations, including the qiclean dependency's own
-    # source: a blueprint entry may legitimately cite a declaration that
-    # moved there in the quantum-channel extraction (LionSR/TNLean#6622) --
-    # it still resolves in TNLean's build environment, just not under
-    # TNLean/. TNLean's own declarations take precedence on any name clash.
+    # 1. Resolve citations directly into the QICLean and Mathlib dependencies.
+    # A migrated declaration needs no local compatibility wrapper merely to
+    # satisfy this source check. Scan only these mathematical libraries, not
+    # every Lake package; TNLean takes precedence, then QICLean, then Mathlib.
     print("Scanning Lean source tree …")
     report.lean_decls = collect_lean_decls(lean_root)
     print(f"  Found {len(report.lean_decls)} declarations in Lean source")
-    qiclean_root = _resolve_dependency_lean_root(root, "qiclean")
-    if qiclean_root is not None:
-        qiclean_decls = collect_lean_decls(qiclean_root)
+    for package_name in ("qiclean", "mathlib"):
+        dependency_root = _resolve_dependency_lean_root(root, package_name)
+        if dependency_root is None:
+            continue
+        dependency_decls = collect_lean_decls(dependency_root)
         added = 0
-        for fqn, decl in qiclean_decls.items():
+        for fqn, decl in dependency_decls.items():
             if fqn not in report.lean_decls:
                 report.lean_decls[fqn] = decl
                 added += 1
         print(
-            f"  Found {len(qiclean_decls)} declarations in the qiclean "
+            f"  Found {len(dependency_decls)} declarations in the {package_name} "
             f"dependency ({added} new)"
         )
 

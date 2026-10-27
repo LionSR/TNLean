@@ -574,8 +574,8 @@ open TNLean.Algebra in
 /-- `akltOmega` is a genuine `2`-cocycle: it is the factor system of the
 projective representation `akltProjRep`, so its class lives in
 `H²(Z₂ × Z₂, ℂˣ)`. -/
-lemma akltOmega_isCocycle : ScalarCocycle.IsCocycle akltOmega :=
-  ScalarCocycle.isCocycle_of_projRep akltProjRep (by norm_num)
+lemma akltOmega_isCocycle : groupCohomology.IsMulCocycle₂ akltOmega :=
+  ScalarCocycle.isMulCocycle₂_of_projRep akltProjRep (by norm_num)
 
 open TNLean.Algebra in
 /-- The commutator phase of `akltOmega` on the two generators is `-1`. -/
@@ -591,7 +591,7 @@ open TNLean.Algebra in
 `H²(Z₂ × Z₂, ℂˣ) = Z₂`: the AKLT state is a non-trivial SPT phase. -/
 theorem aklt_isNontrivialSPT :
     groupCohomology.H2π _
-      (groupCohomology.cocyclesOfIsMulCocycle₂ akltOmega_isCocycle.isMulCocycle₂) ≠ 0 := by
+      (groupCohomology.cocyclesOfIsMulCocycle₂ akltOmega_isCocycle) ≠ 0 := by
   refine ScalarCocycle.H2π_ne_zero_of_commPhase_ne_one akltOmega_isCocycle
     (g := Multiplicative.ofAdd (1, 0)) (h := Multiplicative.ofAdd (0, 1)) ?_ ?_
   · rfl
