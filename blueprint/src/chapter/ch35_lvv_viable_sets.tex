@@ -18,7 +18,7 @@ whose range is the span of the columns of $M_i(\psi)$.
         TNLean.MPS.AreaLaw.mem_leftSupportSubmodule,
         TNLean.MPS.AreaLaw.IsViable}
     \leanok
-    \uses{def:chain_model, def:chain_open_mps}
+    \uses{def:chain_model}
     Let $\Gamma$ be a vector on the chain, $\delta\in\mathbb R$ and $S$ a set of
     vectors on the first $i$ sites. Then $S$ is $(i,\delta)$-viable for $\Gamma$
     if some unit vector $\phi$ with $|\langle\phi,\Gamma\rangle|\ge1-\delta$ has
@@ -191,7 +191,7 @@ whose range is the span of the columns of $M_i(\psi)$.
     When $S$ is nonempty and $b\ge1$, this bound is $|S|b$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:open_mps_finite_span}
+    \uses{thm:open_mps_finite_span,thm:chain_cut_rank_of_mps}
     The map $R$ is linear, so $Rv\in\operatorname{Span}(R(S))$ and
     $|R(S)|\le |S|$. Theorem~\ref{thm:open_mps_finite_span} gives a bond
     bound $|R(S)|\beta\le |S|\beta\le\max\{1,|S|\beta\}$.

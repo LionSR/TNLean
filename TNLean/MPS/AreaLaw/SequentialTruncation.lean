@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.OpenMPSRank
 import TNLean.Algebra.ToEuclideanLinApply
+import TNLean.Algebra.SubmoduleStarProjectionMatrix
 import QICLean.Entropy.FilterOptimizer
 import TNLean.Lattice.RegionEntropyInequalities
 import QICLean.Entropy.RegionEntropy
@@ -222,13 +223,9 @@ private theorem isStarProjection_prefixBasisProjection
   classical
   unfold prefixBasisProjection
   split_ifs with hk
-  · exact (isStarProjection_starProjection (U := Submodule.span ℂ
+  · exact Submodule.isStarProjection_starProjectionMatrix (Submodule.span ℂ
       (Set.range fun i : Fin (min D (Fintype.card (RegionalConfig k))) ↦
-        b ⟨k, hk⟩ (Fin.castLE (Nat.min_le_right D _) i)))).map
-      (A := EuclideanSpace ℂ (RegionalConfig k) →L[ℂ]
-        EuclideanSpace ℂ (RegionalConfig k))
-      (B := LeftBlockMatrix L q k)
-      (Matrix.toEuclideanCLM (n := RegionalConfig k) (𝕜 := ℂ)).symm.toStarAlgHom
+        b ⟨k, hk⟩ (Fin.castLE (Nat.min_le_right D _) i)))
   · exact IsStarProjection.one _
 
 /-- A lifted operator on the left block acts on the cut matrix by left multiplication. -/
@@ -329,10 +326,6 @@ theorem norm_sub_sequentialTruncation_sq_le (hP : ∀ k, IsStarProjection (P k))
     have hpy := norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero _ _ horth
     rw [hsplit, sq, hpy]
     nlinarith [ih, hcontr, norm_nonneg (toEuclideanLin (Entropy.localLift D Pj) x)]
-
-/-- Left blocks grow with the cut. -/
-theorem leftBlock_mono {k k' : ℕ} (h : k ≤ k') : leftBlock L k ⊆ leftBlock L k' :=
-  fun _ hi ↦ mem_leftBlock.mpr (lt_of_lt_of_le (mem_leftBlock.mp hi) h)
 
 /-- After the truncation on the cut `L - 1 - i` has been applied, every later truncation
 acts on a smaller left block, so the whole product from step `i` on is the lift of a
