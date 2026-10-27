@@ -3,6 +3,7 @@
 \begin{theorem}[Conjugation from factorial commutator growth]
     \label{thm:factorial_commutator_conjugation}
     \lean{Matrix.norm_exp_conjugation_le_two}
+    \leanok
     Let $H,O$ be complex square matrices on a finite index set, and put
     $\operatorname{ad}_H(X)=HX-XH$. Suppose that, for every $m\in\N$,
     \begin{align}
@@ -16,7 +17,7 @@
     This is the conditional exponential-series estimate used
     in~\cite[lines 795--837]{Arad2014Connecting}.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Left and right multiplication by $H$ commute. Exponentiating their
     difference gives the Hadamard expansion
     \begin{align}
