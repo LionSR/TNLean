@@ -15,17 +15,17 @@ The statements below give supporting locality algebra for
     \lean{TNLean.MPS.AreaLaw.operatorBlock_isSupportedOn_of_threeSplit_left,
         TNLean.MPS.AreaLaw.leftBlock_isSupportedOn_of_threeSplit_right}
     Suppose that $P$ is supported on $D\subseteq V$.
-    If $P^g=U\otimes I_R$, then for any configurations $a,b$ on $T$,
+    If $P^g=U\otimes \Id_R$, then for any configurations $a,b$ on $T$,
     the matrix on $E$ with entries
     \begin{align}
-        U_{a,b}(x,y)=U((a,x),(b,y))
+        U^{\mathrm R}_{ab}(x,y)=U((a,x),(b,y))
         \label{eq:three_region_left_partial}
     \end{align}
     is supported on $D\cap E$, viewed as a subset of $E$.
-    If instead $P^g=I_T\otimes V_0$, then for any configurations $r,s$
+    If instead $P^g=\Id_T\otimes V_0$, then for any configurations $r,s$
     on $R$, the matrix
     \begin{align}
-        (V_0)_{r,s}(x,y)=V_0((x,r),(y,s))
+        (V_0)^{\mathrm L}_{rs}(x,y)=V_0((x,r),(y,s))
         \label{eq:three_region_right_partial}
     \end{align}
     has the same support conclusion. The two fixed configurations in either
@@ -47,7 +47,7 @@ The statements below give supporting locality algebra for
     Suppose that $E$ contains a specified site. If $W,M$ are operators on
     $\mathcal H_E$ and
     \begin{align}
-        I_T\otimes W\otimes I_R=I_T\otimes M\otimes I_R,
+        \Id_T\otimes W\otimes \Id_R=\Id_T\otimes M\otimes \Id_R,
         \label{eq:three_region_middle_lift_equality}
     \end{align}
     then $W=M$. No positive-local-dimension assumption is required.
@@ -65,7 +65,7 @@ The statements below give supporting locality algebra for
     For every operator $W$ on $\mathcal H_E$, its canonical extension to $V$
     has three-region form
     \begin{align}
-        (\iota_E(W))^g=I_T\otimes W\otimes I_R.
+        (\iota_E(W))^g=\Id_T\otimes W\otimes \Id_R.
         \label{eq:three_region_middle_embedding}
     \end{align}
     This includes empty regions and zero local dimension.
@@ -96,20 +96,21 @@ The statements below give supporting locality algebra for
     Intervals are intersected with the finite chain. Fix $0\le p,s<2\ell$
     and set
     \begin{align}
-        T & ={[0,a+p+1)},               & E & ={[a+p+1,b+s+1)}, &
-        R & =V\setminus(T\cup E),\notag                           \\
+        T & =[0,a+p+1),\notag           \\
+        E & =[a+p+1,b+s+1),\notag       \\
+        R & =V\setminus(T\cup E),\notag \\
         C & =E\setminus[a+2\ell+1,b).
         \label{eq:three_region_selected_regions}
     \end{align}
     There are regional families $H^L,H^M,H^R$ and crossing operators $U,V_0$
     such that, for every label $i\ne L_p,R_s$,
     \begin{align}
-        F_i^g                   & =H_i^L\otimes I_E\otimes I_R
-        +I_T\otimes H_i^M\otimes I_R
-        +I_T\otimes I_E\otimes H_i^R,\notag                      \\
-        F_{L_p}^g               & =U\otimes I_R,               &
-        F_{R_s}^g               & =I_T\otimes V_0,\notag         \\
-        \operatorname{OSR}(U)   & \le q^2,                     &
+        F_i^g                   & =H_i^L\otimes \Id_E\otimes \Id_R
+        +\Id_T\otimes H_i^M\otimes \Id_R
+        +\Id_T\otimes \Id_E\otimes H_i^R,\notag                      \\
+        F_{L_p}^g               & =U\otimes \Id_R,                 &
+        F_{R_s}^g               & =\Id_T\otimes V_0,\notag           \\
+        \operatorname{OSR}(U)   & \le q^2,                         &
         \operatorname{OSR}(V_0) & \le q^2.
         \label{eq:three_region_two_window_factors}
     \end{align}
