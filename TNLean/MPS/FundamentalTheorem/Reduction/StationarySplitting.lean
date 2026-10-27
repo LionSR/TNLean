@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.FaithfulStationaryClosure
 import TNLean.MPS.FundamentalTheorem.Reduction.Splitting
+import TNLean.Algebra.SubmoduleStarProjectionMatrix
 
 /-!
 # Stationary splitting in the asymmetric fundamental theorem
@@ -48,22 +49,14 @@ theorem isSemisimpleModule_wordModule_of_hasInvariantProjectorClosure (B : MPSTe
   have hinv (i : Fin d) {v : E} (hv : v ∈ p) : Matrix.toEuclideanLin (B i) v ∈ p := by
     obtain ⟨w, hw, rfl⟩ := hv
     exact ⟨(ofWord [i] : WordAlgebra d) • w, K.smul_mem _ hw, heletter i w⟩
-  let P : Matrix (Fin D) (Fin D) ℂ := Matrix.toEuclideanLin.symm p.starProjection.toLinearMap
+  let P : Matrix (Fin D) (Fin D) ℂ := p.starProjectionMatrix
   have hPlin : Matrix.toEuclideanLin P = p.starProjection.toLinearMap := by simp [P]
   have hmul (X Y : Matrix (Fin D) (Fin D) ℂ) :
       Matrix.toEuclideanLin (X * Y) =
         (Matrix.toEuclideanLin X).comp (Matrix.toEuclideanLin Y) :=
     Matrix.toLpLin_mul_same 2 X Y
-  have hP : IsOrthogonalProjection P := by
-    constructor
-    · apply (Matrix.isSymmetric_toEuclideanLin_iff (A := P) (𝕜 := ℂ)).mp
-      rw [hPlin]
-      exact Submodule.starProjection_isSymmetric p
-    · apply Matrix.toEuclideanLin.injective
-      rw [hmul, hPlin]
-      apply LinearMap.ext
-      intro x
-      exact (Submodule.starProjection_eq_self_iff).2 (by simp)
+  have hP : IsOrthogonalProjection P :=
+    p.isStarProjection_starProjectionMatrix.isOrthogonalProjection
   have hAP (i : Fin d) : B i * P = P * B i * P := by
     apply Matrix.toEuclideanLin.injective
     rw [hmul, hmul, hmul, hPlin]

@@ -570,7 +570,7 @@ second cohomology group $H^2(G,\C^{\times})$ of cocycles modulo coboundaries.
 \end{proof}
 
 \begin{definition}[Multiplicative 2-cocycle condition]\label{def:is_cocycle}
-    \lean{TNLean.Algebra.ScalarCocycle.IsCocycle}
+    \lean{groupCohomology.IsMulCocycle₂}
     \leanok
     A scalar 2-cochain $\omega \colon G \times G \to \C^{\times}$ is a
     \emph{2-cocycle} if it satisfies, for all $g,h,k \in G$,
@@ -583,7 +583,7 @@ second cohomology group $H^2(G,\C^{\times})$ of cocycles modulo coboundaries.
 
 \begin{theorem}[A projective factor system is a cocycle]
     \label{thm:is_cocycle_of_projective_rep}
-    \lean{TNLean.Algebra.ScalarCocycle.isCocycle_of_projRep}
+    \lean{TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep}
     \leanok
     \uses{def:is_cocycle, def:projective_rep, lem:cocycle_of_assoc}
     If $D>0$ and $\rho:G\to\GL_D(\C)$ obeys
