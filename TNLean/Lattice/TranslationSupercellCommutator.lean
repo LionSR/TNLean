@@ -97,7 +97,10 @@ theorem norm_groundCompression_commutator_le_of_momenta [NeZero d]
             2 * ‖h i‖ * Real.exp (-(T * ΔE) ^ 2 / (2 * q))) +
         2 * ‖h i‖ * ‖h j‖ * Real.exp (-q / 2) := by
   have hInv := isSiteInvariant_sum_of_covariant d h hcov
-  obtain ⟨g, hg, hdist⟩ := exists_mem_supercell_lt_edist_add hN hden G π hπ e he i j
+  obtain ⟨g, hg, hdist⟩ : ∃ g ∈ supercell Γ d (∑ k, h k) E₀,
+      ((n / 2 : ℕ) : ℕ∞) < G.edist i (g • j) + N := by
+    simpa only [Nat.cast_one, one_mul] using
+      exists_mem_supercell_lt_edist_add hN hden G (R := 1) Nat.zero_lt_one π hπ e he i j
   have hsep : Disjoint (((X i).biUnion fun x => graphBall G x l : Finset ι) : Set ι)
       (X (g • j) : Set ι) := by
     refine Set.disjoint_left.mpr fun z hz hz' ↦ ?_
