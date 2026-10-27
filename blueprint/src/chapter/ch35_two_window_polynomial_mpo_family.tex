@@ -42,6 +42,7 @@ the coefficient operators; see
 \begin{theorem}[The canonical common middle family]
     \label{thm:physical_polynomial_canonical_middle_family}
     \lean{TNLean.MPS.AreaLaw.exists_common_physical_polynomial_mpo_family}
+    \leanok
     \uses{def:crossing_frequency_index,thm:global_two_window_polynomial_recovery,
         thm:common_middle_grid_mpo_family,
         thm:common_middle_low_frequency_cardinality,
@@ -92,7 +93,7 @@ the coefficient operators; see
     Zero virtual dimension is allowed. This is the general square-derived
     bond bound, with no sharper source bond or running-time assertion.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:global_two_window_polynomial_recovery,thm:common_middle_grid_mpo_family,
         thm:common_middle_low_frequency_cardinality,
         thm:chain_two_window_family_cardinality}
@@ -115,6 +116,7 @@ the coefficient operators; see
 \begin{theorem}[A finite enumeration of the common middle family]
     \label{thm:physical_polynomial_fin_middle_family}
     \lean{TNLean.MPS.AreaLaw.exists_common_physical_polynomial_mpo_family_fin}
+    \leanok
     \uses{thm:physical_polynomial_canonical_middle_family}
     Under the same hypotheses and with the same supplied windows, core tensors
     and cap, there are a nonnegative integer $N\le D^2$ and matrices
@@ -129,7 +131,7 @@ the coefficient operators; see
     The number and middle matrices are chosen before both the exterior pair and
     all polynomial coefficients.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:physical_polynomial_canonical_middle_family}
     Enumerate the finite canonical carrier $I$ by
     $\{0,\ldots,|I|-1\}$. Pull both the middle matrices and the later exterior
@@ -140,6 +142,7 @@ the coefficient operators; see
 \begin{theorem}[A common middle family for polynomial evaluation]
     \label{thm:physical_aeval_fin_middle_family}
     \lean{TNLean.MPS.AreaLaw.exists_common_physical_aeval_mpo_family_fin}
+    \leanok
     \uses{thm:physical_polynomial_fin_middle_family}
     Under the same hypotheses and fixed data, one may choose $N\le D^2$ and
     middle matrices $W_0,\ldots,W_{N-1}$ with the same natural bond bound
@@ -152,7 +155,7 @@ the coefficient operators; see
     \end{align}
     The zero polynomial is included, with no normalization condition on $P$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:physical_polynomial_fin_middle_family}
     Apply the preceding theorem with $c_h$ equal to the coefficient of $X^h$
     in $P$. The finite polynomial-evaluation identity gives
