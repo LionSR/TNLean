@@ -65,6 +65,7 @@ import TNLean.MPS.AreaLaw.PhysicalChebyshevViability
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.PhysicalPeriodicPolynomialFamily
 import TNLean.MPS.AreaLaw.PhysicalPolynomialTensorFamily
+import TNLean.MPS.AreaLaw.PolynomialFilterParameters
 import TNLean.MPS.AreaLaw.ProductCutIteration
 import TNLean.MPS.AreaLaw.ProductReplacement
 import TNLean.MPS.AreaLaw.ProtocolConditionalPreparation
