@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.Permutation
-import TNLean.Algebra.PermutationMatrixUnitary
+import QICLean.Algebra.PermutationMatrixUnitary
 import TNLean.MPS.MPDO.AreaLaw
 import TNLean.MPS.MPDO.OperatorCyclicSum
 import TNLean.MPS.MPDO.StackedLayers

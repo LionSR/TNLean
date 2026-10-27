@@ -7,7 +7,7 @@ import Mathlib.LinearAlgebra.Matrix.Dual
 import Mathlib.LinearAlgebra.TensorProduct.Matrix
 import Mathlib.LinearAlgebra.UnitaryGroup
 import Mathlib.RepresentationTheory.Basic
-import TNLean.Algebra.PermutationMatrixUnitary
+import QICLean.Algebra.PermutationMatrixUnitary
 
 /-!
 # Representations in orthonormal coordinates
