@@ -83,6 +83,7 @@ import TNLean.MPS.AreaLaw.ProtocolTerminalCoordinates
 import TNLean.MPS.AreaLaw.ProtocolTerminalReference
 import TNLean.MPS.AreaLaw.ProtocolTerminalWord
 import TNLean.MPS.AreaLaw.ProtocolUniformPreparation
+import TNLean.MPS.AreaLaw.RangeOneCut
 import TNLean.MPS.AreaLaw.RangeOneSupport
 import TNLean.MPS.AreaLaw.RegionalMiddleFactors
 import TNLean.MPS.AreaLaw.RelativeGeneratorLocalization
