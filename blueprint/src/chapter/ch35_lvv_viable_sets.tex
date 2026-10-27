@@ -150,3 +150,84 @@ whose range is the span of the columns of $M_i(\psi)$.
     summand lies in $\operatorname{Span}(S')$, so the columns of $M_i(\phi)$ do as
     well; the witness $\phi$ is unchanged.
 \end{proof}
+
+\begin{theorem}[Bond dimensions in a finite span]
+    \label{thm:open_mps_finite_span}
+    \lean{TNLean.MPS.AreaLaw.isOpenMPS_of_mem_span}
+    \leanok
+    \uses{def:chain_open_mps}
+    Let $L,q,D$ be natural numbers, and let $S$ be a finite set of vectors
+    on a chain of $L$ sites of local dimension $q$. Suppose that every
+    member of $S$ is an open-boundary matrix product state of bond
+    dimension at most $D$. Every $v\in\operatorname{Span}(S)$ is then an
+    open-boundary matrix product state of bond dimension at most $|S|D$.
+    This is the finite-span estimate used
+    in~\cite[Claim~2.7, source lines 520--527]{Landau2015Polynomial}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_cut_rank_of_mps}
+    Write $v=\sum_{w\in S}a_w w$. At every internal cut $j$,
+    \begin{align}
+        M_j(v)                    & =\sum_{w\in S}a_wM_j(w),\notag \\
+        \operatorname{rank}M_j(v) & \le
+        \sum_{w\in S}\operatorname{rank}(a_wM_j(w))\le |S|D.\notag
+    \end{align}
+    The cut-rank characterization gives the asserted representation,
+    including empty and one-site chains and $D=0$.
+\end{proof}
+
+\begin{theorem}[Bond dimensions in a left span]
+    \label{thm:left_mps_finite_span}
+    \lean{TNLean.MPS.AreaLaw.isLeftOpenMPS_of_mem_span}
+    \leanok
+    \uses{def:lvv_viable_mps}
+    Fix natural numbers $L,q,k,b$, and put $\beta=\max\{1,b\}$.
+    Write $Rv$ for the vector read on $k$ sites by restriction to the left
+    block, so $Rv(a)=v(a|_{\{j<L:j<k\}})$ for a $k$-site configuration $a$.
+    Let $S$ be a finite set of left-block vectors, and suppose that every
+    $Rw$, $w\in S$, is a matrix product state of bond dimension at most
+    $\beta$. For every $v\in\operatorname{Span}(S)$, the vector $Rv$ is a
+    matrix product state of bond dimension at most $\max\{1,|S|\beta\}$.
+    When $S$ is nonempty and $b\ge1$, this bound is $|S|b$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:open_mps_finite_span,thm:chain_cut_rank_of_mps}
+    The map $R$ is linear, so $Rv\in\operatorname{Span}(R(S))$ and
+    $|R(S)|\le |S|$. Theorem~\ref{thm:open_mps_finite_span} gives a bond
+    bound $|R(S)|\beta\le |S|\beta\le\max\{1,|S|\beta\}$.
+\end{proof}
+
+\begin{definition}[Left columns of a finite family]
+    \label{def:lvv_finite_left_columns}
+    \lean{TNLean.MPS.AreaLaw.leftColumns}
+    \leanok
+    Let $I$ be a finite index set and let $m$ be a natural number. Write
+    $\mathcal L$ for the Hilbert space of configurations on the left block
+    of a cut. For vectors $u_i\in\mathcal L\otimes\mathbb C^m$, write
+    $u_i=\sum_{j<m}u_{i,j}\otimes|j\rangle$ in the standard basis of the
+    bond space, and define
+    \begin{align}
+        T=\{u_{i,j}:i\in I,\ j<m\}.\notag
+    \end{align}
+    This is the column construction used in the size-trimming step
+    of~\cite[Claim~2.7, source lines 472--477 and 520--527]{Landau2015Polynomial}.
+\end{definition}
+
+\begin{theorem}[Number and support of the left columns]
+    \label{thm:lvv_finite_left_columns}
+    \lean{TNLean.MPS.AreaLaw.card_leftColumns_le,
+        TNLean.MPS.AreaLaw.leftColumns_subset_span}
+    \leanok
+    \uses{def:lvv_finite_left_columns}
+    The finite set $T$ satisfies $|T|\le |I|m$.
+    Let $S\subseteq\mathcal L$, and let $P_S$ be the orthogonal projection
+    onto $\operatorname{Span}(S)$. If $(P_S\otimes I_m)u_i=u_i$ for every
+    $i\in I$, then $T\subseteq\operatorname{Span}(S)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:lvv_viable_projection}
+    The set $T$ is the image of $I\times\{0,\ldots,m-1\}$, so its cardinality
+    is at most $|I|m$. Let $C_i$ have columns $u_{i,j}$. The fixed-vector
+    identity gives $P_SC_i=C_i$, hence $P_Su_{i,j}=u_{i,j}$ for every
+    retained column. The range of $P_S$ is $\operatorname{Span}(S)$.
+\end{proof}
