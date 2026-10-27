@@ -309,6 +309,11 @@ jobs:
               - 'scripts/generate_import_aggregators.py'
               - 'scripts/test_generate_import_aggregators.py'
             blueprint:
+              # Dependency upgrades must recheck compiled declarations and web/PDF renders.
+              - 'lean-toolchain'
+              - 'lakefile.*'
+              - 'lake-manifest.json'
+              - 'docbuild/**'
               - 'blueprint/src/**'
               - 'texra-blueprint.toml'
               - 'tenkz.toml'
@@ -346,6 +351,10 @@ jobs:
             # scripts/build_blueprint_ch01_12.sh, with the bibliography from
             # `texra-blueprint bbl` (texra-blueprint.toml).
             blueprint_pdf:
+              - 'lean-toolchain'
+              - 'lakefile.*'
+              - 'lake-manifest.json'
+              - 'docbuild/**'
               - 'blueprint/src/**'
               - 'texra-blueprint.toml'
               - 'scripts/build_blueprint_ch01_12.sh'
@@ -531,6 +540,29 @@ jobs:
           if-no-files-found: ignore
           retention-days: 1
           compression-level: 9
+
+      # Diagnose the PR's direct edits before the full dependency build. Selection
+      # uses the explicit feature head, while checks use this merged checkout.
+      # The root build and complete strict suite below remain mandatory.
+      - name: Check directly changed Lean sources and tests strictly
+        if: github.event_name == 'pull_request'
+        timeout-minutes: 60
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          for revision in "$BASE_SHA" "$PR_HEAD_SHA"; do
+            [[ "$revision" =~ ^[0-9a-f]{40}$ ]]
+            if ! git cat-file -e "$revision^{commit}" 2>/dev/null; then
+              git fetch --no-tags origin "$revision"
+            fi
+            git cat-file -e "$revision^{commit}"
+          done
+          python3 scripts/ci_lean_checks.py focused \
+            --base "$BASE_SHA" --head "$PR_HEAD_SHA" --jobs 3 \
+            --log "$RUNNER_TEMP/lake-build.log"
 
       # Build the changed production modules before the full library so a
       # failure surfaces early. The build is a shortcut: past its budget it
@@ -1142,10 +1174,14 @@ jobs:
 
       - name: Generate lean_decls from blueprint .tex files
         id: lean-decls
+        env:
+          BLUEPRINT_SYNC_FETCH_DEPS: '1'
         run: python3 scripts/blueprint_lean_sync.py --root . --update-lean-decls
 
       - name: Check blueprint and Lean source stay in sync
         if: steps.lean-decls.outcome == 'success'
+        env:
+          BLUEPRINT_SYNC_FETCH_DEPS: '1'
         run: python3 scripts/blueprint_lean_sync.py --root . --ci --report-duplicate-tags
 
       - name: Verify immutable PR base for diff

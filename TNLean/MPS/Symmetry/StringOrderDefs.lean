@@ -272,6 +272,9 @@ lemma stringOrderBoundaryParam_tendsto_zero_of_spectralRadius_lt_one
     @_root_.pow_tendsto_zero_of_spectralRadius_lt_one
       (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ)
       ContinuousLinearMap.toNormedRing hComplete ContinuousLinearMap.toNormedAlgebra F' hsrF
+  let : IsNormableSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
+    ⟨⟨normSeminorm ℂ (Matrix (Fin D) (Fin D) ℂ),
+      norm_withSeminorms ℂ (Matrix (Fin D) (Fin D) ℂ)⟩⟩
   have hIter0 :
       Filter.Tendsto (fun L => ((twistedTransferMap A u) ^ L) Y)
         Filter.atTop (nhds 0) := by

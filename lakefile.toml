@@ -22,12 +22,13 @@ rev = "ec93e4daed4ad8b4784a9d760e492832e7711433"
 [[require]]
 name = "mathlib"
 scope = "leanprover-community"
-rev = "v4.35.0-rc3"
+rev = "v4.36.0-rc1"
 
 [[require]]
 name = "qiclean"
 git = "https://github.com/LionSR/QICLean.git"
-rev = "17a4c0d1a2f9599f8bac689e4fa81f27cee3eadb"
+# Draft-only candidate; replace with the validated immutable semver release tag before merge.
+rev = "9b6b98a6388dc74d3c05a997aeb5a0871d34c102"
 
 [[lean_lib]]
 name = "TNLean"

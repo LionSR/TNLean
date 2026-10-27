@@ -136,7 +136,8 @@ theorem exists_kraus_mulVec_ne_zero {v : (Fin N → Fin d) → ℂ} (hv : v ≠ 
 
 /-- The vectors reached from `v` by the sequence of rounds `Rs`, the head applied first, over all
 the sequences of outcomes. -/
-def outputs : List (MeasurementRound d N) → ((Fin N → Fin d) → ℂ) → Set ((Fin N → Fin d) → ℂ)
+noncomputable def outputs :
+    List (MeasurementRound d N) → ((Fin N → Fin d) → ℂ) → Set ((Fin N → Fin d) → ℂ)
   | [], v => {v}
   | R :: Rs, v => ⋃ m, outputs Rs (R.kraus m *ᵥ v)
 

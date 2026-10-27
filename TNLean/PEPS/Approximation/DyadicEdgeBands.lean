@@ -176,7 +176,7 @@ noncomputable def bandCoord (n : ℝ) (e : SquareEdge) (p : ℝ × ℝ) : ℝ :=
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), equation `eq:geometry-lens`,
 `06-geometry.tex:199–202`. -/
-def edgeLens (n : ℝ) (e : SquareEdge) : Set (ℝ × ℝ) := edgeBand n e (-7) (-7 / 2)
+noncomputable def edgeLens (n : ℝ) (e : SquareEdge) : Set (ℝ × ℝ) := edgeBand n e (-7) (-7 / 2)
 
 /-- The open exterior neighboring `n`-square across an edge, `{0 < s < n, -n < d < 0}`.
 
