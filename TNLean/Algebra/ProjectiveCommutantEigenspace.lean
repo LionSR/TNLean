@@ -38,8 +38,8 @@ representation.**  Source: arXiv:2011.12127, §III.A
 (`Papers/2011.12127/TN-Review-main.tex` line 1171). -/
 theorem ProjectiveRepresentation.finrank_eigenspace_ne_one_of_commute
     {ω : ScalarCocycle G} (ρ : ProjectiveRepresentation (D := D) ω)
-    (hω : ω.IsCocycle)
-    (hnt : groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hω.isMulCocycle₂) ≠ 0)
+    (hω : groupCohomology.IsMulCocycle₂ ω)
+    (hnt : groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hω) ≠ 0)
     {Λ : Matrix (Fin D) (Fin D) ℂ}
     (hΛ : ∀ g, Commute Λ (ρ.X g : Matrix (Fin D) (Fin D) ℂ)) (μ : ℂ) :
     finrank ℂ (Module.End.eigenspace (Matrix.toLin' Λ) μ) ≠ 1 := by

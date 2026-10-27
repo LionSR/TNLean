@@ -283,7 +283,7 @@ theorem akltTensorRMP_virtual_projRep :
         ((akltProjRep.X g : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) =
       ((akltProjRep.X g : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) * akltTensorRMP i) ∧
     groupCohomology.H2π _
-      (groupCohomology.cocyclesOfIsMulCocycle₂ akltOmega_isCocycle.isMulCocycle₂) ≠ 0 := by
+      (groupCohomology.cocyclesOfIsMulCocycle₂ akltOmega_isCocycle) ≠ 0 := by
   refine ⟨fun g i => ?_, aklt_isNontrivialSPT⟩
   change twistedTensor akltTensorRMP akltZ2Z2Action g i * (akltRepX g : Matrix _ _ ℂ) =
     (akltRepX g : Matrix _ _ ℂ) * akltTensorRMP i

@@ -24,6 +24,8 @@ The extra identity used to rewrite the onsite Gauss coefficient assumes
 
 noncomputable section
 
+open scoped TNLean.Algebra.ScalarCohomology
+
 namespace TNLean.Algebra
 
 variable {G : Type} [Group G]
@@ -37,7 +39,7 @@ abbrev phase (ω : ScalarCocycle G) (g h : G) : ℂ :=
 
 /-- The circle phase of a scalar cocycle satisfies the complex-valued cocycle
 equation. -/
-theorem phase_isCocycle {ω : ScalarCocycle G} (hω : ω.IsCocycle) (g h k : G) :
+theorem phase_isCocycle {ω : ScalarCocycle G} (hω : groupCohomology.IsMulCocycle₂ ω) (g h k : G) :
     ω.phase g h * ω.phase (g * h) k =
       ω.phase g (h * k) * ω.phase h k := by
   have hc := ω.circlePhase_isMulCocycle₂ hω g h k
@@ -138,7 +140,7 @@ theorem twistedRightRegular_mulVec_apply [Fintype G]
 /-- The twisted left regular matrices obey the projective multiplication law
 `Lᵠ_g Lᵠ_h = ϕ(g,h)⁻¹ Lᵠ_{gh}`. -/
 theorem twistedLeftRegular_mul [Fintype G] {ω : ScalarCocycle G}
-    (hω : ω.IsCocycle) (g h : G) :
+    (hω : groupCohomology.IsMulCocycle₂ ω) (g h : G) :
     twistedLeftRegular ω g * twistedLeftRegular ω h =
       (ω.phase g h)⁻¹ • twistedLeftRegular ω (g * h) := by
   classical
@@ -164,7 +166,7 @@ theorem twistedLeftRegular_mul [Fintype G] {ω : ScalarCocycle G}
 /-- The twisted right regular matrices obey the projective multiplication law
 `Rᵠ_g Rᵠ_h = ϕ(h⁻¹,g⁻¹)⁻¹ Rᵠ_{gh}`. -/
 theorem twistedRightRegular_mul [Fintype G] {ω : ScalarCocycle G}
-    (hω : ω.IsCocycle) (g h : G) :
+    (hω : groupCohomology.IsMulCocycle₂ ω) (g h : G) :
     twistedRightRegular ω g * twistedRightRegular ω h =
       (ω.phase h⁻¹ g⁻¹)⁻¹ • twistedRightRegular ω (g * h) := by
   classical
@@ -190,7 +192,7 @@ theorem twistedRightRegular_mul [Fintype G] {ω : ScalarCocycle G}
 
 /-- The cocycle-twisted left and right regular matrices commute. -/
 theorem twistedLeftRegular_commute [Fintype G] {ω : ScalarCocycle G}
-    (hω : ω.IsCocycle) (g h : G) :
+    (hω : groupCohomology.IsMulCocycle₂ ω) (g h : G) :
     twistedLeftRegular ω g * twistedRightRegular ω h =
       twistedRightRegular ω h * twistedLeftRegular ω g := by
   classical
@@ -278,7 +280,7 @@ corresponding to the scalar convention `S_{t⁻¹} = S_t⁻¹` at line 238. The
 normalization is not claimed as a consequence of an arbitrary cocycle. The
 coefficient rewrite is arXiv:2502.20257, lines 3763--3766. -/
 theorem onsiteGauss_phase_div {ω : ScalarCocycle G}
-    (hω : ω.IsCocycle) (hInv : ∀ t : G, ω.phase t⁻¹ t = 1)
+    (hω : groupCohomology.IsMulCocycle₂ ω) (hInv : ∀ t : G, ω.phase t⁻¹ t = 1)
     (a g b : G) :
     ω.phase (a * g⁻¹) (g * b) / ω.phase a b =
       1 / (ω.phase a g⁻¹ * ω.phase g b) := by
