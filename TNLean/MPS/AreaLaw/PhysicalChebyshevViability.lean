@@ -23,7 +23,8 @@ estimate or the running-time assertion of Proposition 5.7.
 ## References
 
 Supporting ALVV, arXiv:1602.08828v2, Proposition 5.7, lines 1311–1333,
-Theorem `thm:Cheby-AGSP`, lines 789–853, and Lemma `l:er`, lines 606–622.
+Definition `def:Cheby-AGSP`, lines 789–803, Theorem `thm:Cheby-AGSP`,
+lines 809–853, and Lemma `l:er`, lines 597–622.
 -/
 
 open Matrix QuantumCircuit
@@ -40,7 +41,8 @@ upper-spectrum assumptions. The middle family precedes all supported
 exterior operators and spectral choices. Its count is at most `D^2` and
 its natural open bond is at most `(max 1 B)^(2*k)`.
 Supporting ALVV, arXiv:1602.08828v2, Proposition 5.7, lines 1311–1333,
-Theorem `thm:Cheby-AGSP`, lines 789–853, and Lemma `l:er`, lines 606–622.
+Definition `def:Cheby-AGSP`, lines 789–803, Theorem `thm:Cheby-AGSP`,
+lines 809–853, and Lemma `l:er`, lines 597–622.
 
 **Local fix (spectral boundaries and positivity):** The hypotheses use the
 closed low/high conditions and `δ < 1`. Positivity of the unsquared filter
