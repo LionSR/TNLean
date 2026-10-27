@@ -171,6 +171,7 @@ import TNLean.PEPS.NormalEdgeSingleCrossing
 import TNLean.PEPS.NormalFundamentalTheorem
 import TNLean.PEPS.NormalGeneralFundamentalTheorem
 import TNLean.PEPS.NormalPairBlocking
+import TNLean.PEPS.NormalPhysicalSymmetry
 import TNLean.PEPS.NormalRectangleTiling
 import TNLean.PEPS.NormalSquareComparisonRegion
 import TNLean.PEPS.NormalSquareEdgeCoeff
