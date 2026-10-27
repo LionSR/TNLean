@@ -1,0 +1,56 @@
+\section{Parameters for a polynomial filter}
+
+\begin{theorem}[A joint count and contraction estimate]
+    \label{thm:chain_polynomial_filter_parameters}
+    \lean{Real.exists_dg_scalar_parameters}
+    For every $C_H>0$ and $M\in\R$, there is a real constant
+    $A\ge\max\{1,21,M,\log400000\}$ with the following properties.
+    For every integer $d\ge2$ and $0<g\le1$, put
+    \begin{align}
+        u    & =1+\log d+\log(1/g),                   &
+        \ell & =\left\lceil Au^2/g\right\rceil,\notag                                  \\
+        c_A  & =6+2\log(A+1),                         & D & =(d\ell^2)^{22\ell}.\notag
+    \end{align}
+    Then $Au^2/g\le\ell\le(A+1)u^2/g$, $A\le\ell$, and
+    $20\ell+2\lfloor\ell^2/\ell\rfloor=22\ell$.
+    For every $0<R\le2C_H\ell$, define
+    $\Delta=4\exp(-4\ell^2\sqrt{(4g/5)/R})$. One has
+    \begin{align}
+        \log D & \le22(A+1)c_Ag^{-1}u^3, & D^{12}\Delta & \le\frac1{100000}.\notag
+    \end{align}
+    The same $A$ has the following simultaneous tail property. For all
+    $C,c,\varepsilon>0$ and $p\ge0$ satisfying
+    $\max\{0,\log(C/\varepsilon)\}+p+c\le cM$, one has
+    $C\exp(-c(\ell-g))\le\varepsilon g^p$.
+    This is a supporting scalar estimate for the parameter choice
+    in~\cite[lines 1010--1024]{Arad2016RigorousRG}.
+\end{theorem}
+\begin{proof}
+    Since $\log(A+1)=o(\sqrt A)$, one may choose $A$ above all the prescribed
+    lower bounds so that
+    \begin{align}
+        264\bigl(6+2\log(A+1)\bigr)+1
+         & \le4\sqrt{\frac{2A}{5C_H}}.\notag
+    \end{align}
+    The ceiling bounds follow from $u\ge1$ and $g\le1$. They imply
+    $\log\ell\le\log(A+1)+2\log u+\log(1/g)$. Since $\log u\le u$,
+    one obtains $\log(d\ell^2)\le c_Au$ and
+    $12\log D\le264\ell c_Au$. Positivity of $\ell$ gives the integer
+    identity, and the upper ceiling bound gives the asserted bound on $\log D$.
+
+    From $g\ell\ge Au^2$ and $R\le2C_H\ell$, comparison of nonnegative
+    squares gives
+    $u\sqrt{2A/(5C_H)}\le\ell\sqrt{(4g/5)/R}$. Consequently
+    \begin{align}
+        12\log D-4\ell^2\sqrt{\frac{4g/5}{R}}
+                     & \le-\ell u\le-A,\notag                            \\
+        D^{12}\Delta & \le4e^{-A}\le\frac4{400000}=\frac1{100000}.\notag
+    \end{align}
+    Finally put $B=\max\{0,\log(C/\varepsilon)\}$. The threshold condition,
+    $\ell\ge Au$, and $u\ge1+\log(1/g)$ give
+    \begin{align}
+        c(\ell-g) & \ge cAu-c\ge(B+p+c)u-c\notag                             \\
+                  & \ge B+p\log(1/g)\ge\log(C/\varepsilon)+p\log(1/g).\notag
+    \end{align}
+    Exponentiation proves the tail estimate with the same $A$.
+\end{proof}
