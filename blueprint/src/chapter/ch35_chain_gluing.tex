@@ -18,10 +18,11 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
         TNLean.MPS.AreaLaw.rightCutOperator}
     \leanok
     The coordinates $((x,y),z)$ of a configuration of the chain at the cut
-    after $k$ sites. For an operator $H_L$ supported on the first $k$ sites,
-    $H_L'$ is its restriction to them; for an operator $K$ supported off the
-    first $k-1$ sites, $K'$ is its restriction to site $k-1$ and the sites right
-    of the cut.
+    after $k$ sites. Let the local dimension satisfy $q\ge1$, so that each
+    region has a configuration $0$. For an operator $H_L$ supported on the
+    first $k$ sites, $H_L'$ is its restriction to them; for an operator $K$
+    supported off the first $k-1$ sites, $K'$ is its restriction to site $k-1$
+    and the sites right of the cut.
 \end{definition}
 
 \begin{theorem}[The Hamiltonian at a cut]
@@ -29,8 +30,8 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     \lean{TNLean.MPS.AreaLaw.reindex_gluingCut_eq}
     \leanok
     \uses{def:chain_gluing_cut}
-    If $H_L$ is supported on the first $k$ sites and $K$ off the first $k-1$
-    sites, then in the cut coordinates $H_L+K=H_L'\otimes1+1\otimes K'$.
+    Let $q\ge1$. If $H_L$ is supported on the first $k$ sites and $K$ off the
+    first $k-1$ sites, then in the cut coordinates $H_L+K=H_L'\otimes1+1\otimes K'$.
 \end{theorem}
 
 \begin{proof}
@@ -50,12 +51,12 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     \lean{TNLean.MPS.AreaLaw.exists_leading_eigenvector_chain}
     \leanok
     \uses{def:chain_gluing_cut}
-    Let $H=H_L+K$ with $H_L$ supported on the first $k$ sites and $K$ off the
-    first $k-1$ sites have a gapped ground state $\Gamma$ with energy $E_0$ and
-    gap $\Delta$. Let $W$ be an isometry from a bond $\mathbb C^m$ into the
-    sites right of the cut, and let $w=(1\otimes W)x$ in the cut coordinates
-    have energy at most $E_0+e$. Let $\sigma$ be a density matrix on the first
-    $k$ sites and the bond with
+    Let $q\ge1$ and let $H=H_L+K$ with $H_L$ supported on the first $k$ sites
+    and $K$ off the first $k-1$ sites have a gapped ground state $\Gamma$ with
+    energy $E_0$ and gap $\Delta$. Let $W$ be an isometry from a bond
+    $\mathbb C^m$ into the sites right of the cut, and let $w=(1\otimes W)x$ in
+    the cut coordinates have energy at most $E_0+e$. Let $\sigma$ be a density
+    matrix on the first $k$ sites and the bond with
     $\operatorname{Re}\operatorname{tr}(\sigma(H_L'\otimes1))\le
         \operatorname{Re}\operatorname{tr}(\lvert x\rangle\langle x\rvert(H_L'\otimes1))$
     and
@@ -77,13 +78,18 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     \uses{thm:chain_gluing_split}
     In the cut coordinates the Hamiltonian, the ground state and $w$ satisfy
     the hypotheses of the leading-eigenvector theorem of the companion volume,
-    with $\lVert K'\rVert\le\lVert K\rVert$. This comparison follows from
-    invariance of the operator norm under a change of coordinates and
-    $\lVert1\otimes K'\rVert=\lVert K'\rVert$, since the first configuration
-    factor is nonempty~\cite[``Operator norm after adjoining an identity factor'']{QICLean2026Blueprint}.
-    Let $E$ be the cut-coordinate bijection and $U$ the
-    unitary map $U\psi=\psi\circ E^{-1}$. For chain vectors $\phi,\psi$ and
-    an operator $M$,
+    with $\lVert K'\rVert\le\lVert K\rVert$. Let $E$ be the cut-coordinate
+    bijection and $U$ the unitary map $U\psi=\psi\circ E^{-1}$. Then
+    \begin{align}
+        \lVert K'\rVert=\lVert1\otimes K'\rVert=\lVert UKU^*\rVert
+        =\lVert K\rVert.\notag
+    \end{align}
+    The first equality holds because the first configuration factor is
+    nonempty~\cite[``Operator norm after adjoining an identity factor'']{QICLean2026Blueprint},
+    the second because $UKU^*=1\otimes K'$
+    by Theorem~\ref{thm:chain_gluing_split}, and the third because
+    conjugation by a unitary preserves the operator norm. For chain vectors
+    $\phi,\psi$ and an operator $M$,
     \begin{align}
         \langle U\phi,U\psi\rangle
          & =\langle\phi,\psi\rangle,
@@ -205,7 +211,8 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     \uses{thm:chain_range_one_gap_upper,thm:chain_range_one_overlap_energy,
         thm:chain_range_one_cut_decomposition,thm:chain_constant_bond_overlap,
         thm:lvv_viable_projection,thm:chain_trimmed_witness,
-        thm:chain_numerical_trim_bound,thm:chain_numerical_trim_constant}
+        thm:chain_numerical_trim_bound,thm:chain_numerical_trim_constant,
+        thm:chain_trim_energy}
     The gap bound gives $\Delta\le4$, hence $0<c\le1/1600$.
     A viability witness $\psi$ has energy at most $E_0+8c$ and left support
     in $\operatorname{Span}(S)$. The normalized ground vector trimmed at

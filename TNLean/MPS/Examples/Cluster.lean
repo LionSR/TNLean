@@ -518,8 +518,8 @@ open TNLean.Algebra in
 /-- `clusterOmega` is a genuine `2`-cocycle: it is the factor system of the
 projective representation `clusterProjRep`, so its class lives in
 `H²(Z₂ × Z₂, ℂˣ)`. -/
-lemma clusterOmega_isCocycle : ScalarCocycle.IsCocycle clusterOmega :=
-  ScalarCocycle.isCocycle_of_projRep clusterProjRep (by norm_num)
+lemma clusterOmega_isCocycle : groupCohomology.IsMulCocycle₂ clusterOmega :=
+  ScalarCocycle.isMulCocycle₂_of_projRep clusterProjRep (by norm_num)
 
 open TNLean.Algebra in
 /-- The commutator phase of `clusterOmega` on the two generators is `-1`. -/
@@ -535,7 +535,7 @@ open TNLean.Algebra in
 `H²(Z₂ × Z₂, ℂˣ) = Z₂`: the cluster state is a non-trivial SPT phase. -/
 theorem cluster_isNontrivialSPT :
     groupCohomology.H2π _
-      (groupCohomology.cocyclesOfIsMulCocycle₂ clusterOmega_isCocycle.isMulCocycle₂) ≠ 0 := by
+      (groupCohomology.cocyclesOfIsMulCocycle₂ clusterOmega_isCocycle) ≠ 0 := by
   refine ScalarCocycle.H2π_ne_zero_of_commPhase_ne_one clusterOmega_isCocycle
     (g := Multiplicative.ofAdd (1, 0)) (h := Multiplicative.ofAdd (0, 1)) ?_ ?_
   · rfl

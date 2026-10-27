@@ -24,6 +24,30 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Matrices of submodule orthogonal projections — promoted (2026-10-26)
+
+- **Pattern:** Form `Matrix.toEuclideanLin.symm W.starProjection.toLinearMap`
+  and prove that it is Hermitian and idempotent, either separately or by
+  transporting `isStarProjection_starProjection` through `Matrix.toEuclideanCLM`.
+- **Defined in:** `TNLean/Algebra/SubmoduleStarProjectionMatrix.lean`,
+  `Submodule.starProjectionMatrix`, `Submodule.isStarProjection_starProjectionMatrix`,
+  and the evaluation lemma `Submodule.toEuclideanLin_starProjectionMatrix`.
+- **Refactored occurrences:** six existing modules:
+  `MPS/AreaLaw/SequentialTruncation.lean`,
+  `MPS/AreaLaw/ViableSet/Basic.lean`,
+  `MPS/ParentHamiltonian/PrimitiveQuasiLocalUniqueness.lean`,
+  `MPS/FundamentalTheorem/Reduction/StationarySplitting.lean`,
+  `PEPS/ParentHamiltonian/CoordinateRangeProjector.lean`, and
+  `PEPS/ParentHamiltonian/RegionParentHamiltonian.lean`.
+- **Notes:** The helper keeps the linear-map definition used by rank and range
+  calculations. Public wrappers retain their existing linear- or continuous-map
+  definitions for downstream explicit rewrites; their star-projection proofs use
+  the same helper by definitional equality. Public statements are unchanged.
+  The six consumer files shrink by 34 lines; the 41-line helper and one generated
+  aggregator import give a net production increase of 8 lines, plus regression
+  coverage. The `ViableSet/Basic.lean` consumer introduced by PR #10182 is included;
+  its former candidate entry is consolidated here. Tracked in #10192.
+
 ### Tensor forms from product generators — promoted (2026-10-23)
 
 - **Pattern:** Establish a linear tensor form for every product generator,
@@ -4924,6 +4948,19 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Simultaneous regional factors for a supported family — candidate (2026-10-26)
+
+- **Pattern:** Classify each ordinary term into one of three regions, choose
+  its single-region factor and put zero in the other two positions. Choose
+  these factors over the entire finite family at once.
+- **Seen:** `MPS/AreaLaw/TwoCutOperatorForms.lean` and
+  `MPS/AreaLaw/TwoWindowOperatorForms.lean`.
+- **Abstraction:** Both use the existing three regional factor lemmas and
+  `choose`; there are two occurrences across two files.
+- **Notes:** The latter family has three independently supplied bulk terms.
+  A third occurrence would justify separating this common finite-family
+  argument from its geometric support classification.
+
 ### Uniform bounds for sums of natural powers — candidate (2026-10-26)
 
 - **Pattern:** Bound each term by monotonicity of natural powers, then replace
@@ -7119,20 +7156,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   `v T₀ + 15 + r ≤ K / 2`, which concludes the displayed inequality for any `‖W‖ ≤ 1`.
 - **Notes:** promote at a third occurrence, for example a reset filter on another domain.
 
-
-### Matrix of an orthogonal projection is a star projection — candidate (2026-10-25)
-- **Pattern:** `Matrix.toEuclideanLin.symm W.starProjection.toLinearMap` for a submodule `W` of
-  `EuclideanSpace`, followed by the same proof that it is a star projection (Hermitian and
-  idempotent) via `Submodule.isIdempotentElem_starProjection` and self-adjointness.
-- **Seen:** 5 or more occurrences across 4 or more files:
-  `TNLean/MPS/AreaLaw/SequentialTruncation.lean` (`prefixBasisProjection` and its private
-  star-projection lemma), `TNLean/MPS/AreaLaw/ViableSet/Basic.lean` (`spanProjection`,
-  `isStarProjection_spanProjection`), `TNLean/MPS/ParentHamiltonian/PrimitiveQuasiLocalUniqueness.lean`,
-  and the matrix constructions in `StationarySplitting`, `RegionParentHamiltonian` and
-  `CoordinateRangeProjector`.
-- **Abstraction:** proposed `Submodule.starProjectionMatrix W` with
-  `isStarProjection_starProjectionMatrix` in `TNLean/Algebra/`.
-- **Notes:** meets the rule of three; the refactor of the call sites is tracked in #10192.
 
 ## Rejected
 
