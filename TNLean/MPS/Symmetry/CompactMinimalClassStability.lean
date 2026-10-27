@@ -115,9 +115,8 @@ theorem eventually_cohomologousTo_of_tendsto_periodic_ray_sequence
       groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
         (groupCohomology.cocyclesOfIsMulCocycle₂
           (ScalarCocycle.isMulCocycle₂_of_projRep (ρ₀) (NeZero.pos D))) := by
-  suffices h : ∀ᶠ n in atTop, groupCohomology.IsMulCoboundary₂ (ω n / ω₀) by
-    exact h.mono fun n ht ↦
-      (H2π_eq_iff_isMulCoboundary₂_div _ _).mpr ht
+  apply (Filter.eventually_congr (.of_forall fun _ ↦
+    H2π_eq_iff_isMulCoboundary₂_div _ _)).mpr
   classical
   by_contra hClass
   obtain ⟨ψ, hψ, hBad⟩ := exists_seq_forall_of_frequently
@@ -238,9 +237,8 @@ theorem eventually_cohomologousTo_of_continuousAt_bounded_unital_periodic_rays
       groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
         (groupCohomology.cocyclesOfIsMulCocycle₂
           (ScalarCocycle.isMulCocycle₂_of_projRep (ρ t₀) (hDPos t₀))) := by
-  suffices h : ∀ᶠ t in 𝓝 t₀, groupCohomology.IsMulCoboundary₂ (ω t / ω t₀) by
-    exact h.mono fun t ht ↦
-      (H2π_eq_iff_isMulCoboundary₂_div _ _).mpr ht
+  apply (Filter.eventually_congr (.of_forall fun _ ↦
+    H2π_eq_iff_isMulCoboundary₂_div _ _)).mpr
   classical
   by_contra hClass
   obtain ⟨x, hx, hBad⟩ := exists_seq_forall_of_frequently

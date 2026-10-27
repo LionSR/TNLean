@@ -88,9 +88,11 @@ theorem H2π_eq_of_continuous_unital_supported_family
               (K 0) (σ 0) (hσ 0) (hsupport 0) (htrace 0)))) := by
   apply (H2π_eq_iff_isMulCoboundary₂_div _ _).mpr
   exact isMulCoboundary₂_div_of_eventually_at_all_points ω
-    (fun t₀ ↦ (eventually_cohomologousTo_of_continuous_unital_supported_family
-      D ω ρ B hB hUnital σ hσ htrace hfix K hK hsupport A hA hUnitary U hCov
-        t₀ (hdim t₀) (hInj t₀)).mono
-          (fun t ht ↦ (H2π_eq_iff_isMulCoboundary₂_div _ _).mp ht)) 1 0
+    (fun t₀ ↦ by
+      apply (Filter.eventually_congr (.of_forall fun _ ↦
+        H2π_eq_iff_isMulCoboundary₂_div _ _)).mp
+      exact eventually_cohomologousTo_of_continuous_unital_supported_family
+        D ω ρ B hB hUnital σ hσ htrace hfix K hK hsupport A hA hUnitary U hCov
+        t₀ (hdim t₀) (hInj t₀)) 1 0
 
 end MPSTensor
