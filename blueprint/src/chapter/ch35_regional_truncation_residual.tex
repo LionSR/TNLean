@@ -9,8 +9,7 @@
     Set $A_j=\sum_{i\in I(k_j,k_{j+1})}h_i$ and choose lower bounds
     $A_j\ge e_j\Id$. For $K\subseteq\{0,\ldots,m-1\}$ and real $t$ put
     \begin{align}
-        F_j&=\begin{cases}\min(A_j,e_j+t),&j\in K,\\A_j,&j\notin K,\end{cases}
-        &X&=\sum_j(F_j-e_j\Id).
+        F_j & =\begin{cases}\min(A_j,e_j+t),&j\in K,\\A_j,&j\notin K,\end{cases} & X & =\sum_j(F_j-e_j\Id).
     \end{align}
     Let $J\subseteq\mathcal B_L$, $Y=\sum_{i\in J}h_i$, and let $(b_v)$
     be an actual orthonormal eigenbasis of $X+Y$ with eigenvalues $a_v$.
@@ -20,7 +19,7 @@
     \begin{align}
         \bigl\|(A_j-\min(A_j,e_j+t))|_G\bigr\|
         \le\frac{e^{-s(t-u)-1}}{s}
-             \frac{2|J|}{u-\varepsilon-2|J|}.
+        \frac{2|J|}{u-\varepsilon-2|J|}.
     \end{align}
     The $e_j$ need only be lower bounds; their attainment is not assumed.
 \end{theorem}
