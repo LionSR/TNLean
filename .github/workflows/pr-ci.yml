@@ -75,6 +75,9 @@ on:
       - 'scripts/write_badges.py'
       - 'scripts/generate_badges.py'
       - 'scripts/test_badge_colors.py'
+      - 'scripts/campaign_board/collect.py'
+      - 'scripts/campaign_board/board.js'
+      - 'scripts/test_campaign_results.py'
       - 'scripts/test_blueprint_web_render.py'
       - 'scripts/test_blueprint_graph_worker.py'
       - 'scripts/test_blueprint_graph_precompute.py'
@@ -170,6 +173,9 @@ on:
       - 'scripts/write_badges.py'
       - 'scripts/generate_badges.py'
       - 'scripts/test_badge_colors.py'
+      - 'scripts/campaign_board/collect.py'
+      - 'scripts/campaign_board/board.js'
+      - 'scripts/test_campaign_results.py'
       - 'scripts/test_blueprint_web_render.py'
       - 'scripts/test_blueprint_graph_worker.py'
       - 'scripts/test_blueprint_graph_precompute.py'
@@ -235,6 +241,7 @@ jobs:
       paper_gaps: ${{ steps.filter.outputs.paper_gaps }}
       workflow: ${{ steps.filter.outputs.workflow }}
       coherent_prerequisites: ${{ steps.filter.outputs.coherent_prerequisites }}
+      campaign_results: ${{ steps.filter.outputs.campaign_results }}
     steps:
       - uses: dorny/paths-filter@v4
         id: filter
@@ -360,6 +367,11 @@ jobs:
               - 'texra-blueprint.toml'
               - 'scripts/paper_gap_leanid_sync.py'
               - 'scripts/test_paper_gap_leanid_sync.py'
+            campaign_results:
+              - 'scripts/campaign_board/collect.py'
+              - 'scripts/campaign_board/board.js'
+              - 'scripts/test_campaign_results.py'
+              - 'docs/campaign/README.md'
             workflow:
               - '.github/workflows/**'
               - '.github/dependabot.yml'
@@ -670,6 +682,31 @@ jobs:
               exit 1
               ;;
           esac
+
+  campaign-results:
+    name: Check campaign source results
+    needs: changes
+    if: |
+      !cancelled() && (
+        github.event_name != 'pull_request' ||
+        needs.changes.outputs.campaign_results == 'true' ||
+        needs.changes.outputs.workflow == 'true'
+      )
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - name: Check campaign JavaScript syntax
+        run: node --check scripts/campaign_board/board.js
+      - name: Test campaign source-result tables
+        run: python3 scripts/test_campaign_results.py
 
   file-length:
     name: Check Lean module policies
