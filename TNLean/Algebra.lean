@@ -43,6 +43,7 @@ import TNLean.Algebra.ConstantTracePowers
 import TNLean.Algebra.ContinuousIdempotentFrames
 import TNLean.Algebra.ContinuousNearbyIdempotent
 import TNLean.Algebra.ConvexWeightsCompactness
+import TNLean.Algebra.CoreWordCoefficients
 import TNLean.Algebra.CycleLaplacianFourier
 import TNLean.Algebra.CyclicInsertion
 import TNLean.Algebra.CyclicMomentRigidity
