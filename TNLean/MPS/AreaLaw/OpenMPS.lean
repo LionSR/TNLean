@@ -94,4 +94,13 @@ def IsOpenMPS (L q D : ℕ) (ψ : (Fin L → Fin q) → ℂ) : Prop :=
     (∀ k, 0 < k.val → k.val < L → A.bondDim k ≤ D) ∧
       ∀ x, ψ x = c * A.coeff x
 
+/-- Scaling a matrix product state multiplies its scalar endpoint cap. -/
+theorem IsOpenMPS.smul {L q D : ℕ} {ψ : (Fin L → Fin q) → ℂ}
+    (h : IsOpenMPS L q D ψ) (c : ℂ) :
+    IsOpenMPS L q D fun x ↦ c * ψ x := by
+  obtain ⟨A, a, hA, hψ⟩ := h
+  refine ⟨A, c * a, hA, fun x ↦ ?_⟩
+  change c * ψ x = _
+  rw [hψ x, mul_assoc]
+
 end TNLean.MPS.AreaLaw
