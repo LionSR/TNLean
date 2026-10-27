@@ -17,15 +17,7 @@ import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
 import Mathlib.Tactic.Abel
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
-import Mathlib.Analysis.Normed.Operator.Mul
 import Mathlib.Analysis.Normed.Algebra.Exponential
-import Mathlib.Analysis.Normed.Operator.Bilinear
-import Mathlib.Topology.Algebra.InfiniteSum.Module
-import Mathlib.Data.FunLike.IsApply
-import Mathlib.Analysis.Complex.Basic
-import Mathlib.Analysis.Normed.Group.InfiniteSum
-import Mathlib.Analysis.SpecificLimits.Basic
-import Mathlib.Tactic.Linarith
 
 /-!
 # Imaginary-time conjugation for nearest-neighbour Hamiltonians
