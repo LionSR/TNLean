@@ -88,9 +88,20 @@ theorem contractBondMatrix_toTensorFromBlocks {r : ℕ} {dim : Fin r → ℕ}
       Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv
         (Matrix.blockDiagonal' fun k ↦ μ k • contractBondMatrix (A k) X) := by
   ext p q
-  simp [contractBondMatrix, toTensorFromBlocks, Matrix.reindex_apply,
-    Matrix.blockDiagonal'_apply, Matrix.sum_apply, Matrix.smul_apply,
-    Finset.mul_sum, mul_left_comm]
+  obtain ⟨⟨i, p⟩, rfl⟩ := finSigmaFinEquiv.surjective p
+  obtain ⟨⟨j, q⟩, rfl⟩ := finSigmaFinEquiv.surjective q
+  by_cases h : i = j
+  · subst j
+    simp only [contractBondMatrix_apply, toTensorFromBlocks, Matrix.reindex_apply,
+      Matrix.submatrix_apply, Equiv.symm_apply_apply, Matrix.sum_apply,
+      Matrix.smul_apply, Matrix.blockDiagonal'_apply_eq, smul_eq_mul, Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro ab _
+    exact mul_left_comm _ _ _
+  · simp only [contractBondMatrix_apply, toTensorFromBlocks, Matrix.reindex_apply,
+      Matrix.submatrix_apply, Equiv.symm_apply_apply, Matrix.sum_apply,
+      Matrix.smul_apply, Matrix.blockDiagonal'_apply_ne _ _ _ h,
+      smul_eq_mul, mul_zero, Finset.sum_const_zero]
 
 end MPSTensor
 

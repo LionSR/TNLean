@@ -230,7 +230,8 @@ theorem TemplatePolygon.mem_region_iff_normal_bounds (P : TemplatePolygon) (p : 
       change Convex ℝ (f ⁻¹' Set.Icc l r)
       exact (convex_Icc l r).linear_preimage f
     rw [P.region_eq_convexHull_vertices] at hp
-    exact convexHull_min hv hc hp
+    apply convexHull_min ?_ hc hp
+    exact fun q hq ↦ hv q hq
   · intro h
     cases P with
     | triangle a b c hd hab hbc hca =>

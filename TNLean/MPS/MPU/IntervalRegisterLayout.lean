@@ -30,7 +30,7 @@ namespace MPUCircuit
 left boundary bond on side one, and the right boundary bond on side zero.
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
-def intervalLogicalSupport (d D N j k : ℕ) : Set (LogicalSite d D N)
+def intervalLogicalSupport (d D N j k : ℕ) : Set (LogicalSite d D N) := Set.ofPred fun
   | Sum.inl s => j ≤ s.val ∧ s.val < k
   | Sum.inr (Sum.inl (c, side, _)) =>
       (j < (internalCutEmbedding N c).val ∧ (internalCutEmbedding N c).val < k) ∨
@@ -42,7 +42,7 @@ def intervalLogicalSupport (d D N j k : ℕ) : Set (LogicalSite d D N)
 /-- The two amplification flags at the joining cut.
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
-def joiningFlagSupport (d D N m : ℕ) : Set (LogicalSite d D N)
+def joiningFlagSupport (d D N m : ℕ) : Set (LogicalSite d D N) := Set.ofPred fun
   | Sum.inr (Sum.inr (c, _)) => (internalCutEmbedding N c).val = m
   | _ => False
 
@@ -375,7 +375,7 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 the interval construction.
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
-def intervalInteriorAuxiliarySupport (d D N j k : ℕ) : Set (LogicalSite d D N)
+def intervalInteriorAuxiliarySupport (d D N j k : ℕ) : Set (LogicalSite d D N) := Set.ofPred fun
   | Sum.inl _ => False
   | Sum.inr (Sum.inl (c, _, _)) =>
       j < (internalCutEmbedding N c).val ∧ (internalCutEmbedding N c).val < k
@@ -385,7 +385,7 @@ def intervalInteriorAuxiliarySupport (d D N j k : ℕ) : Set (LogicalSite d D N)
 /-- All bond and flag sites at the joining cut.
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
-def joiningAuxiliarySupport (d D N m : ℕ) : Set (LogicalSite d D N)
+def joiningAuxiliarySupport (d D N m : ℕ) : Set (LogicalSite d D N) := Set.ofPred fun
   | Sum.inl _ => False
   | Sum.inr (Sum.inl (c, _, _)) => (internalCutEmbedding N c).val = m
   | Sum.inr (Sum.inr (c, _)) => (internalCutEmbedding N c).val = m

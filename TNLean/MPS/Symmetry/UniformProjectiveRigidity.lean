@@ -69,7 +69,7 @@ private theorem exists_common_fixedPoint_in_closedConvexHull
   let S := closedConvexHull ℝ O
   have hSmap : ∀ i, Set.MapsTo (f i) S S := by
     intro i
-    exact closedConvexHull_min
+    exact closedConvexHull_min (t := (f i) ⁻¹' S)
       (fun y hy => subset_closedConvexHull (hmap i hy))
       (convex_closedConvexHull.linear_preimage (f i).toLinearMap)
       (isClosed_closedConvexHull.preimage (f i).continuous)

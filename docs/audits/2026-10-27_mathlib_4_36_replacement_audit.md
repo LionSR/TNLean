@@ -157,3 +157,37 @@ group supplies the extended norm and topology; no global alias, shadow norm
 or extra hypothesis is introduced. All other bytes of both Lean modules are
 unchanged. Target elaboration and its dependent Gaussian-law checks remain
 required; source comparison alone does not certify instance synthesis.
+
+### Further native API compatibility
+
+- `ScalarThreeCocycleCyclicClass` uses `Rep.norm.asHom.hom`, the accessor in
+  `Mathlib/RepresentationTheory/Rep/Basic.lean` (`Rep.norm_apply`). This exposes
+  the same norm linear map and kernel; the cyclic cohomology statements and
+  hypotheses are unchanged. No degree-three structure migration is included.
+- The four support sets in `IntervalRegisterLayout` now wrap their existing
+  pattern predicates with `Set.ofPred`, matching `Mathlib/Data/Set/Defs.lean`.
+  Their membership conditions, public types and subsequent proofs are unchanged.
+- `StringOrderDefs` supplies a proof-local `IsNormableSpace` witness using
+  `normSeminorm` and `norm_withSeminorms` from
+  `Mathlib/Analysis/LocallyConvex/WithSeminorms.lean`. It uses the existing
+  `TNOperatorSpace` matrix norm and topology, without selecting a new norm.
+- `UniformProjectiveRigidity` explicitly supplies the preimage target set to
+  `closedConvexHull_min` (`Mathlib/Analysis/Convex/Topology.lean`), preserving
+  the original orbit-invariance argument and all assumptions.
+- `VerticalBoundaryContraction` splits the entries of the weighted block sum
+  into equal and unequal block indices, using `Matrix.blockDiagonal'_apply_eq`
+  and `Matrix.blockDiagonal'_apply_ne` from `Mathlib/Data/Matrix/Block.lean`.
+  On diagonal blocks, `Finset.mul_sum` and one `mul_left_comm` per summand give
+  the original contraction identity; off-diagonal entries are zero. This
+  replaces broad associative-commutative simplification without changing the
+  mathematical statement or introducing a heartbeat override.
+
+These compatibility derivations are source-reviewed; their Lean elaboration
+remains to be validated. They introduce no replacement wrappers or aliases.
+
+The accompanying circuit and geometry repairs use `Disjoint.subset_compl_left`
+for the unchanged support inclusion and explicitly introduce the vertex argument
+for `convexHull_min`. `MeasurementRound.outputs` and `edgeLens` are marked
+`noncomputable` because their existing definitions use noncomputable Kraus
+operators and real division respectively. These qualifiers change executability,
+not their mathematical values or types; no hypotheses or source references change.

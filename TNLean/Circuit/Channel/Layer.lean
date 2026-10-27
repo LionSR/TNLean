@@ -417,7 +417,7 @@ theorem dual_mul (L : BondChannelLayer d bond) {X Y : Set ι}
   have hA' : A ∈ supportedOperators d Xᶜᶜ := by rwa [compl_compl]
   have hQB := L.partialDual_mem_supportedOperators
     (L.bonds.filter fun k ↦ ¬ (bond k ∩ X).Nonempty) (Finset.filter_subset _ _) hB
-  have hQB' := supportedOperators_mono (fun _ hy hx ↦ Set.disjoint_left.mp hXY hx hy) hQB
+  have hQB' := supportedOperators_mono hXY.subset_compl_left hQB
   rw [dual, L.partialDual_eq_filter_mul L.bonds subset_rfl fun k ↦ (bond k ∩ X).Nonempty]
   simp only [Module.End.mul_apply]
   rw [hQ.map_mul_left B A hA', hP.map_mul_right A _ hQB', hQ.map_eq_self A hA',
