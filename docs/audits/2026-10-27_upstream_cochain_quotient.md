@@ -12,6 +12,7 @@ arguments. It does not close the whole migration gate.
 | `TNLean.Algebra.scalarCocycleSetoid` | The quotient by `groupCohomology.coboundaries₂ (Rep.ofMulDistribMulAction G ℂˣ)` of all additive-valued two-cochains |
 | `TNLean.Algebra.ScalarCocycle.cohomologousTo_of_eventually_at_all_points` | `TNLean.Algebra.isMulCoboundary₂_div_of_eventually_at_all_points` |
 | `MPSTensor.cohomologousTo_of_continuous_unital_supported_family` | `MPSTensor.isMulCoboundary₂_div_of_continuous_unital_supported_family` |
+| Private `MPSTensor.cohomologousTo_of_locally_constant_classes` | The shared `TNLean.Algebra.isMulCoboundary₂_div_of_eventually_at_all_points` |
 
 No local quotient type, setoid, abbreviation, or compatibility alias replaces
 the removed instance. The endpoint declaration tags in chapter 12 are
