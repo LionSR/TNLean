@@ -42,7 +42,7 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
         (U_m u)(b,j) & =u(r(b),j). \notag
     \end{align}
     These are the left coordinates of the vectors used in the size-trimming
-    program and Lemma~2.5 of~\cite[source lines 472--478 and 493--505]{Landau2015Polynomial}.
+    program and~\cite[Lemma~2.5, source lines 472--478 and 493--505]{Landau2015Polynomial}.
 \end{definition}
 
 \begin{theorem}[Dimension of the intervening configuration space]
@@ -65,7 +65,7 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     \label{thm:chain_gluing_left_projection}
     \lean{TNLean.MPS.AreaLaw.gluingLeftCoordinates_spanProjection_eq_iff}
     \leanok
-    \uses{def:chain_gluing_left_coordinates}
+    \uses{def:chain_gluing_left_coordinates,thm:lvv_viable_projection}
     Let $S\subseteq\mathbb C^{\mathcal C_B}$, let $P$ be the orthogonal
     projection onto $\operatorname{Span}(S)$, and define $P^r$ by
     $P^r(r(b),r(b'))=P(b,b')$. For every vector $u$ on the two left regions
@@ -78,9 +78,13 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
 \end{theorem}
 \begin{proof}
     \leanok
-    Changing the row and column coordinates of $P\otimes1_m$ by
-    $r\times\mathrm{id}$ gives $P^r\otimes1_m$. Composing with this
-    bijection gives the asserted equivalence of the fixed-vector conditions.
+    Since $(U_m u)(b,j)=u(r(b),j)$ and $P^r(r(b),r(b'))=P(b,b')$,
+    \begin{align}
+        U_m^{-1}(P\otimes1_m)U_m & =P^r\otimes1_m. \notag
+    \end{align}
+    Hence $(P^r\otimes1_m)u=u$ if and only if
+    $U_m^{-1}(P\otimes1_m)U_m u=u$, that is,
+    $(P\otimes1_m)U_m u=U_m u$.
 \end{proof}
 
 \begin{theorem}[Extension after joining the left coordinates]
