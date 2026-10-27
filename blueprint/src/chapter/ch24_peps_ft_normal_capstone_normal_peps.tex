@@ -378,13 +378,14 @@ product states, and the square lattice.
     \label{def:peps_physical_tensor_action}
     \lean{TNLean.PEPS.physicalTensorAction}
     \lean{TNLean.PEPS.stateCoeff_physicalTensorAction}
+    \leanok
 
     For a tensor $A$ on a finite simple graph with vertex set $V$ and a
     matrix $U\in\MN{d}$, define $B=U\cdot A$ by keeping all bond spaces
     and setting $B_v(\eta,\sigma)=\sum_\tau U_{\sigma\tau}A_v(\eta,\tau)$.
     Its state is $\Coeff_B=U^{\otimes V}\Coeff_A$.
 \end{definition}
-\begin{proof}
+\begin{proof}\leanok
     Expand the local matrix products in the contraction and exchange the
     finite sums. The product of the physical coefficients is
     $\prod_vU_{\sigma_v\tau_v}$, giving the stated product action.
@@ -393,12 +394,13 @@ product states, and the square lattice.
 \begin{theorem}[Positive physical dimension from an injective region]%
     \label{thm:peps_physical_dimension_pos_of_region}
     \lean{TNLean.PEPS.physicalDim_pos_of_nonempty_injectiveRegion}
+    \leanok
 
     \uses{def:peps_regionInjectivityDataOf}
     If all virtual bond spaces are nonzero and a nonempty region is
     injective, then the common physical dimension $d$ is positive.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Positive bond dimensions give a boundary configuration. The blocked
     vector at that configuration is nonzero by linear independence.
     If $d=0$, a nonempty region has no physical configurations, so its
@@ -408,13 +410,14 @@ product states, and the square lattice.
 \begin{theorem}[Regional injectivity from the state and bond dimensions]%
     \label{thm:peps_regional_injectivity_from_state}
     \lean{TNLean.PEPS.regionBlockedTensorInjective_of_sameState_of_bondDim_eq}
+    \leanok
 
     \uses{def:peps_regionInjectivityDataOf, def:peps_region_partial_state}
     Let $A$ and $B$ have the same state and the same positive bond
     dimensions. If a region $R$ and its complement are injective for $A$,
     then $R$ is injective for $B$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Write $F_{A,R}$ and $F_{B,R}$ for the blocked maps from the common
     boundary space to the physical space of $R$. Injectivity of the
     complement for $A$ identifies the range of $F_{A,R}$ with the span of
@@ -429,6 +432,7 @@ product states, and the square lattice.
 \begin{definition}[Inherited normal pair blockings]%
     \label{def:peps_normal_pair_blockings_from_state}
     \lean{TNLean.PEPS.normalPairHypothesesOfSameStateOfBondDimEq}
+    \leanok
 
     \uses{def:peps_normalPEPSBlockingHypotheses, def:peps_normalPEPSPairHypotheses}
     Suppose $A$ admits the normal blocking regions of
@@ -436,7 +440,7 @@ product states, and the square lattice.
     virtual spaces. If $B$ has the same state and bond dimensions, the
     inherited pair blockings use exactly these regions for both tensors.
 \end{definition}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_regional_injectivity_from_state, lem:peps_injectiveRegion_union_pos}
     For each edge blocking, the complement of each of the three regions
     is the disjoint union of the other two, hence is injective for $A$.
@@ -449,6 +453,7 @@ product states, and the square lattice.
 \begin{theorem}[Virtual gauges for a normal on-site symmetry]%
     \label{thm:peps_normal_onsite_symmetry_gauge}
     \lean{TNLean.PEPS.gaugeEquiv_physicalTensorAction_of_normal_symmetry}
+    \leanok
 
     \uses{def:peps_physical_tensor_action, def:peps_normalPEPSBlockingHypotheses,
         def:GaugeEquivPEPS}
@@ -466,7 +471,7 @@ product states, and the square lattice.
     Connectivity is needed to absorb the component scalars, as recorded
     in~\cite{gap:peps_gaugeConsistency_connectivity_gap}.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:peps_physical_tensor_action, def:peps_normal_pair_blockings_from_state,
         thm:peps_physical_dimension_pos_of_region,
         thm:fundamentalTheorem_normalPEPS_connected}
