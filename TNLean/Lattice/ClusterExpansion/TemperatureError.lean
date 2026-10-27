@@ -92,8 +92,10 @@ large connected sets, with `y = (e^{Jβ/n} - 1) e^{SJβ/n}`.
 
 The source sums the bound `(1/m!) (∑_C n y^{n_C})^m ‖O‖` on `Z⁻¹ Tr (O ρ_m)` (lines 1334–1341)
 over `m ≥ 1`; here the words of `n` admissible families are summed directly, which gives the same
-exponential. The source's final form `exp((β/β₀) N exp(-l/ξ_perc)) - 1` then follows from the
-count of large connected sets (`norm_trace_mul_exp_sub_truncatedExp_pow_le_percolation`). -/
+exponential. Counting large connected sets gives `exp(n N exp(-l/ξ)) - 1`
+(`norm_trace_mul_exp_sub_truncatedExp_pow_le_percolation`), with the integer number `n` of
+factors in place of the source's `β/β₀` (lines 1342–1347). The correction is recorded in
+`docs/paper-gaps/hastings05_temperature_factor_count.tex`. -/
 theorem norm_trace_mul_exp_sub_truncatedExp_pow_le {H : Matrix ι ι ℂ} (hHerm : H.IsHermitian)
     {h : κ → Matrix ι ι ℂ} (hH : H = ∑ k, h k) (hh : ∀ k, (h k).IsHermitian) {J : ℝ}
     (hJ : ∀ k, ‖h k‖ ≤ J) (O : Matrix ι ι ℂ) {β : ℝ} (hβ : 0 ≤ β) {S : ℝ}
