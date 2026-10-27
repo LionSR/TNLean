@@ -10,7 +10,7 @@
 \date{}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source argument}
 Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
@@ -119,9 +119,9 @@ most $2\varepsilon_i\lVert h_j\rVert+2\lVert h_i\rVert\varepsilon_j$.\footnote{\
     in \doclink{TNLean/Lattice/TranslationSupercellCommutator}.}
 No hypothesis beyond the source's is assumed.
 
-\section{The remaining restriction}
+\section{The truncated terms}
 The errors $\varepsilon_i$ of eq.~\texttt{apb} depend on the truncation radius
-$l_{proj}$ and not on $n$, so the bound for the truncated $M_i$ is not
+$l_{proj}$ and not on $n$, so the bound above for the truncated $M_i$ is not
 exponentially small in $n$. The source avoids this by applying the Gaussian
 filter a second time to $M_i$ itself: the filter $\tilde M_i^0$ of $M_i$
 under $H$ satisfies
@@ -131,11 +131,16 @@ under $H$ satisfies
 \end{align}
 and the
 low-energy commutator of the $M_i$ obeys eq.~\texttt{blecm} directly
-(lines 1555--1601). Elimination: state eq.~\texttt{blecm} for the $M_i$ as
-operators supported within $l_{proj}$ of $i$, require the truncations to be
-covariant, $s_{g\cdot k}=g\cdot s_k$, so that $M_{g\cdot k}=P_gM_kP_g^\dagger$,
-and run the supercell argument above on the $M_i$. This step is tracked in
-issue~\#10177 of the TNLean repository.
+(lines 1555--1601). This is formalized. Each $M_i$ acts on a set $K_i\ni i$ of
+diameter at most $R'$; with covariant truncations, $s_{g\cdot k}=g\cdot s_k$,
+one has $M_{g\cdot k}=P_gM_kP_g^\dagger$, so $PM_{g\cdot j}P=PM_jP$ for $g$ in
+the supercell. Eq.~\texttt{blecm} applied to $M_i$ and $M_{g\cdot j}$ then
+bounds the low-energy commutator of the $M_i$ at every separation $l$ with
+$2R'+l+N\le\lfloor n/2\rfloor$, with no truncation error, which gives the
+conclusion of lines 1634--1641 for the source's
+$M_i$.\footnote{\leanid{TNLean.Lattice.truncatedTerm_smul} and
+    \leanid{TNLean.Lattice.norm_groundCompression_truncatedTerm_commutator_le_of_momenta}
+    in \doclink{TNLean/Lattice/TranslationSupercellTruncated}.}
 
 \section{A slip}
 At line 1638 the source writes the distance ``between $(\vec x_1,y_2)$ and

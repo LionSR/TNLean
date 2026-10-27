@@ -38,12 +38,9 @@ formalized separately, for the filtered terms `H_tilde_i`:
 * `TNLean.Lattice.norm_groundCompression_commutator_truncated_le_of_momenta`: the same bound,
   up to the truncation errors of eq. `apb`, for the truncated terms `M_i` of eq. `mid`.
 
-**Scope restriction (filtered terms):** the source's conclusion (lines 1634–1641) is for the
-truncated terms `M_i` of eq. `mid`, whose low-energy commutator obeys eq. `blecm` by filtering
-`M_i` itself a second time (lines 1555–1601). Here the exponential smallness in `n` is proved for
-the filtered terms `H_tilde_i`. For the `M_i` it holds only up to the truncation errors of
-eq. `apb`, which depend on the truncation radius and do not decrease with `n`. Documented in
-`docs/paper-gaps/hastings05_translation_supercell.tex`.
+For the source's truncated terms `M_i` themselves, eq. `blecm` applies to the `M_i` directly
+(lines 1555–1601), which `TranslationSupercellTruncated.lean` uses to prove the exponential
+smallness in `n` with no truncation error.
 -/
 
 open Matrix GaussianFilter QuantumCircuit
@@ -183,8 +180,8 @@ arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 285–307), and let `ε_i`, `ε_
 `‖H_tilde_i - M_i‖`, `‖H_tilde_j - M_j‖`, as eq. `apb` does
 (`norm_gaussianFilteredTerm_sub_truncated_le`). Then `‖[P M_i P, P M_j P]‖` is at most the bound of
 `norm_groundCompression_commutator_le_of_momenta` plus `2 ε_i ‖h_j‖ + 2 ‖h_i‖ ε_j`. The errors
-`ε` of eq. `apb` do not decrease with `n`, so this does not give the source's exponential
-smallness in `n` for the `M_i` (see the module's scope restriction). -/
+`ε` of eq. `apb` do not decrease with `n`; for the exponential smallness in `n` of the `M_i`
+see `norm_groundCompression_truncatedTerm_commutator_le_of_momenta`. -/
 theorem norm_groundCompression_commutator_truncated_le_of_momenta [NeZero d]
     (G : SimpleGraph ι) (X : ι → Finset ι) (hX : ∀ k, k ∈ X k)
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
