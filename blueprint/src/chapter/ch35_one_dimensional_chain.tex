@@ -101,10 +101,22 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
     \uses{def:chain_model}
     Diagonalize the marginal $\rho_0$ at site $0$, and let $U_0$ cyclically
     permute an orthonormal eigenbasis. Since $q\ge2$, this permutation has
-    no fixed point, so $\operatorname{tr}(\rho_0U_0)=0$. The lifted unitary
-    $K=U_0\otimes I$ sends $\Omega$ to a unit vector $\varphi$ orthogonal to
-    $\Omega$. Every term supported away from $0$ commutes with $K$ and
-    therefore has the same expectation in $\varphi$ and $\Omega$.
+    no fixed point, so $\operatorname{tr}(\rho_0U_0)=0$. Put $K=U_0\otimes I$
+    and $\varphi=K\Omega$. Since $K$ acts only on site $0$ and is unitary,
+    \begin{align}
+        \langle\Omega,\varphi\rangle & =\langle\Omega,K\Omega\rangle
+        =\operatorname{tr}(\rho_0U_0)=0,\notag                    \\
+        \lVert\varphi\rVert            & =\lVert K\Omega\rVert
+        =\lVert\Omega\rVert=1.\notag
+    \end{align}
+    If $0\notin X$, then $h_X$ acts as the identity on site $0$, so
+    $K^\dagger h_XK=h_X$ and
+    \begin{align}
+        \langle\varphi,h_X\varphi\rangle
+        =\langle K\Omega,h_XK\Omega\rangle
+        =\langle\Omega,K^\dagger h_XK\Omega\rangle
+        =\langle\Omega,h_X\Omega\rangle.\notag
+    \end{align}
     At most two range-one supports contain $0$: the singleton $\{0\}$ and,
     when it exists, the edge $\{0,1\}$. Each expectation changes by at most
     $2J$. The gap inequality gives
