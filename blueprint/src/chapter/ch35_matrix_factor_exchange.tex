@@ -9,19 +9,23 @@ algebra; they impose no ordering or bond bound on the matrices.
     \label{def:chain_middle_factor_exchange}
     \lean{Matrix.middleFactorExchangeEquiv,Matrix.exchangedMiddleFactor,Matrix.exchangedMiddleFamily}
     \leanok
-    Let $A,B$ be finite sets, let $C,O$ be arbitrary sets, and let $R$ be a
-    semiring. Write $E_{uv}$ for a standard matrix unit. Define the bijection
+    Let $A,B,C,O$ be arbitrary sets. Define the bijection
     \begin{align}
         \Phi\colon (B\times O)\times(A\times C)
                       & \longrightarrow(A\times O)\times(B\times C),\notag \\
         ((b,o),(a,c)) & \longmapsto((a,o),(b,c)).\notag
     \end{align}
-    For a matrix $X$ on $Y\times Z$, let $X[y,y']$ denote the matrix on $Z$
-    with entries $X[y,y']_{z,z'}=X_{(y,z),(y',z')}$. For $V$ on $A\times C$, set
+    Let $R$ be a set with distinguished elements $0,1$ and a binary
+    multiplication. For arbitrary sets $Y,Z$ and a matrix $X$ on $Y\times Z$
+    over $R$, write $X^{\mathrm R}_{yy'}$ for the matrix on $Z$ with entries
+    $(X^{\mathrm R}_{yy'})_{z,z'}=X_{(y,z),(y',z')}$.
+    Suppose equality on $B$ is decidable, and write $E_{bb'}$ for the
+    standard matrix unit on $B$. For $V$ on $A\times C$, set
     \begin{align}
-        V_{a,a',b,b'}=E_{bb'}\otimes V[a,a'].\notag
+        V_{a,a',b,b'}=E_{bb'}\otimes V^{\mathrm R}_{aa'}.\notag
     \end{align}
-    For a family $(V_t)_{t\in I}$, apply this definition to each $V_t$.
+    For an arbitrary index set $I$ and a family $(V_t)_{t\in I}$, apply
+    this definition to each $V_t$.
     The resulting family depends only on the original middle matrices.
 \end{definition}
 
@@ -30,12 +34,13 @@ algebra; they impose no ordering or bond bound on the matrices.
     \lean{Matrix.reindex_kronecker_middleFactorExchange,Matrix.reindex_sum_kronecker_middleFactorExchange}
     \leanok
     \uses{def:chain_middle_factor_exchange}
-    Let $M$ be a matrix on $B\times O$ and $V$ a matrix on $A\times C$,
+    Let $A,B$ be finite sets, let $C,O$ be arbitrary sets, and let $R$ be a
+    semiring. Let $M$ be a matrix on $B\times O$ and $V$ a matrix on $A\times C$,
     both over $R$. Transporting both indices by $\Phi$ gives
     \begin{align}
         (M\otimes V)^\Phi
          & =\sum_{a,a'\in A}\sum_{b,b'\in B}
-        \bigl(E_{aa'}\otimes M[b,b']\bigr)\otimes V_{a,a',b,b'}.\notag
+        \bigl(E_{aa'}\otimes M^{\mathrm R}_{bb'}\bigr)\otimes V_{a,a',b,b'}.\notag
     \end{align}
     For a finite index set $I$ and prescribed matrices $V_t$, the same
     family $(V_{t,a,a',b,b'})$ therefore gives such a decomposition of
@@ -59,8 +64,8 @@ algebra; they impose no ordering or bond bound on the matrices.
     \lean{Matrix.card_exchangedMiddleFamily_index}
     \leanok
     \uses{def:chain_middle_factor_exchange}
-    If $I$ is finite, the prescribed family has $|I|\,|A|^2|B|^2$ indexed terms, including
-    repetitions and zero matrices.
+    If $I,A,B$ are finite, the prescribed family has $|I|\,|A|^2|B|^2$ indexed
+    terms, including repetitions and zero matrices.
 \end{theorem}
 \begin{proof}\leanok
     Its index set is $I\times(A\times A)\times(B\times B)$; take cardinalities.
