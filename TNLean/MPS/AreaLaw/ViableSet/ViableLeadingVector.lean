@@ -22,8 +22,10 @@ lines 472–476, and Lemma `l:leading`, lines 493–505, using Lemma `l:within`,
 **Scope restriction (nontrivial chains and bond bound):** The theorem assumes `0 < L` and
 `2 ≤ q` and uses the library bound `constantCutBond q 1 1 Δ c`. Its dependence on dimension
 and gap is documented in `docs/paper-gaps/lvv13_constant_bond.tex`; the source's quantitative
-AKLV bound remains separate. The theorem concerns a point close to the actual boundary
-state, without a finite-net or viable-set cardinality assertion.
+AKLV bound remains separate.
+
+The theorem concerns a point close to the actual boundary state. It makes no finite-net or
+viable-set cardinality assertion; that is a separate statement of the source.
 -/
 
 open Matrix
