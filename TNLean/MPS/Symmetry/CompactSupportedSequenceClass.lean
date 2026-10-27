@@ -30,6 +30,8 @@ set_option linter.mathlibStandardSet true
 open scoped Matrix ComplexOrder Topology OnePoint
 open Filter TNLean.Algebra
 
+open scoped TNLean.Algebra.ScalarCohomology
+
 namespace MPSTensor
 
 private theorem eventually_class_of_unital_sequence_supported_limit
@@ -59,7 +61,17 @@ private theorem eventually_class_of_unital_sequence_supported_limit
     (hCov₀ : ∀ g, rotatePhysical (U g) C = fun i =>
       (ρ₀.X (g⁻¹) : Matrix (Fin E) (Fin E) ℂ) * C i *
         (ρ₀.X (g⁻¹) : Matrix (Fin E) (Fin E) ℂ)ᴴ) :
-    ∀ᶠ n in atTop, (ω n).CohomologousTo ω₀ := by
+    ∀ᶠ n in atTop, groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ n) (by
+            apply Nat.pos_of_ne_zero
+            intro hk
+            subst k
+            simpa only [Matrix.trace_fin_zero, zero_ne_one] using hτTrace))) =
+      groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep ρ₀
+            (Matrix.supportFrame_dimension_pos_of_trace_one K τ hτ hSupport hτTrace))) := by
   let ambient := OnePoint.continuousMapMkNat B b hB
   let dim : OnePoint ℕ → ℕ := OnePoint.rec E (fun _ => k)
   let factor : OnePoint ℕ → ScalarCocycle G := OnePoint.rec ω₀ ω
@@ -131,7 +143,16 @@ theorem eventually_cohomologousTo_of_tendsto_unital_periodic_lines
     (hCov₀ : ∀ g, rotatePhysical (U g) A = fun i =>
       (ρ₀.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A i *
         (ρ₀.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ)ᴴ) :
-    ∀ᶠ n in atTop, (ω n).CohomologousTo ω₀ := by
+    ∀ᶠ n in atTop, groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ n) (by
+            apply Nat.pos_of_ne_zero
+            intro hk
+            subst k
+            simpa only [Matrix.trace_fin_zero, zero_ne_one] using hτTrace))) =
+      groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ₀) (NeZero.pos D))) := by
   have hk : k ≠ 0 := by
     intro hzero
     subst k

@@ -40,6 +40,8 @@ set_option linter.mathlibStandardSet true
 open scoped Matrix ComplexOrder Topology
 open Filter TNLean.Algebra
 
+open scoped TNLean.Algebra.ScalarCohomology
+
 namespace MPSTensor
 
 /-- Stationary support invariance makes the adjoint transfer map intertwine
@@ -138,7 +140,7 @@ private theorem eventually_class_of_continuousAt_pointwise_compression
     (C : T → MPSTensor d r) (hC : ContinuousOn C S)
     (t₀ : T) (ht₀ : t₀ ∈ S) (hInj : Kraus.IsInjective (C t₀))
     (hCompress : ∀ t ∈ S, ∀ i, C t i = (J t)ᴴ * A t i * J t) :
-    ∀ᶠ t in 𝓝 t₀, (ω t).CohomologousTo (ω t₀) := by
+    ∀ᶠ t in 𝓝 t₀, groupCohomology.IsMulCoboundary₂ (ω t / ω t₀) := by
   let : NeZero r := ⟨Nat.ne_of_gt hr⟩
   choose σ hσ hσUnitary using fun t : S =>
     (ρ t).exists_unitary_compression (J t) (hJ t t.property)
@@ -161,7 +163,7 @@ private theorem eventually_class_of_continuousAt_pointwise_compression
   have hNhds : Filter.map ((↑) : S → T) (𝓝 (⟨t₀, ht₀⟩ : S)) = 𝓝 t₀ :=
     map_nhds_subtype_coe_eq_nhds ht₀ (hSopen.mem_nhds ht₀)
   rw [← hNhds]
-  exact hClass
+  exact hClass.mono fun t ht ↦ (H2π_eq_iff_isMulCoboundary₂_div _ _).mp ht
 
 
 end MPSTensor
@@ -227,7 +229,19 @@ theorem eventually_cohomologousTo_of_continuousOn_unique_stationary_density
       ((ρ t).X (g⁻¹) : Matrix (Fin (D t)) (Fin (D t)) ℂ) * A t i *
         ((ρ t).X (g⁻¹) : Matrix (Fin (D t)) (Fin (D t)) ℂ)ᴴ)
     (t₀ : T) (ht₀S : t₀ ∈ S) (hInj : Kraus.IsInjective (A t₀)) :
-    ∀ᶠ t in 𝓝 t₀, (ω t).CohomologousTo (ω t₀) := by
+    ∀ᶠ t in 𝓝 t₀, groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ t)
+            (Matrix.supportFrame_dimension_pos_of_trace_one
+              (K t) (σ t) (hσ t) (hsupport t) (htrace t)))) =
+      groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ t₀)
+            (Matrix.supportFrame_dimension_pos_of_trace_one
+              (K t₀) (σ t₀) (hσ t₀) (hsupport t₀) (htrace t₀)))) := by
+  suffices h : ∀ᶠ t in 𝓝 t₀, groupCohomology.IsMulCoboundary₂ (ω t / ω t₀) by
+    exact h.mono fun t ht ↦
+      (H2π_eq_iff_isMulCoboundary₂_div _ _).mpr ht
   have hD : 0 < D t₀ := Matrix.supportFrame_dimension_pos_of_trace_one
     (K t₀) (σ t₀) (hσ t₀) (hsupport t₀) (htrace t₀)
   obtain ⟨a, b, R, ha, hab, hRopen, ht₀, hRS, hJcont, hJ₀, hJ⟩ :=
@@ -307,7 +321,16 @@ theorem eventually_cohomologousTo_of_continuous_unique_stationary_density
       ((ρ t).X (g⁻¹) : Matrix (Fin (D t)) (Fin (D t)) ℂ) * A t i *
         ((ρ t).X (g⁻¹) : Matrix (Fin (D t)) (Fin (D t)) ℂ)ᴴ)
     (t₀ : T) (hInj : Kraus.IsInjective (A t₀)) :
-    ∀ᶠ t in 𝓝 t₀, (ω t).CohomologousTo (ω t₀) :=
+    ∀ᶠ t in 𝓝 t₀, groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ t)
+            (Matrix.supportFrame_dimension_pos_of_trace_one
+              (K t) (σ t) (hσ t) (hsupport t) (htrace t)))) =
+      groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ t₀)
+            (Matrix.supportFrame_dimension_pos_of_trace_one
+              (K t₀) (σ t₀) (hσ t₀) (hsupport t₀) (htrace t₀)))) :=
   eventually_cohomologousTo_of_continuousOn_unique_stationary_density
     D ω ρ B hB σ Set.univ isOpen_univ hσcont.continuousOn hσ htrace hfix
     (fun t _ => huniq t) K hK hsupport A hA hUnitary U hCov t₀ (Set.mem_univ t₀) hInj
@@ -344,7 +367,16 @@ theorem eventually_cohomologousTo_of_continuous_unital_supported_family
     (hdim : Module.finrank ℂ
       (LinearMap.ker (LinearMap.id - Kraus.adjointMapLM (B t₀))) = 1)
     (hInj : Kraus.IsInjective (A t₀)) :
-    ∀ᶠ t in 𝓝 t₀, (ω t).CohomologousTo (ω t₀) := by
+    ∀ᶠ t in 𝓝 t₀, groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ t)
+            (Matrix.supportFrame_dimension_pos_of_trace_one
+              (K t) (σ t) (hσ t) (hsupport t) (htrace t)))) =
+      groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ t₀)
+            (Matrix.supportFrame_dimension_pos_of_trace_one
+              (K t₀) (σ t₀) (hσ t₀) (hsupport t₀) (htrace t₀)))) := by
   let : NeZero k := ⟨by
     intro hk
     subst k
@@ -387,7 +419,16 @@ theorem eventually_cohomologousTo_of_continuousAt_unital_supported_family
     (hdim : Module.finrank ℂ
       (LinearMap.ker (LinearMap.id - Kraus.adjointMapLM (B t₀))) = 1)
     (hInj : Kraus.IsInjective (A t₀)) :
-    ∀ᶠ t in 𝓝 t₀, (ω t).CohomologousTo (ω t₀) := by
+    ∀ᶠ t in 𝓝 t₀, groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ t)
+            (Matrix.supportFrame_dimension_pos_of_trace_one
+              (K t) (σ t) (hσ t) (hsupport t) (htrace t)))) =
+      groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ t₀)
+            (Matrix.supportFrame_dimension_pos_of_trace_one
+              (K t₀) (σ t₀) (hσ t₀) (hsupport t₀) (htrace t₀)))) := by
   have hNhds : @nhds T (τ ⊓ TopologicalSpace.induced B inferInstance) t₀ =
       @nhds T τ t₀ := by
     rw [nhds_inf, nhds_induced, inf_eq_left]

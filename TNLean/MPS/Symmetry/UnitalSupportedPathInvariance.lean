@@ -53,7 +53,7 @@ support compression is injective at every parameter.
 
 This completes the local-to-global step in SPC11, Appendix C, for the explicitly
 supplied unital stationary-support data. -/
-theorem isMulCoboundary₂_div_of_continuous_unital_supported_family
+theorem H2π_eq_of_continuous_unital_supported_family
     {G : Type} [Group G] {d k : ℕ}
     (D : unitInterval → ℕ) (ω : unitInterval → ScalarCocycle G)
     (ρ : ∀ t, ProjectiveRepresentation (D := D t) (ω t))
@@ -76,11 +76,21 @@ theorem isMulCoboundary₂_div_of_continuous_unital_supported_family
     (hdim : ∀ t, Module.finrank ℂ
       (LinearMap.ker (LinearMap.id - Kraus.adjointMapLM (B t))) = 1)
     (hInj : ∀ t, Kraus.IsInjective (A t)) :
-    groupCohomology.IsMulCoboundary₂ (ω 1 / ω 0) :=
-  isMulCoboundary₂_div_of_eventually_at_all_points ω
+    groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ 1)
+            (Matrix.supportFrame_dimension_pos_of_trace_one
+              (K 1) (σ 1) (hσ 1) (hsupport 1) (htrace 1)))) =
+      groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ 0)
+            (Matrix.supportFrame_dimension_pos_of_trace_one
+              (K 0) (σ 0) (hσ 0) (hsupport 0) (htrace 0)))) := by
+  apply (H2π_eq_iff_isMulCoboundary₂_div _ _).mpr
+  exact isMulCoboundary₂_div_of_eventually_at_all_points ω
     (fun t₀ ↦ (eventually_cohomologousTo_of_continuous_unital_supported_family
       D ω ρ B hB hUnital σ hσ htrace hfix K hK hsupport A hA hUnitary U hCov
         t₀ (hdim t₀) (hInj t₀)).mono
-          (fun t ht ↦ (ScalarCocycle.cohomologousTo_iff_isMulCoboundary₂_div _ _).mp ht)) 1 0
+          (fun t ht ↦ (H2π_eq_iff_isMulCoboundary₂_div _ _).mp ht)) 1 0
 
 end MPSTensor

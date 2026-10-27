@@ -16,7 +16,7 @@ gauge preparation preceding the polar deformation.
 Source: arXiv:1010.3732, Sections II.C and II.F.2.
 -/
 
-open scoped Matrix
+open scoped Matrix TNLean.Algebra.ScalarCohomology
 
 namespace TNLean.Algebra.ProjectiveRepresentation
 
@@ -93,7 +93,10 @@ theorem cohomologousTo_of_smul_gaugeEquiv
     (hρ₁ : ∀ g i, twistedTensor B U g i =
       (ρ₁.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * B i *
         (((ρ₁.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) :
-    ω₁.CohomologousTo ω₀ := by
+    groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+      (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ (NeZero.pos D))) =
+    groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+      (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ (NeZero.pos D))) := by
   obtain ⟨Y, hY⟩ := hGauge
   exact cohomologousTo_of_isInjective B hB U (NeZero.pos D)
     (twistedTensor_covariance_of_smul_gauge U ρ₀ hρ₀ c Y hY) hρ₁

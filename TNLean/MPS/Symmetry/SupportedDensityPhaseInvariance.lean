@@ -30,6 +30,8 @@ set_option linter.mathlibStandardSet true
 open scoped Matrix ComplexOrder Topology
 open Filter TNLean.Algebra
 
+open scoped TNLean.Algebra.ScalarCohomology
+
 namespace MPSTensor
 
 /-- Continuous ambient tensors and positive bond densities determine a
@@ -61,7 +63,19 @@ theorem eventually_cohomologousTo_of_continuous_supported_density
       ((ρ t).X (g⁻¹) : Matrix (Fin (D t)) (Fin (D t)) ℂ) * A t i *
         ((ρ t).X (g⁻¹) : Matrix (Fin (D t)) (Fin (D t)) ℂ)ᴴ)
     (t₀ : unitInterval) (hInj : Kraus.IsInjective (A t₀)) :
-    ∀ᶠ t in 𝓝 t₀, (ω t).CohomologousTo (ω t₀) := by
+    ∀ᶠ t in 𝓝 t₀, groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ t)
+            (Matrix.supportFrame_dimension_pos_of_trace_one
+              (K t) (σ t) (hσ t) (hsupport t) (htrace t)))) =
+      groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ t₀)
+            (Matrix.supportFrame_dimension_pos_of_trace_one
+              (K t₀) (σ t₀) (hσ t₀) (hsupport t₀) (htrace t₀)))) := by
+  suffices h : ∀ᶠ t in 𝓝 t₀, groupCohomology.IsMulCoboundary₂ (ω t / ω t₀) by
+    exact h.mono fun t ht ↦
+      (H2π_eq_iff_isMulCoboundary₂_div _ _).mpr ht
   have hD : 0 < D t₀ := Matrix.supportFrame_dimension_pos_of_trace_one
     (K t₀) (σ t₀) (hσ t₀) (hsupport t₀) (htrace t₀)
   obtain ⟨a, b, S, ha, hab, hSopen, ht₀, hJcont, hJ₀, hJ⟩ :=

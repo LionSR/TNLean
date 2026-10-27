@@ -39,6 +39,8 @@ set_option linter.mathlibStandardSet true
 open scoped Matrix Matrix.Norms.Frobenius ComplexOrder Topology
 open Filter TNLean.Algebra
 
+open scoped TNLean.Algebra.ScalarCohomology
+
 namespace MPSTensor
 
 private theorem fixedSpace_finrank_of_irreducible_unital
@@ -107,11 +109,19 @@ theorem eventually_cohomologousTo_of_tendsto_periodic_ray_sequence
     (hCov₀ : ∀ g, rotatePhysical (U g) A = fun i =>
       (ρ₀.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A i *
         (ρ₀.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ)ᴴ) :
-    ∀ᶠ n in atTop, (ω n).CohomologousTo ω₀ := by
+    ∀ᶠ n in atTop, groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ n) (NeZero.pos k))) =
+      groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ₀) (NeZero.pos D))) := by
+  suffices h : ∀ᶠ n in atTop, groupCohomology.IsMulCoboundary₂ (ω n / ω₀) by
+    exact h.mono fun n ht ↦
+      (H2π_eq_iff_isMulCoboundary₂_div _ _).mpr ht
   classical
   by_contra hClass
   obtain ⟨ψ, hψ, hBad⟩ := exists_seq_forall_of_frequently
-    (show ∃ᶠ n in atTop, ¬ (ω n).CohomologousTo ω₀ from
+    (show ∃ᶠ n in atTop, ¬ groupCohomology.IsMulCoboundary₂ (ω n / ω₀) from
       not_eventually.mp hClass)
   choose σ hσ hσTrace hσFix using
     (fun n => exists_faithful_adjoint_density_of_irreducible_unital (hB n) (hBU n))
@@ -174,7 +184,7 @@ theorem eventually_cohomologousTo_of_tendsto_periodic_ray_sequence
     U (ω ∘ η) ω₀ (fun n => ρ (η n)) ρ₀ (fun n => hρ (η n)) hρ₀
     (fun n => hCov (η n)) hCov₀
   obtain ⟨n, hn⟩ := hGood.exists
-  exact hBad (φ n) hn
+  exact hBad (φ n) ((H2π_eq_iff_isMulCoboundary₂_div _ _).mp hn)
 
 end MPSTensor
 
@@ -222,11 +232,19 @@ theorem eventually_cohomologousTo_of_continuousAt_bounded_unital_periodic_rays
     (hCov : ∀ t g, rotatePhysical (U g) (A t) = fun i =>
       ((ρ t).X (g⁻¹) : Matrix (Fin (D t)) (Fin (D t)) ℂ) * A t i *
         ((ρ t).X (g⁻¹) : Matrix (Fin (D t)) (Fin (D t)) ℂ)ᴴ) :
-    ∀ᶠ t in 𝓝 t₀, (ω t).CohomologousTo (ω t₀) := by
+    ∀ᶠ t in 𝓝 t₀, groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ t) (hDPos t))) =
+      groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ t₀) (hDPos t₀))) := by
+  suffices h : ∀ᶠ t in 𝓝 t₀, groupCohomology.IsMulCoboundary₂ (ω t / ω t₀) by
+    exact h.mono fun t ht ↦
+      (H2π_eq_iff_isMulCoboundary₂_div _ _).mpr ht
   classical
   by_contra hClass
   obtain ⟨x, hx, hBad⟩ := exists_seq_forall_of_frequently
-    (show ∃ᶠ t in 𝓝 t₀, ¬ (ω t).CohomologousTo (ω t₀) from
+    (show ∃ᶠ t in 𝓝 t₀, ¬ groupCohomology.IsMulCoboundary₂ (ω t / ω t₀) from
       not_eventually.mp hClass)
   let dim : ℕ → Fin (M + 1) := fun n => ⟨D (x n), Nat.lt_succ_of_le (hDBound (x n))⟩
   obtain ⟨⟨k, hkBound⟩, hInfinite⟩ := Finite.exists_infinite_fiber dim
@@ -262,7 +280,7 @@ theorem eventually_cohomologousTo_of_continuousAt_bounded_unital_periodic_rays
     hBRay (hRay t₀) q hq hqOne (hSpec t₀) hBSpec U (ω ∘ t) (ω t₀)
     V (ρ t₀) hV (hρ t₀) hBCov (hCov t₀)
   obtain ⟨n, hn⟩ := hGood.exists
-  exact hBad (φ n) hn
+  exact hBad (φ n) ((H2π_eq_iff_isMulCoboundary₂_div _ _).mp hn)
 
 end MPSTensor
 
@@ -343,7 +361,14 @@ theorem eventually_cohomologousTo_of_continuousAt_bounded_normal_periodic_rays
     (hCov : ∀ t g, rotatePhysical (U g) (A t) = fun i =>
       ((ρ t).X (g⁻¹) : Matrix (Fin (D t)) (Fin (D t)) ℂ) * A t i *
         ((ρ t).X (g⁻¹) : Matrix (Fin (D t)) (Fin (D t)) ℂ)ᴴ) :
-    ∀ᶠ t in 𝓝 t₀, (ω t).CohomologousTo (ω t₀) := by
+    ∀ᶠ t in 𝓝 t₀, groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ t)
+            (Nat.pos_of_ne_zero (hA t).bondDim_ne_zero))) =
+      groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ t₀)
+            (Nat.pos_of_ne_zero (hA t₀).bondDim_ne_zero))) := by
   let L := M ^ 4
   have hDPos : ∀ t, 0 < D t := fun t => Nat.pos_of_ne_zero (hA t).bondDim_ne_zero
   have hMPos : 0 < M := (hDPos t₀).trans_le (hDBound t₀)
