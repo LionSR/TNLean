@@ -9437,3 +9437,18 @@ and use a little-o estimate to compare the logarithmic remainder with positive
 entropy growth. There are two independent occurrences. A third consumer should
 share the logarithmic integer-budget lemma and the elementary eventual comparison;
 there is no need for a new tactic.
+
+### Disjoint adjacent intervals in the common middle family — candidate (2026-10-27)
+
+- **Pattern:** Prove disjointness of consecutive chain intervals by expanding
+  membership and comparing the common boundary.
+- **Seen:** Seven occurrences in the 2026-10-27 scan, including
+  `MPS/AreaLaw/CommonMiddleMPOFamily.lean:303`,
+  `MPS/AreaLaw/SelectedCoefficientDecomposition.lean:179`, and
+  `MPS/AreaLaw/SelectedMiddleData.lean:492`.
+- **Abstraction:** Move the existing general result
+  `Hastings.disjoint_interval_interval` from `Hastings/Window.lean` to
+  `MPS/AreaLaw/Basic.lean`, and use it in the common-family constructions.
+- **Notes:** The statement is independent of entropy and of a Hamiltonian.
+  Promotion and replacement of the repeated proofs belong to the immediate
+  following refactoring change; no new tactic is needed.
