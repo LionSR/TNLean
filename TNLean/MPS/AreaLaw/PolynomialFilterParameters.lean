@@ -17,6 +17,8 @@ import Mathlib.Analysis.Real.Sqrt
 /-!
 # Polynomial filter parameters
 
+Here DG denotes the degenerate-ground-space setting of ALVV.
+
 For fixed `C_H > 0` and any lower threshold `M`, one constant `A` controls
 both the polynomial count and a squared exponential contraction. With
 `u = 1 + log d + log (1 / g)`, `ell = ceil (A * u^2 / g)` and
@@ -36,7 +38,6 @@ local Hamiltonian.
 -/
 
 open Filter
-open scoped Topology
 
 /-- At the chosen square degree the original integer count exponent is
 exactly 22 times the positive scale. Auxiliary to ALVV, t:ais. -/
