@@ -37,6 +37,13 @@ local Hamiltonian.
 open Filter
 open scoped Topology
 
+/-- At the chosen square degree the original integer count exponent is
+exactly 22 times the positive scale. Auxiliary to ALVV, t:ais. -/
+private theorem Nat.count_exponent_eq (ell : ℕ) (hell : 0 < ell) :
+    20 * ell + 2 * (ell ^ 2 / ell) = 22 * ell := by
+  rw [pow_two, Nat.mul_div_right _ hell]
+  ring
+
 namespace Real
 
 /-- A logarithmic expression is eventually bounded by any positive multiple
@@ -71,14 +78,9 @@ private theorem exists_log_sqrt_absorption (a b c M : ℝ) (hb : 0 ≤ b) (hc : 
     _ ≤ c * ‖sqrt A‖ := hbound
     _ = c * sqrt A := by rw [Real.norm_eq_abs, abs_of_nonneg (sqrt_nonneg A)]
 
-end Real
-
-
-namespace Real
-
 /-- The ceiling of A v²/g is bounded above by (A+1)v²/g and below by A.
 Auxiliary to ALVV, arXiv:1602.08828v2, Theorem `t:ais`, lines 1010–1024. -/
-private theorem dg_ceil_scale_bounds (A v g : ℝ) (hA : 1 ≤ A) (hv : 1 ≤ v)
+private theorem ceil_scale_bounds (A v g : ℝ) (hA : 1 ≤ A) (hv : 1 ≤ v)
     (hg : 0 < g) (hg1 : g ≤ 1) :
     A * v ^ 2 / g ≤ (⌈A * v ^ 2 / g⌉₊ : ℝ) ∧
       (⌈A * v ^ 2 / g⌉₊ : ℝ) ≤ (A + 1) * v ^ 2 / g ∧
@@ -101,13 +103,9 @@ private theorem dg_ceil_scale_bounds (A v g : ℝ) (hA : 1 ≤ A) (hv : 1 ≤ v)
     _ ≤ A * v ^ 2 / g + v ^ 2 / g := add_le_add le_rfl hratio
     _ = (A + 1) * v ^ 2 / g := by ring
 
-end Real
-
-namespace Real
-
 /-- Joint choice of the logarithmic absorption constant and a prescribed
 lower threshold. Scalar auxiliary for ALVV, t:ais, lines 1010--1024. -/
-private theorem dg_joint_absorption_constant (C_H M : ℝ) (hC : 0 < C_H) :
+private theorem joint_absorption_constant (C_H M : ℝ) (hC : 0 < C_H) :
     ∃ A : ℝ, 1 ≤ A ∧ 21 ≤ A ∧ M ≤ A ∧ log 400000 ≤ A ∧
       264 * (6 + 2 * log (A + 1)) + 1 ≤
         4 * sqrt (2 * A / (5 * C_H)) := by
@@ -130,7 +128,7 @@ private theorem dg_joint_absorption_constant (C_H M : ℝ) (hC : 0 < C_H) :
 
 /-- The logarithm of the actual count base is linear in the logarithmic
 scale. Scalar auxiliary for ALVV, t:ais, lines 1010--1024. -/
-private theorem dg_log_base_bound (A d g u e : ℝ) (hA : 1 ≤ A)
+private theorem log_base_bound (A d g u e : ℝ) (hA : 1 ≤ A)
     (hd : 2 ≤ d) (hg : 0 < g) (hg1 : g ≤ 1)
     (hu : u = 1 + log d + log (1 / g))
     (he : 1 ≤ e) (heup : e ≤ (A + 1) * u ^ 2 / g) :
@@ -168,7 +166,7 @@ private theorem dg_log_base_bound (A d g u e : ℝ) (hA : 1 ≤ A)
 
 /-- The width bound and the ceiling lower bound give the required decay
 exponent. This is scalar algebra, not a physical spectral-width estimate. -/
-private theorem dg_decay_exponent_lower (C_H A g u e R : ℝ)
+private theorem decay_exponent_lower (C_H A g u e R : ℝ)
     (hC : 0 < C_H) (hA : 0 ≤ A) (hg : 0 < g)
     (hu : 0 ≤ u) (he : 0 ≤ e) (hR : 0 < R)
     (hRup : R ≤ 2 * C_H * e) (hscale : A * u ^ 2 ≤ g * e) :
@@ -200,7 +198,7 @@ private theorem dg_decay_exponent_lower (C_H A g u e R : ℝ)
 
 /-- An explicit lower threshold controls a scalar exponential tail with the
 same integer scale. No physical truncation estimate is asserted. -/
-private theorem dg_scalar_tail_bound (A u g e C c epsilon p : ℝ)
+private theorem scalar_tail_bound (A u g e C c epsilon p : ℝ)
     (hu : 1 + log (1 / g) ≤ u)
     (hg : 0 < g) (hg1 : g ≤ 1) (hscale : A * u ≤ e)
     (hC : 0 < C) (hc : 0 < c) (hepsilon : 0 < epsilon) (hp : 0 ≤ p)
@@ -235,13 +233,6 @@ private theorem dg_scalar_tail_bound (A u g e C c epsilon p : ℝ)
         exp_log hepsilon, exp_log hC]
       field_simp [hC.ne']
 
-/-- At the chosen square degree the original integer count exponent is
-exactly 22 times the positive scale. Auxiliary to ALVV, t:ais. -/
-private theorem dg_count_exponent_eq (ell : ℕ) (hell : 0 < ell) :
-    20 * ell + 2 * (ell ^ 2 / ell) = 22 * ell := by
-  rw [pow_two, Nat.mul_div_right _ hell]
-  ring
-
 /-- Joint scalar choice for the actual DG count and squared contraction.
 This supporting statement for ALVV, t:ais, lines 1010--1024, does not assert
 any physical Hamiltonian or hard-truncation estimate. -/
@@ -263,7 +254,7 @@ theorem exists_dg_scalar_parameters (C_H M : ℝ) (hC : 0 < C_H) :
       (∀ C c epsilon p : ℝ, 0 < C → 0 < c → 0 < epsilon → 0 ≤ p →
         (max 0 (log (C / epsilon)) + p + c) / c ≤ M →
         C * exp (-c * ((ell : ℝ) - g)) ≤ epsilon * g ^ p) := by
-  obtain ⟨A, hA, hA21, hAM, hAlog, habsorb⟩ := dg_joint_absorption_constant C_H M hC
+  obtain ⟨A, hA, hA21, hAM, hAlog, habsorb⟩ := joint_absorption_constant C_H M hC
   refine ⟨A, hA, hA21, hAM, hAlog, ?_⟩
   intro d g hd hg hg1 u ell D cA
   have hdR : (2 : ℝ) ≤ (d : ℝ) := by exact_mod_cast hd
@@ -272,7 +263,7 @@ theorem exists_dg_scalar_parameters (C_H M : ℝ) (hC : 0 < C_H) :
   have hb : 0 ≤ log (1 / g) := log_nonneg ((one_le_div hg).2 hg1)
   have hu1 : 1 ≤ u := by dsimp only [u]; linarith
   have hu0 : 0 ≤ u := by linarith
-  obtain ⟨hellLower, hellUpper, hellA⟩ := dg_ceil_scale_bounds A u g hA hu1 hg hg1
+  obtain ⟨hellLower, hellUpper, hellA⟩ := ceil_scale_bounds A u g hA hu1 hg hg1
   have hell1 : 1 ≤ (ell : ℝ) := hA.trans hellA
   have hell0 : 0 ≤ (ell : ℝ) := by linarith
   have hA0 : 0 ≤ A := by linarith
@@ -281,7 +272,7 @@ theorem exists_dg_scalar_parameters (C_H M : ℝ) (hC : 0 < C_H) :
     have := log_nonneg (show 1 ≤ A + 1 by linarith)
     linarith
   have hbase : log ((d : ℝ) * (ell : ℝ) ^ 2) ≤ cA * u :=
-    dg_log_base_bound A d g u ell hA hdR hg hg1 rfl hell1 hellUpper
+    log_base_bound A d g u ell hA hdR hg hg1 rfl hell1 hellUpper
   have hDcast : (D : ℝ) = ((d : ℝ) * (ell : ℝ) ^ 2) ^ (22 * ell) := by
     simp only [D, Nat.cast_pow, Nat.cast_mul]
   have hDpos : 0 < (D : ℝ) := by rw [hDcast]; positivity
@@ -308,11 +299,11 @@ theorem exists_dg_scalar_parameters (C_H M : ℝ) (hC : 0 < C_H) :
     nlinarith only [h1, h2, hscale]
   have hellpos : 0 < ell := by
     exact_mod_cast (show 0 < (ell : ℝ) by linarith)
-  refine ⟨hellLower, hellUpper, hellA, dg_count_exponent_eq ell hellpos, hlogDup, ?_, ?_⟩
+  refine ⟨hellLower, hellUpper, hellA, Nat.count_exponent_eq ell hellpos, hlogDup, ?_, ?_⟩
   · intro R hR hRup
     let E : ℝ := 4 * (ell : ℝ) ^ 2 * sqrt ((4 * g / 5) / R)
     have hE : 4 * (ell : ℝ) * u * sqrt (2 * A / (5 * C_H)) ≤ E :=
-      dg_decay_exponent_lower C_H A g u ell R hC hA0 hg hu0 hell0 hR hRup hscale
+      decay_exponent_lower C_H A g u ell R hC hA0 hg hu0 hell0 hR hRup hscale
     have hmargin : 264 * (ell : ℝ) * cA * u + (ell : ℝ) * u ≤ E := by
       calc
         264 * (ell : ℝ) * cA * u + (ell : ℝ) * u =
@@ -343,7 +334,7 @@ theorem exists_dg_scalar_parameters (C_H M : ℝ) (hC : 0 < C_H) :
         rw [exp_neg, exp_log (show 0 < (400000 : ℝ) by norm_num)]
         norm_num
   · intro C c epsilon p hCp hcp hep hp hMtail
-    apply dg_scalar_tail_bound A u g ell C c epsilon p
+    apply scalar_tail_bound A u g ell C c epsilon p
       (by dsimp only [u]; linarith) hg hg1 hAu hCp hcp hep hp
     exact hMtail.trans hAM
 
