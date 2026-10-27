@@ -80,7 +80,7 @@ theorem norm_trace_mul_list_prod_clusterPart_le_pow {H : Matrix ι ι ℂ} (hH :
   have hβn : 0 ≤ β / n := div_nonneg hβ hn'.le
   set W : Fin n → Matrix ι ι ℂ := fun j ↦ H - ∑ i ∈ B j, h i - ∑ i ∈ C j, h i with hW
   have hsumH : ∀ j, ∀ T ⊆ B j ∪ C j, (∑ i ∈ T, h i).IsHermitian := fun j T hT ↦
-    Matrix.isHermitian_sum T fun i hi ↦ hh j i (hT hi)
+    Matrix.isHermitian_sum_of_subset (hh j) hT
   have hY : ∀ j, (β • W j).IsHermitian := fun j ↦
     ((hH.sub (hsumH j _ Finset.subset_union_left)).sub
       (hsumH j _ Finset.subset_union_right)).smul (IsSelfAdjoint.all β)
