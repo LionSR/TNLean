@@ -34,9 +34,9 @@ algebra; they impose no ordering or bond bound on the matrices.
     \lean{Matrix.reindex_kronecker_middleFactorExchange,Matrix.reindex_sum_kronecker_middleFactorExchange}
     \leanok
     \uses{def:chain_middle_factor_exchange}
-    Let $A,B$ be finite sets, let $C,O$ be arbitrary sets, and let $R$ be a
-    semiring. Let $M$ be a matrix on $B\times O$ and $V$ a matrix on $A\times C$,
-    both over $R$. Transporting both indices by $\Phi$ gives
+    Let $A,B$ be finite sets with decidable equality, let $C,O$ be arbitrary
+    sets, and let $R$ be a semiring. Let $M$ be a matrix on $B\times O$ and $V$
+    a matrix on $A\times C$, both over $R$. Transporting both indices by $\Phi$ gives
     \begin{align}
         (M\otimes V)^\Phi
          & =\sum_{a,a'\in A}\sum_{b,b'\in B}
