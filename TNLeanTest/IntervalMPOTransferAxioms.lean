@@ -13,6 +13,8 @@ run_cmd do
   let env ← Lean.getEnv
   let expectations : Array (Lean.Name × Array Lean.Name) := #[
     (``TNLean.MPS.AreaLaw.changingRegionalMiddleFamily_mpo_and_global_decomposition,
+      #[``propext, ``Classical.choice, ``Quot.sound]),
+    (``TNLean.MPS.AreaLaw.exists_intervalSlice_changingRegionalMiddleFactor,
       #[``propext, ``Classical.choice, ``Quot.sound])]
   for (decl, expected) in expectations do
     unless env.contains decl do

@@ -31,7 +31,7 @@ using the increasing enumeration of $K$. Put
     \label{eq:physical_polynomial_two_bounds}
 \end{align}
 The count parameter $D$ and the open-boundary bond bound $\mathcal B$
-have distinct roles.
+have distinct roles. Write $\beta=\max(1,B)$.
 
 These are supporting polynomial-family results for
 \cite[Proposition~5.7]{Arad2016RigorousRG}.
@@ -72,6 +72,18 @@ the coefficient operators; see
     $W_\omega$, on the paired physical alphabet in increasing site order on
     $J$, has an open-boundary matrix product representation with internal
     bond dimensions at most $\mathcal B$.
+    For every $\omega\in I$ there are a nonnegative integer
+    $\chi_\omega\le\beta^k$, a matrix
+    $C_\omega\in\C^{\chi_\omega\times\chi_\omega}$, and site-dependent tensors
+    $A_{\omega,v}(x,y)\in\C^{\chi_\omega\times\chi_\omega}$ satisfying
+    \begin{align}
+        W_\omega(\sigma,\tau)
+        &=\operatorname{tr}\left(C_\omega
+        \prod_{v=0}^{|J|-1}A_{\omega,v}(\sigma_{j_v},\tau_{j_v})\right),
+        \label{eq:physical_polynomial_trace_presentation}
+    \end{align}
+    where $j_0<\cdots<j_{|J|-1}$ enumerate $J$ and
+    $\sigma,\tau\in\mathcal C(J)$.
 
     All these choices precede the following data. Supply arbitrary full-chain
     operators $P_L,P_R$ supported on $[0,a+1)$ and
@@ -89,8 +101,7 @@ the coefficient operators; see
     \end{align}
     The superscript denotes the canonical restriction of a full configuration
     to $J^c$ and $J$. No self-adjointness, positivity or gap assumption is made.
-    Zero virtual dimension is allowed. This is the general square-derived
-    bond bound, with no sharper source bond or running-time assertion.
+    Zero virtual dimension is allowed.
 \end{theorem}
 \begin{proof}
     \uses{thm:global_two_window_polynomial_recovery,thm:common_middle_grid_mpo_family,
@@ -103,7 +114,10 @@ the coefficient operators; see
     prescribed regional middle operator. The low-frequency estimates bound the
     number of terms before the final numerical absorption. There are
     $(k+1)^{4\ell+1}\le(k+1)^{4\ell+3}$ scalar nodes, so the square
-    cardinality estimate gives $|I|\le D^2$.
+    cardinality estimate gives $|I|\le D^2$. Each member retains its trace
+    presentation from the prescribed-middle family, so
+    (\ref{eq:physical_polynomial_trace_presentation}) holds for these same
+    matrices.
 
     After $P_L,P_R$ and the polynomial coefficients are supplied, scalar
     recovery expresses the polynomial as a sum of the corresponding
@@ -119,22 +133,25 @@ the coefficient operators; see
     Under the same hypotheses and with the same supplied windows, core tensors
     and cap, there are a nonnegative integer $N\le D^2$ and matrices
     $W_0,\ldots,W_{N-1}$ on $\mathcal C(J)$, each with natural open-boundary
-    bond bound $\mathcal B$, such that for every supported $P_L,P_R$ and every
+    bond bound $\mathcal B$. Each $W_r$ also has a trace presentation of the
+    form (\ref{eq:physical_polynomial_trace_presentation}), with
+    $\chi_r\le\beta^k$. For every supported $P_L,P_R$ and every
     complex family $c_0,\ldots,c_k$ there are exterior matrices $M_r$ with
     \begin{align}
         \sum_{h=0}^{k}c_hH^h
         =\left(\sum_{r=0}^{N-1}M_r\otimes W_r\right)^{\mathrm{phys}}.
         \label{eq:physical_polynomial_fin_decomposition}
     \end{align}
-    The number and middle matrices are chosen before both the exterior pair and
-    all polynomial coefficients.
+    The number, middle matrices and their trace presentations are chosen
+    before both the exterior pair and all polynomial coefficients.
 \end{theorem}
 \begin{proof}
     \uses{thm:physical_polynomial_canonical_middle_family}
     Enumerate the finite canonical carrier $I$ by
     $\{0,\ldots,|I|-1\}$. Pull both the middle matrices and the later exterior
-    matrices back along this bijection. The cardinality, bond bounds and finite
-    sum identity are unchanged.
+    matrices back along this bijection. Retain the closing matrix and tensors
+    for each enumerated member. The cardinality, both representation bounds
+    and finite sum identity are unchanged.
 \end{proof}
 
 \begin{theorem}[A common middle family for polynomial evaluation]
@@ -143,7 +160,9 @@ the coefficient operators; see
     \uses{thm:physical_polynomial_fin_middle_family}
     Under the same hypotheses and fixed data, one may choose $N\le D^2$ and
     middle matrices $W_0,\ldots,W_{N-1}$ with the same natural bond bound
-    $\mathcal B$ before every supported exterior pair and every polynomial
+    $\mathcal B$ and trace presentations
+    (\ref{eq:physical_polynomial_trace_presentation}) with $\chi_r\le\beta^k$
+    before every supported exterior pair and every polynomial
     $P\in\C[X]$ of natural degree at most $k$, so that suitable exterior
     matrices satisfy
     \begin{align}

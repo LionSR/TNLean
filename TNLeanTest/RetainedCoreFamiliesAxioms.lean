@@ -23,6 +23,12 @@ run_cmd do
     (``MPOTensor.exists_finite_natural_retained_core_family,
       #[``propext, ``Classical.choice, ``Quot.sound]),
     (``MPOTensor.prod_actual_natural_affine_eq,
+      #[``propext, ``Classical.choice, ``Quot.sound]),
+    (``MPOTensor.trace_actual_retainedInterval_eq,
+      #[``propext, ``Classical.choice, ``Quot.sound]),
+    (``MPOTensor.exists_traceChainOperator_retainedSingle_insert,
+      #[``propext, ``Classical.choice, ``Quot.sound]),
+    (``MPOTensor.exists_traceChainOperator_intervalSlice_extend_by_configuration,
       #[``propext, ``Classical.choice, ``Quot.sound])]
   for (decl, expected) in expectations do
     unless env.contains decl do
