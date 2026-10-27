@@ -18,4 +18,5 @@ import TNLean.MPS.AreaLaw.ViableSet.Span
 import TNLean.MPS.AreaLaw.ViableSet.TrimmedWitness
 import TNLean.MPS.AreaLaw.ViableSet.Trimming
 import TNLean.MPS.AreaLaw.ViableSet.TrimmingConstants
+import TNLean.MPS.AreaLaw.ViableSet.ViableLeadingVector
 import TNLean.MPS.AreaLaw.ViableSet.ViableTrimmedWitness
