@@ -24,9 +24,9 @@ lines 472–476, and Lemma `l:leading`, lines 493–505, using Lemma `l:within`,
 and gap is documented in `docs/paper-gaps/lvv13_constant_bond.tex`; the source's quantitative
 AKLV bound remains separate.
 
-**Scope restriction (net point):** The theorem concerns any boundary point within the
-convex program's tolerance of the actual boundary state, which includes the closest net element
-of Lemma `l:leading` (lines 493–495). It makes no finite-net or cardinality assertion; see
+The theorem concerns any boundary point within the convex program's tolerance of the actual
+boundary state, which includes the closest net element of Lemma `l:leading` (lines 493–495).
+The net and its cardinality bound (Claim `c:2`) remain an open gap, recorded in
 `docs/paper-gaps/lvv13_leading_net_point.tex`.
 -/
 
