@@ -7,8 +7,7 @@ import TNLean.MPS.AreaLaw.ViableSet.Basic
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
-/-! Presence and permitted-axiom checks for the viable sets of Landau, Vazirani and Vidick, the
-support condition, the closeness bridge and Claim `c:ext`. -/
+/-! The public viable-set results are present and depend only on the three standard axioms. -/
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
