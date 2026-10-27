@@ -74,7 +74,7 @@ private theorem mem_leftSupportSubmodule_of_gluingCut_fixed
 low-energy vector. This is the library-bond form of LVV13, `algo53.tex`, equation `eq:conv`,
 lines 472–476, and Lemma `l:leading`, lines 493–505. The boundary point is chosen after the
 witness's actual bond space; no optimizer or witness energy bound is assumed. -/
-theorem ChainHamiltonian.exists_boundary_minimizer_leading_vector_of_isViable
+theorem ChainHamiltonian.exists_boundary_minimizer_leading_vector_of_isViable [NeZero q]
     (h : ChainHamiltonian L q 1 1) (hpos : ∀ X, (h.term X).PosSemidef)
     (hL : 0 < L) (hq : 2 ≤ q) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
@@ -126,7 +126,6 @@ theorem ChainHamiltonian.exists_boundary_minimizer_leading_vector_of_isViable
           (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
           1 - 1 / 12 ≤ ‖⟪Γ, v⟫_ℂ‖ := by
   classical
-  let : NeZero q := ⟨by omega⟩
   let c : ℝ := (Δ / 169) ^ 2
   let D := constantCutBond q 1 1 Δ c
   let P := reindex
