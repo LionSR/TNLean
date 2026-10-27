@@ -32,6 +32,9 @@ formalized separately, for the filtered terms `H_tilde_i`:
   low-energy commutator at `i` and `j` obeys the bound of eq. `blecm` at every separation `l`
   with `2R + l + N ≤ n / 2`. Taking `l = n / 2 - N - 2R` makes it exponentially small in `n`.
   This is the statement for the filtered terms `H_tilde_i`.
+* `TNLean.Lattice.norm_groundCompression_commutator_le_of_momenta_exp`: the filtered-term
+  bound with explicit exponential rate and prefactor, including system sizes for which
+  `n / 2 - N - 2R` is nonpositive.
 * `TNLean.Lattice.norm_groundCompression_commutator_le_of_norm_sub_le`: the commutator moves by
   at most `2 ε_i ‖h_j‖ + 2 ‖h_i‖ ε_j` when the filtered terms are replaced by operators within
   `ε_i`, `ε_j` of them.
@@ -283,12 +286,6 @@ theorem norm_groundCompression_commutator_le_of_momenta_exp [NeZero d]
       omega
     have hsep := disjoint_biUnion_graphBall_of_lt_edist G X id hX R hDiam
       (g • j) i l hfar
-    have hgj : groundCompression (∑ k, h k) E₀ (h (g • j)) =
-        groundCompression (∑ k, h k) E₀ (h j) := by
-      rw [hcov]
-      exact groundCompression_sitePermMatrix_conj (supercell Γ d (∑ k, h k) E₀)
-        (fun g hg v hv ↦ sitePermMatrix_mulVec_eq_of_mem_supercell hInv hg v hv)
-        hg (h j)
     have hnorm : ‖h (g • j)‖ = ‖h j‖ := by
       rw [hcov, Matrix.norm_sitePermMatrix_mul_mul_conjTranspose]
     have hcast : (l : ℝ) = ((n / 2 : ℕ) : ℝ) - N - 2 * R := by
@@ -298,7 +295,10 @@ theorem norm_groundCompression_commutator_le_of_momenta_exp [NeZero d]
       ring
     have hmain := norm_groundCompression_commutator_le_exp G X id hX h hHerm hSupport R
       hDiam vR hCard b₀ hBudget Kg kg hGrowth hΔE hH hgap (g • j) i l hsep
-    simpa only [groundCompression_gaussianFilteredTerm hr hH, ← hgj, hnorm, hcast] using hmain
+    rw [← groundCompression_commutator_eq_of_mem_supercell r ΔE hInv hH hcov
+      (supercell Γ d (∑ k, h k) E₀)
+      (fun g hg v hv ↦ sitePermMatrix_mulVec_eq_of_mem_supercell hInv hg v hv) hg i j]
+    simpa only [groundCompression_gaussianFilteredTerm hr hH, hnorm, hcast] using hmain
   · have hKg : 0 ≤ Kg := by
       have hzero := hGrowth i 0
       simp only [CharP.cast_eq_zero, zero_add, one_pow, mul_one] at hzero

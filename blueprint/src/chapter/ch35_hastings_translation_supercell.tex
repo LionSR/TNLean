@@ -265,15 +265,16 @@ the residue of the site.
 \begin{theorem}[A closed exponential bound for filtered low-energy commutators]
     \label{thm:hastings_supercell_commutator_exp}
     \lean{TNLean.Lattice.norm_groundCompression_commutator_le_of_momenta_exp}
+    \leanok
     \uses{thm:hastings_supercell_commutator_small,thm:hastings05_blecm_exp}
     Under the hypotheses of Theorem~\ref{thm:hastings_supercell_commutator_small},
     let $\tilde H_i$ be the Gaussian-filtered term with any nonnegative
-    filter parameter. Write $K_g(r+1)^{k_g}$ for the sphere-growth bound and set
+    filter parameter. Write $K_g(r+1)^{k}$ for the sphere-growth bound and set
     \begin{align}
         v      & =2v_R|b_0|e^{2R}+1,                       &
         \gamma & =\min\bigl(1/4,\Delta E/(8v)\bigr),\notag   \\
         C      & =2(2+4|b_0|e^{2R})v_R^2K_g
-        \frac{2^{k_g}k_g!e^{1/2}}{1-e^{-1/2}}+6.\notag
+        \frac{2^{k}k!e^{1/2}}{1-e^{-1/2}}+6.\notag
     \end{align}
     Then
     \begin{align}
@@ -287,21 +288,33 @@ the residue of the site.
     terms in the supercell argument of
     \cite[lines 1620--1641]{Hastings2006Solving}.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:hastings_site_invariant_sum,thm:hastings_supercell_of_momenta,
-        thm:hastings_supercell_far,thm:hastings_supercell_compression,
-        thm:hastings05_blecm_exp}
+        thm:hastings_supercell_far,thm:hastings_supercell_commutator,
+        thm:hastings05_low_energy_commutator,thm:hastings05_blecm_exp}
     If $\lfloor n/2\rfloor\ge N+2R$, take
     $l=\lfloor n/2\rfloor-N-2R$.
-    A supercell translation places the second support outside the
-    $l$-neighbourhood of the first. The translated term has the same
-    compression and norm as the original one, so
-    Theorem~\ref{thm:hastings05_blecm_exp} gives
+    Theorem~\ref{thm:hastings_supercell_far} gives a supercell translation $g$
+    such that
+    \begin{align}
+        d(i,g\cdot j)                            & >\lfloor n/2\rfloor-N=2R+l,\notag \\
+        X_{g\cdot j}\cap\bigcup_{x\in X_i}B_l(x) & =\varnothing.\notag
+    \end{align}
+    The supercell fixes the ground space, and covariance preserves the norm:
+    \begin{align}
+        [P\tilde H_iP,P\tilde H_{g\cdot j}P]
+                         & =[P\tilde H_iP,P\tilde H_jP],\notag   \\
+        \|h_{g\cdot j}\| & =\|P_gh_jP_g^\dagger\|=\|h_j\|.\notag
+    \end{align}
+    Theorem~\ref{thm:hastings05_blecm_exp} now gives
     (\ref{eq:hastings_supercell_exp}).
     Otherwise the exponential in (\ref{eq:hastings_supercell_exp}) is at least
     one. The commutator is at most $2\|h_i\|\,\|h_j\|$, and $C\ge6$.
-    Ground-space compression is unchanged by the Gaussian filtering, so
-    the original nonnegative filter parameter is arbitrary.
+    The original nonnegative filter parameter is arbitrary, since
+    Theorem~\ref{thm:hastings05_low_energy_commutator} gives
+    \begin{align}
+        P\tilde H_kP=Ph_kP.\notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[The truncated terms up to their truncation errors]
