@@ -36,15 +36,15 @@ unsquared polynomial~\cite{gap:alvv16_chebyshev_filter_positivity}.
     Supply real numbers $\eta_0<\eta_1\le u$. For every $0\le j<d$,
     suppose
     \begin{align}
-        \lambda_j&\le u,\notag\\
-        \lambda_j&\le\eta_0\ \text{or}\ \eta_1\le\lambda_j.
+        \lambda_j & \le u,\notag                              \\
+        \lambda_j & \le\eta_0\ \text{or}\ \eta_1\le\lambda_j.
         \label{eq:physical_chebyshev_spectrum}
     \end{align}
     Define
     \begin{align}
-        G&=\spn_{\C}\{v_j:\lambda_j\le\eta_0\},
-        \label{eq:physical_chebyshev_target}\\
-        \Delta&=\left(2\exp\left[-2k\sqrt{
+        G      & =\spn_{\C}\{v_j:\lambda_j\le\eta_0\},
+        \label{eq:physical_chebyshev_target}           \\
+        \Delta & =\left(2\exp\left[-2k\sqrt{
             \frac{\eta_1-\eta_0}{u-\eta_0}}\right]\right)^2.
         \label{eq:physical_chebyshev_error}
     \end{align}
@@ -52,8 +52,8 @@ unsquared polynomial~\cite{gap:alvv16_chebyshev_filter_positivity}.
     that $S$ is $\delta$-viable for $G$ and $\delta<1$, put
     $V=\sum_{r=0}^{N-1}W_r(S)$. Then
     \begin{align}
-        \dim V&\le D^2\dim S,\notag\\
-        V&\text{ is }\frac{\Delta}{(1-\delta)^2}\text{-viable for }G.
+        \dim V & \le D^2\dim S,\notag                                        \\
+        V      & \text{ is }\frac{\Delta}{(1-\delta)^2}\text{-viable for }G.
         \label{eq:physical_chebyshev_conclusion}
     \end{align}
     These are supporting consequences for the spectral filtering and
@@ -66,8 +66,8 @@ unsquared polynomial~\cite{gap:alvv16_chebyshev_filter_positivity}.
     The Chebyshev spectral estimate supplies a real polynomial $p$ of degree
     $k$ whose operator $K=p(H_m)$ preserves $G$ and $G^\perp$ and satisfies
     \begin{align}
-        \|g\|&\le\|Kg\|\quad(g\in G),\notag\\
-        \|Kw\|^2&\le\Delta\|w\|^2\quad(w\in G^\perp).
+        \|g\|    & \le\|Kg\|\quad(g\in G),\notag        \\
+        \|Kw\|^2 & \le\Delta\|w\|^2\quad(w\in G^\perp).
         \label{eq:physical_chebyshev_contract}
     \end{align}
     Polynomial evaluation commutes with the matrix-to-operator identification
@@ -75,7 +75,7 @@ unsquared polynomial~\cite{gap:alvv16_chebyshev_filter_positivity}.
     (\ref{eq:physical_tensor_conjugation}) to the complex polynomial obtained
     from $p$ therefore gives $K=\sum_r W_r\otimes M_r$ with the same middle
     family. In particular, $K(S\otimes\mathcal H_E)\subseteq
-    V\otimes\mathcal H_E$ and $\dim V\le N\dim S$.
+        V\otimes\mathcal H_E$ and $\dim V\le N\dim S$.
     The two-factor error-reduction estimate applied to
     (\ref{eq:physical_chebyshev_contract}) gives viability
     $\Delta/(1-\delta)^2$ for $V$. Finally $N\le D^2$ gives the dimension
