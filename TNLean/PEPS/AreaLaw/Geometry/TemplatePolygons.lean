@@ -96,7 +96,7 @@ private theorem triangle_mem_of_normal_bounds (a b c p : ℝ × ℝ)
       simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hq <;>
       rcases hq with rfl | rfl | rfl <;> first
         | (left; simp [planeCross]; done) | (left; dsimp [planeCross]; ring1)
-        | (right; dsimp [d, planeCross] <;> ring1)
+        | (right; dsimp [d, planeCross]; ring1)
   have hd' : d ≠ 0 := hd
   have hsum : γ + α + β = 1 := by
     dsimp [α, β, γ]
