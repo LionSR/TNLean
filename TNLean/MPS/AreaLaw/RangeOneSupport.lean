@@ -16,6 +16,8 @@ open scoped Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
 
+/-- A range-one support is the interval starting at its least site, with length equal to
+its cardinality, which is one or two. -/
 private theorem chainSupport_range_one_eq_interval {L : ℕ} (X : ChainSupport L 1) :
     X.1 = interval L (X.1.min' X.2.1).val ((X.1.min' X.2.1).val + X.1.card) := by
   classical
