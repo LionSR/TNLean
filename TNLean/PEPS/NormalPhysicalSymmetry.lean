@@ -221,6 +221,24 @@ noncomputable def normalPairHypothesesOfSameStateOfBondDimEq
       rw [← congr_fun hDim e]
       exact hA.bondDim_pos_left e }
 
+/-- The normal-region transport retains each red block.
+Source: arXiv:1804.04964, lines 1576–1583 and 1696–1713. -/
+private theorem normalPairHypothesesOfSameStateOfBondDimEq_red
+    (A B : Tensor G d) (hA : NormalPEPSPairHypotheses A A)
+    (hDim : A.bondDim = B.bondDim) (hState : SameState A B) (e : Edge G) :
+    (normalPairHypothesesOfSameStateOfBondDimEq A B hA hDim hState).edgeBlocking.red e =
+      hA.edgeBlocking.red e := by
+  rfl
+
+/-- The normal-region transport retains each blue block.
+Source: arXiv:1804.04964, lines 1576–1583 and 1696–1713. -/
+private theorem normalPairHypothesesOfSameStateOfBondDimEq_blue
+    (A B : Tensor G d) (hA : NormalPEPSPairHypotheses A A)
+    (hDim : A.bondDim = B.bondDim) (hState : SameState A B) (e : Edge G) :
+    (normalPairHypothesesOfSameStateOfBondDimEq A B hA hDim hState).edgeBlocking.blue e =
+      hA.edgeBlocking.blue e := by
+  rfl
+
 /-- A global on-site physical symmetry of a normal tensor network is implemented
 by virtual edge gauges. Transformed regional injectivity follows from equality
 of states and unchanged bond dimensions; physical dimension positivity is also
@@ -260,8 +278,15 @@ theorem gaugeEquiv_physicalTensorAction_of_normal_symmetry
     (hA.oneSiteSeparation.withSite_injective v).1 hA.bondDim_pos_left
   have hsingle' : ∀ e g : Edge G,
       IsCrossingEdge (G := G) A (h.edgeBlocking.red e)
-        (h.edgeBlocking.blue e) g ↔ g = e :=
-    hsingle
+        (h.edgeBlocking.blue e) g ↔ g = e := by
+    intro e g
+    change IsCrossingEdge (G := G) A
+      ((normalPairHypothesesOfSameStateOfBondDimEq A B hA rfl hState).edgeBlocking.red e)
+      ((normalPairHypothesesOfSameStateOfBondDimEq A B hA rfl hState).edgeBlocking.blue e)
+      g ↔ g = e
+    rw [normalPairHypothesesOfSameStateOfBondDimEq_red A B hA rfl hState e,
+      normalPairHypothesesOfSameStateOfBondDimEq_blue A B hA rfl hState e]
+    exact hsingle e g
   exact fundamentalTheorem_normalPEPS (V := V) (G := G) (d := d)
     A B h hsingle' hState hd hconn
 
