@@ -189,6 +189,7 @@ import TNLean.Algebra.SemiRegularTensorFactor
 import TNLean.Algebra.SemisimpleTracePowers
 import TNLean.Algebra.SignedPermutationSpan
 import TNLean.Algebra.SingletMatrix
+import TNLean.Algebra.SingletonWordCancellation
 import TNLean.Algebra.StabilizerCocycleExtension
 import TNLean.Algebra.StabilizerCocycleLSymbol
 import TNLean.Algebra.StabilizerCocycleReconstruction

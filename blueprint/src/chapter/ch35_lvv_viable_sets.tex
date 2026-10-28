@@ -455,3 +455,31 @@ whose range is the span of the columns of $M_i(\psi)$.
     arbitrarily on unused places. There are $p^{2p}\ell^p$ pairs of
     maps, which gives the bound.
 \end{proof}
+
+
+\begin{theorem}[Cancellation of a singleton sample label]
+    \label{thm:lvv_singleton_word_cancellation}
+    \lean{Fintype.sum_ordered_word_eq_zero_of_singleton}
+    \leanok
+    Let $A$ and $B$ be finite sets, and let $R$ be a possibly
+    noncommutative semiring. Let $s:\{0,\ldots,m-1\}\to B$ specify
+    the sample label at each position. Suppose that $s(t)$ occurs
+    only at position $t$. Let $\Phi_k:A\to R$ satisfy
+    $\sum_{a\in A}\Phi_t(a)=0$. Then
+    \begin{align}
+        \sum_{\sigma:B\to A}
+        \Phi_0(\sigma(s(0)))\cdots\Phi_{m-1}(\sigma(s(m-1)))=0.
+        \label{eq:lvv_singleton_word_cancellation}
+    \end{align}
+    The product is taken in the displayed order.
+\end{theorem}
+\begin{proof}\leanok
+    Fix the values of $\sigma$ away from $s(t)$. The factors before
+    and after position $t$ are then fixed, so the sum over
+    $a=\sigma(s(t))$ has the form
+    \begin{align}
+        L\left(\sum_{a\in A}\Phi_t(a)\right)R'=0.
+        \label{eq:lvv_singleton_word_cancellation_inner}
+    \end{align}
+    Sum this identity over the remaining values of $\sigma$.
+\end{proof}
