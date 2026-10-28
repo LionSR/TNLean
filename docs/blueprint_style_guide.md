@@ -20,14 +20,23 @@ The blueprint links the mathematics to its Lean formalization. A reader should b
    `This is \cite[Theorem~4.1]{...}`. Do not write headings such as
    `Theorem 4.1` unless the source is also named and the title remains
    mathematically descriptive.
-8. **Match the primary Lean declaration exactly.** If the principal declaration
-   says `theorem X`, use `\begin{theorem}`; if it says `lemma X`, use
-   `\begin{lemma}`. Never use `\begin{proposition}` (Lean has no `proposition`
-   keyword). Label prefixes are `thm:` for theorems, `lem:` for lemmas, `cor:`
-   for corollaries, and `def:` for definitions. Immediate projections and
-   accessor lemmas may share the parent entry as described below; the
-   environment then follows the principal declaration rather than each
-   subordinate `\lean{...}` tag.
+8. **Choose the environment by mathematical role, not by Lean keyword.** Use
+   `\begin{theorem}` only for the results a chapter exists to prove, the ones
+   a reader would cite; `\begin{corollary}` for direct consequences of such a
+   theorem, such as versions with explicit or sharper constants; and
+   `\begin{lemma}` for every supporting result. Most chapters have one to
+   three theorems. Lean declares nearly everything with `theorem`, so the
+   Lean keyword says nothing about the role. Never use
+   `\begin{proposition}`. New labels use the prefix of their environment
+   (`thm:`, `lem:`, `cor:`, `def:`). Labels are stable anchors of the web
+   pages and are cited from other files, issues and campaign boards, so an
+   entry whose environment changes keeps its existing label; update the
+   word in prose references (`Lemma~\ref{...}`) instead. Immediate
+   projections and accessor lemmas may share the parent entry as described
+   below.
+   Each chapter opens with a paragraph that says, in ordinary words, what the
+   chapter proves and names its theorems, and the chapter title says what is
+   proved rather than listing construction names.
 9. **Do not put prose quantifiers at the edge of displayed equations.** Avoid
    `\qquad \text{for all ...}` and similar tails in displays. State the
    quantifier in the surrounding sentence, or use mathematical quantifier

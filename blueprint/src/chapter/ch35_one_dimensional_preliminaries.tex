@@ -1,0 +1,904 @@
+\chapter{Chains and local Hamiltonians}
+\label{ch:one_dimensional_preliminaries}
+
+This chapter collects the definitions and elementary facts about chains
+used by the one-dimensional chapters that follow: the chain of $L$ sites
+with local dimension $q$, its intervals, finite-range Hamiltonians with one
+bounded Hermitian term per support, counts of the supports that cross a
+cut, and Lieb--Robinson bounds on a contiguous chain. The area law itself
+is proved in Chapter~\ref{ch:one_dimensional_chain}.
+
+\section{Chains, supports and Hamiltonians}
+
+\begin{definition}[Chains, intervals and finite-range Hamiltonians]
+    \label{def:chain_model}
+    \lean{
+        TNLean.MPS.AreaLaw.interval,
+        TNLean.MPS.AreaLaw.mem_interval,
+        TNLean.MPS.AreaLaw.interval_mono,
+        TNLean.MPS.AreaLaw.interval_eq_empty,
+        TNLean.MPS.AreaLaw.interval_zero_eq_univ,
+        TNLean.MPS.AreaLaw.card_interval_le,
+        TNLean.MPS.AreaLaw.IsChainSupport,
+        TNLean.MPS.AreaLaw.ChainSupport,
+        TNLean.MPS.AreaLaw.IsChainSupport.card_le,
+        TNLean.MPS.AreaLaw.supportDim_le,
+        TNLean.MPS.AreaLaw.one_le_supportDim,
+        TNLean.MPS.AreaLaw.ChainHamiltonian,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.operator,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.operator_isHermitian,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.zero,
+        TNLean.MPS.AreaLaw.cutLogBudget,
+        TNLean.MPS.AreaLaw.one_le_cutLogBudget
+    }
+    \leanok
+    The \emph{chain of $L$ sites} has sites $0,\ldots,L-1$, each carrying
+    $\mathbb C^q$. For natural numbers $a\le b$ the \emph{interval} $[a,b)$ is
+    the set of sites with position at least $a$ and less than $b$; it has at
+    most $b-a$ sites, and its dilation $[a-d,b+d)$ is clipped at the ends of the
+    chain. A \emph{support of range $R$} is a nonempty set of sites of diameter
+    at most $R$; it has at most $R+1$ sites and Hilbert-space dimension at most
+    $q^{R+1}$. A \emph{finite-range Hamiltonian} assigns to every support $X$
+    of range $R$ a Hermitian term $h_X$ acting as the identity off $X$ with
+    operator norm at most $J$, zero terms allowed, and
+    $H=\sum_X h_X$. A \emph{gapped ground vector} with gap $\Delta$ is a unit
+    vector $\Omega$ with $H\Omega=E_0\Omega$ and
+    $H-E_0\ge\Delta(1-|\Omega\rangle\langle\Omega|)$. For a cut $A$ the
+    \emph{cut budget} is
+    $\mathcal B_A=1+\sum_X\log^2(e\,q^{|X|})$ over the supports $X$ meeting
+    both $A$ and its complement; it is at least one.
+\end{definition}
+
+\begin{lemma}[A bond sum separated by two windows]
+    \label{thm:chain_two_window_sum}
+    \lean{Finset.sum_range_eq_five_parts_of_two_windows,
+        Fin.sum_univ_eq_five_parts_of_two_windows}
+    \leanok
+    Let $M$ be an abelian monoid written additively, and let
+    $a,b,\ell,N$ be natural numbers with $a+2\ell\le b$ and
+    $b+2\ell\le N$. For a sequence $f:\mathbb N\to M$,
+    \begin{align}
+        \sum_{t<N}f(t)
+         & =\sum_{t<a}f(t)+\sum_{r<2\ell}f(a+r)\notag   \\
+         & \quad+\sum_{r<b-(a+2\ell)}f(a+2\ell+r)\notag \\
+         & \quad+\sum_{r<2\ell}f(b+r)
+        +\sum_{r<N-(b+2\ell)}f(b+2\ell+r).
+        \label{eq:chain_two_window_sum}
+    \end{align}
+    The same identity holds when $f$ is given only on
+    $\{0,\ldots,N-1\}$: every shifted index in~(\ref{eq:chain_two_window_sum})
+    belongs to this set. Empty windows and empty complementary intervals
+    are permitted. Applied to a bond array, this is the additive grouping
+    used in~\cite[Section~4.1]{Arad2016RigorousRG}.
+\end{lemma}
+\begin{proof}\leanok
+    Split the sum successively at $b+2\ell$, $b$, $a+2\ell$ and $a$.
+    The inequalities on the endpoints give the complementary lengths
+    in~(\ref{eq:chain_two_window_sum}). For a finite array, extend $f$ by zero
+    outside its domain and reindex each interval by its finite length.
+    Each shifted index is less than $N$, so the extension agrees with $f$
+    in every summand.
+\end{proof}
+
+\begin{definition}[Two-window grouping of a bond family]
+    \label{def:chain_two_window_family}
+    \lean{Fin.twoWindowFamily}
+    \leanok
+    Let $A$ be an additive commutative monoid, and let
+    $h_0,\ldots,h_{N-1}\in A$. For the two-window decomposition of
+    \cite{Arad2016RigorousRG}, take natural numbers $a,b,\ell$ with
+    \begin{align}
+        a+2\ell & \le b,\notag \\
+        b+2\ell & \le N.
+        \label{eq:chain_two_window_admissibility}
+    \end{align}
+    Put $W=\{r\in\mathbb N:r<2\ell\}$ and form the disjoint union
+    \begin{align}
+        I & =(W\sqcup W)\sqcup\{L,M,R\}.
+        \label{eq:chain_two_window_family_alphabet}
+    \end{align}
+    Write $\iota_L,\iota_R$ for the two window injections and
+    $\kappa$ for the bulk injection. Thus $|I|=4\ell+3$, and the two
+    window injections have disjoint images. Define $F:I\to A$ by
+    \begin{align}
+        F_{\iota_L(r)} & =h_{a+r},\notag                  \\
+        F_{\iota_R(r)} & =h_{b+r},\notag                  \\
+        F_{\kappa(L)}  & =\sum_{0\le t<a}h_t,\notag       \\
+        F_{\kappa(M)}  & =\sum_{a+2\ell\le t<b}h_t,\notag \\
+        F_{\kappa(R)}  & =\sum_{b+2\ell\le t<N}h_t.
+        \label{eq:chain_two_window_family_values}
+    \end{align}
+    The three bulk labels remain distinct when their sums vanish.
+\end{definition}
+
+\begin{lemma}[Sum of the grouped bond family]
+    \label{thm:chain_two_window_family_sum}
+    \lean{Fin.sum_twoWindowFamily}
+    \leanok
+    \uses{def:chain_two_window_family}
+    The family in Definition~\ref{def:chain_two_window_family} satisfies
+    \begin{align}
+        \sum_{\alpha\in I}F_\alpha & =\sum_{t=0}^{N-1}h_t.
+        \label{eq:chain_two_window_family_sum}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:chain_two_window_family,thm:chain_two_window_sum}
+    Put $S_L=\sum_{r\in W}h_{a+r}$, $S_R=\sum_{r\in W}h_{b+r}$ and
+    $B_\nu=F_{\kappa(\nu)}$ for $\nu\in\{L,M,R\}$.
+    Expanding~(\ref{eq:chain_two_window_family_values}) gives
+    \begin{align}
+        \sum_{\alpha\in I}F_\alpha
+         & =(S_L+S_R)+(B_L+B_M+B_R)\notag \\
+         & =B_L+S_L+B_M+S_R+B_R.
+        \label{eq:chain_two_window_regrouping}
+    \end{align}
+    Lemma~\ref{thm:chain_two_window_sum} identifies the expression
+    in~(\ref{eq:chain_two_window_regrouping}) with the original sum,
+    proving~(\ref{eq:chain_two_window_family_sum}). Empty intervals
+    cause no exception.
+\end{proof}
+
+\begin{lemma}[Additive maps and the grouped bond family]
+    \label{thm:chain_two_window_family_map}
+    \lean{Fin.twoWindowFamily_map}
+    \leanok
+    \uses{def:chain_two_window_family}
+    Let $A,B$ be additive commutative monoids, let $\varphi:A\to B$ be a
+    homomorphism of additive monoids, and let $F:I\to A$ be the family in
+    Definition~\ref{def:chain_two_window_family}. Form $F':I\to B$ from the
+    array $\varphi(h_0),\ldots,\varphi(h_{N-1})$ using the same windows.
+    Then $F'_\alpha=\varphi(F_\alpha)$ for every $\alpha\in I$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:chain_two_window_family}
+    For a window label the assertion follows from the definition.
+    For each of the three bulk labels, apply preservation of finite sums
+    by $\varphi$ to the corresponding complementary interval.
+\end{proof}
+
+\begin{lemma}[Three-region tensor forms after grouping two windows]
+    \label{thm:chain_two_window_tensor_forms}
+    \lean{Matrix.twoWindowFamily_eq_three_region_forms}
+    \leanok
+    \uses{def:chain_two_window_family}
+    Let $X,Y,Z$ be index sets, and let $H_r$, $H^L_r$, $H^M_r$, $H^R_r$
+    be complex matrices indexed respectively by $(X\times Y)\times Z$,
+    $X$, $Y$, $Z$, for $0\le r<N$.
+    Use the windows and alphabet of Definition~\ref{def:chain_two_window_family},
+    and choose $p,s\in W$. For matrices $A,B,C$ on the three factors, put
+    \begin{align}
+        \mathcal E_L(A) & =(A\otimes I_Y)\otimes I_Z,\notag \\
+        \mathcal E_M(B) & =(I_X\otimes B)\otimes I_Z,\notag \\
+        \mathcal E_R(C) & =I_{X\times Y}\otimes C.
+        \label{eq:chain_two_window_embeddings}
+    \end{align}
+    Suppose that, whenever $r\ne a+p$ and $r\ne b+s$,
+    \begin{align}
+        H_r & =\mathcal E_L(H^L_r)+\mathcal E_M(H^M_r)+\mathcal E_R(H^R_r).
+        \label{eq:chain_two_window_family_ordinary_forms}
+    \end{align}
+    Group each of the four arrays using the same windows, obtaining
+    $F,F^L,F^M,F^R$. Then, for every $\alpha\in I$ other than
+    $\iota_L(p)$ and $\iota_R(s)$,
+    \begin{align}
+        F_\alpha & =\mathcal E_L(F^L_\alpha)+\mathcal E_M(F^M_\alpha)
+        +\mathcal E_R(F^R_\alpha).
+        \label{eq:chain_two_window_grouped_forms}
+    \end{align}
+    This is the additive step in the grouping used in~\cite{Arad2016RigorousRG}; the original tensor identities are hypotheses
+    of the assertion. Empty index sets are allowed.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:chain_two_window_family}
+    Each map in~(\ref{eq:chain_two_window_embeddings}) is linear. Hence, for
+    any finite set $J$ of original indices avoiding $a+p$ and $b+s$,
+    \begin{align}
+        \sum_{r\in J}H_r
+         & =\mathcal E_L\left(\sum_{r\in J}H^L_r\right)
+        +\mathcal E_M\left(\sum_{r\in J}H^M_r\right)
+        +\mathcal E_R\left(\sum_{r\in J}H^R_r\right).
+        \label{eq:chain_two_window_sum_forms}
+    \end{align}
+    For a window label different from the two selected labels,
+    use~(\ref{eq:chain_two_window_family_ordinary_forms}). Each complementary
+    interval avoids both selected indices by
+    (\ref{eq:chain_two_window_admissibility}). Applying
+    (\ref{eq:chain_two_window_sum_forms}) to each of these three intervals
+    proves~(\ref{eq:chain_two_window_grouped_forms}) for the bulk labels.
+\end{proof}
+
+\begin{lemma}[The number of range-one supports]
+    \label{thm:chain_range_one_support_count}
+    \lean{
+        TNLean.MPS.AreaLaw.card_chainSupport_range_one_le,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_operator_le_of_range_one
+    }
+    \leanok
+    \uses{def:chain_model}
+    A chain of $L$ sites has at most $2L$ supports of range one.
+    Consequently, a range-one Hamiltonian whose terms have norm at most
+    $J$ satisfies $\|H\|\le2LJ$.
+\end{lemma}
+\begin{proof}\leanok
+    A support of range one is a singleton or a pair of adjacent sites.
+    It is therefore determined by its least site and its cardinality,
+    which is either one or two. This gives the bound $2L$.
+    If $L>0$, the norm bound on a singleton term implies $J\ge0$, and the
+    triangle inequality gives $\|H\|\le\sum_X\|h_X\|\le2LJ$.
+    If $L=0$, there are no interaction terms and both sides vanish.
+\end{proof}
+
+The following upper bound on the gap is an auxiliary estimate for the constant
+comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
+
+\begin{lemma}[An upper bound on the gap of a range-one chain]
+    \label{thm:chain_range_one_gap_upper}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.gap_le_four_mul_of_range_one}
+    \leanok
+    \uses{def:chain_model}
+    Let $L\ge1$, $q\ge2$ and $J\in\mathbb R$, and let $H=\sum_Xh_X$ be a
+    range-one Hamiltonian on the chain with $\lVert h_X\rVert\le J$.
+    Let $\Omega$ be a gapped ground vector of $H$, with gap
+    $\Delta\in\mathbb R$. Then $\Delta\le4J$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:chain_model}
+    Diagonalize the marginal $\rho_0$ at site $0$, and let $U_0$ cyclically
+    permute an orthonormal eigenbasis. Since $q\ge2$, this permutation has
+    no fixed point, so $\operatorname{tr}(\rho_0U_0)=0$. Put $K=U_0\otimes I$
+    and $\varphi=K\Omega$. Since $K$ acts only on site $0$ and is unitary,
+    \begin{align}
+        \langle\Omega,\varphi\rangle & =\langle\Omega,K\Omega\rangle
+        =\operatorname{tr}(\rho_0U_0)=0,\notag                       \\
+        \lVert\varphi\rVert          & =\lVert K\Omega\rVert
+        =\lVert\Omega\rVert=1.\notag
+    \end{align}
+    If $0\notin X$, then $h_X$ acts as the identity on site $0$, so
+    $K^\dagger h_XK=h_X$ and
+    \begin{align}
+        \langle\varphi,h_X\varphi\rangle
+        =\langle K\Omega,h_XK\Omega\rangle
+        =\langle\Omega,K^\dagger h_XK\Omega\rangle
+        =\langle\Omega,h_X\Omega\rangle.\notag
+    \end{align}
+    At most two range-one supports contain $0$: the singleton $\{0\}$ and,
+    when it exists, the edge $\{0,1\}$. Each expectation changes by at most
+    $2J$. The gap inequality gives
+    \begin{align}
+        \Delta\le\langle\varphi,H\varphi\rangle-E_0
+        =\sum_{X\ni0}\bigl(\langle\varphi,h_X\varphi\rangle
+        -\langle\Omega,h_X\Omega\rangle\bigr)\le4J.\notag
+    \end{align}
+\end{proof}
+
+\begin{lemma}[A range-one support crossing a cut]
+    \label{thm:chain_range_one_crossing_support}
+    \lean{TNLean.MPS.AreaLaw.IsChainSupport.eq_interval_of_splits_of_range_one}
+    \leanok
+    \uses{def:chain_model}
+    If a support $X$ of range one contains sites on both sides of the cut
+    after the first $k$ sites, then $X=\lbrack k-1,k+1)$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:chain_full_support_window}
+    The support contains distinct sites $x<k\le y$, so it has at least two
+    sites. Its diameter is at most one, so it has exactly two sites. By
+    Lemma~\ref{thm:chain_full_support_window} with $R=1$, it is an interval
+    $\lbrack a,a+2)$ of two adjacent sites, and $a\le x<k\le y\le a+1$ forces
+    $a=k-1$.
+\end{proof}
+
+\begin{lemma}[The Hamiltonian at one cut]
+    \label{thm:chain_range_one_cut_decomposition}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_cut_decomposition_of_range_one}
+    \leanok
+    \uses{def:chain_model}
+    Let $H=\sum_Xh_X$ be a range-one Hamiltonian whose terms are positive
+    semidefinite and satisfy $\|h_X\|\le1$. For every natural number $k$,
+    let $A=\lbrack0,k)$ be the interval clipped to the chain. There is a
+    decomposition
+    \begin{align}
+        H & =H_L+H_R+K,\notag \\
+        0 & \le K\le I.\notag
+    \end{align}
+    where $H_L$ is supported on $A$ and $H_R$ on its complement.
+    This gives the decomposition used for nearest-neighbour interactions
+    in~\cite[lines 283 and 409--410]{Landau2015Polynomial}; positive
+    one-site terms are also allowed here.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:chain_range_one_crossing_support}
+    Let $C$ be the set of interaction supports meeting both $A$ and $A^{\mathsf c}$.
+    Partitioning the nonempty interaction supports gives
+    \begin{align}
+        H & =\underbrace{\sum_{X\subseteq A}h_X}_{H_L}
+        +\underbrace{\sum_{X\subseteq A^{\mathsf c}}h_X}_{H_R}
+        +\underbrace{\sum_{X\in C}h_X}_{K}.\notag
+    \end{align}
+    The first two sums have the required supports. By
+    Lemma~\ref{thm:chain_range_one_crossing_support}, $|C|\le1$.
+    Thus $K$ is either zero or one positive semidefinite term of norm at
+    most one, and $0\le K\le I$.
+\end{proof}
+
+\begin{lemma}[Decomposition for boundary gluing]
+    \label{thm:chain_gluing_hamiltonian_decomposition}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_gluing_decomposition_of_range_one}
+    \leanok
+    \uses{def:chain_model}
+    Let $H=\sum_Xh_X$ be a range-one Hamiltonian on $L$ sites with
+    $\lVert h_X\rVert\le1$. For every natural number $k$, put
+    $A=\lbrack0,k)$ and $D=\lbrack0,\max\{k-1,0\})^{\mathsf c}$, with intervals clipped
+    to the chain. There exist matrices $H_L$ and $B$ such that
+    \begin{align}
+        H              & =H_L+B,\notag \\
+        \lVert B\rVert & \le2L.\notag
+    \end{align}
+    where $H_L$ is supported on $A$ and $B$ on $D$.
+    This supplies the decomposition $H=H_L+(H_R+H_i)$ used
+    in~\cite[lines 409--410]{Landau2015Polynomial} for the range-one model
+    of Definition~\ref{def:chain_model}, which also allows Hermitian one-site terms.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:chain_range_one_support_count}
+    Put $H_L=\sum_{X\subseteq A}h_X$ and
+    $B=\sum_{X\nsubseteq A}h_X$. Then $H=H_L+B$, and $H_L$ is
+    supported on $A$. Every support in the second sum contains a site
+    $y\ge k$. For each of its sites $x$, the range-one condition gives
+    $y\le x+1$, so $k\le x+1$ and $x\in D$. Thus $B$ is supported on $D$.
+    By Lemma~\ref{thm:chain_range_one_support_count}, there are at most
+    $2L$ supports. The triangle inequality and $\lVert h_X\rVert\le1$ give
+    \begin{align}
+        \lVert B\rVert & \le\sum_{X\nsubseteq A}\lVert h_X\rVert\le2L.\notag
+    \end{align}
+\end{proof}
+
+\begin{lemma}[Energy from ground-state overlap for a range-one chain]
+    \label{thm:chain_range_one_overlap_energy}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.re_inner_sub_le_of_overlap_of_range_one,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.re_inner_le_of_overlap_div_of_range_one}
+    \leanok
+    \uses{def:chain_model}
+    Let $H$ be a range-one Hamiltonian on a chain of $L$ sites, with each
+    interaction term of norm at most one. Let $E_0,\Delta$ be real and let
+    $\Omega$ be a unit vector satisfying $H\Omega=E_0\Omega$ and
+    $H-E_0\ge\Delta(1-|\Omega\rangle\langle\Omega|)$.
+    If $v$ is a unit vector with $|\langle\Omega,v\rangle|\ge1-\delta$, then
+    \begin{align}
+        \operatorname{Re}\langle v,Hv\rangle-E_0
+         & \le8L\delta.
+        \label{eq:chain_range_one_overlap_energy}
+    \end{align}
+    In particular, when $L>0$, overlap at least $1-c/L$ gives energy at
+    most $E_0+8c$.
+
+    This is a general norm estimate supporting the first energy inference
+    in Lemma~l:within of~\cite[lines 509--515]{Landau2015Polynomial}.
+    The source assumes positive adjacent-pair terms; here singleton and
+    adjacent-pair terms need only be Hermitian. The correction for
+    unsquared overlap is recorded in \cite{gap:lvv13_witness_energy}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:chain_range_one_support_count}
+    The support count gives $\|H\|\le2L$. The eigenvector equation and
+    $\|\Omega\|=1$ give $|E_0|\le\|H\|$, hence
+    $\|H-E_0\,1\|\le\|H\|+|E_0|\le4L$.
+    The energy estimate from overlap with an eigenvector in
+    \cite[``Energy bound from overlap with an eigenvector'']{QICLean2026Blueprint}
+    now gives (\ref{eq:chain_range_one_overlap_energy}). Substituting
+    $\delta=c/L$ proves the last assertion.
+\end{proof}
+
+\begin{lemma}[Nearest-neighbour supports at two cuts]
+    \label{thm:chain_two_cut_edge_supports}
+    \lean{TNLean.MPS.AreaLaw.interval_edge_classification_of_lt}
+    \leanok
+    \uses{def:chain_model}
+    Let $L,u,v$ be natural numbers with $u<v$ and $v+1<L$.
+    Place the cuts immediately after sites $u$ and $v$, as in
+    \cite{Arad2016RigorousRG}. Set $T=\{0,\ldots,u\}$, $E=\{u+1,\ldots,v\}$
+    and $U=\{0,\ldots,L-1\}\setminus(T\cup E)$.
+    For an edge $r$ with $r+1<L$, write $D_r=\{r,r+1\}$.
+    Then $D_u\subseteq T\cup E$, $D_u\cap T=\{u\}$,
+    $D_v\cap T=\varnothing$ and $D_v\cap E=\{v\}$.
+    Every other edge has its support contained in $T$, in $E$, or in $U$.
+    Adjacent cuts, $v=u+1$, are included.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:chain_model}
+    Membership in $T\cup E$ is equivalent to having coordinate less than
+    $v+1$; membership in $U$ is equivalent to having coordinate at least
+    $v+1$. Comparing the endpoints gives the four assertions for $D_u,D_v$.
+    For any other edge, either $r<u$, $u<r<v$, or $v<r$.
+    These cases give $r+2\le u+1$, the pair of inequalities
+    $u+1\le r$ and $r+2\le v+1$, or $v+1\le r$, respectively.
+    The corresponding interval containment places $D_r$ in $T$, $E$, or $U$.
+    For adjacent cuts, $E=\{u+1\}=\{v\}$. The first two assertions give
+    $D_u\cap E=\{u+1\}$ and the fourth gives $D_v\cap E=\{v\}$, so the
+    crossing supports $D_u$ and $D_v$ share the single middle site.
+\end{proof}
+
+\begin{lemma}[Changed sites under interval displacement]
+    \label{thm:chain_interval_symmdiff}
+    \lean{TNLean.MPS.AreaLaw.card_interval_symmDiff_le_dist}
+    \leanok
+    \uses{def:chain_model}
+    For natural numbers $L,a,b,c,d$, let
+    $[a,b)_L=\{t\in\{0,\ldots,L-1\}:a\le t<b\}$.
+    Then
+    \begin{align}
+        |{\lbrack a,b)_L}\mathbin{\triangle}{\lbrack c,d)_L}| & \le |a-c|+|b-d|.
+        \label{eq:chain_interval_symmdiff}
+    \end{align}
+    No ordering or containment assumptions on the endpoints are required.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:chain_model}
+    A site belonging to exactly one interval lies between the two left
+    endpoints or between the two right endpoints. Thus
+    \begin{align}
+        {\lbrack a,b)_L}\mathbin{\triangle}{\lbrack c,d)_L}
+         & \subseteq [\min(a,c),\max(a,c))_L\notag \\
+         & \qquad\cup [\min(b,d),\max(b,d))_L.
+        \label{eq:chain_interval_endpoint_strips}
+    \end{align}
+    The two intervals in~(\ref{eq:chain_interval_endpoint_strips}) have at
+    most $\max(a,c)-\min(a,c)=|a-c|$ and
+    $\max(b,d)-\min(b,d)=|b-d|$ sites. Subadditivity of cardinality gives
+    (\ref{eq:chain_interval_symmdiff}).
+\end{proof}
+
+\begin{lemma}[Middle-region displacement within two windows]
+    \label{thm:chain_two_window_middle_displacement}
+    \lean{TNLean.MPS.AreaLaw.card_two_window_middle_symmDiff_le}
+    \leanok
+    \uses{def:chain_model}
+    Let $L,a,b,\ell$ be natural numbers, let $0\le p,s<2\ell$, and let
+    $\delta\in\{0,1\}$. Using the clipped intervals of
+    Lemma~\ref{thm:chain_interval_symmdiff}, set
+    \begin{align}
+        E        & =[a+p+1,b+s+1)_L,\notag      \\
+        E_\delta & =[a+\ell+\delta,b+\ell+1)_L.
+        \label{eq:chain_two_window_middle_regions}
+    \end{align}
+    Then $|E\mathbin{\triangle}E_\delta|\le2\ell$.
+    When $a+\ell+1<b+\ell+1\le L$, write $i_1=a+\ell+1$ and
+    $i_2=b+\ell+1$. In one-based site coordinates, $E_0$ is the block
+    $\{i_1,\ldots,i_2\}$ in~\cite[Proposition~5.7]{Arad2016RigorousRG},
+    whereas $E_1$ is the middle
+    region between the cuts after $i_1$ and $i_2$ in its Theorem~4.2.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:chain_interval_symmdiff}
+    The inequalities $0\le p,s<2\ell$ and $\delta\in\{0,1\}$ give
+    $|(p+1)-(\ell+\delta)|\le\ell$ and $|s-\ell|\le\ell$.
+    Apply~(\ref{eq:chain_interval_symmdiff}) to the two intervals
+    in~(\ref{eq:chain_two_window_middle_regions}) and add these bounds.
+\end{proof}
+
+\begin{lemma}[Frequency vectors with two prescribed coordinates]
+    \label{thm:chain_two_fixed_frequencies}
+    \lean{Nat.card_fun_sum_eq_and_two_eq,
+        Nat.card_fun_sum_eq_and_two_eq_of_lt,
+        Nat.card_fun_sum_eq_and_two_eq_of_total}
+    \leanok
+    Let $I$ be a finite set, let $u,v\in I$ be distinct, and let
+    $r,i,j$ be natural numbers. Define
+    \begin{align}
+        \mathcal F_{r,i,j}
+         & =\left\{\alpha:I\to\mathbb N:
+        \sum_{a\in I}\alpha(a)=r,\quad
+        \alpha(u)=i,\quad\alpha(v)=j\right\}.\label{eq:chain_fixed_frequency_set}
+    \end{align}
+    If $r<i+j$, then the set in~(\ref{eq:chain_fixed_frequency_set}) is empty.
+    If $|I|=s+3$ for a natural number $s$, then
+    \begin{align}
+        |\mathcal F_{r,i,j}|
+         & =\begin{cases}
+                \displaystyle\binom{r-i-j+s}{s}, & i+j\le r, \\
+                0,                               & r<i+j.
+            \end{cases}\label{eq:chain_fixed_frequency_count}
+    \end{align}
+    Taking $r=m+i+j$ in~(\ref{eq:chain_fixed_frequency_count}) gives
+    $|\mathcal F_{m+i+j,i,j}|=\binom{m+s}{s}$
+    for every natural number $m$.
+    Thus the count is one when $s=0$, provided $i+j\le r$,
+    and also when $r=i+j$.
+    The grouped alphabet in \cite[Section~4.1]{Arad2016RigorousRG}
+    has two windows of $2\ell$ bond labels and three bulk labels;
+    for this alphabet the formula applies with $s=4\ell$.
+\end{lemma}
+\begin{proof}\leanok
+    For every $\alpha:I\to\mathbb N$,
+    $\alpha(u)+\alpha(v)\le\sum_{a\in I}\alpha(a)$,
+    proving the empty case.
+    When the total is $m+i+j$, restricting to $I\setminus\{u,v\}$
+    is a bijection between $\mathcal F_{m+i+j,i,j}$ and the
+    nonnegative integer functions on $s+1$ labels whose sum is $m$.
+    Its inverse reinserts $i$ at $u$ and $j$ at $v$.
+    Identifying these functions with multisets of cardinality $m$
+    gives $\binom{m+s}{s}$.
+    When $i+j\le r$, substituting $m=r-i-j$ gives~(\ref{eq:chain_fixed_frequency_count}).
+\end{proof}
+
+\begin{lemma}[Uniform bound for frequency slices]
+    \label{thm:chain_fixed_frequency_uniform_bound}
+    \lean{Nat.card_fun_sum_eq_and_two_eq_le}
+    \leanok
+    Let $I$ have cardinality $s+3$, and let $u,v\in I$ be distinct.
+    For natural numbers $r,i,j$, let $\mathcal F_{r,i,j}$ be the set
+    in~(\ref{eq:chain_fixed_frequency_set}). Then
+    \begin{align}
+        |\mathcal F_{r,i,j}| & \le (r+1)^s.
+        \label{eq:chain_fixed_frequency_uniform_bound}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:chain_two_fixed_frequencies}
+    If $r<i+j$, the set is empty. Otherwise put $m=r-i-j$.
+    The exact count in~(\ref{eq:chain_fixed_frequency_count}) and the
+    elementary binomial estimate give
+    \begin{align}
+        |\mathcal F_{r,i,j}|=\binom{m+s}{s}
+         & \le (m+1)^s\le(r+1)^s.
+        \label{eq:chain_frequency_binomial_bound}
+    \end{align}
+    Combining~(\ref{eq:chain_frequency_binomial_bound}) with the empty case
+    proves~(\ref{eq:chain_fixed_frequency_uniform_bound}).
+\end{proof}
+
+\begin{lemma}[Frequency slices through a prescribed degree]
+    \label{thm:chain_fixed_frequency_degree_sum}
+    \lean{Nat.sum_card_fun_sum_eq_and_two_eq_le}
+    \leanok
+    Let $I$ be a finite set of cardinality $s+3$, with $s\in\mathbb N$,
+    and let $u,v\in I$ be distinct. For natural numbers $k,i,j$, use
+    $\mathcal F_{r,i,j}$ from~(\ref{eq:chain_fixed_frequency_set}). Then
+    \begin{align}
+        \sum_{r=0}^{k}|\mathcal F_{r,i,j}|
+         & \le (k+1)^{s+1}.
+        \label{eq:chain_frequency_degree_sum}
+    \end{align}
+    All degrees from $0$ through $k$ are included. For an alphabet of
+    $4\ell+3$ labels, the exponent is $4\ell+1$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:chain_fixed_frequency_uniform_bound}
+    For each $0\le r\le k$,
+    Lemma~\ref{thm:chain_fixed_frequency_uniform_bound} gives
+    $|\mathcal F_{r,i,j}|\le(r+1)^s\le(k+1)^s$.
+    Summing over the $k+1$ degrees gives
+    $(k+1)(k+1)^s=(k+1)^{s+1}$.
+\end{proof}
+
+The following scalar estimates are auxiliaries for the two-window argument
+of \cite[Proposition~5.7]{Arad2016RigorousRG}. For natural
+$k,d,\ell,b$, write
+\begin{align}
+    C_{k,d,\ell,b}
+     & =(2\ell)^2(b+1)^2(k+1)^{4\ell+1}\notag            \\
+     & \qquad\cdot\bigl(2(k+1)\bigr)^{4b+2}d^{4b+4\ell}.
+    \label{eq:chain_two_window_count_factor}
+\end{align}
+The full alphabet of $4\ell+3$ labels is retained, consisting of the two
+windows and the three bulk labels.
+
+\begin{lemma}[Summing the two-window counting factors]
+    \label{thm:chain_two_window_count_sum}
+    \lean{Nat.two_window_rank_sum_le_factor}
+    \leanok
+    Let $k,d,\ell,b\in\mathbb N$ with $d\ge1$ and $b\le k$. Then
+    \begin{align}
+         & (2\ell)^2
+        \sum_{\substack{0\le r\le k  \\0\le i,j\le b}}
+        (r+1)^{4\ell}
+        \binom{r+i+1}{2i+1}\binom{r+j+1}{2j+1}
+        d^{2(i+j)+4\ell}\notag       \\
+         & \qquad\le C_{k,d,\ell,b}.
+        \label{eq:chain_two_window_count_sum}
+    \end{align}
+    The sum ranges over every natural triple in the indicated ranges,
+    including degree zero. The binomial factors retain the upper arguments
+    $r+i+1$ and $r+j+1$ printed in
+    \cite[Proposition~5.7]{Arad2016RigorousRG}; the count of commuting gaps
+    is recorded in~\cite{gap:aklv13_interpolation_and_word_count}.
+\end{lemma}
+\begin{proof}\leanok
+    For $r\le k$ and $i\le b\le k$, the elementary binomial estimate gives
+    \begin{align}
+        \binom{r+i+1}{2i+1}
+         & \le (r+i+1)^{2i+1}
+        \le\bigl(2(k+1)\bigr)^{2b+1}.
+        \label{eq:chain_two_window_gap_bound}
+    \end{align}
+    Apply~(\ref{eq:chain_two_window_gap_bound}) to both binomials.
+    Also $(r+1)^{4\ell}\le(k+1)^{4\ell}$ and
+    $d^{2(i+j)+4\ell}\le d^{4b+4\ell}$, since $d\ge1$.
+    Each summand is therefore at most
+    $(k+1)^{4\ell}\bigl(2(k+1)\bigr)^{4b+2}d^{4b+4\ell}$.
+    There are $(k+1)(b+1)^2$ triples. Multiplying by this number and by
+    $(2\ell)^2$ gives the product
+    (\ref{eq:chain_two_window_count_factor}).
+\end{proof}
+
+\begin{lemma}[An explicit bound for the counting product]
+    \label{thm:chain_two_window_count_power}
+    \lean{Nat.two_window_rank_factor_le_pow}
+    \leanok
+    Let $k,d,\ell,b\in\mathbb N$ with $k\ge1$, $d\ge2$,
+    $\ell\ge1$ and $b\le k$. For the product in
+    (\ref{eq:chain_two_window_count_factor}),
+    \begin{align}
+        C_{k,d,\ell,b}
+         & \le(dk)^{17(\ell+b)}.
+        \label{eq:chain_two_window_count_power}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    Put $X=dk\ge2$. The hypotheses give $d\le X$,
+    $b+1\le k+1\le X$, $2\ell\le2^\ell\le X^\ell$ and
+    $2(k+1)\le X^2$. Substituting these bounds into
+    (\ref{eq:chain_two_window_count_factor}) yields
+    \begin{align}
+        C_{k,d,\ell,b}
+         & \le X^{10\ell+12b+7}
+        \le X^{17(\ell+b)}.
+        \label{eq:chain_two_window_count_exponent}
+    \end{align}
+    The last step uses $\ell\ge1$, which implies
+    $10\ell+12b+7\le17(\ell+b)$.
+\end{proof}
+
+\begin{lemma}[Distance and spheres on a finite path]
+    \label{lem:chain_path_metric_spheres}
+    \lean{SimpleGraph.pathGraph_edist, SimpleGraph.pathGraph_card_sphere_le_two}
+    \leanok
+    Let $L$ be a natural number, and let $P_L$ be the graph on
+    $\{0,\ldots,L-1\}$ joining consecutive coordinates. For vertices $x,y$ and
+    every natural number $d$,
+    \begin{align}
+        d_{P_L}(x,y)                     & =|x-y|, \\
+        \bigl|\{y:d_{P_L}(x,y)=d\}\bigr| & \le2.
+    \end{align}
+    Thus the sphere growth bound holds with coefficient $2$ and exponent $0$,
+    independently of $L$. This concerns the contiguous chain setting of
+    Section~1 of~\cite{TNLean2026OneDimensional}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Each edge changes the coordinate by one, so the displacement of a walk is
+    at most its length. Taking the infimum over walks gives one inequality.
+    In the other direction, successive coordinates between $x$ and $y$ stay
+    inside the chain and give a walk of length $|x-y|$. A site at distance $d$
+    from $x$ has coordinate $x-d$ or $x+d$; discarding coordinates outside the
+    chain leaves at most two sites. At $d=0$ the candidates coincide. When
+    $L=0$ there are no vertices, so the assertions are vacuous.
+\end{proof}
+
+\begin{lemma}[Regional forms of a nearest-neighbour bond array]
+    \label{thm:chain_two_cut_edge_factors}
+    \lean{TNLean.MPS.AreaLaw.exists_threeSplit_edge_factors}
+    \leanok
+    \uses{thm:chain_two_cut_edge_supports,lem:peps_frame_split_forms}
+    Let $L,q,u,v$ be natural numbers with $u<v$ and $v+1<L$.
+    For each bond index $0\le r<L-1$, let $H_r$ be a complex operator
+    supported on $D_r=\{r,r+1\}$. Use the partition $T,E,U$ of
+    Lemma~\ref{thm:chain_two_cut_edge_supports}, and write $\widetilde H_r$
+    for $H_r$ in the three-region coordinates of
+    Lemma~\ref{lem:peps_frame_split_forms}.
+    There are arrays $H^{\mathrm L}_r,H^{\mathrm M}_r,H^{\mathrm R}_r$
+    of operators on $\mathcal H_T,\mathcal H_E,\mathcal H_U$, respectively,
+    and crossing factors $A_u$ on $\mathcal H_T\otimes\mathcal H_E$ and
+    $B_v$ on $\mathcal H_E\otimes\mathcal H_U$ with the following properties.
+    For every $r\ne u,v$,
+    \begin{align}
+        \widetilde H_r
+         & =(H^{\mathrm L}_r\otimes\id_E)\otimes\id_U
+        +(\id_T\otimes H^{\mathrm M}_r)\otimes\id_U\notag \\
+         & \quad+\id_{TE}\otimes H^{\mathrm R}_r.
+        \label{eq:chain_two_cut_ordinary_forms}
+    \end{align}
+    The two distinguished operators satisfy
+    \begin{align}
+        \widetilde H_u & =A_u\otimes\id_U,
+                       & \operatorname{OSR}(A_u) & \le q^2,\notag \\
+        \widetilde H_v & =\id_T\otimes B_v,
+                       & \operatorname{OSR}(B_v) & \le q^2.
+        \label{eq:chain_two_cut_crossing_forms}
+    \end{align}
+    All tensors are read in the same left-associated coordinates, using
+    canonical reassociation for $\id_T\otimes B_v$.
+    The arrays and crossing factors are chosen simultaneously for the given
+    bond array and cuts. The local dimension may be zero, and the cuts may
+    be adjacent. These are tensor forms for the local terms in
+    \cite[Sections~4.1 and~5.2]{Arad2016RigorousRG}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:chain_two_cut_edge_supports,lem:peps_frame_split_forms,
+        thm:peps_supported_left_factor_rank,thm:peps_supported_right_factor_rank}
+    The support classification places every ordinary bond in $T$, $E$ or
+    $U$. Apply the corresponding single-region part of
+    Lemma~\ref{lem:peps_frame_split_forms}, putting zero in the other two
+    array entries. Making these choices over the finite bond index set gives
+    the arrays in~(\ref{eq:chain_two_cut_ordinary_forms}).
+
+    For the first crossing, the classification gives
+    $D_u\subseteq T\cup E$ and $D_u\cap T=\{u\}$.
+    Theorem~\ref{thm:peps_supported_left_factor_rank} therefore supplies
+    the same $A_u$ for its tensor identity and the bound
+    $q^{2|D_u\cap T|}=q^2$.
+    For the second crossing, $D_v\cap T=\varnothing$ and
+    $D_v\cap E=\{v\}$, so
+    Theorem~\ref{thm:peps_supported_right_factor_rank} supplies the same
+    $B_v$ for its associated tensor identity and its bound
+    $q^{2|D_v\cap E|}=q^2$.
+    These are~(\ref{eq:chain_two_cut_crossing_forms}), including $q=0$.
+\end{proof}
+
+\begin{lemma}[Regional forms of two windows and three bulk operators]
+    \label{thm:chain_two_window_factors}
+    \lean{TNLean.MPS.AreaLaw.exists_threeSplit_two_window_factors}
+    \leanok
+    \uses{def:chain_model,lem:peps_frame_split_forms}
+    Let $L,q,\ell,a,b$ be natural numbers with $a+2\ell\le b$ and
+    $b+2\ell\le L-1$. Consider the $4\ell+3$ distinct labels
+    \begin{align}
+        \mathcal I
+         & =\{x_r:0\le r<2\ell\}\sqcup\{y_r:0\le r<2\ell\}
+        \sqcup\{\lambda,\mu,\rho\}.
+        \label{eq:chain_two_window_alphabet}
+    \end{align}
+    For each $\alpha\in\mathcal I$, let $F_\alpha$ be a complex operator
+    on the chain. Suppose that $F_{x_r}$ is supported on $[a+r,a+r+2)$
+    and $F_{y_r}$ on $[b+r,b+r+2)$, and that the three independently
+    given bulk operators satisfy
+    \begin{align}
+        F_\lambda & \text{ is supported on }[0,a+1),\notag       \\
+        F_\mu     & \text{ is supported on }[a+2\ell,b+1),\notag \\
+        F_\rho    & \text{ is supported on }[b+2\ell,L).
+        \label{eq:chain_two_window_bulk_supports}
+    \end{align}
+    The labels remain distinct when operators coincide or vanish.
+    Choose integers $0\le p,s<2\ell$, put $u=a+p$ and $v=b+s$, and set
+    \begin{align}
+        T & =[0,u+1),\notag   \\
+        E & =[u+1,v+1),\notag \\
+        U & =[v+1,L).
+        \label{eq:chain_two_window_regions}
+    \end{align}
+    Write $\widetilde F_\alpha$ for $F_\alpha$ in the three-region
+    coordinates of Lemma~\ref{lem:peps_frame_split_forms}.
+    There are families $F^{\mathrm L}_\alpha,F^{\mathrm M}_\alpha,
+        F^{\mathrm R}_\alpha$ of operators on $\mathcal H_T,\mathcal H_E,
+        \mathcal H_U$, respectively, and operators $A$ on
+    $\mathcal H_T\otimes\mathcal H_E$ and $B$ on
+    $\mathcal H_E\otimes\mathcal H_U$, chosen simultaneously, such that
+    for every $\alpha\ne x_p,y_s$,
+    \begin{align}
+        \widetilde F_\alpha
+         & =(F^{\mathrm L}_\alpha\otimes\id_E)\otimes\id_U
+        +(\id_T\otimes F^{\mathrm M}_\alpha)\otimes\id_U\notag \\
+         & \quad+\id_{TE}\otimes F^{\mathrm R}_\alpha.
+        \label{eq:chain_two_window_ordinary_forms}
+    \end{align}
+    The same $A$ and $B$ satisfy
+    \begin{align}
+        \widetilde F_{x_p}    & =A\otimes\id_U,\notag  \\
+        \operatorname{OSR}(A) & \le q^2,\notag         \\
+        \widetilde F_{y_s}    & =\id_T\otimes B,\notag \\
+        \operatorname{OSR}(B) & \le q^2.
+        \label{eq:chain_two_window_crossing_forms}
+    \end{align}
+    All tensors use the same left-associated coordinates, with canonical
+    reassociation for $\id_T\otimes B$. The local dimension may be zero.
+    When $a+2\ell=b$, the middle bulk support is the singleton $\{b\}$.
+    This is a tensor decomposition for the two-window grouping in
+    \cite[Sections~4.1 and~5.2]{Arad2016RigorousRG}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:chain_two_cut_edge_supports,lem:peps_frame_split_forms,
+        thm:peps_supported_left_factor_rank,thm:peps_supported_right_factor_rank}
+    The hypotheses give $u<v$ and $v+1<L$.
+    Lemma~\ref{thm:chain_two_cut_edge_supports} places each window edge
+    other than $u,v$ wholly in one of $T,E,U$.
+    The three bulk supports satisfy
+    \begin{align}
+        {[0,a+1)}       & \subseteq T,\notag \\
+        {[a+2\ell,b+1)} & \subseteq E,\notag \\
+        {[b+2\ell,L)}   & \subseteq U.
+        \label{eq:chain_two_window_bulk_containments}
+    \end{align}
+    Thus every operator other than $F_{x_p},F_{y_s}$ is supported in one
+    region. Apply the corresponding single-region form of
+    Lemma~\ref{lem:peps_frame_split_forms}, putting zero in the other two
+    regional factors. Choosing these factors over $\mathcal I$ gives the
+    three families in~(\ref{eq:chain_two_window_ordinary_forms}).
+
+    The first crossing support is contained in $T\cup E$ and meets $T$
+    in the single site $u$. Theorem~\ref{thm:peps_supported_left_factor_rank}
+    supplies $A$ with both its tensor identity and the bound $q^2$.
+    The second crossing support is disjoint from $T$ and meets $E$ in
+    the single site $v$. Theorem~\ref{thm:peps_supported_right_factor_rank}
+    supplies $B$ with both its tensor identity and the bound $q^2$.
+    These are~(\ref{eq:chain_two_window_crossing_forms}), including $q=0$.
+\end{proof}
+
+\section{Locality on a contiguous chain}
+
+\begin{lemma}[Lieb--Robinson estimates on a contiguous chain]
+    \label{thm:chain_lieb_robinson}
+    \lean{TNLean.MPS.AreaLaw.norm_heisenberg_commutator_le_chainDistance,
+        TNLean.MPS.AreaLaw.norm_heisenberg_sub_siteExpectation_chainNeighborhood_le}
+    \leanok
+    \uses{def:chain_model,def:qc_site_expectation}
+    Let $L,q,R$ be natural numbers. Let $K$ be a finite set of interaction
+    labels, and for each $k\in K$ let $X_k$ be a nonempty support of diameter
+    at most $R$ in the contiguous chain $I=\{0,\ldots,L-1\}$.
+    Let $h_k$ be Hermitian operators supported on $X_k$, and suppose that
+    $b_0\in\mathbb R$ satisfies
+    \begin{align}
+        \sum_{k:\,x\in X_k}\|h_k\|\le b_0
+    \end{align}
+    for every site $x$. Put $H=\sum_{k\in K}h_k$ and
+    $\tau_t(A)=e^{itH}Ae^{-itH}$, and set
+    \begin{align}
+        C_0 & =2+4|b_0|e^{2R},\notag      \\
+        v   & =2(R+1)|b_0|e^{2R}+1,\notag \\
+        \mu & =\tfrac12,\qquad
+        C'=\frac{2C_0e}{1-e^{-1/2}}.\notag
+    \end{align}
+    These constants are independent of $L,q$, the interaction family, and
+    the observable support. For $S\subseteq I$ let
+    $d(S,y)=\min_{x\in S}|x-y|$, with $d(\varnothing,y)=\infty$ and
+    $e^{-\mu\infty}=0$. For every operator $A$ supported on $S$, every site
+    $y$, every operator $B_y$ supported on $\{y\}$, and every real $t$,
+    \begin{align}
+        \|[\tau_t(A),B_y]\|
+        \le C_0|S|\|A\|\|B_y\|e^{v|t|}e^{-d(S,y)/2}.
+    \end{align}
+    This estimate allows every natural local dimension $q$.
+    If $q\ge1$, define, for every real $\ell\ge0$,
+    $N_\ell(S)=\{y\in I:\exists x\in S,\ |x-y|\le\ell\}$.
+    The normalized partial-trace expectation $E_{N_\ell(S)}$ then satisfies
+    \begin{align}
+        \|\tau_t(A)-E_{N_\ell(S)}(\tau_t(A))\|
+        \le C'|S|^2\|A\|e^{v|t|-\ell/2}.
+    \end{align}
+    Both estimates allow $S=\varnothing$. This is the contiguous-chain case
+    of the lemma ``Lieb--Robinson bound on a chain'' in Part~II
+    of~\cite{TNLean2026OneDimensional}, as used for its Theorem~B;
+    the distinction from the broader finite-domain reading is recorded
+    in~\cite{gap:tnlean_one_dimensional_connected_domain_scope}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:chain_path_metric_spheres,thm:area_law_supported_identity,
+        thm:qc_graph_lieb_robinson_finset,
+        thm:qc_graph_neighborhood_localization}
+    Use the path graph on $I$. Its distance is $|x-y|$, each $X_k$ has
+    graph diameter at most $R$ and at most $R+1$ sites, and its nonemptiness
+    permits a choice of an anchor in $X_k$. The matrix-entry characterization
+    of support supplies the hypotheses on the supported algebras.
+    Apply the arbitrary-support graph commutator estimate with decay
+    parameter $1$ and support-size bound $R+1$. If $S$ is nonempty,
+    its least distance to $y$ is a finite nonnegative integer $d$, and
+    $e^{-d}\le e^{-d/2}$. For $S=\varnothing$, the factor $|S|$ makes
+    the commutator bound zero without selecting a point of $S$.
+
+    For localization assume $q\ge1$ and put $m=\lfloor\ell\rfloor$.
+    Every distance sphere of the path has at most two sites, so the graph
+    localization estimate applies with $K_g=2$ and growth exponent zero.
+    Since path distances are integers, the union of graph balls of radius
+    $m$ about $S$ is exactly $N_\ell(S)$. The tail constant and the rounding
+    bound are
+    \begin{align}
+        T_0      & =\frac{e^{1/2}}{1-e^{-1/2}},\notag \\
+        e^{-m/2} & \le e^{1/2}e^{-\ell/2}.\notag
+    \end{align}
+    Thus the graph coefficient $2C_0T_0$, multiplied by the rounding factor
+    $e^{1/2}$, is $C'$. Empty unions and the zero factor $|S|^2$ cover
+    $S=\varnothing$ as well.
+\end{proof}

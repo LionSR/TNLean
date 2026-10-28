@@ -1,0 +1,63 @@
+\chapter{Ground states of gapped chains in polynomial time}
+\label{ch:gapped_chain_algorithms}
+
+Landau, Vazirani and Vidick~\cite{Landau2015Polynomial} showed that a
+matrix product state approximating the ground state of a gapped chain can
+be computed in polynomial time, and Arad, Landau, Vazirani and
+Vidick~\cite{Arad2016RigorousRG} gave a more efficient renormalization
+algorithm. Both build the approximation one cut at a time. At each cut they
+keep a small set of vectors on the sites to the left of the cut, a viable
+set, whose span still contains the left half of a good approximation. This
+chapter formalizes viable sets, trimming them to polynomial size, gluing a
+left state at a cut, and the polynomial filters with their families of
+coefficients on two windows.
+
+\input{chapter/ch35_lvv_viable_sets}
+\input{chapter/ch35_chain_trimming}
+\input{chapter/ch35_collective_trimming}
+\input{chapter/ch35_chain_gluing}
+\input{chapter/ch35_polynomial_filter_parameters}
+\input{chapter/ch35_core_word_coefficients}
+\input{chapter/ch35_three_region_support}
+\input{chapter/ch35_two_marker_middle_factors}
+\input{chapter/ch35_two_marker_middle_index_cardinality}
+
+\begin{theorem}[A square bound for the middle-family cardinality]
+    \label{thm:chain_two_window_family_cardinality}
+    \lean{TNLean.MPS.AreaLaw.crossing_grid_cardinality_le_square}
+    \leanok
+    Let $q,k,\ell,Z,N$ be nonnegative integers with $q\ge2$, $k\ge1$ and
+    $\ell\ge1$, and put $m=\lfloor k/\ell\rfloor$ and
+    $r=\lfloor k/(2\ell)\rfloor$.
+    Suppose that $Z\le(k+1)^{4\ell+3}$ and
+    \begin{align}
+        N & \le (2\ell)^2(r+1)^2 Z(qk)^{24\ell+4m}.\label{eq:chain_middle_family_count}
+    \end{align}
+    Then $N\le D^2$, where $D=(qk)^{18\ell+2m}$.
+    This is a numerical estimate for the counting argument supporting
+    \cite[Proposition~5.7]{Arad2016RigorousRG}.
+\end{theorem}
+\begin{proof}\leanok
+    The inequalities $2\ell\le2^\ell\le(qk)^\ell$ and
+    $r+1\le k+1\le qk\le(qk)^\ell$ give
+    $(2\ell)^2(r+1)^2\le(qk)^{4\ell}$.
+    Also $Z\le(qk)^{4\ell+3}\le(qk)^{7\ell}$.
+    Substituting into~(\ref{eq:chain_middle_family_count}) yields
+    \begin{align*}
+        N\le(qk)^{35\ell+4m}\le(qk)^{36\ell+4m}=D^2.
+    \end{align*}
+\end{proof}
+
+\input{chapter/ch35_selected_middle_data}
+\input{chapter/ch35_selected_coefficient_decomposition}
+\input{chapter/ch35_trace_core_slices}
+\input{chapter/ch35_retained_core_families}
+\input{chapter/ch35_physical_interval_transport}
+\input{chapter/ch35_regional_middle_factors}
+\input{chapter/ch35_selected_middle_mpo_family}
+\input{chapter/ch35_interval_mpo_transfer}
+\input{chapter/ch35_common_middle_mpo_family}
+\input{chapter/ch35_two_marker_scalar_recovery}
+\input{chapter/ch35_two_window_polynomial_recovery}
+\input{chapter/ch35_two_window_polynomial_mpo_family}
+\input{chapter/ch35_matrix_factor_exchange}

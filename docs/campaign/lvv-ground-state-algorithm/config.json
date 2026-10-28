@@ -59,7 +59,7 @@
   },
   "sources": "https://arxiv.org/abs/1307.5143v1",
   "citationPattern": "lvv13|LandauVaziraniVidick|1307\\.5143",
-  "excludePathPattern": "ch35_one_dimensional_chain\\.tex$",
+  "excludePathPattern": "ch35_one_dimensional_[a-z_]*\\.tex$",
   "leanDirs": [
     "TNLean/MPS/AreaLaw/ViableSet"
   ],
