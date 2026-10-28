@@ -48,7 +48,7 @@ regions; documented in `docs/paper-gaps/gs24_domain_wall_nondegenerate.tex`.
   `Intequiv`.
 * `MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq_of_fixed`: the projective
   action of the subgroup fixing the two blocks (Mathlib's `fixingSubgroup`), with the two-cocycle
-  of `TNLean.Algebra.LSymbol.ratioCocycle_isCocycle` (`TNLean/Algebra/LSymbolDomainWall.lean`).
+  of `TNLean.Algebra.LSymbol.ratioCocycle_isMulCocycle₂` (`TNLean/Algebra/LSymbolDomainWall.lean`).
 
 ## References
 - [arXiv:2405.00439](https://arxiv.org/abs/2405.00439) -- Garre-Rubio, Schuch,
@@ -184,7 +184,7 @@ theorem prod_eq_domainWallPhase (hB : ad.IsDomainWallFamily e B)
 /-- **The subgroup fixing two blocks acts projectively on the domain walls between them**
 (arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 2028--2036): for `a, b` fixing `y` and
 `z`, `B^a_{y,z} B^b_{y,z} = α(a, b) B^{ab}_{y,z}` with the two-cocycle
-`α(a, b) = L^y_{a,b} / L^z_{a,b}` of `TNLean.Algebra.LSymbol.ratioCocycle_isCocycle`. The source
+`α(a, b) = L^y_{a,b} / L^z_{a,b}` of `TNLean.Algebra.LSymbol.ratioCocycle_isMulCocycle₂`. The source
 states this on the subgroup fixing every block, which is contained in the subgroup here; see
 `docs/paper-gaps/gs24_unbroken_subgroup_stabilizer.tex` for the stabilizer reading. -/
 theorem mul_eq_of_fixed (hB : ad.IsDomainWallFamily e B) (hA : ∀ x, Kraus.IsNormal (A x))

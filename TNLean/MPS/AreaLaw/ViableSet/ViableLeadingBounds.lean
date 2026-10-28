@@ -19,8 +19,10 @@ lines 472–476, Lemma `l:leading`, lines 493–505, and Lemma `l:within`, lines
 
 **Scope restriction (nontrivial chains and bond bound):** The theorem assumes `0 < L` and
 `2 ≤ q` and uses the library bound `constantCutBond q 1 1 Δ c`, rather than the quantitative
-AKLV bound; see `docs/paper-gaps/lvv13_constant_bond.tex`. Boundary points are quantified on
-the actual bond space. No finite-net cardinality assertion is made.
+AKLV bound; see `docs/paper-gaps/lvv13_nontrivial_chain.tex` and
+`docs/paper-gaps/lvv13_constant_bond.tex`. Boundary points are quantified on the actual bond
+space. No finite-net cardinality assertion is made; see
+`docs/paper-gaps/lvv13_leading_net_point.tex`.
 -/
 
 open Matrix

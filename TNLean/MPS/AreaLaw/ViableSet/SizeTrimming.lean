@@ -23,8 +23,9 @@ lines 472–478, Lemmas `l:leading` and `l:within`, lines 493–515, and Claim `
 lines 519–527.
 
 **Scope restriction (nontrivial chains and bond bound):** The result assumes `0 < L` and
-`2 ≤ q` and uses the library's uniform cut bound rather than the sharper AKLV dependence;
-see `docs/paper-gaps/lvv13_constant_bond.tex`. Taking the union over actual bond dimensions
+`2 ≤ q`, as recorded in `docs/paper-gaps/lvv13_nontrivial_chain.tex`, and uses the library's
+uniform cut bound rather than the sharper AKLV dependence; see
+`docs/paper-gaps/lvv13_constant_bond.tex`. Taking the union over actual bond dimensions
 avoids extending a bond isometry beyond the dimension of the right physical space.
 The finite-span estimate uses the effective input budget `max 1 b` of `IsLeftOpenMPS`.
 The boundary nets use the corrected matrix-space exponent recorded in

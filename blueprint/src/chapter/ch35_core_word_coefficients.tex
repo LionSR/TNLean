@@ -1,0 +1,72 @@
+\section{Coefficients of ordered affine products}
+
+The following coefficients separate the two tensor factors in the ordered
+word argument of
+\cite[Proposition~5.7]{Arad2016RigorousRG} and
+\cite[Lemma~4.2]{Arad2013AreaLaw}. Their definition does not
+involve the matrices on the second factor.
+
+\begin{definition}[Retained word coefficients]
+    \label{def:core_word_coefficients}
+    \lean{Matrix.coreWordCoeff}
+    \leanok
+    Let $m$ be a finite set, let $I$ be an arbitrary set, and choose
+    $R_a\in\C^{m\times m}$ for $a\in I$. For a finite list $s$ of pairs
+    $(K,c)\in\C^{m\times m}\times\C$ and a word $w$ in $I$, define
+    $C_R(s,w)\in\C^{m\times m}$ recursively by
+    \begin{align}
+        C_R(\varnothing,\varnothing) & =\Id_m,\notag                \\
+        C_R(\varnothing,aw)          & =0,\notag                    \\
+        C_R((K,c)::s,\varnothing)    & =K C_R(s,\varnothing),\notag \\
+        C_R((K,c)::s,aw)             & =K C_R(s,aw)+cR_a C_R(s,w).
+        \label{eq:core_word_recursion}
+    \end{align}
+    Here $aw$ is the word obtained by placing $a$ before $w$, and $(K,c)::s$
+    places the displayed pair before the list $s$.
+\end{definition}
+
+\begin{theorem}[Expansion over interior words]
+    \label{thm:core_word_product}
+    \lean{Matrix.prod_coreStep_eq_sum}
+    \leanok
+    \uses{def:core_word_coefficients}
+    Let $I,m,n$ be finite sets. Choose
+    $R_a\in\C^{m\times m}$ and $N_a\in\C^{n\times n}$ for $a\in I$.
+    For a list $s=((K_0,c_0),\ldots,(K_{h-1},c_{h-1}))$,
+    \begin{align}
+        \prod_{j=0}^{h-1}\left(K_j\otimes \Id_n+
+        \sum_{a\in I}(c_jR_a)\otimes N_a\right)
+        =\sum_{t=0}^{h}\ \sum_{w\in I^t}
+        C_R(s,w)\otimes\left(\prod_{j=0}^{t-1}N_{w_j}\right).
+        \label{eq:core_word_product}
+    \end{align}
+    Every displayed product is taken in increasing order. Empty products are
+    identity matrices, and the empty alphabet and empty matrix index sets are
+    included. No commutativity assumption is made on the matrices.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:core_word_coefficients}
+    Introduce a central formal variable $X$ and the matrix polynomial
+    \begin{align}
+        P_s(X)=\prod_{(K,c)\in s}
+        \left(K\otimes \Id_n+X\sum_{a\in I}(cR_a)\otimes N_a\right),
+        \label{eq:core_word_polynomial}
+    \end{align}
+    with the product in list order. Induction on $s$, using the coefficient
+    recurrence for left multiplication by a linear polynomial, gives
+    \begin{align}
+        [X^t]P_s(X)=\sum_{w\in I^t}C_R(s,w)\otimes
+        \left(\prod_{j=0}^{t-1}N_{w_j}\right).
+        \label{eq:core_word_coefficient}
+    \end{align}
+    At a positive degree, split each word into its first letter and remaining
+    word. The constant term of the new factor contributes
+    $K C_R(s,aw)$, while its linear term contributes $cR_a C_R(s,w)$.
+    These are the two terms in (\ref{eq:core_word_recursion}).
+
+    The same recursion shows that $C_R(s,w)=0$ when $|w|>|s|$. Thus
+    $\deg P_s\le h$. Evaluation at $X=1$ preserves the ordered product because
+    the identity matrix commutes with every coefficient. Summing
+    (\ref{eq:core_word_coefficient}) over $0\le t\le h$ gives
+    (\ref{eq:core_word_product}).
+\end{proof}
