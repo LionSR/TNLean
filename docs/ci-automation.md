@@ -213,31 +213,21 @@ base revision (the previous head for pushes).
   compile error fails the step, but a build that runs past the budget (for
   example behind a cold dependency cache after a pin change) stops with a
   warning and leaves the remaining modules to the root build.
-  Only after that build completes successfully, the remaining part of the same
-  budget is used for advisory diagnostics of changed fixtures and their imported
-  fixture support files. Lean's native import parser determines those prerequisites;
-  Lake prepares their package dependencies, and fixtures elaborate in import order
-  into a fresh overlay with the strict options. Each diagnostic is capped by the
-  remaining budget and the existing per-file timeout. Errors and timeouts are
-  reported without replacing or skipping any mandatory check below. Dependency
-  build timings join the build log; fixture output and parser JSON do not.
 - **Strict checks** (after the root build): every changed production file and
-  every affected test file is elaborated with the package options
-  and `-DwarningAsError=true`, three files at a time, each with a time limit.
-  Test files are those under `TNLeanTest/` and the standalone regressions
-  `scripts/*_regression.lean`. A test is affected when it changed or when its
-  repository import closure contains a changed, deleted or renamed module; the
-  tests it imports are elaborated first, into a
-  fresh overlay placed ahead of every Lake package path. Every test runs on
-  manual dispatch, and when the base revision is unknown or
-  `lake-manifest.json`, `lakefile.toml`, `lean-toolchain`, the workflow, or the
-  selection script changes.
+  every affected standalone regression `scripts/*_regression.lean` is
+  elaborated with the package options and `-DwarningAsError=true`, three files
+  at a time, each with a time limit. A regression is affected when it changed
+  or when its repository import closure contains a changed, deleted or renamed
+  module. Every regression runs on manual dispatch, and when the base revision
+  is unknown or `lake-manifest.json`, `lakefile.toml`, `lean-toolchain`, the
+  workflow, or the selection script changes.
 
 `python3 scripts/ci_lean_checks.py list --base origin/main` prints the
 selection locally. Do not add per-module "build early" or "test strictly" steps
-to `pr-ci.yml`: a new test file under `TNLeanTest/`, or a new
-`scripts/*_regression.lean`, is picked up automatically,
-including axiom-guard files that pin `#print axioms` output with `#guard_msgs`.
+to `pr-ci.yml`: a new module, or a new `scripts/*_regression.lean`, is picked
+up automatically. The repository keeps no test-fixture directory: the module
+policy job rejects any file under `TNLeanTest/`, and per-theorem `#print
+axioms` fixtures are not written (see `docs/project_conventions.md`).
 
 ---
 

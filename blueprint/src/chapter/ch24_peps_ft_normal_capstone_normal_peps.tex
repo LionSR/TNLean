@@ -373,3 +373,272 @@ product states, and the square lattice.
         the proportionality of the gauges themselves.
     \end{proof}
 \end{theorem}
+
+\begin{definition}[A common physical action on a tensor network]%
+    \label{def:peps_physical_tensor_action}
+    \lean{TNLean.PEPS.physicalTensorAction}
+    \leanok
+
+    \uses{def:peps_tensor}
+    For a tensor $A$ on a finite simple graph with vertex set $V$ and a
+    matrix $U\in\MN{d}$, define $B=U\cdot A$ by keeping all bond spaces
+    and setting $B_v(\eta,\sigma)=\sum_\tau U_{\sigma\tau}A_v(\eta,\tau)$.
+\end{definition}
+
+\begin{theorem}[State of a physical tensor action]%
+    \label{thm:peps_state_physical_tensor_action}
+    \lean{TNLean.PEPS.stateCoeff_physicalTensorAction}
+    \leanok
+
+    \uses{def:peps_physical_tensor_action,
+        def:peps_dependent_physical_product, def:peps_stateCoeff}
+    For a tensor $A$ on a finite simple graph with vertex set $V$ and
+    $U\in\MN{d}$, the tensor $B=U\cdot A$ has state
+    \begin{align}
+        \Coeff_B=U^{\otimes V}\Coeff_A.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Expand the local matrix products in the contraction and exchange the
+    finite sums. The product of the physical coefficients is
+    $\prod_vU_{\sigma_v\tau_v}$, giving the stated product action.
+\end{proof}
+
+\begin{theorem}[Positive physical dimension from an injective region]%
+    \label{thm:peps_physical_dimension_pos_of_region}
+    \lean{TNLean.PEPS.physicalDim_pos_of_nonempty_injectiveRegion}
+    \leanok
+
+    \uses{def:peps_regionInjectivityDataOf}
+    If all virtual bond spaces are nonzero and a nonempty region is
+    injective, then the common physical dimension $d$ is positive.
+\end{theorem}
+\begin{proof}\leanok
+    Positive bond dimensions give the boundary configuration $\beta_e=0$
+    on every boundary edge. Linear independence gives the nonzero blocked
+    vector $T_{A,R}^{\beta}\ne0$. If $d=0$, the nonempty region $R$ has
+    no physical configurations, so
+    \begin{align}
+        T_{A,R}^{\beta}=0,
+    \end{align}
+    a contradiction.
+\end{proof}
+
+\begin{theorem}[Regional injectivity from the state and bond dimensions]%
+    \label{thm:peps_regional_injectivity_from_state}
+    \lean{TNLean.PEPS.regionBlockedTensorInjective_of_sameState_of_bondDim_eq}
+    \leanok
+
+    \uses{def:peps_regionInjectivityDataOf, def:peps_same_state}
+    Let $A$ and $B$ have the same state and the same positive bond
+    dimensions. If a region $R$ and its complement are injective for $A$,
+    then $R$ is injective for $B$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:peps_region_partial_state, thm:peps_region_partial_state_same_state}
+    Write $F_{A,R}$ and $F_{B,R}$ for the blocked maps from the common
+    boundary space to the physical space of $R$. Injectivity of the
+    complement for $A$ identifies the range of $F_{A,R}$ with the span of
+    the partial-state vectors across this cut:
+    \begin{align}
+        \operatorname{ran}F_{A,R}
+         & =\operatorname{span}\{\psi^\tau_{A,R}\}_\tau.
+        \notag
+    \end{align}
+    Since $A$ and $B$ have the same state, Theorem~\ref{thm:peps_region_partial_state_same_state}
+    gives
+    \begin{align}
+        \psi^\tau_{A,R}
+         & =\psi^\tau_{B,R}
+        \notag
+    \end{align}
+    for every complement configuration $\tau$. Splitting the contraction of
+    $B$ along the boundary of $R$ writes each $\psi^\tau_{B,R}$ as a linear
+    combination of the blocked vectors of $B$, because every bond dimension
+    is positive. Hence
+    \begin{align}
+        \operatorname{ran}F_{A,R}
+         & =\operatorname{span}\{\psi^\tau_{B,R}\}_\tau
+        \subseteq\operatorname{ran}F_{B,R}.
+        \notag
+    \end{align}
+    Thus $\dim\operatorname{ran}F_{B,R}\ge
+        \dim\operatorname{ran}F_{A,R}=\dim\operatorname{dom}F_{B,R}$.
+    The two domains have the same dimension because their bond dimensions
+    agree. Consequently the columns of $F_{B,R}$ are linearly independent.
+\end{proof}
+
+\begin{definition}[Inherited normal pair blockings]%
+    \label{def:peps_normal_pair_blockings_from_state}
+    \lean{TNLean.PEPS.normalPairHypothesesOfSameStateOfBondDimEq}
+    \leanok
+
+    \uses{def:peps_normalPEPSBlockingHypotheses, def:peps_normalPEPSPairHypotheses,
+        def:peps_same_state}
+    Suppose $A$ admits the normal blocking regions of
+    Definition~\ref{def:peps_normalPEPSBlockingHypotheses}, with nonzero
+    virtual spaces. If $B$ has the same state and bond dimensions, the
+    inherited pair blockings use exactly these regions for both tensors.
+\end{definition}
+\begin{proof}\leanok
+    \uses{thm:peps_regional_injectivity_from_state, lem:peps_injectiveRegion_union_pos}
+    For each edge blocking, the complement of each of the three regions
+    is the disjoint union of the other two, hence is injective for $A$.
+    The one-site comparison regions already have injective complements.
+    Theorem~\ref{thm:peps_regional_injectivity_from_state} therefore proves
+    injectivity of each selected region for $B$. All regions and their
+    incidence properties are retained, and the bond spaces stay nonzero.
+\end{proof}
+
+\begin{theorem}[Virtual gauges for a normal on-site symmetry]%
+    \label{thm:peps_normal_onsite_symmetry_gauge}
+    \lean{TNLean.PEPS.gaugeEquiv_physicalTensorAction_of_normal_symmetry}
+    \leanok
+
+    \uses{def:peps_physical_tensor_action, def:peps_normalPEPSBlockingHypotheses,
+        def:peps_normalPEPSPairHypotheses, def:GaugeEquivPEPS}
+    Let $A$ be a normal tensor network on a connected finite simple graph
+    with nonzero virtual spaces. Assume the edge blockings and one-site
+    comparison regions of
+    Definition~\ref{def:peps_normalPEPSBlockingHypotheses}; in each edge
+    blocking, the distinguished edge is the entire bond between the first
+    two regions. If $U\in\MN{d}$ satisfies
+    $U^{\otimes V}\Coeff_A=\Coeff_A$, then there is an invertible matrix
+    $X_e$ on every edge such that $(U\cdot A)_v=\operatorname{Gauge}_X(A)_v$
+    at every vertex.
+    This gives the virtual-gauge conclusion of the global-symmetry
+    application in~\cite[lines~1696--1713]{Molnar2018NormalPEPS}.
+    Connectivity is needed to absorb the component scalars, as recorded
+    in~\cite{gap:peps_gaugeConsistency_connectivity_gap}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:peps_physical_tensor_action, thm:peps_state_physical_tensor_action,
+        def:peps_normal_pair_blockings_from_state,
+        thm:peps_physical_dimension_pos_of_region,
+        thm:fundamentalTheorem_normalPEPS_connected}
+    Put $B=U\cdot A$. Its state equals that of $A$, and its bond
+    dimensions are unchanged. Definition~\ref{def:peps_normal_pair_blockings_from_state}
+    gives the required shared injective regions for $A$ and $B$, retaining
+    the single-crossing property of each distinguished edge.
+    A one-site comparison region containing its distinguished site is
+    nonempty, so Theorem~\ref{thm:peps_physical_dimension_pos_of_region}
+    gives $d>0$. Apply the connected normal Fundamental Theorem to this pair.
+\end{proof}
+
+\begin{theorem}[Multiplication of endpoint gauge matrices]%
+    \label{thm:peps_endpoint_gauge_mul}
+    \lean{TNLean.PEPS.edgeGaugeAt_mul}
+    \leanok
+
+    \uses{def:edgeGaugeAt}
+    Let $X$ and $Y$ be invertible edge-matrix families, and write
+    $M_{v,e}(X)$ for the endpoint action of $X_e$ at $v$. Then
+    $M_{v,e}(XY)=M_{v,e}(X)M_{v,e}(Y)$.
+\end{theorem}
+\begin{proof}\leanok
+    At the first endpoint this is matrix multiplication. At the second,
+    $(XY)^{-\mathsf T}=X^{-\mathsf T}Y^{-\mathsf T}$, where
+    $X^{-\mathsf T}=(X^{-1})^{\mathsf T}$.
+\end{proof}
+
+\begin{theorem}[Composition of virtual gauge actions]%
+    \label{thm:peps_gauge_action_composition}
+    \lean{TNLean.PEPS.gaugeVertex_applyGauge}
+    \leanok
+
+    \uses{def:gaugeVertex, def:applyGauge}
+    For invertible edge-matrix families $X$ and $Y$, the vertex tensors
+    satisfy $(A^X)^Y_v=A^{YX}_v$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_endpoint_gauge_mul}
+    Expand both gauge actions and exchange the finite sums. On each
+    incident leg the resulting matrix is
+    $M_{v,e}(Y)M_{v,e}(X)=M_{v,e}(YX)$.
+\end{proof}
+
+\begin{theorem}[Composition of physical tensor actions]%
+    \label{thm:peps_physical_action_composition}
+    \lean{TNLean.PEPS.physicalTensorAction_mul_component}
+    \leanok
+
+    \uses{def:peps_physical_tensor_action}
+    For physical matrices $U,W\in\MN{d}$, the vertex tensors satisfy
+    $(U\cdot(W\cdot A))_v=((UW)\cdot A)_v$.
+\end{theorem}
+\begin{proof}\leanok
+    Exchange the finite sums over the two physical indices and use
+    $(UW)_{\sigma\kappa}=\sum_\tau U_{\sigma\tau}W_{\tau\kappa}$.
+\end{proof}
+
+\begin{theorem}[Physical and virtual tensor actions commute]%
+    \label{thm:peps_physical_virtual_commute}
+    \lean{TNLean.PEPS.physicalTensorAction_applyGauge_component}
+    \leanok
+
+    \uses{def:peps_physical_tensor_action, def:gaugeVertex, def:applyGauge}
+    For a physical matrix $U$ and an invertible edge-matrix family $X$,
+    the vertex tensors satisfy $(U\cdot A^X)_v=(U\cdot A)^X_v$.
+\end{theorem}
+\begin{proof}\leanok
+    Write $M_{v,e}=M_{v,e}(X)$ and let $\eta,\eta'$ range over the
+    virtual indices of the legs incident to $v$. Exchanging the sums gives
+    \begin{align}
+        (U\cdot A^X)_v(\eta,\sigma)
+         & =\sum_\tau U_{\sigma\tau}\sum_{\eta'}
+        \Bigl(\prod_{e\ni v}(M_{v,e})_{\eta_e\eta'_e}\Bigr)
+        A_v(\eta',\tau)\notag                                               \\
+         & =\sum_{\eta'}\Bigl(\prod_{e\ni v}(M_{v,e})_{\eta_e\eta'_e}\Bigr)
+        \sum_\tau U_{\sigma\tau}A_v(\eta',\tau)
+        =(U\cdot A)^X_v(\eta,\sigma).\notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Projective bond representations of a normal symmetry group]%
+    \label{thm:peps_normal_virtual_representation}
+    \lean{TNLean.PEPS.exists_virtualRepresentation_of_normal_symmetry}
+    \leanok
+
+    \uses{def:projective_rep, thm:peps_normal_onsite_symmetry_gauge}
+    Let $A$ satisfy all the graph and blocking hypotheses of
+    Theorem~\ref{thm:peps_normal_onsite_symmetry_gauge}. Let $H$ be a group
+    and $U:H\to\GL_d(\C)$ a representation such that
+    $U(g)^{\otimes V}\Coeff_A=\Coeff_A$ for every $g\in H$.
+    Then each edge $e$ admits a homomorphism
+    $\overline\rho_e:H\to\operatorname{PGL}_{D_e}(\C)$ and invertible lifts
+    $\rho_e(g)\in\GL_{D_e}(\C)$ with
+    $\overline\rho_e(g)=[\rho_e(g)]$. Here
+    $\operatorname{PGL}_{D_e}(\C)=\GL_{D_e}(\C)/\C^\times$.
+    The lifts have a factor system $\omega_e:H\times H\to\C^\times$
+    such that, for all $g,h,k\in H$,
+    \begin{align}
+        \rho_e(g)\rho_e(h)          & =\omega_e(g,h)\rho_e(gh),\notag     \\
+        \omega_e(g,h)\omega_e(gh,k) & =\omega_e(g,hk)\omega_e(h,k).\notag
+    \end{align}
+    At every vertex, $(U(g)\cdot A)_v=A^{X(g)}_v$, where
+    $X(g)_e=\rho_e(g^{-1})$.
+    This proves the projective-representation assertion
+    in~\cite[Applications, line~1713]{Molnar2018NormalPEPS}, with the
+    connectedness correction in~\cite{gap:peps_gaugeConsistency_connectivity_gap}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_normal_onsite_symmetry_gauge,
+        def:peps_normal_pair_blockings_from_state,
+        thm:peps_physical_action_composition, thm:peps_physical_virtual_commute,
+        thm:peps_gauge_action_composition,
+        thm:fundamentalTheorem_normalPEPS_gauge_unique, lem:cocycle_of_assoc}
+    Choose gauges $Z(g)$ from
+    Theorem~\ref{thm:peps_normal_onsite_symmetry_gauge}.
+    Composition and commutation give
+    $(U(gh)\cdot A)_v=A^{Z(h)Z(g)}_v$.
+    The same transformed tensor is also $A^{Z(gh)}_v$.
+    Gauge uniqueness therefore gives nonzero scalars $c_e(g,h)$ with
+    $Z_e(h)Z_e(g)=c_e(g,h)Z_e(gh)$.
+    Set $\rho_e(g)=Z_e(g^{-1})$ and
+    $\omega_e(g,h)=c_e(h^{-1},g^{-1})$.
+    Since $(gh)^{-1}=h^{-1}g^{-1}$, this is the stated projective
+    multiplication law. Passing to projective classes removes its scalar
+    factor and gives the homomorphism $\overline\rho_e$.
+    The bond dimension $D_e$ is positive, so
+    Lemma~\ref{lem:cocycle_of_assoc} gives the cocycle identity.
+\end{proof}

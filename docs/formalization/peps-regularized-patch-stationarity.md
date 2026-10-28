@@ -86,23 +86,6 @@ nonzero global space when normalization is needed. No extra nonempty-local-basis
 hypothesis is added. With no coordinates there is no selected `j`; the marginal
 statements still apply to the identity product.
 
-The post-build strict regression targets are:
-
-- `TNLeanTest/RegularizedPatchStationarity.lean`: an actual feasible singular
-  qubit density with a skew-Hermitian generator has real first-variation pairing
-  `3/8`, and therefore cannot be an actual minimizer. Feasibility alone is
-  insufficient for stationarity. It also checks two occurrences of the same
-  region: updating index zero leaves index one unchanged, and insertion
-  remains `I₀(K) = L₁KΩ`, `I₁(K) = KL₀Ω` in their original positions.
-- `TNLeanTest/RegularizedPatchMarginal.lean`: dependent local dimensions two
-  and three, an empty-region density, and a complex-phase state with Pauli-Y
-  expectation `2` rather than the `−2` obtained by reversing its outer product.
-  The empty-family case also checks the canonical marginal for the identity
-  product directly.
-- `TNLeanTest/RegularizedPatchZeroWeight.lean`: zero-weight
-  behavior, including a minimizing tuple whose independent density is not
-  forced to commute with its final marginal.
-
 The blueprint diagram contracts the actual ordered insertion on the full
 global Hilbert space. Reading from the input on the right, the lower-index
 product acts first, the identity-extended commutator second, and the higher-index

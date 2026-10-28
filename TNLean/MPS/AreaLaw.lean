@@ -54,6 +54,7 @@ import TNLean.MPS.AreaLaw.LocalSolution
 import TNLean.MPS.AreaLaw.LogarithmicAreaLaw
 import TNLean.MPS.AreaLaw.LogarithmicSeparation
 import TNLean.MPS.AreaLaw.MPSApproximation
+import TNLean.MPS.AreaLaw.NearestNeighbourImaginaryTime
 import TNLean.MPS.AreaLaw.OpenMPS
 import TNLean.MPS.AreaLaw.OpenMPSCutRank
 import TNLean.MPS.AreaLaw.OpenMPSProduct
@@ -62,6 +63,7 @@ import TNLean.MPS.AreaLaw.OpenMPSSpan
 import TNLean.MPS.AreaLaw.OverlapEnergy
 import TNLean.MPS.AreaLaw.PartialSwap
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
+import TNLean.MPS.AreaLaw.PolynomialFilterParameters
 import TNLean.MPS.AreaLaw.ProductCutIteration
 import TNLean.MPS.AreaLaw.ProductReplacement
 import TNLean.MPS.AreaLaw.ProtocolConditionalPreparation

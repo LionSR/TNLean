@@ -1192,6 +1192,8 @@ abstracted — record why, so it is not re-proposed).
 - **Abstraction:** `TNLeanTest.SingleQubitConfig.plusDensity` and
   `plusDensity_posSemidef` in `TNLeanTest/Support/SingleQubitConfig.lean`.
   The three regressions use the shared density and positivity result directly.
+- **Removed (2026-10-28):** the abstraction and its three call sites were
+  deleted with the rest of `TNLeanTest/`.
 - **Notes:** The former private `density`/`density_psd`,
   `secondDensity`/`secondDensity_psd`, and `plusDensity`/`plusDensity_posSemidef`
   pairs are removed. The singularity, noncommutation, first-variation, and
@@ -4948,6 +4950,24 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Counting nearest-neighbour bonds that meet a region — candidate (2026-10-28)
+
+- **Pattern:** Bound the number of nearest-neighbour bonds meeting a finite
+  region by a linear function of its size: either inject the meeting bonds
+  into a `Fin` of the target size by an affine relabelling such as
+  `i ↦ i.val + m + 1 - c`, closing the bounds with `omega`, or cover them by
+  the region and its translate and count the union.
+- **Seen:** `MPS/AreaLaw/NearestNeighbourImaginaryTime.lean`
+  (`card_bonds_meeting_enlarged_interval_le`, clipped linear intervals, by
+  injection) and `MPS/Preparation/FiniteRingLiebRobinson.lean`
+  (`card_bonds_meeting_le`, cyclic ring bonds, by a union cover); two
+  occurrences across two files with different ambient index sets.
+- **Abstraction:** A shared counting lemma in `TNLean/Algebra/`, stated for
+  bonds `{i, i + 1}` meeting a finite set of sites, from which both the
+  clipped-interval and ring bounds follow.
+- **Notes:** Below the rule-of-three threshold. A third occurrence would
+  justify the shared lemma.
+
 ### Simultaneous regional factors for a supported family — candidate (2026-10-26)
 
 - **Pattern:** Classify each ordinary term into one of three regions, choose
@@ -7187,6 +7207,9 @@ spectral split → block extraction → MPV calculation → strict bounds
   lines of metaprogramming with no mathematical content; a shared command would
   move the allow-list out of the audited file without removing a proof
   obligation. Fixtures keep the explicit block.
+- **Superseded (2026-10-28):** the fixtures themselves were deleted with the
+  rest of `TNLeanTest/`, and new ones are no longer written
+  (`docs/project_conventions.md`, "No test fixtures").
 
 ### Elementary set and finite-sum proof structure — rejected (2026-10-02)
 
@@ -7778,8 +7801,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   `WordEvaluationTransport`. The helpers identify the register lists before
   applying ordinary congruence to the operators. They do not infer equality
   of restricted operators from equality before restriction. The new framed
-  local-part proof uses the same shared lemmas. Named axiom checks are in
-  `TNLeanTest/WordEvaluationTransportAxioms.lean`.
+  local-part proof uses the same shared lemmas.
 - **Further promotion (2026-10-12):** Three identity-operator transports in
   `WordPermutationRestriction`, `LocalPartFrameListRestriction` and
   `LocalPartSpectatorOwnerExclusion` now use `Word.eval_id_heq`. Four input

@@ -74,7 +74,3 @@ the Hamiltonian energy estimate, construct the low-energy filters, establish
 a minimizing vector or a Schmidt-rank bound, or complete Proposition 4.1.
 In particular, no energy bound is assumed as a field or replaced by a scalar
 inequality with the same numerical constant.
-
-The geometric statements have regression checks in
-`TNLeanTest/NestedPatchGeometry.lean` and kernel-dependency guards in
-`TNLeanTest/NestedPatchGeometryAxioms.lean`.
