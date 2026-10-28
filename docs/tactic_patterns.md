@@ -9448,6 +9448,23 @@ entropy growth. There are two independent occurrences. A third consumer should
 share the logarithmic integer-budget lemma and the elementary eventual comparison;
 there is no need for a new tactic.
 
+### Disjoint adjacent chain intervals — promoted (2026-10-27)
+
+- **Pattern:** Prove disjointness of consecutive chain intervals by their common
+  boundary.
+- **Seen:** Seven repeated proofs in `CommonMiddleMPOFamily.lean`,
+  `SelectedCoefficientDecomposition.lean`, `SelectedMiddleData.lean`,
+  `SelectedMiddleMPOFamily.lean` (twice), `ThreeRegionSupport.lean` and
+  `TwoWindowOperatorForms.lean`; two further uses in `Hastings/Window.lean`.
+- **Abstraction:** `TNLean.MPS.AreaLaw.disjoint_interval_interval` in
+  `MPS/AreaLaw/Basic.lean`. The proof applies
+  `Finset.Ico_disjoint_Ico_consecutive` to the natural-number positions.
+- **Notes:** The statement needs no ordering of the endpoints and no positivity
+  of the chain length. The Mathlib theorem is already imported. The former
+  `Hastings.disjoint_interval_interval` is removed rather than retained as an
+  alias, so users of the basic interval result need no entropy module. All seven
+  repeated family proofs and both window uses refer to the common declaration.
+
 ### Unit phases in energy and absolute overlap — candidate (2026-10-26)
 
 - **Seen:** `MPS/AreaLaw/ViableSet/GluingBounds.lean` and the companion

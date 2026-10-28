@@ -1,0 +1,162 @@
+\section{Retained matrices and finite families of ordered cores}
+
+The identities below give supporting algebra for
+\cite[Proposition~5.7]{Arad2016RigorousRG}.
+All products of site matrices retain their natural order.
+
+\begin{definition}[An interval and its single retained complement]
+    \label{def:retained_interval_coordinates}
+    \lean{TNLean.MPS.AreaLaw.retainedIntervalEquiv,MPOTensor.actualAffineRetainedConfig}
+    \leanok
+    Let $T,L,a$ be nonnegative integers with $a+L\le T$, and set
+    $J=[a,a+L)$ in the chain of $T$ sites. For any set $X$, restriction gives
+    an equivalence
+    \begin{align}
+        e:X^{J^c}\times X^{\{0,\ldots,L-1\}} & \longrightarrow
+        X^{\{0,\ldots,T-1\}},\notag                            \\
+        e(\eta,x)_v                          & =
+        \begin{cases}x_{v-a},&a\le v<a+L,\\ \eta_v,&v\notin J.\end{cases}
+        \label{eq:retained_interval_coordinates}
+    \end{align}
+    Its inverse restricts a configuration to $J^c$ and to the sites $a+r$,
+    $0\le r<L$. For local alphabet $\{0,\ldots,q-1\}$, denote the retained
+    configuration set by $\mathcal R=\{0,\ldots,q-1\}^{J^c}$.
+    The complement is a single set: each site outside $J$ occurs once.
+\end{definition}
+
+\begin{definition}[The actual retained closing matrix]
+    \label{def:actual_retained_interval_closing}
+    \lean{MPOTensor.actualRetainedIntervalClosing}
+    \leanok
+    \uses{def:retained_interval_coordinates}
+    Let $A_v(i,j)\in\C^{B\times B}$ be supplied site-dependent operator
+    tensors on the full chain, and let $C\in\C^{B\times B}$ be supplied.
+    For $\eta,\theta\in\mathcal R$, define
+    \begin{align}
+        P(\eta,\theta) & =\prod_{v=0}^{a-1}A_v(\eta_v,\theta_v),         &
+        S(\eta,\theta) & =\prod_{v=a+L}^{T-1}A_v(\eta_v,\theta_v),\notag   \\
+        F(\eta,\theta) & =S(\eta,\theta)\,C\,P(\eta,\theta).
+        \label{eq:actual_retained_interval_closing}
+    \end{align}
+    Empty products are identity matrices. The matrix $F(\eta,\theta)$ is
+    chosen before any physical coordinates inside $J$.
+\end{definition}
+
+\begin{definition}[The scalar-closed core at a retained matrix entry]
+    \label{def:retained_stack_core}
+    \lean{MPOTensor.retainedStackCore}
+    \leanok
+    \uses{def:core_word_coefficients,def:trace_core_word_closing}
+    Let $m$ be a finite retained index set, let
+    $R_{ab}\in\C^{m\times m}$ for $0\le a,b<B$, and let
+    $s=((K_0,c_0),\ldots,(K_{h-1},c_{h-1}))$ be a list of affine steps.
+    For $t\ge0$ and $i,j\in m$, let
+    \begin{align}
+        \gamma_t^{i,j}(w)=C_R(s,w)_{ij},
+        \qquad w\in(\{0,\ldots,B-1\}^2)^t.
+        \label{eq:retained_stack_scalar_coefficient}
+    \end{align}
+    The joint closing matrix $D_t^{i,j}$ is the closing matrix associated to
+    these scalar word coefficients. In the stacking coordinates $\iota_t$
+    on words of $t$ virtual labels, its entries are
+    \begin{align}
+        (D_t^{i,j})_{\iota_t(v),\iota_t(u)}
+        =\gamma_t^{i,j}\bigl((u_r,v_r)_{r=0}^{t-1}\bigr).
+        \label{eq:retained_stack_closing_entries}
+    \end{align}
+    For supplied interior tensors $A_v$, $0\le v<L$, let $A_v^{[t]}$ be
+    their existing $t$-layer stack, of virtual dimension $B^t$. Define
+    \begin{align}
+        W_t^{i,j}(\sigma,\tau)=\operatorname{tr}\left(
+        D_t^{i,j}\prod_{v=0}^{L-1}A_v^{[t]}(\sigma_v,\tau_v)\right).
+        \label{eq:retained_stack_core}
+    \end{align}
+    The closing matrix depends on $R,s,t,i,j$, independently of the interior
+    chain. In particular, no rank-one condition on that matrix is imposed.
+\end{definition}
+
+\begin{theorem}[A finite family in natural physical order]
+    \label{thm:finite_natural_retained_core_family}
+    \lean{MPOTensor.exists_finite_natural_retained_core_family}
+    \leanok
+    \uses{def:retained_interval_coordinates,def:retained_stack_core,
+        def:trace_core_matrix_slice,thm:core_word_product,
+        thm:trace_core_slice_words,thm:trace_core_open_square,
+        thm:chain_fixed_configuration_extension}
+    Fix $a+L\le T$, interior tensors $A_v$ of virtual dimension $B$, and
+    a retained index set $m=\mathcal R$. Choose $R_{ab}\in\C^{m\times m}$
+    and a list $s$ of $h$ affine steps on $m$.
+    Let $N_{ab}(A)$ be the interior matrix slice obtained by fixing the two
+    virtual endpoints to $a,b$. Put $n=(h+1)|m|^2$.
+    There are degrees $t_r\in\{0,\ldots,h\}$, retained indices $i_r,j_r\in m$,
+    and full-chain operators $V_r$, for $0\le r<n$, such that
+    \begin{align}
+        V_r & =\left(|i_r\rangle\langle j_r|\otimes
+        W_{t_r}^{i_r,j_r}\right)^e,\notag           \\
+        \left(\prod_{v=0}^{h-1}\left(K_v\otimes I+
+        \sum_{a,b}(c_vR_{ab})\otimes N_{ab}(A)\right)\right)^e
+            & =\sum_{r=0}^{n-1}V_r.
+        \label{eq:finite_natural_retained_core_family}
+    \end{align}
+    The superscript denotes transport from retained/interior coordinates by
+    the equivalence $e$. Each $V_r$, viewed as a vector on the paired physical
+    alphabet, has an open-boundary MPS representation with bond bound
+    $(B^{t_r})^2$. Empty chains, empty intervals, and zero physical or virtual
+    dimensions are included whenever the stated retained data exist.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:retained_interval_coordinates,def:retained_stack_core,
+        thm:core_word_product,thm:trace_core_slice_words,thm:trace_core_open_square,
+        thm:chain_fixed_configuration_extension}
+    Expand the ordered affine product over words of each length $0\le t\le h$.
+    Resolve every retained coefficient on the matrix units of $m$. For fixed
+    $t,i,j$, the scalar word coefficients are exactly
+    (\ref{eq:retained_stack_scalar_coefficient}). Their joint closing matrix
+    therefore gives the core (\ref{eq:retained_stack_core}). Enumerate the
+    finite set $\{0,\ldots,h\}\times m\times m$ to obtain the literal family
+    in (\ref{eq:finite_natural_retained_core_family}).
+
+    A trace-closed chain of virtual dimension $B^t$ has open-boundary bond
+    bound $(B^t)^2$. Inserting fixed retained configurations outside the
+    interval gives bond bound $\max\{1,(B^t)^2\}$. If $B^t>0$, this is the
+    stated square bound. If $B^t=0$, the trace defining the core vanishes;
+    the full inserted operator is zero and has the square bound as well.
+\end{proof}
+
+\begin{theorem}[The affine product of the actual supplied trace operator]
+    \label{thm:actual_natural_affine_product}
+    \lean{MPOTensor.prod_actual_natural_affine_eq}
+    \leanok
+    \uses{def:retained_interval_coordinates,def:actual_retained_interval_closing}
+    Fix $a+L\le T$. For supplied full-chain tensors $A^{\mathrm{full}}_v$
+    of virtual dimension $B$ and cap $C\in\C^{B\times B}$, define
+    \begin{align}
+        H(\sigma,\tau)      & =\operatorname{tr}\left(
+        C\prod_{v=0}^{T-1}A^{\mathrm{full}}_v(\sigma_v,\tau_v)\right),\notag \\
+        A^{\mathrm{int}}_r  & =A^{\mathrm{full}}_{a+r}, &
+        R_{ab}(\eta,\theta) & =F(\eta,\theta)_{ba}.
+        \label{eq:actual_natural_affine_data}
+    \end{align}
+    For every ordered list $s=((K_v,c_v))_{v=0}^{h-1}$ on $\mathcal R$,
+    \begin{align}
+        \prod_{v=0}^{h-1}\left((K_v\otimes I)^e+c_vH\right)
+        =\left(\prod_{v=0}^{h-1}\left(K_v\otimes I+
+        \sum_{a,b}(c_vR_{ab})\otimes N_{ab}(A^{\mathrm{int}})\right)\right)^e.
+        \label{eq:actual_natural_affine_product}
+    \end{align}
+    Here $F$ is exactly the suffix-cap-prefix matrix of
+    (\ref{eq:actual_retained_interval_closing}). The identity concerns the
+    supplied trace operator $H$; no identification with another Hamiltonian
+    is assumed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:retained_interval_coordinates,def:actual_retained_interval_closing}
+    Split the ordered full-chain product into prefix, interval and suffix.
+    Cyclicity of the trace moves the suffix before the cap, giving $F=SCP$.
+    Expanding the trace over its two virtual indices gives
+    $H^{{e}^{-1}}=\sum_{a,b}R_{ab}\otimes N_{ab}(A^{\mathrm{int}})$;
+    the reversed indices in $F_{ba}$ come from the trace pairing.
+    Transport preserves sums, scalar multiplication and ordered products.
+    Applying it to each affine factor proves
+    (\ref{eq:actual_natural_affine_product}).
+\end{proof}
