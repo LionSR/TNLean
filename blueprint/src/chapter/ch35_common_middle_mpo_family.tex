@@ -1,0 +1,137 @@
+\section{A common family on the prescribed middle interval}
+
+Write $\mathcal C(S)=\{0,\ldots,q-1\}^S$ for the configurations on a
+set of sites $S$. Regional tensor products list the complement first.
+The following are supporting geometric and counting results for
+\cite[Proposition~5.7]{Arad2016RigorousRG}.
+
+\begin{theorem}[Bounds for the selected and prescribed intervals]
+    \label{thm:common_middle_interval_bounds}
+    \lean{TNLean.MPS.AreaLaw.selected_middle_fixed_interval_bounds}
+    \leanok
+    Let $L,a,b,\ell$ be nonnegative integers with $a+2\ell\le b$ and
+    $b+2\ell\le L-1$, and let $0\le p,s<2\ell$. Put
+    $c=a+p+1$, $d=b+s+1$, $u=a+\ell$, and $v=b+\ell+1$. Then
+    $c\le d\le L$, $u\le v\le L$, and $\max(c,u)<\min(d,v)$.
+\end{theorem}
+\begin{proof}\leanok
+    The bounds $p,s<2\ell$, together with the two separation inequalities,
+    give each endpoint comparison.
+\end{proof}
+
+\begin{theorem}[Low-frequency cardinality on the prescribed interval]
+    \label{thm:common_middle_low_frequency_cardinality}
+    \lean{TNLean.MPS.AreaLaw.actual_common_fixed_middle_mpo_card_low_frequency_le}
+    \leanok
+    \uses{thm:selected_common_natural_cardinality,
+        thm:selected_common_natural_low_frequency_cardinality}
+    Retain the geometric data and positions above. Set $E=[a+p+1,b+s+1)$,
+    $Z=[a+2\ell+1,b)$, and $\rho=|\mathcal C(E\setminus Z)|$.
+    Let $\mathcal W_{k,i,j}$ be the two-marker index set with $q^2$ labels
+    for each marker family. Suppose $q\ge2$, $k\ge1$, and
+    $i,j\le\lfloor k/(2\ell)\rfloor$. For every nonnegative integer $n$,
+    \begin{align}
+        n\le |\mathcal W_{k,i,j}|(k+1)\rho^2q^{4\ell}
+        \quad\Longrightarrow\quad
+        n\le(qk)^{24\ell+4\lfloor k/\ell\rfloor}.
+        \label{eq:common_middle_low_frequency_count}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    The chosen position implies $\ell\ge1$. The selected-family count and its
+    low-frequency consequence give
+    $|\mathcal W_{k,i,j}|(k+1)\rho^2\le(qk)^{20\ell+4\lfloor k/\ell\rfloor}$.
+    Multiplication by $q^{4\ell}\le(qk)^{4\ell}$ proves
+    (\ref{eq:common_middle_low_frequency_count}).
+\end{proof}
+
+\begin{theorem}[A common prescribed-middle family for finite sampling nodes]
+    \label{thm:common_middle_grid_mpo_family}
+    \lean{TNLean.MPS.AreaLaw.exists_common_fixed_middle_grid_mpo_family}
+    \leanok
+    \uses{thm:common_middle_interval_bounds,thm:selected_common_natural_mpo_family,
+        thm:regional_middle_from_numbered_three_regions,
+        thm:interval_mpo_common_family_transfer,def:regional_middle_transferred_family}
+    Retain the geometric data and positions above, and suppose $q\ge1$.
+    Let $B,k,i,j$ be arbitrary nonnegative integers. Supply window operators
+    $W^L_r,W^R_r$, supported on $[a+r,a+r+2)$ and
+    $[b+r,b+r+2)$,
+    respectively. Supply site-dependent core tensors of virtual dimension $B$
+    on $[a+2\ell,b+1)$ and an arbitrary closing matrix. Let $P_M$ be their
+    trace contraction, canonically placed on the full chain.
+
+    Let $\zeta$ be a finite set of sampling nodes. Use the labels
+    $L_r,R_r,B_0,B_1,B_2$ and set
+    $O=\{L_r,R_r,B_0,B_1,B_2\}\setminus\{L_p,R_s\}$.
+    Supply complex weights $z_{\nu,t}$ for $\nu\in\zeta$ and all labels $t$.
+    Put $E=[a+p+1,b+s+1)$,
+    $J=[a+\ell,b+\ell+1)$,
+    $Z=[a+2\ell+1,b)$, and $\rho=|\mathcal C(E\setminus Z)|$. Define
+    $Q=|\mathcal W_{k,i,j}|(k+1)\rho^2$.
+
+    There exist nonnegative integers $n_\nu$, degrees $0\le d_{\nu,r}\le k$, and matrices
+    $V_{\nu,r}$ on the natural coordinates of $E$, with $0\le r<n_\nu$.
+    Read these matrices on $\mathcal C(E)$ using the increasing enumeration
+    of $E$. Let $A=E\setminus J$ and $B'=J\setminus E$, and define
+    \begin{align}
+        I_\nu                   & =\{0,\ldots,n_\nu-1\}\times\mathcal C(A)^2
+        \times\mathcal C(B')^2, &
+        I                       & =\coprod_{\nu\in\zeta} I_\nu.
+        \label{eq:common_middle_node_indices}
+    \end{align}
+    For $\sigma,\tau\in\mathcal C(J)$, prescribe the middle matrices by
+    \begin{align}
+        W_{\nu,r,\alpha_r,\alpha_c,\eta_r,\eta_c}(\sigma,\tau)
+         & =\mathbf1_{\sigma|_{B'}=\eta_r}\mathbf1_{\tau|_{B'}=\eta_c}
+        V_{\nu,r}(\alpha_r\sqcup\sigma|_{E\cap J},
+        \alpha_c\sqcup\tau|_{E\cap J}).
+        \label{eq:common_middle_node_matrices}
+    \end{align}
+    The disjoint unions in (\ref{eq:common_middle_node_matrices}) combine
+    configurations on $A$ and $E\cap J$ into configurations on $E$.
+    The resulting family satisfies $|I|\le|\zeta|Qq^{4\ell}$.
+    Each $W_\omega$ has an open matrix product representation on $J$, on the
+    paired physical alphabet in increasing site order, with internal bond
+    dimensions at most $(\max(1,B))^{2k}$.
+
+    These choices precede every supported exterior pair $P_L,P_R$ on
+    $[0,a+1)$ and
+    $[b+2\ell,L)$, respectively. For such a pair, set
+    $F_{L_r}=W^L_r$, $F_{R_r}=W^R_r$,
+    $F_{B_0}=P_L$, $F_{B_1}=P_M$, $F_{B_2}=P_R$, and
+    $D_\nu=\sum_{t\in O}z_{\nu,t}F_t$.
+    For every scalar array $c_{\nu,h}$, with $\nu\in\zeta$ and $0\le h\le k$,
+    there are joint exterior matrices $M_\omega$ on $\mathcal C(J^c)$ such that
+    \begin{align}
+        \sum_{\nu\in\zeta}\sum_{h=0}^{k}
+        c_{\nu,h}[x^iy^j](D_\nu+xW^L_p+yW^R_s)^h
+         & =\left(\sum_{\omega\in I}M_\omega\otimes W_\omega\right)^{\mathrm{phys}}.
+        \label{eq:common_middle_node_decomposition}
+    \end{align}
+    The superscript uses the canonical restriction of a full configuration
+    to $J^c$ and $J$; the formal variables commute with matrix coefficients.
+    Empty sampling sets, zero virtual dimension, and degree zero are allowed.
+    No interpolation recovery, sharp virtual dimension, or running-time bound
+    is included.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:selected_common_natural_mpo_family,
+        thm:regional_middle_from_numbered_three_regions,
+        thm:interval_mpo_common_family_transfer,thm:common_middle_interval_bounds,
+        thm:chain_mps_of_cut_rank,thm:chain_cut_rank_of_mps}
+    Choose the selected natural family separately at each supplied node.
+    Pass its joint exterior decomposition to regional coordinates, then
+    transfer the middle from $E$ to $J$. The geometric inequalities give the
+    required overlap. Moreover $|E\setminus J|+|J\setminus E|\le2\ell$,
+    so the canonical family (\ref{eq:common_middle_node_matrices}) has at most
+    $Qq^{4\ell}$ members at each node. Taking the disjoint union
+    (\ref{eq:common_middle_node_indices}) gives the asserted total count.
+
+    A member of degree $t\le k$ first has open bond bound
+    $\max(1,(B^t)^2)$. Since
+    $\max(1,(B^t)^2)\le(\max(1,B))^{2k}$, the internal-cut-rank criterion
+    gives the uniform bound. Finally choose the exterior matrices at each
+    node for the scalar family $c_{\nu,h}$ and sum their decompositions.
+    The finite sum over the disjoint union is exactly
+    (\ref{eq:common_middle_node_decomposition}).
+\end{proof}

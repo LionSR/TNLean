@@ -1192,6 +1192,8 @@ abstracted — record why, so it is not re-proposed).
 - **Abstraction:** `TNLeanTest.SingleQubitConfig.plusDensity` and
   `plusDensity_posSemidef` in `TNLeanTest/Support/SingleQubitConfig.lean`.
   The three regressions use the shared density and positivity result directly.
+- **Removed (2026-10-28):** the abstraction and its three call sites were
+  deleted with the rest of `TNLeanTest/`.
 - **Notes:** The former private `density`/`density_psd`,
   `secondDensity`/`secondDensity_psd`, and `plusDensity`/`plusDensity_posSemidef`
   pairs are removed. The singularity, noncommutation, first-variation, and
@@ -7187,6 +7189,9 @@ spectral split → block extraction → MPV calculation → strict bounds
   lines of metaprogramming with no mathematical content; a shared command would
   move the allow-list out of the audited file without removing a proof
   obligation. Fixtures keep the explicit block.
+- **Superseded (2026-10-28):** the fixtures themselves were deleted with the
+  rest of `TNLeanTest/`, and new ones are no longer written
+  (`docs/project_conventions.md`, "No test fixtures").
 
 ### Elementary set and finite-sum proof structure — rejected (2026-10-02)
 
@@ -7778,8 +7783,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   `WordEvaluationTransport`. The helpers identify the register lists before
   applying ordinary congruence to the operators. They do not infer equality
   of restricted operators from equality before restriction. The new framed
-  local-part proof uses the same shared lemmas. Named axiom checks are in
-  `TNLeanTest/WordEvaluationTransportAxioms.lean`.
+  local-part proof uses the same shared lemmas.
 - **Further promotion (2026-10-12):** Three identity-operator transports in
   `WordPermutationRestriction`, `LocalPartFrameListRestriction` and
   `LocalPartSpectatorOwnerExclusion` now use `Word.eval_id_heq`. Four input
@@ -9448,6 +9452,23 @@ entropy growth. There are two independent occurrences. A third consumer should
 share the logarithmic integer-budget lemma and the elementary eventual comparison;
 there is no need for a new tactic.
 
+### Disjoint adjacent chain intervals — promoted (2026-10-27)
+
+- **Pattern:** Prove disjointness of consecutive chain intervals by their common
+  boundary.
+- **Seen:** Seven repeated proofs in `CommonMiddleMPOFamily.lean`,
+  `SelectedCoefficientDecomposition.lean`, `SelectedMiddleData.lean`,
+  `SelectedMiddleMPOFamily.lean` (twice), `ThreeRegionSupport.lean` and
+  `TwoWindowOperatorForms.lean`; two further uses in `Hastings/Window.lean`.
+- **Abstraction:** `TNLean.MPS.AreaLaw.disjoint_interval_interval` in
+  `MPS/AreaLaw/Basic.lean`. The proof applies
+  `Finset.Ico_disjoint_Ico_consecutive` to the natural-number positions.
+- **Notes:** The statement needs no ordering of the endpoints and no positivity
+  of the chain length. The Mathlib theorem is already imported. The former
+  `Hastings.disjoint_interval_interval` is removed rather than retained as an
+  alias, so users of the basic interval result need no entropy module. All seven
+  repeated family proofs and both window uses refer to the common declaration.
+
 ### Unit phases in energy and absolute overlap — candidate (2026-10-26)
 
 - **Seen:** `MPS/AreaLaw/ViableSet/GluingBounds.lean` and the companion
@@ -9475,3 +9496,83 @@ there is no need for a new tactic.
 - **Notes:** This specializes the existing range-dependent coordinate estimate
   to displacement at most one along every edge. The original range-dependent
   theorem and all three commutator statements are unchanged.
+
+### Joining cut coordinates in tensor projections — reused Mathlib (2026-10-26)
+
+- **Seen:** `MPS/AreaLaw/ViableSet/GluingCoordinates.lean`.
+- **Pattern:** Transport a tensor projection through a product of coordinate equivalences,
+  then compare its fixed vectors by composition with the equivalence.
+- **Reuse:** `Matrix.kroneckerMap_reindex_left`, `Matrix.submatrix_mulVec_equiv` and
+  `Equiv.comp_symm_eq` give the proof directly. The extension identity uses the public
+  coefficient-matrix formula for `Matrix.rightApply`.
+- **Decision:** No new general matrix lemma or tactic is needed. The chain-specific map is
+  the existing isometric change of finite coordinates from Mathlib.
+
+### Eigenvectors in the support of a density matrix — existing Mathlib lemmas (2026-10-26)
+
+- **Seen:** The local `hQu` arguments in
+  `MPS/AreaLaw/ViableSet/ViableLeadingVector.lean` and
+  `MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean`.
+- **Pattern:** From `Q * σ = σ` and `σ *ᵥ u = μ • u`, with `μ ≠ 0`,
+  deduce `Q *ᵥ u = u` by associativity and scalar cancellation.
+- **Reuse:** Apply `congrArg` to the action on `u`, then use
+  `Matrix.mulVec_mulVec`, `Matrix.mulVec_smul` and `smul_right_injective`.
+- **Decision:** These existing lemmas give the new argument in three lines;
+  no separate scalar-inverse calculation or custom tactic is needed.
+
+### Gap-controlled error budget of the viable leading step — candidate (2026-10-27)
+
+- **Seen:** `MPS/AreaLaw/ViableSet/ViableLeadingVector.lean` and
+  `MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean`.
+- **Pattern:** From `Δ ≤ 4`, `c = (Δ / 169) ^ 2`, `‖B‖ ≤ 2 L` and
+  `η = c / (2 L)`, derive `2 c ≤ √c`, `‖B‖ (2 η) ≤ 2 c`,
+  `2 (6 √c + ‖B‖ (2 η)) ≤ 14 √c < Δ / 12` and
+  `4 (6 √c + ‖B‖ (2 η)) < Δ`.
+- **Decision:** Two occurrences of the same twenty-line derivation. A third
+  occurrence should factor it into one lemma beside
+  `lvv_trimming_constant_bounds` that takes `Δ`, `c`, `‖B‖` and `L` and
+  returns the two error bounds.
+
+### Enlarging a covering bound by its dimension — reused Mathlib (2026-10-26)
+
+- **Seen:** `MPS/AreaLaw/ViableSet/BoundaryNet.lean`.
+- **Pattern:** A net on matrices of size `c` has a bound whose grid size and exponent both
+  increase with `c`; replace `c` by a geometric upper bound without changing the net.
+- **Reuse:** `Nat.pow_le_pow_left`, `Nat.ceil_mono` and `pow_le_pow` give the comparison,
+  with the larger base at least one. They also cover zero dimension and exponent.
+- **Decision:** The proof needs no separate scalar declaration or tactic.
+
+### A ceiling bound with a natural factor — reused Mathlib (2026-10-26)
+
+- **Seen:** `MPS/AreaLaw/ViableSet/BoundaryNetPolynomial.lean`.
+- **Pattern:** Bound `ceil(L t)` by `L ceil(t)` for a natural factor, then raise a grid-size
+  comparison to a fixed natural degree.
+- **Reuse:** `Nat.le_ceil`, multiplication by a nonnegative factor and `Nat.ceil_le` give
+  the ceiling bound. Applying `mul_pow` directly keeps the symbolic degree intact.
+- **Decision:** One occurrence; no separate general ceiling lemma or tactic is introduced.
+
+
+### Cardinality of a finite union with a uniform bound — reused Mathlib (2026-10-26)
+
+- **Seen:** `MPS/AreaLaw/ViableSet/SizeTrimming.lean`, `exists_size_trimmed_family`.
+- **Pattern:** A finite family of sets has at most the number of indices times a uniform
+  cardinality bound; here the indices are all actual bond dimensions `m : Fin (D + 1)`.
+- **Reuse:** `Finset.card_biUnion_le_card_mul` gives the union bound directly after
+  `m ≤ D` and the net cardinality estimate bound each selected column set by `D * K`.
+- **Decision:** Reuse the existing Mathlib theorem, with no separate counting lemma or tactic.
+
+### Trace of a normalized pure density — existing mathematical lemmas (2026-10-26)
+
+- **Seen:** The pure-state trace arguments in `MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean`
+  and `MPS/AreaLaw/ViableSet/SizeTrimming.lean`, and the companion QICLean module
+  `Channel/BoundaryDensityMinimizer.lean`.
+- **Pattern:** For a unit vector `x`, rewrite the trace of `vecMulVec x (star x)` as its
+  Euclidean inner product, then as the squared norm.
+- **Reuse:** `Matrix.trace_vecMulVec`, `EuclideanSpace.inner_eq_star_dotProduct` and
+  `inner_self_eq_norm_sq_to_K` give this calculation directly; the last step uses normalization.
+- **Existing general statement:** QICLean's `Matrix.trace_euclideanOuterProduct_self` in
+  `Analysis/ChronologicalGarbage.lean` already states the generic trace identity. That module
+  also imports contraction-chain and register-evolution results, so importing it here would
+  add unrelated dependencies. If a shared one-step statement is needed, move that existing
+  mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
+  statement or introduce a new tactic.

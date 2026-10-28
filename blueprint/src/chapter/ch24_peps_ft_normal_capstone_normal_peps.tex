@@ -330,3 +330,154 @@ product states, and the square lattice.
         unwinding the orientation adaptation gives $X'_e=c_e X_e$.
     \end{proof}
 \end{theorem}
+
+\begin{definition}[A common physical action on a tensor network]%
+    \label{def:peps_physical_tensor_action}
+    \lean{TNLean.PEPS.physicalTensorAction}
+    \leanok
+
+    \uses{def:peps_tensor}
+    For a tensor $A$ on a finite simple graph with vertex set $V$ and a
+    matrix $U\in\MN{d}$, define $B=U\cdot A$ by keeping all bond spaces
+    and setting $B_v(\eta,\sigma)=\sum_\tau U_{\sigma\tau}A_v(\eta,\tau)$.
+\end{definition}
+
+\begin{theorem}[State of a physical tensor action]%
+    \label{thm:peps_state_physical_tensor_action}
+    \lean{TNLean.PEPS.stateCoeff_physicalTensorAction}
+    \leanok
+
+    \uses{def:peps_physical_tensor_action,
+        def:peps_dependent_physical_product, def:peps_stateCoeff}
+    For a tensor $A$ on a finite simple graph with vertex set $V$ and
+    $U\in\MN{d}$, the tensor $B=U\cdot A$ has state
+    \begin{align}
+        \Coeff_B=U^{\otimes V}\Coeff_A.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Expand the local matrix products in the contraction and exchange the
+    finite sums. The product of the physical coefficients is
+    $\prod_vU_{\sigma_v\tau_v}$, giving the stated product action.
+\end{proof}
+
+\begin{theorem}[Positive physical dimension from an injective region]%
+    \label{thm:peps_physical_dimension_pos_of_region}
+    \lean{TNLean.PEPS.physicalDim_pos_of_nonempty_injectiveRegion}
+    \leanok
+
+    \uses{def:peps_regionInjectivityDataOf}
+    If all virtual bond spaces are nonzero and a nonempty region is
+    injective, then the common physical dimension $d$ is positive.
+\end{theorem}
+\begin{proof}\leanok
+    Positive bond dimensions give the boundary configuration $\beta_e=0$
+    on every boundary edge. Linear independence gives the nonzero blocked
+    vector $T_{A,R}^{\beta}\ne0$. If $d=0$, the nonempty region $R$ has
+    no physical configurations, so
+    \begin{align}
+        T_{A,R}^{\beta}=0,
+    \end{align}
+    a contradiction.
+\end{proof}
+
+\begin{theorem}[Regional injectivity from the state and bond dimensions]%
+    \label{thm:peps_regional_injectivity_from_state}
+    \lean{TNLean.PEPS.regionBlockedTensorInjective_of_sameState_of_bondDim_eq}
+    \leanok
+
+    \uses{def:peps_regionInjectivityDataOf, def:peps_same_state}
+    Let $A$ and $B$ have the same state and the same positive bond
+    dimensions. If a region $R$ and its complement are injective for $A$,
+    then $R$ is injective for $B$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:peps_region_partial_state, thm:peps_region_partial_state_same_state}
+    Write $F_{A,R}$ and $F_{B,R}$ for the blocked maps from the common
+    boundary space to the physical space of $R$. Injectivity of the
+    complement for $A$ identifies the range of $F_{A,R}$ with the span of
+    the partial-state vectors across this cut:
+    \begin{align}
+        \operatorname{ran}F_{A,R}
+         & =\operatorname{span}\{\psi^\tau_{A,R}\}_\tau.
+        \notag
+    \end{align}
+    Since $A$ and $B$ have the same state, Theorem~\ref{thm:peps_region_partial_state_same_state}
+    gives
+    \begin{align}
+        \psi^\tau_{A,R}
+         & =\psi^\tau_{B,R}
+        \notag
+    \end{align}
+    for every complement configuration $\tau$. Splitting the contraction of
+    $B$ along the boundary of $R$ writes each $\psi^\tau_{B,R}$ as a linear
+    combination of the blocked vectors of $B$, because every bond dimension
+    is positive. Hence
+    \begin{align}
+        \operatorname{ran}F_{A,R}
+         & =\operatorname{span}\{\psi^\tau_{B,R}\}_\tau
+        \subseteq\operatorname{ran}F_{B,R}.
+        \notag
+    \end{align}
+    Thus $\dim\operatorname{ran}F_{B,R}\ge
+        \dim\operatorname{ran}F_{A,R}=\dim\operatorname{dom}F_{B,R}$.
+    The two domains have the same dimension because their bond dimensions
+    agree. Consequently the columns of $F_{B,R}$ are linearly independent.
+\end{proof}
+
+\begin{definition}[Inherited normal pair blockings]%
+    \label{def:peps_normal_pair_blockings_from_state}
+    \lean{TNLean.PEPS.normalPairHypothesesOfSameStateOfBondDimEq}
+    \leanok
+
+    \uses{def:peps_normalPEPSBlockingHypotheses, def:peps_normalPEPSPairHypotheses,
+        def:peps_same_state}
+    Suppose $A$ admits the normal blocking regions of
+    Definition~\ref{def:peps_normalPEPSBlockingHypotheses}, with nonzero
+    virtual spaces. If $B$ has the same state and bond dimensions, the
+    inherited pair blockings use exactly these regions for both tensors.
+\end{definition}
+\begin{proof}\leanok
+    \uses{thm:peps_regional_injectivity_from_state, lem:peps_injectiveRegion_union_pos}
+    For each edge blocking, the complement of each of the three regions
+    is the disjoint union of the other two, hence is injective for $A$.
+    The one-site comparison regions already have injective complements.
+    Theorem~\ref{thm:peps_regional_injectivity_from_state} therefore proves
+    injectivity of each selected region for $B$. All regions and their
+    incidence properties are retained, and the bond spaces stay nonzero.
+\end{proof}
+
+\begin{theorem}[Virtual gauges for a normal on-site symmetry]%
+    \label{thm:peps_normal_onsite_symmetry_gauge}
+    \lean{TNLean.PEPS.gaugeEquiv_physicalTensorAction_of_normal_symmetry}
+    \leanok
+
+    \uses{def:peps_physical_tensor_action, def:peps_normalPEPSBlockingHypotheses,
+        def:peps_normalPEPSPairHypotheses, def:GaugeEquivPEPS}
+    Let $A$ be a normal tensor network on a connected finite simple graph
+    with nonzero virtual spaces. Assume the edge blockings and one-site
+    comparison regions of
+    Definition~\ref{def:peps_normalPEPSBlockingHypotheses}; in each edge
+    blocking, the distinguished edge is the entire bond between the first
+    two regions. If $U\in\MN{d}$ satisfies
+    $U^{\otimes V}\Coeff_A=\Coeff_A$, then there is an invertible matrix
+    $X_e$ on every edge such that $(U\cdot A)_v=\operatorname{Gauge}_X(A)_v$
+    at every vertex.
+    This gives the virtual-gauge conclusion of the global-symmetry
+    application in~\cite[lines~1696--1713]{Molnar2018NormalPEPS}.
+    Connectivity is needed to absorb the component scalars, as recorded
+    in~\cite{gap:peps_gaugeConsistency_connectivity_gap}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:peps_physical_tensor_action, thm:peps_state_physical_tensor_action,
+        def:peps_normal_pair_blockings_from_state,
+        thm:peps_physical_dimension_pos_of_region,
+        thm:fundamentalTheorem_normalPEPS_connected}
+    Put $B=U\cdot A$. Its state equals that of $A$, and its bond
+    dimensions are unchanged. Definition~\ref{def:peps_normal_pair_blockings_from_state}
+    gives the required shared injective regions for $A$ and $B$, retaining
+    the single-crossing property of each distinguished edge.
+    A one-site comparison region containing its distinguished site is
+    nonempty, so Theorem~\ref{thm:peps_physical_dimension_pos_of_region}
+    gives $d>0$. Apply the connected normal Fundamental Theorem to this pair.
+\end{proof}

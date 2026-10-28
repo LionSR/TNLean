@@ -32,7 +32,9 @@ between this MPS argument and arbitrary Hamiltonian paths is recorded in
 
 namespace MPSTensor
 
+open scoped TNLean.Algebra.ScalarCohomology
 open scoped Matrix
+open TNLean.Algebra
 
 /-- A continuous family of invertible projective matrices has continuous
 factor systems. An entry of the product with the adjugate extracts each
@@ -75,7 +77,15 @@ theorem invertible_projectivePath_factor_endpoints_cohomologous
     (hV : ∀ g, Continuous fun t => V t g)
     (hdet : ∀ t g, (V t g).det ≠ 0)
     (hmul : ∀ t g h, V t g * V t h = (ω t (g, h) : ℂ) • V t (g * h)) :
-    (ω 1).CohomologousTo (ω 0) := by
+    let ρ : ∀ t, ProjectiveRepresentation (D := D) (ω t) := fun t ↦
+      { X := fun g ↦ Matrix.GeneralLinearGroup.mkOfDetNeZero (V t g) (hdet t g)
+        map_mul' := fun g h ↦ by
+          simpa only [Matrix.GeneralLinearGroup.val_mkOfDetNeZero] using hmul t g h }
+    groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (ScalarCocycle.isMulCocycle₂_of_projRep (ρ 1) hD)) =
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (ScalarCocycle.isMulCocycle₂_of_projRep (ρ 0) hD)) := by
+  apply (H2π_eq_iff_isMulCoboundary₂_div _ _).mpr
   have hdetMul (t : unitInterval) (g h : G) :
       (V t g).det * (V t h).det =
         (ω t (g, h) : ℂ) ^ D * (V t (g * h)).det := by

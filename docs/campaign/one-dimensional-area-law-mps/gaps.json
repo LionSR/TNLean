@@ -1,5 +1,5 @@
 {
- "reviewedAt": "2026-10-18T06:00:00Z",
+ "reviewedAt": "2026-10-28T18:00:00Z",
  "checked": [],
  "entries": [
   {
@@ -11,16 +11,18 @@
    "issue": 9533,
    "prs": {
     "TNLean": [
-     9533
+     9533,
+     9700,
+     9733
     ]
    },
    "title": "Constants of the buffered discount",
-   "summary": "The argument of the note stands; the formal proof uses slightly different absolute constants, and the area-law constant stays linear in 1 + <i>J</i>/Δ.",
+   "summary": "The argument of the note stands. The buffered discount is formalized both with the printed constants and with slightly different absolute constants, which the chain theorems use; either way the area-law constant stays linear in 1 + <i>J</i>/Δ.",
    "context": "Lemma 4.2 surrounds an interval <i>X</i> by <i>m</i> nested shells of width <i>R</i> and shows that, conditioned on these shells, <i>X</i> keeps at most half of its entropy plus a constant. This constant and <i>m</i> enter the entropy bound of Theorem A.",
    "claims": "The note fixes an energy constant <i>C<sub>E</sub></i> = 8<i>N<sub>R</sub>Jq</i><sup>2(<i>R</i>+1)</sup>, where <i>N<sub>R</sub></i> bounds the number of terms crossing a cut, takes <i>m</i> as the least integer above four quantities, and bounds the energy of the reweighted state by Δ/4, so that the conditional entropy is at most ½<i>S</i>(<i>X</i>) + ½ + <i>C<sub>E</sub></i>/Δ.",
-   "found": "The finite-dimensional estimate used in the formalization bounds the energy by twice the printed amount, so the argument runs with the energy bound Δ/2. The losses from the overlap with the ground state then sum to <i>m</i> log 2 instead of 2<i>C<sub>E</sub></i>/Δ, and an error term of order (<i>J</i>/Δ)<i>B<sub>R</sub></i>/<i>m</i> is kept explicitly instead of being absorbed by a fourth condition on <i>m</i>, which is dropped. The structure of the argument and its hypotheses are those of the note.",
-   "impact": "No. Only absolute constants change, the formal constants are explicit, and Theorem A holds with a constant <i>C</i><sub>0</sub>(<i>q</i>, <i>R</i>)(1 + <i>J</i>/Δ) as stated.",
-   "plan": "Either revise the note to the formal constants, or prove the finite-dimensional discount with the sharper energy coefficient and restore the printed constants. Neither is needed for any later step.",
+   "found": "The finite-dimensional estimate used in the formalization bounds the energy by twice the printed amount, so the argument runs with the energy bound Δ/2. The losses from the overlap with the ground state then sum to <i>m</i> log 2 instead of 2<i>C<sub>E</sub></i>/Δ, and an error term of order (<i>J</i>/Δ)<i>B<sub>R</sub></i>/<i>m</i> is kept explicitly instead of being absorbed by a fourth condition on <i>m</i>, which is dropped. The shell count also takes the smaller of the note's energy constant and the logarithmic one of Remark 5.2. Separately, a sharper energy comparison gives the energy bound Δ/4 of the note, and with it the printed discount, the printed interval bound and the matrix product state bound that follows from them. The structure of the argument and its hypotheses are those of the note.",
+   "impact": "No. Only absolute constants change, both sets of constants are explicit, and Theorem A holds with a constant <i>C</i><sub>0</sub>(<i>q</i>, <i>R</i>)(1 + <i>J</i>/Δ) as stated.",
+   "plan": "Nothing remains. The printed constants are proved as a separate statement; the chain theorems keep the formal constants, and neither choice is claimed to be smaller in general.",
    "stage": "area:2"
   },
   {
@@ -32,7 +34,9 @@
    "issue": 9533,
    "prs": {
     "TNLean": [
-     9533
+     9533,
+     9687,
+     9759
     ]
    },
    "title": "Sequential truncation by an eigenvalue threshold",
@@ -53,16 +57,41 @@
    "issue": 9548,
    "prs": {
     "TNLean": [
-     9616
+     9616,
+     9793,
+     9796,
+     9869
     ]
    },
    "title": "Domains with gaps in the one-dimensional area law",
    "summary": "Theorem A is formalized for every finite set of integers, as the note states it, with the constant of the chain.",
    "context": "Theorem A allows any finite set Λ of integers, which may consist of several separated intervals, with edges between consecutive integers in Λ. Its proof first reduces to a single interval of consecutive sites.",
    "claims": "The note reduces to one interval by writing the Hamiltonian as a sum over the separated pieces of Λ, factoring the gapped ground state as a product over the pieces, and adding entropies and boundaries over the pieces.",
-   "found": "The formal proof first treated only a chain of consecutive sites. It now covers every finite Λ by a shorter argument: across a gap of Λ the part to the left has zero entropy, and replacing a region by its symmetric difference with that part changes neither its entropy nor its boundary edges in Λ, so the chain theorem applies without factoring the ground state.",
+   "found": "The formal proof first treated only a chain of consecutive sites. It now covers every finite Λ by a shorter argument: across a gap of Λ the part to the left has zero entropy, and replacing a region by its symmetric difference with that part changes neither its entropy nor its boundary edges in Λ, so the chain theorem applies without factoring the ground state. The same note records that the Lieb–Robinson bound, the information reset and information at logarithmic separation of Part II, which the note uses only on a chain, are also proved on every finite set of integers.",
    "impact": "No. The theorem is proved with the hypotheses of the note.",
    "plan": "Nothing remains."
+  },
+  {
+   "id": "docs/paper-gaps/tnlean_one_dimensional_band_sweep_corrections.tex",
+   "kind": "local-correction",
+   "status": "resolved",
+   "paper": "chain",
+   "result": "Proposition 10.4, properties of the sweep",
+   "issue": 9555,
+   "prs": {
+    "TNLean": [
+     9684,
+     9700
+    ]
+   },
+   "title": "Band ends and output registers in the sweep",
+   "summary": "Two statements of the sweep in the second proof of Theorem B need small corrections, one on which sites a band contains and one on which registers the output parties hold; with them the sweep, the compression and Theorem B are formalized with the note's hypotheses.",
+   "context": "The second proof of Theorem B distributes the ground state Ω among parties, each holding sites of a main copy of Ω or of auxiliary copies of Ω prepared along the way. The sweep cuts the chain into blocks of <i>t</i> = 20<i>w</i> sites, with <i>w</i> of order log <i>L</i>, and hands each band of <i>w</i> sites between two blocks to a neighbouring party by a fixed sequence of births, deaths and one exchange with a fresh auxiliary copy (Construction 10.1). Proposition 10.4 states that at the end each output party holds exactly one block of sites and the state is close to Ω times the retired auxiliary copies.",
+   "claims": "Construction 10.1 writes the first band as [<i>a</i>, <i>a</i> + <i>w</i>) but the later moves as open intervals of the scaled coordinate (<i>y</i> − <i>a</i>)/<i>w</i>, and asserts that afterwards the main copy left of the band is again held by its original owner. Proposition 10.4 asserts that each output party <i>P<sub>i</sub></i> holds precisely the registers of its block <i>B<sub>i</sub></i>, of dimension <i>q</i><sup>|<i>B<sub>i</sub></i>|</sup> ≤ <i>q</i><sup>4<i>t</i></sup>, and that no other party holds any register.",
+   "found": "Read as open intervals, the moves skip the sites at integer scaled coordinates. The site at scaled coordinate −3 is handed on twice and never returned, so it ends with the wrong owner, at every band width <i>w</i>. Reading every interval with integer ends as half-open, [<i>u</i>, <i>v</i>), as the first band is written, gives the intended ownership with every information margin at least <i>w</i>. Separately, the note itself leaves the auxiliary registers with the parties that hold them at the end, which contradicts the second claim; the block and dimension statement is therefore restricted to the main copy, and the auxiliary registers stay private to their owners. With these readings the preparation is built from the global gap alone, with vector error at most 26<i>L</i><sup>−11</sup>, and the compression gives Theorem B.",
+   "impact": "No. Both corrections concern only which party holds which register. The information estimates, the error bound and the polynomial bond dimension of Theorem B are those of the note.",
+   "plan": "Nothing remains for the formalization. A revision of the note could write the band ends as half-open intervals and restrict the output statement to the main copy.",
+   "stage": "mps:4"
   }
  ]
 }

@@ -75,6 +75,32 @@ omit [LinearOrder V] in
 @[simp] theorem ThreeBlockGeometry.swapBlueComplement_complement :
     g.swapBlueComplement.complement = g.blue := rfl
 
+/-- Rotate the three blocks cyclically: the blue block becomes red, the complementary
+block becomes blue, and the red block becomes complementary. Unlike the transposition
+`swapBlueComplement`, this three-cycle moves every block into the red position after
+at most two applications, so a statement about the red block yields the same statement
+for each block. -/
+abbrev ThreeBlockGeometry.rotate (g : ThreeBlockGeometry V) : ThreeBlockGeometry V where
+  red := g.blue
+  blue := g.complement
+  complement := g.red
+  red_disjoint_blue := g.blue_disjoint_complement
+  red_disjoint_complement := g.red_disjoint_blue.symm
+  blue_disjoint_complement := g.red_disjoint_complement.symm
+  cover_univ := by rw [← g.cover_univ]; ac_rfl
+
+omit [LinearOrder V] in
+/-- The red block after rotating is the original blue block. -/
+@[simp] theorem ThreeBlockGeometry.rotate_red : g.rotate.red = g.blue := rfl
+
+omit [LinearOrder V] in
+/-- The blue block after rotating is the original complementary block. -/
+@[simp] theorem ThreeBlockGeometry.rotate_blue : g.rotate.blue = g.complement := rfl
+
+omit [LinearOrder V] in
+/-- The complementary block after rotating is the original red block. -/
+@[simp] theorem ThreeBlockGeometry.rotate_complement : g.rotate.complement = g.red := rfl
+
 omit [LinearOrder V] in
 /-- The physical configuration on the swapped complement agrees with the original fused
 configuration after interchanging the blue and complement arguments. -/

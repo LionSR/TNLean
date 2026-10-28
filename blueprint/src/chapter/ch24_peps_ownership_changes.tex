@@ -78,10 +78,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $\mathcal H_T\otimes\mathcal H_E$ such that, in the three-region
     coordinates of Lemma~\ref{lem:peps_frame_split_forms},
     \begin{align}
-        A                     & = B\otimes\id_U,\notag    \\
-        \operatorname{OSR}(B) & \le q^{2|D\cap T|}.\notag
+        A                     & = B\otimes\id_U,\notag                         \\
+        \operatorname{OSR}(B) & \le q^{2|D\cap T|}.\label{eq:peps_left_factor}
     \end{align}
-    The rank is taken across $\mathcal H_T:\mathcal H_E$, allowing an empty
+    The rank in~(\ref{eq:peps_left_factor}) is taken across $\mathcal H_T:\mathcal H_E$, allowing an empty
     sum in the operator Schmidt decomposition. The statement includes
     $q=0$ and empty regions. In particular, $|D\cap T|=1$ gives the bound
     $q^2$. This support estimate applies to the local terms in the
@@ -97,21 +97,21 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     and the matrix-unit decomposition across a cut~\cite[``Matrix-unit
         decomposition across a cut'']{QICLean2026Blueprint} give
     \begin{align}
-        A & =\sum_{\alpha=1}^{M}L_\alpha\otimes R_\alpha,\notag \\
-        M & \le\bigl(q^{|D\cap T|}\bigr)^2,\notag
+        A & =\sum_{\alpha=1}^{M}L_\alpha\otimes R_\alpha,\notag                \\
+        M & \le\bigl(q^{|D\cap T|}\bigr)^2,\label{eq:peps_left_support_decomp}
     \end{align}
     in the coordinates
     $\mathcal H_T\otimes\mathcal H_{\Lambda\setminus T}$.
     For a configuration $e$ on $E$, let $\gamma(e)$ be the configuration on
     $\Lambda\setminus T=E\sqcup U$ equal to $e$ on $E$ and to $u_0$ on $U$.
-    Restricting the outside factors at this fixed $u_0$ yields
+    Restricting~(\ref{eq:peps_left_support_decomp}) at this fixed $u_0$ yields
     \begin{align}
         (\widehat R_\alpha)_{e,e'}
-          & =(R_\alpha)_{\gamma(e),\gamma(e')},\notag                   \\
-        B & =\sum_{\alpha=1}^{M}L_\alpha\otimes\widehat R_\alpha.\notag
+          & =(R_\alpha)_{\gamma(e),\gamma(e')},\notag                                                   \\
+        B & =\sum_{\alpha=1}^{M}L_\alpha\otimes\widehat R_\alpha.\label{eq:peps_left_restricted_decomp}
     \end{align}
-    The identity on $U$ has entry $1$ at $(u_0,u_0)$, so this restriction
-    gives the same $B$. Its operator Schmidt rank is at most $M$.
+    The identity on $U$ has entry $1$ at $(u_0,u_0)$, so the restriction
+    in~(\ref{eq:peps_left_restricted_decomp}) gives the same $B$. Its operator Schmidt rank is at most $M$.
 \end{proof}
 
 \begin{theorem}[Support-intersection bound for a complementary operator]
@@ -126,10 +126,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     such that, in the three-region coordinates of
     Lemma~\ref{lem:peps_frame_split_forms},
     \begin{align}
-        A                     & =\id_T\otimes V,\notag    \\
-        \operatorname{OSR}(V) & \le q^{2|D\cap E|}.\notag
+        A                     & =\id_T\otimes V,\notag                          \\
+        \operatorname{OSR}(V) & \le q^{2|D\cap E|}.\label{eq:peps_right_factor}
     \end{align}
-    The tensor product is read after canonical reassociation into
+    The tensor product in~(\ref{eq:peps_right_factor}) is read after canonical reassociation into
     $(\mathcal H_T\otimes\mathcal H_E)\otimes\mathcal H_U$.
     Here the operator Schmidt rank is the least number of simple operator
     tensors in a decomposition, allowing the empty sum. The statement
@@ -146,10 +146,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         cut'']{QICLean2026Blueprint} give, in the coordinates
     $\mathcal H_E\otimes\mathcal H_{\Lambda\setminus E}$,
     \begin{align}
-        A & =\sum_{\alpha=1}^{M}L_\alpha\otimes R_\alpha,\notag \\
-        M & \le\bigl(q^{|D\cap E|}\bigr)^2.\notag
+        A & =\sum_{\alpha=1}^{M}L_\alpha\otimes R_\alpha,\notag                 \\
+        M & \le\bigl(q^{|D\cap E|}\bigr)^2.\label{eq:peps_right_support_decomp}
     \end{align}
-    The count is the square of the number of configurations on $D\cap E$;
+    The count in~(\ref{eq:peps_right_support_decomp}) is the square of the number of configurations on $D\cap E$;
     no factor-norm estimate is needed.
     Take $V$ from Lemma~\ref{lem:peps_frame_split_forms}.
     For a configuration $u$ on $U$, let $\gamma(u)$ be the configuration
@@ -158,10 +158,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     configuration $t_0$ gives
     \begin{align}
         (\widehat R_\alpha)_{u,u'}
-          & =(R_\alpha)_{\gamma(u),\gamma(u')},\notag                   \\
-        V & =\sum_{\alpha=1}^{M}L_\alpha\otimes\widehat R_\alpha.\notag
+          & =(R_\alpha)_{\gamma(u),\gamma(u')},\notag                                                    \\
+        V & =\sum_{\alpha=1}^{M}L_\alpha\otimes\widehat R_\alpha.\label{eq:peps_right_restricted_decomp}
     \end{align}
-    Thus the same $M$ summands give a decomposition of $V$ and bound its
+    Thus~(\ref{eq:peps_right_restricted_decomp}) gives a decomposition of $V$ with the same $M$ summands and bounds its
     operator Schmidt rank. No injectivity of $\gamma$ is required.
 \end{proof}
 
