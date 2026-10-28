@@ -433,8 +433,8 @@ private theorem sum_crossing_eq_countP (b : Fin (L - 1)) (w : List (Fin L)) :
 
 /-- **The rank bound behind equation `e:decomp`.** If the letter `P_b` occurs at most `k` times
 in a word `I`, then `P_I` has operator Schmidt rank at most `q^{2k}` across the cut between the
-sites `b` and `b + 1`, the cut crossed only by the bond `b`. Landau, Vazirani and Vidick, arXiv:1307.5143v1,
-`algo53.tex`, lines 584–588. -/
+sites `b` and `b + 1`, the cut crossed only by the bond `b`. Landau, Vazirani and Vidick,
+arXiv:1307.5143v1, `algo53.tex`, lines 584–588. -/
 theorem operatorSchmidtRank_cutOperator_bondComplementWord_le
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
