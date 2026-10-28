@@ -13,9 +13,9 @@ The LVV successive construction begins with the scalar singleton. Each
 family is obtained from the preceding one by extension, size trimming,
 independent bond trimming and a finite physical Gaussian filter. The
 polynomial coefficient and degree precede the length and Hamiltonian; the
-chosen families precede every ground pair. The normalized final vector
-belongs to the final family's span and has overlap at least
-$1-(\Delta/169)^2/L$ with every admissible ground vector. This is a
+chosen families precede every ground pair. For each admissible ground pair, the final family's span contains a
+normalized vector with overlap at least $1-(\Delta/169)^2/L$ with that
+ground vector. This is a
 construction of the successive families, rather than independent
 existential choices at the cuts. The sharper printed parameter dependence,
 arbitrary-precision bounds and running time remain separate.
@@ -86,3 +86,45 @@ a local lift. Their TNLean copies are removed; the existing QICLean
 declarations are used directly, with no compatibility aliases. Separate
 strict checks of both affected TNLean modules passed before repeating the
 combined verification.
+
+
+## Completed combined verification
+
+Verification completed on 29 October 2026 at the exact mathematical
+revision `7881dbe5a91f1436913a0a97d9812b0149aa3165`, using companion
+revision `b66600027b2e60ccafea43d041d563cdd00cf05b`.
+
+| Check | Result |
+|---|---|
+| Full TNLean library | Passed, 15,067 jobs |
+| Strict changed production sources | Passed, 56 files |
+| Existing dependent regressions | Passed, five files |
+| Manual imported foundations | Passed, 139 public declarations |
+| Blueprint source synchronization | Passed |
+| Compiled blueprint declarations | Passed |
+| Added reader-facing prose | Passed |
+| Added proof-integrity tokens | Passed |
+
+All inspected foundations are among `propext`, `Classical.choice` and
+`Quot.sound`. No permanent Lean fixture is added. The build used cached
+Mathlib artifacts and reported zero Mathlib source jobs. The earlier
+common physical target build also passed 9,777 jobs. The unchanged
+50-second strict per-file limit and package options were used.
+The changed-file compilation-time check passed with its unchanged limits.
+The final build reported 25 seconds for `TwoWindowPolynomialMPOFamily`,
+producing a diagnostic warning below the 50-second failure threshold.
+An earlier unsuccessful integration snapshot reported 52 seconds for
+`PhysicalChebyshevViability`; the same module took 16 seconds in the final
+build and passed the strict per-file check. These observations are local
+diagnostics, not comparable performance benchmarks.
+
+The companion foundation snapshot `98ec7c9f` separately passed its full
+10,344-job build, strict checks, 73-declaration foundations inspection and
+compiled blueprint check. The subsequent Chebyshev addition at `b6660002`
+passed the full 10,345-job companion build and its strict, imported
+foundations and blueprint checks. Both used prebuilt Mathlib artifacts.
+
+The repository-wide prose scan reports pre-existing issue-reference
+wording in unchanged PEPS files. The added-prose check above passes; those
+unrelated files are preserved. The source statements and proofs are
+unchanged by this completion record.
