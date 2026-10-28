@@ -35,6 +35,7 @@ set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true
 
+open scoped TNLean.Algebra.ScalarCohomology
 open scoped Matrix Matrix.Norms.Frobenius ComplexOrder InnerProductSpace Kronecker Topology
 
 private theorem exists_common_fixedPoint_of_closed_convex_isometries
@@ -253,7 +254,12 @@ private theorem cohomologous_of_projective_intertwiner
     (c : G → ℂ)
     (hInter : ∀ g, (ρ₁.X g : Matrix (Fin D) (Fin D) ℂ) * W =
       c g • (W * (ρ₀.X g : Matrix (Fin D) (Fin D) ℂ))) :
-    ω₁.CohomologousTo ω₀ := by
+    groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ (NeZero.pos D))) =
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ (NeZero.pos D))) := by
+  apply (H2π_eq_iff_isMulCoboundary₂_div _ _).mpr
+  apply (isMulCoboundary₂_div_iff _ _).mpr
   have hne : ∀ g, c g ≠ 0 := by
     intro g hz
     have hprod : IsUnit ((ρ₁.X g : Matrix (Fin D) (Fin D) ℂ) * W) :=
@@ -302,7 +308,10 @@ private theorem cohomologous_of_uniformly_near_intertwiner_orbit
         (ρ₁.X g : Matrix (Fin D) (Fin D) ℂ) * decode v *
           (ρ₀.X g : Matrix (Fin D) (Fin D) ℂ)ᴴ) →
       (∀ g, ‖S g * (J₀ * J₀ᴴ) * (S g)ᴴ - J₀ * J₀ᴴ‖ < ε) →
-      ω₁.CohomologousTo ω₀ := by
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ (NeZero.pos D))) =
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ (NeZero.pos D))) := by
   obtain ⟨δ, hδ, hline⟩ := Matrix.exists_radius_invertible_spectral_line
     J₀ hJ₀ decode hdecode
   refine ⟨δ / 2, half_pos hδ, fun G _ ω₀ ω₁ ρ₀ ρ₁ S hS hρ₀ hmul hdec hnear => ?_⟩
@@ -551,7 +560,10 @@ theorem exists_uniform_adjoint_rigidity_radius {D : ℕ} [NeZero D] :
       (∀ g, (ρ₁.X g : Matrix (Fin D) (Fin D) ℂ) ∈ Matrix.unitaryGroup _ ℂ) →
       (∀ g, ‖Matrix.conjugationEuclideanCLM (ρ₁.X g : Matrix (Fin D) (Fin D) ℂ) -
         Matrix.conjugationEuclideanCLM (ρ₀.X g : Matrix (Fin D) (Fin D) ℂ)‖ < δ) →
-      ω₁.CohomologousTo ω₀ := by
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ (NeZero.pos D))) =
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ (NeZero.pos D))) := by
   obtain ⟨a, _, J₀, hJ₀, hJa, hdecode⟩ :=
     Matrix.exists_identity_intertwiner_frame (D := D)
   obtain ⟨ε, hε, hOrbit⟩ := cohomologous_of_uniformly_near_intertwiner_orbit

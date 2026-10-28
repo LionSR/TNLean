@@ -27,7 +27,7 @@ symmetric tensor, independent of the gauge parametrisation.
   spin systems*, Phys. Rev. B 83, 035107 (2011)
 -/
 
-open scoped Matrix
+open scoped Matrix TNLean.Algebra.ScalarCohomology
 
 /-! ### Gauge independence of the cocycle class -/
 
@@ -61,7 +61,12 @@ theorem cohomologousTo_of_isInjective
     (hρ₂ : ∀ g i, twistedTensor A U g i =
       (ρ₂.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A i *
         (((ρ₂.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) :
-    ScalarCocycle.CohomologousTo ω₂ ω₁ := by
+    groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+      (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₂ hD)) =
+    groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+      (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ hD)) := by
+  apply (H2π_eq_iff_isMulCoboundary₂_div _ _).mpr
+  apply (isMulCoboundary₂_div_iff _ _).mpr
   -- For each g, the two gauge matrices differ by a scalar.
   have hScalar : ∀ g : G, ∃ u : Units ℂ,
       (ρ₂.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) =

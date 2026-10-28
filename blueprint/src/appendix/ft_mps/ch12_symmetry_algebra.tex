@@ -304,7 +304,9 @@ $\omega_1,\omega_2:G\times G\to\C^\times$ be arbitrary scalar $2$-cochains.
 
 \begin{theorem}[Cohomology relation is an equivalence relation]%
     \label{thm:cohomologous_equivalence}
-    \lean{TNLean.Algebra.ScalarCocycle.CohomologousTo.equivalence}
+    \lean{TNLean.Algebra.isMulCoboundary₂_div_self,
+        TNLean.Algebra.isMulCoboundary₂_div_symm,
+        TNLean.Algebra.isMulCoboundary₂_div_trans}
     \leanok
     \uses{def:cohomologous_to}
     The relation ``cohomologous to'' is reflexive, symmetric, and
@@ -322,8 +324,7 @@ $\omega_1,\omega_2:G\times G\to\C^\times$ be arbitrary scalar $2$-cochains.
 
 \begin{theorem}[Cohomologous cochains differ by a coboundary]%
     \label{thm:coboundary_iff_cohomologous_one}
-    \lean{TNLean.Algebra.ScalarCocycle.cohomologousTo_iff_isMulCoboundary₂_div,
-        TNLean.Algebra.isMulCoboundary₂_div_iff_quotient_mk_eq}
+    \lean{TNLean.Algebra.isMulCoboundary₂_div_iff_quotient_mk_eq}
     \leanok
     \uses{def:is_coboundary, def:cohomologous_to}
     Two scalar $2$-cochains satisfy $\omega_1\sim\omega_2$ if and only if
@@ -344,4 +345,20 @@ $\omega_1,\omega_2:G\times G\to\C^\times$ be arbitrary scalar $2$-cochains.
     $\omega_2=\Id$ the ratio reduces to $\omega_1$ itself.
     Equality in the quotient by $B^2$ is exactly membership of
     $\omega_1\omega_2^{-1}$ in $B^2$.
+\end{proof}
+
+\begin{theorem}[Coboundary changes preserve the cocycle equation]%
+    \label{thm:cochain_coboundary_preserves_cocycle}
+    \lean{TNLean.Algebra.isMulCocycle₂_of_isMulCoboundary₂_div}
+    \leanok
+    \uses{def:cohomologous_to, def:is_cocycle}
+    If two scalar two-cochains $\omega_1$ and $\omega_2$ are
+    cohomologous and $\omega_2$ is a cocycle, then $\omega_1$ is a cocycle.
+\end{theorem}
+
+\begin{proof}\leanok\uses{def:cohomologous_to, def:is_cocycle}
+    Write $\omega_1(g,h)=\varphi(g)\varphi(h)\varphi(gh)^{-1}\omega_2(g,h)$.
+    Substituting in the cocycle equation for $\omega_1$ leaves the common
+    factor $\varphi(g)\varphi(h)\varphi(k)\varphi(ghk)^{-1}$ multiplying
+    the two sides of the cocycle equation for $\omega_2$.
 \end{proof}
