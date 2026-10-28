@@ -20,7 +20,7 @@ supplies a unit vector witnessing viability of the output family with error `1 /
 
 Source: Landau, Vazirani and Vidick, arXiv:1307.5143v1, `algo53.tex`, equation `eq:conv`,
 lines 472–478, Lemmas `l:leading` and `l:within`, lines 493–515, and Claim `c:2`,
-lines 519–527.
+lines 520–527.
 
 **Scope restriction (nontrivial chains and bond bound):** The result assumes `0 < L` and
 `2 ≤ q`, as recorded in `docs/paper-gaps/lvv13_nontrivial_chain.tex`, and uses the library's
@@ -39,7 +39,7 @@ namespace TNLean.MPS.AreaLaw
 
 /-- A finite family chosen independently of the ground vector performs size trimming with
 error `1 / 12`. Auxiliary library-bond version of LVV13, `algo53.tex`, Claim `c:2`,
-lines 519–527, using all actual bond dimensions up to the uniform cut bound. -/
+lines 520–527, using all actual bond dimensions up to the uniform cut bound. -/
 theorem ChainHamiltonian.exists_size_trimmed_family {L q k : ℕ}
     (h : ChainHamiltonian L q 1 1) (hpos : ∀ X, (h.term X).PosSemidef)
     (hL : 0 < L) (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ)
@@ -139,7 +139,7 @@ theorem ChainHamiltonian.exists_size_trimmed_family {L q k : ℕ}
 
 /-- The finite size-trimming family has an explicit polynomial cardinality in the chain
 length, with coefficient and degree independent of that length. Auxiliary library-bond
-version of LVV13, `algo53.tex`, Claim `c:2`, lines 519–527. -/
+version of LVV13, `algo53.tex`, Claim `c:2`, lines 520–527. -/
 theorem ChainHamiltonian.exists_size_trimmed_family_polynomial {L q k : ℕ}
     (h : ChainHamiltonian L q 1 1) (hpos : ∀ X, (h.term X).PosSemidef)
     (hL : 0 < L) (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ)
