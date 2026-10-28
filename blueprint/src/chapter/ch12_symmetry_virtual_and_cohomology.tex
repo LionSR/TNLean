@@ -481,11 +481,11 @@ second cohomology group $H^2(G,\C^{\times})$ of cocycles modulo coboundaries.
     \end{align}
 \end{definition}
 
-\begin{definition}[Cohomologous cocycles]\label{def:cohomologous_to}
-    \lean{TNLean.Algebra.ScalarCocycle.CohomologousTo}
+\begin{definition}[Cohomologous cochains]\label{def:cohomologous_to}
+    \lean{TNLean.Algebra.isMulCoboundary₂_div_iff}
     \leanok
     \uses{def:scalar_cocycle}
-    Two cocycles $\omega_1,\omega_2$ are \emph{cohomologous}
+    Two scalar two-cochains $\omega_1,\omega_2$ are \emph{cohomologous}
     (written $\omega_1 \sim \omega_2$) if there exists
     $\varphi \colon G \to \C^{\times}$ such that, for all $g,h \in G$,
     \begin{align}
@@ -630,7 +630,7 @@ establishes non-triviality of the class.
 \end{definition}
 
 \begin{theorem}[The commutator phase is a class invariant]\label{thm:comm_phase_invariant}
-    \lean{TNLean.Algebra.ScalarCocycle.commPhase_eq_of_cohomologousTo}
+    \lean{TNLean.Algebra.ScalarCocycle.commPhase_eq_of_isMulCoboundary₂_div}
     \leanok
     \uses{def:comm_phase, def:cohomologous_to}
     If $\omega_1\sim\omega_2$ and $gh=hg$, then
@@ -665,7 +665,7 @@ establishes non-triviality of the class.
 
 \begin{theorem}[The trivial class]\label{thm:trivial_class}
     \lean{TNLean.Algebra.ScalarCocycle.H2π_one,
-        TNLean.Algebra.ScalarCocycle.cohomologousTo_one_iff_H2π_eq_zero}
+        TNLean.Algebra.H2π_eq_zero_iff_isMulCoboundary₂}
     \leanok
     \uses{def:cohomologous_to, def:h2_cx}
     The class of the constant cocycle $1$ is zero, and $[\omega]=0$ exactly

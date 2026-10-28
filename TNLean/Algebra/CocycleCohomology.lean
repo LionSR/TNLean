@@ -23,8 +23,7 @@ action of an arbitrary group on `ℂˣ`.  Open it with
 ## Main definitions
 
 * `groupCohomology.IsMulCocycle₂` : the multiplicative 2-cocycle condition
-* `ScalarCocycle.CohomologousTo` : two cochains are cohomologous if their ratio
-  is a coboundary
+* `groupCohomology.IsMulCoboundary₂` : the multiplicative 2-coboundary condition
 * `ScalarCohomology.trivialMulDistribMulAction` : the trivial action of `G` on `ℂˣ`
 * `scalarRepresentationRes` : restriction of the trivial representation on `ℂˣ`
   along a group homomorphism, the coefficient map of Mathlib's restriction
@@ -33,8 +32,8 @@ action of an arbitrary group on `ℂˣ`.  Open it with
 ## Main results
 
 * `isMulCocycle₂_iff` : the scalar cocycle equation in the source orientation
-* `ScalarCocycle.cohomologousTo_iff_H2π_eq` : two cocycles are cohomologous iff
-  they have the same class in Mathlib's `H²(G, ℂˣ)`
+* `H2π_eq_iff_isMulCoboundary₂_div` : two cocycles have the same class in
+  Mathlib's `H²(G, ℂˣ)` iff their ratio is a coboundary
 * `ScalarCocycle.exists_H2π_eq` : every class of `H²(G, ℂˣ)` is the class of a
   scalar cocycle
 * `ScalarCocycle.H2π_ne_zero_of_commPhase_ne_one` : a non-trivial commutator phase
@@ -89,27 +88,46 @@ theorem isMulCocycle₂_iff (ω : ScalarCocycle G) :
   · change ω (g * k, j) * ω (g, k) = ω (k, j) * ω (g, k * j)
     simpa only [mul_comm] using h g k j
 
-/-! ### Cocycles and cohomologous cochains -/
+/-! ### Cocycle and coboundary equations -/
 
-/-- Two cocycles `ω₁` and `ω₂` are cohomologous if their ratio is a coboundary,
-i.e., `ω₁(g,h) = φ(g) * φ(h) * φ(g*h)⁻¹ * ω₂(g,h)` for some `φ : G → ℂˣ`. -/
-def ScalarCocycle.CohomologousTo (ω₁ ω₂ : ScalarCocycle G) : Prop :=
-  ∃ φ : G → Units ℂ, ∀ g h, ω₁ (g, h) = φ g * φ h * (φ (g * h))⁻¹ * ω₂ (g, h)
+/-- The source-oriented scalar coboundary formula, with the same witness. -/
+theorem isMulCoboundary₂_div_iff (ω₁ ω₂ : G × G → ℂˣ) :
+    groupCohomology.IsMulCoboundary₂ (ω₁ / ω₂) ↔
+      ∃ φ : G → ℂˣ, ∀ g h, ω₁ (g, h) = φ g * φ h * (φ (g * h))⁻¹ * ω₂ (g, h) := by
+  constructor
+  · rintro ⟨φ, hφ⟩
+    refine ⟨φ, fun g h ↦ ?_⟩
+    have h' := hφ g h
+    change φ h / φ (g * h) * φ g = ω₁ (g, h) / ω₂ (g, h) at h'
+    rw [eq_div_iff_mul_eq'] at h'
+    rw [← h', div_mul_eq_mul_div, mul_comm (φ h), div_eq_mul_inv]
+  · rintro ⟨φ, hφ⟩
+    refine ⟨φ, fun g h ↦ ?_⟩
+    change φ h / φ (g * h) * φ g = ω₁ (g, h) / ω₂ (g, h)
+    rw [hφ g h, mul_div_cancel_right, div_mul_eq_mul_div, mul_comm (φ h), div_eq_mul_inv]
 
-/-- A scalar cochain cohomologous to a genuine cocycle satisfies the cocycle equation. -/
-theorem ScalarCocycle.isMulCocycle₂_of_cohomologousTo {ω₁ ω₂ : ScalarCocycle G}
-    (hω₂ : groupCohomology.IsMulCocycle₂ ω₂) (h : ω₁.CohomologousTo ω₂) :
+/-- Adding a coboundary to a scalar cocycle preserves the cocycle condition. -/
+theorem isMulCocycle₂_of_isMulCoboundary₂_div {ω₁ ω₂ : G × G → ℂˣ}
+    (h₂ : groupCohomology.IsMulCocycle₂ ω₂)
+    (h : groupCohomology.IsMulCoboundary₂ (ω₁ / ω₂)) :
     groupCohomology.IsMulCocycle₂ ω₁ := by
-  obtain ⟨φ, hφ⟩ := h
-  apply (isMulCocycle₂_iff _).mpr
-  intro a b c
-  simp only [hφ]
-  calc
-    _ = (φ a * φ b * φ c * (φ (a * (b * c)))⁻¹) *
-        (ω₂ (a, b) * ω₂ (a * b, c)) := by simp [mul_assoc, mul_comm, mul_left_comm]
-    _ = (φ a * φ b * φ c * (φ (a * (b * c)))⁻¹) *
-        (ω₂ (a, b * c) * ω₂ (b, c)) := by rw [(isMulCocycle₂_iff _).mp hω₂ a b c]
-    _ = _ := by simp [mul_assoc, mul_comm, mul_left_comm]
+  have hd := groupCohomology.coboundaries₂_le_cocycles₂
+    (Rep.ofMulDistribMulAction G ℂˣ)
+    (groupCohomology.coboundariesOfIsMulCoboundary₂ h).property
+  have hs := (groupCohomology.cocycles₂ (Rep.ofMulDistribMulAction G ℂˣ)).add_mem hd
+    (groupCohomology.cocyclesOfIsMulCocycle₂ h₂).property
+  apply groupCohomology.isMulCocycle₂_of_mem_cocycles₂ (G := G) (M := ℂˣ)
+    ((@Additive.ofMul ℂˣ) ∘ ω₁)
+  have heq :
+      (groupCohomology.coboundariesOfIsMulCoboundary₂ h :
+          G × G → Rep.ofMulDistribMulAction G ℂˣ) +
+        (groupCohomology.cocyclesOfIsMulCocycle₂ h₂ :
+          G × G → Rep.ofMulDistribMulAction G ℂˣ) = ((@Additive.ofMul ℂˣ) ∘ ω₁) := by
+    funext p
+    change Additive.ofMul (ω₁ p / ω₂ p * ω₂ p) = Additive.ofMul (ω₁ p)
+    rw [div_mul_cancel]
+  exact (congrArg (fun f : G × G → Rep.ofMulDistribMulAction G ℂˣ ↦
+    f ∈ groupCohomology.cocycles₂ (Rep.ofMulDistribMulAction G ℂˣ)) heq).mp hs
 
 /-- Every projective representation of positive bond dimension has a genuine 2-cocycle
 as factor system.  This is the `Units ℂ`-level lift of
@@ -126,49 +144,6 @@ theorem ScalarCocycle.isMulCocycle₂_of_projRep
       ((ω (g, h * k) * ω (h, k) : Units ℂ) : ℂ) := by
     push_cast; exact hℂ
   exact Units.ext hUcoe
-
-/-! ### Equivalence relation -/
-
-namespace ScalarCocycle.CohomologousTo
-
-/-- Cohomologous-to is reflexive: every cocycle is cohomologous to itself. -/
-theorem refl (ω : ScalarCocycle G) : CohomologousTo ω ω :=
-  ⟨fun _ => 1, fun _ _ => by simp⟩
-
-/-- Cohomologous-to is symmetric. -/
-theorem symm {ω₁ ω₂ : ScalarCocycle G} (h : CohomologousTo ω₁ ω₂) :
-    CohomologousTo ω₂ ω₁ := by
-  obtain ⟨φ, hφ⟩ := h
-  refine ⟨fun g => (φ g)⁻¹, fun g h => ?_⟩
-  simp only [inv_inv]
-  rw [hφ g h]
-  rw [show (φ g)⁻¹ * (φ h)⁻¹ * (φ (g * h)) * (φ g * φ h * (φ (g * h))⁻¹ * ω₂ (g, h)) =
-    ((φ g)⁻¹ * φ g) * ((φ h)⁻¹ * φ h) * (φ (g * h) * (φ (g * h))⁻¹) * ω₂ (g, h) from by
-    simp only [mul_assoc, mul_comm, mul_left_comm]]
-  simp
-
-/-- Cohomologous-to is transitive. -/
-theorem trans {ω₁ ω₂ ω₃ : ScalarCocycle G}
-    (h₁₂ : CohomologousTo ω₁ ω₂) (h₂₃ : CohomologousTo ω₂ ω₃) :
-    CohomologousTo ω₁ ω₃ := by
-  obtain ⟨φ, hφ⟩ := h₁₂
-  obtain ⟨ψ, hψ⟩ := h₂₃
-  refine ⟨fun g => φ g * ψ g, fun g h => ?_⟩
-  rw [hφ g h, hψ g h]
-  -- `mul_inv_rev` + AC normalization: valid because `Units ℂ` is commutative
-  rw [mul_inv_rev]
-  simp only [mul_assoc, mul_comm, mul_left_comm]
-
-/-- Cohomologous-to is an equivalence relation. -/
-theorem equivalence : Equivalence (CohomologousTo (G := G)) :=
-  ⟨refl, symm, trans⟩
-
-end ScalarCocycle.CohomologousTo
-
-/-- The setoid on scalar cocycles induced by cohomologous-to. -/
-scoped instance scalarCocycleSetoid : Setoid (ScalarCocycle G) where
-  r := ScalarCocycle.CohomologousTo
-  iseqv := ScalarCocycle.CohomologousTo.equivalence
 
 /-! ### Mathlib's degree-two group cohomology with coefficients `ℂˣ`
 
@@ -189,37 +164,59 @@ def scalarRepresentationRes {K : Type} [Group K] (f : K →* G) :
   intro g
   rfl
 
-/-- Two scalar cochains are cohomologous precisely when their pointwise ratio is a
-Mathlib multiplicative 2-coboundary for the trivial action on `ℂˣ`. -/
-theorem ScalarCocycle.cohomologousTo_iff_isMulCoboundary₂_div (ω₁ ω₂ : ScalarCocycle G) :
-    ω₁.CohomologousTo ω₂ ↔ groupCohomology.IsMulCoboundary₂ (ω₁ / ω₂) := by
+/-- Two arbitrary scalar two-cochains differ by a coboundary precisely when
+their images in the quotient of all two-cochains by two-coboundaries agree.
+No cocycle condition is required: this quotient is not `H²(G, ℂˣ)`. -/
+theorem isMulCoboundary₂_div_iff_quotient_mk_eq (ω₁ ω₂ : G × G → ℂˣ) :
+    groupCohomology.IsMulCoboundary₂ (ω₁ / ω₂) ↔
+      (Submodule.Quotient.mk ((@Additive.ofMul ℂˣ) ∘ ω₁) :
+        (G × G → Rep.ofMulDistribMulAction G ℂˣ) ⧸
+          groupCohomology.coboundaries₂ (Rep.ofMulDistribMulAction G ℂˣ)) =
+        Submodule.Quotient.mk ((@Additive.ofMul ℂˣ) ∘ ω₂) := by
   constructor
-  · rintro ⟨φ, hφ⟩
-    refine ⟨φ, fun g h ↦ ?_⟩
-    change φ h / φ (g * h) * φ g = ω₁ (g, h) / ω₂ (g, h)
-    rw [hφ g h, mul_div_cancel_right, div_mul_eq_mul_div, mul_comm (φ h), div_eq_mul_inv]
-  · rintro ⟨φ, hφ⟩
-    refine ⟨φ, fun g h ↦ ?_⟩
-    have h' := hφ g h
-    change φ h / φ (g * h) * φ g = ω₁ (g, h) / ω₂ (g, h) at h'
-    rw [eq_div_iff_mul_eq'] at h'
-    rw [← h', div_mul_eq_mul_div, mul_comm (φ h), div_eq_mul_inv]
+  · intro h
+    exact (Submodule.Quotient.eq _).mpr
+      (groupCohomology.coboundariesOfIsMulCoboundary₂ h).property
+  · intro h
+    exact groupCohomology.isMulCoboundary₂_of_mem_coboundaries₂
+      (G := G) (M := ℂˣ) _ ((Submodule.Quotient.eq _).mp h)
 
-/-- Two scalar cocycles are cohomologous precisely when they have the same class in
-Mathlib's `H²(G, ℂˣ)`, by `groupCohomology.H2π_eq_iff`. -/
-theorem ScalarCocycle.cohomologousTo_iff_H2π_eq {ω₁ ω₂ : ScalarCocycle G}
+/-- Every scalar cochain has a coboundary self-ratio, without a cocycle hypothesis. -/
+theorem isMulCoboundary₂_div_self (ω : G × G → ℂˣ) :
+    groupCohomology.IsMulCoboundary₂ (ω / ω) :=
+  (isMulCoboundary₂_div_iff_quotient_mk_eq ω ω).mpr rfl
+
+/-- Symmetry uses equality in the upstream cochain quotient, not a local relation. -/
+theorem isMulCoboundary₂_div_symm {ω₁ ω₂ : G × G → ℂˣ}
+    (h : groupCohomology.IsMulCoboundary₂ (ω₁ / ω₂)) :
+    groupCohomology.IsMulCoboundary₂ (ω₂ / ω₁) :=
+  (isMulCoboundary₂_div_iff_quotient_mk_eq ω₂ ω₁).mpr
+    ((isMulCoboundary₂_div_iff_quotient_mk_eq ω₁ ω₂).mp h).symm
+
+/-- Transitivity uses equality in the upstream cochain quotient. -/
+theorem isMulCoboundary₂_div_trans {ω₁ ω₂ ω₃ : G × G → ℂˣ}
+    (h₁₂ : groupCohomology.IsMulCoboundary₂ (ω₁ / ω₂))
+    (h₂₃ : groupCohomology.IsMulCoboundary₂ (ω₂ / ω₃)) :
+    groupCohomology.IsMulCoboundary₂ (ω₁ / ω₃) :=
+  (isMulCoboundary₂_div_iff_quotient_mk_eq ω₁ ω₃).mpr
+    (((isMulCoboundary₂_div_iff_quotient_mk_eq ω₁ ω₂).mp h₁₂).trans
+      ((isMulCoboundary₂_div_iff_quotient_mk_eq ω₂ ω₃).mp h₂₃))
+
+/-- Genuine scalar cocycles have equal `H²` classes exactly when their ratio is a coboundary. -/
+theorem H2π_eq_iff_isMulCoboundary₂_div {ω₁ ω₂ : G × G → ℂˣ}
     (h₁ : groupCohomology.IsMulCocycle₂ ω₁) (h₂ : groupCohomology.IsMulCocycle₂ ω₂) :
-    ω₁.CohomologousTo ω₂ ↔
+    groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂ h₁) =
       groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
-          (groupCohomology.cocyclesOfIsMulCocycle₂ h₁) =
-        groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
-          (groupCohomology.cocyclesOfIsMulCocycle₂ h₂) := by
-  rw [groupCohomology.H2π_eq_iff, ScalarCocycle.cohomologousTo_iff_isMulCoboundary₂_div]
+        (groupCohomology.cocyclesOfIsMulCocycle₂ h₂) ↔
+      groupCohomology.IsMulCoboundary₂ (ω₁ / ω₂) := by
+  rw [groupCohomology.H2π_eq_iff]
   constructor
+  · intro h
+    exact groupCohomology.isMulCoboundary₂_of_mem_coboundaries₂
+      (G := G) (M := ℂˣ) _ h
   · intro h
     exact (groupCohomology.coboundariesOfIsMulCoboundary₂ h).property
-  · intro h
-    exact groupCohomology.isMulCoboundary₂_of_mem_coboundaries₂ (G := G) (M := Units ℂ) _ h
 
 /-- The class of the constant cocycle `1` is zero. -/
 theorem ScalarCocycle.H2π_one
@@ -229,16 +226,19 @@ theorem ScalarCocycle.H2π_one
   have : groupCohomology.cocyclesOfIsMulCocycle₂ h = 0 := rfl
   rw [this, map_zero]
 
-/-- A scalar cocycle is cohomologous to the constant cocycle `1` precisely when its
-class in Mathlib's `H²(G, ℂˣ)` is zero. -/
-theorem ScalarCocycle.cohomologousTo_one_iff_H2π_eq_zero {ω : ScalarCocycle G}
+/-- The native zero-class criterion needs no constant-cocycle comparison. -/
+theorem H2π_eq_zero_iff_isMulCoboundary₂ {ω : G × G → ℂˣ}
     (hω : groupCohomology.IsMulCocycle₂ ω) :
-    ω.CohomologousTo 1 ↔
-      groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
-        (groupCohomology.cocyclesOfIsMulCocycle₂ hω) = 0 := by
-  have h1 : groupCohomology.IsMulCocycle₂ (1 : ScalarCocycle G) :=
-    fun _ _ _ ↦ rfl
-  rw [ScalarCocycle.cohomologousTo_iff_H2π_eq hω h1, ScalarCocycle.H2π_one h1]
+    groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂ hω) = 0 ↔
+      groupCohomology.IsMulCoboundary₂ ω := by
+  rw [groupCohomology.H2π_eq_zero_iff]
+  constructor
+  · intro h
+    exact groupCohomology.isMulCoboundary₂_of_mem_coboundaries₂
+      (G := G) (M := ℂˣ) _ h
+  · intro h
+    exact (groupCohomology.coboundariesOfIsMulCoboundary₂ h).property
 
 /-- Every class of Mathlib's `H²(G, ℂˣ)`, for the trivial action, is the class of a
 scalar cocycle. -/
@@ -271,16 +271,13 @@ lemma ScalarCocycle.commPhase_one (g h : G) :
     ScalarCocycle.commPhase (G := G) 1 g h = 1 := by
   simp [ScalarCocycle.commPhase]
 
-/-- The commutator phase at a commuting pair is invariant under coboundary
-equivalence: cohomologous cocycles share the same commutator phase. -/
-lemma ScalarCocycle.commPhase_eq_of_cohomologousTo {ω₁ ω₂ : ScalarCocycle G}
-    (H : ScalarCocycle.CohomologousTo ω₁ ω₂) {g k : G} (hgk : g * k = k * g) :
+/-- Commutator phases are invariant under a coboundary, without a cocycle hypothesis. -/
+theorem ScalarCocycle.commPhase_eq_of_isMulCoboundary₂_div {ω₁ ω₂ : G × G → ℂˣ}
+    (H : groupCohomology.IsMulCoboundary₂ (ω₁ / ω₂))
+    {g k : G} (hgk : g * k = k * g) :
     ScalarCocycle.commPhase ω₁ g k = ScalarCocycle.commPhase ω₂ g k := by
-  obtain ⟨φ, hφ⟩ := H
-  -- Substitute the coboundary formula and use `φ (g*k) = φ (k*g)` (from `hgk`).
+  obtain ⟨φ, hφ⟩ := (isMulCoboundary₂_div_iff ω₁ ω₂).mp H
   simp only [ScalarCocycle.commPhase, hφ g k, hφ k g, hgk]
-  -- `Units ℂ` is a commutative group; coerce to `ℂ`, where units are nonzero, and
-  -- let `field_simp` cancel the common `φ`-factors in the ratio.
   apply Units.ext
   push_cast
   field_simp
@@ -294,8 +291,9 @@ theorem ScalarCocycle.H2π_ne_zero_of_commPhase_ne_one {ω : ScalarCocycle G}
       (groupCohomology.cocyclesOfIsMulCocycle₂ hω) ≠ 0 := by
   intro H
   apply hne
-  rw [ScalarCocycle.commPhase_eq_of_cohomologousTo
-    ((ScalarCocycle.cohomologousTo_one_iff_H2π_eq_zero hω).mpr H) hgh,
+  have hB : groupCohomology.IsMulCoboundary₂ (ω / (1 : G × G → ℂˣ)) := by
+    simpa only [div_one] using (H2π_eq_zero_iff_isMulCoboundary₂ hω).mp H
+  rw [ScalarCocycle.commPhase_eq_of_isMulCoboundary₂_div hB hgh,
     ScalarCocycle.commPhase_one]
 
 end TNLean.Algebra

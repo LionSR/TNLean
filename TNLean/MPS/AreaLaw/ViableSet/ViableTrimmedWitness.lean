@@ -26,7 +26,7 @@ This is an auxiliary version of Landau, Vazirani and Vidick, arXiv:1307.5143v1,
 **Scope restriction (nontrivial chains and bond bound):** The result assumes `0 < L` and
 `2 ≤ q` and uses `constantCutBond q 1 1 Δ c` from this library's area law. The source's
 quantitative dependence `exp(O(Δ⁻¹ log³ q log(1/c)))` is not established here. See
-`docs/paper-gaps/lvv13_constant_bond.tex`.
+`docs/paper-gaps/lvv13_nontrivial_chain.tex` and `docs/paper-gaps/lvv13_constant_bond.tex`.
 -/
 
 open Matrix
@@ -58,8 +58,8 @@ theorem ChainHamiltonian.exists_trimmed_witness_of_isViable
       WithLp.ofLp w ∘ (gluingCut L q k).symm =
         ((1 : Matrix (CutLeft L q k × CutSite L q k)
           (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ x ∧
-      (reindex (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_sub_one_subset k))
-          (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_sub_one_subset k))
+      (reindex (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+          (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
           (spanProjection S) ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ x = x := by
   classical
   let c : ℝ := (Δ / 169) ^ 2

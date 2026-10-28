@@ -88,15 +88,16 @@ theorem inducedLSymbol_eq_gauge (K : StabilizerRepresentatives G X x₀)
   simp only [div_eq_mul_inv, mul_inv_rev, inv_inv]
   ac_rfl
 
-/-- Two stabilizer cocycles are cohomologous exactly when their induced
+/-- Two arbitrary stabilizer cochains differ by a coboundary exactly when their induced
 L-symbols differ by an action-tensor gauge with no change of fusion gauge. -/
-theorem cohomologousTo_iff_exists_actionGauge_inducedLSymbol_eq
+theorem isMulCoboundary₂_div_iff_exists_actionGauge_inducedLSymbol_eq
     (K : StabilizerRepresentatives G X x₀)
     (ψ₁ ψ₂ : ScalarCocycle (MulAction.stabilizer G x₀)) :
-    ScalarCocycle.CohomologousTo ψ₁ ψ₂ ↔
+    groupCohomology.IsMulCoboundary₂ (ψ₁ / ψ₂) ↔
       ∃ γ : ActionTensorGauge G X,
         K.inducedLSymbol ψ₁ =
           LSymbol.gauge (fun _ ↦ 1) γ (K.inducedLSymbol ψ₂) := by
+  rw [isMulCoboundary₂_div_iff]
   constructor
   · rintro ⟨φ, hφ⟩
     exact ⟨K.inducedActionGauge φ, K.inducedLSymbol_eq_gauge φ hφ⟩

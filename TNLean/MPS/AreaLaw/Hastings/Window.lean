@@ -69,14 +69,6 @@ namespace TNLean.MPS.AreaLaw.Hastings
 
 variable {L : ℕ}
 
-/-- Two adjacent intervals `[a, b)` and `[b, c)` are disjoint. -/
-theorem disjoint_interval_interval (a b c : ℕ) :
-    Disjoint (interval L a b) (interval L b c) := by
-  rw [Finset.disjoint_left]
-  intro x hx hx'
-  rw [mem_interval] at hx hx'
-  omega
-
 /-- Two adjacent intervals `[a, b)` and `[b, c)` with `a ≤ b ≤ c` make up `[a, c)`. -/
 theorem interval_union_interval {a b c : ℕ} (hab : a ≤ b) (hbc : b ≤ c) :
     interval L a b ∪ interval L b c = interval L a c := by
@@ -101,7 +93,8 @@ theorem cutEntropy_sub_le (hΩ : ‖Ω‖ = 1) {i k : ℕ} (hik : i ≤ k) :
     Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω -
         ((k : ℝ) - i) * Real.log q ≤
       Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 k) Ω := by
-  have hAL := regionEntropy_le_union_add (q := q) hΩ (disjoint_interval_interval 0 i k)
+  have hAL := regionEntropy_le_union_add (q := q) hΩ
+    (TNLean.MPS.AreaLaw.disjoint_interval_interval 0 i k)
   rw [interval_union_interval (Nat.zero_le i) hik] at hAL
   have hT := regionEntropy_le_card_mul_log (q := q) hΩ (interval L i k)
   have hcard : ((interval L i k).card : ℝ) ≤ (k : ℝ) - i := by
@@ -239,7 +232,8 @@ theorem windowEntropy_two_mul_le (hΩ : ‖Ω‖ = 1) (i l₀ l : ℕ) :
       congr 1
       ring
     rw [hsplit]
-    refine (regionEntropy_union_le hΩ (disjoint_interval_interval _ _ _)).trans ?_
+    refine (regionEntropy_union_le hΩ
+      (TNLean.MPS.AreaLaw.disjoint_interval_interval _ _ _)).trans ?_
     have h1 := regionEntropy_le_windowEntropy (Ω := Ω) hia (show a + l ≤ i + l₀ by omega)
     have h2 := regionEntropy_le_windowEntropy (Ω := Ω) (show i ≤ a + l by omega)
       (show a + l + l ≤ i + l₀ by omega)

@@ -13,7 +13,7 @@ open TNLean.MPS.AreaLaw.Hastings
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
-  for decl in #[``disjoint_interval_interval, ``interval_union_interval,
+  for decl in #[``TNLean.MPS.AreaLaw.disjoint_interval_interval, ``interval_union_interval,
       ``regionEntropy_nonneg, ``cutEntropy_sub_le,
       ``windowLength_mul_log_le, ``lt_windowLength_add_one, ``two_mul_div_three_le_cutEntropy,
       ``regionEntropy_le_windowEntropy, ``exists_windowEntropy_eq, ``windowEntropy_nonneg,

@@ -28,7 +28,7 @@ limit `D₁`. See `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.
   states and projected entangled pair states*, Section II.F.2
 -/
 
-open scoped Matrix Matrix.Norms.L2Operator
+open scoped Matrix Matrix.Norms.L2Operator TNLean.Algebra.ScalarCohomology
 
 namespace TNLean.Algebra
 
@@ -65,7 +65,10 @@ theorem ProjectiveRepresentation.exists_unitary_rephase_with_factorSystem
     {ω₀ ω₁ : ScalarCocycle G}
     (ρ₀ : ProjectiveRepresentation (D := D₀) ω₀)
     (ρ₁ : ProjectiveRepresentation (D := D₁) ω₁)
-    (h : ω₁.CohomologousTo ω₀)
+    (h : groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ (NeZero.pos D₁))) =
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ (NeZero.pos D₀))))
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ) :
     ∃ (ρ₀' : ProjectiveRepresentation (D := D₀) ω₁) (φ : G → Circle),
@@ -75,7 +78,7 @@ theorem ProjectiveRepresentation.exists_unitary_rephase_with_factorSystem
   have hRephase := @ProjectiveRepresentation.exists_unitary_rephase_of_cohomologous
     G _ D₀ ω₀ ω₁
   rw [ρ₀.circlePhaseInclusion_eq h₀, ρ₁.circlePhaseInclusion_eq h₁] at hRephase
-  exact hRephase ρ₀ h h₀
+  exact hRephase ρ₀ ((H2π_eq_iff_isMulCoboundary₂_div _ _).mp h) h₀
 
 end TNLean.Algebra
 
@@ -106,7 +109,10 @@ theorem exists_symmetricGappedInteractionPath_of_cohomologous_fixedPoint
     {ω₀ ω₁ : TNLean.Algebra.ScalarCocycle G}
     (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω₀)
     (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω₁)
-    (h : ω₁.CohomologousTo ω₀)
+    (h : groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ (NeZero.pos D₁))) =
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ (NeZero.pos D₀))))
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ) :
     ∃ (ρ₀' : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω₁)

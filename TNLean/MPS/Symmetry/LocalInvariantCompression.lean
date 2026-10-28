@@ -29,6 +29,8 @@ set_option linter.mathlibStandardSet true
 open scoped Matrix Matrix.Norms.L2Operator ComplexOrder
 open Filter Topology
 
+open scoped TNLean.Algebra.ScalarCohomology
+
 namespace MPSTensor
 
 /-- Injectivity persists near a parameter at which a one-site tensor
@@ -111,11 +113,12 @@ theorem eventually_cohomologousTo_of_continuousOn_pointwise_compression
     (t₀ : unitInterval) (hS : S ∈ 𝓝 t₀)
     (hInj : Kraus.IsInjective (C t₀))
     (hCompress : ∀ t ∈ S, ∀ i, C t i = (J t)ᴴ * A t i * J t) :
-    ∀ᶠ t in 𝓝 t₀, (ω t).CohomologousTo (ω t₀) := by
+    ∀ᶠ t in 𝓝 t₀, groupCohomology.IsMulCoboundary₂ (ω t / ω t₀) := by
   have hlocal := Set.Icc.eventually_forall_convexComb t₀
     (eventually_isInjective_of_continuousAt C t₀ (hC.continuousAt hS) hInj)
   have hlocalS := Set.Icc.eventually_forall_convexComb t₀ hS
   filter_upwards [hlocal, hlocalS] with t ht hts
+  apply (H2π_eq_iff_isMulCoboundary₂_div _ _).mp
   simpa only [Set.Icc.convexComb_zero, Set.Icc.convexComb_one] using
     cohomologousTo_of_continuous_injective_pointwise_compression hr
       (fun s => D (Set.Icc.convexComb t₀ t s))
@@ -155,7 +158,18 @@ theorem eventually_cohomologousTo_of_continuous_pointwise_compression
     (C : unitInterval → MPSTensor d r) (hC : Continuous C)
     (t₀ : unitInterval) (hInj : Kraus.IsInjective (C t₀))
     (hCompress : ∀ t i, C t i = (J t)ᴴ * A t i * J t) :
-    ∀ᶠ t in 𝓝 t₀, (ω t).CohomologousTo (ω t₀) := by
+    ∀ᶠ t in 𝓝 t₀, groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ t)
+            (hr.trans_le (by
+              simpa only [Fintype.card_fin] using Matrix.IsIsometry.card_le (J t) (hJ t))))) =
+      groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ t₀)
+            (hr.trans_le (by
+              simpa only [Fintype.card_fin] using Matrix.IsIsometry.card_le (J t₀) (hJ t₀))))) := by
+  apply (Filter.eventually_congr (.of_forall fun _ ↦
+    H2π_eq_iff_isMulCoboundary₂_div _ _)).mpr
   exact eventually_cohomologousTo_of_continuousOn_pointwise_compression
     hr D ω ρ A J Set.univ (fun t _ => hJ t) (fun t _ => hUnitary t)
     (fun t _ => hComm t) U (fun t _ => hCov t) C hC.continuousOn t₀
@@ -184,7 +198,20 @@ theorem eventually_cohomologousTo_of_continuousOn_invariant_compression
         ((ρ t).X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ)ᴴ)
     (t₀ : unitInterval) (hS : S ∈ 𝓝 t₀)
     (hInj : Kraus.IsInjective (fun i => (J t₀)ᴴ * A t₀ i * J t₀)) :
-    ∀ᶠ t in 𝓝 t₀, (ω t).CohomologousTo (ω t₀) := by
+    ∀ᶠ t in 𝓝 t₀, groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ t)
+            (hr.trans_le (by
+              simpa only [Fintype.card_fin] using
+                Matrix.IsIsometry.card_le (J t₀) (hJ t₀ (mem_of_mem_nhds hS)))))) =
+      groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ t₀)
+            (hr.trans_le (by
+              simpa only [Fintype.card_fin] using
+                Matrix.IsIsometry.card_le (J t₀) (hJ t₀ (mem_of_mem_nhds hS)))))) := by
+  apply (Filter.eventually_congr (.of_forall fun _ ↦
+    H2π_eq_iff_isMulCoboundary₂_div _ _)).mpr
   let C : unitInterval → MPSTensor d r := fun t i => (J t)ᴴ * A t i * J t
   have hC : ContinuousOn C S := by
     rw [continuousOn_iff_continuous_domRestrict]

@@ -42,6 +42,8 @@ times their graph distance. If `e` translates the coordinate by one, some transl
 * `TNLean.Lattice.exists_mem_supercell_lt_edist_add`: with momenta of denominator `q`, some
   element of the supercell carries any site to graph distance more than `(n / 2 - q) / R` from
   any other.
+* `TNLean.Lattice.exists_mem_supercell_lt_edist`: if `l + q ≤ n / 2`, a supercell
+  translate has distance greater than `l`, when each edge changes the coordinate by at most one.
 * `TNLean.Lattice.exists_mem_supercell_lt_edist_add_ring`: the same for the rotations of a ring.
 -/
 
@@ -187,6 +189,33 @@ theorem exists_mem_supercell_lt_edist_add {Γ : Type*} [CommGroup Γ] [MulAction
       ((π y + ((q * t : ℕ) : ZMod n) - π x).valMinAbs.natAbs : ℕ∞) + q := by
     exact_mod_cast ht
   exact h1.trans_le (add_le_add_left hdist _)
+
+/-- If each edge changes the cell coordinate by at most one and
+`l + q ≤ n / 2`, a supercell translation carries any site to graph distance
+strictly greater than `l` from any other. This combines the geometric choice
+with its distance consequence in Hastings, arXiv:cond-mat/0508554v3,
+`proj3new.tex`, lines 1634–1641. -/
+theorem exists_mem_supercell_lt_edist {Γ : Type*} [CommGroup Γ] [MulAction Γ V]
+    {H : Matrix (V → Fin d) (V → Fin d) ℂ} {E₀ : ℝ} {q : ℕ} (hq : 0 < q)
+    (hden : ∀ χ : Γ →* ℂ, momentumSector Γ d H E₀ χ ≠ ⊥ → ∀ g, χ g ^ q = 1)
+    (G : SimpleGraph V) {n : ℕ} [NeZero n] (π : V → ZMod n)
+    (hπ : ∀ u v, G.Adj u v → (π v - π u).valMinAbs.natAbs ≤ 1)
+    (e : Γ) (he : ∀ v, π (e • v) = π v + 1)
+    (l : ℕ) (hl : l + q ≤ n / 2) (x y : V) :
+    ∃ g ∈ supercell Γ d H E₀, (l : ℕ∞) < G.edist x (g • y) := by
+  obtain ⟨g, hg, hdist⟩ : ∃ g ∈ supercell Γ d H E₀,
+      ((n / 2 : ℕ) : ℕ∞) < G.edist x (g • y) + q := by
+    simpa only [Nat.cast_one, one_mul] using
+      exists_mem_supercell_lt_edist_add hq hden G (R := 1) Nat.zero_lt_one π hπ e he x y
+  refine ⟨g, hg, ?_⟩
+  by_contra hfar
+  have hle := le_of_not_gt hfar
+  have hlt : ((n / 2 : ℕ) : ℕ∞) < ((l + q : ℕ) : ℕ∞) := by
+    calc
+      ((n / 2 : ℕ) : ℕ∞) < G.edist x (g • y) + q := hdist
+      _ ≤ (l : ℕ∞) + q := add_le_add hle le_rfl
+      _ = ((l + q : ℕ) : ℕ∞) := by rw [Nat.cast_add]
+  exact (not_lt_of_ge hl) (ENat.natCast_lt_natCast.mp hlt)
 
 /-- **A supercell rotation of a ring carries a site far away.** The case of
 `exists_mem_supercell_lt_edist_add` for the rotations of a ring of `n` sites, with the

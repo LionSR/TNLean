@@ -17,7 +17,7 @@ system. The following results establish this algebraic step for the concrete
 matrix-valued projective representations used in TNLean.
 -/
 
-open scoped Matrix
+open scoped Matrix TNLean.Algebra.ScalarCohomology
 
 namespace TNLean.Algebra
 
@@ -87,7 +87,7 @@ lines 886–921. -/
 theorem ProjectiveRepresentation.exists_unitary_rephase_of_cohomologous
     {ω₀ ω₁ : ScalarCocycle G}
     (ρ₀ : ProjectiveRepresentation (D := D) ω₀.circlePhaseInclusion)
-    (h : ω₁.CohomologousTo ω₀)
+    (h : groupCohomology.IsMulCoboundary₂ (ω₁ / ω₀))
     (hρ₀ : ∀ g, (ρ₀.X g : Matrix (Fin D) (Fin D) ℂ) ∈
       Matrix.unitaryGroup (Fin D) ℂ) :
     ∃ (ρ₁ : ProjectiveRepresentation (D := D) ω₁.circlePhaseInclusion)
@@ -96,7 +96,7 @@ theorem ProjectiveRepresentation.exists_unitary_rephase_of_cohomologous
         Matrix.unitaryGroup (Fin D) ℂ) ∧
       (∀ g, ρ₁.X g = Matrix.GeneralLinearGroup.scalar (Fin D)
         (Circle.toUnits (φ g)) * ρ₀.X g) := by
-  obtain ⟨φ, hφ⟩ := h
+  obtain ⟨φ, hφ⟩ := (isMulCoboundary₂_div_iff _ _).mp h
   let ψ : G → Circle := fun g => Complex.unitsPhase (φ g)
   have hphase : ∀ g k,
       ω₁.circlePhaseInclusion (g, k) =
