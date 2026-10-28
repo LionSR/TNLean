@@ -22,6 +22,7 @@ import QICLean.Algebra.OperatorSchmidtBounds
 import Mathlib.Algebra.Polynomial.AlgebraMap
 import QICLean.Algebra.OperatorSchmidt
 import TNLean.Algebra.TwoWindowRankBounds
+import TNLean.Algebra.TwoWindowPolynomialRecovery
 
 /-!
 # Regional rank bounds for polynomials in a two-window family
@@ -443,80 +444,7 @@ private theorem operatorSchmidtRank_two_window_source_full_counts_le
 end TNLean.MPS.AreaLaw
 end
 
-
 /-! ## A common frequency cutoff for all degrees -/
-
-open scoped BigOperators
-
-open Classical in
-/-- A common pair of local frequency selectors partitions every degree up to
-a prescribed bound into the same finite set of bins.
-ALVV, arXiv:1602.08828v2, `prop:Cheby-AGSP-eff`, lines 1324–1332;
-AKLV, arXiv:1301.1162v1, Lemma `l:agsp`, lines 604–625. -/
-private theorem Fintype.exists_two_window_word_coefficient_partition_of_le
-    {ι 𝓡 : Type*} [Fintype ι] [Semiring 𝓡]
-    (L R : Finset ι) (hL : L.Nonempty) (hR : R.Nonempty) :
-    ∃ pickL : (↥L → ℕ) → ↥L,
-      ∃ pickR : (↥R → ℕ) → ↥R,
-        (∀ (f : ι → ℕ) (k : ℕ), (∑ a, f a) ≤ k →
-          f (pickL (fun u : ↥L ↦ f u)) ≤ k / L.card ∧
-          f (pickR (fun v : ↥R ↦ f v)) ≤ k / R.card) ∧
-        ∀ (H : ι → 𝓡) (k r : ℕ), r ≤ k →
-          let A := Finset.piAntidiag (Finset.univ : Finset ι) r
-          let B := (L.product (Finset.range (k / L.card + 1))).product
-            (R.product (Finset.range (k / R.card + 1)))
-          let left : (ι → ℕ) → ↥L := fun α ↦ pickL (fun u : ↥L ↦ α u)
-          let right : (ι → ℕ) → ↥R := fun α ↦ pickR (fun v : ↥R ↦ α v)
-          let label : (ι → ℕ) → (ι × ℕ) × (ι × ℕ) := fun α ↦
-            (((left α : ι), α (left α)), ((right α : ι), α (right α)))
-          let coefficient : (ι → ℕ) → 𝓡 := fun α ↦
-            ∑ w ∈ (Finset.univ : Finset (Fin r → ι)).filter
-                (fun w ↦ (WordMultiplicity.countsFinsupp w : ι → ℕ) = α),
-              (List.ofFn (fun t ↦ H (w t))).prod
-          (∑ x, H x) ^ r =
-            ∑ t ∈ B, ∑ α ∈ A with label α = t, coefficient α := by
-  obtain ⟨pickL, pickR, hpick⟩ :=
-    Finset.exists_two_window_low_frequency_selectors L R hL hR
-  refine ⟨pickL, pickR, hpick, ?_⟩
-  intro H k r hr A B left right label coefficient
-  have hword : ∀ w ∈ (Finset.univ : Finset (Fin r → ι)),
-      (WordMultiplicity.countsFinsupp w : ι → ℕ) ∈ A :=
-    fun w _ ↦ Finset.mem_piAntidiag.mpr
-      ⟨WordMultiplicity.sum_counts w, fun _ _ ↦ Finset.mem_univ _⟩
-  have hcoeff : (∑ x, H x) ^ r = ∑ α ∈ A, coefficient α :=
-    (Fintype.sum_pow_eq_sum_ordered_words H r).trans
-      (Finset.sum_fiberwise_of_maps_to hword
-        (fun w ↦ (List.ofFn (fun t ↦ H (w t))).prod)).symm
-  refine hcoeff.trans (Finset.sum_fiberwise_of_maps_to ?_ coefficient).symm
-  intro α hα
-  obtain ⟨hleft, hright⟩ := hpick α k ((Finset.mem_piAntidiag.mp hα).1.le.trans hr)
-  exact Finset.mem_product.mpr
-    ⟨Finset.mem_product.mpr
-      ⟨(left α).property, Finset.mem_range.mpr (Nat.lt_succ_of_le hleft)⟩,
-      Finset.mem_product.mpr
-        ⟨(right α).property, Finset.mem_range.mpr (Nat.lt_succ_of_le hright)⟩⟩
-
-
-open scoped BigOperators
-
-open Classical in
-/-- A bin selected by two labels and their frequencies is a weighted full-frequency slice.
-The weight restricts the two chosen labels, while the slice fixes their frequencies.
-ALVV, arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
-private theorem frequency_bin_eq_weighted_slice
-    {I M : Type*} [AddCommMonoid M] [Module ℂ M]
-    (E : Finset (I → ℕ)) (left right : (I → ℕ) → I)
-    (u v : I) (i j : ℕ) (coefficient : (I → ℕ) → M) :
-    (∑ α ∈ E with ((left α, α (left α)), (right α, α (right α))) =
-        ((u, i), (v, j)), coefficient α) =
-      ∑ α ∈ E with α u = i ∧ α v = j,
-        (if left α = u ∧ right α = v then (1 : ℂ) else 0) • coefficient α := by
-  classical
-  simp only [Finset.sum_filter]
-  apply Finset.sum_congr rfl
-  intro α _
-  by_cases hl : left α = u <;> by_cases hr : right α = v <;>
-    simp [hl, hr, Prod.mk.injEq]
 
 noncomputable section
 namespace TNLean.MPS.AreaLaw
