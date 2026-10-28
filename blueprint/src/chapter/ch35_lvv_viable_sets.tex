@@ -303,3 +303,127 @@ whose range is the span of the columns of $M_i(\psi)$.
     Theorem~\ref{thm:lvv_finite_left_columns} gives
     $T\subseteq\operatorname{Span}(S)$ and $|T|\le m|F|\le m|N|$.
 \end{proof}
+
+
+\begin{theorem}[A size-trimming family chosen before the ground state]
+    \label{thm:lvv_size_trimmed_family}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_trimmed_family}
+    \leanok
+    \uses{def:chain_model,def:chain_constant_bond,def:lvv_viable_set,def:lvv_viable_mps}
+    Let $L\ge1$ and $q\ge2$. Fix a range-one chain Hamiltonian
+    $H=\sum_Xh_X$ with positive semidefinite terms of norm at most one,
+    a number $\Delta>0$, and a natural cut position $k$, with left blocks
+    intersected with the chain. Let $S$ be a finite set of left-block
+    vectors. Fix $b\in\mathbb N$, put $\beta=\max\{1,b\}$, and suppose that
+    every member of $S$, read on $k$ sites as in
+    Definition~\ref{def:lvv_viable_mps}, has matrix product state bond
+    dimension at most $\beta$. Use Definition~\ref{def:chain_constant_bond}
+    with $R=J=1$, and define
+    \begin{align}
+        c    & =(\Delta/169)^2,\notag                                   \\
+        D    & =B_c,\notag                                              \\
+        \eta & =c/(2L),\notag                                           \\
+        K    & =\bigl(2\lceil(qD)^2/\eta\rceil+1\bigr)^{2(qD)^2}.\notag
+    \end{align}
+    There is a finite set $T$ of left-block vectors such that
+    \begin{align}
+        |T| & \le(D+1)DK,\notag                      \\
+        T   & \subseteq\operatorname{Span}(S).\notag
+    \end{align}
+    Every member of $T$, read on $k$ sites, has matrix product state bond
+    dimension at most $\max\{1,|S|\beta\}$. The set $T$ is chosen before
+    both the ground-state energy and the ground vector: for every
+    $E_0\in\mathbb R$ and every $\Gamma$, if $\Gamma$ is a normalized ground
+    state of $H$ of energy $E_0$ with gap at least $\Delta$, then
+    $(k,c/L)$-viability of $S$ for $\Gamma$ implies
+    $(k,1/12)$-viability of $T$ for $\Gamma$.
+
+    This is an auxiliary version of
+    \cite[Claim~2.7, source lines 472--478 and 520--527]{Landau2015Polynomial}.
+    It uses the library bond constant, a union over actual bond dimensions,
+    and the corrected matrix-space exponent. These qualifications are
+    recorded in~\cite{gap:lvv13_constant_bond,gap:lvv13_trace_norm_net};
+    the printed quantitative AKLV dependence remains separate.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_gluing_hamiltonian_decomposition,thm:chain_boundary_trace_norm_net,
+        thm:lvv_finite_boundary_selection,thm:lvv_uniform_leading_bounds_library_bond,
+        thm:chain_gluing_left_extension,thm:lvv_left_columns_right_extension,
+        thm:left_mps_finite_span}
+    First fix a decomposition $H=H_L+B$ with the stated left and right
+    supports and $\|B\|\le2L$. For every integer $0\le m\le D$, choose an
+    $\eta$-net $N_m$ on the actual boundary space, with $|N_m|\le K$.
+    Theorem~\ref{thm:lvv_finite_boundary_selection} chooses a global
+    minimizer and a leading unit eigenvector at exactly the feasible
+    points of $N_m$. Let $T_m$ be their left columns, and put
+    \begin{align}
+        T   & =\bigcup_{m=0}^{D}T_m,\notag \\
+        |T| & \le\sum_{m=0}^{D}|T_m|
+        \le\sum_{m=0}^{D}m|N_m|\le(D+1)DK.\notag
+    \end{align}
+    All these choices precede $E_0$ and $\Gamma$. Every $T_m$ lies in
+    $\operatorname{Span}(S)$, and Theorem~\ref{thm:left_mps_finite_span}
+    gives the asserted bond bound.
+
+    Now fix a ground-state pair $E_0,\Gamma$ for which $S$ is
+    $(k,c/L)$-viable. Theorem~\ref{thm:lvv_uniform_leading_bounds_library_bond}
+    supplies an actual bond $m\le D$, an isometry $W$ and a unit left
+    state $x$ fixed by the left support projection. Write $\mathcal A$
+    for the Hilbert space on $\lbrack0,\max\{k-1,0\})$, intersected with the chain. For
+    $\rho_x=|x\rangle\langle x|$ and its boundary state $Y$, one has
+    \begin{align}
+        \rho_x                 & \ge0,\notag                                      \\
+        \tr\rho_x              & =\|x\|^2=1,\notag                                \\
+        (P_S\otimes I_m)\rho_x & =\rho_x,\notag                                   \\
+        Y                      & =\operatorname{tr}_{\mathcal A}\rho_x\ge0,\notag \\
+        \|Y\|_1                & =\tr Y=1.\notag
+    \end{align}
+    Choose $X\in N_m$ with $\|Y-X\|_1\le\eta$. The density $\rho_x$ is
+    feasible at $X$, so $X$ belongs to the selected feasible set.
+    The same uniform theorem applies to the already chosen global
+    minimizer and its already chosen top eigenvector $u_{m,X}$. It gives
+    a unit physical extension $v=(I\otimes W)u_{m,X}$ with
+    $|\langle\Gamma,v\rangle|\ge11/12$.
+    Joining the left coordinates and extending the right factor places
+    $v$ in $\operatorname{Span}(T_m)\otimes\mathcal H_R$, hence in
+    $\operatorname{Span}(T)\otimes\mathcal H_R$. Thus $v$ witnesses the
+    asserted viability.
+\end{proof}
+
+\begin{theorem}[Polynomial size of the size-trimming family]
+    \label{thm:lvv_size_trimmed_family_polynomial}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_trimmed_family_polynomial}
+    \leanok
+    \uses{def:chain_model,def:chain_constant_bond,def:lvv_viable_set,def:lvv_viable_mps}
+    Under the assumptions of Theorem~\ref{thm:lvv_size_trimmed_family}, put
+    \begin{align}
+        c & =(\Delta/169)^2,\notag        \\
+        D & =B_c,\notag                   \\
+        p & =2(qD)^2,\notag               \\
+        A & =\lceil2(qD)^2/c\rceil,\notag \\
+        C & =(D+1)D(2A+1)^p.\notag
+    \end{align}
+    There is a finite set $T$, chosen before $E_0$ and $\Gamma$, such that
+    \begin{align}
+        |T| & \le CL^p,\notag                        \\
+        T   & \subseteq\operatorname{Span}(S).\notag
+    \end{align}
+    Every member of $T$, read on $k$ sites, has matrix product state bond
+    dimension at most $\max\{1,|S|\max\{1,b\}\}$.
+    For every $E_0\in\mathbb R$ and every normalized ground state $\Gamma$
+    of $H$ of energy $E_0$ with gap at least $\Delta$, $(k,c/L)$-viability of $S$
+    implies $(k,1/12)$-viability of $T$.
+    For fixed $q,\Delta$, both $C$ and $p$ are independent of $L$.
+    This is the polynomial form of the auxiliary preceding theorem,
+    with the same qualifications on the bond constant and net exponent.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:lvv_size_trimmed_family,thm:chain_boundary_net_polynomial_bound}
+    Take the same set $T$ as in Theorem~\ref{thm:lvv_size_trimmed_family}.
+    Theorem~\ref{thm:chain_boundary_net_polynomial_bound} gives
+    \begin{align}
+        K   & \le(2A+1)^pL^p,\notag                      \\
+        |T| & \le(D+1)DK\le(D+1)D(2A+1)^pL^p=CL^p.\notag
+    \end{align}
+    Its span inclusion, bond bound and viability implication are unchanged.
+\end{proof}
