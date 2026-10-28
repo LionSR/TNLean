@@ -25,6 +25,92 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     and the sites right of the cut.
 \end{definition}
 
+\begin{definition}[Joining the left coordinates]
+    \label{def:chain_gluing_left_coordinates}
+    \lean{TNLean.MPS.AreaLaw.gluingLeftCoordinates}
+    \leanok
+    \uses{def:chain_gluing_cut}
+    Let $L,q,k,m$ be natural numbers. Put $A=\lbrack0,k-1)$ and $B=\lbrack0,k)$,
+    intersecting both intervals with the chain of $L$ sites, and write
+    $\mathcal C_D=\{0,\ldots,q-1\}^{D}$ for the configurations of a region $D$.
+    Restriction gives a bijection
+    $r:\mathcal C_B\to\mathcal C_A\times\mathcal C_{B\setminus A}$.
+    Define the linear isometric equivalence
+    \begin{align}
+        U_m          & :\mathbb C^{(\mathcal C_A\times\mathcal C_{B\setminus A})\times\{0,\ldots,m-1\}}
+        \longrightarrow\mathbb C^{\mathcal C_B\times\{0,\ldots,m-1\}},                                  \\
+        (U_m u)(b,j) & =u(r(b),j). \notag
+    \end{align}
+    These are the left coordinates of the vectors used in the size-trimming
+    program and~\cite[Lemma~2.5, source lines 472--478 and 493--505]{Landau2015Polynomial}.
+\end{definition}
+
+\begin{theorem}[Dimension of the intervening configuration space]
+    \label{thm:chain_gluing_site_dimension}
+    \lean{TNLean.MPS.AreaLaw.card_cutSite_le}
+    \leanok
+    \uses{def:chain_gluing_cut}
+    For every natural cut position $k$ and every $q\ge1$, the configuration
+    space of $B\setminus A$ has at most $q$ elements, where
+    $A=\lbrack0,k-1)$ and $B=\lbrack0,k)$ are intersected with the chain.
+\end{theorem}
+\begin{proof}
+    \leanok
+    If $a,b\in B\setminus A$, then $k-1\le a,b<k$, hence $a=b$.
+    Thus $|B\setminus A|\le1$ and
+    $|\mathcal C_{B\setminus A}|=q^{|B\setminus A|}\le q$.
+\end{proof}
+
+\begin{theorem}[Transport of the left support projection]
+    \label{thm:chain_gluing_left_projection}
+    \lean{TNLean.MPS.AreaLaw.gluingLeftCoordinates_spanProjection_eq_iff}
+    \leanok
+    \uses{def:chain_gluing_left_coordinates,thm:lvv_viable_projection}
+    Let $S\subseteq\mathbb C^{\mathcal C_B}$, let $P$ be the orthogonal
+    projection onto $\operatorname{Span}(S)$, and define $P^r$ by
+    $P^r(r(b),r(b'))=P(b,b')$. For every vector $u$ on the two left regions
+    and a bond of dimension $m$,
+    \begin{align}
+        (P^r\otimes1_m)u=u
+        \quad & \Longleftrightarrow\quad
+        (P\otimes1_m)U_m u=U_m u. \notag
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    Since $(U_m u)(b,j)=u(r(b),j)$ and $P^r(r(b),r(b'))=P(b,b')$,
+    \begin{align}
+        U_m^{-1}(P\otimes1_m)U_m & =P^r\otimes1_m. \notag
+    \end{align}
+    Hence $(P^r\otimes1_m)u=u$ if and only if
+    $U_m^{-1}(P\otimes1_m)U_m u=u$, that is,
+    $(P\otimes1_m)U_m u=U_m u$.
+\end{proof}
+
+\begin{theorem}[Extension after joining the left coordinates]
+    \label{thm:chain_gluing_left_extension}
+    \lean{TNLean.MPS.AreaLaw.gluingLeftCoordinates_rightApply}
+    \leanok
+    \uses{def:chain_gluing_left_coordinates}
+    Let $W:\mathbb C^m\to\mathbb C^{\mathcal C_{B^c}}$ be any linear map
+    and let $u$ be a vector on the two left regions and the bond.
+    Extending $u$ by $1\otimes W$ in the three-way cut and then reading it
+    on the chain gives the same vector as extending $U_m u$ in the cut at
+    $B$. For a chain configuration $c$, their common value is
+    \begin{align}
+        v(c)=\sum_{j=0}^{m-1}(U_m u)(c|_B,j)\,W(c|_{B^c},j). \notag
+    \end{align}
+    No isometry assumption on $W$ is needed.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The three-way cut sends $c$ to $(r(c|_B),c|_{B^c})$.
+    If $C$ is the coefficient matrix of $U_m u$, its right extension has
+    coefficient matrix $CW^{\mathsf T}$. Expanding this product gives
+    the stated sum, which is also the value of $(1\otimes W)u$ in the
+    three-way coordinates.
+\end{proof}
+
 \begin{theorem}[The Hamiltonian at a cut]
     \label{thm:chain_gluing_split}
     \lean{TNLean.MPS.AreaLaw.reindex_gluingCut_eq}

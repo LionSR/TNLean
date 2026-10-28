@@ -12,6 +12,7 @@ import TNLean.MPS.AreaLaw.ViableSet.Basic
 import TNLean.MPS.AreaLaw.ViableSet.ConstantRankCut
 import TNLean.MPS.AreaLaw.ViableSet.Gluing
 import TNLean.MPS.AreaLaw.ViableSet.GluingBounds
+import TNLean.MPS.AreaLaw.ViableSet.GluingCoordinates
 import TNLean.MPS.AreaLaw.ViableSet.GluingSupport
 import TNLean.MPS.AreaLaw.ViableSet.LeftColumns
 import TNLean.MPS.AreaLaw.ViableSet.Span

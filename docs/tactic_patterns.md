@@ -9476,6 +9476,17 @@ there is no need for a new tactic.
   to displacement at most one along every edge. The original range-dependent
   theorem and all three commutator statements are unchanged.
 
+### Joining cut coordinates in tensor projections — reused Mathlib (2026-10-26)
+
+- **Seen:** `MPS/AreaLaw/ViableSet/GluingCoordinates.lean`.
+- **Pattern:** Transport a tensor projection through a product of coordinate equivalences,
+  then compare its fixed vectors by composition with the equivalence.
+- **Reuse:** `Matrix.kroneckerMap_reindex_left`, `Matrix.submatrix_mulVec_equiv` and
+  `Equiv.comp_symm_eq` give the proof directly. The extension identity uses the public
+  coefficient-matrix formula for `Matrix.rightApply`.
+- **Decision:** No new general matrix lemma or tactic is needed. The chain-specific map is
+  the existing isometric change of finite coordinates from Mathlib.
+
 ### Eigenvectors in the support of a density matrix — existing Mathlib lemmas (2026-10-26)
 
 - **Seen:** The local `hQu` arguments in
