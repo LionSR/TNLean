@@ -9585,3 +9585,20 @@ there is no need for a new tactic.
 - **Notes:** The present occurrences are confined to one module, below the
   two-file promotion threshold. The ordered-product sum itself already reuses
   `MultilinearMap.map_sum` and `MultilinearMap.map_update_sum`.
+
+### Positive-definite Hermitian exponentials — promoted through Mathlib (2026-10-28)
+
+- **Pattern:** Prove positivity of a Hermitian exponential and combine it with
+  `NormedSpace.isUnit_exp` to obtain positive definiteness.
+- **Seen:** The private exponential lemma in `Algebra/TraceExpLogConcavity.lean`
+  and the finite Jensen and Bernstein exponential estimates.
+- **Abstraction:** Mathlib's `cfc_isStrictlyPositive_iff`, together with
+  `CFC.real_exp_eq_normedSpace_exp` and `Matrix.isStrictlyPositive_iff_posDef`,
+  applies directly to `Real.exp_pos` on the spectrum.
+- **Refactored occurrences:** The two new consumers in
+  `Algebra/TraceExpFiniteJensen.lean` and `Algebra/BernsteinExponentialBound.lean`
+  use the existing strict-positivity abstraction. They no longer repeat the
+  auxiliary rational normed-algebra instance and invertibility argument.
+- **Notes:** The previously checked private lemma in
+  `Algebra/TraceExpLogConcavity.lean` retains its independent proof. No new
+  tactic or matrix-specific positivity lemma is needed.

@@ -1,0 +1,73 @@
+\documentclass{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\title{Finite Uniform Scope of the Matrix Bernstein Development}
+\author{}
+\date{October 28, 2026}
+\begin{document}
+\maketitle
+
+\section{Source statement and present scope}
+
+Tropp, \emph{User-friendly tail bounds for sums of random matrices},
+Theorem~6.1(ii), gives a one-sided spectral Bernstein inequality for independent
+Hermitian random matrices. Its rectangular version, Theorem~1.6, is the source
+of the norm estimate quoted in Landau--Vazirani--Vidick, % chktex 8
+arXiv:1307.5143v1, Theorem~2.13. See
+\url{https://tropp.caltech.edu/papers/Tro11-User-Friendly-preprint.pdf} and
+\url{https://arxiv.org/abs/1307.5143v1}.
+
+The present theorem concerns independent uniform samples from one finite
+nonempty family of Hermitian matrices. It is a specialization, rather than the
+formalization of the source theorem for general matrix-valued random variables.
+No general source-labelled theorem is marked proved by this result.
+
+Let $Z:\mathcal A\to M_d(\mathbb C)$ be Hermitian, with
+$\sum_{a\in\mathcal A}Z(a)=0$ and $\|Z(a)\|\le R$, where $R\ge0$.
+Let $\sigma^2$ be any real upper bound for
+\begin{align*}
+	\left\|\frac1{|\mathcal A|}\sum_{a\in\mathcal A} Z(a)^{2}\right\|. % chktex 3
+\end{align*}
+For $m\ge0$ and $\tau\ge0$, the proved bound is
+\begin{align*}
+	\frac{\#\{\omega\in\mathcal A^m:
+		\lambda_{\max}(\sum_j Z(\omega_j))\ge\tau\}}
+	{|\mathcal A|^m}
+	\le d\exp\left(-\frac{\tau^2}{2m\sigma^2+2R\tau/3}\right).
+\end{align*}
+The Lean event is expressed by the existence of a spectral value at least
+$\tau$. The theorem includes zero variance and zero threshold. At a zero
+denominator it uses the formal convention $0^{-1}=0$; the resulting bound by
+$d$ is immediate. The coefficient $1/3$ and the variance norm are retained.
+
+\section{Proof and extension plan}
+
+Lieb's trace-log-exponential concavity is already proved on the full
+positive-definite cone. Finite Jensen and induction over the sample coordinates
+therefore give the matrix logarithmic moment generating function estimate.
+The scalar bound
+\begin{align*}
+	e^x\le 1+x+\frac{x^2}{2(1-a/3)}
+	\qquad (|x|\le a<3)
+\end{align*}
+follows from $2\,3^k\le{(k+2)!}$. Functional calculus, centering and the variance
+norm bound give the exponential Markov estimate. Optimizing its scalar
+parameter yields the displayed tail bound. These steps are derived in the
+formal proof, rather than supplied as hypotheses.
+
+The next finite step is the Hermitian dilation of an arbitrary complex matrix.
+Its upper spectral tail gives the factor $2d$, and its squared diagonal blocks
+give the maximum of the two Gram-matrix variance norms. Subsequently the finite
+uniform expectations must be replaced by Bochner integrals and genuine
+independence. The generic analytic and probability results belong in QICLean;
+their transfer must precede any QICLean probability theorem depending on them.
+
+The source-specific sampled projector is a further task. A norm approximation
+alone does not establish the simultaneous bound on the frequency of each local
+factor in every sampled word. The ground-energy dependence of the published
+construction is recorded separately in
+\path{docs/paper-gaps/lvv13_sampling_ground_energy.tex}.
+
+\end{document}

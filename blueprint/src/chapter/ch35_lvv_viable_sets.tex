@@ -677,3 +677,76 @@ whose range is the span of the columns of $M_i(\psi)$.
     attained by $X=\exp(H+\log A)$. Mixing the two attaining matrices gives
     the asserted concavity.
 \end{proof}
+
+\begin{theorem}[Finite uniform trace-exponential Jensen inequality]
+	\label{thm:finite_matrix_trace_exp_jensen}
+	\lean{Matrix.average_trace_exp_add_le_trace_exp_log_average_exp}
+	\leanok
+	\uses{thm:matrix_trace_exp_log_concavity}
+	Let $H$ be Hermitian and let $Y_a$, indexed by a finite nonempty set, be
+	Hermitian. With uniform averaging denoted by $\mathbb E_a$,
+	\begin{align}
+		\mathbb E_a\operatorname{tr}e^{H+Y_a}
+		\le\operatorname{tr}e^{H+\log(\mathbb E_a e^{Y_a})}.
+		\label{eq:finite_matrix_trace_exp_jensen}
+	\end{align}
+	This is the finite uniform specialization of
+	\cite[Corollary~3.3]{Tropp2012TailBounds}.
+\end{theorem}
+\begin{proof}\leanok
+	\uses{thm:matrix_trace_exp_log_concavity}
+	Apply Jensen's inequality on the positive-definite cone to $e^{Y_a}$.
+\end{proof}
+
+\begin{theorem}[Finite uniform logarithmic moment generating function bound]
+	\label{thm:finite_matrix_log_mgf_bernstein}
+	\lean{Matrix.log_average_exp_le_bernstein}
+	\leanok
+	Let $Z_a$ be a centered finite uniform Hermitian family with $\|Z_a\|\le R$.
+	For $\theta\ge0$ and $\theta R<3$, put
+	$V=\mathbb E_a Z_a^2$. Then
+	\begin{align}
+		\log\mathbb E_a e^{\theta Z_a}
+		\le\frac{\theta^2\|V\|}{2(1-\theta R/3)}I.
+		\label{eq:finite_matrix_log_mgf_bernstein}
+	\end{align}
+\end{theorem}
+\begin{proof}\leanok
+	The factorial inequality $2\,3^k\le(k+2)!$ bounds the exponential remainder
+	by a geometric series. Functional calculus gives
+	$e^{\theta Z_a}\le I+\theta Z_a+
+		\theta^2Z_a^2/(2(1-\theta R/3))$.
+	Averaging removes the linear term. The variance norm bounds the quadratic
+	term by a scalar multiple of the identity, and $\log x\le x-1$ bounds
+	each spectral value of the logarithm.
+\end{proof}
+
+\begin{theorem}[Finite uniform one-sided Hermitian Bernstein inequality]
+	\label{thm:finite_uniform_hermitian_bernstein}
+	\lean{Matrix.finite_uniform_hermitian_bernstein_of_variance_le}
+	\leanok
+	\uses{thm:finite_matrix_trace_exp_jensen,thm:finite_matrix_log_mgf_bernstein}
+	Let $Z_a$ be a centered finite uniform family of Hermitian $d\times d$
+	matrices with $\|Z_a\|\le R$. Let $\sigma^2\ge\|\mathbb E_a Z_a^2\|$.
+	For $m$ independent uniform samples and $\tau\ge0$,
+	\begin{align}
+		\Pr\left(\lambda_{\max}\left(\sum_{j=1}^m Z_{a_j}\right)
+		\ge\tau\right)
+		\le d\exp\left(-\frac{\tau^2}{2m\sigma^2+2R\tau/3}\right).
+		\label{eq:finite_uniform_hermitian_bernstein}
+	\end{align}
+	At a zero denominator the right side is read as $d$.
+	This is the finite uniform, norm-bounded specialization of
+	\cite[Theorem~6.1(ii)]{Tropp2012TailBounds}.
+	The general probability theorem and the non-Hermitian norm estimate
+	remain separate assertions.
+\end{theorem}
+\begin{proof}\leanok
+	\uses{thm:finite_matrix_trace_exp_jensen,thm:finite_matrix_log_mgf_bernstein}
+	Iterate the trace-exponential Jensen inequality over the sample coordinates.
+	The logarithmic moment generating function bound and exponential Markov
+	inequality give the usual scalar parameter bound. For $m\sigma^2>0$ take
+	$\theta=\tau/(m\sigma^2+R\tau/3)$.
+	If $m\sigma^2=0<R\tau$, take $\theta=3/(2R)$.
+	The zero-denominator case follows by bounding a probability by one.
+\end{proof}

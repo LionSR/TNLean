@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Algebra
 
 import TNLean.Algebra.AnticommutingEvenDimension
+import TNLean.Algebra.BernsteinExponentialBound
 import TNLean.Algebra.BinaryCharacterSum
 import TNLean.Algebra.BinaryProjectionFamily
 import TNLean.Algebra.BlockDiagonalGauge
@@ -66,6 +67,7 @@ import TNLean.Algebra.FinVecEta
 import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.FiniteGroupCommutant
 import TNLean.Algebra.FiniteGroupUnitaryAverage
+import TNLean.Algebra.FiniteHermitianBernstein
 import TNLean.Algebra.FiniteIndicatorSum
 import TNLean.Algebra.FiniteMatrixMoments
 import TNLean.Algebra.FiniteMatrixSampling
@@ -214,6 +216,7 @@ import TNLean.Algebra.TensorProductRegrouping
 import TNLean.Algebra.ThreeOperatorPerturbation
 import TNLean.Algebra.ToEuclideanCLM
 import TNLean.Algebra.ToEuclideanLinApply
+import TNLean.Algebra.TraceExpFiniteJensen
 import TNLean.Algebra.TraceExpLogConcavity
 import TNLean.Algebra.TraceInvariantSubmodule
 import TNLean.Algebra.TranslatedCharacterOrthogonality
