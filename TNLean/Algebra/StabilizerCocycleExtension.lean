@@ -20,16 +20,20 @@ The corrected transition index is explained in
 `docs/paper-gaps/fbc25_stabilizer_transition_index_typo.tex`.
 -/
 
+open scoped TNLean.Algebra.ScalarCohomology
+
 namespace TNLean.Algebra
 
 variable {G : Type} {X : Type*} [Group G] [MulAction G X] {x₀ : X}
 
-private theorem cocycle_transition_identity {Ψ : ScalarCocycle G} (hΨ : Ψ.IsCocycle)
+private theorem cocycle_transition_identity {Ψ : ScalarCocycle G}
+    (hΨ : groupCohomology.IsMulCocycle₂ Ψ)
     (a b c u v : G) :
     Ψ (a⁻¹ * u * b, b⁻¹ * v * c) =
       Ψ (u, v) * (Ψ (a⁻¹, (u * v) * c) * Ψ (u * v, c) / (Ψ (1, 1) * Ψ (c, c⁻¹))) /
         ((Ψ (a⁻¹, u * b) * Ψ (u, b) / (Ψ (1, 1) * Ψ (b, b⁻¹))) *
           (Ψ (b⁻¹, v * c) * Ψ (v, c) / (Ψ (1, 1) * Ψ (c, c⁻¹)))) := by
+  have hΨ := (isMulCocycle₂_iff _).mp hΨ
   have hr (g : G) : Ψ (g, 1) = Ψ (1, 1) := by
     have h := hΨ g 1 1
     simpa only [mul_one, mul_left_cancel_iff] using h
@@ -74,7 +78,8 @@ def extensionActionGauge (K : StabilizerRepresentatives G X x₀)
 theorem inducedLSymbol_eq_extensionActionGauge
     (K : StabilizerRepresentatives G X x₀)
     {ψ : ScalarCocycle (MulAction.stabilizer G x₀)} {Ψ : ScalarCocycle G}
-    (hΨ : Ψ.IsCocycle) (hext : ∀ a b : MulAction.stabilizer G x₀, Ψ ((a : G), (b : G)) = ψ (a, b))
+    (hΨ : groupCohomology.IsMulCocycle₂ Ψ)
+    (hext : ∀ a b : MulAction.stabilizer G x₀, Ψ ((a : G), (b : G)) = ψ (a, b))
     (g₁ g₂ : G) (x : X) :
     K.inducedLSymbol ψ x g₁ g₂ = Ψ (g₁, g₂) * K.extensionActionGauge Ψ (g₁ * g₂) x /
       (K.extensionActionGauge Ψ g₁ (g₂ • x) * K.extensionActionGauge Ψ g₂ x) := by
@@ -89,7 +94,7 @@ at the representative level. -/
 theorem inducedLSymbol_hasTrivialGauge_of_extension
     (K : StabilizerRepresentatives G X x₀)
     {ψ : ScalarCocycle (MulAction.stabilizer G x₀)} {Ψ : ScalarCocycle G}
-    (hΨ : Ψ.IsCocycle)
+    (hΨ : groupCohomology.IsMulCocycle₂ Ψ)
     (hext : ∀ a b : MulAction.stabilizer G x₀, Ψ ((a : G), (b : G)) = ψ (a, b)) :
     LSymbol.HasTrivialGauge (K.inducedLSymbol ψ) := by
   refine ⟨Ψ⁻¹, (K.extensionActionGauge Ψ)⁻¹, fun x g h ↦ ?_⟩
