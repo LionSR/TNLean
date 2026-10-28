@@ -105,6 +105,16 @@ theorem ScalarCocycle.circlePhase_isMulCocycle₂ {ω : ScalarCocycle G}
   simpa only [map_mul, mul_comm] using
     congrArg Complex.unitsPhase ((isMulCocycle₂_iff _).mp hω g h k)
 
+/-- Including the pointwise unit phase preserves the scalar cocycle equation. -/
+theorem ScalarCocycle.circlePhaseInclusion_isMulCocycle₂ {ω : ScalarCocycle G}
+    (hω : groupCohomology.IsMulCocycle₂ ω) :
+    groupCohomology.IsMulCocycle₂ ω.circlePhaseInclusion := by
+  apply (isMulCocycle₂_iff _).mpr
+  intro g h k
+  simpa only [circlePhaseInclusion, circlePhase, map_mul] using
+    congrArg (fun z : ℂˣ ↦ Circle.toUnits (Complex.unitsPhase z))
+      ((isMulCocycle₂_iff _).mp hω g h k)
+
 /-- The radial residual of a scalar cocycle is a generalized cocycle on the
 one-point block space. -/
 theorem ScalarCocycle.positiveResidual_isGeneralizedCocycle
@@ -129,8 +139,8 @@ theorem ScalarCocycle.positiveResidual_isPositiveValued (ω : ScalarCocycle G) :
   intro x g h
   exact ⟨PositiveUnits.norm (ω (g, h)), (Complex.div_toUnits_unitsPhase (ω (g, h))).symm⟩
 
-/-- Every `ℂˣ`-valued scalar cocycle of a finite group is cohomologous to the
-inclusion of its pointwise `U(1)` phase.
+/-- Every `ℂˣ`-valued scalar cocycle of a finite group has the same `H²` class as
+the inclusion of its pointwise `U(1)` phase.
 
 The radial residual is a coboundary, by the one-block specialization of the positive
 generalized cocycle trivialization.
@@ -138,9 +148,14 @@ generalized cocycle trivialization.
 This is the finite-discrete algebraic comparison used for
 arXiv:2502.20257, line 1931.  It does not use the sheaf-cohomology argument in
 the source footnote. -/
-theorem ScalarCocycle.cohomologousTo_circlePhaseInclusion [Finite G]
+theorem ScalarCocycle.H2π_circlePhaseInclusion [Finite G]
     {ω : ScalarCocycle G} (hω : groupCohomology.IsMulCocycle₂ ω) :
-    ω.CohomologousTo ω.circlePhaseInclusion := by
+    groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂ hω) =
+      groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂ (circlePhaseInclusion_isMulCocycle₂ hω)) := by
+  apply (H2π_eq_iff_isMulCoboundary₂_div hω (circlePhaseInclusion_isMulCocycle₂ hω)).mpr
+  apply (isMulCoboundary₂_div_iff ω ω.circlePhaseInclusion).mpr
   obtain ⟨χ, _, hχ⟩ := LSymbol.exists_positive_coboundary
     (positiveResidual_isGeneralizedCocycle hω)
     (positiveResidual_isPositiveValued ω)
@@ -197,9 +212,7 @@ theorem ScalarCocycle.H2π_map_circlePhaseMathlibCocycle
             (groupCohomology.cocyclesOfIsMulCocycle₂ hω))) =
       groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
         (groupCohomology.cocyclesOfIsMulCocycle₂ hω) := by
-  have hcoh := ScalarCocycle.cohomologousTo_circlePhaseInclusion hω
-  exact (ScalarCocycle.cohomologousTo_iff_H2π_eq
-    (ScalarCocycle.isMulCocycle₂_of_cohomologousTo hω hcoh.symm) hω).mp hcoh.symm
+  exact (ScalarCocycle.H2π_circlePhaseInclusion hω).symm
 
 /-- The coefficient-inclusion map
 `H²(G, U(1)) → H²(G, ℂˣ)`. -/

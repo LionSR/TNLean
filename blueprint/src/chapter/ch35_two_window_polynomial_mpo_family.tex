@@ -1,0 +1,164 @@
+\section{A common physical middle family for every polynomial}
+
+Let the chain have $L$ sites and local space $\C^q$.
+For a region $S$, write $\mathcal C(S)=\{0,\ldots,q-1\}^S$.
+Every regional tensor product below lists the complement before the middle.
+All intervals are intersected with the chain.
+
+Fix nonnegative integers $a,b,\ell,B,k$ satisfying
+\begin{align}
+    a+2\ell\le b,\qquad b+2\ell\le L-1,\qquad
+    \ell\ge1,\quad q\ge2,\quad k\ge1.
+    \label{eq:physical_polynomial_family_hypotheses}
+\end{align}
+Supply full-chain window operators $W^L_r,W^R_r$, $0\le r<2\ell$,
+supported on $[a+r,a+r+2)$ and
+$[b+r,b+r+2)$, respectively.
+Set $K=[a+2\ell,b+1)$ and supply site-dependent tensors
+$A_t(i,j)\in\C^{B\times B}$ for $0\le t<|K|$, together with an arbitrary
+closing matrix $C_0\in\C^{B\times B}$. Let $P_M$ be the canonical
+full-chain extension of their trace contraction
+\begin{align}
+    (\sigma,\tau)\longmapsto
+    \operatorname{tr}\left(C_0\prod_{t=0}^{|K|-1}A_t(\sigma_t,\tau_t)\right),
+    \label{eq:physical_polynomial_supplied_core}
+\end{align}
+using the increasing enumeration of $K$. Put
+\begin{align}
+    J          & =[a+\ell,b+\ell+1),                    &
+    D          & =(qk)^{18\ell+2\lfloor k/\ell\rfloor}, &
+    \mathcal B & =(\max(1,B))^{2k}.
+    \label{eq:physical_polynomial_two_bounds}
+\end{align}
+The count parameter $D$ and the open-boundary bond bound $\mathcal B$
+have distinct roles.
+
+These are supporting polynomial-family results for
+\cite[Proposition~5.7]{Arad2016RigorousRG}.
+The interpolation argument requires only spanning, without independence of
+the coefficient operators; see
+\cite{gap:aklv13_interpolation_and_word_count}.
+
+\begin{theorem}[The canonical common middle family]
+    \label{thm:physical_polynomial_canonical_middle_family}
+    \lean{TNLean.MPS.AreaLaw.exists_common_physical_polynomial_mpo_family}
+    \leanok
+    \uses{def:crossing_frequency_index,thm:global_two_window_polynomial_recovery,
+        thm:common_middle_grid_mpo_family,
+        thm:common_middle_low_frequency_cardinality,
+        def:regional_middle_transferred_family,thm:chain_two_window_family_cardinality}
+    Let
+    \begin{align}
+        \kappa=\{0,\ldots,2\ell-1\}^2\times
+        \{0,\ldots,\lfloor k/(2\ell)\rfloor\}^2,
+        \qquad m=(k+1)^{4\ell+1}.
+        \label{eq:physical_polynomial_crossing_index}
+    \end{align}
+    For $v=(p,s,i,j)\in\kappa$, put
+    $E_v=[a+p+1,b+s+1)$.
+    There are nonnegative integers $n_{v,t}$ and matrices $V_{v,t,r}$ in the
+    increasing natural coordinates of $E_v$, for $0\le t<m$ and
+    $0\le r<n_{v,t}$, which determine the following prescribed family.
+    Write $V^{\mathrm{reg}}_{v,t,r}$ for these matrices read on
+    $\mathcal C(E_v)$, and set
+    \begin{align}
+        I_{v,t} & =\{0,\ldots,n_{v,t}-1\}\times
+        \mathcal C(E_v\setminus J)^2\times\mathcal C(J\setminus E_v)^2,
+                & I                             & =\coprod_{v\in\kappa}\coprod_{t=0}^{m-1} I_{v,t}.
+        \label{eq:physical_polynomial_canonical_index}
+    \end{align}
+    Apply the prescribed regional middle-family transfer to each family
+    $V^{\mathrm{reg}}_{v,t}$ from $E_v$ to $J$, and denote the resulting
+    matrices by $W_\omega$, $\omega\in I$. Then $|I|\le D^2$, and each
+    $W_\omega$, on the paired physical alphabet in increasing site order on
+    $J$, has an open-boundary matrix product representation with internal
+    bond dimensions at most $\mathcal B$.
+
+    All these choices precede the following data. Supply arbitrary full-chain
+    operators $P_L,P_R$ supported on $[0,a+1)$ and
+    $[b+2\ell,L)$, and put
+    \begin{align}
+        H=P_L+P_M+P_R+\sum_{r=0}^{2\ell-1}(W^L_r+W^R_r).
+        \label{eq:physical_polynomial_hamiltonian}
+    \end{align}
+    For every scalar family $c_0,\ldots,c_k\in\C$, there are matrices
+    $M_\omega$ on $\mathcal C(J^c)$ such that
+    \begin{align}
+        \sum_{r=0}^{k}c_rH^r
+        =\left(\sum_{\omega\in I}M_\omega\otimes W_\omega\right)^{\mathrm{phys}}.
+        \label{eq:physical_polynomial_canonical_decomposition}
+    \end{align}
+    The superscript denotes the canonical restriction of a full configuration
+    to $J^c$ and $J$. No self-adjointness, positivity or gap assumption is made.
+    Zero virtual dimension is allowed. This is the general square-derived
+    bond bound, with no sharper source bond or running-time assertion.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:global_two_window_polynomial_recovery,thm:common_middle_grid_mpo_family,
+        thm:common_middle_low_frequency_cardinality,
+        thm:chain_two_window_family_cardinality}
+    Choose the common scalar recovery points and weights before the operator
+    family and the polynomial coefficients. For every crossing position and
+    low-frequency pair, apply the supplied-node middle-family theorem at those
+    points. Take the dependent union of its canonical carriers, retaining each
+    prescribed regional middle operator. The low-frequency estimates bound the
+    number of terms before the final numerical absorption. There are
+    $(k+1)^{4\ell+1}\le(k+1)^{4\ell+3}$ scalar nodes, so the square
+    cardinality estimate gives $|I|\le D^2$.
+
+    After $P_L,P_R$ and the polynomial coefficients are supplied, scalar
+    recovery expresses the polynomial as a sum of the corresponding
+    two-frequency coefficients. Choose their exterior matrices in the common
+    family and sum them, giving
+    (\ref{eq:physical_polynomial_canonical_decomposition}).
+\end{proof}
+
+\begin{theorem}[A finite enumeration of the common middle family]
+    \label{thm:physical_polynomial_fin_middle_family}
+    \lean{TNLean.MPS.AreaLaw.exists_common_physical_polynomial_mpo_family_fin}
+    \leanok
+    \uses{thm:physical_polynomial_canonical_middle_family}
+    Under the same hypotheses and with the same supplied windows, core tensors
+    and cap, there are a nonnegative integer $N\le D^2$ and matrices
+    $W_0,\ldots,W_{N-1}$ on $\mathcal C(J)$, each with natural open-boundary
+    bond bound $\mathcal B$, such that for every supported $P_L,P_R$ and every
+    complex family $c_0,\ldots,c_k$ there are exterior matrices $M_r$ with
+    \begin{align}
+        \sum_{h=0}^{k}c_hH^h
+        =\left(\sum_{r=0}^{N-1}M_r\otimes W_r\right)^{\mathrm{phys}}.
+        \label{eq:physical_polynomial_fin_decomposition}
+    \end{align}
+    The number and middle matrices are chosen before both the exterior pair and
+    all polynomial coefficients.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:physical_polynomial_canonical_middle_family}
+    Enumerate the finite canonical carrier $I$ by
+    $\{0,\ldots,|I|-1\}$. Pull both the middle matrices and the later exterior
+    matrices back along this bijection. The cardinality, bond bounds and finite
+    sum identity are unchanged.
+\end{proof}
+
+\begin{theorem}[A common middle family for polynomial evaluation]
+    \label{thm:physical_aeval_fin_middle_family}
+    \lean{TNLean.MPS.AreaLaw.exists_common_physical_aeval_mpo_family_fin}
+    \leanok
+    \uses{thm:physical_polynomial_fin_middle_family}
+    Under the same hypotheses and fixed data, one may choose $N\le D^2$ and
+    middle matrices $W_0,\ldots,W_{N-1}$ with the same natural bond bound
+    $\mathcal B$ before every supported exterior pair and every polynomial
+    $P\in\C[X]$ of natural degree at most $k$, so that suitable exterior
+    matrices satisfy
+    \begin{align}
+        P(H)=\left(\sum_{r=0}^{N-1}M_r\otimes W_r\right)^{\mathrm{phys}}.
+        \label{eq:physical_aeval_fin_decomposition}
+    \end{align}
+    The zero polynomial is included, with no normalization condition on $P$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:physical_polynomial_fin_middle_family}
+    Apply the preceding theorem with $c_h$ equal to the coefficient of $X^h$
+    in $P$. The finite polynomial-evaluation identity gives
+    $P(H)=\sum_{h=0}^{k}c_hH^h$. It remains valid in the noncommutative matrix
+    algebra because the complex scalar coefficients act centrally.
+\end{proof}

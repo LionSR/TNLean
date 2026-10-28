@@ -435,12 +435,33 @@ product states, and the square lattice.
     then $R$ is injective for $B$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:peps_region_partial_state}
+    \uses{def:peps_region_partial_state, thm:peps_region_partial_state_same_state}
     Write $F_{A,R}$ and $F_{B,R}$ for the blocked maps from the common
     boundary space to the physical space of $R$. Injectivity of the
     complement for $A$ identifies the range of $F_{A,R}$ with the span of
-    the partial-state vectors across this cut. Equality of the states and
-    the contraction formula put this span inside the range of $F_{B,R}$.
+    the partial-state vectors across this cut:
+    \begin{align}
+        \operatorname{ran}F_{A,R}
+         & =\operatorname{span}\{\psi^\tau_{A,R}\}_\tau.
+        \notag
+    \end{align}
+    Since $A$ and $B$ have the same state, Theorem~\ref{thm:peps_region_partial_state_same_state}
+    gives
+    \begin{align}
+        \psi^\tau_{A,R}
+         & =\psi^\tau_{B,R}
+        \notag
+    \end{align}
+    for every complement configuration $\tau$. Splitting the contraction of
+    $B$ along the boundary of $R$ writes each $\psi^\tau_{B,R}$ as a linear
+    combination of the blocked vectors of $B$, because every bond dimension
+    is positive. Hence
+    \begin{align}
+        \operatorname{ran}F_{A,R}
+         & =\operatorname{span}\{\psi^\tau_{B,R}\}_\tau
+        \subseteq\operatorname{ran}F_{B,R}.
+        \notag
+    \end{align}
     Thus $\dim\operatorname{ran}F_{B,R}\ge
         \dim\operatorname{ran}F_{A,R}=\dim\operatorname{dom}F_{B,R}$.
     The two domains have the same dimension because their bond dimensions
@@ -475,7 +496,7 @@ product states, and the square lattice.
     \leanok
 
     \uses{def:peps_physical_tensor_action, def:peps_normalPEPSBlockingHypotheses,
-        def:GaugeEquivPEPS}
+        def:peps_normalPEPSPairHypotheses, def:GaugeEquivPEPS}
     Let $A$ be a normal tensor network on a connected finite simple graph
     with nonzero virtual spaces. Assume the edge blockings and one-site
     comparison regions of

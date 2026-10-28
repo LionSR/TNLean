@@ -48,11 +48,7 @@ theorem exists_threeSplit_two_window_factors
     (p s : Fin (2 * ℓ)) :
     let T := interval L 0 ((a + p.val) + 1)
     let E := interval L ((a + p.val) + 1) ((b + s.val) + 1)
-    let hTE : Disjoint T E := by
-      rw [Finset.disjoint_left]
-      intro x hx hx'
-      simp only [T, E, mem_interval] at hx hx'
-      omega
+    let hTE : Disjoint T E := disjoint_interval_interval (L := L) 0 _ _
     let g := threeSplit q T E hTE
     ∃ (HL : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) → Matrix (T → Fin q) (T → Fin q) ℂ)
       (HM : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) → Matrix (E → Fin q) (E → Fin q) ℂ)

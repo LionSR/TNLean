@@ -210,6 +210,7 @@ the residue of the site.
 \begin{theorem}[A supercell translation carries a site far away]
     \label{thm:hastings_supercell_far}
     \lean{TNLean.Lattice.exists_mem_supercell_lt_edist_add,
+        TNLean.Lattice.exists_mem_supercell_lt_edist,
         TNLean.Lattice.exists_mem_supercell_lt_edist_add_ring}
     \leanok
     \uses{thm:hastings_supercell_pow,thm:hastings_cell_distance_le,
@@ -219,7 +220,9 @@ the residue of the site.
     momentum sector, where $N\ge1$. For sites $x$, $y$ some $g$ in the supercell
     satisfies $\lfloor n/2\rfloor<r\,d(x,g\cdot y)+N$, so it carries $y$ to
     graph distance more than $(\lfloor n/2\rfloor-N)/r$ from $x$. For the ring,
-    and in the theorem below, $r=1$. With $N$ the least common multiple of the
+    and in the theorem below, $r=1$. In this case, whenever
+    $l+N\le\lfloor n/2\rfloor$, the translate can be chosen with
+    $d(x,g\cdot y)>l$. With $N$ the least common multiple of the
     denominators of the momenta, this is the supercell
     of \cite[lines 1620--1630]{Hastings2006Solving} and the choice of
     $\vec x'$ in lines 1634--1641.
@@ -260,6 +263,62 @@ the residue of the site.
     ground space by Theorem~\ref{thm:hastings_supercell_of_momenta}, so
     Theorem~\ref{thm:hastings_supercell_decay} applies, and
     $\|h_{g\cdot j}\|=\|P_gh_jP_g^\dagger\|=\|h_j\|$.
+\end{proof}
+
+\begin{theorem}[A closed exponential bound for filtered low-energy commutators]
+    \label{thm:hastings_supercell_commutator_exp}
+    \lean{TNLean.Lattice.norm_groundCompression_commutator_le_of_momenta_exp}
+    \leanok
+    \uses{thm:hastings_supercell_commutator_small,thm:hastings05_blecm_exp}
+    Under the hypotheses of Theorem~\ref{thm:hastings_supercell_commutator_small},
+    let $\tilde H_i$ be the Gaussian-filtered term with any nonnegative
+    filter parameter. Write $K_g(r+1)^{k}$ for the sphere-growth bound and set
+    \begin{align}
+        v      & =2v_R|b_0|e^{2R}+1,                       &
+        \gamma & =\min\bigl(1/4,\Delta E/(8v)\bigr),\notag   \\
+        C      & =2(2+4|b_0|e^{2R})v_R^2K_g
+        \frac{2^{k}k!e^{1/2}}{1-e^{-1/2}}+6.\notag
+    \end{align}
+    Then
+    \begin{align}
+        \|[P\tilde H_iP,P\tilde H_jP]\|
+         & \le C\|h_i\|\,\|h_j\|
+        e^{-\gamma(\lfloor n/2\rfloor-N-2R)}.
+        \label{eq:hastings_supercell_exp}
+    \end{align}
+    The subtraction in the exponent is real subtraction, and the estimate
+    holds for every system size. This is an explicit bound for the filtered
+    terms in the supercell argument of
+    \cite[lines 1620--1641]{Hastings2006Solving}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_site_invariant_sum,thm:hastings_supercell_of_momenta,
+        thm:hastings_supercell_far,thm:hastings_supercell_commutator,
+        thm:hastings_supercell_commutator_small,
+        thm:hastings05_low_energy_commutator,thm:hastings05_blecm_exp}
+    If $\lfloor n/2\rfloor\ge N+2R$, take
+    $l=\lfloor n/2\rfloor-N-2R$.
+    Theorem~\ref{thm:hastings_supercell_far} gives a supercell translation $g$
+    such that
+    \begin{align}
+        d(i,g\cdot j)                            & >\lfloor n/2\rfloor-N=2R+l,\notag \\
+        X_{g\cdot j}\cap\bigcup_{x\in X_i}B_l(x) & =\varnothing.\notag
+    \end{align}
+    The supercell fixes the ground space, and covariance preserves the norm:
+    \begin{align}
+        [P\tilde H_iP,P\tilde H_{g\cdot j}P]
+                         & =[P\tilde H_iP,P\tilde H_jP],\notag   \\
+        \|h_{g\cdot j}\| & =\|P_gh_jP_g^\dagger\|=\|h_j\|.\notag
+    \end{align}
+    Theorem~\ref{thm:hastings05_blecm_exp} now gives
+    (\ref{eq:hastings_supercell_exp}).
+    Otherwise the exponential in (\ref{eq:hastings_supercell_exp}) is at least
+    one. The commutator is at most $2\|h_i\|\,\|h_j\|$, and $C\ge6$.
+    The original nonnegative filter parameter is arbitrary, since
+    Theorem~\ref{thm:hastings05_low_energy_commutator} gives
+    \begin{align}
+        P\tilde H_kP=Ph_kP.\notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[The truncated terms up to their truncation errors]
@@ -309,7 +368,8 @@ the residue of the site.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_site_invariant_sum,thm:hastings_supercell_compression,
-        thm:hastings_supercell_of_momenta,thm:hastings_supercell_far}
+        thm:hastings_supercell_of_momenta,thm:hastings_supercell_far,
+        thm:hastings05_blecm}
     Covariance of the terms and of the truncations gives
     $M_{g\cdot k}=P_gM_kP_g^\dagger$, since conjugation by $P_g$ commutes with
     the Gaussian filter. Each $M_k$ acts on $K_k$. Take $g$ in the supercell

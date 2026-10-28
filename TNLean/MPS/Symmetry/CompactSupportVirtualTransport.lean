@@ -23,7 +23,7 @@ Appendix C, lines 2653–2717. No physical-gap implication is asserted.
 set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true
-open scoped Matrix
+open scoped Matrix TNLean.Algebra.ScalarCohomology
 open TNLean.Algebra
 
 namespace MPSTensor
@@ -50,7 +50,10 @@ theorem cohomologousTo_of_injective_gaugePhaseEquiv
     (h₁ : ∀ g i, twistedTensor B U g i =
       (ρ₁.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * B i *
         (((ρ₁.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) :
-    ω₁.CohomologousTo ω₀ := by
+    groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+      (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ (NeZero.pos D))) =
+    groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+      (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ (NeZero.pos D))) := by
   obtain ⟨c, hc, hG⟩ := exists_smul_gauge_of_gaugePhaseEquiv hGauge
   exact cohomologousTo_of_smul_gaugeEquiv
     (isInjective_of_gaugeEquiv (hA.smul hc) hG) U c hG ρ₀ ρ₁ h₀ h₁

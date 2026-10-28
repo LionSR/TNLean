@@ -215,7 +215,10 @@ import TNLean.Algebra.TranslatedCharacterOrthogonality
 import TNLean.Algebra.TwistedRegularProjective
 import TNLean.Algebra.TwistedRegularRepresentation
 import TNLean.Algebra.TwoMarkerMiddleFactors
+import TNLean.Algebra.TwoMarkerMiddleIndexCardinality
+import TNLean.Algebra.TwoMarkerScalarRecovery
 import TNLean.Algebra.TwoWindowFamily
+import TNLean.Algebra.TwoWindowPolynomialRecovery
 import TNLean.Algebra.TwoWindowRankBounds
 import TNLean.Algebra.TwoWindowSum
 import TNLean.Algebra.TwoWindowTensorForms

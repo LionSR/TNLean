@@ -29,7 +29,7 @@ case with trivial scalar character, as recorded in
 `docs/paper-gaps/rmp_spt_fixed_point_trivial_character.tex`.
 -/
 
-open scoped Matrix
+open scoped Matrix TNLean.Algebra.ScalarCohomology
 
 namespace MPSTensor
 
@@ -92,9 +92,6 @@ theorem isSameExactMPSGappedPhase_of_oneSite_path
     rfl
   · intro g
     simp only [MonoidHom.one_apply, one_smul]
-    change (U g : Matrix (Fin m) (Fin m) ℂ) * E₀.submatrix id (singleBlockEquiv d₀) =
-      E₀.submatrix id (singleBlockEquiv d₀) *
-        blockKron 1 (U₀ g : Matrix (Fin d₀) (Fin d₀) ℂ)
     rw [blockKron_one_eq_submatrix]
     have hL := Matrix.submatrix_mul_equiv (U g : Matrix (Fin m) (Fin m) ℂ) E₀
       id (Equiv.refl _) (singleBlockEquiv d₀)
@@ -105,9 +102,6 @@ theorem isSameExactMPSGappedPhase_of_oneSite_path
         (hCov₀ g)).trans hR.symm)
   · intro g
     simp only [MonoidHom.one_apply, one_smul]
-    change (U g : Matrix (Fin m) (Fin m) ℂ) * E₁.submatrix id (singleBlockEquiv d₁) =
-      E₁.submatrix id (singleBlockEquiv d₁) *
-        blockKron 1 (U₁ g : Matrix (Fin d₁) (Fin d₁) ℂ)
     rw [blockKron_one_eq_submatrix]
     have hL := Matrix.submatrix_mul_equiv (U g : Matrix (Fin m) (Fin m) ℂ) E₁
       id (Equiv.refl _) (singleBlockEquiv d₁)
@@ -156,7 +150,10 @@ theorem exists_unitary_covariant_preparation_with_virtual_class
     ∃ (B : MPSTensor d D) (c : ℂ) (ωB : TNLean.Algebra.ScalarCocycle G)
       (ρB : TNLean.Algebra.ProjectiveRepresentation (D := D) ωB),
       c ≠ 0 ∧ GaugeEquiv (c • A) B ∧ Kraus.IsInjective B ∧
-      ωB.CohomologousTo ωA ∧
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρB (NeZero.pos D))) =
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρA (NeZero.pos D))) ∧
       (∀ g, (ρB.X g : Matrix (Fin D) (Fin D) ℂ) ∈ Matrix.unitaryGroup _ ℂ) ∧
       ∀ g, rotatePhysical (U g) B =
         fun i => (sptGauge ρB g : Matrix (Fin D) (Fin D) ℂ) * B i *
@@ -429,7 +426,10 @@ theorem isSameExactMPSGappedPhase_of_unitary_cohomologous
     (hCov₁ : ∀ g, rotatePhysical (U₁ g) A₁ =
       fun i => (sptGauge ρ₁ g : Matrix (Fin D₁) (Fin D₁) ℂ) * A₁ i *
         (sptGauge ρ₁ g : Matrix (Fin D₁) (Fin D₁) ℂ)ᴴ)
-    (hCoh : ω₁.CohomologousTo ω₀) :
+    (hCoh : groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ (NeZero.pos D₁))) =
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ (NeZero.pos D₀)))) :
     IsSameExactMPSGappedPhase A₀ A₁ U₀ U₁ := by
   obtain ⟨σ, φ, hσ, hX⟩ :=
     ρ₀.exists_unitary_rephase_of_unitary_cohomologous ρ₁ h₀ h₁ hCoh
@@ -459,7 +459,10 @@ theorem isSameExactMPSGappedPhase_of_isInjective_cohomologous
       ((Matrix.unitaryGroup (Fin d₁) ℂ).subtype.comp U₁) g i =
       (ρ₁.X (g⁻¹) : Matrix (Fin D₁) (Fin D₁) ℂ) * A₁ i *
         (((ρ₁.X (g⁻¹))⁻¹ : GL (Fin D₁) ℂ) : Matrix (Fin D₁) (Fin D₁) ℂ))
-    (hCoh : ω₁.CohomologousTo ω₀) :
+    (hCoh : groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ (NeZero.pos D₁))) =
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ (NeZero.pos D₀)))) :
     IsSameExactMPSGappedPhase A₀ A₁ U₀ U₁ := by
   obtain ⟨B₀, c₀, η₀, σ₀, hc₀, hGauge₀, hB₀, hClass₀, hσ₀, hCov₀⟩ :=
     exists_unitary_covariant_preparation_with_virtual_class A₀ hA₀ U₀ ρ₀ hρ₀
