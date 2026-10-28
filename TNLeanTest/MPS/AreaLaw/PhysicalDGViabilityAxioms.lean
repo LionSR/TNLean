@@ -42,7 +42,13 @@ run_cmd do
     ``TNLean.MPS.AreaLaw.exists_short_actual_region_improving_family,
     ``TNLean.MPS.AreaLaw.inward_effective_cuts,
     ``TNLean.MPS.AreaLaw.collar_card_le_square_at_square_degree,
-    ``TNLean.MPS.AreaLaw.exists_physical_dg_viable_family]
+    ``TNLean.MPS.AreaLaw.exists_physical_dg_viable_family,
+    ``TNLean.MPS.AreaLaw.exists_five_region_physical_scaled_low_cluster,
+    ``TNLean.MPS.AreaLaw.exists_physical_interval_viable_subspace,
+    ``TNLean.MPS.AreaLaw.exists_accuracy_physical_interval_family_and_bootstrap,
+    ``Real.exists_dg_accuracy_scalar_parameters,
+    ``TNLean.MPS.AreaLaw.collar_card_le_square_of_larger_count_base,
+    ``TNLean.MPS.AreaLaw.exists_short_actual_region_improving_family_of_count_base]
   for decl in decls do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
