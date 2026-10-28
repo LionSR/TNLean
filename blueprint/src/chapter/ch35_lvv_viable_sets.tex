@@ -427,3 +427,31 @@ whose range is the span of the columns of $M_i(\psi)$.
     \end{align}
     Its span inclusion, bond bound and viability implication are unchanged.
 \end{proof}
+
+
+\begin{theorem}[Counting words without singleton letters]
+    \label{thm:lvv_even_word_count}
+    \lean{Finset.card_image_le_half_of_no_singleton,
+        Fintype.exists_factor_fin_of_card_range_le,
+        Fintype.card_functions_of_card_range_le,
+        Fintype.card_even_words_without_singleton}
+    \leanok
+    Let $p\ge1$ be an integer, and let $B$ be an alphabet with
+    $\ell\ge1$ letters. The number of words of length $2p$ over $B$ in
+    which no letter occurs exactly once is at most
+    \begin{align}
+        \ell^p p^{2p}.
+        \label{eq:lvv_even_word_count}
+    \end{align}
+    This elementary count is one ingredient of an even-moment
+    argument for sampled operators. It does not assert a matrix
+    concentration inequality.
+\end{theorem}
+\begin{proof}\leanok
+    Each occurring letter appears at least twice, so such a word
+    uses at most $p$ letters. Every word with at most $p$ letters
+    factors as a map from its $2p$ positions to a set of $p$ places,
+    followed by a map from those places to $B$. Extend the second map
+    arbitrarily on unused places. There are $p^{2p}\ell^p$ pairs of
+    maps, which gives the bound.
+\end{proof}

@@ -136,6 +136,7 @@ import TNLean.Algebra.MultilinearSelectedSum
 import TNLean.Algebra.NatInterval
 import TNLean.Algebra.NatSquarePlusOne
 import TNLean.Algebra.NewtonIdempotentConvergence
+import TNLean.Algebra.NoSingletonWords
 import TNLean.Algebra.NonnegativeMatrixSpectralRadius
 import TNLean.Algebra.NormedRingTelescoping
 import TNLean.Algebra.OneMagnon
