@@ -45,6 +45,8 @@ eq. `smd`, so the printed `S_max = c₀ ξ' ln ξ' ln D 2^{ξ' ln D}` is not cla
 
 * `exists_regionEntropy_prefix_le`: eq. `entbd`, with `ξ' = 6ζ` and `C₁ = max (K ζ³) 1`,
   where `K` depends only on `R`, under the scope restriction above.
+* `exists_regionEntropy_prefix_le_with_log_constant`: the same choice of `K`, together with
+  `log C₁ ≤ a log ξ'` for a nonnegative `a` depending only on `R`.
 
 ## References
 
@@ -83,5 +85,61 @@ theorem exists_regionEntropy_prefix_le (R : ℕ) :
   obtain ⟨OB, OL, OR, hf⟩ := hF hJ hΔ h hgs c l
   exact ⟨OB, OL, OR, hf.mono
     (mul_le_mul_of_nonneg_right (le_max_left _ _) (Real.exp_pos _).le)⟩
+
+open Real in
+/-- The logarithmic consequence of the cubic constant in Hastings' Lemma 1,
+arXiv:0705.2024v4, lines 258–262. -/
+private theorem log_polynomial_factorization_constant_le {K ζ : ℝ} (hζ : 2 ≤ ζ) :
+    log (max (K * ζ ^ 3) 1) ≤
+      (3 + log (max K 1) / log 2) * log (6 * ζ) := by
+  have hζ1 : 1 ≤ ζ := by linarith
+  have hζpow : 1 ≤ ζ ^ 3 := one_le_pow₀ hζ1
+  have hprod : max (K * ζ ^ 3) 1 ≤ max K 1 * ζ ^ 3 :=
+    max_le (mul_le_mul_of_nonneg_right (le_max_left K 1) (by positivity))
+      (one_le_mul_of_one_le_of_one_le (le_max_right K 1) hζpow)
+  have hlog := log_le_log (lt_of_lt_of_le zero_lt_one (le_max_right (K * ζ ^ 3) 1)) hprod
+  rw [log_mul (by linarith [le_max_right K 1] : max K 1 ≠ 0)
+    (by positivity : ζ ^ 3 ≠ 0), log_pow] at hlog
+  have hscale : log ζ ≤ log (6 * ζ) :=
+    log_le_log (by linarith) (by linarith)
+  have hlarge : log 2 ≤ log (6 * ζ) :=
+    log_le_log (by norm_num) (by linarith)
+  have hratio : log (max K 1) ≤ log (max K 1) / log 2 * log (6 * ζ) := by
+    simpa only [div_mul_cancel₀ _ (ne_of_gt (log_pos (by norm_num : (1 : ℝ) < 2)))] using
+      mul_le_mul_of_nonneg_left hlarge
+        (div_nonneg (log_nonneg (le_max_right K 1))
+          (log_pos (by norm_num : (1 : ℝ) < 2)).le)
+  norm_num at hlog
+  nlinarith only [hlog, hscale, hratio]
+
+/-- The area law and the logarithmic size of its factorization constant can be chosen
+simultaneously. For fixed range `R`, both `K` and `a` are independent of the chain length,
+local dimension, coupling and gap. With `ζ = lemmaOneEndpointLength R J ΔE`, the constant
+`C₁ = max (K ζ³) 1` satisfies `log C₁ ≤ a log (6ζ)`, and the entropy bound remains
+`areaLawBound (6ζ) C₁ q`.
+
+This supplies the logarithmic consequence of the polynomial bound on `C₁` in Hastings,
+arXiv:0705.2024v4, Lemma 1, lines 258–262, used in the main theorem's equation `smd`,
+lines 134–142. The length restriction and the corrected doubling constants are those of
+the module docstring. -/
+theorem exists_regionEntropy_prefix_le_with_log_constant (R : ℕ) :
+    ∃ K a : ℝ, 0 ≤ K ∧ 0 ≤ a ∧
+      (∀ J ΔE : ℝ,
+        Real.log (max (K * lemmaOneEndpointLength R J ΔE ^ 3) 1) ≤
+          a * Real.log (6 * lemmaOneEndpointLength R J ΔE)) ∧
+      ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
+        ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
+        {Ω : EuclideanSpace ℂ (Fin L → Fin q)},
+        Matrix.IsGappedGroundState h.operator E₀ Ω ΔE →
+        ∀ i : ℕ, Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω ≤
+          areaLawBound (6 * lemmaOneEndpointLength R J ΔE)
+            (max (K * lemmaOneEndpointLength R J ΔE ^ 3) 1) q := by
+  obtain ⟨K, hK, hS⟩ := exists_regionEntropy_prefix_le R
+  refine ⟨K, 3 + Real.log (max K 1) / Real.log 2, hK,
+    add_nonneg (by norm_num) (div_nonneg (Real.log_nonneg (le_max_right K 1))
+      (Real.log_pos (by norm_num : (1 : ℝ) < 2)).le), ?_, hS⟩
+  refine fun J ΔE ↦ log_polynomial_factorization_constant_le ?_
+  unfold lemmaOneEndpointLength
+  linarith only [le_max_right (2 * (5 / 4 * chainLRVelocity R (J / ΔE))) (1 : ℝ)]
 
 end TNLean.MPS.AreaLaw.Hastings

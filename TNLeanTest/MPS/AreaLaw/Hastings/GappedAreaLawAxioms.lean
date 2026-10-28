@@ -13,7 +13,8 @@ open TNLean.MPS.AreaLaw.Hastings
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
-  for decl in #[``exists_regionEntropy_prefix_le] do
+  for decl in #[``exists_regionEntropy_prefix_le,
+      ``exists_regionEntropy_prefix_le_with_log_constant] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl
