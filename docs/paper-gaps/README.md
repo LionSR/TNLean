@@ -1653,6 +1653,17 @@ and [#9847](https://github.com/LionSR/TNLean/issues/9847).
 
 ## Landau, Vazirani and Vidick's one-dimensional algorithm, arXiv:1307.5143
 
+- [`lvv13_sampling_ground_energy.tex`](lvv13_sampling_ground_energy.tex)
+  (false preprint claim, published correction identified) records the missing
+  ground-energy dependence in the sampled projection of arXiv:1307.5143v1.
+  A commuting chain with zero local minima, a unique ground vector and gap
+  `1/8` shows that polynomially many independent uniform words do not
+  approximate the ground projection with the claimed high probability
+  at the required power when the ground energy is extensive. The published Methods theorem and its supplementary proof
+  include the ground energy in the exponent. Formalizing that corrected
+  construction, and deriving a different construction for the unrestricted
+  uniform polynomial conclusion, remain open.
+
 - [`lvv13_leading_net_point.tex`](lvv13_leading_net_point.tex)
   (open gap) records that the leading-vector step of Lemma
   `l:leading` (arXiv:1307.5143v1, lines 493–495) is formalized for any
