@@ -180,6 +180,7 @@ import TNLean.PEPS.NormalSquareInteriorAbsorbedFamily
 import TNLean.PEPS.NormalSquarePEPSBlocking
 import TNLean.PEPS.NormalSquareUnconditionalFundamentalTheorem
 import TNLean.PEPS.NormalTorusRectanglePEPS
+import TNLean.PEPS.NormalVirtualRepresentation
 import TNLean.PEPS.OnSiteOperator
 import TNLean.PEPS.OpenRegionContraction
 import TNLean.PEPS.PairConjugacy
