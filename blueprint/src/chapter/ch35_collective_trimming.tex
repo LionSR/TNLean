@@ -8,6 +8,11 @@ vectors on the first $i$ sites of a chain of $L$ sites and $T$ a subspace of
 vectors on the chain. Write $\mathcal H_A$ for the first $i$ sites and
 $\mathcal H_R$ for the remaining $L-i$, so that the cuts $(j:j+1)$,
 $1\le j\le i-1$, of the source are the cuts of the chain after $j$ sites.
+For subspaces $U$ and $T$ of the same space, $U$ is \emph{$\delta$-close} to
+$T$ if $\|P_Ut\|^2\ge(1-\delta)\|t\|^2$ for every $t\in T$, where $P_U$ is the
+orthogonal projection onto $U$; $S$ is $\delta$-viable for $T$ when
+$\operatorname{Span}(S)\otimes\mathcal H_R$ is $\delta$-close to
+$T$~\cite[lines 433--440]{Arad2016RigorousRG}.
 
 \begin{definition}[Trimmed subspace]
     \label{def:alvv_collective_trim}
@@ -34,7 +39,6 @@ $1\le j\le i-1$, of the source are the cuts of the chain after $j$ sites.
         TNLean.MPS.AreaLaw.blockSplit_apply,
         TNLean.MPS.AreaLaw.leftSupportSubmodule_eq_comap,
         TNLean.MPS.AreaLaw.isCloseTo_leftSupportSubmodule_iff,
-        TNLean.MPS.AreaLaw.blockCut_mono,
         TNLean.MPS.AreaLaw.mem_blockCut,
         TNLean.MPS.AreaLaw.blockCutSubtypeEquiv,
         TNLean.MPS.AreaLaw.blockRestSubtypeEquiv,
@@ -42,9 +46,14 @@ $1\le j\le i-1$, of the source are the cuts of the chain after $j$ sites.
     \leanok
     \uses{def:alvv_collective_trim}
     Write a vector $\psi$ on the chain in the coordinates
-    $\mathcal H_A\otimes\mathcal H_R$. Then $\operatorname{Span}(S)\otimes
-        \mathcal H_R$ is $\delta$-close to $T$ exactly when $S$ is $\delta$-viable
-    for $T$ in these coordinates. For $1\le j\le i$, the Schmidt rank of $\psi$
+    $\mathcal H_A\otimes\mathcal H_R$, as the vector of
+    $\mathbb C^{\Sigma_A\times\Sigma_R}$ with entries
+    $(x,y)\mapsto M_i(\psi)_{xy}$, where $\Sigma_A$ and $\Sigma_R$ are the
+    configurations of the first $i$ sites and of the rest. Then
+    $\operatorname{Span}(S)\otimes\mathcal H_R$ is $\delta$-close to $T$
+    exactly when the subspace of vectors of $\mathbb C^{\Sigma_A\times
+                \Sigma_R}$ whose columns $x\mapsto w(x,y)$ all lie in $S$ is
+    $\delta$-close to the image of $T$. For $1\le j\le i$, the Schmidt rank of $\psi$
     across the first $j$ sites of $\mathcal H_A$, with $\mathcal H_R$ on the
     right, equals the rank of the coefficient matrix $M_j(\psi)$ of the chain
     cut after $j$ sites.
@@ -62,7 +71,8 @@ $1\le j\le i-1$, of the source are the cuts of the chain after $j$ sites.
 
 \begin{theorem}[Trimming a viable subspace on the chain]
     \label{thm:alvv_collective_trim}
-    \lean{TNLean.MPS.AreaLaw.isCloseTo_leftSupportSubmodule_chainTrimSubspace,
+    \lean{TNLean.MPS.AreaLaw.blockCut_mono,
+        TNLean.MPS.AreaLaw.isCloseTo_leftSupportSubmodule_chainTrimSubspace,
         TNLean.MPS.AreaLaw.schmidtRank_cutVector_chainTrimVector_le}
     \leanok
     \uses{def:alvv_collective_trim, thm:alvv_collective_trim_coordinates}
@@ -83,10 +93,31 @@ $1\le j\le i-1$, of the source are the cuts of the chain after $j$ sites.
     \leanok
     In the coordinates of the previous theorem this is the trimming lemma for
     a subspace of a block of sites with the remaining sites as environment.
-    The part of a vector of $\operatorname{Span}(S)\otimes\mathcal H_R$
-    removed at the cut after $j$ sites pairs with a vector $t$ of $T$ to at
-    most $\xi\sqrt b$ times the norm of the piece of $t$ removed there. The
-    pieces removed at different cuts are orthogonal, so their norms sum to at
-    most $\sqrt{i-1}\,\|t\|$. The rank bound holds because $\psi$ has at most
+    Write $m=i-1$ and $\varepsilon=\xi\sqrt{mb}$. Let $t\in T$, let $w$ be
+    the projection of $t$ onto $\operatorname{Span}(S)\otimes\mathcal H_R$,
+    so that $\langle w,t\rangle=\|w\|^2\ge(1-\delta)\|t\|^2$, and let
+    $Q_j=(P^1\otimes1)\cdots(P^j\otimes1)$, with $Q_0=1$. The part
+    $(Q_{j-1}-Q_j)w$ removed at the cut after $j$ sites has Schmidt
+    coefficients at most $\xi\|w\|$ there, and $(Q_{j-1}-Q_j)t$ has
+    Schmidt rank at most $b$, so by the Cauchy--Schwarz inequality on the
+    Schmidt coefficients
+    \begin{align}
+        |\langle(Q_{j-1}-Q_j)w,t\rangle|\le\xi\sqrt b\,\|w\|\,\|t_j\|,
+        \qquad t_j=(Q_{j-1}-Q_j)t. \notag
+    \end{align}
+    The projections $Q_{j-1}-Q_j$ are mutually orthogonal, so
+    $\sum_j\|t_j\|^2\le\|t\|^2$, and summing the telescoping differences,
+    \begin{align}
+        |\langle w-Q_mw,t\rangle|
+        \le\xi\sqrt b\,\|w\|\sum_{j=1}^{m}\|t_j\|
+        \le\varepsilon\,\|w\|\,\|t\|. \notag
+    \end{align}
+    The vector $Q_mw$ lies in $\operatorname{Trim}_\xi(S)\otimes\mathcal H_R$
+    and $\|Q_mw\|\le\|w\|$, so the projection of $t$ onto that subspace
+    has norm at least $|\langle Q_mw,t\rangle|/\|w\|\ge\|w\|-\varepsilon\|t\|$,
+    and its square is at least $\|w\|^2-2\varepsilon\|w\|\|t\|$ (when
+    $\|w\|<\varepsilon\|t\|$ this quantity is negative). Since $\|w\|\le\|t\|$,
+    it is at least $(1-\delta-2\varepsilon)\|t\|^2$. The rank bound holds because
+    $\psi=\sum_ku_k\otimes|k\rangle$ has norm $\sqrt s$, hence at most
     $s/\xi^2$ Schmidt coefficients at least $\xi$ across each cut.
 \end{proof}
