@@ -4950,6 +4950,24 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Counting nearest-neighbour bonds that meet a region — candidate (2026-10-28)
+
+- **Pattern:** Bound the number of nearest-neighbour bonds meeting a finite
+  region by a linear function of its size: either inject the meeting bonds
+  into a `Fin` of the target size by an affine relabelling such as
+  `i ↦ i.val + m + 1 - c`, closing the bounds with `omega`, or cover them by
+  the region and its translate and count the union.
+- **Seen:** `MPS/AreaLaw/NearestNeighbourImaginaryTime.lean`
+  (`card_bonds_meeting_enlarged_interval_le`, clipped linear intervals, by
+  injection) and `MPS/Preparation/FiniteRingLiebRobinson.lean`
+  (`card_bonds_meeting_le`, cyclic ring bonds, by a union cover); two
+  occurrences across two files with different ambient index sets.
+- **Abstraction:** A shared counting lemma in `TNLean/Algebra/`, stated for
+  bonds `{i, i + 1}` meeting a finite set of sites, from which both the
+  clipped-interval and ring bounds follow.
+- **Notes:** Below the rule-of-three threshold. A third occurrence would
+  justify the shared lemma.
+
 ### Simultaneous regional factors for a supported family — candidate (2026-10-26)
 
 - **Pattern:** Classify each ordinary term into one of three regions, choose
