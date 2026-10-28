@@ -1192,6 +1192,8 @@ abstracted — record why, so it is not re-proposed).
 - **Abstraction:** `TNLeanTest.SingleQubitConfig.plusDensity` and
   `plusDensity_posSemidef` in `TNLeanTest/Support/SingleQubitConfig.lean`.
   The three regressions use the shared density and positivity result directly.
+- **Removed (2026-10-28):** the abstraction and its three call sites were
+  deleted with the rest of `TNLeanTest/`.
 - **Notes:** The former private `density`/`density_psd`,
   `secondDensity`/`secondDensity_psd`, and `plusDensity`/`plusDensity_posSemidef`
   pairs are removed. The singularity, noncommutation, first-variation, and
@@ -7205,6 +7207,9 @@ spectral split → block extraction → MPV calculation → strict bounds
   lines of metaprogramming with no mathematical content; a shared command would
   move the allow-list out of the audited file without removing a proof
   obligation. Fixtures keep the explicit block.
+- **Superseded (2026-10-28):** the fixtures themselves were deleted with the
+  rest of `TNLeanTest/`, and new ones are no longer written
+  (`docs/project_conventions.md`, "No test fixtures").
 
 ### Elementary set and finite-sum proof structure — rejected (2026-10-02)
 
@@ -7796,8 +7801,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   `WordEvaluationTransport`. The helpers identify the register lists before
   applying ordinary congruence to the operators. They do not infer equality
   of restricted operators from equality before restriction. The new framed
-  local-part proof uses the same shared lemmas. Named axiom checks are in
-  `TNLeanTest/WordEvaluationTransportAxioms.lean`.
+  local-part proof uses the same shared lemmas.
 - **Further promotion (2026-10-12):** Three identity-operator transports in
   `WordPermutationRestriction`, `LocalPartFrameListRestriction` and
   `LocalPartSpectatorOwnerExclusion` now use `Word.eval_id_heq`. Four input

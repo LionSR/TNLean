@@ -62,6 +62,18 @@ was discharged as a theorem and its modules moved to the
 quantum-channel extraction; QICLean's copy of this document records that
 history in its own addendum.
 
+### No test fixtures
+
+Do not write Lean test fixtures: no `TNLeanTest/` directory, no per-theorem
+`#print axioms` files pinned with `#guard_msgs`, and no example files whose
+only purpose is to show that a theorem's hypotheses can hold together. The
+module-policy job in `pr-ci.yml` rejects any file under `TNLeanTest/`. Check a
+new theorem's axioms locally with `#print axioms` while writing it, and delete
+the command before committing. A worked example that is itself mathematics
+belongs in the library (for instance under `TNLean/MPS/Examples/`) with a
+blueprint entry. A 2026-10-28 cleanup deleted 877 fixture files (about 51,000
+lines) that had accumulated in six weeks, 593 of them axiom printouts only.
+
 ## Prose (prose_style)
 
 - The designated migrated docstring region is `TNLean/MPS/ParentHamiltonian`:
