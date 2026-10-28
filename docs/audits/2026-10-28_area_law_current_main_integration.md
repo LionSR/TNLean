@@ -49,3 +49,30 @@ spectrum restrictions must be retained when integrating or comparing its results
 The low-energy and binary-tree constructions, the unrestricted quantitative source
 claims, and the remaining Hastings and AKLV arguments are not certified by this
 integration report.
+
+
+## Verification of the first integration snapshot
+
+Revision `bacd5b7d73b144f7d828b8e0473bdfac89af3063` passed the full library build
+(15004 jobs), strict compilation of all 52 changed production sources, manual
+ordinary-object inspection of 251 public declarations, and compiled blueprint
+declaration checking. The inspected declarations use only `propext`,
+`Classical.choice` and `Quot.sound`. No permanent foundation fixture is present.
+The full and targeted build logs contain no Mathlib source-compilation jobs, and
+no reported new job in the full build reached the 25-second diagnostic threshold.
+
+The subsequent contribution supplies the actual successive induction and final-span
+approximation, described in `2026-10-28_lvv_successive_construction.md`. Its independent
+strict and foundation checks precede its ordinary integration verification. It is a
+new contribution beyond the verified snapshot above; that snapshot is not evidence
+for source files added afterwards. The same distinction applies to the subsequent
+general-probability integral trace-exponential estimates.
+
+
+The next integration also includes the completed general iid complex matrix Bernstein
+inequality, described in `2026-10-28_lvv_matrix_concentration_plan.md`. Its statement
+uses the actual centered Gram variance norms and the dimension factor `2d`.
+This concentration theorem is distinct from the source-specific word sampler; the
+successive construction instead uses the independently proved physical Gaussian
+family. The generic probability and matrix-analysis modules are staged here pending
+reconciliation with the companion library's existing results and active development.

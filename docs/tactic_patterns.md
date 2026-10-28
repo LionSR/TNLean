@@ -9632,6 +9632,50 @@ there is no need for a new tactic.
 - **Abstraction:** Continue using `Matrix.fromBlocks` and its existing algebraic
   identities. If the entry pattern recurs in another new consumer, prefer a
   finite-sum identity for `fromBlocks` before introducing a tactic.
-- **Notes:** The observed occurrences are confined to one module, below the
-  two-file promotion threshold. Rectangular zero products require
+- **Notes:** The coordinate arguments are confined to one module. The later
+  integral consumer in `Algebra/HermitianDilationIntegral.lean` uses the existing
+  block addition, negation, scalar-action and identity lemmas instead of
+  repeating the coordinate split. Its block order bounds also reuse
+  `CStarAlgebra.norm_le_iff_le_algebraMap`. Rectangular zero products require
   `Matrix.mul_zero` and `Matrix.zero_mul`, rather than their square-ring forms.
+
+
+### Explicit matrix integrands in ordered integration — candidate (2026-10-28)
+
+- **Pattern:** When applying ordered Bochner integration to matrices, name the
+  matrix-valued integrand explicitly and state the almost-everywhere order
+  comparison with a matrix-typed zero.
+- **Seen:** Nonnegativity of the integrated square, the upper exponential bound
+  and the positive lower exponential bound in `Algebra/TraceExpIntegralBounds.lean`.
+- **Abstraction:** Use the existing `integral_nonneg_of_ae` and `integral_mono_ae`
+  with explicit `f` and `g` arguments. No new integration theorem is required.
+- **Notes:** The three uses are in one module. Explicit integrands prevent
+  accidental inference of a pointwise function order during elaboration.
+
+### Separating the first coordinate of a product integral — candidate (2026-10-28)
+
+- **Pattern:** Use `measurePreserving_piFinSuccAbove`, rewrite the inverse
+  coordinate map with `Fin.insertNthEquiv`, and simplify the first-coordinate
+  and tail sum identities.
+- **Seen:** The integrability transfer and Fubini identity in
+  `Algebra/IndependentTraceExponential.lean`.
+- **Abstraction:** The existing measurable equivalence and measure-preserving
+  statements handle the transformation. If a third occurrence is needed in
+  another module, extract the common function identity for the inverse map.
+- **Notes:** There are two occurrences in one module. Simplification uses
+  `cast_eq` for the constant matrix family and `Fin.zero_succAbove` for the
+  tail marginal distributions.
+
+### Spectral lower bound for a trace exponential — candidate (2026-10-28)
+
+- **Pattern:** Choose the eigenvalue represented by a real spectral value,
+  express the trace exponential as a sum of positive scalar exponentials,
+  and bound it below by that summand.
+- **Seen:** The private spectral Markov helpers in
+  `Algebra/FiniteHermitianBernstein.lean` and
+  `Algebra/HermitianMatrixBernstein.lean`.
+- **Abstraction:** If a third consumer needs the statement, promote the common
+  Hermitian spectral estimate and refactor both helpers. The current proofs
+  reuse `spectrum_real_eq_range_eigenvalues` and `trace_cfc_eq_sum_re`.
+- **Notes:** Two occurrences across two modules, below the three-occurrence
+  promotion threshold. No specialized probability tactic is needed.

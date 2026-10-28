@@ -11,6 +11,7 @@ finite operator approximation in \cite[Section 5.4, Lemma 19 and equations
 \begin{theorem}[Finite physical Gaussian approximation]
     \label{thm:huang_physical_gaussian}
     \lean{TNLean.MPS.AreaLaw.exists_positive_chain_gaussian_approximation}
+    \leanok
     \uses{thm:huang_unitary_quadrature, thm:huang_physical_propagation,
         thm:huang_weighted_interval_layer_ranks}
     Let $q\ge1$ and let $H=\sum_{i=0}^{L-2}h_i$, where $h_i$ is supported on
@@ -36,6 +37,7 @@ finite operator approximation in \cite[Section 5.4, Lemma 19 and equations
     the convention $T^2/(2a)=0$; the measure itself is the point mass at zero.
 \end{theorem}
 \begin{proof}
+    \leanok
     Since $\|H-EI\|\le L+|E|$, use the Gaussian interval masses on a mesh
     of width $\eta/(\|H-EI\|+1)$ in $[-T,T]$. Write these masses as
     $w_j\ge0$ and their representatives as $t_j$. They satisfy

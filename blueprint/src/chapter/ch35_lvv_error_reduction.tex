@@ -185,6 +185,7 @@ in~\cite{gap:lvv13_error_reduction_witness_norm}.
     \label{thm:lvv_scaled_projection_error_reduction}
     \lean{TNLean.MPS.AreaLaw.IsViable.errorReduction_of_norm_sub_smul_groundProjection_le,
         TNLean.MPS.AreaLaw.IsViableMPS.errorReduction_of_norm_sub_smul_groundProjection_le}
+    \leanok
     \uses{thm:lvv_filter_witness, thm:lvv_operator_bond_growth}
     Let $c>0$ and let $S$ be $(i,s,b,1/2)$-viable for a unit vector
     $\Gamma$. Suppose that $K=\sum_{j\in J}A_j\otimes B_j$,
@@ -195,6 +196,7 @@ in~\cite{gap:lvv13_error_reduction_witness_norm}.
     $(i,|J|s,D\max(1,b),4\eta/c)$-viable.
 \end{theorem}
 \begin{proof}
+    \leanok
     For a half-viable unit witness $v$, put
     $A_0=c|\Gamma\rangle\langle\Gamma|$. Then
     $\|A_0v\|\ge c/2$ and

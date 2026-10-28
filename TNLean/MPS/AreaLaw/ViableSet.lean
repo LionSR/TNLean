@@ -31,6 +31,10 @@ import TNLean.MPS.AreaLaw.ViableSet.OperatorAction
 import TNLean.MPS.AreaLaw.ViableSet.SizeBondTrimming
 import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming
 import TNLean.MPS.AreaLaw.ViableSet.Span
+import TNLean.MPS.AreaLaw.ViableSet.SuccessiveApproximation
+import TNLean.MPS.AreaLaw.ViableSet.SuccessiveBudgets
+import TNLean.MPS.AreaLaw.ViableSet.SuccessiveConstruction
+import TNLean.MPS.AreaLaw.ViableSet.SuccessiveStep
 import TNLean.MPS.AreaLaw.ViableSet.SuccessiveTrimming
 import TNLean.MPS.AreaLaw.ViableSet.TrimmedWitness
 import TNLean.MPS.AreaLaw.ViableSet.Trimming

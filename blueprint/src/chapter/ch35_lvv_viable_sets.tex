@@ -519,8 +519,8 @@ whose range is the span of the columns of $M_i(\psi)$.
         \label{eq:lvv_finite_uniform_matrix_moment}
     \end{align}
     The samples need not be Hermitian. This is an auxiliary finite
-    moment estimate; the sharp matrix Bernstein inequality remains a
-    separate result.
+    moment estimate. The sharp matrix Bernstein inequality is proved
+    separately in Theorem~\ref{thm:lvv_matrix_bernstein}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:lvv_even_word_count,thm:lvv_singleton_word_cancellation}
@@ -692,156 +692,430 @@ whose range is the span of the columns of $M_i(\psi)$.
 \end{proof}
 
 \begin{theorem}[Finite uniform trace-exponential Jensen inequality]
-	\label{thm:finite_matrix_trace_exp_jensen}
-	\lean{Matrix.average_trace_exp_add_le_trace_exp_log_average_exp}
-	\leanok
-	\uses{thm:matrix_trace_exp_log_concavity}
-	Let $H$ be Hermitian and let $Y_a$, indexed by a finite nonempty set, be
-	Hermitian. With uniform averaging denoted by $\mathbb E_a$,
-	\begin{align}
-		\mathbb E_a\operatorname{tr}e^{H+Y_a}
-		\le\operatorname{tr}e^{H+\log(\mathbb E_a e^{Y_a})}.
-		\label{eq:finite_matrix_trace_exp_jensen}
-	\end{align}
-	This is the finite uniform specialization of
-	\cite[Corollary~3.3]{Tropp2012TailBounds}.
+    \label{thm:finite_matrix_trace_exp_jensen}
+    \lean{Matrix.average_trace_exp_add_le_trace_exp_log_average_exp}
+    \leanok
+    \uses{thm:matrix_trace_exp_log_concavity}
+    Let $H$ be Hermitian and let $Y_a$, indexed by a finite nonempty set, be
+    Hermitian. With uniform averaging denoted by $\mathbb E_a$,
+    \begin{align}
+        \mathbb E_a\operatorname{tr}e^{H+Y_a}
+        \le\operatorname{tr}e^{H+\log(\mathbb E_a e^{Y_a})}.
+        \label{eq:finite_matrix_trace_exp_jensen}
+    \end{align}
+    This is the finite uniform specialization of
+    \cite[Corollary~3.3]{Tropp2012TailBounds}.
 \end{theorem}
 \begin{proof}\leanok
-	\uses{thm:matrix_trace_exp_log_concavity}
-	Apply Jensen's inequality on the positive-definite cone to $e^{Y_a}$.
+    \uses{thm:matrix_trace_exp_log_concavity}
+    Apply Jensen's inequality on the positive-definite cone to $e^{Y_a}$.
 \end{proof}
 
 \begin{theorem}[Finite uniform logarithmic moment generating function bound]
-	\label{thm:finite_matrix_log_mgf_bernstein}
-	\lean{Matrix.log_average_exp_le_bernstein}
-	\leanok
-	Let $Z_a$ be a centered finite uniform Hermitian family with $\|Z_a\|\le R$.
-	For $\theta\ge0$ and $\theta R<3$, put
-	$V=\mathbb E_a Z_a^2$. Then
-	\begin{align}
-		\log\mathbb E_a e^{\theta Z_a}
-		\le\frac{\theta^2\|V\|}{2(1-\theta R/3)}I.
-		\label{eq:finite_matrix_log_mgf_bernstein}
-	\end{align}
+    \label{thm:finite_matrix_log_mgf_bernstein}
+    \lean{Matrix.log_average_exp_le_bernstein}
+    \leanok
+    Let $Z_a$ be a centered finite uniform Hermitian family with $\|Z_a\|\le R$.
+    For $\theta\ge0$ and $\theta R<3$, put
+    $V=\mathbb E_a Z_a^2$. Then
+    \begin{align}
+        \log\mathbb E_a e^{\theta Z_a}
+        \le\frac{\theta^2\|V\|}{2(1-\theta R/3)}I.
+        \label{eq:finite_matrix_log_mgf_bernstein}
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
-	The factorial inequality $2\,3^k\le(k+2)!$ bounds the exponential remainder
-	by a geometric series. Functional calculus gives
-	$e^{\theta Z_a}\le I+\theta Z_a+
-		\theta^2Z_a^2/(2(1-\theta R/3))$.
-	Averaging removes the linear term. The variance norm bounds the quadratic
-	term by a scalar multiple of the identity, and $\log x\le x-1$ bounds
-	each spectral value of the logarithm.
+    The factorial inequality $2\,3^k\le(k+2)!$ bounds the exponential remainder
+    by a geometric series. Functional calculus gives
+    $e^{\theta Z_a}\le I+\theta Z_a+
+        \theta^2Z_a^2/(2(1-\theta R/3))$.
+    Averaging removes the linear term. The variance norm bounds the quadratic
+    term by a scalar multiple of the identity, and $\log x\le x-1$ bounds
+    each spectral value of the logarithm.
 \end{proof}
 
 \begin{theorem}[Finite uniform one-sided Hermitian Bernstein inequality]
-	\label{thm:finite_uniform_hermitian_bernstein}
-	\lean{Matrix.finite_uniform_hermitian_bernstein_of_variance_le}
-	\leanok
-	\uses{thm:finite_matrix_trace_exp_jensen,thm:finite_matrix_log_mgf_bernstein}
-	Let $Z_a$ be a centered finite uniform family of Hermitian $d\times d$
-	matrices with $\|Z_a\|\le R$. Let $\sigma^2\ge\|\mathbb E_a Z_a^2\|$.
-	For $m$ independent uniform samples and $\tau\ge0$,
-	\begin{align}
-		\Pr\left(\lambda_{\max}\left(\sum_{j=1}^m Z_{a_j}\right)
-		\ge\tau\right)
-		\le d\exp\left(-\frac{\tau^2}{2m\sigma^2+2R\tau/3}\right).
-		\label{eq:finite_uniform_hermitian_bernstein}
-	\end{align}
-	At a zero denominator the right side is read as $d$.
-	This is the finite uniform, norm-bounded specialization of
-	\cite[Theorem~6.1(ii)]{Tropp2012TailBounds}.
-	The general probability theorem and the non-Hermitian norm estimate
-	remain separate assertions.
+    \label{thm:finite_uniform_hermitian_bernstein}
+    \lean{Matrix.finite_uniform_hermitian_bernstein_of_variance_le}
+    \leanok
+    \uses{thm:finite_matrix_trace_exp_jensen,thm:finite_matrix_log_mgf_bernstein}
+    Let $Z_a$ be a centered finite uniform family of Hermitian $d\times d$
+    matrices with $\|Z_a\|\le R$. Let $\sigma^2\ge\|\mathbb E_a Z_a^2\|$.
+    For $m$ independent uniform samples and $\tau\ge0$,
+    \begin{align}
+        \Pr\left(\lambda_{\max}\left(\sum_{j=1}^m Z_{a_j}\right)
+        \ge\tau\right)
+        \le d\exp\left(-\frac{\tau^2}{2m\sigma^2+2R\tau/3}\right).
+        \label{eq:finite_uniform_hermitian_bernstein}
+    \end{align}
+    At a zero denominator the right side is read as $d$.
+    This is the finite uniform, norm-bounded specialization of
+    \cite[Theorem~6.1(ii)]{Tropp2012TailBounds}.
+    The general probability theorem and the non-Hermitian norm estimate
+    remain separate assertions.
 \end{theorem}
 \begin{proof}\leanok
-	\uses{thm:finite_matrix_trace_exp_jensen,thm:finite_matrix_log_mgf_bernstein}
-	Iterate the trace-exponential Jensen inequality over the sample coordinates.
-	The logarithmic moment generating function bound and exponential Markov
-	inequality give the usual scalar parameter bound. For $m\sigma^2>0$ take
-	$\theta=\tau/(m\sigma^2+R\tau/3)$.
-	If $m\sigma^2=0<R\tau$, take $\theta=3/(2R)$.
-	The zero-denominator case follows by bounding a probability by one.
+    \uses{thm:finite_matrix_trace_exp_jensen,thm:finite_matrix_log_mgf_bernstein}
+    Iterate the trace-exponential Jensen inequality over the sample coordinates.
+    The logarithmic moment generating function bound and exponential Markov
+    inequality give the usual scalar parameter bound. For $m\sigma^2>0$ take
+    $\theta=\tau/(m\sigma^2+R\tau/3)$.
+    If $m\sigma^2=0<R\tau$, take $\theta=3/(2R)$.
+    The zero-denominator case follows by bounding a probability by one.
 \end{proof}
 
 \begin{lemma}[Hermitian dilation and variance domination]
-	\label{lem:matrix_hermitian_dilation}
-	\lean{Matrix.hermitianDilation,
-		Matrix.isHermitian_hermitianDilation,
-		Matrix.hermitianDilation_sq,
-		Matrix.norm_hermitianDilation,
-		Matrix.norm_mem_spectrum_hermitianDilation,
-		Matrix.hermitianDilation_sum,
-		Matrix.hermitianDilation_real_smul,
-		Matrix.norm_average_hermitianDilation_sq_le}
-	\leanok
-	For a complex $d_1\times d_2$ matrix $Y$, define
-	\begin{align}
-		\mathcal D(Y)=\begin{pmatrix}0&Y\\Y^*&0\end{pmatrix}.
-		\label{eq:matrix_hermitian_dilation}
-	\end{align}
-	This matrix is Hermitian, has norm $\|Y\|$, and has $\|Y\|$ in its spectrum.
-	The dilation is real-linear and
-	$\mathcal D(Y)^2=\operatorname{diag}(YY^*,Y^*Y)$.
-	For a finite uniform family,
-	\begin{align}
-		\|\mathbb E\mathcal D(Y)^2\|
-		\le\max\{\|\mathbb EYY^*\|,\|\mathbb EY^*Y\|\}.
-		\label{eq:matrix_hermitian_dilation_variance}
-	\end{align}
-	These are the dilation properties used in
-	\cite[equations~(2.12)--(2.13), Remark~3.11]{Tropp2012TailBounds}.
+    \label{lem:matrix_hermitian_dilation}
+    \lean{Matrix.hermitianDilation,
+        Matrix.isHermitian_hermitianDilation,
+        Matrix.hermitianDilation_sq,
+        Matrix.norm_hermitianDilation,
+        Matrix.norm_mem_spectrum_hermitianDilation,
+        Matrix.hermitianDilation_sum,
+        Matrix.hermitianDilation_real_smul,
+        Matrix.norm_average_hermitianDilation_sq_le}
+    \leanok
+    For a complex $d_1\times d_2$ matrix $Y$, define
+    \begin{align}
+        \mathcal D(Y)=\begin{pmatrix}0&Y\\Y^*&0\end{pmatrix}.
+        \label{eq:matrix_hermitian_dilation}
+    \end{align}
+    This matrix is Hermitian, has norm $\|Y\|$, and has $\|Y\|$ in its spectrum.
+    The dilation is real-linear and
+    $\mathcal D(Y)^2=\operatorname{diag}(YY^*,Y^*Y)$.
+    For a finite uniform family,
+    \begin{align}
+        \|\mathbb E\mathcal D(Y)^2\|
+        \le\max\{\|\mathbb EYY^*\|,\|\mathbb EY^*Y\|\}.
+        \label{eq:matrix_hermitian_dilation_variance}
+    \end{align}
+    These are the dilation properties used in
+    \cite[equations~(2.12)--(2.13), Remark~3.11]{Tropp2012TailBounds}.
 \end{lemma}
 \begin{proof}\leanok
-	The square identity and positive-semidefinite block domination bound the
-	dilation norm from above. The two coordinate inclusions bound it from below.
-	Conjugation by $\operatorname{diag}(I,-I)$ changes the sign of the dilation,
-	so its spectrum is symmetric and contains its positive norm endpoint.
-	The same block domination gives the variance bound.
+    The square identity and positive-semidefinite block domination bound the
+    dilation norm from above. The two coordinate inclusions bound it from below.
+    Conjugation by $\operatorname{diag}(I,-I)$ changes the sign of the dilation,
+    so its spectrum is symmetric and contains its positive norm endpoint.
+    The same block domination gives the variance bound.
 \end{proof}
 
 \begin{theorem}[Finite uniform rectangular matrix Bernstein inequality]
-	\label{thm:finite_uniform_rectangular_bernstein}
-	\lean{Matrix.finite_uniform_rectangular_bernstein,
-		Matrix.finite_uniform_rectangular_average_bernstein}
-	\leanok
-	\uses{lem:matrix_hermitian_dilation,thm:finite_uniform_hermitian_bernstein}
-	Let $Y$ be a centered finite uniform family of complex $d_1\times d_2$
-	matrices, with $\|Y\|\le R$, and put
-	$\sigma^2=\max\{\|\mathbb EYY^*\|,\|\mathbb EY^*Y\|\}$.
-	For $\ell\ge1$ independent uniform samples and $t\ge0$,
-	\begin{align}
-		\Pr\left(\left\|\frac1\ell\sum_{j=1}^{\ell}Y_j\right\|\ge t\right)
-		\le(d_1+d_2)\exp\left(-\frac{\ell t^2}{2\sigma^2+2Rt/3}\right).
-		\label{eq:finite_uniform_rectangular_bernstein}
-	\end{align}
-	This is the finite uniform specialization of
-	\cite[Theorem~1.6]{Tropp2012TailBounds}.
+    \label{thm:finite_uniform_rectangular_bernstein}
+    \lean{Matrix.finite_uniform_rectangular_bernstein,
+        Matrix.finite_uniform_rectangular_average_bernstein}
+    \leanok
+    \uses{lem:matrix_hermitian_dilation,thm:finite_uniform_hermitian_bernstein}
+    Let $Y$ be a centered finite uniform family of complex $d_1\times d_2$
+    matrices, with $\|Y\|\le R$, and put
+    $\sigma^2=\max\{\|\mathbb EYY^*\|,\|\mathbb EY^*Y\|\}$.
+    For $\ell\ge1$ independent uniform samples and $t\ge0$,
+    \begin{align}
+        \Pr\left(\left\|\frac1\ell\sum_{j=1}^{\ell}Y_j\right\|\ge t\right)
+        \le(d_1+d_2)\exp\left(-\frac{\ell t^2}{2\sigma^2+2Rt/3}\right).
+        \label{eq:finite_uniform_rectangular_bernstein}
+    \end{align}
+    This is the finite uniform specialization of
+    \cite[Theorem~1.6]{Tropp2012TailBounds}.
 \end{theorem}
 \begin{proof}\leanok
-	\uses{lem:matrix_hermitian_dilation,thm:finite_uniform_hermitian_bernstein}
-	Apply the one-sided Hermitian theorem to the dilation and use its positive
-	spectral norm endpoint. The dilation dimension is $d_1+d_2$.
-	Normalize the sum by $\ell$.
+    \uses{lem:matrix_hermitian_dilation,thm:finite_uniform_hermitian_bernstein}
+    Apply the one-sided Hermitian theorem to the dilation and use its positive
+    spectral norm endpoint. The dilation dimension is $d_1+d_2$.
+    Normalize the sum by $\ell$.
 \end{proof}
 
 \begin{corollary}[Finite uniform concentration about the actual matrix mean]
-	\label{cor:finite_uniform_square_matrix_bernstein}
-	\lean{Matrix.finite_uniform_matrix_average_sub_mean_bernstein}
-	\leanok
-	\uses{thm:finite_uniform_rectangular_bernstein}
-	Let $X$ be a finite uniform family of complex $d\times d$ matrices and
-	$\mu=\mathbb EX$. If $\|X-\mu\|\le R$, set
-	$\sigma^2=\max\{\|\mathbb E(X-\mu)(X-\mu)^*\|,
-		\|\mathbb E(X-\mu)^*(X-\mu)\|\}$.
-	The bound in Theorem~\ref{thm:finite_uniform_rectangular_bernstein}
-	holds for the deviation of the sample mean from $\mu$, with factor $2d$.
-	This is the finite uniform specialization of LVV Theorem~2.13.
-	The assertion for general probability spaces remains unproved here.
+    \label{cor:finite_uniform_square_matrix_bernstein}
+    \lean{Matrix.finite_uniform_matrix_average_sub_mean_bernstein}
+    \leanok
+    \uses{thm:finite_uniform_rectangular_bernstein}
+    Let $X$ be a finite uniform family of complex $d\times d$ matrices and
+    $\mu=\mathbb EX$. If $\|X-\mu\|\le R$, set
+    $\sigma^2=\max\{\|\mathbb E(X-\mu)(X-\mu)^*\|,
+        \|\mathbb E(X-\mu)^*(X-\mu)\|\}$.
+    The bound in Theorem~\ref{thm:finite_uniform_rectangular_bernstein}
+    holds for the deviation of the sample mean from $\mu$, with factor $2d$.
+    This is the finite uniform specialization of LVV Theorem~2.13.
+    The version for general probability spaces is
+    Theorem~\ref{thm:lvv_matrix_bernstein}.
 \end{corollary}
 \begin{proof}\leanok
-	\uses{thm:finite_uniform_rectangular_bernstein}
-	Subtract the actual uniform mean. The centered sum and its normalization
-	are computed explicitly, then the rectangular theorem is applied with
-	equal row and column dimensions.
+    \uses{thm:finite_uniform_rectangular_bernstein}
+    Subtract the actual uniform mean. The centered sum and its normalization
+    are computed explicitly, then the rectangular theorem is applied with
+    equal row and column dimensions.
 \end{proof}
+
+\begin{lemma}[Integrability of continuous functions of bounded matrix families]
+    \label{lem:integrable_continuous_bounded_matrix_family}
+    \lean{Matrix.integrable_continuous_comp_of_ae_norm_le}
+    \leanok
+    On a finite measure space, let $Y$ be an almost everywhere bounded strongly
+    measurable finite matrix family. For every continuous function $g$ into a
+    normed additive group, $g\circ Y$ is integrable.
+\end{lemma}
+\begin{proof}\leanok
+    A closed matrix ball is compact. Its continuous image is bounded, which
+    gives an integrable constant bound for $\|g\circ Y\|$.
+\end{proof}
+
+\begin{theorem}[Trace-exponential Jensen inequality for bounded random matrices]
+    \label{thm:bounded_matrix_trace_exp_integral_jensen}
+    \lean{Matrix.integral_trace_exp_add_le_trace_exp_log_integral_exp}
+    \leanok
+    \uses{thm:matrix_trace_exp_log_concavity,
+        lem:integrable_continuous_bounded_matrix_family}
+    Let $H$ be Hermitian. On a probability space, let $Y$ be strongly measurable,
+    Hermitian almost everywhere, and bounded in operator norm almost everywhere.
+    Then
+    \begin{align}
+        \mathbb E\operatorname{tr}e^{H+Y}
+        \le\operatorname{tr}e^{H+\log\mathbb Ee^Y}.
+        \label{eq:bounded_matrix_trace_exp_integral_jensen}
+    \end{align}
+    This is the bounded-sample specialization of
+    \cite[Corollary~3.3]{Tropp2012TailBounds}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:matrix_trace_exp_log_concavity,
+        lem:integrable_continuous_bounded_matrix_family}
+    If $\|Y\|\le R$, functional calculus gives $e^Y\ge e^{-R}I$.
+    Restrict Lieb's concavity to the closed convex set of matrices at least
+    $e^{-R}I$. The logarithm is continuous there. The preceding integrability
+    lemma verifies the hypotheses of integral Jensen; $\log e^Y=Y$ gives
+    the stated inequality.
+\end{proof}
+
+\begin{theorem}[Integral logarithmic moment generating function bound]
+    \label{thm:bounded_matrix_integral_log_mgf_bernstein}
+    \lean{Matrix.log_integral_exp_le_bernstein}
+    \leanok
+    Let $Z$ be a strongly measurable, centered Hermitian random matrix on a
+    probability space, with $\|Z\|\le R$ almost everywhere. For $\theta\ge0$
+    and $\theta R<3$,
+    \begin{align}
+        \log\mathbb Ee^{\theta Z}
+        \le\frac{\theta^2\|\mathbb EZ^2\|}{2(1-\theta R/3)}I.
+        \label{eq:bounded_matrix_integral_log_mgf_bernstein}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:integrable_continuous_bounded_matrix_family}
+    The scalar Bernstein majorant and functional calculus give the quadratic
+    exponential bound. Integrate in the Loewner order and use centering.
+    Bound the variance by its norm times the identity, then apply operator
+    monotonicity of the logarithm and $\log(1+x)\le x$.
+    The positive lower bound $e^{\theta Z}\ge e^{-\theta R}I$ ensures that
+    the expected exponential is positive definite.
+\end{proof}
+
+\begin{lemma}[Almost-everywhere bounds and integrability for finite matrix sums]
+    \label{lem:bounded_matrix_sum_integrability}
+    \lean{Matrix.ae_norm_sum_le_of_forall,
+        Matrix.integrable_trace_exp_sum_of_ae_norm_le}
+    \leanok
+    Let $X_1,\ldots,X_m$ be almost everywhere measurable matrix families on a
+    finite measure space, with $\|X_j\|\le R$ almost everywhere. Then
+    $\|\sum_jX_j\|\le mR$ almost everywhere. For every fixed matrix $H$,
+    $\operatorname{Re}\operatorname{tr}e^{H+\sum_jX_j}$ is integrable.
+    Independence and Hermiticity are unnecessary for this conclusion.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:integrable_continuous_bounded_matrix_family}
+    Intersect the finitely many events of full measure and use the triangle
+    inequality. Apply the continuous-function integrability lemma to the sum.
+\end{proof}
+
+\begin{theorem}[Trace-exponential iteration on a product probability space]
+    \label{thm:bounded_product_matrix_trace_exp}
+    \lean{Matrix.integral_trace_exp_sum_pi_le}
+    \leanok
+    \uses{thm:bounded_matrix_trace_exp_integral_jensen,
+        lem:bounded_matrix_sum_integrability}
+    Let $\mu_1,\ldots,\mu_m$ be probability distributions on Hermitian matrices,
+    each bounded in norm by $R$ almost everywhere. On their product space,
+    for every Hermitian $H$,
+    \begin{align}
+        \mathbb E\operatorname{tr}e^{H+\sum_jX_j}
+        \le\operatorname{tr}e^{H+\sum_j\log\mathbb E_{\mu_j}e^{X_j}}.
+        \label{eq:bounded_product_matrix_trace_exp}
+    \end{align}
+    The marginal distributions may differ.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:bounded_matrix_trace_exp_integral_jensen,
+        lem:bounded_matrix_sum_integrability}
+    Separate the first coordinate by the measurable product equivalence and
+    apply Fubini. Integral Jensen replaces that coordinate by its logarithmic
+    moment generating function. Induct on the number of coordinates, allowing
+    the fixed Hermitian shift to change at each step.
+\end{proof}
+
+\begin{theorem}[Trace-exponential bound for bounded independent random matrices]
+    \label{thm:bounded_independent_matrix_trace_exp}
+    \lean{Matrix.integral_trace_exp_sum_le_of_iIndepFun}
+    \leanok
+    \uses{thm:bounded_product_matrix_trace_exp}
+    Let $X_1,\ldots,X_m$ be independent, almost everywhere measurable Hermitian
+    random matrices on a probability space, each bounded in norm by $R$ almost
+    everywhere. For every Hermitian $H$,
+    \begin{align}
+        \mathbb E\operatorname{tr}e^{H+\sum_jX_j}
+        \le\operatorname{tr}e^{H+\sum_j\log\mathbb Ee^{X_j}}.
+        \label{eq:bounded_independent_matrix_trace_exp}
+    \end{align}
+    This is the bounded form of \cite[Lemma~3.4]{Tropp2012TailBounds} used in
+    the Bernstein argument.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:bounded_product_matrix_trace_exp}
+    Independence identifies the actual joint distribution with the product
+    of the marginal distributions. Change variables in the joint integral
+    and in each marginal exponential integral, then apply the product-space
+    theorem.
+\end{proof}
+
+\begin{theorem}[Trace-exponential estimate from an upper variance bound]
+    \label{thm:independent_matrix_trace_exp_variance_bound}
+    \lean{Matrix.integral_trace_exp_sum_le_bernstein_of_variance_le}
+    \leanok
+    \uses{thm:bounded_independent_matrix_trace_exp,
+        thm:bounded_matrix_integral_log_mgf_bernstein}
+    Let $X_1,\ldots,X_m$ be independent centered Hermitian random matrices on a
+    probability space, with $\|X_j\|\le R$ almost everywhere and
+    $\|\mathbb EX_j^2\|\le\sigma^2$ for every $j$.
+    For $\theta\ge0$ and $\theta R<3$,
+    \begin{align}
+        \mathbb E\operatorname{tr}e^{\theta\sum_jX_j}
+        \le d\exp\left(\frac{m\theta^2\sigma^2}{2(1-\theta R/3)}\right).
+        \label{eq:independent_matrix_trace_exp_variance_bound}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:bounded_independent_matrix_trace_exp,
+        thm:bounded_matrix_integral_log_mgf_bernstein}
+    The independent trace-exponential inequality bounds the left side by the
+    trace exponential of the sum of the logarithmic moment generating
+    functions. Bound each summand by
+    $\theta^2\sigma^2I/(2(1-\theta R/3))$ and use monotonicity of the trace
+    exponential.
+\end{proof}
+
+\begin{theorem}[Exponential Markov bound for the upper spectral event]
+    \label{thm:independent_matrix_spectral_parameter_bound}
+    \lean{Matrix.probability_spectral_tail_le_bernstein_parameter}
+    \leanok
+    \uses{thm:independent_matrix_trace_exp_variance_bound}
+    Under the preceding hypotheses, for every real $\tau$,
+    \begin{align}
+        \Pr\left(\lambda_{\max}\left(\sum_jX_j\right)\ge\tau\right)
+        \le d\exp\left(-\theta\tau+
+        \frac{m\theta^2\sigma^2}{2(1-\theta R/3)}\right).
+        \label{eq:independent_matrix_spectral_parameter_bound}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:independent_matrix_trace_exp_variance_bound}
+    The spectral event implies
+    $e^{\theta\tau}\le\operatorname{tr}e^{\theta\sum_jX_j}$ almost surely.
+    Apply scalar exponential Markov to this actual trace-exponential random
+    variable. Its integrability and nonnegativity have been established.
+\end{proof}
+
+\begin{theorem}[One-sided Hermitian Bernstein with an upper variance bound]
+    \label{thm:independent_hermitian_bernstein_variance_bound}
+    \lean{Matrix.probability_hermitian_bernstein_of_variance_le}
+    \leanok
+    \uses{thm:independent_matrix_spectral_parameter_bound}
+    Let $X_1,\ldots,X_m$ be independent centered Hermitian random matrices on a
+    probability space. Suppose $\|X_j\|\le R$ almost everywhere and
+    $\|\mathbb EX_j^2\|\le\sigma^2$, where $R,\sigma^2\ge0$.
+    For $\tau\ge0$,
+    \begin{align}
+        \Pr\left(\lambda_{\max}\left(\sum_jX_j\right)\ge\tau\right)
+        \le d\exp\left(-\frac{\tau^2}{2m\sigma^2+2R\tau/3}\right).
+        \label{eq:independent_hermitian_bernstein_variance_bound}
+    \end{align}
+    This is the upper-variance-bound consequence of the argument in
+    \cite[Theorem~6.1(ii)]{Tropp2012TailBounds}. It uses $m\sigma^2$ in place
+    of the sharper norm of the sum of variances for unrelated distributions.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:independent_matrix_spectral_parameter_bound}
+    If $m\sigma^2>0$, take
+    $\theta=\tau/(m\sigma^2+R\tau/3)$.
+    If $m\sigma^2=0<R\tau$, take $\theta=3/(2R)$.
+    In the remaining zero-denominator case, take $\theta=0$ and use the
+    inverse-zero convention. Thus zero variance, threshold and sample count
+    are included without an additional hypothesis.
+\end{proof}
+
+\begin{lemma}[Hermitian dilation and the Bochner integral]
+    \label{lem:matrix_integral_hermitian_dilation}
+    \lean{Matrix.hermitianDilationLinearIsometry,
+        Matrix.integral_hermitianDilation,
+        Matrix.norm_integral_hermitianDilation_sq_le}
+    \leanok
+    \uses{lem:matrix_hermitian_dilation}
+    The Hermitian dilation of a complex square matrix is a real-linear isometry.
+    It therefore commutes with the Bochner integral. For an almost everywhere
+    measurable bounded matrix family $Y$ on a finite measure space,
+    \begin{align}
+        \left\|\int\mathcal D(Y)^2\right\|
+        \le\max\left\{\left\|\int YY^*\right\|,
+        \left\|\int Y^*Y\right\|\right\}.
+        \label{eq:matrix_integral_hermitian_dilation_variance}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:matrix_hermitian_dilation}
+    Real-linearity and preservation of the operator norm give the isometry.
+    Its integral identity follows from linear isometry of the Bochner integral.
+    The two continuous linear corner embeddings identify the integrated squared
+    dilation with the block diagonal of the integrated Gram matrices.
+    These blocks are positive semidefinite; domination by the maximum of their
+    norms times the identity gives the variance bound.
+\end{proof}
+
+\begin{theorem}[The iid complex matrix Bernstein inequality]
+    \label{thm:lvv_matrix_bernstein}
+    \lean{Matrix.probability_matrix_bernstein}
+    \leanok
+    \uses{thm:independent_hermitian_bernstein_variance_bound,
+        lem:matrix_integral_hermitian_dilation}
+    Let $X_1,\ldots,X_\ell$ be independent identically distributed complex
+    $d\times d$ random matrices on a probability space, with $d,\ell\ge1$,
+    common mean $\mu$ and $\|X_j-\mu\|\le R$ almost surely. Put $Y=X_1-\mu$ and
+    \begin{align}
+        \sigma^2=\max\{\|\mathbb EYY^*\|,\|\mathbb EY^*Y\|\}.
+        \label{eq:lvv_matrix_bernstein_variance}
+    \end{align}
+    For every $t\ge0$,
+    \begin{align}
+        \Pr\left(\left\|\frac1\ell\sum_{j=1}^{\ell}X_j-\mu\right\|\ge t\right)
+        \le2d\exp\left(-\frac{\ell t^2}{2\sigma^2+2Rt/3}\right).
+        \label{eq:lvv_matrix_bernstein}
+    \end{align}
+    This is LVV Theorem~2.13, equation~(7), the iid complex square-matrix case
+    of \cite[Theorem~1.6]{Tropp2012TailBounds}. The scalar maximum of variance
+    norms clarifies the notation in LVV. At a zero denominator the inverse-zero
+    convention gives the bound $2d$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:independent_hermitian_bernstein_variance_bound,
+        lem:matrix_integral_hermitian_dilation}
+    Derive integrability from the deviation bound and center the actual samples.
+    Apply the Hermitian dilation to each centered matrix. Its mean is zero and
+    its norm has the same bound. Identical distribution identifies both Gram
+    expectations with those of the first actual sample; the preceding lemma
+    supplies the variance cap. Apply the one-sided Hermitian bound at threshold
+    $\ell t$. The positive spectral norm endpoint gives dimension $2d$.
+    The explicit centering and sample-mean identities give the stated event
+    and exponent.
+\end{proof}
+
+Theorem~\ref{thm:lvv_matrix_bernstein} supplies the sharp concentration result.
+The sampled-filter construction in LVV Corollary~2.14 also requires a
+simultaneous word-frequency bound and the corrected ground-energy dependence;
+these are separate assertions.

@@ -13,10 +13,12 @@ the inverse gap is asserted.
 \begin{lemma}[An energy window determined by the chain length]
     \label{lem:huang_positive_chain_energy_window}
     \lean{TNLean.MPS.AreaLaw.abs_eigenvalue_positive_chain_le_length}
+    \leanok
     Let $H=\sum_{j=0}^{L-2}h_j$, with $0\le h_j\le I$. If
     $H\Gamma=E_0\Gamma$ and $\|\Gamma\|=1$, then $|E_0|\le L$.
 \end{lemma}
 \begin{proof}
+    \leanok
     Each summand has norm at most one, so
     $|E_0|=\|H\Gamma\|\le\|H\|\le L$.
 \end{proof}
@@ -24,8 +26,9 @@ the inverse gap is asserted.
 \begin{theorem}[The finite family of Gaussian approximants]
     \label{thm:huang_positive_chain_filter_family}
     \lean{TNLean.MPS.AreaLaw.exists_positive_chain_filter_family}
+    \leanok
     \uses{thm:huang_physical_gaussian}
-    Let $h_j$ additionally be supported on sites $j,j+1$, and fix
+    Let $q\ge1$, let $h_j$ additionally be supported on sites $j,j+1$, and fix
     $c,\Delta>0$. Let $\eta,h,T$ and the energy mesh width be the
     parameters of Section~\ref{sec:huang_filter_parameters}.
     There is a family $(Q_e)$ indexed by that mesh in $[-L,L]$ such that
@@ -37,6 +40,7 @@ the inverse gap is asserted.
     \end{align*}
 \end{theorem}
 \begin{proof}
+    \leanok
     Apply the finite Gaussian approximation at each mesh point.
     The bound $|e|\le L$ gives a common sample count. The time tail,
     quadrature error and propagation error are each at most $\eta$.
@@ -46,6 +50,7 @@ the inverse gap is asserted.
 \begin{theorem}[A member close to the ground projection]
     \label{thm:huang_positive_chain_ground_filter_family}
     \lean{TNLean.MPS.AreaLaw.exists_positive_chain_ground_filter_family}
+    \leanok
     \uses{lem:huang_positive_chain_energy_window,
         thm:huang_positive_chain_filter_family}
     The family can be chosen before $E_0$ and $\Gamma$ so that the following
@@ -59,6 +64,7 @@ the inverse gap is asserted.
     \end{align*}
 \end{theorem}
 \begin{proof}
+    \leanok
     Choose a mesh point within the prescribed energy accuracy of $E_0$.
     The spectral Gaussian estimate gives error at most $\eta$ from
     $a|\Gamma\rangle\langle\Gamma|$, where
@@ -69,6 +75,7 @@ the inverse gap is asserted.
 \begin{lemma}[One finite collection of left factors]
     \label{lem:huang_finite_left_filter_factors}
     \lean{TNLean.MPS.AreaLaw.exists_finite_left_filter_factors}
+    \leanok
     \uses{thm:lvv_simultaneous_cut_decomposition}
     Suppose that $M$ chain operators have operator-Schmidt rank at most
     $R$ at every cut. At the cut after $i\le L$ sites, their left factors
@@ -76,6 +83,7 @@ the inverse gap is asserted.
     of $F$ has operator-Schmidt rank at most $R$ at every internal left cut.
 \end{lemma}
 \begin{proof}
+    \leanok
     Decompose each operator using at most $R$ product terms, with the left
     factors retaining the earlier cut-rank bounds. Take the union of the
     $M$ resulting sets of left factors.
@@ -84,6 +92,7 @@ the inverse gap is asserted.
 \begin{theorem}[Error reduction chosen before the ground pair]
     \label{thm:huang_positive_chain_viable_filter}
     \lean{TNLean.MPS.AreaLaw.exists_positive_chain_error_reduced_set}
+    \leanok
     \uses{lem:huang_finite_left_filter_factors,
         thm:huang_positive_chain_ground_filter_family,
         thm:lvv_scaled_projection_error_reduction}
@@ -100,10 +109,11 @@ the inverse gap is asserted.
     satisfying the gap assumption, $T$ is $(i,c/L)$-viable for that vector.
 \end{theorem}
 \begin{proof}
+    \leanok
     Form $T=\{Av:A\in F,\ v\in S\}$ from the common collection of left
     factors. This gives both the cardinality and individual bond bounds.
     One Gaussian approximant is within $4\eta$ of $a|\Gamma\rangle\langle\Gamma|$
-    with $a\ge1/2$. Its left factors give a subset of $T$ with viability
+    with $a\ge1/2$. Applying its left factors to $S$ gives a subset of $T$ with viability
     error at most $16\eta/a\le32\eta\le c/L$. The same witness is therefore
     supported on the span of $T$.
 \end{proof}

@@ -8,6 +8,7 @@ retain every earlier operator-Schmidt rank bound of the original operator.
 \begin{definition}[Right contraction]
     \label{def:lvv_operator_right_contraction}
     \lean{Matrix.operatorRightContraction}
+    \leanok
     For finite configuration spaces $X,Y$, an operator $K$ on
     $\mathbb C^X\otimes\mathbb C^Y$ and a linear functional
     $\varphi:\operatorname{Mat}_Y(\mathbb C)\to\mathbb C$, define
@@ -20,6 +21,7 @@ retain every earlier operator-Schmidt rank bound of the original operator.
 \begin{theorem}[A shortest decomposition by right contractions]
     \label{thm:lvv_right_contraction_decomposition}
     \lean{Matrix.exists_operatorRightContraction_decomposition}
+    \leanok
     \uses{def:lvv_operator_right_contraction}
     If $d=\operatorname{OSR}(K)$, there are $d$ linear functionals
     $\varphi_j$ and $d$ right operators $B_j$ such that
@@ -29,6 +31,7 @@ retain every earlier operator-Schmidt rank bound of the original operator.
     Empty configuration spaces and $d=0$ are included.
 \end{theorem}
 \begin{proof}
+    \leanok
     Let $S$ be the span of the actual right blocks of $K$, and choose a basis
     $B_1,\ldots,B_d$ of $S$. Extend its coordinate functionals linearly to the
     full right matrix space. Basis reconstruction gives
@@ -39,6 +42,7 @@ retain every earlier operator-Schmidt rank bound of the original operator.
     \label{thm:lvv_right_contraction_rank}
     \lean{Matrix.operatorSchmidtRank_operatorRightContraction_le,
         Entropy.operatorSchmidtRank_rightContraction_subset_le}
+    \leanok
     \uses{def:lvv_operator_right_contraction}
     Let $K$ act on three finite factors $X,Y,Z$. Contracting the $Z$ matrix
     factor by any linear functional $\varphi$ gives an operator on $X\otimes Y$
@@ -51,6 +55,7 @@ retain every earlier operator-Schmidt rank bound of the original operator.
     exterior of $B$ does not increase the operator-Schmidt rank across $A$.
 \end{theorem}
 \begin{proof}
+    \leanok
     Take a shortest decomposition $K=\sum_a L_a\otimes Y_a$ across
     $X\mid YZ$. Linearity gives
     $C_\varphi(K)=\sum_aL_a\otimes C_\varphi(Y_a)$, a decomposition of the
@@ -61,12 +66,14 @@ retain every earlier operator-Schmidt rank bound of the original operator.
 \begin{theorem}[Left-chain coordinates preserve internal operator ranks]
     \label{thm:lvv_left_operator_rank_coordinates}
     \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_cutOperator_leftConfigOfFin}
+    \leanok
     Let $k\le i\le L$. Reading an operator on the first $i$ sites as an
     operator on an $i$-site chain preserves its rank across the cut after $k$
     sites. More precisely, this rank equals its rank across the split of the
     original first $i$ sites into the first $k$ and the remaining $i-k$ sites.
 \end{theorem}
 \begin{proof}
+    \leanok
     The site inclusions give separate bijections on the two configuration
     spaces. Reindexing by these bijections preserves the rank of a product
     decomposition in both directions.
@@ -75,6 +82,7 @@ retain every earlier operator-Schmidt rank bound of the original operator.
 \begin{theorem}[One global operator supplies suitable left factors]
     \label{thm:lvv_simultaneous_cut_decomposition}
     \lean{TNLean.MPS.AreaLaw.exists_cutDecomposition_of_operatorSchmidtRank_le}
+    \leanok
     \uses{thm:lvv_right_contraction_decomposition, thm:lvv_right_contraction_rank,
         thm:lvv_left_operator_rank_coordinates}
     Let $K$ be one operator on an $L$-site chain with local dimension $q$,
@@ -88,6 +96,7 @@ retain every earlier operator-Schmidt rank bound of the original operator.
     chain, has operator-Schmidt rank at most $R$ at every internal cut.
 \end{theorem}
 \begin{proof}
+    \leanok
     Choose the shortest right-contraction decomposition at $i$. For each
     $k<i$, contraction of the sites right of $i$ does not increase the rank
     across $k$. The same chosen factors therefore satisfy all the earlier

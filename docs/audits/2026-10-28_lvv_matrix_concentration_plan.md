@@ -1,8 +1,50 @@
 # Matrix concentration for the LVV construction
 
-The relevant sources are LVV, [arXiv:1307.5143v1](https://arxiv.org/abs/1307.5143v1), Section 2.3.1, and the [published Methods theorem and supplementary proof](https://people.eecs.berkeley.edu/~vazirani/pubs/1dalg.pdf), DOI 10.1038/nphys3345. The distinction between their ground-energy dependences is recorded in [the sampling note](../paper-gaps/lvv13_sampling_ground_energy.tex). This audit concerns the pinned Mathlib v4.35.0-rc3 and QICLean revision `c97ffd63d9b52bdec7191d25aca66b9af7a2f872`.
+The sources are LVV, [arXiv:1307.5143v1](https://arxiv.org/abs/1307.5143v1), Theorem 2.13 and Section 2.3.1, and [Tropp, *User-friendly tail bounds for sums of random matrices*](https://tropp.caltech.edu/papers/Tro11-User-Friendly-preprint.pdf), Theorem 1.6. The published LVV ground-energy correction is in the [Methods and supplementary proof](https://people.eecs.berkeley.edu/~vazirani/pubs/1dalg.pdf), DOI 10.1038/nphys3345. This audit uses Mathlib v4.35.0-rc3 and pinned QICLean revision `c97ffd63d9b52bdec7191d25aca66b9af7a2f872`.
 
-The finite uniform specialization of the alternating-adjoint moment bound below is now proved by `Matrix.average_norm_average_pow_le_of_centered` in `TNLean/Algebra/FiniteMatrixMoments.lean`. Its hypotheses are finite nonempty sample and matrix index sets, exact centering of each sample family, a uniform operator-norm bound, and an integer moment order $p\ge1$. It assumes none of the word count, cancellation, spectral comparison or moment estimate as additional hypotheses. The general probability formulation, the full non-Hermitian sharp matrix Bernstein theorem and the source-correct sampler remain separate outstanding tasks. A finite uniform one-sided Hermitian Bernstein theorem with the sharp coefficient is now proved below.
+## The completed iid matrix Bernstein theorem
+
+`Matrix.probability_matrix_bernstein` in `TNLean/Algebra/MatrixBernstein.lean` proves the general-probability complex square-matrix inequality used by LVV. Let $X_1,\ldots,X_\ell$ be actually independent and identically distributed $d\times d$ complex random matrices on a probability space, with $d,\ell\ge1$, common actual mean $\mu$, and $\|X_j-\mu\|\le R$ almost surely. Put $Y=X_1-\mu$ and
+
+$$
+\sigma^2=\max\{\|\mathbb EYY^*\|,\|\mathbb EY^*Y\|\}.
+$$
+
+For every $t\ge0$ the theorem gives
+
+$$
+\Pr\left(\left\|\frac1\ell\sum_{j=1}^{\ell}X_j-\mu\right\|\ge t\right)
+\le2d\exp\left(-\frac{\ell t^2}{2\sigma^2+2Rt/3}\right).
+$$
+
+The two Gram expectations are computed from actual centered samples. Identical distribution identifies them across indices. Measurability is derived from `IdentDistrib`; integrability, centered means, the dilation identities and the variance cap are proved inside the argument. The norm bound forces $R\ge0$. No common marginal measure, variance cap, moment generating function estimate, concentration inequality or integrability premise is supplied as additional data. The positive sample count is explicit. At a zero denominator the field inverse-zero convention gives the immediate bound by $2d$.
+
+The variance is the scalar maximum of the two operator norms, as in Tropp. The matrix-valued maximum printed in LVV is read accordingly. The former finite-uniform restriction and this notational clarification are recorded in [the source comparison note](../paper-gaps/finite_uniform_matrix_bernstein.tex). The theorem establishes the iid complex square-matrix case quoted by LVV; it does not claim Tropp's sharper nonidentical-distribution variance norm or the arbitrary rectangular general-probability theorem.
+
+## The proved analytic and probability argument
+
+1. `TraceExpLogConcavity.lean` derives unnormalized Klein, the attained trace variational formula and full concavity of $A\mapsto\operatorname{Re}\operatorname{tr}\exp(H+\log A)$ on the positive-definite cone. The proof follows [Tropp, *From joint convexity of quantum relative entropy to a concavity theorem of Lieb*](https://tropp.caltech.edu/papers/Tro12-Joint-Convexity.pdf), Fact 3, Lemma 6 and Theorem 1, using QICLean's unnormalized relative-entropy joint convexity. No trace-one premise is introduced. An independent mathematical review confirmed the normalization, attainment, domain and empty-index case.
+2. The factorial estimate $2\,3^k\le(k+2)!$ gives $e^x\le1+x+x^2/(2(1-a/3))$ for $|x|\le a<3$. Functional calculus gives the matrix exponential majorant. `TraceExpIntegralBounds.lean` derives its integrability and proves, for centered bounded Hermitian $Z$,
+
+   $$
+   \log\mathbb Ee^{\theta Z}
+   \le\frac{\theta^2\|\mathbb EZ^2\|}{2(1-\theta R/3)}I,
+   \qquad\theta\ge0,\quad\theta R<3.
+   $$
+
+   Integral Jensen is applied on the closed convex set above $e^{-R}I$; compactness of a finite-dimensional matrix ball derives all continuous-composition integrability. Operator monotonicity of the logarithm completes the variance bound.
+3. `IndependentTraceExponential.lean` separates product coordinates with `measurePreserving_piFinSuccAbove` and Fubini's `integral_prod_symm`. Its product-space theorem permits different bounded Hermitian marginal laws. Mathlib's `iIndepFun.map_fun_eq_pi_map` identifies the actual joint distribution, and `integral_map` transfers the joint and marginal integrals. Thus the independent trace-exponential inequality is derived from genuine independence.
+4. `HermitianMatrixBernstein.lean` applies scalar exponential Markov to the actual upper spectral event and optimizes the parameter. For a common individual variance cap $\sigma^2$, it gives $d\exp(-\tau^2/(2m\sigma^2+2R\tau/3))$. If $m\sigma^2>0$, choose $\theta=\tau/(m\sigma^2+R\tau/3)$; if $m\sigma^2=0<R\tau$, choose $\theta=3/(2R)$; in the zero-denominator case choose $\theta=0$. These cases include zero variance, threshold and sample count. For unrelated laws this uses $m\sigma^2$, rather than the sharper norm of the summed variances.
+5. `HermitianDilation.lean` proves the norm and positive spectral endpoint of $\mathcal D(Y)=\left(\begin{smallmatrix}0&Y\\Y^*&0\end{smallmatrix}\right)$. `HermitianDilationIntegral.lean` makes it a real-linear isometry, so its Bochner mean commutes with dilation without an integrability premise. The squared diagonal blocks are $YY^*$ and $Y^*Y$. Existing continuous linear corner embeddings identify their integrals; positive-semidefinite block domination gives the exact required upper variance cap. The one-sided spectral event yields dimension $2d$ directly.
+6. `MatrixBernstein.lean` centers the actual iid samples, derives equality of both Gram expectations by `IdentDistrib.comp` and `IdentDistrib.integral_eq`, applies the Hermitian theorem, and proves the sample-mean normalization. The final variance and dimension coefficient are those in the source.
+
+Golden–Thompson is not assumed or proved by this argument. The unrestricted integrable version of the trace-exponential iteration and the sharper variance norm for unrelated distributions remain outside this development. The bounded analytic form suffices for the iid source theorem.
+
+## Finite probability results and ownership
+
+`TraceExpFiniteJensen.lean`, `BernsteinExponentialBound.lean`, `FiniteHermitianBernstein.lean` and `FiniteMatrixBernstein.lean` give independently checked finite uniform forms of the same concentration argument. The rectangular finite theorem has dimension factor $d_1+d_2$. The finite word-moment proof below gives another route with a weaker tail but the same logarithmic dependence on dimension.
+
+The generic analytic, finite sampling and matrix probability modules belong in QICLean. The word-counting and singleton-cancellation modules should move to its `Algebra/`; the analytic and concentration modules should move to `Analysis/` and `Probability/` in dependency order. Their proofs use only Mathlib and existing QICLean results. QICLean must not import their TNLean copies. The source-specific filtered-operator and tensor-network bond estimates remain in TNLean.
 
 ## A sufficient moment estimate
 
@@ -45,19 +87,18 @@ The failure probability is at most $\delta$. On an $n$-site chain of fixed local
 
 ## An alternative using alternating adjoints
 
-The same method can avoid the dilation. Write $S=\sum_jY_j$ and expand $\operatorname{tr}((S^*S)^p)$ into ordered words of length $2p$, with adjointed and unadjointed factors alternating. A singleton sample label again gives zero expectation, since $\mathbb EY_j=\mathbb EY_j^*=0$. The remaining words obey the same $\ell^p p^{2p}$ count, and each contributes absolute expected trace at most $NR^{2p}$. The positive semidefinite spectral theorem gives $\|S\|^{2p}\le\operatorname{tr}((S^*S)^p)$. This proves the displayed moment and probability estimates with $N$ in place of $2N$. It requires neither a dilation norm identity nor a changed sampler. The finite uniform version of this argument is now formalized by `Matrix.average_norm_average_pow_le_of_centered`, including the alternating expansion, singleton cancellation, spectral comparison and their composition. The corresponding theorem for general independent random matrices and the sharp concentration theorem remain unproved.
+The same method can avoid the dilation. Write $S=\sum_jY_j$ and expand $\operatorname{tr}((S^*S)^p)$ into ordered words of length $2p$, with adjointed and unadjointed factors alternating. A singleton sample label again gives zero expectation, since $\mathbb EY_j=\mathbb EY_j^*=0$. The remaining words obey the same $\ell^p p^{2p}$ count, and each contributes absolute expected trace at most $NR^{2p}$. The positive semidefinite spectral theorem gives $\|S\|^{2p}\le\operatorname{tr}((S^*S)^p)$. This proves the displayed moment and probability estimates with $N$ in place of $2N$. It requires neither a dilation norm identity nor a changed sampler. The finite uniform version of this argument is now formalized by `Matrix.average_norm_average_pow_le_of_centered`, including the alternating expansion, singleton cancellation, spectral comparison and their composition. The corresponding general-probability moment theorem remains outside this finite word argument. The sharp general-probability Bernstein theorem is proved separately by the preceding Lieb argument.
 
-## Proved finite ingredients and remaining probability results
+## The finite moment ingredients
 
 - `Fintype.card_even_words_without_singleton` in `TNLean/Algebra/NoSingletonWords.lean` proves the bound $\ell^p p^{2p}$ for words of length $2p$ with no singleton letter, by the finite-fiber count and factorization described above. It is a counting theorem only.
 - `Fintype.sum_pow_eq_sum_ordered_words` in QICLean's `Algebra/FiniteSumPowers.lean` gives the ordered expansion without any commutativity assumption.
 - QICLean's `Probability/IndependentCovariance.lean` supplies product-measure integration identities. Mathlib supplies `MeasureTheory.integral_pi`, finite product probability measures, independence, and scalar Markov bounds.
 - `Fintype.sum_ordered_word_eq_zero_of_singleton` in `TNLean/Algebra/SingletonWordCancellation.lean` proves singleton cancellation for finite independent uniform assignments into any noncommutative semiring, allowing position-dependent factors. It uses `Equiv.funSplitAt`, `Equiv.sum_comp` and `Fintype.sum_prod_type` to isolate the unique sample coordinate. The existing ordered product `MultilinearMap.mkPiAlgebraFin`, together with `MultilinearMap.map_update_sum` and `MultilinearMap.map_update_zero`, then gives cancellation. There is no new product decomposition and no conditional-expectation hypothesis.
 - `Matrix.average_norm_average_pow_le_of_centered` proves the complete finite uniform moment estimate with coefficient $N$. The alternating expansion uses `MultilinearMap.map_sum` and `List.ofFn_fin_repeat`; the per-word bound uses `Matrix.PosSemidef.norm_trace_mul_le` at the identity, `List.nnnorm_prod_le` and `List.prod_le_pow_length`; the spectral comparison uses `CFC.norm_pow`, `Matrix.l2_opNorm_conjTranspose_mul_self` and `Matrix.PosSemidef.l2_opNorm_le_trace_re`. These steps are derived inside the proof. No Hermiticity assumption is imposed on the samples.
-- `Matrix.finite_uniform_tail_bound_of_centered` in `TNLean/Algebra/FiniteMatrixSampling.lean` proves the finite Markov consequence: the fraction of assignments with sample-mean norm at least $\eta$ is at most $N(p^2R^2/(\ell\eta^2))^p$. The same module proves existence when this bound is less than one, and gives the sufficient conditions $N<4^p$ and $\ell\eta^2\ge4p^2R^2$. For an uncentered family of norm at most $R$, it derives the norm bound $2R$ after subtracting the uniform mean and proves approximation of that mean under $\ell\eta^2\ge16p^2R^2$. The corresponding general probability theorem, sharp matrix Bernstein inequality and source sampler remain separate tasks.
-- An alternative is to sample $(C^mP_I+C^mP_I^*)/2$, whose expectation is the Hermitian ideal power. Then no dilation is needed. The sampler is changed explicitly, and the adjoint words at most double the number of product terms; their bond estimates must be proved. This does not establish the original sampler's norm estimate.
+- `Matrix.finite_uniform_tail_bound_of_centered` in `TNLean/Algebra/FiniteMatrixSampling.lean` proves the finite Markov consequence: the fraction of assignments with sample-mean norm at least $\eta$ is at most $N(p^2R^2/(\ell\eta^2))^p$. The same module proves existence when this bound is less than one, and gives the sufficient conditions $N<4^p$ and $\ell\eta^2\ge4p^2R^2$. For an uncentered family of norm at most $R$, it derives the norm bound $2R$ after subtracting the uniform mean and proves approximation of that mean under $\ell\eta^2\ge16p^2R^2$. The general-probability moment extension is separate from these finite statements. The sharp Bernstein theorem is proved by the Lieb argument; the source sampler remains a further task.
 
-The pinned QICLean trace-power Lieb concavity statements do not directly provide concavity of $B\mapsto\operatorname{tr}\exp(H+\log B)$. No Golden–Thompson or matrix Bernstein theorem was found in the pinned libraries. The finite moment proof avoids both results; the independent relative-entropy derivation below now supplies full trace-log-exponential concavity.
+The finite moment proof is independent of the Lieb trace-log-exponential argument used for the sharp Bernstein theorem.
 
 ## The ground-energy dependence remains essential
 
@@ -69,100 +110,4 @@ $$
 
 The moment method therefore retains the energy-dependent polynomial exponent of the publication. It does not prove a uniform polynomial sample count for extensive ground energy. The commuting counterexample in the note rules out that inference. The unrestricted construction in issues #9822–#9823 requires a different approximate projection; the published supplement points to Huang's construction, arXiv:1406.6355, for this purpose.
 
-The sharp matrix Bernstein inequality stated in #9822 remains an outstanding task in its own right. The finite uniform moment estimate and its Markov corollary give sample existence under explicit norm and cardinality bounds; they do not complete that sharp concentration theorem or construct the source-specific sampled filter. Both the stated concentration theorem and a correct sampler with the required ground-energy dependence remain outstanding under #9822–#9823.
-
-
-## A possible route to the sharp i.i.d. theorem
-
-For the explicitly identically distributed formulation in #9822, full Lieb log-MGF concavity may be unnecessary. Let $Y_1,\ldots,Y_\ell$ be independent copies of a centered Hermitian $N\times N$ matrix $Y$, with $\|Y\|\le R$ almost surely. For $\theta\ge0$, Golden–Thompson and conditioning give
-
-$$
-\mathbb E\operatorname{tr}\exp\left(\theta\sum_jY_j\right)
-\le N\left\|\mathbb E\exp(\theta Y)\right\|^\ell.
-$$
-
-For $R>0$, the scalar exponential majorant, applied by functional calculus, gives
-
-$$
-\exp(\theta Y)\le I+\theta Y+g_R(\theta)Y^2,
-\qquad
-g_R(\theta)=\frac{e^{\theta R}-1-\theta R}{R^2}.
-$$
-
-After taking expectations, centering removes the linear term. Consequently
-
-$$
-\left\|\mathbb E\exp(\theta Y)\right\|
-\le\exp\left(g_R(\theta)\left\|\mathbb EY^2\right\|\right).
-$$
-
-The case $R=0$ is separate and immediate. The resulting scalar optimization is the usual Bernstein argument. For non-Hermitian square samples, a Hermitian dilation has dimension $2N$ and variance norm $\max\{\|\mathbb EYY^*\|,\|\mathbb EY^*Y\|\}$. This requires the dilation identities to be proved. Golden–Thompson, the matrix exponential majorant, the required probability argument and the final sharp tail bound remain unproved here.
-
-For nonidentically distributed samples, the same conditioning argument controls a sum of individual variance norms. It does not by itself give the sharper norm of the summed variances. This is the distinction for which a Lieb-based argument may be needed.
-
-## Location of the general probability development
-
-A general matrix probability theorem belongs in QICLean. Before it uses these finite ingredients, move `NoSingletonWords.lean`, `SingletonWordCancellation.lean`, `FiniteMatrixMoments.lean` and `FiniteMatrixSampling.lean` together to QICLean, with the first two under `Algebra/` and the latter two under `Analysis/`. Their proofs depend only on Mathlib and existing QICLean results. QICLean must not import the TNLean versions. The current placement permits verification against the pinned companion revision while keeping the later order of dependencies explicit.
-
-
-## The proved Lieb concavity alternative
-
-A direct derivation is now formalized in `TNLean/Algebra/TraceExpLogConcavity.lean`. The theorem `Matrix.concaveOn_trace_exp_add_log` proves concavity of $A\mapsto\operatorname{Re}\operatorname{tr}\exp(H+\log A)$ on the positive-definite cone for every Hermitian $H$. The proof follows [Tropp, *From joint convexity of quantum relative entropy to a concavity theorem of Lieb*](https://tropp.caltech.edu/papers/Tro12-Joint-Convexity.pdf), Fact 3, Lemma 6 and Theorem 1. It derives unnormalized Klein, the attained trace variational formula and the concavity inequality from QICLean's existing positive-definite relative-entropy joint convexity. No trace normalization or new analytic assumption is imposed.
-
-This provides the concavity needed for the trace-exponential Jensen argument in matrix concentration. Golden–Thompson itself is still unproved here, but it need not be assumed for this route. The finite i.i.d. Bernstein theorem with the variance norm in #9822 remains the next target. The scalar exponential majorant, finite Jensen iteration and one-sided Hermitian tail optimization are now proved. The non-Hermitian dilation is now proved below. The general probability formulation remains to be proved.
-
-The alternative elementary proof in [Oliveira, arXiv:1004.3821, Section 5](https://arxiv.org/abs/1004.3821) requires a dyadic trace-power comparison and a Lie-product limit; neither was found as a theorem in the pinned libraries. The pinching proof in [Sutter, Berta and Tomamichel, arXiv:1604.03023, Section 2.2](https://arxiv.org/abs/1604.03023) requires spectral pinching and its polynomial tensor-power count. The relative-entropy route uses the existing joint convexity result directly.
-
-`TraceExpLogConcavity.lean` imports only Mathlib and QICLean, so it can be transferred independently to QICLean's `Analysis/` before the probability development. It does not depend on the four finite word, moment and sampling modules above.
-
-
-## The proved finite one-sided Bernstein inequality
-
-`TraceExpFiniteJensen.lean` proves the finite uniform specialization of [Tropp, Corollary 3.3 and Lemma 3.4](https://tropp.caltech.edu/papers/Tro11-User-Friendly-preprint.pdf). Its induction allows an arbitrary fixed Hermitian shift. No independence or conditional-expectation identity is supplied as an extra hypothesis: the sample space is the full finite product, and the induction explicitly sums one coordinate at a time.
-
-`BernsteinExponentialBound.lean` proves the scalar estimate
-
-$$
-e^x\le1+x+\frac{x^2}{2(1-a/3)}\qquad(|x|\le a<3)
-$$
-
-from $2\,3^k\le(k+2)!$ and a geometric series. Functional calculus gives the matrix majorant. For a centered finite uniform Hermitian family $Z$ with $\|Z\|\le R$, averaging and the scalar inequality $\log x\le x-1$ give
-
-$$
-\log\mathbb E e^{\theta Z}
-\le\frac{\theta^2\|\mathbb E Z^2\|}{2(1-\theta R/3)}I,
-\qquad\theta\ge0,\quad\theta R<3.
-$$
-
-`FiniteHermitianBernstein.lean` combines this with Jensen iteration and finite exponential Markov. Its theorem `Matrix.finite_uniform_hermitian_bernstein_of_variance_le` proves, for $m$ independent uniform samples and every upper variance bound $\sigma^2\ge\|\mathbb E Z^2\|$,
-
-$$
-\Pr\left(\lambda_{\max}\left(\sum_{j=1}^mZ_j\right)\ge\tau\right)
-\le d\exp\left(-\frac{\tau^2}{2m\sigma^2+2R\tau/3}\right),\qquad\tau\ge0.
-$$
-
-The proof includes $m=0$, $\tau=0$ and $\sigma^2=0$. When $m\sigma^2>0$, it chooses $\theta=\tau/(m\sigma^2+R\tau/3)$. When $m\sigma^2=0<R\tau$, it chooses $\theta=3/(2R)$; thus no unproved zero-variance implication is needed. At a zero denominator, Lean's inverse-zero convention gives the immediate bound by $d$. The finite uniform scope and extension plan are recorded in [the Bernstein scope note](../paper-gaps/finite_uniform_matrix_bernstein.tex).
-
-This is the one-sided Hermitian specialization of Tropp's Theorem 6.1(ii), under a two-sided norm bound. Hermitian dilation now supplies the finite uniform non-Hermitian norm bound below. General probability spaces remain outside the proved theorem.
-
-All three new modules depend only on the earlier trace-log-exponential concavity and existing QICLean/Mathlib results. They should move to QICLean's `Analysis/` together before its probability theorem is added. They do not depend on TNLean's finite word or moment construction.
-
-An independent mathematical review of `TraceExpLogConcavity.lean` confirmed that its relative entropy is unnormalized, the variational maximum is attained at an actual positive-definite matrix, and the joint-convexity theorem has no trace-one premise. The proof is consistent for the empty matrix index set. These checks establish that the full source concavity theorem is proved, rather than assumed.
-
-
-## The proved finite uniform matrix Bernstein inequality
-
-`HermitianDilation.lean` proves the rectangular dilation identities from [Tropp, equations (2.12)–(2.13) and Remark 3.11](https://tropp.caltech.edu/papers/Tro11-User-Friendly-preprint.pdf). The norm upper bound uses positive-semidefinite domination of the two Gram blocks. Norm-one coordinate inclusions give the reverse bound. Conjugation by $\operatorname{diag}(I,-I)$ makes the spectrum symmetric, proving that the positive norm endpoint lies in the spectrum. The same block domination bounds the averaged dilation variance by the maximum of the two averaged Gram-matrix norms. No exact block-norm formula is assumed.
-
-`FiniteMatrixBernstein.lean` then proves the rectangular sum and sample-mean bounds. Its square-matrix theorem `Matrix.finite_uniform_matrix_average_sub_mean_bernstein` centers a given family at its actual uniform mean $\mu$ and derives
-
-$$
-\Pr\left(\left\|\frac1\ell\sum_{j=1}^{\ell}X_j-\mu\right\|\ge t\right)
-\le2d\exp\left(-\frac{\ell t^2}{2\sigma^2+2Rt/3}\right),
-$$
-
-where $\ell\ge1$, $t\ge0$, $\|X-\mu\|\le R$ and
-$\sigma^2=\max\{\|\mathbb E(X-\mu)(X-\mu)^*\|,\|\mathbb E(X-\mu)^*(X-\mu)\|\}$.
-The sample space is the full finite product, with uniform measure expressed by cardinality ratios. The centering, variance estimate, positive spectral endpoint and final normalization are all derived. The two rectangular dimensions give $d_1+d_2$; the square corollary gives exactly $2d$.
-
-This completes the finite uniform specialization of LVV Theorem 2.13. Its extension to general matrix-valued random variables remains required for the unrestricted source statement. The new generic modules should transfer to QICLean together with `TraceExpFiniteJensen.lean`, `BernsteinExponentialBound.lean`, `FiniteHermitianBernstein.lean` and `TraceExpLogConcavity.lean` before the general probability theorem is developed. The source-specific sampled filter, its word-frequency bound, and the corrected ground-energy dependence remain independent outstanding tasks.
+The sharp matrix Bernstein part of the source theorem is now proved. The norm approximation of a sampled operator must still be combined with the simultaneous word-frequency bound in LVV Corollary 2.14 and with the correct ground-energy dependence. The concentration theorem does not itself construct that sampled operator. The source-specific power sampler remains a separate obligation under #9822–#9823. The polynomial successive-family construction is proved separately using the physical Gaussian filters of Huang; it does not use or validate the unrestricted power-sampling claim. Its exact precision and quantitative scope are recorded in `2026-10-28_lvv_successive_construction.md`.

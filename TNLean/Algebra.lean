@@ -88,9 +88,12 @@ import TNLean.Algebra.GeneralizedCocycle
 import TNLean.Algebra.GeneralizedCocycleInversion
 import TNLean.Algebra.GraphDistanceTransport
 import TNLean.Algebra.HermitianDilation
+import TNLean.Algebra.HermitianDilationIntegral
+import TNLean.Algebra.HermitianMatrixBernstein
 import TNLean.Algebra.HypercubePhasePotential
 import TNLean.Algebra.IdempotentRankContinuity
 import TNLean.Algebra.IdempotentTracePerturbation
+import TNLean.Algebra.IndependentTraceExponential
 import TNLean.Algebra.InjectivePositiveMapRank
 import TNLean.Algebra.InjectiveRangeProjectorContinuity
 import TNLean.Algebra.IntegerHasseGraph
@@ -112,6 +115,7 @@ import TNLean.Algebra.LSymbolDomainWall
 import TNLean.Algebra.LSymbolFreeAction
 import TNLean.Algebra.ListOfFn
 import TNLean.Algebra.ListProduct
+import TNLean.Algebra.MatrixBernstein
 import TNLean.Algebra.MatrixBilinearCoordinates
 import TNLean.Algebra.MatrixCoordinateInclusion
 import TNLean.Algebra.MatrixCyclicPathSum
@@ -220,6 +224,7 @@ import TNLean.Algebra.ThreeOperatorPerturbation
 import TNLean.Algebra.ToEuclideanCLM
 import TNLean.Algebra.ToEuclideanLinApply
 import TNLean.Algebra.TraceExpFiniteJensen
+import TNLean.Algebra.TraceExpIntegralBounds
 import TNLean.Algebra.TraceExpLogConcavity
 import TNLean.Algebra.TraceInvariantSubmodule
 import TNLean.Algebra.TranslatedCharacterOrthogonality

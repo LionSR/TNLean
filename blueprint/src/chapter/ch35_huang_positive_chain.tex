@@ -9,11 +9,13 @@ chain model. The following identification preserves its operator exactly.
     \label{thm:huang_adjacent_supports}
     \lean{TNLean.MPS.AreaLaw.nearestNeighborChainSupport_injective,
         TNLean.MPS.AreaLaw.card_nearestNeighborChainSupport}
+    \leanok
     The map $i\mapsto\{i,i+1\}$ from the original edge indices
     $0\le i<L-1$ into the nonempty range-one supports is injective. Each such
     support has cardinality two.
 \end{theorem}
 \begin{proof}
+    \leanok
     The least site of the pair is its edge index. Its two consecutive sites are
     distinct and both lie on the chain.
 \end{proof}
@@ -21,6 +23,7 @@ chain model. The following identification preserves its operator exactly.
 \begin{definition}[Embedding the positive adjacent-pair interaction]
     \label{def:huang_positive_chain_hamiltonian}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.ofNearestNeighborPositive}
+    \leanok
     \uses{thm:huang_adjacent_supports}
     Let $h_i$ be supported on sites $i,i+1$, with $0\le h_i\le I$.
     For each nonempty range-one support $X$, assign the term
@@ -41,6 +44,7 @@ chain model. The following identification preserves its operator exactly.
         TNLean.MPS.AreaLaw.ChainHamiltonian.ofNearestNeighborPositive_term_eq_zero_of_card_one,
         TNLean.MPS.AreaLaw.ChainHamiltonian.ofNearestNeighborPositive_term_nonneg,
         TNLean.MPS.AreaLaw.ChainHamiltonian.ofNearestNeighborPositive_term_le_one}
+    \leanok
     \uses{def:huang_positive_chain_hamiltonian}
     The term on each designated adjacent pair is the original $h_i$; all
     singleton terms vanish. Every term is supported on its assigned support,
@@ -48,6 +52,7 @@ chain model. The following identification preserves its operator exactly.
     $\|\widetilde h_X\|\le1$.
 \end{theorem}
 \begin{proof}
+    \leanok
     Injectivity makes the assignment well-defined. A zero term has all the
     stated properties. An assigned term inherits its support and positive
     contraction inequalities; these imply Hermiticity and the norm bound.
@@ -58,12 +63,14 @@ chain model. The following identification preserves its operator exactly.
 \begin{theorem}[Equality of the Hamiltonian operators]
     \label{thm:huang_positive_chain_operator}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.ofNearestNeighborPositive_operator}
+    \leanok
     \uses{thm:huang_positive_chain_terms}
     The constructed finite-range operator is exactly
     $\widetilde H=\sum_X\widetilde h_X=\sum_{i=0}^{L-2}h_i$.
     This includes chains with zero or one site and local dimension zero.
 \end{theorem}
 \begin{proof}
+    \leanok
     Restrict the support sum to the image of the injective edge-support map;
     every term outside this image is zero. Reindexing the remaining finite sum
     by the original edges gives the asserted identity.
