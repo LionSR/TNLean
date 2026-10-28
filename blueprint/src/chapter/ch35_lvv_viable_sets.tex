@@ -961,3 +961,78 @@ whose range is the span of the columns of $M_i(\psi)$.
 	and in each marginal exponential integral, then apply the product-space
 	theorem.
 \end{proof}
+
+\begin{theorem}[Trace-exponential estimate from an upper variance bound]
+	\label{thm:independent_matrix_trace_exp_variance_bound}
+	\lean{Matrix.integral_trace_exp_sum_le_bernstein_of_variance_le}
+	\leanok
+	\uses{thm:bounded_independent_matrix_trace_exp,
+		thm:bounded_matrix_integral_log_mgf_bernstein}
+	Let $X_1,\ldots,X_m$ be independent centered Hermitian random matrices on a
+	probability space, with $\|X_j\|\le R$ almost everywhere and
+	$\|\mathbb EX_j^2\|\le\sigma^2$ for every $j$.
+	For $\theta\ge0$ and $\theta R<3$,
+	\begin{align}
+		\mathbb E\operatorname{tr}e^{\theta\sum_jX_j}
+		\le d\exp\left(\frac{m\theta^2\sigma^2}{2(1-\theta R/3)}\right).
+		\label{eq:independent_matrix_trace_exp_variance_bound}
+	\end{align}
+\end{theorem}
+\begin{proof}\leanok
+	\uses{thm:bounded_independent_matrix_trace_exp,
+		thm:bounded_matrix_integral_log_mgf_bernstein}
+	The independent trace-exponential inequality bounds the left side by the
+	trace exponential of the sum of the logarithmic moment generating
+	functions. Bound each summand by
+	$\theta^2\sigma^2I/(2(1-\theta R/3))$ and use monotonicity of the trace
+	exponential.
+\end{proof}
+
+\begin{theorem}[Exponential Markov bound for the upper spectral event]
+	\label{thm:independent_matrix_spectral_parameter_bound}
+	\lean{Matrix.probability_spectral_tail_le_bernstein_parameter}
+	\leanok
+	\uses{thm:independent_matrix_trace_exp_variance_bound}
+	Under the preceding hypotheses, for every real $\tau$,
+	\begin{align}
+		\Pr\left(\lambda_{\max}\left(\sum_jX_j\right)\ge\tau\right)
+		\le d\exp\left(-\theta\tau+
+		\frac{m\theta^2\sigma^2}{2(1-\theta R/3)}\right).
+		\label{eq:independent_matrix_spectral_parameter_bound}
+	\end{align}
+\end{theorem}
+\begin{proof}\leanok
+	\uses{thm:independent_matrix_trace_exp_variance_bound}
+	The spectral event implies
+	$e^{\theta\tau}\le\operatorname{tr}e^{\theta\sum_jX_j}$ almost surely.
+	Apply scalar exponential Markov to this actual trace-exponential random
+	variable. Its integrability and nonnegativity have been established.
+\end{proof}
+
+\begin{theorem}[One-sided Hermitian Bernstein with an upper variance bound]
+	\label{thm:independent_hermitian_bernstein_variance_bound}
+	\lean{Matrix.probability_hermitian_bernstein_of_variance_le}
+	\leanok
+	\uses{thm:independent_matrix_spectral_parameter_bound}
+	Let $X_1,\ldots,X_m$ be independent centered Hermitian random matrices on a
+	probability space. Suppose $\|X_j\|\le R$ almost everywhere and
+	$\|\mathbb EX_j^2\|\le\sigma^2$, where $R,\sigma^2\ge0$.
+	For $\tau\ge0$,
+	\begin{align}
+		\Pr\left(\lambda_{\max}\left(\sum_jX_j\right)\ge\tau\right)
+		\le d\exp\left(-\frac{\tau^2}{2m\sigma^2+2R\tau/3}\right).
+		\label{eq:independent_hermitian_bernstein_variance_bound}
+	\end{align}
+	This is the upper-variance-bound consequence of the argument in
+	\cite[Theorem~6.1(ii)]{Tropp2012TailBounds}. It uses $m\sigma^2$ in place
+	of the sharper norm of the sum of variances for unrelated distributions.
+\end{theorem}
+\begin{proof}\leanok
+	\uses{thm:independent_matrix_spectral_parameter_bound}
+	If $m\sigma^2>0$, take
+	$\theta=\tau/(m\sigma^2+R\tau/3)$.
+	If $m\sigma^2=0<R\tau$, take $\theta=3/(2R)$.
+	In the remaining zero-denominator case, take $\theta=0$ and use the
+	inverse-zero convention. Thus zero variance, threshold and sample count
+	are included without an additional hypothesis.
+\end{proof}

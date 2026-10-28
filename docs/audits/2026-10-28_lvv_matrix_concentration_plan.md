@@ -191,3 +191,17 @@ The independent-coordinate iteration and joint-law transfer are now proved in th
 The theorem `Matrix.integral_trace_exp_sum_le_of_iIndepFun` starts from actual `iIndepFun` independence on an arbitrary probability space. Mathlib's `iIndepFun.map_fun_eq_pi_map` identifies the joint distribution with the product of the actual marginal distributions. `integral_map` then transfers the joint trace-exponential integral and every marginal exponential integral. No common marginal distribution or supplied joint expectation identity is assumed. The matrix spaces carry the canonical Borel sigma algebra of their finite-dimensional norm topology.
 
 This proves the bounded form of [Tropp, Lemma 3.4](https://tropp.caltech.edu/papers/Tro11-User-Friendly-preprint.pdf), which is the form required for Bernstein. The source's unrestricted integrable moment-generating statement remains outside the present scope. The sharp general-probability tail still requires scalar Markov and optimization followed by the integral Hermitian dilation and iid centering composition. The finite uniform source-shaped bound is already proved separately.
+
+
+## General-probability one-sided Hermitian Bernstein
+
+`HermitianMatrixBernstein.lean` derives the trace-exponential estimate, scalar exponential Markov bound and optimized one-sided spectral tail on arbitrary probability spaces. The variables are actually independent, centered and Hermitian almost everywhere, with a common norm bound $R$. If $\|\mathbb EX_j^2\|\le\sigma^2$ for every sample, the conclusion is
+
+$$
+\Pr\left(\lambda_{\max}\left(\sum_{j=1}^mX_j\right)\ge\tau\right)
+\le d\exp\left(-\frac{\tau^2}{2m\sigma^2+2R\tau/3}\right).
+$$
+
+All integrability and nonnegativity used by Markov are derived. The event comparison is almost everywhere, so Hermiticity need only hold almost surely. The scalar parameter is chosen explicitly, including zero variance, threshold and sample count. No concentration or logarithmic moment generating function estimate is supplied as an assumption.
+
+This is an upper-variance-bound consequence of [Tropp, Theorem 6.1(ii)](https://tropp.caltech.edu/papers/Tro11-User-Friendly-preprint.pdf). It uses $m\sigma^2$, rather than the sharper norm of the sum of the individual variance matrices for unrelated laws. In the iid case the actual common variance gives the required denominator. The final complex-matrix theorem must derive this variance cap from the two actual centered Gram-matrix expectations and identical distribution, and compose the integral dilation and centering identities. Those are the remaining steps for the general-probability LVV Theorem 2.13.

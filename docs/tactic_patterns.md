@@ -9643,3 +9643,17 @@ there is no need for a new tactic.
 - **Notes:** There are two occurrences in one module. Simplification uses
   `cast_eq` for the constant matrix family and `Fin.zero_succAbove` for the
   tail marginal distributions.
+
+### Spectral lower bound for a trace exponential — candidate (2026-10-28)
+
+- **Pattern:** Choose the eigenvalue represented by a real spectral value,
+  express the trace exponential as a sum of positive scalar exponentials,
+  and bound it below by that summand.
+- **Seen:** The private spectral Markov helpers in
+  `Algebra/FiniteHermitianBernstein.lean` and
+  `Algebra/HermitianMatrixBernstein.lean`.
+- **Abstraction:** If a third consumer needs the statement, promote the common
+  Hermitian spectral estimate and refactor both helpers. The current proofs
+  reuse `spectrum_real_eq_range_eigenvalues` and `trace_cfc_eq_sum_re`.
+- **Notes:** Two occurrences across two modules, below the three-occurrence
+  promotion threshold. No specialized probability tactic is needed.

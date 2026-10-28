@@ -88,6 +88,7 @@ import TNLean.Algebra.GeneralizedCocycle
 import TNLean.Algebra.GeneralizedCocycleInversion
 import TNLean.Algebra.GraphDistanceTransport
 import TNLean.Algebra.HermitianDilation
+import TNLean.Algebra.HermitianMatrixBernstein
 import TNLean.Algebra.HypercubePhasePotential
 import TNLean.Algebra.IdempotentRankContinuity
 import TNLean.Algebra.IdempotentTracePerturbation
