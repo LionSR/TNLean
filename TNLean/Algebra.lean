@@ -69,6 +69,7 @@ import TNLean.Algebra.FiniteGroupCommutant
 import TNLean.Algebra.FiniteGroupUnitaryAverage
 import TNLean.Algebra.FiniteHermitianBernstein
 import TNLean.Algebra.FiniteIndicatorSum
+import TNLean.Algebra.FiniteMatrixBernstein
 import TNLean.Algebra.FiniteMatrixMoments
 import TNLean.Algebra.FiniteMatrixSampling
 import TNLean.Algebra.FinsetEnumeration
@@ -86,6 +87,7 @@ import TNLean.Algebra.GeneralizeDecide
 import TNLean.Algebra.GeneralizedCocycle
 import TNLean.Algebra.GeneralizedCocycleInversion
 import TNLean.Algebra.GraphDistanceTransport
+import TNLean.Algebra.HermitianDilation
 import TNLean.Algebra.HypercubePhasePotential
 import TNLean.Algebra.IdempotentRankContinuity
 import TNLean.Algebra.IdempotentTracePerturbation

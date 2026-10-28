@@ -109,7 +109,7 @@ A general matrix probability theorem belongs in QICLean. Before it uses these fi
 
 A direct derivation is now formalized in `TNLean/Algebra/TraceExpLogConcavity.lean`. The theorem `Matrix.concaveOn_trace_exp_add_log` proves concavity of $A\mapsto\operatorname{Re}\operatorname{tr}\exp(H+\log A)$ on the positive-definite cone for every Hermitian $H$. The proof follows [Tropp, *From joint convexity of quantum relative entropy to a concavity theorem of Lieb*](https://tropp.caltech.edu/papers/Tro12-Joint-Convexity.pdf), Fact 3, Lemma 6 and Theorem 1. It derives unnormalized Klein, the attained trace variational formula and the concavity inequality from QICLean's existing positive-definite relative-entropy joint convexity. No trace normalization or new analytic assumption is imposed.
 
-This provides the concavity needed for the trace-exponential Jensen argument in matrix concentration. Golden–Thompson itself is still unproved here, but it need not be assumed for this route. The finite i.i.d. Bernstein theorem with the variance norm in #9822 remains the next target. The scalar exponential majorant, finite Jensen iteration and one-sided Hermitian tail optimization are now proved. The non-Hermitian dilation and general probability formulation remain to be proved.
+This provides the concavity needed for the trace-exponential Jensen argument in matrix concentration. Golden–Thompson itself is still unproved here, but it need not be assumed for this route. The finite i.i.d. Bernstein theorem with the variance norm in #9822 remains the next target. The scalar exponential majorant, finite Jensen iteration and one-sided Hermitian tail optimization are now proved. The non-Hermitian dilation is now proved below. The general probability formulation remains to be proved.
 
 The alternative elementary proof in [Oliveira, arXiv:1004.3821, Section 5](https://arxiv.org/abs/1004.3821) requires a dyadic trace-power comparison and a Lie-product limit; neither was found as a theorem in the pinned libraries. The pinching proof in [Sutter, Berta and Tomamichel, arXiv:1604.03023, Section 2.2](https://arxiv.org/abs/1604.03023) requires spectral pinching and its polynomial tensor-power count. The relative-entropy route uses the existing joint convexity result directly.
 
@@ -143,8 +143,26 @@ $$
 
 The proof includes $m=0$, $\tau=0$ and $\sigma^2=0$. When $m\sigma^2>0$, it chooses $\theta=\tau/(m\sigma^2+R\tau/3)$. When $m\sigma^2=0<R\tau$, it chooses $\theta=3/(2R)$; thus no unproved zero-variance implication is needed. At a zero denominator, Lean's inverse-zero convention gives the immediate bound by $d$. The finite uniform scope and extension plan are recorded in [the Bernstein scope note](../paper-gaps/finite_uniform_matrix_bernstein.tex).
 
-This is the one-sided Hermitian specialization of Tropp's Theorem 6.1(ii), under a two-sided norm bound. It does not complete LVV Theorem 2.13, which concerns arbitrary complex matrices and general probability spaces. The next finite step is Hermitian dilation with a one-sided upper spectral tail: this produces the required factor $2d$, while its squared diagonal blocks yield the upper variance bound $\max\{\|\mathbb E YY^*\|,\|\mathbb E Y^*Y\|\}$. A two-sided union after dilation would introduce an unnecessary factor two.
+This is the one-sided Hermitian specialization of Tropp's Theorem 6.1(ii), under a two-sided norm bound. Hermitian dilation now supplies the finite uniform non-Hermitian norm bound below. General probability spaces remain outside the proved theorem.
 
 All three new modules depend only on the earlier trace-log-exponential concavity and existing QICLean/Mathlib results. They should move to QICLean's `Analysis/` together before its probability theorem is added. They do not depend on TNLean's finite word or moment construction.
 
 An independent mathematical review of `TraceExpLogConcavity.lean` confirmed that its relative entropy is unnormalized, the variational maximum is attained at an actual positive-definite matrix, and the joint-convexity theorem has no trace-one premise. The proof is consistent for the empty matrix index set. These checks establish that the full source concavity theorem is proved, rather than assumed.
+
+
+## The proved finite uniform matrix Bernstein inequality
+
+`HermitianDilation.lean` proves the rectangular dilation identities from [Tropp, equations (2.12)–(2.13) and Remark 3.11](https://tropp.caltech.edu/papers/Tro11-User-Friendly-preprint.pdf). The norm upper bound uses positive-semidefinite domination of the two Gram blocks. Norm-one coordinate inclusions give the reverse bound. Conjugation by $\operatorname{diag}(I,-I)$ makes the spectrum symmetric, proving that the positive norm endpoint lies in the spectrum. The same block domination bounds the averaged dilation variance by the maximum of the two averaged Gram-matrix norms. No exact block-norm formula is assumed.
+
+`FiniteMatrixBernstein.lean` then proves the rectangular sum and sample-mean bounds. Its square-matrix theorem `Matrix.finite_uniform_matrix_average_sub_mean_bernstein` centers a given family at its actual uniform mean $\mu$ and derives
+
+$$
+\Pr\left(\left\|\frac1\ell\sum_{j=1}^{\ell}X_j-\mu\right\|\ge t\right)
+\le2d\exp\left(-\frac{\ell t^2}{2\sigma^2+2Rt/3}\right),
+$$
+
+where $\ell\ge1$, $t\ge0$, $\|X-\mu\|\le R$ and
+$\sigma^2=\max\{\|\mathbb E(X-\mu)(X-\mu)^*\|,\|\mathbb E(X-\mu)^*(X-\mu)\|\}$.
+The sample space is the full finite product, with uniform measure expressed by cardinality ratios. The centering, variance estimate, positive spectral endpoint and final normalization are all derived. The two rectangular dimensions give $d_1+d_2$; the square corollary gives exactly $2d$.
+
+This completes the finite uniform specialization of LVV Theorem 2.13. Its extension to general matrix-valued random variables remains required for the unrestricted source statement. The new generic modules should transfer to QICLean together with `TraceExpFiniteJensen.lean`, `BernsteinExponentialBound.lean`, `FiniteHermitianBernstein.lean` and `TraceExpLogConcavity.lean` before the general probability theorem is developed. The source-specific sampled filter, its word-frequency bound, and the corrected ground-energy dependence remain independent outstanding tasks.

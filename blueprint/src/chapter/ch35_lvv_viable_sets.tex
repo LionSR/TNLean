@@ -750,3 +750,85 @@ whose range is the span of the columns of $M_i(\psi)$.
 	If $m\sigma^2=0<R\tau$, take $\theta=3/(2R)$.
 	The zero-denominator case follows by bounding a probability by one.
 \end{proof}
+
+\begin{lemma}[Hermitian dilation and variance domination]
+	\label{lem:matrix_hermitian_dilation}
+	\lean{Matrix.hermitianDilation,
+		Matrix.isHermitian_hermitianDilation,
+		Matrix.hermitianDilation_sq,
+		Matrix.norm_hermitianDilation,
+		Matrix.norm_mem_spectrum_hermitianDilation,
+		Matrix.hermitianDilation_sum,
+		Matrix.hermitianDilation_real_smul,
+		Matrix.norm_average_hermitianDilation_sq_le}
+	\leanok
+	For a complex $d_1\times d_2$ matrix $Y$, define
+	\begin{align}
+		\mathcal D(Y)=\begin{pmatrix}0&Y\\Y^*&0\end{pmatrix}.
+		\label{eq:matrix_hermitian_dilation}
+	\end{align}
+	This matrix is Hermitian, has norm $\|Y\|$, and has $\|Y\|$ in its spectrum.
+	The dilation is real-linear and
+	$\mathcal D(Y)^2=\operatorname{diag}(YY^*,Y^*Y)$.
+	For a finite uniform family,
+	\begin{align}
+		\|\mathbb E\mathcal D(Y)^2\|
+		\le\max\{\|\mathbb EYY^*\|,\|\mathbb EY^*Y\|\}.
+		\label{eq:matrix_hermitian_dilation_variance}
+	\end{align}
+	These are the dilation properties used in
+	\cite[equations~(2.12)--(2.13), Remark~3.11]{Tropp2012TailBounds}.
+\end{lemma}
+\begin{proof}\leanok
+	The square identity and positive-semidefinite block domination bound the
+	dilation norm from above. The two coordinate inclusions bound it from below.
+	Conjugation by $\operatorname{diag}(I,-I)$ changes the sign of the dilation,
+	so its spectrum is symmetric and contains its positive norm endpoint.
+	The same block domination gives the variance bound.
+\end{proof}
+
+\begin{theorem}[Finite uniform rectangular matrix Bernstein inequality]
+	\label{thm:finite_uniform_rectangular_bernstein}
+	\lean{Matrix.finite_uniform_rectangular_bernstein,
+		Matrix.finite_uniform_rectangular_average_bernstein}
+	\leanok
+	\uses{lem:matrix_hermitian_dilation,thm:finite_uniform_hermitian_bernstein}
+	Let $Y$ be a centered finite uniform family of complex $d_1\times d_2$
+	matrices, with $\|Y\|\le R$, and put
+	$\sigma^2=\max\{\|\mathbb EYY^*\|,\|\mathbb EY^*Y\|\}$.
+	For $\ell\ge1$ independent uniform samples and $t\ge0$,
+	\begin{align}
+		\Pr\left(\left\|\frac1\ell\sum_{j=1}^{\ell}Y_j\right\|\ge t\right)
+		\le(d_1+d_2)\exp\left(-\frac{\ell t^2}{2\sigma^2+2Rt/3}\right).
+		\label{eq:finite_uniform_rectangular_bernstein}
+	\end{align}
+	This is the finite uniform specialization of
+	\cite[Theorem~1.6]{Tropp2012TailBounds}.
+\end{theorem}
+\begin{proof}\leanok
+	\uses{lem:matrix_hermitian_dilation,thm:finite_uniform_hermitian_bernstein}
+	Apply the one-sided Hermitian theorem to the dilation and use its positive
+	spectral norm endpoint. The dilation dimension is $d_1+d_2$.
+	Normalize the sum by $\ell$.
+\end{proof}
+
+\begin{corollary}[Finite uniform concentration about the actual matrix mean]
+	\label{cor:finite_uniform_square_matrix_bernstein}
+	\lean{Matrix.finite_uniform_matrix_average_sub_mean_bernstein}
+	\leanok
+	\uses{thm:finite_uniform_rectangular_bernstein}
+	Let $X$ be a finite uniform family of complex $d\times d$ matrices and
+	$\mu=\mathbb EX$. If $\|X-\mu\|\le R$, set
+	$\sigma^2=\max\{\|\mathbb E(X-\mu)(X-\mu)^*\|,
+		\|\mathbb E(X-\mu)^*(X-\mu)\|\}$.
+	The bound in Theorem~\ref{thm:finite_uniform_rectangular_bernstein}
+	holds for the deviation of the sample mean from $\mu$, with factor $2d$.
+	This is the finite uniform specialization of LVV Theorem~2.13.
+	The assertion for general probability spaces remains unproved here.
+\end{corollary}
+\begin{proof}\leanok
+	\uses{thm:finite_uniform_rectangular_bernstein}
+	Subtract the actual uniform mean. The centered sum and its normalization
+	are computed explicitly, then the rectangular theorem is applied with
+	equal row and column dimensions.
+\end{proof}

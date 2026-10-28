@@ -9602,3 +9602,17 @@ there is no need for a new tactic.
 - **Notes:** The previously checked private lemma in
   `Algebra/TraceExpLogConcavity.lean` retains its independent proof. No new
   tactic or matrix-specific positivity lemma is needed.
+
+### Entries of a two-block matrix — candidate (2026-10-28)
+
+- **Pattern:** After matrix extensionality, split each sum-type coordinate and
+  simplify the corresponding block entry. Finite sums additionally use
+  `Matrix.sum_apply`.
+- **Seen:** The block-order comparison, dilation sum, real scalar action and
+  averaged Gram-block identification in `Algebra/HermitianDilation.lean`.
+- **Abstraction:** Continue using `Matrix.fromBlocks` and its existing algebraic
+  identities. If the entry pattern recurs in another new consumer, prefer a
+  finite-sum identity for `fromBlocks` before introducing a tactic.
+- **Notes:** The observed occurrences are confined to one module, below the
+  two-file promotion threshold. Rectangular zero products require
+  `Matrix.mul_zero` and `Matrix.zero_mul`, rather than their square-ring forms.
