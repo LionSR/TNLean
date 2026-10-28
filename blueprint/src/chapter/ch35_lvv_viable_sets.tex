@@ -526,3 +526,63 @@ whose range is the span of the columns of $M_i(\psi)$.
     Sum this inequality over $\sigma$, apply the preceding bounds, and
     divide by $|A|^\ell\ell^{2p}$.
 \end{proof}
+
+
+\begin{theorem}[Finite uniform tails and centered sample existence]
+    \label{thm:lvv_finite_uniform_matrix_tail}
+    \lean{Matrix.finite_uniform_tail_bound_of_centered,
+        Matrix.exists_average_norm_lt_of_centered,
+        Matrix.exists_average_norm_lt_of_sample_card}
+    \leanok
+    \uses{thm:lvv_finite_uniform_matrix_moment}
+    Under the hypotheses of Theorem~\ref{thm:lvv_finite_uniform_matrix_moment},
+    let $\eta>0$. The fraction of assignments $\sigma:B\to A$ for which
+    $\|\ell^{-1}\sum_bX_b(\sigma(b))\|\ge\eta$ is at most
+    \begin{align}
+        N\left(\frac{p^2R^2}{\ell\eta^2}\right)^p.
+        \label{eq:lvv_finite_uniform_matrix_tail}
+    \end{align}
+    If this bound is less than one, an assignment with norm below $\eta$
+    exists. In particular, it suffices that
+    \begin{align}
+        N          & <4^p,       \\
+        \ell\eta^2 & \ge4p^2R^2.
+        \label{eq:lvv_finite_uniform_centered_sample_count}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:lvv_finite_uniform_matrix_moment}
+    Every assignment in the exceptional set contributes at least $\eta^{2p}$
+    to the moment sum. Divide by the total number of assignments and
+    apply Theorem~\ref{thm:lvv_finite_uniform_matrix_moment}. If the resulting
+    fraction is less than one, the exceptional set is not the whole set.
+    Under~\eqref{eq:lvv_finite_uniform_centered_sample_count}, the bound is
+    at most $N4^{-p}<1$.
+\end{proof}
+
+\begin{theorem}[Approximating a finite matrix average by a sample]
+    \label{thm:lvv_finite_matrix_sample_mean}
+    \lean{Matrix.exists_average_sub_mean_norm_lt}
+    \leanok
+    \uses{thm:lvv_finite_uniform_matrix_tail}
+    Let $A,B$ be finite nonempty sets, with $|B|=\ell$, and let $N\ge1$.
+    Suppose that $Y:A\to M_N(\mathbb C)$ satisfies $\|Y(a)\|\le R$ for all
+    $a\in A$, where $R\ge0$. Put $\mu=|A|^{-1}\sum_aY(a)$.
+    If $\eta>0$ and an integer $p\ge1$ satisfies
+    \begin{align}
+        N          & <4^p,        \\
+        \ell\eta^2 & \ge16p^2R^2,
+        \label{eq:lvv_finite_uniform_sample_count}
+    \end{align}
+    there is an assignment $\sigma:B\to A$ for which
+    \begin{align}
+        \left\|\frac1\ell\sum_{b\in B}Y(\sigma(b))-\mu\right\|<\eta.
+        \label{eq:lvv_finite_matrix_sample_mean}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:lvv_finite_uniform_matrix_tail}
+    The triangle inequality gives $\|\mu\|\le R$. Thus $Y(a)-\mu$ is
+    centered and has norm at most $2R$. Apply
+    Theorem~\ref{thm:lvv_finite_uniform_matrix_tail} with $2R$ in place of $R$.
+\end{proof}
