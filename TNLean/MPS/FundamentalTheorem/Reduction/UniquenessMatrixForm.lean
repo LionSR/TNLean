@@ -10,20 +10,21 @@ import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessCommonBasis
 /-!
 # The matching and the comparison of two compressions in matrices
 
-Let `(σ, g)` and `(σ̃, g̃)` be reductions of the same tensor `B` onto two families of normal blocks
-of positive bond dimension, with flags `M_k` and `M̃_{k'}`. Write `G_{≤k}` for the matrix of the
-columns of `g⁻¹` at the slots of the positions before `k`, so that its column span is `M_k`, and
-likewise `G̃_{≤k'}`. Then (*The asymmetric fundamental theorem of matrix product states*, Remark 5.3
-and Corollary 6.4):
+Let `(σ, g)` and `(σ_tilde, g_tilde)` be reductions of the same tensor `B` onto two families of
+normal blocks of positive bond dimension, with flags `M_k` and `M_tilde_{k'}`. Write `G_{≤k}` for
+the matrix of the columns of `g⁻¹` at the slots of the positions before `k`, so that its column span
+is `M_k`, and likewise `G_tilde_{≤k'}`. Then (*The asymmetric fundamental theorem of matrix product
+states*, Remark 5.3 and Corollary 6.4):
 
-* `rank (G_{≤k} G̃_{≤k'}) = dim (M_k + M̃_{k'})`;
+* `rank (G_{≤k} G_tilde_{≤k'}) = dim (M_k + M_tilde_{k'})`;
 * the position `π(k)` matched with `k` is the least `k'` at which the column block of the position
-  `k` does not raise the rank of `(G_{≤k-1} G̃_{≤k'})`;
-* `M_k ∩ M̃_{k'}` consists of the vectors `G_{≤k} a` with `G_{≤k} a = G̃_{≤k'} a'` for some `a'`;
+  `k` does not raise the rank of `(G_{≤k-1} G_tilde_{≤k'})`;
+* `M_k ∩ M_tilde_{k'}` consists of the vectors `G_{≤k} a` with `G_{≤k} a = G_tilde_{≤k'} a'` for
+  some `a'`;
 * for the intertwiner `X` of *Two compressions with different flags* (blueprint
   `thm:asym_uniq_different_flags`) at the matched slots `b`, `b'` and any matrix `Y_U` whose columns
-  lie in `U = M_k ∩ M̃_{π(k)}`, `W̃_{b'} Y_U = X W_b Y_U`, and
-  `Ṽ_{b'} - V_b X⁻¹ = (G_{≤k-1} G̃_{≤π(k)-1}) R` for some matrix `R`.
+  lie in `U = M_k ∩ M_tilde_{π(k)}`, `W_tilde_{b'} Y_U = X W_b Y_U`, and
+  `V_tilde_{b'} - V_b X⁻¹ = (G_{≤k-1} G_tilde_{≤π(k)-1}) R` for some matrix `R`.
 
 ## Main definitions
 
@@ -33,7 +34,7 @@ and Corollary 6.4):
 
 * `MPSTensor.MultiBlockCompression.range_leadingCols`: the column span of `G_{≤k}` is `M_k`.
 * `MPSTensor.MultiBlockCompression.range_fromCols_leadingCols`,
-  `MPSTensor.MultiBlockCompression.rank_fromCols_leadingCols`: the rank of `(G_{≤k} G̃_{≤k'})`.
+  `MPSTensor.MultiBlockCompression.rank_fromCols_leadingCols`: the rank of `(G_{≤k} G_tilde_{≤k'})`.
 * `MPSTensor.MultiBlockCompression.isLeast_rank_fromCols_leadingCols_eq`: the matched position.
 * `MPSTensor.MultiBlockCompression.coe_map_inf_eq_leadingCols`: the intersections.
 * `MPSTensor.MultiBlockCompression.leftRow_mul_eq_mul_leftRow_mul`,
@@ -138,7 +139,8 @@ section TwoReductions
 variable (P : MultiBlockCompression B S C) (Q : MultiBlockCompression B S' C')
 
 /-- **The matching rule in matrices, the column span** (*The asymmetric fundamental theorem of
-matrix product states*, Remark 5.3): the column span of `(G_{≤k} G̃_{≤k'})` is `M_k + M̃_{k'}`. -/
+matrix product states*, Remark 5.3): the column span of `(G_{≤k} G_tilde_{≤k'})` is
+`M_k + M_tilde_{k'}`. -/
 theorem range_fromCols_leadingCols (k : Fin (S.card + P.z + 1)) (k' : Fin (S'.card + Q.z + 1)) :
     LinearMap.range (Matrix.fromCols (P.leadingCols k) (Q.leadingCols k')).mulVecLin =
       ((P.flag k ⊔ Q.flag k').restrictScalars ℂ).map (WordModule.toVec B).toLinearMap := by
@@ -146,7 +148,7 @@ theorem range_fromCols_leadingCols (k : Fin (S.card + P.z + 1)) (k' : Fin (S'.ca
     Submodule.restrictScalars_sup, Submodule.map_sup]
 
 /-- **The matching rule in matrices, the rank** (*The asymmetric fundamental theorem of matrix
-product states*, Remark 5.3): `rank (G_{≤k} G̃_{≤k'}) = dim (M_k + M̃_{k'})`. -/
+product states*, Remark 5.3): `rank (G_{≤k} G_tilde_{≤k'}) = dim (M_k + M_tilde_{k'})`. -/
 theorem rank_fromCols_leadingCols (k : Fin (S.card + P.z + 1)) (k' : Fin (S'.card + Q.z + 1)) :
     (Matrix.fromCols (P.leadingCols k) (Q.leadingCols k')).rank =
       Module.finrank ℂ ↥(P.flag k ⊔ Q.flag k') := by
@@ -154,9 +156,9 @@ theorem rank_fromCols_leadingCols (k : Fin (S.card + P.z + 1)) (k' : Fin (S'.car
   rfl
 
 /-- **The matching rule in matrices, the intersections** (*The asymmetric fundamental theorem of
-matrix product states*, Remark 5.3): for all `k`, `k'`, `M_k ∩ M̃_{k'}` consists of the vectors
-`G_{≤k} a` with `G_{≤k} a = G̃_{≤k'} a'` for some `a'`; for the matched `k' = π(k)` this is `U`, and
-with `k - 1` in place of `k` it is `K`. -/
+matrix product states*, Remark 5.3): for all `k`, `k'`, `M_k ∩ M_tilde_{k'}` consists of the vectors
+`G_{≤k} a` with `G_{≤k} a = G_tilde_{≤k'} a'` for some `a'`; for the matched `k' = π(k)` this is
+`U`, and with `k - 1` in place of `k` it is `K`. -/
 theorem coe_map_inf_eq_leadingCols (k : Fin (S.card + P.z + 1))
     (k' : Fin (S'.card + Q.z + 1)) :
     ((((P.flag k ⊓ Q.flag k').restrictScalars ℂ).map (WordModule.toVec B).toLinearMap :
@@ -180,10 +182,10 @@ variable (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
   (hC' : ∀ t ∈ S', Kraus.IsNormal (C' t)) (hD' : ∀ t ∈ S', 0 < D' t)
 
 include hC hD in
-/-- Adding the column block of the position `k` to `(G_{≤k-1} G̃_{≤j})` keeps the rank exactly when
-`M_k ∩ M̃_j ⊄ M_{k-1}` (*The asymmetric fundamental theorem of matrix product states*, Remark 5.3):
-equal ranks mean `M_k ⊆ M_{k-1} + M̃_j`, which by the modular law and the covering `M_{k-1} ⋖ M_k`
-is `M_k ∩ M̃_j ⊄ M_{k-1}`. -/
+/-- Adding the column block of the position `k` to `(G_{≤k-1} G_tilde_{≤j})` keeps the rank exactly
+when `M_k ∩ M_tilde_j ⊄ M_{k-1}` (*The asymmetric fundamental theorem of matrix product states*,
+Remark 5.3): equal ranks mean `M_k ⊆ M_{k-1} + M_tilde_j`, which by the modular law and the covering
+`M_{k-1} ⋖ M_k` is `M_k ∩ M_tilde_j ⊄ M_{k-1}`. -/
 theorem rank_fromCols_leadingCols_eq_iff (k : Fin (S.card + P.z))
     (j : Fin (S'.card + Q.z + 1)) :
     (Matrix.fromCols (P.leadingCols k.castSucc) (Q.leadingCols j)).rank =
@@ -217,7 +219,7 @@ theorem rank_fromCols_leadingCols_eq_iff (k : Fin (S.card + P.z))
 
 /-- **The matching rule in matrices, the matched position** (*The asymmetric fundamental theorem of
 matrix product states*, Remark 5.3): the position `π(k)` matched with `k` is the least `k'` at which
-adding the column block of the position `k` to `(G_{≤k-1} G̃_{≤k'})` does not raise the rank
+adding the column block of the position `k` to `(G_{≤k-1} G_tilde_{≤k'})` does not raise the rank
 (positions counted from `0`, so the matched member of the second flag is `π(k) + 1`). -/
 theorem isLeast_rank_fromCols_leadingCols_eq (k : Fin (S.card + P.z)) :
     IsLeast {j : Fin (S'.card + Q.z + 1) |
@@ -236,9 +238,9 @@ theorem isLeast_rank_fromCols_leadingCols_eq (k : Fin (S.card + P.z)) :
 
 /-- **Two compressions with different flags in matrices, the reading maps** (*The asymmetric
 fundamental theorem of matrix product states*, Corollary 6.4): if `X` relates the reading maps on
-`U = M_k ∩ M̃_{π(k)}`, as the intertwiner of *Two compressions with different flags* (blueprint
+`U = M_k ∩ M_tilde_{π(k)}`, as the intertwiner of *Two compressions with different flags* (blueprint
 `thm:asym_uniq_different_flags`) (`exists_intertwiner_of_matching`) does, then
-`W̃_{b'} Y_U = X W_b Y_U` for every matrix `Y_U` whose columns lie in `U`. -/
+`W_tilde_{b'} Y_U = X W_b Y_U` for every matrix `Y_U` whose columns lie in `U`. -/
 theorem leftRow_mul_eq_mul_leftRow_mul (k : Fin (S.card + P.z)) {b : BlockIndex S P.z}
     {b' : BlockIndex S' Q.z} {X : Matrix (Fin (slotSize D' b')) (Fin (slotSize D b)) ℂ}
     (hread : ∀ x ∈ P.flag k.succ ⊓ Q.flag (P.matching Q hC hD hC' hD' k).succ,
@@ -255,10 +257,11 @@ theorem leftRow_mul_eq_mul_leftRow_mul (k : Fin (S.card + P.z)) {b : BlockIndex 
 
 /-- **Two compressions with different flags in matrices, the injections** (*The asymmetric
 fundamental theorem of matrix product states*, Corollary 6.4): for the matched slots `b` at `k` and
-`b'` at `π(k)`, an `X` relating the reading maps on `U = M_k ∩ M̃_{π(k)}` is the intertwiner of *Two
-compressions with different flags* (blueprint `thm:asym_uniq_different_flags`), and for its inverse
-`Y = X⁻¹`, `Ṽ_{b'} - V_b X⁻¹ = (G_{≤k-1} G̃_{≤π(k)-1}) R` for some matrix `R`: every column of the
-left side lies in `M_{k-1} + M̃_{π(k)-1}`, the column span of `(G_{≤k-1} G̃_{≤π(k)-1})`. -/
+`b'` at `π(k)`, an `X` relating the reading maps on `U = M_k ∩ M_tilde_{π(k)}` is the intertwiner of
+*Two compressions with different flags* (blueprint `thm:asym_uniq_different_flags`), and for its
+inverse `Y = X⁻¹`, `V_tilde_{b'} - V_b X⁻¹ = (G_{≤k-1} G_tilde_{≤π(k)-1}) R` for some matrix `R`:
+every column of the left side lies in `M_{k-1} + M_tilde_{π(k)-1}`, the column span of
+`(G_{≤k-1} G_tilde_{≤π(k)-1})`. -/
 theorem exists_rightCol_sub_mul_eq_fromCols_mul (k : Fin (S.card + P.z))
     {b : BlockIndex S P.z} (hb : P.ord b = k) {b' : BlockIndex S' Q.z}
     (hb' : Q.ord b' = P.matching Q hC hD hC' hD' k)

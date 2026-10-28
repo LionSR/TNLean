@@ -9,14 +9,14 @@ import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessFlag
 /-!
 # Two multi-block reductions with the same flag
 
-Let `(σ, g)` and `(σ, g̃)` be two multi-block reductions of a tensor `B` onto the same family of
-normal blocks `C s`, `s ∈ S`, with the same slots and order `σ` and the same flag,
-`g̃⁻¹ E_k = g⁻¹ E_k` for every leading coordinate subspace `E_k`. The coordinate change `h = g̃ g⁻¹`
-maps every `E_k` onto itself, so it is block upper triangular for the order `σ`, and its diagonal
-block `h_{bb}` intertwines the diagonal block of the slot `b` with itself, so it is a nonzero scalar
-`λ_b` by Schur's lemma. Reading the rows of `g̃ = h g` and the columns of `g̃⁻¹ = g⁻¹ h⁻¹` gives
-$$\widetilde W_b = \lambda_b W_b + \sum_{c \text{ after } b} h_{bc} W_c, \qquad
-\widetilde V_b = \lambda_b^{-1} V_b + \sum_{c \text{ before } b} V_c (h^{-1})_{cb}.$$
+Let `(σ, g)` and `(σ, g_tilde)` be two multi-block reductions of a tensor `B` onto the same family
+of normal blocks `C s`, `s ∈ S`, with the same slots and order `σ` and the same flag,
+`g_tilde⁻¹ E_k = g⁻¹ E_k` for every leading coordinate subspace `E_k`. The coordinate change
+`h = g_tilde g⁻¹` maps every `E_k` onto itself, so it is block upper triangular for the order `σ`,
+and its diagonal block `h_{bb}` intertwines the diagonal block of the slot `b` with itself, so it is
+a nonzero scalar `λ_b` by Schur's lemma. Reading the rows of `g_tilde = h g` and the columns of
+`g_tilde⁻¹ = g⁻¹ h⁻¹` gives $$\widetilde W_b = \lambda_b W_b + \sum_{c \text{ after } b} h_{bc} W_c,
+\qquad \widetilde V_b = \lambda_b^{-1} V_b + \sum_{c \text{ before } b} V_c (h^{-1})_{cb}.$$
 Conversely every block upper triangular `h` with nonzero scalar diagonal blocks turns `(σ, g)` into
 a reduction `(σ, h g)` with the same flag. Together the two directions say that the group `T_σ` of
 such matrices acts freely and transitively by `g ↦ h g` on the reductions with a given labelled flag
@@ -29,11 +29,11 @@ assumed normal, as in the existence theorem, and of positive bond dimension; the
 Schur's lemma, which holds for irreducible blocks.
 
 **Formulation of "the same slots, order and flag".** A multi-block compression carries its number of
-zero slots `z` and its order `ord` as fields. A second reduction with `σ̃ = σ` is therefore written
-`P.withGauge g htri hdiag`: the compression with the fields `z` and `ord` of `P` and the change of
-coordinates `g`, in which every letter is block upper triangular for the order of `P` with the
-prescribed diagonal blocks. Every compression whose `z` equals that of `P` and whose order is that
-of `P` is of this form (`MPSTensor.MultiBlockCompression.exists_eq_withGauge`). The equality of
+zero slots `z` and its order `ord` as fields. A second reduction with `σ_tilde = σ` is therefore
+written `P.withGauge g htri hdiag`: the compression with the fields `z` and `ord` of `P` and the
+change of coordinates `g`, in which every letter is block upper triangular for the order of `P` with
+the prescribed diagonal blocks. Every compression whose `z` equals that of `P` and whose order is
+that of `P` is of this form (`MPSTensor.MultiBlockCompression.exists_eq_withGauge`). The equality of
 flags is the hypothesis `∀ k, (P.withGauge g htri hdiag).flag k = P.flag k`, equivalently
 `g⁻¹ E_k = g_P⁻¹ E_k` (`MPSTensor.MultiBlockCompression.flag_withGauge_eq_iff`).
 
@@ -167,7 +167,7 @@ variable (g₁ g₂ : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S z → ℂ))
 
 /-- The coordinate change `h = g₂ g₁⁻¹` between two block coordinate systems `g₁` and `g₂` of the
 bond space (blueprint `thm:asym_uniq_same_flag`, *Two compressions with the same flag*,
-`h = g̃ g⁻¹`). -/
+`h = g_tilde g⁻¹`). -/
 noncomputable def coordChange : Matrix (BlockSpace D S z) (BlockSpace D S z) ℂ :=
   gaugeMatrix g₂ * gaugeMatrixInv g₁
 
@@ -264,9 +264,10 @@ theorem blockTriangular_coordChange {g₁ g₂ : (Fin DB → ℂ) ≃ₗ[ℂ] (B
 /-! ### A second reduction with the same slots and order -/
 
 /-- **A second reduction with the slots and order of `P`** (blueprint `thm:asym_uniq_same_flag`,
-*Two compressions with the same flag*, the reduction `(σ̃, g̃)` with `σ̃ = σ`): the compression with
-the number of zero slots and the order of `P` and the change of coordinates `g`, in which every
-letter is block upper triangular for the order of `P` with the prescribed diagonal blocks. -/
+*Two compressions with the same flag*, the reduction `(σ_tilde, g_tilde)` with `σ_tilde = σ`): the
+compression with the number of zero slots and the order of `P` and the change of coordinates `g`, in
+which every letter is block upper triangular for the order of `P` with the prescribed diagonal
+blocks. -/
 def withGauge (g : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S P.z → ℂ))
     (htri : ∀ i, (conjMatrix g (B i)).BlockTriangular fun x => P.ord x.1)
     (hdiag : ∀ i b, (conjMatrix g (B i)).blockDiag' b = blockOf D C i b) :
@@ -310,7 +311,7 @@ theorem mem_flag_iff_toVec_mem_comap {k : Fin (S.card + P.z + 1)} {x : B.WordMod
   Iff.rfl
 
 /-- Two reductions with the same slots and order have the same flag exactly when their changes of
-coordinates have the same preimages of the leading coordinate subspaces, `g̃⁻¹ E_k = g⁻¹ E_k`
+coordinates have the same preimages of the leading coordinate subspaces, `g_tilde⁻¹ E_k = g⁻¹ E_k`
 (blueprint `thm:asym_uniq_same_flag`, *Two compressions with the same flag*, hypothesis).
 -/
 theorem flag_withGauge_eq_iff (g : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S P.z → ℂ))
@@ -358,9 +359,9 @@ theorem blockTriangular_coordChange_symm_of_flag_eq
 
 /-- **The diagonal blocks of the coordinate change intertwine** (blueprint
 `thm:asym_uniq_same_flag`, *Two compressions with the same flag*, proof). The diagonal block of
-`h = g̃ g⁻¹` at a slot `b` commutes with every letter of the diagonal block of that slot, because
-the diagonal block of a product of block upper triangular matrices is the product of their diagonal
-blocks. -/
+`h = g_tilde g⁻¹` at a slot `b` commutes with every letter of the diagonal block of that slot,
+because the diagonal block of a product of block upper triangular matrices is the product of their
+diagonal blocks. -/
 theorem blockDiag'_coordChange_intertwines
     (hflag : ∀ k, (P.withGauge g htri hdiag).flag k = P.flag k) (i : Fin d)
     (b : BlockIndex S P.z) :
@@ -374,8 +375,8 @@ theorem blockDiag'_coordChange_intertwines
 
 variable (P g) in
 /-- **The scalar of a slot** (blueprint `thm:asym_uniq_same_flag`, *Two compressions with the same
-flag*, `λ_b`): the normalized trace of the diagonal block of the coordinate change `h = g̃ g⁻¹` at
-the slot `b`. -/
+flag*, `λ_b`): the normalized trace of the diagonal block of the coordinate change `h = g_tilde g⁻¹`
+at the slot `b`. -/
 noncomputable def coordChangeScalar (b : BlockIndex S P.z) : ℂ :=
   (slotSize D b : ℂ)⁻¹ * ((coordChange P.gauge g).blockDiag' b).trace
 
@@ -578,7 +579,7 @@ theorem blockDiag'_inv_of_blockDiag'_eq_smul (b : BlockIndex S P.z) :
 compressions with the same flag*, converse): for a block upper triangular `h` with nonzero scalar
 diagonal blocks `h_{bb} = μ_b 1`, the change of coordinates `h g` gives a reduction `(σ, h g)` onto
 the same family, with the same slots and order. Its diagonal blocks are
-`μ_b Ĉ^i_{bb} μ_b⁻¹ = Ĉ^i_{bb}`. -/
+`μ_b C_hat^i_{bb} μ_b⁻¹ = C_hat^i_{bb}`. -/
 noncomputable def conjTriangular : MultiBlockCompression B S C :=
   P.withGauge (P.conjTriangularGauge ht hμ hdiag)
     (fun i => by
@@ -634,7 +635,7 @@ variable {P} {g : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S P.z → ℂ)}
 
 /-- **Two compressions with the same flag, transitivity** (blueprint `thm:asym_uniq_same_flag`, *Two
 compressions with the same flag*): a second reduction with the same slots, order and flag as `P` is
-`(σ, h g)` for its coordinate change `h = g̃ g⁻¹`, which is block upper triangular with nonzero
+`(σ, h g)` for its coordinate change `h = g_tilde g⁻¹`, which is block upper triangular with nonzero
 scalar diagonal blocks `λ_b 1`. -/
 theorem withGauge_eq_conjTriangular (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
     (hflag : ∀ k, (P.withGauge g htri hdiag).flag k = P.flag k) :

@@ -8,11 +8,11 @@ import TNLean.MPS.Examples.MultiBlock.Worked
 /-!
 # The worked example: the dimension matrix and a basis adapted to both flags
 
-For the two reductions `g = g₀` and `g̃ = h P g₀` of the worked example
+For the two reductions `g = g₀` and `g_tilde = h P g₀` of the worked example
 (`TNLean.MPS.Examples.MultiBlock.Worked`; *The asymmetric fundamental theorem of matrix product
-states*, Example 6.16), this file computes the dimension matrix `dim (M_k ∩ M̃_{k'})` of the two
-flags and the factorization `g = 𝔄 Γ`, `g̃ = 𝔄̃ P_X Γ` of *A basis adapted to both flags*, with
-explicit complements `L_k` and integer matrices `𝔄`, `𝔄̃` and `Γ`.
+states*, Example 6.16), this file computes the dimension matrix `dim (M_k ∩ M_tilde_{k'})` of the
+two flags and the factorization `g = 𝔄 Γ`, `g_tilde = 𝔄_tilde P_X Γ` of *A basis adapted to both
+flags*, with explicit complements `L_k` and integer matrices `𝔄`, `𝔄_tilde` and `Γ`.
 
 ## Main results
 
@@ -46,7 +46,7 @@ theorem card_add_z_redGt : 4 = labels.card + redGt.z + 1 := by decide
 noncomputable def posG (i : Fin 3) : Fin (labels.card + redG.z + 1) :=
   Fin.cast card_add_z_redG i.succ
 
-/-- The position `k' = j + 1` of the flag of `g̃`. -/
+/-- The position `k' = j + 1` of the flag of `g_tilde`. -/
 noncomputable def posGt (j : Fin 3) : Fin (labels.card + redGt.z + 1) :=
   Fin.cast card_add_z_redGt j.succ
 
@@ -156,7 +156,7 @@ theorem flagVec_redG_two_inf_flagVec_redGt_two :
     ring
 
 /-- **The dimension matrix** (*The asymmetric fundamental theorem of matrix product states*, Example
-6.16): `dim (M_k ∩ M̃_{k'})` for `k, k' = 1, 2, 3` (rows `k`, columns `k'`) is
+6.16): `dim (M_k ∩ M_tilde_{k'})` for `k, k' = 1, 2, 3` (rows `k`, columns `k'`) is
 `[[0, 0, 2], [1, 1, 3], [1, 2, 4]]`. -/
 theorem finrank_flagVec_redG_inf_flagVec_redGt :
     (Matrix.of fun i j : Fin 3 =>
@@ -201,10 +201,10 @@ def aInt : Matrix (Fin 4) (Fin 4) ℤ := !![1, 0, 0, 0; 0, 1, 0, 0; 0, 0, 1, 1; 
 /-- `𝔄⁻¹`. -/
 def aInvInt : Matrix (Fin 4) (Fin 4) ℤ := !![1, 0, 0, 0; 0, 1, 0, 0; 0, 0, 1, -1; 0, 0, 0, 1]
 
-/-- `𝔄̃` (in the bond coordinates of `g̃`). -/
+/-- `𝔄_tilde` (in the bond coordinates of `g_tilde`). -/
 def atInt : Matrix (Fin 4) (Fin 4) ℤ := !![1, 2, 1, -1; 0, 1, -1, 2; 0, 0, 1, 0; 0, 0, 0, 1]
 
-/-- `P_X` (rows in the coordinates of `g̃`, columns in those of `g`). -/
+/-- `P_X` (rows in the coordinates of `g_tilde`, columns in those of `g`). -/
 def pxInt : Matrix (Fin 4) (Fin 4) ℤ := !![0, 0, 1, 0; 0, 0, 0, 1; 1, 1, 0, 0; 0, 1, 0, 0]
 
 /-- `Γ = 𝔄⁻¹ g`. -/
@@ -247,7 +247,7 @@ theorem gaugeMatrixInv_redG : gaugeMatrixInv redG.gauge = (toC g0InvInt).submatr
   erw [gauge_redG, gaugeMatrixInv_gaugeOfMatrix]
   rfl
 
-/-- The complements `L₁ = M₁`, `L₂ = M̃₁`, `L₃ = ℂ (V_{C₂} + V₀) = ℂ (0, -1, 2, 0)` in `ℂ⁴`. -/
+/-- The complements `L₁ = M₁`, `L₂ = M_tilde₁`, `L₃ = ℂ (V_{C₂} + V₀) = ℂ (0, -1, 2, 0)` in `ℂ⁴`. -/
 noncomputable def complementVec (j : Fin (labels.card + redG.z)) : Submodule ℂ (Fin 4 → ℂ) :=
   if j.val = 0 then Submodule.span ℂ {![1, 0, -1, 0], ![-1, 1, -1, 1]}
   else if j.val = 1 then Submodule.span ℂ {![-1, 0, 2, 0]}
@@ -531,7 +531,7 @@ theorem gaugeMatrix_redG_eq_mul : gaugeMatrix redG.gauge =
   rw [gaugeMatrix_redG, gaugeMatrix_gammaGauge, Matrix.submatrix_mul_equiv, ← complexOfRing_mul,
     aInt_mul_gammaInt]
 
-/-- `g̃ = 𝔄̃ P_X Γ`. -/
+/-- `g_tilde = 𝔄_tilde P_X Γ`. -/
 theorem gaugeMatrix_redGt_eq_mul : gaugeMatrix redGt.gauge = (toC atInt).submatrix tauGt tauGt *
     (∑ b, Matrix.blockEmbed (slotSize dims) b * intertwiner b *
       Matrix.blockProj (slotSize dims) b) * gaugeMatrix gammaGauge := by
@@ -559,7 +559,7 @@ theorem blockDiag'_atInt (b : BlockIndex labels 1) :
   rw [Matrix.blockDiag'_apply, Matrix.submatrix_apply]
   exact toC_atInt_apply_diag b p q
 
-/-- `g̃ g⁻¹ = 𝔄̃ P_X 𝔄⁻¹`, in the bond coordinates. -/
+/-- `g_tilde g⁻¹ = 𝔄_tilde P_X 𝔄⁻¹`, in the bond coordinates. -/
 theorem gt_mul_g0Inv_submatrix : (toC gtInt).submatrix tauGt id * (toC g0InvInt).submatrix id tauG =
     (toC atInt).submatrix tauGt tauGt * (toC pxInt).submatrix tauGt tauG *
       ((toC aInt).submatrix tauG tauG)⁻¹ := by
@@ -573,11 +573,12 @@ theorem gt_mul_g0Inv_submatrix : (toC gtInt).submatrix tauGt id * (toC g0InvInt)
     ← complexOfRing_mul, ← complexOfRing_mul, ← complexOfRing_mul, gtInt_mul_g0InvInt]
 
 /-- **The factorization** (*The asymmetric fundamental theorem of matrix product states*, Example
-6.16): with the complements `L₁ = M₁`, `L₂ = M̃₁` (forced, `K = 0` at both positions) and
+6.16): with the complements `L₁ = M₁`, `L₂ = M_tilde₁` (forced, `K = 0` at both positions) and
 `L₃ = ℂ (V_{C₂} + V₀) = ℂ (0, -1, 2, 0)`, the intertwiners `X_{C₁} = Y`, `X₀ = X_{C₂} = 1` and
-`Γ = 𝔄⁻¹ g`, the factors `𝔄`, `P_X`, `𝔄̃` are the printed matrices (in the bond coordinates of `g`
-and `g̃`), `𝔄` and `𝔄̃` are unipotent in the two orders, and `g̃ g⁻¹ = 𝔄̃ P_X 𝔄⁻¹`. The matching
-read on slots is the identity of labels (`C₁ ↦ C₁'`, `0 ↦ 0`, `C₂ ↦ C₂`). -/
+`Γ = 𝔄⁻¹ g`, the factors `𝔄`, `P_X`, `𝔄_tilde` are the printed matrices (in the bond coordinates of
+`g` and `g_tilde`), `𝔄` and `𝔄_tilde` are unipotent in the two orders, and
+`g_tilde g⁻¹ = 𝔄_tilde P_X 𝔄⁻¹`. The matching read on slots is the identity of labels (`C₁ ↦ C₁'`,
+`0 ↦ 0`, `C₂ ↦ C₂`). -/
 theorem isAdaptedFactorization_redG_redGt :
     let 𝔄 : Matrix (BlockSpace dims labels 1) (BlockSpace dims labels 1) ℂ :=
       (toC aInt).submatrix tauG tauG

@@ -10,7 +10,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessSameFlag
 # The multiplicity gauge of split multi-block reductions
 
 Let `P` and `Q` be two split reductions of the same tensor `B` onto the same family of normal blocks
-`C s`, `s ∈ S`, of positive bond dimension, with coordinate changes `g` and `g̃`, and let
+`C s`, `s ∈ S`, of positive bond dimension, with coordinate changes `g` and `g_tilde`, and let
 $h = \tilde g g^{-1}$ be their relative gauge. The block $h_{b'b}$ intertwines the diagonal block at
 `b` with that at `b'`, so it vanishes between blocks that are not gauge related and between a block
 slot and a zero slot. This module proves the remaining clause of the bare uniqueness of split
@@ -273,8 +273,8 @@ theorem blockEntry_relativeGauge_eq_classMatrix_smul (hP : P.remainder = 0)
 
 /-- **The coefficient matrices of the two directions are mutually inverse** (blueprint
 `prop:asym_uniq_split`, *Uniqueness of split compressions, bare form*): for two split reductions,
-the coefficient matrix of `h = g̃ g⁻¹` on the gauge class of `s₀` times that of `h⁻¹ = g g̃⁻¹` is
-the identity. -/
+the coefficient matrix of `h = g_tilde g⁻¹` on the gauge class of `s₀` times that of
+`h⁻¹ = g g_tilde⁻¹` is the identity. -/
 theorem classMatrix_mul_classMatrix (hP : P.remainder = 0) (hQ : Q.remainder = 0)
     (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s) (s₀ : {s // s ∈ S}) :
     P.classMatrix Q s₀ * Q.classMatrix P s₀ = 1 := by
@@ -328,8 +328,8 @@ theorem isUnit_classMatrix (hP : P.remainder = 0) (hQ : Q.remainder = 0)
 
 /-- **The zero slots are mixed by an invertible matrix** (blueprint `prop:asym_uniq_split`,
 *Uniqueness of split compressions, bare form*, the $\mathrm{GL}_z$ clause): for two split reductions
-onto normal blocks, the zero-slot block of `h = g̃ g⁻¹` times that of `h⁻¹ = g g̃⁻¹` is the
-identity. -/
+onto normal blocks, the zero-slot block of `h = g_tilde g⁻¹` times that of `h⁻¹ = g g_tilde⁻¹` is
+the identity. -/
 theorem zeroSlotBlock_relativeGauge_mul_zeroSlotBlock_relativeGauge (hP : P.remainder = 0)
     (hQ : Q.remainder = 0) (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) :
     zeroSlotBlock (P.relativeGauge Q) * zeroSlotBlock (Q.relativeGauge P) = 1 := by

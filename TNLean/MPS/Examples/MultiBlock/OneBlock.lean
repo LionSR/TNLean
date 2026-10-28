@@ -13,9 +13,9 @@ import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessAllReductions
 The tensor `B = [[1, 1], [0, 0]]` with one letter and the block `C = (1)` (*The asymmetric
 fundamental theorem of matrix product states*, Example 6.15) has the two invariant lines `ℂ e₁` (on
 which `B` acts by `1`) and `ℂ (e₁ - e₂)` (on which `B` acts by `0`). The reduction `g = 1` puts the
-block first, with the flag `0 ⊂ ℂ e₁ ⊂ ℂ²`; the reduction `g̃ = [[0, -1], [1, 1]]` puts the zero
-block first, with the flag `0 ⊂ ℂ (e₁ - e₂) ⊂ ℂ²` and `g̃ B g̃⁻¹ = diag(0, 1)`. The two reductions
-are the objects `MultiBlockExamples.SharpnessOneBlock.firstCompression`,
+block first, with the flag `0 ⊂ ℂ e₁ ⊂ ℂ²`; the reduction `g_tilde = [[0, -1], [1, 1]]` puts the
+zero block first, with the flag `0 ⊂ ℂ (e₁ - e₂) ⊂ ℂ²` and `g_tilde B g_tilde⁻¹ = diag(0, 1)`. The
+two reductions are the objects `MultiBlockExamples.SharpnessOneBlock.firstCompression`,
 `MultiBlockExamples.SharpnessOneBlock.lastCompression` of the case `z = 1` of the sharpness example.
 The matching sends the block at position `1` to position `2`, `U = ℂ e₁`, `N = ℂ (e₁ - e₂)`; the
 reading maps agree on `U` and after one letter, but not on `e₂`; the second reduction is split and
@@ -102,7 +102,7 @@ theorem isInvariantSubmodule_span_tensorB_iff (v : Fin 2 → ℂ) (hv : v ≠ 0)
       ext j; fin_cases j <;> simp [tensorB_apply, Matrix.mulVec, dotProduct, hv0, hv1]
 
 /-- **The two reductions** (*The asymmetric fundamental theorem of matrix product states*, Example
-6.15): both reductions have `z = 1`, and `g̃ B g̃⁻¹ = diag(0, 1)`. -/
+6.15): both reductions have `z = 1`, and `g_tilde B g_tilde⁻¹ = diag(0, 1)`. -/
 theorem z_eq_one_and_gInt_conj : firstCompression.z = 1 ∧ lastCompression.z = 1 ∧
     gInt * bInt * gInvInt = !![0, 0; 0, 1] :=
   ⟨rfl, rfl, by decide⟩
@@ -271,7 +271,7 @@ theorem flag_eq_of_flagVec_eq {d DB : ℕ} {ι κ : Type*} [DecidableEq ι] [Dec
 
 /-- **The labelled flags** (*The asymmetric fundamental theorem of matrix product states*, Example
 6.15): the labelled invariant flags of `B` for `C = (1)` are exactly the flags of the two reductions
-`g = 1` and `g̃`. -/
+`g = 1` and `g_tilde`. -/
 theorem eq_toFlagData_firstCompression_or_lastCompression
     (F : FlagData tensorB.WordModule oneSlot blockC) :
     F = firstCompression.toFlagData ∨ F = lastCompression.toFlagData := by
@@ -347,8 +347,9 @@ theorem eq_toFlagData_firstCompression_or_lastCompression
     rfl
 
 /-- **The matching and the maps** (*The asymmetric fundamental theorem of matrix product states*,
-Example 6.15): `W = (1, 0)`, `V = e₁`, `W̃ = (1, 1)`, `Ṽ = e₁`; the matching sends the block at
-position `1` to position `2`; `U = ℂ e₁`, `N = ℂ (e₁ - e₂)`, `W̃ e₁ = W e₁ = 1`, `Ṽ - V = 0`. -/
+Example 6.15): `W = (1, 0)`, `V = e₁`, `W_tilde = (1, 1)`, `V_tilde = e₁`; the matching sends the
+block at position `1` to position `2`; `U = ℂ e₁`, `N = ℂ (e₁ - e₂)`, `W_tilde e₁ = W e₁ = 1`,
+`V_tilde - V = 0`. -/
 theorem left_right_matching_firstCompression_lastCompression :
     firstCompression.left oneSlotMem = !![1, 0] ∧ firstCompression.right oneSlotMem = !![1; 0] ∧
     lastCompression.left oneSlotMem = !![1, 1] ∧ lastCompression.right oneSlotMem = !![1; 0] ∧
@@ -388,7 +389,7 @@ theorem left_right_matching_firstCompression_lastCompression :
     ext i; fin_cases i; simp [Matrix.mulVec, dotProduct]
 
 /-- **The reading maps differ, but not after one letter** (*The asymmetric fundamental theorem of
-matrix product states*, Example 6.15): `W̃ e₂ = 1 ≠ 0 = W e₂`, and `W̃ B = W B`. -/
+matrix product states*, Example 6.15): `W_tilde e₂ = 1 ≠ 0 = W e₂`, and `W_tilde B = W B`. -/
 theorem left_mulVec_e_one_and_left_mul_tensorB :
     lastCompression.left oneSlotMem *ᵥ e 1 = ![1] ∧ firstCompression.left oneSlotMem *ᵥ e 1 = ![0] ∧
     lastCompression.left oneSlotMem * tensorB 0 = firstCompression.left oneSlotMem * tensorB 0 := by

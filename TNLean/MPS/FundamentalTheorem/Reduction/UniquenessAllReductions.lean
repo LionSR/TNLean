@@ -8,13 +8,14 @@ import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessCommonBasis
 /-!
 # Unipotent changes of two reductions, and the set of all reductions
 
-Let `P = (σ, g)` and `Q = (σ̃, g̃)` be two reductions of the same tensor `B` onto two families of
-normal blocks of positive bond dimension, with the factorization `g̃ g⁻¹ = 𝔄̃ P_X 𝔄⁻¹` of *A basis
-adapted to both flags* (`MPSTensor.MultiBlockCompression.gaugeMatrix_mul_gaugeMatrixInv_eq`).
-Replacing them by unipotent changes `(σ, u g)` and `(σ̃, ũ g̃)`, with `u` and `ũ` block upper
-triangular with identity diagonal blocks in the two orders, keeps the flags, the complements `L_k`,
-the coordinates `Γ` and the factor `P_X`, and multiplies the unipotent factors, `𝔄 ↦ u 𝔄` and
-`𝔄̃ ↦ ũ 𝔄̃`; every pair of unipotent factors occurs in this way.
+Let `P = (σ, g)` and `Q = (σ_tilde, g_tilde)` be two reductions of the same tensor `B` onto two
+families of normal blocks of positive bond dimension, with the factorization
+`g_tilde g⁻¹ = 𝔄_tilde P_X 𝔄⁻¹` of *A basis adapted to both flags*
+(`MPSTensor.MultiBlockCompression.gaugeMatrix_mul_gaugeMatrixInv_eq`). Replacing them by unipotent
+changes `(σ, u g)` and `(σ_tilde, u_tilde g_tilde)`, with `u` and `u_tilde` block upper triangular
+with identity diagonal blocks in the two orders, keeps the flags, the complements `L_k`, the
+coordinates `Γ` and the factor `P_X`, and multiplies the unipotent factors, `𝔄 ↦ u 𝔄` and
+`𝔄_tilde ↦ u_tilde 𝔄_tilde`; every pair of unipotent factors occurs in this way.
 
 The set of all compressions (blueprint `thm:asym_uniq_all`, *The set of all compressions*) is
 indexed by the labelled flags, and over the flag of `P` lies the orbit of `P` under the group `T_σ`
@@ -26,9 +27,9 @@ onto a family with `z` zero slots exactly when its word module has a labelled in
 
 * `MPSTensor.MultiBlockCompression.flag_conjTriangular_and_unipotentFactor_conjTriangular`,
   `MPSTensor.MultiBlockCompression.exists_conjTriangular_unipotentFactor_eq`: unipotent changes
-  `(σ, u g)`, `(σ̃, ũ g̃)` keep the complements, `Γ` and `P_X` and multiply the factors, and every
-  pair of unipotent factors occurs (*The asymmetric fundamental theorem of matrix product states*,
-  Theorem 6.5, last sentence).
+  `(σ, u g)`, `(σ_tilde, u_tilde g_tilde)` keep the complements, `Γ` and `P_X` and multiply the
+  factors, and every pair of unipotent factors occurs (*The asymmetric fundamental theorem of matrix
+  product states*, Theorem 6.5, last sentence).
 * `MPSTensor.MultiBlockCompression.flag_withGauge_eq_iff_exists_eq_conjTriangularGauge`,
   `MPSTensor.FlagData.exists_multiBlockCompression_flag_eq`: the set of all compressions (blueprint
   `thm:asym_uniq_all`, *The set of all compressions*).
@@ -140,8 +141,8 @@ variable {κ : Type*} [DecidableEq κ] {D' : κ → ℕ} {S' : Finset κ}
   (hu' : u'.BlockTriangular fun x => Q.ord x.1) (hu1' : ∀ b, u'.blockDiag' b = (1 : ℂ) • 1)
 
 /-- **The matching depends only on the two flags** (*The asymmetric fundamental theorem of matrix
-product states*, Theorem 6.5, last sentence): `(σ, h g)` and `(σ̃, h̃ g̃)` have the matching of
-`(σ, g)` and `(σ̃, g̃)`. -/
+product states*, Theorem 6.5, last sentence): `(σ, h g)` and `(σ_tilde, h_tilde g_tilde)` have the
+matching of `(σ, g)` and `(σ_tilde, g_tilde)`. -/
 theorem matching_conjTriangular :
     (P.conjTriangular ht hμ hdiag).matching (Q.conjTriangular ht' hμ' hdiag') hC hD hC' hD' =
       P.matching Q hC hD hC' hD' := by
@@ -174,8 +175,9 @@ theorem matchedKer_conjTriangular (k : Fin (S.card + P.z)) :
       Q.flag j.succ) (P.matching_conjTriangular_apply Q hC hD hC' hD' ht hμ hdiag ht' hμ' hdiag' k))
 
 /-- **The same complements** (*The asymmetric fundamental theorem of matrix product states*, Theorem
-6.5, last sentence): `(σ, h g)` and `(σ̃, h̃ g̃)` have the complements `L_k` of `(σ, g)` and
-`(σ̃, g̃)`, since these depend only on the two flags (`matchedCompl_congr`). -/
+6.5, last sentence): `(σ, h g)` and `(σ_tilde, h_tilde g_tilde)` have the complements `L_k` of
+`(σ, g)` and `(σ_tilde, g_tilde)`, since these depend only on the two flags (`matchedCompl_congr`).
+-/
 theorem matchedCompl_conjTriangular (k : Fin (S.card + P.z)) :
     (P.conjTriangular ht hμ hdiag).matchedCompl (Q.conjTriangular ht' hμ' hdiag') hC hD hC' hD' k =
       P.matchedCompl Q hC hD hC' hD' k :=
@@ -185,8 +187,8 @@ theorem matchedCompl_conjTriangular (k : Fin (S.card + P.z)) :
 
 /-- **The same `Γ`** (*The asymmetric fundamental theorem of matrix product states*, proof of the
 last sentence of Theorem 6.5): for `u` unipotent in the order of `P`, the reading of `u g` on
-`L_j ⊆ M_j` is that of `g`, so `(σ, u g)` and `(σ̃, h̃ g̃)` have the change of basis `Γ` of `(σ, g)`
-and `(σ̃, g̃)`. -/
+`L_j ⊆ M_j` is that of `g`, so `(σ, u g)` and `(σ_tilde, h_tilde g_tilde)` have the change of basis
+`Γ` of `(σ, g)` and `(σ_tilde, g_tilde)`. -/
 theorem commonCoord_conjTriangular :
     (P.conjTriangular hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).commonCoord
         (Q.conjTriangular ht' hμ' hdiag') hC hD hC' hD' =
@@ -228,8 +230,8 @@ theorem commonCoord'_of_mem_of_matching_eq {j : Fin (S.card + P.z)} {b' : BlockI
   exact P.commonCoord'_of_mem Q hC hD hC' hD' hx
 
 /-- **The same `P_X Γ`** (*The asymmetric fundamental theorem of matrix product states*, proof of
-the last sentence of Theorem 6.5): for `ũ` unipotent in the order of `Q`, the reading of `ũ g̃` on
-`L_j ⊆ M̃_{π(j)}` is that of `g̃`. -/
+the last sentence of Theorem 6.5): for `u_tilde` unipotent in the order of `Q`, the reading of
+`u_tilde g_tilde` on `L_j ⊆ M_tilde_{π(j)}` is that of `g_tilde`. -/
 theorem commonCoord'_conjTriangular :
     (P.conjTriangular ht hμ hdiag).commonCoord'
         (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' =
@@ -296,9 +298,9 @@ theorem unipotentFactor_conjTriangular :
       gaugeMatrixInv Γ)
     (P.commonGauge_conjTriangular Q hC hD hC' hD' ht' hμ' hdiag' hu hu1)).trans key
 
-/-- **The second unipotent factor of `(σ̃, ũ g̃)`** (*The asymmetric fundamental theorem of matrix
-product states*, Theorem 6.5, last sentence): `ũ 𝔄̃`, since `ũ g̃ = (ũ 𝔄̃) P_X Γ` with the same
-`P_X Γ`. -/
+/-- **The second unipotent factor of `(σ_tilde, u_tilde g_tilde)`** (*The asymmetric fundamental
+theorem of matrix product states*, Theorem 6.5, last sentence): `u_tilde 𝔄_tilde`, since
+`u_tilde g_tilde = (u_tilde 𝔄_tilde) P_X Γ` with the same `P_X Γ`. -/
 theorem unipotentFactor'_conjTriangular :
     (P.conjTriangular ht hμ hdiag).unipotentFactor'
         (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' =
@@ -314,8 +316,8 @@ theorem unipotentFactor'_conjTriangular :
     (P.commonGauge'_conjTriangular Q hC hD hC' hD' ht hμ hdiag hu' hu1')).trans key
 
 /-- **The same block permutation matrix** (*The asymmetric fundamental theorem of matrix product
-states*, Theorem 6.5, last sentence): `(σ, u g)` and `(σ̃, ũ g̃)` have the `P_X` of `(σ, g)` and
-`(σ̃, g̃)`. -/
+states*, Theorem 6.5, last sentence): `(σ, u g)` and `(σ_tilde, u_tilde g_tilde)` have the `P_X` of
+`(σ, g)` and `(σ_tilde, g_tilde)`. -/
 theorem matchingPermMatrix_conjTriangular :
     (P.conjTriangular hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).matchingPermMatrix
         (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' =
@@ -329,11 +331,11 @@ theorem matchingPermMatrix_conjTriangular :
       (P.matchingPermMatrix_eq_mul Q hC hD hC' hD').symm)
 
 /-- **Unipotent changes** (*The asymmetric fundamental theorem of matrix product states*, Theorem
-6.5, last sentence, first part): for `u` unipotent in the order of `P` and `ũ` unipotent in the
-order of `Q`, the reductions `(σ, u g)` and `(σ̃, ũ g̃)` have the flags of `(σ, g)` and `(σ̃, g̃)`,
-the factors `u 𝔄` and `ũ 𝔄̃`, and the same `P_X`. The complements `L_k`, the change of basis `Γ` and
-the intertwiners entering `P_X` are the same as well (`matchedCompl_conjTriangular`,
-`commonGauge_conjTriangular`). -/
+6.5, last sentence, first part): for `u` unipotent in the order of `P` and `u_tilde` unipotent in
+the order of `Q`, the reductions `(σ, u g)` and `(σ_tilde, u_tilde g_tilde)` have the flags of
+`(σ, g)` and `(σ_tilde, g_tilde)`, the factors `u 𝔄` and `u_tilde 𝔄_tilde`, and the same `P_X`. The
+complements `L_k`, the change of basis `Γ` and the intertwiners entering `P_X` are the same as well
+(`matchedCompl_conjTriangular`, `commonGauge_conjTriangular`). -/
 theorem flag_conjTriangular_and_unipotentFactor_conjTriangular :
     (∀ k, (P.conjTriangular hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).flag k = P.flag k) ∧
     (∀ k', (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1').flag k' =
@@ -366,9 +368,10 @@ theorem blockTriangular_inv_and_blockDiag'_inv_of_unipotent
 
 /-- **Every pair of unipotent factors occurs** (*The asymmetric fundamental theorem of matrix
 product states*, Theorem 6.5, last sentence, second part): for every `𝔄₁` unipotent in the order of
-`P` and every `𝔄₂` unipotent in the order of `Q` there are unipotent `u`, `ũ` such that `(σ, u g)`
-and `(σ̃, ũ g̃)`, reductions with the flags of `(σ, g)` and `(σ̃, g̃)`, have the factors `𝔄₁` and
-`𝔄₂` and the same `P_X`; take `u = 𝔄₁ 𝔄⁻¹` and `ũ = 𝔄₂ 𝔄̃⁻¹`. -/
+`P` and every `𝔄₂` unipotent in the order of `Q` there are unipotent `u`, `u_tilde` such that
+`(σ, u g)` and `(σ_tilde, u_tilde g_tilde)`, reductions with the flags of `(σ, g)` and
+`(σ_tilde, g_tilde)`, have the factors `𝔄₁` and `𝔄₂` and the same `P_X`; take `u = 𝔄₁ 𝔄⁻¹` and
+`u_tilde = 𝔄₂ 𝔄_tilde⁻¹`. -/
 theorem exists_conjTriangular_unipotentFactor_eq
     (A₁ : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ)
     (hA₁ : A₁.BlockTriangular fun x => P.ord x.1) (hA₁' : ∀ b, A₁.blockDiag' b = 1)

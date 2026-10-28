@@ -30,7 +30,7 @@ index of the second factor (the block).
   split reductions of `B` onto two copies of `C` are exactly `A ⊗ 1₂`.
 * `MultiBlockExamples.Multiplicity.exists_left_mul_evalWord_eq_smul_iff`: proportional reading maps.
 * `MultiBlockExamples.Multiplicity.matching_left_splitRed_of_span_ne`: *Two compressions with
-  different flags* for any two split reductions `A ⊗ 1₂`, `Ã ⊗ 1₂` with `ℂ u₁ ≠ ℂ ũ₁`.
+  different flags* for any two split reductions `A ⊗ 1₂`, `Ã ⊗ 1₂` with `ℂ u₁ ≠ ℂ u_tilde₁`.
 * `MultiBlockExamples.Multiplicity.matching_left_redOne_redAt`: the instance `A = 1`,
   `Ã = [[1, 0], [1, 1]]`.
 
@@ -420,8 +420,8 @@ theorem kronRow_mul_kronCol_apply (a u : Fin 2 → ℂ) :
 /-- **Every split reduction is `A ⊗ 1₂`** (*The asymmetric fundamental theorem of matrix product
 states*, Example 6.13): a split reduction of `B` onto two copies of `C` has no zero block and is
 `A ⊗ 1₂` for an invertible `A`: `W_j = a_j ⊗ 1₂` with `a_j` the rows of `A`, `V_j = u_j ⊗ 1₂` with
-`u_j` the columns of `A⁻¹`. A second split reduction `g̃` has `W̃_j = ã_j ⊗ 1₂`, `Ṽ_j = ũ_j ⊗ 1₂`
-likewise. -/
+`u_j` the columns of `A⁻¹`. A second split reduction `g_tilde` has `W_tilde_j = ã_j ⊗ 1₂`,
+`V_tilde_j = u_tilde_j ⊗ 1₂` likewise. -/
 theorem exists_left_eq_kronRow_of_remainder_eq_zero
     (P : MultiBlockCompression tensorB labels blocks) (hP : P.remainder = 0) :
     P.z = 0 ∧ ∃ A U : Matrix (Fin 2) (Fin 2) ℂ, A * U = 1 ∧ U * A = 1 ∧
@@ -487,9 +487,9 @@ theorem kronRowMat_apply (a : Fin 2 → ℂ) (M : Matrix (Fin 2) (Fin 2) ℂ) (p
   fin_cases p <;> fin_cases q <;> fin_cases a' <;> simp [kronRowMat]
 
 /-- **Proportional reading maps** (*The asymmetric fundamental theorem of matrix product states*,
-Example 6.13): for two reductions with `W_s = a ⊗ 1₂`, `W̃_s = ã ⊗ 1₂` (every split reduction, by
-`exists_left_eq_kronRow_of_remainder_eq_zero`), `W̃_s B^w = λ W_s B^w` holds for some `λ` and some
-word with `C^w ≠ 0` iff `ã` is proportional to `a`, and then it holds for every word. -/
+Example 6.13): for two reductions with `W_s = a ⊗ 1₂`, `W_tilde_s = ã ⊗ 1₂` (every split reduction,
+by `exists_left_eq_kronRow_of_remainder_eq_zero`), `W_tilde_s B^w = λ W_s B^w` holds for some `λ`
+and some word with `C^w ≠ 0` iff `ã` is proportional to `a`, and then it holds for every word. -/
 theorem exists_left_mul_evalWord_eq_smul_iff (P Q : MultiBlockCompression tensorB labels blocks)
     (s : {s // s ∈ labels})
     {a ã : Fin 2 → ℂ} (hP : P.left s = kronRow a) (hQ : Q.left s = kronRow ã) :
@@ -646,11 +646,12 @@ theorem left_splitRed (A Ainv : Matrix (Fin 2) (Fin 2) ℂ) (h1 : A * Ainv = 1)
   exact kronMat_tauM_row A _ _ _
 
 /-- **Two split reductions with different flags** (*The asymmetric fundamental theorem of matrix
-product states*, Example 6.13), for any two split reductions `g = A ⊗ 1₂`, `g̃ = Ã ⊗ 1₂` (every
-split reduction, by `exists_left_eq_kronRow_of_remainder_eq_zero`) with `ℂ u₁ ≠ ℂ ũ₁` (`u_j`, `ũ_j`
-the columns of `A⁻¹`, `Ã⁻¹`): the matching pairs position `1` of `g` with position `2` of `g̃`;
-`U = ℂ u₁ ⊗ ℂ²`, `N = ℂ ũ₁ ⊗ ℂ²`; the intertwiner is the scalar `λ = ã₂ u₁ ≠ 0` (`ã₂` the second row
-of `Ã`), that is `W̃₂ = λ W₁` on `U`, with `W̃₂ (u₁ ⊗ v) = λ v`; and `ũ₂ - λ⁻¹ u₁ ∈ ℂ ũ₁`. -/
+product states*, Example 6.13), for any two split reductions `g = A ⊗ 1₂`, `g_tilde = Ã ⊗ 1₂` (every
+split reduction, by `exists_left_eq_kronRow_of_remainder_eq_zero`) with `ℂ u₁ ≠ ℂ u_tilde₁` (`u_j`,
+`u_tilde_j` the columns of `A⁻¹`, `Ã⁻¹`): the matching pairs position `1` of `g` with position `2`
+of `g_tilde`; `U = ℂ u₁ ⊗ ℂ²`, `N = ℂ u_tilde₁ ⊗ ℂ²`; the intertwiner is the scalar `λ = ã₂ u₁ ≠ 0`
+(`ã₂` the second row of `Ã`), that is `W_tilde₂ = λ W₁` on `U`, with `W_tilde₂ (u₁ ⊗ v) = λ v`; and
+`u_tilde₂ - λ⁻¹ u₁ ∈ ℂ u_tilde₁`. -/
 theorem matching_left_splitRed_of_span_ne (A Ainv At AtInv : Matrix (Fin 2) (Fin 2) ℂ)
     (h1 : A * Ainv = 1) (h2 : Ainv * A = 1) (h1' : At * AtInv = 1) (h2' : AtInv * At = 1)
     (hne : Submodule.span ℂ {fun a => Ainv a 0} ≠ Submodule.span ℂ {fun a => AtInv a 0}) :
@@ -659,19 +660,19 @@ theorem matching_left_splitRed_of_span_ne (A Ainv At AtInv : Matrix (Fin 2) (Fin
     let π := P.matching Q isNormal_blocks dims_pos isNormal_blocks dims_pos
     let k := P.ord (Sum.inl slot0)
     let u₁ : Fin 2 → ℂ := fun a => Ainv a 0
-    let ũ₁ : Fin 2 → ℂ := fun a => AtInv a 0
-    let ũ₂ : Fin 2 → ℂ := fun a => AtInv a 1
+    let u_tilde₁ : Fin 2 → ℂ := fun a => AtInv a 0
+    let u_tilde₂ : Fin 2 → ℂ := fun a => AtInv a 1
     let lam : ℂ := At 1 0 * u₁ 0 + At 1 1 * u₁ 1
     π k = Q.ord (Sum.inl slot1) ∧ k.val = 0 ∧ (Q.ord (Sum.inl slot1)).val = 1 ∧
     ((P.flag k.succ ⊓ Q.flag (π k).succ).restrictScalars ℂ).map
         (WordModule.toVec tensorB).toLinearMap = lineTensor u₁ ∧
     ((P.flag k.castSucc ⊔ Q.flag (π k).castSucc).restrictScalars ℂ).map
-        (WordModule.toVec tensorB).toLinearMap = lineTensor ũ₁ ∧
+        (WordModule.toVec tensorB).toLinearMap = lineTensor u_tilde₁ ∧
     lam ≠ 0 ∧
     (∀ x ∈ lineTensor u₁, Q.left slot1 *ᵥ x = lam • (P.left slot0 *ᵥ x)) ∧
     (∀ v : Fin 2 → ℂ, Q.left slot1 *ᵥ kron u₁ v = lam • v) ∧
-    ũ₂ - lam⁻¹ • u₁ ∈ Submodule.span ℂ {ũ₁} := by
-  intro P Q π k u₁ ũ₁ ũ₂ lam
+    u_tilde₂ - lam⁻¹ • u₁ ∈ Submodule.span ℂ {u_tilde₁} := by
+  intro P Q π k u₁ u_tilde₁ u_tilde₂ lam
   obtain ⟨e00, e01, e10, e11⟩ := mul_eq_one_entries h1
   obtain ⟨f00, f01, f10, f11⟩ := mul_eq_one_entries h1'
   have hu : u₁ ≠ 0 := by
@@ -682,7 +683,7 @@ theorem matching_left_splitRed_of_span_ne (A Ainv At AtInv : Matrix (Fin 2) (Fin
     simp at e00
   have hlam : lam ≠ 0 := by
     intro h0
-    have hy : u₁ = (At 0 0 * u₁ 0 + At 0 1 * u₁ 1) • ũ₁ := eq_smul_col_of_row_one h2' h0
+    have hy : u₁ = (At 0 0 * u₁ 0 + At 0 1 * u₁ 1) • u_tilde₁ := eq_smul_col_of_row_one h2' h0
     have hc : At 0 0 * u₁ 0 + At 0 1 * u₁ 1 ≠ 0 := by
       intro hc
       rw [hc, zero_smul] at hy
@@ -742,8 +743,8 @@ theorem matching_left_splitRed_of_span_ne (A Ainv At AtInv : Matrix (Fin 2) (Fin
     rw [hkron, hW, kronRow_mulVec_kron]
     change lam • v = lam • ((A 0 0 * Ainv 0 0 + A 0 1 * Ainv 1 0) • v)
     rw [e00, one_smul]
-  · have hy : ũ₂ - lam⁻¹ • u₁ =
-        (At 0 0 * (ũ₂ - lam⁻¹ • u₁) 0 + At 0 1 * (ũ₂ - lam⁻¹ • u₁) 1) • ũ₁ := by
+  · have hy : u_tilde₂ - lam⁻¹ • u₁ =
+        (At 0 0 * (u_tilde₂ - lam⁻¹ • u₁) 0 + At 0 1 * (u_tilde₂ - lam⁻¹ • u₁) 1) • u_tilde₁ := by
       refine eq_smul_col_of_row_one h2' ?_
       change At 1 0 * (AtInv 0 1 - lam⁻¹ * Ainv 0 0) + At 1 1 * (AtInv 1 1 - lam⁻¹ * Ainv 1 0) = 0
       have hl : lam⁻¹ * (At 1 0 * Ainv 0 0 + At 1 1 * Ainv 1 0) = 1 := inv_mul_cancel₀ hlam
@@ -767,16 +768,16 @@ theorem matAtInv_mul : matAtInv * matAt = 1 := by
 noncomputable abbrev redOne : MultiBlockCompression tensorB labels blocks :=
   splitRed 1 1 (Matrix.mul_one 1) (Matrix.mul_one 1)
 
-/-- The split reduction `g̃ = Ã ⊗ 1₂`. -/
+/-- The split reduction `g_tilde = Ã ⊗ 1₂`. -/
 noncomputable abbrev redAt : MultiBlockCompression tensorB labels blocks :=
   splitRed matAt matAtInv matAt_mul matAtInv_mul
 
 /-- **The printed instance** (*The asymmetric fundamental theorem of matrix product states*, Example
-6.13), for `A = 1` and `Ã = [[1, 0], [1, 1]]`, where `ℂ u₁ = ℂ e₁ ≠ ℂ ũ₁ = ℂ (1, -1)`: the matching
-pairs position `1` of `g` with position `2` of `g̃`; `U = ℂ u₁ ⊗ ℂ²`, `N = ℂ ũ₁ ⊗ ℂ²`; the
-intertwiner is the scalar `λ = ã₂ u₁ = 1`, with `W̃₂ (u₁ ⊗ v) = λ v`; and
-`ũ₂ - λ⁻¹ u₁ = (-1, 1)ᵀ ∈ ℂ ũ₁`. The matching, `U`, `N` and `W̃₂` are read off
-`matching_left_splitRed_of_span_ne`. -/
+6.13), for `A = 1` and `Ã = [[1, 0], [1, 1]]`, where `ℂ u₁ = ℂ e₁ ≠ ℂ u_tilde₁ = ℂ (1, -1)`: the
+matching pairs position `1` of `g` with position `2` of `g_tilde`; `U = ℂ u₁ ⊗ ℂ²`,
+`N = ℂ u_tilde₁ ⊗ ℂ²`; the intertwiner is the scalar `λ = ã₂ u₁ = 1`, with
+`W_tilde₂ (u₁ ⊗ v) = λ v`; and `u_tilde₂ - λ⁻¹ u₁ = (-1, 1)ᵀ ∈ ℂ u_tilde₁`. The matching, `U`, `N`
+and `W_tilde₂` are read off `matching_left_splitRed_of_span_ne`. -/
 theorem matching_left_redOne_redAt :
     let π := redOne.matching redAt isNormal_blocks dims_pos isNormal_blocks dims_pos
     let k := redOne.ord (Sum.inl slot0)

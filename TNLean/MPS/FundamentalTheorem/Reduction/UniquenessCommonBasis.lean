@@ -21,12 +21,12 @@ so the union of bases of the `L_j` is adapted to both flags. The change of coord
 is invertible, and
 $$g = 𝔄 Γ,\qquad \widetilde g = \widetilde{𝔄} P_X Γ,\qquad
 \widetilde g g^{-1} = \widetilde{𝔄} P_X 𝔄^{-1},$$
-with `𝔄` block upper triangular with identity diagonal blocks in the order of `P`, `𝔄̃` likewise in
-the order of `Q`, and `P_X` the block permutation matrix that sends the block of position `j` to the
-block of position `π(j)` through the intertwiner `X_j` of *Two compressions with different flags*
-(blueprint `thm:asym_uniq_different_flags`). This is *A basis adapted to both flags* (blueprint
-`thm:asym_uniq_common_basis`; for two families, *The asymmetric fundamental theorem of matrix
-product states*, Theorem 6.5).
+with `𝔄` block upper triangular with identity diagonal blocks in the order of `P`, `𝔄_tilde`
+likewise in the order of `Q`, and `P_X` the block permutation matrix that sends the block of
+position `j` to the block of position `π(j)` through the intertwiner `X_j` of *Two compressions with
+different flags* (blueprint `thm:asym_uniq_different_flags`). This is *A basis adapted to both
+flags* (blueprint `thm:asym_uniq_common_basis`; for two families, *The asymmetric fundamental
+theorem of matrix product states*, Theorem 6.5).
 
 ## Main definitions
 
@@ -39,7 +39,7 @@ product states*, Theorem 6.5).
   coordinates `Γ` and `P_X Γ` adapted to both flags.
 * `MPSTensor.MultiBlockCompression.unipotentFactor`,
   `MPSTensor.MultiBlockCompression.unipotentFactor'`,
-  `MPSTensor.MultiBlockCompression.matchingPermMatrix`: the factors `𝔄`, `𝔄̃` and `P_X`.
+  `MPSTensor.MultiBlockCompression.matchingPermMatrix`: the factors `𝔄`, `𝔄_tilde` and `P_X`.
 
 ## Main results
 
@@ -53,7 +53,7 @@ product states*, Theorem 6.5).
   `MPSTensor.MultiBlockCompression.blockDiag'_unipotentFactor` and their primed versions: the two
   factors are unipotent.
 * `MPSTensor.MultiBlockCompression.gaugeMatrix_mul_gaugeMatrixInv_eq`: the factorization
-  `g̃ g⁻¹ = 𝔄̃ P_X 𝔄⁻¹` of *A basis adapted to both flags*.
+  `g_tilde g⁻¹ = 𝔄_tilde P_X 𝔄⁻¹` of *A basis adapted to both flags*.
 
 ## References
 
@@ -545,8 +545,8 @@ to both flags*). -/
 noncomputable def unipotentFactor : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ :=
   coordChange (P.commonGauge Q hC hD hC' hD') P.gauge
 
-/-- **The unipotent factor `𝔄̃ = g̃ (P_X Γ)⁻¹`** (blueprint `thm:asym_uniq_common_basis`, *A basis
-adapted to both flags*). -/
+/-- **The unipotent factor `𝔄_tilde = g_tilde (P_X Γ)⁻¹`** (blueprint `thm:asym_uniq_common_basis`,
+*A basis adapted to both flags*). -/
 noncomputable def unipotentFactor' : Matrix (BlockSpace D' S' Q.z) (BlockSpace D' S' Q.z) ℂ :=
   coordChange (P.commonGauge' Q hC hD hC' hD') Q.gauge
 
@@ -579,8 +579,9 @@ theorem blockDiag'_unipotentFactor (b : BlockIndex S P.z) :
   rw [← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec, unipotentFactor, coordChange_mulVec, hΓ,
     Matrix.one_mulVec, blockProj_mulVec, ← hxv', P.leftRow_mulVec]
 
-/-- **`𝔄̃` is block upper triangular** in the order of `Q` (blueprint `thm:asym_uniq_common_basis`,
-*A basis adapted to both flags*): `g̃` and `P_X Γ` both map `M'_{k'}` onto `E'_{k'}`. -/
+/-- **`𝔄_tilde` is block upper triangular** in the order of `Q` (blueprint
+`thm:asym_uniq_common_basis`, *A basis adapted to both flags*): `g_tilde` and `P_X Γ` both map
+`M'_{k'}` onto `E'_{k'}`. -/
 theorem blockTriangular_unipotentFactor' :
     (P.unipotentFactor' Q hC hD hC' hD').BlockTriangular fun x => Q.ord x.1 := by
   refine Q.blockTriangular_coordChange fun k => ?_
@@ -592,8 +593,8 @@ theorem blockTriangular_unipotentFactor' :
     rfl
   exact h1.symm.trans h2
 
-/-- **The diagonal blocks of `𝔄̃` are identities** (blueprint `thm:asym_uniq_common_basis`, *A basis
-adapted to both flags*). -/
+/-- **The diagonal blocks of `𝔄_tilde` are identities** (blueprint `thm:asym_uniq_common_basis`, *A
+basis adapted to both flags*). -/
 theorem blockDiag'_unipotentFactor' (b' : BlockIndex S' Q.z) :
     (P.unipotentFactor' Q hC hD hC' hD').blockDiag' b' = 1 := by
   rw [← Matrix.blockProj_mul_mul_blockEmbed]
@@ -710,7 +711,7 @@ theorem gaugeMatrix_eq_unipotentFactor_mul :
   gaugeMatrix_eq_coordChange_mul _ _
 
 /-- **A basis adapted to both flags, the second factorization** (blueprint
-`thm:asym_uniq_common_basis`, *A basis adapted to both flags*, `g̃ = 𝔄̃ P_X Γ`). -/
+`thm:asym_uniq_common_basis`, *A basis adapted to both flags*, `g_tilde = 𝔄_tilde P_X Γ`). -/
 theorem gaugeMatrix_eq_unipotentFactor'_mul :
     gaugeMatrix Q.gauge =
       P.unipotentFactor' Q hC hD hC' hD' * P.matchingPermMatrix Q hC hD hC' hD' *
@@ -719,14 +720,14 @@ theorem gaugeMatrix_eq_unipotentFactor'_mul :
   exact gaugeMatrix_eq_coordChange_mul _ _
 
 /-- **A basis adapted to both flags** (blueprint `thm:asym_uniq_common_basis`, *A basis adapted to
-both flags*, the factorization): `g̃ g⁻¹ = 𝔄̃ P_X 𝔄⁻¹`, with `𝔄` and `𝔄̃` block upper triangular
-with identity diagonal blocks in the orders of `P` and `Q` (`blockTriangular_unipotentFactor`,
-`blockDiag'_unipotentFactor` and their primed versions) and `P_X` the block permutation matrix of
-the matching through the intertwiners of *Two compressions with different flags* (blueprint
-`thm:asym_uniq_different_flags`). The two reductions may be onto two different families of normal
-blocks of positive bond dimension, the intertwiners then going from the blocks of the first family
-to the matched blocks of the second (*The asymmetric fundamental theorem of matrix product states*,
-Theorem 6.5). -/
+both flags*, the factorization): `g_tilde g⁻¹ = 𝔄_tilde P_X 𝔄⁻¹`, with `𝔄` and `𝔄_tilde` block upper
+triangular with identity diagonal blocks in the orders of `P` and `Q`
+(`blockTriangular_unipotentFactor`, `blockDiag'_unipotentFactor` and their primed versions) and
+`P_X` the block permutation matrix of the matching through the intertwiners of *Two compressions
+with different flags* (blueprint `thm:asym_uniq_different_flags`). The two reductions may be onto
+two different families of normal blocks of positive bond dimension, the intertwiners then going from
+the blocks of the first family to the matched blocks of the second (*The asymmetric fundamental
+theorem of matrix product states*, Theorem 6.5). -/
 theorem gaugeMatrix_mul_gaugeMatrixInv_eq :
     gaugeMatrix Q.gauge * gaugeMatrixInv P.gauge =
       P.unipotentFactor' Q hC hD hC' hD' * P.matchingPermMatrix Q hC hD hC' hD' *

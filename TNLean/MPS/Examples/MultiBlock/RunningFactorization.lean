@@ -11,11 +11,11 @@ import TNLean.MPS.Examples.MultiBlock.Running
 
 For the running example `B = diag(1, 2)` with one letter and the blocks `C₁ = (1)`, `C₂ = (2)`
 (`TNLean.MPS.Examples.MultiBlock.Running`), the reduction `g = 1` with the order `(1, 2)` and the
-reduction `g̃ = [[β̃, α̃], [δ̃, 0]]` with the order `(2, 1)` are matched block by block, with
-scalars `λ₁ = δ̃` and `λ₂ = α̃`, and `g̃ = 𝔄̃ P_X 𝔄⁻¹` with `𝔄 = 1` (*The asymmetric fundamental
-theorem of matrix product states*, Example 6.14). The last section is the density theorem for one
-letter (Example 4.4): interpolation without constant term, and the multiplicities determined by
-the traces.
+reduction `g_tilde = [[β_tilde, α_tilde], [δ_tilde, 0]]` with the order `(2, 1)` are matched block
+by block, with scalars `λ₁ = δ_tilde` and `λ₂ = α_tilde`, and `g_tilde = 𝔄_tilde P_X 𝔄⁻¹` with
+`𝔄 = 1` (*The asymmetric fundamental theorem of matrix product states*, Example 6.14). The last
+section is the density theorem for one letter (Example 4.4): interpolation without constant term,
+and the multiplicities determined by the traces.
 
 ## Main results
 
@@ -145,10 +145,11 @@ theorem matching_slot1 (α β δ : ℂ) (h : α * δ ≠ 0) :
     omega
 
 /-- **The matching and the intertwiners** (*The asymmetric fundamental theorem of matrix product
-states*, Example 6.14): between `g = 1` and `g̃ = [[β̃, α̃], [δ̃, 0]]` the matching is `π(1) = 2`,
-`π(2) = 1`; for block `1`, `U = ℂ e₁`, `N = ℂ e₂`, `W̃₁ = λ₁ W₁` on `U` with `λ₁ = δ̃`, and
-`Ṽ₁ - δ̃⁻¹ V₁ = (0, -β̃/(α̃δ̃))ᵀ`; for block `2`, `U = ℂ e₂`, `N = ℂ e₁`, `W̃₂ = λ₂ W₂` on `U` with
-`λ₂ = α̃`, and `Ṽ₂ = α̃⁻¹ V₂`. -/
+states*, Example 6.14): between `g = 1` and `g_tilde = [[β_tilde, α_tilde], [δ_tilde, 0]]` the
+matching is `π(1) = 2`, `π(2) = 1`; for block `1`, `U = ℂ e₁`, `N = ℂ e₂`, `W_tilde₁ = λ₁ W₁` on `U`
+with `λ₁ = δ_tilde`, and `V_tilde₁ - δ_tilde⁻¹ V₁ = (0, -β_tilde/(α_tildeδ_tilde))ᵀ`; for block `2`,
+`U = ℂ e₂`, `N = ℂ e₁`, `W_tilde₂ = λ₂ W₂` on `U` with `λ₂ = α_tilde`, and
+`V_tilde₂ = α_tilde⁻¹ V₂`. -/
 theorem matching_left_right_gOne_redSwap (α β δ : ℂ) (h : α * δ ≠ 0) :
     let Q := redSwap α β δ h
     let π := gOne.matching Q isNormal_blocks dims_pos isNormal_blocks dims_pos
@@ -204,7 +205,8 @@ theorem matching_left_right_gOne_redSwap (α β δ : ℂ) (h : α * δ ≠ 0) :
 
 /-! ### The factorization -/
 
-/-- The scalar intertwiners of `matching_left_right_gOne_redSwap`: `X₁ = δ̃`, `X₂ = α̃`. -/
+/-- The scalar intertwiners of `matching_left_right_gOne_redSwap`: `X₁ = δ_tilde`, `X₂ = α_tilde`.
+-/
 noncomputable def intertwinerScalar (α δ : ℂ) : BlockIndex labels 0 → ℂ
   | Sum.inl s => if s.1 = 0 then δ else α
   | Sum.inr t => t.elim0
@@ -235,9 +237,9 @@ theorem map_complement (j : Fin (labels.card + gOne.z)) :
 
 /-- **The factorization** (*The asymmetric fundamental theorem of matrix product states*, Example
 6.14): with `L₁ = ℂ e₁`, `L₂ = ℂ e₂`, the data of *A basis adapted to both flags* for `g = 1` and
-`g̃ = [[β̃, α̃], [δ̃, 0]]` are `Γ = 1`, `𝔄 = 1`, `P_X = [[0, α̃], [δ̃, 0]]`,
-`𝔄̃ = [[1, β̃/δ̃], [0, 1]]` (in the bond coordinates of the two reductions), and
-`g̃ g⁻¹ = 𝔄̃ P_X 𝔄⁻¹`. -/
+`g_tilde = [[β_tilde, α_tilde], [δ_tilde, 0]]` are `Γ = 1`, `𝔄 = 1`,
+`P_X = [[0, α_tilde], [δ_tilde, 0]]`, `𝔄_tilde = [[1, β_tilde/δ_tilde], [0, 1]]` (in the bond
+coordinates of the two reductions), and `g_tilde g⁻¹ = 𝔄_tilde P_X 𝔄⁻¹`. -/
 theorem isAdaptedFactorization_gOne_redSwap (α β δ : ℂ) (h : α * δ ≠ 0) :
     let Q := redSwap α β δ h
     let PX : Matrix (BlockSpace dims labels 0) (BlockSpace dims labels 0) ℂ :=

@@ -10,12 +10,13 @@ import TNLean.MPS.Examples.MultiBlock.SharpnessOneBlock
 
 *The asymmetric fundamental theorem of matrix product states*, Example 6.10: the tensor `B` on
 `ℂ^{1+z}` with one letter, `B e₀ = e₀` and `B e_j = e_{j-1}` for `1 ≤ j ≤ z`, and the block
-`C = (1)`. The identity gauge puts the block first, `W = e₀ᵀ`, `V = e₀`; the gauge `g̃` with
-`g̃⁻¹ = (f₁, …, f_z, e₀)`, `f_j = e_{j-1} - e_j`, puts the block last, `W̃ = e₀ᵀ + ⋯ + e_zᵀ`,
-`Ṽ = e₀`. Then `W Bⁿ = ∑_{j ≤ min(n,z)} e_jᵀ` and `W̃ Bⁿ = ∑_{j ≤ z} e_jᵀ` are proportional exactly
-when `n ≥ z`, so the bound `|w| ≥ D_B - D_C` of the one-block theorem cannot be lowered for any
-`z ≥ 1`. The cases `z = 1, 2` of `TNLean.MPS.Examples.MultiBlock.SharpnessOneBlock` are instances
-(`tensorBGen_one`, `tensorBGen_two`).
+`C = (1)`. The identity gauge puts the block first, `W = e₀ᵀ`, `V = e₀`; the gauge `g_tilde` with
+`g_tilde⁻¹ = (f₁, …, f_z, e₀)`, `f_j = e_{j-1} - e_j`, puts the block last,
+`W_tilde = e₀ᵀ + ⋯ + e_zᵀ`, `V_tilde = e₀`. Then `W Bⁿ = ∑_{j ≤ min(n,z)} e_jᵀ` and
+`W_tilde Bⁿ = ∑_{j ≤ z} e_jᵀ` are proportional exactly when `n ≥ z`, so the bound `|w| ≥ D_B - D_C`
+of the one-block theorem cannot be lowered for any `z ≥ 1`. The cases `z = 1, 2` of
+`TNLean.MPS.Examples.MultiBlock.SharpnessOneBlock` are instances (`tensorBGen_one`,
+`tensorBGen_two`).
 
 ## Main results
 
@@ -43,10 +44,10 @@ open MPSTensor
 
 *The asymmetric fundamental theorem of matrix product states*, Example 6.10: `B` on `ℂ^{1+z}` with
 `B e₀ = e₀` and `B e_j = e_{j-1}` for `1 ≤ j ≤ z`, and the block `C = (1)`. The identity gauge puts
-the block first, `W = e₀ᵀ`, `V = e₀`; the gauge `g̃` with `g̃⁻¹ = (f₁, …, f_z, e₀)`,
-`f_j = e_{j-1} - e_j`, puts the block last, `W̃ = e₀ᵀ + ⋯ + e_zᵀ`, `Ṽ = e₀`. Then
-`W Bⁿ = ∑_{j ≤ min(n,z)} e_jᵀ` and `W̃ Bⁿ = ∑_{j ≤ z} e_jᵀ`, proportional exactly when `n ≥ z`: the
-bound `|w| ≥ D_B - D_C` of the one-block theorem cannot be lowered for any `z ≥ 1`. The cases
+the block first, `W = e₀ᵀ`, `V = e₀`; the gauge `g_tilde` with `g_tilde⁻¹ = (f₁, …, f_z, e₀)`,
+`f_j = e_{j-1} - e_j`, puts the block last, `W_tilde = e₀ᵀ + ⋯ + e_zᵀ`, `V_tilde = e₀`. Then
+`W Bⁿ = ∑_{j ≤ min(n,z)} e_jᵀ` and `W_tilde Bⁿ = ∑_{j ≤ z} e_jᵀ`, proportional exactly when `n ≥ z`:
+the bound `|w| ≥ D_B - D_C` of the one-block theorem cannot be lowered for any `z ≥ 1`. The cases
 `z = 1, 2` above are instances (`tensorBGen_one`, `tensorBGen_two`). -/
 
 section General
@@ -135,14 +136,15 @@ theorem rowOnes_mul_pow (n : ℕ) : rowOnes z * tensorBGen z 0 ^ n = rowOnes z :
     split_ifs <;> simp [rowOnes]
 
 /-- **The reading maps after words** (*The asymmetric fundamental theorem of matrix product states*,
-Example 6.10): `W Bⁿ = ∑_{j ≤ min(n,z)} e_jᵀ` and `W̃ Bⁿ = ∑_{j ≤ z} e_jᵀ` for every `n ≥ 0`. -/
+Example 6.10): `W Bⁿ = ∑_{j ≤ min(n,z)} e_jᵀ` and `W_tilde Bⁿ = ∑_{j ≤ z} e_jᵀ` for every `n ≥ 0`.
+-/
 theorem rowE0_mul_pow_and_rowOnes_mul_pow (n : ℕ) :
     rowE0 z * tensorBGen z 0 ^ n = Matrix.of (fun _ j => if j.val ≤ n then 1 else 0) ∧
     rowOnes z * tensorBGen z 0 ^ n = rowOnes z :=
   ⟨rowE0_mul_pow n, rowOnes_mul_pow n⟩
 
 /-- **Proportional exactly from length `z` on** (*The asymmetric fundamental theorem of matrix
-product states*, Example 6.10): `W̃ Bⁿ = λ W Bⁿ` for some `λ` iff `n ≥ z`. -/
+product states*, Example 6.10): `W_tilde Bⁿ = λ W Bⁿ` for some `λ` iff `n ≥ z`. -/
 theorem exists_rowOnes_mul_pow_eq_smul_iff (n : ℕ) :
     (∃ c : ℂ, rowOnes z * tensorBGen z 0 ^ n = c • (rowE0 z * tensorBGen z 0 ^ n)) ↔ z ≤ n := by
   rw [rowE0_mul_pow, rowOnes_mul_pow]
@@ -281,17 +283,17 @@ def lastOrdGen : BlockIndex oneSlot z ≃ Fin (1 + z) where
       have := n.isLt
       omega
 
-/-- `g̃`: the row `z` is `e₀ᵀ + ⋯ + e_zᵀ`, the row `p < z` is `-(e_{p+1}ᵀ + ⋯ + e_zᵀ)`. -/
+/-- `g_tilde`: the row `z` is `e₀ᵀ + ⋯ + e_zᵀ`, the row `p < z` is `-(e_{p+1}ᵀ + ⋯ + e_zᵀ)`. -/
 noncomputable def gGen : Matrix (Fin (1 + z)) (Fin (1 + z)) ℂ :=
   Matrix.of fun a b => if a.val = z then 1 else if a.val < b.val then -1 else 0
 
-/-- `g̃⁻¹ = (f₁, …, f_z, e₀)`, `f_j = e_{j-1} - e_j`. -/
+/-- `g_tilde⁻¹ = (f₁, …, f_z, e₀)`, `f_j = e_{j-1} - e_j`. -/
 noncomputable def gInvGen : Matrix (Fin (1 + z)) (Fin (1 + z)) ℂ :=
   Matrix.of fun b c =>
     if c.val = z then (if b.val = 0 then 1 else 0)
     else if b.val = c.val then 1 else if b.val = c.val + 1 then -1 else 0
 
-/-- `g̃ B g̃⁻¹`: `1` at `(z, z)` and at `(p - 1, p)` for `1 ≤ p < z`. -/
+/-- `g_tilde B g_tilde⁻¹`: `1` at `(z, z)` and at `(p - 1, p)` for `1 ≤ p < z`. -/
 noncomputable def kGen : Matrix (Fin (1 + z)) (Fin (1 + z)) ℂ :=
   Matrix.of fun a b => if (a.val = z ∧ b.val = z) ∨ (b.val = a.val + 1 ∧ b.val < z) then 1 else 0
 
@@ -335,7 +337,7 @@ theorem gGen_mul_tensorBGen : gGen (z := z) * tensorBGen z 0 = kGen * gGen := by
 theorem gGen_conj : gGen (z := z) * tensorBGen z 0 * gInvGen = kGen := by
   rw [gGen_mul_tensorBGen, Matrix.mul_assoc, gGen_mul_gInvGen, Matrix.mul_one]
 
-/-- **The reduction `g̃`** with the block last (*The asymmetric fundamental theorem of matrix
+/-- **The reduction `g_tilde`** with the block last (*The asymmetric fundamental theorem of matrix
 product states*, Example 6.10). -/
 noncomputable def lastCompressionGen : MultiBlockCompression (tensorBGen z) oneSlot blockC :=
   compressionGen lastOrdGen gGen gInvGen kGen gGen_mul_gInvGen
@@ -411,8 +413,9 @@ theorem exists_multiBlockCompression_block_first :
     split_ifs <;> first | rfl | (exfalso; omega)
 
 /-- **The second reduction** (*The asymmetric fundamental theorem of matrix product states*, Example
-6.10): `g̃` with `g̃⁻¹ = (f₁, …, f_z, e₀)`, `f_j = e_{j-1} - e_j`, is a reduction with the block
-last, `W̃ = e₀ᵀ + ⋯ + e_zᵀ`, `Ṽ = e₀`; the zero slot at position `p` has injection `f_{p+1}`. -/
+6.10): `g_tilde` with `g_tilde⁻¹ = (f₁, …, f_z, e₀)`, `f_j = e_{j-1} - e_j`, is a reduction with the
+block last, `W_tilde = e₀ᵀ + ⋯ + e_zᵀ`, `V_tilde = e₀`; the zero slot at position `p` has injection
+`f_{p+1}`. -/
 theorem exists_multiBlockCompression_block_last :
     ∃ Q : MultiBlockCompression (tensorBGen z) oneSlot blockC, Q.z = z ∧
     (∀ b, Q.ord b ≤ Q.ord (Sum.inl oneSlotMem)) ∧
@@ -455,8 +458,8 @@ variable (hz : 0 < z)
 include hz in
 /-- **Sharpness** (*The asymmetric fundamental theorem of matrix product states*, Example 6.10;
 blueprint `cor:asym_uniq_one_block`, *Bare uniqueness at the ends of the flag; the one-block
-theorem*): the identity `W̃ B^w = λ W B^w` fails at a word of length `z - 1 = D_B - D_A - 1`, so the
-bound `|w| ≥ D_B - D_A` of the one-block theorem cannot be lowered. -/
+theorem*): the identity `W_tilde B^w = λ W B^w` fails at a word of length `z - 1 = D_B - D_A - 1`,
+so the bound `|w| ≥ D_B - D_A` of the one-block theorem cannot be lowered. -/
 theorem exists_length_eq_sub_one_not_exists_smul : ∃ w : List (Fin 1), w.length = z - 1 ∧
     ¬ ∃ c : ℂ, rowOnes z * Kraus.evalWord (tensorBGen z) w =
       c • (rowE0 z * Kraus.evalWord (tensorBGen z) w) := by
@@ -465,7 +468,7 @@ theorem exists_length_eq_sub_one_not_exists_smul : ∃ w : List (Fin 1), w.lengt
   omega
 
 /-- **The injections after words** (*The asymmetric fundamental theorem of matrix product states*,
-Example 6.10): `Bⁿ Ṽ = Bⁿ V` for reductions with `V = Ṽ = e₀`. -/
+Example 6.10): `Bⁿ V_tilde = Bⁿ V` for reductions with `V = V_tilde = e₀`. -/
 theorem pow_mul_right_eq_of_eq_colE0 (P Q : MultiBlockCompression (tensorBGen z) oneSlot blockC)
     (hP : P.right oneSlotMem = colE0 z) (hQ : Q.right oneSlotMem = colE0 z) (n : ℕ) :
     tensorBGen z 0 ^ n * Q.right oneSlotMem = tensorBGen z 0 ^ n * P.right oneSlotMem := by

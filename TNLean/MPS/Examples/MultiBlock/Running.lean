@@ -14,9 +14,10 @@ states*, Examples 1.2, 3.4, 4.4 and 6.14) has the two one-dimensional blocks `C�
 `C₂ = (2)`. Its invariant subspaces are `0`, `ℂ e₁`, `ℂ e₂`, `ℂ²`, so every reduction onto
 `(C₁, C₂)` without zero block has the flag `0 ⊂ ℂ e₁ ⊂ ℂ²` and the order `(1, 2)`, or the flag
 `0 ⊂ ℂ e₂ ⊂ ℂ²` and the order `(2, 1)`. The reductions with the first flag are the upper triangular
-gauges `h = [[α, β], [0, δ]]`, those with the second flag the gauges `g̃ = [[β̃, α̃], [δ̃, 0]]`.
-Against `g = 1` the gauge `g̃` matches block `1` with block `1` at the other position, with scalars
-`λ₁ = δ̃`, `λ₂ = α̃`, and `g̃ = 𝔄̃ P_X 𝔄⁻¹` with `𝔄 = 1`.
+gauges `h = [[α, β], [0, δ]]`, those with the second flag the gauges
+`g_tilde = [[β_tilde, α_tilde], [δ_tilde, 0]]`. Against `g = 1` the gauge `g_tilde` matches block
+`1` with block `1` at the other position, with scalars `λ₁ = δ_tilde`, `λ₂ = α_tilde`, and
+`g_tilde = 𝔄_tilde P_X 𝔄⁻¹` with `𝔄 = 1`.
 
 This file sets up the example and determines all its reductions; the matching, the intertwiners,
 the factorization and the density theorem for one letter are in
@@ -174,7 +175,7 @@ theorem upper_mul_inv {α β δ : ℂ} (h : α * δ ≠ 0) :
       not_false_eq_true, mul_zero, zero_mul, add_zero, zero_add] <;>
     (try field_simp) <;> ring_nf
 
-/-- The gauge `g̃ = [[β̃, α̃], [δ̃, 0]]` and its inverse. -/
+/-- The gauge `g_tilde = [[β_tilde, α_tilde], [δ_tilde, 0]]` and its inverse. -/
 theorem swap_mul_inv {α β δ : ℂ} (h : α * δ ≠ 0) :
     !![β, α; δ, 0] * !![0, δ⁻¹; α⁻¹, -β / (α * δ)] = 1 ∧
       !![0, δ⁻¹; α⁻¹, -β / (α * δ)] * !![β, α; δ, 0] = 1 := by
@@ -219,8 +220,8 @@ noncomputable def redUpper (α β δ : ℂ) (h : α * δ ≠ 0) :
       fin_cases s <;> simp [ord12]
       norm_num)
 
-/-- The reduction `g̃ = [[β̃, α̃], [δ̃, 0]]` in the order `(2, 1)` (*The asymmetric fundamental
-theorem of matrix product states*, Example 6.14, (6.15)). -/
+/-- The reduction `g_tilde = [[β_tilde, α_tilde], [δ_tilde, 0]]` in the order `(2, 1)` (*The
+asymmetric fundamental theorem of matrix product states*, Example 6.14, (6.15)). -/
 noncomputable def redSwap (α β δ : ℂ) (h : α * δ ≠ 0) :
     MultiBlockCompression tensorB labels blocks :=
   red ord21 tau21 tau21_eq_ord21 !![β, α; δ, 0] !![0, δ⁻¹; α⁻¹, -β / (α * δ)] (swap_mul_inv h).1
@@ -249,8 +250,8 @@ theorem exists_multiBlockCompression_gauge_one :
     ext i j; fin_cases i; fin_cases j <;> simp [ord12]
 
 /-- **The reduction `h`** (*The asymmetric fundamental theorem of matrix product states*, Examples
-1.2 and 3.4): `g̃ = h = [[1, 1], [0, 1]]` is a reduction in the order `(1, 2)` with `W̃₁ = (1, 1)`,
-`W̃₂ = (0, 1)`, `Ṽ₁ = e₁`, `Ṽ₂ = (-1, 1)ᵀ`. -/
+1.2 and 3.4): `g_tilde = h = [[1, 1], [0, 1]]` is a reduction in the order `(1, 2)` with
+`W_tilde₁ = (1, 1)`, `W_tilde₂ = (0, 1)`, `V_tilde₁ = e₁`, `V_tilde₂ = (-1, 1)ᵀ`. -/
 theorem exists_multiBlockCompression_gauge_unipotent :
     ∃ P : MultiBlockCompression tensorB labels blocks, P.z = 0 ∧
     P.ord (Sum.inl slot0) < P.ord (Sum.inl slot1) ∧
@@ -283,7 +284,7 @@ theorem tensorB_pow (n : ℕ) : tensorB 0 ^ n = !![1, 0; 0, (2 : ℂ) ^ n] := by
     simp [pow_succ]
 
 /-- **The reading maps after words** (*The asymmetric fundamental theorem of matrix product states*,
-Example 3.4): `W₁ Bⁿ = (1, 0)` and `W̃₁ Bⁿ = (1, 2ⁿ)` for every `n ≥ 0`, and these are never
+Example 3.4): `W₁ Bⁿ = (1, 0)` and `W_tilde₁ Bⁿ = (1, 2ⁿ)` for every `n ≥ 0`, and these are never
 proportional. -/
 theorem left_mul_pow_ne_smul (n : ℕ) :
     !![(1 : ℂ), 0] * tensorB 0 ^ n = !![1, 0] ∧ !![(1 : ℂ), 1] * tensorB 0 ^ n = !![1, 2 ^ n] ∧
@@ -534,9 +535,10 @@ theorem exists_left_eq_upper_of_ord_lt (P : MultiBlockCompression tensorB labels
     · rfl
 
 /-- **The reductions with the second flag** (*The asymmetric fundamental theorem of matrix product
-states*, Example 6.14, (6.15)): `g̃ = [[β̃, α̃], [δ̃, 0]]` with `α̃δ̃ ≠ 0` is a reduction in the
-order `(2, 1)`, with `W̃₂ = (β̃, α̃)`, `W̃₁ = (δ̃, 0)`, `Ṽ₂ = (0, α̃⁻¹)ᵀ`,
-`Ṽ₁ = (δ̃⁻¹, -β̃/(α̃δ̃))ᵀ`. -/
+states*, Example 6.14, (6.15)): `g_tilde = [[β_tilde, α_tilde], [δ_tilde, 0]]` with
+`α_tildeδ_tilde ≠ 0` is a reduction in the order `(2, 1)`, with `W_tilde₂ = (β_tilde, α_tilde)`,
+`W_tilde₁ = (δ_tilde, 0)`, `V_tilde₂ = (0, α_tilde⁻¹)ᵀ`,
+`V_tilde₁ = (δ_tilde⁻¹, -β_tilde/(α_tildeδ_tilde))ᵀ`. -/
 theorem exists_multiBlockCompression_swap (α β δ : ℂ) (h : α * δ ≠ 0) :
     ∃ P : MultiBlockCompression tensorB labels blocks, P.z = 0 ∧
       P.ord (Sum.inl slot1) < P.ord (Sum.inl slot0) ∧
@@ -556,7 +558,8 @@ theorem exists_multiBlockCompression_swap (α β δ : ℂ) (h : α * δ ≠ 0) :
 
 /-- **Every reduction with the second flag** (*The asymmetric fundamental theorem of matrix product
 states*, Example 6.14): every reduction with the second flag (no zero block, order `(2, 1)`) has
-`W̃₂ = (β̃, α̃)`, `W̃₁ = (δ̃, 0)` with `α̃δ̃ ≠ 0`, that is the gauge `[[β̃, α̃], [δ̃, 0]]`. -/
+`W_tilde₂ = (β_tilde, α_tilde)`, `W_tilde₁ = (δ_tilde, 0)` with `α_tildeδ_tilde ≠ 0`, that is the
+gauge `[[β_tilde, α_tilde], [δ_tilde, 0]]`. -/
 theorem exists_left_eq_swap_of_ord_gt (P : MultiBlockCompression tensorB labels blocks)
     (hz : P.z = 0) (hord : P.ord (Sum.inl slot1) < P.ord (Sum.inl slot0)) :
     ∃ α β δ : ℂ, α * δ ≠ 0 ∧ P.left slot1 = !![β, α] ∧ P.left slot0 = !![δ, 0] := by

@@ -31,17 +31,18 @@ takes `B = [[1, 1, 0], [0, 0, 1], [0, 0, 0]]` on `ℂ³`, that is `B e₀ = e₀
 
 * the identity gauge, in the order block, zero slot, zero slot: reading map `W = (1, 0, 0)` and
   injection `V = e₀`;
-* the gauge `g̃ = [[0, -1, -1], [0, 0, -1], [1, 1, 1]]`, whose inverse has the columns
-  `f₁ = e₀ - e₁`, `f₂ = e₁ - e₂`, `e₀`, with `g̃ B g̃⁻¹ = [[0, 1, 0], [0, 0, 0], [0, 0, 1]]`, in the
-  order zero slot, zero slot, block: reading map `W̃ = (1, 1, 1)` and injection `Ṽ = e₀`.
+* the gauge `g_tilde = [[0, -1, -1], [0, 0, -1], [1, 1, 1]]`, whose inverse has the columns
+  `f₁ = e₀ - e₁`, `f₂ = e₁ - e₂`, `e₀`, with
+  `g_tilde B g_tilde⁻¹ = [[0, 1, 0], [0, 0, 0], [0, 0, 1]]`, in the order zero slot, zero slot,
+  block: reading map `W_tilde = (1, 1, 1)` and injection `V_tilde = e₀`.
 
-Here `W B = (1, 1, 0)` and `W̃ B = (1, 1, 1)` are not proportional, so the identity fails at
-`|w| = 1 = z - 1`, while `B² = [[1, 1, 1], [0, 0, 0], [0, 0, 0]]` gives `W B² = W̃ B² = (1, 1, 1)`,
-and the identity holds with `λ = 1` for every word of length at least `2 = D_B - D_C`. The bound
-therefore cannot be lowered for `z = 2` either. The general case `z ≥ 1` (*The asymmetric
-fundamental theorem of matrix product states*, Example 6.10) is
+Here `W B = (1, 1, 0)` and `W_tilde B = (1, 1, 1)` are not proportional, so the identity fails at
+`|w| = 1 = z - 1`, while `B² = [[1, 1, 1], [0, 0, 0], [0, 0, 0]]` gives
+`W B² = W_tilde B² = (1, 1, 1)`, and the identity holds with `λ = 1` for every word of length at
+least `2 = D_B - D_C`. The bound therefore cannot be lowered for `z = 2` either. The general case
+`z ≥ 1` (*The asymmetric fundamental theorem of matrix product states*, Example 6.10) is
 `TNLean.MPS.Examples.MultiBlock.SharpnessOneBlockGeneral`: `B` on `ℂ^{1+z}` with `B e₀ = e₀`,
-`B e_j = e_{j-1}`; `W Bⁿ` and `W̃ Bⁿ` are proportional exactly when `n ≥ z`.
+`B e_j = e_{j-1}`; `W Bⁿ` and `W_tilde Bⁿ` are proportional exactly when `n ≥ z`.
 
 ## Main definitions
 
@@ -57,11 +58,11 @@ fundamental theorem of matrix product states*, Example 6.10) is
 * `MultiBlockExamples.SharpnessOneBlock.left_mul_evalWord_eq`: `W' B^w = W B^w` for every nonempty
   word.
 * `MultiBlockExamples.SharpnessOneBlock.right_eq`: the two injections agree.
-* `MultiBlockExamples.SharpnessOneBlock.not_exists_left_mul_eq_smul_two`: for `z = 2`, `W̃ B^w` and
-  `W B^w` are not proportional for words of length one.
+* `MultiBlockExamples.SharpnessOneBlock.not_exists_left_mul_eq_smul_two`: for `z = 2`, `W_tilde B^w`
+  and `W B^w` are not proportional for words of length one.
 * `MultiBlockExamples.SharpnessOneBlock.left_mul_sq_eq_two`,
-  `MultiBlockExamples.SharpnessOneBlock.left_mul_evalWord_eq_two`: for `z = 2`, `W̃ B^w = W B^w` for
-  words of length two, and of every length at least two.
+  `MultiBlockExamples.SharpnessOneBlock.left_mul_evalWord_eq_two`: for `z = 2`,
+  `W_tilde B^w = W B^w` for words of length two, and of every length at least two.
 * `MultiBlockExamples.SharpnessOneBlock.right_eq_two`: for `z = 2`, the two injections agree.
 
 ## References
@@ -353,11 +354,11 @@ noncomputable def compressionOfTwo (ord : BlockIndex oneSlot 2 ≃ Fin 3)
       obtain rfl : q = 0 := Subsingleton.elim q 0
       exact hzero t
 
-/-- The gauge of the reduction with the zero slots first, `g̃ = [[0, -1, -1], [0, 0, -1],
+/-- The gauge of the reduction with the zero slots first, `g_tilde = [[0, -1, -1], [0, 0, -1],
 [1, 1, 1]]`; its rows read off the coefficients of `f₁ = e₀ - e₁`, `f₂ = e₁ - e₂` and `e₀`. -/
 def gIntTwo : Matrix (Fin 3) (Fin 3) ℤ := !![0, -1, -1; 0, 0, -1; 1, 1, 1]
 
-/-- The inverse gauge `g̃⁻¹ = [[1, 0, 1], [-1, 1, 0], [0, -1, 0]]`, whose columns are the basis
+/-- The inverse gauge `g_tilde⁻¹ = [[1, 0, 1], [-1, 1, 0], [0, -1, 0]]`, whose columns are the basis
 `f₁ = e₀ - e₁`, `f₂ = e₁ - e₂`, `e₀` adapted to the flag `0 ⊂ ℂ f₁ ⊂ ℂ f₁ + ℂ f₂ ⊂ ℂ³`. -/
 def gInvIntTwo : Matrix (Fin 3) (Fin 3) ℤ := !![1, 0, 1; -1, 1, 0; 0, -1, 0]
 
@@ -369,8 +370,9 @@ noncomputable def firstCompressionTwo : MultiBlockCompression tensorBTwo oneSlot
     (by decide +kernel) (by decide +kernel) (by decide +kernel) (by decide +kernel)
 
 /-- **The reduction with the two zero slots first** (*The asymmetric fundamental theorem of matrix
-product states*, Example 6.10, `z = 2`): the gauge `g̃` with
-`g̃ B g̃⁻¹ = [[0, 1, 0], [0, 0, 0], [0, 0, 1]]`, in the order zero slot, zero slot, block. -/
+product states*, Example 6.10, `z = 2`): the gauge `g_tilde` with
+`g_tilde B g_tilde⁻¹ = [[0, 1, 0], [0, 0, 0], [0, 0, 1]]`, in the order zero slot, zero slot, block.
+-/
 noncomputable def lastCompressionTwo : MultiBlockCompression tensorBTwo oneSlot blockC :=
   compressionOfTwo lastOrdTwo lastTauTwo gIntTwo gInvIntTwo !![0, 1, 0; 0, 0, 0; 0, 0, 1]
     (by decide) (by decide) (by decide +kernel) (by decide +kernel) (by decide +kernel)
@@ -418,7 +420,7 @@ theorem left_firstCompressionTwo : firstCompressionTwo.left oneSlotMem = !![1, 0
   ext i j
   fin_cases i; fin_cases j <;> simp [firstTauTwo, firstOrdTwo, Matrix.one_apply]
 
-/-- The reading map of the reduction with the zero slots first is `W̃ = (1, 1, 1)`. -/
+/-- The reading map of the reduction with the zero slots first is `W_tilde = (1, 1, 1)`. -/
 theorem left_lastCompressionTwo : lastCompressionTwo.left oneSlotMem = !![1, 1, 1] := by
   rw [lastCompressionTwo, left_compressionOfTwo]
   ext i j
@@ -432,7 +434,7 @@ theorem left_firstCompressionTwo_mul (i : Fin 1) :
   fin_cases a
   fin_cases b <;> simp [tensorBTwo, bIntTwo, Matrix.mul_apply, Fin.sum_univ_three]
 
-/-- `W̃ B = (1, 1, 1)`: the sum of the rows of `B`. -/
+/-- `W_tilde B = (1, 1, 1)`: the sum of the rows of `B`. -/
 theorem left_lastCompressionTwo_mul (i : Fin 1) :
     lastCompressionTwo.left oneSlotMem * tensorBTwo i = !![1, 1, 1] := by
   rw [left_lastCompressionTwo]
@@ -441,9 +443,10 @@ theorem left_lastCompressionTwo_mul (i : Fin 1) :
   fin_cases b <;> simp [tensorBTwo, bIntTwo, Matrix.mul_apply, Fin.sum_univ_three]
 
 /-- **The one-block identity fails at length one for `z = 2`** (*The asymmetric fundamental theorem
-of matrix product states*, Example 6.10): for every word of length `1 = z - 1`, `W̃ B^w = (1, 1, 1)`
-is not proportional to `W B^w = (1, 1, 0)`. So the bound `|w| ≥ D_B - D_C = 2` of the one-block
-theorem (blueprint `cor:asym_uniq_one_block`) cannot be lowered for `z = 2`. -/
+of matrix product states*, Example 6.10): for every word of length `1 = z - 1`,
+`W_tilde B^w = (1, 1, 1)` is not proportional to `W B^w = (1, 1, 0)`. So the bound
+`|w| ≥ D_B - D_C = 2` of the one-block theorem (blueprint `cor:asym_uniq_one_block`) cannot be
+lowered for `z = 2`. -/
 theorem not_exists_left_mul_eq_smul_two (w : List (Fin 1)) (hw : w.length = 1) :
     ¬ ∃ c : ℂ, lastCompressionTwo.left oneSlotMem * Kraus.evalWord tensorBTwo w =
       c • (firstCompressionTwo.left oneSlotMem * Kraus.evalWord tensorBTwo w) := by
@@ -463,7 +466,7 @@ theorem left_firstCompressionTwo_mul_mul (i j : Fin 1) :
   fin_cases a
   fin_cases b <;> simp [tensorBTwo, bIntTwo, Matrix.mul_apply, Fin.sum_univ_three]
 
-/-- `W̃ B² = (1, 1, 1)`. -/
+/-- `W_tilde B² = (1, 1, 1)`. -/
 theorem left_lastCompressionTwo_mul_mul (i j : Fin 1) :
     lastCompressionTwo.left oneSlotMem * (tensorBTwo i * tensorBTwo j) = !![1, 1, 1] := by
   rw [← Matrix.mul_assoc, left_lastCompressionTwo_mul]
@@ -472,8 +475,8 @@ theorem left_lastCompressionTwo_mul_mul (i j : Fin 1) :
   fin_cases b <;> simp [tensorBTwo, bIntTwo, Matrix.mul_apply, Fin.sum_univ_three]
 
 /-- **The one-block identity at length two for `z = 2`** (*The asymmetric fundamental theorem of
-matrix product states*, Example 6.10): `W̃ B² = W B² = (1, 1, 1)`, the identity of the one-block
-theorem (blueprint `cor:asym_uniq_one_block`) with scalar `1` at `|w| = 2 = z`. -/
+matrix product states*, Example 6.10): `W_tilde B² = W B² = (1, 1, 1)`, the identity of the
+one-block theorem (blueprint `cor:asym_uniq_one_block`) with scalar `1` at `|w| = 2 = z`. -/
 theorem left_mul_sq_eq_two (i j : Fin 1) :
     lastCompressionTwo.left oneSlotMem * (tensorBTwo i * tensorBTwo j) =
       firstCompressionTwo.left oneSlotMem * (tensorBTwo i * tensorBTwo j) := by
@@ -481,7 +484,7 @@ theorem left_mul_sq_eq_two (i j : Fin 1) :
 
 /-- **The one-block identity from length two on, for `z = 2`** (*The asymmetric fundamental theorem
 of matrix product states*, Example 6.10, and the one-block theorem (blueprint
-`cor:asym_uniq_one_block`)): `W̃ B^w = W B^w` for every word of length at least `2`. -/
+`cor:asym_uniq_one_block`)): `W_tilde B^w = W B^w` for every word of length at least `2`. -/
 theorem left_mul_evalWord_eq_two (w : List (Fin 1)) (hw : 2 ≤ w.length) :
     lastCompressionTwo.left oneSlotMem * Kraus.evalWord tensorBTwo w =
       firstCompressionTwo.left oneSlotMem * Kraus.evalWord tensorBTwo w := by
@@ -492,7 +495,7 @@ theorem left_mul_evalWord_eq_two (w : List (Fin 1)) (hw : 2 ≤ w.length) :
       Matrix.mul_assoc (firstCompressionTwo.left oneSlotMem), left_mul_sq_eq_two]
 
 /-- **The injections agree for `z = 2`** (*The asymmetric fundamental theorem of matrix product
-states*, Example 6.10): `Ṽ = V = e₀`. -/
+states*, Example 6.10): `V_tilde = V = e₀`. -/
 theorem right_eq_two :
     lastCompressionTwo.right oneSlotMem = firstCompressionTwo.right oneSlotMem := by
   rw [lastCompressionTwo, right_compressionOfTwo, firstCompressionTwo, right_compressionOfTwo]

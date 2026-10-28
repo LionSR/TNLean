@@ -16,11 +16,11 @@ with `C s` on the slot `s` and the `1 × 1` zero matrix on each zero slot. Equiv
 $B^i - \sum_s V_s C_s^i W_s$ vanishes, which is the zipper condition.
 
 For two split reductions `P` and `Q` of the same tensor onto the same family, with coordinate
-changes `g` and `g̃`, the relative gauge $h = \tilde g g^{-1}$ intertwines the two block diagonal
-tensors, so its block $h_{b'b}$ intertwines the diagonal block at `b` with the diagonal block at
-`b'`. For normal blocks this block vanishes unless the two blocks are gauge related, and it is a
-scalar multiple of a fixed intertwiner when they are; it also vanishes between a block slot and a
-zero slot. When no two blocks of the family are gauge related, the reading maps and injections of
+changes `g` and `g_tilde`, the relative gauge $h = \tilde g g^{-1}$ intertwines the two block
+diagonal tensors, so its block $h_{b'b}$ intertwines the diagonal block at `b` with the diagonal
+block at `b'`. For normal blocks this block vanishes unless the two blocks are gauge related, and it
+is a scalar multiple of a fixed intertwiner when they are; it also vanishes between a block slot and
+a zero slot. When no two blocks of the family are gauge related, the reading maps and injections of
 the two reductions agree up to one nonzero scalar per block,
 $$\widetilde W_s = \lambda_s W_s,\qquad \widetilde V_s = \lambda_s^{-1} V_s,$$
 as matrices, with no words attached.
@@ -53,8 +53,8 @@ split compressions, bare form*), for the multi-block reductions of blueprint `th
   `MPSTensor.MultiBlockCompression.right_eq_smul_of_split_of_pairwise_not_isGaugeRelated`: without
   repeated blocks, $\widetilde W_s = \lambda_s W_s$ and $\widetilde V_s = \lambda_s^{-1} V_s$.
 * `MPSTensor.MultiBlockCompression.range_rightCol_le_iSup_range_rightCol`: with repeated blocks
-  allowed, the range of `V_b` lies in the sum of the ranges of the `Ṽ_{b'}` over the slots `b'`
-  gauge equivalent to `b` (*The asymmetric fundamental theorem of matrix product states*,
+  allowed, the range of `V_b` lies in the sum of the ranges of the `V_tilde_{b'}` over the slots
+  `b'` gauge equivalent to `b` (*The asymmetric fundamental theorem of matrix product states*,
   Proposition 6.12).
 
 ## References
@@ -254,7 +254,7 @@ theorem remainder_eq_zero_iff_conjMatrix_eq_blockDiagonal' :
     rw [P.conjMatrix_remainder i, key, h i, sub_self, Pi.zero_apply, conjMatrix_zero]
 
 /-- The **relative gauge** $h = \tilde g g^{-1}$ of two reductions `P` (coordinates `g`) and `Q`
-(coordinates `g̃`) of the same tensor (blueprint `prop:asym_uniq_split`, *Uniqueness of split
+(coordinates `g_tilde`) of the same tensor (blueprint `prop:asym_uniq_split`, *Uniqueness of split
 compressions, bare form*). -/
 noncomputable def relativeGauge : Matrix (BlockSpace D S Q.z) (BlockSpace D S P.z) ℂ :=
   gaugeMatrix Q.gauge * gaugeMatrixInv P.gauge
@@ -495,9 +495,10 @@ theorem exists_left_eq_smul_and_right_eq_inv_smul_of_split (hP : P.remainder = 0
 /-- **Split reductions, subspace form** (*The asymmetric fundamental theorem of matrix product
 states*, Proposition 6.12). For two split reductions onto the same family of normal blocks of
 positive bond dimension, repeated blocks allowed, the range of `V_b` lies in the sum of the ranges
-of the `Ṽ_{b'}` over the slots `b'` whose diagonal block is gauge equivalent to that of `b` (zero
-slots are gauge equivalent to each other). Indeed `V_b = ∑_{b'} Ṽ_{b'} h_{b'b}` with `h = g̃ g⁻¹`,
-and by Schur's lemma `h_{b'b} = 0` unless the two diagonal blocks are gauge equivalent. -/
+of the `V_tilde_{b'}` over the slots `b'` whose diagonal block is gauge equivalent to that of `b`
+(zero slots are gauge equivalent to each other). Indeed `V_b = ∑_{b'} V_tilde_{b'} h_{b'b}` with
+`h = g_tilde g⁻¹`, and by Schur's lemma `h_{b'b} = 0` unless the two diagonal blocks are gauge
+equivalent. -/
 theorem range_rightCol_le_iSup_range_rightCol (hP : P.remainder = 0) (hQ : Q.remainder = 0)
     (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s) (b : BlockIndex S P.z) :
     LinearMap.range (P.rightCol b).mulVecLin ≤

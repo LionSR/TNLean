@@ -13,7 +13,7 @@ The tensor `B = (B¹, B²)` on `ℂ⁴` of *The asymmetric fundamental theorem o
 Example 6.16, with the letters as printed there (the normal block `C₁ = (σ_x, E₁₁)`), is
 `B^i = g₀⁻¹ (C₁^i ⊕ T^i) g₀` with `T = ([[0, 1], [0, 1]], [[0, 0], [0, 2]])`, a non-split extension
 of `C₂ = ((1), (2))` by a zero block. It has the reduction `g = g₀` in the order `(C₁, 0, C₂)` and
-the reduction `g̃ = h P g₀` in the order `(0, C₂, C₁')` onto the second family `(C₁', C₂)`,
+the reduction `g_tilde = h P g₀` in the order `(0, C₂, C₁')` onto the second family `(C₁', C₂)`,
 `C₁' = Y C₁ Y⁻¹`, `Y = [[1, 1], [0, 1]]`. The dimension matrix and the basis adapted to both
 flags are in `TNLean.MPS.Examples.MultiBlock.WorkedAdaptedBasis`.
 
@@ -210,7 +210,7 @@ def tauG : BlockSpace dims labels 1 ≃ Fin 4 where
   left_inv := by decide
   right_inv := by decide
 
-/-- The bond coordinates of `g̃`: the zero block on `0`, `C₂` on `1`, `C₁'` on `2, 3`. -/
+/-- The bond coordinates of `g_tilde`: the zero block on `0`, `C₂` on `1`, `C₁'` on `2, 3`. -/
 def tauGt : BlockSpace dims labels 1 ≃ Fin 4 where
   toFun
     | ⟨Sum.inl s, p⟩ => if s.1 = 0 then ⟨(p.val + 2) % 4, Nat.mod_lt _ (by norm_num)⟩ else 1
@@ -239,11 +239,11 @@ def permInt : Matrix (Fin 4) (Fin 4) ℤ :=
 def hInt : Matrix (Fin 4) (Fin 4) ℤ :=
   !![1, 1, 1, -1; 0, 1, -1, 2; 0, 0, 1, 0; 0, 0, 0, 1]
 
-/-- `g̃ = h P g₀`. -/
+/-- `g_tilde = h P g₀`. -/
 def gtInt : Matrix (Fin 4) (Fin 4) ℤ :=
   !![3, 2, 2, 3; -2, -3, -1, 1; 2, 2, 1, 2; 0, 0, 0, 1]
 
-/-- `g̃⁻¹`. -/
+/-- `g_tilde⁻¹`. -/
 def gtInvInt : Matrix (Fin 4) (Fin 4) ℤ :=
   !![-1, 2, 4, -7; 0, -1, -1, 3; 2, -2, -5, 6; 0, 0, 0, 1]
 
@@ -252,8 +252,8 @@ def conjG : Fin 2 → Matrix (Fin 4) (Fin 4) ℤ :=
   ![!![0, 1, 0, 0; 1, 0, 0, 0; 0, 0, 0, 1; 0, 0, 0, 1],
     !![1, 0, 0, 0; 0, 0, 0, 0; 0, 0, 0, 0; 0, 0, 0, 2]]
 
-/-- `g̃ B¹ g̃⁻¹`, `g̃ B² g̃⁻¹` as printed in *The asymmetric fundamental theorem of matrix product
-states*, Example 6.16. -/
+/-- `g_tilde B¹ g_tilde⁻¹`, `g_tilde B² g_tilde⁻¹` as printed in *The asymmetric fundamental theorem
+of matrix product states*, Example 6.16. -/
 def conjGt : Fin 2 → Matrix (Fin 4) (Fin 4) ℤ :=
   ![!![0, 2, 2, -3; 0, 1, 2, -4; 0, 0, 1, 0; 0, 0, 1, -1],
     !![0, 2, 3, -5; 0, 2, 1, -3; 0, 0, 1, -1; 0, 0, 0, 0]]
@@ -280,7 +280,7 @@ noncomputable def redG : MultiBlockCompression tensorB labels blocks :=
       fin_cases s <;> fin_cases i <;> intro p q <;> fin_cases p <;> fin_cases q <;> decide +kernel)
     (by decide +kernel)
 
-/-- **The reduction `g̃ = h P g₀`** in the order `(0, C₂, C₁')` onto the second family (*The
+/-- **The reduction `g_tilde = h P g₀`** in the order `(0, C₂, C₁')` onto the second family (*The
 asymmetric fundamental theorem of matrix product states*, Example 6.16). -/
 noncomputable def redGt : MultiBlockCompression tensorB labels blocks' :=
   MultiBlockCompression.ofRing (Int.castRingHom ℂ) ordGt tauGt
@@ -361,9 +361,9 @@ theorem redG_spec : redG.z = 1 ∧ (redG.ord (Sum.inl slotC1)).val = 0 ∧
       (Matrix.ext fun i j => by fin_cases i <;> fin_cases j <;> decide))
 
 /-- **The second reduction** (*The asymmetric fundamental theorem of matrix product states*, Example
-6.16): `g̃ = h P g₀` is a reduction in the order `(0, C₂, C₁')` onto `(C₁', C₂)`, with `g̃ B¹ g̃⁻¹`
-and `g̃ B² g̃⁻¹` as printed, and its reading maps and injections are the row blocks of `g̃` and the
-column blocks of `g̃⁻¹`. -/
+6.16): `g_tilde = h P g₀` is a reduction in the order `(0, C₂, C₁')` onto `(C₁', C₂)`, with
+`g_tilde B¹ g_tilde⁻¹` and `g_tilde B² g_tilde⁻¹` as printed, and its reading maps and injections
+are the row blocks of `g_tilde` and the column blocks of `g_tilde⁻¹`. -/
 theorem redGt_spec : redGt.z = 1 ∧ (redGt.ord zeroSlot).val = 0 ∧
     (redGt.ord (Sum.inl slotC2)).val = 1 ∧ (redGt.ord (Sum.inl slotC1)).val = 2 ∧
     hInt * permInt * g0Int = gtInt ∧ gtInt * gtInvInt = 1 ∧
@@ -391,8 +391,8 @@ theorem redGt_spec : redGt.z = 1 ∧ (redGt.ord zeroSlot).val = 0 ∧
       (Matrix.ext fun i j => by fin_cases i <;> fin_cases j <;> decide))
 
 /-- **The reading maps of `C₂` are not proportional** (*The asymmetric fundamental theorem of matrix
-product states*, Example 6.16): `W̃_{C₂} = (-2, -3, -1, 1)` and `W_{C₂} = (0, -1, 0, 1)` are not
-proportional. -/
+product states*, Example 6.16): `W_tilde_{C₂} = (-2, -3, -1, 1)` and `W_{C₂} = (0, -1, 0, 1)` are
+not proportional. -/
 theorem not_exists_left_redGt_eq_smul_left_redG : redGt.left slotC2 = toC !![-2, -3, -1, 1] ∧
     redG.left slotC2 = toC !![0, -1, 0, 1] ∧
     ¬ ∃ c : ℂ, redGt.left slotC2 = c • redG.left slotC2 := by
@@ -493,7 +493,8 @@ theorem mem_flagVec_redG (k : Fin (labels.card + redG.z + 1)) (v : Fin 4 → ℂ
     erw [Equiv.apply_symm_apply]
     exact h n (by rw [← hpos]; exact Fin.le_def.1 hy)
 
-/-- Membership in the flag of `g̃`: the coordinates `g̃ v` at the positions `≥ k` vanish. -/
+/-- Membership in the flag of `g_tilde`: the coordinates `g_tilde v` at the positions `≥ k` vanish.
+-/
 theorem mem_flagVec_redGt (k : Fin (labels.card + redGt.z + 1)) (v : Fin 4 → ℂ) :
     v ∈ flagVec redGt k ↔
       ∀ n : Fin 4, k.val ≤ (![0, 1, 2, 2] : Fin 4 → ℕ) n → (toC gtInt *ᵥ v) n = 0 := by
@@ -629,8 +630,8 @@ theorem positionMatching_ord_slotC2 :
 
 /-- **The flags and the matching** (*The asymmetric fundamental theorem of matrix product states*,
 Example 6.16): the flags `M₁ = span{(1, 0, -1, 0), (-1, 1, -1, 1)}`, `M₂ = M₁ + ℂ(-1, 0, 2, 0)`,
-`M̃₁ = ℂ(-1, 0, 2, 0)`, `M̃₂ = M̃₁ + ℂ(2, -1, -2, 0)` (as solution sets of the printed rows of `g₀`
-and `g̃`), and the matching `π(1) = 3`, `π(2) = 1`, `π(3) = 2`. -/
+`M_tilde₁ = ℂ(-1, 0, 2, 0)`, `M_tilde₂ = M_tilde₁ + ℂ(2, -1, -2, 0)` (as solution sets of the
+printed rows of `g₀` and `g_tilde`), and the matching `π(1) = 3`, `π(2) = 1`, `π(3) = 2`. -/
 theorem flagVec_redG_redGt_and_matching :
     (∀ k : Fin (labels.card + redG.z + 1), k.val = 1 →
       flagVec redG k = Submodule.span ℂ {![1, 0, -1, 0], ![-1, 1, -1, 1]}) ∧
@@ -694,27 +695,27 @@ theorem flagVec_redG_redGt_and_matching :
 
 /-! ### Two compressions with different flags, on the three pairs -/
 
-/-- The subspace `U = M_k ∩ M̃_{π(k)}` of the pair at the position `k` of `g`. -/
+/-- The subspace `U = M_k ∩ M_tilde_{π(k)}` of the pair at the position `k` of `g`. -/
 noncomputable abbrev subspaceU (k : Fin (labels.card + redG.z)) : Submodule ℂ (Fin 4 → ℂ) :=
   ((redG.flag k.succ ⊓ redGt.flag (positionMatching k).succ).restrictScalars ℂ).map
     (WordModule.toVec tensorB).toLinearMap
 
-/-- The subspace `K = M_{k-1} ∩ M̃_{π(k)}`. -/
+/-- The subspace `K = M_{k-1} ∩ M_tilde_{π(k)}`. -/
 noncomputable abbrev subspaceK (k : Fin (labels.card + redG.z)) : Submodule ℂ (Fin 4 → ℂ) :=
   ((redG.flag k.castSucc ⊓ redGt.flag (positionMatching k).succ).restrictScalars ℂ).map
     (WordModule.toVec tensorB).toLinearMap
 
-/-- The subspace `N = M_{k-1} + M̃_{π(k)-1}`. -/
+/-- The subspace `N = M_{k-1} + M_tilde_{π(k)-1}`. -/
 noncomputable abbrev subspaceN (k : Fin (labels.card + redG.z)) : Submodule ℂ (Fin 4 → ℂ) :=
   ((redG.flag k.castSucc ⊔ redGt.flag (positionMatching k).castSucc).restrictScalars ℂ).map
     (WordModule.toVec tensorB).toLinearMap
 
 /-- **The three matched pairs** (*The asymmetric fundamental theorem of matrix product states*,
 Example 6.16): for the `C₁` pair, `U = span{(1, 0, -1, 0), (-2, 1, 0, 1)}`, `K = 0`,
-`N = span{(-1, 0, 2, 0), (2, -1, -2, 0)}`; the intertwiner is `X = Y`, that is `W̃_{C₁'} = Y W_{C₁}`
-on `U` and `Y C₁^i = C₁'^i Y`; and `Ṽ_{C₁'} - V_{C₁} Y⁻¹` is the printed `4 × 2` matrix, with
-columns in `N`. For the zero block and for `C₂` the intertwiners are `1` (`W̃ = W` on `U`), with
-`dim K = 0` and `dim K = 1`. -/
+`N = span{(-1, 0, 2, 0), (2, -1, -2, 0)}`; the intertwiner is `X = Y`, that is
+`W_tilde_{C₁'} = Y W_{C₁}` on `U` and `Y C₁^i = C₁'^i Y`; and `V_tilde_{C₁'} - V_{C₁} Y⁻¹` is the
+printed `4 × 2` matrix, with columns in `N`. For the zero block and for `C₂` the intertwiners are
+`1` (`W_tilde = W` on `U`), with `dim K = 0` and `dim K = 1`. -/
 theorem inf_sup_intertwiner_redG_redGt :
     subspaceU (redG.ord (Sum.inl slotC1)) = Submodule.span ℂ {![1, 0, -1, 0], ![-2, 1, 0, 1]} ∧
     subspaceK (redG.ord (Sum.inl slotC1)) = ⊥ ∧
