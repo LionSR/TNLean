@@ -67,6 +67,7 @@ import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.FiniteGroupCommutant
 import TNLean.Algebra.FiniteGroupUnitaryAverage
 import TNLean.Algebra.FiniteIndicatorSum
+import TNLean.Algebra.FiniteMatrixMoments
 import TNLean.Algebra.FinsetEnumeration
 import TNLean.Algebra.FinsetNormSumCauchySchwarz
 import TNLean.Algebra.FinsetSubtypeSum

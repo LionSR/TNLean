@@ -483,3 +483,46 @@ whose range is the span of the columns of $M_i(\psi)$.
     \end{align}
     Sum this identity over the remaining values of $\sigma$.
 \end{proof}
+
+
+\begin{theorem}[Finite uniform moments of centered matrix samples]
+    \label{thm:lvv_finite_uniform_matrix_moment}
+    \lean{Matrix.average_norm_average_pow_le_of_centered}
+    \leanok
+    \uses{thm:lvv_even_word_count,thm:lvv_singleton_word_cancellation}
+    Let $A,B$ be finite nonempty sets, with $|B|=\ell$, and let $N\ge1$.
+    Let $X_b:A\to M_N(\mathbb C)$ satisfy
+    \begin{align}
+        \sum_{a\in A}X_b(a) & =0,   \\
+        \|X_b(a)\|          & \le R
+        \qquad(a\in A,\ b\in B),
+        \label{eq:lvv_finite_moment_hypotheses}
+    \end{align}
+    where $R\ge0$ and the norm is the operator norm. For every integer $p\ge1$,
+    \begin{align}
+        \frac1{|A|^\ell}\sum_{\sigma:B\to A}
+        \left\|\frac1\ell\sum_{b\in B}X_b(\sigma(b))\right\|^{2p}
+        \le N\left(\frac{p^2R^2}{\ell}\right)^p.
+        \label{eq:lvv_finite_uniform_matrix_moment}
+    \end{align}
+    The samples need not be Hermitian. This is an auxiliary finite
+    moment estimate; the sharp matrix Bernstein inequality remains a
+    separate result.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:lvv_even_word_count,thm:lvv_singleton_word_cancellation}
+    Put $S_\sigma=\sum_bX_b(\sigma(b))$. Expand
+    $\operatorname{tr}((S_\sigma^*S_\sigma)^p)$ into ordered words of length
+    $2p$ in $B$, alternating adjointed and unadjointed factors.
+    If a sample label occurs exactly once, its sum over $\sigma$ vanishes
+    by Theorem~\ref{thm:lvv_singleton_word_cancellation}, since both
+    $X_b$ and $X_b^*$ are centered. By Theorem~\ref{thm:lvv_even_word_count},
+    at most $\ell^pp^{2p}$ words remain. Each has trace of absolute value
+    at most $NR^{2p}$, because $|\operatorname{tr}T|\le N\|T\|$ and the
+    operator norm is submultiplicative.
+
+    The positive spectral theorem gives
+    $\|S_\sigma\|^{2p}\le\operatorname{tr}((S_\sigma^*S_\sigma)^p)$.
+    Sum this inequality over $\sigma$, apply the preceding bounds, and
+    divide by $|A|^\ell\ell^{2p}$.
+\end{proof}

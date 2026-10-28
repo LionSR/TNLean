@@ -9572,3 +9572,16 @@ there is no need for a new tactic.
   add unrelated dependencies. If a shared one-step statement is needed, move that existing
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
+
+### Alternating identity and adjoint — candidate (2026-10-28)
+
+- **Pattern:** Unfold a repeated pair of operators, generalize the `Fin 2` remainder,
+  and prove the identity and adjoint cases separately with `fin_cases`.
+- **Seen:** Three occurrences in `Algebra/FiniteMatrixMoments.lean`, in the proofs
+  of the coordinate sum, centered singleton factor and uniform factor norm bound.
+- **Abstraction:** If a second module needs the same reasoning, first state that
+  the selected operator is either the identity or the adjoint, then reuse that
+  alternative for sums and norms. A mathematical lemma is preferable to a tactic.
+- **Notes:** The present occurrences are confined to one module, below the
+  two-file promotion threshold. The ordered-product sum itself already reuses
+  `MultilinearMap.map_sum` and `MultilinearMap.map_update_sum`.
