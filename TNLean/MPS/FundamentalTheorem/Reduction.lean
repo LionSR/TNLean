@@ -33,6 +33,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.SplitUniquenessGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.Splitting
 import TNLean.MPS.FundamentalTheorem.Reduction.StarSemisimple
 import TNLean.MPS.FundamentalTheorem.Reduction.StationarySplitting
+import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessAllReductions
 import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessBlocks
 import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessCommonBasis
 import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessDifferentFlags

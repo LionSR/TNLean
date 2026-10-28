@@ -48,6 +48,12 @@ terms of the flag*).
   adapted coordinates vanish at the later steps.
 * `MPSTensor.FlagData.toMultiBlockCompression_flag`: the flag of the compression built from a
   labelled invariant flag is that flag.
+
+## References
+
+Blueprint chapter *The Multi-Block Asymmetric Fundamental Theorem* (`ch:asymmetric_ft`):
+`prop:asym_uniq_dictionary`, *A compression is a labelled flag with an adapted basis*, and
+`lem:asym_uniq_maps`, *The compression maps in terms of the flag*.
 -/
 
 open scoped Matrix

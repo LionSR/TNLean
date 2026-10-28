@@ -54,6 +54,12 @@ is the uniqueness of the blocks (blueprint `thm:asym_uniq_blocks`, *The blocks a
 * `MPSTensor.MultiBlockCompression.matching_inl_iff`, `MPSTensor.MultiBlockCompression.z_eq`,
   `MPSTensor.MultiBlockCompression.z_eq_and_exists_equiv_isGaugeRelated`: the uniqueness of the
   blocks (blueprint `thm:asym_uniq_blocks`, *The blocks are unique*).
+
+## References
+
+Blueprint chapter *The Multi-Block Asymmetric Fundamental Theorem* (`ch:asymmetric_ft`):
+`lem:asym_uniq_step`, *One step against another*, `prop:asym_uniq_matching`, *The matching*, and
+`thm:asym_uniq_blocks`, *The blocks are unique*.
 -/
 
 open scoped Matrix
@@ -203,6 +209,26 @@ theorem IsGaugeRelated.dim_eq {A : MPSTensor d D₁} {A' : MPSTensor d D₂}
       (by rw [← Matrix.toLin'_mul, hXY, Matrix.toLin'_one])
       (by rw [← Matrix.toLin'_mul, hYX, Matrix.toLin'_one])
   simpa using e.finrank_eq.symm
+
+/-- Gauge relatedness is symmetric. -/
+theorem IsGaugeRelated.symm {D₁ D₂ : ℕ} {A : MPSTensor d D₁} {A' : MPSTensor d D₂}
+    (h : IsGaugeRelated A A') : IsGaugeRelated A' A := by
+  obtain ⟨X, Y, hXY, hYX, hint⟩ := h
+  refine ⟨Y, X, hYX, hXY, fun i => ?_⟩
+  calc A' i * Y = Y * (A i * X) * Y := by
+        rw [hint, ← Matrix.mul_assoc, hYX, Matrix.one_mul]
+    _ = Y * A i := by rw [Matrix.mul_assoc, Matrix.mul_assoc, hXY, Matrix.mul_one]
+
+/-- Gauge relatedness is transitive. -/
+theorem IsGaugeRelated.trans {D₁ D₂ D₃ : ℕ} {A : MPSTensor d D₁} {A' : MPSTensor d D₂}
+    {A'' : MPSTensor d D₃} (h : IsGaugeRelated A A') (h' : IsGaugeRelated A' A'') :
+    IsGaugeRelated A A'' := by
+  obtain ⟨X, Y, hXY, hYX, hint⟩ := h
+  obtain ⟨X', Y', hXY', hYX', hint'⟩ := h'
+  refine ⟨X * X', Y' * Y, ?_, ?_, fun i => ?_⟩
+  · rw [Matrix.mul_assoc, ← Matrix.mul_assoc X', hXY', Matrix.one_mul, hXY]
+  · rw [Matrix.mul_assoc, ← Matrix.mul_assoc Y, hYX, Matrix.one_mul, hYX']
+  · rw [← Matrix.mul_assoc, hint, Matrix.mul_assoc, hint', Matrix.mul_assoc]
 
 end GaugeRelatedOfLinearEquiv
 

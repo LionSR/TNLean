@@ -4,9 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.CoveringMatching
-import TNLean.MPS.Examples.MultiBlock.SharpnessOneBlock
+import TNLean.MPS.Examples.MultiBlock.SharpnessOneBlockGeneral
 import TNLean.MPS.FundamentalTheorem.Reduction.LongWords
 import TNLean.MPS.FundamentalTheorem.Reduction.SplitUniqueness
+import TNLean.MPS.FundamentalTheorem.Reduction.SplitUniquenessGauge
+import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessAllReductions
 import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessBlocks
 import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessCommonBasis
 import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessDifferentFlags
@@ -15,12 +17,13 @@ import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessLongWords
 import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessSameFlag
 
 /-!
-# Statement probes and axiom checks for the uniqueness of multi-block reductions
+# Statement probes and checks of the axioms for the uniqueness of multi-block reductions
 
 Each main theorem on the uniqueness of multi-block compressions (blueprint `sec:asym_uniqueness`) is
 instantiated at explicit types: two letters, bond dimension three, and families of blocks
 labelled by `Fin 2` and `Fin 3`. Each probe restates the conclusion and closes it by the
-theorem itself, so a change of statement fails here. The axiom checks pin the standard axioms.
+theorem itself, so a change of statement fails here. The `#print axioms` checks pin the standard
+axioms.
 -/
 
 open scoped Matrix
@@ -227,6 +230,87 @@ example (w : List (Fin 1)) (hw : w ≠ []) :
         Kraus.evalWord MultiBlockExamples.SharpnessOneBlock.tensorB w :=
   MultiBlockExamples.SharpnessOneBlock.left_mul_evalWord_eq w hw
 
+/-! ### Split reductions: the gauge classes and the zero slots
+(blueprint `prop:asym_uniq_split`) -/
+
+example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} {B : MPSTensor 2 3}
+    {P Q : MultiBlockCompression B S C} (hP : P.remainder = 0) (hQ : Q.remainder = 0)
+    (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s) (s₀ : {s // s ∈ S}) :
+    IsUnit (P.classMatrix Q s₀) :=
+  MultiBlockCompression.isUnit_classMatrix hP hQ hC hD s₀
+
+example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} {B : MPSTensor 2 3}
+    {P Q : MultiBlockCompression B S C} (hP : P.remainder = 0) (hQ : Q.remainder = 0)
+    (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) :
+    zeroSlotBlock (P.relativeGauge Q) * zeroSlotBlock (Q.relativeGauge P) = 1 ∧
+      zeroSlotBlock (Q.relativeGauge P) * zeroSlotBlock (P.relativeGauge Q) = 1 :=
+  MultiBlockCompression.zeroSlotBlock_relativeGauge_mul_eq_one_and_mul_eq_one hP hQ hC
+
+example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} {B : MPSTensor 2 3}
+    {P Q : MultiBlockCompression B S C} (hP : P.remainder = 0) (hQ : Q.remainder = 0)
+    (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
+    (hsep : ∀ s ∈ S, ∀ t ∈ S, s ≠ t → ¬ IsGaugeRelated (C s) (C t)) :
+    ∃ c : {s // s ∈ S} → ℂ, ∀ s, c s ≠ 0 ∧ Q.left s = c s • P.left s ∧
+      Q.right s = (c s)⁻¹ • P.right s :=
+  MultiBlockCompression.exists_left_eq_smul_and_right_eq_inv_smul_of_split hP hQ hC hD hsep
+
+example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {z z' : ℕ}
+    (X : Matrix (BlockSpace D S z') (BlockSpace D S z) ℂ) (b' : BlockIndex S z')
+    (b : BlockIndex S z) :
+    blockEntry X b' b = X.submatrix (Sigma.mk b') (Sigma.mk b) :=
+  blockEntry_eq_submatrix X b' b
+
+example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} {B : MPSTensor 2 3}
+    (P : MultiBlockCompression B S C) (g : (Fin 3 → ℂ) ≃ₗ[ℂ] (BlockSpace D S P.z → ℂ))
+    (htri : ∀ i, (conjMatrix g (B i)).BlockTriangular fun x => P.ord x.1)
+    (hdiag : ∀ i b, (conjMatrix g (B i)).blockDiag' b = blockOf D C i b) :
+    P.relativeGauge (P.withGauge g htri hdiag) = coordChange P.gauge g :=
+  MultiBlockCompression.relativeGauge_withGauge P g htri hdiag
+
+/-! ### Gauge relatedness is symmetric and transitive -/
+
+example {A : MPSTensor 2 3} {A' : MPSTensor 2 2} (h : IsGaugeRelated A A') :
+    IsGaugeRelated A' A :=
+  h.symm
+
+example {A : MPSTensor 2 3} {A' : MPSTensor 2 2} {A'' : MPSTensor 2 1}
+    (h : IsGaugeRelated A A') (h' : IsGaugeRelated A' A'') : IsGaugeRelated A A'' :=
+  h.trans h'
+
+/-! ### Bare uniqueness at the first slot (blueprint `cor:asym_uniq_one_block`) -/
+
+example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} {B : MPSTensor 2 3}
+    (P Q : MultiBlockCompression B S C) (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
+    (hD : ∀ s ∈ S, 0 < D s) {s : {s // s ∈ S}}
+    (hs : ∀ t ∈ S, IsGaugeRelated (C s.1) (C t) → t = s.1)
+    (hP : ∀ b, P.ord (Sum.inl s) ≤ P.ord b) (hQ : ∀ b, Q.ord (Sum.inl s) ≤ Q.ord b) :
+    ∃ c : ℂ, c ≠ 0 ∧ Q.right s = c⁻¹ • P.right s :=
+  P.exists_right_eq_inv_smul_of_first Q hC hD hs hP hQ
+
+/-! ### Sharpness for two zero slots and for every number of zero slots
+(*The asymmetric fundamental theorem of matrix product states*, Example 6.10) -/
+
+example (w : List (Fin 1)) (hw : w.length = 1) :
+    ¬ ∃ c : ℂ, MultiBlockExamples.SharpnessOneBlock.lastCompressionTwo.left oneSlotMem *
+        Kraus.evalWord MultiBlockExamples.SharpnessOneBlock.tensorBTwo w =
+      c • (MultiBlockExamples.SharpnessOneBlock.firstCompressionTwo.left oneSlotMem *
+        Kraus.evalWord MultiBlockExamples.SharpnessOneBlock.tensorBTwo w) :=
+  MultiBlockExamples.SharpnessOneBlock.not_exists_left_mul_eq_smul_two w hw
+
+example (w : List (Fin 1)) (hw : 2 ≤ w.length) :
+    MultiBlockExamples.SharpnessOneBlock.lastCompressionTwo.left oneSlotMem *
+        Kraus.evalWord MultiBlockExamples.SharpnessOneBlock.tensorBTwo w =
+      MultiBlockExamples.SharpnessOneBlock.firstCompressionTwo.left oneSlotMem *
+        Kraus.evalWord MultiBlockExamples.SharpnessOneBlock.tensorBTwo w :=
+  MultiBlockExamples.SharpnessOneBlock.left_mul_evalWord_eq_two w hw
+
+example (z : ℕ) (hz : 0 < z) : ∃ w : List (Fin 1), w.length = z - 1 ∧
+    ¬ ∃ c : ℂ, MultiBlockExamples.SharpnessOneBlock.rowOnes z *
+        Kraus.evalWord (MultiBlockExamples.SharpnessOneBlock.tensorBGen z) w =
+      c • (MultiBlockExamples.SharpnessOneBlock.rowE0 z *
+        Kraus.evalWord (MultiBlockExamples.SharpnessOneBlock.tensorBGen z) w) :=
+  MultiBlockExamples.SharpnessOneBlock.exists_length_eq_sub_one_not_exists_smul hz
+
 /-! ### Axioms -/
 
 set_option linter.hashCommand false in
@@ -388,3 +472,35 @@ depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms MultiBlockExamples.SharpnessOneBlock.left_mul_evalWord_eq
+
+set_option linter.hashCommand false in
+/--
+info: 'MPSTensor.MultiBlockCompression.isUnit_classMatrix'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms MPSTensor.MultiBlockCompression.isUnit_classMatrix
+
+set_option linter.hashCommand false in
+/--
+info: 'MPSTensor.MultiBlockCompression.zeroSlotBlock_relativeGauge_mul_eq_one_and_mul_eq_one'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms MPSTensor.MultiBlockCompression.zeroSlotBlock_relativeGauge_mul_eq_one_and_mul_eq_one
+
+set_option linter.hashCommand false in
+/--
+info: 'MPSTensor.MultiBlockCompression.exists_left_eq_smul_and_right_eq_inv_smul_of_split'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms MPSTensor.MultiBlockCompression.exists_left_eq_smul_and_right_eq_inv_smul_of_split
+
+set_option linter.hashCommand false in
+/--
+info: 'MPSTensor.MultiBlockCompression.exists_right_eq_inv_smul_of_first'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms MPSTensor.MultiBlockCompression.exists_right_eq_inv_smul_of_first

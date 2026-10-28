@@ -33,6 +33,11 @@ quotient, which is either a zero module or, by the identification theorem, one o
 * `MPSTensor.isEmpty_linearEquiv_wordModule_of_mpv_ne`,
   `MPSTensor.pairwise_isEmpty_linearEquiv_of_linearIndependent`: distinct, or linearly
   independent, periodic vectors give non-isomorphic word modules.
+
+## References
+
+Blueprint chapter *The Multi-Block Asymmetric Fundamental Theorem* (`ch:asymmetric_ft`):
+`def:asym_flag_data`, *Labelled invariant flag*, and `thm:asym_flag_theorem`, *The flag theorem*.
 -/
 
 universe u

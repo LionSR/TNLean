@@ -49,6 +49,13 @@ A combination of words `a` is an element of the word algebra; it is evaluated on
 * `MPSTensor.eq_zero_of_intertwines_of_not_isGaugeRelated`,
   `MPSTensor.exists_ne_zero_eq_smul_reindex_one_of_intertwines`: the forms of Schur's lemma used for
   split reductions and for equal blocks.
+
+## References
+
+Blueprint chapter *The Multi-Block Asymmetric Fundamental Theorem* (`ch:asymmetric_ft`):
+`lem:asym_normal_simple`, `thm:asym_uniq_density`, *The density theorem with targets*, and
+`cor:asym_uniq_trace_independence`, *Independence of the word traces*; *The asymmetric fundamental
+theorem of matrix product states*, Lemma 3.1, Theorem 4.2 and Corollary 4.3.
 -/
 
 open scoped Matrix

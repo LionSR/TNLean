@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.Reduction.SplitUniqueness
+import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessSameFlag
 
 /-!
 # The multiplicity gauge of split multi-block reductions
@@ -64,28 +65,6 @@ open scoped Matrix
 namespace MPSTensor
 
 variable {d : ℕ}
-
-/-! ### Gauge relatedness is symmetric and transitive -/
-
-/-- Gauge relatedness is symmetric. -/
-theorem IsGaugeRelated.symm {D₁ D₂ : ℕ} {A : MPSTensor d D₁} {A' : MPSTensor d D₂}
-    (h : IsGaugeRelated A A') : IsGaugeRelated A' A := by
-  obtain ⟨X, Y, hXY, hYX, hint⟩ := h
-  refine ⟨Y, X, hYX, hXY, fun i => ?_⟩
-  calc A' i * Y = Y * (A i * X) * Y := by
-        rw [hint, ← Matrix.mul_assoc, hYX, Matrix.one_mul]
-    _ = Y * A i := by rw [Matrix.mul_assoc, Matrix.mul_assoc, hXY, Matrix.mul_one]
-
-/-- Gauge relatedness is transitive. -/
-theorem IsGaugeRelated.trans {D₁ D₂ D₃ : ℕ} {A : MPSTensor d D₁} {A' : MPSTensor d D₂}
-    {A'' : MPSTensor d D₃} (h : IsGaugeRelated A A') (h' : IsGaugeRelated A' A'') :
-    IsGaugeRelated A A'' := by
-  obtain ⟨X, Y, hXY, hYX, hint⟩ := h
-  obtain ⟨X', Y', hXY', hYX', hint'⟩ := h'
-  refine ⟨X * X', Y' * Y, ?_, ?_, fun i => ?_⟩
-  · rw [Matrix.mul_assoc, ← Matrix.mul_assoc X', hXY', Matrix.one_mul, hXY]
-  · rw [Matrix.mul_assoc, ← Matrix.mul_assoc Y, hYX, Matrix.one_mul, hYX']
-  · rw [← Matrix.mul_assoc, hint, Matrix.mul_assoc, hint', Matrix.mul_assoc]
 
 variable {ι : Type*} {D : ι → ℕ} {S : Finset ι} {C : ∀ s, MPSTensor d (D s)}
 
@@ -366,6 +345,16 @@ theorem zeroSlotBlock_relativeGauge_mul_eq_one_and_mul_eq_one (hP : P.remainder 
       zeroSlotBlock (Q.relativeGauge P) * zeroSlotBlock (P.relativeGauge Q) = 1 :=
   ⟨zeroSlotBlock_relativeGauge_mul_zeroSlotBlock_relativeGauge hP hQ hC,
     zeroSlotBlock_relativeGauge_mul_zeroSlotBlock_relativeGauge hQ hP hC⟩
+
+/-- For two reductions with the same number of zero slots and the same order, the second written
+as `P.withGauge g` (blueprint `thm:asym_uniq_same_flag`, *Two compressions with the same flag*),
+the relative gauge is the coordinate change $h = \tilde g g^{-1}$ of that theorem. -/
+theorem relativeGauge_withGauge (P : MultiBlockCompression B S C)
+    (g : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S P.z → ℂ))
+    (htri : ∀ i, (conjMatrix g (B i)).BlockTriangular fun x => P.ord x.1)
+    (hdiag : ∀ i b, (conjMatrix g (B i)).blockDiag' b = blockOf D C i b) :
+    P.relativeGauge (P.withGauge g htri hdiag) = coordChange P.gauge g :=
+  rfl
 
 end MultiBlockCompression
 

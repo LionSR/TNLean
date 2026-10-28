@@ -40,6 +40,12 @@ matching*).
 * `MPSTensor.MultiBlockCompression.matching_eq_of_flag_eq`,
   `MPSTensor.MultiBlockCompression.inf_eq_and_sup_eq_of_flag_eq`: *Two compressions with different
   flags* for coinciding flags, where `U = M_k` and `N = M_{k-1}`.
+
+## References
+
+Blueprint chapter *The Multi-Block Asymmetric Fundamental Theorem* (`ch:asymmetric_ft`):
+`thm:asym_uniq_different_flags`, *Two compressions with different flags*; *The asymmetric
+fundamental theorem of matrix product states*, Theorem 2.2(c).
 -/
 
 open scoped Matrix

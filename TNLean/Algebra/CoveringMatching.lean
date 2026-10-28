@@ -36,6 +36,12 @@ reductions needs the specific matching rule above together with the four lattice
 identify both matched factors with `U / K`, where `K = P ⊓ Q' = Q ⊓ P'`. The isomorphisms
 `U / K ≃ Q / P` and `U / K ≃ Q' / P'` of the step lemma are not lattice statements and are not
 formalized here.
+
+## References
+
+Blueprint chapter *The Multi-Block Asymmetric Fundamental Theorem* (`ch:asymmetric_ft`), section
+*Uniqueness of multi-block compressions*: `lem:asym_uniq_step`, *One step against another*, and
+`prop:asym_uniq_matching`, *The matching*.
 -/
 
 namespace CoveringMatching

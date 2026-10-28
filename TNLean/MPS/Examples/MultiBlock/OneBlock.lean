@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.MultiBlock.Running
-import TNLean.MPS.Examples.MultiBlock.SharpnessOneBlock
+import TNLean.MPS.Examples.MultiBlock.SharpnessOneBlockGeneral
+import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessAllReductions
 
 /-!
 # Two flags with one block

@@ -49,6 +49,11 @@ common decomposition into `|S| + z` blocks, the block of the slot `s` is `C s`, 
 * `MPSTensor.exists_multiBlockCompression_of_isNormal`: the theorem itself, that a tensor whose
   positive-length word traces are the sums of the word traces of a finite family of normal
   blocks admits a multi-block compression onto that family.
+
+## References
+
+Blueprint chapter *The Multi-Block Asymmetric Fundamental Theorem* (`ch:asymmetric_ft`):
+`thm:asym_multiblock`, *Multi-block asymmetric compression theorem*.
 -/
 
 open scoped Matrix

@@ -63,6 +63,12 @@ flags is the hypothesis `∀ k, (P.withGauge g htri hdiag).flag k = P.flag k`, e
   the flag of `(σ, g)`.
 * `MPSTensor.MultiBlockCompression.bijOn_conjTriangular`: the torsor, `(h, μ) ↦ (σ, h g)` is a
   bijection from `T_σ` onto the reductions with the order and flag of `(σ, g)`.
+
+## References
+
+Blueprint chapter *The Multi-Block Asymmetric Fundamental Theorem* (`ch:asymmetric_ft`):
+`thm:asym_uniq_same_flag`, *Two compressions with the same flag*, and `thm:asym_uniq_torsor`, *The
+compressions with one labelled flag form a torsor*.
 -/
 
 open scoped Matrix

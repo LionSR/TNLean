@@ -31,7 +31,8 @@ split compressions, bare form*), for the multi-block reductions of blueprint `th
 
 ## Main definitions
 
-* `MPSTensor.blockEntry`: the block $X_{b'b}$ of a matrix between two graded coordinate spaces.
+* `MPSTensor.blockEntry`: the block $X_{b'b}$ of a matrix between two graded coordinate spaces,
+  the submatrix of `X` on the coordinates of `b'` and `b` (`MPSTensor.blockEntry_eq_submatrix`).
 * `MPSTensor.MultiBlockCompression.relativeGauge`: the relative gauge $h = \tilde g g^{-1}$ of two
   reductions.
 * `MPSTensor.MultiBlockCompression.splitScalar`: the scalar $\lambda_s$ of a block slot.
@@ -55,6 +56,12 @@ split compressions, bare form*), for the multi-block reductions of blueprint `th
   allowed, the range of `V_b` lies in the sum of the ranges of the `Ṽ_{b'}` over the slots `b'`
   gauge equivalent to `b` (*The asymmetric fundamental theorem of matrix product states*,
   Proposition 6.12).
+
+## References
+
+Blueprint chapter *The Multi-Block Asymmetric Fundamental Theorem* (`ch:asymmetric_ft`):
+`prop:asym_uniq_split`, *Uniqueness of split compressions, bare form*; *The asymmetric fundamental
+theorem of matrix product states*, Proposition 6.12.
 -/
 
 open scoped Matrix
@@ -149,6 +156,13 @@ def blockEntry {z z' : ℕ} (X : Matrix (BlockSpace D S z') (BlockSpace D S z) �
   Matrix.blockProj (slotSize D) b' * X * Matrix.blockEmbed (slotSize D) b
 
 variable {z z' : ℕ}
+
+/-- The block $X_{b'b}$ is the submatrix of `X` on the coordinates of `b'` and of `b`. -/
+theorem blockEntry_eq_submatrix (X : Matrix (BlockSpace D S z') (BlockSpace D S z) ℂ)
+    (b' : BlockIndex S z') (b : BlockIndex S z) :
+    blockEntry X b' b = X.submatrix (Sigma.mk b') (Sigma.mk b) := by
+  ext i j
+  simp [blockEntry, Matrix.mul_apply, Matrix.blockProj, Matrix.blockEmbed, ite_mul, mul_ite]
 
 /-- The rows of `X` at the slot `b'`, expanded over its blocks. -/
 theorem blockProj_mul_eq_sum (X : Matrix (BlockSpace D S z') (BlockSpace D S z) ℂ)

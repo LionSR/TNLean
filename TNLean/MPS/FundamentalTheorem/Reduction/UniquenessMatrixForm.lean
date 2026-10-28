@@ -39,6 +39,13 @@ and Corollary 6.4):
 * `MPSTensor.MultiBlockCompression.leftRow_mul_eq_mul_leftRow_mul`,
   `MPSTensor.MultiBlockCompression.exists_rightCol_sub_mul_eq_fromCols_mul`: the reading maps and
   the injections in matrices.
+
+## References
+
+Blueprint chapter *The Multi-Block Asymmetric Fundamental Theorem* (`ch:asymmetric_ft`):
+`lem:asym_uniq_rank_test`, *The matching as a rank test*, and
+`cor:asym_uniq_different_flags_matrices`, *Two compressions with different flags in matrices*; *The
+asymmetric fundamental theorem of matrix product states*, Remark 5.3 and Corollary 6.4.
 -/
 
 open scoped Matrix
