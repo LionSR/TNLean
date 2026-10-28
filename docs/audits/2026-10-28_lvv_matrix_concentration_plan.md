@@ -181,4 +181,13 @@ $$
 
 for centered bounded Hermitian $Z$, $\theta\ge0$, and $\theta R<3$. The expected exponential is proved positive definite by integrating its uniform positive lower bound. These are the bounded-sample analytic steps in [Tropp, Corollary 3.3 and the proof of Theorem 6.1(ii)](https://tropp.caltech.edu/papers/Tro11-User-Friendly-preprint.pdf).
 
-The remaining probability steps are iteration over independent coordinates on an actual product measure, transfer from independence to the joint product distribution, exponential Markov, and the final integral dilation and centering identities. The unrestricted LVV Theorem 2.13 remains outstanding until those steps are composed. The finite uniform theorem already retains the exact source variance and constants. All analytic modules remain suitable for transfer to QICLean before its probability theorem is added.
+The independent-coordinate iteration and joint-law transfer are now proved in the next section. Exponential Markov, optimization, and the final integral dilation and centering identities remain. The unrestricted LVV Theorem 2.13 remains outstanding until those steps are composed. The finite uniform theorem already retains the exact source variance and constants. All analytic modules remain suitable for transfer to QICLean before its probability theorem is added.
+
+
+## Actual joint-law transfer for independent bounded matrices
+
+`IndependentTraceExponential.lean` proves the product-space trace-exponential iteration for arbitrary bounded Hermitian marginal distributions, which may differ. Integrability is derived from the common norm bound. The proof uses `measurePreserving_piFinSuccAbove` to separate the first coordinate and `integral_prod_symm` for Fubini. The logarithmic moment generating function of that coordinate is absorbed into the fixed Hermitian shift, allowing induction on the number of coordinates.
+
+The theorem `Matrix.integral_trace_exp_sum_le_of_iIndepFun` starts from actual `iIndepFun` independence on an arbitrary probability space. Mathlib's `iIndepFun.map_fun_eq_pi_map` identifies the joint distribution with the product of the actual marginal distributions. `integral_map` then transfers the joint trace-exponential integral and every marginal exponential integral. No common marginal distribution or supplied joint expectation identity is assumed. The matrix spaces carry the canonical Borel sigma algebra of their finite-dimensional norm topology.
+
+This proves the bounded form of [Tropp, Lemma 3.4](https://tropp.caltech.edu/papers/Tro11-User-Friendly-preprint.pdf), which is the form required for Bernstein. The source's unrestricted integrable moment-generating statement remains outside the present scope. The sharp general-probability tail still requires scalar Markov and optimization followed by the integral Hermitian dilation and iid centering composition. The finite uniform source-shaped bound is already proved separately.

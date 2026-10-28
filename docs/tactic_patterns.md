@@ -9629,3 +9629,17 @@ there is no need for a new tactic.
   with explicit `f` and `g` arguments. No new integration theorem is required.
 - **Notes:** The three uses are in one module. Explicit integrands prevent
   accidental inference of a pointwise function order during elaboration.
+
+### Separating the first coordinate of a product integral — candidate (2026-10-28)
+
+- **Pattern:** Use `measurePreserving_piFinSuccAbove`, rewrite the inverse
+  coordinate map with `Fin.insertNthEquiv`, and simplify the first-coordinate
+  and tail sum identities.
+- **Seen:** The integrability transfer and Fubini identity in
+  `Algebra/IndependentTraceExponential.lean`.
+- **Abstraction:** The existing measurable equivalence and measure-preserving
+  statements handle the transformation. If a third occurrence is needed in
+  another module, extract the common function identity for the inverse map.
+- **Notes:** There are two occurrences in one module. Simplification uses
+  `cast_eq` for the constant matrix family and `Fin.zero_succAbove` for the
+  tail marginal distributions.

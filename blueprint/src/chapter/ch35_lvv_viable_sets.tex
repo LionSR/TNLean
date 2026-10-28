@@ -895,3 +895,69 @@ whose range is the span of the columns of $M_i(\psi)$.
 	The positive lower bound $e^{\theta Z}\ge e^{-\theta R}I$ ensures that
 	the expected exponential is positive definite.
 \end{proof}
+
+\begin{lemma}[Almost-everywhere bounds and integrability for finite matrix sums]
+	\label{lem:bounded_matrix_sum_integrability}
+	\lean{Matrix.ae_norm_sum_le_of_forall,
+		Matrix.integrable_trace_exp_sum_of_ae_norm_le}
+	\leanok
+	Let $X_1,\ldots,X_m$ be almost everywhere measurable matrix families on a
+	finite measure space, with $\|X_j\|\le R$ almost everywhere. Then
+	$\|\sum_jX_j\|\le mR$ almost everywhere. For every fixed matrix $H$,
+	$\operatorname{Re}\operatorname{tr}e^{H+\sum_jX_j}$ is integrable.
+	Independence and Hermiticity are unnecessary for this conclusion.
+\end{lemma}
+\begin{proof}\leanok
+	\uses{lem:integrable_continuous_bounded_matrix_family}
+	Intersect the finitely many events of full measure and use the triangle
+	inequality. Apply the continuous-function integrability lemma to the sum.
+\end{proof}
+
+\begin{theorem}[Trace-exponential iteration on a product probability space]
+	\label{thm:bounded_product_matrix_trace_exp}
+	\lean{Matrix.integral_trace_exp_sum_pi_le}
+	\leanok
+	\uses{thm:bounded_matrix_trace_exp_integral_jensen,
+		lem:bounded_matrix_sum_integrability}
+	Let $\mu_1,\ldots,\mu_m$ be probability distributions on Hermitian matrices,
+	each bounded in norm by $R$ almost everywhere. On their product space,
+	for every Hermitian $H$,
+	\begin{align}
+		\mathbb E\operatorname{tr}e^{H+\sum_jX_j}
+		\le\operatorname{tr}e^{H+\sum_j\log\mathbb E_{\mu_j}e^{X_j}}.
+		\label{eq:bounded_product_matrix_trace_exp}
+	\end{align}
+	The marginal distributions may differ.
+\end{theorem}
+\begin{proof}\leanok
+	\uses{thm:bounded_matrix_trace_exp_integral_jensen,
+		lem:bounded_matrix_sum_integrability}
+	Separate the first coordinate by the measurable product equivalence and
+	apply Fubini. Integral Jensen replaces that coordinate by its logarithmic
+	moment generating function. Induct on the number of coordinates, allowing
+	the fixed Hermitian shift to change at each step.
+\end{proof}
+
+\begin{theorem}[Trace-exponential bound for bounded independent random matrices]
+	\label{thm:bounded_independent_matrix_trace_exp}
+	\lean{Matrix.integral_trace_exp_sum_le_of_iIndepFun}
+	\leanok
+	\uses{thm:bounded_product_matrix_trace_exp}
+	Let $X_1,\ldots,X_m$ be independent, almost everywhere measurable Hermitian
+	random matrices on a probability space, each bounded in norm by $R$ almost
+	everywhere. For every Hermitian $H$,
+	\begin{align}
+		\mathbb E\operatorname{tr}e^{H+\sum_jX_j}
+		\le\operatorname{tr}e^{H+\sum_j\log\mathbb Ee^{X_j}}.
+		\label{eq:bounded_independent_matrix_trace_exp}
+	\end{align}
+	This is the bounded form of \cite[Lemma~3.4]{Tropp2012TailBounds} used in
+	the Bernstein argument.
+\end{theorem}
+\begin{proof}\leanok
+	\uses{thm:bounded_product_matrix_trace_exp}
+	Independence identifies the actual joint distribution with the product
+	of the marginal distributions. Change variables in the joint integral
+	and in each marginal exponential integral, then apply the product-space
+	theorem.
+\end{proof}

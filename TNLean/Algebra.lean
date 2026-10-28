@@ -91,6 +91,7 @@ import TNLean.Algebra.HermitianDilation
 import TNLean.Algebra.HypercubePhasePotential
 import TNLean.Algebra.IdempotentRankContinuity
 import TNLean.Algebra.IdempotentTracePerturbation
+import TNLean.Algebra.IndependentTraceExponential
 import TNLean.Algebra.InjectivePositiveMapRank
 import TNLean.Algebra.InjectiveRangeProjectorContinuity
 import TNLean.Algebra.IntegerHasseGraph
