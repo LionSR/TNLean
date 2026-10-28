@@ -92,6 +92,134 @@ for an arbitrary finite set of sites and are instantiated here directly.
     in every summand.
 \end{proof}
 
+\begin{definition}[Two-window grouping of a bond family]
+    \label{def:chain_two_window_family}
+    \lean{Fin.twoWindowFamily}
+    \leanok
+    Let $A$ be an additive commutative monoid, and let
+    $h_0,\ldots,h_{N-1}\in A$. For the two-window decomposition of
+    \cite{Arad2016RigorousRG}, take natural numbers $a,b,\ell$ with
+    \begin{align}
+        a+2\ell & \le b,\notag \\
+        b+2\ell & \le N.
+        \label{eq:chain_two_window_admissibility}
+    \end{align}
+    Put $W=\{r\in\mathbb N:r<2\ell\}$ and form the disjoint union
+    \begin{align}
+        I & =(W\sqcup W)\sqcup\{L,M,R\}.
+        \label{eq:chain_two_window_family_alphabet}
+    \end{align}
+    Write $\iota_L,\iota_R$ for the two window injections and
+    $\kappa$ for the bulk injection. Thus $|I|=4\ell+3$, and the two
+    window injections have disjoint images. Define $F:I\to A$ by
+    \begin{align}
+        F_{\iota_L(r)} & =h_{a+r},\notag                  \\
+        F_{\iota_R(r)} & =h_{b+r},\notag                  \\
+        F_{\kappa(L)}  & =\sum_{0\le t<a}h_t,\notag       \\
+        F_{\kappa(M)}  & =\sum_{a+2\ell\le t<b}h_t,\notag \\
+        F_{\kappa(R)}  & =\sum_{b+2\ell\le t<N}h_t.
+        \label{eq:chain_two_window_family_values}
+    \end{align}
+    The three bulk labels remain distinct when their sums vanish.
+\end{definition}
+
+\begin{theorem}[Sum of the grouped bond family]
+    \label{thm:chain_two_window_family_sum}
+    \lean{Fin.sum_twoWindowFamily}
+    \leanok
+    \uses{def:chain_two_window_family}
+    The family in Definition~\ref{def:chain_two_window_family} satisfies
+    \begin{align}
+        \sum_{\alpha\in I}F_\alpha & =\sum_{t=0}^{N-1}h_t.
+        \label{eq:chain_two_window_family_sum}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_two_window_family,thm:chain_two_window_sum}
+    Put $S_L=\sum_{r\in W}h_{a+r}$, $S_R=\sum_{r\in W}h_{b+r}$ and
+    $B_\nu=F_{\kappa(\nu)}$ for $\nu\in\{L,M,R\}$.
+    Expanding~(\ref{eq:chain_two_window_family_values}) gives
+    \begin{align}
+        \sum_{\alpha\in I}F_\alpha
+         & =(S_L+S_R)+(B_L+B_M+B_R)\notag \\
+         & =B_L+S_L+B_M+S_R+B_R.
+        \label{eq:chain_two_window_regrouping}
+    \end{align}
+    Theorem~\ref{thm:chain_two_window_sum} identifies the expression
+    in~(\ref{eq:chain_two_window_regrouping}) with the original sum,
+    proving~(\ref{eq:chain_two_window_family_sum}). Empty intervals
+    cause no exception.
+\end{proof}
+
+\begin{theorem}[Additive maps and the grouped bond family]
+    \label{thm:chain_two_window_family_map}
+    \lean{Fin.twoWindowFamily_map}
+    \leanok
+    \uses{def:chain_two_window_family}
+    Let $A,B$ be additive commutative monoids, let $\varphi:A\to B$ be a
+    homomorphism of additive monoids, and let $F:I\to A$ be the family in
+    Definition~\ref{def:chain_two_window_family}. Form $F':I\to B$ from the
+    array $\varphi(h_0),\ldots,\varphi(h_{N-1})$ using the same windows.
+    Then $F'_\alpha=\varphi(F_\alpha)$ for every $\alpha\in I$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_two_window_family}
+    For a window label the assertion follows from the definition.
+    For each of the three bulk labels, apply preservation of finite sums
+    by $\varphi$ to the corresponding complementary interval.
+\end{proof}
+
+\begin{theorem}[Three-region tensor forms after grouping two windows]
+    \label{thm:chain_two_window_tensor_forms}
+    \lean{Matrix.twoWindowFamily_eq_three_region_forms}
+    \leanok
+    \uses{def:chain_two_window_family}
+    Let $X,Y,Z$ be index sets, and let $H_r$, $H^L_r$, $H^M_r$, $H^R_r$
+    be complex matrices indexed respectively by $(X\times Y)\times Z$,
+    $X$, $Y$, $Z$, for $0\le r<N$.
+    Use the windows and alphabet of Definition~\ref{def:chain_two_window_family},
+    and choose $p,s\in W$. For matrices $A,B,C$ on the three factors, put
+    \begin{align}
+        \mathcal E_L(A) & =(A\otimes I_Y)\otimes I_Z,\notag \\
+        \mathcal E_M(B) & =(I_X\otimes B)\otimes I_Z,\notag \\
+        \mathcal E_R(C) & =I_{X\times Y}\otimes C.
+        \label{eq:chain_two_window_embeddings}
+    \end{align}
+    Suppose that, whenever $r\ne a+p$ and $r\ne b+s$,
+    \begin{align}
+        H_r & =\mathcal E_L(H^L_r)+\mathcal E_M(H^M_r)+\mathcal E_R(H^R_r).
+        \label{eq:chain_two_window_family_ordinary_forms}
+    \end{align}
+    Group each of the four arrays using the same windows, obtaining
+    $F,F^L,F^M,F^R$. Then, for every $\alpha\in I$ other than
+    $\iota_L(p)$ and $\iota_R(s)$,
+    \begin{align}
+        F_\alpha & =\mathcal E_L(F^L_\alpha)+\mathcal E_M(F^M_\alpha)
+        +\mathcal E_R(F^R_\alpha).
+        \label{eq:chain_two_window_grouped_forms}
+    \end{align}
+    This is the additive step in the grouping used in~\cite{Arad2016RigorousRG}; the original tensor identities are hypotheses
+    of the assertion. Empty index sets are allowed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_two_window_family}
+    Each map in~(\ref{eq:chain_two_window_embeddings}) is linear. Hence, for
+    any finite set $J$ of original indices avoiding $a+p$ and $b+s$,
+    \begin{align}
+        \sum_{r\in J}H_r
+         & =\mathcal E_L\left(\sum_{r\in J}H^L_r\right)
+        +\mathcal E_M\left(\sum_{r\in J}H^M_r\right)
+        +\mathcal E_R\left(\sum_{r\in J}H^R_r\right).
+        \label{eq:chain_two_window_sum_forms}
+    \end{align}
+    For a window label different from the two selected labels,
+    use~(\ref{eq:chain_two_window_family_ordinary_forms}). Each complementary
+    interval avoids both selected indices by
+    (\ref{eq:chain_two_window_admissibility}). Applying
+    (\ref{eq:chain_two_window_sum_forms}) to each of these three intervals
+    proves~(\ref{eq:chain_two_window_grouped_forms}) for the bulk labels.
+\end{proof}
+
 \begin{theorem}[The number of range-one supports]
     \label{thm:chain_range_one_support_count}
     \lean{
@@ -111,6 +239,133 @@ for an arbitrary finite set of sites and are instantiated here directly.
     If $L>0$, the norm bound on a singleton term implies $J\ge0$, and the
     triangle inequality gives $\|H\|\le\sum_X\|h_X\|\le2LJ$.
     If $L=0$, there are no interaction terms and both sides vanish.
+\end{proof}
+
+The following upper bound on the gap is an auxiliary estimate for the constant
+comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
+
+\begin{theorem}[An upper bound on the gap of a range-one chain]
+    \label{thm:chain_range_one_gap_upper}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.gap_le_four_mul_of_range_one}
+    \leanok
+    \uses{def:chain_model}
+    Let $L\ge1$, $q\ge2$ and $J\in\mathbb R$, and let $H=\sum_Xh_X$ be a
+    range-one Hamiltonian on the chain with $\lVert h_X\rVert\le J$.
+    Let $\Omega$ be a gapped ground vector of $H$, with gap
+    $\Delta\in\mathbb R$. Then $\Delta\le4J$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:chain_model}
+    Diagonalize the marginal $\rho_0$ at site $0$, and let $U_0$ cyclically
+    permute an orthonormal eigenbasis. Since $q\ge2$, this permutation has
+    no fixed point, so $\operatorname{tr}(\rho_0U_0)=0$. Put $K=U_0\otimes I$
+    and $\varphi=K\Omega$. Since $K$ acts only on site $0$ and is unitary,
+    \begin{align}
+        \langle\Omega,\varphi\rangle & =\langle\Omega,K\Omega\rangle
+        =\operatorname{tr}(\rho_0U_0)=0,\notag                       \\
+        \lVert\varphi\rVert          & =\lVert K\Omega\rVert
+        =\lVert\Omega\rVert=1.\notag
+    \end{align}
+    If $0\notin X$, then $h_X$ acts as the identity on site $0$, so
+    $K^\dagger h_XK=h_X$ and
+    \begin{align}
+        \langle\varphi,h_X\varphi\rangle
+        =\langle K\Omega,h_XK\Omega\rangle
+        =\langle\Omega,K^\dagger h_XK\Omega\rangle
+        =\langle\Omega,h_X\Omega\rangle.\notag
+    \end{align}
+    At most two range-one supports contain $0$: the singleton $\{0\}$ and,
+    when it exists, the edge $\{0,1\}$. Each expectation changes by at most
+    $2J$. The gap inequality gives
+    \begin{align}
+        \Delta\le\langle\varphi,H\varphi\rangle-E_0
+        =\sum_{X\ni0}\bigl(\langle\varphi,h_X\varphi\rangle
+        -\langle\Omega,h_X\Omega\rangle\bigr)\le4J.\notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[A range-one support crossing a cut]
+    \label{thm:chain_range_one_crossing_support}
+    \lean{TNLean.MPS.AreaLaw.IsChainSupport.eq_interval_of_splits_of_range_one}
+    \leanok
+    \uses{def:chain_model}
+    If a support $X$ of range one contains sites on both sides of the cut
+    after the first $k$ sites, then $X=\lbrack k-1,k+1)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_full_support_window}
+    The support contains distinct sites $x<k\le y$, so it has at least two
+    sites. Its diameter is at most one, so it has exactly two sites. By
+    Theorem~\ref{thm:chain_full_support_window} with $R=1$, it is an interval
+    $\lbrack a,a+2)$ of two adjacent sites, and $a\le x<k\le y\le a+1$ forces
+    $a=k-1$.
+\end{proof}
+
+\begin{theorem}[The Hamiltonian at one cut]
+    \label{thm:chain_range_one_cut_decomposition}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_cut_decomposition_of_range_one}
+    \leanok
+    \uses{def:chain_model}
+    Let $H=\sum_Xh_X$ be a range-one Hamiltonian whose terms are positive
+    semidefinite and satisfy $\|h_X\|\le1$. For every natural number $k$,
+    let $A=\lbrack0,k)$ be the interval clipped to the chain. There is a
+    decomposition
+    \begin{align}
+        H & =H_L+H_R+K,\notag \\
+        0 & \le K\le I.\notag
+    \end{align}
+    where $H_L$ is supported on $A$ and $H_R$ on its complement.
+    This gives the decomposition used for nearest-neighbour interactions
+    in~\cite[lines 283 and 409--410]{Landau2015Polynomial}; positive
+    one-site terms are also allowed here.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_range_one_crossing_support}
+    Let $C$ be the set of interaction supports meeting both $A$ and $A^{\mathsf c}$.
+    Partitioning the nonempty interaction supports gives
+    \begin{align}
+        H & =\underbrace{\sum_{X\subseteq A}h_X}_{H_L}
+        +\underbrace{\sum_{X\subseteq A^{\mathsf c}}h_X}_{H_R}
+        +\underbrace{\sum_{X\in C}h_X}_{K}.\notag
+    \end{align}
+    The first two sums have the required supports. By
+    Theorem~\ref{thm:chain_range_one_crossing_support}, $|C|\le1$.
+    Thus $K$ is either zero or one positive semidefinite term of norm at
+    most one, and $0\le K\le I$.
+\end{proof}
+
+\begin{theorem}[Decomposition for boundary gluing]
+    \label{thm:chain_gluing_hamiltonian_decomposition}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_gluing_decomposition_of_range_one}
+    \leanok
+    \uses{def:chain_model}
+    Let $H=\sum_Xh_X$ be a range-one Hamiltonian on $L$ sites with
+    $\lVert h_X\rVert\le1$. For every natural number $k$, put
+    $A=\lbrack0,k)$ and $D=\lbrack0,\max\{k-1,0\})^{\mathsf c}$, with intervals clipped
+    to the chain. There exist matrices $H_L$ and $B$ such that
+    \begin{align}
+        H              & =H_L+B,\notag \\
+        \lVert B\rVert & \le2L.\notag
+    \end{align}
+    where $H_L$ is supported on $A$ and $B$ on $D$.
+    This supplies the decomposition $H=H_L+(H_R+H_i)$ used
+    in~\cite[lines 409--410]{Landau2015Polynomial} for the range-one model
+    of Definition~\ref{def:chain_model}, which also allows Hermitian one-site terms.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_range_one_support_count}
+    Put $H_L=\sum_{X\subseteq A}h_X$ and
+    $B=\sum_{X\nsubseteq A}h_X$. Then $H=H_L+B$, and $H_L$ is
+    supported on $A$. Every support in the second sum contains a site
+    $y\ge k$. For each of its sites $x$, the range-one condition gives
+    $y\le x+1$, so $k\le x+1$ and $x\in D$. Thus $B$ is supported on $D$.
+    By Theorem~\ref{thm:chain_range_one_support_count}, there are at most
+    $2L$ supports. The triangle inequality and $\lVert h_X\rVert\le1$ give
+    \begin{align}
+        \lVert B\rVert & \le\sum_{X\nsubseteq A}\lVert h_X\rVert\le2L.\notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Energy from ground-state overlap for a range-one chain]
@@ -6284,7 +6539,53 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     tensor entries and tagged alphabets.
 \end{proof}
 
+\input{chapter/ch35_core_word_coefficients}
+\input{chapter/ch35_three_region_support}
+\input{chapter/ch35_two_marker_middle_factors}
+
+\input{chapter/ch35_two_marker_middle_index_cardinality}
+
+\begin{theorem}[A square bound for the middle-family cardinality]
+    \label{thm:chain_two_window_family_cardinality}
+    \lean{TNLean.MPS.AreaLaw.crossing_grid_cardinality_le_square}
+    \leanok
+    Let $q,k,\ell,Z,N$ be nonnegative integers with $q\ge2$, $k\ge1$ and
+    $\ell\ge1$, and put $m=\lfloor k/\ell\rfloor$ and
+    $r=\lfloor k/(2\ell)\rfloor$.
+    Suppose that $Z\le(k+1)^{4\ell+3}$ and
+    \begin{align}
+        N & \le (2\ell)^2(r+1)^2 Z(qk)^{24\ell+4m}.\label{eq:chain_middle_family_count}
+    \end{align}
+    Then $N\le D^2$, where $D=(qk)^{18\ell+2m}$.
+    This is a numerical estimate for the counting argument supporting
+    \cite[Proposition~5.7]{Arad2016RigorousRG}.
+\end{theorem}
+\begin{proof}\leanok
+    The inequalities $2\ell\le2^\ell\le(qk)^\ell$ and
+    $r+1\le k+1\le qk\le(qk)^\ell$ give
+    $(2\ell)^2(r+1)^2\le(qk)^{4\ell}$.
+    Also $Z\le(qk)^{4\ell+3}\le(qk)^{7\ell}$.
+    Substituting into~(\ref{eq:chain_middle_family_count}) yields
+    \begin{align*}
+        N\le(qk)^{35\ell+4m}\le(qk)^{36\ell+4m}=D^2.
+    \end{align*}
+\end{proof}
+
+\input{chapter/ch35_selected_middle_data}
+\input{chapter/ch35_selected_coefficient_decomposition}
+\input{chapter/ch35_trace_core_slices}
+\input{chapter/ch35_retained_core_families}
+\input{chapter/ch35_physical_interval_transport}
+\input{chapter/ch35_regional_middle_factors}
+\input{chapter/ch35_selected_middle_mpo_family}
+\input{chapter/ch35_interval_mpo_transfer}
+\input{chapter/ch35_common_middle_mpo_family}
+\input{chapter/ch35_two_marker_scalar_recovery}
+\input{chapter/ch35_two_window_polynomial_recovery}
+\input{chapter/ch35_two_window_polynomial_mpo_family}
+
 \input{chapter/ch35_product_replacement}
+\input{chapter/ch35_matrix_factor_exchange}
 \input{chapter/ch35_copy_region_entropy}
 \input{chapter/ch35_chain_trimming}
 \input{chapter/ch35_lvv_viable_sets}

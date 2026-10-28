@@ -1,0 +1,32 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.MPS.AreaLaw.RetainedCoreFamilies
+import Lean.Elab.Command
+import Lean.Util.CollectAxioms
+
+/-! # Exact declaration dependencies for RetainedCoreFamilies -/
+
+run_cmd do
+  let env ← Lean.getEnv
+  let expectations : Array (Lean.Name × Array Lean.Name) := #[
+    (``MPOTensor.retainedStackCore,
+      #[``propext, ``Classical.choice, ``Quot.sound]),
+    (``TNLean.MPS.AreaLaw.retainedIntervalEquiv,
+      #[``propext, ``Classical.choice, ``Quot.sound]),
+    (``MPOTensor.actualRetainedIntervalClosing,
+      #[``propext, ``Classical.choice, ``Quot.sound]),
+    (``MPOTensor.actualAffineRetainedConfig,
+      #[]),
+    (``MPOTensor.exists_finite_natural_retained_core_family,
+      #[``propext, ``Classical.choice, ``Quot.sound]),
+    (``MPOTensor.prod_actual_natural_affine_eq,
+      #[``propext, ``Classical.choice, ``Quot.sound])]
+  for (decl, expected) in expectations do
+    unless env.contains decl do
+      throwError "Missing declaration {decl}"
+    let actual ← Lean.collectAxioms decl
+    unless actual.size == expected.size && actual.all (expected.contains ·) do
+      throwError "Unexpected axioms for {decl}: {actual}"

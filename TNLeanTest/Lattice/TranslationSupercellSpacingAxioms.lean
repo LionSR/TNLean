@@ -17,6 +17,7 @@ run_cmd do
       ``SimpleGraph.natAbs_valMinAbs_sub_le_edist,
       ``TNLean.Lattice.exists_lt_natAbs_valMinAbs_add,
       ``TNLean.Lattice.exists_mem_supercell_lt_edist_add,
+      ``TNLean.Lattice.exists_mem_supercell_lt_edist,
       ``TNLean.Lattice.exists_mem_supercell_lt_edist_add_ring] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
@@ -24,3 +25,8 @@ run_cmd do
     unless axioms.all (allowed.contains ·) do
       throwError "Unexpected axioms for {decl}: {axioms}"
     Lean.logInfo m!"{decl}: {axioms}"
+
+/-- A range-two coordinate jump can traverse a single graph edge. -/
+example : (2 : ℕ∞) ≤ (2 : ℕ∞) * (⊤ : SimpleGraph (Fin 3)).edist 0 2 := by
+  exact SimpleGraph.natAbs_valMinAbs_sub_le_edist (Γ := ⊤) (n := 5) (R := 2)
+    (Nat.succ_pos 1) (fun i : Fin 3 ↦ (i.val : ZMod 5)) (by decide) 0 2

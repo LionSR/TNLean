@@ -24,6 +24,30 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Matrices of submodule orthogonal projections — promoted (2026-10-26)
+
+- **Pattern:** Form `Matrix.toEuclideanLin.symm W.starProjection.toLinearMap`
+  and prove that it is Hermitian and idempotent, either separately or by
+  transporting `isStarProjection_starProjection` through `Matrix.toEuclideanCLM`.
+- **Defined in:** `TNLean/Algebra/SubmoduleStarProjectionMatrix.lean`,
+  `Submodule.starProjectionMatrix`, `Submodule.isStarProjection_starProjectionMatrix`,
+  and the evaluation lemma `Submodule.toEuclideanLin_starProjectionMatrix`.
+- **Refactored occurrences:** six existing modules:
+  `MPS/AreaLaw/SequentialTruncation.lean`,
+  `MPS/AreaLaw/ViableSet/Basic.lean`,
+  `MPS/ParentHamiltonian/PrimitiveQuasiLocalUniqueness.lean`,
+  `MPS/FundamentalTheorem/Reduction/StationarySplitting.lean`,
+  `PEPS/ParentHamiltonian/CoordinateRangeProjector.lean`, and
+  `PEPS/ParentHamiltonian/RegionParentHamiltonian.lean`.
+- **Notes:** The helper keeps the linear-map definition used by rank and range
+  calculations. Public wrappers retain their existing linear- or continuous-map
+  definitions for downstream explicit rewrites; their star-projection proofs use
+  the same helper by definitional equality. Public statements are unchanged.
+  The six consumer files shrink by 34 lines; the 41-line helper and one generated
+  aggregator import give a net production increase of 8 lines, plus regression
+  coverage. The `ViableSet/Basic.lean` consumer introduced by PR #10182 is included;
+  its former candidate entry is consolidated here. Tracked in #10192.
+
 ### Tensor forms from product generators — promoted (2026-10-23)
 
 - **Pattern:** Establish a linear tensor form for every product generator,
@@ -7133,20 +7157,6 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** promote at a third occurrence, for example a reset filter on another domain.
 
 
-### Matrix of an orthogonal projection is a star projection — candidate (2026-10-25)
-- **Pattern:** `Matrix.toEuclideanLin.symm W.starProjection.toLinearMap` for a submodule `W` of
-  `EuclideanSpace`, followed by the same proof that it is a star projection (Hermitian and
-  idempotent) via `Submodule.isIdempotentElem_starProjection` and self-adjointness.
-- **Seen:** 5 or more occurrences across 4 or more files:
-  `TNLean/MPS/AreaLaw/SequentialTruncation.lean` (`prefixBasisProjection` and its private
-  star-projection lemma), `TNLean/MPS/AreaLaw/ViableSet/Basic.lean` (`spanProjection`,
-  `isStarProjection_spanProjection`), `TNLean/MPS/ParentHamiltonian/PrimitiveQuasiLocalUniqueness.lean`,
-  and the matrix constructions in `StationarySplitting`, `RegionParentHamiltonian` and
-  `CoordinateRangeProjector`.
-- **Abstraction:** proposed `Submodule.starProjectionMatrix W` with
-  `isStarProjection_starProjectionMatrix` in `TNLean/Algebra/`.
-- **Notes:** meets the rule of three; the refactor of the call sites is tracked in #10192.
-
 ## Rejected
 
 ### Lower bound for a logarithmic cut budget — rejected (2026-10-19)
@@ -9437,3 +9447,128 @@ and use a little-o estimate to compare the logarithmic remainder with positive
 entropy growth. There are two independent occurrences. A third consumer should
 share the logarithmic integer-budget lemma and the elementary eventual comparison;
 there is no need for a new tactic.
+
+### Disjoint adjacent chain intervals — promoted (2026-10-27)
+
+- **Pattern:** Prove disjointness of consecutive chain intervals by their common
+  boundary.
+- **Seen:** Seven repeated proofs in `CommonMiddleMPOFamily.lean`,
+  `SelectedCoefficientDecomposition.lean`, `SelectedMiddleData.lean`,
+  `SelectedMiddleMPOFamily.lean` (twice), `ThreeRegionSupport.lean` and
+  `TwoWindowOperatorForms.lean`; two further uses in `Hastings/Window.lean`.
+- **Abstraction:** `TNLean.MPS.AreaLaw.disjoint_interval_interval` in
+  `MPS/AreaLaw/Basic.lean`. The proof applies
+  `Finset.Ico_disjoint_Ico_consecutive` to the natural-number positions.
+- **Notes:** The statement needs no ordering of the endpoints and no positivity
+  of the chain length. The Mathlib theorem is already imported. The former
+  `Hastings.disjoint_interval_interval` is removed rather than retained as an
+  alias, so users of the basic interval result need no entropy module. All seven
+  repeated family proofs and both window uses refer to the common declaration.
+
+### Unit phases in energy and absolute overlap — candidate (2026-10-26)
+
+- **Seen:** `MPS/AreaLaw/ViableSet/GluingBounds.lean` and the companion
+  QICLean module `Channel/LeadingEigenvectorBounds.lean`.
+- **Pattern:** If two unit eigenvectors differ by a scalar of norm one,
+  their images under a linear extension have the same quadratic energy
+  and the same absolute overlap with every fixed vector.
+- **Reuse:** `map_smul`, `inner_smul_left`, `inner_smul_right`, `norm_mul`
+  and `Complex.mul_conj'` give the two equalities directly.
+- **Decision:** There are two occurrences across the companion libraries.
+  Retain the existing lemmas; a third occurrence would justify a shared
+  mathematical statement, rather than a custom tactic.
+
+### Supercell translation beyond a prescribed distance — promoted (2026-10-27)
+
+- **Pattern:** Choose a supercell translate with
+  `n / 2 < G.edist x (g • y) + N`, then use `l + N ≤ n / 2` to obtain
+  `l < G.edist x (g • y)`. For supports of diameter at most `R`, apply
+  `disjoint_biUnion_graphBall_of_lt_edist` at `l = 2 * R + s`.
+- **Seen:** Three applications across
+  `Lattice/TranslationSupercellCommutator.lean` (the two filtered bounds) and
+  `Lattice/TranslationSupercellTruncated.lean` (the truncated bound).
+- **Abstraction:** `TNLean.Lattice.exists_mem_supercell_lt_edist` in
+  `Lattice/TranslationSupercellSpacing.lean`.
+- **Notes:** This specializes the existing range-dependent coordinate estimate
+  to displacement at most one along every edge. The original range-dependent
+  theorem and all three commutator statements are unchanged.
+
+### Joining cut coordinates in tensor projections — reused Mathlib (2026-10-26)
+
+- **Seen:** `MPS/AreaLaw/ViableSet/GluingCoordinates.lean`.
+- **Pattern:** Transport a tensor projection through a product of coordinate equivalences,
+  then compare its fixed vectors by composition with the equivalence.
+- **Reuse:** `Matrix.kroneckerMap_reindex_left`, `Matrix.submatrix_mulVec_equiv` and
+  `Equiv.comp_symm_eq` give the proof directly. The extension identity uses the public
+  coefficient-matrix formula for `Matrix.rightApply`.
+- **Decision:** No new general matrix lemma or tactic is needed. The chain-specific map is
+  the existing isometric change of finite coordinates from Mathlib.
+
+### Eigenvectors in the support of a density matrix — existing Mathlib lemmas (2026-10-26)
+
+- **Seen:** The local `hQu` arguments in
+  `MPS/AreaLaw/ViableSet/ViableLeadingVector.lean` and
+  `MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean`.
+- **Pattern:** From `Q * σ = σ` and `σ *ᵥ u = μ • u`, with `μ ≠ 0`,
+  deduce `Q *ᵥ u = u` by associativity and scalar cancellation.
+- **Reuse:** Apply `congrArg` to the action on `u`, then use
+  `Matrix.mulVec_mulVec`, `Matrix.mulVec_smul` and `smul_right_injective`.
+- **Decision:** These existing lemmas give the new argument in three lines;
+  no separate scalar-inverse calculation or custom tactic is needed.
+
+### Gap-controlled error budget of the viable leading step — candidate (2026-10-27)
+
+- **Seen:** `MPS/AreaLaw/ViableSet/ViableLeadingVector.lean` and
+  `MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean`.
+- **Pattern:** From `Δ ≤ 4`, `c = (Δ / 169) ^ 2`, `‖B‖ ≤ 2 L` and
+  `η = c / (2 L)`, derive `2 c ≤ √c`, `‖B‖ (2 η) ≤ 2 c`,
+  `2 (6 √c + ‖B‖ (2 η)) ≤ 14 √c < Δ / 12` and
+  `4 (6 √c + ‖B‖ (2 η)) < Δ`.
+- **Decision:** Two occurrences of the same twenty-line derivation. A third
+  occurrence should factor it into one lemma beside
+  `lvv_trimming_constant_bounds` that takes `Δ`, `c`, `‖B‖` and `L` and
+  returns the two error bounds.
+
+### Enlarging a covering bound by its dimension — reused Mathlib (2026-10-26)
+
+- **Seen:** `MPS/AreaLaw/ViableSet/BoundaryNet.lean`.
+- **Pattern:** A net on matrices of size `c` has a bound whose grid size and exponent both
+  increase with `c`; replace `c` by a geometric upper bound without changing the net.
+- **Reuse:** `Nat.pow_le_pow_left`, `Nat.ceil_mono` and `pow_le_pow` give the comparison,
+  with the larger base at least one. They also cover zero dimension and exponent.
+- **Decision:** The proof needs no separate scalar declaration or tactic.
+
+### A ceiling bound with a natural factor — reused Mathlib (2026-10-26)
+
+- **Seen:** `MPS/AreaLaw/ViableSet/BoundaryNetPolynomial.lean`.
+- **Pattern:** Bound `ceil(L t)` by `L ceil(t)` for a natural factor, then raise a grid-size
+  comparison to a fixed natural degree.
+- **Reuse:** `Nat.le_ceil`, multiplication by a nonnegative factor and `Nat.ceil_le` give
+  the ceiling bound. Applying `mul_pow` directly keeps the symbolic degree intact.
+- **Decision:** One occurrence; no separate general ceiling lemma or tactic is introduced.
+
+
+### Cardinality of a finite union with a uniform bound — reused Mathlib (2026-10-26)
+
+- **Seen:** `MPS/AreaLaw/ViableSet/SizeTrimming.lean`, `exists_size_trimmed_family`.
+- **Pattern:** A finite family of sets has at most the number of indices times a uniform
+  cardinality bound; here the indices are all actual bond dimensions `m : Fin (D + 1)`.
+- **Reuse:** `Finset.card_biUnion_le_card_mul` gives the union bound directly after
+  `m ≤ D` and the net cardinality estimate bound each selected column set by `D * K`.
+- **Decision:** Reuse the existing Mathlib theorem, with no separate counting lemma or tactic.
+
+### Trace of a normalized pure density — existing mathematical lemmas (2026-10-26)
+
+- **Seen:** The pure-state trace arguments in `MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean`
+  and `MPS/AreaLaw/ViableSet/SizeTrimming.lean`, and the companion QICLean module
+  `Channel/BoundaryDensityMinimizer.lean`.
+- **Pattern:** For a unit vector `x`, rewrite the trace of `vecMulVec x (star x)` as its
+  Euclidean inner product, then as the squared norm.
+- **Reuse:** `Matrix.trace_vecMulVec`, `EuclideanSpace.inner_eq_star_dotProduct` and
+  `inner_self_eq_norm_sq_to_K` give this calculation directly; the last step uses normalization.
+- **Existing general statement:** QICLean's `Matrix.trace_euclideanOuterProduct_self` in
+  `Analysis/ChronologicalGarbage.lean` already states the generic trace identity. That module
+  also imports contraction-chain and register-evolution results, so importing it here would
+  add unrelated dependencies. If a shared one-step statement is needed, move that existing
+  mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
+  statement or introduce a new tactic.
