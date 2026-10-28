@@ -1,0 +1,53 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+% Fallbacks keep this note compilable when a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{The Net Point in the Leading-Eigenvector Lemma of Landau, Vazirani and Vidick}
+\author{}
+\date{2026-10-27}
+
+\begin{document}
+\maketitle
+\gapnote{open-gap}{open}
+
+\section{The source statement}
+
+In the size-trimming step of Landau, Vazirani and Vidick~\cite{Landau2015Polynomial}
+(arXiv:1307.5143v1, \path{algo53.tex}, lines~464--476), $\mathcal N$ is a
+finite net over the boundary contractions of bounded bond dimension, whose
+cardinality is polynomial in the chain length (lines~454--455).
+Lemma \path{l:leading} (lines~493--495) takes for $X$ the element of
+$\mathcal N$ closest to the boundary contraction of a low-energy state $w$,
+and Claim \path{c:2} (lines~519--520) bounds the size of the resulting set by
+the cardinality of $\mathcal N$.
+
+\section{What is formalized}
+
+The leading-vector theorem is stated for any boundary density matrix $X$
+whose trace distance to the boundary contraction of $w$ is at most the
+tolerance of the convex program. The closest net element is one such $X$, so
+the theorem applies to it. The theorem makes no assertion about the net or
+its cardinality, so this is an open gap in the formalization of the
+size-trimming step rather than a restriction of the leading-vector theorem:
+the covering property of the net and Claim \path{c:2} remain unformalized.
+
+\section{Elimination}
+
+The net, its covering property and the polynomial bound on its cardinality
+are separate statements, formalized in the boundary-net modules of the same
+development (tracked in issue \#9820). Combining them with the
+leading-vector theorem gives Claim \path{c:2}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
