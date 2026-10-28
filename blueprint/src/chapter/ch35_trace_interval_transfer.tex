@@ -3,6 +3,7 @@
 \begin{theorem}[Trace presentation of one transferred middle factor]
     \label{thm:interval_trace_factor_transfer}
     \lean{TNLean.MPS.AreaLaw.exists_traceChainOperator_changingRegionalMiddleFactor}
+    \leanok
     \uses{thm:interval_transfer_entry_coordinates,
         thm:trace_interval_slice_configuration_extend}
     Let $q\ge1$ and let $E=\lbrack c,d)$ and $J=\lbrack u,v)$ satisfy
@@ -16,7 +17,7 @@
     before its variable row and column configurations. The dimension
     $\chi$ and the overlap length may vanish.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:interval_transfer_entry_coordinates,
         thm:trace_interval_slice_configuration_extend}
     Write $W$ in the natural conditional form
@@ -28,6 +29,7 @@
 \begin{theorem}[A common transferred family at the same trace dimensions]
     \label{thm:interval_trace_common_family_transfer}
     \lean{TNLean.MPS.AreaLaw.changingRegionalMiddleFamily_trace_and_global_decomposition}
+    \leanok
     \uses{thm:interval_trace_factor_transfer,thm:regional_middle_exterior_transfer}
     Under (\ref{eq:interval_mpo_transfer_endpoints}), let $q\ge1$ and let
     $V_t$, $t\in\iota$, be a finite family on $\mathcal C(E)$, each with
@@ -44,7 +46,7 @@
     (\ref{eq:interval_mpo_transfer_decomposition}). Empty carriers and
     empty overlaps are allowed.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:interval_trace_factor_transfer,thm:regional_middle_exterior_transfer}
     Apply Theorem~\ref{thm:interval_trace_factor_transfer} to each prescribed
     member. The two configuration pairs give the stated cardinality.

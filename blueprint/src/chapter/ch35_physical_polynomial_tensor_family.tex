@@ -40,6 +40,7 @@ $\mathrm{phys}$ denotes its pullback by these two restrictions.
 \begin{theorem}[A common middle-first tensor decomposition]
     \label{thm:physical_polynomial_tensor_family}
     \lean{TNLean.MPS.AreaLaw.exists_common_physical_aeval_mpo_middleFirst_family_fin}
+    \leanok
     \uses{thm:physical_aeval_fin_middle_family}
     Under the supplied data and hypotheses
     (\ref{eq:physical_tensor_hypotheses}), there are a nonnegative integer
@@ -69,7 +70,7 @@ $\mathrm{phys}$ denotes its pullback by these two restrictions.
     middle matrices do not. The dimension $B$ may be zero. No symmetry or
     spectral assumption is imposed on $H$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:physical_aeval_fin_middle_family}
     Choose the common family from
     Theorem~\ref{thm:physical_aeval_fin_middle_family}; this gives

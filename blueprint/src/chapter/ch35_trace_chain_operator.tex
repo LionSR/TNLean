@@ -3,6 +3,7 @@
 \begin{definition}[Trace contraction with a closing matrix]
     \label{def:trace_chain_operator}
     \lean{MPOTensor.traceChainOperator}
+    \leanok
     Let $n,q,\chi$ be nonnegative integers. Supply matrices
     $A_v(i,j)\in\C^{\chi\times\chi}$ for $0\le v<n$ and $0\le i,j<q$,
     together with $C\in\C^{\chi\times\chi}$. Their trace contraction is
@@ -20,6 +21,7 @@
 \begin{theorem}[Absorption of a closing matrix on a nonempty chain]
     \label{thm:trace_chain_closing_absorption}
     \lean{MPOTensor.exists_traceChainOperator_one}
+    \leanok
     Let $n,q,\chi$ be nonnegative integers with $n\ge1$.
     Supply matrices $A_v(x,y)\in\C^{\chi\times\chi}$ for
     $0\le v<n$ and $0\le x,y<q$, and a matrix
@@ -33,7 +35,7 @@
     \end{align}
     The dimensions $q$ and $\chi$ may vanish.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Set $A'_0(x,y)=CA_0(x,y)$ and $A'_v(x,y)=A_v(x,y)$ for $1\le v<n$.
     Associativity gives (\ref{eq:trace_chain_closing_absorption}).
 \end{proof}

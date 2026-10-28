@@ -19,6 +19,7 @@ unsquared polynomial~\cite{gap:alvv16_chebyshev_filter_positivity}.
 \begin{theorem}[A common family for Chebyshev viability improvement]
     \label{thm:physical_chebyshev_viability}
     \lean{TNLean.MPS.AreaLaw.exists_common_physical_chebyshev_viable_family_fin}
+    \leanok
     \uses{thm:physical_polynomial_tensor_family}
     There are a nonnegative integer $N\le D^2$ and matrices
     $W_0,\ldots,W_{N-1}$ on
@@ -59,7 +60,7 @@ unsquared polynomial~\cite{gap:alvv16_chebyshev_filter_positivity}.
     These are supporting consequences for the spectral filtering and
     error-reduction arguments in \cite{Arad2016RigorousRG}.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:physical_polynomial_tensor_family}
     Choose the common family in
     Theorem~\ref{thm:physical_polynomial_tensor_family}.

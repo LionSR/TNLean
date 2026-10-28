@@ -46,6 +46,7 @@ All products of site matrices retain their natural order.
 \begin{theorem}[Restriction of a trace contraction to an interval]
     \label{thm:actual_retained_interval_trace}
     \lean{MPOTensor.trace_actual_retainedInterval_eq}
+    \leanok
     \uses{def:retained_interval_coordinates,def:actual_retained_interval_closing,
         def:trace_chain_operator}
     Use $a+L\le T$, the full-chain tensors $A_v$, the closing matrix $C$,
@@ -61,7 +62,7 @@ All products of site matrices retain their natural order.
     Empty intervals and zero dimensions are allowed whenever the supplied
     configurations exist.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Split the ordered product into prefix, interval and suffix.
     Cyclicity gives $\operatorname{tr}(CPXS)=\operatorname{tr}(SCPX)$,
     and $F=SCP$ by (\ref{eq:actual_retained_interval_closing}).
@@ -70,6 +71,7 @@ All products of site matrices retain their natural order.
 \begin{theorem}[Insertion of fixed configurations at the same trace dimension]
     \label{thm:retained_single_trace_insert}
     \lean{MPOTensor.exists_traceChainOperator_retainedSingle_insert}
+    \leanok
     \uses{def:retained_interval_coordinates,def:trace_chain_operator}
     Let $T,L,q,\chi,a$ be nonnegative integers with $a+L\le T$.
     Put $J=[a,a+L)$ and supply site tensors $A_r$ on the $L$ interior sites,
@@ -86,7 +88,7 @@ All products of site matrices retain their natural order.
     The restrictions to $J$ use its increasing enumeration. Both $L$ and
     $T$ may vanish; no positivity assumption on $q$ or $\chi$ is imposed.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Use $A'_v=A_{v-a}$ inside $J$ and
     $A'_v(i,j)=\mathbf1_{i=\eta_v}\mathbf1_{j=\theta_v}\Id_\chi$ outside $J$.
     If the retained configurations match, the extra letters are identity
@@ -96,6 +98,7 @@ All products of site matrices retain their natural order.
 \begin{theorem}[A trace contraction after restriction and fixed extension]
     \label{thm:trace_interval_slice_configuration_extend}
     \lean{MPOTensor.exists_traceChainOperator_intervalSlice_extend_by_configuration}
+    \leanok
     \uses{thm:actual_retained_interval_trace,thm:retained_single_trace_insert}
     Let $T,L,N,q,\chi,a,b$ be nonnegative integers with $a+L\le T$ and
     $b+L\le N$. Supply old tensors $A_v$ of dimension $\chi$, a closing
@@ -116,7 +119,7 @@ All products of site matrices retain their natural order.
     Restrictions to $J'$ use increasing coordinates. All chain lengths and
     dimensions may vanish, subject only to the stated supplied data.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:actual_retained_interval_trace,thm:retained_single_trace_insert}
     Fix the old outside configurations to those of $f,g$ and apply
     Theorem~\ref{thm:actual_retained_interval_trace}, obtaining the restricted

@@ -3,6 +3,7 @@
 \begin{theorem}[A common polynomial family with periodic trace presentations]
     \label{thm:physical_aeval_periodic_middle_family}
     \lean{TNLean.MPS.AreaLaw.exists_common_physical_aeval_periodic_family_fin}
+    \leanok
     \uses{thm:physical_aeval_fin_middle_family,thm:trace_chain_closing_absorption}
     Retain the hypotheses (\ref{eq:physical_polynomial_family_hypotheses}),
     the supplied window operators, core tensors and closing matrix of
@@ -36,7 +37,7 @@
     where $H$ is given by (\ref{eq:physical_polynomial_hamiltonian}).
     The zero polynomial and zero supplied virtual dimension are allowed.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:physical_aeval_fin_middle_family,thm:trace_chain_closing_absorption}
     Choose the common family and, for each member, its closing matrix and
     tensors from (\ref{eq:physical_polynomial_trace_presentation}).
