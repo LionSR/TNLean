@@ -24,3 +24,10 @@ completed 3,731 jobs with cached Mathlib artifacts. An imported foundations
 inspection of the new theorem reports only `propext`, `Classical.choice`,
 and `Quot.sound`. The blueprint statement and proof have been synchronized.
 Further integration checks are recorded separately with their exact revision.
+
+
+The exact production revision `75597394807a76f2825eb743a8404768316e5658`
+also passed the full 15,013-job library build, strict changed-module check,
+blueprint synchronization and compiled declaration check. The build reported
+no Mathlib source jobs. The imported foundations inspection preceded that
+full check and used the same theorem statement and proof.
