@@ -2669,27 +2669,36 @@ proves that all horizontal bond dimensions agree and all vertical bond
 dimensions agree. The corresponding blueprint entry is
 \path{cor:peps_state_translation_bond_uniform}.
 
-The full source corollary is recorded separately as
-\path{cor:exists_constant_injectivePEPS_of_translationInvariantState} and
-remains not ready. Its open conclusion is the existence of an injective
-translation-invariant tensor \(B\), with the same bond-dimension function and
-the same represented state. Since the source gives no two-dimensional proof,
-the formalization must derive this construction from the translation
-comparisons and the Fundamental Theorem; it must not introduce an unproved
-plaquette relation, seam condition, or compatibility datum as if it were part
-of the cited statement.
+The full source corollary is formalized by
+\leanid{TNLean.PEPS.exists_isTorusTranslationInvariant_sameState}, with
+blueprint entry
+\path{thm:exists_constant_injectivePEPS_of_translationInvariantState}.
+Both periods are at least three, as required by the source's simple
+square-lattice graph at lines 1207--1212. The input tensor may depend on the
+site, only its represented state is assumed translation invariant, and its
+horizontal and vertical bond dimensions may differ.
 
-\emph{Verdict: partial formalization.} The source's orientation-wise bond-
-dimension equalities are complete for an injective PEPS on a discrete
-torus of width and height greater than one, with the nonzero virtual-space
-convention of the injective tensor hypothesis documented in
-\path{docs/paper-gaps/peps_injective_ft_section3_route.tex}. Crucially, the
-input remains site-dependent and only its represented state is assumed
-translation invariant. The translation-invariant description by a single
-tensor \(B\) remains open. The earlier proposed plaquette-flatness and
-residual-gauge formulae were project-invented proof data not present in
-Ref.~\cite{Molnar2018NormalPEPS}; they have therefore been removed rather than
-retained as an unsupported proof route.
+For completeness, the construction proceeds as follows. Comparing each
+translated tensor with the original one by the injective Fundamental Theorem
+expresses every local tensor as invertible changes of the origin tensor's
+four virtual legs. Contraction pairs the two endpoint matrices on each edge
+into their ordinary transpose product. The product of the origin tensor's
+local left inverses recovers the resulting coefficient on independent
+incidence coordinates. State translation invariance therefore gives
+translation invariance of the product of the edge factors. Uniqueness of
+nonzero product factors makes each directional family proportional to its
+factor at the origin. Absorbing those two reference factors on the right and
+down legs gives a repeated injective tensor whose state differs by one
+nonzero scalar. A root of this scalar, of degree equal to the number of
+vertices, restores the original vector exactly.
+
+\emph{Verdict: complete for the source's torus with both periods at least
+three.} The constructed tensor is injective, is fixed by every lattice
+translation, has the original bond-dimension function, and represents the
+original state. All leg matrices, nonzero factors and the scalar root are
+conclusions of the construction. The nonzero virtual-space convention is
+part of the injective tensor hypothesis, as documented in
+\path{docs/paper-gaps/peps_injective_ft_section3_route.tex}.
 
 \section*{The strengthening to $n \ge 2L+1$ via overlapping windows}
 

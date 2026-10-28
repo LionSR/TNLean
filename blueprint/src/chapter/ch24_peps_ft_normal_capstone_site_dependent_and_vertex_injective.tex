@@ -480,24 +480,542 @@ standing regime of at least three sites, whereas Theorem~\ref{thm:peps_cycle_two
     (Theorem~\ref{thm:peps_torusUniformBondDim_of_translationInvariant}).
 \end{proof}
 
-\begin{corollary}[Translation-invariant description of an injective 2D PEPS]%
-    \label{cor:exists_constant_injectivePEPS_of_translationInvariantState}
-    \notready
+\begin{theorem}[Uniqueness of finite product factors]%
+    \label{thm:peps_product_factor_uniqueness}
+    \lean{Fintype.exists_scalars_of_prod_eq}
+    \leanok
+    Let $I$ be finite, let $\mathbb K$ be a field, and let
+    $f_i,g_i:X_i\to\mathbb K$. Suppose there is $a^0\in\prod_iX_i$
+    with $\prod_i f_i(a_i^0)\ne0$, and
+    $\prod_i f_i(a_i)=\prod_i g_i(a_i)$ for every $a\in\prod_iX_i$.
+    Then there are $c_i\ne0$ with $\prod_i c_i=1$ and
+    $g_i(x)=c_i f_i(x)$ for every $i$ and $x\in X_i$.
+\end{theorem}
+\begin{proof}\leanok
+    All $f_i(a_i^0)$ and $g_i(a_i^0)$ are nonzero. Put
+    $c_i=g_i(a_i^0)/f_i(a_i^0)$; equality at $a^0$ gives
+    $\prod_i c_i=1$. Varying only coordinate $i$ and cancelling the
+    other nonzero factors gives $g_i(x)=c_i f_i(x)$.
+\end{proof}
+
+\begin{theorem}[Proportionality of directional matrix factors]%
+    \label{thm:peps_directional_product_factors}
+    \lean{Matrix.GeneralLinearGroup.exists_directional_scalars_of_prod_translate_eq}
+    \leanok
+    Let $I$ be finite and $P$ a finite additive monoid. Let
+    $D_r>0$ and $E_{r,p}\in\GL(D_r,\C)$ for $r\in I$ and $p\in P$.
+    Suppose that for every $t\in P$ and every independent family of pairs
+    $(a_{r,p},b_{r,p})$,
+    \begin{align}
+        \prod_{r,p} E_{r,p}(a_{r,p},b_{r,p})
+         & =\prod_{r,p} E_{r,p+t}(a_{r,p},b_{r,p}).\notag
+    \end{align}
+    Then $E_{r,p}=\alpha_{r,p}E_{r,0}$ for nonzero scalars $\alpha_{r,p}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_product_factor_uniqueness}
+    Each invertible matrix on a nonzero space has a nonzero entry.
+    Choosing one such entry for each factor gives a nonzero reference product.
+    Theorem~\ref{thm:peps_product_factor_uniqueness}, applied to the
+    translation by $t$, gives proportionality of its factors. Take $t=p$
+    and inspect the factor at position zero.
+\end{proof}
+
+\begin{theorem}[Reindexing physical product maps]%
+    \label{thm:peps_physical_product_reindex}
+    \lean{TNLean.Lattice.dependentPhysicalProductFamilyMap_reindex_input}
+    \leanok
+    For a finite set of sites $V$ and finite alphabets $X_v$, write
+    $M_F=\bigotimes_{v\in V}F_v$ for the product of local matrices
+    $F_v:\C^{X_v}\to\C^{Y_v}$. Thus
+    $(M_F R)(\sigma)=\sum_x\prod_vF_v(\sigma_v,x_v)R(x)$.
+    If $e_v:X'_v\to X_v$ are bijections, then
+    $M_{F\circ e}(R\circ e)=M_F R$, where
+    $(e x)_v=e_v(x_v)$ and $(F\circ e)_v(\sigma,x)=F_v(\sigma,e_vx)$.
+\end{theorem}
+\begin{proof}\leanok
+    In the coefficient formula, change the summation variable by the
+    product bijection $x\mapsto(e_vx_v)_v$.
+\end{proof}
+
+\begin{theorem}[Reflection of permutation invariance by an injective common map]%
+    \label{thm:peps_common_map_reflects_invariance}
+    \lean{TNLean.Lattice.invariant_of_commonPhysicalProductFamilyMap_invariant}
+    \leanok
+    \uses{thm:peps_physical_product_reindex}
+    Let $V,X,Y$ be finite, let $F:\C^X\to\C^Y$ be an injective linear map, and
+    let $\tau$ permute $V$. If $F^{\otimes V}R$ is invariant under
+    precomposition of configurations by $\tau$, then $R$ has the same
+    invariance.
+\end{theorem}
+\begin{proof}\leanok
+    Choose a linear left inverse $L$ of $F$. Products of local maps compose
+    site by site, so $L^{\otimes V}F^{\otimes V}=1$.
+    A common local matrix commutes with every site permutation, by changing
+    the summation variable and reindexing the product. Apply
+    $L^{\otimes V}$ to the assumed invariant vector.
+\end{proof}
+
+\begin{definition}[The coefficient from independent changes of virtual legs]%
+    \label{def:peps_independent_leg_coefficient}
+    \lean{TNLean.PEPS.independentLegEdgeCoefficient}
+    \leanok
+    Let $A$ be a tensor on a finite simple graph. For each incidence of
+    $v$ with an edge $e$, let $K_{v,e}$ be a square matrix on that bond
+    space. Give the two endpoints of every edge independent virtual labels.
+    If $u<v$ are the stored endpoints of $e$, put
+    $E_e=K_{u,e}^{\mathsf T}K_{v,e}$ and
+    $R_K(\xi)=\prod_e E_e(\xi_{u,e},\xi_{v,e})$.
+    The factor of $e$ is
+    $\sum_jK_{u,e}(j,\xi_{u,e})K_{v,e}(j,\xi_{v,e})$.
+\end{definition}
+
+\begin{theorem}[Independence of the stored endpoint order]%
+    \label{thm:peps_independent_leg_endpoint_order}
+    \lean{TNLean.PEPS.independentLegKernel_edge_eq_of_endpoints}
+    \leanok
+    \uses{def:peps_independent_leg_coefficient}
+    Let $\xi$ be any independent incidence configuration and let $u,v$ be
+    the distinct endpoints of an edge $e$, in either order. The edge factor
+    $\mathcal K_e(\xi)$ in $R_K$ satisfies
+    \begin{align}
+        \mathcal K_e(\xi)
+         & =\sum_jK_{u,e}(j,\xi_{u,e})K_{v,e}(j,\xi_{v,e})\notag  \\
+         & =\sum_jK_{v,e}(j,\xi_{v,e})K_{u,e}(j,\xi_{u,e}).\notag
+    \end{align}
+    No invertibility assumption on the incidence matrices is needed.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:peps_independent_leg_coefficient}
+    In the stored endpoint order the first equality is matrix multiplication.
+    Reversing the endpoints exchanges the two complex factors in each
+    summand, which leaves the scalar unchanged.
+\end{proof}
+
+\begin{theorem}[The state as a common physical product image]%
+    \label{thm:peps_independent_leg_physical_image}
+    \lean{TNLean.PEPS.stateCoeff_eq_commonPhysicalProductFamilyMap}
+    \leanok
+    \uses{def:peps_independent_leg_coefficient, thm:peps_physical_product_reindex}
+    Let $X$ be finite, and let
+    $\mathcal E_v:X\to\prod_{e\ni v}\{0,\ldots,D_e-1\}$ be bijections. Suppose a common array $F$ and incidence matrices $K_{v,e}$
+    satisfy
+    \begin{align}
+        A_v(\eta,\sigma)
+         & =\sum_\xi\left(\prod_{e\ni v}K_{v,e}(\eta_e,\xi_e)\right)
+        F(\mathcal E_v^{-1}\xi,\sigma).\notag
+    \end{align}
+    Then $\Coeff_A=F^{\otimes V}R$, with
+    $R(x)=R_K((\mathcal E_vx_v)_v)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:peps_independent_leg_coefficient, thm:peps_physical_product_reindex}
+    Expand the local arrays in the state coefficient and exchange the finite
+    sums. Each original bond index contracts its two incidence matrices
+    into $K_{u,e}^{\mathsf T}K_{v,e}$. Reindex each remaining local
+    configuration by $\mathcal E_v$.
+\end{proof}
+
+\begin{theorem}[Injectivity after invertible changes of virtual legs]%
+    \label{thm:peps_invertible_leg_injectivity}
+    \lean{TNLean.PEPS.linearIndependent_smul_piProductKernel}
+    \leanok
+    Let $I$ and all $X_i$ be finite, and let
+    $F:\prod_iX_i\to W$ be a linearly independent family in a complex
+    vector space. For $P_i\in\GL(X_i,\C)$ and $\rho\ne0$, the family
+    $x\mapsto\rho\sum_y\prod_iP_i(x_i,y_i)F(y)$ is linearly independent.
+\end{theorem}
+\begin{proof}\leanok
+    The product matrix with entries $\prod_iP_i(x_i,y_i)$ is invertible:
+    its inverse is the product matrix of the $P_i^{-1}$.
+    Recombining a linearly independent family by an invertible matrix,
+    then multiplying it by a nonzero scalar, preserves linear independence.
+\end{proof}
+
+\begin{definition}[Canonical four-leg coordinates on an anisotropic torus]%
+    \label{def:peps_common_four_leg_coordinates}
+    \lean{TNLean.PEPS.torusFourLegBondDim}
+    \lean{TNLean.PEPS.bondDim_torusIncidentLeg_eq_fourLegBondDim}
+    \lean{TNLean.PEPS.torusFourLegConfigEquiv}
+    \lean{TNLean.PEPS.torusFourLegConfigEquiv_apply_leg}
+    \lean{TNLean.PEPS.fourLegConfigEquivDirectionPorts}
+    \lean{TNLean.PEPS.torusDirectionPortConfigEquiv}
+    \leanok
+    \uses{def:peps_torus_uniform_bond_dim}
+    Let $A$ be a tensor on an $n\times m$ torus, with $n,m\ge3$,
+    whose bond dimensions are $D_h$ horizontally and $D_v$ vertically.
+    In the order top, right, down, left the four dimensions are
+    $(D_v,D_h,D_v,D_h)$. Let
+    $X=\prod_{i=0}^3\{0,\ldots,D_i-1\}$.
+    Let $\mathcal V_p$ denote the actual local virtual configurations at $p$.
+    The bijection $\mathcal E_p:X\to\mathcal V_p$ sends each coordinate
+    to the corresponding actual incidence at $p$, preserving its numerical
+    value.
+    The same coordinates can be written as $x_{r,b}$, where $r=h,v$ and
+    $b=0,1$ means incoming or outgoing: top is $(v,0)$, right $(h,1)$,
+    down $(v,1)$ and left $(h,0)$.
+\end{definition}
+
+\begin{theorem}[Linear independence in common four-leg coordinates]%
+    \label{thm:peps_four_leg_coordinate_independence}
+    \lean{TNLean.PEPS.linearIndependent_component_torusFourLegConfigEquiv}
+    \leanok
+    \uses{def:peps_common_four_leg_coordinates,def:peps_injective_tensor}
+    Under the hypotheses of Definition~\ref{def:peps_common_four_leg_coordinates},
+    if $A$ is injective, then $x\mapsto A_p(\mathcal E_p x)$ is linearly
+    independent for every vertex $p$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:peps_common_four_leg_coordinates,def:peps_injective_tensor}
+    Injectivity makes the family of actual local components at $p$ linearly
+    independent. Composing its index with the bijection $\mathcal E_p$
+    preserves linear independence.
+\end{proof}
+
+\begin{definition}[A repeated tensor in four-leg coordinates]%
+    \label{def:peps_repeated_four_leg_tensor}
+    \lean{TNLean.PEPS.torusFourLegTensor}
+    \lean{TNLean.PEPS.torusFourLegTensor_bondDim}
+    \lean{TNLean.PEPS.torusFourLegTensor_component}
+    \leanok
+    \uses{def:peps_common_four_leg_coordinates}
+    Under the hypotheses of Definition~\ref{def:peps_common_four_leg_coordinates},
+    an array $F:X\to\C^d$ defines a torus tensor $B$ with
+    $D_B(e)=D_A(e)$ and $B_p(\eta)=F(\mathcal E_p^{-1}\eta)$ at every
+    vertex $p$.
+\end{definition}
+
+\begin{theorem}[Injectivity of a repeated four-leg tensor]%
+    \label{thm:peps_repeated_four_leg_injective}
+    \lean{TNLean.PEPS.isInjective_torusFourLegTensor}
+    \leanok
+    \uses{def:peps_repeated_four_leg_tensor, def:peps_injective_tensor}
+    If the bond dimensions are positive and the family $F$ is linearly
+    independent, the repeated tensor of
+    Definition~\ref{def:peps_repeated_four_leg_tensor} is injective.
+\end{theorem}
+\begin{proof}\leanok
+    Each $\mathcal E_p$ is a bijection. Composing a linearly independent
+    family with $\mathcal E_p^{-1}$ preserves linear independence, and the
+    bond dimensions retain their positivity.
+\end{proof}
+
+\begin{theorem}[Translation invariance of a repeated four-leg tensor]%
+    \label{thm:peps_repeated_four_leg_translation_invariant}
+    \lean{TNLean.PEPS.isTorusTranslationInvariant_torusFourLegTensor}
+    \leanok
+    \uses{def:peps_repeated_four_leg_tensor, def:peps_torus_translation_invariant}
+    Every repeated tensor of
+    Definition~\ref{def:peps_repeated_four_leg_tensor} is fixed by transport
+    under each torus translation.
+\end{theorem}
+\begin{proof}\leanok
+    Translation preserves horizontal and vertical edges and their dimensions.
+    It also preserves the four incidence labels. Thus pullback of a local
+    configuration has the same four-leg coordinates as its dimension-cast
+    configuration at the translated vertex. Evaluating $F$ gives equality
+    of the transported and original local arrays.
+\end{proof}
+
+\begin{theorem}[Scalar homogeneity of a repeated tensor state]%
+    \label{thm:peps_repeated_four_leg_scaling}
+    \lean{TNLean.PEPS.stateCoeff_torusFourLegTensor_smul}
+    \leanok
+    \uses{def:peps_repeated_four_leg_tensor}
+    If $B_F$ denotes the repeated tensor of $F$, $N=nm$ and $\rho\in\C$,
+    then $\Coeff_{B_{\rho F}}=\rho^N\Coeff_{B_F}$.
+\end{theorem}
+\begin{proof}\leanok
+    Each product in the state coefficient contains one copy of $\rho$ per
+    vertex. Factor $\rho^N$ out of the finite sum.
+\end{proof}
+
+\begin{theorem}[The local translation orbit of an injective torus tensor]%
+    \label{thm:peps_common_local_translation_orbit}
+    \lean{TNLean.PEPS.exists_torus_common_local_orbit_incident}
+    \leanok
+    \uses{def:peps_common_four_leg_coordinates, def:peps_torus_state_translation_invariant}
+    Let $A$ be injective on an $n\times m$ torus with $n,m\ge3$, and
+    suppose its state is translation invariant. Its bond dimensions determine
+    the coordinates of Definition~\ref{def:peps_common_four_leg_coordinates}.
+    Put $F(x,\sigma)=A_0(\mathcal E_0x,\sigma)$.
+    There are invertible incidence matrices $K_{p,e}$ such that
+    \begin{align}
+        A_p(\eta,\sigma)
+         & =\sum_\xi\left(\prod_{e\ni p}K_{p,e}(\eta_e,\xi_e)\right)
+        F(\mathcal E_p^{-1}\xi,\sigma).\notag
+    \end{align}
+    This comparison follows from the injective Fundamental Theorem and
+    gives a step toward the translation-invariant description stated
+    in~\cite[lines~1891--1894]{Molnar2018NormalPEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:fundamentalTheorem_PEPS, cor:peps_state_translation_bond_uniform}
+    Apply the injective Fundamental Theorem to $A$ and its transport by the
+    translation taking the origin to $p$. The resulting gauge equation gives
+    invertible matrices on the actual incidence spaces, using a transpose
+    inverse at one stored endpoint. In four-leg coordinates the transported
+    local array at $p$ is exactly the original array at zero.
+\end{proof}
+
+\begin{definition}[Native outgoing edges of the torus]%
+    \label{def:peps_native_outgoing_edges}
+    \lean{TNLean.PEPS.torusOutgoingEdgeEquiv}
+    \lean{TNLean.PEPS.torusOutgoingEdgeEquiv_horizontal}
+    \lean{TNLean.PEPS.torusOutgoingEdgeEquiv_vertical}
+    \lean{TNLean.PEPS.bondDim_torusOutgoingEdgeEquiv}
+    \lean{TNLean.PEPS.torusOutgoingNeighbor}
+    \lean{TNLean.PEPS.torusOutgoingTailIncident}
+    \lean{TNLean.PEPS.torusOutgoingHeadIncident}
+    \leanok
+    \uses{def:peps_common_four_leg_coordinates}
+    Under the hypotheses of
+    Definition~\ref{def:peps_common_four_leg_coordinates}, put
+    $\delta_h=(1,0)$ and $\delta_v=(0,-1)$. Each torus edge occurs
+    exactly once as the outgoing edge $e_{r,p}$ from $p$ to $p+\delta_r$,
+    with $r=h,v$. Its dimension is $D_r$. The outgoing and incoming
+    incidences of this edge are its incidences at $p$ and $p+\delta_r$,
+    respectively, regardless of the stored increasing endpoint order.
+\end{definition}
+
+\begin{definition}[Native matrices from incidence kernels]%
+    \label{def:peps_native_incidence_matrices}
+    \lean{TNLean.PEPS.torusNativeIndependentEdgeKernel}
+    \lean{TNLean.PEPS.torusNativeIndependentEdgeKernel_apply}
+    \leanok
+    \uses{def:peps_native_outgoing_edges}
+    For invertible incidence matrices $K_{p,e}$, define
+    $E_{r,p}=K_{p,e_{r,p}}^{\mathsf T}K_{p+\delta_r,e_{r,p}}$ in the
+    direction-$r$ reference coordinates. Its entries are the finite sums
+    $E_{r,p}(a,b)=\sum_jK_{p,e_{r,p}}(j,a)
+        K_{p+\delta_r,e_{r,p}}(j,b)$, with the canonical dimension
+    identifications understood.
+\end{definition}
+
+\begin{definition}[Products on independent torus incidence coordinates]%
+    \label{def:peps_independent_port_product}
+    \lean{TNLean.PEPS.independentPortProduct}
+    \leanok
+    \uses{def:peps_native_incidence_matrices, def:peps_independent_leg_coefficient}
+    For direction-indexed matrices $E_{r,p}$ and independent incidence
+    coordinates $x_{p,r,b}$, put
+    \begin{align}
+        R_E(x)=\prod_{r,p}E_{r,p}(x_{p,r,1},x_{p+\delta_r,r,0}).\notag
+    \end{align}
+\end{definition}
+
+\begin{theorem}[The independent coefficient in native torus coordinates]%
+    \label{thm:peps_independent_port_coefficient}
+    \lean{TNLean.PEPS.independentLegEdgeCoefficient_eq_torusNativeProduct}
+    \leanok
+    \uses{def:peps_independent_port_product,def:peps_native_incidence_matrices,
+        def:peps_common_four_leg_coordinates}
+    Let the incidence matrices $K_{p,e}$ be invertible and let $E_{r,p}$
+    be their native matrices. For any independent port assignment $x$, put
+    $\widehat x_p=(x_{p,v,0},x_{p,h,1},x_{p,v,1},x_{p,h,0})$. Then
+    \begin{align}
+        R_K\bigl((\mathcal E_p\widehat x_p)_p\bigr)=R_E(x).\notag
+    \end{align}
+    All endpoint labels remain independent; they are not restricted to
+    equal labels on the two ends of an edge.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_independent_leg_endpoint_order,def:peps_native_outgoing_edges}
+    Enumerate the graph edges by their native pairs $(r,p)$.
+    The endpoint-order identity turns each stored edge factor into its
+    outgoing-incoming contraction, even across a coordinate seam.
+    The four-leg coordinate identifications preserve numerical labels, so
+    each factor becomes $E_{r,p}(x_{p,r,1},x_{p+\delta_r,r,0})$.
+\end{proof}
+
+\begin{theorem}[Translation of the independent edge-pair product]%
+    \label{thm:peps_independent_port_translation}
+    \lean{TNLean.PEPS.torus_prod_translate_eq_of_portProduct_invariant}
+    \leanok
+    \uses{def:peps_independent_port_product}
+    Let the torus periods be positive, let $X_h,X_v$ be arbitrary sets,
+    and let $E_{r,p}:X_r\times X_r\to\C$ be arbitrary arrays.
+    If $R_E$ is invariant under precomposition of port configurations by
+    every torus translation, then, for every translation $t$ and every
+    independent family $a_{r,p},b_{r,p}\in X_r$,
+    \begin{align}
+        \prod_{r,p}E_{r,p}(a_{r,p},b_{r,p})
+        =\prod_{r,p}E_{r,p+t}(a_{r,p},b_{r,p}).\notag
+    \end{align}
+    This assertion needs neither finite alphabets nor invertible arrays.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:peps_independent_port_product}
+    Reindex an incidence assignment by the two labels on each directed
+    edge. Translations commute with the rightward and downward neighbor
+    maps, so this bijection carries a translated assignment to translated
+    edge pairs. Apply the given invariance to the assignment with pairs
+    indexed by $p-t$, and then reindex the finite product by $p\mapsto p+t$.
+\end{proof}
+
+\begin{definition}[Independent changes of a common four-leg array]%
+    \label{def:peps_common_four_leg_transformation}
+    \lean{TNLean.PEPS.torusIncidentKernelOfFourLeg}
+    \lean{TNLean.PEPS.fourLegKernelApply}
+    \lean{TNLean.PEPS.fourLegKernelApply_apply}
+    \lean{TNLean.PEPS.torusFourLegKernelOnPort}
+    \lean{TNLean.PEPS.torusUniformBondLegKernel}
+    \leanok
+    \uses{def:peps_repeated_four_leg_tensor, def:peps_native_incidence_matrices}
+    For $P_i\in\GL(D_i,\C)$ define
+    $(\mathcal P F)(x,\sigma)=\sum_y\prod_iP_i(x_i,y_i)F(y,\sigma)$.
+    Write $P_{r,1}$ and $P_{r,0}$ for its outgoing and incoming matrices.
+    For invertible directional matrices $Q_h,Q_v$, the uniform-bond choice is
+    $(P_0,P_1,P_2,P_3)=(1,Q_h^{\mathsf T},Q_v^{\mathsf T},1)$.
+\end{definition}
+
+\begin{theorem}[The common leg transformation on actual incidences]%
+    \label{thm:peps_four_leg_incident_expansion}
+    \lean{TNLean.PEPS.fourLegKernelApply_eq_sum_incident}
+    \leanok
+    \uses{def:peps_common_four_leg_transformation}
+    Let $P_i\in\GL(D_i,\C)$ and let $F$ be any common four-leg array.
+    Transport $P_i$ to the corresponding actual incidence matrices $K_{p,e}$.
+    Then the repeated tensor from $\mathcal P F$ satisfies
+    \begin{align}
+        B_{\mathcal P F,p}(\eta,\sigma)
+        =\sum_\xi\left(\prod_{e\ni p}K_{p,e}(\eta_e,\xi_e)\right)
+        F(\mathcal E_p^{-1}\xi,\sigma).\notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:peps_common_four_leg_transformation,def:peps_common_four_leg_coordinates}
+    Substitute the sum defining $\mathcal P F$ and change variables from
+    the common four-leg coordinates to $\xi=\mathcal E_p y$.
+    The coordinate bijection identifies the four matrix factors with
+    those at the actual incidences, preserving their row and column labels.
+\end{proof}
+
+\begin{theorem}[The native matrix of a common leg transformation]%
+    \label{thm:peps_four_leg_native_edge_matrix}
+    \lean{TNLean.PEPS.torusNativeIndependentEdgeKernel_fourLeg}
+    \leanok
+    \uses{def:peps_common_four_leg_transformation,def:peps_native_incidence_matrices}
+    For every $P_i\in\GL(D_i,\C)$, the induced native matrix is
+    $E_{r,p}=P_{r,1}^{\mathsf T}P_{r,0}$ at every vertex $p$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:peps_common_four_leg_transformation,def:peps_native_incidence_matrices}
+    Write the native contraction in the common directional coordinates.
+    Its two incidence factors are the outgoing and incoming matrices;
+    their sum over the common bond label is
+    $P_{r,1}^{\mathsf T}P_{r,0}$.
+    For the uniform-bond choice this is
+    $(Q_r^{\mathsf T})^{\mathsf T}\Id=Q_r$.
+\end{proof}
+
+\begin{theorem}[Uniform directional bonds for a common origin tensor]%
+    \label{thm:peps_uniform_edge_representation}
+    \lean{TNLean.PEPS.exists_torus_uniform_edge_representation}
+    \leanok
+    \uses{def:peps_independent_port_product, def:peps_torus_state_translation_invariant}
+    Let $A$ be injective on an $n\times m$ torus, with $n,m\ge3$,
+    and suppose its state is translation invariant. Let $F$ be its origin
+    array in canonical coordinates. There are
+    $Q_h\in\GL(D_h,\C)$, $Q_v\in\GL(D_v,\C)$ and $\Gamma\ne0$ such that
+    $\Coeff_A=\Gamma F^{\otimes V}R_Q$, where $R_Q$ has the same factor
+    $Q_r$ on every edge of direction $r$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_common_local_translation_orbit,
+        thm:peps_independent_leg_physical_image,thm:peps_common_map_reflects_invariance,
+        thm:peps_independent_port_coefficient,thm:peps_independent_port_translation,
+        thm:peps_directional_product_factors}
+    The local translation orbit and independent-leg contraction give
+    $\Coeff_A=F^{\otimes V}R_E$. Since $F$ is injective, reflection through
+    this common product map makes $R_E$ translation invariant. Reindexing
+    to independent endpoint pairs and applying directional factor uniqueness
+    gives $E_{r,p}=\alpha_{r,p}E_{r,0}$ with all $\alpha_{r,p}\ne0$.
+    Take $Q_r=E_{r,0}$ and $\Gamma=\prod_{r,p}\alpha_{r,p}$, and factor
+    this scalar out of the physical product map.
+\end{proof}
+
+\begin{theorem}[Absorbing uniform bonds into a repeated tensor]%
+    \label{thm:peps_uniform_bond_absorption}
+    \lean{TNLean.PEPS.stateCoeff_torusFourLegTensor_uniformBondAbsorption}
+    \leanok
+    \uses{def:peps_common_four_leg_transformation, def:peps_independent_port_product}
+    On the torus of Definition~\ref{def:peps_common_four_leg_coordinates},
+    let $F$ be any common four-leg array and let $Q_h,Q_v$ be invertible.
+    If $\mathcal P$ has leg matrices
+    $(1,Q_h^{\mathsf T},Q_v^{\mathsf T},1)$, then the repeated tensor
+    $B_{\mathcal P F}$ satisfies $\Coeff_{B_{\mathcal P F}}=F^{\otimes V}R_Q$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_independent_leg_physical_image,thm:peps_physical_product_reindex,
+        thm:peps_four_leg_incident_expansion,thm:peps_four_leg_native_edge_matrix,
+        thm:peps_independent_port_coefficient}
+    The actual-incidence formula of
+    Theorem~\ref{thm:peps_four_leg_incident_expansion} allows the
+    independent-leg contraction formula to be applied to $B_{\mathcal P F}$.
+    Reindex its coefficient to incoming and outgoing ports. Its native edge
+    matrices are $(Q_r^{\mathsf T})^{\mathsf T}1=Q_r$, so its independent
+    coefficient is $R_Q$.
+\end{proof}
+
+\begin{theorem}[Translation-invariant description of an injective 2D PEPS]%
+    \label{thm:exists_constant_injectivePEPS_of_translationInvariantState}
+    \lean{TNLean.PEPS.exists_isTorusTranslationInvariant_sameState}
+    \leanok
     \uses{def:peps_injective_tensor, def:peps_torus_translation_invariant,
         def:peps_torus_state_translation_invariant,
         def:peps_torus_uniform_bond_dim, def:peps_same_state}
-    Let $A$ be an injective PEPS on an $n\times m$ torus ($n,m\ge3$). If
-    $\Coeff_A(\sigma\circ\tau_{a,b})=\Coeff_A(\sigma)$ for all $\tau_{a,b}$ and
-    $\sigma$, then $D_A$ is orientation-uniform with values $D_h,D_v>0$, and
-    there exists an injective translation-invariant torus tensor $B$ with
-    $D_B=D_A$ and $\Coeff_B=\Coeff_A$
-    \cite[lines~1891--1894]{Molnar2018NormalPEPS}.
-\end{corollary}
-\begin{proof}
-    \uses{cor:peps_state_translation_bond_uniform}
-    Orientation-uniformity of $D_A$ is
-    Corollary~\ref{cor:peps_state_translation_bond_uniform}; the construction of
-    the translation-invariant tensor $B$ remains open.
+    Let $A$ be an injective PEPS on a discrete $n\times m$ torus with
+    $n,m\ge3$. If the generated state is invariant
+    under all lattice translations $\tau_{a,b}$, that is,
+    $\Coeff_A(\sigma\circ\tau_{a,b})=\Coeff_A(\sigma)$ for every translation
+    and every physical configuration $\sigma$, then there is an injective
+    translation-invariant torus tensor $B$ with the same bond-dimension
+    function and the same represented state as $A$.
+\end{theorem}
+Together with
+Corollary~\ref{cor:peps_state_translation_bond_uniform}, which shows that
+the bond dimensions of $A$ are orientation-uniform with positive horizontal
+and vertical values, this is the two-dimensional Applications-section
+corollary of \cite[lines~1891--1894]{Molnar2018NormalPEPS}.
+\begin{proof}\leanok
+    \uses{cor:peps_state_translation_bond_uniform,
+        thm:peps_uniform_edge_representation, thm:peps_uniform_bond_absorption,
+        thm:peps_invertible_leg_injectivity, thm:peps_repeated_four_leg_injective,
+        thm:peps_repeated_four_leg_translation_invariant,
+        thm:peps_repeated_four_leg_scaling}
+    The bond dimensions are orientation-uniform by
+    Corollary~\ref{cor:peps_state_translation_bond_uniform}.
+    Write $F$ for the tensor at the origin in the order top, right, down, left.
+    Applying the injective Fundamental Theorem to each translate gives
+    invertible matrices $K_{p,i}$ such that
+    $A_p(x,\sigma)=\sum_y\prod_iK_{p,i}(x_i,y_i)F(y,\sigma)$.
+    Contracting the original bond indices pairs these matrices into
+    $E_{r,p}=K_{\mathrm{tail}}^{\mathsf T}K_{\mathrm{head}}$, where
+    $r$ denotes the rightward or downward direction.
+
+    Since $F$ is injective, choose a linear left inverse $L$ of $F$.
+    Applying the tensor product of $L$ over all sites recovers the coefficient
+    tensor whose two virtual indices on each bond vary independently.
+    This operation commutes with translations. State translation invariance
+    therefore makes $\prod_{r,p}E_{r,p}(a_{r,p},b_{r,p})$ invariant under
+    simultaneous translation of the factors, with the pairs
+    $(a_{r,p},b_{r,p})$ independent. These product functions are nonzero:
+    the bond spaces have positive dimension and every $E_{r,p}$ is invertible.
+    Equality of two nonzero product functions implies proportionality of
+    their individual factors. Thus
+    $E_{r,p}=\alpha_{r,p}E_{r,0}$ with $\alpha_{r,p}\ne0$.
+    Put $\Gamma=\prod_{r,p}\alpha_{r,p}$.
+
+    Apply $E_{h,0}^{\mathsf T}$ to the right leg of $F$ and
+    $E_{v,0}^{\mathsf T}$ to its down leg, leaving the top and left legs
+    unchanged. The resulting repeated tensor $C$ satisfies
+    $\Coeff_A=\Gamma\Coeff_C$ and is injective because all leg changes are
+    invertible. If $N=nm$, choose $\rho\ne0$ with $\rho^N=\Gamma$.
+    Repeating $\rho C$ gives the required tensor $B$:
+    $\Coeff_B=\rho^N\Coeff_C=\Coeff_A$.
+    Its bond dimensions are those of $A$, and its identical four-leg arrays
+    make it invariant under every lattice translation.
 \end{proof}
 
 \begin{theorem}[Uniqueness of the injective closed-chain gauge]%

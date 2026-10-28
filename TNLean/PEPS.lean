@@ -67,6 +67,7 @@ import TNLean.PEPS.FixedBoundaryFactorDensity
 import TNLean.PEPS.FundamentalTheorem
 import TNLean.PEPS.FundamentalTheorem.EdgeInsertion
 import TNLean.PEPS.FundamentalTheorem.GaugeAction
+import TNLean.PEPS.FundamentalTheorem.IndependentLegContraction
 import TNLean.PEPS.FundamentalTheorem.LocalGaugeExtraction
 import TNLean.PEPS.FundamentalTheorem.OneVertexComparison
 import TNLean.PEPS.FundamentalTheorem.Uniqueness
@@ -180,6 +181,7 @@ import TNLean.PEPS.NormalSquareInteriorAbsorbedFamily
 import TNLean.PEPS.NormalSquarePEPSBlocking
 import TNLean.PEPS.NormalSquareUnconditionalFundamentalTheorem
 import TNLean.PEPS.NormalTorusRectanglePEPS
+import TNLean.PEPS.NormalVirtualRepresentation
 import TNLean.PEPS.OnSiteOperator
 import TNLean.PEPS.OpenRegionContraction
 import TNLean.PEPS.PairConjugacy
@@ -375,6 +377,8 @@ import TNLean.PEPS.TorusBondFlatConnection
 import TNLean.PEPS.TorusChargeFluxCrossing
 import TNLean.PEPS.TorusChargeStringDeformation
 import TNLean.PEPS.TorusClosureSeams
+import TNLean.PEPS.TorusCommonTensor
+import TNLean.PEPS.TorusCommonTensorCoordinates
 import TNLean.PEPS.TorusComplementCycleWords
 import TNLean.PEPS.TorusComplementDisentangling
 import TNLean.PEPS.TorusComplementPathReplacement
@@ -416,6 +420,7 @@ import TNLean.PEPS.TorusEdgeGaugeCovariance
 import TNLean.PEPS.TorusEdgePhysicalChargeMeasurement
 import TNLean.PEPS.TorusExteriorPathApproximation
 import TNLean.PEPS.TorusFlatConnectionGauge
+import TNLean.PEPS.TorusFourLegTransformation
 import TNLean.PEPS.TorusFundamentalTheorem
 import TNLean.PEPS.TorusGClosure
 import TNLean.PEPS.TorusGaugeUniqueness
@@ -442,6 +447,7 @@ import TNLean.PEPS.TorusMatchedBondRepresentation
 import TNLean.PEPS.TorusMatchedCutClosureMembership
 import TNLean.PEPS.TorusMatchedProjectorExpansion
 import TNLean.PEPS.TorusMultiplicityBondState
+import TNLean.PEPS.TorusNativeEdgeKernels
 import TNLean.PEPS.TorusNativeFluxHolonomy
 import TNLean.PEPS.TorusNativeOrientation
 import TNLean.PEPS.TorusOperatorString
