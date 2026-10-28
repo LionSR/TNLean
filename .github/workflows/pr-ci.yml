@@ -43,7 +43,6 @@ on:
       - 'scripts/ci_compatible_cache.py'
       - 'scripts/test_ci_compatible_cache.py'
       - 'scripts/test_ci_cache_lake_invalidation.py'
-      - 'scripts/test_ci_fixture_overlay.py'
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/**'
@@ -75,6 +74,9 @@ on:
       - 'scripts/write_badges.py'
       - 'scripts/generate_badges.py'
       - 'scripts/test_badge_colors.py'
+      - 'scripts/campaign_board/collect.py'
+      - 'scripts/campaign_board/board.js'
+      - 'scripts/test_campaign_results.py'
       - 'scripts/test_blueprint_web_render.py'
       - 'scripts/test_blueprint_graph_worker.py'
       - 'scripts/test_blueprint_graph_precompute.py'
@@ -145,7 +147,6 @@ on:
       - 'scripts/ci_compatible_cache.py'
       - 'scripts/test_ci_compatible_cache.py'
       - 'scripts/test_ci_cache_lake_invalidation.py'
-      - 'scripts/test_ci_fixture_overlay.py'
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/**'
@@ -170,6 +171,9 @@ on:
       - 'scripts/write_badges.py'
       - 'scripts/generate_badges.py'
       - 'scripts/test_badge_colors.py'
+      - 'scripts/campaign_board/collect.py'
+      - 'scripts/campaign_board/board.js'
+      - 'scripts/test_campaign_results.py'
       - 'scripts/test_blueprint_web_render.py'
       - 'scripts/test_blueprint_graph_worker.py'
       - 'scripts/test_blueprint_graph_precompute.py'
@@ -235,6 +239,7 @@ jobs:
       paper_gaps: ${{ steps.filter.outputs.paper_gaps }}
       workflow: ${{ steps.filter.outputs.workflow }}
       coherent_prerequisites: ${{ steps.filter.outputs.coherent_prerequisites }}
+      campaign_results: ${{ steps.filter.outputs.campaign_results }}
     steps:
       - uses: dorny/paths-filter@v4
         id: filter
@@ -296,7 +301,6 @@ jobs:
               - 'scripts/ci_compatible_cache.py'
               - 'scripts/test_ci_compatible_cache.py'
               - 'scripts/test_ci_cache_lake_invalidation.py'
-              - 'scripts/test_ci_fixture_overlay.py'
               - 'docs/ci-automation.md'
               - 'docs/CONTRIBUTING.md'
               - 'scripts/generate_import_aggregators.py'
@@ -360,6 +364,11 @@ jobs:
               - 'texra-blueprint.toml'
               - 'scripts/paper_gap_leanid_sync.py'
               - 'scripts/test_paper_gap_leanid_sync.py'
+            campaign_results:
+              - 'scripts/campaign_board/collect.py'
+              - 'scripts/campaign_board/board.js'
+              - 'scripts/test_campaign_results.py'
+              - 'docs/campaign/README.md'
             workflow:
               - '.github/workflows/**'
               - '.github/dependabot.yml'
@@ -529,6 +538,7 @@ jobs:
         timeout-minutes: 30
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           set -eo pipefail
           test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
@@ -545,15 +555,17 @@ jobs:
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
-      # Elaborate changed production files and every affected TNLeanTest file
-      # with warnings as errors. A test is affected when it changed or its
-      # import closure contains a changed module; every test runs when a
-      # dependency pin, the toolchain or this workflow changes. New modules and
-      # tests need no workflow edit. Selection: scripts/ci_lean_checks.py.
+      # Elaborate changed production files and every affected
+      # scripts/*_regression.lean file with warnings as errors. A regression is
+      # affected when it changed or its import closure contains a changed
+      # module; every regression runs when a dependency pin, the toolchain or
+      # this workflow changes. New modules need no workflow edit. Selection:
+      # scripts/ci_lean_checks.py.
       - name: Check changed Lean files and affected tests strictly
         timeout-minutes: 60
         env:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          PR_HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || '' }}
         run: |
           set -eo pipefail
           case "$BASE_SHA" in 0000000000000000000000000000000000000000) BASE_SHA="" ;; esac
@@ -669,6 +681,31 @@ jobs:
               ;;
           esac
 
+  campaign-results:
+    name: Check campaign source results
+    needs: changes
+    if: |
+      !cancelled() && (
+        github.event_name != 'pull_request' ||
+        needs.changes.outputs.campaign_results == 'true' ||
+        needs.changes.outputs.workflow == 'true'
+      )
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - name: Check campaign JavaScript syntax
+        run: node --check scripts/campaign_board/board.js
+      - name: Test campaign source-result tables
+        run: python3 scripts/test_campaign_results.py
+
   file-length:
     name: Check Lean module policies
     needs: changes
@@ -720,9 +757,6 @@ jobs:
           python3 scripts/test_pr_ci_base_snapshot.py
           python3 -m py_compile scripts/test_ci_cache_lake_invalidation.py
 
-      - name: Test CI fixture import overlay
-        run: python3 scripts/test_ci_fixture_overlay.py
-
       - name: Test changed-file Lean check selection
         run: python3 scripts/test_ci_lean_checks.py
 
@@ -739,6 +773,17 @@ jobs:
       # the same revisions or the weekly API docs build checks out stale ones.
       - name: Check docbuild manifest against the root manifest
         run: python3 scripts/check_docbuild_manifest.py --root .
+
+      # The repository keeps no Lean test fixtures (per-theorem axiom
+      # printouts and the like) under TNLeanTest/; see
+      # docs/project_conventions.md.
+      - name: Reject test fixture files
+        run: |
+          files=$(git ls-files -- TNLeanTest)
+          if [ -n "$files" ]; then
+            printf '::error file=%s::Do not add files under TNLeanTest/; see docs/project_conventions.md.\n' $files
+            exit 1
+          fi
 
       # Ordinary Lean modules over 1000 lines fail. The exact root aggregator
       # exemption is accepted only while its uncommented content is import-only.

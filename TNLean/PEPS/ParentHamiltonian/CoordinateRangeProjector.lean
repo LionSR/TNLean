@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.ParentHamiltonian.IsometricProjectorTransport
+import TNLean.Algebra.SubmoduleStarProjectionMatrix
 import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 import Mathlib.Analysis.Matrix.Hermitian
 
@@ -35,15 +36,7 @@ noncomputable def coordinateRangeProjector (S : Submodule ℂ (ι → ℂ)) : Ma
 theorem coordinateRangeProjector_isStarProjection (S : Submodule ℂ (ι → ℂ)) :
     IsStarProjection (coordinateRangeProjector S) := by
   classical
-  have hp := Submodule.isSymmetricProjection_starProjection (coordinateSubspaceES S)
-  apply (isStarProjection_iff').mpr
-  constructor
-  · apply Matrix.toEuclideanLin.injective
-    rw [Matrix.toLpLin_mul 2 2 2]
-    simp only [coordinateRangeProjector, LinearEquiv.apply_symm_apply]
-    exact hp.isIdempotentElem.eq
-  · apply Matrix.isSymmetric_toEuclideanLin_iff.mp
-    simpa only [coordinateRangeProjector, LinearEquiv.apply_symm_apply] using hp.isSymmetric
+  exact (coordinateSubspaceES S).isStarProjection_starProjectionMatrix
 
 /-- A vector is fixed by the coordinate projector exactly when it lies in the subspace. -/
 theorem coordinateRangeProjector_mulVec_eq_self_iff (S : Submodule ℂ (ι → ℂ)) (x : ι → ℂ) :

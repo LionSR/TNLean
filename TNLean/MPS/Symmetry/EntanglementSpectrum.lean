@@ -202,8 +202,8 @@ theorem finrank_eigenspace_ne_one_of_isNontrivialClass {G : Type} [Group G]
     (hρ : ∀ g i, twistedTensor A U g i =
       ζ g • ((ρ.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A i *
         (((ρ.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)))
-    (hω : ω.IsCocycle)
-    (hnt : groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hω.isMulCocycle₂) ≠ 0)
+    (hω : groupCohomology.IsMulCocycle₂ ω)
+    (hnt : groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hω) ≠ 0)
     (μ : ℂ) :
     Module.finrank ℂ (Module.End.eigenspace (Matrix.toLin' Λ) μ) ≠ 1 := by
   refine ρ.finrank_eigenspace_ne_one_of_commute hω hnt (fun h => ?_) μ

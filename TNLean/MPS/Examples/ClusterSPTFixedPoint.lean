@@ -153,13 +153,10 @@ theorem isNontrivialClass_of_clusterSPTFixedPoint
       (ρ'.X (g⁻¹) : Matrix (Fin 2) (Fin 2) ℂ) * sptFixedPointTensor 2 i *
         (((ρ'.X (g⁻¹))⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ)) :
     groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
-      (ScalarCocycle.isCocycle_of_projRep ρ' two_pos).isMulCocycle₂) ≠ 0 := by
+      (ScalarCocycle.isMulCocycle₂_of_projRep ρ' two_pos)) ≠ 0 := by
   intro h
   apply cluster_isNontrivialSPT
-  have h' := (ScalarCocycle.cohomologousTo_one_iff_H2π_eq_zero
-    (ScalarCocycle.isCocycle_of_projRep ρ' two_pos)).mpr h
-  refine (ScalarCocycle.cohomologousTo_one_iff_H2π_eq_zero clusterOmega_isCocycle).mp ?_
-  exact ((cohomologousTo_of_sptFixedPointTensor clusterProjRep 1 ρ'
-    (fun g i => by rw [MonoidHom.one_apply, one_smul]; exact hρ' g i)).symm).trans h'
+  exact (cohomologousTo_of_sptFixedPointTensor clusterProjRep 1 ρ'
+    (fun g i => by rw [MonoidHom.one_apply, one_smul]; exact hρ' g i)).symm.trans h
 
 end MPSTensor

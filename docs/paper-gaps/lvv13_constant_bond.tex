@@ -13,11 +13,11 @@
 
 \title{The Constant Bond Dimension in the Algorithm of Landau, Vazirani and Vidick}
 \author{}
-\date{2026-10-25}
+\date{2026-10-28}
 
 \begin{document}
 \maketitle
-\gapnote{local-correction}{resolved}
+\gapnote{scope-restriction}{open}
 
 \section{The source statement}
 
@@ -110,9 +110,33 @@ $B_{\delta_0}$ remains independent of the chain length and cut. Thus the
 corollary retains its stated energy and overlap bounds for every
 $\delta>0$, despite the correction needed in Lemma \path{l:2}.
 
+\section{The actual bond spaces in size trimming}
+
+In size trimming, put $c=(\Delta/169)^2$ and $D=B_c$. A retained bond of
+actual dimension $m\le D$ supplies an isometry
+$W:\mathbb C^m\to\mathcal H_R$. It does not in general supply an isometry
+from $\mathbb C^D$ when the right physical space has dimension less than
+$D$. Choosing the optimization families separately for every
+$0\le m\le D$ and taking the union of their left columns avoids this
+extension. If each boundary net $N_m$ has at most $K$ points, the resulting
+family $T$ satisfies
+\begin{align}
+    |T|\le\sum_{m=0}^{D}m|N_m|\le(D+1)DK.
+    \label{eq:lvv13_actual_bond_union}
+\end{align}
+Thus the prefactor $(D+1)D$ replaces the single-space prefactor $D$ in
+\cite[Claim~2.7]{Landau2015Polynomial}. Both $D$ and the corrected net
+exponent $2(qD)^2$ are independent of $L$, so this change preserves
+polynomial growth in the chain length. It does not establish the sharper
+quantitative AKLV dependence in
+(\ref{eq:lvv13_constant_bond_source}).
+
 \section{The source's constant}
 
-The explicit dependence $\varepsilon^{-1}\log^3d$ is not formalized. It would
+The explicit dependence $\varepsilon^{-1}\log^3d$ is not formalized, which is
+why this note remains open as a scope restriction: the formalized lemma has the
+source's hypotheses and the source's form of $B_\delta$, but a weaker explicit
+constant. It would
 follow from the bound of Arad, Kitaev, Landau and Vazirani,
 arXiv:1301.1162~\cite{Arad2013AreaLaw}, which gives the Schmidt rank in
 (\ref{eq:lvv13_constant_bond_source}), by the argument of the previous

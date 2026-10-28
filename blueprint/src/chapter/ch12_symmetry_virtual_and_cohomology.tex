@@ -481,11 +481,11 @@ second cohomology group $H^2(G,\C^{\times})$ of cocycles modulo coboundaries.
     \end{align}
 \end{definition}
 
-\begin{definition}[Cohomologous cocycles]\label{def:cohomologous_to}
-    \lean{TNLean.Algebra.ScalarCocycle.CohomologousTo}
+\begin{definition}[Cohomologous cochains]\label{def:cohomologous_to}
+    \lean{TNLean.Algebra.isMulCoboundary₂_div_iff}
     \leanok
     \uses{def:scalar_cocycle}
-    Two cocycles $\omega_1,\omega_2$ are \emph{cohomologous}
+    Two scalar two-cochains $\omega_1,\omega_2$ are \emph{cohomologous}
     (written $\omega_1 \sim \omega_2$) if there exists
     $\varphi \colon G \to \C^{\times}$ such that, for all $g,h \in G$,
     \begin{align}
@@ -570,7 +570,7 @@ second cohomology group $H^2(G,\C^{\times})$ of cocycles modulo coboundaries.
 \end{proof}
 
 \begin{definition}[Multiplicative 2-cocycle condition]\label{def:is_cocycle}
-    \lean{TNLean.Algebra.ScalarCocycle.IsCocycle}
+    \lean{groupCohomology.IsMulCocycle₂}
     \leanok
     A scalar 2-cochain $\omega \colon G \times G \to \C^{\times}$ is a
     \emph{2-cocycle} if it satisfies, for all $g,h,k \in G$,
@@ -583,7 +583,7 @@ second cohomology group $H^2(G,\C^{\times})$ of cocycles modulo coboundaries.
 
 \begin{theorem}[A projective factor system is a cocycle]
     \label{thm:is_cocycle_of_projective_rep}
-    \lean{TNLean.Algebra.ScalarCocycle.isCocycle_of_projRep}
+    \lean{TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep}
     \leanok
     \uses{def:is_cocycle, def:projective_rep, lem:cocycle_of_assoc}
     If $D>0$ and $\rho:G\to\GL_D(\C)$ obeys
@@ -630,7 +630,7 @@ establishes non-triviality of the class.
 \end{definition}
 
 \begin{theorem}[The commutator phase is a class invariant]\label{thm:comm_phase_invariant}
-    \lean{TNLean.Algebra.ScalarCocycle.commPhase_eq_of_cohomologousTo}
+    \lean{TNLean.Algebra.ScalarCocycle.commPhase_eq_of_isMulCoboundary₂_div}
     \leanok
     \uses{def:comm_phase, def:cohomologous_to}
     If $\omega_1\sim\omega_2$ and $gh=hg$, then
@@ -665,7 +665,7 @@ establishes non-triviality of the class.
 
 \begin{theorem}[The trivial class]\label{thm:trivial_class}
     \lean{TNLean.Algebra.ScalarCocycle.H2π_one,
-        TNLean.Algebra.ScalarCocycle.cohomologousTo_one_iff_H2π_eq_zero}
+        TNLean.Algebra.H2π_eq_zero_iff_isMulCoboundary₂}
     \leanok
     \uses{def:cohomologous_to, def:h2_cx}
     The class of the constant cocycle $1$ is zero, and $[\omega]=0$ exactly

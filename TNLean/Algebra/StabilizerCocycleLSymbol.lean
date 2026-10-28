@@ -29,6 +29,8 @@ gauge `γ^x_g = φ(t_k(g,x))⁻¹`.
 No finiteness, normality, or tensor assumption is used.
 -/
 
+open scoped TNLean.Algebra.ScalarCohomology
+
 namespace TNLean.Algebra
 
 variable {G : Type} {X : Type*} [Group G] [MulAction G X] {x₀ : X}
@@ -46,13 +48,13 @@ def inducedLSymbol (K : StabilizerRepresentatives G X x₀)
 three-cochain. This is the `ω = 1` scalar specialization of arXiv:2203.12563,
 Equation (20). -/
 theorem inducedLSymbol_isCompatible (K : StabilizerRepresentatives G X x₀)
-    {ψ : ScalarCocycle (MulAction.stabilizer G x₀)} (hψ : ψ.IsCocycle) :
+    {ψ : ScalarCocycle (MulAction.stabilizer G x₀)} (hψ : groupCohomology.IsMulCocycle₂ ψ) :
     LSymbol.IsCompatible (K.inducedLSymbol ψ) (fun _ _ _ ↦ 1) := by
   intro x g h k
   simp only [inducedLSymbol, one_mul]
   rw [K.transitionElement_mul h k x, K.transitionElement_mul g h (k • x)]
   simpa only [smul_smul] using
-    (hψ (K.transitionElement g ((h * k) • x))
+    ((isMulCocycle₂_iff _).mp hψ (K.transitionElement g ((h * k) • x))
       (K.transitionElement h (k • x)) (K.transitionElement k x)).symm
 
 /-- Restricting the induced L-symbol to the basepoint and stabilizer arguments
@@ -86,15 +88,16 @@ theorem inducedLSymbol_eq_gauge (K : StabilizerRepresentatives G X x₀)
   simp only [div_eq_mul_inv, mul_inv_rev, inv_inv]
   ac_rfl
 
-/-- Two stabilizer cocycles are cohomologous exactly when their induced
+/-- Two arbitrary stabilizer cochains differ by a coboundary exactly when their induced
 L-symbols differ by an action-tensor gauge with no change of fusion gauge. -/
-theorem cohomologousTo_iff_exists_actionGauge_inducedLSymbol_eq
+theorem isMulCoboundary₂_div_iff_exists_actionGauge_inducedLSymbol_eq
     (K : StabilizerRepresentatives G X x₀)
     (ψ₁ ψ₂ : ScalarCocycle (MulAction.stabilizer G x₀)) :
-    ScalarCocycle.CohomologousTo ψ₁ ψ₂ ↔
+    groupCohomology.IsMulCoboundary₂ (ψ₁ / ψ₂) ↔
       ∃ γ : ActionTensorGauge G X,
         K.inducedLSymbol ψ₁ =
           LSymbol.gauge (fun _ ↦ 1) γ (K.inducedLSymbol ψ₂) := by
+  rw [isMulCoboundary₂_div_iff]
   constructor
   · rintro ⟨φ, hφ⟩
     exact ⟨K.inducedActionGauge φ, K.inducedLSymbol_eq_gauge φ hφ⟩

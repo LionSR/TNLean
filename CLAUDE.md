@@ -206,7 +206,8 @@ When adding or completing (removing sorry from) theorems/lemmas:
 - Do not leave unrelated new sorrys
 - Before changing theorem statements, first try to complete the proof using existing lemmas
 - If a mathematical result looks wrong or suspiciously general, check the LaTeX sources in `Papers/` and `Notes/` for the original theorems
-- Do not add per-module steps or path entries to `.github/workflows/pr-ci.yml`. CI discovers changed modules, `TNLeanTest/` files, `scripts/*_regression.lean`, and blueprint diagram tests (`scripts/test_tenkz_*.py`, `scripts/test_*_diagram.py`) automatically; see `docs/ci-automation.md`
+- Do not add per-module steps or path entries to `.github/workflows/pr-ci.yml`. CI discovers changed modules, `scripts/*_regression.lean`, and blueprint diagram tests (`scripts/test_tenkz_*.py`, `scripts/test_*_diagram.py`) automatically; see `docs/ci-automation.md`
+- Do not write Lean test fixtures: no `TNLeanTest/` files (CI rejects them) and no per-theorem `#print axioms` / `#guard_msgs` files. Run `#print axioms` locally while proving if needed, then delete it; see `docs/project_conventions.md`
 
 ### Faithfulness rule
 
@@ -437,7 +438,7 @@ follow-up, not against the temporary `sorry` count.
 | `MPOTensor.mpo_mul_eq_of_trace_evalWord`, `MPOTensor.mpo_eq_of_trace_evalWord`, `MPOTensor.mpo_apply_toMPSTensor` | helper theorems | Turning a word-trace identity of pair-alphabet tensors on nonempty words into an identity of periodic operators at every positive length, such as a fusion rule of matrix product operators | `TNLean/MPS/MPDO/OperatorFromWordTrace.lean` |
 | `MPOTensor.IsMPUCanonicalFormII.simple2_recorded_fixed_pair` | helper theorem | Specializing two-letter simplicity to the recorded canonical right boundary `ρ` and identity left boundary | `TNLean/MPS/MPU/SuppliedFixedWitnesses.lean` |
 | `matrix_reciprocal_smul` | simp set | Moving scalars out of matrix products and cancelling nested reciprocal actions; use `simp (disch := exact hβ) only [matrix_reciprocal_smul]` for `hβ : β ≠ 0` | `TNLean/Tactic/Attr.lean`, `TNLean/Tactic/MatrixReciprocalSmul.lean` |
-| `Equiv.Perm.permMatrix_mem_unitaryGroup` | helper theorem | Showing that a complex permutation matrix is unitary | `TNLean/Algebra/PermutationMatrixUnitary.lean` |
+| `Equiv.Perm.permMatrix_mem_unitaryGroup` | helper theorem | Showing that a complex permutation matrix is unitary | `QICLean/Algebra/PermutationMatrixUnitary.lean` (QICLean dependency) |
 | `List.ofFn_reverse` | helper theorem | Reversing a `List.ofFn`-indexed finite word by precomposition with `Fin.rev` | `QICLean/Kraus/Word.lean` (QICLean dependency) |
 | `verticalAssembledTensor_apply_copy_same` | helper theorem | Evaluating an assembled vertical tensor at two coordinates in the same retained multiplicity copy | `TNLean/MPS/MPDO/VerticalSectorCoordinates.lean` |
 | `exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_of_openBoundary` | helper theorem | Closing block-diagonal boundaries from an open-boundary representation and a simultaneous span across the complementary global cut | `TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalBoundaryClosing.lean` |

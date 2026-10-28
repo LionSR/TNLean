@@ -43,6 +43,7 @@ import TNLean.Algebra.ConstantTracePowers
 import TNLean.Algebra.ContinuousIdempotentFrames
 import TNLean.Algebra.ContinuousNearbyIdempotent
 import TNLean.Algebra.ConvexWeightsCompactness
+import TNLean.Algebra.CoreWordCoefficients
 import TNLean.Algebra.CycleLaplacianFourier
 import TNLean.Algebra.CyclicInsertion
 import TNLean.Algebra.CyclicMomentRigidity
@@ -86,6 +87,7 @@ import TNLean.Algebra.IdempotentRankContinuity
 import TNLean.Algebra.IdempotentTracePerturbation
 import TNLean.Algebra.InjectivePositiveMapRank
 import TNLean.Algebra.InjectiveRangeProjectorContinuity
+import TNLean.Algebra.IntegerHasseGraph
 import TNLean.Algebra.IsNilpotentOfTracePow
 import TNLean.Algebra.IsingCrossingCoefficients
 import TNLean.Algebra.IsometricFrameEmbedding
@@ -109,6 +111,7 @@ import TNLean.Algebra.MatrixCoordinateInclusion
 import TNLean.Algebra.MatrixCyclicPathSum
 import TNLean.Algebra.MatrixDensitySum
 import TNLean.Algebra.MatrixEntryNorm
+import TNLean.Algebra.MatrixFactorExchange
 import TNLean.Algebra.MatrixFixedSection
 import TNLean.Algebra.MatrixGramLeftInverse
 import TNLean.Algebra.MatrixHermitianSum
@@ -143,7 +146,6 @@ import TNLean.Algebra.OrthogonalResolution
 import TNLean.Algebra.OrthogonalSymplecticKroneckerDeterminant
 import TNLean.Algebra.PathGraphDistance
 import TNLean.Algebra.PermutationMatrixCommutation
-import TNLean.Algebra.PermutationMatrixUnitary
 import TNLean.Algebra.PiMatrixRepresentation
 import TNLean.Algebra.PiMulSingleInduction
 import TNLean.Algebra.PiSigmaEquiv
@@ -192,6 +194,7 @@ import TNLean.Algebra.StabilizerCocycleReconstruction
 import TNLean.Algebra.StabilizerTransition
 import TNLean.Algebra.StackedIsometryCard
 import TNLean.Algebra.StarClosedSemisimple
+import TNLean.Algebra.SubmoduleStarProjectionMatrix
 import TNLean.Algebra.Subquotient
 import TNLean.Algebra.SupportedIsometricCompression
 import TNLean.Algebra.SupportedRangeProjector
@@ -211,7 +214,14 @@ import TNLean.Algebra.TraceInvariantSubmodule
 import TNLean.Algebra.TranslatedCharacterOrthogonality
 import TNLean.Algebra.TwistedRegularProjective
 import TNLean.Algebra.TwistedRegularRepresentation
+import TNLean.Algebra.TwoMarkerMiddleFactors
+import TNLean.Algebra.TwoMarkerMiddleIndexCardinality
+import TNLean.Algebra.TwoMarkerScalarRecovery
+import TNLean.Algebra.TwoWindowFamily
+import TNLean.Algebra.TwoWindowPolynomialRecovery
 import TNLean.Algebra.TwoWindowRankBounds
+import TNLean.Algebra.TwoWindowSum
+import TNLean.Algebra.TwoWindowTensorForms
 import TNLean.Algebra.UniformSelectionBounds
 import TNLean.Algebra.UnimodularPowerSum
 import TNLean.Algebra.UnitaryAdjointKronecker

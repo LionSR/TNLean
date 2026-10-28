@@ -38,8 +38,8 @@ representation.**  Source: arXiv:2011.12127, §III.A
 (`Papers/2011.12127/TN-Review-main.tex` line 1171). -/
 theorem ProjectiveRepresentation.finrank_eigenspace_ne_one_of_commute
     {ω : ScalarCocycle G} (ρ : ProjectiveRepresentation (D := D) ω)
-    (hω : ω.IsCocycle)
-    (hnt : groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hω.isMulCocycle₂) ≠ 0)
+    (hω : groupCohomology.IsMulCocycle₂ ω)
+    (hnt : groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hω) ≠ 0)
     {Λ : Matrix (Fin D) (Fin D) ℂ}
     (hΛ : ∀ g, Commute Λ (ρ.X g : Matrix (Fin D) (Fin D) ℂ)) (μ : ℂ) :
     finrank ℂ (Module.End.eigenspace (Matrix.toLin' Λ) μ) ≠ 1 := by
@@ -65,21 +65,24 @@ theorem ProjectiveRepresentation.finrank_eigenspace_ne_one_of_commute
     have h := congrArg (((ρ.X g)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ).mulVec (hcv g)
     simpa [Matrix.mulVec_mulVec, hg] using h
   apply hnt
-  refine (ScalarCocycle.cohomologousTo_one_iff_H2π_eq_zero hω).mp
-    ⟨fun g => Units.mk0 (c g) (hc0 g), fun g h => ?_⟩
-  apply Units.ext
-  simp only [Units.val_mul, Units.val_mk0, Units.val_inv_eq_inv_val, Pi.one_apply, mul_one]
-  have hmul := congrArg (fun M : Matrix (Fin D) (Fin D) ℂ => M.mulVec (v : Fin D → ℂ))
-    (ρ.map_mul g h)
-  simp only [← Matrix.mulVec_mulVec, hcv, Matrix.mulVec_smul, Matrix.smul_mulVec,
-    smul_smul] at hmul
-  have hωc : (ω (g, h) : ℂ) * c (g * h) = c h * c g := by
-    by_contra hne
-    apply hv0'
-    have := sub_eq_zero.mpr hmul
-    rw [← sub_smul] at this
-    exact (smul_eq_zero.mp this).resolve_left (sub_ne_zero.mpr (Ne.symm hne))
-  field_simp [hc0 (g * h)]
-  linear_combination hωc
+  apply (H2π_eq_zero_iff_isMulCoboundary₂ hω).mpr
+  have hB : groupCohomology.IsMulCoboundary₂ (ω / (1 : G × G → ℂˣ)) := by
+    apply (isMulCoboundary₂_div_iff ω 1).mpr
+    refine ⟨fun g => Units.mk0 (c g) (hc0 g), fun g h => ?_⟩
+    apply Units.ext
+    simp only [Units.val_mul, Units.val_mk0, Units.val_inv_eq_inv_val, Pi.one_apply, mul_one]
+    have hmul := congrArg (fun M : Matrix (Fin D) (Fin D) ℂ => M.mulVec (v : Fin D → ℂ))
+      (ρ.map_mul g h)
+    simp only [← Matrix.mulVec_mulVec, hcv, Matrix.mulVec_smul, Matrix.smul_mulVec,
+      smul_smul] at hmul
+    have hωc : (ω (g, h) : ℂ) * c (g * h) = c h * c g := by
+      by_contra hne
+      apply hv0'
+      have := sub_eq_zero.mpr hmul
+      rw [← sub_smul] at this
+      exact (smul_eq_zero.mp this).resolve_left (sub_ne_zero.mpr (Ne.symm hne))
+    field_simp [hc0 (g * h)]
+    linear_combination hωc
+  simpa only [div_one] using hB
 
 end TNLean.Algebra

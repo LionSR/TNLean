@@ -5556,7 +5556,6 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
 \begin{theorem}[The stabilizer of two blocks acts projectively]
     \label{thm:mpug_domain_wall_projective}
     \lean{TNLean.Algebra.LSymbol.ratioCocycle,
-        TNLean.Algebra.LSymbol.ratioCocycle_isCocycle,
         TNLean.Algebra.LSymbol.ratioCocycle_isMulCocycle₂,
         MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq_of_fixed,
         MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq_of_fixed_self}
@@ -8196,9 +8195,8 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 
 \begin{theorem}[Cocycles and classes for trivial coefficients]
     \label{thm:mpug_h2_trivial_coefficients}
-    \lean{TNLean.Algebra.ScalarCocycle.isCocycle_iff_isMulCocycle₂,
-        TNLean.Algebra.ScalarCocycle.IsCocycle.isMulCocycle₂,
-        TNLean.Algebra.ScalarCocycle.cohomologousTo_iff_H2π_eq}
+    \lean{TNLean.Algebra.isMulCocycle₂_iff,
+        TNLean.Algebra.H2π_eq_iff_isMulCoboundary₂_div}
     \leanok
     \uses{def:is_coboundary, def:cohomologous_to, def:is_cocycle, def:h2_cx}
     Let $G$ act trivially on $\C^\times$, and let
@@ -8281,8 +8279,8 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 
 \begin{theorem}[Pullback preserves cocycles and cohomology]
     \label{thm:mpug_h2_pullback_preserves}
-    \lean{TNLean.Algebra.ScalarCocycle.IsCocycle.comap,
-        TNLean.Algebra.ScalarCocycle.CohomologousTo.comap}
+    \lean{TNLean.Algebra.ScalarCocycle.isMulCocycle₂_comap,
+        TNLean.Algebra.isMulCoboundary₂_div_comap}
     \leanok
     \uses{def:mpug_h2_pullback, def:cohomologous_to, def:is_cocycle}
     Let $f:K\to G$ be a group homomorphism. If $\omega$ is a scalar
@@ -8329,7 +8327,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 \begin{theorem}[Exact extension of a subgroup cocycle]
     \label{thm:mpug_h2_exact_extension}
     \lean{TNLean.Algebra.ScalarCocycle.H2π_mem_range_map_subtype_iff,
-        TNLean.Algebra.ScalarCocycle.IsCocycle.coboundary_mul}
+        TNLean.Algebra.ScalarCocycle.isMulCocycle₂_coboundary_mul}
     \leanok
     \uses{def:mpug_h2_pullback, def:is_cocycle}
     Let $H\le G$ be any subgroup, let $\iota:H\hookrightarrow G$ be its
@@ -8364,7 +8362,8 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \label{thm:mpug_circle_complex_units_h2}
     \lean{TNLean.Algebra.Complex.div_toUnits_unitsPhase,
         TNLean.Algebra.ScalarCocycle.circlePhase_isMulCocycle₂,
-        TNLean.Algebra.ScalarCocycle.cohomologousTo_circlePhaseInclusion,
+        TNLean.Algebra.ScalarCocycle.circlePhaseInclusion_isMulCocycle₂,
+        TNLean.Algebra.ScalarCocycle.H2π_circlePhaseInclusion,
         TNLean.Algebra.ScalarCocycle.circlePhaseMathlibCocycle,
         TNLean.Algebra.ScalarCocycle.H2π_map_circlePhaseMathlibCocycle,
         TNLean.Algebra.circleH2ToComplexUnitsH2_injective,
@@ -8948,7 +8947,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
         TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_base,
         TNLean.Algebra.StabilizerRepresentatives.inducedActionGauge,
         TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_eq_gauge,
-        TNLean.Algebra.StabilizerRepresentatives.cohomologousTo_iff_exists_actionGauge_inducedLSymbol_eq}
+        TNLean.Algebra.StabilizerRepresentatives.isMulCoboundary₂_div_iff_exists_actionGauge_inducedLSymbol_eq}
     \leanok
     \uses{def:mpug_l_symbols, def:mpug_l_gauge, def:is_cocycle,
         def:cohomologous_to, thm:mpug_stabilizer_transition}

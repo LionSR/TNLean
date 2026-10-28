@@ -21,7 +21,7 @@ Method
   ``simp``, ``grind`` and ``ext`` use them without naming them.
 * Count word-boundary occurrences of each declaration's final name component
   across the reference corpus: every ``.lean`` file under ``TNLean/``,
-  ``TNLeanTest/``, ``Archive/`` and ``scripts/``, the blueprint sources,
+  ``Archive/`` and ``scripts/``, the blueprint sources,
   ``docs/``, ``Notes/``, ``Papers/`` and the Python/JSON files under
   ``scripts/``.  Extra corpus directories (for example a checked-out
   downstream package) are added with ``--corpus``.  Dot notation
@@ -98,7 +98,6 @@ EXCLUDED_DIRS = {"Archive", "Scratch"}
 
 CORPUS_GLOBS = (
     "TNLean/**/*.lean",
-    "TNLeanTest/**/*.lean",
     "Archive/**/*.lean",
     "blueprint/src/**/*.tex",
     "docs/**/*.md",

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Combinatorics.SimpleGraph.CycleGraph
 import Mathlib.Combinatorics.SimpleGraph.Metric
 import Mathlib.LinearAlgebra.Matrix.Permutation
-import TNLean.Algebra.PermutationMatrixUnitary
+import QICLean.Algebra.PermutationMatrixUnitary
 import TNLean.Circuit.SitePermutationSupport
 import TNLean.Lattice.GaussianFilteredTerm
 
@@ -40,6 +40,7 @@ positions (lines 1634–1639).
   representation.
 * `Matrix.sitePermMatrix_mul_mul_conjTranspose_mem_supportedOperators`: `P_g A P_g†` acts on
   `g • S` when `A` acts on `S`.
+* `Matrix.norm_sitePermMatrix_mul_mul_conjTranspose`: `P_g A P_g†` has the norm of `A`.
 * `Matrix.isSiteInvariant_sum_of_covariant`: the sum of covariant terms is invariant;
   `Matrix.isSiteInvariant_sum_conj` is the sum of the translates of one term.
 * `TNLean.Lattice.gaussianFilteredTerm_sitePermMatrix_conj`: for invariant `H`, filtering
@@ -97,6 +98,17 @@ theorem sitePermMatrix_mul_mul_conjTranspose_mem_supportedOperators (q : ℕ) (g
       QuantumCircuit.supportedOperators q ((g • ·) '' S) := by
   rw [sitePermMatrix_mul_mul_conjTranspose]
   exact QuantumCircuit.supportedOperators_submatrix_siteEquiv (MulAction.toPerm g) hA
+
+/-- Conjugation by a site permutation preserves the operator norm. -/
+theorem norm_sitePermMatrix_mul_mul_conjTranspose (q : ℕ) (g : G)
+    (A : Matrix (V → Fin q) (V → Fin q) ℂ) :
+    ‖sitePermMatrix q g * A * (sitePermMatrix q g)ᴴ‖ = ‖A‖ := by
+  let U : unitary (Matrix (V → Fin q) (V → Fin q) ℂ) :=
+    ⟨sitePermMatrix q g, sitePermMatrix_mem_unitaryGroup q g⟩
+  calc ‖sitePermMatrix q g * A * (sitePermMatrix q g)ᴴ‖
+      = ‖(U : Matrix _ _ ℂ) * A * ((star U : unitary _) : Matrix _ _ ℂ)‖ := by
+        rfl
+    _ = ‖A‖ := by rw [CStarRing.norm_mul_coe_unitary, CStarRing.norm_coe_unitary_mul]
 
 /-- An operator `H` on the configurations of the sites `V` is **invariant under the site action**
 of `G` when it commutes with every site permutation `P_g`.

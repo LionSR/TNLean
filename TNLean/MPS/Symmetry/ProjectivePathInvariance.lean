@@ -29,7 +29,9 @@ physical Hamiltonian path produces such a continuous virtual family.
 
 namespace MPSTensor
 
+open scoped TNLean.Algebra.ScalarCohomology
 open scoped Matrix
+open TNLean.Algebra
 
 /-- A continuous family of `D`th roots of unity on the unit interval is
 constant. This is the discreteness step in the virtual-path argument of
@@ -116,7 +118,8 @@ theorem projectiveFactor_endpoints_cohomologous_of_det_path
     (hdcont : ∀ g, Continuous fun t => d t g)
     (hdnz : ∀ t g, d t g ≠ 0)
     (hdet : ∀ t g h, d t g * d t h = (ω t (g, h) : ℂ) ^ D * d t (g * h)) :
-    (ω 1).CohomologousTo (ω 0) := by
+    groupCohomology.IsMulCoboundary₂ (ω 1 / ω 0) := by
+  apply (isMulCoboundary₂_div_iff _ _).mpr
   have hroot (g : G) : ∃ β : unitInterval → ℂ,
       Continuous β ∧ (∀ t, β t ^ D = d t g) ∧ ∀ t, β t ≠ 0 :=
     exists_continuous_pow_root_path hD (fun t => d t g) (hdcont g)
@@ -175,7 +178,14 @@ theorem unitary_projectivePath_factor_endpoints_cohomologous
     (hV : ∀ g, Continuous fun t => V t g)
     (hunitary : ∀ t g, V t g ∈ Matrix.unitaryGroup (Fin D) ℂ)
     (hmul : ∀ t g h, V t g * V t h = (ω t (g, h) : ℂ) • V t (g * h)) :
-    (ω 1).CohomologousTo (ω 0) := by
+    let ρ : ∀ t, ProjectiveRepresentation (D := D) (ω t) := fun t ↦
+      { X := fun g ↦ Unitary.toUnits ⟨V t g, hunitary t g⟩
+        map_mul' := hmul t }
+    groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (ScalarCocycle.isMulCocycle₂_of_projRep (ρ 1) hD)) =
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (ScalarCocycle.isMulCocycle₂_of_projRep (ρ 0) hD)) := by
+  apply (H2π_eq_iff_isMulCoboundary₂_div _ _).mpr
   let d : unitInterval → G → ℂ := fun t g => (V t g).det
   have hdcont (g : G) : Continuous fun t => d t g :=
     (hV g).matrix_det
