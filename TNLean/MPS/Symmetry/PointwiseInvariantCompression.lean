@@ -29,6 +29,8 @@ set_option linter.mathlibStandardSet true
 
 open scoped Matrix
 
+open scoped TNLean.Algebra.ScalarCohomology
+
 namespace Matrix
 
 /-- Conjugation descends through an invariant isometric corner without
@@ -83,7 +85,16 @@ theorem cohomologousTo_of_continuous_injective_pointwise_compression
     (C : unitInterval → MPSTensor d r) (hC : Continuous C)
     (hInj : ∀ t, Kraus.IsInjective (C t))
     (hCompress : ∀ t i, C t i = (J t)ᴴ * A t i * J t) :
-    (ω 1).CohomologousTo (ω 0) := by
+    groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ 1)
+            (hr.trans_le (by
+              simpa only [Fintype.card_fin] using Matrix.IsIsometry.card_le (J 1) (hJ 1))))) =
+      groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ 0)
+            (hr.trans_le (by
+              simpa only [Fintype.card_fin] using Matrix.IsIsometry.card_le (J 0) (hJ 0))))) := by
   let : NeZero r := ⟨Nat.ne_of_gt hr⟩
   choose σ hσ hσUnitary using fun t =>
     (ρ t).exists_unitary_compression (J t) (hJ t) (hUnitary t) (hComm t)

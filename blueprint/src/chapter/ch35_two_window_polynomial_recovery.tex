@@ -1,0 +1,82 @@
+\section{A common recovery identity for two-window polynomials}
+
+The following combines the low-frequency partition and scalar interpolation
+in \cite[Lemma~4.2]{Arad2013AreaLaw} and
+\cite[Proposition~5.7]{Arad2016RigorousRG}.
+Interpolation uses a spanning family of evaluations, as explained in
+\cite{gap:aklv13_interpolation_and_word_count}.
+
+\begin{definition}[Crossing positions and low frequencies]
+    \label{def:crossing_frequency_index}
+    \lean{TNLean.MPS.AreaLaw.crossingFrequencyIndex}
+    \leanok
+    For $k\ge0$, set $\mathcal I_{0,k}=\varnothing$. For $\ell\ge1$, put
+    $m=\lfloor k/(2\ell)\rfloor$ and
+    \begin{align}
+        \mathcal I_{\ell,k}
+         & =\{0,\ldots,2\ell-1\}^2\times\{0,\ldots,m\}^2.
+        \label{eq:crossing_frequency_index}
+    \end{align}
+    An index $\nu=(p,s,i,j)$ records one position in each window and their two
+    frequencies.
+\end{definition}
+
+\begin{theorem}[Common recovery of every polynomial through a fixed degree]
+    \label{thm:global_two_window_polynomial_recovery}
+    \lean{TNLean.MPS.AreaLaw.exists_global_two_window_polynomial_recovery}
+    \leanok
+    \uses{def:crossing_frequency_index,thm:two_window_common_scalar_recovery,
+        def:two_marker_coefficient}
+    Let $\ell\ge1$ and $k\ge0$. Let $R$ be a ring and a complex algebra,
+    without a commutativity assumption. Set
+    $\Lambda=(\{0,\ldots,2\ell-1\}\sqcup\{0,\ldots,2\ell-1\})
+        \sqcup\{0,1,2\}$ and $N=(k+1)^{4\ell+1}$.
+    Write $L_p$ and $R_s$ for the two window labels.
+    There are complex scalar arrays
+    $z_{\nu,t}:\Lambda\to\C$ and $\gamma_{\nu,t}\in\C$, with
+    $\nu=(p,s,i,j)\in\mathcal I_{\ell,k}$ and $0\le t<N$, such that the
+    following identity holds for every family $H:\Lambda\to R$ and all
+    complex coefficients $c_0,\ldots,c_k$. Define
+    \begin{align}
+        D_{\nu,t} & =\sum_{a\in\Lambda\setminus\{L_p,R_s\}}
+        z_{\nu,t}(a)H_a.
+        \label{eq:global_two_window_ordinary_sum}
+    \end{align}
+    Then
+    \begin{align}
+        \sum_{r=0}^{k} c_r\left(\sum_{a\in\Lambda}H_a\right)^r
+         & =\sum_{\nu=(p,s,i,j)\in\mathcal I_{\ell,k}}
+        \sum_{t=0}^{N-1}\sum_{r=0}^{k}
+        c_r\gamma_{\nu,t}\,[x^iy^j]
+        (D_{\nu,t}+xH_{L_p}+yH_{R_s})^r.
+        \label{eq:global_two_window_recovery}
+    \end{align}
+    The variables $x,y$ are central, and scalar multiplication is the complex
+    algebra action. The selected terms are unweighted. Both arrays are fixed
+    before $H$ and the entire polynomial coefficient family are supplied.
+    The case $k=0$ is included. This is a scalar recovery identity; it imposes
+    no spatial support, spectral, tensor rank, or matrix product hypothesis.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:crossing_frequency_index,thm:two_window_common_scalar_recovery,
+        def:full_frequency_word_coefficient,def:two_marker_coefficient}
+    The common-cutoff word partition chooses one selector on the frequency
+    vectors of each window. If a full frequency vector has total at most $k$,
+    the selected count in each window is at most
+    $\lfloor k/(2\ell)\rfloor$. These same selectors work before $H$ and at
+    every degree $r\le k$.
+
+    For $\nu=(p,s,i,j)$, use the scalar mask equal to one when the two selectors
+    choose $L_p,R_s$, and zero otherwise. The words assigned to this bin are
+    exactly the full-frequency slice with counts $i,j$, weighted by this mask.
+    The two-window scalar recovery theorem supplies $z_{\nu,t}$ and
+    $\gamma_{\nu,t}$ before $H$ and all degrees. These masks depend only on
+    the selectors and the index $\nu$.
+
+    Partition each power into these bins and replace each masked slice by its
+    recovery identity. Reindex the window labels and their bounded counts by
+    (\ref{eq:crossing_frequency_index}). Multiplying by $c_r$ and interchanging
+    the finite degree and sample sums gives
+    (\ref{eq:global_two_window_recovery}), with ordinary sums
+    (\ref{eq:global_two_window_ordinary_sum}). All ordered products are preserved.
+\end{proof}

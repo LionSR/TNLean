@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Hastings.Window
 import TNLean.MPS.AreaLaw.TwoCutOperatorForms
 import TNLean.Circuit.PairProduct
 
@@ -60,7 +59,7 @@ private noncomputable abbrev zeroDimensionThreeSites :=
   exists_threeSplit_edge_factors (L := 3) (q := 0)
     (fun _ : Fin 2 ↦ (0 : Matrix (Fin 3 → Fin 0) (Fin 3 → Fin 0) ℂ))
     (fun _ ↦ Submodule.zero_mem _) (0 : Fin 2) 1 (by decide) rfl rfl
-    (Hastings.disjoint_interval_interval 0 _ _)
+    (disjoint_interval_interval 0 _ _)
 
 -- These are the two actual adjacent SWAPs on three qubits. The crossing supports
 -- share site 1; no commutation premise is supplied.
@@ -68,7 +67,7 @@ private noncomputable abbrev adjacentCrossingsThreeSites :=
   exists_threeSplit_edge_factors (L := 3) (q := 2)
     (adjacentSwapFamily 3 2) (adjacentSwapFamily_supported 3 2)
     (0 : Fin 2) 1 (by decide) rfl rfl
-    (Hastings.disjoint_interval_interval 0 _ _)
+    (disjoint_interval_interval 0 _ _)
 
 -- T={0,1}, E={2,3}, U={4,5}. Selected bonds 1 and 3 cross the two boundaries;
 -- ordinary bonds 0, 2 and 4 lie wholly in T, E and U respectively.
@@ -76,4 +75,4 @@ private noncomputable abbrev separatedCrossingsSixSites :=
   exists_threeSplit_edge_factors (L := 6) (q := 2)
     (adjacentSwapFamily 6 2) (adjacentSwapFamily_supported 6 2)
     (1 : Fin 5) 3 (by decide) rfl rfl
-    (Hastings.disjoint_interval_interval 0 _ _)
+    (disjoint_interval_interval 0 _ _)
