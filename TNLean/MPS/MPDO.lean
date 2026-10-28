@@ -391,6 +391,7 @@ import TNLean.MPS.MPDO.TopologicalPhysicalGibbs
 import TNLean.MPS.MPDO.TopologicalProjectorRecursion
 import TNLean.MPS.MPDO.TopologicalProjectors
 import TNLean.MPS.MPDO.TopologicalTerminalSpectral
+import TNLean.MPS.MPDO.TraceChainOperator
 import TNLean.MPS.MPDO.TriangularActionLIdentification
 import TNLean.MPS.MPDO.TriangularBoundaryBlocked
 import TNLean.MPS.MPDO.TriangularBoundaryDecomposition

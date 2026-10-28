@@ -9581,7 +9581,8 @@ there is no need for a new tactic.
 
 - **Pattern:** Unfold a repeated pair of operators, generalize the `Fin 2` remainder,
   and prove the identity and adjoint cases separately with `fin_cases`.
-- **Seen:** Three occurrences in `Algebra/FiniteMatrixMoments.lean`, in the proofs
+- **Seen:** Three occurrences in the companion module
+  `QICLean/Probability/FiniteMatrixMoments.lean`, in the proofs
   of the coordinate sum, centered singleton factor and uniform factor norm bound.
 - **Abstraction:** If a second module needs the same reasoning, first state that
   the selected operator is either the identity or the adjoint, then reuse that
@@ -9605,82 +9606,6 @@ there is no need for a new tactic.
   The generic filtering module is intended for QICLean, where the helper can be
   consolidated with the existing ground-projection development.
 
-### Positive-definite Hermitian exponentials — promoted through Mathlib (2026-10-28)
-
-- **Pattern:** Prove positivity of a Hermitian exponential and combine it with
-  `NormedSpace.isUnit_exp` to obtain positive definiteness.
-- **Seen:** The private exponential lemma in `Algebra/TraceExpLogConcavity.lean`
-  and the finite Jensen and Bernstein exponential estimates.
-- **Abstraction:** Mathlib's `cfc_isStrictlyPositive_iff`, together with
-  `CFC.real_exp_eq_normedSpace_exp` and `Matrix.isStrictlyPositive_iff_posDef`,
-  applies directly to `Real.exp_pos` on the spectrum.
-- **Refactored occurrences:** The two new consumers in
-  `Algebra/TraceExpFiniteJensen.lean` and `Algebra/BernsteinExponentialBound.lean`
-  use the existing strict-positivity abstraction. They no longer repeat the
-  auxiliary rational normed-algebra instance and invertibility argument.
-- **Notes:** The previously checked private lemma in
-  `Algebra/TraceExpLogConcavity.lean` retains its independent proof. No new
-  tactic or matrix-specific positivity lemma is needed.
-
-### Entries of a two-block matrix — candidate (2026-10-28)
-
-- **Pattern:** After matrix extensionality, split each sum-type coordinate and
-  simplify the corresponding block entry. Finite sums additionally use
-  `Matrix.sum_apply`.
-- **Seen:** The block-order comparison, dilation sum, real scalar action and
-  averaged Gram-block identification in `Algebra/HermitianDilation.lean`.
-- **Abstraction:** Continue using `Matrix.fromBlocks` and its existing algebraic
-  identities. If the entry pattern recurs in another new consumer, prefer a
-  finite-sum identity for `fromBlocks` before introducing a tactic.
-- **Notes:** The coordinate arguments are confined to one module. The later
-  integral consumer in `Algebra/HermitianDilationIntegral.lean` uses the existing
-  block addition, negation, scalar-action and identity lemmas instead of
-  repeating the coordinate split. Its block order bounds also reuse
-  `CStarAlgebra.norm_le_iff_le_algebraMap`. Rectangular zero products require
-  `Matrix.mul_zero` and `Matrix.zero_mul`, rather than their square-ring forms.
-
-
-### Explicit matrix integrands in ordered integration — candidate (2026-10-28)
-
-- **Pattern:** When applying ordered Bochner integration to matrices, name the
-  matrix-valued integrand explicitly and state the almost-everywhere order
-  comparison with a matrix-typed zero.
-- **Seen:** Nonnegativity of the integrated square, the upper exponential bound
-  and the positive lower exponential bound in `Algebra/TraceExpIntegralBounds.lean`.
-- **Abstraction:** Use the existing `integral_nonneg_of_ae` and `integral_mono_ae`
-  with explicit `f` and `g` arguments. No new integration theorem is required.
-- **Notes:** The three uses are in one module. Explicit integrands prevent
-  accidental inference of a pointwise function order during elaboration.
-
-### Separating the first coordinate of a product integral — candidate (2026-10-28)
-
-- **Pattern:** Use `measurePreserving_piFinSuccAbove`, rewrite the inverse
-  coordinate map with `Fin.insertNthEquiv`, and simplify the first-coordinate
-  and tail sum identities.
-- **Seen:** The integrability transfer and Fubini identity in
-  `Algebra/IndependentTraceExponential.lean`.
-- **Abstraction:** The existing measurable equivalence and measure-preserving
-  statements handle the transformation. If a third occurrence is needed in
-  another module, extract the common function identity for the inverse map.
-- **Notes:** There are two occurrences in one module. Simplification uses
-  `cast_eq` for the constant matrix family and `Fin.zero_succAbove` for the
-  tail marginal distributions.
-
-### Spectral lower bound for a trace exponential — candidate (2026-10-28)
-
-- **Pattern:** Choose the eigenvalue represented by a real spectral value,
-  express the trace exponential as a sum of positive scalar exponentials,
-  and bound it below by that summand.
-- **Seen:** The private spectral Markov helpers in
-  `Algebra/FiniteHermitianBernstein.lean` and
-  `Algebra/HermitianMatrixBernstein.lean`.
-- **Abstraction:** If a third consumer needs the statement, promote the common
-  Hermitian spectral estimate and refactor both helpers. The current proofs
-  reuse `spectrum_real_eq_range_eigenvalues` and `trace_cfc_eq_sum_re`.
-- **Notes:** Two occurrences across two modules, below the three-occurrence
-  promotion threshold. No specialized probability tactic is needed.
-
-
 ### Endpoint-unitary variational gap bounds — candidate (2026-10-28)
 
 - **Pattern:** Diagonalize the first-site marginal, choose a trace-orthogonal unitary,
@@ -9691,3 +9616,71 @@ there is no need for a new tactic.
   allows signed singleton and bond terms, while the second has one positive bond.
 - **Candidate:** A common local-unitary trial-vector lemma if a third use occurs in
   another file; the existing QICLean unitary trace-pairing theorem is already reused.
+
+### Low spectral clusters at fixed and variable accuracy — candidate (2026-10-28)
+
+- **Pattern:** Identify the original centered eigenbasis, bound the two
+  restricted residuals, and transport the resulting low spectral cluster
+  back to the full original ground space.
+- **Seen:** Two proofs in
+  `TNLean/MPS/AreaLaw/FiveRegionTruncationResidual.lean`,
+  `exists_five_region_physical_low_cluster` and
+  `exists_five_region_physical_scaled_low_cluster`.
+- **Abstraction:** The variable-accuracy theorem contains the fixed-accuracy
+  case at scale one. Reordering the declarations would permit deriving the
+  latter from the former and removing the repeated spectral argument.
+- **Notes:** Two occurrences in one file, below the promotion threshold.
+  The independent-threshold generalization retains the existing fixed case;
+  no third spectral argument is introduced.
+
+### Independent polynomial families — candidate (2026-10-28)
+
+- **Pattern:** Derive the actual clipped low cluster, move the two interval
+  cuts inward, construct its common polynomial family, absorb the collar
+  count, and extend the family by zero before improving all viable subspaces.
+- **Seen:** The fixed-accuracy proof in
+  `TNLean/MPS/AreaLaw/PhysicalDGViability.lean` and the general proof in
+  `TNLean/MPS/AreaLaw/IndependentPhysicalDGViability.lean`.
+- **Abstraction:** `exists_independent_long_middle_actual_dg_family` now
+  supplies the variable-accuracy construction. The former accuracy-family
+  proof calls it rather than repeating the construction.
+- **Notes:** Two remaining proofs across two files. The fixed-accuracy
+  specialization may also be derived from the general theorem in a later
+  cleanup; the new sharp-rank argument already uses the general family.
+
+### Physical spectral comparisons in both directions — candidate (2026-10-28)
+
+- **Seen:** The two shifted-cutoff comparisons in
+  `MPS/AreaLaw/PhysicalLowEnergyCloseness.lean`.
+- **Reuse:** One scalar ceiling estimate supplies the budget for both orders
+  of the existing low-energy perturbation theorem. A local function supplies
+  the canonical eigenvector identity for every current clipping subset.
+- **Scope:** The proof uses the actual residual constructor directly. It
+  does not repeat the two gap-dependent equal-rank cluster arguments or
+  assume a spectral gap. No new tactic or parallel spectral-space notion is
+  introduced.
+
+### Increasing an exact matrix product bond bound — promoted (2026-10-28)
+
+- **Seen:** The uniform polynomial-family bound in
+  `MPS/AreaLaw/CommonMiddleMPOFamily.lean`, the viable-set span in
+  `MPS/AreaLaw/ViableSet/Span.lean`, and the reference-space span in
+  `MPS/AreaLaw/MPSReferenceSpace.lean`.
+- **Lemma:** `IsOpenMPS.mono` in `MPS/AreaLaw/OpenMPSCutRank.lean` derives
+  monotonicity once from the internal-cut rank characterization. Empty chains
+  and zero bond bounds are included.
+- **Refactor:** All three consumers supply their numerical inequality
+  directly. The repeated conversion to cut ranks is removed.
+- **Mechanism:** An ordinary theorem suffices; no tactic or new predicate is
+  introduced.
+
+### Transfer to a common reference before constructive trimming — candidate (2026-10-28)
+
+- **Seen:** The two closeness transfers around actual collective trimming in
+  `MPS/AreaLaw/PhysicalDGReferenceTrimming.lean`.
+- **Reuse:** The existing `Submodule.IsCloseTo.trans` supplies both transfers;
+  the collective trimming theorem derives its rank hypotheses directly from
+  `IsOpenMPS.rank_cutMatrix_le` for the same fixed reference space.
+- **Scope:** The abstract auxiliary is used once by the physical theorem,
+  keeping all basis choices and the final elementary expansion in one place.
+  No tactic or additional closeness predicate is needed.

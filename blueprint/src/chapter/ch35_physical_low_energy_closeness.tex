@@ -1,0 +1,57 @@
+\section{Physical low-energy comparison without a spectral gap}
+
+\begin{theorem}[Closeness at shifted low-energy cutoffs]
+    \label{thm:physical_low_energy_closeness}
+    \lean{TNLean.MPS.AreaLaw.exists_five_region_physical_low_energy_closeness}
+    \leanok
+    Let the positive unit nearest-neighbour Hamiltonian and the five regions
+    satisfy the geometric assumptions of
+    Theorem~\ref{thm:five_region_physical_truncation_residual}, with
+    $q\ge1$ and $\ell\ge1$. Let $\eta,w,\delta>0$ and $C_*=288e^{11/8}$. Put
+    \begin{align}
+        z_* & =\min\left\{1,\frac{\delta w^2}{2(6+\eta)}\right\},\notag \\
+        t   & =21+\eta+8\log(C_*/z_*).
+        \label{eq:physical_low_energy_threshold}
+    \end{align}
+    There are genuine original regional ground energies $e_j$, attained
+    simultaneously by a common unit vector. Form the partially clipped
+    centered matrices $B_T$ as in
+    (\ref{eq:five_region_independent_clipping}), with $K=\{0,2,4\}$.
+    The original centered matrix $B_\varnothing=H-(\sum_j e_j)\Id$ has a
+    unit ground vector of energy $E_0\in[0,4]$, and
+    $\|B_K\|\le3t+4\ell$.
+
+    For $T=\varnothing,K$, write
+    $V_T(c)=\mathbf1_{(-\infty,E_0+c]}(B_T)\mathcal H$.
+    Then $V_K(\eta+w)$ is $\delta$-close to $V_\varnothing(\eta)$, and
+    $V_\varnothing(\eta+w)$ is $\delta$-close to $V_K(\eta)$.
+    No spectral gap is assumed. These are one-sided comparisons at
+    different cutoffs, supporting the hard-truncation step in
+    \cite[Lemma~4.5 and Theorem~4.8]{Arad2016RigorousRG}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:five_region_physical_truncation_residual}
+    The threshold in (\ref{eq:physical_low_energy_threshold}) satisfies
+    $t\ge21$, $19+\eta\le t$, and the physical residual
+    $\xi=C_*e^{-(t-\eta)/8}$ obeys $0<\xi\le z_*\le1$.
+    In particular, $2(6+\eta)\xi\le\delta w^2$.
+    Each partially clipped centered matrix is positive semidefinite.
+    The finite spectral-window perturbation estimate of
+    \cite[``Closeness of low-energy spectral subspaces'']{QICLean2026Blueprint}
+    applies to the original and clipped matrices in both orders, with
+    lower spectral bound zero and window half-width $\xi$.
+    Its number of windows is
+    $N=\lceil(E_0+\eta)/(2\xi)\rceil$, and
+    \begin{align*}
+        N(2\xi)^2
+         & \le2(E_0+\eta)\xi+4\xi^2
+        \le2(6+\eta)\xi
+        \le\delta w^2
+        \le\delta(w+\xi)^2.
+    \end{align*}
+    The two shifted-cutoff comparisons follow. The original and regional
+    ground vectors and their attained lower bounds come from the actual
+    physical truncation construction.
+\end{proof}

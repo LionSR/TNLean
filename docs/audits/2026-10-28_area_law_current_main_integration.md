@@ -1,5 +1,9 @@
 # Verification of the area-law construction on current main
 
+This report records the two immutable snapshots below. The later common
+companion integration is described in
+`2026-10-28_common_area_law_constructions.md`.
+
 The mathematical snapshot `fea97ebd91cb1858b670892eadbb8d5028c46b7b` proves a
 polynomial successive viable-set construction and the general iid complex matrix
 Bernstein inequality. The construction starts with the scalar singleton, obtains

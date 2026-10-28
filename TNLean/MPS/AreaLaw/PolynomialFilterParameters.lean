@@ -12,6 +12,7 @@ import Mathlib.Tactic.Ring
 import Mathlib.Algebra.Order.Archimedean.Real.Basic
 import Mathlib.Algebra.Order.Floor.Semiring
 import Mathlib.Tactic.FieldSimp
+import Mathlib.Analysis.Real.Sqrt
 
 /-!
 # Polynomial filter parameters
@@ -340,3 +341,292 @@ theorem exists_dg_scalar_parameters (C_H M : ℝ) (hC : 0 < C_H) :
     exact hMtail.trans hAM
 
 end Real
+
+
+section
+
+section
+
+open Filter
+
+open scoped Topology
+
+namespace Real
+
+/-- A single universal constant gives the integer scale, count, exponential
+truncation tail and squared Chebyshev tradeoff used in the physical DG
+construction. This is a scalar specialization supporting ALVV,
+arXiv:1602.08828v2, Theorem `t:ais`, lines 1010–1024. It does not itself
+assert the spectral or operator-family conclusions of that theorem. -/
+theorem exists_physical_dg_scalar_parameters :
+    let Ctail : ℝ := 288 * exp (11 / 8)
+    let M : ℝ := (max 0 (log (Ctail / (1 / 1000000))) + 1 + 1 / 8) / (1 / 8)
+    ∃ A : ℝ, 1 ≤ A ∧ 21 ≤ A ∧ M ≤ A ∧ log 400000 ≤ A ∧
+      ∀ (d : ℕ) (g : ℝ), 2 ≤ d → 0 < g → g ≤ 1 →
+      let u : ℝ := 1 + log (d : ℝ) + log (1 / g)
+      let ell : ℕ := ⌈A * u ^ 2 / g⌉₊
+      let D : ℕ := (d * ell ^ 2) ^ (22 * ell)
+      let cA : ℝ := 6 + 2 * log (A + 1)
+      21 ≤ ell ∧ 2 ≤ D ∧
+      A * u ^ 2 / g ≤ (ell : ℝ) ∧
+      (ell : ℝ) ≤ (A + 1) * u ^ 2 / g ∧ A ≤ (ell : ℝ) ∧
+      20 * ell + 2 * (ell ^ 2 / ell) = 22 * ell ∧
+      log (D : ℝ) ≤ 22 * (A + 1) * cA / g * u ^ 3 ∧
+      (∀ R : ℝ, 0 < R → R ≤ 8 * (ell : ℝ) →
+        (D : ℝ) ^ 12 *
+          (4 * exp (-(4 * (ell : ℝ) ^ 2 * sqrt ((4 * g / 5) / R)))) ≤
+            1 / 100000) ∧
+      Ctail * exp (-((ell : ℝ) - g) / 8) ≤ g / 1000000 := by
+  intro Ctail M
+  obtain ⟨A, hA, hA21, hAM, hAlog, hall⟩ :=
+    exists_dg_scalar_parameters 4 M (by norm_num)
+  refine ⟨A, hA, hA21, hAM, hAlog, ?_⟩
+  intro d g hd hg hg1 u ell D cA
+  obtain ⟨hlower, hupper, hscale, hcount, hlogD, htrade, htail⟩ :=
+    hall d g hd hg hg1
+  have hellR : (21 : ℝ) ≤ (ell : ℝ) := hA21.trans hscale
+  have hell : 21 ≤ ell := by exact_mod_cast hellR
+  have hell1 : 1 ≤ ell := by omega
+  have hbase : 2 ≤ d * ell ^ 2 := by
+    calc
+      2 ≤ d := hd
+      _ = d * 1 := (mul_one d).symm
+      _ ≤ d * ell ^ 2 := Nat.mul_le_mul_left d (Left.one_le_pow_of_le hell1 2)
+  have hD : 2 ≤ D := hbase.trans
+    (le_self_pow (by omega : 1 ≤ d * ell ^ 2)
+      (Nat.mul_ne_zero (by norm_num) (by omega : ell ≠ 0)))
+  refine ⟨hell, hD, hlower, hupper, hscale, hcount, hlogD, ?_, ?_⟩
+  · intro R hR hRup
+    apply htrade R hR
+    simpa only [show (2 : ℝ) * 4 = 8 by norm_num] using hRup
+  · have hCtail : 0 < Ctail := by
+      dsimp only [Ctail]
+      positivity
+    have h := htail Ctail (1 / 8) (1 / 1000000) 1
+      hCtail (by norm_num) (by norm_num) (by norm_num) le_rfl
+    have harg : -(1 / 8 : ℝ) * ((ell : ℝ) - g) =
+        -((ell : ℝ) - g) / 8 := by ring
+    rw [harg, rpow_one] at h
+    simpa only [div_mul_eq_mul_div, one_mul] using h
+end Real
+end
+
+section
+
+namespace Real
+
+/-- The physical spectral endpoints give a positive Chebyshev width within
+the joint scalar budget. The squared filter error has exactly the decay
+expression used by that budget. Auxiliary to ALVV, arXiv:1602.08828v2,
+Definition `def:Cheby-AGSP` and Theorem `thm:Cheby-AGSP`, lines 789–853,
+and Theorem `t:ais`, lines 1010–1024. -/
+theorem physical_chebyshev_endpoints
+    (ell : ℕ) (E0 g : ℝ) (hell : 21 ≤ ell)
+    (hE0 : 0 ≤ E0) (hE4 : E0 ≤ 4) (hg : 0 < g) (hg1 : g ≤ 1) :
+    let eta0 := E0 + g / 10
+    let eta1 := E0 + 9 * g / 10
+    let upper := 7 * (ell : ℝ)
+    let R := upper - eta0
+    eta0 < eta1 ∧ eta1 ≤ upper ∧ 0 < R ∧ R ≤ 8 * (ell : ℝ) ∧
+      eta1 - eta0 = 4 * g / 5 ∧
+      (2 * exp (-2 * (ell : ℝ) ^ 2 * sqrt ((eta1 - eta0) / R))) ^ 2 =
+        4 * exp (-4 * (ell : ℝ) ^ 2 * sqrt ((4 * g / 5) / R)) := by
+  intro eta0 eta1 upper R
+  have hellR : 21 ≤ (ell : ℝ) := by exact_mod_cast hell
+  have hsep : eta0 < eta1 := by dsimp only [eta0, eta1]; linarith
+  have hupper : eta1 ≤ upper := by dsimp only [eta1, upper]; linarith
+  have hR0 : 0 < R := by dsimp only [R]; linarith
+  have hR8 : R ≤ 8 * (ell : ℝ) := by
+    dsimp only [R, upper, eta0]
+    linarith
+  have hgap : eta1 - eta0 = 4 * g / 5 := by dsimp only [eta0, eta1]; ring
+  refine ⟨hsep, hupper, hR0, hR8, hgap, ?_⟩
+  rw [hgap]
+  let z := -2 * (ell : ℝ) ^ 2 * sqrt ((4 * g / 5) / R)
+  change (2 * exp z) ^ 2 = 4 * exp (-4 * (ell : ℝ) ^ 2 * sqrt ((4 * g / 5) / R))
+  calc
+    _ = 4 * (exp z * exp z) := by ring
+    _ = 4 * exp (z + z) := by rw [exp_add]
+    _ = _ := by congr 2; dsimp only [z]; ring
+end Real
+end
+end
+
+section
+
+namespace TNLean.MPS.AreaLaw
+
+/-- At degree `ell ^ 2`, adjoining at most `2 * ell` collar sites fits the
+square family bound with exponent `22 * ell`. The old family contributes
+`18 * ell + 2 * (ell ^ 2 / ell)` to its unsquared exponent; the containing-region
+transfer contributes `q ^ (2 * d)` to its cardinality.
+Auxiliary to ALVV, arXiv:1602.08828v2, Proposition 5.7, lines 1311–1333,
+and Theorem `t:ais`, lines 1010–1024. -/
+theorem collar_card_le_square_at_square_degree (q ell d n : ℕ)
+    (hq : 2 ≤ q) (hell : 1 ≤ ell) (hd : d ≤ 2 * ell)
+    (hn : n ≤ ((q * ell ^ 2) ^ (18 * ell + 2 * (ell ^ 2 / ell))) ^ 2) :
+    n * q ^ (2 * d) ≤ ((q * ell ^ 2) ^ (22 * ell)) ^ 2 := by
+  have hellPos : 0 < ell := by omega
+  have hdiv : ell ^ 2 / ell = ell := by
+    rw [pow_two]
+    exact Nat.mul_div_cancel ell hellPos
+  have hexp : 18 * ell + 2 * (ell ^ 2 / ell) = 20 * ell := by
+    rw [hdiv]
+    omega
+  let b := q * ell ^ 2
+  have hsq : 1 ≤ ell ^ 2 := by
+    rw [pow_two]
+    simpa only [Nat.one_mul] using Nat.mul_le_mul hell hell
+  have hbase : q ≤ b := by
+    dsimp only [b]
+    simpa only [Nat.mul_one] using Nat.mul_le_mul_left q hsq
+  have hbPos : 0 < b := by omega
+  have hn' : n ≤ (b ^ (20 * ell)) ^ 2 := by
+    simpa only [b, hexp] using hn
+  have hfactor : q ^ (2 * d) ≤ b ^ (4 * ell) :=
+    Nat.le_trans (Nat.pow_le_pow_left hbase (2 * d))
+      (Nat.pow_le_pow_right hbPos (by omega))
+  change n * q ^ (2 * d) ≤ (b ^ (22 * ell)) ^ 2
+  calc
+    n * q ^ (2 * d) ≤ (b ^ (20 * ell)) ^ 2 * b ^ (4 * ell) :=
+      Nat.mul_le_mul hn' hfactor
+    _ = b ^ ((20 * ell) * 2) * b ^ (4 * ell) :=
+      congrArg (fun t : ℕ ↦ t * b ^ (4 * ell)) (pow_mul b (20 * ell) 2).symm
+    _ = b ^ ((20 * ell) * 2 + 4 * ell) := (pow_add b _ _).symm
+    _ = b ^ ((22 * ell) * 2) := by
+      congr 1
+      omega
+    _ = (b ^ (22 * ell)) ^ 2 := pow_mul b (22 * ell) 2
+end TNLean.MPS.AreaLaw
+end
+
+
+section
+
+open Filter
+
+open scoped Topology
+
+namespace Real
+
+/-- A single scalar choice gives an accuracy-dependent truncation tail with
+an auxiliary numerical count base. The physical local dimension need not
+equal this base. This supports the dyadic entropy argument for ALVV,
+arXiv:1602.08828v2, `thm:al-dg`, lines 1048–1099, using the parameter
+choice in `t:ais`, lines 1010–1024. No physical spectral or operator-family
+assertion, padding of sites, or enlargement of a previously chosen constant
+is made here. -/
+theorem exists_dg_accuracy_scalar_parameters :
+    let Ctail : ℝ := 288 * exp (11 / 8)
+    let Caug : ℝ := Ctail * exp (1 / 8)
+    let Maug : ℝ :=
+      (max 0 (log (Caug / (1 / 1000000))) + 1 + 1 / 8) / (1 / 8)
+    ∃ A : ℝ, 1 ≤ A ∧ 21 ≤ A ∧ Maug ≤ A ∧ log 400000 ≤ A ∧
+      ∀ (m : ℕ) (g : ℝ), 2 ≤ m → 0 < g → g ≤ 1 →
+      let u : ℝ := 1 + log (m : ℝ) + log (1 / g)
+      let ell : ℕ := ⌈A * u ^ 2 / g⌉₊
+      let D : ℕ := (m * ell ^ 2) ^ (22 * ell)
+      let cA : ℝ := 6 + 2 * log (A + 1)
+      21 ≤ ell ∧ m ≤ D ∧ 2 ≤ D ∧
+      A * u ^ 2 / g ≤ (ell : ℝ) ∧
+      (ell : ℝ) ≤ (A + 1) * u ^ 2 / g ∧ A ≤ (ell : ℝ) ∧
+      20 * ell + 2 * (ell ^ 2 / ell) = 22 * ell ∧
+      log (D : ℝ) ≤ 22 * (A + 1) * cA / g * u ^ 3 ∧
+      (∀ R : ℝ, 0 < R → R ≤ 8 * (ell : ℝ) →
+        (D : ℝ) ^ 12 *
+          (4 * exp (-(4 * (ell : ℝ) ^ 2 * sqrt ((4 * g / 5) / R)))) ≤
+            1 / 100000) ∧
+      Ctail * exp (-((ell : ℝ) - g) / 8) ≤ g / (1000000 * (m : ℝ)) := by
+  intro Ctail Caug Maug
+  obtain ⟨A, hA, hA21, hAM, hAlog, hall⟩ :=
+    exists_dg_scalar_parameters 4 Maug (by norm_num)
+  refine ⟨A, hA, hA21, hAM, hAlog, ?_⟩
+  intro m g hm hg hg1 u ell D cA
+  obtain ⟨hlower, hupper, hscale, hcount, hlogD, htrade, _htail⟩ :=
+    hall m g hm hg hg1
+  have hmR : (2 : ℝ) ≤ (m : ℝ) := by exact_mod_cast hm
+  have hmRpos : 0 < (m : ℝ) := by linarith
+  have hmR1 : (1 : ℝ) ≤ (m : ℝ) := by linarith
+  have hellR : (21 : ℝ) ≤ (ell : ℝ) := hA21.trans hscale
+  have hell : 21 ≤ ell := by exact_mod_cast hellR
+  have hell1 : 1 ≤ ell := by omega
+  have hbase : m ≤ m * ell ^ 2 := by
+    simpa only [mul_one] using
+      Nat.mul_le_mul_left m (Left.one_le_pow_of_le hell1 2)
+  have hmD : m ≤ D := hbase.trans
+    (le_self_pow (by omega : 1 ≤ m * ell ^ 2)
+      (Nat.mul_ne_zero (by norm_num) (by omega : ell ≠ 0)))
+  have hlogm : 0 ≤ log (m : ℝ) := log_nonneg hmR1
+  have hlogg : 0 ≤ log (1 / g) := log_nonneg ((one_le_div hg).2 hg1)
+  have hu1 : 1 ≤ u := by dsimp only [u]; linarith
+  have hAu : A * u ≤ (ell : ℝ) := by
+    calc
+      A * u ≤ A * u ^ 2 :=
+        mul_le_mul_of_nonneg_left (by nlinarith : u ≤ u ^ 2) (by linarith)
+      _ ≤ (ell : ℝ) * g := (div_le_iff₀ hg).mp hlower
+      _ ≤ (ell : ℝ) := by
+        simpa only [mul_one] using
+          mul_le_mul_of_nonneg_left hg1 (Nat.cast_nonneg ell)
+  let gp : ℝ := g / (m : ℝ)
+  have hgp : 0 < gp := div_pos hg hmRpos
+  have hgp_le_g : gp ≤ g := (div_le_iff₀ hmRpos).2 (by
+    simpa only [mul_one] using mul_le_mul_of_nonneg_left hmR1 hg.le)
+  have hgp1 : gp ≤ 1 := hgp_le_g.trans hg1
+  have hrecip : 1 / gp = (m : ℝ) / g := by
+    dsimp only [gp]
+    field_simp [hg.ne', hmRpos.ne']
+  have hu : 1 + log (1 / gp) = u := by
+    rw [hrecip, log_div hmRpos.ne' hg.ne']
+    dsimp only [u]
+    rw [one_div, log_inv]
+    ring
+  have hCtail : 0 < Ctail := by dsimp only [Ctail]; positivity
+  have hCaug : 0 < Caug := mul_pos hCtail (exp_pos _)
+  have haug := scalar_tail_bound A u gp ell Caug (1 / 8) (1 / 1000000) 1
+    hu.le hgp hgp1 hAu hCaug (by norm_num) (by norm_num) (by norm_num) hAM
+  have harg : -(1 / 8 : ℝ) * ((ell : ℝ) - gp) =
+      -((ell : ℝ) - gp) / 8 := by ring
+  rw [harg, rpow_one] at haug
+  have hshift : g - gp ≤ 1 := by linarith [hgp.le]
+  have hcompare : Ctail * exp (-((ell : ℝ) - g) / 8) ≤
+      Caug * exp (-((ell : ℝ) - gp) / 8) := by
+    calc
+      Ctail * exp (-((ell : ℝ) - g) / 8) ≤
+          Ctail * exp ((1 / 8 : ℝ) + -((ell : ℝ) - gp) / 8) :=
+        mul_le_mul_of_nonneg_left (exp_le_exp.mpr (by linarith)) hCtail.le
+      _ = Caug * exp (-((ell : ℝ) - gp) / 8) := by
+        dsimp only [Caug]
+        rw [exp_add]
+        ring
+  refine ⟨hell, hmD, hm.trans hmD, hlower, hupper, hscale, hcount, hlogD, ?_, ?_⟩
+  · intro R hR hRup
+    apply htrade R hR
+    simpa only [show (2 : ℝ) * 4 = 8 by norm_num] using hRup
+  · calc
+      Ctail * exp (-((ell : ℝ) - g) / 8) ≤
+          Caug * exp (-((ell : ℝ) - gp) / 8) := hcompare
+      _ ≤ (1 / 1000000 : ℝ) * gp := haug
+      _ = g / (1000000 * (m : ℝ)) := by
+        dsimp only [gp]
+        rw [div_mul_div_comm, one_mul]
+end Real
+end
+
+section
+
+namespace TNLean.MPS.AreaLaw
+
+/-- Increasing only the numerical count base absorbs the same physical
+collar cost into the joint square budget. The physical dimension remains
+`q`. Supporting the entropy schedule in ALVV, arXiv:1602.08828v2,
+`thm:al-dg`, lines 1048–1099. -/
+theorem collar_card_le_square_of_larger_count_base
+    (q m ell d n : ℕ) (hq : 2 ≤ q) (hqm : q ≤ m) (hell : 1 ≤ ell)
+    (hd : d ≤ 2 * ell)
+    (hn : n ≤ ((q * ell ^ 2) ^ (18 * ell + 2 * (ell ^ 2 / ell))) ^ 2) :
+    n * q ^ (2 * d) ≤ ((m * ell ^ 2) ^ (22 * ell)) ^ 2 := by
+  exact (collar_card_le_square_at_square_degree q ell d n hq hell hd hn).trans
+    (Nat.pow_le_pow_left
+      (Nat.pow_le_pow_left (Nat.mul_le_mul_right (ell ^ 2) hqm) (22 * ell)) 2)
+end TNLean.MPS.AreaLaw
+end

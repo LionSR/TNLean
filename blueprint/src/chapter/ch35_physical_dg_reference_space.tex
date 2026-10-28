@@ -1,0 +1,168 @@
+\section{A fixed reference space for collective trimming}
+
+\begin{theorem}[Increasing an allowed bond dimension]
+    \label{thm:open_mps_bond_mono}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.mono}
+    \leanok
+    If a vector has an open-boundary matrix product representation of bond
+    dimension at most $D$, and $D\le D'$, then it has one of bond dimension
+    at most $D'$. Empty chains and zero bounds are included.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:chain_cut_rank_of_mps}
+    Each internal cut has rank at most $D\le D'$. Apply the cut-rank
+    characterization.
+\end{proof}
+
+\begin{theorem}[A reference span from approximants to a basis]
+    \label{thm:mps_basis_reference_subspace}
+    \lean{TNLean.MPS.AreaLaw.exists_reference_subspace_of_isOpenMPS_basis_approximations}
+    \leanok
+    Let $T\subseteq(\C^q)^{\otimes N}$ have dimension $r$, and let
+    $(u_i)_{i=1}^r$ be an orthonormal basis of $T$.
+    Let $0\le\varepsilon\le1$ and suppose that vectors $\phi_i$ have matrix
+    product bond dimension at most $D$ and satisfy
+    \begin{align}
+        \sum_{i=1}^r\|\phi_i-u_i\|^2\le\varepsilon/4.
+        \label{eq:basis_reference_total_error}
+    \end{align}
+    There is a fixed subspace $U$ of dimension $r$, mutually
+    $\varepsilon$-close to $T$, such that every vector of $U$ has exact
+    matrix product bond dimension at most $rD$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:open_mps_finite_span,thm:open_mps_bond_mono}
+    Define $F:T\to(\C^q)^{\otimes N}$ by $Fu_i=\phi_i$ and put $U=FT$.
+    The coefficient Cauchy--Schwarz inequality gives
+    \begin{align}
+        \|Fx-x\|^2\le\frac{\varepsilon}{4}\|x\|^2\qquad(x\in T).
+        \label{eq:basis_reference_operator_error}
+    \end{align}
+    Since $\varepsilon\le1$, the triangle inequality implies
+    $\|Fx\|\ge\|x\|/2$, so $F$ is injective and $\dim U=r$.
+    Best approximation by orthogonal projection and
+    (\ref{eq:basis_reference_operator_error}) give the closeness of $U$ to $T$.
+    For the reverse direction, write $y=Fx$ and use
+    $\|x\|\le2\|y\|$. Its squared distance from $T$ is at most
+    $\|Fx-x\|^2\le\varepsilon\|y\|^2$.
+    The finite-span matrix product estimate gives the exact bond bound $rD$
+    throughout this one space $U$. No orthogonality of the $\phi_i$ is needed.
+\end{proof}
+
+\begin{theorem}[A physical ground-space reference for trimming]
+    \label{thm:physical_dg_mps_reference_subspace}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_isOpenMPS_reference_subspace}
+    \leanok
+    There is a universal constant $K>0$ with the following property.
+    Let $H,q,\mu,\nu,\gamma,G$ satisfy the physical hypotheses of
+    Theorem~\ref{thm:physical_interval_bootstrap} on $N$ sites.
+    Put $r=\dim G$, $g=\min(\gamma,1)$ and $u=1+\log q+\log(1/g)$.
+    For $0<\varepsilon\le1$, set
+    \begin{align}
+        b=16+\log(1/g)+\log\bigl(32r(N+1)/\varepsilon\bigr).
+        \label{eq:physical_reference_accuracy}
+    \end{align}
+    There are an integer $B\ge1$ and a fixed subspace $U$ such that
+    \begin{align}
+        \log B & \le K\bigl(u^3/g+g^{-1/4}b^{3/4}u\bigr)(1+\log b),
+        \label{eq:physical_reference_bond}
+    \end{align}
+    $\dim U=r$, the spaces $U$ and $G$ are mutually $\varepsilon$-close,
+    and every vector in $U$ has an exact matrix product representation of
+    bond dimension at most $r^2B$.
+    The capped gap is as described in
+    \cite{gap:alvv16_approximation_parameters}.
+
+    This is a reference space for the trimming analysis in
+    \cite[proof for degenerate ground spaces, lines 1801--1805]{Arad2016RigorousRG}.
+    The viable spaces of the merge tree remain to be constructed by
+    tensoring, sampling, filtering and trimming. The coefficient-one
+    entropy theorem remains a statement about the original space $G$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:physical_dg_normalized_mps_approximation,
+        thm:mps_basis_reference_subspace}
+    Choose an actual orthonormal basis $u_1,\ldots,u_r$ of $G$.
+    Apply the global approximation theorem at
+    $\delta_{\mathrm{basis}}=\varepsilon/(2r)$.
+    Its integer $B$ is chosen before the basis vector, so every $u_i$ has
+    an approximant $\phi_i$ with bond at most $rB$ and
+    \begin{align*}
+        \|\phi_i-u_i\|^2\le\delta_{\mathrm{basis}}/2
+        =\varepsilon/(4r).
+    \end{align*}
+    Their total squared error is at most $\varepsilon/4$.
+    The preceding theorem gives $U$ with bond bound $r(rB)=r^2B$.
+    Substitution of $\delta_{\mathrm{basis}}$ into the global logarithmic
+    bound gives (\ref{eq:physical_reference_accuracy}) and
+    (\ref{eq:physical_reference_bond}).
+\end{proof}
+
+\begin{theorem}[Trimming through a common reference]
+    \label{thm:chain_trimming_near_reference}
+    \lean{TNLean.MPS.AreaLaw.isCloseTo_leftSupportSubmodule_chainTrimSubspace_of_reference}
+    \leanok
+    Let $0\le i\le N$ and $m=\max\{i-1,0\}$.
+    Let $S$ be a subspace of the first $i$ sites, with an orthonormal basis,
+    and let $G,U$ be subspaces of the whole chain. Suppose that
+    $\delta,\varepsilon\ge0$, $\xi>0$, and $S\otimes\mathcal H_R$ is
+    $\delta$-close to $G$. Suppose also that $G$ and $U$ are mutually
+    $\varepsilon$-close and that every vector of $U$ has matrix product
+    bond dimension at most $D$.
+    The actual collective trim $\operatorname{Trim}_{\xi}(S)$, defined by
+    its successive spectral projections, satisfies
+    \begin{align}
+        \operatorname{Trim}_{\xi}(S)\otimes\mathcal H_R
+        \text{ is }\bigl(4\delta+6\varepsilon+4\xi\sqrt{mD}\bigr)
+        \text{-close to }G.
+        \label{eq:trimming_reference_error}
+    \end{align}
+    The trimming constant is the corrected one documented in
+    \cite{gap:alvv16_trimming_constant}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:alvv_collective_trim,thm:chain_cut_rank_of_mps}
+    Transfer first from $G$ to $U$. The block space is
+    $2(\delta+\varepsilon)$-viable for $U$.
+    Its collective trim is therefore
+    $2(\delta+\varepsilon)+2\xi\sqrt{mD}$-viable for $U$.
+    Transfer back from $U$ to $G$ and expand
+    $2\bigl(2(\delta+\varepsilon)+2\xi\sqrt{mD}+\varepsilon\bigr)$.
+\end{proof}
+
+\begin{theorem}[Collective trimming for the physical ground space]
+    \label{thm:physical_dg_collective_trimming}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_collective_trimming_bound}
+    \leanok
+    Let $0<\varepsilon\le1$ and impose the physical hypotheses of
+    Theorem~\ref{thm:physical_dg_mps_reference_subspace}. There are the same
+    universal constant $K>0$ and common integer $B\ge1$, with logarithmic
+    bound (\ref{eq:physical_reference_bond}), for which the following holds.
+    For every block of the first $i\le N$ sites and every actual
+    $\delta$-viable subspace $S$ for $G$, where $\delta\ge0$, put
+    $m=\max\{i-1,0\}$. Its collective trim at threshold $\xi>0$ is
+    \begin{align}
+        4\delta+6\varepsilon+4\xi\sqrt{mr^2B}
+        \label{eq:physical_collective_trimming_error}
+    \end{align}
+    viable for $G$.
+    The basis used for trimming is chosen internally, and $B$ is chosen
+    before $i,S,\delta,\xi$.
+    The capped-gap restriction remains that of
+    Theorem~\ref{thm:physical_dg_mps_reference_subspace}.
+    This proves the reference-space trimming step in
+    \cite[proof for degenerate ground spaces, lines 1801--1805]{Arad2016RigorousRG}.
+    The construction of the sampled viable spaces and the merge-tree
+    induction remain separate.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:physical_dg_mps_reference_subspace,thm:chain_trimming_near_reference}
+    Choose the one reference space $U$ before the block and viable space.
+    Every vector of $U$ has bond dimension at most $r^2B$.
+    Apply the preceding theorem with $D=r^2B$ to the actual subspace $S$.
+\end{proof}

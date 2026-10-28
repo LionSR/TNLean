@@ -61,10 +61,21 @@ bound with a degree independent of the ground energy; the published LVV version
 records that dependence. These points are documented in the corresponding
 `docs/paper-gaps/lvv13_*.tex` notes.
 
-The ALVV results discussed next refer to the separately verified development at
-revision `0341b256badfec30365411d5b77923777fc06208`, with its declared QICLean
-revision `af7e5c90650e5ddb06c2befac508df97fd20b2e3`. They are not asserted to follow
-from the dependency revision used by the LVV integration.
+The ALVV and AKLV constructions use a common companion revision based on
+QICLean main `acda92aa`, preserving its matrix Bernstein theorem. The added
+low-energy, entropy and interpolation results are compiled together rather than
+being assumed from independent dependency revisions.
+
+The AKLV polynomial rank estimate now applies to the original supported
+Hamiltonian, with no supplied tensor decomposition or rank hypothesis. For a
+window of width $s>0$ and a polynomial of degree at most $\ell$, the rank at the
+central cut is at most
+$[q(\ell+1)]^{16(\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1)}$.
+For $\ell\ge1$, the source base $q\ell$ is available with exponent
+$96\max(\lfloor\ell/s\rfloor,\lfloor\sqrt\ell\rfloor)$.
+The commuting-gap count includes the documented correction. Combining the
+spectral suppression with this same operator, then deriving the required
+robustness and entropy conclusions, are distinct steps.
 
 For a unique ground vector on an open chain with $q\ge2$ and $0\le h_j\le I$,
 the gap is at most one. An endpoint unitary with zero expectation in that vector
@@ -84,6 +95,17 @@ $g=\min(\gamma,1)$; a claim with the uncapped gap requires an additional argumen
 The source's degenerate-ground-space assumption includes a second spectral value,
 so the existence of an excited spectrum should be distinguished from an extra
 hypothesis imposed by a formalization.
+
+The global approximation also gives one $r$-dimensional reference space,
+mutually $\varepsilon$-close to the full physical ground space, whose every
+vector has bond bound $r^2B$. This reference is chosen before the viable space
+to be trimmed. It supports collective trimming; it does not supply a sampled
+merge construction.
+
+The sampling results provide one actual sample with both a matrix-mean error
+bound and simultaneous word-frequency bounds whenever the explicit sum of the
+two failure bounds is less than one. This is not yet the physical power-filter
+application, whose ground-energy dependence must still be retained.
 
 The low-energy construction is a separate problem. Approximation below an energy
 cutoff generally permits a slightly larger output cutoff. The corresponding
