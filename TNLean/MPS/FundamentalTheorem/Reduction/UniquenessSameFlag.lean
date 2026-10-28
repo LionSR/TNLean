@@ -112,7 +112,10 @@ theorem blockProj_mul_eq_sum_submatrix_mul_blockProj
   · intro l' _ hl'
     simp only [Matrix.mul_apply]
     exact Finset.sum_eq_zero fun j' _ => by
-      rw [blockProj_apply_of_fst_ne j' (y := ⟨l, j⟩) (Ne.symm hl'), mul_zero]
+      have h0 : blockProj n l' j' ⟨l, j⟩ = 0 := by
+        simp only [blockProj, Matrix.transpose_apply]
+        exact blockEmbed_apply_of_fst_ne (Ne.symm hl') j'
+      rw [h0, mul_zero]
   · intro h
     exact absurd (Finset.mem_univ _) h
 
