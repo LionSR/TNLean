@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Algebra
 
 import TNLean.Algebra.AnticommutingEvenDimension
+import TNLean.Algebra.BernsteinExponentialBound
 import TNLean.Algebra.BinaryCharacterSum
 import TNLean.Algebra.BinaryProjectionFamily
 import TNLean.Algebra.BlockDiagonalGauge
@@ -66,7 +67,11 @@ import TNLean.Algebra.FinVecEta
 import TNLean.Algebra.FiniteCycleCoboundary
 import TNLean.Algebra.FiniteGroupCommutant
 import TNLean.Algebra.FiniteGroupUnitaryAverage
+import TNLean.Algebra.FiniteHermitianBernstein
 import TNLean.Algebra.FiniteIndicatorSum
+import TNLean.Algebra.FiniteMatrixBernstein
+import TNLean.Algebra.FiniteMatrixMoments
+import TNLean.Algebra.FiniteMatrixSampling
 import TNLean.Algebra.FinsetEnumeration
 import TNLean.Algebra.FinsetNormSumCauchySchwarz
 import TNLean.Algebra.FinsetSubtypeSum
@@ -82,6 +87,7 @@ import TNLean.Algebra.GeneralizeDecide
 import TNLean.Algebra.GeneralizedCocycle
 import TNLean.Algebra.GeneralizedCocycleInversion
 import TNLean.Algebra.GraphDistanceTransport
+import TNLean.Algebra.HermitianDilation
 import TNLean.Algebra.HypercubePhasePotential
 import TNLean.Algebra.IdempotentRankContinuity
 import TNLean.Algebra.IdempotentTracePerturbation
@@ -136,6 +142,7 @@ import TNLean.Algebra.MultilinearSelectedSum
 import TNLean.Algebra.NatInterval
 import TNLean.Algebra.NatSquarePlusOne
 import TNLean.Algebra.NewtonIdempotentConvergence
+import TNLean.Algebra.NoSingletonWords
 import TNLean.Algebra.NonnegativeMatrixSpectralRadius
 import TNLean.Algebra.NormedRingTelescoping
 import TNLean.Algebra.OneMagnon
@@ -189,6 +196,7 @@ import TNLean.Algebra.SemiRegularTensorFactor
 import TNLean.Algebra.SemisimpleTracePowers
 import TNLean.Algebra.SignedPermutationSpan
 import TNLean.Algebra.SingletMatrix
+import TNLean.Algebra.SingletonWordCancellation
 import TNLean.Algebra.StabilizerCocycleExtension
 import TNLean.Algebra.StabilizerCocycleLSymbol
 import TNLean.Algebra.StabilizerCocycleReconstruction
@@ -211,6 +219,8 @@ import TNLean.Algebra.TensorProductRegrouping
 import TNLean.Algebra.ThreeOperatorPerturbation
 import TNLean.Algebra.ToEuclideanCLM
 import TNLean.Algebra.ToEuclideanLinApply
+import TNLean.Algebra.TraceExpFiniteJensen
+import TNLean.Algebra.TraceExpLogConcavity
 import TNLean.Algebra.TraceInvariantSubmodule
 import TNLean.Algebra.TranslatedCharacterOrthogonality
 import TNLean.Algebra.TwistedRegularProjective

@@ -1653,6 +1653,17 @@ and [#9847](https://github.com/LionSR/TNLean/issues/9847).
 
 ## Landau, Vazirani and Vidick's one-dimensional algorithm, arXiv:1307.5143
 
+- [`lvv13_sampling_ground_energy.tex`](lvv13_sampling_ground_energy.tex)
+  (false preprint claim, published correction identified) records the missing
+  ground-energy dependence in the sampled projection of arXiv:1307.5143v1.
+  A commuting chain with zero local minima, a unique ground vector and gap
+  `1/8` shows that polynomially many independent uniform words do not
+  approximate the ground projection with the claimed high probability
+  at the required power when the ground energy is extensive. The published Methods theorem and its supplementary proof
+  include the ground energy in the exponent. Formalizing that corrected
+  construction, and deriving a different construction for the unrestricted
+  uniform polynomial conclusion, remain open.
+
 - [`lvv13_leading_net_point.tex`](lvv13_leading_net_point.tex)
   (open gap) records that the leading-vector step of Lemma
   `l:leading` (arXiv:1307.5143v1, lines 493–495) is formalized for any
@@ -1678,3 +1689,10 @@ and [#9847](https://github.com/LionSR/TNLean/issues/9847).
   `E₀ + 6√δ` and bond dimension `B_{min(δ, 1/12)}`. The energy bound after
   trimming a general low-energy vector is corrected in the QICLean note
   `lvv13_trimming_energy`.
+
+- [`lvv13_error_reduction_witness_norm.tex`](lvv13_error_reduction_witness_norm.tex)
+  (local correction, resolved) records that the step from `A v` to `K v` in the
+  proof of Claim `c:errorreduction` (arXiv:1307.5143v1, line 589) needs a lower
+  bound on `‖A v‖`; a two-dimensional example disproves it without one. The
+  source's `A` is Hermitian and fixes `Γ`, so `‖A v‖ ≥ 1/2`, and the new error is
+  `δ + 4 ‖K - A‖` in place of `2 δ`, a constant absorbed by the choice of `q(n)`.

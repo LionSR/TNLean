@@ -43,6 +43,7 @@ import TNLean.MPS.AreaLaw.FixedConfigurationExtension
 import TNLean.MPS.AreaLaw.GluingHamiltonian
 import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.Hastings
+import TNLean.MPS.AreaLaw.Huang
 import TNLean.MPS.AreaLaw.InformationReset
 import TNLean.MPS.AreaLaw.InteractionBudget
 import TNLean.MPS.AreaLaw.IntervalMPOTransfer
@@ -56,6 +57,7 @@ import TNLean.MPS.AreaLaw.LogarithmicSeparation
 import TNLean.MPS.AreaLaw.MPSApproximation
 import TNLean.MPS.AreaLaw.OpenMPS
 import TNLean.MPS.AreaLaw.OpenMPSCutRank
+import TNLean.MPS.AreaLaw.OpenMPSOperatorAction
 import TNLean.MPS.AreaLaw.OpenMPSProduct
 import TNLean.MPS.AreaLaw.OpenMPSRank
 import TNLean.MPS.AreaLaw.OpenMPSSpan

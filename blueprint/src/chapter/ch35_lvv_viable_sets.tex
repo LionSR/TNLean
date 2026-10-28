@@ -236,7 +236,8 @@ whose range is the span of the columns of $M_i(\psi)$.
 
 \begin{theorem}[Left support after extending the right factor]
     \label{thm:lvv_left_columns_right_extension}
-    \lean{TNLean.MPS.AreaLaw.rightApply_mem_leftSupportSubmodule_leftColumns}
+    \lean{TNLean.MPS.AreaLaw.rightApply_mem_leftSupportSubmodule_leftColumns,
+        TNLean.MPS.AreaLaw.rightApply_mem_leftSupportSubmodule_of_columns}
     \leanok
     \uses{def:lvv_finite_left_columns,def:lvv_viable_set}
     Let $T$ be the finite set of left columns in
@@ -244,6 +245,9 @@ whose range is the span of the columns of $M_i(\psi)$.
     For every $i\in I$ and every linear map $W:\mathbb C^m\to\mathcal H_R$,
     the chain vector obtained from $(I_{\mathcal L}\otimes W)u_i$ by the
     cut identification belongs to $\operatorname{Span}(T)\otimes\mathcal H_R$.
+    More generally, an arbitrary finite environment and right extension
+    preserve this support whenever every left column lies in
+    $\operatorname{Span}(T)$.
     This is the support step used
     in~\cite[Claim~2.7, source lines 520--527]{Landau2015Polynomial}.
 \end{theorem}
@@ -307,7 +311,8 @@ whose range is the span of the columns of $M_i(\psi)$.
 
 \begin{theorem}[A size-trimming family chosen before the ground state]
     \label{thm:lvv_size_trimmed_family}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_trimmed_family}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_trimmed_family,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_trimmed_column_family}
     \leanok
     \uses{def:chain_model,def:chain_constant_bond,def:lvv_viable_set,def:lvv_viable_mps}
     Let $L\ge1$ and $q\ge2$. Fix a range-one chain Hamiltonian
@@ -337,6 +342,11 @@ whose range is the span of the columns of $M_i(\psi)$.
     state of $H$ of energy $E_0$ with gap at least $\Delta$, then
     $(k,c/L)$-viability of $S$ for $\Gamma$ implies
     $(k,1/12)$-viability of $T$ for $\Gamma$.
+    In this case there are $m\le D$, an isometry
+    $W:\C^m\to\mathcal H_R$, and a unit vector
+    $u\in\mathcal H_L\otimes\C^m$ such that every column
+    $u_a=(I\otimes\langle a|)u$ belongs to $T$ and
+    $|\langle\Gamma,(I\otimes W)u\rangle|\ge11/12$.
 
     This is an auxiliary version of
     \cite[Claim~2.7, source lines 472--478 and 520--527]{Landau2015Polynomial}.
@@ -387,12 +397,15 @@ whose range is the span of the columns of $M_i(\psi)$.
     Joining the left coordinates and extending the right factor places
     $v$ in $\operatorname{Span}(T_m)\otimes\mathcal H_R$, hence in
     $\operatorname{Span}(T)\otimes\mathcal H_R$. Thus $v$ witnesses the
-    asserted viability.
+    asserted viability. The same selected eigenvector $u_{m,X}$, after
+    joining the left coordinates, has all its columns in $T_m\subseteq T$;
+    its norm is one and the original right extension $W$ is an isometry.
 \end{proof}
 
 \begin{theorem}[Polynomial size of the size-trimming family]
     \label{thm:lvv_size_trimmed_family_polynomial}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_trimmed_family_polynomial}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_trimmed_family_polynomial,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_trimmed_column_family_polynomial}
     \leanok
     \uses{def:chain_model,def:chain_constant_bond,def:lvv_viable_set,def:lvv_viable_mps}
     Under the assumptions of Theorem~\ref{thm:lvv_size_trimmed_family}, put
@@ -426,4 +439,409 @@ whose range is the span of the columns of $M_i(\psi)$.
         |T| & \le(D+1)DK\le(D+1)D(2A+1)^pL^p=CL^p.\notag
     \end{align}
     Its span inclusion, bond bound and viability implication are unchanged.
+\end{proof}
+
+
+\begin{theorem}[Counting words without singleton letters]
+    \label{thm:lvv_even_word_count}
+    \lean{Finset.card_image_le_half_of_no_singleton,
+        Fintype.exists_factor_fin_of_card_range_le,
+        Fintype.card_functions_of_card_range_le,
+        Fintype.card_even_words_without_singleton}
+    \leanok
+    Let $p\ge1$ be an integer, and let $B$ be an alphabet with
+    $\ell\ge1$ letters. The number of words of length $2p$ over $B$ in
+    which no letter occurs exactly once is at most
+    \begin{align}
+        \ell^p p^{2p}.
+        \label{eq:lvv_even_word_count}
+    \end{align}
+    This elementary count is one ingredient of an even-moment
+    argument for sampled operators. It does not assert a matrix
+    concentration inequality.
+\end{theorem}
+\begin{proof}\leanok
+    Each occurring letter appears at least twice, so such a word
+    uses at most $p$ letters. Every word with at most $p$ letters
+    factors as a map from its $2p$ positions to a set of $p$ places,
+    followed by a map from those places to $B$. Extend the second map
+    arbitrarily on unused places. There are $p^{2p}\ell^p$ pairs of
+    maps, which gives the bound.
+\end{proof}
+
+
+\begin{theorem}[Cancellation of a singleton sample label]
+    \label{thm:lvv_singleton_word_cancellation}
+    \lean{Fintype.sum_ordered_word_eq_zero_of_singleton}
+    \leanok
+    Let $A$ and $B$ be finite sets, and let $R$ be a possibly
+    noncommutative semiring. Let $s:\{0,\ldots,m-1\}\to B$ specify
+    the sample label at each position. Suppose that $s(t)$ occurs
+    only at position $t$. Let $\Phi_k:A\to R$ satisfy
+    $\sum_{a\in A}\Phi_t(a)=0$. Then
+    \begin{align}
+        \sum_{\sigma:B\to A}
+        \Phi_0(\sigma(s(0)))\cdots\Phi_{m-1}(\sigma(s(m-1)))=0.
+        \label{eq:lvv_singleton_word_cancellation}
+    \end{align}
+    The product is taken in the displayed order.
+\end{theorem}
+\begin{proof}\leanok
+    Fix the values of $\sigma$ away from $s(t)$. The factors before
+    and after position $t$ are then fixed, so the sum over
+    $a=\sigma(s(t))$ has the form
+    \begin{align}
+        L\left(\sum_{a\in A}\Phi_t(a)\right)R'=0.
+        \label{eq:lvv_singleton_word_cancellation_inner}
+    \end{align}
+    Sum this identity over the remaining values of $\sigma$.
+\end{proof}
+
+
+\begin{theorem}[Finite uniform moments of centered matrix samples]
+    \label{thm:lvv_finite_uniform_matrix_moment}
+    \lean{Matrix.average_norm_average_pow_le_of_centered}
+    \leanok
+    \uses{thm:lvv_even_word_count,thm:lvv_singleton_word_cancellation}
+    Let $A,B$ be finite nonempty sets, with $|B|=\ell$, and let $N\ge1$.
+    Let $X_b:A\to M_N(\mathbb C)$ satisfy
+    \begin{align}
+        \sum_{a\in A}X_b(a) & =0,   \\
+        \|X_b(a)\|          & \le R
+        \qquad(a\in A,\ b\in B),
+        \label{eq:lvv_finite_moment_hypotheses}
+    \end{align}
+    where $R\ge0$ and the norm is the operator norm. For every integer $p\ge1$,
+    \begin{align}
+        \frac1{|A|^\ell}\sum_{\sigma:B\to A}
+        \left\|\frac1\ell\sum_{b\in B}X_b(\sigma(b))\right\|^{2p}
+        \le N\left(\frac{p^2R^2}{\ell}\right)^p.
+        \label{eq:lvv_finite_uniform_matrix_moment}
+    \end{align}
+    The samples need not be Hermitian. This is an auxiliary finite
+    moment estimate; the sharp matrix Bernstein inequality remains a
+    separate result.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:lvv_even_word_count,thm:lvv_singleton_word_cancellation}
+    Put $S_\sigma=\sum_bX_b(\sigma(b))$. Expand
+    $\operatorname{tr}((S_\sigma^*S_\sigma)^p)$ into ordered words of length
+    $2p$ in $B$, alternating adjointed and unadjointed factors.
+    If a sample label occurs exactly once, its sum over $\sigma$ vanishes
+    by Theorem~\ref{thm:lvv_singleton_word_cancellation}, since both
+    $X_b$ and $X_b^*$ are centered. By Theorem~\ref{thm:lvv_even_word_count},
+    at most $\ell^pp^{2p}$ words remain. Each has trace of absolute value
+    at most $NR^{2p}$, because $|\operatorname{tr}T|\le N\|T\|$ and the
+    operator norm is submultiplicative.
+
+    The positive spectral theorem gives
+    $\|S_\sigma\|^{2p}\le\operatorname{tr}((S_\sigma^*S_\sigma)^p)$.
+    Sum this inequality over $\sigma$, apply the preceding bounds, and
+    divide by $|A|^\ell\ell^{2p}$.
+\end{proof}
+
+
+\begin{theorem}[Finite uniform tails and centered sample existence]
+    \label{thm:lvv_finite_uniform_matrix_tail}
+    \lean{Matrix.finite_uniform_tail_bound_of_centered,
+        Matrix.exists_average_norm_lt_of_centered,
+        Matrix.exists_average_norm_lt_of_sample_card}
+    \leanok
+    \uses{thm:lvv_finite_uniform_matrix_moment}
+    Under the hypotheses of Theorem~\ref{thm:lvv_finite_uniform_matrix_moment},
+    let $\eta>0$. The fraction of assignments $\sigma:B\to A$ for which
+    $\|\ell^{-1}\sum_bX_b(\sigma(b))\|\ge\eta$ is at most
+    \begin{align}
+        N\left(\frac{p^2R^2}{\ell\eta^2}\right)^p.
+        \label{eq:lvv_finite_uniform_matrix_tail}
+    \end{align}
+    If this bound is less than one, an assignment with norm below $\eta$
+    exists. In particular, it suffices that
+    \begin{align}
+        N          & <4^p,       \\
+        \ell\eta^2 & \ge4p^2R^2.
+        \label{eq:lvv_finite_uniform_centered_sample_count}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:lvv_finite_uniform_matrix_moment}
+    Every assignment in the exceptional set contributes at least $\eta^{2p}$
+    to the moment sum. Divide by the total number of assignments and
+    apply Theorem~\ref{thm:lvv_finite_uniform_matrix_moment}. If the resulting
+    fraction is less than one, the exceptional set is not the whole set.
+    Under~\eqref{eq:lvv_finite_uniform_centered_sample_count}, the bound is
+    at most $N4^{-p}<1$.
+\end{proof}
+
+\begin{theorem}[Approximating a finite matrix average by a sample]
+    \label{thm:lvv_finite_matrix_sample_mean}
+    \lean{Matrix.exists_average_sub_mean_norm_lt}
+    \leanok
+    \uses{thm:lvv_finite_uniform_matrix_tail}
+    Let $A,B$ be finite nonempty sets, with $|B|=\ell$, and let $N\ge1$.
+    Suppose that $Y:A\to M_N(\mathbb C)$ satisfies $\|Y(a)\|\le R$ for all
+    $a\in A$, where $R\ge0$. Put $\mu=|A|^{-1}\sum_aY(a)$.
+    If $\eta>0$ and an integer $p\ge1$ satisfies
+    \begin{align}
+        N          & <4^p,        \\
+        \ell\eta^2 & \ge16p^2R^2,
+        \label{eq:lvv_finite_uniform_sample_count}
+    \end{align}
+    there is an assignment $\sigma:B\to A$ for which
+    \begin{align}
+        \left\|\frac1\ell\sum_{b\in B}Y(\sigma(b))-\mu\right\|<\eta.
+        \label{eq:lvv_finite_matrix_sample_mean}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:lvv_finite_uniform_matrix_tail}
+    The triangle inequality gives $\|\mu\|\le R$. Thus $Y(a)-\mu$ is
+    centered and has norm at most $2R$. Apply
+    Theorem~\ref{thm:lvv_finite_uniform_matrix_tail} with $2R$ in place of $R$.
+\end{proof}
+
+
+\subsection{Exponential trace concavity}
+
+\begin{theorem}[Unnormalized Klein inequality]
+    \label{thm:matrix_unnormalized_klein}
+    \lean{Matrix.trace_sub_le_quantumRelativeEntropy}
+    \leanok
+    For positive-definite complex matrices $X,Y$ of the same finite size,
+    put $D_0(X\Vert Y)=\operatorname{Re}\operatorname{tr}(X(\log X-\log Y))$.
+    Then
+    \begin{align}
+        \operatorname{Re}\operatorname{tr}X-
+        \operatorname{Re}\operatorname{tr}Y\le D_0(X\Vert Y).
+        \label{eq:matrix_unnormalized_klein}
+    \end{align}
+    This is~\cite[Fact~3]{Tropp2012JointConvexity}, with the affine trace
+    correction separated from the relative entropy.
+\end{theorem}
+\begin{proof}\leanok
+    In eigenbases of $X$ and $Y$, the squared overlaps form a doubly stochastic
+    matrix. Sum the scalar inequality $x-y\le x(\log x-\log y)$ against these
+    overlaps.
+\end{proof}
+
+\begin{theorem}[Attained variational formula for the trace]
+    \label{thm:matrix_trace_variational_maximum}
+    \lean{Matrix.isGreatest_trace_variational}
+    \leanok
+    \uses{thm:matrix_unnormalized_klein}
+    For every positive-definite $Y$,
+    \begin{align}
+        \operatorname{Re}\operatorname{tr}Y
+        =\max_{X>0}\operatorname{Re}\operatorname{tr}
+        (X\log Y-X\log X+X).
+        \label{eq:matrix_trace_variational_maximum}
+    \end{align}
+    The maximum is attained at $X=Y$. This is
+    \cite[Lemma~6]{Tropp2012JointConvexity}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:matrix_unnormalized_klein}
+    Rearrange Theorem~\ref{thm:matrix_unnormalized_klein} and take $X=Y$.
+\end{proof}
+
+\begin{theorem}[Joint convexity on positive-definite pairs]
+    \label{thm:matrix_positive_definite_relative_entropy_convexity}
+    \lean{TNLean.RelativeEntropyConvexity.convexOn_quantumRelativeEntropy_index}
+    \leanok
+    The function $(X,Y)\mapsto D_0(X\Vert Y)$ is jointly convex on pairs
+    of positive-definite matrices. Equivalently,
+    \begin{align}
+        D_0(aX_1+bX_2\Vert aY_1+bY_2)
+        \le aD_0(X_1\Vert Y_1)+bD_0(X_2\Vert Y_2)
+        \label{eq:matrix_positive_definite_relative_entropy_convexity}
+    \end{align}
+    whenever $a,b\ge0$ and $a+b=1$. The affine trace correction in
+    \cite[Fact~4]{Tropp2012JointConvexity} does not affect convexity.
+\end{theorem}
+\begin{proof}\leanok
+    For $0\le s<1$, Lieb's trace-power concavity makes
+    $(\operatorname{tr}X-\operatorname{tr}(X^sY^{1-s}))/(1-s)$ jointly convex.
+    These functions converge to $D_0(X\Vert Y)$ as $s\uparrow1$.
+    Convexity passes to the pointwise limit.
+\end{proof}
+
+\begin{theorem}[Lieb's exponential trace concavity]
+    \label{thm:matrix_trace_exp_log_concavity}
+    \lean{Matrix.concaveOn_trace_exp_add_log}
+    \leanok
+    \uses{thm:matrix_trace_variational_maximum,
+        thm:matrix_positive_definite_relative_entropy_convexity}
+    For every Hermitian $H$, the function
+    \begin{align}
+        A\longmapsto\operatorname{Re}\operatorname{tr}\exp(H+\log A)
+        \label{eq:matrix_trace_exp_log_concavity}
+    \end{align}
+    is concave on the positive-definite cone. This is
+    \cite[Theorem~1]{Tropp2012JointConvexity}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:matrix_trace_variational_maximum,
+        thm:matrix_positive_definite_relative_entropy_convexity}
+    Theorem~\ref{thm:matrix_trace_variational_maximum} writes the function as
+    the maximum, over $X>0$, of
+    $\operatorname{Re}\operatorname{tr}(XH)-D_0(X\Vert A)+
+        \operatorname{Re}\operatorname{tr}X$.
+    This expression is jointly concave, and its maximum at each $A$ is
+    attained by $X=\exp(H+\log A)$. Mixing the two attaining matrices gives
+    the asserted concavity.
+\end{proof}
+
+\begin{theorem}[Finite uniform trace-exponential Jensen inequality]
+	\label{thm:finite_matrix_trace_exp_jensen}
+	\lean{Matrix.average_trace_exp_add_le_trace_exp_log_average_exp}
+	\leanok
+	\uses{thm:matrix_trace_exp_log_concavity}
+	Let $H$ be Hermitian and let $Y_a$, indexed by a finite nonempty set, be
+	Hermitian. With uniform averaging denoted by $\mathbb E_a$,
+	\begin{align}
+		\mathbb E_a\operatorname{tr}e^{H+Y_a}
+		\le\operatorname{tr}e^{H+\log(\mathbb E_a e^{Y_a})}.
+		\label{eq:finite_matrix_trace_exp_jensen}
+	\end{align}
+	This is the finite uniform specialization of
+	\cite[Corollary~3.3]{Tropp2012TailBounds}.
+\end{theorem}
+\begin{proof}\leanok
+	\uses{thm:matrix_trace_exp_log_concavity}
+	Apply Jensen's inequality on the positive-definite cone to $e^{Y_a}$.
+\end{proof}
+
+\begin{theorem}[Finite uniform logarithmic moment generating function bound]
+	\label{thm:finite_matrix_log_mgf_bernstein}
+	\lean{Matrix.log_average_exp_le_bernstein}
+	\leanok
+	Let $Z_a$ be a centered finite uniform Hermitian family with $\|Z_a\|\le R$.
+	For $\theta\ge0$ and $\theta R<3$, put
+	$V=\mathbb E_a Z_a^2$. Then
+	\begin{align}
+		\log\mathbb E_a e^{\theta Z_a}
+		\le\frac{\theta^2\|V\|}{2(1-\theta R/3)}I.
+		\label{eq:finite_matrix_log_mgf_bernstein}
+	\end{align}
+\end{theorem}
+\begin{proof}\leanok
+	The factorial inequality $2\,3^k\le(k+2)!$ bounds the exponential remainder
+	by a geometric series. Functional calculus gives
+	$e^{\theta Z_a}\le I+\theta Z_a+
+		\theta^2Z_a^2/(2(1-\theta R/3))$.
+	Averaging removes the linear term. The variance norm bounds the quadratic
+	term by a scalar multiple of the identity, and $\log x\le x-1$ bounds
+	each spectral value of the logarithm.
+\end{proof}
+
+\begin{theorem}[Finite uniform one-sided Hermitian Bernstein inequality]
+	\label{thm:finite_uniform_hermitian_bernstein}
+	\lean{Matrix.finite_uniform_hermitian_bernstein_of_variance_le}
+	\leanok
+	\uses{thm:finite_matrix_trace_exp_jensen,thm:finite_matrix_log_mgf_bernstein}
+	Let $Z_a$ be a centered finite uniform family of Hermitian $d\times d$
+	matrices with $\|Z_a\|\le R$. Let $\sigma^2\ge\|\mathbb E_a Z_a^2\|$.
+	For $m$ independent uniform samples and $\tau\ge0$,
+	\begin{align}
+		\Pr\left(\lambda_{\max}\left(\sum_{j=1}^m Z_{a_j}\right)
+		\ge\tau\right)
+		\le d\exp\left(-\frac{\tau^2}{2m\sigma^2+2R\tau/3}\right).
+		\label{eq:finite_uniform_hermitian_bernstein}
+	\end{align}
+	At a zero denominator the right side is read as $d$.
+	This is the finite uniform, norm-bounded specialization of
+	\cite[Theorem~6.1(ii)]{Tropp2012TailBounds}.
+	The general probability theorem and the non-Hermitian norm estimate
+	remain separate assertions.
+\end{theorem}
+\begin{proof}\leanok
+	\uses{thm:finite_matrix_trace_exp_jensen,thm:finite_matrix_log_mgf_bernstein}
+	Iterate the trace-exponential Jensen inequality over the sample coordinates.
+	The logarithmic moment generating function bound and exponential Markov
+	inequality give the usual scalar parameter bound. For $m\sigma^2>0$ take
+	$\theta=\tau/(m\sigma^2+R\tau/3)$.
+	If $m\sigma^2=0<R\tau$, take $\theta=3/(2R)$.
+	The zero-denominator case follows by bounding a probability by one.
+\end{proof}
+
+\begin{lemma}[Hermitian dilation and variance domination]
+	\label{lem:matrix_hermitian_dilation}
+	\lean{Matrix.hermitianDilation,
+		Matrix.isHermitian_hermitianDilation,
+		Matrix.hermitianDilation_sq,
+		Matrix.norm_hermitianDilation,
+		Matrix.norm_mem_spectrum_hermitianDilation,
+		Matrix.hermitianDilation_sum,
+		Matrix.hermitianDilation_real_smul,
+		Matrix.norm_average_hermitianDilation_sq_le}
+	\leanok
+	For a complex $d_1\times d_2$ matrix $Y$, define
+	\begin{align}
+		\mathcal D(Y)=\begin{pmatrix}0&Y\\Y^*&0\end{pmatrix}.
+		\label{eq:matrix_hermitian_dilation}
+	\end{align}
+	This matrix is Hermitian, has norm $\|Y\|$, and has $\|Y\|$ in its spectrum.
+	The dilation is real-linear and
+	$\mathcal D(Y)^2=\operatorname{diag}(YY^*,Y^*Y)$.
+	For a finite uniform family,
+	\begin{align}
+		\|\mathbb E\mathcal D(Y)^2\|
+		\le\max\{\|\mathbb EYY^*\|,\|\mathbb EY^*Y\|\}.
+		\label{eq:matrix_hermitian_dilation_variance}
+	\end{align}
+	These are the dilation properties used in
+	\cite[equations~(2.12)--(2.13), Remark~3.11]{Tropp2012TailBounds}.
+\end{lemma}
+\begin{proof}\leanok
+	The square identity and positive-semidefinite block domination bound the
+	dilation norm from above. The two coordinate inclusions bound it from below.
+	Conjugation by $\operatorname{diag}(I,-I)$ changes the sign of the dilation,
+	so its spectrum is symmetric and contains its positive norm endpoint.
+	The same block domination gives the variance bound.
+\end{proof}
+
+\begin{theorem}[Finite uniform rectangular matrix Bernstein inequality]
+	\label{thm:finite_uniform_rectangular_bernstein}
+	\lean{Matrix.finite_uniform_rectangular_bernstein,
+		Matrix.finite_uniform_rectangular_average_bernstein}
+	\leanok
+	\uses{lem:matrix_hermitian_dilation,thm:finite_uniform_hermitian_bernstein}
+	Let $Y$ be a centered finite uniform family of complex $d_1\times d_2$
+	matrices, with $\|Y\|\le R$, and put
+	$\sigma^2=\max\{\|\mathbb EYY^*\|,\|\mathbb EY^*Y\|\}$.
+	For $\ell\ge1$ independent uniform samples and $t\ge0$,
+	\begin{align}
+		\Pr\left(\left\|\frac1\ell\sum_{j=1}^{\ell}Y_j\right\|\ge t\right)
+		\le(d_1+d_2)\exp\left(-\frac{\ell t^2}{2\sigma^2+2Rt/3}\right).
+		\label{eq:finite_uniform_rectangular_bernstein}
+	\end{align}
+	This is the finite uniform specialization of
+	\cite[Theorem~1.6]{Tropp2012TailBounds}.
+\end{theorem}
+\begin{proof}\leanok
+	\uses{lem:matrix_hermitian_dilation,thm:finite_uniform_hermitian_bernstein}
+	Apply the one-sided Hermitian theorem to the dilation and use its positive
+	spectral norm endpoint. The dilation dimension is $d_1+d_2$.
+	Normalize the sum by $\ell$.
+\end{proof}
+
+\begin{corollary}[Finite uniform concentration about the actual matrix mean]
+	\label{cor:finite_uniform_square_matrix_bernstein}
+	\lean{Matrix.finite_uniform_matrix_average_sub_mean_bernstein}
+	\leanok
+	\uses{thm:finite_uniform_rectangular_bernstein}
+	Let $X$ be a finite uniform family of complex $d\times d$ matrices and
+	$\mu=\mathbb EX$. If $\|X-\mu\|\le R$, set
+	$\sigma^2=\max\{\|\mathbb E(X-\mu)(X-\mu)^*\|,
+		\|\mathbb E(X-\mu)^*(X-\mu)\|\}$.
+	The bound in Theorem~\ref{thm:finite_uniform_rectangular_bernstein}
+	holds for the deviation of the sample mean from $\mu$, with factor $2d$.
+	This is the finite uniform specialization of LVV Theorem~2.13.
+	The assertion for general probability spaces remains unproved here.
+\end{corollary}
+\begin{proof}\leanok
+	\uses{thm:finite_uniform_rectangular_bernstein}
+	Subtract the actual uniform mean. The centered sum and its normalization
+	are computed explicitly, then the rectangular theorem is applied with
+	equal row and column dimensions.
 \end{proof}

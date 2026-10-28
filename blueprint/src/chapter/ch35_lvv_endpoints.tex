@@ -1,0 +1,47 @@
+\section{Initial and final cuts}
+\label{sec:lvv_endpoints}
+
+The successive construction of Landau, Vazirani and
+Vidick~\cite{Landau2015Polynomial} begins with the scalar space before
+the first site. At the final cut the left block is the whole chain.
+The following observations identify the initial family and the conclusion
+provided by viability at that cut. The intermediate construction is a
+separate assertion.
+
+\begin{theorem}[The initial scalar family]
+    \label{thm:lvv_initial_scalar_family}
+    \lean{TNLean.MPS.AreaLaw.emptyLeftVector,
+        TNLean.MPS.AreaLaw.mem_leftSupportSubmodule_emptyLeftVector,
+        TNLean.MPS.AreaLaw.isViableMPS_emptyLeftVector}
+    \leanok
+    \uses{def:lvv_viable_mps}
+    Let $e_{\varnothing}=1$ be the scalar basis vector on the empty
+    left block. For every unit chain vector $\Gamma$, the family
+    $\{e_{\varnothing}\}$ is $(0,1,1,0)$-viable.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Every column at the empty cut is a scalar multiple of
+    $e_{\varnothing}$. Thus $\Gamma$ itself is a unit witness with
+    overlap one. There are no internal bonds on the empty chain.
+\end{proof}
+
+\begin{theorem}[A vector in the final span]
+    \label{thm:lvv_final_span_vector}
+    \lean{TNLean.MPS.AreaLaw.fullLeftEquiv,
+        TNLean.MPS.AreaLaw.cutColumn_full,
+        TNLean.MPS.AreaLaw.IsViable.exists_fullLeftVector}
+    \leanok
+    \uses{def:lvv_viable_set}
+    If $S$ is $(L,\delta)$-viable for $\Gamma$, then there exists
+    a unit vector $v\in\operatorname{Span}(S)$ with
+    $|\langle v,\Gamma\rangle|\ge 1-\delta$, under the canonical
+    identification of the full left block with the chain.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The right block is empty, so the cut matrix of a witness has one
+    column. This column is the witness itself in the full-left
+    coordinates and belongs to $\operatorname{Span}(S)$ by viability.
+    The coordinate identification preserves the norm and inner product.
+\end{proof}

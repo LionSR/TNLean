@@ -15,6 +15,7 @@ import TNLean.Circuit.CleanUnitaryImplementation
 import TNLean.Circuit.CoherentEncoder
 import TNLean.Circuit.Composition
 import TNLean.Circuit.ConfigurationLayers
+import TNLean.Circuit.DisjointRelativeEvolution
 import TNLean.Circuit.EmbeddedProduct
 import TNLean.Circuit.EntropySupport
 import TNLean.Circuit.ExactAmplificationBudget

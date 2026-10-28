@@ -1,0 +1,79 @@
+\documentclass{article}
+\usepackage[margin=20mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\title{Finite Uniform Scope of the Matrix Bernstein Development}
+\author{}
+\date{October 28, 2026}
+\begin{document}
+\maketitle
+
+\section{Source statement and present scope}
+
+Tropp, \emph{User-friendly tail bounds for sums of random matrices},
+Theorem~6.1(ii), gives a one-sided spectral Bernstein inequality for independent
+Hermitian random matrices. Its rectangular version, Theorem~1.6, is the source
+of the norm estimate quoted in Landau--Vazirani--Vidick, % chktex 8
+arXiv:1307.5143v1, Theorem~2.13. See
+\url{https://tropp.caltech.edu/papers/Tro11-User-Friendly-preprint.pdf} and
+\url{https://arxiv.org/abs/1307.5143v1}.
+
+The present theorem concerns independent uniform samples from one finite
+nonempty family of arbitrary complex matrices. It is a specialization, rather
+than the formalization of the source theorem for general matrix-valued random
+variables. No general source-labelled theorem is marked proved by this result.
+
+Let $X:\mathcal A\to M_d(\mathbb C)$, let $\mu=\mathbb EX$ be its actual
+uniform mean, and suppose $\|X(a)-\mu\|\le R$. Put $Y=X-\mu$ and
+\begin{align*}
+	\sigma^2=\max\{\|\mathbb EYY^*\|,\|\mathbb EY^*Y\|\}.
+\end{align*}
+The expectations are finite uniform averages. For $\ell\ge1$ and $t\ge0$,
+the proved bound is
+\begin{align*}
+	\frac{\#\{\omega\in\mathcal A^\ell:
+		\|\ell^{-1}\sum_j X(\omega_j)-\mu\|\ge t\}}
+	{|\mathcal A|^\ell}
+	\le 2d\exp\left(-\frac{\ell t^2}{2\sigma^2+2Rt/3}\right).
+\end{align*}
+The variance is the scalar maximum of the two operator norms, as in Tropp's
+source theorem; the matrix-valued maximum printed in LVV is read accordingly.
+The coefficient $1/3$, both variance norms and the dimension factor $2d$ are
+retained. At a zero denominator the formal inverse-zero convention gives the
+immediate bound by $2d$.
+
+For a centered $d_1\times d_2$ family, the rectangular theorem has the factor
+$d_1+d_2$. Its preceding one-sided Hermitian theorem permits an upper variance
+bound. The normalized theorem uses a positive sample count.
+
+\section{Proof and extension plan}
+
+Lieb's concavity, finite Jensen and induction over the sample coordinates give
+the logarithmic moment generating function estimate.
+The scalar bound
+\begin{align*}
+	e^x\le 1+x+\frac{x^2}{2(1-a/3)}
+	\qquad (|x|\le a<3)
+\end{align*}
+follows from $2\,3^k\le{(k+2)!}$. Functional calculus, centering and the variance
+norm bound give the exponential Markov estimate. Optimizing its scalar
+parameter yields the displayed tail bound.
+
+The proved Hermitian dilation preserves the operator norm and has that norm as
+a positive spectral endpoint. Its squared diagonal blocks are the Gram
+matrices, whose positive-semidefinite domination gives the variance bound.
+The one-sided tail gives $2d$ directly. Centering and normalization are derived.
+
+The remaining extension is from finite uniform averages to Bochner integrals
+and genuine independence on general probability spaces. The generic analytic
+and probability results belong in QICLean; their transfer must precede any
+QICLean probability theorem depending on them.
+
+The source-specific sampled projector is a further task. A norm approximation
+alone does not establish the simultaneous bound on the frequency of each local
+factor in every sampled word. The ground-energy dependence of the published
+construction is recorded separately in
+\path{docs/paper-gaps/lvv13_sampling_ground_energy.tex}.
+
+\end{document}

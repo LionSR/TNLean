@@ -40,7 +40,7 @@ namespace TNLean.MPS.AreaLaw
 /-- A finite family chosen independently of the ground vector performs size trimming with
 error `1 / 12`. Auxiliary library-bond version of LVV13, `algo53.tex`, Claim `c:2`,
 lines 520–527, using all actual bond dimensions up to the uniform cut bound. -/
-theorem ChainHamiltonian.exists_size_trimmed_family {L q k : ℕ}
+theorem ChainHamiltonian.exists_size_trimmed_column_family {L q k : ℕ}
     (h : ChainHamiltonian L q 1 1) (hpos : ∀ X, (h.term X).PosSemidef)
     (hL : 0 < L) (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ)
     (S : Finset (LeftBlockVector L q k)) (b : ℕ)
@@ -56,7 +56,14 @@ theorem ChainHamiltonian.exists_size_trimmed_family {L q k : ℕ}
       ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
         IsGappedGroundState h.operator E₀ Γ Δ →
         IsViable Γ (c / L) (S : Set (LeftBlockVector L q k)) →
-        IsViable Γ (1 / 12) (T : Set (LeftBlockVector L q k)) := by
+        IsViable Γ (1 / 12) (T : Set (LeftBlockVector L q k)) ∧
+        ∃ (m : ℕ) (W : Matrix (CutRight L q k) (Fin m) ℂ)
+          (u : EuclideanSpace ℂ
+            (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) × Fin m)),
+          Wᴴ * W = 1 ∧ m ≤ D ∧ ‖u‖ = 1 ∧
+          (∀ a, WithLp.toLp 2 (fun x ↦ u (x, a)) ∈ T) ∧
+          1 - 1 / 12 ≤ ‖⟪Γ, WithLp.toLp 2 (fun z ↦ rightApply W u
+            (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k) z))⟫_ℂ‖ := by
   classical
   intro c D K
   let : NeZero q := ⟨by omega⟩
@@ -78,9 +85,16 @@ theorem ChainHamiltonian.exists_size_trimmed_family {L q k : ℕ}
   have hgood : ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
       IsGappedGroundState h.operator E₀ Γ Δ →
       IsViable Γ (c / L) (S : Set (LeftBlockVector L q k)) →
-      IsViable Γ (1 / 12) (Ttotal : Set (LeftBlockVector L q k)) := by
+      IsViable Γ (1 / 12) (Ttotal : Set (LeftBlockVector L q k)) ∧
+      ∃ (m : ℕ) (W : Matrix (CutRight L q k) (Fin m) ℂ)
+        (u : EuclideanSpace ℂ
+          (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) × Fin m)),
+        Wᴴ * W = 1 ∧ m ≤ D ∧ ‖u‖ = 1 ∧
+        (∀ a, WithLp.toLp 2 (fun x ↦ u (x, a)) ∈ Ttotal) ∧
+        1 - 1 / 12 ≤ ‖⟪Γ, WithLp.toLp 2 (fun z ↦ rightApply W u
+          (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k) z))⟫_ℂ‖ := by
     intro E₀ Γ hgs hviable
-    obtain ⟨_, m, W, x, -, -, -, -, -, hmD, -, hxnorm, hxP, huniform⟩ :=
+    obtain ⟨_, m, W, x, -, -, -, -, hW, hmD, -, hxnorm, hxP, huniform⟩ :=
       h.exists_uniform_leading_bounds_of_isViable hpos hL hq hΔ
         HL B hsplit hHL hBS hBn hgs hviable
     let ρx := vecMulVec x (star x)
@@ -110,20 +124,33 @@ theorem ChainHamiltonian.exists_size_trimmed_family {L q k : ℕ}
     obtain ⟨_, _, hvnorm, _, _, hvΓ⟩ := huniform X hX (σ i j) hσ htr hσP hσX
       (fun ρ hρ htρ hρP hρX ↦ hmin ρ ⟨hρ, htρ, hρP, hρX⟩)
       (u i j) (μ i j) hu heig hmax
-    refine ⟨_, hvnorm, ?_, ?_⟩
-    · rw [norm_inner_symm]
+    have hviable : IsViable Γ (1 / 12) (Ttotal : Set (LeftBlockVector L q k)) := by
+      refine ⟨_, hvnorm, ?_, ?_⟩
+      · rw [norm_inner_symm]
+        exact hvΓ
+      · rw [gluingLeftCoordinates_rightApply W (u i j)]
+        have hvT := rightApply_mem_leftSupportSubmodule_leftColumns
+          (Finset.univ : Finset (F i))
+          (fun z ↦ gluingLeftCoordinates L q k i.val (u i z))
+          (i := j) (Finset.mem_univ j) W
+        rw [← hTeq i] at hvT
+        have hsubset : (T i : Set (LeftBlockVector L q k)) ⊆
+            (Ttotal : Set (LeftBlockVector L q k)) :=
+          fun z hz ↦ Finset.mem_biUnion.mpr ⟨i, Finset.mem_univ i, hz⟩
+        exact mem_leftSupportSubmodule.mpr fun β ↦
+          Submodule.span_mono hsubset ((mem_leftSupportSubmodule.mp hvT) β)
+    refine ⟨hviable, m, W, gluingLeftCoordinates L q k m (u i j), hW, hmD, ?_, ?_, ?_⟩
+    · rw [(gluingLeftCoordinates L q k m).norm_map]
+      exact hu
+    · intro a
+      apply Finset.mem_biUnion.mpr
+      refine ⟨i, Finset.mem_univ i, ?_⟩
+      rw [hTeq i]
+      unfold leftColumns
+      exact Finset.mem_image.mpr ⟨(j, a), Finset.mem_product.mpr
+        ⟨Finset.mem_univ j, Finset.mem_univ a⟩, rfl⟩
+    · rw [← gluingLeftCoordinates_rightApply W (u i j)]
       exact hvΓ
-    · rw [gluingLeftCoordinates_rightApply W (u i j)]
-      have hvT := rightApply_mem_leftSupportSubmodule_leftColumns
-        (Finset.univ : Finset (F i))
-        (fun z ↦ gluingLeftCoordinates L q k i.val (u i z))
-        (i := j) (Finset.mem_univ j) W
-      rw [← hTeq i] at hvT
-      have hsubset : (T i : Set (LeftBlockVector L q k)) ⊆
-          (Ttotal : Set (LeftBlockVector L q k)) :=
-        fun z hz ↦ Finset.mem_biUnion.mpr ⟨i, Finset.mem_univ i, hz⟩
-      exact mem_leftSupportSubmodule.mpr fun β ↦
-        Submodule.span_mono hsubset ((mem_leftSupportSubmodule.mp hvT) β)
   have hTsub : (Ttotal : Set (LeftBlockVector L q k)) ⊆
       Submodule.span ℂ (S : Set (LeftBlockVector L q k)) := by
     intro v hv
@@ -137,8 +164,69 @@ theorem ChainHamiltonian.exists_size_trimmed_family {L q k : ℕ}
   exact ⟨Ttotal, hcard, hTsub,
     fun v hv ↦ isLeftOpenMPS_of_mem_span S hS (hTsub hv), hgood⟩
 
+/-- A finite family chosen independently of the ground vector performs size trimming with
+error `1 / 12`. Auxiliary library-bond version of LVV13, `algo53.tex`, Claim `c:2`,
+lines 520–527, using all actual bond dimensions up to the uniform cut bound. -/
+theorem ChainHamiltonian.exists_size_trimmed_family {L q k : ℕ}
+    (h : ChainHamiltonian L q 1 1) (hpos : ∀ X, (h.term X).PosSemidef)
+    (hL : 0 < L) (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ)
+    (S : Finset (LeftBlockVector L q k)) (b : ℕ)
+    (hS : ∀ v ∈ S, IsLeftOpenMPS b v) :
+    let c : ℝ := (Δ / 169) ^ 2
+    let D := constantCutBond q 1 1 Δ c
+    let K : ℕ := (2 * ⌈((q * D : ℕ) : ℝ) ^ 2 / (c / (2 * L))⌉₊ + 1) ^
+      (2 * (q * D) ^ 2)
+    ∃ T : Finset (LeftBlockVector L q k),
+      T.card ≤ (D + 1) * D * K ∧
+      (T : Set (LeftBlockVector L q k)) ⊆ Submodule.span ℂ (S : Set (LeftBlockVector L q k)) ∧
+      (∀ v ∈ T, IsLeftOpenMPS (S.card * max 1 b) v) ∧
+      ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
+        IsGappedGroundState h.operator E₀ Γ Δ →
+        IsViable Γ (c / L) (S : Set (LeftBlockVector L q k)) →
+        IsViable Γ (1 / 12) (T : Set (LeftBlockVector L q k)) := by
+  obtain ⟨T, hcard, hspan, hbond, hgood⟩ :=
+    h.exists_size_trimmed_column_family hpos hL hq hΔ S b hS
+  exact ⟨T, hcard, hspan, hbond, fun E₀ Γ hgs hv ↦ (hgood E₀ Γ hgs hv).1⟩
+
 /-- The finite size-trimming family has an explicit polynomial cardinality in the chain
 length, with coefficient and degree independent of that length. Auxiliary library-bond
+version of LVV13, `algo53.tex`, Claim `c:2`, lines 520–527. -/
+theorem ChainHamiltonian.exists_size_trimmed_column_family_polynomial {L q k : ℕ}
+    (h : ChainHamiltonian L q 1 1) (hpos : ∀ X, (h.term X).PosSemidef)
+    (hL : 0 < L) (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ)
+    (S : Finset (LeftBlockVector L q k)) (b : ℕ)
+    (hS : ∀ v ∈ S, IsLeftOpenMPS b v) :
+    let c : ℝ := (Δ / 169) ^ 2
+    let D := constantCutBond q 1 1 Δ c
+    let p := 2 * (q * D) ^ 2
+    let A := ⌈2 * ((q * D : ℕ) : ℝ) ^ 2 / c⌉₊
+    let C := (D + 1) * D * (2 * A + 1) ^ p
+    ∃ T : Finset (LeftBlockVector L q k),
+      T.card ≤ C * L ^ p ∧
+      (T : Set (LeftBlockVector L q k)) ⊆ Submodule.span ℂ (S : Set (LeftBlockVector L q k)) ∧
+      (∀ v ∈ T, IsLeftOpenMPS (S.card * max 1 b) v) ∧
+      ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
+        IsGappedGroundState h.operator E₀ Γ Δ →
+        IsViable Γ (c / L) (S : Set (LeftBlockVector L q k)) →
+        IsViable Γ (1 / 12) (T : Set (LeftBlockVector L q k)) ∧
+        ∃ (m : ℕ) (W : Matrix (CutRight L q k) (Fin m) ℂ)
+          (u : EuclideanSpace ℂ
+            (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) × Fin m)),
+          Wᴴ * W = 1 ∧ m ≤ D ∧ ‖u‖ = 1 ∧
+          (∀ a, WithLp.toLp 2 (fun x ↦ u (x, a)) ∈ T) ∧
+          1 - 1 / 12 ≤ ‖⟪Γ, WithLp.toLp 2 (fun z ↦ rightApply W u
+            (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k) z))⟫_ℂ‖ := by
+  classical
+  intro c D p A C
+  obtain ⟨T, hcard, hspan, hbond, hgood⟩ :=
+    h.exists_size_trimmed_column_family hpos hL hq hΔ S b hS
+  have hnet := boundaryNet_card_bound_le_polynomial (q := q) (D := D) (c := c)
+    (by omega : 1 ≤ L) (sq_pos_of_pos (div_pos hΔ (by norm_num)))
+  refine ⟨T, ?_, hspan, hbond, hgood⟩
+  simpa only [C, Nat.mul_assoc] using
+    hcard.trans (Nat.mul_le_mul_left ((D + 1) * D) hnet)
+
+/-- The finite size-trimming family has polynomial cardinality. This is the library-bond
 version of LVV13, `algo53.tex`, Claim `c:2`, lines 520–527. -/
 theorem ChainHamiltonian.exists_size_trimmed_family_polynomial {L q k : ℕ}
     (h : ChainHamiltonian L q 1 1) (hpos : ∀ X, (h.term X).PosSemidef)
@@ -158,14 +246,8 @@ theorem ChainHamiltonian.exists_size_trimmed_family_polynomial {L q k : ℕ}
         IsGappedGroundState h.operator E₀ Γ Δ →
         IsViable Γ (c / L) (S : Set (LeftBlockVector L q k)) →
         IsViable Γ (1 / 12) (T : Set (LeftBlockVector L q k)) := by
-  classical
-  intro c D p A C
   obtain ⟨T, hcard, hspan, hbond, hgood⟩ :=
-    h.exists_size_trimmed_family hpos hL hq hΔ S b hS
-  have hnet := boundaryNet_card_bound_le_polynomial (q := q) (D := D) (c := c)
-    (by omega : 1 ≤ L) (sq_pos_of_pos (div_pos hΔ (by norm_num)))
-  refine ⟨T, ?_, hspan, hbond, hgood⟩
-  simpa only [C, Nat.mul_assoc] using
-    hcard.trans (Nat.mul_le_mul_left ((D + 1) * D) hnet)
+    h.exists_size_trimmed_column_family_polynomial hpos hL hq hΔ S b hS
+  exact ⟨T, hcard, hspan, hbond, fun E₀ Γ hgs hv ↦ (hgood E₀ Γ hgs hv).1⟩
 
 end TNLean.MPS.AreaLaw

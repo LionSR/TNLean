@@ -9576,3 +9576,62 @@ there is no need for a new tactic.
   add unrelated dependencies. If a shared one-step statement is needed, move that existing
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
+
+### Alternating identity and adjoint — candidate (2026-10-28)
+
+- **Pattern:** Unfold a repeated pair of operators, generalize the `Fin 2` remainder,
+  and prove the identity and adjoint cases separately with `fin_cases`.
+- **Seen:** Three occurrences in `Algebra/FiniteMatrixMoments.lean`, in the proofs
+  of the coordinate sum, centered singleton factor and uniform factor norm bound.
+- **Abstraction:** If a second module needs the same reasoning, first state that
+  the selected operator is either the identity or the adjoint, then reuse that
+  alternative for sums and norms. A mathematical lemma is preferable to a tactic.
+- **Notes:** The present occurrences are confined to one module, below the
+  two-file promotion threshold. The ordered-product sum itself already reuses
+  `MultilinearMap.map_sum` and `MultilinearMap.map_update_sum`.
+
+### Functional calculus on a Hermitian eigenbasis — candidate (2026-10-28)
+
+- **Pattern:** Expand the Hermitian functional calculus using its eigenvector
+  unitary, multiply by a basis vector and cancel the unitary factors. The
+  result is scalar multiplication by the function at the corresponding energy.
+- **Seen:** Two private helper proofs, in
+  `MPS/AreaLaw/Huang/ApproximateEnergyFilter.lean` and the companion module
+  `QICLean/Analysis/GroundProjection.lean`.
+- **Abstraction:** A public Mathlib or QICLean theorem for the action of a real
+  functional calculus on `IsHermitian.eigenvectorBasis` would replace both helpers.
+- **Notes:** The current spectral proof calls the helper once and then uses
+  `norm_cfc_le`; it does not repeat the full Gaussian Parseval argument.
+  The generic filtering module is intended for QICLean, where the helper can be
+  consolidated with the existing ground-projection development.
+
+### Positive-definite Hermitian exponentials — promoted through Mathlib (2026-10-28)
+
+- **Pattern:** Prove positivity of a Hermitian exponential and combine it with
+  `NormedSpace.isUnit_exp` to obtain positive definiteness.
+- **Seen:** The private exponential lemma in `Algebra/TraceExpLogConcavity.lean`
+  and the finite Jensen and Bernstein exponential estimates.
+- **Abstraction:** Mathlib's `cfc_isStrictlyPositive_iff`, together with
+  `CFC.real_exp_eq_normedSpace_exp` and `Matrix.isStrictlyPositive_iff_posDef`,
+  applies directly to `Real.exp_pos` on the spectrum.
+- **Refactored occurrences:** The two new consumers in
+  `Algebra/TraceExpFiniteJensen.lean` and `Algebra/BernsteinExponentialBound.lean`
+  use the existing strict-positivity abstraction. They no longer repeat the
+  auxiliary rational normed-algebra instance and invertibility argument.
+- **Notes:** The previously checked private lemma in
+  `Algebra/TraceExpLogConcavity.lean` retains its independent proof. No new
+  tactic or matrix-specific positivity lemma is needed.
+
+### Entries of a two-block matrix — candidate (2026-10-28)
+
+- **Pattern:** After matrix extensionality, split each sum-type coordinate and
+  simplify the corresponding block entry. Finite sums additionally use
+  `Matrix.sum_apply`.
+- **Seen:** The block-order comparison, dilation sum, real scalar action and
+  averaged Gram-block identification in `Algebra/HermitianDilation.lean`.
+- **Abstraction:** Continue using `Matrix.fromBlocks` and its existing algebraic
+  identities. If the entry pattern recurs in another new consumer, prefer a
+  finite-sum identity for `fromBlocks` before introducing a tactic.
+- **Notes:** The observed occurrences are confined to one module, below the
+  two-file promotion threshold. Rectangular zero products require
+  `Matrix.mul_zero` and `Matrix.zero_mul`, rather than their square-ring forms.
