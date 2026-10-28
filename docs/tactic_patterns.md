@@ -9492,3 +9492,57 @@ there is no need for a new tactic.
 - **Notes:** This specializes the existing range-dependent coordinate estimate
   to displacement at most one along every edge. The original range-dependent
   theorem and all three commutator statements are unchanged.
+
+### Joining cut coordinates in tensor projections — reused Mathlib (2026-10-26)
+
+- **Seen:** `MPS/AreaLaw/ViableSet/GluingCoordinates.lean`.
+- **Pattern:** Transport a tensor projection through a product of coordinate equivalences,
+  then compare its fixed vectors by composition with the equivalence.
+- **Reuse:** `Matrix.kroneckerMap_reindex_left`, `Matrix.submatrix_mulVec_equiv` and
+  `Equiv.comp_symm_eq` give the proof directly. The extension identity uses the public
+  coefficient-matrix formula for `Matrix.rightApply`.
+- **Decision:** No new general matrix lemma or tactic is needed. The chain-specific map is
+  the existing isometric change of finite coordinates from Mathlib.
+
+### Eigenvectors in the support of a density matrix — existing Mathlib lemmas (2026-10-26)
+
+- **Seen:** The local `hQu` arguments in
+  `MPS/AreaLaw/ViableSet/ViableLeadingVector.lean` and
+  `MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean`.
+- **Pattern:** From `Q * σ = σ` and `σ *ᵥ u = μ • u`, with `μ ≠ 0`,
+  deduce `Q *ᵥ u = u` by associativity and scalar cancellation.
+- **Reuse:** Apply `congrArg` to the action on `u`, then use
+  `Matrix.mulVec_mulVec`, `Matrix.mulVec_smul` and `smul_right_injective`.
+- **Decision:** These existing lemmas give the new argument in three lines;
+  no separate scalar-inverse calculation or custom tactic is needed.
+
+### Gap-controlled error budget of the viable leading step — candidate (2026-10-27)
+
+- **Seen:** `MPS/AreaLaw/ViableSet/ViableLeadingVector.lean` and
+  `MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean`.
+- **Pattern:** From `Δ ≤ 4`, `c = (Δ / 169) ^ 2`, `‖B‖ ≤ 2 L` and
+  `η = c / (2 L)`, derive `2 c ≤ √c`, `‖B‖ (2 η) ≤ 2 c`,
+  `2 (6 √c + ‖B‖ (2 η)) ≤ 14 √c < Δ / 12` and
+  `4 (6 √c + ‖B‖ (2 η)) < Δ`.
+- **Decision:** Two occurrences of the same twenty-line derivation. A third
+  occurrence should factor it into one lemma beside
+  `lvv_trimming_constant_bounds` that takes `Δ`, `c`, `‖B‖` and `L` and
+  returns the two error bounds.
+
+### Enlarging a covering bound by its dimension — reused Mathlib (2026-10-26)
+
+- **Seen:** `MPS/AreaLaw/ViableSet/BoundaryNet.lean`.
+- **Pattern:** A net on matrices of size `c` has a bound whose grid size and exponent both
+  increase with `c`; replace `c` by a geometric upper bound without changing the net.
+- **Reuse:** `Nat.pow_le_pow_left`, `Nat.ceil_mono` and `pow_le_pow` give the comparison,
+  with the larger base at least one. They also cover zero dimension and exponent.
+- **Decision:** The proof needs no separate scalar declaration or tactic.
+
+### A ceiling bound with a natural factor — reused Mathlib (2026-10-26)
+
+- **Seen:** `MPS/AreaLaw/ViableSet/BoundaryNetPolynomial.lean`.
+- **Pattern:** Bound `ceil(L t)` by `L ceil(t)` for a natural factor, then raise a grid-size
+  comparison to a fixed natural degree.
+- **Reuse:** `Nat.le_ceil`, multiplication by a nonnegative factor and `Nat.ceil_le` give
+  the ceiling bound. Applying `mul_pow` directly keeps the symbolic degree intact.
+- **Decision:** One occurrence; no separate general ceiling lemma or tactic is introduced.

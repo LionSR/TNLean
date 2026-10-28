@@ -7,6 +7,7 @@ All products of site matrices retain their natural order.
 \begin{definition}[An interval and its single retained complement]
     \label{def:retained_interval_coordinates}
     \lean{TNLean.MPS.AreaLaw.retainedIntervalEquiv,MPOTensor.actualAffineRetainedConfig}
+    \leanok
     Let $T,L,a$ be nonnegative integers with $a+L\le T$, and set
     $J=[a,a+L)$ in the chain of $T$ sites. For any set $X$, restriction gives
     an equivalence
@@ -26,6 +27,7 @@ All products of site matrices retain their natural order.
 \begin{definition}[The actual retained closing matrix]
     \label{def:actual_retained_interval_closing}
     \lean{MPOTensor.actualRetainedIntervalClosing}
+    \leanok
     \uses{def:retained_interval_coordinates}
     Let $A_v(i,j)\in\C^{B\times B}$ be supplied site-dependent operator
     tensors on the full chain, and let $C\in\C^{B\times B}$ be supplied.
@@ -43,6 +45,7 @@ All products of site matrices retain their natural order.
 \begin{definition}[The scalar-closed core at a retained matrix entry]
     \label{def:retained_stack_core}
     \lean{MPOTensor.retainedStackCore}
+    \leanok
     \uses{def:core_word_coefficients,def:trace_core_word_closing}
     Let $m$ be a finite retained index set, let
     $R_{ab}\in\C^{m\times m}$ for $0\le a,b<B$, and let
@@ -75,6 +78,7 @@ All products of site matrices retain their natural order.
 \begin{theorem}[A finite family in natural physical order]
     \label{thm:finite_natural_retained_core_family}
     \lean{MPOTensor.exists_finite_natural_retained_core_family}
+    \leanok
     \uses{def:retained_interval_coordinates,def:retained_stack_core,
         def:trace_core_matrix_slice,thm:core_word_product,
         thm:trace_core_slice_words,thm:trace_core_open_square,
@@ -100,7 +104,7 @@ All products of site matrices retain their natural order.
     $(B^{t_r})^2$. Empty chains, empty intervals, and zero physical or virtual
     dimensions are included whenever the stated retained data exist.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:retained_interval_coordinates,def:retained_stack_core,
         thm:core_word_product,thm:trace_core_slice_words,thm:trace_core_open_square,
         thm:chain_fixed_configuration_extension}
@@ -122,6 +126,7 @@ All products of site matrices retain their natural order.
 \begin{theorem}[The affine product of the actual supplied trace operator]
     \label{thm:actual_natural_affine_product}
     \lean{MPOTensor.prod_actual_natural_affine_eq}
+    \leanok
     \uses{def:retained_interval_coordinates,def:actual_retained_interval_closing}
     Fix $a+L\le T$. For supplied full-chain tensors $A^{\mathrm{full}}_v$
     of virtual dimension $B$ and cap $C\in\C^{B\times B}$, define
@@ -144,7 +149,7 @@ All products of site matrices retain their natural order.
     supplied trace operator $H$; no identification with another Hamiltonian
     is assumed.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:retained_interval_coordinates,def:actual_retained_interval_closing}
     Split the ordered full-chain product into prefix, interval and suffix.
     Cyclicity of the trace moves the suffix before the cap, giving $F=SCP$.
