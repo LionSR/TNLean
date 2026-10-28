@@ -1,0 +1,182 @@
+\section{Error reduction for viable sets}
+\label{sec:lvv_error_reduction}
+
+The error-reduction argument of Landau, Vazirani and
+Vidick~\cite[Claim 2.11]{Landau2015Polynomial} applies the left factors of an
+approximate ground projection to a viable set. The conclusions below take the
+operator approximation as a hypothesis; they do not construct the sampled
+operator. Normalizing its output requires the lower norm estimate recorded
+in~\cite{gap:lvv13_error_reduction_witness_norm}.
+
+\begin{definition}[The error-reduced family]
+    \label{def:lvv_error_reduction_family}
+    \lean{TNLean.MPS.AreaLaw.RightBlockMatrix,
+        TNLean.MPS.AreaLaw.errorReductionSet,
+        TNLean.MPS.AreaLaw.toEuclideanLin_mem_errorReductionSet}
+    \leanok
+    \uses{def:lvv_viable_set}
+    Fix the cut after $i$ sites. For a finite index set $J$, operators $A_j$
+    on the first $i$ sites and a finite set $S$ of left vectors, set
+    $S'=\{A_js:j\in J,\ s\in S\}$.
+\end{definition}
+
+\begin{theorem}[Support and cardinality after error reduction]
+    \label{thm:lvv_error_reduction_support}
+    \lean{TNLean.MPS.AreaLaw.cutMatrix_toEuclideanLin_eq_sum,
+        TNLean.MPS.AreaLaw.card_errorReductionSet_le,
+        TNLean.MPS.AreaLaw.toEuclideanLin_mem_span_errorReductionSet,
+        TNLean.MPS.AreaLaw.toEuclideanLin_mem_leftSupportSubmodule_errorReductionSet}
+    \leanok
+    \uses{def:lvv_error_reduction_family}
+    Suppose that $K=\sum_{j\in J}A_j\otimes B_j$ in the coordinates of the
+    cut. Then $|S'|\le |J||S|$ and
+    $K(\operatorname{Span}(S)\otimes\mathcal H_R)
+        \subseteq\operatorname{Span}(S')\otimes\mathcal H_R$.
+    For every chain vector $\psi$,
+    \begin{align}
+        M_i(K\psi)=\sum_{j\in J}A_jM_i(\psi)B_j^{\mathsf T}.
+        \label{eq:lvv_error_reduction_cut_matrix}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    In cut coordinates, applying $A\otimes B$ sends a coefficient matrix
+    $M$ to $AMB^{\mathsf T}$. Summing over $j$ gives
+    (\ref{eq:lvv_error_reduction_cut_matrix}).
+    Each column on the right side of
+    (\ref{eq:lvv_error_reduction_cut_matrix}) is a linear combination of
+    $A_j$ applied to columns of $M_i(\psi)$. Those columns belong to
+    $\operatorname{Span}(S)$, and $A_j\operatorname{Span}(S)$ is contained in
+    $\operatorname{Span}(S')$. The cardinality bound follows from the map
+    $(j,s)\mapsto A_js$ on $J\times S$.
+\end{proof}
+
+\begin{theorem}[Size, bonds and viability after error reduction]
+    \label{thm:lvv_mps_error_reduction}
+    \lean{TNLean.MPS.AreaLaw.IsViableMPS.errorReduction_of_norm_sub_groundProjection_le}
+    \leanok
+    \uses{def:lvv_viable_mps, def:lvv_error_reduction_family}
+    Let $0\le i\le L$, let $\Gamma$ be a unit vector, and let $S$ be
+    $(i,s,b,1/2)$-viable. Suppose that
+    $K=\sum_{j\in J}A_j\otimes B_j$ across the cut after $i$ sites,
+    each $A_j$ has operator-Schmidt rank at most $D$ at every internal
+    cut of the first $i$ sites, and
+    $\|K-|\Gamma\rangle\langle\Gamma|\|\le\eta<1/2$.
+    Then $S'=\{A_jt:j\in J,\ t\in S\}$ is
+    $(i,|J|s,D\max(1,b),4\eta)$-viable.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:lvv_error_reduction_support, thm:lvv_projection_error_reduction,
+        thm:lvv_operator_bond_growth}
+    Theorem~\ref{thm:lvv_error_reduction_support} gives at most $|J|s$ members.
+    Theorem~\ref{thm:lvv_operator_bond_growth} gives each member effective
+    MPS bond bound $\max(1,D\max(1,b))$.
+    Theorem~\ref{thm:lvv_projection_error_reduction} supplies a unit witness
+    with overlap at least $1-4\eta$.
+\end{proof}
+
+\begin{theorem}[Overlap under a perturbation]
+    \label{thm:lvv_overlap_perturbation}
+    \lean{TNLean.MPS.AreaLaw.mul_norm_le_norm_inner_of_norm_sub_le}
+    \leanok
+    Let $\Gamma$ be a unit vector, let $\varepsilon,\eta\ge0$ and $c>0$,
+    and suppose that $\|x\|\ge c$, $\|y-x\|\le\eta$ and
+    $|\langle\Gamma,x\rangle|\ge(1-\varepsilon)\|x\|$. Then
+    \begin{align}
+        |\langle\Gamma,y\rangle|
+        \ge\left(1-\varepsilon-\frac{2\eta}{c}\right)\|y\|.
+        \label{eq:lvv_overlap_perturbation}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    Cauchy--Schwarz and the triangle inequality give
+    $|\langle\Gamma,y\rangle|\ge(1-\varepsilon)\|x\|-\eta$ and
+    $\|y\|\le\|x\|+\eta$. If $a=1-\varepsilon-2\eta/c$ is nonpositive,
+    the conclusion is immediate. Otherwise $a\le1$ and
+    $a\|y\|\le a\|x\|+\eta\le(1-\varepsilon)\|x\|-\eta$,
+    since $\|x\|\ge c$.
+\end{proof}
+
+\begin{theorem}[A viable witness from an approximate filter]
+    \label{thm:lvv_filter_witness}
+    \lean{TNLean.MPS.AreaLaw.isViable_errorReductionSet_of_witness,
+        TNLean.MPS.AreaLaw.norm_inner_le_norm_toEuclideanLin_of_fixed,
+        TNLean.MPS.AreaLaw.IsViable.errorReduction,
+        TNLean.MPS.AreaLaw.IsViableMPS.errorReduction}
+    \leanok
+    \uses{def:lvv_viable_mps, def:lvv_error_reduction_family}
+    Let $\Gamma$ be a unit vector and
+    $K=\sum_{j\in J}A_j\otimes B_j$. Suppose that a unit vector
+    $v\in\operatorname{Span}(S)\otimes\mathcal H_R$ satisfies
+    $\|A_0v\|\ge c>0$ and
+    $|\langle\Gamma,A_0v\rangle|\ge(1-\varepsilon)\|A_0v\|$, with
+    $\varepsilon\ge0$. If $\|K-A_0\|\le\eta<c$, then $S'$ is
+    $(i,\varepsilon+2\eta/c)$-viable.
+
+    If $S$ is half-viable, $A_0$ is Hermitian, $A_0\Gamma=\Gamma$, and
+    every half-viable witness satisfies this overlap bound with error
+    $\delta\ge0$, then $S'$ is $(i,\delta+4\eta)$-viable whenever
+    $\|K-A_0\|\le\eta<1/2$. If $S$ is $(i,s,b,1/2)$-viable and every $A_jt$, for
+    $j\in J$ and $t\in S$, has MPS bond bound $\max(1,b')$, then $S'$ is
+    $(i,|J|s,b',\delta+4\eta)$-viable.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:lvv_error_reduction_support, thm:lvv_overlap_perturbation}
+    Put $x=A_0v$ and $y=Kv$. The operator bound gives $\|y-x\|\le\eta$,
+    so $\|y\|\ge c-\eta>0$. Applying
+    (\ref{eq:lvv_overlap_perturbation}) and dividing by $\|y\|$ gives the
+    witness $Kv/\|Kv\|$. Its support follows from
+    Theorem~\ref{thm:lvv_error_reduction_support}. In the Hermitian case,
+    $|\langle v,\Gamma\rangle|=|\langle A_0v,\Gamma\rangle|
+        \le\|A_0v\|$, so one may take $c=1/2$.
+\end{proof}
+
+\begin{theorem}[Viability from the ground projection error]
+    \label{thm:lvv_projection_error_reduction}
+    \lean{TNLean.MPS.AreaLaw.IsViable.errorReduction_of_norm_sub_groundProjection_le}
+    \leanok
+    \uses{def:lvv_viable_set, def:lvv_error_reduction_family}
+    Let $\Gamma$ be a unit vector, let $S$ be $(i,1/2)$-viable, and suppose
+    $K=\sum_{j\in J}A_j\otimes B_j$. If
+    $\|K-|\Gamma\rangle\langle\Gamma|\|\le\eta<1/2$, then $S'$ is
+    $(i,4\eta)$-viable.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:lvv_filter_witness}
+    For a half-viable unit witness $v$ and
+    $P=|\Gamma\rangle\langle\Gamma|$,
+    $\|Pv\|=|\langle\Gamma,v\rangle|\ge1/2$ and
+    $|\langle\Gamma,Pv\rangle|=\|Pv\|$. Apply
+    Theorem~\ref{thm:lvv_filter_witness} with $A_0=P$ and $\varepsilon=0$.
+\end{proof}
+
+\begin{theorem}[Bond growth under a chain operator]
+    \label{thm:lvv_operator_bond_growth}
+    \lean{TNLean.MPS.AreaLaw.rank_cutMatrix_toEuclideanLin_le_operatorSchmidtRank_mul,
+        TNLean.MPS.AreaLaw.IsOpenMPS.toEuclideanLin,
+        TNLean.MPS.AreaLaw.leftConfigOfFin_toEuclideanLin,
+        TNLean.MPS.AreaLaw.IsLeftOpenMPS.toEuclideanLin}
+    \leanok
+    \uses{def:chain_open_mps, def:lvv_viable_mps}
+    Applying an operator increases a vector's Schmidt rank at any cut by
+    at most the operator-Schmidt rank at that cut. In particular, an
+    operator whose operator-Schmidt ranks are at most $D$ at all internal
+    cuts sends an open MPS of bond bound $b$ to one of bond bound $Db$.
+    On the first $i\le L$ sites, a vector with effective bond bound
+    $\max(1,b)$ therefore has effective output bound
+    $\max(1,D\max(1,b))$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Factor the input coefficient matrix through its Schmidt-rank space
+    and expand the operator into a minimal sum of product operators.
+    The output coefficient matrix factors through the product of the two
+    index spaces. Its rank is bounded by their product. Apply the
+    characterization of open MPS by the ranks of all internal cuts.
+    Numbering the left block commutes with the matrix action, since it
+    only changes the summation index in each matrix-vector product.
+\end{proof}

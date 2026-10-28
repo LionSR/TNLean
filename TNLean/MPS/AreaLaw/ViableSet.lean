@@ -13,6 +13,7 @@ import TNLean.MPS.AreaLaw.ViableSet.BoundaryNet
 import TNLean.MPS.AreaLaw.ViableSet.BoundaryNetPolynomial
 import TNLean.MPS.AreaLaw.ViableSet.CollectiveTrimming
 import TNLean.MPS.AreaLaw.ViableSet.ConstantRankCut
+import TNLean.MPS.AreaLaw.ViableSet.ErrorReduction
 import TNLean.MPS.AreaLaw.ViableSet.FiniteBoundarySelection
 import TNLean.MPS.AreaLaw.ViableSet.Gluing
 import TNLean.MPS.AreaLaw.ViableSet.GluingBounds
@@ -21,6 +22,8 @@ import TNLean.MPS.AreaLaw.ViableSet.GluingSupport
 import TNLean.MPS.AreaLaw.ViableSet.LeftColumns
 import TNLean.MPS.AreaLaw.ViableSet.PowerProjector
 import TNLean.MPS.AreaLaw.ViableSet.SampledProjector
+import TNLean.MPS.AreaLaw.ViableSet.LeftCoordinates
+import TNLean.MPS.AreaLaw.ViableSet.OperatorAction
 import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming
 import TNLean.MPS.AreaLaw.ViableSet.Span
 import TNLean.MPS.AreaLaw.ViableSet.TrimmedWitness
