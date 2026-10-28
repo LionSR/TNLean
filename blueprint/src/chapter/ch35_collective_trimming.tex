@@ -10,7 +10,8 @@ $\mathcal H_R$ for the remaining $L-i$, so that the cuts $(j:j+1)$,
 $1\le j\le i-1$, of the source are the cuts of the chain after $j$ sites.
 For subspaces $U$ and $T$ of the same space, $U$ is \emph{$\delta$-close} to
 $T$ if $\|P_Ut\|^2\ge(1-\delta)\|t\|^2$ for every $t\in T$, where $P_U$ is the
-orthogonal projection onto $U$; $S$ is $\delta$-viable for $T$ when
+orthogonal projection onto $U$~\cite[``Closeness'']{QICLean2026Blueprint};
+$S$ is $\delta$-viable for $T$ when
 $\operatorname{Span}(S)\otimes\mathcal H_R$ is $\delta$-close to
 $T$~\cite[lines 433--440]{Arad2016RigorousRG}.
 
@@ -21,7 +22,7 @@ $T$~\cite[lines 433--440]{Arad2016RigorousRG}.
         TNLean.MPS.AreaLaw.chainTrimSubspace,
         TNLean.MPS.AreaLaw.chainTrimSubspace_eq_span}
     \leanok
-    \uses{def:lvv_viable_set}
+    \uses{def:chain_open_mps}
     Let $u_1,\dots,u_s$ be an orthonormal basis of $S$ and $\xi>0$, and set
     $\psi=\sum_k u_k\otimes|k\rangle\in\mathcal H_A\otimes\mathbb C^s$. For
     $j=1,\dots,i-1$ let $P^j$ be the orthogonal projection onto the left
@@ -44,7 +45,7 @@ $T$~\cite[lines 433--440]{Arad2016RigorousRG}.
         TNLean.MPS.AreaLaw.blockRestSubtypeEquiv,
         TNLean.MPS.AreaLaw.rank_cutEnvVector_blockSplit}
     \leanok
-    \uses{def:alvv_collective_trim}
+    \uses{def:alvv_collective_trim,def:lvv_viable_set}
     Write a vector $\psi$ on the chain in the coordinates
     $\mathcal H_A\otimes\mathcal H_R$, as the vector of
     $\mathbb C^{\Sigma_A\times\Sigma_R}$ with entries
