@@ -88,6 +88,7 @@ import TNLean.Algebra.GeneralizedCocycle
 import TNLean.Algebra.GeneralizedCocycleInversion
 import TNLean.Algebra.GraphDistanceTransport
 import TNLean.Algebra.HermitianDilation
+import TNLean.Algebra.HermitianDilationIntegral
 import TNLean.Algebra.HermitianMatrixBernstein
 import TNLean.Algebra.HypercubePhasePotential
 import TNLean.Algebra.IdempotentRankContinuity
@@ -114,6 +115,7 @@ import TNLean.Algebra.LSymbolDomainWall
 import TNLean.Algebra.LSymbolFreeAction
 import TNLean.Algebra.ListOfFn
 import TNLean.Algebra.ListProduct
+import TNLean.Algebra.MatrixBernstein
 import TNLean.Algebra.MatrixBilinearCoordinates
 import TNLean.Algebra.MatrixCoordinateInclusion
 import TNLean.Algebra.MatrixCyclicPathSum

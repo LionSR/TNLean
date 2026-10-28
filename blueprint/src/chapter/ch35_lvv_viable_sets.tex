@@ -506,8 +506,8 @@ whose range is the span of the columns of $M_i(\psi)$.
         \label{eq:lvv_finite_uniform_matrix_moment}
     \end{align}
     The samples need not be Hermitian. This is an auxiliary finite
-    moment estimate; the sharp matrix Bernstein inequality remains a
-    separate result.
+    moment estimate. The sharp matrix Bernstein inequality is proved
+    separately in Theorem~\ref{thm:lvv_matrix_bernstein}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:lvv_even_word_count,thm:lvv_singleton_word_cancellation}
@@ -824,7 +824,8 @@ whose range is the span of the columns of $M_i(\psi)$.
 	The bound in Theorem~\ref{thm:finite_uniform_rectangular_bernstein}
 	holds for the deviation of the sample mean from $\mu$, with factor $2d$.
 	This is the finite uniform specialization of LVV Theorem~2.13.
-	The assertion for general probability spaces remains unproved here.
+	The version for general probability spaces is
+	Theorem~\ref{thm:lvv_matrix_bernstein}.
 \end{corollary}
 \begin{proof}\leanok
 	\uses{thm:finite_uniform_rectangular_bernstein}
@@ -1036,3 +1037,72 @@ whose range is the span of the columns of $M_i(\psi)$.
 	inverse-zero convention. Thus zero variance, threshold and sample count
 	are included without an additional hypothesis.
 \end{proof}
+
+\begin{lemma}[Hermitian dilation and the Bochner integral]
+    \label{lem:matrix_integral_hermitian_dilation}
+    \lean{Matrix.hermitianDilationLinearIsometry,
+        Matrix.integral_hermitianDilation,
+        Matrix.norm_integral_hermitianDilation_sq_le}
+    \leanok
+    \uses{lem:matrix_hermitian_dilation}
+    The Hermitian dilation of a complex square matrix is a real-linear isometry.
+    It therefore commutes with the Bochner integral. For an almost everywhere
+    measurable bounded matrix family $Y$ on a finite measure space,
+    \begin{align}
+        \left\|\int\mathcal D(Y)^2\right\|
+        \le\max\left\{\left\|\int YY^*\right\|,
+        \left\|\int Y^*Y\right\|\right\}.
+        \label{eq:matrix_integral_hermitian_dilation_variance}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:matrix_hermitian_dilation}
+    Real-linearity and preservation of the operator norm give the isometry.
+    Its integral identity follows from linear isometry of the Bochner integral.
+    The two continuous linear corner embeddings identify the integrated squared
+    dilation with the block diagonal of the integrated Gram matrices.
+    These blocks are positive semidefinite; domination by the maximum of their
+    norms times the identity gives the variance bound.
+\end{proof}
+
+\begin{theorem}[The iid complex matrix Bernstein inequality]
+    \label{thm:lvv_matrix_bernstein}
+    \lean{Matrix.probability_matrix_bernstein}
+    \leanok
+    \uses{thm:independent_hermitian_bernstein_variance_bound,
+        lem:matrix_integral_hermitian_dilation}
+    Let $X_1,\ldots,X_\ell$ be independent identically distributed complex
+    $d\times d$ random matrices on a probability space, with $d,\ell\ge1$,
+    common mean $\mu$ and $\|X_j-\mu\|\le R$ almost surely. Put $Y=X_1-\mu$ and
+    \begin{align}
+        \sigma^2=\max\{\|\mathbb EYY^*\|,\|\mathbb EY^*Y\|\}.
+        \label{eq:lvv_matrix_bernstein_variance}
+    \end{align}
+    For every $t\ge0$,
+    \begin{align}
+        \Pr\left(\left\|\frac1\ell\sum_{j=1}^{\ell}X_j-\mu\right\|\ge t\right)
+        \le2d\exp\left(-\frac{\ell t^2}{2\sigma^2+2Rt/3}\right).
+        \label{eq:lvv_matrix_bernstein}
+    \end{align}
+    This is LVV Theorem~2.13, equation~(7), the iid complex square-matrix case
+    of \cite[Theorem~1.6]{Tropp2012TailBounds}. The scalar maximum of variance
+    norms clarifies the notation in LVV. At a zero denominator the inverse-zero
+    convention gives the bound $2d$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:independent_hermitian_bernstein_variance_bound,
+        lem:matrix_integral_hermitian_dilation}
+    Derive integrability from the deviation bound and center the actual samples.
+    Apply the Hermitian dilation to each centered matrix. Its mean is zero and
+    its norm has the same bound. Identical distribution identifies both Gram
+    expectations with those of the first actual sample; the preceding lemma
+    supplies the variance cap. Apply the one-sided Hermitian bound at threshold
+    $\ell t$. The positive spectral norm endpoint gives dimension $2d$.
+    The explicit centering and sample-mean identities give the stated event
+    and exponent.
+\end{proof}
+
+Theorem~\ref{thm:lvv_matrix_bernstein} supplies the sharp concentration result.
+The sampled-filter construction in LVV Corollary~2.14 also requires a
+simultaneous word-frequency bound and the corrected ground-energy dependence;
+these are separate assertions.

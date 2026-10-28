@@ -9613,8 +9613,11 @@ there is no need for a new tactic.
 - **Abstraction:** Continue using `Matrix.fromBlocks` and its existing algebraic
   identities. If the entry pattern recurs in another new consumer, prefer a
   finite-sum identity for `fromBlocks` before introducing a tactic.
-- **Notes:** The observed occurrences are confined to one module, below the
-  two-file promotion threshold. Rectangular zero products require
+- **Notes:** The coordinate arguments are confined to one module. The later
+  integral consumer in `Algebra/HermitianDilationIntegral.lean` uses the existing
+  block addition, negation, scalar-action and identity lemmas instead of
+  repeating the coordinate split. Its block order bounds also reuse
+  `CStarAlgebra.norm_le_iff_le_algebraMap`. Rectangular zero products require
   `Matrix.mul_zero` and `Matrix.zero_mul`, rather than their square-ring forms.
 
 
