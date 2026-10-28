@@ -214,6 +214,7 @@ import TNLean.Algebra.TensorProductRegrouping
 import TNLean.Algebra.ThreeOperatorPerturbation
 import TNLean.Algebra.ToEuclideanCLM
 import TNLean.Algebra.ToEuclideanLinApply
+import TNLean.Algebra.TraceExpLogConcavity
 import TNLean.Algebra.TraceInvariantSubmodule
 import TNLean.Algebra.TranslatedCharacterOrthogonality
 import TNLean.Algebra.TwistedRegularProjective

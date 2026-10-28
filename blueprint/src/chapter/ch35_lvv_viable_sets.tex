@@ -586,3 +586,94 @@ whose range is the span of the columns of $M_i(\psi)$.
     centered and has norm at most $2R$. Apply
     Theorem~\ref{thm:lvv_finite_uniform_matrix_tail} with $2R$ in place of $R$.
 \end{proof}
+
+
+\subsection{Exponential trace concavity}
+
+\begin{theorem}[Unnormalized Klein inequality]
+    \label{thm:matrix_unnormalized_klein}
+    \lean{Matrix.trace_sub_le_quantumRelativeEntropy}
+    \leanok
+    For positive-definite complex matrices $X,Y$ of the same finite size,
+    put $D_0(X\Vert Y)=\operatorname{Re}\operatorname{tr}(X(\log X-\log Y))$.
+    Then
+    \begin{align}
+        \operatorname{Re}\operatorname{tr}X-
+        \operatorname{Re}\operatorname{tr}Y\le D_0(X\Vert Y).
+        \label{eq:matrix_unnormalized_klein}
+    \end{align}
+    This is~\cite[Fact~3]{Tropp2012JointConvexity}, with the affine trace
+    correction separated from the relative entropy.
+\end{theorem}
+\begin{proof}\leanok
+    In eigenbases of $X$ and $Y$, the squared overlaps form a doubly stochastic
+    matrix. Sum the scalar inequality $x-y\le x(\log x-\log y)$ against these
+    overlaps.
+\end{proof}
+
+\begin{theorem}[Attained variational formula for the trace]
+    \label{thm:matrix_trace_variational_maximum}
+    \lean{Matrix.isGreatest_trace_variational}
+    \leanok
+    \uses{thm:matrix_unnormalized_klein}
+    For every positive-definite $Y$,
+    \begin{align}
+        \operatorname{Re}\operatorname{tr}Y
+        =\max_{X>0}\operatorname{Re}\operatorname{tr}
+        (X\log Y-X\log X+X).
+        \label{eq:matrix_trace_variational_maximum}
+    \end{align}
+    The maximum is attained at $X=Y$. This is
+    \cite[Lemma~6]{Tropp2012JointConvexity}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:matrix_unnormalized_klein}
+    Rearrange Theorem~\ref{thm:matrix_unnormalized_klein} and take $X=Y$.
+\end{proof}
+
+\begin{theorem}[Joint convexity on positive-definite pairs]
+    \label{thm:matrix_positive_definite_relative_entropy_convexity}
+    \lean{TNLean.RelativeEntropyConvexity.convexOn_quantumRelativeEntropy_index}
+    \leanok
+    The function $(X,Y)\mapsto D_0(X\Vert Y)$ is jointly convex on pairs
+    of positive-definite matrices. Equivalently,
+    \begin{align}
+        D_0(aX_1+bX_2\Vert aY_1+bY_2)
+        \le aD_0(X_1\Vert Y_1)+bD_0(X_2\Vert Y_2)
+        \label{eq:matrix_positive_definite_relative_entropy_convexity}
+    \end{align}
+    whenever $a,b\ge0$ and $a+b=1$. The affine trace correction in
+    \cite[Fact~4]{Tropp2012JointConvexity} does not affect convexity.
+\end{theorem}
+\begin{proof}\leanok
+    For $0\le s<1$, Lieb's trace-power concavity makes
+    $(\operatorname{tr}X-\operatorname{tr}(X^sY^{1-s}))/(1-s)$ jointly convex.
+    These functions converge to $D_0(X\Vert Y)$ as $s\uparrow1$.
+    Convexity passes to the pointwise limit.
+\end{proof}
+
+\begin{theorem}[Lieb's exponential trace concavity]
+    \label{thm:matrix_trace_exp_log_concavity}
+    \lean{Matrix.concaveOn_trace_exp_add_log}
+    \leanok
+    \uses{thm:matrix_trace_variational_maximum,
+        thm:matrix_positive_definite_relative_entropy_convexity}
+    For every Hermitian $H$, the function
+    \begin{align}
+        A\longmapsto\operatorname{Re}\operatorname{tr}\exp(H+\log A)
+        \label{eq:matrix_trace_exp_log_concavity}
+    \end{align}
+    is concave on the positive-definite cone. This is
+    \cite[Theorem~1]{Tropp2012JointConvexity}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:matrix_trace_variational_maximum,
+        thm:matrix_positive_definite_relative_entropy_convexity}
+    Theorem~\ref{thm:matrix_trace_variational_maximum} writes the function as
+    the maximum, over $X>0$, of
+    $\operatorname{Re}\operatorname{tr}(XH)-D_0(X\Vert A)+
+        \operatorname{Re}\operatorname{tr}X$.
+    This expression is jointly concave, and its maximum at each $A$ is
+    attained by $X=\exp(H+\log A)$. Mixing the two attaining matrices gives
+    the asserted concavity.
+\end{proof}

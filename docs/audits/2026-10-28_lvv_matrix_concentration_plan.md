@@ -103,3 +103,14 @@ For nonidentically distributed samples, the same conditioning argument controls 
 ## Location of the general probability development
 
 A general matrix probability theorem belongs in QICLean. Before it uses these finite ingredients, move `NoSingletonWords.lean`, `SingletonWordCancellation.lean`, `FiniteMatrixMoments.lean` and `FiniteMatrixSampling.lean` together to QICLean, with the first two under `Algebra/` and the latter two under `Analysis/`. Their proofs depend only on Mathlib and existing QICLean results. QICLean must not import the TNLean versions. The current placement permits verification against the pinned companion revision while keeping the later order of dependencies explicit.
+
+
+## The proved Lieb concavity alternative
+
+A direct derivation is now formalized in `TNLean/Algebra/TraceExpLogConcavity.lean`. The theorem `Matrix.concaveOn_trace_exp_add_log` proves concavity of $A\mapsto\operatorname{Re}\operatorname{tr}\exp(H+\log A)$ on the positive-definite cone for every Hermitian $H$. The proof follows [Tropp, *From joint convexity of quantum relative entropy to a concavity theorem of Lieb*](https://tropp.caltech.edu/papers/Tro12-Joint-Convexity.pdf), Fact 3, Lemma 6 and Theorem 1. It derives unnormalized Klein, the attained trace variational formula and the concavity inequality from QICLean's existing positive-definite relative-entropy joint convexity. No trace normalization or new analytic assumption is imposed.
+
+This provides the concavity needed for the trace-exponential Jensen argument in matrix concentration. Golden–Thompson itself is still unproved here, but it need not be assumed for this route. The finite i.i.d. Bernstein theorem with the variance norm in #9822 remains the next target. The scalar exponential majorant, conditional finite expectation argument, dilation and final tail optimization remain to be proved.
+
+The alternative elementary proof in [Oliveira, arXiv:1004.3821, Section 5](https://arxiv.org/abs/1004.3821) requires a dyadic trace-power comparison and a Lie-product limit; neither was found as a theorem in the pinned libraries. The pinching proof in [Sutter, Berta and Tomamichel, arXiv:1604.03023, Section 2.2](https://arxiv.org/abs/1604.03023) requires spectral pinching and its polynomial tensor-power count. The relative-entropy route uses the existing joint convexity result directly.
+
+`TraceExpLogConcavity.lean` imports only Mathlib and QICLean, so it can be transferred independently to QICLean's `Analysis/` before the probability development. It does not depend on the four finite word, moment and sampling modules above.
