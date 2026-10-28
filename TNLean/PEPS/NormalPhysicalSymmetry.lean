@@ -124,10 +124,10 @@ theorem regionBlockedTensorInjective_of_sameState_of_bondDim_eq
         rw [regionPartialState_sameState hState R τ]
         exact regionPartialState_mem_span_regionBlockedWeight B R hpos τ
       have hSpan : Submodule.span ℂ (Set.range f) ≤
-          Submodule.span ℂ (Set.range g) := by
-        rw [Submodule.span_le]
-        rintro _ ⟨μ, rfl⟩
-        exact hPartial (regionBlockedWeight_mem_span_regionPartialState A R hC μ)
+          Submodule.span ℂ (Set.range g) :=
+        ((range_regionBlockedTensorMap_eq_span A R).symm.trans
+          (range_regionBlockedTensorMap_eq_span_regionPartialState A R hC hpos)).le.trans
+          hPartial
       change LinearIndependent ℂ g
       apply linearIndependent_iff_card_le_finrank_span.mpr
       change Fintype.card (RegionBoundaryConfig (G := G) B R) ≤
@@ -146,21 +146,6 @@ open TNLean.Lattice
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
-
-/-- Rotate a three-region partition without changing its blocks.
-Supporting geometry for arXiv:1804.04964, lines 1576–1583 and 1696–1713. -/
-private def rotateThreeBlockGeometry (g : ThreeBlockGeometry V) :
-    ThreeBlockGeometry V where
-  red := g.blue
-  blue := g.complement
-  complement := g.red
-  red_disjoint_blue := g.blue_disjoint_complement
-  red_disjoint_complement := g.red_disjoint_blue.symm
-  blue_disjoint_complement := g.red_disjoint_complement.symm
-  cover_univ := by
-    calc
-      g.blue ∪ g.complement ∪ g.red = g.red ∪ g.blue ∪ g.complement := by ac_rfl
-      _ = Finset.univ := g.cover_univ
 
 /-- A same-state tensor with identical bond dimensions inherits the original
 normal blocking regions. Regional injectivity of the second tensor is derived
@@ -189,14 +174,10 @@ noncomputable def normalPairHypothesesOfSameStateOfBondDimEq
       regionBlockedTensorInjective_blue D
     have hC : RegionBlockedTensorInjective A D.complement :=
       regionBlockedTensorInjective_complement D
-    have hCR : RegionBlockedTensorInjective A (Finset.univ \ D.red) :=
-      g.regionBlockedTensorInjective_union hB hC hA.bondDim_pos_left
-    have hCB : RegionBlockedTensorInjective A (Finset.univ \ D.blue) :=
-      (rotateThreeBlockGeometry g).regionBlockedTensorInjective_union
-        hC hR hA.bondDim_pos_left
-    have hCC : RegionBlockedTensorInjective A (Finset.univ \ D.complement) :=
-      (rotateThreeBlockGeometry (rotateThreeBlockGeometry g)).regionBlockedTensorInjective_union
-        hR hB hA.bondDim_pos_left
+    have hCompl := g.regionBlockedTensorInjective_compl hR hB hC hA.bondDim_pos_left
+    have hCR : RegionBlockedTensorInjective A (Finset.univ \ D.red) := hCompl.1
+    have hCB : RegionBlockedTensorInjective A (Finset.univ \ D.blue) := hCompl.2.1
+    have hCC : RegionBlockedTensorInjective A (Finset.univ \ D.complement) := hCompl.2.2
     exact {
       red := D.red
       blue := D.blue
@@ -240,24 +221,6 @@ noncomputable def normalPairHypothesesOfSameStateOfBondDimEq
       rw [← congr_fun hDim e]
       exact hA.bondDim_pos_left e }
 
-/-- The normal-region transport retains each red block.
-Source: arXiv:1804.04964, lines 1576–1583 and 1696–1713. -/
-private theorem normalPairHypothesesOfSameStateOfBondDimEq_red
-    (A B : Tensor G d) (hA : NormalPEPSPairHypotheses A A)
-    (hDim : A.bondDim = B.bondDim) (hState : SameState A B) (e : Edge G) :
-    (normalPairHypothesesOfSameStateOfBondDimEq A B hA hDim hState).edgeBlocking.red e =
-      hA.edgeBlocking.red e := by
-  rfl
-
-/-- The normal-region transport retains each blue block.
-Source: arXiv:1804.04964, lines 1576–1583 and 1696–1713. -/
-private theorem normalPairHypothesesOfSameStateOfBondDimEq_blue
-    (A B : Tensor G d) (hA : NormalPEPSPairHypotheses A A)
-    (hDim : A.bondDim = B.bondDim) (hState : SameState A B) (e : Edge G) :
-    (normalPairHypothesesOfSameStateOfBondDimEq A B hA hDim hState).edgeBlocking.blue e =
-      hA.edgeBlocking.blue e := by
-  rfl
-
 /-- A global on-site physical symmetry of a normal tensor network is implemented
 by virtual edge gauges. Transformed regional injectivity follows from equality
 of states and unchanged bond dimensions; physical dimension positivity is also
@@ -297,15 +260,8 @@ theorem gaugeEquiv_physicalTensorAction_of_normal_symmetry
     (hA.oneSiteSeparation.withSite_injective v).1 hA.bondDim_pos_left
   have hsingle' : ∀ e g : Edge G,
       IsCrossingEdge (G := G) A (h.edgeBlocking.red e)
-        (h.edgeBlocking.blue e) g ↔ g = e := by
-    intro e g
-    change IsCrossingEdge (G := G) A
-      ((normalPairHypothesesOfSameStateOfBondDimEq A B hA rfl hState).edgeBlocking.red e)
-      ((normalPairHypothesesOfSameStateOfBondDimEq A B hA rfl hState).edgeBlocking.blue e)
-      g ↔ g = e
-    rw [normalPairHypothesesOfSameStateOfBondDimEq_red A B hA rfl hState e,
-      normalPairHypothesesOfSameStateOfBondDimEq_blue A B hA rfl hState e]
-    exact hsingle e g
+        (h.edgeBlocking.blue e) g ↔ g = e :=
+    hsingle
   exact fundamentalTheorem_normalPEPS (V := V) (G := G) (d := d)
     A B h hsingle' hState hd hconn
 
