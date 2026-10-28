@@ -11,6 +11,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.ViableSet.Basic
 import TNLean.MPS.AreaLaw.ViableSet.BoundaryNet
 import TNLean.MPS.AreaLaw.ViableSet.BoundaryNetPolynomial
+import TNLean.MPS.AreaLaw.ViableSet.CollectiveTrimming
 import TNLean.MPS.AreaLaw.ViableSet.ConstantRankCut
 import TNLean.MPS.AreaLaw.ViableSet.FiniteBoundarySelection
 import TNLean.MPS.AreaLaw.ViableSet.Gluing
