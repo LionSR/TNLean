@@ -170,7 +170,7 @@ open scoped ComplexOrder MatrixOrder Matrix.Norms.L2Operator Kronecker
 
 namespace Matrix
 
-/-- Complementary supported Hermitian operators admit a common unit ground
+/-- Complementary supported Hermitian operators have a common unit ground
 vector on the actual chain. Auxiliary to ALVV, arXiv:1602.08828v2,
 `def:hard-trunc`, lines 873–886. Both minima and the vector are constructed;
 no common-vector, simplicity, gap, or commutation hypothesis is imposed. -/
@@ -274,7 +274,7 @@ open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace Matrix
 
-/-- Original regional operators with pairwise disjoint supports admit a
+/-- Original regional operators with pairwise disjoint supports have a
 common unit vector attaining their supplied genuine ground energies.
 Auxiliary to the three successive truncations in ALVV,
 arXiv:1602.08828v2, Corollary c:goodagsphardtrunc, lines 979–1005.

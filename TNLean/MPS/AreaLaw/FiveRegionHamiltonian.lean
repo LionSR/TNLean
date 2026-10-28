@@ -160,7 +160,7 @@ end Fin
 
 namespace Finset
 
-/-- Four cut positions admit at most four actual crossing bonds.
+/-- Four cut positions give at most four actual crossing bonds.
 Auxiliary geometry for ALVV, arXiv:1602.08828v2, `def:hard-trunc`,
 lines 873–886, and `t:ais`, lines 1010–1024. -/
 private theorem card_four_cut_crossing_le (L k1 k2 k3 k4 : ℕ) :

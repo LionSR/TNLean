@@ -78,3 +78,11 @@ exact, clean, fully warmed QICLean main. Ordinary builds and cache changes
 use the common lock and verify the pinned prebuilt Mathlib artifacts.
 Theorem foundations are inspected with temporary imported Lean sources;
 no permanent theorem fixture is added.
+
+
+The common-import check also identified two remaining declarations shared
+between the libraries: the ordered-word coefficient and subtraction under
+a local lift. Their TNLean copies are removed; the existing QICLean
+declarations are used directly, with no compatibility aliases. Separate
+strict checks of both affected TNLean modules passed before repeating the
+combined verification.

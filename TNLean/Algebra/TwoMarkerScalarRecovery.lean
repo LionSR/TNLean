@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.FiniteMonomialInterpolation
 import QICLean.Algebra.TwoMarkerWordCoefficients
+import QICLean.Algebra.WordCoefficient
 import Mathlib.Algebra.Order.Antidiag.Pi
 import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Data.Fintype.BigOperators
@@ -478,20 +479,6 @@ private theorem exists_uniform_twoMarker_masked_slice_recovery
       rw [heval (z s)]
 
 end MvPolynomial
-
-namespace WordMultiplicity
-
-/-- The full-frequency coefficient is the sum of the original ordered words
-with the prescribed letter counts. This is the coefficient family used in
-ALVV, arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
-noncomputable def wordCoefficient {I R : Type*} [Fintype I] [Semiring R]
-    (H : I → R) (r : ℕ) (ν : I → ℕ) : R := by
-  classical
-  exact ∑ w ∈ (Finset.univ : Finset (Fin r → I)).filter
-      (fun w ↦ (countsFinsupp w : I → ℕ) = ν),
-    (List.ofFn (fun p ↦ H (w p))).prod
-
-end WordMultiplicity
 
 namespace Polynomial
 
