@@ -18,10 +18,11 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
         TNLean.MPS.AreaLaw.rightCutOperator}
     \leanok
     The coordinates $((x,y),z)$ of a configuration of the chain at the cut
-    after $k$ sites. For an operator $H_L$ supported on the first $k$ sites,
-    $H_L'$ is its restriction to them; for an operator $K$ supported off the
-    first $k-1$ sites, $K'$ is its restriction to site $k-1$ and the sites right
-    of the cut.
+    after $k$ sites. Let the local dimension satisfy $q\ge1$, so that each
+    region has a configuration $0$. For an operator $H_L$ supported on the
+    first $k$ sites, $H_L'$ is its restriction to them; for an operator $K$
+    supported off the first $k-1$ sites, $K'$ is its restriction to site $k-1$
+    and the sites right of the cut.
 \end{definition}
 
 \begin{definition}[Joining the left coordinates]
@@ -41,7 +42,7 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
         (U_m u)(b,j) & =u(r(b),j). \notag
     \end{align}
     These are the left coordinates of the vectors used in the size-trimming
-    program and Lemma~2.5 of~\cite[source lines 472--478 and 493--505]{Landau2015Polynomial}.
+    program and~\cite[Lemma~2.5, source lines 472--478 and 493--505]{Landau2015Polynomial}.
 \end{definition}
 
 \begin{theorem}[Dimension of the intervening configuration space]
@@ -64,7 +65,7 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     \label{thm:chain_gluing_left_projection}
     \lean{TNLean.MPS.AreaLaw.gluingLeftCoordinates_spanProjection_eq_iff}
     \leanok
-    \uses{def:chain_gluing_left_coordinates}
+    \uses{def:chain_gluing_left_coordinates,thm:lvv_viable_projection}
     Let $S\subseteq\mathbb C^{\mathcal C_B}$, let $P$ be the orthogonal
     projection onto $\operatorname{Span}(S)$, and define $P^r$ by
     $P^r(r(b),r(b'))=P(b,b')$. For every vector $u$ on the two left regions
@@ -77,9 +78,13 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
 \end{theorem}
 \begin{proof}
     \leanok
-    Changing the row and column coordinates of $P\otimes1_m$ by
-    $r\times\mathrm{id}$ gives $P^r\otimes1_m$. Composing with this
-    bijection gives the asserted equivalence of the fixed-vector conditions.
+    Since $(U_m u)(b,j)=u(r(b),j)$ and $P^r(r(b),r(b'))=P(b,b')$,
+    \begin{align}
+        U_m^{-1}(P\otimes1_m)U_m & =P^r\otimes1_m. \notag
+    \end{align}
+    Hence $(P^r\otimes1_m)u=u$ if and only if
+    $U_m^{-1}(P\otimes1_m)U_m u=u$, that is,
+    $(P\otimes1_m)U_m u=U_m u$.
 \end{proof}
 
 \begin{theorem}[Extension after joining the left coordinates]
@@ -106,50 +111,13 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     three-way coordinates.
 \end{proof}
 
-\begin{theorem}[A trace-norm net on a chain boundary]
-    \label{thm:chain_boundary_trace_norm_net}
-    \lean{TNLean.MPS.AreaLaw.exists_finset_boundary_rectangularTraceNorm_net}
-    \leanok
-    \uses{def:chain_gluing_left_coordinates}
-    Let $L,q,k,m,D$ be natural numbers with $q\ge1$ and $m\le D$, and let
-    $\eta>0$. Use the clipped regions $A=\lbrack0,k-1)$ and $B=\lbrack0,k)$ of
-    Definition~\ref{def:chain_gluing_left_coordinates}, and put
-    $K=\mathcal C_{B\setminus A}\times\{0,\ldots,m-1\}$.
-    There is a finite set $\mathcal N\subseteq\mathbb C^{K\times K}$ such that
-    \begin{align}
-        |\mathcal N|\le
-        \bigl(2\lceil(qD)^2/\eta\rceil+1\bigr)^{2(qD)^2}. \notag
-    \end{align}
-    Every matrix $Y\in\mathbb C^{K\times K}$ with $\|Y\|_1\le1$ admits an
-    $X\in\mathcal N$ with $\|Y-X\|_1\le\eta$.
-    This is the boundary-space specialization of
-    \cite[Lemma~2.4, source lines 451--460]{Landau2015Polynomial}, with the
-    corrected grid and quadratic exponent recorded in~\cite{gap:lvv13_trace_norm_net}.
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{thm:chain_gluing_site_dimension}
-    Theorem~\ref{thm:chain_gluing_site_dimension} gives
-    $c=|K|=|\mathcal C_{B\setminus A}|m\le qD$.
-    Apply the trace-norm net theorem of the companion
-    volume~\cite[``A trace-norm net'']{QICLean2026Blueprint} to matrices of size $c$.
-    It gives the covering property and
-    \begin{align}
-        |\mathcal N|
-        \le\bigl(2\lceil c^2/\eta\rceil+1\bigr)^{2c^2}
-        \le\bigl(2\lceil(qD)^2/\eta\rceil+1\bigr)^{2(qD)^2}. \notag
-    \end{align}
-    The second inequality follows from $c^2\le(qD)^2$ and monotonicity of
-    the ceiling and of natural powers with base at least one.
-\end{proof}
-
 \begin{theorem}[The Hamiltonian at a cut]
     \label{thm:chain_gluing_split}
     \lean{TNLean.MPS.AreaLaw.reindex_gluingCut_eq}
     \leanok
     \uses{def:chain_gluing_cut}
-    If $H_L$ is supported on the first $k$ sites and $K$ off the first $k-1$
-    sites, then in the cut coordinates $H_L+K=H_L'\otimes1+1\otimes K'$.
+    Let $q\ge1$. If $H_L$ is supported on the first $k$ sites and $K$ off the
+    first $k-1$ sites, then in the cut coordinates $H_L+K=H_L'\otimes1+1\otimes K'$.
 \end{theorem}
 
 \begin{proof}
@@ -169,12 +137,12 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     \lean{TNLean.MPS.AreaLaw.exists_leading_eigenvector_chain}
     \leanok
     \uses{def:chain_gluing_cut}
-    Let $H=H_L+K$ with $H_L$ supported on the first $k$ sites and $K$ off the
-    first $k-1$ sites have a gapped ground state $\Gamma$ with energy $E_0$ and
-    gap $\Delta$. Let $W$ be an isometry from a bond $\mathbb C^m$ into the
-    sites right of the cut, and let $w=(1\otimes W)x$ in the cut coordinates
-    have energy at most $E_0+e$. Let $\sigma$ be a density matrix on the first
-    $k$ sites and the bond with
+    Let $q\ge1$ and let $H=H_L+K$ with $H_L$ supported on the first $k$ sites
+    and $K$ off the first $k-1$ sites have a gapped ground state $\Gamma$ with
+    energy $E_0$ and gap $\Delta$. Let $W$ be an isometry from a bond
+    $\mathbb C^m$ into the sites right of the cut, and let $w=(1\otimes W)x$ in
+    the cut coordinates have energy at most $E_0+e$. Let $\sigma$ be a density
+    matrix on the first $k$ sites and the bond with
     $\operatorname{Re}\operatorname{tr}(\sigma(H_L'\otimes1))\le
         \operatorname{Re}\operatorname{tr}(\lvert x\rangle\langle x\rvert(H_L'\otimes1))$
     and
@@ -196,13 +164,18 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     \uses{thm:chain_gluing_split}
     In the cut coordinates the Hamiltonian, the ground state and $w$ satisfy
     the hypotheses of the leading-eigenvector theorem of the companion volume,
-    with $\lVert K'\rVert\le\lVert K\rVert$. This comparison follows from
-    invariance of the operator norm under a change of coordinates and
-    $\lVert1\otimes K'\rVert=\lVert K'\rVert$, since the first configuration
-    factor is nonempty~\cite[``Operator norm after adjoining an identity factor'']{QICLean2026Blueprint}.
-    Let $E$ be the cut-coordinate bijection and $U$ the
-    unitary map $U\psi=\psi\circ E^{-1}$. For chain vectors $\phi,\psi$ and
-    an operator $M$,
+    with $\lVert K'\rVert\le\lVert K\rVert$. Let $E$ be the cut-coordinate
+    bijection and $U$ the unitary map $U\psi=\psi\circ E^{-1}$. Then
+    \begin{align}
+        \lVert K'\rVert=\lVert1\otimes K'\rVert=\lVert UKU^*\rVert
+        =\lVert K\rVert.\notag
+    \end{align}
+    The first equality holds because the first configuration factor is
+    nonempty~\cite[``Operator norm after adjoining an identity factor'']{QICLean2026Blueprint},
+    the second because $UKU^*=1\otimes K'$
+    by Theorem~\ref{thm:chain_gluing_split}, and the third because
+    conjugation by a unitary preserves the operator norm. For chain vectors
+    $\phi,\psi$ and an operator $M$,
     \begin{align}
         \langle U\phi,U\psi\rangle
          & =\langle\phi,\psi\rangle,
@@ -324,7 +297,8 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     \uses{thm:chain_range_one_gap_upper,thm:chain_range_one_overlap_energy,
         thm:chain_range_one_cut_decomposition,thm:chain_constant_bond_overlap,
         thm:lvv_viable_projection,thm:chain_trimmed_witness,
-        thm:chain_numerical_trim_bound,thm:chain_numerical_trim_constant}
+        thm:chain_numerical_trim_bound,thm:chain_numerical_trim_constant,
+        thm:chain_trim_energy}
     The gap bound gives $\Delta\le4$, hence $0<c\le1/1600$.
     A viability witness $\psi$ has energy at most $E_0+8c$ and left support
     in $\operatorname{Span}(S)$. The normalized ground vector trimmed at
@@ -343,4 +317,167 @@ volume~\cite[``Gluing'', ``The leading eigenvector of a near-optimal left state'
     The same application of Theorem~\ref{thm:chain_trimmed_witness} gives
     $W^\dagger W=I$, $m\le B_c$, $w=(I\otimes W)x$ and the retained support
     condition $(P_S\otimes I)x=x$.
+\end{proof}
+
+\begin{theorem}[Left support in the three-way cut coordinates]
+    \label{thm:chain_gluing_support}
+    \lean{TNLean.MPS.AreaLaw.mem_leftSupportSubmodule_of_gluingCut_fixed}
+    \leanok
+    \uses{def:chain_gluing_cut,thm:lvv_viable_projection}
+    Let $S$ be a set of vectors on the first $k$ sites and let $P_S$ be
+    the orthogonal projection onto $\operatorname{Span}(S)$, expressed in
+    the left coordinates of Definition~\ref{def:chain_gluing_cut}.
+    If $(P_S\otimes I)y=y$ in the three-way cut coordinates, then the
+    corresponding chain vector lies in
+    $\operatorname{Span}(S)\otimes\mathcal H_R$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:chain_gluing_cut,thm:lvv_viable_projection}
+    In coefficient-matrix form the hypothesis says $P_SC_y=C_y$.
+    Reading the cut coordinates on the chain only relabels its left rows.
+    Thus the chain coefficient matrix $C$ satisfies $P_SC=C$, and
+    Theorem~\ref{thm:lvv_viable_projection} gives the stated support.
+\end{proof}
+
+\begin{theorem}[A minimizing boundary state from a viable set]
+    \label{thm:lvv_viable_leading_vector_library_bond}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_boundary_minimizer_leading_vector_of_isViable}
+    \leanok
+    \uses{def:chain_model,def:lvv_viable_set,def:chain_constant_bond,def:chain_gluing_cut}
+    Let $L\ge1$, $q\ge2$, and let $H$ be a range-one Hamiltonian with
+    positive semidefinite interaction terms of operator norm at most one.
+    Let $\Gamma$ be a gapped ground vector with energy $E_0$ and gap
+    $\Delta>0$, and put $c=(\Delta/169)^2$. Fix a natural number $k$ and a
+    $(k,c/L)$-viable set $S$, and write $V=\operatorname{Span}(S)$.
+    There are a decomposition $H=H_L+B$, with $H_L$ supported on the first
+    $k$ sites, $B$ supported outside the first $k-1$ sites and
+    $\|B\|\le2L$, and a unit vector $w\in V\otimes\mathcal H_R$ satisfying
+    \begin{align}
+        \operatorname{rank}M_k(w)            & \le B_c,\notag          \\
+        \operatorname{Re}\langle w,Hw\rangle & \le E_0+6\sqrt c.\notag
+    \end{align}
+    There are also $m\le B_c$, an isometry
+    $W:\mathbb C^m\to\mathcal H_R$, and a unit vector
+    $x\in V\otimes\mathbb C^m$ such that $w=(I\otimes W)x$ in the
+    coordinates of Definition~\ref{def:chain_gluing_cut}.
+
+    Write $\rho_x=|x\rangle\langle x|$, $\eta=c/(2L)$ and
+    $Q=P_V\otimes I_m$. For every matrix $X$ with
+    $\|\operatorname{tr}_{[1,k-1]}\rho_x-X\|_1\le\eta$, the set
+    \begin{align}
+        \mathcal F_X=\{\rho\ge0:\operatorname{tr}\rho=1,\quad
+        Q\rho=\rho,\quad
+        \|\operatorname{tr}_{[1,k-1]}\rho-X\|_1\le\eta\}\notag
+    \end{align}
+    has a minimizer $\sigma$ of
+    $\operatorname{Re}\operatorname{tr}(\rho(H_L'\otimes I_m))$, where
+    $H_L'$ is the left-coordinate expression of $H_L$.
+    There is a unit vector $u$ with $\sigma u=\mu u$, $\mu>1/2$ and $Qu=u$.
+    Its extension $v=(I\otimes W)u$ is a unit vector in
+    $V\otimes\mathcal H_R$ and satisfies
+    \begin{align}
+        \operatorname{Re}\langle v,Hv\rangle & \le E_0+\Delta/12,\notag \\
+        |\langle\Gamma,v\rangle|             & \ge11/12.\notag
+    \end{align}
+    Here $B_c$ is the bound of Definition~\ref{def:chain_constant_bond}
+    at $R=J=1$. This is the leading-vector conclusion of
+    \cite[Lemma~2.5, source lines 493--505]{Landau2015Polynomial}, with a
+    derived witness and an arbitrary sufficiently close boundary point.
+    The quantitative AKLV bound on $B_c$ is not formalized;
+    see~\cite{gap:lvv13_constant_bond}. The source's bound on the
+    cardinality of a finite net of boundary points is not part of this
+    statement; see~\cite{gap:lvv13_leading_net_point}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:lvv_viable_trimmed_witness_library_bond,
+        thm:chain_gluing_hamiltonian_decomposition,thm:chain_leading_eigenvector,
+        thm:chain_numerical_trim_constant,thm:chain_range_one_gap_upper,
+        thm:chain_gluing_support}
+    The viable-witness theorem gives $w$, $m$, $W$ and $x$; the isometry
+    implies $\|x\|=1$. The decomposition for boundary gluing gives $H_L$ and $B$.
+    Since $\rho_x\in\mathcal F_X$, the compactness argument of the
+    companion volume~\cite[``A minimizing left density matrix'']{QICLean2026Blueprint}
+    gives a global minimizer $\sigma$, whose boundary state is within
+    $2\eta=c/L$ of that of $x$.
+    With $e=6\sqrt c$, the gluing error satisfies
+    \begin{align}
+        2(e+\|B\|\,2\eta) & \le12\sqrt c+4c
+        \le14\sqrt c<\Delta/12,\notag
+    \end{align}
+    since $\sqrt c=\Delta/169$ and the gap bound $\Delta\le4$ gives
+    $c\le1/1600$.
+    Theorem~\ref{thm:chain_leading_eigenvector} gives $u$ and the asserted
+    energy and overlap bounds. The identity $Q\sigma=\sigma$, applied
+    to $\sigma u=\mu u$ with $\mu\ne0$, gives $Qu=u$.
+    Since $(P_V\otimes I)(I\otimes W)=(I\otimes W)(P_V\otimes I)$
+    and $Qu=u$,
+    \begin{align}
+        (P_V\otimes I)v & =(P_V\otimes I)(I\otimes W)u
+        =(I\otimes W)Qu=(I\otimes W)u=v,\notag                      \\
+        \|v\|^2         & =\langle u,(I\otimes W^\dagger W)u\rangle
+        =\|u\|^2=1.\notag
+    \end{align}
+    Hence $v$ is a unit vector in $V\otimes\mathcal H_R$.
+\end{proof}
+
+\begin{theorem}[Every minimizing boundary state and its top eigenvector]
+    \label{thm:lvv_uniform_leading_bounds_library_bond}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_uniform_leading_bounds_of_isViable}
+    \leanok
+    \uses{thm:lvv_viable_leading_vector_library_bond}
+    Use the Hamiltonian, viable set and bound $B_c$ of
+    Theorem~\ref{thm:lvv_viable_leading_vector_library_bond}; in particular,
+    $L\ge1$, $q\ge2$ and $c=(\Delta/169)^2$.
+    Fix a decomposition $H=H_L+B$ with $H_L$ supported on the first
+    $k$ sites, $B$ supported outside the first $k-1$ sites and $\|B\|\le2L$.
+    There are a unit witness $w\in\operatorname{Span}(S)\otimes\mathcal H_R$
+    with rank at most $B_c$ across the cut and energy at most
+    $E_0+6\sqrt c$, a number $m\le B_c$, an isometry
+    $W:\mathbb C^m\to\mathcal H_R$ and a unit vector
+    $x\in\operatorname{Span}(S)\otimes\mathbb C^m$ with $w=(I\otimes W)x$.
+    Put $\eta=c/(2L)$ and $Q=P_S\otimes I_m$.
+    For every matrix $X$ within trace-norm distance $\eta$ of the actual
+    boundary state of $x$, let $\sigma$ be any global minimizer of
+    $\operatorname{Re}\operatorname{tr}(\rho(H_L'\otimes I_m))$ among
+    the density matrices satisfying
+    $Q\rho=\rho$ and
+    $\|\operatorname{tr}_{[1,k-1]}\rho-X\|_1\le\eta$.
+    Let $u$ be any unit eigenvector of $\sigma$ whose real eigenvalue
+    $\mu$ is at least every real eigenvalue of $\sigma$.
+    Then $\mu>1/2$ and $Qu=u$. Its physical extension
+    $v=(I\otimes W)u$, read on the chain, is a unit vector in
+    $\operatorname{Span}(S)\otimes\mathcal H_R$, with
+    \begin{align}
+        \operatorname{Re}\langle v,Hv\rangle & \le E_0+\Delta/12,\notag \\
+        |\langle\Gamma,v\rangle|             & \ge11/12.\notag
+    \end{align}
+    The quantification over $X$ is on the actual bond space
+    $\mathbb C^m$, with $m\le B_c$. This is an auxiliary form of
+    \cite[Lemma~2.5, source lines 493--505]{Landau2015Polynomial} using
+    this bond bound; its relation to the quantitative AKLV bound
+    is recorded in~\cite{gap:lvv13_constant_bond}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:lvv_viable_leading_vector_library_bond,
+        thm:chain_range_one_gap_upper,thm:chain_leading_eigenvector,
+        thm:chain_leading_eigenvector_uniform_bounds,thm:chain_gluing_support}
+    Reuse the witness data $w,m,W,x$ of
+    Theorem~\ref{thm:lvv_viable_leading_vector_library_bond}, keeping the fixed
+    decomposition $H=H_L+B$.
+    The pure state $\rho_x=|x\rangle\langle x|$ is feasible.
+    Minimality therefore gives
+    $\operatorname{Re}\operatorname{tr}(\sigma(H_L'\otimes I_m))
+        \le\operatorname{Re}\operatorname{tr}(\rho_x(H_L'\otimes I_m))$.
+    The two boundary constraints and the triangle inequality give
+    $\|\operatorname{tr}_{[1,k-1]}\sigma-
+        \operatorname{tr}_{[1,k-1]}\rho_x\|_1\le2\eta=c/L$.
+    With $\|B\|\le2L$, the energy excess in the leading-vector argument
+    is at most $2(6\sqrt c+2c)\le14\sqrt c<\Delta/12$.
+    Theorem~\ref{thm:chain_leading_eigenvector} gives a unit eigenvector
+    with eigenvalue $\nu>1/2$. Maximality yields $\mu\ge\nu>1/2$,
+    so Theorem~\ref{thm:chain_leading_eigenvector_uniform_bounds} applies to $u$.
+    From $Q\sigma=\sigma$ and $\sigma u=\mu u$ with $\mu\ne0$ one gets $Qu=u$.
+    The isometry preserves the norm; the identity
+    $(P_S\otimes I)(I\otimes W)=(I\otimes W)Q$ and
+    Theorem~\ref{thm:chain_gluing_support} give the left support of $v$.
 \end{proof}
