@@ -286,6 +286,35 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
     \end{align}
 \end{proof}
 
+\begin{theorem}[Gap normalization for positive nearest-neighbour interactions]
+    \label{thm:chain_positive_nearest_neighbor_gap_upper}
+    \lean{TNLean.MPS.AreaLaw.gap_le_one_of_positive_nearest_neighbor_terms}
+    \leanok
+    \uses{def:chain_model}
+    Let $L\ge1$, $q\ge2$, and
+    $H=\sum_{j=0}^{L-2}h_j$, where $h_j$ is supported on sites $j,j+1$ and
+    $0\le h_j\le I$. Suppose that a unit vector $\Omega$ satisfies
+    $H\Omega=E_0\Omega$ and
+    \begin{align*}
+        H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|).
+    \end{align*}
+    Then $\Delta\le1$. This is the normalization used in
+    \cite[Section~5, before equation~(4)]{Arad2013AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Diagonalize the marginal at site $0$, and let a unitary $U_0$ cyclically
+    permute an orthonormal eigenbasis. Since $q\ge2$, it has zero diagonal
+    in this basis. Thus the unit vector $\varphi=(U_0\otimes I)\Omega$
+    is orthogonal to $\Omega$.
+    All bonds away from site $0$ commute with this unitary and keep their
+    expectations. At most one bond is incident to site $0$. Both its
+    expectations belong to $[0,1]$, so
+    \begin{align*}
+        \Delta\le\langle\varphi,H\varphi\rangle-E_0\le1.
+    \end{align*}
+\end{proof}
+
 \begin{theorem}[A range-one support crossing a cut]
     \label{thm:chain_range_one_crossing_support}
     \lean{TNLean.MPS.AreaLaw.IsChainSupport.eq_interval_of_splits_of_range_one}

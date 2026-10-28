@@ -9679,3 +9679,15 @@ there is no need for a new tactic.
   reuse `spectrum_real_eq_range_eigenvalues` and `trace_cfc_eq_sum_re`.
 - **Notes:** Two occurrences across two modules, below the three-occurrence
   promotion threshold. No specialized probability tactic is needed.
+
+
+### Endpoint-unitary variational gap bounds — candidate (2026-10-28)
+
+- **Pattern:** Diagonalize the first-site marginal, choose a trace-orthogonal unitary,
+  lift it to the chain, and compare the energy of the resulting orthogonal unit vector.
+- **Seen:** `ChainHamiltonian.gap_le_four_mul_of_range_one` and
+  `gap_le_one_of_positive_nearest_neighbor_terms` in `MPS/AreaLaw/BoundaryGap.lean`.
+- **Repetition:** Two occurrences in one file. The bounds differ because the first
+  allows signed singleton and bond terms, while the second has one positive bond.
+- **Candidate:** A common local-unitary trial-vector lemma if a third use occurs in
+  another file; the existing QICLean unitary trace-pairing theorem is already reused.

@@ -66,6 +66,15 @@ revision `0341b256badfec30365411d5b77923777fc06208`, with its declared QICLean
 revision `af7e5c90650e5ddb06c2befac508df97fd20b2e3`. They are not asserted to follow
 from the dependency revision used by the LVV integration.
 
+For a unique ground vector on an open chain with $q\ge2$ and $0\le h_j\le I$,
+the gap is at most one. An endpoint unitary with zero expectation in that vector
+gives an orthogonal unit trial vector; it changes only one bond, whose expectation
+can increase by at most one. This proves the normalization stated in AKLV,
+Section 5, before equation (4), and is formalized by
+`gap_le_one_of_positive_nearest_neighbor_terms`. Orthogonality to one chosen ground
+vector does not imply orthogonality to an entire degenerate ground space, so this
+argument must not be used to remove the capped-gap qualification below.
+
 For a degenerate target space, uniformity must cover every unit vector of the full
 physical ground eigenspace. The coefficient of its logarithmic dimension is part
 of the theorem. The checked ALVV development retains coefficient one on this term,
