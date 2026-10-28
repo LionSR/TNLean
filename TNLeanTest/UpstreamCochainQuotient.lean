@@ -29,20 +29,17 @@ example (ω η : G × G → ℂˣ) :
   isMulCoboundary₂_div_iff_quotient_mk_eq ω η
 
 example (ω : G × G → ℂˣ) : groupCohomology.IsMulCoboundary₂ (ω / ω) :=
-  (isMulCoboundary₂_div_iff_quotient_mk_eq ω ω).mpr rfl
+  isMulCoboundary₂_div_self ω
 
 example (ω η : G × G → ℂˣ) (h : groupCohomology.IsMulCoboundary₂ (ω / η)) :
     groupCohomology.IsMulCoboundary₂ (η / ω) :=
-  (isMulCoboundary₂_div_iff_quotient_mk_eq η ω).mpr
-    ((isMulCoboundary₂_div_iff_quotient_mk_eq ω η).mp h).symm
+  isMulCoboundary₂_div_symm h
 
 example (ω η ζ : G × G → ℂˣ)
     (hωη : groupCohomology.IsMulCoboundary₂ (ω / η))
     (hηζ : groupCohomology.IsMulCoboundary₂ (η / ζ)) :
     groupCohomology.IsMulCoboundary₂ (ω / ζ) :=
-  (isMulCoboundary₂_div_iff_quotient_mk_eq ω ζ).mpr
-    (((isMulCoboundary₂_div_iff_quotient_mk_eq ω η).mp hωη).trans
-      ((isMulCoboundary₂_div_iff_quotient_mk_eq η ζ).mp hηζ))
+  isMulCoboundary₂_div_trans hωη hηζ
 end
 
 private def nonCocycle : Multiplicative ℤ × Multiplicative ℤ → ℂˣ :=
@@ -57,4 +54,4 @@ example : ¬ groupCohomology.IsMulCocycle₂ nonCocycle := by
 
 -- Nevertheless its class modulo two-coboundaries is well-defined.
 example : groupCohomology.IsMulCoboundary₂ (nonCocycle / nonCocycle) :=
-  (isMulCoboundary₂_div_iff_quotient_mk_eq nonCocycle nonCocycle).mpr rfl
+  isMulCoboundary₂_div_self nonCocycle

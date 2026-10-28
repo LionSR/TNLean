@@ -36,16 +36,16 @@ example : groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
       (show groupCohomology.IsMulCocycle₂ (1 : G × G → ℂˣ) from fun _ _ _ ↦ rfl)) = 0 :=
   ScalarCocycle.H2π_one _
 
--- The arbitrary-cochain coboundary comparison still takes no cocycle hypotheses.
-example (ω η : G × G → ℂˣ) : ScalarCocycle.CohomologousTo ω η ↔
-    groupCohomology.IsMulCoboundary₂ (ω / η) :=
-  ScalarCocycle.cohomologousTo_iff_isMulCoboundary₂_div ω η
+-- The arbitrary-cochain source formula still takes no cocycle hypotheses.
+example (ω η : G × G → ℂˣ) : groupCohomology.IsMulCoboundary₂ (ω / η) ↔
+    ∃ φ : G → ℂˣ, ∀ g h, ω (g, h) = φ g * φ h * (φ (g * h))⁻¹ * η (g, h) :=
+  isMulCoboundary₂_div_iff ω η
 
 -- Class equality still requires both genuine cocycle hypotheses.
 example (ω η : G × G → ℂˣ) (hω : groupCohomology.IsMulCocycle₂ ω)
     (hη : groupCohomology.IsMulCocycle₂ η) :
-    ScalarCocycle.CohomologousTo ω η ↔
-      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hω) =
-      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hη) :=
-  ScalarCocycle.cohomologousTo_iff_H2π_eq hω hη
+    groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hω) =
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hη) ↔
+        groupCohomology.IsMulCoboundary₂ (ω / η) :=
+  H2π_eq_iff_isMulCoboundary₂_div hω hη
 end

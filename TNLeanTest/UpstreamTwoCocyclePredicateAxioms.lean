@@ -24,9 +24,9 @@ set_option linter.hashCommand false in
 #print axioms TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep
 
 /-- info:
-'TNLean.Algebra.ScalarCocycle.cohomologousTo_iff_H2π_eq' depends on axioms:
+'TNLean.Algebra.H2π_eq_iff_isMulCoboundary₂_div' depends on axioms:
 [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
 set_option linter.hashCommand false in
-#print axioms TNLean.Algebra.ScalarCocycle.cohomologousTo_iff_H2π_eq
+#print axioms TNLean.Algebra.H2π_eq_iff_isMulCoboundary₂_div

@@ -1653,6 +1653,18 @@ and [#9847](https://github.com/LionSR/TNLean/issues/9847).
 
 ## Landau, Vazirani and Vidick's one-dimensional algorithm, arXiv:1307.5143
 
+- [`lvv13_leading_net_point.tex`](lvv13_leading_net_point.tex)
+  (open gap) records that the leading-vector step of Lemma
+  `l:leading` (arXiv:1307.5143v1, lines 493–495) is formalized for any
+  boundary point within the convex program's tolerance, which includes the
+  closest net element; the net and its cardinality bound (Claim `c:2`) are
+  separate statements.
+- [`lvv13_nontrivial_chain.tex`](lvv13_nontrivial_chain.tex)
+  (scope restriction, open) records that the viable-witness and
+  leading-vector statements for the size-trimming step (arXiv:1307.5143v1,
+  lines 472–476 and 493–505) assume at least one site and local dimension at
+  least two, which give the gap bound `Δ ≤ 4`; the remaining cases need
+  separate statements.
 - [`lvv13_constant_bond.tex`](lvv13_constant_bond.tex)
   (local correction, resolved) records that the constant bond dimension of Lemma
   `constantbondapprox` (arXiv:1307.5143v1, lines 342–345) is formalized with
