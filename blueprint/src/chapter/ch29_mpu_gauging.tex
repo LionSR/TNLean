@@ -8196,7 +8196,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 \begin{theorem}[Cocycles and classes for trivial coefficients]
     \label{thm:mpug_h2_trivial_coefficients}
     \lean{TNLean.Algebra.isMulCocycle₂_iff,
-        TNLean.Algebra.ScalarCocycle.cohomologousTo_iff_H2π_eq}
+        TNLean.Algebra.H2π_eq_iff_isMulCoboundary₂_div}
     \leanok
     \uses{def:is_coboundary, def:cohomologous_to, def:is_cocycle, def:h2_cx}
     Let $G$ act trivially on $\C^\times$, and let
@@ -8280,7 +8280,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 \begin{theorem}[Pullback preserves cocycles and cohomology]
     \label{thm:mpug_h2_pullback_preserves}
     \lean{TNLean.Algebra.ScalarCocycle.isMulCocycle₂_comap,
-        TNLean.Algebra.ScalarCocycle.CohomologousTo.comap}
+        TNLean.Algebra.isMulCoboundary₂_div_comap}
     \leanok
     \uses{def:mpug_h2_pullback, def:cohomologous_to, def:is_cocycle}
     Let $f:K\to G$ be a group homomorphism. If $\omega$ is a scalar
@@ -8362,7 +8362,8 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \label{thm:mpug_circle_complex_units_h2}
     \lean{TNLean.Algebra.Complex.div_toUnits_unitsPhase,
         TNLean.Algebra.ScalarCocycle.circlePhase_isMulCocycle₂,
-        TNLean.Algebra.ScalarCocycle.cohomologousTo_circlePhaseInclusion,
+        TNLean.Algebra.ScalarCocycle.circlePhaseInclusion_isMulCocycle₂,
+        TNLean.Algebra.ScalarCocycle.H2π_circlePhaseInclusion,
         TNLean.Algebra.ScalarCocycle.circlePhaseMathlibCocycle,
         TNLean.Algebra.ScalarCocycle.H2π_map_circlePhaseMathlibCocycle,
         TNLean.Algebra.circleH2ToComplexUnitsH2_injective,
@@ -8946,7 +8947,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
         TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_base,
         TNLean.Algebra.StabilizerRepresentatives.inducedActionGauge,
         TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_eq_gauge,
-        TNLean.Algebra.StabilizerRepresentatives.cohomologousTo_iff_exists_actionGauge_inducedLSymbol_eq}
+        TNLean.Algebra.StabilizerRepresentatives.isMulCoboundary₂_div_iff_exists_actionGauge_inducedLSymbol_eq}
     \leanok
     \uses{def:mpug_l_symbols, def:mpug_l_gauge, def:is_cocycle,
         def:cohomologous_to, thm:mpug_stabilizer_transition}

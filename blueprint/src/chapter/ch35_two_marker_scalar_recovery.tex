@@ -11,6 +11,7 @@ basis in the source interpolation argument is recorded in
 \begin{definition}[Ordinary labels]
     \label{def:two_marker_ordinary_labels}
     \lean{MvPolynomial.twoMarkerOrdinaryLabels}
+    \leanok
     For a finite alphabet $I$ and distinguished labels $u,v\in I$, let
     \begin{align}
         \mathcal O_{u,v}=I\setminus\{u,v\}.
@@ -22,6 +23,7 @@ basis in the source interpolation argument is recorded in
 \begin{definition}[The full-frequency ordered-word coefficient]
     \label{def:full_frequency_word_coefficient}
     \lean{WordMultiplicity.wordCoefficient}
+    \leanok
     Let $I$ be finite, let $R$ be a semiring, and let $H_a\in R$ for $a\in I$.
     For $r\ge0$ and a count vector $\nu:I\to\N$, put
     \begin{align}
@@ -38,6 +40,7 @@ basis in the source interpolation argument is recorded in
 \begin{theorem}[One sample family for every degree and frequency slice]
     \label{thm:two_window_common_scalar_recovery}
     \lean{Polynomial.exists_twoWindow_wordCoefficient_recovery}
+    \leanok
     \uses{def:two_marker_ordinary_labels,def:full_frequency_word_coefficient}
     Let $\ell,K$ be nonnegative integers, let
     \begin{align}
@@ -69,7 +72,7 @@ basis in the source interpolation argument is recorded in
     and every degree $r\le K$. Points for different selected pairs need not
     coincide. The case $K=0$ is included.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:two_marker_ordinary_labels,def:full_frequency_word_coefficient}
     The distinguished labels are distinct, so $\mathcal O=\mathcal O_{u,v}$
     has $4\ell+1$ members. Put $G=\{0,\ldots,K\}^{\mathcal O}$.
@@ -98,11 +101,31 @@ basis in the source interpolation argument is recorded in
         \label{eq:two_marker_mask_weights}
     \end{align}
     These coefficients precede the operator family and the degree.
-    At any degree $r\le K$, extend the coefficients of the prescribed
-    frequency slice by zero to the ordinary monomial box. Every ordinary
-    coordinate in the slice is at most $K$, and restoring and removing the
-    distinguished counts are inverse on that slice. Substituting
-    (\ref{eq:two_marker_grid_recovery}) and exchanging the two finite sums
+    Fix a degree $r\le K$, and let $S_{r,i,j}$ be the prescribed frequency
+    slice, the set of $\nu:I\to\N$ with $\sum_a\nu(a)=r$, $\nu(u)=i$ and
+    $\nu(v)=j$. Every ordinary coordinate of $\nu\in S_{r,i,j}$ is at most
+    $r\le K$. Restriction to the ordinary labels and restoration of the two
+    distinguished counts therefore satisfy
+    \begin{align}
+        \nu|_{\mathcal O}\in G,\quad
+        \nu_{i,j,\nu|_{\mathcal O}}=\nu
+        \quad(\nu\in S_{r,i,j}),\qquad
+        (\nu_{i,j,\alpha})|_{\mathcal O}=\alpha
+        \quad(\alpha\in G).
+        \label{eq:two_marker_slice_restriction}
+    \end{align}
+    By (\ref{eq:two_marker_slice_restriction}), restriction is a bijection from $S_{r,i,j}$ onto the set of
+    $\alpha\in G$ with $\nu_{i,j,\alpha}\in S_{r,i,j}$, and for every
+    function $F$ on count vectors the slice sum is the zero extension
+    \begin{align}
+        \sum_{\nu\in S_{r,i,j}}F(\nu)
+        =\sum_{\alpha\in G}\mathbf 1_{\nu_{i,j,\alpha}\in S_{r,i,j}}
+        F(\nu_{i,j,\alpha}).
+        \label{eq:two_marker_slice_zero_extension}
+    \end{align}
+    Substituting
+    (\ref{eq:two_marker_grid_recovery}) into
+    (\ref{eq:two_marker_slice_zero_extension}) and exchanging the two finite sums
     gives recovery with the weights in (\ref{eq:two_marker_mask_weights}).
 
     Apply this recovery identity to $\mathcal W_{H,r}(\nu)$.

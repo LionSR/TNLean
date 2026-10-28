@@ -15,6 +15,7 @@ run_cmd do
   for decl in #[
       ``Matrix.norm_sitePermMatrix_mul_mul_conjTranspose,
       ``TNLean.Lattice.norm_groundCompression_commutator_le_of_momenta,
+      ``TNLean.Lattice.norm_groundCompression_commutator_le_of_momenta_exp,
       ``TNLean.Lattice.norm_groundCompression_commutator_le_of_norm_sub_le,
       ``TNLean.Lattice.norm_groundCompression_commutator_truncated_le_of_momenta] do
     unless (← Lean.getEnv).contains decl do

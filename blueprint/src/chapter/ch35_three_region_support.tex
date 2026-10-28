@@ -14,6 +14,7 @@ The statements below give supporting locality algebra for
     \label{thm:three_region_partial_support}
     \lean{TNLean.MPS.AreaLaw.operatorBlock_isSupportedOn_of_threeSplit_left,
         TNLean.MPS.AreaLaw.leftBlock_isSupportedOn_of_threeSplit_right}
+    \leanok
     Suppose that $P$ is supported on $D\subseteq V$.
     If $P^g=U\otimes \Id_R$, then for any configurations $a,b$ on $T$,
     the matrix on $E$ with entries
@@ -31,7 +32,7 @@ The statements below give supporting locality algebra for
     has the same support conclusion. The two fixed configurations in either
     statement need not agree outside $D$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     For $q>0$, choose one fixed configuration on the unused region.
     The displayed partial matrix element is then an entry of $P$ with that
     configuration on both sides. A disagreement at a site of $E\setminus D$
@@ -44,6 +45,7 @@ The statements below give supporting locality algebra for
 \begin{theorem}[Equality from a middle identity lift]
     \label{thm:three_region_middle_lift_equality}
     \lean{TNLean.MPS.AreaLaw.eq_of_threeSplit_middle_lift_eq}
+    \leanok
     Suppose that $E$ contains a specified site. If $W,M$ are operators on
     $\mathcal H_E$ and
     \begin{align}
@@ -52,7 +54,7 @@ The statements below give supporting locality algebra for
     \end{align}
     then $W=M$. No positive-local-dimension assumption is required.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     For $q>0$, evaluate the identity at equal fixed configurations on $T$ and
     $R$. For $q=0$, a configuration on $E$ would assign an element of the empty
     local alphabet to the specified site. Thus both matrices have empty index
@@ -62,6 +64,7 @@ The statements below give supporting locality algebra for
 \begin{theorem}[Canonical placement in the middle region]
     \label{thm:three_region_middle_embedding}
     \lean{TNLean.MPS.AreaLaw.embedOp_subtype_val_submatrix_threeSplit}
+    \leanok
     For every operator $W$ on $\mathcal H_E$, its canonical extension to $V$
     has three-region form
     \begin{align}
@@ -70,7 +73,7 @@ The statements below give supporting locality algebra for
     \end{align}
     This includes empty regions and zero local dimension.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The extension has entry $W(x,y)$ when the two configurations agree off
     $E$, and zero otherwise. In three-region coordinates, agreement off $E$
     is precisely equality of both the $T$ and $R$ configurations. These two
@@ -80,7 +83,9 @@ The statements below give supporting locality algebra for
 \begin{theorem}[Two-window factors with their collars]
     \label{thm:three_region_two_window_collars}
     \lean{TNLean.MPS.AreaLaw.exists_threeSplit_two_window_factors_with_collars}
-    \uses{thm:three_region_partial_support}
+    \leanok
+    \uses{def:chain_model,lem:peps_frame_split_forms,
+        thm:three_region_partial_support}
     Consider a chain of $L$ sites and nonnegative integers $a,b,\ell$ with
     $a+2\ell\le b$ and $b+2\ell\le L-1$.
     Let the label set consist of $L_r,R_r$ for $0\le r<2\ell$, together
@@ -127,8 +132,10 @@ The statements below give supporting locality algebra for
     The three bulk operators are supplied independently; no identity with
     complementary sums of bond terms is assumed.
 \end{theorem}
-\begin{proof}
-    \uses{thm:three_region_partial_support}
+\begin{proof}\leanok
+    \uses{thm:chain_two_cut_edge_supports,lem:peps_frame_split_forms,
+        thm:peps_supported_left_factor_rank,thm:peps_supported_right_factor_rank,
+        thm:three_region_partial_support}
     The selected bonds meet each side of their cut at one site, so their
     crossing operators have operator Schmidt rank at most $q^2$.
     Every other left-window bond lies either in $T$ or in $E$, according as
@@ -147,6 +154,7 @@ The statements below give supporting locality algebra for
 \begin{theorem}[The weighted middle sum and its supported remainder]
     \label{thm:three_region_weighted_middle_remainder}
     \lean{TNLean.MPS.AreaLaw.exists_weighted_ordinary_middle_eq_central_add_supported}
+    \leanok
     Let $E$ be any finite set, let $H^M$ be indexed by the labels above, and
     let $C\subseteq E$. Suppose $H^M_{B_0}=H^M_{B_2}=0$,
     $H^M_{L_r}=0$ for $r\le p$, and $H^M_{R_r}=0$ for $s\le r$.
@@ -159,7 +167,7 @@ The statements below give supporting locality algebra for
         \label{eq:three_region_weighted_middle_remainder}
     \end{align}
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Take
     \begin{align}
         K=\sum_{p<r<2\ell}z_{L_r}H^M_{L_r}

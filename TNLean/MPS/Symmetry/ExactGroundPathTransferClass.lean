@@ -7,7 +7,7 @@ import TNLean.MPS.Symmetry.CompactMinimalClassStability
 import TNLean.MPS.Symmetry.VaryingBondPhysicalCharacter
 import TNLean.MPS.Symmetry.PolarVirtualCohomology
 import TNLean.MPS.Symmetry.ExactMPSPhaseGaugeInvariance
-import Mathlib.Topology.LocallyConstant.Basic
+import TNLean.MPS.Symmetry.UnitalSupportedPathInvariance
 import TNLean.Algebra.UnitaryGeneralLinearInverse
 
 /-!
@@ -29,7 +29,7 @@ set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true
 
-open scoped Matrix Matrix.Norms.Frobenius Topology
+open scoped Matrix Matrix.Norms.Frobenius Topology TNLean.Algebra.ScalarCohomology
 open Filter TNLean.Algebra
 
 namespace MPSTensor
@@ -44,17 +44,6 @@ private theorem isOnSiteSymmetric_of_samePositiveMpvRay
   · simp [mpv, coeff]
   · simpa only [one_mul] using (hRay.symmetry_eigenvalue U g 1 hN
       (fun s => by simpa only [one_mul] using (hA g N s).symm) s).symm
-
-private theorem cohomologousTo_of_locally_constant_classes
-    {T G : Type} [TopologicalSpace T] [PreconnectedSpace T] [Group G]
-    (ω : T → ScalarCocycle G)
-    (hω : ∀ s, ∀ᶠ t in 𝓝 s, (ω t).CohomologousTo (ω s)) :
-    ∀ s t, (ω t).CohomologousTo (ω s) := by
-  let f : T → Quotient (scalarCocycleSetoid (G := G)) := fun t => Quotient.mk' (ω t)
-  have hf : IsLocallyConstant f := IsLocallyConstant.iff_eventually_eq f |>.mpr
-    (fun s => (hω s).mono fun t ht => Quotient.sound ht)
-  intro s t
-  exact Quotient.exact (congrFun (hf.eq_const s) t)
 
 private theorem exists_unitary_projective_covariance_of_unital_symmetry
     {G : Type} [Group G] {d D : ℕ} [NeZero D]
@@ -95,6 +84,7 @@ theorem ExactMPSGroundPath.exists_constant_virtual_class_of_uniform_transfer_bou
     ∃ D : unitInterval → ℕ, ∃ A : ∀ t, MPSTensor d (D t),
     ∃ ω : unitInterval → ScalarCocycle G,
     ∃ ρ : ∀ t, ProjectiveRepresentation (D := D t) (ω t),
+    ∃ hω : ∀ t, groupCohomology.IsMulCocycle₂ (ω t),
       (∀ t, 0 < D t ∧ D t ≤ Q.bondDimension) ∧
       (∀ t, Kraus.IsInjective (A t) ∧ Kraus.IsUnital (A t)) ∧
       (∀ t : unitInterval, SamePositiveMpvRay (Q.tensor t) (A t)) ∧
@@ -103,7 +93,10 @@ theorem ExactMPSGroundPath.exists_constant_virtual_class_of_uniform_transfer_bou
       (∀ t g, rotatePhysical (physicalCharacterUntwist χ hχ U g) (A t) = fun i =>
         ((ρ t).X (g⁻¹) : Matrix (Fin (D t)) (Fin (D t)) ℂ) * A t i *
           ((ρ t).X (g⁻¹) : Matrix (Fin (D t)) (Fin (D t)) ℂ)ᴴ) ∧
-      ∀ s t, (ω t).CohomologousTo (ω s) := by
+      ∀ s t, groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+          (groupCohomology.cocyclesOfIsMulCocycle₂ (hω t)) =
+        groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+          (groupCohomology.cocyclesOfIsMulCocycle₂ (hω s)) := by
   classical
   obtain ⟨χ, hχ, hSym⟩ := Q.exists_exact_symmetry
   let V := physicalCharacterUntwist χ hχ U
@@ -132,11 +125,17 @@ theorem ExactMPSGroundPath.exists_constant_virtual_class_of_uniform_transfer_bou
     exact exists_unitary_projective_covariance_of_unital_symmetry (A t) (hA t) (hAU t)
       V (isOnSiteSymmetric_of_samePositiveMpvRay (hRay t) _ (hSym t))
   choose ω ρ hρ hCov using hVirtual
-  refine ⟨χ, hχ, D, A, ω, ρ, fun t => ⟨hD t, hBound t⟩,
+  let hω : ∀ t, groupCohomology.IsMulCocycle₂ (ω t) :=
+    fun t ↦ ScalarCocycle.isMulCocycle₂_of_projRep (ρ t) (hD t)
+  refine ⟨χ, hχ, D, A, ω, ρ, hω, fun t => ⟨hD t, hBound t⟩,
     fun t => ⟨hA t, hAU t⟩, hRay, hρ, hCov, ?_⟩
-  apply cohomologousTo_of_locally_constant_classes ω
+  intro s t
+  apply (H2π_eq_iff_isMulCoboundary₂_div (hω t) (hω s)).mpr
+  refine isMulCoboundary₂_div_of_eventually_at_all_points ω ?_ t s
   intro t₀
   have hQ : Continuous (fun t : unitInterval => Q.tensor t) := Q.continuous.domRestrict
+  apply (Filter.eventually_congr (.of_forall fun _ ↦
+    H2π_eq_iff_isMulCoboundary₂_div _ _)).mp
   exact eventually_cohomologousTo_of_continuousAt_bounded_unital_periodic_rays
     D hD hBound A
     (fun t => Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM (A t)
