@@ -143,3 +143,11 @@ modules. Their reported build times were 10, 3.5, 3.5 and 3.7 seconds. The same 
 also verified the general-probability integral trace-exponential bounds. Full-library,
 strict imported-source and compiled blueprint checks are recorded separately for the
 resulting integration revision.
+
+
+The combined mathematical snapshot `fea97ebd91cb1858b670892eadbb8d5028c46b7b`
+subsequently passed the full library build (15013 jobs), strict checks of all 11
+changed source files, manual ordinary-object inspection of its 24 new public
+declarations and compiled blueprint declaration checking. The inspected declarations
+use only `propext`, `Classical.choice` and `Quot.sound`. The full build contained no
+Mathlib source-compilation jobs. No permanent Lean fixture was added.
