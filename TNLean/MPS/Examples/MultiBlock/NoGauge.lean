@@ -8,22 +8,25 @@ import TNLean.MPS.Examples.MultiBlock.Periodic
 /-!
 # Same word traces, no gauge
 
-The tensors `B' = (E₁₁, E₂₂)` and `B = (E₁₁ + E₁₂, E₂₂)` on `ℂ²` (lecture note AsymmetricFT,
-Example 4.5; milestone V, V3.5) have the same trace on every word, `1` on a nonempty word that
-uses one letter only and `0` on a word that uses both, but they are not gauge equivalent: the
-letters of `B'` commute and those of `B` do not, `B¹B² - B²B¹ = E₁₂`. The only line invariant
+The tensors `B' = (E₁₁, E₂₂)` and `B = (E₁₁ + E₁₂, E₂₂)` on `ℂ²` (*The asymmetric fundamental
+theorem of matrix product states*, Example 4.5) have the same trace on every word, `1` on a nonempty
+word that uses one letter only and `0` on a word that uses both, but they are not gauge equivalent:
+the letters of `B'` commute and those of `B` do not, `B¹B² - B²B¹ = E₁₂`. The only line invariant
 under both letters of `B` is `ℂ e₁`, while `B'` has the two invariant lines `ℂ e₁` and `ℂ e₂`.
 
 ## Main results
 
-* `MultiBlockExamples.NoGauge.V3_5a_trace_eq`, `V3_5a_trace_single`, `V3_5a_trace_mixed`.
-* `MultiBlockExamples.NoGauge.V3_5b`: the commutators.
-* `MultiBlockExamples.NoGauge.V3_5c_B`, `V3_5c_B'`: the invariant lines.
-* `MultiBlockExamples.NoGauge.V3_5d`: no gauge transformation.
+* `MultiBlockExamples.NoGauge.trace_evalWord_tensorB_eq`,
+  `trace_evalWord_tensorB'_eq_one_of_eq_replicate`,
+  `trace_evalWord_tensorB'_eq_zero_of_ne_replicate`: the word traces.
+* `MultiBlockExamples.NoGauge.tensorB_one_mul_zero_and_tensorB'_commute`: the commutators.
+* `MultiBlockExamples.NoGauge.isInvariantSubmodule_span_tensorB_iff`,
+  `isInvariantSubmodule_span_tensorB'_iff`: the invariant lines.
+* `MultiBlockExamples.NoGauge.not_exists_conj_tensorB_eq_tensorB'`: no gauge transformation.
 
 ## References
 
-Lecture note AsymmetricFT, Example 4.5; milestone V, V3.5.
+*The asymmetric fundamental theorem of matrix product states*, Example 4.5.
 -/
 
 open scoped Matrix
@@ -32,10 +35,12 @@ namespace MultiBlockExamples
 
 namespace NoGauge
 
-/-- `B' = (E₁₁, E₂₂)` (lecture note AsymmetricFT, Example 4.5; milestone V, V3.5). -/
+/-- `B' = (E₁₁, E₂₂)` (*The asymmetric fundamental theorem of matrix product states*, Example 4.5).
+-/
 noncomputable def tensorB' : Fin 2 → Matrix (Fin 2) (Fin 2) ℂ := ![E 0 0, E 1 1]
 
-/-- `B = (E₁₁ + E₁₂, E₂₂)` (lecture note AsymmetricFT, Example 4.5; milestone V, V3.5). -/
+/-- `B = (E₁₁ + E₁₂, E₂₂)` (*The asymmetric fundamental theorem of matrix product states*, Example
+4.5). -/
 noncomputable def tensorB : Fin 2 → Matrix (Fin 2) (Fin 2) ℂ := ![E 0 0 + E 0 1, E 1 1]
 
 /-- A word of `B'` is the diagonal matrix with `1` at `k` when every letter is `k`. -/
@@ -80,16 +85,16 @@ theorem evalWord_tensorB_apply (w : List (Fin 2)) :
     · simp only [Fin.mk_one, Fin.isValue, hB1, hB'1]
       simp [h10, h00, h11, h'01, h'10]
 
-/-- **V3.5(a)** (lecture note AsymmetricFT, Example 4.5; milestone V, V3.5(a)): `tr B^w = tr B'^w`
-for every word. -/
-theorem V3_5a_trace_eq (w : List (Fin 2)) :
+/-- **Equal word traces** (*The asymmetric fundamental theorem of matrix product states*, Example
+4.5): `tr B^w = tr B'^w` for every word. -/
+theorem trace_evalWord_tensorB_eq (w : List (Fin 2)) :
     (Kraus.evalWord tensorB w).trace = (Kraus.evalWord tensorB' w).trace := by
   obtain ⟨-, h00, h11⟩ := evalWord_tensorB_apply w
   simp only [Matrix.trace, Matrix.diag, Fin.sum_univ_two, h00, h11]
 
-/-- **V3.5(a)** (lecture note AsymmetricFT, Example 4.5; milestone V, V3.5(a)): a nonempty word
-using a single letter has trace `1`. -/
-theorem V3_5a_trace_single (w : List (Fin 2)) (hw : w ≠ [])
+/-- **Words in one letter** (*The asymmetric fundamental theorem of matrix product states*, Example
+4.5): a nonempty word using a single letter has trace `1`. -/
+theorem trace_evalWord_tensorB'_eq_one_of_eq_replicate (w : List (Fin 2)) (hw : w ≠ [])
     (h : ∃ i, w = List.replicate w.length i) : (Kraus.evalWord tensorB' w).trace = 1 := by
   obtain ⟨i, hi⟩ := h
   have hall : ∀ a ∈ w, a = i := (List.eq_replicate_iff.1 hi).2
@@ -110,25 +115,27 @@ theorem V3_5a_trace_single (w : List (Fin 2)) (hw : w ≠ [])
     simp only [eq_true h1, eq_false h0, ite_true, ite_false]
     norm_num
 
-/-- **V3.5(a)** (lecture note AsymmetricFT, Example 4.5; milestone V, V3.5(a)): a word using both
-letters has trace `0`. -/
-theorem V3_5a_trace_mixed (w : List (Fin 2)) (h : ¬ ∃ i, w = List.replicate w.length i) :
+/-- **Words in both letters** (*The asymmetric fundamental theorem of matrix product states*,
+Example 4.5): a word using both letters has trace `0`. -/
+theorem trace_evalWord_tensorB'_eq_zero_of_ne_replicate (w : List (Fin 2))
+    (h : ¬ ∃ i, w = List.replicate w.length i) :
     (Kraus.evalWord tensorB' w).trace = 0 := by
   have hk : ∀ k, ¬ ∀ a ∈ w, a = k := fun k hk =>
     h ⟨k, List.eq_replicate_iff.2 ⟨rfl, hk⟩⟩
   rw [evalWord_tensorB', Matrix.trace_diagonal, Fin.sum_univ_two]
   simp [hk]
 
-/-- **V3.5(b)** (lecture note AsymmetricFT, Example 4.5; milestone V, V3.5(b)): `B²B¹ = 0`,
-`B¹B² - B²B¹ = E₁₂`, and the letters of `B'` commute. -/
-theorem V3_5b : tensorB 1 * tensorB 0 = 0 ∧ tensorB 0 * tensorB 1 - tensorB 1 * tensorB 0 = E 0 1 ∧
+/-- **The commutators** (*The asymmetric fundamental theorem of matrix product states*, Example
+4.5): `B²B¹ = 0`, `B¹B² - B²B¹ = E₁₂`, and the letters of `B'` commute. -/
+theorem tensorB_one_mul_zero_and_tensorB'_commute :
+    tensorB 1 * tensorB 0 = 0 ∧ tensorB 0 * tensorB 1 - tensorB 1 * tensorB 0 = E 0 1 ∧
     tensorB' 0 * tensorB' 1 = tensorB' 1 * tensorB' 0 := by
   refine ⟨?_, ?_, ?_⟩ <;> ext i j <;> fin_cases i <;> fin_cases j <;>
     simp [tensorB, tensorB', Matrix.mul_apply, Fin.sum_univ_two]
 
-/-- **V3.5(c)** (lecture note AsymmetricFT, Example 4.5; milestone V, V3.5(c)): the only line
-invariant under both letters of `B` is `ℂ e₁`. -/
-theorem V3_5c_B (v : Fin 2 → ℂ) (hv : v ≠ 0) :
+/-- **The invariant line of `B`** (*The asymmetric fundamental theorem of matrix product states*,
+Example 4.5): the only line invariant under both letters of `B` is `ℂ e₁`. -/
+theorem isInvariantSubmodule_span_tensorB_iff (v : Fin 2 → ℂ) (hv : v ≠ 0) :
     Matrix.IsInvariantSubmodule tensorB (Submodule.span ℂ {v}) ↔
       Submodule.span ℂ {v} = Submodule.span ℂ {e 0} := by
   rw [isInvariantSubmodule_span_singleton_iff]
@@ -160,9 +167,9 @@ theorem V3_5c_B (v : Fin 2 → ℂ) (hv : v ≠ 0) :
     · exact ⟨1, by ext j; fin_cases j <;> simp [tensorB, Matrix.mulVec, dotProduct, hv1]⟩
     · exact ⟨0, by ext j; fin_cases j <;> simp [tensorB, Matrix.mulVec, dotProduct, hv1]⟩
 
-/-- **V3.5(c)** (lecture note AsymmetricFT, Example 4.5; milestone V, V3.5(c)): the lines
-invariant under both letters of `B'` are `ℂ e₁` and `ℂ e₂`. -/
-theorem V3_5c_B' (v : Fin 2 → ℂ) (hv : v ≠ 0) :
+/-- **The invariant lines of `B'`** (*The asymmetric fundamental theorem of matrix product states*,
+Example 4.5): the lines invariant under both letters of `B'` are `ℂ e₁` and `ℂ e₂`. -/
+theorem isInvariantSubmodule_span_tensorB'_iff (v : Fin 2 → ℂ) (hv : v ≠ 0) :
     Matrix.IsInvariantSubmodule tensorB' (Submodule.span ℂ {v}) ↔
       Submodule.span ℂ {v} = Submodule.span ℂ {e 0} ∨
         Submodule.span ℂ {v} = Submodule.span ℂ {e 1} := by
@@ -196,10 +203,11 @@ theorem V3_5c_B' (v : Fin 2 → ℂ) (hv : v ≠ 0) :
       · exact ⟨0, by ext j; fin_cases j <;> simp [tensorB', Matrix.mulVec, dotProduct, hv0]⟩
       · exact ⟨1, by ext j; fin_cases j <;> simp [tensorB', Matrix.mulVec, dotProduct, hv0]⟩
 
-/-- **V3.5(d)** (lecture note AsymmetricFT, Example 4.5; milestone V, V3.5(d)): there is no
-invertible `X` with `X Bⁱ X⁻¹ = B'ⁱ`, since the letters of `B'` commute and those of `B` do
+/-- **No gauge** (*The asymmetric fundamental theorem of matrix product states*, Example 4.5): there
+is no invertible `X` with `X Bⁱ X⁻¹ = B'ⁱ`, since the letters of `B'` commute and those of `B` do
 not. -/
-theorem V3_5d : ¬ ∃ X Y : Matrix (Fin 2) (Fin 2) ℂ, X * Y = 1 ∧ Y * X = 1 ∧
+theorem not_exists_conj_tensorB_eq_tensorB' :
+    ¬ ∃ X Y : Matrix (Fin 2) (Fin 2) ℂ, X * Y = 1 ∧ Y * X = 1 ∧
     ∀ i, X * tensorB i * Y = tensorB' i := by
   rintro ⟨X, Y, hXY, hYX, h⟩
   have hB : ∀ i, tensorB i = Y * tensorB' i * X := fun i => by
@@ -212,11 +220,11 @@ theorem V3_5d : ¬ ∃ X Y : Matrix (Fin 2) (Fin 2) ℂ, X * Y = 1 ∧ Y * X = 1
         = Y * tensorB' 0 * (X * Y) * tensorB' 1 * X := by simp only [Matrix.mul_assoc]
       _ = Y * (tensorB' 0 * tensorB' 1) * X := by
           rw [hXY, Matrix.mul_one, Matrix.mul_assoc Y]
-      _ = Y * (tensorB' 1 * tensorB' 0) * X := by rw [V3_5b.2.2]
+      _ = Y * (tensorB' 1 * tensorB' 0) * X := by rw [tensorB_one_mul_zero_and_tensorB'_commute.2.2]
       _ = Y * tensorB' 1 * (X * Y) * tensorB' 0 * X := by
           rw [hXY, Matrix.mul_one]; simp only [Matrix.mul_assoc]
       _ = Y * tensorB' 1 * X * (Y * tensorB' 0 * X) := by simp only [Matrix.mul_assoc]
-  have h01 := V3_5b.2.1
+  have h01 := tensorB_one_mul_zero_and_tensorB'_commute.2.1
   rw [hcomm, sub_self] at h01
   have := congrFun (congrFun h01 0) 1
   simp at this

@@ -163,10 +163,10 @@ letter.
         MPSTensor.MultiBlockCompression.coordChangeScalar_ne_zero,
         MPSTensor.MultiBlockCompression.leftRow_withGauge,
         MPSTensor.MultiBlockCompression.rightCol_withGauge,
-        MPSTensor.MultiBlockCompression.conjT,
-        MPSTensor.MultiBlockCompression.conjT_flag,
-        MPSTensor.MultiBlockCompression.withGauge_eq_conjT,
-        MPSTensor.MultiBlockCompression.coordChange_conjTGauge}
+        MPSTensor.MultiBlockCompression.conjTriangular,
+        MPSTensor.MultiBlockCompression.conjTriangular_flag,
+        MPSTensor.MultiBlockCompression.withGauge_eq_conjTriangular,
+        MPSTensor.MultiBlockCompression.coordChange_conjTriangularGauge}
     \uses{lem:asym_uniq_maps, def:normal}
     Let $(\sigma,G)$ and $(\sigma,\widetilde G)$ be compressions of $B$ onto the same family with the
     same labelled flag, $\widetilde G^{-1}E_k=G^{-1}E_k$ for all $k$. Then $h=\widetilde GG^{-1}$ is
@@ -265,7 +265,7 @@ letter.
 
 \begin{theorem}[The set of all compressions]
     \label{thm:asym_uniq_all}
-    \lean{MPSTensor.MultiBlockCompression.flag_fibre_eq_orbit,
+    \lean{MPSTensor.MultiBlockCompression.flag_withGauge_eq_iff_exists_eq_conjTriangularGauge,
         MPSTensor.FlagData.exists_multiBlockCompression_flag_eq}
     \uses{prop:asym_uniq_dictionary, thm:asym_uniq_same_flag}
     Every labelled invariant flag of $B$ is the flag of a compression, and two compressions with the
@@ -310,10 +310,10 @@ letter.
         MPSTensor.MultiBlockCompression.exists_left_mul_evalWord_eq_smul_of_last,
         MPSTensor.MultiBlockCompression.exists_evalWord_mul_right_eq_inv_smul_of_first,
         MPSTensor.MultiBlockCompression.exists_smul_single_block,
-        SharpnessOneBlock.not_exists_left_eq_smul,
-        SharpnessOneBlock.left_mul_evalWord_eq,
-        SharpnessOneBlock.not_exists_left_mul_eq_smul_two,
-        SharpnessOneBlock.left_mul_evalWord_eq_two}
+        MultiBlockExamples.SharpnessOneBlock.not_exists_left_eq_smul,
+        MultiBlockExamples.SharpnessOneBlock.left_mul_evalWord_eq,
+        MultiBlockExamples.SharpnessOneBlock.not_exists_left_mul_eq_smul_two,
+        MultiBlockExamples.SharpnessOneBlock.left_mul_evalWord_eq_two}
     \uses{thm:asym_uniq_different_flags, lem:asym_uniq_long_words, thm:asym_uniq_blocks}
     Let $C_s$ occur once in the family up to gauge. If $s$ is the last slot of both compressions
     then $\widetilde W_s=\lambda W_s$ as matrices, for a nonzero scalar $\lambda$; if first in both,
@@ -354,8 +354,8 @@ letter.
         MPSTensor.MultiBlockCompression.classMatrix,
         MPSTensor.MultiBlockCompression.blockEntry_relativeGauge_eq_classMatrix_smul,
         MPSTensor.MultiBlockCompression.isUnit_classMatrix,
-        MPSTensor.MultiBlockCompression.zeroSlotBlock_relativeGauge_mul,
-        MPSTensor.MultiBlockCompression.zeroSlotBlock_relativeGauge_inverse}
+        MPSTensor.MultiBlockCompression.zeroSlotBlock_relativeGauge_mul_zeroSlotBlock_relativeGauge,
+        MPSTensor.MultiBlockCompression.zeroSlotBlock_relativeGauge_mul_eq_one_and_mul_eq_one}
     \uses{thm:asym_multiblock, lem:asym_normal_intertwiner, thm:asym_zipper_uniqueness}
     Let two compressions of $B$ onto the same family of normal blocks both have zero remainder,
     $B^i=\sum_bV_bC_b^iW_b$. Then every block of $h=\widetilde GG^{-1}$ between two slots whose

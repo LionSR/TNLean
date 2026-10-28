@@ -12,8 +12,8 @@ import TNLean.MPS.Symmetry.MPOSymmetry.ZipperUniqueness
 A multi-block reduction `P` of a tensor `B` onto blocks `C s`, `s ∈ S`, is *split* when its
 transitions vanish: in the block coordinates every letter is block diagonal,
 $$g B^i g^{-1} = \bigoplus_b \hat B^i_{bb},$$
-with `C s` on the slot `s` and the `1 × 1` zero matrix on each zero slot. Equivalently the
-remainder $B^i - \sum_s V_s C_s^i W_s$ vanishes, which is the zipper condition.
+with `C s` on the slot `s` and the `1 × 1` zero matrix on each zero slot. Equivalently the remainder
+$B^i - \sum_s V_s C_s^i W_s$ vanishes, which is the zipper condition.
 
 For two split reductions `P` and `Q` of the same tensor onto the same family, with coordinate
 changes `g` and `g̃`, the relative gauge $h = \tilde g g^{-1}$ intertwines the two block diagonal
@@ -25,35 +25,36 @@ the two reductions agree up to one nonzero scalar per block,
 $$\widetilde W_s = \lambda_s W_s,\qquad \widetilde V_s = \lambda_s^{-1} V_s,$$
 as matrices, with no words attached.
 
-This is lecture note MultiBlockUniqueness, Proposition 5.11 (Uniqueness of split reductions),
-in its bare form for the multi-block reductions of Section 1 of that note.
+This is the bare uniqueness of split compressions (blueprint `prop:asym_uniq_split`, *Uniqueness of
+split compressions, bare form*), for the multi-block reductions of blueprint `thm:asym_multiblock`,
+*Multi-block asymmetric compression theorem*.
 
 ## Main definitions
 
 * `MPSTensor.blockEntry`: the block $X_{b'b}$ of a matrix between two graded coordinate spaces.
-* `MPSTensor.MultiBlockCompression.relativeGauge`: the relative gauge $h = \tilde g g^{-1}$ of
-  two reductions.
+* `MPSTensor.MultiBlockCompression.relativeGauge`: the relative gauge $h = \tilde g g^{-1}$ of two
+  reductions.
 * `MPSTensor.MultiBlockCompression.splitScalar`: the scalar $\lambda_s$ of a block slot.
 
 ## Main statements
 
-* `MPSTensor.MultiBlockCompression.remainder_eq_zero_iff_conjMatrix_eq_blockDiagonal'`: a
-  reduction is split exactly when every letter is block diagonal in its coordinates.
-* `MPSTensor.MultiBlockCompression.blockEntry_intertwines`: the blocks of the relative gauge of
-  two split reductions intertwine the diagonal blocks.
+* `MPSTensor.MultiBlockCompression.remainder_eq_zero_iff_conjMatrix_eq_blockDiagonal'`: a reduction
+  is split exactly when every letter is block diagonal in its coordinates.
+* `MPSTensor.MultiBlockCompression.blockEntry_intertwines`: the blocks of the relative gauge of two
+  split reductions intertwine the diagonal blocks.
 * `MPSTensor.MultiBlockCompression.blockEntry_eq_zero_of_not_isGaugeRelated`,
   `MPSTensor.MultiBlockCompression.blockEntry_inl_inr_eq_zero`,
   `MPSTensor.MultiBlockCompression.blockEntry_inr_inl_eq_zero`: the blocks vanish between blocks
   that are not gauge related and between a block slot and a zero slot.
-* `MPSTensor.MultiBlockCompression.exists_blockEntry_eq_smul_of_intertwines`: between gauge
-  related blocks the block is a scalar multiple of a fixed intertwiner.
+* `MPSTensor.MultiBlockCompression.exists_blockEntry_eq_smul_of_intertwines`: between gauge related
+  blocks the block is a scalar multiple of a fixed intertwiner.
 * `MPSTensor.MultiBlockCompression.left_eq_smul_of_split_of_pairwise_not_isGaugeRelated`,
-  `MPSTensor.MultiBlockCompression.right_eq_smul_of_split_of_pairwise_not_isGaugeRelated`:
-  without repeated blocks, $\widetilde W_s = \lambda_s W_s$ and
-  $\widetilde V_s = \lambda_s^{-1} V_s$.
+  `MPSTensor.MultiBlockCompression.right_eq_smul_of_split_of_pairwise_not_isGaugeRelated`: without
+  repeated blocks, $\widetilde W_s = \lambda_s W_s$ and $\widetilde V_s = \lambda_s^{-1} V_s$.
 * `MPSTensor.MultiBlockCompression.range_rightCol_le_iSup_range_rightCol`: with repeated blocks
   allowed, the range of `V_b` lies in the sum of the ranges of the `Ṽ_{b'}` over the slots `b'`
-  gauge equivalent to `b` (lecture note AsymmetricFT, Proposition 6.12).
+  gauge equivalent to `b` (*The asymmetric fundamental theorem of matrix product states*,
+  Proposition 6.12).
 -/
 
 open scoped Matrix
@@ -219,9 +220,9 @@ namespace MultiBlockCompression
 
 variable {B : MPSTensor d DB} (P Q : MultiBlockCompression B S C)
 
-/-- **Split reductions** (lecture note MultiBlockUniqueness, Section 5.2). The
-remainder of a reduction vanishes exactly when, in its coordinates, every letter is the block
-diagonal matrix of the prescribed blocks: `C s` on the slot `s` and `0` on each zero slot. -/
+/-- **Split reductions** (blueprint `prop:asym_uniq_split`, *Uniqueness of split compressions, bare
+form*). The remainder of a reduction vanishes exactly when, in its coordinates, every letter is the
+block diagonal matrix of the prescribed blocks: `C s` on the slot `s` and `0` on each zero slot. -/
 theorem remainder_eq_zero_iff_conjMatrix_eq_blockDiagonal' :
     P.remainder = 0 ↔ ∀ i,
       conjMatrix P.gauge (B i) = Matrix.blockDiagonal' (blockOf (S := S) (z := P.z) D C i) := by
@@ -239,8 +240,8 @@ theorem remainder_eq_zero_iff_conjMatrix_eq_blockDiagonal' :
     rw [P.conjMatrix_remainder i, key, h i, sub_self, Pi.zero_apply, conjMatrix_zero]
 
 /-- The **relative gauge** $h = \tilde g g^{-1}$ of two reductions `P` (coordinates `g`) and `Q`
-(coordinates `g̃`) of the same tensor (lecture note MultiBlockUniqueness, Proposition 5.11
-(Uniqueness of split reductions)). -/
+(coordinates `g̃`) of the same tensor (blueprint `prop:asym_uniq_split`, *Uniqueness of split
+compressions, bare form*). -/
 noncomputable def relativeGauge : Matrix (BlockSpace D S Q.z) (BlockSpace D S P.z) ℂ :=
   gaugeMatrix Q.gauge * gaugeMatrixInv P.gauge
 
@@ -274,10 +275,10 @@ theorem blockEntry_relativeGauge_inl_inl (t s : {s // s ∈ S}) :
 
 variable {P Q}
 
-/-- **The blocks of the relative gauge intertwine the diagonal blocks** (lecture note
-MultiBlockUniqueness, Proposition 5.11 (Uniqueness of split reductions), first step of the
-proof). For two split reductions the
-block $h_{b'b}$ of $h = \tilde g g^{-1}$ intertwines the diagonal block at `b` with that at `b'`. -/
+/-- **The blocks of the relative gauge intertwine the diagonal blocks** (blueprint
+`prop:asym_uniq_split`, *Uniqueness of split compressions, bare form*, first step of the proof). For
+two split reductions the block $h_{b'b}$ of $h = \tilde g g^{-1}$ intertwines the diagonal block at
+`b` with that at `b'`. -/
 theorem blockEntry_intertwines (hP : P.remainder = 0) (hQ : Q.remainder = 0) (i : Fin d)
     (b' : BlockIndex S Q.z) (b : BlockIndex S P.z) :
     blockEntry (P.relativeGauge Q) b' b * blockOf D C i b =
@@ -287,10 +288,9 @@ theorem blockEntry_intertwines (hP : P.remainder = 0) (hQ : Q.remainder = 0) (i 
     ← (Q.remainder_eq_zero_iff_conjMatrix_eq_blockDiagonal').1 hQ i,
     relativeGauge_mul_conjMatrix]
 
-/-- **Blocks that are not gauge related do not mix** (lecture note MultiBlockUniqueness,
-Proposition 5.11 (Uniqueness of split reductions), Schur
-step). For two split reductions and normal blocks `C t`, `C s` that are
-not gauge related, the block $h_{ts}$ of the relative gauge vanishes. -/
+/-- **Blocks that are not gauge related do not mix** (blueprint `prop:asym_uniq_split`, *Uniqueness
+of split compressions, bare form*, Schur step). For two split reductions and normal blocks `C t`,
+`C s` that are not gauge related, the block $h_{ts}$ of the relative gauge vanishes. -/
 theorem blockEntry_eq_zero_of_not_isGaugeRelated (hP : P.remainder = 0) (hQ : Q.remainder = 0)
     {t s : {s // s ∈ S}} (ht : Kraus.IsNormal (C t.1)) (hs : Kraus.IsNormal (C s.1))
     (hts : ¬ IsGaugeRelated (C t.1) (C s.1)) :
@@ -298,10 +298,10 @@ theorem blockEntry_eq_zero_of_not_isGaugeRelated (hP : P.remainder = 0) (hQ : Q.
   (eq_zero_or_isGaugeRelated_of_intertwines ht hs
     fun i => (blockEntry_intertwines hP hQ i (Sum.inl t) (Sum.inl s)).symm).resolve_right hts
 
-/-- **A block slot does not mix with a zero slot of the other reduction** (lecture note
-MultiBlockUniqueness, Proposition 5.11 (Uniqueness of split
-reductions)). The block of the relative gauge from a zero slot of `P`
-to a normal block slot of `Q` vanishes: it is a column killed by every letter of the block. -/
+/-- **A block slot does not mix with a zero slot of the other reduction** (blueprint
+`prop:asym_uniq_split`, *Uniqueness of split compressions, bare form*). The block of the relative
+gauge from a zero slot of `P` to a normal block slot of `Q` vanishes: it is a column killed by every
+letter of the block. -/
 theorem blockEntry_inl_inr_eq_zero (hP : P.remainder = 0) (hQ : Q.remainder = 0)
     {s : {s // s ∈ S}} (hs : Kraus.IsNormal (C s.1)) (t : Fin P.z) :
     blockEntry (P.relativeGauge Q) (Sum.inl s) (Sum.inr t) = 0 := by
@@ -311,10 +311,10 @@ theorem blockEntry_inl_inr_eq_zero (hP : P.remainder = 0) (hQ : Q.remainder = 0)
   rw [Matrix.mul_zero] at h
   exact h.symm
 
-/-- **A zero slot does not mix with a block slot of the other reduction** (lecture note
-MultiBlockUniqueness, Proposition 5.11 (Uniqueness of split
-reductions)). The block of the relative gauge from a normal block slot
-of `P` to a zero slot of `Q` vanishes: it is a row killed by every letter of the block. -/
+/-- **A zero slot does not mix with a block slot of the other reduction** (blueprint
+`prop:asym_uniq_split`, *Uniqueness of split compressions, bare form*). The block of the relative
+gauge from a normal block slot of `P` to a zero slot of `Q` vanishes: it is a row killed by every
+letter of the block. -/
 theorem blockEntry_inr_inl_eq_zero (hP : P.remainder = 0) (hQ : Q.remainder = 0)
     (t : Fin Q.z) {s : {s // s ∈ S}} (hs : Kraus.IsNormal (C s.1)) :
     blockEntry (P.relativeGauge Q) (Sum.inr t) (Sum.inl s) = 0 := by
@@ -325,10 +325,10 @@ theorem blockEntry_inr_inl_eq_zero (hP : P.remainder = 0) (hQ : Q.remainder = 0)
   exact h
 
 /-- **Between gauge related blocks the relative gauge is a scalar multiple of one intertwiner**
-(lecture note MultiBlockUniqueness, Proposition 5.11 (Uniqueness of split reductions), the line of
-intertwiners). If an invertible
-`Y` intertwines the normal block `C s` with `C t`, `C t i * Y = Y * C s i`, then the block
-$h_{ts}$ of the relative gauge of two split reductions is `μ • Y` for a scalar `μ`. -/
+(blueprint `prop:asym_uniq_split`, *Uniqueness of split compressions, bare form*, the line of
+intertwiners). If an invertible `Y` intertwines the normal block `C s` with `C t`,
+`C t i * Y = Y * C s i`, then the block $h_{ts}$ of the relative gauge of two split reductions is
+`μ • Y` for a scalar `μ`. -/
 theorem exists_blockEntry_eq_smul_of_intertwines (hP : P.remainder = 0) (hQ : Q.remainder = 0)
     {t s : {s // s ∈ S}} (hs : Kraus.IsNormal (C s.1))
     {Y : Matrix (Fin (D t.1)) (Fin (D s.1)) ℂ} {Y' : Matrix (Fin (D s.1)) (Fin (D t.1)) ℂ}
@@ -352,8 +352,8 @@ theorem exists_blockEntry_eq_smul_of_intertwines (hP : P.remainder = 0) (hQ : Q.
 variable (P Q)
 
 /-- The scalar $\lambda_s = \operatorname{tr}(\widetilde W_s V_s)/D_s$ of a block slot, for the
-reductions `P` (maps $W$, $V$) and `Q` (maps $\widetilde W$, $\widetilde V$) (lecture note
-MultiBlockUniqueness, Proposition 5.11 (Uniqueness of split reductions)). -/
+reductions `P` (maps $W$, $V$) and `Q` (maps $\widetilde W$, $\widetilde V$) (blueprint
+`prop:asym_uniq_split`, *Uniqueness of split compressions, bare form*). -/
 noncomputable def splitScalar (s : {s // s ∈ S}) : ℂ :=
   (D s.1 : ℂ)⁻¹ * (Q.left s * P.right s).trace
 
@@ -397,10 +397,10 @@ theorem blockEntry_relativeGauge_eq_zero_inl (hP : P.remainder = 0) (hQ : Q.rema
       (hsep _ t.2 _ s.2 fun h => hb (congrArg Sum.inl (Subtype.ext h)))
   · exact blockEntry_inr_inl_eq_zero hP hQ t (hC _ s.2)
 
-/-- **The reading maps of split reductions without repeated blocks** (lecture note
-MultiBlockUniqueness, Proposition 5.11 (Uniqueness of split reductions), last
-sentence). If no two blocks of the family are gauge
-related, then $\widetilde W_s = \lambda_s W_s$ as matrices, with no words attached. -/
+/-- **The reading maps of split reductions without repeated blocks** (blueprint
+`prop:asym_uniq_split`, *Uniqueness of split compressions, bare form*, last sentence). If no two
+blocks of the family are gauge related, then $\widetilde W_s = \lambda_s W_s$ as matrices, with no
+words attached. -/
 theorem left_eq_smul_of_split_of_pairwise_not_isGaugeRelated (hP : P.remainder = 0)
     (hQ : Q.remainder = 0) (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
     (hsep : ∀ s ∈ S, ∀ t ∈ S, s ≠ t → ¬ IsGaugeRelated (C s) (C t)) (s : {s // s ∈ S}) :
@@ -453,10 +453,10 @@ theorem splitScalar_ne_zero (hP : P.remainder = 0) (hQ : Q.remainder = 0)
     P.splitScalar Q s ≠ 0 :=
   left_ne_zero_of_mul_eq_one (splitScalar_mul_splitScalar hP hQ hC hD hsep s)
 
-/-- **The injections of split reductions without repeated blocks** (lecture note
-MultiBlockUniqueness, Proposition 5.11 (Uniqueness of split reductions), last
-sentence). If no two blocks of the family are gauge
-related, then $\widetilde V_s = \lambda_s^{-1} V_s$ as matrices, with no words attached. -/
+/-- **The injections of split reductions without repeated blocks** (blueprint
+`prop:asym_uniq_split`, *Uniqueness of split compressions, bare form*, last sentence). If no two
+blocks of the family are gauge related, then $\widetilde V_s = \lambda_s^{-1} V_s$ as matrices, with
+no words attached. -/
 theorem right_eq_smul_of_split_of_pairwise_not_isGaugeRelated (hP : P.remainder = 0)
     (hQ : Q.remainder = 0) (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
     (hsep : ∀ s ∈ S, ∀ t ∈ S, s ≠ t → ¬ IsGaugeRelated (C s) (C t)) (s : {s // s ∈ S}) :
@@ -464,10 +464,9 @@ theorem right_eq_smul_of_split_of_pairwise_not_isGaugeRelated (hP : P.remainder 
   rw [right_eq_splitScalar_smul hP hQ hC hsep s,
     ← eq_inv_of_mul_eq_one_right (splitScalar_mul_splitScalar hP hQ hC hD hsep s)]
 
-/-- **Uniqueness of split reductions without repeated blocks** (lecture note
-MultiBlockUniqueness, Proposition 5.11 (Uniqueness of split
-reductions)). Two split reductions of the same tensor onto the same
-family of normal blocks of positive bond dimension, no two of which are gauge related, have
+/-- **Uniqueness of split reductions without repeated blocks** (blueprint `prop:asym_uniq_split`,
+*Uniqueness of split compressions, bare form*). Two split reductions of the same tensor onto the
+same family of normal blocks of positive bond dimension, no two of which are gauge related, have
 reading maps and injections that agree up to one nonzero scalar per block:
 $\widetilde W_s = \lambda_s W_s$ and $\widetilde V_s = \lambda_s^{-1} V_s$. -/
 theorem exists_left_eq_smul_and_right_eq_inv_smul_of_split (hP : P.remainder = 0)
@@ -479,12 +478,12 @@ theorem exists_left_eq_smul_and_right_eq_inv_smul_of_split (hP : P.remainder = 0
     left_eq_smul_of_split_of_pairwise_not_isGaugeRelated hP hQ hC hsep s,
     right_eq_smul_of_split_of_pairwise_not_isGaugeRelated hP hQ hC hD hsep s⟩⟩
 
-/-- **Split reductions, subspace form** (lecture note AsymmetricFT, Proposition 6.12; milestone V,
-V2.10). For two split reductions onto the same family of normal blocks of positive bond
-dimension, repeated blocks allowed, the range of `V_b` lies in the sum of the ranges of the
-`Ṽ_{b'}` over the slots `b'` whose diagonal block is gauge equivalent to that of `b` (zero slots
-are gauge equivalent to each other). Indeed `V_b = ∑_{b'} Ṽ_{b'} h_{b'b}` with `h = g̃ g⁻¹`, and
-by Schur's lemma `h_{b'b} = 0` unless the two diagonal blocks are gauge equivalent. -/
+/-- **Split reductions, subspace form** (*The asymmetric fundamental theorem of matrix product
+states*, Proposition 6.12). For two split reductions onto the same family of normal blocks of
+positive bond dimension, repeated blocks allowed, the range of `V_b` lies in the sum of the ranges
+of the `Ṽ_{b'}` over the slots `b'` whose diagonal block is gauge equivalent to that of `b` (zero
+slots are gauge equivalent to each other). Indeed `V_b = ∑_{b'} Ṽ_{b'} h_{b'b}` with `h = g̃ g⁻¹`,
+and by Schur's lemma `h_{b'b} = 0` unless the two diagonal blocks are gauge equivalent. -/
 theorem range_rightCol_le_iSup_range_rightCol (hP : P.remainder = 0) (hQ : Q.remainder = 0)
     (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s) (b : BlockIndex S P.z) :
     LinearMap.range (P.rightCol b).mulVecLin ≤

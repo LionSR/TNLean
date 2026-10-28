@@ -14,36 +14,32 @@ injections `V_b`, `V'_{b'}`. Fix a position `k` of `P` carrying the slot `b`, an
 position `k'` of `Q` carry the slot `b'`. With
 $$U = M_k ∩ M'_{k'},\qquad N = M_{k-1} + M'_{k'-1},$$
 there is a unique intertwiner `X`, `X C_b^i = C'_{b'}^i X`, with `W'_{b'} x = X W_b x` for every
-`x ∈ U`; it is invertible, and with `Y = X⁻¹` the difference `V'_{b'} - V_b Y` takes values in
-`N`. On a pair of zero slots, and on a pair of block slots with the same label of the same
-family, `X` is a nonzero scalar `λ`: `W'_{b'} = λ W_b` on `U`, and `V'_{b'} ≡ λ⁻¹ V_b` modulo `N`
-(lecture note MultiBlockUniqueness, Theorem 5.3 (C: two reductions with different flags), Figure 3).
+`x ∈ U`; it is invertible, and with `Y = X⁻¹` the difference `V'_{b'} - V_b Y` takes values in `N`.
+On a pair of zero slots, and on a pair of block slots with the same label of the same family, `X` is
+a nonzero scalar `λ`: `W'_{b'} = λ W_b` on `U`, and `V'_{b'} ≡ λ⁻¹ V_b` modulo `N` (blueprint
+`thm:asym_uniq_different_flags`, *Two compressions with different flags*).
 
 The proof compares two linear maps on `U` with the same kernel: `W_b` and `W'_{b'}` both map `U`
-onto the coordinates of their slots, because `M_{k-1} + U = M_k` and `M'_{k'-1} + U = M'_{k'}`,
-and both have kernel `K = U ∩ M_{k-1} = U ∩ M'_{k'-1}` (Proposition 4.2 (The matching) of the same
-note).
+onto the coordinates of their slots, because `M_{k-1} + U = M_k` and `M'_{k'-1} + U = M'_{k'}`, and
+both have kernel `K = U ∩ M_{k-1} = U ∩ M'_{k'-1}` (blueprint `prop:asym_uniq_matching`, *The
+matching*).
 
 ## Main results
 
-* `MPSTensor.MultiBlockCompression.exists_intertwiner_of_matching`: Theorem 5.3 (C: two reductions
-  with different flags), existence
-  of the invertible intertwiner, the comparison of the reading maps on `U`, and of the
-  injections modulo `N`.
-* `MPSTensor.MultiBlockCompression.existsUnique_intertwiner_of_matching`: Theorem 5.3 (C: two
-  reductions with different flags),
-  uniqueness of the intertwiner.
+* `MPSTensor.MultiBlockCompression.exists_intertwiner_of_matching`: *Two compressions with different
+  flags*, existence of the invertible intertwiner, the comparison of the reading maps on `U`, and of
+  the injections modulo `N`.
+* `MPSTensor.MultiBlockCompression.existsUnique_intertwiner_of_matching`: *Two compressions with
+  different flags*, uniqueness of the intertwiner.
 * `MPSTensor.MultiBlockCompression.exists_smul_of_matching_inl`,
-  `MPSTensor.MultiBlockCompression.exists_smul_of_matching_inr`: Theorem 5.3 (C: two reductions with
-  different flags), the scalar
-  clause for block slots with the same label and for zero slots.
-* `MPSTensor.MultiBlockCompression.exists_ne_zero_eq_smul_of_slotTensor_eq`: the scalar clause
-  for equal blocks at any two slots of two families (lecture note AsymmetricFT,
-  Theorem 2.2(c)).
+  `MPSTensor.MultiBlockCompression.exists_smul_of_matching_inr`: *Two compressions with different
+  flags*, the scalar clause for block slots with the same label and for zero slots.
+* `MPSTensor.MultiBlockCompression.exists_ne_zero_eq_smul_of_slotTensor_eq`: the scalar clause for
+  equal blocks at any two slots of two families (*The asymmetric fundamental theorem of matrix
+  product states*, Theorem 2.2(c)).
 * `MPSTensor.MultiBlockCompression.matching_eq_of_flag_eq`,
-  `MPSTensor.MultiBlockCompression.inf_eq_and_sup_eq_of_flag_eq`: Theorem 5.3 (C: two reductions
-  with different flags) for coinciding
-  flags, where `U = M_k` and `N = M_{k-1}`.
+  `MPSTensor.MultiBlockCompression.inf_eq_and_sup_eq_of_flag_eq`: *Two compressions with different
+  flags* for coinciding flags, where `U = M_k` and `N = M_{k-1}`.
 -/
 
 open scoped Matrix
@@ -109,10 +105,9 @@ section OneCompression
 
 variable (P : MultiBlockCompression B S C)
 
-/-- The reading map of a slot at position `k` maps a subspace `U` with `M_{k-1} + U = M_k`
-onto the coordinates of the slot (lecture note MultiBlockUniqueness, proof of Theorem 5.3 (C: two
-reductions with different flags):
-`W_b(U) = W_b(M_{k-1} + U) = W_b(M_k)`). -/
+/-- The reading map of a slot at position `k` maps a subspace `U` with `M_{k-1} + U = M_k` onto the
+coordinates of the slot (proof of blueprint `thm:asym_uniq_different_flags`, *Two compressions with
+different flags*: `W_b(U) = W_b(M_{k-1} + U) = W_b(M_k)`). -/
 theorem leftRow_surjOn_of_sup_eq {b : BlockIndex S P.z}
     {U : Submodule (WordAlgebra d) B.WordModule}
     (hU : P.flag (P.ord b).castSucc ⊔ U = P.flag (P.ord b).succ) :
@@ -124,8 +119,8 @@ theorem leftRow_surjOn_of_sup_eq {b : BlockIndex S P.z}
   refine ⟨u, hu, ?_⟩
   simp only [map_add, Matrix.mulVec_add, P.leftRow_mulVec_eq_zero_of_mem hy, zero_add]
 
-/-- The kernel of the reading map of a slot at position `k` on `M_k` is `M_{k-1}` (lecture note
-MultiBlockUniqueness, Lemma 5.1 (The maps in terms of the flag), part (a)). -/
+/-- The kernel of the reading map of a slot at position `k` on `M_k` is `M_{k-1}` (blueprint
+`lem:asym_uniq_maps`, *The compression maps in terms of the flag*, the assertions on `W_b`). -/
 theorem mem_flag_of_leftRow_mulVec_eq_zero {b : BlockIndex S P.z} {x : B.WordModule}
     (hx : x ∈ P.flag (P.ord b).succ) (h : P.leftRow b *ᵥ WordModule.toVec B x = 0) :
     x ∈ P.flag (P.ord b).castSucc := by
@@ -136,10 +131,9 @@ theorem mem_flag_of_leftRow_mulVec_eq_zero {b : BlockIndex S P.z} {x : B.WordMod
   rw [P.ker_readStep] at hker
   exact hker
 
-/-- The reading map of a slot at position `k` intertwines the action of a letter on `M_k` with
-the diagonal block of the slot (lecture note MultiBlockUniqueness, Lemma 5.1 (The maps in terms of
-the flag), part (a)), written with
-the action of the word algebra. -/
+/-- The reading map of a slot at position `k` intertwines the action of a letter on `M_k` with the
+diagonal block of the slot (blueprint `lem:asym_uniq_maps`, *The compression maps in terms of the
+flag*, the assertions on `W_b`), written with the action of the word algebra. -/
 theorem leftRow_mulVec_ofWord_smul {b : BlockIndex S P.z} (i : Fin d) {x : B.WordModule}
     (hx : x ∈ P.flag (P.ord b).succ) :
     P.leftRow b *ᵥ WordModule.toVec B ((ofWord [i] : WordAlgebra d) • x) =
@@ -155,11 +149,10 @@ variable (P : MultiBlockCompression B S C) (Q : MultiBlockCompression B S' C')
   (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
   (hC' : ∀ t ∈ S', Kraus.IsNormal (C' t)) (hD' : ∀ t ∈ S', 0 < D' t)
 
-/-- **Theorem C: two reductions with different flags** (lecture note MultiBlockUniqueness,
-Theorem 5.3 (C: two reductions with different flags), Figure
-3). Let the position `k` of `P` carry the slot `b`, and the matched
-position `k'` of `Q` the slot `b'`; put `U = M_k ∩ M'_{k'}` and `N = M_{k-1} + M'_{k'-1}`. There
-are mutually inverse matrices `X`, `Y` such that `X` intertwines the diagonal blocks,
+/-- **Two compressions with different flags** (blueprint `thm:asym_uniq_different_flags`, *Two
+compressions with different flags*). Let the position `k` of `P` carry the slot `b`, and the matched
+position `k'` of `Q` the slot `b'`; put `U = M_k ∩ M'_{k'}` and `N = M_{k-1} + M'_{k'-1}`. There are
+mutually inverse matrices `X`, `Y` such that `X` intertwines the diagonal blocks,
 `X C_b^i = C'_{b'}^i X`, the reading maps satisfy `W'_{b'} x = X W_b x` for `x ∈ U`, and the
 injections satisfy `V'_{b'} v - V_b Y v ∈ N` for every `v`. -/
 theorem exists_intertwiner_of_matching (k : Fin (S.card + P.z)) {b : BlockIndex S P.z}
@@ -239,10 +232,10 @@ theorem exists_intertwiner_of_matching (k : Fin (S.card + P.z)) {b : BlockIndex 
     rw [map_sub, ← hyu, ← hyu']
     exact Submodule.mem_sup.2 ⟨u - u' - y', sub_mem h4 hy', y, hy, by abel⟩
 
-/-- **Theorem C, uniqueness of the intertwiner** (lecture note MultiBlockUniqueness,
-Theorem 5.3 (C: two reductions with different
-flags)): the intertwiner `X` with `W'_{b'} x = X W_b x` for `x ∈ U = M_k ∩ M'_{k'}` is
-unique, because `W_b` maps `U` onto the coordinates of `b`. -/
+/-- **Two compressions with different flags, uniqueness of the intertwiner** (blueprint
+`thm:asym_uniq_different_flags`, *Two compressions with different flags*): the intertwiner `X` with
+`W'_{b'} x = X W_b x` for `x ∈ U = M_k ∩ M'_{k'}` is unique, because `W_b` maps `U` onto the
+coordinates of `b`. -/
 theorem existsUnique_intertwiner_of_matching (k : Fin (S.card + P.z)) {b : BlockIndex S P.z}
     (hb : P.ord b = k) {b' : BlockIndex S' Q.z}
     (hb' : Q.ord b' = P.matching Q hC hD hC' hD' k) :
@@ -258,11 +251,11 @@ theorem existsUnique_intertwiner_of_matching (k : Fin (S.card + P.z)) {b : Block
   obtain ⟨x, hx, rfl⟩ := hs (Set.mem_univ v)
   rw [← hX'.2 x hx, hX x hx]
 
-/-- **Theorem C on a pair of zero slots** (lecture note MultiBlockUniqueness, Theorem 5.3 (C: two
-reductions with different flags)):
-when the position `k` of `P` and the matched position `k'` of `Q` carry zero slots, there is a
-nonzero scalar `λ` with `W'_{b'} = λ W_b` on `U = M_k ∩ M'_{k'}` and
-`V'_{b'} ≡ λ⁻¹ V_b` modulo `N = M_{k-1} + M'_{k'-1}`. -/
+/-- **Two compressions with different flags, on a pair of zero slots** (blueprint
+`thm:asym_uniq_different_flags`, *Two compressions with different flags*): when the position `k` of
+`P` and the matched position `k'` of `Q` carry zero slots, there is a nonzero scalar `λ` with
+`W'_{b'} = λ W_b` on `U = M_k ∩ M'_{k'}` and `V'_{b'} ≡ λ⁻¹ V_b` modulo `N = M_{k-1} + M'_{k'-1}`.
+-/
 theorem exists_smul_of_matching_inr (k : Fin (S.card + P.z)) {t : Fin P.z}
     (hk : P.ord (Sum.inr t) = k) {t' : Fin Q.z}
     (hk' : Q.ord (Sum.inr t') = P.matching Q hC hD hC' hD' k) :
@@ -282,10 +275,10 @@ theorem exists_smul_of_matching_inr (k : Fin (S.card + P.z)) {t : Fin P.z}
   · have h := hV v
     rwa [Matrix.smul_mulVec, Matrix.one_mulVec, Matrix.mulVec_smul] at h
 
-/-- **Matched positions of coinciding flags** (lecture note MultiBlockUniqueness, Theorem 5.3 (C:
-two reductions with different flags),
-the case of coinciding flags): if the position `j` of `Q` has the same two members
-`M'_{j-1} = M_{k-1}`, `M'_j = M_k` as the position `k` of `P`, then `j` is matched with `k`. -/
+/-- **Matched positions of coinciding flags** (blueprint `thm:asym_uniq_different_flags`, *Two
+compressions with different flags*, the case of coinciding flags): if the position `j` of `Q` has
+the same two members `M'_{j-1} = M_{k-1}`, `M'_j = M_k` as the position `k` of `P`, then `j` is
+matched with `k`. -/
 theorem matching_eq_of_flag_eq (k : Fin (S.card + P.z)) {j : Fin (S'.card + Q.z)}
     (h0 : Q.flag j.castSucc = P.flag k.castSucc) (h1 : Q.flag j.succ = P.flag k.succ) :
     P.matching Q hC hD hC' hD' k = j := by
@@ -297,10 +290,10 @@ theorem matching_eq_of_flag_eq (k : Fin (S.card + P.z)) {j : Fin (S'.card + Q.z)
     sup_eq_right.2 (P.flag_mono (Fin.castSucc_le_succ k))]
   exact (P.flag_covBy hC hD k).lt
 
-/-- **Theorem C for coinciding flags** (lecture note MultiBlockUniqueness, Theorem 5.3 (C: two
-reductions with different flags)):
-when the position `j` of `Q` has the same two members `M'_{j-1} = M_{k-1}`, `M'_j = M_k` as the
-position `k` of `P`, the subspaces of Theorem C are `U = M_k` and `N = M_{k-1}`. -/
+/-- **Two compressions with different flags, for coinciding flags** (blueprint
+`thm:asym_uniq_different_flags`, *Two compressions with different flags*): when the position `j` of
+`Q` has the same two members `M'_{j-1} = M_{k-1}`, `M'_j = M_k` as the position `k` of `P`, the
+subspaces of *Two compressions with different flags* are `U = M_k` and `N = M_{k-1}`. -/
 theorem inf_eq_and_sup_eq_of_flag_eq (k : Fin (S.card + P.z)) {j : Fin (S'.card + Q.z)}
     (h0 : Q.flag j.castSucc = P.flag k.castSucc) (h1 : Q.flag j.succ = P.flag k.succ) :
     P.flag k.succ ⊓ Q.flag (P.matching Q hC hD hC' hD' k).succ = P.flag k.succ ∧
@@ -316,12 +309,12 @@ section SameFamily
 variable (P Q : MultiBlockCompression B S C) (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
   (hD : ∀ s ∈ S, 0 < D s)
 
-/-- **Theorem C on a pair of block slots with the same label** (lecture note
-MultiBlockUniqueness, Theorem 5.3 (C: two reductions with different
-flags)): for two compressions onto the same family, when the
-position `k` of `P` and the matched position `k'` of `Q` both carry the block `C_s`, the
-intertwiner of Theorem C commutes with `C_s` and is a nonzero scalar `λ` by Schur's lemma; so
-`W'_s = λ W_s` on `U = M_k ∩ M'_{k'}` and `V'_s ≡ λ⁻¹ V_s` modulo `N = M_{k-1} + M'_{k'-1}`. -/
+/-- **Two compressions with different flags, on a pair of block slots with the same label**
+(blueprint `thm:asym_uniq_different_flags`, *Two compressions with different flags*): for two
+compressions onto the same family, when the position `k` of `P` and the matched position `k'` of `Q`
+both carry the block `C_s`, the intertwiner of *Two compressions with different flags* commutes with
+`C_s` and is a nonzero scalar `λ` by Schur's lemma; so `W'_s = λ W_s` on `U = M_k ∩ M'_{k'}` and
+`V'_s ≡ λ⁻¹ V_s` modulo `N = M_{k-1} + M'_{k'-1}`. -/
 theorem exists_smul_of_matching_inl (k : Fin (S.card + P.z)) (s : {s // s ∈ S})
     (hk : P.ord (Sum.inl s) = k) (hk' : Q.ord (Sum.inl s) = P.matching Q hC hD hC hD k) :
     ∃ c : ℂ, c ≠ 0 ∧
@@ -348,12 +341,12 @@ section EqualBlocks
 
 variable (P : MultiBlockCompression B S C) (Q : MultiBlockCompression B S' C')
 
-/-- **Equal blocks give a scalar** (lecture note AsymmetricFT, Theorem 2.2(c); milestone V,
-V2.5), for two families: if the diagonal blocks at the slot `b` of `P` and the slot `b'` of `Q`
-are equal tensors (equal sizes, letters equal after the size identification; two zero slots
-count as equal), then every invertible intertwiner `X` from the first to the second, in
-particular the intertwiner of Theorem C for matched slots, is a nonzero multiple of the
-identification. This covers equal blocks at different labels of one family and blocks of two
+/-- **Equal blocks give a scalar** (*The asymmetric fundamental theorem of matrix product states*,
+Theorem 2.2(c)), for two families: if the diagonal blocks at the slot `b` of `P` and the slot `b'`
+of `Q` are equal tensors (equal sizes, letters equal after the size identification; two zero slots
+count as equal), then every invertible intertwiner `X` from the first to the second, in particular
+the intertwiner of *Two compressions with different flags* for matched slots, is a nonzero multiple
+of the identification. This covers equal blocks at different labels of one family and blocks of two
 families. The statement holds for any two slots, matched or not, and uses only `X Y = 1`. -/
 theorem exists_ne_zero_eq_smul_of_slotTensor_eq (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
     (hD : ∀ s ∈ S, 0 < D s) {b : BlockIndex S P.z} {b' : BlockIndex S' Q.z}

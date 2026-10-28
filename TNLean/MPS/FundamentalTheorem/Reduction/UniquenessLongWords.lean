@@ -10,47 +10,44 @@ import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessDifferentFlags
 # Long words and the one-block theorem
 
 Let `P` and `Q` be two multi-block compressions of the same tensor `B` onto the same family of
-normal blocks `C s`, `s ∈ S`, of positive bond dimension, with flags `M_k` and `M'_{k'}`,
-reading maps `W_s`, `W'_s` and injections `V_s`, `V'_s`. Suppose the block `C_s` occurs once in
-the family up to gauge. Then the matching of the two flags pairs the position `k` of `s` in `P`
-with the position `k'` of `s` in `Q`, and Theorem C gives a nonzero scalar `λ` with
-`W'_s = λ W_s` on `U = M_k ∩ M'_{k'}` and `V'_s ≡ λ⁻¹ V_s` modulo `N = M_{k-1} + M'_{k'-1}`.
+normal blocks `C s`, `s ∈ S`, of positive bond dimension, with flags `M_k` and `M'_{k'}`, reading
+maps `W_s`, `W'_s` and injections `V_s`, `V'_s`. Suppose the block `C_s` occurs once in the family
+up to gauge. Then the matching of the two flags pairs the position `k` of `s` in `P` with the
+position `k'` of `s` in `Q`, and *Two compressions with different flags* (blueprint
+`thm:asym_uniq_different_flags`) gives a nonzero scalar `λ` with `W'_s = λ W_s` on
+`U = M_k ∩ M'_{k'}` and `V'_s ≡ λ⁻¹ V_s` modulo `N = M_{k-1} + M'_{k'-1}`.
 
-A word of length `|w| ≥ z` maps the bond space into the step of the last block slot and kills
-the step below the first block slot (lecture note MultiBlockUniqueness, Lemma 5.6 (Long words in a
-triangular form)). So when `s`
-is the last block slot in both compressions, `B^w` maps everything into `U`, and
+A word of length `|w| ≥ z` maps the bond space into the step of the last block slot and kills the
+step below the first block slot (blueprint `lem:asym_uniq_long_words`, *Long words in a triangular
+form*). So when `s` is the last block slot in both compressions, `B^w` maps everything into `U`, and
 `W'_s B^w = λ W_s B^w`; when `s` is the first block slot in both, `B^w` kills `N`, and
-`B^w V'_s = λ⁻¹ B^w V_s` (Corollary 5.10 (C3: extremal slots)). With one block every other slot is a
-zero slot,
-and both identities hold for `|w| ≥ z = D_B - D_s` (Corollary 5.8 (C2: the one-block theorem)).
-When `s` is the last slot outright `U` is the whole bond space, and when it is the first slot
-outright `N = 0`; then the bare maps agree up to the scalar (Corollary 5.7 (C1: bare uniqueness at
-the ends of the flag)).
+`B^w V'_s = λ⁻¹ B^w V_s` (blueprint `cor:asym_uniq_one_block`, *Bare uniqueness at the ends of the
+flag; the one-block theorem*). With one block every other slot is a zero slot, and both identities
+hold for `|w| ≥ z = D_B - D_s`, the one-block theorem. When `s` is the last slot outright `U` is the
+whole bond space, and when it is the first slot outright `N = 0`; then the bare maps agree up to the
+scalar.
 
 ## Main results
 
-* `MPSTensor.MultiBlockCompression.matching_ord_inl_of_unique`: a block occurring once up to
-  gauge is matched with itself.
+* `MPSTensor.MultiBlockCompression.matching_ord_inl_of_unique`: a block occurring once up to gauge
+  is matched with itself.
 * `MPSTensor.MultiBlockCompression.evalWord_mulVec_mem_flag_of_forall_le`,
-  `MPSTensor.MultiBlockCompression.evalWord_mulVec_eq_zero_of_mem_flag_of_forall_ge`:
-  Lemma 5.6 (Long words in a triangular form) read in the flag, `B^w ℂ^{D_B} ⊆ M_{k_max}` and
-  `B^w M_{k_min - 1} = 0`.
+  `MPSTensor.MultiBlockCompression.evalWord_mulVec_eq_zero_of_mem_flag_of_forall_ge`: the long-word
+  lemma read in the flag, `B^w ℂ^{D_B} ⊆ M_{k_max}` and `B^w M_{k_min - 1} = 0`.
 * `MPSTensor.MultiBlockCompression.exists_left_eq_smul_of_last`,
-  `MPSTensor.MultiBlockCompression.exists_right_eq_inv_smul_of_first`: Corollary 5.7 (C1: bare
-  uniqueness at the ends of the flag).
-* `MPSTensor.MultiBlockCompression.exists_smul_single_block`: Corollary 5.8 (C2: the one-block
-  theorem).
+  `MPSTensor.MultiBlockCompression.exists_right_eq_inv_smul_of_first`: bare uniqueness at the ends
+  of the flag.
+* `MPSTensor.MultiBlockCompression.exists_smul_single_block`: the one-block theorem.
 * `MPSTensor.MultiBlockCompression.exists_left_mul_evalWord_eq_smul_of_last`,
-  `MPSTensor.MultiBlockCompression.exists_evalWord_mul_right_eq_inv_smul_of_first`:
-  Corollary 5.10 (C3: extremal slots).
+  `MPSTensor.MultiBlockCompression.exists_evalWord_mul_right_eq_inv_smul_of_first`: uniqueness after
+  long words at the first and last block slots.
 
 ## References
 
-Lecture note MultiBlockUniqueness, Section 5.1: Lemma 5.6 (Long words in a triangular form),
-Corollary 5.7 (C1: bare uniqueness at the ends of the flag), Corollary 5.8 (C2: the one-block
-theorem) and
-Corollary 5.10 (C3: extremal slots).
+Blueprint `lem:asym_uniq_long_words`, *Long words in a triangular form*, and blueprint
+`cor:asym_uniq_one_block`, *Bare uniqueness at the ends of the flag; the one-block theorem*; *The
+asymmetric fundamental theorem of matrix product states*, Lemma 6.7 and Corollaries 6.8, 6.9 and
+6.11.
 -/
 
 open scoped Matrix
@@ -73,10 +70,9 @@ theorem gauge_mulVec (A : Matrix (Fin DB) (Fin DB) ℂ) (v : Fin DB → ℂ) :
   rw [conjMatrix_apply, LinearMap.toMatrix'_mulVec, LinearEquiv.conj_apply_apply,
     Matrix.toLin'_apply, LinearEquiv.symm_apply_apply]
 
-/-- **Long words land in the step of the last block slot** (lecture note MultiBlockUniqueness,
-Lemma 5.6 (Long words in a triangular form),
-`B^w ℂ^{D_B} ⊆ M_{k_max}`). If every block slot sits at a position `≤ k` and
-`|w| ≥ z`, then `B^w v ∈ M_k` for every vector `v` of the bond space. -/
+/-- **Long words land in the step of the last block slot** (blueprint `lem:asym_uniq_long_words`,
+*Long words in a triangular form*, `B^w ℂ^{D_B} ⊆ M_{k_max}`). If every block slot sits at a
+position `≤ k` and `|w| ≥ z`, then `B^w v ∈ M_k` for every vector `v` of the bond space. -/
 theorem evalWord_mulVec_mem_flag_of_forall_le {k : Fin (S.card + P.z)}
     (hk : ∀ s : {s // s ∈ S}, P.ord (Sum.inl s) ≤ k) (w : List (Fin d)) (hw : P.z ≤ w.length)
     (v : Fin DB → ℂ) :
@@ -89,11 +85,10 @@ theorem evalWord_mulVec_mem_flag_of_forall_le {k : Fin (S.card + P.z)}
   rw [P.conjMatrix_evalWord_eq_zero_of_forall_lt_row w hw (fun s => (hk s).trans_lt hky) y',
     zero_mul]
 
-/-- **Long words kill the step below the first block slot** (lecture note
-MultiBlockUniqueness, Lemma 5.6 (Long words in a triangular form),
-`B^w M_{k_min - 1} = 0`). If every block slot sits at a
-position `≥ k` and `|w| ≥ z`, then `B^w x = 0` for every `x ∈ M_{k-1}`, the span of the slots
-at positions `< k`. -/
+/-- **Long words kill the step below the first block slot** (blueprint `lem:asym_uniq_long_words`,
+*Long words in a triangular form*, `B^w M_{k_min - 1} = 0`). If every block slot sits at a position
+`≥ k` and `|w| ≥ z`, then `B^w x = 0` for every `x ∈ M_{k-1}`, the span of the slots at positions
+`< k`. -/
 theorem evalWord_mulVec_eq_zero_of_mem_flag_of_forall_ge {k : Fin (S.card + P.z)}
     (hk : ∀ s : {s // s ∈ S}, k ≤ P.ord (Sum.inl s)) (w : List (Fin d)) (hw : P.z ≤ w.length)
     {x : B.WordModule} (hx : x ∈ P.flag k.castSucc) :
@@ -122,8 +117,8 @@ theorem flag_castSucc_eq_bot_of_forall_ge {k : Fin (S.card + P.z)} (hk : ∀ b, 
     funext fun y => P.mem_flag_iff.1 hx y (Fin.castSucc_le_castSucc_iff.2 (hk y.1))
   exact P.coord.map_eq_zero_iff.1 h
 
-/-- With a single block `C_s` the number of zero slots is `z = D_B - D_s` (lecture note
-MultiBlockUniqueness, Corollary 5.8 (C2: the one-block theorem)). -/
+/-- With a single block `C_s` the number of zero slots is `z = D_B - D_s` (blueprint
+`cor:asym_uniq_one_block`, *Bare uniqueness at the ends of the flag; the one-block theorem*). -/
 theorem z_eq_of_single_block {s : {s // s ∈ S}} (hS : ∀ t ∈ S, t = s.1) :
     P.z = DB - D s.1 := by
   have hsum : ∑ t ∈ S, D t = D s.1 :=
@@ -138,10 +133,10 @@ section SameFamily
 variable (P Q : MultiBlockCompression B S C) (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
   (hD : ∀ s ∈ S, 0 < D s)
 
-/-- **A block occurring once up to gauge is matched with itself** (lecture note
-MultiBlockUniqueness, proofs of Corollary 5.7 (C1: bare uniqueness at the ends of the flag) and
-Corollary 5.8 (C2: the one-block theorem)): the matched label of `s` carries a
-block gauge related to `C_s` (Theorem 4.3 (A: the blocks are unique)), so it is `s`. -/
+/-- **A block occurring once up to gauge is matched with itself** (proof of blueprint
+`cor:asym_uniq_one_block`, *Bare uniqueness at the ends of the flag; the one-block theorem*): the
+matched label of `s` carries a block gauge related to `C_s` (blueprint `thm:asym_uniq_blocks`, *The
+blocks are unique*), so it is `s`. -/
 theorem labelMatching_eq_of_unique {s : {s // s ∈ S}}
     (hs : ∀ t ∈ S, IsGaugeRelated (C s.1) (C t) → t = s.1) :
     P.labelMatching Q hC hD hC hD s = s := by
@@ -149,10 +144,9 @@ theorem labelMatching_eq_of_unique {s : {s // s ∈ S}}
   rw [slotMatching_inl] at h
   exact Subtype.ext (hs _ (P.labelMatching Q hC hD hC hD s).2 h)
 
-/-- **The two `s`-steps are matched** (lecture note MultiBlockUniqueness, proofs of
-Corollary 5.7 (C1: bare uniqueness at the ends of the flag) and Corollary 5.8 (C2: the one-block
-theorem)): if `C_s` occurs once up to gauge, the matching sends the position of
-`s` in `P` to the position of `s` in `Q`. -/
+/-- **The two `s`-steps are matched** (proof of blueprint `cor:asym_uniq_one_block`, *Bare
+uniqueness at the ends of the flag; the one-block theorem*): if `C_s` occurs once up to gauge, the
+matching sends the position of `s` in `P` to the position of `s` in `Q`. -/
 theorem matching_ord_inl_of_unique {s : {s // s ∈ S}}
     (hs : ∀ t ∈ S, IsGaugeRelated (C s.1) (C t) → t = s.1) :
     P.matching Q hC hD hC hD (P.ord (Sum.inl s)) = Q.ord (Sum.inl s) := by
@@ -162,12 +156,11 @@ theorem matching_ord_inl_of_unique {s : {s // s ∈ S}}
 
 include hC hD
 
-/-- **Long words and an unrepeated block** (lecture note MultiBlockUniqueness, proofs of
-Corollary 5.8 (C2: the one-block theorem) and Corollary 5.10 (C3: extremal
-slots)). Let `C_s` occur once in the family up to gauge. There is one nonzero
-scalar `λ` such that, for every word with `|w| ≥ z`, `W'_s B^w = λ W_s B^w` when `s` is the last
-block slot in both compressions, and `B^w V'_s = λ⁻¹ B^w V_s` when it is the first block slot in
-both. -/
+/-- **Long words and an unrepeated block** (proof of blueprint `cor:asym_uniq_one_block`, *Bare
+uniqueness at the ends of the flag; the one-block theorem*). Let `C_s` occur once in the family up
+to gauge. There is one nonzero scalar `λ` such that, for every word with `|w| ≥ z`,
+`W'_s B^w = λ W_s B^w` when `s` is the last block slot in both compressions, and
+`B^w V'_s = λ⁻¹ B^w V_s` when it is the first block slot in both. -/
 theorem exists_smul_evalWord_of_unique {s : {s // s ∈ S}}
     (hs : ∀ t ∈ S, IsGaugeRelated (C s.1) (C t) → t = s.1) :
     ∃ c : ℂ, c ≠ 0 ∧
@@ -202,11 +195,11 @@ theorem exists_smul_evalWord_of_unique {s : {s // s ∈ S}}
     rw [← Matrix.mulVec_mulVec, Matrix.smul_mulVec, ← Matrix.mulVec_mulVec, ← Matrix.mulVec_smul]
     exact sub_eq_zero.1 h0.symm
 
-/-- **C3: an unrepeated last block slot** (lecture note MultiBlockUniqueness, Corollary 5.10 (C3:
-extremal slots)).
-If `C_s` occurs once up to gauge and `s` is the last block slot in both compressions, only zero
-slots coming after it, then there is a nonzero scalar `λ` with `W'_s B^w = λ W_s B^w` for every
-word with `|w| ≥ z`. -/
+/-- **Uniqueness after long words at an unrepeated last block slot** (blueprint
+`cor:asym_uniq_one_block`, *Bare uniqueness at the ends of the flag; the one-block theorem*). If
+`C_s` occurs once up to gauge and `s` is the last block slot in both compressions, only zero slots
+coming after it, then there is a nonzero scalar `λ` with `W'_s B^w = λ W_s B^w` for every word with
+`|w| ≥ z`. -/
 theorem exists_left_mul_evalWord_eq_smul_of_last {s : {s // s ∈ S}}
     (hs : ∀ t ∈ S, IsGaugeRelated (C s.1) (C t) → t = s.1)
     (hP : ∀ t : {t // t ∈ S}, P.ord (Sum.inl t) ≤ P.ord (Sum.inl s))
@@ -216,11 +209,11 @@ theorem exists_left_mul_evalWord_eq_smul_of_last {s : {s // s ∈ S}}
   obtain ⟨c, hc, h, -⟩ := P.exists_smul_evalWord_of_unique Q hC hD hs
   exact ⟨c, hc, h hP hQ⟩
 
-/-- **C3: an unrepeated first block slot** (lecture note MultiBlockUniqueness, Corollary 5.10 (C3:
-extremal slots)).
-If `C_s` occurs once up to gauge and `s` is the first block slot in both compressions, only zero
-slots coming before it, then there is a nonzero scalar `λ` with `B^w V'_s = λ⁻¹ B^w V_s` for
-every word with `|w| ≥ z`. -/
+/-- **Uniqueness after long words at an unrepeated first block slot** (blueprint
+`cor:asym_uniq_one_block`, *Bare uniqueness at the ends of the flag; the one-block theorem*). If
+`C_s` occurs once up to gauge and `s` is the first block slot in both compressions, only zero slots
+coming before it, then there is a nonzero scalar `λ` with `B^w V'_s = λ⁻¹ B^w V_s` for every word
+with `|w| ≥ z`. -/
 theorem exists_evalWord_mul_right_eq_inv_smul_of_first {s : {s // s ∈ S}}
     (hs : ∀ t ∈ S, IsGaugeRelated (C s.1) (C t) → t = s.1)
     (hP : ∀ t : {t // t ∈ S}, P.ord (Sum.inl s) ≤ P.ord (Sum.inl t))
@@ -230,11 +223,10 @@ theorem exists_evalWord_mul_right_eq_inv_smul_of_first {s : {s // s ∈ S}}
   obtain ⟨c, hc, -, h⟩ := P.exists_smul_evalWord_of_unique Q hC hD hs
   exact ⟨c, hc, h hP hQ⟩
 
-/-- **C2: the one-block theorem** (lecture note MultiBlockUniqueness, Corollary 5.8 (C2: the
-one-block theorem)). For two
-compressions of `B` onto a single block `C_s`, with maps `(W, V)` and `(W', V')`, there is a
-nonzero scalar `λ` with `W' B^w = λ W B^w` and `B^w V' = λ⁻¹ B^w V` for every word with
-`|w| ≥ D_B - D_s`. -/
+/-- **The one-block theorem** (blueprint `cor:asym_uniq_one_block`, *Bare uniqueness at the ends of
+the flag; the one-block theorem*). For two compressions of `B` onto a single block `C_s`, with maps
+`(W, V)` and `(W', V')`, there is a nonzero scalar `λ` with `W' B^w = λ W B^w` and
+`B^w V' = λ⁻¹ B^w V` for every word with `|w| ≥ D_B - D_s`. -/
 theorem exists_smul_single_block {s : {s // s ∈ S}} (hS : ∀ t ∈ S, t = s.1) :
     ∃ c : ℂ, c ≠ 0 ∧ ∀ w : List (Fin d), DB - D s.1 ≤ w.length →
       Q.left s * Kraus.evalWord B w = c • (P.left s * Kraus.evalWord B w) ∧
@@ -246,10 +238,10 @@ theorem exists_smul_single_block {s : {s // s ∈ S}} (hS : ∀ t ∈ S, t = s.1
   exact ⟨hl (fun t => by rw [heq t]) (fun t => by rw [heq t]) w hw,
     hr (fun t => by rw [heq t]) (fun t => by rw [heq t]) w hw⟩
 
-/-- **C1: bare uniqueness at the end of the flag** (lecture note MultiBlockUniqueness,
-Corollary 5.7 (C1: bare uniqueness at the ends of the
-flag)). If `C_s` occurs once up to gauge and `s` is the last slot in both compressions,
-then `W'_s = λ W_s` as matrices for a nonzero scalar `λ`: here `U` is the whole bond space. -/
+/-- **Bare uniqueness at the end of the flag** (blueprint `cor:asym_uniq_one_block`, *Bare
+uniqueness at the ends of the flag; the one-block theorem*). If `C_s` occurs once up to gauge and
+`s` is the last slot in both compressions, then `W'_s = λ W_s` as matrices for a nonzero scalar `λ`:
+here `U` is the whole bond space. -/
 theorem exists_left_eq_smul_of_last {s : {s // s ∈ S}}
     (hs : ∀ t ∈ S, IsGaugeRelated (C s.1) (C t) → t = s.1)
     (hP : ∀ b, P.ord b ≤ P.ord (Sum.inl s)) (hQ : ∀ b, Q.ord b ≤ Q.ord (Sum.inl s)) :
@@ -264,10 +256,10 @@ theorem exists_left_eq_smul_of_last {s : {s // s ∈ S}}
   rw [Matrix.smul_mulVec]
   exact h
 
-/-- **C1: bare uniqueness at the start of the flag** (lecture note MultiBlockUniqueness,
-Corollary 5.7 (C1: bare uniqueness at the ends of the
-flag)). If `C_s` occurs once up to gauge and `s` is the first slot in both compressions,
-then `V'_s = λ⁻¹ V_s` as matrices for a nonzero scalar `λ`: here `N = 0`. -/
+/-- **Bare uniqueness at the start of the flag** (blueprint `cor:asym_uniq_one_block`, *Bare
+uniqueness at the ends of the flag; the one-block theorem*). If `C_s` occurs once up to gauge and
+`s` is the first slot in both compressions, then `V'_s = λ⁻¹ V_s` as matrices for a nonzero scalar
+`λ`: here `N = 0`. -/
 theorem exists_right_eq_inv_smul_of_first {s : {s // s ∈ S}}
     (hs : ∀ t ∈ S, IsGaugeRelated (C s.1) (C t) → t = s.1)
     (hP : ∀ b, P.ord (Sum.inl s) ≤ P.ord b) (hQ : ∀ b, Q.ord (Sum.inl s) ≤ Q.ord b) :

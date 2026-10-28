@@ -10,7 +10,7 @@ import TNLean.MPS.Examples.MultiBlock.Periodic
 import TNLean.MPS.Examples.MultiBlock.Running
 import TNLean.MPS.Examples.MultiBlock.Multiplicity
 import TNLean.MPS.Examples.MultiBlock.Worked
-import TNLean.MPS.Examples.SharpnessOneBlock
+import TNLean.MPS.Examples.MultiBlock.SharpnessOneBlock
 import TNLean.MPS.FundamentalTheorem.Reduction.Flag
 import TNLean.MPS.FundamentalTheorem.Reduction.IrreducibleTensor
 import TNLean.MPS.FundamentalTheorem.Reduction.SplitUniqueness
@@ -25,21 +25,20 @@ import TNLean.MPS.Symmetry.MPOSymmetry.ZipperUniqueness
 /-!
 # Statement probes and axiom checks for the asymmetric fundamental theorem
 
-Milestone V formalizes the lecture note AsymmetricFT (the asymmetric fundamental theorem): the
-lemmas on irreducible tensors (Section 1 of the milestone V statements, V1.1-V1.5) and the
-comparison of two reductions, possibly onto two different families of blocks (Section 2,
-V2.1-V2.10, with the components of Theorem E listed under V2.6 and V2.7). Each library
-declaration named there is instantiated at explicit types: two letters, bond dimension three,
-and families of blocks labelled by `Fin 2` and `Fin 3`. Each probe restates the conclusion and
-closes it by the theorem itself, so a change of statement fails here. The axiom checks pin the
-standard axioms for every declaration of milestone V, the examples of Section 3 (V3.1-V3.9)
-included.
+The library formalizes *The asymmetric fundamental theorem of matrix product states* (blueprint
+`sec:asym_uniqueness`): the lemmas on irreducible tensors and the comparison of two reductions,
+possibly onto two different families of blocks, including the components of *A basis adapted to
+both flags*. Each library declaration of the first two groups of sections below is instantiated at
+explicit types: two letters, bond dimension three, and families of blocks labelled by `Fin 2` and
+`Fin 3`. Each probe restates the conclusion and closes it by the theorem itself, so a change of
+statement fails here. The axiom checks pin the standard axioms for every library declaration and
+for the worked examples.
 -/
 
 open scoped Matrix
 open MPSTensor WordAlgebra
 
-/-! ### V1.1: irreducible tensors and simple modules -/
+/-! ### Irreducible tensors and simple modules -/
 
 example (C : MPSTensor 2 3) :
     Matrix.IsIrreducibleAction C ∧ 0 < 3 ↔ IsSimpleModule (WordAlgebra 2) C.WordModule :=
@@ -52,7 +51,7 @@ example (C : MPSTensor 2 3) (hC : Kraus.IsNormal C) (hD : 0 < 3) :
 example {A : MPSTensor 2 3} (hA : Kraus.IsNormal A) : ∃ i, A i ≠ 0 :=
   exists_ne_zero_of_isNormal hA
 
-/-! ### V1.2: Schur's lemma (AsymmetricFT, Lemma 3.1) -/
+/-! ### Schur's lemma (*The asymmetric fundamental theorem of matrix product states*, Lemma 3.1) -/
 
 example {C : MPSTensor 2 3} {C' : MPSTensor 2 2} (hC : Matrix.IsIrreducibleAction C)
     (hC' : Matrix.IsIrreducibleAction C') {X : Matrix (Fin 2) (Fin 3) ℂ}
@@ -71,7 +70,8 @@ example {C : MPSTensor 2 3} {C' : MPSTensor 2 2} (hC : Matrix.IsIrreducibleActio
     ∃ c : ℂ, X = c • X₀ :=
   exists_eq_smul_of_intertwines hC hXY hYX hX₀ hX
 
-/-! ### V1.3: traces along a flag (AsymmetricFT, Lemma 4.1) -/
+/-! ### Traces along a flag
+(*The asymmetric fundamental theorem of matrix product states*, Lemma 4.1) -/
 
 example (B : MPSTensor 2 3) (M : Fin (2 + 1) → Submodule (WordAlgebra 2) B.WordModule)
     (h0 : M 0 = ⊥) (hlast : M (Fin.last 2) = ⊤) (hmono : Monotone M) (w : List (Fin 2)) :
@@ -79,7 +79,7 @@ example (B : MPSTensor 2 3) (M : Fin (2 + 1) → Submodule (WordAlgebra 2) B.Wor
       ∑ k : Fin 2, traceWord (Submodule.subquot (M k.castSucc) (M k.succ)) w :=
   trace_evalWord_eq_sum_traceWord_subquot B M h0 hlast hmono w
 
-/-! ### V1.4: density (AsymmetricFT, Theorem 4.2) -/
+/-! ### Density (*The asymmetric fundamental theorem of matrix product states*, Theorem 4.2) -/
 
 example {D : Fin 2 → ℕ} (C : ∀ j, MPSTensor 2 (D j))
     (hirr : ∀ j, Matrix.IsIrreducibleAction (C j))
@@ -96,7 +96,8 @@ example {D : Fin 2 → ℕ} (C : ∀ j, MPSTensor 2 (D j))
       ∀ j, LinearMap.toMatrix' ((C j).wordRep.asAlgebraHom a) = Y j :=
   exists_aug_eq_zero_eval_eq_of_pairwise_not_isGaugeRelated C hirr hne hlet Y
 
-/-! ### V1.5: independence of traces (AsymmetricFT, Corollary 4.3) -/
+/-! ### Independence of traces
+(*The asymmetric fundamental theorem of matrix product states*, Corollary 4.3) -/
 
 example {D : Fin 2 → ℕ} (C : ∀ j, MPSTensor 2 (D j))
     (hirr : ∀ j, Matrix.IsIrreducibleAction (C j))
@@ -106,14 +107,14 @@ example {D : Fin 2 → ℕ} (C : ∀ j, MPSTensor 2 (D j))
     c = 0 :=
   eq_zero_of_forall_sum_mul_trace_evalWord_eq_zero C hirr hne hlet c h
 
-/-! ### V2.1: the maps (AsymmetricFT, (1.2)) -/
+/-! ### The maps (*The asymmetric fundamental theorem of matrix product states*, equation (1.2)) -/
 
 example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} {B : MPSTensor 2 3}
     (P : MultiBlockCompression B S C) {b b' : BlockIndex S P.z} (h : b ≠ b') :
     P.leftRow b * P.rightCol b' = 0 :=
   P.leftRow_mul_rightCol_of_ne h
 
-/-! ### V2.2: the torsor of Theorem B (AsymmetricFT, Theorem 6.2) -/
+/-! ### The torsor (blueprint `thm:asym_uniq_same_flag`, *Two compressions with the same flag*) -/
 
 example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} {B : MPSTensor 2 3}
     (P : MultiBlockCompression B S C) (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
@@ -122,13 +123,14 @@ example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} 
       (fun p : {p : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ × (BlockIndex S P.z → ℂ) //
           p.1.BlockTriangular (fun x => P.ord x.1) ∧ (∀ b, p.2 b ≠ 0) ∧
             ∀ b, p.1.blockDiag' b = p.2 b • 1} =>
-        P.conjT p.2.1 p.2.2.1 p.2.2.2)
+        P.conjTriangular p.2.1 p.2.2.1 p.2.2.2)
       Set.univ
       {Q : MultiBlockCompression B S C | ∃ hz : Q.z = P.z, HEq Q.ord P.ord ∧
           ∀ k, Q.flag (Fin.cast (by rw [hz]) k) = P.flag k} :=
-  P.bijOn_conjT hC hD
+  P.bijOn_conjTriangular hC hD
 
-/-! ### V2.3: the set of all reductions (AsymmetricFT, Theorem 6.6) -/
+/-! ### The set of all reductions
+(blueprint `thm:asym_uniq_all`, *The set of all compressions*) -/
 
 example (B : MPSTensor 2 3) (S : Finset (Fin 2)) {D : Fin 2 → ℕ} (C : ∀ s, MPSTensor 2 (D s))
     (z : ℕ) :
@@ -144,17 +146,17 @@ example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} 
         Matrix (BlockSpace D S (rep F).z) (BlockSpace D S (rep F).z) ℂ,
       ∃ (ht : p.2.BlockTriangular fun x => (rep p.1).ord x.1) (μ : BlockIndex S (rep p.1).z → ℂ)
         (hμ : ∀ b, μ b ≠ 0) (hh : ∀ b, p.2.blockDiag' b = μ b • 1),
-        P = (rep p.1).conjT ht hμ hh) ∧
+        P = (rep p.1).conjTriangular ht hμ hh) ∧
     ∀ p : (F : FlagData B.WordModule S C) ×
         Matrix (BlockSpace D S (rep F).z) (BlockSpace D S (rep F).z) ℂ,
       (∃ (ht : p.2.BlockTriangular fun x => (rep p.1).ord x.1)
         (μ : BlockIndex S (rep p.1).z → ℂ) (hμ : ∀ b, μ b ≠ 0)
-        (hh : ∀ b, p.2.blockDiag' b = μ b • 1), P = (rep p.1).conjT ht hμ hh) →
+        (hh : ∀ b, p.2.blockDiag' b = μ b • 1), P = (rep p.1).conjTriangular ht hμ hh) →
       p.1 = P.toFlagData :=
-  MultiBlockCompression.existsUnique_conjT hC hD rep hrep P
+  MultiBlockCompression.existsUnique_conjTriangular hC hD rep hrep P
 
-/- The hypothesis `hrep` of V2.3(b) can be met: the compression of a labelled flag has that
-labelled flag. -/
+/- The hypothesis `hrep` of `existsUnique_conjTriangular` can be met: the compression of a
+labelled flag has that labelled flag. -/
 example {D : Fin 2 → ℕ} {B : MPSTensor 2 3} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)}
     (F : FlagData B.WordModule S C) : F.toMultiBlockCompression.toFlagData = F :=
   F.toMultiBlockCompression_toFlagData
@@ -168,26 +170,26 @@ example {D : Fin 2 → ℕ} {B : MPSTensor 2 3} {S : Finset (Fin 2)} {C : ∀ s,
       ∃ (ht : p.2.BlockTriangular fun x => p.1.toMultiBlockCompression.ord x.1)
         (μ : BlockIndex S p.1.toMultiBlockCompression.z → ℂ)
         (hμ : ∀ b, μ b ≠ 0) (hh : ∀ b, p.2.blockDiag' b = μ b • 1),
-        P = p.1.toMultiBlockCompression.conjT ht hμ hh) ∧
+        P = p.1.toMultiBlockCompression.conjTriangular ht hμ hh) ∧
     ∀ p : (F : FlagData B.WordModule S C) ×
         Matrix (BlockSpace D S F.toMultiBlockCompression.z)
           (BlockSpace D S F.toMultiBlockCompression.z) ℂ,
       (∃ (ht : p.2.BlockTriangular fun x => p.1.toMultiBlockCompression.ord x.1)
         (μ : BlockIndex S p.1.toMultiBlockCompression.z → ℂ) (hμ : ∀ b, μ b ≠ 0)
         (hh : ∀ b, p.2.blockDiag' b = μ b • 1),
-        P = p.1.toMultiBlockCompression.conjT ht hμ hh) →
+        P = p.1.toMultiBlockCompression.conjTriangular ht hμ hh) →
       p.1 = P.toFlagData :=
-  MultiBlockCompression.existsUnique_conjT hC hD FlagData.toMultiBlockCompression
+  MultiBlockCompression.existsUnique_conjTriangular hC hD FlagData.toMultiBlockCompression
     FlagData.toMultiBlockCompression_toFlagData P
 
 example {D : Fin 2 → ℕ} {B : MPSTensor 2 3} {S : Finset (Fin 2)}
     {C : ∀ s, MPSTensor 2 (D s)} :
     ∃ rep : FlagData B.WordModule S C → MultiBlockCompression B S C,
       ∀ F, (rep F).toFlagData = F :=
-  FlagData.exists_rep
+  FlagData.exists_rightInverse_toFlagData
 
-/-! ### V2.4: one step against another; matched steps (AsymmetricFT, Lemma 5.1(c),
-Proposition 5.2) -/
+/-! ### One step against another; matched steps
+(blueprint `lem:asym_uniq_step`, `prop:asym_uniq_matching`) -/
 
 example {B : MPSTensor 2 3} {P₁ Q₁ P₂ Q₂ : Submodule (WordAlgebra 2) B.WordModule}
     (h₁ : P₁ ⋖ Q₁) (h₂ : P₂ ⋖ Q₂) (h : P₁ ⊔ Q₁ ⊓ P₂ < P₁ ⊔ Q₁ ⊓ Q₂) :
@@ -205,8 +207,9 @@ example {B : MPSTensor 2 3}
     (c : CoveringMatching.CoveringChain (Submodule (WordAlgebra 2) B.WordModule) 2)
     (c' : CoveringMatching.CoveringChain (Submodule (WordAlgebra 2) B.WordModule) 2)
     (k : Fin 2) :
-    Nonempty (Submodule.subquot (c.M k.castSucc) (c.M k.succ) ≃ₗ[WordAlgebra 2]
-      Submodule.subquot (c'.M (c.jumpEquiv c' k).castSucc) (c'.M (c.jumpEquiv c' k).succ)) :=
+    Nonempty (Submodule.subquot (c.toFun k.castSucc) (c.toFun k.succ) ≃ₗ[WordAlgebra 2]
+      Submodule.subquot (c'.toFun (c.jumpEquiv c' k).castSucc)
+        (c'.toFun (c.jumpEquiv c' k).succ)) :=
   c.nonempty_subquotEquiv_jumpEquiv c' k
 
 section TwoFamilies
@@ -217,7 +220,8 @@ variable {D : Fin 2 → ℕ} {D' : Fin 3 → ℕ} {B : MPSTensor 2 3} {S : Finse
   (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
   (hC' : ∀ t ∈ S', Kraus.IsNormal (C' t)) (hD' : ∀ t ∈ S', 0 < D' t)
 
-/-! ### V2.5: equal blocks give a scalar (AsymmetricFT, Theorem 2.2(c)) -/
+/-! ### Equal blocks give a scalar
+(*The asymmetric fundamental theorem of matrix product states*, Theorem 2.2(c)) -/
 
 example {b : BlockIndex S P.z} {b' : BlockIndex S' Q.z}
     (hdim : slotSize D b = slotSize D' b')
@@ -231,7 +235,8 @@ example {b : BlockIndex S P.z} {b' : BlockIndex S' Q.z}
         (1 : Matrix (Fin (slotSize D b)) (Fin (slotSize D b)) ℂ) :=
   P.exists_ne_zero_eq_smul_of_slotTensor_eq Q hC hD hdim heq hXY hint
 
-/-! ### V2.6: Theorem E for two families (AsymmetricFT, Theorem 6.5) -/
+/-! ### A basis adapted to both flags, for two families
+(*The asymmetric fundamental theorem of matrix product states*, Theorem 6.5) -/
 
 example (k : Fin (S.card + P.z)) :
     Disjoint ((P.flag k.castSucc ⊓ Q.flag (P.matching Q hC hD hC' hD' k).succ).restrictScalars ℂ)
@@ -297,24 +302,26 @@ example :
         (P.unipotentFactor Q hC hD hC' hD')⁻¹ :=
   P.gaugeMatrix_mul_gaugeMatrixInv_eq Q hC hD hC' hD'
 
-/-! ### V2.7: unipotent changes (AsymmetricFT, Theorem 6.5, last sentence) -/
+/-! ### Unipotent changes
+(*The asymmetric fundamental theorem of matrix product states*, Theorem 6.5, last sentence) -/
 
 example {u : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ}
     (hu : u.BlockTriangular fun x => P.ord x.1) (hu1 : ∀ b, u.blockDiag' b = (1 : ℂ) • 1)
     {u' : Matrix (BlockSpace D' S' Q.z) (BlockSpace D' S' Q.z) ℂ}
     (hu' : u'.BlockTriangular fun x => Q.ord x.1) (hu1' : ∀ b, u'.blockDiag' b = (1 : ℂ) • 1) :
-    (∀ k, (P.conjT hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).flag k = P.flag k) ∧
-    (∀ k', (Q.conjT hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1').flag k' = Q.flag k') ∧
-    (P.conjT hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).unipotentFactor
-        (Q.conjT hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' =
+    (∀ k, (P.conjTriangular hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).flag k = P.flag k) ∧
+    (∀ k', (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1').flag k' =
+      Q.flag k') ∧
+    (P.conjTriangular hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).unipotentFactor
+        (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' =
       u * P.unipotentFactor Q hC hD hC' hD' ∧
-    (P.conjT hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).unipotentFactor'
-        (Q.conjT hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' =
+    (P.conjTriangular hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).unipotentFactor'
+        (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' =
       u' * P.unipotentFactor' Q hC hD hC' hD' ∧
-    (P.conjT hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).matchingPermMatrix
-        (Q.conjT hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' =
+    (P.conjTriangular hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).matchingPermMatrix
+        (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' =
       P.matchingPermMatrix Q hC hD hC' hD' :=
-  P.flag_conjT_and_unipotentFactor_conjT Q hC hD hC' hD' hu hu1 hu' hu1'
+  P.flag_conjTriangular_and_unipotentFactor_conjTriangular Q hC hD hC' hD' hu hu1 hu' hu1'
 
 example {h : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ}
     (ht : h.BlockTriangular fun x => P.ord x.1) {μ : BlockIndex S P.z → ℂ} (hμ : ∀ b, μ b ≠ 0)
@@ -322,29 +329,29 @@ example {h : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ}
     {h' : Matrix (BlockSpace D' S' Q.z) (BlockSpace D' S' Q.z) ℂ}
     (ht' : h'.BlockTriangular fun x => Q.ord x.1) {μ' : BlockIndex S' Q.z → ℂ}
     (hμ' : ∀ b, μ' b ≠ 0) (hdiag' : ∀ b, h'.blockDiag' b = μ' b • 1) (k : Fin (S.card + P.z)) :
-    (P.conjT ht hμ hdiag).matchedCompl (Q.conjT ht' hμ' hdiag') hC hD hC' hD' k =
+    (P.conjTriangular ht hμ hdiag).matchedCompl (Q.conjTriangular ht' hμ' hdiag') hC hD hC' hD' k =
       P.matchedCompl Q hC hD hC' hD' k :=
-  P.matchedCompl_conjT Q hC hD hC' hD' ht hμ hdiag ht' hμ' hdiag' k
+  P.matchedCompl_conjTriangular Q hC hD hC' hD' ht hμ hdiag ht' hμ' hdiag' k
 
 example {h' : Matrix (BlockSpace D' S' Q.z) (BlockSpace D' S' Q.z) ℂ}
     (ht' : h'.BlockTriangular fun x => Q.ord x.1) {μ' : BlockIndex S' Q.z → ℂ}
     (hμ' : ∀ b, μ' b ≠ 0) (hdiag' : ∀ b, h'.blockDiag' b = μ' b • 1)
     {u : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ}
     (hu : u.BlockTriangular fun x => P.ord x.1) (hu1 : ∀ b, u.blockDiag' b = (1 : ℂ) • 1) :
-    (P.conjT hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).commonGauge
-        (Q.conjT ht' hμ' hdiag') hC hD hC' hD' =
+    (P.conjTriangular hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).commonGauge
+        (Q.conjTriangular ht' hμ' hdiag') hC hD hC' hD' =
       P.commonGauge Q hC hD hC' hD' :=
-  P.commonGauge_conjT Q hC hD hC' hD' ht' hμ' hdiag' hu hu1
+  P.commonGauge_conjTriangular Q hC hD hC' hD' ht' hμ' hdiag' hu hu1
 
 example {h : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ}
     (ht : h.BlockTriangular fun x => P.ord x.1) {μ : BlockIndex S P.z → ℂ} (hμ : ∀ b, μ b ≠ 0)
     (hdiag : ∀ b, h.blockDiag' b = μ b • 1)
     {u' : Matrix (BlockSpace D' S' Q.z) (BlockSpace D' S' Q.z) ℂ}
     (hu' : u'.BlockTriangular fun x => Q.ord x.1) (hu1' : ∀ b, u'.blockDiag' b = (1 : ℂ) • 1) :
-    (P.conjT ht hμ hdiag).commonGauge'
-        (Q.conjT hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' =
+    (P.conjTriangular ht hμ hdiag).commonGauge'
+        (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' =
       P.commonGauge' Q hC hD hC' hD' :=
-  P.commonGauge'_conjT Q hC hD hC' hD' ht hμ hdiag hu' hu1'
+  P.commonGauge'_conjTriangular Q hC hD hC' hD' ht hμ hdiag hu' hu1'
 
 example (A₁ : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ)
     (hA₁ : A₁.BlockTriangular fun x => P.ord x.1) (hA₁' : ∀ b, A₁.blockDiag' b = 1)
@@ -354,18 +361,20 @@ example (A₁ : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ)
       (hu : u.BlockTriangular fun x => P.ord x.1) (hu1 : ∀ b, u.blockDiag' b = (1 : ℂ) • 1)
       (u' : Matrix (BlockSpace D' S' Q.z) (BlockSpace D' S' Q.z) ℂ)
       (hu' : u'.BlockTriangular fun x => Q.ord x.1) (hu1' : ∀ b, u'.blockDiag' b = (1 : ℂ) • 1),
-      (∀ k, (P.conjT hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).flag k = P.flag k) ∧
-      (∀ k', (Q.conjT hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1').flag k' = Q.flag k') ∧
-      (P.conjT hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).unipotentFactor
-          (Q.conjT hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' = A₁ ∧
-      (P.conjT hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).unipotentFactor'
-          (Q.conjT hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' = A₂ ∧
-      (P.conjT hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).matchingPermMatrix
-          (Q.conjT hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' =
+      (∀ k, (P.conjTriangular hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).flag k = P.flag k) ∧
+      (∀ k', (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1').flag k' =
+        Q.flag k') ∧
+      (P.conjTriangular hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).unipotentFactor
+          (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' = A₁ ∧
+      (P.conjTriangular hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).unipotentFactor'
+          (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' = A₂ ∧
+      (P.conjTriangular hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).matchingPermMatrix
+          (Q.conjTriangular hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' =
         P.matchingPermMatrix Q hC hD hC' hD' :=
-  P.exists_conjT_unipotentFactor_eq Q hC hD hC' hD' A₁ hA₁ hA₁' A₂ hA₂ hA₂'
+  P.exists_conjTriangular_unipotentFactor_eq Q hC hD hC' hD' A₁ hA₁ hA₁' A₂ hA₂ hA₂'
 
-/-! ### V2.8: the matching as a rank test (AsymmetricFT, Remark 5.3) -/
+/-! ### The matching as a rank test
+(*The asymmetric fundamental theorem of matrix product states*, Remark 5.3) -/
 
 example (k : Fin (S.card + P.z + 1)) :
     LinearMap.range (P.leadingCols k).mulVecLin =
@@ -395,7 +404,8 @@ example (k : Fin (S.card + P.z + 1)) (k' : Fin (S'.card + Q.z + 1)) :
       {v | ∃ a a', v = P.leadingCols k *ᵥ a ∧ P.leadingCols k *ᵥ a = Q.leadingCols k' *ᵥ a'} :=
   P.coe_map_inf_eq_leadingCols Q k k'
 
-/-! ### V2.9: Theorem C in matrices (AsymmetricFT, Corollary 6.4) -/
+/-! ### Two compressions with different flags in matrices
+(*The asymmetric fundamental theorem of matrix product states*, Corollary 6.4) -/
 
 example (k : Fin (S.card + P.z)) {b : BlockIndex S P.z} {b' : BlockIndex S' Q.z}
     {X : Matrix (Fin (slotSize D' b')) (Fin (slotSize D b)) ℂ}
@@ -420,7 +430,8 @@ example (k : Fin (S.card + P.z)) {b : BlockIndex S P.z} (hb : P.ord b = k)
 
 end TwoFamilies
 
-/-! ### V2.10: split reductions, subspace form (AsymmetricFT, Proposition 6.12) -/
+/-! ### Split reductions, subspace form
+(*The asymmetric fundamental theorem of matrix product states*, Proposition 6.12) -/
 
 example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} {B : MPSTensor 2 3}
     {P Q : MultiBlockCompression B S C} (hP : P.remainder = 0) (hQ : Q.remainder = 0)
@@ -430,7 +441,7 @@ example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} 
         LinearMap.range (Q.rightCol b').mulVecLin :=
   MultiBlockCompression.range_rightCol_le_iSup_range_rightCol hP hQ hC hD b
 
-/-! ### Axioms of the library declarations (Sections 1 and 2) -/
+/-! ### Axioms of the library declarations -/
 
 set_option linter.hashCommand false in
 /--
@@ -522,11 +533,11 @@ depends on axioms: [propext, Classical.choice, Quot.sound]
 
 set_option linter.hashCommand false in
 /--
-info: 'MPSTensor.MultiBlockCompression.bijOn_conjT'
+info: 'MPSTensor.MultiBlockCompression.bijOn_conjTriangular'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MPSTensor.MultiBlockCompression.bijOn_conjT
+#print axioms MPSTensor.MultiBlockCompression.bijOn_conjTriangular
 
 set_option linter.hashCommand false in
 /--
@@ -538,11 +549,11 @@ depends on axioms: [propext, Classical.choice, Quot.sound]
 
 set_option linter.hashCommand false in
 /--
-info: 'MPSTensor.MultiBlockCompression.existsUnique_conjT'
+info: 'MPSTensor.MultiBlockCompression.existsUnique_conjTriangular'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MPSTensor.MultiBlockCompression.existsUnique_conjT
+#print axioms MPSTensor.MultiBlockCompression.existsUnique_conjTriangular
 
 set_option linter.hashCommand false in
 /--
@@ -554,11 +565,11 @@ depends on axioms: [propext, Classical.choice, Quot.sound]
 
 set_option linter.hashCommand false in
 /--
-info: 'MPSTensor.FlagData.exists_rep'
+info: 'MPSTensor.FlagData.exists_rightInverse_toFlagData'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MPSTensor.FlagData.exists_rep
+#print axioms MPSTensor.FlagData.exists_rightInverse_toFlagData
 
 set_option linter.hashCommand false in
 /--
@@ -682,43 +693,43 @@ depends on axioms: [propext, Classical.choice, Quot.sound]
 
 set_option linter.hashCommand false in
 /--
-info: 'MPSTensor.MultiBlockCompression.flag_conjT_and_unipotentFactor_conjT'
+info: 'MPSTensor.MultiBlockCompression.flag_conjTriangular_and_unipotentFactor_conjTriangular'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MPSTensor.MultiBlockCompression.flag_conjT_and_unipotentFactor_conjT
+#print axioms MPSTensor.MultiBlockCompression.flag_conjTriangular_and_unipotentFactor_conjTriangular
 
 set_option linter.hashCommand false in
 /--
-info: 'MPSTensor.MultiBlockCompression.matchedCompl_conjT'
+info: 'MPSTensor.MultiBlockCompression.matchedCompl_conjTriangular'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MPSTensor.MultiBlockCompression.matchedCompl_conjT
+#print axioms MPSTensor.MultiBlockCompression.matchedCompl_conjTriangular
 
 set_option linter.hashCommand false in
 /--
-info: 'MPSTensor.MultiBlockCompression.commonGauge_conjT'
+info: 'MPSTensor.MultiBlockCompression.commonGauge_conjTriangular'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MPSTensor.MultiBlockCompression.commonGauge_conjT
+#print axioms MPSTensor.MultiBlockCompression.commonGauge_conjTriangular
 
 set_option linter.hashCommand false in
 /--
-info: 'MPSTensor.MultiBlockCompression.commonGauge'_conjT'
+info: 'MPSTensor.MultiBlockCompression.commonGauge'_conjTriangular'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MPSTensor.MultiBlockCompression.commonGauge'_conjT
+#print axioms MPSTensor.MultiBlockCompression.commonGauge'_conjTriangular
 
 set_option linter.hashCommand false in
 /--
-info: 'MPSTensor.MultiBlockCompression.exists_conjT_unipotentFactor_eq'
+info: 'MPSTensor.MultiBlockCompression.exists_conjTriangular_unipotentFactor_eq'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MPSTensor.MultiBlockCompression.exists_conjT_unipotentFactor_eq
+#print axioms MPSTensor.MultiBlockCompression.exists_conjTriangular_unipotentFactor_eq
 
 set_option linter.hashCommand false in
 /--
@@ -784,7 +795,7 @@ depends on axioms: [propext, Classical.choice, Quot.sound]
 #guard_msgs (whitespace := lax) in
 #print axioms MPSTensor.MultiBlockCompression.range_rightCol_le_iSup_range_rightCol
 
-/-! ### Axioms of the examples (Section 3) -/
+/-! ### Axioms of the examples -/
 
 set_option linter.hashCommand false in
 /--
@@ -828,456 +839,457 @@ depends on axioms: [propext, Classical.choice, Quot.sound]
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Running.V3_2a_one'
+info: 'MultiBlockExamples.Running.exists_multiBlockCompression_gauge_one'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Running.V3_2a_one
+#print axioms MultiBlockExamples.Running.exists_multiBlockCompression_gauge_one
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Running.V3_2a_h'
+info: 'MultiBlockExamples.Running.exists_multiBlockCompression_gauge_unipotent'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Running.V3_2a_h
+#print axioms MultiBlockExamples.Running.exists_multiBlockCompression_gauge_unipotent
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Running.V3_2a_conj'
+info: 'MultiBlockExamples.Running.unipotent_conj_tensorB'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Running.V3_2a_conj
+#print axioms MultiBlockExamples.Running.unipotent_conj_tensorB
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Running.V3_2b'
+info: 'MultiBlockExamples.Running.left_mul_pow_ne_smul'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Running.V3_2b
+#print axioms MultiBlockExamples.Running.left_mul_pow_ne_smul
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Running.V3_2c'
+info: 'MultiBlockExamples.Running.remainder_pow_ne_zero'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Running.V3_2c
+#print axioms MultiBlockExamples.Running.remainder_pow_ne_zero
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Running.V3_2d_invariant'
+info: 'MultiBlockExamples.Running.isInvariantSubmodule_tensorB_iff'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Running.V3_2d_invariant
+#print axioms MultiBlockExamples.Running.isInvariantSubmodule_tensorB_iff
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Running.V3_2d_reductions'
+info: 'MultiBlockExamples.Running.ord_flagVec_cases_of_z_eq_zero'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Running.V3_2d_reductions
+#print axioms MultiBlockExamples.Running.ord_flagVec_cases_of_z_eq_zero
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Running.V3_2d_both'
+info: 'MultiBlockExamples.Running.exists_multiBlockCompression_each_order'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Running.V3_2d_both
+#print axioms MultiBlockExamples.Running.exists_multiBlockCompression_each_order
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Running.V3_3a'
+info: 'MultiBlockExamples.Running.exists_multiBlockCompression_upper'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Running.V3_3a
+#print axioms MultiBlockExamples.Running.exists_multiBlockCompression_upper
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Running.V3_3a_converse'
+info: 'MultiBlockExamples.Running.exists_left_eq_upper_of_ord_lt'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Running.V3_3a_converse
+#print axioms MultiBlockExamples.Running.exists_left_eq_upper_of_ord_lt
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Running.V3_3b'
+info: 'MultiBlockExamples.Running.exists_multiBlockCompression_swap'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Running.V3_3b
+#print axioms MultiBlockExamples.Running.exists_multiBlockCompression_swap
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Running.V3_3b_converse'
+info: 'MultiBlockExamples.Running.exists_left_eq_swap_of_ord_gt'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Running.V3_3b_converse
+#print axioms MultiBlockExamples.Running.exists_left_eq_swap_of_ord_gt
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Running.V3_3c'
+info: 'MultiBlockExamples.Running.matching_left_right_gOne_redSwap'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Running.V3_3c
+#print axioms MultiBlockExamples.Running.matching_left_right_gOne_redSwap
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Running.V3_3d'
+info: 'MultiBlockExamples.Running.isAdaptedFactorization_gOne_redSwap'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Running.V3_3d
+#print axioms MultiBlockExamples.Running.isAdaptedFactorization_gOne_redSwap
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Running.V3_4a'
+info: 'MultiBlockExamples.Running.exists_eval_zero_eq_zero_and_eval_eq'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Running.V3_4a
+#print axioms MultiBlockExamples.Running.exists_eval_zero_eq_zero_and_eval_eq
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Running.V3_4b'
+info: 'MultiBlockExamples.Running.eq_one_and_eq_one_of_forall_add_mul_pow_eq'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Running.V3_4b
+#print axioms MultiBlockExamples.Running.eq_one_and_eq_one_of_forall_add_mul_pow_eq
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.NoGauge.V3_5a_trace_eq'
+info: 'MultiBlockExamples.NoGauge.trace_evalWord_tensorB_eq'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.NoGauge.V3_5a_trace_eq
+#print axioms MultiBlockExamples.NoGauge.trace_evalWord_tensorB_eq
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.NoGauge.V3_5a_trace_single'
+info: 'MultiBlockExamples.NoGauge.trace_evalWord_tensorB'_eq_one_of_eq_replicate'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.NoGauge.V3_5a_trace_single
+#print axioms MultiBlockExamples.NoGauge.trace_evalWord_tensorB'_eq_one_of_eq_replicate
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.NoGauge.V3_5a_trace_mixed'
+info: 'MultiBlockExamples.NoGauge.trace_evalWord_tensorB'_eq_zero_of_ne_replicate'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.NoGauge.V3_5a_trace_mixed
+#print axioms MultiBlockExamples.NoGauge.trace_evalWord_tensorB'_eq_zero_of_ne_replicate
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.NoGauge.V3_5b'
+info: 'MultiBlockExamples.NoGauge.tensorB_one_mul_zero_and_tensorB'_commute'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.NoGauge.V3_5b
+#print axioms MultiBlockExamples.NoGauge.tensorB_one_mul_zero_and_tensorB'_commute
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.NoGauge.V3_5c_B'
+info: 'MultiBlockExamples.NoGauge.isInvariantSubmodule_span_tensorB_iff'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.NoGauge.V3_5c_B
+#print axioms MultiBlockExamples.NoGauge.isInvariantSubmodule_span_tensorB_iff
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.NoGauge.V3_5c_B''
+info: 'MultiBlockExamples.NoGauge.isInvariantSubmodule_span_tensorB'_iff'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.NoGauge.V3_5c_B'
+#print axioms MultiBlockExamples.NoGauge.isInvariantSubmodule_span_tensorB'_iff
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.NoGauge.V3_5d'
+info: 'MultiBlockExamples.NoGauge.not_exists_conj_tensorB_eq_tensorB''
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.NoGauge.V3_5d
+#print axioms MultiBlockExamples.NoGauge.not_exists_conj_tensorB_eq_tensorB'
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.OneBlock.V3_6a_lines'
+info: 'MultiBlockExamples.OneBlock.isInvariantSubmodule_span_tensorB_iff'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.OneBlock.V3_6a_lines
+#print axioms MultiBlockExamples.OneBlock.isInvariantSubmodule_span_tensorB_iff
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.OneBlock.V3_6a_z_conj'
+info: 'MultiBlockExamples.OneBlock.z_eq_one_and_gInt_conj'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.OneBlock.V3_6a_z_conj
+#print axioms MultiBlockExamples.OneBlock.z_eq_one_and_gInt_conj
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.OneBlock.V3_6a_flags'
+info: 'MultiBlockExamples.OneBlock.flagVec_one_firstCompression_and_lastCompression'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.OneBlock.V3_6a_flags
+#print axioms MultiBlockExamples.OneBlock.flagVec_one_firstCompression_and_lastCompression
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.OneBlock.V3_6a_only'
+info: 'MultiBlockExamples.OneBlock.eq_toFlagData_firstCompression_or_lastCompression'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.OneBlock.V3_6a_only
+#print axioms MultiBlockExamples.OneBlock.eq_toFlagData_firstCompression_or_lastCompression
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.OneBlock.V3_6b'
+info: 'MultiBlockExamples.OneBlock.left_right_matching_firstCompression_lastCompression'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.OneBlock.V3_6b
+#print axioms MultiBlockExamples.OneBlock.left_right_matching_firstCompression_lastCompression
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.OneBlock.V3_6c'
+info: 'MultiBlockExamples.OneBlock.left_mulVec_e_one_and_left_mul_tensorB'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.OneBlock.V3_6c
+#print axioms MultiBlockExamples.OneBlock.left_mulVec_e_one_and_left_mul_tensorB
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.OneBlock.V3_6d'
+info: 'MultiBlockExamples.OneBlock.remainder_lastCompression_eq_zero_and_firstCompression_ne_zero'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.OneBlock.V3_6d
+#print axioms
+  MultiBlockExamples.OneBlock.remainder_lastCompression_eq_zero_and_firstCompression_ne_zero
 
 set_option linter.hashCommand false in
 /--
-info: 'SharpnessOneBlock.V3_7a_first'
+info: 'MultiBlockExamples.SharpnessOneBlock.exists_multiBlockCompression_block_first'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms SharpnessOneBlock.V3_7a_first
+#print axioms MultiBlockExamples.SharpnessOneBlock.exists_multiBlockCompression_block_first
 
 set_option linter.hashCommand false in
 /--
-info: 'SharpnessOneBlock.V3_7a_last'
+info: 'MultiBlockExamples.SharpnessOneBlock.exists_multiBlockCompression_block_last'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms SharpnessOneBlock.V3_7a_last
+#print axioms MultiBlockExamples.SharpnessOneBlock.exists_multiBlockCompression_block_last
 
 set_option linter.hashCommand false in
 /--
-info: 'SharpnessOneBlock.V3_7b'
+info: 'MultiBlockExamples.SharpnessOneBlock.rowE0_mul_pow_and_rowOnes_mul_pow'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms SharpnessOneBlock.V3_7b
+#print axioms MultiBlockExamples.SharpnessOneBlock.rowE0_mul_pow_and_rowOnes_mul_pow
 
 set_option linter.hashCommand false in
 /--
-info: 'SharpnessOneBlock.V3_7c'
+info: 'MultiBlockExamples.SharpnessOneBlock.exists_rowOnes_mul_pow_eq_smul_iff'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms SharpnessOneBlock.V3_7c
+#print axioms MultiBlockExamples.SharpnessOneBlock.exists_rowOnes_mul_pow_eq_smul_iff
 
 set_option linter.hashCommand false in
 /--
-info: 'SharpnessOneBlock.V3_7c_sharp'
+info: 'MultiBlockExamples.SharpnessOneBlock.exists_length_eq_sub_one_not_exists_smul'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms SharpnessOneBlock.V3_7c_sharp
+#print axioms MultiBlockExamples.SharpnessOneBlock.exists_length_eq_sub_one_not_exists_smul
 
 set_option linter.hashCommand false in
 /--
-info: 'SharpnessOneBlock.V3_7d'
+info: 'MultiBlockExamples.SharpnessOneBlock.pow_mul_right_eq_of_eq_colE0'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms SharpnessOneBlock.V3_7d
+#print axioms MultiBlockExamples.SharpnessOneBlock.pow_mul_right_eq_of_eq_colE0
 
 set_option linter.hashCommand false in
 /--
-info: 'SharpnessOneBlock.tensorBGen_one'
+info: 'MultiBlockExamples.SharpnessOneBlock.tensorBGen_one'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms SharpnessOneBlock.tensorBGen_one
+#print axioms MultiBlockExamples.SharpnessOneBlock.tensorBGen_one
 
 set_option linter.hashCommand false in
 /--
-info: 'SharpnessOneBlock.tensorBGen_two'
+info: 'MultiBlockExamples.SharpnessOneBlock.tensorBGen_two'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms SharpnessOneBlock.tensorBGen_two
+#print axioms MultiBlockExamples.SharpnessOneBlock.tensorBGen_two
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Multiplicity.V3_8a'
+info: 'MultiBlockExamples.Multiplicity.wordSpan_tensorC_three_eq_top_and_isNormal'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Multiplicity.V3_8a
+#print axioms MultiBlockExamples.Multiplicity.wordSpan_tensorC_three_eq_top_and_isNormal
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Multiplicity.V3_8b_invariant'
+info: 'MultiBlockExamples.Multiplicity.isInvariantSubmodule_lineTensor'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Multiplicity.V3_8b_invariant
+#print axioms MultiBlockExamples.Multiplicity.isInvariantSubmodule_lineTensor
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Multiplicity.V3_8b_injective'
+info: 'MultiBlockExamples.Multiplicity.span_eq_of_lineTensor_eq'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Multiplicity.V3_8b_injective
+#print axioms MultiBlockExamples.Multiplicity.span_eq_of_lineTensor_eq
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Multiplicity.V3_8c_commutant'
+info: 'MultiBlockExamples.Multiplicity.commute_tensorB_iff_eq_kronMat'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Multiplicity.V3_8c_commutant
+#print axioms MultiBlockExamples.Multiplicity.commute_tensorB_iff_eq_kronMat
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Multiplicity.V3_8c_exists'
+info: 'MultiBlockExamples.Multiplicity.exists_split_multiBlockCompression_kronRow'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Multiplicity.V3_8c_exists
+#print axioms MultiBlockExamples.Multiplicity.exists_split_multiBlockCompression_kronRow
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Multiplicity.V3_8c_split'
+info: 'MultiBlockExamples.Multiplicity.exists_left_eq_kronRow_of_remainder_eq_zero'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Multiplicity.V3_8c_split
+#print axioms MultiBlockExamples.Multiplicity.exists_left_eq_kronRow_of_remainder_eq_zero
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Multiplicity.V3_8d'
+info: 'MultiBlockExamples.Multiplicity.exists_left_mul_evalWord_eq_smul_iff'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Multiplicity.V3_8d
+#print axioms MultiBlockExamples.Multiplicity.exists_left_mul_evalWord_eq_smul_iff
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Multiplicity.V3_8e_general'
+info: 'MultiBlockExamples.Multiplicity.matching_left_splitRed_of_span_ne'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Multiplicity.V3_8e_general
+#print axioms MultiBlockExamples.Multiplicity.matching_left_splitRed_of_span_ne
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Multiplicity.V3_8e'
+info: 'MultiBlockExamples.Multiplicity.matching_left_redOne_redAt'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Multiplicity.V3_8e
+#print axioms MultiBlockExamples.Multiplicity.matching_left_redOne_redAt
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Worked.V3_9a_normal'
+info: 'MultiBlockExamples.Worked.wordSpan_tensorC₁_three_eq_top_and_isNormal'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Worked.V3_9a_normal
+#print axioms MultiBlockExamples.Worked.wordSpan_tensorC₁_three_eq_top_and_isNormal
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Worked.V3_9a_T'
+info: 'MultiBlockExamples.Worked.isInvariantSubmodule_span_tensorT_iff_and_mulVec_eq_zero'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Worked.V3_9a_T
+#print axioms MultiBlockExamples.Worked.isInvariantSubmodule_span_tensorT_iff_and_mulVec_eq_zero
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Worked.V3_9b_g'
+info: 'MultiBlockExamples.Worked.redG_spec'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Worked.V3_9b_g
+#print axioms MultiBlockExamples.Worked.redG_spec
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Worked.V3_9b_gt'
+info: 'MultiBlockExamples.Worked.redGt_spec'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Worked.V3_9b_gt
+#print axioms MultiBlockExamples.Worked.redGt_spec
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Worked.V3_9c'
+info: 'MultiBlockExamples.Worked.flagVec_redG_redGt_and_matching'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Worked.V3_9c
+#print axioms MultiBlockExamples.Worked.flagVec_redG_redGt_and_matching
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Worked.V3_9c_dims'
+info: 'MultiBlockExamples.Worked.finrank_flagVec_redG_inf_flagVec_redGt'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Worked.V3_9c_dims
+#print axioms MultiBlockExamples.Worked.finrank_flagVec_redG_inf_flagVec_redGt
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Worked.V3_9d'
+info: 'MultiBlockExamples.Worked.inf_sup_intertwiner_redG_redGt'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Worked.V3_9d
+#print axioms MultiBlockExamples.Worked.inf_sup_intertwiner_redG_redGt
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Worked.V3_9e'
+info: 'MultiBlockExamples.Worked.isAdaptedFactorization_redG_redGt'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Worked.V3_9e
+#print axioms MultiBlockExamples.Worked.isAdaptedFactorization_redG_redGt
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Worked.V3_9f'
+info: 'MultiBlockExamples.Worked.not_exists_left_redGt_eq_smul_left_redG'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Worked.V3_9f
+#print axioms MultiBlockExamples.Worked.not_exists_left_redGt_eq_smul_left_redG
 
 set_option linter.hashCommand false in
 /--
-info: 'MultiBlockExamples.Worked.V3_9g'
+info: 'MultiBlockExamples.Worked.trace_evalWord_tensorB_eq_add'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockExamples.Worked.V3_9g
+#print axioms MultiBlockExamples.Worked.trace_evalWord_tensorB_eq_add

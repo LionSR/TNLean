@@ -9,27 +9,32 @@ import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
 /-!
 # The worked example
 
-The tensor `B = (B¹, B²)` on `ℂ⁴` of lecture note AsymmetricFT, Example 6.16, with decision D3
-of milestone V (the normal block `C₁ = (σ_x, E₁₁)`), is `B^i = g₀⁻¹ (C₁^i ⊕ T^i) g₀` with
-`T = ([[0, 1], [0, 1]], [[0, 0], [0, 2]])`, a non-split extension of `C₂ = ((1), (2))` by a zero
-block. It has the reduction `g = g₀` in the order `(C₁, 0, C₂)` and the reduction
-`g̃ = h P g₀` in the order `(0, C₂, C₁')` onto the second family `(C₁', C₂)`,
-`C₁' = Y C₁ Y⁻¹`, `Y = [[1, 1], [0, 1]]` (milestone V, V3.9).
+The tensor `B = (B¹, B²)` on `ℂ⁴` of *The asymmetric fundamental theorem of matrix product states*,
+Example 6.16, with the letters as printed there (the normal block `C₁ = (σ_x, E₁₁)`), is
+`B^i = g₀⁻¹ (C₁^i ⊕ T^i) g₀` with `T = ([[0, 1], [0, 1]], [[0, 0], [0, 2]])`, a non-split extension
+of `C₂ = ((1), (2))` by a zero block. It has the reduction `g = g₀` in the order `(C₁, 0, C₂)` and
+the reduction `g̃ = h P g₀` in the order `(0, C₂, C₁')` onto the second family `(C₁', C₂)`,
+`C₁' = Y C₁ Y⁻¹`, `Y = [[1, 1], [0, 1]]`.
 
 ## Main results
 
-* `MultiBlockExamples.Worked.V3_9a_normal`, `V3_9a_T`: V3.9(a).
-* `MultiBlockExamples.Worked.V3_9b_g`, `V3_9b_gt`: V3.9(b).
-* `MultiBlockExamples.Worked.V3_9c`, `V3_9c_dims`, `V3_9d`: V3.9(c) (flags, dimension matrix
-  and matching), V3.9(d).
-* `MultiBlockExamples.Worked.V3_9e`: V3.9(e), the factorization of Theorem E.
-* `MultiBlockExamples.Worked.V3_9f`: V3.9(f).
-* `MultiBlockExamples.Worked.V3_9g`: V3.9(g).
+* `MultiBlockExamples.Worked.wordSpan_tensorC₁_three_eq_top_and_isNormal`,
+  `isInvariantSubmodule_span_tensorT_iff_and_mulVec_eq_zero`: the blocks.
+* `MultiBlockExamples.Worked.redG_spec`, `redGt_spec`: the two reductions.
+* `MultiBlockExamples.Worked.flagVec_redG_redGt_and_matching`,
+  `finrank_flagVec_redG_inf_flagVec_redGt`, `inf_sup_intertwiner_redG_redGt`: the flags, the
+  dimension matrix, the matching and the matched pairs.
+* `MultiBlockExamples.Worked.isAdaptedFactorization_redG_redGt`: the factorization of *A basis
+  adapted to both flags*.
+* `MultiBlockExamples.Worked.not_exists_left_redGt_eq_smul_left_redG`: the reading maps of `C₂` are
+  not proportional.
+* `MultiBlockExamples.Worked.trace_evalWord_tensorB_eq_add`: the word traces.
 
 ## References
 
-Lecture note AsymmetricFT, Example 6.16; milestone V, V3.9 (with decision D3); the numbers are
-those of `check/worked_example_normal.py` and `check/example-2x2-normal.tex`.
+*The asymmetric fundamental theorem of matrix product states*, Example 6.16, with the letters as
+printed there; the numbers are those of `check/worked_example_normal.py` and
+`check/example-2x2-normal.tex`.
 -/
 
 open scoped Matrix
@@ -40,13 +45,14 @@ namespace Worked
 
 open MPSTensor
 
-/-- The integer letters of `B` (milestone V, V3.9, decision D3). -/
+/-- The integer letters of `B`, as printed in *The asymmetric fundamental theorem of matrix product
+states*, Example 6.16. -/
 def tensorBInt : Fin 2 → Matrix (Fin 4) (Fin 4) ℤ :=
   ![!![-2, -2, -1, 0; 2, 3, 1, 0; -2, -4, -1, 0; 2, 2, 1, 1],
     !![2, 0, 1, 3; 0, 2, 0, -2; -2, -2, -1, -1; 0, 0, 0, 0]]
 
-/-- **The worked example** `B = (B¹, B²)` of lecture note AsymmetricFT, Example 6.16, with
-decision D3 (milestone V, V3.9). -/
+/-- **The worked example** `B = (B¹, B²)` of *The asymmetric fundamental theorem of matrix product
+states*, Example 6.16, with the letters as printed there. -/
 noncomputable def tensorB : MPSTensor 2 4 :=
   ![!![-2, -2, -1, 0; 2, 3, 1, 0; -2, -4, -1, 0; 2, 2, 1, 1],
     !![2, 0, 1, 3; 0, 2, 0, -2; -2, -2, -1, -1; 0, 0, 0, 0]]
@@ -57,7 +63,8 @@ theorem tensorB_eq_complexOfRing (i : Fin 2) :
   fin_cases i <;> fin_cases a <;> fin_cases b <;>
     simp [tensorB, tensorBInt, complexOfRing_apply]
 
-/-- `C₁ = (σ_x, E₁₁)` (decision D3). -/
+/-- `C₁ = (σ_x, E₁₁)`, as printed in *The asymmetric fundamental theorem of matrix product states*,
+Example 6.16. -/
 noncomputable def tensorC₁ : MPSTensor 2 2 := Multiplicity.tensorC
 
 /-- `C₂ = ((1), (2))`. -/
@@ -72,14 +79,15 @@ noncomputable def matY : Matrix (Fin 2) (Fin 2) ℂ := !![1, 1; 0, 1]
 /-- `C₁' = Y C₁ Y⁻¹ = ([[1, 0], [1, -1]], [[1, -1], [0, 0]])`. -/
 noncomputable def tensorC₁' : MPSTensor 2 2 := ![!![1, 0; 1, -1], !![1, -1; 0, 0]]
 
-/-- **V3.9(a)** (lecture note AsymmetricFT, Example 6.16; milestone V, V3.9(a)): `C₁` is normal,
-its words of length `3` spanning `M₂(ℂ)`. -/
-theorem V3_9a_normal : Kraus.wordSpan tensorC₁ 3 = ⊤ ∧ Kraus.IsNormal tensorC₁ :=
-  Multiplicity.V3_8a
+/-- **The block `C₁` is normal** (*The asymmetric fundamental theorem of matrix product states*,
+Example 6.16): `C₁` is normal, its words of length `3` spanning `M₂(ℂ)`. -/
+theorem wordSpan_tensorC₁_three_eq_top_and_isNormal :
+    Kraus.wordSpan tensorC₁ 3 = ⊤ ∧ Kraus.IsNormal tensorC₁ :=
+  Multiplicity.wordSpan_tensorC_three_eq_top_and_isNormal
 
-/-- **V3.9(a)** (lecture note AsymmetricFT, Example 6.16; milestone V, V3.9(a)): `T` has exactly
-one invariant line, `ℂ e₁`, and both letters vanish on it. -/
-theorem V3_9a_T : (∀ v : Fin 2 → ℂ, v ≠ 0 →
+/-- **The invariant line of `T`** (*The asymmetric fundamental theorem of matrix product states*,
+Example 6.16): `T` has exactly one invariant line, `ℂ e₁`, and both letters vanish on it. -/
+theorem isInvariantSubmodule_span_tensorT_iff_and_mulVec_eq_zero : (∀ v : Fin 2 → ℂ, v ≠ 0 →
       (Matrix.IsInvariantSubmodule tensorT (Submodule.span ℂ {v}) ↔
         Submodule.span ℂ {v} = Submodule.span ℂ {e 0})) ∧
     ∀ i, tensorT i *ᵥ e 0 = 0 := by
@@ -148,13 +156,13 @@ def blocksInt' : ∀ s : Fin 2, Fin 2 → Matrix (Fin (dims s)) (Fin (dims s)) �
   | 0 => ![!![1, 0; 1, -1], !![1, -1; 0, 0]]
   | 1 => ![!![1], !![2]]
 
-theorem blocks_eq (s : Fin 2) (i : Fin 2) :
+theorem blocks_eq_complexOfRing (s : Fin 2) (i : Fin 2) :
     blocks s i = complexOfRing (Int.castRingHom ℂ) (blocksInt s i) := by
   ext a b
   fin_cases s <;> fin_cases i <;> fin_cases a <;> fin_cases b <;>
     simp [blocks, blocksInt, tensorC₁, tensorC₂, Multiplicity.tensorC, complexOfRing_apply]
 
-theorem blocks'_eq (s : Fin 2) (i : Fin 2) :
+theorem blocks'_eq_complexOfRing (s : Fin 2) (i : Fin 2) :
     blocks' s i = complexOfRing (Int.castRingHom ℂ) (blocksInt' s i) := by
   ext a b
   fin_cases s <;> fin_cases i <;> fin_cases a <;> fin_cases b <;>
@@ -245,8 +253,8 @@ def conjG : Fin 2 → Matrix (Fin 4) (Fin 4) ℤ :=
   ![!![0, 1, 0, 0; 1, 0, 0, 0; 0, 0, 0, 1; 0, 0, 0, 1],
     !![1, 0, 0, 0; 0, 0, 0, 0; 0, 0, 0, 0; 0, 0, 0, 2]]
 
-/-- `g̃ B¹ g̃⁻¹`, `g̃ B² g̃⁻¹` as printed in lecture note AsymmetricFT, Example 6.16 (decision
-D3). -/
+/-- `g̃ B¹ g̃⁻¹`, `g̃ B² g̃⁻¹` as printed in *The asymmetric fundamental theorem of matrix product
+states*, Example 6.16. -/
 def conjGt : Fin 2 → Matrix (Fin 4) (Fin 4) ℤ :=
   ![!![0, 2, 2, -3; 0, 1, 2, -4; 0, 0, 1, 0; 0, 0, 1, -1],
     !![0, 2, 3, -5; 0, 2, 1, -3; 0, 0, 1, -1; 0, 0, 0, 0]]
@@ -257,15 +265,15 @@ theorem conjG_eq (i : Fin 2) : g0Int * tensorBInt i * g0InvInt = conjG i := by
 theorem conjGt_eq (i : Fin 2) : gtInt * tensorBInt i * gtInvInt = conjGt i := by
   fin_cases i <;> decide +kernel
 
-/-- **The reduction `g = g₀`** in the order `(C₁, 0, C₂)` (lecture note AsymmetricFT,
-Example 6.16; milestone V, V3.9(b)). -/
+/-- **The reduction `g = g₀`** in the order `(C₁, 0, C₂)` (*The asymmetric fundamental theorem of
+matrix product states*, Example 6.16). -/
 noncomputable def redG : MultiBlockCompression tensorB labels blocks :=
   MultiBlockCompression.ofRing (Int.castRingHom ℂ) ordG tauG
     (gaugeOfRingMatrix _ tauG g0Int g0InvInt (by decide +kernel) (by decide +kernel)) conjG
     (fun i => by
       rw [conjMatrix_gaugeOfRingMatrix (Int.castRingHom ℂ) tauG (by decide +kernel)
         (by decide +kernel) (tensorB_eq_complexOfRing i), conjG_eq])
-    blocksInt blocks_eq (fun i x y h => by revert i x y; decide +kernel)
+    blocksInt blocks_eq_complexOfRing (fun i x y h => by revert i x y; decide +kernel)
     (fun i s p q => by
       obtain ⟨s, hs⟩ := s
       obtain rfl : hs = Finset.mem_univ s := rfl
@@ -273,15 +281,15 @@ noncomputable def redG : MultiBlockCompression tensorB labels blocks :=
       fin_cases s <;> fin_cases i <;> intro p q <;> fin_cases p <;> fin_cases q <;> decide +kernel)
     (by decide +kernel)
 
-/-- **The reduction `g̃ = h P g₀`** in the order `(0, C₂, C₁')` onto the second family
-(lecture note AsymmetricFT, Example 6.16; milestone V, V3.9(b)). -/
+/-- **The reduction `g̃ = h P g₀`** in the order `(0, C₂, C₁')` onto the second family (*The
+asymmetric fundamental theorem of matrix product states*, Example 6.16). -/
 noncomputable def redGt : MultiBlockCompression tensorB labels blocks' :=
   MultiBlockCompression.ofRing (Int.castRingHom ℂ) ordGt tauGt
     (gaugeOfRingMatrix _ tauGt gtInt gtInvInt (by decide +kernel) (by decide +kernel)) conjGt
     (fun i => by
       rw [conjMatrix_gaugeOfRingMatrix (Int.castRingHom ℂ) tauGt (by decide +kernel)
         (by decide +kernel) (tensorB_eq_complexOfRing i), conjGt_eq])
-    blocksInt' blocks'_eq (fun i x y h => by revert i x y; decide +kernel)
+    blocksInt' blocks'_eq_complexOfRing (fun i x y h => by revert i x y; decide +kernel)
     (fun i s p q => by
       obtain ⟨s, hs⟩ := s
       obtain rfl : hs = Finset.mem_univ s := rfl
@@ -324,72 +332,73 @@ theorem rightCol_redGt (b : BlockIndex labels 1) :
   rfl
 
 /-- The zero slot. -/
-abbrev zslot : BlockIndex labels 1 := Sum.inr ⟨0, Nat.one_pos⟩
+abbrev zeroSlot : BlockIndex labels 1 := Sum.inr ⟨0, Nat.one_pos⟩
 
-/-- **V3.9(b), the first reduction** (lecture note AsymmetricFT, Example 6.16; milestone V,
-V3.9(b)): `g = g₀` is a reduction in the order `(C₁, 0, C₂)`, `g₀ B^i g₀⁻¹ = C₁^i ⊕ T^i`, and the
+/-- **The first reduction** (*The asymmetric fundamental theorem of matrix product states*, Example
+6.16): `g = g₀` is a reduction in the order `(C₁, 0, C₂)`, `g₀ B^i g₀⁻¹ = C₁^i ⊕ T^i`, and the
 reading maps and injections are the row blocks of `g₀` and the column blocks of `g₀⁻¹`. -/
-theorem V3_9b_g : redG.z = 1 ∧ (redG.ord (Sum.inl slotC1)).val = 0 ∧
-    (redG.ord zslot).val = 1 ∧ (redG.ord (Sum.inl slotC2)).val = 2 ∧
+theorem redG_spec : redG.z = 1 ∧ (redG.ord (Sum.inl slotC1)).val = 0 ∧
+    (redG.ord zeroSlot).val = 1 ∧ (redG.ord (Sum.inl slotC2)).val = 2 ∧
     g0Int * g0InvInt = 1 ∧ (∀ i, toC g0Int * tensorB i * toC g0InvInt = toC (conjG i)) ∧
     redG.leftRow (Sum.inl slotC1) = toC !![2, 2, 1, 1; 0, 0, 0, 1] ∧
-    redG.leftRow zslot = toC !![1, 1, 1, 1] ∧
+    redG.leftRow zeroSlot = toC !![1, 1, 1, 1] ∧
     redG.leftRow (Sum.inl slotC2) = toC !![0, -1, 0, 1] ∧
     redG.rightCol (Sum.inl slotC1) = toC !![1, -1; 0, 1; -1, -1; 0, 1] ∧
-    redG.rightCol zslot = toC !![-1; 0; 2; 0] ∧
+    redG.rightCol zeroSlot = toC !![-1; 0; 2; 0] ∧
     redG.rightCol (Sum.inl slotC2) = toC !![1; -1; 0; 0] := by
   refine ⟨rfl, rfl, rfl, rfl, by decide +kernel, fun i => ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
   · rw [tensorB_eq_complexOfRing, ← complexOfRing_mul, ← complexOfRing_mul, conjG_eq]
   · exact (leftRow_redG (Sum.inl slotC1)).trans (congrArg toC
       (Matrix.ext fun i j => by fin_cases i <;> fin_cases j <;> decide))
-  · exact (leftRow_redG zslot).trans (congrArg toC
+  · exact (leftRow_redG zeroSlot).trans (congrArg toC
       (Matrix.ext fun i j => by fin_cases i; fin_cases j <;> decide))
   · exact (leftRow_redG (Sum.inl slotC2)).trans (congrArg toC
       (Matrix.ext fun i j => by fin_cases i; fin_cases j <;> decide))
   · exact (rightCol_redG (Sum.inl slotC1)).trans (congrArg toC
       (Matrix.ext fun i j => by fin_cases i <;> fin_cases j <;> decide))
-  · exact (rightCol_redG zslot).trans (congrArg toC
+  · exact (rightCol_redG zeroSlot).trans (congrArg toC
       (Matrix.ext fun i j => by fin_cases i <;> fin_cases j <;> decide))
   · exact (rightCol_redG (Sum.inl slotC2)).trans (congrArg toC
       (Matrix.ext fun i j => by fin_cases i <;> fin_cases j <;> decide))
 
-/-- **V3.9(b), the second reduction** (lecture note AsymmetricFT, Example 6.16; milestone V,
-V3.9(b)): `g̃ = h P g₀` is a reduction in the order `(0, C₂, C₁')` onto `(C₁', C₂)`, with
-`g̃ B¹ g̃⁻¹` and `g̃ B² g̃⁻¹` as printed, and its reading maps and injections are the row blocks of
-`g̃` and the column blocks of `g̃⁻¹`. -/
-theorem V3_9b_gt : redGt.z = 1 ∧ (redGt.ord zslot).val = 0 ∧
+/-- **The second reduction** (*The asymmetric fundamental theorem of matrix product states*, Example
+6.16): `g̃ = h P g₀` is a reduction in the order `(0, C₂, C₁')` onto `(C₁', C₂)`, with `g̃ B¹ g̃⁻¹`
+and `g̃ B² g̃⁻¹` as printed, and its reading maps and injections are the row blocks of `g̃` and the
+column blocks of `g̃⁻¹`. -/
+theorem redGt_spec : redGt.z = 1 ∧ (redGt.ord zeroSlot).val = 0 ∧
     (redGt.ord (Sum.inl slotC2)).val = 1 ∧ (redGt.ord (Sum.inl slotC1)).val = 2 ∧
     hInt * permInt * g0Int = gtInt ∧ gtInt * gtInvInt = 1 ∧
     (∀ i, toC gtInt * tensorB i * toC gtInvInt = toC (conjGt i)) ∧
-    redGt.leftRow zslot = toC !![3, 2, 2, 3] ∧
+    redGt.leftRow zeroSlot = toC !![3, 2, 2, 3] ∧
     redGt.leftRow (Sum.inl slotC2) = toC !![-2, -3, -1, 1] ∧
     redGt.leftRow (Sum.inl slotC1) = toC !![2, 2, 1, 2; 0, 0, 0, 1] ∧
-    redGt.rightCol zslot = toC !![-1; 0; 2; 0] ∧
+    redGt.rightCol zeroSlot = toC !![-1; 0; 2; 0] ∧
     redGt.rightCol (Sum.inl slotC2) = toC !![2; -1; -2; 0] ∧
     redGt.rightCol (Sum.inl slotC1) = toC !![4, -7; -1, 3; -5, 6; 0, 1] := by
   refine ⟨rfl, rfl, rfl, rfl, by decide +kernel, by decide +kernel, fun i => ?_, ?_, ?_, ?_, ?_,
     ?_, ?_⟩
   · rw [tensorB_eq_complexOfRing, ← complexOfRing_mul, ← complexOfRing_mul, conjGt_eq]
-  · exact (leftRow_redGt zslot).trans (congrArg toC
+  · exact (leftRow_redGt zeroSlot).trans (congrArg toC
       (Matrix.ext fun i j => by fin_cases i; fin_cases j <;> decide))
   · exact (leftRow_redGt (Sum.inl slotC2)).trans (congrArg toC
       (Matrix.ext fun i j => by fin_cases i; fin_cases j <;> decide))
   · exact (leftRow_redGt (Sum.inl slotC1)).trans (congrArg toC
       (Matrix.ext fun i j => by fin_cases i <;> fin_cases j <;> decide))
-  · exact (rightCol_redGt zslot).trans (congrArg toC
+  · exact (rightCol_redGt zeroSlot).trans (congrArg toC
       (Matrix.ext fun i j => by fin_cases i <;> fin_cases j <;> decide))
   · exact (rightCol_redGt (Sum.inl slotC2)).trans (congrArg toC
       (Matrix.ext fun i j => by fin_cases i <;> fin_cases j <;> decide))
   · exact (rightCol_redGt (Sum.inl slotC1)).trans (congrArg toC
       (Matrix.ext fun i j => by fin_cases i <;> fin_cases j <;> decide))
 
-/-- **V3.9(f)** (lecture note AsymmetricFT, Example 6.16; milestone V, V3.9(f)):
-`W̃_{C₂} = (-2, -3, -1, 1)` and `W_{C₂} = (0, -1, 0, 1)` are not proportional. -/
-theorem V3_9f : redGt.left slotC2 = toC !![-2, -3, -1, 1] ∧
+/-- **The reading maps of `C₂` are not proportional** (*The asymmetric fundamental theorem of matrix
+product states*, Example 6.16): `W̃_{C₂} = (-2, -3, -1, 1)` and `W_{C₂} = (0, -1, 0, 1)` are not
+proportional. -/
+theorem not_exists_left_redGt_eq_smul_left_redG : redGt.left slotC2 = toC !![-2, -3, -1, 1] ∧
     redG.left slotC2 = toC !![0, -1, 0, 1] ∧
     ¬ ∃ c : ℂ, redGt.left slotC2 = c • redG.left slotC2 := by
-  have h1 : redGt.left slotC2 = toC !![-2, -3, -1, 1] := V3_9b_gt.2.2.2.2.2.2.2.2.1
-  have h2 : redG.left slotC2 = toC !![0, -1, 0, 1] := V3_9b_g.2.2.2.2.2.2.2.2.1
+  have h1 : redGt.left slotC2 = toC !![-2, -3, -1, 1] := redGt_spec.2.2.2.2.2.2.2.2.1
+  have h2 : redG.left slotC2 = toC !![0, -1, 0, 1] := redG_spec.2.2.2.2.2.2.2.2.1
   refine ⟨h1, h2, ?_⟩
   rintro ⟨c, hc⟩
   rw [h1, h2] at hc
@@ -397,9 +406,10 @@ theorem V3_9f : redGt.left slotC2 = toC !![-2, -3, -1, 1] ∧
     rw [hc]; rfl
   simp [toC, complexOfRing_apply] at h00
 
-/-- **V3.9(g)** (lecture note AsymmetricFT, Example 6.16; milestone V, V3.9(g)):
-`tr B^w = tr C₁^w + tr C₂^w` for every nonempty word, and `tr B^∅ = 4`. -/
-theorem V3_9g : (∀ w : List (Fin 2), w ≠ [] → (Kraus.evalWord tensorB w).trace =
+/-- **The word traces** (*The asymmetric fundamental theorem of matrix product states*, Example
+6.16): `tr B^w = tr C₁^w + tr C₂^w` for every nonempty word, and `tr B^∅ = 4`. -/
+theorem trace_evalWord_tensorB_eq_add :
+    (∀ w : List (Fin 2), w ≠ [] → (Kraus.evalWord tensorB w).trace =
       (Kraus.evalWord tensorC₁ w).trace + (Kraus.evalWord tensorC₂ w).trace) ∧
     (Kraus.evalWord tensorB []).trace = 4 := by
   refine ⟨fun w hw => ?_, ?_⟩
@@ -452,13 +462,13 @@ theorem dims_pos : ∀ s ∈ labels, 0 < dims s := by
   intro s _
   fin_cases s <;> decide
 
-theorem g0_mulVec (v : Fin 4 → ℂ) :
+theorem toC_g0Int_mulVec (v : Fin 4 → ℂ) :
     toC g0Int *ᵥ v = ![2 * v 0 + 2 * v 1 + v 2 + v 3, v 3, v 0 + v 1 + v 2 + v 3, -v 1 + v 3] := by
   ext i
   fin_cases i <;>
     simp [g0Int, toC, complexOfRing_apply, Matrix.mulVec, dotProduct, Fin.sum_univ_four]
 
-theorem gt_mulVec (v : Fin 4 → ℂ) :
+theorem toC_gtInt_mulVec (v : Fin 4 → ℂ) :
     toC gtInt *ᵥ v = ![3 * v 0 + 2 * v 1 + 2 * v 2 + 3 * v 3, -2 * v 0 - 3 * v 1 - v 2 + v 3,
       2 * v 0 + 2 * v 1 + v 2 + 2 * v 3, v 3] := by
   ext i
@@ -502,9 +512,9 @@ theorem mem_flagVec_redGt (k : Fin (labels.card + redGt.z + 1)) (v : Fin 4 → �
     erw [Equiv.apply_symm_apply]
     exact h n (by rw [← hpos]; exact Fin.le_def.1 hy)
 
-theorem mem_M1 (k : Fin (labels.card + redG.z + 1)) (hk : k.val = 1) (v : Fin 4 → ℂ) :
+theorem mem_flagVec_redG_one (k : Fin (labels.card + redG.z + 1)) (hk : k.val = 1) (v : Fin 4 → ℂ) :
     v ∈ flagVec redG k ↔ v 0 + v 1 + v 2 + v 3 = 0 ∧ -v 1 + v 3 = 0 := by
-  rw [mem_flagVec_redG, hk, g0_mulVec]
+  rw [mem_flagVec_redG, hk, toC_g0Int_mulVec]
   constructor
   · intro h
     exact ⟨by simpa using h 2 (by decide), by simpa using h 3 (by decide)⟩
@@ -515,9 +525,9 @@ theorem mem_M1 (k : Fin (labels.card + redG.z + 1)) (hk : k.val = 1) (v : Fin 4 
     · simpa using h2
     · simpa using h3
 
-theorem mem_M2 (k : Fin (labels.card + redG.z + 1)) (hk : k.val = 2) (v : Fin 4 → ℂ) :
+theorem mem_flagVec_redG_two (k : Fin (labels.card + redG.z + 1)) (hk : k.val = 2) (v : Fin 4 → ℂ) :
     v ∈ flagVec redG k ↔ -v 1 + v 3 = 0 := by
-  rw [mem_flagVec_redG, hk, g0_mulVec]
+  rw [mem_flagVec_redG, hk, toC_g0Int_mulVec]
   constructor
   · intro h
     simpa using h 3 (by decide)
@@ -528,10 +538,11 @@ theorem mem_M2 (k : Fin (labels.card + redG.z + 1)) (hk : k.val = 2) (v : Fin 4 
     · exact absurd hn (by decide)
     · simpa using h3
 
-theorem mem_Mt1 (k : Fin (labels.card + redGt.z + 1)) (hk : k.val = 1) (v : Fin 4 → ℂ) :
+theorem mem_flagVec_redGt_one (k : Fin (labels.card + redGt.z + 1)) (hk : k.val = 1)
+    (v : Fin 4 → ℂ) :
     v ∈ flagVec redGt k ↔ -2 * v 0 - 3 * v 1 - v 2 + v 3 = 0 ∧
       2 * v 0 + 2 * v 1 + v 2 + 2 * v 3 = 0 ∧ v 3 = 0 := by
-  rw [mem_flagVec_redGt, hk, gt_mulVec]
+  rw [mem_flagVec_redGt, hk, toC_gtInt_mulVec]
   constructor
   · intro h
     exact ⟨by simpa using h 1 (by decide), by simpa using h 2 (by decide),
@@ -543,9 +554,10 @@ theorem mem_Mt1 (k : Fin (labels.card + redGt.z + 1)) (hk : k.val = 1) (v : Fin 
     · simpa using h2
     · simpa using h3
 
-theorem mem_Mt2 (k : Fin (labels.card + redGt.z + 1)) (hk : k.val = 2) (v : Fin 4 → ℂ) :
+theorem mem_flagVec_redGt_two (k : Fin (labels.card + redGt.z + 1)) (hk : k.val = 2)
+    (v : Fin 4 → ℂ) :
     v ∈ flagVec redGt k ↔ 2 * v 0 + 2 * v 1 + v 2 + 2 * v 3 = 0 ∧ v 3 = 0 := by
-  rw [mem_flagVec_redGt, hk, gt_mulVec]
+  rw [mem_flagVec_redGt, hk, toC_gtInt_mulVec]
   constructor
   · intro h
     exact ⟨by simpa using h 2 (by decide), by simpa using h 3 (by decide)⟩
@@ -557,12 +569,13 @@ theorem mem_Mt2 (k : Fin (labels.card + redGt.z + 1)) (hk : k.val = 2) (v : Fin 
     · simpa using h3
 
 /-- The matching of the two reductions. -/
-noncomputable abbrev πW : Fin (labels.card + redG.z) ≃ Fin (labels.card + redGt.z) :=
+noncomputable abbrev positionMatching : Fin (labels.card + redG.z) ≃ Fin (labels.card + redGt.z) :=
   redG.matching redGt isNormal_blocks dims_pos isNormal_blocks' dims_pos
 
-theorem matching_C1 : πW (redG.ord (Sum.inl slotC1)) = redGt.ord (Sum.inl slotC1) := by
-  refine matching_eq_of _ _ _ _ _ _ _ _ ⟨![1, 0, -1, 0], ?_, ?_, ?_⟩ ?_
-  · rw [mem_M1 _ rfl]; norm_num
+theorem positionMatching_ord_slotC1 :
+    positionMatching (redG.ord (Sum.inl slotC1)) = redGt.ord (Sum.inl slotC1) := by
+  refine matching_eq_of_flagVec_inf _ _ _ _ _ _ _ _ ⟨![1, 0, -1, 0], ?_, ?_, ?_⟩ ?_
+  · rw [mem_flagVec_redG_one _ rfl]; norm_num
   · rw [flagVec_eq_top _ _ rfl]; exact Submodule.mem_top
   · rw [flagVec_eq_bot _ _ rfl, Submodule.mem_bot]
     intro h; have := congrFun h 0; simp at this
@@ -571,11 +584,11 @@ theorem matching_C1 : πW (redG.ord (Sum.inl slotC1)) = redGt.ord (Sum.inl slotC
       have := Fin.lt_def.1 hj
       have h2 : (redGt.ord (Sum.inl slotC1)).val = 2 := rfl
       omega
-    rw [mem_M1 _ rfl] at hv1
+    rw [mem_flagVec_redG_one _ rfl] at hv1
     have hv2' : 2 * v 0 + 2 * v 1 + v 2 + 2 * v 3 = 0 ∧ v 3 = 0 := by
       rcases hj with hj | hj
-      · exact ((mem_Mt1 _ (by rw [Fin.val_succ, hj]) v).1 hv2).2
-      · exact (mem_Mt2 _ (by rw [Fin.val_succ, hj]) v).1 hv2
+      · exact ((mem_flagVec_redGt_one _ (by rw [Fin.val_succ, hj]) v).1 hv2).2
+      · exact (mem_flagVec_redGt_two _ (by rw [Fin.val_succ, hj]) v).1 hv2
     have hv : v = 0 := by
       obtain ⟨a, b⟩ := hv1
       obtain ⟨c, e⟩ := hv2'
@@ -587,37 +600,39 @@ theorem matching_C1 : πW (redG.ord (Sum.inl slotC1)) = redGt.ord (Sum.inl slotC
     rw [hv]
     exact Submodule.zero_mem _
 
-theorem matching_zero : πW (redG.ord zslot) = redGt.ord zslot := by
-  refine matching_eq_of _ _ _ _ _ _ _ _ ⟨![-1, 0, 2, 0], ?_, ?_, ?_⟩ ?_
-  · rw [mem_M2 _ rfl]; norm_num
-  · rw [mem_Mt1 _ rfl]; norm_num
-  · rw [mem_M1 _ rfl]; norm_num
+theorem positionMatching_ord_zeroSlot :
+    positionMatching (redG.ord zeroSlot) = redGt.ord zeroSlot := by
+  refine matching_eq_of_flagVec_inf _ _ _ _ _ _ _ _ ⟨![-1, 0, 2, 0], ?_, ?_, ?_⟩ ?_
+  · rw [mem_flagVec_redG_two _ rfl]; norm_num
+  · rw [mem_flagVec_redGt_one _ rfl]; norm_num
+  · rw [mem_flagVec_redG_one _ rfl]; norm_num
   · intro j hj
     exfalso
     have := Fin.lt_def.1 hj
-    have h0 : (redGt.ord zslot).val = 0 := rfl
+    have h0 : (redGt.ord zeroSlot).val = 0 := rfl
     omega
 
-theorem matching_C2 : πW (redG.ord (Sum.inl slotC2)) = redGt.ord (Sum.inl slotC2) := by
-  refine matching_eq_of _ _ _ _ _ _ _ _ ⟨![2, -1, -2, 0], ?_, ?_, ?_⟩ ?_
+theorem positionMatching_ord_slotC2 :
+    positionMatching (redG.ord (Sum.inl slotC2)) = redGt.ord (Sum.inl slotC2) := by
+  refine matching_eq_of_flagVec_inf _ _ _ _ _ _ _ _ ⟨![2, -1, -2, 0], ?_, ?_, ?_⟩ ?_
   · rw [flagVec_eq_top _ _ rfl]; exact Submodule.mem_top
-  · rw [mem_Mt2 _ rfl]; norm_num
-  · rw [mem_M2 _ rfl]; norm_num
+  · rw [mem_flagVec_redGt_two _ rfl]; norm_num
+  · rw [mem_flagVec_redG_two _ rfl]; norm_num
   · intro j hj v _ hv2
     have hj0 : j.val = 0 := by
       have := Fin.lt_def.1 hj
       have h1 : (redGt.ord (Sum.inl slotC2)).val = 1 := rfl
       omega
-    rw [mem_Mt1 _ (by rw [Fin.val_succ, hj0])] at hv2
-    rw [mem_M2 _ rfl]
+    rw [mem_flagVec_redGt_one _ (by rw [Fin.val_succ, hj0])] at hv2
+    rw [mem_flagVec_redG_two _ rfl]
     obtain ⟨a, b, c⟩ := hv2
     linear_combination a + b - 2 * c
 
-/-- **V3.9(c)** (lecture note AsymmetricFT, Example 6.16; milestone V, V3.9(c)): the flags
-`M₁ = span{(1, 0, -1, 0), (-1, 1, -1, 1)}`, `M₂ = M₁ + ℂ(-1, 0, 2, 0)`,
-`M̃₁ = ℂ(-1, 0, 2, 0)`, `M̃₂ = M̃₁ + ℂ(2, -1, -2, 0)` (as solution sets of the printed rows of
-`g₀` and `g̃`), and the matching `π(1) = 3`, `π(2) = 1`, `π(3) = 2`. -/
-theorem V3_9c :
+/-- **The flags and the matching** (*The asymmetric fundamental theorem of matrix product states*,
+Example 6.16): the flags `M₁ = span{(1, 0, -1, 0), (-1, 1, -1, 1)}`, `M₂ = M₁ + ℂ(-1, 0, 2, 0)`,
+`M̃₁ = ℂ(-1, 0, 2, 0)`, `M̃₂ = M̃₁ + ℂ(2, -1, -2, 0)` (as solution sets of the printed rows of `g₀`
+and `g̃`), and the matching `π(1) = 3`, `π(2) = 1`, `π(3) = 2`. -/
+theorem flagVec_redG_redGt_and_matching :
     (∀ k : Fin (labels.card + redG.z + 1), k.val = 1 →
       flagVec redG k = Submodule.span ℂ {![1, 0, -1, 0], ![-1, 1, -1, 1]}) ∧
     (∀ k : Fin (labels.card + redG.z + 1), k.val = 2 →
@@ -626,14 +641,16 @@ theorem V3_9c :
       flagVec redGt k = Submodule.span ℂ {![-1, 0, 2, 0]}) ∧
     (∀ k : Fin (labels.card + redGt.z + 1), k.val = 2 →
       flagVec redGt k = Submodule.span ℂ {![-1, 0, 2, 0], ![2, -1, -2, 0]}) ∧
-    (πW (redG.ord (Sum.inl slotC1))).val = 2 ∧ (πW (redG.ord zslot)).val = 0 ∧
-    (πW (redG.ord (Sum.inl slotC2))).val = 1 ∧
-    (redG.ord (Sum.inl slotC1)).val = 0 ∧ (redG.ord zslot).val = 1 ∧
+    (positionMatching (redG.ord (Sum.inl slotC1))).val = 2 ∧
+    (positionMatching (redG.ord zeroSlot)).val = 0 ∧
+    (positionMatching (redG.ord (Sum.inl slotC2))).val = 1 ∧
+    (redG.ord (Sum.inl slotC1)).val = 0 ∧ (redG.ord zeroSlot).val = 1 ∧
     (redG.ord (Sum.inl slotC2)).val = 2 := by
   refine ⟨fun k hk => ?_, fun k hk => ?_, fun k hk => ?_, fun k hk => ?_,
-    by rw [matching_C1]; rfl, by rw [matching_zero]; rfl, by rw [matching_C2]; rfl, rfl, rfl, rfl⟩
+    by rw [positionMatching_ord_slotC1]; rfl, by rw [positionMatching_ord_zeroSlot]; rfl,
+    by rw [positionMatching_ord_slotC2]; rfl, rfl, rfl, rfl⟩
   · ext v
-    rw [mem_M1 k hk, Submodule.mem_span_pair]
+    rw [mem_flagVec_redG_one k hk, Submodule.mem_span_pair]
     constructor
     · rintro ⟨h2, h3⟩
       have e3 : v 3 = v 1 := by linear_combination h3
@@ -643,7 +660,7 @@ theorem V3_9c :
     · rintro ⟨a, b, rfl⟩
       constructor <;> simp
   · ext v
-    rw [mem_M2 k hk, Submodule.mem_span_insert]
+    rw [mem_flagVec_redG_two k hk, Submodule.mem_span_insert]
     simp_rw [Submodule.mem_span_pair]
     constructor
     · intro h3
@@ -653,7 +670,7 @@ theorem V3_9c :
     · rintro ⟨a, z, ⟨b, c, rfl⟩, rfl⟩
       simp
   · ext v
-    rw [mem_Mt1 k hk, Submodule.mem_span_singleton]
+    rw [mem_flagVec_redGt_one k hk, Submodule.mem_span_singleton]
     constructor
     · rintro ⟨h1, h2, h3⟩
       have e3 : v 3 = 0 := h3
@@ -665,7 +682,7 @@ theorem V3_9c :
     · rintro ⟨a, rfl⟩
       refine ⟨?_, ?_, ?_⟩ <;> simp <;> ring
   · ext v
-    rw [mem_Mt2 k hk, Submodule.mem_span_pair]
+    rw [mem_flagVec_redGt_two k hk, Submodule.mem_span_pair]
     constructor
     · rintro ⟨h2, h3⟩
       have e3 : v 3 = 0 := h3
@@ -676,90 +693,93 @@ theorem V3_9c :
       constructor <;> simp
       ring
 
-/-! ### Theorem C on the three pairs -/
+/-! ### Two compressions with different flags, on the three pairs -/
 
 /-- The subspace `U = M_k ∩ M̃_{π(k)}` of the pair at the position `k` of `g`. -/
-noncomputable abbrev Uw (k : Fin (labels.card + redG.z)) : Submodule ℂ (Fin 4 → ℂ) :=
-  ((redG.flag k.succ ⊓ redGt.flag (πW k).succ).restrictScalars ℂ).map
+noncomputable abbrev subspaceU (k : Fin (labels.card + redG.z)) : Submodule ℂ (Fin 4 → ℂ) :=
+  ((redG.flag k.succ ⊓ redGt.flag (positionMatching k).succ).restrictScalars ℂ).map
     (WordModule.toVec tensorB).toLinearMap
 
 /-- The subspace `K = M_{k-1} ∩ M̃_{π(k)}`. -/
-noncomputable abbrev Kw (k : Fin (labels.card + redG.z)) : Submodule ℂ (Fin 4 → ℂ) :=
-  ((redG.flag k.castSucc ⊓ redGt.flag (πW k).succ).restrictScalars ℂ).map
+noncomputable abbrev subspaceK (k : Fin (labels.card + redG.z)) : Submodule ℂ (Fin 4 → ℂ) :=
+  ((redG.flag k.castSucc ⊓ redGt.flag (positionMatching k).succ).restrictScalars ℂ).map
     (WordModule.toVec tensorB).toLinearMap
 
 /-- The subspace `N = M_{k-1} + M̃_{π(k)-1}`. -/
-noncomputable abbrev Nw (k : Fin (labels.card + redG.z)) : Submodule ℂ (Fin 4 → ℂ) :=
-  ((redG.flag k.castSucc ⊔ redGt.flag (πW k).castSucc).restrictScalars ℂ).map
+noncomputable abbrev subspaceN (k : Fin (labels.card + redG.z)) : Submodule ℂ (Fin 4 → ℂ) :=
+  ((redG.flag k.castSucc ⊔ redGt.flag (positionMatching k).castSucc).restrictScalars ℂ).map
     (WordModule.toVec tensorB).toLinearMap
 
-/-- **V3.9(d)** (lecture note AsymmetricFT, Example 6.16; milestone V, V3.9(d)): for the `C₁`
-pair, `U = span{(1, 0, -1, 0), (-2, 1, 0, 1)}`, `K = 0`,
-`N = span{(-1, 0, 2, 0), (2, -1, -2, 0)}`; the intertwiner is `X = Y`, that is
-`W̃_{C₁'} = Y W_{C₁}` on `U` and `Y C₁^i = C₁'^i Y`; and `Ṽ_{C₁'} - V_{C₁} Y⁻¹` is the printed
-`4 × 2` matrix, with columns in `N`. For the zero block and for `C₂` the intertwiners are `1`
-(`W̃ = W` on `U`), with `dim K = 0` and `dim K = 1`. -/
-theorem V3_9d :
-    Uw (redG.ord (Sum.inl slotC1)) = Submodule.span ℂ {![1, 0, -1, 0], ![-2, 1, 0, 1]} ∧
-    Kw (redG.ord (Sum.inl slotC1)) = ⊥ ∧
-    Nw (redG.ord (Sum.inl slotC1)) = Submodule.span ℂ {![-1, 0, 2, 0], ![2, -1, -2, 0]} ∧
-    (∀ v ∈ Uw (redG.ord (Sum.inl slotC1)),
+/-- **The three matched pairs** (*The asymmetric fundamental theorem of matrix product states*,
+Example 6.16): for the `C₁` pair, `U = span{(1, 0, -1, 0), (-2, 1, 0, 1)}`, `K = 0`,
+`N = span{(-1, 0, 2, 0), (2, -1, -2, 0)}`; the intertwiner is `X = Y`, that is `W̃_{C₁'} = Y W_{C₁}`
+on `U` and `Y C₁^i = C₁'^i Y`; and `Ṽ_{C₁'} - V_{C₁} Y⁻¹` is the printed `4 × 2` matrix, with
+columns in `N`. For the zero block and for `C₂` the intertwiners are `1` (`W̃ = W` on `U`), with
+`dim K = 0` and `dim K = 1`. -/
+theorem inf_sup_intertwiner_redG_redGt :
+    subspaceU (redG.ord (Sum.inl slotC1)) = Submodule.span ℂ {![1, 0, -1, 0], ![-2, 1, 0, 1]} ∧
+    subspaceK (redG.ord (Sum.inl slotC1)) = ⊥ ∧
+    subspaceN (redG.ord (Sum.inl slotC1)) = Submodule.span ℂ {![-1, 0, 2, 0], ![2, -1, -2, 0]} ∧
+    (∀ v ∈ subspaceU (redG.ord (Sum.inl slotC1)),
       redGt.left slotC1 *ᵥ v = matY *ᵥ (redG.left slotC1 *ᵥ v)) ∧
     (∀ i, matY * tensorC₁ i = tensorC₁' i * matY) ∧
     @id (Matrix (Fin 4) (Fin 2) ℂ) (redGt.right slotC1) -
         @id (Matrix (Fin 4) (Fin 2) ℂ) (redG.right slotC1) * !![(1 : ℂ), -1; 0, 1] =
       toC !![3, -5; -1, 2; -4, 6; 0, 0] ∧
     (∀ j, (fun i => (toC !![(3 : ℤ), -5; -1, 2; -4, 6; 0, 0]) i j) ∈
-      Nw (redG.ord (Sum.inl slotC1))) ∧
-    (∀ v ∈ Uw (redG.ord zslot), redGt.leftRow zslot *ᵥ v = redG.leftRow zslot *ᵥ v) ∧
-    Module.finrank ℂ (Kw (redG.ord zslot)) = 0 ∧
-    (∀ v ∈ Uw (redG.ord (Sum.inl slotC2)),
+      subspaceN (redG.ord (Sum.inl slotC1))) ∧
+    (∀ v ∈ subspaceU (redG.ord zeroSlot),
+      redGt.leftRow zeroSlot *ᵥ v = redG.leftRow zeroSlot *ᵥ v) ∧
+    Module.finrank ℂ (subspaceK (redG.ord zeroSlot)) = 0 ∧
+    (∀ v ∈ subspaceU (redG.ord (Sum.inl slotC2)),
       redGt.left slotC2 *ᵥ v = redG.left slotC2 *ᵥ v) ∧
-    Module.finrank ℂ (Kw (redG.ord (Sum.inl slotC2))) = 1 := by
-  have hU1 : Uw (redG.ord (Sum.inl slotC1)) = flagVec redG ⟨1, by decide⟩ := by
-    rw [Uw, matching_C1, map_toVec_inf]
+    Module.finrank ℂ (subspaceK (redG.ord (Sum.inl slotC2))) = 1 := by
+  have hU1 : subspaceU (redG.ord (Sum.inl slotC1)) = flagVec redG ⟨1, by decide⟩ := by
+    rw [subspaceU, positionMatching_ord_slotC1, map_toVec_inf]
     change flagVec redG _ ⊓ flagVec redGt _ = _
     rw [flagVec_eq_top redGt _ rfl, inf_top_eq]
     rfl
-  have hK1 : Kw (redG.ord (Sum.inl slotC1)) = ⊥ := by
-    rw [Kw, matching_C1, map_toVec_inf]
+  have hK1 : subspaceK (redG.ord (Sum.inl slotC1)) = ⊥ := by
+    rw [subspaceK, positionMatching_ord_slotC1, map_toVec_inf]
     change flagVec redG _ ⊓ flagVec redGt _ = _
     rw [flagVec_eq_bot redG _ rfl, bot_inf_eq]
-  have hN1 : Nw (redG.ord (Sum.inl slotC1)) = flagVec redGt ⟨2, by decide⟩ := by
-    rw [Nw, matching_C1, map_toVec_sup]
+  have hN1 : subspaceN (redG.ord (Sum.inl slotC1)) = flagVec redGt ⟨2, by decide⟩ := by
+    rw [subspaceN, positionMatching_ord_slotC1, map_toVec_sup]
     change flagVec redG _ ⊔ flagVec redGt _ = _
     rw [flagVec_eq_bot redG _ rfl, bot_sup_eq]
     rfl
-  have hU0 : Uw (redG.ord zslot) = flagVec redGt ⟨1, by decide⟩ ⊓ flagVec redG ⟨2, by decide⟩ := by
-    rw [Uw, matching_zero, map_toVec_inf, inf_comm]
+  have hU0 : subspaceU (redG.ord zeroSlot) =
+      flagVec redGt ⟨1, by decide⟩ ⊓ flagVec redG ⟨2, by decide⟩ := by
+    rw [subspaceU, positionMatching_ord_zeroSlot, map_toVec_inf, inf_comm]
     rfl
-  have hK0 : Kw (redG.ord zslot) = flagVec redG ⟨1, by decide⟩ ⊓ flagVec redGt ⟨1, by decide⟩ := by
-    rw [Kw, matching_zero, map_toVec_inf]
+  have hK0 : subspaceK (redG.ord zeroSlot) =
+      flagVec redG ⟨1, by decide⟩ ⊓ flagVec redGt ⟨1, by decide⟩ := by
+    rw [subspaceK, positionMatching_ord_zeroSlot, map_toVec_inf]
     rfl
-  have hU2 : Uw (redG.ord (Sum.inl slotC2)) = flagVec redGt ⟨2, by decide⟩ := by
-    rw [Uw, matching_C2, map_toVec_inf]
+  have hU2 : subspaceU (redG.ord (Sum.inl slotC2)) = flagVec redGt ⟨2, by decide⟩ := by
+    rw [subspaceU, positionMatching_ord_slotC2, map_toVec_inf]
     change flagVec redG _ ⊓ flagVec redGt _ = _
     rw [flagVec_eq_top redG _ rfl, top_inf_eq]
     rfl
-  have hK2 : Kw (redG.ord (Sum.inl slotC2)) =
+  have hK2 : subspaceK (redG.ord (Sum.inl slotC2)) =
       flagVec redG ⟨2, by decide⟩ ⊓ flagVec redGt ⟨2, by decide⟩ := by
-    rw [Kw, matching_C2, map_toVec_inf]
+    rw [subspaceK, positionMatching_ord_slotC2, map_toVec_inf]
     rfl
-  have hWG1 : redG.left slotC1 = toC !![2, 2, 1, 1; 0, 0, 0, 1] := V3_9b_g.2.2.2.2.2.2.1
+  have hWG1 : redG.left slotC1 = toC !![2, 2, 1, 1; 0, 0, 0, 1] := redG_spec.2.2.2.2.2.2.1
   have hWGt1 : redGt.left slotC1 = toC !![2, 2, 1, 2; 0, 0, 0, 1] :=
-    V3_9b_gt.2.2.2.2.2.2.2.2.2.1
+    redGt_spec.2.2.2.2.2.2.2.2.2.1
   have hVG1 : redG.right slotC1 = toC !![1, -1; 0, 1; -1, -1; 0, 1] :=
-    V3_9b_g.2.2.2.2.2.2.2.2.2.1
+    redG_spec.2.2.2.2.2.2.2.2.2.1
   have hVGt1 : redGt.right slotC1 = toC !![4, -7; -1, 3; -5, 6; 0, 1] :=
-    V3_9b_gt.2.2.2.2.2.2.2.2.2.2.2.2
-  have hWG0 : redG.leftRow zslot = toC !![1, 1, 1, 1] := V3_9b_g.2.2.2.2.2.2.2.1
-  have hWGt0 : redGt.leftRow zslot = toC !![3, 2, 2, 3] := V3_9b_gt.2.2.2.2.2.2.2.1
-  have hWG2 : redG.left slotC2 = toC !![0, -1, 0, 1] := V3_9b_g.2.2.2.2.2.2.2.2.1
-  have hWGt2 : redGt.left slotC2 = toC !![-2, -3, -1, 1] := V3_9b_gt.2.2.2.2.2.2.2.2.1
+    redGt_spec.2.2.2.2.2.2.2.2.2.2.2.2
+  have hWG0 : redG.leftRow zeroSlot = toC !![1, 1, 1, 1] := redG_spec.2.2.2.2.2.2.2.1
+  have hWGt0 : redGt.leftRow zeroSlot = toC !![3, 2, 2, 3] := redGt_spec.2.2.2.2.2.2.2.1
+  have hWG2 : redG.left slotC2 = toC !![0, -1, 0, 1] := redG_spec.2.2.2.2.2.2.2.2.1
+  have hWGt2 : redGt.left slotC2 = toC !![-2, -3, -1, 1] := redGt_spec.2.2.2.2.2.2.2.2.1
   refine ⟨?_, hK1, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
   · rw [hU1]
     ext v
-    rw [mem_M1 _ rfl, Submodule.mem_span_pair]
+    rw [mem_flagVec_redG_one _ rfl, Submodule.mem_span_pair]
     constructor
     · rintro ⟨h2, h3⟩
       have e3 : v 3 = v 1 := by linear_combination h3
@@ -770,7 +790,7 @@ theorem V3_9d :
       constructor <;> simp
       ring
   · rw [hN1]
-    exact (V3_9c.2.2.2.1 _ rfl)
+    exact (flagVec_redG_redGt_and_matching.2.2.2.1 _ rfl)
   · intro v _
     rw [hWGt1, hWG1]
     ext i; fin_cases i <;>
@@ -785,12 +805,12 @@ theorem V3_9d :
     fin_cases i <;> fin_cases j <;>
       simp [toC, complexOfRing_apply, Matrix.mul_apply, Fin.sum_univ_two] <;> norm_num
   · intro j
-    rw [hN1, mem_Mt2 _ rfl]
+    rw [hN1, mem_flagVec_redGt_two _ rfl]
     fin_cases j <;> simp [toC, complexOfRing_apply] <;> norm_num
   · intro v hv
     rw [hU0] at hv
     obtain ⟨hv1, -⟩ := Submodule.mem_inf.1 hv
-    rw [mem_Mt1 _ rfl] at hv1
+    rw [mem_flagVec_redGt_one _ rfl] at hv1
     obtain ⟨h1, h2, h3⟩ := hv1
     have e1 : v 1 = 0 := by linear_combination -h1 - h2 + 3 * h3
     have e2 : v 2 = -2 * v 0 := by linear_combination h2 - 2 * e1 - 2 * h3
@@ -803,8 +823,8 @@ theorem V3_9d :
       rw [eq_bot_iff]
       intro v hv
       obtain ⟨hv1, hv2⟩ := Submodule.mem_inf.1 hv
-      rw [mem_M1 _ rfl] at hv1
-      rw [mem_Mt1 _ rfl] at hv2
+      rw [mem_flagVec_redG_one _ rfl] at hv1
+      rw [mem_flagVec_redGt_one _ rfl] at hv2
       obtain ⟨a, b⟩ := hv1
       obtain ⟨c1, c, e⟩ := hv2
       rw [Submodule.mem_bot]
@@ -815,7 +835,7 @@ theorem V3_9d :
       · simp; linear_combination e
     rw [this, finrank_bot]
   · intro v hv
-    rw [hU2, mem_Mt2 _ rfl] at hv
+    rw [hU2, mem_flagVec_redGt_two _ rfl] at hv
     obtain ⟨h2, h3⟩ := hv
     have e2 : v 2 = -2 * v 0 - 2 * v 1 := by linear_combination h2 - 2 * h3
     rw [hWGt2, hWG2]
@@ -826,7 +846,8 @@ theorem V3_9d :
     have : flagVec redG ⟨2, by decide⟩ ⊓ flagVec redGt ⟨2, by decide⟩ =
         Submodule.span ℂ {![-1, 0, 2, 0]} := by
       ext v
-      rw [Submodule.mem_inf, mem_M2 _ rfl, mem_Mt2 _ rfl, Submodule.mem_span_singleton]
+      rw [Submodule.mem_inf, mem_flagVec_redG_two _ rfl, mem_flagVec_redGt_two _ rfl,
+        Submodule.mem_span_singleton]
       constructor
       · rintro ⟨h3', h2, h3⟩
         have e1 : v 1 = 0 := by linear_combination -h3' + h3
@@ -867,7 +888,7 @@ theorem finrank_span_triple {x y w : Fin 4 → ℂ} (h : LinearIndependent ℂ !
   rwa [Matrix.range_cons, Matrix.range_cons_cons_empty, Set.singleton_union,
     Fintype.card_fin] at this
 
-theorem finrank_M1 : Module.finrank ℂ (Submodule.span ℂ
+theorem finrank_span_redG_one : Module.finrank ℂ (Submodule.span ℂ
     {(![1, 0, -1, 0] : Fin 4 → ℂ), ![-1, 1, -1, 1]}) = 2 := by
   refine finrank_span_pair (Fintype.linearIndependent_iff.2 fun g hg => ?_)
   have c0 : g 0 * 1 + g 1 * (-1) = 0 := by simpa [Fin.sum_univ_two] using congrFun hg 0
@@ -878,7 +899,7 @@ theorem finrank_M1 : Module.finrank ℂ (Submodule.span ℂ
   · exact g0
   · exact g1
 
-theorem finrank_M2 : Module.finrank ℂ (Submodule.span ℂ
+theorem finrank_span_redG_two : Module.finrank ℂ (Submodule.span ℂ
     {(![1, 0, -1, 0] : Fin 4 → ℂ), ![-1, 1, -1, 1], ![-1, 0, 2, 0]}) = 3 := by
   refine finrank_span_triple (Fintype.linearIndependent_iff.2 fun g hg => ?_)
   have c0 : g 0 * 1 + g 1 * (-1) + g 2 * (-1) = 0 := by
@@ -894,12 +915,13 @@ theorem finrank_M2 : Module.finrank ℂ (Submodule.span ℂ
   · exact g1
   · exact g2
 
-theorem finrank_Mt1 : Module.finrank ℂ (Submodule.span ℂ {(![-1, 0, 2, 0] : Fin 4 → ℂ)}) = 1 := by
+theorem finrank_span_redGt_one :
+    Module.finrank ℂ (Submodule.span ℂ {(![-1, 0, 2, 0] : Fin 4 → ℂ)}) = 1 := by
   refine finrank_span_singleton fun h => ?_
   have := congrFun h 0
   simp at this
 
-theorem finrank_Mt2 : Module.finrank ℂ (Submodule.span ℂ
+theorem finrank_span_redGt_two : Module.finrank ℂ (Submodule.span ℂ
     {(![-1, 0, 2, 0] : Fin 4 → ℂ), ![2, -1, -2, 0]}) = 2 := by
   refine finrank_span_pair (Fintype.linearIndependent_iff.2 fun g hg => ?_)
   have c0 : g 0 * (-1) + g 1 * 2 = 0 := by simpa [Fin.sum_univ_two] using congrFun hg 0
@@ -910,12 +932,13 @@ theorem finrank_Mt2 : Module.finrank ℂ (Submodule.span ℂ
   · exact g0
   · exact g1
 
-theorem M1_inf_Mt1 : flagVec redG (posG 0) ⊓ flagVec redGt (posGt 0) = ⊥ := by
+theorem flagVec_redG_one_inf_flagVec_redGt_one :
+    flagVec redG (posG 0) ⊓ flagVec redGt (posGt 0) = ⊥ := by
   rw [eq_bot_iff]
   intro v hv
   obtain ⟨hv1, hv2⟩ := Submodule.mem_inf.1 hv
-  rw [mem_M1 _ rfl] at hv1
-  rw [mem_Mt1 _ rfl] at hv2
+  rw [mem_flagVec_redG_one _ rfl] at hv1
+  rw [mem_flagVec_redGt_one _ rfl] at hv2
   obtain ⟨a, b⟩ := hv1
   obtain ⟨c1, c, e⟩ := hv2
   rw [Submodule.mem_bot]
@@ -925,12 +948,13 @@ theorem M1_inf_Mt1 : flagVec redG (posG 0) ⊓ flagVec redGt (posGt 0) = ⊥ := 
   · simp; linear_combination 2 * a - c
   · simp; linear_combination e
 
-theorem M1_inf_Mt2 : flagVec redG (posG 0) ⊓ flagVec redGt (posGt 1) = ⊥ := by
+theorem flagVec_redG_one_inf_flagVec_redGt_two :
+    flagVec redG (posG 0) ⊓ flagVec redGt (posGt 1) = ⊥ := by
   rw [eq_bot_iff]
   intro v hv
   obtain ⟨hv1, hv2⟩ := Submodule.mem_inf.1 hv
-  rw [mem_M1 _ rfl] at hv1
-  rw [mem_Mt2 _ rfl] at hv2
+  rw [mem_flagVec_redG_one _ rfl] at hv1
+  rw [mem_flagVec_redGt_two _ rfl] at hv2
   obtain ⟨a, b⟩ := hv1
   obtain ⟨c, e⟩ := hv2
   rw [Submodule.mem_bot]
@@ -940,10 +964,12 @@ theorem M1_inf_Mt2 : flagVec redG (posG 0) ⊓ flagVec redGt (posGt 1) = ⊥ := 
   · simp; linear_combination 2 * a - c
   · simp; linear_combination e
 
-theorem M2_inf_Mt2 : flagVec redG ⟨2, by decide⟩ ⊓ flagVec redGt ⟨2, by decide⟩ =
+theorem flagVec_redG_two_inf_flagVec_redGt_two :
+    flagVec redG ⟨2, by decide⟩ ⊓ flagVec redGt ⟨2, by decide⟩ =
     Submodule.span ℂ {![-1, 0, 2, 0]} := by
   ext v
-  rw [Submodule.mem_inf, mem_M2 _ rfl, mem_Mt2 _ rfl, Submodule.mem_span_singleton]
+  rw [Submodule.mem_inf, mem_flagVec_redG_two _ rfl, mem_flagVec_redGt_two _ rfl,
+    Submodule.mem_span_singleton]
   constructor
   · rintro ⟨h3', h2, h3⟩
     have e1 : v 1 = 0 := by linear_combination -h3' + h3
@@ -956,14 +982,14 @@ theorem M2_inf_Mt2 : flagVec redG ⟨2, by decide⟩ ⊓ flagVec redGt ⟨2, by 
     refine ⟨?_, ?_, ?_⟩ <;> simp
     ring
 
-/-- **V3.9(c), the dimension matrix** (lecture note AsymmetricFT, Example 6.16; milestone V,
-V3.9(c)): `dim (M_k ∩ M̃_{k'})` for `k, k' = 1, 2, 3` (rows `k`, columns `k'`) is
+/-- **The dimension matrix** (*The asymmetric fundamental theorem of matrix product states*, Example
+6.16): `dim (M_k ∩ M̃_{k'})` for `k, k' = 1, 2, 3` (rows `k`, columns `k'`) is
 `[[0, 0, 2], [1, 1, 3], [1, 2, 4]]`. -/
-theorem V3_9c_dims :
+theorem finrank_flagVec_redG_inf_flagVec_redGt :
     (Matrix.of fun i j : Fin 3 =>
       Module.finrank ℂ ↥(flagVec redG (posG i) ⊓ flagVec redGt (posGt j))) =
       !![0, 0, 2; 1, 1, 3; 1, 2, 4] := by
-  obtain ⟨hM1, hM2, hMt1, hMt2, -⟩ := V3_9c
+  obtain ⟨hM1, hM2, hMt1, hMt2, -⟩ := flagVec_redG_redGt_and_matching
   have eM1 : flagVec redG (posG 0) = _ := hM1 _ rfl
   have eM2 : flagVec redG (posG 1) = _ := hM2 _ rfl
   have eMt1 : flagVec redGt (posGt 0) = _ := hMt1 _ rfl
@@ -971,30 +997,30 @@ theorem V3_9c_dims :
   have eM3 : flagVec redG (posG 2) = ⊤ := flagVec_eq_top _ _ rfl
   have eMt3 : flagVec redGt (posGt 2) = ⊤ := flagVec_eq_top _ _ rfl
   have d11 : Module.finrank ℂ ↥(flagVec redG (posG 0) ⊓ flagVec redGt (posGt 0)) = 0 := by
-    rw [M1_inf_Mt1, finrank_bot]
+    rw [flagVec_redG_one_inf_flagVec_redGt_one, finrank_bot]
   have d12 : Module.finrank ℂ ↥(flagVec redG (posG 0) ⊓ flagVec redGt (posGt 1)) = 0 := by
-    rw [M1_inf_Mt2, finrank_bot]
+    rw [flagVec_redG_one_inf_flagVec_redGt_two, finrank_bot]
   have d13 : Module.finrank ℂ ↥(flagVec redG (posG 0) ⊓ flagVec redGt (posGt 2)) = 2 := by
-    rw [eMt3, inf_top_eq, eM1, finrank_M1]
+    rw [eMt3, inf_top_eq, eM1, finrank_span_redG_one]
   have d21 : Module.finrank ℂ ↥(flagVec redG (posG 1) ⊓ flagVec redGt (posGt 0)) = 1 := by
-    rw [eM2, eMt1, inf_eq_right.2 (Submodule.span_mono (by simp)), finrank_Mt1]
+    rw [eM2, eMt1, inf_eq_right.2 (Submodule.span_mono (by simp)), finrank_span_redGt_one]
   have d22 : Module.finrank ℂ ↥(flagVec redG (posG 1) ⊓ flagVec redGt (posGt 1)) = 1 := by
     have h : flagVec redG (posG 1) ⊓ flagVec redGt (posGt 1) =
-        Submodule.span ℂ {(![-1, 0, 2, 0] : Fin 4 → ℂ)} := M2_inf_Mt2
-    rw [h, finrank_Mt1]
+        Submodule.span ℂ {(![-1, 0, 2, 0] : Fin 4 → ℂ)} := flagVec_redG_two_inf_flagVec_redGt_two
+    rw [h, finrank_span_redGt_one]
   have d23 : Module.finrank ℂ ↥(flagVec redG (posG 1) ⊓ flagVec redGt (posGt 2)) = 3 := by
-    rw [eMt3, inf_top_eq, eM2, finrank_M2]
+    rw [eMt3, inf_top_eq, eM2, finrank_span_redG_two]
   have d31 : Module.finrank ℂ ↥(flagVec redG (posG 2) ⊓ flagVec redGt (posGt 0)) = 1 := by
-    rw [eM3, top_inf_eq, eMt1, finrank_Mt1]
+    rw [eM3, top_inf_eq, eMt1, finrank_span_redGt_one]
   have d32 : Module.finrank ℂ ↥(flagVec redG (posG 2) ⊓ flagVec redGt (posGt 1)) = 2 := by
-    rw [eM3, top_inf_eq, eMt2, finrank_Mt2]
+    rw [eM3, top_inf_eq, eMt2, finrank_span_redGt_two]
   have d33 : Module.finrank ℂ ↥(flagVec redG (posG 2) ⊓ flagVec redGt (posGt 2)) = 4 := by
     rw [eM3, eMt3, inf_top_eq, finrank_top, Module.finrank_fin_fun]
   ext i j
   fin_cases i <;> fin_cases j
   exacts [d11, d12, d13, d21, d22, d23, d31, d32, d33]
 
-/-! ### Theorem E -/
+/-! ### A basis adapted to both flags -/
 
 /-- `𝔄` (in the bond coordinates of `g`). -/
 def aInt : Matrix (Fin 4) (Fin 4) ℤ := !![1, 0, 0, 0; 0, 1, 0, 0; 0, 0, 1, 1; 0, 0, 0, 1]
@@ -1015,24 +1041,25 @@ def gammaInt : Matrix (Fin 4) (Fin 4) ℤ := !![2, 2, 1, 1; 0, 0, 0, 1; 1, 2, 1,
 def gammaInvInt : Matrix (Fin 4) (Fin 4) ℤ :=
   !![1, -1, -1, 0; 0, 1, 0, -1; -1, -1, 2, 2; 0, 1, 0, 0]
 
-theorem gamma_mul : gammaInt * gammaInvInt = 1 := by decide +kernel
+theorem gammaInt_mul_gammaInvInt : gammaInt * gammaInvInt = 1 := by decide +kernel
 
-theorem gamma_mul' : gammaInvInt * gammaInt = 1 := by decide +kernel
+theorem gammaInvInt_mul_gammaInt : gammaInvInt * gammaInt = 1 := by decide +kernel
 
-theorem aInv_mul : aInvInt * aInt = 1 := by decide +kernel
+theorem aInvInt_mul_aInt : aInvInt * aInt = 1 := by decide +kernel
 
-theorem a_mul_gamma : aInt * gammaInt = g0Int := by decide +kernel
+theorem aInt_mul_gammaInt : aInt * gammaInt = g0Int := by decide +kernel
 
-theorem at_px_gamma : atInt * pxInt * gammaInt = gtInt := by decide +kernel
+theorem atInt_mul_pxInt_mul_gammaInt : atInt * pxInt * gammaInt = gtInt := by decide +kernel
 
-theorem gt_mul_g0Inv : gtInt * g0InvInt = atInt * pxInt * aInvInt := by decide +kernel
+theorem gtInt_mul_g0InvInt : gtInt * g0InvInt = atInt * pxInt * aInvInt := by decide +kernel
 
 /-- `Γ` as a change of coordinates. -/
-noncomputable def gammaW : (Fin 4 → ℂ) ≃ₗ[ℂ] (BlockSpace dims labels 1 → ℂ) :=
-  gaugeOfMatrix tauG (toC gammaInt) (toC gammaInvInt) (complexOfRing_mul_eq_one _ gamma_mul)
-    (complexOfRing_mul_eq_one _ gamma_mul')
+noncomputable def gammaGauge : (Fin 4 → ℂ) ≃ₗ[ℂ] (BlockSpace dims labels 1 → ℂ) :=
+  gaugeOfMatrix tauG (toC gammaInt) (toC gammaInvInt)
+    (complexOfRing_mul_eq_one _ gammaInt_mul_gammaInvInt)
+    (complexOfRing_mul_eq_one _ gammaInvInt_mul_gammaInt)
 
-theorem gaugeMatrix_gammaW : gaugeMatrix gammaW = (toC gammaInt).submatrix tauG id :=
+theorem gaugeMatrix_gammaGauge : gaugeMatrix gammaGauge = (toC gammaInt).submatrix tauG id :=
   gaugeMatrix_gaugeOfMatrix _ _ _ _ _
 
 theorem gaugeMatrix_redG : gaugeMatrix redG.gauge = (toC g0Int).submatrix tauG id := by
@@ -1048,22 +1075,22 @@ theorem gaugeMatrixInv_redG : gaugeMatrixInv redG.gauge = (toC g0InvInt).submatr
   rfl
 
 /-- The complements `L₁ = M₁`, `L₂ = M̃₁`, `L₃ = ℂ (V_{C₂} + V₀) = ℂ (0, -1, 2, 0)` in `ℂ⁴`. -/
-noncomputable def lVec (j : Fin (labels.card + redG.z)) : Submodule ℂ (Fin 4 → ℂ) :=
+noncomputable def complementVec (j : Fin (labels.card + redG.z)) : Submodule ℂ (Fin 4 → ℂ) :=
   if j.val = 0 then Submodule.span ℂ {![1, 0, -1, 0], ![-1, 1, -1, 1]}
   else if j.val = 1 then Submodule.span ℂ {![-1, 0, 2, 0]}
   else Submodule.span ℂ {![0, -1, 2, 0]}
 
 /-- The complements in the word module. -/
-noncomputable def lW (j : Fin (labels.card + redG.z)) : Submodule ℂ tensorB.WordModule :=
-  (lVec j).map (WordModule.toVec tensorB).symm.toLinearMap
+noncomputable def complement (j : Fin (labels.card + redG.z)) : Submodule ℂ tensorB.WordModule :=
+  (complementVec j).map (WordModule.toVec tensorB).symm.toLinearMap
 
-theorem map_lW (j : Fin (labels.card + redG.z)) :
-    (lW j).map (WordModule.toVec tensorB).toLinearMap = lVec j := by
-  rw [lW, ← Submodule.map_comp]
+theorem map_complement (j : Fin (labels.card + redG.z)) :
+    (complement j).map (WordModule.toVec tensorB).toLinearMap = complementVec j := by
+  rw [complement, ← Submodule.map_comp]
   simp
 
 /-- The intertwiners `X_{C₁} = Y`, `X₀ = 1`, `X_{C₂} = 1`. -/
-noncomputable def xW :
+noncomputable def intertwiner :
     ∀ b : BlockIndex labels 1, Matrix (Fin (slotSize dims b)) (Fin (slotSize dims b)) ℂ
   | Sum.inl ⟨0, _⟩ => matY
   | Sum.inl ⟨1, _⟩ => 1
@@ -1078,13 +1105,13 @@ theorem slot_cases {z : ℕ} (b : BlockIndex labels z) (hz : z = 1) :
     · exact Or.inr (Or.inr rfl)
   · exact Or.inr (Or.inl (by rw [Subsingleton.elim t ⟨0, Nat.one_pos⟩]))
 
-theorem gamma_mulVec (v : Fin 4 → ℂ) :
+theorem toC_gammaInt_mulVec (v : Fin 4 → ℂ) :
     toC gammaInt *ᵥ v = ![2 * v 0 + 2 * v 1 + v 2 + v 3, v 3, v 0 + 2 * v 1 + v 2, -v 1 + v 3] := by
   ext i
   fin_cases i <;>
     simp [gammaInt, toC, complexOfRing_apply, Matrix.mulVec, dotProduct, Fin.sum_univ_four]
 
-theorem blockEmbed_restrict {z : ℕ} (b : BlockIndex labels z) (f : BlockSpace dims labels z → ℂ)
+theorem blockEmbed_mulVec_apply {z : ℕ} (b : BlockIndex labels z) (f : BlockSpace dims labels z → ℂ)
     (y : BlockSpace dims labels z) :
     (Matrix.blockEmbed (slotSize dims) b *ᵥ fun j => f ⟨b, j⟩) y = if y.1 = b then f y else 0 := by
   by_cases h : y.1 = b
@@ -1097,64 +1124,71 @@ theorem blockEmbed_restrict {z : ℕ} (b : BlockIndex labels z) (f : BlockSpace 
     simp [h]
 
 /-- `P_X = ∑_b E_{π(b)} X_b P_b` is the printed permutation-like matrix. -/
-theorem pxW : (∑ b, Matrix.blockEmbed (slotSize dims) b * xW b *
-    Matrix.blockProj (slotSize dims) b) = (toC pxInt).submatrix tauGt tauG := by
+theorem sum_blockEmbed_mul_intertwiner_mul_blockProj :
+    (∑ b, Matrix.blockEmbed (slotSize dims) b * intertwiner b *
+      Matrix.blockProj (slotSize dims) b) = (toC pxInt).submatrix tauGt tauG := by
   rw [Matrix.sum_blockEmbed_mul_mul_blockProj]
   ext x y
   obtain ⟨m, rfl⟩ := tauGt.symm.surjective x
   obtain ⟨n, rfl⟩ := tauG.symm.surjective y
   fin_cases m <;> fin_cases n <;>
-    simp [tauGt, tauG, Matrix.blockDiagonal'_apply, xW, matY, toC, complexOfRing_apply, pxInt] <;>
+    simp [tauGt, tauG, Matrix.blockDiagonal'_apply, intertwiner, matY, toC, complexOfRing_apply,
+      pxInt] <;>
     rfl
 
-theorem aInt_tri : ∀ x y : BlockSpace dims labels 1, ordG y.1 < ordG x.1 →
+theorem aInt_apply_eq_zero_of_lt : ∀ x y : BlockSpace dims labels 1, ordG y.1 < ordG x.1 →
     aInt (tauG x) (tauG y) = 0 := by
   decide
 
-theorem atInt_tri : ∀ x y : BlockSpace dims labels 1, ordGt y.1 < ordGt x.1 →
+theorem atInt_apply_eq_zero_of_lt : ∀ x y : BlockSpace dims labels 1, ordGt y.1 < ordGt x.1 →
     atInt (tauGt x) (tauGt y) = 0 := by
   decide
 
 /-- The complements: `K_j ⊕ L_j = U_j` for the three positions. -/
-theorem complements_ok (j : Fin (labels.card + redG.z)) :
-    Disjoint ((redG.flag j.castSucc ⊓ redGt.flag (πW j).succ).restrictScalars ℂ) (lW j) ∧
-    (redG.flag j.castSucc ⊓ redGt.flag (πW j).succ).restrictScalars ℂ ⊔ lW j =
-      (redG.flag j.succ ⊓ redGt.flag (πW j).succ).restrictScalars ℂ := by
-  obtain ⟨-, hK1, -, -, -, -, -, -, hK0, -, -⟩ := V3_9d
+theorem disjoint_complement_and_sup_eq (j : Fin (labels.card + redG.z)) :
+    Disjoint ((redG.flag j.castSucc ⊓ redGt.flag (positionMatching j).succ).restrictScalars ℂ)
+      (complement j) ∧
+    (redG.flag j.castSucc ⊓ redGt.flag (positionMatching j).succ).restrictScalars ℂ ⊔ complement j =
+      (redG.flag j.succ ⊓ redGt.flag (positionMatching j).succ).restrictScalars ℂ := by
+  obtain ⟨-, hK1, -, -, -, -, -, -, hK0, -, -⟩ := inf_sup_intertwiner_redG_redGt
   obtain ⟨b, rfl⟩ := redG.ord.surjective j
   rcases slot_cases b rfl with rfl | rfl | rfl
   · have hK : (redG.flag (redG.ord (Sum.inl slotC1)).castSucc ⊓
-        redGt.flag (πW (redG.ord (Sum.inl slotC1))).succ).restrictScalars ℂ = ⊥ := by
+        redGt.flag (positionMatching (redG.ord (Sum.inl slotC1))).succ).restrictScalars ℂ = ⊥ := by
       apply eq_of_map_toVec_eq
       rw [Submodule.map_bot]
       exact hK1
     have hU : (redG.flag (redG.ord (Sum.inl slotC1)).succ ⊓
-        redGt.flag (πW (redG.ord (Sum.inl slotC1))).succ).restrictScalars ℂ =
-          lW (redG.ord (Sum.inl slotC1)) := by
+        redGt.flag (positionMatching (redG.ord (Sum.inl slotC1))).succ).restrictScalars ℂ =
+          complement (redG.ord (Sum.inl slotC1)) := by
       apply eq_of_map_toVec_eq
-      rw [map_lW, map_toVec_inf, matching_C1]
+      rw [map_complement, map_toVec_inf, positionMatching_ord_slotC1]
       change flagVec redG _ ⊓ flagVec redGt _ = _
-      rw [flagVec_eq_top redGt _ rfl, inf_top_eq, V3_9c.1 _ rfl]
-      simp only [lVec, show (redG.ord (Sum.inl slotC1)).val = 0 from rfl, ite_true]
+      rw [flagVec_eq_top redGt _ rfl, inf_top_eq, flagVec_redG_redGt_and_matching.1 _ rfl]
+      simp only [complementVec, show (redG.ord (Sum.inl slotC1)).val = 0 from rfl, ite_true]
     exact ⟨hK ▸ disjoint_bot_left, by rw [hK, hU, bot_sup_eq]⟩
-  · change Disjoint ((redG.flag (redG.ord zslot).castSucc ⊓
-        redGt.flag (πW (redG.ord zslot)).succ).restrictScalars ℂ) (lW (redG.ord zslot)) ∧
-      (redG.flag (redG.ord zslot).castSucc ⊓
-          redGt.flag (πW (redG.ord zslot)).succ).restrictScalars ℂ ⊔ lW (redG.ord zslot) =
-        (redG.flag (redG.ord zslot).succ ⊓
-          redGt.flag (πW (redG.ord zslot)).succ).restrictScalars ℂ
-    have hK : (redG.flag (redG.ord zslot).castSucc ⊓
-        redGt.flag (πW (redG.ord zslot)).succ).restrictScalars ℂ = ⊥ := by
+  · change Disjoint ((redG.flag (redG.ord zeroSlot).castSucc ⊓
+        redGt.flag (positionMatching (redG.ord zeroSlot)).succ).restrictScalars ℂ)
+        (complement (redG.ord zeroSlot)) ∧
+      (redG.flag (redG.ord zeroSlot).castSucc ⊓
+          redGt.flag (positionMatching (redG.ord zeroSlot)).succ).restrictScalars ℂ ⊔
+          complement (redG.ord zeroSlot) =
+        (redG.flag (redG.ord zeroSlot).succ ⊓
+          redGt.flag (positionMatching (redG.ord zeroSlot)).succ).restrictScalars ℂ
+    have hK : (redG.flag (redG.ord zeroSlot).castSucc ⊓
+        redGt.flag (positionMatching (redG.ord zeroSlot)).succ).restrictScalars ℂ = ⊥ := by
       apply eq_of_map_toVec_eq
       rw [Submodule.map_bot]
       exact Submodule.finrank_eq_zero.1 hK0
-    have hU : (redG.flag (redG.ord zslot).succ ⊓
-        redGt.flag (πW (redG.ord zslot)).succ).restrictScalars ℂ = lW (redG.ord zslot) := by
+    have hU : (redG.flag (redG.ord zeroSlot).succ ⊓
+        redGt.flag (positionMatching (redG.ord zeroSlot)).succ).restrictScalars ℂ =
+        complement (redG.ord zeroSlot) := by
       apply eq_of_map_toVec_eq
-      rw [map_lW, map_toVec_inf, matching_zero]
+      rw [map_complement, map_toVec_inf, positionMatching_ord_zeroSlot]
       change flagVec redG _ ⊓ flagVec redGt _ = _
-      rw [V3_9c.2.1 _ rfl, V3_9c.2.2.1 _ rfl]
-      simp only [lVec, show (redG.ord zslot).val = 1 from rfl, ite_true, one_ne_zero, ite_false]
+      rw [flagVec_redG_redGt_and_matching.2.1 _ rfl, flagVec_redG_redGt_and_matching.2.2.1 _ rfl]
+      simp only [complementVec, show (redG.ord zeroSlot).val = 1 from rfl, ite_true, one_ne_zero,
+        ite_false]
       refine inf_eq_right.2 (Submodule.span_mono ?_)
       intro w hw
       rw [Set.mem_singleton_iff] at hw
@@ -1162,22 +1196,22 @@ theorem complements_ok (j : Fin (labels.card + redG.z)) :
       simp
     exact ⟨hK ▸ disjoint_bot_left, by rw [hK, hU, bot_sup_eq]⟩
   · have hKv : ((redG.flag (redG.ord (Sum.inl slotC2)).castSucc ⊓
-        redGt.flag (πW (redG.ord (Sum.inl slotC2))).succ).restrictScalars ℂ).map
+        redGt.flag (positionMatching (redG.ord (Sum.inl slotC2))).succ).restrictScalars ℂ).map
           (WordModule.toVec tensorB).toLinearMap = Submodule.span ℂ {![-1, 0, 2, 0]} := by
-      rw [map_toVec_inf, matching_C2]
-      exact M2_inf_Mt2
+      rw [map_toVec_inf, positionMatching_ord_slotC2]
+      exact flagVec_redG_two_inf_flagVec_redGt_two
     have hUv : ((redG.flag (redG.ord (Sum.inl slotC2)).succ ⊓
-        redGt.flag (πW (redG.ord (Sum.inl slotC2))).succ).restrictScalars ℂ).map
+        redGt.flag (positionMatching (redG.ord (Sum.inl slotC2))).succ).restrictScalars ℂ).map
           (WordModule.toVec tensorB).toLinearMap =
             Submodule.span ℂ {![-1, 0, 2, 0], ![2, -1, -2, 0]} := by
-      rw [map_toVec_inf, matching_C2]
+      rw [map_toVec_inf, positionMatching_ord_slotC2]
       change flagVec redG _ ⊓ flagVec redGt _ = _
       rw [flagVec_eq_top redG _ rfl, top_inf_eq]
-      exact V3_9c.2.2.2.1 _ rfl
-    have hLv : (lW (redG.ord (Sum.inl slotC2))).map (WordModule.toVec tensorB).toLinearMap =
+      exact flagVec_redG_redGt_and_matching.2.2.2.1 _ rfl
+    have hLv : (complement (redG.ord (Sum.inl slotC2))).map (WordModule.toVec tensorB).toLinearMap =
         Submodule.span ℂ {![0, -1, 2, 0]} := by
-      rw [map_lW]
-      simp only [lVec, show (redG.ord (Sum.inl slotC2)).val = 2 from rfl]
+      rw [map_complement]
+      simp only [complementVec, show (redG.ord (Sum.inl slotC2)).val = 2 from rfl]
       rfl
     constructor
     · rw [Submodule.disjoint_def]
@@ -1209,20 +1243,20 @@ theorem complements_ok (j : Fin (labels.card + redG.z)) :
           exact ⟨-2, 1, by ext i; fin_cases i <;> simp; norm_num⟩
 
 /-- `Γ` reads `x ∈ L_j` by the slot of position `j`. -/
-theorem gamma_reads (b : BlockIndex labels 1) (x : tensorB.WordModule)
-    (hx : x ∈ lW (redG.ord b)) :
-    gammaW (WordModule.toVec tensorB x) =
+theorem gammaGauge_apply_of_mem_complement (b : BlockIndex labels 1) (x : tensorB.WordModule)
+    (hx : x ∈ complement (redG.ord b)) :
+    gammaGauge (WordModule.toVec tensorB x) =
       Matrix.blockEmbed (slotSize dims) b *ᵥ (redG.leftRow b *ᵥ WordModule.toVec tensorB x) := by
-  have hv : WordModule.toVec tensorB x ∈ lVec (redG.ord b) := by
-    rw [← map_lW]; exact Submodule.mem_map_of_mem hx
+  have hv : WordModule.toVec tensorB x ∈ complementVec (redG.ord b) := by
+    rw [← map_complement]; exact Submodule.mem_map_of_mem hx
   have hrow : redG.leftRow b *ᵥ WordModule.toVec tensorB x =
       fun j => redG.gauge (WordModule.toVec tensorB x) ⟨b, j⟩ :=
     redG.leftRow_mulVec b _
   erw [hrow]
   funext y
-  erw [blockEmbed_restrict (z := 1) b (fun y => redG.gauge (WordModule.toVec tensorB x) y) y]
+  erw [blockEmbed_mulVec_apply (z := 1) b (fun y => redG.gauge (WordModule.toVec tensorB x) y) y]
   obtain ⟨n, rfl⟩ := tauG.symm.surjective y
-  have e1 : gammaW (WordModule.toVec tensorB x) (tauG.symm n) =
+  have e1 : gammaGauge (WordModule.toVec tensorB x) (tauG.symm n) =
       (toC gammaInt *ᵥ WordModule.toVec tensorB x) n := by
     change (toC gammaInt *ᵥ _) (tauG (tauG.symm n)) = _
     rw [Equiv.apply_symm_apply]
@@ -1230,19 +1264,19 @@ theorem gamma_reads (b : BlockIndex labels 1) (x : tensorB.WordModule)
       (toC g0Int *ᵥ WordModule.toVec tensorB x) n := by
     change (toC g0Int *ᵥ _) (tauG (tauG.symm n)) = _
     rw [Equiv.apply_symm_apply]
-  rw [e1, e2, gamma_mulVec, g0_mulVec]
+  rw [e1, e2, toC_gammaInt_mulVec, toC_g0Int_mulVec]
   rcases slot_cases b rfl with rfl | rfl | rfl
-  · rw [lVec, ite_eq_left (by decide)] at hv
+  · rw [complementVec, ite_eq_left (by decide)] at hv
     obtain ⟨a, c, hac⟩ := Submodule.mem_span_pair.1 hv
     rw [← hac]
     fin_cases n <;> simp [tauG]
     ring
-  · rw [lVec, ite_eq_right (by decide), ite_eq_left (by decide)] at hv
+  · rw [complementVec, ite_eq_right (by decide), ite_eq_left (by decide)] at hv
     obtain ⟨a, ha⟩ := Submodule.mem_span_singleton.1 hv
     rw [← ha]
     fin_cases n <;> simp [tauG]
     ring
-  · rw [lVec, ite_eq_right (by decide), ite_eq_right (by decide)] at hv
+  · rw [complementVec, ite_eq_right (by decide), ite_eq_right (by decide)] at hv
     obtain ⟨a, ha⟩ := Submodule.mem_span_singleton.1 hv
     rw [← ha]
     fin_cases n <;> simp [tauG] <;> ring
@@ -1253,124 +1287,125 @@ theorem matY_mul : matY * !![1, -1; 0, 1] = 1 := by
 theorem mul_matY : !![1, -1; 0, 1] * matY = 1 := by
   ext a c; fin_cases a <;> fin_cases c <;> simp [matY, Matrix.mul_apply, Fin.sum_univ_two]
 
-theorem one_mul_one : (1 : Matrix (Fin 1) (Fin 1) ℂ) * 1 = 1 := by simp
-
-/-- The intertwiners of Theorem C for the three pairs. -/
-theorem x_ok (b : BlockIndex labels 1) :
-    (∃ Y : Matrix (Fin (slotSize dims b)) (Fin (slotSize dims b)) ℂ, xW b * Y = 1 ∧ Y * xW b = 1) ∧
-    (∀ i, xW b * slotTensor blocks b i = slotTensor blocks' b i * xW b) ∧
-    ∀ x ∈ redG.flag (redG.ord b).succ ⊓ redGt.flag (πW (redG.ord b)).succ,
+/-- The intertwiners of *Two compressions with different flags* for the three pairs. -/
+theorem intertwiner_spec (b : BlockIndex labels 1) :
+    (∃ Y : Matrix (Fin (slotSize dims b)) (Fin (slotSize dims b)) ℂ,
+      intertwiner b * Y = 1 ∧ Y * intertwiner b = 1) ∧
+    (∀ i, intertwiner b * slotTensor blocks b i = slotTensor blocks' b i * intertwiner b) ∧
+    ∀ x ∈ redG.flag (redG.ord b).succ ⊓ redGt.flag (positionMatching (redG.ord b)).succ,
       redGt.leftRow b *ᵥ WordModule.toVec tensorB x =
-        xW b *ᵥ (redG.leftRow b *ᵥ WordModule.toVec tensorB x) := by
-  obtain ⟨-, -, -, hl1, hY, -, -, hl0, -, hl2, -⟩ := V3_9d
+        intertwiner b *ᵥ (redG.leftRow b *ᵥ WordModule.toVec tensorB x) := by
+  obtain ⟨-, -, -, hl1, hY, -, -, hl0, -, hl2, -⟩ := inf_sup_intertwiner_redG_redGt
   rcases slot_cases b rfl with rfl | rfl | rfl
   · exact ⟨⟨!![1, -1; 0, 1], matY_mul, mul_matY⟩, fun i => hY i,
       fun x hx => hl1 _ (Submodule.mem_map_of_mem hx)⟩
-  · refine ⟨⟨(1 : Matrix (Fin 1) (Fin 1) ℂ), one_mul_one, one_mul_one⟩, fun i => ?_,
+  · refine ⟨⟨(1 : Matrix (Fin 1) (Fin 1) ℂ), mul_one 1, mul_one 1⟩, fun i => ?_,
       fun x hx => ?_⟩
     · exact (by simp : (1 : Matrix (Fin 1) (Fin 1) ℂ) * 0 = 0 * 1)
     · change _ = (1 : Matrix (Fin 1) (Fin 1) ℂ) *ᵥ _
       rw [Matrix.one_mulVec]
       exact hl0 _ (Submodule.mem_map_of_mem hx)
-  · refine ⟨⟨(1 : Matrix (Fin 1) (Fin 1) ℂ), one_mul_one, one_mul_one⟩, fun i => ?_,
+  · refine ⟨⟨(1 : Matrix (Fin 1) (Fin 1) ℂ), mul_one 1, mul_one 1⟩, fun i => ?_,
       fun x hx => ?_⟩
     · exact (by simp : (1 : Matrix (Fin 1) (Fin 1) ℂ) * tensorC₂ i = tensorC₂ i * 1)
     · change _ = (1 : Matrix (Fin 1) (Fin 1) ℂ) *ᵥ _
       erw [Matrix.one_mulVec]
       exact hl2 _ (Submodule.mem_map_of_mem hx)
 
-theorem aC_tri (x y : BlockSpace dims labels 1) (h : ordG y.1 < ordG x.1) :
+theorem toC_aInt_apply_eq_zero_of_lt (x y : BlockSpace dims labels 1) (h : ordG y.1 < ordG x.1) :
     toC aInt (tauG x) (tauG y) = 0 := by
   change complexOfRing (Int.castRingHom ℂ) aInt (tauG x) (tauG y) = 0
-  rw [complexOfRing_apply, aInt_tri x y h, map_zero]
+  rw [complexOfRing_apply, aInt_apply_eq_zero_of_lt x y h, map_zero]
 
-theorem atC_tri (x y : BlockSpace dims labels 1) (h : ordGt y.1 < ordGt x.1) :
+theorem toC_atInt_apply_eq_zero_of_lt (x y : BlockSpace dims labels 1) (h : ordGt y.1 < ordGt x.1) :
     toC atInt (tauGt x) (tauGt y) = 0 := by
   change complexOfRing (Int.castRingHom ℂ) atInt (tauGt x) (tauGt y) = 0
-  rw [complexOfRing_apply, atInt_tri x y h, map_zero]
+  rw [complexOfRing_apply, atInt_apply_eq_zero_of_lt x y h, map_zero]
 
-theorem aInt_diag (b : BlockIndex labels 1) (p q : Fin (slotSize dims b)) :
+theorem aInt_apply_diag (b : BlockIndex labels 1) (p q : Fin (slotSize dims b)) :
     aInt (tauG ⟨b, p⟩) (tauG ⟨b, q⟩) = if p = q then 1 else 0 := by
   rcases slot_cases b rfl with rfl | rfl | rfl <;> revert p q <;> decide
 
-theorem atInt_diag (b : BlockIndex labels 1) (p q : Fin (slotSize dims b)) :
+theorem atInt_apply_diag (b : BlockIndex labels 1) (p q : Fin (slotSize dims b)) :
     atInt (tauGt ⟨b, p⟩) (tauGt ⟨b, q⟩) = if p = q then 1 else 0 := by
   rcases slot_cases b rfl with rfl | rfl | rfl <;> revert p q <;> decide
 
-theorem aC_diag (b : BlockIndex labels 1) (p q : Fin (slotSize dims b)) :
+theorem toC_aInt_apply_diag (b : BlockIndex labels 1) (p q : Fin (slotSize dims b)) :
     toC aInt (tauG ⟨b, p⟩) (tauG ⟨b, q⟩) =
       (1 : Matrix (Fin (slotSize dims b)) (Fin (slotSize dims b)) ℂ) p q := by
   change complexOfRing (Int.castRingHom ℂ) aInt (tauG ⟨b, p⟩) (tauG ⟨b, q⟩) = _
-  rw [complexOfRing_apply, aInt_diag, Matrix.one_apply]
+  rw [complexOfRing_apply, aInt_apply_diag, Matrix.one_apply]
   split_ifs <;> simp
 
-theorem atC_diag (b : BlockIndex labels 1) (p q : Fin (slotSize dims b)) :
+theorem toC_atInt_apply_diag (b : BlockIndex labels 1) (p q : Fin (slotSize dims b)) :
     toC atInt (tauGt ⟨b, p⟩) (tauGt ⟨b, q⟩) =
       (1 : Matrix (Fin (slotSize dims b)) (Fin (slotSize dims b)) ℂ) p q := by
   change complexOfRing (Int.castRingHom ℂ) atInt (tauGt ⟨b, p⟩) (tauGt ⟨b, q⟩) = _
-  rw [complexOfRing_apply, atInt_diag, Matrix.one_apply]
+  rw [complexOfRing_apply, atInt_apply_diag, Matrix.one_apply]
   split_ifs <;> simp
 
 /-- The matching read on slots is the identity of labels. -/
-theorem ord_redGt_eq_matching (b : BlockIndex labels 1) : redGt.ord b = πW (redG.ord b) := by
+theorem ord_redGt_eq_matching (b : BlockIndex labels 1) :
+    redGt.ord b = positionMatching (redG.ord b) := by
   rcases slot_cases b rfl with rfl | rfl | rfl
-  · exact matching_C1.symm
-  · exact matching_zero.symm
-  · exact matching_C2.symm
+  · exact positionMatching_ord_slotC1.symm
+  · exact positionMatching_ord_zeroSlot.symm
+  · exact positionMatching_ord_slotC2.symm
 
 /-- `g = 𝔄 Γ`. -/
 theorem gaugeMatrix_redG_eq_mul : gaugeMatrix redG.gauge =
-    (toC aInt).submatrix tauG tauG * gaugeMatrix gammaW := by
-  rw [gaugeMatrix_redG, gaugeMatrix_gammaW, Matrix.submatrix_mul_equiv, ← complexOfRing_mul,
-    a_mul_gamma]
+    (toC aInt).submatrix tauG tauG * gaugeMatrix gammaGauge := by
+  rw [gaugeMatrix_redG, gaugeMatrix_gammaGauge, Matrix.submatrix_mul_equiv, ← complexOfRing_mul,
+    aInt_mul_gammaInt]
 
 /-- `g̃ = 𝔄̃ P_X Γ`. -/
 theorem gaugeMatrix_redGt_eq_mul : gaugeMatrix redGt.gauge = (toC atInt).submatrix tauGt tauGt *
-    (∑ b, Matrix.blockEmbed (slotSize dims) b * xW b * Matrix.blockProj (slotSize dims) b) *
-      gaugeMatrix gammaW := by
-  rw [pxW, gaugeMatrix_redGt, gaugeMatrix_gammaW, Matrix.submatrix_mul_equiv,
-    Matrix.submatrix_mul_equiv, ← complexOfRing_mul, ← complexOfRing_mul, at_px_gamma]
+    (∑ b, Matrix.blockEmbed (slotSize dims) b * intertwiner b *
+      Matrix.blockProj (slotSize dims) b) * gaugeMatrix gammaGauge := by
+  rw [sum_blockEmbed_mul_intertwiner_mul_blockProj, gaugeMatrix_redGt, gaugeMatrix_gammaGauge,
+    Matrix.submatrix_mul_equiv, Matrix.submatrix_mul_equiv, ← complexOfRing_mul,
+    ← complexOfRing_mul, atInt_mul_pxInt_mul_gammaInt]
 
 theorem blockTriangular_aInt :
     ((toC aInt).submatrix tauG tauG).BlockTriangular fun x => redG.ord x.1 :=
-  fun x y hxy => aC_tri x y hxy
+  fun x y hxy => toC_aInt_apply_eq_zero_of_lt x y hxy
 
 theorem blockDiag'_aInt (b : BlockIndex labels 1) :
     ((toC aInt).submatrix tauG tauG).blockDiag' b = 1 := by
   ext p q
   rw [Matrix.blockDiag'_apply, Matrix.submatrix_apply]
-  exact aC_diag b p q
+  exact toC_aInt_apply_diag b p q
 
 theorem blockTriangular_atInt :
     ((toC atInt).submatrix tauGt tauGt).BlockTriangular fun x => redGt.ord x.1 :=
-  fun x y hxy => atC_tri x y hxy
+  fun x y hxy => toC_atInt_apply_eq_zero_of_lt x y hxy
 
 theorem blockDiag'_atInt (b : BlockIndex labels 1) :
     ((toC atInt).submatrix tauGt tauGt).blockDiag' b = 1 := by
   ext p q
   rw [Matrix.blockDiag'_apply, Matrix.submatrix_apply]
-  exact atC_diag b p q
+  exact toC_atInt_apply_diag b p q
 
 /-- `g̃ g⁻¹ = 𝔄̃ P_X 𝔄⁻¹`, in the bond coordinates. -/
 theorem gt_mul_g0Inv_submatrix : (toC gtInt).submatrix tauGt id * (toC g0InvInt).submatrix id tauG =
     (toC atInt).submatrix tauGt tauGt * (toC pxInt).submatrix tauGt tauG *
       ((toC aInt).submatrix tauG tauG)⁻¹ := by
   have hinvA : (toC aInvInt).submatrix tauG tauG * (toC aInt).submatrix tauG tauG = 1 := by
-    rw [Matrix.submatrix_mul_equiv, ← complexOfRing_mul, aInv_mul, complexOfRing_one]
+    rw [Matrix.submatrix_mul_equiv, ← complexOfRing_mul, aInvInt_mul_aInt, complexOfRing_one]
     exact Matrix.submatrix_one_equiv tauG
   have hL : ∀ M N : Matrix (Fin 4) (Fin 4) ℂ,
       M.submatrix tauGt id * N.submatrix id tauG = (M * N).submatrix tauGt tauG :=
     fun M N => (Matrix.submatrix_mul M N _ _ _ Function.bijective_id).symm
   rw [Matrix.inv_eq_left_inv hinvA, hL, Matrix.submatrix_mul_equiv, Matrix.submatrix_mul_equiv,
-    ← complexOfRing_mul, ← complexOfRing_mul, ← complexOfRing_mul, gt_mul_g0Inv]
+    ← complexOfRing_mul, ← complexOfRing_mul, ← complexOfRing_mul, gtInt_mul_g0InvInt]
 
-/-- **V3.9(e)** (lecture note AsymmetricFT, Example 6.16; milestone V, V3.9(e)): with the
-complements `L₁ = M₁`, `L₂ = M̃₁` (forced, `K = 0` at both positions) and
+/-- **The factorization** (*The asymmetric fundamental theorem of matrix product states*, Example
+6.16): with the complements `L₁ = M₁`, `L₂ = M̃₁` (forced, `K = 0` at both positions) and
 `L₃ = ℂ (V_{C₂} + V₀) = ℂ (0, -1, 2, 0)`, the intertwiners `X_{C₁} = Y`, `X₀ = X_{C₂} = 1` and
-`Γ = 𝔄⁻¹ g`, the factors `𝔄`, `P_X`, `𝔄̃` are the printed matrices (in the bond coordinates of
-`g` and `g̃`), `𝔄` and `𝔄̃` are unipotent in the two orders, and `g̃ g⁻¹ = 𝔄̃ P_X 𝔄⁻¹`. The
-matching read on slots is the identity of labels (`C₁ ↦ C₁'`, `0 ↦ 0`, `C₂ ↦ C₂`). -/
-theorem V3_9e :
+`Γ = 𝔄⁻¹ g`, the factors `𝔄`, `P_X`, `𝔄̃` are the printed matrices (in the bond coordinates of `g`
+and `g̃`), `𝔄` and `𝔄̃` are unipotent in the two orders, and `g̃ g⁻¹ = 𝔄̃ P_X 𝔄⁻¹`. The matching
+read on slots is the identity of labels (`C₁ ↦ C₁'`, `0 ↦ 0`, `C₂ ↦ C₂`). -/
+theorem isAdaptedFactorization_redG_redGt :
     let 𝔄 : Matrix (BlockSpace dims labels 1) (BlockSpace dims labels 1) ℂ :=
       (toC aInt).submatrix tauG tauG
     let 𝔄' : Matrix (BlockSpace dims labels 1) (BlockSpace dims labels 1) ℂ :=
@@ -1378,15 +1413,18 @@ theorem V3_9e :
     let PX : Matrix (BlockSpace dims labels 1) (BlockSpace dims labels 1) ℂ :=
       (toC pxInt).submatrix tauGt tauG
     IsAdaptedFactorization redG redGt isNormal_blocks dims_pos isNormal_blocks' dims_pos
-      (Equiv.refl (BlockIndex labels 1)) lW gammaW 𝔄 𝔄' xW ∧
-    (∑ b, Matrix.blockEmbed (slotSize dims) b * xW b * Matrix.blockProj (slotSize dims) b) = PX ∧
+      (Equiv.refl (BlockIndex labels 1)) complement gammaGauge 𝔄 𝔄' intertwiner ∧
+    (∑ b, Matrix.blockEmbed (slotSize dims) b * intertwiner b *
+      Matrix.blockProj (slotSize dims) b) = PX ∧
     gaugeMatrix redG.gauge = (toC g0Int).submatrix tauG id ∧
     gaugeMatrix redGt.gauge = (toC gtInt).submatrix tauGt id ∧
-    gaugeMatrix gammaW = (toC gammaInt).submatrix tauG id ∧
+    gaugeMatrix gammaGauge = (toC gammaInt).submatrix tauG id ∧
     gaugeMatrix redGt.gauge * gaugeMatrixInv redG.gauge = 𝔄' * PX * 𝔄⁻¹ :=
-  ⟨⟨ord_redGt_eq_matching, complements_ok, gamma_reads, x_ok, blockTriangular_aInt,
+  ⟨⟨ord_redGt_eq_matching, disjoint_complement_and_sup_eq, gammaGauge_apply_of_mem_complement,
+    intertwiner_spec, blockTriangular_aInt,
     blockDiag'_aInt, blockTriangular_atInt, blockDiag'_atInt, gaugeMatrix_redG_eq_mul,
-    gaugeMatrix_redGt_eq_mul⟩, pxW, gaugeMatrix_redG, gaugeMatrix_redGt, gaugeMatrix_gammaW,
+    gaugeMatrix_redGt_eq_mul⟩, sum_blockEmbed_mul_intertwiner_mul_blockProj, gaugeMatrix_redG,
+    gaugeMatrix_redGt, gaugeMatrix_gammaGauge,
     (congrArg₂ (· * ·) gaugeMatrix_redGt gaugeMatrixInv_redG).trans gt_mul_g0Inv_submatrix⟩
 
 end Worked

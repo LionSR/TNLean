@@ -11,30 +11,34 @@ import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessCommonBasis
 /-!
 # The running example
 
-The tensor `B = diag(1, 2)` with one letter (lecture note AsymmetricFT, Examples 1.2, 3.4, 4.4
-and 6.14; milestone V, V3.2, V3.3, V3.4) has the two one-dimensional blocks `C₁ = (1)` and
+The tensor `B = diag(1, 2)` with one letter (*The asymmetric fundamental theorem of matrix product
+states*, Examples 1.2, 3.4, 4.4 and 6.14) has the two one-dimensional blocks `C₁ = (1)` and
 `C₂ = (2)`. Its invariant subspaces are `0`, `ℂ e₁`, `ℂ e₂`, `ℂ²`, so every reduction onto
 `(C₁, C₂)` without zero block has the flag `0 ⊂ ℂ e₁ ⊂ ℂ²` and the order `(1, 2)`, or the flag
-`0 ⊂ ℂ e₂ ⊂ ℂ²` and the order `(2, 1)`. The reductions with the first flag are the upper
-triangular gauges `h = [[α, β], [0, δ]]`, those with the second flag the gauges
-`g̃ = [[β̃, α̃], [δ̃, 0]]`. Against `g = 1` the gauge `g̃` matches block `1` with block `1` at the
-other position, with scalars `λ₁ = δ̃`, `λ₂ = α̃`, and `g̃ = 𝔄̃ P_X 𝔄⁻¹` with `𝔄 = 1`.
+`0 ⊂ ℂ e₂ ⊂ ℂ²` and the order `(2, 1)`. The reductions with the first flag are the upper triangular
+gauges `h = [[α, β], [0, δ]]`, those with the second flag the gauges `g̃ = [[β̃, α̃], [δ̃, 0]]`.
+Against `g = 1` the gauge `g̃` matches block `1` with block `1` at the other position, with scalars
+`λ₁ = δ̃`, `λ₂ = α̃`, and `g̃ = 𝔄̃ P_X 𝔄⁻¹` with `𝔄 = 1`.
 
-The first section collects reading tools shared by the examples of milestone V: the flag read
-in `ℂ^{D_B}`, its membership for an explicit gauge, the reading maps of an explicit gauge, and a
+The first section collects reading tools shared by the multi-block examples: the flag read in
+`ℂ^{D_B}`, its membership for an explicit gauge, the reading maps of an explicit gauge, and a
 criterion for the matching.
 
 ## Main results
 
-* `MultiBlockExamples.Running.V3_2a_one`, `V3_2a_h`, `V3_2a_conj`, `V3_2b`, `V3_2c`,
-  `V3_2d_invariant`, `V3_2d_reductions`, `V3_2d_both`: milestone V, V3.2.
-* `MultiBlockExamples.Running.V3_3a`, `V3_3a_converse`, `V3_3b`, `V3_3b_converse`, `V3_3c`,
-  `V3_3d`: V3.3.
-* `MultiBlockExamples.Running.V3_4a`, `V3_4b`: V3.4.
+* `MultiBlockExamples.Running.exists_multiBlockCompression_gauge_one`,
+  `exists_multiBlockCompression_gauge_unipotent`, `unipotent_conj_tensorB`, `left_mul_pow_ne_smul`,
+  `remainder_pow_ne_zero`, `isInvariantSubmodule_tensorB_iff`, `ord_flagVec_cases_of_z_eq_zero`,
+  `exists_multiBlockCompression_each_order`: Examples 1.2 and 3.4.
+* `MultiBlockExamples.Running.exists_multiBlockCompression_upper`, `exists_left_eq_upper_of_ord_lt`,
+  `exists_multiBlockCompression_swap`, `exists_left_eq_swap_of_ord_gt`,
+  `matching_left_right_gOne_redSwap`, `isAdaptedFactorization_gOne_redSwap`: Example 6.14.
+* `MultiBlockExamples.Running.exists_eval_zero_eq_zero_and_eval_eq`,
+  `eq_one_and_eq_one_of_forall_add_mul_pow_eq`: Example 4.4.
 
 ## References
 
-Lecture note AsymmetricFT, Examples 1.2, 3.4, 4.4, 6.14; milestone V, V3.2-V3.4.
+*The asymmetric fundamental theorem of matrix product states*, Examples 1.2, 3.4, 4.4 and 6.14.
 -/
 
 open scoped Matrix
@@ -43,12 +47,12 @@ namespace MultiBlockExamples
 
 open MPSTensor
 
-section Tools
+section FlagVectors
 
 variable {d DB : ℕ} {ι : Type*} [DecidableEq ι] {D : ι → ℕ} {S : Finset ι}
   {C : ∀ s, MPSTensor d (D s)} {B : MPSTensor d DB}
 
-/-- The member `M_k` of the flag of a reduction, read in `ℂ^{D_B}` (milestone V, Section 3). -/
+/-- The member `M_k` of the flag of a reduction, read in `ℂ^{D_B}`. -/
 noncomputable abbrev flagVec (P : MultiBlockCompression B S C) (k : Fin (S.card + P.z + 1)) :
     Submodule ℂ (Fin DB → ℂ) :=
   ((P.flag k).restrictScalars ℂ).map (WordModule.toVec B).toLinearMap
@@ -181,10 +185,11 @@ theorem mem_flagVec_gaugeOfMatrix (P : MultiBlockCompression B S C)
 
 variable {κ : Type*} [DecidableEq κ] {D' : κ → ℕ} {S' : Finset κ} {C' : ∀ t, MPSTensor d (D' t)}
 
-/-- **A criterion for the matching** (lecture note AsymmetricFT, Section 5; milestone V,
-Section 3): the position `k` of `P` is matched with `j` when `M_k ∩ M'_j ⊄ M_{k-1}` and
+/-- **A criterion for the matching** (*The asymmetric fundamental theorem of matrix product states*,
+Section 5): the position `k` of `P` is matched with `j` when `M_k ∩ M'_j ⊄ M_{k-1}` and
 `M_k ∩ M'_{j'} ⊆ M_{k-1}` for every `j' < j`. -/
-theorem matching_eq_of (P : MultiBlockCompression B S C) (Q : MultiBlockCompression B S' C')
+theorem matching_eq_of_flagVec_inf (P : MultiBlockCompression B S C)
+    (Q : MultiBlockCompression B S' C')
     (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
     (hC' : ∀ t ∈ S', Kraus.IsNormal (C' t)) (hD' : ∀ t ∈ S', 0 < D' t)
     (k : Fin (S.card + P.z)) (j : Fin (S'.card + Q.z))
@@ -211,12 +216,13 @@ theorem matching_eq_of (P : MultiBlockCompression B S C) (Q : MultiBlockCompress
       ((mem_flag_iff_toVec_mem Q _ _).1 hx.2)
     exact (mem_flag_iff_toVec_mem P _ _).2 h
 
-/-- **The data of Theorem E for two reductions onto two families with chosen complements**
-(lecture note AsymmetricFT, Theorem 6.5; milestone V, Section 3): `π` is the matching read on
-slots, `L j` a complement of `K_j = M_{j-1} ∩ M'_{π(j)}` in `U_j = M_j ∩ M'_{π(j)}`, `Γ` reads
-`x ∈ L_j` by the slot of position `j`, `X b` the intertwiner of Theorem C, `𝔄`, `𝔄'` unipotent in
-the two orders, and `g = 𝔄 Γ`, `g̃ = 𝔄' P_X Γ`. The examples choose the complements explicitly,
-which the library's `unipotentFactor` (a choice of complements) does not allow. -/
+/-- **The data of *A basis adapted to both flags* for two reductions onto two families with chosen
+complements** (*The asymmetric fundamental theorem of matrix product states*, Theorem 6.5): `π` is
+the matching read on slots, `L j` a complement of `K_j = M_{j-1} ∩ M'_{π(j)}` in
+`U_j = M_j ∩ M'_{π(j)}`, `Γ` reads `x ∈ L_j` by the slot of position `j`, `X b` the intertwiner of
+*Two compressions with different flags*, `𝔄`, `𝔄'` unipotent in the two orders, and `g = 𝔄 Γ`,
+`g̃ = 𝔄' P_X Γ`. The examples choose the complements explicitly, which the library's
+`unipotentFactor` (a choice of complements) does not allow. -/
 def IsAdaptedFactorization (P : MultiBlockCompression B S C) (Q : MultiBlockCompression B S' C')
     (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
     (hC' : ∀ t ∈ S', Kraus.IsNormal (C' t)) (hD' : ∀ t ∈ S', 0 < D' t)
@@ -244,7 +250,7 @@ def IsAdaptedFactorization (P : MultiBlockCompression B S C) (Q : MultiBlockComp
   gaugeMatrix Q.gauge = 𝔄' * (∑ b, Matrix.blockEmbed (slotSize D') (π b) * X b *
       Matrix.blockProj (slotSize D) b) * gaugeMatrix Γ
 
-end Tools
+end FlagVectors
 
 /-- A one-dimensional subspace of `ℂⁿ` is the line through one of its nonzero vectors. -/
 theorem exists_eq_span_singleton_of_finrank_eq_one {n : ℕ} (W : Submodule ℂ (Fin n → ℂ))
@@ -257,8 +263,8 @@ theorem exists_eq_span_singleton_of_finrank_eq_one {n : ℕ} (W : Submodule ℂ 
 
 namespace Running
 
-/-- **The running example** `B = diag(1, 2)`, one letter (lecture note AsymmetricFT,
-Example 1.2; milestone V, V3.2). -/
+/-- **The running example** `B = diag(1, 2)`, one letter (*The asymmetric fundamental theorem of
+matrix product states*, Example 1.2). -/
 noncomputable def tensorB : MPSTensor 1 2 := fun _ => !![1, 0; 0, 2]
 
 /-- Labels of the two blocks. -/
@@ -310,9 +316,9 @@ def tau21 : BlockSpace dims labels 0 ≃ Fin 2 where
 
 theorem tensorB_apply (i : Fin 1) : tensorB i = !![1, 0; 0, 2] := rfl
 
-/-- A reduction of the running example from an explicit complex gauge `G` (lecture note
-AsymmetricFT, Definition 1.1): `G B G⁻¹` is upper triangular with the block of the slot at
-position `p` on the diagonal entry `p`. -/
+/-- A reduction of the running example from an explicit complex gauge `G` (blueprint
+`thm:asym_multiblock`, *Multi-block asymmetric compression theorem*, clauses (i)–(iii)): `G B G⁻¹`
+is upper triangular with the block of the slot at position `p` on the diagonal entry `p`. -/
 noncomputable def red (ord : BlockIndex labels 0 ≃ Fin 2) (τ : BlockSpace dims labels 0 ≃ Fin 2)
     (hτ : ∀ x, τ x = ord x.1) (G Ginv : Matrix (Fin 2) (Fin 2) ℂ) (hG : G * Ginv = 1)
     (hG' : Ginv * G = 1) (h10 : (G * tensorB 0 * Ginv) 1 0 = 0)
@@ -368,9 +374,9 @@ theorem red_right (s : {s // s ∈ labels}) :
 
 end RedMaps
 
-theorem hτ12 : ∀ x, tau12 x = ord12 x.1 := fun _ => rfl
+theorem tau12_eq_ord12 : ∀ x, tau12 x = ord12 x.1 := fun _ => rfl
 
-theorem hτ21 : ∀ x, tau21 x = ord21 x.1 := fun _ => rfl
+theorem tau21_eq_ord21 : ∀ x, tau21 x = ord21 x.1 := fun _ => rfl
 
 /-- The gauge `h = [[α, β], [0, δ]]` and its inverse. -/
 theorem upper_mul_inv {α β δ : ℂ} (h : α * δ ≠ 0) :
@@ -418,11 +424,11 @@ theorem swap_conj {α β δ : ℂ} (h : α * δ ≠ 0) :
   fin_cases i <;> fin_cases j <;> simp <;> field_simp
   ring
 
-/-- The reduction `h = [[α, β], [0, δ]]` in the order `(1, 2)` (lecture note AsymmetricFT,
-Example 6.14, (6.14); milestone V, V3.3(a)). -/
+/-- The reduction `h = [[α, β], [0, δ]]` in the order `(1, 2)` (*The asymmetric fundamental theorem
+of matrix product states*, Example 6.14, (6.14)). -/
 noncomputable def redUpper (α β δ : ℂ) (h : α * δ ≠ 0) :
     MultiBlockCompression tensorB labels blocks :=
-  red ord12 tau12 hτ12 !![α, β; 0, δ] !![α⁻¹, -β / (α * δ); 0, δ⁻¹] (upper_mul_inv h).1
+  red ord12 tau12 tau12_eq_ord12 !![α, β; 0, δ] !![α⁻¹, -β / (α * δ); 0, δ⁻¹] (upper_mul_inv h).1
     (upper_mul_inv h).2 (by rw [upper_conj h]; simp)
     (fun s => by
       rw [upper_conj h]
@@ -430,11 +436,11 @@ noncomputable def redUpper (α β δ : ℂ) (h : α * δ ≠ 0) :
       fin_cases s <;> simp [ord12]
       norm_num)
 
-/-- The reduction `g̃ = [[β̃, α̃], [δ̃, 0]]` in the order `(2, 1)` (lecture note AsymmetricFT,
-Example 6.14, (6.15); milestone V, V3.3(b)). -/
+/-- The reduction `g̃ = [[β̃, α̃], [δ̃, 0]]` in the order `(2, 1)` (*The asymmetric fundamental
+theorem of matrix product states*, Example 6.14, (6.15)). -/
 noncomputable def redSwap (α β δ : ℂ) (h : α * δ ≠ 0) :
     MultiBlockCompression tensorB labels blocks :=
-  red ord21 tau21 hτ21 !![β, α; δ, 0] !![0, δ⁻¹; α⁻¹, -β / (α * δ)] (swap_mul_inv h).1
+  red ord21 tau21 tau21_eq_ord21 !![β, α; δ, 0] !![0, δ⁻¹; α⁻¹, -β / (α * δ)] (swap_mul_inv h).1
     (swap_mul_inv h).2 (by rw [swap_conj h]; simp)
     (fun s => by
       rw [swap_conj h]
@@ -442,11 +448,13 @@ noncomputable def redSwap (α β δ : ℂ) (h : α * δ ≠ 0) :
       fin_cases s <;> simp [ord21]
       norm_num)
 
-/-! ### V3.2 -/
+/-! ### Two reductions with the same flag -/
 
-/-- **V3.2(a)** (lecture note AsymmetricFT, Examples 1.2 and 3.4; milestone V, V3.2(a)): `g = 1`
-is a reduction in the order `(1, 2)`, with `W₁ = (1, 0)`, `W₂ = (0, 1)`. -/
-theorem V3_2a_one : ∃ P : MultiBlockCompression tensorB labels blocks, P.z = 0 ∧
+/-- **The reduction `g = 1`** (*The asymmetric fundamental theorem of matrix product states*,
+Examples 1.2 and 3.4): `g = 1` is a reduction in the order `(1, 2)`, with `W₁ = (1, 0)`,
+`W₂ = (0, 1)`. -/
+theorem exists_multiBlockCompression_gauge_one :
+    ∃ P : MultiBlockCompression tensorB labels blocks, P.z = 0 ∧
     P.ord (Sum.inl slot0) < P.ord (Sum.inl slot1) ∧
     P.left slot0 = !![1, 0] ∧ P.left slot1 = !![0, 1] := by
   refine ⟨redUpper 1 0 1 (by norm_num), rfl, ?_, ?_, ?_⟩
@@ -457,10 +465,11 @@ theorem V3_2a_one : ∃ P : MultiBlockCompression tensorB labels blocks, P.z = 0
   · rw [redUpper, red_left]
     ext i j; fin_cases i; fin_cases j <;> simp [ord12]
 
-/-- **V3.2(a)** (lecture note AsymmetricFT, Examples 1.2 and 3.4; milestone V, V3.2(a)):
-`g̃ = h = [[1, 1], [0, 1]]` is a reduction in the order `(1, 2)` with `W̃₁ = (1, 1)`,
+/-- **The reduction `h`** (*The asymmetric fundamental theorem of matrix product states*, Examples
+1.2 and 3.4): `g̃ = h = [[1, 1], [0, 1]]` is a reduction in the order `(1, 2)` with `W̃₁ = (1, 1)`,
 `W̃₂ = (0, 1)`, `Ṽ₁ = e₁`, `Ṽ₂ = (-1, 1)ᵀ`. -/
-theorem V3_2a_h : ∃ P : MultiBlockCompression tensorB labels blocks, P.z = 0 ∧
+theorem exists_multiBlockCompression_gauge_unipotent :
+    ∃ P : MultiBlockCompression tensorB labels blocks, P.z = 0 ∧
     P.ord (Sum.inl slot0) < P.ord (Sum.inl slot1) ∧
     P.left slot0 = !![1, 1] ∧ P.left slot1 = !![0, 1] ∧
     P.right slot0 = !![1; 0] ∧ P.right slot1 = !![-1; 1] := by
@@ -476,9 +485,10 @@ theorem V3_2a_h : ∃ P : MultiBlockCompression tensorB labels blocks, P.z = 0 �
   · rw [redUpper, red_right]
     ext i j; fin_cases i <;> fin_cases j <;> simp [ord12]
 
-/-- **V3.2(a)** (lecture note AsymmetricFT, Example 3.4; milestone V, V3.2(a)):
-`h B h⁻¹ = [[1, 1], [0, 2]]`. -/
-theorem V3_2a_conj : !![(1 : ℂ), 1; 0, 1] * tensorB 0 * !![1, -1; 0, 1] = !![1, 1; 0, 2] := by
+/-- **The conjugated letter** (*The asymmetric fundamental theorem of matrix product states*,
+Example 3.4): `h B h⁻¹ = [[1, 1], [0, 2]]`. -/
+theorem unipotent_conj_tensorB :
+    !![(1 : ℂ), 1; 0, 1] * tensorB 0 * !![1, -1; 0, 1] = !![1, 1; 0, 2] := by
   rw [tensorB_apply, Matrix.mul_fin_two, Matrix.mul_fin_two]
   norm_num
 
@@ -489,9 +499,10 @@ theorem tensorB_pow (n : ℕ) : tensorB 0 ^ n = !![1, 0; 0, (2 : ℂ) ^ n] := by
     rw [pow_succ, ih, tensorB_apply, Matrix.mul_fin_two]
     simp [pow_succ]
 
-/-- **V3.2(b)** (lecture note AsymmetricFT, Example 3.4; milestone V, V3.2(b)): `W₁ Bⁿ = (1, 0)`
-and `W̃₁ Bⁿ = (1, 2ⁿ)` for every `n ≥ 0`, and these are never proportional. -/
-theorem V3_2b (n : ℕ) :
+/-- **The reading maps after words** (*The asymmetric fundamental theorem of matrix product states*,
+Example 3.4): `W₁ Bⁿ = (1, 0)` and `W̃₁ Bⁿ = (1, 2ⁿ)` for every `n ≥ 0`, and these are never
+proportional. -/
+theorem left_mul_pow_ne_smul (n : ℕ) :
     !![(1 : ℂ), 0] * tensorB 0 ^ n = !![1, 0] ∧ !![(1 : ℂ), 1] * tensorB 0 ^ n = !![1, 2 ^ n] ∧
     ¬ ∃ c : ℂ, !![(1 : ℂ), 1] * tensorB 0 ^ n = c • (!![(1 : ℂ), 0] * tensorB 0 ^ n) := by
   have h1 : !![(1 : ℂ), 0] * tensorB 0 ^ n = !![1, 0] := by
@@ -504,9 +515,9 @@ theorem V3_2b (n : ℕ) :
   have := congrFun (congrFun hc 0) 1
   simp at this
 
-/-- **V3.2(c)** (lecture note AsymmetricFT, Example 1.2; milestone V, V3.2(c)): the remainder
-`B - V₁ C₁ W₁ = diag(0, 2)` has no vanishing power. -/
-theorem V3_2c :
+/-- **The remainder is not nilpotent** (*The asymmetric fundamental theorem of matrix product
+states*, Example 1.2): the remainder `B - V₁ C₁ W₁ = diag(0, 2)` has no vanishing power. -/
+theorem remainder_pow_ne_zero :
     tensorB 0 - !![(1 : ℂ); 0] * blocks 0 0 * !![(1 : ℂ), 0] = !![0, 0; 0, 2] ∧
     ∀ n : ℕ, (!![(0 : ℂ), 0; 0, 2]) ^ n ≠ 0 := by
   refine ⟨?_, fun n hn => ?_⟩
@@ -533,9 +544,9 @@ theorem isInvariant_span_e1 : Matrix.IsInvariantSubmodule tensorB (Submodule.spa
   (isInvariantSubmodule_span_singleton_iff _ _).2 fun i =>
     ⟨2, by ext j; fin_cases j <;> simp [tensorB, Matrix.mulVec, dotProduct]⟩
 
-/-- **V3.2(d)** (lecture note AsymmetricFT, Example 3.4; milestone V, V3.2(d)): the subspaces
-invariant under `B` are `0`, `ℂ e₁`, `ℂ e₂`, `ℂ²`. -/
-theorem V3_2d_invariant (W : Submodule ℂ (Fin 2 → ℂ)) :
+/-- **The invariant subspaces** (*The asymmetric fundamental theorem of matrix product states*,
+Example 3.4): the subspaces invariant under `B` are `0`, `ℂ e₁`, `ℂ e₂`, `ℂ²`. -/
+theorem isInvariantSubmodule_tensorB_iff (W : Submodule ℂ (Fin 2 → ℂ)) :
     Matrix.IsInvariantSubmodule tensorB W ↔
       W = ⊥ ∨ W = Submodule.span ℂ {e 0} ∨ W = Submodule.span ℂ {e 1} ∨ W = ⊤ := by
   constructor
@@ -614,16 +625,17 @@ theorem flagVec_eq_of_ord (P : MultiBlockCompression tensorB labels blocks)
       simpa [blockOf, blocks, Matrix.mulVec, dotProduct] using this
     have : (j.val : ℂ) = s.1.val := by linear_combination h0
     exact Fin.ext (by exact_mod_cast this)
-  rcases (V3_2d_invariant _).1 hinv with h | h | h | h
+  rcases (isInvariantSubmodule_tensorB_iff _).1 hinv with h | h | h | h
   · exact absurd ((Submodule.mem_bot ℂ).1 (h ▸ hu)) hu0
   · rw [h, heig 0 h]
   · rw [h, heig 1 h]
   · exact absurd (h ▸ Submodule.mem_top) hu'
 
-/-- **V3.2(d)** (lecture note AsymmetricFT, Example 3.4; milestone V, V3.2(d)): a reduction
-without zero block has the flag `0 ⊂ ℂ e₁ ⊂ ℂ²` and the order `(1, 2)`, or the flag
+/-- **The two flags** (*The asymmetric fundamental theorem of matrix product states*, Example 3.4):
+a reduction without zero block has the flag `0 ⊂ ℂ e₁ ⊂ ℂ²` and the order `(1, 2)`, or the flag
 `0 ⊂ ℂ e₂ ⊂ ℂ²` and the order `(2, 1)`. -/
-theorem V3_2d_reductions (P : MultiBlockCompression tensorB labels blocks) (hz : P.z = 0) :
+theorem ord_flagVec_cases_of_z_eq_zero (P : MultiBlockCompression tensorB labels blocks)
+    (hz : P.z = 0) :
     (P.ord (Sum.inl slot0) < P.ord (Sum.inl slot1) ∧
       ∀ k : Fin (labels.card + P.z + 1), k.val = 1 → flagVec P k = Submodule.span ℂ {e 0}) ∨
     (P.ord (Sum.inl slot1) < P.ord (Sum.inl slot0) ∧
@@ -639,9 +651,9 @@ theorem V3_2d_reductions (P : MultiBlockCompression tensorB labels blocks) (hz :
   · exact Or.inl ⟨Fin.lt_def.2 (by omega), fun k hk => flagVec_eq_of_ord P slot0 slot1 ha hb k hk⟩
   · exact Or.inr ⟨Fin.lt_def.2 (by omega), fun k hk => flagVec_eq_of_ord P slot1 slot0 hb ha k hk⟩
 
-/-- **V3.2(d)** (lecture note AsymmetricFT, Example 3.4; milestone V, V3.2(d)): both cases
-occur. -/
-theorem V3_2d_both :
+/-- **Both orders occur** (*The asymmetric fundamental theorem of matrix product states*, Example
+3.4): both cases occur. -/
+theorem exists_multiBlockCompression_each_order :
     (∃ P : MultiBlockCompression tensorB labels blocks, P.z = 0 ∧
       P.ord (Sum.inl slot0) < P.ord (Sum.inl slot1)) ∧
     ∃ P : MultiBlockCompression tensorB labels blocks, P.z = 0 ∧
@@ -652,7 +664,7 @@ theorem V3_2d_both :
   · change ord21 (Sum.inl slot1) < ord21 (Sum.inl slot0)
     decide
 
-/-! ### V3.3(a), (b) -/
+/-! ### All reductions -/
 
 /-- A vector read as zero by both reading maps of a reduction without zero block is zero. -/
 theorem eq_zero_of_left_mulVec_eq_zero (P : MultiBlockCompression tensorB labels blocks)
@@ -678,10 +690,10 @@ theorem left_mul_right_apply (P : MultiBlockCompression tensorB labels blocks)
   have := congrFun (congrFun (P.left_mul_right_self s) 0) 0
   simpa [Matrix.mul_apply, Fin.sum_univ_two] using this
 
-/-- **V3.3(a)** (lecture note AsymmetricFT, Example 6.14, (6.14); milestone V, V3.3(a)):
-`h = [[α, β], [0, δ]]` with `αδ ≠ 0` is a reduction in the order `(1, 2)`, with
-`W₁ = (α, β)`, `W₂ = (0, δ)`, `V₁ = (α⁻¹, 0)ᵀ`, `V₂ = (-β/(αδ), δ⁻¹)ᵀ`. -/
-theorem V3_3a (α β δ : ℂ) (h : α * δ ≠ 0) :
+/-- **The reductions with the first flag** (*The asymmetric fundamental theorem of matrix product
+states*, Example 6.14, (6.14)): `h = [[α, β], [0, δ]]` with `αδ ≠ 0` is a reduction in the order
+`(1, 2)`, with `W₁ = (α, β)`, `W₂ = (0, δ)`, `V₁ = (α⁻¹, 0)ᵀ`, `V₂ = (-β/(αδ), δ⁻¹)ᵀ`. -/
+theorem exists_multiBlockCompression_upper (α β δ : ℂ) (h : α * δ ≠ 0) :
     ∃ P : MultiBlockCompression tensorB labels blocks, P.z = 0 ∧
       P.ord (Sum.inl slot0) < P.ord (Sum.inl slot1) ∧
       P.left slot0 = !![α, β] ∧ P.left slot1 = !![0, δ] ∧
@@ -698,15 +710,15 @@ theorem V3_3a (α β δ : ℂ) (h : α * δ ≠ 0) :
   · rw [redUpper, red_right]
     ext i j; fin_cases i <;> fin_cases j <;> simp [ord12]
 
-/-- **V3.3(a), converse** (lecture note AsymmetricFT, Example 6.14; milestone V, V3.3(a)): every
-reduction with the first flag (no zero block, order `(1, 2)`) has `W₁ = (α, β)`, `W₂ = (0, δ)`
-with `αδ ≠ 0`, that is the gauge `[[α, β], [0, δ]]`. -/
-theorem V3_3a_converse (P : MultiBlockCompression tensorB labels blocks) (hz : P.z = 0)
-    (hord : P.ord (Sum.inl slot0) < P.ord (Sum.inl slot1)) :
+/-- **Every reduction with the first flag** (*The asymmetric fundamental theorem of matrix product
+states*, Example 6.14): every reduction with the first flag (no zero block, order `(1, 2)`) has
+`W₁ = (α, β)`, `W₂ = (0, δ)` with `αδ ≠ 0`, that is the gauge `[[α, β], [0, δ]]`. -/
+theorem exists_left_eq_upper_of_ord_lt (P : MultiBlockCompression tensorB labels blocks)
+    (hz : P.z = 0) (hord : P.ord (Sum.inl slot0) < P.ord (Sum.inl slot1)) :
     ∃ α β δ : ℂ, α * δ ≠ 0 ∧ P.left slot0 = !![α, β] ∧ P.left slot1 = !![0, δ] := by
   have hflag : ∀ k : Fin (labels.card + P.z + 1), k.val = 1 →
       flagVec P k = Submodule.span ℂ {e 0} := by
-    rcases V3_2d_reductions P hz with ⟨-, h⟩ | ⟨h, -⟩
+    rcases ord_flagVec_cases_of_z_eq_zero P hz with ⟨-, h⟩ | ⟨h, -⟩
     · exact h
     · exact absurd hord (lt_asymm h)
   have hn : labels.card + P.z = 2 := by rw [hz]; rfl
@@ -738,10 +750,11 @@ theorem V3_3a_converse (P : MultiBlockCompression tensorB labels blocks) (hz : P
     · exact h10
     · rfl
 
-/-- **V3.3(b)** (lecture note AsymmetricFT, Example 6.14, (6.15); milestone V, V3.3(b)):
-`g̃ = [[β̃, α̃], [δ̃, 0]]` with `α̃δ̃ ≠ 0` is a reduction in the order `(2, 1)`, with
-`W̃₂ = (β̃, α̃)`, `W̃₁ = (δ̃, 0)`, `Ṽ₂ = (0, α̃⁻¹)ᵀ`, `Ṽ₁ = (δ̃⁻¹, -β̃/(α̃δ̃))ᵀ`. -/
-theorem V3_3b (α β δ : ℂ) (h : α * δ ≠ 0) :
+/-- **The reductions with the second flag** (*The asymmetric fundamental theorem of matrix product
+states*, Example 6.14, (6.15)): `g̃ = [[β̃, α̃], [δ̃, 0]]` with `α̃δ̃ ≠ 0` is a reduction in the
+order `(2, 1)`, with `W̃₂ = (β̃, α̃)`, `W̃₁ = (δ̃, 0)`, `Ṽ₂ = (0, α̃⁻¹)ᵀ`,
+`Ṽ₁ = (δ̃⁻¹, -β̃/(α̃δ̃))ᵀ`. -/
+theorem exists_multiBlockCompression_swap (α β δ : ℂ) (h : α * δ ≠ 0) :
     ∃ P : MultiBlockCompression tensorB labels blocks, P.z = 0 ∧
       P.ord (Sum.inl slot1) < P.ord (Sum.inl slot0) ∧
       P.left slot1 = !![β, α] ∧ P.left slot0 = !![δ, 0] ∧
@@ -758,15 +771,15 @@ theorem V3_3b (α β δ : ℂ) (h : α * δ ≠ 0) :
   · rw [redSwap, red_right]
     ext i j; fin_cases i <;> fin_cases j <;> simp [ord21]
 
-/-- **V3.3(b), converse** (lecture note AsymmetricFT, Example 6.14; milestone V, V3.3(b)): every
-reduction with the second flag (no zero block, order `(2, 1)`) has `W̃₂ = (β̃, α̃)`,
-`W̃₁ = (δ̃, 0)` with `α̃δ̃ ≠ 0`, that is the gauge `[[β̃, α̃], [δ̃, 0]]`. -/
-theorem V3_3b_converse (P : MultiBlockCompression tensorB labels blocks) (hz : P.z = 0)
-    (hord : P.ord (Sum.inl slot1) < P.ord (Sum.inl slot0)) :
+/-- **Every reduction with the second flag** (*The asymmetric fundamental theorem of matrix product
+states*, Example 6.14): every reduction with the second flag (no zero block, order `(2, 1)`) has
+`W̃₂ = (β̃, α̃)`, `W̃₁ = (δ̃, 0)` with `α̃δ̃ ≠ 0`, that is the gauge `[[β̃, α̃], [δ̃, 0]]`. -/
+theorem exists_left_eq_swap_of_ord_gt (P : MultiBlockCompression tensorB labels blocks)
+    (hz : P.z = 0) (hord : P.ord (Sum.inl slot1) < P.ord (Sum.inl slot0)) :
     ∃ α β δ : ℂ, α * δ ≠ 0 ∧ P.left slot1 = !![β, α] ∧ P.left slot0 = !![δ, 0] := by
   have hflag : ∀ k : Fin (labels.card + P.z + 1), k.val = 1 →
       flagVec P k = Submodule.span ℂ {e 1} := by
-    rcases V3_2d_reductions P hz with ⟨h, -⟩ | ⟨-, h⟩
+    rcases ord_flagVec_cases_of_z_eq_zero P hz with ⟨h, -⟩ | ⟨-, h⟩
     · exact absurd hord (lt_asymm h)
     · exact h
   have hn : labels.card + P.z = 2 := by rw [hz]; rfl
@@ -798,7 +811,7 @@ theorem V3_3b_converse (P : MultiBlockCompression tensorB labels blocks) (hz : P
     · rfl
     · exact h01
 
-/-! ### V3.3(c) -/
+/-! ### The matching and the intertwiners -/
 
 /-- The blocks `(1)`, `(2)` are normal. -/
 theorem isNormal_blocks : ∀ s ∈ labels, Kraus.IsNormal (blocks s) := by
@@ -871,7 +884,7 @@ noncomputable abbrev gOne : MultiBlockCompression tensorB labels blocks :=
 theorem matching_slot0 (α β δ : ℂ) (h : α * δ ≠ 0) :
     gOne.matching (redSwap α β δ h) isNormal_blocks dims_pos isNormal_blocks dims_pos
       (gOne.ord (Sum.inl slot0)) = (redSwap α β δ h).ord (Sum.inl slot0) := by
-  refine matching_eq_of _ _ _ _ _ _ _ _ ⟨e 0, ?_, ?_, ?_⟩ ?_
+  refine matching_eq_of_flagVec_inf _ _ _ _ _ _ _ _ ⟨e 0, ?_, ?_, ?_⟩ ?_
   · rw [flagVec_redUpper _ _ _ _ _ rfl]; exact Submodule.mem_span_singleton_self _
   · rw [flagVec_eq_top _ _ rfl]; exact Submodule.mem_top
   · rw [flagVec_eq_bot _ _ rfl]; simp
@@ -888,7 +901,7 @@ theorem matching_slot0 (α β δ : ℂ) (h : α * δ ≠ 0) :
 theorem matching_slot1 (α β δ : ℂ) (h : α * δ ≠ 0) :
     gOne.matching (redSwap α β δ h) isNormal_blocks dims_pos isNormal_blocks dims_pos
       (gOne.ord (Sum.inl slot1)) = (redSwap α β δ h).ord (Sum.inl slot1) := by
-  refine matching_eq_of _ _ _ _ _ _ _ _ ⟨e 1, ?_, ?_, ?_⟩ ?_
+  refine matching_eq_of_flagVec_inf _ _ _ _ _ _ _ _ ⟨e 1, ?_, ?_, ?_⟩ ?_
   · rw [flagVec_eq_top _ _ rfl]; exact Submodule.mem_top
   · rw [flagVec_redSwap _ _ _ _ _ rfl]; exact Submodule.mem_span_singleton_self _
   · rw [flagVec_redUpper _ _ _ _ _ rfl]
@@ -902,12 +915,12 @@ theorem matching_slot1 (α β δ : ℂ) (h : α * δ ≠ 0) :
     have h0 : ((redSwap α β δ h).ord (Sum.inl slot1)).val = 0 := rfl
     omega
 
-/-- **V3.3(c)** (lecture note AsymmetricFT, Example 6.14; milestone V, V3.3(c)): between `g = 1`
-and `g̃ = [[β̃, α̃], [δ̃, 0]]` the matching is `π(1) = 2`, `π(2) = 1`; for block `1`,
-`U = ℂ e₁`, `N = ℂ e₂`, `W̃₁ = λ₁ W₁` on `U` with `λ₁ = δ̃`, and
+/-- **The matching and the intertwiners** (*The asymmetric fundamental theorem of matrix product
+states*, Example 6.14): between `g = 1` and `g̃ = [[β̃, α̃], [δ̃, 0]]` the matching is `π(1) = 2`,
+`π(2) = 1`; for block `1`, `U = ℂ e₁`, `N = ℂ e₂`, `W̃₁ = λ₁ W₁` on `U` with `λ₁ = δ̃`, and
 `Ṽ₁ - δ̃⁻¹ V₁ = (0, -β̃/(α̃δ̃))ᵀ`; for block `2`, `U = ℂ e₂`, `N = ℂ e₁`, `W̃₂ = λ₂ W₂` on `U` with
 `λ₂ = α̃`, and `Ṽ₂ = α̃⁻¹ V₂`. -/
-theorem V3_3c (α β δ : ℂ) (h : α * δ ≠ 0) :
+theorem matching_left_right_gOne_redSwap (α β δ : ℂ) (h : α * δ ≠ 0) :
     let Q := redSwap α β δ h
     let π := gOne.matching Q isNormal_blocks dims_pos isNormal_blocks dims_pos
     let k₁ := gOne.ord (Sum.inl slot0)
@@ -960,15 +973,15 @@ theorem V3_3c (α β δ : ℂ) (h : α * δ ≠ 0) :
   · rw [hV1, gV1]
     ext i j; fin_cases i <;> fin_cases j <;> simp
 
-/-! ### V3.3(d) -/
+/-! ### The factorization -/
 
-/-- The scalar intertwiners of V3.3(c): `X₁ = δ̃`, `X₂ = α̃`. -/
-noncomputable def xRun (α δ : ℂ) : BlockIndex labels 0 → ℂ
+/-- The scalar intertwiners of `matching_left_right_gOne_redSwap`: `X₁ = δ̃`, `X₂ = α̃`. -/
+noncomputable def intertwinerScalar (α δ : ℂ) : BlockIndex labels 0 → ℂ
   | Sum.inl s => if s.1 = 0 then δ else α
   | Sum.inr t => t.elim0
 
 /-- The complements `L₁ = ℂ e₁`, `L₂ = ℂ e₂` (in the word module). -/
-noncomputable def lRun (j : Fin (labels.card + gOne.z)) : Submodule ℂ tensorB.WordModule :=
+noncomputable def complement (j : Fin (labels.card + gOne.z)) : Submodule ℂ tensorB.WordModule :=
   Submodule.span ℂ {(WordModule.toVec tensorB).symm fun i => if i.val = j.val then 1 else 0}
 
 theorem gauge_gOne (v : Fin 2 → ℂ) (y : BlockSpace dims labels gOne.z) :
@@ -985,28 +998,29 @@ theorem blockIndex_cases {z : ℕ} (b : BlockIndex labels z) (hz : z = 0) :
     · exact Or.inr rfl
   · exact absurd t.isLt (by omega)
 
-theorem map_lRun (j : Fin (labels.card + gOne.z)) :
-    (lRun j).map (WordModule.toVec tensorB).toLinearMap =
+theorem map_complement (j : Fin (labels.card + gOne.z)) :
+    (complement j).map (WordModule.toVec tensorB).toLinearMap =
       Submodule.span ℂ {fun i : Fin 2 => if i.val = j.val then (1 : ℂ) else 0} := by
-  rw [lRun, Submodule.map_span, Set.image_singleton]
+  rw [complement, Submodule.map_span, Set.image_singleton]
   simp
 
-/-- **V3.3(d)** (lecture note AsymmetricFT, Example 6.14; milestone V, V3.3(d)): with
-`L₁ = ℂ e₁`, `L₂ = ℂ e₂`, the data of Theorem E for `g = 1` and
+/-- **The factorization** (*The asymmetric fundamental theorem of matrix product states*, Example
+6.14): with `L₁ = ℂ e₁`, `L₂ = ℂ e₂`, the data of *A basis adapted to both flags* for `g = 1` and
 `g̃ = [[β̃, α̃], [δ̃, 0]]` are `Γ = 1`, `𝔄 = 1`, `P_X = [[0, α̃], [δ̃, 0]]`,
 `𝔄̃ = [[1, β̃/δ̃], [0, 1]]` (in the bond coordinates of the two reductions), and
 `g̃ g⁻¹ = 𝔄̃ P_X 𝔄⁻¹`. -/
-theorem V3_3d (α β δ : ℂ) (h : α * δ ≠ 0) :
+theorem isAdaptedFactorization_gOne_redSwap (α β δ : ℂ) (h : α * δ ≠ 0) :
     let Q := redSwap α β δ h
     let PX : Matrix (BlockSpace dims labels 0) (BlockSpace dims labels 0) ℂ :=
       (!![0, α; δ, 0]).submatrix tau21 tau12
     let 𝔄' : Matrix (BlockSpace dims labels 0) (BlockSpace dims labels 0) ℂ :=
       (!![1, β / δ; 0, 1]).submatrix tau21 tau21
     IsAdaptedFactorization gOne Q isNormal_blocks dims_pos isNormal_blocks dims_pos (Equiv.refl _)
-      lRun gOne.gauge 1 𝔄'
-      (fun b => xRun α δ b • (1 : Matrix (Fin (slotSize dims b)) (Fin (slotSize dims b)) ℂ)) ∧
+      complement gOne.gauge 1 𝔄'
+      (fun b => intertwinerScalar α δ b •
+        (1 : Matrix (Fin (slotSize dims b)) (Fin (slotSize dims b)) ℂ)) ∧
     gaugeMatrix gOne.gauge = (1 : Matrix (Fin 2) (Fin 2) ℂ).submatrix tau12 id ∧
-    (∑ b, Matrix.blockEmbed (slotSize dims) b * (xRun α δ b •
+    (∑ b, Matrix.blockEmbed (slotSize dims) b * (intertwinerScalar α δ b •
       (1 : Matrix (Fin (slotSize dims b)) (Fin (slotSize dims b)) ℂ)) *
         Matrix.blockProj (slotSize dims) b) = PX ∧
     gaugeMatrix Q.gauge * gaugeMatrixInv gOne.gauge =
@@ -1014,19 +1028,20 @@ theorem V3_3d (α β δ : ℂ) (h : α * δ ≠ 0) :
   intro Q PX 𝔄'
   have hα : α ≠ 0 := left_ne_zero_of_mul h
   have hδ : δ ≠ 0 := right_ne_zero_of_mul h
-  obtain ⟨hm1, hm2, -, -, -, -, hU1, -, hl1, -, hU2, -, hl2, -⟩ := V3_3c α β δ h
-  have hxne : ∀ b, xRun α δ b ≠ 0 := by
+  obtain ⟨hm1, hm2, -, -, -, -, hU1, -, hl1, -, hU2, -, hl2, -⟩ :=
+    matching_left_right_gOne_redSwap α β δ h
+  have hxne : ∀ b, intertwinerScalar α δ b ≠ 0 := by
     intro b
     rcases blockIndex_cases b rfl with rfl | rfl
-    · simp [xRun, hδ]
-    · simp [xRun, hα]
+    · simp [intertwinerScalar, hδ]
+    · simp [intertwinerScalar, hα]
   have hG1 : gaugeMatrix gOne.gauge = (1 : Matrix (Fin 2) (Fin 2) ℂ).submatrix tau12 id := by
     rw [show gOne.gauge = gaugeOfMatrix tau12 !![(1 : ℂ), 0; 0, 1] !![1⁻¹, -0 / (1 * 1); 0, 1⁻¹]
         (upper_mul_inv (by norm_num)).1 (upper_mul_inv (by norm_num)).2 from rfl]
     erw [gaugeMatrix_gaugeOfMatrix]
     congr 1
     ext a b; fin_cases a <;> fin_cases b <;> simp
-  have hPX : (∑ b, Matrix.blockEmbed (slotSize dims) b * (xRun α δ b •
+  have hPX : (∑ b, Matrix.blockEmbed (slotSize dims) b * (intertwinerScalar α δ b •
       (1 : Matrix (Fin (slotSize dims b)) (Fin (slotSize dims b)) ℂ)) *
         Matrix.blockProj (slotSize dims) b) = PX := by
     rw [Matrix.sum_blockEmbed_mul_mul_blockProj]
@@ -1035,7 +1050,7 @@ theorem V3_3d (α β δ : ℂ) (h : α * δ ≠ 0) :
       rcases blockIndex_cases y rfl with rfl | rfl <;>
       obtain rfl : p = 0 := Subsingleton.elim p 0 <;>
       obtain rfl : q = 0 := Subsingleton.elim q 0 <;>
-      simp [PX, Matrix.blockDiagonal'_apply, xRun, tau21, tau12, ord21, ord12]
+      simp [PX, Matrix.blockDiagonal'_apply, intertwinerScalar, tau21, tau12, ord21, ord12]
   have hQg : gaugeMatrix Q.gauge =
       𝔄' * PX * (1 : Matrix (Fin 2) (Fin 2) ℂ).submatrix tau12 id := by
     rw [show Q.gauge = gaugeOfMatrix tau21 !![β, α; δ, 0] !![0, δ⁻¹; α⁻¹, -β / (α * δ)]
@@ -1070,9 +1085,9 @@ theorem V3_3d (α β δ : ℂ) (h : α * δ ≠ 0) :
       have hU : (gOne.flag (gOne.ord (Sum.inl slot0)).succ ⊓
           Q.flag (gOne.matching Q isNormal_blocks dims_pos isNormal_blocks dims_pos
             (gOne.ord (Sum.inl slot0))).succ).restrictScalars ℂ =
-              lRun (gOne.ord (Sum.inl slot0)) := by
+              complement (gOne.ord (Sum.inl slot0)) := by
         apply eq_of_map_toVec_eq
-        rw [hU1, map_lRun]
+        rw [hU1, map_complement]
         congr 2
         funext i; fin_cases i <;> rfl
       exact ⟨hK ▸ disjoint_bot_left, by rw [hK, hU, bot_sup_eq]⟩
@@ -1089,9 +1104,9 @@ theorem V3_3d (α β δ : ℂ) (h : α * δ ≠ 0) :
       have hU : (gOne.flag (gOne.ord (Sum.inl slot1)).succ ⊓
           Q.flag (gOne.matching Q isNormal_blocks dims_pos isNormal_blocks dims_pos
             (gOne.ord (Sum.inl slot1))).succ).restrictScalars ℂ =
-              lRun (gOne.ord (Sum.inl slot1)) := by
+              complement (gOne.ord (Sum.inl slot1)) := by
         apply eq_of_map_toVec_eq
-        rw [hU2, map_lRun]
+        rw [hU2, map_complement]
         congr 2
         funext i; fin_cases i <;> rfl
       exact ⟨hK ▸ disjoint_bot_left, by rw [hK, hU, bot_sup_eq]⟩
@@ -1111,34 +1126,37 @@ theorem V3_3d (α β δ : ℂ) (h : α * δ ≠ 0) :
         hy (gOne.ord.injective (Fin.ext he))
       rw [LinearEquiv.map_smul, LinearEquiv.apply_symm_apply, Pi.smul_apply, ite_eq_right hne,
         smul_zero]
-  · refine ⟨(xRun α δ b)⁻¹ • (1 : Matrix (Fin (slotSize dims b)) (Fin (slotSize dims b)) ℂ),
-      ?_, ?_⟩
-    · change xRun α δ b • (1 : Matrix (Fin (slotSize dims b)) (Fin (slotSize dims b)) ℂ) *
-        ((xRun α δ b)⁻¹ • 1) = 1
+  · refine ⟨(intertwinerScalar α δ b)⁻¹ •
+      (1 : Matrix (Fin (slotSize dims b)) (Fin (slotSize dims b)) ℂ), ?_, ?_⟩
+    · change intertwinerScalar α δ b •
+        (1 : Matrix (Fin (slotSize dims b)) (Fin (slotSize dims b)) ℂ) *
+        ((intertwinerScalar α δ b)⁻¹ • 1) = 1
       simp [hxne b]
-    · change (xRun α δ b)⁻¹ • (1 : Matrix (Fin (slotSize dims b)) (Fin (slotSize dims b)) ℂ) *
-        (xRun α δ b • 1) = 1
+    · change (intertwinerScalar α δ b)⁻¹ •
+        (1 : Matrix (Fin (slotSize dims b)) (Fin (slotSize dims b)) ℂ) *
+        (intertwinerScalar α δ b • 1) = 1
       simp [hxne b]
   · intro i
-    change xRun α δ b • (1 : Matrix (Fin (slotSize dims b)) (Fin (slotSize dims b)) ℂ) *
-      slotTensor blocks b i = slotTensor blocks b i * (xRun α δ b • 1)
+    change intertwinerScalar α δ b •
+        (1 : Matrix (Fin (slotSize dims b)) (Fin (slotSize dims b)) ℂ) *
+      slotTensor blocks b i = slotTensor blocks b i * (intertwinerScalar α δ b • 1)
     simp
   · intro x hx
     change Q.leftRow b *ᵥ WordModule.toVec tensorB x =
-      (xRun α δ b • (1 : Matrix (Fin (slotSize dims b)) (Fin (slotSize dims b)) ℂ)) *ᵥ
+      (intertwinerScalar α δ b • (1 : Matrix (Fin (slotSize dims b)) (Fin (slotSize dims b)) ℂ)) *ᵥ
         (gOne.leftRow b *ᵥ WordModule.toVec tensorB x)
     rw [Matrix.smul_mulVec, Matrix.one_mulVec]
     rcases blockIndex_cases b rfl with rfl | rfl
     · rw [hm1] at hx
       have hv : WordModule.toVec tensorB x ∈ Submodule.span ℂ {e 0} := by
         rw [← hU1, hm1]; exact Submodule.mem_map_of_mem hx
-      have e : xRun α δ (Sum.inl slot0) = δ := by simp [xRun]
+      have e : intertwinerScalar α δ (Sum.inl slot0) = δ := by simp [intertwinerScalar]
       erw [e]
       exact hl1 _ hv
     · rw [hm2] at hx
       have hv : WordModule.toVec tensorB x ∈ Submodule.span ℂ {e 1} := by
         rw [← hU2, hm2]; exact Submodule.mem_map_of_mem hx
-      have e : xRun α δ (Sum.inl slot1) = α := by simp [xRun]
+      have e : intertwinerScalar α δ (Sum.inl slot1) = α := by simp [intertwinerScalar]
       erw [e]
       exact hl2 _ hv
   · exact Matrix.blockTriangular_one
@@ -1171,12 +1189,14 @@ theorem V3_3d (α β δ : ℂ) (h : α * δ ≠ 0) :
   · erw [hQg, ← hG1, Matrix.mul_assoc (𝔄' * PX), gaugeMatrix_mul_gaugeMatrixInv, Matrix.mul_one,
       inv_one, Matrix.mul_one]
 
-/-! ### V3.4 -/
+/-! ### The density theorem for one letter -/
 
-/-- **V3.4(a)** (lecture note AsymmetricFT, Example 4.4; milestone V, V3.4(a)): for distinct
-nonzero `ν_j` and any `y_j` there is a polynomial `a` with `a(0) = 0` and `a(ν_j) = y_j`, namely
-`a = X p` with `p` the Lagrange interpolant of `y_j / ν_j` at the nodes `ν_j`. -/
-theorem V3_4a {m : ℕ} (ν y : Fin m → ℂ) (hinj : Function.Injective ν) (hne : ∀ j, ν j ≠ 0) :
+/-- **Interpolation without constant term** (*The asymmetric fundamental theorem of matrix product
+states*, Example 4.4): for distinct nonzero `ν_j` and any `y_j` there is a polynomial `a` with
+`a(0) = 0` and `a(ν_j) = y_j`, namely `a = X p` with `p` the Lagrange interpolant of `y_j / ν_j` at
+the nodes `ν_j`. -/
+theorem exists_eval_zero_eq_zero_and_eval_eq {m : ℕ} (ν y : Fin m → ℂ) (hinj : Function.Injective ν)
+    (hne : ∀ j, ν j ≠ 0) :
     ∃ a : Polynomial ℂ, a.eval 0 = 0 ∧ ∀ j, a.eval (ν j) = y j := by
   refine ⟨Polynomial.X * Lagrange.interpolate Finset.univ ν (fun j => y j / ν j), by simp,
     fun j => ?_⟩
@@ -1184,9 +1204,11 @@ theorem V3_4a {m : ℕ} (ν y : Fin m → ℂ) (hinj : Function.Injective ν) (h
     Lagrange.eval_interpolate_at_node _ hinj.injOn (Finset.mem_univ j)]
   field_simp [hne j]
 
-/-- **V3.4(b)** (lecture note AsymmetricFT, Example 4.4; milestone V, V3.4(b)): if
-`c₁ + c₂ 2ⁿ = 1 + 2ⁿ` for every `n ≥ 1`, then `c₁ = c₂ = 1`. -/
-theorem V3_4b (c₁ c₂ : ℂ) (h : ∀ n : ℕ, 1 ≤ n → c₁ + c₂ * 2 ^ n = 1 + 2 ^ n) :
+/-- **The multiplicities are determined by the traces** (*The asymmetric fundamental theorem of
+matrix product states*, Example 4.4): if `c₁ + c₂ 2ⁿ = 1 + 2ⁿ` for every `n ≥ 1`, then
+`c₁ = c₂ = 1`. -/
+theorem eq_one_and_eq_one_of_forall_add_mul_pow_eq (c₁ c₂ : ℂ)
+    (h : ∀ n : ℕ, 1 ≤ n → c₁ + c₂ * 2 ^ n = 1 + 2 ^ n) :
     c₁ = 1 ∧ c₂ = 1 := by
   have h1 := h 1 le_rfl
   have h2 := h 2 (by norm_num)

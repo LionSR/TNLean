@@ -9,32 +9,34 @@ import TNLean.MPS.FundamentalTheorem.Reduction.RingEmbedding
 /-!
 # Two copies of one block
 
-The block `C = (σ_x, E₁₁)` on `ℂ²` (lecture note AsymmetricFT, Example 6.13; milestone V, V3.8)
-is normal: its words of length `3` span `M₂(ℂ)`. The tensor `B = 1₂ ⊗ C` on `ℂ⁴ = ℂ² ⊗ ℂ²`
-contains two copies of `C`, and for every nonzero `u ∈ ℂ²` the subspace `ℂ u ⊗ ℂ²` is
-invariant, different lines giving different subspaces: `B` has infinitely many invariant
-subspaces carrying `C`.
+The block `C = (σ_x, E₁₁)` on `ℂ²` (*The asymmetric fundamental theorem of matrix product states*,
+Example 6.13) is normal: its words of length `3` span `M₂(ℂ)`. The tensor `B = 1₂ ⊗ C` on
+`ℂ⁴ = ℂ² ⊗ ℂ²` contains two copies of `C`, and for every nonzero `u ∈ ℂ²` the subspace `ℂ u ⊗ ℂ²` is
+invariant, different lines giving different subspaces: `B` has infinitely many invariant subspaces
+carrying `C`.
 
-The bond index of `ℂ⁴` is `2a + b`, with `a` the index of the first factor (the copy) and `b`
-the index of the second factor (the block).
+The bond index of `ℂ⁴` is `2a + b`, with `a` the index of the first factor (the copy) and `b` the
+index of the second factor (the block).
 
 ## Main results
 
-* `MultiBlockExamples.Multiplicity.V3_8a`: the words of length `3` span `M₂(ℂ)`, so `C` is
-  normal.
+* `MultiBlockExamples.Multiplicity.wordSpan_tensorC_three_eq_top_and_isNormal`: the words of length
+  `3` span `M₂(ℂ)`, so `C` is normal.
 * `MultiBlockExamples.Multiplicity.tensorB_eq_kronecker`: `B = 1₂ ⊗ C`.
-* `MultiBlockExamples.Multiplicity.V3_8b_invariant`, `V3_8b_injective`: the invariant subspaces
-  `ℂ u ⊗ ℂ²`.
-* `MultiBlockExamples.Multiplicity.V3_8c_commutant`, `V3_8c_exists`, `V3_8c_split`: the split
-  reductions of `B` onto two copies of `C` are exactly `A ⊗ 1₂`.
-* `MultiBlockExamples.Multiplicity.V3_8d`: proportional reading maps.
-* `MultiBlockExamples.Multiplicity.V3_8e_general`: Theorem C for any two split reductions
-  `A ⊗ 1₂`, `Ã ⊗ 1₂` with `ℂ u₁ ≠ ℂ ũ₁`.
-* `MultiBlockExamples.Multiplicity.V3_8e`: the instance `A = 1`, `Ã = [[1, 0], [1, 1]]`.
+* `MultiBlockExamples.Multiplicity.isInvariantSubmodule_lineTensor`, `span_eq_of_lineTensor_eq`: the
+  invariant subspaces `ℂ u ⊗ ℂ²`.
+* `MultiBlockExamples.Multiplicity.commute_tensorB_iff_eq_kronMat`,
+  `exists_split_multiBlockCompression_kronRow`, `exists_left_eq_kronRow_of_remainder_eq_zero`: the
+  split reductions of `B` onto two copies of `C` are exactly `A ⊗ 1₂`.
+* `MultiBlockExamples.Multiplicity.exists_left_mul_evalWord_eq_smul_iff`: proportional reading maps.
+* `MultiBlockExamples.Multiplicity.matching_left_splitRed_of_span_ne`: *Two compressions with
+  different flags* for any two split reductions `A ⊗ 1₂`, `Ã ⊗ 1₂` with `ℂ u₁ ≠ ℂ ũ₁`.
+* `MultiBlockExamples.Multiplicity.matching_left_redOne_redAt`: the instance `A = 1`,
+  `Ã = [[1, 0], [1, 1]]`.
 
 ## References
 
-Lecture note AsymmetricFT, Example 6.13; milestone V, V3.8.
+*The asymmetric fundamental theorem of matrix product states*, Example 6.13.
 -/
 
 open scoped Matrix Kronecker
@@ -48,7 +50,8 @@ open MPSTensor
 /-- `σ_x`. -/
 noncomputable abbrev σx : Matrix (Fin 2) (Fin 2) ℂ := !![0, 1; 1, 0]
 
-/-- **The block `C = (σ_x, E₁₁)`** (lecture note AsymmetricFT, Example 6.13; milestone V, V3.8). -/
+/-- **The block `C = (σ_x, E₁₁)`** (*The asymmetric fundamental theorem of matrix product states*,
+Example 6.13). -/
 noncomputable def tensorC : MPSTensor 2 2 := ![σx, E 0 0]
 
 /-- The integer letters of `C`. -/
@@ -67,24 +70,25 @@ def unitWord : Fin 2 → Fin 2 → Unit → Fin 3 → Fin 2
   | 1, 0, _ => ![0, 1, 1]
   | 1, 1, _ => ![0, 1, 0]
 
-/-- **V3.8(a)** (lecture note AsymmetricFT, Example 6.13; milestone V, V3.8(a)): the words of
-length `3` of `C` span `M₂(ℂ)`, so `C` is normal. -/
-theorem V3_8a : Kraus.wordSpan tensorC 3 = ⊤ ∧ Kraus.IsNormal tensorC := by
+/-- **The block is normal** (*The asymmetric fundamental theorem of matrix product states*, Example
+6.13): the words of length `3` of `C` span `M₂(ℂ)`, so `C` is normal. -/
+theorem wordSpan_tensorC_three_eq_top_and_isNormal :
+    Kraus.wordSpan tensorC 3 = ⊤ ∧ Kraus.IsNormal tensorC := by
   have h : Kraus.IsNBlkInjective tensorC 3 :=
     isNBlkInjective_of_complexOfRing_smul_single (Int.castRingHom ℂ) tensorCInt
       tensorC_eq_complexOfRing unitWord (fun _ _ _ => 1) (c := 1) (by simp) (by decide)
   exact ⟨h, ⟨3, by norm_num, h⟩⟩
 
-theorem isNormal_tensorC : Kraus.IsNormal tensorC := V3_8a.2
+theorem isNormal_tensorC : Kraus.IsNormal tensorC := wordSpan_tensorC_three_eq_top_and_isNormal.2
 
-/-- **The tensor `B = 1₂ ⊗ C`** on `ℂ⁴`, bond index `2a + b` (lecture note AsymmetricFT,
-Example 6.13; milestone V, V3.8). -/
+/-- **The tensor `B = 1₂ ⊗ C`** on `ℂ⁴`, bond index `2a + b` (*The asymmetric fundamental theorem of
+matrix product states*, Example 6.13). -/
 noncomputable def tensorB : MPSTensor 2 4 :=
   ![!![0, 1, 0, 0; 1, 0, 0, 0; 0, 0, 0, 1; 0, 0, 1, 0],
     !![1, 0, 0, 0; 0, 0, 0, 0; 0, 0, 1, 0; 0, 0, 0, 0]]
 
-/-- `B = 1₂ ⊗ C`, read on `ℂ⁴` through the bond index `2a + b` (lecture note AsymmetricFT,
-Example 6.13; milestone V, V3.8). -/
+/-- `B = 1₂ ⊗ C`, read on `ℂ⁴` through the bond index `2a + b` (*The asymmetric fundamental theorem
+of matrix product states*, Example 6.13). -/
 theorem tensorB_eq_kronecker (i : Fin 2) :
     tensorB i = Matrix.reindex finProdFinEquiv finProdFinEquiv
       ((1 : Matrix (Fin 2) (Fin 2) ℂ) ⊗ₖ tensorC i) := by
@@ -110,15 +114,18 @@ theorem tensorB_mulVec_kron (i : Fin 2) (u v : Fin 2 → ℂ) :
   fin_cases i <;> fin_cases k <;>
     simp [tensorB, tensorC, kron, Matrix.mulVec, dotProduct, Fin.sum_univ_four, Fin.sum_univ_two]
 
-/-- **V3.8(b)** (lecture note AsymmetricFT, Example 6.13; milestone V, V3.8(b)): for every
-`u ∈ ℂ²` the subspace `ℂ u ⊗ ℂ²` is invariant under both letters of `B`. -/
-theorem V3_8b_invariant (u : Fin 2 → ℂ) : Matrix.IsInvariantSubmodule tensorB (lineTensor u) := by
+/-- **The invariant subspaces `ℂ u ⊗ ℂ²`** (*The asymmetric fundamental theorem of matrix product
+states*, Example 6.13): for every `u ∈ ℂ²` the subspace `ℂ u ⊗ ℂ²` is invariant under both letters
+of `B`. -/
+theorem isInvariantSubmodule_lineTensor (u : Fin 2 → ℂ) :
+    Matrix.IsInvariantSubmodule tensorB (lineTensor u) := by
   rintro i _ ⟨v, rfl⟩
   exact ⟨tensorC i *ᵥ v, (tensorB_mulVec_kron i u v).symm⟩
 
-/-- **V3.8(b)** (lecture note AsymmetricFT, Example 6.13; milestone V, V3.8(b)): different lines
-give different subspaces: `ℂ u ⊗ ℂ² = ℂ u' ⊗ ℂ²` for nonzero `u` only if `ℂ u = ℂ u'`. -/
-theorem V3_8b_injective {u u' : Fin 2 → ℂ} (hu : u ≠ 0)
+/-- **Different lines give different subspaces** (*The asymmetric fundamental theorem of matrix
+product states*, Example 6.13): different lines give different subspaces: `ℂ u ⊗ ℂ² = ℂ u' ⊗ ℂ²` for
+nonzero `u` only if `ℂ u = ℂ u'`. -/
+theorem span_eq_of_lineTensor_eq {u u' : Fin 2 → ℂ} (hu : u ≠ 0)
     (h : lineTensor u = lineTensor u') : Submodule.span ℂ {u} = Submodule.span ℂ {u'} := by
   have hmem : kron u (e 0) ∈ lineTensor u' := h ▸ ⟨e 0, rfl⟩
   obtain ⟨v, hv⟩ := hmem
@@ -184,9 +191,9 @@ theorem kronRow_mul_oneKron (a : Fin 2 → ℂ) (M : Matrix (Fin 2) (Fin 2) ℂ)
   fin_cases x <;> fin_cases y <;>
     simp [kronRow, oneKron, kronRowMat, Matrix.mul_apply, Fin.sum_univ_four]
 
-/-- **V3.8(c), the commutant** (lecture note AsymmetricFT, Example 6.13; milestone V, V3.8(c)):
+/-- **The commutant** (*The asymmetric fundamental theorem of matrix product states*, Example 6.13):
 a `4 × 4` matrix commutes with both letters of `B = 1₂ ⊗ C` iff it is `A ⊗ 1₂`. -/
-theorem V3_8c_commutant (X : Matrix (Fin 4) (Fin 4) ℂ) :
+theorem commute_tensorB_iff_eq_kronMat (X : Matrix (Fin 4) (Fin 4) ℂ) :
     (∀ i, X * tensorB i = tensorB i * X) ↔ ∃ A : Matrix (Fin 2) (Fin 2) ℂ, X = kronMat A := by
   constructor
   · intro h
@@ -336,11 +343,11 @@ theorem kronMat_inv {A Ainv : Matrix (Fin 2) (Fin 2) ℂ} (h1 : A * Ainv = 1) :
 
 theorem kronMat_conj {A Ainv : Matrix (Fin 2) (Fin 2) ℂ} (h1 : A * Ainv = 1) (i : Fin 2) :
     kronMat A * tensorB i * kronMat Ainv = tensorB i := by
-  have hc := (V3_8c_commutant (kronMat A)).2 ⟨A, rfl⟩
+  have hc := (commute_tensorB_iff_eq_kronMat (kronMat A)).2 ⟨A, rfl⟩
   rw [hc i, Matrix.mul_assoc, ← kronMat_mul, h1, kronMat_one, Matrix.mul_one]
 
-/-- **The split reduction `g = A ⊗ 1₂`** (lecture note AsymmetricFT, Example 6.13; milestone V,
-V3.8(c)), for an invertible `A`: `g B g⁻¹ = B = C ⊕ C`. -/
+/-- **The split reduction `g = A ⊗ 1₂`** (*The asymmetric fundamental theorem of matrix product
+states*, Example 6.13), for an invertible `A`: `g B g⁻¹ = B = C ⊕ C`. -/
 noncomputable def splitRed (A Ainv : Matrix (Fin 2) (Fin 2) ℂ) (h1 : A * Ainv = 1)
     (h2 : Ainv * A = 1) : MultiBlockCompression tensorB labels blocks where
   z := 0
@@ -378,11 +385,12 @@ theorem kronMat_tauM_col (A : Matrix (Fin 2) (Fin 2) ℂ) (s : {s // s ∈ label
   obtain ⟨s, hs⟩ := s
   fin_cases s <;> fin_cases p <;> fin_cases k <;> rfl
 
-/-- **V3.8(c), existence** (lecture note AsymmetricFT, Example 6.13; milestone V, V3.8(c)): for
-every invertible `A`, `g = A ⊗ 1₂` is a split reduction of `B` onto two copies of `C`, with
-`W_j = a_j ⊗ 1₂` (`a_j` the rows of `A`) and `V_j = u_j ⊗ 1₂` (`u_j` the columns of `A⁻¹`). -/
-theorem V3_8c_exists (A Ainv : Matrix (Fin 2) (Fin 2) ℂ) (h1 : A * Ainv = 1)
-    (h2 : Ainv * A = 1) :
+/-- **The split reductions `A ⊗ 1₂`** (*The asymmetric fundamental theorem of matrix product
+states*, Example 6.13): for every invertible `A`, `g = A ⊗ 1₂` is a split reduction of `B` onto two
+copies of `C`, with `W_j = a_j ⊗ 1₂` (`a_j` the rows of `A`) and `V_j = u_j ⊗ 1₂` (`u_j` the columns
+of `A⁻¹`). -/
+theorem exists_split_multiBlockCompression_kronRow (A Ainv : Matrix (Fin 2) (Fin 2) ℂ)
+    (h1 : A * Ainv = 1) (h2 : Ainv * A = 1) :
     ∃ P : MultiBlockCompression tensorB labels blocks, P.z = 0 ∧ P.remainder = 0 ∧
       ∀ j : Fin 2, P.left ⟨j, Finset.mem_univ j⟩ = kronRow (A j) ∧
         P.right ⟨j, Finset.mem_univ j⟩ = kronCol fun a => Ainv a j := by
@@ -409,11 +417,13 @@ theorem kronRow_mul_kronCol_apply (a u : Fin 2 → ℂ) :
     (kronRow a * kronCol u) 0 0 = a 0 * u 0 + a 1 * u 1 := by
   simp [kronRow, kronCol, Matrix.mul_apply, Fin.sum_univ_four]
 
-/-- **V3.8(c), every split reduction** (lecture note AsymmetricFT, Example 6.13; milestone V,
-V3.8(c)): a split reduction of `B` onto two copies of `C` has no zero block and is `A ⊗ 1₂` for
-an invertible `A`: `W_j = a_j ⊗ 1₂` with `a_j` the rows of `A`, `V_j = u_j ⊗ 1₂` with `u_j` the
-columns of `A⁻¹`. A second split reduction `g̃` has `W̃_j = ã_j ⊗ 1₂`, `Ṽ_j = ũ_j ⊗ 1₂` likewise. -/
-theorem V3_8c_split (P : MultiBlockCompression tensorB labels blocks) (hP : P.remainder = 0) :
+/-- **Every split reduction is `A ⊗ 1₂`** (*The asymmetric fundamental theorem of matrix product
+states*, Example 6.13): a split reduction of `B` onto two copies of `C` has no zero block and is
+`A ⊗ 1₂` for an invertible `A`: `W_j = a_j ⊗ 1₂` with `a_j` the rows of `A`, `V_j = u_j ⊗ 1₂` with
+`u_j` the columns of `A⁻¹`. A second split reduction `g̃` has `W̃_j = ã_j ⊗ 1₂`, `Ṽ_j = ũ_j ⊗ 1₂`
+likewise. -/
+theorem exists_left_eq_kronRow_of_remainder_eq_zero
+    (P : MultiBlockCompression tensorB labels blocks) (hP : P.remainder = 0) :
     P.z = 0 ∧ ∃ A U : Matrix (Fin 2) (Fin 2) ℂ, A * U = 1 ∧ U * A = 1 ∧
       ∀ j : Fin 2, P.left ⟨j, Finset.mem_univ j⟩ = kronRow (A j) ∧
         P.right ⟨j, Finset.mem_univ j⟩ = kronCol fun a => U a j := by
@@ -476,11 +486,12 @@ theorem kronRowMat_apply (a : Fin 2 → ℂ) (M : Matrix (Fin 2) (Fin 2) ℂ) (p
     kronRowMat a M p ⟨2 * a'.val + q.val, by omega⟩ = a a' * M p q := by
   fin_cases p <;> fin_cases q <;> fin_cases a' <;> simp [kronRowMat]
 
-/-- **V3.8(d)** (lecture note AsymmetricFT, Example 6.13; milestone V, V3.8(d)): for two
-reductions with `W_s = a ⊗ 1₂`, `W̃_s = ã ⊗ 1₂` (every split reduction, by V3.8(c)),
-`W̃_s B^w = λ W_s B^w` holds for some `λ` and some word with `C^w ≠ 0` iff `ã` is proportional to
-`a`, and then it holds for every word. -/
-theorem V3_8d (P Q : MultiBlockCompression tensorB labels blocks) (s : {s // s ∈ labels})
+/-- **Proportional reading maps** (*The asymmetric fundamental theorem of matrix product states*,
+Example 6.13): for two reductions with `W_s = a ⊗ 1₂`, `W̃_s = ã ⊗ 1₂` (every split reduction, by
+`exists_left_eq_kronRow_of_remainder_eq_zero`), `W̃_s B^w = λ W_s B^w` holds for some `λ` and some
+word with `C^w ≠ 0` iff `ã` is proportional to `a`, and then it holds for every word. -/
+theorem exists_left_mul_evalWord_eq_smul_iff (P Q : MultiBlockCompression tensorB labels blocks)
+    (s : {s // s ∈ labels})
     {a ã : Fin 2 → ℂ} (hP : P.left s = kronRow a) (hQ : Q.left s = kronRow ã) :
     ((∃ c : ℂ, ∃ w : List (Fin 2), Kraus.evalWord tensorC w ≠ 0 ∧
         Q.left s * Kraus.evalWord tensorB w = c • (P.left s * Kraus.evalWord tensorB w)) ↔
@@ -503,7 +514,7 @@ theorem V3_8d (P Q : MultiBlockCompression tensorB labels blocks) (s : {s // s �
   rw [Matrix.smul_apply, kronRowMat_apply, kronRowMat_apply, smul_eq_mul, ← mul_assoc] at e
   exact mul_right_cancel₀ hpq e
 
-/-! ### V3.8(e), the printed instance -/
+/-! ### The printed instance -/
 
 theorem isNormal_blocks : ∀ s ∈ labels, Kraus.IsNormal (blocks s) := fun _ _ => isNormal_tensorC
 
@@ -534,7 +545,7 @@ theorem mem_flagVec_splitRed (A Ainv : Matrix (Fin 2) (Fin 2) ℂ) (h1 : A * Ain
     erw [Equiv.apply_symm_apply]
     exact h n (by rw [← hpos]; exact Fin.le_def.1 hy)
 
-/-! ### V3.8(e), any two split reductions -/
+/-! ### Any two split reductions -/
 
 /-- The first copy. -/
 abbrev slot0 : {s // s ∈ labels} := ⟨0, Finset.mem_univ _⟩
@@ -634,14 +645,14 @@ theorem left_splitRed (A Ainv : Matrix (Fin 2) (Fin 2) ℂ) (h1 : A * Ainv = 1)
   ext b c
   exact kronMat_tauM_row A _ _ _
 
-/-- **V3.8(e)** (lecture note AsymmetricFT, Example 6.13; milestone V, V3.8(e)), for any two split
-reductions `g = A ⊗ 1₂`, `g̃ = Ã ⊗ 1₂` (every split reduction, by V3.8(c)) with
-`ℂ u₁ ≠ ℂ ũ₁` (`u_j`, `ũ_j` the columns of `A⁻¹`, `Ã⁻¹`): the matching pairs position `1` of `g`
-with position `2` of `g̃`; `U = ℂ u₁ ⊗ ℂ²`, `N = ℂ ũ₁ ⊗ ℂ²`; the intertwiner is the scalar
-`λ = ã₂ u₁ ≠ 0` (`ã₂` the second row of `Ã`), that is `W̃₂ = λ W₁` on `U`, with
-`W̃₂ (u₁ ⊗ v) = λ v`; and `ũ₂ - λ⁻¹ u₁ ∈ ℂ ũ₁`. -/
-theorem V3_8e_general (A Ainv At AtInv : Matrix (Fin 2) (Fin 2) ℂ) (h1 : A * Ainv = 1)
-    (h2 : Ainv * A = 1) (h1' : At * AtInv = 1) (h2' : AtInv * At = 1)
+/-- **Two split reductions with different flags** (*The asymmetric fundamental theorem of matrix
+product states*, Example 6.13), for any two split reductions `g = A ⊗ 1₂`, `g̃ = Ã ⊗ 1₂` (every
+split reduction, by `exists_left_eq_kronRow_of_remainder_eq_zero`) with `ℂ u₁ ≠ ℂ ũ₁` (`u_j`, `ũ_j`
+the columns of `A⁻¹`, `Ã⁻¹`): the matching pairs position `1` of `g` with position `2` of `g̃`;
+`U = ℂ u₁ ⊗ ℂ²`, `N = ℂ ũ₁ ⊗ ℂ²`; the intertwiner is the scalar `λ = ã₂ u₁ ≠ 0` (`ã₂` the second row
+of `Ã`), that is `W̃₂ = λ W₁` on `U`, with `W̃₂ (u₁ ⊗ v) = λ v`; and `ũ₂ - λ⁻¹ u₁ ∈ ℂ ũ₁`. -/
+theorem matching_left_splitRed_of_span_ne (A Ainv At AtInv : Matrix (Fin 2) (Fin 2) ℂ)
+    (h1 : A * Ainv = 1) (h2 : Ainv * A = 1) (h1' : At * AtInv = 1) (h2' : AtInv * At = 1)
     (hne : Submodule.span ℂ {fun a => Ainv a 0} ≠ Submodule.span ℂ {fun a => AtInv a 0}) :
     let P := splitRed A Ainv h1 h2
     let Q := splitRed At AtInv h1' h2'
@@ -681,7 +692,7 @@ theorem V3_8e_general (A Ainv At AtInv : Matrix (Fin 2) (Fin 2) ℂ) (h1 : A * A
   have hWt : Q.left slot1 = kronRow (At 1) := left_splitRed At AtInv h1' h2' 1
   have hW : P.left slot0 = kronRow (A 0) := left_splitRed A Ainv h1 h2 0
   have hm : π k = Q.ord (Sum.inl slot1) := by
-    refine matching_eq_of _ _ _ _ _ _ _ _ ⟨kron u₁ ![1, 0], ?_, ?_, ?_⟩ ?_
+    refine matching_eq_of_flagVec_inf _ _ _ _ _ _ _ _ ⟨kron u₁ ![1, 0], ?_, ?_, ?_⟩ ?_
     · rw [flagVec_splitRed_one A Ainv h1 h2 _ rfl]
       exact ⟨![1, 0], rfl⟩
     · rw [flagVec_eq_top _ _ rfl]; exact Submodule.mem_top
@@ -760,12 +771,13 @@ noncomputable abbrev redOne : MultiBlockCompression tensorB labels blocks :=
 noncomputable abbrev redAt : MultiBlockCompression tensorB labels blocks :=
   splitRed matAt matAtInv matAt_mul matAtInv_mul
 
-/-- **V3.8(e)** (lecture note AsymmetricFT, Example 6.13; milestone V, V3.8(e)), for `A = 1` and
-`Ã = [[1, 0], [1, 1]]`, where `ℂ u₁ = ℂ e₁ ≠ ℂ ũ₁ = ℂ (1, -1)`: the matching pairs position `1`
-of `g` with position `2` of `g̃`; `U = ℂ u₁ ⊗ ℂ²`, `N = ℂ ũ₁ ⊗ ℂ²`; the intertwiner is the
-scalar `λ = ã₂ u₁ = 1`, with `W̃₂ (u₁ ⊗ v) = λ v`; and `ũ₂ - λ⁻¹ u₁ = (-1, 1)ᵀ ∈ ℂ ũ₁`. The
-matching, `U`, `N` and `W̃₂` are read off `V3_8e_general`. -/
-theorem V3_8e :
+/-- **The printed instance** (*The asymmetric fundamental theorem of matrix product states*, Example
+6.13), for `A = 1` and `Ã = [[1, 0], [1, 1]]`, where `ℂ u₁ = ℂ e₁ ≠ ℂ ũ₁ = ℂ (1, -1)`: the matching
+pairs position `1` of `g` with position `2` of `g̃`; `U = ℂ u₁ ⊗ ℂ²`, `N = ℂ ũ₁ ⊗ ℂ²`; the
+intertwiner is the scalar `λ = ã₂ u₁ = 1`, with `W̃₂ (u₁ ⊗ v) = λ v`; and
+`ũ₂ - λ⁻¹ u₁ = (-1, 1)ᵀ ∈ ℂ ũ₁`. The matching, `U`, `N` and `W̃₂` are read off
+`matching_left_splitRed_of_span_ne`. -/
+theorem matching_left_redOne_redAt :
     let π := redOne.matching redAt isNormal_blocks dims_pos isNormal_blocks dims_pos
     let k := redOne.ord (Sum.inl slot0)
     π k = redAt.ord (Sum.inl slot1) ∧ k.val = 0 ∧ (redAt.ord (Sum.inl slot1)).val = 1 ∧
@@ -792,7 +804,7 @@ theorem V3_8e :
     obtain ⟨c, hc⟩ := Submodule.mem_span_singleton.1 hmem
     have := congrFun hc 1
     simp at this
-  obtain ⟨hm, -, -, hU, hN, -, -, hkron, -⟩ := V3_8e_general 1 1 matAt matAtInv
+  obtain ⟨hm, -, -, hU, hN, -, -, hkron, -⟩ := matching_left_splitRed_of_span_ne 1 1 matAt matAtInv
     (Matrix.mul_one 1) (Matrix.mul_one 1) matAt_mul matAtInv_mul hne
   rw [hu1] at hU hkron
   rw [hut] at hN

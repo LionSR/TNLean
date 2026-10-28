@@ -9,11 +9,11 @@ import QICLean.Kraus.Injectivity
 /-!
 # The periodic tensor: irreducible but not normal
 
-The tensor `C = (E₁₂, E₂₁)` on `ℂ²` (lecture note AsymmetricFT, (1.1); milestone V, V3.1) has no
-common invariant subspace other than `0` and `ℂ²`, so it is irreducible, but it is not normal:
-for every length `ℓ ≥ 1` the words of length `ℓ` span a two-dimensional subspace of `M₂(ℂ)`,
-the diagonal matrices for `ℓ` even and the off-diagonal ones for `ℓ` odd. It separates the
-irreducible tensors from the normal ones.
+The tensor `C = (E₁₂, E₂₁)` on `ℂ²` (*The asymmetric fundamental theorem of matrix product states*,
+equation (1.1)) has no common invariant subspace other than `0` and `ℂ²`, so it is irreducible, but
+it is not normal: for every length `ℓ ≥ 1` the words of length `ℓ` span a two-dimensional subspace
+of `M₂(ℂ)`, the diagonal matrices for `ℓ` even and the off-diagonal ones for `ℓ` odd. It separates
+the irreducible tensors from the normal ones.
 
 ## Main results
 
@@ -25,7 +25,7 @@ irreducible tensors from the normal ones.
 
 ## References
 
-Lecture note AsymmetricFT, (1.1); milestone V, V3.1.
+*The asymmetric fundamental theorem of matrix product states*, equation (1.1).
 -/
 
 open scoped Matrix
@@ -66,8 +66,8 @@ theorem exists_eq_smul_of_span_singleton_eq {n : ℕ} {v u : Fin n → ℂ}
 
 namespace Periodic
 
-/-- **The periodic tensor** `C = (E₁₂, E₂₁)` (lecture note AsymmetricFT, (1.1); milestone V,
-V3.1). -/
+/-- **The periodic tensor** `C = (E₁₂, E₂₁)` (*The asymmetric fundamental theorem of matrix product
+states*, equation (1.1)). -/
 noncomputable def tensorC : Fin 2 → Matrix (Fin 2) (Fin 2) ℂ := ![E 0 1, E 1 0]
 
 /-- The entry `(i, j)` of a word of length `ℓ` vanishes unless `i + j + ℓ` is even. -/
@@ -170,8 +170,8 @@ theorem mem_wordSpan_of_length {ℓ : ℕ} (w : List (Fin 2)) (hw : w.length = �
     Kraus.evalWord tensorC w ∈ Kraus.wordSpan tensorC ℓ :=
   hw ▸ Kraus.evalWord_mem_wordSpan tensorC w
 
-/-- **V3.1, even lengths** (lecture note AsymmetricFT, (1.1); milestone V, V3.1): for even
-`ℓ ≥ 1` the words of length `ℓ` span the diagonal matrices. -/
+/-- **Even lengths** (*The asymmetric fundamental theorem of matrix product states*, equation
+(1.1)): for even `ℓ ≥ 1` the words of length `ℓ` span the diagonal matrices. -/
 theorem wordSpan_tensorC_of_even {ℓ : ℕ} (hℓ : 1 ≤ ℓ) (he : Even ℓ) :
     Kraus.wordSpan tensorC ℓ = Submodule.span ℂ {E 0 0, E 1 1} := by
   obtain ⟨m, rfl⟩ := he
@@ -187,8 +187,8 @@ theorem wordSpan_tensorC_of_even {ℓ : ℕ} (hℓ : 1 ≤ ℓ) (he : Even ℓ) 
     · rw [← evalWord_altWord_one_zero m]
       exact mem_wordSpan_of_length _ (by rw [length_altWord]; ring)
 
-/-- **V3.1, odd lengths** (lecture note AsymmetricFT, (1.1); milestone V, V3.1): for odd `ℓ`
-the words of length `ℓ` span the off-diagonal matrices. -/
+/-- **Odd lengths** (*The asymmetric fundamental theorem of matrix product states*, equation (1.1)):
+for odd `ℓ` the words of length `ℓ` span the off-diagonal matrices. -/
 theorem wordSpan_tensorC_of_odd {ℓ : ℕ} (ho : Odd ℓ) :
     Kraus.wordSpan tensorC ℓ = Submodule.span ℂ {E 0 1, E 1 0} := by
   obtain ⟨m, rfl⟩ := ho
@@ -210,8 +210,8 @@ theorem finrank_span_pair {x y : Matrix (Fin 2) (Fin 2) ℂ}
   have := finrank_span_eq_card hli
   rwa [Matrix.range_cons_cons_empty, Fintype.card_fin] at this
 
-/-- **V3.1, the dimension** (lecture note AsymmetricFT, (1.1); milestone V, V3.1): for every
-`ℓ ≥ 1` the words of length `ℓ` span a two-dimensional subspace of `M₂(ℂ)`. -/
+/-- **The dimension** (*The asymmetric fundamental theorem of matrix product states*, equation
+(1.1)): for every `ℓ ≥ 1` the words of length `ℓ` span a two-dimensional subspace of `M₂(ℂ)`. -/
 theorem finrank_wordSpan_tensorC {ℓ : ℕ} (hℓ : 1 ≤ ℓ) :
     Module.finrank ℂ ↥(Kraus.wordSpan tensorC ℓ) = 2 := by
   rcases Nat.even_or_odd ℓ with he | ho
@@ -226,8 +226,8 @@ theorem finrank_wordSpan_tensorC {ℓ : ℕ} (hℓ : 1 ≤ ℓ) :
     have h1 := congrFun (congrFun hst 1) 0
     exact ⟨by simpa using h0, by simpa using h1⟩
 
-/-- **V3.1, not normal** (lecture note AsymmetricFT, (1.1); milestone V, V3.1): no length
-`ℓ ≥ 1` has words spanning `M₂(ℂ)`. -/
+/-- **Not normal** (*The asymmetric fundamental theorem of matrix product states*, equation (1.1)):
+no length `ℓ ≥ 1` has words spanning `M₂(ℂ)`. -/
 theorem not_isNormal_tensorC : ¬ Kraus.IsNormal tensorC := by
   rintro ⟨N, hN, hinj⟩
   have h := finrank_wordSpan_tensorC (ℓ := N) hN
@@ -235,8 +235,8 @@ theorem not_isNormal_tensorC : ¬ Kraus.IsNormal tensorC := by
   rw [hinj, finrank_top, Module.finrank_matrix] at h
   simp at h
 
-/-- **V3.1, irreducible** (lecture note AsymmetricFT, (1.1); milestone V, V3.1): the only
-subspaces invariant under `E₁₂` and `E₂₁` are `0` and `ℂ²`. -/
+/-- **Irreducible** (*The asymmetric fundamental theorem of matrix product states*, equation (1.1)):
+the only subspaces invariant under `E₁₂` and `E₂₁` are `0` and `ℂ²`. -/
 theorem isIrreducibleAction_tensorC : Matrix.IsIrreducibleAction tensorC := by
   intro W hW
   by_cases hbot : W = ⊥

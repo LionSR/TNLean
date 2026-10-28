@@ -4,29 +4,36 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.MultiBlock.Running
-import TNLean.MPS.Examples.SharpnessOneBlock
+import TNLean.MPS.Examples.MultiBlock.SharpnessOneBlock
 
 /-!
 # Two flags with one block
 
-The tensor `B = [[1, 1], [0, 0]]` with one letter and the block `C = (1)` (lecture note
-AsymmetricFT, Example 6.15; milestone V, V3.6) has the two invariant lines `ℂ e₁` (on which `B`
-acts by `1`) and `ℂ (e₁ - e₂)` (on which `B` acts by `0`). The reduction `g = 1` puts the block
-first, with the flag `0 ⊂ ℂ e₁ ⊂ ℂ²`; the reduction `g̃ = [[0, -1], [1, 1]]` puts the zero block
-first, with the flag `0 ⊂ ℂ (e₁ - e₂) ⊂ ℂ²` and `g̃ B g̃⁻¹ = diag(0, 1)`. The two reductions are
-the objects `SharpnessOneBlock.firstCompression`, `SharpnessOneBlock.lastCompression` of the case
-`z = 1` of the sharpness example. The matching sends the block at position `1` to position `2`,
-`U = ℂ e₁`, `N = ℂ (e₁ - e₂)`; the reading maps agree on `U` and after one letter, but not on
-`e₂`; the second reduction is split and the first is not.
+The tensor `B = [[1, 1], [0, 0]]` with one letter and the block `C = (1)` (*The asymmetric
+fundamental theorem of matrix product states*, Example 6.15) has the two invariant lines `ℂ e₁` (on
+which `B` acts by `1`) and `ℂ (e₁ - e₂)` (on which `B` acts by `0`). The reduction `g = 1` puts the
+block first, with the flag `0 ⊂ ℂ e₁ ⊂ ℂ²`; the reduction `g̃ = [[0, -1], [1, 1]]` puts the zero
+block first, with the flag `0 ⊂ ℂ (e₁ - e₂) ⊂ ℂ²` and `g̃ B g̃⁻¹ = diag(0, 1)`. The two reductions
+are the objects `MultiBlockExamples.SharpnessOneBlock.firstCompression`,
+`MultiBlockExamples.SharpnessOneBlock.lastCompression` of the case `z = 1` of the sharpness example.
+The matching sends the block at position `1` to position `2`, `U = ℂ e₁`, `N = ℂ (e₁ - e₂)`; the
+reading maps agree on `U` and after one letter, but not on `e₂`; the second reduction is split and
+the first is not.
 
 ## Main results
 
-* `MultiBlockExamples.OneBlock.V3_6a_lines`, `V3_6a_z_conj`, `V3_6a_flags`, `V3_6a_only`: V3.6(a).
-* `MultiBlockExamples.OneBlock.V3_6b`, `V3_6c`, `V3_6d`: V3.6(b)-(d).
+* `MultiBlockExamples.OneBlock.isInvariantSubmodule_span_tensorB_iff`, `z_eq_one_and_gInt_conj`,
+  `flagVec_one_firstCompression_and_lastCompression`,
+  `eq_toFlagData_firstCompression_or_lastCompression`: the invariant lines, the two reductions and
+  their flags.
+* `MultiBlockExamples.OneBlock.left_right_matching_firstCompression_lastCompression`,
+  `left_mulVec_e_one_and_left_mul_tensorB`,
+  `remainder_lastCompression_eq_zero_and_firstCompression_ne_zero`: the matching, the reading maps
+  and splitness.
 
 ## References
 
-Lecture note AsymmetricFT, Example 6.15; milestone V, V3.6.
+*The asymmetric fundamental theorem of matrix product states*, Example 6.15.
 -/
 
 open scoped Matrix
@@ -35,10 +42,10 @@ namespace MultiBlockExamples
 
 namespace OneBlock
 
-open MPSTensor SharpnessOneBlock
+open MPSTensor MultiBlockExamples.SharpnessOneBlock
 
-/-- The block `C = (1)` is normal (lecture note AsymmetricFT, Example 6.15; milestone V, V3.6):
-its letter spans `M₁(ℂ)`. -/
+/-- The block `C = (1)` is normal (*The asymmetric fundamental theorem of matrix product states*,
+Example 6.15): its letter spans `M₁(ℂ)`. -/
 theorem isNormal_blockC : ∀ s ∈ oneSlot, Kraus.IsNormal (blockC s) := by
   intro s _
   refine Kraus.IsInjective.isNormal (Submodule.eq_top_of_forall_single_mem _ fun x y => ?_)
@@ -58,9 +65,9 @@ theorem tensorB_apply (i : Fin 1) : tensorB i = !![1, 1; 0, 0] := by
   ext a b
   fin_cases a <;> fin_cases b <;> simp [tensorB, bInt, complexOfRing_apply]
 
-/-- **V3.6(a)** (lecture note AsymmetricFT, Example 6.15; milestone V, V3.6(a)): the lines
-invariant under `B = [[1, 1], [0, 0]]` are `ℂ e₁` and `ℂ (e₁ - e₂)`. -/
-theorem V3_6a_lines (v : Fin 2 → ℂ) (hv : v ≠ 0) :
+/-- **The invariant lines** (*The asymmetric fundamental theorem of matrix product states*, Example
+6.15): the lines invariant under `B = [[1, 1], [0, 0]]` are `ℂ e₁` and `ℂ (e₁ - e₂)`. -/
+theorem isInvariantSubmodule_span_tensorB_iff (v : Fin 2 → ℂ) (hv : v ≠ 0) :
     Matrix.IsInvariantSubmodule tensorB (Submodule.span ℂ {v}) ↔
       Submodule.span ℂ {v} = Submodule.span ℂ {e 0} ∨
         Submodule.span ℂ {v} = Submodule.span ℂ {e 0 - e 1} := by
@@ -93,9 +100,9 @@ theorem V3_6a_lines (v : Fin 2 → ℂ) (hv : v ≠ 0) :
       refine ⟨0, ?_⟩
       ext j; fin_cases j <;> simp [tensorB_apply, Matrix.mulVec, dotProduct, hv0, hv1]
 
-/-- **V3.6(a)** (lecture note AsymmetricFT, Example 6.15; milestone V, V3.6(a)): both reductions
-have `z = 1`, and `g̃ B g̃⁻¹ = diag(0, 1)`. -/
-theorem V3_6a_z_conj : firstCompression.z = 1 ∧ lastCompression.z = 1 ∧
+/-- **The two reductions** (*The asymmetric fundamental theorem of matrix product states*, Example
+6.15): both reductions have `z = 1`, and `g̃ B g̃⁻¹ = diag(0, 1)`. -/
+theorem z_eq_one_and_gInt_conj : firstCompression.z = 1 ∧ lastCompression.z = 1 ∧
     gInt * bInt * gInvInt = !![0, 0; 0, 1] :=
   ⟨rfl, rfl, by decide⟩
 
@@ -158,9 +165,9 @@ theorem flagVec_last_one (k : Fin (oneSlot.card + lastCompression.z + 1)) (hk : 
     flagVec lastCompression k = Submodule.span ℂ {e 0 - e 1} := by
   ext v; rw [mem_flagVec_last_one k hk, mem_span_e0_sub_e1]
 
-/-- **V3.6(a)** (lecture note AsymmetricFT, Example 6.15; milestone V, V3.6(a)): the flags are
-`0 ⊂ ℂ e₁ ⊂ ℂ²` and `0 ⊂ ℂ (e₁ - e₂) ⊂ ℂ²`. -/
-theorem V3_6a_flags :
+/-- **The two flags** (*The asymmetric fundamental theorem of matrix product states*, Example 6.15):
+the flags are `0 ⊂ ℂ e₁ ⊂ ℂ²` and `0 ⊂ ℂ (e₁ - e₂) ⊂ ℂ²`. -/
+theorem flagVec_one_firstCompression_and_lastCompression :
     (∀ k : Fin (oneSlot.card + firstCompression.z + 1), k.val = 1 →
       flagVec firstCompression k = Submodule.span ℂ {e 0}) ∧
     ∀ k : Fin (oneSlot.card + lastCompression.z + 1), k.val = 1 →
@@ -171,7 +178,7 @@ theorem matching_first_last :
     firstCompression.matching lastCompression isNormal_blockC blockC_pos isNormal_blockC
         blockC_pos (firstCompression.ord (Sum.inl oneSlotMem)) =
       lastCompression.ord (Sum.inl oneSlotMem) := by
-  refine matching_eq_of _ _ _ _ _ _ _ _ ⟨e 0, ?_, ?_, ?_⟩ ?_
+  refine matching_eq_of_flagVec_inf _ _ _ _ _ _ _ _ ⟨e 0, ?_, ?_, ?_⟩ ?_
   · rw [flagVec_first_one _ rfl]; exact Submodule.mem_span_singleton_self _
   · rw [flagVec_eq_top _ _ rfl]; exact Submodule.mem_top
   · rw [flagVec_eq_bot _ _ rfl]; simp
@@ -226,7 +233,7 @@ theorem flagVec_one_cases (P : MultiBlockCompression tensorB oneSlot blockC)
     omega
   obtain ⟨v, hv, hspan⟩ := exists_eq_span_singleton_of_finrank_eq_one _ hrank
   have hW := leftRow_mulVec_mulVec_of_mem_flagVec P (b := b₀) 0 (hks.symm ▸ hu)
-  rcases (V3_6a_lines v hv).1 (hspan ▸ hinv) with h | h
+  rcases (isInvariantSubmodule_span_tensorB_iff v hv).1 (hspan ▸ hinv) with h | h
   · have hfk := hspan.trans h
     obtain ⟨a, ha⟩ := Submodule.mem_span_singleton.1 (hfk ▸ hu)
     have hBu : tensorB 0 *ᵥ u = u := by
@@ -261,10 +268,11 @@ theorem flag_eq_of_flagVec_eq {d DB : ℕ} {ι κ : Type*} [DecidableEq ι] [Dec
   Submodule.restrictScalars_injective ℂ _ _
     (Submodule.map_injective_of_injective (WordModule.toVec B).injective h)
 
-/-- **V3.6(a), the labelled flags** (lecture note AsymmetricFT, Example 6.15; milestone V,
-V3.6(a)): the labelled invariant flags of `B` for `C = (1)` are exactly the flags of the two
-reductions `g = 1` and `g̃`. -/
-theorem V3_6a_only (F : FlagData tensorB.WordModule oneSlot blockC) :
+/-- **The labelled flags** (*The asymmetric fundamental theorem of matrix product states*, Example
+6.15): the labelled invariant flags of `B` for `C = (1)` are exactly the flags of the two reductions
+`g = 1` and `g̃`. -/
+theorem eq_toFlagData_firstCompression_or_lastCompression
+    (F : FlagData tensorB.WordModule oneSlot blockC) :
     F = firstCompression.toFlagData ∨ F = lastCompression.toFlagData := by
   have hz : F.z = 1 := by
     have := F.toMultiBlockCompression.dim_eq
@@ -337,10 +345,10 @@ theorem V3_6a_only (F : FlagData tensorB.WordModule oneSlot blockC) :
     subst hHeq hleq
     rfl
 
-/-- **V3.6(b)** (lecture note AsymmetricFT, Example 6.15; milestone V, V3.6(b)): `W = (1, 0)`,
-`V = e₁`, `W̃ = (1, 1)`, `Ṽ = e₁`; the matching sends the block at position `1` to position `2`;
-`U = ℂ e₁`, `N = ℂ (e₁ - e₂)`, `W̃ e₁ = W e₁ = 1`, `Ṽ - V = 0`. -/
-theorem V3_6b :
+/-- **The matching and the maps** (*The asymmetric fundamental theorem of matrix product states*,
+Example 6.15): `W = (1, 0)`, `V = e₁`, `W̃ = (1, 1)`, `Ṽ = e₁`; the matching sends the block at
+position `1` to position `2`; `U = ℂ e₁`, `N = ℂ (e₁ - e₂)`, `W̃ e₁ = W e₁ = 1`, `Ṽ - V = 0`. -/
+theorem left_right_matching_firstCompression_lastCompression :
     firstCompression.left oneSlotMem = !![1, 0] ∧ firstCompression.right oneSlotMem = !![1; 0] ∧
     lastCompression.left oneSlotMem = !![1, 1] ∧ lastCompression.right oneSlotMem = !![1; 0] ∧
     (firstCompression.ord (Sum.inl oneSlotMem)).val = 0 ∧
@@ -378,9 +386,9 @@ theorem V3_6b :
   · rw [left_firstCompression]
     ext i; fin_cases i; simp [Matrix.mulVec, dotProduct]
 
-/-- **V3.6(c)** (lecture note AsymmetricFT, Example 6.15; milestone V, V3.6(c)):
-`W̃ e₂ = 1 ≠ 0 = W e₂`, and `W̃ B = W B`. -/
-theorem V3_6c :
+/-- **The reading maps differ, but not after one letter** (*The asymmetric fundamental theorem of
+matrix product states*, Example 6.15): `W̃ e₂ = 1 ≠ 0 = W e₂`, and `W̃ B = W B`. -/
+theorem left_mulVec_e_one_and_left_mul_tensorB :
     lastCompression.left oneSlotMem *ᵥ e 1 = ![1] ∧ firstCompression.left oneSlotMem *ᵥ e 1 = ![0] ∧
     lastCompression.left oneSlotMem * tensorB 0 = firstCompression.left oneSlotMem * tensorB 0 := by
   refine ⟨?_, ?_, left_mul_eq 0⟩
@@ -389,9 +397,10 @@ theorem V3_6c :
   · rw [left_firstCompression]
     ext i; fin_cases i; simp [Matrix.mulVec, dotProduct]
 
-/-- **V3.6(d)** (lecture note AsymmetricFT, Example 6.15; milestone V, V3.6(d)): the second
-reduction is split and the first is not. -/
-theorem V3_6d : lastCompression.remainder = 0 ∧ firstCompression.remainder ≠ 0 := by
+/-- **Only the second reduction is split** (*The asymmetric fundamental theorem of matrix product
+states*, Example 6.15): the second reduction is split and the first is not. -/
+theorem remainder_lastCompression_eq_zero_and_firstCompression_ne_zero :
+    lastCompression.remainder = 0 ∧ firstCompression.remainder ≠ 0 := by
   have hfirstV : firstCompression.right oneSlotMem = !![1; 0] := by
     rw [firstCompression, right_compressionOf]
     ext i j; fin_cases i <;> fin_cases j <;>

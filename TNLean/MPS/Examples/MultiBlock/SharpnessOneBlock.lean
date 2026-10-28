@@ -10,25 +10,22 @@ import TNLean.MPS.Examples.MultiBlock.Running
 # Sharpness of the one-block bound for one and two zero slots
 
 Let `d = 1`, let the block be `C = (1)`, and let `B = [[1, 1], [0, 0]]` act on `ℂ²`, so that
-`D_B - D_C = 1` and every reduction of `B` onto `C` has one zero slot. The tensor has two
-reductions onto `C` (lecture note MultiBlockUniqueness, Example 5.13 (Two different flags with one
-block), the case `z = 1` of
-Example 5.9 (Sharpness of the bound)):
+`D_B - D_C = 1` and every reduction of `B` onto `C` has one zero slot. The tensor has two reductions
+onto `C` (*The asymmetric fundamental theorem of matrix product states*, Example 6.15, the case
+`z = 1` of Example 6.10):
 
-* the identity gauge, with the block first: the flag `0 ⊂ ℂ e₁ ⊂ ℂ²`, reading map
-  `W = (1, 0)` and injection `V = e₁`;
+* the identity gauge, with the block first: the flag `0 ⊂ ℂ e₁ ⊂ ℂ²`, reading map `W = (1, 0)` and
+  injection `V = e₁`;
 * the gauge `g' = [[0, -1], [1, 1]]`, with inverse `[[1, 1], [-1, 0]]` and
-  `g' B g'⁻¹ = [[0, 0], [0, 1]]`, with the zero slot first: the flag `0 ⊂ ℂ (e₁ - e₂) ⊂ ℂ²`,
-  reading map `W' = (1, 1)` and injection `V' = e₁`.
+  `g' B g'⁻¹ = [[0, 0], [0, 1]]`, with the zero slot first: the flag `0 ⊂ ℂ (e₁ - e₂) ⊂ ℂ²`, reading
+  map `W' = (1, 1)` and injection `V' = e₁`.
 
-The reading maps are not proportional, so the identity `W' B^w = λ W B^w` of the one-block
-theorem (Corollary 5.8 (C2: the one-block theorem)) fails for the empty word, while it holds with
-`λ = 1` for every word of
-length at least `1 = D_B - D_C`. The bound of Corollary 5.8 (C2: the one-block theorem) therefore
-cannot be lowered for
-`z = 1`.
+The reading maps are not proportional, so the identity `W' B^w = λ W B^w` of the one-block theorem
+(blueprint `cor:asym_uniq_one_block`, *Bare uniqueness at the ends of the flag; the one-block
+theorem*) fails for the empty word, while it holds with `λ = 1` for every word of length at least
+`1 = D_B - D_C`. The bound of the one-block theorem therefore cannot be lowered for `z = 1`.
 
-The case `z = 2` of lecture note MultiBlockUniqueness, Example 5.9 (Sharpness of the bound),
+The case `z = 2` of *The asymmetric fundamental theorem of matrix product states*, Example 6.10,
 takes `B = [[1, 1, 0], [0, 0, 1], [0, 0, 0]]` on `ℂ³`, that is `B e₀ = e₀`, `B e₁ = e₀`,
 `B e₂ = e₁`, so that `D_B - D_C = 2`. Its two reductions onto `C = (1)` are
 
@@ -39,53 +36,57 @@ takes `B = [[1, 1, 0], [0, 0, 1], [0, 0, 0]]` on `ℂ³`, that is `B e₀ = e₀
   order zero slot, zero slot, block: reading map `W̃ = (1, 1, 1)` and injection `Ṽ = e₀`.
 
 Here `W B = (1, 1, 0)` and `W̃ B = (1, 1, 1)` are not proportional, so the identity fails at
-`|w| = 1 = z - 1`, while `B² = [[1, 1, 1], [0, 0, 0], [0, 0, 0]]` gives
-`W B² = W̃ B² = (1, 1, 1)`, and the identity holds with `λ = 1` for every word of length at
-least `2 = D_B - D_C`. The bound therefore cannot be lowered for `z = 2` either. The general
-case `z ≥ 1` (lecture note AsymmetricFT, Example 6.10; milestone V, V3.7) is the last section:
-`B` on `ℂ^{1+z}` with `B e₀ = e₀`, `B e_j = e_{j-1}`; `W Bⁿ` and `W̃ Bⁿ` are proportional exactly
-when `n ≥ z`.
+`|w| = 1 = z - 1`, while `B² = [[1, 1, 1], [0, 0, 0], [0, 0, 0]]` gives `W B² = W̃ B² = (1, 1, 1)`,
+and the identity holds with `λ = 1` for every word of length at least `2 = D_B - D_C`. The bound
+therefore cannot be lowered for `z = 2` either. The general case `z ≥ 1` (*The asymmetric
+fundamental theorem of matrix product states*, Example 6.10) is the last section: `B` on `ℂ^{1+z}`
+with `B e₀ = e₀`, `B e_j = e_{j-1}`; `W Bⁿ` and `W̃ Bⁿ` are proportional exactly when `n ≥ z`.
 
 ## Main definitions
 
-* `SharpnessOneBlock.firstCompression`, `SharpnessOneBlock.lastCompression`: the two
-  reductions for `z = 1`.
-* `SharpnessOneBlock.firstCompressionTwo`, `SharpnessOneBlock.lastCompressionTwo`: the two
-  reductions for `z = 2`.
+* `MultiBlockExamples.SharpnessOneBlock.firstCompression`,
+  `MultiBlockExamples.SharpnessOneBlock.lastCompression`: the two reductions for `z = 1`.
+* `MultiBlockExamples.SharpnessOneBlock.firstCompressionTwo`,
+  `MultiBlockExamples.SharpnessOneBlock.lastCompressionTwo`: the two reductions for `z = 2`.
 
 ## Main results
 
-* `SharpnessOneBlock.not_exists_left_eq_smul`: the two reading maps are not proportional.
-* `SharpnessOneBlock.left_mul_evalWord_eq`: `W' B^w = W B^w` for every nonempty word.
-* `SharpnessOneBlock.right_eq`: the two injections agree.
-* `SharpnessOneBlock.not_exists_left_mul_eq_smul_two`: for `z = 2`, `W̃ B^w` and `W B^w` are not
-  proportional for words of length one.
-* `SharpnessOneBlock.left_mul_sq_eq_two`, `SharpnessOneBlock.left_mul_evalWord_eq_two`: for
-  `z = 2`, `W̃ B^w = W B^w` for words of length two, and of every length at least two.
-* `SharpnessOneBlock.V3_7a_first`, `SharpnessOneBlock.V3_7a_last`, `SharpnessOneBlock.V3_7b`,
-  `SharpnessOneBlock.V3_7c`, `SharpnessOneBlock.V3_7c_sharp`, `SharpnessOneBlock.V3_7d`: every
-  `z ≥ 1` (lecture note AsymmetricFT, Example 6.10; milestone V, V3.7).
-* `SharpnessOneBlock.right_eq_two`: for `z = 2`, the two injections agree.
+* `MultiBlockExamples.SharpnessOneBlock.not_exists_left_eq_smul`: the two reading maps are not
+  proportional.
+* `MultiBlockExamples.SharpnessOneBlock.left_mul_evalWord_eq`: `W' B^w = W B^w` for every nonempty
+  word.
+* `MultiBlockExamples.SharpnessOneBlock.right_eq`: the two injections agree.
+* `MultiBlockExamples.SharpnessOneBlock.not_exists_left_mul_eq_smul_two`: for `z = 2`, `W̃ B^w` and
+  `W B^w` are not proportional for words of length one.
+* `MultiBlockExamples.SharpnessOneBlock.left_mul_sq_eq_two`,
+  `MultiBlockExamples.SharpnessOneBlock.left_mul_evalWord_eq_two`: for `z = 2`, `W̃ B^w = W B^w` for
+  words of length two, and of every length at least two.
+* `MultiBlockExamples.SharpnessOneBlock.exists_multiBlockCompression_block_first`,
+  `MultiBlockExamples.SharpnessOneBlock.exists_multiBlockCompression_block_last`,
+  `MultiBlockExamples.SharpnessOneBlock.rowE0_mul_pow_and_rowOnes_mul_pow`,
+  `MultiBlockExamples.SharpnessOneBlock.exists_rowOnes_mul_pow_eq_smul_iff`,
+  `MultiBlockExamples.SharpnessOneBlock.exists_length_eq_sub_one_not_exists_smul`,
+  `MultiBlockExamples.SharpnessOneBlock.pow_mul_right_eq_of_eq_colE0`: every `z ≥ 1`.
+* `MultiBlockExamples.SharpnessOneBlock.right_eq_two`: for `z = 2`, the two injections agree.
 
 ## References
 
-Lecture note MultiBlockUniqueness, Examples 5.9 and 5.13, Corollary 5.8 (C2: the one-block theorem);
-lecture note AsymmetricFT, Example 6.10 and Corollary 6.9 (milestone V, V3.7).
+*The asymmetric fundamental theorem of matrix product states*, Examples 6.10 and 6.15; blueprint
+`cor:asym_uniq_one_block`, *Bare uniqueness at the ends of the flag; the one-block theorem*.
 -/
 
 open scoped Matrix
 
-namespace SharpnessOneBlock
+namespace MultiBlockExamples.SharpnessOneBlock
 
 open MPSTensor
 
-/-- The integer matrix of the single letter, `B = [[1, 1], [0, 0]]` (lecture note
-MultiBlockUniqueness, Example 5.13 (Two different flags with one block)). -/
+/-- The integer matrix of the single letter, `B = [[1, 1], [0, 0]]` (*The asymmetric fundamental
+theorem of matrix product states*, Example 6.15). -/
 def bInt : Matrix (Fin 2) (Fin 2) ℤ := !![1, 1; 0, 0]
 
-/-- The tensor of Example 5.13 (Two different flags with one block) of lecture note
-MultiBlockUniqueness: one letter,
-`B = [[1, 1], [0, 0]]`. -/
+/-- The tensor of *The asymmetric fundamental theorem of matrix product states*, Example 6.15: one
+letter, `B = [[1, 1], [0, 0]]`. -/
 noncomputable def tensorB : MPSTensor 1 2 := fun _ => complexOfInt bInt
 
 /-- The block `C = (1)`, indexed by the single label. -/
@@ -131,10 +132,10 @@ def lastTau : BlockSpace (fun _ : Unit => 1) oneSlot 1 ≃ Fin 2 where
   left_inv := by decide
   right_inv := by decide
 
-/-- A reduction of `B` onto `C = (1)` with one zero slot from an integer gauge `G` with
-inverse `Ginv` conjugating `B` to a matrix `K` that is upper triangular for the ordering `ord`,
-with `1` at the block and `0` at the zero slot (lecture note MultiBlockUniqueness,
-Definition 1.1). -/
+/-- A reduction of `B` onto `C = (1)` with one zero slot from an integer gauge `G` with inverse
+`Ginv` conjugating `B` to a matrix `K` that is upper triangular for the ordering `ord`, with `1` at
+the block and `0` at the zero slot (blueprint `thm:asym_multiblock`, *Multi-block asymmetric
+compression theorem*, clauses (i)–(iii)). -/
 noncomputable def compressionOf (ord : BlockIndex oneSlot 1 ≃ Fin 2)
     (τ : BlockSpace (fun _ : Unit => 1) oneSlot 1 ≃ Fin 2) (G Ginv K : Matrix (Fin 2) (Fin 2) ℤ)
     (hG : G * Ginv = 1) (hG' : Ginv * G = 1) (hK : G * bInt * Ginv = K)
@@ -167,17 +168,15 @@ def gInt : Matrix (Fin 2) (Fin 2) ℤ := !![0, -1; 1, 1]
 basis adapted to the flag `0 ⊂ ℂ (e₁ - e₂) ⊂ ℂ²`. -/
 def gInvInt : Matrix (Fin 2) (Fin 2) ℤ := !![1, 1; -1, 0]
 
-/-- **The reduction with the block first** (lecture note MultiBlockUniqueness, Example 5.13 (Two
-different flags with one block)):
-the identity gauge and the flag `0 ⊂ ℂ e₁ ⊂ ℂ²`. -/
+/-- **The reduction with the block first** (*The asymmetric fundamental theorem of matrix product
+states*, Example 6.15): the identity gauge and the flag `0 ⊂ ℂ e₁ ⊂ ℂ²`. -/
 noncomputable def firstCompression : MultiBlockCompression tensorB oneSlot blockC :=
   compressionOf firstOrd firstTau 1 1 bInt (by decide) (by decide) (by decide +kernel)
     (by decide +kernel) (by decide +kernel) (by decide +kernel)
 
-/-- **The reduction with the zero slot first** (lecture note MultiBlockUniqueness,
-Example 5.13 (Two different flags with one
-block)): the gauge `g' = [[0, -1], [1, 1]]`, with `g' B g'⁻¹ = [[0, 0], [0, 1]]`, and the
-flag `0 ⊂ ℂ (e₁ - e₂) ⊂ ℂ²`. -/
+/-- **The reduction with the zero slot first** (*The asymmetric fundamental theorem of matrix
+product states*, Example 6.15): the gauge `g' = [[0, -1], [1, 1]]`, with
+`g' B g'⁻¹ = [[0, 0], [0, 1]]`, and the flag `0 ⊂ ℂ (e₁ - e₂) ⊂ ℂ²`. -/
 noncomputable def lastCompression : MultiBlockCompression tensorB oneSlot blockC :=
   compressionOf lastOrd lastTau gInt gInvInt !![0, 0; 0, 1] (by decide) (by decide)
     (by decide +kernel) (by decide +kernel) (by decide +kernel) (by decide +kernel)
@@ -237,10 +236,10 @@ theorem left_lastCompression : lastCompression.left oneSlotMem = !![1, 1] := by
   ext i j
   fin_cases i; fin_cases j <;> simp [gInt, lastTau, lastOrd]
 
-/-- **The reading maps are not proportional** (lecture note MultiBlockUniqueness,
-Example 5.13 (Two different flags with one
-block)): `W' e₂ = 1` while `W e₂ = 0`. So the identity `W' B^w = λ W B^w` of
-Corollary 5.8 (C2: the one-block theorem) fails for the empty word, of length `0 < 1 = D_B - D_C`.
+/-- **The reading maps are not proportional** (*The asymmetric fundamental theorem of matrix product
+states*, Example 6.15): `W' e₂ = 1` while `W e₂ = 0`. So the identity `W' B^w = λ W B^w` of the
+one-block theorem (blueprint `cor:asym_uniq_one_block`) fails for the empty word, of length
+`0 < 1 = D_B - D_C`.
 -/
 theorem not_exists_left_eq_smul :
     ¬ ∃ c : ℂ, lastCompression.left oneSlotMem = c • firstCompression.left oneSlotMem := by
@@ -249,9 +248,8 @@ theorem not_exists_left_eq_smul :
   rw [left_firstCompression, left_lastCompression] at h
   simp at h
 
-/-- `W' B = W B` (lecture note MultiBlockUniqueness, Example 5.13 (Two different flags with one
-block)): `B` maps `ℂ²` into
-`U = ℂ e₁`, where the two reading maps agree. -/
+/-- `W' B = W B` (*The asymmetric fundamental theorem of matrix product states*, Example 6.15): `B`
+maps `ℂ²` into `U = ℂ e₁`, where the two reading maps agree. -/
 theorem left_mul_eq (i : Fin 1) :
     lastCompression.left oneSlotMem * tensorB i = firstCompression.left oneSlotMem * tensorB i := by
   rw [left_firstCompression, left_lastCompression]
@@ -259,8 +257,8 @@ theorem left_mul_eq (i : Fin 1) :
   fin_cases a
   fin_cases b <;> simp [tensorB, bInt, Matrix.mul_apply, Fin.sum_univ_two, complexOfRing_apply]
 
-/-- **The one-block identity from length one on** (lecture note MultiBlockUniqueness,
-Example 5.13 (Two different flags with one block) and Corollary 5.8 (C2: the one-block theorem) with
+/-- **The one-block identity from length one on** (*The asymmetric fundamental theorem of matrix
+product states*, Example 6.15 and the one-block theorem (blueprint `cor:asym_uniq_one_block`) with
 `z = 1`): `W' B^w = W B^w` for every nonempty word. -/
 theorem left_mul_evalWord_eq (w : List (Fin 1)) (hw : w ≠ []) :
     lastCompression.left oneSlotMem * Kraus.evalWord tensorB w =
@@ -268,9 +266,8 @@ theorem left_mul_evalWord_eq (w : List (Fin 1)) (hw : w ≠ []) :
   obtain ⟨i, w, rfl⟩ := List.exists_cons_of_ne_nil hw
   rw [Kraus.evalWord, ← Matrix.mul_assoc, ← Matrix.mul_assoc, left_mul_eq]
 
-/-- **The injections agree** (lecture note MultiBlockUniqueness, Example 5.13 (Two different flags
-with one block)):
-`V' = V = e₁`. -/
+/-- **The injections agree** (*The asymmetric fundamental theorem of matrix product states*, Example
+6.15): `V' = V = e₁`. -/
 theorem right_eq : lastCompression.right oneSlotMem = firstCompression.right oneSlotMem := by
   rw [lastCompression, right_compressionOf, firstCompression, right_compressionOf]
   ext i j
@@ -279,11 +276,11 @@ theorem right_eq : lastCompression.right oneSlotMem = firstCompression.right one
 /-! ### Two zero slots -/
 
 /-- The integer matrix of the single letter for two zero slots,
-`B = [[1, 1, 0], [0, 0, 1], [0, 0, 0]]`, that is `B e₀ = e₀`, `B e₁ = e₀`, `B e₂ = e₁` (lecture
-note MultiBlockUniqueness, Example 5.9 (Sharpness of the bound), the case `z = 2`). -/
+`B = [[1, 1, 0], [0, 0, 1], [0, 0, 0]]`, that is `B e₀ = e₀`, `B e₁ = e₀`, `B e₂ = e₁` (*The
+asymmetric fundamental theorem of matrix product states*, Example 6.10, the case `z = 2`). -/
 def bIntTwo : Matrix (Fin 3) (Fin 3) ℤ := !![1, 1, 0; 0, 0, 1; 0, 0, 0]
 
-/-- The tensor of Example 5.9 (Sharpness of the bound) of lecture note MultiBlockUniqueness with
+/-- The tensor of *The asymmetric fundamental theorem of matrix product states*, Example 6.10, with
 `z = 2`: one letter, `B = [[1, 1, 0], [0, 0, 1], [0, 0, 0]]`. -/
 noncomputable def tensorBTwo : MPSTensor 1 3 := fun _ => complexOfInt bIntTwo
 
@@ -333,10 +330,10 @@ def lastTauTwo : BlockSpace (fun _ : Unit => 1) oneSlot 2 ≃ Fin 3 where
   left_inv := by decide
   right_inv := by decide
 
-/-- A reduction of the `3 × 3` letter onto `C = (1)` with two zero slots from an integer gauge
-`G` with inverse `Ginv` conjugating `B` to a matrix `K` that is upper triangular for the ordering
-`ord`, with `1` at the block and `0` at both zero slots (lecture note MultiBlockUniqueness,
-Definition 1.1). -/
+/-- A reduction of the `3 × 3` letter onto `C = (1)` with two zero slots from an integer gauge `G`
+with inverse `Ginv` conjugating `B` to a matrix `K` that is upper triangular for the ordering `ord`,
+with `1` at the block and `0` at both zero slots (blueprint `thm:asym_multiblock`, *Multi-block
+asymmetric compression theorem*, clauses (i)–(iii)). -/
 noncomputable def compressionOfTwo (ord : BlockIndex oneSlot 2 ≃ Fin 3)
     (τ : BlockSpace (fun _ : Unit => 1) oneSlot 2 ≃ Fin 3) (G Ginv K : Matrix (Fin 3) (Fin 3) ℤ)
     (hG : G * Ginv = 1) (hG' : Ginv * G = 1) (hK : G * bIntTwo * Ginv = K)
@@ -369,15 +366,15 @@ def gIntTwo : Matrix (Fin 3) (Fin 3) ℤ := !![0, -1, -1; 0, 0, -1; 1, 1, 1]
 `f₁ = e₀ - e₁`, `f₂ = e₁ - e₂`, `e₀` adapted to the flag `0 ⊂ ℂ f₁ ⊂ ℂ f₁ + ℂ f₂ ⊂ ℂ³`. -/
 def gInvIntTwo : Matrix (Fin 3) (Fin 3) ℤ := !![1, 0, 1; -1, 1, 0; 0, -1, 0]
 
-/-- **The reduction with the block first, two zero slots** (lecture note MultiBlockUniqueness,
-Example 5.9 (Sharpness of the bound), `z = 2`): the identity gauge and the flag
+/-- **The reduction with the block first, two zero slots** (*The asymmetric fundamental theorem of
+matrix product states*, Example 6.10, `z = 2`): the identity gauge and the flag
 `0 ⊂ ℂ e₀ ⊂ ℂ e₀ + ℂ e₁ ⊂ ℂ³`. -/
 noncomputable def firstCompressionTwo : MultiBlockCompression tensorBTwo oneSlot blockC :=
   compressionOfTwo firstOrdTwo firstTauTwo 1 1 bIntTwo (by decide) (by decide)
     (by decide +kernel) (by decide +kernel) (by decide +kernel) (by decide +kernel)
 
-/-- **The reduction with the two zero slots first** (lecture note MultiBlockUniqueness,
-Example 5.9 (Sharpness of the bound), `z = 2`): the gauge `g̃` with
+/-- **The reduction with the two zero slots first** (*The asymmetric fundamental theorem of matrix
+product states*, Example 6.10, `z = 2`): the gauge `g̃` with
 `g̃ B g̃⁻¹ = [[0, 1, 0], [0, 0, 0], [0, 0, 1]]`, in the order zero slot, zero slot, block. -/
 noncomputable def lastCompressionTwo : MultiBlockCompression tensorBTwo oneSlot blockC :=
   compressionOfTwo lastOrdTwo lastTauTwo gIntTwo gInvIntTwo !![0, 1, 0; 0, 0, 0; 0, 0, 1]
@@ -448,11 +445,10 @@ theorem left_lastCompressionTwo_mul (i : Fin 1) :
   fin_cases a
   fin_cases b <;> simp [tensorBTwo, bIntTwo, Matrix.mul_apply, Fin.sum_univ_three]
 
-/-- **The one-block identity fails at length one for `z = 2`** (lecture note
-MultiBlockUniqueness, Example 5.9 (Sharpness of the bound)): for every word of length
-`1 = z - 1`, `W̃ B^w = (1, 1, 1)` is not proportional to `W B^w = (1, 1, 0)`. So the bound
-`|w| ≥ D_B - D_C = 2` of Corollary 5.8 (C2: the one-block theorem) cannot be lowered for
-`z = 2`. -/
+/-- **The one-block identity fails at length one for `z = 2`** (*The asymmetric fundamental theorem
+of matrix product states*, Example 6.10): for every word of length `1 = z - 1`, `W̃ B^w = (1, 1, 1)`
+is not proportional to `W B^w = (1, 1, 0)`. So the bound `|w| ≥ D_B - D_C = 2` of the one-block
+theorem (blueprint `cor:asym_uniq_one_block`) cannot be lowered for `z = 2`. -/
 theorem not_exists_left_mul_eq_smul_two (w : List (Fin 1)) (hw : w.length = 1) :
     ¬ ∃ c : ℂ, lastCompressionTwo.left oneSlotMem * Kraus.evalWord tensorBTwo w =
       c • (firstCompressionTwo.left oneSlotMem * Kraus.evalWord tensorBTwo w) := by
@@ -480,17 +476,17 @@ theorem left_lastCompressionTwo_mul_mul (i j : Fin 1) :
   fin_cases a
   fin_cases b <;> simp [tensorBTwo, bIntTwo, Matrix.mul_apply, Fin.sum_univ_three]
 
-/-- **The one-block identity at length two for `z = 2`** (lecture note MultiBlockUniqueness,
-Example 5.9 (Sharpness of the bound)): `W̃ B² = W B² = (1, 1, 1)`, the identity of
-Corollary 5.8 (C2: the one-block theorem) with scalar `1` at `|w| = 2 = z`. -/
+/-- **The one-block identity at length two for `z = 2`** (*The asymmetric fundamental theorem of
+matrix product states*, Example 6.10): `W̃ B² = W B² = (1, 1, 1)`, the identity of the one-block
+theorem (blueprint `cor:asym_uniq_one_block`) with scalar `1` at `|w| = 2 = z`. -/
 theorem left_mul_sq_eq_two (i j : Fin 1) :
     lastCompressionTwo.left oneSlotMem * (tensorBTwo i * tensorBTwo j) =
       firstCompressionTwo.left oneSlotMem * (tensorBTwo i * tensorBTwo j) := by
   rw [left_firstCompressionTwo_mul_mul, left_lastCompressionTwo_mul_mul]
 
-/-- **The one-block identity from length two on, for `z = 2`** (lecture note
-MultiBlockUniqueness, Example 5.9 (Sharpness of the bound), and Corollary 5.8 (C2: the one-block
-theorem)): `W̃ B^w = W B^w` for every word of length at least `2`. -/
+/-- **The one-block identity from length two on, for `z = 2`** (*The asymmetric fundamental theorem
+of matrix product states*, Example 6.10, and the one-block theorem (blueprint
+`cor:asym_uniq_one_block`)): `W̃ B^w = W B^w` for every word of length at least `2`. -/
 theorem left_mul_evalWord_eq_two (w : List (Fin 1)) (hw : 2 ≤ w.length) :
     lastCompressionTwo.left oneSlotMem * Kraus.evalWord tensorBTwo w =
       firstCompressionTwo.left oneSlotMem * Kraus.evalWord tensorBTwo w := by
@@ -500,8 +496,8 @@ theorem left_mul_evalWord_eq_two (w : List (Fin 1)) (hw : 2 ≤ w.length) :
     rw [Matrix.mul_assoc (lastCompressionTwo.left oneSlotMem),
       Matrix.mul_assoc (firstCompressionTwo.left oneSlotMem), left_mul_sq_eq_two]
 
-/-- **The injections agree for `z = 2`** (lecture note MultiBlockUniqueness, Example 5.9
-(Sharpness of the bound)): `Ṽ = V = e₀`. -/
+/-- **The injections agree for `z = 2`** (*The asymmetric fundamental theorem of matrix product
+states*, Example 6.10): `Ṽ = V = e₀`. -/
 theorem right_eq_two :
     lastCompressionTwo.right oneSlotMem = firstCompressionTwo.right oneSlotMem := by
   rw [lastCompressionTwo, right_compressionOfTwo, firstCompressionTwo, right_compressionOfTwo]
@@ -510,20 +506,20 @@ theorem right_eq_two :
 
 /-! ### Every number of zero slots
 
-Lecture note AsymmetricFT, Example 6.10 (milestone V, V3.7): `B` on `ℂ^{1+z}` with `B e₀ = e₀`
-and `B e_j = e_{j-1}` for `1 ≤ j ≤ z`, and the block `C = (1)`. The identity gauge puts the block
-first, `W = e₀ᵀ`, `V = e₀`; the gauge `g̃` with `g̃⁻¹ = (f₁, …, f_z, e₀)`, `f_j = e_{j-1} - e_j`,
-puts the block last, `W̃ = e₀ᵀ + ⋯ + e_zᵀ`, `Ṽ = e₀`. Then `W Bⁿ = ∑_{j ≤ min(n,z)} e_jᵀ` and
-`W̃ Bⁿ = ∑_{j ≤ z} e_jᵀ`, proportional exactly when `n ≥ z`: the bound `|w| ≥ D_B - D_C` of the
-one-block theorem cannot be lowered for any `z ≥ 1`. The cases `z = 1, 2` above are instances
-(`tensorBGen_one`, `tensorBGen_two`). -/
+*The asymmetric fundamental theorem of matrix product states*, Example 6.10: `B` on `ℂ^{1+z}` with
+`B e₀ = e₀` and `B e_j = e_{j-1}` for `1 ≤ j ≤ z`, and the block `C = (1)`. The identity gauge puts
+the block first, `W = e₀ᵀ`, `V = e₀`; the gauge `g̃` with `g̃⁻¹ = (f₁, …, f_z, e₀)`,
+`f_j = e_{j-1} - e_j`, puts the block last, `W̃ = e₀ᵀ + ⋯ + e_zᵀ`, `Ṽ = e₀`. Then
+`W Bⁿ = ∑_{j ≤ min(n,z)} e_jᵀ` and `W̃ Bⁿ = ∑_{j ≤ z} e_jᵀ`, proportional exactly when `n ≥ z`: the
+bound `|w| ≥ D_B - D_C` of the one-block theorem cannot be lowered for any `z ≥ 1`. The cases
+`z = 1, 2` above are instances (`tensorBGen_one`, `tensorBGen_two`). -/
 
 section General
 
 variable (z : ℕ)
 
-/-- **V3.7** (lecture note AsymmetricFT, Example 6.10; milestone V, V3.7): `B` on `ℂ^{1+z}` with
-`B e₀ = e₀`, `B e_j = e_{j-1}`. -/
+/-- **The tensor** (*The asymmetric fundamental theorem of matrix product states*, Example 6.10):
+`B` on `ℂ^{1+z}` with `B e₀ = e₀`, `B e_j = e_{j-1}`. -/
 noncomputable def tensorBGen : MPSTensor 1 (1 + z) := fun _ =>
   Matrix.of fun i j => if (i.val = 0 ∧ j.val = 0) ∨ j.val = i.val + 1 then 1 else 0
 
@@ -603,16 +599,16 @@ theorem rowOnes_mul_pow (n : ℕ) : rowOnes z * tensorBGen z 0 ^ n = rowOnes z :
     rw [pow_succ, ← Matrix.mul_assoc, ih, mul_tensorBGen_apply]
     split_ifs <;> simp [rowOnes]
 
-/-- **V3.7(b)** (lecture note AsymmetricFT, Example 6.10; milestone V, V3.7(b)):
-`W Bⁿ = ∑_{j ≤ min(n,z)} e_jᵀ` and `W̃ Bⁿ = ∑_{j ≤ z} e_jᵀ` for every `n ≥ 0`. -/
-theorem V3_7b (n : ℕ) :
+/-- **The reading maps after words** (*The asymmetric fundamental theorem of matrix product states*,
+Example 6.10): `W Bⁿ = ∑_{j ≤ min(n,z)} e_jᵀ` and `W̃ Bⁿ = ∑_{j ≤ z} e_jᵀ` for every `n ≥ 0`. -/
+theorem rowE0_mul_pow_and_rowOnes_mul_pow (n : ℕ) :
     rowE0 z * tensorBGen z 0 ^ n = Matrix.of (fun _ j => if j.val ≤ n then 1 else 0) ∧
     rowOnes z * tensorBGen z 0 ^ n = rowOnes z :=
   ⟨rowE0_mul_pow n, rowOnes_mul_pow n⟩
 
-/-- **V3.7(c)** (lecture note AsymmetricFT, Example 6.10; milestone V, V3.7(c)):
-`W̃ Bⁿ = λ W Bⁿ` for some `λ` iff `n ≥ z`. -/
-theorem V3_7c (n : ℕ) :
+/-- **Proportional exactly from length `z` on** (*The asymmetric fundamental theorem of matrix
+product states*, Example 6.10): `W̃ Bⁿ = λ W Bⁿ` for some `λ` iff `n ≥ z`. -/
+theorem exists_rowOnes_mul_pow_eq_smul_iff (n : ℕ) :
     (∃ c : ℂ, rowOnes z * tensorBGen z 0 ^ n = c • (rowE0 z * tensorBGen z 0 ^ n)) ↔ z ≤ n := by
   rw [rowE0_mul_pow, rowOnes_mul_pow]
   constructor
@@ -652,7 +648,8 @@ def coordOfOrd (ord : BlockIndex oneSlot z ≃ Fin (1 + z)) :
 
 /-- A reduction of `B` onto `C = (1)` with `z` zero slots from an explicit gauge `G` with
 `G B G⁻¹ = K` upper triangular, `1` at the position of the block and `0` at the zero slots
-(lecture note AsymmetricFT, Definition 1.1). -/
+(blueprint `thm:asym_multiblock`, *Multi-block asymmetric compression theorem*, clauses (i)–(iii)).
+-/
 noncomputable def compressionGen (ord : BlockIndex oneSlot z ≃ Fin (1 + z))
     (G Ginv K : Matrix (Fin (1 + z)) (Fin (1 + z)) ℂ) (hG : G * Ginv = 1) (hG' : Ginv * G = 1)
     (hK : G * tensorBGen z 0 * Ginv = K) (htri : ∀ a b, b < a → K a b = 0)
@@ -719,8 +716,8 @@ def firstOrdGen : BlockIndex oneSlot z ≃ Fin (1 + z) where
       simp only
       omega
 
-/-- **The reduction `g = 1`** with the block first (lecture note AsymmetricFT, Example 6.10;
-milestone V, V3.7(a)). -/
+/-- **The reduction `g = 1`** with the block first (*The asymmetric fundamental theorem of matrix
+product states*, Example 6.10). -/
 noncomputable def firstCompressionGen : MultiBlockCompression (tensorBGen z) oneSlot blockC :=
   compressionGen firstOrdGen 1 1 (tensorBGen z 0) (Matrix.mul_one 1) (Matrix.mul_one 1)
     (by rw [Matrix.one_mul, Matrix.mul_one]) tensorBGen_tri
@@ -803,8 +800,8 @@ theorem gGen_mul_tensorBGen : gGen (z := z) * tensorBGen z 0 = kGen * gGen := by
 theorem gGen_conj : gGen (z := z) * tensorBGen z 0 * gInvGen = kGen := by
   rw [gGen_mul_tensorBGen, Matrix.mul_assoc, gGen_mul_gInvGen, Matrix.mul_one]
 
-/-- **The reduction `g̃`** with the block last (lecture note AsymmetricFT, Example 6.10;
-milestone V, V3.7(a)). -/
+/-- **The reduction `g̃`** with the block last (*The asymmetric fundamental theorem of matrix
+product states*, Example 6.10). -/
 noncomputable def lastCompressionGen : MultiBlockCompression (tensorBGen z) oneSlot blockC :=
   compressionGen lastOrdGen gGen gInvGen kGen gGen_mul_gInvGen
     (mul_eq_one_comm.1 gGen_mul_gInvGen) gGen_conj
@@ -841,10 +838,11 @@ theorem lastOrdGen_inl (s : {s // s ∈ oneSlot}) : (lastOrdGen (z := z) (Sum.in
 
 theorem lastOrdGen_inr (t : Fin z) : (lastOrdGen (z := z) (Sum.inr t)).val = t.val := rfl
 
-/-- **V3.7(a), the first reduction** (lecture note AsymmetricFT, Example 6.10; milestone V,
-V3.7(a)): `g = 1` is a reduction onto `C = (1)` with the block first and `z` zero blocks,
-`W = e₀ᵀ`, `V = e₀`; the zero slot at position `p` reads `e_pᵀ`. -/
-theorem V3_7a_first : ∃ P : MultiBlockCompression (tensorBGen z) oneSlot blockC, P.z = z ∧
+/-- **The first reduction** (*The asymmetric fundamental theorem of matrix product states*, Example
+6.10): `g = 1` is a reduction onto `C = (1)` with the block first and `z` zero blocks, `W = e₀ᵀ`,
+`V = e₀`; the zero slot at position `p` reads `e_pᵀ`. -/
+theorem exists_multiBlockCompression_block_first :
+    ∃ P : MultiBlockCompression (tensorBGen z) oneSlot blockC, P.z = z ∧
     (∀ b, P.ord (Sum.inl oneSlotMem) ≤ P.ord b) ∧
     P.left oneSlotMem = rowE0 z ∧ P.right oneSlotMem = colE0 z ∧
     ∀ t, P.leftRow (Sum.inr t) =
@@ -877,11 +875,11 @@ theorem V3_7a_first : ∃ P : MultiBlockCompression (tensorBGen z) oneSlot block
     simp only [Matrix.one_apply, Fin.ext_iff]
     split_ifs <;> first | rfl | (exfalso; omega)
 
-/-- **V3.7(a), the second reduction** (lecture note AsymmetricFT, Example 6.10; milestone V,
-V3.7(a)): `g̃` with `g̃⁻¹ = (f₁, …, f_z, e₀)`, `f_j = e_{j-1} - e_j`, is a reduction with the
-block last, `W̃ = e₀ᵀ + ⋯ + e_zᵀ`, `Ṽ = e₀`; the zero slot at position `p` has injection
-`f_{p+1}`. -/
-theorem V3_7a_last : ∃ Q : MultiBlockCompression (tensorBGen z) oneSlot blockC, Q.z = z ∧
+/-- **The second reduction** (*The asymmetric fundamental theorem of matrix product states*, Example
+6.10): `g̃` with `g̃⁻¹ = (f₁, …, f_z, e₀)`, `f_j = e_{j-1} - e_j`, is a reduction with the block
+last, `W̃ = e₀ᵀ + ⋯ + e_zᵀ`, `Ṽ = e₀`; the zero slot at position `p` has injection `f_{p+1}`. -/
+theorem exists_multiBlockCompression_block_last :
+    ∃ Q : MultiBlockCompression (tensorBGen z) oneSlot blockC, Q.z = z ∧
     (∀ b, Q.ord b ≤ Q.ord (Sum.inl oneSlotMem)) ∧
     Q.left oneSlotMem = rowOnes z ∧ Q.right oneSlotMem = colE0 z ∧
     ∀ t, Q.rightCol (Sum.inr t) = Matrix.of fun i _ =>
@@ -920,23 +918,24 @@ theorem V3_7a_last : ∃ Q : MultiBlockCompression (tensorBGen z) oneSlot blockC
 variable (hz : 0 < z)
 
 include hz in
-/-- **V3.7(c), sharpness** (lecture note AsymmetricFT, Example 6.10 and Corollary 6.9; milestone
-V, V3.7(c)): the identity `W̃ B^w = λ W B^w` fails at a word of length `z - 1 = D_B - D_A - 1`,
-so the bound `|w| ≥ D_B - D_A` of Corollary 6.9 cannot be lowered. -/
-theorem V3_7c_sharp : ∃ w : List (Fin 1), w.length = z - 1 ∧
+/-- **Sharpness** (*The asymmetric fundamental theorem of matrix product states*, Example 6.10;
+blueprint `cor:asym_uniq_one_block`, *Bare uniqueness at the ends of the flag; the one-block
+theorem*): the identity `W̃ B^w = λ W B^w` fails at a word of length `z - 1 = D_B - D_A - 1`, so the
+bound `|w| ≥ D_B - D_A` of the one-block theorem cannot be lowered. -/
+theorem exists_length_eq_sub_one_not_exists_smul : ∃ w : List (Fin 1), w.length = z - 1 ∧
     ¬ ∃ c : ℂ, rowOnes z * Kraus.evalWord (tensorBGen z) w =
       c • (rowE0 z * Kraus.evalWord (tensorBGen z) w) := by
   refine ⟨List.replicate (z - 1) 0, List.length_replicate, ?_⟩
-  rw [evalWord_replicate, V3_7c]
+  rw [evalWord_replicate, exists_rowOnes_mul_pow_eq_smul_iff]
   omega
 
-/-- **V3.7(d)** (lecture note AsymmetricFT, Example 6.10; milestone V, V3.7(d)): `Bⁿ Ṽ = Bⁿ V`
-for reductions with `V = Ṽ = e₀`. -/
-theorem V3_7d (P Q : MultiBlockCompression (tensorBGen z) oneSlot blockC)
+/-- **The injections after words** (*The asymmetric fundamental theorem of matrix product states*,
+Example 6.10): `Bⁿ Ṽ = Bⁿ V` for reductions with `V = Ṽ = e₀`. -/
+theorem pow_mul_right_eq_of_eq_colE0 (P Q : MultiBlockCompression (tensorBGen z) oneSlot blockC)
     (hP : P.right oneSlotMem = colE0 z) (hQ : Q.right oneSlotMem = colE0 z) (n : ℕ) :
     tensorBGen z 0 ^ n * Q.right oneSlotMem = tensorBGen z 0 ^ n * P.right oneSlotMem := by
   rw [hP, hQ]
 
 end General
 
-end SharpnessOneBlock
+end MultiBlockExamples.SharpnessOneBlock

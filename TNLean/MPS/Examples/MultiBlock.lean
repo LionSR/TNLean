@@ -20,5 +20,6 @@ import TNLean.MPS.Examples.MultiBlock.ParityGraded
 import TNLean.MPS.Examples.MultiBlock.Periodic
 import TNLean.MPS.Examples.MultiBlock.RepeatedBlock
 import TNLean.MPS.Examples.MultiBlock.Running
+import TNLean.MPS.Examples.MultiBlock.SharpnessOneBlock
 import TNLean.MPS.Examples.MultiBlock.StackedPairGauge
 import TNLean.MPS.Examples.MultiBlock.Worked

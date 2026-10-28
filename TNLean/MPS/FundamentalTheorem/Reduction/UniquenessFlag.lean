@@ -14,38 +14,38 @@ change of bond coordinates `g` in which every `B^i` is block upper triangular wi
 diagonal blocks. Writing `E_k` for the span of the coordinate vectors of the first `k` slots, the
 subspaces `M_k = g⁻¹ E_k` form an invariant flag of `B` whose `k`-th step carries the block of the
 slot at position `k`; conversely a labelled invariant flag gives a compression whose flag it is
-(lecture note MultiBlockUniqueness, Proposition 2.3 (Reductions are labelled flags with an adapted
-basis)). The reading map `W_b` of a slot `b` at
-position `k` vanishes on `M_{k-1}`, maps `M_k` onto the coordinates of the slot and intertwines
-the action of `B` on `M_k` with the diagonal block; the injection `V_b` takes values in `M_k`
-(lecture note MultiBlockUniqueness, Lemma 5.1 (The maps in terms of the flag)).
+(blueprint `prop:asym_uniq_dictionary`, *A compression is a labelled flag with an adapted basis*).
+The reading map `W_b` of a slot `b` at position `k` vanishes on `M_{k-1}`, maps `M_k` onto the
+coordinates of the slot and intertwines the action of `B` on `M_k` with the diagonal block; the
+injection `V_b` takes values in `M_k` (blueprint `lem:asym_uniq_maps`, *The compression maps in
+terms of the flag*).
 
 ## Main definitions
 
-* `WordAlgebra.linearMapOfLetter`: a complex-linear map commuting with every one-letter word, as
-  a map of word-algebra modules.
+* `WordAlgebra.linearMapOfLetter`: a complex-linear map commuting with every one-letter word, as a
+  map of word-algebra modules.
 * `MPSTensor.slotTensor`: the diagonal block of a slot as a tensor, `C s` on a block slot and the
   one-dimensional zero tensor on a zero slot.
 * `MPSTensor.MultiBlockCompression.flag`: the flag `M_k = g⁻¹ E_k` of a compression.
-* `MPSTensor.MultiBlockCompression.leftRow`, `MPSTensor.MultiBlockCompression.rightCol`: the
-  reading map and the injection of a block or zero slot.
-* `MPSTensor.MultiBlockCompression.stepEquiv`: the step of the flag at the position of a slot is
-  the word module of the diagonal block of that slot.
+* `MPSTensor.MultiBlockCompression.leftRow`, `MPSTensor.MultiBlockCompression.rightCol`: the reading
+  map and the injection of a block or zero slot.
+* `MPSTensor.MultiBlockCompression.stepEquiv`: the step of the flag at the position of a slot is the
+  word module of the diagonal block of that slot.
 * `MPSTensor.MultiBlockCompression.toFlagData`: the labelled invariant flag of a compression.
 
 ## Main results
 
 * `MPSTensor.MultiBlockCompression.leftRow_mulVec_eq_zero_of_mem`,
   `MPSTensor.MultiBlockCompression.leftRow_surjOn`,
-  `MPSTensor.MultiBlockCompression.leftRow_mulVec_mulVec_of_mem`: Lemma 5.1 (The maps in terms of
-  the flag), part (a).
+  `MPSTensor.MultiBlockCompression.leftRow_mulVec_mulVec_of_mem`: the assertions on `W_b` of *The
+  compression maps in terms of the flag* (blueprint `lem:asym_uniq_maps`).
 * `MPSTensor.MultiBlockCompression.rightCol_mulVec_mem_flag`,
-  `MPSTensor.MultiBlockCompression.leftRow_mul_rightCol_self`: Lemma 5.1 (The maps in terms of the
-  flag), part (b).
-* `MPSTensor.MultiBlockCompression.leftRow_mul_rightCol_of_ne`: `W_b V_{b'} = 0` for distinct
-  slots (lecture note AsymmetricFT, (1.2)).
-* `MPSTensor.FlagData.mem_H_iff`: a member of a labelled invariant flag is the set of vectors
-  whose adapted coordinates vanish at the later steps.
+  `MPSTensor.MultiBlockCompression.leftRow_mul_rightCol_self`: the assertions on `V_b` of *The
+  compression maps in terms of the flag* (blueprint `lem:asym_uniq_maps`).
+* `MPSTensor.MultiBlockCompression.leftRow_mul_rightCol_of_ne`: `W_b V_{b'} = 0` for distinct slots
+  (*The asymmetric fundamental theorem of matrix product states*, equation (1.2)).
+* `MPSTensor.FlagData.mem_H_iff`: a member of a labelled invariant flag is the set of vectors whose
+  adapted coordinates vanish at the later steps.
 * `MPSTensor.FlagData.toMultiBlockCompression_flag`: the flag of the compression built from a
   labelled invariant flag is that flag.
 -/
@@ -91,8 +91,8 @@ open WordAlgebra
 variable {d DB : ℕ} {ι : Type*} {D : ι → ℕ}
 
 /-- The diagonal block of a slot as a tensor: the block `C s` on a block slot `s`, and the
-one-dimensional tensor with zero letters on a zero slot (lecture note MultiBlockUniqueness,
-notation `C_b`). -/
+one-dimensional tensor with zero letters on a zero slot (the notation `C_b` of blueprint
+`lem:asym_uniq_maps`, *The compression maps in terms of the flag*). -/
 def slotTensor {S : Finset ι} {z : ℕ} (C : ∀ s, MPSTensor d (D s)) (b : BlockIndex S z) :
     MPSTensor d (slotSize D b) :=
   fun i => blockOf D C i b
@@ -164,11 +164,10 @@ theorem mulVec_mem_leadingSpace (i : Fin d) {k : Fin (S.card + P.z + 1)}
   · rw [P.triangular i hlt, zero_mul]
   · rw [hu y' (le_trans hy (Fin.castSucc_le_castSucc_iff.2 (not_lt.1 hlt))), mul_zero]
 
-/-- **The flag of a multi-block compression** (lecture note MultiBlockUniqueness,
-Proposition 2.3 (Reductions are labelled flags with an adapted
-basis)): `M_k = g⁻¹ E_k`, the vectors of the bond space whose block coordinates vanish
-on every slot at a position `≥ k`. It is invariant because the one-site matrices are block upper
-triangular in the block coordinates. -/
+/-- **The flag of a multi-block compression** (blueprint `prop:asym_uniq_dictionary`, *A compression
+is a labelled flag with an adapted basis*): `M_k = g⁻¹ E_k`, the vectors of the bond space whose
+block coordinates vanish on every slot at a position `≥ k`. It is invariant because the one-site
+matrices are block upper triangular in the block coordinates. -/
 noncomputable def flag (k : Fin (S.card + P.z + 1)) : Submodule (WordAlgebra d) B.WordModule :=
   WordAlgebra.submoduleOfLetterInvariant
     ((P.leadingSpace k).comap (P.coord : B.WordModule →ₗ[ℂ] (BlockSpace D S P.z → ℂ)))
@@ -195,13 +194,15 @@ theorem flag_mono : Monotone P.flag :=
 
 /-! ### The reading maps and injections -/
 
-/-- The reading map of a slot, block or zero (the note's `W_b`): the row block of the change
-of coordinates at that slot. On a block slot it is `MultiBlockCompression.left`. -/
+/-- The reading map of a slot, block or zero (`W_b` of blueprint `lem:asym_uniq_maps`, *The
+compression maps in terms of the flag*): the row block of the change of coordinates at that slot. On
+a block slot it is `MultiBlockCompression.left`. -/
 noncomputable def leftRow (b : BlockIndex S P.z) : Matrix (Fin (slotSize D b)) (Fin DB) ℂ :=
   Matrix.blockProj (slotSize D) b * gaugeMatrix P.gauge
 
-/-- The injection of a slot, block or zero (the note's `V_b`): the column block of the inverse
-change of coordinates at that slot. On a block slot it is `MultiBlockCompression.right`. -/
+/-- The injection of a slot, block or zero (`V_b` of blueprint `lem:asym_uniq_maps`, *The
+compression maps in terms of the flag*): the column block of the inverse change of coordinates at
+that slot. On a block slot it is `MultiBlockCompression.right`. -/
 noncomputable def rightCol (b : BlockIndex S P.z) : Matrix (Fin DB) (Fin (slotSize D b)) ℂ :=
   gaugeMatrixInv P.gauge * Matrix.blockEmbed (slotSize D) b
 
@@ -209,17 +210,16 @@ theorem leftRow_inl (s : {s // s ∈ S}) : P.leftRow (Sum.inl s) = P.left s := r
 
 theorem rightCol_inl (s : {s // s ∈ S}) : P.rightCol (Sum.inl s) = P.right s := rfl
 
-/-- **Biorthogonality of the maps of a slot** (lecture note MultiBlockUniqueness, Lemma 5.1 (The
-maps in terms of the flag), part (b),
-`W_b V_b = 1`). -/
+/-- **Biorthogonality of the maps of a slot** (blueprint `lem:asym_uniq_maps`, *The compression maps
+in terms of the flag*, `W_b V_b = 1`). -/
 theorem leftRow_mul_rightCol_self (b : BlockIndex S P.z) : P.leftRow b * P.rightCol b = 1 := by
   simp only [leftRow, rightCol, Matrix.mul_assoc]
   rw [← Matrix.mul_assoc (gaugeMatrix P.gauge), gaugeMatrix_mul_gaugeMatrixInv, Matrix.one_mul,
     Matrix.blockProj_mul_blockEmbed_self]
 
-/-- **Biorthogonality across slots** (lecture note AsymmetricFT, (1.2); milestone V, V2.1):
-`W_b V_{b'} = 0` for distinct slots `b ≠ b'`, zero slots included; it is the block at `(b, b')`
-of `g g⁻¹ = 1`. -/
+/-- **Biorthogonality across slots** (*The asymmetric fundamental theorem of matrix product states*,
+equation (1.2)): `W_b V_{b'} = 0` for distinct slots `b ≠ b'`, zero slots included; it is the block
+at `(b, b')` of `g g⁻¹ = 1`. -/
 theorem leftRow_mul_rightCol_of_ne {b b' : BlockIndex S P.z} (h : b ≠ b') :
     P.leftRow b * P.rightCol b' = 0 := by
   simp only [leftRow, rightCol, Matrix.mul_assoc]
@@ -236,18 +236,18 @@ theorem gauge_rightCol_mulVec (b : BlockIndex S P.z) (v : Fin (slotSize D b) →
   rw [rightCol, ← Matrix.mulVec_mulVec, gaugeMatrixInv, LinearMap.toMatrix'_mulVec,
     LinearEquiv.coe_coe, LinearEquiv.apply_symm_apply]
 
-/-- **The reading map vanishes on the previous step** (lecture note MultiBlockUniqueness,
-Lemma 5.1 (The maps in terms of the flag), part
-(a)): `W_b` vanishes on `M_{k-1}`, where `k` is the position of `b`. -/
+/-- **The reading map vanishes on the previous step** (blueprint `lem:asym_uniq_maps`, *The
+compression maps in terms of the flag*, the assertions on `W_b`): `W_b` vanishes on `M_{k-1}`, where
+`k` is the position of `b`. -/
 theorem leftRow_mulVec_eq_zero_of_mem {b : BlockIndex S P.z} {x : B.WordModule}
     (hx : x ∈ P.flag (P.ord b).castSucc) : P.leftRow b *ᵥ WordModule.toVec B x = 0 := by
   rw [leftRow_mulVec]
   funext j
   exact P.mem_flag_iff.1 hx ⟨b, j⟩ le_rfl
 
-/-- **The injection lands in the step of its slot** (lecture note MultiBlockUniqueness,
-Lemma 5.1 (The maps in terms of the flag), part
-(b)): `V_b` maps into `M_k`, where `k` is the position of `b`. -/
+/-- **The injection lands in the step of its slot** (blueprint `lem:asym_uniq_maps`, *The
+compression maps in terms of the flag*, the assertions on `V_b`): `V_b` maps into `M_k`, where `k`
+is the position of `b`. -/
 theorem rightCol_mulVec_mem_flag (b : BlockIndex S P.z) (v : Fin (slotSize D b) → ℂ) :
     (WordModule.toVec B).symm (P.rightCol b *ᵥ v) ∈ P.flag (P.ord b).succ := by
   refine P.mem_flag_iff.2 fun y hy => ?_
@@ -256,10 +256,9 @@ theorem rightCol_mulVec_mem_flag (b : BlockIndex S P.z) (v : Fin (slotSize D b) 
   rw [hyb] at hy
   exact absurd hy (not_le.2 Fin.castSucc_lt_succ)
 
-/-- **The reading map is onto on the step of its slot** (lecture note MultiBlockUniqueness,
-Lemma 5.1 (The maps in terms of the flag), part
-(a)): `W_b` maps `M_k` onto the coordinates of `b`, where `k` is the position
-of `b`. -/
+/-- **The reading map is onto on the step of its slot** (blueprint `lem:asym_uniq_maps`, *The
+compression maps in terms of the flag*, the assertions on `W_b`): `W_b` maps `M_k` onto the
+coordinates of `b`, where `k` is the position of `b`. -/
 theorem leftRow_surjOn (b : BlockIndex S P.z) :
     Set.SurjOn (fun x : B.WordModule => P.leftRow b *ᵥ WordModule.toVec B x)
       (P.flag (P.ord b).succ) Set.univ := by
@@ -268,9 +267,9 @@ theorem leftRow_surjOn (b : BlockIndex S P.z) :
   simp only [LinearEquiv.apply_symm_apply, Matrix.mulVec_mulVec, leftRow_mul_rightCol_self,
     Matrix.one_mulVec]
 
-/-- **The reading map intertwines on the step of its slot** (lecture note MultiBlockUniqueness,
-Lemma 5.1 (The maps in terms of the flag), part
-(a)): for `x ∈ M_k`, where `k` is the position of `b`, `W_b B^i x = C_b^i W_b x`. -/
+/-- **The reading map intertwines on the step of its slot** (blueprint `lem:asym_uniq_maps`, *The
+compression maps in terms of the flag*, the assertions on `W_b`): for `x ∈ M_k`, where `k` is the
+position of `b`, `W_b B^i x = C_b^i W_b x`. -/
 theorem leftRow_mulVec_mulVec_of_mem {b : BlockIndex S P.z} (i : Fin d) {x : B.WordModule}
     (hx : x ∈ P.flag (P.ord b).succ) :
     P.leftRow b *ᵥ (B i *ᵥ WordModule.toVec B x) =
@@ -340,20 +339,20 @@ theorem ker_readStep (b : BlockIndex S P.z) :
       exact P.mem_flag_iff.1 x.2 ⟨b', j'⟩ (Fin.succ_le_castSucc_iff.2 hlt)
   · exact P.leftRow_mulVec_eq_zero_of_mem
 
-/-- **The step of the flag at the position of a slot** (lecture note MultiBlockUniqueness,
-Proposition 2.3 (Reductions are labelled flags with an adapted
-basis)): `M_k / M_{k-1}` is isomorphic, as a word-algebra module, to the word module
-of the diagonal block of the slot at position `k`, through the reading map of that slot. -/
+/-- **The step of the flag at the position of a slot** (blueprint `prop:asym_uniq_dictionary`, *A
+compression is a labelled flag with an adapted basis*): `M_k / M_{k-1}` is isomorphic, as a
+word-algebra module, to the word module of the diagonal block of the slot at position `k`, through
+the reading map of that slot. -/
 noncomputable def stepEquiv (b : BlockIndex S P.z) :
     Submodule.subquot (P.flag (P.ord b).castSucc) (P.flag (P.ord b).succ) ≃ₗ[WordAlgebra d]
       (slotTensor C b).WordModule :=
   (Submodule.quotEquivOfEq _ _ (P.ker_readStep b).symm).trans
     ((P.readStep b).quotKerEquivOfSurjective (P.readStep_surjective b))
 
-/-- **The labelled invariant flag of a multi-block compression** (lecture note
-MultiBlockUniqueness, Proposition 2.3 (Reductions are labelled flags with an adapted basis), forward
-direction): the flag `M_k = g⁻¹ E_k`, with the
-step at position `k` labelled by the slot at position `k`. -/
+/-- **The labelled invariant flag of a multi-block compression** (blueprint
+`prop:asym_uniq_dictionary`, *A compression is a labelled flag with an adapted basis*, forward
+direction): the flag `M_k = g⁻¹ E_k`, with the step at position `k` labelled by the slot at position
+`k`. -/
 noncomputable def toFlagData : FlagData B.WordModule S C where
   r := S.card + P.z
   z := P.z
@@ -390,9 +389,9 @@ variable {M : Type*} [AddCommGroup M] [Module ℂ M] [Module (WordAlgebra d) M]
   {C : ∀ s, MPSTensor d (D s)}
 
 omit [DecidableEq ι] in
-/-- A member of a labelled invariant flag consists of the vectors whose flag-adapted
-coordinates vanish at every step from its index on (lecture note MultiBlockUniqueness,
-Proposition 2.3 (Reductions are labelled flags with an adapted basis)). -/
+/-- A member of a labelled invariant flag consists of the vectors whose flag-adapted coordinates
+vanish at every step from its index on (blueprint `prop:asym_uniq_dictionary`, *A compression is a
+labelled flag with an adapted basis*). -/
 theorem mem_H_iff (F : FlagData M S C) (k : Fin (F.r + 1)) (x : M) :
     x ∈ F.H k ↔ ∀ (l : Fin F.r) (j : Fin (slotSize D (F.label l))), (k : ℕ) ≤ l →
       F.adaptedCoord x ⟨l, j⟩ = 0 := by
@@ -430,10 +429,9 @@ namespace FlagData
 
 variable {M : Type*} {S : Finset ι} {C : ∀ s, MPSTensor d (D s)} {B : MPSTensor d DB}
 
-/-- **The flag of the compression of a labelled invariant flag is that flag** (lecture note
-MultiBlockUniqueness, Proposition 2.3 (Reductions are labelled flags with an adapted basis),
-converse direction), up to the identification of the
-number of steps with the number of slots. -/
+/-- **The flag of the compression of a labelled invariant flag is that flag** (blueprint
+`prop:asym_uniq_dictionary`, *A compression is a labelled flag with an adapted basis*, converse
+direction), up to the identification of the number of steps with the number of slots. -/
 theorem toMultiBlockCompression_flag (F : FlagData B.WordModule S C) (k : Fin (F.r + 1)) :
     F.toMultiBlockCompression.flag (Fin.cast (congrArg (· + 1) F.r_eq) k) = F.H k := by
   ext x

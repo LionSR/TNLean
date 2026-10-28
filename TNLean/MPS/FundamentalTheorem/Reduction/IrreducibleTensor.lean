@@ -13,18 +13,20 @@ import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessBlocks
 
 A tensor `C` of bond dimension `D` is *irreducible* (`Matrix.IsIrreducibleAction C`) when its
 letters have no common invariant subspace other than `0` and `ℂ^D`. This file proves the lemmas on
-irreducible tensors on which the asymmetric fundamental theorem rests (lecture note AsymmetricFT,
-Sections 3 and 4; milestone V, Section 1):
+irreducible tensors on which the asymmetric fundamental theorem rests (*The asymmetric fundamental
+theorem of matrix product states*, Sections 3 and 4):
 
-* irreducible tensors of positive bond dimension are exactly those whose word module is simple,
-  and normal tensors are irreducible (V1.1);
-* Schur's lemma: an intertwiner of two irreducible tensors is zero or invertible, a
-  self-intertwiner is a scalar, and the intertwiners between two gauge equivalent irreducible
-  tensors form a line (V1.2);
+* irreducible tensors of positive bond dimension are exactly those whose word module is simple, and
+  normal tensors are irreducible (blueprint `lem:asym_normal_simple`);
+* Schur's lemma: an intertwiner of two irreducible tensors is zero or invertible, a self-intertwiner
+  is a scalar, and the intertwiners between two gauge equivalent irreducible tensors form a line
+  (*The asymmetric fundamental theorem of matrix product states*, Lemma 3.1);
 * the density theorem: for finitely many irreducible, pairwise not gauge equivalent tensors, one
   combination of words reaches any family of target matrices, with augmentation zero when every
-  tensor has a nonzero letter (V1.4);
-* the independence of the word traces of such tensors (V1.5).
+  tensor has a nonzero letter (*The asymmetric fundamental theorem of matrix product states*,
+  Theorem 4.2);
+* the independence of the word traces of such tensors (*The asymmetric fundamental theorem of matrix
+  product states*, Corollary 4.3).
 
 A combination of words `a` is an element of the word algebra; it is evaluated on `C` as
 `MPSTensor.wordEval C a = LinearMap.toMatrix' (C.wordRep.asAlgebraHom a)`, an algebra map with
@@ -37,17 +39,16 @@ A combination of words `a` is an element of the word algebra; it is evaluated on
 ## Main results
 
 * `MPSTensor.isIrreducibleAction_and_pos_iff_isSimpleModule`,
-  `MPSTensor.isIrreducibleAction_of_isNormal`: V1.1.
+  `MPSTensor.isIrreducibleAction_of_isNormal`: irreducible tensors and simple modules.
 * `MPSTensor.eq_zero_or_exists_inverse_of_intertwines`,
-  `MPSTensor.exists_eq_smul_one_of_intertwines`, `MPSTensor.exists_eq_smul_of_intertwines`:
-  Schur's lemma, V1.2.
+  `MPSTensor.exists_eq_smul_one_of_intertwines`, `MPSTensor.exists_eq_smul_of_intertwines`: Schur's
+  lemma.
 * `MPSTensor.exists_eval_eq_of_pairwise_not_isGaugeRelated`,
-  `MPSTensor.exists_aug_eq_zero_eval_eq_of_pairwise_not_isGaugeRelated`: the density theorem,
-  V1.4.
-* `MPSTensor.eq_zero_of_forall_sum_mul_trace_evalWord_eq_zero`: independence of traces, V1.5.
+  `MPSTensor.exists_aug_eq_zero_eval_eq_of_pairwise_not_isGaugeRelated`: the density theorem.
+* `MPSTensor.eq_zero_of_forall_sum_mul_trace_evalWord_eq_zero`: independence of traces.
 * `MPSTensor.eq_zero_of_intertwines_of_not_isGaugeRelated`,
-  `MPSTensor.exists_ne_zero_eq_smul_reindex_one_of_intertwines`: the forms of Schur's lemma used
-  for split reductions and for equal blocks.
+  `MPSTensor.exists_ne_zero_eq_smul_reindex_one_of_intertwines`: the forms of Schur's lemma used for
+  split reductions and for equal blocks.
 -/
 
 open scoped Matrix
@@ -60,9 +61,10 @@ variable {d : ℕ}
 
 /-! ### Irreducible tensors and simple modules -/
 
-/-- **Irreducible tensors are simple modules** (lecture note AsymmetricFT, Section 1; milestone V,
-V1.1(a)): a tensor of positive bond dimension is irreducible exactly when its word module is
-simple, because a subspace is invariant under every letter exactly when it is a submodule. -/
+/-- **Irreducible tensors are simple modules** (the definition of irreducible tensors in *The
+asymmetric fundamental theorem of matrix product states*, Section 1): a tensor of positive bond
+dimension is irreducible exactly when its word module is simple, because a subspace is invariant
+under every letter exactly when it is a submodule. -/
 theorem isIrreducibleAction_and_pos_iff_isSimpleModule {D : ℕ} (C : MPSTensor d D) :
     Matrix.IsIrreducibleAction C ∧ 0 < D ↔ IsSimpleModule (WordAlgebra d) C.WordModule := by
   constructor
@@ -111,8 +113,8 @@ theorem isIrreducibleAction_and_pos_iff_isSimpleModule {D : ℕ} (C : MPSTensor 
         exact absurd ((WordModule.toVec C).injective (Subsingleton.elim _ _)) hxy
       · exact hD
 
-/-- **Normal tensors are irreducible** (lecture note AsymmetricFT, Section 1; milestone V,
-V1.1(b)): a normal tensor of positive bond dimension has a simple word module. -/
+/-- **Normal tensors are irreducible** (blueprint `lem:asym_normal_simple`, *Normal tensors define
+simple modules*): a normal tensor of positive bond dimension has a simple word module. -/
 theorem isIrreducibleAction_of_isNormal {D : ℕ} (C : MPSTensor d D) (hC : Kraus.IsNormal C)
     (hD : 0 < D) : Matrix.IsIrreducibleAction C :=
   ((isIrreducibleAction_and_pos_iff_isSimpleModule C).2
@@ -120,9 +122,10 @@ theorem isIrreducibleAction_of_isNormal {D : ℕ} (C : MPSTensor d D) (hC : Krau
 
 /-! ### Schur's lemma -/
 
-/-- **Schur's lemma, clause (a)** (lecture note AsymmetricFT, Lemma 3.1; milestone V, V1.2(a)):
-an intertwiner `X C^i = C'^i X` of two irreducible tensors is zero or invertible, and then the
-bond dimensions agree. The kernel of `X` is invariant under `C` and its range under `C'`. -/
+/-- **Schur's lemma, first assertion** (*The asymmetric fundamental theorem of matrix product
+states*, Lemma 3.1): an intertwiner `X C^i = C'^i X` of two irreducible tensors is zero or
+invertible, and then the bond dimensions agree. The kernel of `X` is invariant under `C` and its
+range under `C'`. -/
 theorem eq_zero_or_exists_inverse_of_intertwines {D D' : ℕ} {C : MPSTensor d D}
     {C' : MPSTensor d D'} (hC : Matrix.IsIrreducibleAction C)
     (hC' : Matrix.IsIrreducibleAction C') {X : Matrix (Fin D') (Fin D) ℂ}
@@ -154,9 +157,10 @@ theorem eq_zero_or_exists_inverse_of_intertwines {D D' : ℕ} {C : MPSTensor d D
     exact LinearMap.ext fun v => e.symm_apply_apply v
   · simpa using e.finrank_eq
 
-/-- **Schur's lemma, clause (b)** (lecture note AsymmetricFT, Lemma 3.1; milestone V, V1.2(b)):
-a self-intertwiner of an irreducible tensor is a scalar. For `D ≥ 1`, `X` has an eigenvalue `c`,
-and `X - c` is an intertwiner that is not invertible, hence zero by clause (a). -/
+/-- **Schur's lemma, second assertion** (*The asymmetric fundamental theorem of matrix product
+states*, Lemma 3.1): a self-intertwiner of an irreducible tensor is a scalar. For `D ≥ 1`, `X` has
+an eigenvalue `c`, and `X - c` is an intertwiner that is not invertible, hence zero by the first
+assertion. -/
 theorem exists_eq_smul_one_of_intertwines {D : ℕ} {C : MPSTensor d D}
     (hC : Matrix.IsIrreducibleAction C) {X : Matrix (Fin D) (Fin D) ℂ}
     (hX : ∀ i, X * C i = C i * X) : ∃ c : ℂ, X = c • 1 := by
@@ -182,10 +186,10 @@ theorem exists_eq_smul_one_of_intertwines {D : ℕ} {C : MPSTensor d D}
     calc v = (Y * (X - c • 1)) *ᵥ v := by rw [hYX, Matrix.one_mulVec]
       _ = 0 := by rw [← Matrix.mulVec_mulVec, h1, Matrix.mulVec_zero]
 
-/-- **Schur's lemma, clause (c)** (lecture note AsymmetricFT, Lemma 3.1; milestone V, V1.2(c)):
-if an invertible `X₀` intertwines the irreducible tensor `C` with `C'`, every intertwiner from `C`
-to `C'` is a multiple of `X₀`, since `X₀⁻¹ X` intertwines `C` with itself. Only `C` need be
-irreducible. -/
+/-- **Schur's lemma, third assertion** (*The asymmetric fundamental theorem of matrix product
+states*, Lemma 3.1): if an invertible `X₀` intertwines the irreducible tensor `C` with `C'`, every
+intertwiner from `C` to `C'` is a multiple of `X₀`, since `X₀⁻¹ X` intertwines `C` with itself. Only
+`C` need be irreducible. -/
 theorem exists_eq_smul_of_intertwines {D D' : ℕ} {C : MPSTensor d D} {C' : MPSTensor d D'}
     (hC : Matrix.IsIrreducibleAction C)
     {X₀ : Matrix (Fin D') (Fin D) ℂ} {Y₀ : Matrix (Fin D) (Fin D') ℂ}
@@ -202,8 +206,8 @@ theorem exists_eq_smul_of_intertwines {D D' : ℕ} {C : MPSTensor d D} {C' : MPS
   calc X = X₀ * (Y₀ * X) := by rw [← Matrix.mul_assoc, hXY, Matrix.one_mul]
     _ = c • X₀ := by rw [hc, Matrix.mul_smul, Matrix.mul_one]
 
-/-- **Schur's lemma for tensors that are not gauge equivalent** (lecture note AsymmetricFT,
-Lemma 3.1; milestone V, V1.2(a)): an intertwiner of two irreducible tensors that are not gauge
+/-- **Schur's lemma for tensors that are not gauge equivalent** (*The asymmetric fundamental theorem
+of matrix product states*, Lemma 3.1): an intertwiner of two irreducible tensors that are not gauge
 equivalent is zero. -/
 theorem eq_zero_of_intertwines_of_not_isGaugeRelated {D D' : ℕ} {C : MPSTensor d D}
     {C' : MPSTensor d D'} (hC : Matrix.IsIrreducibleAction C)
@@ -215,10 +219,10 @@ theorem eq_zero_of_intertwines_of_not_isGaugeRelated {D D' : ℕ} {C : MPSTensor
   calc C i * Y = Y * (X * C i) * Y := by rw [← Matrix.mul_assoc, hYX, Matrix.one_mul]
     _ = Y * C' i := by rw [hX, Matrix.mul_assoc, Matrix.mul_assoc, hXY, Matrix.mul_one]
 
-/-- **Equal irreducible tensors give a scalar** (lecture note AsymmetricFT, Theorem 2.2(c);
-milestone V, V2.5): if `C'` is the irreducible tensor `C` read through an identification of the
-bond dimensions, an invertible intertwiner from `C` to `C'` is a nonzero multiple of that
-identification. -/
+/-- **Equal irreducible tensors give a scalar** (*The asymmetric fundamental theorem of matrix
+product states*, Theorem 2.2(c)): if `C'` is the irreducible tensor `C` read through an
+identification of the bond dimensions, an invertible intertwiner from `C` to `C'` is a nonzero
+multiple of that identification. -/
 theorem exists_ne_zero_eq_smul_reindex_one_of_intertwines {n n' : ℕ} (hdim : n = n')
     {A : MPSTensor d n} {A' : MPSTensor d n'} (hA : Matrix.IsIrreducibleAction A)
     (heq : ∀ i, Matrix.reindex (finCongr hdim) (finCongr hdim) (A i) = A' i)
@@ -240,9 +244,9 @@ theorem exists_ne_zero_eq_smul_reindex_one_of_intertwines {n n' : ℕ} (hdim : n
 
 /-! ### Combinations of words -/
 
-/-- The evaluation `a ↦ a(C) = ∑_w a_w C^w` of a combination of words on a tensor
-(lecture note AsymmetricFT, Section 4; milestone V, Section 1), as an algebra map into the
-matrices: the matrix of the action of `a` through the word representation. -/
+/-- The evaluation `a ↦ a(C) = ∑_w a_w C^w` of a combination of words on a tensor (*The asymmetric
+fundamental theorem of matrix product states*, Section 4), as an algebra map into the matrices: the
+matrix of the action of `a` through the word representation. -/
 noncomputable def wordEval {D : ℕ} (C : MPSTensor d D) :
     WordAlgebra d →ₐ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
   (LinearMap.toMatrixAlgEquiv' : ((Fin D → ℂ) →ₗ[ℂ] Fin D → ℂ) ≃ₐ[ℂ] _).toAlgHom.comp
@@ -285,7 +289,7 @@ theorem wordEval_eq_aug_smul_one {D : ℕ} (C : MPSTensor d D) (h0 : ∀ i, C i 
   rw [smul_eq_aug_smul hzero a v, map_smul, Matrix.smul_mulVec, Matrix.one_mulVec]
 
 /-- A tensor with a nonzero letter has positive bond dimension. -/
-theorem pos_of_exists_ne_zero {D : ℕ} {C : MPSTensor d D} (h : ∃ i, C i ≠ 0) : 0 < D := by
+theorem dim_pos_of_exists_ne_zero {D : ℕ} {C : MPSTensor d D} (h : ∃ i, C i ≠ 0) : 0 < D := by
   rcases Nat.eq_zero_or_pos D with hD | hD
   · subst hD
     obtain ⟨i, hi⟩ := h
@@ -293,9 +297,9 @@ theorem pos_of_exists_ne_zero {D : ℕ} {C : MPSTensor d D} (h : ∃ i, C i ≠ 
   · exact hD
 
 /-- An irreducible tensor of positive bond dimension whose letters all vanish has bond dimension
-one, since every line is then invariant (lecture note AsymmetricFT, Theorem 4.2, proof;
-milestone V, V1.4). -/
-theorem eq_one_of_forall_eq_zero {D : ℕ} {C : MPSTensor d D} (hC : Matrix.IsIrreducibleAction C)
+one, since every line is then invariant (*The asymmetric fundamental theorem of matrix product
+states*, proof of Theorem 4.2). -/
+theorem dim_eq_one_of_forall_eq_zero {D : ℕ} {C : MPSTensor d D} (hC : Matrix.IsIrreducibleAction C)
     (hD : 0 < D) (h0 : ∀ i, C i = 0) : D = 1 := by
   have hv : (Pi.single (⟨0, hD⟩ : Fin D) (1 : ℂ) : Fin D → ℂ) ≠ 0 := by
     intro h
@@ -317,9 +321,9 @@ theorem isGaugeRelated_of_forall_eq_zero {D₁ D₂ : ℕ} {C₁ : MPSTensor d D
   refine ⟨1, 1, Matrix.mul_one 1, Matrix.mul_one 1, fun i => ?_⟩
   rw [hC₁, hC₂, Matrix.zero_mul, Matrix.mul_zero]
 
-/-- **Burnside's theorem for a tensor with a simple word module** (lecture note AsymmetricFT,
-Theorem 4.2, proof; milestone V, V1.4): every matrix is the evaluation of some combination of
-words. -/
+/-- **Burnside's theorem for a tensor with a simple word module** (blueprint `thm:asym_burnside`,
+*Burnside's theorem at module level*, in matrix form): every matrix is the evaluation of some
+combination of words. -/
 theorem exists_wordEval_eq_of_isSimpleModule {D : ℕ} (C : MPSTensor d D)
     [IsSimpleModule (WordAlgebra d) C.WordModule] (Y : Matrix (Fin D) (Fin D) ℂ) :
     ∃ b : WordAlgebra d, C.wordEval b = Y := by
@@ -334,10 +338,10 @@ theorem exists_wordEval_eq_of_isSimpleModule {D : ℕ} (C : MPSTensor d D)
 
 variable {J : Type*} [Finite J] {D : J → ℕ}
 
-/-- **Separation** (lecture note AsymmetricFT, Theorem 4.2, proof; milestone V, V1.4): for a
-finite family of irreducible, pairwise not gauge equivalent tensors and a member with a nonzero
-letter, a combination of words with augmentation zero evaluates to `1` on that member and to `0`
-on every other member. -/
+/-- **Separation** (blueprint `thm:asym_separation`, *Separating a simple module from a finite
+non-isomorphic family*, for tensors): for a finite family of irreducible, pairwise not gauge
+equivalent tensors and a member with a nonzero letter, a combination of words with augmentation zero
+evaluates to `1` on that member and to `0` on every other member. -/
 theorem exists_aug_eq_zero_wordEval_eq_one (C : ∀ j, MPSTensor d (D j))
     (hirr : ∀ j, Matrix.IsIrreducibleAction (C j))
     (hne : Pairwise fun j k => ¬ IsGaugeRelated (C j) (C k)) (j : J) (hj : ∃ i, C j i ≠ 0) :
@@ -346,7 +350,7 @@ theorem exists_aug_eq_zero_wordEval_eq_one (C : ∀ j, MPSTensor d (D j))
   classical
   have := Fintype.ofFinite J
   have : IsSimpleModule (WordAlgebra d) (C j).WordModule :=
-    (isIrreducibleAction_and_pos_iff_isSimpleModule (C j)).1 ⟨hirr j, pos_of_exists_ne_zero hj⟩
+    (isIrreducibleAction_and_pos_iff_isSimpleModule (C j)).1 ⟨hirr j, dim_pos_of_exists_ne_zero hj⟩
   have hQ : ∃ (i : Fin d) (q : (C j).WordModule), (ofWord [i] : WordAlgebra d) • q ≠ 0 := by
     obtain ⟨i, hi⟩ := hj
     obtain ⟨u, hu⟩ : ∃ u, C j i *ᵥ u ≠ 0 := by
@@ -360,7 +364,7 @@ theorem exists_aug_eq_zero_wordEval_eq_one (C : ∀ j, MPSTensor d (D j))
   obtain ⟨p, hp, hpj, hpS⟩ := exists_aug_eq_zero_of_forall_isEmpty_linearEquiv (C j).WordModule hQ
     (Finset.univ.filter fun k => k ≠ j ∧ ∃ i, C k i ≠ 0) C
     (fun k hk => (isIrreducibleAction_and_pos_iff_isSimpleModule (C k)).1
-      ⟨hirr k, pos_of_exists_ne_zero (Finset.mem_filter.1 hk).2.2⟩)
+      ⟨hirr k, dim_pos_of_exists_ne_zero (Finset.mem_filter.1 hk).2.2⟩)
     (fun k hk => ⟨fun e => hne (Finset.mem_filter.1 hk).2.1.symm
       (isGaugeRelated_of_linearEquiv e)⟩)
   refine ⟨p, hp, wordEval_eq_of_forall_toVec_smul _ fun v => by rw [hpj, Matrix.one_mulVec],
@@ -372,11 +376,11 @@ theorem exists_aug_eq_zero_wordEval_eq_one (C : ∀ j, MPSTensor d (D j))
   · push Not at hk
     rw [wordEval_eq_aug_smul_one _ hk, hp, zero_smul]
 
-/-- **The density construction** (lecture note AsymmetricFT, Theorem 4.2; milestone V, V1.4):
-for a finite family of irreducible, pairwise not gauge equivalent tensors, one combination of words
-evaluates to any prescribed matrices, with augmentation zero when every tensor has a nonzero
-letter. With `b_j` from Burnside's theorem and the separating `p_j`, the combination is
-`∑_j b_j p_j + Y_{j₀} (1 - ∑_j p_j)`, the second term for the at most one tensor `C_{j₀}` of
+/-- **The density construction** (*The asymmetric fundamental theorem of matrix product states*,
+Theorem 4.2): for a finite family of irreducible, pairwise not gauge equivalent tensors, one
+combination of words evaluates to any prescribed matrices, with augmentation zero when every tensor
+has a nonzero letter. With `b_j` from Burnside's theorem and the separating `p_j`, the combination
+is `∑_j b_j p_j + Y_{j₀} (1 - ∑_j p_j)`, the second term for the at most one tensor `C_{j₀}` of
 positive bond dimension whose letters all vanish. -/
 theorem exists_wordEval_eq_and_aug_eq_zero (C : ∀ j, MPSTensor d (D j))
     (hirr : ∀ j, Matrix.IsIrreducibleAction (C j))
@@ -391,7 +395,7 @@ theorem exists_wordEval_eq_and_aug_eq_zero (C : ∀ j, MPSTensor d (D j))
     intro j
     by_cases hj : ∃ i, C j i ≠ 0
     · have := (isIrreducibleAction_and_pos_iff_isSimpleModule (C j)).1
-        ⟨hirr j, pos_of_exists_ne_zero hj⟩
+        ⟨hirr j, dim_pos_of_exists_ne_zero hj⟩
       obtain ⟨b, hb⟩ := exists_wordEval_eq_of_isSimpleModule (C j) (Y j)
       exact ⟨b, fun _ => hb⟩
     · exact ⟨0, fun h => absurd h hj⟩
@@ -425,7 +429,7 @@ theorem exists_wordEval_eq_and_aug_eq_zero (C : ∀ j, MPSTensor d (D j))
     rcases Nat.eq_zero_or_pos (D m) with hD0 | hDm
     · have : IsEmpty (Fin (D m)) := by rw [hD0]; infer_instance
       exact Subsingleton.elim _ _
-    have hm1 := eq_one_of_forall_eq_zero (hirr m) hDm hm
+    have hm1 := dim_eq_one_of_forall_eq_zero (hirr m) hDm hm
     have hmZ : m ∈ Z := Finset.mem_filter.2 ⟨Finset.mem_univ _, not_exists.2 fun i h => h (hm i)⟩
     have hcj : ∀ j ∈ Z, j ≠ m → c j = 0 := by
       intro j hj hjm
@@ -435,8 +439,8 @@ theorem exists_wordEval_eq_and_aug_eq_zero (C : ∀ j, MPSTensor d (D j))
         exact this
       simp only [c]
       split_ifs with hDj
-      · exact absurd (isGaugeRelated_of_forall_eq_zero (eq_one_of_forall_eq_zero (hirr j) hDj hj0)
-          hm1 hj0 hm) (hne hjm)
+      · exact absurd (isGaugeRelated_of_forall_eq_zero
+          (dim_eq_one_of_forall_eq_zero (hirr j) hDj hj0) hm1 hj0 hm) (hne hjm)
       · rfl
     have haug : aug (∑ j ∈ G, b j * p j + ∑ j ∈ Z, c j • (1 - ∑ k ∈ G, p k)) = c m := by
       have h1 : aug (1 - ∑ k ∈ G, p k) = 1 := by
@@ -452,9 +456,9 @@ theorem exists_wordEval_eq_and_aug_eq_zero (C : ∀ j, MPSTensor d (D j))
     obtain rfl : y = ⟨0, hDm⟩ := Subsingleton.elim _ _
     simp [c, hDm]
 
-/-- **The density theorem** (lecture note AsymmetricFT, Theorem 4.2, first sentence; milestone V,
-V1.4): for finitely many irreducible, pairwise not gauge equivalent tensors and any target
-matrices `Y_j`, one combination of words `a` satisfies `a(C_j) = Y_j` for every `j`. -/
+/-- **The density theorem** (*The asymmetric fundamental theorem of matrix product states*, Theorem
+4.2, first sentence): for finitely many irreducible, pairwise not gauge equivalent tensors and any
+target matrices `Y_j`, one combination of words `a` satisfies `a(C_j) = Y_j` for every `j`. -/
 theorem exists_eval_eq_of_pairwise_not_isGaugeRelated (C : ∀ j, MPSTensor d (D j))
     (hirr : ∀ j, Matrix.IsIrreducibleAction (C j))
     (hne : Pairwise fun j k => ¬ IsGaugeRelated (C j) (C k))
@@ -463,8 +467,8 @@ theorem exists_eval_eq_of_pairwise_not_isGaugeRelated (C : ∀ j, MPSTensor d (D
   obtain ⟨a, -, ha⟩ := exists_wordEval_eq_and_aug_eq_zero C hirr hne Y
   exact ⟨a, ha⟩
 
-/-- **The density theorem without the empty word** (lecture note AsymmetricFT, Theorem 4.2,
-second sentence; milestone V, V1.4): if moreover every tensor has a nonzero letter, the
+/-- **The density theorem without the empty word** (*The asymmetric fundamental theorem of matrix
+product states*, Theorem 4.2, second sentence): if moreover every tensor has a nonzero letter, the
 combination of words can be chosen with augmentation zero. -/
 theorem exists_aug_eq_zero_eval_eq_of_pairwise_not_isGaugeRelated (C : ∀ j, MPSTensor d (D j))
     (hirr : ∀ j, Matrix.IsIrreducibleAction (C j))
@@ -476,11 +480,11 @@ theorem exists_aug_eq_zero_eval_eq_of_pairwise_not_isGaugeRelated (C : ∀ j, MP
   exact ⟨a, h0 hlet, ha⟩
 
 omit [Finite J] in
-/-- **Traces are independent** (lecture note AsymmetricFT, Corollary 4.3; milestone V, V1.5): for
-irreducible, pairwise not gauge equivalent tensors, each with a nonzero letter, a linear relation
-`∑_j c_j tr C_j^w = 0` on every nonempty word is trivial. The relation extends linearly to
-combinations of words without empty word, and the combination `a_j` of the density theorem with
-`a_j(C_k) = δ_{jk} 1` gives `c_j D_j = 0`. -/
+/-- **Traces are independent** (*The asymmetric fundamental theorem of matrix product states*,
+Corollary 4.3): for irreducible, pairwise not gauge equivalent tensors, each with a nonzero letter,
+a linear relation `∑_j c_j tr C_j^w = 0` on every nonempty word is trivial. The relation extends
+linearly to combinations of words without empty word, and the combination `a_j` of the density
+theorem with `a_j(C_k) = δ_{jk} 1` gives `c_j D_j = 0`. -/
 theorem eq_zero_of_forall_sum_mul_trace_evalWord_eq_zero [Fintype J]
     (C : ∀ j, MPSTensor d (D j))
     (hirr : ∀ j, Matrix.IsIrreducibleAction (C j))
@@ -505,7 +509,7 @@ theorem eq_zero_of_forall_sum_mul_trace_evalWord_eq_zero [Fintype J]
     rw [Finset.sum_eq_single j (fun k _ hkj => by simp [hkj])
       (fun h => absurd (Finset.mem_univ j) h)]
     simp
-  have hD : (D j : ℂ) ≠ 0 := Nat.cast_ne_zero.2 (pos_of_exists_ne_zero (hlet j)).ne'
+  have hD : (D j : ℂ) ≠ 0 := Nat.cast_ne_zero.2 (dim_pos_of_exists_ne_zero (hlet j)).ne'
   rw [hχa, LinearMap.zero_apply] at h0
   simpa [hD] using h0
 

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.CoveringMatching
-import TNLean.MPS.Examples.SharpnessOneBlock
+import TNLean.MPS.Examples.MultiBlock.SharpnessOneBlock
 import TNLean.MPS.FundamentalTheorem.Reduction.LongWords
 import TNLean.MPS.FundamentalTheorem.Reduction.SplitUniqueness
 import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessBlocks
@@ -17,7 +17,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessSameFlag
 /-!
 # Statement probes and axiom checks for the uniqueness of multi-block reductions
 
-Each main theorem of the uniqueness programme (lecture note MultiBlockUniqueness) is
+Each main theorem on the uniqueness of multi-block compressions (blueprint `sec:asym_uniqueness`) is
 instantiated at explicit types: two letters, bond dimension three, and families of blocks
 labelled by `Fin 2` and `Fin 3`. Each probe restates the conclusion and closes it by the
 theorem itself, so a change of statement fails here. The axiom checks pin the standard axioms.
@@ -26,28 +26,28 @@ theorem itself, so a change of statement fails here. The axiom checks pin the st
 open scoped Matrix
 open MPSTensor
 
-/-! ### Matching of covering chains (Proposition 4.2 (The matching)) -/
+/-! ### Matching of covering chains (blueprint `prop:asym_uniq_matching`, *The matching*) -/
 
 example (c c' : CoveringMatching.CoveringChain (Submodule ℂ (Fin 3 → ℂ)) 2) (k : Fin 2) :
-    c.M k.castSucc ⊔ (c.M k.succ ⊓ c'.M (c.jump c' k).succ) = c.M k.succ ∧
-      c'.M (c.jump c' k).castSucc ⊔ (c.M k.succ ⊓ c'.M (c.jump c' k).succ) =
-        c'.M (c.jump c' k).succ ∧
-      c.M k.succ ⊓ c'.M (c.jump c' k).succ ⊓ c.M k.castSucc =
-        c.M k.castSucc ⊓ c'.M (c.jump c' k).succ ∧
-      c.M k.succ ⊓ c'.M (c.jump c' k).succ ⊓ c'.M (c.jump c' k).castSucc =
-        c.M k.castSucc ⊓ c'.M (c.jump c' k).succ ∧
-      c.M k.castSucc ⊓ c'.M (c.jump c' k).succ = c.M k.succ ⊓ c'.M (c.jump c' k).castSucc :=
+    c.toFun k.castSucc ⊔ (c.toFun k.succ ⊓ c'.toFun (c.jump c' k).succ) = c.toFun k.succ ∧
+      c'.toFun (c.jump c' k).castSucc ⊔ (c.toFun k.succ ⊓ c'.toFun (c.jump c' k).succ) =
+        c'.toFun (c.jump c' k).succ ∧
+      c.toFun k.succ ⊓ c'.toFun (c.jump c' k).succ ⊓ c.toFun k.castSucc =
+        c.toFun k.castSucc ⊓ c'.toFun (c.jump c' k).succ ∧
+      c.toFun k.succ ⊓ c'.toFun (c.jump c' k).succ ⊓ c'.toFun (c.jump c' k).castSucc =
+        c.toFun k.castSucc ⊓ c'.toFun (c.jump c' k).succ ∧
+      c.toFun k.castSucc ⊓ c'.toFun (c.jump c' k).succ =
+        c.toFun k.succ ⊓ c'.toFun (c.jump c' k).castSucc :=
   c.jump_sup_eq c' k
 
-/-! ### Compressions as labelled invariant flags
-(Proposition 2.3 (Reductions are labelled flags with an adapted basis)) -/
+/-! ### Compressions as labelled invariant flags (blueprint `prop:asym_uniq_dictionary`) -/
 
 example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} {B : MPSTensor 2 3}
     (F : FlagData B.WordModule S C) (k : Fin (F.r + 1)) :
     F.toMultiBlockCompression.flag (Fin.cast (congrArg (· + 1) F.r_eq) k) = F.H k :=
   F.toMultiBlockCompression_flag k
 
-/-! ### Long words (Lemma 5.6 (Long words in a triangular form)) -/
+/-! ### Long words (blueprint `lem:asym_uniq_long_words`) -/
 
 example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} {B : MPSTensor 2 3}
     (P : MultiBlockCompression B S C) (w : List (Fin 2)) (hw : P.z ≤ w.length)
@@ -56,7 +56,7 @@ example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} 
     conjMatrix P.gauge (Kraus.evalWord B w) x y = 0 :=
   P.conjMatrix_evalWord_eq_zero_of_forall_notMem w hw hS
 
-/-! ### Theorem A (Theorem 4.3 (A: the blocks are unique)) -/
+/-! ### The blocks are unique (blueprint `thm:asym_uniq_blocks`) -/
 
 example {D : Fin 2 → ℕ} {D' : Fin 3 → ℕ} {B : MPSTensor 2 3} {S : Finset (Fin 2)}
     {S' : Finset (Fin 3)} {C : ∀ s, MPSTensor 2 (D s)} {C' : ∀ t, MPSTensor 2 (D' t)}
@@ -67,7 +67,7 @@ example {D : Fin 2 → ℕ} {D' : Fin 3 → ℕ} {B : MPSTensor 2 3} {S : Finset
       ∀ s, IsGaugeRelated (C s.1) (C' (τ s).1) :=
   P.z_eq_and_exists_equiv_isGaugeRelated Q hC hD hC' hD'
 
-/-! ### Theorem B (Theorem 5.2 (B: two reductions with the same flag)) -/
+/-! ### Two compressions with the same flag (blueprint `thm:asym_uniq_same_flag`) -/
 
 example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} {B : MPSTensor 2 3}
     {P : MultiBlockCompression B S C} {g : (Fin 3 → ℂ) ≃ₗ[ℂ] (BlockSpace D S P.z → ℂ)}
@@ -95,10 +95,10 @@ example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} 
     (P : MultiBlockCompression B S C) {h : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ}
     (ht : h.BlockTriangular fun x => P.ord x.1) {μ : BlockIndex S P.z → ℂ} (hμ : ∀ b, μ b ≠ 0)
     (hdiag : ∀ b, h.blockDiag' b = μ b • 1) (k : Fin (S.card + P.z + 1)) :
-    (P.conjT ht hμ hdiag).flag k = P.flag k :=
-  P.conjT_flag ht hμ hdiag k
+    (P.conjTriangular ht hμ hdiag).flag k = P.flag k :=
+  P.conjTriangular_flag ht hμ hdiag k
 
-/-! ### Theorem C (Theorem 5.3 (C: two reductions with different flags)) -/
+/-! ### Two compressions with different flags (blueprint `thm:asym_uniq_different_flags`) -/
 
 example {D : Fin 2 → ℕ} {D' : Fin 3 → ℕ} {B : MPSTensor 2 3} {S : Finset (Fin 2)}
     {S' : Finset (Fin 3)} {C : ∀ s, MPSTensor 2 (D s)} {C' : ∀ t, MPSTensor 2 (D' t)}
@@ -142,7 +142,7 @@ example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} 
         P.flag k.castSucc ⊔ Q.flag (P.matching Q hC hD hC hD k).castSucc :=
   P.exists_smul_of_matching_inl Q hC hD k s hk hk'
 
-/-! ### Split reductions (Proposition 5.11 (Uniqueness of split reductions)) -/
+/-! ### Split reductions (blueprint `prop:asym_uniq_split`) -/
 
 example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} {B : MPSTensor 2 3}
     {P Q : MultiBlockCompression B S C} (hP : P.remainder = 0) (hQ : Q.remainder = 0)
@@ -151,7 +151,7 @@ example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} 
     Q.left s = P.splitScalar Q s • P.left s :=
   MultiBlockCompression.left_eq_smul_of_split_of_pairwise_not_isGaugeRelated hP hQ hC hsep s
 
-/-! ### Theorem E (Theorem 5.4 (E: a basis adapted to both flags)) -/
+/-! ### A basis adapted to both flags (blueprint `thm:asym_uniq_common_basis`) -/
 
 example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} {B : MPSTensor 2 3}
     (P Q : MultiBlockCompression B S C) (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
@@ -173,7 +173,7 @@ example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} 
     (hD : ∀ s ∈ S, 0 < D s) : iSupIndep (P.matchedCompl Q hC hD hC hD) :=
   P.iSupIndep_matchedCompl Q hC hD hC hD
 
-/-! ### Theorem D (Theorem 5.5 (D: the set of all reductions)) -/
+/-! ### The set of all compressions (blueprint `thm:asym_uniq_all`) -/
 
 example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} {B : MPSTensor 2 3}
     {P : MultiBlockCompression B S C} (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
@@ -184,8 +184,8 @@ example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} 
       ∃ (h : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ)
         (ht : h.BlockTriangular fun x => P.ord x.1) (μ : BlockIndex S P.z → ℂ)
         (hμ : ∀ b, μ b ≠ 0) (hh : ∀ b, h.blockDiag' b = μ b • 1),
-        g = P.conjTGauge ht hμ hh :=
-  MultiBlockCompression.flag_fibre_eq_orbit hC hD g htri hdiag
+        g = P.conjTriangularGauge ht hμ hh :=
+  MultiBlockCompression.flag_withGauge_eq_iff_exists_eq_conjTriangularGauge hC hD g htri hdiag
 
 example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} {B : MPSTensor 2 3}
     (F : FlagData B.WordModule S C) :
@@ -193,8 +193,8 @@ example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} 
       ∀ k, P.flag (Fin.cast h k) = F.H k :=
   F.exists_multiBlockCompression_flag_eq
 
-/-! ### Corollaries C1 and C2 (Corollary 5.7 (C1: bare uniqueness at the ends of the flag),
-Corollary 5.8 (C2: the one-block theorem)) -/
+/-! ### Bare uniqueness at the ends of the flag; the one-block theorem
+(blueprint `cor:asym_uniq_one_block`) -/
 
 example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} {B : MPSTensor 2 3}
     (P Q : MultiBlockCompression B S C) (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
@@ -212,20 +212,20 @@ example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} 
     ∃ c : ℂ, c ≠ 0 ∧ Q.left s = c • P.left s :=
   P.exists_left_eq_smul_of_last Q hC hD hs hP hQ
 
-/-! ### Sharpness of the bound (Example 5.9 (Sharpness of the bound), Example 5.13 (Two different
-flags with one block)) -/
+/-! ### Sharpness of the bound (*The asymmetric fundamental theorem of matrix product states*,
+Examples 6.10 and 6.15) -/
 
 example : ¬ ∃ c : ℂ,
-    SharpnessOneBlock.lastCompression.left oneSlotMem =
-      c • SharpnessOneBlock.firstCompression.left oneSlotMem :=
-  SharpnessOneBlock.not_exists_left_eq_smul
+    MultiBlockExamples.SharpnessOneBlock.lastCompression.left oneSlotMem =
+      c • MultiBlockExamples.SharpnessOneBlock.firstCompression.left oneSlotMem :=
+  MultiBlockExamples.SharpnessOneBlock.not_exists_left_eq_smul
 
 example (w : List (Fin 1)) (hw : w ≠ []) :
-    SharpnessOneBlock.lastCompression.left oneSlotMem *
-        Kraus.evalWord SharpnessOneBlock.tensorB w =
-      SharpnessOneBlock.firstCompression.left oneSlotMem *
-        Kraus.evalWord SharpnessOneBlock.tensorB w :=
-  SharpnessOneBlock.left_mul_evalWord_eq w hw
+    MultiBlockExamples.SharpnessOneBlock.lastCompression.left oneSlotMem *
+        Kraus.evalWord MultiBlockExamples.SharpnessOneBlock.tensorB w =
+      MultiBlockExamples.SharpnessOneBlock.firstCompression.left oneSlotMem *
+        Kraus.evalWord MultiBlockExamples.SharpnessOneBlock.tensorB w :=
+  MultiBlockExamples.SharpnessOneBlock.left_mul_evalWord_eq w hw
 
 /-! ### Axioms -/
 
@@ -263,11 +263,11 @@ depends on axioms: [propext, Classical.choice, Quot.sound]
 
 set_option linter.hashCommand false in
 /--
-info: 'MPSTensor.MultiBlockCompression.conjT_flag'
+info: 'MPSTensor.MultiBlockCompression.conjTriangular_flag'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockCompression.conjT_flag
+#print axioms MultiBlockCompression.conjTriangular_flag
 
 set_option linter.hashCommand false in
 /--
@@ -343,11 +343,11 @@ depends on axioms: [propext, Classical.choice, Quot.sound]
 
 set_option linter.hashCommand false in
 /--
-info: 'MPSTensor.MultiBlockCompression.flag_fibre_eq_orbit'
+info: 'MPSTensor.MultiBlockCompression.flag_withGauge_eq_iff_exists_eq_conjTriangularGauge'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms MultiBlockCompression.flag_fibre_eq_orbit
+#print axioms MultiBlockCompression.flag_withGauge_eq_iff_exists_eq_conjTriangularGauge
 
 set_option linter.hashCommand false in
 /--
@@ -375,16 +375,16 @@ depends on axioms: [propext, Classical.choice, Quot.sound]
 
 set_option linter.hashCommand false in
 /--
-info: 'SharpnessOneBlock.not_exists_left_eq_smul'
+info: 'MultiBlockExamples.SharpnessOneBlock.not_exists_left_eq_smul'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms SharpnessOneBlock.not_exists_left_eq_smul
+#print axioms MultiBlockExamples.SharpnessOneBlock.not_exists_left_eq_smul
 
 set_option linter.hashCommand false in
 /--
-info: 'SharpnessOneBlock.left_mul_evalWord_eq'
+info: 'MultiBlockExamples.SharpnessOneBlock.left_mul_evalWord_eq'
 depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms SharpnessOneBlock.left_mul_evalWord_eq
+#print axioms MultiBlockExamples.SharpnessOneBlock.left_mul_evalWord_eq

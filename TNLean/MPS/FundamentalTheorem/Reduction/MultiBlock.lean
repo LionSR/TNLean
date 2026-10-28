@@ -480,7 +480,8 @@ noncomputable def FlagData.adaptedCoord (F : FlagData M S C) :
 
 /-- The four properties of the adapted coordinates: block upper triangularity of the one-letter
 actions, their diagonal blocks, the coordinates of a vector of a step, and the vanishing of the
-coordinates of a vector of a step at all later positions (Lemma 7.6 of the P5 note). -/
+coordinates of a vector of a step at all later positions (blueprint `lem:asym_composition_gauge`,
+*Composition-series triangular gauge*, and its proof). -/
 theorem FlagData.adaptedCoord_spec (F : FlagData M S C) :
     (∀ i : Fin d, (LinearMap.toMatrix' (F.adaptedCoord.conj
         (Algebra.lsmul ℂ ℂ M (ofWord [i])))).BlockTriangular Sigma.fst) ∧
@@ -529,7 +530,8 @@ theorem FlagData.conjMatrix_gauge (F : FlagData B.WordModule S C) (i : Fin d) :
     hfi, toMatrix'_conj_funCongrLeft]
 
 /-- In the coordinates given by a labelled invariant flag, every one-site matrix is block upper
-triangular for the order of the steps (P5 note, Theorem 7.7(i)). -/
+triangular for the order of the steps (blueprint `thm:asym_multiblock`, *Multi-block asymmetric
+compression theorem*, clause (i)). -/
 theorem FlagData.blockTriangular_conjMatrix_gauge (F : FlagData B.WordModule S C) (i : Fin d) :
     (conjMatrix F.gauge (B i)).BlockTriangular fun x => F.slotOrder x.1 := by
   intro x y hlt
@@ -539,7 +541,8 @@ theorem FlagData.blockTriangular_conjMatrix_gauge (F : FlagData B.WordModule S C
   exact hlt
 
 /-- In the coordinates given by a labelled invariant flag, the diagonal blocks of every one-site
-matrix are the prescribed ones (P5 note, Theorem 7.7(ii)–(iii)). -/
+matrix are the prescribed ones (blueprint `thm:asym_multiblock`, *Multi-block asymmetric compression
+theorem*, clauses (ii)–(iii)). -/
 theorem FlagData.blockDiag'_conjMatrix_gauge (F : FlagData B.WordModule S C) (i : Fin d)
     (b : BlockIndex S F.z) : (conjMatrix F.gauge (B i)).blockDiag' b = blockOf D C i b := by
   obtain ⟨k, rfl⟩ := F.label_bijective.2 b
@@ -553,12 +556,12 @@ theorem FlagData.blockDiag'_conjMatrix_gauge (F : FlagData B.WordModule S C) (i 
   rw [F.conjMatrix_gauge i, Matrix.blockDiag'_apply, Matrix.submatrix_apply, hx p, hx q, hd,
     F.toMatrix'_conj_stepCoord k i]
 
-/-- **The multi-block compression of a labelled invariant flag** (lecture note
-MultiBlockUniqueness, Proposition 2.3 (Reductions are labelled flags with an adapted basis),
-converse direction; P5 note, Theorem 7.7(i)–(iii)). A
-labelled invariant flag of the word module of `B` gives a multi-block compression of `B`: the
-change of coordinates is the flag-adapted one, regraded by the block labels, and the slots are
-ordered by the positions of their steps. -/
+/-- **The multi-block compression of a labelled invariant flag** (blueprint
+`prop:asym_uniq_dictionary`, *A compression is a labelled flag with an adapted basis*, converse
+direction; blueprint `thm:asym_multiblock`, clauses (i)–(iii)). A labelled invariant flag of the
+word module of `B` gives a multi-block compression of `B`: the change of coordinates is the
+flag-adapted one, regraded by the block labels, and the slots are ordered by the positions of their
+steps. -/
 noncomputable def FlagData.toMultiBlockCompression (F : FlagData B.WordModule S C) :
     MultiBlockCompression B S C where
   z := F.z

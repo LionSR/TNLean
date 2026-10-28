@@ -82,8 +82,8 @@ lemma traceWord_eq_add_quotient (K : Submodule (WordAlgebra d) M) (w : List (Fin
   congr 1
 
 /-- Word traces are additive over a step `A ≤ B` of invariant subspaces: the trace on `B` is the
-trace on `A` plus the trace on `B / A` (lecture note AsymmetricFT, Lemma 4.1; milestone V,
-V1.3). -/
+trace on `A` plus the trace on `B / A` (blueprint `lem:asym_trace_additivity`, *Trace additivity
+over an invariant submodule*). -/
 lemma traceWord_eq_add_subquot {A B : Submodule (WordAlgebra d) M} (hAB : A ≤ B)
     (w : List (Fin d)) :
     traceWord B w = traceWord A w + traceWord (Submodule.subquot A B) w := by
@@ -99,9 +99,9 @@ lemma traceWord_bot (w : List (Fin d)) :
   rw [traceWord_def, Subsingleton.elim (Algebra.lsmul ℂ ℂ (⊥ : Submodule (WordAlgebra d) M)
     (ofWord w : WordAlgebra d)) 0, map_zero]
 
-/-- **Traces along an invariant flag** (lecture note AsymmetricFT, Lemma 4.1; milestone V,
-V1.3), module form: for a chain `0 = N_0 ≤ N_1 ≤ ⋯ ≤ N_r` of invariant subspaces, the word trace
-on `N_r` is the sum of the word traces on the steps `N_k / N_{k-1}`. -/
+/-- **Traces along an invariant flag** (*The asymmetric fundamental theorem of matrix product
+states*, Lemma 4.1), module form: for a chain `0 = N_0 ≤ N_1 ≤ ⋯ ≤ N_r` of invariant subspaces, the
+word trace on `N_r` is the sum of the word traces on the steps `N_k / N_{k-1}`. -/
 lemma traceWord_eq_sum_subquot {r : ℕ} (N : Fin (r + 1) → Submodule (WordAlgebra d) M)
     (h0 : N 0 = ⊥) (hmono : Monotone N) (w : List (Fin d)) :
     traceWord (N (Fin.last r)) w =
@@ -126,10 +126,10 @@ open WordAlgebra
 
 variable {d D : ℕ} {ι : Type*}
 
-/-- **Traces along an arbitrary invariant flag** (lecture note AsymmetricFT, Lemma 4.1; milestone
-V, V1.3): for a flag `0 = M_0 ⊆ M_1 ⊆ ⋯ ⊆ M_r = ℂ^{D_B}` of subspaces invariant under every
-letter of `B` and every word `w`, the empty word included, `tr B^w` is the sum of the traces
-induced on the steps `M_k / M_{k-1}`. -/
+/-- **Traces along an arbitrary invariant flag** (*The asymmetric fundamental theorem of matrix
+product states*, Lemma 4.1): for a flag `0 = M_0 ⊆ M_1 ⊆ ⋯ ⊆ M_r = ℂ^{D_B}` of subspaces invariant
+under every letter of `B` and every word `w`, the empty word included, `tr B^w` is the sum of the
+traces induced on the steps `M_k / M_{k-1}`. -/
 theorem trace_evalWord_eq_sum_traceWord_subquot {DB : ℕ} (B : MPSTensor d DB) {r : ℕ}
     (M : Fin (r + 1) → Submodule (WordAlgebra d) B.WordModule) (h0 : M 0 = ⊥)
     (hlast : M (Fin.last r) = ⊤) (hmono : Monotone M) (w : List (Fin d)) :

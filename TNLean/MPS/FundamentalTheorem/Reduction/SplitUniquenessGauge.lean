@@ -8,35 +8,36 @@ import TNLean.MPS.FundamentalTheorem.Reduction.SplitUniqueness
 /-!
 # The multiplicity gauge of split multi-block reductions
 
-Let `P` and `Q` be two split reductions of the same tensor `B` onto the same family of normal
-blocks `C s`, `s ∈ S`, of positive bond dimension, with coordinate changes `g` and `g̃`, and let
-$h = \tilde g g^{-1}$ be their relative gauge. The block $h_{b'b}$ intertwines the diagonal block
-at `b` with that at `b'`, so it vanishes between blocks that are not gauge related and between a
-block slot and a zero slot. This module proves the remaining clause of lecture note
-MultiBlockUniqueness, Proposition 5.11 (Uniqueness of split reductions): `h` mixes the `m_c`
-copies of one gauge class `c` by an invertible `m_c × m_c` matrix composed with intertwiners,
-and the zero slots by an invertible matrix.
+Let `P` and `Q` be two split reductions of the same tensor `B` onto the same family of normal blocks
+`C s`, `s ∈ S`, of positive bond dimension, with coordinate changes `g` and `g̃`, and let
+$h = \tilde g g^{-1}$ be their relative gauge. The block $h_{b'b}$ intertwines the diagonal block at
+`b` with that at `b'`, so it vanishes between blocks that are not gauge related and between a block
+slot and a zero slot. This module proves the remaining clause of the bare uniqueness of split
+compressions (blueprint `prop:asym_uniq_split`, *Uniqueness of split compressions, bare form*): `h`
+mixes the `m_c` copies of one gauge class `c` by an invertible `m_c × m_c` matrix composed with
+intertwiners, and the zero slots by an invertible matrix.
 
 **Gauge classes.** A gauge class is encoded by a representative block slot `s₀`: the class is the
 set `gaugeClass C s₀` of block slots `t` with `C s₀` gauge related to `C t`. For every `t` in the
 class an invertible intertwiner `Y_t` from `C s₀` to `C t`, with `C t i * Y_t = Y_t * C s₀ i`, is
-chosen once (`classIntertwiner`, with inverse `classIntertwinerInv`). For `t, t'` in the class
-the block of `h` is
+chosen once (`classIntertwiner`, with inverse `classIntertwinerInv`). For `t, t'` in the class the
+block of `h` is
 $$h_{t't} = \mu_{t't}\, Y_{t'} Y_t^{-1},$$
 and the coefficient matrix `μ = classMatrix P Q s₀` is invertible, with inverse the coefficient
 matrix `classMatrix Q P s₀` of $h^{-1} = g \tilde g^{-1}$, for the same choice of intertwiners.
 
 **Zero slots.** The zero-slot block `zeroSlotBlock h`, a `Q.z × P.z` matrix, has the two-sided
-inverse `zeroSlotBlock h⁻¹`; this is the element of $\mathrm{GL}_z(\mathbb C)$ of the
-proposition. The two numbers of zero slots agree by Theorem A
-(`MPSTensor.MultiBlockCompression.z_eq`); the statement is phrased with the two rectangular
-zero-slot blocks so that no transport along that equality is needed.
+inverse `zeroSlotBlock h⁻¹`; this is the element of $\mathrm{GL}_z(\mathbb C)$ of the proposition.
+The two numbers of zero slots agree by the uniqueness of the blocks (blueprint
+`thm:asym_uniq_blocks`, *The blocks are unique*; `MPSTensor.MultiBlockCompression.z_eq`); the
+statement is phrased with the two rectangular zero-slot blocks so that no transport along that
+equality is needed.
 
 ## Main definitions
 
 * `MPSTensor.gaugeClass`: the block slots gauge related to a representative.
-* `MPSTensor.classIntertwiner`, `MPSTensor.classIntertwinerInv`: the chosen intertwiners
-  `Y_t` and their inverses.
+* `MPSTensor.classIntertwiner`, `MPSTensor.classIntertwinerInv`: the chosen intertwiners `Y_t` and
+  their inverses.
 * `MPSTensor.zeroSlotBlock`: the block of a matrix between the zero slots.
 * `MPSTensor.MultiBlockCompression.classMatrix`: the coefficient matrix `μ` of one gauge class.
 
@@ -49,12 +50,13 @@ zero-slot blocks so that no transport along that equality is needed.
   $h_{t't} = \mu_{t't} Y_{t'} Y_t^{-1}$.
 * `MPSTensor.MultiBlockCompression.classMatrix_mul_classMatrix`,
   `MPSTensor.MultiBlockCompression.isUnit_classMatrix`: the coefficient matrix is invertible.
-* `MPSTensor.MultiBlockCompression.zeroSlotBlock_relativeGauge_mul`: the zero-slot block of `h`
-  is invertible, with inverse the zero-slot block of $h^{-1}$.
+* `MPSTensor.MultiBlockCompression.zeroSlotBlock_relativeGauge_mul_zeroSlotBlock_relativeGauge`: the
+  zero-slot block of `h` is invertible, with inverse the zero-slot block of $h^{-1}$.
 
 ## References
 
-Lecture note MultiBlockUniqueness, Proposition 5.11 (Uniqueness of split reductions).
+Blueprint `prop:asym_uniq_split`, *Uniqueness of split compressions, bare form*; *The asymmetric
+fundamental theorem of matrix product states*, Proposition 6.12.
 -/
 
 open scoped Matrix
@@ -92,8 +94,8 @@ variable {ι : Type*} {D : ι → ℕ} {S : Finset ι} {C : ∀ s, MPSTensor d (
 section Classes
 
 variable (C) in
-/-- The **gauge class** of a block slot `s₀`: the block slots `t` with `C s₀` gauge related to
-`C t` (lecture note MultiBlockUniqueness, Proposition 5.11 (Uniqueness of split reductions)). -/
+/-- The **gauge class** of a block slot `s₀`: the block slots `t` with `C s₀` gauge related to `C t`
+(blueprint `prop:asym_uniq_split`, *Uniqueness of split compressions, bare form*). -/
 noncomputable def gaugeClass (s₀ : {s // s ∈ S}) : Finset {s // s ∈ S} := by
   classical
   exact Finset.univ.filter fun t => IsGaugeRelated (C s₀.1) (C t.1)
@@ -228,12 +230,11 @@ theorem relativeGauge_mul_relativeGauge : P.relativeGauge Q * Q.relativeGauge P 
   rw [relativeGauge, relativeGauge, Matrix.mul_assoc, ← Matrix.mul_assoc (gaugeMatrixInv P.gauge),
     gaugeMatrixInv_mul_gaugeMatrix, Matrix.one_mul, gaugeMatrix_mul_gaugeMatrixInv]
 
-/-- The **coefficient matrix** `μ` of the gauge class of `s₀` (lecture note MultiBlockUniqueness,
-Proposition 5.11 (Uniqueness of split reductions)):
-$\mu_{t't} = \operatorname{tr}(Y_{t'}^{-1} h_{t't} Y_t)/D_{s_0}$ for `t, t'` in the class, where
-`h` is the relative gauge of `P` and `Q` and `Y_t` are the chosen intertwiners. For split
-reductions $h_{t't} = \mu_{t't} Y_{t'} Y_t^{-1}$
-(`blockEntry_relativeGauge_eq_classMatrix_smul`). -/
+/-- The **coefficient matrix** `μ` of the gauge class of `s₀` (blueprint `prop:asym_uniq_split`,
+*Uniqueness of split compressions, bare form*):
+$\mu_{t't} = \operatorname{tr}(Y_{t'}^{-1} h_{t't} Y_t)/D_{s_0}$ for `t, t'` in the class, where `h`
+is the relative gauge of `P` and `Q` and `Y_t` are the chosen intertwiners. For split reductions
+$h_{t't} = \mu_{t't} Y_{t'} Y_t^{-1}$ (`blockEntry_relativeGauge_eq_classMatrix_smul`). -/
 noncomputable def classMatrix (s₀ : {s // s ∈ S}) :
     Matrix (gaugeClass C s₀) (gaugeClass C s₀) ℂ :=
   Matrix.of fun t' t => (D s₀.1 : ℂ)⁻¹ *
@@ -242,9 +243,9 @@ noncomputable def classMatrix (s₀ : {s // s ∈ S}) :
 
 variable {P Q}
 
-/-- **The relative gauge does not mix a gauge class with its complement** (lecture note
-MultiBlockUniqueness, Proposition 5.11 (Uniqueness of split reductions)): the block from a block
-slot outside the class of `s₀` to a member of the class vanishes. -/
+/-- **The relative gauge does not mix a gauge class with its complement** (blueprint
+`prop:asym_uniq_split`, *Uniqueness of split compressions, bare form*): the block from a block slot
+outside the class of `s₀` to a member of the class vanishes. -/
 theorem blockEntry_eq_zero_of_mem_gaugeClass_of_notMem (hP : P.remainder = 0)
     (hQ : Q.remainder = 0) (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) {s₀ t' s : {s // s ∈ S}}
     (ht' : t' ∈ gaugeClass C s₀) (hs : s ∉ gaugeClass C s₀) :
@@ -260,10 +261,9 @@ theorem blockEntry_eq_zero_of_notMem_gaugeClass_of_mem (hP : P.remainder = 0)
   blockEntry_eq_zero_of_not_isGaugeRelated hP hQ (hC _ s.2) (hC _ t.2) fun h =>
     hs (mem_gaugeClass.2 ((mem_gaugeClass.1 ht).trans h.symm))
 
-/-- **Within a gauge class the relative gauge is the coefficient matrix composed with
-intertwiners** (lecture note MultiBlockUniqueness, Proposition 5.11 (Uniqueness of split
-reductions)): for two split reductions and `t, t'` in the class of `s₀`,
-$h_{t't} = \mu_{t't}\, Y_{t'} Y_t^{-1}$. -/
+/-- **Within a gauge class the relative gauge is the coefficient matrix composed with intertwiners**
+(blueprint `prop:asym_uniq_split`, *Uniqueness of split compressions, bare form*): for two split
+reductions and `t, t'` in the class of `s₀`, $h_{t't} = \mu_{t't}\, Y_{t'} Y_t^{-1}$. -/
 theorem blockEntry_relativeGauge_eq_classMatrix_smul (hP : P.remainder = 0)
     (hQ : Q.remainder = 0) (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
     (s₀ : {s // s ∈ S}) (t' t : gaugeClass C s₀) :
@@ -292,10 +292,10 @@ theorem blockEntry_relativeGauge_eq_classMatrix_smul (hP : P.remainder = 0)
       Fintype.card_fin, smul_eq_mul, mul_comm, mul_assoc, mul_inv_cancel₀ hD0, mul_one]
   rw [hν, hμ]
 
-/-- **The coefficient matrices of the two directions are mutually inverse** (lecture note
-MultiBlockUniqueness, Proposition 5.11 (Uniqueness of split reductions)): for two split
-reductions, the coefficient matrix of `h = g̃ g⁻¹` on the gauge class of `s₀` times that of
-`h⁻¹ = g g̃⁻¹` is the identity. -/
+/-- **The coefficient matrices of the two directions are mutually inverse** (blueprint
+`prop:asym_uniq_split`, *Uniqueness of split compressions, bare form*): for two split reductions,
+the coefficient matrix of `h = g̃ g⁻¹` on the gauge class of `s₀` times that of `h⁻¹ = g g̃⁻¹` is
+the identity. -/
 theorem classMatrix_mul_classMatrix (hP : P.remainder = 0) (hQ : Q.remainder = 0)
     (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s) (s₀ : {s // s ∈ S}) :
     P.classMatrix Q s₀ * Q.classMatrix P s₀ = 1 := by
@@ -337,34 +337,35 @@ theorem classMatrix_mul_classMatrix (hP : P.remainder = 0) (hQ : Q.remainder = 0
     rw [Matrix.one_apply_ne htt]
     exact (smul_eq_zero.1 hconj.symm).resolve_right one_ne_zero
 
-/-- **The multiplicity gauge of one gauge class is invertible** (lecture note
-MultiBlockUniqueness, Proposition 5.11 (Uniqueness of split reductions), the
-$\mathrm{GL}_{m_c}$ clause): for two split reductions onto normal blocks of positive bond
-dimension, the coefficient matrix of every gauge class is invertible. -/
+/-- **The multiplicity gauge of one gauge class is invertible** (blueprint `prop:asym_uniq_split`,
+*Uniqueness of split compressions, bare form*, the $\mathrm{GL}_{m_c}$ clause): for two split
+reductions onto normal blocks of positive bond dimension, the coefficient matrix of every gauge
+class is invertible. -/
 theorem isUnit_classMatrix (hP : P.remainder = 0) (hQ : Q.remainder = 0)
     (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s) (s₀ : {s // s ∈ S}) :
     IsUnit (P.classMatrix Q s₀) :=
   ⟨⟨P.classMatrix Q s₀, Q.classMatrix P s₀, classMatrix_mul_classMatrix hP hQ hC hD s₀,
     classMatrix_mul_classMatrix hQ hP hC hD s₀⟩, rfl⟩
 
-/-- **The zero slots are mixed by an invertible matrix** (lecture note MultiBlockUniqueness,
-Proposition 5.11 (Uniqueness of split reductions), the $\mathrm{GL}_z$ clause): for two split
-reductions onto normal blocks, the zero-slot block of `h = g̃ g⁻¹` times that of
-`h⁻¹ = g g̃⁻¹` is the identity. -/
-theorem zeroSlotBlock_relativeGauge_mul (hP : P.remainder = 0) (hQ : Q.remainder = 0)
-    (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) :
+/-- **The zero slots are mixed by an invertible matrix** (blueprint `prop:asym_uniq_split`,
+*Uniqueness of split compressions, bare form*, the $\mathrm{GL}_z$ clause): for two split reductions
+onto normal blocks, the zero-slot block of `h = g̃ g⁻¹` times that of `h⁻¹ = g g̃⁻¹` is the
+identity. -/
+theorem zeroSlotBlock_relativeGauge_mul_zeroSlotBlock_relativeGauge (hP : P.remainder = 0)
+    (hQ : Q.remainder = 0) (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) :
     zeroSlotBlock (P.relativeGauge Q) * zeroSlotBlock (Q.relativeGauge P) = 1 := by
   rw [← zeroSlotBlock_mul _ _ fun t s => blockEntry_inr_inl_eq_zero hP hQ t (hC _ s.2),
     relativeGauge_mul_relativeGauge, zeroSlotBlock_one]
 
-/-- **The zero-slot block of the relative gauge has a two-sided inverse** (lecture note
-MultiBlockUniqueness, Proposition 5.11 (Uniqueness of split reductions), the $\mathrm{GL}_z$
-clause): the zero-slot block of `h⁻¹` is a left and a right inverse of that of `h`. -/
-theorem zeroSlotBlock_relativeGauge_inverse (hP : P.remainder = 0) (hQ : Q.remainder = 0)
-    (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) :
+/-- **The zero-slot block of the relative gauge has a two-sided inverse** (blueprint
+`prop:asym_uniq_split`, *Uniqueness of split compressions, bare form*, the $\mathrm{GL}_z$ clause):
+the zero-slot block of `h⁻¹` is a left and a right inverse of that of `h`. -/
+theorem zeroSlotBlock_relativeGauge_mul_eq_one_and_mul_eq_one (hP : P.remainder = 0)
+    (hQ : Q.remainder = 0) (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) :
     zeroSlotBlock (P.relativeGauge Q) * zeroSlotBlock (Q.relativeGauge P) = 1 ∧
       zeroSlotBlock (Q.relativeGauge P) * zeroSlotBlock (P.relativeGauge Q) = 1 :=
-  ⟨zeroSlotBlock_relativeGauge_mul hP hQ hC, zeroSlotBlock_relativeGauge_mul hQ hP hC⟩
+  ⟨zeroSlotBlock_relativeGauge_mul_zeroSlotBlock_relativeGauge hP hQ hC,
+    zeroSlotBlock_relativeGauge_mul_zeroSlotBlock_relativeGauge hQ hP hC⟩
 
 end MultiBlockCompression
 
