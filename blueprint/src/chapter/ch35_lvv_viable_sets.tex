@@ -832,3 +832,66 @@ whose range is the span of the columns of $M_i(\psi)$.
 	are computed explicitly, then the rectangular theorem is applied with
 	equal row and column dimensions.
 \end{proof}
+
+\begin{lemma}[Integrability of continuous functions of bounded matrix families]
+	\label{lem:integrable_continuous_bounded_matrix_family}
+	\lean{Matrix.integrable_continuous_comp_of_ae_norm_le}
+	\leanok
+	On a finite measure space, let $Y$ be an almost everywhere bounded strongly
+	measurable finite matrix family. For every continuous function $g$ into a
+	normed additive group, $g\circ Y$ is integrable.
+\end{lemma}
+\begin{proof}\leanok
+	A closed matrix ball is compact. Its continuous image is bounded, which
+	gives an integrable constant bound for $\|g\circ Y\|$.
+\end{proof}
+
+\begin{theorem}[Trace-exponential Jensen inequality for bounded random matrices]
+	\label{thm:bounded_matrix_trace_exp_integral_jensen}
+	\lean{Matrix.integral_trace_exp_add_le_trace_exp_log_integral_exp}
+	\leanok
+	\uses{thm:matrix_trace_exp_log_concavity,
+		lem:integrable_continuous_bounded_matrix_family}
+	Let $H$ be Hermitian. On a probability space, let $Y$ be strongly measurable,
+	Hermitian almost everywhere, and bounded in operator norm almost everywhere.
+	Then
+	\begin{align}
+		\mathbb E\operatorname{tr}e^{H+Y}
+		\le\operatorname{tr}e^{H+\log\mathbb Ee^Y}.
+		\label{eq:bounded_matrix_trace_exp_integral_jensen}
+	\end{align}
+	This is the bounded-sample specialization of
+	\cite[Corollary~3.3]{Tropp2012TailBounds}.
+\end{theorem}
+\begin{proof}\leanok
+	\uses{thm:matrix_trace_exp_log_concavity,
+		lem:integrable_continuous_bounded_matrix_family}
+	If $\|Y\|\le R$, functional calculus gives $e^Y\ge e^{-R}I$.
+	Restrict Lieb's concavity to the closed convex set of matrices at least
+	$e^{-R}I$. The logarithm is continuous there. The preceding integrability
+	lemma verifies the hypotheses of integral Jensen; $\log e^Y=Y$ gives
+	the stated inequality.
+\end{proof}
+
+\begin{theorem}[Integral logarithmic moment generating function bound]
+	\label{thm:bounded_matrix_integral_log_mgf_bernstein}
+	\lean{Matrix.log_integral_exp_le_bernstein}
+	\leanok
+	Let $Z$ be a strongly measurable, centered Hermitian random matrix on a
+	probability space, with $\|Z\|\le R$ almost everywhere. For $\theta\ge0$
+	and $\theta R<3$,
+	\begin{align}
+		\log\mathbb Ee^{\theta Z}
+		\le\frac{\theta^2\|\mathbb EZ^2\|}{2(1-\theta R/3)}I.
+		\label{eq:bounded_matrix_integral_log_mgf_bernstein}
+	\end{align}
+\end{theorem}
+\begin{proof}\leanok
+	\uses{lem:integrable_continuous_bounded_matrix_family}
+	The scalar Bernstein majorant and functional calculus give the quadratic
+	exponential bound. Integrate in the Loewner order and use centering.
+	Bound the variance by its norm times the identity, then apply operator
+	monotonicity of the logarithm and $\log(1+x)\le x$.
+	The positive lower bound $e^{\theta Z}\ge e^{-\theta R}I$ ensures that
+	the expected exponential is positive definite.
+\end{proof}

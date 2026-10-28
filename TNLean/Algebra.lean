@@ -219,6 +219,7 @@ import TNLean.Algebra.ThreeOperatorPerturbation
 import TNLean.Algebra.ToEuclideanCLM
 import TNLean.Algebra.ToEuclideanLinApply
 import TNLean.Algebra.TraceExpFiniteJensen
+import TNLean.Algebra.TraceExpIntegralBounds
 import TNLean.Algebra.TraceExpLogConcavity
 import TNLean.Algebra.TraceInvariantSubmodule
 import TNLean.Algebra.TranslatedCharacterOrthogonality

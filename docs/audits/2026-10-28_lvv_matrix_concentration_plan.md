@@ -166,3 +166,19 @@ $\sigma^2=\max\{\|\mathbb E(X-\mu)(X-\mu)^*\|,\|\mathbb E(X-\mu)^*(X-\mu)\|\}$.
 The sample space is the full finite product, with uniform measure expressed by cardinality ratios. The centering, variance estimate, positive spectral endpoint and final normalization are all derived. The two rectangular dimensions give $d_1+d_2$; the square corollary gives exactly $2d$.
 
 This completes the finite uniform specialization of LVV Theorem 2.13. Its extension to general matrix-valued random variables remains required for the unrestricted source statement. The new generic modules should transfer to QICLean together with `TraceExpFiniteJensen.lean`, `BernsteinExponentialBound.lean`, `FiniteHermitianBernstein.lean` and `TraceExpLogConcavity.lean` before the general probability theorem is developed. The source-specific sampled filter, its word-frequency bound, and the corrected ground-energy dependence remain independent outstanding tasks.
+
+
+## Integral analytic bounds without a finite-support restriction
+
+`TraceExpIntegralBounds.lean` now proves the analytic Jensen and variance bounds on an arbitrary probability space for an almost everywhere bounded, almost everywhere strongly measurable Hermitian family. Its auxiliary integrability theorem uses compactness of a closed ball in the finite-dimensional matrix space and continuity of the function being integrated. Thus the public Jensen and logarithmic moment generating function bounds assume neither integrability of exponentials nor a positive lower bound as additional hypotheses.
+
+The trace-exponential Jensen argument uses $e^Y\ge e^{-R}I$ for $\|Y\|\le R$. It restricts the proved Lieb concavity to the closed convex set above this positive scalar matrix, where the matrix logarithm is continuous. Mathlib's integral Jensen theorem then applies. The integral variance bound uses the scalar Bernstein majorant, matrix-order monotonicity of the Bochner integral, centering, and operator monotonicity of the logarithm. It gives
+
+$$
+\log\mathbb E e^{\theta Z}
+\le\frac{\theta^2\|\mathbb E Z^2\|}{2(1-\theta R/3)}I
+$$
+
+for centered bounded Hermitian $Z$, $\theta\ge0$, and $\theta R<3$. The expected exponential is proved positive definite by integrating its uniform positive lower bound. These are the bounded-sample analytic steps in [Tropp, Corollary 3.3 and the proof of Theorem 6.1(ii)](https://tropp.caltech.edu/papers/Tro11-User-Friendly-preprint.pdf).
+
+The remaining probability steps are iteration over independent coordinates on an actual product measure, transfer from independence to the joint product distribution, exponential Markov, and the final integral dilation and centering identities. The unrestricted LVV Theorem 2.13 remains outstanding until those steps are composed. The finite uniform theorem already retains the exact source variance and constants. All analytic modules remain suitable for transfer to QICLean before its probability theorem is added.

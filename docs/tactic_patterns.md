@@ -9616,3 +9616,16 @@ there is no need for a new tactic.
 - **Notes:** The observed occurrences are confined to one module, below the
   two-file promotion threshold. Rectangular zero products require
   `Matrix.mul_zero` and `Matrix.zero_mul`, rather than their square-ring forms.
+
+
+### Explicit matrix integrands in ordered integration — candidate (2026-10-28)
+
+- **Pattern:** When applying ordered Bochner integration to matrices, name the
+  matrix-valued integrand explicitly and state the almost-everywhere order
+  comparison with a matrix-typed zero.
+- **Seen:** Nonnegativity of the integrated square, the upper exponential bound
+  and the positive lower exponential bound in `Algebra/TraceExpIntegralBounds.lean`.
+- **Abstraction:** Use the existing `integral_nonneg_of_ae` and `integral_mono_ae`
+  with explicit `f` and `g` arguments. No new integration theorem is required.
+- **Notes:** The three uses are in one module. Explicit integrands prevent
+  accidental inference of a pointwise function order during elaboration.
