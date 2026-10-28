@@ -13,6 +13,7 @@ by these regional identities.
 \begin{theorem}[From numbered middle coordinates to the actual middle region]
     \label{thm:regional_middle_from_numbered_three_regions}
     \lean{TNLean.MPS.AreaLaw.exists_regional_exterior_of_natural_threeSplit_decomposition}
+    \leanok
     \uses{def:selected_exterior_middle_equiv}
     Let $\Omega$ be a finite site set, let $T,E\subseteq\Omega$ be disjoint,
     and put $R=\Omega\setminus(T\cup E)$. Fix a local alphabet
@@ -38,7 +39,7 @@ by these regional identities.
     The middle matrices are the prescribed $V_t$ transported by $e_E$; only
     the exterior coefficients change. The bijection need not carry any order.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The two inverse identities for $e_E$ first turn the given decomposition
     into one with actual $E$ configurations. Restriction identifies the actual
     exterior configuration on $E^c$ with its pair of restrictions to $T,R$.
@@ -50,6 +51,7 @@ by these regional identities.
 \begin{definition}[The old and new middle configuration splittings]
     \label{def:regional_middle_configuration_splittings}
     \lean{FiniteProduct.changingOldMiddleConfigEquiv,FiniteProduct.changingNewMiddleConfigEquiv}
+    \leanok
     Let $\Omega$ be finite, let $\beta_v$ be any set for each site, and write
     $\mathcal X_S=\prod_{v\in S}\beta_v$. For regions $E,J\subseteq\Omega$, put
     \begin{align}
@@ -70,6 +72,7 @@ by these regional identities.
 \begin{definition}[The prescribed new regional middle family]
     \label{def:regional_middle_transferred_family}
     \lean{FiniteProduct.changingRegionalMiddleFamily}
+    \leanok
     \uses{def:regional_middle_configuration_splittings,def:chain_middle_factor_exchange}
     Let $\mathbb S$ be a semiring, let $I$ be any set, and let $V_t$ be
     $\mathbb S$-valued matrices on $\mathcal X_E$, indexed by $t\in I$.
@@ -95,6 +98,7 @@ by these regional identities.
 \begin{theorem}[Transfer of a fixed middle family between regions]
     \label{thm:regional_middle_exterior_transfer}
     \lean{FiniteProduct.exists_changingRegional_exterior_family}
+    \leanok
     \uses{def:regional_middle_configuration_splittings,
         def:regional_middle_transferred_family,thm:chain_middle_factor_exchange}
     Assume now that $I$ and every local set $\beta_v$ are finite.
@@ -112,7 +116,7 @@ by these regional identities.
     The family $\widetilde V$ is the one already prescribed above and is
     independent of $M$. Empty regions and empty local sets are included.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:regional_middle_configuration_splittings,
         def:regional_middle_transferred_family,thm:chain_middle_factor_exchange}
     The old split into the four regions gives $((\mathcal X_B,\mathcal X_O),(\mathcal X_A,\mathcal X_C))$.

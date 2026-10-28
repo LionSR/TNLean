@@ -17,10 +17,11 @@ These statements provide supporting locality algebra for
 \begin{theorem}[The central regions lie in the selected middle]
     \label{thm:selected_middle_core_inclusions}
     \lean{TNLean.MPS.AreaLaw.core_and_strict_core_subset_selected_middle}
+    \leanok
     For the data above, $K\subseteq E$ and $Z\subseteq E$.
     No separation assumption on $a,b$ is needed for these inclusions.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The inequalities $p<2\ell$ and $s\ge0$ show that the left endpoint of
     $E$ is no greater than that of $K$, while its right endpoint is no
     smaller. The same comparison applies to $Z$. Monotonicity of clipped
@@ -30,9 +31,10 @@ These statements provide supporting locality algebra for
 \begin{theorem}[Cardinality of the selected collars]
     \label{thm:selected_middle_collar_cardinality}
     \lean{TNLean.MPS.AreaLaw.card_selected_middle_sdiff_strict_core_le}
+    \leanok
     If $a+2\ell\le b$, then $|C|\le4\ell$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The complement of the strict core within $E$ is
     \begin{align}
         C=[a+p+1,a+2\ell+1)\cup
@@ -47,6 +49,7 @@ These statements provide supporting locality algebra for
 \begin{theorem}[Middle and crossing factors chosen before the exterior operators]
     \label{thm:selected_middle_fixed_physical_data}
     \lean{TNLean.MPS.AreaLaw.exists_physical_selected_window_fixed_middle_data}
+    \leanok
     \uses{thm:selected_middle_core_inclusions,thm:three_region_partial_support,
         thm:three_region_middle_lift_equality,thm:three_region_middle_embedding,
         thm:three_region_two_window_collars,thm:three_region_weighted_middle_remainder,
@@ -110,7 +113,7 @@ These statements provide supporting locality algebra for
     The sites $e_L,e_R$ may coincide. No positive-local-dimension assumption
     is imposed.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:selected_middle_core_inclusions,thm:three_region_partial_support,
         thm:three_region_middle_lift_equality,thm:three_region_middle_embedding,
         thm:three_region_two_window_collars,thm:three_region_weighted_middle_remainder,
@@ -121,9 +124,16 @@ These statements provide supporting locality algebra for
     Both endpoints lie in $C$, as follows directly from $p,s<2\ell$.
 
     Canonical placement of $M$ factors through its inclusion into $E$.
-    The chosen central middle factor and $M_E$ therefore have the same
-    identity lift. The endpoint $e_L$ supplies an actual site of $E$, so
-    equality of middle lifts identifies them, including at $q=0$.
+    Since the central exterior components vanish, the chosen central middle
+    factor satisfies
+    \begin{align}
+        P_M^g=I_T\otimes H^M_{B_1}\otimes I_R
+        =I_T\otimes M_E\otimes I_R.
+        \label{eq:selected_middle_central_lift}
+    \end{align}
+    The endpoint $e_L$ supplies an actual site of $E$, so the two middle
+    factors in (\ref{eq:selected_middle_central_lift}) coincide,
+    including at $q=0$.
 
     The partial matrix elements of each crossing are supported on its single
     middle endpoint. An operator supported on one site belongs to the span of

@@ -3,6 +3,7 @@
 \begin{theorem}[Counting crossing decorations and ordinary runs]
     \label{thm:two_marker_index_two_binomial}
     \lean{TNLean.MPS.AreaLaw.card_twoMarkerMiddleIndex_two_binomial_le}
+    \leanok
     \uses{def:two_marker_middle_index}
     Let $k,i,j,u,v$ be nonnegative integers, and let
     $\mathcal I_{k,i,j}^{u,v}$ be the set in
@@ -16,7 +17,7 @@
     This is the finite count used in
     \cite[Proposition~5.7]{Arad2016RigorousRG}.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Put $m=i+j$. If $m>k$, the set is empty. Suppose $m\le k$.
     The left positions form an $i$-element subset of $\{0,\ldots,m-1\}$.
     Recording this subset and the labels in its two complementary parts

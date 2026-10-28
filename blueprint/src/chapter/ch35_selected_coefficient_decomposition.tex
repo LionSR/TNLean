@@ -8,6 +8,7 @@ units furnished by the selected crossing edges.
 \begin{definition}[Grouping the exterior regions]
     \label{def:selected_exterior_middle_equiv}
     \lean{TNLean.MPS.AreaLaw.exteriorMiddleEquiv}
+    \leanok
     For sets $X,Y,Z$, define the equivalence
     \begin{align}
         \epsilon:(X\times Y)\times Z & \longrightarrow(X\times Z)\times Y, &
@@ -21,6 +22,7 @@ units furnished by the selected crossing edges.
 \begin{theorem}[One prescribed middle family for all exterior operators]
     \label{thm:selected_coefficient_prescribed_middle}
     \lean{TNLean.MPS.AreaLaw.exists_physical_twoMarkerCoefficient_prescribed_middle_decomposition}
+    \leanok
     \uses{def:selected_exterior_middle_equiv,thm:selected_middle_core_inclusions,
         thm:selected_middle_fixed_physical_data,def:two_marker_middle_index,
         def:two_marker_middle_product,def:two_marker_coefficient,
@@ -87,7 +89,7 @@ units furnished by the selected crossing edges.
     in $D_{\mathrm{phys}}$.
     The assertion includes zero local dimension and every value of $k,i,j$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:selected_exterior_middle_equiv,
         thm:selected_middle_fixed_physical_data,thm:two_marker_common_middle}
     Choose the fixed middle and crossing data from the two windows and $M$.
@@ -103,15 +105,26 @@ units furnished by the selected crossing edges.
         +I_T\otimes I_E\otimes R_z.
         \label{eq:selected_coefficient_ordinary_form}
     \end{align}
-    The equivalence $\epsilon$ turns this into an exterior operator tensored
-    with $I_E$, plus the exterior identity tensored with $A$. It sends each
-    crossing decomposition to the corresponding sum with the same middle
-    matrix units.
+    The crossings have the forms in
+    (\ref{eq:selected_middle_fixed_crossings}), with exterior factors
+    $A^L_t$ on $T$ and $B^R_t$ on $R$:
+    $U=\sum_tA^L_t\otimes N_{e_L}(t)$ and
+    $V_0=\sum_tN_{e_R}(t)\otimes B^R_t$. Regrouping by $\epsilon$ gives
+    \begin{align}
+        (D_0)^\epsilon            & =(L_z\otimes I_R+I_T\otimes R_z)\otimes I_E
+        +I_{T\times R}\otimes A,\notag                                           \\
+        (U\otimes I_R)^\epsilon   & =\sum_t(A^L_t\otimes I_R)\otimes N_{e_L}(t),
+        \notag                                                                   \\
+        (I_T\otimes V_0)^\epsilon & =\sum_t(I_T\otimes B^R_t)\otimes N_{e_R}(t).
+        \label{eq:selected_coefficient_regrouped_form}
+    \end{align}
+    Thus the exterior factors are combined, while the middle factors $A$,
+    $N_{e_L}(t)$ and $N_{e_R}(t)$ are unchanged.
 
     Reindexing is a ring homomorphism, so it commutes with powers, extraction
     of the two marked coefficients, and their finite scalar combinations.
     Apply the prescribed-middle decomposition through degree $k$ to these
-    regrouped operators. Its middle factors are exactly
+    regrouped operators in (\ref{eq:selected_coefficient_regrouped_form}). Its middle factors are exactly
     (\ref{eq:selected_coefficient_middle_family}); its exterior coefficients
     give the operators $B_f$ in (\ref{eq:selected_coefficient_decomposition}).
 \end{proof}
