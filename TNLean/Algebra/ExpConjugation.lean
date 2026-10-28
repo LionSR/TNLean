@@ -88,14 +88,6 @@ private theorem exp_right_multiplication_apply (H O : Matrix n n ℂ) :
   simpa only [NormedSpace.exp_op, MulOpposite.unop_op,
     ContinuousLinearMap.flip_apply, ContinuousLinearMap.mul_apply'] using hO.symm
 
-end Matrix
-
-open scoped Matrix.Norms.L2Operator
-
-namespace Matrix
-
-variable {n : Type*} [Fintype n] [DecidableEq n]
-
 /-- Left and right multiplication commute, so the exponential of their
 commutator splits into two regular exponentials. This is the algebraic step in
 AKL14, arXiv:1406.3898, low70.tex, lines 795–810. -/
@@ -119,12 +111,6 @@ private theorem exp_commutator_operator (H : Matrix n n ℂ) :
   simpa only [sub_eq_add_neg] using
     NormedSpace.exp_add_of_commute_of_mem_ball (𝕂 := ℂ)
       hcomm.neg_right (hball L) (hball (-R))
-
-end Matrix
-
-namespace Matrix
-
-variable {n : Type*} [Fintype n] [DecidableEq n]
 
 /-- The exponential of the commutator acts by conjugation. This is the
 algebraic Hadamard identity underlying AKL14, arXiv:1406.3898,
