@@ -22,8 +22,8 @@ Conversely every block upper triangular `h` with nonzero scalar diagonal blocks 
 into a reduction `(σ, h g)` with the same flag. Together the two directions say that the group
 `T_σ` of such matrices acts freely and transitively by `g ↦ h g` on the reductions with a given
 labelled flag (`MPSTensor.MultiBlockCompression.withGauge_eq_conjT` and
-`MPSTensor.MultiBlockCompression.coordChange_conjTGauge`); no separate declaration records the
-torsor.
+`MPSTensor.MultiBlockCompression.coordChange_conjTGauge`); the bijection
+`MPSTensor.MultiBlockCompression.bijOn_conjT` records the torsor.
 
 This is lecture note MultiBlockUniqueness, Theorem 5.2 (B: two reductions with the same flag), and
 the paragraph after it. The
@@ -63,6 +63,8 @@ equivalently `g⁻¹ E_k = g_P⁻¹ E_k` (`MPSTensor.MultiBlockCompression.flag_
   and injections.
 * `MPSTensor.MultiBlockCompression.conjT_flag`: the converse, the reduction `(σ, h g)` has the
   flag of `(σ, g)`.
+* `MPSTensor.MultiBlockCompression.bijOn_conjT`: the torsor, `(h, μ) ↦ (σ, h g)` is a bijection
+  from `T_σ` onto the reductions with the order and flag of `(σ, g)`.
 -/
 
 open scoped Matrix
@@ -608,6 +610,14 @@ theorem conjT_flag (k : Fin (S.card + P.z + 1)) : (P.conjT ht hμ hdiag).flag k 
       Matrix.one_mulVec] at hmem
   · exact P.mulVec_mem_leadingSpace_of_blockTriangular ht
 
+/-- **The reduction `(σ, h g)` has the labelled flag of `(σ, g)`** (lecture note AsymmetricFT,
+Theorem 6.2; milestone V, V2.3): the same flag, by `conjT_flag`, and the same order of the
+labels. -/
+theorem toFlagData_conjT : (P.conjT ht hμ hdiag).toFlagData = P.toFlagData := by
+  have hflag : (P.conjT ht hμ hdiag).flag = P.flag := funext (P.conjT_flag ht hμ hdiag)
+  unfold toFlagData
+  congr 1
+
 end Converse
 
 /-! ### The torsor statement -/
@@ -630,6 +640,70 @@ theorem withGauge_eq_conjT (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s 
   rw [conjTGauge_apply, coordChange_mulVec, LinearEquiv.symm_apply_apply]
 
 end Torsor
+
+/-! ### The torsor as a bijection -/
+
+section TorsorBijection
+
+/-- **The action `h ↦ (σ, h g)` is free** (lecture note AsymmetricFT, Theorem 6.2; milestone V,
+V2.2): equal reductions `(σ, h g) = (σ, h' g)` have `h = h'`, since `h` is the coordinate change
+from `g` to `h g`. -/
+theorem eq_of_conjT_eq {h h' : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ}
+    {ht : h.BlockTriangular fun x => P.ord x.1} {μ : BlockIndex S P.z → ℂ} {hμ : ∀ b, μ b ≠ 0}
+    {hdiag : ∀ b, h.blockDiag' b = μ b • 1}
+    {ht' : h'.BlockTriangular fun x => P.ord x.1} {μ' : BlockIndex S P.z → ℂ}
+    {hμ' : ∀ b, μ' b ≠ 0} {hdiag' : ∀ b, h'.blockDiag' b = μ' b • 1}
+    (heq : P.conjT ht hμ hdiag = P.conjT ht' hμ' hdiag') : h = h' := by
+  -- Compare the two gauges through `P.z`, so that the kernel never compares two `conjT`s.
+  have key : ∀ X Y : MultiBlockCompression B S C, X = Y → ∀ (hX : X.z = P.z) (hY : Y.z = P.z),
+      (hX ▸ X.gauge : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S P.z → ℂ)) = hY ▸ Y.gauge := by
+    rintro X _ rfl hX hY
+    rfl
+  have hg := key _ _ heq rfl rfl
+  rw [← P.coordChange_conjTGauge ht hμ hdiag, ← P.coordChange_conjTGauge ht' hμ' hdiag']
+  exact congrArg (coordChange P.gauge) hg
+
+omit [DecidableEq ι] in
+/-- The scalars of the diagonal blocks of a matrix are determined by the matrix when every slot
+has positive size. -/
+theorem eq_of_blockDiag'_eq_smul (hD : ∀ s ∈ S, 0 < D s)
+    {h : Matrix (BlockSpace D S z) (BlockSpace D S z) ℂ} {μ μ' : BlockIndex S z → ℂ}
+    (hdiag : ∀ b, h.blockDiag' b = μ b • 1) (hdiag' : ∀ b, h.blockDiag' b = μ' b • 1) :
+    μ = μ' := by
+  funext b
+  have e := congrFun (congrFun ((hdiag b).symm.trans (hdiag' b)) ⟨0, slotSize_pos hD b⟩)
+    ⟨0, slotSize_pos hD b⟩
+  simpa using e
+
+/-- **The torsor of Theorem B** (lecture note AsymmetricFT, Theorem 6.2; milestone V, V2.2): for
+a reduction `(σ, g)` onto normal blocks of positive bond dimension, `(h, μ) ↦ (σ, h g)` is a
+bijection from the group `T_σ` of block upper triangular matrices with diagonal blocks `μ_b 1`,
+`μ_b ≠ 0`, onto the reductions with the order and the flag of `(σ, g)`. The scalars `μ` are
+recorded with `h`; they are determined by `h` because every slot has positive size. -/
+theorem bijOn_conjT (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s) :
+    Set.BijOn
+      (fun p : {p : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ × (BlockIndex S P.z → ℂ) //
+          p.1.BlockTriangular (fun x => P.ord x.1) ∧ (∀ b, p.2 b ≠ 0) ∧
+            ∀ b, p.1.blockDiag' b = p.2 b • 1} =>
+        P.conjT p.2.1 p.2.2.1 p.2.2.2)
+      Set.univ
+      {Q : MultiBlockCompression B S C | ∃ hz : Q.z = P.z, HEq Q.ord P.ord ∧
+          ∀ k, Q.flag (Fin.cast (by rw [hz]) k) = P.flag k} := by
+  refine ⟨fun p _ => ⟨rfl, HEq.rfl, fun k => P.conjT_flag _ _ _ k⟩, fun p _ q _ hpq => ?_,
+    fun Q hQ => ?_⟩
+  · obtain ⟨⟨h, μ⟩, ht, hμ, hdiag⟩ := p
+    obtain ⟨⟨h', μ'⟩, ht', hμ', hdiag'⟩ := q
+    obtain rfl : h = h' := P.eq_of_conjT_eq hpq
+    obtain rfl : μ = μ' := eq_of_blockDiag'_eq_smul hD hdiag hdiag'
+    rfl
+  · obtain ⟨hz, hord, hflag⟩ := hQ
+    obtain ⟨g, htri, hdiag, rfl⟩ := P.exists_eq_withGauge hz hord
+    have hflag' : ∀ k, (P.withGauge g htri hdiag).flag k = P.flag k := fun k => hflag k
+    exact ⟨⟨(coordChange P.gauge g, P.coordChangeScalar g),
+      blockTriangular_coordChange_of_flag_eq hflag', coordChangeScalar_ne_zero hC hD hflag',
+      blockDiag'_coordChange_eq_smul hC hflag'⟩, trivial, (withGauge_eq_conjT hC hD hflag').symm⟩
+
+end TorsorBijection
 
 end MultiBlockCompression
 

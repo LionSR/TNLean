@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessFlag
+import TNLean.MPS.FundamentalTheorem.Reduction.IrreducibleTensor
 import TNLean.MPS.Symmetry.MPOSymmetry.ZipperUniqueness
 
 /-!
@@ -51,6 +51,9 @@ in its bare form for the multi-block reductions of Section 1 of that note.
   `MPSTensor.MultiBlockCompression.right_eq_smul_of_split_of_pairwise_not_isGaugeRelated`:
   without repeated blocks, $\widetilde W_s = \lambda_s W_s$ and
   $\widetilde V_s = \lambda_s^{-1} V_s$.
+* `MPSTensor.MultiBlockCompression.range_rightCol_le_iSup_range_rightCol`: with repeated blocks
+  allowed, the range of `V_b` lies in the sum of the ranges of the `Ṽ_{b'}` over the slots `b'`
+  gauge equivalent to `b` (lecture note AsymmetricFT, Proposition 6.12).
 -/
 
 open scoped Matrix
@@ -475,6 +478,36 @@ theorem exists_left_eq_smul_and_right_eq_inv_smul_of_split (hP : P.remainder = 0
   ⟨P.splitScalar Q, fun s => ⟨splitScalar_ne_zero hP hQ hC hD hsep s,
     left_eq_smul_of_split_of_pairwise_not_isGaugeRelated hP hQ hC hsep s,
     right_eq_smul_of_split_of_pairwise_not_isGaugeRelated hP hQ hC hD hsep s⟩⟩
+
+/-- **Split reductions, subspace form** (lecture note AsymmetricFT, Proposition 6.12; milestone V,
+V2.10). For two split reductions onto the same family of normal blocks of positive bond
+dimension, repeated blocks allowed, the range of `V_b` lies in the sum of the ranges of the
+`Ṽ_{b'}` over the slots `b'` whose diagonal block is gauge equivalent to that of `b` (zero slots
+are gauge equivalent to each other). Indeed `V_b = ∑_{b'} Ṽ_{b'} h_{b'b}` with `h = g̃ g⁻¹`, and
+by Schur's lemma `h_{b'b} = 0` unless the two diagonal blocks are gauge equivalent. -/
+theorem range_rightCol_le_iSup_range_rightCol (hP : P.remainder = 0) (hQ : Q.remainder = 0)
+    (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s) (b : BlockIndex S P.z) :
+    LinearMap.range (P.rightCol b).mulVecLin ≤
+      ⨆ (b' : BlockIndex S Q.z) (_ : IsGaugeRelated (slotTensor C b) (slotTensor C b')),
+        LinearMap.range (Q.rightCol b').mulVecLin := by
+  have hirr : ∀ {z : ℕ} (c : BlockIndex S z), Matrix.IsIrreducibleAction (slotTensor C c) :=
+    fun c => ((isIrreducibleAction_and_pos_iff_isSimpleModule _).2
+      (isSimpleModule_slotTensor hC hD c)).1
+  have hV : P.rightCol b = ∑ b', Q.rightCol b' * blockEntry (P.relativeGauge Q) b' b := by
+    rw [rightCol, MultiBlockCompression.gaugeMatrixInv_eq_mul_relativeGauge Q P, Matrix.mul_assoc,
+      mul_blockEmbed_eq_sum, Matrix.mul_sum]
+    simp only [rightCol, Matrix.mul_assoc]
+  rintro _ ⟨u, rfl⟩
+  rw [Matrix.mulVecLin_apply, hV, Matrix.sum_mulVec]
+  refine Submodule.sum_mem _ fun b' _ => ?_
+  by_cases hrel : IsGaugeRelated (slotTensor C b) (slotTensor C b')
+  · refine Submodule.mem_iSup_of_mem b' (Submodule.mem_iSup_of_mem hrel ?_)
+    exact ⟨blockEntry (P.relativeGauge Q) b' b *ᵥ u, by
+      rw [Matrix.mulVecLin_apply, Matrix.mulVec_mulVec]⟩
+  · have h0 := eq_zero_of_intertwines_of_not_isGaugeRelated (hirr b) (hirr b')
+      (fun i => blockEntry_intertwines hP hQ i b' b) hrel
+    rw [h0, Matrix.mul_zero, Matrix.zero_mulVec]
+    exact zero_mem _
 
 end MultiBlockCompression
 

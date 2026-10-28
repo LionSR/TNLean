@@ -30,6 +30,9 @@ labels and gauge.
 
 ## Main definitions
 
+* `Submodule.subquotInfEquivOfLt`, `Submodule.subquotInfEquivOfLt'`: for two steps `P ⋖ Q`,
+  `P' ⋖ Q'` of submodules satisfying the matching condition, the isomorphisms `U / K ≅ Q / P` and
+  `U / K ≅ Q' / P'` induced by the inclusions (lecture note AsymmetricFT, Lemma 5.1(c)).
 * `MPSTensor.MultiBlockCompression.coveringChain`: the flag of a compression onto normal blocks
   as a covering chain.
 * `MPSTensor.MultiBlockCompression.matching`: the matching of the positions of two compressions.
@@ -40,6 +43,10 @@ labels and gauge.
 
 ## Main results
 
+* `Submodule.exists_subquotEquiv_of_covBy_of_lt`,
+  `CoveringMatching.CoveringChain.nonempty_subquotEquiv_jumpEquiv`: one step against another,
+  and matched steps of any two covering chains are isomorphic (lecture note AsymmetricFT,
+  Lemma 5.1(c) and Proposition 5.2).
 * `MPSTensor.MultiBlockCompression.matching_symm`,
   `MPSTensor.MultiBlockCompression.flag_sup_inf_eq` and its four companion identities:
   Proposition 4.2 (The matching).
@@ -51,6 +58,94 @@ labels and gauge.
 -/
 
 open scoped Matrix
+
+/-! ### One step against another: the step isomorphisms -/
+
+namespace Submodule
+
+variable {R M : Type*} [Ring R] [AddCommGroup M] [Module R M]
+
+/-- The second isomorphism theorem for a step: if `U ≤ Q`, `P ⊔ U = Q` and `U ⊓ P = K`, the
+inclusion `U → Q` induces an isomorphism `U / K ≅ Q / P`. -/
+noncomputable def subquotEquivOfSupEq {K U P Q : Submodule R M} (hUQ : U ≤ Q) (hsup : P ⊔ U = Q)
+    (hinf : U ⊓ P = K) : subquot K U ≃ₗ[R] subquot P Q :=
+  let f : U →ₗ[R] subquot P Q := (P.comap Q.subtype).mkQ ∘ₗ Submodule.inclusion hUQ
+  have hf : Function.Surjective f := by
+    intro y
+    obtain ⟨y, rfl⟩ := Submodule.Quotient.mk_surjective _ y
+    obtain ⟨p, hp, u, hu, hpu⟩ := Submodule.mem_sup.1 (hsup.symm ▸ y.2 : (y : M) ∈ P ⊔ U)
+    refine ⟨⟨u, hu⟩, (Submodule.Quotient.eq _).2 ?_⟩
+    rw [Submodule.mem_comap, Submodule.subtype_apply, Submodule.coe_sub,
+      Submodule.coe_inclusion, ← hpu, sub_add_cancel_right]
+    exact P.neg_mem hp
+  have hker : LinearMap.ker f = K.comap U.subtype := by
+    ext x
+    rw [LinearMap.mem_ker, LinearMap.comp_apply, Submodule.mkQ_apply,
+      Submodule.Quotient.mk_eq_zero, Submodule.mem_comap, Submodule.mem_comap,
+      Submodule.subtype_apply, Submodule.subtype_apply, Submodule.coe_inclusion, ← hinf]
+    exact ⟨fun h => ⟨x.2, h⟩, fun h => h.2⟩
+  (Submodule.quotEquivOfEq _ _ hker.symm).trans (f.quotKerEquivOfSurjective hf)
+
+/-- The isomorphism `U / K ≅ Q / P` is induced by the inclusion. -/
+theorem subquotEquivOfSupEq_mk {K U P Q : Submodule R M} (hUQ : U ≤ Q) (hsup : P ⊔ U = Q)
+    (hinf : U ⊓ P = K) (x : U) :
+    subquotEquivOfSupEq hUQ hsup hinf (Submodule.Quotient.mk x) =
+      Submodule.Quotient.mk ⟨x, hUQ x.2⟩ := rfl
+
+/-- The isomorphism `U / K ≅ Q / P` of lecture note AsymmetricFT, Lemma 5.1(c) (milestone V,
+V2.4) for a step `P ⋖ Q` against `P'`, `Q'` with `P ⊔ (Q ⊓ P') < P ⊔ (Q ⊓ Q')`, where
+`U = Q ⊓ Q'` and `K = P ⊓ Q'`. -/
+noncomputable def subquotInfEquivOfLt {P₁ Q₁ P₂ Q₂ : Submodule R M} (h₁ : P₁ ⋖ Q₁)
+    (h : P₁ ⊔ Q₁ ⊓ P₂ < P₁ ⊔ Q₁ ⊓ Q₂) :
+    subquot (P₁ ⊓ Q₂) (Q₁ ⊓ Q₂) ≃ₗ[R] subquot P₁ Q₁ :=
+  subquotEquivOfSupEq inf_le_left (CoveringMatching.step_sup_eq_of_lt h₁ h).1 <|
+    le_antisymm (le_inf inf_le_right (inf_le_left.trans inf_le_right))
+      (le_inf (le_inf (inf_le_left.trans h₁.le) inf_le_right) inf_le_left)
+
+/-- The isomorphism `U / K ≅ Q' / P'` of lecture note AsymmetricFT, Lemma 5.1(c) (milestone V,
+V2.4) for two steps `P ⋖ Q`, `P' ⋖ Q'` with `P ⊔ (Q ⊓ P') < P ⊔ (Q ⊓ Q')`, where `U = Q ⊓ Q'` and
+`K = P ⊓ Q'`. -/
+noncomputable def subquotInfEquivOfLt' {P₁ Q₁ P₂ Q₂ : Submodule R M} (h₁ : P₁ ⋖ Q₁)
+    (h₂ : P₂ ⋖ Q₂) (h : P₁ ⊔ Q₁ ⊓ P₂ < P₁ ⊔ Q₁ ⊓ Q₂) :
+    subquot (P₁ ⊓ Q₂) (Q₁ ⊓ Q₂) ≃ₗ[R] subquot P₂ Q₂ :=
+  subquotEquivOfSupEq inf_le_right (CoveringMatching.step_sup_eq_of_lt' h₁ h₂ h).1 <| by
+    rw [inf_assoc, inf_eq_right.2 h₂.le]
+    exact (CoveringMatching.step_inf_eq_of_lt h₁ h₂ h).symm
+
+/-- **One step against another** (lecture note AsymmetricFT, Lemma 5.1(c); milestone V, V2.4):
+for steps `P ⋖ Q` and `P' ⋖ Q'` of invariant subspaces with `P ⊔ (Q ⊓ P') < P ⊔ (Q ⊓ Q')`
+(condition (5.2)), and `U = Q ⊓ Q'`, `K = P ⊓ Q'`, the inclusions induce isomorphisms
+`U / K ≅ Q / P` and `U / K ≅ Q' / P'`. Stated for modules over any ring; for the word module of
+a tensor these are isomorphisms commuting with the letters. No hypothesis on blocks. -/
+theorem exists_subquotEquiv_of_covBy_of_lt {P₁ Q₁ P₂ Q₂ : Submodule R M} (h₁ : P₁ ⋖ Q₁)
+    (h₂ : P₂ ⋖ Q₂) (h : P₁ ⊔ Q₁ ⊓ P₂ < P₁ ⊔ Q₁ ⊓ Q₂) :
+    (∃ e : subquot (P₁ ⊓ Q₂) (Q₁ ⊓ Q₂) ≃ₗ[R] subquot P₁ Q₁,
+      ∀ x : ↥(Q₁ ⊓ Q₂), e (Submodule.Quotient.mk x) =
+        Submodule.Quotient.mk ⟨x.1, (Submodule.mem_inf.1 x.2).1⟩) ∧
+    (∃ e : subquot (P₁ ⊓ Q₂) (Q₁ ⊓ Q₂) ≃ₗ[R] subquot P₂ Q₂,
+      ∀ x : ↥(Q₁ ⊓ Q₂), e (Submodule.Quotient.mk x) =
+        Submodule.Quotient.mk ⟨x.1, (Submodule.mem_inf.1 x.2).2⟩) :=
+  ⟨⟨subquotInfEquivOfLt h₁ h, fun _ => rfl⟩, ⟨subquotInfEquivOfLt' h₁ h₂ h, fun _ => rfl⟩⟩
+
+end Submodule
+
+namespace CoveringMatching.CoveringChain
+
+variable {R M : Type*} [Ring R] [AddCommGroup M] [Module R M]
+
+/-- **Matched steps of two covering chains are isomorphic** (lecture note AsymmetricFT,
+Proposition 5.2; milestone V, V2.4): for any two chains of submodules with covering steps, not
+only the flags of two reductions, the step `k` of the first and the matched step of the second
+are isomorphic modules. For invariant flags of a tensor this is the coordinate-free form of "the
+induced letters are gauge equivalent". -/
+theorem nonempty_subquotEquiv_jumpEquiv {r r' : ℕ} (c : CoveringChain (Submodule R M) r)
+    (c' : CoveringChain (Submodule R M) r') (k : Fin r) :
+    Nonempty (Submodule.subquot (c.M k.castSucc) (c.M k.succ) ≃ₗ[R]
+      Submodule.subquot (c'.M (c.jumpEquiv c' k).castSucc) (c'.M (c.jumpEquiv c' k).succ)) :=
+  ⟨(Submodule.subquotInfEquivOfLt (c.covBy k) (c.jump_spec c' k)).symm.trans
+    (Submodule.subquotInfEquivOfLt' (c.covBy k) (c'.covBy _) (c.jump_spec c' k))⟩
+
+end CoveringMatching.CoveringChain
 
 namespace MPSTensor
 
@@ -270,25 +365,10 @@ noncomputable def subquotEquivMatching (k : Fin (S.card + P.z)) :
     Submodule.subquot (P.flag k.castSucc) (P.flag k.succ) ≃ₗ[WordAlgebra d]
       Submodule.subquot (Q.flag (P.matching Q hC hD hC' hD' k).castSucc)
         (Q.flag (P.matching Q hC hD hC' hD' k).succ) :=
-  let U := P.flag k.succ ⊓ Q.flag (P.matching Q hC hD hC' hD' k).succ
-  have hP : U ⊔ P.flag k.castSucc = P.flag k.succ := by
-    rw [sup_comm]; exact P.flag_sup_inf_eq Q hC hD hC' hD' k
-  have hQ : U ⊔ Q.flag (P.matching Q hC hD hC' hD' k).castSucc =
-      Q.flag (P.matching Q hC hD hC' hD' k).succ := by
-    rw [sup_comm]; exact P.flag_sup_inf_eq' Q hC hD hC' hD' k
-  have hUK : U ⊓ P.flag k.castSucc = U ⊓ Q.flag (P.matching Q hC hD hC' hD' k).castSucc :=
-    (P.flag_inf_inf_eq Q hC hD hC' hD' k).trans (P.flag_inf_inf_eq' Q hC hD hC' hD' k).symm
-  have hK : U.comap U.subtype ⊓ (P.flag k.castSucc).comap U.subtype =
-      U.comap U.subtype ⊓ (Q.flag (P.matching Q hC hD hC' hD' k).castSucc).comap U.subtype := by
-    ext x
-    simp only [Submodule.mem_inf, Submodule.mem_comap, Submodule.subtype_apply]
-    exact ⟨fun h => ⟨h.1, (hUK.le ⟨x.2, h.2⟩).2⟩, fun h => ⟨h.1, (hUK.ge ⟨x.2, h.2⟩).2⟩⟩
-  ((Submodule.subquotCongr rfl hP).symm.trans
-    (LinearMap.quotientInfEquivSupQuotient U (P.flag k.castSucc)).symm).trans
-    ((Submodule.quotEquivOfEq _ _ hK).trans
-      ((LinearMap.quotientInfEquivSupQuotient U
-        (Q.flag (P.matching Q hC hD hC' hD' k).castSucc)).trans
-        (Submodule.subquotCongr rfl hQ)))
+  (Submodule.subquotInfEquivOfLt (P.flag_covBy hC hD k)
+      ((P.coveringChain hC hD).jump_spec (Q.coveringChain hC' hD') k)).symm.trans
+    (Submodule.subquotInfEquivOfLt' (P.flag_covBy hC hD k) (Q.flag_covBy hC' hD' _)
+      ((P.coveringChain hC hD).jump_spec (Q.coveringChain hC' hD') k))
 
 /-- **The matched diagonal blocks have isomorphic word modules** (lecture note
 MultiBlockUniqueness, Proposition 4.2 (The

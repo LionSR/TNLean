@@ -9,9 +9,9 @@ import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessSameFlag
 /-!
 # A basis adapted to two flags, and the set of all reductions
 
-Let `P` and `Q` be two multi-block compressions of the same tensor `B` onto the same family of
-normal blocks of positive bond dimension, with flags `M_k` and `M'_{k'}`, and let `π` be the
-matching of their positions. For every position `k` put
+Let `P` and `Q` be two multi-block compressions of the same tensor `B` onto two families of
+normal blocks of positive bond dimension (possibly the same family), with flags `M_k` and
+`M'_{k'}`, and let `π` be the matching of their positions. For every position `k` put
 $$U_k = M_k ∩ M'_{π(k)},\qquad K_k = M_{k-1} ∩ M'_{π(k)},$$
 and choose a complex-linear complement `L_k` of `K_k` in `U_k`. Then
 $$\mathcal B = L_1 ⊕ ⋯ ⊕ L_r,\qquad M_k = \bigoplus_{j ≤ k} L_j,\qquad
@@ -57,9 +57,20 @@ matrices with nonzero scalar diagonal blocks.
   factors are unipotent.
 * `MPSTensor.MultiBlockCompression.gaugeMatrix_mul_gaugeMatrixInv_eq`: the factorization
   `g̃ g⁻¹ = 𝔄̃ P_X 𝔄⁻¹` of Theorem E.
+* `MPSTensor.MultiBlockCompression.flag_conjT_and_unipotentFactor_conjT`,
+  `MPSTensor.MultiBlockCompression.exists_conjT_unipotentFactor_eq`: unipotent changes `(σ, u g)`,
+  `(σ̃, ũ g̃)` keep the complements, `Γ` and `P_X` and multiply the factors, and every pair of
+  unipotent factors occurs (lecture note AsymmetricFT, Theorem 6.5, last sentence).
 * `MPSTensor.MultiBlockCompression.flag_fibre_eq_orbit`,
   `MPSTensor.FlagData.exists_multiBlockCompression_flag_eq`: Theorem 5.5 (D: the set of all
   reductions).
+* `MPSTensor.MultiBlockCompression.exists_z_eq_iff_exists_flagData`,
+  `MPSTensor.MultiBlockCompression.existsUnique_conjT`: which families admit a reduction, and
+  the set of all reductions as the union over labelled flags of the `T_σ`-orbits (lecture note
+  AsymmetricFT, Theorem 6.6).
+* `MPSTensor.FlagData.toMultiBlockCompression_toFlagData`, `MPSTensor.FlagData.exists_rep`: the
+  compression of a labelled flag has that labelled flag, so a choice of one reduction for each
+  labelled flag, as `existsUnique_conjT` assumes, exists.
 -/
 
 open scoped Matrix
@@ -286,21 +297,24 @@ theorem bijective_leftRow_domRestrict (R : MultiBlockCompression B S C) {b : Blo
 
 section Matched
 
-variable (P Q : MultiBlockCompression B S C) (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
-  (hD : ∀ s ∈ S, 0 < D s)
+variable {κ : Type*} [DecidableEq κ] {D' : κ → ℕ} {S' : Finset κ}
+  {C' : ∀ t, MPSTensor d (D' t)}
+  (P : MultiBlockCompression B S C) (Q : MultiBlockCompression B S' C')
+  (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
+  (hC' : ∀ t ∈ S', Kraus.IsNormal (C' t)) (hD' : ∀ t ∈ S', 0 < D' t)
 
 /-- The subspace `U_k = M_k ∩ M'_{π(k)}` of the matched positions `k ↦ π(k)` (lecture note
 MultiBlockUniqueness, Theorem 5.4 (E: a basis adapted to both flags)). -/
 noncomputable def matchedInter (k : Fin (S.card + P.z)) : Submodule (WordAlgebra d) B.WordModule :=
-  P.flag k.succ ⊓ Q.flag (P.matching Q hC hD hC hD k).succ
+  P.flag k.succ ⊓ Q.flag (P.matching Q hC hD hC' hD' k).succ
 
 /-- The subspace `K_k = M_{k-1} ∩ M'_{π(k)}` of the matched positions `k ↦ π(k)` (lecture note
 MultiBlockUniqueness, Theorem 5.4 (E: a basis adapted to both flags)). -/
 noncomputable def matchedKer (k : Fin (S.card + P.z)) : Submodule (WordAlgebra d) B.WordModule :=
-  P.flag k.castSucc ⊓ Q.flag (P.matching Q hC hD hC hD k).succ
+  P.flag k.castSucc ⊓ Q.flag (P.matching Q hC hD hC' hD' k).succ
 
 theorem matchedKer_le_matchedInter (k : Fin (S.card + P.z)) :
-    P.matchedKer Q hC hD k ≤ P.matchedInter Q hC hD k :=
+    P.matchedKer Q hC hD hC' hD' k ≤ P.matchedInter Q hC hD hC' hD' k :=
   inf_le_inf_right _ (P.flag_mono (Fin.castSucc_le_succ k))
 
 /-- **The chosen complement `L_k`** (lecture note MultiBlockUniqueness, Theorem 5.4 (E: a basis
@@ -308,58 +322,78 @@ adapted to both flags)): a
 complex-linear complement of `K_k` in `U_k`. -/
 noncomputable def matchedCompl (k : Fin (S.card + P.z)) : Submodule ℂ B.WordModule :=
   Classical.choose (IsModularLattice.exists_disjoint_and_sup_eq
-    (Submodule.restrictScalars_mono ℂ (P.matchedKer_le_matchedInter Q hC hD k)))
+    (Submodule.restrictScalars_mono ℂ (P.matchedKer_le_matchedInter Q hC hD hC' hD' k)))
 
 theorem disjoint_matchedCompl (k : Fin (S.card + P.z)) :
-    Disjoint ((P.matchedKer Q hC hD k).restrictScalars ℂ) (P.matchedCompl Q hC hD k) :=
+    Disjoint ((P.matchedKer Q hC hD hC' hD' k).restrictScalars ℂ)
+      (P.matchedCompl Q hC hD hC' hD' k) :=
   (Classical.choose_spec (IsModularLattice.exists_disjoint_and_sup_eq
-    (Submodule.restrictScalars_mono ℂ (P.matchedKer_le_matchedInter Q hC hD k)))).1
+    (Submodule.restrictScalars_mono ℂ (P.matchedKer_le_matchedInter Q hC hD hC' hD' k)))).1
 
 theorem sup_matchedCompl (k : Fin (S.card + P.z)) :
-    (P.matchedKer Q hC hD k).restrictScalars ℂ ⊔ P.matchedCompl Q hC hD k =
-      (P.matchedInter Q hC hD k).restrictScalars ℂ :=
+    (P.matchedKer Q hC hD hC' hD' k).restrictScalars ℂ ⊔ P.matchedCompl Q hC hD hC' hD' k =
+      (P.matchedInter Q hC hD hC' hD' k).restrictScalars ℂ :=
   (Classical.choose_spec (IsModularLattice.exists_disjoint_and_sup_eq
-    (Submodule.restrictScalars_mono ℂ (P.matchedKer_le_matchedInter Q hC hD k)))).2
+    (Submodule.restrictScalars_mono ℂ (P.matchedKer_le_matchedInter Q hC hD hC' hD' k)))).2
 
 theorem matchedCompl_le (k : Fin (S.card + P.z)) :
-    P.matchedCompl Q hC hD k ≤ (P.matchedInter Q hC hD k).restrictScalars ℂ :=
-  P.sup_matchedCompl Q hC hD k ▸ le_sup_right
+    P.matchedCompl Q hC hD hC' hD' k ≤ (P.matchedInter Q hC hD hC' hD' k).restrictScalars ℂ :=
+  P.sup_matchedCompl Q hC hD hC' hD' k ▸ le_sup_right
+
+/-- **Equal subspaces give equal complements** (lecture note AsymmetricFT, Theorem 6.5, last
+sentence; milestone V, V2.7): the complement `L_k` is a choice depending only on the two
+subspaces `K_k ⊆ U_k`, so two pairs of reductions, possibly with different numbers of zero slots
+or different positions, with the same `K` and the same `U` have the same complement. -/
+theorem matchedCompl_congr {P₁ : MultiBlockCompression B S C} {Q₁ : MultiBlockCompression B S' C'}
+    {P₂ : MultiBlockCompression B S C} {Q₂ : MultiBlockCompression B S' C'}
+    {k₁ : Fin (S.card + P₁.z)} {k₂ : Fin (S.card + P₂.z)}
+    (hK : P₁.matchedKer Q₁ hC hD hC' hD' k₁ = P₂.matchedKer Q₂ hC hD hC' hD' k₂)
+    (hU : P₁.matchedInter Q₁ hC hD hC' hD' k₁ = P₂.matchedInter Q₂ hC hD hC' hD' k₂) :
+    P₁.matchedCompl Q₁ hC hD hC' hD' k₁ = P₂.matchedCompl Q₂ hC hD hC' hD' k₂ := by
+  have key : ∀ {K₁ U₁ K₂ U₂ : Submodule ℂ B.WordModule}, K₁ = K₂ → U₁ = U₂ →
+      ∀ (h₁ : ∃ L, Disjoint K₁ L ∧ K₁ ⊔ L = U₁) (h₂ : ∃ L, Disjoint K₂ L ∧ K₂ ⊔ L = U₂),
+        Classical.choose h₁ = Classical.choose h₂ := by
+    rintro K U _ _ rfl rfl h₁ h₂
+    rfl
+  exact key (congrArg (Submodule.restrictScalars ℂ) hK) (congrArg (Submodule.restrictScalars ℂ) hU)
+    _ _
 
 /-- The reading map of the slot at position `k` of `P` identifies `L_k` with the coordinates of
 that slot (lecture note MultiBlockUniqueness, proof of Theorem 5.4 (E: a basis adapted to both
 flags)). -/
 theorem bijective_leftRow_matchedCompl (b : BlockIndex S P.z) :
     Function.Bijective (((P.leftRow b).mulVecLin ∘ₗ (WordModule.toVec B).toLinearMap).domRestrict
-      (P.matchedCompl Q hC hD (P.ord b))) :=
-  P.bijective_leftRow_domRestrict (U := P.matchedInter Q hC hD (P.ord b))
-    (P.flag_sup_inf_eq Q hC hD hC hD (P.ord b))
+      (P.matchedCompl Q hC hD hC' hD' (P.ord b))) :=
+  P.bijective_leftRow_domRestrict (U := P.matchedInter Q hC hD hC' hD' (P.ord b))
+    (P.flag_sup_inf_eq Q hC hD hC' hD' (P.ord b))
     (fun x => by
       rw [Submodule.restrictScalars_mem, matchedInter, matchedKer,
-        P.flag_inf_inf_eq Q hC hD hC hD (P.ord b)])
-    (P.disjoint_matchedCompl Q hC hD _) (P.sup_matchedCompl Q hC hD _)
+        P.flag_inf_inf_eq Q hC hD hC' hD' (P.ord b)])
+    (P.disjoint_matchedCompl Q hC hD hC' hD' _) (P.sup_matchedCompl Q hC hD hC' hD' _)
 
 /-- The reading map of the slot at position `π(j)` of `Q` identifies `L_j` with the coordinates of
 that slot (lecture note MultiBlockUniqueness, proof of Theorem 5.4 (E: a basis adapted to both
 flags)). -/
-theorem bijective_leftRow_matchedCompl' {j : Fin (S.card + P.z)} {b' : BlockIndex S Q.z}
-    (hj : P.matching Q hC hD hC hD j = Q.ord b') :
+theorem bijective_leftRow_matchedCompl' {j : Fin (S.card + P.z)} {b' : BlockIndex S' Q.z}
+    (hj : P.matching Q hC hD hC' hD' j = Q.ord b') :
     Function.Bijective (((Q.leftRow b').mulVecLin ∘ₗ (WordModule.toVec B).toLinearMap).domRestrict
-      (P.matchedCompl Q hC hD j)) := by
-  refine Q.bijective_leftRow_domRestrict (U := P.matchedInter Q hC hD j) ?_ (fun x => ?_)
-    (P.disjoint_matchedCompl Q hC hD j) (P.sup_matchedCompl Q hC hD j)
+      (P.matchedCompl Q hC hD hC' hD' j)) := by
+  refine Q.bijective_leftRow_domRestrict (U := P.matchedInter Q hC hD hC' hD' j) ?_ (fun x => ?_)
+    (P.disjoint_matchedCompl Q hC hD hC' hD' j) (P.sup_matchedCompl Q hC hD hC' hD' j)
   · rw [← hj]
-    exact P.flag_sup_inf_eq' Q hC hD hC hD j
+    exact P.flag_sup_inf_eq' Q hC hD hC' hD' j
   · rw [Submodule.restrictScalars_mem, ← hj, matchedInter, matchedKer,
-      P.flag_inf_inf_eq' Q hC hD hC hD j]
+      P.flag_inf_inf_eq' Q hC hD hC' hD' j]
 
 /-- **The dimension of `L_k`** (lecture note MultiBlockUniqueness, Theorem 5.4 (E: a basis adapted
 to both flags), proof:
 `U_k / K_k ≅ M_k / M_{k-1}`, so `dim L_k = n_k`). -/
 theorem finrank_matchedCompl (k : Fin (S.card + P.z)) :
-    Module.finrank ℂ (P.matchedCompl Q hC hD k) = slotSize D (P.ord.symm k) := by
+    Module.finrank ℂ (P.matchedCompl Q hC hD hC' hD' k) = slotSize D (P.ord.symm k) := by
   obtain ⟨b, rfl⟩ := P.ord.surjective k
   rw [P.ord.symm_apply_apply]
-  simpa using (LinearEquiv.ofBijective _ (P.bijective_leftRow_matchedCompl Q hC hD b)).finrank_eq
+  simpa using
+    (LinearEquiv.ofBijective _ (P.bijective_leftRow_matchedCompl Q hC hD hC' hD' b)).finrank_eq
 
 /-! ### The two decompositions -/
 
@@ -367,14 +401,15 @@ theorem finrank_matchedCompl (k : Fin (S.card + P.z)) :
 both flags), proof). -/
 theorem flag_succ_eq_sup_matchedCompl (k : Fin (S.card + P.z)) :
     (P.flag k.succ).restrictScalars ℂ =
-      (P.flag k.castSucc).restrictScalars ℂ ⊔ P.matchedCompl Q hC hD k := by
+      (P.flag k.castSucc).restrictScalars ℂ ⊔ P.matchedCompl Q hC hD hC' hD' k := by
   refine le_antisymm (fun x hx => ?_) (sup_le
     (Submodule.restrictScalars_mono ℂ (P.flag_mono (Fin.castSucc_le_succ k)))
-    ((P.matchedCompl_le Q hC hD k).trans (Submodule.restrictScalars_mono ℂ inf_le_left)))
-  rw [Submodule.restrictScalars_mem, ← P.flag_sup_inf_eq Q hC hD hC hD k] at hx
+    ((P.matchedCompl_le Q hC hD hC' hD' k).trans (Submodule.restrictScalars_mono ℂ inf_le_left)))
+  rw [Submodule.restrictScalars_mem, ← P.flag_sup_inf_eq Q hC hD hC' hD' k] at hx
   obtain ⟨a, ha, u, hu, rfl⟩ := Submodule.mem_sup.1 hx
-  have hu' : u ∈ (P.matchedKer Q hC hD k).restrictScalars ℂ ⊔ P.matchedCompl Q hC hD k := by
-    rw [P.sup_matchedCompl Q hC hD k]
+  have hu' : u ∈ (P.matchedKer Q hC hD hC' hD' k).restrictScalars ℂ ⊔
+      P.matchedCompl Q hC hD hC' hD' k := by
+    rw [P.sup_matchedCompl Q hC hD hC' hD' k]
     exact hu
   obtain ⟨c, hc, l, hl, rfl⟩ := Submodule.mem_sup.1 hu'
   have hc' : c ∈ P.flag k.castSucc := (Submodule.mem_inf.1 hc).1
@@ -385,20 +420,21 @@ theorem flag_succ_eq_sup_matchedCompl (k : Fin (S.card + P.z)) :
 adapted to both flags),
 proof). -/
 theorem flag_matching_succ_eq_sup_matchedCompl (j : Fin (S.card + P.z)) :
-    (Q.flag (P.matching Q hC hD hC hD j).succ).restrictScalars ℂ =
-      (Q.flag (P.matching Q hC hD hC hD j).castSucc).restrictScalars ℂ ⊔
-        P.matchedCompl Q hC hD j := by
+    (Q.flag (P.matching Q hC hD hC' hD' j).succ).restrictScalars ℂ =
+      (Q.flag (P.matching Q hC hD hC' hD' j).castSucc).restrictScalars ℂ ⊔
+        P.matchedCompl Q hC hD hC' hD' j := by
   refine le_antisymm (fun x hx => ?_) (sup_le
     (Submodule.restrictScalars_mono ℂ (Q.flag_mono (Fin.castSucc_le_succ _)))
-    ((P.matchedCompl_le Q hC hD j).trans (Submodule.restrictScalars_mono ℂ inf_le_right)))
-  rw [Submodule.restrictScalars_mem, ← P.flag_sup_inf_eq' Q hC hD hC hD j] at hx
+    ((P.matchedCompl_le Q hC hD hC' hD' j).trans (Submodule.restrictScalars_mono ℂ inf_le_right)))
+  rw [Submodule.restrictScalars_mem, ← P.flag_sup_inf_eq' Q hC hD hC' hD' j] at hx
   obtain ⟨a, ha, u, hu, rfl⟩ := Submodule.mem_sup.1 hx
-  have hu' : u ∈ (P.matchedKer Q hC hD j).restrictScalars ℂ ⊔ P.matchedCompl Q hC hD j := by
-    rw [P.sup_matchedCompl Q hC hD j]
+  have hu' : u ∈ (P.matchedKer Q hC hD hC' hD' j).restrictScalars ℂ ⊔
+      P.matchedCompl Q hC hD hC' hD' j := by
+    rw [P.sup_matchedCompl Q hC hD hC' hD' j]
     exact hu
   obtain ⟨c, hc, l, hl, rfl⟩ := Submodule.mem_sup.1 hu'
-  have hc'' : c ∈ P.flag j.succ ⊓ Q.flag (P.matching Q hC hD hC hD j).castSucc := by
-    rw [← P.flag_inf_eq Q hC hD hC hD j]
+  have hc'' : c ∈ P.flag j.succ ⊓ Q.flag (P.matching Q hC hD hC' hD' j).castSucc := by
+    rw [← P.flag_inf_eq Q hC hD hC' hD' j]
     exact hc
   rw [← add_assoc]
   exact Submodule.add_mem_sup ((Q.flag _).add_mem ha (Submodule.mem_inf.1 hc'').2) hl
@@ -406,10 +442,11 @@ theorem flag_matching_succ_eq_sup_matchedCompl (j : Fin (S.card + P.z)) :
 /-- `M'_{m} = M'_{m-1} + L_{π⁻¹(m)}` (lecture note MultiBlockUniqueness, Theorem 5.4 (E: a basis
 adapted to both flags),
 proof). -/
-theorem flag_succ_eq_sup_matchedCompl' (m : Fin (S.card + Q.z)) :
+theorem flag_succ_eq_sup_matchedCompl' (m : Fin (S'.card + Q.z)) :
     (Q.flag m.succ).restrictScalars ℂ = (Q.flag m.castSucc).restrictScalars ℂ ⊔
-      P.matchedCompl Q hC hD ((P.matching Q hC hD hC hD).symm m) := by
-  have := P.flag_matching_succ_eq_sup_matchedCompl Q hC hD ((P.matching Q hC hD hC hD).symm m)
+      P.matchedCompl Q hC hD hC' hD' ((P.matching Q hC hD hC' hD').symm m) := by
+  have := P.flag_matching_succ_eq_sup_matchedCompl Q hC hD hC' hD'
+    ((P.matching Q hC hD hC' hD').symm m)
   rwa [Equiv.apply_symm_apply] at this
 
 /-- **The first flag is a sum of complements** (lecture note MultiBlockUniqueness,
@@ -417,36 +454,36 @@ Theorem 5.4 (E: a basis adapted to both
 flags)): `M_k = ⨁_{j < k} L_j`, positions counted from `0`. -/
 theorem flag_eq_iSup_matchedCompl (k : Fin (S.card + P.z + 1)) :
     (P.flag k).restrictScalars ℂ =
-      ⨆ (j : Fin (S.card + P.z)) (_ : j.castSucc < k), P.matchedCompl Q hC hD j :=
+      ⨆ (j : Fin (S.card + P.z)) (_ : j.castSucc < k), P.matchedCompl Q hC hD hC' hD' j :=
   eq_iSup_castSucc_lt_of_eq_sup (F := fun k => (P.flag k).restrictScalars ℂ)
-    (by simp [P.flag_zero]) (P.flag_succ_eq_sup_matchedCompl Q hC hD) k
+    (by simp [P.flag_zero]) (P.flag_succ_eq_sup_matchedCompl Q hC hD hC' hD') k
 
 /-- **The second flag is a sum of complements** (lecture note MultiBlockUniqueness,
 Theorem 5.4 (E: a basis adapted to both
 flags)): `M'_{k'} = ⨁_{π(j) < k'} L_j`, positions counted from `0`. -/
-theorem flag_eq_iSup_matchedCompl' (k' : Fin (S.card + Q.z + 1)) :
+theorem flag_eq_iSup_matchedCompl' (k' : Fin (S'.card + Q.z + 1)) :
     (Q.flag k').restrictScalars ℂ =
-      ⨆ (j : Fin (S.card + P.z)) (_ : (P.matching Q hC hD hC hD j).castSucc < k'),
-        P.matchedCompl Q hC hD j := by
-  have h : (Q.flag k').restrictScalars ℂ = ⨆ (m : Fin (S.card + Q.z)) (_ : m.castSucc < k'),
-      P.matchedCompl Q hC hD ((P.matching Q hC hD hC hD).symm m) :=
+      ⨆ (j : Fin (S.card + P.z)) (_ : (P.matching Q hC hD hC' hD' j).castSucc < k'),
+        P.matchedCompl Q hC hD hC' hD' j := by
+  have h : (Q.flag k').restrictScalars ℂ = ⨆ (m : Fin (S'.card + Q.z)) (_ : m.castSucc < k'),
+      P.matchedCompl Q hC hD hC' hD' ((P.matching Q hC hD hC' hD').symm m) :=
     eq_iSup_castSucc_lt_of_eq_sup (F := fun k => (Q.flag k).restrictScalars ℂ)
-      (by simp [Q.flag_zero]) (P.flag_succ_eq_sup_matchedCompl' Q hC hD) k'
+      (by simp [Q.flag_zero]) (P.flag_succ_eq_sup_matchedCompl' Q hC hD hC' hD') k'
   rw [h]
   apply le_antisymm
-  · refine iSup₂_le fun m hm => le_iSup₂_of_le ((P.matching Q hC hD hC hD).symm m) ?_ le_rfl
+  · refine iSup₂_le fun m hm => le_iSup₂_of_le ((P.matching Q hC hD hC' hD').symm m) ?_ le_rfl
     rwa [Equiv.apply_symm_apply]
-  · refine iSup₂_le fun j hj => le_iSup₂_of_le (P.matching Q hC hD hC hD j) hj ?_
+  · refine iSup₂_le fun j hj => le_iSup₂_of_le (P.matching Q hC hD hC' hD' j) hj ?_
     rw [Equiv.symm_apply_apply]
 
 /-- **The complements span the bond space** (lecture note MultiBlockUniqueness,
 Theorem 5.4 (E: a basis adapted to both flags)). -/
-theorem iSup_matchedCompl : ⨆ j, P.matchedCompl Q hC hD j = ⊤ := by
-  have h := P.flag_eq_iSup_matchedCompl Q hC hD (Fin.last _)
+theorem iSup_matchedCompl : ⨆ j, P.matchedCompl Q hC hD hC' hD' j = ⊤ := by
+  have h := P.flag_eq_iSup_matchedCompl Q hC hD hC' hD' (Fin.last _)
   rw [P.flag_last, Submodule.restrictScalars_top] at h
   rw [h]
   exact iSup_congr fun j =>
-    (iSup_pos (f := fun _ => P.matchedCompl Q hC hD j) (Fin.castSucc_lt_last j)).symm
+    (iSup_pos (f := fun _ => P.matchedCompl Q hC hD hC' hD' j) (Fin.castSucc_lt_last j)).symm
 
 /-! ### The coordinates adapted to both flags -/
 
@@ -455,98 +492,100 @@ to both flags)): the vector
 `x = ∑_j x_j`, `x_j ∈ L_j`, goes to the vector whose block at the slot `b` of position `j` is
 `W_b x_j`. -/
 noncomputable def commonCoord : B.WordModule ≃ₗ[ℂ] (BlockSpace D S P.z → ℂ) :=
-  (slotAssembleEquiv (P.matchedCompl Q hC hD) P.ord
+  (slotAssembleEquiv (P.matchedCompl Q hC hD hC' hD') P.ord
     (fun b => (P.leftRow b).mulVecLin ∘ₗ (WordModule.toVec B).toLinearMap)
-    (P.bijective_leftRow_matchedCompl Q hC hD) (P.iSup_matchedCompl Q hC hD)
+    (P.bijective_leftRow_matchedCompl Q hC hD hC' hD') (P.iSup_matchedCompl Q hC hD hC' hD')
     P.coord.finrank_eq.symm).symm
 
 /-- **The change of basis `P_X Γ`** (lecture note MultiBlockUniqueness, Theorem 5.4 (E: a basis
 adapted to both flags)): the
 vector `x = ∑_j x_j`, `x_j ∈ L_j`, goes to the vector whose block at the slot `b'` of position
 `π(j)` of `Q` is `W'_{b'} x_j`. -/
-noncomputable def commonCoord' : B.WordModule ≃ₗ[ℂ] (BlockSpace D S Q.z → ℂ) :=
-  (slotAssembleEquiv (P.matchedCompl Q hC hD) (Q.ord.trans (P.matching Q hC hD hC hD).symm)
+noncomputable def commonCoord' : B.WordModule ≃ₗ[ℂ] (BlockSpace D' S' Q.z → ℂ) :=
+  (slotAssembleEquiv (P.matchedCompl Q hC hD hC' hD')
+    (Q.ord.trans (P.matching Q hC hD hC' hD').symm)
     (fun b' => (Q.leftRow b').mulVecLin ∘ₗ (WordModule.toVec B).toLinearMap)
-    (fun _ => P.bijective_leftRow_matchedCompl' Q hC hD (Equiv.apply_symm_apply _ _))
-    (P.iSup_matchedCompl Q hC hD) Q.coord.finrank_eq.symm).symm
+    (fun _ => P.bijective_leftRow_matchedCompl' Q hC hD hC' hD' (Equiv.apply_symm_apply _ _))
+    (P.iSup_matchedCompl Q hC hD hC' hD') Q.coord.finrank_eq.symm).symm
 
 theorem commonCoord_of_mem {b : BlockIndex S P.z} {x : B.WordModule}
-    (hx : x ∈ P.matchedCompl Q hC hD (P.ord b)) :
-    P.commonCoord Q hC hD x =
+    (hx : x ∈ P.matchedCompl Q hC hD hC' hD' (P.ord b)) :
+    P.commonCoord Q hC hD hC' hD' x =
       Matrix.blockEmbed (slotSize D) b *ᵥ (P.leftRow b *ᵥ WordModule.toVec B x) :=
   slotAssembleEquiv_symm_apply_of_mem _ _ _ _ _ _ hx
 
-theorem commonCoord'_of_mem {b' : BlockIndex S Q.z} {x : B.WordModule}
-    (hx : x ∈ P.matchedCompl Q hC hD ((P.matching Q hC hD hC hD).symm (Q.ord b'))) :
-    P.commonCoord' Q hC hD x =
-      Matrix.blockEmbed (slotSize D) b' *ᵥ (Q.leftRow b' *ᵥ WordModule.toVec B x) :=
+theorem commonCoord'_of_mem {b' : BlockIndex S' Q.z} {x : B.WordModule}
+    (hx : x ∈ P.matchedCompl Q hC hD hC' hD' ((P.matching Q hC hD hC' hD').symm (Q.ord b'))) :
+    P.commonCoord' Q hC hD hC' hD' x =
+      Matrix.blockEmbed (slotSize D') b' *ᵥ (Q.leftRow b' *ᵥ WordModule.toVec B x) :=
   slotAssembleEquiv_symm_apply_of_mem _ _ _ _ _ _ hx
 
 /-- **`Γ` is adapted to the first flag** (lecture note MultiBlockUniqueness, Theorem 5.4 (E: a basis
 adapted to both flags)):
 `Γ` maps `M_k` onto the leading coordinate subspace `E_k`. -/
 theorem mem_flag_iff_commonCoord (k : Fin (S.card + P.z + 1)) (x : B.WordModule) :
-    x ∈ P.flag k ↔ P.commonCoord Q hC hD x ∈ P.leadingSpace k := by
+    x ∈ P.flag k ↔ P.commonCoord Q hC hD hC' hD' x ∈ P.leadingSpace k := by
   change x ∈ (P.flag k).restrictScalars ℂ ↔ _
-  rw [mem_iff_slotAssembleEquiv_symm_apply (P.matchedCompl Q hC hD) P.ord
+  rw [mem_iff_slotAssembleEquiv_symm_apply (P.matchedCompl Q hC hD hC' hD') P.ord
     (fun b => (P.leftRow b).mulVecLin ∘ₗ (WordModule.toVec B).toLinearMap)
-    (P.bijective_leftRow_matchedCompl Q hC hD) (P.iSup_matchedCompl Q hC hD)
-    P.coord.finrank_eq.symm (P.flag_eq_iSup_matchedCompl Q hC hD k) x, P.mem_leadingSpace]
+    (P.bijective_leftRow_matchedCompl Q hC hD hC' hD') (P.iSup_matchedCompl Q hC hD hC' hD')
+    P.coord.finrank_eq.symm (P.flag_eq_iSup_matchedCompl Q hC hD hC' hD' k) x,
+    P.mem_leadingSpace]
   simp only [not_lt]
   rfl
 
 /-- **`P_X Γ` is adapted to the second flag** (lecture note MultiBlockUniqueness,
 Theorem 5.4 (E: a basis adapted to both
 flags)): `P_X Γ` maps `M'_{k'}` onto the leading coordinate subspace `E'_{k'}`. -/
-theorem mem_flag_iff_commonCoord' (k' : Fin (S.card + Q.z + 1)) (x : B.WordModule) :
-    x ∈ Q.flag k' ↔ P.commonCoord' Q hC hD x ∈ Q.leadingSpace k' := by
+theorem mem_flag_iff_commonCoord' (k' : Fin (S'.card + Q.z + 1)) (x : B.WordModule) :
+    x ∈ Q.flag k' ↔ P.commonCoord' Q hC hD hC' hD' x ∈ Q.leadingSpace k' := by
   change x ∈ (Q.flag k').restrictScalars ℂ ↔ _
-  rw [mem_iff_slotAssembleEquiv_symm_apply (P.matchedCompl Q hC hD)
-    (Q.ord.trans (P.matching Q hC hD hC hD).symm)
+  rw [mem_iff_slotAssembleEquiv_symm_apply (P.matchedCompl Q hC hD hC' hD')
+    (Q.ord.trans (P.matching Q hC hD hC' hD').symm)
     (fun b' => (Q.leftRow b').mulVecLin ∘ₗ (WordModule.toVec B).toLinearMap)
-    (fun _ => P.bijective_leftRow_matchedCompl' Q hC hD (Equiv.apply_symm_apply _ _))
-    (P.iSup_matchedCompl Q hC hD) Q.coord.finrank_eq.symm
-    (P.flag_eq_iSup_matchedCompl' Q hC hD k') x, Q.mem_leadingSpace]
+    (fun _ => P.bijective_leftRow_matchedCompl' Q hC hD hC' hD' (Equiv.apply_symm_apply _ _))
+    (P.iSup_matchedCompl Q hC hD hC' hD') Q.coord.finrank_eq.symm
+    (P.flag_eq_iSup_matchedCompl' Q hC hD hC' hD' k') x, Q.mem_leadingSpace]
   simp only [Equiv.trans_apply, Equiv.apply_symm_apply, not_lt]
   rfl
 
 /-- **The complements are independent** (lecture note MultiBlockUniqueness, Theorem 5.4 (E: a basis
 adapted to both flags),
 `𝓑 = L_1 ⊕ ⋯ ⊕ L_r`). -/
-theorem iSupIndep_matchedCompl : iSupIndep (P.matchedCompl Q hC hD) :=
-  iSupIndep_of_slotAssemble (P.matchedCompl Q hC hD) P.ord
+theorem iSupIndep_matchedCompl : iSupIndep (P.matchedCompl Q hC hD hC' hD') :=
+  iSupIndep_of_slotAssemble (P.matchedCompl Q hC hD hC' hD') P.ord
     (fun b => (P.leftRow b).mulVecLin ∘ₗ (WordModule.toVec B).toLinearMap)
-    (P.bijective_leftRow_matchedCompl Q hC hD) (P.iSup_matchedCompl Q hC hD)
+    (P.bijective_leftRow_matchedCompl Q hC hD hC' hD') (P.iSup_matchedCompl Q hC hD hC' hD')
     P.coord.finrank_eq.symm
 
 /-! ### The factorization -/
 
 /-- `Γ` as a change of coordinates of the bond space. -/
 noncomputable def commonGauge : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S P.z → ℂ) :=
-  (WordModule.toVec B).symm.trans (P.commonCoord Q hC hD)
+  (WordModule.toVec B).symm.trans (P.commonCoord Q hC hD hC' hD')
 
 /-- `P_X Γ` as a change of coordinates of the bond space. -/
-noncomputable def commonGauge' : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S Q.z → ℂ) :=
-  (WordModule.toVec B).symm.trans (P.commonCoord' Q hC hD)
+noncomputable def commonGauge' : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D' S' Q.z → ℂ) :=
+  (WordModule.toVec B).symm.trans (P.commonCoord' Q hC hD hC' hD')
 
 /-- **The unipotent factor `𝔄 = g Γ⁻¹`** (lecture note MultiBlockUniqueness, Theorem 5.4 (E: a basis
 adapted to both flags)). -/
 noncomputable def unipotentFactor : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ :=
-  coordChange (P.commonGauge Q hC hD) P.gauge
+  coordChange (P.commonGauge Q hC hD hC' hD') P.gauge
 
 /-- **The unipotent factor `𝔄̃ = g̃ (P_X Γ)⁻¹`** (lecture note MultiBlockUniqueness,
 Theorem 5.4 (E: a basis adapted to both flags)). -/
-noncomputable def unipotentFactor' : Matrix (BlockSpace D S Q.z) (BlockSpace D S Q.z) ℂ :=
-  coordChange (P.commonGauge' Q hC hD) Q.gauge
+noncomputable def unipotentFactor' : Matrix (BlockSpace D' S' Q.z) (BlockSpace D' S' Q.z) ℂ :=
+  coordChange (P.commonGauge' Q hC hD hC' hD') Q.gauge
 
 /-- **`𝔄` is block upper triangular** in the order of `P` (lecture note MultiBlockUniqueness,
 Theorem 5.4 (E: a basis adapted to both flags)): `g` and `Γ` both map `M_k` onto `E_k`. -/
 theorem blockTriangular_unipotentFactor :
-    (P.unipotentFactor Q hC hD).BlockTriangular fun x => P.ord x.1 := by
+    (P.unipotentFactor Q hC hD hC' hD').BlockTriangular fun x => P.ord x.1 := by
   refine P.blockTriangular_coordChange fun k => ?_
   ext v
   simp only [Submodule.mem_comap, LinearEquiv.coe_coe]
-  have h1 := P.mem_flag_iff_commonCoord Q hC hD k ((WordModule.toVec B).symm v)
+  have h1 := P.mem_flag_iff_commonCoord Q hC hD hC' hD' k ((WordModule.toVec B).symm v)
   have h2 : (WordModule.toVec B).symm v ∈ P.flag k ↔ P.gauge v ∈ P.leadingSpace k := by
     rw [P.mem_flag_iff_toVec_mem_comap, LinearEquiv.apply_symm_apply]
     rfl
@@ -556,16 +595,16 @@ theorem blockTriangular_unipotentFactor :
 Theorem 5.4 (E: a basis adapted to both
 flags)): on `L_k` both `g` and `Γ` read the block of position `k` by `W_{σ(k)}`. -/
 theorem blockDiag'_unipotentFactor (b : BlockIndex S P.z) :
-    (P.unipotentFactor Q hC hD).blockDiag' b = 1 := by
+    (P.unipotentFactor Q hC hD hC' hD').blockDiag' b = 1 := by
   rw [← Matrix.blockProj_mul_mul_blockEmbed]
   refine Matrix.ext_iff_mulVec.2 fun v => ?_
-  obtain ⟨⟨x, hx⟩, hxv⟩ := (P.bijective_leftRow_matchedCompl Q hC hD b).2 v
+  obtain ⟨⟨x, hx⟩, hxv⟩ := (P.bijective_leftRow_matchedCompl Q hC hD hC' hD' b).2 v
   have hxv' : P.leftRow b *ᵥ WordModule.toVec B x = v := hxv
-  have hΓ : (P.commonGauge Q hC hD).symm (Matrix.blockEmbed (slotSize D) b *ᵥ v) =
+  have hΓ : (P.commonGauge Q hC hD hC' hD').symm (Matrix.blockEmbed (slotSize D) b *ᵥ v) =
       WordModule.toVec B x := by
     rw [LinearEquiv.symm_apply_eq]
-    change _ = P.commonCoord Q hC hD ((WordModule.toVec B).symm (WordModule.toVec B x))
-    rw [LinearEquiv.symm_apply_apply, P.commonCoord_of_mem Q hC hD hx, hxv']
+    change _ = P.commonCoord Q hC hD hC' hD' ((WordModule.toVec B).symm (WordModule.toVec B x))
+    rw [LinearEquiv.symm_apply_apply, P.commonCoord_of_mem Q hC hD hC' hD' hx, hxv']
   rw [← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec, unipotentFactor, coordChange_mulVec, hΓ,
     Matrix.one_mulVec, blockProj_mulVec, ← hxv', P.leftRow_mulVec]
 
@@ -573,11 +612,11 @@ theorem blockDiag'_unipotentFactor (b : BlockIndex S P.z) :
 Theorem 5.4 (E: a basis adapted to both
 flags)): `g̃` and `P_X Γ` both map `M'_{k'}` onto `E'_{k'}`. -/
 theorem blockTriangular_unipotentFactor' :
-    (P.unipotentFactor' Q hC hD).BlockTriangular fun x => Q.ord x.1 := by
+    (P.unipotentFactor' Q hC hD hC' hD').BlockTriangular fun x => Q.ord x.1 := by
   refine Q.blockTriangular_coordChange fun k => ?_
   ext v
   simp only [Submodule.mem_comap, LinearEquiv.coe_coe]
-  have h1 := P.mem_flag_iff_commonCoord' Q hC hD k ((WordModule.toVec B).symm v)
+  have h1 := P.mem_flag_iff_commonCoord' Q hC hD hC' hD' k ((WordModule.toVec B).symm v)
   have h2 : (WordModule.toVec B).symm v ∈ Q.flag k ↔ Q.gauge v ∈ Q.leadingSpace k := by
     rw [Q.mem_flag_iff_toVec_mem_comap, LinearEquiv.apply_symm_apply]
     rfl
@@ -585,67 +624,72 @@ theorem blockTriangular_unipotentFactor' :
 
 /-- **The diagonal blocks of `𝔄̃` are identities** (lecture note MultiBlockUniqueness,
 Theorem 5.4 (E: a basis adapted to both flags)). -/
-theorem blockDiag'_unipotentFactor' (b' : BlockIndex S Q.z) :
-    (P.unipotentFactor' Q hC hD).blockDiag' b' = 1 := by
+theorem blockDiag'_unipotentFactor' (b' : BlockIndex S' Q.z) :
+    (P.unipotentFactor' Q hC hD hC' hD').blockDiag' b' = 1 := by
   rw [← Matrix.blockProj_mul_mul_blockEmbed]
   refine Matrix.ext_iff_mulVec.2 fun v => ?_
   obtain ⟨⟨x, hx⟩, hxv⟩ :=
-    (P.bijective_leftRow_matchedCompl' Q hC hD (Equiv.apply_symm_apply _ (Q.ord b'))).2 v
+    (P.bijective_leftRow_matchedCompl' Q hC hD hC' hD' (Equiv.apply_symm_apply _ (Q.ord b'))).2 v
   have hxv' : Q.leftRow b' *ᵥ WordModule.toVec B x = v := hxv
-  have hΓ : (P.commonGauge' Q hC hD).symm (Matrix.blockEmbed (slotSize D) b' *ᵥ v) =
+  have hΓ : (P.commonGauge' Q hC hD hC' hD').symm (Matrix.blockEmbed (slotSize D') b' *ᵥ v) =
       WordModule.toVec B x := by
     rw [LinearEquiv.symm_apply_eq]
-    change _ = P.commonCoord' Q hC hD ((WordModule.toVec B).symm (WordModule.toVec B x))
-    rw [LinearEquiv.symm_apply_apply, P.commonCoord'_of_mem Q hC hD hx, hxv']
+    change _ =
+      P.commonCoord' Q hC hD hC' hD' ((WordModule.toVec B).symm (WordModule.toVec B x))
+    rw [LinearEquiv.symm_apply_apply, P.commonCoord'_of_mem Q hC hD hC' hD' hx, hxv']
   rw [← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec, unipotentFactor', coordChange_mulVec, hΓ,
     Matrix.one_mulVec, blockProj_mulVec, ← hxv', Q.leftRow_mulVec]
 
 /-- The slot matched with `b` sits at the matched position. -/
 theorem ord_slotMatching (b : BlockIndex S P.z) :
-    Q.ord (P.slotMatching Q hC hD hC hD b) = P.matching Q hC hD hC hD (P.ord b) := by
+    Q.ord (P.slotMatching Q hC hD hC' hD' b) = P.matching Q hC hD hC' hD' (P.ord b) := by
   rw [slotMatching_apply, Equiv.apply_symm_apply]
 
 /-- **The intertwiner `X_j`** of Theorem 5.3 (C: two reductions with different flags) for the slot
 `b` of position `j` and the matched
 slot of `Q` (lecture note MultiBlockUniqueness, Theorem 5.4 (E: a basis adapted to both flags)). -/
 noncomputable def matchedIntertwiner (b : BlockIndex S P.z) :
-    Matrix (Fin (slotSize D (P.slotMatching Q hC hD hC hD b))) (Fin (slotSize D b)) ℂ :=
-  Classical.choose
-    (P.exists_intertwiner_of_matching Q hC hD hC hD (P.ord b) rfl (P.ord_slotMatching Q hC hD b))
+    Matrix (Fin (slotSize D' (P.slotMatching Q hC hD hC' hD' b))) (Fin (slotSize D b)) ℂ :=
+  Classical.choose (P.exists_intertwiner_of_matching Q hC hD hC' hD' (P.ord b) rfl
+    (P.ord_slotMatching Q hC hD hC' hD' b))
 
 /-- The intertwiner `X_j` is invertible and intertwines the diagonal blocks of the matched
 slots (lecture note MultiBlockUniqueness, Theorem 5.3 (C: two reductions with different flags)). -/
 theorem matchedIntertwiner_spec (b : BlockIndex S P.z) :
-    ∃ Y : Matrix (Fin (slotSize D b)) (Fin (slotSize D (P.slotMatching Q hC hD hC hD b))) ℂ,
-      P.matchedIntertwiner Q hC hD b * Y = 1 ∧ Y * P.matchedIntertwiner Q hC hD b = 1 ∧
-      ∀ i, P.matchedIntertwiner Q hC hD b * slotTensor C b i =
-        slotTensor C (P.slotMatching Q hC hD hC hD b) i * P.matchedIntertwiner Q hC hD b := by
+    ∃ Y : Matrix (Fin (slotSize D b)) (Fin (slotSize D' (P.slotMatching Q hC hD hC' hD' b))) ℂ,
+      P.matchedIntertwiner Q hC hD hC' hD' b * Y = 1 ∧
+      Y * P.matchedIntertwiner Q hC hD hC' hD' b = 1 ∧
+      ∀ i, P.matchedIntertwiner Q hC hD hC' hD' b * slotTensor C b i =
+        slotTensor C' (P.slotMatching Q hC hD hC' hD' b) i *
+          P.matchedIntertwiner Q hC hD hC' hD' b := by
   obtain ⟨Y, hXY, hYX, hint, -, -⟩ := Classical.choose_spec
-    (P.exists_intertwiner_of_matching Q hC hD hC hD (P.ord b) rfl (P.ord_slotMatching Q hC hD b))
+    (P.exists_intertwiner_of_matching Q hC hD hC' hD' (P.ord b) rfl
+      (P.ord_slotMatching Q hC hD hC' hD' b))
   exact ⟨Y, hXY, hYX, hint⟩
 
 /-- On `U_j` the reading map of the matched slot of `Q` is `X_j` times the reading map of the
 slot of `P` (lecture note MultiBlockUniqueness, Theorem 5.3 (C: two reductions with different
 flags)). -/
 theorem leftRow_slotMatching_mulVec (b : BlockIndex S P.z) {x : B.WordModule}
-    (hx : x ∈ P.matchedInter Q hC hD (P.ord b)) :
-    Q.leftRow (P.slotMatching Q hC hD hC hD b) *ᵥ WordModule.toVec B x =
-      P.matchedIntertwiner Q hC hD b *ᵥ (P.leftRow b *ᵥ WordModule.toVec B x) := by
+    (hx : x ∈ P.matchedInter Q hC hD hC' hD' (P.ord b)) :
+    Q.leftRow (P.slotMatching Q hC hD hC' hD' b) *ᵥ WordModule.toVec B x =
+      P.matchedIntertwiner Q hC hD hC' hD' b *ᵥ (P.leftRow b *ᵥ WordModule.toVec B x) := by
   obtain ⟨-, -, -, -, h, -⟩ := Classical.choose_spec
-    (P.exists_intertwiner_of_matching Q hC hD hC hD (P.ord b) rfl (P.ord_slotMatching Q hC hD b))
+    (P.exists_intertwiner_of_matching Q hC hD hC' hD' (P.ord b) rfl
+      (P.ord_slotMatching Q hC hD hC' hD' b))
   exact h x hx
 
 /-- **The block permutation matrix `P_X`** (lecture note MultiBlockUniqueness, Theorem 5.4 (E: a
 basis adapted to both flags)):
 it sends the block of the slot `b` to the block of the matched slot of `Q`, applying `X_b`. -/
-noncomputable def matchingPermMatrix : Matrix (BlockSpace D S Q.z) (BlockSpace D S P.z) ℂ :=
-  ∑ b, Matrix.blockEmbed (slotSize D) (P.slotMatching Q hC hD hC hD b) *
-    P.matchedIntertwiner Q hC hD b * Matrix.blockProj (slotSize D) b
+noncomputable def matchingPermMatrix : Matrix (BlockSpace D' S' Q.z) (BlockSpace D S P.z) ℂ :=
+  ∑ b, Matrix.blockEmbed (slotSize D') (P.slotMatching Q hC hD hC' hD' b) *
+    P.matchedIntertwiner Q hC hD hC' hD' b * Matrix.blockProj (slotSize D) b
 
 theorem matchingPermMatrix_mul_blockEmbed (b : BlockIndex S P.z) :
-    P.matchingPermMatrix Q hC hD * Matrix.blockEmbed (slotSize D) b =
-      Matrix.blockEmbed (slotSize D) (P.slotMatching Q hC hD hC hD b) *
-        P.matchedIntertwiner Q hC hD b := by
+    P.matchingPermMatrix Q hC hD hC' hD' * Matrix.blockEmbed (slotSize D) b =
+      Matrix.blockEmbed (slotSize D') (P.slotMatching Q hC hD hC' hD' b) *
+        P.matchedIntertwiner Q hC hD hC' hD' b := by
   rw [matchingPermMatrix, Matrix.sum_mul, Finset.sum_eq_single b]
   · rw [Matrix.mul_assoc, Matrix.blockProj_mul_blockEmbed_self, Matrix.mul_one]
   · intro c _ hc
@@ -658,50 +702,53 @@ adapted to both flags), proof:
 on `L_j ⊆ U_j` the reading of the matched slot is `X_j W_{σ(j)}` by Theorem 5.3 (C: two reductions
 with different flags)). -/
 theorem commonCoord'_eq_mulVec (x : B.WordModule) :
-    P.commonCoord' Q hC hD x =
-      P.matchingPermMatrix Q hC hD *ᵥ P.commonCoord Q hC hD x := by
-  have h : ⨆ j, P.matchedCompl Q hC hD j ≤
-      LinearMap.eqLocus (P.commonCoord' Q hC hD).toLinearMap
-        ((P.matchingPermMatrix Q hC hD).mulVecLin ∘ₗ (P.commonCoord Q hC hD).toLinearMap) := by
+    P.commonCoord' Q hC hD hC' hD' x =
+      P.matchingPermMatrix Q hC hD hC' hD' *ᵥ P.commonCoord Q hC hD hC' hD' x := by
+  have h : ⨆ j, P.matchedCompl Q hC hD hC' hD' j ≤
+      LinearMap.eqLocus (P.commonCoord' Q hC hD hC' hD').toLinearMap
+        ((P.matchingPermMatrix Q hC hD hC' hD').mulVecLin ∘ₗ
+          (P.commonCoord Q hC hD hC' hD').toLinearMap) := by
     refine iSup_le fun j y hy => ?_
     obtain ⟨b, rfl⟩ := P.ord.surjective j
-    have hy' : y ∈ P.matchedCompl Q hC hD
-        ((P.matching Q hC hD hC hD).symm (Q.ord (P.slotMatching Q hC hD hC hD b))) := by
-      rw [P.ord_slotMatching Q hC hD, Equiv.symm_apply_apply]
+    have hy' : y ∈ P.matchedCompl Q hC hD hC' hD'
+        ((P.matching Q hC hD hC' hD').symm (Q.ord (P.slotMatching Q hC hD hC' hD' b))) := by
+      rw [P.ord_slotMatching Q hC hD hC' hD', Equiv.symm_apply_apply]
       exact hy
     rw [LinearMap.mem_eqLocus]
     simp only [LinearEquiv.coe_coe, LinearMap.comp_apply, Matrix.mulVecLin_apply]
-    rw [P.commonCoord'_of_mem Q hC hD hy', P.commonCoord_of_mem Q hC hD hy,
-      P.leftRow_slotMatching_mulVec Q hC hD b (P.matchedCompl_le Q hC hD _ hy),
-      Matrix.mulVec_mulVec _ (P.matchingPermMatrix Q hC hD),
+    rw [P.commonCoord'_of_mem Q hC hD hC' hD' hy', P.commonCoord_of_mem Q hC hD hC' hD' hy,
+      P.leftRow_slotMatching_mulVec Q hC hD hC' hD' b (P.matchedCompl_le Q hC hD hC' hD' _ hy),
+      Matrix.mulVec_mulVec _ (P.matchingPermMatrix Q hC hD hC' hD'),
       P.matchingPermMatrix_mul_blockEmbed, ← Matrix.mulVec_mulVec]
-  exact h (show x ∈ ⨆ j, P.matchedCompl Q hC hD j by
-    rw [P.iSup_matchedCompl Q hC hD]
+  exact h (show x ∈ ⨆ j, P.matchedCompl Q hC hD hC' hD' j by
+    rw [P.iSup_matchedCompl Q hC hD hC' hD']
     exact Submodule.mem_top)
 
 /-- `P_X Γ = P_X · Γ` as matrices (lecture note MultiBlockUniqueness, Theorem 5.4 (E: a basis
 adapted to both flags)). -/
 theorem gaugeMatrix_commonGauge' :
-    gaugeMatrix (P.commonGauge' Q hC hD) =
-      P.matchingPermMatrix Q hC hD * gaugeMatrix (P.commonGauge Q hC hD) := by
+    gaugeMatrix (P.commonGauge' Q hC hD hC' hD') =
+      P.matchingPermMatrix Q hC hD hC' hD' * gaugeMatrix (P.commonGauge Q hC hD hC' hD') := by
   refine Matrix.ext_iff_mulVec.2 fun v => ?_
   rw [← Matrix.mulVec_mulVec, gaugeMatrix, gaugeMatrix, LinearMap.toMatrix'_mulVec,
     LinearMap.toMatrix'_mulVec, LinearEquiv.coe_coe, LinearEquiv.coe_coe]
-  exact P.commonCoord'_eq_mulVec Q hC hD _
+  exact P.commonCoord'_eq_mulVec Q hC hD hC' hD' _
 
 /-- **Theorem E, the first factorization** (lecture note MultiBlockUniqueness, Theorem 5.4 (E: a
 basis adapted to both flags),
 `g = 𝔄 Γ`). -/
 theorem gaugeMatrix_eq_unipotentFactor_mul :
-    gaugeMatrix P.gauge = P.unipotentFactor Q hC hD * gaugeMatrix (P.commonGauge Q hC hD) :=
+    gaugeMatrix P.gauge =
+      P.unipotentFactor Q hC hD hC' hD' * gaugeMatrix (P.commonGauge Q hC hD hC' hD') :=
   gaugeMatrix_eq_coordChange_mul _ _
 
 /-- **Theorem E, the second factorization** (lecture note MultiBlockUniqueness, Theorem 5.4 (E: a
 basis adapted to both flags),
 `g̃ = 𝔄̃ P_X Γ`). -/
 theorem gaugeMatrix_eq_unipotentFactor'_mul :
-    gaugeMatrix Q.gauge = P.unipotentFactor' Q hC hD * P.matchingPermMatrix Q hC hD *
-      gaugeMatrix (P.commonGauge Q hC hD) := by
+    gaugeMatrix Q.gauge =
+      P.unipotentFactor' Q hC hD hC' hD' * P.matchingPermMatrix Q hC hD hC' hD' *
+        gaugeMatrix (P.commonGauge Q hC hD hC' hD') := by
   rw [Matrix.mul_assoc, ← P.gaugeMatrix_commonGauge']
   exact gaugeMatrix_eq_coordChange_mul _ _
 
@@ -711,17 +758,367 @@ Theorem 5.4 (E: a basis adapted to both flags), display
 with identity diagonal blocks in the orders of `P` and `Q`
 (`blockTriangular_unipotentFactor`, `blockDiag'_unipotentFactor` and their primed versions) and
 `P_X` the block permutation matrix of the matching through the intertwiners of Theorem 5.3 (C: two
-reductions with different flags). -/
+reductions with different flags). The two reductions may be onto two different families of normal
+blocks of positive bond dimension, the intertwiners then going from the blocks of the first family
+to the matched blocks of the second (lecture note AsymmetricFT, Theorem 6.5; milestone V, V2.6). -/
 theorem gaugeMatrix_mul_gaugeMatrixInv_eq :
     gaugeMatrix Q.gauge * gaugeMatrixInv P.gauge =
-      P.unipotentFactor' Q hC hD * P.matchingPermMatrix Q hC hD *
-        (P.unipotentFactor Q hC hD)⁻¹ := by
+      P.unipotentFactor' Q hC hD hC' hD' * P.matchingPermMatrix Q hC hD hC' hD' *
+        (P.unipotentFactor Q hC hD hC' hD')⁻¹ := by
   rw [unipotentFactor, coordChange_inv, unipotentFactor', coordChange, coordChange,
-    Matrix.mul_assoc, Matrix.mul_assoc, ← Matrix.mul_assoc (P.matchingPermMatrix Q hC hD),
+    Matrix.mul_assoc, Matrix.mul_assoc, ← Matrix.mul_assoc (P.matchingPermMatrix Q hC hD hC' hD'),
     ← P.gaugeMatrix_commonGauge', ← Matrix.mul_assoc (gaugeMatrixInv _),
     gaugeMatrixInv_mul_gaugeMatrix, Matrix.one_mul]
 
+/-- `P_X = (P_X Γ) Γ⁻¹`: the block permutation matrix is determined by the two changes of basis
+(lecture note AsymmetricFT, Theorem 6.5; milestone V, V2.7). -/
+theorem matchingPermMatrix_eq_mul :
+    P.matchingPermMatrix Q hC hD hC' hD' =
+      gaugeMatrix (P.commonGauge' Q hC hD hC' hD') *
+        gaugeMatrixInv (P.commonGauge Q hC hD hC' hD') := by
+  rw [gaugeMatrix_commonGauge', Matrix.mul_assoc, gaugeMatrix_mul_gaugeMatrixInv, Matrix.mul_one]
+
 end Matched
+
+/-! ### Unipotent changes of the two reductions -/
+
+section UnipotentChange
+
+/-! `(σ, h g)` has the number of zero slots and the order of `(σ, g)` only after unfolding
+`conjT`, so the proofs below compare the two reductions through statements typed with `P.z`,
+glued by `exact` rather than by rewriting. -/
+
+/-- **The reading maps of `(σ, h g)`** (lecture note AsymmetricFT, proof of Theorem 6.5, last
+sentence; milestone V, V2.7): the row of `h g` at the slot `b` is `∑_c h_{bc} W_c`. -/
+theorem leftRow_conjT (P : MultiBlockCompression B S C)
+    {h : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ}
+    (ht : h.BlockTriangular fun x => P.ord x.1) {μ : BlockIndex S P.z → ℂ} (hμ : ∀ b, μ b ≠ 0)
+    (hdiag : ∀ b, h.blockDiag' b = μ b • 1) (b : BlockIndex S P.z) :
+    (P.conjT ht hμ hdiag).leftRow b =
+      ∑ c, h.submatrix (Sigma.mk b) (Sigma.mk c) * P.leftRow c := by
+  change Matrix.blockProj (slotSize D) b * gaugeMatrix (P.conjTGauge ht hμ hdiag) = _
+  rw [gaugeMatrix_conjTGauge, ← Matrix.mul_assoc,
+    Matrix.blockProj_mul_eq_sum_submatrix_mul_blockProj, Matrix.sum_mul]
+  simp only [Matrix.mul_assoc]
+  rfl
+
+/-- **On the step of its slot the reading map of `(σ, h g)` is `μ_b W_b`** (lecture note
+AsymmetricFT, proof of Theorem 6.5, last sentence; milestone V, V2.7): the added rows `h_{bc} W_c`,
+`c` after `b`, vanish on `M_k`, `k` the position of `b`. -/
+theorem leftRow_conjT_mulVec_of_mem (P : MultiBlockCompression B S C)
+    {h : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ}
+    (ht : h.BlockTriangular fun x => P.ord x.1) {μ : BlockIndex S P.z → ℂ} (hμ : ∀ b, μ b ≠ 0)
+    (hdiag : ∀ b, h.blockDiag' b = μ b • 1) {b : BlockIndex S P.z} {x : B.WordModule}
+    (hx : x ∈ P.flag (P.ord b).succ) :
+    (P.conjT ht hμ hdiag).leftRow b *ᵥ WordModule.toVec B x =
+      μ b • (P.leftRow b *ᵥ WordModule.toVec B x) := by
+  have key : (∑ c, h.submatrix (Sigma.mk b) (Sigma.mk c) * P.leftRow c) *ᵥ
+      WordModule.toVec B x = μ b • (P.leftRow b *ᵥ WordModule.toVec B x) := by
+    rw [Matrix.sum_mulVec, Finset.sum_eq_single b]
+    · rw [show h.submatrix (Sigma.mk b) (Sigma.mk b) = h.blockDiag' b from rfl, hdiag,
+        Matrix.smul_mul, Matrix.one_mul, Matrix.smul_mulVec]
+    · intro c _ hcb
+      rcases lt_or_gt_of_ne (fun e => hcb (P.ord.injective e)) with hlt | hlt
+      · have h0 : h.submatrix (Sigma.mk b) (Sigma.mk c) = 0 := by
+          ext j j'
+          exact ht (i := ⟨b, j⟩) (j := ⟨c, j'⟩) hlt
+        rw [h0, Matrix.zero_mul, Matrix.zero_mulVec]
+      · rw [← Matrix.mulVec_mulVec, P.leftRow_mulVec_eq_zero_of_mem
+          (P.flag_mono (Fin.succ_le_castSucc_iff.2 hlt) hx), Matrix.mulVec_zero]
+    · intro hb
+      exact absurd (Finset.mem_univ b) hb
+  exact (congrArg (· *ᵥ WordModule.toVec B x) (P.leftRow_conjT ht hμ hdiag b)).trans key
+
+/-- The flag of `(σ, h g)` is the flag of `(σ, g)` read as a covering chain. -/
+theorem coveringChain_conjT (P : MultiBlockCompression B S C)
+    {h : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ}
+    (ht : h.BlockTriangular fun x => P.ord x.1) {μ : BlockIndex S P.z → ℂ} (hμ : ∀ b, μ b ≠ 0)
+    (hdiag : ∀ b, h.blockDiag' b = μ b • 1) (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
+    (hD : ∀ s ∈ S, 0 < D s) :
+    (P.conjT ht hμ hdiag).coveringChain hC hD = P.coveringChain hC hD := by
+  have hflag : (P.conjT ht hμ hdiag).flag = P.flag := funext (P.conjT_flag ht hμ hdiag)
+  unfold coveringChain
+  congr 1
+
+variable {κ : Type*} [DecidableEq κ] {D' : κ → ℕ} {S' : Finset κ}
+  {C' : ∀ t, MPSTensor d (D' t)}
+  (P : MultiBlockCompression B S C) (Q : MultiBlockCompression B S' C')
+  (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
+  (hC' : ∀ t ∈ S', Kraus.IsNormal (C' t)) (hD' : ∀ t ∈ S', 0 < D' t)
+  {h : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ}
+  (ht : h.BlockTriangular fun x => P.ord x.1) {μ : BlockIndex S P.z → ℂ} (hμ : ∀ b, μ b ≠ 0)
+  (hdiag : ∀ b, h.blockDiag' b = μ b • 1)
+  {h' : Matrix (BlockSpace D' S' Q.z) (BlockSpace D' S' Q.z) ℂ}
+  (ht' : h'.BlockTriangular fun x => Q.ord x.1) {μ' : BlockIndex S' Q.z → ℂ}
+  (hμ' : ∀ b, μ' b ≠ 0) (hdiag' : ∀ b, h'.blockDiag' b = μ' b • 1)
+  {u : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ}
+  (hu : u.BlockTriangular fun x => P.ord x.1) (hu1 : ∀ b, u.blockDiag' b = (1 : ℂ) • 1)
+  {u' : Matrix (BlockSpace D' S' Q.z) (BlockSpace D' S' Q.z) ℂ}
+  (hu' : u'.BlockTriangular fun x => Q.ord x.1) (hu1' : ∀ b, u'.blockDiag' b = (1 : ℂ) • 1)
+
+/-- **The matching depends only on the two flags** (lecture note AsymmetricFT, Theorem 6.5, last
+sentence; milestone V, V2.7): `(σ, h g)` and `(σ̃, h̃ g̃)` have the matching of `(σ, g)` and
+`(σ̃, g̃)`. -/
+theorem matching_conjT :
+    (P.conjT ht hμ hdiag).matching (Q.conjT ht' hμ' hdiag') hC hD hC' hD' =
+      P.matching Q hC hD hC' hD' := by
+  unfold matching
+  rw [coveringChain_conjT, coveringChain_conjT]
+  rfl
+
+theorem matching_conjT_apply (k : Fin (S.card + P.z)) :
+    (P.conjT ht hμ hdiag).matching (Q.conjT ht' hμ' hdiag') hC hD hC' hD' k =
+      P.matching Q hC hD hC' hD' k :=
+  congrArg (fun e : Fin (S.card + P.z) ≃ Fin (S'.card + Q.z) => e k)
+    (P.matching_conjT Q hC hD hC' hD' ht hμ hdiag ht' hμ' hdiag')
+
+theorem matchedInter_conjT (k : Fin (S.card + P.z)) :
+    (P.conjT ht hμ hdiag).matchedInter (Q.conjT ht' hμ' hdiag') hC hD hC' hD' k =
+      P.matchedInter Q hC hD hC' hD' k := by
+  unfold matchedInter
+  congr 1
+  · exact P.conjT_flag ht hμ hdiag _
+  · exact (Q.conjT_flag ht' hμ' hdiag' _).trans (congrArg (fun j : Fin (S'.card + Q.z) =>
+      Q.flag j.succ) (P.matching_conjT_apply Q hC hD hC' hD' ht hμ hdiag ht' hμ' hdiag' k))
+
+theorem matchedKer_conjT (k : Fin (S.card + P.z)) :
+    (P.conjT ht hμ hdiag).matchedKer (Q.conjT ht' hμ' hdiag') hC hD hC' hD' k =
+      P.matchedKer Q hC hD hC' hD' k := by
+  unfold matchedKer
+  congr 1
+  · exact P.conjT_flag ht hμ hdiag _
+  · exact (Q.conjT_flag ht' hμ' hdiag' _).trans (congrArg (fun j : Fin (S'.card + Q.z) =>
+      Q.flag j.succ) (P.matching_conjT_apply Q hC hD hC' hD' ht hμ hdiag ht' hμ' hdiag' k))
+
+/-- **The same complements** (lecture note AsymmetricFT, Theorem 6.5, last sentence; milestone V,
+V2.7): `(σ, h g)` and `(σ̃, h̃ g̃)` have the complements `L_k` of `(σ, g)` and `(σ̃, g̃)`, since
+these depend only on the two flags (`matchedCompl_congr`). -/
+theorem matchedCompl_conjT (k : Fin (S.card + P.z)) :
+    (P.conjT ht hμ hdiag).matchedCompl (Q.conjT ht' hμ' hdiag') hC hD hC' hD' k =
+      P.matchedCompl Q hC hD hC' hD' k :=
+  matchedCompl_congr hC hD hC' hD'
+    (P.matchedKer_conjT Q hC hD hC' hD' ht hμ hdiag ht' hμ' hdiag' k)
+    (P.matchedInter_conjT Q hC hD hC' hD' ht hμ hdiag ht' hμ' hdiag' k)
+
+/-- **The same `Γ`** (lecture note AsymmetricFT, proof of Theorem 6.5, last sentence; milestone V,
+V2.7): for `u` unipotent in the order of `P`, the reading of `u g` on `L_j ⊆ M_j` is that of `g`,
+so `(σ, u g)` and `(σ̃, h̃ g̃)` have the change of basis `Γ` of `(σ, g)` and `(σ̃, g̃)`. -/
+theorem commonCoord_conjT :
+    (P.conjT hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).commonCoord
+        (Q.conjT ht' hμ' hdiag') hC hD hC' hD' =
+      P.commonCoord Q hC hD hC' hD' := by
+  refine LinearEquiv.ext fun x => ?_
+  have hx : x ∈ ⨆ j, P.matchedCompl Q hC hD hC' hD' j := by
+    rw [P.iSup_matchedCompl Q hC hD hC' hD']
+    exact Submodule.mem_top
+  refine Submodule.iSup_induction (P.matchedCompl Q hC hD hC' hD')
+    (motive := fun x => (P.conjT hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).commonCoord
+      (Q.conjT ht' hμ' hdiag') hC hD hC' hD' x = P.commonCoord Q hC hD hC' hD' x) hx
+    (fun j y hy => ?_) ?_ (fun y y' hy hy' => ?_)
+  · obtain ⟨b, rfl⟩ := P.ord.surjective j
+    have hy₂ : y ∈ (P.conjT hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).matchedCompl
+        (Q.conjT ht' hμ' hdiag') hC hD hC' hD' (P.ord b) :=
+      (congrArg (y ∈ ·) (P.matchedCompl_conjT Q hC hD hC' hD' hu (fun _ => one_ne_zero) hu1
+        ht' hμ' hdiag' (P.ord b))).mpr hy
+    have hyU : y ∈ P.matchedInter Q hC hD hC' hD' (P.ord b) :=
+      P.matchedCompl_le Q hC hD hC' hD' _ hy
+    have e1 := commonCoord_of_mem _ _ _ _ _ _ hy₂
+    have e2 := P.commonCoord_of_mem Q hC hD hC' hD' hy
+    have e3 := P.leftRow_conjT_mulVec_of_mem hu (fun _ => one_ne_zero) hu1
+      (Submodule.mem_inf.1 hyU).1
+    simp only [one_smul] at e3
+    exact e1.trans ((congrArg (Matrix.blockEmbed (slotSize D) b *ᵥ ·) e3).trans e2.symm)
+  · exact (map_zero _).trans (map_zero _).symm
+  · exact (map_add _ _ _).trans ((congrArg₂ (· + ·) hy hy').trans (map_add _ _ _).symm)
+
+/-- The coordinates `P_X Γ` of a vector of `L_j` read by the slot at the matched position. -/
+theorem commonCoord'_of_mem_of_matching_eq {j : Fin (S.card + P.z)} {b' : BlockIndex S' Q.z}
+    (hj : P.matching Q hC hD hC' hD' j = Q.ord b') {x : B.WordModule}
+    (hx : x ∈ P.matchedCompl Q hC hD hC' hD' j) :
+    P.commonCoord' Q hC hD hC' hD' x =
+      Matrix.blockEmbed (slotSize D') b' *ᵥ (Q.leftRow b' *ᵥ WordModule.toVec B x) := by
+  have h : (P.matching Q hC hD hC' hD').symm (Q.ord b') = j := by
+    rw [← hj, Equiv.symm_apply_apply]
+  rw [← h] at hx
+  exact P.commonCoord'_of_mem Q hC hD hC' hD' hx
+
+/-- **The same `P_X Γ`** (lecture note AsymmetricFT, proof of Theorem 6.5, last sentence;
+milestone V, V2.7): for `ũ` unipotent in the order of `Q`, the reading of `ũ g̃` on
+`L_j ⊆ M̃_{π(j)}` is that of `g̃`. -/
+theorem commonCoord'_conjT :
+    (P.conjT ht hμ hdiag).commonCoord'
+        (Q.conjT hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' =
+      P.commonCoord' Q hC hD hC' hD' := by
+  refine LinearEquiv.ext fun x => ?_
+  have hx : x ∈ ⨆ j, P.matchedCompl Q hC hD hC' hD' j := by
+    rw [P.iSup_matchedCompl Q hC hD hC' hD']
+    exact Submodule.mem_top
+  refine Submodule.iSup_induction (P.matchedCompl Q hC hD hC' hD')
+    (motive := fun x => (P.conjT ht hμ hdiag).commonCoord'
+      (Q.conjT hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' x =
+        P.commonCoord' Q hC hD hC' hD' x) hx
+    (fun j y hy => ?_) ?_ (fun y y' hy hy' => ?_)
+  · obtain ⟨b', hb'⟩ := Q.ord.surjective (P.matching Q hC hD hC' hD' j)
+    have hy₂ : y ∈ (P.conjT ht hμ hdiag).matchedCompl
+        (Q.conjT hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' j :=
+      (congrArg (y ∈ ·) (P.matchedCompl_conjT Q hC hD hC' hD' ht hμ hdiag hu'
+        (fun _ => one_ne_zero) hu1' j)).mpr hy
+    have hj₂ : (P.conjT ht hμ hdiag).matching
+        (Q.conjT hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' j = Q.ord b' :=
+      (P.matching_conjT_apply Q hC hD hC' hD' ht hμ hdiag hu' (fun _ => one_ne_zero) hu1'
+        j).trans hb'.symm
+    have hyU : y ∈ P.matchedInter Q hC hD hC' hD' j := P.matchedCompl_le Q hC hD hC' hD' _ hy
+    have hyQ : y ∈ Q.flag (Q.ord b').succ := by
+      rw [hb']
+      exact (Submodule.mem_inf.1 hyU).2
+    have e1 := commonCoord'_of_mem_of_matching_eq _ _ _ _ _ _ hj₂ hy₂
+    have e2 := P.commonCoord'_of_mem_of_matching_eq Q hC hD hC' hD' hb'.symm hy
+    have e3 := Q.leftRow_conjT_mulVec_of_mem hu' (fun _ => one_ne_zero) hu1' hyQ
+    simp only [one_smul] at e3
+    exact e1.trans ((congrArg (Matrix.blockEmbed (slotSize D') b' *ᵥ ·) e3).trans e2.symm)
+  · exact (map_zero _).trans (map_zero _).symm
+  · exact (map_add _ _ _).trans ((congrArg₂ (· + ·) hy hy').trans (map_add _ _ _).symm)
+
+theorem commonGauge_conjT :
+    (P.conjT hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).commonGauge
+        (Q.conjT ht' hμ' hdiag') hC hD hC' hD' =
+      P.commonGauge Q hC hD hC' hD' :=
+  congrArg (fun Γ : B.WordModule ≃ₗ[ℂ] (BlockSpace D S P.z → ℂ) =>
+    (WordModule.toVec B).symm.trans Γ) (P.commonCoord_conjT Q hC hD hC' hD' ht' hμ' hdiag' hu hu1)
+
+theorem commonGauge'_conjT :
+    (P.conjT ht hμ hdiag).commonGauge'
+        (Q.conjT hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' =
+      P.commonGauge' Q hC hD hC' hD' :=
+  congrArg (fun Γ : B.WordModule ≃ₗ[ℂ] (BlockSpace D' S' Q.z → ℂ) =>
+    (WordModule.toVec B).symm.trans Γ)
+    (P.commonCoord'_conjT Q hC hD hC' hD' ht hμ hdiag hu' hu1')
+
+/-- **The first unipotent factor of `(σ, u g)`** (lecture note AsymmetricFT, Theorem 6.5, last
+sentence; milestone V, V2.7): `u 𝔄`, since `u g = (u 𝔄) Γ` with the same `Γ`. -/
+theorem unipotentFactor_conjT :
+    (P.conjT hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).unipotentFactor
+        (Q.conjT ht' hμ' hdiag') hC hD hC' hD' =
+      u * P.unipotentFactor Q hC hD hC' hD' := by
+  have key : gaugeMatrix (P.conjTGauge hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1) *
+      gaugeMatrixInv (P.commonGauge Q hC hD hC' hD') = u * P.unipotentFactor Q hC hD hC' hD' := by
+    rw [gaugeMatrix_conjTGauge, Matrix.mul_assoc]
+    rfl
+  exact (congrArg (fun Γ : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S P.z → ℂ) =>
+    gaugeMatrix (P.conjTGauge hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1) *
+      gaugeMatrixInv Γ) (P.commonGauge_conjT Q hC hD hC' hD' ht' hμ' hdiag' hu hu1)).trans key
+
+/-- **The second unipotent factor of `(σ̃, ũ g̃)`** (lecture note AsymmetricFT, Theorem 6.5, last
+sentence; milestone V, V2.7): `ũ 𝔄̃`, since `ũ g̃ = (ũ 𝔄̃) P_X Γ` with the same `P_X Γ`. -/
+theorem unipotentFactor'_conjT :
+    (P.conjT ht hμ hdiag).unipotentFactor'
+        (Q.conjT hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' =
+      u' * P.unipotentFactor' Q hC hD hC' hD' := by
+  have key : gaugeMatrix (Q.conjTGauge hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') *
+      gaugeMatrixInv (P.commonGauge' Q hC hD hC' hD') =
+        u' * P.unipotentFactor' Q hC hD hC' hD' := by
+    rw [gaugeMatrix_conjTGauge, Matrix.mul_assoc]
+    rfl
+  exact (congrArg (fun Γ : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D' S' Q.z → ℂ) =>
+    gaugeMatrix (Q.conjTGauge hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') *
+      gaugeMatrixInv Γ) (P.commonGauge'_conjT Q hC hD hC' hD' ht hμ hdiag hu' hu1')).trans key
+
+/-- **The same block permutation matrix** (lecture note AsymmetricFT, Theorem 6.5, last sentence;
+milestone V, V2.7): `(σ, u g)` and `(σ̃, ũ g̃)` have the `P_X` of `(σ, g)` and `(σ̃, g̃)`. -/
+theorem matchingPermMatrix_conjT :
+    (P.conjT hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).matchingPermMatrix
+        (Q.conjT hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' =
+      P.matchingPermMatrix Q hC hD hC' hD' :=
+  ((P.conjT hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).matchingPermMatrix_eq_mul
+    (Q.conjT hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD').trans
+    ((congrArg₂ (fun (Γ₁ : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S P.z → ℂ))
+        (Γ₂ : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D' S' Q.z → ℂ)) => gaugeMatrix Γ₂ * gaugeMatrixInv Γ₁)
+      (P.commonGauge_conjT Q hC hD hC' hD' hu' (fun _ => one_ne_zero) hu1' hu hu1)
+      (P.commonGauge'_conjT Q hC hD hC' hD' hu (fun _ => one_ne_zero) hu1 hu' hu1')).trans
+      (P.matchingPermMatrix_eq_mul Q hC hD hC' hD').symm)
+
+/-- **Unipotent changes** (lecture note AsymmetricFT, Theorem 6.5, last sentence; milestone V,
+V2.7, first part): for `u` unipotent in the order of `P` and `ũ` unipotent in the order of `Q`,
+the reductions `(σ, u g)` and `(σ̃, ũ g̃)` have the flags of `(σ, g)` and `(σ̃, g̃)`, the factors
+`u 𝔄` and `ũ 𝔄̃`, and the same `P_X`. The complements `L_k`, the change of basis `Γ` and the
+intertwiners entering `P_X` are the same as well (`matchedCompl_conjT`, `commonGauge_conjT`). -/
+theorem flag_conjT_and_unipotentFactor_conjT :
+    (∀ k, (P.conjT hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).flag k = P.flag k) ∧
+    (∀ k', (Q.conjT hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1').flag k' = Q.flag k') ∧
+    (P.conjT hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).unipotentFactor
+        (Q.conjT hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' =
+      u * P.unipotentFactor Q hC hD hC' hD' ∧
+    (P.conjT hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).unipotentFactor'
+        (Q.conjT hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' =
+      u' * P.unipotentFactor' Q hC hD hC' hD' ∧
+    (P.conjT hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).matchingPermMatrix
+        (Q.conjT hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' =
+      P.matchingPermMatrix Q hC hD hC' hD' :=
+  ⟨P.conjT_flag _ _ _, Q.conjT_flag _ _ _,
+    P.unipotentFactor_conjT Q hC hD hC' hD' _ _ _ hu hu1,
+    P.unipotentFactor'_conjT Q hC hD hC' hD' _ _ _ hu' hu1',
+    P.matchingPermMatrix_conjT Q hC hD hC' hD' hu hu1 hu' hu1'⟩
+
+/-- The inverse of a matrix unipotent in the order of `P` is unipotent in that order. -/
+theorem blockTriangular_inv_and_blockDiag'_inv_of_unipotent
+    {A : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ}
+    (hA : A.BlockTriangular fun x => P.ord x.1) (hA1 : ∀ b, A.blockDiag' b = 1) :
+    A⁻¹.BlockTriangular (fun x => P.ord x.1) ∧ (∀ b, A⁻¹.blockDiag' b = 1) ∧ A⁻¹ * A = 1 := by
+  have hA1' : ∀ b, A.blockDiag' b = (1 : ℂ) • 1 := fun b => by
+    rw [hA1, one_smul]
+  refine ⟨P.blockTriangular_inv_of_blockDiag'_eq_smul hA (fun _ => one_ne_zero) hA1',
+    fun b => ?_, Matrix.nonsing_inv_mul A
+      (P.isUnit_det_of_blockDiag'_eq_smul hA (fun _ => one_ne_zero) hA1')⟩
+  rw [P.blockDiag'_inv_of_blockDiag'_eq_smul hA (fun _ => one_ne_zero) hA1' b, inv_one, one_smul]
+
+/-- **Every pair of unipotent factors occurs** (lecture note AsymmetricFT, Theorem 6.5, last
+sentence; milestone V, V2.7, second part): for every `𝔄₁` unipotent in the order of `P` and every
+`𝔄₂` unipotent in the order of `Q` there are unipotent `u`, `ũ` such that `(σ, u g)` and
+`(σ̃, ũ g̃)`, reductions with the flags of `(σ, g)` and `(σ̃, g̃)`, have the factors `𝔄₁` and
+`𝔄₂` and the same `P_X`; take `u = 𝔄₁ 𝔄⁻¹` and `ũ = 𝔄₂ 𝔄̃⁻¹`. -/
+theorem exists_conjT_unipotentFactor_eq
+    (A₁ : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ)
+    (hA₁ : A₁.BlockTriangular fun x => P.ord x.1) (hA₁' : ∀ b, A₁.blockDiag' b = 1)
+    (A₂ : Matrix (BlockSpace D' S' Q.z) (BlockSpace D' S' Q.z) ℂ)
+    (hA₂ : A₂.BlockTriangular fun x => Q.ord x.1) (hA₂' : ∀ b, A₂.blockDiag' b = 1) :
+    ∃ (u : Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ)
+      (hu : u.BlockTriangular fun x => P.ord x.1) (hu1 : ∀ b, u.blockDiag' b = (1 : ℂ) • 1)
+      (u' : Matrix (BlockSpace D' S' Q.z) (BlockSpace D' S' Q.z) ℂ)
+      (hu' : u'.BlockTriangular fun x => Q.ord x.1) (hu1' : ∀ b, u'.blockDiag' b = (1 : ℂ) • 1),
+      (∀ k, (P.conjT hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).flag k = P.flag k) ∧
+      (∀ k', (Q.conjT hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1').flag k' = Q.flag k') ∧
+      (P.conjT hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).unipotentFactor
+          (Q.conjT hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' = A₁ ∧
+      (P.conjT hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).unipotentFactor'
+          (Q.conjT hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' = A₂ ∧
+      (P.conjT hu (μ := fun _ => 1) (fun _ => one_ne_zero) hu1).matchingPermMatrix
+          (Q.conjT hu' (μ := fun _ => 1) (fun _ => one_ne_zero) hu1') hC hD hC' hD' =
+        P.matchingPermMatrix Q hC hD hC' hD' := by
+  obtain ⟨hi, hi1, hinv⟩ := P.blockTriangular_inv_and_blockDiag'_inv_of_unipotent
+    (P.blockTriangular_unipotentFactor Q hC hD hC' hD')
+    (P.blockDiag'_unipotentFactor Q hC hD hC' hD')
+  obtain ⟨hi', hi1', hinv'⟩ := Q.blockTriangular_inv_and_blockDiag'_inv_of_unipotent
+    (P.blockTriangular_unipotentFactor' Q hC hD hC' hD')
+    (P.blockDiag'_unipotentFactor' Q hC hD hC' hD')
+  have hu : (A₁ * (P.unipotentFactor Q hC hD hC' hD')⁻¹).BlockTriangular fun x => P.ord x.1 :=
+    hA₁.mul hi
+  have hu1 : ∀ b, (A₁ * (P.unipotentFactor Q hC hD hC' hD')⁻¹).blockDiag' b = (1 : ℂ) • 1 :=
+    fun b => by
+      rw [Matrix.blockDiag'_mul_of_blockTriangular P.ord.injective hA₁ hi, hA₁', hi1,
+        Matrix.one_mul, one_smul]
+  have hu' : (A₂ * (P.unipotentFactor' Q hC hD hC' hD')⁻¹).BlockTriangular fun x => Q.ord x.1 :=
+    hA₂.mul hi'
+  have hu1' : ∀ b, (A₂ * (P.unipotentFactor' Q hC hD hC' hD')⁻¹).blockDiag' b = (1 : ℂ) • 1 :=
+    fun b => by
+      rw [Matrix.blockDiag'_mul_of_blockTriangular Q.ord.injective hA₂ hi', hA₂', hi1',
+        Matrix.one_mul, one_smul]
+  obtain ⟨hf, hf', h1, h2, h3⟩ :=
+    P.flag_conjT_and_unipotentFactor_conjT Q hC hD hC' hD' hu hu1 hu' hu1'
+  refine ⟨_, hu, hu1, _, hu', hu1', hf, hf', ?_, ?_, h3⟩
+  · rw [h1, Matrix.mul_assoc, hinv, Matrix.mul_one]
+  · rw [h2, Matrix.mul_assoc, hinv', Matrix.mul_one]
+
+end UnipotentChange
 
 /-! ### Theorem D: the set of all reductions -/
 
@@ -755,6 +1152,83 @@ theorem flag_fibre_eq_orbit (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s
 
 end TheoremD
 
+/-! ### Theorem D: which families admit a reduction, and the union over flags -/
+
+section AllReductions
+
+/-- **Which families admit a reduction** (lecture note AsymmetricFT, Theorem 6.6; milestone V,
+V2.3(a)): `B` has a reduction onto `(C_s)` with `z` zero slots exactly when its word module has a
+labelled invariant flag for `(C_s)` with `z` zero steps. No hypothesis on the blocks. -/
+theorem exists_z_eq_iff_exists_flagData (B : MPSTensor d DB) (S : Finset ι)
+    (C : ∀ s, MPSTensor d (D s)) (z : ℕ) :
+    (∃ P : MultiBlockCompression B S C, P.z = z) ↔
+      ∃ F : FlagData B.WordModule S C, F.z = z :=
+  ⟨fun ⟨P, hP⟩ => ⟨P.toFlagData, hP⟩, fun ⟨F, hF⟩ => ⟨F.toMultiBlockCompression, hF⟩⟩
+
+omit [DecidableEq ι] in
+/-- Two orders of the slots whose inverses agree, read as functions, agree. -/
+theorem heq_of_heq_coe_symm {z z' : ℕ} (hz : z = z') {e : BlockIndex S z ≃ Fin (S.card + z)}
+    {e' : BlockIndex S z' ≃ Fin (S.card + z')} (h : HEq ⇑e.symm ⇑e'.symm) : HEq e e' := by
+  subst hz
+  rw [← Equiv.symm_symm e, Equiv.coe_fn_injective (eq_of_heq h), Equiv.symm_symm]
+
+/-- **A reduction with the labelled flag of another is in its `T_σ`-orbit** (lecture note
+AsymmetricFT, Theorems 6.2 and 6.6; milestone V, V2.3(b)): if `R` and `P` have the same labelled
+flag, then `P = (σ_R, h g_R)` for some `h ∈ T_{σ_R}`. -/
+theorem exists_eq_conjT_of_toFlagData_eq (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
+    (hD : ∀ s ∈ S, 0 < D s) {P R : MultiBlockCompression B S C}
+    (h : R.toFlagData = P.toFlagData) :
+    ∃ (h' : Matrix (BlockSpace D S R.z) (BlockSpace D S R.z) ℂ)
+      (ht : h'.BlockTriangular fun x => R.ord x.1) (μ : BlockIndex S R.z → ℂ)
+      (hμ : ∀ b, μ b ≠ 0) (hh : ∀ b, h'.blockDiag' b = μ b • 1), P = R.conjT ht hμ hh := by
+  have hz : P.z = R.z := congrArg FlagData.z h.symm
+  have hl : HEq P.toFlagData.label R.toFlagData.label := by rw [h]
+  have hord : HEq P.ord R.ord := heq_of_heq_coe_symm (e := P.ord) (e' := R.ord) hz hl
+  obtain ⟨g, htri, hdiag, rfl⟩ := R.exists_eq_withGauge hz hord
+  have hH' : HEq (R.withGauge g htri hdiag).toFlagData.H R.toFlagData.H := by rw [h]
+  have hH := eq_of_heq hH'
+  have hflag : ∀ k, (R.withGauge g htri hdiag).flag k = R.flag k := fun k => congrFun hH k
+  exact ⟨_, _, _, _, _, withGauge_eq_conjT hC hD hflag⟩
+
+/-- **The set of all reductions** (lecture note AsymmetricFT, Theorem 6.6; milestone V,
+V2.3(b)): choose for each labelled invariant flag `F` one reduction `rep F` with labelled flag
+`F`. Every reduction onto normal blocks of positive bond dimension is `(σ_F, h g_F)` for exactly
+one pair `(F, h)` with `h ∈ T_{σ_F}`, and `F` is then its labelled flag. -/
+theorem existsUnique_conjT (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
+    (rep : FlagData B.WordModule S C → MultiBlockCompression B S C)
+    (hrep : ∀ F, (rep F).toFlagData = F) (P : MultiBlockCompression B S C) :
+    (∃! p : (F : FlagData B.WordModule S C) ×
+        Matrix (BlockSpace D S (rep F).z) (BlockSpace D S (rep F).z) ℂ,
+      ∃ (ht : p.2.BlockTriangular fun x => (rep p.1).ord x.1) (μ : BlockIndex S (rep p.1).z → ℂ)
+        (hμ : ∀ b, μ b ≠ 0) (hh : ∀ b, p.2.blockDiag' b = μ b • 1),
+        P = (rep p.1).conjT ht hμ hh) ∧
+    ∀ p : (F : FlagData B.WordModule S C) ×
+        Matrix (BlockSpace D S (rep F).z) (BlockSpace D S (rep F).z) ℂ,
+      (∃ (ht : p.2.BlockTriangular fun x => (rep p.1).ord x.1)
+        (μ : BlockIndex S (rep p.1).z → ℂ) (hμ : ∀ b, μ b ≠ 0)
+        (hh : ∀ b, p.2.blockDiag' b = μ b • 1), P = (rep p.1).conjT ht hμ hh) →
+      p.1 = P.toFlagData := by
+  have hfst : ∀ p : (F : FlagData B.WordModule S C) ×
+        Matrix (BlockSpace D S (rep F).z) (BlockSpace D S (rep F).z) ℂ,
+      (∃ (ht : p.2.BlockTriangular fun x => (rep p.1).ord x.1)
+        (μ : BlockIndex S (rep p.1).z → ℂ) (hμ : ∀ b, μ b ≠ 0)
+        (hh : ∀ b, p.2.blockDiag' b = μ b • 1), P = (rep p.1).conjT ht hμ hh) →
+      p.1 = P.toFlagData := by
+    rintro ⟨F, h⟩ ⟨ht, μ, hμ, hh, rfl⟩
+    rw [toFlagData_conjT, hrep]
+  refine ⟨?_, hfst⟩
+  obtain ⟨h', ht, μ, hμ, hh, hP⟩ := exists_eq_conjT_of_toFlagData_eq hC hD (hrep P.toFlagData)
+  refine ⟨⟨P.toFlagData, h'⟩, ⟨ht, μ, hμ, hh, hP⟩, fun p hp => ?_⟩
+  have h1 := hfst p hp
+  obtain ⟨F, h''⟩ := p
+  obtain ⟨ht', μ', hμ', hh', hP'⟩ := hp
+  dsimp only at h1
+  subst h1
+  obtain rfl : h'' = h' := (rep _).eq_of_conjT_eq (hP'.symm.trans hP)
+  rfl
+
+end AllReductions
+
 end MultiBlockCompression
 
 namespace FlagData
@@ -777,6 +1251,27 @@ step `k` is the label of `k`. -/
 theorem toMultiBlockCompression_ord_symm (F : FlagData B.WordModule S C) (k : Fin F.r) :
     F.toMultiBlockCompression.ord.symm (Fin.cast F.r_eq k) = F.label k :=
   rfl
+
+/-- **The labelled flag of the compression of a labelled invariant flag is that flag** (lecture
+note AsymmetricFT, Theorem 6.6; milestone V, V2.3(b)): `F ↦ F.toMultiBlockCompression` is a right
+inverse of the labelled flag map `P ↦ P.toFlagData`. -/
+theorem toMultiBlockCompression_toFlagData (F : FlagData B.WordModule S C) :
+    F.toMultiBlockCompression.toFlagData = F := by
+  have hH := F.toMultiBlockCompression_flag
+  have hr : F.r = S.card + F.z := F.r_eq
+  obtain ⟨r, z, H, H0, Hl, Hm, label, lb, m, uf, us⟩ := F
+  dsimp only at hr
+  subst hr
+  unfold MultiBlockCompression.toFlagData
+  congr 1
+  exact funext hH
+
+/-- **A choice of one reduction for each labelled invariant flag** (lecture note AsymmetricFT,
+Theorem 6.6; milestone V, V2.3(b)): there is a map `rep` with `(rep F).toFlagData = F` for every
+`F`, so the hypothesis of `MPSTensor.MultiBlockCompression.existsUnique_conjT` can be met. -/
+theorem exists_rep : ∃ rep : FlagData B.WordModule S C → MultiBlockCompression B S C,
+    ∀ F, (rep F).toFlagData = F :=
+  ⟨toMultiBlockCompression, toMultiBlockCompression_toFlagData⟩
 
 end FlagData
 

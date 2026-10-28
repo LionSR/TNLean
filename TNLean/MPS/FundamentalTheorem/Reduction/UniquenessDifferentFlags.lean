@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessBlocks
+import TNLean.MPS.FundamentalTheorem.Reduction.IrreducibleTensor
 
 /-!
 # Two reductions with different flags
@@ -37,6 +37,9 @@ note).
   `MPSTensor.MultiBlockCompression.exists_smul_of_matching_inr`: Theorem 5.3 (C: two reductions with
   different flags), the scalar
   clause for block slots with the same label and for zero slots.
+* `MPSTensor.MultiBlockCompression.exists_ne_zero_eq_smul_of_slotTensor_eq`: the scalar clause
+  for equal blocks at any two slots of two families (lecture note AsymmetricFT,
+  Theorem 2.2(c)).
 * `MPSTensor.MultiBlockCompression.matching_eq_of_flag_eq`,
   `MPSTensor.MultiBlockCompression.inf_eq_and_sup_eq_of_flag_eq`: Theorem 5.3 (C: two reductions
   with different flags) for coinciding
@@ -340,6 +343,34 @@ theorem exists_smul_of_matching_inl (k : Fin (S.card + P.z)) (s : {s // s ∈ S}
     rwa [Matrix.smul_mulVec, Matrix.one_mulVec, Matrix.mulVec_smul] at h
 
 end SameFamily
+
+section EqualBlocks
+
+variable (P : MultiBlockCompression B S C) (Q : MultiBlockCompression B S' C')
+
+/-- **Equal blocks give a scalar** (lecture note AsymmetricFT, Theorem 2.2(c); milestone V,
+V2.5), for two families: if the diagonal blocks at the slot `b` of `P` and the slot `b'` of `Q`
+are equal tensors (equal sizes, letters equal after the size identification; two zero slots
+count as equal), then every invertible intertwiner `X` from the first to the second, in
+particular the intertwiner of Theorem C for matched slots, is a nonzero multiple of the
+identification. This covers equal blocks at different labels of one family and blocks of two
+families. The statement holds for any two slots, matched or not, and uses only `X Y = 1`. -/
+theorem exists_ne_zero_eq_smul_of_slotTensor_eq (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
+    (hD : ∀ s ∈ S, 0 < D s) {b : BlockIndex S P.z} {b' : BlockIndex S' Q.z}
+    (hdim : slotSize D b = slotSize D' b')
+    (heq : ∀ i, Matrix.reindex (finCongr hdim) (finCongr hdim) (slotTensor C b i) =
+      slotTensor C' b' i)
+    {X : Matrix (Fin (slotSize D' b')) (Fin (slotSize D b)) ℂ}
+    {Y : Matrix (Fin (slotSize D b)) (Fin (slotSize D' b')) ℂ} (hXY : X * Y = 1)
+    (hint : ∀ i, X * slotTensor C b i = slotTensor C' b' i * X) :
+    ∃ c : ℂ, c ≠ 0 ∧
+      X = c • Matrix.reindex (finCongr hdim) (Equiv.refl _)
+        (1 : Matrix (Fin (slotSize D b)) (Fin (slotSize D b)) ℂ) :=
+  have := isSimpleModule_slotTensor hC hD b
+  exists_ne_zero_eq_smul_reindex_one_of_intertwines hdim
+    ((isIrreducibleAction_and_pos_iff_isSimpleModule _).2 this).1 heq hXY hint
+
+end EqualBlocks
 
 end MultiBlockCompression
 

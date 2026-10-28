@@ -157,21 +157,21 @@ example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} 
     (P Q : MultiBlockCompression B S C) (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
     (hD : ∀ s ∈ S, 0 < D s) :
     gaugeMatrix Q.gauge * gaugeMatrixInv P.gauge =
-      P.unipotentFactor' Q hC hD * P.matchingPermMatrix Q hC hD *
-        (P.unipotentFactor Q hC hD)⁻¹ :=
-  P.gaugeMatrix_mul_gaugeMatrixInv_eq Q hC hD
+      P.unipotentFactor' Q hC hD hC hD * P.matchingPermMatrix Q hC hD hC hD *
+        (P.unipotentFactor Q hC hD hC hD)⁻¹ :=
+  P.gaugeMatrix_mul_gaugeMatrixInv_eq Q hC hD hC hD
 
 example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} {B : MPSTensor 2 3}
     (P Q : MultiBlockCompression B S C) (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
     (hD : ∀ s ∈ S, 0 < D s) (k : Fin (S.card + P.z + 1)) :
     (P.flag k).restrictScalars ℂ =
-      ⨆ (j : Fin (S.card + P.z)) (_ : j.castSucc < k), P.matchedCompl Q hC hD j :=
-  P.flag_eq_iSup_matchedCompl Q hC hD k
+      ⨆ (j : Fin (S.card + P.z)) (_ : j.castSucc < k), P.matchedCompl Q hC hD hC hD j :=
+  P.flag_eq_iSup_matchedCompl Q hC hD hC hD k
 
 example {D : Fin 2 → ℕ} {S : Finset (Fin 2)} {C : ∀ s, MPSTensor 2 (D s)} {B : MPSTensor 2 3}
     (P Q : MultiBlockCompression B S C) (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
-    (hD : ∀ s ∈ S, 0 < D s) : iSupIndep (P.matchedCompl Q hC hD) :=
-  P.iSupIndep_matchedCompl Q hC hD
+    (hD : ∀ s ∈ S, 0 < D s) : iSupIndep (P.matchedCompl Q hC hD hC hD) :=
+  P.iSupIndep_matchedCompl Q hC hD hC hD
 
 /-! ### Theorem D (Theorem 5.5 (D: the set of all reductions)) -/
 

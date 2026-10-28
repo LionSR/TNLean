@@ -17,6 +17,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.Flag
 import TNLean.MPS.FundamentalTheorem.Reduction.FlagData
 import TNLean.MPS.FundamentalTheorem.Reduction.Identification
 import TNLean.MPS.FundamentalTheorem.Reduction.IntegralRankOneAction
+import TNLean.MPS.FundamentalTheorem.Reduction.IrreducibleTensor
 import TNLean.MPS.FundamentalTheorem.Reduction.LongWords
 import TNLean.MPS.FundamentalTheorem.Reduction.MPOProduct
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlock
@@ -37,6 +38,7 @@ import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessCommonBasis
 import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessDifferentFlags
 import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessFlag
 import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessLongWords
+import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessMatrixForm
 import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessSameFlag
 import TNLean.MPS.FundamentalTheorem.Reduction.WeightedMultiBlock
 import TNLean.MPS.FundamentalTheorem.Reduction.WordModule

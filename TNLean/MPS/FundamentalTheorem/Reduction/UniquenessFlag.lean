@@ -42,6 +42,8 @@ the action of `B` on `M_k` with the diagonal block; the injection `V_b` takes va
 * `MPSTensor.MultiBlockCompression.rightCol_mulVec_mem_flag`,
   `MPSTensor.MultiBlockCompression.leftRow_mul_rightCol_self`: Lemma 5.1 (The maps in terms of the
   flag), part (b).
+* `MPSTensor.MultiBlockCompression.leftRow_mul_rightCol_of_ne`: `W_b V_{b'} = 0` for distinct
+  slots (lecture note AsymmetricFT, (1.2)).
 * `MPSTensor.FlagData.mem_H_iff`: a member of a labelled invariant flag is the set of vectors
   whose adapted coordinates vanish at the later steps.
 * `MPSTensor.FlagData.toMultiBlockCompression_flag`: the flag of the compression built from a
@@ -214,6 +216,15 @@ theorem leftRow_mul_rightCol_self (b : BlockIndex S P.z) : P.leftRow b * P.right
   simp only [leftRow, rightCol, Matrix.mul_assoc]
   rw [← Matrix.mul_assoc (gaugeMatrix P.gauge), gaugeMatrix_mul_gaugeMatrixInv, Matrix.one_mul,
     Matrix.blockProj_mul_blockEmbed_self]
+
+/-- **Biorthogonality across slots** (lecture note AsymmetricFT, (1.2); milestone V, V2.1):
+`W_b V_{b'} = 0` for distinct slots `b ≠ b'`, zero slots included; it is the block at `(b, b')`
+of `g g⁻¹ = 1`. -/
+theorem leftRow_mul_rightCol_of_ne {b b' : BlockIndex S P.z} (h : b ≠ b') :
+    P.leftRow b * P.rightCol b' = 0 := by
+  simp only [leftRow, rightCol, Matrix.mul_assoc]
+  rw [← Matrix.mul_assoc (gaugeMatrix P.gauge), gaugeMatrix_mul_gaugeMatrixInv, Matrix.one_mul,
+    Matrix.blockProj_mul_blockEmbed_of_ne h]
 
 theorem leftRow_mulVec (b : BlockIndex S P.z) (v : Fin DB → ℂ) :
     P.leftRow b *ᵥ v = fun j => P.gauge v ⟨b, j⟩ := by
