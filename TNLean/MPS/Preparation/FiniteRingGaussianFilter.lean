@@ -111,7 +111,7 @@ theorem norm_gaussianFilteredTerm_interactionHamiltonian_commutator_le_exp
   refine (norm_gaussianFilteredTerm_interactionHamiltonian_commutator_le hN h hHerm hNorm
     A B X Y hX hY hA hB hXY 1 (by norm_num) (mul_nonneg hT.le hΔ.le) hT.le).trans ?_
   rw [hTime, hTail]
-  apply add_le_add_right
+  refine add_le_add ?_ le_rfl
   calc
     2 * ‖A‖ * ‖B‖ * X.card *
           Real.exp (-1 * ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY) *

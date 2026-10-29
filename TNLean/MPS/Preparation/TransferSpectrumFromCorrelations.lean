@@ -48,24 +48,24 @@ theorem norm_transfer_spectrum_le_of_limitCorrelator_bound
     (hCorr : ∀ X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ,
       ∃ C : ℝ, ∃ n₀ : ℕ, ∀ n : ℕ, n₀ ≤ n →
         ‖limitCorrelator A ρ (by rw [hρ]; exact one_ne_zero) L X Y n‖ ≤ C * r ^ n)
-    {λ : ℂ} (hλ : λ ∈ spectrum ℂ (Kraus.transferMap A)) (hλone : λ ≠ 1) :
-    ‖λ‖ ≤ r := by
+    {lam : ℂ} (hlam : lam ∈ spectrum ℂ (Kraus.transferMap A)) (hlamOne : lam ≠ 1) :
+    ‖lam‖ ≤ r := by
   classical
-  have hEigen := Module.End.hasEigenvalue_iff_mem_spectrum.mpr hλ
+  have hEigen := Module.End.hasEigenvalue_iff_mem_spectrum.mpr hlam
   obtain ⟨R, hR⟩ := hEigen.exists_hasEigenvector
   obtain ⟨X, Y, hXY⟩ := exists_limitCorrelator_eq_pow hL hA hρ hR.2
-    hR.apply_eq_smul hλone
+    hR.apply_eq_smul hlamOne
   obtain ⟨C, n₀, hC⟩ := hCorr X Y
   by_contra hle
-  have hlt : r < ‖λ‖ := lt_of_not_ge hle
-  have hratio : 1 < ‖λ‖ / r := (lt_div_iff₀ hr).mpr (by simpa using hlt)
+  have hlt : r < ‖lam‖ := lt_of_not_ge hle
+  have hratio : 1 < ‖lam‖ / r := (lt_div_iff₀ hr).mpr (by simpa using hlt)
   obtain ⟨n, hn⟩ := pow_unbounded_of_one_lt C hratio
   have hbound := hC (n + n₀) (Nat.le_add_left n₀ n)
   rw [hXY, norm_pow] at hbound
-  have hquot : (‖λ‖ / r) ^ (n + n₀) ≤ C := by
+  have hquot : (‖lam‖ / r) ^ (n + n₀) ≤ C := by
     rw [div_pow, div_le_iff₀ (pow_pos hr (n + n₀))]
     exact hbound
-  have hpow : (‖λ‖ / r) ^ n ≤ (‖λ‖ / r) ^ (n + n₀) :=
+  have hpow : (‖lam‖ / r) ^ n ≤ (‖lam‖ / r) ^ (n + n₀) :=
     pow_le_pow_right₀ hratio.le (Nat.le_add_right n n₀)
   exact (not_lt_of_ge hquot) (hn.trans_le hpow)
 
