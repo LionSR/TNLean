@@ -10,7 +10,7 @@ the dual $C^*$-algebra involution of
 \cite[Equation~(5.38)]{Molnar2022MPOAlgebrasI}, which composes with the
 antipode, the involution $\kappa$ defined below preserves convolution order.
 
-\begin{theorem}[Same-order involution of the convolution dual]
+\begin{lemma}[Same-order involution of the convolution dual]
     \label{thm:glm_coalgebra_dual_star}
     \lean{Coalgebra.dualStar_mul,Coalgebra.dualStarMulEquiv,
         Coalgebra.dualStar_one}
@@ -23,7 +23,7 @@ antipode, the involution $\kappa$ defined below preserves convolution order.
         \label{eq:glm_dual_star_product}
     \end{align}
     Here multiplication is convolution, and $1$ is the counit.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     On a pure tensor, complex conjugation sends
@@ -42,7 +42,7 @@ antipode, the involution $\kappa$ defined below preserves convolution order.
     Define $f_{ij}(x)=\phi(x)_{ij}$ and $T^{ij}=\psi(f_{ij})$.
 \end{definition}
 
-\begin{theorem}[Ordered coefficient products]
+\begin{lemma}[Ordered coefficient products]
     \label{thm:glm_dual_representation_words}
     \lean{MPOTensor.evalWord_ofDualRepresentation,
         MPOTensor.star_dualCoefficient,MPOTensor.star_dualCoefficient_prod}
@@ -58,7 +58,7 @@ antipode, the involution $\kappa$ defined below preserves convolution order.
         \kappa(f_{\sigma,\tau}) & =f_{\tau,\sigma}.
         \label{eq:glm_dual_representation_words}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_coalgebra_dual_star}
@@ -114,7 +114,7 @@ at the ordered convolution product of the coefficient functionals.
 \end{tenkzequation}
 % TENKZ-COALGEBRA-WORDS-END
 
-\begin{theorem}[One adjoint boundary at every length]
+\begin{lemma}[One adjoint boundary at every length]
     \label{thm:glm_coalgebra_adjoint_boundary}
     \lean{MPOTensor.exists_boundary_trace_dualStar,
         MPOTensor.exists_adjointBoundary_of_dualRepresentation,
@@ -129,7 +129,7 @@ at the ordered convolution product of the coefficient functionals.
         \label{eq:glm_coalgebra_adjoint_boundary}
     \end{align}
     for every $N\geq0$. In particular, $T$ is boundary adjoint closed.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_dual_representation_words}
@@ -202,20 +202,20 @@ single boundary $Y$.
 \end{tenkzequation}
 % TENKZ-COALGEBRA-ADJOINT-END
 
-\begin{theorem}[Canonical parent symmetry of a dual representation]
+\begin{lemma}[Canonical parent symmetry of a dual representation]
     \label{thm:glm_dual_representation_parent}
     \lean{MPOTensor.IsBoundaryCompatible.parentInteractionES_commute_of_dualRepresentation,
         MPOTensor.IsBoundaryCompatible.parentHamiltonianES_commute_of_dualRepresentation}
     \leanok
     \uses{def:glm_dual_representation_tensor,def:glm_boundary_closedness,
         def:parent_interaction,def:parent_hamiltonian,def:mpdo_commuting_boundary}
-    Under the hypotheses of Theorem~\ref{thm:glm_coalgebra_adjoint_boundary},
+    Under the hypotheses of Lemma~\ref{thm:glm_coalgebra_adjoint_boundary},
     suppose $T$ is arbitrary-boundary compatible with a state tensor $A$.
     For $L>0$, the canonical local parent commutes with $O^L_{T,X}$
     for every $X$. For $N\geq L$, the periodic canonical parent
     commutes with $O^N_{T,X}$ whenever $X$ commutes with every tensor
     letter $T^{ij}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:glm_coalgebra_adjoint_boundary,thm:glm_boundary_parent_local,
@@ -224,9 +224,9 @@ single boundary $Y$.
     orthogonal complement is invariant as well, since the entire boundary
     family is adjoint closed. The complementary orthogonal projector
     therefore satisfies $[h_L,O^L_{T,X}]=0$ by
-    Theorem~\ref{thm:glm_boundary_parent_local}. Commutation
+    Lemma~\ref{thm:glm_boundary_parent_local}. Commutation
     with every tensor letter carries this equality to all
     cyclic windows, including those crossing the periodic boundary;
-    Theorem~\ref{thm:glm_boundary_parent_periodic} then gives
+    Lemma~\ref{thm:glm_boundary_parent_periodic} then gives
     $[H_{L,N},O^N_{T,X}]=0$.
 \end{proof}

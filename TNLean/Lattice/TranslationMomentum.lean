@@ -149,7 +149,7 @@ theorem iSup_momentumSector {H : Matrix (V → Fin q) (V → Fin q) ℂ}
       rw [hwg, hwg, map_smul, hwg, smul_smul, mul_comm (χ h)] at this
       exact smul_left_injective ℂ hw0 this
     have hone : χ 1 = 1 := by
-      have : R 1 w = w := by ext1; simp [hR, toEuclideanLin_sitePermMatrix_one]
+      have : R 1 w = w := by ext1; simp [hR]
       rw [hwg] at this
       exact smul_left_injective ℂ hw0 (this.trans (one_smul ℂ w).symm)
     let χ' : G →* ℂ := ⟨⟨χ, hone⟩, hmul⟩

@@ -9,7 +9,7 @@ between the resulting regions.
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % These interface results do not assemble the global two-family partition.
 
-\begin{theorem}[A belt run meets a retained primary with opposite label]
+\begin{lemma}[A belt run meets a retained primary with opposite label]
     \label{thm:area_law_belt_run_primary_interface}
     \lean{TNLean.PEPS.AreaLaw.Geometry.beltCellFanRun_primary_interface}
     \leanok
@@ -23,7 +23,7 @@ between the resulting regions.
     the run region of $R$ and the primary birth region of index $J$ at
     layer $h$. Then $J$ is a retained primary index at layer $h$, and every
     triangle of $R$ has label $h+1\ne h\pmod2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_primary_fine_cell_cover,
         thm:area_law_fan_other_cell_contact,
@@ -41,7 +41,7 @@ between the resulting regions.
     triangle of $R$.
 \end{proof}
 
-\begin{theorem}[Opposite labels across a shared boundary of distinct belt cells]
+\begin{lemma}[Opposite labels across a shared boundary of distinct belt cells]
     \label{thm:area_law_belt_runs_interface_colors}
     \lean{TNLean.PEPS.AreaLaw.Geometry.beltCellFanRuns_interface_colors_ne}
     \leanok
@@ -51,7 +51,7 @@ between the resulting regions.
     If a nondegenerate closed segment $[u,v]$ with $u\ne v$ lies in both
     run regions, then the triangles of $R$ and the triangles of $T$ carry
     opposite labels in $\mathbb Z/2\mathbb Z$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_fan_other_cell_contact,
         thm:area_law_belt_fan_contact_colors,thm:area_law_fan_run_color,

@@ -47,7 +47,7 @@ four-block comparison of \cite[Theorem~5.5]{Schuch2010PEPS}.
     $c_p(\psi)=(\bigotimes_e\ell_{e,p_e})(\psi)$ for this product functional.
 \end{definition}
 
-\begin{theorem}[Exact extraction of coherent coefficients]%
+\begin{lemma}[Exact extraction of coherent coefficients]%
     \label{thm:peps_dependent_coefficient_extraction}
     \lean{TNLean.PEPS.DependentBondNetwork.outputBondPairing_matrixBondProduct,
         TNLean.PEPS.DependentBondNetwork.bondCoefficientExtraction_bondProduct,
@@ -64,7 +64,7 @@ four-block comparison of \cite[Theorem~5.5]{Schuch2010PEPS}.
     \end{align}
     Thus two coherent sums in the $b_p$ are equal if and only if their
     complete coefficient functions are equal.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_torus_projector_extraction}
     Distributing (\ref{eq:peps_dependent_bond_pairing}) over the bond pairs
@@ -90,7 +90,7 @@ four-block comparison of \cite[Theorem~5.5]{Schuch2010PEPS}.
     Put $B_e(q)=U_e(q_{h(e)})B_eU_e(q_{t(e)}^{-1})$.
 \end{definition}
 
-\begin{theorem}[Canonical products, slices, and extracted sums]%
+\begin{lemma}[Canonical products, slices, and extracted sums]%
     \label{thm:peps_dependent_canonical_bond_sum}
     \lean{TNLean.PEPS.DependentBondNetwork.dependentProduct_coordinateSlice_eq_smul,
         TNLean.PEPS.DependentBondNetwork.bondRegrouping_network_averagingSite,
@@ -110,7 +110,7 @@ four-block comparison of \cite[Theorem~5.5]{Schuch2010PEPS}.
                             & =|G|^{-n}\sum_q\prod_e\ell_{e,p_e}(B_e(q)).\nonumber
     \end{align}
     These identities require neither semi-regularity nor restrictions on $B$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_dependent_projector_expansion,
         thm:peps_dependent_coefficient_extraction}
@@ -120,7 +120,7 @@ four-block comparison of \cite[Theorem~5.5]{Schuch2010PEPS}.
     term gives the third.
 \end{proof}
 
-\begin{theorem}[An uncut bond forces representation-matrix support]%
+\begin{lemma}[An uncut bond forces representation-matrix support]%
     \label{thm:peps_dependent_uncut_support}
     \lean{TNLean.PEPS.DependentBondNetwork.physicalBondSlice_network_averagingSite_mem_range,
         TNLean.PEPS.DependentBondNetwork.physicalBondSlice_mem_range_of_mem_cutSpace}
@@ -131,7 +131,7 @@ four-block comparison of \cite[Theorem~5.5]{Schuch2010PEPS}.
     $\psi\in\mathcal S_{A^0,C}$, then
     $S_{e,\tau}\psi\in\operatorname{im}F_e$ for every $\tau$, even when
     the cut boundary is arbitrarily correlated.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_dependent_canonical_bond_sum, thm:peps_dependent_cut_basis}
     In a summand of (\ref{eq:peps_dependent_canonical_bonds}), an identity
@@ -142,7 +142,7 @@ four-block comparison of \cite[Theorem~5.5]{Schuch2010PEPS}.
     matrix-unit networks that still have $B_e=I$ when $e\notin C$.
 \end{proof}
 
-\begin{theorem}[Complementary cuts give a coherent bond expansion]%
+\begin{lemma}[Complementary cuts give a coherent bond expansion]%
     \label{thm:peps_dependent_cut_expansion}
     \lean{TNLean.PEPS.DependentBondNetwork.bondRegrouping_mem_product_range_of_mem_cutSpaces,
         TNLean.PEPS.DependentBondNetwork.exists_bondCoefficients_of_mem_cutSpaces,
@@ -158,7 +158,7 @@ four-block comparison of \cite[Theorem~5.5]{Schuch2010PEPS}.
         \psi=\sum_{p:\mathcal E\to G}c_p(\psi)b_p.
         \label{eq:peps_dependent_extracted_expansion}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_dependent_uncut_support, thm:peps_dependent_product_range,
         thm:peps_dependent_coefficient_extraction}
@@ -169,7 +169,7 @@ four-block comparison of \cite[Theorem~5.5]{Schuch2010PEPS}.
     identifies $a_p=c_p(\psi)$ in the semi-regular case.
 \end{proof}
 
-\begin{theorem}[A nonzero coefficient has compatible uncut labels]%
+\begin{lemma}[A nonzero coefficient has compatible uncut labels]%
     \label{thm:peps_dependent_uncut_coefficients}
     \lean{TNLean.PEPS.DependentBondNetwork.bondCoefficientExtraction_network_eq_zero_of_incompatible,
         TNLean.PEPS.DependentBondNetwork.bondCoefficientExtraction_eq_zero_of_mem_cutSpace_of_incompatible,
@@ -188,7 +188,7 @@ four-block comparison of \cite[Theorem~5.5]{Schuch2010PEPS}.
         \forall e\notin C,\quad p_e=q_{h(e)}q_{t(e)}^{-1}.
         \label{eq:peps_dependent_uncut_coefficients}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_dependent_canonical_bond_sum,
         thm:peps_dependent_coefficient_extraction, thm:peps_dependent_cut_basis}

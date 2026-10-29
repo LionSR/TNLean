@@ -20,7 +20,7 @@ They give support consequences of the bond transformation in
     Its matrix is the matching-sector bond inclusion $E_X$.
 \end{definition}
 
-\begin{theorem}[Coordinate support of inclusion ranges]%
+\begin{lemma}[Coordinate support of inclusion ranges]%
     \label{thm:peps_open_sector_coordinate_support}
     \lean{TNLean.PEPS.endpointEmbeddingMatrix_mulVec_image,
         TNLean.PEPS.endpointEmbeddingMatrix_mulVec_eq_zero_of_notMem_range,
@@ -43,7 +43,7 @@ They give support consequences of the bond transformation in
     $\psi\in\operatorname{im}\bigotimes_{f\in E}E_X$
     (Definition~\ref{def:peps_open_sector_embedding}) vanishes whenever some
     bond $f\in E$ has mismatched endpoint sectors.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     In $(E_jx)(a)=\sum_{c\in B}\delta_{a,j(c)}x(c)$, injectivity of $j$ leaves
     $x(b)$ when $a=j(b)$ and $0$ when $a\notin j(B)$; conversely, if
@@ -85,7 +85,7 @@ They give support consequences of the bond transformation in
     numbered physical coordinates).
 \end{definition}
 
-\begin{theorem}[Internal weighted products with arbitrary boundary labels]%
+\begin{lemma}[Internal weighted products with arbitrary boundary labels]%
     \label{thm:peps_open_sector_weighted_slice}
     \lean{TNLean.PEPS.graphRegionInternalBondSlice_dressedAveragingSite}
     \leanok
@@ -100,10 +100,10 @@ They give support consequences of the bond transformation in
         (W^2U(q_hq_t^{-1}))_{\beta_{h,f},\beta_{t,f}}.
         \label{eq:peps_open_sector_weighted_slice}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_graph_open_averaging_bond_state}
-    By Theorem~\ref{thm:peps_graph_open_averaging_bond_state}, regrouping the
+    By Lemma~\ref{thm:peps_graph_open_averaging_bond_state}, regrouping the
     open contraction into $\partial E_R$ and $E_R$ contracts each internal bond
     $f=(t,h)\in E_R$ to $(U(q_h)W)(WU(q_t^{-1}))=W^2U(q_hq_t^{-1})$ while
     retaining~(\ref{eq:peps_open_sector_boundary_coefficient})--(\ref{eq:peps_open_sector_boundary_factors})
@@ -132,7 +132,7 @@ They give support consequences of the bond transformation in
     \end{tenkzequation}
 \end{proof}
 
-\begin{theorem}[Internal multiplicity restoration]%
+\begin{lemma}[Internal multiplicity restoration]%
     \label{thm:peps_open_sector_internal_restoration}
     \lean{TNLean.PEPS.graphRegionInternalBondSlice_blockFourthRootWeight}
     \leanok
@@ -156,23 +156,23 @@ They give support consequences of the bond transformation in
     multiplicity $d_i$ in sector $i$, and
     $U'(g)=\bigoplus_i(D_i(g)\otimes I_{d_i})$.
     The coefficients $c_R$ still use the original $U,W,\theta,\sigma$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_open_sector_weighted_slice,
         thm:peps_coherent_multiplicity_transport}
     Since $WU(g)=U(g)W$ and $W^2U(g)=\bigoplus_i\sqrt{d_i}\,D_i(g)$, applying
-    Theorem~\ref{thm:peps_coherent_multiplicity_transport} to
-    Theorem~\ref{thm:peps_open_sector_weighted_slice} with coefficients
+    Lemma~\ref{thm:peps_coherent_multiplicity_transport} to
+    Lemma~\ref{thm:peps_open_sector_weighted_slice} with coefficients
     $c_R(\theta,\sigma;q)$ and internal bond labels $q_hq_t^{-1}$ yields both
     $\psi\in\operatorname{im}\bigotimes_{f\in E_R}E_X$ and~(\ref{eq:peps_open_sector_internal_restoration}).
 \end{proof}
 
-\begin{theorem}[Matching sectors throughout a regional range]%
+\begin{lemma}[Matching sectors throughout a regional range]%
     \label{thm:peps_open_sector_regional_support}
     \lean{TNLean.PEPS.regionInternalBondSlice_mem_matchingSectorRange,
         TNLean.PEPS.regionGroundSpace_apply_eq_zero_of_internal_sector_ne}
     \leanok
-    With $U,W,X$ as in Theorem~\ref{thm:peps_open_sector_internal_restoration}
+    With $U,W,X$ as in Lemma~\ref{thm:peps_open_sector_internal_restoration}
     and site enumerations $e_v:X^{\operatorname{Inc}(v)}\cong\{0,\ldots,p-1\}$,
     let $A$ be the resulting numbered weighted averaging tensor. For any region
     $R$, crossing labels $\sigma$, and $\psi\in\mathcal G_R(A)$,
@@ -183,23 +183,23 @@ They give support consequences of the bond transformation in
     \end{align}
     so $\psi$ vanishes whenever the two endpoints of some $f\in E_R$ lie in
     different sectors.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_open_sector_internal_restoration,
         thm:peps_open_sector_coordinate_support}
     Since $\mathcal G_R(A)=\spn\{\mathcal C_R(A)\ket{\theta}:\theta\}$,
     linearity of $\mathcal S_{R,\sigma}$ and
-    Theorem~\ref{thm:peps_open_sector_internal_restoration} yield~(\ref{eq:peps_open_sector_regional_support});
-    Theorem~\ref{thm:peps_open_sector_coordinate_support} then gives vanishing
+    Lemma~\ref{thm:peps_open_sector_internal_restoration} yield~(\ref{eq:peps_open_sector_regional_support});
+    Lemma~\ref{thm:peps_open_sector_coordinate_support} then gives vanishing
     at any configuration with a mismatched internal bond $f\in E_R$.
 \end{proof}
 
-\begin{theorem}[Product bond support of every parent ground vector]%
+\begin{lemma}[Product bond support of every parent ground vector]%
     \label{thm:peps_open_sector_parent_support}
     \lean{TNLean.PEPS.regionParentGroundSpace_apply_eq_zero_of_sector_ne,
         TNLean.PEPS.regionParentGroundSpace_mem_product_matchingSectorRange}
     \leanok
-    Let $A$ and $e_v$ be as in Theorem~\ref{thm:peps_open_sector_regional_support},
+    Let $A$ and $e_v$ be as in Lemma~\ref{thm:peps_open_sector_regional_support},
     and suppose every $f=(t,h)\in E$ has $\{t,h\}\subseteq R_i$ for some
     $R_i\in\mathcal R$. Then every $\psi\in\mathcal P_{\mathcal R}(A)$ vanishes
     whenever any bond $f\in E$ has mismatched endpoint sectors; equivalently,
@@ -210,15 +210,15 @@ They give support consequences of the bond transformation in
         \label{eq:peps_open_sector_parent_support}
     \end{align}
     without assuming irreducibility or completeness of the $D_i$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_open_sector_regional_support,
         thm:peps_open_sector_coordinate_support}
     If $f\in E$ has mismatched endpoint sectors, pick $R_i\in\mathcal R$ with
     $f\in E_{R_i}$; the exterior slice of $\psi\in\mathcal P_{\mathcal R}(A)$
     lies in $\mathcal G_{R_i}(A)$ and hence vanishes at that configuration by
-    Theorem~\ref{thm:peps_open_sector_regional_support}. By~(\ref{eq:peps_open_sector_inclusion_support})
-    in Theorem~\ref{thm:peps_open_sector_coordinate_support}, this vanishing is
+    Lemma~\ref{thm:peps_open_sector_regional_support}. By~(\ref{eq:peps_open_sector_inclusion_support})
+    in Lemma~\ref{thm:peps_open_sector_coordinate_support}, this vanishing is
     equivalent to~(\ref{eq:peps_open_sector_parent_support}).
 \end{proof}
 % The product-support conclusion permits the supported multiplicity map to
