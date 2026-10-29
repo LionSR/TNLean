@@ -46,8 +46,7 @@ theorem exists_supported_ground_cutoff {S : Set ι}
   have hshift : cfc (fun x : ℝ => x - λ) A = A - (λ : ℂ) • 1 := by
     rw [cfc_sub (fun x : ℝ => x) (fun _ : ℝ => λ) A (hc _) (hc _),
       cfc_id' ℝ A hA.isSelfAdjoint, cfc_const λ A hA.isSelfAdjoint,
-      Algebra.algebraMap_eq_smul_one]
-    rfl
+      Algebra.algebraMap_eq_smul_one, ← Complex.coe_smul]
   have hkill : (A - (λ : ℂ) • 1) * P = 0 := by
     rw [← hshift, P, ← cfc_mul _ _ A (hc _) (hc _)]
     have hfun : (fun x : ℝ => (x - λ) * f x) = fun _ => 0 := by
