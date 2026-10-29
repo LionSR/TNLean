@@ -229,3 +229,31 @@
     Choose the one common reference before the interval and $S$, and
     apply the preceding theorem with $D=D_{\rm ref}$.
 \end{proof}
+
+\begin{theorem}[Merging adjacent interval spaces for one global target]
+    \label{thm:actual_adjacent_interval_merge}
+    \lean{TNLean.MPS.AreaLaw.adjacentIntervalMerge,
+        TNLean.MPS.AreaLaw.isViable_adjacentIntervalMerge,
+        TNLean.MPS.AreaLaw.finrank_adjacentIntervalMerge_le}
+    \leanok
+    Let $p\le k\le r$ and fix an arbitrary global target
+    $G\subseteq\mathcal H_{[0,N)}$. Suppose that
+    $S_1\subseteq\mathcal H_{[p,k)}$ and
+    $S_2\subseteq\mathcal H_{[k,r)}$ are respectively
+    $\delta_1$-viable and $\delta_2$-viable for $G$ in their actual
+    interval/exterior splits. The tensor product of $S_1,S_2$, carried
+    back to the parent configuration space $\mathcal H_{[p,r)}$, is
+    $(\delta_1+\delta_2)$-viable for the same $G$ and has dimension at
+    most $(\dim S_1)(\dim S_2)$.
+    Empty child intervals are included, and no product structure of $G$
+    is assumed. This is the chain-coordinate form of
+    \cite[Lemma on tensoring, lines 500--523]{Arad2016RigorousRG}.
+\end{theorem}
+\begin{proof}\leanok
+    The actual restrictions to the two disjoint intervals and their full
+    common exterior give one three-factor image of $G$. Tensoring the
+    two child viability inequalities in this image gives the sum of
+    errors. The union of the two adjacent intervals is $[p,r)$, so the
+    canonical configuration identification carries the constructed
+    candidate to the stated parent interval and preserves dimension.
+\end{proof}

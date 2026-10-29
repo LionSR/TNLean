@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.MPS.AreaLaw.AKLV
 import TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily
+import TNLean.MPS.AreaLaw.AdjacentIntervalMerge
 import TNLean.MPS.AreaLaw.AreaLaw
 import TNLean.MPS.AreaLaw.BandDissolution
 import TNLean.MPS.AreaLaw.BandInformation
@@ -60,6 +61,7 @@ import TNLean.MPS.AreaLaw.IntervalMPOTransfer
 import TNLean.MPS.AreaLaw.IntervalNeighborhoodEntropy
 import TNLean.MPS.AreaLaw.IntervalSlice
 import TNLean.MPS.AreaLaw.IntervalSymmDiff
+import TNLean.MPS.AreaLaw.IntervalUnion
 import TNLean.MPS.AreaLaw.LiebRobinson
 import TNLean.MPS.AreaLaw.LocalSolution
 import TNLean.MPS.AreaLaw.LogarithmicAreaLaw
