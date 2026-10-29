@@ -44,6 +44,28 @@ theorem uncleInteractionES_isPositive
   rw [← LinearIsometryEquiv.adjoint_toLinearMap_eq_symm]
   exact (parentInteractionES_isPositive (uncleTensor A B R L) 1).conj_adjoint e.toLinearMap
 
+open scoped ComplexOrder in
+/-- Every actual finite periodic uncle Hamiltonian is positive, including
+empty configuration spaces and chain lengths. This is the positivity used
+in the spectral conclusion of arXiv:1210.6613, proof of thm:gapless. -/
+theorem uncleHamiltonianES_isPositive
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (N : ℕ) :
+    (uncleHamiltonianES A B R L N).toLinearMap.IsPositive := by
+  classical
+  change (∑ i : Fin N, (((d ^ 2 : ℕ) : ℂ)⁻¹) • ∑ τ : Cfg d N,
+    (cyclicRestrictES (Fin.pos i) 2 i τ).adjoint ∘ₗ
+      (uncleInteractionES A B R L).toLinearMap ∘ₗ
+        cyclicRestrictES (Fin.pos i) 2 i τ).IsPositive
+  apply LinearMap.isPositive_sum
+  intro i _
+  apply LinearMap.IsPositive.smul_of_nonneg _ (inv_nonneg.mpr (Nat.cast_nonneg _))
+  apply LinearMap.isPositive_sum
+  intro τ _
+  exact (uncleInteractionES_isPositive A B R L).adjoint_conj
+    (cyclicRestrictES (Fin.pos i) 2 i τ)
+
 /-- Vanishing of the explicit uncle projector is exactly membership in its
 blocked boundary space, transported to the original two physical sites.
 Source: arXiv:1210.6613, eq:uncletensor-2site and the local kernel in
@@ -99,9 +121,8 @@ theorem uncleHamiltonianES_apply_eq_zero_iff
         cyclicRestrictES (Fin.pos p.1) 2 p.1 p.2
   have hK : ∀ p, (K p).IsPositive := by
     intro p
-    simpa only [K, LinearMap.adjoint_adjoint] using
-      (uncleInteractionES_isPositive A B R L).conj_adjoint
-        (cyclicRestrictES (Fin.pos p.1) 2 p.1 p.2).adjoint
+    exact (uncleInteractionES_isPositive A B R L).adjoint_conj
+      (cyclicRestrictES (Fin.pos p.1) 2 p.1 p.2)
   have hsum : (uncleHamiltonianES A B R L N).toLinearMap =
       ∑ p : Fin N × Cfg d N, (c : ℂ) • K p := by
     ext ψ
