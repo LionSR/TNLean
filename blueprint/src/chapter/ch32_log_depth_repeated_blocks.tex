@@ -39,7 +39,7 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
     \end{align*}
 \end{definition}
 
-\begin{theorem}[Positive part of a blocked tensor with multiplicities]
+\begin{lemma}[Positive part of a blocked tensor with multiplicities]
     \label{thm:ldp_repeated_block_polar}
     \lean{MPSTensor.repeatedBlockSum_eq_blockSum,
         MPSTensor.flat_disjoint_coord,
@@ -66,7 +66,7 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
     the copy index, where \cite[eq.~(S5)]{Malz2024Preparation} prints
     $\operatorname{diag}(\mu_{j,1}^q,\dots,\mu_{j,m_j}^q)\otimes P_j$
     \cite{gap:mswc24_repeated_block_corrected_state}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Listing all copies as blocks of multiplicity one, every word of length
@@ -89,7 +89,7 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
     \uses{def:ldp_non_normal_fixed_point, def:ldp_repeated_block_sum,
         thm:ldp_repeated_block_polar}
     With the notation of Definition~\ref{def:ldp_repeated_block_sum} and
-    Theorem~\ref{thm:ldp_repeated_block_polar}, fixed points
+    Lemma~\ref{thm:ldp_repeated_block_polar}, fixed points
     $\rho_j$ of the blocks, and $\ket{\Omega_j}$ the product of the pairs of
     $\rho_j$ over $M$ sites in the bond space of block $j$, the corrected
     approximating state on $N=qM$ sites with coefficients $\alpha_j$ is
@@ -97,12 +97,12 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
         \ket{\widetilde\phi_N}\propto V^{\otimes M}\sum_j\alpha_j
         L_j^{\otimes M}\ket{\Omega_j}.
     \end{align*}
-    When the weights $\beta_j$ of Theorem~\ref{thm:ldp_repeated_block_polar} are
+    When the weights $\beta_j$ of Lemma~\ref{thm:ldp_repeated_block_polar} are
     not all zero, the source's coefficients are
     $\alpha_j=\beta_j/\bigl(\sum_l\lvert\beta_l\rvert^2\bigr)^{1/2}$; if all
     $\beta_j$ vanish these coefficients are undefined.
     Replacing each $P_j$ in the corrected block form of
-    Theorem~\ref{thm:ldp_repeated_block_polar} by its fixed point, just as
+    Lemma~\ref{thm:ldp_repeated_block_polar} by its fixed point, just as
     \cite[eq.~(S7)]{Malz2024Preparation} does with the printed block form,
     yields this state with the weights of the source. Because the isometry
     $L_j$ acts on the two legs of each site, for a repeated block the state
@@ -112,7 +112,7 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
     of Definition~\ref{def:ldp_non_normal_fixed_point}.
 \end{definition}
 
-\begin{theorem}[Approximation error for orthogonal blocks with multiplicities]
+\begin{lemma}[Approximation error for orthogonal blocks with multiplicities]
     \label{thm:ldp_approximation_error_repeated_orthogonal_blocks}
     \lean{MPSTensor.exists_approximationError_le_repeatedBlockSum,
         MPSTensor.exists_approximationError_le_mul_repeatedBlockSum,
@@ -121,7 +121,7 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
     \uses{def:ldp_repeated_block_state, thm:ldp_repeated_block_polar,
         thm:ldp_approximation_error_orthogonal_blocks,
         thm:ldp_approximation_error_repeated_overlapping, def:correlation_length}
-    With the notation of Theorem~\ref{thm:ldp_repeated_block_polar}, let the
+    With the notation of Lemma~\ref{thm:ldp_repeated_block_polar}, let the
     blocks $A_j$ be normal in the gauge (\ref{eq:ldp_normal_gauge}) with fixed
     points $\rho_j$, let $\lambda_2$ bound the moduli of the eigenvalues other
     than one of every transfer map $\E_{A_j}$, with correlation length $\xi$, and
@@ -144,15 +144,15 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
     When the states are orthogonal, the corrected state is the combination
     $\sum_j\alpha_j\ket{\phi_M(V_jP_{j,\infty})}$ of the approximating states of the
     blocks.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    By Theorem~\ref{thm:ldp_repeated_block_polar}, $VL_j=V_j$ at every $q$ at which
+    By Lemma~\ref{thm:ldp_repeated_block_polar}, $VL_j=V_j$ at every $q$ at which
     the states are orthogonal, which gives the last statement. For the bounds,
     suppose the states are orthogonal at some $q_0$; otherwise there is nothing to
     prove. As in the proof of
-    Theorem~\ref{thm:ldp_approximation_error_orthogonal_blocks}, every mixed
+    Lemma~\ref{thm:ldp_approximation_error_orthogonal_blocks}, every mixed
     transfer map $\E_{jj'}$, $j\neq j'$, is then nilpotent, so $\lambda_2$ bounds the
     moduli of its eigenvalues, and
-    Theorem~\ref{thm:ldp_approximation_error_repeated_overlapping} gives both bounds.
+    Lemma~\ref{thm:ldp_approximation_error_repeated_overlapping} gives both bounds.
 \end{proof}

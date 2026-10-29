@@ -48,7 +48,7 @@ source and physical input coordinates, following
     the first slot with the inductive basis on the remaining slots preserves
     orthonormality under $\Phi$, giving~(\ref{eq:peps_source_slot_basis});
     tensoring with $(f_j)_{j\in N}$ and applying
-    Theorem~\ref{thm:peps_source_preparation_sums} yields~(\ref{eq:peps_source_input_basis}).
+    Lemma~\ref{thm:peps_source_preparation_sums} yields~(\ref{eq:peps_source_input_basis}).
 \end{proof}
 
 \begin{definition}[The complete free-input matrix]
@@ -82,7 +82,7 @@ source and physical input coordinates, following
     \end{align}
 \end{definition}
 
-\begin{theorem}[Pure-input prepared density coefficients]
+\begin{lemma}[Pure-input prepared density coefficients]
     \label{thm:peps_pure_source_density_coefficient}
     \lean{TNLean.Lattice.PartyCircuit.Word.preparedDensityCoefficient_pure_eq_vecMulVec}
     \leanok
@@ -94,15 +94,15 @@ source and physical input coordinates, following
          & =A_{T,\psi}(:,a)A_{T',\psi}(:,b)^\dagger.
         \label{eq:peps_pure_source_density_coefficient}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_prepared_vector_density,def:peps_source_slot_basis,
         thm:peps_source_preparation_sums}
-    By Theorem~\ref{thm:peps_source_preparation_sums} and
+    By Lemma~\ref{thm:peps_source_preparation_sums} and
     Definition~\ref{def:peps_source_slot_basis},
     $K_T(a)[\psi]=[T(s_a\otimes\psi)]=A_{T,\psi}(:,a)$, so
-    Theorem~\ref{thm:peps_prepared_vector_density} yields~(\ref{eq:peps_pure_source_density_coefficient}).
+    Lemma~\ref{thm:peps_prepared_vector_density} yields~(\ref{eq:peps_pure_source_density_coefficient}).
 \end{proof}
 
 \begin{definition}[The product source matrix]
@@ -120,7 +120,7 @@ source and physical input coordinates, following
     \end{align}
 \end{definition}
 
-\begin{theorem}[Finite contraction of source columns]
+\begin{lemma}[Finite contraction of source columns]
     \label{thm:peps_source_column_contraction}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.sourceContraction_columns_eq_mul}
     \leanok
@@ -134,7 +134,7 @@ source and physical input coordinates, following
         \mathcal C_H(X) & =L\mathcal X M^\dagger.
         \label{eq:peps_source_column_contraction}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_product_source_matrix}
@@ -151,7 +151,7 @@ source and physical input coordinates, following
     \end{align}
 \end{proof}
 
-\begin{theorem}[Contraction on a prescribed pure input]
+\begin{lemma}[Contraction on a prescribed pure input]
     \label{thm:peps_pure_source_contraction}
     \lean{TNLean.Lattice.PartyCircuit.Word.sourceContraction_preparedDensityCoefficient_pure_eq_mul}
     \leanok
@@ -165,7 +165,7 @@ source and physical input coordinates, following
          & =A_{T,\psi}\mathcal X A_{T',\psi}^\dagger.
         \label{eq:peps_pure_source_contraction}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_pure_source_density_coefficient,
@@ -174,7 +174,7 @@ source and physical input coordinates, following
     and apply (\ref{eq:peps_source_column_contraction}).
 \end{proof}
 
-\begin{theorem}[Physical entries of a pure prepared coefficient]
+\begin{lemma}[Physical entries of a pure prepared coefficient]
     \label{thm:peps_pure_source_physical}
     \lean{TNLean.Lattice.PartyCircuit.Word.preparedDensityCoefficient_pure_partialTrace_apply}
     \leanok
@@ -189,7 +189,7 @@ source and physical input coordinates, following
         \overline{A_{T',\psi}((s,z),\beta)}.
         \label{eq:peps_pure_source_physical}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_pure_source_density_coefficient}
@@ -197,7 +197,7 @@ source and physical input coordinates, following
     over $z\in D$.
 \end{proof}
 
-\begin{theorem}[Mixed products of party matrices]
+\begin{lemma}[Mixed products of party matrices]
     \label{thm:peps_party_product_conjugation}
     \lean{TNLean.Lattice.PartyCircuit.partyProductMatrix_conjTranspose,
         TNLean.Lattice.PartyCircuit.partyProductMatrix_conjugate}
@@ -214,13 +214,13 @@ source and physical input coordinates, following
          & =\bigotimes_p (A_pX_pB_p^\dagger).
         \label{eq:peps_party_product_conjugation}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_dependent_product_calculus}
     Multiplicativity of complex conjugation gives
     $(\bigotimes_p B_p)^\dagger=\bigotimes_p B_p^\dagger$, and applying
-    Theorem~\ref{thm:peps_dependent_product_calculus} twice gives
+    Lemma~\ref{thm:peps_dependent_product_calculus} twice gives
     \begin{align}
         \left(\bigotimes_p A_p\right)\left(\bigotimes_p X_p\right)\left(\bigotimes_p B_p\right)^\dagger
          & =\left(\bigotimes_p(A_pX_p)\right)\left(\bigotimes_p B_p^\dagger\right)
@@ -228,7 +228,7 @@ source and physical input coordinates, following
     \end{align}
 \end{proof}
 
-\begin{theorem}[Tracing the private coordinates at each party]
+\begin{lemma}[Tracing the private coordinates at each party]
     \label{thm:peps_party_product_partial_trace}
     \lean{TNLean.Lattice.PartyCircuit.partialTraceRight_partyProductMatrix,
         TNLean.Lattice.PartyCircuit.partialTraceRight_partyProduct_conjugate}
@@ -246,7 +246,7 @@ source and physical input coordinates, following
     For $O_p=H_p\times D_p$ in (\ref{eq:peps_party_product_conjugation}),
     $\tr_{\prod_pD_p}\bigl((\bigotimes_p A_p)(\bigotimes_p X_p)(\bigotimes_p B_p)^\dagger\bigr)
         =\bigotimes_p\tr_{D_p}(A_pX_pB_p^\dagger)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_party_product_conjugation}
@@ -261,7 +261,7 @@ source and physical input coordinates, following
     (\ref{eq:peps_party_product_partial_trace}) gives the mixed-product trace.
 \end{proof}
 
-\begin{theorem}[Absorbing a common scalar at one party]
+\begin{lemma}[Absorbing a common scalar at one party]
     \label{thm:peps_party_product_scalar}
     \lean{TNLean.Lattice.PartyCircuit.partyProductMatrix_smul_at_party}
     \leanok
@@ -273,20 +273,20 @@ source and physical input coordinates, following
          & =\mu\bigotimes_pM_p.
         \label{eq:peps_party_product_scalar}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_dependent_physical_product}
     Entrywise, $\prod_p c_pM_p(x_p,y_p)=(\prod_p c_p)\prod_p M_p(x_p,y_p)=\mu\prod_p M_p(x_p,y_p)$.
 \end{proof}
 
-\begin{theorem}[Joint contraction of all source inputs]
+\begin{lemma}[Joint contraction of all source inputs]
     \label{thm:peps_free_source_contraction}
     \lean{TNLean.Lattice.PartyCircuit.Word.norm_freeSourceMatrix_le_one}
     \leanok
     \uses{def:peps_free_source_matrix}
     If $T$ is an allowed composition, then $\|A_T\|\le1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_party_layout,def:peps_source_slot_basis}
@@ -294,7 +294,7 @@ source and physical input coordinates, following
     (Definition~\ref{def:peps_source_slot_basis}), $\|A_T\|=\|T\|\le 1$.
 \end{proof}
 
-\begin{theorem}[The bra-adjoint--ket contraction]
+\begin{lemma}[The bra-adjoint--ket contraction]
     \label{thm:peps_free_source_overlap}
     \lean{TNLean.Lattice.PartyCircuit.Word.freeSourceMatrix_conjTranspose_mul_apply}
     \lean{TNLean.Lattice.PartyCircuit.Word.norm_freeSourceMatrix_conjTranspose_mul_le_one}
@@ -307,22 +307,22 @@ source and physical input coordinates, following
         \label{eq:peps_free_source_overlap}
     \end{align}
     and if $T,T'$ are allowed, then $\|O\|\le1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_free_source_contraction}
     Multiplying (\ref{eq:peps_free_source_matrix}) gives
-    (\ref{eq:peps_free_source_overlap}), and Theorem~\ref{thm:peps_free_source_contraction}
+    (\ref{eq:peps_free_source_overlap}), and Lemma~\ref{thm:peps_free_source_contraction}
     gives $\|O\|\le\|B^\dagger\|\|A\|=\|B\|\|A\|\le1$.
 \end{proof}
 
-\begin{theorem}[Tracing a prepared density coefficient]
+\begin{lemma}[Tracing a prepared density coefficient]
     \label{thm:peps_free_source_trace}
     \lean{TNLean.Lattice.PartyCircuit.Word.trace_preparedMatrix_mul_conjTranspose_eq}
     \lean{TNLean.Lattice.PartyCircuit.Word.trace_preparedDensityCoefficient_eq_freeSourceMatrix}
     \leanok
     \uses{def:peps_free_source_matrix,def:peps_prepared_density_coefficient}
-    In the setting of Theorem~\ref{thm:peps_free_source_overlap}, for any
+    In the setting of Lemma~\ref{thm:peps_free_source_overlap}, for any
     $\rho\in\C^{N\times N'}$ (where $C_{T,T'}(\rho;a,b)=K_T(a)\rho K_{T'}(b)^\dagger$
     is the coefficient of Definition~\ref{def:peps_prepared_density_coefficient}),
     \begin{align}
@@ -331,7 +331,7 @@ source and physical input coordinates, following
         \rho_{ij}\,O_{(b,j),(a,i)}.
         \label{eq:peps_free_source_trace}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_free_source_overlap}
@@ -352,7 +352,7 @@ source and physical input coordinates, following
     $\{\{p,q\}:p,q\in P,\ p\ne q\}$.
 \end{definition}
 
-\begin{theorem}[Number of pair-source slots]
+\begin{lemma}[Number of pair-source slots]
     \label{thm:peps_source_pair_count}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.length_eq_choose}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.length_le_card_sq}
@@ -362,7 +362,7 @@ source and physical input coordinates, following
     \texttt{04-compression.tex}, lines 565--585, if $P$ is finite and $R$
     satisfies Definition~\ref{def:peps_source_pair_index}, then
     $|R|=\binom{|P|}{2}\le|P|^2$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_source_pair_index}
@@ -381,7 +381,7 @@ source and physical input coordinates, following
     memory $\mathcal H$.
 \end{definition}
 
-\begin{theorem}[Action of the local source maps]
+\begin{lemma}[Action of the local source maps]
     \label{thm:peps_source_slot_maps}
     \lean{TNLean.Lattice.PartyCircuit.Word.mapSourceSlots_spec}
     \lean{TNLean.Lattice.PartyCircuit.Word.eval_mapSourceSlots_prepareSlots}
@@ -395,12 +395,12 @@ source and physical input coordinates, following
     \end{align}
     If $\|L_e\|,\|M_e\|\le1$ for all $e$, then $F_{L,M}$ is allowed and
     source-free.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_map_source_pair,thm:peps_source_preparation}
-    Induction on the ordered slots using Theorem~\ref{thm:peps_map_source_pair}
-    and Theorem~\ref{thm:peps_source_preparation} gives
+    Induction on the ordered slots using Lemma~\ref{thm:peps_map_source_pair}
+    and Lemma~\ref{thm:peps_source_preparation} gives
     (\ref{eq:peps_source_slot_maps}); contractivity of each $L_e,M_e$ makes
     $F_{L,M}$ allowed.
 \end{proof}
@@ -437,24 +437,24 @@ source and physical input coordinates, following
     for $TF_{L,M}$.
 \end{proof}
 
-\begin{theorem}[Joint contraction in source frames]
+\begin{lemma}[Joint contraction in source frames]
     \label{thm:peps_source_frame_contraction}
     \lean{TNLean.Lattice.PartyCircuit.Word.norm_sourceFrameMatrix_le_one}
     \leanok
     \uses{def:peps_source_frame_matrix}
     If $T$ is allowed and $\|L_e\|,\|M_e\|\le 1$ for all $e$, then
     $\|A_T^{L,M}\|\le1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_source_slot_maps,thm:peps_free_source_contraction}
-    By Theorem~\ref{thm:peps_source_slot_maps}, $TF_{L,M}$ is allowed, so
+    By Lemma~\ref{thm:peps_source_slot_maps}, $TF_{L,M}$ is allowed, so
     (\ref{eq:peps_source_frame_matrix_composition}) and
-    Theorem~\ref{thm:peps_free_source_contraction} give
+    Lemma~\ref{thm:peps_free_source_contraction} give
     $\|A_T^{L,M}\|=\|A_{TF_{L,M}}\|\le1$.
 \end{proof}
 
-\begin{theorem}[Contraction through the source columns]
+\begin{lemma}[Contraction through the source columns]
     \label{thm:peps_actual_pure_source_contraction}
     \leanok
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceContraction_preparedDensityCoefficient_pure_eq_mul}
@@ -472,15 +472,15 @@ source and physical input coordinates, following
          & =M_\xi\mathcal X M_\zeta^\dagger.
         \label{eq:peps_actual_pure_source_contraction}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_actual_private_preparation,
         thm:peps_pure_source_density_coefficient,thm:peps_source_column_contraction}
-    By Theorems~\ref{thm:peps_actual_private_preparation}
+    By Lemmas~\ref{thm:peps_actual_private_preparation}
     and~\ref{thm:peps_pure_source_density_coefficient},
     $C_{\xi,\zeta}(x,y)=M_\xi(:,x)M_\zeta(:,y)^\dagger$, so
-    Theorem~\ref{thm:peps_source_column_contraction} gives
+    Lemma~\ref{thm:peps_source_column_contraction} gives
     (\ref{eq:peps_actual_pure_source_contraction}).
 \end{proof}
 
@@ -516,7 +516,7 @@ source and physical input coordinates, following
 \end{definition}
 
 
-\begin{theorem}[Incidence of original sample positions]
+\begin{lemma}[Incidence of original sample positions]
     \label{thm:peps_original_source_sample_incidence}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.mem_sourceSampleEquiv_iff}
     \leanok
@@ -526,7 +526,7 @@ source and physical input coordinates, following
     $p\in P$ in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, the
     sample position of $e$ is incident to $p$ if and only if $p=p_e$ or $p=q_e$.
     % Source: 04-compression.tex, lines 342--364 and 568--579.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_original_source_pair_indices}
@@ -575,7 +575,7 @@ source and physical input coordinates, following
     has inverse $j\mapsto j\circ\sigma$.
 \end{proof}
 
-\begin{theorem}[Inverse assignments at the original source occurrence]
+\begin{lemma}[Inverse assignments at the original source occurrence]
     \label{thm:peps_source_sample_assignment_occurrence}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allSourceSampleAssignmentEquiv_symm_apply}
     \leanok
@@ -584,7 +584,7 @@ source and physical input coordinates, following
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     $(T^{-1}j)(\rho^{-1}e)=j(\tau e)$.
     % Source: 04-compression.tex, lines 342--417 and 568--579.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_source_sample_assignment_indices}
@@ -592,7 +592,7 @@ source and physical input coordinates, following
     $(T^{-1}j)(\rho^{-1}e)=(j\circ\tau\circ\rho)(\rho^{-1}e)=j(\tau e)$.
 \end{proof}
 
-\begin{theorem}[Reindexing a common sample sum]
+\begin{lemma}[Reindexing a common sample sum]
     \label{thm:peps_source_sample_assignment_sum}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_sourceSampleAssignments_eq}
     \leanok
@@ -606,7 +606,7 @@ source and physical input coordinates, following
         \label{eq:peps_source_sample_assignment_sum}
     \end{align}
     % Source: 04-compression.tex, lines 568--579.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_source_sample_assignment_indices}
@@ -615,7 +615,7 @@ source and physical input coordinates, following
 \end{proof}
 
 
-\begin{theorem}[Number of the original shared samples]
+\begin{lemma}[Number of the original shared samples]
     \label{thm:peps_original_source_sample_count}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.length_allSourceSlots_eq_sum_pairSampleLabels}
     \leanok
@@ -631,7 +631,7 @@ source and physical input coordinates, following
         \label{eq:peps_original_source_sample_count}
     \end{align}
     % Source: 04-compression.tex, lines 342--417 and 568--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -640,15 +640,15 @@ source and physical input coordinates, following
     By Definitions~\ref{def:peps_all_original_source_slots}
     and~\ref{def:peps_original_source_sample_indices}, the $N$ slots are in
     bijection with $\bigsqcup_{g\in G}\mathcal E(C_g)$, and
-    $|\mathcal E(C_g)|=\binom{|C_g|}{2}$ by Theorem~\ref{thm:peps_source_pair_count}.
+    $|\mathcal E(C_g)|=\binom{|C_g|}{2}$ by Lemma~\ref{thm:peps_source_pair_count}.
 \end{proof}
 
-\begin{theorem}[Distributing the source averaging factor]
+\begin{lemma}[Distributing the source averaging factor]
     \label{thm:peps_original_source_sample_averaging}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.inv_sampleSize_pow_allSourceSlots_eq_prod}
     \leanok
     \uses{thm:peps_original_source_sample_count}
-    In the notation of Theorem~\ref{thm:peps_original_source_sample_count}, for
+    In the notation of Lemma~\ref{thm:peps_original_source_sample_count}, for
     every $k\in\mathbb N$ (with $0^{-1}=0$ in $\C$), the averaging factor in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS} factors as
     \begin{align}
@@ -656,7 +656,7 @@ source and physical input coordinates, following
         \label{eq:peps_original_source_sample_averaging}
     \end{align}
     % Source: 04-compression.tex, lines 568--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

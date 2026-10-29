@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.AreaLaw
 
+import TNLean.MPS.AreaLaw.AKLV
 import TNLean.MPS.AreaLaw.AreaLaw
 import TNLean.MPS.AreaLaw.BandDissolution
 import TNLean.MPS.AreaLaw.BandInformation
@@ -57,6 +58,7 @@ import TNLean.MPS.AreaLaw.MPSApproximation
 import TNLean.MPS.AreaLaw.NearestNeighbourImaginaryTime
 import TNLean.MPS.AreaLaw.OpenMPS
 import TNLean.MPS.AreaLaw.OpenMPSCutRank
+import TNLean.MPS.AreaLaw.OpenMPSOperatorAction
 import TNLean.MPS.AreaLaw.OpenMPSProduct
 import TNLean.MPS.AreaLaw.OpenMPSRank
 import TNLean.MPS.AreaLaw.OpenMPSSpan

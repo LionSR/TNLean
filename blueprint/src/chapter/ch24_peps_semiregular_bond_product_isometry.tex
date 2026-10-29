@@ -1,4 +1,4 @@
-\begin{theorem}[Physical product isometries and supported overlaps]%
+\begin{lemma}[Physical product isometries and supported overlaps]%
     \label{thm:peps_physical_product_supported_isometry}
     \lean{TNLean.PEPS.physicalProductMatrix_mul,
         TNLean.PEPS.physicalProductMatrix_isIsometry,
@@ -21,7 +21,7 @@
     Products compose bond by bond: $(\bigotimes_e A)(\bigotimes_e B)
         =\bigotimes_e(AB)$. In particular, the product of any physical isometry is an isometry
     and preserves all physical overlaps.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Applying the region product isometry to the full finite set and
     identifying its configurations with those on $\mathcal B$ shows that the
@@ -34,7 +34,7 @@
     (\ref{eq:peps_product_supported_overlap}).
 \end{proof}
 
-\begin{theorem}[Overlaps under the product multiplicity-restoring map]%
+\begin{lemma}[Overlaps under the product multiplicity-restoring map]%
     \label{thm:peps_multiplicity_bond_product_overlap}
     \lean{TNLean.PEPS.physicalProductMap_fullMultiplicityBondMap_dotProduct}
     \leanok
@@ -57,7 +57,7 @@
     Consequently, the supported product isometry of
     \cite[Section~7]{Schuch2010PEPS} preserves all overlaps of arbitrary
     coherent superpositions supported on the product matching-sector subspace.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since the matching-sector inclusion is an isometry satisfying
     $F^\dagger F=E_VE_V^\dagger$, the physical product overlap

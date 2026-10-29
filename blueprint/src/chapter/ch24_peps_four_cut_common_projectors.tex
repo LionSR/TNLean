@@ -24,7 +24,7 @@
     physical map when $I=X$.
 \end{definition}
 
-\begin{theorem}[Composition and coordinate action of product maps]%
+\begin{lemma}[Composition and coordinate action of product maps]%
     \label{thm:peps_four_cut_common_product_algebra}
     \lean{TNLean.PEPS.physicalProductFamilyMatrix_mul,
         TNLean.PEPS.physicalProductFamilyMap_comp,
@@ -44,16 +44,16 @@
     \end{align}
     In particular, if $B_v$ fixes $s\mapsto\psi(\tau[v\mapsto s])$ for all $v,\tau$,
     then $\mathcal T_B\psi=\psi$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_dependent_product_calculus}
-    Specialize Theorem~\ref{thm:peps_dependent_product_calculus} to constant
+    Specialize Lemma~\ref{thm:peps_dependent_product_calculus} to constant
     alphabets to obtain $\mathcal T_F\mathcal T_L=\mathcal T_{(F_vL_v)_v}$ and
     (\ref{eq:peps_common_one_coordinate}), and compose the single-coordinate
     factors over $v\in I$ to obtain $\mathcal T_B\psi=\psi$.
 \end{proof}
 
-\begin{theorem}[Slice characterization of a product range]%
+\begin{lemma}[Slice characterization of a product range]%
     \label{thm:peps_four_cut_common_product_range}
     \lean{TNLean.PEPS.physicalProductFamilyMap_slice_mem_range,
         TNLean.PEPS.mem_range_physicalProductFamilyMap_iff}
@@ -68,16 +68,16 @@
         \psi(\tau[v\mapsto\cdot])\in\operatorname{ran}F_v.
         \label{eq:peps_common_product_range}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_dependent_product_range}
-    Specialize Theorem~\ref{thm:peps_dependent_product_range} to constant
+    Specialize Lemma~\ref{thm:peps_dependent_product_range} to constant
     alphabets: choosing $L_v$ with $F_vL_v|_{\operatorname{ran}F_v}=\Id$ gives
     $\mathcal T_{FL}\psi=\psi=\mathcal T_F(\mathcal T_L\psi)$ whenever the
     right-hand side of (\ref{eq:peps_common_product_range}) holds.
 \end{proof}
 
-\begin{theorem}[Sitewise physical maps preserve the cut boundary]%
+\begin{lemma}[Sitewise physical maps preserve the cut boundary]%
     \label{thm:peps_four_cut_common_physical_contraction}
     \lean{TNLean.PEPS.torusSitewisePhysicalMap_torusCutMap,
         TNLean.PEPS.torusSitewisePhysicalMap_torusBondNetwork,
@@ -103,7 +103,7 @@
         \mathcal T_F(\mathcal Z_A)    & =\mathcal Z_{FA}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Interchanging the physical and virtual sums factors
     (\ref{eq:peps_common_physical_site}) at each site $v$, giving
@@ -111,7 +111,7 @@
     identities.
 \end{proof}
 
-\begin{theorem}[One local inverse for all four cuts]%
+\begin{lemma}[One local inverse for all four cuts]%
     \label{thm:peps_four_cut_common_local_inverse}
     \lean{TNLean.PEPS.physicalMapSite_representationAveragingSite,
         TNLean.PEPS.exists_sitewisePhysicalMap_to_representationAveragingSite,
@@ -142,13 +142,13 @@
         \label{eq:peps_common_cut_inverse}
     \end{align}
     so $\mathcal S^A=\mathcal T_R(\mathcal S^{A^0})$ on the $2\times2$ torus.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_g_injective_left_inverse,
         thm:peps_site_coefficients_composition,
         thm:peps_four_cut_common_physical_contraction}
     Averaging $R_v\rho_v(k)=R_v$ yields $R_v\Pi_{\rho_v}=R_v$, and
-    Theorem~\ref{thm:peps_g_injective_left_inverse} supplies $L_v$ with
+    Lemma~\ref{thm:peps_g_injective_left_inverse} supplies $L_v$ with
     $L_vR_v=\Pi_{\rho_v}$; applying (\ref{eq:peps_common_physical_cut}) gives
     (\ref{eq:peps_common_cut_recovery}), (\ref{eq:peps_common_cut_inverse}),
     $\mathcal T_R(\mathcal Z_{A^0})=\mathcal Z_A$, and
@@ -156,7 +156,7 @@
     $\mathcal T_R\mathcal T_L|_{\mathcal S^A}=\Id$.
 \end{proof}
 
-\begin{theorem}[Multilinear expansion of canonical cut contractions]%
+\begin{lemma}[Multilinear expansion of canonical cut contractions]%
     \label{thm:peps_four_cut_common_cut_expansion}
     \lean{TNLean.PEPS.torusCutCoeff_sum,
         TNLean.PEPS.torusCutCoeff_mul,
@@ -180,7 +180,7 @@
          & =|G|^{-|X|}\sum_{q:X\to G}\mathcal C^{B^q}_{c,r}M.
         \label{eq:peps_common_cut_average_expansion}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Distribute the finite site sums and scalar factors across $\prod_{v\in X}$
     and apply them to $A^0_{\rho_v}=|G|^{-1}\sum_{k\in G}\rho_v(k)$.
@@ -207,7 +207,7 @@
     Direct from the tensor-product, transpose, and Kronecker-delta definitions.
 \end{proof}
 
-\begin{theorem}[Moving independent leg operators across a bond]%
+\begin{lemma}[Moving independent leg operators across a bond]%
     \label{thm:peps_four_cut_common_leg_gauge}
     \lean{TNLean.PEPS.torusBondNetwork_legGauge}
     \leanok
@@ -220,14 +220,14 @@
          & =\mathcal N_{(a_vK_v)_v}(O^{\mathrm h},O^{\mathrm v}).
         \label{eq:peps_common_leg_gauge}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Regroup the intermediate bond-endpoint indices by site via the bijection
     $\beta\mapsto(s_v(\beta))_v$ of (\ref{eq:peps_common_boundary_restriction})
     and shift the indices of $L_{v+e}$ and $B_{v+n}$ by translation.
 \end{proof}
 
-\begin{theorem}[Matched vertex gauge invariance]%
+\begin{lemma}[Matched vertex gauge invariance]%
     \label{thm:peps_four_cut_common_vertex_gauge}
     \lean{TNLean.PEPS.vecMul_torusMatchedLegMatrix_of_comp_eq,
         TNLean.PEPS.torusBondNetwork_matchedVertexGauge}
@@ -245,7 +245,7 @@
         \label{eq:peps_common_gauged_vertical}
     \end{align}
     yields $\mathcal N_A(O^{\mathrm h,q},O^{\mathrm v,q})=\mathcal N_A(O^{\mathrm h},O^{\mathrm v})$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_four_cut_common_leg_gauge}
     Apply (\ref{eq:peps_common_leg_gauge}) with $T_v=U^{\mathrm v}_v(q_v)$,
@@ -254,7 +254,7 @@
     $A_v^s K_v=A_v^s$.
 \end{proof}
 
-\begin{theorem}[Matched averaging networks as coherent bond products]%
+\begin{lemma}[Matched averaging networks as coherent bond products]%
     \label{thm:peps_four_cut_common_network_expansion}
     \lean{TNLean.PEPS.torusBondNetwork_representationAveragingSite,
         TNLean.PEPS.torusBondRegrouping_insertedAveragingSite_coherent,
@@ -277,7 +277,7 @@
         O^q_f(\beta_f^1,\beta_f^2).
         \label{eq:peps_common_regrouped_average}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_four_cut_common_cut_expansion,
         thm:peps_four_cut_common_leg_gauge,thm:peps_torus_projector_expansion,

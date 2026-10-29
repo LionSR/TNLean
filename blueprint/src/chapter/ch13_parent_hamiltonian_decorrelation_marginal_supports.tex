@@ -23,13 +23,13 @@ $H_L\otimes H_R$ with $H_L=H_A\otimes H_X$, $H_R=H_B$, and $P_L$ the orthogonal
 projector onto the support of $\tr_R\rho$, one has
 $(P_L\otimes\Id_R)\rho=\rho$ and $\rho(P_L\otimes\Id_R)=\rho$.
 
-\begin{theorem}[Hermiticity of the left partial trace]
+\begin{lemma}[Hermiticity of the left partial trace]
     \label{thm:partial_trace_left_hermitian}
     \lean{Matrix.partialTraceLeft_isHermitian}
     \leanok
     If $\rho=\rho^\dagger$, then
     $\tr_L\rho=(\tr_L\rho)^\dagger$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -146,14 +146,14 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     $P O_A(\Id-P)O_B P=0$ for arbitrary complex matrices $O_A$ and $O_B$.
 \end{definition}
 
-\begin{theorem}[Observable and complex-linear decorrelation are equivalent]
+\begin{lemma}[Observable and complex-linear decorrelation are equivalent]
     \label{thm:tripartite_observable_decorrelation_iff}
     \lean{TripartiteDecorrelation.isObservableDecorrelated_iff}
     \leanok
     \uses{def:tripartite_observable_decorrelation, def:tripartite_decorrelation}
     Observable decorrelation holds if and only if its complex-linear extension
     holds.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -181,7 +181,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     Hermitian components.
 \end{proof}
 
-\begin{theorem}[Reverse order of decorrelation]
+\begin{lemma}[Reverse order of decorrelation]
     \label{thm:tripartite_decorrelation_reverse}
     \lean{TripartiteDecorrelation.IsDecorrelated.reverse}
     \leanok
@@ -189,7 +189,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     If $P=P^\dagger$ and $A$ and $B$ are decorrelated, then, for arbitrary
     complex matrices $O_A$ and $O_B$, one has
     $P O_B(\Id-P)O_A P=0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -206,7 +206,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     $\rho_{XB}=\tr_A P$.
 \end{definition}
 
-\begin{theorem}[Matrix-unit expansions of the reduced operators]
+\begin{lemma}[Matrix-unit expansions of the reduced operators]
     \label{thm:tripartite_marginal_matrix_units}
     \lean{TripartiteDecorrelation.lift_marginalAX_eq_sum,
         TripartiteDecorrelation.lift_marginalXB_eq_sum}
@@ -221,7 +221,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
          & =\sum_{b,k}E^B_{bk}P E^B_{kb}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -241,14 +241,14 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     The $AX$ identity follows symmetrically.
 \end{proof}
 
-\begin{theorem}[Decorrelation for the reduced operators]
+\begin{lemma}[Decorrelation for the reduced operators]
     \label{thm:tripartite_marginal_complementary_product_zero}
     \lean{TripartiteDecorrelation.IsDecorrelated.marginals_mul_complement_mul_eq_zero}
     \leanok
     \uses{def:tripartite_decorrelation, thm:tripartite_marginal_matrix_units}
     If $A$ and $B$ are decorrelated, then
     $\widehat\rho_{XB}(\Id-P)\widehat\rho_{AX}=0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -263,14 +263,14 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     where the bracketed factor vanishes by decorrelation.
 \end{proof}
 
-\begin{theorem}[Reverse reduced-operator decorrelation]
+\begin{lemma}[Reverse reduced-operator decorrelation]
     \label{thm:tripartite_reverse_marginal_complementary_product_zero}
     \lean{TripartiteDecorrelation.IsDecorrelated.reverse_marginals_mul_complement_mul_eq_zero}
     \leanok
     \uses{thm:tripartite_decorrelation_reverse, thm:tripartite_marginal_matrix_units}
     If $P=P^\dagger$ and $A$ and $B$ are decorrelated, then
     $\widehat\rho_{AX}(\Id-P)\widehat\rho_{XB}=0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -296,7 +296,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     tripartite space.
 \end{definition}
 
-\begin{theorem}[Decorrelation for the two marginal supports]
+\begin{lemma}[Decorrelation for the two marginal supports]
     \label{thm:tripartite_complementary_product_zero}
     \lean{TripartiteDecorrelation.IsDecorrelated.supports_mul_complement_mul_eq_zero,
         TripartiteDecorrelation.IsDecorrelated.reverse_supports_mul_complement_mul_eq_zero}
@@ -311,7 +311,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
          & =0.
         \label{eq:parent_reverse_support_complementary_zero}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -348,7 +348,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     % docs/paper-gaps/cpsv16_decorrelation_slice_expansion_fix.tex.
 \end{proof}
 
-\begin{theorem}[Absorption by the lifted $XB$ support projector]
+\begin{lemma}[Absorption by the lifted $XB$ support projector]
     \label{thm:tripartite_xb_support_absorption}
     \lean{TripartiteDecorrelation.liftSupportXB_mul_self,
         TripartiteDecorrelation.mul_liftSupportXB_self}
@@ -356,7 +356,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     \uses{def:tripartite_local_lifts, def:tripartite_marginal_supports}
     For $P\geq0$,
     $\widehat P_{XB}P=P=P\widehat P_{XB}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -368,7 +368,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Absorption by the lifted $AX$ support projector]
+\begin{lemma}[Absorption by the lifted $AX$ support projector]
     \label{thm:tripartite_ax_support_absorption}
     \lean{TripartiteDecorrelation.liftSupportAX_mul_self,
         TripartiteDecorrelation.mul_liftSupportAX_self}
@@ -376,7 +376,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     \uses{def:tripartite_local_lifts, def:tripartite_marginal_supports}
     For $P\geq0$,
     $\widehat P_{AX}P=P=P\widehat P_{AX}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -389,7 +389,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Product of the two marginal support projectors]
+\begin{lemma}[Product of the two marginal support projectors]
     \label{thm:tripartite_support_products}
     \lean{TripartiteDecorrelation.supportProducts_eq}
     \leanok
@@ -403,7 +403,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
          & =P.
         \label{eq:parent_support_product_ax_xb}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

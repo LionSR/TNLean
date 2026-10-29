@@ -8,7 +8,7 @@ $r_k=2^k$, and $s_k=2^{p_k}$. All indices below are nonnegative integers.
 The following statements give the uniform scale separation used in
 \cite[Section~11]{OpenAI2026AreaLaw}.
 
-\begin{theorem}[Explicit gaps between scale indices]
+\begin{lemma}[Explicit gaps between scale indices]
     \label{thm:area_law_scale_index_gaps}
     \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicScale_index_gaps}
     \leanok
@@ -18,7 +18,7 @@ The following statements give the uniform scale separation used in
         \ell_k+d & \le k,   \\
         k+d      & \le p_k.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_exponent_gaps}
     The threshold gives $d\le k$ and
@@ -27,7 +27,7 @@ The following statements give the uniform scale separation used in
     is at least the integer $k+d$.
 \end{proof}
 
-\begin{theorem}[Dyadic factors between successive sides]
+\begin{lemma}[Dyadic factors between successive sides]
     \label{thm:area_law_scale_side_ratios}
     \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicScale_side_ratios}
     \leanok
@@ -37,7 +37,7 @@ The following statements give the uniform scale separation used in
         2^d t_k & \le r_k, \\
         2^d r_k & \le s_k.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_scale_index_gaps}
     Applying the increasing function $n\mapsto2^n$ to the two index
@@ -45,7 +45,7 @@ The following statements give the uniform scale separation used in
     $2^{a+b}=2^a2^b$ yields both bounds.
 \end{proof}
 
-\begin{theorem}[Uniform multiplicative separation]
+\begin{lemma}[Uniform multiplicative separation]
     \label{thm:area_law_uniform_scale_separation}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_dyadicScale_side_ratios}
     \leanok
@@ -58,7 +58,7 @@ The following statements give the uniform scale separation used in
         M t_k & \le r_k, \\
         M r_k & \le s_k.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_scale_side_ratios}
     By the unboundedness of powers of two, there is a nonnegative integer $d$

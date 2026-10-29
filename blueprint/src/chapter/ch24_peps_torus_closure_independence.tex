@@ -1,0 +1,345 @@
+\section{Independence of torus closures}%
+\label{sec:peps_torus_closure_independence}
+
+On the torus a $G$-injective tensor is closed by group elements inserted along
+the two seams (Definition~\ref{def:peps_torus_g_closure}). The closure vector
+depends only on the pair-conjugacy class of the two elements, and this section
+computes the overlaps of closure vectors for regular $G$-isometric tensors.
+
+\begin{definition}[Pair-conjugacy classes of closures]%
+    \label{def:peps_pair_conjugacy}
+    \lean{TNLean.PEPS.PairConjugacyClass, TNLean.PEPS.pairConjugacyClass,
+        TNLean.PEPS.pairConjugacyClass_eq_iff,
+        TNLean.PEPS.commute_iff_of_pairConjugacyClass_eq,
+        TNLean.PEPS.PairConjugacyClass.IsCommuting,
+        TNLean.PEPS.PairConjugacyClass.isCommuting_pairConjugacyClass,
+        TNLean.PEPS.CommutingPairConjugacyClass}
+    \leanok
+    Two pairs are equivalent if
+    $(g,h)=(xg'x^{-1},xh'x^{-1})$ for some $x\in G$. Their equivalence
+    classes are the pair-conjugacy classes of
+    \cite[Definition~5.8]{Schuch2010PEPS}. Commutation is constant on each
+    class, so the classes of commuting pairs are well-defined.
+\end{definition}
+
+\begin{lemma}[The torus vector depends only on the pair-conjugacy class]%
+    \label{thm:peps_torus_pair_conjugacy}
+    \lean{TNLean.PEPS.torusBondNetwork_conjugate, TNLean.PEPS.torusGClosure_conjugate,
+        TNLean.PEPS.torusGClosure_eq_of_pairConjugacyClass_eq,
+        TNLean.PEPS.torusGClosureClass, TNLean.PEPS.torusGClosureClass_pairConjugacyClass}
+    \leanok
+    \uses{def:peps_torus_g_closure, def:peps_pair_conjugacy}
+    Suppose $A$ is invariant under the virtual group action. Then
+    $\ket{\mathcal M(A\mid xgx^{-1},xhx^{-1})}
+        =\ket{\mathcal M(A\mid g,h)}$ for every $x\in G$.
+    Consequently $\ket{\mathcal M(A\mid C)}$ is well-defined for each
+    pair-conjugacy class $C$ \cite[Definition~5.8]{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:peps_torus_bond_network_gauge}
+    In Lemma~\ref{lem:peps_torus_bond_network_gauge} take $P_v=U_x$ and
+    $Q_v=U_{x^{-1}}$ at every site. The absorbed site tensor is unchanged
+    by invariance. Each closure matrix $U_g$ or $U_h$ becomes
+    $U_{xgx^{-1}}$ or $U_{xhx^{-1}}$, and each identity bond remains the
+    identity. This proves the assertion for every coefficient in
+    (\ref{eq:peps_torus_closure_coeff}).
+\end{proof}
+
+\begin{lemma}[Displacement of commuting closure seams]%
+    \label{thm:peps_torus_commuting_closure_seams}
+    \lean{TNLean.PEPS.torusHorizontalClosureAt_zero,
+        TNLean.PEPS.torusHorizontalClosureAt,
+        TNLean.PEPS.torusVerticalClosureAt,
+        TNLean.PEPS.torusVerticalClosureAt_zero,
+        TNLean.PEPS.torusBondNetwork_closureAt_eq_torusGClosure}
+    \leanok
+    \uses{def:peps_torus_g_closure}
+    Let $A$ be invariant under the virtual group action and let $gh=hg$.
+    For any column $c$ and row $r$, put
+    \begin{align}
+        H^c_v=\begin{cases}U_h,&v_x+1=c,\\\mathbb 1,&\text{otherwise},\end{cases}
+        \qquad
+        V^r_v=\begin{cases}U_g,&v_y+1=r,\\\mathbb 1,&\text{otherwise}.\end{cases}
+    \end{align}
+    Contracting $A$ with these bond operators gives
+    $\ket{\mathcal M(A\mid g,h)}$, independently of $c$ and $r$.
+    This is the displacement of commuting loops described after
+    the string-deformation display of \cite{Schuch2010PEPS}, local source
+    lines 1638--1644; neither isometry
+    nor semi-regularity is needed. The identity holds on every nonempty
+    rectangular torus, including dimensions equal to one.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:peps_torus_bond_network_gauge}
+    Choose coordinate representatives between zero and the corresponding
+    circumference minus one. To move the horizontal seam, use the vertex
+    change of basis $U_{h^{-1}}$ on columns preceding $c$ and the identity
+    elsewhere. The adjacent changes cancel on all ordinary bonds, remove
+    the old seam at zero, and insert $U_h$ at the new seam. They commute
+    with every $U_g$ on the transverse seam. Similarly, use $U_g$ on rows
+    preceding $r$ to move the vertical seam, with the inverse convention
+    required by its orientation. Local invariance removes every absorbed
+    change of basis. The network gauge identity therefore preserves each
+    physical coefficient.
+\end{proof}
+
+\begin{definition}[Regular coordinates of a torus site]%
+    \label{def:peps_torus_regular_coordinates}
+    \lean{TNLean.PEPS.leftRegularMatrix,
+        TNLean.PEPS.leftRegularMatrix_apply,
+        TNLean.PEPS.toMatrix_leftRegular_eq_leftRegularMatrix,
+        TNLean.PEPS.leftRegularMatrixEquiv,
+        TNLean.PEPS.isSemiRegular_leftRegularMatrix,
+        TNLean.PEPS.torusLegMatrix_leftRegularMatrix_apply,
+        TNLean.PEPS.torusLegRep_leftRegularMatrix_apply,
+        TNLean.PEPS.finFourArrowEquiv_smul,
+        TNLean.PEPS.torusLegRep_leftRegularMatrix_conj,
+        TNLean.PEPS.torusLegRep_leftRegularMatrix_unitary,
+        TNLean.PEPS.toMatrix_averageMap_torusLegRep_leftRegularMatrix,
+        TNLean.PEPS.toMatrix_siteMap_regular,
+        TNLean.PEPS.siteMap_fourCoordinates}
+    \leanok
+    \uses{def:peps_torus_bond_network, def:peps_semiregular,
+        thm:peps_semiregular_equivalence}
+    In the group basis, $L_x\ket{k}=\ket{xk}$. The coordinate map
+    $\sum_k c_k[k]\mapsto(c_k)_k$ intertwines the group-algebra regular
+    representation with these permutation matrices. They are therefore
+    semi-regular by Lemma~\ref{thm:peps_semiregular_equivalence}.
+    The oriented four-leg
+    action sends $(t,r,b,l)$ to $(xt,xr,xb,xl)$; its invariant projector
+    has entries
+    \begin{align}
+        \Pi_{\eta,\theta}
+        =\frac{1}{|G|}\sum_{x\in G}\mathbf{1}_{\eta=x\theta}.
+    \end{align}
+    Thus the four regular coordinates agree with the oriented virtual
+    action in Definition~6.1 of \cite{Schuch2010PEPS}.
+\end{definition}
+
+\begin{lemma}[The local regular Gram identity]%
+    \label{thm:peps_torus_regular_site_gram}
+    \lean{TNLean.PEPS.IsGIsometric.torusRegularSite_translation,
+        TNLean.PEPS.IsGIsometric.exists_torusRegularSiteGram}
+    \leanok
+    \uses{def:peps_torus_regular_coordinates, def:peps_g_injective}
+    A regular $G$-isometric site tensor $A$ is invariant under common
+    translation of its four virtual labels. There is $c>0$ such that
+    \begin{align}
+        \sum_s\overline{A_s(\eta)}A_s(\theta)
+        =\frac{c}{|G|}\sum_{x\in G}\mathbf{1}_{\eta=x\theta}.
+    \end{align}
+    The factor $c$ records the normalization of the site tensor.
+\end{lemma}
+
+\begin{proof}\leanok
+    Expressing $A^\dagger A=c\Pi$ in the orthonormal group basis and substituting
+    the matrix entries of the invariant projector yields the formula.
+\end{proof}
+
+\begin{lemma}[Access to the virtual invariant space]%
+    \label{thm:peps_torus_accessible_virtual_site}
+    \lean{TNLean.PEPS.IsGIsometric.exists_accessibleVirtualSite}
+    \leanok
+    If $A^\dagger A=c\Pi$ with $c>0$, then $J=c^{-1/2}A^\dagger$
+    satisfies $JA=\sqrt{c}\Pi$ and preserves inner products on
+    $\operatorname{ran}A$. It identifies the physical support with
+    the invariant virtual space, as in Observation~6.4 of
+    \cite{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_torus_regular_site_gram}
+    For $u,v$ in the virtual space, $JA u=\sqrt{c}\Pi u$ and
+    $\langle Au,Av\rangle=c\langle\Pi u,\Pi v\rangle$.
+\end{proof}
+
+\begin{lemma}[Expansion of a torus overlap]%
+    \label{thm:peps_torus_overlap_expansion}
+    \lean{TNLean.PEPS.sum_star_weightedSiteProduct_mul,
+        TNLean.PEPS.torusBondSiteLabels,
+        TNLean.PEPS.torusBondWeight,
+        TNLean.PEPS.sum_star_torusSiteProduct_mul,
+        TNLean.PEPS.sum_star_torusBondNetwork_mul,
+        TNLean.PEPS.permMatrixHom_apply_eq_ite,
+        TNLean.PEPS.torusPermutationSiteLabels,
+        TNLean.PEPS.torusBondNetwork_perm,
+        TNLean.PEPS.sum_star_torusBondNetwork_perm_mul}
+    \leanok
+    \uses{def:peps_torus_bond_network}
+    Let $W(\beta)$ denote the product of the bond matrix entries and
+    let $\eta_v(\beta)$ be the four labels read by site $v$.
+    The overlap of two networks with site tensors $A_v,B_v$ is
+    \begin{align}
+        \sum_{\beta,\gamma}\overline{W_A(\beta)}W_B(\gamma)
+        \prod_v\left(\sum_s
+        \overline{A_{v,s}(\eta_v(\beta))}
+        B_{v,s}(\eta_v(\gamma))\right).
+    \end{align}
+    For permutation bonds, the head label is the permutation of the
+    tail label. Hence one free label per bond suffices in each network.
+\end{lemma}
+
+\begin{proof}\leanok
+    Expanding both contractions, interchanging the finite sums, and summing each
+    physical index independently yields the product formula, while a permutation matrix has entry one
+    exactly when its row is the image of its column.
+\end{proof}
+
+\begin{lemma}[Counting compatible regular bonds]%
+    \label{thm:peps_regular_bond_intertwining_count}
+    \lean{TNLean.PEPS.regularBond_labels_iff_intertwining,
+        TNLean.PEPS.sum_regularBond_labels_eq_card,
+        TNLean.PEPS.sum_two_regularBond_labels_eq_card,
+        TNLean.PEPS.torusRegularSiteLabels,
+        TNLean.PEPS.torusRegularSiteLabels_translation_iff,
+        TNLean.PEPS.sum_torusRegularSiteLabels_translation_eq_card,
+        TNLean.PEPS.sum_torusClosureSiteLabels_translation_eq_card}
+    \leanok
+    \uses{thm:peps_torus_overlap_expansion}
+    On a bond $e$ oriented from $s(e)$ to $t(e)$, let $u_e,w_e$ be
+    the group elements in the two networks. Vertex translations $q_v$
+    are compatible with this bond precisely when
+    \begin{align}
+        u_e q_{s(e)}=q_{t(e)}w_e.
+    \end{align}
+    If the equations hold, each bond has one independent group label;
+    otherwise there are no compatible labels. For the two bond families
+    on a torus with $N$ sites, the count is $|G|^{2N}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The tail labels satisfy $\eta_e=q_{s(e)}\theta_e$. Substituting this
+    into $u_e\eta_e=q_{t(e)}w_e\theta_e$ and cancelling $\theta_e$
+    gives the intertwining equation. Every $\theta_e$ is then free.
+\end{proof}
+
+\begin{lemma}[Translation compatibility across the torus seams]%
+    \label{thm:peps_torus_closure_compatibility}
+    \lean{TNLean.PEPS.torusHorizontalClosure_eq_map_element,
+        TNLean.PEPS.torusHorizontalClosureElement,
+        TNLean.PEPS.torusVerticalClosureElement,
+        TNLean.PEPS.torusVerticalClosure_eq_map_element,
+        TNLean.PEPS.IsTorusClosureCompatible,
+        TNLean.PEPS.IsTorusClosureCompatible.eq_origin,
+        TNLean.PEPS.isTorusClosureCompatible_iff_exists_intertwiner,
+        TNLean.PEPS.sum_torusClosureCompatible_eq_sum_intertwiner}
+    \leanok
+    \uses{def:peps_torus_g_closure,
+        thm:peps_regular_bond_intertwining_count}
+    For closures $(g,h)$ and $(g',h')$, a compatible vertex translation
+    is constant, $q_v=x$, and its value satisfies
+    \begin{align}
+        hx=xh',\qquad gx=xg'.
+        \label{eq:peps_closure_seam_intertwining}
+    \end{align}
+    Summing over compatible vertex translations therefore gives exactly
+    the number of simultaneous intertwiners. This holds also when a
+    torus circumference is one.
+\end{lemma}
+
+\begin{proof}\leanok
+    The nonseam horizontal and vertical bonds identify all translations
+    in a rectangular fundamental domain. The two seams give the equations
+    (\ref{eq:peps_closure_seam_intertwining}). For a circumference of one the corresponding seam is
+    already a loop at each site, imposing the same equation.
+\end{proof}
+
+\begin{lemma}[Overlap of regular isometric torus closures]%
+    \label{thm:peps_regular_torus_closure_overlap}
+    \lean{TNLean.PEPS.prod_torusSiteGram_eq_sum_translation,
+        TNLean.PEPS.sum_star_torusBondNetwork_regularClosure_mul,
+        TNLean.PEPS.sum_star_torusGClosure_regular_mul,
+        TNLean.PEPS.IsGIsometric.exists_torusGClosure_overlap}
+    \leanok
+    \uses{thm:peps_torus_overlap_expansion, thm:peps_torus_closure_compatibility}
+    Let $A_v^\dagger A_v=c_v\Pi_v$ be the local regular isometry identities
+    on a torus with $N$ sites, with $c_v>0$. For the closure vectors,
+    \begin{align}
+        \langle\psi_{g,h},\psi_{g',h'}\rangle
+        =\left(\prod_v c_v\right)|G|^N
+        \#\{x\in G:hx=xh',\ gx=xg'\}.
+    \end{align}
+    For a uniform tensor the prefactor is $c^N|G|^N$. Neither closure
+    pair is required to commute.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_torus_regular_site_gram, thm:peps_finite_indicator_sum}
+    Expanding the overlap into local Gram kernels expresses their product as the
+    sum over vertex translations with prefactor
+    $(\prod_v c_v)|G|^{-N}$. For a compatible translation, the two bond
+    families contribute $|G|^{2N}$, leaving the stated prefactor. By
+    Lemma~\ref{thm:peps_torus_closure_compatibility}, the remaining sum
+    counts the simultaneous intertwiners.
+\end{proof}
+
+\begin{lemma}[Independent simultaneous-conjugacy operator sums]%
+    \label{thm:peps_pair_conjugacy_operator_independence}
+    \lean{TNLean.PEPS.pairConjugacyOperator_eq_of_pairConjugacyClass_eq,
+        TNLean.PEPS.pairConjugacyOperator,
+        TNLean.PEPS.pairConjugacyClassOperator,
+        TNLean.PEPS.pairConjugacyClassOperator_pairConjugacyClass,
+        TNLean.PEPS.pairOperatorDeltaPairing,
+        TNLean.PEPS.pairOperatorDeltaPairing_tmul,
+        TNLean.PEPS.pairOperatorDeltaPairing_pairConjugacyOperator,
+        TNLean.PEPS.pairOperatorDeltaPairing_eq_zero_of_pairConjugacyClass_ne,
+        TNLean.PEPS.pairOperatorDeltaPairing_self_eq_card_centralizer,
+        TNLean.PEPS.pairOperatorDeltaPairing_self_ne_zero,
+        TNLean.PEPS.linearIndependent_pairConjugacyClassOperator,
+        TNLean.PEPS.pairConjugacyClassKroneckerOperator,
+        TNLean.PEPS.pairConjugacyClassKroneckerOperator_pairConjugacyClass,
+        TNLean.PEPS.linearIndependent_pairConjugacyClassKroneckerOperator}
+    \leanok
+    \uses{def:peps_pair_conjugacy, def:peps_semiregular, def:peps_delta_operator}
+    Let $U$ be a semi-regular representation of a finite group $G$ on a
+    finite-dimensional complex vector space $E$. Define
+    \begin{align}
+        \Omega_{g,h}
+         & =\sum_{x\in G}U_{xhx^{-1}}\otimes U_{xgx^{-1}},
+        \label{eq:peps_pair_operator_sum}                  \\
+        \Phi_{g,h}(A\otimes B)
+         & =\tr[U_{h^{-1}}A\Delta]\,
+        \tr[U_{g^{-1}}B\Delta].
+        \label{eq:peps_pair_operator_dual}
+    \end{align}
+    The operator $\Omega_{g,h}$ depends only on the simultaneous-conjugacy
+    class $C$ of $(g,h)$; denote it by $\Omega_C$. The family
+    $(\Omega_C)_C$ is linearly independent. The detecting functionals satisfy
+    \begin{align}
+        \Phi_{g,h}(\Omega_{g',h'})
+         & =\bigl|\{x\in G:
+        g=xg'x^{-1},\ h=xh'x^{-1}\}\bigr|,
+        \label{eq:peps_pair_operator_count} \\
+        \Phi_{g,h}(\Omega_{g,h})
+         & =|Z_G(g)\cap Z_G(h)|>0.
+        \label{eq:peps_pair_operator_diagonal}
+    \end{align}
+    In a coordinate basis, the corresponding matrices
+    $\sum_x U_{xhx^{-1}}\otimes_{\mathrm K}U_{xgx^{-1}}$ are likewise
+    well-defined on classes and linearly independent. Here
+    $\otimes_{\mathrm K}$ denotes the Kronecker product.
+    Restriction to commuting pair classes gives the operator-independence
+    argument in \cite[Theorem~5.9]{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:peps_pair_conjugacy, thm:peps_semiregular_trace}
+    Replacing $(g,h)$ by $(ygy^{-1},yhy^{-1})$ in
+    (\ref{eq:peps_pair_operator_sum}) and substituting $x\mapsto xy$
+    leaves the sum unchanged. By Lemma~\ref{thm:peps_semiregular_trace},
+    each factor of (\ref{eq:peps_pair_operator_dual}) evaluates to a
+    Kronecker delta on a representation operator, giving
+    (\ref{eq:peps_pair_operator_count}). Its value is zero on distinct
+    classes, while (\ref{eq:peps_pair_operator_diagonal}) is nonzero
+    because the common centralizer contains the identity. Applying
+    $\Phi_{g,h}$ to a finite relation $\sum_C\lambda_C\Omega_C=0$
+    therefore gives $\lambda_C|Z_G(g)\cap Z_G(h)|=0$ for the class of
+    $(g,h)$, and hence every coefficient vanishes. Finally, the canonical
+    isomorphism
+    $\operatorname{End}(E)\otimes\operatorname{End}(E)
+        \cong\operatorname{End}(E\otimes E)$, followed by passage to the
+    tensor-product coordinate basis, takes simple tensors to Kronecker
+    matrices and preserves linear independence.
+\end{proof}

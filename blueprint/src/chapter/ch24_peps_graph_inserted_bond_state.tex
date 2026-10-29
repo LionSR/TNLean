@@ -18,7 +18,7 @@
     inserted bond matrices.
 \end{definition}
 
-\begin{theorem}[Identity and regular insertions in the closed contraction]%
+\begin{lemma}[Identity and regular insertions in the closed contraction]%
     \label{thm:peps_graph_inserted_bond_recovery}
     \lean{TNLean.PEPS.graphInsertedBondNetwork_one,
         TNLean.PEPS.graphInsertedBondNetwork_leftRegular_eq_labels,
@@ -34,7 +34,7 @@
     numbered alphabets it is exactly the original twisted tensor-network
     coefficient, with the existing oriented regular insertion convention of
     \cite[Section~6.4]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The identity matrix constrains the two endpoint labels to agree.
@@ -43,7 +43,7 @@
     tail-label sum and the stated site coefficients.
 \end{proof}
 
-\begin{theorem}[Weighted averaging contractions with arbitrary bond insertions]%
+\begin{lemma}[Weighted averaging contractions with arbitrary bond insertions]%
     \label{thm:peps_graph_inserted_averaging_bond_state}
     \lean{TNLean.PEPS.graphInsertedBondNetwork_dressedAveragingSite,
         TNLean.PEPS.graphInsertedBondNetwork_dressedAveragingSite_group,
@@ -73,7 +73,7 @@
     \cite[Section~7]{Schuch2010PEPS}; the normalized site convention is recorded
     in \cite{gap:rmp_peps_quantum_double_g_isometry}.
     No physical isometry for arbitrary $K_e$ is asserted.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Expanding the independent local averages and regrouping the incidence products

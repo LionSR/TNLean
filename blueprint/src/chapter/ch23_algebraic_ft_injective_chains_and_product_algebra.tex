@@ -60,7 +60,7 @@ Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_of_sameState}.
     $\zeta A_k^i$ there.
 \end{proof}
 
-\begin{theorem}[Injective-chain Fundamental Theorem up to a global phase]%
+\begin{corollary}[Injective-chain Fundamental Theorem up to a global phase]%
     \label{thm:fundamentalTheorem_injective_chain_gaugePhase}
     \lean{MPSChainTensor.fundamentalTheorem_injective_chain_gaugePhase}
     \leanok
@@ -80,7 +80,7 @@ Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_of_sameState}.
     \end{align}
     for all sites $k$ and physical indices $i$, where $k+1$ is interpreted
     cyclically modulo $n$.
-\end{theorem}
+\end{corollary}
 
 \begin{proof}
     \leanok
@@ -125,7 +125,7 @@ agreement from any threshold $N_0$ onward already implies full agreement.
     $\sigma \in [d]^N$.
 \end{definition}
 
-\begin{theorem}[Finite-length agreement implies full agreement]%
+\begin{lemma}[Finite-length agreement implies full agreement]%
     \label{thm:sameMPV_of_sameMPVFrom}
     \lean{MPSTensor.sameMPV_of_sameMPVFrom_of_injective}
     \leanok
@@ -134,7 +134,7 @@ agreement from any threshold $N_0$ onward already implies full agreement.
     $B$ be a tensor of the same bond dimension. If $A$ and $B$ generate
     the same MPV family for every system size $N \ge N_0$, then they
     generate the same MPV family for every system size.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -155,7 +155,7 @@ agreement from any threshold $N_0$ onward already implies full agreement.
     \end{enumerate}
 \end{proof}
 
-\begin{theorem}[Strengthened single-block FT (finite-length)]%
+\begin{corollary}[Strengthened single-block FT (finite-length)]%
     \label{thm:ft_singleBlock_finiteLength}
     \lean{MPSTensor.fundamentalTheorem_singleBlock_finiteLength}
     \leanok
@@ -164,12 +164,12 @@ agreement from any threshold $N_0$ onward already implies full agreement.
     $B$ be a tensor of the same bond dimension. If $A$ and $B$ agree on
     all MPV coefficients for system sizes $N \ge N_0$ (for any threshold
     $N_0$), then $A$ and $B$ are gauge equivalent.
-\end{theorem}
+\end{corollary}
 
 \begin{proof}
     \leanok
     \uses{thm:sameMPV_of_sameMPVFrom, thm:ft_single}
-    Theorem~\ref{thm:sameMPV_of_sameMPVFrom} upgrades the hypothesis to
+    Lemma~\ref{thm:sameMPV_of_sameMPVFrom} upgrades the hypothesis to
     equality of the MPV families for all system sizes, and the
     single-block Fundamental Theorem (Theorem~\ref{thm:ft_single}) then yields gauge equivalence.
 \end{proof}
@@ -185,7 +185,7 @@ translation-invariant, and constant chains of blocked tensors.
 
 \subsection{Translation-invariant chains}
 
-\begin{theorem}[Single gauge for translation-invariant chains]
+\begin{lemma}[Single gauge for translation-invariant chains]
     \label{thm:ti_tensors_single_gauge}
     \lean{MPSChainTensor.ti_tensors_single_gauge}
     \leanok
@@ -197,7 +197,7 @@ translation-invariant, and constant chains of blocked tensors.
     MPV family.
     Then there exists an invertible matrix $X \in \GL_D(\C)$ such that
     $B^i = X A^i X^{-1}$ for every physical index~$i$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -233,7 +233,7 @@ translation-invariant, and constant chains of blocked tensors.
 \begin{proof}
     \leanok
     \uses{thm:ti_tensors_single_gauge}
-    Theorem~\ref{thm:ti_tensors_single_gauge} provides an invertible matrix $X$ satisfying
+    Lemma~\ref{thm:ti_tensors_single_gauge} provides an invertible matrix $X$ satisfying
     $B^i = X A^i X^{-1}$.
     Setting $Z = X^{-1}$ and $\lambda = 1$ gives
     $\lambda^n = 1$ and rewrites this gauge relation in the form (\ref{eq:aft_ti_collapse_conj}).
@@ -272,7 +272,7 @@ Chapter~\ref{ch:symmetry}.
     constant blocked chain is injective.
 \end{proof}
 
-\begin{theorem}[Fundamental Theorem for blocked chains]
+\begin{corollary}[Fundamental Theorem for blocked chains]
     \label{thm:fundamentalTheorem_blockedChain}
     \lean{MPSChainTensor.fundamentalTheorem_blockedChain}
     \leanok
@@ -283,7 +283,7 @@ Chapter~\ref{ch:symmetry}.
     two constant blocked chains built from $A^{[L]}$ and $B^{[L]}$ generate the
     same MPV family.
     Then the two blocked chains are gauge equivalent.
-\end{theorem}
+\end{corollary}
 
 \begin{proof}
     \leanok
@@ -295,7 +295,7 @@ Chapter~\ref{ch:symmetry}.
 \end{proof}
 
 \begin{remark}[Relation to normal-MPS corollary]
-    Theorem~\ref{thm:fundamentalTheorem_blockedChain} establishes gauge
+    Corollary~\ref{thm:fundamentalTheorem_blockedChain} establishes gauge
     equivalence only for the blocked chains; recovering sitewise gauges for the
     original unblocked tensors is a separate unblocking step yielding the
     normal-MPS corollary of \cite{Molnar2018NormalPEPS}, outside this
@@ -324,13 +324,13 @@ Throughout this section, assume $D_k \ge 1$ for every block~$k$.
 The $k$-th block ideal consists of the tuples that vanish outside the
 $k$-th coordinate, as in Definition~\cite[``Block ideal'']{QICLean2026Blueprint}.
 
-\begin{theorem}[Each block ideal is an atom]\label{thm:block_ideal_atom}
+\begin{lemma}[Each block ideal is an atom]\label{thm:block_ideal_atom}
     \lean{TwoSidedIdeal.isAtom_blockIdeal}
     \leanok
 
     Each block ideal $I_k$ is an atom in the lattice of two-sided ideals of
     $\prod_{j=0}^{r-1} R_j$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -341,7 +341,7 @@ $k$-th coordinate, as in Definition~\cite[``Block ideal'']{QICLean2026Blueprint}
     hence so is $I_k$.
 \end{proof}
 
-\begin{theorem}[Ring isomorphisms match block ideals]\label{thm:ring_perm}
+\begin{lemma}[Ring isomorphisms match block ideals]\label{thm:ring_perm}
     \lean{TwoSidedIdeal.exists_blockEquiv_of_ringEquiv_pi_simple}
     \lean{TwoSidedIdeal.ringEquiv_pi_simple_permutes_blockIdeals}
     \leanok
@@ -352,19 +352,19 @@ $k$-th coordinate, as in Definition~\cite[``Block ideal'']{QICLean2026Blueprint}
     $\sigma:I\simeq J$ such that $T$ maps the $i$-th block ideal onto the
     $\sigma(i)$-th block ideal. In particular, an automorphism of one product
     permutes its block ideals.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:block_ideal_atom}
-    By Theorem~\ref{thm:block_ideal_atom}, the atoms in each two-sided ideal
+    By Lemma~\ref{thm:block_ideal_atom}, the atoms in each two-sided ideal
     lattice are exactly its block ideals. The induced order isomorphism
     therefore assigns a unique target block ideal to every source block
     ideal. Applying its inverse shows that this assignment is bijective and
     gives~$\sigma$.
 \end{proof}
 
-\begin{theorem}[Decomposition of automorphisms of $\prod \MN{D_k}$]\label{thm:pi_auto_decomp}
+\begin{lemma}[Decomposition of automorphisms of $\prod \MN{D_k}$]\label{thm:pi_auto_decomp}
     \lean{MPSTensor.algEquiv_pi_matrix_decomposition,
         MPSTensor.algEquiv_pi_matrix_decomposition_apply}
     \leanok
@@ -377,13 +377,13 @@ $k$-th coordinate, as in Definition~\cite[``Block ideal'']{QICLean2026Blueprint}
     for every tuple $M = (M_0,\ldots,M_{r-1})$ and every block index~$k$,
     $T(M)_{\pi(k)} = X_k M_k X_k^{-1}$,
     where $T(M)_j$ denotes the $j$-th block component of $T(M)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:ring_perm}
     As a standard decomposition for semisimple algebras (used in~\cite[Section~IV.A]{Cirac2021Matrix} in the MPS context),
-    Theorem~\ref{thm:ring_perm} gives the permutation $\pi$, and
+    Lemma~\ref{thm:ring_perm} gives the permutation $\pi$, and
     Theorem~\cite[``Summand matching and dimension preservation'']{QICLean2026Blueprint} identifies the matrix sizes
     $D_{\pi(k)} = D_k$.
     For each $k$, Theorem~\cite[``Paired component maps are bijections'']{QICLean2026Blueprint} gives a bijective
@@ -395,7 +395,7 @@ $k$-th coordinate, as in Definition~\cite[``Block ideal'']{QICLean2026Blueprint}
 \end{proof}
 
 \begin{remark}[Ring level versus algebra level]\label{rem:ring_vs_alg}
-    Theorem~\ref{thm:ring_perm} is a ring-level statement: it only uses the
+    Lemma~\ref{thm:ring_perm} is a ring-level statement: it only uses the
     ideal structure of $\prod_k R_k$.
     Theorem~\cite[``Paired component maps are bijections'']{QICLean2026Blueprint} stays at this ring level: once the
     block ideals are permuted, one can extract the corresponding single-block
@@ -463,7 +463,7 @@ applies.
     of the trace pairing for injective tensors.
 \end{proof}
 
-\begin{theorem}[Unitary implementation of a positive per-block extension]%
+\begin{lemma}[Unitary implementation of a positive per-block extension]%
     \label{thm:positive_perBlockLinearExtension_unitary}
     \lean{MPSTensor.exists_unitary_conj_of_positive_perBlockLinearExtension}
     \leanok
@@ -471,7 +471,7 @@ applies.
     If the per-block linear extension $T_k$ is positive, then there is a
     unitary matrix $U_k$ such that
     $T_k(M)=U_kMU_k^\dagger$ for every $M\in\MN{D_k}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:perBlockLinearExtension_mul, lem:perBlockLinearExtension_bijective}
@@ -503,7 +503,7 @@ applies.
     obtained by applying the corresponding extension to each summand.
 \end{definition}
 
-\begin{theorem}[Block-permutation decomposition]%
+\begin{lemma}[Block-permutation decomposition]%
     \label{thm:piAlgEquiv_decomposition}
     \lean{MPSTensor.piAlgEquiv_decomposition}
     \leanok
@@ -522,10 +522,10 @@ applies.
     Equivalently, the product-algebra automorphism first permutes the
     simple matrix blocks and then acts inside each block by an inner
     conjugation.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok\uses{def:piAlgEquiv, thm:pi_auto_decomp}
-    Applying Theorem~\ref{thm:pi_auto_decomp} to the product-algebra
+    Applying Lemma~\ref{thm:pi_auto_decomp} to the product-algebra
     automorphism of Definition~\ref{def:piAlgEquiv} writes the
     nonzero input block as $\pi(k)$ in output component~$k$; setting $\sigma := \pi^{-1}$ ensures that an element supported in block~$k$
     lands in block~$\sigma(k)$.

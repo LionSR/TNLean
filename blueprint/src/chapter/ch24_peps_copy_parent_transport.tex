@@ -18,7 +18,7 @@ Fix a finite group $G$, a finite ordered simple graph, and a finite family of ma
     Let $A_m$ be the averaging tensor for $D$ with virtual weight $W_m$, and $B_m$ the unweighted averaging tensor for $D^{[m]}$, both normalized by $|G|^{-1}$ per site.
 \end{definition}
 
-\begin{theorem}[One and two endpoint weights]%
+\begin{lemma}[One and two endpoint weights]%
     \label{thm:peps_copy_weight_products}
     \lean{TNLean.PEPS.blockMultiplicityRootWeight_mul,
         TNLean.PEPS.mul_blockMultiplicityRootWeight,
@@ -32,7 +32,7 @@ Fix a finite group $G$, a finite ordered simple graph, and a finite family of ma
         W_m^2D(g)       & =\bigoplus_i\sqrt{m_i}\,D_i(g).
         \label{eq:peps_copy_weight_products}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     In each block $i$, $m_i^{1/4}I_{d_i}$ commutes with $D_i(g)$ and satisfies $(m_i^{1/4})^2=\sqrt{m_i}$.
 \end{proof}
@@ -54,7 +54,7 @@ Fix a finite group $G$, a finite ordered simple graph, and a finite family of ma
     and obtain the numbered regional matrix by regrouping site labels into $\partial E_R$ and $E_R$ (with $m=d$ for dimension multiplicity).
 \end{definition}
 
-\begin{theorem}[Action on internal and crossing factors]%
+\begin{lemma}[Action on internal and crossing factors]%
     \label{thm:peps_copy_open_factors}
     \lean{TNLean.PEPS.graphOpenInternalFactor_copy,
         TNLean.PEPS.graphOpenInternalFactor_copy_adjoint,
@@ -77,15 +77,15 @@ Fix a finite group $G$, a finite ordered simple graph, and a finite family of ma
         \label{eq:peps_copy_boundary_adjoint}
     \end{align}
     where $w_y=m_i^{1/4}$ on sector $i$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_copy_weight_products,thm:peps_full_multiplicity_bond_map,
         thm:peps_parent_support_boundary_factors,
         thm:peps_parent_support_boundary_adjoints}
-    For $f=(t,h)\in E_R$, $a_f(q)=\operatorname{vec}(W_m^2D(q_hq_t^{-1}))$, so (\ref{eq:peps_copy_weight_products}) and Theorem~\ref{thm:peps_full_multiplicity_bond_map} give $F_ma_f(q)=b_f(q)$ and $F_m^\dagger b_f(q)=a_f(q)$. For $f\in\partial E_R$, the bond matrix is $W_mD(q_t^{-1})$ ($t\in R$) or $D(q_h)W_m$ ($h\in R$); applying $B_z$ and $B_z^\dagger$ via Theorems~\ref{thm:peps_parent_support_boundary_factors} and~\ref{thm:peps_parent_support_boundary_adjoints} yields (\ref{eq:peps_copy_boundary_forward})--(\ref{eq:peps_copy_boundary_adjoint}).
+    For $f=(t,h)\in E_R$, $a_f(q)=\operatorname{vec}(W_m^2D(q_hq_t^{-1}))$, so (\ref{eq:peps_copy_weight_products}) and Lemma~\ref{thm:peps_full_multiplicity_bond_map} give $F_ma_f(q)=b_f(q)$ and $F_m^\dagger b_f(q)=a_f(q)$. For $f\in\partial E_R$, the bond matrix is $W_mD(q_t^{-1})$ ($t\in R$) or $D(q_h)W_m$ ($h\in R$); applying $B_z$ and $B_z^\dagger$ via Lemmas~\ref{thm:peps_parent_support_boundary_factors} and~\ref{thm:peps_parent_support_boundary_adjoints} yields (\ref{eq:peps_copy_boundary_forward})--(\ref{eq:peps_copy_boundary_adjoint}).
 \end{proof}
 
-\begin{theorem}[Action on virtual boundary coefficients]%
+\begin{lemma}[Action on virtual boundary coefficients]%
     \label{thm:peps_copy_open_generators}
     \lean{TNLean.PEPS.graphRegionCopyMatrix_open,
         TNLean.PEPS.graphRegionCopyMatrix_adjoint_open,
@@ -106,13 +106,13 @@ Fix a finite group $G$, a finite ordered simple graph, and a finite family of ma
         a_R(\pi\eta).
         \label{eq:peps_copy_open_adjoint}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_copy_open_factors,def:peps_parent_support_open_factors}
-    Expanding $a_R(\theta)$ and $b_R(\eta)$ as $|G|^{-|R|}\sum_{q:R\to G}$ of the tensor products of their crossing and internal bond factors (Definition~\ref{def:peps_parent_support_open_factors}) and applying Theorem~\ref{thm:peps_copy_open_factors} factorwise gives (\ref{eq:peps_copy_open_forward}) and (\ref{eq:peps_copy_open_adjoint}).
+    Expanding $a_R(\theta)$ and $b_R(\eta)$ as $|G|^{-|R|}\sum_{q:R\to G}$ of the tensor products of their crossing and internal bond factors (Definition~\ref{def:peps_parent_support_open_factors}) and applying Lemma~\ref{thm:peps_copy_open_factors} factorwise gives (\ref{eq:peps_copy_open_forward}) and (\ref{eq:peps_copy_open_adjoint}).
 \end{proof}
 
-\begin{theorem}[Both regional range inclusions]%
+\begin{lemma}[Both regional range inclusions]%
     \label{thm:peps_copy_local_ranges}
     \lean{TNLean.PEPS.graphRegionCopyMatrix_maps_openBondSpace,
         TNLean.PEPS.graphRegionCopyMatrix_adjoint_maps_openBondSpace,
@@ -129,15 +129,15 @@ Fix a finite group $G$, a finite ordered simple graph, and a finite family of ma
                                       & M_{R,\gamma}^\dagger\mathcal G_R(B_m) & \subseteq\mathcal G_R(A_m).
         \label{eq:peps_copy_local_ranges}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_copy_open_generators,thm:peps_parent_support_open_coordinates}
-    Since $\{a_R(\theta)\}_\theta$ and $\{b_R(\eta)\}_\eta$ span $\mathcal G_R(A_m)$ and $\mathcal G_R(B_m)$ in bond coordinates (Theorem~\ref{thm:peps_parent_support_open_coordinates}), (\ref{eq:peps_copy_open_forward}) and (\ref{eq:peps_copy_open_adjoint}) imply (\ref{eq:peps_copy_local_ranges}).
+    Since $\{a_R(\theta)\}_\theta$ and $\{b_R(\eta)\}_\eta$ span $\mathcal G_R(A_m)$ and $\mathcal G_R(B_m)$ in bond coordinates (Lemma~\ref{thm:peps_parent_support_open_coordinates}), (\ref{eq:peps_copy_open_forward}) and (\ref{eq:peps_copy_open_adjoint}) imply (\ref{eq:peps_copy_local_ranges}).
 \end{proof}
 
 \subsection{Global supported inverses}
 
-\begin{theorem}[All parent constraints are preserved]%
+\begin{lemma}[All parent constraints are preserved]%
     \label{thm:peps_copy_parent_inclusions}
     \lean{TNLean.PEPS.graphNumberedCopyMatrix_maps_parent,
         TNLean.PEPS.graphNumberedCopyMatrix_adjoint_maps_parent,
@@ -150,13 +150,13 @@ Fix a finite group $G$, a finite ordered simple graph, and a finite family of ma
                                         & M_m^\dagger\mathcal P_{\mathcal R}(B_m) & \subseteq\mathcal P_{\mathcal R}(A_m).
         \label{eq:peps_copy_parent_inclusions}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_oriented_copy_parent_inverses}
-    Specializing Theorem~\ref{thm:peps_oriented_copy_parent_inverses} to $o_e=0$ for all $e\in E$ identifies $A^{D,W_m,o}=A_m$, $A^{D^{[m]},1,o}=B_m$, and $M((F_m)_e)=M_m$, yielding (\ref{eq:peps_copy_parent_inclusions}).
+    Specializing Lemma~\ref{thm:peps_oriented_copy_parent_inverses} to $o_e=0$ for all $e\in E$ identifies $A^{D,W_m,o}=A_m$, $A^{D^{[m]},1,o}=B_m$, and $M((F_m)_e)=M_m$, yielding (\ref{eq:peps_copy_parent_inclusions}).
 \end{proof}
 
-\begin{theorem}[Exact inverses on the entire parent spaces]%
+\begin{lemma}[Exact inverses on the entire parent spaces]%
     \label{thm:peps_copy_parent_inverses}
     \lean{TNLean.PEPS.graphNumberedCopyMatrix_leftInverse_parent,
         TNLean.PEPS.graphNumberedCopyMatrix_rightInverse_parent,
@@ -172,13 +172,13 @@ Fix a finite group $G$, a finite ordered simple graph, and a finite family of ma
         \label{eq:peps_copy_parent_inverses}
     \end{align}
     so $M_m$ is injective on $\mathcal P_{\mathcal R}(A_m)$ (including for $m=d$).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_oriented_copy_parent_inverses}
-    Setting $o_e=0$ for all $e\in E$ in Theorem~\ref{thm:peps_oriented_copy_parent_inverses} reduces (\ref{eq:peps_oriented_copy_left_inverse})--(\ref{eq:peps_oriented_copy_right_inverse}) to (\ref{eq:peps_copy_parent_inverses}).
+    Setting $o_e=0$ for all $e\in E$ in Lemma~\ref{thm:peps_oriented_copy_parent_inverses} reduces (\ref{eq:peps_oriented_copy_left_inverse})--(\ref{eq:peps_oriented_copy_right_inverse}) to (\ref{eq:peps_copy_parent_inverses}).
 \end{proof}
 
-\begin{theorem}[Canonical parent equivalence under copy restoration]%
+\begin{lemma}[Canonical parent equivalence under copy restoration]%
     \label{thm:peps_copy_parent_equivalence}
     \lean{TNLean.PEPS.map_regionParentGroundSpace_copy_eq,
         TNLean.PEPS.canonicalCopyParentEquiv,
@@ -198,11 +198,11 @@ Fix a finite group $G$, a finite ordered simple graph, and a finite family of ma
         \label{eq:peps_copy_parent_equivalence}
     \end{align}
     and for any finite $\mathcal R$ and positive parent Hamiltonians $H,K$ with exact regional kernels $\mathcal G_{R_i}(A_m),\mathcal G_{R_i}(B_m)$, $M_m(\ker H)=\ker K$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_oriented_copy_parent,thm:peps_copy_parent_inverses,
         thm:peps_region_parent_common_kernel}
-    Setting $o_e=0$ in Theorem~\ref{thm:peps_oriented_copy_parent} and applying Theorem~\ref{thm:peps_copy_parent_inverses} gives (\ref{eq:peps_copy_parent_equivalence}); Theorem~\ref{thm:peps_region_parent_common_kernel} identifies $\ker H=\mathcal P_{\mathcal R}(A_m)$ and $\ker K=\mathcal P_{\mathcal R}(B_m)$.
+    Setting $o_e=0$ in Lemma~\ref{thm:peps_oriented_copy_parent} and applying Lemma~\ref{thm:peps_copy_parent_inverses} gives (\ref{eq:peps_copy_parent_equivalence}); Lemma~\ref{thm:peps_region_parent_common_kernel} identifies $\ker H=\mathcal P_{\mathcal R}(A_m)$ and $\ker K=\mathcal P_{\mathcal R}(B_m)$.
 \end{proof}
 
 \subsection{Removing weights and changing multiplicities}
@@ -218,7 +218,7 @@ Fix a finite group $G$, a finite ordered simple graph, and a finite family of ma
     When $m_i>0$, define the invertible diagonal matrix $C_v=\operatorname{diag}(c_v)$ in the numbered site coordinates and $C=\bigotimes_vC_v$.
 \end{definition}
 
-\begin{theorem}[Copy weights are an invertible physical deformation]%
+\begin{lemma}[Copy weights are an invertible physical deformation]%
     \label{thm:peps_copy_physical_filter}
     \lean{TNLean.PEPS.graphDressedAveragingSite_copy_weight,
         TNLean.PEPS.graphCopyWeight_ne_zero,
@@ -234,10 +234,10 @@ Fix a finite group $G$, a finite ordered simple graph, and a finite family of ma
         C:\mathcal P_{\mathcal R}(A_0)\cong\mathcal P_{\mathcal R}(A_m).
         \label{eq:peps_copy_filter_parent}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_copy_weight_products,thm:peps_region_parent_ground_space_physical_transport}
-    By (\ref{eq:peps_copy_weight_products}), each incident leg in sector $i(\sigma_f)$ contributes $m_{i(\sigma_f)}^{1/4}$, giving $(A_m)_v=C_v(A_0)_v$. Since $m_i>0$, $C_v$ is invertible, and Theorem~\ref{thm:peps_region_parent_ground_space_physical_transport} yields (\ref{eq:peps_copy_filter_parent}).
+    By (\ref{eq:peps_copy_weight_products}), each incident leg in sector $i(\sigma_f)$ contributes $m_{i(\sigma_f)}^{1/4}$, giving $(A_m)_v=C_v(A_0)_v$. Since $m_i>0$, $C_v$ is invertible, and Lemma~\ref{thm:peps_region_parent_ground_space_physical_transport} yields (\ref{eq:peps_copy_filter_parent}).
 \end{proof}
 
 \begin{definition}[The positive-multiplicity parent map]%
@@ -250,7 +250,7 @@ Fix a finite group $G$, a finite ordered simple graph, and a finite family of ma
     Assume $m_i>0$ and every edge is internal to some $R_i\in\mathcal R$. Define $T_m=M_mC:\mathcal P_{\mathcal R}(A_0)\xrightarrow{\cong}\mathcal P_{\mathcal R}(B_m)$, and for positive multiplicity families $m,n$, define $T_nT_m^{-1}:\mathcal P_{\mathcal R}(B_m)\xrightarrow{\cong}\mathcal P_{\mathcal R}(B_n)$.
 \end{definition}
 
-\begin{theorem}[Independence of positive copy multiplicities]%
+\begin{lemma}[Independence of positive copy multiplicities]%
     \label{thm:peps_copy_positive_parent}
     \lean{TNLean.PEPS.map_regionParentGroundSpace_positiveMultiplicity_eq,
         TNLean.PEPS.finrank_regionParentGroundSpace_positiveMultiplicity_eq,
@@ -263,11 +263,11 @@ Fix a finite group $G$, a finite ordered simple graph, and a finite family of ma
                                         & \dim\mathcal P_{\mathcal R}(B_m) & =\dim\mathcal P_{\mathcal R}(A_0),
     \end{align}
     so $\mathcal P_{\mathcal R}(B_m)\cong\mathcal P_{\mathcal R}(B_n)$ for any $m_i,n_i>0$, and $T_m(\ker H)=\ker K$ for any finite $\mathcal R$ and positive parent Hamiltonians $H,K$ with exact regional kernels $\mathcal G_{R_i}(A_0),\mathcal G_{R_i}(B_m)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_copy_physical_filter,thm:peps_copy_parent_equivalence,
         thm:peps_region_parent_common_kernel}
-    Composing (\ref{eq:peps_copy_filter_parent}) and (\ref{eq:peps_copy_parent_equivalence}) shows that $T_m=M_mC$ is an isomorphism $\mathcal P_{\mathcal R}(A_0)\xrightarrow{\cong}\mathcal P_{\mathcal R}(B_m)$, and Theorem~\ref{thm:peps_region_parent_common_kernel} gives $T_m(\ker H)=\ker K$.
+    Composing (\ref{eq:peps_copy_filter_parent}) and (\ref{eq:peps_copy_parent_equivalence}) shows that $T_m=M_mC$ is an isomorphism $\mathcal P_{\mathcal R}(A_0)\xrightarrow{\cong}\mathcal P_{\mathcal R}(B_m)$, and Lemma~\ref{thm:peps_region_parent_common_kernel} gives $T_m(\ker H)=\ker K$.
 \end{proof}
 
 % These results compare full kernels, not only chosen closed-state spans.
