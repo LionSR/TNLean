@@ -166,3 +166,66 @@
     Every vector of $U$ has bond dimension at most $r^2B$.
     Apply the preceding theorem with $D=r^2B$ to the actual subspace $S$.
 \end{proof}
+
+\begin{theorem}[Collective trimming on an arbitrary interval]
+    \label{thm:interval_trimming_reference}
+    \lean{TNLean.MPS.AreaLaw.intervalTrimCut,
+        TNLean.MPS.AreaLaw.intervalTrimCut_mono,
+        TNLean.MPS.AreaLaw.schmidtRank_cutEnvVector_interval_le,
+        TNLean.MPS.AreaLaw.intervalTrimVector,
+        TNLean.MPS.AreaLaw.intervalTrimSubspace,
+        TNLean.MPS.AreaLaw.intervalTrimSubspace_eq_span,
+        TNLean.MPS.AreaLaw.finrank_intervalTrimSubspace_le,
+        TNLean.MPS.AreaLaw.schmidtRank_cutVector_intervalTrimVector_le,
+        TNLean.MPS.AreaLaw.isCloseTo_prodExt_intervalTrimSubspace_of_reference,
+        TNLean.MPS.AreaLaw.isViable_intervalTrimSubspace_of_reference}
+    \leanok
+    Let $J=[p,r)$ and $m=\max\{r-p-1,0\}$. Suppose $D\ge1$,
+    $G,U\subseteq\mathcal H_V$ are mutually $\varepsilon$-close, and
+    every vector of $U$ is an open matrix product state of bond at most
+    $D$. If $S\subseteq\mathcal H_J$ is $\delta$-viable for $G$, then
+    its actual collective trim at threshold $\xi>0$ is
+    \begin{align}
+        4\delta+6\varepsilon+4\xi\sqrt{mD^2}
+        \label{eq:interval_reference_trimming_error}
+    \end{align}
+    viable for $G$, where $\delta,\varepsilon\ge0$.
+    For any recorded orthonormal basis of $S$ with $s$ members, the trim
+    has dimension at most $s$, and each recorded trimmed vector has
+    Schmidt rank at most $s/\xi^2$ across every internal interval cut.
+    These statements retain the whole exterior of $J$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:alvv_collective_trim}
+    An internal prefix of $J$ has at most two global boundaries, hence
+    every vector of $U$ has rank at most $D^2$ across that cut with the
+    whole exterior kept. Transfer from $G$ to $U$, apply collective
+    trimming with this rank bound, and transfer back. The resulting error
+    is $2\bigl(2(\delta+\varepsilon)+2\xi\sqrt{mD^2}+\varepsilon\bigr)$.
+    The actual projections also give the dimension and recorded-vector
+    rank bounds.
+\end{proof}
+
+\begin{theorem}[One physical reference for all interval trims]
+    \label{thm:physical_dg_interval_trimming}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interval_collective_trimming_bound}
+    \leanok
+    Under the hypotheses of Theorem~\ref{thm:physical_dg_mps_reference_subspace},
+    let $0<\varepsilon\le1$. The same universal constant and integer
+    $B\ge1$ satisfying (\ref{eq:physical_reference_bond}) can be chosen
+    before every interval $J=[p,r)\subseteq[0,N)$ and every
+    $\delta$-viable subspace $S\subseteq\mathcal H_J$.
+    Put $D_{\rm ref}=r_G^2B$, where $r_G=\dim G$.
+    The collective trim formed from an internally chosen orthonormal
+    basis of $S$ is
+    $4\delta+6\varepsilon+4\xi\sqrt{\max\{|J|-1,0\}D_{\rm ref}^2}$-viable
+    for $G$.
+    The capped-gap dependence is unchanged. This two-boundary estimate
+    does not identify the trimming radius with the printed tree parameters
+    in~\cite[lines 1801--1805]{Arad2016RigorousRG}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:physical_dg_mps_reference_subspace,thm:interval_trimming_reference}
+    Choose the one common reference before the interval and $S$, and
+    apply the preceding theorem with $D=D_{\rm ref}$.
+\end{proof}

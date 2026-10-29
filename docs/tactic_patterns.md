@@ -10067,3 +10067,15 @@ there is no need for a new tactic.
 - **Boundary:** Existence of one good sample, including the distinct
   bracketed construction, does not establish this probability statement.
   The upstream mathematical declarations and proofs are preserved unchanged.
+
+### A regional reference rank with the whole exterior — candidate (2026-10-29)
+
+- **Seen:** `MPS/AreaLaw/IntervalCollectiveTrimming.lean` and the physical
+  specialization in `PhysicalDGIntervalTrimming.lean`.
+- **Reuse:** QICLean's exact
+  `Entropy.schmidtRank_cutEnvVector_regionConfigurationSplit` identifies
+  the coefficient matrix with the global regional coefficient matrix. The
+  existing two-boundary MPS marginal rank theorem then supplies `D^2`.
+- **Scope:** The exterior is retained, so the prefix-cut bound `D` cannot
+  replace `D^2`. Existing closeness transitivity supplies both transfers
+  around the collective trim; no new tactic or closeness predicate is used.

@@ -55,6 +55,7 @@ import TNLean.MPS.AreaLaw.IndependentTruncationParameters
 import TNLean.MPS.AreaLaw.InformationReset
 import TNLean.MPS.AreaLaw.InteractionBudget
 import TNLean.MPS.AreaLaw.InteriorLowEnergyFamily
+import TNLean.MPS.AreaLaw.IntervalCollectiveTrimming
 import TNLean.MPS.AreaLaw.IntervalMPOTransfer
 import TNLean.MPS.AreaLaw.IntervalNeighborhoodEntropy
 import TNLean.MPS.AreaLaw.IntervalSlice
@@ -83,6 +84,7 @@ import TNLean.MPS.AreaLaw.PhysicalChebyshevViability
 import TNLean.MPS.AreaLaw.PhysicalDGApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGEntropy
 import TNLean.MPS.AreaLaw.PhysicalDGGlobalApproximation
+import TNLean.MPS.AreaLaw.PhysicalDGIntervalTrimming
 import TNLean.MPS.AreaLaw.PhysicalDGReferenceSpace
 import TNLean.MPS.AreaLaw.PhysicalDGReferenceTrimming
 import TNLean.MPS.AreaLaw.PhysicalDGSharpApproximation
