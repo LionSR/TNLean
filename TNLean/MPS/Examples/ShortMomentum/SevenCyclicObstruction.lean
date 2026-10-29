@@ -70,7 +70,7 @@ theorem eq_zero_of_seven_cyclic_agreement {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5
     (hg : g ∈ groundSpace (threeLetterTensor ζ) 7)
     (hfg : ∀ (i : Fin 3) (σ : Cfg 3 6), f (Fin.cons i σ) = g (Fin.snoc σ i)) :
     f = 0 ∧ g = 0 := by
-  obtain ⟨F, G, hF, hG, hcmp⟩ :=
+  obtain ⟨F, G, hF, _, hcmp⟩ :=
     exists_charge_comparison_of_cyclic_agreement hζ f g hf hg hfg
   have hFzero (p : ZMod 5 × ZMod 5) (hp : p ≠ 0) : F p = 0 := by
     obtain ⟨i, j, σ, τ, hi, hj, hij⟩ := exists_distinct_seven_cyclic_phases p.1 p.2 hp

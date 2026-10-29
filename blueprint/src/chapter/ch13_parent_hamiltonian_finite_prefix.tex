@@ -176,6 +176,7 @@
         MPSTensor.ShortMomentum.wordCharge_ne_zero_of_length_seven,
         MPSTensor.ShortMomentum.exists_word_seven_of_charge,
         MPSTensor.ShortMomentum.exists_word_eight_of_charge,
+        MPSTensor.ShortMomentum.exists_word_of_eight_le_of_charge,
         MPSTensor.ShortMomentum.exists_central_counts_of_eight_le}
     \notready
     Give three letters the charges $(1,0)$, $(0,1)$ and $(-1,-1)$
@@ -222,13 +223,14 @@
     \lean{MPSTensor.ShortMomentum.sum_rootCharacter_smul_chargedWeyl,
         MPSTensor.ShortMomentum.span_chargedWeyl_eq_top,
         MPSTensor.ShortMomentum.isNBlkInjective_threeLetterTensor_eight,
+        MPSTensor.ShortMomentum.isNBlkInjective_threeLetterTensor_of_eight_le,
         MPSTensor.ShortMomentum.isNormal_threeLetterTensor,
         MPSTensor.ShortMomentum.trace_evalWord_threeLetterTensor_seven,
         MPSTensor.ShortMomentum.not_isNBlkInjective_threeLetterTensor_seven,
         MPSTensor.ShortMomentum.exists_trace_evalWord_ne_zero_of_eight_le}
     \notready
     \uses{lem:short_volume_weyl_charges, lem:short_volume_weyl_products}
-    The actual three-letter tensor is injective at degree eight and
+    The actual three-letter tensor is injective at every degree at least eight and
     therefore normal. Every degree-seven word is traceless, so it is
     not injective at degree seven. At every degree at least eight its
     periodic trace vector is nonzero. These matrix facts do not classify
@@ -341,4 +343,48 @@
     vanishes. The central charge never occurs at this degree, so every
     actual vector coefficient is zero. The windows starting at zero
     and one supply the two required actual local boundary vectors.
+\end{proof}
+
+\begin{lemma}[All-degree cyclic closure of actual boundary spaces]
+    \label{lem:short_volume_weyl_global_boundary_closure}
+    \lean{MPSTensor.ShortMomentum.exists_six_config_of_charge,
+        MPSTensor.ShortMomentum.exists_distinct_eight_cyclic_phases,
+        MPSTensor.ShortMomentum.exists_distinct_nine_cyclic_phases,
+        MPSTensor.ShortMomentum.exists_distinct_cyclic_phases,
+        MPSTensor.ShortMomentum.exists_smul_mpv_of_cyclic_agreement,
+        MPSTensor.ShortMomentum.mem_mpvSubmodule_of_cyclic_local_membership}
+    \notready
+    \uses{lem:short_volume_weyl_cyclic_phase,
+        lem:short_volume_weyl_seven_periodic_zero}
+    At every degree at least seven, two actual global boundary vectors
+    agreeing across a cyclic cut close to the actual periodic trace line.
+    This conclusion presupposes only their actual global boundary-space
+    membership and their coefficient agreement. It does not state that
+    seven-site local constraints already give global membership.
+\end{lemma}
+\begin{proof}
+    Explicit word pairs detect distinct cyclic phases at every noncentral
+    charge in degrees seven, eight and nine. Appending one copy of each
+    letter preserves their charge and extends the witnesses by three
+    sites, covering every larger degree. Hence all noncentral charge
+    coefficients vanish. The remaining central coefficient is the
+    actual periodic trace coefficient divided by five.
+\end{proof}
+
+\begin{lemma}[Actual long-window open intersection]
+    \label{lem:short_volume_weyl_long_intersection}
+    \lean{MPSTensor.ShortMomentum.groundSpace_intersection_threeLetterTensor_of_eight_le}
+    \notready
+    \uses{lem:short_volume_weyl_normality, lem:short_volume_weyl_letter_relations}
+    If the common middle of two overlapping boundary windows has at
+    least eight sites, their actual left and right constraints imply
+    membership in the next boundary space. No intersection identity
+    is supplied. The steps producing eight and nine sites remain separate.
+\end{lemma}
+\begin{proof}
+    Fullness of the actual middle word span makes trace pairing
+    injective and gives the required intertwining boundary matrices.
+    The fourth power of the first physical letter is its actual inverse.
+    Apply the standard one-sided reconstruction with this inverse and
+    zero coefficients on the other two physical letters.
 \end{proof}

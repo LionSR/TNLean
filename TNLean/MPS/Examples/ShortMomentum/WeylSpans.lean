@@ -83,24 +83,32 @@ theorem span_chargedWeyl_eq_top {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5) :
   have hscaled := S.smul_mem ((5 : ℂ)⁻¹) hmem
   simpa only [smul_smul, inv_mul_cancel₀ (by norm_num : (5 : ℂ) ≠ 0), one_smul] using hscaled
 
-/-- Every charged matrix is represented, up to a nonzero scalar, at degree eight. -/
-theorem chargedWeyl_mem_wordSpan_eight {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
-    (u v : ZMod 5) : chargedWeyl ζ u v ∈ Kraus.wordSpan (threeLetterTensor ζ) 8 := by
-  obtain ⟨w, hw, hcharge⟩ := exists_word_eight_of_charge u v
+/-- Every charged matrix belongs to the actual word span at every degree
+at least eight. -/
+theorem chargedWeyl_mem_wordSpan {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
+    (n : ℕ) (hn : 8 ≤ n) (u v : ZMod 5) :
+    chargedWeyl ζ u v ∈ Kraus.wordSpan (threeLetterTensor ζ) n := by
+  obtain ⟨w, hw, hcharge⟩ := exists_word_of_eight_le_of_charge n hn u v
   have hmem := Kraus.evalWord_mem_wordSpan (threeLetterTensor ζ) w
   rw [hw, evalWord_threeLetterTensor hζ.pow_eq_one, hcharge] at hmem
-  have hscaled := (Kraus.wordSpan (threeLetterTensor ζ) 8).smul_mem
+  have hscaled := (Kraus.wordSpan (threeLetterTensor ζ) n).smul_mem
     (rootCharacter ζ (wordPhase w))⁻¹ hmem
   simpa only [smul_smul, inv_mul_cancel₀ (rootCharacter_ne_zero hζ _), one_smul] using hscaled
 
-/-- Degree eight is an actual injectivity witness for the three-letter tensor. -/
-theorem isNBlkInjective_threeLetterTensor_eight {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5) :
-    Kraus.IsNBlkInjective (threeLetterTensor ζ) 8 := by
+/-- Every degree at least eight has the full actual matrix word span. -/
+theorem isNBlkInjective_threeLetterTensor_of_eight_le {ζ : ℂ}
+    (hζ : IsPrimitiveRoot ζ 5) (n : ℕ) (hn : 8 ≤ n) :
+    Kraus.IsNBlkInjective (threeLetterTensor ζ) n := by
   apply top_unique
   rw [← span_chargedWeyl_eq_top hζ]
   apply Submodule.span_le.mpr
   rintro _ ⟨⟨u, v⟩, rfl⟩
-  exact chargedWeyl_mem_wordSpan_eight hζ u v
+  exact chargedWeyl_mem_wordSpan hζ n hn u v
+
+/-- Degree eight is an actual injectivity witness for the three-letter tensor. -/
+theorem isNBlkInjective_threeLetterTensor_eight {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5) :
+    Kraus.IsNBlkInjective (threeLetterTensor ζ) 8 :=
+  isNBlkInjective_threeLetterTensor_of_eight_le hζ 8 (by omega)
 
 /-- The tensor is genuinely normal despite its exceptional short trace vector. -/
 theorem isNormal_threeLetterTensor {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5) :

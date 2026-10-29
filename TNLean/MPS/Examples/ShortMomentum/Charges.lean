@@ -198,6 +198,21 @@ theorem exists_word_eight_of_charge (u v : ZMod 5) :
   obtain ⟨a, b, c, hdegree, hcharge⟩ := exists_counts_eight_of_charge u v
   exact ⟨sortedWord a b c, by simpa using hdegree, by simpa using hcharge⟩
 
+/-- Every charge is reached at each degree at least eight, using an
+actual degree-eight word followed by copies of the first physical letter. -/
+theorem exists_word_of_eight_le_of_charge (n : ℕ) (hn : 8 ≤ n) (u v : ZMod 5) :
+    ∃ w : List (Fin 3), w.length = n ∧ wordCharge w = (u, v) := by
+  obtain ⟨w, hw, hc⟩ := exists_word_eight_of_charge (u - (n - 8 : ℕ)) v
+  refine ⟨w ++ List.replicate (n - 8) 0, ?_, ?_⟩
+  · simp only [List.length_append, List.length_replicate, hw]
+    omega
+  · rw [wordCharge_append, hc]
+    have hrep : wordCharge (List.replicate (n - 8) 0) =
+        ((n - 8 : ℕ), 0) := by
+      simp [wordCharge, countCharge, List.count_replicate]
+    rw [hrep]
+    apply Prod.ext <;> simp
+
 /-- Every degree at least eight is a nonnegative combination of three
 and five. This proves actual central reachability above the exceptional
 short degree without extrapolating from a numerical sample. -/

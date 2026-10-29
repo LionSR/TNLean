@@ -33,7 +33,7 @@ count residues because three is invertible modulo five. At degree seven,
 the central charge is absent and every other charge occurs. At degree
 eight every charge occurs. A finite Fourier sum expresses each matrix
 unit as a linear combination of the actual charged matrices. Therefore
-the actual tensor is injective at degree eight and is normal. It is not
+the actual tensor is injective at every degree at least eight and is normal. It is not
 injective at degree seven, because every degree-seven word is traceless.
 Finally every degree at least eight has an actual word with nonzero
 trace: each such degree is a nonnegative combination of three and five.
@@ -61,6 +61,20 @@ that their seven-site cyclic agreement forces both vectors to vanish.
 The actual seven-site periodic main-sector parent space is therefore
 zero. This supplies the main exceptional-volume obstruction without
 asserting the long-volume classification.
+
+The same phase detection extends to every degree at least seven: use
+explicit initial words at degrees seven, eight, and nine, then append
+one copy of each physical letter. `CyclicBoundaryClosure.lean` therefore
+derives that two actual global boundary vectors agreeing across the
+cyclic cut close to the actual periodic trace line at every such degree.
+This does not supply global boundary-space membership from local constraints.
+
+`LongIntersection.lean` derives the actual one-step open intersection
+whenever the shared middle has at least eight sites, by full actual word
+span, the existing trace-pairing reconstruction, and the actual inverse
+fourth power of the first letter. The two exceptional overlap steps
+producing eight and nine sites remain to be proved before iteration
+from seven-site constraints is justified.
 
 ## Proposed fixed-interaction construction: obligations still open
 

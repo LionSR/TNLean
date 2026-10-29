@@ -9724,3 +9724,17 @@ there is no need for a new tactic.
   seven still needs its separate arithmetic argument.
 - **Notes:** Two concrete occurrences in one file; the abstraction threshold
   is not met. Reuse the current charge and count lemmas in downstream proofs.
+
+### Extending finite charge witnesses by a neutral word — promoted (2026-10-29)
+
+- **Seen:** The degree-seven, degree-eight, and degree-nine phase-detecting
+  word tables in `MPS/Examples/ShortMomentum/SevenCyclicObstruction.lean` and
+  `CyclicChargeDetection.lean`.
+- **Pattern:** Preserve both the total charge and the detecting first letters
+  while appending a fixed neutral physical word.
+- **Abstraction:** `MPSTensor.ShortMomentum.exists_distinct_cyclic_phases`
+  packages the three explicit base tables into one all-degree statement by
+  strong induction with a three-letter neutral suffix. The global boundary
+  closure calls this one helper.
+- **Notes:** The finite witness tables contain distinct mathematical data;
+  their closed reductions remain explicit. No specialized tactic is needed.
