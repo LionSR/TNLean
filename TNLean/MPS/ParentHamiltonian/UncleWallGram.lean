@@ -83,7 +83,7 @@ private theorem sum_ofFn_cons {V : Type*} [AddCommMonoid V]
       ∑ i : Fin d, ∑ τ : Fin n → Fin d, f (i :: List.ofFn τ) := by
   classical
   rw [← (Fin.consEquiv (fun _ : Fin (n + 1) => Fin d)).sum_comp]
-  simp [Fintype.sum_prod_type, List.ofFn_cons]
+  simp [Fintype.sum_prod_type]
 
 private theorem sum_mul_pair {ι : Type*} [Fintype ι] {r s t u v : ℕ}
     (U : Matrix (Fin r) (Fin s) ℂ) (f : ι → Matrix (Fin s) (Fin t) ℂ)
@@ -114,7 +114,8 @@ theorem uncleWallCorrelation_succ (A : MPSTensor d a) (B : MPSTensor d b)
     uncleWallCorrelation A B R (n + 1) =
       Kraus.mixedMapLM A B (uncleWallCorrelation A B R n) + uncleWallSeed B R := by
   classical
-  rw [uncleWallCorrelation, sum_ofFn_cons]
+  rw [uncleWallCorrelation, sum_ofFn_cons
+    (fun w ↦ uncleDomainWallWord A B R w * (Kraus.evalWord B w)ᴴ) n]
   simp only [uncleDomainWallWord, Kraus.evalWord_cons, Matrix.conjTranspose_mul,
     Matrix.add_mul]
   simp_rw [← Matrix.mul_assoc]
@@ -135,7 +136,8 @@ theorem uncleWallGram_succ (A : MPSTensor d a) (B : MPSTensor d b)
       (uncleWallCrossMap A R (uncleWallCorrelation A B R n))ᴴ +
       ∑ i, R i * (R i)ᴴ := by
   classical
-  rw [uncleWallGram, sum_ofFn_cons]
+  rw [uncleWallGram, sum_ofFn_cons
+    (fun w ↦ uncleDomainWallWord A B R w * (uncleDomainWallWord A B R w)ᴴ) n]
   simp only [uncleDomainWallWord, Matrix.conjTranspose_add, Matrix.conjTranspose_mul,
     Matrix.add_mul, Matrix.mul_add]
   simp_rw [← Matrix.mul_assoc]
@@ -160,11 +162,7 @@ theorem uncleWallCorrelation_eq_sum (A : MPSTensor d a) (B : MPSTensor d b)
       rw [uncleWallCorrelation_succ A B R hB, ih]
       simp only [map_sum]
       rw [Finset.sum_range_succ']
-      simp only [pow_zero, LinearMap.one_apply, pow_succ']
-      change (∑ k ∈ Finset.range n,
-        ((Kraus.mixedMapLM A B) ^ (k + 1)) (uncleWallSeed B R)) +
-          uncleWallSeed B R = _
-      rfl
+      simp only [pow_zero, Module.End.one_apply, pow_succ', Module.End.mul_apply]
 
 /-- The weighted Gram coefficient with the canonical left density;
 arXiv:1210.6613, the quantity \(\Xi_R\). -/
