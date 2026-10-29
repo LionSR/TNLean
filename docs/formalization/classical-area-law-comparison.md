@@ -74,7 +74,11 @@ counterexample and the geometric qualification are recorded in
 bound in terms of a local radius remain separate obligations. The source explicitly makes no claim
 of bounding the intermediate matrix-product dimensions (lines 104–109);
 its retained-basis expansion is in Section III, lines 630–685.
-An additional bound on those dimensions would be a further result.
+An additional bound on those dimensions would be a further result. The shared
+coordinate theorem now constructs the parent coefficient isometry from actual
+range coordinates of two child projections, with exact factorization and
+product-dimension bound, including zero ranks. Substitution of the physical
+local projections and recursive amplitude contraction remain to be completed.
 
 For the viable-set construction, the relevant quantifier order is different. The
 family at a cut is selected from the Hamiltonian and the preceding family before
@@ -312,7 +316,14 @@ With comparison error $1/200$, its additive contribution is already $1/100$;
 a final $1/100$ claim requires retuning that precision.
 The low-density induction requires sampling between distinct nested targets
 and a dyadic rank estimate; the fixed-ground-space induction does not provide
-it. The actual improving family can now be powered: the same target and
+it. A generic two-target step now retains the actual Haar sample and operator
+image and gives dimension at most $\lfloor p/2\rfloor$, with the exact
+lower-target error $2(\Delta/\alpha^2+1/200)$. Its probability and error
+conditions remain explicit. The physical dyadic argument must construct a
+common count envelope together with its shrinking bound; increasing a count
+bound alone does not preserve $D^{12}\Delta$. The strict dimension decrease
+and source constant corrections are recorded in the companion note
+[ALVV bootstrap constants](https://sirui-lu.com/QICLean/paper-gaps/alvv16_bootstrap_constants.pdf). The actual improving family can now be powered: the same target and
 retained operators precede every integer power and viable input space.
 Ordered words of length $k$ have cardinality at most $D_0^{2k}$ and
 suppression $\Delta_0^k$. The logarithmic choice
