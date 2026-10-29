@@ -583,6 +583,46 @@ conjugate-transposed tensor.
 \end{proof}
 
 
+\begin{lemma}[Uniform periodic norm of a unital tensor]
+    \label{lem:half_chain_unital_periodic_norm}
+    \lean{MPSTensor.norm_mpvState_le_bondDimension_of_unital}
+    \notready
+    A unital tensor of positive bond dimension $D$ satisfies
+    $\|\psi_N\|\leq D$ at every length $N$, without primitivity or
+    a spectral gap.
+\end{lemma}
+\begin{proof}
+    Positivity and unitality place every transfer eigenvalue in the
+    closed unit disk. The squared periodic norm is the trace of the
+    transfer power, so its modulus is at most the matrix-space
+    dimension $D^2$, counting algebraic multiplicities.
+\end{proof}
+
+\begin{lemma}[Vanishing physical contribution of subunit canonical weights]
+    \label{lem:half_chain_weighted_remainder}
+    \lean{MPSTensor.PGVWC07CanonicalFormData.norm_mpvState_sub_unitWeight_sum_le,
+        MPSTensor.PGVWC07CanonicalFormData.tendsto_norm_mpvState_sub_unitWeight_sum}
+    \notready
+    \uses{lem:half_chain_unital_periodic_norm}
+    Let $A_i=\bigoplus_j w_j A_i^j$ be a TI canonical representation with
+    $0<w_j\leq1$, unital blocks $A^j$, and block dimensions $D_j$.
+    Its actual periodic vector satisfies
+    \begin{align}
+        \left\|\psi_N(A)-\sum_{w_j=1}\psi_N(A^j)\right\|
+         & \leq\sum_{w_j<1}w_j^N D_j\longrightarrow0.
+        \label{eq:half_chain_weighted_remainder}
+    \end{align}
+    No condition on the peripheral transfer spectrum is required for
+    this estimate.
+\end{lemma}
+\begin{proof}
+    The exact canonical decomposition is
+    $\psi_N(A)=\sum_jw_j^N\psi_N(A^j)$.
+    Subtract the unit-weight terms and apply the triangle inequality
+    and Lemma~\ref{lem:half_chain_unital_periodic_norm}. Each remaining
+    geometric sequence tends to zero, and there are finitely many blocks.
+\end{proof}
+
 \begin{lemma}[General canonical C2 half-chain limit]%
     \label{thm:half_chain_general_c2_source}
     \notready
