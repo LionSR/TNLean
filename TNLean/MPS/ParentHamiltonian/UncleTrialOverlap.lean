@@ -281,7 +281,6 @@ private theorem mixed_pow_norm_le_geometric (A : MPSTensor d a) (B : MPSTensor d
     rw [mixedMapSpectralRadius_eq_end] at hSpect
     change spectralRadius ℂ (e (Kraus.mixedMapLM A B)) < 1
     simpa only [spectralRadius_eq_of_unital, AlgEquiv.spectrum_eq] using hSpect
-
   obtain ⟨K, r, hK, hr, hr1, hbound⟩ :=
     geometric_apply_bound_of_spectralRadius_lt_one F hF
   refine ⟨K, r, hK, hr, hr1, fun n X ↦ ?_⟩
