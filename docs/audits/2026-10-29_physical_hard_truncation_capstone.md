@@ -39,9 +39,11 @@ minimum certificates `0<=E,E'<=2`. It then derives:
 - `E'<=E<=E'+xi`.
 - For every `delta>0`, set
   `eta'=eta+xi+2xi sqrt(ceil(eta/(2xi))/delta)`.
-  The original closed spectral space up to `E+eta` is delta-close to the
-  clipped space up to `E'+eta'`, and the clipped space up to `E'+eta` is
-  delta-close to the original space up to `E+eta'`.
+  The enlarged clipped space up to `E'+eta'` is delta-close to the
+  original space up to `E+eta`, and the enlarged original space up to
+  `E+eta'` is delta-close to the clipped space up to `E'+eta`. The
+  convention is target-first: `IsCloseTo delta TARGET SOURCE` controls
+  the target projection on source vectors; the relation is asymmetric.
 
 Repeated eigenvalues and arbitrary ground degeneracy are allowed. There is
 no source-gap hypothesis and no additional `delta<=1` restriction. This is
