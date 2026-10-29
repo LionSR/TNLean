@@ -41,6 +41,7 @@ def negativeFrequencyPart {H : Matrix n n ℂ} (hH : H.IsHermitian)
     ⟪b i, toEuclideanCLM (n := n) (𝕜 := ℂ) A (b j)⟫_ℂ •
       InnerProductSpace.rankOne ℂ (b i) (b j) else 0
 
+omit [DecidableEq n] in
 private theorem inner_apply_eq_double_sum
     (b : OrthonormalBasis n ℂ (EuclideanSpace ℂ n))
     (T : EuclideanSpace ℂ n →L[ℂ] EuclideanSpace ℂ n)
@@ -124,7 +125,7 @@ private theorem inner_ground_negativeFrequencyPart_apply
           (inner_eq_zero_of_mem_groundEigenspace hH hi
             (SpectralFilter.mulVec_eigenvectorBasis_complex hH i) hψ)
         simp only [hz, mul_zero]
-    simpa only [if_neg hij, ContinuousLinearMap.zero_apply, inner_zero] using hvanish.symm
+    simpa only [if_neg hij, ContinuousLinearMap.zero_apply, inner_zero_right] using hvanish.symm
 
 /-- Ground-space-subtracted correlation is exactly a commutator involving
 the actual negative-frequency part. This supplies the spectral separation
@@ -150,7 +151,7 @@ theorem inner_ground_projected_eq_negativeFrequency_commutator
   have hkillProjection := negativeFrequencyPart_apply_ground_eq_zero hH hmin A
     (K.starProjection_apply_mem y)
   rw [map_sub, hkillProjection, sub_zero] at hsplit
-  simpa only [ContinuousLinearMap.sub_apply, ContinuousLinearMap.comp_apply,
+  simpa only [sub_apply, ContinuousLinearMap.comp_apply,
     hkill, map_zero, sub_zero] using hsplit.symm
 
 /-- At a one-dimensional ground space, the sharp-frequency commutator is
@@ -178,7 +179,8 @@ theorem inner_ground_connected_eq_negativeFrequency_commutator
             (toEuclideanCLM (n := n) (𝕜 := ℂ) B ψ))⟫_ℂ := by
       rw [hline, Submodule.starProjection_singleton (𝕜 := ℂ)]
       simp only [map_sub, map_smul, inner_sub_right, inner_smul_right, div_eq_mul_inv]
-      ring
+      congr 1
+      ac_rfl
     _ = _ := inner_ground_projected_eq_negativeFrequency_commutator hH hmin A B hψ
 
 end TNLean.Lattice

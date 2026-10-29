@@ -31,14 +31,19 @@ def gaussianCauchyKernel (α ε t : ℝ) : ℂ :=
   (Real.exp (-α * t ^ 2) / (2 * Real.pi) : ℝ) *
     ((ε : ℂ) - Complex.I * t)⁻¹
 
-private theorem cauchyDenominator_ne_zero {ε : ℝ} (hε : 0 < ε) (t : ℝ) :
+/-- The regularized Cauchy denominator is nonzero at every real time.
+Source: Hastings–Koma, arXiv:math-ph/0507008, equation (3.8). -/
+theorem cauchyDenominator_ne_zero {ε : ℝ} (hε : 0 < ε) (t : ℝ) :
     (ε : ℂ) - Complex.I * t ≠ 0 := by
   intro h
   have hre := congrArg Complex.re h
   have : ε = 0 := by simpa using hre
   exact hε.ne' this
 
-private theorem norm_inv_cauchyDenominator_le {ε : ℝ} (hε : 0 < ε) (t : ℝ) :
+/-- The rational Cauchy factor is bounded by the reciprocal of its
+positive regularizer. Source: Hastings–Koma, arXiv:math-ph/0507008,
+equation (3.8). -/
+theorem norm_inv_cauchyDenominator_le {ε : ℝ} (hε : 0 < ε) (t : ℝ) :
     ‖((ε : ℂ) - Complex.I * t)⁻¹‖ ≤ ε⁻¹ := by
   have hnorm : ε ≤ ‖(ε : ℂ) - Complex.I * t‖ := by
     simpa using Complex.re_le_norm ((ε : ℂ) - Complex.I * t)
@@ -55,7 +60,8 @@ theorem inv_cauchyDenominator_eq_integral {ε : ℝ} (hε : 0 < ε) (t : ℝ) :
   have ha : (-(ε : ℂ) + Complex.I * t).re < 0 := by simpa using neg_lt_zero.mpr hε
   rw [integral_exp_mul_complex_Ioi ha 0]
   have hsign : -(ε : ℂ) + Complex.I * t = -((ε : ℂ) - Complex.I * t) := by ring
-  simp [hsign]
+  simp only [Complex.ofReal_zero, mul_zero, Complex.exp_zero]
+  rw [hsign, neg_div_neg_eq, one_div]
 
 /-- The actual Gaussian/Cauchy kernel is bounded by an integrable Gaussian
 when its regularizer is positive. Source: Hastings–Koma,
@@ -68,7 +74,7 @@ theorem norm_gaussianCauchyKernel_le {ε : ℝ} (hε : 0 < ε) (α t : ℝ) :
   calc
     _ ≤ (Real.exp (-α * t ^ 2) / (2 * Real.pi)) * ε⁻¹ :=
       mul_le_mul_of_nonneg_left (norm_inv_cauchyDenominator_le hε t) (by positivity)
-    _ = _ := by field_simp [Real.pi_ne_zero, hε.ne'] <;> ring
+    _ = _ := by field_simp [Real.pi_ne_zero, hε.ne']
 
 /-- Multiplying the regularized kernel by the actual frequency phase
 preserves absolute integrability. Source: Hastings–Koma,

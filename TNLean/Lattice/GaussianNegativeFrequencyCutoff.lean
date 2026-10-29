@@ -3,8 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Probability.Distributions.Gaussian.Real
-import Mathlib.Probability.Moments.SubGaussian
+import QICLean.Analysis.GaussianFilter.Kernel
 
 /-!
 # The actual Gaussian approximation to a negative-frequency selector
@@ -34,18 +33,12 @@ Lemma 3.1, equation (3.7). -/
 def gaussianNegativeFrequencyCutoff (q Δ ω : ℝ) : ℝ :=
   (gaussianReal 0 (Δ ^ 2 / q).toNNReal).real (Set.Ici ω)
 
-private theorem gaussian_id_hasSubgaussianMGF (v : ℝ≥0) :
-    HasSubgaussianMGF (fun x : ℝ ↦ x) v (gaussianReal 0 v) where
-  integrable_exp_mul t := integrable_exp_mul_gaussianReal t
-  mgf_le t := by
-    simp only [mgf_fun_id_gaussianReal, zero_mul, zero_add, le_refl]
-
 private theorem gaussian_gap_rate {q Δ : ℝ} (hq : 0 < q) (hΔ : 0 < Δ) :
     Real.exp (-(Δ ^ 2) / (2 * ((Δ ^ 2 / q).toNNReal : ℝ))) =
       Real.exp (-q / 2) := by
   congr 1
   rw [Real.coe_toNNReal _ (div_nonneg (sq_nonneg Δ) hq.le)]
-  field_simp [hq.ne', hΔ.ne'] <;> ring
+  field_simp [hq.ne', hΔ.ne']
 
 /-- The actual Gaussian frequency multiplier is nonnegative.
 Source: Hastings–Koma, arXiv:math-ph/0507008, equation (3.7). -/
@@ -72,7 +65,7 @@ theorem gaussianNegativeFrequencyCutoff_le_exp_of_gap
         (gaussianReal 0 v).real {x : ℝ | Δ ≤ x} :=
       measureReal_mono fun _ hx ↦ hω.trans hx
     _ ≤ Real.exp (-(Δ ^ 2) / (2 * (v : ℝ))) :=
-      (gaussian_id_hasSubgaussianMGF v).measure_ge_le hΔ.le
+      (GaussianFilter.hasSubgaussianMGF_gaussianReal v).measure_ge_le hΔ.le
     _ = _ := gaussian_gap_rate hq hΔ
 
 /-- Below the negative gap, the actual Gaussian selector differs from one
@@ -93,10 +86,11 @@ theorem abs_one_sub_gaussianNegativeFrequencyCutoff_le_exp_of_gap
       apply measureReal_mono
       intro x hx
       have hx' : x < ω := by simpa only [Set.mem_compl_iff, Set.mem_Ici, not_le] using hx
+      change Δ ≤ -x
       linarith
     _ ≤ Real.exp (-(Δ ^ 2) / (2 * (v : ℝ))) := by
       simpa only [Pi.neg_apply] using
-        (gaussian_id_hasSubgaussianMGF v).neg.measure_ge_le hΔ.le
+        (GaussianFilter.hasSubgaussianMGF_gaussianReal v).neg.measure_ge_le hΔ.le
     _ = _ := gaussian_gap_rate hq hΔ
 
 end TNLean.Lattice

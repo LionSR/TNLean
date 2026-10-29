@@ -4431,9 +4431,8 @@ resulting ordinary exponential clustering bound remain to be proved.
     $\{-X\ge\Delta\}$, and $-X$ has the same sub-Gaussian bound.
 \end{proof}
 
-The scalar approximation bounds above do not yet identify the multiplier
-with the Gaussian-regularized Cauchy time integral. That identity and the
-operator locality estimates remain separate obligations.
+The following regularized time-integral argument identifies this actual
+Gaussian selector. Operator locality estimates remain separate obligations.
 
 \begin{definition}[The regularized Gaussian--Cauchy kernel]
     \label{def:spt_gaussian_cauchy_kernel}
@@ -4451,7 +4450,9 @@ operator locality estimates remain separate obligations.
 
 \begin{lemma}[Laplace representation and integrability of the actual kernel]
     \label{lem:spt_gaussian_cauchy_integrability}
-    \lean{TNLean.Lattice.inv_cauchyDenominator_eq_integral,
+    \lean{TNLean.Lattice.cauchyDenominator_ne_zero,
+        TNLean.Lattice.norm_inv_cauchyDenominator_le,
+        TNLean.Lattice.inv_cauchyDenominator_eq_integral,
         TNLean.Lattice.norm_gaussianCauchyKernel_le,
         TNLean.Lattice.integrable_gaussianCauchyKernel_mul_exp,
         TNLean.Lattice.norm_integral_gaussianCauchyKernel_mul_exp_le}
@@ -4487,6 +4488,55 @@ The bound retains its dependence on $\varepsilon$. It is not a uniform
 regularizer-limit estimate. Interchanging the two integrals, identifying
 the Gaussian selector, and passing to the regularizer limit still require
 proof.
+
+\begin{lemma}[The actual scalar Gaussian--Cauchy limit]
+    \label{lem:spt_gaussian_cauchy_limit}
+    \lean{TNLean.Lattice.gaussianCauchyTransform,
+        TNLean.Lattice.gaussianCauchyTransform_eq_integral,
+        TNLean.Lattice.tendsto_gaussianCauchyTransform_zero_regularizer,
+        GaussianFilter.halfLine_gaussian_integral_eq_measureReal,
+        TNLean.Lattice.tendsto_normalized_gaussianCauchyTransform,
+        TNLean.Lattice.tendsto_normalized_gaussianCauchyTransform_cutoff}
+    \notready
+    \discussion{9879}
+    \uses{lem:spt_gaussian_cauchy_integrability,lem:spt_gaussian_negative_frequency_cutoff}
+    Let $\nu_h$ be the centered Gaussian probability measure of variance
+    $h>0$, and let $c_h$ be the density at zero of $\nu_{1/h}$.
+    For $\varepsilon>0$, define the actual transform
+    \[
+        C_{h,\varepsilon}(\omega)=\int_{\mathbb R}
+        \frac{e^{i\omega t}}{\varepsilon-it}\,d\nu_h(t).
+    \]
+    Then
+    \[
+        C_{h,\varepsilon}(\omega)=
+        \int_0^\infty e^{-\varepsilon s}
+        e^{-h(\omega+s)^2/2}\,ds,
+        \qquad
+        c_hC_{h,\varepsilon}(\omega)
+        \longrightarrow \nu_{1/h}([\omega,\infty))
+    \]
+    as $\varepsilon\downarrow0$.
+    In particular, $h=q/\Delta^2$ gives the actual Gaussian selector
+    $F_{q,\Delta}$ above and its explicit gap-error bounds.
+\end{lemma}
+\begin{proof}
+    Insert the half-line Laplace representation of the Cauchy
+    denominator. Under $\nu_h\otimes ds$ on $s>0$, the absolute value of
+    the joint integrand is $e^{-\varepsilon s}$, which is integrable.
+    Fubini and the exact Gaussian characteristic function give the first
+    identity. For the limit, the translated Gaussian
+    $e^{-h(\omega+s)^2/2}$ is an integrable majorant independent of
+    $\varepsilon>0$. Apply dominated convergence.
+    The actual density formula for $\nu_{1/h}$, translation invariance
+    of Lebesgue integration, and equality of open and closed integral
+    endpoints give the normalization to the probability tail.
+\end{proof}
+
+The scalar frequency selector and its actual integral representation are
+now derived. The regularized operator comparison and uniform locality
+bounds, followed by the ordinary exponential-clustering conclusion,
+remain separate obligations.
 
 \begin{lemma}[Transfer spectral rate from limiting correlations]
     \label{lem:spt_transfer_rate_from_correlations}
