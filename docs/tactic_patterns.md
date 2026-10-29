@@ -4950,6 +4950,21 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Completing an orthonormal family by its cardinality — candidate (2026-10-29)
+
+- **Pattern:** Use
+  `hv.linearIndependent.span_eq_top_of_card_eq_finrank' hcard`, then
+  `OrthonormalBasis.mk hv hspan.ge`, to turn an orthonormal family with as
+  many vectors as the dimension into an orthonormal basis.
+- **Seen:** The zero and successor cases of
+  `LinearIsometry.exists_paired_orthonormalBasis` in
+  `Algebra/OrthogonalComplexStructureBasis.lean`.
+- **Abstraction:** Mathlib already supplies both mathematical steps. Two
+  occurrences in one proof do not justify a local wrapper or tactic.
+- **Notes:** The empty-index form of the spanning lemma handles dimension
+  zero without assuming a nontrivial space. The successor case combines an
+  invariant orthonormal pair with a basis of its orthogonal complement.
+
 ### Counting nearest-neighbour bonds that meet a region — candidate (2026-10-28)
 
 - **Pattern:** Bound the number of nearest-neighbour bonds meeting a finite
