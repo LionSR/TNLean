@@ -164,3 +164,331 @@
     threshold is the general fifth-degree threshold specialized to
     bond dimension one.
 \end{proof}
+
+\subsection{Fifth-root Weyl word ingredients}
+\label{sec:short_volume_weyl_words}
+
+\begin{lemma}[Degree and reachable Weyl charges]
+    \label{lem:short_volume_weyl_charges}
+    \lean{MPSTensor.ShortMomentum.countCharge,
+        MPSTensor.ShortMomentum.wordCharge,
+        MPSTensor.ShortMomentum.residues_eq_of_degree_charge,
+        MPSTensor.ShortMomentum.wordCharge_ne_zero_of_length_seven,
+        MPSTensor.ShortMomentum.exists_word_seven_of_charge,
+        MPSTensor.ShortMomentum.exists_word_eight_of_charge,
+        MPSTensor.ShortMomentum.exists_word_of_eight_le_of_charge,
+        MPSTensor.ShortMomentum.exists_central_counts_of_eight_le}
+    \notready
+    Give three letters the charges $(1,0)$, $(0,1)$ and $(-1,-1)$
+    in $(\mathbb Z/5\mathbb Z)^2$. At fixed degree, the total charge
+    determines all three letter-count residues. At degree seven the
+    reached charges are exactly the nonzero charges; at degree eight
+    all charges occur. Every degree at least eight admits central counts.
+\end{lemma}
+\begin{proof}
+    The two charges and the total degree determine three times the
+    third count, and three has inverse two modulo five. The least
+    residues at degree seven sum to two, seven or twelve; the last
+    case is exactly the central residue triple $(4,4,4)$.
+    At degree eight their sum is three or eight. Add a multiple of five
+    to one count to reach the desired degree. Every integer at least
+    eight is a nonnegative combination of three and five.
+\end{proof}
+
+\begin{lemma}[Exact charged matrix products]
+    \label{lem:short_volume_weyl_products}
+    \lean{MPSTensor.ShortMomentum.chargedWeyl,
+        MPSTensor.ShortMomentum.chargedWeyl_mul,
+        MPSTensor.ShortMomentum.threeLetterTensor,
+        MPSTensor.ShortMomentum.evalWord_threeLetterTensor}
+    \notready
+    \uses{lem:short_volume_weyl_charges}
+    Fix a primitive fifth root $q$ and put
+    $W(u,v)_{ij}=q^{ui}\mathbf1_{j=i-v}$. Then
+    \[
+        W(a,b)W(c,d)=q^{-cb}W(a+c,b+d).
+    \]
+    The actual three-letter tensor
+    $(W(1,0),W(0,1),q^{-1}W(-1,-1))$ evaluates every word to a
+    nonzero scalar multiple of the matrix indexed by its charge.
+\end{lemma}
+\begin{proof}
+    Each matrix row has one retained intermediate index.
+    Multiplying its two character values gives the displayed cocycle.
+    Induction on actual physical words records the accumulated exponent.
+\end{proof}
+
+\begin{lemma}[Full span at degree eight and vanishing trace at degree seven]
+    \label{lem:short_volume_weyl_normality}
+    \lean{MPSTensor.ShortMomentum.sum_rootCharacter_smul_chargedWeyl,
+        MPSTensor.ShortMomentum.span_chargedWeyl_eq_top,
+        MPSTensor.ShortMomentum.isNBlkInjective_threeLetterTensor_eight,
+        MPSTensor.ShortMomentum.isNBlkInjective_threeLetterTensor_of_eight_le,
+        MPSTensor.ShortMomentum.isNormal_threeLetterTensor,
+        MPSTensor.ShortMomentum.trace_evalWord_threeLetterTensor_seven,
+        MPSTensor.ShortMomentum.not_isNBlkInjective_threeLetterTensor_seven,
+        MPSTensor.ShortMomentum.exists_trace_evalWord_ne_zero_of_eight_le}
+    \notready
+    \uses{lem:short_volume_weyl_charges, lem:short_volume_weyl_products}
+    The actual three-letter tensor is injective at every degree at least eight and
+    therefore normal. Every degree-seven word is traceless, so it is
+    not injective at degree seven. At every degree at least eight its
+    periodic trace vector is nonzero. These matrix facts do not classify
+    the ground spaces of any proposed fixed local interaction.
+\end{lemma}
+\begin{proof}
+    The finite Fourier identity
+    \[
+        \sum_u q^{-ui}W(u,i-j)=5E_{ij}
+    \]
+    gives all matrix units. Reachability and nonzero word scalars put
+    them in the degree-eight span. Noncentral Weyl matrices are
+    traceless, and every degree-seven word has noncentral charge.
+    At larger degrees, central counts give a nonzero scalar times
+    the identity and hence a nonzero trace coefficient.
+\end{proof}
+
+\begin{lemma}[Actual homogeneous Weyl-letter relations]
+    \label{lem:short_volume_weyl_letter_relations}
+    \lean{MPSTensor.ShortMomentum.chargedWeyl_commute,
+        MPSTensor.ShortMomentum.threeLetterTensor_commute,
+        MPSTensor.ShortMomentum.threeLetterTensor_cyclic_commute,
+        MPSTensor.ShortMomentum.threeLetterTensor_pow_five,
+        MPSTensor.ShortMomentum.evalWord_five_letter_transfer}
+    \notready
+    \uses{lem:short_volume_weyl_products}
+    The actual letters $X,Y,Z$ satisfy
+    \[
+        XY=qYX,\qquad YZ=qZY,\qquad ZX=qXZ,
+        \qquad X^5=Y^5=Z^5=1.
+    \]
+    Thus replacing five consecutive equal letters by five copies of
+    another letter preserves the actual matrix word in every left
+    and right context. Completeness of these relations for periodic
+    local constraints is not asserted.
+\end{lemma}
+\begin{proof}
+    The charged multiplication formula gives the commutator phase as
+    the symplectic pairing. Each cyclic adjacent pair has pairing one.
+    A five-letter constant word has zero charge and zero accumulated
+    exponent. Concatenation preserves the equality in arbitrary contexts.
+\end{proof}
+
+\begin{lemma}[Exact local charged boundary spaces]
+    \label{lem:short_volume_weyl_local_spaces}
+    \lean{MPSTensor.ShortMomentum.chargedWeylDual,
+        MPSTensor.ShortMomentum.trace_chargedWeyl_mul_dual,
+        MPSTensor.ShortMomentum.chargeBoundary,
+        MPSTensor.ShortMomentum.mem_groundSpace_threeLetterTensor_iff,
+        MPSTensor.ShortMomentum.groundSpace_threeLetterTensor_same_charge}
+    \notready
+    \uses{lem:short_volume_weyl_products}
+    Set $D_{u,v}=q^{-uv}W(-u,-v)/5$. These matrices satisfy
+    $\operatorname{tr}(W(p)D_q)=\mathbf1_{p=q}$.
+    At every length, the actual local boundary MPS space consists
+    exactly of the vectors whose coefficients are the accumulated
+    word phase times an arbitrary function of the total charge.
+    This is a local-space characterization; no global periodic
+    intersection conclusion is asserted.
+\end{lemma}
+\begin{proof}
+    Multiply the actual charged matrices and use the vanishing trace
+    at every nonzero charge. The two central phases cancel.
+    Given a function $g$ of the charge, the boundary matrix
+    $\sum_p g(p)D_p$ represents the asserted coefficient family.
+    Conversely every boundary matrix defines such a function by
+    its trace pairing with the charged matrices.
+\end{proof}
+
+\begin{lemma}[Actual charge comparison across a cyclic cut]
+    \label{lem:short_volume_weyl_cyclic_phase}
+    \lean{MPSTensor.ShortMomentum.letterPairing,
+        MPSTensor.ShortMomentum.wordPhase_append,
+        MPSTensor.ShortMomentum.wordPhase_cons_sub_snoc,
+        MPSTensor.ShortMomentum.exists_charge_comparison_of_cyclic_agreement}
+    \notready
+    \uses{lem:short_volume_weyl_local_spaces}
+    Moving a first letter of charge $(a,b)$ to the end changes the
+    actual scalar exponent by $av-ub$, where $(u,v)$ is the total charge.
+    If two actual local boundary vectors agree across that cyclic cut,
+    their charge functions satisfy the corresponding character relation.
+    The relation is derived from their actual coefficients.
+\end{lemma}
+\begin{proof}
+    Concatenation gives the same cocycle as actual matrix multiplication.
+    The first-letter and last-letter expressions differ by the displayed
+    pairing. Cancel the nonzero character of the remaining word in the
+    two actual local-space parametrizations.
+\end{proof}
+
+\begin{lemma}[Zero main-sector periodic space at length seven]
+    \label{lem:short_volume_weyl_seven_periodic_zero}
+    \lean{MPSTensor.ShortMomentum.exists_distinct_seven_cyclic_phases,
+        MPSTensor.ShortMomentum.eq_zero_of_seven_cyclic_agreement,
+        MPSTensor.ShortMomentum.eq_zero_of_seven_cyclic_local_membership,
+        MPSTensor.ShortMomentum.chainGroundSpace_threeLetterTensor_seven_eq_bot}
+    \notready
+    \uses{lem:short_volume_weyl_cyclic_phase, lem:short_volume_weyl_charges}
+    The actual seven-site periodic parent space formed from the
+    seven-site local boundary space of the three-letter Weyl tensor
+    is zero. More precisely, two seven-site boundary vectors agreeing
+    across the cyclic cut must both vanish. This is an exceptional
+    short-volume obstruction; long-volume uniqueness remains separate.
+\end{lemma}
+\begin{proof}
+    Each of the 24 noncentral charges has two explicit degree-seven words
+    whose first letters have different pairings with that charge.
+    The preceding cyclic comparison would give two distinct character
+    values times the same charge coefficient. Thus that coefficient
+    vanishes. The central charge never occurs at this degree, so every
+    actual vector coefficient is zero. The windows starting at zero
+    and one supply the two required actual local boundary vectors.
+\end{proof}
+
+\begin{lemma}[All-degree cyclic closure of actual boundary spaces]
+    \label{lem:short_volume_weyl_global_boundary_closure}
+    \lean{MPSTensor.ShortMomentum.exists_six_config_of_charge,
+        MPSTensor.ShortMomentum.exists_distinct_eight_cyclic_phases,
+        MPSTensor.ShortMomentum.exists_distinct_nine_cyclic_phases,
+        MPSTensor.ShortMomentum.exists_distinct_cyclic_phases,
+        MPSTensor.ShortMomentum.exists_smul_mpv_of_cyclic_agreement,
+        MPSTensor.ShortMomentum.mem_mpvSubmodule_of_cyclic_local_membership}
+    \notready
+    \uses{lem:short_volume_weyl_cyclic_phase,
+        lem:short_volume_weyl_seven_periodic_zero}
+    At every degree at least seven, two actual global boundary vectors
+    agreeing across a cyclic cut close to the actual periodic trace line.
+    This conclusion presupposes only their actual global boundary-space
+    membership and their coefficient agreement. It does not state that
+    seven-site local constraints already give global membership.
+\end{lemma}
+\begin{proof}
+    Explicit word pairs detect distinct cyclic phases at every noncentral
+    charge in degrees seven, eight and nine. Appending one copy of each
+    letter preserves their charge and extends the witnesses by three
+    sites, covering every larger degree. Hence all noncentral charge
+    coefficients vanish. The remaining central coefficient is the
+    actual periodic trace coefficient divided by five.
+\end{proof}
+
+\begin{lemma}[Actual long-window open intersection]
+    \label{lem:short_volume_weyl_long_intersection}
+    \lean{MPSTensor.ShortMomentum.groundSpace_intersection_threeLetterTensor_of_eight_le}
+    \notready
+    \uses{lem:short_volume_weyl_normality, lem:short_volume_weyl_letter_relations}
+    If the common middle of two overlapping boundary windows has at
+    least eight sites, their actual left and right constraints imply
+    membership in the next boundary space. No intersection identity
+    is supplied. The steps producing eight and nine sites remain separate.
+\end{lemma}
+\begin{proof}
+    Fullness of the actual middle word span makes trace pairing
+    injective and gives the required intertwining boundary matrices.
+    The fourth power of the first physical letter is its actual inverse.
+    Apply the standard one-sided reconstruction with this inverse and
+    zero coefficients on the other two physical letters.
+\end{proof}
+
+\begin{lemma}[Actual endpoint charge coefficients on an overlap]
+    \label{lem:short_volume_weyl_overlap_charge_coefficients}
+    \lean{MPSTensor.ShortMomentum.exists_overlap_charge_coefficients}
+    \notready
+    \uses{lem:short_volume_weyl_cyclic_phase, lem:short_volume_weyl_local_spaces}
+    Suppose every restriction obtained by fixing the first or last site
+    of a vector lies in the corresponding boundary MPS space.
+    There are functions of the total charge for each fixed endpoint
+    whose product with the actual full-word phase equals each physical
+    coefficient. Their equality on overlapping interior words is not
+    supplied as a premise. Values at unreachable endpoint charges
+    may remain arbitrary.
+\end{lemma}
+\begin{proof}
+    Apply the exact actual local-space characterization to each endpoint
+    restriction. Subtract that endpoint's charge, and cancel its scalar
+    exponent together with the actual concatenation cocycle. This gives
+    the asserted normalization by the full-word phase on both sides.
+\end{proof}
+
+\begin{lemma}[Charge bridges in the short overlaps]
+    \label{lem:short_weyl_overlap_charge_bridges}
+    \lean{MPSTensor.ShortMomentum.exists_six_overlap_charge_bridge}
+    \lean{MPSTensor.ShortMomentum.exists_seven_overlap_charge_bridge}
+    \lean{MPSTensor.ShortMomentum.eq_of_six_overlap_charge_edges}
+    \lean{MPSTensor.ShortMomentum.eq_of_seven_overlap_charge_edges}
+    \notready
+    Write $c_0=(1,0)$, $c_1=(0,1)$ and $c_2=(-1,-1)$ in
+    $(\mathbb Z/5\mathbb Z)^2$, and fix a total charge $p$.
+    For six-letter middle words, call an edge $(i,j)$ allowed when
+    $p-c_i-c_j$ lies outside $\{(0,4),(1,1),(4,0)\}$; an endpoint is
+    active when $p\ne c_i$. Every active left endpoint and active right
+    endpoint are joined by three allowed edges. For seven-letter middle
+    words, an edge is allowed when $p-c_i-c_j\ne0$, and every pair of
+    endpoints is joined by three allowed edges.
+    Consequently, if $F_j=G_i$ on every allowed edge, the equality holds
+    on every active pair in the first case and every pair in the second.
+\end{lemma}
+\begin{proof}
+    \notready
+    For each of the twenty-five charges and each pair of relevant endpoints,
+    choose letters $k,l$ with allowed edges $(i,k),(l,k),(l,j)$.
+    The finite residue identities give all the witnesses.
+    Then $F_j=G_l=F_k=G_i$.
+\end{proof}
+
+\begin{lemma}[The two short Weyl intersections]
+    \label{lem:short_weyl_eight_nine_intersections}
+    \lean{MPSTensor.ShortMomentum.groundSpace_intersection_threeLetterTensor_eight}
+    \lean{MPSTensor.ShortMomentum.groundSpace_intersection_threeLetterTensor_nine}
+    \notready
+    \uses{lem:short_weyl_overlap_charge_bridges}
+    For the three-letter fifth-root Weyl tensor, a vector on eight sites
+    whose first and last seven-site coefficient sections belong to the
+    respective boundary spaces belongs to the eight-site boundary space.
+    Likewise, a vector on nine sites with both eight-site section conditions
+    belongs to the nine-site boundary space.
+\end{lemma}
+\begin{proof}
+    \notready
+    Normalize the endpoint charge coefficients by the full-word phase.
+    Every actual middle word equates the two endpoint coefficients at
+    its total charge. The charge bridges make these coefficients agree
+    with a single function of that charge.
+    On eight sites, an actual first letter is active because its remaining
+    seven-site word cannot have zero charge. Choose any active endpoint
+    as the reference. On nine sites every endpoint can serve as reference.
+    Multiplying the resulting common charge function by the word phase
+    gives the full boundary-space representation.
+\end{proof}
+
+\begin{lemma}[Actual main-sector kernels of the seven-site Weyl interaction]
+    \label{lem:short_volume_weyl_periodic_kernel}
+    \lean{MPSTensor.ShortMomentum.groundSpace_restriction_intersection_threeLetterTensor,
+        MPSTensor.ShortMomentum.mem_groundSpace_of_seven_contiguous_constraints,
+        MPSTensor.ShortMomentum.chainGroundSpace_seven_le_groundSpace_threeLetterTensor,
+        MPSTensor.ShortMomentum.chainGroundSpace_seven_threeLetterTensor_eq_mpvSubmodule,
+        MPSTensor.ShortMomentum.ker_parentHamiltonianES_threeLetterTensor_eq_span,
+        MPSTensor.ShortMomentum.ker_parentHamiltonianES_threeLetterTensor_seven_eq_bot,
+        MPSTensor.ShortMomentum.mpvState_threeLetterTensor_ne_zero}
+    \notready
+    \uses{lem:short_volume_weyl_global_boundary_closure,
+        lem:short_volume_weyl_long_intersection,
+        lem:short_weyl_eight_nine_intersections}
+    Let the actual local interaction be the orthogonal projection onto
+    the complement of the seven-site boundary space of the three-letter
+    Weyl tensor. Its actual periodic Hamiltonian has zero kernel at
+    length seven. At every length $N\ge8$, its kernel is exactly the
+    line generated by its actual periodic trace vector, which is nonzero.
+    No open-chain intersection or global-space premise is supplied.
+    This statement concerns the main physical sector alone.
+\end{lemma}
+\begin{proof}
+    The two short overlap calculations and the full-span reconstruction
+    give every one-step boundary-space intersection from range seven.
+    Contiguous-window induction yields actual global boundary membership.
+    Cyclic translation preserves the actual local constraints, so the
+    translated vector also lies in the global boundary space. Apply
+    the actual cyclic closure theorem. Finally transport the existing
+    equality between cyclic constraints and the parent-Hamiltonian kernel
+    to the Euclidean realization. The explicit central words prove
+    nonvanishing at every length at least eight.
+\end{proof}
