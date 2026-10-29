@@ -3,14 +3,17 @@
 \usepackage{amsmath,amssymb}
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
-\input{command}
+\input{./command}
 \providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
 \title{The Truncated Dynamics in Hastings' Approximation $M_i$}
 \author{}
 \date{}
 \begin{document}
-\maketitle
-\gapnote{scope-restriction}{resolved}
+\begin{center}
+ {\Large The Truncated Dynamics in Hastings' Approximation $M_i$}
+\end{center}
+\medskip
+\gapnote{local-correction}{resolved}
 
 \section{The printed estimate}
 Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
@@ -88,10 +91,10 @@ Let $H=\sum_k h_k$ have ground energy $E_0$ and a positive spectral gap
 $\Delta E$. Write $P_{high}$ for the orthogonal projection onto the complement
 of its ground eigenspace and $\Psi_a$ for a normalized ground eigenvector.
 The source states eq.~(facld), $|P_{high}M_i\Psi_a\rangle|\le
-J\,O(e^{-l_{proj}/l_{fac}})$, only to order of magnitude, with the size of the
-shell left implicit: spheres in a finite-dimensional lattice have polynomial
-size. The formalization obtains this form under an explicit hypothesis on the
-shell, a scope restriction: at projection radius $l$, let $M_l$ be the
+J\,O(e^{-l_{proj}/l_{fac}})$, only to order of magnitude. Its metric and local
+range hypotheses at lines 169--190 do not imply polynomial growth of spheres
+or of the omitted shell. The earlier shell-count argument obtains this form
+under an additional hypothesis: at projection radius $l$, let $M_l$ be the
 Gaussian-filtered approximation of $W$ with $q=c_1l\Delta E$, evolved under
 the terms of a family $s_l$ supported inside $K_l\supseteq S$. Assume that
 the number $N_l$ of omitted terms meeting $K_l$ is at most $K_g(l+1)^k$, for
@@ -106,10 +109,40 @@ with $\mu>0$, $0<c_1v<\mu$ and $m=l-3R$, it gives
 with $C'$ independent of $l$, using $(x+1)^kx\le(k+1)!\,e^{a}a^{-(k+1)}e^{ax}$
 for $a=1/l_{fac}$ to absorb the polynomial factor. A subexponential bound
 $N_l\le C_\varepsilon e^{\varepsilon l}$ would suffice with $l_{fac}$ adjusted;
-the polynomial form is the one formalized. The bound also assumes $J\ge0$,
+this polynomial form remains available as a separate specialization. The bound also assumes $J\ge0$,
 which holds for the source's $J$, a bound on norms: if there is any term,
 $0\le\|h_k\|\le J$ implies it. The explicit assumption only adds a convention
 for the empty family of terms, where the termwise norm bound is vacuous.
+The shell-dependent comparison remains valid as stated. Its growth restriction
+is no longer needed for the source's actual physical metric truncation:
+\path{GaussianFilteredMetricTruncation.lean} proves this case by retaining the
+distance of each omitted term in the Lieb--Robinson estimate. The graph
+joining sites at distance at most $R$ has degree at most $S$, even when physical
+metric balls have no useful cardinality bound. Choosing
+$\mu=\log(S+1)+1$ makes the weighted omitted tail summable. With
+$v=4S^2Je^{4\mu}$, $c_1=1/(4R(v+1))$ and
+$\gamma=1/(2R)-vc_1>0$, the proved estimate has rate
+$\tfrac12\min(c_1\Delta E,\gamma)>0$. Its prefactor depends only on
+$R,S,J,\Delta E$, not on the finite site set or Hamiltonian. It applies for
+$\ell\ge R$, the large-radius range of the source's order estimate, and
+proves support, norm and Hermiticity for the actual $M_i$. The ground-space
+and unique-ground-vector bounds and the estimate on $\|\sum_iM_i-H\|$ are
+also proved. The zero-range case is exact and requires no division by $R$.
+Explicit constants and the metric-to-graph comparison are recorded in
+\href{https://sirui-lu.com/TNLean/paper-gaps/hastings05_geometric_growth_scope.pdf}
+{the note on geometric growth}.
+
+\section{The factorization length}
+Immediately after eq.~(facld), the source says that $l_{fac}$ is the
+minimum of $(c_1\Delta E)^{-1}$ and $\xi_C$. This reverses the elementary
+rule for adding two decays: the sum is controlled by the slower decay,
+hence by the larger length, or equivalently the smaller rate. The source's
+following sentence, that $l_{fac}=(c_1\Delta E)^{-1}$ for small gap, agrees
+with the larger-length reading. The explicit rate above and in
+\eqref{eq:hastings05_truncated_dynamics_facld_decay} uses the minimum of
+rates, with an additional factor two to absorb the time factor. This is a
+local correction of the printed length comparison; the exponential order
+asserted by eq.~(facld) is proved.
 \bibliographystyle{unsrt}
 \bibliography{references}
 \end{document}
