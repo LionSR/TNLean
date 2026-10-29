@@ -9764,3 +9764,17 @@ there is no need for a new tactic.
   `ParentHamiltonian/QuasiLocalWindowCoordinates`; move the established translation
   statement unchanged to `QCA/IntervalTranslation`. Reuse those owners and retain
   their existing signatures, rather than renaming the duplicates or adding aliases.
+
+### Faithful image coordinates of a star-subalgebra — promoted (2026-10-29)
+
+- **Seen:** the finite support embedding, range-equality coordinates, and
+  actual two-site translation of support factors.
+- **Promotion:** `StarSubalgebra.equivMapOfInjective` and
+  `StarSubalgebra.equivOfEq` retain the corresponding existing Mathlib
+  algebra equivalences and add only preservation of star. Their coercion
+  lemmas evaluate as the original map and unchanged ambient element.
+- **Reuse:** The previous manual finite embedding bijection and the
+  equality-transported range presentation now consume these adapters;
+  the translated even-factor coordinates use them directly.
+- **Notes:** The matrix-specific support-map presentation in the index
+  comparison uses this shared owner; its duplicate private helper is removed.

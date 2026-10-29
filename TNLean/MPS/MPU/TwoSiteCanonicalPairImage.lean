@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.StarSubalgebraEquiv
 import TNLean.QCA.ConsecutivePairCoordinates
 import TNLean.MPS.MPU.TwoSiteBlockedLocalAction
 import TNLean.MPS.MPU.TwoSiteOutputSupport
@@ -169,14 +170,6 @@ private theorem actual_evenPairLocalImage_zero :
     obtain ⟨B, hB⟩ := hmem
     exact ⟨B, (congrArg ω hB).trans (hAction A)⟩
 
-private noncomputable def supportMapEquiv
-    {m n : Type*} [Fintype m] [Fintype n] [DecidableEq m] [DecidableEq n]
-    (T : StarSubalgebra ℂ (Matrix m m ℂ)) (E : Matrix m m ℂ ≃⋆ₐ[ℂ] Matrix n n ℂ) :
-    ↥T ≃⋆ₐ[ℂ] ↥(T.map E.toStarAlgHom) :=
-  StarAlgEquiv.ofAlgEquiv
-    (T.toSubalgebra.equivMapOfInjective E.toAlgHom E.injective)
-    (fun x => Subtype.ext (map_star E (x : Matrix m m ℂ)))
-
 /-- The actual canonical even support factor of the blocked MPU action
 has its derived ℓ-dimensional full-matrix presentation. Neither a
 support-factor presentation nor a rank identity is supplied as a premise.
@@ -190,8 +183,9 @@ noncomputable def blocked_bufferedMPUQuasiLocalAut_evenSupportEquiv_zero :
       (blocked_bufferedMPUQuasiLocalAut_propagatesWithin hU k hk S) 0)) ≃⋆ₐ[ℂ] _
   rw [actual_evenPairLocalImage_zero hU k hk S,
     Matrix.leftSupportAlgebra_map_matrixReindexStarAlgEquiv]
-  exact (supportMapEquiv _
-    (Matrix.matrixReindexStarAlgEquiv (leftPairZeroConfigEquiv _))).symm.trans
+  exact (StarSubalgebra.equivMapOfInjective _
+    (Matrix.matrixReindexStarAlgEquiv (leftPairZeroConfigEquiv _)).toStarAlgHom
+    (Matrix.matrixReindexStarAlgEquiv (leftPairZeroConfigEquiv _)).injective).symm.trans
       (MPOTensor.twoLinkLeftSupportEquiv u v S.u_unitary S.v_unitary S.phys_pos S.right_pos)
 
 /-- The actual support matrix size at the fixed even cut is ℓ.
