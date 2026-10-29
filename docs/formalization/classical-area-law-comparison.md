@@ -267,7 +267,11 @@ For the same original ground space, every constructed interval space has
 viability error at most $3/200$ and dimension at most $M=D^6s^3$.
 It is spanned by at most $M$ recorded vectors, each with internal-cut rank at
 most $10^6D_{\rm ref}^2(L+1)M$. This rank bound is for those recorded
-vectors; an arbitrary linear combination can require an additional factor.
+vectors. The actual full-interval root is now transported to the native chain
+coordinates. Every vector in that same root has an open-boundary MPS
+representation with bond at most $10^6D_{\rm ref}^2(L+1)M^2$, retaining
+the extra spanning-count factor. A normalized approximation extracted from
+that root remains a separate conclusion.
 The numerical filter and tail conditions are also discharged. With
 $m=\max(q,50)$, $g=\min(\gamma,1)$ and
 $v=1+\log m+\log(1/g)$, a universal $C$ gives
@@ -323,9 +327,15 @@ and a dyadic rank estimate; the fixed-ground-space induction does not provide
 it. A generic two-target step now retains the actual Haar sample and operator
 image and gives dimension at most $\lfloor p/2\rfloor$, with the exact
 lower-target error $2(\Delta/\alpha^2+1/200)$. Its probability and error
-conditions remain explicit. The physical dyadic argument must construct a
-common count envelope together with its shrinking bound; increasing a count
-bound alone does not preserve $D^{12}\Delta$. The strict dimension decrease
+conditions remain explicit. The physical family can now be calibrated by
+choosing an analytic count base $m\ge q$ before its degree and suppression,
+while leaving the physical local dimension unchanged. One and the same
+family has count at most $D^2$ and $D^{12}\Delta<10^{-5}$, with
+$D=(m\ell^2)^{22\ell}$. For the prescribed ceiling degrees, the shared
+scalar estimate gives $\log D_{j+1}\le(13/6)\log D_j$ at dyadic scales
+under its explicit numerical conditions. Canonical spectral-window transport
+and the complete minimal-dimension induction remain to be constructed;
+increasing a count bound alone would not preserve $D^{12}\Delta$. The strict dimension decrease
 and source constant corrections are recorded in the companion note
 [ALVV bootstrap constants](https://sirui-lu.com/QICLean/paper-gaps/alvv16_bootstrap_constants.pdf). The actual improving family can now be powered: the same target and
 retained operators precede every integer power and viable input space.
