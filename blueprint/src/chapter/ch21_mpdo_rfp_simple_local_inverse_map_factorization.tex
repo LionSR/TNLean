@@ -13,7 +13,7 @@
     insertions back into local physical operators.
 \end{definition}
 
-\begin{theorem}[Inverse-map identities for an injective simple MPO tensor]
+\begin{lemma}[Inverse-map identities for an injective simple MPO tensor]
     \label{thm:mpdo_injective_inverse_layer_spec}
     \lean{MPOTensor.inverseTensor_spec}
     \lean{MPOTensor.physRealize_spec}
@@ -25,7 +25,7 @@
     the matrix units on the virtual bond space. Likewise, every right virtual
     insertion admits a physical realization, this realization is multiplicative,
     and the analogous left-insertion statement also holds.
-\end{theorem}
+\end{lemma}
 
 For an injective simple tensor, contracting $K^{-1}$ with $K$ through the
 physical index identifies the corresponding virtual legs as in
@@ -100,7 +100,7 @@ a further copy of $K$ recovers $K$:
     \end{align}
 \end{definition}
 
-\begin{theorem}[Three-site marginal closed by the normalized fourth-site tail]
+\begin{lemma}[Three-site marginal closed by the normalized fourth-site tail]
     \label{thm:mpdo_reduced_four_three_tail}
     \lean{MPOTensor.reducedBlockState_four_three_apply}
     \leanok
@@ -115,7 +115,7 @@ a further copy of $K$ recovers $K$:
         \mathcal K^{i_3j_3}R_4\right).
         \label{eq:rfp_three_site_marginal}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{figure}[ht]
     \centering
@@ -163,13 +163,13 @@ a further copy of $K$ recovers $K$:
     \end{align}
 \end{proof}
 
-\begin{theorem}[Non-vanishing of the normalized fourth-site tail]
+\begin{lemma}[Non-vanishing of the normalized fourth-site tail]
     \label{thm:mpdo_normalized_four_site_tail_ne_zero}
     \lean{MPOTensor.normalizedFourSiteTail_ne_zero}
     \leanok
     \uses{def:mpdo_normalized_four_site_tail}
     If $Z_4=\tr[\rho^{(4)}(\mathcal K)]\ne0$, then $R_4\ne0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -180,7 +180,7 @@ a further copy of $K$ recovers $K$:
     $\tr[\sigma_3^{(4)}(\mathcal K)]=1$, a contradiction.
 \end{proof}
 
-\begin{theorem}[A nonzero entry of the normalized fourth-site tail]
+\begin{lemma}[A nonzero entry of the normalized fourth-site tail]
     \label{thm:mpdo_normalized_four_site_tail_entry_ne_zero}
     \lean{MPOTensor.exists_normalizedFourSiteTail_entry_ne_zero}
     \leanok
@@ -189,7 +189,7 @@ a further copy of $K$ recovers $K$:
     \cite[Appendix~C.2, lines~1431--1437]{Cirac2016MPDO_arXiv}, if $Z_4\ne0$,
     there exist virtual indices $\beta$ and $\alpha$ such that
     $(R_4)_{\beta,\alpha}\ne0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -219,7 +219,7 @@ a further copy of $K$ recovers $K$:
     \end{align}
 \end{definition}
 
-\begin{theorem}[Evaluation of the three-site inverse-map contraction]
+\begin{lemma}[Evaluation of the three-site inverse-map contraction]
     \label{thm:mpdo_inverse_map_three_site_contraction}
     \lean{MPOTensor.inverseMapThreeSiteContraction_eq}
     \leanok
@@ -237,7 +237,7 @@ a further copy of $K$ recovers $K$:
     % index in the tail entry; direct contraction gives R_{beta_3,alpha_1} as
     % above. Recorded in
     % docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex.
-\end{theorem}
+\end{lemma}
 
 \begin{figure}[ht]
     \centering
@@ -358,7 +358,7 @@ a further copy of $K$ recovers $K$:
     \end{align}
 \end{definition}
 
-\begin{theorem}[Outer inverse-map contraction of a closure]
+\begin{lemma}[Outer inverse-map contraction of a closure]
     \label{thm:mpdo_closure_outer_contraction}
     \lean{MPOTensor.inverseMap_threeSite_closure_collapse}
     \lean{MPOTensor.inverseMap_conj_physicalSlice_expansion}
@@ -393,7 +393,7 @@ a further copy of $K$ recovers $K$:
         \overline{U_{b',j_2}}.
         \label{eq:rfp_conjugated_slice}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -402,7 +402,7 @@ a further copy of $K$ recovers $K$:
     (\ref{eq:rfp_three_site_closure}) converts the left-hand side
     of (\ref{eq:rfp_outer_collapse}) to
     $C_{\alpha_1,\beta_1,\alpha_3,\beta_3}((i_2,j_2);R)$.
-    Theorem~\ref{thm:mpdo_inverse_map_three_site_contraction} then gives
+    Lemma~\ref{thm:mpdo_inverse_map_three_site_contraction} then gives
     \begin{align}
         C_{\alpha_1,\beta_1,\alpha_3,\beta_3}((i_2,j_2);R)
          & =\mathcal K^{i_2j_2}_{\beta_1,\alpha_3}
@@ -431,7 +431,7 @@ a further copy of $K$ recovers $K$:
     and reordering the finite sums.
 \end{proof}
 
-\begin{theorem}[Sectorwise inverse-map comparison]
+\begin{lemma}[Sectorwise inverse-map comparison]
     \label{thm:mpdo_inverse_map_hayashi_sector_comparison}
     \lean{MPOTensor.inverseMap_hayashi_sector_comparison}
     \leanok
@@ -457,7 +457,7 @@ a further copy of $K$ recovers $K$:
     The probability $p_k$ remains explicit because both sector density
     operators are normalized. No zero-correlation-length or non-vanishing
     hypothesis is used in this comparison.
-\end{theorem}
+\end{lemma}
 
 For fixed $k,\alpha_1,\beta_3$, the identity
 (\ref{eq:rfp_sector_comparison}) reads coefficientwise as follows.
@@ -564,7 +564,7 @@ For fixed $k,\alpha_1,\beta_3$, the identity
     gives (\ref{eq:rfp_sector_comparison}).
 \end{proof}
 
-\begin{theorem}[The four-site marginal is a three-site closure]
+\begin{lemma}[The four-site marginal is a three-site closure]
     \label{thm:mpdo_three_site_closure_reduced}
     \lean{MPOTensor.isThreeSiteClosure_reducedBlockState}
     \leanok
@@ -572,7 +572,7 @@ For fixed $k,\alpha_1,\beta_3$, the identity
     Carried onto the tripartite site index, the three-site marginal of the
     normalized four-site chain is the three-site closure of $\mathcal K$
     against the normalized fourth-site tail $R_4$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -590,13 +590,13 @@ For fixed $k,\alpha_1,\beta_3$, the identity
     (\ref{eq:rfp_three_site_closure}) against $R_4$.
 \end{proof}
 
-\begin{theorem}[Vanishing of the off-diagonal Hayashi sectors]
+\begin{lemma}[Vanishing of the off-diagonal Hayashi sectors]
     \label{thm:mpdo_inverse_map_hayashi_sector_offdiagonal}
     \lean{MPOTensor.inverseMap_hayashi_sector_offdiagonal}
     \leanok
     \uses{def:mpdo_three_site_closure, def:mpdo_hayashi_inverse_factors}
     In the setting of
-    Theorem~\ref{thm:mpdo_inverse_map_hayashi_sector_comparison}, for all
+    Lemma~\ref{thm:mpdo_inverse_map_hayashi_sector_comparison}, for all
     $k\ne k'$, every off-diagonal sector satisfies
     \begin{align}
         R_{\beta_3,\alpha_1}
@@ -607,7 +607,7 @@ For fixed $k,\alpha_1,\beta_3$, the identity
     Together with the diagonal comparison this gives the direct-sum structure
     of the factorized tensor: the direct sum over sectors is inherited from
     the splitting of the middle site.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -622,7 +622,7 @@ For fixed $k,\alpha_1,\beta_3$, the identity
         \notag
     \end{align}
     Substituting this vanishing into the expansion of
-    Theorem~\ref{thm:mpdo_closure_outer_contraction}
+    Lemma~\ref{thm:mpdo_closure_outer_contraction}
     gives (\ref{eq:rfp_offdiagonal_vanishing}).
 \end{proof}
 
@@ -667,7 +667,7 @@ For fixed $k,\alpha_1,\beta_3$, the identity
     $(l_k)_\beta$ as its target factor.
 \end{proof}
 
-\begin{theorem}[Sector factorization of an injective simple tensor]
+\begin{lemma}[Sector factorization of an injective simple tensor]
     \label{thm:mpdo_sector_factorization}
     \lean{MPOTensor.physicalSlice_sector_factorization}
     \leanok
@@ -684,7 +684,7 @@ For fixed $k,\alpha_1,\beta_3$, the identity
         (l_k)_{\beta_1}\otimes(r_k)_{\alpha_3}.
         \label{eq:rfp_sector_factorization}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 In the middle-site basis selected by $U_B$, the same factorization
 (\ref{eq:rfp_sector_factorization}) is displayed as
@@ -725,7 +725,7 @@ In the middle-site basis selected by $U_B$, the same factorization
     vanishes.
 \end{proof}
 
-\begin{theorem}[Existence of the sector tensors]
+\begin{lemma}[Existence of the sector tensors]
     \label{thm:mpdo_exists_sector_factorization}
     \lean{MPOTensor.exists_physicalSlice_sector_factorization}
     \leanok
@@ -745,7 +745,7 @@ In the middle-site basis selected by $U_B$, the same factorization
     in Definition~\ref{def:mpdo_sector_eta}; the remaining steps of
     \cite[Appendix~C.2, Lemma~C.4]{Cirac2016MPDO_arXiv} prove the
     all-length identity and primitivity.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

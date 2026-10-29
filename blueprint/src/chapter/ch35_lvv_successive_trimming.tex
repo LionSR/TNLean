@@ -4,7 +4,7 @@
 The bond-trimming step of Landau, Vazirani and
 Vidick~\cite[Claim~2.10, source lines 549--559]{Landau2015Polynomial} trims every
 member of a viable set successively across all internal cuts. This section proves
-Theorem~\ref{thm:lvv_size_bond_trimmed_family}: after size trimming and bond
+Lemma~\ref{thm:lvv_size_bond_trimmed_family}: after size trimming and bond
 trimming, a family chosen before the ground state is $1/2$-viable, with polynomial
 cardinality and polynomial bond dimension. The retained dimension is quadratic in the
 chain length, in place of the printed linear one~\cite{gap:lvv13_trimming_radius}.
@@ -296,7 +296,7 @@ chain length, in place of the printed linear one~\cite{gap:lvv13_trimming_radius
     Since $48L\ge1$, increasing the exponent preserves the inequality.
 \end{proof}
 
-\begin{theorem}[Size and bond trimming before the ground vector is supplied]
+\begin{lemma}[Size and bond trimming before the ground vector is supplied]
     \label{thm:lvv_size_bond_trimmed_family}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_bond_trimmed_family_polynomial}
     \leanok
@@ -305,7 +305,7 @@ chain length, in place of the printed linear one~\cite{gap:lvv13_trimming_radius
     Hamiltonian with positive semidefinite terms of norm at most one,
     and a finite left family $S$ whose members have bond dimension at
     most $\max\{1,b\}$. Use $c,D,p,A,C$ from
-    Theorem~\ref{thm:lvv_size_trimmed_family_polynomial}, and put
+    Lemma~\ref{thm:lvv_size_trimmed_family_polynomial}, and put
     $m=(48L)^2r(L)$, with $r(L)$ from
     Lemma~\ref{lem:lvv_bond_trimming_reference}. This bond radius is
     polynomial in $L$ by Lemma~\ref{lem:lvv_bond_trimming_radius_polynomial}.
@@ -316,9 +316,9 @@ chain length, in place of the printed linear one~\cite{gap:lvv13_trimming_radius
     $E_0$ and gap at least $\Delta$ implies $(i,1/2)$-viability of $T$.
     This is~\cite[Claim~2.10, source lines 549--559]{Landau2015Polynomial}
     for the size-trimming family of
-    Theorem~\ref{thm:lvv_size_trimmed_family_polynomial}, with the bond
+    Lemma~\ref{thm:lvv_size_trimmed_family_polynomial}, with the bond
     $m=(48L)^2r(L)$ in place of the printed $48L\,r(L)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:lvv_size_trimmed_family_polynomial,

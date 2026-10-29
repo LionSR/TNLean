@@ -1,7 +1,7 @@
 \subsection{Mixed-square counts for template shells}
 
 % This is the mixed-square prerequisite, not the complete entropy lemma.
-\begin{theorem}[Mixed squares of finite unions and differences]
+\begin{lemma}[Mixed squares of finite unions and differences]
     \label{thm:area_law_mixed_dyadic_boolean}
     \lean{TNLean.PEPS.AreaLaw.Geometry.mem_latticeDyadicCell_iff_bounds,
         TNLean.PEPS.AreaLaw.Geometry.mixedDyadicIndices_empty,
@@ -20,7 +20,7 @@
         M_k(S\setminus U)            & \subseteq M_k(S)\cup M_k(U).
     \end{align}
     In particular, the corresponding mixed-square counts are subadditive.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     A site of $C_{k,z}$ inside a union belongs to some $S_a$, whereas a site
     outside the union lies outside every $S_a$, so $C_{k,z}$ is mixed for $S_a$.
@@ -29,7 +29,7 @@
     to $U$; hence $C_{k,z}$ is mixed for either $S$ or $U$.
 \end{proof}
 
-\begin{theorem}[Row displacement under integer dilation]
+\begin{lemma}[Row displacement under integer dilation]
     \label{thm:area_law_template_dilated_row_displacement}
     \lean{TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_in_row_within,
         TNLean.PEPS.AreaLaw.Geometry.Template.exists_dilation_in_row_within}
@@ -38,7 +38,7 @@
     $(x,y)\in(S_a)_j$. If row $z$ of $(S_a)_j$ is nonempty and $|z-y|\le d$,
     then there is $(w,z)\in(S_a)_j$ with $|w-x|\le d$. The same holds for
     the undilated sample $S_a$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The four pairs of integer supporting inequalities describe the rows of
     $S_a$. Since their slopes lie in $\{-1,0,1\}$, clamping $x$ into a nonempty
@@ -49,7 +49,7 @@
     and clamping the horizontal coordinate within radius $j$ yields $(w,z)$.
 \end{proof}
 
-\begin{theorem}[Mixed squares of one dilated piece]
+\begin{lemma}[Mixed squares of one dilated piece]
     \label{thm:area_law_template_piece_mixed_count}
     \lean{TNLean.PEPS.AreaLaw.Geometry.Template.card_mixedDyadicIndices_sample_dilation_le}
     \leanok
@@ -61,7 +61,7 @@
     \end{align}
     This is the single-piece mixed-square bound in the proof of
     \cite[Lemma~9.4]{OpenAI2026AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_template_dilated_row_displacement}
     In an interior block of $u$ rows, every row of $(S_a)_j$ is nonempty.
@@ -79,7 +79,7 @@
     empty).
 \end{proof}
 
-\begin{theorem}[Mixed squares of a template and its shell]
+\begin{lemma}[Mixed squares of a template and its shell]
     \label{thm:area_law_template_shell_mixed_count}
     \lean{TNLean.PEPS.AreaLaw.Geometry.Template.card_mixedDyadicIndices_dilation_pieceCount_le,
         TNLean.PEPS.AreaLaw.Geometry.Template.card_mixedDyadicIndices_le,
@@ -97,7 +97,7 @@
         u|M_k(T_j)|            & \le2n+24N_0u, \\
         u|M_k(T_j\setminus T)| & \le3n+48N_0u.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_template_piece_mixed_count,thm:area_law_mixed_dyadic_boolean}
     Integer dilation commutes with the finite union of sampled
@@ -106,7 +106,7 @@
     $T_j\setminus T$ follows by subadditivity.
 \end{proof}
 
-\begin{theorem}[Selected shell squares below the cap]
+\begin{lemma}[Selected shell squares below the cap]
     \label{thm:area_law_template_shell_selected_count}
     \lean{TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_shell_below_cap_le}
     \leanok
@@ -114,7 +114,7 @@
     Suppose $C_{\rm tpl}\ge24$, $0\le j\le s_0$, $k<K$, and $u=2^k\le s_0$.
     The number $N_k$ of selected squares of side $u$ in the capped partition
     of $T_j\setminus T$ satisfies $uN_k\le14n$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_capped_mixed_parents,thm:area_law_template_shell_mixed_count}
     Each selected square at level $k<K$ has a mixed parent at level $k+1$, and
@@ -123,7 +123,7 @@
     $uN_k\le2(3n+96N_0u)\le14n$.
 \end{proof}
 
-\begin{theorem}[Selected core squares at and below the cap]
+\begin{lemma}[Selected core squares at and below the cap]
     \label{thm:area_law_template_core_selected_count}
     \lean{TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_at_cap_le,
         TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_below_cap_le}
@@ -138,7 +138,7 @@
         2^k N_k & \le4n \qquad (k<K).
     \end{align}
     This establishes the core-covering counts in the proof of Lemma~9.4.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_template_area,thm:area_law_capped_dyadic_partition,
         thm:area_law_capped_mixed_parents,thm:area_law_template_shell_mixed_count}

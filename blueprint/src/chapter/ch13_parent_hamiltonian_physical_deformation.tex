@@ -9,7 +9,7 @@ is a parent interaction for the deformed tensor, and the ground spaces of the tw
 chain Hamiltonians correspond one-to-one through $\Lambda^{\otimes N}$.
 
 The corresponding statement on an arbitrary finite graph is
-Theorem~\ref{thm:peps_region_parent_ground_space_physical_transport}.
+Lemma~\ref{thm:peps_region_parent_ground_space_physical_transport}.
 The local spaces on nonempty proper arcs of a cycle agree with the matrix
 product spaces used here. Identifying the full parent spaces, including
 checking the different boundary prescriptions when $L=N$, is a separate
@@ -111,7 +111,7 @@ comparison recorded in
     from multiplicativity applied to $\Lambda^{-1}\Lambda=\Lambda\Lambda^{-1}=\Id$.
 \end{proof}
 
-\begin{theorem}[Word evaluation under a physical map]\label{thm:physical_rotation_word}
+\begin{lemma}[Word evaluation under a physical map]\label{thm:physical_rotation_word}
     \lean{MPSTensor.evalWord_rotatePhysical_ofFn}
     \leanok
     \uses{def:physical_rotation}
@@ -123,7 +123,7 @@ comparison recorded in
         \label{eq:physical_rotation_word}
     \end{align}
     where $\tau$ ranges over words in the $d$-letter alphabet.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -149,10 +149,10 @@ comparison recorded in
     The state identity is Lemma~\ref{lem:mpv_rotate_physical}, written using
     the on-site tensor power.
     The boundary-map identity is the square-map instance of
-    Theorem~\ref{thm:spt_physical_embedding_boundary}.
+    Lemma~\ref{thm:spt_physical_embedding_boundary}.
 \end{proof}
 
-\begin{theorem}[Local ground space of the rotated tensor]\label{thm:ground_space_physical_rotation}
+\begin{lemma}[Local ground space of the rotated tensor]\label{thm:ground_space_physical_rotation}
     \lean{MPSTensor.groundSpace_rotatePhysical}
     \lean{MPSTensor.groundSpaceES_rotatePhysical}
     \leanok
@@ -164,12 +164,12 @@ comparison recorded in
     \end{align}
     and the same identity holds for the Hilbert-space realizations of the two
     local ground spaces.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:spt_physical_embedding_boundary}
-    Applying Theorem~\ref{thm:spt_physical_embedding_boundary} to the square map
+    Applying Lemma~\ref{thm:spt_physical_embedding_boundary} to the square map
     $\Lambda$, whose tensor power agrees with the on-site tensor power in the
     configuration basis, yields the identity.
 \end{proof}
@@ -184,13 +184,13 @@ comparison recorded in
     equals $G_L(A)$.
 \end{definition}
 
-\begin{theorem}[The canonical parent interaction is a parent interaction]\label{thm:canonical_parent_interaction_is_parent_interaction}
+\begin{lemma}[The canonical parent interaction is a parent interaction]\label{thm:canonical_parent_interaction_is_parent_interaction}
     \lean{MPSTensor.isParentInteraction_parentInteractionES}
     \leanok
     \uses{def:is_parent_interaction, rem:euclidean_local_projector_ingredients}
     The canonical parent interaction $P_L^{\mathrm{ES}}(A)$, the orthogonal
     projector onto $G_L(A)^\perp$, is a parent interaction on $L$ sites for $A$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -218,7 +218,7 @@ comparison recorded in
     \end{align}
 \end{definition}
 
-\begin{theorem}[The deformed interaction is a parent interaction]\label{thm:deformed_interaction_parent}
+\begin{lemma}[The deformed interaction is a parent interaction]\label{thm:deformed_interaction_parent}
     \lean{MPSTensor.deformedInteraction_isPositive}
     \lean{MPSTensor.ker_deformedInteraction}
     \lean{MPSTensor.IsParentInteraction.deformedInteraction}
@@ -228,7 +228,7 @@ comparison recorded in
     sites for $A$. Then the deformed interaction $h'$ of
     (\ref{eq:deformed_interaction}) is a parent interaction on $L$ sites for
     $\Lambda A$: $h'\ge0$ and $\ker h'=G_L(\Lambda A)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -314,7 +314,7 @@ comparison recorded in
     $\rho=\omega$.
 \end{proof}
 
-\begin{theorem}[Ground-space correspondence]\label{thm:chain_ground_space_physical_rotation}
+\begin{lemma}[Ground-space correspondence]\label{thm:chain_ground_space_physical_rotation}
     \lean{MPSTensor.map_chainGroundSpace_le_chainGroundSpace_rotatePhysical}
     \lean{MPSTensor.chainGroundSpace_rotatePhysical}
     \lean{MPSTensor.ker_parentHamiltonian_rotatePhysical}
@@ -334,7 +334,7 @@ comparison recorded in
     invertibility, the inclusion
     $\Lambda^{\otimes N}\mathcal G_{N,L}(A)\subseteq\mathcal G_{N,L}(\Lambda A)$
     still holds.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -349,18 +349,18 @@ comparison recorded in
     for every $\Lambda$. Applying it to $\Lambda^{-1}$ and $\Lambda A$ gives
     $(\Lambda^{-1})^{\otimes N}\mathcal G_{N,L}(\Lambda A)\subseteq\mathcal G_{N,L}(A)$,
     and composing with $\Lambda^{\otimes N}$ gives the reverse inclusion;
-    Theorem~\ref{thm:parent_hamiltonian_kernel_eq_chain_ground_space} then
+    Lemma~\ref{thm:parent_hamiltonian_kernel_eq_chain_ground_space} then
     yields the kernel equality.
 \end{proof}
 
-\begin{theorem}[Uniqueness of the ground state is preserved]\label{thm:unique_ground_state_physical_rotation}
+\begin{lemma}[Uniqueness of the ground state is preserved]\label{thm:unique_ground_state_physical_rotation}
     \lean{MPSTensor.onSiteTensorPowEquiv}
     \lean{MPSTensor.hasUniqueGroundState_chainGroundSpace_rotatePhysical}
     \leanok
     \uses{def:physical_rotation, def:chain_ground_space, def:has_unique_ground_state}
     Let $\Lambda\in\MN{d}$ be invertible. If $\dim\mathcal G_{N,L}(A)=1$, then
     $\dim\mathcal G_{N,L}(\Lambda A)=1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

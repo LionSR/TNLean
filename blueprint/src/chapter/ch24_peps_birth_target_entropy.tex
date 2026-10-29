@@ -1,7 +1,7 @@
 \section{Boundary entropy from birth-target information}
 \label{sec:area_law_birth_information}
 
-\begin{theorem}[Boundary entropy from birth-target information]
+\begin{lemma}[Boundary entropy from birth-target information]
     \label{thm:area_law_birth_information_boundary}
     \lean{TNLean.PEPS.AreaLaw.regionalEntropy_le_boundary_of_birth_information_estimates}
     \leanok
@@ -44,7 +44,7 @@
     mutual-information estimates in the proof of
     \cite[Theorem~1.1, lines~838--852 of Section~11]{OpenAI2026AreaLaw},
     where $Y_i=A\cap T_i$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_boundary_assembly}
     Since $Y_i\subseteq A$ and $Y_i\cap P_i=\varnothing$, the set $Y_i$ is
@@ -60,13 +60,13 @@
          & =c_I\sum_i n_i^{-100}
         \le c_Ic_S|\partial_\Lambda A|.
     \end{align*}
-    Applying Theorem~\ref{thm:area_law_boundary_assembly} with error
+    Applying Lemma~\ref{thm:area_law_boundary_assembly} with error
     coefficient $c_Ic_S$ and residual coefficient $c_D$, which combines
     Theorem~\ref{thm:area_law_two_family_entropy} with
-    Theorem~\ref{thm:area_law_entropy_dimension}, gives the bound.
+    Lemma~\ref{thm:area_law_entropy_dimension}, gives the bound.
 \end{proof}
 
-\begin{theorem}[Boundary entropy from neighborhood information]
+\begin{lemma}[Boundary entropy from neighborhood information]
     \label{thm:area_law_neighborhood_information_boundary}
     \lean{TNLean.PEPS.AreaLaw.regionalEntropy_le_boundary_of_neighborhood_information_estimates}
     \leanok
@@ -92,7 +92,7 @@
     This is the reduction from exterior-neighborhood mutual information to
     boundary entropy in
     \cite[Theorem~1.1, lines~815--852 of Section~11]{OpenAI2026AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_birth_information_boundary}
     Put $J_i=(\Lambda\setminus A)\cup P_i$.
@@ -103,6 +103,6 @@
         I_\Omega(Y_i:J_i) & \le I_\Omega(Y_i:\Lambda\setminus N_i)
         \le c_I n_i^{-100}.
     \end{align*}
-    Theorem~\ref{thm:area_law_birth_information_boundary} then yields the
+    Lemma~\ref{thm:area_law_birth_information_boundary} then yields the
     bound.
 \end{proof}

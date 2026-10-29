@@ -45,7 +45,7 @@ Definition~\ref{def:qc_site_expectation}.
     $\mathcal E_K(B-C)=\mathcal E_K(B)-\mathcal E_K(C)$.
 \end{definition}
 
-\begin{theorem}[Contraction of the root channels]
+\begin{lemma}[Contraction of the root channels]
     \label{thm:al_root_channel_contraction}
     \uses{def:al_local_root_channel}
     \lean{TNLean.PEPS.AreaLaw.norm_spectatorRootChannel_le,
@@ -58,7 +58,7 @@ Definition~\ref{def:qc_site_expectation}.
         \|\mathcal E_K(B)\|   & \le\|B\|,  \label{eq:al_shell_local_contraction} \\
         \|\mathcal E_K(B)-B\| & \le2\|B\|. \label{eq:al_shell_identity_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:al_site_expectation_order,def:al_local_root_channel}
@@ -71,7 +71,7 @@ Definition~\ref{def:qc_site_expectation}.
     (\ref{eq:al_shell_identity_bound}).
 \end{proof}
 
-\begin{theorem}[Channel error from localization of the constraint]
+\begin{lemma}[Channel error from localization of the constraint]
     \label{thm:al_root_channel_error}
     \uses{def:al_local_root_channel}
     \lean{TNLean.PEPS.AreaLaw.norm_spectatorRootChannel_sub_localRootChannel_le,
@@ -89,7 +89,7 @@ Definition~\ref{def:qc_site_expectation}.
          & \le4\bigl(\sqrt{\varepsilon_K}+\sqrt{\varepsilon_L}\bigr)\|B\|.
         \label{eq:al_shell_two_region_error}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:al_site_expectation_order,def:al_local_root_channel}
@@ -111,7 +111,7 @@ Definition~\ref{def:qc_site_expectation}.
     $\mathcal E(B)$ yields~(\ref{eq:al_shell_two_region_error}).
 \end{proof}
 
-\begin{theorem}[Fixing the regional commutant and intertwining commutators]
+\begin{lemma}[Fixing the regional commutant and intertwining commutators]
     \label{thm:al_root_channel_commutant}
     \uses{def:al_local_root_channel}
     \lean{TNLean.PEPS.AreaLaw.localRootChannel_eq_self_of_forall_commute,
@@ -127,7 +127,7 @@ Definition~\ref{def:qc_site_expectation}.
     \end{align}
     In particular, $[\widehat U,\mathcal E_K(B)]=\mathcal E_K([\widehat U,B])$
     for every $U\in\mathcal A_{I\setminus K}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:al_site_expectation_order,def:al_local_root_channel}
@@ -147,19 +147,19 @@ Definition~\ref{def:qc_site_expectation}.
     disjoint supports then give the case $U\in\mathcal A_{I\setminus K}$.
 \end{proof}
 
-\begin{theorem}[Oscillation outside the region]
+\begin{lemma}[Oscillation outside the region]
     \label{thm:al_root_channel_outside_oscillation}
     \uses{def:al_local_root_channel,def:qc_site_oscillation}
     \lean{TNLean.PEPS.AreaLaw.siteOscillation_localRootChannel_le_of_notMem}
     \leanok
     If $y\notin K$, then $d_y(\mathcal E_K(B))\le d_y(B)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_root_channel_commutant,thm:al_root_channel_contraction,
         thm:qc_site_oscillation_bounds}
     For every unitary $U\in\mathcal A_{\{y\}}\subseteq\mathcal A_{I\setminus K}$,
-    Theorems~\ref{thm:al_root_channel_commutant}
+    Lemmas~\ref{thm:al_root_channel_commutant}
     and~\ref{thm:al_root_channel_contraction} give
     \begin{align}
         \|[\widehat U,\mathcal E_K(B)]\|
@@ -191,7 +191,7 @@ Definition~\ref{def:qc_site_expectation}.
     so $\Delta_l(B-C)=\Delta_l(B)-\Delta_l(C)$.
 \end{definition}
 
-\begin{theorem}[Norm bounds for the channel shells]
+\begin{lemma}[Norm bounds for the channel shells]
     \label{thm:al_channel_shell_norm}
     \uses{def:al_local_channel_shell}
     \lean{TNLean.PEPS.AreaLaw.norm_localRootChannelShell_zero_le,
@@ -211,7 +211,7 @@ Definition~\ref{def:qc_site_expectation}.
         +\sqrt{\varepsilon_{\rm prev}}\bigr)\|B\|.
         \label{eq:al_shell_successor_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_root_channel_contraction,thm:al_root_channel_error}
@@ -219,23 +219,23 @@ Definition~\ref{def:qc_site_expectation}.
     (\ref{eq:al_shell_two_region_error}) at $(K_{l+1},K_l)$.
 \end{proof}
 
-\begin{theorem}[Shells vanish on the physical regional commutant]
+\begin{lemma}[Shells vanish on the physical regional commutant]
     \label{thm:al_channel_shell_commutant}
     \uses{def:al_local_channel_shell}
     \lean{TNLean.PEPS.AreaLaw.localRootChannelShell_eq_zero_of_forall_commute}
     \leanok
     Suppose $K_l\subseteq K_m$ for $l\le m$. If $[B,\widehat A]=0$ for all
     $A\in\mathcal A_{K_l}$, then $\Delta_l(B)=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_root_channel_commutant,def:al_local_channel_shell}
-    By Theorem~\ref{thm:al_root_channel_commutant}, $\mathcal E_0(B)=B$ when
+    By Lemma~\ref{thm:al_root_channel_commutant}, $\mathcal E_0(B)=B$ when
     $l=0$, and $\mathcal A_{K_m}\subseteq\mathcal A_{K_{m+1}}$ gives
     $\mathcal E_{m+1}(B)=B=\mathcal E_m(B)$ when $l=m+1$.
 \end{proof}
 
-\begin{theorem}[Physical-site oscillation bound for channel shells]
+\begin{lemma}[Physical-site oscillation bound for channel shells]
     \label{thm:al_channel_shell_oscillation}
     \uses{def:al_local_channel_shell,def:qc_site_oscillation}
     \lean{TNLean.PEPS.AreaLaw.norm_localRootChannelShell_zero_le_sum_siteOscillation,
@@ -255,7 +255,7 @@ Definition~\ref{def:qc_site_expectation}.
         \sum_{y\in K_{l+1}}d_y(B).
         \label{eq:al_shell_successor_oscillation}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_channel_shell_norm,thm:al_channel_shell_commutant,
@@ -264,9 +264,9 @@ Definition~\ref{def:qc_site_expectation}.
     Following \cite[Section~10]{OpenAI2026AreaLaw}, let
     $\|\Delta_m(C)\|\le\eta\|C\|$ with $\eta=2$ ($m=0$) or
     $\eta=4(\sqrt{\varepsilon_{\rm next}}+\sqrt{\varepsilon_{\rm prev}})$
-    ($m=l+1$) from Theorem~\ref{thm:al_channel_shell_norm}. For
+    ($m=l+1$) from Lemma~\ref{thm:al_channel_shell_norm}. For
     $\overline B=E_{I\setminus K_m}^{\mathcal K}(B)$,
-    Theorems~\ref{thm:qc_spectator_commutant} and~\ref{thm:qc_spectator_error}
+    Lemmas~\ref{thm:qc_spectator_commutant} and~\ref{thm:qc_spectator_error}
     give, for all $A\in\mathcal A_{K_m}$,
     \begin{align}
         [\overline B,\widehat A] & =0,
@@ -274,7 +274,7 @@ Definition~\ref{def:qc_site_expectation}.
         \|B-\overline B\|        & \le\sum_{y\in K_m}d_y(B).
         \label{eq:al_shell_averaging_error}
     \end{align}
-    By Theorem~\ref{thm:al_channel_shell_commutant}, $\Delta_m(\overline B)=0$,
+    By Lemma~\ref{thm:al_channel_shell_commutant}, $\Delta_m(\overline B)=0$,
     so~(\ref{eq:al_shell_averaging_error}) yields
     \begin{align}
         \|\Delta_m(B)\|

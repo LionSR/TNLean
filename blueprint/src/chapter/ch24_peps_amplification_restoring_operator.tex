@@ -44,7 +44,7 @@ $\eta=\Omega\otimes\sum_x\sqrt{p_x}|x\rangle_{s'}|x\rangle_{e'}$.
     $\Omega$ and $Q$ determine $R_0$, $B_0$, $\phi$, and $\eta$.
 \end{definition}
 
-\begin{theorem}[Mutual information of the collar]
+\begin{lemma}[Mutual information of the collar]
     \label{thm:al_amp_restoring_purity}
     \lean{TNLean.PEPS.AreaLaw.mutualInformation_compl_eq}
     \leanok
@@ -53,13 +53,13 @@ $\eta=\Omega\otimes\sum_x\sqrt{p_x}|x\rangle_{s'}|x\rangle_{e'}$.
     \begin{align*}
         I_\Omega(X:Z')=S_\Omega(X)+S_\Omega(S_0)-S_\Omega(Y).
     \end{align*}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Complementary regions of a pure state have equal entropy, so
     $S_\Omega(Z')=S_\Omega(S_0)$ and $S_\Omega(X\cup Z')=S_\Omega(Y)$.
 \end{proof}
 
-\begin{theorem}[Spectral inequalities of the restoring operator]
+\begin{lemma}[Spectral inequalities of the restoring operator]
     \label{thm:al_amp_restoring_spectral}
     \lean{TNLean.PEPS.AreaLaw.restoringCutProjection_le_and_typicalProjection_le,
         TNLean.PEPS.AreaLaw.restoringCutProjection_isStarProjection_commute,
@@ -72,7 +72,7 @@ $\eta=\Omega\otimes\sum_x\sqrt{p_x}|x\rangle_{s'}|x\rangle_{e'}$.
         Q\le\mathrm e^{S_\Omega(S_0)+w}\rho_{S_0},\qquad
         T_Y\rho_YT_Y\le\mathrm e^{-S_\Omega(Y)+w}T_Y.
     \end{align*}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:al_amp_typical_projection_cut}
     Both $Q$ and $T_Y$ are spectral projections of the corresponding reduced
@@ -82,7 +82,7 @@ $\eta=\Omega\otimes\sum_x\sqrt{p_x}|x\rangle_{s'}|x\rangle_{e'}$.
     eigenvalue by eigenvalue in a common eigenbasis.
 \end{proof}
 
-\begin{theorem}[Action of the three typical projections on the ground state]
+\begin{lemma}[Action of the three typical projections on the ground state]
     \label{thm:al_amp_restoring_failure}
     \lean{TNLean.PEPS.AreaLaw.norm_selectedProjection_restoringVector_sub_le,
         TNLean.PEPS.AreaLaw.norm_typicalProjection_restoringVector_sub_le,
@@ -92,14 +92,14 @@ $\eta=\Omega\otimes\sum_x\sqrt{p_x}|x\rangle_{s'}|x\rangle_{e'}$.
     \uses{def:al_amp_restoring_coordinates}
     If $1-\operatorname{tr}(\rho_AP_A^w)\le\delta$ for $A=X,Y,S_0$, then each
     of $P_X$, $T_Y$, and $Q$ moves $\Omega$ by at most $\sqrt\delta$ in norm.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:al_amp_typical_projection_cut}
     For any orthogonal projection $P$ acting on a subsystem $A$,
     $\|P\Omega-\Omega\|^2=1-\operatorname{tr}(\rho_AP)$.
 \end{proof}
 
-\begin{theorem}[Three estimates for the restoring operator]
+\begin{lemma}[Three estimates for the restoring operator]
     \label{thm:al_amp_restoring_estimates}
     \lean{TNLean.PEPS.AreaLaw.restoringOperator_estimates}
     \leanok
@@ -114,24 +114,24 @@ $\eta=\Omega\otimes\sum_x\sqrt{p_x}|x\rangle_{s'}|x\rangle_{e'}$.
         3\sqrt\delta+\|(L')^\dagger\Omega-\Omega\|,
     \end{align*}
     where the third inequality holds for every physical operator $L'$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:al_amp_restoring_purity, thm:al_amp_restoring_spectral,
         thm:al_amp_restoring_failure}
     Selected eigenvalues satisfy $p_x^{-1}\le\mathrm e^{S_\Omega(X)+w}$. By
-    Theorem~\ref{thm:al_amp_restoring_spectral}, the Gram
+    Lemma~\ref{thm:al_amp_restoring_spectral}, the Gram
     operators of $R_0$ and $B_0$ are bounded above by
     $\mathrm e^{S_\Omega(X)+S_\Omega(S_0)-S_\Omega(Y)+3w}=M_0^2$, where the
-    equality uses Theorem~\ref{thm:al_amp_restoring_purity}. To bound
+    equality uses Lemma~\ref{thm:al_amp_restoring_purity}. To bound
     $\|P_\Omega R_0\phi\|$, set
     $M_X=\operatorname{tr}_Y[(I_X\otimes T_Y)\rho_{S_0}Q]$; since $Q$ commutes
     with $\rho_{S_0}$, we have $0\le M_X\le\rho_X$, and $\rho_X$ is diagonal in
     the basis $\{|x\rangle\}$. The adjoint error bound follows by inserting
     $P_X$, $T_Y$, and $Q$ in turn on $\Omega$ and applying
-    Theorem~\ref{thm:al_amp_restoring_failure}.
+    Lemma~\ref{thm:al_amp_restoring_failure}.
 \end{proof}
 
-\begin{theorem}[The restoring operator at large scales]
+\begin{lemma}[The restoring operator at large scales]
     \label{thm:al_amp_restoring_large_scales}
     \lean{TNLean.PEPS.AreaLaw.exists_restoringOperator_estimates}
     \leanok
@@ -143,12 +143,12 @@ $\eta=\Omega\otimes\sum_x\sqrt{p_x}|x\rangle_{s'}|x\rangle_{e'}$.
     with a unit ground vector $\Omega$ of full-system gap $\Delta$, and every
     pair of disjoint subsets $X,Y$ such that $X$, $Y$, and $S_0$ each have at
     most $C_0n$ crossing edges, the estimates of
-    Theorem~\ref{thm:al_amp_restoring_estimates} hold at width $w=n^{3/5}$ with
+    Lemma~\ref{thm:al_amp_restoring_estimates} hold at width $w=n^{3/5}$ with
     $3\sqrt\delta=3n^{-K}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:al_amp_typical_projectors}
-    Theorem~\ref{thm:al_amp_typical_projectors} bounds the three tail weights
+    Lemma~\ref{thm:al_amp_typical_projectors} bounds the three tail weights
     $1-\operatorname{tr}(\rho_AP_A^w)$ by $\delta=n^{-2K}$, and
     $\sqrt{n^{-2K}}=n^{-K}$.
 \end{proof}

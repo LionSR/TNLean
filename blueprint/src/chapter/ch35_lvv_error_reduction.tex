@@ -4,7 +4,7 @@
 The error-reduction argument of Landau, Vazirani and
 Vidick~\cite[Claim~2.11, source lines 580--592]{Landau2015Polynomial} applies
 the left factors of an approximate ground projection to a viable set.
-Theorem~\ref{thm:lvv_mps_error_reduction} is the deterministic part of this
+Lemma~\ref{thm:lvv_mps_error_reduction} is the deterministic part of this
 claim: it takes the operator approximation as a hypothesis and does not
 construct the sampled operator. Normalizing its output requires the lower norm
 estimate recorded in~\cite{gap:lvv13_error_reduction_witness_norm}.
@@ -52,7 +52,7 @@ estimate recorded in~\cite{gap:lvv13_error_reduction_witness_norm}.
     $(j,s)\mapsto A_js$ on $J\times S$.
 \end{proof}
 
-\begin{theorem}[Size, bonds and viability after error reduction]
+\begin{lemma}[Size, bonds and viability after error reduction]
     \label{thm:lvv_mps_error_reduction}
     \lean{TNLean.MPS.AreaLaw.IsViableMPS.errorReduction_of_norm_sub_groundProjection_le}
     \leanok
@@ -68,7 +68,7 @@ estimate recorded in~\cite{gap:lvv13_error_reduction_witness_norm}.
     This is the deterministic part
     of~\cite[Claim~2.11, source lines 580--592]{Landau2015Polynomial}, with the
     error $4\eta$ of~\cite{gap:lvv13_error_reduction_witness_norm}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:lvv_error_reduction_support, lem:lvv_projection_error_reduction,

@@ -60,7 +60,7 @@ spectral-gap assertion.
     (\ref{eq:pvbs_word}).
 \end{proof}
 
-\begin{theorem}[Open PVBS matrix-product space]
+\begin{lemma}[Open PVBS matrix-product space]
     \label{thm:pvbs_open_space}
     \lean{MPSTensor.groundSpaceMap_pvbsTensor}
     \lean{MPSTensor.mem_groundSpace_pvbsTensor_iff}
@@ -72,7 +72,7 @@ spectral-gap assertion.
     The full boundary matrix-product space is
     $\mathcal G_N=\operatorname{span}\{\Omega_N,\Psi_N(q)\}$.
     It has dimension two for every $N\ge1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Taking the trace against a boundary matrix $X$ gives
@@ -82,7 +82,7 @@ spectral-gap assertion.
     linear independence.
 \end{proof}
 
-\begin{theorem}[Open PVBS parent-Hamiltonian ground space]
+\begin{lemma}[Open PVBS parent-Hamiltonian ground space]
     \label{thm:pvbs_open_parent}
     \lean{MPSTensor.pvbs_pair_constraints}
     \lean{MPSTensor.mem_groundSpace_pvbs_two_iff}
@@ -94,7 +94,7 @@ spectral-gap assertion.
     \uses{thm:pvbs_open_space}
     The open nearest-neighbour parent Hamiltonian has kernel $\mathcal G_N$
     and ground-state dimension two for every $N\ge2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     A two-site vector satisfies the local constraint precisely when
@@ -108,7 +108,7 @@ spectral-gap assertion.
     Hamiltonian.
 \end{proof}
 
-\begin{theorem}[Periodic PVBS vacuum uniqueness]
+\begin{lemma}[Periodic PVBS vacuum uniqueness]
     \label{thm:pvbs_periodic_parent}
     \lean{MPSTensor.chainGroundSpace_pvbs_le_groundSpace}
     \lean{MPSTensor.pvbsVacuum_mem_chainGroundSpace}
@@ -124,7 +124,7 @@ spectral-gap assertion.
     If $N\ge2$ and $q^N\ne1$, the periodic parent Hamiltonian has kernel
     $\operatorname{span}\{\Omega_N\}$ and ground-state dimension one.
     In particular, this conclusion holds at every such length if $|q|\ne1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Every periodic ground vector satisfies the nonwrapping constraints and
@@ -134,7 +134,7 @@ spectral-gap assertion.
     vacuum $\Omega_N$ satisfies every cyclic constraint.
 \end{proof}
 
-\begin{theorem}[Critical W state and geometric localization]
+\begin{lemma}[Critical W state and geometric localization]
     \label{thm:pvbs_boundary_regimes}
     \lean{MPSTensor.pvbsTensor_one}
     \lean{MPSTensor.pvbsEdge_one}
@@ -151,7 +151,7 @@ spectral-gap assertion.
     nonvacuum zero-energy state. For $|q|<1$, amplitudes decay as $|q|^k$
     from the left edge. For $|q|>1$, the amplitude $k$ sites from the right
     edge relative to the last-site amplitude equals $q^{-k}$ and tends to zero.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Substitution gives the W tensor at $q=1$ and verifies the two periodic

@@ -53,7 +53,7 @@ produces the global gauge family that relates the two tensors.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Kernel descent gives edge-middle injectivity]%
+\begin{lemma}[Kernel descent gives edge-middle injectivity]%
     \label{thm:peps_edgeMiddleTensorInjective_of_kernelDescent}
     \lean{TNLean.PEPS.EdgeMiddleKernelDescentData.edgeMiddleTensorInjective,
         TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_kernelDescent}
@@ -62,17 +62,17 @@ produces the global gauge family that relates the two tensors.
     Let $e=(u,v)$ and $M_e=V\setminus\{u,v\}$. Given an edge-middle kernel
     descent datum, $\inj(T_{A,M_e})$ holds; if $A$ is also vertex-injective,
     then $\inj(T_{A,u})\wedge\inj(T_{A,M_e})\wedge\inj(T_{A,v})$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     If $\sum_{\rho}c_{\rho}T_{A,M_e}^{\rho}(\tau)=0$ for all $\tau$, then
     Definition~\ref{def:peps_edgeMiddleKernelDescentData} and
     Lemma~\ref{lem:peps_finiteRegionKernelDescent} give
     $K_c(M_e)\Longrightarrow K_c(\varnothing)\Longrightarrow\forall\rho,\ c_{\rho}=0$,
-    proving $\inj(T_{A,M_e})$. Theorem~\ref{thm:peps_edgeBlockedThreeSiteInjective_of_middle}
+    proving $\inj(T_{A,M_e})$. Lemma~\ref{thm:peps_edgeBlockedThreeSiteInjective_of_middle}
     then gives the three-site claim.
 \end{proof}
 
-\begin{theorem}[Edge blocking preserves injectivity]%
+\begin{lemma}[Edge blocking preserves injectivity]%
     \label{thm:peps_edgeBlockedThreeSiteInjective}
     \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}
     \leanok
@@ -84,7 +84,7 @@ produces the global gauge family that relates the two tensors.
     complement configuration space can force $T_{A,V\setminus\{u,v\}}=0$ by
     Lemmas~\ref{lem:peps_edgeMiddleTensorFamily_eq_zero_of_isEmpty}
     and~\ref{lem:peps_not_edgeMiddleTensorInjective_of_isEmpty}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_edgeMiddleTensorInjective_of_kernelDescent, lem:peps_localCoeff_eq_zero_of_contract_zero}
     Fix $e=(u,v)$ and $M_e=V\setminus\{u,v\}$. For any relation
@@ -96,10 +96,10 @@ produces the global gauge family that relates the two tensors.
     gives $K_c(S)\Longrightarrow K_c(S\setminus\{j\})$. Since $\dim A_f>0$,
     residual boundary configurations lift to $\mc C_e$, giving
     $K_c(\varnothing)\Longrightarrow\forall\rho,\ c_{\rho}=0$.
-    Theorem~\ref{thm:peps_edgeMiddleTensorInjective_of_kernelDescent} concludes.
+    Lemma~\ref{thm:peps_edgeMiddleTensorInjective_of_kernelDescent} concludes.
 \end{proof}
 
-\begin{theorem}[Local virtual insertion realized physically on either endpoint]%
+\begin{lemma}[Local virtual insertion realized physically on either endpoint]%
     \label{thm:peps_virtualInsertionPhysicalRealization}
     \lean{TNLean.PEPS.edgeVirtualInsertionPhysicalRealization}
     \leanok
@@ -142,13 +142,13 @@ produces the global gauge family that relates the two tensors.
     % This is the local endpoint part of Molnar2018NormalPEPS, Section 3. The corresponding
     % coefficient identity is
     % thm:peps_edgeInsertedCoeff_endpointPhysicalRealization.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:peps_localIncidentMatrixOp_physicalRealization} at
+    Apply Lemma~\ref{thm:peps_localIncidentMatrixOp_physicalRealization} at
     the two endpoint incidences of $e=(u,v)$.
 \end{proof}
 
-\begin{theorem}[Left-endpoint projected recovery]%
+\begin{lemma}[Left-endpoint projected recovery]%
     \label{thm:peps_edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
     \lean{TNLean.PEPS.edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eqAt}
     \leanok
@@ -156,13 +156,13 @@ produces the global gauge family that relates the two tensors.
     Let $e=(u,v)$ and assume $\inj(\Phi_u)$. Then for any physical operator $O_1$
     at $u$,
     $\Psi_uO_1\Phi_u=T_{u,e}(M^{\mathsf T})\iff P_uO_1P_u=\Phi_uT_{u,e}(M^{\mathsf T})\Psi_u$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Specialize Theorem~\ref{thm:peps_localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
+    Specialize Lemma~\ref{thm:peps_localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
     to $T_{u,e}(M^{\mathsf T})$ at the left endpoint $u$.
 \end{proof}
 
-\begin{theorem}[Right-endpoint projected recovery]%
+\begin{lemma}[Right-endpoint projected recovery]%
     \label{thm:peps_edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
     \lean{TNLean.PEPS.edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eqAt}
     \leanok
@@ -170,13 +170,13 @@ produces the global gauge family that relates the two tensors.
     Let $e=(u,v)$ and assume $\inj(\Phi_v)$. Then for any physical operator $O_2$
     at $v$,
     $\Psi_vO_2\Phi_v=T_{v,e}(M)\iff P_vO_2P_v=\Phi_vT_{v,e}(M)\Psi_v$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Specialize Theorem~\ref{thm:peps_localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
+    Specialize Lemma~\ref{thm:peps_localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
     to $T_{v,e}(M)$ at the right endpoint $v$.
 \end{proof}
 
-\begin{theorem}[Endpoint recovery of a common virtual insertion]%
+\begin{lemma}[Endpoint recovery of a common virtual insertion]%
     \label{thm:peps_edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
     \lean{TNLean.PEPS.edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
     \leanok
@@ -187,13 +187,13 @@ produces the global gauge family that relates the two tensors.
     $\Psi_uO_1\Phi_u=T_{u,e}(M^{\mathsf T})$ and
     $\Psi_vO_2\Phi_v=T_{v,e}(M)$, where $T_{w,e}(N)$ acts by $N$ on the leg of
     $e$ and by $\Id$ on all other legs incident to $w$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Combine Theorems~\ref{thm:peps_edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
+    Combine Lemmas~\ref{thm:peps_edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
     and~\ref{thm:peps_edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}.
 \end{proof}
 
-\begin{theorem}[Endpoint physical-to-virtual recovery under image preservation]%
+\begin{lemma}[Endpoint physical-to-virtual recovery under image preservation]%
     \label{thm:peps_edgePhysicalToVirtualInsertion_of_projected_realization_eq}
     \lean{TNLean.PEPS.edgePhysicalToVirtualInsertion_of_projected_realization_eq}
     \leanok
@@ -203,14 +203,14 @@ produces the global gauge family that relates the two tensors.
     $P_vO_2P_v=\Phi_vT_{v,e}(M)\Psi_v$, $O_1(\operatorname{im}\Phi_u)\subseteq\operatorname{im}\Phi_u$,
     and $O_2(\operatorname{im}\Phi_v)\subseteq\operatorname{im}\Phi_v$, then
     $O_1\Phi_u=\Phi_uT_{u,e}(M^{\mathsf T})$ and $O_2\Phi_v=\Phi_vT_{v,e}(M)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Combine Theorem~\ref{thm:peps_edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
-    with Theorem~\ref{thm:peps_localVirtualOpOfPhysicalOp_realizes_of_projector}
+    Combine Lemma~\ref{thm:peps_edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
+    with Lemma~\ref{thm:peps_localVirtualOpOfPhysicalOp_realizes_of_projector}
     at $u$ and $v$.
 \end{proof}
 
-\begin{theorem}[Right-endpoint physical realization of the inserted coefficient]%
+\begin{lemma}[Right-endpoint physical realization of the inserted coefficient]%
     \label{thm:peps_edgeInsertedCoeff_rightPhysicalRealization}
     \lean{TNLean.PEPS.edgeInsertedCoeff_eq_sum_right_physicalRealization}
     \leanok
@@ -224,16 +224,16 @@ produces the global gauge family that relates the two tensors.
         O_2(A_v(\beta_v))_{\sigma_v}.
         \label{eq:peps_edgeInsertedCoeff_right_realization}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expand $O_2(A_v(\beta_v))_{\sigma_v}$ via
-    Theorem~\ref{thm:peps_localTensorMap_localIncidentMatrixOp_single} and
+    Lemma~\ref{thm:peps_localTensorMap_localIncidentMatrixOp_single} and
     reindex the sum over $(\beta,j)$ along
     Definition~\ref{def:peps_edgeBoundaryRightIndexEquivInsertedBoundaryConfig}
     to match Definition~\ref{def:peps_edgeInsertedCoeff}.
 \end{proof}
 
-\begin{theorem}[Left-endpoint physical realization of the inserted coefficient]%
+\begin{lemma}[Left-endpoint physical realization of the inserted coefficient]%
     \label{thm:peps_edgeInsertedCoeff_leftPhysicalRealization}
     \lean{TNLean.PEPS.edgeInsertedCoeff_eq_sum_left_physicalRealization}
     \leanok
@@ -247,16 +247,16 @@ produces the global gauge family that relates the two tensors.
         A_v(\beta_v)_{\sigma_v}.
         \label{eq:peps_edgeInsertedCoeff_left_realization}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expand $O_1(A_u(\beta_u))_{\sigma_u}$ via
-    Theorem~\ref{thm:peps_localTensorMap_localIncidentMatrixOp_single}, use
+    Lemma~\ref{thm:peps_localTensorMap_localIncidentMatrixOp_single}, use
     $(M^{\mathsf T})_{ji}=M_{ij}$, and reindex along
     Definition~\ref{def:peps_edgeBoundaryLeftIndexEquivInsertedBoundaryConfig}
     to match Definition~\ref{def:peps_edgeInsertedCoeff}.
 \end{proof}
 
-\begin{theorem}[Endpoint physical realizations of the inserted coefficient]%
+\begin{lemma}[Endpoint physical realizations of the inserted coefficient]%
     \label{thm:peps_edgeInsertedCoeff_endpointPhysicalRealization}
     \lean{TNLean.PEPS.edgeInsertedCoeff_endpointPhysicalRealization}
     \leanok
@@ -267,14 +267,14 @@ produces the global gauge family that relates the two tensors.
     $O_2\Phi_v=\Phi_vT_{v,e}(M)$, and both
     (\ref{eq:peps_edgeInsertedCoeff_right_realization}) and
     (\ref{eq:peps_edgeInsertedCoeff_left_realization}) for all $\sigma$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Combine Theorem~\ref{thm:peps_localIncidentMatrixOp_physicalRealization} at
-    $u$ and $v$ with Theorems~\ref{thm:peps_edgeInsertedCoeff_leftPhysicalRealization}
+    Combine Lemma~\ref{thm:peps_localIncidentMatrixOp_physicalRealization} at
+    $u$ and $v$ with Lemmas~\ref{thm:peps_edgeInsertedCoeff_leftPhysicalRealization}
     and~\ref{thm:peps_edgeInsertedCoeff_rightPhysicalRealization}.
 \end{proof}
 
-\begin{theorem}[Equal neighboring physical actions recover a virtual insertion]%
+\begin{lemma}[Equal neighboring physical actions recover a virtual insertion]%
     \label{thm:peps_physical_to_virtual_insertion}
     \lean{TNLean.PEPS.physical_to_virtual_insertion}
     \leanok
@@ -327,7 +327,7 @@ produces the global gauge family that relates the two tensors.
             \tn[skin=ring, species=operator, at=on bond-1-1-1-2 0.5]{W}
         \end{tenkz}
     \end{center}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Injectivity of $T_{A,M_e}$ strips $C_{\mathrm{mid}}$ from
     (\ref{eq:peps_equal_neighboring_physical_actions}), leaving
@@ -340,7 +340,7 @@ produces the global gauge family that relates the two tensors.
     $M=W$.
 \end{proof}
 
-\begin{theorem}[Injectivity of an inserted edge coefficient]%
+\begin{lemma}[Injectivity of an inserted edge coefficient]%
     \label{thm:peps_edgeInsertedCoeff_injective}
     \lean{TNLean.PEPS.edgeInsertedCoeff_injective}
     \leanok
@@ -348,14 +348,14 @@ produces the global gauge family that relates the two tensors.
     Assume edge-blocked three-site injectivity of $B$ at $e$ and
     $\forall f\in E,\ D_B(f)>0$. If $M,M'\in\MN{D_B(e)}$ satisfy
     $\forall\sigma,\ C_B(e,M;\sigma)=C_B(e,M';\sigma)$, then $M=M'$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Realizing $M'^{\mathsf T}$ by $O_1$ at $u$ via
     (\ref{eq:peps_edgeInsertedCoeff_left_realization}) and $M$ by $O_2$ at $v$
     via (\ref{eq:peps_edgeInsertedCoeff_right_realization}), the hypothesis
     $C_B(e,M';\sigma)=C_B(e,M;\sigma)$ gives
     (\ref{eq:peps_equal_neighboring_physical_actions}) for $B$.
-    Theorem~\ref{thm:peps_physical_to_virtual_insertion} yields a single matrix
+    Lemma~\ref{thm:peps_physical_to_virtual_insertion} yields a single matrix
     realizing both $O_1$ and $O_2$, which endpoint injectivity identifies with
     both $M'$ and $M$.
 \end{proof}

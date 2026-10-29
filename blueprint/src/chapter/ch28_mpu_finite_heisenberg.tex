@@ -1,7 +1,7 @@
 \subsection{Actual finite Heisenberg action on complete blocks}
 \label{sec:mpu_finite_heisenberg}
 
-\begin{theorem}[Finite conjugation with arbitrary complete-block tail]
+\begin{lemma}[Finite conjugation with arbitrary complete-block tail]
     \label{thm:mpu_finite_heisenberg_complete_block}
     \lean{MPOTensor.twoSiteHeisenbergInputEquiv,
         MPOTensor.twoSiteHeisenbergOutputEquiv,
@@ -29,7 +29,7 @@
     the standard-form and finite-conjugation formulas in
     \cite[lines~603--622 and~2300--2306]{Cirac2017MPU}, under the scope restriction and remaining
     assembly recorded in \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     Fixing all exterior indices gives the already derived three-block
     trace intertwiner, with the arbitrary tail retained as a virtual word
@@ -40,7 +40,7 @@
     exterior word is removed in this argument.
 \end{proof}
 
-\begin{theorem}[Actual original-site conjugation with arbitrary residuals]
+\begin{lemma}[Actual original-site conjugation with arbitrary residuals]
     \label{thm:mpu_finite_heisenberg_original_residuals}
     \lean{MPOTensor.originalSiteHeisenbergInputEquiv,
         MPOTensor.originalSiteHeisenbergOutputEquiv,
@@ -68,7 +68,7 @@
     This is the one-window finite-conjugation consequence of
     \cite[lines~2300--2306]{Cirac2017MPU}, with the remaining scope recorded
     in \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     The actual direct-block equivalence identifies the three complete
     middle blocks with their standard-form letters. The original residual
@@ -80,7 +80,7 @@
 \end{proof}
 
 
-\begin{theorem}[A fixed finite-window output under arbitrary buffering]
+\begin{lemma}[A fixed finite-window output under arbitrary buffering]
     \label{thm:mpu_finite_heisenberg_fixed_window}
     \lean{MPOTensor.bufferedWindowConfigEquiv,
         MPOTensor.bufferedWindowMatrix,
@@ -104,7 +104,7 @@
     \cite[lines~2300--2306]{Cirac2017MPU}; finite-region assembly is
     given below, with the inverse and completion scope recorded in
     \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     Separate the prefix and suffix words from the complete central
     window. In these coordinates, the exterior Kronecker identity is
@@ -114,7 +114,7 @@
 \end{proof}
 
 
-\begin{theorem}[Canonical local-observable buffering for one window]
+\begin{lemma}[Canonical local-observable buffering for one window]
     \label{thm:mpu_finite_heisenberg_canonical_window}
     \lean{SpinChain.intervalCoordinates_localInclusion_eq_bufferedWindowMatrix,
         SpinChain.finiteChainLocalObservable_originalSiteHeisenbergWindow}
@@ -132,7 +132,7 @@
     \cite[lines~2300--2306]{Cirac2017MPU}; finite-region assembly is
     given below, with the inverse and completion scope recorded in
     \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     Equality of the complementary coordinates is precisely equality
     of both exterior words, so canonical local inclusion is the same
@@ -143,7 +143,7 @@
 \end{proof}
 
 
-\begin{theorem}[The full central interval algebra has a buffered local action]
+\begin{lemma}[The full central interval algebra has a buffered local action]
     \label{thm:mpu_finite_heisenberg_full_central_interval}
     \lean{MPOTensor.originalSiteHeisenbergCentreEquiv,
         SpinChain.intervalCoordinates_centralInclusion_originalSiteHeisenbergInputWindow,
@@ -161,7 +161,7 @@
     family and completion remain separate from this instance of
     \cite[lines~2300--2306]{Cirac2017MPU}; see
     \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     The direct-block decoding bijection identifies the middle input
     coordinates with all configurations on the central $2k$ sites.
@@ -174,7 +174,7 @@
 \end{proof}
 
 
-\begin{theorem}[Actual buffering compatibility on arbitrary finite support]
+\begin{lemma}[Actual buffering compatibility on arbitrary finite support]
     \label{thm:mpu_finite_heisenberg_arbitrary_region_compatibility}
     \lean{SpinChain.finiteChainLocalObservable_eq_of_twoSiteStandardForm_buffers}
     \notready
@@ -195,7 +195,7 @@
     a bare MPU, the inverse family, completion, and the source radius
     remain separate as recorded in
     \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     For $x\in\Lambda$, place its one-site algebra in the complete central
     interval $[x,x+2k)$. The preceding theorem gives one fixed output
@@ -209,7 +209,7 @@
 \end{proof}
 
 
-\begin{theorem}[Actual compatible norm-preserving forward local action]
+\begin{lemma}[Actual compatible norm-preserving forward local action]
     \label{thm:mpu_finite_heisenberg_forward_local_action}
     \lean{SpinChain.finiteChainLocalObservable_localInclusion,
         SpinChain.bufferedMPULocalAction,
@@ -230,7 +230,7 @@
     \cite[lines~2292--2306]{Cirac2017MPU}; the inverse and completed
     automorphism remain separate as in
     \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     The largest absolute site coordinate of a finite support is finite.
     Adding $4k+1$ on both sides gives a canonical chain of length greater
@@ -244,7 +244,7 @@
 \end{proof}
 
 
-\begin{theorem}[Completed actual isometric forward endomorphism]
+\begin{lemma}[Completed actual isometric forward endomorphism]
     \label{thm:mpu_finite_heisenberg_completed_forward_action}
     \lean{SpinChain.bufferedMPUAlgebraicAction_isometry,
         SpinChain.bufferedMPUQuasiLocalAction,
@@ -264,7 +264,7 @@
     \cite[lines~2296--2306]{Cirac2017MPU}; the inverse and full source
     automorphism statement remain separate as in
     \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     Norm preservation makes the actual algebraic-local homomorphism an
     isometry. The uniform completion extends its ring homomorphism;
