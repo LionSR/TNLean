@@ -18,6 +18,7 @@ import TNLean.QCA.BlockingIntervalCoordinates
 import TNLean.QCA.BlockingQCA
 import TNLean.QCA.BlockingStateTransport
 import TNLean.QCA.BlockingTranslation
+import TNLean.QCA.CanonicalAdjacentSupportGeneration
 import TNLean.QCA.CommutingStarSubalgebraKronecker
 import TNLean.QCA.CompatibleLocalAutomorphism
 import TNLean.QCA.CompatibleLocalState

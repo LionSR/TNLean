@@ -107,7 +107,8 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
 \begin{theorem}[Generation of each image pair by its support factors]
     \label{thm:qca_image_pair_adjacent_generation}
     \lean{SpinChain.PropagatesWithin.exists_adjacentSupportJoin_matrix,
-        SpinChain.PropagatesWithin.range_image_evenPair_eq_adjacentSupportJoin}
+        SpinChain.PropagatesWithin.range_image_evenPair_eq_adjacentSupportJoin,
+        SpinChain.PropagatesWithin.evenPairLocalImage_eq_sup_supportAlgebra}
     \notready
     \uses{cor:qca_support_factor_presentations,
         lem:qca_adjacent_support_relative_commutant,thm:qca_commuting_full_matrix_product}
@@ -118,7 +119,9 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
          & =\mathcal R_{2x}\vee\mathcal R_{2x+1}.
         \label{eq:qca_image_pair_adjacent_generation}
     \end{align}
-    This is equation~AARReven of
+    In canonical left--right matrix coordinates, this is the equality
+    of the finite local image with the join of the left and right
+    Kronecker embeddings. This is equation~AARReven of
     \cite[lines~1276--1287]{Gross2012IndexTheory}, in the homogeneous domain.
 \end{theorem}
 \begin{proof}
@@ -156,6 +159,7 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
     \label{thm:qca_physical_pair_adjacent_generation}
     \lean{SpinChain.PropagatesWithin.existsUnique_eq_smul_one_of_supported_rightPair_commute_supports,
         SpinChain.PropagatesWithin.adjacentSupportJoin_eq_range_rightPair,
+        SpinChain.PropagatesWithin.oddSupportAlgebra_sup_evenSupportAlgebra_eq_top,
         SpinChain.PropagatesWithin.oddSupportAlgebra_matrixSize_mul_even_add_one,
         SpinChain.PropagatesWithin.exists_supportAlgebra_matrixSizes_mul}
     \notready
@@ -167,7 +171,9 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
         \mathcal R_{2x+1}\vee\mathcal R_{2x+2} & =\mathcal A_{P_x}.
         \label{eq:qca_physical_pair_adjacent_generation}
     \end{align}
-    The same coherent positive matrix-size family therefore satisfies
+    Faithfulness of the finite-region embedding identifies this with
+    equality to the whole physical-pair matrix algebra, after identifying
+    $P_x=L_{x+1}$. The same coherent positive matrix-size family therefore satisfies
     \begin{align}
         r(2x)r(2x+1) & =d^2, & r(2x+1)r(2x+2) & =d^2.
         \label{eq:qca_both_adjacent_matrix_sizes}

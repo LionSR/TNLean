@@ -75,6 +75,13 @@ The second matrix-size equality follows from its matrix algebra equivalence.
 The final existence theorem records both identities for the same coherent
 positive site-indexed size family.
 
+`CanonicalAdjacentSupportGeneration.lean` reflects the two quasi-local
+equalities through faithful canonical embeddings. The first is the requested
+equality of bundled finite star-subalgebras in ordered left/right Kronecker
+coordinates. The second is equality to the top star-subalgebra in the same
+physical-pair matrix algebra, transporting the even factor along P_x=L_(x+1).
+No bare-submodule equality replaces either bundled equality.
+
 The mathematical conclusions requested by #7122 are source-written with
 homogeneous nearest-neighbour automorphism inputs only. Hosted Lean
 verification and integration remain outstanding; the issue stays open.
