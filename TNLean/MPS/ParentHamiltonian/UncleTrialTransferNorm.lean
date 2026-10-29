@@ -167,4 +167,21 @@ theorem norm_uncleTwoWallTrial_sq_eq_trace_transfer
     uncleTwoWallTrial_append_apply, trace_uncleTwoWallTransfer_eq_sum,
     map_sum, Complex.mul_conj, Complex.ofReal_re, Complex.normSq_eq_norm_sq]
 
+/-- The actual source trial norm is the cyclic contraction with separation
+lengths 2N in A and 2N−1 in B, and two moving intervals of N+1 sites.
+No limiting factorization is supplied. Source: arXiv:1210.6613,
+phiN-def and the norm calculation in Lemma lowenergystates. -/
+theorem norm_uncleTwoWallTrialSource_sq_eq_trace_transfer
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (N : ℕ) (hN : 0 < N) :
+    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+        (uncleTwoWallTrialSource A B R L N)‖ ^ 2 =
+      (LinearMap.trace ℂ (Matrix (Fin a) (Fin a) ℂ)
+        (uncleTwoWallTransfer A B R L (2 * N) (N + 1) (2 * N - 1) (N + 1) 0)).re := by
+  rw [norm_uncleTwoWallTrialSource_eq A B R L N hN,
+    norm_uncleTwoWallTrial_sq_eq_trace_transfer]
+  exact congrArg Complex.re (by simpa only [two_mul] using
+    trace_uncleTwoWallTransfer_join_exterior A B R L N (N + 1) (2 * N - 1) (N + 1) N)
+
 end MPSTensor
