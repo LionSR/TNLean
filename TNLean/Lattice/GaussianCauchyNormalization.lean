@@ -70,7 +70,7 @@ theorem halfLine_gaussian_integral_eq_measureReal
       apply integral_congr_ae
       exact Filter.Eventually.of_forall fun s ↦ (hdensity (ω + s)).symm
     _ = ∫ t : ℝ in Set.Ioi ω, (kernel h⁻¹ t : ℂ) := htranslate
-    _ = ((∫ t : ℝ in Set.Ici ω, kernel h⁻¹ t) : ℂ) := by
+    _ = Complex.ofReal (∫ t : ℝ in Set.Ici ω, kernel h⁻¹ t) := by
       rw [← integral_Ici_eq_integral_Ioi, integral_ofReal]
     _ = _ := congrArg Complex.ofReal
       (integral_kernel_eq_measureReal (inv_ne_zero hh.ne') (Set.Ici ω))

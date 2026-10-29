@@ -9618,3 +9618,17 @@ there is no need for a new tactic.
   add unrelated dependencies. If a shared one-step statement is needed, move that existing
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
+
+### Euclidean matrix action bounds — promoted upstream reuse (2026-10-29)
+
+- **Pattern:** Bound a matrix acting on a Euclidean vector by the product
+  of its operator norm and the vector norm.
+- **Canonical API:** Mathlib `Matrix.l2_opNorm_mulVec`, already imported by
+  the matrix operator-norm interface; its action is definitionally the
+  same as `Matrix.toEuclideanCLM`.
+- **Refactored occurrences:** `Lattice/ObservableCentering.lean`,
+  `Lattice/GaussianGroundFrequencySeparation.lean`, and
+  `Lattice/GaussianConnectedCorrelation.lean` now invoke the existing theorem
+  directly instead of repeating the norm-identification and `le_opNorm` proof.
+- **Related API:** QICLean's `Entropy.norm_toEuclideanLin_le` gives the same
+  bound, but its entropy import is unnecessary for these matrix-only modules.

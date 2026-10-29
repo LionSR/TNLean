@@ -215,8 +215,8 @@ theorem exists_gaussianNegativeFrequency_ground_commutator_limit
       dsimp only
       simp only [map_sub, map_mul, _root_.sub_apply, inner_sub_right,
         ContinuousLinearMap.mul_apply, hmove]
-  · have hnorm (M : Matrix n n ℂ) : ‖L M ψ‖ ≤ ‖M‖ * ‖ψ‖ := by
-      simpa only [← Matrix.cstar_norm_def] using (L M).le_opNorm ψ
+  · have hnorm (M : Matrix n n ℂ) : ‖L M ψ‖ ≤ ‖M‖ * ‖ψ‖ :=
+      Matrix.l2_opNorm_mulVec M ψ
     have hnormAdj (M : Matrix n n ℂ) : ‖L Mᴴ ψ‖ ≤ ‖M‖ * ‖ψ‖ := by
       simpa only [Matrix.l2_opNorm_conjTranspose] using hnorm Mᴴ
     have hid : ⟪ψ, L (A * B) ψ⟫_ℂ - z =
