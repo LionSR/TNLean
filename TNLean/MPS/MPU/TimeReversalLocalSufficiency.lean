@@ -187,20 +187,21 @@ theorem IsMPUCanonicalFormII.mpo_standardForm_even_eq_adjoint_of_local_certifica
     obtain ⟨hA, hB⟩ := coarse_gates_eq_four_spin_gates hU hsimple hrU hlU hr hl
     rw [hA, hB]
     have h := congrArg E hlocal
-    rw [Matrix.smul_mul, map_smul,
+    simp only [Matrix.smul_mul, map_smul,
       ← Matrix.reindexLinearEquiv_mul ℂ ℂ p p p] at h
     have hK : E ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
         (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ) =
         (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
           (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ := by
-      change Matrix.reindex (Equiv.prodCongr e e) (Equiv.prodCongr e e) _ = _
+      simp only [E, p, Matrix.coe_reindexLinearEquiv]
       dsimp only [x']
       rw [Matrix.conjTranspose_reindex]
       exact (Matrix.kroneckerMap_reindex (fun a b : ℂ ↦ a * b) e e e e
         (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
         (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ).symm
     rw [hK] at h
-    simp only [Matrix.conjTranspose_reindex] at ⊢
+    simp only [E, p, Matrix.coe_reindexLinearEquiv,
+      Matrix.conjTranspose_reindex] at h ⊢
     rw [Matrix.smul_mul]
     exact h
   exact hU.blockTwo.mpo_even_eq_adjoint_of_source_local_certificate
