@@ -205,6 +205,74 @@ theorem exists_fourSpin_selected_source_gate_gauges
   exact S.exists_fourSpin_source_gate_gauges T
     (hW.sourceFactors_sourceU_isUnitaryBetween (S.isMPUSimple hW) T)
 
+/-- The selected normalized source gates and the literal four-spin gates
+of a supplied square standard form in common physical-pair coordinates.
+Source: CPSV17, `eq:block-twosites`, lines 1237–1252, and FBC25,
+`lem:deco`, lines 1052–1066. -/
+theorem exists_fourSpin_selected_source_gate_gauges_of_square_ranks
+    {d D : ℕ} {W : MPOTensor (d * d) D}
+    {u v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ}
+    (S : TwoSiteStandardFormData W u v) (hW : IsMPUCanonicalFormII W) :
+    let T := sourceFactors W hW.ρ hW.ρ_posDef
+    let L := finCongr S.sourceRanks_eq.2
+    let R := finCongr S.sourceRanks_eq.1
+    let p := Equiv.prodCongr (finProdFinEquiv (m := d) (n := d))
+      (finProdFinEquiv (m := d) (n := d))
+    ∃ X Y : Matrix.unitaryGroup (Fin (d * d)) ℂ,
+      Matrix.reindex (Equiv.prodCongr L R) (Equiv.refl _) (SourceFactors.sourceU W T) =
+        ((X : Matrix _ _ ℂ) ⊗ₖ (Y : Matrix _ _ ℂ)) * Matrix.reindex p p
+          (staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u)) ∧
+      Matrix.reindex (Equiv.refl _) (Equiv.prodCongr R L) (SourceFactors.sourceV W T) =
+        Matrix.reindex p p (staircaseMiddle (A := Fin d) (E := Fin d) v) *
+          ((Y : Matrix _ _ ℂ)ᴴ ⊗ₖ (X : Matrix _ _ ℂ)ᴴ) := by
+  classical
+  let T := sourceFactors W hW.ρ hW.ρ_posDef
+  have hr : r[W] = d * d := S.sourceRanks_eq.1
+  have hl : ℓ[W] = d * d := S.sourceRanks_eq.2
+  obtain ⟨X, Y, hu, hv⟩ := S.exists_fourSpin_selected_source_gate_gauges hW
+  let L := finCongr hl
+  let R := finCongr hr
+  let X' : Matrix.unitaryGroup (Fin (d * d)) ℂ :=
+    ⟨Matrix.reindex L L X, Matrix.reindex_mem_unitaryGroup _ _ X.property⟩
+  let Y' : Matrix.unitaryGroup (Fin (d * d)) ℂ :=
+    ⟨Matrix.reindex R R Y, Matrix.reindex_mem_unitaryGroup _ _ Y.property⟩
+  let e : (Fin d × Fin d) ≃ Fin (d * d) := finProdFinEquiv
+  let p := Equiv.prodCongr e e
+  let A := staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u)
+  let B := staircaseMiddle (A := Fin d) (E := Fin d) v
+  have hu' : Matrix.reindex (Equiv.prodCongr L R) (Equiv.refl _)
+      (SourceFactors.sourceU W T) =
+      ((X' : Matrix _ _ ℂ) ⊗ₖ (Y' : Matrix _ _ ℂ)) * Matrix.reindex p p A := by
+    have h := congrArg (Matrix.reindex (Equiv.prodCongr L R) (Equiv.refl _)) hu
+    rw [Matrix.reindex_kronecker_mul] at h
+    have hA : Matrix.reindex (Equiv.prodCongr L R) (Equiv.refl _)
+        (Matrix.reindex
+          (Equiv.prodCongr
+            (finProdFinEquiv.trans (finCongr S.sourceRanks_eq.2.symm))
+            (finProdFinEquiv.trans (finCongr S.sourceRanks_eq.1.symm))) p A) =
+        Matrix.reindex p p A := by
+      ext ⟨i, j⟩ ⟨k, l⟩
+      rfl
+    rw [hA] at h
+    exact h
+  have hv' : Matrix.reindex (Equiv.refl _) (Equiv.prodCongr R L)
+      (SourceFactors.sourceV W T) = Matrix.reindex p p B *
+      ((Y' : Matrix _ _ ℂ)ᴴ ⊗ₖ (X' : Matrix _ _ ℂ)ᴴ) := by
+    have h := congrArg (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr R L)) hv
+    rw [Matrix.reindex_mul_kronecker] at h
+    have hB : Matrix.reindex (Equiv.refl _) (Equiv.prodCongr R L)
+        (Matrix.reindex p
+          (Equiv.prodCongr
+            (finProdFinEquiv.trans (finCongr S.sourceRanks_eq.1.symm))
+            (finProdFinEquiv.trans (finCongr S.sourceRanks_eq.2.symm))) B) =
+        Matrix.reindex p p B := by
+      ext ⟨i, j⟩ ⟨k, l⟩
+      rfl
+    rw [hB] at h
+    simpa only [X', Y', Unitary.coe_star, Matrix.star_eq_conjTranspose,
+      Matrix.conjTranspose_reindex] using h
+  exact ⟨X', Y', hu', hv'⟩
+
 /-- Even-family adjoint symmetry forces the intermediate dimensions of any
 supplied standard form to equal its original physical dimension. The
 ambient canonical presentation remains explicit. Source: CPSV17,

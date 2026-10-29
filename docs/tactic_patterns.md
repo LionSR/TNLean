@@ -9808,3 +9808,48 @@ removed after the dependency audit exposed it.
   proves both identities once within the deformation module.
 - **Related reuse:** The local scalar path uses the existing actual `mpo_smul`
   law and `TwoSiteStandardFormData` structure; no new path predicate is added.
+
+
+### Actual square-coordinate source comparison — promoted (2026-10-29)
+
+- **Pattern:** Reindex the actual supplied four-spin/source comparison by
+  the proved source ranks, giving both square gate equations in the same
+  physical-pair coordinates.
+- **Defined in:** `MPS/MPU/SuppliedFourSpinSourceComparison.lean`,
+  `TwoSiteStandardFormData.exists_fourSpin_selected_source_gate_gauges_of_square_ranks`.
+- **Refactored occurrences:** both directions in `SuppliedTimeReversalCriterion.lean`
+  and both directions in `SuppliedTranspositionCriterion.lean` reuse the single
+  existing proof; no duplicate source comparison or witness predicate.
+
+### Physical-pair transpose-certificate coordinates — promoted (2026-10-29)
+
+- **Pattern:** Commute the actual pair-space reindexing with scalar action,
+  products, Kronecker factors and transpose in a local phase equation.
+- **Defined in:** `MPS/MPU/SourceFactorChoiceGates.lean`,
+  `Matrix.reindex_transposition_certificate`.
+- **Refactored occurrences:** chosen-source and arbitrary-supplied-source
+  transpose converses both use this coordinate theorem. It does not assume
+  unitarity, a factor presentation or another local equation.
+
+### Unit phase from the circle argument — upstream reuse (2026-10-29)
+
+- **Pattern:** Recover exp(i*arg(c))=c from |c|=1.
+- **Existing owner:** Mathlib `Circle.exp_arg` in
+  `Analysis/SpecialFunctions/Complex/Circle.lean`.
+- **Refactored occurrences:** both exponential certificate callers in
+  `TranspositionLocalNecessity.lean` and the supplied exponential certificate
+  use this existing identity directly through the complex coercion.
+- **Notes:** No repeated norm-times-polar normalization proof, new local phase
+  wrapper or continuous phase-argument assumption is introduced.
+
+
+### Kronecker gauge cancellation — upstream reuse (2026-10-29)
+
+- **Pattern:** Cancel a Kronecker pair of unitary comparison gauges and
+  their adjoints in an actual local-equation transport.
+- **Existing owner:** `Matrix.IsUnitaryBetween.kronecker`, already exposed
+  through the gate-coordinate imports.
+- **Refactored occurrences:** both supplied adjoint and supplied transpose
+  directions instantiate the existing Kronecker unitarity theorem and use
+  its Gram identity directly, rather than expanding both one-factor Gram
+  proofs and Kronecker multiplication repeatedly. No local wrapper added.

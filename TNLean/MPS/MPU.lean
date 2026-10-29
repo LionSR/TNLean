@@ -206,6 +206,7 @@ import TNLean.MPS.MPU.SuppliedFixedWitnesses
 import TNLean.MPS.MPU.SuppliedFourSpinSourceComparison
 import TNLean.MPS.MPU.SuppliedHalfFactorMinimality
 import TNLean.MPS.MPU.SuppliedTimeReversalCriterion
+import TNLean.MPS.MPU.SuppliedTranspositionCriterion
 import TNLean.MPS.MPU.SupportedAmplification
 import TNLean.MPS.MPU.SupportedChildColumns
 import TNLean.MPS.MPU.SymmetryPathTransport
