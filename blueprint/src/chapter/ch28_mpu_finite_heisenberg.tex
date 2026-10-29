@@ -178,7 +178,8 @@
     \label{thm:mpu_finite_heisenberg_arbitrary_region_compatibility}
     \lean{SpinChain.finiteChainLocalObservable_eq_of_twoSiteStandardForm_buffers}
     \notready
-    \uses{thm:mpu_finite_heisenberg_full_central_interval}
+    \uses{thm:mpu_finite_heisenberg_full_central_interval,
+        lem:mpu_singleton_generation_and_inverse_reflection}
     Let $k>0$ and suppose that the length-$k$ blocked tensor has the
     supplied two-site standard form above. Let $\Lambda\subset\mathbb Z$
     be finite, and let $[b_j,b_j+N_j)$, for $j=1,2$, contain $\Lambda$,
@@ -272,4 +273,35 @@
     corresponding identities on the dense algebraic local algebra.
     Completion preserves the isometry. Evaluation on a finite observable
     follows from the extension formula on the canonical dense image.
+\end{proof}
+
+
+\begin{lemma}[Finite one-site generation and inverse support reflection]
+    \label{lem:mpu_singleton_generation_and_inverse_reflection}
+    \lean{SpinChain.range_localObservable_empty_le,
+        SpinChain.range_localObservable_le_of_singletons,
+        SpinChain.commute_localObservable_of_singletons,
+        SpinChain.mem_range_localInclusion_iff_commute_outside_singletons,
+        SpinChain.inverse_mem_range_localInclusion_of_forward_commute,
+        SpinChain.inverse_mem_range_localInclusion_of_forward_support}
+    \notready
+    The one-site algebras generate every finite local algebra; the empty
+    local algebra consists of scalars. An observable on a finite region
+    is supported in a retained subregion exactly when it commutes with
+    every one-site algebra outside that subregion. Consequently, for a
+    finite star-automorphism $e$, if $B$ commutes with the forward images
+    of all one-site algebras outside a retained region $K$, then
+    $e^{-1}(B)$ is supported in $K$. Forward support disjoint from the
+    support of $B$ is sufficient for this commutation condition. These
+    are finite algebraic ingredients for the actual inverse-locality
+    argument in \cite[lines~2292--2306]{Cirac2017MPU}; no inverse family
+    or global locality assertion is assumed or concluded here.
+\end{lemma}
+\begin{proof}
+    Induct over disjoint unions of sites using matrix tensor expansion.
+    Commutation with each generating algebra therefore implies
+    commutation with the whole exterior algebra. Its relative commutant
+    is exactly the retained identity-tensor factor. Applying $e^{-1}$
+    to the forward commutators and using this characterization gives
+    the finite inverse support assertion.
 \end{proof}

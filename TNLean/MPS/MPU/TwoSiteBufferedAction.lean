@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.TwoSiteFiniteHeisenberg
 import TNLean.MPS.MPU.FiniteChainConjugation
-import TNLean.QCA.SupportAlgebraGeneration
+import TNLean.QCA.SingletonGeneration
 
 /-!
 # Canonical buffered local action of supplied MPU standard form
@@ -258,47 +258,20 @@ private theorem localAlgebraHom_ext_singletons {d : ℕ} [NeZero d] {Λ : Finset
       f (localInclusion (Finset.singleton_subset_iff.mpr hx) A) =
         g (localInclusion (Finset.singleton_subset_iff.mpr hx) A)) : f = g := by
   classical
-  rcases Λ.eq_empty_or_nonempty with rfl | hΛ
-  · let : Subsingleton (Config d ∅) := ⟨fun f g ↦ by
-      funext x
-      exact False.elim (by simpa using x.2)⟩
-    let x₀ : Config d ∅ := fun x ↦ False.elim (by simpa using x.2)
-    ext A
-    have hA : A = algebraMap ℂ (LocalAlgebra d ∅) (A x₀ x₀) := by
-      apply CStarMatrix.ext
-      intro i j
-      rw [Subsingleton.elim i x₀, Subsingleton.elim j x₀]
-      simp only [CStarMatrix.algebraMap_apply, if_pos rfl, Algebra.algebraMap_self]
-    rw [hA]
-    simp only [map_algebraMap]
-  · let S := StarAlgHom.equalizer f g
-    have hsingle : ∀ (x : ℤ), x ∈ Λ → (localObservable d {x}).range ≤
-        S.map (localObservable d Λ) := by
-      intro x hx z hz
-      obtain ⟨A, rfl⟩ := hz
-      refine StarSubalgebra.mem_map.mpr
-        ⟨localInclusion (Finset.singleton_subset_iff.mpr hx) A, h x hx A, ?_⟩
-      exact localObservable_localInclusion d _ A
-    have hgen : ∀ Γ : Finset ℤ, Γ ⊆ Λ →
-        (localObservable d Γ).range ≤ S.map (localObservable d Λ) := by
-      intro Γ
-      induction Γ using Finset.induction_on with
-      | empty =>
-          intro _
-          obtain ⟨x, hx⟩ := hΛ
-          exact (range_localObservable_mono d (Finset.empty_subset {x})).trans (hsingle x hx)
-      | @insert x Γ hx ih =>
-          intro hΓ
-          have hd : Disjoint ({x} : Finset ℤ) Γ := by simpa using hx
-          rw [show insert x Γ = {x} ∪ Γ by simp, range_localObservable_union d hd]
-          exact sup_le (hsingle x (hΓ (Finset.mem_insert_self x Γ)))
-            (ih ((Finset.subset_insert x Γ).trans hΓ))
-    ext A
-    have hmem : localObservable d Λ A ∈ S.map (localObservable d Λ) :=
-      hgen Λ le_rfl ⟨A, rfl⟩
-    obtain ⟨X, hX, hEq⟩ := hmem
-    have hXA : X = A := localObservable_injective d Λ hEq
-    exact StarAlgHom.mem_equalizer f g A |>.mp (hXA ▸ hX)
+  let S := StarAlgHom.equalizer f g
+  have hsingle : ∀ (x : ℤ), x ∈ Λ → (localObservable d {x}).range ≤
+      S.map (localObservable d Λ) := by
+    intro x hx z hz
+    obtain ⟨A, rfl⟩ := hz
+    refine StarSubalgebra.mem_map.mpr
+      ⟨localInclusion (Finset.singleton_subset_iff.mpr hx) A, h x hx A, ?_⟩
+    exact localObservable_localInclusion d _ A
+  ext A
+  have hmem : localObservable d Λ A ∈ S.map (localObservable d Λ) :=
+    range_localObservable_le_of_singletons Λ (S.map (localObservable d Λ)) hsingle ⟨A, rfl⟩
+  obtain ⟨X, hX, hEq⟩ := hmem
+  have hXA : X = A := localObservable_injective d Λ hEq
+  exact StarAlgHom.mem_equalizer f g A |>.mp (hXA ▸ hX)
 
 
 private theorem exists_central_interval_output_of_bounds
