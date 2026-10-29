@@ -134,3 +134,71 @@ using the adjacent-generation equalities of
     the changed gates gives $K^*K=I$ on both sides of the intermediate
     observable; cancellation proves the two identities.
 \end{proof}
+
+\begin{lemma}[Actual alternating output for every pair matrix]
+    \label{lem:qca_margolus_alternating_pair_rule}
+    \lean{SpinChain.PropagatesWithin.margolus_alternating_kronecker,
+        SpinChain.PropagatesWithin.margolusAlternatingPairRule,
+        SpinChain.PropagatesWithin.margolusAlternatingPairRule_eq,
+        SpinChain.PropagatesWithin.margolusAlternatingPairRule_input}
+    \notready
+    \uses{lem:qca_margolus_matrix_rules,lem:qca_margolus_spatial_unitaries}
+    Write $e_{ac}$ and $f_{bd}$ for matrix units in the even and odd
+    intermediate factors of $E_{x+1}$, respectively. Define
+    \begin{align}
+        H_x(K) & =\sum_{a,b,c,d}K_{(a,b),(c,d)}\,
+        \iota_{P_x}\bigl(G_x(I\otimes e_{ac})\bigr)
+        \iota_{P_{x+1}}\bigl(G_{x+1}(f_{bd}\otimes I)\bigr).
+    \end{align}
+    Then for every intermediate matrix $K$ and physical matrix $A$,
+    \begin{align}
+        \omega\bigl(\iota_{E_{x+1}}(F_{x+1}^{-1}(K))\bigr) & =H_x(K),\notag    \\
+        \omega\bigl(\iota_{E_{x+1}}(A)\bigr)               & =H_x(F_{x+1}(A)).
+    \end{align}
+    Thus the input gate is followed by the two neighbouring shifted
+    output gates, in their odd--even factor order. No local-action
+    equality is assumed.
+\end{lemma}
+\begin{proof}
+    \notready
+    For $K=C\otimes D$, the first identity reduces to the two product
+    rules: $G_x(I\otimes C)$ recovers the even factor and
+    $G_{x+1}(D\otimes I)$ recovers the odd factor. Expand an arbitrary
+    $K$ into matrix units, each of which is a scalar multiple of a
+    Kronecker product of matrix units, and use linearity. Substitute
+    $K=F_{x+1}(A)$ for the second identity.
+\end{proof}
+
+\begin{lemma}[Unique global extension and translation compatibility]
+    \label{lem:qca_margolus_global_extension}
+    \lean{SpinChain.PropagatesWithin.existsUnique_margolus_local_extension,
+        SpinChain.PropagatesWithin.margolusAlternatingPairRule_translation}
+    \notready
+    \uses{lem:qca_margolus_alternating_pair_rule,
+        thm:qca_even_pair_algebraic_generation,def:qca_quasi_local_algebra}
+    There is exactly one continuous complex star-algebra homomorphism
+    $T$ on the quasi-local algebra satisfying
+    \begin{align}
+        T\bigl(\iota_{E_{x+1}}(A)\bigr) & =H_x(F_{x+1}(A))
+    \end{align}
+    for every integer $x$ and pair matrix $A$. It is the given
+    automorphism $\omega$. If $\omega$ commutes with translations
+    $\tau_t$, then for every $t\in\mathbb Z$,
+    \begin{align}
+        \omega\bigl(\tau_t(\iota_{E_{x+1}}(A))\bigr)
+         & =\tau_t\bigl(H_x(F_{x+1}(A))\bigr).
+    \end{align}
+    This expresses one-site translation compatibility as agreement with
+    the original QCA on every translated block. It does not assert that
+    independently chosen factor coordinates yield constant gates.
+\end{lemma}
+\begin{proof}
+    \notready
+    The preceding finite matrix formula supplies existence. The even-pair
+    local algebras generate the algebraic local algebra. Their equality
+    set for two star-algebra homomorphisms is a star-subalgebra, so
+    agreement on pairs gives agreement on all algebraic local observables.
+    Continuity and completion density give global equality. Translation
+    compatibility is the covariance identity for the actual automorphism
+    after substituting the finite alternating formula.
+\end{proof}

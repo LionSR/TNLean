@@ -36,6 +36,7 @@ import TNLean.QCA.KroneckerSupportAlgebra
 import TNLean.QCA.LocalAlgebra
 import TNLean.QCA.LocalLimit
 import TNLean.QCA.LocalNorm
+import TNLean.QCA.MargolusAlternatingLocalRule
 import TNLean.QCA.MargolusUnitaryGates
 import TNLean.QCA.NearestNeighborBlocking
 import TNLean.QCA.OverlappingSupportAlgebra

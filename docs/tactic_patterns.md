@@ -9697,3 +9697,16 @@ there is no need for a new tactic.
   theorem. The two QCA matrix rules then reuse their owner evaluations,
   rather than reconstructing the tensor-product map or a Kronecker expansion.
 - **Notes:** This is a helper theorem, not a new algebra structure or tactic.
+
+### Pairwise matrix-unit expansion of an actual local rule — candidate (2026-10-29)
+
+- **Seen:** `QCA/MargolusAlternatingLocalRule.lean`.
+- **Pattern:** Rewrite a full intermediate matrix using the pinned
+  `Matrix.matrix_eq_sum_single`, express each product-index matrix unit as
+  a scalar multiple of a Kronecker product, and map the two finite sums
+  through the already constructed linear rules.
+- **Reuse:** One product rule supplies every summand. Existing even-pair
+  generation then controls the equalizer of any two continuous global
+  extensions; no second local-generation induction is written.
+- **Decision:** Keep the finite source formula and one private product
+  matrix-unit helper until another independent consumer appears.

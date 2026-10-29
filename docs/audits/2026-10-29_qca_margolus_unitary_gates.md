@@ -24,13 +24,24 @@ Skolem–Noether theorem after deriving equality of the coordinate sizes.
 
 The current domain is a homogeneous positive-dimensional chain and an
 actual nearest-neighbour star-automorphism. Gates may depend on position.
-This establishes the finite spatial and local product-rule steps of
-issue 7035, not its full translation-covariant generalized Margolus
-partitioning theorem. Independent unitary changes of the intermediate
-factor bases preserve gate unitarity and cancel in both actual product
-local rules, as in source lines 1033–1041. Still remaining are an assembled
-alternating-layer action on the full local algebra and its translation
-compatibility against the original QCA.
+The alternating rule now recovers the even factor through the preceding
+shifted output rule and the odd factor through the following output rule.
+A matrix-unit expansion gives the literal finite sum for every pair
+matrix. Existing even-pair generation and completion density prove that
+this explicit recipe has exactly one continuous global star-algebra
+extension, namely the original automorphism. Actual original translation
+covariance gives agreement with that QCA on every translated block.
+No action, local compatibility or translation constraint is assumed as an
+independent conclusion premise. Independent intermediate unitary basis
+changes preserve gate unitarity and cancel in both product local rules.
+
+The independently chosen support-factor presentations do not give
+constant gates even when the original QCA is translation covariant.
+Extracting constant gates in translation-transported factor coordinates,
+as needed for direct conversion to one translation-invariant MPU tensor,
+is a separate remaining step. This distinction does not weaken the
+position-dependent alternating representation or its actual translated
+block agreement.
 No selected compact-SVD or MPU source-factor presentation is identified.
 
 No Lean executable, elaboration or build was run, as requested. All new
