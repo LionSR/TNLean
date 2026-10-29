@@ -172,3 +172,38 @@
     the complete central algebra. Apply the preceding buffered action
     and compose the two canonical input inclusions.
 \end{proof}
+
+
+\begin{theorem}[Actual buffering compatibility on arbitrary finite support]
+    \label{thm:mpu_finite_heisenberg_arbitrary_region_compatibility}
+    \lean{SpinChain.finiteChainLocalObservable_eq_of_twoSiteStandardForm_buffers}
+    \notready
+    \uses{thm:mpu_finite_heisenberg_full_central_interval}
+    Let $k>0$ and suppose that the length-$k$ blocked tensor has the
+    supplied two-site standard form above. Let $\Lambda\subset\mathbb Z$
+    be finite, and let $[b_j,b_j+N_j)$, for $j=1,2$, contain $\Lambda$,
+    with $N_j>1$. Suppose that for every $x\in\Lambda$,
+    \[
+        b_j\le x-2k,
+        \qquad x+4k\le b_j+N_j .
+    \]
+    Then the two actual finite-chain MPU conjugations give the same
+    homomorphism from $\mathcal A_\Lambda$ into the algebraic local
+    algebra. In particular a symmetric buffer of radius $4k$ suffices.
+    This is derived compatibility for the supplied standard form in
+    \cite[lines~2300--2306]{Cirac2017MPU}. Construction of that form from
+    a bare MPU, the inverse family, completion, and the source radius
+    remain separate as recorded in
+    \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
+\end{theorem}
+\begin{proof}
+    For $x\in\Lambda$, place its one-site algebra in the complete central
+    interval $[x,x+2k)$. The preceding theorem gives one fixed output
+    on $[x-2k,x+4k)$ for both ambient chains. The two homomorphisms
+    therefore agree on every one-site algebra in $\Lambda$. These
+    algebras generate the complete finite-region algebra: disjoint
+    regions generate their union by matrix tensor expansion, so
+    induction over the sites places the whole algebra in the
+    equalizer. For the empty region, both homomorphisms preserve its
+    scalar algebra.
+\end{proof}

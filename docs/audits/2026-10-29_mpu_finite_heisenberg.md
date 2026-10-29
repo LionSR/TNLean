@@ -64,9 +64,19 @@ observable on that central interval and constructs one fixed local output
 on the surrounding6k sites which all actual original-site buffered finite
 conjugations represent. This removes any selected-coordinate-family premise.
 
-This is still not the full source stabilization theorem. It does not yet
-assemble arbitrary supported observables; no compatible-local-action datum,
-induced QCA, radius 4D⁴, or MPU/QCA index comparison is claimed. The exact
+The source now also assembles arbitrary finite supported regions:
+`finiteChainLocalObservable_eq_of_twoSiteStandardForm_buffers` compares
+any two actual finite-chain maps whose endpoints cover every singleton's
+[x−2k,x+4k) window. Equality on the singleton algebras follows from the
+same fixed central output, then `range_localObservable_union` and a
+finite equalizer argument derive equality on the complete region. The
+empty region is handled as the scalar algebra. A symmetric4k buffer
+suffices, and no compatibility premise is supplied.
+
+This is still not the full bare-MPU source theorem. It does not yet
+construct the supplied standard form from bare MPU data or the complete
+inverse family. No compatible-local-automorphism datum, induced QCA,
+source radius4D⁴, or MPU/QCA index comparison is claimed. The exact
 scope and elimination plan are in
 `docs/paper-gaps/mpu_qca_complete_block_heisenberg_scope.tex`.
 
