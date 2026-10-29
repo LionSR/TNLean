@@ -144,7 +144,7 @@ private theorem uncleWallMixedMap_succ_right
     simp only [Fin.snoc_castSucc, Fin.snoc_last, List.concat_eq_append]
   simp only [hsnocEquiv, hsnoc, uncleDomainWallWord_append,
     uncleDomainWallWord, Kraus.evalWord_append, Kraus.evalWord_cons,
-    Kraus.evalWord_nil, Matrix.mul_zero, Matrix.zero_mul, zero_add,
+    Kraus.evalWord_nil, Matrix.mul_zero, zero_add,
     Matrix.mul_one, Matrix.conjTranspose_mul, Matrix.add_mul, Matrix.mul_sum,
     Matrix.sum_mul, Matrix.mul_assoc, Finset.sum_add_distrib]
   exact add_comm _ _
@@ -260,10 +260,8 @@ theorem inner_mpvState_uncleTwoWallTrialSource_eq_trace
 open scoped TNOperatorSpace in
 private theorem mixedMapSpectralRadius_eq_end (A : MPSTensor d a) (B : MPSTensor d b) :
     Kraus.mixedMapSpectralRadius A B = spectralRadius ℂ (Kraus.mixedMapLM A B) := by
-  unfold Kraus.mixedMapSpectralRadius spectralRadius
-  rw [AlgEquiv.quasispectrum_eq (R := ℂ)
-    (Module.End.toContinuousLinearMap (𝕜 := ℂ) (Matrix (Fin a) (Fin b) ℂ))
-    (Kraus.mixedMapLM A B)]
+  unfold Kraus.mixedMapSpectralRadius
+  simp only [spectralRadius_eq_of_unital, AlgEquiv.spectrum_eq]
 
 section OperatorNorm
 
@@ -280,10 +278,10 @@ private theorem mixed_pow_norm_le_geometric (A : MPSTensor d a) (B : MPSTensor d
   let F : Matrix (Fin a) (Fin b) ℂ →L[ℂ] Matrix (Fin a) (Fin b) ℂ :=
     e (Kraus.mixedMapLM A B)
   have hF : spectralRadius ℂ F < 1 := by
-    change spectralRadius ℂ (e (Kraus.mixedMapLM A B)) < 1
-    rw [spectralRadius, AlgEquiv.quasispectrum_eq (R := ℂ) e (Kraus.mixedMapLM A B)]
     rw [mixedMapSpectralRadius_eq_end] at hSpect
-    exact hSpect
+    change spectralRadius ℂ (e (Kraus.mixedMapLM A B)) < 1
+    simpa only [spectralRadius_eq_of_unital, AlgEquiv.spectrum_eq] using hSpect
+
   obtain ⟨K, r, hK, hr, hr1, hbound⟩ :=
     geometric_apply_bound_of_spectralRadius_lt_one F hF
   refine ⟨K, r, hK, hr, hr1, fun n X ↦ ?_⟩
