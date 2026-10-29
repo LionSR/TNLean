@@ -27,6 +27,7 @@ import TNLean.MPS.AreaLaw.CopyProduct
 import TNLean.MPS.AreaLaw.CopyRegionEntropy
 import TNLean.MPS.AreaLaw.Counting
 import TNLean.MPS.AreaLaw.CutMatrixGrowth
+import TNLean.MPS.AreaLaw.DGEntropyParameters
 import TNLean.MPS.AreaLaw.DomainGraphGeometry
 import TNLean.MPS.AreaLaw.DomainInformationReset
 import TNLean.MPS.AreaLaw.DomainInteractionBudget
@@ -66,6 +67,7 @@ import TNLean.MPS.AreaLaw.OpenMPSSpan
 import TNLean.MPS.AreaLaw.OverlapEnergy
 import TNLean.MPS.AreaLaw.PartialSwap
 import TNLean.MPS.AreaLaw.PhysicalChebyshevViability
+import TNLean.MPS.AreaLaw.PhysicalDGEntropy
 import TNLean.MPS.AreaLaw.PhysicalDGViability
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.PhysicalPeriodicPolynomialFamily

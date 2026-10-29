@@ -1,0 +1,96 @@
+% Proposed addition; the public declaration and dependency labels await extraction.
+% No completion marks are assigned by this proposal.
+\begin{theorem}[Interval entropy bound for a degenerate ground space]
+    \label{thm:physical_dg_interval_entropy_bound}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interval_entropy_bound}
+    There is a universal constant $C>0$ with the following property.
+    Let $N,d$ be nonnegative integers and let $H=\sum_{i=0}^{N-2}h_i$ act on
+    $\mathcal H=(\C^d)^{\otimes N}$, with the sum empty when $N<2$.
+    Each $h_i$ is supported on sites $i,i+1$ and satisfies $0\le h_i\le\Id$.
+    Suppose that $\mu,\nu\in\operatorname{spec}(H)$ and $\gamma>0$ satisfy
+    $\mu<\nu$ and
+    \begin{align*}
+        \operatorname{spec}(H)\subseteq\{\mu\}\cup[\mu+\gamma,\infty).
+    \end{align*}
+    Set $G=\ker(H-\mu\Id)$, $r=\dim_{\C}G$, and $g=\min\{\gamma,1\}$.
+    For every interval $J=[a,b)\subseteq\{0,\ldots,N-1\}$ and every unit vector
+    $\psi\in G$, the reduced state
+    $\rho_J=\tr_{J^c}\ketbra{\psi}{\psi}$ satisfies
+    \begin{align}
+        S(\rho_J)
+         & \le \log r+\frac{C}{g}
+        \bigl(1+\log d+\log(1/g)\bigr)^3.
+        \label{eq:physical_dg_interval_entropy}
+    \end{align}
+    Here $S(\rho)=-\tr(\rho\log\rho)$, with $0\log0=0$, and logarithms are natural.
+    This is an interval version of the entropy conclusion in
+    \cite[Theorem~4.9]{Arad2016RigorousRG}.
+    The full ground space is retained at the closed spectral cutoff, as in
+    \cite{gap:alvv16_spectral_projector_boundary}; the bootstrap constants are
+    taken as in \cite{gap:alvv16_bootstrap_constants}.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:physical_interval_all_accuracy_family,
+        thm:dg_logarithmic_rank_tail_entropy, thm:dg_entropy_coefficient_bound}
+    The spectral assumptions imply $d\ge2$ and $r\ge1$.
+    Choose the universal constant $A>0$ in the simultaneous accuracy and
+    bootstrap construction, and set
+    \begin{align*}
+        u & =1+\log d+\log(1/g),
+          & c_A                  & =6+2\log(A+1),
+          & K                    & =\frac{22(A+1)c_A}{g}.
+    \end{align*}
+    For $i\ge0$, put $m_i=d2^i$,
+    $u_i=1+\log m_i+\log(1/g)$,
+    $\ell_i=\lceil A u_i^2/g\rceil$, and
+    $D_i=(m_i\ell_i^2)^{22\ell_i}$.
+    The same construction gives $D_i\ge m_i$ and $\log D_i\le K u_i^3$.
+
+    Fix $J$. There is a subspace $W_0\subseteq\mathcal H_J$ which is
+    $0.015$-viable for $G$ and has dimension less than $rD_0^{24}$.
+    Here $\delta$-viability means that the squared norm of the projection of
+    each unit vector of $G$ onto $W_0\otimes\mathcal H_{J^c}$ is at least
+    $1-\delta$.
+    At scale $m_i$, the construction supplies a target $T_i$ mutually
+    $1/(200m_i)$-close to $G$, and a family of $D_i^2$ operators on
+    $\mathcal H_J$ whose improving parameter $\Delta_i$ satisfies
+    $D_i^{12}\Delta_i\le10^{-5}$.
+    These choices precede the choice of $\psi$.
+    Applying this family to $W_0$ and taking the span gives a subspace $V_i$.
+    The two closeness transfers and the improving estimate give
+    \begin{align*}
+        \dim_{\C}V_i & \le rD_0^{24}D_i^2,
+                     & V_i                 & \text{ is }\frac{1}{2m_i}\text{-viable for }G.
+    \end{align*}
+    Indeed, $W_0$ is $0.04$-viable for $T_i$,
+    $\Delta_i/(1-0.04)^2\le1/(8m_i)$, and the transfer back to $G$ has error
+    at most $2(1/(8m_i)+1/(200m_i))\le1/(2m_i)$.
+
+    Now fix a unit vector $\psi\in G$, and let $p_0,\ldots,p_{M-1}$ be the
+    eigenvalues of its actual reduced state $\rho_J$, in decreasing order.
+    The probability distribution is fixed before the scale $i$ is chosen.
+    The Schmidt approximation obtained from $V_i$ gives
+    \begin{align}
+        \sum_{a\ge rD_0^{24}D_i^2}p_a
+         & \le\frac{1}{2m_i}\le2^{-(i+1)}.
+        \label{eq:physical_dg_entropy_tails}
+    \end{align}
+    There is an integer $B\ge1$ such that
+    \begin{align*}
+        rD_0^{24}D_i^2 & \le r2^{B(i+1)^3},
+                       & B                  & \le\frac{26Ku^3}{\log2}+2.
+    \end{align*}
+    Nonnegativity of the $p_a$ transfers
+    (\ref{eq:physical_dg_entropy_tails}) to these larger thresholds.
+    The cubic dyadic tail estimate therefore yields
+    \begin{align*}
+        S(\rho_J)
+         & =-\sum_{a=0}^{M-1}p_a\log p_a \\
+         & \le\log r+26B\log2+2\log2     \\
+         & \le\log r+676Ku^3+54\log2.
+    \end{align*}
+    Since $u\ge1$ and $0<g\le1$, the choice
+    $C=14872(A+1)c_A+54$ absorbs the last term and proves
+    (\ref{eq:physical_dg_interval_entropy}).
+\end{proof}
