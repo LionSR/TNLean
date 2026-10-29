@@ -12,6 +12,9 @@ import TNLean.Lattice.ClusterExpansion.AllTemperatures
 import TNLean.Lattice.ClusterExpansion.ClusterFactorization
 import TNLean.Lattice.ClusterExpansion.ClusterPart
 import TNLean.Lattice.ClusterExpansion.MandatoryLabels
+import TNLean.Lattice.ClusterExpansion.NormalizedPathTail
+import TNLean.Lattice.ClusterExpansion.PathIntervals
+import TNLean.Lattice.ClusterExpansion.PathWindowWeights
 import TNLean.Lattice.ClusterExpansion.Percolation
 import TNLean.Lattice.ClusterExpansion.PercolationSource
 import TNLean.Lattice.ClusterExpansion.TemperatureError
@@ -21,3 +24,4 @@ import TNLean.Lattice.ClusterExpansion.TruncatedAllTemperatures
 import TNLean.Lattice.ClusterExpansion.TruncatedPositivity
 import TNLean.Lattice.ClusterExpansion.TruncatedProductForm
 import TNLean.Lattice.ClusterExpansion.Truncation
+import TNLean.Lattice.ClusterExpansion.WindowInclusionExclusion

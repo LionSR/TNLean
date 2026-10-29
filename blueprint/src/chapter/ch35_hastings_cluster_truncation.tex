@@ -342,3 +342,173 @@ obstructions are recorded in~\cite{gap:alvv16_cluster_approximation}.
     (\ref{eq:mandatory_cluster_part_support_sum}). Word order and repeated
     occurrences of a label are retained in this partition.
 \end{proof}
+
+
+\subsection{A normalized tail for an interaction-label cutoff}
+
+The cutoff in this subsection counts interaction labels. It differs from
+both physical-site support and the unrestricted estimate discussed
+in~\cite{gap:alvv16_cluster_approximation}. No positivity of the individual
+interactions is imposed.
+
+\begin{definition}[Intervals of interaction labels]
+    \label{def:cluster_label_intervals}
+    \lean{TNLean.Lattice.ClusterExpansion.pathWindows,
+        TNLean.Lattice.ClusterExpansion.mem_pathWindows,
+        TNLean.Lattice.ClusterExpansion.pathIntervals,
+        TNLean.Lattice.ClusterExpansion.mem_pathIntervals}
+    \leanok
+    Give the labels $K=\{0,\ldots,N-1\}$ their path adjacency. For an integer
+    $r\geq1$, let $\mathcal W_r$ be the family of intervals of exactly $r$
+    labels, and let $\mathcal I_r$ be the family of nonempty intervals of
+    at least $r$ labels.
+\end{definition}
+
+\begin{theorem}[Windows and connected components on a path]
+    \label{thm:cluster_label_window_geometry}
+    \lean{TNLean.Lattice.ClusterExpansion.ordConnected_of_pathGraph_connected,
+        TNLean.Lattice.ClusterExpansion.pathGraph_connected_of_ordConnected,
+        TNLean.Lattice.ClusterExpansion.eq_Icc_of_ordConnected,
+        TNLean.Lattice.ClusterExpansion.exists_interval_subset_card,
+        TNLean.Lattice.ClusterExpansion.noLargeCluster_pathGraph_iff,
+        TNLean.Lattice.ClusterExpansion.pathWindows_exists_marker,
+        TNLean.Lattice.ClusterExpansion.card_pathIntervals_le,
+        TNLean.Lattice.ClusterExpansion.clusters_biUnion_pathWindows_subset}
+    \leanok
+    \uses{def:cluster_label_intervals, def:hastings_cluster_of_terms}
+    A nonempty support is connected in the label path if and only if it is
+    an interval. Every interval with at least $r$ labels contains a member
+    of $\mathcal W_r$. Hence a support has no component of size at least
+    $r$ if and only if it contains no member of $\mathcal W_r$.
+    The left endpoints of the members of $\mathcal W_r$ are distinct and
+    belong to their respective windows. Moreover, $|\mathcal I_r|\leq N^2$.
+    Every component of a union of members of $\mathcal W_r$ belongs to
+    $\mathcal I_r$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:hastings_clusters_meet}
+    A walk cannot cross a missing label: adjacent labels differ by one.
+    Conversely, the induced path on an interval is the Hasse graph of its
+    inherited order and is connected. A nonempty interval is determined
+    by its minimum and maximum. Its size is the difference of these
+    endpoints plus one, which gives a length-$r$ subinterval and the
+    injectivity of the left endpoint for fixed length. The pair of
+    endpoints gives the bound $N^2$.
+
+    If a window meets a component of a support containing it, connectedness
+    and avoidance of the component boundary force the window to lie in
+    that component. This proves both the cutoff characterization and
+    the assertion about unions of windows.
+\end{proof}
+
+\begin{theorem}[Inclusion and exclusion over mandatory windows]
+    \label{thm:cluster_window_inclusion_exclusion}
+    \lean{TNLean.Lattice.ClusterExpansion.sum_clusterOp_bad_windows_eq,
+        TNLean.Lattice.ClusterExpansion.exp_sub_truncatedExp_eq_sum_clusterPart_windows,
+        Finset.norm_sum_powerset_biUnion_sign_le_two_pow}
+    \leanok
+    \uses{thm:mandatory_cluster_part_support_sum}
+    Let $K$ be finite, let $H_i$, $i\in K$, be complex square matrices,
+    and put $H=\sum_iH_i$. Let $\mathcal W$ be a finite family of subsets
+    of $K$. For every real $\beta$,
+    \begin{align}
+        \sum_{\substack{A\subseteq K\\
+              \exists I\in\mathcal W:\ I\subseteq A}}E_A
+        &=\sum_{\varnothing\ne F\subseteq\mathcal W}
+          (-1)^{|F|+1}R_{\bigcup F}^H(\beta).
+        \label{eq:cluster_window_inclusion_exclusion}
+    \end{align}
+    If the retained supports of a truncated expansion are exactly those
+    avoiding every window, its error $e^{-\beta H}-M$ equals
+    (\ref{eq:cluster_window_inclusion_exclusion}).
+    If each member $I$ of $\mathcal W$ has a distinct selected label
+    belonging to $I$, then the grouped coefficient
+    \begin{align}
+        c_U=\sum_{\substack{\varnothing\ne F\subseteq\mathcal W\\
+                           \bigcup F=U}}(-1)^{|F|+1}
+        ,\qquad |c_U|\leq2^{|U|}.
+        \label{eq:cluster_window_coefficient}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mandatory_cluster_part_support_sum}
+    Apply finite inclusion and exclusion to the events $I\subseteq A$,
+    then sum over $A$. For each $F$, the intersection of these events is
+    $\bigcup F\subseteq A$, whose exact-support sum is
+    $R_{\bigcup F}^H(\beta)$.
+    A contributing family with union $U$ consists of windows contained in
+    $U$. Their selected labels are distinct elements of $U$, so there
+    are at most $|U|$ such windows and at most $2^{|U|}$ contributing
+    families. Each sign has absolute value one.
+\end{proof}
+
+\begin{theorem}[Weighted unions of windows]
+    \label{thm:cluster_label_window_weights}
+    \lean{TNLean.Lattice.ClusterExpansion.sum_pow_card_unions_pathWindows_le}
+    \leanok
+    \uses{thm:cluster_label_window_geometry}
+    For $0\leq b\leq1$, put
+    $\mathcal U_r=\{\bigcup F:\varnothing\ne F\subseteq\mathcal W_r\}$.
+    Then
+    \begin{align}
+        \sum_{U\in\mathcal U_r}b^{|U|}
+        \leq\exp(N^2b^r)-1.
+        \label{eq:cluster_label_window_weights}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:cluster_label_window_geometry,
+        thm:hastings_truncation_cluster_products}
+    The component family determines $U$, its members are disjoint,
+    and each belongs to $\mathcal I_r$. Thus
+    \begin{align}
+        \sum_{U\in\mathcal U_r}b^{|U|}
+        &\leq\sum_{\varnothing\ne F\subseteq\mathcal I_r}
+                   \prod_{C\in F}b^{|C|}
+         =\prod_{C\in\mathcal I_r}(1+b^{|C|})-1
+         \leq\exp\Bigl(\sum_{C\in\mathcal I_r}b^{|C|}\Bigr)-1
+         \leq\exp(N^2b^r)-1.
+        \label{eq:cluster_label_weight_product}
+    \end{align}
+    The last inequality uses $|C|\geq r$ and
+    $|\mathcal I_r|\leq N^2$.
+\end{proof}
+
+\begin{theorem}[Normalized interaction-label tail on a path]
+    \label{thm:normalized_cluster_label_tail}
+    \lean{TNLean.Lattice.ClusterExpansion.norm_exp_sub_truncatedExp_pathGraph_le}
+    \leanok
+    \uses{def:hastings_truncated_expansion, thm:mandatory_cluster_part_norm,
+        thm:cluster_label_window_geometry, thm:cluster_window_inclusion_exclusion,
+        thm:cluster_label_window_weights}
+    Let $H=\sum_{i=0}^{N-1}H_i$, where the $H_i$ are Hermitian matrices
+    with $\|H_i\|\leq1$. Suppose $H\geq\lambda I$, $r\geq1$,
+    $\beta\geq0$, and $b=2(e^\beta-1)\leq1$.
+    Let $M_r$ retain exactly the words whose label supports have no
+    path component of size at least $r$. Then
+    \begin{align}
+        e^{\beta\lambda}\|e^{-\beta H}-M_r\|
+        \leq\exp(N^2b^r)-1.
+        \label{eq:normalized_cluster_label_tail}
+    \end{align}
+    The number $\lambda$ is any lower energy. No commutation of the terms
+    is required for this estimate.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:mandatory_cluster_part_norm, thm:cluster_label_window_geometry,
+        thm:cluster_window_inclusion_exclusion, thm:cluster_label_window_weights}
+    The cutoff characterization and inclusion and exclusion group the
+    discarded operator by required label union.
+    The left endpoints provide the distinct selected labels for the
+    coefficient bound. Hence
+    \begin{align}
+        e^{\beta\lambda}\|e^{-\beta H}-M_r\|
+        &\leq\sum_{U\in\mathcal U_r}|c_U|(e^\beta-1)^{|U|}
+         \leq\sum_{U\in\mathcal U_r}b^{|U|}
+         \leq\exp(N^2b^r)-1.
+        \label{eq:normalized_cluster_label_tail_proof}
+    \end{align}
+    This changes both the normalization and the cutoff of the printed
+    estimate in~\cite[lines 1270--1291 and 1935--1968]{Arad2016RigorousRG}.
+    It does not assert that estimate or a matrix product representation.
+\end{proof}

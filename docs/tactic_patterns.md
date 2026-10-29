@@ -9956,3 +9956,21 @@ there is no need for a new tactic.
 - **Reuse:** The uniform accuracy theorem uses the actual retained stage of
   the padded successive run; it does not repeat column normalization or
   reconstruct an independent family.
+
+### Ordered path supports and finite window weights — candidate (2026-10-29)
+
+- **Pattern:** Identify connected induced path supports with order intervals;
+  reconstruct supports from their graph components; compare weighted unions
+  with the full powerset product over possible components.
+- **Seen:** `PathIntervals.lean` and `PathWindowWeights.lean` in
+  `Lattice/ClusterExpansion/`.
+- **Reuse:** `Set.OrdConnected.apply_covBy_apply_iff`,
+  `SimpleGraph.hasse_preconnected_of_succ`, `Fin.card_Icc`,
+  `Finset.sum_le_sum_of_injOn`, and `Finset.prod_one_add` provide the
+  geometric and finite-product steps. Existing `clusters`,
+  `biUnion_clusters`, and `pairwise_clusters` provide the actual component
+  partition.
+- **Decision:** Keep these uses of the established order, graph and finite-sum
+  results; no additional cluster operator, component decomposition, or tactic
+  is needed. The endpoint and component arguments are centralized in their
+  mathematical lemmas.
