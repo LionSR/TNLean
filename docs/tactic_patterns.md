@@ -9620,3 +9620,16 @@ there is no need for a new tactic.
 - **Decision:** Two occurrences in one file. Before a third copy, promote the
   rectangular block multiplication identity at its generic matrix owner in
   QICLean, and retain the actual MPU source-specific wrappers here.
+
+
+### Nested finite-chain local inclusions — promoted lemma (2026-10-29)
+
+- **Seen:** The fixed-window, full-central-interval, singleton comparison,
+  and canonical forward-family proofs in `MPS/MPU/TwoSiteBufferedAction.lean`
+  and `MPS/MPU/TwoSiteLocalAction.lean`.
+- **Pattern:** Compose two canonical local inclusions inside an actual finite
+  MPU conjugation and its algebraic-local inclusion.
+- **Promoted:** `SpinChain.finiteChainLocalObservable_localInclusion` in
+  `MPS/MPU/FiniteChainConjugation.lean` applies the existing inclusion
+  composition theorem under the actual conjugation. The downstream proofs
+  reuse this lemma rather than repeat the matrix map composition.

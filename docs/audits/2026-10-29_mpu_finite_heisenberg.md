@@ -73,6 +73,16 @@ finite equalizer argument derive equality on the complete region. The
 empty region is handled as the scalar algebra. A symmetric4k buffer
 suffices, and no compatibility premise is supplied.
 
+`TwoSiteLocalAction.lean` now chooses a canonical actual chain from the
+largest absolute coordinate of each finite support plus4k+1. The resulting
+`bufferedMPULocalAction` is defined by actual finiteChainLocalObservable;
+its compatibility under every canonical inclusion follows from the
+arbitrary-buffer theorem, not from a field or assumption. The existing
+algebraic direct-limit universal property constructs
+`bufferedMPUAlgebraicAction`, and actual finite unitary conjugation proves
+operator-norm preservation. The small generic nested-inclusion lemma in
+FiniteChainConjugation is reused to avoid repeating inclusion composition.
+
 This is still not the full bare-MPU source theorem. It does not yet
 construct the supplied standard form from bare MPU data or the complete
 inverse family. No compatible-local-automorphism datum, induced QCA,
@@ -88,5 +98,5 @@ The present proof reuses the supplied rectangular open contraction and
 therefore does not assume a homogeneous-intermediate circuit presentation.
 
 Native source/import/prose/format/whitespace/integrity checks only.
-No local Lean invocation/build/checkdecls or cache mutation. New Blueprint
-entry remains notready pending hosted verification and integration.
+No local Lean invocation/build/checkdecls or cache mutation. All seven scoped Blueprint
+entries remain notready pending hosted verification and integration.

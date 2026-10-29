@@ -101,8 +101,8 @@
     Both window matrices are independent of $p$ and $s$. Tensor factors
     are written in the original order of the sites. This is the finite
     buffering identity underlying
-    \cite[lines~2300--2306]{Cirac2017MPU}; arbitrary supported-region
-    assembly remains as recorded in
+    \cite[lines~2300--2306]{Cirac2017MPU}; finite-region assembly is
+    given below, with the inverse and completion scope recorded in
     \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
 \end{theorem}
 \begin{proof}
@@ -129,8 +129,8 @@
     local algebra. Consequently its value is independent of both
     buffers, including the position and length of the ambient interval.
     This is the one-window instance of
-    \cite[lines~2300--2306]{Cirac2017MPU}; assembly for arbitrary supported
-    observables remains separate as in
+    \cite[lines~2300--2306]{Cirac2017MPU}; finite-region assembly is
+    given below, with the inverse and completion scope recorded in
     \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
 \end{theorem}
 \begin{proof}
@@ -157,8 +157,8 @@
     input inclusion represents this fixed output in the algebraic
     local algebra. Thus the complete algebra on the central $2k$
     sites is covered, rather than a chosen family of coefficient
-    slices. Arbitrary supported-region and inverse-family assembly
-    remain separate from this instance of
+    slices. Finite-region generation is derived below; the inverse
+    family and completion remain separate from this instance of
     \cite[lines~2300--2306]{Cirac2017MPU}; see
     \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
 \end{theorem}
@@ -206,4 +206,39 @@
     induction over the sites places the whole algebra in the
     equalizer. For the empty region, both homomorphisms preserve its
     scalar algebra.
+\end{proof}
+
+
+\begin{theorem}[Actual compatible norm-preserving forward local action]
+    \label{thm:mpu_finite_heisenberg_forward_local_action}
+    \lean{SpinChain.finiteChainLocalObservable_localInclusion,
+        SpinChain.bufferedMPULocalAction,
+        SpinChain.bufferedMPULocalAction_compatible,
+        SpinChain.bufferedMPUAlgebraicAction,
+        SpinChain.norm_bufferedMPULocalAction,
+        SpinChain.norm_bufferedMPUAlgebraicAction}
+    \notready
+    \uses{thm:mpu_finite_heisenberg_arbitrary_region_compatibility}
+    Under the preceding supplied standard-form hypotheses, choosing one
+    sufficiently buffered finite chain for each region gives an actual
+    compatible family of forward local actions. It therefore induces
+    a unital star-algebra homomorphism of the algebraic local algebra.
+    For positive physical dimension this homomorphism preserves the
+    physical operator norm. The forward family is built from the
+    actual finite MPU operators; compatibility and norm preservation
+    are conclusions. This gives the forward algebraic-local part of
+    \cite[lines~2292--2306]{Cirac2017MPU}; the inverse and completed
+    automorphism remain separate as in
+    \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
+\end{theorem}
+\begin{proof}
+    The largest absolute site coordinate of a finite support is finite.
+    Adding $4k+1$ on both sides gives a canonical chain of length greater
+    than one with all required buffers. For nested supports, the two
+    chosen chain actions agree by the preceding compatibility theorem
+    and composition of identity-tensor inclusions. The universal
+    property of the algebraic local algebra therefore gives the forward
+    homomorphism. Canonical local inclusion, actual unitary conjugation,
+    and the inclusion into the algebraic local algebra all preserve the
+    physical operator norm.
 \end{proof}

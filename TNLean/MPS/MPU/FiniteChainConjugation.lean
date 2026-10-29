@@ -105,4 +105,17 @@ lemma finiteChainLocalObservable_apply {d D : ℕ} {U : MPOTensor d D}
           star (finiteChainMPOMatrix U N a)) :=
   rfl
 
+
+/-- Conjugating a nested local inclusion is the same actual finite-chain
+map as including directly into that chain. Source: arXiv:1703.09188,
+Appendix identity-tensor inclusions in lines 2292--2306. -/
+theorem finiteChainLocalObservable_localInclusion {d D : ℕ} {U : MPOTensor d D}
+    (hU : U.IsMPU) {N : ℕ} (hN : 1 < N) (a : ℤ) {Λ Γ : Finset ℤ}
+    (hΛΓ : Λ ⊆ Γ) (hΓ : Γ ⊆ finiteChainRegion a N) (A : LocalAlgebra d Λ) :
+    finiteChainLocalObservable hU hN a hΓ (localInclusion hΛΓ A) =
+      finiteChainLocalObservable hU hN a (hΛΓ.trans hΓ) A := by
+  have h := DFunLike.congr_fun (localInclusion_trans hΛΓ hΓ) A
+  exact congrArg (fun X ↦ localObservable d (finiteChainRegion a N)
+    (finiteChainConjugation hU hN a X)) h
+
 end SpinChain

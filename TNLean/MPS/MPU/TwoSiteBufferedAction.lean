@@ -247,14 +247,9 @@ theorem exists_finiteChainLocalObservable_central_interval
     simpa only [Nat.add_assoc] using
       finiteChainRegion_subset_expanded a (3 * (2 * k)) p s
   have h := finiteChainLocalObservable_originalSiteHeisenbergWindow hU k p s hN a S A
-  change localObservable d _ (finiteChainConjugation hU hN (a - p)
-    (localInclusion hwindow _)) = _ at h
-  rw [hinput] at h
-  have hcomp := DFunLike.congr_fun (localInclusion_trans hcentral hwindow) B
-  change localInclusion hwindow (localInclusion hcentral B) =
-    localInclusion (hcentral.trans hwindow) B at hcomp
-  rw [hcomp] at h
+  rw [hinput, finiteChainLocalObservable_localInclusion] at h
   exact h
+
 
 
 private theorem localAlgebraHom_ext_singletons {d : ℕ} [NeZero d] {Λ : Finset ℤ}
@@ -388,18 +383,9 @@ theorem finiteChainLocalObservable_eq_of_twoSiteStandardForm_buffers
         finiteChainLocalObservable hU hN b hΛ
           (localInclusion (Finset.singleton_subset_iff.mpr hx) A) := by
     intro N b hN hcentral hΛ
-    change localObservable d _ (finiteChainConjugation hU hN b
-      (localInclusion hcentral (localInclusion hsingle A))) =
-        localObservable d _ (finiteChainConjugation hU hN b
-          (localInclusion hΛ (localInclusion (Finset.singleton_subset_iff.mpr hx) A)))
-    have h₁ := DFunLike.congr_fun (localInclusion_trans hsingle hcentral) A
-    have h₂ := DFunLike.congr_fun
-      (localInclusion_trans (Finset.singleton_subset_iff.mpr hx) hΛ) A
-    change localInclusion hcentral (localInclusion hsingle A) =
-      localInclusion (hsingle.trans hcentral) A at h₁
-    change localInclusion hΛ (localInclusion (Finset.singleton_subset_iff.mpr hx) A) =
-      localInclusion ((Finset.singleton_subset_iff.mpr hx).trans hΛ) A at h₂
-    rw [h₁, h₂]
+    rw [finiteChainLocalObservable_localInclusion,
+      finiteChainLocalObservable_localInclusion]
+
   rw [hcompose b₁ hN₁ _ hΛ₁] at h₁
   rw [hcompose b₂ hN₂ _ hΛ₂] at h₂
   exact h₁.trans h₂.symm
