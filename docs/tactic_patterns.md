@@ -9633,3 +9633,16 @@ there is no need for a new tactic.
   `MPS/MPU/FiniteChainConjugation.lean` applies the existing inclusion
   composition theorem under the actual conjugation. The downstream proofs
   reuse this lemma rather than repeat the matrix map composition.
+
+### Common buffered chain for completed local inverse identities — candidate (2026-10-29)
+
+- **Pattern:** use derived finite output support, choose one finite chain containing
+  both input and output with their buffers, reflect equality through the faithful
+  local observable embedding, cancel the actual finite conjugations, and extend
+  by completion density.
+- **Occurrences:** the two inverse directions in
+  `SpinChain.exists_isQCA_of_isMPUCanonicalFormII` use the single private helper
+  `leftInverse_of_finiteChainConjugation` in `MPS/MPU/CanonicalQuasiLocalAction.lean`.
+- **Abstraction:** the helper already removes the repeated common-buffer and
+  completion proof. No tactic is needed; a public generalization should wait for
+  an independent caller.

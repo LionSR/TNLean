@@ -836,11 +836,13 @@
     },
     "ch:mpu_qca": {
       "theorems": [
-        "thm:quasi_local_interval_observable"
+        "thm:quasi_local_interval_observable",
+        "thm:mpu_actual_qca"
       ],
       "corollaries": [],
       "notes": {
-        "thm:quasi_local_interval_observable": "Quasi-local interval observables, the structure used across chapters"
+        "thm:quasi_local_interval_observable": "Quasi-local interval observables, the structure used across chapters",
+        "thm:mpu_actual_qca": "Actual QCA induced by a bare MPU, with its source original-site finite-chain formula"
       }
     },
     "ch:mpo_boundaries": {
