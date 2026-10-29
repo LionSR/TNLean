@@ -41,3 +41,20 @@ remain notready. Native checks cover generated imports, declaration ownership,
 mathematical roles, reader-facing prose, proof integrity, whitespace and width.
 This branch includes the unchanged AKLV role-only baseline from draft #10359;
 no AKLV mathematics is changed.
+
+## Actual boundary states and the reverse inclusion
+
+`VaryingOBCBoundaryStates.lean` supplies the other inclusion needed by the final
+assembly. It proves concatenation for actual rectangular products by induction
+on the suffix length, reusing the existing last-letter product identity. For an
+arbitrary endpoint boundary Z, the actual trace vector has pair boundary
+X=P_suffix Z P_prefix. Rectangular trace cyclicity gives the coefficients, and
+the actual projector-kernel characterization proves H applied to this trace
+vector is zero. No injectivity, canonical normalization, or supplied local
+annihilation condition occurs in this direction.
+
+The relevant Mathlib source files were independently byte-compared against
+objects at manifest revision c55e6e786f49471c72fbddbec5415808896aec1e, including
+the finite tuples, list words, rectangular trace, projections, positivity and
+adjoint APIs. The shared source snapshot agrees with those objects. This is
+source provenance and API review, not compilation evidence.

@@ -250,3 +250,35 @@ the adjacent-pair conditions with the kernel of the actual open parent Hamiltoni
     compressions vanish. Ordered prefix, pair and suffix concatenation
     identifies the same physical configurations in either description.
 \end{proof}
+
+\begin{lemma}[Actual boundary states lie in the open parent kernel]
+    \label{lem:varying_obc_boundary_states_parent_kernel}
+    \lean{Matrix.obc_rectangularEval_append, Matrix.obcBoundaryState,
+        Matrix.obcBoundaryState_pair_section,
+        Matrix.obcParentHamiltonian_apply_obcBoundaryState}
+    \notready
+    \uses{def:varying_obc_parent_projectors,
+        lem:varying_obc_parent_kernel_sections}
+    Let $Z\in M_{D_N,D_0}(\mathbb C)$ and define the actual physical vector
+    \begin{align}
+        \phi_Z(i_0,\ldots,i_{N-1})
+         & =\operatorname{tr}(ZB^{[0]}_{i_0}\cdots B^{[N-1]}_{i_{N-1}}).
+    \end{align}
+    Then $H_N\phi_Z=0$, with no spanning or canonical normalization assumption.
+    More precisely, if $P_u$ and $P_v$ are the ordered prefix and suffix
+    products outside the pair at $j$, its actual local boundary is
+    $X=P_v ZP_u\in M_{D_{j+2},D_j}(\mathbb C)$.
+\end{lemma}
+\begin{proof}
+    \notready
+    Concatenating physical words multiplies their actual rectangular products.
+    This identity follows by induction on the suffix length, adjoining its
+    last matrix. Hence cyclicity of the rectangular trace gives
+    \begin{align}
+        \phi_Z(u,i,k,v)
+         & =\operatorname{tr}(ZP_uB^{[j]}_iB^{[j+1]}_kP_v)
+        =\operatorname{tr}((P_vZP_u)B^{[j]}_iB^{[j+1]}_k).
+    \end{align}
+    Every pair section therefore belongs to its boundary range, so the
+    actual Hamiltonian kernel characterization applies.
+\end{proof}
