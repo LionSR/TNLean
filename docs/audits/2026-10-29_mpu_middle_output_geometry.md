@@ -48,8 +48,7 @@ width/whitespace and proof-integrity checks are used. New entries remain
 notready pending hosted acceptance. No local Lean build, elaboration,
 compilation or cache mutation was run.
 
-The global role-policy check on the inherited index parent reports six
-existing theorem/corollary roles not registered in its role table, in
-`ch28_qca_index.tex` and `ch28_qca_support_factors.tex`. Those owner files
-are left unchanged here; the geometry node itself is a lemma and notready.
-The index owner has the exact diagnostics for its coordinated repair.
+The index owner corrected the six inherited role-policy mismatches in
+`ch28_qca_index.tex` and `ch28_qca_support_factors.tex` while integrating
+this geometry. The combined branch passes the global role-policy check;
+all new statements remain supporting lemmas and notready.

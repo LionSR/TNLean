@@ -234,4 +234,18 @@ noncomputable def twoLinkLeftSupportEquiv {d ℓ r : ℕ}
   exact (StarAlgEquiv.ofInjective (twoLinkLeftOutputMap v hv)
     (twoLinkLeftOutputMap_injective v hv hr)).symm
 
+/-- The two source ratio presentations agree for the actual supplied
+intermediate dimensions. Source: arXiv:1703.09188, Definition def:index
+and Appendix eq:original-index, lines 681–688 and 2329–2334. -/
+theorem TwoSiteStandardFormData.left_div_phys_eq_phys_div_right
+    {d D ℓ r : ℕ} {W : MPOTensor (d * d) D}
+    {u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
+    {v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
+    (S : TwoSiteStandardFormData W u v) :
+    (ℓ : ℚ) / (d : ℚ) = (d : ℚ) / (r : ℚ) := by
+  apply (div_eq_div_iff
+    (by exact_mod_cast S.phys_pos.ne' : (d : ℚ) ≠ 0)
+    (by exact_mod_cast S.right_pos.ne' : (r : ℚ) ≠ 0)).mpr
+  exact_mod_cast S.left_mul_right
+
 end MPOTensor

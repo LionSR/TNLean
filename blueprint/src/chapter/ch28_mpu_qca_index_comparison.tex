@@ -11,7 +11,8 @@
         MPOTensor.twoLinkRightOutputMap,
         MPOTensor.twoLinkOutputMap_inverse_conj_kronecker,
         MPOTensor.leftSupportAlgebra_twoLinkOutputMap,
-        MPOTensor.twoLinkLeftSupportEquiv}
+        MPOTensor.twoLinkLeftSupportEquiv,
+        MPOTensor.TwoSiteStandardFormData.left_div_phys_eq_phys_div_right}
     \notready
     Let $d,r,\ell$ be positive and let
     $u:\mathbb C^d\otimes\mathbb C^d\to\mathbb C^\ell\otimes\mathbb C^r$
@@ -70,4 +71,26 @@
     its one-site algebra. Finite one-site generation gives commutation
     with every algebra disjoint from the intersection, and the
     outside-commutant characterization recovers exact support.
+\end{proof}
+
+\begin{lemma}[Actual complete-interval action and its four-block output]
+    \label{lem:mpu_actual_complete_interval_four_output}
+    \lean{SpinChain.quasiLocalIntervalObservable_chainWindowOperator,
+        SpinChain.bufferedMPUQuasiLocalAut_central_interval,
+        SpinChain.bufferedMPUQuasiLocalAut_central_interval_four_output}
+    \notready
+    \uses{lem:mpu_supplied_standard_form_actual_qca}
+    Under the supplied positive-block standard-form hypotheses, the
+    actual completed action sends every matrix on the complete
+    original-site interval $[a+2k,a+4k)$ to the two-link output matrix
+    on $[a+k,a+5k)$, with the indicated block-coordinate identifications.
+    In particular, its output support is this four-block interval.
+\end{lemma}
+\begin{proof}
+    Choose the actual ambient chain $[a,a+8k)$ so that every input
+    site has the required buffers. The finite-chain evaluation of
+    the completed action and the actual standard-form identity give
+    the fixed six-block output. Remove the two identity exterior
+    blocks using its exact four-block placement and canonical
+    interval inclusions.
 \end{proof}
