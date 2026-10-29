@@ -82,12 +82,12 @@ theorem threePauliTensor_vectorSpreadSpan_one (φ : Fin 2 → ℂ) (hφ : φ ≠
     convert W.add_mem (hPauli 0) (W.smul_mem Complex.I (hPauli 1)) using 1
     ext i
     fin_cases i <;>
-      simp [SpinCover.pauli, Matrix.vecHead, Matrix.vecTail, smul_eq_mul, ← mul_assoc]
+      simp [SpinCover.pauli, Matrix.vecHead, Matrix.vecTail, smul_eq_mul, ← mul_assoc, two_mul]
   have hsecond : (2 * φ 0) • ![(0 : ℂ), 1] ∈ W := by
     convert W.sub_mem (hPauli 0) (W.smul_mem Complex.I (hPauli 1)) using 1
     ext i
     fin_cases i <;>
-      simp [SpinCover.pauli, Matrix.vecHead, Matrix.vecTail, smul_eq_mul, ← mul_assoc]
+      simp [SpinCover.pauli, Matrix.vecHead, Matrix.vecTail, smul_eq_mul, ← mul_assoc, two_mul]
   have haxes : ![(1 : ℂ), 0] ∈ W ∧ ![(0 : ℂ), 1] ∈ W := by
     by_cases hzero : φ 0 = 0
     · have hone : φ 1 ≠ 0 := by
