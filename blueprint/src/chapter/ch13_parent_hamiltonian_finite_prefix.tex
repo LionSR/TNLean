@@ -408,3 +408,54 @@
     exponent together with the actual concatenation cocycle. This gives
     the asserted normalization by the full-word phase on both sides.
 \end{proof}
+
+\begin{lemma}[Charge bridges in the short overlaps]
+    \label{lem:short_weyl_overlap_charge_bridges}
+    \lean{MPSTensor.ShortMomentum.exists_six_overlap_charge_bridge}
+    \lean{MPSTensor.ShortMomentum.exists_seven_overlap_charge_bridge}
+    \lean{MPSTensor.ShortMomentum.eq_of_six_overlap_charge_edges}
+    \lean{MPSTensor.ShortMomentum.eq_of_seven_overlap_charge_edges}
+    \notready
+    Write $c_0=(1,0)$, $c_1=(0,1)$ and $c_2=(-1,-1)$ in
+    $(\mathbb Z/5\mathbb Z)^2$, and fix a total charge $p$.
+    For six-letter middle words, call an edge $(i,j)$ allowed when
+    $p-c_i-c_j$ lies outside $\{(0,4),(1,1),(4,0)\}$; an endpoint is
+    active when $p\ne c_i$. Every active left endpoint and active right
+    endpoint are joined by three allowed edges. For seven-letter middle
+    words, an edge is allowed when $p-c_i-c_j\ne0$, and every pair of
+    endpoints is joined by three allowed edges.
+    Consequently, if $F_j=G_i$ on every allowed edge, the equality holds
+    on every active pair in the first case and every pair in the second.
+\end{lemma}
+\begin{proof}
+    \notready
+    For each of the twenty-five charges and each pair of relevant endpoints,
+    choose letters $k,l$ with allowed edges $(i,k),(l,k),(l,j)$.
+    The finite residue identities give all the witnesses.
+    Then $F_j=G_l=F_k=G_i$.
+\end{proof}
+
+\begin{lemma}[The two short Weyl intersections]
+    \label{lem:short_weyl_eight_nine_intersections}
+    \lean{MPSTensor.ShortMomentum.groundSpace_intersection_threeLetterTensor_eight}
+    \lean{MPSTensor.ShortMomentum.groundSpace_intersection_threeLetterTensor_nine}
+    \notready
+    \uses{lem:short_weyl_overlap_charge_bridges}
+    For the three-letter fifth-root Weyl tensor, a vector on eight sites
+    whose first and last seven-site coefficient sections belong to the
+    respective boundary spaces belongs to the eight-site boundary space.
+    Likewise, a vector on nine sites with both eight-site section conditions
+    belongs to the nine-site boundary space.
+\end{lemma}
+\begin{proof}
+    \notready
+    Normalize the endpoint charge coefficients by the full-word phase.
+    Every actual middle word equates the two endpoint coefficients at
+    its total charge. The charge bridges make these coefficients agree
+    with a single function of that charge.
+    On eight sites, an actual first letter is active because its remaining
+    seven-site word cannot have zero charge. Choose any active endpoint
+    as the reference. On nine sites every endpoint can serve as reference.
+    Multiplying the resulting common charge function by the word phase
+    gives the full boundary-space representation.
+\end{proof}
