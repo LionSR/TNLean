@@ -1,0 +1,100 @@
+\section{A constructed basis for full-Hamiltonian filtered terms}
+
+The basis argument of \cite{Hastings2006Solving} can be completed with
+corrected constants under a polynomial sphere bound. The geometric
+restriction is explicit here; this statement is not the unrestricted
+printed equation \texttt{oibu}. See \cite{gap:hastings05_two_dim_ground_basis}
+and the companion correction \cite{gap:hastings05_basis_refinement}.
+
+\begin{lemma}[Ground-space restrictions and weighted graph sums]
+    \label{lem:hastings_full_hamiltonian_basis_inputs}
+    \lean{TNLean.Lattice.groundSpaceCompression,
+    TNLean.Lattice.coe_groundSpaceCompression_apply,
+    TNLean.Lattice.isSelfAdjoint_groundSpaceCompression,
+    TNLean.Lattice.norm_groundSpaceCompression_le,
+    TNLean.Lattice.norm_groundSpaceCompression_commutator_le,
+    TNLean.Lattice.norm_groundSpaceCompression_eq,
+    TNLean.Lattice.norm_groundSpaceCompression_commutator_eq}
+    \leanok
+
+    \lean{TNLean.Lattice.graphClosedBall,
+    TNLean.Lattice.mem_graphClosedBall,
+    TNLean.Lattice.card_graphClosedBall_le,
+    TNLean.Lattice.sum_weight_anchor_le_of_support_budget,
+    TNLean.Lattice.sum_weight_mul_comp_le_budget_mul_sum,
+    TNLean.Lattice.sum_weight_meeting_le_card_mul_budget,
+    TNLean.Lattice.sum_weight_meeting_graphClosedBall_le,
+    TNLean.Lattice.graphClosedBall_subset_of_mem,
+    TNLean.Lattice.graphClosedBall_separation}
+    \leanok
+
+    \lean{TNLean.Lattice.graphDecayKernel,
+    TNLean.Lattice.graphDecayKernel_nonneg,
+    TNLean.Lattice.graphDecayKernel_le_one,
+    TNLean.Lattice.graphDecayKernel_symm,
+    TNLean.Lattice.graphDecayKernel_mul_le,
+    TNLean.Lattice.sqrtKernel_graphDecayKernel}
+    \leanok
+
+    \lean{TNLean.Lattice.sum_weight_mul_exp_neg_edist_le}
+    \leanok
+
+    Restricting $PWP$ to the actual ground eigenspace preserves its norm,
+    and also the norm of a commutator of two such compressions.
+    Put $S(\beta,k)=k!(2/\beta)^k e^{\beta/2}/(1-e^{-\beta/2})$.
+    A sitewise support budget bounds the total weight assigned to any
+    one anchor. Degree at most $D$ gives closed balls of cardinality at most
+    $(D+1)^r$; meeting-term weights are bounded by the support budget times
+    the number of sites in the region. Enlarging or separating supports uses
+    the graph triangle inequality. If the spheres have cardinality at most $K_g(r+1)^{k_g}$,
+    the weighted exponential sum about any anchor is at most
+    $|b_0||K_g|S(\beta,k_g)$ for every $\beta>0$. A list of anchors
+    multiplies this bound by its length, including repetitions.
+\end{lemma}
+\begin{proof}\leanok
+    The ambient compression is the extension by zero of its restriction.
+    Group nonnegative weights by their anchors, then group sites by their
+    graph distance. Sum the resulting polynomial times exponential series.
+    For disconnected components the kernel is zero. Repeated square roots
+    turn its rate $\gamma$ into $\gamma/2^n$.
+\end{proof}
+
+\begin{theorem}[Uniform full-Hamiltonian basis bound]
+    \label{thm:hastings_full_hamiltonian_uniform_basis}
+    \lean{TNLean.Lattice.sum_weight_list_graphDecayKernel_le,
+    TNLean.Lattice.exists_groundSpaceBasis_sum_norm_offDiagonalPartFamily_le_uniform}
+    \leanok
+
+    Let $H=\sum_i h_i$ be a Hermitian local Hamiltonian on a finite graph,
+    with positive on-site dimension and nonempty supports $X_i$, chosen anchors $a_i\in X_i$, support
+    diameter at most $R$, support cardinality at most $v_R$, and sitewise
+    budget $\sum_{i:x\in X_i}\|h_i\|\le b_0$.
+    Assume sphere growth at most $K_g(r+1)^{k_g}$, a nonzero ground
+    eigenspace of dimension $n$, and a positive gap $\Delta E$.
+    Let $\gamma>0$ and $C$ be the explicit local commutator constants of
+    Theorem~\ref{thm:hastings05_blecm_exp}, with the support-separation
+    factor $e^{\gamma(2R+1)}$ included in $C$. There is an orthonormal
+    ground-space basis in which
+    \[
+      \sum_i\|\operatorname{offdiag}(P\widetilde h_iP)\|
+      \le (n-1)^2\sqrt{n^3C(1+2n^3)^n}\,
+         |b_0||K_g|S(\gamma/2^n,k_g).
+    \]
+    Here $\widetilde h_i$ is the Gaussian filter under the full
+    Hamiltonian, with any nonnegative filter parameter. The bound is
+    independent of the numbers of terms and sites when $n$ and the
+    displayed local, gap and growth parameters are fixed.
+\end{theorem}
+\begin{proof}\leanok
+    Restrict the actual compressions to the ground eigenspace and use
+    their proved pairwise commutator bound. Apply the weighted recursive
+    basis theorem. Its list has length at most
+    $n-1$. The norm of an off-diagonal part supplies one factor $n-1$;
+    summing the list supplies the other. Filtering under the full
+    Hamiltonian leaves the ground-space compressions unchanged.
+\end{proof}
+
+The source's operators filtered under locally truncated generators require
+an additional physical estimate. They are not identified with the
+full-Hamiltonian filtered operators in this theorem. The separate mathematical counterexample is given in
+\cite{gap:hastings05_tree_basis_counterexample}.

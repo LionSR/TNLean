@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.LowEnergyBasisSimpleSpectrum
+import QICLean.Analysis.ApproximateDiagonalization.OffDiagonalFamily
 
 /-!
 # A basis of a degenerate ground space by iterated compressions
@@ -59,6 +59,8 @@ earlier levels. Documented in `docs/paper-gaps/hastings05_two_dim_ground_basis.t
 -/
 
 open scoped InnerProductSpace
+
+open ApproximateDiagonalization
 
 namespace TNLean.Lattice
 
