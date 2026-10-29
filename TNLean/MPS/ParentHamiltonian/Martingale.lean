@@ -88,6 +88,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.SparseGroupedOpenGap
 import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorGapEquivalence
 import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorMaps
 import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorOrder
+import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorPhysicalEmbedding
 import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorTransport
 import TNLean.MPS.ParentHamiltonian.Martingale.SupportedParentProjection
 import TNLean.MPS.ParentHamiltonian.Martingale.Transport
