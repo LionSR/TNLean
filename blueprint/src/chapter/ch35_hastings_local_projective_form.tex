@@ -21,7 +21,7 @@ $\Delta E\in\mathbb R$, $\widetilde W$ denotes the Gaussian average of
 $e^{iHt}We^{-iHt}$ of variance $q/(\Delta E)^2$ when $q>0$ and $\Delta E\ne0$,
 and $\widetilde W=W$ when $q=0$ or $\Delta E=0$.
 
-\begin{theorem}[Locality of a filtered term on a graph]
+\begin{lemma}[Locality of a filtered term on a graph]
     \label{thm:hastings05_filtered_locality_graph}
     \lean{TNLean.Lattice.norm_commutator_gaussianFilteredTerm_le_graphDistance}
     \leanok
@@ -35,14 +35,14 @@ and $\widetilde W=W$ when $q=0$ or $\Delta E=0$.
         \label{eq:hastings05_filtered_graph_commutator}
     \end{align}
     For $T=c_1l$ this is eq.~(lbnd) of~\cite[lines 266--283]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Combine the $|t|\le T$ commutator bound of
     Theorem~\ref{thm:qc_graph_lieb_robinson_finset} with
-    Theorem~\ref{thm:hastings_filtered_locality}.
+    Lemma~\ref{thm:hastings_filtered_locality}.
 \end{proof}
 
-\begin{theorem}[The finite-range approximation of a filtered term]
+\begin{lemma}[The finite-range approximation of a filtered term]
     \label{thm:hastings05_filtered_approximation_graph}
     \lean{TNLean.Lattice.norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood,
         TNLean.Lattice.exists_local_approx_gaussianFilteredTerm,
@@ -52,7 +52,7 @@ and $\widetilde W=W$ when $q=0$ or $\Delta E=0$.
         lem:qc_site_expectation_properties,lem:al_site_expectation_order,
         thm:hastings_gaussian_filtered_spectral}
     Assume $|\{y:d_G(x,y)=r\}|\le K_g(r+1)^k$ for all $x$ and $r\ge0$, and let
-    $(C,v,T_k)$ be as in Theorem~\ref{thm:qc_graph_neighborhood_localization}.
+    $(C,v,T_k)$ be as in Lemma~\ref{thm:qc_graph_neighborhood_localization}.
     For $W$ supported on $S$, $l\in\mathbb N$, $N_l(S)=\{y:d_G(y,S)\le l\}$,
     positive local dimension, $q,T\ge0$, and $\Delta E\in\mathbb R$, the
     operator $M=\mathbb E_{N_l(S)}(\widetilde W)$ acts on $N_l(S)$, satisfies
@@ -67,13 +67,13 @@ and $\widetilde W=W$ when $q=0$ or $\Delta E=0$.
     $l_{\mathrm{proj}}$ of $i$ with $\|M_i\|\le J$
     \cite[lines 285--320]{Hastings2006Solving},
     \cite{gap:hastings05_filtered_term_approximation}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Combine Theorem~\ref{thm:qc_graph_neighborhood_localization} for $|t|\le T$
-    with Theorem~\ref{thm:hastings_filtered_partial_trace}.
+    Combine Lemma~\ref{thm:qc_graph_neighborhood_localization} for $|t|\le T$
+    with Lemma~\ref{thm:hastings_filtered_partial_trace}.
 \end{proof}
 
-\begin{theorem}[Ground vectors are nearly invariant under the approximation]
+\begin{lemma}[Ground vectors are nearly invariant under the approximation]
     \label{thm:hastings05_facld}
     \lean{TNLean.Lattice.norm_sub_starProjection_apply_le_of_gaussianFilteredTerm,
         TNLean.Lattice.norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm}
@@ -90,15 +90,15 @@ and $\widetilde W=W$ when $q=0$ or $\Delta E=0$.
         \label{eq:hastings05_filtered_ground_vector}
     \end{align}
     \cite[eq.~(facld), lines 322--348 and 375--387]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $(1-P)M\psi=(1-P)\widetilde W\psi+(1-P)(M-\widetilde W)\psi$,
-    Theorem~\ref{thm:hastings_gaussian_filtered_spectral} bounds the first term
+    Lemma~\ref{thm:hastings_gaussian_filtered_spectral} bounds the first term
     by $\|W\|e^{-q/2}\|\psi\|$ and $\|(1-P)(M-\widetilde W)\psi\|\le\|\widetilde W-M\|\,\|\psi\|$.
     For $\operatorname{ran}P=\mathbb C\Omega$, $P\phi=\langle\Omega,\phi\rangle\Omega$.
 \end{proof}
 
-\begin{theorem}[The sum of the approximations]
+\begin{lemma}[The sum of the approximations]
     \label{thm:hastings05_sum_approximation}
     \lean{TNLean.Lattice.norm_sum_sub_le_of_sum_eq}
     \leanok
@@ -106,9 +106,9 @@ and $\widetilde W=W$ when $q=0$ or $\Delta E=0$.
     If $H=H^\dagger=\sum_iW_i$, then any $M_i$ satisfy
     $\|\sum_iM_i-H\|\le\sum_i\|\widetilde W_i-M_i\|$
     \cite[lines 359--374]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:hastings_gaussian_filtered_spectral},
+    By Lemma~\ref{thm:hastings_gaussian_filtered_spectral},
     $\sum_i\widetilde W_i=H$, so $\sum_iM_i-H=\sum_i(M_i-\widetilde W_i)$.
 \end{proof}
 
@@ -122,13 +122,13 @@ approximate eigenvectors of $M_i$ in a basis that approximately diagonalizes
 the compressions $PM_iP$ \cite[lines 395--491]{Hastings2006Solving}. Throughout
 this subsection, $H$ has ground energy $E_0$ and gap $\Delta E>0$, and $q\ge0$.
 Separated-operator commutators are bounded via
-Theorem~\ref{thm:hastings05_filtered_approximation_graph}
+Lemma~\ref{thm:hastings05_filtered_approximation_graph}
 \cite{gap:hastings05_filtered_term_approximation}; the translation-invariant
 case and low-energy example are in
 Sections~\ref{sec:hastings_translation_supercell}
 and~\ref{sec:hastings_low_energy_example}.
 
-\begin{theorem}[Low-energy commutators]
+\begin{lemma}[Low-energy commutators]
     \label{thm:hastings05_low_energy_commutator}
     \lean{TNLean.Lattice.groundCompression,
         TNLean.Lattice.groundCompression_gaussianFilteredTerm,
@@ -145,9 +145,9 @@ and~\ref{sec:hastings_low_energy_example}.
         \label{eq:hastings05_low_energy_bound}
     \end{align}
     \cite[lines 1562--1593]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Theorem~\ref{thm:hastings_gaussian_filtered_spectral} gives
+    Lemma~\ref{thm:hastings_gaussian_filtered_spectral} gives
     $P\widetilde WP=PWP$, $\|(1-P)\widetilde WP\|\le\|W\|e^{-q/2}$, and its
     adjoint bound since $(\widetilde W)^\dagger=\widetilde{W^\dagger}$. With
     $Q=1-P$,
@@ -159,12 +159,12 @@ and~\ref{sec:hastings_low_energy_example}.
     which yields (\ref{eq:hastings05_low_energy_bound}).
 \end{proof}
 
-\begin{theorem}[The commutator with a separated operator]
+\begin{lemma}[The commutator with a separated operator]
     \label{thm:hastings05_lc}
     \lean{TNLean.Lattice.norm_commutator_gaussianFilteredTerm_le_of_disjoint}
     \leanok
     \uses{thm:hastings05_filtered_approximation_graph}
-    In the setting of Theorem~\ref{thm:hastings05_filtered_approximation_graph},
+    In the setting of Lemma~\ref{thm:hastings05_filtered_approximation_graph},
     if $W$ acts on $S$, $B$ acts on a set disjoint from $N_l(S)$, and $q>0$,
     then for all $T\ge0$,
     \begin{align}
@@ -174,7 +174,7 @@ and~\ref{sec:hastings_low_energy_example}.
     \end{align}
     (with $e^{-(T\Delta E)^2/(2q)}$ replaced by $1$ at $q=0$)
     \cite[lines 1548--1561]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $\mathbb E_{N_l(S)}(\widetilde W)$ commutes with $B$,
     $\|[\widetilde W,B]\|=\|[\widetilde W-\mathbb E_{N_l(S)}(\widetilde W),B]\|
@@ -182,12 +182,12 @@ and~\ref{sec:hastings_low_energy_example}.
     (\ref{eq:hastings05_filtered_graph_approximation}).
 \end{proof}
 
-\begin{theorem}[Low-energy commutators of separated operators]
+\begin{lemma}[Low-energy commutators of separated operators]
     \label{thm:hastings05_blecm}
     \lean{TNLean.Lattice.norm_groundCompression_commutator_le_graphNeighborhood}
     \leanok
     \uses{thm:hastings05_low_energy_commutator,thm:hastings05_lc}
-    Under the assumptions of Theorem~\ref{thm:hastings05_lc},
+    Under the assumptions of Lemma~\ref{thm:hastings05_lc},
     \begin{align}
         \|[PWP,PBP]\|\le2\|B\|\Bigl(C|S|^2\,\|W\|\,K_gT_k\,e^{vT-l/2}
         +2\|W\|\,e^{-(T\Delta E)^2/(2q)}\Bigr)+2\|W\|\,\|B\|\,e^{-q/2}
@@ -202,13 +202,13 @@ and~\ref{sec:hastings_low_energy_example}.
         \label{eq:hastings05_exponential_commutator_decay}
     \end{align}
     \cite[lines 1562--1601]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Combine (\ref{eq:hastings05_low_energy_bound}) and
     (\ref{eq:hastings05_separated_commutator}).
 \end{proof}
 
-\begin{theorem}[Off-diagonal elements from a commutator]
+\begin{lemma}[Off-diagonal elements from a commutator]
     \label{thm:hastings05_offdiagonal_commutator}
     \lean{TNLean.Lattice.abs_sub_mul_norm_inner_le_norm_commutator,
         TNLean.Lattice.norm_inner_le_norm_commutator_div}
@@ -220,12 +220,12 @@ and~\ref{sec:hastings_low_energy_example}.
         \label{eq:hastings05_offdiagonal_bound}
     \end{align}
     \cite[lines 1678--1690]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Use $(r-s)\langle v,Bw\rangle=\langle v,[A,B]w\rangle$ and Cauchy--Schwarz.
 \end{proof}
 
-\begin{theorem}[A basis of a two-dimensional ground space]
+\begin{lemma}[A basis of a two-dimensional ground space]
     \label{thm:hastings05_two_dim_basis}
     \lean{TNLean.Lattice.offDiagonalPart,
         TNLean.Lattice.offDiagonalPart_apply,
@@ -247,7 +247,7 @@ and~\ref{sec:hastings_low_energy_example}.
     \end{align}
     \cite[lines 1678--1694]{Hastings2006Solving},
     \cite{gap:hastings05_two_dim_ground_basis}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By Bessel's inequality,
     $\|o_Bx\|^2=|\langle v,Bw\rangle|^2|\langle w,x\rangle|^2
@@ -256,7 +256,7 @@ and~\ref{sec:hastings_low_energy_example}.
     (\ref{eq:hastings05_offdiagonal_bound}).
 \end{proof}
 
-\begin{theorem}[Ground states as approximate eigenvectors up to the off-diagonal part]
+\begin{lemma}[Ground states as approximate eigenvectors up to the off-diagonal part]
     \label{thm:hastings05_low_up_to_offdiagonal}
     \lean{TNLean.Lattice.norm_apply_sub_inner_smul_le_add_offDiagonalPart}
     \leanok
@@ -268,7 +268,7 @@ and~\ref{sec:hastings_low_energy_example}.
         \label{eq:hastings05_low_up_to_offdiagonal}
     \end{align}
     \cite[eq.~(low), lines 476--491]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $PMv-\langle v,Mv\rangle v=\langle w,PMPv\rangle w=o_{PMP}v$, the
     triangle inequality gives (\ref{eq:hastings05_low_up_to_offdiagonal}).
@@ -278,7 +278,7 @@ For $\dim\operatorname{ran}P=n>2$, we treat simple spectrum of $PM_jP$ first
 and then the iterative splitting of repeated eigenvalues
 \cite[lines 1695--1705]{Hastings2006Solving}.
 
-\begin{theorem}[The off-diagonal part for a compression with simple spectrum]
+\begin{lemma}[The off-diagonal part for a compression with simple spectrum]
     \label{thm:hastings05_simple_spectrum_basis}
     \lean{TNLean.Lattice.shiftPart,
         TNLean.Lattice.shiftPart_apply,
@@ -302,7 +302,7 @@ and then the iterative splitting of repeated eigenvalues
     \end{align}
     \cite[lines 1678--1705]{Hastings2006Solving},
     \cite{gap:hastings05_two_dim_ground_basis}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Decompose $o_B=\sum_{k=1}^{n-1}S_k$ with
     $S_k=\sum_a\langle v_a,Bv_{a+k}\rangle\lvert v_a\rangle\langle v_{a+k}\rvert$
@@ -311,7 +311,7 @@ and then the iterative splitting of repeated eigenvalues
     $\|[A,B]\|/\delta$.
 \end{proof}
 
-\begin{theorem}[Ground states as approximate eigenvectors, any dimension]
+\begin{lemma}[Ground states as approximate eigenvectors, any dimension]
     \label{thm:hastings05_low_up_to_offdiagonal_family}
     \lean{TNLean.Lattice.offDiagonalPartFamily_apply_self,
         TNLean.Lattice.norm_apply_sub_inner_smul_le_add_offDiagonalPartFamily}
@@ -324,7 +324,7 @@ and then the iterative splitting of repeated eigenvalues
         \label{eq:hastings05_low_up_to_offdiagonal_family}
     \end{align}
     \cite[eq.~(low), lines 476--491]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Use $PMv_a-\langle v_a,Mv_a\rangle v_a
         =\sum_{b\ne a}\langle v_b,PMPv_a\rangle v_b=o_{PMP}v_a$.
@@ -338,7 +338,7 @@ $A_\ell=PM_{j_\ell}P$, and let $\delta_\ell>0$ be the minimum of
 $|r_\ell(a)-r_\ell(b)|>0$ over $b\in C_\ell(a)$ ($\delta_\ell=1$ if no such
 pair exists) \cite[lines 1695--1705]{Hastings2006Solving}.
 
-\begin{theorem}[One level of the iteration]
+\begin{lemma}[One level of the iteration]
     \label{thm:hastings05_basis_iteration_step}
     \lean{TNLean.Lattice.inner_commutator_apply_eq_sum,
         TNLean.Lattice.abs_sub_mul_norm_inner_le}
@@ -352,7 +352,7 @@ pair exists) \cite[lines 1695--1705]{Hastings2006Solving}.
         |\langle v_c,Av_b\rangle|\bigr).
         \label{eq:hastings05_basis_iteration_step}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expand $\langle v_a,[A,B]v_b\rangle
         =\sum_c(\langle v_a,Av_c\rangle\langle v_c,Bv_b\rangle
@@ -371,7 +371,7 @@ pair exists) \cite[lines 1695--1705]{Hastings2006Solving}.
     when empty).
 \end{definition}
 
-\begin{theorem}[The bound at the first separating level]
+\begin{lemma}[The bound at the first separating level]
     \label{thm:hastings05_basis_iteration}
     \lean{TNLean.Lattice.levelGap_pos,
         TNLean.Lattice.levelGap_le,
@@ -384,13 +384,13 @@ pair exists) \cite[lines 1695--1705]{Hastings2006Solving}.
     $\delta_\ell^{-1}$ times the right-hand side of
     (\ref{eq:hastings05_basis_iteration_step}) for $A=A_\ell$ and
     $S=C_\ell(a)$~\cite{gap:hastings05_two_dim_ground_basis}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Divide (\ref{eq:hastings05_basis_iteration_step}) by
     $|r_\ell(a)-r_\ell(b)|\ge\delta_\ell>0$.
 \end{proof}
 
-\begin{theorem}[Two levels]
+\begin{lemma}[Two levels]
     \label{thm:hastings05_basis_two_levels}
     \lean{TNLean.Lattice.norm_inner_le_of_two_levels,
         TNLean.Lattice.norm_offDiagonalPartFamily_le_of_two_levels}
@@ -408,14 +408,14 @@ pair exists) \cite[lines 1695--1705]{Hastings2006Solving}.
     and $\|o_B\|$ is at most $n-1$ times the right-hand side of
     (\ref{eq:hastings05_basis_two_levels})
     \cite[lines 1695--1705]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:hastings05_basis_iteration} at $\ell=0$ (where
+    Apply Lemma~\ref{thm:hastings05_basis_iteration} at $\ell=0$ (where
     $S^c=\emptyset$) and at $\ell=1$ (where each $c\notin C_1(a)$ is separated
-    from $a,b$ at level $0$), then Theorem~\ref{thm:hastings05_simple_spectrum_basis}.
+    from $a,b$ at level $0$), then Lemma~\ref{thm:hastings05_simple_spectrum_basis}.
 \end{proof}
 
-\begin{theorem}[Every level]
+\begin{lemma}[Every level]
     \label{thm:hastings05_basis_levels}
     \lean{TNLean.Lattice.exists_lt_mem_labelClass_ne,
         TNLean.Lattice.sum_cross_le,
@@ -437,14 +437,14 @@ pair exists) \cite[lines 1695--1705]{Hastings2006Solving}.
     $|\langle v_a,Bv_b\rangle|\le\beta_\ell$; if every pair $a\ne b$ is
     separated below level $L$, then $\|o_B\|\le(n-1)\beta_{L-1}$
     \cite[lines 1695--1708]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Induct on $\ell$ using Theorem~\ref{thm:hastings05_basis_iteration} (first
+    Induct on $\ell$ using Lemma~\ref{thm:hastings05_basis_iteration} (first
     for $B=A_m$ to bound $|\langle v_a,A_mv_c\rangle|\le\alpha_\ell$, then for
-    $B$), and conclude with Theorem~\ref{thm:hastings05_simple_spectrum_basis}.
+    $B$), and conclude with Lemma~\ref{thm:hastings05_simple_spectrum_basis}.
 \end{proof}
 
-\begin{theorem}[The low-energy commutators decay exponentially]
+\begin{lemma}[The low-energy commutators decay exponentially]
     \label{thm:hastings05_blecm_exp}
     \lean{TNLean.Lattice.lrVelocity,
         TNLean.Lattice.commutatorRate,
@@ -456,21 +456,21 @@ pair exists) \cite[lines 1695--1705]{Hastings2006Solving}.
         TNLean.Lattice.norm_groundCompression_commutator_le_exp_edist}
     \leanok
     \uses{thm:hastings05_blecm, thm:hastings05_low_energy_commutator}
-    In the setting of Theorem~\ref{thm:hastings05_blecm}, set
+    In the setting of Lemma~\ref{thm:hastings05_blecm}, set
     $v=2v_R|b_0|e^{2R}+1$ and $\gamma=\min(1/4,\Delta E/(8v))$. There is an
     explicit constant $C$ such that $\|[Ph_jP,Ph_iP]\|\le C\|h_j\|\,\|h_i\|e^{-\gamma l}$
     whenever $X_i\cap N_l(X_j)=\emptyset$, and
     $\|[Ph_jP,Ph_iP]\|\le Ce^{\gamma(2R+1)}\|h_j\|\,\|h_i\|e^{-\gamma d_G(a_j,a_i)}$
     for anchors $a_j\in X_j$, $a_i\in X_i$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:hastings05_blecm} with $T=l/(4v)$ and $q=T\Delta E$,
+    Apply Lemma~\ref{thm:hastings05_blecm} with $T=l/(4v)$ and $q=T\Delta E$,
     so $vT-l/2=-l/4$ and $q/2=l\Delta E/(8v)$. If $d_G(a_j,a_i)>2R+l$, then
     $X_i\cap N_l(X_j)=\emptyset$; otherwise
     $\|[Ph_jP,Ph_iP]\|\le2\|h_j\|\,\|h_i\|$.
 \end{proof}
 
-\begin{theorem}[The sum over all terms, eq.~(oibu)]
+\begin{lemma}[The sum over all terms, eq.~(oibu)]
     \label{thm:hastings05_oibu}
     \lean{TNLean.Lattice.add_one_pow_mul_exp_neg_le,
         TNLean.Lattice.shellSumConst,
@@ -493,14 +493,14 @@ pair exists) \cite[lines 1695--1705]{Hastings2006Solving}.
     $\sum_i\|o_{Ph_iP}\|$ is at most $(n-1)/\delta$ times (\ref{eq:hastings05_oibu}),
     uniformly in system size \cite[eq.~(oibu), lines 1689--1694]{Hastings2006Solving},
     \cite{gap:hastings05_two_dim_ground_basis}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Group $h_i$ by anchor $x$: $\sum_{a_i=x}\|h_i\|\le b_0$, and
     $\sum_xe^{-\gamma d_G(a_j,x)}\le K_g\sum_{r\ge0}(r+1)^ke^{-\gamma r}\le K_gS_{\gamma,k}$.
-    Apply Theorem~\ref{thm:hastings05_simple_spectrum_basis}.
+    Apply Lemma~\ref{thm:hastings05_simple_spectrum_basis}.
 \end{proof}
 
-\begin{theorem}[Eq.~(oibu) for a degenerate ground space]
+\begin{lemma}[Eq.~(oibu) for a degenerate ground space]
     \label{thm:hastings05_oibu_levels}
     \lean{TNLean.Lattice.levelBoundB_eq_mul,
         TNLean.Lattice.sum_norm_offDiagonalPartFamily_le_levelBoundB,
@@ -508,7 +508,7 @@ pair exists) \cite[lines 1695--1705]{Hastings2006Solving}.
         TNLean.Lattice.sum_norm_offDiagonalPartFamily_le_oibu_levels}
     \leanok
     \uses{thm:hastings05_basis_levels, thm:hastings05_oibu}
-    In the setting of Theorem~\ref{thm:hastings05_basis_levels} with
+    In the setting of Lemma~\ref{thm:hastings05_basis_levels} with
     $A_\ell=Ph_{j_\ell}P$ ($\ell<L$) separating all basis pairs and
     $\|h_i\|\le J$, let $\beta_{L-1}$ be defined by
     (\ref{eq:hastings05_basis_levels_recurrence}) at $K=2J^2$ and $K_B=1$. Then
@@ -518,10 +518,10 @@ pair exists) \cite[lines 1695--1705]{Hastings2006Solving}.
         \label{eq:hastings05_oibu_levels}
     \end{align}
     \cite[lines 1689--1708]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By homogeneity of $\beta_{L-1}$ in $K_B$, apply
-    Theorem~\ref{thm:hastings05_basis_levels} with
+    Lemma~\ref{thm:hastings05_basis_levels} with
     $K_B(i)=\sum_{\ell<L}\|[A_\ell,Ph_iP]\|$ and sum over $i$ via
-    Theorem~\ref{thm:hastings05_oibu}.
+    Lemma~\ref{thm:hastings05_oibu}.
 \end{proof}

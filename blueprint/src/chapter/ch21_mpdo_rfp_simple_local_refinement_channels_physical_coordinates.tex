@@ -9,14 +9,14 @@
     multiple physical indices are associated to the right.
 \end{definition}
 
-\begin{theorem}[The physical refinement map is a channel]
+\begin{lemma}[The physical refinement map is a channel]
     \label{thm:mpdo_physical_t_map_cptp}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalTMap_isKrausCPTP}
     \leanok
     \uses{def:mpdo_physical_t_map}
     The map $\widehat{\mathcal T}$ is trace-preserving and completely
     positive.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_physical_sector_t_map_cptp}
@@ -28,7 +28,7 @@
 % **Local fix (zero-weight quotient):** this identity uses the completed
 % zero-weight preparation. Documented in
 % docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex.
-\begin{theorem}[Refinement identity in ordinary physical coordinates]
+\begin{lemma}[Refinement identity in ordinary physical coordinates]
     \label{thm:mpdo_physical_t_closure_identity}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalTMap_twoSiteClosure_eq_threeSiteClosure}
     \leanok
@@ -36,7 +36,7 @@
     For every virtual matrix $X$,
     $\widehat{\mathcal T}(\widehat{\mathcal K}_2(X))
         =\widehat{\mathcal K}_3(X)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_physical_sector_t_closure_identity}
@@ -54,14 +54,14 @@
     $\widehat{\mathcal S}:\MN{q^3}\longrightarrow\MN{q^2}$.
 \end{definition}
 
-\begin{theorem}[The physical coarse-graining map is a channel]
+\begin{lemma}[The physical coarse-graining map is a channel]
     \label{thm:mpdo_physical_s_map_cptp}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalSMap_isKrausCPTP}
     \leanok
     \uses{def:mpdo_physical_s_map}
     The map $\widehat{\mathcal S}$ is trace-preserving and completely
     positive.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_physical_sector_s_map_cptp}
@@ -69,7 +69,7 @@
     channels.
 \end{proof}
 
-\begin{theorem}[Coarse-graining identity in ordinary physical coordinates]
+\begin{lemma}[Coarse-graining identity in ordinary physical coordinates]
     \label{thm:mpdo_physical_s_closure_identity}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalSMap_threeSiteClosure_eq_twoSiteClosure}
     \leanok
@@ -77,7 +77,7 @@
     For every virtual matrix $X$,
     $\widehat{\mathcal S}(\widehat{\mathcal K}_3(X))
         =\widehat{\mathcal K}_2(X)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_physical_sector_s_closure_identity}
@@ -98,14 +98,14 @@
     on right-associated physical coordinates.
 \end{definition}
 
-\begin{theorem}[The localized physical refinement is a channel]
+\begin{lemma}[The localized physical refinement is a channel]
     \label{thm:mpdo_localized_physical_t_map_cptp}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.localizedPhysicalTMap_isKrausCPTP}
     \leanok
     \uses{def:mpdo_localized_physical_t_map}
     The localized refinement map is trace-preserving and completely
     positive.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_physical_t_map_cptp}
@@ -116,7 +116,7 @@
 % **Local fix (zero-weight quotient):** this identity uses the completed
 % zero-weight preparation. Documented in
 % docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex.
-\begin{theorem}[Localized refinement of physical closures]
+\begin{lemma}[Localized refinement of physical closures]
     \label{thm:mpdo_localized_physical_t_closure_identity}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.localizedPhysicalTMap_threeSiteClosure_eq_fourSiteClosure}
     \leanok
@@ -126,7 +126,7 @@
         (\widehat{\mathcal K}_3(X))
         =\widehat{\mathcal K}_4(X)$, with the map understood in
     right-associated coordinates.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_physical_t_closure_identity}
@@ -148,14 +148,14 @@
     on right-associated physical coordinates.
 \end{definition}
 
-\begin{theorem}[The localized physical coarse-graining is a channel]
+\begin{lemma}[The localized physical coarse-graining is a channel]
     \label{thm:mpdo_localized_physical_s_map_cptp}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.localizedPhysicalSMap_isKrausCPTP}
     \leanok
     \uses{def:mpdo_localized_physical_s_map}
     The localized coarse-graining map is trace-preserving and completely
     positive.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_physical_s_map_cptp}
@@ -164,7 +164,7 @@
     properties.
 \end{proof}
 
-\begin{theorem}[Localized coarse-graining of physical closures]
+\begin{lemma}[Localized coarse-graining of physical closures]
     \label{thm:mpdo_localized_physical_s_closure_identity}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.localizedPhysicalSMap_fourSiteClosure_eq_threeSiteClosure}
     \leanok
@@ -173,7 +173,7 @@
     $(\widehat{\mathcal S}\otimes\id)
         (\widehat{\mathcal K}_4(X))
         =\widehat{\mathcal K}_3(X)$ in right-associated coordinates.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_physical_s_closure_identity}
@@ -209,14 +209,14 @@
     \cite[Appendix~C.2, lines~1821--1825]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{theorem}[The two-step physical refinement is a channel]
+\begin{lemma}[The two-step physical refinement is a channel]
     \label{thm:mpdo_physical_t_squared_map_cptp}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalTSquaredMap_isKrausCPTP}
     \leanok
     \uses{def:mpdo_physical_t_squared_map}
     The map $\widehat{\mathcal T}^2$ is trace-preserving and completely
     positive.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_physical_t_map_cptp, thm:mpdo_localized_physical_t_map_cptp}
@@ -227,7 +227,7 @@
 % **Local fix (zero-weight quotient):** this identity uses the completed
 % zero-weight preparation. Documented in
 % docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex.
-\begin{theorem}[Two-step refinement of the sector-coordinate tensor]
+\begin{lemma}[Two-step refinement of the sector-coordinate tensor]
     \label{thm:mpdo_physical_t_squared_closure_identity}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalTSquaredMap_twoSiteClosure_eq_fourSiteClosure}
     \leanok
@@ -235,7 +235,7 @@
     For every virtual matrix $X$, the sector-coordinate tensor satisfies
     $\widehat{\mathcal T}^2(\widehat{\mathcal K}_2(X))
         =\widehat{\mathcal K}_4(X)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_physical_t_closure_identity, thm:mpdo_localized_physical_t_closure_identity}
@@ -263,14 +263,14 @@
     overlapping applications.
 \end{definition}
 
-\begin{theorem}[The two-step physical coarse-graining is a channel]
+\begin{lemma}[The two-step physical coarse-graining is a channel]
     \label{thm:mpdo_physical_s_squared_map_cptp}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalSSquaredMap_isKrausCPTP}
     \leanok
     \uses{def:mpdo_physical_s_squared_map}
     The map $\widehat{\mathcal S}^2$ is trace-preserving and completely
     positive.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_physical_s_map_cptp, thm:mpdo_localized_physical_s_map_cptp}
@@ -278,7 +278,7 @@
     physical coarse-graining channel.
 \end{proof}
 
-\begin{theorem}[Two-step coarse-graining of the sector-coordinate tensor]
+\begin{lemma}[Two-step coarse-graining of the sector-coordinate tensor]
     \label{thm:mpdo_physical_s_squared_closure_identity}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalSSquaredMap_fourSiteClosure_eq_twoSiteClosure}
     \leanok
@@ -286,7 +286,7 @@
     For every virtual matrix $X$, the sector-coordinate tensor satisfies
     $\widehat{\mathcal S}^2(\widehat{\mathcal K}_4(X))
         =\widehat{\mathcal K}_2(X)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_localized_physical_s_closure_identity, thm:mpdo_physical_s_closure_identity}
@@ -388,7 +388,7 @@
 % and does not control unequal raw repeated-copy weights. Thus this conditional
 % helper does not imply the printed (iv)=>(v), which is refuted. Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{theorem}[Blocked sector-coordinate tensor is a renormalization fixed point]
+\begin{lemma}[Blocked sector-coordinate tensor is a renormalization fixed point]
     \label{thm:mpdo_blocked_sector_coordinate_tensor_is_rfp_via_ts}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.blockTwo_sectorCoordinateTensor_isRFPViaTS}
     \leanok
@@ -402,7 +402,7 @@
     canonical identifications of one blocked site with two original sites and
     two blocked sites with four original sites, the required channels are
     $\widehat{\mathcal S}^2$ and $\widehat{\mathcal T}^2$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_physical_t_squared_map_cptp, thm:mpdo_physical_t_squared_closure_identity, thm:mpdo_physical_s_squared_map_cptp, thm:mpdo_physical_s_squared_closure_identity, thm:mpdo_one_site_closure_two_site_blocking, thm:mpdo_two_site_closure_two_site_blocking}
@@ -430,7 +430,7 @@
 % unconstrained. The printed (iv)=>(v) is therefore not an all-sector extension
 % of this theorem and is refuted. Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{theorem}[Conditional two-site blocking theorem from neighboring trace factorization]
+\begin{lemma}[Conditional two-site blocking theorem from neighboring trace factorization]
     \label{thm:mpdo_blocked_original_tensor_is_rfp_via_ts}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.blockTwo_isRFPViaTS}
     \leanok
@@ -456,7 +456,7 @@
     from the false Proposition~C.12, so this conditional theorem does not prove
     the bare implication (ii)$\Rightarrow$(v). It also does not exclude
     different channel maps; see \cite{gap:cpgsv17_pf_rank_one}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_blocked_sector_coordinate_tensor_is_rfp_via_ts}
@@ -479,7 +479,7 @@
 % is not a separate source obligation.
 % The raw implication (iv)=>(v) is separately refuted.  Documented in
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{theorem}[Arbitrary virtual boundaries of canonical block sums]
+\begin{lemma}[Arbitrary virtual boundaries of canonical block sums]
     \label{thm:mpdo_canonical_block_sum_arbitrary_boundary}
     \lean{MPSTensor.trace_evalWord_toTensorFromBlocks_mul,
         MPSTensor.trace_evalWord_gauge_mul,
@@ -498,7 +498,7 @@
         \notag
     \end{align}
     where the conjugated boundary $G^{-1}XG$ is independent of the word length.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     A word of length $|w|$ in the block-sum tensor is block diagonal. Its
@@ -513,7 +513,7 @@
     transformed boundary is the same at every word length.
 \end{proof}
 
-\begin{theorem}[Absorbed-representative boundary decomposition]
+\begin{lemma}[Absorbed-representative boundary decomposition]
     \label{thm:mpdo_absorbed_representative_boundary_decomposition}
     \lean{MPOTensor.physCloseN_eq_sum_flatBasis_of_gauge_toTensor,
         MPOTensor.physCloseN_eq_sum_commonWeightAbsorbedBasis_of_gauge_toTensor}
@@ -547,10 +547,10 @@
     diagonal copy blocks depends on $N$. In particular, the same
     representative boundary map applies at the two lengths entering the two
     channel equations of Definition~\ref{def:is_rfp_via_ts}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    Applying Theorem~\ref{thm:mpdo_canonical_block_sum_arbitrary_boundary} to
+    Applying Lemma~\ref{thm:mpdo_canonical_block_sum_arbitrary_boundary} to
     the block sum indexed by the individual copies and reindexing this finite
     sum by a representative $j$ and a copy label $q$ isolates each basis block.
     For fixed $j$, all copy weights are equal, so their common $N$-th power may
@@ -561,7 +561,7 @@
     nor the subsequent sum of diagonal copy blocks depends on $N$.
 \end{proof}
 
-\begin{theorem}[Conditional composition of absorbed BNT channels]
+\begin{lemma}[Conditional composition of absorbed BNT channels]
     \label{thm:mpdo_absorbed_bnt_channel_assembly}
     \lean{MPOTensor.blockedOneChainEquiv,
         MPOTensor.blockedTwoChainEquiv,
@@ -619,7 +619,7 @@
     composition underlying \cite[Appendix~C.2, lines~1646--1665 and
         1810--1825]{Cirac2016MPDO_arXiv}; it is not the printed implication
     (iv)$\Rightarrow$(v) of Theorem~4.9.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_absorbed_representative_boundary_decomposition}
@@ -651,7 +651,7 @@
     $K$ carrying the original boundary.
 \end{proof}
 
-\begin{theorem}[Completion outside the absorbed BNT supports]
+\begin{lemma}[Completion outside the absorbed BNT supports]
     \label{thm:mpdo_absorbed_bnt_channel_support_completion}
     \lean{MPOTensor.sum_firstSiteMatrix,
         MPOTensor.sum_projection_twoSidedSupport_physicalSlice,
@@ -660,18 +660,18 @@
     \leanok
     \uses{thm:mpdo_absorbed_representative_boundary_decomposition, thm:mpdo_absorbed_bnt_channel_assembly, def:is_rfp_via_ts}
     Retain the hypotheses of
-    Theorem~\ref{thm:mpdo_absorbed_bnt_channel_assembly}, except that the
+    Lemma~\ref{thm:mpdo_absorbed_bnt_channel_assembly}, except that the
     pairwise orthogonal outer support projections are not required to sum to
     the identity. If every blocked absorbed representative is a
     renormalization fixed point via trace-preserving completely positive maps,
     then the blocked complete tensor is also such a fixed point.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_absorbed_representative_boundary_decomposition, thm:mpdo_absorbed_bnt_channel_assembly, thm:matrix_support_completion_cptp, lem:mpdo_compressed_cp_sum, lem:mpdo_projector_controlled_trace_selection}
     If the one-site physical space has dimension zero, all of its endomorphisms
     are equal. Hence $\sum_sP_s=I$, and
-    Theorem~\ref{thm:mpdo_absorbed_bnt_channel_assembly} applies directly.
+    Lemma~\ref{thm:mpdo_absorbed_bnt_channel_assembly} applies directly.
     Assume from now on that the physical dimension is positive. Fixed basis
     vectors show that the two output spaces are nonempty; normalizing
     their identity matrices gives maximally mixed density matrices
@@ -704,7 +704,7 @@
     \end{align}
 
     Since $Q_N$ is Hermitian and idempotent, applying
-    Theorem~\ref{thm:matrix_support_completion_cptp} to each active sum
+    Lemma~\ref{thm:matrix_support_completion_cptp} to each active sum
     with $P=Q_N$ completes it on the orthogonal input complement,
     \begin{align}
         \mathcal S_{\mathrm{glob}}(Y)   & =\mathcal S_{\mathrm{act}}(Y)
@@ -728,7 +728,7 @@
 % factorizations. Proposition C.12's claim that SAL and ZCL supply them is
 % false under the complete standing hypotheses; see
 % docs/paper-gaps/cpgsv17_pf_rank_one.tex.
-\begin{theorem}[Blocking channels from representative trace factorizations]
+\begin{lemma}[Blocking channels from representative trace factorizations]
     \label{thm:mpdo_absorbed_factorization_blocking_channels}
     \lean{MPOTensor.%
         blockTwo_isRFPViaTS_of_bntLayerOrthogonal_of_physicalSectorFactorization_of_commonWeight}
@@ -759,13 +759,13 @@
     coefficient families may then be taken identically one. The
     factorizations are assumed here. They cannot in general be derived from
     saturation of the area law and zero correlation length:
-    Theorem~\ref{thm:mpdo_sal_zcl_bnt_sector_structure} refutes that
+    Lemma~\ref{thm:mpdo_sal_zcl_bnt_sector_structure} refutes that
     representativewise assertion under the complete standing hypotheses; see
     \cite{gap:cpgsv17_pf_rank_one}. Thus this conditional result neither proves
-    Theorem~\ref{thm:mpdo_sal_zcl_blocking_channels} nor itself excludes a
+    Lemma~\ref{thm:mpdo_sal_zcl_blocking_channels} nor itself excludes a
     different construction of its two channel maps. The independent
     trace-norm argument in that theorem refutes the source conclusion.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{cor:mpdo_common_weight_bnt_layer_supports, thm:mpdo_blocked_original_tensor_is_rfp_via_ts, thm:mpdo_absorbed_bnt_channel_support_completion}
@@ -777,10 +777,10 @@
     the projection onto each local subspace in the closing proof of the
     source. Each given trace factorization yields a blocked channel pair
     for its representative by
-    Theorem~\ref{thm:mpdo_blocked_original_tensor_is_rfp_via_ts}. The
+    Lemma~\ref{thm:mpdo_blocked_original_tensor_is_rfp_via_ts}. The
     projector-controlled combination of these pairs across the outer
     supports, completed trace-preservingly outside their sum, is
-    Theorem~\ref{thm:mpdo_absorbed_bnt_channel_support_completion}. In the
+    Lemma~\ref{thm:mpdo_absorbed_bnt_channel_support_completion}. In the
     single-sector case the sole trace condition $\tr(\eta^s)=1$ realizes the
     required rank-one normalization with unit coefficient families.
 \end{proof}
@@ -846,7 +846,7 @@
 % witness below refutes the refinement direction itself; it is not merely a
 % failure of the printed representativewise factorization route.  Documented
 % in docs/paper-gaps/cpsv16_prop_c15_blocking_channel_false.tex.
-\begin{theorem}[The SAL--ZCL blocking-channel conclusion is false]
+\begin{lemma}[The SAL--ZCL blocking-channel conclusion is false]
     \label{thm:mpdo_sal_zcl_blocking_channels}
     \lean{MPOTensor.CPSVBlockingChannelCounterexample.%
         printed_propositionC15_and_theorem49_ii_to_v_are_false}
@@ -875,7 +875,7 @@
     Proposition~C.15 and its twice-applied contribution to the condition-(ii)
     route to Theorem~4.9(v) are false as printed
     \cite{gap:cpsv16_prop_c15_blocking_channel_false}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:mpdo_sitewise_physical_recovery,

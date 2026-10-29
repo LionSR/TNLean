@@ -14,7 +14,7 @@
     \cite{Schuch2010PEPS}, lines 2489--2507.
 \end{definition}
 
-\begin{theorem}[One original-spin unitary moves a charge]
+\begin{lemma}[One original-spin unitary moves a charge]
     \label{thm:peps_regular_physical_charge_motion}
     \lean{TNLean.PEPS.regularChargeMoveCoordinatePermutation_coordinateTranslation,
         TNLean.PEPS.exists_unitary_regularPhysicalChargeMotion}
@@ -36,7 +36,7 @@
     $\chi(p\eta_e)$, and $p'$ is the derived tree-gauge parameter above.
     The character is retained when $\chi$ is an irreducible character.
     No coefficient identity or Gram matrix is assumed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     On surviving canonical terms the charge label is
     $k_{\mathrm{tail}(e)}x^{-1}a_e$. After the swap its target value is
@@ -47,7 +47,7 @@
     identity gives the stated contraction action.
 \end{proof}
 
-\begin{theorem}[The weighted charge is the tensor insertion]
+\begin{lemma}[The weighted charge is the tensor insertion]
     \label{thm:peps_regular_weighted_charge_contraction}
     \lean{TNLean.PEPS.regularWeightedOpenRegionWeight_eq_openRegionWeight_regularEdgeCharacterSite}
     \leanok
@@ -58,7 +58,7 @@
     on the ordered tail of $e$. Every boundary label is retained.
     This is the charge insertion of \cite{Schuch2010PEPS}, lines
     2432--2453.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The identity bond shares one group label at both endpoints. The product
     of the site factors differs from the original product by precisely the
@@ -66,7 +66,7 @@
     edge labels gives the claimed identity, with the same boundary constraint.
 \end{proof}
 
-\begin{theorem}[Untwisted motion without fixed tree choices]
+\begin{lemma}[Untwisted motion without fixed tree choices]
     \label{thm:peps_regular_untwisted_physical_charge_motion}
     \lean{TNLean.PEPS.regularRegionTreeGauge_one,
         TNLean.PEPS.exists_unitary_regularPhysicalChargeMotion_of_connected}
@@ -79,7 +79,7 @@
     from $e$ to $f$ in the ordinary open tensor contraction, retaining $\chi,p$ and every boundary configuration. The tree and root
     are chosen in the proof. This is a finite-block charge-motion consequence
     of \cite{Schuch2010PEPS}, lines 2489--2507.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Choose a spanning tree from the induced connectivity. Its identity
     gradient has the identity normalized vertex labels. Thus $p'=p$ in the

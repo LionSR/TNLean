@@ -137,7 +137,7 @@ conjugate-transposed tensor.
     which is the $L$-fold transfer map applied to the matrix unit.
 \end{proof}
 
-\begin{theorem}[Half-chain Schmidt factorization]%
+\begin{lemma}[Half-chain Schmidt factorization]%
     \label{thm:half_chain_schmidt_factorization}
     \lean{MPSTensor.halfChainReducedMatrix_eq_mul_swap_gram}
     \lean{MPSTensor.halfChainSwapMatrix_mul_conjTranspose}
@@ -151,7 +151,7 @@ conjugate-transposed tensor.
         \label{eq:half_chain_factorization}
     \end{align}
     where $SG^{\mathsf T}S$ is the Gram matrix of the complementary family.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -163,7 +163,7 @@ conjugate-transposed tensor.
     boundary-swapped half-chain Gram matrix.
 \end{proof}
 
-\begin{theorem}[Boundary comparison of the half-chain spectrum]%
+\begin{lemma}[Boundary comparison of the half-chain spectrum]%
     \label{thm:half_chain_charpoly}
     \lean{MPSTensor.charpoly_halfChainReducedMatrix}
     \leanok
@@ -178,7 +178,7 @@ conjugate-transposed tensor.
     \end{align}
     In particular the nonzero spectrum of $\rho_L$, with multiplicities, is
     that of the boundary comparison matrix.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -189,7 +189,7 @@ conjugate-transposed tensor.
     $(SG^{\mathsf T}S)\Psi^{\dagger}\Psi=(SG^{\mathsf T}S)G$.
 \end{proof}
 
-\begin{theorem}[Geometric transfer error of the half-chain overlaps]%
+\begin{lemma}[Geometric transfer error of the half-chain overlaps]%
     \label{thm:half_chain_gram_geometric}
     \lean{MPSTensor.exists_geometric_bound_halfChainGram_sub_fixedPointProj}
     \leanok
@@ -217,7 +217,7 @@ conjugate-transposed tensor.
     apart from the simple eigenvalue one, the spectrum of $\E_A$ lies
     strictly inside the unit disc. The rate $r$ is chosen strictly between the
     spectral radius of $\E_A-P_{\Lambda}$ and one.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -256,7 +256,7 @@ conjugate-transposed tensor.
     of $\Lambda$ at $(\alpha',\alpha)$ is $\lambda_\alpha\delta_{\alpha,\alpha'}$.
 \end{proof}
 
-\begin{theorem}[Geometric convergence to the doubled fixed-point spectrum]%
+\begin{lemma}[Geometric convergence to the doubled fixed-point spectrum]%
     \label{thm:half_chain_comparison_geometric}
     \lean{MPSTensor.exists_geometric_bound_halfChainComparison_sub_diagonal}
     \leanok
@@ -278,17 +278,17 @@ conjugate-transposed tensor.
     \end{align}
     The limiting matrix is the diagonal matrix $\Lambda\otimes\Lambda$ up to
     the trace normalization. Together with
-    Theorem~\ref{thm:half_chain_charpoly}, the nonzero spectrum of the
+    Lemma~\ref{thm:half_chain_charpoly}, the nonzero spectrum of the
     half-chain reduced density matrix on the ring of $2L$ sites is that of a
     $D^2\times D^2$ matrix converging entrywise, geometrically in $L$, to
-    $\Lambda\otimes\Lambda/\tr(\Lambda)^2$. Theorem~\ref{thm:half_chain_ordered_limit}
+    $\Lambda\otimes\Lambda/\tr(\Lambda)^2$. Lemma~\ref{thm:half_chain_ordered_limit}
     proves convergence of the normalized physical eigenvalues.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:half_chain_gram_geometric, lem:half_chain_gram_limit_diagonal}
-    By Theorem~\ref{thm:half_chain_gram_geometric} and
+    By Lemma~\ref{thm:half_chain_gram_geometric} and
     Lemma~\ref{lem:half_chain_gram_limit_diagonal}, both factors of
     $(SG^{\mathsf T}S)G$ lie entrywise within $Cr^{L}$ of their diagonal
     limits, since swapping and transposing $G$ permute its entries and exchange
@@ -312,7 +312,7 @@ conjugate-transposed tensor.
     nonnegative.
 \end{definition}
 
-\begin{theorem}[Ordered functional calculus and perturbations]%
+\begin{lemma}[Ordered functional calculus and perturbations]%
     \label{thm:half_chain_weyl}
     \lean{Matrix.IsHermitian.eigenvalues₀_cfc_monotone}
     \lean{Matrix.IsHermitian.eigenvalues₀_add_algebraMap}
@@ -329,7 +329,7 @@ conjugate-transposed tensor.
     $|s_k(M)-s_k(N)|\leq\lVert M-N\rVert_{\mathrm{op}}$ for every $k$.
     Consequently, convergence of Hermitian matrices of fixed size implies
     convergence of every zero-extended ordered eigenvalue.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -342,7 +342,7 @@ conjugate-transposed tensor.
     eigenvalues follows.
 \end{proof}
 
-\begin{theorem}[Characteristic roots with zero padding]%
+\begin{lemma}[Characteristic roots with zero padding]%
     \label{thm:half_chain_padded_charpoly}
     \lean{Matrix.PosSemidef.paddedEigenvalues_eq_of_charpoly}
     \leanok
@@ -350,7 +350,7 @@ conjugate-transposed tensor.
     Let $M\geq0$ have size $n$ and $N\geq0$ have size $m$.
     If $X^m\chi_M(X)=X^n\chi_N(X)$, then $s_k(M)=s_k(N)$ for every
     $k\geq0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -383,7 +383,7 @@ conjugate-transposed tensor.
     The physical entanglement spectrum is $s_k(\widehat\rho_L)$.
 \end{definition}
 
-\begin{theorem}[Exact physical spectral comparison]%
+\begin{lemma}[Exact physical spectral comparison]%
     \label{thm:half_chain_positive_comparison}
     \lean{MPSTensor.posSemidef_halfChainSpectralMatrix}
     \lean{MPSTensor.charpoly_halfChainSpectralMatrix}
@@ -415,7 +415,7 @@ conjugate-transposed tensor.
     These statements include $d^L<D^2$, singular Gram matrices, and
     zero-norm lengths. If $Z_L>0$, then
     $\operatorname{tr}\widehat\rho_L=1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -426,7 +426,7 @@ conjugate-transposed tensor.
     characteristic-polynomial identity to $\rho_L=\Psi_L W_L\Psi_L^\dagger$ and
     the square-product identity to $H_L$, then scaling both products by
     $Z_L^{-1}$, gives (\ref{eq:half_chain_normalized_charpoly}), from which
-    Theorem~\ref{thm:half_chain_padded_charpoly} equates the ordered
+    Lemma~\ref{thm:half_chain_padded_charpoly} equates the ordered
     eigenvalues.
 \end{proof}
 
@@ -446,7 +446,7 @@ conjugate-transposed tensor.
     The matrix $H_\infty$ is positive semidefinite and has trace one.
 \end{definition}
 
-\begin{theorem}[Normalized physical eigenvalue convergence]%
+\begin{lemma}[Normalized physical eigenvalue convergence]%
     \label{thm:half_chain_ordered_limit}
     \lean{MPSTensor.tendsto_halfChainGram}
     \lean{MPSTensor.tendsto_halfChainSpectralMatrix_of_diagonal}
@@ -470,7 +470,7 @@ conjugate-transposed tensor.
     Repeated eigenvalues are counted with multiplicity, and both lists use
     the zero-extension convention of Definition~\ref{def:half_chain_ordered_spectrum}.
     No invertibility of $\Lambda$ or finite-length normalization is assumed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -491,14 +491,14 @@ conjugate-transposed tensor.
 
 \subsection{The unital canonical convention}
 
-\begin{theorem}[Half-chain Gram matrices under adjoints]%
+\begin{lemma}[Half-chain Gram matrices under adjoints]%
     \label{thm:half_chain_adjoint_gram}
     \lean{MPSTensor.halfChainGram_conjTranspose}
     \leanok
     For $B_i=A_i^\dagger$, the half-chain Gram matrices satisfy
     $G_L(B)_{(\beta',\alpha'),(\beta,\alpha)}
         =G_L(A)_{(\alpha,\beta),(\alpha',\beta')}$ at every length.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -508,7 +508,7 @@ conjugate-transposed tensor.
     exchanges the boundary pairs.
 \end{proof}
 
-\begin{theorem}[Half-chain limit for normal unital tensors]%
+\begin{lemma}[Half-chain limit for normal unital tensors]%
     \label{thm:half_chain_unital_limit}
     \lean{MPSTensor.tendsto_halfChainGram_unital}
     \lean{MPSTensor.tendsto_halfChainSpectralMatrix_unital}
@@ -528,7 +528,7 @@ conjugate-transposed tensor.
     Under the index and decay conventions detailed in
     \cite{gap:pgvwc07_half_chain_spectrum_conventions}, the intermediate Gram
     limit is $\operatorname{diag}_{\alpha\beta}(\lambda_\beta)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -538,11 +538,11 @@ conjugate-transposed tensor.
     has the same eigenvalues under the trace pairing. Its complementary
     fixed-point map therefore has spectral radius strictly below one, so the
     geometric Gram estimate applied to $B_i=A_i^\dagger$ and
-    Theorem~\ref{thm:half_chain_adjoint_gram} give the Gram limit for the
+    Lemma~\ref{thm:half_chain_adjoint_gram} give the Gram limit for the
     original tensor $A$. With $g_{\alpha\beta}=\lambda_\beta$, the positive
     boundary limit has entries $g_{\alpha\beta}g_{\beta\alpha}
         =\lambda_\alpha\lambda_\beta$, and the norm and ordered-eigenvalue
-    arguments of Theorem~\ref{thm:half_chain_ordered_limit} then yield the
+    arguments of Lemma~\ref{thm:half_chain_ordered_limit} then yield the
     eigenvalue convergence of the physical reduced matrices.
 \end{proof}
 
@@ -578,12 +578,12 @@ conjugate-transposed tensor.
     Together with the identity eigenvector from unitality, the exclusion of
     other peripheral eigenvalues by Condition C2, and the spectral-radius
     normalization, this irreducibility establishes that $A$ is normal, so
-    Theorem~\ref{thm:half_chain_unital_limit} yields the half-chain eigenvalue
+    Lemma~\ref{thm:half_chain_unital_limit} yields the half-chain eigenvalue
     limit.
 \end{proof}
 
 
-\begin{theorem}[General canonical C2 half-chain limit]%
+\begin{lemma}[General canonical C2 half-chain limit]%
     \label{thm:half_chain_general_c2_source}
     \notready
     For a TI MPS satisfying Condition C2, \cite[Theorem~6]{PerezGarcia2007Matrix}
@@ -593,4 +593,4 @@ conjugate-transposed tensor.
     Theorem~\ref{thm:half_chain_source_limit} to a general weighted canonical
     representation requires passing to its dominant block and controlling the
     subleading physical contribution.
-\end{theorem}
+\end{lemma}

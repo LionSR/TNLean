@@ -68,7 +68,7 @@ configurations of the $n$ sites.
     $K=V_{n_1}\otimes V_{n_2}$. Here
     $K^\dagger K=\Pi_{n_1}\otimes\Pi_{n_2}$, and $\Pi_{n_i}$ fixes the tensor of
     $P_{n_i}$, so $K^\dagger K$ fixes $C$. By
-    Theorem~\ref{thm:ldpolar_tensor_rotate}, $V_{n_1+n_2}=KW$ and $C$ has the
+    Lemma~\ref{thm:ldpolar_tensor_rotate}, $V_{n_1+n_2}=KW$ and $C$ has the
     positive part of $\mathcal B_{n_1+n_2}$. The matrices
     $\mathcal B_{n_1+n_2}^{\tau}$ are combinations of the products
     $P_{n_1}^aP_{n_2}^b$, so these span the full matrix algebra when the former
@@ -78,7 +78,7 @@ configurations of the $n$ sites.
     on $j$ from $P_2=T_1$ gives $P_{2^j}=T_j$.
 \end{proof}
 
-\begin{theorem}[Layers of register gates one after the other]
+\begin{lemma}[Layers of register gates one after the other]
     \label{thm:ldp_register_layers}
     \lean{MPSPreparation.registerLayersOp,
         MPSPreparation.exists_rounds_registerLayersOp}
@@ -91,10 +91,10 @@ configurations of the $n$ sites.
     measurement rounds of total depth $m(4s+K+2)$ implement the product of the
     gates of $G_{m-1},\dots,G_0$, the list $G_0$ applied first, on the vectors
     with $\ket0$ at the interiors of all the gates.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    By Theorem~\ref{thm:qc_register_layer} each list is applied in depth
+    By Lemma~\ref{thm:qc_register_layer} each list is applied in depth
     $4s+K+2$ on the vectors with $\ket0$ at the interiors of its gates. The
     gates of $G_{j'}$ act on their registers only, which lie outside the
     interiors of the later lists, so they keep $\ket0$ there. Induction on the
@@ -141,7 +141,7 @@ configurations of the $n$ sites.
     depth $j$ lies strictly between the two registers of a node of depth $j$.
 \end{definition}
 
-\begin{theorem}[Trees on blocks of any length with measurements]
+\begin{lemma}[Trees on blocks of any length with measurements]
     \label{thm:ldp_unequal_tree_rounds}
     \lean{MPSPreparation.treeLevelOp, MPSPreparation.treeLevelsOp,
         MPSPreparation.treeLeafOp, MPSPreparation.treeLevelsOp_succ',
@@ -172,19 +172,19 @@ configurations of the $n$ sites.
     sites of its leaves. If every leaf carries a product of at most $K'$
     unitaries on neighbouring sites of the leaf, the leaves of all the blocks
     form a local circuit of depth $K'$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The unitary of a node is a register gate whose stretch is the node, without
     the sites after the leaves; the nodes of one depth are pairwise disjoint.
     By Definition~\ref{def:ldp_tree_layout} a register of a coarser depth is
     never strictly between the two registers of a finer node, so
-    Theorem~\ref{thm:ldp_register_layers} applies the depths one after the
+    Lemma~\ref{thm:ldp_register_layers} applies the depths one after the
     other. The leaves are pairwise disjoint windows of consecutive sites, so
     their unitaries act in parallel.
 \end{proof}
 
-\begin{theorem}[The tree of a block of any length implements its isometry]
+\begin{lemma}[The tree of a block of any length implements its isometry]
     \label{thm:ldp_unequal_tree_isometry}
     \lean{MPSPreparation.treeInput, MPSPreparation.treeInput_injective,
         MPSPreparation.nodeCfg, MPSPreparation.segCfg,
@@ -221,7 +221,7 @@ configurations of the $n$ sites.
     \end{align*}
     for every configuration $\tau$ of the block, with $\iota_0(x)$ the input
     $x$ on the two registers of the root and $\ket0$ elsewhere.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldp_unitary_implementing_isometry, lem:ldp_tree_amplitudes}
@@ -237,7 +237,7 @@ configurations of the $n$ sites.
     depth $j$. The root covers the block.
 \end{proof}
 
-\begin{theorem}[Coherent measurement implementation of bounded-leaf trees]
+\begin{lemma}[Coherent measurement implementation of bounded-leaf trees]
     \label{thm:ldp_supported_tree_rounds}
     \lean{QuantumCircuit.MeasurementRound.OutcomeHistory,
         QuantumCircuit.MeasurementRound.historyKraus,
@@ -254,7 +254,7 @@ configurations of the $n$ sites.
     There is $C$, depending only on $d,s,c$, such that any ring partitioned
     into blocks with tree layouts of $h+1$ coarse depths and leaves of at most
     $c$ sites has the following property. For the register tree $T_b$ of each
-    block from Theorem~\ref{thm:ldp_unequal_tree_isometry}, measurement rounds
+    block from Lemma~\ref{thm:ldp_unequal_tree_isometry}, measurement rounds
     implement $T=\bigotimes_bT_b$ in depth at most $C(h+1)$ on the subspace
     $E$ with every interior scratch site in $\ket0$.
     For every fixed outcome history $\mathbf m$, there is a scalar
@@ -265,12 +265,12 @@ configurations of the $n$ sites.
     \end{align}
     The scalar may be zero. The equality includes every physical output site.
     In particular, substituting the supported polar maps of
-    Theorem~\ref{thm:ldp_supported_polar_tree} gives one physical
+    Lemma~\ref{thm:ldp_supported_polar_tree} gives one physical
     implementation on all supported labels and their coherent superpositions.
     Only nearest-neighbour unitary layers contribute to the depth;
     measurements, classical communication and on-site corrections are free.
     The number of rounds is allowed to grow with $h$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldp_unequal_tree_rounds, thm:qc_bounded_unitary_two_site_gates}
@@ -314,7 +314,7 @@ configurations of the $n$ sites.
     site when $L$ is odd.
 \end{proof}
 
-\begin{theorem}[The state of blocks of unequal lengths with measurements]
+\begin{lemma}[The state of blocks of unequal lengths with measurements]
     \label{thm:ldp_unequal_blocks_measurements}
     \lean{MPSPreparation.isZeroOn_pairLayerOp_mulVec_productVector,
         MPSPreparation.blockInputCfg_eq_placeCfg,
@@ -334,7 +334,7 @@ configurations of the $n$ sites.
     $2^{h+2}s\le\ell_k\le2^{h+1}c$, the state~(\ref{eq:ldp_block_isometry_state})
     of these blocks with the pair $\omega$ is prepared with measurement rounds in
     depth at most $C(h+1)$. No outcome is post-selected.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Injectivity over $s$ sites gives $D^2\le d^s$, hence $D\le d^{s-1}$ since
@@ -346,16 +346,16 @@ configurations of the $n$ sites.
     the last site of the block lies after the leaves, and it carries the last
     site of the leg $r$, which is $\ket0$. A local circuit of bounded depth,
     applied in one round, prepares the pairs from the all-$\ket0$ product
-    state; Theorem~\ref{thm:ldp_unequal_tree_rounds} applies the depths
+    state; Lemma~\ref{thm:ldp_unequal_tree_rounds} applies the depths
     $0,\dots,h$ of the trees with the unitaries of
-    Theorem~\ref{thm:ldp_unequal_tree_isometry}; and a local circuit of
+    Lemma~\ref{thm:ldp_unequal_tree_isometry}; and a local circuit of
     bounded depth, by Theorem~\ref{thm:qc_bounded_unitary_two_site_gates} for
     the boundedly many lengths of the leaves, applies the leaves in one round.
     The output is the state of the blocks as in
-    Theorem~\ref{thm:ldp_approximating_state_depth}.
+    Lemma~\ref{thm:ldp_approximating_state_depth}.
 \end{proof}
 
-\begin{theorem}[Preparation with measurements in depth $O(\log\log(N/\varepsilon))$, every chain length]
+\begin{lemma}[Preparation with measurements in depth $O(\log\log(N/\varepsilon))$, every chain length]
     \label{thm:ldp_loglog_depth_every_length}
     \lean{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpvState_ne_zero,
         MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log}
@@ -372,7 +372,7 @@ configurations of the $n$ sites.
     ``Tree-RG circuit with measurements'' of~\cite{Malz2024Preparation}, where
     normalizing $\ket{\phi_N}$ presupposes $\ket{\phi_N(A)}\neq0$ as noted in
     \cite{gap:mswc24_depth_upper_bound_nonzero_state}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldp_unequal_blocks_measurements,
@@ -385,15 +385,15 @@ configurations of the $n$ sites.
     $\ket{\phi_N}$ by a nonzero scalar, with a bound $t<1$ on the moduli of the
     subleading eigenvalues, $r=-\log t$, and an injectivity length $L$;
     let $s=L+2$, $a=1/r$, $b=\max(\log K,0)/r+4s+1$ with $K$ the constant of
-    Theorem~\ref{thm:ldp_block_approximation_error} at $\gamma=1/2$, and
+    Lemma~\ref{thm:ldp_block_approximation_error} at $\gamma=1/2$, and
     $q=\lceil a\log(N/\varepsilon)+b\rceil\ge4s$. If $q\le N$, writing
     $N=(M-1)q+q'$ with $q\le q'<2q$ ensures that the state of these blocks with the pair of
     the fixed point has error at most $KMe^{-rq}\le\varepsilon$ by
-    Theorem~\ref{thm:ldp_block_approximation_error}, and with
+    Lemma~\ref{thm:ldp_block_approximation_error}, and with
     $2^{h+2}s\le q<2^{h+3}s$ it is prepared in depth $C(h+1)$ by
-    Theorem~\ref{thm:ldp_unequal_blocks_measurements} with $c=8s$. If
+    Lemma~\ref{thm:ldp_unequal_blocks_measurements} with $c=8s$. If
     $4s\le N<q$, the chain is one block, and by
-    Theorem~\ref{thm:ldp_short_chain_preparation} $\ket{\phi_N}$ is the state of
+    Lemma~\ref{thm:ldp_short_chain_preparation} $\ket{\phi_N}$ is the state of
     this block with the pair $\omega\propto P\ket{\mathbb 1}$, prepared in depth
     $C(h+1)$ with $2^{h+2}s\le N<2^{h+3}s$. If $N<4s$, $\ket{\phi_N}$ is prepared
     by a local circuit of bounded depth. In each case $2^h\le

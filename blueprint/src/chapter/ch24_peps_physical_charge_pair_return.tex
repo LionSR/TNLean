@@ -1,5 +1,5 @@
 
-\begin{theorem}[Support of the original product site map]
+\begin{lemma}[Support of the original product site map]
     \label{thm:peps_original_region_projector_absorption}
     \lean{TNLean.PEPS.regionPhysicalProductMatrix_mul_regularLocalProjector}
     \leanok
@@ -7,13 +7,13 @@
     $A$ be their product physical map and $P$ the product of their local
     averaging projectors. Then $A$ satisfies the local-invariance identity $AP=A$ of
     \cite{Schuch2010PEPS}, source lines 1765--1820.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each original site map absorbs its local averaging projector.
     Multiplication of the product maps gives the regional identity.
 \end{proof}
 
-\begin{theorem}[Return measurement on the original physical block]
+\begin{lemma}[Return measurement on the original physical block]
     \label{thm:peps_original_charge_pair_return_measurement}
     \lean{TNLean.PEPS.exists_regularPhysicalChargePairReturnMeasurement}
     \leanok
@@ -36,7 +36,7 @@
     auxiliary finite-region return operation for
     \cite[Section~6.6]{Schuch2010PEPS}, source lines 2582--2615; see
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_reference_return_actual_column,

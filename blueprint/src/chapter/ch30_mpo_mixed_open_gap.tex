@@ -11,7 +11,7 @@ extended two-site interaction of Definition~\ref{def:mpo_mixed_extended_support}
 A norm gap $\eta$ above the kernel of a positive operator $H$ means
 $\eta\|v\|\leq\|Hv\|$ for every $v\perp\ker H$.
 
-\begin{theorem}[Active and inactive endpoint sectors]
+\begin{lemma}[Active and inactive endpoint sectors]
     \label{thm:mpo_mixed_open_active_sectors}
     \lean{MPSTensor.periodicLocalInteractionES_apply_fiber,
         MPSTensor.periodicLocalInteractionES_commute_siteDiagonal,
@@ -100,7 +100,7 @@ $\eta\|v\|\leq\|Hv\|$ for every $v\perp\ker H$.
     $K_N=J_N^*H_NJ_N$. Then $J_N^*J_N=I$, $J_NJ_N^*=Q_N$, and
     $J_N(\ker K_N)=\ker H_N$. A gap $\eta\geq0$ of $K_N$ gives
     a gap $\min\{\eta,1/2\}$ of $H_N$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_endpoint_projector_comparison,
@@ -123,7 +123,7 @@ $\eta\|v\|\leq\|Hv\|$ for every $v\perp\ker H$.
     and gives the stated gap comparison.
 \end{proof}
 
-\begin{theorem}[Uniformly bounded boundary normalization]
+\begin{lemma}[Uniformly bounded boundary normalization]
     \label{thm:mpo_mixed_open_boundary_normalization}
     \lean{MPSTensor.MPOSymmetry.insertedEvalWord_factor_boundary,
         MPSTensor.MPOSymmetry.mixedEndpointPhysicalIndex,
@@ -385,7 +385,7 @@ $\eta\|v\|\leq\|Hv\|$ for every $v\perp\ker H$.
     corresponding normalized local kernel. The normalized Hamiltonian
     acts on the interior coordinates independently of the two free
     exterior registers.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_open_active_sectors}
@@ -405,7 +405,7 @@ $\eta\|v\|\leq\|Hv\|$ for every $v\perp\ker H$.
     two changes gives $B$ and $C$ independent of the number of bulk sites.
 \end{proof}
 
-\begin{theorem}[Uniform open gaps at both endpoints]
+\begin{lemma}[Uniform open gaps at both endpoints]
     \label{thm:mpo_mixed_open_endpoint_gaps}
     \lean{LinearEquiv.ker_adjoint_congruence,
         LinearMap.IsPositive.norm_gap_adjoint_congruence_of_inverse_bound,
@@ -458,7 +458,7 @@ $\eta\|v\|\leq\|Hv\|$ for every $v\perp\ker H$.
     \end{align}
     The kernels are the extended open kernels with free
     exterior registers.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_open_boundary_normalization,
