@@ -219,6 +219,49 @@ theorem iSup_range_localObservable_evenPair (d : ℕ) [NeZero d] :
   exact range_localObservable_biUnion_evenPair_le d _
     (range_localObservable_mono d (subset_biUnion_evenPair Λ) ⟨a, rfl⟩)
 
+/-- Commuting with the automorphic images of every even-pair algebra
+implies commutation with the full quasi-local algebra. This is the intermediate
+generation argument needed for the strict-inclusion step of GNVW,
+arXiv:0910.3675v2, Section 7.2, source lines 1276--1287. It does not assume
+commutation with the separate support factors. -/
+theorem commute_of_forall_commute_image_evenPair [NeZero d]
+    (ω : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d) {z : QuasiLocalAlgebra d}
+    (hz : ∀ x : ℤ, ∀ A : LocalAlgebra d (evenPair x),
+      Commute z (ω (quasiLocalObservable d (evenPair x) A)))
+    (a : QuasiLocalAlgebra d) : Commute z a := by
+  let C := StarSubalgebra.centralizer ℂ ({z} : Set (QuasiLocalAlgebra d))
+  have hle : (⨆ x : ℤ, (localObservable d (evenPair x)).range) ≤
+      C.comap (ω.toStarAlgHom.comp (algebraicToQuasiLocal d)) := by
+    refine iSup_le fun x ↦ ?_
+    rintro _ ⟨A, rfl⟩
+    change ω (quasiLocalObservable d (evenPair x) A) ∈ C
+    rw [StarSubalgebra.mem_centralizer_iff]
+    intro g hg
+    rw [Set.mem_singleton_iff] at hg
+    subst g
+    have hstar := congrArg star (hz x (star A)).eq
+    simp only [map_star, star_mul, star_star] at hstar
+    exact ⟨(hz x A).eq, hstar.symm⟩
+  have hlocal (A : AlgebraicLocalAlgebra d) : ω (algebraicToQuasiLocal d A) ∈ C :=
+    hle (by rw [iSup_range_localObservable_evenPair]; exact StarSubalgebra.mem_top)
+  have hclosedC : IsClosed (C : Set (QuasiLocalAlgebra d)) := by
+    rw [show C = StarSubalgebra.centralizer ℂ ({z} : Set (QuasiLocalAlgebra d)) from rfl,
+      StarSubalgebra.coe_centralizer]
+    exact Set.isClosed_centralizer _
+  have hcont : Continuous (ω : QuasiLocalAlgebra d → QuasiLocalAlgebra d) :=
+    (NonUnitalStarAlgHom.isometry ω.toStarAlgHom ω.injective).continuous
+  have hsub : Set.range (algebraicToQuasiLocal d) ⊆
+      (ω : QuasiLocalAlgebra d → QuasiLocalAlgebra d) ⁻¹' (C : Set (QuasiLocalAlgebra d)) := by
+    rintro _ ⟨A, rfl⟩
+    exact hlocal A
+  have huniv : (Set.univ : Set (QuasiLocalAlgebra d)) ⊆
+      (ω : QuasiLocalAlgebra d → QuasiLocalAlgebra d) ⁻¹' (C : Set (QuasiLocalAlgebra d)) := by
+    rw [← (denseRange_algebraicToQuasiLocal d).closure_range]
+    exact closure_minimal hsub (hclosedC.preimage hcont)
+  have ha : a ∈ C := by
+    simpa using huniv (Set.mem_univ (ω.symm a))
+  exact ((StarSubalgebra.mem_centralizer_iff ℂ).mp ha z rfl).1
+
 /-! ### The quasi-local join of the site-indexed support algebras -/
 
 namespace PropagatesWithin

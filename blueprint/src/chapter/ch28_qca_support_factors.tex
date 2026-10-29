@@ -1,0 +1,77 @@
+\subsection{Centers and matrix sizes of the support factors}
+\label{sec:qca_support_factors}
+
+Let $d>0$ and let $\omega$ be a nearest-neighbour star-automorphism of the
+homogeneous quasi-local chain. No translation covariance is assumed.
+The following is the center and factor argument in
+\cite[lines~1276--1282]{Gross2012IndexTheory}, under the homogeneous scope
+recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
+
+\begin{lemma}[Scalar centers of the support algebras]
+    \label{lem:qca_support_factor_centers}
+    \lean{SpinChain.PropagatesWithin.embeddedSupportAlgebra_isCentral,
+        SpinChain.PropagatesWithin.evenSupportAlgebra_isCentral,
+        SpinChain.PropagatesWithin.oddSupportAlgebra_isCentral}
+    \notready
+    \uses{thm:qca_site_indexed_support_algebras_commute,
+        cor:qca_support_algebra_commutant,thm:qca_quasi_local_center_scalar}
+    Each support algebra $\mathcal R_y$ has scalar center:
+    $Z(\mathcal R_y)=\mathbb C I$.
+\end{lemma}
+\begin{proof}
+    If $X\in Z(\mathcal R_y)$, then $X$ commutes with $\mathcal R_y$ by
+    centrality and with every $\mathcal R_z$, $z\ne y$, by pairwise
+    commutation. Norm-closed generation implies $[X,A]=0$ for every
+    quasi-local observable $A$, so $X=cI$. Faithfulness of the finite-region
+    inclusion gives the same scalar-center assertion in the finite matrix
+    coordinates.
+\end{proof}
+
+\begin{corollary}[Positive matrix presentations]
+    \label{cor:qca_support_factor_presentations}
+    \lean{SpinChain.PropagatesWithin.exists_evenSupportAlgebra_matrix,
+        SpinChain.PropagatesWithin.exists_oddSupportAlgebra_matrix,
+        SpinChain.PropagatesWithin.exists_supportAlgebra_matrixSizes}
+    \notready
+    \uses{lem:qca_support_factor_centers}
+    There is a family of positive integers $r(y)$ with star-algebra
+    isomorphisms
+    \begin{align}
+        \mathcal R_{2x}   & \cong M_{r(2x)}(\mathbb C),   &
+        \mathcal R_{2x+1} & \cong M_{r(2x+1)}(\mathbb C).
+        \label{eq:qca_support_factor_presentations}
+    \end{align}
+    The integer $r(y)$ is the matrix size; the complex dimension of
+    $\mathcal R_y$ is $r(y)^2$.
+\end{corollary}
+\begin{proof}
+    Apply the full-matrix scalar-center consequence of the finite-dimensional
+    star-algebra classification to each finite support algebra. This is the
+    consequence of \cite[Proposition~Csform]{SchumacherWerner2004QCA}
+    documented in \cite{gap:sw04_csform_matrix_scope}; no general direct-sum
+    classification is needed here. Choose these presentations simultaneously
+    in the even and odd families and combine their matrix sizes according to
+    the parity of the site index.
+\end{proof}
+
+\begin{lemma}[Commutant of the even-pair images]
+    \label{lem:qca_even_pair_image_commutant}
+    \lean{SpinChain.commute_of_forall_commute_image_evenPair}
+    \notready
+    \uses{thm:qca_even_pair_algebraic_generation,def:qca_quasi_local_algebra}
+    Let $\omega$ be any star-automorphism of the homogeneous quasi-local
+    chain. If $Z$ commutes with $\omega(\mathcal A_{E_x})$ for every even
+    pair $E_x$, then $Z$ commutes with every quasi-local observable.
+    Commutation with the separate support factors is not assumed.
+    This is the intermediate generation argument in the strict-inclusion
+    step of \cite[lines~1276--1287]{Gross2012IndexTheory}, under the
+    homogeneous scope of
+    \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
+\end{lemma}
+\begin{proof}
+    The even-pair algebras generate the algebraic local algebra. Their
+    images lie in the closed star-algebra of elements commuting with $Z$
+    and $Z^*$. Density of the local union and continuity of $\omega$ extend
+    this containment to its entire image. Surjectivity makes that image
+    the full quasi-local algebra.
+\end{proof}

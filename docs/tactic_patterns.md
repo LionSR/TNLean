@@ -9606,3 +9606,17 @@ there is no need for a new tactic.
   add unrelated dependencies. If a shared one-step statement is needed, move that existing
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
+
+### Dense local image inside a closed commutant — candidate (2026-10-29)
+
+- **Seen:** `QCA/SupportAlgebraGeneration.lean`, the support-family generation
+  theorem and the even-pair-image commutant theorem.
+- **Pattern:** Pull back a closed ambient subset under an automorphism;
+  include the dense algebraic local image; use closure minimality and
+  surjectivity to obtain the global containment.
+- **Reuse:** The new commutant theorem exposes the source's intermediate
+  even-pair argument, avoiding the stronger premise of commutation with
+  each separate support factor.
+- **Decision:** Two proof occurrences in one file; keep the concrete source
+  statements and consolidate the closed-containment argument before a third
+  copy, rather than adding another notion of local generation.
