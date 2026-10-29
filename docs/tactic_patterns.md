@@ -9788,3 +9788,15 @@ there is no need for a new tactic.
   transport in `ParentHamiltonian/PhysicalAlphabetLocalTerms.lean`.
 - **Notes:** Reuses Mathlib's extension-by-zero linear map and dependent product
   embedding. No separate physical configuration record or isometry predicate.
+
+### Pairwise physical transport with outside coordinates — candidate (2026-10-29)
+
+- **Seen:** `ParentHamiltonian/PhysicalAlphabetLocalTerms.lean`.
+- **Pattern:** At an embedded outside coordinate, identify the active vector
+  with the embedding of the original active vector; outside the image it is
+  zero. Apply the already-derived active operator intertwining pointwise.
+- **Reuse:** The operator is the canonical `rightFiberwiseMap` from
+  `ParentHamiltonian/Martingale/SpectatorMaps.lean`; physical extension is the
+  shared Euclidean isometry. No new tensor-product operator model is defined.
+- **Notes:** The active intertwining is a private general helper; the public
+  parent statement derives it from actual rectangular boundary ranges.
