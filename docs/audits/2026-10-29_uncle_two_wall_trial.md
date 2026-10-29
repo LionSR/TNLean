@@ -63,6 +63,18 @@ rotates the exterior first wall around the trace. No supplied local-kernel
 condition, perturbation injectivity, normalization or gap estimate is a
 premise of these cancellation results.
 
+## Exact cyclic norm partition
+
+The existing three-site canonical coordinate helpers are extracted from
+`LocalSupportTransport.lean` into `CyclicRestrictionNorm.lean`, generalized
+to all L≤T and promoted for their actual second consumer. The old three-site
+proof keeps using them. No parallel coordinate equivalence is introduced.
+The new raw identity sums the actual restriction norms with multiplicity
+d^L, including zero physical dimension and empty windows. For d nonzero,
+the actual averaging normalization divides out that multiplicity exactly.
+Independent source review checked the configuration bijection, replacement
+identity, sum order and empty-index cases; no local Lean invocation was run.
+
 ## Remaining work and verification boundary
 
 `UncleTrialLocalization.lean` now derives the full global cyclic cancellation.
