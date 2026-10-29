@@ -4533,10 +4533,269 @@ proof.
     endpoints give the normalization to the probability tail.
 \end{proof}
 
-The scalar frequency selector and its actual integral representation are
-now derived. The regularized operator comparison and uniform locality
-bounds, followed by the ordinary exponential-clustering conclusion,
-remain separate obligations.
+The scalar frequency selector and its integral representation supply
+the regularized observable, ground-vector comparison, and locality
+argument below.
+
+\begin{definition}[The actual regularized negative-frequency observable]
+    \label{def:spt_regularized_negative_frequency_operator}
+    \lean{TNLean.Lattice.gaussianNegativeFrequencyIntegrand,
+        TNLean.Lattice.gaussianNegativeFrequencyOperator}
+    \notready
+    \discussion{9879}
+    \uses{lem:spt_gaussian_cauchy_limit}
+    For a Hermitian $H$, an observable $A$, Gaussian time variance $h$,
+    and positive regularizer $\varepsilon$, put
+    \[
+        A^-_{h,\varepsilon}
+        =c_h\int_{\mathbb R}
+        \frac{e^{itH}Ae^{-itH}}{\varepsilon-it}\,d\nu_h(t).
+    \]
+\end{definition}
+
+\begin{lemma}[Actual regularized energy matrix elements]
+    \label{lem:spt_regularized_frequency_matrix_elements}
+    \lean{TNLean.Lattice.continuous_gaussianNegativeFrequencyIntegrand,
+        TNLean.Lattice.norm_gaussianNegativeFrequencyIntegrand_le,
+        TNLean.Lattice.integrable_gaussianNegativeFrequencyIntegrand,
+        TNLean.Lattice.norm_gaussianNegativeFrequencyOperator_le,
+        TNLean.Lattice.dotProduct_integral_gaussianNegativeFrequencyIntegrand_mulVec,
+        TNLean.Lattice.dotProduct_gaussianNegativeFrequencyOperator_mulVec,
+        TNLean.Lattice.inner_gaussianNegativeFrequencyOperator,
+        TNLean.Lattice.tendsto_dotProduct_gaussianNegativeFrequencyOperator}
+    \notready
+    \discussion{9879}
+    \uses{def:spt_regularized_negative_frequency_operator,lem:spt_gaussian_cauchy_limit}
+    The actual regularized observable is integrable and
+    $\|A^-_{h,\varepsilon}\|\le c_h\varepsilon^{-1}\|A\|$.
+    For energy eigenvectors $Hv=Ev$ and $Hw=E'w$,
+    \[
+        \langle v,A^-_{h,\varepsilon}w\rangle
+        =c_hC_{h,\varepsilon}(E-E')\langle v,Aw\rangle.
+    \]
+    If $h>0$, the actual entries therefore converge as
+    $\varepsilon\downarrow0$ to
+    \[
+        \nu_{1/h}([E-E',\infty))\langle v,Aw\rangle.
+    \]
+\end{lemma}
+\begin{proof}
+    Unitary conjugation preserves the norm, and the rational factor has
+    norm at most $\varepsilon^{-1}$, so the finite Gaussian measure
+    gives integrability. Between energy eigenvectors the actual
+    Heisenberg evolution contributes $e^{it(E-E')}$. Passing the matrix
+    element through the integral gives the actual scalar transform.
+    Apply its proved Gaussian probability-tail limit.
+\end{proof}
+
+\begin{lemma}[Uniform locality after cancelling the Cauchy singularity]
+    \label{lem:spt_regularized_frequency_uniform_locality}
+    \lean{TNLean.Lattice.norm_commutator_gaussianNegativeFrequencyOperator_le}
+    \notready
+    \discussion{9879}
+    \uses{def:spt_regularized_negative_frequency_operator}
+    Suppose $C,v\ge0$ and the actual dynamics satisfy
+    $\|[A(t),B]\|\le C(e^{v|t|}-1)$ for all real $t$.
+    For $T,\varepsilon>0$,
+    \[
+        \|[A^-_{h,\varepsilon},B]\|
+        \le c_h\left(Cve^{vT}
+        +\frac{2\|A\|\|B\|}{T}e^{-T^2/(2h)}\right).
+    \]
+    In particular the bound is independent of the positive regularizer.
+\end{lemma}
+\begin{proof}
+    The rational factor is at most $|t|^{-1}$ for $t\ne0$.
+    For $|t|\le T$, the inequality $e^x-1\le xe^x$ cancels this
+    factor against the actual short-time increment. At $t=0$ the
+    commutator vanishes. Outside the time window, the rational factor
+    is at most $T^{-1}$ and the commutator norm at most
+    $2\|A\|\|B\|$. Split the actual Gaussian integral and apply its
+    Gaussian tail bound. No bound growing as $\varepsilon^{-1}$ is
+    used for this passage.
+\end{proof}
+
+\begin{corollary}[Actual finite-ring regularized-frequency locality]
+    \label{cor:spt_finite_ring_regularized_frequency_locality}
+    \lean{MPSTensor.norm_negativeFrequency_interactionHamiltonian_commutator_le}
+    \notready
+    \discussion{9879}
+    \uses{lem:spt_regularized_frequency_uniform_locality,lem:spt_finite_ring_lieb_robinson}
+    For an actual periodic nearest-neighbour Hamiltonian with Hermitian
+    interaction of norm at most one and disjoint nonempty supports $X,Y$,
+    the preceding bound holds with
+    \[
+        C=2\|A\|\|B\|\,|X|e^{-a d(X,Y)},
+        \qquad v=8e^a,\qquad a\ge0.
+    \]
+    There is no supplied propagation or correlation estimate.
+\end{corollary}
+\begin{proof}
+    The actual finite-ring Lieb--Robinson bound supplies exactly the
+    required short-time increment. Apply the preceding lemma.
+\end{proof}
+
+\begin{lemma}[Actual Gaussian ground-vector separation]
+    \label{lem:spt_gaussian_ground_frequency_separation}
+    \lean{TNLean.Lattice.exists_gaussianNegativeFrequency_ground_limits,
+        TNLean.Lattice.exists_gaussianNegativeFrequency_ground_commutator_limit}
+    \notready
+    \discussion{9879}
+    \uses{lem:spt_regularized_frequency_matrix_elements,lem:spt_gaussian_negative_frequency_cutoff}
+    Suppose the full ground eigenspace of $H$ is $\mathbb C\psi$,
+    every other energy is at least $\Delta>0$ above it, and
+    $\langle\psi,A\psi\rangle=0$. For $q>0$, put $h=q/\Delta^2$.
+    The vectors $A^-_{h,\varepsilon}\psi$ and
+    $(A^-_{h,\varepsilon})^\dagger\psi$ have limits $\xi,\eta$ with
+    \[
+        \|\xi\|\le e^{-q/2}\|A\psi\|,
+        \qquad \|A^\dagger\psi-\eta\|
+        \le e^{-q/2}\|A^\dagger\psi\|.
+    \]
+    The scalar commutator therefore converges to a number $z$ satisfying
+    \[
+        |\langle\psi,AB\psi\rangle-z|
+        \le 2e^{-q/2}\|A\|\|B\|\|\psi\|^2.
+    \]
+    No normalization of $\psi$ or centering of $B$ is required.
+\end{lemma}
+\begin{proof}
+    Expand in an orthonormal energy basis and apply the matrix-element
+    limit. Centering removes all ground-energy coefficients. The two
+    probability-tail estimates bound the remaining coefficients, and
+    Parseval gives the vector bounds. Move the adjoint across the inner
+    product and apply Cauchy--Schwarz to the two error terms.
+\end{proof}
+
+\begin{lemma}[Centering an observable at an unnormalized vector]
+    \label{lem:spt_actual_observable_centering}
+    \lean{TNLean.Lattice.normalizedVectorExpectation,
+        TNLean.Lattice.centeredObservable,
+        TNLean.Lattice.norm_normalizedVectorExpectation_le,
+        TNLean.Lattice.inner_centeredObservable_eq_zero,
+        TNLean.Lattice.norm_centeredObservable_le,
+        TNLean.Lattice.inner_centeredObservable_mul,
+        TNLean.Lattice.centeredObservable_mem,
+        TNLean.Lattice.centeredObservable_commutator}
+    \notready
+    \discussion{9879}
+    For $\psi\ne0$, write
+    $\langle A\rangle_\psi=\langle\psi,A\psi\rangle/\|\psi\|^2$
+    and $A_0=A-\langle A\rangle_\psi\Id$. Then
+    $|\langle A\rangle_\psi|\le\|A\|$,
+    $\langle\psi,A_0\psi\rangle=0$, and $\|A_0\|\le2\|A\|$.
+    Moreover
+    \[
+        \frac{\langle\psi,A_0B\psi\rangle}{\|\psi\|^2}
+        =\langle AB\rangle_\psi
+        -\langle A\rangle_\psi\langle B\rangle_\psi.
+    \]
+    Subtracting this scalar identity preserves every linear space of
+    observables containing $A$ and $\Id$, as well as the commutator with $B$.
+\end{lemma}
+\begin{proof}
+    Use Cauchy--Schwarz, the operator-norm bound, and the triangle
+    inequality. Expand the scalar identity and use that $\|\psi\|^2>0$.
+\end{proof}
+
+\begin{lemma}[Ordinary centered correlation from Gaussian frequency separation]
+    \label{lem:spt_gaussian_ordinary_centered_correlation}
+    \lean{TNLean.Lattice.norm_centered_ground_correlation_le_gaussian}
+    \notready
+    \discussion{9879}
+    \uses{lem:spt_gaussian_ground_frequency_separation,lem:spt_regularized_frequency_uniform_locality}
+    Under the preceding ground-line and propagation hypotheses, for
+    $q,T>0$ and $h=q/\Delta^2$,
+    \[
+        |\langle\psi,AB\psi\rangle|
+        \le\left(2e^{-q/2}\|A\|\|B\|
+        +c_h\left(Cve^{vT}
+            +\frac{2\|A\|\|B\|}{T}e^{-T^2/(2h)}\right)\right)\|\psi\|^2.
+    \]
+\end{lemma}
+\begin{proof}
+    The regularized commutator is bounded uniformly in its positive
+    regularizer. Pass this bound to its scalar limit and add the proved
+    Gaussian ground-vector error.
+\end{proof}
+
+\begin{corollary}[Ordinary connected Gaussian bound for the physical path]
+    \label{cor:spt_exact_ground_connected_gaussian_bound}
+    \lean{MPSTensor.ExactMPSGroundPath.exists_uniform_centered_correlation_gaussian_bound,
+        MPSTensor.ExactMPSGroundPath.exists_uniform_connected_correlation_gaussian_bound}
+    \notready
+    \discussion{9879}
+    \uses{lem:spt_gaussian_ordinary_centered_correlation,lem:spt_actual_observable_centering,
+        lem:spt_exact_ground_gaussian_bounds,lem:spt_finite_ring_lieb_robinson}
+    Along an exact MPS ground-state path there is one $\Delta>0$ such that,
+    at every parameter and ring length $N\ge2$, arbitrary observables
+    supported on disjoint nonempty sets $X,Y$ satisfy
+    \[
+        |\langle AB\rangle_\psi
+        -\langle A\rangle_\psi\langle B\rangle_\psi|
+        \le2\|A\|\|B\|
+        \left(2e^{-q/2}+c_h\left(
+            2|X|e^{-a d(X,Y)}ve^{vT}
+            +\frac2T e^{-T^2/(2h)}\right)\right),
+    \]
+    where $q,T>0$, $a\ge0$, $h=q/\Delta^2$, and $v=8e^a$.
+\end{corollary}
+\begin{proof}
+    The actual physical gap supplies the full ground line and the common
+    spectral gap. The actual finite-ring propagation estimate supplies
+    the time increment. Center the first observable at the actual
+    nonzero periodic MPS vector, preserve its support, and divide the
+    preceding estimate by the squared vector norm.
+\end{proof}
+
+\begin{lemma}[An exponential rate for the Gaussian frequency bound]
+    \label{lem:spt_gaussian_frequency_clustering_rate}
+    \lean{GaussianFilter.kernel_inv_zero_eq_sqrt,
+        TNLean.Lattice.exists_gaussianFrequencyClusteringRate}
+    \notready
+    \discussion{9879}
+    If $\Delta,v>0$, there are $C,\kappa>0$ such that for $m\ge0$ and
+    $\ell\ge1$,
+    \[
+        2e^{-\ell\Delta/(4v)}+
+        \sqrt{\frac{\ell}{4\pi v\Delta}}
+        \left(2mv e^{-\ell/2}
+        +\frac{4v}{\ell}e^{-\ell\Delta/(4v)}\right)
+        \le C(m+1)e^{-\kappa\ell}.
+    \]
+\end{lemma}
+\begin{proof}
+    The density normalization is $c_h=\sqrt{h/(2\pi)}$.
+    Take $\kappa=\min(1/4,\Delta/(8v))$ and absorb the square-root
+    factors using $\sqrt\ell\le\ell$ and
+    $\ell e^{-\ell/2}\le4e^{-\ell/4}$.
+\end{proof}
+
+\begin{theorem}[Ordinary connected exponential clustering along the physical path]
+    \label{thm:spt_exact_ground_connected_exponential_clustering}
+    \lean{MPSTensor.ExactMPSGroundPath.exists_uniform_connected_exponential_clustering}
+    \notready
+    \discussion{9879}
+    \uses{cor:spt_exact_ground_connected_gaussian_bound,lem:spt_gaussian_frequency_clustering_rate}
+    Along an exact MPS ground-state path there are $K,\kappa>0$,
+    independent of the parameter and ring length $N\ge2$, such that
+    observables supported on disjoint nonempty $X,Y$ obey
+    \[
+        |\langle AB\rangle_\psi
+        -\langle A\rangle_\psi\langle B\rangle_\psi|
+        \le K(|X|+1)\|A\|\|B\|e^{-\kappa\ell}
+    \]
+    whenever $1\le\ell\le d(X,Y)$.
+\end{theorem}
+\begin{proof}
+    Set $a=1$, $v=8e$, $T=\ell/(2v)$, and $q=T\Delta$ in the
+    preceding Gaussian bound. Both Gaussian errors are
+    $e^{-\ell\Delta/(4v)}$, while the short-time term is bounded
+    by $2|X|v e^{-\ell/2}$. Apply the exponential-rate lemma.
+\end{proof}
+
+Passing these finite correlations to limiting transfer contractions and
+choosing minimal canonical representatives are separate steps below.
 
 \begin{lemma}[Transfer spectral rate from limiting correlations]
     \label{lem:spt_transfer_rate_from_correlations}

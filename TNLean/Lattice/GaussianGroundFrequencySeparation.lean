@@ -62,6 +62,7 @@ private theorem actual_inner_cutoff_limit
   filter_upwards [self_mem_nhdsWithin] with ε hε
   exact (inner_gaussianNegativeFrequencyOperator _ hH A hε hv hw).symm
 
+omit [DecidableEq n] in
 private theorem exists_vector_limit_of_inner_limits
     {α : Type*} {l : Filter α} [l.NeBot]
     (b : OrthonormalBasis n ℂ (EuclideanSpace ℂ n))
@@ -76,6 +77,7 @@ private theorem exists_vector_limit_of_inner_limits
   refine ⟨ξ, hf, fun i ↦ ?_⟩
   exact tendsto_nhds_unique (tendsto_const_nhds.inner hf) (hc i)
 
+omit [DecidableEq n] in
 private theorem norm_le_of_inner_coefficients_le
     (b : OrthonormalBasis n ℂ (EuclideanSpace ℂ n))
     (x y : EuclideanSpace ℂ n) {r : ℝ} (hr : 0 ≤ r)
@@ -211,7 +213,7 @@ theorem exists_gaussianNegativeFrequency_ground_commutator_limit
     apply h.congr'
     exact Eventually.of_forall fun ε ↦ by
       dsimp only
-      simp only [map_sub, map_mul, ContinuousLinearMap.sub_apply, inner_sub_right,
+      simp only [map_sub, map_mul, _root_.sub_apply, inner_sub_right,
         ContinuousLinearMap.mul_apply, hmove]
   · have hnorm (M : Matrix n n ℂ) : ‖L M ψ‖ ≤ ‖M‖ * ‖ψ‖ := by
       simpa only [← Matrix.cstar_norm_def] using (L M).le_opNorm ψ

@@ -23,6 +23,7 @@ regularized Cauchy time integral is a separate step.
 noncomputable section
 
 open MeasureTheory ProbabilityTheory
+open scoped NNReal Topology
 
 namespace TNLean.Lattice
 
@@ -83,13 +84,13 @@ theorem abs_one_sub_gaussianNegativeFrequencyCutoff_le_exp_of_gap
         (gaussianReal 0 v).real ((Set.Ici ω)ᶜ) :=
       (probReal_compl_eq_one_sub measurableSet_Ici).symm
     _ ≤ (gaussianReal 0 v).real {x : ℝ | Δ ≤ -x} := by
-      apply measureReal_mono
+      refine measureReal_mono ?_ (measure_ne_top _ _)
       intro x hx
       have hx' : x < ω := by simpa only [Set.mem_compl_iff, Set.mem_Ici, not_le] using hx
       change Δ ≤ -x
       linarith
     _ ≤ Real.exp (-(Δ ^ 2) / (2 * (v : ℝ))) := by
-      simpa only [Pi.neg_apply] using
+      simpa only [Pi.neg_apply, id_eq] using
         (GaussianFilter.hasSubgaussianMGF_gaussianReal v).neg.measure_ge_le hΔ.le
     _ = _ := gaussian_gap_rate hq hΔ
 

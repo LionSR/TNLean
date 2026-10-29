@@ -21,6 +21,8 @@ frequency-separation and propagation balance following Lemma 3.1.
 
 noncomputable section
 
+open scoped NNReal
+
 namespace GaussianFilter
 
 /-- The actual normalization coefficient at inverse variance is a square

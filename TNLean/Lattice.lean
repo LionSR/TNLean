@@ -18,6 +18,7 @@ import TNLean.Lattice.FiniteDomain
 import TNLean.Lattice.GaussianCauchyKernel
 import TNLean.Lattice.GaussianCauchyNormalization
 import TNLean.Lattice.GaussianCauchyTransform
+import TNLean.Lattice.GaussianConnectedCorrelation
 import TNLean.Lattice.GaussianFilteredGround
 import TNLean.Lattice.GaussianFilteredIncrement
 import TNLean.Lattice.GaussianFilteredLocality
@@ -26,7 +27,11 @@ import TNLean.Lattice.GaussianFilteredTermLocalization
 import TNLean.Lattice.GaussianFilteredTruncation
 import TNLean.Lattice.GaussianFilteredTruncationDecay
 import TNLean.Lattice.GaussianFilteredTruncationGround
+import TNLean.Lattice.GaussianFrequencyClusteringRate
+import TNLean.Lattice.GaussianGroundFrequencySeparation
 import TNLean.Lattice.GaussianNegativeFrequencyCutoff
+import TNLean.Lattice.GaussianNegativeFrequencyLocality
+import TNLean.Lattice.GaussianNegativeFrequencyOperator
 import TNLean.Lattice.GaussianTail
 import TNLean.Lattice.GaussianTailMoment
 import TNLean.Lattice.HeisenbergDuhamel
@@ -39,6 +44,7 @@ import TNLean.Lattice.LowEnergyCommutatorExample
 import TNLean.Lattice.LowEnergyCommutatorSum
 import TNLean.Lattice.MarginalTails
 import TNLean.Lattice.NegativeFrequencyGroundCorrelation
+import TNLean.Lattice.ObservableCentering
 import TNLean.Lattice.PartyCircuit
 import TNLean.Lattice.PhysicalBufferCoordinates
 import TNLean.Lattice.ProductForm

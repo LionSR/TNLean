@@ -29,7 +29,7 @@ equations (3.7)–(3.14), and the regularized observable used in Section 3.
 noncomputable section
 
 open MeasureTheory ProbabilityTheory Complex Matrix
-open scoped Matrix Matrix.Norms.L2Operator InnerProductSpace
+open scoped Matrix Matrix.Norms.L2Operator InnerProductSpace NNReal Topology
 
 namespace TNLean.Lattice
 

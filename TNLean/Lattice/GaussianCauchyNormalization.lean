@@ -22,6 +22,7 @@ equations (3.7)–(3.13), with precision h and frequency threshold ω.
 noncomputable section
 
 open MeasureTheory ProbabilityTheory
+open scoped NNReal Topology
 
 namespace GaussianFilter
 

@@ -29,6 +29,7 @@ Gaussian probability cutoff.
 noncomputable section
 
 open MeasureTheory ProbabilityTheory
+open scoped NNReal Topology
 
 namespace TNLean.Lattice
 

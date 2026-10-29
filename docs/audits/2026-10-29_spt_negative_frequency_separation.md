@@ -1,4 +1,4 @@
-# Actual negative-frequency separation and Gaussian/Cauchy scalar limit
+# Ordinary connected clustering from the actual physical MPS gap
 
 Source: Hastings–Koma, arXiv:math-ph/0507008, Section 3, equations
 (3.1)–(3.14), https://arxiv.org/pdf/math-ph/0507008. These are supporting
@@ -38,12 +38,50 @@ energy. It does not replace a quasi-degenerate finite-volume ground band
 by one exact eigenspace. The physical-path caller has an exact unique
 full ground line, as its predicate states.
 
-Remaining: construct the actual regularized observable, relate its matrix
-elements to this scalar transform, control its ground commutator uniformly
-by finite-ring Lieb–Robinson, and derive ordinary exponential clustering.
+The actual regularized observable is now constructed as the Gaussian
+Bochner integral of the Cauchy-weighted actual dynamics. Its inverse-ε
+norm bound proves integrability. A matrix-element functional made from
+existing bilinear maps transports the integral to the actual scalar
+transform, so the energy entries have the proved Gaussian-tail limit.
+
+Uniform locality uses a different bound. At nonzero time the Cauchy factor
+has norm at most 1/|t|. The actual Lieb–Robinson increment cancels that
+factor at short times using exp(x)-1≤x exp(x); at zero the actual
+commutator vanishes. At long times use 1/T and the norm bound
+2‖A‖‖B‖. Splitting the actual Gaussian integral gives a bound independent
+of ε>0. The actual finite-ring caller supplies the propagation estimate
+from its local Hamiltonian, without an extra locality/correlation premise.
+
+The actual regularized ground vectors and adjoint ground vectors have
+limits obtained from their finite energy-basis coefficients. Centering
+removes every coefficient at the ground energy; the two Gaussian-tail
+bounds and Parseval give the two vector errors. Moving adjoints across
+the inner products gives the actual scalar commutator limit and the
+ordinary centered-correlation error, without assuming either comparison.
+
+Centering an arbitrary supported observable at the actual nonzero MPS
+vector preserves its support and increases its norm by at most two.
+Dividing by the actual squared vector norm therefore gives ordinary
+connected correlations of arbitrary supported observables. Neither the
+vector nor the observables are assumed normalized.
+
+Finally set a=1, v=8e, T=ell/(2v), and q=T Delta. Both Gaussian errors
+decay as exp(-ell Delta/(4v)); the short-time propagation term decays as
+exp(-ell/2). The explicit Gaussian normalization and elementary
+square-root absorption yield common positive constants K,kappa with
+
+    |<AB> - <A><B>| <= K (|X|+1) ||A|| ||B|| exp(-kappa ell)
+
+for 1<=ell<=d(X,Y), uniformly over every path parameter and ring length
+N>=2. All inputs to this conclusion are the actual physical path,
+supported observables, and disjoint nonempty supports. No spectral-filter
+comparison, propagation estimate, clustering estimate, transfer bound,
+or minimal-gauge choice is supplied as a public premise.
+
 Passing finite correlations to limiting transfer contractions and minimal
-gauges is also separate. No locality of the sharp spectral part and no
-full clustering/SPT converse are asserted here.
+gauges remains separate. No locality of the sharp spectral part and no
+full SPT converse are asserted here. Issue #9879 remains open until the
+remaining argument and integration are complete.
 
 No local Lean command, build, elaboration or checkdecls was run, as
 requested. Blueprint entries remain notready pending hosted acceptance.
@@ -51,4 +89,4 @@ Independent source/API reviews found no concrete mathematical mismatch.
 First hosted diagnostics exposed elementary name, set-membership and
 coercion-normalization issues in the foundations; these are source-repaired.
 Native source/import/prose/format/integrity checks do not replace Lean
-verification of the new scalar-limit assembly.
+verification of the new clustering assembly.
