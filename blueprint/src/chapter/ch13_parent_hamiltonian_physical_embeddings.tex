@@ -243,3 +243,24 @@ be the actual periodic sums of the complementary projections of these spaces.
     shows that term vanishes; the second then vanishes also. Injectivity
     gives the two component equations. The converse follows by linearity.
 \end{proof}
+
+\begin{lemma}[Full kernel decomposition for a split physical alphabet]
+    \label{lem:physical_sum_full_kernel}
+    \lean{MPSTensor.ker_physical_sum_projectorHamiltonian}
+    \notready
+    \uses{lem:physical_sector_state_decomposition,lem:physical_sector_sum_kernel_iff}
+    Let $M\ge R\ge2$, and split the physical alphabet into its first $a$
+    and last $b$ letters. For local spaces $S$ and $T$, put
+    $U=E_RS+F_RT$, where the two maps extend by zero on physical words.
+    For the actual periodic sums of the complementary projections,
+    $\ker H_U=E_M\ker H_S+F_M\ker H_T$.
+\end{lemma}
+\begin{proof}
+    \notready
+    Every kernel vector has zero mixed-sector coefficients and therefore
+    splits into its two actual coefficient restrictions. The component
+    kernel equivalence puts each restriction in its respective kernel.
+    Conversely, the component kernel equivalence and linearity show that
+    the sum of any two embedded component kernel vectors is killed by
+    the combined Hamiltonian.
+\end{proof}
