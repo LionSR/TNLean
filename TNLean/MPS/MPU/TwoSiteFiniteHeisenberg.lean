@@ -47,7 +47,12 @@ private def windowInputHeadEquiv (d : ℕ) :
   toFun z := ![z.1.1, finProdFinEquiv z.2, z.1.2]
   invFun f := ((f 0, f 2), finProdFinEquiv.symm (f 1))
   left_inv z := by rcases z with ⟨⟨a, b⟩, c⟩; simp
-  right_inv f := by funext i; fin_cases i <;> simp
+  right_inv f := by
+    funext i
+    fin_cases i
+    · rfl
+    · exact finProdFinEquiv.apply_symm_apply (f 1)
+    · rfl
 
 private def windowOutputHeadEquiv (d : ℕ) :
     (HalfPair d × FourHalves d) ≃ (Fin 3 → Fin (d * d)) where
@@ -58,7 +63,12 @@ private def windowOutputHeadEquiv (d : ℕ) :
       (((finProdFinEquiv.symm (f 0)).2, (finProdFinEquiv.symm (f 1)).1),
         ((finProdFinEquiv.symm (f 1)).2, (finProdFinEquiv.symm (f 2)).1)))
   left_inv z := by rcases z with ⟨⟨a, b⟩, ⟨⟨c, e⟩, ⟨f, g⟩⟩⟩; simp
-  right_inv f := by funext i; fin_cases i <;> simp
+  right_inv f := by
+    funext i
+    fin_cases i
+    · exact finProdFinEquiv.apply_symm_apply (f 0)
+    · exact finProdFinEquiv.apply_symm_apply (f 1)
+    · exact finProdFinEquiv.apply_symm_apply (f 2)
 
 private def switchMiddleEquiv (α β γ : Type*) : ((α × β) × γ) ≃ ((α × γ) × β) where
   toFun z := ((z.1.1, z.2), z.1.2)
@@ -114,7 +124,7 @@ private theorem twoSiteHeisenbergMatrix_apply {d D ℓ r n : ℕ}
   rw [evalWord_append W _ _ _ _ (by simp)]
   change Matrix.trace (evalWord W _ _ * evalWord W _ _) =
     Matrix.trace (1 * evalWord W _ _ * evalWord W _ _)
-  rw [Matrix.one_mul]
+  simp only [Matrix.one_mul, List.ofFn_succ, List.ofFn_zero]
 
 /-- The full finite MPO intertwines the actual middle input observable
 with the neighbouring four-half-site output observable, for every tail
@@ -126,9 +136,9 @@ theorem twoSiteHeisenbergMatrix_intertwiner {d D ℓ r : ℕ}
     {v : Matrix (HalfPair d) (Fin r × Fin ℓ) ℂ}
     (S : TwoSiteStandardFormData W u v) (n : ℕ)
     (A : Matrix (HalfPair d) (HalfPair d) ℂ) :
-    twoSiteHeisenbergMatrix W n * Matrix.rightKroneckerEmbed A =
-      Matrix.rightKroneckerEmbed (twoLinkOutputObservable u v A) *
-        twoSiteHeisenbergMatrix W n := by
+    Matrix.mul (twoSiteHeisenbergMatrix W n) (Matrix.rightKroneckerEmbed A) =
+      Matrix.mul (Matrix.rightKroneckerEmbed (twoLinkOutputObservable u v A))
+        (twoSiteHeisenbergMatrix W n) := by
   classical
   ext row col
   rcases row with ⟨e, x⟩
@@ -169,9 +179,9 @@ theorem twoSiteHeisenbergMatrix_conjugation {d D ℓ r : ℕ}
     {v : Matrix (HalfPair d) (Fin r × Fin ℓ) ℂ}
     (S : TwoSiteStandardFormData W u v) (n : ℕ)
     (A : Matrix (HalfPair d) (HalfPair d) ℂ) :
-    twoSiteHeisenbergMatrix W n * Matrix.rightKroneckerEmbed A *
+    Matrix.mul (Matrix.mul (twoSiteHeisenbergMatrix W n) (Matrix.rightKroneckerEmbed A))
         (twoSiteHeisenbergMatrix W n)ᴴ =
-      Matrix.rightKroneckerEmbed (twoLinkOutputObservable u v A) := by
+      Matrix.rightKroneckerEmbed (m := OutputExterior d n) (twoLinkOutputObservable u v A) := by
   rw [twoSiteHeisenbergMatrix_intertwiner S n A, Matrix.mul_assoc,
     (twoSiteHeisenbergMatrix_isUnitaryBetween S n).2, Matrix.mul_one]
 
@@ -287,9 +297,9 @@ theorem originalSiteHeisenbergMatrix_intertwiner {d D ℓ r : ℕ}
     (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
     (A : Matrix (HalfPair (MPSTensor.blockPhysDim d k))
       (HalfPair (MPSTensor.blockPhysDim d k)) ℂ) :
-    originalSiteHeisenbergMatrix U k p s * Matrix.rightKroneckerEmbed A =
-      Matrix.rightKroneckerEmbed (twoLinkOutputObservable u v A) *
-        originalSiteHeisenbergMatrix U k p s := by
+    Matrix.mul (originalSiteHeisenbergMatrix U k p s) (Matrix.rightKroneckerEmbed A) =
+      Matrix.mul (Matrix.rightKroneckerEmbed (twoLinkOutputObservable u v A))
+        (originalSiteHeisenbergMatrix U k p s) := by
   classical
   ext row col
   rcases row with ⟨e, x⟩
@@ -329,9 +339,11 @@ theorem originalSiteHeisenbergMatrix_conjugation {d D ℓ r : ℕ}
     (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
     (A : Matrix (HalfPair (MPSTensor.blockPhysDim d k))
       (HalfPair (MPSTensor.blockPhysDim d k)) ℂ) :
-    originalSiteHeisenbergMatrix U k p s * Matrix.rightKroneckerEmbed A *
-        (originalSiteHeisenbergMatrix U k p s)ᴴ =
-      Matrix.rightKroneckerEmbed (twoLinkOutputObservable u v A) := by
+    Matrix.mul (Matrix.mul (originalSiteHeisenbergMatrix U k p s)
+        (Matrix.rightKroneckerEmbed A)) (originalSiteHeisenbergMatrix U k p s)ᴴ =
+      Matrix.rightKroneckerEmbed
+        (m := OriginalExterior d p s (HalfPair (MPSTensor.blockPhysDim d k)))
+        (twoLinkOutputObservable u v A) := by
   rw [originalSiteHeisenbergMatrix_intertwiner U k p s S A, Matrix.mul_assoc,
     (originalSiteHeisenbergMatrix_isUnitaryBetween hU k p s hN).2, Matrix.mul_one]
 
@@ -456,3 +468,4 @@ theorem mpo_bufferedWindow_conjugation {d D ℓ r : ℕ}
     originalSiteHeisenbergInputWindow, originalSiteHeisenbergOutputWindow] using h
 
 end MPOTensor
+
