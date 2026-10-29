@@ -9629,7 +9629,8 @@ there is no need for a new tactic.
   contract each Kronecker summand with the existing QIC swap-trace identity.
 - **Seen:** `MPS/MPU/TimeReversalTwistedTransfer.lean`.
 - **Reuse:** `normalizedDiagonal_pow_eq_sum_evalWord`, `evalWord_mulTensor`,
-  `Matrix.trace_swapMatrix_mul_kronecker`, and the existing physical-word
+  `Matrix.trace_swapMatrix_mul_kronecker`, the existing
+  `Matrix.swapMatrix_mul_kronecker`, and the existing physical-word
   decoding equivalence. No new tensor-product expansion induction is copied.
 - **Decision:** The resulting actual twisted-transfer power identity is a
   mathematical lemma, shared by the exchange-commutation and blocked-trace
