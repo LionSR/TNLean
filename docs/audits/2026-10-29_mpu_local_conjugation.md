@@ -6,7 +6,7 @@ Fundamental Theorem. Source: `Papers/1703.09188/paper_v2.tex`, Proposition
 
 ## Delivered proof text
 
-`TNLean/MPS/MPU/ConjugationSymmetry.lean` adds seven declarations:
+`TNLean/MPS/MPU/ConjugationSymmetry.lean` adds nine declarations:
 
 1. `Matrix.kronecker_map_star_mul_eq_one_of_gate_conjugation` derives
    `(conj(x)*x) ⊗ (conj(y)*y) = 1` from the literal local equation
@@ -15,10 +15,12 @@ Fundamental Theorem. Source: `Papers/1703.09188/paper_v2.tex`, Proposition
 2. `Matrix.transpose_eq_self_or_transpose_eq_neg_of_gate_conjugation` uses
    the existing common-sign theorem from #7711 to obtain the common
    symmetric or skew-symmetric case directly from that local gate equation.
-3. `MPOTensor.mpo_map_star` identifies the periodic operator of the
+3. `MPOTensor.mapStar` names coefficientwise conjugation without any index
+   exchange. `MPOTensor.mpo_map_star` identifies the periodic operator of the
    coefficientwise conjugate tensor with the coefficientwise conjugate
    periodic operator, including length zero. It uses products and traces.
-4. `MPOTensor.TwoSiteStandardFormData.mapStar` conjugates the supplied
+4. `Matrix.IsUnitaryBetween.map_star` transports both rectangular unitary
+   identities. `MPOTensor.TwoSiteStandardFormData.mapStar` conjugates the supplied
    standard form, including its actual half factors, into a standard form
    of the conjugate tensor with exactly the conjugate supplied gates.
 5. `MPOTensor.twoSiteUnshiftedLayer_map_star` and
@@ -77,7 +79,16 @@ the exact circuit equality and unitary-gauge cancellation already in TNLean.
 The generated import check, tactic-pattern scan, declaration/tag source
 check, TeX formatter, whitespace/line-length check, and proof-integrity
 placeholder scan are run. The source-only Blueprint scanner reports all
-seven new declarations covered; its repository-wide scan also reports 547
+nine new declarations covered; its repository-wide scan also reports 547
 unresolved references outside this addition, so full Blueprint synchronization
 is not claimed. No compiled `checkdecls` is run. These checks do not establish
 kernel acceptance.
+
+## Hosted diagnostic repair
+
+Hosted job `123398370707` found three elaboration errors in the first draft:
+composition under `List.ofFn` was not unfolded, the local polymorphic
+unitarity helper had a universe inference mismatch, and the circuit equality
+was invoked without the ring length. The repair uses `Function.comp_def`, a
+shared theorem with explicit gate arguments, and `(N := N)`. This repair is
+source-checked against those existing logs; no local Lean command was run.

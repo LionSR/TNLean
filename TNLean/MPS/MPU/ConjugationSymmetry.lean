@@ -32,6 +32,21 @@ namespace Matrix
 variable {a b c : Type*} [Fintype a] [Fintype b] [Fintype c]
   [DecidableEq a] [DecidableEq b] [DecidableEq c]
 
+/-- Entrywise conjugation preserves both unitary identities of a rectangular
+gate, as used for the conjugate comparison in arXiv:1703.09188,
+`prop1conj`, lines 1030–1033. -/
+theorem IsUnitaryBetween.map_star {A : Matrix a b ℂ} (hA : A.IsUnitaryBetween) :
+    (A.map (starRingEnd ℂ)).IsUnitaryBetween := by
+  have hstar : (A.map (starRingEnd ℂ))ᴴ = Aᴴ.map (starRingEnd ℂ) :=
+    (Matrix.conjTranspose_map (starRingEnd ℂ) (by simp [Function.Semiconj])).symm
+  constructor
+  · change (A.map (starRingEnd ℂ))ᴴ * A.map (starRingEnd ℂ) = 1
+    rw [hstar, ← Matrix.map_mul, hA.1]
+    simp
+  · change A.map (starRingEnd ℂ) * (A.map (starRingEnd ℂ))ᴴ = 1
+    rw [hstar, ← Matrix.map_mul, hA.2]
+    simp
+
 /-- Applying the literal unshifted gate equation twice and cancelling the
 coisometric gate gives the Kronecker identity of arXiv:1703.09188,
 `paper_v2.tex` lines 1033–1035. This identity is derived, not assumed. -/
@@ -80,18 +95,23 @@ namespace MPOTensor
 
 variable {d D ℓ r N : ℕ}
 
+/-- Entrywise conjugation of an MPO tensor, without a physical or virtual
+index swap. Source: arXiv:1703.09188, `prop1conj`, lines 1008–1010. -/
+def mapStar (W : MPOTensor d D) : MPOTensor d D :=
+  fun i j ↦ (W i j).map (starRingEnd ℂ)
+
 /-- Conjugating every coefficient conjugates the periodic operator at each
 length, including zero. This is the finite-chain meaning of conjugation in
 arXiv:1703.09188, `paper_v2.tex` lines 1008–1010. -/
 theorem mpo_map_star (W : MPOTensor d D) (N : ℕ) :
-    mpo (fun i j ↦ (W i j).map (starRingEnd ℂ)) N =
+    mpo (mapStar W) N =
       (mpo W N).map (starRingEnd ℂ) := by
   ext σ τ
   change Matrix.trace (evalWord _ (List.ofFn σ) (List.ofFn τ)) =
     starRingEnd ℂ (Matrix.trace (evalWord W (List.ofFn σ) (List.ofFn τ)))
   rw [evalWord_ofFn, evalWord_ofFn, AddMonoidHom.map_trace]
   congr 1
-  simpa only [List.map_ofFn, Function.comp_apply, RingHom.mapMatrix_apply] using
+  simpa only [List.map_ofFn, Function.comp_def, RingHom.mapMatrix_apply] using
     (map_list_prod (starRingEnd ℂ).mapMatrix
       (List.ofFn fun i : Fin N ↦ W (σ i) (τ i))).symm
 
@@ -104,20 +124,8 @@ def TwoSiteStandardFormData.mapStar
     {u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
     {v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
     (S : TwoSiteStandardFormData W u v) :
-    TwoSiteStandardFormData (fun i j ↦ (W i j).map (starRingEnd ℂ))
+    TwoSiteStandardFormData (MPOTensor.mapStar W)
       (u.map (starRingEnd ℂ)) (v.map (starRingEnd ℂ)) := by
-  have hunitary {a b : Type*} [Fintype a] [Fintype b] [DecidableEq a] [DecidableEq b]
-      {A : Matrix a b ℂ} (hA : A.IsUnitaryBetween) :
-      (A.map (starRingEnd ℂ)).IsUnitaryBetween := by
-    have hstar : (A.map (starRingEnd ℂ))ᴴ = Aᴴ.map (starRingEnd ℂ) :=
-      (Matrix.conjTranspose_map (starRingEnd ℂ) (by simp [Function.Semiconj])).symm
-    constructor
-    · change (A.map (starRingEnd ℂ))ᴴ * A.map (starRingEnd ℂ) = 1
-      rw [hstar, ← Matrix.map_mul, hA.1]
-      simp
-    · change A.map (starRingEnd ℂ) * (A.map (starRingEnd ℂ))ᴴ = 1
-      rw [hstar, ← Matrix.map_mul, hA.2]
-      simp
   refine {
     phys_pos := S.phys_pos
     bond_pos := S.bond_pos
@@ -125,8 +133,8 @@ def TwoSiteStandardFormData.mapStar
     right_pos := S.right_pos
     X₁ := S.X₁.map (starRingEnd ℂ)
     X₂ := S.X₂.map (starRingEnd ℂ)
-    u_unitary := hunitary S.u_unitary
-    v_unitary := hunitary S.v_unitary
+    u_unitary := Matrix.IsUnitaryBetween.map_star (A := u) S.u_unitary
+    v_unitary := Matrix.IsUnitaryBetween.map_star (A := v) S.v_unitary
     v_apply := ?_
     W_apply := ?_
   }
@@ -173,7 +181,7 @@ theorem TwoSiteStandardFormData.map_star_mpo_eq_of_gate_conjugation [NeZero N]
     (mpo W N).map (starRingEnd ℂ) = mpo W N := by
   let e := (twoSitePairConfigEquiv d N).symm
   apply (Matrix.reindex e e).injective
-  have hcircuit := TwoSiteStandardFormData.mpo_eq_shifted_mul_unshifted W u v S
+  have hcircuit := TwoSiteStandardFormData.mpo_eq_shifted_mul_unshifted (N := N) W u v S
   change (Matrix.reindex e e (mpo W N)).map (starRingEnd ℂ) =
     Matrix.reindex e e (mpo W N)
   rw [hcircuit, Matrix.map_mul, twoSiteShiftedLayer_map_star,
