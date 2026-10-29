@@ -763,3 +763,20 @@ start, and is discarded only after the circuit has finished.
     $\langle\phi,\phi\rangle=1$ gives
     $\langle\eta,\eta\rangle=1$. No factorization assumption is used.
 \end{proof}
+
+
+\begin{corollary}[Environment measurement branches of a pure output]
+    \label{cor:qc_physical_port_pure_output_branches}
+    \uses{thm:qc_physical_port_pure_output}
+    \lean{QuantumCircuit.IsPhysicalPortProtocol.exists_environmentKraus_pure_output}
+    \notready
+    Under the hypotheses of Theorem~\ref{thm:qc_physical_port_pure_output}, measuring the final environment in its standard product basis gives branch operators $K_e$ satisfying
+    \[
+        \Gamma(X)=\sum_e K_e X K_e^*,\qquad K_e\psi=\eta_e\phi,\qquad \sum_e|\eta_e|^2=1.
+    \]
+    Thus every outcome of nonzero probability leaves the same pure system state. The circuit has the same physical ports and intersite depth as in that theorem. This does not impose a fixed number of source QCcc blocks or their internal control restrictions.
+\end{corollary}
+
+\begin{proof}
+    Take the matrix blocks of the compiled unitary in the initialized environment column. Their channel is the partial trace of that unitary after pure environment initialization. Each block applied to the input vector is the corresponding environment coordinate of the product output from Theorem~\ref{thm:qc_physical_port_pure_output}.
+\end{proof}

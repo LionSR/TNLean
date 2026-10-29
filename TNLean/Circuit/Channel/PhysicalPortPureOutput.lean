@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Circuit.Channel.PhysicalPortDilation
 import QICLean.Channel.MaximalOverlap
+import QICLean.Channel.EnvironmentDilation
 import Mathlib.LinearAlgebra.Matrix.DotProduct
 
 /-!
@@ -120,5 +121,50 @@ theorem IsPhysicalPortProtocol.exists_appended_unitary_dilation_pure_output
     exact h.trans hOutput
   obtain ⟨η, hη, hfactor⟩ := exists_product_of_pure_marginal Ω φ hφ hMarginal
   exact ⟨A, owner, U, η, hU, hDilation, hη, hfactor⟩
+
+/-- Measuring the actual final environment in its standard product basis
+leaves the same pure system vector in every branch with nonzero amplitude.
+The complete branch family realizes the original channel on all operators;
+its amplitudes form a derived unit vector. The physical ports and intersite
+depth are those of the compiled dilation. Source: arXiv:2103.13367, the
+pure-state transformation convention in the main-text paragraphs
+"Quantum circuits and LOCC" and "State transformations with QC and LOCC". -/
+theorem IsPhysicalPortProtocol.exists_environmentKraus_pure_output
+    {P : PhysicalPortLayout N W} {T : ℕ}
+    {Φ : Module.End ℂ (Matrix (Fin W → Fin d) (Fin W → Fin d) ℂ)}
+    (hΦ : IsPhysicalPortProtocol P T Φ)
+    (ψ φ : (Fin W → Fin d) → ℂ) (hφ : star φ ⬝ᵥ φ = 1)
+    (hOutput : Φ (vecMulVec ψ (star ψ)) = vecMulVec φ (star φ)) :
+    ∃ A : ℕ, ∃ owner : Fin A → Fin N,
+      ∃ U : Matrix (Fin (W + A) → Fin d) (Fin (W + A) → Fin d) ℂ,
+        ∃ η : (Fin A → Fin d) → ℂ,
+          IsPhysicalPortUnitary (P.append owner) T U ∧
+          rectangularKrausMap (environmentKraus (appendMatrixSplit W A d U)
+            (0 : Fin A → Fin d)) = Φ ∧
+          star η ⬝ᵥ η = 1 ∧ ∀ e,
+            environmentKraus (appendMatrixSplit W A d U) (0 : Fin A → Fin d) e *ᵥ ψ =
+              η e • φ := by
+  obtain ⟨A, owner, U, η, hU, hDilation, hη, hfactor⟩ :=
+    hΦ.exists_appended_unitary_dilation_pure_output ψ φ hφ hOutput
+  refine ⟨A, owner, U, η, hU, ?_, hη, fun e ↦ ?_⟩
+  · apply LinearMap.ext
+    intro X
+    rw [← partialTrace_freshEnvironmentInput]
+    have h := LinearMap.congr_fun hDilation X
+    change discardAppendedEnvironment W A d
+      (U * appendEnvironmentInput W A d X * Uᴴ) = Φ X at h
+    rw [discardAppendedEnvironment_conj] at h
+    change partialTraceRight (appendMatrixSplit W A d U *
+      freshEnvironmentInput (0 : Fin A → Fin d) X * (appendMatrixSplit W A d U)ᴴ) = Φ X at h
+    exact h
+  · funext x
+    change (environmentKraus (appendMatrixSplit W A d U)
+      (0 : Fin A → Fin d) e *ᵥ ψ) x = η e * φ x
+    calc
+      _ = ((appendMatrixSplit W A d U) *ᵥ
+          (fixedEnvEmbedding (0 : Fin A → Fin d) *ᵥ ψ)) (x, e) := by
+        rw [mulVec_mulVec]
+        simp only [mulVec, dotProduct, mul_fixedEnvEmbedding_apply, environmentKraus]
+      _ = η e * φ x := (hfactor x e).trans (mul_comm _ _)
 
 end QuantumCircuit

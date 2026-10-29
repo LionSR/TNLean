@@ -249,6 +249,12 @@ in \doclink{TNLean/Circuit/Channel/PhysicalPortPureOutput} retains the
 existing unitary, spatial ownership, physical ports and intersite-depth
 bound. It awaits hosted Lean verification; its Blueprint entry is not ready.
 The environment may remain internally entangled and need not reset to zero.
+The actual environment-column operators also realize the channel, and each
+branch sends the input vector to its environment amplitude times the target
+vector. Their amplitudes are normalized, so every branch of nonzero probability
+has the same pure system state. This does not supply a source QCcc control
+order or a fixed number of blocks.
+
 This exact pure-output result supplies no general approximation estimate or
 source QCcc block/control decomposition.
 

@@ -32,6 +32,13 @@ The marginal trace and normalization of phi normalize that vector. The
 actual dilation equality supplies the marginal identity; this is not an
 assumed purification or opaque simulator.
 
+The actual environment-column Kraus family is also identified. It realizes
+the original channel on all operators, and each branch sends psi to
+eta(e) times phi. Thus a standard-basis environment measurement has the
+same pure system output in every nonzero branch, with a derived normalized
+amplitude family. This conclusion uses the actual dilation, not a supplied
+branch correctness or measurement-simulation assumption.
+
 ## Precise limits
 
 The environment need not be a product over spatial sites and need not

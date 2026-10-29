@@ -3126,7 +3126,9 @@ involve no boundary.
   `.exists_appended_unitary_dilation_reference`. These construct an
   actual same-depth unitary on a port-preserving extension, with fresh local
   product-zero environments initialized once and discarded only at the end.
-  The source-written `.exists_appended_unitary_dilation_pure_output` additionally
+  The source-written `.exists_environmentKraus_pure_output` identifies the actual
+  environment-basis branches, their normalized amplitudes and their common
+  pure system output. The source-written `.exists_appended_unitary_dilation_pure_output` additionally
   derives an actual normalized environment vector and system/environment product
   output when the actual channel output is pure; hosted verification is pending.
 - **Caveat:** source pure-state conditions and the fixed number of composed
