@@ -4,9 +4,8 @@
 \chapter{Repairing the regions}%
 \label{ch:peps_area_law_repair}
 
-Near the marked points of the cells, the initial regions may meet in ways
-that no collar separates. They are repaired recursively
-\cite[Section~11]{OpenAI2026AreaLaw}: each step removes a small square about
+The initial regions are repaired recursively near the marked points of the
+cells \cite[Section~11]{OpenAI2026AreaLaw}: each step removes a small square about
 every current mark from all existing regions and adjoins replacement regions
 cut from a fan, which may create new marks at a smaller scale. This chapter
 defines the repair, proves by a uniform induction that the marks die out after
