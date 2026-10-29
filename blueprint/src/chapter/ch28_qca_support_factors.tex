@@ -151,3 +151,36 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
     also identifies it with $M_{d^2}(\mathbb C)$. Full complex matrix
     algebras which are algebra-isomorphic have equal matrix sizes.
 \end{proof}
+
+\begin{theorem}[Generation of the physical pair and both size identities]
+    \label{thm:qca_physical_pair_adjacent_generation}
+    \lean{SpinChain.PropagatesWithin.existsUnique_eq_smul_one_of_supported_rightPair_commute_supports,
+        SpinChain.PropagatesWithin.adjacentSupportJoin_eq_range_rightPair,
+        SpinChain.PropagatesWithin.oddSupportAlgebra_matrixSize_mul_even_add_one,
+        SpinChain.PropagatesWithin.exists_supportAlgebra_matrixSizes_mul}
+    \notready
+    \uses{cor:qca_image_pair_matrix_sizes,
+        cor:qca_support_factor_presentations,cor:qca_support_algebra_commutant,
+        thm:qca_quasi_local_center_scalar,thm:qca_commuting_full_matrix_product}
+    The two support factors on the same physical pair generate that pair:
+    \begin{align}
+        \mathcal R_{2x+1}\vee\mathcal R_{2x+2} & =\mathcal A_{P_x}.
+        \label{eq:qca_physical_pair_adjacent_generation}
+    \end{align}
+    The same coherent positive matrix-size family therefore satisfies
+    \begin{align}
+        r(2x)r(2x+1) & =d^2, & r(2x+1)r(2x+2) & =d^2.
+        \label{eq:qca_both_adjacent_matrix_sizes}
+    \end{align}
+    This is equation~AARRodd and the two size consequences in
+    \cite[lines~1276--1318]{Gross2012IndexTheory}, in the homogeneous domain.
+\end{theorem}
+\begin{proof}
+    Both support factors lie on $P_x$. If an observable on $P_x$ commutes
+    with both, it commutes with every other support factor by disjoint
+    locality. Global support generation makes it scalar. The support join
+    is a full matrix algebra, so its inclusion into the physical-pair
+    algebra has scalar relative commutant and is onto. Comparing the
+    resulting full-matrix presentations gives the second size identity,
+    and the first was established for the same family above.
+\end{proof}

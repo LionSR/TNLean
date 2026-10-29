@@ -64,10 +64,21 @@ composes with the actual support-product presentation, and the accepted
 matrix-algebra equivalence theorem equates their matrix sizes. No equality
 of vector-space dimensions is mislabeled as an equality of matrix sizes.
 
-Remaining in #7122: AARRodd and its homogeneous size identity. The second
-equality has its own ambient-pair strict-inclusion argument. AARReven and
-the first size identity are source-written here but not claimed compiled
-or integrated.
+The distinct AARRodd argument is now also source-written. Both supports
+embed into the same physical pair. An observable on that pair which commutes
+with them commutes with every other support factor by disjoint locality.
+The global support commutant theorem makes it scalar. Transport to the
+actual full-matrix presentations invokes the same accepted finite relative-
+commutant surjectivity theorem, now with the physical pair as target. This
+derives the second adjacent-generation equality rather than assuming it.
+The second matrix-size equality follows from its matrix algebra equivalence.
+The final existence theorem records both identities for the same coherent
+positive site-indexed size family.
+
+The mathematical conclusions requested by #7122 are source-written with
+homogeneous nearest-neighbour automorphism inputs only. Hosted Lean
+verification and integration remain outstanding; the issue stays open.
+No index construction or MPU correspondence is claimed.
 
 Validation: import-generation, source/prose/whitespace and integrity checks
 passed. No local Lean invocation, build or checkdecls was run, as requested.
