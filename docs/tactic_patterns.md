@@ -24,6 +24,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Cubic dimension of actual sampled word images — promoted (2026-10-29)
+
+- **Pattern:** Bound the actual word-image dimension by the alphabet size
+  to the word length times the sampled dimension, then apply the upper
+  integer-logarithm estimate to obtain `D ^ 6 * s ^ 3`.
+- **Abstraction:** `Submodule.finrank_sampledWordImage_le_cubic` in QICLean
+  `Analysis/SampledWordImageBounds.lean`.
+- **Refactored occurrences:** The existing measurable interval event and
+  the recorded-generator bound in `MPS/AreaLaw/IntervalSampledImage.lean`
+  both use this one dimension theorem. The proof applies to every actual
+  unitary, without a supplied image dimension or success premise.
+
+
 ### Kernels of finite projection sums — promoted (2026-10-29)
 
 - **Pattern:** Deduce that each projection annihilates a vector from the

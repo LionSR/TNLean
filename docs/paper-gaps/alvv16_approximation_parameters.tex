@@ -184,6 +184,41 @@ The remaining quantitative comparison concerns the cap $g=\min(\gamma,1)$
 for larger supplied gaps, as discussed above. The low-energy extension and
 the binary-tree algorithm are separate results and are not asserted here.
 
+
+\section*{The bounded recursive witness construction}
+
+For the same original full ground space, a balanced recursion can be
+constructed with full local spaces at leaves of length at most $4\ell$.
+At every longer parent, one actual family is chosen from the Hamiltonian
+before the sampling size and the child spaces. Its literal ordered words
+act on the actual Haar coordinate sample, followed by one collective trim.
+Writing $D_{\rm ref}=r^2B$, take
+\[
+  A=1+\log r+\log D+\log(1/\beta),\qquad
+  s=\lceil4096rA\rceil,\qquad
+  M=D^6s^3,\qquad
+  \xi=(1000D_{\rm ref}\sqrt{n+1})^{-1}.
+\]
+The corrected fixed-input failure bound is at most $\beta<1$, uniformly
+for parent dimensions at most $D^{12}s^6$. Choosing successful unitaries
+therefore gives actual recursively selected spaces, all $3/200$-viable
+for the original ground space. Each has at most $M$ recorded generators,
+whose internal-cut Schmidt ranks are at most
+$10^6D_{\rm ref}^2(n+1)M$. This bound concerns the recorded generators,
+not arbitrary linear combinations in their span. The whole exterior is
+retained; the squared reference factor is not replaced by $D_{\rm ref}$.
+
+The independent scalar tail and filter conditions remain hypotheses of
+this bounded result. It uses block leaves and one final trim, whereas
+Figure~\texttt{fig:merge-prime} of the source places trimming within the
+error-reduction rounds. It proves existence of one recursively selected
+tree, not a joint probability theorem for the adaptive algorithm. A
+pointwise choice of a measurable hull of each bad set does not by itself
+supply measurable dependence on the earlier spaces. The source theorem
+\texttt{t:alg1} remains separate: its full parameter selection, modified
+merge analysis, adaptive probability, energy-estimation invariant, final
+spectral extraction and computational cost require their own proofs.
+
 \bibliographystyle{unsrt}
 \bibliography{references}
 \end{document}

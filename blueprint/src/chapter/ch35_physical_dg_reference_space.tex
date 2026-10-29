@@ -317,3 +317,146 @@
     $4/400+6/10000+1/250<3/200$.
     The reference uses the genuine two-boundary rank $D_{\rm ref}^2$.
 \end{proof}
+
+
+\begin{definition}[Balanced recursive interval spaces]
+    \label{def:balanced_interval_spaces}
+    \lean{TNLean.MPS.AreaLaw.LongIntervalIndex,
+        TNLean.MPS.AreaLaw.IntervalMergeOperation,
+        TNLean.MPS.AreaLaw.balancedIntervalSpace}
+    \leanok
+    Fix an integer leaf width $w\ge1$ and an operation on pairs of spaces
+    on adjacent intervals. On $[p,r)$, retain the full local space if
+    $r-p\le w$. Otherwise put $k=p+\lfloor(r-p)/2\rfloor$, recursively
+    construct the spaces on $[p,k)$ and $[k,r)$, and apply the fixed
+    operation to these actual child spaces. A long interval is a valid
+    interval of length greater than $w$.
+\end{definition}
+
+\begin{lemma}[Induction for the actual interval recursion]
+    \label{lem:balanced_interval_invariant}
+    \lean{TNLean.MPS.AreaLaw.balancedIntervalSpace_of_short,
+        TNLean.MPS.AreaLaw.balancedIntervalSpace_invariant}
+    \leanok
+    \uses{def:balanced_interval_spaces}
+    Any property of interval spaces that holds at the short leaves and
+    is preserved by the chosen parent operation holds at every actual
+    recursively constructed space.
+\end{lemma}
+\begin{proof}\leanok
+    Induct on the interval length. Both children of a long interval have
+    strictly smaller positive length, and their lengths sum to the
+    parent length.
+\end{proof}
+
+\begin{lemma}[Recorded generators of the actual trimmed image]
+    \label{lem:interval_recorded_generator_bounds}
+    \lean{TNLean.MPS.AreaLaw.IsIntervalSpanWithRankBound,
+        TNLean.MPS.AreaLaw.IsIntervalSpanWithRankBound.finrank_le,
+        TNLean.MPS.AreaLaw.isIntervalSpanWithRankBound_intervalTrimSubspace,
+        TNLean.MPS.AreaLaw.isIntervalSpanWithRankBound_top,
+        TNLean.MPS.AreaLaw.sampledIntervalTrim,
+        TNLean.MPS.AreaLaw.isIntervalSpanWithRankBound_sampledIntervalTrim}
+    \leanok
+    \uses{thm:interval_trimming_reference}
+    A space spanned by at most $M$ recorded vectors has dimension at most
+    $M$. Collective trimming of an orthonormal family of at most $M$
+    vectors produces a spanning family of at most $M$ vectors satisfying
+    $\xi^2\operatorname{SR}(u_i)\le M$ at every internal interval cut.
+    In particular this applies to the literal sampled-word image at the
+    cubic count $M=D^6s^3$.
+    The full local space also admits this bound whenever its dimension
+    is at most $M$ and $0<\xi\le1$.
+    These rank bounds concern the recorded vectors; the same bound is
+    not asserted for every vector in their span.
+\end{lemma}
+\begin{proof}\leanok
+    Use the actual trimmed orthonormal basis as the recorded spanning
+    family and apply the collective rank estimate at each cut.
+    For the full local space, every vector has rank at most its local
+    dimension, and an orthonormal basis spans it.
+\end{proof}
+
+\begin{theorem}[A recursive witness tree from fixed-input node events]
+    \label{thm:sampled_interval_witness_tree}
+    \lean{TNLean.MPS.AreaLaw.exists_balanced_sampled_interval_tree}
+    \leanok
+    \uses{lem:balanced_interval_invariant,lem:interval_recorded_generator_bounds}
+    Fix the same arbitrary global target $G$ at every interval. Suppose
+    a family of at most $D^2$ operators is fixed at each long parent,
+    before choosing the child spaces and the sampling size. Let $r_G\ge1$,
+    $D\ge2$, $0<\beta<1$, and choose
+    \[
+      A=1+\log r_G+\log D+\log(1/\beta),\quad
+      s=\lceil4096r_GA\rceil,\quad M=D^6s^3.
+    \]
+    Assume $q^w\le M$ and $0<\xi\le1$.
+    Suppose that, for every pair of $3/200$-viable child spaces of
+    dimensions at most $M$, the actual sampled-word image and final
+    collective trim is $3/200$-viable on a fixed-input Haar event with
+    the corrected failure bound above.
+    Then one operation can be selected whose values on all such inputs
+    are literal sampled and trimmed outputs for actual unitaries.
+    Its actual balanced recursion is $3/200$-viable for the same $G$ at
+    every interval, has dimension at most $M$, and retains at most $M$
+    generators with $\xi^2\operatorname{SR}(u_i)\le M$.
+    This auxiliary theorem assumes the certified node events; it does
+    not assume final viable spaces or assert an adaptive probability.
+\end{theorem}
+\begin{proof}\leanok
+    The actual merged dimension is at most $M^2=D^{12}s^6$. The uniform
+    failure bound is at most $\beta<1$, hence every certified Haar event
+    contains a unitary. Choose such a unitary for each admissible input.
+    The resulting parent space is the literal sampled-word image and
+    collective trim. At the leaves the full local dimension is at most
+    $q^w\le M$. The preceding induction proves all three bounds for the
+    actual recursion.
+\end{proof}
+
+\begin{theorem}[An actual recursive tree for the physical ground space]
+    \label{thm:physical_dg_recursive_interval_spaces}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_recursive_interval_spaces}
+    \leanok
+    \uses{thm:physical_dg_sampled_node,thm:sampled_interval_witness_tree}
+    Under the physical hypotheses and explicit scalar conditions of
+    Theorem~\ref{thm:physical_dg_sampled_node}, choose the same common
+    reference bound $B$ and put $D_{\rm ref}=r_G^2B$ and
+    $\xi=(1000D_{\rm ref}\sqrt{L+1})^{-1}$.
+    The Hamiltonian constructs one family of at most $D^2$ operators for
+    every valid interval of length greater than $4\ell$, before every
+    $\beta$, sampling size and child space.
+    For $0<\beta<1$, take
+    \[
+      A=1+\log r_G+\log D+\log(1/\beta),\qquad
+      s=\lceil4096r_GA\rceil,\qquad M=D^6s^3.
+    \]
+    Then $s\le4097r_GA$. There is one parent operation whose values on
+    all admissible children are the literal sampled-word image and final
+    collective trim for an actual unitary. Its actual balanced recursion,
+    with full local spaces at leaves of length at most $4\ell$, is
+    $3/200$-viable for the same original global ground space $G$ at
+    every interval and has dimension at most $M$.
+    Each such space has at most $M$ recorded spanning vectors, with
+    internal-cut Schmidt ranks at most
+    \[
+      10^6D_{\rm ref}^2(L+1)M.
+    \]
+    The whole exterior is retained in the viability statements.
+
+    This is a recursive witness theorem with block leaves, capped gap
+    $g=\min\{\gamma,1\}$, independent scalar tail/filter conditions and
+    one final trim at a long node. It does not assert the printed
+    interleaved-trim algorithm, adaptive joint probability, energy
+    estimation, final spectral extraction or running time; these
+    distinctions are recorded in~\cite{gap:alvv16_approximation_parameters}.
+\end{theorem}
+\begin{proof}\leanok
+    Choose the physical reference and all fixed parent families before
+    the sampling size. The uniform failure estimate makes every
+    certified fixed-input node event nonempty. Since $q\le m$,
+    $\ell\ge1$ and $D=(m\ell^2)^{22\ell}$, the full short-leaf dimension
+    $q^{4\ell}$ is at most $D^6\le M$. Apply the preceding actual-tree
+    theorem. Finally divide each recorded weighted rank estimate by
+    $\xi^2$ to obtain the displayed integer bound. The invariant keeps
+    the same original $G$ at every step.
+\end{proof}

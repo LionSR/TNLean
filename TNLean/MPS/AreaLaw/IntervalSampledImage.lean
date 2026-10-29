@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.AdjacentIntervalMerge
-import QICLean.Analysis.SampledOperatorImage
-import QICLean.Analysis.ViableNodeParameters
+import TNLean.MPS.AreaLaw.IntervalGenerators
+import QICLean.Analysis.SampledWordImageBounds
 
 /-!
 # Actual sampled word images on a parent interval
@@ -30,6 +30,36 @@ open scoped TensorProduct
 open MeasureTheory
 
 namespace TNLean.MPS.AreaLaw
+
+/-- The actual sampled word-image followed by one collective interval trim.
+Supporting ALVV, arXiv:1602.08828v2, `l:er`, lines 597–622, and
+`lem:trimming`, lines 660–697. This definition does not identify one final
+trim with the source's interleaved-trim operation. -/
+noncomputable def sampledIntervalTrim (L q p r : ℕ) {N : ℕ}
+    (F : Fin N → EuclideanSpace ℂ (interval L p r → Fin q) →L[ℂ]
+      EuclideanSpace ℂ (interval L p r → Fin q)) (power s : ℕ) (xi : ℝ)
+    (W : Submodule ℂ (EuclideanSpace ℂ (interval L p r → Fin q)))
+    (U : Matrix.unitaryGroup (Fin (Module.finrank ℂ W)) ℂ) :
+    Submodule ℂ (EuclideanSpace ℂ (interval L p r → Fin q)) :=
+  let V := Submodule.sampledWordImage F power s W U
+  let basis := stdOrthonormalBasis ℂ V
+  intervalTrimSubspace L q p r xi (fun i ↦ (basis i : _))
+
+/-- The actual output retains a bounded recorded family, for every unitary.
+Supporting ALVV, arXiv:1602.08828v2, error reduction, lines 597–622,
+and collective trimming, lines 660–697. The bound concerns the recorded
+vectors rather than every linear combination in their span. -/
+theorem isIntervalSpanWithRankBound_sampledIntervalTrim {L q p r N D s : ℕ}
+    (hD : 2 ≤ D) (hs : 1 ≤ s) {xi : ℝ} (hxi : 0 < xi)
+    (F : Fin N → EuclideanSpace ℂ (interval L p r → Fin q) →L[ℂ]
+      EuclideanSpace ℂ (interval L p r → Fin q)) (hN : N ≤ D ^ 2)
+    (W : Submodule ℂ (EuclideanSpace ℂ (interval L p r → Fin q)))
+    (U : Matrix.unitaryGroup (Fin (Module.finrank ℂ W)) ℂ) :
+    IsIntervalSpanWithRankBound L q p r (D ^ 6 * s ^ 3) xi
+      (sampledIntervalTrim L q p r F (Nat.clog D (D ^ 2 * s)) s xi W U) := by
+  apply isIntervalSpanWithRankBound_intervalTrimSubspace hxi
+  exact Submodule.finrank_sampledWordImage_le_cubic hD hs F
+    (by simpa only [Fintype.card_fin] using hN) W U
 
 /-- The actual sampled word image has a measurable fixed-input success
 event, a cubic dimension bound and controlled error for the same original
@@ -109,15 +139,10 @@ theorem exists_measurable_interval_word_image_event
       (T.map C.toLinearEquiv.toLinearMap) Delta himprove power s hs W hW hWT (by norm_num)
   refine ⟨Good, hGood, hbad, hprob, ?_⟩
   intro U hU
-  obtain ⟨hdimension, hfiltered⟩ := houtput U hU
+  obtain ⟨_hdimension, hfiltered⟩ := houtput U hU
   constructor
-  · calc
-      _ ≤ N ^ power * min s Q := by simpa only [Fintype.card_fin] using hdimension
-      _ ≤ (D ^ 2) ^ power * min s Q :=
-        Nat.mul_le_mul_right _ (Nat.pow_le_pow_left hN power)
-      _ ≤ (D ^ 2) ^ power * s := Nat.mul_le_mul_left _ (Nat.min_le_left _ _)
-      _ = (D ^ power) ^ 2 * s := by rw [← pow_mul, ← pow_mul, Nat.mul_comm 2 power]
-      _ ≤ D ^ 6 * s ^ 3 := (Nat.viable_node_power_bounds hD hs).2.2.2
+  · exact Submodule.finrank_sampledWordImage_le_cubic hD hs F
+      (by simpa only [Fintype.card_fin] using hN) W U
   · change Submodule.IsViable (Delta ^ power / c ^ 2)
       (Submodule.sampledWordImage F power s W U) (T.map C.toLinearEquiv.toLinearMap) at hfiltered
     have hback := Submodule.IsCloseTo.trans hfiltered hTGmap (by positivity)

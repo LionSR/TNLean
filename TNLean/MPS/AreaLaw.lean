@@ -12,6 +12,7 @@ import TNLean.MPS.AreaLaw.AKLV
 import TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily
 import TNLean.MPS.AreaLaw.AdjacentIntervalMerge
 import TNLean.MPS.AreaLaw.AreaLaw
+import TNLean.MPS.AreaLaw.BalancedIntervalTree
 import TNLean.MPS.AreaLaw.BandDissolution
 import TNLean.MPS.AreaLaw.BandInformation
 import TNLean.MPS.AreaLaw.Basic
@@ -60,9 +61,11 @@ import TNLean.MPS.AreaLaw.InformationReset
 import TNLean.MPS.AreaLaw.InteractionBudget
 import TNLean.MPS.AreaLaw.InteriorLowEnergyFamily
 import TNLean.MPS.AreaLaw.IntervalCollectiveTrimming
+import TNLean.MPS.AreaLaw.IntervalGenerators
 import TNLean.MPS.AreaLaw.IntervalMPOTransfer
 import TNLean.MPS.AreaLaw.IntervalNeighborhoodEntropy
 import TNLean.MPS.AreaLaw.IntervalSampledImage
+import TNLean.MPS.AreaLaw.IntervalSamplingTree
 import TNLean.MPS.AreaLaw.IntervalSlice
 import TNLean.MPS.AreaLaw.IntervalSymmDiff
 import TNLean.MPS.AreaLaw.IntervalUnion
@@ -92,6 +95,7 @@ import TNLean.MPS.AreaLaw.PhysicalChebyshevViability
 import TNLean.MPS.AreaLaw.PhysicalDGApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGEntropy
 import TNLean.MPS.AreaLaw.PhysicalDGGlobalApproximation
+import TNLean.MPS.AreaLaw.PhysicalDGIntervalTree
 import TNLean.MPS.AreaLaw.PhysicalDGIntervalTrimming
 import TNLean.MPS.AreaLaw.PhysicalDGReferenceSpace
 import TNLean.MPS.AreaLaw.PhysicalDGReferenceTrimming
