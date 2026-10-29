@@ -162,7 +162,7 @@ one scalar need not be a similarity transformation.
     fixed operator compositions preserve operator-norm convergence.
 \end{proof}
 
-\begin{corollary}[Uncle limits under an injective perturbation]
+\begin{lemma}[Uncle limits under an injective perturbation]
     \label{cor:uncle_parent_limit_injective_perturbation}
     \lean{MPSTensor.tendsto_parentInteractionES_twoBlockPerturbation_of_isInjective_perturbation,
         MPSTensor.tendsto_parentHamiltonianES_twoBlockPerturbation_of_isInjective_perturbation}
@@ -175,11 +175,11 @@ one scalar need not be a similarity transformation.
     $N\geq2$, the corresponding Hamiltonians converge to the translated
     sum of uncle projectors. Both limits are operator-norm limits as
     $\varepsilon\to0$ through nonzero complex values.
-\end{corollary}
+\end{lemma}
 \begin{proof}
     The perturbation hypothesis gives injectivity of $U$ by
     Lemma~\ref{lem:uncle_injective_perturbation}. Apply
-    Theorem~\ref{thm:two_block_uncle_parent_limit}.
+    Lemma~\ref{thm:two_block_uncle_parent_limit}.
 \end{proof}
 
 The source assumes $C=A\oplus B$ is block-injective. The local limit proof
