@@ -18,7 +18,7 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
         MPSTensor.uncleTwoWallTrial_append_apply,
         MPSTensor.uncleTwoWallTrialSource_cast_apply,
         MPSTensor.norm_uncleTwoWallTrialSource_eq}
-    \notready
+    \leanok
     \uses{def:uncle_boundary_space}
     For five consecutive words $u,v,w,x,y$, define the coefficient
     \[
@@ -45,7 +45,7 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
         MPSTensor.uncleInteractionES_lower_wall_slice_eq_zero,
         MPSTensor.uncleInteractionES_twoWall_slice_first_eq_zero,
         MPSTensor.uncleInteractionES_twoWall_slice_second_eq_zero}
-    \notready
+    \leanok
     \uses{def:uncle_two_wall_trial,thm:uncle_periodic_ground_space}
     Fix all exterior physical letters, and vary two adjacent physical
     letters entirely inside either moving-wall interval. The resulting
@@ -53,7 +53,7 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
     This algebraic cancellation requires neither perturbation injectivity
     nor canonical normalization.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Concatenation multiplies the single-wall coefficient words by the
     bilinear product defining $S_n$. A fixed exterior contraction therefore
     composes a linear functional with multiplication by the two fixed
@@ -71,7 +71,7 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
         MPSTensor.uncleTrialEndpointBonds_card,
         MPSTensor.uncleInteractionES_trial_cyclicRestrict_eq_zero,
         MPSTensor.uncleHamiltonianES_trial_eq_sum_endpoints}
-    \notready
+    \leanok
     \uses{def:uncle_two_wall_trial,lem:uncle_two_wall_interior_cancellation,
         thm:uncle_parent_sector_containment}
     For every $N\ge1$, let
@@ -84,7 +84,7 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
     This finite identity uses no perturbation injectivity or normalization
     assumption and does not yet bound the surviving contributions.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     A nonwrapping pair outside the four endpoints lies entirely in one of
     the five consecutive segments. Within a moving-wall segment, use the
     preceding local cancellation with all exterior physical letters fixed.
@@ -105,7 +105,7 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
         MPSTensor.cyclicCfg_cyclicWindowCfgEquiv,
         MPSTensor.sum_norm_sq_cyclicRestrictES,
         MPSTensor.inv_pow_mul_sum_norm_sq_cyclicRestrictES}
-    \notready
+    \leanok
     \uses{def:parent_hamiltonian}
     On a chain of length $T$, let $L\le T$ and choose a cyclic starting
     site $i$. Splitting a physical configuration into its ordered window
@@ -117,7 +117,7 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
     The unnormalized identity also includes zero physical dimension and
     empty windows.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Write each full exterior configuration as its old window label and
     complement label. Replacing the window by a new local configuration
     discards the old window label and preserves the complement. Summing
@@ -133,7 +133,7 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
         MPSTensor.re_inner_uncleInteractionES_bounds,
         MPSTensor.re_inner_uncleHamiltonianES_trial_eq_sum_endpoints,
         MPSTensor.re_inner_uncleHamiltonianES_trial_le_endpoint_norms}
-    \notready
+    \leanok
     \uses{lem:uncle_trial_four_bond_localization,def:two_block_uncle_tensor}
     The actual local uncle projector is a contraction, and
     \[
@@ -149,7 +149,7 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
     \]
     The latter finite bound does not yet assert the source's linear energy rate.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The local interaction is an isometric conjugate of an orthogonal projector.
     Orthogonal projection contracts norms, and its real quadratic form equals
     the squared projected norm. Expand the preceding four-bond identity,
@@ -174,7 +174,7 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
         MPSTensor.uncleTrialPinnedEndpointState,
         MPSTensor.uncleInteractionES_trial_eq_pinnedEndpointState,
         MPSTensor.re_inner_uncleHamiltonianES_trial_le_pinnedEndpoint_norms}
-    \notready
+    \leanok
     \uses{lem:uncle_trial_endpoint_quadratic_energy,
         lem:uncle_two_wall_interior_cancellation}
     At the four endpoints, the actual projected residual is the image of
@@ -191,7 +191,7 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
     \]
     No asymptotic norm estimate is imposed as a hypothesis.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Split the wall sum at the endpoint site. The contribution with the
     wall elsewhere has a pure A/A or B/B local pair, hence is killed by
     the actual projector. Only the displayed pinned pair remains.
