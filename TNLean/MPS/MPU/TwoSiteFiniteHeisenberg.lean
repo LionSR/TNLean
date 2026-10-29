@@ -335,4 +335,124 @@ theorem originalSiteHeisenbergMatrix_conjugation {d D ℓ r : ℕ}
   rw [originalSiteHeisenbergMatrix_intertwiner U k p s S A, Matrix.mul_assoc,
     (originalSiteHeisenbergMatrix_isUnitaryBetween hU k p s hN).2, Matrix.mul_one]
 
+
+/-- Separate the complete exterior words from one consecutive finite window.
+These coordinates keep the original site order inside all three words.
+Source: arXiv:1703.09188, identity-tensor inclusion, lines 2292--2295. -/
+def bufferedWindowConfigEquiv (d n p s : ℕ) :
+    (((Fin p → Fin d) × (Fin s → Fin d)) × (Fin n → Fin d)) ≃
+      (Fin (p + (n + s)) → Fin d) :=
+  (switchMiddleEquiv _ _ _).trans
+    ((Equiv.prodAssoc _ _ _).trans
+      (((Equiv.refl (Fin p → Fin d)).prodCongr (Fin.appendEquiv n s)).trans
+        (Fin.appendEquiv p (n + s))))
+
+/-- Include a window matrix into original-site coordinates by adjoining
+identity operators on arbitrary exterior words. Source: arXiv:1703.09188,
+Appendix, identity-tensor inclusion in lines 2292--2295. -/
+noncomputable def bufferedWindowMatrix (d n p s : ℕ)
+    (A : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) :
+    Matrix (Fin (p + (n + s)) → Fin d) (Fin (p + (n + s)) → Fin d) ℂ :=
+  Matrix.reindex (bufferedWindowConfigEquiv d n p s)
+    (bufferedWindowConfigEquiv d n p s) (Matrix.rightKroneckerEmbed A)
+
+private theorem originalWindowConfigEquiv_buffer {d k p s : ℕ} {E C : Type*}
+    (head : (E × C) ≃ (Fin 3 →
+      Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k)))
+    (z : OriginalExterior d p s E × C) :
+    originalWindowConfigEquiv d k p s head z =
+      bufferedWindowConfigEquiv d (3 * (2 * k)) p s
+        (z.1.1, (head.trans (originalWindowMiddleEquiv d k)) (z.1.2, z.2)) := rfl
+
+private theorem originalWindowMatrix_eq_buffer {d k p s : ℕ} {E C : Type*}
+    [Fintype E] [DecidableEq E] [Fintype C] [DecidableEq C]
+    (head : (E × C) ≃ (Fin 3 →
+      Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k)))
+    (A : Matrix C C ℂ) :
+    Matrix.reindex (originalWindowConfigEquiv d k p s head)
+      (originalWindowConfigEquiv d k p s head) (Matrix.rightKroneckerEmbed A) =
+    bufferedWindowMatrix d (3 * (2 * k)) p s
+      (Matrix.reindex (head.trans (originalWindowMiddleEquiv d k))
+        (head.trans (originalWindowMiddleEquiv d k)) (Matrix.rightKroneckerEmbed A)) := by
+  classical
+  ext row col
+  obtain ⟨⟨⟨ex, e⟩, c⟩, rfl⟩ :=
+    (originalWindowConfigEquiv d k p s head).surjective row
+  obtain ⟨⟨⟨ex', e'⟩, c'⟩, rfl⟩ :=
+    (originalWindowConfigEquiv d k p s head).surjective col
+  simp only [Matrix.reindex_apply, Equiv.symm_apply_apply]
+  rw [originalWindowConfigEquiv_buffer, originalWindowConfigEquiv_buffer]
+  simp only [bufferedWindowMatrix, Matrix.reindex_apply, Equiv.symm_apply_apply,
+    Matrix.rightKroneckerEmbed_apply, Matrix.kroneckerMap_apply, Matrix.one_apply,
+    Prod.mk.injEq]
+  by_cases he : ex = ex' <;> by_cases hh : e = e' <;> simp [he, hh]
+
+/-- The input matrix on the fixed six-block window. Its central two
+half-blocks carry the supplied observable and the other four half-blocks
+carry identities. Source: arXiv:1703.09188, StandardForm and finite
+conjugation, lines 603--622 and 2300--2306. -/
+noncomputable def originalSiteHeisenbergInputWindow (d k : ℕ)
+    (A : Matrix (HalfPair (MPSTensor.blockPhysDim d k))
+      (HalfPair (MPSTensor.blockPhysDim d k)) ℂ) :
+    Matrix (Fin (3 * (2 * k)) → Fin d) (Fin (3 * (2 * k)) → Fin d) ℂ :=
+  Matrix.reindex
+    ((windowInputHeadEquiv (MPSTensor.blockPhysDim d k)).trans
+      (originalWindowMiddleEquiv d k))
+    ((windowInputHeadEquiv (MPSTensor.blockPhysDim d k)).trans
+      (originalWindowMiddleEquiv d k)) (Matrix.rightKroneckerEmbed A)
+
+/-- The fixed six-block output matrix of the actual local action. Keeping
+the two exterior half-blocks here makes adjoining original residual words
+canonical without imposing divisibility on their lengths.
+Source: arXiv:1703.09188, StandardForm and finite conjugation,
+lines 603--622 and 2300--2306. -/
+noncomputable def originalSiteHeisenbergOutputWindow {d ℓ r : ℕ} (k : ℕ)
+    (u : Matrix (Fin ℓ × Fin r) (HalfPair (MPSTensor.blockPhysDim d k)) ℂ)
+    (v : Matrix (HalfPair (MPSTensor.blockPhysDim d k)) (Fin r × Fin ℓ) ℂ)
+    (A : Matrix (HalfPair (MPSTensor.blockPhysDim d k))
+      (HalfPair (MPSTensor.blockPhysDim d k)) ℂ) :
+    Matrix (Fin (3 * (2 * k)) → Fin d) (Fin (3 * (2 * k)) → Fin d) ℂ :=
+  Matrix.reindex
+    ((windowOutputHeadEquiv (MPSTensor.blockPhysDim d k)).trans
+      (originalWindowMiddleEquiv d k))
+    ((windowOutputHeadEquiv (MPSTensor.blockPhysDim d k)).trans
+      (originalWindowMiddleEquiv d k))
+    (Matrix.rightKroneckerEmbed (twoLinkOutputObservable u v A))
+
+/-- The actual periodic MPO conjugates identity-tensor inclusions of the
+same fixed input window to inclusions of the same fixed output window,
+for every original-site prefix and suffix. No ambient-dependent output
+matrix is chosen. Source: arXiv:1703.09188, eq:appendix-1, lines 2300--2306. -/
+theorem mpo_bufferedWindow_conjugation {d D ℓ r : ℕ}
+    {U : MPOTensor d D} (hU : U.IsMPU) (k p s : ℕ)
+    (hN : 1 < p + (3 * (2 * k) + s))
+    {u : Matrix (Fin ℓ × Fin r) (HalfPair (MPSTensor.blockPhysDim d k)) ℂ}
+    {v : Matrix (HalfPair (MPSTensor.blockPhysDim d k)) (Fin r × Fin ℓ) ℂ}
+    (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
+    (A : Matrix (HalfPair (MPSTensor.blockPhysDim d k))
+      (HalfPair (MPSTensor.blockPhysDim d k)) ℂ) :
+    mpo U (p + (3 * (2 * k) + s)) *
+        bufferedWindowMatrix d (3 * (2 * k)) p s
+          (originalSiteHeisenbergInputWindow d k A) *
+        (mpo U (p + (3 * (2 * k) + s)))ᴴ =
+      bufferedWindowMatrix d (3 * (2 * k)) p s
+        (originalSiteHeisenbergOutputWindow k u v A) := by
+  let ei := originalSiteHeisenbergInputEquiv d k p s
+  let eo := originalSiteHeisenbergOutputEquiv d k p s
+  let M := originalSiteHeisenbergMatrix U k p s
+  have hM : Matrix.reindex eo ei M = mpo U (p + (3 * (2 * k) + s)) := by
+    ext row col
+    simp [M, eo, ei, originalSiteHeisenbergMatrix, Matrix.reindex_apply]
+  have hMH : Matrix.reindex ei eo Mᴴ = (mpo U (p + (3 * (2 * k) + s)))ᴴ := by
+    rw [← Matrix.conjTranspose_reindex, hM]
+  have h := congrArg (Matrix.reindexLinearEquiv ℂ ℂ eo eo)
+    (originalSiteHeisenbergMatrix_conjugation hU k p s hN S A)
+  rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ eo ei eo,
+    ← Matrix.reindexLinearEquiv_mul ℂ ℂ eo ei ei] at h
+  simp only [Matrix.coe_reindexLinearEquiv] at h
+  rw [hM, hMH] at h
+  simpa only [ei, eo, originalSiteHeisenbergInputEquiv,
+    originalSiteHeisenbergOutputEquiv, originalWindowMatrix_eq_buffer,
+    originalSiteHeisenbergInputWindow, originalSiteHeisenbergOutputWindow] using h
+
 end MPOTensor

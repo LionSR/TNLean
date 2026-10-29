@@ -78,3 +78,37 @@
     property at length $N>1$ gives its unitarity; multiplication by the
     adjoint proves the formula. No residual or periodic seam is discarded.
 \end{proof}
+
+
+\begin{theorem}[A fixed finite-window output under arbitrary buffering]
+    \label{thm:mpu_finite_heisenberg_fixed_window}
+    \lean{MPOTensor.bufferedWindowConfigEquiv,
+        MPOTensor.bufferedWindowMatrix,
+        MPOTensor.originalSiteHeisenbergInputWindow,
+        MPOTensor.originalSiteHeisenbergOutputWindow,
+        MPOTensor.mpo_bufferedWindow_conjugation}
+    \notready
+    \uses{thm:mpu_finite_heisenberg_original_residuals}
+    Under the preceding hypotheses, let $I_k(A)$ and $O_k(A)$ be the
+    input and output matrices on the fixed window of $6k$ original
+    sites. For every $p,s\ge0$ with $p+6k+s>1$,
+    \[
+        U^{(p+6k+s)}
+        (I_p\otimes I_k(A)\otimes I_s)
+        U^{(p+6k+s)\dagger}
+        = I_p\otimes O_k(A)\otimes I_s .
+    \]
+    Both window matrices are independent of $p$ and $s$. Tensor factors
+    are written in the original order of the sites. This is the finite
+    buffering identity underlying
+    \cite[lines~2300--2306]{Cirac2017MPU}; arbitrary supported-region
+    assembly remains as recorded in
+    \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
+\end{theorem}
+\begin{proof}
+    Separate the prefix and suffix words from the complete central
+    window. In these coordinates, the exterior Kronecker identity is
+    the product of the identities on the original residual words and
+    on the exterior coordinates inside the window. Reindexing the
+    actual finite conjugation identity gives the claimed formula.
+\end{proof}

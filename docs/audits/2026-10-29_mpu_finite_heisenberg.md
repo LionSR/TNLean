@@ -36,6 +36,14 @@ The same local output is obtained for every p,s, with identities on all
 original exterior coordinates. This removes the complete-block ambient
 length restriction for this local observable.
 
+The source additionally defines the fixed original-site input and output
+window matrices and proves `mpo_bufferedWindow_conjugation`: the actual
+periodic MPO sends the identity-tensor inclusion of the fixed input to the
+identity-tensor inclusion of the fixed output for every original prefix
+and suffix. The coordinate proof splits equality of the complete exterior
+index into equality of its residual-word and within-window parts. The
+output matrix itself is independent of the ambient dimensions.
+
 This is still not the full source stabilization theorem. It does not yet
 assemble arbitrary buffered interval anchors or arbitrary supported
 observables; no compatible-local-action datum,
