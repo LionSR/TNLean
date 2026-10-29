@@ -86,8 +86,14 @@ Gram norm by C*n from the normalized limit, absorbing the finite initial
 segment. For a faithful density, the existing QICLean positive lower bound
 rho >= c*I gives tr(Y_n).re <= K*eta_n.re. This yields uniform linear
 bounds on the actual unweighted Gram trace and its Euclidean operator
-norm, suitable for the pinned endpoint estimates. No growth estimate is
-introduced as a hypothesis.
+norm, suitable for the pinned endpoint estimates. The actual rectangular
+Kraus map of wall words additionally satisfies a pointwise Euclidean
+operator-norm bound by tr(Y_n).re times the input norm, hence by C*n times
+the input norm. This is proved directly by the triangle inequality and
+the existing rectangular word operator-norm/Gram-trace inequality. It
+needs no rectangular Russo-Dye theorem or duplicate map definition, and
+the finite-transfer Gram map in #10320 is this same existing Kraus map.
+No growth estimate is introduced as a hypothesis.
 
 Remaining norm work is the actual two-wall Gram factorization error bound. These identities do not assert Theta(N^2), an energy
 bound, genericity, or gaplessness. Finite nonnegativity alone does not
