@@ -23,6 +23,20 @@ write $Q_t=1-P_t$. The truncation in Section~6.1 is the continuous
 function $x\mapsto\min(x,t)$, so choosing either side at equality in its
 spectral formula produces the same operator.
 
+\section{The printed normalization denominator}
+The uniform interior shift printed in Section~6.1 is $d/(s-7)$ for
+$4\le i\le s-3$. For $s\ge8$ this range contains $s-6$ terms. If the
+unshifted interior sum has ground energy $d>0$, the printed shifts give
+ground energy
+\begin{align}
+    d-(s-6)\frac{d}{s-7}=-\frac{d}{s-7}<0,
+\end{align}
+rather than the stated zero. To obtain zero, the uniform shift would
+be $d/(s-6)$; equivalently, subtract $dI$ from the interior sum once.
+This correction follows by counting the displayed range. The normalized
+robustness theorem takes the regional positivity and $0\le e\le6$ as
+data and does not use the printed distribution of scalar shifts.
+
 \section{The cross term and two typographical slips}
 The Cauchy--Schwarz calculation in the proof of Lemma~6.5 gives
 \begin{align}
