@@ -18,6 +18,8 @@ import TNLean.PEPS.Examples.CZXRectangleMap
 import TNLean.PEPS.Examples.CZXRectangleSupport
 import TNLean.PEPS.Examples.CZXRegionSymmetry
 import TNLean.PEPS.Examples.CZXSymmetry
+import TNLean.PEPS.Examples.CZXWrappingRectangle
+import TNLean.PEPS.Examples.CZXWrappingRectangleTransport
 import TNLean.PEPS.Examples.Classical
 import TNLean.PEPS.Examples.Cluster
 import TNLean.PEPS.Examples.ClusterStabilizer
