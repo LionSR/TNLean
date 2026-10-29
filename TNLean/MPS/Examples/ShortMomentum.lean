@@ -17,6 +17,7 @@ import TNLean.MPS.Examples.ShortMomentum.LocalSpace
 import TNLean.MPS.Examples.ShortMomentum.LongIntersection
 import TNLean.MPS.Examples.ShortMomentum.OverlapChargeCoefficients
 import TNLean.MPS.Examples.ShortMomentum.PeriodicKernel
+import TNLean.MPS.Examples.ShortMomentum.SectorModel
 import TNLean.MPS.Examples.ShortMomentum.SevenCyclicObstruction
 import TNLean.MPS.Examples.ShortMomentum.ShortIntersections
 import TNLean.MPS.Examples.ShortMomentum.ShortOverlapBridges

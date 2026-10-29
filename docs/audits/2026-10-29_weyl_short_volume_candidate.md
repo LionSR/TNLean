@@ -8,6 +8,14 @@ In particular, a translation-invariant one-dimensional space alone does
 not establish a fixed positive interaction with unique frustration-free
 ground space at every permitted volume.
 
+## Later assembly
+
+The separate source-written capstone in
+`docs/audits/2026-10-29_short_volume_sector_model.md` now combines these
+ingredients with the actual particle and mixed-sector kernels on the explicit
+permitted domain M ≥ 7. It retains the eventual/site-dependent/source-volume
+distinctions below; no local Lean validation is asserted.
+
 ## Actual source-written matrix ingredients
 
 Fix a primitive fifth root of unity \(q\). For \(u,v,i,j\in\mathbb Z/5\mathbb Z\), set

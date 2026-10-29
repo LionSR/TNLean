@@ -83,9 +83,10 @@
     \end{enumerate}
     An invariant ground line alone does not state the second condition:
     translation can act on a line by a nontrivial root of unity.
-    No derivation of the second condition from the complete hypotheses
-    of \cite[Theorem~5]{Sanz2010Quantum} is asserted here; this remaining
-    boundary is recorded in
+    Lemma~\ref{lem:seven_sector_concrete_interaction} shows that the second
+    condition does not follow from positive frustration-free uniqueness on
+    all permitted volumes $M\ge7$. The relation to the source's volume and
+    representation conventions is recorded in
     \cite{gap:spwc10_ground_state_dichotomy_quantifiers}.
 \end{lemma}
 \begin{proof}
@@ -491,4 +492,141 @@
     equality between cyclic constraints and the parent-Hamiltonian kernel
     to the Euclidean realization. The explicit central words prove
     nonvanishing at every length at least eight.
+\end{proof}
+
+\subsection{A fixed interaction with an exceptional short ground line}
+
+The following statements concern the permitted volumes $M\ge7$ and the
+ordinary site-independent periodic trace convention. They distinguish an
+all-volume representation from the eventual fixed-tensor conclusion in
+\cite[Theorem~5]{Sanz2010Quantum}. They make no assertion about a convention
+for interactions on fewer than seven sites or about general site-dependent
+matrix product representations.
+
+\begin{definition}[The seven-site two-sector interaction]
+    \label{def:seven_sector_interaction}
+    \lean{MPSTensor.ShortMomentum.sevenSectorInteraction}
+    \notready
+    \uses{lem:short_volume_weyl_local_spaces,def:pvbs_pure_window_interaction}
+    Split the five physical letters into three Weyl letters and two particle
+    letters. Let $E_R$ and $F_R$ be their word embeddings. For parameters
+    $\zeta,q\in\mathbb C$, define $h$ to be the orthogonal projection onto
+    the complement of
+    $E_7\mathcal G_7(\zeta)+F_7\operatorname{span}\{\Psi_7(q)\}$.
+    Here $\mathcal G_7(\zeta)$ is the actual three-letter Weyl boundary space.
+\end{definition}
+
+\begin{lemma}[Positivity of the seven-site interaction]
+    \label{lem:seven_sector_interaction_positive}
+    \lean{MPSTensor.ShortMomentum.sevenSectorInteraction_isPositive}
+    \notready
+    \uses{def:seven_sector_interaction}
+    The interaction $h$ is positive for all $\zeta,q\in\mathbb C$.
+\end{lemma}
+\begin{proof}
+    \notready
+    It is an orthogonal projection.
+\end{proof}
+
+\begin{lemma}[Exact periodic kernels of the two-sector interaction]
+    \label{lem:seven_sector_periodic_kernels}
+    \lean{MPSTensor.ShortMomentum.ker_sevenSectorHamiltonian_of_eight_le}
+    \lean{MPSTensor.ShortMomentum.ker_sevenSectorHamiltonian_seven}
+    \notready
+    \uses{def:seven_sector_interaction,lem:physical_sum_full_kernel,
+        lem:short_volume_weyl_periodic_kernel,lem:pvbs_pure_window_large_kernel,
+        lem:pvbs_matching_volume_kernel}
+    Suppose $\zeta$ is a primitive fifth root of unity, and let
+    $H_M=\sum_i h_i$ be the actual periodic Hamiltonian of $h$.
+    If $q\ne0$ and $M\ge8$, then
+    $\ker H_M=\operatorname{span}\{E_M\psi_M(\zeta)\}$, where
+    $\psi_M(\zeta)$ is the actual Weyl trace vector.
+    If $q^7=1$, then
+    $\ker H_7=\operatorname{span}\{F_7\Psi_7(q)\}$.
+\end{lemma}
+\begin{proof}
+    \notready
+    The full physical-sector kernel identity gives the sum of the actual
+    component kernels. The Weyl component vanishes at seven sites and is
+    its trace line thereafter; the pure particle component is its particle
+    line at seven sites and vanishes thereafter.
+\end{proof}
+
+\begin{lemma}[An actual fixed tensor for every larger volume]
+    \label{lem:seven_sector_eventual_fixed_tensor}
+    \lean{MPSTensor.ShortMomentum.exists_bond_five_eventual_ground_family_sevenSector}
+    \notready
+    \uses{lem:seven_sector_periodic_kernels,lem:mpv_state_extend_physical}
+    Under the same primitive-fifth-root and $q\ne0$ assumptions, there is
+    one site-independent tensor with physical dimension five and bond
+    dimension five whose periodic vector is nonzero and spans $\ker H_M$
+    for every $M\ge8$.
+\end{lemma}
+\begin{proof}
+    \notready
+    Extend the three-letter Weyl tensor by zero on the two particle letters.
+    Its actual periodic vectors are the isometric extensions of the nonzero
+    Weyl trace vectors, and the kernel identity applies at every larger volume.
+\end{proof}
+
+\begin{lemma}[Nonzero ground lines at every permitted volume]
+    \label{lem:seven_sector_permitted_ground_lines}
+    \lean{MPSTensor.ShortMomentum.exists_nonzero_ground_line_sevenSectorHamiltonian}
+    \lean{MPSTensor.ShortMomentum.finrank_ker_sevenSectorHamiltonian}
+    \notready
+    \uses{lem:seven_sector_periodic_kernels}
+    Suppose $\zeta$ is a primitive fifth root of unity and $q^7=1$.
+    For every $M\ge7$, there is a nonzero actual vector $v_M$ with
+    $H_Mv_M=0$ and $\ker H_M=\operatorname{span}\{v_M\}$.
+    In particular, $\dim\ker H_M=1$.
+\end{lemma}
+\begin{proof}
+    \notready
+    At seven sites use the embedded particle vector, whose first-excitation
+    coefficient is one. At every larger volume use the embedded Weyl trace
+    vector. Isometric embedding preserves nonvanishing in both cases.
+\end{proof}
+
+\begin{lemma}[No invariant or periodic trace vector at the short volume]
+    \label{lem:seven_sector_no_short_trace_ground}
+    \lean{MPSTensor.ShortMomentum.eq_zero_of_sevenSectorHamiltonian_fixed}
+    \lean{MPSTensor.ShortMomentum.mpvState_eq_zero_of_sevenSectorHamiltonian_eq_zero}
+    \notready
+    \uses{lem:seven_sector_periodic_kernels,lem:pvbs_matching_volume_no_fixed_ground_vector,
+        lem:periodic_finite_cyclic_representation}
+    Suppose additionally $q\ne1$. Every vector in $\ker H_7$ fixed exactly
+    by every cyclic translation is zero. Consequently, at every bond
+    dimension, an ordinary site-independent periodic trace-MPS vector
+    killed by $H_7$ is zero.
+\end{lemma}
+\begin{proof}
+    \notready
+    Restrict a vector in the embedded particle line to its actual particle
+    coefficients. Cyclic translation commutes with this restriction, so an
+    invariant vector would give an invariant vector in the particle ground
+    line, where the nontrivial phase forces it to vanish. Every ordinary
+    periodic trace vector is fixed exactly by translation, by trace cyclicity.
+\end{proof}
+
+\begin{lemma}[A fixed frustration-free interaction with a short cyclic phase]
+    \label{lem:seven_sector_concrete_interaction}
+    \lean{MPSTensor.ShortMomentum.exists_seven_site_interaction_without_short_fixed_ground}
+    \notready
+    \uses{lem:seven_sector_interaction_positive,lem:seven_sector_permitted_ground_lines,
+        lem:seven_sector_eventual_fixed_tensor,lem:seven_sector_no_short_trace_ground}
+    There exists one positive seven-site interaction on five physical letters
+    with the following properties. At every $M\ge7$ its actual periodic
+    kernel is one-dimensional and contains a nonzero vector killed by every
+    local term. One actual tensor of bond dimension five spans its nonzero
+    periodic ground line at every $M\ge8$. At seven sites, no nonzero ground
+    vector is fixed exactly by cyclic translation.
+\end{lemma}
+\begin{proof}
+    \notready
+    Choose $\zeta=\exp(2\pi i/5)$ and $q=\exp(2\pi i/7)$ and use the
+    two-sector interaction. The preceding kernel identities give the unique
+    nonzero lines. Positivity turns each zero equation for the sum into
+    zero equations for every local term. The seventh root has nontrivial
+    cyclic phase, while physical extension gives the actual eventual
+    bond-five tensor.
 \end{proof}
