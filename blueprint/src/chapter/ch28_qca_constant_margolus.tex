@@ -9,14 +9,12 @@ factors is odd then even, namely $\mathbb C^r\otimes\mathbb C^\ell$.
 
 \begin{lemma}[Faithful image and equality coordinates]
     \label{lem:qca_support_coordinate_equivalences}
-    \lean{StarSubalgebra.equivMapOfInjective,
-        StarSubalgebra.equivMapOfInjective_coe,
-        StarSubalgebra.equivOfEq,StarSubalgebra.equivOfEq_coe,
-        SpinChain.PropagatesWithin.supportEmbeddingEquiv,
+    \lean{SpinChain.PropagatesWithin.supportEmbeddingEquiv,
         SpinChain.PropagatesWithin.outputPairEquiv,
         SpinChain.PropagatesWithin.outputPairEquiv_coe}
     \notready
-    \uses{thm:qca_physical_pair_adjacent_generation}
+    \uses{lem:star_subalgebra_coordinate_equivalences,
+        thm:qca_physical_pair_adjacent_generation}
     An injective star-algebra homomorphism identifies a star-subalgebra
     with its actual image and evaluates as the original ambient map.
     Equality of two star-subalgebras identifies them without changing
