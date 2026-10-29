@@ -50,13 +50,21 @@ protocols with the source relation. Issue #8640 remains open.
 
 ## Verification
 
-Hosted build job 123535458127 at exact code head
-`087d337e4b8538e222d19ec3ff7944d14d011104` compiled the new module in
-2.4 seconds, completed the full 14994-job repository build and passed all
-strict Lean checks on the new file. Module-policy, inline-diagram and
-changed-compilation-time checks also passed. Blueprint PDF job 123535458140
-passed; the web check was still running at this status update. Both new
-mathematical Blueprint nodes and proofs now carry `leanok`.
+Exact historical head `04d88a6cddef8bf8ba9127e3ab895f92a5af2087` passed
+[hosted full and strict Lean checks](https://github.com/LionSR/TNLean/actions/runs/40908250684/job/123570455346).
+The log records that matching `PR_HEAD_SHA`, a full 14994-job build, individual
+strict `: ok` results for the complete pure-output module and its aggregator,
+and `All strict Lean checks passed`. Every applicable reported check succeeded,
+including Blueprint web and PDF; the campaign-source check was skipped.
+Both new mathematical Blueprint nodes and proofs carry `leanok`.
+
+The refreshed branch reconciles main
+`c7d2992c89c16d85237e18557ff292979b3a67b4` with the pure-output module
+unchanged byte-for-byte. Ledger entries and main chapter relocations are
+preserved; entry roles and references follow current main. Native import
+completeness, full declaration synchronization, roles, prose, ChkTeX and
+owned-diff whitespace checks pass. Fresh combined-head hosted checks and
+integration remain pending; the historical build does not verify a new head.
 
 No local Lean invocation, build, elaboration or persistent proof fixture
 was used. The issue remains open for the explicit remaining resource-model
