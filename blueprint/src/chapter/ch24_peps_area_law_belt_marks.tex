@@ -35,32 +35,32 @@ Coincident points contribute only once to the union.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Marks lie in their closed cell]
+\begin{lemma}[Marks lie in their closed cell]
     \label{thm:area_law_belt_marks_closed_cell}
     \lean{TNLean.PEPS.AreaLaw.Geometry.beltCellMarks_subset_closure_dyadicCell}
     \leanok
     \uses{def:area_law_belt_cell_marks}
     Every point of $M_{\ell,z}$ belongs to $\overline{C_{\ell,z}}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_dyadic_closures}
     Each coordinate of $e/2$ lies in $[0,1]$, so both coordinates
     of each mark lie in the corresponding closed cell intervals.
 \end{proof}
 
-\begin{theorem}[Exact cell-mark count]
+\begin{lemma}[Exact cell-mark count]
     \label{thm:area_law_belt_cell_mark_count}
     \lean{TNLean.PEPS.AreaLaw.Geometry.card_beltCellMarks}
     \leanok
     \uses{def:area_law_belt_cell_marks}
     For every origin $o$, scale $\ell$ and cell index $z$, $|M_{\ell,z}|=9$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $2^\ell>0$, distinct elements of $\{0,1,2\}^2$ yield distinct points,
     and there are nine such elements.
 \end{proof}
 
-\begin{theorem}[Count of the union of marks]
+\begin{lemma}[Count of the union of marks]
     \label{thm:area_law_belt_mark_count}
     \lean{TNLean.PEPS.AreaLaw.Geometry.card_beltMarks_le}
     \leanok
@@ -69,14 +69,14 @@ Coincident points contribute only once to the union.
     \begin{align}
         |M_\ell(F)| & \le9|F|.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_belt_cell_mark_count}
     The cardinality of a finite union is at most the sum of the
     cardinalities of its members, each of which has nine points.
 \end{proof}
 
-\begin{theorem}[Sparse shifts bound the belt marks]
+\begin{lemma}[Sparse shifts bound the belt marks]
     \label{thm:area_law_sparse_belt_marks}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_sparse_dyadic_belt_marks_shift}
     \leanok
@@ -89,7 +89,7 @@ Coincident points contribute only once to the union.
         |M_{\ell_k}(F_k(a,b))|
          & \le576(2C_0+1)^2|\partial_\Lambda A|\,2^{-\delta_0 k/2}.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_belt_mark_count,thm:area_law_sparse_dyadic_belts}
     For the sparse-belt pair of residues $(a,b)$, multiplying the belt-cell

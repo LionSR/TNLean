@@ -30,7 +30,7 @@
     An embedded patch also requires $W<w$ and $H<h$.
 \end{definition}
 
-\begin{theorem}[Injectivity of the embedded patch]%
+\begin{lemma}[Injectivity of the embedded patch]%
     \label{thm:peps_dual_rectangle_injective}
     \lean{TNLean.PEPS.torusRectCoord_injective,
         TNLean.PEPS.TorusDualRectangle.injective}
@@ -40,7 +40,7 @@
     $x+i=x+j$ in $\mathbb Z/n$, then $i=j$. Consequently, if $W<w$ and
     $H<h$, then $\kappa$ is injective on the closed lifted rectangle
     $\{0,\ldots,W\}\times\{0,\ldots,H\}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Cancelling $x$ gives $i\equiv j\pmod n$. Since
     \begin{align*}
@@ -50,7 +50,7 @@
     coordinates with $n=w$ and to the second with $n=h$, $W$ replaced by $H$.
 \end{proof}
 
-\begin{theorem}[Comb-edge normalization and prefix cancellation]%
+\begin{lemma}[Comb-edge normalization and prefix cancellation]%
     \label{thm:peps_dual_rectangle_comb}
     \lean{TNLean.PEPS.TorusDualHomotopy.cancel_prefix,
         TNLean.PEPS.TorusDualHomotopy.reverse_edge,
@@ -63,7 +63,7 @@
     For every permitted edge $e:a\to b$, $C_a e\sim_R C_b$.
     More generally, $ce\sim_R d$ implies $de^{-1}\sim_R c$,
     and $cp\sim_R cq$ implies $p\sim_R q$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Write $e_{i,j}:(i,j)\to(i+1,j)$ and $n_{i,j}:(i,j)\to(i,j+1)$, and let
     $\gamma_i^j=n_{i,0}n_{i,1}\cdots n_{i,j-1}$ be the column at $i$.
@@ -92,7 +92,7 @@
     \end{align*}
 \end{proof}
 
-\begin{theorem}[Deformation inside an embedded rectangular dual patch]%
+\begin{lemma}[Deformation inside an embedded rectangular dual patch]%
     \label{thm:peps_dual_rectangle}
     \lean{TNLean.PEPS.rectDualPath_comb,
         TNLean.PEPS.rectDualPath_homotopy,
@@ -108,7 +108,7 @@
     endpoints have projections related by $\sim_R$.
     This is the rectangular bulk specialization of
     \cite[Lemma~6.14]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Let $C_{i,j}$ run along the bottom row from $(0,0)$ to $(i,0)$,
     then up to $(i,j)$. Interchanging an east edge with a column of
@@ -119,7 +119,7 @@
     of $p:a\to b$ gives $C_a p\sim_R C_b$.
     Thus $C_a p\sim_R C_a q$; prepend $C_a^{-1}$ and cancel
     its successive backtracks. By
-    Theorem~\ref{thm:peps_dual_rectangle_injective}, the bounds $W<w$
+    Lemma~\ref{thm:peps_dual_rectangle_injective}, the bounds $W<w$
     and $H<h$ make $\kappa$ injective on $D$. No periodic-endpoint identification
     replaces equality of the lifted endpoints.
 \end{proof}
@@ -153,7 +153,7 @@
 \end{tenkzequation}
 
 
-\begin{theorem}[Rectangular bulk deformation with a fixed exterior]%
+\begin{lemma}[Rectangular bulk deformation with a fixed exterior]%
     \label{thm:peps_dual_rectangle_exterior}
     \lean{TNLean.PEPS.TorusDualRectangle.torusBondNetwork_eq_with_exterior}
     \leanok
@@ -165,11 +165,11 @@
     arbitrary fixed matrices on all remaining bonds.
     The two native contractions are equal for each fixed physical
     configuration. Site tensors outside $R$ are unrestricted.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Theorem~\ref{thm:peps_dual_rectangle} gives $\bar p\sim_R\bar q$ for the
+    Lemma~\ref{thm:peps_dual_rectangle} gives $\bar p\sim_R\bar q$ for the
     projections $\bar p,\bar q$ of $p,q$, using only square moves at sites
-    of $R$. Theorem~\ref{thm:peps_dual_flux_deformation}, applied with the
+    of $R$. Lemma~\ref{thm:peps_dual_flux_deformation}, applied with the
     fixed exterior assignment $E$, then gives
     \begin{align*}
         \Psi_{\bar p}^E(\sigma)=\Psi_{\bar q}^E(\sigma).

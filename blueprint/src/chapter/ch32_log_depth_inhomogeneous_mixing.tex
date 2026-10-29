@@ -45,7 +45,7 @@ panels; the internal index $u$ has dimension $D^2$.
 \end{center}
 % TENKZ-ORDERED-MIXING-BLOCK-END
 
-\begin{theorem}[Uniform Gram and transfer-matrix comparison]
+\begin{lemma}[Uniform Gram and transfer-matrix comparison]
     \label{thm:ldp_uniform_gram_transfer}
     \lean{MPSTensor.exists_norm_gram_transferMatrix_sub_le,
         MPSTensor.transpose_kronecker_one_apply}
@@ -67,7 +67,7 @@ panels; the internal index $u$ has dimension $D^2$.
     faithfulness assumption is required of $\rho$. The first inequality
     is the Gram rearrangement of~\cite{Piroli2021LOCC}, Supplemental Material,
     (19) and (21), expressed in operator norm.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:prep_transfer_fixed_point_tensor}
     The linear permutation $(\mathcal RT)_{(a,b),(c,e)}=T_{(a,c),(b,e)}$
@@ -78,7 +78,7 @@ panels; the internal index $u$ has dimension $D^2$.
     reset map with the transfer map of the fixed-point tensor.
 \end{proof}
 
-\begin{theorem}[Uniform ordered mixed-transfer overlap]
+\begin{lemma}[Uniform ordered mixed-transfer overlap]
     \label{thm:ldp_inhomogeneous_mixed_overlap}
     \lean{MPSPreparation.exists_norm_polarPos_sub_le_transferMatrix,
         MPSPreparation.exists_norm_trace_prod_polarPos_sub_one_le}
@@ -94,7 +94,7 @@ panels; the internal index $u$ has dimension $D^2$.
         \left|\operatorname{Tr}(\tau_0\cdots\tau_{M-1})-1\right|
         \le C_0M\delta\exp(C_0M\delta).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:ldp_uniform_gram_transfer,thm:ldp_sqrt_lipschitz_constant,thm:ldp_ordered_telescoping_bound}
     The entries of $B_j^\dagger B_j$ are a fixed reshuffling of $T_{B_j}$.
@@ -143,7 +143,7 @@ $(\hbox{lower bond},\hbox{upper bond})$.
 \end{center}
 % TENKZ-ORDERED-MIXING-OVERLAP-END
 
-\begin{theorem}[Uniform normalized pair approximation]
+\begin{lemma}[Uniform normalized pair approximation]
     \label{thm:ldp_inhomogeneous_normalized_pairs}
     \lean{MPSPreparation.ofReal_norm_chainState_sq,
         MPSPreparation.inner_pairFamilyVector_chainPosState,
@@ -163,7 +163,7 @@ $(\hbox{lower bond},\hbox{upper bond})$.
     \end{align}
     The algebraic convention is $0^{-1}=0$; a normalized quantum state
     requires $c_N>0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:ldp_inhomogeneous_mixed_overlap,thm:ldp_normalization_triangle,thm:ldp_chain_block_iso_inner,lem:ldp_block_isometry_state_overlap}
     The whole-ring transfer matrix satisfies
@@ -230,7 +230,7 @@ preparation, and $d\le1$ is prepared directly in depth zero.
 \end{center}
 % TENKZ-ORDERED-MIXING-PREPARATION-END
 
-\begin{theorem}[Logarithmic preparation from ordered mixing]
+\begin{lemma}[Logarithmic preparation from ordered mixing]
     \label{thm:ldp_inhomogeneous_ordered_mixing_preparation}
     \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_ordered_mixing}
     \leanok
@@ -245,7 +245,7 @@ preparation, and $d\le1$ is prepared directly in depth zero.
     a unit vector $\psi$ can be prepared by physical local gates in depth
     at most $C\log(N/\varepsilon)$, with
     $1-|\langle\psi,\phi_N/\|\phi_N\|\rangle|\le\varepsilon$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:ldp_inhomogeneous_normalized_pairs,thm:ldp_inhomogeneous_uniform_rate_from,thm:ldp_chain_transfer_product}
     For $1\le q\le N$, partitioning the ring with
@@ -259,7 +259,7 @@ preparation, and $d\le1$ is prepared directly in depth zero.
 \end{proof}
 
 
-\begin{theorem}[Uniform preparation above a ring-length cutoff]
+\begin{lemma}[Uniform preparation above a ring-length cutoff]
     \label{thm:ldp_inhomogeneous_uniform_rate_from}
     \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate_from}
     \leanok
@@ -270,7 +270,7 @@ preparation, and $d\le1$ is prepared directly in depth zero.
     $q\le\ell_j\le2q$. Here $K,r>0$ and $k\ge0$ are uniform in $N,q$.
     Then its normalized states at these same lengths can be approximated
     to error $0<\varepsilon\le1$ in depth $C\log(N/\varepsilon)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:ldp_inhomogeneous,thm:ldp_inhomogeneous_exact,lem:ldp_log_threshold_error}
     For $N\ge2$, setting $q=\lceil a\log(N/\varepsilon)+b\rceil$ with
@@ -282,17 +282,17 @@ preparation, and $d\le1$ is prepared directly in depth zero.
     length, so restricting it to $N\ge N_0$ changes no physical state.
 \end{proof}
 
-\begin{theorem}[Eventual preparation from ordered mixing]
+\begin{lemma}[Eventual preparation from ordered mixing]
     \label{thm:ldp_inhomogeneous_eventual_mixing_preparation}
     \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_ordered_mixing}
     \leanok
     Under the uniform ordered-mixing hypothesis of
-    Theorem~\ref{thm:ldp_inhomogeneous_ordered_mixing_preparation}, but
+    Lemma~\ref{thm:ldp_inhomogeneous_ordered_mixing_preparation}, but
     without a nonzero-target assumption, there exist $N_0$ and $C$ such
     that for every $N\ge\max(1,N_0)$ and $0<\varepsilon\le1$, the
     original normalized periodic state has error at most $\varepsilon$
     against a unit vector prepared in depth at most $C\log(N/\varepsilon)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:ldp_inhomogeneous_normalized_pairs,thm:ldp_inhomogeneous_uniform_rate_from,thm:ldp_chain_transfer_product,lem:ldp_log_threshold_error}
     The whole-ring estimate gives
@@ -303,7 +303,7 @@ preparation, and $d\le1$ is prepared directly in depth zero.
     theorem applies. No member of the physical family is replaced on short rings.
 \end{proof}
 
-\begin{theorem}[Physical preparation from uniform Choi domination]
+\begin{lemma}[Physical preparation from uniform Choi domination]
     \label{thm:ldp_inhomogeneous_doeblin_preparation}
     \lean{MPSPreparation.exists_norm_transferMatrix_blockTensor_sub_le_of_choi_domination,
         MPSPreparation.le_norm_chainState_sq_of_choi_domination,
@@ -317,7 +317,7 @@ preparation, and $d\le1$ is prepared directly in depth zero.
     Physical preparation to error
     $0<\varepsilon\le1$ has depth at most $C\log(N/\varepsilon)$,
     with one constant for the family.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:ldp_uniform_gram_transfer,thm:ldp_chain_positive_part_rate,
         thm:ldp_inhomogeneous_ordered_mixing_preparation,
@@ -327,7 +327,7 @@ preparation, and $d\le1$ is prepared directly in depth zero.
     $R_\sigma S=R_\sigma$ by trace preservation. Since a completely positive map has
     nonnegative supertrace, $\|\phi_N\|^2=\operatorname{Tr}(QS)+\eta\ge\eta$.
     The inverse Gram reshuffling is a bounded linear permutation of matrix
-    entries, and Theorem~\ref{thm:ldp_chain_positive_part_rate} applied to the
+    entries, and Lemma~\ref{thm:ldp_chain_positive_part_rate} applied to the
     individual sites, regarded as blocks of length one, gives
     $\|T_{B_I}-T_\sigma\|\le K(1-\eta)^{|I|}$, uniformly in every
     interval. Weakening domination to $\eta/2$ and setting

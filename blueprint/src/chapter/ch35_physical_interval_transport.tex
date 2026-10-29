@@ -19,7 +19,7 @@ finite chain. Subtraction of natural numbers is truncated at zero.
     Its inverse sends a site $x$ to $x-a$. Empty intervals are included.
 \end{definition}
 
-\begin{theorem}[A subinterval in increasing coordinates]
+\begin{lemma}[A subinterval in increasing coordinates]
     \label{thm:physical_interval_subinterval_coordinates}
     \lean{TNLean.MPS.AreaLaw.intervalShiftOrderIso_mem_subinterval}
     \leanok
@@ -32,12 +32,12 @@ finite chain. Subtraction of natural numbers is truncated at zero.
         \label{eq:physical_interval_subinterval_coordinates}
     \end{align}
     No ordering of $u,v$ is required: if $v<u$, both conditions are false.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Substitute $e_{c,d}(i)=c+i$ and compare the endpoint inequalities.
 \end{proof}
 
-\begin{theorem}[The length of the natural subinterval]
+\begin{lemma}[The length of the natural subinterval]
     \label{thm:physical_interval_subinterval_length}
     \lean{TNLean.MPS.AreaLaw.intervalShift_subinterval_length_le}
     \leanok
@@ -47,7 +47,7 @@ finite chain. Subtraction of natural numbers is truncated at zero.
         \label{eq:physical_interval_subinterval_length}
     \end{align}
     This includes $v<u$, when the subinterval length is zero.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     If $u\le v$, the left side equals $v-c$. If $v<u$, it equals $u-c$.
     Each is at most $d-c$.
@@ -89,7 +89,7 @@ finite chain. Subtraction of natural numbers is truncated at zero.
     The virtual space remains the supplied $B$-dimensional space.
 \end{definition}
 
-\begin{theorem}[Reading a nested physical interval in natural coordinates]
+\begin{lemma}[Reading a nested physical interval in natural coordinates]
     \label{thm:physical_interval_nested_trace}
     \lean{MPOTensor.trace_identityExtendInterval_nested_natural}
     \leanok
@@ -109,7 +109,7 @@ finite chain. Subtraction of natural numbers is truncated at zero.
     where the identity extension starts at $a-c$ inside the natural chain
     of length $d-c$. The closing matrix and virtual space are unchanged.
     Empty intervals and zero physical or virtual dimension are included.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     When the two physical configurations agree outside the core interval,
     all exterior letters are identities, and the ordered product is the
@@ -120,7 +120,7 @@ finite chain. Subtraction of natural numbers is truncated at zero.
     recovers its natural matrix.
 \end{proof}
 
-\begin{theorem}[A physical complement operator as a retained matrix]
+\begin{lemma}[A physical complement operator as a retained matrix]
     \label{thm:physical_interval_retained_matrix}
     \lean{TNLean.MPS.AreaLaw.exists_retainedMatrix_of_physical_localLift}
     \leanok
@@ -139,7 +139,7 @@ finite chain. Subtraction of natural numbers is truncated at zero.
     \end{align}
     The retained matrix is obtained from the supplied regional matrix
     by this coordinate identification. No interior operator is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:retained_interval_coordinates}
     Relabel the canonical extension along $e$ using covariance of the

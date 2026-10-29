@@ -8,7 +8,7 @@ of the second assertion listed below. The expansion of the branches into
 allowed monomials on these registers is in
 Section~\ref{sec:peps_small_rewrite_monomials}, and the second assertion with
 its polynomial count is
-Theorem~\ref{thm:peps_frame_small_rewrite_polynomial}.
+Lemma~\ref{thm:peps_frame_small_rewrite_polynomial}.
 
 Throughout, $\Lambda$ is a finite set of sites with positions in the plane,
 each site carries a site register $\C^q$ with $q\ge1$, and
@@ -195,7 +195,7 @@ norm of matrices, rectangular ones included.
     $(A_1R-\id)\psi=A_1(R-\id)\psi+(A_1-\id)\psi$ and $\lVert A_1\rVert\le1$.
 \end{proof}
 
-\begin{theorem}[Norm of the frame reference vector]
+\begin{lemma}[Norm of the frame reference vector]
     \label{thm:peps_frame_norm}
     \lean{TNLean.PEPS.EncodedFrame.Frame.norm_refVec_eq,
         TNLean.PEPS.EncodedFrame.Frame.norm_refVec_le,
@@ -209,7 +209,7 @@ norm of matrices, rectangular ones included.
         1-r\varepsilon\le\lVert\Omega_{\mathcal F}\rVert\le1 .
         \label{eq:peps_frame_norm}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     By Lemma~\ref{lem:peps_frame_gram}, $P_1\cdots P_r$ is an orthogonal projection and
@@ -342,7 +342,7 @@ norm of matrices, rectangular ones included.
     \uses{def:peps_frame}
     Old and new one-sheet frames $\mathcal F_{\rm old},\mathcal F_{\rm new}$ share their untouched holes (with identical encodings and tag owners), alongside $r_{\rm old}$ affected old holes and $r_{\rm new}$ affected new holes, $m$ additional square patches
     $(c_i,u_i)$ with cylinder data, and a specified finite list of parties (entering the polynomial count of
-    Theorem~\ref{thm:peps_frame_small_rewrite_polynomial}).
+    Lemma~\ref{thm:peps_frame_small_rewrite_polynomial}).
     Write $H^\mp(\mathcal F)$ for the unions of the physical samples of the
     inner and outer hole squares of $\mathcal F$. The four conditions of
     \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}
@@ -360,7 +360,7 @@ norm of matrices, rectangular ones included.
     \end{enumerate}
     Patches may overlap, and affected old holes may overlap affected new
     holes. In the canonical coordinates below, the tags of the untouched
-    holes come first in both frames; Theorem~\ref{thm:peps_frame_small_rewrite}
+    holes come first in both frames; Lemma~\ref{thm:peps_frame_small_rewrite}
     also covers arbitrary tag orderings.
 \end{definition}
 
@@ -383,7 +383,7 @@ norm of matrices, rectangular ones included.
     $\mathcal F_{\rm new}$ (\texttt{05-frames.tex}, lines 222--232).
 \end{definition}
 
-\begin{theorem}[Tensoring with an identity is a contraction]
+\begin{lemma}[Tensoring with an identity is a contraction]
     \label{thm:peps_frame_identity_tensor_norm}
     \lean{Matrix.l2_opNorm_kronecker_one_le,
         Matrix.l2_opNorm_one_kronecker_rect_le}
@@ -391,7 +391,7 @@ norm of matrices, rectangular ones included.
     For complex matrices $A$ and $B$ (not necessarily square) and identity
     matrices $I$ of any size, $\lVert A\otimes I\rVert\le\lVert A\rVert$ and
     $\lVert I\otimes B\rVert\le\lVert B\rVert$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     For $x=\sum_k x_k\otimes e_k$,
@@ -410,7 +410,7 @@ norm of matrices, rectangular ones included.
 \end{lemma}
 
 \begin{proof}\leanok
-    By Lemma~\ref{lem:peps_frame_gram}, $\lVert K_{\rm new}\rVert,\lVert P_i\rVert,\lVert K_{\rm old}^\dagger\rVert\le1$, and by Theorem~\ref{thm:peps_frame_identity_tensor_norm} tensoring with $\id$ on the
+    By Lemma~\ref{lem:peps_frame_gram}, $\lVert K_{\rm new}\rVert,\lVert P_i\rVert,\lVert K_{\rm old}^\dagger\rVert\le1$, and by Lemma~\ref{thm:peps_frame_identity_tensor_norm} tensoring with $\id$ on the
     untouched tags and relabelling coordinates preserve $\lVert M\rVert\le1$.
 \end{proof}
 
@@ -434,7 +434,7 @@ norm of matrices, rectangular ones included.
         =U_uQ_1\cdots Q_{r_{\rm old}}$, and commuting $U_u$ past $B_aP_m\cdots P_1$ yields the identity.
 \end{proof}
 
-\begin{theorem}[Small-patch rewrite: canonical contraction]
+\begin{lemma}[Small-patch rewrite: canonical contraction]
     \label{thm:peps_frame_small_rewrite}
     \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.norm_rewrite_le_one_and_refVec_sub_le,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.norm_rewrite_refVec_sub_le,
@@ -453,7 +453,7 @@ norm of matrices, rectangular ones included.
     \end{align}
     The same holds for arbitrary tag orderings after relabelling $M$ along the tag permutation. In this
     first assertion of \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}, the error bound~(\ref{eq:peps_frame_small_rewrite_err}) uses condition~(1) only, without assuming small errors on untouched holes or commuting patch projectors.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     By Lemma~\ref{lem:peps_frame_rewrite_intertwining},
@@ -550,7 +550,7 @@ norm of matrices, rectangular ones included.
 \end{lemma}
 
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_frame_small_rewrite} and $\lVert\Omega_{\mathcal F_{\rm old}}\rVert\le1$,
+    By Lemma~\ref{thm:peps_frame_small_rewrite} and $\lVert\Omega_{\mathcal F_{\rm old}}\rVert\le1$,
     $\lVert M_a\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}\rVert\le\lVert M_a-M\rVert\lVert\Omega_{\mathcal F_{\rm old}}\rVert+\lVert M\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}\rVert\le\delta+(m+r_{\rm old})\varepsilon\le(1+m+r_{\rm old})L^{-30}\le L^{-20}$.
 \end{proof}
 
@@ -604,7 +604,7 @@ norm of matrices, rectangular ones included.
 \end{lemma}
 
 \begin{proof}\leanok
-    Since $\lVert k_j\rVert,\lVert b_j\rVert\le1$, Theorem~\ref{thm:peps_group_tensor}
+    Since $\lVert k_j\rVert,\lVert b_j\rVert\le1$, Lemma~\ref{thm:peps_group_tensor}
     approximates the network tensor $Z$ by $Z_k$ with $\lVert Z-Z_k\rVert\le\lvert G\rvert/\sqrt k$. Reshaping $W=Z-Z_k$ into an operator on $\mathcal H_{\bigcup_j S_j}$ tensored with $\id$ on $\Lambda\setminus\bigcup_j S_j$ gives an operator norm bounded by the Hilbert--Schmidt norm $\lVert Z-Z_k\rVert\le\lvert G\rvert/\sqrt k$.
 \end{proof}
 
@@ -639,7 +639,7 @@ norm of matrices, rectangular ones included.
     Equation~(\ref{eq:peps_frame_branch_factors}) follows from~(\ref{eq:peps_frame_patch_proj}) and~(\ref{eq:peps_frame_hole_encoder}). By Lemma~\ref{lem:peps_frame_wires}(i), every site of $D^{\rm old}_t$ or $D^{\rm new}_r$ lies in some $E_i$, so $\ket{u_t}$ and $\bra{u'_r}$ have no open legs and the zero factors have only fixed legs. By Lemma~\ref{lem:peps_frame_wires}(ii) and (iv), the open input legs of $\bra{w_i}$ (which lie in $E_i\setminus\bigcup_t D^{\rm old}_t$) have at most two old owners in the specified list, and symmetrically for $\ket{w_i}$.
 \end{proof}
 
-\begin{theorem}[Small-patch rewrite: approximation by product terms]
+\begin{lemma}[Small-patch rewrite: approximation by product terms]
     \label{thm:peps_frame_small_rewrite_product_terms}
     \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_branch_truncation,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.liftBranchLinearMap,
@@ -663,16 +663,16 @@ norm of matrices, rectangular ones included.
     two specified parties by Lemma~\ref{lem:peps_frame_branch_network}. This formalizes the branch-network,
     truncation and rescaling steps of the second assertion of
     \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}; see
-    Theorem~\ref{thm:peps_frame_small_rewrite_monomials} and
-    Theorem~\ref{thm:peps_frame_small_rewrite_polynomial} for the allowed-monomial expansion and polynomial count.
-\end{theorem}
+    Lemma~\ref{thm:peps_frame_small_rewrite_monomials} and
+    Lemma~\ref{thm:peps_frame_small_rewrite_polynomial} for the allowed-monomial expansion and polynomial count.
+\end{lemma}
 
 \begin{proof}\leanok
     Applying Lemma~\ref{lem:peps_frame_chain_truncation} to each branch network from Lemma~\ref{lem:peps_frame_branch_network} with the at most $2m$ patch vertices as $G$, and combining with Lemma~\ref{lem:peps_frame_rescale} via
     $N\cdot 2m/\sqrt k\le\tfrac12\delta$, gives both bounds.
 \end{proof}
 
-\begin{theorem}[Small-patch rewrite: polynomial approximation]
+\begin{lemma}[Small-patch rewrite: polynomial approximation]
     \label{thm:peps_frame_small_rewrite_polynomial}
     \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx_polynomial,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx_refVec}
@@ -698,18 +698,18 @@ norm of matrices, rectangular ones included.
     $\lVert M_{30}\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}
         \rVert\le(2b+1)L^{-20}$, as in the second
     assertion of \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    By Lemma~\ref{lem:peps_frame_branches}, $M=\sum_\beta M_\beta$ has $N\le((C+1)L^c)^{3b}$ branches $\beta=(a,s,b)$, each of the form $M_\beta=\ket a\bra b\otimes B_aC_sA_b^\dagger$ with $B_aC_sA_b^\dagger$ factored as in~(\ref{eq:peps_frame_branch_factors}) of Lemma~\ref{lem:peps_frame_branch_network}. By Theorem~\ref{thm:peps_frame_small_rewrite_product_terms} (which applies Theorem~\ref{thm:peps_group_tensor} and Lemma~\ref{lem:peps_frame_rescale} to the residual network $Z$ of Lemma~\ref{lem:peps_frame_branch_network}) and Theorem~\ref{thm:peps_frame_small_rewrite_monomials}, for $\delta=L^{-a}$ the rescaled contraction $M_a$ satisfies $\lVert M_a-M\rVert\le L^{-a}$ and expands into at most $Nk^{2m}$ allowed monomials, bounded by~(\ref{eq:peps_frame_poly_monomial_count}), each with at most $2m\le 2b$ pair sources and $2m\le 2b$ pair effects and using only the specified parties (where condition~(4) bounds the owners on the hole squares $D^{\rm old}_t$ and $D^{\rm new}_r$ that condition~(3) leaves unrestricted inside inner holes~\cite{gap:polypeps_small_rewrite_monomials}). Finally, Lemma~\ref{lem:peps_frame_approx_reference} with $a=30$ and $\varepsilon=L^{-60}$ gives $\lVert M_{30}\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}\rVert\le L^{-30}+2bL^{-60}\le(2b+1)L^{-20}$.
+    By Lemma~\ref{lem:peps_frame_branches}, $M=\sum_\beta M_\beta$ has $N\le((C+1)L^c)^{3b}$ branches $\beta=(a,s,b)$, each of the form $M_\beta=\ket a\bra b\otimes B_aC_sA_b^\dagger$ with $B_aC_sA_b^\dagger$ factored as in~(\ref{eq:peps_frame_branch_factors}) of Lemma~\ref{lem:peps_frame_branch_network}. By Lemma~\ref{thm:peps_frame_small_rewrite_product_terms} (which applies Lemma~\ref{thm:peps_group_tensor} and Lemma~\ref{lem:peps_frame_rescale} to the residual network $Z$ of Lemma~\ref{lem:peps_frame_branch_network}) and Lemma~\ref{thm:peps_frame_small_rewrite_monomials}, for $\delta=L^{-a}$ the rescaled contraction $M_a$ satisfies $\lVert M_a-M\rVert\le L^{-a}$ and expands into at most $Nk^{2m}$ allowed monomials, bounded by~(\ref{eq:peps_frame_poly_monomial_count}), each with at most $2m\le 2b$ pair sources and $2m\le 2b$ pair effects and using only the specified parties (where condition~(4) bounds the owners on the hole squares $D^{\rm old}_t$ and $D^{\rm new}_r$ that condition~(3) leaves unrestricted inside inner holes~\cite{gap:polypeps_small_rewrite_monomials}). Finally, Lemma~\ref{lem:peps_frame_approx_reference} with $a=30$ and $\varepsilon=L^{-60}$ gives $\lVert M_{30}\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}\rVert\le L^{-30}+2bL^{-60}\le(2b+1)L^{-20}$.
 \end{proof}
 
-\begin{theorem}[Small-patch rewrite as one gate]
+\begin{lemma}[Small-patch rewrite as one gate]
     \label{thm:peps_frame_small_rewrite_gate}
     \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_originalCircuit_refVec}
     \leanok
     \uses{thm:peps_frame_small_rewrite_polynomial}
-    In the setting of Theorem~\ref{thm:peps_frame_small_rewrite_polynomial}
+    In the setting of Lemma~\ref{thm:peps_frame_small_rewrite_polynomial}
     with $a=30$, suppose that the specified list $S$ of at most $b$ parties is nonempty and
     that the memory of $\mathcal F_{\rm old}$ is nonzero.
     Then $M_{30}$ is the operator of a circuit from the
@@ -719,11 +719,11 @@ norm of matrices, rectangular ones included.
     \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} (\texttt{06-geometry.tex}, lines 574--583) having at most
     $K L^e$ terms, each with at most $2b$ normalized pair effects, and
     coefficients of total modulus at most $K L^e$, where $K L^e$ is the bound~(\ref{eq:peps_frame_poly_monomial_count}) of
-    Theorem~\ref{thm:peps_frame_small_rewrite_polynomial}.
-\end{theorem}
+    Lemma~\ref{thm:peps_frame_small_rewrite_polynomial}.
+\end{lemma}
 
 \begin{proof}\leanok
-    By conditions~(2) and~(4) of Definition~\ref{def:peps_frame_rewrite_data}, the registers held by parties outside $S$ are identical in $\mathcal F_{\rm old}$ and $\mathcal F_{\rm new}$, and each monomial of $M_{30}$ from Theorem~\ref{thm:peps_frame_small_rewrite_polynomial} acts as $\id$ on them and moves only registers of $S$; restricting the sum to the registers of $S$ therefore forms a single gate on $S$.
+    By conditions~(2) and~(4) of Definition~\ref{def:peps_frame_rewrite_data}, the registers held by parties outside $S$ are identical in $\mathcal F_{\rm old}$ and $\mathcal F_{\rm new}$, and each monomial of $M_{30}$ from Lemma~\ref{thm:peps_frame_small_rewrite_polynomial} acts as $\id$ on them and moves only registers of $S$; restricting the sum to the registers of $S$ therefore forms a single gate on $S$.
 \end{proof}
 
 \subsection{Pair sources of the rewrite gates}
@@ -783,7 +783,7 @@ pair sources with the same constant.
     monomials that use only the parties of a nonempty finite set $S$ and act
     as $\id$ on all other registers. Then $\sum_\xi c_\xi M_\xi$ is the operator of a
     circuit with at most one gate, whose parties lie in $S$ as in
-    Theorem~\ref{thm:peps_frame_small_rewrite_gate}, and which satisfies the pair-source bound with constant $r$ whenever every
+    Lemma~\ref{thm:peps_frame_small_rewrite_gate}, and which satisfies the pair-source bound with constant $r$ whenever every
     $M_\xi$ has at most $r$ pair sources.
 \end{lemma}
 
@@ -791,7 +791,7 @@ pair sources with the same constant.
     Restricting each $M_\xi$ to the registers of $S$ and relabelling owners into $S$ preserves or reduces the number of pair sources (turning a pair source with coincided relabelled owners into a local preparation), while the factor exchanges bringing the registers of $S$ to the front and back contain no nonprivate gates.
 \end{proof}
 
-\begin{theorem}[Pair sources of the small-patch rewrite gates]
+\begin{lemma}[Pair sources of the small-patch rewrite gates]
     \label{thm:peps_frame_small_rewrite_gate_sources}
     \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_originalCircuit_refVec_isSourceBounded,
         TNLean.PEPS.Approximation.GuideFrameRewrite.PlaneConditions.exists_originalCircuit_isSourceBounded,
@@ -805,15 +805,15 @@ pair sources with the same constant.
         thm:peps_guide_frame_rewrite_events,
         thm:peps_guide_frame_resize_treatment_gates,
         thm:peps_guide_frame_reading_gates}
-    In the setting of Theorem~\ref{thm:peps_frame_small_rewrite_gate}, the
+    In the setting of Lemma~\ref{thm:peps_frame_small_rewrite_gate}, the
     circuit can be chosen to satisfy the pair-source bound with constant $2b$. The same holds for the
-    guide-frame rewrites of Theorem~\ref{thm:peps_guide_frame_rewrite} and, in the dyadic protocol of
+    guide-frame rewrites of Lemma~\ref{thm:peps_guide_frame_rewrite} and, in the dyadic protocol of
     \cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}, for the direct
     repainting, hole resize, and point treatment gates of
-    Theorems~\ref{thm:peps_guide_frame_rewrite_events}, \ref{thm:peps_guide_frame_resize_treatment_gates},
+    Lemmas~\ref{thm:peps_guide_frame_rewrite_events}, \ref{thm:peps_guide_frame_resize_treatment_gates},
     and~\ref{thm:peps_guide_frame_reading_gates}; hence every monomial of
     these gates has at most $2b$ pair sources and at most $2b$ pair effects.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_guide_frame_patch_congruence,
@@ -825,7 +825,7 @@ pair sources with the same constant.
         thm:peps_guide_frame_resize_treatment_gates,
         thm:peps_dyadic_sampled_ratio, lem:peps_dyadic_floor,
         thm:peps_guide_frame_reading_gates, def:peps_dyadic_block_guide}
-    Each monomial in Theorem~\ref{thm:peps_frame_small_rewrite_polynomial} has at most
+    Each monomial in Lemma~\ref{thm:peps_frame_small_rewrite_polynomial} has at most
     $2m\le 2b$ normalized pair sources, and Lemma~\ref{lem:peps_party_gate_source_bound} preserves this bound on
-    the gate, while the tag-register exchanges in Theorem~\ref{thm:peps_guide_frame_rewrite} add no nonprivate gates.
+    the gate, while the tag-register exchanges in Lemma~\ref{thm:peps_guide_frame_rewrite} add no nonprivate gates.
 \end{proof}

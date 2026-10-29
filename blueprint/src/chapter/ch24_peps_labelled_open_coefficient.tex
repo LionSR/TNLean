@@ -28,7 +28,7 @@
     and pair $c(\theta)$ with any joint boundary tensor $B$ by
     $\sum_\theta B(\theta)c(\theta)$.
 \end{definition}
-\begin{theorem}[Exact delta-exterior completion]
+\begin{lemma}[Exact delta-exterior completion]
     \label{thm:peps_labelled_open_delta}
     \lean{TNLean.PEPS.DependentBondNetwork.joinRegionConfig,
         TNLean.PEPS.DependentBondNetwork.deltaExteriorConfig,
@@ -53,7 +53,7 @@
     \end{align}
     The closed contraction of $\Delta$ with $O^{\rm int}$ equals $c(\theta)$
     with no scalar factor.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For $\beta^\delta=(\eta,\xi^\delta)$, the exterior deltas in
     (\ref{eq:peps_delta_completed_data}) collapse the $\xi$-sum to
@@ -89,7 +89,7 @@
         \label{eq:peps_dual_collar_sets}
     \end{align}
 \end{definition}
-\begin{theorem}[Native delta completion and collar geometry]
+\begin{lemma}[Native delta completion and collar geometry]
     \label{thm:peps_dual_collar_geometry}
     \lean{TNLean.PEPS.torusEndpointTupleEquiv,
         TNLean.PEPS.labelledNetwork_eq_torusBondNetwork,
@@ -111,12 +111,12 @@
     is injective on $Y$, every site in $R$ and its four neighbors lie in $Y$,
     and every bond not internal to $Y$ has both endpoints outside $R$. When
     $V=\emptyset$, the open coefficient of any nonempty region is zero.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Regrouping the four anchored bond endpoints at each vertex gives the
-    native contraction identity by Theorem~\ref{thm:peps_labelled_open_delta}.
+    native contraction identity by Lemma~\ref{thm:peps_labelled_open_delta}.
     By (\ref{eq:peps_dual_collar_sets}), $\kappa(0,0)\in Y$, and
-    Theorem~\ref{thm:peps_dual_rectangle_injective} with $W+1<w$, $H+1<h$
+    Lemma~\ref{thm:peps_dual_rectangle_injective} with $W+1<w$, $H+1<h$
     gives injectivity on $Y$. For $\kappa(i+1,j+1)\in R$ ($0\leq i<W$,
     $0\leq j<H$), its four neighbors $\kappa(i+1\pm1,j+1)$ and
     $\kappa(i+1,j+1\pm1)$ satisfy
@@ -128,7 +128,7 @@
     vertex in a nonempty region has an incidence with no label, making the
     sum (\ref{eq:peps_open_coefficient}) empty.
 \end{proof}
-\begin{theorem}[Collared open deformation with a correlated boundary]
+\begin{lemma}[Collared open deformation with a correlated boundary]
     \label{thm:peps_dual_collar_open}
     \lean{TNLean.PEPS.torusDualFluxBondMatrices,
         TNLean.PEPS.TorusDualCollar.exists_internalFluxGauge,
@@ -153,22 +153,22 @@
     physical configuration on $Y$ and arbitrary $(G,U)$, and equality
     persists after contraction with any joint boundary tensor $B(\theta)$
     (without assuming factorization or $V\neq\emptyset$).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_dual_flux_gauge_absorption,
         thm:peps_torus_operator_string_deformation}
-    Theorem~\ref{thm:peps_dual_rectangle} gives $\bar p\sim_R\bar q$ and a
+    Lemma~\ref{thm:peps_dual_rectangle} gives $\bar p\sim_R\bar q$ and a
     potential $k$ with $k=1$ off $R$ satisfying
     (\ref{eq:peps_dual_label_gauge}). This yields
     (\ref{eq:peps_collar_internal_gauge}) on bonds internal to $Y$, while on
-    noninternal bonds Theorem~\ref{thm:peps_dual_collar_geometry} gives
+    noninternal bonds Lemma~\ref{thm:peps_dual_collar_geometry} gives
     $h(e),t(e)\notin R$, so $k(h(e))=k(t(e))=1$ and both sides of
     (\ref{eq:peps_collar_internal_gauge}) equal $I$. If $V\neq\emptyset$,
     fix $v_0\in V$; at any $v$ with $k(v)\neq1$ we have $v\in R$, so
     $\Delta^{\rm nat}_v=A_v(\sigma_v)$ is $k(v)$-invariant by
-    Theorem~\ref{thm:peps_torus_operator_string_deformation}. Writing $\Psi$
+    Lemma~\ref{thm:peps_torus_operator_string_deformation}. Writing $\Psi$
     for the closed native contraction,
-    Theorems~\ref{thm:peps_dual_flux_gauge_absorption}
+    Lemmas~\ref{thm:peps_dual_flux_gauge_absorption}
     and~\ref{thm:peps_dual_collar_geometry} give
     \begin{align}
         c^{\rm nat}_q(\theta)
@@ -179,5 +179,5 @@
     \end{align}
     and summing against $B(\theta)$ gives the boundary claim. If
     $V=\emptyset$, both coefficients vanish by
-    Theorem~\ref{thm:peps_dual_collar_geometry} since $\kappa(0,0)\in Y$.
+    Lemma~\ref{thm:peps_dual_collar_geometry} since $\kappa(0,0)\in Y$.
 \end{proof}

@@ -59,31 +59,31 @@ The scanner estimate of \cite[Proposition~9.2]{OpenAI2026AreaLaw} selects a char
                   +Cn^{-1000}+\rho_k,
                   \label{eq:al_scanner_source_energy}
               \end{align}
-              together with the rough upper bound $-\frac{1}{k}\log N_k^2\le2\log d_*-\log z+W(B_{\rm sh}/z+B_{\rm exc})+R_k^{\rm RU}$, the rough lower bound (\ref{eq:arealaw-supplied-rough-lower}) for all $0<\tau\le1/2$, and—when $a\sqrt{\mathcal B}\le\min\{c_0,1\}/10$ for $C_0=1024\mathrm e/g$ and $c_0=[32\sqrt{1+2/g}]^{-1}$—both sharp bounds (\ref{eq:arealaw-supplied-sharp-bounds}) of Theorem~\ref{thm:arealaw-supplied-target-norm-bounds} with remainders vanishing uniformly in the selected charge and $p_k$ (while keeping input $C_e$ fixed; see~\cite{gap:arealaw2d_scanner_inputs}).
+              together with the rough upper bound $-\frac{1}{k}\log N_k^2\le2\log d_*-\log z+W(B_{\rm sh}/z+B_{\rm exc})+R_k^{\rm RU}$, the rough lower bound (\ref{eq:arealaw-supplied-rough-lower}) for all $0<\tau\le1/2$, and—when $a\sqrt{\mathcal B}\le\min\{c_0,1\}/10$ for $C_0=1024\mathrm e/g$ and $c_0=[32\sqrt{1+2/g}]^{-1}$—both sharp bounds (\ref{eq:arealaw-supplied-sharp-bounds}) of Lemma~\ref{thm:arealaw-supplied-target-norm-bounds} with remainders vanishing uniformly in the selected charge and $p_k$ (while keeping input $C_e$ fixed; see~\cite{gap:arealaw2d_scanner_inputs}).
     \end{enumerate}
 \end{definition}
 
-\begin{theorem}[The scanner estimate]
+\begin{lemma}[The scanner estimate]
     \label{thm:al_scanner_source}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.scannerStatement}
     \leanok
     \uses{def:al_scanner_source_statement}
     Definition~\ref{def:al_scanner_source_statement} holds for $J\ge0$, $\Delta>0$, and $C_T\ge0$, establishing \cite[Proposition~9.2]{OpenAI2026AreaLaw} under~\cite{gap:arealaw2d_scanner_inputs}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:arealaw-source-selected-energy,thm:arealaw-supplied-target-norm-bounds,
         thm:al_scan_common_status_budget,thm:al_positive_prefix_entropy_transfer,
         thm:al_scan_actual_rough_upper,thm:al_augmented_prevector_norm,thm:al_lattice_counts}
-    Choose $C_{\rm tr}$ from Theorem~\ref{thm:arealaw-source-selected-energy} before fixing $q$.
-    By Theorem~\ref{thm:al_lattice_counts}, range-$R$ anchor multiplicity is at most $\mu_*=2^{2R(R+1)}$; setting $C_1=3\mu_*+1$ and applying Theorem~\ref{thm:arealaw-source-selected-energy} with entropy coefficient $\max\{C_e,1\}$ yields $\widetilde\Omega$, $E$, $\lambda_k$, and a selected point satisfying (\ref{eq:al_scanner_source_trace_distance}), $1-n^{-100}\le z\le1$, $\|\mathrm{pre}_k\|\le1$ (Theorem~\ref{thm:al_augmented_prevector_norm}), and (\ref{eq:al_scanner_source_energy}).
+    Choose $C_{\rm tr}$ from Lemma~\ref{thm:arealaw-source-selected-energy} before fixing $q$.
+    By Lemma~\ref{thm:al_lattice_counts}, range-$R$ anchor multiplicity is at most $\mu_*=2^{2R(R+1)}$; setting $C_1=3\mu_*+1$ and applying Lemma~\ref{thm:arealaw-source-selected-energy} with entropy coefficient $\max\{C_e,1\}$ yields $\widetilde\Omega$, $E$, $\lambda_k$, and a selected point satisfying (\ref{eq:al_scanner_source_trace_distance}), $1-n^{-100}\le z\le1$, $\|\mathrm{pre}_k\|\le1$ (Lemma~\ref{thm:al_augmented_prevector_norm}), and (\ref{eq:al_scanner_source_energy}).
 
-    Applying Theorem~\ref{thm:arealaw-supplied-target-norm-bounds} and Theorem~\ref{thm:al_scan_common_status_budget} with cut and norm coefficients $C_{B,\rm cut},C_{B,\rm norm}$, set
+    Applying Lemma~\ref{thm:arealaw-supplied-target-norm-bounds} and Lemma~\ref{thm:al_scan_common_status_budget} with cut and norm coefficients $C_{B,\rm cut},C_{B,\rm norm}$, set
     \begin{align}
         C_b        =\max\{C_{B,\rm cut},C_{B,\rm norm},
         \max\{C_e,1\}+1,1+3\log q\},\qquad
         \mathcal B =C_bnD(\log n)^{12}. \notag
     \end{align}
-    Theorem~\ref{thm:al_positive_prefix_entropy_transfer} gives $B_{\rm sh}=\max\{C_e,1\}(nL^e+n)+n^{-247}$ and $B_{\rm exc}=1+3nD\log q\le C_bnD$, while Theorem~\ref{thm:al_scan_actual_rough_upper} gives the terminal-round bound at parameter $1$ and the rough upper bound at the selected point.
+    Lemma~\ref{thm:al_positive_prefix_entropy_transfer} gives $B_{\rm sh}=\max\{C_e,1\}(nL^e+n)+n^{-247}$ and $B_{\rm exc}=1+3nD\log q\le C_bnD$, while Lemma~\ref{thm:al_scan_actual_rough_upper} gives the terminal-round bound at parameter $1$ and the rough upper bound at the selected point.
 \end{proof}

@@ -38,7 +38,7 @@ estimate.
     cases are exhaustive.
 \end{definition}
 
-\begin{theorem}[Label opposite the dummy tile]
+\begin{lemma}[Label opposite the dummy tile]
     \label{thm:area_law_belt_fan_dummy_color}
     \lean{TNLean.PEPS.AreaLaw.Geometry.beltCellFanColor_dummy}
     \leanok
@@ -47,7 +47,7 @@ estimate.
     $e_i$ lies in $\overline{N_{k_0}}$, then
     $c_{k,z}(i)=(k_0-1)+1\ne k_0-1$ in $\mathbb Z/2\mathbb Z$, so the incident
     triangle receives the label opposite that of the dummy tile.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_unique_elementary_side_opponent,def:area_law_belt_fan_color}
     Since $e_i\subseteq\overline{N_{k_0}}$, uniqueness of the opposing region
@@ -55,7 +55,7 @@ estimate.
     $\mathbb Z/2\mathbb Z$.
 \end{proof}
 
-\begin{theorem}[Label and primary region opposite a non-belt cell]
+\begin{lemma}[Label and primary region opposite a non-belt cell]
     \label{thm:area_law_belt_fan_nonbelt_color}
     \lean{TNLean.PEPS.AreaLaw.Geometry.beltCellFanColor_nonbelt_opponent}
     \leanok
@@ -69,7 +69,7 @@ estimate.
     the segment $e_i$ is contained in the primary region
     $\overline{D_h\cap I_{a_h,b_h}(J)}$, and
     $c_{k,z}(i)=h+1\ne h$ in $\mathbb Z/2\mathbb Z$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_selected_opponent_contact,
         thm:area_law_unique_elementary_side_opponent,
@@ -84,7 +84,7 @@ estimate.
     $c_{k,z}(i)=h+1\ne h$ in $\mathbb Z/2\mathbb Z$.
 \end{proof}
 
-\begin{theorem}[Opposite labels across contacting belt-cell segments]
+\begin{lemma}[Opposite labels across contacting belt-cell segments]
     \label{thm:area_law_belt_fan_contact_colors}
     \lean{TNLean.PEPS.AreaLaw.Geometry.beltCellFanColor_belt_contact}
     \leanok
@@ -93,7 +93,7 @@ estimate.
     $e_j$ be elementary segments of their respective fans.
     If $e_i\cap e_j$ contains two distinct points, then
     $c_{k,z}(i)\ne c_{h,w}(j)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_selected_opponent_contact,thm:area_law_cell_fan_cover,
         def:area_law_belt_fan_color}
