@@ -462,7 +462,7 @@ theorem uncleInteractionES_trial_eq_pinnedEndpointState
       i = ⟨4 * N - 1, by omega⟩ ∨ i = ⟨5 * N, by omega⟩ := by
     simpa only [uncleTrialEndpointBonds, Finset.mem_insert, Finset.mem_singleton] using hi
   rcases hcases with rfl | rfl | rfl | rfl
-  · simpa only [uncleTrialPinnedEndpointState, if_pos rfl] using
+  · simpa [uncleTrialPinnedEndpointState] using
       uncleInteractionES_trial_pin_first_endpoint A B R L N hN τ
   · simpa [uncleTrialPinnedEndpointState, ne_of_gt h01] using
       uncleInteractionES_trial_pin_second_endpoint A B R L N hN τ
