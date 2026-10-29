@@ -54,8 +54,8 @@ theorem periodicLocalInteractionES_eq_zero_iff_sections
     rw [← cyclicRestrictES_periodicLocalInteractionES h hR hRN i τ ψ, hzero, map_zero]
   · intro hzero
     ext σ
-    rw [periodicLocalInteractionES_apply h hR hRN, hzero σ]
-    rfl
+    rw [periodicLocalInteractionES_apply h hR hRN]
+    exact congrArg (fun v : MPVSpace d R ↦ v (extractWindow R i σ)) (hzero σ)
 
 /-- Positivity derives every local section equation from the actual periodic
 Hamiltonian kernel. Source: SPWC10, Theorem 5 proof, lines 869--880. -/
