@@ -161,7 +161,7 @@ All products of site matrices retain their natural order.
     chain. In particular, no rank-one condition on that matrix is imposed.
 \end{definition}
 
-\begin{theorem}[A finite family in natural physical order]
+\begin{lemma}[A finite family in natural physical order]
     \label{thm:finite_natural_retained_core_family}
     \lean{MPOTensor.exists_finite_natural_retained_core_family}
     \leanok
@@ -189,7 +189,7 @@ All products of site matrices retain their natural order.
     alphabet, has an open-boundary MPS representation with bond bound
     $(B^{t_r})^2$. Empty chains, empty intervals, and zero physical or virtual
     dimensions are included whenever the stated retained data exist.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:retained_interval_coordinates,def:retained_stack_core,
         thm:core_word_product,thm:trace_core_slice_words,thm:trace_core_open_square,
@@ -209,7 +209,7 @@ All products of site matrices retain their natural order.
     the full inserted operator is zero and has the square bound as well.
 \end{proof}
 
-\begin{theorem}[The affine product of the actual supplied trace operator]
+\begin{lemma}[The affine product of the actual supplied trace operator]
     \label{thm:actual_natural_affine_product}
     \lean{MPOTensor.prod_actual_natural_affine_eq}
     \leanok
@@ -234,7 +234,7 @@ All products of site matrices retain their natural order.
     (\ref{eq:actual_retained_interval_closing}). The identity concerns the
     supplied trace operator $H$; no identification with another Hamiltonian
     is assumed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:retained_interval_coordinates,def:actual_retained_interval_closing}
     Split the ordered full-chain product into prefix, interval and suffix.

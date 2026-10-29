@@ -1,29 +1,19 @@
 \section{Fourier coordinates for regional parent spaces}
 \label{sec:peps_fourier_parent_transport}
 
-Let $G$ be finite, and let $U,L$ be representations on finite coordinate
-sets $X,Y$. Suppose $Q:\C^X\to\C^Y$ satisfies
-$Q^\dagger Q=I$ and $L(g)=QU(g)Q^\dagger$.
-All graph edges retain their ordered tail--head orientation.
-The physical bond coordinate map is $B(Q)=Q\otimes\overline Q$ in
-head--tail order, as in \cite[Section~7]{Schuch2010PEPS}.
-Every open contraction retains its full virtual boundary coefficient.
+For a finite group $G$, representations $U,L$ on finite sets $X,Y$, and $Q:\C^X\to\C^Y$ satisfying $Q^\dagger Q=I$ and $L(g)=QU(g)Q^\dagger$, orient all graph edges from tail to head and define the head--tail physical bond map $B(Q)=Q\otimes\overline Q$ (\cite[Section~7]{Schuch2010PEPS}).
 
 \subsection{Regional coordinate changes}
 
-\begin{theorem}[The reverse coordinate identity]%
+\begin{lemma}[The reverse coordinate identity]%
     \label{thm:peps_fourier_reverse_coordinates}
     \lean{TNLean.PEPS.mul_conjTranspose_eq_one_of_representation_coordinates,
         TNLean.PEPS.representation_coordinates_conjTranspose}
     \leanok
-    The identity $L(g)=QU(g)Q^\dagger$ alone implies $QQ^\dagger=I$.
-    If also $Q^\dagger Q=I$, then $U(g)=Q^\dagger L(g)Q$.
-\end{theorem}
+    If $L(g)=QU(g)Q^\dagger$, then $QQ^\dagger=I$; if also $Q^\dagger Q=I$, then $U(g)=Q^\dagger L(g)Q$.
+\end{lemma}
 \begin{proof}\leanok
-    Evaluating the first identity at $g=1$ with $U(1)=L(1)=I$ gives
-    $QQ^\dagger=I$. Multiplying $L(g)=QU(g)Q^\dagger$ on the left by
-    $Q^\dagger$ and on the right by $Q$ and cancelling $Q^\dagger Q$
-    yields the second identity.
+    Evaluating $L(g)=QU(g)Q^\dagger$ at $g=1$ gives $QQ^\dagger=I$, and left/right multiplication by $Q^\dagger,Q$ with $Q^\dagger Q=I$ gives $U(g)=Q^\dagger L(g)Q$.
 \end{proof}
 
 \begin{definition}[Oriented regional Fourier matrices]%
@@ -31,20 +21,15 @@ Every open contraction retains its full virtual boundary coefficient.
     \lean{TNLean.PEPS.graphBoundaryCoordinateMatrix,
         TNLean.PEPS.graphRegionCoordinateMatrix}
     \leanok
-    For a crossing edge $f=(t,h)$ of a region $R$, put
-    $Q_f=\overline Q$ when $t\in R$ and $Q_f=Q$ when $h\in R$.
-    On its physical crossing endpoints and internal head--tail pairs,
-    define
+    For a crossing edge $f=(t,h)\in\partial E_R$ of a region $R$, set $Q_f=\overline Q$ if $t\in R$ and $Q_f=Q$ if $h\in R$, and define the virtual boundary and regional coordinate matrices
     \begin{align}
-        Q_R=\bigotimes_{f\in\partial E_R}Q_f
-        \otimes\bigotimes_{f\in E_R}B(Q).
+        Q_{\partial R}=\bigotimes_{f\in\partial E_R}Q_f,\qquad
+        Q_R=Q_{\partial R}\otimes\bigotimes_{f\in E_R}B(Q).
         \label{eq:peps_fourier_regional_matrix}
     \end{align}
-    The virtual boundary matrix is
-    $Q_{\partial R}=\bigotimes_{f\in\partial E_R}Q_f$.
 \end{definition}
 
-\begin{theorem}[Composition of product coordinate matrices]%
+\begin{lemma}[Composition of product coordinate matrices]%
     \label{thm:peps_fourier_product_composition}
     \lean{TNLean.PEPS.mixedPhysicalProductMatrix_mul,
         TNLean.PEPS.mixedPhysicalProductMatrix_one,
@@ -53,24 +38,13 @@ Every open contraction retains its full virtual boundary coefficient.
         TNLean.PEPS.graphRegionCoordinateMatrix_mul_conjTranspose}
     \leanok
     \uses{def:peps_fourier_regional_matrix}
-    For finite products with compatible index spaces, multiplying
-    product matrices multiplies the matrices at each factor, and a
-    product of identity matrices is the identity. In particular,
-    $B(P)B(Q)=B(PQ)$ and $B(I)=I$.
-    If $QQ^\dagger=I$, then $Q_R(Q^\dagger)_R=I$.
-\end{theorem}
+    Product coordinate matrices multiply factorwise, satisfying $B(P)B(Q)=B(PQ)$ and $B(I)=I$; in particular, $QQ^\dagger=I$ implies $Q_R(Q^\dagger)_R=I$.
+\end{lemma}
 \begin{proof}\leanok
-    In matrix multiplication, the sum over an intermediate product
-    configuration factors into the product of the individual sums.
-    Conjugation commutes with multiplication, proving the bond formula.
-    For a tail crossing the two factors are $\overline Q$ and
-    $\overline{Q^\dagger}$, with product
-    $\overline{QQ^\dagger}=I$; at a head they are $Q,Q^\dagger$.
-    The internal product is $B(QQ^\dagger)=I$, proving the regional
-    cancellation identity.
+    Factoring the matrix product over the tensor factors in (\ref{eq:peps_fourier_regional_matrix}) gives $\overline Q\,\overline{Q^\dagger}=\overline{QQ^\dagger}=I$ at tail crossings, $QQ^\dagger=I$ at head crossings, and $B(QQ^\dagger)=I$ on $E_R$.
 \end{proof}
 
-\begin{theorem}[Fourier transformation of open generators]%
+\begin{lemma}[Fourier transformation of open generators]%
     \label{thm:peps_fourier_open_contractions}
     \lean{TNLean.PEPS.graphOpenBoundaryFactor_coordinates,
         TNLean.PEPS.graphOpenInternalFactor_coordinates,
@@ -78,9 +52,8 @@ Every open contraction retains its full virtual boundary coefficient.
         TNLean.PEPS.graphRegionCoordinateMatrix_open_superposition}
     \leanok
     \uses{def:peps_fourier_regional_matrix}
-    Let $a_R^U(\theta)$ and $a_R^L(\eta)$ be the unweighted
-    open averaging contractions in regional bond coordinates.
-    If $Q^\dagger Q=I$ and $L(g)=QU(g)Q^\dagger$, then
+    Let $a_R^U(\theta)$ and $a_R^L(\eta)$ be the unweighted open averaging contractions in regional bond coordinates, with contraction maps $\mathcal C_R(U),\mathcal C_R(L)$.
+    If $Q^\dagger Q=I$ and $L(g)=QU(g)Q^\dagger$, then for every virtual boundary vector $c$,
     \begin{align}
         Q_Ra_R^U(\theta)
                             & =\sum_\eta\left(\prod_{f\in\partial E_R}
@@ -89,71 +62,41 @@ Every open contraction retains its full virtual boundary coefficient.
         Q_R\mathcal C_R(U)c & =\mathcal C_R(L)Q_{\partial R}c.
         \label{eq:peps_fourier_open_superposition}
     \end{align}
-    Here $c$ is an arbitrary virtual boundary coefficient vector.
-    For each internal edge the individual factor is transformed by
-    $B(Q)$, using only $L(g)=QU(g)Q^\dagger$.
-    At each crossing the individual factor obeys the corresponding
-    one-ended sum over $\eta_f$ in
-    (\ref{eq:peps_fourier_open_generator}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    For an internal edge, vectorization of
-    $L(q_hq_t^{-1})=QU(q_hq_t^{-1})Q^\dagger$ gives its factor identity.
-    At a head crossing $L(g)Q=QU(g)$, while at a tail crossing
-    $Q^\dagger L(g)=U(g)Q^\dagger$ with $g=q_t^{-1}$ in tail-ordered
-    coefficients; both identities leave the oriented
-    virtual boundary matrix $Q_f$.
-    Expanding the site averages and distributing the product of crossing
-    sums yields~(\ref{eq:peps_fourier_open_generator}).
-    Summing against $c(\theta)$ and interchanging finite sums proves
-    (\ref{eq:peps_fourier_open_superposition}).
+    Vectorizing $L(q_hq_t^{-1})=QU(q_hq_t^{-1})Q^\dagger$ transforms each internal bond factor by $B(Q)$, while $L(g)Q=QU(g)$ (head crossing) and $Q^\dagger L(q_t^{-1})=U(q_t^{-1})Q^\dagger$ (tail crossing) transform each $f\in\partial E_R$ by $Q_f$; expanding site averages gives (\ref{eq:peps_fourier_open_generator}), and summing against $c(\theta)$ gives (\ref{eq:peps_fourier_open_superposition}).
 \end{proof}
 
-\begin{theorem}[Exact equality of every regional range]%
+\begin{lemma}[Exact equality of every regional range]%
     \label{thm:peps_fourier_regional_ranges}
     \lean{TNLean.PEPS.graphRegionCoordinateMatrix_maps_openBondSpace,
         TNLean.PEPS.graphRegionCoordinateMatrix_map_openBondSpace}
     \leanok
-    Under the coordinate hypotheses above,
-    $Q_R\mathcal G_R(U)=\mathcal G_R(L)$ in regional bond coordinates,
-    for every $R$. In particular the forward range inclusion holds.
-\end{theorem}
+    Under the hypotheses of Lemma~\ref{thm:peps_fourier_open_contractions}, $Q_R\mathcal G_R(U)=\mathcal G_R(L)$ for every region $R$.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_fourier_open_contractions,
         thm:peps_fourier_reverse_coordinates,
         thm:peps_fourier_product_composition}
-    Equation~(\ref{eq:peps_fourier_open_generator}) maps every source
-    generator into the target span. Applying it to $Q^\dagger$ via
-    Theorem~\ref{thm:peps_fourier_reverse_coordinates} sends
-    every target range vector back into the source range, and
-    the identity $Q_R(Q^\dagger)_R=I$ then gives its preimage.
+    Equation~(\ref{eq:peps_fourier_open_generator}) gives $Q_R\mathcal G_R(U)\subseteq\mathcal G_R(L)$, while applying (\ref{eq:peps_fourier_open_generator}) to $Q^\dagger$ via Lemma~\ref{thm:peps_fourier_reverse_coordinates} and $Q_R(Q^\dagger)_R=I$ (Lemma~\ref{thm:peps_fourier_product_composition}) gives $\mathcal G_R(L)\subseteq Q_R\mathcal G_R(U)$.
 \end{proof}
 
 \subsection{Exterior blocks and complete kernels}
 
-\begin{theorem}[Global Fourier blocks preserve local ranges]%
+\begin{lemma}[Global Fourier blocks preserve local ranges]%
     \label{thm:peps_fourier_exterior_blocks}
     \lean{TNLean.PEPS.regionOperatorBlock_graphNumberedBondMatrix_coordinates_maps,
         TNLean.PEPS.graphNumberedBondMatrix_coordinates_maps_regionParentGroundSpace}
     \leanok
     \uses{def:peps_fourier_regional_matrix}
-    Let $\mathcal Q$ be $\bigotimes_{f\in E}B(Q)$ in numbered site
-    coordinates. For fixed input and output exterior configurations,
-    its regional matrix block maps $\mathcal G_R(U)$ into
-    $\mathcal G_R(L)$. Hence
-    $\mathcal Q\mathcal P_{\mathcal R}(U)
-        \subseteq\mathcal P_{\mathcal R}(L)$ for any region family.
-\end{theorem}
+    For $\mathcal Q=\bigotimes_{f\in E}B(Q)$ in numbered site coordinates, every exterior block of $\mathcal Q$ maps $\mathcal G_R(U)$ into $\mathcal G_R(L)$, so $\mathcal Q\mathcal P_{\mathcal R}(U)\subseteq\mathcal P_{\mathcal R}(L)$ for any region family $\mathcal R$.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_oriented_coordinate_blocks}
-    This is the case of
-    Theorem~\ref{thm:peps_oriented_coordinate_blocks} in which no edge
-    is reversed. When every $o_e=0$, each $Q_e$ equals $Q$, so the
-    oriented global coordinate matrix is $\mathcal Q$, and the oriented
-    averaging tensors are the ordered ones.
+    Specialize Lemma~\ref{thm:peps_oriented_coordinate_blocks} to trivial edge orientations $o_e=0$ ($\forall e\in E$), where $Q_e=Q$ and the oriented global matrix reduces to $\mathcal Q$.
 \end{proof}
 
-\begin{theorem}[Canonical parents in different representation coordinates]%
+\begin{lemma}[Canonical parents in different representation coordinates]%
     \label{thm:peps_fourier_coordinate_parent}
     \lean{TNLean.PEPS.graphNumberedBondMatrix_coordinates_rightInverse,
         TNLean.PEPS.graphNumberedBondMatrix_coordinates_injective,
@@ -162,36 +105,19 @@ Every open contraction retains its full virtual boundary coefficient.
         TNLean.PEPS.finrank_regionParentGroundSpace_coordinates_eq,
         TNLean.PEPS.map_ker_regionParentHamiltonian_coordinates_eq}
     \leanok
-    Suppose $Q^\dagger Q=I$ and $L(g)=QU(g)Q^\dagger$.
-    For given incident enumerations and any family of regions,
+    If $Q^\dagger Q=I$ and $L(g)=QU(g)Q^\dagger$, then for any incident enumerations and region family $\mathcal R$ (with $\mathcal Q^\dagger$ inverse to $\mathcal Q$ on the full physical space),
     \begin{align}
         \mathcal Q\mathcal P_{\mathcal R}(U) & =\mathcal P_{\mathcal R}(L),
                                              & \mathcal Q:\mathcal P_{\mathcal R}(U) & \xrightarrow{\ \cong\ }
-        \mathcal P_{\mathcal R}(L).
+        \mathcal P_{\mathcal R}(L),
         \label{eq:peps_fourier_coordinate_parent}
     \end{align}
-    Their dimensions agree. The global operation associated to
-    $Q^\dagger$ is its inverse on the entire physical space:
-    $QQ^\dagger=I$ suffices for the right-inverse identity, and
-    $Q^\dagger Q=I$ suffices for injectivity.
-    For a finite region family, arbitrary positive local interactions
-    whose kernels are the respective regional ranges satisfy
-    $\mathcal Q(\ker H)=\ker K$.
-    No vertex or edge coverage assumption is needed.
-\end{theorem}
+    so $\dim\mathcal P_{\mathcal R}(U)=\dim\mathcal P_{\mathcal R}(L)$, and for any finite $\mathcal R$ and positive local interactions $H,K$ with local kernels $\mathcal G_R(U),\mathcal G_R(L)$, $\mathcal Q(\ker H)=\ker K$.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_oriented_global_coordinate_inverse,
         thm:peps_oriented_coordinate_parent,thm:peps_region_parent_common_kernel}
-    Setting every $o_e=0$ in
-    Theorems~\ref{thm:peps_oriented_global_coordinate_inverse}
-    and~\ref{thm:peps_oriented_coordinate_parent} makes the oriented
-    global coordinate matrix equal to $\mathcal Q$ and the oriented averaging
-    tensors equal to the ordered ones, which gives the inverse identities,
-    injectivity, and the equality of parent spaces.
-    Restricting $\mathcal Q$ to the source parent space is therefore
-    injective with image the target parent space, which gives the
-    isomorphism and equality of dimensions.
-    Positivity identifies the Hamiltonian kernels with those spaces.
+    Specializing Lemmas~\ref{thm:peps_oriented_global_coordinate_inverse} and~\ref{thm:peps_oriented_coordinate_parent} to $o_e=0$ ($\forall e\in E$) yields $\mathcal Q\mathcal Q^\dagger=\mathcal Q^\dagger\mathcal Q=I$ and (\ref{eq:peps_fourier_coordinate_parent}); Lemma~\ref{thm:peps_region_parent_common_kernel} identifies $\ker H=\mathcal P_{\mathcal R}(U)$ and $\ker K=\mathcal P_{\mathcal R}(L)$.
 \end{proof}
 
 \begin{definition}[Dimension restoration followed by Fourier transformation]%
@@ -200,44 +126,29 @@ Every open contraction retains its full virtual boundary coefficient.
         TNLean.PEPS.canonicalSemiRegularFourierParentEquiv}
     \leanok
     \uses{thm:peps_copy_parent_equivalence,thm:peps_fourier_coordinate_parent}
-    Let $d_i>0$, and suppose an isometric matrix
-    $Q:\C^{\coprod_i\{0,\ldots,d_i-1\}^2}\to\C^G$ satisfies
-    $L(g)=QD^{[d]}(g)Q^\dagger$.
-    Given incident enumerations at all three stages, define
-    $T=\mathcal Q M_d$. When every edge is internal to some parent
-    region, its restriction is the composition of the copy-restoration
-    and Fourier parent-space isomorphisms.
+    For $d_i>0$ and an isometry $Q:\C^{\coprod_i\{0,\ldots,d_i-1\}^2}\to\C^G$ satisfying $L(g)=QD^{[d]}(g)Q^\dagger$, define $T=\mathcal Q M_d$ by composing the copy-restoration map $M_d$ (Lemma~\ref{thm:peps_copy_parent_equivalence}) with $\mathcal Q$ (Lemma~\ref{thm:peps_fourier_coordinate_parent}).
 \end{definition}
 
-\begin{theorem}[The weighted canonical parent in the regular group basis]%
+\begin{lemma}[The weighted canonical parent in the regular group basis]%
     \label{thm:peps_fourier_semiregular_parent}
     \lean{TNLean.PEPS.map_regionParentGroundSpace_semiRegular_fourier_eq,
         TNLean.PEPS.finrank_regionParentGroundSpace_semiRegular_fourier_eq,
         TNLean.PEPS.map_ker_regionParentHamiltonian_semiRegular_fourier_eq}
     \leanok
     \uses{def:peps_fourier_semiregular_parent_map}
-    With the hypotheses of
-    Definition~\ref{def:peps_fourier_semiregular_parent_map}, let $A_d$
-    be the averaging tensor for $D=\bigoplus_iD_i$ with weights
-    $d_i^{1/4}$, and let $A_{\mathrm{reg}}$ be the unweighted averaging
-    tensor for $L$ in group coordinates. Then
+    Under Definition~\ref{def:peps_fourier_semiregular_parent_map}, if every edge is internal to some $R\in\mathcal R$, $A_d$ is the $d_i^{1/4}$-weighted averaging tensor for $D=\bigoplus_iD_i$, and $A_{\mathrm{reg}}$ is the unweighted averaging tensor for $L$, then
     \begin{align}
         T\mathcal P_{\mathcal R}(A_d) & =
         \mathcal P_{\mathcal R}(A_{\mathrm{reg}}),
                                       & \dim\mathcal P_{\mathcal R}(A_d) & =
-        \dim\mathcal P_{\mathcal R}(A_{\mathrm{reg}}).
+        \dim\mathcal P_{\mathcal R}(A_{\mathrm{reg}}), \notag
     \end{align}
-    For a finite region family and arbitrary positive local interactions
-    with these exact regional kernels, $T(\ker H)=\ker K$.
-\end{theorem}
+    and for finite $\mathcal R$ and positive local interactions $H,K$ with these regional kernels, $T(\ker H)=\ker K$.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_copy_parent_equivalence,thm:peps_fourier_coordinate_parent,
         thm:peps_region_parent_common_kernel}
-    Copy restoration identifies the full weighted single-copy parent
-    space with the unweighted $D^{[d]}$ parent space, and the Fourier
-    isomorphism identifies that entire space with the regular
-    parent space. Composing the two maps preserves dimension,
-    and positivity identifies each Hamiltonian kernel with its parent space.
+    Composing $M_d:\mathcal P_{\mathcal R}(A_d)\xrightarrow{\cong}\mathcal P_{\mathcal R}(D^{[d]})$ (Lemma~\ref{thm:peps_copy_parent_equivalence}) with $\mathcal Q:\mathcal P_{\mathcal R}(D^{[d]})\xrightarrow{\cong}\mathcal P_{\mathcal R}(A_{\mathrm{reg}})$ (Lemma~\ref{thm:peps_fourier_coordinate_parent}) and applying Lemma~\ref{thm:peps_region_parent_common_kernel} yields the claims.
 \end{proof}
 
 % This supplied-Fourier comparison is distinct from deriving the blocks and

@@ -16,22 +16,7 @@
     \lean{TNLean.Lattice.PartyCircuit.Layout.eq_conj_memCongr_of_heq}
     \leanok
     \uses{def:peps_party_layout}
-    For an ordered list of registers $\ell$ and a party $p$, let $\ell_p$
-    retain precisely the registers owned by $p$, in their original order.
-    Write $\mathcal H_{\ell,p}$ for their joint memory. The memory of an
-    empty list is $\mathbb C$. A finite ordered list of distinct parties
-    $p_1,\ldots,p_s$ gives the grouped memory
-    $\bigotimes_{j=1}^s\mathcal H_{\ell,p_j}$. Local maps between these
-    memories act by their ordered tensor product; for an empty party list
-    this is the identity on $\mathbb C$. Equal register lists are identified
-    by the identity on their memories, preserving operator norms.
-
-    In the local-space and local-operation setup of
-    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, \texttt{04-compression.tex},
-    lines 233--251, the parties of a composition include every register owner
-    and the party assigned to each local operation; in particular, a scalar
-    operation $\mathbb C\to\mathbb C$ retains its assigned party when both its
-    input and output register lists are empty.
+    For an ordered register list $\ell$ and party $p$, let $\ell_p$ be the sublist of registers owned by $p$ in their original order, with memory $\mathcal H_{\ell,p}$ ($\mathbb C$ when $\ell_p=\emptyset$). Distinct parties $p_1,\ldots,p_s$ define the grouped memory $\bigotimes_{j=1}^s\mathcal H_{\ell,p_j}$, on which party-local maps act by ordered tensor product ($\operatorname{id}_{\mathbb C}$ for $s=0$). In \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} (\texttt{04-compression.tex}, lines 233--251), the party set of a composition includes all register owners and all parties assigned to local operations (including scalar maps $\mathbb C\to\mathbb C$).
 \end{definition}
 
 \begin{definition}[Register partitions and grouping]
@@ -64,47 +49,30 @@
     \lean{TNLean.Lattice.PartyCircuit.groupByPartyIso_cons}
     \leanok
     \uses{def:peps_party_registers}
-    For a choice of parties $A$, there is a prescribed isometric
-    identification
+    For any party subset $A$, associativity, tensor-factor exchanges, and unit identifications with $\mathbb C$ define an order-preserving unitary
     \begin{align}
         U_{A,\ell}:\mathcal H_\ell
          & \longrightarrow \mathcal H_{\ell|_A}\otimes
-        \mathcal H_{\ell|_{A^c}},
+        \mathcal H_{\ell|_{A^c}}.
         \label{eq:peps_party_partition}
     \end{align}
-    which retains the order within each selected list. It is obtained
-    solely from associativity, exchanges of tensor factors, and the unit
-    identifications with $\mathbb C$.
-
-    If $p_1,\ldots,p_s$ are distinct and contain every owner in $\ell$, successive
-    partitions give a prescribed isometric identification
-    $U_\ell:\mathcal H_\ell\to
-        \bigotimes_{j=1}^s\mathcal H_{\ell,p_j}$.
+    For distinct parties $p_1,\ldots,p_s$ containing all owners in $\ell$, iterating (\ref{eq:peps_party_partition}) defines the grouping unitary $U_\ell:\mathcal H_\ell\to\bigotimes_{j=1}^s\mathcal H_{\ell,p_j}$.
 \end{definition}
 
 \begin{proof}\leanok
-    We proceed by induction on $\ell$. For the empty list, $U_{A,\emptyset}(z)=1\otimes z$
-    on $\mathbb C$. For a register $r$ with vector $x$ and
-    $y\in\mathcal H_\ell$ with $U_{A,\ell}(y)=a\otimes b$, where
-    $a\in\mathcal H_{\ell|_A}$ and $b\in\mathcal H_{\ell|_{A^c}}$,
-    the list $(r,\ell)$ consisting of $r$ followed by $\ell$ has
-    $U_{A,(r,\ell)}$ defined by linearity from
-    \begin{align*}
+    Set $U_{A,\emptyset}(z)=1\otimes z$ on $\mathbb C$, and for $U_{A,\ell}(y)=a\otimes b\in\mathcal H_{\ell|_A}\otimes\mathcal H_{\ell|_{A^c}}$ define $U_{A,(r,\ell)}$ inductively by
+    \begin{align}
         U_{A,(r,\ell)}(x\otimes y)
         =\begin{cases}
-             (x\otimes a)\otimes b & \text{if the owner of $r$ lies in $A$}, \\
+             (x\otimes a)\otimes b & \text{if }\operatorname{owner}(r)\in A, \\
              a\otimes(x\otimes b)  & \text{otherwise}.
          \end{cases}
-    \end{align*}
-    The first case is the inverse associativity map and the second the
-    exchange of $x$ past $a$, each applied after
-    $\operatorname{id}_r\otimes U_{A,\ell}$. For the second assertion,
-    successively separating the registers of $p_1,\ldots,p_s$ uses
-    distinctness to prevent any register from being repeated and coverage
-    to make the final remaining register list empty.
+        \notag
+    \end{align}
+    Iterating over distinct $p_1,\ldots,p_s$ covering the owners of $\ell$ extracts each $\mathcal H_{\ell,p_j}$ once and leaves an empty remainder $\mathcal H_\emptyset=\mathbb C$.
 \end{proof}
 
-\begin{theorem}[Restriction to selected parties]
+\begin{lemma}[Restriction to selected parties]
     \label{thm:peps_party_restriction}
     \lean{TNLean.Lattice.PartyCircuit.Word.castLayouts}
     \lean{TNLean.Lattice.PartyCircuit.Word.sources_castLayouts}
@@ -126,60 +94,40 @@
     \lean{TNLean.Lattice.PartyCircuit.Word.parties_restrict}
     \leanok
     \uses{def:peps_party_registers,def:peps_party_partition}
-    Let $F$ be a composition containing no pair-source preparations.
-    For any choice of parties $A$, retaining their registers and local
-    operations gives a composition $F_A$ containing no pair-source
-    preparations. It is allowed whenever $F$ is allowed. Its local
-    operations occur in their original chronological order, and its parties
-    are precisely those of $F$ that belong to $A$.
-\end{theorem}
+    For any source-free composition $F$ and party set $A$, retaining the registers and local operations with party in $A$ yields a source-free composition $F_A$ in the same chronological order with party set $\mathcal P(F)\cap A$, and $F_A$ is allowed whenever $F$ is allowed.
+\end{lemma}
 
 \begin{proof}\leanok
-    Retaining a local operation exactly when its assigned party belongs to $A$,
-    restricting every exchange to the retained registers, and restricting
-    compositions and untouched registers recursively leaves the local
-    contraction bounds unchanged, and induction on the composition proves
-    the assertion about its parties, including scalar local operations.
+    Retaining a local operation precisely when its assigned party lies in $A$ and restricting exchanges and spectator registers recursively preserves the local contraction bounds and gives $\mathcal P(F_A)=\mathcal P(F)\cap A$ by structural induction on $F$.
 \end{proof}
 
-\begin{theorem}[Factorization across a partition of the parties]
+\begin{lemma}[Factorization across a partition of the parties]
     \label{thm:peps_party_binary_factorization}
     \lean{TNLean.Lattice.PartyCircuit.Word.partitionIso_eval}
     \leanok
     \uses{def:peps_party_partition,thm:peps_party_restriction}
-    If $F:\mathcal H_\ell\to\mathcal H_{\ell'}$ contains no pair-source
-    preparations, then for any choice of parties $A$ its restrictions satisfy
+    For any source-free composition $F:\mathcal H_\ell\to\mathcal H_{\ell'}$ and party set $A$,
     \begin{align}
         U_{A,\ell'}F & =(F_A\otimes F_{A^c})U_{A,\ell}.
         \label{eq:peps_party_binary_factorization}
     \end{align}
-    This identity does not require bounds on the norms of the local maps.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_party_partition,thm:peps_party_restriction}
-    By induction on the composition, let a local operation $L$ at party $p$ act
-    on registers $a$, all owned by $p$, in front of a list $\ell$, and let
-    $J_{a,\ell}$ identify the memory of $a$ followed by $\ell$ with
-    $\mathcal H_a\otimes\mathcal H_\ell$. For $s\in\mathcal H_a$,
-    $x\in\mathcal H_{\ell|_A}$, and $y\in\mathcal H_{\ell|_{A^c}}$,
-    \begin{align*}
+    By induction on $F$, if $L$ acts at party $p$ on registers $a$ owned by $p$ in front of $\ell$, and $J_{a,\ell}:\mathcal H_{(a,\ell)}\xrightarrow{\cong}\mathcal H_a\otimes\mathcal H_\ell$, then for $s\in\mathcal H_a$, $x\in\mathcal H_{\ell|_A}$, and $y\in\mathcal H_{\ell|_{A^c}}$,
+    \begin{align}
         U_{A,(a,\ell)}J_{a,\ell}^{-1}
         \bigl(s\otimes U_{A,\ell}^{-1}(x\otimes y)\bigr)
         =\begin{cases}
              J_{a,\ell|_A}^{-1}(s\otimes x)\otimes y
               & \text{if $p\in A$},    \\
              x\otimes J_{a,\ell|_{A^c}}^{-1}(s\otimes y)
-              & \text{if $p\notin A$}.
+              & \text{if $p\notin A$},
          \end{cases}
-    \end{align*}
-    Thus $L$ acts on $s$ inside the first factor when $p\in A$ and inside
-    the second otherwise, while the other restriction is the identity.
-    Let $S_{r,t,\ell}$ exchange the first two registers $r,t$, whose
-    owners are $p_r,p_t$, and write $S_A,S_{A^c}$ for its restrictions.
-    For $u\in\mathcal H_r$ and $v\in\mathcal H_t$, with
-    $w=u\otimes(v\otimes U_{A,\ell}^{-1}(x\otimes y))$,
-    the four cases give
+        \notag
+    \end{align}
+    so $L$ acts on the $A$-factor when $p\in A$ and on the $A^c$-factor when $p\notin A$. For an exchange $S_{r,t,\ell}$ of registers $r,t$ with owners $p_r,p_t$ and $w=u\otimes(v\otimes U_{A,\ell}^{-1}(x\otimes y))$,
     \begin{align}
         U_{A,(t,r,\ell)}S_{r,t,\ell}w
          & =(S_A\otimes S_{A^c})U_{A,(r,t,\ell)}w   \\
@@ -195,16 +143,10 @@
             \end{cases}
         \label{eq:peps_party_exchange}
     \end{align}
-    When both registers belong to one part, its restriction exchanges
-    them and the other restriction is the identity. When their owners
-    belong to different parts, both restrictions are identities on the
-    selected register lists. Elementary tensors span the memories, so
-    (\ref{eq:peps_party_exchange}) proves the exchange case, and
-    tensoring with an untouched register and composition preserve the
-    identity.
+    Since elementary tensors span and (\ref{eq:peps_party_binary_factorization}) is preserved under composition and tensoring with untouched registers, the result follows.
 \end{proof}
 
-\begin{theorem}[Tensor product of the local maps]
+\begin{lemma}[Tensor product of the local maps]
     \label{thm:peps_party_factorization}
     \lean{TNLean.Lattice.PartyCircuit.norm_tensorPartyMaps_le_one}
     \lean{TNLean.Lattice.PartyCircuit.Word.exists_tensorPartyMaps}
@@ -212,111 +154,56 @@
     \lean{TNLean.Lattice.PartyCircuit.Word.eq_nil_and_eval_eq_id_of_parties_eq_empty}
     \leanok
     \uses{def:peps_party_registers,def:peps_party_partition}
-    In the collection of local maps of
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    \texttt{04-compression.tex}, lines 233--251, let
-    $F:\mathcal H_\ell\to\mathcal H_{\ell'}$ be an allowed composition
-    containing no pair-source preparations, and let $p_1,\ldots,p_s$ be distinct
-    parties containing every party of this composition. There are
-    contractions $B_{p_j}:\mathcal H_{\ell,p_j}\to
-        \mathcal H_{\ell',p_j}$ such that
+    Let $F:\mathcal H_\ell\to\mathcal H_{\ell'}$ be an allowed source-free composition (\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, \texttt{04-compression.tex}, lines 233--251), and let $p_1,\ldots,p_s$ be distinct parties with $\mathcal P(F)\subseteq\{p_1,\ldots,p_s\}$. There exist contractions $B_{p_j}:\mathcal H_{\ell,p_j}\to\mathcal H_{\ell',p_j}$ such that
     \begin{align}
         U_{\ell'}F
-         & =\left(\bigotimes_{j=1}^s B_{p_j}\right)U_\ell.
+         & =\left(\bigotimes_{j=1}^s B_{p_j}\right)U_\ell,
         \label{eq:peps_party_factorization}
     \end{align}
-    The tensor product is itself a contraction. The list of parties may be
-    chosen to consist exactly of the parties of $F$. Each map is obtained
-    by composing the local operations at its party. A composition without
-    parties has empty input and output register lists and is the identity
-    on $\mathbb C$; this is the case $s=0$.
-\end{theorem}
+    with $\bigl\|\bigotimes_{j=1}^s B_{p_j}\bigr\|\le1$ (and $F=\operatorname{id}_{\mathbb C}$ when $\mathcal P(F)=\emptyset$, $s=0$).
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_party_binary_factorization,thm:peps_party_restriction}
-    Applying (\ref{eq:peps_party_binary_factorization}) successively with
-    $A=\{p_j\}$ leaves a remaining
-    composition with no parties once all $p_j$ have been removed, which is the
-    identity on $\mathbb C$. The restriction to each party is allowed, so
-    its operator has norm at most one, and the tensor product of the resulting
-    contractions gives (\ref{eq:peps_party_factorization}).
+    Iterating (\ref{eq:peps_party_binary_factorization}) with $A=\{p_j\}$ ($j=1,\ldots,s$) leaves a composition with empty party set equal to $\operatorname{id}_{\mathbb C}$, and Lemma~\ref{thm:peps_party_restriction} ensures each factor $B_{p_j}=F_{\{p_j\}}$ is a contraction.
 \end{proof}
 
-\begin{theorem}[Prepared pair sources and local contractions]
+\begin{lemma}[Prepared pair sources and local contractions]
     \label{thm:peps_prepared_party_maps}
     \lean{TNLean.Lattice.PartyCircuit.Word.exists_prepared_tensorPartyMaps}
     \leanok
     \uses{def:peps_source_inventory,def:peps_party_registers,def:peps_party_partition}
-    Let $P$ be the prescribed finite set of parties of a gate, and use a
-    fixed ordering of $P$. Let $F:\mathcal H_{\rm in}\to\mathcal H_{\rm out}$ be
-    an allowed composition whose register owners and assigned local parties
-    all belong to $P$. There is a
-    normalized source list $S$, containing exactly one source for each
-    unordered source pair occurring in $F$, and a contraction $B_p$ at each $p\in P$
-    such that
+    Let $P$ be an ordered finite party set and $F:\mathcal H_{\rm in}\to\mathcal H_{\rm out}$ an allowed composition with $\mathcal P(F)\subseteq P$. There exist a normalized source list $S$ with one source per unordered pair in $F$ and contractions $B_p$ ($p\in P$) such that
     \begin{align}
         U_{\rm out}F
          & =\left(\bigotimes_{p\in P}B_p\right)
-        U_{S,\rm in}P_{S,\mathcal H_{\rm in}}.
+        U_{S,\rm in}P_{S,\mathcal H_{\rm in}},
         \label{eq:peps_prepared_party_maps}
     \end{align}
-    Here $U_{S,\rm in}$ groups the prepared source registers together with
-    the original input registers by their owners; $U_{\rm out}$ groups the
-    output registers in the same party order. The input and output of $B_p$
-    are precisely the corresponding memories of party $p$.
-\end{theorem}
+    where $U_{S,\rm in}$ and $U_{\rm out}$ group the prepared-source plus input registers and the output registers in the order of $P$.
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_grouped_sources,thm:peps_party_factorization}
-    Theorem~\ref{thm:peps_grouped_sources} gives
-    $F=V\circ P_{S,\mathcal H_{\rm in}}$ with $V$ allowed and containing no
-    sources, where every party named by $V$ belongs to the prescribed set $P$;
-    applying (\ref{eq:peps_party_factorization}) to $V$ with all parties of $P$
-    and composing on the right with the preparation map yields the factorization.
+    Lemma~\ref{thm:peps_grouped_sources} factors $F=V\circ P_{S,\mathcal H_{\rm in}}$ with $V$ allowed, source-free, and $\mathcal P(V)\subseteq P$; applying (\ref{eq:peps_party_factorization}) to $V$ yields (\ref{eq:peps_prepared_party_maps}).
 \end{proof}
 
-
-\begin{theorem}[Factorization by singleton restrictions]
+\begin{lemma}[Factorization by singleton restrictions]
     \label{thm:peps_actual_singleton_factorization}
     \lean{TNLean.Lattice.PartyCircuit.Word.groupByPartyIso_eval_eq_tensorRestrictions}
     \leanok
     \uses{def:peps_party_registers,def:peps_party_partition,
         thm:peps_party_restriction}
-    In the local-map construction of
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    \texttt{04-compression.tex}, lines 233--251 and 351--381, let
-    $W:\mathcal H_\ell\to\mathcal H_m$ be a source-free
-    composition, and let $p_1,\ldots,p_s$ be a list of distinct
-    parties containing every party named by $W$. This includes
-    parties assigned scalar operations on empty memories. Let
-    $U_\ell,U_m$ be the isometries grouping registers
-    in this party order. Then
+    For any source-free composition $W:\mathcal H_\ell\to\mathcal H_m$ and distinct parties $p_1,\ldots,p_s$ with $\mathcal P(W)\subseteq\{p_1,\ldots,p_s\}$ (\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, \texttt{04-compression.tex}, lines 233--251 and 351--381), the grouping unitaries $U_\ell,U_m$ satisfy
     \begin{align}
         U_m W
          & =\left(\bigotimes_{j=1}^s W|_{\{p_j\}}\right)U_\ell.
         \label{eq:peps_actual_singleton_factorization}
     \end{align}
-    Thus each factor is the operator of the singleton
-    restriction. No norm bound, nonvanishing condition or
-    finite-dimensionality assumption on the register spaces is
-    required, and zero maps and the empty party list are included.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_party_binary_factorization,thm:peps_party_factorization,
         thm:peps_party_restriction,thm:peps_singleton_after_excluded_party}
-    We proceed by induction on the ordered party list. For an empty list, the
-    composition has no named parties, hence has empty input and
-    output lists and is the identity on $\C$ by the no-party clause
-    of Theorem~\ref{thm:peps_party_factorization}.
-    For a list beginning with $p$, splitting the registers into those
-    owned by $p$ and the complementary registers and specializing
-    (\ref{eq:peps_party_binary_factorization}) with $A=\{p\}$ splits $W$
-    into $W|_{\{p\}}$ and $W|_{P\setminus\{p\}}$. Applying the induction hypothesis to
-    the latter composition, for each remaining party $q\ne p$
-    its singleton factor agrees with $W|_{\{q\}}$ by
-    (\ref{eq:peps_singleton_after_excluded_party}). The
-    grouping isometries identify this split with the stated
-    party order, so tensoring and composing the resulting operator
-    identities proves (\ref{eq:peps_actual_singleton_factorization}).
+    We induct on $(p_1,\ldots,p_s)$. For $s=0$, $\mathcal P(W)=\emptyset$ gives $W=\operatorname{id}_{\C}$ by Lemma~\ref{thm:peps_party_factorization}. For $(p,p_2,\ldots,p_s)$, applying (\ref{eq:peps_party_binary_factorization}) with $A=\{p\}$ splits $W$ into $W|_{\{p\}}$ and $W|_{P\setminus\{p\}}$, and for each $q\in\{p_2,\ldots,p_s\}$ one has $(W|_{P\setminus\{p\}})|_{\{q\}}=W|_{\{q\}}$ by (\ref{eq:peps_singleton_after_excluded_party}), completing the induction.
 \end{proof}

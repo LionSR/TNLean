@@ -1,91 +1,53 @@
 \subsection{Physical changes on the site images}
 \label{sec:peps_range_parent_transport}
 
-Fix a finite simple graph with ordered vertices $V$, site maps
-$A_v:\mathcal V_v\to\mathbb C^d$, and linear maps
-$F_v:\mathbb C^d\to\mathbb C^e$. Write $B_v=F_vA_v$,
-$\mathcal G_S(A)=\operatorname{im}\mathcal C_S(A)$ for the full
-open-region range, and $\mathcal P_{\mathcal R}(A)$ for the common
-parent space of a family $\mathcal R=(R_i)_{i\in\mathcal I}$.
-Set $F_S=\bigotimes_{v\in S}F_v$ and
-$F_{\mathrm{all}}=\bigotimes_{v\in V}F_v$.
-The following are consequences of the site inverse in
-\cite[Definition~5.1]{Schuch2010PEPS} and the regional parent construction.
-The virtual spaces and representations remain fixed.
+Fix a finite simple graph with ordered vertices $V$, site maps $A_v:\mathcal V_v\to\mathbb C^d$, linear maps $F_v:\mathbb C^d\to\mathbb C^e$, and $B_v=F_vA_v$ (\cite[Definition~5.1]{Schuch2010PEPS}).
+Write $\mathcal G_S(A)=\operatorname{im}\mathcal C_S(A)$ for the open-region range, $\mathcal P_{\mathcal R}(A)$ for the common parent space of $\mathcal R=(R_i)_{i\in\mathcal I}$, $F_S=\bigotimes_{v\in S}F_v$, and $F_{\mathrm{all}}=\bigotimes_{v\in V}F_v$.
 
-\begin{theorem}[Inverses on the site images]%
+\begin{lemma}[Inverses on the site images]%
     \label{thm:peps_range_parent_site_inverse}
     \lean{TNLean.PEPS.exists_siteRange_leftInverse,
         TNLean.PEPS.physicalDeform_physicalDeform_eq_of_leftInverse,
         TNLean.PEPS.physicalDeform_rightInverse_on_site_ranges}
     \leanok
-    If every $F_v$ is injective on $\operatorname{im}A_v$, there are
-    linear maps $L_v:\mathbb C^e\to\mathbb C^d$ such that
-    $L_vF_vx=x$ for $x\in\operatorname{im}A_v$.
-    For any such choice, $L_vB_v=A_v$, and $F_vL_vy=y$ for
-    $y\in\operatorname{im}B_v$.
-\end{theorem}
+    If each $F_v$ is injective on $\operatorname{im}A_v$, there exist linear maps $L_v:\mathbb C^e\to\mathbb C^d$ satisfying $L_vF_v|_{\operatorname{im}A_v}=\operatorname{id}_{\operatorname{im}A_v}$, and any such choice satisfies $L_vB_v=A_v$ and $F_vL_v|_{\operatorname{im}B_v}=\operatorname{id}_{\operatorname{im}B_v}$.
+\end{lemma}
 \begin{proof}\leanok
-    The injection $F_v:\operatorname{im}A_v\to\mathbb C^e$ has a
-    linear left inverse, and composing it with the inclusion of
-    $\operatorname{im}A_v$ into $\mathbb C^d$ yields $L_v$.
-    Applying $L_vF_v$ to each column of $A_v$ gives $L_vB_v=A_v$, and
-    if $y=B_vz=F_vA_vz$, then $F_vL_vy=F_vA_vz=y$.
+    Since $F_v|_{\operatorname{im}A_v}$ is injective, it admits a linear left inverse $L_v:\mathbb C^e\to\mathbb C^d$; then $L_vB_v=L_vF_vA_v=A_v$ and $F_vL_v(B_vz)=F_vA_vz=B_vz$.
 \end{proof}
 
-\begin{theorem}[Reconstruction on every open-region range]%
+\begin{lemma}[Reconstruction on every open-region range]%
     \label{thm:peps_range_parent_regional_inverse}
     \lean{TNLean.PEPS.regionPhysicalMap_leftInverse_on_regionGroundSpace,
         TNLean.PEPS.regionPhysicalMap_injOn_regionGroundSpace}
     \leanok
-    Suppose $L_vF_v$ fixes $\operatorname{im}A_v$ at every vertex.
-    For any region $S$ and $\psi\in\mathcal G_S(A)$,
-    $L_SF_S\psi=\psi$.
-    Consequently site-image injectivity of the $F_v$ implies
-    injectivity of $F_S$ on $\mathcal G_S(A)$ for every $S$.
-    All virtual boundary conditions are allowed.
-\end{theorem}
+    If $L_vF_v|_{\operatorname{im}A_v}=\operatorname{id}_{\operatorname{im}A_v}$ ($\forall v\in V$), then $L_SF_S|_{\mathcal G_S(A)}=\operatorname{id}_{\mathcal G_S(A)}$ for every region $S$; hence site-image injectivity of $F_v$ implies injectivity of $F_S$ on $\mathcal G_S(A)$.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_range_parent_site_inverse}
-    Writing $\psi=\mathcal C_S(A)\theta$ for arbitrary boundary data
-    $\theta$, physical deformation commutes with contraction, so
+    For $\psi=\mathcal C_S(A)\theta$, Lemma~\ref{thm:peps_range_parent_site_inverse} gives
     \begin{align}
         L_SF_S\mathcal C_S(A)\theta
         =L_S\mathcal C_S(B)\theta
         =\mathcal C_S(LB)\theta
-        =\mathcal C_S(A)\theta.
+        =\mathcal C_S(A)\theta. \notag
     \end{align}
-    Applying $L_S$ to an equality $F_S\psi=F_S\phi$ yields
-    injectivity, and when only site-image injectivity is given,
-    $L_v$ is chosen by Theorem~\ref{thm:peps_range_parent_site_inverse}.
 \end{proof}
 
-\begin{theorem}[Product maps fixing all site slices]%
+\begin{lemma}[Product maps fixing all site slices]%
     \label{thm:peps_range_parent_slice_reconstruction}
     \lean{TNLean.PEPS.globalPhysicalMap_eq_self_of_fixes_site_ranges,
         TNLean.PEPS.globalPhysicalMap_leftInverse_of_mem_parent}
     \leanok
     \uses{def:peps_vertex_image_ground_space}
-    Let $P_v:\mathbb C^d\to\mathbb C^d$ fix
-    $\operatorname{im}A_v$ pointwise. If every one-site slice of
-    $\psi$ at $v$ belongs to $\operatorname{im}A_v$, for all $v$,
-    then $(\bigotimes_vP_v)\psi=\psi$.
-    In particular, if $L_vF_v$ fixes $\operatorname{im}A_v$ and
-    every vertex belongs to some $R_i$, then
-    $L_{\mathrm{all}}F_{\mathrm{all}}\psi=\psi$ for every
-    $\psi\in\mathcal P_{\mathcal R}(A)$.
-\end{theorem}
+    If $P_v|_{\operatorname{im}A_v}=\operatorname{id}_{\operatorname{im}A_v}$ and every one-site slice of $\psi$ at $v$ lies in $\operatorname{im}A_v$ ($\forall v\in V$), then $(\bigotimes_{v\in V}P_v)\psi=\psi$; in particular, if $L_vF_v|_{\operatorname{im}A_v}=\operatorname{id}_{\operatorname{im}A_v}$ and $V=\bigcup_{i\in\mathcal I}R_i$, then $L_{\mathrm{all}}F_{\mathrm{all}}|_{\mathcal P_{\mathcal R}(A)}=\operatorname{id}_{\mathcal P_{\mathcal R}(A)}$.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_region_vertex_image_support}
-    The operator acting as $P_v$ at one vertex and as the identity
-    elsewhere fixes $\psi$ because it acts on its one-site slices, and
-    multiplying these operators gives the first assertion.
-    Vertex coverage puts every one-site slice of a parent vector in
-    the appropriate site image, so taking $P_v=L_vF_v$ and using
-    $L_{\mathrm{all}}F_{\mathrm{all}}=\bigotimes_v(L_vF_v)$ gives the second assertion.
+    Each single-site factor $P_v\otimes I_{V\setminus\{v\}}$ fixes $\psi$ slicewise, so $(\bigotimes_{v\in V}P_v)\psi=\psi$; when $V=\bigcup_{i\in\mathcal I}R_i$, Lemma~\ref{thm:peps_region_vertex_image_support} places all slices of $\psi\in\mathcal P_{\mathcal R}(A)$ in $\operatorname{im}A_v$, and taking $P_v=L_vF_v$ gives $L_{\mathrm{all}}F_{\mathrm{all}}\psi=\psi$.
 \end{proof}
 
-\begin{theorem}[Equivalence of covered parent spaces]%
+\begin{lemma}[Equivalence of covered parent spaces]%
     \label{thm:peps_range_parent_equivalence}
     \lean{TNLean.PEPS.globalPhysicalMap_mem_parent_physicalDeform,
         TNLean.PEPS.map_regionParentGroundSpace_physicalDeform_of_leftInverse,
@@ -94,123 +56,63 @@ The virtual spaces and representations remain fixed.
         TNLean.PEPS.regionParentGroundSpaceRangeEquiv,
         TNLean.PEPS.finrank_regionParentGroundSpace_physicalDeform_of_injOn}
     \leanok
-    Every physical product map satisfies
-    $F_{\mathrm{all}}\mathcal P_{\mathcal R}(A)
-        \subseteq\mathcal P_{\mathcal R}(B)$, without injectivity
-    or coverage assumptions.
-    If each $F_v$ is injective on $\operatorname{im}A_v$ and the
-    regions cover all vertices, its restriction is a linear isomorphism
+    For any $F_v$, $F_{\mathrm{all}}\mathcal P_{\mathcal R}(A)\subseteq\mathcal P_{\mathcal R}(B)$; if each $F_v$ is injective on $\operatorname{im}A_v$ and $V=\bigcup_{i\in\mathcal I}R_i$, then (with inverse $L_{\mathrm{all}}$ from Lemma~\ref{thm:peps_range_parent_site_inverse})
     \begin{align}
         F_{\mathrm{all}}:\mathcal P_{\mathcal R}(A)
                                        & \xrightarrow{\ \cong\ }\mathcal P_{\mathcal R}(B),
         \label{eq:peps_range_parent_equivalence}                                            \\
-        \dim\mathcal P_{\mathcal R}(B) & =\dim\mathcal P_{\mathcal R}(A).
+        \dim\mathcal P_{\mathcal R}(B) & =\dim\mathcal P_{\mathcal R}(A). \notag
     \end{align}
-    An inverse is $L_{\mathrm{all}}$ for any site inverses from
-    Theorem~\ref{thm:peps_range_parent_site_inverse}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_range_parent_site_inverse,
         thm:peps_range_parent_slice_reconstruction}
-    The identity $\mathcal G_S(B)=F_S\mathcal G_S(A)$ sends each
-    regional constraint to the corresponding constraint for $B$.
-    In a fixed exterior slice, the physical maps on exterior vertices
-    only form linear combinations of source slices; hence the forward
-    inclusion holds for arbitrary $F_v$, and
-    applying it also to $L_v$ with $LB=A$ gives the reverse inclusion.
-    Since $LF$ fixes the source site images and $FL$ fixes the target
-    site images, Theorem~\ref{thm:peps_range_parent_slice_reconstruction}
-    gives both inverse identities on the parent spaces,
-    proving~(\ref{eq:peps_range_parent_equivalence}) and the
-    dimension equality.
+    Since $\mathcal G_S(B)=F_S\mathcal G_S(A)$, $F_{\mathrm{all}}\mathcal P_{\mathcal R}(A)\subseteq\mathcal P_{\mathcal R}(B)$ and similarly $L_{\mathrm{all}}\mathcal P_{\mathcal R}(B)\subseteq\mathcal P_{\mathcal R}(A)$ via $L_vB_v=A_v$ (Lemma~\ref{thm:peps_range_parent_site_inverse}); Lemma~\ref{thm:peps_range_parent_slice_reconstruction} gives $L_{\mathrm{all}}F_{\mathrm{all}}|_{\mathcal P_{\mathcal R}(A)}=\operatorname{id}$ and $F_{\mathrm{all}}L_{\mathrm{all}}|_{\mathcal P_{\mathcal R}(B)}=\operatorname{id}$, establishing (\ref{eq:peps_range_parent_equivalence}).
 \end{proof}
 
-\begin{theorem}[Kernels of positive regional parents]%
+\begin{lemma}[Kernels of positive regional parents]%
     \label{thm:peps_range_parent_kernel}
     \lean{TNLean.PEPS.map_ker_regionParentHamiltonian_physicalDeform_of_injOn}
     \leanok
     \uses{def:peps_region_parent_interaction}
-    Assume the site-image injectivity and vertex coverage of
-    Theorem~\ref{thm:peps_range_parent_equivalence}, and suppose
-    $\mathcal I$ is finite. Let $H_i,K_i$ be positive semidefinite
-    regional interactions with
-    $\ker H_i=\mathcal G_{R_i}(A)$ and
-    $\ker K_i=\mathcal G_{R_i}(B)$.
-    If $H$ and $K$ are the sums of their placements on the full graph,
-    then $F_{\mathrm{all}}(\ker H)=\ker K$.
-\end{theorem}
+    Under the hypotheses of Lemma~\ref{thm:peps_range_parent_equivalence} with finite $\mathcal I$, if $H=\sum_{i\in\mathcal I}H_i$ and $K=\sum_{i\in\mathcal I}K_i$ for $H_i,K_i\ge0$ with $\ker H_i=\mathcal G_{R_i}(A)$ and $\ker K_i=\mathcal G_{R_i}(B)$, then $F_{\mathrm{all}}(\ker H)=\ker K$.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_range_parent_equivalence}
-    Positivity identifies the kernel of each sum with the intersection
-    of its local kernels, so $\ker H=\mathcal P_{\mathcal R}(A)$
-    and $\ker K=\mathcal P_{\mathcal R}(B)$, to which
-    (\ref{eq:peps_range_parent_equivalence}) applies.
+    Since $H_i,K_i\ge0$, $\ker H=\bigcap_{i\in\mathcal I}\ker H_i=\mathcal P_{\mathcal R}(A)$ and $\ker K=\mathcal P_{\mathcal R}(B)$, so (\ref{eq:peps_range_parent_equivalence}) gives $F_{\mathrm{all}}(\ker H)=\ker K$.
 \end{proof}
 
-\begin{theorem}[Physical comparison for one fixed virtual representation]%
+\begin{lemma}[Physical comparison for one fixed virtual representation]%
     \label{thm:peps_range_parent_g_comparison}
     \lean{TNLean.PEPS.IsGInjective.exists_physicalMap_comp_eq,
         TNLean.PEPS.exists_physicalDeform_eq_of_isGInjective}
     \leanok
     \uses{def:peps_g_injective}
-    Let $G$ be finite, $\rho$ a complex representation on $\mathcal W$,
-    and $T:\mathcal W\to\mathcal P$ and
-    $S:\mathcal W\to\mathcal Q$ be $G$-injective for $\rho$.
-    There is a linear $F:\mathcal P\to\mathcal Q$ such that
-    $FT=S$ and $F$ is injective on $\operatorname{im}T$.
-    In particular, two tensor families $A,B$ on the same virtual
-    bond spaces, with site maps $G$-injective for the same $\rho_v$,
-    admit such maps $F_v$ with $B_v=F_vA_v$.
-    Their ambient physical dimensions may differ.
-\end{theorem}
+    For a finite group $G$, representation $\rho$ on $\mathcal W$, and $\rho$-injective maps $T:\mathcal W\to\mathcal P$ and $S:\mathcal W\to\mathcal Q$, there exists a linear map $F:\mathcal P\to\mathcal Q$ injective on $\operatorname{im}T$ such that $FT=S$; in particular, site families $A_v,B_v$ that are $G$-injective for the same $\rho_v$ admit $F_v$ injective on $\operatorname{im}A_v$ with $B_v=F_vA_v$.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_g_injective_physical_map}
-    Choosing $L$ with $LT=\Pi_\rho$, where
-    $\Pi_\rho=|G|^{-1}\sum_g\rho(g)$, and setting $F=SL$,
-    invariance of $S$ gives $FT=S\Pi_\rho=S$.
-    Since both $T$ and $FT=S$ are $G$-injective,
-    Theorem~\ref{thm:peps_g_injective_physical_map} gives injectivity
-    of $F$ on $\operatorname{im}T$.
-    Applying this argument at every vertex and evaluating on virtual basis
-    vectors gives equality of the tensor coefficients.
+    Choose $L$ with $LT=\Pi_\rho=|G|^{-1}\sum_{g\in G}\rho(g)$ and set $F=SL$, so $G$-invariance of $S$ gives $FT=S\Pi_\rho=S$, and Lemma~\ref{thm:peps_g_injective_physical_map} gives injectivity of $F$ on $\operatorname{im}T$.
 \end{proof}
 
-\begin{theorem}[Parent kernels for a fixed G-injective representation]%
+\begin{lemma}[Parent kernels for a fixed G-injective representation]%
     \label{thm:peps_range_parent_g_transport}
     \lean{TNLean.PEPS.map_regionParentGroundSpace_physicalDeform_of_isGInjective,
         TNLean.PEPS.exists_regionParentGroundSpace_transport_of_isGInjective,
         TNLean.PEPS.exists_ker_regionParentHamiltonian_transport_of_isGInjective}
     \leanok
-    Let $A,B$ have the same virtual bond spaces and let their site maps
-    be $G$-injective for the same representations $\rho_v$ of a finite
-    group. If the regions $R_i$ cover every vertex, there are rectangular
-    physical maps $F_v$ such that, for every region $S$,
+    If $A,B$ share virtual bond spaces with site maps $G$-injective for the same $\rho_v$ ($G$ finite) and $V=\bigcup_{i\in\mathcal I}R_i$, there exist linear maps $F_v$ (or any prescribed $F_v$ satisfying $B_v=F_vA_v$) such that $F_{\mathrm{all}}|_{\mathcal P_{\mathcal R}(A)}$ is injective, $\dim\mathcal P_{\mathcal R}(A)=\dim\mathcal P_{\mathcal R}(B)$, and for every region $S$,
     \begin{align}
-        F_S\mathcal G_S(A) & =\mathcal G_S(B),            \\
-        F_{\mathrm{all}}\mathcal P_{\mathcal R}(A)
-                           & =\mathcal P_{\mathcal R}(B).
+        F_S\mathcal G_S(A) =\mathcal G_S(B), \qquad
+        F_{\mathrm{all}}\mathcal P_{\mathcal R}(A) =\mathcal P_{\mathcal R}(B); \notag
     \end{align}
-    The second restriction is injective, and the parent spaces have
-    equal dimensions. If $B=FA$ is already specified and both site
-    families are $G$-injective for $\rho_v$, the second equality holds
-    for that $F$.
-    For a finite region family and arbitrary positive regional
-    interactions with these exact local kernels, the same comparison
-    gives $F_{\mathrm{all}}(\ker H)=\ker K$, injectivity on
-    $\ker H$, and $\dim\ker K=\dim\ker H$.
-\end{theorem}
+    for finite $\mathcal I$ and positive regional interactions $H_i,K_i\ge0$ with these local kernels, $F_{\mathrm{all}}(\ker H)=\ker K$ and $\dim\ker K=\dim\ker H$.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_range_parent_g_comparison,
         thm:peps_range_parent_equivalence,
         thm:peps_g_injective_physical_map}
-    Theorem~\ref{thm:peps_range_parent_g_comparison} gives
-    $B=FA$ and site-image injectivity. Regional contraction commutes
-    with $F$, giving the first equality, and
-    Theorem~\ref{thm:peps_range_parent_equivalence} gives the equality on the common
-    parent spaces. For a prescribed $F$, its site-image injectivity
-    follows directly from $G$-injectivity of $A$ and $FA$.
-    Finally, positivity identifies each Hamiltonian kernel with its
-    common parent space.
+    Lemma~\ref{thm:peps_range_parent_g_comparison} (or Lemma~\ref{thm:peps_g_injective_physical_map} when $B=FA$ is prescribed) provides $F_v$ injective on $\operatorname{im}A_v$ with $B_v=F_vA_v$, and Lemma~\ref{thm:peps_range_parent_equivalence} (with $\ker H=\mathcal P_{\mathcal R}(A)$ and $\ker K=\mathcal P_{\mathcal R}(B)$) yields the remaining claims.
 \end{proof}
 % These fixed-representation consequences do not change virtual bond spaces.
 % They are not a completion of SCP10 Theorem 5.7 for arbitrary semi-regular

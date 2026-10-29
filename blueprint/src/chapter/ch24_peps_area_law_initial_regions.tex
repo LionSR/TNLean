@@ -78,21 +78,21 @@ cells, midpoint subdivisions, and triangle colours of
     which is well defined by constancy of the triangle colour on each run.
 \end{definition}
 
-\begin{theorem}[Agreement with every constituent triangle]
+\begin{lemma}[Agreement with every constituent triangle]
     \label{thm:area_law_initial_run_color}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegionColor_beltRun_eq}
     \leanok
     \uses{def:area_law_initial_region_colors}
     For every triangle $e$ of a belt run $R\in\mathcal R_{k,z}$, the region
     label $\lambda(k,z,R)$ equals the colour of $e$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_initial_region_colors}
     By definition, $\lambda(k,z,R)$ is the common colour of the triangles
     in $R$.
 \end{proof}
 
-\begin{theorem}[Closed cover by the initial family]
+\begin{lemma}[Closed cover by the initial family]
     \label{thm:area_law_initial_closed_cover}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialBirthRegions_cover}
     \leanok
@@ -101,7 +101,7 @@ cells, midpoint subdivisions, and triangle colours of
     \begin{align}
         \bigcup_{i\in\mathcal I}X_i^0 & =\mathbb R^2.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_unique_fine_cell,
         thm:area_law_nonbelt_unique_primary,thm:area_law_fan_run_cover,

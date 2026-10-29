@@ -5,7 +5,7 @@ set of sites $S$. Regional tensor products list the complement first.
 The following are supporting geometric and counting results for
 \cite[Proposition~5.7]{Arad2016RigorousRG}.
 
-\begin{theorem}[Bounds for the selected and prescribed intervals]
+\begin{lemma}[Bounds for the selected and prescribed intervals]
     \label{thm:common_middle_interval_bounds}
     \lean{TNLean.MPS.AreaLaw.selected_middle_fixed_interval_bounds}
     \leanok
@@ -13,13 +13,13 @@ The following are supporting geometric and counting results for
     $b+2\ell\le L-1$, and let $0\le p,s<2\ell$. Put
     $c=a+p+1$, $d=b+s+1$, $u=a+\ell$, and $v=b+\ell+1$. Then
     $c\le d\le L$, $u\le v\le L$, and $\max(c,u)<\min(d,v)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The bounds $p,s<2\ell$, together with the two separation inequalities,
     give each endpoint comparison.
 \end{proof}
 
-\begin{theorem}[Low-frequency cardinality on the prescribed interval]
+\begin{lemma}[Low-frequency cardinality on the prescribed interval]
     \label{thm:common_middle_low_frequency_cardinality}
     \lean{TNLean.MPS.AreaLaw.actual_common_fixed_middle_mpo_card_low_frequency_le}
     \leanok
@@ -36,7 +36,7 @@ The following are supporting geometric and counting results for
         n\le(qk)^{24\ell+4\lfloor k/\ell\rfloor}.
         \label{eq:common_middle_low_frequency_count}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The chosen position implies $\ell\ge1$. The selected-family count and its
     low-frequency consequence give
@@ -45,7 +45,7 @@ The following are supporting geometric and counting results for
     (\ref{eq:common_middle_low_frequency_count}).
 \end{proof}
 
-\begin{theorem}[A common prescribed-middle family for finite sampling nodes]
+\begin{lemma}[A common prescribed-middle family for finite sampling nodes]
     \label{thm:common_middle_grid_mpo_family}
     \lean{TNLean.MPS.AreaLaw.exists_common_fixed_middle_grid_mpo_family}
     \leanok
@@ -128,7 +128,7 @@ The following are supporting geometric and counting results for
     Empty sampling sets, zero virtual dimension, and degree zero are allowed.
     No interpolation recovery, sharp virtual dimension, or running-time bound
     is included.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:selected_common_natural_mpo_family,
         thm:regional_middle_from_numbered_three_regions,

@@ -12,18 +12,17 @@
     }
     \leanok
     \uses{thm:area_law_exponent_gaps}
-    For $e_0\in\mathbb R$, set $e_*=2\cdot10^{-6}$; the parameters used in
-    the proof of \cite[Proposition~9.5]{OpenAI2026AreaLaw} are
+    For $e_0\in\mathbb R$, set $e_*=2\cdot10^{-6}$ and define the fixed
+    parameters of \cite[Proposition~9.5]{OpenAI2026AreaLaw}:
     \begin{align}
         g_0  & =\frac{1-e_0}{2}, & \mu    & =1-g_0,              & \nu & =\frac{g_0}{1000},
         \label{eq:area_law_bootstrap_parameters}                                            \\
         \ell & =\frac{\nu}{100}, & \kappa & =\min\{\ell,e_*/4\}.
         \label{eq:area_law_bootstrap_separation}
     \end{align}
-    These parameters remain fixed as the entropy exponent decreases.
 \end{definition}
 
-\begin{theorem}[Margins in the exponent estimates]
+\begin{lemma}[Margins in the exponent estimates]
     \label{thm:area_law_bootstrap_margins}
     \lean{
         TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.parameter_bounds,
@@ -33,52 +32,40 @@
     }
     \leanok
     \uses{def:area_law_bootstrap_parameters}
-    With the parameters of (\ref{eq:area_law_bootstrap_parameters}) and
-    (\ref{eq:area_law_bootstrap_separation}), the condition $0<e_0<1$ gives
-    $0<g_0<1/2$, $0<\ell<1$, and $\kappa>0$.
-    If $e_0<1$ and $e\le e_0$, the density-error exponents satisfy
+    Under (\ref{eq:area_law_bootstrap_parameters})--(\ref{eq:area_law_bootstrap_separation}),
+    $0<e_0<1$ gives $0<g_0<1/2$, $0<\ell<1$, and $\kappa>0$. For $e\le e_0<1$,
     \begin{align}
         e_0-\mu+\nu & =-0.999g_0,
                     & -\frac{g_0-\ell}{4}+\nu & =-0.2489975g_0,
         \label{eq:area_law_bootstrap_density_values}            \\
         e-\mu+\nu   & <-0.24g_0,
-                    & -\frac{g_0-\ell}{4}+\nu & <-0.24g_0.
+                    & -\frac{g_0-\ell}{4}+\nu & <-0.24g_0,
         \label{eq:area_law_bootstrap_density_margin}
     \end{align}
-    For $e_0<1$, write $p=\ell+2\kappa$ for the energy-prefactor exponent. Then
+    and $p=\ell+2\kappa$ satisfies
     \begin{align}
         p & \le0.00003g_0, & p-\nu & <-\nu/2, & p-0.03g_0 & <-\nu/2.
         \label{eq:area_law_bootstrap_energy_margin}
     \end{align}
-    For $e_0>0$ and $e>e_*$, one has $\kappa<(1-\ell)e$ and
-    $g_0-\ell-\nu/4<1$.
-\end{theorem}
+    Moreover, $e_0>0$ and $e>e_*$ give $\kappa<(1-\ell)e$ and $g_0-\ell-\nu/4<1$.
+\end{lemma}
 \begin{proof}\leanok
-    If $0<e_0<1$, then $g_0=(1-e_0)/2$ lies in $(0,1/2)$. Hence
-    $\ell=g_0/100000$ lies in $(0,1)$, and $\kappa=\min\{\ell,e_*/4\}>0$.
-    Substituting (\ref{eq:area_law_bootstrap_parameters}) and
-    (\ref{eq:area_law_bootstrap_separation}) gives
-    (\ref{eq:area_law_bootstrap_density_values}). Since $g_0>0$ when $e_0<1$,
-    the identities imply (\ref{eq:area_law_bootstrap_density_margin}) for
-    $e\le e_0$. The bound $\kappa\le\ell$ gives
-    (\ref{eq:area_law_bootstrap_energy_margin}), and substituting the same
-    formulas together with $\kappa\le e_*/4$, $e>e_*$, and
-    $e_0>0$ yields the comparison bounds.
+    Direct substitution of (\ref{eq:area_law_bootstrap_parameters})--(\ref{eq:area_law_bootstrap_separation})
+    with $g_0=(1-e_0)/2\in(0,1/2)$, $\ell=g_0/10^5$, and $0<\kappa\le\min\{\ell,e_*/4\}$.
 \end{proof}
 
 % Source: 08-scanner.tex, lines 371--384 and 731--755, adc7f124.
 % The fixed C n^{-1000} contribution and replica remainder are excluded from A_n.
-\begin{theorem}[Principal energy term at the fixed bootstrap scales]
+\begin{lemma}[Principal energy term at the fixed bootstrap scales]
     \label{thm:area_law_bootstrap_principal_energy}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_principal_energy_bound}
     \leanok
     \uses{def:area_law_bootstrap_parameters}
-    Fix $0<e_0<1$, use the fixed parameters of
-    Definition~\ref{def:area_law_bootstrap_parameters}, and fix
-    $C,C_\delta\ge0$ and $\gamma,\gamma_\delta\in\mathbb R$.
-    For an integer $n\ge2$ and a real exponent $e\le e_0$, with the convention
-    $x/0=0$ for all quotients, the numerical principal term in the energy
-    estimate of \cite[Section~9, lines~731--755]{OpenAI2026AreaLaw} is defined via
+    Fix $0<e_0<1$, the parameters of
+    Definition~\ref{def:area_law_bootstrap_parameters}, $C,C_\delta\ge0$, and
+    $\gamma,\gamma_\delta\in\mathbb R$. For $n\ge2$ and $e\le e_0$ (with
+    $x/0=0$), define the principal energy term of
+    \cite[Section~9, lines~731--755]{OpenAI2026AreaLaw} by
     \begin{align}
         L_n         & =\lfloor n^{1-\ell}\rfloor,                 &
         m_n         & =\lfloor n^\mu\rfloor,                      &
@@ -92,46 +79,30 @@
         \bigl(\delta_n(e)^{1/8}+n^{-\nu}+n^{-100}\bigr).
         \label{eq:al_principal_energy_term}
     \end{align}
-    There is an integer $N\ge2$, depending only on the fixed constants
-    and $e_0$, such that every integer $n\ge N$ and every real $e\le e_0$
-    satisfy $A_n(e)\le n^{-\nu/2}$.
-\end{theorem}
+    There is $N\ge2$ (depending only on the fixed constants and $e_0$) such
+    that $A_n(e)\le n^{-\nu/2}$ for all $n\ge N$ and $e\le e_0$.
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:al_scanner_scale_facts,thm:area_law_bootstrap_margins}
-    Applying the numerical scale estimates with the fixed exponents and
-    auxiliary entropy exponent $\mu$, and cancelling the positive factor $D_n^2$,
-    shows that for some fixed $C_1\ge1$ and all sufficiently large $n$,
+    By Lemma~\ref{lem:al_scanner_scale_facts}, there is $C_1\ge1$ such that for
+    large $n$,
     \begin{align}
         n   & \le C_1n^\ell m_nK_n\le C_1n^{\ell+\mu}K_n, &
         a_n & \le4C_1n^{-(g_0-\ell)}.
         \label{eq:al_principal_energy_band}
     \end{align}
-    Because $\nu>0$ and every fixed power of $\log n$ grows more slowly than
-    every positive power of $n$, enlarging the threshold ensures that
-    \begin{align}
-        4C_1                     & \le n^\nu,     & 2C_\delta & \le n^\nu, \\
-        (\log n)^{\gamma_\delta} & \le n^\nu,     &
-        192C(\log n)^\gamma      & \le n^{\nu/4}.
-    \end{align}
-    The parameter inequalities $g_0-\ell\ge45\nu$ and
-    $e-\mu\le-10\nu$ hold uniformly for $e\le e_0$. Hence
-    \begin{align}
-        a_n         & \le n^{-44\nu}, \\
-        n^{e-\mu}+a_n^{1/4}(\log n)^{\gamma_\delta}
-                    & \le2n^{-10\nu}, \\
-        \delta_n(e) & \le n^{-8\nu}.
-    \end{align}
-    Since $\nu<100$, the sum in parentheses in $A_n(e)$ is at most
-    $3n^{-\nu}$. The ceiling bound $D_n\le2n^\kappa$ therefore yields
+    For $n$ large enough that $\max\{4C_1,2C_\delta,(\log n)^{\gamma_\delta}\}\le n^\nu$
+    and $192C(\log n)^\gamma\le n^{\nu/4}$, the uniform bounds $g_0-\ell\ge45\nu$
+    and $e-\mu\le-10\nu$ ($e\le e_0$) give $a_n\le n^{-44\nu}$,
+    $n^{e-\mu}+a_n^{1/4}(\log n)^{\gamma_\delta}\le2n^{-10\nu}$, and
+    $\delta_n(e)\le n^{-8\nu}$. Since $\nu<100$ and $D_n\le2n^\kappa$,
+    (\ref{eq:area_law_bootstrap_energy_margin}) yields
     \begin{align}
         A_n(e)
-         & \le192C(\log n)^\gamma n^{\ell+2\kappa-\nu} \\
-         & \le n^{\ell+2\kappa-3\nu/4}
-        \le n^{-\nu/2},
+         & \le192C(\log n)^\gamma n^{\ell+2\kappa-\nu}
+        \le n^{\ell+2\kappa-3\nu/4}
+        \le n^{-\nu/2}. \notag
     \end{align}
-    where the last inequality uses $\ell+2\kappa\le3\nu/100$.
-    Every enlargement of the threshold depends only on the fixed constants
-    and $e_0$.
 \end{proof}
 
 % Source: 08-scanner.tex, scanner:energy-output and scanner:bootstrap-energy,
@@ -141,151 +112,94 @@
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_energy_expression_bound}
     \leanok
     \uses{thm:area_law_bootstrap_principal_energy}
-    Under the hypotheses and notation of
-    Theorem~\ref{thm:area_law_bootstrap_principal_energy}, put
+    Under the hypotheses of Lemma~\ref{thm:area_law_bootstrap_principal_energy},
+    there is $N\ge2$ such that for all $n\ge N$ and $e\le e_0$,
     \begin{align}
-        E_n(e)=A_n(e)+Cn^{-1000}.
-        \label{eq:al_bootstrap_energy_expression}
-    \end{align}
-    There is an integer $N\ge2$ (for which the threshold in the principal
-    energy estimate suffices), depending only on the fixed constants
-    and $e_0$, such that every integer $n\ge N$ and every real $e\le e_0$
-    satisfy
-    \begin{align}
-        E_n(e)\le(1+C)n^{-\nu/2}.
+        E_n(e) & =A_n(e)+Cn^{-1000}
+        \label{eq:al_bootstrap_energy_expression} \\
+               & \le(1+C)n^{-\nu/2}.
         \label{eq:al_bootstrap_energy_expression_bound}
     \end{align}
 \end{corollary}
 \begin{proof}\leanok
     \uses{thm:area_law_bootstrap_principal_energy,def:area_law_bootstrap_parameters}
-    Since $0<g_0<1/2$ and $\nu=g_0/1000$, we have $\nu/2<1000$.
-    For $n\ge2$, it follows that $n^{-1000}\le n^{-\nu/2}$.
-    As $C\ge0$, the principal energy estimate gives
-    \begin{align}
-        E_n(e)\le n^{-\nu/2}+Cn^{-\nu/2}=(1+C)n^{-\nu/2}.
-    \end{align}
+    Since $\nu/2=g_0/2000<1000$, we have $n^{-1000}\le n^{-\nu/2}$ for $n\ge2$;
+    combine with Lemma~\ref{thm:area_law_bootstrap_principal_energy}.
 \end{proof}
 
-The fixed contribution $Cn^{-1000}$ is included in $E_n(e)$.
-The remaining error in the scanner energy estimate tends to zero with the
-replica index at each fixed system size.
-
-\begin{theorem}[Binary-entropy cost of the rounded bands]
+\begin{lemma}[Binary-entropy cost of the rounded bands]
     \label{thm:area_law_bootstrap_binary_entropy_cost}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_binEntropy_cost_bound}
     \leanok
-    Fix the scanner exponents described in Section~\ref{sec:al_scanner}, and put
+    For fixed scanner exponents (Section~\ref{sec:al_scanner}), with $L_n,m_n,K_n,a_n$
+    as in (\ref{eq:al_principal_energy_scales}) and
+    $h(\tau)=-\tau\log|\tau|-(1-\tau)\log|1-\tau|$ ($0\log0=0$), there is
+    $N\ge1$ such that for all $n\ge N$ and $\tau\in\mathbb R$
+    (\cite[Proposition~9.5]{OpenAI2026AreaLaw}),
     \begin{align}
-        L_n & =\lfloor n^{1-\ell}\rfloor,\qquad
-        m_n=\lfloor n^\mu\rfloor,\qquad
-        K_n=\left\lfloor\frac{L_n}{8m_n}\right\rfloor,\qquad
-        a_n=\frac4{K_n}.
+        K_n                 & \ge1,                         & a_n & >0, &
+        \frac{h(\tau)}{a_n} & \le\frac{\log2}{4}\,n. \notag
     \end{align}
-    Define $h(\tau)=-\tau\log|\tau|-(1-\tau)\log|1-\tau|$ for
-    $\tau\in\mathbb R$, with the convention $0\log0=0$ (which coincides with the
-    binary entropy on $[0,1]$).
-    To bound the binary-entropy term in the proof of
-    \cite[Proposition~9.5]{OpenAI2026AreaLaw} for the rounded band count $K_n$,
-    there is an integer $N\ge1$, depending only on these fixed exponents and
-    independent of $\tau$, such that $K_n\ge1$, $a_n>0$, and
-    \begin{align}
-        \frac{h(\tau)}{a_n}\le\frac{\log2}{4}\,n
-    \end{align}
-    for every integer $n\ge N$ and every $\tau\in\mathbb R$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:al_scanner_scale_facts}
-    Since $\mu<1-\ell$, the numerical scale estimates of
-    Lemma~\ref{lem:al_scanner_scale_facts} give $K_n\ge1$
-    for all sufficiently large $n$. They also give $L_n\le n$, and
-    integer division gives $K_n\le L_n$. The extension satisfies
-    $h(\tau)\le\log2$ for every real $\tau$, so
-    \begin{align}
-        \frac{h(\tau)}{a_n}
-        =\frac{K_nh(\tau)}4
-        \le\frac{K_n\log2}4
-        \le\frac{n\log2}4.
-    \end{align}
+    Since $\mu<1-\ell$, Lemma~\ref{lem:al_scanner_scale_facts} gives
+    $1\le K_n\le L_n\le n$ for large $n$, and $h(\tau)\le\log2$ gives
+    $h(\tau)/a_n=K_nh(\tau)/4\le(n\log2)/4$.
 \end{proof}
 
-\begin{theorem}[Additive comparison costs at fixed bootstrap scales]
+\begin{lemma}[Additive comparison costs at fixed bootstrap scales]
     \label{thm:area_law_bootstrap_comparison_budget}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_comparison_budget_bound}
     \leanok
     \uses{def:area_law_bootstrap_parameters}
-    Fix $e_*<e_0<1$, where $e_*=2\cdot10^{-6}$, and use the parameters of
-    (\ref{eq:area_law_bootstrap_parameters}) and
-    (\ref{eq:area_law_bootstrap_separation}). Set $\eta=1-\ell$ and
-    \begin{align}
-        L_n & =\lfloor n^\eta\rfloor,\qquad
-        m_n=\lfloor n^\mu\rfloor,\qquad
-        K_n=\left\lfloor\frac{L_n}{8m_n}\right\rfloor,\qquad
-        D_n=\lceil n^\kappa\rceil,\qquad a_n=\frac4{K_n}.
-    \end{align}
-    For the additive terms following the comparison in the proof of
-    \cite[Proposition~9.5]{OpenAI2026AreaLaw}, there is an integer $N\ge1$,
-    depending only on $e_0$ and chosen before $e$ and $\tau$, such that
-    $K_n\ge1$ and $a_n>0$ for every integer $n\ge N$ and, simultaneously,
+    Fix $e_*<e_0<1$ ($e_*=2\cdot10^{-6}$), the parameters of
+    (\ref{eq:area_law_bootstrap_parameters})--(\ref{eq:area_law_bootstrap_separation}),
+    $\eta=1-\ell$, and $L_n,m_n,K_n,D_n,a_n$ as in
+    (\ref{eq:al_principal_energy_scales}). There is $N\ge1$ (depending only on
+    $e_0$) such that for all $n\ge N$, $e_*<e\le e_0$, and $\tau\in\mathbb R$
+    (\cite[Proposition~9.5]{OpenAI2026AreaLaw}), $K_n\ge1$, $a_n>0$, and
     \begin{align}
         nL_n^e+nD_n+n^{3/5}+\frac{h(\tau)}{a_n}+1
-        \le\left(5+\frac{\log2}{4}\right)n^{1+\eta e}
+         & \le\left(5+\frac{\log2}{4}\right)n^{1+\eta e}. \notag
     \end{align}
-    for every $e_*<e\le e_0$ and every real $\tau$, where
-    $h(\tau)=-\tau\log|\tau|-(1-\tau)\log|1-\tau|$ with the convention
-    $0\log0=0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:area_law_bootstrap_binary_entropy_cost,thm:area_law_bootstrap_margins}
-    Applying the binary-entropy estimate with the fixed parameters chosen from
-    $e_0$ gives one $N\ge1$ such that $K_n\ge1$, $a_n>0$, and
-    $h(\tau)/a_n\le(\log2/4)n$ for every $n\ge N$ and every real $\tau$.
-    For such an $n$ and an exponent $e_*<e\le e_0$, let
-    $P=n^{1+\eta e}$. Since $\eta>0$, $e>0$ and $n\ge1$, we have
-    $1\le n\le P$. The floor bound $L_n\le n^\eta$ yields
-    $nL_n^e\le P$. Since $\kappa>0$ and $n\ge1$, we have $n^\kappa\ge1$.
-    The parameter inequality $\kappa<\eta e$ gives
-    \begin{align}
-        D_n\le n^\kappa+1\le2n^\kappa\le2n^{\eta e},
-    \end{align}
-    and hence $nD_n\le2P$. Also $n^{3/5}\le P$, and the nonnegative
-    coefficient $\log2/4$ gives $h(\tau)/a_n\le(\log2/4)P$.
-    Adding these four estimates and $1\le P$ proves the result, with
-    coefficient $1+2+1+\log2/4+1=5+\log2/4$.
+    Take $N$ from Lemma~\ref{thm:area_law_bootstrap_binary_entropy_cost} and
+    set $P=n^{1+\eta e}\ge n\ge1$. Then $nL_n^e\le P$, $n^{3/5}\le P$,
+    $h(\tau)/a_n\le(\log2/4)P$, $1\le P$, and by
+    Lemma~\ref{thm:area_law_bootstrap_margins} ($\kappa<\eta e$),
+    $D_n\le n^\kappa+1\le2n^{\eta e}$, so $nD_n\le2P$.
 \end{proof}
 
-\begin{theorem}[Uniform bounds after finitely many exponent improvements]
+\begin{lemma}[Uniform bounds after finitely many exponent improvements]
     \label{thm:area_law_finite_exponent_improvement}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_uniform_boxError_bound_of_eventual_improvement}
     \leanok
     \uses{def:area_law_bootstrap_parameters}
-    Fix $0<e_0<1$, set $e_*=2\cdot10^{-6}$, and take $\ell$ from
-    (\ref{eq:area_law_bootstrap_separation}).
-    Let $F_i:\mathbb N\to\mathbb R$ be an arbitrary family, and suppose there
-    are constants $V\ge0$ and $C_0>0$ such that, for every $i$ and $r\ge1$,
+    Fix $0<e_0<1$, $e_*=2\cdot10^{-6}$, and $\ell$ from
+    (\ref{eq:area_law_bootstrap_separation}). Let $F_i:\mathbb N\to\mathbb R$
+    satisfy, for some $V\ge0$, $C_0>0$, and all $i$ and $r\ge1$,
     \begin{align}
         F_i(r) & \le Vr^2, & F_i(r) & \le C_0r^{1+e_0}.
         \label{eq:area_law_bootstrap_initial}
     \end{align}
-    Assume the following implication for every $e_*<e\le e_0$: if there is a
-    constant $C_e>0$ such that $F_i(r)\le C_er^{1+e}$ for every $i$ and
-    $r\ge1$, then there are a constant $C'_e>0$ and an integer $N_e$ such that
+    Suppose that for every $e_*<e\le e_0$, having $F_i(r)\le C_er^{1+e}$ for all
+    $i$ and $r\ge1$ implies the existence of $C'_e>0$ and $N_e$ with
     \begin{align}
-        F_i(r) & \le C'_er^{1+(1-\ell)e}
+        F_i(r) & \le C'_er^{1+(1-\ell)e}\quad(r\ge N_e).
         \label{eq:area_law_bootstrap_step}
     \end{align}
-    for every $i$ and $r\ge N_e$. Then there is one constant $C>0$ such that
-    $F_i(r)\le Cr^{1+e_*}$ for every $i$ and every $r\ge1$.
-\end{theorem}
+    Then there is $C>0$ such that $F_i(r)\le Cr^{1+e_*}$ for all $i$ and $r\ge1$.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_bootstrap_margins}
-    With $a=1-\ell\in(0,1)$, enlarging the constant at each improvement step
-    using the quadratic bound in (\ref{eq:area_law_bootstrap_initial}) extends
-    the bound across $1\le r<N_e$ independently of $i$.
-    Iterating (\ref{eq:area_law_bootstrap_step}) from $e_0$ while the current
-    exponent exceeds $e_*$ terminates in finitely many steps because $a^ne_0\to0$.
-    Once $a^ne_0\le e_*$, the inequality
-    $r^{1+a^ne_0}\le r^{1+e_*}$ for $r\ge1$ gives the result.
+    By Lemma~\ref{thm:area_law_bootstrap_margins}, $a=1-\ell\in(0,1)$.
+    Using $F_i(r)\le Vr^2$ from (\ref{eq:area_law_bootstrap_initial}) to absorb
+    $1\le r<N_e$ at each step (\ref{eq:area_law_bootstrap_step}), iterate until
+    $a^ne_0\le e_*$, where $r^{1+a^ne_0}\le r^{1+e_*}$.
 \end{proof}
 
 % This is the conditional finite iteration in the proof of Proposition 9.5.

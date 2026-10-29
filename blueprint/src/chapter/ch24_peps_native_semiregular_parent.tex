@@ -15,7 +15,7 @@ periods at least three are retained; the link-dependent and smaller-period
 cases are discussed in
 \cite{gap:rmp_peps_quantum_double_g_isometry,gap:rmp_peps_examples_small_torus}.
 The oriented graph comparison in
-Theorem~\ref{thm:peps_oriented_semiregular_physical_parent}, in contrast,
+Lemma~\ref{thm:peps_oriented_semiregular_physical_parent}, in contrast,
 allows vertex-dependent physical tensors.
 
 \subsection{Native geometry and the local invariant subspace}
@@ -27,14 +27,12 @@ allows vertex-dependent physical tensors.
         TNLean.PEPS.torusNativeEdgeTail_right,
         TNLean.PEPS.torusNativeEdgeTail_up}
     \leanok
-    For the horizontal edge from $v=(x,y)$ to $(x+1,y)$ the native
-    tail is $v$. For the vertical edge joining $v$ to $(x,y+1)$,
-    the native tail is $(x,y+1)$, including wraparound edges.
-    If $e=(t,h)$ is its ordered-edge description, define $o_e=1$
-    exactly when $t$ is not this native tail.
+    For $v=(x,y)\in V$, the native tail of $\{v,(x+1,y)\}$ is $v$ and the
+    native tail of $\{v,(x,y+1)\}$ is $(x,y+1)$. For an ordered edge $e=(t,h)$,
+    set $o_e=1$ if $t$ is not the native tail of $e$ and $o_e=0$ otherwise.
 \end{definition}
 
-\begin{theorem}[Native outgoing incidences and degree]%
+\begin{lemma}[Native outgoing incidences and degree]%
     \label{thm:peps_native_torus_incidence}
     \lean{TNLean.PEPS.torusNativeEdgeTail_mem_endpoints,
         TNLean.PEPS.card_torusIncidentEdge,
@@ -44,20 +42,16 @@ allows vertex-dependent physical tensors.
         TNLean.PEPS.graphNativeTail_torus_leg_iff}
     \leanok
     \uses{def:peps_native_torus_orientation,def:peps_oriented_native_tail}
-    Every native tail is an endpoint of its edge. Every vertex has
-    four distinct incident edges, bijectively indexed by
-    $0,1,2,3$ in top, right, down, left order.
-    At $v$, the native-tail incidences are precisely indices $1,2$.
-    Equivalently, the graph native-tail predicate for $o$ holds exactly
-    when the chosen torus tail equals $v$.
-\end{theorem}
+    Every native tail is an endpoint of its edge, $|\operatorname{Inc}(v)|=4$
+    indexed by $\{0,1,2,3\}$ (top, right, down, left), and at $v$ the native-tail
+    incidences (equivalently, the graph native-tail predicate of
+    Definition~\ref{def:peps_oriented_native_tail} for $o$) are precisely $\{1,2\}$.
+\end{lemma}
 \begin{proof}\leanok
-    The horizontal and vertical edge bijection identifies the selected
-    tails with edge endpoints. The four-leg incidence bijection gives
-    degree four. Evaluating the tail on its four legs gives $v$ on
-    right and down; on top and left it gives a neighboring vertex,
-    different from $v$. The definition of $o_e$ then identifies this
-    test with the ordered-graph native-tail predicate.
+    For $m,n\ge 3$, the four incident edges at $v=(x,y)$ are distinct, and
+    Definition~\ref{def:peps_native_torus_orientation} gives native tail $v$ on
+    legs $1,2$ (right, down) and $(x,y+1)\ne v$, $(x-1,y)\ne v$ on legs $0,3$
+    (top, left), matching Definition~\ref{def:peps_oriented_native_tail}.
 \end{proof}
 
 \begin{definition}[Native incidence coordinates and site tensor]%
@@ -67,16 +61,14 @@ allows vertex-dependent physical tensors.
         TNLean.PEPS.torusNativeIncidentSite}
     \leanok
     \uses{thm:peps_native_torus_incidence}
-    The bijection $j_v:X^{\operatorname{Inc}(v)}\to X^4$ sends
-    $\eta$ to $(\eta_{\mathrm{top}},\eta_{\mathrm{right}},
-        \eta_{\mathrm{down}},\eta_{\mathrm{left}})$.
-    A native tensor $a:X^4\times\{0,\ldots,d-1\}\to\C$
-    defines the graph site $a_v(\eta,s)=a(j_v\eta,s)$.
-    Its native linear map is
-    $\mathcal A x(s)=\sum_{\xi\in X^4}a(\xi,s)x(\xi)$.
+    Let $j_v:X^{\operatorname{Inc}(v)}\xrightarrow{\sim}X^4$ send
+    $\eta\mapsto(\eta_{\mathrm{top}},\eta_{\mathrm{right}},\eta_{\mathrm{down}},\eta_{\mathrm{left}})$.
+    A native tensor $a:X^4\times\{0,\ldots,d-1\}\to\C$ defines the site tensor
+    $a_v(\eta,s)=a(j_v\eta,s)$ and linear map
+    $(\mathcal A x)(s)=\sum_{\xi\in X^4}a(\xi,s)x(\xi)$.
 \end{definition}
 
-\begin{theorem}[Native four-leg and oriented graph $G$-injectivity]%
+\begin{lemma}[Native four-leg and oriented graph $G$-injectivity]%
     \label{thm:peps_native_oriented_g_injectivity}
     \lean{TNLean.PEPS.graphOrientedIncidentMatrix_torus,
         TNLean.PEPS.graphOrientedIncidentRepresentation_torus,
@@ -121,69 +113,51 @@ allows vertex-dependent physical tensors.
             \tnmark[form=label, label pos=w]{on leg-n-2-2 1}{$s$}
         \end{tenkz}
     \end{tenkzequation}
-    Then $\rho_v^o(g)_{\sigma,\eta}
-        =\rho_\square(g)_{j_v\sigma,j_v\eta}$.
-    For coefficient vectors, let $J_vx=x\circ j_v^{-1}$.
-    The corresponding identities are
-    $J_v\rho_v^o(g)=\rho_\square(g)J_v$ and
-    $\mathcal A_v=\mathcal A J_v$.
-    Hence $G$-injectivity of $\mathcal A$ for $\rho_\square$
-    implies $G$-injectivity of every $\mathcal A_v$ for $\rho_v^o$.
-    In numbered virtual coordinates the local map is
-    $\mathcal A_vE_v$ and is $G$-injective for
-    $E_v^{-1}\rho_v^oE_v$.
-\end{theorem}
+    With $(J_vx)(\xi)=x(j_v^{-1}\xi)$, one has
+    $\rho_v^o(g)_{\sigma,\eta}=\rho_\square(g)_{j_v\sigma,j_v\eta}$,
+    $J_v\rho_v^o(g)=\rho_\square(g)J_v$, and $\mathcal A_v=\mathcal A J_v$.
+    Hence $G$-injectivity of $\mathcal A$ for $\rho_\square$ implies
+    $G$-injectivity of $\mathcal A_v$ for $\rho_v^o$ (and of $\mathcal A_vE_v$
+    for $E_v^{-1}\rho_v^oE_v$).
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_native_torus_incidence}
-    The outgoing indices $1,2$ contribute $U_{g^{-1}}^T$;
-    indices $0,3$ contribute $U_g$. Reindexing the four incidence
-    factors gives~(\ref{eq:peps_native_four_leg}). Reindexing the
-    finite coefficient sum by $j_v$ gives both intertwining identities.
-    Since $J_v$ is invertible, invariance and injectivity on invariant
-    vectors pass from $\mathcal A$ to $\mathcal A_v$.
-    Reindex once more by $E_v$ to obtain the numbered assertion.
+    By Lemma~\ref{thm:peps_native_torus_incidence}, legs $1,2$ carry
+    $U_{g^{-1}}^T$ and legs $0,3$ carry $U_g$, giving
+    (\ref{eq:peps_native_four_leg}), $J_v\rho_v^o(g)=\rho_\square(g)J_v$, and
+    $\mathcal A_v=\mathcal A J_v$; invertibility of $J_v$ and $E_v$ transports
+    $G$-injectivity.
 \end{proof}
 
-\begin{theorem}[A native $G$-injective averaging site exists]%
+\begin{lemma}[A native $G$-injective averaging site exists]%
     \label{thm:peps_native_averaging_site}
     \lean{TNLean.PEPS.exists_isGInjective_torusSite}
     \leanok
     \uses{def:peps_g_injective}
-    For every finite group representation $U$ on a finite alphabet
-    $X$, there are a finite physical dimension $p$ and a native
-    tensor $b:X^4\times\{0,\ldots,p-1\}\to\C$ which is
+    For any representation $U$ of $G$ on a finite alphabet $X$, there exist
+    $p=|X|^4$ and a native tensor $b:X^4\times\{0,\ldots,p-1\}\to\C$ that is
     $G$-injective for $\rho_\square$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Let $\Pi=|G|^{-1}\sum_g\rho_\square(g)$ and enumerate the
-    coefficient basis of $\C^{X^4}$ by a linear isomorphism $E$
-    to $\C^p$, with $p=|X|^4$. Take $b$ to be the matrix entries
-    of $E\Pi$. The average satisfies $\Pi\rho_\square(g)=\Pi$
-    and is the identity on invariant vectors. Composing with $E$
-    therefore gives the required invariance and restricted injectivity.
+    Set $\Pi=|G|^{-1}\sum_{g\in G}\rho_\square(g)$ and choose a linear bijection
+    $E:\C^{X^4}\xrightarrow{\sim}\C^p$; the matrix entries of $b=E\Pi$ satisfy
+    $b\rho_\square(g)=b$ and $\ker b=\ker\Pi$.
 \end{proof}
 
 \subsection{Commuting closures satisfy the original plaquette constraints}
 
-\begin{theorem}[Exterior insertions change only regional boundaries]%
+\begin{lemma}[Exterior insertions change only regional boundaries]%
     \label{thm:peps_native_inserted_region_support}
     \lean{TNLean.PEPS.graphInsertedBondNetwork_slice_mem_regionGroundSpace_of_internal_eq_one}
     \leanok
     \uses{def:peps_region_ground_space}
-    On any finite simple graph, let $a_v$ be arbitrary site tensors
-    with finite virtual alphabet $X$, and insert a matrix $K_e$ on
-    each ordered bond. Suppose $K_e=1$ whenever both endpoints lie
-    in $R$. For every fixed exterior physical configuration $\tau$,
-    the resulting vector $\Psi_K(\,\cdot\,,\tau)$ on $R$ belongs
-    to the original regional contraction range $\operatorname{im}\mathcal C_R$.
-    No invertibility, group symmetry, or positivity of the inserted
-    matrices is required.
-\end{theorem}
+    On any finite simple graph with site tensors $a_v$ and bond matrices $K_e$,
+    if $K_e=1$ for all $e\in E(R)$, then for every exterior physical
+    configuration $\tau$, $\Psi_K(\,\cdot\,,\tau)\in\operatorname{im}\mathcal C_R$.
+\end{lemma}
 \begin{proof}\leanok
-    Split endpoint assignments into internal labels and pairs $\zeta$
-    on all noninternal edges. The identity matrices on internal edges
-    force their two endpoint labels to agree. For fixed $\zeta$, the
-    remaining coefficient is
+    Since $K_e=1$ for $e\in E(R)$ identifies internal endpoint labels, summing
+    over noninternal endpoint pairs $\zeta$ gives
     \begin{align}
         c_\tau(\zeta)
          & =\prod_{e\notin E_R}K_e(\zeta_{e,h},\zeta_{e,t})
@@ -191,12 +165,10 @@ allows vertex-dependent physical tensors.
         \label{eq:peps_native_inserted_exterior}            \\
         \Psi_K(\,\cdot\,,\tau)
          & =\sum_\zeta c_\tau(\zeta)
-        \mathcal C_R(\theta(\zeta)).
+        \mathcal C_R(\theta(\zeta))\in\operatorname{im}\mathcal C_R,
         \label{eq:peps_native_inserted_slice}
     \end{align}
-    Here $\theta(\zeta)$ selects the retained endpoint on every crossing
-    edge. Each summand is a boundary column of the original regional
-    map, so the sum belongs to its range.
+    where $\theta(\zeta)$ is the boundary restriction on $\partial R$.
 \end{proof}
 
 \begin{definition}[Native inserted matrices in ordered coordinates]%
@@ -205,9 +177,8 @@ allows vertex-dependent physical tensors.
         TNLean.PEPS.torusGraphBondMatrix_right,
         TNLean.PEPS.torusGraphBondMatrix_up}
     \leanok
-    Let $O^h_v$ act on the native rightward bond from $v$, and
-    $O^v_v$ on the downward bond from $(x,y+1)$ to $v=(x,y)$.
-    For an ordered edge $e=(t,h)$ put
+    Given $O^h_v$ on the rightward bond from $v=(x,y)$ and $O^v_v$ on the
+    downward bond from $(x,y+1)$ to $v$, define for each ordered edge $e=(t,h)$:
     \begin{align}
         K_{e_{\mathrm{right}}(v)} & =
         \begin{cases}O^h_v,&t=v,\\(O^h_v)^T,&t\ne v,\end{cases}
@@ -216,59 +187,49 @@ allows vertex-dependent physical tensors.
         \begin{cases}(O^v_v)^T,&t=v,\\O^v_v,&t\ne v.\end{cases}
         \label{eq:peps_native_inserted_vertical}
     \end{align}
-    Thus a transpose is inserted exactly when the native arrow and
-    ordered-edge arrow disagree.
 \end{definition}
 
-\begin{theorem}[Equality of native and inserted graph contractions]%
+\begin{lemma}[Equality of native and inserted graph contractions]%
     \label{thm:peps_native_inserted_network}
     \lean{TNLean.PEPS.torusBondNetwork_eq_graphInsertedBondNetwork}
     \leanok
     \uses{def:peps_native_inserted_matrices,def:peps_native_incident_coordinates}
-    For every physical configuration, the native torus contraction
-    with matrices $O^h,O^v$ equals the ordered inserted graph
-    contraction with the matrices $K$ of
-    (\ref{eq:peps_native_inserted_horizontal})--
-    (\ref{eq:peps_native_inserted_vertical}) and site tensors $a_v$.
-\end{theorem}
+    The native torus contraction with bond matrices $O^h,O^v$ equals the ordered
+    inserted graph contraction with $K$ from
+    (\ref{eq:peps_native_inserted_horizontal})--(\ref{eq:peps_native_inserted_vertical})
+    and site tensors $a_v$.
+\end{lemma}
 \begin{proof}\leanok
-    Reindex all native top/right/down/left labels by the incidence
-    bijections $j_v$, then regroup them into ordered endpoint pairs.
-    The horizontal and vertical bond coefficients become, respectively,
+    Reindexing native leg labels via $j_v$ from
+    Definition~\ref{def:peps_native_incident_coordinates} turns the horizontal
+    and vertical bond factors into
     \begin{align}
         O^h_v(\eta_{v+(1,0),\mathrm{left}},\eta_{v,\mathrm{right}}),
         \qquad
-        O^v_v(\eta_{v,\mathrm{top}},\eta_{v+(0,1),\mathrm{down}}).
+        O^v_v(\eta_{v,\mathrm{top}},\eta_{v+(0,1),\mathrm{down}}),
+        \notag
     \end{align}
-    Equations~(\ref{eq:peps_native_inserted_horizontal}) and
-    (\ref{eq:peps_native_inserted_vertical}) give exactly these entries
-    in both possible vertex orders. The site factors are unchanged,
-    so the reindexed finite sums agree.
+    which match (\ref{eq:peps_native_inserted_horizontal})--(\ref{eq:peps_native_inserted_vertical})
+    under either endpoint ordering of $e=(t,h)$.
 \end{proof}
 
-\begin{theorem}[Seams beyond a native plaquette]%
+\begin{lemma}[Seams beyond a native plaquette]%
     \label{thm:peps_native_plaquette_seam_exclusion}
     \lean{TNLean.PEPS.torusGraphBondMatrix_closureAt_eq_one_on_plaquette_internal}
     \leanok
     \uses{def:peps_native_inserted_matrices}
-    For $v=(x,y)$ let
-    $R_v=v+\{(0,0),(1,0),(1,1),(0,1)\}$.
-    Place the horizontal closure seam at $x+2$ and the vertical
-    closure seam at $y+2$. For any $g,h\in G$, the corresponding
-    inserted graph matrices are the identity on every edge internal
-    to $R_v$. This assertion includes $m=3$ or $n=3$.
-\end{theorem}
+    For $v=(x,y)$ and $R_v=v+\{(0,0),(1,0),(1,1),(0,1)\}$ with $m,n\ge 3$,
+    placing the closure seams at $x+2$ and $y+2$ gives $K_e=1$ for every
+    $e\in E(R_v)$ and all $g,h\in G$.
+\end{lemma}
 \begin{proof}\leanok
-    The first coordinates in $R_v$ are $x,x+1$, whereas
-    $x+2$ differs from both modulo $m\ge3$. The analogous statement
-    holds for $y,y+1,y+2$ modulo $n$.
-    An internal rightward edge cannot end at the horizontal seam,
-    and an internal upward edge cannot end at the vertical seam.
-    Their insertion matrices are therefore $1$; any transpose
-    required by ordered coordinates leaves $1$ unchanged.
+    Since $m,n\ge 3$, $x+2\notin\{x,x+1\}\pmod m$ and $y+2\notin\{y,y+1\}\pmod n$,
+    so no internal edge of $R_v$ crosses the seam at $x+2$ or $y+2$; hence
+    $O^h=1$ and $O^v=1$ on $E(R_v)$, and $1^T=1$ in
+    (\ref{eq:peps_native_inserted_horizontal})--(\ref{eq:peps_native_inserted_vertical}).
 \end{proof}
 
-\begin{theorem}[Invariant commuting closures are parent ground vectors]%
+\begin{lemma}[Invariant commuting closures are parent ground vectors]%
     \label{thm:peps_native_invariant_closure_membership}
     \lean{TNLean.PEPS.torusGClosure_slice_mem_plaquetteGroundSpace_of_invariant,
         TNLean.PEPS.torusGClosure_mem_torusParentGroundSpace_of_invariant,
@@ -277,38 +238,30 @@ allows vertex-dependent physical tensors.
         TNLean.PEPS.span_torusGClosure_commuting_le_torusParentKernel_of_invariant}
     \leanok
     \uses{def:peps_torus_g_closure,def:peps_region_parent_interaction}
-    Let $U$ be any representation on finite $X$, and suppose
-    $\mathcal A\rho_\square(k)=\mathcal A$ for every $k\in G$.
-    If $gh=hg$, every physical slice of the native closure
-    $\lvert a;(g,h)\rangle$ on $R_v$ lies in
-    $\operatorname{im}\mathcal C_{R_v}$.
-    Consequently the closure belongs to the full plaquette parent
-    space. If $P_v\ge0$ and
-    $\ker P_v=\operatorname{im}\mathcal C_{R_v}$, then every embedded
-    $P_v$ annihilates it, and so does
-    $H=\sum_v(P_v\otimes1_{R_v^c})$. In particular,
+    If $\mathcal A\rho_\square(k)=\mathcal A$ for all $k\in G$ and $gh=hg$, then
+    for every $v$ and exterior configuration $\tau$, the slice of
+    $\lvert a;(g,h)\rangle$ on $R_v$ lies in $\operatorname{im}\mathcal C_{R_v}$,
+    so $\lvert a;(g,h)\rangle\in\mathcal P_{\{R_v\}}(a)$. If $P_v\ge0$ with
+    $\ker P_v=\operatorname{im}\mathcal C_{R_v}$ and
+    $H=\sum_v(P_v\otimes1_{R_v^c})$, then
     \begin{align}
         \operatorname{span}\{\lvert a;(g,h)\rangle:gh=hg\}
         \subseteq\ker H.
         \label{eq:peps_native_closure_inclusion}
     \end{align}
-    This implication uses only local virtual invariance, without
-    semi-regularity or $G$-injectivity.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_torus_commuting_closure_seams,
         thm:peps_native_plaquette_seam_exclusion,
         thm:peps_native_inserted_network,
         thm:peps_native_inserted_region_support,
         thm:peps_region_parent_common_kernel}
-    Local invariance and $gh=hg$ move both closure seams to $x+2,y+2$
-    without changing the vector. Theorem~\ref{thm:peps_native_plaquette_seam_exclusion}
-    makes every internal insertion on $R_v$ the identity.
-    After the native-to-ordered contraction identity, formula
-    (\ref{eq:peps_native_inserted_slice}) expresses each physical slice
-    as a sum of unrestricted regional boundary columns.
-    For the four-site plaquette, collecting equal boundary labels gives
-    the contraction below. All four sites carry $a$.
+    By Lemma~\ref{thm:peps_torus_commuting_closure_seams}, $\mathcal A\rho_\square(k)=\mathcal A$
+    and $gh=hg$ shift the closure seams to $(x+2,y+2)$, where
+    Lemma~\ref{thm:peps_native_plaquette_seam_exclusion} gives $K_e=1$ on
+    $E(R_v)$. By Lemmas~\ref{thm:peps_native_inserted_network}
+    and~\ref{thm:peps_native_inserted_region_support}, (\ref{eq:peps_native_inserted_slice})
+    expresses the $R_v$-slice as:
     % Formula: closure slice = sum_theta c_tau(theta) C_{R_v}(theta),
     % with K_e=1 on every internal edge and arbitrary crossing/exterior K_e.
     % Source: SCP10 paper_v3.tex:1622--1647; native seam exclusion above.
@@ -337,38 +290,29 @@ allows vertex-dependent physical tensors.
                         90:virtual,270:virtual:$\theta_{b,1}$}, label pos=sw]{}
         \end{tenkz}
     \end{tenkzequation}
-    The coefficients $c_\tau$ include the exterior contraction and
-    every crossing insertion. Each local term therefore annihilates
-    every closure slice. Summing the terms gives $H\lvert a;(g,h)\rangle=0$;
-    linearity proves~(\ref{eq:peps_native_closure_inclusion}).
+    Hence $(P_v\otimes 1_{R_v^c})\lvert a;(g,h)\rangle=0$ for each $v$, giving
+    (\ref{eq:peps_native_closure_inclusion}).
 \end{proof}
 
 \subsection{Dimension and exhaustion of the full kernel}
 
-\begin{theorem}[Full uniform semi-regular native parent dimension]%
+\begin{lemma}[Full uniform semi-regular native parent dimension]%
     \label{thm:peps_native_uniform_semiregular_parent_dimension}
     \lean{TNLean.PEPS.IsGInjective.finrank_torusParentGroundSpace_of_isSemiRegular,
         TNLean.PEPS.IsGInjective.finrank_torusParentKernel_of_isSemiRegular}
     \leanok
     \uses{def:peps_semiregular,def:peps_g_injective,
         def:peps_native_incident_coordinates,def:peps_region_parent_interaction}
-    Let $G$ be finite, let $U$ be one unitary semi-regular representation
-    on finite $X$, and let $a$ be one $G$-injective native tensor for
-    $\rho_\square$, repeated at every vertex of a torus with $m,n\ge3$.
-    For each native plaquette $R_v$, let $P_v\ge0$ have kernel
-    $\operatorname{im}\mathcal C_{R_v}$ and set
-    $H=\sum_v(P_v\otimes1_{R_v^c})$.
-    If $\mathcal K_G=\{(g,h)\in G^2:gh=hg\}/G$, with simultaneous
-    conjugation, then
+    Let $G$ be finite, $U$ a unitary semi-regular representation on finite $X$,
+    and $a$ a $G$-injective native tensor for $\rho_\square$ repeated on a torus
+    with $m,n\ge3$. If $P_v\ge0$ has $\ker P_v=\operatorname{im}\mathcal C_{R_v}$,
+    $H=\sum_v(P_v\otimes1_{R_v^c})$, and $\mathcal K_G=\{(g,h)\in G^2:gh=hg\}/G$,
+    then (\cite[Theorem~5.9]{Schuch2010PEPS})
     \begin{align}
         \dim\mathcal P_{\{R_v\}}(a)=\dim\ker H=|\mathcal K_G|.
         \label{eq:peps_native_semiregular_dimension}
     \end{align}
-    The block decomposition and its positive multiplicities are
-    consequences of $U$; no expansion of a parent vector into
-    closures is assumed. This is the stated uniform-torus case of
-    \cite[Theorem~5.9]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_native_oriented_g_injectivity,
         thm:peps_native_torus_incidence,
@@ -377,31 +321,23 @@ allows vertex-dependent physical tensors.
         thm:peps_oriented_physical_canonical_parent,
         thm:peps_regular_torus_parent_ground_space,
         thm:peps_region_parent_common_kernel}
-    Native incidence coordinates make every graph tensor
-    $G$-injective for the rightward/downward orientation.
-    The torus has degree four. Every vertex belongs to its plaquette,
-    and every edge has both endpoints in a native plaquette.
-    Theorem~\ref{thm:peps_oriented_semiregular_physical_parent}
-    therefore identifies the entire parent space of $a$ with that
-    of the oriented regular averaging tensor.
-    Independently construct a native $G$-injective site $b$ for the
-    regular representation using
-    Theorem~\ref{thm:peps_native_averaging_site}.
-    Fixed-representation comparison identifies its parent space with
-    the same oriented regular canonical space. The already established
-    regular native-torus theorem gives dimension $|\mathcal K_G|$
-    for $b$. Thus
+    Let $b$ be the regular-representation native $G$-injective site from
+    Lemma~\ref{thm:peps_native_averaging_site}. Combining
+    Lemmas~\ref{thm:peps_native_oriented_g_injectivity},
+    \ref{thm:peps_oriented_semiregular_physical_parent},
+    \ref{thm:peps_oriented_physical_canonical_parent},
+    and~\ref{thm:peps_regular_torus_parent_ground_space} gives
     \begin{align}
         \dim\mathcal P(a)
         =\dim\mathcal P(A^{L,1,o})
-        =\dim\mathcal P(b)=|\mathcal K_G|.
+        =\dim\mathcal P(b)=|\mathcal K_G|,
         \label{eq:peps_native_dimension_comparison}
     \end{align}
-    Finally, positivity and the genuine local kernel conditions give
+    and Lemma~\ref{thm:peps_region_parent_common_kernel} gives
     $\ker H=\mathcal P_{\{R_v\}}(a)$.
 \end{proof}
 
-\begin{theorem}[Full uniform semi-regular native parent spanning]%
+\begin{lemma}[Full uniform semi-regular native parent spanning]%
     \label{thm:peps_native_uniform_semiregular_parent_spanning}
     \lean{TNLean.PEPS.IsGInjective.torusParentKernel_eq_commutingClosureSpan_of_isSemiRegular,
         TNLean.PEPS.IsGInjective.torusParentGroundSpace_eq_commutingClosureSpan_of_isSemiRegular}
@@ -409,36 +345,23 @@ allows vertex-dependent physical tensors.
     \uses{def:peps_torus_g_closure,def:peps_semiregular,
         def:peps_g_injective,def:peps_region_parent_interaction}
     Under the hypotheses of
-    Theorem~\ref{thm:peps_native_uniform_semiregular_parent_dimension},
+    Lemma~\ref{thm:peps_native_uniform_semiregular_parent_dimension}
+    (\cite[Theorems~5.7 and~5.9]{Schuch2010PEPS}),
     \begin{align}
         \ker H=\mathcal P_{\{R_v\}}(a)
         =\operatorname{span}\{\lvert a;(g,h)\rangle:gh=hg\}.
         \label{eq:peps_native_semiregular_spanning}
     \end{align}
-    Thus the commuting closure vectors exhaust the entire
-    positive plaquette-parent kernel for one repeated $G$-injective
-    tensor and one uniform unitary semi-regular representation on
-    native tori of periods at least three.
-    This is the corresponding case of
-    \cite[Theorems~5.7 and~5.9]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_native_invariant_closure_membership,
         thm:peps_native_uniform_semiregular_parent_dimension,
         thm:peps_g_injective_closure_dimension,
         thm:peps_region_parent_common_kernel}
-    Let $\mathcal V$ be the span on the right of
-    (\ref{eq:peps_native_semiregular_spanning}).
-    Invariance gives $\mathcal V\subseteq\ker H$ by
-    (\ref{eq:peps_native_closure_inclusion}).
-    Closures in the same simultaneous-conjugacy class coincide,
-    and semi-regular $G$-injectivity makes the vectors from distinct
-    commuting classes linearly independent. Hence
-    $\dim\mathcal V=|\mathcal K_G|$ by
-    Theorem~\ref{thm:peps_g_injective_closure_dimension}.
-    Equation~(\ref{eq:peps_native_semiregular_dimension}) gives
-    $\dim\ker H=|\mathcal K_G|$. Inclusion and equal finite
-    dimension imply $\mathcal V=\ker H$.
-    Taking canonical positive plaquette interactions identifies the
-    same span with the full intersection of regional range conditions.
+    Let $\mathcal V=\operatorname{span}\{\lvert a;(g,h)\rangle:gh=hg\}$.
+    Equation~(\ref{eq:peps_native_closure_inclusion}) gives
+    $\mathcal V\subseteq\ker H=\mathcal P_{\{R_v\}}(a)$, while
+    Lemma~\ref{thm:peps_g_injective_closure_dimension} and
+    (\ref{eq:peps_native_semiregular_dimension}) give
+    $\dim\mathcal V=|\mathcal K_G|=\dim\ker H$, hence $\mathcal V=\ker H$.
 \end{proof}

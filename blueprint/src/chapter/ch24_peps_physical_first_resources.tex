@@ -2,100 +2,101 @@
 \label{sec:peps_physical_first_resources}
 
 The following bounds concern the source replacement and its prescribed
-star and sample alphabets. They do not assert an identification of the sampled
-physical operator with a contraction of local tensors.
+star and sample alphabets (without asserting an identification of the
+sampled physical operator with a contraction of local tensors).
 
-\begin{theorem}[Finite coordinates for the original input]
+\begin{lemma}[Finite coordinates for the original input]
     \label{thm:peps_finite_whole_party_input}
     \lean{TNLean.Lattice.PartyCircuit.ProductInput.finiteDimensional_wholePartyMem}
     \leanok
-    Let $P$ be a finite set of parties and let $H_p$ be their original
-    finite-dimensional private memories. The ordered memory
-    $\bigotimes_{p\in P}H_p$ is finite-dimensional and hence admits a finite
-    orthonormal basis. There is no numerical bound on the dimensions $\dim H_p$.
-\end{theorem}
+    For any finite party set $P$ and finite-dimensional private memories
+    $H_p$ (with no bound on $\dim H_p$), the ordered memory
+    $\bigotimes_{p\in P}H_p$ is finite-dimensional and admits a finite
+    orthonormal basis.
+\end{lemma}
 \begin{proof}
     \leanok
-    Each register in the original party list has space $H_p$ for one $p\in P$.
-    Finite tensor products of finite-dimensional spaces are finite-dimensional.
-    This includes the empty tensor product and zero-dimensional factors.
+    A finite tensor product of finite-dimensional spaces $H_p$ (including
+    empty products and zero-dimensional factors) is finite-dimensional.
 \end{proof}
 
 
-\begin{theorem}[Source positions after the physical output exchange]
+\begin{lemma}[Source positions after the physical output exchange]
     \label{thm:peps_physical_first_source_count}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_sourceLocations_physicalFirstReplacement_le}
     \leanok
-    Let $W$ be an original contraction circuit with $N$ nonprivate gate
-    occurrences, each involving at most $a$ parties. Its physical-first
-    source replacement has at most $N\binom a2$ source positions. This count
-    does not depend on the effect-elimination accuracy or on private dimensions.
-\end{theorem}
+    An original contraction circuit $W$ with $N$ nonprivate gate
+    occurrences of arity at most $a$ has physical-first source replacement
+    with at most $N\binom a2$ source positions (independent of accuracy
+    and private dimensions).
+\end{lemma}
 \begin{proof}
     \uses{thm:peps_physical_first_occurrences}
     \leanok
-    Each replacement gate has one source slot per unordered pair of its
-    original participants. The final physical output exchange introduces
-    no new gate or source occurrence.
+    Each replacement gate has $\binom{|\text{participants}|}{2}\le\binom a2$
+    source slots, and the physical output exchange adds no gates or sources
+    (Lemma~\ref{thm:peps_physical_first_occurrences}).
 \end{proof}
 
-\begin{theorem}[Polynomial sample count from original resources]
+\begin{lemma}[Polynomial sample count from original resources]
     \label{thm:peps_physical_first_sample_polynomial}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.sourceSamplingCount_physicalFirstReplacement_lt_power}
     \leanok
-    Let $W,N,a$ be as in
-    Theorem~\ref{thm:peps_physical_first_source_count}.
-    Let $L\ge1$, let $n,s,d,p$ be nonnegative integers, and suppose
+    In the setting of Lemma~\ref{thm:peps_physical_first_source_count},
+    let $L\ge1$, let $n,s,d,p,\ell\in\mathbb N$, and suppose
     \begin{align}
         N\le C_NL^n,\qquad 0\le B\le C_BL^s,\qquad 0\le D\le C_DL^d,
-        \qquad C_B\ge0.
+        \qquad C_B\ge0,
         \label{eq:peps_physical_first_sample_resource_bounds}
     \end{align}
-    Here $B$ bounds the original gate coefficient sums, $D$ is a nonnegative
-    parameter, and $\ell$ is a nonnegative integer. In applications they are
-    chosen as a physical-dimension bound and a whole-lifetime participation bound.
-    Put $C_{\rm src}=\max\{1,C_N\binom a2\}$.
-    For the sample count of the physical-first replacement, chosen at
-    accuracy $L^{-p}$ and cost $B^{4\ell}D^4$, one has
+    where $B$ bounds the original gate coefficient sums. With
+    $C_{\rm src}=\max\{1,C_N\binom a2\}$, the sample count $k$ of the
+    physical-first replacement at accuracy $L^{-p}$ and cost $B^{4\ell}D^4$
+    satisfies
     \begin{align}
         k<\bigl[64C_{\rm src}^2(C_B^{4\ell}C_D^4)^2+2\bigr]
         L^{2(n+4\ell s+4d+p)}.
+        \label{eq:peps_physical_first_sample_polynomial}
     \end{align}
-    Every coefficient and exponent in this bound depends only on the fixed
-    original resource bounds and the prescribed accuracy.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_physical_first_source_count,thm:peps_source_sampling_polynomial}
-    Since the source count is at most $C_{\rm src}L^n$ (with the maximum with one covering the case of no sources), the explicit
-    sample-count estimate with this bound
-    and~(\ref{eq:peps_physical_first_sample_resource_bounds}) yields the stated inequality.
+    By Lemma~\ref{thm:peps_physical_first_source_count} and
+    (\ref{eq:peps_physical_first_sample_resource_bounds}), the source count
+    is at most $C_{\rm src}L^n$; substituting this and
+    (\ref{eq:peps_physical_first_sample_resource_bounds}) into
+    Lemma~\ref{thm:peps_source_sampling_polynomial} yields
+    (\ref{eq:peps_physical_first_sample_polynomial}).
 \end{proof}
 
-\begin{theorem}[Polynomial branch counts after the physical exchange]
+\begin{lemma}[Polynomial branch counts after the physical exchange]
     \label{thm:peps_physical_first_branch_polynomial}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_branchLabels_physicalFirstReplacement_le_power}
     \leanok
-    Suppose $L\ge1$, $C_N\ge1$, $C_K,C_S,S\ge0$, and
+    Suppose $L\ge1$, $C_N\ge1$, $C_K,C_S,S\ge0$, $u,n,s,p\in\mathbb N$, and
     \begin{align}
         K\le C_KL^u,\qquad N\le C_NL^n,\qquad S\le C_SL^s.
+        \label{eq:peps_physical_first_branch_inputs}
     \end{align}
-    Let every original gate contain at most $K$ monomials with at most $r$
-    pair effects each and coefficient sum at most $S$. Use per-gate error tolerance
-    $\delta=L^{-p}/(8\max\{1,N\})$, where $u,n,s,p$ are nonnegative integers.
-    Every gate of the physical-first replacement then has at most
+    If every original gate has at most $K$ monomials, each with at most $r$
+    pair effects and coefficient sum at most $S$, then at per-gate tolerance
+    $\delta=L^{-p}/(8\max\{1,N\})$, every gate of the physical-first
+    replacement has at most
     \begin{align}
         C_K\bigl[64C_N^2(rC_S)^2+2\bigr]^r
         L^{u+2r(n+s+p)}
+        \label{eq:peps_physical_first_branch_polynomial}
     \end{align}
     branches.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_effect_replacement_polynomial}
-    The replacement has at most $K m^r$ branches for the chosen
-    stack length $m$; substituting the polynomial bound for $m$ gives the estimate, since the physical output
-    exchange changes neither branch labels nor coefficient sums.
+    The physical output exchange preserves branch labels and coefficient
+    sums, so substituting (\ref{eq:peps_physical_first_branch_inputs}) into
+    Lemma~\ref{thm:peps_effect_replacement_polynomial} gives
+    (\ref{eq:peps_physical_first_branch_polynomial}).
 \end{proof}
 
 \begin{definition}[Original gate occurrences]
@@ -105,80 +106,77 @@ physical operator with a contraction of local tensors.
     \uses{thm:peps_replacement_participants,thm:peps_physical_first_occurrences}
     Let $E$ be the bijection from original nonprivate gate occurrences to
     physical-first replacement gate occurrences obtained by composing the
-    correspondences for effect elimination and the physical output exchange.
+    correspondences of Lemmas~\ref{thm:peps_replacement_participants}
+    and~\ref{thm:peps_physical_first_occurrences}.
 \end{definition}
 
-\begin{theorem}[Original participants and link locality]
+\begin{lemma}[Original participants and link locality]
     \label{thm:peps_physical_first_original_locality}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participants_physicalFirstReplacementLocationsEquiv}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.exists_original_gate_of_physicalFirst_link}
     \uses{def:peps_physical_first_original_locality}
     \leanok
-    The bijection $E$ preserves participating sets. Choose any collection of
-    replacement gate occurrences and a root assignment on all replacement
-    occurrences whose value participates at every retained occurrence.
-    Every star or sample link in the resulting construction joins two parties
-    that participate in a common gate of the original circuit.
-\end{theorem}
+    The bijection $E$ preserves participating sets. For any retained set of
+    replacement gate occurrences and participating root assignment, every
+    resulting star or sample link joins two parties from a common gate of
+    the original circuit.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_replacement_participants,thm:peps_physical_first_occurrences,
         thm:compression_original_gate_locality}
-    The two gate correspondences preserve participating sets, so their
-    composition does as well. A link's gate label places both endpoints in
-    its replacement gate's participating set; the correspondence identifies
-    this set with the original one.
+    By Lemmas~\ref{thm:peps_replacement_participants}
+    and~\ref{thm:peps_physical_first_occurrences}, $E$ preserves
+    participating sets; Lemma~\ref{thm:compression_original_gate_locality}
+    places both endpoints of each link in the participating set of its
+    gate.
 \end{proof}
 
-\begin{theorem}[Original lifetime bound controls the link degree]
+\begin{lemma}[Original lifetime bound controls the link degree]
     \label{thm:peps_physical_first_original_degree}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_incidentPhysicalFirstLinks_le}
     \leanok
-    Suppose every original gate involves at most $b$ parties and each party
-    participates in at most $b$ original nonprivate occurrences over the
-    whole construction. For the retained gate collection and participating
-    roots above, each party is incident to at most $2b(b-1)$ links,
-    counting parallel links separately.
-\end{theorem}
+    If every original gate involves at most $b$ parties and each party
+    participates in at most $b$ original nonprivate occurrences, then in
+    Lemma~\ref{thm:peps_physical_first_original_locality} each party is
+    incident to at most $2b(b-1)$ links (counting parallel links
+    separately).
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_physical_first_original_locality}
-    The gate correspondence preserves arity and lifetime participation.
-    Discarding some gate occurrences can only reduce the latter count.
-    Each participating gate contributes at most $b-1$ star links and $b-1$
-    sample links at a party, and summing over its at most $b$ original occurrences gives $2b(b-1)$.
+    By Lemma~\ref{thm:peps_physical_first_original_locality}, $E$
+    preserves arity and lifetime participation; each of the at most $b$
+    participating gates at a party contributes at most $b-1$ star links and
+    $b-1$ sample links, giving at most $2b(b-1)$ links.
 \end{proof}
 
-\begin{theorem}[Polynomial virtual dimensions of the source alphabets]
+\begin{lemma}[Polynomial virtual dimensions of the source alphabets]
     \label{thm:peps_source_alphabet_polynomial}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_sourceNetworkAlphabet_le_of_power_bounds}
     \leanok
-    Fix a set of gate occurrences of a source circuit, and the
-    root assignment defining its star links. A star link at occurrence
-    $g$ carries the ordered ket--bra pair of its branch labels;
-    each sample link carries one of $k$ sample indices.
-    Suppose $L\geq1$, $C_M,C_k\geq0$, and $u,v$ are nonnegative integers.
-    If each of these gate occurrences has at most $C_ML^u$ branches and
-    $k\leq C_kL^v$, then every constructed link alphabet satisfies
+    Fix a set of gate occurrences of a source circuit and a root assignment
+    defining its star links (carrying ordered ket--bra branch pairs) and
+    sample links (carrying $k$ sample indices). If $L\geq1$,
+    $C_M,C_k\geq0$, $u,v\in\mathbb N$, each retained occurrence has at most
+    $C_ML^u$ branches, and $k\leq C_kL^v$, then every constructed link
+    alphabet $A_{\rm link}$ satisfies
     \begin{align}
-        \dim(\text{link alphabet})
-        \leq (C_M^2+C_k)L^{\max(2u,v)}.
+        |A_{\rm link}|
+        \leq (C_M^2+C_k)L^{\max(2u,v)},
         \label{eq:peps_source_alphabet_polynomial}
     \end{align}
-    No dimension of a private memory or source Schmidt space occurs in
-    this bound. The statement concerns the constructed link alphabets; the
-    identification of the sampled physical operator with a contraction
-    of local tensors is a separate assertion.
-\end{theorem}
+    independent of private-memory and source Schmidt dimensions.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:compression_operator_alphabet_card,
         def:compression_distributed_links}
-    For the star and sample alphabets of
-    \cite[Proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    a star link has cardinality equal to the square of the branch
-    count, hence at most $C_M^2L^{2u}$, while a sample link has cardinality
-    $k\leq C_kL^v$. Since $L\geq1$, increasing either exponent to
-    $\max(2u,v)$ and bounding its nonnegative coefficient by $C_M^2+C_k$ gives the stated polynomial bound.
+    By Definition~\ref{def:compression_distributed_links} and
+    Lemma~\ref{thm:compression_operator_alphabet_card}
+    (\cite[Proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}), star and
+    sample link alphabets have cardinalities at most $(C_ML^u)^2=C_M^2L^{2u}$
+    and $k\leq C_kL^v$; since $L\geq1$, both are bounded by
+    $(C_M^2+C_k)L^{\max(2u,v)}$.
     % Source: 04-compression.tex, lines 565--588.
 \end{proof}

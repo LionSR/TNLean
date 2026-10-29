@@ -6,12 +6,12 @@
     \lean{TNLean.PEPS.horizontalStaircaseReferenceEdge}
     \leanok
     \uses{def:peps_horizontal_staircase_patch}
-    In the staircase coordinates $s=(a,b)$, the reference edge is the
-    horizontal edge joining $(a+L-1,b+K-1)$ to $(a+L,b+K-1)$.
-    It is the edge between the left and right end windows.
+    In staircase coordinates $s=(a,b)$, the reference edge $e$ is the horizontal
+    edge $\{(a+L-1,b+K-1),(a+L,b+K-1)\}$ joining $W_{\mathrm{left}}$ and
+    $W_{\mathrm{right}}$ (Definition~\ref{def:peps_horizontal_staircase_patch}).
 \end{definition}
 
-\begin{theorem}[The reference edge is the unique crossing of the two end windows]
+\begin{lemma}[The reference edge is the unique crossing of the two end windows]
     \label{thm:peps_horizontal_staircase_reference_edge_crossing}
     \lean{TNLean.PEPS.isCrossingEdge_horizontalStaircaseEndWindows}
     \lean{TNLean.PEPS.isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge}
@@ -19,26 +19,22 @@
     \lean{TNLean.PEPS.not_isRegionBoundaryEdge_horizontalStaircaseEndPair_referenceEdge}
     \leanok
     \uses{def:peps_horizontal_staircase_reference_edge, def:peps_horizontal_staircase_patch}
-    Assume
-    $1<W$, $1<H$, $0<L$, $0<K$, $1\le a$, $a+2L\le W$, and
-    $b+2K-1\le H$.
-    Then an edge crosses from the left end window to the right end window if
-    and only if it is the reference edge $e$:
+    Assume $1<W$, $1<H$, $0<L$, $0<K$, $1\le a$, $a+2L\le W$, and
+    $b+2K-1\le H$, and set $S=W_{\mathrm{left}}\cup W_{\mathrm{right}}$. Then
     \begin{align}
         f\in\partial W_{\mathrm{left}}\cap\partial W_{\mathrm{right}}
         \quad\Longleftrightarrow\quad
-        f=e.
-        \notag
+        f=e,
+        \label{eq:peps_reference_edge_unique_crossing}
     \end{align}
-    Thus $e$ is a boundary edge of each end window, but both endpoints of $e$
-    lie in the end pair $S$, so $e\notin\partial S$.
-\end{theorem}
-\begin{proof}
-    \leanok
-    The endpoint calculation identifies $e$ with the unique horizontal edge
-    joining the two displayed rectangles. Since one endpoint lies in
-    $W_{\mathrm{left}}$ and the other lies in $W_{\mathrm{right}}$, the same
-    edge is internal to their union $S$.
+    so $e\in\partial W_{\mathrm{left}}\cap\partial W_{\mathrm{right}}$ and
+    $e\notin\partial S$.
+\end{lemma}
+\begin{proof}\leanok
+    Direct coordinate inspection identifies $e$ (Definition~\ref{def:peps_horizontal_staircase_reference_edge})
+    as the unique horizontal edge joining $W_{\mathrm{left}}$ and
+    $W_{\mathrm{right}}$, giving~(\ref{eq:peps_reference_edge_unique_crossing});
+    since both endpoints of $e$ lie in $S$, $e\notin\partial S$.
 \end{proof}
 
 \begin{lemma}[Boundary edges of the end pair come from the end windows]
@@ -49,52 +45,46 @@
     \lean{TNLean.PEPS.ne_referenceEdge_of_isRegionBoundaryEdge_endPair}
     \leanok
     \uses{thm:peps_horizontal_staircase_reference_edge_crossing}
-    Under the bounds
-    $1<W$, $1<H$, $0<L$, $0<K$, $1\le a$, $a+2L\le W$, and
-    $b+2K-1\le H$,
-    a boundary edge of the end pair is a boundary edge of one of the two end
-    windows, and it is not the reference edge. Conversely, any boundary edge
-    of one end window other than $e$ is a boundary edge of $S$.
+    Under $1<W$, $1<H$, $0<L$, $0<K$, $1\le a$, $a+2L\le W$, and $b+2K-1\le H$:
+    if $f\in\partial S$, then
+    $f\in(\partial W_{\mathrm{left}}\cup\partial W_{\mathrm{right}})\setminus\{e\}$;
+    conversely, any
+    $f\in(\partial W_{\mathrm{left}}\cup\partial W_{\mathrm{right}})\setminus\{e\}$
+    lies in $\partial S$.
 \end{lemma}
-\begin{proof}
-    \leanok
-    A boundary edge of $S$ has one endpoint in $S$; that endpoint lies in one
-    of the two end windows. The other endpoint is outside $S$, hence outside
-    that window. Conversely, a boundary edge of one window which is not $e$
-    cannot enter the other window, because $e$ is the unique crossing edge.
+\begin{proof}\leanok
+    If $f\in\partial S$, its endpoint in $S=W_{\mathrm{left}}\cup W_{\mathrm{right}}$
+    lies in one window while the other endpoint lies in $V\setminus S$, so
+    $f\in\partial W_{\mathrm{left}}\cup\partial W_{\mathrm{right}}$ and $f\ne e$
+    by Lemma~\ref{thm:peps_horizontal_staircase_reference_edge_crossing}.
+    Conversely, any $f\in\partial W_{\mathrm{left}}\setminus\{e\}$ (or
+    $\partial W_{\mathrm{right}}\setminus\{e\}$) cannot enter the opposite
+    window by~(\ref{eq:peps_reference_edge_unique_crossing}), so $f\in\partial S$.
 \end{proof}
 
-\begin{theorem}[Boundary of the staircase end pair]
+\begin{lemma}[Boundary of the staircase end pair]
     \label{thm:peps_horizontal_staircase_end_pair_boundary}
     \lean{TNLean.PEPS.eq_referenceEdge_of_isRegionBoundaryEdge_both_endWindows}
     \lean{TNLean.PEPS.isRegionBoundaryEdge_endPair_iff}
     \lean{TNLean.PEPS.isRegionBoundaryEdge_endPair_exactlyOne_window}
     \leanok
     \uses{lem:peps_horizontal_staircase_end_pair_boundary_from_windows}
-    Under the bounds
-    $1<W$, $1<H$, $0<L$, $0<K$, $1\le a$, $a+2L\le W$, and
-    $b+2K-1\le H$,
-    an edge is a boundary edge of the staircase end pair $S$ if and only if it
-    is a boundary edge of one of the two end windows and is not the reference
-    edge:
+    Under $1<W$, $1<H$, $0<L$, $0<K$, $1\le a$, $a+2L\le W$, and $b+2K-1\le H$,
     \begin{align}
         f\in\partial S
         \quad\Longleftrightarrow\quad
         \bigl(f\in\partial W_{\mathrm{left}}
-        \quad\text{or}\quad
+        \ \text{or}\
         f\in\partial W_{\mathrm{right}}\bigr)
-        \ \text{and}\ f\ne e.
-        \notag
+        \ \text{and}\ f\ne e,
+        \label{eq:peps_end_pair_boundary_iff}
     \end{align}
-    In addition, each edge in $\partial S$ lies on exactly one of the two window
-    boundaries.
-\end{theorem}
-\begin{proof}
-    \leanok
+    and $\partial S=(\partial W_{\mathrm{left}}\setminus\{e\})\sqcup(\partial W_{\mathrm{right}}\setminus\{e\})$.
+\end{lemma}
+\begin{proof}\leanok
     Lemma~\ref{lem:peps_horizontal_staircase_end_pair_boundary_from_windows}
-    gives both implications. If an edge lay on both end-window boundaries,
-    the unique-crossing theorem would identify it with $e$, which is not a
-    boundary edge of $S$.
+    gives~(\ref{eq:peps_end_pair_boundary_iff}), and~(\ref{eq:peps_reference_edge_unique_crossing})
+    gives $\partial W_{\mathrm{left}}\cap\partial W_{\mathrm{right}}=\{e\}$.
 \end{proof}
 
 \begin{definition}[Boundary configurations of the staircase end windows]
@@ -116,11 +106,11 @@
     \lean{TNLean.PEPS.horizontalStaircaseEndPairBoundaryConfigEquiv_symm_right}
     \leanok
     \uses{thm:peps_horizontal_staircase_end_pair_boundary, thm:peps_horizontal_staircase_reference_edge_crossing}
-    Under the same geometric bounds, write
-    $\partial_{\mathrm{left}}S$ and $\partial_{\mathrm{right}}S$
-    for the boundary edges of $S$ which lie on the corresponding end-window
-    boundary.  Then the boundary-configuration spaces have canonical
-    factorizations
+    Under the bounds of Lemma~\ref{thm:peps_horizontal_staircase_end_pair_boundary},
+    set $\partial_{\mathrm{left}}S=\partial S\cap\partial W_{\mathrm{left}}$ and
+    $\partial_{\mathrm{right}}S=\partial S\cap\partial W_{\mathrm{right}}$.
+    Splitting at $e$ and reindexing along~(\ref{eq:peps_end_pair_boundary_iff})
+    gives canonical label-preserving equivalences
     \begin{align}
         \operatorname{Conf}(\partial W_{\mathrm{left}})
          & \cong \operatorname{Conf}(e)
@@ -133,16 +123,11 @@
         \operatorname{Conf}(\partial S)
          & \cong
         \operatorname{Conf}(\partial_{\mathrm{left}}S)
-        \times\operatorname{Conf}(\partial_{\mathrm{right}}S).
-        \notag
+        \times\operatorname{Conf}(\partial_{\mathrm{right}}S),
+        \label{eq:peps_end_window_conf_equiv}
     \end{align}
-    These equivalences preserve every underlying lattice-edge label.  Thus
-    the reference edge is the only contracted virtual index shared by the
-    two highlighted end windows; every other virtual index remains on the
-    corresponding open boundary of $S$.
-    The constructions split each end-window configuration at the reference
-    edge and reindex the remaining dependent products along the corresponding
-    boundary-edge identifications.
+    isolating $e$ as the sole contracted virtual bond between
+    $W_{\mathrm{left}}$ and $W_{\mathrm{right}}$.
 \end{definition}
 
 \begin{lemma}[Complement split for an end window]
@@ -153,106 +138,83 @@
     \lean{TNLean.PEPS.compl_rightWindow_eq_leftWindow_union_complEndPair}
     \leanok
     \uses{def:peps_horizontal_staircase_patch, lem:peps_horizontal_staircase_end_pair_disjoint}
-    If $2L\le W$, the complement of either end window splits as the opposite
-    end window and the complement of the end pair:
+    If $2L\le W$, then
     \begin{align}
         V\setminus W_{\mathrm{left}}
          & =W_{\mathrm{right}}\cup (V\setminus S),
-        \notag                                     \\
+         &
         V\setminus W_{\mathrm{right}}
          & =W_{\mathrm{left}}\cup (V\setminus S).
-        \notag
+        \label{eq:peps_end_window_compl_split}
     \end{align}
 \end{lemma}
-\begin{proof}
-    \leanok
-    Since the two end windows are disjoint and
-    $S=W_{\mathrm{left}}\cup W_{\mathrm{right}}$, removing one window from
-    $S$ leaves the other. Splitting $V\setminus W$ through the inclusion
-    $W\subseteq S$ gives the displayed decompositions.
+\begin{proof}\leanok
+    By Lemma~\ref{lem:peps_horizontal_staircase_end_pair_disjoint},
+    $S=W_{\mathrm{left}}\sqcup W_{\mathrm{right}}$, so
+    $S\setminus W_{\mathrm{left}}=W_{\mathrm{right}}$ and
+    $S\setminus W_{\mathrm{right}}=W_{\mathrm{left}}$, yielding~(\ref{eq:peps_end_window_compl_split}).
 \end{proof}
 
-\begin{theorem}[The reference edge bounds the two end windows]
+\begin{lemma}[The reference edge bounds the two end windows]
     \label{thm:peps_staircase_end_reference_edge_boundary}
     \lean{TNLean.PEPS.isRegionBoundaryEdge_staircaseWindow_zero_referenceEdge}
     \lean{TNLean.PEPS.isRegionBoundaryEdge_staircaseWindow_last_referenceEdge}
     \leanok
-    Let the torus have width $W$ and height $H$, with $1<H$.
-    Let $e$ be the horizontal reference edge of a staircase window family with
-    dimensions $L,K$ and lower-left coordinate $(a,b)$. Suppose
-    $0<L$, $0<K$, $1\le a$, $a+2L\le W$, and $b+2K-1\le H$.
-    Then $e$ is a boundary edge of the first staircase window $W_0$ and of the
-    last staircase window $W_{L+K-1}$:
+    On a $W\times H$ torus with $1<H$, $0<L$, $0<K$, $1\le a$, $a+2L\le W$, and
+    $b+2K-1\le H$, the reference edge $e$ of the $(L,K)$-staircase at $(a,b)$
+    satisfies
     \begin{align}
-        e & \in\partial W_0,
-        \notag                     \\
-        e & \in\partial W_{L+K-1}.
-        \notag
+        e\in\partial W_0,\qquad e\in\partial W_{L+K-1}.
+        \label{eq:peps_reference_edge_end_staircase_windows}
     \end{align}
-\end{theorem}
-\begin{proof}
-    \leanok
-    The first staircase window is the right end window, and the last
-    staircase window is the left end window:
-    \begin{align}
-        W_0       & =W_{\mathrm{right}},
-        \notag                           \\
-        W_{L+K-1} & =W_{\mathrm{left}}.
-        \notag
-    \end{align}
-    The reference edge is a boundary edge of these two end windows by their
-    defining geometry.
+\end{lemma}
+\begin{proof}\leanok
+    Since $W_0=W_{\mathrm{right}}$ and $W_{L+K-1}=W_{\mathrm{left}}$,~(\ref{eq:peps_reference_edge_end_staircase_windows})
+    follows from Lemma~\ref{thm:peps_horizontal_staircase_reference_edge_crossing}.
 \end{proof}
 
-\begin{theorem}[Open-boundary equality on the staircase end pair]
+\begin{lemma}[Open-boundary equality on the staircase end pair]
     \label{thm:peps_staircase_pair_insert_eq_open}
     \lean{TNLean.PEPS.staircasePair_insert_eq_open}
     \leanok
     \uses{thm:peps_staircase_pair_cancel, thm:peps_corner_extension_linear_transitive}
-    Let $S=W_0\cup W_{L+K-1}$ be the staircase end pair. Suppose that the
-    one-orientation $L\times K$ window injectivity hypotheses hold for a
-    tensor $B$, unions of injective regions are injective, all bond dimensions
-    of $B$ are positive, and
-    $0<L$, $0<K$, $2L+1\le W$, and $2K+1\le H$.
-    If $C_j$ are inserts on the staircase windows whose deformed states all
-    equal one common state, then the two end-window inserts have equal corner
-    extensions to $S$:
+    Let $S=W_0\cup W_{L+K-1}$. Suppose $B$ satisfies the one-orientation
+    $L\times K$ window-injectivity hypotheses, union closure for injective
+    regions, and positive bond dimensions, with $0<L$, $0<K$, $2L+1\le W$, and
+    $2K+1\le H$. If inserts $C_j$ on $W_j$ all generate the same deformed state,
+    then
     \begin{align}
         \Ext_{W_0\subseteq S}(C_0)
         =
         \Ext_{W_{L+K-1}\subseteq S}(C_{L+K-1}).
-        \notag
+        \label{eq:peps_staircase_pair_insert_eq_open}
     \end{align}
-\end{theorem}
-\begin{proof}
-    \leanok
-    The consecutive-window equalities are composed across the staircase patch.
-    Both sides are then extended through the completed corner, and
-    transitivity of corner extension rewrites the two extension chains. The
-    completed corner is an injective $L\times K$ window, so
-    Theorem~\ref{thm:peps_staircase_pair_cancel} cancels it and leaves the
-    equality on the end pair $S$.
+\end{lemma}
+\begin{proof}\leanok
+    Composing consecutive-window equalities across the staircase patch,
+    extending to $S\cup Q$ via Lemma~\ref{thm:peps_corner_extension_linear_transitive},
+    and cancelling the injective $L\times K$ completed corner $Q$ via
+    Lemma~\ref{thm:peps_staircase_pair_cancel} yields~(\ref{eq:peps_staircase_pair_insert_eq_open}).
 \end{proof}
 
-\begin{theorem}[Lemma 5 comparison of the two end blocks]
+\begin{lemma}[Lemma 5 comparison of the two end blocks]
     \label{thm:peps_existsUnique_virtualOperation_of_endPair}
     \lean{TNLean.PEPS.gauge_eq1}
     \lean{TNLean.PEPS.gauge_eq2}
     \lean{TNLean.PEPS.existsUnique_virtualOperation_of_endPair}
     \leanok
-    Let $K$ be the basis of the virtual space on the bond between two
-    injective blocks, and let
-    $\{A_{1,\mu}\}_{\mu\in K}$ and
-    $\{A_{2,\mu}\}_{\mu\in K}$ be linearly independent families.  Suppose
-    that the two end physical operations $O_1$ and $O_3$ produce families
-    $C_1$ and $C_2$ satisfying the open contraction identity
+    Let $\{A_{1,\mu}\}_{\mu\in K}$ and $\{A_{2,\mu}\}_{\mu\in K}$ be linearly
+    independent families indexed by the bond basis $K$. If end operations
+    $O_1,O_3$ produce families $C_1,C_2$ (without assuming injectivity of
+    $C_1,C_2$) satisfying
     \begin{align}
         \sum_{\mu\in K} C_{1,\mu}\otimes A_{2,\mu}
         =
-        \sum_{\nu\in K} A_{1,\nu}\otimes C_{2,\nu}.
+        \sum_{\nu\in K} A_{1,\nu}\otimes C_{2,\nu},
         \label{eq:peps_open_contraction_id}
     \end{align}
-    Then there is a unique matrix $X\in\MN{|K|}$ such that
+    then there is a unique matrix $X\in\MN{|K|}$ such that
+    \cite[Lemma~5]{Molnar2018NormalPEPS}
     \begin{align}
         C_{1,\nu}
          & =\sum_{\mu\in K} A_{1,\mu}X_{\mu,\nu},
@@ -261,20 +223,12 @@
          & =\sum_{\nu\in K} X_{\mu,\nu}A_{2,\nu}.
         \label{eq:peps_c2_expansion}
     \end{align}
-    Thus the two end operations are obtained by inserting the same virtual
-    operation $X$ on their common bond.  No injectivity is required of the
-    modified families $C_1$ and $C_2$.  This is the ``compare the two ends''
-    step in Lemma~5 of \cite{Molnar2018NormalPEPS}.
-\end{theorem}
-\begin{proof}
-    \leanok
-    Apply a dual functional to the linearly independent family
-    $\{A_{2,\mu}\}$ in~(\ref{eq:peps_open_contraction_id}) to express
-    $C_{1,\nu}$ as a linear combination of the $A_{1,\mu}$ with a coefficient
-    matrix $X$, yielding~(\ref{eq:peps_c1_expansion}).
-    Substitution into~(\ref{eq:peps_open_contraction_id}) and linear independence
-    of $\{A_{1,\mu}\}$ yields~(\ref{eq:peps_c2_expansion}) with the same
-    matrix.  Linear independence of $\{A_{1,\mu}\}$ also makes $X$ unique.
+\end{lemma}
+\begin{proof}\leanok
+    Applying a dual basis of $\{A_{2,\mu}\}$ to~(\ref{eq:peps_open_contraction_id})
+    yields~(\ref{eq:peps_c1_expansion}) for some $X$; substituting~(\ref{eq:peps_c1_expansion})
+    into~(\ref{eq:peps_open_contraction_id}) and using linear independence of
+    $\{A_{1,\mu}\}$ gives~(\ref{eq:peps_c2_expansion}) and uniqueness of $X$.
 \end{proof}
 
 \begin{definition}[End operations realizing a virtual matrix]
@@ -282,27 +236,20 @@
     \lean{TNLean.PEPS.IsO1VirtualOperation}
     \lean{TNLean.PEPS.IsO3TransposeVirtualOperation}
     \leanok
-    Let $\{A_{1,\mu}\}_{\mu\in K}$ and
-    $\{A_{3,\mu}\}_{\mu\in K}$ be two end families.  The left physical
-    operation $O_1$ realizes a virtual matrix $X$ when
+    For end families $\{A_{1,\mu}\}_{\mu\in K}$ and $\{A_{3,\mu}\}_{\mu\in K}$,
+    $O_1$ realizes $X\in\MN{|K|}$, and $O_3$ realizes $X$ in the transposed
+    orientation $O_3^{\mathsf T}$ of \cite[Lemma~5]{Molnar2018NormalPEPS}, when
     \begin{align}
         O_1(A_{1,\nu})
-        =\sum_{\mu\in K}X_{\mu\nu}A_{1,\mu}.
-        \notag
-    \end{align}
-    The right physical operation $O_3$, read in the transposed orientation
-    $O_3^{\mathsf T}$ of Lemma~5, realizes the same matrix when
-    \begin{align}
+        =\sum_{\mu\in K}X_{\mu\nu}A_{1,\mu},
+        \qquad
         O_3(A_{3,\mu})
         =\sum_{\nu\in K}X_{\mu\nu}A_{3,\nu}.
-        \notag
+        \label{eq:peps_end_operations_realize}
     \end{align}
-    This convention records the orientation of the displayed tensor
-    relation; it does not choose a transpose on the abstract space of
-    physical operations.
 \end{definition}
 
-\begin{theorem}[Multiplication of the end operations in Lemma 5]
+\begin{lemma}[Multiplication of the end operations in Lemma 5]
     \label{thm:peps_lemma5_end_operation_multiplication}
     \lean{TNLean.PEPS.IsO1VirtualOperation.virtualOperation_eq}
     \lean{TNLean.PEPS.IsO3TransposeVirtualOperation.virtualOperation_eq}
@@ -313,30 +260,20 @@
     \lean{TNLean.PEPS.existsUnique_virtualOperation_of_O1_O3Transpose}
     \leanok
     \uses{def:peps_end_operations_realizing_virtual_matrix, thm:peps_existsUnique_virtualOperation_of_endPair}
-    Suppose that the two genuine end families are linearly independent and
-    that the open contraction identity for $O_1$ and $O_3$ holds.  Then there
-    is a unique matrix $X$ simultaneously realized by $O_1$ and by
-    $O_3^{\mathsf T}$.
-
-    If $O_1$ and $P_1$ realize $X$ and $Y$, respectively, then
-    $O_1\circ P_1$ realizes $XY$.  If $O_3^{\mathsf T}$ and
-    $P_3^{\mathsf T}$ realize $X$ and $Y$, then their product realizes
-    $XY$; in terms of the underlying right operations this product is
-    $P_3\circ O_3$.  Uniqueness identifies the virtual matrix of either
-    composite with $XY$.  This is precisely the composition step in the
-    final sentence of Lemma~5 of \cite{Molnar2018NormalPEPS}; it does not by
-    itself identify operations belonging to two different PEPS tensors.
-\end{theorem}
-\begin{proof}
-    \leanok
-    The two-end comparison gives existence and uniqueness of $X$.  Applying
-    the first operation to the expansion furnished by the second and
-    interchanging the two finite sums gives matrix multiplication.  On the
-    right, transposition reverses the order of the underlying physical
-    operations.
+    If $\{A_{1,\mu}\}$ and $\{A_{3,\mu}\}$ are linearly independent and
+    $(O_1(A_1),O_3(A_3))$ satisfies~(\ref{eq:peps_open_contraction_id}), then a
+    unique $X$ satisfies~(\ref{eq:peps_end_operations_realize}). Moreover, if
+    $O_1,P_1$ realize $X,Y$ and $O_3^{\mathsf T},P_3^{\mathsf T}$ realize $X,Y$,
+    then $O_1\circ P_1$ and $(P_3\circ O_3)^{\mathsf T}$ realize $XY$
+    \cite[Lemma~5]{Molnar2018NormalPEPS}.
+\end{lemma}
+\begin{proof}\leanok
+    Lemma~\ref{thm:peps_existsUnique_virtualOperation_of_endPair} gives
+    existence and uniqueness of $X$. Applying $O_1$ (or $P_3$) to the expansion~(\ref{eq:peps_end_operations_realize})
+    of $P_1$ (or $O_3$) and interchanging finite sums gives $XY$.
 \end{proof}
 
-\begin{theorem}[Normalized coupling of the highlighted end windows]
+\begin{lemma}[Normalized coupling of the highlighted end windows]
     \label{thm:peps_horizontal_staircase_normalized_blue_coupling}
     \lean{TNLean.PEPS.horizontalStaircaseLeftWindow_isExternalCrossingEdge_iff}
     \lean{TNLean.PEPS.horizontalStaircaseRightWindow_isExternalCrossingEdge_iff}
@@ -355,85 +292,76 @@
     \lean{TNLean.PEPS.horizontalStaircaseRightWindow_normalized_threeBlockBlueCoeff_factorization}
     \leanok
     \uses{def:peps_horizontal_staircase_end_window_boundary_config, lem:peps_horizontal_staircase_end_window_complement_split}
-    Write the boundary coordinates of the two end windows and their union as
+    In the coordinates~(\ref{eq:peps_end_window_conf_equiv}), write
+    $\mu_{\mathrm L}=(k,\eta_{\mathrm L})$,
+    $\mu_{\mathrm R}=(k,\eta_{\mathrm R})$, and
+    $\nu=(\eta'_{\mathrm L},\eta'_{\mathrm R})$ with $k\in\operatorname{Conf}(e)$.
+    In extending a left-window insert to $S$, the normalized coupling to
+    $W_{\mathrm{right}}$ equals
     \begin{align}
-        \mu_{\mathrm L} & =(k,\eta_{\mathrm L}),
-                        & \mu_{\mathrm R}        & =(k,\eta_{\mathrm R}),
-                        & \nu                    & =(\eta'_{\mathrm L},\eta'_{\mathrm R}),
-        \notag
-    \end{align}
-    where $k$ is the coordinate on the reference edge.  In the extension of
-    a left-window insert to the end pair, the normalized coupling to the
-    right window vanishes unless
-    $\eta_{\mathrm L}=\eta'_{\mathrm L}$.  On that fibre it is
-    \begin{align}
-        \Lambda_{\mathrm L}^{-1}
+        \delta_{\eta_{\mathrm L},\eta'_{\mathrm L}}\Lambda_{\mathrm L}^{-1}
         A_{\mathrm R}(k,\eta'_{\mathrm R}),
-        \notag
+        \label{eq:peps_normalized_blue_coupling}
     \end{align}
-    where $A_{\mathrm R}$ is the genuine blocked tensor of the right window
-    and $\Lambda_{\mathrm L}$ is the product of the exterior interior-bond
-    factor and the bond dimensions on the external legs of the left window.
-    The analogous statement holds after interchanging left and right.  If
-    the tensor is translation invariant and every bond dimension is
-    positive, then $\Lambda_{\mathrm L}=\Lambda_{\mathrm R}$.
-\end{theorem}
-\begin{proof}
-    \leanok
-    The crossing edges are precisely the boundary edges of the host window
-    other than the reference edge.  Compatible host and end-pair boundary
-    labels therefore determine one boundary label on the opposite window;
-    the blue coupling reduces to its genuine blocked tensor.  Incompatible
-    external labels cannot arise from a global virtual configuration and give
-    zero.
-    Finally, the two end windows are translates.  Translation invariance
-    equates their full boundary products, and cancellation of the common
-    positive reference-edge factor equates the two normalizations.
+    where $A_{\mathrm R}$ is the blocked tensor on $W_{\mathrm{right}}$ and
+    $\Lambda_{\mathrm L}$ is the product of the exterior interior-bond factor
+    and external bond dimensions of $W_{\mathrm{left}}$ (and symmetrically for
+    $\mathrm L\leftrightarrow\mathrm R$). If the tensor is translation invariant
+    with positive bond dimensions, then $\Lambda_{\mathrm L}=\Lambda_{\mathrm R}$.
+\end{lemma}
+\begin{proof}\leanok
+    By Definition~\ref{def:peps_horizontal_staircase_end_window_boundary_config}
+    and Lemma~\ref{lem:peps_horizontal_staircase_end_window_complement_split},
+    the external crossing edges of $W_{\mathrm{left}}$ are
+    $\partial W_{\mathrm{left}}\setminus\{e\}$, so compatibility forces
+    $\eta_{\mathrm L}=\eta'_{\mathrm L}$ and reduces the coupling to~(\ref{eq:peps_normalized_blue_coupling}).
+    Since $W_{\mathrm{left}}$ and $W_{\mathrm{right}}$ are translates,
+    translation invariance equates their full boundary products and cancelling
+    $D(e)>0$ gives $\Lambda_{\mathrm L}=\Lambda_{\mathrm R}$.
 \end{proof}
 
-\begin{theorem}[The end-pair extensions contract over one bond]
+\begin{lemma}[The end-pair extensions contract over one bond]
     \label{thm:peps_horizontal_staircase_end_pair_single_bond_contraction}
     \lean{TNLean.PEPS.horizontalStaircaseLeftWindow_extendInsert_eq_singleBondContraction}
     \lean{TNLean.PEPS.horizontalStaircaseRightWindow_extendInsert_eq_singleBondContraction}
     \lean{TNLean.PEPS.singleBondContraction_eq_of_horizontalStaircaseEndPair_extendInsert_eq}
     \leanok
     \uses{thm:peps_horizontal_staircase_normalized_blue_coupling}
-    Let $C_{\mathrm L}$ and $C_{\mathrm R}$ be arbitrary inserts on the two
-    end windows.  In the boundary coordinates above, their extensions to the
-    end pair are
+    For inserts $C_{\mathrm L}$ on $W_{\mathrm{left}}$ and $C_{\mathrm R}$ on
+    $W_{\mathrm{right}}$, their extensions to $S$ in coordinates~(\ref{eq:peps_end_window_conf_equiv})
+    are
     \begin{align}
         \Ext(C_{\mathrm L})
          & =\Lambda_{\mathrm L}^{-1}
         \sum_k C_{\mathrm L}(k,\eta_{\mathrm L})
         A_{\mathrm R}(k,\eta_{\mathrm R}),
-        \notag                       \\
+        \qquad
         \Ext(C_{\mathrm R})
-         & =\Lambda_{\mathrm R}^{-1}
+        =\Lambda_{\mathrm R}^{-1}
         \sum_k A_{\mathrm L}(k,\eta_{\mathrm L})
         C_{\mathrm R}(k,\eta_{\mathrm R}).
-        \notag
+        \label{eq:peps_end_pair_single_bond_ext}
     \end{align}
-    Hence, for a translation-invariant tensor with positive bond dimensions,
-    equality of the two extensions implies the single-bond identity
+    For a translation-invariant tensor with positive bond dimensions,
+    $\Ext(C_{\mathrm L})=\Ext(C_{\mathrm R})$ implies
     \begin{align}
         \sum_k C_{\mathrm L}(k,\eta_{\mathrm L})
         A_{\mathrm R}(k,\eta_{\mathrm R})
         =
         \sum_k A_{\mathrm L}(k,\eta_{\mathrm L})
         C_{\mathrm R}(k,\eta_{\mathrm R}).
-        \notag
+        \label{eq:peps_end_pair_single_bond_id}
     \end{align}
-\end{theorem}
-\begin{proof}
-    \leanok
-    Reindex each extension sum by the reference-edge coordinate and the
-    external boundary data.  The normalized-coupling theorem kills every
-    incompatible fibre and identifies the unique surviving fibre with the
-    genuine opposite-window tensor.  The common nonzero normalization then
-    cancels from the equality of extensions.
+\end{lemma}
+\begin{proof}\leanok
+    Reindexing the extension sums via~(\ref{eq:peps_end_window_conf_equiv}) and
+    substituting~(\ref{eq:peps_normalized_blue_coupling}) gives~(\ref{eq:peps_end_pair_single_bond_ext});
+    cancelling $\Lambda_{\mathrm L}=\Lambda_{\mathrm R}>0$
+    (Lemma~\ref{thm:peps_horizontal_staircase_normalized_blue_coupling})
+    yields~(\ref{eq:peps_end_pair_single_bond_id}).
 \end{proof}
 
-\begin{theorem}[Lemma 5 operation on the staircase reference edge]
+\begin{lemma}[Lemma 5 operation on the staircase reference edge]
     \label{thm:peps_existsUnique_virtualOperation_of_horizontal_staircase_end_pair}
     \lean{TNLean.PEPS.existsUnique_virtualOperation_of_horizontalStaircaseEndPair}
     \lean{TNLean.PEPS.existsUnique_virtualOperation_of_horizontalStaircaseEndPhysicalOperations}
@@ -441,84 +369,63 @@
     \uses{def:peps_end_operations_realizing_virtual_matrix,
         thm:peps_existsUnique_virtualOperation_of_endPair,
         thm:peps_horizontal_staircase_end_pair_single_bond_contraction}
-    Suppose the tensor is translation invariant, all bond dimensions are
-    positive, and the two genuine highlighted end-window blocked tensors are
-    injective.  If arbitrary inserts $C_{\mathrm L}$ and $C_{\mathrm R}$ on
-    those windows have equal extensions to the open end pair, then there is
-    a unique matrix $X$ on the reference edge such that
+    Suppose the tensor is translation invariant with positive bond dimensions
+    and $A_{\mathrm L},A_{\mathrm R}$ are injective. If inserts $C_{\mathrm L},C_{\mathrm R}$
+    satisfy $\Ext(C_{\mathrm L})=\Ext(C_{\mathrm R})$ on $S$ (with no
+    injectivity assumed on $C_{\mathrm L},C_{\mathrm R}$, single vertices, $S$,
+    or $V\setminus S$), then there is a unique matrix $X$ on $e$ such that
     \begin{align}
         C_{\mathrm L}(k,\eta_{\mathrm L})
          & =\sum_j A_{\mathrm L}(j,\eta_{\mathrm L})X_{jk},
-        \notag                                              \\
+         &
         C_{\mathrm R}(k,\eta_{\mathrm R})
          & =\sum_j X_{kj}A_{\mathrm R}(j,\eta_{\mathrm R}).
-        \notag
+        \label{eq:peps_staircase_ref_edge_op}
     \end{align}
-    No injectivity is assumed for either modified insert, a single vertex,
-    the end pair, or its complement.
-    In particular, when the two inserts are obtained by applying the physical
-    end operations $O_1$ and $O_3$, these relations say that $O_1$ and
-    $O_3^{\mathsf T}$ realize the same unique matrix $X$.
-\end{theorem}
-\begin{proof}
-    \leanok
-    The preceding theorem turns the open end-pair equality into the exact
-    one-bond contraction identity.  Injectivity of each genuine end window
-    implies linear independence after keeping its external boundary and
-    physical coordinates together.  The two-end comparison theorem then
-    gives the displayed relations and uniqueness of $X$.
+    In particular, if $C_{\mathrm L}=O_1(A_{\mathrm L})$ and
+    $C_{\mathrm R}=O_3(A_{\mathrm R})$, then $O_1$ and $O_3^{\mathsf T}$ realize
+    the same unique $X$ (Definition~\ref{def:peps_end_operations_realizing_virtual_matrix}).
+\end{lemma}
+\begin{proof}\leanok
+    Lemma~\ref{thm:peps_horizontal_staircase_end_pair_single_bond_contraction}
+    gives~(\ref{eq:peps_end_pair_single_bond_id}), and injectivity of
+    $A_{\mathrm L},A_{\mathrm R}$ makes the $k$-indexed families linearly
+    independent, so Lemma~\ref{thm:peps_existsUnique_virtualOperation_of_endPair}
+    yields~(\ref{eq:peps_staircase_ref_edge_op}) and uniqueness of $X$.
 \end{proof}
 
-\begin{theorem}[Single-bond peeling of the staircase end equality]
+\begin{lemma}[Single-bond peeling of the staircase end equality]
     \label{thm:peps_regionInsertedCoeff_endWindows_eq_of_staircase}
     \lean{TNLean.PEPS.regionInsertedCoeff_endWindows_eq_of_staircase}
     \leanok
     \uses{def:peps_bond_inserted_region_insert, thm:peps_regionInsertedCoeff_eq_extendInsert_bondInserted, thm:peps_staircase_end_reference_edge_boundary, thm:peps_staircase_pair_insert_eq_open}
-    Let the torus have width $W$ and height $H$.
-    Suppose that the one-orientation $L\times K$ window injectivity
-    hypotheses hold for a tensor $B$, unions of injective regions are
-    injective, and all bond dimensions of $B$ are positive. Assume
-    \begin{align}
-        2\le L,\qquad 2\le K,\qquad 1\le a,\qquad
-        a+2L\le W,\qquad b+2K-1\le H,
-        \notag \\
-        2L+1\le W,\qquad 2K+1\le H.
-        \notag
-    \end{align}
-    Let $C_j$ be inserts on the staircase windows $W_j$ whose deformed states
-    all equal one common state. Suppose that
-    $C_0=I_{B,W_0,e,M}$ and
-    $C_{L+K-1}=I_{B,W_{L+K-1},e,M'}$.
-    Then for every global physical configuration $\sigma$,
+    Suppose $B$ satisfies the one-orientation $L\times K$ window-injectivity
+    hypotheses, union closure for injective regions, and positive bond
+    dimensions on a $W\times H$ torus with $2\le L$, $2\le K$, $1\le a$,
+    $a+2L\le W$, $b+2K-1\le H$, $2L+1\le W$, and $2K+1\le H$. If inserts $C_j$
+    on $W_j$ all generate the same deformed state, with
+    $C_0=I_{B,W_0,e,M}$ and $C_{L+K-1}=I_{B,W_{L+K-1},e,M'}$, then for every
+    global physical configuration $\sigma$,
     \begin{align}
         C_B(W_0,e,M;\sigma|_{W_0},\sigma|_{V\setminus W_0})
          & =
         C_B\bigl(W_{L+K-1},e,M';
         \sigma|_{W_{L+K-1}},\sigma|_{V\setminus W_{L+K-1}}\bigr).
-        \notag
+        \label{eq:peps_single_bond_peeling_coeff}
     \end{align}
-\end{theorem}
-\begin{proof}
-    \leanok
-    Theorem~\ref{thm:peps_regionInsertedCoeff_eq_extendInsert_bondInserted}
-    rewrites the two coefficients as the deformed states on the staircase end
-    pair of the two corner-extended inserts:
+\end{lemma}
+\begin{proof}\leanok
+    By Lemma~\ref{thm:peps_regionInsertedCoeff_eq_extendInsert_bondInserted},
     \begin{align}
         C_B(W_0,e,M;\sigma|_{W_0},\sigma|_{V\setminus W_0})
-         & =
-        \Psi_{B,S,\Ext_{W_0\subseteq S}(C_0)}(\sigma),
-        \notag \\
-        C_B(W_{L+K-1},e,M';
-        \sigma|_{W_{L+K-1}},\sigma|_{V\setminus W_{L+K-1}})
-         & =
-        \Psi_{B,S,
-            \Ext_{W_{L+K-1}\subseteq S}(C_{L+K-1})}(\sigma).
+         & =\Psi_{B,S,\Ext_{W_0\subseteq S}(C_0)}(\sigma),
+        \notag                                                         \\
+        C_B(W_{L+K-1},e,M';\sigma|_{W_{L+K-1}},\sigma|_{V\setminus W_{L+K-1}})
+         & =\Psi_{B,S,\Ext_{W_{L+K-1}\subseteq S}(C_{L+K-1})}(\sigma),
         \notag
     \end{align}
-    The open-boundary equality on the staircase end pair gives
-    $\Ext_{W_0\subseteq S}(C_0)
-        =\Ext_{W_{L+K-1}\subseteq S}(C_{L+K-1})$, and hence the two coefficients
-    are equal.
+    and~(\ref{eq:peps_staircase_pair_insert_eq_open}) of
+    Lemma~\ref{thm:peps_staircase_pair_insert_eq_open} equates the two right-hand sides.
 \end{proof}
 
 \input{chapter/ch24_peps_ft_torus_window_independence}
@@ -529,30 +436,22 @@
     \lean{TNLean.PEPS.windowEdgeCoeffIdentityWitness}
     \leanok
     \uses{def:peps_regionInsertedCoeff, thm:peps_staircase_end_reference_edge_boundary}
-    Let $W$ be the left end window of a horizontal staircase with parameters
-    $(L,K)$ and lower-left coordinate $(a,b)$, and let $e$ be its reference
-    edge. Suppose that
-    \begin{align}
-        0<L,\qquad 0<K,\qquad
-        1\le a,\qquad
-        a+2L\le W_{\mathrm{torus}},\qquad
-        b+2K-1\le H_{\mathrm{torus}}.
-        \notag
-    \end{align}
-    Then $e\in\partial W$. Suppose also that the blocked tensors of $B$ on
-    $W$ and $V\setminus W$ are injective, that all bond dimensions of $B$ are
-    positive, and that the bond dimensions of $A$ and $B$ at $e$ are
-    identified by $\iota_e:\MN{D_A(e)}\simeq\MN{D_B(e)}$. If
-    $Z\in\GL(D_B(e))$ satisfies, for every matrix $M$ and physical
-    configurations $\sigma,\tau$,
+    Let $W=W_{\mathrm{left}}$ and $e$ be the left end window and reference edge
+    of an $(L,K)$-staircase at $(a,b)$ with $0<L$, $0<K$, $1\le a$,
+    $a+2L\le W_{\mathrm{torus}}$, and $b+2K-1\le H_{\mathrm{torus}}$ (so
+    $e\in\partial W$ by Lemma~\ref{thm:peps_staircase_end_reference_edge_boundary}).
+    Given injectivity of $B$ on $W$ and $V\setminus W$, positive bond
+    dimensions of $B$, $\iota_e:\MN{D_A(e)}\simeq\MN{D_B(e)}$, and
+    $Z\in\GL(D_B(e))$ satisfying
     \begin{align}
         C_A(W,e,M;\sigma,\tau)
         =
-        C_B(W,e,Z\,\iota_e(M)\,Z^{-1};\sigma,\tau),
-        \notag
+        C_B(W,e,Z\,\iota_e(M)\,Z^{-1};\sigma,\tau)
+        \qquad(\forall M,\sigma,\tau),
+        \label{eq:peps_window_edge_coeff_id}
     \end{align}
-    then these objects form the coefficient-identity datum at $e$ on the
-    region $W$ with both gauge entries equal to $Z$.
+    these data form the coefficient-identity datum at $(W,e)$ with both gauge
+    entries equal to $Z$.
 \end{definition}
 
 \begin{definition}[Window-region coefficient-identity datum from window injectivity]
@@ -560,33 +459,14 @@
     \lean{TNLean.PEPS.windowEdgeCoeffIdentityWitness_of_hypotheses}
     \leanok
     \uses{def:peps_window_edge_coeff_identity_witness}
-    Let $W$ be the left end window around the reference edge $e$, placed with
-    lower-left coordinate $(a,b)$. Suppose that every cyclic $L\times K$
-    window of $B$ is blocked-tensor injective, unions of injective regions are
-    injective, all bond dimensions of $B$ are positive, and
-    \begin{align}
-        0<L,\qquad 0<K,\qquad
-        2L+1\le W_{\mathrm{torus}},\qquad
-        2K+1\le H_{\mathrm{torus}},
-        \notag \\
-        1\le a,\qquad
-        a+2L\le W_{\mathrm{torus}},\qquad
-        b+2K-1\le H_{\mathrm{torus}}.
-        \notag
-    \end{align}
-    Suppose also that the bond dimensions of $A$ and $B$ at $e$ are
-    identified by $\iota_e:\MN{D_A(e)}\simeq\MN{D_B(e)}$, and let
-    $Z\in\GL(D_B(e))$. If the conjugation identity
-    \begin{align}
-        C_A(W,e,M;\sigma,\tau)
-        =
-        C_B(W,e,Z\,\iota_e(M)\,Z^{-1};\sigma,\tau)
-        \notag
-    \end{align}
-    holds for every $M,\sigma,\tau$, then the coefficient-identity datum of
-    Definition~\ref{def:peps_window_edge_coeff_identity_witness} is obtained
-    for the region $W$. The hypotheses establish the injectivity of both $W$ and
-    its complement at the minimal torus size.
+    If every cyclic $L\times K$ window of $B$ is injective, unions of injective
+    regions are injective, all bond dimensions of $B$ are positive, and
+    $0<L$, $0<K$, $2L+1\le W_{\mathrm{torus}}$, $2K+1\le H_{\mathrm{torus}}$,
+    $1\le a$, $a+2L\le W_{\mathrm{torus}}$, and $b+2K-1\le H_{\mathrm{torus}}$,
+    then both $W=W_{\mathrm{left}}$ and $V\setminus W$ are injective, so any
+    $\iota_e:\MN{D_A(e)}\simeq\MN{D_B(e)}$ and $Z\in\GL(D_B(e))$
+    satisfying~(\ref{eq:peps_window_edge_coeff_id}) yield the datum of
+    Definition~\ref{def:peps_window_edge_coeff_identity_witness}.
 \end{definition}
 
 \input{chapter/ch24_peps_ft_torus_window_realizes}

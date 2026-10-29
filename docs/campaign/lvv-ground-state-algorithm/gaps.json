@@ -1,24 +1,29 @@
 {
- "reviewedAt": "2026-10-23T12:50:00Z",
- "checked": [],
- "entries": [
+ "reviewedAt": "2026-10-29T00:00:00Z",
+ "checked": [
   {
-   "id": "docs/paper-gaps/lvv13_trimmed_energy_constant.tex",
-   "kind": "missing-step",
-   "status": "open",
-   "paper": "lvv",
-   "result": "Lemma l:2, energy of a trimmed low-energy state",
-   "issue": 9819,
-   "stage": "alg:2",
-   "prs": {},
-   "title": "Energy bound after trimming at one cut",
-   "summary": "The printed proof drops two terms, one of which depends on 1/ε; the bound ε<sub>0</sub> + 6√δ and the constant chosen from it downstream have not yet been rechecked.",
-   "context": "Lemma l:2 trims a low-energy state to the constant Schmidt rank <i>B</i><sub>δ</sub> at one cut and bounds the energy of the result. The algorithm uses it to show that a good state of constant rank at a cut always exists, and chooses its accuracy constant <i>c</i><sub>ε</sub> = (ε/169)<sup>2</sup> from this bound.",
-   "claims": "If δ(1 + 1/ε) ≤ 1/2 and <i>w</i> has energy at most ε<sub>0</sub> + δ, the normalized trimmed state has energy at most ε<sub>0</sub> + 6√δ.",
-   "found": "The proof first bounds the change in one local term by 2√δ′ with δ′ = δ(1 + 1/ε) ≥ δ, then continues with 2√δ; and of a term (1 − ε<sub>0</sub>)δ′ it keeps only −ε<sub>0</sub>δ′. Keeping both gives a bound of the form ε<sub>0</sub> + 2(δ + δ′ + 2√δ′), which depends on 1/ε. This reading comes from the tracking issue and has not yet been written up as a note.",
-   "impact": "Probably not. A smaller choice of <i>c</i><sub>ε</sub>, polynomial in ε, appears to restore the later inequality 14√<i>c</i><sub>ε</sub> &lt; ε/12, which would change constants but not the polynomial running time.",
-   "plan": "Write the paper-gap note with the corrected bound, recheck the choice of <i>c</i><sub>ε</sub> and the inequality used in the proof of Lemma l:leading, and record whether only constants change."
+   "result": "Lemmas claim:energy-overlap and claim:overlap",
+   "what": "Overlap with the ground state from the energy, and overlap of two states close to a third",
+   "repo": "QICLean",
+   "pr": 928,
+   "note": "Proved as stated; a slip in the printed proof of the second lemma does not affect its statement."
   },
+  {
+   "result": "Lemma l:trim2",
+   "what": "Trimming at one cut does not raise the Schmidt rank at any other cut",
+   "repo": "TNLean",
+   "pr": 10151,
+   "note": "Proved as stated, for every choice of the kept Schmidt terms."
+  },
+  {
+   "result": "Lemma l:gluing",
+   "what": "Gluing a left half to the right half of a state through its boundary contraction",
+   "repo": "QICLean",
+   "pr": 929,
+   "note": "Proved in slightly greater generality, with the factor n of the energy bound replaced by the norm of the terms across and right of the cut."
+  }
+ ],
+ "entries": [
   {
    "id": "docs/paper-gaps/lvv13_runtime_ground_energy.tex",
    "kind": "error",
@@ -27,14 +32,272 @@
    "result": "Theorem 1, dependence of the running time on the ground energy",
    "issue": 9822,
    "stage": "alg:5",
-   "prs": {},
+   "prs": {
+    "TNLean": [
+     10271
+    ]
+   },
    "title": "Ground energy in the exponent of the running time",
-   "summary": "As quoted in the tracking issue, Theorem 1 gives an exponent independent of the ground energy, but the normalization of the approximate ground-state projector contributes a factor polynomial in <i>n</i> only when ε<sub>0</sub>/ε is bounded; this page states the corrected exponent, and the reading has not yet been checked against the source in a note.",
+   "summary": "Theorem 1 gives an exponent independent of the ground energy, but the normalization of the sampled projector is polynomial in <i>n</i> only when ε<sub>0</sub>/ε is bounded. The sampled projector is formalized with the number of words explicit in <i>C</i><sup><i>m</i></sup>; the running time is not formalized.",
    "context": "The algorithm uses the operator <i>A</i> = ((1 − <i>H</i>/<i>n</i>)/(1 − ε<sub>0</sub>/<i>n</i>))<sup><i>m</i></sup> with <i>m</i> of order (<i>n</i>/ε) log <i>n</i>, and samples it by an average of words in the factors 1 − <i>H<sub>i</sub></i> multiplied by <i>C</i><sup><i>m</i></sup>, <i>C</i> = (1 − ε<sub>0</sub>/<i>n</i>)<sup>−1</sup>. The size of <i>C</i><sup><i>m</i></sup> controls the variance in the matrix Bernstein bound, and hence the number of sampled words.",
-   "claims": "Tracker #9832 quotes Theorem 1 of arXiv:1307.5143v1 (lines 213–216 of the source) as running in time <i>n</i><sup><i>c</i>(<i>d</i>, ε)</sup> poly(<i>n</i>/η) with <i>c</i>(<i>d</i>, ε) = 2<sup><i>O</i>(log<sup>3</sup> <i>d</i>/ε)</sup>, with no dependence on the ground energy ε<sub>0</sub>.",
-   "found": "<i>C</i><sup><i>m</i></sup> = (1 − ε<sub>0</sub>/<i>n</i>)<sup>−<i>m</i></sup> is about e<sup>ε<sub>0</sub><i>m</i>/<i>n</i></sup> = <i>n</i><sup><i>O</i>(ε<sub>0</sub>/ε)</sup>. The hypotheses 0 ≤ <i>H<sub>i</sub></i> ≤ 1 allow ε<sub>0</sub> of order <i>n</i>, and then this factor, and with it the exponent of the running time, grows with <i>n</i>. Treating <i>C</i><sup>2<i>m</i></sup> as <i>n</i><sup><i>O</i>(1/ε)</sup> requires ε<sub>0</sub> bounded. The corrected exponent is 2<sup><i>O</i>(log<sup>3</sup> <i>d</i>/ε) + <i>O</i>(ε<sub>0</sub>/ε)</sup>.",
+   "claims": "Theorem 1 of arXiv:1307.5143v1 (lines 213–216 of the source) runs in time <i>n</i><sup><i>c</i>(<i>d</i>, ε)</sup> poly(<i>n</i>/η) with <i>c</i>(<i>d</i>, ε) = 2<sup><i>O</i>(log<sup>3</sup> <i>d</i>/ε)</sup>, with no dependence on the ground energy ε<sub>0</sub>. The proof of the sampling estimate (line 644) uses <i>C</i><sup>2<i>m</i></sup> = <i>n</i><sup><i>O</i>(1/ε)</sup>.",
+   "found": "<i>C</i><sup><i>m</i></sup> = (1 − ε<sub>0</sub>/<i>n</i>)<sup>−<i>m</i></sup> is about e<sup>ε<sub>0</sub><i>m</i>/<i>n</i></sup> = <i>n</i><sup><i>O</i>(ε<sub>0</sub>/ε)</sup>. The hypotheses 0 ≤ <i>H<sub>i</sub></i> ≤ 1 allow ε<sub>0</sub> of order <i>n</i>, and then this factor, and with it the exponent of the running time, grows with <i>n</i>. Rescaling the sampled operator, which the source allows, does not change the relative accuracy that the number of samples must reach. The corrected exponent is 2<sup><i>O</i>(log<sup>3</sup> <i>d</i>/ε) + <i>O</i>(ε<sub>0</sub>/ε)</sup>.",
    "impact": "The algorithm is polynomial-time whenever ε<sub>0</sub>/ε is bounded, in particular for frustration-free chains; for an extensive ground energy the stated bound does not give polynomial time. The formalization targets existence statements, not running times, so no formal statement depends on this.",
-   "plan": "Check the printed statement and the sampling estimate against the source, write the paper-gap note, and correct the result table in #9832."
+   "plan": "The note records the failure and the corrected statement. Corollary c:agsp is proved with ℓ explicit in <i>C</i><sup><i>m</i></sup> and the bound <i>C</i><sup><i>m</i></sup> ≤ <i>n</i> η<sup>−ε<sub>0</sub>/ε</sup>; the dependence of the whole algorithm on ε<sub>0</sub> stays open."
+  },
+  {
+   "id": "docs/paper-gaps/lvv13_constant_bond.tex",
+   "kind": "narrower",
+   "status": "open",
+   "paper": "lvv",
+   "result": "Lemma constantbondapprox, the constant bond dimension",
+   "issue": 9819,
+   "stage": "alg:2",
+   "prs": {
+    "TNLean": [
+     10164,
+     10221
+    ]
+   },
+   "title": "A constant bond dimension with different constants",
+   "summary": "Nothing is wrong with the paper; the formalization proves a bond dimension independent of the chain length and of the cut, of the same form as the paper's, but with constants taken from the area law already in TNLean rather than the dependence on log<sup>3</sup> <i>d</i>/ε quoted from Arad, Kitaev, Landau and Vazirani.",
+   "context": "At a single cut, trimming the ground state Γ to its <i>B</i><sub>δ</sub> largest Schmidt terms and normalizing gives a state with overlap at least 1 − δ with Γ. The algorithm takes δ = <i>c</i><sub>ε</sub>, and the size of its net of boundary contractions is polynomial in <i>n</i> because <i>B</i><sub>δ</sub> does not depend on <i>n</i>.",
+   "claims": "For every cut and every δ, the source (lines 342–345) states, without proof and quoting earlier area laws, a bond dimension <i>B</i><sub>δ</sub> = exp(<i>O</i>(ε<sup>−1</sup> log<sup>3</sup> <i>d</i> log(1/δ))) with this property.",
+   "found": "From the tail bound on the Schmidt coefficients in the one-dimensional area law of the library, the bond dimension ⌊exp(<i>C</i> + 32<i>s</i> log(2e<sup>e/2</sup>/δ))⌋ works for every δ &gt; 0, where <i>C</i> bounds the entropy of an interval and <i>s</i> depends on the local dimension and the gap. Like the source's, it is the exponential of an affine function of log(1/δ), independent of <i>n</i> and of the cut; its constants are different. In the size-trimming step, the union over all actual bond dimensions up to <i>D</i> = <i>B</i><sub><i>c</i><sub>ε</sub></sub> multiplies the size of the set by (<i>D</i> + 1)<i>D</i> instead of <i>D</i>, which avoids extending a bond beyond the dimension of the right half.",
+   "impact": "None for the existence statements. The later steps use only that <i>B</i><sub>δ</sub> is independent of <i>n</i> and of the cut, so the different constant changes the explicit running time, not the conclusions.",
+   "plan": "Derive the source's dependence on log<sup>3</sup> <i>d</i>/ε from the area law of Arad, Kitaev, Landau and Vazirani if the explicit running time is ever wanted."
+  },
+  {
+   "id": "docs/paper-gaps/lvv13_nontrivial_chain.tex",
+   "kind": "narrower",
+   "status": "open",
+   "paper": "lvv",
+   "result": "Lemma l:leading, chains with at least one site and two states per site",
+   "issue": 9820,
+   "stage": "alg:3",
+   "prs": {
+    "TNLean": [
+     10206,
+     10209,
+     10217,
+     10221
+    ]
+   },
+   "title": "Chains with at least one site and two states per site",
+   "summary": "Nothing is wrong with the paper; the witness, leading-vector and size-trimming theorems are proved for chains with at least one site and local dimension at least two, and the two excluded cases, both degenerate, remain to be stated separately.",
+   "context": "The size-trimming step needs an upper bound on the gap, ε ≤ 4, for a nearest-neighbour Hamiltonian with terms of norm at most one; this bound fixes the size of the constant <i>c</i><sub>ε</sub> = (ε/169)<sup>2</sup> relative to ε and the energy error in the leading-vector argument.",
+   "claims": "The source states the convex program (lines 472–476) and Lemma l:leading (lines 493–505) for every chain of <i>n</i> qudits of dimension <i>d</i>.",
+   "found": "The upper bound on the gap needs a second state per site and at least one site. With one state per site the Hilbert space is one-dimensional, there is no excited state, and any number counts as a gap; the empty chain makes the quantities <i>c</i><sub>ε</sub>/<i>n</i> and <i>c</i><sub>ε</sub>/(2<i>n</i>) meaningless.",
+   "impact": "None for the algorithm, which concerns chains of qudits with a gap above a unique ground state. In the excluded cases the conclusions are trivial or need a separate formulation.",
+   "plan": "State the one-state-per-site case directly, with a bond dimension of at least one, and give a separate formulation for the empty chain, as part of the viable-set construction."
+  },
+  {
+   "id": "docs/paper-gaps/lvv13_trimming_radius.tex",
+   "repo": "QICLean",
+   "kind": "error",
+   "status": "resolved",
+   "paper": "lvv",
+   "result": "Lemma l:trim1, the number of Schmidt terms kept",
+   "issue": 9818,
+   "stage": "alg:1",
+   "prs": {
+    "QICLean": [
+     925
+    ],
+    "TNLean": [
+     10151
+    ]
+   },
+   "title": "Too few Schmidt terms in the bond-trimming lemma",
+   "summary": "The printed lemma is false; keeping <i>D</i>/η<sup>2</sup> Schmidt terms instead of <i>D</i>/η restores it, and the corrected lemma is proved.",
+   "context": "Trimming a vector <i>u</i> at a cut keeps its largest Schmidt terms there. The bond-trimming step of the algorithm trims every member of the viable set and needs to know how much overlap with a vector <i>v</i> of Schmidt rank <i>D</i> is lost.",
+   "claims": "Keeping <i>D</i>/η terms loses at most η: |⟨trim(<i>u</i>), <i>v</i>⟩| ≥ |⟨<i>u</i>, <i>v</i>⟩| − η (lines 531–542). The proof bounds a tail of Schmidt coefficients by η where the argument gives only η<sup>2</sup>.",
+   "found": "Take <i>u</i> with (<i>k</i> + 1)<i>D</i> equal Schmidt coefficients and <i>v</i> the normalized sum of its last <i>D</i> Schmidt terms, with η = 1/<i>k</i>. Keeping <i>kD</i> = <i>D</i>/η terms removes <i>v</i> entirely, so the trimmed overlap is zero, while the overlap before trimming is √(η/(1 + η)) &gt; η for η &lt; (√5 − 1)/2. The correct loss after keeping <i>k</i> terms is at most ‖<i>u</i>‖ ‖<i>v</i>‖ √(<i>D</i>/(<i>k</i> + 1)), from Ky Fan's maximum principle, so <i>D</i>/η<sup>2</sup> terms suffice.",
+   "impact": "Only a polynomial changes. In the bond-trimming claim, trimming every bond with loss 1/(48<i>n</i>) needs (48<i>n</i>)<sup>2</sup><i>r</i>(<i>n</i>) terms instead of 48<i>n r</i>(<i>n</i>), which is still a polynomial in <i>n</i>.",
+   "plan": "Use the corrected radius in the bond-trimming claim of the viable-set induction."
+  },
+  {
+   "id": "docs/paper-gaps/lvv13_trimming_energy.tex",
+   "repo": "QICLean",
+   "kind": "local-correction",
+   "status": "resolved",
+   "paper": "lvv",
+   "result": "Lemma l:2, energy of a trimmed low-energy state",
+   "issue": 9819,
+   "stage": "alg:2",
+   "prs": {
+    "QICLean": [
+     931
+    ],
+    "TNLean": [
+     10164
+    ]
+   },
+   "title": "Energy bound after trimming at one cut",
+   "summary": "The printed proof does not give the bound ε<sub>0</sub> + 6√δ; a corrected bound, which depends on 1/ε, is proved, and the algorithm keeps the source's constant <i>c</i><sub>ε</sub> by comparing its witness directly with the trimmed ground state.",
+   "context": "Lemma l:2 trims a state <i>w</i> of energy at most ε<sub>0</sub> + δ to the constant Schmidt rank <i>B</i><sub>δ</sub> at one cut and bounds the energy of the normalized result. The algorithm uses such a trimmed state as the good low-rank state at a cut, and chooses its accuracy constant <i>c</i><sub>ε</sub> = (ε/169)<sup>2</sup> from this bound.",
+   "claims": "If δ(1 + 1/ε) ≤ 1/2, the normalized trimmed state has energy at most ε<sub>0</sub> + 6√δ (lines 347–359).",
+   "found": "The proof drops the factor 2 of the overlap lemma, uses the Eckart–Young bound for the norm of the trimmed vector as a bound on its square, and loses a term <i>t</i> = 1 − ‖trim <i>w</i>‖<sup>2</sup> while writing 2√δ for 2√δ′ with δ′ ≥ δ. Keeping these terms gives the energy bound ε<sub>0</sub> + (δ + 2√(2η))/(1 − 2η) with η = 2δ(1 + 1/ε), which grows like √(δ/ε). No counterexample to the printed bound is known. For the ground state itself, the bound ε<sub>0</sub> + 6√δ holds for every δ &gt; 0.",
+   "impact": "No. In the lemma on a trimmed witness, comparing the witness directly with the trimmed ground state avoids the factor 1/ε, so the formalization keeps <i>c</i><sub>ε</sub> = (ε/169)<sup>2</sup> and the energy ε<sub>0</sub> + 6√<i>c</i><sub>ε</sub>. Through Lemma l:2 alone one would need a smaller constant, such as 10<sup>−5</sup> min(ε, 1)<sup>3</sup>, which changes only constants.",
+   "plan": "Nothing further; the corrected bound and the direct comparison are both proved."
+  },
+  {
+   "id": "docs/paper-gaps/lvv13_trace_norm_net.tex",
+   "repo": "QICLean",
+   "kind": "error",
+   "status": "resolved",
+   "paper": "lvv",
+   "result": "Lemma l:constantbondapprox, the net of boundary contractions",
+   "issue": 9820,
+   "stage": "alg:3",
+   "prs": {
+    "QICLean": [
+     930
+    ],
+    "TNLean": [
+     10218
+    ]
+   },
+   "title": "Size of the net of boundary contractions",
+   "summary": "The printed size of the net is too small; the correct size, with exponent 2(<i>Bd</i>)<sup>2</sup> in place of 2<i>Bd</i>, is proved and is still polynomial in <i>n</i>.",
+   "context": "A boundary contraction is a density matrix on the site next to the cut and a bond of dimension <i>B</i>, so a matrix of dimension <i>Bd</i>. The algorithm solves one convex problem for each point of a finite net of these matrices in trace norm.",
+   "claims": "With a grid of step ⌊η/(<i>Bd</i>)<sup>2</sup>⌋ on [−1, 1], a net of at most (2⌈<i>Bd</i>/η⌉ + 1)<sup>2<i>Bd</i></sup> matrices is within trace-norm distance η of every matrix of trace norm at most one (lines 451–460).",
+   "found": "The floor makes the step zero for small η, so the step is read as η/(<i>Bd</i>)<sup>2</sup>, and the net is named for δ where η is meant. A complex matrix of dimension <i>Bd</i> has 2(<i>Bd</i>)<sup>2</sup> real coordinates, and covering the unit ball needs at least η<sup>−2(<i>Bd</i>)<sup>2</sup></sup> balls of radius η, so the printed size fails once <i>Bd</i> ≥ 2 and η is small. Rounding every coordinate to the grid gives a net of at most (2⌈(<i>Bd</i>)<sup>2</sup>/η⌉ + 1)<sup>2(<i>Bd</i>)<sup>2</sup></sup> points. The distance estimate holds as printed.",
+   "impact": "None for polynomial time. At η = <i>c</i><sub>ε</sub>/(2<i>n</i>) the corrected size is still polynomial in <i>n</i>, with exponent 2(<i>B</i><sub><i>c</i><sub>ε</sub></sub><i>d</i>)<sup>2</sup>.",
+   "plan": "The corrected net is proved and is used in the size-trimming step on the chain."
+  },
+  {
+   "id": "docs/paper-gaps/lvv13_witness_energy.tex",
+   "repo": "QICLean",
+   "kind": "local-correction",
+   "status": "resolved",
+   "paper": "lvv",
+   "result": "Lemma l:within, energy of a viable-set witness",
+   "issue": 9820,
+   "stage": "alg:3",
+   "prs": {
+    "QICLean": [
+     959
+    ],
+    "TNLean": [
+     10203
+    ]
+   },
+   "title": "A factor two in the energy of a witness",
+   "summary": "One inference in the proof of Lemma l:within omits a factor two, which changes a constant and nothing else; the corrected inference is proved.",
+   "context": "A witness for a viable set is a state with overlap at least 1 − δ with Γ whose left half is supported on the span of the set. Lemma l:within needs a bound on its energy to produce a good low-rank state supported on that span.",
+   "claims": "A unit witness with overlap at least 1 − <i>c</i><sub>ε</sub>/<i>n</i> with Γ, for a Hamiltonian of norm at most <i>n</i>, has energy at most ε<sub>0</sub> + <i>c</i><sub>ε</sub> (lines 509–515).",
+   "found": "The excess energy is at most ‖<i>H</i> − ε<sub>0</sub>‖(1 − |⟨Γ, <i>v</i>⟩|<sup>2</sup>), and an overlap of at least 1 − δ gives 1 − |⟨Γ, <i>v</i>⟩|<sup>2</sup> ≤ 2δ, so the bound is ε<sub>0</sub> + 2<i>c</i><sub>ε</sub>. A diagonal two-by-two Hamiltonian shows that the factor two cannot be removed from this inference.",
+   "impact": "No. The later steps absorb the larger excess; on the chain the witness is shown to have energy at most ε<sub>0</sub> + 8<i>c</i><sub>ε</sub>, and the trimmed witness still has energy at most ε<sub>0</sub> + 6√<i>c</i><sub>ε</sub>.",
+   "plan": "Nothing further; the corrected estimate is used in the lemma on a trimmed witness."
+  },
+  {
+   "id": "docs/paper-gaps/lvv13_paired_matrix_decomposition.tex",
+   "repo": "QICLean",
+   "kind": "local-correction",
+   "status": "resolved",
+   "paper": "lvv",
+   "result": "Claim c:errorreduction, the decomposition of a word across a cut",
+   "issue": 9821,
+   "stage": "alg:4",
+   "prs": {
+    "QICLean": [
+     863
+    ]
+   },
+   "title": "Paired indices in the decomposition of the crossing term",
+   "summary": "The printed decomposition of the term across the cut has independent indices, which would make it a single product; pairing the indices gives the stated count of <i>d</i><sup>2</sup> terms, and the corrected bound is proved.",
+   "context": "To apply the sampled projector to a viable set, each word in the factors 1 − <i>H<sub>j</sub></i> is written as a sum of products of an operator left of the cut and one right of it. Only 1 − <i>H<sub>i</sub></i> crosses the cut (<i>i</i>, <i>i</i> + 1), and each occurrence of it is expanded into <i>d</i><sup>2</sup> such products.",
+   "claims": "1 − <i>H<sub>i</sub></i> = ∑<sub><i>j</i>,<i>k</i>=1</sub><sup><i>d</i></sup> <i>E<sub>j</sub></i> ⊗ <i>F<sub>k</sub></i> (line 584), so that a word with <i>k</i> occurrences of it is a sum of at most <i>d</i><sup>2<i>k</i></sup> products.",
+   "found": "A double sum with independent indices factors as (∑ <i>E<sub>j</sub></i>) ⊗ (∑ <i>F<sub>k</sub></i>), a single product, which a general two-site operator is not: the positive contraction |00⟩⟨00| + |11⟩⟨11| needs two products, and it occurs in a gapped chain with positive terms. Writing the operator through its blocks <i>E<sub>ab</sub></i> ⊗ <i>B<sub>ab</sub></i>, with both factors indexed by the same pair (<i>a</i>, <i>b</i>), gives <i>d</i><sup>2</sup> terms, and the bound <i>d</i><sup>2<i>k</i></sup> for a word follows.",
+   "impact": "None; the count used by the algorithm is the corrected one.",
+   "plan": "Nothing further; the bound on the operator Schmidt rank of an ordered word is proved for any finite set of sites."
+  },
+  {
+   "id": "docs/paper-gaps/lvv13_power_expansion_padding.tex",
+   "kind": "local-correction",
+   "status": "resolved",
+   "paper": "lvv",
+   "result": "Equation eq:a-exp, the expansion of the power projector",
+   "issue": 9821,
+   "stage": "alg:4",
+   "prs": {
+    "TNLean": [
+     10268
+    ]
+   },
+   "title": "The n-th letter of the power expansion is the identity",
+   "summary": "The expansion of the power projector into words sums over <i>n</i> letters although the Hamiltonian has <i>n</i> − 1 terms; reading the extra letter as the identity makes the identity exact, and the formal statement uses that reading.",
+   "context": "The operator <i>A</i> = <i>C</i><sup><i>m</i></sup>(1 − <i>H</i>/<i>n</i>)<sup><i>m</i></sup>, with <i>C</i> = (1 − ε<sub>0</sub>/<i>n</i>)<sup>−1</sup>, is expanded as an average over words in the factors <i>P<sub>i</sub></i> = 1 − <i>H<sub>i</sub></i>, so that it can later be sampled word by word.",
+   "claims": "<i>A</i> = <i>C</i><sup><i>m</i></sup> <i>n</i><sup>−<i>m</i></sup> Σ<sub><i>I</i> ∈ {1,…,<i>n</i>}<sup><i>m</i></sup></sub> <i>P<sub>I</sub></i>, with <i>P<sub>I</sub></i> the ordered product of the letters of <i>I</i> (lines 606–609).",
+   "found": "<i>H</i> has only the terms <i>H</i><sub>1</sub>, …, <i>H</i><sub><i>n</i>−1</sub>, so <i>P<sub>n</sub></i> is undefined. With <i>H<sub>n</sub></i> = 0, that is <i>P<sub>n</sub></i> = 1, the letters sum to <i>n</i> − <i>H</i> and the identity holds exactly. The extra letter acts on no site, so it never crosses a cut and leaves the rank estimate unchanged.",
+   "impact": "None; the expansion, the spectral bounds and the rank estimate hold as stated with this reading.",
+   "plan": "Nothing further; the reading is part of the formal definition of the letters."
+  },
+  {
+   "id": "docs/paper-gaps/lvv13_leading_net_point.tex",
+   "kind": "narrower",
+   "status": "resolved",
+   "paper": "lvv",
+   "result": "Claim c:2, the net point in the leading-vector lemma",
+   "issue": 9820,
+   "stage": "alg:3",
+   "prs": {
+    "TNLean": [
+     10209,
+     10218,
+     10221
+    ]
+   },
+   "title": "The net point in the leading-vector lemma",
+   "summary": "Nothing is wrong with the paper; the leading-vector theorem was first proved for an arbitrary boundary point near the actual one, and the size-trimming theorem now combines it with the net and its polynomial size.",
+   "context": "Lemma l:leading takes the point of the net of boundary contractions closest to that of a good low-rank state, solves the convex program at that point, and shows that the leading eigenvector of the solution is a good left half. Claim c:2 bounds the size of the resulting set by the size of the net.",
+   "claims": "The net point is the element of the net nearest the boundary contraction of the good state (lines 493–495), and the size of the set is at most the size of the net times the bond dimension (lines 519–520).",
+   "found": "The leading-vector theorem holds for every boundary point within the tolerance of the convex program, which includes the nearest net point but makes no assertion about the net. The size-trimming theorem chooses a net for every actual bond dimension, solves the program at every point of it before the ground state is known, and shows that the resulting set has polynomial size and contains a good left half whenever its input is viable. The note recording this gap predates that theorem and still describes it as open.",
+   "impact": "None; Claim c:2 is proved, with the restrictions recorded in the notes on the constant bond dimension and on chains with at least one site and two states per site.",
+   "plan": "Update the note to record that the size-trimming theorem closes the gap."
+  },
+  {
+   "id": "docs/paper-gaps/lvv13_bond_dimension_zero.tex",
+   "kind": "convention",
+   "status": "resolved",
+   "paper": "lvv",
+   "result": "Claim c:ext, bond dimension zero",
+   "issue": 9823,
+   "stage": "alg:6",
+   "prs": {
+    "TNLean": [
+     10182
+    ]
+   },
+   "title": "Bond dimension at most zero is read as at most one",
+   "summary": "A degenerate case of the definition of a viable set is read as the authors intend; nothing is wrong with the paper, and the extension step is proved for every bond dimension.",
+   "context": "A viable set of bond dimension <i>b</i> consists of matrix product states with bonds of dimension at most <i>b</i>. The extension step tensors every member with the basis states of the next site and keeps the same <i>b</i>.",
+   "claims": "Appending one site in a basis state does not raise the bond dimension (line 399).",
+   "found": "A vector on one site has no internal bond, so its bond dimension is zero, while a nonzero product vector on two sites has a bond of dimension one. The source uses <i>b</i> = 0 only for the initial set {1} at the start of the sweep (line 372), and its later bond dimensions are positive polynomials. The formalization reads a bond dimension of at most <i>b</i> as at most max(1, <i>b</i>).",
+   "impact": "None; every bound with <i>b</i> ≥ 1 is unchanged.",
+   "plan": "Nothing further; the convention is part of the definition."
+  },
+  {
+   "id": "docs/paper-gaps/lvv13_error_reduction_witness_norm.tex",
+   "kind": "local-correction",
+   "status": "resolved",
+   "paper": "lvv",
+   "result": "Claim c:errorreduction, the normalized witness",
+   "issue": 9823,
+   "stage": "alg:6",
+   "prs": {
+    "TNLean": [
+     10274
+    ]
+   },
+   "title": "The error-reduction step needs a lower bound on the norm of A v",
+   "summary": "The passage from <i>A v</i> to <i>K v</i> in the proof of the error-reduction claim needs a lower bound on ‖<i>A v</i>‖; the source's <i>A</i> supplies ‖<i>A v</i>‖ ≥ 1/2, and the new error is δ + 4‖<i>K</i> − <i>A</i>‖ in place of 2δ, a change of constant that the free polynomial <i>q</i>(<i>n</i>) absorbs.",
+   "context": "Error reduction applies the left factors <i>A<sub>j</sub></i> of a decomposition <i>K</i> = Σ<sub><i>j</i></sub> <i>A<sub>j</sub></i> ⊗ <i>B<sub>j</sub></i> of the sampled projector to a half-viable set. A witness <i>v</i> of the old set is mapped to the witness <i>K v</i>/‖<i>K v</i>‖ of the new one.",
+   "claims": "From |⟨Γ, <i>A v</i>/‖<i>A v</i>‖⟩| ≥ 1 − δ and ‖<i>K</i> − <i>A</i>‖ ≤ δ it follows that |⟨Γ, <i>K v</i>/‖<i>K v</i>‖⟩| ≥ 1 − 2δ (line 589).",
+   "found": "Without a lower bound on ‖<i>A v</i>‖ the implication fails: in ℂ<sup>2</sup> with Γ = <i>v</i> = <i>e</i><sub>1</sub>, <i>A</i> = δ·1 and <i>K</i> = <i>A</i> + δ|<i>e</i><sub>2</sub>⟩⟨<i>e</i><sub>1</sub>|, the overlap of <i>K v</i>/‖<i>K v</i>‖ with Γ is 1/√2. The source's <i>A</i> is Hermitian and fixes Γ (line 602), so ‖<i>A v</i>‖ ≥ |⟨Γ, <i>v</i>⟩| ≥ 1/2, and the triangle inequality gives 1 − δ − 4‖<i>K</i> − <i>A</i>‖.",
+   "impact": "None for the claim, which is stated for an arbitrary polynomial <i>q</i>(<i>n</i>); a smaller sampling error restores the printed target error.",
+   "plan": "Nothing further; the deterministic error-reduction step is proved with the corrected constant."
   }
  ]
 }

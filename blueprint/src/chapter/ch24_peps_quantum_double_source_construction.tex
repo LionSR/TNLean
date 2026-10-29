@@ -5,9 +5,8 @@
 % These are source constructions, not additional formalization claims.
 \paragraph{The checkerboard and its blocked plaquettes.}
 In the lattice of \cite[Section~7]{Schuch2010PEPS}, each vertex carries
-one physical spin and each square is an A or B plaquette. The diagonal
-arrows below reproduce the original spin orientations. The horizontal
-and vertical lines only record adjacency; they are not tensor contractions.
+one physical spin in $\C[G]$ and each square is an A or B plaquette. Diagonal
+arrows show the source spin orientations; dotted lines record lattice adjacency rather than tensor contractions.
 % Source: figs6/tc-lattice.pdf; upper-left A, alternating A/B plaquettes.
 % Ink: cb00,...,cb33 are sixteen physical sites, with no tensor ports.
 % Diagonal arrows are source spin orientations, not virtual contractions.
@@ -83,33 +82,14 @@ and vertical lines only record adjacency; they are not tensor contractions.
         \tnmark[name=cbPlaquette22,form=label]{(6,6)}{A}
     \end{tenkz}
 \end{tenkzequation}
-For a B plaquette, an arrow pointing away from its center carries
-$L_u\ket g=\ket{ug}$, and an arrow pointing towards it carries
-$R_u\ket g=\ket{gu^{-1}}$. Its invariant-space projector is
-$\Pi_B=|G|^{-1}\sum_{u\in G}V_u$, with $V_u$ the product of these four
-actions, and its penalty is $h_B=I-\Pi_B$.
-For $G=\mathbb Z_2$, where $L_1=R_1=X$, we have $V_0=I$ and $V_1=X^{\otimes4}$,
-so the general formulas specialize to
-$\Pi_B=\tfrac12(I+X^{\otimes4})$ and $h_B=\tfrac12(I-X^{\otimes4})$.
-The A penalty is $h_A=\tfrac12(I-Z^{\otimes4})$.
-These agree with the penalties printed in
-\cite[Section~7]{Schuch2010PEPS}. The source also writes the binary
-B term as the unnormalized sum $\sum_{u}V_u=I+X^{\otimes4}=2\Pi_B$, and
-the general B term as $I-\sum_uV_u$. Since
-$\bigl(\sum_uV_u\bigr)^2=|G|\sum_uV_u$, that sum must be divided by $|G|$
-to give the projector $\Pi_B$; see
-\cite{gap:scp10_quantum_double_local_hamiltonian}.
+At a B plaquette, an outward arrow carries $L_u\ket g=\ket{ug}$ and an inward arrow carries $R_u\ket g=\ket{gu^{-1}}$, with four-spin product $V_u$, invariant-space projector $\Pi_B=|G|^{-1}\sum_{u\in G}V_u$, and penalty $h_B=I-\Pi_B$.
+For $G=\mathbb Z_2$ ($L_1=R_1=X$, $V_0=I$, $V_1=X^{\otimes4}$),
+$\Pi_B=\tfrac12(I+X^{\otimes4})$, $h_B=\tfrac12(I-X^{\otimes4})$, and $h_A=\tfrac12(I-Z^{\otimes4})$ (\cite[Section~7]{Schuch2010PEPS}; the unnormalized source expression $I-\sum_uV_u$ requires the factor $|G|^{-1}$ since $\bigl(\sum_uV_u\bigr)^2=|G|\sum_uV_u$, see \cite{gap:scp10_quantum_double_local_hamiltonian}).
 % Source: paper_v3.tex:2640--2656 (binary) and 2870--2872 (general group).
 % Normalization correction recorded in
 % docs/paper-gaps/scp10_quantum_double_local_hamiltonian.tex.
 
-Choose the disjoint A plaquettes at the corners of this patch as blocks.
-They become the four sites $K_{NW},K_{NE},K_{SE},K_{SW}$.
-The remaining A plaquette becomes the hole between them. The B plaquettes
-become bonds: $B_h$ is horizontal and $B_v$ is vertical.
-The next picture records this partition of the original physical sites;
-each contour contains four spins and one A plaquette. Its arrows use the
-clockwise physical coordinates obtained by the basis inversion described below.
+Grouping the four corner A plaquettes into blocked sites $K_{NW},K_{NE},K_{SE},K_{SW}$ makes the central A plaquette the hole $A_\square$ and the B plaquettes the horizontal and vertical bonds $B_h,B_v$ (shown below after the basis inversion $J$).
 % Source: figs6/tc-blocked-lattice.pdf and paper_v3.tex:2808--2844.
 % Ink: bk00,...,bk33 are the same sixteen physical sites as cb00,...,cb33.
 % Four disjoint enclosures contain the four inner A supports. A_square
@@ -193,27 +173,15 @@ clockwise physical coordinates obtained by the basis inversion described below.
 \end{tenkzequation}
 
 \paragraph{Clockwise physical coordinates.}
-Keep the B colors $p,q,r,s$ at north, east, south, west. In the original
-arrow convention, the spins at northeast, southeast, southwest, northwest
-are $(qp^{-1},rq^{-1},sr^{-1},ps^{-1})$. Inverting every physical basis
-label gives the clockwise coordinates
-$(a,b,c,d)=(pq^{-1},qr^{-1},rs^{-1},sp^{-1})$ used below.
-Indeed, the basis involution $J\ket g=\ket{g^{-1}}$ satisfies
-$JL_uJ=R_u$ and $JR_uJ=L_u$. Thus this change reverses the spin arrows
-and exchanges their incoming and outgoing actions. It leaves the
-checkerboard incidence unchanged.
+With B colors $(p,q,r,s)$ at $(\text{N},\text{E},\text{S},\text{W})$, the original spin values at $(\text{NE},\text{SE},\text{SW},\text{NW})$ are $(qp^{-1},rq^{-1},sr^{-1},ps^{-1})$. Applying the basis involution $J\ket g=\ket{g^{-1}}$ (which satisfies $JL_uJ=R_u$ and $JR_uJ=L_u$, reversing spin arrows) gives the clockwise coordinates
+$(a,b,c,d)=(pq^{-1},qr^{-1},rs^{-1},sp^{-1})$.
 % Source anchors: paper_v3.tex:2873--2876 (L/R), 2889--2894 (two colors),
 % 2896--2908 (clockwise K); original arrows from tc-lattice.pdf.
 % This elementary basis comparison is stated mathematically here, without
 % identifying it with quantumDoubleDualToK (a different coordinate change).
 
-At one K site, the A product is $abcd=1$, read clockwise from northeast.
-At the hole it is
-$\sigma_{NW,b}\sigma_{SW,a}\sigma_{SE,d}\sigma_{NE,c}=1$, read in the
-opposite sense from its northwest corner. These ordered products must
-not be interchanged when $G$ is nonabelian.
-For the horizontal and vertical B bonds, respectively, the four actions
-in these clockwise coordinates are
+The A constraint is $abcd=1$ at a K site (clockwise from NE) and $\sigma_{NW,b}\sigma_{SW,a}\sigma_{SE,d}\sigma_{NE,c}=1$ at the hole $A_\square$ (counterclockwise from NW).
+In clockwise coordinates on left--right and top--bottom pairs, the horizontal and vertical B-bond actions for $\Pi_B=|G|^{-1}\sum_uV_u$ and $h_B=I-\Pi_B$ are
 \begin{align}
     V_u^h & : (a,b,c,d;e,f,g,h)
     \longmapsto(au^{-1},ub,c,d;e,f,gu^{-1},uh), \\
@@ -221,29 +189,17 @@ in these clockwise coordinates are
     \longmapsto(a,bu^{-1},uc,d;ue,f,g,hu^{-1}).
     \label{eq:peps_source_bond_actions}
 \end{align}
-The ordered tensor pairs are left--right and top--bottom, respectively.
-In both cases $\Pi_B=|G|^{-1}\sum_uV_u$ and $h_B=I-\Pi_B$.
-A horizontal bond changes spins $a,b$ on the left and $c,d$ on the right.
-A vertical bond changes spins $b,c$ on top and $a,d$ below.
 % Only the horizontal bond and the northern hole-bond statements below
 % carry published declaration links. This source illustration adds none.
 
 \paragraph{A controlled plaquette loop and its two layers.}
-For a spin adjacent to a B plaquette, let $U_s$ denote the appropriate
-$L_s$ or $R_s$. The elementary tensor is
-$P=\sum_{s,k}U_s\ket{k}_{\rm out}\bra{k}_{\rm in}
-    \otimes\ket{s}_v\bra{s}_v$.
-The two virtual indices force the same control color to pass through P.
-Contracting four copies around one plaquette gives
+For $U_s\in\{L_s,R_s\}$ on a spin adjacent to a B plaquette, the elementary tensor is $P=\sum_{s,k}U_s\ket{k}_{\rm out}\bra{k}_{\rm in}\otimes\ket{s}_v\bra{s}_v$, and contracting four copies around one plaquette gives
 \begin{align}
     \operatorname{Loop}(P) & =\sum_{s\in G}
     U_s^{NW}\otimes U_s^{NE}\otimes U_s^{SE}\otimes U_s^{SW}
     =|G|\Pi_B.
     \label{eq:peps_source_p_loop}
 \end{align}
-The factor $|G|^{-1}$ belongs to the whole loop, rather than once to
-each of its four tensors. In the drawing the four virtual bonds carry
-one summed color $s$, whereas the eight physical legs remain open.
 % Source: figs6/proj-as-peps.pdf; paper_v3.tex:2696--2722,2879--2885.
 % Ink: loopNW,loopNE,loopSE,loopSW are controlled P tensors. Their directed
 % virtual edges close clockwise, imposing one common summed control color.
@@ -267,19 +223,7 @@ one summed color $s$, whereas the eight physical legs remain open.
     \end{tenkz}
 \end{tenkzequation}
 
-Every spin belongs to two B plaquettes, one from each disjoint layer.
-Their actions on that spin are a left and a right multiplication, so
-$L_rR_s=R_sL_r$. Applying the two P tensors to $\ket1$ therefore
-produces $\ket{rs^{-1}}$ or $\ket{sr^{-1}}$, according to the
-left and right assignments.
-For $\mathbb Z_2$ this is $\ket{r+s}$.
-The diagram uses clockwise coordinates at the southeast spin of a blocked
-A plaquette. Here $r$ is the northeast B color and $s$ the southwest B color,
-so the two actions are $L_r$ and $R_s$. In the original arrow convention
-this same spin is $sr^{-1}$; applying $J$ gives $rs^{-1}$.
-The equality contracts only the intermediate physical index and the
-initial state; all four virtual legs of T remain open. The duplicated $r$ and $s$ labels express equality
-constraints, not additional sums.
+Each spin belongs to two B plaquettes from disjoint layers, whose actions $L_r$ and $R_s$ commute ($L_rR_s=R_sL_r$) and map $\ket1$ to $\ket{rs^{-1}}$ ($\ket{r+s}$ for $G=\mathbb Z_2$). At the southeast spin of a blocked A plaquette in clockwise coordinates, in the original arrow convention this same spin is $sr^{-1}$; applying $J$ gives $rs^{-1}$, defining the four-virtual-leg site tensor $T$:
 % Source: paper_v3.tex:2724--2749,2886--2894; tc-tensor-orientation.pdf.
 % Ink: lower P^R_s and upper P^L_r have opposite virtual directions.
 % One physical wire joins them, and a second joins P^R_s to |1>.
@@ -322,30 +266,13 @@ constraints, not additional sums.
 \end{tenkzequation}
 
 \paragraph{The source renormalization and the open boundary identity.}
-The source groups four T tensors around an A plaquette and separates
-K from four local factors L. In the binary construction, the CNOT
-$\ket{a,b}\mapsto\ket{a,a+b}$ conjugates $X\otimes X$ to
-$X\otimes I$ and $Z\otimes Z$ to $I\otimes Z$, separating the local
-pair symmetries from the retained four-leg symmetry.
-For a general group, the source uses the pair permutation
-$\ket{a,b}\mapsto\ket{a,b^{-1}a}$.
-Each L has one virtual index and a physical output. Its one-leg
-symmetry is $LU_u=L$ for every $u\in G$, where $U$ is the action on
-that index, unitarily equivalent to the regular representation. The invariant
-vectors of $U$ therefore form a line spanned by a unit vector $\omega$,
-and $|G|^{-1}\sum_uU_u=\ket\omega\bra\omega$. For any tensor $M$ on the
-neighboring block, contracting the index over an orthonormal basis
-$(\ket k)$ gives
-\begin{align*}
+Grouping four $T$ tensors around an A plaquette via the pair permutation $\ket{a,b}\mapsto\ket{a,b^{-1}a}$ (or CNOT $\ket{a,b}\mapsto\ket{a,a+b}$ for $G=\mathbb Z_2$, conjugating $X\otimes X\mapsto X\otimes I$ and $Z\otimes Z\mapsto I\otimes Z$) separates $K$ from four factors $L$, each carrying one virtual index with regular-representation symmetry $LU_u=L$ ($u\in G$) and $|G|^{-1}\sum_{u\in G}U_u=\ket\omega\bra\omega$:
+\begin{align}
     L                        & =L\,|G|^{-1}\sum_{u\in G}U_u=L\ket\omega\bra\omega, &
     \sum_kL\ket k\otimes M_k & =L\ket\omega\otimes
-    \sum_k\braket{\omega}{k}M_k,
-\end{align*}
-so the physical output of L factors off as the fixed state
-$L\ket\omega$. The diagram shows the factorized side of this
-source construction. Physical indices are bundled, as in the original
-renormalization drawing; no equality of the unrestricted physical
-ambient spaces is asserted.
+    \sum_k\braket{\omega}{k}M_k, \notag
+\end{align}
+so the physical output of $L$ factors off as $L\ket\omega$:
 % Source: paper_v3.tex:2777--2806 and figs6/tc-2x2-renorm.pdf.
 % Ink: sourceK carries four virtual indices and a bundled physical output;
 % each sourceL* carries ONE virtual index AND a distinct physical output.
@@ -378,12 +305,4 @@ ambient spaces is asserted.
     \end{tenkz}
 \end{tenkzequation}
 
-A different, coefficient-level identity retains the original four physical
-spins and changes only the eight virtual boundary coordinates. For the
-binary model, the pair CNOTs give
-$\mathsf B\mathsf C=\mathsf K E^\dagger$, where E sets four second
-virtual registers to zero, as stated in
-Theorem~\ref{thm:peps_kitaev_checkerboard_map_identity}.
-Those four fixed virtual registers are not the physical-output L factors
-in the source drawing. The clockwise K tensor and its local Hamiltonian
-constraints are described next.
+At the coefficient level on the original four physical spins and eight virtual boundary coordinates, the binary pair CNOTs satisfy $\mathsf B\mathsf C=\mathsf K E^\dagger$, where $E$ sets the four second virtual registers to zero (Lemma~\ref{thm:peps_kitaev_checkerboard_map_identity}).

@@ -7,554 +7,442 @@
 \section{Chronological finite channel words}
 \label{sec:al_channel_words}
 
-Let $I,J$ be finite sets, let $q\in\N$, and put
-$\mathcal H=(\C^q)^{\otimes I}$ and $\mathcal K=\C^J$.
-Let $F$ be a set of event labels,
-and write $\mathcal E_i$ for the full spectator root map associated
-with the physical matrix $k_i$, as in
-Definition~\ref{def:al_local_root_channel}.
-All input operators are complex matrices on
-$\mathcal H\otimes\mathcal K$, with the Euclidean operator norm.
-Write $wi$ for the word obtained by appending a single label $i$ to
-the right of a finite word $w$.
+Let $I,J$ be finite sets, $q\in\N$, $\mathcal H=(\C^q)^{\otimes I}$, and
+$\mathcal K=\C^J$. For an event label set $F$, write $\mathcal E_i$ for the
+full spectator root channel of $k_i$
+(Definition~\ref{def:al_local_root_channel}). All operators on
+$\mathcal H\otimes\mathcal K$ carry the Euclidean operator norm. Write $wi$
+for the word $w$ with $i\in F$ appended on the right.
 
 \begin{definition}[Observable after a chronological word]
     \label{def:al_channel_word}
     \uses{def:al_local_root_channel}
     \lean{TNLean.PEPS.AreaLaw.spectatorRootChannelWord}
     \leanok
-    For a nonempty word $w=(i_0,\ldots,i_{m-1})$, define
+    For $w=(i_0,\ldots,i_{m-1})\in F^m$ ($m\ge1$), define
     \begin{align}
         \label{eq:al_word_composition}
         \mathcal E_w(B)
-         & =(\mathcal E_{i_{m-1}}\circ\cdots\circ\mathcal E_{i_0})(B).
+         & =(\mathcal E_{i_{m-1}}\circ\cdots\circ\mathcal E_{i_0})(B),
     \end{align}
-    For the empty word $\varnothing$, take
-    $\mathcal E_{\varnothing}=\mathrm{id}$.
-    Thus the first event acts first. Given an initial operator $B_0$,
-    write $B_w=\mathcal E_w(B_0)$.
+    and set $\mathcal E_{\varnothing}=\mathrm{id}$. For an initial operator
+    $B_0$, write $B_w=\mathcal E_w(B_0)$.
 \end{definition}
 
-\begin{theorem}[Empty words and appending an event]
+\begin{lemma}[Empty words and appending an event]
     \label{thm:al_channel_word_append}
     \uses{def:al_channel_word}
     \lean{TNLean.PEPS.AreaLaw.spectatorRootChannelWord_nil,
         TNLean.PEPS.AreaLaw.spectatorRootChannelWord_append_singleton}
     \leanok
-    For every operator $B$, every finite word $w$, and every label $i$,
+    For every operator $B$, finite word $w$, and label $i\in F$,
     \begin{align}
         \label{eq:al_word_empty}
-        \mathcal E_{\varnothing}(B) & =B,
-    \end{align}
-    \begin{align}
+        \mathcal E_{\varnothing}(B) & =B,                             \\
         \label{eq:al_word_append}
-        \mathcal E_{wi}(B) & =\mathcal E_i(\mathcal E_w(B)).
+        \mathcal E_{wi}(B)          & =\mathcal E_i(\mathcal E_w(B)),
     \end{align}
-    In particular, $B_{\varnothing}=B_0$ and $B_{wi}=\mathcal E_i(B_w)$.
-\end{theorem}
+    so $B_{\varnothing}=B_0$ and $B_{wi}=\mathcal E_i(B_w)$.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:al_channel_word}
-    The empty composition is the identity. In the composition for
-    $wi$, the last map is $\mathcal E_i$, after every map indexed by
-    $w$, which gives~(\ref{eq:al_word_append}).
+    Immediate from Definition~\ref{def:al_channel_word} and
+    (\ref{eq:al_word_composition}).
 \end{proof}
 
-\begin{theorem}[Relabelling chronological words]
+\begin{lemma}[Relabelling chronological words]
     \label{thm:al_channel_word_relabel}
     \uses{def:al_channel_word}
     \lean{TNLean.PEPS.AreaLaw.spectatorRootChannelWord_map}
     \leanok
-    Let $E$ be any label set and let $f:E\to F$ be any map.
-    Define $\widetilde k_j=k_{f(j)}$ and
-    $\widetilde{\mathcal E}_j=\mathcal E_{f(j)}$ for $j\in E$.
-    For a word $w$ over $E$, let $f(w)$ be the word obtained by
-    applying $f$ to each label. Then, for every operator $B$,
+    For a map $f:E\to F$, set $\widetilde k_j=k_{f(j)}$ and
+    $\widetilde{\mathcal E}_j=\mathcal E_{f(j)}$ ($j\in E$). For a word
+    $w=(j_0,\ldots,j_{m-1})$ over $E$ and $f(w)=(f(j_0),\ldots,f(j_{m-1}))$,
+    every operator $B$ satisfies
     \begin{align}
         \label{eq:al_word_relabel}
         \mathcal E_{f(w)}(B) & =\widetilde{\mathcal E}_w(B).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:al_channel_word}
-    At every position in the chronological composition, both sides
-    of~(\ref{eq:al_word_relabel}) apply the same map
-    $\mathcal E_{f(j)}$. They start from the same input $B$ and
-    apply these maps in the same order.
+    Both sides of~(\ref{eq:al_word_relabel}) equal
+    $(\mathcal E_{f(j_{m-1})}\circ\cdots\circ\mathcal E_{f(j_0)})(B)$ by
+    (\ref{eq:al_word_composition}).
 \end{proof}
 
 % Source: 09-amplification.tex, eq:amplification-channel-vector, lines 218--224.
-\begin{theorem}[Channel words on a common ground vector]
+\begin{lemma}[Channel words on a common ground vector]
     \label{thm:al_channel_word_ground}
     \uses{def:al_channel_word,def:al_local_root_channel}
     \lean{TNLean.PEPS.AreaLaw.spectatorRootChannel_mulVec_ground,
         TNLean.PEPS.AreaLaw.spectatorRootChannelWord_mulVec_ground}
     \leanok
     Following \cite[Section~10]{OpenAI2026AreaLaw}, suppose
-    $0\le k_i\le\mathbb 1$ and $k_i\Omega=0$ for every
-    $i\in F$, where $\Omega\in\mathcal H$. Put
-    $G_i=(\mathbb 1-k_i)^{1/2}$, and, for a chronological word
-    $w=(i_0,\ldots,i_{m-1})$, put
-    $R_w=G_{i_{m-1}}\cdots G_{i_0}$, with
-    $R_{\varnothing}=\mathbb 1$.
-    For every $\xi\in\mathcal K$ and every operator $B$ on
-    $\mathcal H\otimes\mathcal K$, one has
+    $0\le k_i\le\mathbb 1$ and $k_i\Omega=0$ for all $i\in F$, where
+    $\Omega\in\mathcal H$. Set $G_i=(\mathbb 1-k_i)^{1/2}$,
+    $R_w=G_{i_{m-1}}\cdots G_{i_0}$ for $w=(i_0,\ldots,i_{m-1})$, and
+    $R_{\varnothing}=\mathbb 1$. For every $\xi\in\mathcal K$ and operator $B$
+    on $\mathcal H\otimes\mathcal K$,
     \begin{align}
         \label{eq:al_word_ground_vector}
         \mathcal E_w(B)(\Omega\otimes\xi)
          & =(R_w\otimes\mathbb 1)B(\Omega\otimes\xi).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:al_local_root_channel,thm:al_channel_word_append}
-    Functional calculus gives $G_i\Omega=\Omega$ and
-    $k_i^{1/2}\Omega=0$. Consequently
+    Functional calculus gives $G_i\Omega=\Omega$ and $k_i^{1/2}\Omega=0$, so
     \begin{align}
         \label{eq:al_single_ground_vector}
         \mathcal E_i(B)(\Omega\otimes\xi)
          & =(G_i\otimes\mathbb 1)B(\Omega\otimes\xi).
     \end{align}
-    Proceeding by induction on the word length by appending a final
-    event, the empty word acts as the identity, while for $wi$
-    applying (\ref{eq:al_single_ground_vector}) to $\mathcal E_w(B)$
-    and then invoking the induction hypothesis produces the left factor
-    $G_iR_w=R_{wi}$.
+    Inducting on $w$ via~(\ref{eq:al_word_empty}), (\ref{eq:al_word_append}),
+    and~(\ref{eq:al_single_ground_vector}) yields
+    (\ref{eq:al_word_ground_vector}) since $G_iR_w=R_{wi}$.
 \end{proof}
 
-\begin{theorem}[Vector difference bounded by channel difference]
+\begin{lemma}[Vector difference bounded by channel difference]
     \label{thm:al_channel_word_vector_difference}
     \uses{thm:al_channel_word_ground}
     \lean{TNLean.PEPS.AreaLaw.norm_rootProduct_sub_le_channelWord_sub}
     \leanok
-    As the pointwise conversion used in
-    \cite[\texttt{09-amplification.tex}, lines 218--224]{OpenAI2026AreaLaw},
-    under the hypotheses and notation of
-    Theorem~\ref{thm:al_channel_word_ground}, let $u,w$ be any
-    two finite words. Then
+    As in \cite[\texttt{09-amplification.tex}, lines 218--224]{OpenAI2026AreaLaw},
+    under the hypotheses of Lemma~\ref{thm:al_channel_word_ground}, any two
+    finite words $u,w$ satisfy
     \begin{align}
         \label{eq:al_word_vector_difference}
         \bigl\|(R_u\otimes\mathbb 1)B(\Omega\otimes\xi)
         -(R_w\otimes\mathbb 1)B(\Omega\otimes\xi)\bigr\|
          & \le\|\mathcal E_u(B)-\mathcal E_w(B)\|
-        \|\Omega\otimes\xi\|,
+        \|\Omega\otimes\xi\|.
     \end{align}
-    where vector norms are Euclidean and the matrix norm is the induced
-    operator norm.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_channel_word_ground}
-    By (\ref{eq:al_word_ground_vector}), the vector inside the norm
-    equals $(\mathcal E_u(B)-\mathcal E_w(B))(\Omega\otimes\xi)$, so
-    the defining operator-norm inequality yields the bound.
+    By (\ref{eq:al_word_ground_vector}), the left-hand side of
+    (\ref{eq:al_word_vector_difference}) equals
+    $\|(\mathcal E_u(B)-\mathcal E_w(B))(\Omega\otimes\xi)\|\le
+        \|\mathcal E_u(B)-\mathcal E_w(B)\|\|\Omega\otimes\xi\|$.
 \end{proof}
 
-\begin{theorem}[Norm contraction along a finite word]
+\begin{lemma}[Norm contraction along a finite word]
     \label{thm:al_channel_word_norm}
     \uses{def:al_channel_word}
     \lean{TNLean.PEPS.AreaLaw.norm_spectatorRootChannelWord_le}
     \leanok
-    Suppose $0\le k_i\le\mathbb 1$ for every $i\in F$.
-    Then $\|\mathcal E_w(B)\|\le\|B\|$ for every finite word $w$
-    and every operator $B$.
-\end{theorem}
+    If $0\le k_i\le\mathbb 1$ for all $i\in F$, then
+    $\|\mathcal E_w(B)\|\le\|B\|$ for every finite word $w$ and operator $B$.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:al_channel_word,thm:al_root_channel_contraction}
-    We proceed by induction on the word $w$ for an arbitrary input
-    operator $B$. The empty word gives equality. If the first label is
-    $i$ and the remaining word is $u$, then
+    By induction on $w$: $\mathcal E_{\varnothing}(B)=B$, and for $w=iu$,
+    Lemma~\ref{thm:al_root_channel_contraction} and the induction hypothesis
+    give
     \begin{align}
         \label{eq:al_word_norm_step}
         \|\mathcal E_{iu}(B)\|
          & =\|\mathcal E_u(\mathcal E_i(B))\|
         \le\|\mathcal E_i(B)\|\le\|B\|.
     \end{align}
-    Here the first inequality is the induction hypothesis at input
-    $\mathcal E_i(B)$ and the second is
-    Theorem~\ref{thm:al_root_channel_contraction}.
 \end{proof}
 
-\begin{theorem}[Oscillation bounded by the initial norm]
+\begin{lemma}[Oscillation bounded by the initial norm]
     \label{thm:al_channel_word_oscillation}
     \uses{def:al_channel_word,def:qc_site_oscillation}
     \lean{TNLean.PEPS.AreaLaw.siteOscillation_spectatorRootChannelWord_bounds}
     \leanok
-    Suppose $0\le k_i\le\mathbb 1$ for every $i\in F$.
-    For every finite word $w$, site $y\in I$, and initial operator
-    $B_0$, one has $0\le d_y(B_w)\le2\|B_0\|$.
-\end{theorem}
+    If $0\le k_i\le\mathbb 1$ for all $i\in F$, then every finite word $w$,
+    $y\in I$, and $B_0$ satisfy $0\le d_y(B_w)\le2\|B_0\|$.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_channel_word_norm,thm:qc_site_oscillation_bounds}
-    The oscillation is nonnegative, and
-    $d_y(B_w)\le2\|B_w\|\le2\|B_0\|$ by
-    Theorems~\ref{thm:qc_site_oscillation_bounds} and
-    \ref{thm:al_channel_word_norm}.
+    Lemmas~\ref{thm:qc_site_oscillation_bounds}
+    and~\ref{thm:al_channel_word_norm} give
+    $0\le d_y(B_w)\le2\|B_w\|\le2\|B_0\|$.
 \end{proof}
 
-At the empty word, the initial support bound is
-Theorem~\ref{thm:al_spectator_support_indicator}.
-If $q>0$ and every physical matrix block of $B_0$ is supported on
-$S\subseteq I$, then~(\ref{eq:al_word_empty}) gives
+If $q>0$ and $(B_0)_{ab}\in\mathcal A_S$ for all $a,b\in J$,
+then~(\ref{eq:al_word_empty}) and
+Lemma~\ref{thm:al_spectator_support_indicator} give
 \begin{align}
     \label{eq:al_word_initial_support}
     d_y(B_{\varnothing}) & =d_y(B_0)\le2\|B_0\|\mathbf1_S(y).
 \end{align}
 
-\begin{theorem}[Summed append increments of the current observable]
+\begin{lemma}[Summed append increments of the current observable]
     \label{thm:al_channel_word_kernel_increment}
     \uses{def:al_channel_word,def:qc_site_oscillation,
         def:al_graph_event_kernel,def:qc_local_circuit}
     \lean{TNLean.PEPS.AreaLaw.sum_siteOscillation_spectatorRootChannelWord_append_sub_le_graphChannelEventKernel}
     \leanok
-    Suppose $q>0$ and $F$ is finite. Let $G$ be a simple graph on
-    $I$, and choose anchors $a_i\in I$ for $i\in F$.
-    Assume $0\le k_i\le\mathbb 1$ and that $k_i$ is supported on
-    the connected component of $a_i$ for every $i$.
-    Let $C\ge0$, $c>0$, and $0<\alpha\le1$.
-    Fix a cutoff $N\in\N$ with $N\ge R_{a_i}$ for every $i$,
-    where $R_{a_i}$ is the maximum distance from $a_i$ within its
-    component. Suppose that, for every $i\in F$ and every integer
-    $l$ with $0\le l\le N$,
+    Suppose $q>0$, $F$ is finite, $G$ is a simple graph on $I$, and
+    $0\le k_i\le\mathbb 1$ is supported on $C(a_i)$ ($a_i\in I$, $i\in F$).
+    Let $C\ge0$, $c>0$, $0<\alpha\le1$, and $N\ge\max_{i\in F}R_{a_i}$. If
+    every $i\in F$ and $0\le l\le N$ satisfy
     \begin{align}
         \label{eq:al_word_localization_error}
-        \|k_i-E_{N_l(a_i)}(k_i)\| & \le C\exp(-cl^\alpha).
+        \|k_i-E_{N_l(a_i)}(k_i)\| & \le C\exp(-cl^\alpha),
     \end{align}
-    For the kernel~(\ref{eq:al_propagation_event_kernel}) with
-    $D=2(2+8\sqrt C\exp(c/2))$ and $b=c/2$, every finite word $w$,
-    every $y\in I$, and every initial operator $B_0$ satisfy
+    then for the kernel $\mathsf A^{(N)}$ of
+    (\ref{eq:al_propagation_event_kernel}) with
+    $D=2(2+8\sqrt C\exp(c/2))$ and $b=c/2$, every finite word $w$, $y\in I$,
+    and $B_0$ satisfy
     \begin{align}
         \label{eq:al_word_kernel_increment}
         \sum_{i\in F}\bigl(d_y(B_{wi})-d_y(B_w)\bigr)
          & \le\sum_{z\in I}\mathsf A^{(N)}_{yz}d_z(B_w).
     \end{align}
-    Every oscillation on the right is evaluated at the same current
-    observable $B_w$. Labels with the same anchor remain distinct
-    summands.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_actual_channel_kernel_domination,thm:al_channel_word_append}
-    Applying Theorem~\ref{thm:al_actual_channel_kernel_domination} to
-    the operator $B_w$ and rewriting $\mathcal E_i(B_w)$ as $B_{wi}$
-    for each event $i$ via~(\ref{eq:al_word_append})
-    yields~(\ref{eq:al_word_kernel_increment}).
+    Apply Lemma~\ref{thm:al_actual_channel_kernel_domination} to $B=B_w$ and
+    use $\mathcal E_i(B_w)=B_{wi}$ from~(\ref{eq:al_word_append}).
 \end{proof}
 
-For a finite retained family $F_P=\{i\in F:P(i)\}$, let
-$j:F_P\hookrightarrow F$ be the inclusion and let $\mathcal E_w^P$
-denote composition using the restricted effects $k\circ j$.
-Theorem~\ref{thm:al_channel_word_relabel} identifies
-the observable $\mathcal E_w^P(B_0)$ with
-$B_{j(w)}=\mathcal E_{j(w)}(B_0)$ in the original family.
-Under the hypotheses of Theorem~\ref{thm:al_channel_word_kernel_increment}
-for this restricted family, (\ref{eq:al_word_kernel_increment}) gives
+For $F_P=\{i\in F:P(i)\}$ with inclusion $j:F_P\hookrightarrow F$, let
+$\mathcal E_w^P$ be the word composition for $k\circ j$. By
+Lemma~\ref{thm:al_channel_word_relabel},
+$\mathcal E_w^P(B_0)=B_{j(w)}$, so
+(\ref{eq:al_word_kernel_increment}) on $F_P$ gives
 \begin{align}
     \label{eq:al_word_retained_increment}
     \sum_{i\in F_P}\bigl(d_y(B_{j(wi)})-d_y(B_{j(w)})\bigr)
-     & \le\sum_{z\in I}\mathsf A^{(N,P)}_{yz}d_z(B_{j(w)}),
+     & \le\sum_{z\in I}\mathsf A^{(N,P)}_{yz}d_z(B_{j(w)}).
 \end{align}
-where $\mathsf A^{(N,P)}$ counts the retained labels and the cutoff
-need only cover their anchors.
 For the lattice constraints of
-Theorem~\ref{thm:al_lattice_channel_uniform_bounds}, one may instead
-apply~(\ref{eq:al_propagation_lattice_increment}) directly to
-$\mathcal E_w^{\,P}(B_0)$ and use~(\ref{eq:al_word_relabel}) and
-(\ref{eq:al_word_append}). Thus the same $C,c,v$, chosen before $P$,
-give both the lattice weighted row bound and
-(\ref{eq:al_word_retained_increment}) for every retained word.
-Every effect in this composition is still constructed from the
-original full Hamiltonian and its gapped ground vector.
+Lemma~\ref{thm:al_lattice_channel_uniform_bounds}, applying
+(\ref{eq:al_propagation_lattice_increment}) to $\mathcal E_w^P(B_0)$ via
+(\ref{eq:al_word_relabel}) and~(\ref{eq:al_word_append}) yields
+(\ref{eq:al_word_retained_increment}) with the same $C,c,v$ chosen before $P$.
 
 \section{Expected spatial oscillation of channel words}
 \label{sec:al_channel_poisson_growth}
 
-Suppose $F$ is finite. For $t\ge0$, give each chronological word
-$w=(i_0,\ldots,i_{m-1})$ the probability
+For finite $F$ and $t\ge0$, assign each word $w=(i_0,\ldots,i_{m-1})\in F^m$
+the Poisson mass
 \begin{align}
     \label{eq:al_poisson_word_mass}
     \nu_t(\{w\}) & =e^{-|F|t}\frac{t^m}{m!}.
 \end{align}
-These masses sum to one. The empty alphabet has only the empty word,
-whose mass is one. In this section, $B_w$ denotes the
-composition~(\ref{eq:al_word_composition}), and expectations are taken
-with respect to $\nu_t$.
-
-With the extended graph distance $\rho_G$ from
-Definition~\ref{def:al_graph_extended_metric} and
-$d_G(y,S)=\inf_{z\in S}\rho_G(y,z)$, define the distance profile for
-$\beta\ge0$ and $0<\alpha\le1$ by
+With $\rho_G$ from Definition~\ref{def:al_graph_extended_metric},
+$d_G(y,S)=\inf_{z\in S}\rho_G(y,z)$, $\beta\ge0$, and $0<\alpha\le1$, define
 \begin{align}
     \label{eq:al_poisson_distance_profile}
     H_S(y) & =
     \left\{\begin{array}{ll}
                \exp(-\beta d_G(y,S)^\alpha), & d_G(y,S)<\infty, \\
-               0,                            & d_G(y,S)=\infty.
+               0,                            & d_G(y,S)=\infty,
            \end{array}\right.
 \end{align}
-In particular, $H_{\varnothing}=0$.
+so $H_{\varnothing}=0$.
 
-\begin{theorem}[A physical channel kernel gives expected spatial decay]
+\begin{lemma}[A physical channel kernel gives expected spatial decay]
     \label{thm:al_channel_poisson_kernel_growth}
     \uses{def:al_channel_word,def:qc_site_oscillation,
         def:al_graph_extended_metric}
     \lean{TNLean.PEPS.AreaLaw.integrable_and_integral_siteOscillation_le_of_graph_kernel,
         TNLean.PEPS.AreaLaw.spectatorRootChannelWord_ofFn_append_singleton}
     \leanok
-    Suppose $q>0$, let $G$ be a simple graph on the finite physical
-    site set $I$, and let $A_{yz}\ge0$ be a real kernel.
-    Assume that, for every operator $W$ and every $y\in I$,
+    Suppose $q>0$, $G$ is a simple graph on $I$, and $A_{yz}\ge0$ satisfies
+    $A_{yz}=0$ when $\rho_G(y,z)=\infty$. Assume that for all operators $W$
+    and $y\in I$,
     \begin{align}
         \label{eq:al_poisson_physical_increment}
         \sum_{i\in F}\bigl(d_y(\mathcal E_iW)-d_y(W)\bigr)
-         & \le\sum_{z\in I}A_{yz}d_z(W).
-    \end{align}
-    Suppose $A_{yz}=0$ when $\rho_G(y,z)=\infty$, and suppose
-    $\beta\ge0$, $0<\alpha\le1$, and $v\ge0$ satisfy
-    \begin{align}
+         & \le\sum_{z\in I}A_{yz}d_z(W), \\
         \label{eq:al_poisson_weighted_rows}
         \sum_{z\in I}A_{yz}
         \exp\bigl(\beta (\rho_G(y,z)_{\R})^\alpha\bigr)
-         & \le v
+         & \le v,
     \end{align}
-    for every $y\in I$. Let $S\subseteq I$, and suppose every
-    physical matrix block of $B$ is supported on $S$.
-    Then $w\mapsto d_y(B_w)$ is integrable for every $t\ge0$ and
-    every $y\in I$, with
+    where $\beta,v\ge0$ and $0<\alpha\le1$. If $B_{ab}\in\mathcal A_S$ for all
+    $a,b\in J$ ($S\subseteq I$), then $w\mapsto d_y(B_w)$ is
+    $\nu_t$-integrable for all $t\ge0$ and $y\in I$, with
     \begin{align}
         \label{eq:al_poisson_physical_decay}
         \mathbb E_{\nu_t}d_y(B_w)
-         & \le e^{vt}\,2\|B\|\,H_S(y).
+         & \le e^{vt}\,2\|B\|\,H_S(y),
     \end{align}
-    If $d_G(y,S)=\infty$, then $d_y(B_w)=0$ for every word $w$.
-\end{theorem}
+    and $d_y(B_w)=0$ for all $w$ whenever $d_G(y,S)=\infty$.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_channel_word_append,thm:al_spectator_support_indicator,
         thm:al_graph_extended_components,thm:al_graph_extended_real_value}
-    Following the finite-word form of the argument in
-    \cite[\texttt{09-amplification.tex}, lines 161--188]{OpenAI2026AreaLaw},
-    put $f(w,y)=d_y(B_w)\ge0$. The empty word gives
-    $f(\varnothing,y)\le2\|B\|\mathbf1_S(y)$ by
-    Theorem~\ref{thm:al_spectator_support_indicator}.
-    The chronological identity $B_{wi}=\mathcal E_i(B_w)$ turns
-    (\ref{eq:al_poisson_physical_increment}) into
+    Following \cite[\texttt{09-amplification.tex}, lines 161--188]{OpenAI2026AreaLaw},
+    set $f(w,y)=d_y(B_w)\ge0$. Lemma~\ref{thm:al_spectator_support_indicator}
+    gives $f(\varnothing,y)\le2\|B\|\mathbf1_S(y)$, and
+    $B_{wi}=\mathcal E_i(B_w)$ turns~(\ref{eq:al_poisson_physical_increment})
+    into
     \begin{align}
         \label{eq:al_poisson_append_increment}
         \sum_{i\in F}\bigl(f(wi,y)-f(w,y)\bigr)
          & \le\sum_{z\in I}A_{yz}f(w,z).
     \end{align}
-    The extended triangle inequality and subadditivity of
-    $r\mapsto r^\alpha$ give $AH_S\le vH_S$ from
-    (\ref{eq:al_poisson_weighted_rows}). Applying the spatial
-    growth theorem for the atomic Poisson-word law to $f$ gives
-    integrability and~(\ref{eq:al_poisson_physical_decay}), and its
-    zero-profile conclusion gives $f(w,y)=0$ at infinite distance for
-    every word.
+    Subadditivity of $r\mapsto r^\alpha$ and the triangle inequality give
+    $(AH_S)(y)\le vH_S(y)$ from~(\ref{eq:al_poisson_weighted_rows}), so the
+    Poisson-word growth bound yields integrability,
+    (\ref{eq:al_poisson_physical_decay}), and $f(w,y)=0$ when
+    $d_G(y,S)=\infty$.
 \end{proof}
 
-\begin{theorem}[Localization tails give expected spatial decay]
+\begin{lemma}[Localization tails give expected spatial decay]
     \label{thm:al_channel_poisson_graph_growth}
     \uses{thm:al_channel_word_kernel_increment,
         thm:al_channel_poisson_kernel_growth}
     \lean{TNLean.PEPS.AreaLaw.integrable_and_integral_siteOscillation_le_graphChannelEventKernel}
     \leanok
-    Under the effect, component support, tail and cutoff hypotheses
-    of Theorem~\ref{thm:al_channel_word_kernel_increment}, put
-    $\beta=c/(4\cdot2^\alpha)$ and use the kernel
-    $\mathsf A^{(N)}$ with $D=2(2+8\sqrt C e^{c/2})$ and $b=c/2$.
-    Suppose its weighted rows satisfy
-    (\ref{eq:al_poisson_weighted_rows}) for some $v\ge0$.
-    For every initial operator $B$ whose physical blocks are
-    supported on $S$, all conclusions of
-    Theorem~\ref{thm:al_channel_poisson_kernel_growth} hold.
-\end{theorem}
+    Under the hypotheses of Lemma~\ref{thm:al_channel_word_kernel_increment},
+    if $\mathsf A^{(N)}$ satisfies~(\ref{eq:al_poisson_weighted_rows}) with
+    $\beta=c/(4\cdot2^\alpha)$ and $v\ge0$, then every $B$ with
+    $B_{ab}\in\mathcal A_S$ satisfies all conclusions of
+    Lemma~\ref{thm:al_channel_poisson_kernel_growth}.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_actual_channel_kernel_domination,
         thm:al_graph_event_kernel_nonneg,thm:al_graph_kernel_disconnected,
         thm:al_channel_poisson_kernel_growth}
-    Theorem~\ref{thm:al_actual_channel_kernel_domination} establishes
-    (\ref{eq:al_poisson_physical_increment}) for the kernel
-    $\mathsf A^{(N)}$, which is nonnegative and vanishes between
-    distinct components;
-    Theorem~\ref{thm:al_channel_poisson_kernel_growth} then yields all
-    claimed conclusions.
+    Combine Lemma~\ref{thm:al_actual_channel_kernel_domination},
+    Lemma~\ref{thm:al_graph_event_kernel_nonneg}, and
+    Lemma~\ref{thm:al_graph_kernel_disconnected} with
+    Lemma~\ref{thm:al_channel_poisson_kernel_growth}.
 \end{proof}
 
-\begin{theorem}[Uniform expected spatial decay on lattice domains]
+\begin{lemma}[Uniform expected spatial decay on lattice domains]
     \label{thm:al_channel_poisson_lattice_growth}
     \uses{thm:al_lattice_channel_uniform_bounds,
         thm:al_channel_poisson_kernel_growth}
     \lean{TNLean.PEPS.AreaLaw.exists_latticeChannelWord_spatial_growth}
     \leanok
-    Fix $p\ge1$, interaction radius $R\in\N$, interaction bound
-    $J\ge0$, and gap $\Delta>0$. There are $c>0$ and $v\ge0$
-    depending only on $p,R,J,\Delta$ with the following property.
-    Let $q>0$ be any local dimension, let $\Lambda$ be a finite lattice
-    domain with a Hamiltonian, anchors, and a gapped ground vector
-    satisfying the hypotheses of
-    Theorem~\ref{thm:al_lattice_channel_uniform_bounds}, and let $F_P$
-    be any retained subfamily of its event labels with positive
-    constraints $k_i$ formed from the original Hamiltonian.
-    With $\alpha=p/(p+1)$ and $\beta=c/(4\cdot2^\alpha)$, for every
-    finite spectator, support $S\subseteq\Lambda$,
-    operator $B$ whose physical blocks are supported on $S$, and
-    time $t\ge0$, the retained chronological word satisfies
+    For every $p\ge1$, $R\in\N$, $J\ge0$, and $\Delta>0$, there exist $c>0$
+    and $v\ge0$ (depending only on $p,R,J,\Delta$) such that under the lattice
+    hypotheses of Lemma~\ref{thm:al_lattice_channel_uniform_bounds}, for any
+    retained family $F_P$, $\alpha=p/(p+1)$, $\beta=c/(4\cdot2^\alpha)$,
+    $S\subseteq\Lambda$, operator $B$ with $B_{ab}\in\mathcal A_S$, and
+    $t\ge0$, the retained word $B_w=\mathcal E_w^P(B)$ is
+    $\nu_t^{F_P}$-integrable and satisfies
     \begin{align}
         \label{eq:al_poisson_lattice_decay}
         \mathbb E_{\nu_t^{F_P}}d_y(B_w)
-         & \le e^{vt}\,2\|B\|\,H_S(y).
+         & \le e^{vt}\,2\|B\|\,H_S(y),
     \end{align}
-    The oscillation is integrable and vanishes at every word when
-    the component of $y$ does not meet $S$. The same $c,v$ work for
-    all domains, local dimensions, retained families, spectators,
-    and initial operators.
-\end{theorem}
+    with $d_y(B_w)=0$ for all $w$ when $d_{G_\Lambda}(y,S)=\infty$.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_lattice_channel_uniform_bounds,
         thm:al_graph_event_kernel_nonneg,thm:al_graph_kernel_disconnected,
         thm:al_channel_poisson_kernel_growth}
-    Choosing the constants from
-    Theorem~\ref{thm:al_lattice_channel_uniform_bounds} before all
-    lattice and operator data, let $N$ be the maximum component radius
-    of the anchors of a fixed retained family (with maximum zero for the
-    empty family). That theorem establishes both
-    (\ref{eq:al_poisson_physical_increment}) and
-    (\ref{eq:al_poisson_weighted_rows}) for the finite
-    event kernel, and because the kernel is nonnegative and vanishes
-    between components, Theorem~\ref{thm:al_channel_poisson_kernel_growth}
-    gives~(\ref{eq:al_poisson_lattice_decay}) and the remaining
-    conclusions.
+    Take $C,c,v$ from Lemma~\ref{thm:al_lattice_channel_uniform_bounds} and
+    $N=\max_{X\in F_P}R_{a_X}$ (or $0$ if $F_P=\varnothing$), and apply
+    Lemma~\ref{thm:al_channel_poisson_kernel_growth} to $\mathsf A^{(N,P)}$
+    via~(\ref{eq:al_propagation_lattice_row}),
+    (\ref{eq:al_propagation_lattice_increment}),
+    Lemma~\ref{thm:al_graph_event_kernel_nonneg}, and
+    Lemma~\ref{thm:al_graph_kernel_disconnected}.
 \end{proof}
 
-\begin{theorem}[Chronological restriction of a full word]
+\begin{lemma}[Chronological restriction of a full word]
     \label{thm:al_channel_word_filter}
     \uses{def:al_channel_word}
     \lean{TNLean.PEPS.AreaLaw.spectatorRootChannelWord_filter}
     \leanok
-    Let $P$ be a predicate on the event alphabet $F$, and let
-    $F_P=\{i\in F:P(i)\}$. For a word $w$ over $F$, let
-    $\pi_P(w)$ be the word over $F_P$ obtained by retaining exactly
-    the letters satisfying $P$, in their original order and with
-    their original multiplicities. Write $w|_P$ for the same list
-    regarded as a word over $F$. Then
+    For $F_P=\{i\in F:P(i)\}$ and a word $w$ over $F$, let $\pi_P(w)$ be the
+    subword over $F_P$ of letters satisfying $P$ and $w|_P=j(\pi_P(w))$ over
+    $F$. Then
     \begin{align}
         \label{eq:al_channel_word_filter}
         \mathcal E_{w|_P}(B_0)
          & =\mathcal E^P_{\pi_P(w)}(B_0).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_channel_word_relabel}
-    Because the inclusion $j:F_P\hookrightarrow F$ sends $\pi_P(w)$ to
-    the ordered list $w|_P$, applying
-    Theorem~\ref{thm:al_channel_word_relabel} to $j$ gives the identity.
+    Apply Lemma~\ref{thm:al_channel_word_relabel} to the inclusion
+    $j:F_P\hookrightarrow F$, since $j(\pi_P(w))=w|_P$.
 \end{proof}
 
-\begin{theorem}[Expectations of retained physical words]
+\begin{lemma}[Expectations of retained physical words]
     \label{thm:al_channel_word_filter_expectation}
     \uses{def:al_channel_word}
     \lean{TNLean.PEPS.AreaLaw.integrable_spectatorRootChannelWord_filter_iff,
         TNLean.PEPS.AreaLaw.integral_spectatorRootChannelWord_filter}
     \leanok
-    Let $F$ be finite and $t\geq0$. Let $\nu_{F,t}$ be the
-    probability measure on finite words over $F$ assigning to
-    each word $w$ of length $m$ the mass
-    \begin{align}
-        \nu_{F,t}(\{w\})
-         & =e^{-|F|t}\frac{t^m}{m!}.
-    \end{align}
-    Let $P$ be a predicate on $F$, and let $\Phi$ be a function
-    from operators on $\mathcal H\otimes\mathcal K$ to a normed
-    real vector space. The function
-    $w\mapsto\Phi(\mathcal E_{w|_P}(B_0))$ is integrable under
-    $\nu_{F,t}$ if and only if
-    $u\mapsto\Phi(\mathcal E^P_u(B_0))$ is integrable under
-    $\nu_{F_P,t}$, and their Bochner integrals satisfy
+    Let $F$ be finite, $t\ge0$, and $\nu_{F,t}$ the measure
+    (\ref{eq:al_poisson_word_mass}). For any predicate $P$ on $F$ and map
+    $\Phi$ from operators on $\mathcal H\otimes\mathcal K$ to a normed real
+    vector space, $w\mapsto\Phi(\mathcal E_{w|_P}(B_0))$ is
+    $\nu_{F,t}$-integrable if and only if $u\mapsto\Phi(\mathcal E^P_u(B_0))$
+    is $\nu_{F_P,t}$-integrable, and
     \begin{align}
         \label{eq:al_channel_word_filter_expectation}
         \int\Phi(\mathcal E_{w|_P}(B_0))\,d\nu_{F,t}(w)
          & =\int\Phi(\mathcal E^P_u(B_0))\,d\nu_{F_P,t}(u).
     \end{align}
-    In particular, $\Phi$ may be the identity on matrices equipped
-    with the Euclidean operator norm, or the site oscillation
-    $B\mapsto d_y(B)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_channel_word_filter}
-    The ordered Poisson-word marginal identity gives
-    $(\pi_P)_*\nu_{F,t}=\nu_{F_P,t}$. Both word spaces are
-    countable and have the discrete sigma-algebra, so every
-    observation of a word is strongly measurable. Identifying the two
-    physical evaluations via (\ref{eq:al_channel_word_filter}) and
-    changing variables along $\pi_P$ yields the integrability
-    equivalence and the equality of Bochner integrals.
+    Since $(\pi_P)_*\nu_{F,t}=\nu_{F_P,t}$ on discrete countable word spaces,
+    substituting~(\ref{eq:al_channel_word_filter}) and changing variables along
+    $\pi_P$ yields the equivalence and
+    (\ref{eq:al_channel_word_filter_expectation}).
 \end{proof}
 
-\begin{theorem}[Retained oscillation bounds under the full word law]
+\begin{lemma}[Retained oscillation bounds under the full word law]
     \label{thm:al_channel_word_filter_oscillation}
     \uses{thm:al_channel_word_filter_expectation,def:qc_site_oscillation}
     \lean{TNLean.PEPS.AreaLaw.integrable_and_integral_siteOscillation_filter_le}
     \leanok
-    Fix $y\in I$ and $R\in\R$. If
-    $u\mapsto d_y(\mathcal E^P_u(B_0))$ is integrable under
-    $\nu_{F_P,t}$ and its integral is at most $R$, then
-    $w\mapsto d_y(\mathcal E_{w|_P}(B_0))$ is integrable under
-    $\nu_{F,t}$ and
+    For $y\in I$ and $R\in\R$, if $u\mapsto d_y(\mathcal E^P_u(B_0))$ is
+    $\nu_{F_P,t}$-integrable with $\int d_y(\mathcal E^P_u(B_0))\,d\nu_{F_P,t}(u)\le R$,
+    then $w\mapsto d_y(\mathcal E_{w|_P}(B_0))$ is $\nu_{F,t}$-integrable and
     \begin{align}
         \int d_y(\mathcal E_{w|_P}(B_0))\,d\nu_{F,t}(w)
-         & \leq R.
+         & \leq R. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_channel_word_filter_expectation}
-    Specializing the integrability equivalence and
-    (\ref{eq:al_channel_word_filter_expectation}) to
-    $\Phi(B)=d_y(B)$ yields the result.
+    Apply Lemma~\ref{thm:al_channel_word_filter_expectation} with
+    $\Phi(B)=d_y(B)$.
 \end{proof}
 
-\begin{theorem}[Filtered full lattice words satisfy spatial decay]
+\begin{lemma}[Filtered full lattice words satisfy spatial decay]
     \label{thm:al_channel_poisson_lattice_filter_growth}
     \uses{thm:al_channel_poisson_lattice_growth,
         thm:al_channel_word_filter}
     \lean{TNLean.PEPS.AreaLaw.exists_latticeChannelWord_filter_spatial_growth}
     \leanok
     Under the hypotheses of
-    Theorem~\ref{thm:al_channel_poisson_lattice_growth}, sample a
-    word $w$ from the full event alphabet $F$, and retain only the
-    events satisfying $P$. Then
-    $w\mapsto d_y(\mathcal E_{w|_P}(B))$ is integrable under
-    $\nu_{F,t}$, and the same constants $c>0$, $v\ge0$ satisfy
+    Lemma~\ref{thm:al_channel_poisson_lattice_growth},
+    $w\mapsto d_y(\mathcal E_{w|_P}(B))$ is $\nu_{F,t}$-integrable, the same
+    constants $c>0$, $v\ge0$ satisfy
     \begin{align}
         \label{eq:al_poisson_lattice_filtered_decay}
         \mathbb E_{\nu_{F,t}}d_y(\mathcal E_{w|_P}(B))
-         & \le e^{vt}\,2\|B\|\,H_S(y).
+         & \le e^{vt}\,2\|B\|\,H_S(y),
     \end{align}
-    Here $\alpha=p/(p+1)$, $\beta=c/(4\cdot2^\alpha)$, and
-    $H_S$ is~(\ref{eq:al_poisson_distance_profile}). If the
-    component of $y$ does not meet $S$, the filtered observable
-    has zero oscillation at $y$ for every full word. The constants
-    precede the choice of domain, local dimension, Hamiltonian,
-    retained predicate, spectator and supported operator $B$.
-\end{theorem}
+    and $d_y(\mathcal E_{w|_P}(B))=0$ for all $w$ when
+    $d_{G_\Lambda}(y,S)=\infty$.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_channel_poisson_lattice_growth,
         thm:al_channel_word_filter_oscillation,thm:al_channel_word_filter}
-    With $c,v$ chosen from
-    Theorem~\ref{thm:al_channel_poisson_lattice_growth}, applying
-    Theorem~\ref{thm:al_channel_word_filter_oscillation} to its
-    retained-law integrability and expectation bound yields
-    (\ref{eq:al_poisson_lattice_filtered_decay}). The pointwise
-    identity~(\ref{eq:al_channel_word_filter}) transfers the
-    zero-oscillation conclusion from each retained word
-    $\pi_P(w)$ to the corresponding filtered full word.
+    Combine Lemma~\ref{thm:al_channel_poisson_lattice_growth} with
+    Lemma~\ref{thm:al_channel_word_filter_oscillation} and
+    (\ref{eq:al_channel_word_filter}).
 \end{proof}

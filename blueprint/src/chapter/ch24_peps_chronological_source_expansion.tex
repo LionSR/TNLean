@@ -15,33 +15,30 @@ the subsequent separation and second-moment arguments.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.IsAllowed}
     \leanok
     \uses{def:peps_prepared_source_gate,def:peps_party_registers}
-    Let $P$ be any set of parties. A chronological composition from
-    register list $a$ to register list $b$ is formed from identities,
-    consecutive composition, private operations, exchanges of adjacent
-    registers, and nonprivate gates. A gate has a finite participant
-    set $C$, an injection $C\hookrightarrow P$, and common finite
-    source data on $C$. It acts on its prescribed input registers and
-    as the identity on all remaining registers. Any composition may
-    also be extended by an idle register. A composition is allowed
-    when each private operation is a contraction. Its complete
-    operator $W:\mathcal H_a\to\mathcal H_b$ uses the aggregate
-    operator of each nonprivate gate.
+    For a party set $P$, a chronological composition from register list $a$ to
+    $b$ is built from identities, consecutive composition, private operations,
+    adjacent register swaps, idle-register extensions, and nonprivate gates
+    (each carrying a finite participant set $C\hookrightarrow P$ and common
+    finite source data on $C$, acting on its input registers and as the identity
+    elsewhere). The composition is \emph{allowed} if every private operation is
+    a contraction; its complete operator $W:\mathcal H_a\to\mathcal H_b$
+    evaluates the aggregate operator at each nonprivate gate.
 \end{definition}
 
-\begin{theorem}[Norm of the complete composition]
+\begin{lemma}[Norm of the complete composition]
     \label{thm:peps_source_circuit_norm}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.norm_eval_le_one}
     \leanok
     \uses{def:peps_source_circuit}
     Every allowed chronological composition satisfies $\|W\|\leq1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_prepared_gate_grouped}
-    Each gate is a contraction. Consecutive composition, extension
-    by an identity, and unitary identifications of the register order
-    preserve this bound. Induction on the composition proves the claim.
+    By Lemma~\ref{thm:peps_prepared_gate_grouped} each gate is a contraction,
+    and composition, identity extension, and register swaps preserve
+    $\|\cdot\|\le1$.
 \end{proof}
 
 \begin{definition}[Gate occurrences and source positions]
@@ -58,33 +55,27 @@ the subsequent separation and second-moment arguments.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.branchCoefficient}
     \leanok
     \uses{def:peps_source_circuit}
-    Let $\mathcal G$ be the finite set of occurrences of nonprivate
-    gates. Repeated uses of the same gate give distinct elements of
-    $\mathcal G$. For $g\in\mathcal G$, let $C_g\subseteq P$ be its
-    participant set, $E_g$ its ordered source slots, $\Xi_g$ its
-    original branch set, and $c_{g,\xi}$ its original coefficients.
-    The source positions are
-    $\mathcal E=\{(g,e):g\in\mathcal G,\ e\in E_g\}$.
-    Each position has the two original endpoints of its slot,
-    mapped along the participant injection. No monomial label
-    enters the definition of $\mathcal E$.
+    Let $\mathcal G$ be the finite set of nonprivate gate occurrences $g$, each
+    with participants $C_g\subseteq P$, ordered source slots $E_g$, branch set
+    $\Xi_g$, and coefficients $c_{g,\xi}$. The source positions are
+    $\mathcal E=\{(g,e):g\in\mathcal G,\ e\in E_g\}$, with endpoints mapped
+    from $e$ along $C_g\hookrightarrow P$.
 \end{definition}
 
-\begin{theorem}[Incidence of the original source positions]
+\begin{lemma}[Incidence of the original source positions]
     \label{thm:peps_source_circuit_incidence}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.endpoints_mem_participants}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.endpoints_ne}
     \leanok
     \uses{def:peps_source_circuit_positions}
-    The two endpoints of $(g,e)$ are distinct and both belong to $C_g$.
-\end{theorem}
+    Each $(g,e)\in\mathcal E$ has two distinct endpoints in $C_g$.
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:peps_prepared_source_gate}
-    Each original slot has distinct endpoints in its gate's participant
-    set. The participant injection preserves distinctness. Consecutive
-    composition retains the occurrence of the gate containing the slot.
+    By Definition~\ref{def:peps_prepared_source_gate}, each slot $e\in E_g$ has
+    distinct endpoints, which are preserved by the injection $C_g\hookrightarrow P$.
 \end{proof}
 
 \begin{definition}[The partial branch choices]
@@ -98,21 +89,19 @@ the subsequent separation and second-moment arguments.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.expandedEval}
     \leanok
     \uses{def:peps_source_circuit_positions,def:peps_affected_owner}
-    Fix affected parties $\mathcal A\subseteq P$. A gate occurrence
-    is touched when $C_g\cap\mathcal A\neq\varnothing$.
-    Choose one label $\xi_g\in\Xi_g$ at each touched occurrence and
-    no label at the other occurrences. Let $\Xi_{\mathcal A}$ be this
-    finite set of choices. In the resulting composition $W_\xi$,
-    touched gates are replaced by their chosen prepared branches,
-    while untouched gates retain their complete operators. Identify
-    all exterior owners as in Definition~\ref{def:peps_affected_owner}.
-    The coefficient of the partial branch is
-    $c_\xi=\prod_{g:\,C_g\cap\mathcal A\neq\varnothing}c_{g,\xi_g}$,
-    and its weighted sum is $\sum_{\xi\in\Xi_{\mathcal A}}c_\xi W_\xi$.
-    An untouched gate has a single partial choice with coefficient one.
+    For affected parties $\mathcal A\subseteq P$, let
+    $\mathcal G_{\mathcal A}=\{g\in\mathcal G:C_g\cap\mathcal A\neq\varnothing\}$
+    be the touched gate occurrences and
+    $\Xi_{\mathcal A}=\prod_{g\in\mathcal G_{\mathcal A}}\Xi_g$ the partial
+    branch choices $\xi=(\xi_g)_{g\in\mathcal G_{\mathcal A}}$. Each $\xi$
+    defines a composition $W_\xi$ (replacing $g\in\mathcal G_{\mathcal A}$ by
+    branch $\xi_g$, keeping complete operators at $g\notin\mathcal G_{\mathcal A}$,
+    and grouping exterior owners via Definition~\ref{def:peps_affected_owner})
+    with coefficient $c_\xi=\prod_{g\in\mathcal G_{\mathcal A}}c_{g,\xi_g}$ and
+    weighted sum $\sum_{\xi\in\Xi_{\mathcal A}}c_\xi W_\xi$.
 \end{definition}
 
-\begin{theorem}[Allowed partial branches and their retained sources]
+\begin{lemma}[Allowed partial branches and their retained sources]
     \label{thm:peps_partial_source_inventory}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isAllowed_partialWord}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.expandedSources}
@@ -120,25 +109,24 @@ the subsequent separation and second-moment arguments.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.mem_sources_partialWord}
     \leanok
     \uses{def:peps_partial_source_choices}
-    If the original composition is allowed, each partial branch is
-    allowed. Its source list is obtained from the chosen sources of
-    the touched gates by retaining exactly those with at least one
-    endpoint in $\mathcal A$, and then grouping the exterior owners.
-    Each retained source has its original endpoint spaces and vector,
-    and the order and multiplicity of the source occurrences are preserved.
-\end{theorem}
+    If the original composition is allowed, every $W_\xi$ ($\xi\in\Xi_{\mathcal A}$)
+    is allowed, and its source list retains, in order and with multiplicity,
+    precisely the sources of $g\in\mathcal G_{\mathcal A}$ having an endpoint in
+    $\mathcal A$ (with exterior owners grouped and original endpoint spaces and
+    vectors preserved).
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_affected_source_occurrences,thm:peps_prepared_gate_properties,thm:peps_grouped_block_map,thm:peps_prepared_gate_grouped}
-    A chosen prepared branch is allowed. An untouched gate is a single
-    contraction on exterior memory. The owner identification turns a
-    pair with two exterior endpoints into a local normalized
-    preparation. Induction on the chronological composition gives the
-    asserted source list and allowedness.
+    Induct on the composition using Lemmas~\ref{thm:peps_prepared_gate_properties},
+    \ref{thm:peps_prepared_gate_grouped}, \ref{thm:peps_grouped_block_map}, and
+    \ref{thm:peps_affected_source_occurrences}: untouched gates are contractions
+    on exterior memory, and exterior-endpoint pairs become local normalized
+    preparations under owner grouping.
 \end{proof}
 
-\begin{theorem}[Exact chronological operator identity]
+\begin{lemma}[Exact chronological operator identity]
     \label{thm:peps_partial_source_evaluation}
     \lean{TNLean.Lattice.PartyCircuit.Word.eval_sum_appendTail}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_partial_gate}
@@ -147,28 +135,26 @@ the subsequent separation and second-moment arguments.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.expandedEval_mapOwner}
     \leanok
     \uses{def:peps_partial_source_choices}
-    Let $I_a,I_b$ be the isometries identifying the input
-    and output memories with their grouped-owner memories. Then
+    With $I_a,I_b$ the isometries identifying the input and output memories with
+    their grouped-owner memories,
     \begin{align}
         \left(\sum_{\xi\in\Xi_{\mathcal A}}c_\xi W_\xi\right)I_a
          & = I_bW.
         \label{eq:peps_partial_source_evaluation}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_grouped_gate_sum,thm:peps_prepared_gate_grouped,thm:peps_grouped_block_map,def:peps_source_circuit}
-    At a touched gate, summing the original branch expansion and extending
-    the sum by the spectator identity reproduces the gate operator, while at
-    an untouched gate the single partial branch is already its aggregate
-    operator. Because the two independent finite sums distribute with
-    multiplying coefficients under consecutive composition and commute with
-    adjoining idle registers, induction gives
+    By Lemma~\ref{thm:peps_grouped_gate_sum}, summing $\xi_g\in\Xi_g$ at
+    $g\in\mathcal G_{\mathcal A}$ recovers the gate operator, while
+    $g\notin\mathcal G_{\mathcal A}$ already carries its aggregate operator;
+    inducting over consecutive compositions and idle-register extensions gives
     (\ref{eq:peps_partial_source_evaluation}).
 \end{proof}
 
-\begin{theorem}[Local contributions to the scalar cost]
+\begin{lemma}[Local contributions to the scalar cost]
     \label{thm:peps_partial_source_local_cost}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_gate_of_touches}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_gate_of_exterior}
@@ -179,23 +165,20 @@ the subsequent separation and second-moment arguments.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_swap}
     \leanok
     \uses{def:peps_partial_source_choices}
-    A touched gate contributes $\sum_{\xi\in\Xi_g}|c_{g,\xi}|$ to
-    the sum of absolute partial coefficients. An untouched gate,
-    identity, private operation, or register exchange contributes one.
-    Consecutive compositions multiply these sums. Adjoining an idle
-    register leaves the sum unchanged.
-\end{theorem}
+    In $\sum_{\xi\in\Xi_{\mathcal A}}|c_\xi|$, a touched gate $g\in\mathcal G_{\mathcal A}$
+    contributes $\sum_{\xi\in\Xi_g}|c_{g,\xi}|$, untouched gates, identities,
+    private operations, and swaps contribute $1$, consecutive compositions
+    multiply these sums, and idle-register extensions preserve them.
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:peps_partial_source_choices}
-    Evaluating the defining choice set at each elementary operation gives
-    the elementary costs, and for consecutive compositions applying
-    $|cd|=|c|\,|d|$ and distributing the sum over the Cartesian product of
-    the two choice sets multiplies the factors.
+    Direct from Definition~\ref{def:peps_partial_source_choices} and
+    multiplicativity of $|\cdot|$ over Cartesian products of choice sets.
 \end{proof}
 
-\begin{theorem}[The exact product of the gate costs]
+\begin{lemma}[The exact product of the gate costs]
     \label{thm:peps_partial_source_product_cost}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_eq_prod}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_le_pow_card}
@@ -203,42 +186,37 @@ the subsequent separation and second-moment arguments.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_mul_conj_le_pow_card}
     \leanok
     \uses{def:peps_partial_source_choices}
-    Let $\mathcal G_{\mathcal A}$ denote the touched gate occurrences
-    and put $t=|\mathcal G_{\mathcal A}|$. Then
+    With $t=|\mathcal G_{\mathcal A}|$,
     \begin{align}
         \sum_{\xi\in\Xi_{\mathcal A}}|c_\xi|
-         & =\prod_{g\in\mathcal G_{\mathcal A}}
-        \sum_{\eta\in\Xi_g}|c_{g,\eta}|,
+                                         & =\prod_{g\in\mathcal G_{\mathcal A}}
+        \sum_{\eta\in\Xi_g}|c_{g,\eta}|, &
+        \sum_{\xi,\zeta\in\Xi_{\mathcal A}}|c_\xi\overline{c_\zeta}|
+                                         & =\left(\sum_{\xi\in\Xi_{\mathcal A}}|c_\xi|\right)^2,
         \label{eq:peps_partial_source_product_cost}
     \end{align}
-    and the sum of $|c_\xi\overline{c_\zeta}|$ over all independent
-    ket and bra choices is the square of this product. If each touched
-    gate's coefficient sum is at most $B$, these two costs are bounded
-    by $B^t$ and $B^{2t}$, respectively. Every occurrence contributes
-    separately, including repeated uses of one gate.
-\end{theorem}
+    which are bounded by $B^t$ and $B^{2t}$ when
+    $\sum_{\eta\in\Xi_g}|c_{g,\eta}|\le B$ for all $g\in\mathcal G_{\mathcal A}$.
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_partial_source_local_cost,def:peps_partial_source_choices}
-    Induction on the chronological composition gives the product
-    formula from the local contributions, and bounding each nonnegative
-    factor by $B$ yields $B^t$; since the ket and bra sums are independent
-    and complex conjugation preserves absolute value, their total cost is the
-    square of the first sum.
+    Induction via Lemma~\ref{thm:peps_partial_source_local_cost} yields
+    (\ref{eq:peps_partial_source_product_cost}), and bounding each of the $t$
+    factors by $B$ gives $B^t$ and $B^{2t}$.
 \end{proof}
 
-\begin{theorem}[The density expansion in orthonormal coordinates]
+\begin{lemma}[The density expansion in orthonormal coordinates]
     \label{thm:peps_partial_source_density}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.expandedEval_eq_mapOwner}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.toMatrix_eval_eq_sum_partialWord}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.density_eval_eq_sum_partialWord}
     \leanok
     \uses{thm:peps_partial_source_evaluation}
-    Choose finite orthonormal bases of the grouped input and output
-    memories. Let $M$ be the matrix of $I_bWI_a^{-1}$ and $K_\xi$
-    the matrix of the partial branch $W_\xi$. For every input matrix
-    $\rho$,
+    In finite orthonormal bases of the grouped input and output memories, let
+    $M$ and $K_\xi$ be the matrices of $I_bWI_a^{-1}$ and $W_\xi$. For every
+    input matrix $\rho$,
     \begin{align}
         M & =\sum_{\xi\in\Xi_{\mathcal A}}c_\xi K_\xi,
         \label{eq:peps_partial_source_matrix}          \\
@@ -248,20 +226,17 @@ the subsequent separation and second-moment arguments.
         K_\xi\rho K_\zeta^\dagger.
         \label{eq:peps_partial_source_density}
     \end{align}
-    In each summand, the untouched gates retain their complete
-    operators.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_partial_source_evaluation}
-    Composing (\ref{eq:peps_partial_source_evaluation}) with $I_a^{-1}$
-    and taking matrices gives the matrix expansion, and distributing the
-    finite sums in $M\rho M^\dagger$ while conjugating each bra coefficient
-    under the adjoint gives the density expansion.
+    Right-multiplying (\ref{eq:peps_partial_source_evaluation}) by $I_a^{-1}$
+    gives (\ref{eq:peps_partial_source_matrix}), and expanding $M\rho M^\dagger$
+    gives (\ref{eq:peps_partial_source_density}).
 \end{proof}
 
-\begin{theorem}[Fixed positions for every partial source inventory]
+\begin{lemma}[Fixed positions for every partial source inventory]
     \label{thm:peps_partial_source_order}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceOrder}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.mem_sourceOrder}
@@ -277,29 +252,20 @@ the subsequent separation and second-moment arguments.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.layout_sources_partialWord}
     \leanok
     \uses{def:peps_source_circuit_positions,def:peps_partial_source_choices}
-    The positions $\mathcal E$ admit a fixed exhaustive ordered list
-    without repetitions, in the preparation order of the
-    composition. Consecutive compositions list the later composition's
-    positions first; the original slot order within a gate is retained.
-    Each position $e$ has fixed halfspaces $\C^{u_e}$ and $\C^{v_e}$.
-
-    For every partial choice $\xi$, its source inventory is obtained
-    from this fixed list by retaining exactly those positions with an
-    endpoint in $\mathcal A$. A retained position has the grouped
-    original endpoints, the fixed halfspaces, and its normalized
-    chosen branch vector. Consequently the ordered layout of all
-    surviving source registers is independent of $\xi$.
-\end{theorem}
+    The set $\mathcal E$ admits a fixed duplicate-free ordering (listing later
+    compositions first and preserving intra-gate slot order), with fixed
+    halfspaces $\C^{u_e},\C^{v_e}$ at each $e\in\mathcal E$. For every
+    $\xi\in\Xi_{\mathcal A}$, the source inventory of $W_\xi$ is the sublist of
+    positions $e\in\mathcal E$ meeting $\mathcal A$, each carrying its grouped
+    endpoints, fixed halfspaces $\C^{u_e},\C^{v_e}$, and normalized branch
+    vector; hence the surviving source-register layout is independent of $\xi$.
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_partial_source_inventory,thm:peps_affected_source_occurrences}
-    By induction on the chronological composition, the two occurrence sets
-    of consecutive compositions are disjoint, so concatenating their
-    lists preserves uniqueness, while at a gate listing its prescribed slots
-    preserves distinct endpoints under the participant injection and removes
-    a slot under owner grouping exactly when both endpoints are exterior.
-    Because each retained position carries its prescribed spaces and
-    branch vector, the register layout is
-    determined solely by the original positions and $\mathcal A$.
+    Induct on the composition using Lemmas~\ref{thm:peps_partial_source_inventory}
+    and \ref{thm:peps_affected_source_occurrences}: disjoint occurrence sets
+    preserve duplicate-freeness under concatenation, and owner grouping drops a
+    slot $e\in\mathcal E$ precisely when both endpoints lie outside $\mathcal A$.
 \end{proof}

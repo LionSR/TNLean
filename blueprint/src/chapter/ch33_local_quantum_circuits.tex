@@ -10,7 +10,7 @@
 %% and LOCC", and Examples 1 and 2.
 %% ==================================================
 
-\chapter{Local Quantum Circuits}
+\chapter{Local quantum circuits}
 \label{ch:local_quantum_circuits}
 
 A chain of $N$ sites of local dimension $d$ carries $(\C^d)^{\otimes N}$, with
@@ -29,7 +29,10 @@ GHZ-type states in constant depth, teleport sites along chains of neighbouring
 pairs, and apply gates on pairs of distant sites or of distant registers in
 constant depth. Circuits of channels on neighbouring pairs, with ancillas
 attached and discarded site by site, obey the same light cone.
-Chapter~\ref{ch:log_depth_preparation} applies these results to the
+This chapter treats unitary circuits;
+Chapters~\ref{ch:circuits_measurements}--\ref{ch:circuits_lieb_robinson} treat
+measurements and long-range gates, circuits of channels, and Lieb--Robinson
+bounds. Chapter~\ref{ch:log_depth_preparation} applies these results to the
 preparation of matrix product states.
 
 \section{Operators on sets of sites and local circuits}
@@ -44,116 +47,59 @@ preparation of matrix product states.
         QuantumCircuit.supportedOperators,
         QuantumCircuit.rectKronecker_mem_supportedOperators}
     \leanok
-    A \emph{local circuit of depth $T$} on a chain of $N$ sites is a product of
-    $T$ layers, each a tensor product of unitaries acting on disjoint pairs of
-    neighbouring sites. A state is \emph{prepared in depth $T$} if it equals a
-    local circuit of depth $T$ applied to a product state.
+    A \emph{bond geometry} on a finite site set $I$ is a family $(B_b)_{b\in\beta}$ of subsets $B_b\subseteq I$. An operator on $(\C^d)^{\otimes I}$ \emph{acts on} $X\subseteq I$ if it lies in $\mathcal A_X=\MN{d}^{\otimes X}\otimes\mathbb 1_{I\setminus X}=\operatorname{span}\{\bigotimes_{i\in I}m_i:m_i=\mathbb 1\text{ for }i\notin X\}$. A \emph{layer} is a product of unitaries on pairwise disjoint bonds, a \emph{local circuit of depth $T$} is a product $U=W_T\cdots W_1$ of $T$ layers, and a state $\ket\psi$ is \emph{prepared in depth $T$} if $\ket\psi=U\bigotimes_{i\in I}\ket{v_i}$.
 
-    More generally, a \emph{bond geometry} on a finite set of sites $I$ is a
-    family $(B_b)_{b\in\beta}$ of subsets of $I$, the bonds, and a layer is a
-    product of unitaries acting on pairwise disjoint bonds. The model of
-    \cite{Piroli2021LOCC} on a lattice takes for bonds the pairs of
-    nearest-neighbour sites, that is the edges of a graph. Local circuits of
-    depth $T$ and states prepared in depth $T$ are defined in the same way for
-    every bond geometry.
-
-    The chain of $N$ sites is a ring with sites $1,\dots,N$ and neighbouring
-    pairs $\{k,k+1\}$ (indices modulo $N$); for $N=1$ the only pair is $\{1\}$,
-    and for $N=2$ both pairs equal $\{1,2\}$. The open chain has the pairs
-    $\{k,k+1\}$ with $k<N$. For any finite set of sites $I$ and $X\subseteq I$,
-    an operator on $(\C^d)^{\otimes I}$ \emph{acts on} $X$ if it lies in
-    $\MN{d}^{\otimes X}\otimes\mathbb 1$, the span of the products
-    $\bigotimes_{i\in I}m_i$ with $m_i=\mathbb 1$ for $i\notin X$. The chain of
-    $N$ sites is the case $I=\{1,\dots,N\}$.
+    On the $N$-site chain $I=\{1,\dots,N\}$, the ring bonds are $\{k,k+1\}\pmod N$ ($\{1\}$ for $N=1$), the open-chain bonds are $\{k,k+1\}$ ($1\le k<N$), and graph bonds are the edges~\cite{Piroli2021LOCC}.
 \end{definition}
 
-\begin{theorem}[Matrix entries of a supported operator]
+\begin{lemma}[Matrix entries of a supported operator]
     \label{thm:area_law_supported_identity}
     \lean{QuantumCircuit.isSupportedOn_of_mem_supportedOperators,
         QuantumCircuit.mem_supportedOperators_of_isSupportedOn}
     \leanok
     \uses{def:qc_local_circuit}
-    Let $I$ be a finite set, let $q$ be a natural number and let $S\subseteq I$.
-    Write $\mathcal C=\{0,\ldots,q-1\}^I$ for the configurations, and let
-    $A$ be a complex matrix indexed by $\mathcal C$. Then $A$ belongs to the
-    span of the products $\bigotimes_{i\in I}m_i$ with $m_i=\mathbb 1$ for
-    $i\notin S$ if and only if the following two conditions hold:
+    Let $I$ be a finite set, $q\in\mathbb N$, $S\subseteq I$, and $\mathcal C=\{0,\ldots,q-1\}^I$. A matrix $A\in\C^{\mathcal C\times\mathcal C}$ belongs to $\mathcal A_S=\operatorname{span}\{\bigotimes_{i\in I}m_i:m_i=\mathbb 1\text{ for }i\notin S\}$ if and only if:
     \begin{enumerate}
-        \item For configurations $\sigma,\tau$ with
-              $\sigma|_{S^c}\ne\tau|_{S^c}$, one has $A_{\sigma\tau}=0$.
-        \item For configurations $\sigma,\tau,\sigma',\tau'$ satisfying
-              \begin{align}
-                  \sigma|_S      & =\sigma'|_S,   & \tau|_S & =\tau'|_S, \\
-                  \sigma|_{S^c}  & =\tau|_{S^c},  &
-                  \sigma'|_{S^c} & =\tau'|_{S^c},
-              \end{align}
-              one has $A_{\sigma\tau}=A_{\sigma'\tau'}$.
+        \item $\sigma|_{S^c}\ne\tau|_{S^c}\implies A_{\sigma\tau}=0$;
+        \item $\sigma|_S=\sigma'|_S,\,\tau|_S=\tau'|_S,\,\sigma|_{S^c}=\tau|_{S^c},\,\sigma'|_{S^c}=\tau'|_{S^c}\implies A_{\sigma\tau}=A_{\sigma'\tau'}$.
     \end{enumerate}
-    The complement is taken in $I$. This criterion expresses the designated
-    support condition in~\cite[Lemma~3.1]{OpenAI2026AreaLaw},
-    \texttt{02-initial.tex}, line~39, for an arbitrary finite tensor product.
-\end{theorem}
+    This characterizes the support condition of~\cite[Lemma~3.1]{OpenAI2026AreaLaw}, \texttt{02-initial.tex}, line~39.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:qc_local_circuit}
-    For a product $A=\bigotimes_i m_i$ with $m_i=\mathbb 1$ outside $S$,
+    Every generator $A=\bigotimes_i m_i$ ($m_i=\mathbb 1$ for $i\notin S$) has entries
     \begin{align}
         A_{\sigma\tau}
          & =\prod_{i\in S}(m_i)_{\sigma_i\tau_i}
-        \prod_{i\notin S}\delta_{\sigma_i\tau_i}.
+        \prod_{i\notin S}\delta_{\sigma_i\tau_i},\notag
     \end{align}
-    This has both stated properties, which are preserved by sums and scalar
-    multiples. Conversely, if there are no configurations, $A$ is the zero
-    matrix. Otherwise fix $\rho\in\mathcal C$. For configurations $a,b$ of
-    $S$, write $a\rho$ for the configuration equal to $a$ on $S$ and to $\rho$
-    on $S^c$, and set $K_{ab}=A_{a\rho,\,b\rho}$. The two conditions give
+    satisfying (1)--(2), which pass to linear combinations. Conversely, if $\mathcal C=\varnothing$ then $A=0$; otherwise fix $\rho\in\mathcal C$ and set $K_{ab}=A_{a\rho,\,b\rho}$ for $a,b\in\{0,\dots,q-1\}^S$, where $a\rho|_S=a$ and $a\rho|_{S^c}=\rho|_{S^c}$. By (1)--(2),
     \begin{align}
         A_{\sigma\tau}
-         & =K_{\sigma|_S\,\tau|_S}\,\delta_{\sigma|_{S^c}\,\tau|_{S^c}},
-    \end{align}
-    that is, $A=K\otimes\mathbb 1$ in the coordinates of $S$ and $S^c$.
-    Writing $e_{ab}$ for the matrix units on the configurations of $S$,
-    \begin{align}
+         & =K_{\sigma|_S\,\tau|_S}\,\delta_{\sigma|_{S^c}\,\tau|_{S^c}},\notag \\
         A
-         & =\sum_{a,b}K_{ab}\,(e_{ab}\otimes\mathbb 1),
-         &
-        e_{ab}\otimes\mathbb 1
-         & =\bigotimes_{i\in S}e_{a_ib_i}\otimes
-        \bigotimes_{i\notin S}\mathbb 1,
+         & =\sum_{a,b}K_{ab}\,(e_{ab}\otimes\mathbb 1)
+        =\sum_{a,b}K_{ab}\Bigl(\bigotimes_{i\in S}e_{a_ib_i}\otimes\bigotimes_{i\notin S}\mathbb 1\Bigr)\in\mathcal A_S.\notag
     \end{align}
-    so $A$ is a combination of products of the stated form.
 \end{proof}
 
 \begin{definition}[Pairing local coordinates]
     \label{def:qc_site_pair_coordinates}
     \lean{QuantumCircuit.sitePairConfigurationEquiv}
     \leanok
-    Let $I$ be a finite set of sites and let $d,e\geq0$ be integers. At each
-    site, identify $(a,b)\in\{0,\dots,d-1\}\times\{0,\dots,e-1\}$ with
-    $ea+b\in\{0,\dots,de-1\}$. Applied sitewise, this gives a bijection
-    $p$ from pairs of configurations on $I$ to configurations of local
-    dimension $de$.
+    For a finite site set $I$ and integers $d,e\ge0$, the sitewise bijection $(a,b)\mapsto ea+b$ from $\{0,\dots,d-1\}\times\{0,\dots,e-1\}$ to $\{0,\dots,de-1\}$ induces a configuration bijection $p\colon\{0,\dots,d-1\}^I\times\{0,\dots,e-1\}^I\xrightarrow{\sim}\{0,\dots,de-1\}^I$.
 \end{definition}
 
-\begin{theorem}[Support of a tensor product on paired sites]
+\begin{lemma}[Support of a tensor product on paired sites]
     \label{thm:qc_site_pair_tensor_support}
     \lean{QuantumCircuit.reindex_kronecker_mem_supportedOperators}
     \leanok
     \uses{def:qc_local_circuit,def:qc_site_pair_coordinates}
-    To identify the support of the doubled local interactions in
-    \cite{OpenAI2026PolynomialPEPS}, \texttt{02-information.tex},
-    lines 416--424 and 513--524, let $S,T\subseteq I$. If $A$ on
-    $(\C^d)^{\otimes I}$ is supported on $S$ and $B$ on $(\C^e)^{\otimes I}$
-    is supported on $T$, then $A\otimes B$, expressed in the paired
-    coordinates $p$, is supported on $S\cup T$ in $(\C^{de})^{\otimes I}$.
-\end{theorem}
-
+    As in~\cite{OpenAI2026PolynomialPEPS}, \texttt{02-information.tex}, lines 416--424 and 513--524, if $A$ on $(\C^d)^{\otimes I}$ is supported on $S\subseteq I$ and $B$ on $(\C^e)^{\otimes I}$ is supported on $T\subseteq I$, then $A\otimes B$ reindexed by $p$ is supported on $S\cup T$ in $(\C^{de})^{\otimes I}$.
+\end{lemma}
 \begin{proof}\leanok
-    By bilinearity, it suffices to consider
-    $A=\bigotimes_i A_i$ and $B=\bigotimes_i B_i$, with $A_i=\mathbb 1$ outside $S$
-    and $B_i=\mathbb 1$ outside $T$. Pairing the local coordinates identifies
-    $A\otimes B$ with $\bigotimes_i(A_i\otimes B_i)$, whose factor at every site
-    outside $S\cup T$ is the identity.
+    By bilinearity, for $A=\bigotimes_i A_i$ ($A_i=\mathbb 1$ outside $S$) and $B=\bigotimes_i B_i$ ($B_i=\mathbb 1$ outside $T$), reindexing by $p$ identifies $A\otimes B$ with $\bigotimes_i(A_i\otimes B_i)$, where $A_i\otimes B_i=\mathbb 1$ for $i\notin S\cup T$.
 \end{proof}
 
 \begin{definition}[Light cone of a bond geometry]
@@ -163,16 +109,7 @@ preparation of matrix product states.
         QuantumCircuit.neighbourhood, QuantumCircuit.IsSeparatedBy,
         QuantumCircuit.openBond, QuantumCircuit.edgeBond}
     \leanok
-    For a bond geometry $(B_b)_{b\in\beta}$ on $I$ and $X\subseteq I$, the
-    \emph{one-step neighbourhood} of $X$ is $X$ together with every bond that
-    meets $X$, and the \emph{light cone of radius $r$} of $X$ is its $r$-fold
-    one-step neighbourhood. On the ring, the sites within ring distance $r$ of
-    $X$ are the sites $i+m$ with $i\in X$ and $\lvert m\rvert\le r$, indices
-    modulo $N$, and two sets of sites are at distance larger than $s$ if no
-    site of one is within ring distance $s$ of a site of the other. For a
-    graph, the bonds are its edges, and the distance of two vertices is the
-    least number of edges of a path joining them, as in
-    \cite{Piroli2021LOCC}.
+    For a bond geometry $(B_b)_{b\in\beta}$ on $I$ and $X\subseteq I$, the \emph{one-step neighbourhood} is $\mathcal N_1(X)=X\cup\bigcup_{B_b\cap X\ne\varnothing}B_b$, and the \emph{light cone of radius $r$} is the $r$-fold iterate $\mathcal L_r(X)=\mathcal N_1^r(X)$. On the ring, the $r$-neighbourhood of $X$ is $\{i+m\pmod N:i\in X,\,|m|\le r\}$, and $X,Y$ are separated by $s$ if $d_{\rm ring}(X,Y)>s$. On a graph, bonds are edges and distance is the path metric $d_G$~\cite{Piroli2021LOCC}.
 \end{definition}
 
 \begin{lemma}[Light cones of the ring, the open chain and a graph]
@@ -188,27 +125,17 @@ preparation of matrix product states.
         QuantumCircuit.disjoint_lightCone_edgeBond_of_dist,
         QuantumCircuit.lightCone_lightCone}
     \leanok
-    On the ring of $N$ sites, for every $N\ge1$, the light cone of radius $r$
-    of $X$ is the set of sites within ring distance $r$ of $X$. On the open
-    chain it is contained in the set of sites within distance $r$ of $X$ along
-    the chain, and for the edges of a graph it is contained in the set of
-    vertices at graph distance at most $r$ from $X$. In each case, sets of
-    sites at distance larger than $2r$ have disjoint light cones of radius
-    $r$. For every bond geometry, the light cone of radius $s$ of the light
-    cone of radius $r$ of $X$ is the light cone of radius $r+s$ of $X$.
+    For every bond geometry, $\mathcal L_s(\mathcal L_r(X))=\mathcal L_{r+s}(X)$. Furthermore:
+    \begin{enumerate}
+        \item On the ring ($N\ge1$), $\mathcal L_r(X)=\{i+m\pmod N:i\in X,\,|m|\le r\}$.
+        \item On the open chain, $\mathcal L_r(X)\subseteq\{j:|j-i|\le r\text{ for some }i\in X\}$.
+        \item On a graph $G$, $\mathcal L_r(X)\subseteq\{v:d_G(v,X)\le r\}$.
+    \end{enumerate}
+    In each case, $d(X,Y)>2r\implies\mathcal L_r(X)\cap\mathcal L_r(Y)=\varnothing$.
 \end{lemma}
 \begin{proof}
     \leanok
-    On the ring, the bonds meeting $X$ are $\{i-1,i\}$ and $\{i,i+1\}$ for
-    $i\in X$, so the one-step neighbourhood is the set of sites within ring
-    distance $1$, and a displacement of modulus at most $r+1$ is one of
-    modulus at most $r$ followed by one of modulus at most $1$. In the other
-    two cases, two sites on a common bond are at distance at most $1$, and the
-    inclusion follows by induction on $r$ and the triangle inequality. A site
-    in both light cones would give, by the triangle inequality, two points of
-    the two sets at distance at most $2r$. The composition law holds because
-    the light cone of radius $r$ is the $r$-fold iterate of the one-step
-    neighbourhood.
+    Since $\mathcal L_r=\mathcal N_1^r$, $\mathcal L_s(\mathcal L_r(X))=\mathcal L_{r+s}(X)$. On the ring, the bonds meeting $i\in X$ are $\{i-1,i\}$ and $\{i,i+1\}$, so $\mathcal N_1(X)=\{i+m:|m|\le1\}$, and induction on $r$ gives (1). Items (2)--(3) and disjointness for $d(X,Y)>2r$ follow by induction on $r$ and the triangle inequality.
 \end{proof}
 
 \begin{lemma}[Light cone of a local circuit]
@@ -220,21 +147,11 @@ preparation of matrix product states.
         QuantumCircuit.conj_circuitOp_mem_supportedOperators_lightCone,
         QuantumCircuit.BondLayer.conj_op_mem_supportedOperators}
     \leanok
-    As the finite light cone of \cite[Theorem~1]{Malz2024Preparation}, let $U$
-    be a local circuit of depth $T$ on a bond geometry and let $Z$ act on a
-    set of sites $X$. Then $U^\dagger ZU$ acts on the light cone of radius $T$
-    of $X$; on the ring, on the sites within ring distance $T$ of $X$.
+    As in~\cite[Theorem~1]{Malz2024Preparation}, if $U$ is a local circuit of depth $T$ on a bond geometry and $Z\in\mathcal A_X$, then $U^\dagger ZU\in\mathcal A_{\mathcal L_T(X)}$ (on the ring, within ring distance $T$ of $X$).
 \end{lemma}
 \begin{proof}
     \leanok
-    By induction on the layers it suffices to treat one layer $W$. Splitting
-    its gates into those whose bond meets $X$, with product $G$, and the
-    remaining gates, with product $H$, gives $W=HG$ since the gates commute.
-    Because $H$ is unitary and acts on the complement of $X$, it commutes with
-    $Z$ and gives $W^\dagger ZW=G^\dagger ZG$. Since the bonds of $G$ lie in
-    the one-step neighbourhood of $X$ and products and adjoints preserve
-    support on that set, $W^\dagger ZW$ acts on the one-step neighbourhood of
-    $X$, which Lemma~\ref{lem:qc_light_cone_geometries} identifies on the ring.
+    By induction on $T$ using Lemma~\ref{lem:qc_light_cone_geometries}, it suffices to treat a single layer $W=HG$, where $G$ is the product of gates on bonds meeting $X$ and $H$ is the product of the remaining gates. Since $H\in\mathcal A_{X^c}$ is unitary, $[H,Z]=0$, so $W^\dagger ZW=G^\dagger ZG\in\mathcal A_{\mathcal N_1(X)}$.
 \end{proof}
 
 \begin{lemma}[No connected correlations beyond the light cone]
@@ -247,36 +164,16 @@ preparation of matrix product states.
         QuantumCircuit.expect_productVector_rectKronecker,
         QuantumCircuit.expect_productVector_mul}
     \leanok
-    Following the vanishing of connected correlations in the proof of
-    \cite[Theorem~1]{Malz2024Preparation}, let $\ket{\psi}$ be a unit vector
-    prepared in depth $T$ on a bond geometry, and let $Z$, $Z'$ act on sets of
-    sites whose light cones of radius $T$ are disjoint, for instance on the
-    ring sets at distance larger than $2T$. Then
-    $\bra{\psi}ZZ'\ket{\psi}=\bra{\psi}Z\ket{\psi}\bra{\psi}Z'\ket{\psi}$.
-    Without the normalization, every vector $\ket{\psi}$ prepared in depth $T$
-    satisfies
-    $\bra{\psi}ZZ'\ket{\psi}\braket{\psi}{\psi}
-        =\bra{\psi}Z\ket{\psi}\bra{\psi}Z'\ket{\psi}$.
-    Its two ingredients on product vectors hold for
-    any finite set of sites: the expectation of $\bigotimes_im_i$ in
-    $\ket\pi=\bigotimes_i\ket{v_i}$ is $\prod_i\bra{v_i}m_i\ket{v_i}$, and
-    $\bra{\pi}AB\ket{\pi}\braket{\pi}{\pi}
-        =\bra{\pi}A\ket{\pi}\bra{\pi}B\ket{\pi}$ for $A$, $B$ acting on
-    disjoint sets of sites.
+    Following~\cite[Theorem~1]{Malz2024Preparation}, let $\ket\psi$ be prepared in depth $T$, and let $Z\in\mathcal A_X$, $Z'\in\mathcal A_{X'}$ with $\mathcal L_T(X)\cap\mathcal L_T(X')=\varnothing$ (e.g., $d_{\rm ring}(X,X')>2T$). Then
+    \begin{align}
+        \bra{\psi}ZZ'\ket{\psi}\braket{\psi}{\psi}
+         & =\bra{\psi}Z\ket{\psi}\bra{\psi}Z'\ket{\psi},\notag
+    \end{align}
+    and $\bra{\psi}ZZ'\ket{\psi}=\bra{\psi}Z\ket{\psi}\bra{\psi}Z'\ket{\psi}$ when $\braket{\psi}{\psi}=1$. On any product vector $\ket\pi=\bigotimes_i\ket{v_i}$, $\bra\pi\bigotimes_i m_i\ket\pi=\prod_i\bra{v_i}m_i\ket{v_i}$ and $\bra\pi AB\ket\pi\braket\pi\pi=\bra\pi A\ket\pi\bra\pi B\ket\pi$ for $A,B$ on disjoint supports.
 \end{lemma}
 \begin{proof}
     \leanok
-    Write $\ket{\psi}=U\ket{\pi}$ with $\ket{\pi}=\bigotimes_i\ket{v_i}$. Since
-    $UU^\dagger=\mathbb 1$,
-    $\bra{\psi}ZZ'\ket{\psi}=\bra{\pi}(U^\dagger ZU)(U^\dagger Z'U)\ket{\pi}$,
-    and by Lemma~\ref{lem:qc_light_cone} the two factors act on disjoint sets
-    of sites. For products $\bigotimes_i m_i$ and $\bigotimes_i m'_i$ with
-    disjoint supports the expectation in $\ket{\pi}$ is
-    $\prod_i\bra{v_i}m_im'_i\ket{v_i}$, and at each site one of $m_i$, $m'_i$
-    is the identity; bilinearity then gives
-    $\bra{\pi}AB\ket{\pi}\braket{\pi}{\pi}
-        =\bra{\pi}A\ket{\pi}\bra{\pi}B\ket{\pi}$ for $A$, $B$ acting on
-    disjoint sets.
+    Write $\ket\psi=U\ket\pi$ with $\ket\pi=\bigotimes_i\ket{v_i}$. By Lemma~\ref{lem:qc_light_cone}, $A=U^\dagger ZU\in\mathcal A_{\mathcal L_T(X)}$ and $B=U^\dagger Z'U\in\mathcal A_{\mathcal L_T(X')}$ have disjoint supports. For product generators $A=\bigotimes_i m_i$ and $B=\bigotimes_i m'_i$ with disjoint supports, at least one of $m_i,m'_i$ is $\mathbb 1$ at each site $i$, so $\bra\pi AB\ket\pi\braket\pi\pi=\prod_i\bra{v_i}m_im'_i\ket{v_i}\braket{v_i}{v_i}=\bra\pi A\ket\pi\bra\pi B\ket\pi$, which extends by bilinearity.
 \end{proof}
 
 \begin{lemma}[Inverses and series composition of local circuits]
@@ -289,23 +186,11 @@ preparation of matrix product states.
         QuantumCircuit.IsBondCircuitOfDepth.star,
         QuantumCircuit.IsBondCircuitOfDepth.mul}
     \leanok
-    For a layer $W$ with gates $g_k$, the layer with the gates $g_k^\dagger$
-    on the same bonds implements $W^\dagger$, and the same holds for the
-    product of the gates of $W$ over any subset of its bonds. If a circuit
-    has the layers $W_1,\dots,W_T$, applied in this order, and implements $U$,
-    then the circuit with the layers $W_T^\dagger,\dots,W_1^\dagger$
-    implements $U^\dagger$; the layers of a circuit implementing $U$ followed
-    by those of a circuit implementing $U'$ implement $U'U$. Consequently, a
-    local circuit of depth $T$ is unitary, and its adjoint is a local circuit
-    of depth $T$. If $U$ and $U'$ are local circuits of depths $T$ and $T'$,
-    then $U'U$ is a local circuit of depth $T+T'$.
+    For a layer $W=\prod_k g_k$, replacing each gate $g_k$ by $g_k^\dagger$ on the same bond implements $W^\dagger$ (and likewise on any bond subset). If $U=W_T\cdots W_1$ has depth $T$ and $U'=W'_{T'}\cdots W'_1$ has depth $T'$, then $U$ is unitary, $U^\dagger=W_1^\dagger\cdots W_T^\dagger$ has depth $T$, and $U'U=W'_{T'}\cdots W'_1 W_T\cdots W_1$ has depth $T+T'$.
 \end{lemma}
 \begin{proof}
     \leanok
-    If $U=W_T\cdots W_1$ with layers $W_k$, then
-    $U^\dagger=W_1^\dagger\cdots W_T^\dagger$, and $W_k^\dagger$ is the layer
-    whose gates are the adjoints of the gates of $W_k$, on the same bonds. The
-    layers of $U'U$ are those of $U$ followed by those of $U'$.
+    Gates on disjoint bonds commute, so $(\prod_k g_k)^\dagger=\prod_k g_k^\dagger$, $(W_T\cdots W_1)^\dagger=W_1^\dagger\cdots W_T^\dagger$, and concatenating layer lists multiplies the circuit operators and adds their depths.
 \end{proof}
 
 \begin{lemma}[Preparation from the all-zero state]
@@ -319,29 +204,12 @@ preparation of matrix product states.
         QuantumCircuit.isLocalCircuitOfDepth_finKronecker,
         QuantumCircuit.IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero}
     \leanok
-    Let $d\ge1$. For one-site operators $m_i$ and vectors $\ket{v_i}$ in
-    $\mathbb{C}^d$ on any finite set of sites,
-    $(\bigotimes_im_i)(\bigotimes_i\ket{v_i})=\bigotimes_im_i\ket{v_i}$, and
-    $\bigotimes_ic_i\ket{v_i}=(\prod_ic_i)\bigotimes_i\ket{v_i}$ for scalars
-    $c_i$. Every nonzero $x\in\mathbb{C}^d$ equals $c\,u\ket0$ for a unitary
-    $u$ and a scalar $c\neq0$, and every nonzero product vector is a scalar
-    multiple of $(\bigotimes_iu_i)\ket{0\cdots0}$ for one-site unitaries
-    $u_i$. A tensor product $\bigotimes_iu_i$ of one-site unitaries is a
-    local circuit of depth $2$. Every nonzero vector prepared in depth $T$ is a
-    scalar multiple of $U\ket{0\cdots0}$ for a local circuit $U$ of depth
-    $T+2$.
+    Let $d\ge1$. On any finite site set, $(\bigotimes_i m_i)(\bigotimes_i\ket{v_i})=\bigotimes_i m_i\ket{v_i}$ and $\bigotimes_i c_i\ket{v_i}=(\prod_i c_i)\bigotimes_i\ket{v_i}$. Every nonzero $\ket v\in\C^d$ equals $c\,u\ket 0$ ($c=\|v\|\ne0$, $u\in\mathrm U(d)$), every nonzero product vector equals $c(\bigotimes_i u_i)\ket{0\cdots0}$, $\bigotimes_i u_i$ has depth $2$, and every nonzero vector prepared in depth $T$ equals $c\,U\ket{0\cdots0}$ for a local circuit $U$ of depth $T+2$.
 \end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:qc_circuit_inverse_composition}
-    The first layer applies $u_k\otimes u_{k+1}$ on the pairs $\{k,k+1\}$ with
-    $k$ odd and $k<N$, and the second applies $u_N$ when $N$ is odd. A nonzero
-    product vector $\bigotimes_i\ket{v_i}$ has $v_i\neq0$ for every $i$, and
-    $\ket{v_i}=c_iu_i\ket0$ for a unitary $u_i$ whose first column is
-    $\ket{v_i}/\lVert v_i\rVert$ and $c_i=\lVert v_i\rVert$. Hence
-    $\bigotimes_i\ket{v_i}=(\prod_ic_i)(\bigotimes_iu_i)\ket{0\cdots0}$, and
-    Lemma~\ref{lem:qc_circuit_inverse_composition} composes the two
-    circuits.
+    Factoring $\ket{v_i}=\|v_i\|u_i\ket0$ gives $\bigotimes_i\ket{v_i}=(\prod_i\|v_i\|)(\bigotimes_i u_i)\ket{0\cdots0}$. The product $\bigotimes_i u_i$ is implemented in $2$ layers (applying $u_k\otimes u_{k+1}$ on odd bonds $\{k,k+1\}$ with $k<N$, then $u_N$ on $\{N\}$ when $N$ is odd), and Lemma~\ref{lem:qc_circuit_inverse_composition} gives depth $T+2$.
 \end{proof}
 
 \begin{lemma}[Operators placed on sets of sites]
@@ -352,55 +220,38 @@ preparation of matrix product states.
         QuantumCircuit.noncommProd_embedOp_apply}
     \leanok
     \uses{def:qc_local_circuit}
-    For a map $e$ from the $m$ sites of a chain into the $n$ sites of another
-    chain and an operator $X$ on $(\C^d)^{\otimes m}$, the operator $X$
-    \emph{placed by} $e$ has the matrix element $X_{x\circ e,\,y\circ e}$ at
-    the pair of configurations $(x,y)$ if $x$ and $y$ agree at every site
-    outside the range of $e$, and $0$ otherwise; for injective $e$ it is $X$
-    acting on the sites $e(1),\dots,e(m)$ and the identity on the other sites.
-    Placement is defined in the same way for a map $e\colon J\to I$ of any
-    finite sets of sites; for injective $e$, placing a product
-    $\bigotimes_{j\in J}m_j$ gives the product with $m_j$ at the site $e(j)$
-    and $\mathbb 1$ off $e(J)$. For an injective map $f$, placing by $f$ the
-    operator $X$ placed by $e$ places $X$ by $f\circ e$. Operators placed by
-    injective maps between chains with disjoint ranges commute. If $e_k$, $k\in K$, are
-    injective maps with pairwise disjoint ranges and $X_k$ are operators on
-    the corresponding chains, the product of the operators $X_k$ placed by
-    $e_k$ has the matrix element $\prod_{k\in K}(X_k)_{x\circ e_k,\,y\circ
-            e_k}$ at $(x,y)$ if $x$ and $y$ agree at every site outside all the
-    ranges, and $0$ otherwise.
+    For a map $e\colon J\to I$ between finite site sets and $X$ on $(\C^d)^{\otimes J}$, the \emph{placed operator} $\operatorname{embed}_e(X)$ has entries
+    \begin{align}
+        \operatorname{embed}_e(X)_{x,y}
+         & =\begin{cases}X_{x\circ e,\,y\circ e},&\text{if }x|_{I\setminus e(J)}=y|_{I\setminus e(J)},\\0,&\text{otherwise.}\end{cases}\notag
+    \end{align}
+    For injective $e$ and $f\colon I\hookrightarrow K$, $\operatorname{embed}_e(\bigotimes_{j\in J}m_j)$ has factor $m_j$ at $e(j)$ and $\mathbb 1$ outside $e(J)$, and $\operatorname{embed}_f(\operatorname{embed}_e(X))=\operatorname{embed}_{f\circ e}(X)$. If $\{e_k\colon J_k\hookrightarrow I\}_{k\in K}$ have pairwise disjoint ranges, the operators $\operatorname{embed}_{e_k}(X_k)$ commute and
+    \begin{align}
+        \Bigl(\prod_{k\in K}\operatorname{embed}_{e_k}(X_k)\Bigr)_{x,y}
+         & =\begin{cases}\prod_{k\in K}(X_k)_{x\circ e_k,\,y\circ e_k},&\text{if }x|_{I\setminus\bigcup_k e_k(J_k)}=y|_{I\setminus\bigcup_k e_k(J_k)},\\0,&\text{otherwise.}\end{cases}\notag
+    \end{align}
 \end{lemma}
 \begin{proof}
     \leanok
-    A configuration $x$ agrees with $y$ outside the range of $f\circ e$
-    exactly when it agrees with $y$ outside the range of $f$ and $x\circ f$
-    agrees with $y\circ f$ outside the range of $e$. Placed operators with
-    disjoint ranges act on disjoint sets of sites, hence commute. The product
-    formula follows by induction on $K$: the sum over intermediate
-    configurations in the matrix product has a single nonzero term, the
-    configuration agreeing with the output on the range of the new map and
-    with the input elsewhere.
+    The composition rule follows from $x|_{(f\circ e)(J)^c}=y|_{(f\circ e)(J)^c}\iff x|_{f(I)^c}=y|_{f(I)^c}$ and $(x\circ f)|_{e(J)^c}=(y\circ f)|_{e(J)^c}$. Disjoint ranges give commuting supports, and induction on $K$ collapses the intermediate matrix-product sum to the unique configuration matching the output on the new range and the input elsewhere.
 \end{proof}
 
-\begin{theorem}[Operators supported on a set of sites]
+\begin{lemma}[Operators supported on a set of sites]
     \label{thm:qc_supported_operator_placement}
     \lean{QuantumCircuit.exists_embedOp_eq_of_mem_supportedOperators}
     \leanok
     \uses{def:qc_local_circuit,lem:qc_placed_operators}
-    Let $e\colon\{0,\ldots,m-1\}\to\{0,\ldots,n-1\}$ be injective.
-    Every operator $Z$ on $(\C^d)^{\otimes n}$ supported on the range
-    of $e$ is the placement by $e$ of an operator $X$ on
-    $(\C^d)^{\otimes m}$. Empty chains and zero local dimension are
-    included.
-\end{theorem}
+    For any injective $e\colon\{0,\ldots,m-1\}\to\{0,\ldots,n-1\}$ ($m,n,d\ge 0$),
+    every $Z\in\operatorname{End}((\C^d)^{\otimes n})$ with
+    $\operatorname{supp}(Z)\subseteq\operatorname{im}(e)$ satisfies
+    $Z=\iota_e(X)$ for some $X\in\operatorname{End}((\C^d)^{\otimes m})$.
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:qc_local_circuit,lem:qc_placed_operators}
-    By the definition of support, $Z$ is a linear combination of
-    products $\bigotimes_{i<n}A_i$ with $A_i=I$ outside the range of
-    $e$. For each such product take $X=\bigotimes_{j<m}A_{e(j)}$.
-    Lemma~\ref{lem:qc_placed_operators} gives its required placement.
-    Placement preserves addition and scalar multiplication, so the
-    same conclusion holds for $Z$.
+    Writing $Z$ as a linear combination of $\bigotimes_{i<n}A_i$ with $A_i=I$
+    for $i\notin\operatorname{im}(e)$, Lemma~\ref{lem:qc_placed_operators} gives
+    $\bigotimes_{i<n}A_i=\iota_e\bigl(\bigotimes_{j<m}A_{e(j)}\bigr)$, and
+    linearity of $\iota_e$ concludes.
 \end{proof}
 
 \begin{lemma}[Products of matrices placed on disjoint windows]
@@ -412,35 +263,19 @@ preparation of matrix product states.
         QuantumCircuit.list_prod_embedOp_placeCfg, Matrix.mul_apply_extend}
     \leanok
     \uses{lem:qc_placed_operators}
-    Let $d\ge1$, and let $W_1,\dots,W_n$ be windows of $m$ sites of a chain,
-    that is maps from $\{1,\dots,m\}$ into the sites such that
-    $(p,t)\mapsto W_p(t)$ is injective; then every $W_p$ is injective and the
-    ranges of distinct windows are disjoint. For configurations $c_p$ of $m$
-    sites, the configuration with $c_p$ on the windows carries $c_p(t)$ at
-    $W_p(t)$ and $0$ at every other site. It depends injectively on
-    $(c_1,\dots,c_n)$, and every configuration with $0$ outside the windows is
-    the configuration with its own restrictions on the windows.
+    Let $d\ge1$, and let $W_1,\dots,W_n\colon\{1,\dots,m\}\to I$ be windows such that $(p,t)\mapsto W_p(t)$ is injective. For $c=(c_1,\dots,c_n)$ with $c_p\in\{0,\dots,d-1\}^m$, define $\operatorname{place}(c)\in\{0,\dots,d-1\}^I$ by $\operatorname{place}(c)(W_p(t))=c_p(t)$ and $0$ outside $\bigcup_p\operatorname{im}W_p$; then $\operatorname{place}$ is injective and fixes every configuration vanishing outside $\bigcup_p\operatorname{im}W_p$ upon restricting to $(W_p)_p$.
     \begin{enumerate}
-        \item Let $Y_1,\dots,Y_n$ be matrices on $m$ sites with
-              $Y_p\ket{\iota_p(c)}=\sum_eV_p(e,c)\ket{o_p(e)}$ for injective
-              maps $o_p$. Then the product of the matrices $Y_p$ placed by the
-              windows maps the configuration with $\iota_p(c_p)$ on the windows
-              to $\sum_e\prod_pV_p(e_p,c_p)$ times the configuration with
-              $o_p(e_p)$ on the windows.
-        \item Let $R$ and $R'$ be injective maps into the basis of a space. If
-              $M\ket{x_0}=\sum_af(a)\ket{R(a)}$ and
-              $G\ket{R(a)}=\sum_bg(a,b)\ket{R'(b)}$ for every $a$, then
-              $GM\ket{x_0}=\sum_b\bigl(\sum_ag(a,b)f(a)\bigr)\ket{R'(b)}$.
+        \item If $Y_p\ket{\iota_p(c_p)}=\sum_{e_p}V_p(e_p,c_p)\ket{o_p(e_p)}$ for injective maps $o_p$, then
+              \begin{align}
+                  \Bigl(\prod_{p=1}^n\operatorname{embed}_{W_p}(Y_p)\Bigr)\ket{\operatorname{place}(\iota_p(c_p))}
+                   & =\sum_{e}\Bigl(\prod_{p=1}^n V_p(e_p,c_p)\Bigr)\ket{\operatorname{place}(o_p(e_p))}.\notag
+              \end{align}
+        \item For injective $R,R'$ into a basis, if $M\ket{x_0}=\sum_a f(a)\ket{R(a)}$ and $G\ket{R(a)}=\sum_b g(a,b)\ket{R'(b)}$, then $GM\ket{x_0}=\sum_b\bigl(\sum_a g(a,b)f(a)\bigr)\ket{R'(b)}$.
     \end{enumerate}
 \end{lemma}
 \begin{proof}
     \leanok
-    The statements on configurations are evaluations of the definition. For
-    the first item, the placed matrices act on disjoint windows, so by
-    Lemma~\ref{lem:qc_placed_operators} the matrix element of their product is
-    the product over the windows of the matrix elements of the $Y_p$, and it
-    vanishes unless the output configuration is $0$ outside the windows. The
-    second item is the matrix product written out.
+    Item (1) follows from the disjoint-range product formula of Lemma~\ref{lem:qc_placed_operators}, since every output with nonzero amplitude vanishes outside $\bigcup_p\operatorname{im}W_p$. Item (2) is linearity of matrix multiplication.
 \end{proof}
 
 \begin{lemma}[Circuits inside sets of sites, in series and in parallel]
@@ -454,35 +289,16 @@ preparation of matrix product states.
     \leanok
     \uses{def:qc_local_circuit, lem:qc_circuit_inverse_composition,
         lem:qc_placed_operators}
-    A layer acts \emph{inside} a set of sites $R$ if each of its bonds is
-    contained in $R$, and $U$ is a \emph{local circuit of depth $T$ inside
-        $R$} if it is implemented by $T$ layers acting inside $R$. If $U$ and
-    $U'$ are local circuits inside $R$ of depths $T$ and $T'$, then $U'U$ is a
-    local circuit inside $R$ of depth $T+T'$. For a bond geometry whose bonds
-    are nonempty, such as the ring, if $U_i$, $i\in I$ for a finite set $I$,
-    are pairwise commuting local circuits of depth $T$ inside pairwise
-    disjoint sets $R_i$, then their product is a local circuit of depth $T$
-    inside $\bigcup_{i\in I}R_i$. Let $e$ be an injective map from
-    the sites of an open chain of $m$ sites into the ring with
-    $e(j+1)=e(j)+1$. If $X$ is a product of at most $K$ unitaries, each acting
-    on two neighbouring sites of the open chain, then $X$ placed by $e$ is a
-    local circuit of depth $K$ inside the range of $e$. For a list of such
-    maps $e_i$ with pairwise disjoint ranges and such products $X_i$, the
-    product of the $X_i$ placed by $e_i$ is a local circuit of depth $K$
-    inside the union of the ranges.
+    A layer acts \emph{inside} $R\subseteq I$ if all its bonds lie in $R$, and $U$ is a \emph{local circuit of depth $T$ inside $R$} if $U=W_T\cdots W_1$ with each $W_t$ acting inside $R$.
+    \begin{enumerate}
+        \item Series composition inside $R$ adds depths: $T$ and $T'$ give $T+T'$.
+        \item If all bonds are nonempty and $\{U_i\}_{i\in K}$ are commuting depth-$T$ circuits inside pairwise disjoint sets $R_i$, then $\prod_{i\in K}U_i$ has depth $T$ inside $\bigcup_{i\in K}R_i$.
+        \item If $e_i\colon\{1,\dots,m_i\}\hookrightarrow\Z_N$ satisfy $e_i(j+1)=e_i(j)+1$ with pairwise disjoint ranges and each $X_i$ is a product of at most $K$ nearest-neighbour unitaries on $\{1,\dots,m_i\}$, then $\prod_i\operatorname{embed}_{e_i}(X_i)$ has depth $K$ inside $\bigcup_i\operatorname{im}e_i$.
+    \end{enumerate}
 \end{lemma}
 \begin{proof}
     \leanok
-    In series the layers of $U$ are followed by those of $U'$
-    (Lemma~\ref{lem:qc_circuit_inverse_composition}). In parallel, by
-    induction on $I$, the layers of two circuits of depth $T$ inside disjoint
-    sets are merged one by one: the union of two layers acting inside disjoint
-    sets is a layer, whose operator is the product of the two because the
-    nonempty bonds of the two layers are distinct, and the circuit inside one
-    set commutes with every layer inside the other. A product of $K$ gates on neighbouring sites of the open
-    chain, placed by $e$, is the circuit whose $j$-th layer is the $j$-th gate
-    placed by $e$, padded with empty layers; the products on disjoint ranges
-    then run in parallel.
+    Item (1) is layer concatenation (Lemma~\ref{lem:qc_circuit_inverse_composition}). For (2), merging the $t$-th layers across $i\in K$ forms a single layer inside $\bigcup_i R_i$ because nonempty bonds in disjoint $R_i$ are disjoint. For (3), placing each of the $K$ gates of $X_i$ by $e_i$ (padded with empty layers) gives depth $K$ inside $\operatorname{im}e_i$, and (2) merges them in parallel.
 \end{proof}
 
 \section{Two-site gates suffice}
@@ -496,44 +312,22 @@ preparation of matrix product states.
         QuantumCircuit.exists_isPairProduct_ctrlOp,
         QuantumCircuit.isPairProduct_embedOp_pairSites}
     \leanok
-    Realizing the step that unitaries with constant support ``can be further
-    expressed with a low-depth circuit of local gates''
-    \cite[caption of Fig.~1]{Malz2024Preparation}, for $d\ge1$ and $n\ge2$
-    there is $K$ such that every unitary on $(\C^d)^{\otimes n}$ is a product
-    of at most $K$ unitaries, each acting on two neighbouring sites of the
-    open chain of $n$ sites.
+    Realizing~\cite[caption of Fig.~1]{Malz2024Preparation}, for every $d\ge1$ and $n\ge2$ there exists $K$ such that every $U\in\mathrm U((\C^d)^{\otimes n})$ is a product of at most $K$ nearest-neighbour two-site unitaries on the open chain $\{1,\dots,n\}$.
 \end{theorem}
 \begin{proof}
     \leanok
-    Dividing by a root of the determinant of order $d^n$, a global phase and
-    hence a single-site gate, reduces to determinant one. Column-by-column Givens elimination writes such
-    a unitary as a product of two-level operators, each a real rotation or a
-    diagonal phase on the span of two basis vectors. Write $G_{ab}(g)$ for the
-    operator acting as the $2\times2$ matrix $g$ on the span of the basis vectors
-    $\ket a,\ket b$ and as the identity on their complement, and
-    $Q=\bigl(\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\bigr)$ for the
-    quarter turn. For pairwise distinct $a,b,c$,
+    Factoring out a $d^n$-th root of $\det U$ (a $1$-site gate) reduces to $\det U=1$. Givens elimination decomposes $U$ into two-level operators $G_{ab}(g)$ ($g\in\mathrm{SU}(2)$ a rotation or diagonal phase on $\operatorname{span}\{\ket a,\ket b\}$). With $Q=\bigl(\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\bigr)$ and distinct $a,b,c$,
     \begin{align}
-        G_{ab}(g) & =G_{cb}(Q)^\dagger\,G_{ac}(g)\,G_{cb}(Q),
+        G_{ab}(g) & =G_{cb}(Q)^\dagger\,G_{ac}(g)\,G_{cb}(Q);
         \label{eq:qc_two_level_quarter_turn}
     \end{align}
-    and choosing $c$ to differ from $a$ at one site fewer than $b$ does reduces
-    a two-level operator between configurations differing at several sites to
-    one between configurations differing at one site fewer. Between configurations
-    differing at one site $t$ it is a single-site operation at $t$ controlled by
-    the other sites. Every rotation and every phase of determinant one is a group
-    commutator $g_1g_2g_1^\dagger g_2^\dagger$. Write $C_S(u)$ for the single-site
-    operation $u$ at $t$ controlled by the sites of $S$, with $t\notin S$; for
-    unitaries $v,w$ and a site $s\neq t$,
+    choosing $c$ to reduce the Hamming distance $d_H(a,b)$ by $1$ reduces to $d_H(a,b)=1$, where $G_{ab}(g)=C_S(u)$ is a $1$-site gate $u=vwv^\dagger w^\dagger\in\mathrm{SU}(d)$ at $t$ controlled by $S\not\ni t$. For $s\neq t$,
     \begin{align}
         C_{S\cup\{s\}}(vwv^\dagger w^\dagger)
          & =C_S(v)\,C_{\{s\}}(w)\,C_S(v^\dagger)\,C_{\{s\}}(w^\dagger),
         \label{eq:qc_controlled_commutator}
     \end{align}
-    so a controlled commutator is a product of two operations with one control
-    fewer and two operations on two sites; induction removes the controls. An
-    operation on two distant sites is conjugated to neighbouring sites by SWAP
-    gates.
+    which inductively reduces $|S|$ to $1$, and nearest-neighbour SWAP gates route any two-site gate $\{s,t\}$ to adjacent sites.
 \end{proof}
 
 \begin{definition}[Gates on windows of consecutive sites]
@@ -542,14 +336,7 @@ preparation of matrix product states.
         QuantumCircuit.IsWindowProduct}
     \leanok
     \uses{def:qc_local_circuit}
-    Modeling the gates of the sequential circuit of~\cite[paragraph ``The
-        sequential-RG circuit'']{Malz2024Preparation} (each acting on the bond
-    register and one further site), on the open chain of $n$ sites a
-    \emph{gate on a window of $m$ sites} is a unitary acting on the sites $p$
-    with $a\le p<a+m$, for some $a$. Near the right end of the chain fewer
-    than $m$ of these sites exist, so such a gate acts on at most $m$
-    consecutive sites. An operator is a \emph{product of at most $K$ gates on
-        windows of $m$ sites} if it is a product of at most $K$ such gates.
+    Modeling the sequential-RG gates of~\cite[paragraph ``The sequential-RG circuit'']{Malz2024Preparation}, a \emph{gate on a window of $m$ sites} on $\{1,\dots,n\}$ is a unitary supported on $\{p:a\le p<\min(a+m,n+1)\}$ for some $a$. An operator is a \emph{product of at most $K$ window-$m$ gates} if it factors into at most $K$ such gates.
 \end{definition}
 
 \begin{lemma}[Products of gates on windows]
@@ -562,41 +349,15 @@ preparation of matrix product states.
     \leanok
     \uses{def:qc_window_gate, lem:qc_placed_operators,
         thm:qc_bounded_unitary_two_site_gates}
-    On the open chain of $n$ sites the following hold.
+    On the open chain of $n$ sites:
     \begin{enumerate}
-        \item A unitary on $l\le m$ sites placed on consecutive sites is a gate
-              on a window of $m$ sites, and if $n\le m$ every unitary on the
-              chain is one such gate.
-        \item Products of at most $K$ and $K'$ gates on windows of $m$ sites
-              multiply to a product of at most $K+K'$ such gates, and placing
-              the chain as a block of consecutive sites of a longer chain
-              keeps a product of at most $K$ such gates.
-        \item If $n\ge2$, a gate on a window of two sites is a gate on two
-              neighbouring sites.
-        \item For $m\ge2$ there is $C$, depending only on $d$ and $m$, such
-              that for every $n\ge2$ a product of at most $K$ gates on windows
-              of $m$ sites is a product of at most $KC$ gates on two
-              neighbouring sites.
+        \item Any unitary placed on $l\le m$ consecutive sites (and any chain unitary when $n\le m$) is a window-$m$ gate.
+        \item Products of $K$ and $K'$ window-$m$ gates multiply to at most $K+K'$ window-$m$ gates and are preserved under contiguous subchain placement.
+        \item For $n\ge2$, a window-$2$ gate is a nearest-neighbour two-site gate.
+        \item For $m\ge2$, there exists $C(d,m)$ such that for all $n\ge2$, any product of at most $K$ window-$m$ gates is a product of at most $KC(d,m)$ nearest-neighbour two-site gates.
     \end{enumerate}
 \end{lemma}
 \begin{proof}
     \leanok
-    The first two items follow from the support properties of
-    Lemma~\ref{lem:qc_placed_operators}: a placed operator acts on the range
-    of the placement, and placing composes. For the third item, the sites of
-    the window lie in a pair $\{a',a'+1\}$ with $a'=\min(a,n-2)$. For the
-    fourth, enlarging the window of each gate to $\min(m,n)\ge2$ consecutive
-    sites inside the chain expresses the gate as a unitary on these sites
-    placed on the chain, hence by
-    Theorem~\ref{thm:qc_bounded_unitary_two_site_gates} as a product of at most
-    $K_{\min(m,n)}$ gates on neighbouring sites, so taking
-    $C=\sum_{l\le m}K_l$ completes the bound.
+    Items (1)--(2) follow from Lemma~\ref{lem:qc_placed_operators}. For (3), a window of length $2$ lies in $\{a',a'+1\}$ with $a'=\min(a,n-1)$. For (4), each gate lies in a contiguous window of length $\min(m,n)\ge2$, hence factors into at most $K_{\min(m,n)}$ nearest-neighbour gates by Theorem~\ref{thm:qc_bounded_unitary_two_site_gates}, so $C(d,m)=\sum_{l=2}^m K_l$ suffices.
 \end{proof}
-
-\input{chapter/ch33_local_quantum_circuits_measurements}
-\input{chapter/ch33_local_quantum_circuits_teleportation}
-\input{chapter/ch33_local_quantum_circuits_channels}
-\input{chapter/ch33_local_quantum_circuits_physical_ports}
-\input{chapter/ch33_local_quantum_circuits_lieb_robinson}
-\input{chapter/ch33_supported_projected_relative_evolution}
-\input{chapter/ch33_area_law_site_oscillation}

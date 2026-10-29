@@ -1,32 +1,36 @@
 %% =========================================================
-%% Chapter: Positive quasi-local constraints from a global gap
+%% Chapter: Positive local constraints from the spectral gap
 %% =========================================================
 
-\chapter{Positive quasi-local constraints from a global gap}%
+\chapter{Positive local constraints from the spectral gap}%
 \label{ch:peps_area_law_constraints}
 
+The second stage of the proof of the area law replaces the Hamiltonian by a
+sum of positive operators, each of which annihilates the ground state, that
+keep a spectral gap and whose tails decay rapidly in the graph distance. This
+chapter constructs these constraints and proves the two conditional operator
+estimates of \cite[Section~5]{OpenAI2026AreaLaw}.
+
 This chapter follows Section~4 of the two-dimensional area-law manuscript
-(Propositions 4.3 and 4.5 and Lemma 4.4), first on a general finite graph and
-then, in Section~\ref{sec:al_lattice_constraints}, on the induced lattice
-domains of the source. Let $G$ be a finite graph and
-$H=\sum_i h_i$ a sum of Hermitian terms, where $h_i$ acts on a support $X_i$
-with anchor $a_i\in X_i$, every support has graph diameter at most $R$ and at
-most $v_R$ sites, the norms of the terms meeting a site sum to at most $b_0$,
-$\|h_i\|\le J$, and the spheres of $G$ grow at most polynomially. Suppose that
-$H\Omega=E_0\Omega$ for a unit vector $\Omega$ and that
-$H-E_0I\ge\Delta(I-P_\Omega)$ with $\Delta>0$, where
+(Propositions~4.3 and~4.5 and Lemma~4.4), first on a general finite graph $G$
+and then, in Section~\ref{sec:al_lattice_constraints}, on induced lattice
+domains. Let $H=\sum_i h_i$ with $h_i=h_i^*$ acting on $X_i\ni a_i$, where
+$\operatorname{diam}_G(X_i)\le R$, $|X_i|\le v_R$,
+$\sum_{i:x\in X_i}\|h_i\|\le b_0$, $\|h_i\|\le J$, and spheres in $G$ grow at
+most polynomially. Assume $H\Omega=E_0\Omega$ for $\|\Omega\|=1$ and
+$H-E_0I\ge\Delta(I-P_\Omega)$ with $\Delta>0$ and
 $P_\Omega=|\Omega\rangle\langle\Omega|$. Write $E_{i,l}$ for the normalized
-partial-trace expectation onto the graph ball $N_l(a_i)$
+partial-trace expectation onto $N_l(a_i)$
 (Definition~\ref{def:qc_site_expectation}) and $\alpha=p/(p+1)$ for a fixed
 integer $p\ge1$.
 
-The construction filters each term with a smooth spectral filter of width
-$\Delta/2$ whose time kernel $f$ decays like $e^{-c|t|^\alpha}$, removes its
-ground expectation, and takes the absolute value:
-\[
+Filtering each $h_i$ by a smooth spectral filter of width $\Delta/2$ with time
+kernel $f(t)=O(e^{-c|t|^\alpha})$ gives
+\begin{align}
     M_i=\int_{\mathbb R}f(t)e^{itH}h_ie^{-itH}\,dt-\langle\Omega,h_i\Omega\rangle I,
     \qquad k_i=|M_i|/c_*,\qquad c_*=\max\{1,J(\|f\|_1+1)\}.
-\]
+    \label{eq:al_filtered_constraint}
+\end{align}
 
 \begin{lemma}[Order and commutant of the ball expectation]
     \label{lem:al_site_expectation_order}
@@ -42,15 +46,18 @@ ground expectation, and takes the absolute value:
         QuantumCircuit.sqrt_mem_supportedOperators}
     \leanok
     \uses{lem:qc_site_expectation_average, lem:qc_site_expectation_properties}
-    The expectation $E_K$ onto a set of sites $K$ preserves adjoints and the
-    order, maps $[0,I]$ into $[0,I]$, and fixes every operator commuting with
-    all operators acting outside $K$; such an operator acts on $K$. In
-    particular $E_K$ fixes $|Y|$ for every Hermitian $Y$ acting on $K$, and
-    $Y^{1/2}$ acts on $K$ for every $Y\ge0$ acting on $K$.
+    For any site set $K$, the expectation $E_K$ satisfies
+    $E_K(X^*)=E_K(X)^*$, $X\le Y\implies E_K(X)\le E_K(Y)$,
+    $E_K([0,I])\subseteq[0,I]$, and $E_K(X)=X$ (so $X$ acts on $K$) whenever
+    $[X,Z]=0$ for all $Z$ acting on $K^c$. In particular, $E_K(|Y|)=|Y|$ for
+    every $Y=Y^*$ acting on $K$, and $Y^{1/2}$ acts on $K$ for every $Y\ge0$
+    acting on $K$.
 \end{lemma}
 \begin{proof}\leanok
-    $E_K$ is the uniform average of the conjugations by products of on-site
-    Weyl operators outside $K$, and its values act on $K$.
+    By Lemmas~\ref{lem:qc_site_expectation_average}
+    and~\ref{lem:qc_site_expectation_properties}, $E_K$ is the uniform average
+    of conjugations by products of on-site Weyl operators on $K^c$ and takes
+    values acting on $K$.
 \end{proof}
 
 \begin{theorem}[Positive replacement of the Hamiltonian]
@@ -64,29 +71,33 @@ ground expectation, and takes the absolute value:
     \uses{thm:qc_graph_ball_localization, lem:al_site_expectation_order,
         lem:qc_lr_closed_region}
     There are constants $C\ge0$ and $c>0$, depending only on
-    $p,R,v_R,b_0,J,\Delta$ and the growth of the spheres, such that
+    $p,R,v_R,b_0,J,\Delta$ and the sphere-growth constants of $G$, such that the
+    operators $k_i$ of~(\ref{eq:al_filtered_constraint}) and
+    $k_{i,l}=E_{i,l}(k_i)$ ($l\in\mathbb N$) satisfy
     \begin{align}
         0\le k_i\le I,\qquad k_i\Omega=0,\qquad
         \sum_ik_i\ge c_*^{-1}(H-E_0I)\ge\frac{\Delta}{c_*}(I-P_\Omega),
+        \label{eq:al_positive_replacement_gap} \\
+        0\le k_{i,l}\le I,\qquad
+        \|k_i-k_{i,l}\|\le Ce^{-cl^\alpha},
+        \label{eq:al_positive_replacement_tail}
     \end{align}
-    and for every integer $l\ge0$ the operator $k_{i,l}=E_{i,l}(k_i)$ lies in
-    $[0,I]$ and satisfies $\|k_i-k_{i,l}\|\le Ce^{-cl^\alpha}$. Each $k_i$ acts
-    on the connected component of $a_i$.
+    and each $k_i$ acts on the connected component of $a_i$.
 \end{theorem}
 \begin{proof}\leanok
-    The spectral filter multiplies the matrix element of $h_i$ between energies
-    $E$ and $E_0$ by $\chi(E-E_0)$, which vanishes across the gap and equals
-    $1$ at $E=E_0$; hence $M_i\Omega=0$, $\sum_iM_i=H-E_0I$ and
-    $\|M_i\|\le c_*$. Since $M_i\le|M_i|$ and the kernel of $M_i$ lies in that
-    of $|M_i|$, the first display follows. For the tail, the graph-ball
-    localization of the dynamics (Theorem~\ref{thm:qc_graph_ball_localization})
-    is integrated against $|f|$, splitting the time integral at $|t|$ of order
-    $l$; the square-root estimate
-    $\||A|-|B|\|\le((\|A\|+\|B\|)\|A-B\|)^{1/2}$ transfers the bound to the
-    absolute value, because $E_{i,l}$ fixes $|E_{i,l}M_i|$. Finally the
-    Heisenberg evolution of $h_i$ commutes with every operator acting outside
-    the component of $a_i$ (Lemma~\ref{lem:qc_lr_closed_region}), hence so do
-    the filtered term, its centering and its absolute value.
+    Since the filter multiplier $\chi(E-E_0)$ in~(\ref{eq:al_filtered_constraint})
+    vanishes for $|E-E_0|\ge\Delta$ and equals $1$ at $E=E_0$, we have
+    $M_i\Omega=0$, $\sum_iM_i=H-E_0I$, and $\|M_i\|\le c_*$. Because
+    $M_i\le|M_i|$ and $\ker M_i\subseteq\ker|M_i|$,~(\ref{eq:al_positive_replacement_gap})
+    follows. Integrating the localization bound of
+    Lemma~\ref{thm:qc_graph_ball_localization} against $|f(t)|$ (split at
+    $|t|\asymp l$) and applying
+    $\||A|-|B|\|\le((\|A\|+\|B\|)\|A-B\|)^{1/2}$ with
+    $E_{i,l}(|E_{i,l}M_i|)=|E_{i,l}M_i|$ (Lemma~\ref{lem:al_site_expectation_order})
+    yields~(\ref{eq:al_positive_replacement_tail}). By
+    Lemma~\ref{lem:qc_lr_closed_region}, $e^{itH}h_ie^{-itH}$ commutes with all
+    operators outside the connected component of $a_i$, hence so do $M_i$ and
+    $k_i$.
 \end{proof}
 
 \begin{lemma}[Square roots and local channels]
@@ -95,44 +106,44 @@ ground expectation, and takes the absolute value:
     \leanok
     \uses{thm:al_positive_replacement, lem:al_site_expectation_order,
         thm:al_root_channel_commutant}
-    Let $G_i=(I-k_i)^{1/2}$, $K_i=k_i^{1/2}$, $G_{i,l}=(I-k_{i,l})^{1/2}$ and
-    $K_{i,l}=k_{i,l}^{1/2}$. These are positive contractions, $G_i\Omega=\Omega$,
-    $K_i\Omega=0$, $G_{i,l}^2+K_{i,l}^2=I$, and
-    $\|G_i-G_{i,l}\|+\|K_i-K_{i,l}\|\le2\|k_i-k_{i,l}\|^{1/2}
-        \le2C^{1/2}e^{-(c/2)l^\alpha}$. The maps
-    $\mathcal E_i(B)=G_iBG_i+K_iBK_i$ and
-    $\mathcal E_{i,l}(B)=G_{i,l}BG_{i,l}+K_{i,l}BK_{i,l}$ are unital and
-    completely positive, contractive after adjoining any auxiliary system, and
-    $\|(\mathcal E_i-\mathcal E_{i,l})\otimes\mathrm{id}\|\le4\|k_i-k_{i,l}\|^{1/2}$
-    uniformly in the auxiliary dimension. The map $\mathcal E_{i,l}$ fixes every
-    operator commuting with all operators acting on $N_l(a_i)$, and
-    $\mathcal E_{i,l}\otimes\mathrm{id}$ fixes every operator commuting with
-    $A\otimes I$ for all operators $A$ acting on $N_l(a_i)$
-    (Theorem~\ref{thm:al_root_channel_commutant}).
+    Set $G_i=(I-k_i)^{1/2}$, $K_i=k_i^{1/2}$, $G_{i,l}=(I-k_{i,l})^{1/2}$, and
+    $K_{i,l}=k_{i,l}^{1/2}$. These lie in $[0,I]$ and satisfy
+    $G_i\Omega=\Omega$, $K_i\Omega=0$, $G_{i,l}^2+K_{i,l}^2=I$, and
+    \begin{align}
+        \|G_i-G_{i,l}\|+\|K_i-K_{i,l}\|
+        \le2\|k_i-k_{i,l}\|^{1/2}\le2C^{1/2}e^{-(c/2)l^\alpha}.
+        \label{eq:al_root_tail}
+    \end{align}
+    The unital completely positive maps $\mathcal E_i(B)=G_iBG_i+K_iBK_i$ and
+    $\mathcal E_{i,l}(B)=G_{i,l}BG_{i,l}+K_{i,l}BK_{i,l}$ are completely
+    contractive, satisfy
+    $\|(\mathcal E_i-\mathcal E_{i,l})\otimes\mathrm{id}\|\le4\|k_i-k_{i,l}\|^{1/2}$,
+    and satisfy $\mathcal E_{i,l}(B)=B$ (respectively
+    $(\mathcal E_{i,l}\otimes\mathrm{id})(B)=B$) whenever $[B,A]=0$ (respectively
+    $[B,A\otimes I]=0$) for all $A$ acting on $N_l(a_i)$
+    (Lemma~\ref{thm:al_root_channel_commutant}).
 \end{lemma}
 \begin{proof}\leanok
-    The square-root estimate $\|U^{1/2}-V^{1/2}\|\le\|U-V\|^{1/2}$ gives the
-    root tails. The map $v\mapsto Gv\oplus Kv$ is an isometry, and
-    $\mathcal E(B)$ is the compression of $B\oplus B$ by it, also after
-    tensoring with an identity. The difference bound follows from
-    $ABA-A'BA'=(A-A')BA+A'B(A-A')$. An operator commuting with the ball algebra
-    commutes with $k_{i,l}$, hence with both local roots. Both local roots
-    commute with every operator acting outside the ball, so they act on the
-    ball; with an auxiliary system, an operator commuting with $A\otimes I$ for
-    all such $A$ therefore commutes with both Kraus operators of
-    $\mathcal E_{i,l}\otimes\mathrm{id}$, whose squares sum to the identity.
+    The bound $\|U^{1/2}-V^{1/2}\|\le\|U-V\|^{1/2}$ and~(\ref{eq:al_positive_replacement_tail})
+    yield~(\ref{eq:al_root_tail}). Since $v\mapsto Gv\oplus Kv$ is an isometry,
+    $\mathcal E(B)$ (and $\mathcal E\otimes\mathrm{id}$) is a compression of
+    $B\oplus B$, while $ABA-A'BA'=(A-A')BA+A'B(A-A')$ bounds
+    $(\mathcal E_i-\mathcal E_{i,l})\otimes\mathrm{id}$. By
+    Lemma~\ref{lem:al_site_expectation_order}, $G_{i,l}$ and $K_{i,l}$ act on
+    $N_l(a_i)$, so any $B$ commuting with $A$ (or $A\otimes I$) for all $A$ on
+    $N_l(a_i)$ commutes with both Kraus operators and is fixed by
+    $G_{i,l}^2+K_{i,l}^2=I$.
 \end{proof}
 
 \section{Truncation near a finite set}
 \label{sec:al_truncation}
 
-Fix a set $S_0$ of sites and an integer $r_0\ge0$. For a label whose
-anchor has finite distance $d_i^0=d(a_i,S_0)$ from $S_0$ put
-$r_i=\max\{r_0,\lfloor d_i^0/2\rfloor\}$, $\widetilde h_i=k_{i,r_i}$ and
-$\widetilde X_i=N_{r_i}(a_i)$; if $d_i^0=\infty$ put $\widetilde h_i=k_i$ and let
-$\widetilde X_i$ be the connected component of $a_i$. Suppose every graph ball
-of radius $d$ has at most $K_b(d+1)^2$ sites and every site anchors at most
-$\mu$ labels.
+Fix a site set $S_0$ and an integer $r_0\ge0$. For each label $i$ with
+$d_i^0=d(a_i,S_0)<\infty$, set $r_i=\max\{r_0,\lfloor d_i^0/2\rfloor\}$,
+$\widetilde h_i=k_{i,r_i}$, and $\widetilde X_i=N_{r_i}(a_i)$; if
+$d_i^0=\infty$, set $\widetilde h_i=k_i$ and let $\widetilde X_i$ be the
+connected component of $a_i$. Assume $|N_d(x)|\le K_b(d+1)^2$ for all $x,d$ and
+at most $\mu$ labels share any anchor.
 
 \begin{lemma}[Volume-free truncation error]
     \label{lem:al_truncation_error}
@@ -149,15 +160,18 @@ $\mu$ labels.
     depending only on $C,c,\alpha,K_b,\mu$.
 \end{lemma}
 \begin{proof}\leanok
-    At distance $d$ from $S_0$ there are at most $\mu|S_0|K_b(d+1)^2$ labels,
-    and labels at infinite distance have no error. Since
-    $\max\{r_0,u\}^\alpha\ge(r_0^\alpha+u^\alpha)/2$, the series
-    $\sum_d(d+1)^2e^{-c\max\{r_0,\lfloor d/2\rfloor\}^\alpha}$ is at most
-    $e^{-(c/2)r_0^\alpha}\sum_d(d+1)^2e^{-(c/2)\lfloor d/2\rfloor^\alpha}$, and
-    the last series converges because stretched exponentials beat polynomials.
+    At distance $d<\infty$ from $S_0$ there are at most $\mu|S_0|K_b(d+1)^2$
+    labels, while $d_i^0=\infty$ gives $\widetilde h_i-k_i=0$. Using
+    $\max\{r_0,u\}^\alpha\ge(r_0^\alpha+u^\alpha)/2$,
+    \begin{align}
+        \sum_{d\ge0}(d+1)^2e^{-c\max\{r_0,\lfloor d/2\rfloor\}^\alpha}
+        \le e^{-(c/2)r_0^\alpha}\sum_{d\ge0}(d+1)^2e^{-(c/2)\lfloor d/2\rfloor^\alpha}
+        <\infty.
+        \notag
+    \end{align}
 \end{proof}
 
-\begin{theorem}[Truncation near a finite set]
+\begin{lemma}[Truncation near a finite set]
     \label{thm:al_truncation}
     \lean{TNLean.PEPS.AreaLaw.half_le_two_rpow,
         TNLean.PEPS.AreaLaw.exists_truncationConstant,
@@ -170,207 +184,173 @@ $\mu$ labels.
     \leanok
     \uses{lem:al_truncation_error, thm:al_positive_replacement,
         thm:area_law_ground_eigenspace}
-    Use Theorem~\ref{thm:al_positive_replacement} with $p=1$, so $\alpha=1/2$,
-    and fix $C_0>0$. There is $C_1$ such that for every real $n\ge2$ and every
-    set $S_0$ with $|S_0|\le C_0n^2$ (the source states this for nonempty $S_0$; for
-    $S_0=\varnothing$ every constraint is retained), with
-    $r_0=\lceil C_1(\log n)^2\rceil$ and
-    $\epsilon_n=\min\{n^{-1000},g/4\}$: the truncated terms are positive
-    contractions, $\|\widetilde H-H_F\|\le\epsilon_n$, the ground energy of
-    $\widetilde H$ lies in $[0,\epsilon_n]$, its ground vector
-    $\widetilde\Omega$ is unique, its gap is at least $g/2$, and after a choice
-    of phase $\|\widetilde\Omega-\Omega\|\le2(\epsilon_n/g)^{1/2}$ and
-    $\frac12\||\widetilde\Omega\rangle\langle\widetilde\Omega|-P_\Omega\|_1
-        \le(2\epsilon_n/g)^{1/2}$.
-\end{theorem}
+    Take $p=1$ ($\alpha=1/2$) in Theorem~\ref{thm:al_positive_replacement}, set
+    $H_F=\sum_i k_i$, $\widetilde H=\sum_i\widetilde h_i$, and $g=\Delta/c_*$,
+    and fix $C_0>0$. There is $C_1$ such that for all $n\ge2$ and $S_0$ with
+    $|S_0|\le C_0n^2$ (the source assumes $S_0\ne\varnothing$; for
+    $S_0=\varnothing$, $\widetilde h_i=k_i$), setting
+    $r_0=\lceil C_1(\log n)^2\rceil$ and $\epsilon_n=\min\{n^{-1000},g/4\}$
+    gives $0\le\widetilde h_i\le I$, $\|\widetilde H-H_F\|\le\epsilon_n$, and a
+    unique ground state $\widetilde\Omega$ of $\widetilde H$ with ground energy
+    $e_0\in[0,\epsilon_n]$, gap at least $g/2$, and (after a phase choice)
+    \begin{align}
+        \|\widetilde\Omega-\Omega\|\le2(\epsilon_n/g)^{1/2},\qquad
+        \frac12\||\widetilde\Omega\rangle\langle\widetilde\Omega|-P_\Omega\|_1
+        \le(2\epsilon_n/g)^{1/2}.
+        \label{eq:al_truncation_state_closeness}
+    \end{align}
+\end{lemma}
 \begin{proof}\leanok
-    Lemma~\ref{lem:al_truncation_error} bounds the error by
-    $C'C_0n^2e^{-(c/2)\sqrt{r_0}}\le C'C_0n^{2-(c/2)\sqrt{C_1}}$, and $C_1$ is
-    chosen once to make this at most $\epsilon_n$ for all $n\ge2$. The
-    remaining claims follow from the stability of a global gap under a
-    perturbation of norm at most a quarter of the gap: a minimizer of the
-    energy is an eigenvector, every vector orthogonal to it has energy at
-    least $g-\epsilon_n$, and the gap of $H_F$ at $\widetilde\Omega$ gives
-    $g(1-|\langle\Omega,\widetilde\Omega\rangle|^2)\le2\epsilon_n$.
-    The ground vector is unique by Theorem~\ref{thm:area_law_ground_eigenspace}
-    applied to the gap inequality of $\widetilde H$ at its ground energy $e_0$:
-    for every $\psi$ with $\widetilde H\psi=e_0\psi$,
-    \[
+    By Lemma~\ref{lem:al_truncation_error},
+    $\|\widetilde H-H_F\|\le C'C_0n^2e^{-(c/2)\sqrt{r_0}}\le C'C_0n^{2-(c/2)\sqrt{C_1}}\le\epsilon_n$
+    for $C_1$ large enough. Since $\epsilon_n\le g/4$, a ground minimizer
+    $\widetilde\Omega$ of $\widetilde H$ has $e_0\in[0,\epsilon_n]$, orthogonal
+    excitation energy at least $g-\epsilon_n\ge g/2$, and
+    $g(1-|\langle\Omega,\widetilde\Omega\rangle|^2)\le2\epsilon_n$, yielding~(\ref{eq:al_truncation_state_closeness}).
+    By Lemma~\ref{thm:area_law_ground_eigenspace}, any $\psi$ with
+    $\widetilde H\psi=e_0\psi$ satisfies, for
+    $\varphi=\psi-\langle\widetilde\Omega,\psi\rangle\widetilde\Omega$,
+    \begin{align}
         0=\langle\varphi,(\widetilde H-e_0I)\varphi\rangle
-        \ge\frac g2\|\varphi\|^2,\qquad
-        \varphi=\psi-\langle\widetilde\Omega,\psi\rangle\widetilde\Omega,
-    \]
+        \ge\frac g2\|\varphi\|^2,
+        \notag
+    \end{align}
     so $\psi=\langle\widetilde\Omega,\psi\rangle\widetilde\Omega$.
 \end{proof}
 
-\begin{theorem}[A common auxiliary label in physical coordinates]
+\begin{lemma}[A common auxiliary label in physical coordinates]
     \label{thm:al_global_schmidt_bell_prevector}
     \lean{TNLean.PEPS.AreaLaw.exists_global_schmidtBellPrevector}
     \leanok
-    Let $V$ be a finite set of physical sites with local dimension $q>0$,
-    and let $\Omega$ be a unit vector satisfying $H\Omega=E\Omega$.
-    Fix $X\subseteq V$. In a spectral basis of the reduced density on $X$,
-    select a set $F$ of positive total mass $z$, and write $d=|F|$.
-    Let $\psi\in\mathcal H_{X^c}\otimes\mathbb C^d$ be the normalized
-    selected Schmidt vector, with reduced density $\rho$ on $\mathbb C^d$.
-    For each $k$, the symmetric group $S_k$ permutes the $k$ copies of
-    $\mathbb C^d$; for an irreducible representation $\lambda$ of $S_k$,
-    $P_\lambda$ denotes the central projection of $(\mathbb C^d)^{\otimes k}$
-    onto its $\lambda$-isotypic component and $\dim\lambda$ the dimension
-    of $\lambda$ \cite[Section~6]{OpenAI2026AreaLaw}. Following the
-    prevector and high-label comparators of
-    \cite[Section~8 and Section~9, lines~50--59]{OpenAI2026AreaLaw},
-    there is one sequence of irreducible representations $\lambda_k$ of
-    $S_k$ such that the following assertions hold. Put
+    Let $V$ be a finite site set of local dimension $q>0$, and let $\Omega$ be a
+    unit vector with $H\Omega=E\Omega$. Fix $X\subseteq V$, select a subset $F$
+    of a spectral basis of the reduced density on $X$ with total mass $z>0$ and
+    $d=|F|$, and let $\psi\in\mathcal H_{X^c}\otimes\mathbb C^d$ be the
+    normalized selected Schmidt vector with marginal $\rho$ on $\mathbb C^d$.
+    For each $k>0$ and irreducible representation $\lambda$ of $S_k$, let
+    $P_\lambda$ be the central $\lambda$-isotypic projection on
+    $(\mathbb C^d)^{\otimes k}$ \cite[Section~6]{OpenAI2026AreaLaw}. Following
+    \cite[Section~8 and Section~9, lines~50--59]{OpenAI2026AreaLaw}, there is a
+    sequence $\lambda_k$ such that, setting
     \begin{align}
-        \omega_d      & =d^{-1/2}\sum_{a=0}^{d-1}|a,a\rangle, \\
-        L_k           & =P_{\lambda_k},                       \\
-        \xi_k         & =(I\otimes I\otimes L_k)
-        (\Omega^{\otimes k}\otimes\omega_d^{\otimes k}),      \\
-        \overline H_k & =k^{-1}\sum_{j=1}^k H_j.
+        \omega_d                                         & =d^{-1/2}\sum_{a=0}^{d-1}|a,a\rangle,        &
+        L_k                                              & =P_{\lambda_k},                       \notag   \\
+        \xi_k                                            & =(I\otimes I\otimes L_k)
+        (\Omega^{\otimes k}\otimes\omega_d^{\otimes k}), &
+        \overline H_k                                    & =k^{-1}\sum_{j=1}^k H_j,
+        \label{eq:al_schmidt_bell_defs}
     \end{align}
-    Here all factors are identified with the configurations of the original
-    sites and two additional auxiliary sites. For every $k>0$,
+    identified on $V$ and two auxiliary sites, with copy-symmetrizer
+    $P_{\mathrm{sym}}$, every $k>0$ satisfies
     \begin{align}
-        \xi_k                         & \ne0,    \\
-        \|\xi_k\|                     & \le1,    \\
-        (\overline H_k\otimes I)\xi_k & =E\xi_k, \\
-        P_{\mathrm{sym}}\xi_k         & =\xi_k,  \\
-        (I\otimes L_k\otimes I)\xi_k  & =\xi_k,  \\
-        (I\otimes I\otimes L_k)\xi_k  & =\xi_k.
+        \xi_k\ne0,\qquad \|\xi_k\|\le1,\qquad
+        (\overline H_k\otimes I)\xi_k=E\xi_k,
+        \label{eq:al_schmidt_bell_energy} \\
+        P_{\mathrm{sym}}\xi_k=\xi_k,\qquad
+        (I\otimes L_k\otimes I)\xi_k=\xi_k,\qquad
+        (I\otimes I\otimes L_k)\xi_k=\xi_k,
+        \label{eq:al_schmidt_bell_invariance}
     \end{align}
-    The symmetry projection permutes all physical and auxiliary copies
-    simultaneously; the two other projections act on the complete auxiliary
-    copy registers. Eventually in $k$,
+    and eventually in $k$,
     \begin{align}
         \|(I\otimes L_k)\psi^{\otimes k}\|^2
-                                   & \ge\frac1{2(k+1)^{d^2}}, \\
-        \log\dim\lambda_k-kS(\rho) & =o(k).
+        \ge\frac1{2(k+1)^{d^2}},\qquad
+        \log\dim\lambda_k-kS(\rho)=o(k).
+        \label{eq:al_schmidt_bell_asymptotics}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Positive selected mass gives $\|\psi\|=1$. The common-label selection
-    for the auxiliary marginal $\rho$ of $\psi$ gives the polynomial mass
-    bound and the entropy asymptotic. Impose the same labels on the
-    uniform auxiliary pair and the original physical vector: in replica
-    coordinates put
-    $u_k=(I\otimes I\otimes L_k)(\Omega^{\otimes k}\otimes\omega_d^{\otimes k})$.
-    Then $u_k\ne0$ and $\|u_k\|\le1$; the equation $H\Omega=E\Omega$ gives
-    $(\overline H_k\otimes I)u_k=Eu_k$, and the Bell pair gives
-    $(I\otimes L_k\otimes I)u_k=u_k$, $(I\otimes I\otimes L_k)u_k=u_k$ and
-    invariance of $u_k$ under the simultaneous permutation of all copies.
-    Let $U$ be the configuration isometry onto the original sites and the
-    two auxiliary sites, so that $\xi_k=Uu_k$. Then
-    $\|\xi_k\|=\|u_k\|\le1$, $\xi_k\ne0$, and for every operator $K$ and
-    scalar $c$,
+    Since $z>0$, $\|\psi\|=1$, and common-label selection for $\rho$ gives~(\ref{eq:al_schmidt_bell_asymptotics}).
+    In replica coordinates, $u_k=(I\otimes I\otimes L_k)(\Omega^{\otimes k}\otimes\omega_d^{\otimes k})$
+    satisfies $0<\|u_k\|\le1$, $(\overline H_k\otimes I)u_k=Eu_k$,
+    $(I\otimes L_k\otimes I)u_k=(I\otimes I\otimes L_k)u_k=u_k$, and
+    simultaneous-permutation invariance. If $U$ is the configuration isometry
+    with $\xi_k=Uu_k$, then
     \begin{align}
-        Ku_k=cu_k\ \Longrightarrow\ (UKU^{-1})\xi_k=c\,\xi_k.
+        Ku_k=cu_k\ \Longrightarrow\ (UKU^{-1})\xi_k=c\,\xi_k,
         \label{eq:al_schmidt_bell_transport}
     \end{align}
-    Applying~(\ref{eq:al_schmidt_bell_transport}) to the four equations
-    for $u_k$ gives the energy, symmetry and two auxiliary equations for
-    $\xi_k$, since $U$ conjugates the copy symmetrizer on the replica
-    space into $P_{\mathrm{sym}}$.
+    which transports these four identities to~(\ref{eq:al_schmidt_bell_energy})--(\ref{eq:al_schmidt_bell_invariance}).
 \end{proof}
 
-\begin{theorem}[One physical label sequence for the rough lower comparison]
+\begin{lemma}[One physical label sequence for the rough lower comparison]
     \label{thm:al_global_schmidt_bell_rough_lower}
     \lean{TNLean.PEPS.AreaLaw.exists_global_schmidtBellPrevector_rough_lower}
     \leanok
     \uses{thm:al_global_schmidt_bell_prevector}
-    In the setting of Theorem~\ref{thm:al_global_schmidt_bell_prevector},
-    suppose also that $H-EI\geq\gamma(I-|\Omega\rangle\langle\Omega|)$
-    for some $\gamma>0$. There is one label sequence $\lambda_k$
-    satisfying all the conclusions of that theorem. Write
-    $S'=S(\rho)$ and set
-    \begin{align*}
-        \varepsilon_k=-2(\log\dim\lambda_k-kS').
-    \end{align*}
-    Then $2kS'-\varepsilon_k=2\log\dim\lambda_k$ for every $k$,
-    and $\varepsilon_k/k\to0$.
+    In the setting of Lemma~\ref{thm:al_global_schmidt_bell_prevector},
+    suppose $H-EI\ge\gamma(I-|\Omega\rangle\langle\Omega|)$ with $\gamma>0$, and
+    let $\lambda_k,\xi_k$ be given by
+    Lemma~\ref{thm:al_global_schmidt_bell_prevector}. With $S'=S(\rho)$ and
+    $\varepsilon_k=-2(\log\dim\lambda_k-kS')$, we have
+    $2kS'-\varepsilon_k=2\log\dim\lambda_k$ and $\varepsilon_k/k\to0$.
 
-    Fix $K\geq8$ and put $a=4/K$, $t=2/K$. There are constants
-    $c,C_f\geq0$ before the copy number, symmetric coordinates,
-    regional family and iterated weighted geometric mean are chosen.
-    Let $Z^*Z=I$ and $ZZ^*=P_{\mathrm{sym}}$. For a finite family
-    of physical regions $Q_{jg},Y_{jg}$, with $0\leq g<K$, assume
-    \begin{align*}
-        Q_{jg}\cap Y_{jg} & =\varnothing,                 \\
-        Q_{jg}\cup Y_{jg} & \subseteq Q_{j'h}\qquad(g<h).
-    \end{align*}
-    Include the near auxiliary site $C$ in $L_{jg}=Q_{jg}\cup\{C\}$
-    and the far auxiliary site $R$ in
-    $F_{jg}=(Q_{jg}\cup Y_{jg})^c\cup\{R\}$, where the complement
-    is taken in the physical sites. For the replica metric $W$ at
-    parameter $t$, put
-    \begin{align*}
-        A_{jg} & =(W_{L_{jg}}^{-1}W_{F_{jg}}^{-1}W_{Y_{jg}})^2,
-               & B_{jg}                                         & =Z^*A_{jg}Z,         \\
-        M_k    & =\prod_{g=0}^{K-1}T(B_{\cdot g}),
-               & w_k                                            & =M_k^{-1/4}Z^*\xi_k.
-    \end{align*}
-    Here $T$ is any iterated weighted geometric mean of the family,
-    and $\xi_k$ is the same initial vector as in the preceding theorem.
-    Put $\varphi_k=w_k/\|w_k\|$, $v_k=Z\varphi_k$, and
-    \begin{align*}
-        \delta_k & =\frac{\langle v_k,(\overline H_k\otimes I)v_k\rangle-E}{\gamma}, \\
-        r_k      & =\log(k+1)+c\log(k+2)+a\varepsilon_k,                             \\
-        R_k      & =\frac K{2k}\left(2|r_k|+C_f\log(k+2)+2\log2+\log(3/2)\right).
-    \end{align*}
-    The sequence $R_k$ tends to zero and is independent of the chosen
-    coordinates, regions and geometric mean. For every $k>0$,
-    $w_k\ne0$, $\|v_k\|=1$, and $\delta_k\geq0$. For $0<\tau\leq1/2$,
-    \begin{align*}
+    Fix $K\ge8$, $a=4/K$, and $t=2/K$. There are constants $c,C_f\ge0$ such that
+    for any isometry $Z$ with $Z^*Z=I$ and $ZZ^*=P_{\mathrm{sym}}$, any regions
+    $Q_{jg},Y_{jg}\subseteq V$ ($0\le g<K$) satisfying
+    $Q_{jg}\cap Y_{jg}=\varnothing$ and $Q_{jg}\cup Y_{jg}\subseteq Q_{j'h}$ for
+    $g<h$, with $L_{jg}=Q_{jg}\cup\{C\}$,
+    $F_{jg}=(V\setminus(Q_{jg}\cup Y_{jg}))\cup\{R\}$, replica metric $W$ at
+    parameter $t$, and any iterated weighted geometric mean $T$, setting
+    \begin{align}
+        A_{jg}    & =(W_{L_{jg}}^{-1}W_{F_{jg}}^{-1}W_{Y_{jg}})^2,
+                  & B_{jg}                                         & =Z^*A_{jg}Z,
+                  & M_k                                            & =\prod_{g=0}^{K-1}T(B_{\cdot g}),
+                  & w_k                                            & =M_k^{-1/4}Z^*\xi_k,
+        \label{eq:al_rough_lower_ops}                                                                                                  \\
+        \varphi_k & =\frac{w_k}{\|w_k\|},\qquad v_k=Z\varphi_k,
+                  & \delta_k                                       & =\frac{\langle v_k,(\overline H_k\otimes I)v_k\rangle-E}{\gamma},
+        \notag                                                                                                                         \\
+        r_k       & =\log(k+1)+c\log(k+2)+a\varepsilon_k,
+                  & R_k                                            & =\frac K{2k}\bigl(2|r_k|+C_f\log(k+2)+2\log2+\log(3/2)\bigr),
+        \label{eq:al_rough_lower_remainder}
+    \end{align}
+    gives $R_k\to0$ (independently of $Z,Q_{jg},Y_{jg},T$), and for every $k>0$
+    and $0<\tau\le1/2$, $w_k\ne0$, $\|v_k\|=1$, $\delta_k\ge0$, and
+    \begin{align}
         4S'-6\left(\tau\log d+\frac{h(\tau)}a\right)
         -3\frac{\delta_k}{\tau}\max(0,2S')-R_k
-        \leq-\frac{\log\|w_k\|^2}{k}.
-    \end{align*}
-    This is the lower comparison for the physical initial vector of
-    \cite[Section~8]{OpenAI2026AreaLaw}. Choosing a scan point and
-    identifying its regions and geometric mean remain separate assertions.
-\end{theorem}
-\begin{proof}
-    \leanok
-    Choose the preceding theorem's label sequence once and retain its
-    initial vector, mass bound and dimension asymptotic. Positive selected
-    mass gives $d>0$. The initial vector's symmetry and auxiliary equations
-    give the hypotheses of the rough lower comparison at $t=2/K$ and
-    inverse-power exponent $1/4$. Apply the numerical coefficient-three
-    estimate to its normalized vector and energy defect.
-    The signed definition of $\varepsilon_k$ gives the exact label equality.
-    The dimension asymptotic gives $\varepsilon_k/k\to0$; the remaining
-    logarithmic terms are also sublinear. Hence $R_k\to0$.
+        \le-\frac{\log\|w_k\|^2}{k}
+        \label{eq:al_rough_lower_bound}
+    \end{align}
+    \cite[Section~8]{OpenAI2026AreaLaw}. Choosing a scan point and identifying
+    its regions and geometric mean remain separate assertions.
+\end{lemma}
+\begin{proof}\leanok
+    Take $\lambda_k$ and $\xi_k$ from
+    Lemma~\ref{thm:al_global_schmidt_bell_prevector}. Since $z>0$, $d>0$. The
+    identities~(\ref{eq:al_schmidt_bell_invariance}) verify the rough lower
+    comparison hypotheses at $t=2/K$ and exponent $1/4$, and the coefficient-$3$
+    estimate applied to $v_k$ and $\delta_k$ gives~(\ref{eq:al_rough_lower_bound}).
+    Finally, $\varepsilon_k/k\to0$ by~(\ref{eq:al_schmidt_bell_asymptotics}), so
+    $R_k\to0$ by~(\ref{eq:al_rough_lower_remainder}).
 \end{proof}
 
-\begin{theorem}[The initial vector for the truncated Hamiltonian]
+\begin{lemma}[The initial vector for the truncated Hamiltonian]
     \label{thm:al_truncation_schmidt_bell_prevector}
     \lean{TNLean.PEPS.AreaLaw.exists_finiteSetTruncation_schmidtBellPrevector_of_gap}
     \leanok
     \uses{thm:al_truncation, thm:al_global_schmidt_bell_prevector}
-    This combines \cite[Section~4]{OpenAI2026AreaLaw} with the comparators
-    of \cite[Section~8]{OpenAI2026AreaLaw}.
-    Under the hypotheses of Theorem~\ref{thm:al_truncation}, the same constant
-    $C_1$, truncated Hamiltonian $\widetilde H$, ground energy $e$ and unit
-    ground vector $\widetilde\Omega$ satisfy all of its support,
-    perturbation, gap and distance conclusions. For every region $X$ and
-    every positive-mass selection of the reduced spectrum of
-    $\widetilde\Omega$, this vector also gives the sequence and
-    all the conclusions of Theorem~\ref{thm:al_global_schmidt_bell_prevector},
-    with $H=\widetilde H$ and $E=e$.
-\end{theorem}
+    Combining \cite[Sections~4 and~8]{OpenAI2026AreaLaw}, under the hypotheses
+    of Lemma~\ref{thm:al_truncation}, the same $C_1,\widetilde H,e_0,\widetilde\Omega$
+    satisfy Lemma~\ref{thm:al_truncation} and, for every $X\subseteq V$ and
+    every positive-mass spectral selection of $\widetilde\Omega$,
+    Lemma~\ref{thm:al_global_schmidt_bell_prevector} holds with
+    $(H,E,\Omega)=(\widetilde H,e_0,\widetilde\Omega)$.
+\end{lemma}
 \begin{proof}\leanok
-    First choose the constant $C_1$ and ground state $\widetilde\Omega$ from
-    Theorem~\ref{thm:al_truncation}. Apply
-    Theorem~\ref{thm:al_global_schmidt_bell_prevector} to $\widetilde\Omega$
-    and its ground-state equation, separately for each spectral selection.
+    Choose $(C_1,\widetilde H,e_0,\widetilde\Omega)$ by
+    Lemma~\ref{thm:al_truncation} and apply
+    Lemma~\ref{thm:al_global_schmidt_bell_prevector} to
+    $\widetilde H\widetilde\Omega=e_0\widetilde\Omega$ for each spectral selection.
 \end{proof}
 
-For $X\subseteq S_0$ let $b_X$ be the number of edges with exactly one endpoint
-in $X$, let $\mathcal C_X$ be the labels whose designated support meets both
-$X$ and its complement, and put $d_i=q^{|\widetilde X_i|}$ and
+For $X\subseteq S_0$, let $b_X$ be the number of edges crossing $X$, let
+$\mathcal C_X=\{i:\widetilde X_i\cap X\ne\varnothing\text{ and }\widetilde X_i\cap X^c\ne\varnothing\}$,
+and set $d_i=q^{|\widetilde X_i|}$ and
 $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
 
-\begin{theorem}[Crossing count and cut parameter]
+\begin{lemma}[Crossing count and cut parameter]
     \label{thm:al_crossing_budget}
     \lean{TNLean.PEPS.AreaLaw.cutEdges, TNLean.PEPS.AreaLaw.componentFinset,
         TNLean.PEPS.AreaLaw.designatedSupport, TNLean.PEPS.AreaLaw.crossingLabels,
@@ -385,29 +365,27 @@ $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
         TNLean.PEPS.AreaLaw.truncatedConstraint_mem_supportedOperators}
     \leanok
     \uses{thm:al_truncation}
-    Each truncated term $\widetilde h_i$ acts on its designated support
-    $\widetilde X_i$. Every support in $\mathcal C_X$ is a ball of radius $r_0$,
-    $|\mathcal C_X|\le2\mu K_b(r_0+1)^2b_X$, $\log d_i\le K_b(r_0+1)^2\log q$
-    for $i\in\mathcal C_X$, and $\mathcal B_X\le C(1+b_X)(r_0+1)^6$. When
-    $r_0=\lceil C_1(\log n)^2\rceil$, $n\ge2$, $D\ge1$ and $b_X\le C_2nD$, we
-    also have $\mathcal B_X\le C'nD(\log n)^{12}$. If $S_0$ is empty every
-    constraint is retained and no label crosses a cut contained in $S_0$;
-    constraints whose anchors cannot reach $S_0$ are always retained without
-    truncation.
-\end{theorem}
+    Each $\widetilde h_i$ acts on $\widetilde X_i$. For $i\in\mathcal C_X$,
+    $\widetilde X_i=N_{r_0}(a_i)$ and $\log d_i\le K_b(r_0+1)^2\log q$; moreover,
+    $|\mathcal C_X|\le2\mu K_b(r_0+1)^2b_X$ and
+    $\mathcal B_X\le C(1+b_X)(r_0+1)^6$. If $r_0=\lceil C_1(\log n)^2\rceil$,
+    $n\ge2$, $D\ge1$, and $b_X\le C_2nD$, then
+    $\mathcal B_X\le C'nD(\log n)^{12}$. If $S_0=\varnothing$, then
+    $\widetilde h_i=k_i$ and $\mathcal C_X=\varnothing$; if $d_i^0=\infty$, then
+    $\widetilde h_i=k_i$.
+\end{lemma}
 \begin{proof}\leanok
-    A support meeting $X\subseteq S_0$ has an anchor at finite distance; if
-    $r_i>r_0$ then $r_i=\lfloor d_i^0/2\rfloor<d_i^0$ and the ball cannot meet
-    $S_0$. A shortest path from the anchor to a point of the ball on the other
-    side of the cut stays in the ball and contains a cut edge, so the anchor is
-    within $r_0$ of one of the at most $2b_X$ endpoints of cut edges. Each such
-    ball has at most $K_b(r_0+1)^2$ sites and each anchor carries at most $\mu$
-    labels.
+    If $\widetilde X_i$ meets $X\subseteq S_0$, then $d_i^0<\infty$ and
+    $r_i=r_0$ (since $r_i>r_0\implies r_i=\lfloor d_i^0/2\rfloor<d_i^0$, so
+    $N_{r_i}(a_i)\cap S_0=\varnothing$). A shortest path in $N_{r_0}(a_i)$ from
+    $a_i$ across $\partial X$ contains a cut edge, placing $a_i$ within $r_0$ of
+    one of the at most $2b_X$ cut-edge endpoints. Since $|N_{r_0}(x)|\le K_b(r_0+1)^2$
+    and each site anchors at most $\mu$ labels, the bounds follow.
 \end{proof}
 
 % Exact-budget identities preserve the original finite label family.
 % These identities do not assert the lattice-specialized budget producer.
-\begin{theorem}[Cut parameter and complementary cuts]
+\begin{lemma}[Cut parameter and complementary cuts]
     \label{thm:al_exact_cut_budget}
     \lean{TNLean.PEPS.AreaLaw.cutBudget_eq_cutLogBudget,
         TNLean.PEPS.AreaLaw.crossingLabels_compl,
@@ -418,31 +396,28 @@ $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
         TNLean.PEPS.AreaLaw.cutBudget_univ}
     \leanok
     \uses{thm:al_crossing_budget}
-    Let $V$ be the vertex set of a finite graph, let $I$ be a finite label
-    set with anchors $a_i\in V$, and let $q,r_0\in\mathbb N$ and
-    $S_0\subseteq V$. Use the designated supports $\widetilde X_i$ of
-    Theorem~\ref{thm:al_crossing_budget}. For every cut $X\subseteq V$, let
-    $\mathcal C_X$ consist of the original labels whose designated support
-    meets both $X$ and $V\setminus X$. Then $\mathcal B_X$ coincides with
-    the cut parameter in \cite[Lemma~3.1]{OpenAI2026AreaLaw}:
+    For any finite graph on $V$, finite label set $I$ with anchors $a_i\in V$,
+    $q,r_0\in\mathbb N$, $S_0\subseteq V$, and designated supports
+    $\widetilde X_i$ of Lemma~\ref{thm:al_crossing_budget}, every cut
+    $X\subseteq V$ (not necessarily contained in $S_0$, retaining repeated
+    supports and zero terms) satisfies \cite[Lemma~3.1]{OpenAI2026AreaLaw}:
     \begin{align}
         \mathcal B_X
-         & =1+\sum_{i\in\mathcal C_X}
+        =1+\sum_{i\in\mathcal C_X}
         \log^2\Bigl(\mathrm e\prod_{v\in\widetilde X_i}q\Bigr)
-        =1+\sum_{i\in\mathcal C_X}\log^2(\mathrm e\,q^{|\widetilde X_i|}).
+        =1+\sum_{i\in\mathcal C_X}\log^2(\mathrm e\,q^{|\widetilde X_i|}),
+        \label{eq:al_exact_cut_budget}
     \end{align}
-    Here $\log0=0$ when $q=0$. Also,
+    with $\log0=0$ for $q=0$, as well as
     $\mathcal C_{V\setminus X}=\mathcal C_X$,
     $\mathcal B_{V\setminus X}=\mathcal B_X\ge1$, and
     $\mathcal B_\varnothing=\mathcal B_V=1$.
-    No containment $X\subseteq S_0$ is required. Repeated designated
-    supports and zero terms keep their original labels.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    The crossing conditions on each original label agree, and
-    $\prod_{v\in\widetilde X_i}q=q^{|\widetilde X_i|}$. Exchanging $X$ and
-    $V\setminus X$ leaves the crossing condition unchanged. Every
-    summand is a square, and the empty and full cuts have no crossing labels.
+    Using $\prod_{v\in\widetilde X_i}q=q^{|\widetilde X_i|}$, invariance of
+    $\mathcal C_X$ under $X\leftrightarrow V\setminus X$, nonnegativity of
+    squares, and $\mathcal C_\varnothing=\mathcal C_V=\varnothing$ gives all
+    claims.
 \end{proof}
 
 \section{The induced lattice instance}
@@ -458,7 +433,7 @@ $\mu_R=2^{v_R-1}$. In this setting the counting hypotheses of the previous
 sections are consequences of the lattice geometry, and the constants depend
 only on the parameters named below.
 
-\begin{theorem}[Counting on an induced lattice domain]
+\begin{lemma}[Counting on an induced lattice domain]
     \label{thm:al_lattice_counts}
     \lean{TNLean.PEPS.AreaLaw.card_graphBall_domainGraph_le,
         TNLean.PEPS.AreaLaw.card_anchor_fiber_le,
@@ -466,21 +441,18 @@ only on the parameters named below.
     \leanok
     \uses{def:area_law_hamiltonian, thm:area_diamond_count, thm:area_diamond_budget,
         lem:area_domain_graph_counts, thm:area_law_crossing_supports}
-    Graph balls of radius $d$ in $\Lambda$ have at most $2(d+1)^2$ sites, at
-    most $\mu_R$ supports contain a given site
-    (Theorem~\ref{thm:area_law_crossing_supports}), at most $\mu_R$ labels share an
-    anchor, and the pairs $(u,v)$ of adjacent sites with $u\in X$ and
-    $v\notin X$ number at most $|\partial_\Lambda X|$. The sphere bound, the
-    diameter and size bounds for supports and the per-site norm bound are
-    given in Lemma~\ref{lem:area_domain_graph_counts}.
-\end{theorem}
+    In $\Lambda$, $|N_d(x)|\le2(d+1)^2$, at most $\mu_R$ supports contain a
+    given site (Lemma~\ref{thm:area_law_crossing_supports}), at most $\mu_R$
+    labels share an anchor, and
+    $|\{(u,v):u\sim v,\,u\in X,\,v\notin X\}|\le|\partial_\Lambda X|$. The
+    sphere, support-diameter, support-size, and per-site norm bounds are given
+    in Lemma~\ref{lem:area_domain_graph_counts}.
+\end{lemma}
 \begin{proof}\leanok
-    Adjacent sites are at ambient $\ell^1$ distance one, so a graph ball lies in
-    an ambient lattice ball and the diamond count applies. Supports and
-    anchors are counted
-    by Theorem~\ref{thm:area_diamond_budget}, and
-    every label anchored at $x$ has a support containing $x$. The map
-    $(u,v)\mapsto\{u,v\}$ is injective on the pairs crossing $X$.
+    Since $u\sim v\implies\|u-v\|_1=1$, $N_d(x)$ lies in the $\ell^1$-ball of
+    radius $d$ (Lemma~\ref{thm:area_diamond_count}). Supports and anchors are
+    bounded by Theorem~\ref{thm:area_diamond_budget} since $a_i\in X_i$, and
+    $(u,v)\mapsto\{u,v\}$ injects crossing pairs into $\partial_\Lambda X$.
 \end{proof}
 
 \begin{theorem}[Positive replacement on an induced lattice domain]
@@ -488,400 +460,110 @@ only on the parameters named below.
     \lean{TNLean.PEPS.AreaLaw.exists_latticePositiveConstraints}
     \leanok
     \uses{thm:al_positive_replacement, lem:area_domain_graph_counts, def:area_law_ground_entropy}
-    Fix an integer $p\ge1$, put $\alpha=p/(p+1)$, and fix $R\ge0$, $J\ge0$ and
-    $\Delta>0$. There are $C\ge0$ and $c>0$, depending only on $p,R,J,\Delta$,
-    such that for every $q\ge1$, every finite domain, interaction, choice of
-    anchors and gapped ground vector as above, the constraints $k_i=|M_i|/c_*$
-    satisfy $c_*>0$,
+    Fix $p\in\mathbb N_{\ge1}$, $\alpha=p/(p+1)$, $R,J\ge0$, and $\Delta>0$.
+    There are $C\ge0$ and $c>0$, depending only on $p,R,J,\Delta$, such that for
+    every $q\ge1$, finite domain $\Lambda$, interaction, anchor choice, and
+    gapped ground vector $\Omega$, the constraints $k_i=|M_i|/c_*$ satisfy
+    $c_*>0$ and
     \begin{align}
         0\le k_i\le I,\qquad k_i\Omega=0,\qquad
-        \sum_ik_i\ge c_*^{-1}(H-E_0I)\ge\frac{\Delta}{c_*}(I-P_\Omega),
+        H_F=\sum_ik_i\ge c_*^{-1}(H-E_0I)\ge g(I-P_\Omega)\quad(g=\Delta/c_*),
+        \label{eq:al_lattice_positive_replacement_gap} \\
+        0\le k_{i,l}=E_{i,l}(k_i)\le I,\qquad
+        \|k_i-k_{i,l}\|\le Ce^{-cl^\alpha}\quad(l\in\mathbb N),
+        \label{eq:al_lattice_positive_replacement_tail}
     \end{align}
-    so $H_F=\sum_ik_i$ satisfies $H_F\ge g(I-P_\Omega)$ with $g=\Delta/c_*$ and
-    $H_F\Omega=0$. For every integer $l\ge0$ the operator
-    $k_{i,l}=E_{i,l}(k_i)$ lies in $[0,I]$ and satisfies
-    $\|k_i-k_{i,l}\|\le Ce^{-cl^\alpha}$. Each $k_i$ acts on
-    the connected component of $a_i$. This is Proposition~4.3 of
-    \cite{OpenAI2026AreaLaw}.
+    with $H_F\Omega=0$ and each $k_i$ acting on the connected component of
+    $a_i$ \cite[Proposition~4.3]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:al_positive_replacement} with $v_R$, $b_0=\mu_RJ$ and
-    sphere growth $2(d+1)^2$; the graph hypotheses follow from
-    Lemma~\ref{lem:area_domain_graph_counts}.
+    Apply Theorem~\ref{thm:al_positive_replacement} with $v_R$, $b_0=\mu_RJ$,
+    and sphere growth $2(d+1)^2$ from Lemma~\ref{lem:area_domain_graph_counts}.
 \end{proof}
 
-\begin{theorem}[Square roots and local channels on an induced lattice domain]
+\begin{lemma}[Square roots and local channels on an induced lattice domain]
     \label{thm:al_lattice_quasilocal_roots}
     \lean{TNLean.PEPS.AreaLaw.exists_latticeQuasilocalRoots}
     \leanok
     \uses{lem:al_quasilocal_roots, thm:al_lattice_positive_replacement,
         thm:al_root_channel_commutant}
-    With $p,R,J,\Delta$ as in Theorem~\ref{thm:al_lattice_positive_replacement}
-    there are $C\ge0$ and $c>0$, depending only on $p,R,J,\Delta$, such that the
-    roots $G_i$, $K_i$, $G_{i,l}$, $K_{i,l}$ and the channels $\mathcal E_i$,
-    $\mathcal E_{i,l}$ of Lemma~\ref{lem:al_quasilocal_roots}, built from the
-    constraints of Theorem~\ref{thm:al_lattice_positive_replacement}, satisfy
-    every conclusion of that lemma with
-    $\|G_i-G_{i,l}\|+\|K_i-K_{i,l}\|\le Ce^{-cl^\alpha}$ and
-    $\|(\mathcal E_i-\mathcal E_{i,l})\otimes\mathrm{id}\|\le Ce^{-cl^\alpha}$
-    for every auxiliary system. This is Lemma~4.4 of \cite{OpenAI2026AreaLaw}.
-\end{theorem}
+    With $p,R,J,\Delta$ as in Theorem~\ref{thm:al_lattice_positive_replacement},
+    there are $C\ge0$ and $c>0$ depending only on $p,R,J,\Delta$ such that the
+    roots $G_i,K_i,G_{i,l},K_{i,l}$ and channels $\mathcal E_i,\mathcal E_{i,l}$
+    of Lemma~\ref{lem:al_quasilocal_roots}, built from the constraints of
+    Theorem~\ref{thm:al_lattice_positive_replacement}, satisfy all conclusions
+    of Lemma~\ref{lem:al_quasilocal_roots} with
+    \begin{align}
+        \|G_i-G_{i,l}\|+\|K_i-K_{i,l}\|\le Ce^{-cl^\alpha},\qquad
+        \|(\mathcal E_i-\mathcal E_{i,l})\otimes\mathrm{id}\|\le Ce^{-cl^\alpha}
+        \notag
+    \end{align}
+    for every auxiliary system \cite[Lemma~4.4]{OpenAI2026AreaLaw}.
+\end{lemma}
 \begin{proof}\leanok
-    Insert the tail $\|k_i-k_{i,l}\|\le Ce^{-cl^\alpha}$ into
-    Lemma~\ref{lem:al_quasilocal_roots} and use
+    Substitute~(\ref{eq:al_lattice_positive_replacement_tail}) into
+    Lemma~\ref{lem:al_quasilocal_roots} using
     $(Ce^{-cl^\alpha})^{1/2}=C^{1/2}e^{-(c/2)l^\alpha}$.
 \end{proof}
 
-\begin{theorem}[Truncation near a finite set on an induced lattice domain]
+\begin{lemma}[Truncation near a finite set on an induced lattice domain]
     \label{thm:al_lattice_truncation}
     \lean{TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation,
         TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation_eigenspace_eq_span}
     \leanok
     \uses{thm:al_truncation, thm:al_lattice_counts, lem:area_domain_graph_counts,
         def:area_law_ground_entropy, thm:area_law_ground_eigenspace}
-    Take $p=1$ in Theorem~\ref{thm:al_lattice_positive_replacement}, so
-    $\alpha=1/2$, and fix $C_0\ge0$. There is $C_1>0$, depending only on
-    $R,J,\Delta,C_0$, such that for every lattice instance as above, every real
-    $n\ge2$ and every set $S_0$ of sites with $|S_0|\le C_0n^2$, the truncation
-    with $r_0=\lceil C_1(\log n)^2\rceil$, $g=\Delta/c_*$ and
-    $\epsilon_n=\min\{n^{-1000},g/4\}$ has all of the following properties at
-    once: each truncated term is a positive contraction acting on its
-    designated support, $\|\widetilde H-H_F\|\le\epsilon_n$, and
-    $\widetilde H$ has a unit ground vector $\widetilde\Omega$ with ground
-    energy $e_0\in[0,\epsilon_n]$ and gap at least $g/2$, the eigenspace of
-    $\widetilde H$ at $e_0$ is spanned by $\widetilde\Omega$, and after a
-    choice of phase $\|\widetilde\Omega-\Omega\|\le2(\epsilon_n/g)^{1/2}$ and
-    $\frac12\||\widetilde\Omega\rangle\langle\widetilde\Omega|-P_\Omega\|_1
-        \le(2\epsilon_n/g)^{1/2}$. This is the truncation part of
-    Proposition~4.5 of \cite{OpenAI2026AreaLaw}, which assumes $S_0$ nonempty
-    and $C_0>0$.
-\end{theorem}
+    Take $p=1$ ($\alpha=1/2$) in
+    Theorem~\ref{thm:al_lattice_positive_replacement} and fix $C_0\ge0$. There
+    is $C_1>0$, depending only on $R,J,\Delta,C_0$, such that for every lattice
+    instance, $n\ge2$, and $S_0\subseteq\Lambda$ with $|S_0|\le C_0n^2$, setting
+    $r_0=\lceil C_1(\log n)^2\rceil$, $g=\Delta/c_*$, and
+    $\epsilon_n=\min\{n^{-1000},g/4\}$ gives $0\le\widetilde h_i\le I$ acting on
+    $\widetilde X_i$, $\|\widetilde H-H_F\|\le\epsilon_n$, and a unit ground
+    vector $\widetilde\Omega$ of $\widetilde H$ with ground energy
+    $e_0\in[0,\epsilon_n]$, gap at least $g/2$,
+    $\ker(\widetilde H-e_0I)=\operatorname{span}\{\widetilde\Omega\}$, and (after
+    a phase choice) the bounds~(\ref{eq:al_truncation_state_closeness}). This is
+    the truncation part of \cite[Proposition~4.5]{OpenAI2026AreaLaw} (stated
+    there for $S_0\ne\varnothing$ and $C_0>0$).
+\end{lemma}
 \begin{proof}\leanok
-    The gapped ground vector gives $H\Omega=E_0\Omega$ and
-    $H-E_0I\ge\Delta(I-P_\Omega)$. Apply Theorem~\ref{thm:al_truncation} with
-    $v_R$ sites per support, per-site norm bound $\mu_RJ$ and sphere growth
-    $2(d+1)^2$ from Lemma~\ref{lem:area_domain_graph_counts}, and ball growth
-    $2(d+1)^2$ and at most $\mu_R$ labels per anchor from
-    Theorem~\ref{thm:al_lattice_counts}. For every $\psi$ with
-    $\widetilde H\psi=e_0\psi$, put
-    $\varphi=\psi-\langle\widetilde\Omega,\psi\rangle\widetilde\Omega$; then
-    $0=\langle\varphi,(\widetilde H-e_0I)\varphi\rangle\ge\frac g2\|\varphi\|^2$,
+    Apply Lemma~\ref{thm:al_truncation} with $v_R$, $b_0=\mu_RJ$, and sphere
+    growth $2(d+1)^2$ (Lemma~\ref{lem:area_domain_graph_counts}), and
+    $K_b=2,\mu=\mu_R$ (Lemma~\ref{thm:al_lattice_counts}). If
+    $\widetilde H\psi=e_0\psi$ and
+    $\varphi=\psi-\langle\widetilde\Omega,\psi\rangle\widetilde\Omega$, then
+    $0=\langle\varphi,(\widetilde H-e_0I)\varphi\rangle\ge(g/2)\|\varphi\|^2$,
     so $\psi\in\operatorname{span}\{\widetilde\Omega\}$ by
-    Theorem~\ref{thm:area_law_ground_eigenspace}.
+    Lemma~\ref{thm:area_law_ground_eigenspace}.
 \end{proof}
 
-\begin{theorem}[Crossing count and cut parameter on an induced lattice domain]
+\begin{lemma}[Crossing count and cut parameter on an induced lattice domain]
     \label{thm:al_lattice_crossing_budget}
     \lean{TNLean.PEPS.AreaLaw.exists_latticeCrossingBudget,
         TNLean.PEPS.AreaLaw.exists_latticeCutBudget_le_log}
     \leanok
     \uses{thm:al_crossing_budget, thm:al_lattice_counts}
-    For $q\ge1$ there is $C\ge0$, depending only on $q$ and $R$, such that for
-    every finite domain, every choice of anchors, every $S_0$, every $r_0$ and every
-    $X\subseteq S_0$, with $b_X=|\partial_\Lambda X|$, every designated support
-    meeting both $X$ and its complement is the ball of radius $r_0$ about its
-    anchor and
+    For $q\ge1$ there is $C\ge0$, depending only on $q,R$, such that for every
+    finite domain $\Lambda$, anchor choice, $S_0,r_0$, and $X\subseteq S_0$ with
+    $b_X=|\partial_\Lambda X|$, every $i\in\mathcal C_X$ has
+    $\widetilde X_i=N_{r_0}(a_i)$ and
     \begin{align}
         |\mathcal C_X|\le Cb_X(r_0+1)^2,\qquad
         \log d_i\le C(r_0+1)^2\quad(i\in\mathcal C_X),\qquad
         \mathcal B_X\le C(1+b_X)(r_0+1)^6.
+        \label{eq:al_lattice_crossing_bounds}
     \end{align}
-    For $C_1,C_2\ge0$ there is $C$, depending only on
-    $q,R,C_1,C_2$, such that $r_0=\lceil C_1(\log n)^2\rceil$, $n\ge2$,
-    $D\ge1$ and $b_X\le C_2nD$ imply $\mathcal B_X\le CnD(\log n)^{12}$. This
-    is the crossing count and cut parameter bound of Proposition~4.5 of
-    \cite{OpenAI2026AreaLaw}.
-\end{theorem}
-\begin{proof}\leanok
-    Apply Theorem~\ref{thm:al_crossing_budget} with $K_b=2$ and $\mu=\mu_R$,
-    whose hypotheses follow from Theorem~\ref{thm:al_lattice_counts}; the
-    ordered cut edges are counted by $|\partial_\Lambda X|$. The second bound
-    inserts $r_0=\lceil C_1(\log n)^2\rceil$ into the third inequality.
-\end{proof}
-
-\input{chapter/ch24_peps_area_law_scan_histories}
-\input{chapter/ch24_peps_positive_prefix_entropy}
-\input{chapter/ch24_augmented_replica_metric_coordinates}
-\input{chapter/ch24_augmented_replica_prevector_properties}
-\input{chapter/ch24_augmented_root_compression}
-\input{chapter/ch24_peps_area_law_bad_histories}
-
-\section{The scanner estimate from its inputs}
-\label{sec:al_scanner}
-
-Section~9 of the manuscript scans the collar of a finite target in rounds and
-selects one charge round and one interpolation parameter at which the
-symmetrized filtered vector has small defect energy (Proposition~9.2). Fix
-exponents $0<\ell<1$, $0<\kappa<\mu<1-\ell$, $0<e<1$ with $\kappa\le e$,
-$\nu>0$, let the total metric weight $W\ge1$ of the scan be arbitrary, possibly
-depending on $n$, and put $L=\lfloor n^{1-\ell}\rfloor$,
-$D=\lceil n^\kappa\rceil$, $m=\lfloor n^\mu\rfloor$, $\epsilon=n^{-\nu}$ and
-$\delta_n=C\epsilon^{-1}(n^{e-\mu}+a^{1/4}(\log n)^{C})$. The statement below
-takes as hypotheses, for one scan at scale $n$, the conclusions of the scan
-histories (Lemma~9.1), the log-norm evolution (Proposition~7.4), the comparators
-(Proposition~8.1), entropy continuity (Lemma~2.1) and the marginal tails
-(Lemma~3.1); it is therefore Proposition~9.2 restricted to those conclusions,
-not the unconditional source proposition. In these hypotheses, the finite leaf
-measures are required to have mass $1/2$ only for $0<p<1$, where the source's
-terminal weights are positive, with no mass equality required at an inactive
-terminal leaf; the logarithmic norm is continuous on $[0,1]$ with matching
-values at $0$ and $1$, and the charge defect is assumed almost everywhere
-measurable on the interior, which together with its nonnegative upper bound
-gives integrability on $[0,1]$.
-
-% Source: OpenAI2026AreaLaw, sections/08-scanner.tex, lines 32--41 (the scales);
-% the three comparison bounds are the estimates used at lines 469, 480, 519--520.
-\begin{lemma}[Numerical scale estimates]
-    \label{lem:al_scanner_scale_facts}
-    \lean{TNLean.PEPS.AreaLaw.Scan.eventually_scaleFacts}
-    \leanok
-    Fix exponents $0<\ell<1$, $0<\kappa<\mu<1-\ell$, $\nu>0$ and $0<e<1$ with
-    $\kappa\le e$, and put $L=\lfloor n^{1-\ell}\rfloor$,
-    $m=\lfloor n^\mu\rfloor$, $K=\lfloor L/(8m)\rfloor$,
-    $D=\lceil n^\kappa\rceil$ and $\epsilon=n^{-\nu}$, the scales of
-    \cite[Section~9]{OpenAI2026AreaLaw}. There is a constant $C_1\ge1$,
-    depending only on the exponents, such that for all sufficiently large
-    integers $n$:
-    $n\ge2$, $K\ge1$, $m\ge1$, $D\ge1$, $L\le n$, $0<\epsilon<1$, and
-    \begin{align}
-        \frac{n^e}{m}   & \le C_1n^{e-\mu},  &
-        D               & \le C_1n^e,        &
-        \frac{nD^2}{mK} & \le C_1n^\ell D^2.
-    \end{align}
+    For $C_1,C_2\ge0$ there is $C'$, depending only on $q,R,C_1,C_2$, such that
+    $r_0=\lceil C_1(\log n)^2\rceil$, $n\ge2$, $D\ge1$, and $b_X\le C_2nD$
+    imply $\mathcal B_X\le C'nD(\log n)^{12}$
+    \cite[Proposition~4.5]{OpenAI2026AreaLaw}.
 \end{lemma}
 \begin{proof}\leanok
-    For large $n$, $n^\mu\ge2$, $n^{1-\ell}\ge2$ and
-    $n^{1-\ell-\mu}\ge48$. Since $\lfloor x\rfloor\ge x/2$ for $x\ge2$, this
-    gives $m\ge n^\mu/2$ and $L\ge n^{1-\ell}/2\ge24m$, hence $K\ge1$ and
-    $mK\ge L/16\ge n^{1-\ell}/32$. The remaining bounds follow from
-    $\kappa\le e$ and $\lceil x\rceil\le 2x$ for $x\ge1$, with $C_1=32$.
+    Apply Lemma~\ref{thm:al_crossing_budget} with $K_b=2$, $\mu=\mu_R$, and
+    cut-edge bound $|\partial_\Lambda X|$ from Lemma~\ref{thm:al_lattice_counts};
+    substituting $r_0=\lceil C_1(\log n)^2\rceil$ into~(\ref{eq:al_lattice_crossing_bounds})
+    gives the second bound.
 \end{proof}
 
-\begin{lemma}[Continuity cost at trace distance $n^{-500}$]
-    \label{lem:al_continuity_cost}
-    \lean{TNLean.PEPS.AreaLaw.Scan.eventually_continuityCost_le}
-    \leanok
-    Fix $C,\lambda\ge0$. There is a threshold depending only on these constants
-    such that, for every natural number $n$ above the threshold and every real
-    $t\le n^{-500}$,
-    \begin{align}
-        C\sqrt{t}\bigl(1+Cn^2\lambda\bigr)\le n^{-247}.
-    \end{align}
-    This is the continuity cost of \cite[Lemma~2.1]{OpenAI2026AreaLaw} at the
-    trace distances arising in \cite[Proposition~9.2, proof]{OpenAI2026AreaLaw}.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    Take $n\ge1$ and $n\ge C(1+C\lambda)$. Then $\sqrt t\le n^{-250}$ and
-    $1+Cn^2\lambda\le(1+C\lambda)n^2$, so
-    $C\sqrt t(1+Cn^2\lambda)\le n^{-250}\cdot C(1+C\lambda)n^2
-        \le n^{-250}\cdot n^3=n^{-247}$.
-\end{proof}
-
-\begin{lemma}[Continuity cost with a fixed distance coefficient]
-    \label{lem:al_continuity_fixed_coefficient}
-    \lean{TNLean.PEPS.AreaLaw.Scan.eventually_continuityCost_le_of_fixed_coefficient}
-    \leanok
-    Fix $A,C,\lambda\ge0$. There is a threshold depending only on these constants
-    such that, for every natural number $n$ above the threshold and every real
-    $t\le A n^{-500}$,
-    \begin{align}
-        C\sqrt{t}\bigl(1+Cn^2\lambda\bigr)\le n^{-247}.
-    \end{align}
-    Here the real square root is zero on negative arguments.
-    This is the scalar estimate used in the entropy transfer of
-    \cite[Proposition~9.2, proof]{OpenAI2026AreaLaw}.
-\end{lemma}
-
-\begin{proof}
-    \uses{lem:al_continuity_cost}
-    \leanok
-    Put $B=1+A$ and $\overline C=C\sqrt B$.
-    For all sufficiently large $n$ and every $u\le n^{-500}$,
-    Lemma~\ref{lem:al_continuity_cost} with the constants $\overline C$ and
-    $\lambda$ gives
-    \begin{align}
-        \overline C\sqrt u\bigl(1+\overline Cn^2\lambda\bigr)\le n^{-247}.
-    \end{align}
-    If $t\le An^{-500}$, then $u=t/B\le n^{-500}$.
-    Since $B>0$, the identity $\sqrt t=\sqrt B\sqrt{t/B}$ holds for every real
-    $t$, including negative $t$.
-    Since $C\le\overline C$ and $\overline C\sqrt u$ and $n^2\lambda$ are
-    nonnegative,
-    \begin{align}
-        C\sqrt t\bigl(1+Cn^2\lambda\bigr)
-         & =\overline C\sqrt u\bigl(1+Cn^2\lambda\bigr)             \\
-         & \le\overline C\sqrt u\bigl(1+\overline Cn^2\lambda\bigr)
-        \le n^{-247}.
-    \end{align}
-\end{proof}
-
-\begin{theorem}[Growth of the rounded band count]
-    \label{thm:area_law_band_count_growth}
-    \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.eventually_le_K}
-    \leanok
-    Fix scanner exponents satisfying the preceding conditions and put
-    $K_n=\lfloor\lfloor n^{1-\ell}\rfloor/(8\lfloor n^\mu\rfloor)\rfloor$.
-    For every integer $B\ge0$ there is a threshold $N$, depending only on
-    the exponents and $B$, such that $B\le K_n$ whenever $n\ge N$.
-    These are the rounded scales of \cite[Section~9]{OpenAI2026AreaLaw}.
-\end{theorem}
-\begin{proof}\leanok
-    Since $1-\ell-\mu>0$, eventually $n^{1-\ell-\mu}\ge16B$ and
-    $n^{1-\ell},n^\mu\ge2$. Thus
-    \begin{align}
-        8B\lfloor n^\mu\rfloor
-        \le8Bn^\mu
-        \le\tfrac12 n^{1-\ell}
-        \le\lfloor n^{1-\ell}\rfloor.
-    \end{align}
-    The positive integer divisor $8\lfloor n^\mu\rfloor$ then gives
-    $B\le K_n$.
-\end{proof}
-
-\begin{theorem}[Scanner estimate from the conclusions of its inputs]
-    \label{thm:al_scanner_from_inputs}
-    \lean{TNLean.PEPS.AreaLaw.Scan.ScanData,
-        TNLean.PEPS.AreaLaw.Scan.ScanData.SXt_le,
-        TNLean.PEPS.AreaLaw.Scan.ScanData.SQt_le,
-        TNLean.PEPS.AreaLaw.Scan.ScanData.terminalBound,
-        TNLean.PEPS.AreaLaw.Scan.ScanData.terminalBound_le_of,
-        TNLean.PEPS.AreaLaw.Scan.ScanData.IntegratedChargeBound,
-        TNLean.PEPS.AreaLaw.Scan.ScanData.chargeDefect_le_choiceGainSum,
-        TNLean.PEPS.AreaLaw.Scan.ScanData.chargeDefect_le,
-        TNLean.PEPS.AreaLaw.Scan.ScanData.goodOld_le,
-        TNLean.PEPS.AreaLaw.Scan.exists_budgets,
-        TNLean.PEPS.AreaLaw.Scan.ScanData.intervalIntegrable_chargeDefect,
-        TNLean.PEPS.AreaLaw.Scan.ScanData.integratedChargeBound,
-        TNLean.PEPS.AreaLaw.Scan.exists_selected_density,
-        TNLean.PEPS.AreaLaw.Scan.ScanData.energySum_le,
-        TNLean.PEPS.AreaLaw.Scan.exists_defectEnergy_le,
-        TNLean.PEPS.AreaLaw.Scan.scanner_estimate}
-    \leanok
-
-    There are constants, independent of $W$ and depending only on the exponents and on the constants of
-    the inputs, such that for all sufficiently large $n$ and every scan at scale
-    $n$ satisfying the conclusions of Lemmas~9.1, 2.1, 3.1 and
-    Propositions~7.4, 8.1 with the replica counts specified below, the comparator bounds
-    $B_{\mathrm{sh}}\le C(nL^e+n)$, $B_{\mathrm{exc}}\le CnD$ and
-    $\mathcal B\le CnD(\log n)^{C}$ hold, and there is a remainder $\rho_k\to0$, uniform over the selected
-    round and parameter, such that for every $k\ge1$ some charge round and
-    some $p_k\in[\epsilon/2,\epsilon]$ satisfy
-    $\mathcal Q(p_k)/(KnD)\le\delta_n+\rho_k$ and
-    \begin{align}
-        E_{\mathrm{def},k}\le Cn^\ell D^2W^2(\log n)^{C}
-        \bigl(\delta_n^{1/8}+\epsilon+n^{-100}\bigr)+Cn^{-1000}+\rho_k.
-        \label{eq:al_scanner_energy}
-    \end{align}
-    The mass identities of the leaf measures, measurability of the charge
-    defect, continuity and differentiability of the logarithmic norm,
-    log-norm derivative inequalities and initial norm bound are required for every
-    $k\ge0$; the normalized final comparison is required for $k\ge1$.
-    The leaf measures are finite and adjacent endpoint norms agree for every
-    $k\ge0$.
-    Let $C_e$ be the original entropy-input constant, and write
-    $\widetilde S_X$ and $\widetilde S_Q(j)$ for the target and shell
-    entropy values of the truncated state recorded in the same input data.
-    The threshold can also be chosen so that, for every natural shell index
-    $j\le L$,
-    \begin{align}
-        \widetilde S_X    & \le C_e n^{1+e}+n^{-247}, \\
-        \widetilde S_Q(j) & \le C_e(nL^e+n)+n^{-247}.
-    \end{align}
-\end{theorem}
-\begin{proof}\leanok
-    \uses{lem:al_scanner_scale_facts,lem:al_continuity_fixed_coefficient}
-    Write $C_{\rm in}\ge1$ for the fixed distance and continuity coefficient
-    of the input data and $t$ for their trace distance. Apply
-    Lemma~\ref{lem:al_continuity_fixed_coefficient} with
-    $A=C=C_{\rm in}$ and $\lambda=\log q\ge0$ to the assumed bound
-    $t\le C_{\rm in}n^{-500}$. The assumed continuity differences are
-    therefore at most $n^{-247}$. Adding the original target and shell
-    entropy bounds gives the two entropy estimates, uniformly in the scan
-    and shell index.
-    Fix $k\ge1$. Because almost-everywhere measurability on $(0,1)$ and the
-    nonnegative upper bound make the charge defect integrable on $[0,1]$
-    (with the two endpoint values not affecting the integral), integrating
-    the derivative of the continuous logarithmic norm over $[0,1]$ in each
-    round, using its interior differentiability and the pointwise gain
-    inequality while retaining the nonnegative charge contribution on
-    $[\epsilon/2,\epsilon]$, and telescoping across matching adjacent
-    endpoint values yields the integrated charge bound.
-    Write $T$ for the charge rounds, so $|T|=nm$, and let
-    $\mathcal Q_{r,k}(p)$ be the defect in round $r$. With
-    $c_k=KnD(\delta_n+\rho_k)$, the normalized entropy bound gives
-    \begin{align}
-        \sum_{r\in T}\int_{\epsilon/2}^{\epsilon}\mathcal Q_{r,k}(p)\,dp
-        \le |T|\frac{\epsilon}{2}c_k.
-        \label{eq:al_scanner_charge_sum}
-    \end{align}
-    Since $T\ne\varnothing$, finite averaging in~(\ref{eq:al_scanner_charge_sum})
-    gives $r\in T$ with
-    $\int_{\epsilon/2}^{\epsilon}\mathcal Q_{r,k}(p)\,dp\le(\epsilon/2)c_k$.
-    If $\mathcal Q_{r,k}(p)>c_k$ for every $p\in[\epsilon/2,\epsilon]$,
-    integrability and $\epsilon>0$ imply
-    \begin{align}
-        0 & < \int_{\epsilon/2}^{\epsilon}\bigl(\mathcal Q_{r,k}(p)-c_k\bigr)\,dp \notag            \\
-          & = \int_{\epsilon/2}^{\epsilon}\mathcal Q_{r,k}(p)\,dp-\frac{\epsilon}{2}c_k\le0, \notag
-    \end{align}
-    a contradiction. Hence some $p_k\in[\epsilon/2,\epsilon]$ satisfies
-    $\mathcal Q_{r,k}(p_k)/(KnD)\le\delta_n+\rho_k$.
-    At that point
-    H\"older's inequality with exponents $8/7$ and $8$ bounds the leaf
-    energies of the old good leaves by $N(\mathcal Q/N)^{1/8}$, the new and
-    bad leaves contribute at most $\epsilon$ and $n^{-200}$ times the total
-    weight, and the gap of the copied Hamiltonian converts the energy into the
-    defect energy. The comparator bounds follow from these entropy estimates and
-    the recorded bound $\mathcal B\le CnD(\log n)^{12}$ for the marginal
-    parameter.
-\end{proof}
-
-\begin{theorem}[Scanner estimate for the collar scan from the evolution and comparator inputs]
-    \label{thm:al_scanner_actual_scan}
-    \lean{TNLean.PEPS.AreaLaw.Scan.ScanInputs,
-        TNLean.PEPS.AreaLaw.Scan.HistoryFacts.mono,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.scanner_estimate_actualScan}
-    \leanok
-    \uses{thm:al_scanner_from_inputs,thm:al_scan_actual_history_facts,
-        thm:al_scan_truncation_inputs}
-    Fix scanner exponents, an interaction range $R$, a bound $J\ge0$, a gap
-    $\Delta>0$ and a target-size coefficient $C_T\ge0$. There are a truncation
-    coefficient $C_r$ and, for every local dimension $q$, constants $C_0>0$,
-    $c_0>0$ and $C_1>0$ such that for all scanner constants with dimension $q$,
-    normalized gap $g$, common constant at least $C_0$, logarithmic power at
-    least $4$ and sampling constant at most $c_0$, there are constants for which
-    the following holds for all sufficiently large $n$. Let $\Omega$ be a gapped
-    ground vector of a Hamiltonian on $\Lambda$, and take a collar scan at the
-    scales of \cite[Section~9]{OpenAI2026AreaLaw} with
-    $r_0=\lceil C_r(\log n)^2\rceil$ and charge-list constant $C_1$, under the
-    test geometry and the entropy inputs of \cite[Proposition~9.2]{OpenAI2026AreaLaw}.
-    Then there is one ground vector $\widetilde\Omega$ of the truncated
-    Hamiltonian, with gap $g/2$ and the properties listed in
-    Theorem~\ref{thm:al_scan_truncation_inputs}, such that for all auxiliary dimensions, every
-    total weight $W\ge1$ and all replica vectors: if the rounds of the
-    scan, with per-band weight $a=W/K$, satisfy the conclusions of
-    Propositions~7.4 and~8.1 for $W$ and $\widetilde\Omega$, with the replica
-    counts specified in Theorem~\ref{thm:al_scanner_from_inputs}, finite leaf
-    measures and matching adjacent endpoint norms, then the
-    conclusions of Theorem~\ref{thm:al_scanner_from_inputs} hold for these
-    rounds.
-
-    This is Proposition~9.2 with the conclusions of Propositions~7.4 and~8.1
-    for the scan rounds as its only hypothesis beyond the source's; it is not
-    the source proposition.
-\end{theorem}
-\begin{proof}\leanok
-    \uses{thm:al_scanner_from_inputs,thm:al_scan_actual_history_facts,
-        thm:al_scan_truncation_inputs}
-    Theorem~\ref{thm:al_scan_truncation_inputs} gives the truncated ground
-    state $\widetilde\Omega$ and the truncation inputs, while
-    Theorem~\ref{thm:al_scan_actual_history_facts} gives the history inputs
-    for the scan rounds, which persist when the common constant and
-    logarithmic power are increased (once $\log n\ge1$) and the sampling
-    constant is decreased. Combining these inputs with the assumed
-    conclusions of Propositions~7.4 and~8.1 satisfies the hypotheses of
-    Theorem~\ref{thm:al_scanner_from_inputs}.
-\end{proof}
-
-\input{chapter/ch24_peps_sharp_moment_scale}
+\input{chapter/ch24_peps_area_law_conditional_estimates}

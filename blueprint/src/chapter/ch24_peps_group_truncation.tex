@@ -1,18 +1,17 @@
 \section{Whole-group tensor bound and simultaneous truncation}
 \label{sec:peps_group_truncation}
 This section presents the whole-group tensor bound of
-\cite[Lemma~6.2]{OpenAI2026PolynomialPEPS}, September 24, 2026,
-\texttt{05-frames.tex}, lines 125--179, together with the two
-dimension-free matrix inequalities used in its proof. All index sets are
-finite. For a matrix $M$, write $\lVert M\rVert_1$ for the sum of its
-singular values and $\lVert M\rVert_2$ for its Hilbert--Schmidt norm.
+\cite[Lemma~6.2]{OpenAI2026PolynomialPEPS} (\texttt{05-frames.tex},
+lines 125--179) and the two dimension-free matrix inequalities used in its
+proof. All index sets are finite; for a matrix $M$, $\lVert M\rVert_1$ denotes
+the sum of its singular values and $\lVert M\rVert_2$ its Hilbert--Schmidt norm.
 
 \begin{definition}[Nuclear norm]
     \label{def:peps_group_nuclear_norm}
     \lean{Matrix.rectangularTraceNorm}
     \leanok
-    For a finite rectangular complex matrix $M$, the nuclear norm $\lVert M\rVert_1$
-    is the sum of the singular values of $M$.
+    For a finite rectangular complex matrix $M$, the nuclear norm
+    $\lVert M\rVert_1$ is the sum of the singular values of $M$.
 \end{definition}
 
 \begin{lemma}[H\"older bound for a product with a transpose]
@@ -20,20 +19,18 @@ singular values and $\lVert M\rVert_2$ for its Hilbert--Schmidt norm.
     \lean{Matrix.rectangularTraceNorm_mul_transpose_le}
     \leanok
     \uses{def:peps_group_nuclear_norm}
-    For finite complex matrices $A$ and $B$ with the same column index set,
+    For finite complex matrices $A,B$ with the same column index set,
     $\lVert AB^{\mathsf T}\rVert_1\le\lVert A\rVert_2\lVert B\rVert_2$.
 \end{lemma}
 
 \begin{proof}\leanok
-    Let $w_i$ be an orthonormal basis of right singular vectors of
-    $M=AB^{\mathsf T}$, and let $u_i$ be the normalized images $Mw_i$ when
-    $Mw_i\ne0$. The $i$th singular value of $M$ is
-    $\langle u_i, A(B^{\mathsf T}w_i)\rangle
-        =\langle A^{*}u_i, B^{\mathsf T}w_i\rangle$, so by the
-    Cauchy--Schwarz inequality it is at most
-    $\lvert\langle A^{*}u_i, B^{\mathsf T}w_i\rangle\rvert
-        \le\lVert A^{*}u_i\rVert\,\lVert B^{\mathsf T}w_i\rVert$.
-    Summing over $i$ and applying the Cauchy--Schwarz inequality gives
+    Let $(w_i)$ be an orthonormal basis of right singular vectors of
+    $M=AB^{\mathsf T}$, and let $u_i=Mw_i/\lVert Mw_i\rVert$ when $Mw_i\ne0$.
+    The $i$th singular value of $M$ satisfies
+    $s_i(M)=\langle u_i,A(B^{\mathsf T}w_i)\rangle
+        =\langle A^{*}u_i,B^{\mathsf T}w_i\rangle
+        \le\lVert A^{*}u_i\rVert\,\lVert B^{\mathsf T}w_i\rVert$,
+    and Cauchy--Schwarz over $i$ gives
     $\lVert M\rVert_1\le(\sum_i\lVert A^{*}u_i\rVert^2)^{1/2}(\sum_i\lVert B^{\mathsf T}w_i\rVert^2)^{1/2}
         \le\lVert A\rVert_2\lVert B\rVert_2$.
 \end{proof}
@@ -43,21 +40,19 @@ singular values and $\lVert M\rVert_2$ for its Hilbert--Schmidt norm.
     \lean{Matrix.exists_orthonormal_truncation, Matrix.orthonormalProjector}
     \leanok
     \uses{def:peps_group_nuclear_norm}
-    Let $M$ be a finite complex matrix and $k\ge0$ an integer. There exists an
-    orthonormal family of at most $k$ vectors in $\mathbb C^n$, where $n$ is
-    the number of columns of $M$, whose orthogonal projection $Q$ satisfies
-    $(k+1)\lVert M-MQ\rVert_2^2\le\lVert M\rVert_1^2$. If $M$ has at most $k$
-    columns, then $MQ=M$.
+    For any finite complex matrix $M$ with $n$ columns and $k\in\N$, there
+    exists an orthonormal family of at most $k$ vectors in $\C^n$ whose
+    orthogonal projection $Q$ satisfies
+    $(k+1)\lVert M-MQ\rVert_2^2\le\lVert M\rVert_1^2$, with $MQ=M$ when
+    $n\le k$.
 \end{lemma}
 
 \begin{proof}\leanok
     Let $Q$ be the orthogonal projection onto the first $\min(k,n)$ right
-    singular vectors of $M$, where $n$ is the number of columns. Then
-    $\lVert M-MQ\rVert_2^2=\sum_{j>k}s_j^2$, where
-    $s_1\ge s_2\ge\cdots\ge0$ are the singular values of $M$. Since the
-    singular values are nonincreasing,
+    singular vectors of $M$, with singular values $s_1\ge s_2\ge\cdots\ge0$.
+    Then $\lVert M-MQ\rVert_2^2=\sum_{j>k}s_j^2$, and since
     $(k+1)s_{k+1}\le\sum_j s_j$ and $\sum_{j>k}s_j^2\le s_{k+1}\sum_j s_j$,
-    so $(k+1)\sum_{j>k}s_j^2\le(\sum_j s_j)^2=\lVert M\rVert_1^2$.
+    one has $(k+1)\sum_{j>k}s_j^2\le(\sum_j s_j)^2=\lVert M\rVert_1^2$.
 \end{proof}
 
 \begin{definition}[Coordinate contraction of a tensor graph]
@@ -65,62 +60,58 @@ singular values and $\lVert M\rVert_2$ for its Hilbert--Schmidt norm.
     \lean{TNLean.Lattice.WholeGroup.contraction, TNLean.Lattice.WholeGroup.vertexNormSq}
     \leanok
     Let $(V,E)$ be a finite graph whose edges $e\in E$ have endpoints
-    $t(e),h(e)\in V$ and finite index sets $D_e$. At each vertex $v\in V$, let
-    $A_v$ be a tensor with one leg for each edge incident to $v$ and one
-    group of open legs with finite configuration set $P_v$. The coordinate
+    $t(e),h(e)\in V$ and finite index sets $D_e$, and let each $v\in V$ carry
+    a tensor $A_v$ with one leg per incident edge and open-leg configuration
+    set $P_v$, with Euclidean norm $\lVert A_v\rVert$. The coordinate
     contraction is
-    \[
-        Z(\sigma)=\sum_{\beta}\prod_{v\in V}A_v\bigl(\beta|_{v},\sigma_v\bigr),
-    \]
-    where $\beta$ runs over all edge labellings and $\beta|_v$ is the
-    restriction of $\beta$ to the edges incident to $v$. The norm
-    $\lVert A_v\rVert$ is its Euclidean norm over all incident and open legs.
+    \begin{align}
+        Z(\sigma) & =\sum_{\beta}\prod_{v\in V}A_v\bigl(\beta|_{v},\sigma_v\bigr),
+        \label{eq:peps_group_contraction}
+    \end{align}
+    where $\beta$ runs over all edge labellings and $\beta|_v$ restricts
+    $\beta$ to edges incident to $v$.
 \end{definition}
 
-\begin{theorem}[Whole-group tensor bound, norm part]
+\begin{lemma}[Whole-group tensor bound, norm part]
     \label{thm:peps_group_contraction_norm}
     \lean{TNLean.Lattice.WholeGroup.contraction_norm_le_one,
         TNLean.Lattice.WholeGroup.partialNormSq_le_one}
     \leanok
     \uses{def:peps_group_contraction}
-    Suppose that no edge joins a vertex to itself and every vertex tensor
-    satisfies $\lVert A_v\rVert\le1$. Then $\lVert Z\rVert\le1$.
-    The same bound holds for the partial contraction over any subset of
-    vertices, with the open legs of the subset and the edges leaving it kept
-    open.
-\end{theorem}
+    If $(V,E)$ has no self-loops and $\lVert A_v\rVert\le1$ for all $v\in V$,
+    then $\lVert Z\rVert\le1$, and the same bound holds for the partial
+    contraction over any $T\subseteq V$ (keeping open the open legs of $T$ and
+    edges leaving $T$).
+\end{lemma}
 
 \begin{proof}\leanok
-    Induct on the vertex subset by adding one vertex at a time.
-    Contracting the edges between two disjoint vertex subsets amounts to
-    multiplying their partial contractions, reshaped as matrices with the
-    shared edges as the contracted index, so submultiplicativity
-    $\lVert AB\rVert_2\le\lVert A\rVert_2\lVert B\rVert_2$ preserves the norm
-    bound. A single vertex has no self-loops and thus has norm
-    $\lVert A_v\rVert\le1$, while the empty subset has norm $1$.
+    By induction on $|T|$: the empty subset has norm $1$, a single loopless
+    vertex has norm $\lVert A_v\rVert\le1$, and contracting shared edges
+    between disjoint vertex subsets multiplies their reshaped partial
+    contractions, preserving the bound by
+    $\lVert AB\rVert_2\le\lVert A\rVert_2\lVert B\rVert_2$.
 \end{proof}
 
-\begin{theorem}[Whole-group tensor bound, nuclear part]
+\begin{lemma}[Whole-group tensor bound, nuclear part]
     \label{thm:peps_group_contraction_nuclear}
     \lean{TNLean.Lattice.WholeGroup.rectangularTraceNorm_flattening_le_one,
         TNLean.Lattice.WholeGroup.flattening,
         TNLean.Lattice.WholeGroup.flattening_contraction}
     \leanok
     \uses{def:peps_group_contraction, def:peps_group_nuclear_norm}
-    Under the hypotheses of Theorem~\ref{thm:peps_group_contraction_norm},
-    for every subset $T\subseteq V$, the matrix reshaping of $Z$ with rows
-    indexed by the open-leg groups of $T$ and columns indexed by those of
-    $V\setminus T$ has nuclear norm at most $1$.
-\end{theorem}
+    Under the hypotheses of Lemma~\ref{thm:peps_group_contraction_norm}, for
+    every $T\subseteq V$, the matrix reshaping $Z_T$ of $Z$ with rows indexed
+    by $\prod_{v\in T}P_v$ and columns by $\prod_{v\in V\setminus T}P_v$
+    satisfies $\lVert Z_T\rVert_1\le1$.
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_group_contraction_norm, lem:peps_group_nuclear_holder}
-    By Theorem~\ref{thm:peps_group_contraction_norm}, the partial contractions
-    $A$ on $T$ and $B$ on $V\setminus T$ satisfy $\lVert A\rVert_2\le1$ and
-    $\lVert B\rVert_2\le1$. Grouping the edges between $T$ and $V\setminus T$
-    into a single column index writes the reshaping of $Z$ as $AB^{\mathsf T}$,
-    so Lemma~\ref{lem:peps_group_nuclear_holder} gives
-    $\lVert AB^{\mathsf T}\rVert_1\le\lVert A\rVert_2\lVert B\rVert_2\le1$.
+    By Lemma~\ref{thm:peps_group_contraction_norm}, the partial contractions
+    $A$ on $T$ and $B$ on $V\setminus T$ satisfy $\lVert A\rVert_2,\lVert B\rVert_2\le1$,
+    and grouping the edges between $T$ and $V\setminus T$ gives
+    $Z_T=AB^{\mathsf T}$, so Lemma~\ref{lem:peps_group_nuclear_holder} yields
+    $\lVert Z_T\rVert_1\le\lVert A\rVert_2\lVert B\rVert_2\le1$.
 \end{proof}
 
 \begin{lemma}[Simultaneous truncation of open-leg groups]
@@ -131,57 +122,53 @@ singular values and $\lVert M\rVert_2$ for its Hilbert--Schmidt norm.
         TNLean.Lattice.WholeGroup.productVector}
     \leanok
     \uses{def:peps_group_nuclear_norm}
-    Let $Z\in\bigotimes_{v\in V}\mathbb C^{P_v}$ be a tensor with
-    $\lVert Z\rVert\le1$ whose matrix reshaping across each single factor $v$
-    and $V\setminus\{v\}$ has nuclear norm at most $1$. Let $G\subseteq V$
-    contain every $v$ with $|P_v|>1$, and let $k\ge1$. Then there exist
-    orthonormal families of at most $k$ vectors in the factors $\mathbb C^{P_v}$
-    whose tensor-product projection maps $Z$ to a tensor $Z_k$ satisfying
-    $\lVert Z-Z_k\rVert\le|G|/\sqrt{k}$. Expanded in these orthonormal
-    families, $Z_k$ is a sum of at most $k^{|G|}$ product terms with
-    coefficients of modulus at most $1$.
+    Let $Z\in\bigotimes_{v\in V}\C^{P_v}$ satisfy $\lVert Z\rVert\le1$ and
+    $\lVert Z_{\{v\}}\rVert_1\le1$ for all $v\in V$, let $G\subseteq V$ contain
+    every $v$ with $|P_v|>1$, and let $k\ge1$. Then there exist orthonormal
+    families of at most $k$ vectors in each $\C^{P_v}$ whose tensor-product
+    projection $Z_k=\bigl(\bigotimes_{v\in V}Q_v\bigr)Z$ satisfies
+    $\lVert Z-Z_k\rVert\le|G|/\sqrt{k}$ and expands in the orthonormal product
+    basis as at most $k^{|G|}$ product terms with coefficients of modulus at
+    most $1$.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_group_orthonormal_truncation}
-    For each $v\in V$, applying Lemma~\ref{lem:peps_group_orthonormal_truncation}
-    to the reshaping across $\{v\}$ and $V\setminus\{v\}$ yields an orthogonal
-    projection $Q_v$ of rank at most $k$ on $\mathbb C^{P_v}$ with
-    $\lVert Z-Q_v Z\rVert\le1/\sqrt{k+1}\le1/\sqrt{k}$, and $Q_v Z=Z$ whenever
-    $|P_v|\le1$. Because the projections $Q_v$ act on distinct tensor factors,
-    they commute and have operator norm at most $1$, so telescoping over
-    $v\in G$ gives $\lVert Z-Z_k\rVert\le|G|/\sqrt k$. Since
-    $\lVert Z_k\rVert\le\lVert Z\rVert\le1$, every coefficient of $Z_k$ in the
-    orthonormal product basis has modulus at most $1$.
+    For each $v\in V$, Lemma~\ref{lem:peps_group_orthonormal_truncation}
+    provides an orthogonal projection $Q_v$ on $\C^{P_v}$ of rank at most $k$
+    with $\lVert Z-Q_v Z\rVert\le1/\sqrt{k+1}\le1/\sqrt{k}$ and $Q_v Z=Z$ when
+    $|P_v|\le1$. Since the $Q_v$ commute and have $\lVert Q_v\rVert\le1$,
+    telescoping over $v\in G$ gives $\lVert Z-Z_k\rVert\le|G|/\sqrt k$, and
+    $\lVert Z_k\rVert\le\lVert Z\rVert\le1$ bounds each product-basis
+    coefficient by $1$.
 \end{proof}
 
-\begin{theorem}[Whole-group tensor bound]
+\begin{lemma}[Whole-group tensor bound]
     \label{thm:peps_group_tensor}
     \lean{TNLean.Lattice.WholeGroup.exists_simultaneous_openLeg_truncation,
         TNLean.Lattice.WholeGroup.exists_simultaneous_group_truncation}
     \leanok
     \uses{def:peps_group_contraction}
-    Let a finite loopless graph carry at each vertex $v$ a tensor $A_v$ of norm
-    at most $1$, and let $Z$ be its coordinate contraction, with open legs
-    grouped by their vertex $v\in V$. Then $\lVert Z\rVert\le1$, and $Z$ has
-    nuclear norm at most $1$ across every bipartition of $V$. If at most $g$
+    Let a finite loopless graph carry at each $v\in V$ a tensor $A_v$ with
+    $\lVert A_v\rVert\le1$, and let $Z$ be its coordinate contraction
+    (\ref{eq:peps_group_contraction}). Then $\lVert Z\rVert\le1$,
+    $\lVert Z_T\rVert_1\le1$ for every $T\subseteq V$, and if at most $g$
     vertices have nonempty open-leg groups, then for every integer $k\ge1$
-    there exist subspaces of dimension at most $k$ in the respective group
-    spaces whose tensor-product projection maps $Z$ to a tensor $Z_k$ with
-    $\lVert Z-Z_k\rVert\le g/\sqrt{k}$. In orthonormal bases of these
-    subspaces, $Z_k$ is a sum of at most $k^g$ product terms with coefficients
-    of modulus at most $1$.
-\end{theorem}
+    there exist subspaces of dimension at most $k$ in $\C^{P_v}$ whose
+    tensor-product projection $Z_k$ satisfies
+    $\lVert Z-Z_k\rVert\le g/\sqrt{k}$ and expands in orthonormal bases of
+    these subspaces as at most $k^g$ product terms with coefficients of
+    modulus at most $1$.
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_group_contraction_norm, thm:peps_group_contraction_nuclear,
         lem:peps_group_truncation_abstract}
-    Theorems~\ref{thm:peps_group_contraction_norm}
-    and~\ref{thm:peps_group_contraction_nuclear} give $\lVert Z\rVert\le1$ and
-    the nuclear-norm bound across every bipartition of $V$. A vertex with no
-    open legs has $|P_v|=1$, so the set $G$ of vertices with nonempty open-leg
-    groups contains every $v$ with $|P_v|>1$, and
-    Lemma~\ref{lem:peps_group_truncation_abstract} gives the truncation.
+    Lemmas~\ref{thm:peps_group_contraction_norm} and
+    \ref{thm:peps_group_contraction_nuclear} give $\lVert Z\rVert\le1$ and
+    $\lVert Z_T\rVert_1\le1$. Since $|P_v|=1$ when $v$ has no open legs, the
+    set $G$ of vertices with nonempty open-leg groups contains every $v$ with
+    $|P_v|>1$, and Lemma~\ref{lem:peps_group_truncation_abstract} gives $Z_k$.
 \end{proof}
 
 \begin{corollary}[Whole-group tensor bound for networks with edge matrices]
@@ -192,15 +179,15 @@ singular values and $\lVert M\rVert_2$ for its Hilbert--Schmidt norm.
         TNLean.Lattice.WholeGroup.network_one_eq_contraction}
     \leanok
     \uses{thm:peps_group_tensor}
-    Consider a loopless tensor network in which each vertex carries one leg per
-    incident edge endpoint and each edge carries the identity matrix. If every
-    vertex tensor has norm at most $1$, then the conclusions of
-    Theorem~\ref{thm:peps_group_tensor} hold for the network contraction.
+    For a loopless tensor network with one leg per incident edge endpoint,
+    identity edge matrices, and $\lVert A_v\rVert\le1$ for all $v\in V$, the
+    conclusions of Lemma~\ref{thm:peps_group_tensor} hold for the network
+    contraction.
 \end{corollary}
 
 \begin{proof}\leanok
     \uses{thm:peps_group_tensor}
-    When every edge matrix is the identity and the graph has no self-loops,
-    the network contraction coincides with the coordinate contraction, and the
-    vertex norms agree, so the whole-group tensor bound applies directly.
+    With identity edge matrices and no self-loops, the network contraction and
+    vertex norms coincide with those of (\ref{eq:peps_group_contraction}), so
+    Lemma~\ref{thm:peps_group_tensor} applies.
 \end{proof}

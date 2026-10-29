@@ -1,20 +1,16 @@
-
 \section{Original occurrences and common sample assignments}
 \label{sec:peps_original_gate_sample_reindexing}
 
 Following \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, let
 $\mathcal W:a\to b$ be a chronological source circuit on an arbitrary
-party set $P$. Write $G$ for its original gate occurrences with nonempty
-participant sets $C_g$, and $\Xi_g$ for their finite branch sets. Repeated
-uses of a gate are distinct occurrences. Write $\mathcal E(C_g)$ for the
-unordered pairs of distinct participants and
-$\mathcal S=\bigsqcup_{g\in G}\mathcal E(C_g)$ for the shared sample positions.
-Let $\mathcal S_p$ consist of positions whose pair contains $p$.
-The original ordered full source list has length $N$, and the original
-ordered incident source list at $p$ has length $n_p$.
-For $r\in\N$, write $[r]=\{0,\ldots,r-1\}$.
-The canonical bijections of source positions are
-$\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$.
+party set $P$, with original gate occurrences $g\in G$ having nonempty
+participant sets $C_g\subseteq P$ and finite branch sets $\Xi_g$.
+Write $\mathcal E(C_g):=\{\{p,q\}\subseteq C_g:p\ne q\}$,
+$\mathcal S:=\bigsqcup_{g\in G}\mathcal E(C_g)$, and
+$\mathcal S_p:=\{s\in\mathcal S:p\in s\}$.
+Let $N$ and $n_p$ be the lengths of the ordered full and incident source lists,
+write $[r]=\{0,\ldots,r-1\}$ for $r\in\N$, and let
+$\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$ be the canonical position bijections.
 % Source: 04-compression.tex, lines 342--417 and 565--588.
 
 \begin{definition}[A participant root at each original gate]
@@ -22,183 +18,129 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceGateRoot}
     \leanok
     \uses{def:peps_touched_labels}
-    In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, choose
-    $r_g\in C_g$ for every $g\in G$. The resulting assignment
-    $r:G\to P$ specifies the root of the star sharing the gate label.
-    Each $C_g$ is nonempty by the definition of $G$. No nonemptiness
-    assumption on $P$ is imposed; when $G$ is empty the assignment
-    is the unique empty function.
+    In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, choose a star root $r_g\in C_g$ for each $g\in G$ (Definition~\ref{def:peps_touched_labels}), defining $r:G\to P$.
     % Source: 04-compression.tex, lines 565--579.
 \end{definition}
 
-\begin{theorem}[The root is an original participant]
+\begin{lemma}[The root is an original participant]
     \label{thm:peps_source_gate_root_mem}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceGateRoot_mem}
     \leanok
     \uses{def:peps_source_gate_root}
-    For the star roots in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    the selected root at every original occurrence $g\in G$ satisfies
-    $r_g\in C_g$, and the party set is arbitrary.
+    Every $g\in G$ satisfies $r_g\in C_g$ (Definition~\ref{def:peps_source_gate_root}).
     % Source: 04-compression.tex, lines 565--579.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:peps_source_gate_root}
-    By definition of $G$, each participant set $C_g$ is nonempty and $r_g$ is chosen from $C_g$.
+    By Definition~\ref{def:peps_source_gate_root}, $C_g\ne\varnothing$ and $r_g\in C_g$.
 \end{proof}
 
-\begin{theorem}[Incident labels after reindexing a full choice]
+\begin{lemma}[Incident labels after reindexing a full choice]
     \label{thm:peps_reindexed_incident_gate_labels}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.originalGateLabelsAtOfAllChoices_eq_restrictGates}
     \leanok
     \uses{thm:peps_incident_gate_labels,def:peps_touched_labels}
-    For the gate-label identification in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, let $e$ be the
-    canonical bijection from all-party chronological
-    choices to $\prod_{g\in G}\Xi_g$. For any original label function
-    $\eta\in\prod_{g\in G}\Xi_g$ and any $p\in P$, extracting the
-    incident labels of $e^{-1}\eta$ gives precisely
-    $\eta|_{\{g:p\in C_g\}}$. This holds for empty incident sets and,
-    when $\eta$ is given, empty branch sets.
+    Let $e:\Xi_{\rm all}\to\prod_{g\in G}\Xi_g$ be the canonical all-party choice bijection (Definition~\ref{def:peps_touched_labels}). For any $\eta\in\prod_{g\in G}\Xi_g$ and $p\in P$, the incident-label extraction of Lemma~\ref{thm:peps_incident_gate_labels} applied to $e^{-1}\eta$ equals $\eta|_{\{g\in G:p\in C_g\}}$.
     % Source: 04-compression.tex, lines 351--381 and 565--579.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_incident_gate_labels,def:peps_touched_labels}
-    At an incident occurrence $g$, the extracted value is
-    $(e(e^{-1}\eta))_g=\eta_g$. Equality at every incident occurrence
-    gives the assertion.
+    At each $g\in G$ with $p\in C_g$, Lemma~\ref{thm:peps_incident_gate_labels} and Definition~\ref{def:peps_touched_labels} give $(e(e^{-1}\eta))_g=\eta_g$.
 \end{proof}
 
-\begin{theorem}[Incident samples after reindexing a full assignment]
+\begin{lemma}[Incident samples after reindexing a full assignment]
     \label{thm:peps_reindexed_incident_samples}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_reindexedSourceSampleAssignment_eq}
     \leanok
     \uses{def:peps_source_sample_assignment_indices,def:peps_local_source_sample_indices}
-    For the local sample values in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, let $k\in\N$ and
-    let $j:\mathcal S\to[k]$. The corresponding
-    assignment on the full ordered list is $\widetilde j=j\circ\tau$.
-    If $\iota_p:[n_p]\to[N]$ reads the original positions of the
-    incident slots, then
-    $\widetilde j\circ\iota_p=(j|_{\mathcal S_p})\circ\kappa_p$.
-    No finiteness assumption on $P$ is required, and this holds for $k=0$
-    and empty incident lists for any given $j$.
+    For $k\in\N$, $j:\mathcal S\to[k]$, $\widetilde j:=j\circ\tau:[N]\to[k]$, and the incident slot embedding $\iota_p:[n_p]\to[N]$ (Definitions~\ref{def:peps_source_sample_assignment_indices} and~\ref{def:peps_local_source_sample_indices}), one has
+    \begin{align}
+        \widetilde j\circ\iota_p & = (j|_{\mathcal S_p})\circ\kappa_p. \notag
+    \end{align}
     % Source: 04-compression.tex, lines 342--417 and 568--579.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:peps_source_sample_assignment_indices,def:peps_local_source_sample_indices}
-    The inverse assignment reads $j$ at the sample position of each
-    original slot. Since $\tau(\iota_p(i))=\kappa_p(i)$, both sides
-    at $i$ equal $j(\kappa_p(i))$.
+    By Definitions~\ref{def:peps_source_sample_assignment_indices} and~\ref{def:peps_local_source_sample_indices}, $\tau(\iota_p(i))=\kappa_p(i)$ for all $i\in[n_p]$.
 \end{proof}
 
-\begin{theorem}[Reindexing choices and common samples together]
+\begin{lemma}[Reindexing choices and common samples together]
     \label{thm:peps_joint_gate_sample_sum}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_choiceSamples_eq_sum_originalGateSamples}
     \leanok
     \uses{def:peps_touched_labels,def:peps_source_sample_assignment_indices}
-    In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, let $P$ be
-    arbitrary, $k\in\N$, and let $I,J$ be arbitrary index sets.
-    Let $\Xi_{\rm all}$ be the all-party chronological choice set,
-    $c_\xi$ its coefficient, and $a_g:\Xi_g\to\C$ the original gate
-    coefficient. For any matrix family
-    $K:\Xi_{\rm all}\times\Xi_{\rm all}\times[k]^{[N]}\to\C^{I\times J}$,
-    one has
+    For the all-party choice set $\Xi_{\rm all}$ with coefficients $c_\xi$, gate coefficients $a_g:\Xi_g\to\C$, and any $K:\Xi_{\rm all}\times\Xi_{\rm all}\times[k]^{[N]}\to\C^{I\times J}$,
     \begin{align}
-        \sum_{\xi,\zeta}c_\xi\overline{c_\zeta}
+        \sum_{\xi,\zeta\in\Xi_{\rm all}}c_\xi\overline{c_\zeta}
         \sum_{\ell:[N]\to[k]}K(\xi,\zeta,\ell)
          & =\sum_{\eta,\theta\in\prod_{g\in G}\Xi_g}
         \left(\prod_{g\in G}a_g(\eta_g)\overline{a_g(\theta_g)}\right)
         \sum_{j:\mathcal S\to[k]}K(e^{-1}\eta,e^{-1}\theta,j\circ\tau).
         \label{eq:peps_joint_gate_sample_sum}
     \end{align}
-    The two branch functions are independent; the sample assignment
-    is shared. No finiteness of $I,J$ or $P$ is assumed, and the
-    empty-participant scalar is outside the coefficient product.
     % Source: 04-compression.tex, lines 351--381 and 565--579.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_mixed_gate_label_sum,thm:peps_source_sample_assignment_sum}
-    Reindexing the mixed chronological choice sum independently in its
-    two arguments and reindexing the common sample assignment once by
-    $\tau$ in every resulting summand gives
-    (\ref{eq:peps_joint_gate_sample_sum}).
+    Reindex $(\xi,\zeta)$ via Lemma~\ref{thm:peps_mixed_gate_label_sum} and $\ell=j\circ\tau$ via Lemma~\ref{thm:peps_source_sample_assignment_sum}.
 \end{proof}
 
 \section{Ordered gate labels in a distributed density contraction}
 \label{sec:peps_ordered_gate_density_algebra}
 
-\begin{theorem}[Labels on the full selected gate set]
+\begin{lemma}[Labels on the full selected gate set]
     \label{thm:peps_full_selected_gate_label_sum}
     \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.sum_eq_sum_gateLabels_univ}
     \leanok
     \uses{def:compression_operator_gate_labels}
-    For the occurrence identification in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, let $G$ be finite
-    and let $\Lambda_g$ be finite label sets. Let
-    $\widetilde G$ denote the full selected gate set, with its canonical
-    bijection $u:\widetilde G\to G$. For arbitrary index sets $I,J$
-    and $K:(\prod_{g\in G}\Lambda_g)\to\C^{I\times J}$,
+    For finite $G$, finite label sets $\Lambda_g$, the canonical bijection $u:\widetilde G\to G$ from the full selected gate set $\widetilde G$, and any $K:(\prod_{g\in G}\Lambda_g)\to\C^{I\times J}$,
     \begin{align}
         \sum_{\eta\in\prod_{g\in G}\Lambda_g}K(\eta)
          & =\sum_{\xi\in\prod_{h\in\widetilde G}\Lambda_{u(h)}}
         K(\xi\circ u^{-1}).
         \label{eq:peps_full_selected_gate_label_sum}
     \end{align}
-    Empty gate and label sets are included.
     % Source: 04-compression.tex, lines 565--579.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    Precomposition with $u^{-1}$ is a bijection of the dependent label
-    assignments, and reindexing the finite matrix sum by this bijection
-    yields the stated sum identity.
+    Reindex the sum along the bijection $\xi\mapsto\xi\circ u^{-1}$.
 \end{proof}
 
-For the next three statements, let $G$ be finite and let $K_g,B_g$ be
-finite ket and bra label sets. Write $\mathcal K=\prod_g K_g$ and
-$\mathcal B=\prod_g B_g$. For $z\in\prod_g(K_g\times B_g)$, write
-$z^K_g=(z_g)_1$ and $z^B_g=(z_g)_2$. The matrix indices $I,J$ are arbitrary.
+For the next three theorems, let $G,K_g,B_g$ be finite, set $\mathcal K:=\prod_{g\in G} K_g$ and $\mathcal B:=\prod_{g\in G} B_g$, and for $z\in\prod_{g\in G}(K_g\times B_g)$ write $z^K_g:=(z_g)_1$ and $z^B_g:=(z_g)_2$.
 
-\begin{theorem}[Pairing the ket and bra label sums]
+\begin{lemma}[Pairing the ket and bra label sums]
     \label{thm:peps_ordered_gate_label_pair_sum}
     \lean{TNLean.Lattice.Compression.sum_gateLabels_eq_sum_orderedGateLabelPairs}
     \leanok
-    For the shared ket and bra label in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, any matrix family
-    $F:\mathcal K\times\mathcal B\to\C^{I\times J}$ satisfies
+    For any matrix family $F:\mathcal K\times\mathcal B\to\C^{I\times J}$,
     \begin{align}
         \sum_{\eta\in\mathcal K}\sum_{\theta\in\mathcal B}F(\eta,\theta)
          & =\sum_{z\in\prod_g(K_g\times B_g)}F(z^K,z^B).
         \label{eq:peps_ordered_gate_label_pair_sum}
     \end{align}
-    The pairs are ordered, and empty gate and label sets are included.
     % Source: 04-compression.tex, lines 565--579.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    Replacing the iterated sum by the sum over $\mathcal K\times\mathcal B$
-    and reindexing along the bijection
-    $(\eta,\theta)\mapsto((\eta_g,\theta_g))_g$ gives
-    (\ref{eq:peps_ordered_gate_label_pair_sum}).
+    Reindex $\mathcal K\times\mathcal B$ along the bijection $(\eta,\theta)\mapsto((\eta_g,\theta_g))_{g\in G}$.
 \end{proof}
 
-\begin{theorem}[Pairing the weighted ket and bra sums]
+\begin{lemma}[Pairing the weighted ket and bra sums]
     \label{thm:peps_ordered_gate_label_pair_weighted_sum}
     \lean{TNLean.Lattice.Compression.sum_weighted_gateLabels_eq_sum_orderedGateLabelPairs}
     \leanok
-    For the ordered coefficient sum in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, arbitrary
-    $a_g:K_g\to\C$, $b_g:B_g\to\C$ and the matrix family $F$ satisfy
+    For any $a_g:K_g\to\C$, $b_g:B_g\to\C$, and $F:\mathcal K\times\mathcal B\to\C^{I\times J}$,
     \begin{align}
         \sum_{\eta,\theta}
         \left(\prod_g a_g(\eta_g)\overline{b_g(\theta_g)}\right)F(\eta,\theta)
@@ -206,25 +148,20 @@ $z^K_g=(z_g)_1$ and $z^B_g=(z_g)_2$. The matrix indices $I,J$ are arbitrary.
         F(z^K,z^B).
         \label{eq:peps_ordered_gate_label_pair_weighted_sum}
     \end{align}
-    No nonvanishing or normalization is assumed.
     % Source: 04-compression.tex, lines 565--579.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_ordered_gate_label_pair_sum}
-    Applying (\ref{eq:peps_ordered_gate_label_pair_sum}) to
-    $(\eta,\theta)\mapsto(\prod_g a_g(\eta_g)\overline{b_g(\theta_g)})F(\eta,\theta)$
-    gives the weighted-sum identity.
+    Apply (\ref{eq:peps_ordered_gate_label_pair_sum}) to $(\eta,\theta)\mapsto\bigl(\prod_g a_g(\eta_g)\overline{b_g(\theta_g)}\bigr)F(\eta,\theta)$.
 \end{proof}
 
-\begin{theorem}[Placing gate weights inside the ordered coefficient product]
+\begin{lemma}[Placing gate weights inside the ordered coefficient product]
     \label{thm:peps_ordered_gate_label_averaging}
     \lean{TNLean.Lattice.Compression.weighted_sum_gateLabels_eq_exterior_smul_orderedGateLabelPairs}
     \leanok
-    To place the averaging factors in the gate coefficients as in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, let $w_g\in\C$ be
-    arbitrary gate weights and $\gamma\in\C$ an exterior scalar. Then
+    For any $w_g\in\C$ and $\gamma\in\C$,
     \begin{align}
         \left(\prod_g w_g\right)\gamma
         \sum_{\eta,\theta}\left(\prod_g a_g(\eta_g)\overline{b_g(\theta_g)}\right)
@@ -233,41 +170,21 @@ $z^K_g=(z_g)_1$ and $z^B_g=(z_g)_2$. The matrix indices $I,J$ are arbitrary.
         \left(\prod_g w_g a_g(z^K_g)\overline{b_g(z^B_g)}\right)F(z^K,z^B).
         \label{eq:peps_ordered_gate_label_averaging}
     \end{align}
-    All weights may vanish, and all empty finite-sum cases are included.
     % Source: 04-compression.tex, lines 568--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_ordered_gate_label_pair_weighted_sum}
-    By (\ref{eq:peps_ordered_gate_label_pair_weighted_sum}), distributing
-    $\prod_g w_g$ over the finite sum and multiplying the two products
-    term by term yields the averaging identity, with
-    the factor $\gamma$ remaining outside throughout.
+    Distribute $\prod_g w_g$ into each summand of (\ref{eq:peps_ordered_gate_label_pair_weighted_sum}).
 \end{proof}
 
-\begin{theorem}[The distributed density contraction in original gate labels]
+\begin{lemma}[The distributed density contraction in original gate labels]
     \label{thm:peps_density_pair_univ_double_sum}
     \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.contractedOperator_densityPair_univ_eq_double_sum}
     \leanok
     \uses{def:compression_operator_operator,def:compression_operator_density_coefficient}
-    In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, let $P,G$ be
-    finite, and let $C_g\subseteq P$ be arbitrary participant
-    sets with chosen roots $r_g\in C_g$. Let $K_g,B_g$ be finite label
-    sets, $k\in\N$, $a_g:K_g\to\C$, $b_g:B_g\to\C$,
-    $w_g\in\C$ and $\gamma\in\C$.
-    Let $O_p,I_p$ be arbitrary matrix index sets, without finiteness
-    assumptions. Put $\mathcal S=\bigsqcup_g\mathcal E(C_g)$ and let
-    $\mathcal S_p$ consist of its positions incident to $p$.
-    Let
-    $T_p:\prod_{g:p\in C_g}K_g\times\prod_{g:p\in C_g}B_g
-        \times[k]^{\mathcal S_p}\to\C^{O_p\times I_p}$
-    be a family of matrices.
-    Write $\mathcal C(C,r,K\times B,k,c,T)$ for the distributed
-    contraction with ordered gate-pair labels, roots $r_g$, common
-    sample positions, coefficient
-    $c_g(\alpha,\beta)=w_g a_g(\alpha)\overline{b_g(\beta)}$, and local
-    matrix $T_p$ receiving the two coordinates independently. Then
+    Let $P,G,K_g,B_g$ be finite, let $r_g\in C_g\subseteq P$, $k\in\N$, $a_g:K_g\to\C$, $b_g:B_g\to\C$, $w_g,\gamma\in\C$, and let $T_p:\prod_{g:p\in C_g}K_g\times\prod_{g:p\in C_g}B_g\times[k]^{\mathcal S_p}\to\C^{O_p\times I_p}$. For the distributed contraction $\mathcal C(C,r,K\times B,k,c,T)$ (Definition~\ref{def:compression_operator_operator}) with $c_g(\alpha,\beta)=w_g a_g(\alpha)\overline{b_g(\beta)}$ (Definition~\ref{def:compression_operator_density_coefficient}),
     \begin{align}
         \gamma\mathcal C(C,r,K\times B,k,c,T)
          & =\left(\prod_g w_g\right)\gamma
@@ -277,66 +194,34 @@ $z^K_g=(z_g)_1$ and $z^B_g=(z_g)_2$. The matrix indices $I,J$ are arbitrary.
         \bigotimes_{p\in P}T_p(\eta|_p,\theta|_p,j|_p).
         \label{eq:peps_density_pair_univ_double_sum}
     \end{align}
-    The tensor product has indices $\prod_pO_p$ and $\prod_pI_p$.
-    Empty families, empty labels, $k=0$ and zero weights are included
-    whenever the stated root data exist.
     % Source: 04-compression.tex, lines 565--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:compression_operator_density_pair,
         thm:peps_full_selected_gate_label_sum,thm:peps_ordered_gate_label_averaging}
-    Evaluating the density-pair contraction as a sum over labels on the
-    full selected gate set and reindexing those labels by
-    (\ref{eq:peps_full_selected_gate_label_sum}) leaves the coefficient
-    product unchanged under the same occurrence bijection, while each local
-    matrix receives the same incident coordinates and restricted samples.
-    Applying (\ref{eq:peps_ordered_gate_label_averaging}) in reverse then
-    yields (\ref{eq:peps_density_pair_univ_double_sum}).
+    Expand $\mathcal C(C,r,K\times B,k,c,T)$ by Lemma~\ref{thm:compression_operator_density_pair}, reindex along $\widetilde G\to G$ by (\ref{eq:peps_full_selected_gate_label_sum}), and apply (\ref{eq:peps_ordered_gate_label_averaging}) in reverse.
 \end{proof}
 
 \section{The sampled physical density as a distributed contraction}
 \label{sec:peps_actual_sampled_distributed_contraction}
 
-Let $P$ be finite, let $d:P\to\N$, and let an ordered list record every
-party exactly once. Let $h_d$ be its original physical register list,
-with space $\C^{d_p}$ at $p$. Let $c$ be an arbitrary private output
-list and $\mathcal W:a\to h_dc$ a chronological circuit with recorded
-product input $\psi$.
-At every original source $e$, retain the original endpoint dimensions
-$u_e,v_e$ and $r_e=\min(u_e,v_e)$. Fix arbitrary real coefficient
-families and complex endpoint matrices of sizes $u_e\times r_e$ and
-$v_e\times r_e$, with their original branch indices, sample number
-$k\in\N$ and original ordered-pair arrays $\omega$.
-At each all-party grouped owner, choose finite-index orthonormal bases
-of the selected source memory and private output memory, together with
-finite-index orthonormal bases of the original input
-memory and original private output memory. Use the original labelled
-physical basis and the physical/private output bases constructed from
-these data, as in Definition~\ref{def:peps_incident_sampled_physical_factor}.
-Write $\widehat\rho_{\mathrm{phys},\psi}(\widehat X)$ for the original
-physical operator with the sampled source matrices, and
-$\gamma=\lambda_W\overline{\lambda_W}$ for the squared modulus of its
-original empty-participant gate scalar.
-Let $a_g$ denote the original branch coefficient at $g\in G$.
-For incident gate labels $\alpha,\beta$ and a sample assignment
-$s:\mathcal S_p\to[k]$, put
+Let $P$ be finite with a repetition-free ordering, local physical dimensions $d:P\to\N$, physical register list $h_d$, private output list $c$, and a chronological circuit $\mathcal W:a\to h_dc$ with product input $\psi$.
+Retain the endpoint dimensions $u_e,v_e$, $r_e=\min(u_e,v_e)$, branch coefficients $a_g:\Xi_g\to\C$, sample count $k\in\N$, ordered-pair arrays $\omega$, and local orthonormal bases of Definition~\ref{def:peps_incident_sampled_physical_factor}.
+Let $\widehat\rho_{\mathrm{phys},\psi}(\widehat X)$ be the sampled physical operator, let $\gamma=\lambda_W\overline{\lambda_W}$ be the squared modulus of the empty-participant gate scalar, and for incident gate labels $\alpha,\beta$ and $s:\mathcal S_p\to[k]$ define
 \begin{align}
     T_p(\alpha,\beta,s)
      & =M^{\rm inc}_{p,\alpha,\beta,s\circ\kappa_p,\omega}.
     \label{eq:peps_distributed_incident_matrix}
 \end{align}
-Thus every matrix retains the original physical indices $[d_p]$, and
-its sample argument is read at the original ordered incident slots.
 
-\begin{theorem}[The sampled physical sum in original gate and sample positions]
+\begin{lemma}[The sampled physical sum in original gate and sample positions]
     \label{thm:peps_original_gate_sample_physical_sum}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_originalGateSampleSum}
     \leanok
     \uses{def:peps_incident_sampled_physical_factor,def:peps_source_sample_assignment_indices}
-    In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, the data just
-    specified satisfy
+    With $T_p$ from (\ref{eq:peps_distributed_incident_matrix}) (including empty sets, zero dimensions, and $k=0$ with $0^{-1}=0$ and $0^0=1$),
     \begin{align}
         \widehat\rho_{\mathrm{phys},\psi}(\widehat X)
          & =(k^{-1})^N\gamma
@@ -346,68 +231,42 @@ its sample argument is read at the original ordered incident slots.
         \bigotimes_{p\in P}T_p(\eta|_p,\theta|_p,j|_p).
         \label{eq:peps_original_gate_sample_physical_sum}
     \end{align}
-    The two label functions are independent and the sample assignment
-    is shared. The matrices use the same original dimensions, bases
-    and arrays $\omega$. Empty party and source sets, zero dimensions,
-    vanishing coefficients and $k=0$ are included with $0^{-1}=0$ and
-    zeroth powers equal to $1$.
     % Source: 04-compression.tex, lines 351--381 and 565--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_incident_pure_sampled_physical_sum,
         thm:peps_joint_gate_sample_sum,thm:peps_reindexed_incident_gate_labels,
         thm:peps_reindexed_incident_samples}
-    Starting from the original sum in incident factors,
-    (\ref{eq:peps_joint_gate_sample_sum}) reindexes its two branch choices
-    and common sample assignment. The incident-label and incident-sample
-    identities turn each matrix into
-    (\ref{eq:peps_distributed_incident_matrix}) evaluated at
-    $\eta|_p,\theta|_p,j|_p$, while the original scalar and arrays remain
-    unchanged, giving (\ref{eq:peps_original_gate_sample_physical_sum}).
+    Reindexing Lemma~\ref{thm:peps_incident_pure_sampled_physical_sum} by (\ref{eq:peps_joint_gate_sample_sum}) and substituting Lemmas~\ref{thm:peps_reindexed_incident_gate_labels} and~\ref{thm:peps_reindexed_incident_samples} and (\ref{eq:peps_distributed_incident_matrix}) yields (\ref{eq:peps_original_gate_sample_physical_sum}).
 \end{proof}
 
-\begin{theorem}[The exact distributed contraction of the sampled physical density]
+\begin{lemma}[The exact distributed contraction of the sampled physical density]
     \label{thm:peps_actual_sampled_distributed_contraction}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_exterior_smul_contractedOperator}
     \leanok
     \uses{def:compression_operator_operator,def:compression_operator_density_coefficient,
         def:peps_incident_sampled_physical_factor,def:peps_source_gate_root}
-    In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, retain the
-    original physical data, sample arrays, matrices $T_p$ and scalar
-    $\gamma$ specified in this section. Choose the
-    recorded participant roots $r_g$ and define
+    With roots $r_g\in C_g$ from Definition~\ref{def:peps_source_gate_root} and
     \begin{align}
         w_g               & =(k^{-1})^{|\mathcal E(C_g)|},         \\
-        c_g(\alpha,\beta) & =w_g a_g(\alpha)\overline{a_g(\beta)}.
+        c_g(\alpha,\beta) & =w_g a_g(\alpha)\overline{a_g(\beta)},
         \label{eq:peps_actual_gate_weight}
     \end{align}
-    The exact physical operator satisfies
+    the sampled physical operator satisfies
     \begin{align}
         \widehat\rho_{\mathrm{phys},\psi}(\widehat X)
          & =\gamma\mathcal C(C,r,\Xi\times\Xi,k,c,T).
         \label{eq:peps_actual_sampled_distributed_contraction}
     \end{align}
-    The star at each original gate shares the entire ordered ket and
-    bra pair. Each original source occurrence shares one sample index
-    between its two original participants. Its averaging factor occurs
-    once in that gate's coefficient at the root. The scalar $\gamma$
-    remains outside the contraction, and all empty and zero cases of
-    Theorem~\ref{thm:peps_original_gate_sample_physical_sum} are included.
     % Source: 04-compression.tex, lines 565--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_original_gate_sample_physical_sum,
         thm:peps_source_gate_root_mem,thm:peps_density_pair_univ_double_sum,
         thm:peps_original_source_sample_averaging}
-    Evaluating the distributed contraction by
-    (\ref{eq:peps_density_pair_univ_double_sum}) with the original
-    gate coefficients for both the ket and bra, where the selected roots
-    are original participants, and replacing $\prod_g w_g$ by $(k^{-1})^N$
-    via (\ref{eq:peps_original_source_sample_averaging}) yields
-    (\ref{eq:peps_original_gate_sample_physical_sum}) and hence
-    (\ref{eq:peps_actual_sampled_distributed_contraction}).
+    Expanding $\gamma\mathcal C(C,r,\Xi\times\Xi,k,c,T)$ by (\ref{eq:peps_density_pair_univ_double_sum}) (using Lemma~\ref{thm:peps_source_gate_root_mem}) and substituting $\prod_{g\in G}w_g=(k^{-1})^N$ from Lemma~\ref{thm:peps_original_source_sample_averaging} gives (\ref{eq:peps_original_gate_sample_physical_sum}), proving (\ref{eq:peps_actual_sampled_distributed_contraction}).
 \end{proof}

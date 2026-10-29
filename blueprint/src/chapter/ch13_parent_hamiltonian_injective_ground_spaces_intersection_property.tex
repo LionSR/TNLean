@@ -1,11 +1,11 @@
 \subsection{Injectivity of the ground-space map}
 
-\begin{theorem}[Ground-space map injectivity]\label{thm:ground_space_map_injective}
+\begin{lemma}[Ground-space map injectivity]\label{thm:ground_space_map_injective}
     \lean{MPSTensor.groundSpaceMap_injective}
     \leanok
     \uses{def:ground_space_map, def:injective}
     If $A$ is injective and $L \ge 1$, then $\Gamma_L$ is injective.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -14,14 +14,14 @@
     $\MN{D}$, so the trace pairing gives $X = 0$.
 \end{proof}
 
-\begin{theorem}[Ground-space map injectivity from word span]
+\begin{lemma}[Ground-space map injectivity from word span]
     \label{thm:ground_space_map_injective_word_span}
     \lean{MPSTensor.groundSpaceMap_injective_of_wordSpan_eq_top}
     \leanok
     \uses{def:ground_space_map, def:word_span}
     If the length-$L$ products $\{A^\sigma : |\sigma| = L\}$ span $\MN{D}$, then
     $\Gamma_L$ is injective.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -30,28 +30,28 @@
     $M \in \MN{D}$, and the trace pairing gives $X = 0$.
 \end{proof}
 
-\begin{theorem}[Ground-space map injectivity after blocking]
+\begin{lemma}[Ground-space map injectivity after blocking]
     \label{thm:ground_space_map_injective_blk}
     \lean{MPSTensor.groundSpaceMap_injective_of_isNBlkInjective}
     \leanok
     \uses{def:ground_space_map, def:l_blk_injective}
     If $A$ is $L_0$-block injective, then $\Gamma_{L_0}$ is injective.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:ground_space_map_injective_word_span, lem:wordspan_blk_inj}
     Lemma~\ref{lem:wordspan_blk_inj} identifies $L_0$-block injectivity with
     the word-span hypothesis of
-    Theorem~\ref{thm:ground_space_map_injective_word_span}.
+    Lemma~\ref{thm:ground_space_map_injective_word_span}.
 \end{proof}
 
-\begin{theorem}[Ground-space dimension]\label{thm:ground_space_finrank_eq}
+\begin{lemma}[Ground-space dimension]\label{thm:ground_space_finrank_eq}
     \lean{MPSTensor.groundSpace_finrank_eq}
     \leanok
     \uses{thm:ground_space_map_injective, lem:ground_space_finrank_le}
     If $A$ is injective and $L \ge 1$, then $\dim G_L(A) = D^2$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -64,7 +64,7 @@
 The following two statements hold for every tensor $A$; injectivity enters
 only through the choice of the matrices $R_j$ in the second one.
 
-\begin{theorem}[Overlap of one-site restrictions]%
+\begin{lemma}[Overlap of one-site restrictions]%
     \label{thm:ground_space_restriction_overlap}
     \lean{MPSTensor.groundSpaceMap_mul_eq_of_restrict}
     \leanok
@@ -78,7 +78,7 @@ only through the choice of the matrices $R_j$ in the second one.
         \notag
     \end{align}
     for all letters $i,j$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -93,7 +93,7 @@ only through the choice of the matrices $R_j$ in the second one.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Growing back from intertwined boundary matrices]%
+\begin{lemma}[Growing back from intertwined boundary matrices]%
     \label{thm:ground_space_grow_back}
     \lean{MPSTensor.mem_groundSpace_succ_of_intertwine}
     \leanok
@@ -102,7 +102,7 @@ only through the choice of the matrices $R_j$ in the second one.
     $\psi(i,\tau)=\Gamma_{K}(Y_i)(\tau)$ for all letters $i$ and words $\tau$
     of length $K$, and $A^jY_i=Z_jA^i$ for all letters $i,j$. If matrices
     $R_j\in\MN{D}$ satisfy $\sum_jR_jA^j=\Id$, then $\psi\in G_{K+1}(A)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -122,7 +122,7 @@ only through the choice of the matrices $R_j$ in the second one.
     so $\psi=\Gamma_{K+1}(X)$.
 \end{proof}
 
-\begin{theorem}[One inclusion of the intersection property]\label{thm:ground_space_intersection}
+\begin{lemma}[One inclusion of the intersection property]\label{thm:ground_space_intersection}
     \lean{MPSTensor.groundSpace_intersection}
     \leanok
     \uses{thm:ground_space_map_injective, def:in_left_ground, def:in_right_ground, def:ground_space_parent, def:injective}
@@ -133,7 +133,7 @@ only through the choice of the matrices $R_j$ in the second one.
          & \subseteq G_{L+1}(A).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -173,13 +173,13 @@ only through the choice of the matrices $R_j$ in the second one.
               exists a unique $Z_j$ such that
               $\psi(\sigma,j) = \tr(A^\sigma Z_j)$.
         \item Matching on the $(L-1)$-site overlap
-              (Theorem~\ref{thm:ground_space_restriction_overlap}) and using
+              (Lemma~\ref{thm:ground_space_restriction_overlap}) and using
               injectivity of $\Gamma_{L-1}$ gives $A^jY_i = Z_jA^i$ for all
               $i,j$.
         \item Since $A$ is injective, the matrices $\{A^j\}$ span $\MN{D}$
               (Definition~\ref{def:injective}), so
               $\Id = \sum_j c_jA^j$ for some coefficients $c_j \in \C$.
-              Applying Theorem~\ref{thm:ground_space_grow_back} with
+              Applying Lemma~\ref{thm:ground_space_grow_back} with
               $R_j=c_j\Id$ and $X' := \sum_j c_jZ_j$ gives
               $Y_i = \Id Y_i = \sum_j c_jA^jY_i = \sum_j c_jZ_jA^i = X'A^i$.
         \item By trace cyclicity, $\psi(\sigma) = \tr(A^\sigma X')$, so
@@ -187,7 +187,7 @@ only through the choice of the matrices $R_j$ in the second one.
     \end{enumerate}
 \end{proof}
 
-\begin{theorem}[Intersection property]\label{thm:ground_space_iff}
+\begin{lemma}[Intersection property]\label{thm:ground_space_iff}
     \lean{MPSTensor.groundSpace_iff_left_right}
     \leanok
     \uses{lem:ground_space_in_left_ground, lem:ground_space_in_right_ground, thm:ground_space_intersection}
@@ -195,12 +195,12 @@ only through the choice of the matrices $R_j$ in the second one.
     $G_L^{\mathrm{left}}\cap G_L^{\mathrm{right}} = G_{L+1}(A)$,
     equivalently, $\psi \in G_{L+1}(A)$ if and only if
     $\psi \in G_L^{\mathrm{left}}\cap G_L^{\mathrm{right}}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     The two forward-direction lemmas and
-    Theorem~\ref{thm:ground_space_intersection} establish both inclusions.
+    Lemma~\ref{thm:ground_space_intersection} establish both inclusions.
 \end{proof}
 
 \subsection{Unique ground state}
@@ -299,7 +299,7 @@ only through the choice of the matrices $R_j$ in the second one.
     contiguous restriction when the interval does not wrap around the ring.
 \end{remark}
 
-\begin{theorem}[One-site restrictions of cyclic-window boundary conditions]
+\begin{lemma}[One-site restrictions of cyclic-window boundary conditions]
     \label{thm:cyclic_window_boundary_matrix_transport}
     \lean{MPSTensor.cyclicRestrictₗ_restrictFirst_groundSpaceMap}
     \lean{MPSTensor.cyclicRestrictₗ_restrictLast_groundSpaceMap}
@@ -328,7 +328,7 @@ only through the choice of the matrices $R_j$ in the second one.
     $Y_0A^{a_0}\cdots A^{a_{n-1}} = A^{b_0}\cdots A^{b_{n-1}}Y_n$.
     In particular, when the boundary words are given by $a_r=\rho(i_0+r)$ and
     $b_r=\rho(i_0+r+L+1)$ modulo $N$, this identity reads $Y_0A^a=A^bY_n$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -353,7 +353,7 @@ only through the choice of the matrices $R_j$ in the second one.
     \leanok
     The induction repeatedly merges two neighbouring admissible windows
     $[i,i+L-1]$ and $[i+1,i+L]$ into the larger window $[i,i+L]$ by applying
-    Theorem~\ref{thm:ground_space_intersection} to their common overlap
+    Lemma~\ref{thm:ground_space_intersection} to their common overlap
     $[i+1,i+L-1]$.
 \end{proof}
 
@@ -400,7 +400,7 @@ only through the choice of the matrices $R_j$ in the second one.
     \label{rem:contiguous_restriction_ground_space_map_intersection}
     \uses{thm:contiguous_restriction_ground_space_map, def:ground_space_map, def:ground_space_parent, rem:contiguous_window_operators}
     The two-sided window restriction is recorded in the martingale chapter as
-    Theorem~\ref{thm:contiguous_restriction_ground_space_map}: for sites
+    Lemma~\ref{thm:contiguous_restriction_ground_space_map}: for sites
     $s,L,N$ with $s+L \le N$, a full configuration $\tau$ specifying the
     complementary values, and a boundary matrix $X$, the nonwrapping
     restriction of the open-boundary ground-space vector $\Gamma_N(X)$ to the
@@ -454,7 +454,7 @@ only through the choice of the matrices $R_j$ in the second one.
     makes $\Gamma_{L_0}$ injective, $Z_jA^u=A^jY_u$.
 \end{proof}
 
-\begin{theorem}[Inverting step for word compatibility]%
+\begin{lemma}[Inverting step for word compatibility]%
     \label{thm:right_factor_word_compatibility}
     \lean{MPSTensor.exists_right_factor_of_evalWord_compatibility}
     \leanok
@@ -462,7 +462,7 @@ only through the choice of the matrices $R_j$ in the second one.
     Assume $A$ is $L_0$-block-injective with $L_0 > 0$. If matrices $(Z_j)_j$
     satisfy $Z_jA^\sigma=A^jY_\sigma$ for every word $\sigma$ of length $K$,
     then there exists a matrix $X$ such that $Z_j=A^jX$ for all $j$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -477,7 +477,7 @@ only through the choice of the matrices $R_j$ in the second one.
     $K=1$.
 \end{proof}
 
-\begin{theorem}[Growing-back step at the injectivity length]%
+\begin{lemma}[Growing-back step at the injectivity length]%
     \label{thm:ground_space_extend_right_block_injective}
     \lean{MPSTensor.groundSpace_extend_right_of_isNBlkInjective}
     \leanok
@@ -486,14 +486,14 @@ only through the choice of the matrices $R_j$ in the second one.
     on $K+L_0+1$ sites satisfies the left ground condition on the first
     $K+L_0$ sites and the suffix ground condition on every prefix of length
     $K$, then $\psi \in G_{K+L_0+1}(A)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{lem:left_tail_compatibility, thm:right_factor_word_compatibility}
     Lemma~\ref{lem:left_tail_compatibility} produces matrices $(Z_j)_j$ and
     $(Y_u)_u$ with $Z_jA^u=A^jY_u$ for every prefix word $u$ of length $K$.
-    Theorem~\ref{thm:right_factor_word_compatibility} gives a common right
+    Lemma~\ref{thm:right_factor_word_compatibility} gives a common right
     factor $X$ such that $Z_j=A^jX$ for all $j$. Therefore, each last-site
     restriction of $\psi$ agrees with the corresponding last-site restriction
     of the ground-space vector determined by $X$. Since every configuration is
@@ -520,7 +520,7 @@ only through the choice of the matrices $R_j$ in the second one.
     $\mathcal U_L(A)$ and $\mathcal V_{K,L}(A)$, respectively.
 \end{definition}
 
-\begin{theorem}[Membership in the open-chain left ground subspace]
+\begin{lemma}[Membership in the open-chain left ground subspace]
     \label{thm:mem_open_chain_left_ground_space_es}
     \lean{MPSTensor.mem_openChainLeftGroundSpaceES_iff}
     \leanok
@@ -529,7 +529,7 @@ only through the choice of the matrices $R_j$ in the second one.
     belongs to $\mathcal U_L(A)$ exactly when the corresponding function
     satisfies the left ground condition: every fixed-final-site restriction
     belongs to $G_L(A)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -537,7 +537,7 @@ only through the choice of the matrices $R_j$ in the second one.
     left-site restriction condition yields the equivalence.
 \end{proof}
 
-\begin{theorem}[Membership in the open-chain tail ground subspace]
+\begin{lemma}[Membership in the open-chain tail ground subspace]
     \label{thm:mem_open_chain_tail_ground_space_es}
     \lean{MPSTensor.mem_openChainTailGroundSpaceES_iff}
     \leanok
@@ -546,7 +546,7 @@ only through the choice of the matrices $R_j$ in the second one.
     belongs to $\mathcal V_{K,L}(A)$ exactly when the corresponding function
     satisfies the tail ground condition: every fixed-prefix restriction
     belongs to $G_L(A)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -554,7 +554,7 @@ only through the choice of the matrices $R_j$ in the second one.
     tail restriction condition yields the equivalence.
 \end{proof}
 
-\begin{theorem}[Open-chain left--tail ground-space intersection]
+\begin{lemma}[Open-chain left--tail ground-space intersection]
     \label{thm:open_chain_left_tail_ground_intersection}
     \lean{MPSTensor.openChainLeft_inf_tailGroundSpaceES}
     \leanok
@@ -567,7 +567,7 @@ only through the choice of the matrices $R_j$ in the second one.
     In Nachtergaele's notation, with $n=K+L_0$ and $l=L_0$, this is the
     common range identity for $G_{\Lambda_n}$ and
     $G_{\Lambda_{n+1}\setminus\Lambda_{n-l}}$ inside $\Lambda_{n+1}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -577,7 +577,7 @@ only through the choice of the matrices $R_j$ in the second one.
     space after every left or tail restriction.
 \end{proof}
 
-\begin{theorem}[Open-chain iteration of the intersection property]%
+\begin{lemma}[Open-chain iteration of the intersection property]%
     \label{thm:normal_open_chain_range_reduction}
     \lean{MPSTensor.contiguous_mem_groundSpace_of_isNBlkInjective}
     \leanok
@@ -586,7 +586,7 @@ only through the choice of the matrices $R_j$ in the second one.
     If an $N$-site state satisfies the ground-space constraint on every
     non-wrapping contiguous interval of length $L_0+1$, for every fixed choice
     of the complementary sites, with $N \ge L_0+1$, then it lies in $G_N(A)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -596,7 +596,7 @@ only through the choice of the matrices $R_j$ in the second one.
     last site, while Definition~\ref{def:tail_restrict_parent} and
     Remark~\ref{rem:contiguous_window_operators} identify every fixed-prefix
     suffix with one of the assumed length-$(L_0+1)$ intervals.
-    Theorem~\ref{thm:ground_space_extend_right_block_injective} then grows back
+    Lemma~\ref{thm:ground_space_extend_right_block_injective} then grows back
     the rightmost site.
 \end{proof}
 
@@ -669,7 +669,7 @@ only through the choice of the matrices $R_j$ in the second one.
     the general antitonicity.
 \end{proof}
 
-\begin{theorem}[Open-chain containment from cyclic local constraints]%
+\begin{lemma}[Open-chain containment from cyclic local constraints]%
     \label{thm:cyclic_normal_open_chain_range_reduction}
     \lean{MPSTensor.chainGroundSpace_le_groundSpace_of_isNBlkInjective}
     \leanok
@@ -678,7 +678,7 @@ only through the choice of the matrices $R_j$ in the second one.
     If an $N$-site periodic-chain state satisfies all cyclic ground-space
     constraints at some range $L_0+1\le L\le N$, then it lies in the
     open-chain ground space $G_N(A)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -686,6 +686,6 @@ only through the choice of the matrices $R_j$ in the second one.
     Lemma~\ref{lem:cyclic_window_range_antitonicity} reduces the cyclic
     hypotheses to range $L_0+1$. On every non-wrapping interval, the cyclic and
     contiguous restriction maps agree, so
-    Theorem~\ref{thm:normal_open_chain_range_reduction} places the state in
+    Lemma~\ref{thm:normal_open_chain_range_reduction} places the state in
     $G_N(A)$.
 \end{proof}

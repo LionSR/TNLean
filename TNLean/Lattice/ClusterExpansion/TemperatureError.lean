@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.ListProduct
 import TNLean.Lattice.ClusterExpansion.Percolation
+import TNLean.Lattice.ClusterExpansion.AllTemperatures
 import TNLean.Lattice.ClusterExpansion.ThermalProduct
 import TNLean.Lattice.ClusterExpansion.Truncation
 
@@ -219,5 +220,41 @@ theorem norm_trace_mul_exp_sub_truncatedExp_pow_le_percolation {H : Matrix ι ι
         gcongr
         exact pow_succ_div_one_sub_le hxy0.le hxy l
     _ = N * Real.exp (-(l / (Real.log (x * y)⁻¹)⁻¹)) := by rw [pow_eq_exp_neg_div _ hxy0]
+
+/-- For the least sufficient even factor count, the corrected percolation error has
+`β/β₀ + 2` in its exponent. The strict factor-count inequality is established by
+`evenTemperatureFactors_spec`, rather than assumed.
+Hastings, arXiv:cond-mat/0508554v3, lines 1307–1312 and 1334–1347;
+`docs/paper-gaps/hastings05_temperature_factor_count.tex`. -/
+theorem norm_trace_mul_exp_sub_truncatedExp_pow_le_percolation_add_two
+    {H : Matrix ι ι ℂ} (hHerm : H.IsHermitian) {h : κ → Matrix ι ι ℂ}
+    (hH : H = ∑ k, h k) (hh : ∀ k, (h k).IsHermitian) {J : ℝ}
+    (hJ : ∀ k, ‖h k‖ ≤ J) (O : Matrix ι ι ℂ) {β β₀ : ℝ}
+    (hβ : 0 < β) (hβ₀ : 0 < β₀) {S : ℝ}
+    (hS : ∀ C ∈ largeConnected G large, ((#C : ℝ) + #(boundary G C)) ≤ S * #C)
+    {l : ℕ} (hl : ∀ C ∈ largeConnected G large, l + 1 ≤ #C) {N x : ℝ}
+    (hcount : ∀ k, (#{C ∈ largeConnected G large | #C = k} : ℝ) ≤ N * x ^ k)
+    (hN : 0 ≤ N) (hx : 0 ≤ x)
+    (hxy0 : 0 < x * ((Real.exp (β / evenTemperatureFactors β β₀ * J) - 1) *
+      Real.exp (S * J * (β / evenTemperatureFactors β β₀))))
+    (hxy : x * ((Real.exp (β / evenTemperatureFactors β β₀ * J) - 1) *
+      Real.exp (S * J * (β / evenTemperatureFactors β β₀))) ≤ 1 / 2) :
+    ‖(O * (NormedSpace.exp (-(β • H)) -
+      truncatedExp G large h (β / (evenTemperatureFactors β β₀)) ^
+        (evenTemperatureFactors β β₀))).trace‖ ≤
+      ‖O‖ * (Real.exp ((β / β₀ + 2) * (N * Real.exp (-(l / (Real.log
+          (x * ((Real.exp (β / (evenTemperatureFactors β β₀) * J) - 1) *
+            Real.exp (S * J * (β / (evenTemperatureFactors β β₀)))))⁻¹)⁻¹)))) - 1) *
+        (NormedSpace.exp (-(β • H))).trace.re := by
+  have hn : 0 < evenTemperatureFactors β β₀ := by
+    have := (evenTemperatureFactors_spec hβ hβ₀).2.1
+    omega
+  refine (norm_trace_mul_exp_sub_truncatedExp_pow_le_percolation G large hHerm hH hh hJ O
+    hβ.le hS hn hl hcount hN hx hxy0 hxy).trans ?_
+  have hZ := (hHerm.smul (IsSelfAdjoint.all β)).neg.re_trace_exp_nonneg
+  exact mul_le_mul_of_nonneg_right
+    (mul_le_mul_of_nonneg_left
+      (exp_evenTemperatureFactors_mul_sub_one_le hβ hβ₀
+        (mul_nonneg hN (Real.exp_pos _).le)) (norm_nonneg O)) hZ
 
 end TNLean.Lattice.ClusterExpansion

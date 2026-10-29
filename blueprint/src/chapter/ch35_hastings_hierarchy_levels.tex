@@ -3,19 +3,14 @@
 
 % Hastings, arXiv:cond-mat/0508554v3, proj3new.tex, lines 668--707.
 
-The hierarchy of~\cite[lines 668--707]{Hastings2006Solving} projects, at
-level $m+1$, onto the window of the pair operator joining the two halves of a
-block of $2^{m+1}$ supersites, inside the range of the product of the two
-projections of level $m$. This section bounds the deficiency of every level.
-Each deficiency is measured against the ground state $\Psi_a$ itself, rather
-than against the normalized vector of the level below as in the source; this
-replaces the printed recurrence by a recurrence for squared deficiencies, with
-coefficient $3^m-1$ in place of
-$2^m-1$~\cite{gap:hastings05_hierarchical_projection}. The two halves of a
-block act on disjoint supersites, so their projections commute; here this is
-a hypothesis.
+The hierarchy of~\cite[lines 668--707]{Hastings2006Solving} defines level-$m+1$
+projections $P_k^{m+1}$ onto the spectral window of the pair operator $M_k^m$
+inside $\operatorname{ran}(P_{2k}^mP_{2k+1}^m)$. Measuring each deficiency
+$\lVert\Psi_a-P_k^m\Psi_a\rVert$ against $\Psi_a$ directly yields a recurrence
+for squared deficiencies with prefactor $3^m-1$ in place of
+$2^m-1$~\cite{gap:hastings05_hierarchical_projection}.
 
-\begin{theorem}[One level against the ground state]
+\begin{lemma}[One level against the ground state]
     \label{thm:hastings05_level_against_ground_state}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_compressedWindowProjection_mul_sq_le}
     \leanok
@@ -23,23 +18,27 @@ a hypothesis.
         thm:hastings05_nested_projections,thm:hastings05_normalization,
         thm:hastings05_compressed_window_projection,
         thm:hastings05_compressed_window_bound}
-    Let $P,P'$ be commuting orthogonal projections, $M$ Hermitian, $c$ real,
+    Let $P,P'$ be commuting orthogonal projections, $M=M^\dagger$, $c\in\R$,
     $x>0$, and $\psi$ a unit vector with $\lVert(M-c)\psi\rVert\le\epsilon$,
-    $\lVert\psi-P\psi\rVert\le D$ and $\lVert\psi-P'\psi\rVert\le D$. Let $R$
-    be the window of $M$ at $c$ with radius $x$ inside the range of $PP'$.
+    $\lVert\psi-P\psi\rVert\le D$, and $\lVert\psi-P'\psi\rVert\le D$. Let $R$
+    be the spectral window of $M$ on $[c-x,c+x]$ compressed to
+    $\operatorname{ran}(PP')$ (Definition~\ref{def:hastings05_compressed_window}).
     Then
     \begin{align}
         \lVert\psi-R\psi\rVert^2
          & \le2D^2+\Bigl(\frac{\epsilon+2\lVert M-c\rVert D}{x}\Bigr)^2 .
+        \label{eq:hastings05_level_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Put $Q=PP'$ and $\psi'=Q\psi/\lVert Q\psi\rVert$. The vectors
-    $\psi-P\psi$ and $P(\psi-P'\psi)$ are orthogonal, so
-    $\lVert\psi-Q\psi\rVert^2\le2D^2$. The vector $\psi'$ lies in the range
-    of $Q$ and $\lVert\psi'-\psi\rVert\le2D$, so the window moves it by at
-    most $(\epsilon+2\lVert M-c\rVert D)/x$. Since $RQ=R$, the nested
-    projection bound combines the two.
+    Put $Q=PP'$ and $\psi'=Q\psi/\lVert Q\psi\rVert\in\operatorname{ran}Q$.
+    By Lemma~\ref{thm:hastings05_projection_deficiency} and
+    Lemma~\ref{thm:hastings05_normalization},
+    $\lVert\psi-Q\psi\rVert^2\le2D^2$ and $\lVert\psi'-\psi\rVert\le2D$, so
+    Lemma~\ref{thm:hastings05_compressed_window_bound} gives
+    $\lVert\psi'-R\psi'\rVert\le(\epsilon+2\lVert M-c\rVert D)/x$. Since
+    $RQ=R$, Lemma~\ref{thm:hastings05_nested_projections} yields
+    (\ref{eq:hastings05_level_bound}).
 \end{proof}
 
 \begin{definition}[The deficiency bound of a level]
@@ -48,35 +47,35 @@ a hypothesis.
         TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_zero,
         TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_succ}
     \leanok
-    For real $\epsilon$, $K$ and radii $x_0,x_1,\dots$, put $D_0=0$ and
+    For $\epsilon,K\in\R$ and radii $x_0,x_1,\dots$, set $D_0=0$ and
     \begin{align}
         D_{m+1} & =\Bigl(2D_m^2+\Bigl(\frac{\epsilon+2KD_m}{x_m}\Bigr)^2
         \Bigr)^{1/2}.
+        \label{eq:hastings05_hierarchy_deficiency}
     \end{align}
 \end{definition}
 
-\begin{theorem}[All levels]
+\begin{lemma}[All levels]
     \label{thm:hastings05_hierarchy_levels}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.isStarProjection_hierarchy,
         TNLean.MPS.AreaLaw.LocalSolution.norm_sub_hierarchy_le}
     \leanok
     \uses{thm:hastings05_level_against_ground_state,
         def:hastings05_hierarchy_deficiency}
-    Let $P_k^0=1$ for every block $k$, and let $P_k^{m+1}$ be the window of
-    the Hermitian pair operator $M_k^m$ at $c_k^m$ with radius $x_m>0$ inside
-    the range of $P_{2k}^mP_{2k+1}^m$. Suppose $P_{2k}^m$ and $P_{2k+1}^m$
-    commute, and that $\lVert(M_k^m-c_k^m)\psi\rVert\le\epsilon$ and
-    $\lVert M_k^m-c_k^m\rVert\le K$ for all $m$ and $k$, where $\psi$ is a
-    unit vector. Then every $P_k^m$ is an orthogonal projection and
-    $\lVert\psi-P_k^m\psi\rVert\le D_m$. In the source $\psi=\Psi_a$ and
-    $c_k^m=\langle\Psi_a,M_k^m\Psi_a\rangle$
-    \cite[lines 668--707]{Hastings2006Solving}.
-\end{theorem}
+    Let $P_k^0=1$, and let $P_k^{m+1}$ be the window of $M_k^m=(M_k^m)^\dagger$
+    at $c_k^m$ with radius $x_m>0$ inside $\operatorname{ran}(P_{2k}^mP_{2k+1}^m)$.
+    If $[P_{2k}^m,P_{2k+1}^m]=0$, $\lVert(M_k^m-c_k^m)\psi\rVert\le\epsilon$,
+    and $\lVert M_k^m-c_k^m\rVert\le K$ for all $m,k$ and a unit vector $\psi$,
+    then every $P_k^m$ is an orthogonal projection and
+    $\lVert\psi-P_k^m\psi\rVert\le D_m$ (with $\psi=\Psi_a$ and
+    $c_k^m=\langle\Psi_a,M_k^m\Psi_a\rangle$ in
+    \cite[lines 668--707]{Hastings2006Solving}).
+\end{lemma}
 \begin{proof}\leanok
-    Induction on $m$, applying
-    Theorem~\ref{thm:hastings05_level_against_ground_state} to the two
-    halves of each block and using that the right side is increasing in
-    $\lVert M-c\rVert$.
+    Induct on $m$, applying Lemma~\ref{thm:hastings05_level_against_ground_state}
+    to $P_{2k}^m,P_{2k+1}^m$ and comparing with
+    (\ref{eq:hastings05_hierarchy_deficiency}) via
+    $\lVert M_k^m-c_k^m\rVert\le K$.
 \end{proof}
 
 \begin{definition}[The majorant for the source's radii]
@@ -85,94 +84,94 @@ a hypothesis.
         TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_zero,
         TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_succ}
     \leanok
-    For real $e$ and $s$, put $\beta_0=0$ and
+    For $e,s\in\R$, set $\beta_0=0$ and
     $\beta_{m+1}=\bigl(2\beta_m^2+(e+2\beta_m)^{2s}\bigr)^{1/2}$.
 \end{definition}
 
-\begin{theorem}[The source's radii]
+\begin{lemma}[The source's radii]
     \label{thm:hastings05_hierarchy_source_radii}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_nonneg,
         TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_le_hierarchyMajorant}
     \leanok
     \uses{def:hastings05_hierarchy_deficiency,def:hastings05_hierarchy_majorant}
-    Let $K>0$ and $e>0$. With $\epsilon=Ke$ and the radii
-    $x_m=K(e+2\beta_m)^{1-s}$ of~\cite[lines 676--681]{Hastings2006Solving},
-    $D_m\le\beta_m$ and $0\le\beta_m$ for every $m$.
-\end{theorem}
+    For $K,e>0$, $\epsilon=Ke$, and $x_m=K(e+2\beta_m)^{1-s}$
+    \cite[lines 676--681]{Hastings2006Solving}, $0\le D_m\le\beta_m$ for all $m$.
+\end{lemma}
 \begin{proof}\leanok
-    By induction, $(\epsilon+2KD_m)/x_m\le(e+2\beta_m)/(e+2\beta_m)^{1-s}
-        =(e+2\beta_m)^s$.
+    By induction on $m$ using~(\ref{eq:hastings05_hierarchy_deficiency}) and
+    $(\epsilon+2KD_m)/x_m\le(e+2\beta_m)/(e+2\beta_m)^{1-s}=(e+2\beta_m)^s$.
 \end{proof}
 
-\begin{theorem}[The closed form]
+\begin{lemma}[The closed form]
     \label{thm:hastings05_hierarchy_closed_form}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_le,
         TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_le_rpow_quarter}
     \leanok
     \uses{def:hastings05_hierarchy_majorant,thm:hastings05_exponent}
-    For $0<e\le1$ and $0\le s\le1$, $\beta_m\le(3^m-1)e^{s^m}$. For the
-    source's $s=1-1/h$, $N=2^h$ supersites and $h\ge2$, the majorant of the
-    last level satisfies $\beta_h\le(3^h-1)e^{1/4}$, in place of the printed
-    $N\exp[-(l_{\mathrm{proj}}/l_{\mathrm{fac}})(1-1/h)^h]$
-    for $e=\exp(-l_{\mathrm{proj}}/l_{\mathrm{fac}})$
+    For $0<e\le1$ and $0\le s\le1$, $\beta_m\le(3^m-1)e^{s^m}$. In particular,
+    for $s=1-1/h$ and $h\ge2$ ($N=2^h$ supersites),
+    $\beta_h\le(3^h-1)e^{1/4}$, in place of the printed
+    $N\exp[-(l_{\mathrm{proj}}/l_{\mathrm{fac}})(1-1/h)^h]$ at
+    $e=\exp(-l_{\mathrm{proj}}/l_{\mathrm{fac}})$
     \cite[lines 705--707]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Write $\beta_m\le C_me^{s^m}$ with $C_m=3^m-1$. Since $e\le e^{s^m}\le
-        e^{s^{m+1}}$ and $y^s\le y$ for $y\ge1$,
-    $(e+2\beta_m)^s\le(1+2C_m)e^{s^{m+1}}$, and
-    $2C_m^2+(1+2C_m)^2\le(3C_m+2)^2=C_{m+1}^2$. For $s=1-1/h$ and $m=h$,
-    $(1-1/h)^h\ge1/4$ by Theorem~\ref{thm:hastings05_exponent}, and
-    $e^{(1-1/h)^h}\le e^{1/4}$ since $e\le1$.
+    Set $C_m=3^m-1$. By induction on $m$, since $e\le e^{s^m}\le e^{s^{m+1}}$
+    and $y^s\le y$ for $y\ge1$,
+    \begin{align}
+        (e+2\beta_m)^s\le(1+2C_m)e^{s^{m+1}},\qquad
+        2C_m^2+(1+2C_m)^2\le(3C_m+2)^2=C_{m+1}^2.
+        \notag
+    \end{align}
+    For $s=1-1/h$ and $m=h$, Lemma~\ref{thm:hastings05_exponent} gives
+    $(1-1/h)^h\ge1/4$, so $e^{(1-1/h)^h}\le e^{1/4}$.
 \end{proof}
 
 \subsection{The supersite grouping}
 
-The source groups the sites into supersites of $2l_{\mathrm{proj}}$ sites, so
-that each $M_i$ acts on at most two neighbouring supersites, and lets
-$M_{k,k+1}$ be the sum of the $M_i$ acting on supersites $k$ and
-$k+1$~\cite[lines 609--628]{Hastings2006Solving}. Block $k$ of level $m$
-consists of the sites whose supersite has quotient $k$ by $2^m$.
+Grouping sites into supersites of length $2l_{\mathrm{proj}}$ makes each $M_i$
+act on at most two adjacent supersites, with $M_{k,k+1}$ the sum of $M_i$ on
+supersites $k,k+1$~\cite[lines 609--628]{Hastings2006Solving}.
 
-\begin{theorem}[Spectral windows keep supports]
+\begin{lemma}[Spectral windows keep supports]
     \label{thm:hastings05_window_support}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.cfc_mem_supportedOperators,
         TNLean.MPS.AreaLaw.LocalSolution.windowProjection_mem_supportedOperators,
         TNLean.MPS.AreaLaw.LocalSolution.compressedWindowProjection_mem_supportedOperators}
     \leanok
     \uses{def:hastings05_window_projection,def:hastings05_compressed_window}
-    If an operator $A$ acts on a set of sites $S$, so does $f(A)$ for every
-    real function $f$. In particular the window of $M$, and the window of
-    $M$ inside the range of $Q$, act on $S$ when $M$ and $Q$ do.
-\end{theorem}
+    If $A$ is supported on $S$, then $f(A)$ is supported on $S$ for every
+    $f:\R\to\R$; in particular, the spectral window of $M$ and its compression
+    to $\operatorname{ran}Q$ are supported on $S$ whenever $M$ and $Q$ are.
+\end{lemma}
 \begin{proof}\leanok
-    The operators acting on $S$ form a closed $*$-subalgebra containing $A$,
-    and $f(A)$ lies in every such subalgebra.
+    Operators supported on $S$ form a closed $*$-subalgebra, which is preserved
+    by the continuous functional calculus and products.
 \end{proof}
 
 \begin{definition}[Blocks of a level]
     \label{def:hastings05_level_block}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.levelBlock}
     \leanok
-    Given the supersite $\sigma(i)\in\mathbb N$ of each site $i$, block $k$ of
-    level $m$ is the set of sites $i$ with $\lfloor\sigma(i)/2^m\rfloor=k$.
+    For a supersite map $\sigma:\{0,\dots,L-1\}\to\N$, block $k$ of level $m$
+    is $B_k^m=\{i:\lfloor\sigma(i)/2^m\rfloor=k\}$.
 \end{definition}
 
-\begin{theorem}[Halves of a block]
+\begin{lemma}[Halves of a block]
     \label{thm:hastings05_level_block_halves}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.levelBlock_two_mul_subset,
         TNLean.MPS.AreaLaw.LocalSolution.levelBlock_two_mul_add_one_subset,
         TNLean.MPS.AreaLaw.LocalSolution.disjoint_levelBlock_two_mul}
     \leanok
     \uses{def:hastings05_level_block}
-    Blocks $2k$ and $2k+1$ of level $m$ are disjoint and contained in block $k$
-    of level $m+1$.
-\end{theorem}
+    For all $m,k$, $B_{2k}^m\cap B_{2k+1}^m=\emptyset$ and
+    $B_{2k}^m\cup B_{2k+1}^m\subseteq B_k^{m+1}$.
+\end{lemma}
 \begin{proof}\leanok
-    $\lfloor\sigma/2^{m+1}\rfloor=\lfloor\lfloor\sigma/2^m\rfloor/2\rfloor$.
+    Use $\lfloor\sigma(i)/2^{m+1}\rfloor=\lfloor\lfloor\sigma(i)/2^m\rfloor/2\rfloor$.
 \end{proof}
 
-\begin{theorem}[All levels on supersites]
+\begin{lemma}[All levels on supersites]
     \label{thm:hastings05_supersite_hierarchy}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.mem_supportedOperators_hierarchy,
         TNLean.MPS.AreaLaw.LocalSolution.commute_supersiteHierarchy,
@@ -180,61 +179,26 @@ consists of the sites whose supersite has quotient $k$ by $2^m$.
     \leanok
     \uses{thm:hastings05_hierarchy_levels,thm:hastings05_window_support,
         thm:hastings05_level_block_halves}
-    In the setting of Theorem~\ref{thm:hastings05_hierarchy_levels}, suppose
-    each pair operator $M_k^m$ acts on block $k$ of level $m+1$ instead of
-    assuming that the halves commute. Then every $P_k^m$ acts on block $k$ of
-    level $m$, the projections $P_{2k}^m$ and $P_{2k+1}^m$ commute, and the
-    conclusion of Theorem~\ref{thm:hastings05_hierarchy_levels} holds.
-\end{theorem}
+    In Lemma~\ref{thm:hastings05_hierarchy_levels}, if each $M_k^m$ is
+    supported on $B_k^{m+1}$, then $P_k^m$ is supported on $B_k^m$,
+    $[P_{2k}^m,P_{2k+1}^m]=0$, and $\lVert\psi-P_k^m\psi\rVert\le D_m$.
+\end{lemma}
 \begin{proof}\leanok
-    By induction each $P_k^m$ acts on its block, by
-    Theorems~\ref{thm:hastings05_window_support}
-    and~\ref{thm:hastings05_level_block_halves}. The halves act on disjoint
-    sites, so they commute.
+    By induction on $m$ using Lemmas~\ref{thm:hastings05_window_support}
+    and~\ref{thm:hastings05_level_block_halves}, $P_{2k}^m$ and $P_{2k+1}^m$
+    have disjoint supports $B_{2k}^m$ and $B_{2k+1}^m$, hence commute, and
+    Lemma~\ref{thm:hastings05_hierarchy_levels} applies.
 \end{proof}
 
-\begin{theorem}[The final states on supersites]
-    \label{thm:hastings05_supersite_final_states}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.isStarProjection_supersiteHierarchy,
-        TNLean.MPS.AreaLaw.LocalSolution.abs_re_inner_supersiteHierarchySum_sub_le,
-        TNLean.MPS.AreaLaw.LocalSolution.re_inner_supersiteHierarchySum_le_add,
-        TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_supersiteHierarchy,
-        TNLean.MPS.AreaLaw.LocalSolution.norm_sub_supersiteClosingLinkWindow_le,
-        TNLean.MPS.AreaLaw.LocalSolution.re_inner_supersiteHierarchySum_add_le_add,
-        TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_supersiteClosingLink}
-    \leanok
-    \uses{thm:hastings05_supersite_hierarchy,
-        thm:hastings05_hierarchy_sum_expectation, thm:hastings05_hchy_every_state,
-        thm:hastings05_final_state_count_hierarchy,
-        thm:hastings05_closing_link_window, thm:hastings05_hchy_periodic,
-        thm:hastings05_final_state_count_periodic}
-    Suppose each pair operator $M_k^m$ is Hermitian and acts on block $k$ of
-    level $m+1$. Then every $P_k^m$ is an orthogonal projection, and the
-    conclusions of
-    Theorems~\ref{thm:hastings05_hierarchy_sum_expectation},
-    \ref{thm:hastings05_hchy_every_state},
-    \ref{thm:hastings05_final_state_count_hierarchy},
-    \ref{thm:hastings05_closing_link_window},
-    \ref{thm:hastings05_hchy_periodic}
-    and~\ref{thm:hastings05_final_state_count_periodic} hold under their
-    remaining hypotheses, without assuming that the halves of each block
-    commute.
-\end{theorem}
-\begin{proof}\leanok
-    The halves commute by
-    Theorem~\ref{thm:hastings05_supersite_hierarchy}.
-\end{proof}
-
-\begin{theorem}[The residual of a sum]
+\begin{lemma}[The residual of a sum]
     \label{thm:hastings05_sum_residual}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_toEuclideanLin_sum_sub_le}
     \leanok
-    For operators $M_i$ and reals $c_i$,
-    $\lVert(\sum_iM_i-\sum_ic_i)\psi\rVert\le\sum_i\lVert(M_i-c_i)\psi\rVert$.
-    With $c_i=\langle\Psi_a,M_i\Psi_a\rangle$, this bounds the residual of
-    $M_{k,k+1}$ by eq.~(low) for its summands
-    \cite[lines 628--639]{Hastings2006Solving}.
-\end{theorem}
+    For operators $M_i$ and scalars $c_i$,
+    $\lVert(\sum_iM_i-\sum_ic_i)\psi\rVert\le\sum_i\lVert(M_i-c_i)\psi\rVert$;
+    for $c_i=\langle\Psi_a,M_i\Psi_a\rangle$ this bounds the residual of
+    $M_{k,k+1}$ from eq.~(low)~\cite[lines 628--639]{Hastings2006Solving}.
+\end{lemma}
 \begin{proof}\leanok
-    The triangle inequality.
+    By the triangle inequality.
 \end{proof}

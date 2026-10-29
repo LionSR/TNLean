@@ -5,20 +5,16 @@
 % bonds, clusters, the boundary) and 1197--1225 (the inclusion--exclusion sum
 % and the remark added).
 
-Expanding $e^{-\beta H}=\sum_n\frac{(-\beta)^n}{n!}\bigl(\sum_kH_k\bigr)^n$
-writes it as a sum over words $H_{k_1}\cdots H_{k_n}$ in the terms of $H$. In
-each word, terms whose supports meet are joined by active bonds, and the
-truncated operator $\rho(\beta,l_{\mathrm{proj}})$ keeps the words none of whose
-clusters has diameter larger than $l_{\mathrm{proj}}$
-\cite[lines 1090--1114]{Hastings2006Solving}. The remark
-of~\cite[lines 1218--1224]{Hastings2006Solving} writes it as
-$\rho-\rho_1+\rho_2-\cdots$, where $\rho_m$ is the sum of
-$\rho(\beta,C_1,\dots,C_m)$ over families of $m$ large clusters. This section
-proves that identity for a finite set of terms. Which clusters count as large
-is an arbitrary property of sets of terms. The boundary of a cluster is the set
-of terms whose support meets the support of the cluster, which corrects the
-boundary of~\cite[lines 1131--1134]{Hastings2006Solving}; with the printed
-boundary the identity fails~\cite{gap:hastings05_cluster_boundary}.
+Expanding $e^{-\beta H}=\sum_n\frac{(-\beta)^n}{n!}\bigl(\sum_kH_k\bigr)^n$ into
+words $H_{k_1}\cdots H_{k_n}$, the truncated operator
+$\rho(\beta,l_{\mathrm{proj}})$ keeps words containing no cluster of active
+bonds of diameter larger than $l_{\mathrm{proj}}$
+\cite[lines 1090--1114]{Hastings2006Solving} and equals the inclusion--exclusion
+sum $\rho-\rho_1+\rho_2-\cdots$ over families of large clusters
+\cite[lines 1218--1224]{Hastings2006Solving}, provided the cluster boundary
+consists of terms whose supports meet the cluster support
+\cite[lines 1131--1134]{Hastings2006Solving},
+\cite{gap:hastings05_cluster_boundary}.
 
 \begin{definition}[Clusters of a set of terms]
     \label{def:hastings_cluster_of_terms}
@@ -29,17 +25,15 @@ boundary the identity fails~\cite{gap:hastings05_cluster_boundary}.
         TNLean.Lattice.ClusterExpansion.IsAdmissible}
     \leanok
     \uses{thm:hastings_cluster_boundary_count}
-    Let the terms be indexed by a finite set $K$, and let $G$ be a graph on $K$.
-    In the overlap graph two distinct terms are adjacent when their supports
-    meet. The boundary $\partial C$ of $C\subseteq K$ is the set of terms
-    outside $C$ adjacent to a term of $C$; in the overlap graph these are the
-    terms outside $C$ whose support meets the support of $H_C$. A cluster of a
-    set $A\subseteq K$ of terms is a set $C\subseteq A$ that is connected in
-    $G$ and such that $A$ contains no term of $\partial C$. A family $U$ of sets
-    of terms is admissible when no member meets the boundary of a member.
+    Let $G$ be a graph on a finite term index set $K$ (in the overlap graph,
+    $k\sim k'$ when $k\ne k'$ and their supports meet). For $C\subseteq K$, its
+    \emph{boundary} is $\partial C=\{k\in K\setminus C:\exists c\in C,\ k\sim c\}$.
+    A \emph{cluster} of $A\subseteq K$ is a $G$-connected subset $C\subseteq A$
+    with $A\cap\partial C=\emptyset$. A family $U$ of subsets of $K$ is
+    \emph{admissible} if $C\cap\partial C'=\emptyset$ for all $C,C'\in U$.
 \end{definition}
 
-\begin{theorem}[Clusters that meet]
+\begin{lemma}[Clusters that meet]
     \label{thm:hastings_clusters_meet}
     \lean{TNLean.Lattice.ClusterExpansion.subset_of_connected_of_disjoint_boundary,
         TNLean.Lattice.ClusterExpansion.eq_of_isCluster_of_inter_nonempty,
@@ -49,65 +43,56 @@ boundary the identity fails~\cite{gap:hastings05_cluster_boundary}.
         TNLean.Lattice.ClusterExpansion.card_add_card_biUnion_boundary_le}
     \leanok
     \uses{def:hastings_cluster_of_terms}
-    Two clusters of the same set that meet are equal. The members of an admissible family of connected sets are pairwise disjoint,
-    the union of their boundaries is the boundary of their union, and if
-    $n_C+n_{\partial C}\le Sn_C$ for every member $C$, then the union
-    $C_U=\bigcup_{C\in U}C$ has $n_{C_U}+n_{\partial C_U}\le Sn_{C_U}$.
-\end{theorem}
-
+    Intersecting clusters of $A$ coincide. For an admissible family $U$ of
+    connected sets with $C_U=\bigcup_{C\in U}C$, the members of $U$ are pairwise
+    disjoint, $\partial C_U=\bigcup_{C\in U}\partial C$, and if
+    $n_C+n_{\partial C}\le Sn_C$ for all $C\in U$, then
+    $n_{C_U}+n_{\partial C_U}\le Sn_{C_U}$.
+\end{lemma}
 \begin{proof}
     \leanok
-    Let $C$ be connected, meet $C'$, and contain no term of $\partial C'$. A
-    path in $C$ from a common term to any term of $C$ cannot leave $C'$, since
-    its first step outside $C'$ would land in $\partial C'$. So $C\subseteq C'$.
-    For two clusters of $A$ this applies in both directions. For two members of
-    an admissible family it applies in both directions as well, which also
-    covers a member strictly contained in another. The boundary of the union
-    consists of the terms adjacent to the union and outside it, and
-    admissibility puts every term of a member's boundary outside the union. The
-    count follows by adding the counts of the disjoint members.
+    If $C$ is connected, $C\cap C'\ne\emptyset$, and $C\cap\partial C'=\emptyset$,
+    any path in $C$ from $C\cap C'$ stays in $C'$, so $C\subseteq C'$; symmetry
+    gives equality for intersecting clusters of $A$ and pairwise disjointness for
+    admissible families, whence $\partial C_U=\bigcup_{C\in U}\partial C$ and
+    the additive size bound.
 \end{proof}
 
-\begin{theorem}[Words containing a set of terms]
+\begin{lemma}[Words containing a set of terms]
     \label{thm:hastings_words_inclusion_exclusion}
     \lean{TNLean.Lattice.ClusterExpansion.sum_pow_eq_sum_words,
         TNLean.Lattice.ClusterExpansion.sum_powerset_neg_one_pow_card_disjoint,
         TNLean.Lattice.ClusterExpansion.sum_words_contain_avoid}
     \leanok
-    In a ring that need not be commutative, $(\sum_{k\in s}a_k)^n$ is the sum of
-    the ordered products $a_{k_1}\cdots a_{k_n}$ over the words of length $n$ in
-    $s$. For disjoint $B,C\subseteq K$, the words of length $n$ that contain
-    every letter of $C$ and no letter of $B$ have ordered products summing to
-    \begin{align*}
+    In any ring, $(\sum_{k\in s}a_k)^n=\sum_{w\in s^n}a_{w_1}\cdots a_{w_n}$,
+    and for disjoint $B,C\subseteq K$, the sum of $a_{w_1}\cdots a_{w_n}$ over
+    words of length $n$ whose letter set $X$ satisfies $C\subseteq X$ and
+    $X\cap B=\emptyset$ equals
+    \begin{align}
         \sum_{D\subseteq C}(-1)^{|D|}\Bigl(\sum_{k\notin B\cup D}a_k\Bigr)^n.
-    \end{align*}
-\end{theorem}
-
+        \label{eq:hastings_words_inclusion_exclusion}
+    \end{align}
+\end{lemma}
 \begin{proof}
     \leanok
-    The first statement is induction on $n$, splitting off the first letter.
-    For the second, for a word with letter set $X$ disjoint from $B$,
-    $\sum_{D\subseteq C,\ D\cap X=\emptyset}(-1)^{|D|}=\sum_{D\subseteq
-            C\setminus X}(-1)^{|D|}$ is $1$ when $C\subseteq X$ and $0$ otherwise.
+    For $X\cap B=\emptyset$,
+    $\sum_{D\subseteq C\setminus X}(-1)^{|D|}=[C\subseteq X]$.
 \end{proof}
 
-\begin{theorem}[The cluster part as a sum of words]
+\begin{lemma}[The cluster part as a sum of words]
     \label{thm:hastings_cluster_part_words}
     \lean{TNLean.Lattice.ClusterExpansion.hasSum_div_factorial_smul_pow,
         TNLean.Lattice.ClusterExpansion.hasSum_words_clusterPart}
     \leanok
     \uses{thm:hastings_words_inclusion_exclusion, def:hastings_cluster_part}
-    Let $H=\sum_{k\in K}H_k$ and let $B$, $C$ be disjoint. The words that
-    contain every term of $C$ and no term of $B$, weighted by
-    $(-\beta)^n/n!$, sum to the operator $\rho(\beta,C)$
-    of~(\ref{eq:hastings_cluster_part}) with boundary $B$.
-\end{theorem}
-
+    For $H=\sum_{k\in K}H_k$ and disjoint $B,C\subseteq K$, the words whose
+    letter set contains $C$ and avoids $B$, weighted by $(-\beta)^n/n!$, sum to
+    $\rho(\beta,C)$ of (\ref{eq:hastings_cluster_part}) with boundary $B$.
+\end{lemma}
 \begin{proof}
     \leanok
-    By Theorem~\ref{thm:hastings_words_inclusion_exclusion} the words of length
-    $n$ give $\sum_{D\subseteq C}(-1)^{|D|}(H-H_B-H_D)^n$, and the exponential
-    series of $-\beta(H-H_B-H_D)$ sums each term.
+    Sum (\ref{eq:hastings_words_inclusion_exclusion}) weighted by
+    $(-\beta)^n/n!$ over $n\ge0$.
 \end{proof}
 
 \begin{definition}[The truncated operator]
@@ -118,42 +103,35 @@ boundary the identity fails~\cite{gap:hastings05_cluster_boundary}.
         TNLean.Lattice.ClusterExpansion.truncatedExp}
     \leanok
     \uses{def:hastings_cluster_of_terms}
-    Let $T$ be the set of connected sets of terms that are large. The operator
-    $\rho(\beta,l)$ is the sum over $n$ of $(-\beta)^n/n!$ times
-    the sum of the ordered products $H_{k_1}\cdots H_{k_n}$ over the words of
-    length $n$ none of whose clusters is large. This is
-    $\rho(\beta,l_{\mathrm{proj}})$ of~\cite[lines
-        1101--1104]{Hastings2006Solving} when large means diameter larger than
-    $l_{\mathrm{proj}}$.
+    For a set $T$ of large connected subsets of $K$, $\rho(\beta,l)$ is the sum
+    over $n\ge0$ of $\frac{(-\beta)^n}{n!}\sum H_{k_1}\cdots H_{k_n}$ restricted
+    to words whose letter set has no cluster in $T$
+    \cite[lines 1101--1104]{Hastings2006Solving}.
 \end{definition}
 
-\begin{theorem}[Inclusion and exclusion for one word]
+\begin{lemma}[Inclusion and exclusion for one word]
     \label{thm:hastings_word_large_clusters}
     \lean{TNLean.Lattice.ClusterExpansion.mem_largeConnected,
         TNLean.Lattice.ClusterExpansion.forall_isCluster_iff,
         TNLean.Lattice.ClusterExpansion.ite_noLargeCluster_eq_sum}
     \leanok
     \uses{thm:hastings_clusters_meet, def:hastings_truncated_expansion}
-    For a set $A$ of terms,
-    \begin{align*}
-        [\text{no cluster of $A$ is large}]
-        =\sum_{U}(-1)^{|U|},
-    \end{align*}
-    the sum over the admissible families $U\subseteq T$ with
-    $\bigcup_{C\in U}C\subseteq A$ and $A\cap\bigcup_{C\in U}\partial C=\emptyset$.
-    These are exactly the families of large clusters of $A$, so a set with $k$
-    large clusters is counted by $\binom km$ families of size $m$.
-\end{theorem}
-
+    For $A\subseteq K$, summing over admissible $U\subseteq T$ with
+    $\bigcup_{C\in U}C\subseteq A$ and
+    $A\cap\bigcup_{C\in U}\partial C=\emptyset$ gives
+    \begin{align}
+        [\text{no cluster of }A\text{ lies in }T]
+        =\sum_{U}(-1)^{|U|}.
+        \label{eq:hastings_word_large_clusters}
+    \end{align}
+\end{lemma}
 \begin{proof}
     \leanok
-    A family of connected sets consists of clusters of $A$ exactly when $A$
-    contains its union and avoids the union of its boundaries, and such a
-    family is admissible. The sum over the subsets of the set $L$ of large
-    clusters of $A$ is $1$ when $L$ is empty and $0$ otherwise.
+    Such $U$ are precisely the subsets of the set $L$ of large clusters of $A$,
+    and $\sum_{U\subseteq L}(-1)^{|U|}=[L=\emptyset]$.
 \end{proof}
 
-\begin{theorem}[The truncated operator by inclusion and exclusion]
+\begin{lemma}[The truncated operator by inclusion and exclusion]
     \label{thm:hastings_truncation_inclusion_exclusion}
     \lean{TNLean.Lattice.ClusterExpansion.hasSum_truncatedExpTerm,
         TNLean.Lattice.ClusterExpansion.truncatedExp_eq_sum,
@@ -161,56 +139,46 @@ boundary the identity fails~\cite{gap:hastings05_cluster_boundary}.
     \leanok
     \uses{thm:hastings_word_large_clusters, thm:hastings_cluster_part_words,
         def:hastings_truncated_expansion}
-    Let $H=\sum_{k\in K}H_k$. The series defining $\rho(\beta,l)$ converges, and
-    \begin{align*}
+    For $H=\sum_{k\in K}H_k$, the series $\rho(\beta,l)$ converges and, summing
+    over admissible $U\subseteq T$ with $\rho(\beta,U)$ given by
+    (\ref{eq:hastings_cluster_part}) for $\bigl(\bigcup_{C\in U}C,\bigcup_{C\in U}\partial C\bigr)$,
+    \begin{align}
         \rho(\beta,l)=\sum_U(-1)^{|U|}\rho(\beta,U),\qquad
-        e^{-\beta H}-\rho(\beta,l)=-\sum_{U\neq\emptyset}(-1)^{|U|}\rho(\beta,U),
-    \end{align*}
-    summed over the admissible families $U$ of large connected sets, where
-    $\rho(\beta,U)$ is the operator~(\ref{eq:hastings_cluster_part}) for the
-    union of $U$ and the union of the boundaries. Grouping the families by
-    size, this is $\rho-\rho_1+\rho_2-\cdots$
-    of~\cite[lines 1197--1225]{Hastings2006Solving}, with the boundary of
-    Definition~\ref{def:hastings_cluster_of_terms}
+        e^{-\beta H}-\rho(\beta,l)=-\sum_{U\neq\emptyset}(-1)^{|U|}\rho(\beta,U)
+        \label{eq:hastings_truncation_inclusion_exclusion}
+    \end{align}
+    \cite[lines 1197--1225]{Hastings2006Solving},
     \cite{gap:hastings05_cluster_boundary}.
-\end{theorem}
-
+\end{lemma}
 \begin{proof}
     \leanok
-    Multiply the identity of Theorem~\ref{thm:hastings_word_large_clusters}
-    for the letter set of each word by its ordered product and exchange the
-    finite sums. For each admissible $U$, the words in which every member of
-    $U$ is a cluster are those containing the union and avoiding the union of
-    the boundaries, which are disjoint, and
-    Theorem~\ref{thm:hastings_cluster_part_words} sums them. The empty family
-    contributes $e^{-\beta H}$.
+    Substitute (\ref{eq:hastings_word_large_clusters}) into
+    Definition~\ref{def:hastings_truncated_expansion}, exchange sums, and apply
+    Lemma~\ref{thm:hastings_cluster_part_words} (with $\rho(\beta,\emptyset)=e^{-\beta H}$).
 \end{proof}
 
-\begin{theorem}[The bound summed by the percolation estimate]
+\begin{lemma}[The bound summed by the percolation estimate]
     \label{thm:hastings_truncation_trace_bound}
     \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_le}
     \leanok
     \uses{thm:hastings_truncation_inclusion_exclusion,
         thm:hastings_cluster_part_several}
-    Let $H=\sum_kH_k$ be Hermitian with Hermitian terms of norm at most $J$, let
-    $\beta\ge0$, and let every large connected set $C$ have
-    $n_C+n_{\partial C}\le Sn_C$. Then for every operator $O$
-    \begin{align*}
+    If $H=\sum_kH_k$ has Hermitian terms with $\|H_k\|\le J$, $\beta\ge0$, and
+    $n_C+n_{\partial C}\le Sn_C$ for all $C\in T$, then for every $O$, with
+    $y=(e^{J\beta}-1)e^{SJ\beta}$ and $Z=\operatorname{tr}e^{-\beta H}$,
+    \begin{align}
         \bigl|\operatorname{tr}\bigl(O(e^{-\beta H}-\rho(\beta,l))\bigr)\bigr|
-        \le\|O\|Z\sum_{U\neq\emptyset}\prod_{C\in U}y^{n_C},
-    \end{align*}
-    summed over the nonempty admissible families of large connected sets, with
-    $y=(e^{J\beta}-1)e^{SJ\beta}$ and $Z=\operatorname{tr}e^{-\beta H}$.
-\end{theorem}
-
+        \le\|O\|Z\sum_{U\neq\emptyset}\prod_{C\in U}y^{n_C}.
+        \label{eq:hastings_truncation_trace_bound}
+    \end{align}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:hastings_truncation_inclusion_exclusion,
         thm:hastings_cluster_part_several, thm:hastings_clusters_meet}
-    Apply Theorem~\ref{thm:hastings_cluster_part_several} to each term of the
-    second identity of Theorem~\ref{thm:hastings_truncation_inclusion_exclusion};
-    the members of an admissible family are pairwise disjoint by
-    Theorem~\ref{thm:hastings_clusters_meet}.
+    Apply Lemmas~\ref{thm:hastings_cluster_part_several}
+    and~\ref{thm:hastings_clusters_meet} to each term of
+    (\ref{eq:hastings_truncation_inclusion_exclusion}).
 \end{proof}
 
 \begin{definition}[The operator of a set of terms]
@@ -220,17 +188,16 @@ boundary the identity fails~\cite{gap:hastings05_cluster_boundary}.
         TNLean.Lattice.ClusterExpansion.hasSum_words_clusterOp}
     \leanok
     \uses{thm:hastings_cluster_part_words}
-    For a set $A$ of terms put
-    \begin{align*}
+    For $A\subseteq K$ and $H_D=\sum_{k\in D}H_k$, define
+    \begin{align}
         E_A=\sum_{D\subseteq A}(-1)^{|A\setminus D|}e^{-\beta H_D},
-    \end{align*}
-    where $H_D=\sum_{k\in D}H_k$. It is the sum of the terms of the power series of $e^{-\beta H}$ whose set
-    of letters is exactly $A$. When $A$ is a cluster, this is the operator
-    that~\cite[lines 1268--1269]{Hastings2006Solving} describes as ``the sum
-    of all terms which include a given cluster''.
+        \label{eq:hastings_cluster_operator}
+    \end{align}
+    which sums the words in the expansion of $e^{-\beta H}$ whose letter set is
+    exactly $A$ \cite[lines 1268--1269]{Hastings2006Solving}.
 \end{definition}
 
-\begin{theorem}[The truncated operator as a sum of products over clusters]
+\begin{lemma}[The truncated operator as a sum of products over clusters]
     \label{thm:hastings_truncation_cluster_products}
     \lean{TNLean.Lattice.ClusterExpansion.truncatedExp_eq_sum_clusterOp,
         TNLean.Lattice.ClusterExpansion.clusterOp_union,
@@ -243,40 +210,146 @@ boundary the identity fails~\cite{gap:hastings05_cluster_boundary}.
     \leanok
     \uses{def:hastings_cluster_operator, def:hastings_truncated_expansion,
         def:hastings_cluster_of_terms}
-    The truncated operator is $\rho(\beta,l)=\sum_AE_A$, summed over the sets
-    $A$ of terms none of whose clusters is large. If terms that are not
-    adjacent commute, then for every set $A$ of terms, $E_A$ is the product of
-    the commuting operators $E_C$ over the clusters $C$ of $A$. This holds
-    when every term $H_k$ acts only on a set $S_k$ of sites and two terms are
-    adjacent when their sets of sites meet: terms that are not adjacent act on
-    disjoint sets of sites and commute. Thus each term of $\rho(\beta,l)$ is a
-    product of operators, one for each cluster, as
-    in~\cite[lines 1108--1110]{Hastings2006Solving}.
-\end{theorem}
-
+    Summing over $A\subseteq K$ with no cluster in $T$,
+    $\rho(\beta,l)=\sum_AE_A$. If non-adjacent terms commute (in particular for
+    the overlap graph when each $H_k$ acts on $S_k$), then
+    $E_A=\prod_{C\in\mathrm{clusters}(A)}E_C$ with commuting factors
+    \cite[lines 1108--1110]{Hastings2006Solving}.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:hastings_cluster_operator, thm:hastings_clusters_meet}
-    Group the words of each order by their set of letters. If $A$ and $B$ are
-    disjoint and every term of $A$ commutes with every term of $B$, then
-    $e^{-\beta H_{D_1\cup D_2}}=e^{-\beta H_{D_1}}e^{-\beta H_{D_2}}$ for
-    $D_1\subseteq A$ and $D_2\subseteq B$, and the signs multiply, so
-    $E_{A\cup B}=E_AE_B$. The clusters of $A$ partition $A$, distinct clusters
-    have no adjacent terms, and induction over the clusters gives the product.
+    Grouping words by letter set $A$ gives $\rho(\beta,l)=\sum_AE_A$. For
+    disjoint commuting sets $A,B$,
+    $e^{-\beta H_{D_1\cup D_2}}=e^{-\beta H_{D_1}}e^{-\beta H_{D_2}}$ yields
+    $E_{A\cup B}=E_AE_B$; induct over the clusters partitioning $A$.
 \end{proof}
 
-\begin{theorem}[The operator of a cluster acts on its sites]
+\begin{lemma}[The operator of a cluster acts on its sites]
     \label{thm:hastings_cluster_operator_support}
     \lean{TNLean.Lattice.ClusterExpansion.clusterOp_mem_supportedOperators}
     \leanok
     \uses{def:hastings_cluster_operator, thm:hastings_trotter_product_form}
-    If every term $H_k$ acts only on a set $S_k$ of sites, then $E_C$ acts
-    only on $\bigcup_{k\in C}S_k$.
-\end{theorem}
-
+    If each $H_k$ acts on $S_k$, then $E_C$ acts on $\bigcup_{k\in C}S_k$.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:hastings_trotter_product_form}
-    Each $H_D$ with $D\subseteq C$ acts on that union, and so do its
-    exponential and the sum $E_C$.
+    For every $D\subseteq C$, $H_D$ and $e^{-\beta H_D}$ act on
+    $\bigcup_{k\in C}S_k$.
+\end{proof}
+
+\begin{lemma}[The truncated operator in matrix product form]
+    \label{thm:hastings_truncated_product_form}
+    \lean{TNLean.Lattice.ClusterExpansion.IsLargeSupport,
+        TNLean.Lattice.ClusterExpansion.noncommProd_apply_of_pairwiseDisjoint,
+        TNLean.Lattice.ClusterExpansion.noLargeCluster_iff_filter,
+        TNLean.Lattice.ClusterExpansion.truncatedExp_eq_mul,
+        TNLean.Lattice.ClusterExpansion.sum_clusterOp_apply,
+        TNLean.Lattice.ClusterExpansion.isLocalCoefficient_clusterCoeff,
+        TNLean.Lattice.ClusterExpansion.sum_prod_clusterCoeff,
+        TNLean.Lattice.ClusterExpansion.hasProductForm_sum_clusterOp,
+        TNLean.Lattice.ClusterExpansion.hasProductForm_truncatedExp,
+        TNLean.Lattice.ClusterExpansion.hasProductForm_truncatedExp_of_dist_le}
+    \leanok
+    \uses{def:hastings_product_form, def:hastings_truncated_expansion,
+        def:hastings_cluster_of_terms}
+    Let the domain be nonempty, let every term $H_k$ act only on a set $S_k$ of
+    sites, let two terms be adjacent when their sets of sites meet, and call a
+    set of terms large when its sites contain two sites at distance larger
+    than $l$. Then the truncated operator $\rho(\beta,l)$ is in matrix product
+    form of range $l$. This is the matrix product form at high temperature
+    of~\cite[lines 1256--1279]{Hastings2006Solving}, on every finite metric
+    lattice. The local index count is given below.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:hastings_truncation_cluster_products,
+        thm:hastings_cluster_operator_support,
+        thm:hastings_product_form_supported_radius, thm:hastings_product_form_mul}
+    By Lemmas~\ref{thm:hastings_truncation_cluster_products}
+    and~\ref{thm:hastings_cluster_operator_support},
+    $\rho(\beta,l)=\sum_A\prod_{C\in\mathrm{clusters}(A)}E_C$, where empty-support
+    terms factor out as a scalar multiple of $1$ and each remaining cluster $C$
+    acts on $S_C=\bigcup_{k\in C}S_k$ with $\operatorname{diam}S_C\le l$ and
+    pairwise disjoint $S_C$. Indexing each site by its containing cluster (if
+    any) and matrix-unit labels $(a_j,b_j)$ expresses $\sum_A\prod_CE_C$ in the
+    form (\ref{eq:hastings_mpf}) of range $l$; conclude by
+    Lemma~\ref{thm:hastings_product_form_mul}.
+\end{proof}
+
+\begin{lemma}[Local index ranges of the truncated operator]
+    \label{thm:hastings_truncated_index_count}
+    \lean{TNLean.Lattice.ProductForm.restrict,
+        TNLean.Lattice.ProductForm.card_index_restrict,
+        TNLean.Lattice.ClusterExpansion.clusterProductForm,
+        TNLean.Lattice.ClusterExpansion.clusterIndexSet,
+        TNLean.Lattice.ClusterExpansion.localClusterProductForm,
+        TNLean.Lattice.ClusterExpansion.coeff_clusterProductForm_eq_zero_of_not_mem_clusterIndexSet,
+        TNLean.Lattice.ClusterExpansion.card_clusterIndexSet_le,
+        TNLean.Lattice.ClusterExpansion.IsValidCluster.subset_centres_ball,
+        TNLean.Lattice.ClusterExpansion.card_clusterIndexSet_le_ball,
+        TNLean.Lattice.ClusterExpansion.card_index_localClusterProductForm_le,
+        TNLean.Lattice.ClusterExpansion.exists_productForm_truncatedExp_card_index,
+        TNLean.Lattice.ClusterExpansion.exists_productForm_truncatedExp_pow_card_index,
+        TNLean.Lattice.ClusterExpansion.exists_productForm_truncatedExp_card_index_of_polynomial_growth,
+        TNLean.Lattice.ClusterExpansion.exists_productForm_truncatedExp_pow_card_index_of_polynomial_growth}
+    \leanok
+    \uses{thm:hastings_truncated_product_form, thm:hastings_product_form_mul}
+    Let the site set be nonempty, let $q\ge1$, and suppose that each
+    $H_k$ is supported within distance $R\ge0$ of its centre $c_k$. For $l\ge0$, put
+    \begin{align*}
+        M_i=\#\{k:d(i,c_k)\le l+R\}.
+    \end{align*}
+    The actual diameter-truncated operator $\rho(\beta,l)$ has a matrix
+    product form of range $l$ with site index sets satisfying
+    \begin{align*}
+        |\mathcal A_i|\le q^2(1+2^{M_i}).
+    \end{align*}
+    Its $m$-th power has index ranges at most
+    $[q^2(1+2^{M_i})]^m$; if the terms are Hermitian and $m$ is even,
+    this power is positive semidefinite. If, moreover,
+    $M_i\le C(\lceil l+R\rceil+1)^D$ for every $i$, these bounds become
+    \begin{align*}
+        q^2\bigl(1+2^{C(\lceil l+R\rceil+1)^D}\bigr),\qquad
+        \bigl[q^2\bigl(1+2^{C(\lceil l+R\rceil+1)^D}\bigr)\bigr]^m.
+    \end{align*}
+    This makes explicit the polynomial volume growth used in the source's
+    exponential dimensional estimates
+    \cite[lines 1273--1275 and 1318--1320]{Hastings2006Solving}; a metric
+    alone does not imply such growth\cite{gap:hastings05_planar_domain_scope}.
+\end{lemma}
+\begin{proof}\leanok
+    Delete index values that record a cluster not containing their site;
+    its coefficient is zero at that site. A retained cluster containing $i$
+    has diameter at most $l$. Each of its terms acts on some site $j$, so
+    $d(i,c_k)\le d(i,j)+d(j,c_k)\le l+R$. There are at most $2^{M_i}$
+    possible sets of these terms. The additional value records no cluster,
+    and each choice has $q^2$ matrix-unit labels. Empty-support terms split
+    off as a scalar factor whose index sets have one element.
+    Products multiply the index cardinalities, giving the bound for powers.
+\end{proof}
+
+\begin{lemma}[Polynomial ball growth in the integer lattice]
+    \label{lem:hastings_integer_lattice_ball_count}
+    \lean{TNLean.Lattice.card_centres_integerLattice_ball_le,
+        TNLean.Lattice.card_centres_integerLattice_ball_le_polynomial,
+        TNLean.Lattice.card_centres_ball_le_polynomial_of_dist_le,
+        TNLean.Lattice.card_centres_ball_le_polynomial_of_isometry}
+    \leanok
+    For distinct centres in $\mathbb Z^D$ with the coordinate maximum
+    metric, every radius-$r$ ball contains at most
+    $(2\lceil r\rceil+1)^D\le2^D(\lceil r\rceil+1)^D$ centres.
+    The same bound holds for every metric on a finite integer-lattice
+    domain that dominates coordinate maximum distance, including its
+    intrinsic walk metric. More generally, it transfers through any
+    injective coordinate map that does not increase distances.
+    Thus Lemma~\ref{thm:hastings_truncated_index_count} applies with
+    $C=2^D$ on these lattices.
+\end{lemma}
+\begin{proof}\leanok
+    Every coordinate of a centre in the ball lies in an integer interval
+    with $2\lceil r\rceil+1$ elements. Containment in the product of these
+    intervals proves the first bound. The second follows from
+    $2\lceil r\rceil+1\le2(\lceil r\rceil+1)$.
 \end{proof}

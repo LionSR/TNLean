@@ -3,13 +3,7 @@
 
 \subsection{Physical bases and party grouping}
 
-Let $P$ be a finite party set and let $p_1,\ldots,p_m$ be an
-ordering containing each party exactly once. For a register list $a$,
-write $M(a)$ for its right-associated tensor memory, including a terminal
-factor $\C$, and $a_p$ for the registers owned by $p$, in their original
-order. The party-grouping isometry $G_a$ successively partitions off
-$a_{p_1},\ldots,a_{p_m}$, identifying $M(a)$ with
-$M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
+Let $P$ be a finite party set with a repetition-free ordering $p_1,\ldots,p_m$ of $P$. For a register list $a$, write $M(a)$ for its right-associated tensor memory (with terminal factor $\C$), $a_p$ for the registers owned by $p$ in their original order, and $G_a:M(a)\to M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$ for the successive party-grouping isometry.
 
 \begin{definition}[Party tensor bases]
     \label{def:peps_party_tensor_basis}
@@ -17,11 +11,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
         TNLean.Lattice.PartyCircuit.partyLabelledBasis}
     \leanok
     \uses{def:peps_party_layout}
-    For each $p$, let $b_p$ be an orthonormal basis of $M(a_p)$,
-    indexed by a finite set $I_p$. The ordered party basis has column
-    $b_{p_1}(x_{p_1})\otimes\cdots\otimes b_{p_m}(x_{p_m})\otimes1$,
-    indexed by assignments $x_p\in I_p$. For an empty ordering,
-    its single column is the scalar $1$.
+    Given finite orthonormal bases $(b_p(x))_{x\in I_p}$ of $M(a_p)$, the ordered party basis on $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$ has columns $b_{p_1}(x_{p_1})\otimes\cdots\otimes b_{p_m}(x_{p_m})\otimes1$ indexed by $x\in\prod_{p\in P}I_p$ (and column $1\in\C$ for the empty list).
 \end{definition}
 
 \begin{definition}[Party bases on the original register order]
@@ -29,8 +19,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
     \lean{TNLean.Lattice.PartyCircuit.partyGroupedBasis}
     \leanok
     \uses{def:peps_party_tensor_basis}
-    Pull back the ordered party basis by $G_a^{-1}$. Its column on the
-    original register memory is
+    Pulling back the basis of Definition~\ref{def:peps_party_tensor_basis} along $G_a$ defines the party-grouped basis of $M(a)$:
     \begin{align}
         B^a_x=G_a^{-1}
         \bigl(b_{p_1}(x_{p_1})\otimes\cdots
@@ -46,31 +35,21 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
         TNLean.Lattice.PartyCircuit.familyLabelledPhysicalBasis}
     \leanok
     \uses{def:peps_party_layout}
-    Let the physical space at $p$ be $H_p=\C^{d_p}$, where $d_p$
-    is a nonnegative integer, and denote its standard orthonormal
-    basis by $e_{p,j}$. The physical register list has one register
-    $H_{p_i}$ owned by $p_i$ in each position. Its labelled basis has
-    column $E_x=e_{p_1,x_{p_1}}\otimes\cdots
-        \otimes e_{p_m,x_{p_m}}\otimes1$ for each assignment
-    $x_p\in\{0,\ldots,d_p-1\}$. The physical output list may be
-    followed by any specified list of private registers.
+    For local dimensions $d_p\in\N$, let $H_p=\C^{d_p}$ have standard orthonormal basis $(e_{p,j})_{j=0}^{d_p-1}$. The physical register list has register $H_{p_i}$ owned by $p_i$ at position $i$, with labelled basis columns
+    \begin{align}
+        E_x & = e_{p_1,x_{p_1}}\otimes\cdots\otimes e_{p_m,x_{p_m}}\otimes1, &
+        x   & \in \prod_{p\in P}\{0,\ldots,d_p-1\}, \notag
+    \end{align}
+    and may be followed by a private register list.
 \end{definition}
 
 
-\begin{theorem}[Prescribed physical columns under an owner map]
+\begin{lemma}[Prescribed physical columns under an owner map]
     \label{thm:peps_physical_owner_columns}
     \lean{TNLean.Lattice.PartyCircuit.mapOwnerIso_familyPhysicalListBasis_apply_heq}
     \leanok
     \uses{def:peps_family_physical_output}
-    Let $P,Q$ be arbitrary sets, let $f:P\to Q$, and let
-    $\delta_q$ be nonnegative integers. Let
-    $\mathbf p=(p_0,\ldots,p_{m-1})$ be any ordered list in $P$,
-    with repetitions permitted. Fix a prescribed configuration
-    $y_q\in\{0,\ldots,\delta_q-1\}$ for every $q\in Q$.
-    At position $j$, take the physical space $\C^{\delta_{f(p_j)}}$.
-    Changing its owner from $p_j$ to $f(p_j)$ preserves its space
-    and its position. Write $U_f$ for the resulting
-    memory isometry. Then
+    For $f:P\to Q$, $\delta_q\in\N$, an ordered list $\mathbf p=(p_0,\ldots,p_{m-1})$ in $P$, and $y_q\in\{0,\ldots,\delta_q-1\}$ ($q\in Q$), let register $j$ have space $\C^{\delta_{f(p_j)}}$ and let $U_f$ be the owner-relabelling isometry from $\mathbf p$ to $f_*\mathbf p=(f(p_0),\ldots,f(p_{m-1}))$. Then
     \begin{align}
         U_f\bigl(e_{p_0,y_{f(p_0)}}\otimes\cdots
         \otimes e_{p_{m-1},y_{f(p_{m-1})}}\otimes1\bigr)
@@ -78,37 +57,23 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
         \otimes e_{f(p_{m-1}),y_{f(p_{m-1})}}\otimes1.
         \label{eq:peps_physical_owner_columns}
     \end{align}
-    Here the column on the left belongs to the original register list
-    $\mathbf p$, whose party $p$ carries the physical dimension
-    $\delta_{f(p)}$, and the column on the right belongs to the
-    relabelled register list $(f(p_0),\ldots,f(p_{m-1}))$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_basis_owner_memory}
-    By Theorem~\ref{thm:peps_basis_owner_memory}, changing owners
-    leaves each tensor factor unchanged, and $U_f$ is the tensor
-    product of the identities on these factors.
-    The prescribed basis column is the ordered tensor product
-    of its local standard basis vectors. Induction on the list
-    therefore gives (\ref{eq:peps_physical_owner_columns});
-    the empty tensor product is the scalar $1$.
+    By Lemma~\ref{thm:peps_basis_owner_memory}, $U_f$ acts as the identity on each tensor factor $\C^{\delta_{f(p_j)}}$, so induction on $\mathbf p$ gives (\ref{eq:peps_physical_owner_columns}).
 \end{proof}
 
-\begin{theorem}[Singleton physical memory of each party]
+\begin{lemma}[Singleton physical memory of each party]
     \label{thm:peps_singleton_physical_memory}
     \lean{TNLean.Lattice.PartyCircuit.atParty_familyPhysicalLayout_of_mem}
     \leanok
-    Let an ordered list of parties have no repetitions. For any party
-    $p$ in this list, selecting its physical registers gives
-    its single register $H_p$, with memory $H_p\otimes\C$.
-\end{theorem}
+    For any party $p$ in a repetition-free physical list $a$, the party-restricted list $a_p$ is the single register $H_p$, with memory $M(a_p)=H_p\otimes\C$.
+\end{lemma}
 
 \begin{proof}
     \leanok
-    Selecting a party filters the given list by equality with $p$.
-    Since $p$ occurs once, the filtered register list is the
-    singleton containing its physical register.
+    Filtering a repetition-free list at $p$ retains only the single register owned by $p$.
 \end{proof}
 
 \begin{definition}[Physical basis at an individual party]
@@ -116,176 +81,101 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
     \lean{TNLean.Lattice.PartyCircuit.familyPhysicalPartyBasis}
     \leanok
     \uses{thm:peps_singleton_physical_memory}
-    Let $p$ occur in an ordered physical list with no repetitions.
-    On its physical memory $H_p\otimes\C$, take the orthonormal basis
-    with columns $b_p(j)=e_{p,j}\otimes1$.
-    This is the image of the standard basis under the inverse of the
-    right scalar-unit isometry.
+    By Lemma~\ref{thm:peps_singleton_physical_memory}, for $p$ in a repetition-free physical list, define the orthonormal basis of $M(a_p)=H_p\otimes\C$ by $b_p(j):=e_{p,j}\otimes1$.
 \end{definition}
 
-\begin{theorem}[Partitioning a single selected register]
+\begin{lemma}[Partitioning a single selected register]
     \label{thm:peps_selected_head_partition}
     \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_selectedHead_of_tail_excluded_heq}
     \leanok
-    Let the first register have owner $p$ and Hilbert space $H$, and
-    let every remaining register have an owner different from $p$.
-    Write $K$ for the memory of the remaining registers. Under the
-    partition into the registers of $p$ and their complement,
-    every $e\in H$ and $y\in K$ satisfy
+    If the head register of $a$ has owner $p$ and space $H$, and no tail register is owned by $p$ (with tail memory $K$), then the party partition isometry $U_p^a$ acts on $e\in H$ and $y\in K$ as
     \begin{align}
-        e\otimes y\longmapsto(e\otimes1)\otimes y.
+        U_p^a(e\otimes y) & = (e\otimes1)\otimes y.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    Partitioning the remaining registers first sends $y$ to $1\otimes y$ because their selected memory is
-    $\C$. Adjoining the first register
-    and applying the associativity isometry gives
-    $e\otimes y\mapsto(e\otimes1)\otimes y$.
+    Since $p$ owns no tail register, partitioning the tail sends $y\mapsto 1\otimes y\in\C\otimes K$, and adjoining the selected head $e\in H$ via associativity yields $(e\otimes1)\otimes y$.
 \end{proof}
 
-\begin{theorem}[Grouping prescribed physical columns in arbitrary local coordinates]
+\begin{lemma}[Grouping prescribed physical columns in arbitrary local coordinates]
     \label{thm:peps_basis_physical_columns_local_coordinates}
     \lean{TNLean.Lattice.PartyCircuit.groupByPartyIso_familyPhysicalListBasis_eq_partyListBasis}
     \leanok
     \uses{def:peps_family_physical_output,def:peps_party_tensor_basis}
-    Let $P$ be an arbitrary set of parties, let $d_p$ be arbitrary
-    nonnegative integers, and let $\mathbf p=(p_0,\ldots,p_{m-1})$
-    be an ordered list without repetitions. Put
-    $a=a_{\mathbf d}(\mathbf p)$, with register $\C^{d_{p_j}}$
-    at the party in position $j$. For each party $p$, let $b_p$
-    be an orthonormal basis of the complete memory $M(a_p)$,
-    indexed by a finite set $I_p$. Let
-    $x\in\prod_{p\in P}\{0,\ldots,d_p-1\}$ and
-    $y\in\prod_{p\in P} I_p$.
-
-    Suppose that, at every party in $\mathbf p$, the
-    singleton-memory identification sends $b_p(y_p)$ to
-    $e_{x_p}\otimes1$. Then grouping the prescribed physical tensor
-    column gives the ordered column of these local bases:
+    For $d_p\in\N$ and a repetition-free list $\mathbf p=(p_0,\ldots,p_{m-1})$ in $P$, let $a=a_{\mathbf d}(\mathbf p)$ have ordered Euclidean basis $b_{\mathbf d,\mathbf p}$ (Definition~\ref{def:peps_family_physical_output}), and let $(b_p(y))_{y\in I_p}$ be orthonormal bases of $M(a_p)$ with ordered product basis $b_{a,\mathbf p}$ (Definition~\ref{def:peps_party_tensor_basis}). If $x\in\prod_{p\in P}\{0,\ldots,d_p-1\}$ and $y\in\prod_{p\in P}I_p$ satisfy $b_{p_j}(y_{p_j})=e_{p_j,x_{p_j}}\otimes1$ under $M(a_{p_j})=H_{p_j}\otimes\C$ for all $j$, then
     \begin{align}
         G_{\mathbf p,a}\,
         b_{\mathbf d,\mathbf p}\bigl((x_{p_j})_{j=0}^{m-1}\bigr)
         = b_{a,\mathbf p}\bigl((y_{p_j})_{j=0}^{m-1}\bigr).
     \end{align}
-    Here $b_{\mathbf d,\mathbf p}$ is the ordered Euclidean tensor
-    basis, $G_{\mathbf p,a}$ successively separates the complete memories
-    in the listed order, and $b_{a,\mathbf p}$ is the ordered tensor
-    basis formed from $b_{p_0},\ldots,b_{p_{m-1}}$.
-    Both ordered memories retain their terminal scalar factor $\C$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_selected_head_partition,def:peps_party_tensor_basis}
-    By induction on the length of the ordered list, both columns are $1\in\C$ for the empty list. At a nonempty list, the first
-    party does not occur in the tail, so the selected-register partition
-    separates its physical column as $e_{x_p}\otimes1$
-    and the induction hypothesis applies to the tail. The prescribed physical
-    column thus groups as the ordered tensor product of its singleton
-    columns. By the given identifications, these are
-    $b_{p_j}(y_{p_j})$ at every listed party. The ordered tensor basis
-    has the same column,
-    \begin{align}
-        b_{p_0}(y_{p_0})\otimes\cdots\otimes
-        b_{p_{m-1}}(y_{p_{m-1}})\otimes1.
-    \end{align}
+    By induction on $\mathbf p$: for $\mathbf p=\varnothing$ both sides equal $1\in\C$, and for a nonempty list Lemma~\ref{thm:peps_selected_head_partition} separates the head factor as $e_{p_0,x_{p_0}}\otimes1=b_{p_0}(y_{p_0})$ while the induction hypothesis transforms the tail into $b_{p_1}(y_{p_1})\otimes\cdots\otimes b_{p_{m-1}}(y_{p_{m-1}})\otimes1$.
 \end{proof}
 
-\begin{theorem}[Compatibility of physical and party coordinates]
+\begin{lemma}[Compatibility of physical and party coordinates]
     \label{thm:peps_family_physical_party_basis}
     \lean{TNLean.Lattice.PartyCircuit.familyLabelledPhysicalBasis_eq_partyGroupedBasis}
     \leanok
-    Let the physical register list $a$ and the singleton bases $b_p$
-    be as above. For every physical assignment $x$,
+    For the physical register list $a$ of Definition~\ref{def:peps_family_physical_output} and the singleton bases $b_p$ of Definition~\ref{def:peps_singleton_physical_basis}, every $x\in\prod_{p\in P}\{0,\ldots,d_p-1\}$ satisfies
     \begin{align}
         G_a E_x
          & =(e_{p_1,x_{p_1}}\otimes1)\otimes\cdots
-        \otimes(e_{p_m,x_{p_m}}\otimes1)\otimes1.
+        \otimes(e_{p_m,x_{p_m}}\otimes1)\otimes1,
     \end{align}
-    Thus the labelled physical basis equals the party basis on the
-    original register order.
-\end{theorem}
+    so $E_x=B^a_x$ (Definition~\ref{def:peps_party_grouped_basis}).
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:peps_party_grouped_basis,def:peps_family_physical_output,
         def:peps_singleton_physical_basis,thm:peps_selected_head_partition}
-    On any ordered list without repetitions retaining
-    only its physical registers, induction on the list starts from the empty
-    list, where both memories are $\C$ with basis vector $1$. In the
-    induction step, no remaining register is owned by the first party,
-    so Theorem~\ref{thm:peps_selected_head_partition} separates its basis
-    vector as $e_{p,j}\otimes1$ and the induction hypothesis applies to the ordered physical basis
-    vector on the tail.
-    When the list exhausts $P$, applying $G_a^{-1}$ to the resulting equality
-    gives equality of the two bases.
+    Inducting on the repetition-free party list via Lemma~\ref{thm:peps_selected_head_partition} separates each head factor as $e_{p_i,x_{p_i}}\otimes1=b_{p_i}(x_{p_i})$ (Definition~\ref{def:peps_singleton_physical_basis}), and applying $G_a^{-1}$ gives $E_x=B^a_x$ by Definition~\ref{def:peps_party_grouped_basis}.
 \end{proof}
 
 \begin{definition}[Joint physical and private basis of one party]
     \label{def:peps_party_local_output_basis}
     \lean{TNLean.Lattice.PartyCircuit.partyLocalOutputBasis}
     \leanok
-    For register lists $a,c$, choose orthonormal bases $b_p$ of
-    $M(a_p)$ and $f_p$ of $M(c_p)$, indexed respectively by finite
-    sets $X_p$ and $F_p$. Let $J_{u,v}:M(u\mathbin{+\!+}v)
-        \longrightarrow M(u)\otimes M(v)$ be the concatenation
-    isometry. The joint basis at party $p$ has column
-    $J_{a_p,c_p}^{-1}(b_p(x_p)\otimes f_p(y_p))$, under the
-    identification $(a\mathbin{+\!+}c)_p=a_p\mathbin{+\!+}c_p$.
+    Given orthonormal bases $(b_p(x))_{x\in X_p}$ of $M(a_p)$ and $(f_p(y))_{y\in F_p}$ of $M(c_p)$, the joint basis of $M((a\mathbin{+\!+}c)_p)$ (under $(a\mathbin{+\!+}c)_p=a_p\mathbin{+\!+}c_p$) has columns $J_{a_p,c_p}^{-1}(b_p(x_p)\otimes f_p(y_p))$ for $(x_p,y_p)\in X_p\times F_p$.
 \end{definition}
 
-\begin{theorem}[Concatenating physical and private party bases]
+\begin{lemma}[Concatenating physical and private party bases]
     \label{thm:peps_party_grouped_basis_append}
     \lean{TNLean.Lattice.PartyCircuit.partyGroupedBasis_append}
     \leanok
-    With the joint local bases just defined, let $B^{a+c}$ denote
-    their party basis on $M(a\mathbin{+\!+}c)$, and let $B^a,B^c$
-    be the separately grouped party bases. Then for all
-    assignments $x_p\in X_p$ and $y_p\in F_p$,
+    For the party-grouped bases $B^a,B^c,B^{a+c}$ of Definition~\ref{def:peps_party_grouped_basis} built from $b_p,f_p$ and their joint basis of Definition~\ref{def:peps_party_local_output_basis}, every $x\in\prod_p X_p$ and $y\in\prod_p F_p$ satisfy
     \begin{align}
         B^{a+c}_{(x,y)}=J_{a,c}^{-1}(B^a_x\otimes B^c_y).
     \end{align}
-    The index $(x,y)$ denotes the assignment $p\mapsto(x_p,y_p)$;
-    equivalently, this is equality of the two bases after
-    separating the two assignment families.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:peps_party_grouped_basis,def:peps_party_local_output_basis}
-    By induction on the ordered party list, partitioning a concatenation
-    first partitions each list and then regroups its four factors,
-    joining the two selected memories and the two complementary
-    memories so that the selected vector is the stated joint local column.
-    Applying the induction hypothesis to the two complementary lists
-    and then applying $G_{a+c}^{-1}$ completes the step, while for the empty list all memories
-    are scalar and the assertion reduces to multiplication in $\C$.
+    By induction on the party list: at each step, partitioning $a\mathbin{+\!+}c$ combines the selected factors into $J_{a_p,c_p}^{-1}(b_p(x_p)\otimes f_p(y_p))$ (Definition~\ref{def:peps_party_local_output_basis}) and the complementary factors by the induction hypothesis, after which $G_{a+c}^{-1}$ yields the identity (Definition~\ref{def:peps_party_grouped_basis}).
 \end{proof}
 
 These coordinate identities apply to the local contractions in
 \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 \texttt{04-compression.tex}, lines 137--151 and 565--588.
 
-\begin{theorem}[Party memories after selecting all original parties]
+\begin{lemma}[Party memories after selecting all original parties]
     \label{thm:peps_selected_physical_party_layouts}
     \lean{TNLean.Lattice.PartyCircuit.Layout.atParty_none_mapOwner_all}
     \leanok
     \lean{TNLean.Lattice.PartyCircuit.Layout.atParty_some_mapOwner_all}
     \uses{def:peps_affected_owner,def:peps_party_registers,def:peps_owner_layout}
-    Let $P$ be any party set, let
-    $Q=P\sqcup\{*\}$, and let $\iota:P\to Q$
-    assign each original party its selected owner. In the all-party selection from the proof of
-    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, for any register list $a$,
-    the registers of $\iota_*a$ at $*$ form the empty list, and at $\iota(p)$
-    their list is $\iota_*(a_p)$ in the original order.
-\end{theorem}
+    For $Q=P\sqcup\{*\}$, the inclusion $\iota:P\to Q$ in the all-party selection of \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, and any register list $a$, one has $(\iota_*a)_*=\varnothing$ and $(\iota_*a)_{\iota(p)}=\iota_*(a_p)$ for all $p\in P$.
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_excluded_mapped_owners,thm:peps_basis_owner_restriction}
-    No original party maps to $*$, so restriction to $*$ is empty.
-    An original register maps to $\iota(p)$ exactly when its owner is $p$.
-    Restriction after relabelling therefore selects $a_p$.
+    Since $*\notin\iota(P)$ and $\iota^{-1}(\{\iota(p)\})=\{p\}$, Lemmas~\ref{thm:peps_excluded_mapped_owners} and~\ref{thm:peps_basis_owner_restriction} give $(\iota_*a)_*=\varnothing$ and $(\iota_*a)_{\iota(p)}=\iota_*(a_p)$.
 \end{proof}
 
 % Polynomial-PEPS Theorem 5.2, 04-compression.tex, lines 137--151 and 565--588.
@@ -297,37 +187,25 @@ These coordinate identities apply to the local contractions in
     \leanok
     \lean{TNLean.Lattice.PartyCircuit.selectedFamilyPhysicalPartyBasis}
     \uses{thm:peps_selected_physical_party_layouts,def:peps_singleton_physical_basis}
-    Let $d:P\to\mathbb N$ specify the original physical dimensions,
-    and let $\mathbf p$ list every original party exactly once. Set
-    $X_*=\{\bullet\}$ and $X_{\iota(p)}=\{0,\ldots,d(p)-1\}$.
-    On the physical memory at $*$, take the scalar basis with column $1$.
-    At $\iota(p)$, map the original singleton physical basis
-    $b_p$ along the owner isometry and the register-list equality
-    of Theorem~\ref{thm:peps_selected_physical_party_layouts}.
-    Denote the resulting basis by $b^{\mathrm{sel}}_{\iota(p)}$.
+    For $d:P\to\mathbb N$ and a repetition-free list $\mathbf p$ of $P$, set $X_*:=\{\bullet\}$ and $X_{\iota(p)}:=\{0,\ldots,d(p)-1\}$. Define the orthonormal basis $b^{\mathrm{sel}}_q$ of $M((\iota_*a)_q)$ by $b^{\mathrm{sel}}_{*}(\bullet):=1\in\C$ at $q=*$, and by transporting $b_p$ (Definition~\ref{def:peps_singleton_physical_basis}) along the owner isometry and Lemma~\ref{thm:peps_selected_physical_party_layouts} at $q=\iota(p)$.
 \end{definition}
 
 % Polynomial-PEPS Theorem 5.2, 04-compression.tex, lines 137--151, 409--417 and 565--588.
 
 
-\begin{theorem}[Original physical columns after selecting all parties]
+\begin{lemma}[Original physical columns after selecting all parties]
     \label{thm:peps_selected_family_physical_columns}
     \lean{TNLean.Lattice.PartyCircuit.selectedFamilyPhysicalPartyBasis_none_apply_heq}
     \leanok
     \lean{TNLean.Lattice.PartyCircuit.selectedFamilyPhysicalPartyBasis_some_apply_heq}
     \uses{def:peps_selected_family_physical_basis}
-    Under these memory identifications,
-    $b^{\mathrm{sel}}_{*,\bullet}=1$ and
-    $b^{\mathrm{sel}}_{\iota(p),j}=b_{p,j}$ for every $j\in X_{\iota(p)}$.
-\end{theorem}
+    Under the memory identifications of Definition~\ref{def:peps_selected_family_physical_basis}, $b^{\mathrm{sel}}_{*,\bullet}=1$ and $b^{\mathrm{sel}}_{\iota(p),j}=b_{p,j}$ for all $p\in P$ and $j\in X_{\iota(p)}$.
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_selected_family_physical_basis,thm:peps_basis_memory_equalities,
         thm:peps_basis_owner_memory}
-    The scalar singleton basis has column $1$. Equality identifications of
-    register lists preserve vectors. The owner isometry also
-    preserves each vector under the equality of the underlying memory spaces,
-    so the mapped original columns have the stated values.
+    Immediate from Definition~\ref{def:peps_selected_family_physical_basis} and Lemmas~\ref{thm:peps_basis_memory_equalities} and~\ref{thm:peps_basis_owner_memory}.
 \end{proof}
 
 
@@ -339,22 +217,13 @@ These coordinate identities apply to the local contractions in
     \leanok
     \lean{TNLean.Lattice.PartyCircuit.selectedPhysicalPrivateBasis_apply_heq}
     \uses{def:peps_selected_family_physical_basis,def:peps_party_local_output_basis}
-    Write $a$ for the original physical register list and $c$ for the private
-    output list. For each selected owner $q$, choose an orthonormal basis
-    $f_q$ of $M((\iota_*c)_q)$, indexed by a finite set $F_q$.
-    The local basis on $M((\iota_*(a\mathbin{+\!+}c))_q)$ has indices
-    $(x_q,e_q)\in X_q\times F_q$ and column
+    For the physical list $a$, private output list $c$, and orthonormal bases $(f_q(e_q))_{e_q\in F_q}$ of $M((\iota_*c)_q)$ ($q\in Q$), define the local basis of $M((\iota_*(a\mathbin{+\!+}c))_q)$ (under $(\iota_*(a\mathbin{+\!+}c))_q=(\iota_*a)_q\mathbin{+\!+}(\iota_*c)_q$) for $(x_q,e_q)\in X_q\times F_q$ by
     \begin{align}
         C_q(x_q,e_q)
          & =J_{(\iota_*a)_q,(\iota_*c)_q}^{-1}
         \bigl(b^{\mathrm{sel}}_q(x_q)\otimes f_q(e_q)\bigr).
         \label{eq:peps_selected_physical_private_column}
     \end{align}
-    Here the two memories are identified using
-    $(\iota_*(a\mathbin{+\!+}c))_q
-        =(\iota_*a)_q\mathbin{+\!+}(\iota_*c)_q$.
-    Thus the physical coordinate has its original dimension at each
-    $\iota(p)$ and a single scalar coordinate at $*$ in~(\ref{eq:peps_selected_physical_private_column}).
 \end{definition}
 
 
@@ -364,22 +233,17 @@ These coordinate identities apply to the local contractions in
     \lean{TNLean.Lattice.PartyCircuit.selectedFamilyPhysicalConfigEquiv}
     \leanok
     \uses{def:peps_selected_family_physical_basis}
-    The bijection
-    $e:\prod_{q\in Q}X_q\to
-        \prod_{p\in P}\{0,\ldots,d(p)-1\}$,
-    given by $e(x)_p=x_{\iota(p)}$, removes the single exterior coordinate. Its inverse assigns
-    $x_*=\bullet$ and $x_{\iota(p)}=y_p$.
+    The bijection $e:\prod_{q\in Q}X_q\to\prod_{p\in P}\{0,\ldots,d(p)-1\}$ is defined by $e(x)_p:=x_{\iota(p)}$, with inverse $e^{-1}(y)_*=\bullet$ and $e^{-1}(y)_{\iota(p)}=y_p$.
 \end{definition}
 
 
 
-\begin{theorem}[The exterior scalar in original physical configurations]
+\begin{lemma}[The exterior scalar in original physical configurations]
     \label{thm:peps_selected_physical_product_scalar}
     \lean{TNLean.Lattice.PartyCircuit.partyProductMatrix_selectedFamilyPhysicalConfig}
     \leanok
     \uses{def:peps_selected_physical_configurations}
-    Let $P$ be finite, and let $M_q$ be arbitrary complex matrices
-    indexed by $X_q$. In the original physical configurations,
+    For finite $P$, matrices $M_q\in\C^{X_q\times X_q}$ ($q\in Q$), and $x,y\in\prod_{p\in P}\{0,\ldots,d(p)-1\}$,
     \begin{align}
         \prod_{q\in Q}
         (M_q)_{e^{-1}(x)_q,e^{-1}(y)_q}
@@ -387,13 +251,11 @@ These coordinate identities apply to the local contractions in
         \prod_{p\in P}(M_{\iota(p)})_{x_p,y_p}.
         \label{eq:peps_selected_physical_product_scalar}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_selected_physical_configurations}
-    Separating the exterior factor from the finite product over
-    $Q=P\sqcup\{*\}$ and relabelling the remaining
-    factors by their original owners gives the stated product factorization.
+    Split the product over $Q=\{*\}\sqcup\iota(P)$ and substitute Definition~\ref{def:peps_selected_physical_configurations}.
 \end{proof}
 
 
@@ -406,32 +268,24 @@ These coordinate identities apply to the local contractions in
     \lean{TNLean.Lattice.PartyCircuit.selectedPartyOrder_nodup}
     \lean{TNLean.Lattice.PartyCircuit.mem_selectedPartyOrder}
     \uses{thm:peps_selected_physical_party_layouts}
-    From the original order $\mathbf p=(p_0,\ldots,p_{m-1})$, form
-    $\mathbf q=(*,\iota(p_0),\ldots,\iota(p_{m-1}))$.
-    If $\mathbf p$ lists every original party once, then
-    $\mathbf q$ lists every selected owner once.
+    From $\mathbf p=(p_0,\ldots,p_{m-1})$, define $\mathbf q:=(*,\iota(p_0),\ldots,\iota(p_{m-1}))$; if $\mathbf p$ lists $P$ without repetitions, then $\mathbf q$ lists $Q=P\sqcup\{*\}$ without repetitions.
 \end{definition}
 
 
 
-\begin{theorem}[The grouped basis in original physical configurations]
+\begin{lemma}[The grouped basis in original physical configurations]
     \label{thm:peps_selected_physical_basis_grouped}
     \lean{TNLean.Lattice.PartyCircuit.selectedFamilyPhysicalPartyBasis_grouped}
     \leanok
     \uses{def:peps_selected_party_order,def:peps_selected_family_physical_basis,
         def:peps_selected_physical_configurations,def:peps_party_grouped_basis,
         def:peps_family_physical_output}
-    Let $\mathbf p$ list every original party once. Group the
-    relabelled physical memory in the selected order $\mathbf q$, using
-    the local bases $b_q^{\mathrm{sel}}$. Write $B$ for the resulting basis
-    on the original register order, and $U_\iota$ for the owner
-    isometry. In each original physical configuration $x$,
+    Let $\mathbf p$ list $P$ without repetitions, let $B$ be the party-grouped basis of $M(\iota_*a)$ along $\mathbf q$ (Definition~\ref{def:peps_selected_party_order}) built from $b^{\mathrm{sel}}_q$ (Definition~\ref{def:peps_selected_family_physical_basis}), and let $U_\iota:M(a)\to M(\iota_*a)$ be the owner isometry. For every $x\in\prod_{p\in P}\{0,\ldots,d(p)-1\}$,
     \begin{align}
         B_{e^{-1}(x)} & = U_\iota E_x.
         \label{eq:peps_selected_physical_basis_grouped}
     \end{align}
-    The exterior party contributes the scalar column $1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_physical_owner_columns,
@@ -439,44 +293,28 @@ These coordinate identities apply to the local contractions in
         thm:peps_selected_family_physical_columns,thm:peps_basis_empty_first_party,
         thm:peps_basis_grouping_equality,thm:peps_basis_memory_equalities,
         thm:peps_basis_party_recursion}
-    Grouping the relabelled physical column along
-    $(\iota(p_0),\ldots,\iota(p_{m-1}))$ via the owner isometry preserves the
-    ordered physical factors. At each listed owner the selected local column
-    is the original singleton column, so the grouped vector is their
-    ordered tensor product; prepending $*$ contributes only $1$
-    because it owns no register, and mapping back to the register memory
-    gives~(\ref{eq:peps_selected_physical_basis_grouped}).
+    By Lemmas~\ref{thm:peps_physical_owner_columns}, \ref{thm:peps_basis_physical_columns_local_coordinates}, and~\ref{thm:peps_selected_family_physical_columns}, grouping $U_\iota E_x$ along $(\iota(p_0),\ldots,\iota(p_{m-1}))$ yields the ordered product of $b^{\mathrm{sel}}_{\iota(p_j)}(x_{p_j})$; prepending $*$ prepends $1=b^{\mathrm{sel}}_{*}(\bullet)$ by Lemmas~\ref{thm:peps_basis_empty_first_party} and~\ref{thm:peps_basis_party_recursion}, and applying $G_{\mathbf q,\iota_*a}^{-1}$ with Lemmas~\ref{thm:peps_basis_memory_equalities} and~\ref{thm:peps_basis_grouping_equality} gives (\ref{eq:peps_selected_physical_basis_grouped}).
 \end{proof}
 
 
 
 
-\begin{theorem}[Separating the physical and private grouped bases]
+\begin{lemma}[Separating the physical and private grouped bases]
     \label{thm:peps_selected_physical_private_basis_grouped}
     \lean{TNLean.Lattice.PartyCircuit.selectedPhysicalPrivateBasis_grouped}
     \leanok
     \uses{def:peps_selected_physical_private_basis,def:peps_party_grouped_basis,
         thm:peps_party_grouped_basis_append}
-    Choose any order containing every selected owner once.
-    Let $C$ be the grouped basis obtained from the local columns
-    in~(\ref{eq:peps_selected_physical_private_column}), and let
-    $B^{\iota_*a}$ and $B^{\iota_*c}$ be the separately grouped physical
-    and private bases in the same order. Separating the two coordinate
-    families gives
+    Along any repetition-free ordering of $Q$, the party-grouped basis $C$ built from (\ref{eq:peps_selected_physical_private_column}) and the separately grouped bases $B^{\iota_*a},B^{\iota_*c}$ satisfy (under $\iota_*(a\mathbin{+\!+}c)=\iota_*a\mathbin{+\!+}\iota_*c$)
     \begin{align}
         C_{q\mapsto(x_q,e_q)}
          & =J_{\iota_*a,\iota_*c}^{-1}
         \bigl(B^{\iota_*a}_x\otimes B^{\iota_*c}_e\bigr).
         \label{eq:peps_selected_physical_private_basis_grouped}
     \end{align}
-    The output memories are identified through
-    $\iota_*(a\mathbin{+\!+}c)=\iota_*a\mathbin{+\!+}\iota_*c$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_party_grouped_basis_append,thm:peps_basis_memory_equalities}
-    Applying the concatenation identity to the separately relabelled register
-    lists and mapping each local column and the grouped column along the
-    displayed equality of output lists preserves
-    these columns, yielding~(\ref{eq:peps_selected_physical_private_basis_grouped}).
+    Apply Lemma~\ref{thm:peps_party_grouped_basis_append} to $\iota_*a$ and $\iota_*c$ and transport along $\iota_*(a\mathbin{+\!+}c)=\iota_*a\mathbin{+\!+}\iota_*c$ via Lemma~\ref{thm:peps_basis_memory_equalities}.
 \end{proof}

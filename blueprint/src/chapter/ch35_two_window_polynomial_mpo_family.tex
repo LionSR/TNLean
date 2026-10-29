@@ -39,7 +39,7 @@ The interpolation argument requires only spanning, without independence of
 the coefficient operators; see
 \cite{gap:aklv13_interpolation_and_word_count}.
 
-\begin{theorem}[The canonical common middle family]
+\begin{lemma}[The canonical common middle family]
     \label{thm:physical_polynomial_canonical_middle_family}
     \lean{TNLean.MPS.AreaLaw.exists_common_physical_polynomial_mpo_family}
     \leanok
@@ -105,7 +105,7 @@ the coefficient operators; see
     Zero virtual dimension is allowed. The bound $\mathcal B$ is the general
     square-derived bond bound, and neither $\mathcal B$ nor $\beta^k$ is a
     sharper source bond; no running-time assertion is made.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:global_two_window_polynomial_recovery,thm:common_middle_grid_mpo_family,
         thm:common_middle_low_frequency_cardinality,
@@ -129,7 +129,7 @@ the coefficient operators; see
     (\ref{eq:physical_polynomial_canonical_decomposition}).
 \end{proof}
 
-\begin{theorem}[A finite enumeration of the common middle family]
+\begin{lemma}[A finite enumeration of the common middle family]
     \label{thm:physical_polynomial_fin_middle_family}
     \lean{TNLean.MPS.AreaLaw.exists_common_physical_polynomial_mpo_family_fin}
     \leanok
@@ -148,7 +148,7 @@ the coefficient operators; see
     \end{align}
     The number, middle matrices and their trace presentations are chosen
     before both the exterior pair and all polynomial coefficients.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:physical_polynomial_canonical_middle_family}
     Enumerate the finite canonical carrier $I$ by
@@ -158,7 +158,7 @@ the coefficient operators; see
     and finite sum identity are unchanged.
 \end{proof}
 
-\begin{theorem}[A common middle family for polynomial evaluation]
+\begin{lemma}[A common middle family for polynomial evaluation]
     \label{thm:physical_aeval_fin_middle_family}
     \lean{TNLean.MPS.AreaLaw.exists_common_physical_aeval_mpo_family_fin}
     \leanok
@@ -175,7 +175,7 @@ the coefficient operators; see
         \label{eq:physical_aeval_fin_decomposition}
     \end{align}
     The zero polynomial is included, with no normalization condition on $P$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:physical_polynomial_fin_middle_family}
     Apply the preceding theorem with $c_h$ equal to the coefficient of $X^h$

@@ -47,13 +47,11 @@ lines 1324–1333. -/
 abbrev crossingFrequencyIndex (ell k : ℕ) :=
   Fin (2 * ell) × Fin (2 * ell) × Fin (k / (2 * ell) + 1) × Fin (k / (2 * ell) + 1)
 
-end TNLean.MPS.AreaLaw
-
 open Classical in
 /-- A bin selected by two labels and their frequencies is a weighted full-frequency slice.
 The weight restricts the two chosen labels, while the slice fixes their frequencies.
 ALVV, arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
-private theorem frequency_bin_eq_weighted_slice
+theorem frequency_bin_eq_weighted_slice
     {I M : Type*} [AddCommMonoid M] [Module ℂ M]
     (E : Finset (I → ℕ)) (left right : (I → ℕ) → I)
     (u v : I) (i j : ℕ) (coefficient : (I → ℕ) → M) :
@@ -67,8 +65,6 @@ private theorem frequency_bin_eq_weighted_slice
   intro α _
   by_cases hl : left α = u <;> by_cases hr : right α = v <;>
     simp [hl, hr, Prod.mk.injEq]
-
-namespace TNLean.MPS.AreaLaw
 
 open Classical in
 /-- The common degree cutoff and the selected-label mask give one partition

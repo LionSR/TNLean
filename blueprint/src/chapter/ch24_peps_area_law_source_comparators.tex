@@ -1,11 +1,7 @@
 \section{Upper and lower norm comparisons from an auxiliary pair}
 \label{sec:al_comparators_source}
 
-The norm comparisons of \cite[Proposition~8.1]{OpenAI2026AreaLaw} are
-stated for a finite product of finite-dimensional local spaces. One common
-label sequence serves every finite family of nested status partitions,
-every weight and every mean tree, and each remainder is uniform in the
-tree, its terminal probabilities and the symmetric vector.
+The norm comparisons of \cite[Proposition~8.1]{OpenAI2026AreaLaw} apply to a finite product of finite-dimensional local spaces, using a single label sequence across all status families, weights, and mean trees, with remainders uniform in the tree, terminal probabilities, and symmetric vector.
 
 % Source: 07-comparators.tex, prop:comparators, lines 125--214, with the
 % standing data of lines 13--123.
@@ -21,25 +17,9 @@ tree, its terminal probabilities and the symmetric vector.
         TNLean.PEPS.AreaLaw.Scan.Comparators.meanRoot,
         TNLean.PEPS.AreaLaw.Scan.Comparators.ComparatorsStatement}
     \leanok
-    Let $\mathcal H_{\rm phys}$ be the tensor product of finite-dimensional
-    local spaces over a finite set of sites. Let $\widetilde H\ge0$ have the
-    unit ground vector $\widetilde\Omega$ with ground energy $\widetilde E_0$
-    and gap $\widetilde g>0$, that is,
-    $\widetilde H\widetilde\Omega=\widetilde E_0\widetilde\Omega$ and
-    $\widetilde H-\widetilde E_0\ge\widetilde g(1-|\widetilde\Omega\rangle
-        \langle\widetilde\Omega|)$. Fix a set of sites $X$. A typical Schmidt
-    set is a nonempty set $E$ of indices of positive eigenvalues $p_i$ of the
-    reduced density of $X$ such that, for some $w\ge0$,
-    $e^{-S_X-w}\le p_i\le e^{-S_X+w}$ for $i\in E$ and
-    $z=\sum_{i\in E}p_i>0$. Put $d_*=|E|$, $p_i'=p_i/z$ and
-    $S'=-\sum_{i\in E}p_i'\log p_i'$.
-
-    Append systems $C,R$ of dimension $d_*$, put
-    $\mathrm{Bell}_{CR}=d_*^{-1/2}\sum_i|i\rangle_C|i\rangle_R$,
-    $\mathcal V=\mathcal H_{\rm phys}\otimes\mathcal H_C\otimes\mathcal H_R$
-    and $\mathcal S_k=\operatorname{Sym}^k\mathcal V$. For a label $\lambda$ of the
-    symmetric group $S_k$ let $\pi^\lambda_R$ and $\pi^\lambda_C$ be the
-    label projections on the $R$ and $C$ copies, and put
+    On a finite-site tensor-product space $\mathcal H_{\rm phys}$, let $\widetilde H\ge0$ satisfy $\widetilde H\widetilde\Omega=\widetilde E_0\widetilde\Omega$ and $\widetilde H-\widetilde E_0\ge\widetilde g(1-|\widetilde\Omega\rangle\langle\widetilde\Omega|)$ for a unit vector $\widetilde\Omega$ and gap $\widetilde g>0$.
+    For a site subset $X$, a typical Schmidt set is a nonempty index set $E$ of positive eigenvalues $\{p_i\}_{i\in E}$ of $\rho_X$ satisfying $e^{-S_X-w}\le p_i\le e^{-S_X+w}$ ($w\ge0$) and $z=\sum_{i\in E}p_i>0$; set $d_*=|E|$, $p_i'=p_i/z$, and $S'=-\sum_{i\in E}p_i'\log p_i'$.
+    Appending $d_*$-dimensional systems $C,R$ with $\mathrm{Bell}_{CR}=d_*^{-1/2}\sum_i|i\rangle_C|i\rangle_R$, $\mathcal V=\mathcal H_{\rm phys}\otimes\mathcal H_C\otimes\mathcal H_R$, $\mathcal S_k=\operatorname{Sym}^k\mathcal V$, and symmetric-group projections $\pi^\lambda_R,\pi^\lambda_C$, set
     \begin{align}
         \mathrm{pre}_k=\pi_R^{\lambda_k}
         (\widetilde\Omega\otimes\mathrm{Bell}_{CR})^{\otimes k},
@@ -47,144 +27,87 @@ tree, its terminal probabilities and the symmetric vector.
         \overline{\widetilde H}=\frac1k\sum_{i=1}^k\widetilde H^{(i)}.\notag
     \end{align}
 
-    A status family is a finite set of statuses $j$, each consisting of $K$
-    partitions of the sites into disjoint sets $X,U_{j,g},Y_{j,g},V_{j,g}$,
-    $1\le g\le K$, such that $XU_{j,g}Y_{j,g}\subseteq XU_{j',g'}$ for all
-    statuses $j,j'$ and all $g<g'$. For a weight $a>0$ put $t=a/2$, $s=1/4$
-    and $W=aK$. With the common-dimension Schur metrics $W_Q$ at parameter
-    $t$, put
+    A status family is a finite set of statuses $j$, each comprising $K$ site partitions $(X,U_{j,g},Y_{j,g},V_{j,g})$ ($1\le g\le K$) with $XU_{j,g}Y_{j,g}\subseteq XU_{j',g'}$ for all $j,j'$ and $g<g'$.
+    For $a>0$, set $t=a/2$, $s=1/4$, $W=aK$, and with the parameter-$t$ Schur metrics $W_Q$, define
     \begin{align}
         A_{j,g}=(W_{CXU_{j,g}}^{-1}W_{RV_{j,g}}^{-1}W_{Y_{j,g}})^2,
-        \qquad A_j=\prod_{g=1}^KA_{j,g},\notag
+        \qquad A_j=\prod_{g=1}^KA_{j,g}.\notag
     \end{align}
-    and let $\mathcal M$ be the root, on $\mathcal S_k$, of a finite binary
-    mean tree whose leaves carry statuses $j$ with leaf operators $A_j$ and
-    terminal probabilities $w_j$. Write
-    $\langle f\rangle_{\rm av}=K^{-1}\sum_g\sum_jw_jf_{j,g}$.
-    For a vector $\xi\in\mathcal S_k$ put $N=\|\mathcal M^{-s}\xi\|$,
-    $v=\mathcal M^{-s}\xi/N$ and
-    $E_{\rm def}=(\langle v,\overline{\widetilde H}v\rangle-\widetilde E_0)
-        /\widetilde g$. Put
+    Let $\mathcal M$ be the root on $\mathcal S_k$ of a finite binary mean tree with leaf operators $A_j$ and terminal probabilities $w_j$, and write $\langle f\rangle_{\rm av}=K^{-1}\sum_{g,j}w_jf_{j,g}$.
+    For $\xi\in\mathcal S_k$, set $N=\|\mathcal M^{-s}\xi\|$, $v=\mathcal M^{-s}\xi/N$, $E_{\rm def}=(\langle v,\overline{\widetilde H}v\rangle-\widetilde E_0)/\widetilde g$,
     \begin{align}
-        g^{\rm pre}_{j,g}  & =S(XU_{j,g})+S(V_{j,g})-S(Y_{j,g}),\notag \\
-        g^{\rm post}_{j,g} & =S(U_{j,g})+S(U_{j,g}Y_{j,g})-S(Y_{j,g}),
-        \notag
+        g^{\rm pre}_{j,g}  =S(XU_{j,g})+S(V_{j,g})-S(Y_{j,g}),\qquad
+        g^{\rm post}_{j,g} =S(U_{j,g})+S(U_{j,g}Y_{j,g})-S(Y_{j,g}), \notag
     \end{align}
-    and let $g_{\max}$ be the largest of $0$ and the values
-    $g^{\rm pre}_{j,g}$ over the bands and the statuses at the leaves of the
-    tree.
+    and $g_{\max}=\max(\{0\}\cup\{g^{\rm pre}_{j,g}\}_{j,g})$ over the tree leaves.
 
-    Prefix data consist of a finite nested collection $\mathcal R$ of sets of
-    sites disjoint from $X$ and numbers $B_{\rm sh},B_{\rm exc}$ with
-    $S(B)\le B_{\rm sh}$ for $B\in\mathcal R$, such that each $Q=U_{j,g}$ and
-    $Q=U_{j,g}Y_{j,g}$ has a member $B\in\mathcal R$ containing it or
-    contained in it with $1+\log\dim\mathcal H_{B\triangle Q}\le B_{\rm exc}$.
-    Moment data with constants $C_0,c_0$ consist of $\mathcal B\ge1$ such that
-    every $Q\in\{XU_{j,g},V_{j,g},Y_{j,g},U_{j,g},U_{j,g}Y_{j,g}\}$ obeys
+    Prefix data consist of a finite nested family $\mathcal R$ disjoint from $X$ and bounds $B_{\rm sh},B_{\rm exc}$ with $S(B)\le B_{\rm sh}$ ($\forall B\in\mathcal R$) such that every $Q\in\{U_{j,g},U_{j,g}Y_{j,g}\}$ admits $B\in\mathcal R$ with $Q\subseteq B$ or $B\subseteq Q$ and $1+\log\dim\mathcal H_{B\triangle Q}\le B_{\rm exc}$.
+    Moment data with constants $C_0,c_0$ consist of $\mathcal B\ge1$ such that every $Q\in\{XU_{j,g},V_{j,g},Y_{j,g},U_{j,g},U_{j,g}Y_{j,g}\}$ obeys
     \begin{align}
         \log\Tr\rho_Q^{1-u}\le uS(Q)+C_0\mathcal Bu^2,
         \qquad |u|\le c_0/\sqrt{\mathcal B},\notag
     \end{align}
-    with only positive eigenvalues of the marginal $\rho_Q$ in the trace.
+    tracing over positive eigenvalues of $\rho_Q$.
 
-    The statement of the norm comparisons asserts that there are an absolute
-    constant $a_0>0$ and a universal constant $C>0$, and for all
-    $C_0,c_0>0$ constants $c,C'>0$, with the following property. For every
-    such Hamiltonian, set $X$ and typical Schmidt set there is one sequence
-    of labels $\lambda_k$ such that, for every $k>0$, $\mathrm{pre}_k$ is
-    nonzero, lies in $\mathcal S_k$, has norm at most one, satisfies
-    $\overline{\widetilde H}\,\mathrm{pre}_k=\widetilde E_0\,\mathrm{pre}_k$
-    and is fixed by $\pi_C^{\lambda_k}$ and $\pi_R^{\lambda_k}$. For every
-    partition of the sites into disjoint sets $X,U,Y,V$,
+    The norm-comparison statement asserts the existence of universal constants $a_0,C>0$ and, for each $C_0,c_0>0$, constants $c,C'>0$ such that for every $(\widetilde H,X,E)$ there is a label sequence $\lambda_k$ satisfying $0<\|\mathrm{pre}_k\|\le1$, $\mathrm{pre}_k\in\mathcal S_k$, $\overline{\widetilde H}\,\mathrm{pre}_k=\widetilde E_0\,\mathrm{pre}_k$, and $\pi_C^{\lambda_k}\mathrm{pre}_k=\pi_R^{\lambda_k}\mathrm{pre}_k=\mathrm{pre}_k$ for all $k>0$; for every site partition $(X,U,Y,V)$,
     \begin{align}
-        2S_X+g^{\rm pre}-g^{\rm post}=I(X:V)+I(X:YV).
+        2S_X+g^{\rm pre}-g^{\rm post}=I(X:V)+I(X:YV);
         \label{eq:al_comparators_source_identity}
     \end{align}
-    For every status family, $g^{\rm pre}_{j,g}\ge0$, and for every
-    $0<a\le a_0$ the following hold, where each $o_k(1)$ is one sequence
-    tending to zero that does not depend on the tree, its terminal
-    probabilities, the isometric coordinates of $\mathcal S_k$ or the vector
-    $\xi$. For prefix data and all sufficiently large $k$, with $\xi=\mathrm{pre}_k$,
-    \begin{align}
-        -\frac{\log N^2}{k}\le2\log d_*-\log z
-        +2sW\Bigl(\frac{2B_{\rm sh}}z+2B_{\rm exc}\Bigr)+o_k(1).
-        \label{eq:al_comparators_source_rough_upper}
-    \end{align}
-    For every $k>0$, every $\xi\in\mathcal S_k$ with $0<\|\xi\|\le1$ fixed by
-    $\pi_C^{\lambda_k}$ and $\pi_R^{\lambda_k}$, and every $0<\tau<1/2$,
-    \begin{align}
-        -\frac{\log N^2}{k}\ge2sW\Bigl[2S'
-            -C\Bigl(\tau\log d_*+\frac{h(\tau)}a\Bigr)
-            -C\frac{E_{\rm def}}{\tau}S'\Bigr]-o_k(1),
-        \label{eq:al_comparators_source_rough_lower}
-    \end{align}
-    where $h$ is the binary entropy. For moment data with
-    $a\le c/\sqrt{\mathcal B}$, for all sufficiently large $k$ and
-    $\xi=\mathrm{pre}_k$,
-    \begin{align}
-        -\frac{\log N^2}{k}\le2\log d_*-\log z
-        +2sW\Bigl[\langle g^{\rm post}\rangle_{\rm av}
-            +C'\Bigl(a\mathcal B+\frac{|\log z|}a\Bigr)\Bigr]+o_k(1),
-        \label{eq:al_comparators_source_sharp_upper}
-    \end{align}
-    and, for every $k>0$, every such $\xi$ and every $0<\tau<1/2$,
-    \begin{align}
-        -\frac{\log N^2}{k}\ge2sW\Bigl[2S'+(1-\tau)
-            \langle g^{\rm pre}\rangle_{\rm av}
-            -C'\Bigl(\tau\log d_*+\frac{h(\tau)}a+a\mathcal B\Bigr)
-            -C'\frac{E_{\rm def}}\tau(S'+g_{\max})\Bigr]-o_k(1).
-        \label{eq:al_comparators_source_sharp_lower}
-    \end{align}
-    In each comparison $N>0$.
+    and for every status family and $0<a\le a_0$, $g^{\rm pre}_{j,g}\ge0$, $N>0$, and (with $o_k(1)\to0$ independent of the tree, $w_j$, isometric coordinates of $\mathcal S_k$, and $\xi$):
+    \begin{enumerate}
+        \item For prefix data, $\xi=\mathrm{pre}_k$, and $k\gg1$,
+              \begin{align}
+                  -\frac{\log N^2}{k}\le2\log d_*-\log z
+                  +2sW\Bigl(\frac{2B_{\rm sh}}z+2B_{\rm exc}\Bigr)+o_k(1).
+                  \label{eq:al_comparators_source_rough_upper}
+              \end{align}
+        \item For all $k>0$, $0<\tau<1/2$, and $\xi\in\mathcal S_k$ with $0<\|\xi\|\le1$ fixed by $\pi_C^{\lambda_k},\pi_R^{\lambda_k}$ (and binary entropy $h$),
+              \begin{align}
+                  -\frac{\log N^2}{k}\ge2sW\Bigl[2S'
+                      -C\Bigl(\tau\log d_*+\frac{h(\tau)}a\Bigr)
+                      -C\frac{E_{\rm def}}{\tau}S'\Bigr]-o_k(1).
+                  \label{eq:al_comparators_source_rough_lower}
+              \end{align}
+        \item For moment data with $a\le c/\sqrt{\mathcal B}$: for $\xi=\mathrm{pre}_k$ and $k\gg1$,
+              \begin{align}
+                  -\frac{\log N^2}{k}\le2\log d_*-\log z
+                  +2sW\Bigl[\langle g^{\rm post}\rangle_{\rm av}
+                      +C'\Bigl(a\mathcal B+\frac{|\log z|}a\Bigr)\Bigr]+o_k(1),
+                  \label{eq:al_comparators_source_sharp_upper}
+              \end{align}
+              and for all $k>0$, $0<\tau<1/2$, and $\xi$ as in (\ref{eq:al_comparators_source_rough_lower}),
+              \begin{align}
+                  -\frac{\log N^2}{k}\ge2sW\Bigl[2S'+(1-\tau)
+                      \langle g^{\rm pre}\rangle_{\rm av}
+                      -C'\Bigl(\tau\log d_*+\frac{h(\tau)}a+a\mathcal B\Bigr)
+                      -C'\frac{E_{\rm def}}\tau(S'+g_{\max})\Bigr]-o_k(1).
+                  \label{eq:al_comparators_source_sharp_lower}
+              \end{align}
+    \end{enumerate}
 \end{definition}
 
-\begin{theorem}[Upper and lower norm comparisons]
+\begin{lemma}[Upper and lower norm comparisons]
     \label{thm:al_comparators_source}
     \lean{TNLean.PEPS.AreaLaw.Scan.Comparators.comparatorsStatement}
     \leanok
     \uses{def:al_comparators_source_statement}
-    In \cite[Proposition~8.1]{OpenAI2026AreaLaw}, the statement of the norm
-    comparisons holds with $a_0=1/10$, $C=4$,
-    $C'=4+25C_0$ and $c=c_0/10$, where the label sequence is chosen
-    before the status family and the weight, and the two lower comparisons
-    hold for every vector of norm at most one in $\mathcal S_k$ carrying the
-    label $\lambda_k$ on both auxiliary systems, in particular for
-    $\mathrm{pre}_k$.
-\end{theorem}
+    Definition~\ref{def:al_comparators_source_statement} (\cite[Proposition~8.1]{OpenAI2026AreaLaw}) holds with $a_0=1/10$, $C=4$, $C'=4+25C_0$, and $c=c_0/10$, with $\lambda_k$ chosen before the status family and $a$, and (\ref{eq:al_comparators_source_rough_lower}), (\ref{eq:al_comparators_source_sharp_lower}) valid for all $\xi\in\mathcal S_k$ of norm $0<\|\xi\|\le1$ fixed by $\pi_C^{\lambda_k},\pi_R^{\lambda_k}$ (in particular $\xi=\mathrm{pre}_k$).
+\end{lemma}
 
 \begin{proof}
     \leanok
-    The normalized typical Schmidt vector chooses the labels, by the
-    construction of the common auxiliary label in physical coordinates
-    carried out for arbitrary local dimensions, and its auxiliary marginal
-    has entropy $S'$. The label
-    dimensions therefore satisfy $\log\dim\lambda_k=kS'+o(k)$, and the
-    label mass is at least inverse polynomial in $k$. Each $A_{j,g}$
-    preserves $\mathcal S_k$ and, after compression, the bands commute, so
-    $\mathcal M=\prod_g\mathcal M_g$ with $\mathcal M_g$ the root of the
-    same tree with leaves $A_{j,g}$.
+    Choosing $\lambda_k$ from the normalized typical Schmidt vector (whose auxiliary marginal has entropy $S'$) gives $\log\dim\lambda_k=kS'+o(k)$ and inverse-polynomial label mass in $k$.
+    Each $A_{j,g}$ preserves $\mathcal S_k$ and commutes across $g$ after compression, so $\mathcal M=\prod_{g=1}^K\mathcal M_g$ where $\mathcal M_g$ has leaf operators $A_{j,g}$.
 
-    With these identifications the four comparisons are the regional
-    comparisons of \cite[Section~8]{OpenAI2026AreaLaw} at $t=a/2$ and
-    $s=1/4$. The rough upper bound uses the prefix data, and the sharp
-    upper bound uses the moment data on $U_{j,g},U_{j,g}Y_{j,g},Y_{j,g}$
-    with $6a\le c_0/\sqrt{\mathcal B}$. The two lower bounds use the gap of
-    $\widetilde H$ and the label bound $2kS'-\epsilon_k\le2\log\dim\lambda_k$
-    with $\epsilon_k=2|\log\dim\lambda_k-kS'|=o(k)$; the sharp lower bound
-    also uses the moment data on $XU_{j,g},Y_{j,g},V_{j,g}$ with
-    $10a\le c_0/\sqrt{\mathcal B}$. For the sharp lower bound the tree is
-    read on the statuses at its leaves, so that $g_{\max}$ runs over them.
-
-    The explicit finite-$k$ bounds have error terms of order
-    $\log k+a\epsilon_k$, so after division by $k$ they tend to zero. The
-    constants are absorbed as follows, using $a\le1$, $S'\ge0$,
-    $g_{\max}\ge0$ and $E_{\rm def}\ge0$:
-    $2\tau\log d_*+(3+1/a)h(\tau)\le4(\tau\log d_*+h(\tau)/a)$,
-    $25C_0\mathcal Ba\le C'a\mathcal B$,
-    $(E_{\rm def}/\tau)(2S'+g_{\max})\le C'(E_{\rm def}/\tau)(S'+g_{\max})$,
-    $6KC_0\mathcal Ba^2\le2sWC'a\mathcal B$ and
-    $-(K/2)\log z\le2sWC'|\log z|/a$. The identity
-    (\ref{eq:al_comparators_source_identity}) follows from purity of
-    $\widetilde\Omega$, and $g^{\rm pre}_{j,g}=I(XU_{j,g}:V_{j,g})\ge0$ by
-    subadditivity.
+    At $t=a/2$ and $s=1/4$, (\ref{eq:al_comparators_source_rough_upper})--(\ref{eq:al_comparators_source_sharp_lower}) follow from the regional bounds of \cite[Section~8]{OpenAI2026AreaLaw}: (\ref{eq:al_comparators_source_rough_upper}) uses prefix data; (\ref{eq:al_comparators_source_sharp_upper}) uses moment data on $\{U_{j,g},U_{j,g}Y_{j,g},Y_{j,g}\}$ with $6a\le c_0/\sqrt{\mathcal B}$; and (\ref{eq:al_comparators_source_rough_lower}), (\ref{eq:al_comparators_source_sharp_lower}) use the gap $\widetilde g$, $2kS'-\epsilon_k\le2\log\dim\lambda_k$ ($\epsilon_k=2|\log\dim\lambda_k-kS'|=o(k)$), and (for (\ref{eq:al_comparators_source_sharp_lower})) moment data on $\{XU_{j,g},Y_{j,g},V_{j,g}\}$ with $10a\le c_0/\sqrt{\mathcal B}$.
+    The finite-$k$ error $O((\log k+a\epsilon_k)/k)=o_k(1)$, and for $a\le1$ and $S',g_{\max},E_{\rm def}\ge0$,
+    \begin{align}
+        2\tau\log d_*+(3+a^{-1})h(\tau)  & \le 4(\tau\log d_*+h(\tau)/a),         &
+        25C_0\mathcal Ba                 & \le C'a\mathcal B, \notag                \\
+        (E_{\rm def}/\tau)(2S'+g_{\max}) & \le C'(E_{\rm def}/\tau)(S'+g_{\max}), &
+        6KC_0\mathcal Ba^2               & \le 2sWC'a\mathcal B, \notag
+    \end{align}
+    together with $-(K/2)\log z\le2sWC'|\log z|/a$.
+    Purity of $\widetilde\Omega$ gives (\ref{eq:al_comparators_source_identity}), and subadditivity gives $g^{\rm pre}_{j,g}=I(XU_{j,g}:V_{j,g})\ge0$.
 \end{proof}
