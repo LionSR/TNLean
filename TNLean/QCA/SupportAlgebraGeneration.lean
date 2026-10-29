@@ -298,7 +298,7 @@ theorem embeddedOddSupportAlgebra_le_supportAlgebraJoin
   rw [supportAlgebraJoin, ← embeddedSupportAlgebra_odd hω x]
   exact le_iSup (fun y : ℤ ↦ embeddedSupportAlgebra hω y) (2 * x + 1)
 
-/-- The image of a pair algebra under the automorphism lies in the join of the support algebras.
+/-- The image of a pair algebra lies in the join of its two adjacent support algebras.
 
 The two-sided support containment writes the finite image of \(\mathcal A_{E_x}\) inside the
 Kronecker span of \(\mathcal R_{2x}\) and \(\mathcal R_{2x+1}\), and that span is the join of the
@@ -308,10 +308,12 @@ This is the containment
 \(\omega(\mathcal A_{E_x})\subseteq\mathcal R_{2x}\otimes\mathcal R_{2x+1}\)
 used in GNVW, arXiv:0910.3675v2, lines 1276--1278; see the homogeneous-chain scope statement in
 the module docstring. -/
-theorem quasiLocalObservable_evenPair_mem_supportAlgebraJoin
+theorem quasiLocalObservable_evenPair_mem_adjacentSupportJoin
     (hω : PropagatesWithin ω (Finset.Icc (-1) 1)) (x : ℤ)
     (A : LocalAlgebra d (evenPair x)) :
-    ω (quasiLocalObservable d (evenPair x) A) ∈ supportAlgebraJoin hω := by
+    ω (quasiLocalObservable d (evenPair x) A) ∈
+      embeddedEvenSupportAlgebra hω x ⊔ embeddedOddSupportAlgebra hω x := by
+  let J := embeddedEvenSupportAlgebra hω x ⊔ embeddedOddSupportAlgebra hω x
   have hΓΔ : Disjoint (leftPair x) (rightPair x) := disjoint_leftPair_rightPair x
   have htarget : regionSumset (evenPair x) (Finset.Icc (-1) 1) =
       leftPair x ∪ rightPair x := regionSumset_evenPair x
@@ -341,7 +343,7 @@ theorem quasiLocalObservable_evenPair_mem_supportAlgebraJoin
       ((bipartiteLocalAlgebraEquiv hΓΔ).symm Y) := fun _ ↦ rfl
   have hleft : (evenSupportAlgebra hω x).map
       (Matrix.leftKroneckerEmbed (n := Config d (rightPair x))) ≤
-      (supportAlgebraJoin hω).comap φ := by
+      J.comap φ := by
     rw [StarSubalgebra.map_le_iff_le_comap]
     intro a ha
     rw [StarSubalgebra.mem_comap, StarSubalgebra.mem_comap]
@@ -350,14 +352,14 @@ theorem quasiLocalObservable_evenPair_mem_supportAlgebraJoin
         Matrix.leftKroneckerEmbed (n := Config d (rightPair x)) a :=
       bipartiteLocalAlgebraEquiv_localInclusion_left hΓΔ (CStarMatrix.ofMatrix a)
     change φ (Matrix.leftKroneckerEmbed (n := Config d (rightPair x)) a) ∈
-      supportAlgebraJoin hω
+      J
     rw [hφ_apply, ← hinc, StarAlgEquiv.symm_apply_apply,
       quasiLocalObservable_localInclusion]
-    exact embeddedEvenSupportAlgebra_le_supportAlgebraJoin hω x
+    exact (show embeddedEvenSupportAlgebra hω x ≤ J from le_sup_left)
       (StarSubalgebra.mem_map.mpr ⟨a, ha, rfl⟩)
   have hright : (oddSupportAlgebra hω x).map
       (Matrix.rightKroneckerEmbed (m := Config d (leftPair x))) ≤
-      (supportAlgebraJoin hω).comap φ := by
+      J.comap φ := by
     rw [StarSubalgebra.map_le_iff_le_comap]
     intro a ha
     rw [StarSubalgebra.mem_comap, StarSubalgebra.mem_comap]
@@ -366,16 +368,27 @@ theorem quasiLocalObservable_evenPair_mem_supportAlgebraJoin
         Matrix.rightKroneckerEmbed (m := Config d (leftPair x)) a :=
       bipartiteLocalAlgebraEquiv_localInclusion_right hΓΔ (CStarMatrix.ofMatrix a)
     change φ (Matrix.rightKroneckerEmbed (m := Config d (leftPair x)) a) ∈
-      supportAlgebraJoin hω
+      J
     rw [hφ_apply, ← hinc, StarAlgEquiv.symm_apply_apply,
       quasiLocalObservable_localInclusion]
-    exact embeddedOddSupportAlgebra_le_supportAlgebraJoin hω x
+    exact (show embeddedOddSupportAlgebra hω x ≤ J from le_sup_right)
       (StarSubalgebra.mem_map.mpr ⟨a, ha, rfl⟩)
   have hφX : φ X = ω (quasiLocalObservable d (evenPair x) A) := by
     rw [hφ_apply, hX, StarAlgEquiv.symm_apply_apply, hb]
     exact quasiLocalObservable_transport_localRestriction hω htarget A
   rw [← hφX]
   exact sup_le hleft hright hXjoin
+
+/-- The actual pair image also lies in the join of the entire support
+family. This follows from containment in its two adjacent support factors;
+GNVW, arXiv:0910.3675v2, source lines 1276--1279. -/
+theorem quasiLocalObservable_evenPair_mem_supportAlgebraJoin
+    (hω : PropagatesWithin ω (Finset.Icc (-1) 1)) (x : ℤ)
+    (A : LocalAlgebra d (evenPair x)) :
+    ω (quasiLocalObservable d (evenPair x) A) ∈ supportAlgebraJoin hω :=
+  (sup_le (embeddedEvenSupportAlgebra_le_supportAlgebraJoin hω x)
+    (embeddedOddSupportAlgebra_le_supportAlgebraJoin hω x))
+      (quasiLocalObservable_evenPair_mem_adjacentSupportJoin hω x A)
 
 /-- Every image of an algebraic local observable under the automorphism lies in the join of the
 support algebras.

@@ -37,6 +37,77 @@ namespace PropagatesWithin
 variable {d : ℕ} [NeZero d]
   {ω : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d}
 
+private theorem commute_of_mem_sup {S T : StarSubalgebra ℂ (QuasiLocalAlgebra d)}
+    {z w : QuasiLocalAlgebra d}
+    (hS : ∀ r ∈ S, Commute z r) (hT : ∀ r ∈ T, Commute z r)
+    (hw : w ∈ S ⊔ T) : Commute z w := by
+  have hle (U : StarSubalgebra ℂ (QuasiLocalAlgebra d))
+      (hU : ∀ r ∈ U, Commute z r) :
+      U ≤ StarSubalgebra.centralizer ℂ ({z} : Set (QuasiLocalAlgebra d)) := by
+    intro r hr
+    rw [StarSubalgebra.mem_centralizer_iff]
+    intro g hg
+    rw [Set.mem_singleton_iff] at hg
+    subst g
+    have hstar := congrArg star (hU (star r) (star_mem hr)).eq
+    simp only [star_mul, star_star] at hstar
+    exact ⟨(hU r hr).eq, hstar.symm⟩
+  exact ((StarSubalgebra.mem_centralizer_iff ℂ).mp
+    ((sup_le (hle S hS) (hle T hT)) hw) z rfl).1
+
+/-- The joins belonging to different image pairs commute, because their
+four support labels are distinct. Source: GNVW, arXiv:0910.3675v2,
+Section 7.2, source lines 1276--1287. -/
+theorem adjacentSupportJoin_commute
+    (hω : PropagatesWithin ω (Finset.Icc (-1) 1)) (x y : ℤ) (hxy : x ≠ y)
+    {z w : QuasiLocalAlgebra d}
+    (hz : z ∈ embeddedEvenSupportAlgebra hω x ⊔ embeddedOddSupportAlgebra hω x)
+    (hw : w ∈ embeddedEvenSupportAlgebra hω y ⊔ embeddedOddSupportAlgebra hω y) :
+    Commute z w := by
+  have hz' : z ∈ embeddedSupportAlgebra hω (2 * x) ⊔
+      embeddedSupportAlgebra hω (2 * x + 1) := by
+    simpa only [embeddedSupportAlgebra_even, embeddedSupportAlgebra_odd] using hz
+  have hw' : w ∈ embeddedSupportAlgebra hω (2 * y) ⊔
+      embeddedSupportAlgebra hω (2 * y + 1) := by
+    simpa only [embeddedSupportAlgebra_even, embeddedSupportAlgebra_odd] using hw
+  apply commute_of_mem_sup (hw := hw')
+  · intro r hr
+    apply Commute.symm
+    apply commute_of_mem_sup (hw := hz')
+    · intro s hs
+      exact (embeddedSupportAlgebra_pairwise_commute hω _ _ (by omega) s hs r hr).symm
+    · intro s hs
+      exact (embeddedSupportAlgebra_pairwise_commute hω _ _ (by omega) s hs r hr).symm
+  · intro r hr
+    apply Commute.symm
+    apply commute_of_mem_sup (hw := hz')
+    · intro s hs
+      exact (embeddedSupportAlgebra_pairwise_commute hω _ _ (by omega) s hs r hr).symm
+    · intro s hs
+      exact (embeddedSupportAlgebra_pairwise_commute hω _ _ (by omega) s hs r hr).symm
+
+/-- An element of one adjacent-support join which commutes with its actual
+image-pair algebra is scalar. It commutes with every other image pair by
+pairwise support commutation, so image-pair generation makes it central
+globally. This is the relative-commutant step of GNVW,
+arXiv:0910.3675v2, Section 7.2, source lines 1276--1287. -/
+theorem existsUnique_eq_smul_one_of_mem_adjacentSupportJoin_commute_image
+    (hω : PropagatesWithin ω (Finset.Icc (-1) 1)) (x : ℤ)
+    (z : QuasiLocalAlgebra d)
+    (hz : z ∈ embeddedEvenSupportAlgebra hω x ⊔ embeddedOddSupportAlgebra hω x)
+    (hcomm : ∀ A : LocalAlgebra d (evenPair x),
+      Commute z (ω (quasiLocalObservable d (evenPair x) A))) :
+    ∃! c : ℂ, z = c • (1 : QuasiLocalAlgebra d) := by
+  apply existsUnique_eq_smul_one_of_commute z
+  intro a
+  apply commute_of_forall_commute_image_evenPair ω
+  intro y A
+  by_cases hyx : y = x
+  · subst y
+    exact hcomm A
+  · exact adjacentSupportJoin_commute hω x y hyx.symm hz
+      (quasiLocalObservable_evenPair_mem_adjacentSupportJoin hω y A)
+
 /-- Every actual embedded support algebra has scalar center, by generation
 and pairwise commutation. Source: GNVW, arXiv:0910.3675v2, lines 1276--1282. -/
 theorem embeddedSupportAlgebra_isCentral

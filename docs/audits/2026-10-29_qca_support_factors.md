@@ -39,10 +39,19 @@ Even-pair algebraic generation, density, continuity and surjectivity derive
 commutation with the entire quasi-local algebra. Propagation is not needed
 for this intermediate lemma.
 
+The pair-image containment now lands in its own adjacent support join,
+not merely in the join of the entire family. Distinct such joins commute.
+An element in one join commuting with its actual image-pair algebra therefore
+commutes with every image pair, hence is scalar by the derived intermediate
+commutant theorem. This proves the actual relative-commutant assertion
+required in the first strict-inclusion argument, with no such assertion
+assumed as a premise.
+
 Remaining in #7122: AARReven, AARRodd and both homogeneous size identities.
-Those need the distinct strict-inclusion arguments and the finite relative
-commutant separation theorem. This draft supplies the derived support
-factors required by those arguments, not their conclusions.
+The first equality still needs the finite full-matrix relative-commutant
+separation theorem transported through the now-derived matrix presentations.
+The second has its own ambient-pair strict-inclusion argument. Neither
+adjacent-generation equality is claimed by the present source.
 
 Validation: import-generation, source/prose/whitespace and integrity checks
 passed. No local Lean invocation, build or checkdecls was run, as requested.

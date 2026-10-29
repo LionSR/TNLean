@@ -75,3 +75,31 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
     this containment to its entire image. Surjectivity makes that image
     the full quasi-local algebra.
 \end{proof}
+
+\begin{lemma}[Relative commutant inside an adjacent support pair]
+    \label{lem:qca_adjacent_support_relative_commutant}
+    \lean{SpinChain.PropagatesWithin.quasiLocalObservable_evenPair_mem_adjacentSupportJoin,
+        SpinChain.PropagatesWithin.adjacentSupportJoin_commute,
+        SpinChain.PropagatesWithin.existsUnique_eq_smul_one_of_mem_adjacentSupportJoin_commute_image}
+    \notready
+    \uses{lem:qca_even_pair_image_commutant,
+        thm:qca_site_indexed_support_algebras_commute,thm:qca_quasi_local_center_scalar}
+    Put $\mathcal J_x=\mathcal R_{2x}\vee\mathcal R_{2x+1}$.
+    Then $\omega(\mathcal A_{E_x})\subseteq\mathcal J_x$, the algebras
+    $\mathcal J_x$ and $\mathcal J_y$ commute for $x\ne y$, and
+    \begin{align}
+        \{Z\in\mathcal J_x:[Z,\omega(\mathcal A_{E_x})]=0\}
+         & =\mathbb C I.
+        \label{eq:qca_adjacent_support_relative_commutant}
+    \end{align}
+    This is the relative-commutant argument preceding the first adjacent
+    generation identity in \cite[lines~1276--1287]{Gross2012IndexTheory}.
+\end{lemma}
+\begin{proof}
+    The two-sided support containment gives the first inclusion. The four
+    support labels of distinct pairs are distinct, so their pairwise
+    commutation extends to the two joins. If $Z\in\mathcal J_x$ commutes
+    with its own image-pair algebra, it therefore commutes with every other
+    image-pair algebra as well. Their commutant is the global center, which
+    consists exactly of scalars.
+\end{proof}
