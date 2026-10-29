@@ -18,14 +18,14 @@
     If each $F_v$ is invertible, then $F_V$ is a linear isomorphism.
 \end{definition}
 
-\begin{theorem}[Physical deformation of the closed PEPS vector]%
+\begin{lemma}[Physical deformation of the closed PEPS vector]%
     \label{thm:peps_physical_deformation_closed_state}
     \lean{TNLean.PEPS.stateCoeff_physicalDeform}
     \leanok
     \uses{def:peps_global_physical_map,def:peps_physical_deformation}
     The closed PEPS vectors satisfy
     $\ket{\Psi(A^F)}=F_V\ket{\Psi(A)}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Expand both coefficients as finite sums over virtual labels and
@@ -34,7 +34,7 @@
     the defining local physical sums of $A^F$.
 \end{proof}
 
-\begin{theorem}[Slices under a product physical map]%
+\begin{lemma}[Slices under a product physical map]%
     \label{thm:peps_global_physical_map_slice}
     \lean{TNLean.PEPS.physicalProduct_assembleRegion,
         TNLean.PEPS.regionSliceMap_globalPhysicalMap}
@@ -49,7 +49,7 @@
         =\sum_\beta\left(\prod_{v\in R^c}(F_v)_{\tau_v\beta_v}\right)
         F_R\psi_\beta.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Split each input configuration into its restrictions to $R$ and
@@ -57,7 +57,7 @@
     Interchanging the two finite sums gives the stated identity.
 \end{proof}
 
-\begin{theorem}[Covariance of the common parent ground space]%
+\begin{lemma}[Covariance of the common parent ground space]%
     \label{thm:peps_region_parent_ground_space_physical_transport}
     \lean{TNLean.PEPS.mem_regionParentGroundSpace_iff,
         TNLean.PEPS.globalPhysicalMap_mem_regionParentGroundSpace,
@@ -79,7 +79,7 @@
     define $h_i^F=(F_{R_i}^{-1})^\dagger h_iF_{R_i}^{-1}$.
     The corresponding full parent Hamiltonians satisfy
     $\ker H^F=F_V\ker H$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_global_physical_map_slice,

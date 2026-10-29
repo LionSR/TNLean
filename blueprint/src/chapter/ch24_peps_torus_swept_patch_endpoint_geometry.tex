@@ -15,7 +15,7 @@
     placing the lower partner beyond the final string detour rather than at the endpoint of the displayed lower bond.
 \end{definition}
 
-\begin{theorem}[The translated twenty-site geometry]
+\begin{lemma}[The translated twenty-site geometry]
     \label{thm:peps_torus_swept_patch_endpoint_geometry}
     \lean{TNLean.PEPS.card_sweptPatchCoordinate,
         TNLean.PEPS.torusSweptPatchCoordinate_injective,
@@ -24,7 +24,7 @@
     \leanok
     \uses{def:peps_torus_swept_patch_endpoint_geometry}
     For $R_v$ in (\ref{eq:swept_patch_region}) at any position $v$ (including across either seam), the $20$ listed vertices $p(i,j)$ are distinct ($|R_v|=20$), and on their $6\times 5$ coordinate envelope $[-1,4]\times[-2,2]$, native torus adjacency satisfies $p(i,j)\sim p(i',j')\iff |i-i'|+|j-j'|=1$ (with no wrap-around bonds).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since the offset spans $4-(-1)=5<L_x-1$ and $2-(-2)=4<L_y-1$, residue-class equality and unit differences on $[-1,4]\times[-2,2]$ agree with integer equality and unit differences, giving injectivity ($|R_v|=12+4+4=20$) and excluding wrap-around adjacency.
 \end{proof}
@@ -46,7 +46,7 @@
     A group element $s$ along a rightward or downward matrix arrow in the source figure corresponds to native directed bond value $s^{-1}$ (or its inverse if the ordered bond is reversed).
 \end{definition}
 
-\begin{theorem}[Loop and connector containment]
+\begin{lemma}[Loop and connector containment]
     \label{thm:peps_torus_swept_patch_endpoint_walks}
     \lean{TNLean.PEPS.torusSweptPatchEndpoint_eq,
         TNLean.PEPS.torusSweptPatchEndpointLoop_mem_witness,
@@ -58,12 +58,12 @@
     \uses{thm:peps_torus_swept_patch_endpoint_geometry,
         def:peps_torus_swept_patch_endpoint_walks}
     All four endpoint loops at (\ref{eq:swept_patch_bases}) and both partner connectors are native walks contained in $R_v$, with connector lengths $6$ and $3$, respectively (establishing the finite four-endpoint geometry without identifying a physical braid operation or parent-Hamiltonian membership).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_torus_swept_patch_endpoint_geometry}, every vertex of the four plaquette loops and of the $7$- and $4$-vertex connector sequences lies in (\ref{eq:swept_patch_region}) with unit-offset successive steps.
+    By Lemma~\ref{thm:peps_torus_swept_patch_endpoint_geometry}, every vertex of the four plaquette loops and of the $7$- and $4$-vertex connector sequences lies in (\ref{eq:swept_patch_region}) with unit-offset successive steps.
 \end{proof}
 
-\begin{theorem}[Holonomy along the partner connectors]
+\begin{lemma}[Holonomy along the partner connectors]
     \label{thm:peps_torus_swept_patch_connector_transport}
     \lean{TNLean.PEPS.regularWalkHolonomy_torusSweptPatchConnectorA,
         TNLean.PEPS.regularWalkHolonomy_torusSweptPatchConnectorB}
@@ -74,7 +74,7 @@
         H_A & = U(p(3,1))^{-1}R(p(2,2))R(p(1,2))R(p(0,2))R(p(-1,2))U(p(-1,1)), \label{eq:connector_A_holonomy} \\
         H_B & = U(p(1,-2))^{-1}U(p(1,-1))^{-1}U(p(1,0))^{-1}. \label{eq:connector_B_holonomy}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expanding the $6$-step and $3$-step walks of Definition~\ref{def:peps_torus_swept_patch_endpoint_walks} in reverse multiplication order, with downward steps contributing $U(\cdot)^{-1}$, gives (\ref{eq:connector_A_holonomy})--(\ref{eq:connector_B_holonomy}).
 \end{proof}

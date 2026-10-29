@@ -3,7 +3,7 @@
 The marginal states at different cuts may be smoothed independently.
 Throughout this section the smoothing radius is measured in the full trace norm.
 
-\begin{theorem}[Truncation after independent smoothing]
+\begin{lemma}[Truncation after independent smoothing]
     \label{thm:smoothed_marginal_truncation}
     \lean{TNLean.MPS.AreaLaw.norm_sequentialTruncation_leadingEigenprojection_sub_sq_le_of_smoothing}
     \leanok
@@ -24,7 +24,7 @@ Throughout this section the smoothing radius is measured in the full trace norm.
     \end{align}
     This gives the finite-chain estimate for the smoothing argument
     of~\cite{Schuch2008EntropyScaling}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:chain_sequential_truncation_sq}
@@ -50,7 +50,7 @@ The source writes a minimum. The following sufficient criteria use only the
 infimum and do not require a minimizer. At order zero, $S_0(\sigma)$ is the
 logarithm of the rank.
 
-\begin{theorem}[A finite smooth entropy criterion]
+\begin{lemma}[A finite smooth entropy criterion]
     \label{thm:smooth_renyi_finite_criterion}
     \lean{TNLean.MPS.AreaLaw.exists_normalized_isOpenMPS_of_smoothRenyiEntropy_lt}
     \leanok
@@ -75,7 +75,7 @@ logarithm of the rank.
         -|\phi\rangle\langle\phi|\bigr\|_1 & \le\delta.
         \label{eq:smooth_renyi_trace_error}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:smoothed_marginal_truncation,thm:renyi_entropy_tail_threshold}
@@ -96,7 +96,7 @@ logarithm of the rank.
     between the two unit pure states is therefore at most $\delta$.
 \end{proof}
 
-\begin{theorem}[Efficient approximation from smooth entropy bounds]
+\begin{lemma}[Efficient approximation from smooth entropy bounds]
     \label{thm:smooth_renyi_family_approximation}
     \lean{TNLean.MPS.AreaLaw.isEfficientlyApproximableByMPS_of_smoothRenyiEntropy_le}
     \leanok
@@ -113,7 +113,7 @@ logarithm of the rank.
     This proves the smooth entropy sufficient criterion
     of~\cite{Schuch2008EntropyScaling}; bounds on all blocks in
     particular imply the prefix bounds used here.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:smooth_renyi_finite_criterion,def:efficient_mps_approximation}
