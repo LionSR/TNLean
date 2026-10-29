@@ -58,9 +58,16 @@ the pinned QICLean surjectivity theorem, so no strictness or size equality is
 assumed. All public inputs remain exactly the homogeneous nearest-neighbour
 automorphism domain of the source argument.
 
-Remaining in #7122: AARRodd and both homogeneous size identities. The second
-equality has its own ambient-pair strict-inclusion argument. AARReven is
-source-written here but not claimed compiled or integrated.
+The first size identity is also derived for the same coherent positive
+site-indexed family: r(2x)r(2x+1)=d². The actual pair-image equivalence
+composes with the actual support-product presentation, and the accepted
+matrix-algebra equivalence theorem equates their matrix sizes. No equality
+of vector-space dimensions is mislabeled as an equality of matrix sizes.
+
+Remaining in #7122: AARRodd and its homogeneous size identity. The second
+equality has its own ambient-pair strict-inclusion argument. AARReven and
+the first size identity are source-written here but not claimed compiled
+or integrated.
 
 Validation: import-generation, source/prose/whitespace and integrity checks
 passed. No local Lean invocation, build or checkdecls was run, as requested.

@@ -129,3 +129,25 @@ recorded in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
     full complex matrix algebras with scalar relative commutant is onto,
     so the support containment is an equality.
 \end{proof}
+
+\begin{corollary}[Matrix sizes of the image-pair factors]
+    \label{cor:qca_image_pair_matrix_sizes}
+    \lean{SpinChain.PropagatesWithin.evenSupportAlgebra_matrixSize_mul_odd,
+        SpinChain.PropagatesWithin.exists_supportAlgebra_matrixSizes_even_mul}
+    \notready
+    \uses{thm:qca_image_pair_adjacent_generation,
+        cor:qca_support_factor_presentations,thm:qca_commuting_full_matrix_product}
+    The positive matrix sizes can be chosen coherently so that
+    \begin{align}
+        r(2x)r(2x+1) & =d^2
+        \label{eq:qca_image_pair_matrix_sizes}
+    \end{align}
+    for every $x\in\mathbb Z$. This is the first size identity following
+    equation~AARReven in \cite[lines~1287--1290]{Gross2012IndexTheory}.
+\end{corollary}
+\begin{proof}
+    The commuting product presentation identifies the adjacent join with
+    $M_{r(2x)r(2x+1)}(\mathbb C)$. Its equality with the actual image pair
+    also identifies it with $M_{d^2}(\mathbb C)$. Full complex matrix
+    algebras which are algebra-isomorphic have equal matrix sizes.
+\end{proof}

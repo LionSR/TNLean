@@ -46,18 +46,13 @@ private noncomputable def supportEmbeddingEquiv (Λ : Finset ℤ)
     obtain ⟨a, ha, rfl⟩ := StarSubalgebra.mem_map.mp hz
     exact ⟨⟨a, ha⟩, rfl⟩
 
-/-- The join of the actual adjacent support factors is a full matrix
-algebra of positive size. This derives its matrix presentation, rather
-than assuming it; GNVW, arXiv:0910.3675v2, lines 1276--1282. -/
-theorem exists_adjacentSupportJoin_matrix
-    (hω : PropagatesWithin ω (Finset.Icc (-1) 1)) (x : ℤ) :
-    ∃ (q : ℕ) (_ : NeZero q),
-      Nonempty (↥(embeddedEvenSupportAlgebra hω x ⊔ embeddedOddSupportAlgebra hω x)
-        ≃⋆ₐ[ℂ] Matrix (Fin q) (Fin q) ℂ) := by
-  obtain ⟨r, hr, ⟨eR⟩⟩ := exists_evenSupportAlgebra_matrix hω x
-  obtain ⟨s, hs, ⟨eS⟩⟩ := exists_oddSupportAlgebra_matrix hω x
-  let : NeZero r := hr
-  let : NeZero s := hs
+private noncomputable def adjacentSupportJoinMatrixEquiv
+    (hω : PropagatesWithin ω (Finset.Icc (-1) 1)) (x : ℤ)
+    {r s : ℕ} [NeZero r] [NeZero s]
+    (eR : ↥(evenSupportAlgebra hω x) ≃⋆ₐ[ℂ] Matrix (Fin r) (Fin r) ℂ)
+    (eS : ↥(oddSupportAlgebra hω x) ≃⋆ₐ[ℂ] Matrix (Fin s) (Fin s) ℂ) :
+    ↥(embeddedEvenSupportAlgebra hω x ⊔ embeddedOddSupportAlgebra hω x)
+      ≃⋆ₐ[ℂ] Matrix (Fin (r * s)) (Fin (r * s)) ℂ := by
   let eE : ↥(embeddedEvenSupportAlgebra hω x) ≃⋆ₐ[ℂ] Matrix (Fin r) (Fin r) ℂ :=
     (supportEmbeddingEquiv (leftPair x) (evenSupportAlgebra hω x)).symm.trans eR
   let eO : ↥(embeddedOddSupportAlgebra hω x) ≃⋆ₐ[ℂ] Matrix (Fin s) (Fin s) ℂ :=
@@ -70,8 +65,21 @@ theorem exists_adjacentSupportJoin_matrix
       (show 2 * x ≠ 2 * x + 1 by omega) a
       (by simpa only [embeddedSupportAlgebra_even] using a.2) b
       (by simpa only [embeddedSupportAlgebra_odd] using b.2)
-  exact ⟨r * s, inferInstance,
-    ⟨StarSubalgebra.commutingSupEquivMatrix _ _ hEO eE eO⟩⟩
+  exact StarSubalgebra.commutingSupEquivMatrix _ _ hEO eE eO
+
+/-- The join of the actual adjacent support factors is a full matrix
+algebra of positive size. This derives its matrix presentation, rather
+than assuming it; GNVW, arXiv:0910.3675v2, lines 1276--1282. -/
+theorem exists_adjacentSupportJoin_matrix
+    (hω : PropagatesWithin ω (Finset.Icc (-1) 1)) (x : ℤ) :
+    ∃ (q : ℕ) (_ : NeZero q),
+      Nonempty (↥(embeddedEvenSupportAlgebra hω x ⊔ embeddedOddSupportAlgebra hω x)
+        ≃⋆ₐ[ℂ] Matrix (Fin q) (Fin q) ℂ) := by
+  obtain ⟨r, hr, ⟨eR⟩⟩ := exists_evenSupportAlgebra_matrix hω x
+  obtain ⟨s, hs, ⟨eS⟩⟩ := exists_oddSupportAlgebra_matrix hω x
+  let : NeZero r := hr
+  let : NeZero s := hs
+  exact ⟨r * s, inferInstance, ⟨adjacentSupportJoinMatrixEquiv hω x eR eS⟩⟩
 
 /-- The actual image of the even-pair algebra equals the join of its two
 adjacent support factors. The scalar relative commutant is derived from
@@ -128,6 +136,57 @@ theorem range_image_evenPair_eq_adjacentSupportJoin
   · intro z hz
     obtain ⟨A, hA⟩ := hf ⟨z, hz⟩
     exact ⟨A, congrArg Subtype.val hA⟩
+
+/-- The matrix sizes of the two actual support factors of an image pair
+multiply to the physical pair size. The matrix sizes are specified by
+star-algebra presentations, and are not vector-space dimensions; GNVW,
+arXiv:0910.3675v2, lines 1287--1290, immediately after AARReven. -/
+theorem evenSupportAlgebra_matrixSize_mul_odd
+    (hω : PropagatesWithin ω (Finset.Icc (-1) 1)) (x : ℤ)
+    {r s : ℕ} [NeZero r] [NeZero s]
+    (eR : ↥(evenSupportAlgebra hω x) ≃⋆ₐ[ℂ] Matrix (Fin r) (Fin r) ℂ)
+    (eS : ↥(oddSupportAlgebra hω x) ≃⋆ₐ[ℂ] Matrix (Fin s) (Fin s) ℂ) :
+    r * s = d * d := by
+  classical
+  let eJ := adjacentSupportJoinMatrixEquiv hω x eR eS
+  let f := ω.toStarAlgHom.comp (quasiLocalObservable d (evenPair x))
+  let eImage : LocalAlgebra d (evenPair x) ≃⋆ₐ[ℂ]
+      ↥(embeddedEvenSupportAlgebra hω x ⊔ embeddedOddSupportAlgebra hω x) := by
+    rw [← range_image_evenPair_eq_adjacentSupportJoin hω x]
+    exact StarAlgEquiv.ofInjective f
+      (ω.injective.comp (quasiLocalObservable_injective d (evenPair x)))
+  let eA : LocalAlgebra d (evenPair x) ≃⋆ₐ[ℂ]
+      Matrix (Fin (Fintype.card (Config d (evenPair x))))
+        (Fin (Fintype.card (Config d (evenPair x)))) ℂ :=
+    CStarMatrix.ofMatrixStarAlgEquiv.symm.trans
+      (Matrix.matrixReindexStarAlgEquiv (Fintype.equivFin (Config d (evenPair x))))
+  have hsize : Fintype.card (Config d (evenPair x)) = r * s :=
+    Matrix.matrixAlgEquiv_fin_eq (eA.symm.trans (eImage.trans eJ)).toAlgEquiv
+  have hcard : Fintype.card (Config d (evenPair x)) = d * d := by
+    change Fintype.card (↥(evenPair x) → Fin d) = d * d
+    have hne : 2 * x ≠ 2 * x + 1 := by omega
+    simp [evenPair, hne, pow_two]
+  exact hsize.symm.trans hcard
+
+/-- A coherent positive site-indexed matrix-size family satisfies the
+first source size identity, with no presentation or size assertion supplied
+as a premise. Source: GNVW, arXiv:0910.3675v2, lines 1287--1290. -/
+theorem exists_supportAlgebra_matrixSizes_even_mul
+    (hω : PropagatesWithin ω (Finset.Icc (-1) 1)) :
+    ∃ r : ℤ → ℕ, (∀ y, NeZero (r y)) ∧
+      (∀ x, Nonempty (↥(evenSupportAlgebra hω x) ≃⋆ₐ[ℂ]
+        Matrix (Fin (r (2 * x))) (Fin (r (2 * x))) ℂ)) ∧
+      (∀ x, Nonempty (↥(oddSupportAlgebra hω x) ≃⋆ₐ[ℂ]
+        Matrix (Fin (r (2 * x + 1))) (Fin (r (2 * x + 1))) ℂ)) ∧
+      (∀ x, r (2 * x) * r (2 * x + 1) = d * d) := by
+  obtain ⟨r, hr, eE, eO⟩ := exists_supportAlgebra_matrixSizes hω
+  refine ⟨r, hr, eE, eO, ?_⟩
+  intro x
+  let : NeZero (r (2 * x)) := hr (2 * x)
+  let : NeZero (r (2 * x + 1)) := hr (2 * x + 1)
+  obtain ⟨eR⟩ := eE x
+  obtain ⟨eS⟩ := eO x
+  exact evenSupportAlgebra_matrixSize_mul_odd hω x eR eS
 
 end PropagatesWithin
 end SpinChain
