@@ -63,7 +63,8 @@ theorem exists_gaussianFrequencyClusteringRate
   have hκa : κ ≤ a := by
     have hhalf : Δ / (8 * v) = a / 2 := by
       dsimp only [a]
-      field_simp [hv.ne'] <;> ring
+      field_simp [hv.ne']
+      ring
     exact (min_le_right _ _).trans (by rw [hhalf]; linarith)
   refine ⟨C, κ, hC, hκ, fun m hm ℓ hℓ ↦ ?_⟩
   have hℓpos : 0 < ℓ := lt_of_lt_of_le zero_lt_one hℓ

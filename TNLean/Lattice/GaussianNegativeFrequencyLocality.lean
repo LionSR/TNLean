@@ -128,7 +128,7 @@ theorem norm_commutator_gaussianNegativeFrequencyOperator_le
       _ ≤ M * μ.real (Set.Icc (-T) T) + (D / T) * μ.real (Set.Icc (-T) T)ᶜ :=
         add_le_add (norm_setIntegral_le_of_norm_le_const (by finiteness) hshort)
           (norm_setIntegral_le_of_norm_le_const (by finiteness) hlong)
-      _ ≤ _ := add_le_add_right (mul_le_of_le_one_right hM measureReal_le_one) _
+      _ ≤ _ := add_le_add (mul_le_of_le_one_right hM measureReal_le_one) le_rfl
   change ‖L (gaussianNegativeFrequencyOperator h ε H A)‖ ≤ _
   rw [gaussianNegativeFrequencyOperator, map_smul, norm_smul, Complex.norm_real,
     Real.norm_of_nonneg (kernel_nonneg _ _), ← L.integral_comp_comm hint]
