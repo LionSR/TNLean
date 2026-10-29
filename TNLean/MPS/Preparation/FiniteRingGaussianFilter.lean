@@ -103,11 +103,13 @@ theorem norm_gaussianFilteredTerm_interactionHamiltonian_commutator_le_exp
   have hT : 0 < T := div_pos hℓ (by positivity)
   have hTime : (8 * Real.exp (1 : ℝ)) * T = ℓ / 2 := by
     dsimp [T]
-    field_simp [ne_of_gt (Real.exp_pos (1 : ℝ))] <;> ring
+    field_simp [ne_of_gt (Real.exp_pos (1 : ℝ))]
+    ring
   have hTail : -(T * Δ) ^ 2 / (2 * (T * Δ)) =
       -ℓ * Δ / (32 * Real.exp 1) := by
     dsimp [T]
-    field_simp [ne_of_gt hℓ, ne_of_gt hΔ, ne_of_gt (Real.exp_pos (1 : ℝ))] <;> ring
+    field_simp [ne_of_gt hℓ, ne_of_gt hΔ, ne_of_gt (Real.exp_pos (1 : ℝ))]
+    ring
   refine (norm_gaussianFilteredTerm_interactionHamiltonian_commutator_le hN h hHerm hNorm
     A B X Y hX hY hA hB hXY 1 (by norm_num) (mul_nonneg hT.le hΔ.le) hT.le).trans ?_
   rw [hTime, hTail]
