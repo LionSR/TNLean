@@ -99,6 +99,24 @@ original-site radius follows from the source simple-block bound. The
 remaining source assembly is tracked by TNLean issue~\#7013; the induced
 QCA evaluation is also required by issue~\#7040.
 
+The finite inverse step can be separated from periodic boundary
+relocation. The actual finite star-automorphism reflects forward
+commutators, and the finite outside-singleton relative commutant recovers
+inverse support. With the supplied standard form, the actual inverse
+conjugation of an observable on $[b,b+L)$ is supported inside the finite
+chain intersected with
+\begin{align}
+    [b-4k,b+L+4k)\cup[a,a+2k)\cup[a+N-4k,a+N).
+\end{align}
+The declarations
+\leanid{SpinChain.inverse_mem_range_localInclusion_of_forward_support} and
+\leanid{SpinChain.finiteChainConjugation_symm_mem_range_bufferedRegion}
+write this step without an inverse-locality or compatibility premise.
+The two boundary collars remain explicit: deleting them requires a
+periodic boundary argument, such as cyclic relocation of the actual
+forward singleton windows. The finite statement alone is not the uniform
+inverse propagation or completed QCA theorem. Lean checking is pending.
+
 \bibliographystyle{alpha}
 \bibliography{references}
 \end{document}

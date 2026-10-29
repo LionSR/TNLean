@@ -217,6 +217,7 @@ import TNLean.MPS.MPU.TwoKrausPolar
 import TNLean.MPS.MPU.TwoSectorMerging
 import TNLean.MPS.MPU.TwoSiteBufferedAction
 import TNLean.MPS.MPU.TwoSiteFiniteHeisenberg
+import TNLean.MPS.MPU.TwoSiteFiniteInverse
 import TNLean.MPS.MPU.TwoSiteLocalAction
 import TNLean.MPS.MPU.TwoSiteStandardForm
 import TNLean.MPS.MPU.TwoSiteStandardFormCircuit
