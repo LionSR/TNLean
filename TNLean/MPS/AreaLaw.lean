@@ -87,6 +87,7 @@ import TNLean.MPS.AreaLaw.PhysicalDGReferenceSpace
 import TNLean.MPS.AreaLaw.PhysicalDGReferenceTrimming
 import TNLean.MPS.AreaLaw.PhysicalDGSharpApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGViability
+import TNLean.MPS.AreaLaw.PhysicalDetectability
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.PhysicalLowEnergyCloseness
 import TNLean.MPS.AreaLaw.PhysicalLowEnergyFamily
