@@ -9700,3 +9700,16 @@ there is no need for a new tactic.
   preservation give both claims directly. The endpoint quadratic sum reuses
   the already-derived global cancellation identity and adjoint-inner identity.
 - **Decision:** No new projection structure or automation; use the library lemmas.
+
+### Nonnegative quadratic coefficient exceptional set — candidate (2026-10-29)
+
+- **Pattern:** Derive the zero set of an actual nonnegative quadratic form
+  as its radical by testing a scalar perturbation. An explicit positive
+  witness makes the radical proper; reuse `addHaar_submodule` for measure
+  zero and the closed-subspace interior theorem for open dense complement.
+- **Seen:** `MPS/ParentHamiltonian/UncleWallGramGeneric.lean`.
+- **Abstraction:** Existing Mathlib quadratic and Haar APIs provide the
+  structures and final measure statement. The private scalar test is
+  shared within this source calculation; no genericity premise is added.
+- **Notes:** This establishes the one-wall coefficient's exceptional set,
+  independently of the unresolved actual two-wall norm factorization.

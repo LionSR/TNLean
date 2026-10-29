@@ -56,9 +56,25 @@ condition is available in the source setting. The resulting positive
 witness is a value somewhere in wall space; it is not asserted to retain
 the full perturbation span. There is no assumed positive-slope premise.
 
-Remaining source steps are the two-wall Gram factorization error bound
-and polynomial dependence and strict positivity of the limiting coefficients
-outside proper algebraic exceptional sets. These identities do not assert Theta(N^2), an energy
+`UncleWallGramQuadratic.lean` packages the actual slope as a real
+quadratic form. The correlation series is complex linear in R by
+summability and the infinite-sum linearity lemmas. Its explicit real
+bilinear contraction has diagonal exactly equal to the actual slope's real
+part. Under source normalization it is nonnegative, and the positive
+witness proves it is not identically zero.
+
+`UncleWallGramGeneric.lean` derives the zero set as the radical of that
+nonnegative quadratic form. Its radical is proper, its positive complement
+is open and dense, and its zero set has zero additive Haar measure by the
+existing Mathlib proper-subspace theorem. The almost-everywhere positivity
+statement is thus proved from the actual quadratic exceptional set; it is
+not an assumed genericity condition. A full perturbation witness for the
+fixed A/B blocks is used only to derive the dimension bound and nonidentity.
+The explicit positive witness itself need not retain perturbation span.
+
+Remaining norm work is the actual two-wall Gram factorization error bound.
+Combining this with the two separately derived generic wall coefficients
+still requires the product-space bookkeeping. These identities do not assert Theta(N^2), an energy
 bound, genericity, or gaplessness. Finite nonnegativity alone does not
 supply a strictly positive asymptotic coefficient.
 
@@ -69,3 +85,7 @@ independent exact rational complex calculation with rectangular 2-by-1
 walls compares the explicit coefficient sums against both matrix
 recurrences and the scalar weighted formula at lengths zero through five.
 This finite calculation is mathematical evidence, not Lean acceptance.
+An additional exact scalar-block example checks full four-letter perturbation
+span and derives the actual slope as |R_0+R_1|^2+|R_2|^2+|R_3|^2. Its real
+quadratic matrix has rank six and is positive semidefinite, with a positive
+zero-seed wall witness.

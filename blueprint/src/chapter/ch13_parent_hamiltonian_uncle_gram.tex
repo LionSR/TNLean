@@ -152,3 +152,53 @@ supply the required positive quadratic growth.
 Identifying the slope as a quadratic polynomial and proving the proper
 algebraic exceptional-set assertion are still separate steps. The positive
 witness alone does not constitute an almost-everywhere statement.
+
+\begin{theorem}[The actual quadratic coefficient and its exceptional subspace]
+    \label{thm:uncle_wall_gram_generic_positive}
+    \lean{MPSTensor.uncleWallCorrelationLimitLinear,
+        MPSTensor.uncleWallSlopeBilin,MPSTensor.uncleWallSlopeQuadratic,
+        MPSTensor.uncleWallSlopeQuadratic_apply,
+        MPSTensor.uncleWallSlopeQuadratic_nonneg,
+        MPSTensor.uncleWallSlopeQuadratic_ne_zero,
+        MPSTensor.uncleWallSlopeQuadratic_mem_radical_iff,
+        MPSTensor.uncleWallSlopeQuadratic_radical_ne_top,
+        MPSTensor.uncleWallSlopeQuadratic_positive_open_dense,
+        MPSTensor.uncleWallSlopeQuadratic_zero_measure,
+        MPSTensor.uncleWallNormSlope_ae_pos}
+    \notready
+    \uses{lem:uncle_wall_gram_positive_witness,thm:uncle_wall_gram_linear_limit}
+    Fix positive bond dimensions, the unital right block, a faithful
+    stationary left density, and strict mixed-transfer damping. Suppose
+    that a full perturbation span is possible for these diagonal blocks.
+    As a function of the wall $R$, the actual limiting coefficient
+    $\kappa_R$ is a nonnegative real quadratic form. Its zero set is its
+    radical, a proper real linear subspace of the wall space. Thus positive
+    slopes form an open dense set, and the zero slopes have measure zero
+    for every additive Haar measure on that finite-dimensional real space.
+    In particular, almost every wall has strictly positive actual slope.
+\end{theorem}
+\begin{proof}
+    The convergent mixed correlation series is complex linear in $R$.
+    For two walls $R,S$, its actual slope is the diagonal of the real
+    bilinear form
+    \[
+        \operatorname{Re}\operatorname{tr}\!\left(\rho\sum_iR_iS_i^*\right)
+        +2\operatorname{Re}\operatorname{tr}\!\left(\rho\sum_iA_iZ_\infty(R)S_i^*\right).
+    \]
+    Nonnegativity follows from the actual normalized Gram limit, and the
+    preceding explicit witness proves that this form is not identically
+    zero. For any nonnegative real quadratic form $Q$, if $Q(x)=0$ and
+    $p$ is the polar pairing of $x$ with $y$, choosing
+    $t=-p/(Q(y)+1)$ gives
+    \[
+        Q(x+ty)=-\frac{p^2}{(Q(y)+1)^2}.
+    \]
+    Hence $p=0$, and the zero set is the radical. It is a proper closed
+    subspace with empty interior and zero additive Haar measure.
+\end{proof}
+
+The full perturbation span enters this statement only through the existence
+of a positive value of the quadratic coefficient. The exceptional set is
+derived for the actual wall coefficient, rather than supplied as a
+hypothesis. The separating-transfer estimate relating both coefficients
+to the norm of the actual two-wall trial remains a further step.
