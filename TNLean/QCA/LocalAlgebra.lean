@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.CStarMatrixKronecker
 import Mathlib.Analysis.CStarAlgebra.Hom
+import Mathlib.Data.Fintype.BigOperators
 
 /-!
 # Finite-region observable algebras for one-dimensional spin chains
@@ -66,6 +67,7 @@ in lines 1251--1258. This also holds for zero on-site size. -/
 theorem card_config (d : ℕ) (Λ : Finset ℤ) :
     Fintype.card (Config d Λ) = d ^ Λ.card := by
   change Fintype.card (Λ → Fin d) = _
+  rw [Fintype.card_fun]
   simp
 
 /-- Equality of finite-region configurations is decidable. -/
