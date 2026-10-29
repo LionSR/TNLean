@@ -168,4 +168,77 @@ theorem uncleTwoWallTransfer_factorization_bound [NeZero a] [NeZero b]
       mul_le_mul_of_nonneg_right (by linarith) (by positivity)
     _ = (‖tr‖ + 1) * K * ((N + 1 : ℕ) : ℝ) ^ 2 * z ^ N := by ring
 
+/-- The squared norm of the actual source trial, divided by the squared
+moving-window length, converges to the product of the genuine limiting
+wall coefficients. No positive-slope or norm-growth premise is required.
+Source: arXiv:1210.6613, proof of Lemma lowenergystates. -/
+theorem uncleTwoWallTrialSource_normalized_norm_sq_tendsto [NeZero a] [NeZero b]
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (hIA : Kraus.IsInjective A) (hIB : Kraus.IsInjective B)
+    (hUA : Kraus.mapLM A 1 = 1) (hUB : Kraus.mapLM B 1 = 1)
+    (ρA : Matrix (Fin a) (Fin a) ℂ) (hρA : ρA.PosDef) (htrA : Matrix.trace ρA = 1)
+    (ρB : Matrix (Fin b) (Fin b) ℂ) (hρB : ρB.PosDef) (htrB : Matrix.trace ρB = 1)
+    (hFA : Kraus.adjointMap A ρA = ρA) (hFB : Kraus.adjointMap B ρB = ρB)
+    (hAB : Kraus.mixedMapSpectralRadius A B < 1)
+    (hBA : Kraus.mixedMapSpectralRadius B A < 1) :
+    Tendsto (fun N : ℕ ↦
+      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+        (uncleTwoWallTrialSource A B R L N)‖ ^ 2 / ((N + 1 : ℕ) : ℝ) ^ 2) atTop
+      (𝓝 ((uncleWallNormSlope A B R ρA * uncleWallNormSlope B A L ρB).re)) := by
+  obtain ⟨C, z, _, hz, hz1, hbound⟩ := uncleTwoWallTransfer_factorization_bound
+    A B R L hIA hIB hUA hUB ρA hρA htrA ρB hρB htrB hFA hFB hAB hBA
+  let m := fun N : ℕ ↦ ((N + 1 : ℕ) : ℝ)
+  let s := fun N : ℕ ↦
+    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+      (uncleTwoWallTrialSource A B R L N)‖ ^ 2
+  let w := fun N : ℕ ↦
+    (uncleWallGramWeight A B R ρA (N + 1) * uncleWallGramWeight B A L ρB (N + 1)).re /
+      (m N) ^ 2
+  let e := fun N : ℕ ↦ s N / (m N) ^ 2 - w N
+  have habs : ∀ᶠ N : ℕ in atTop, |e N| ≤ C * z ^ N := by
+    filter_upwards [eventually_gt_atTop 0] with N hN
+    have hm : 0 < m N := by dsimp [m]; positivity
+    dsimp only [e, w, s]
+    rw [norm_uncleTwoWallTrialSource_sq_eq_trace_transfer A B R L N hN]
+    rw [← sub_div, ← Complex.sub_re]
+    calc
+      _ = |(LinearMap.trace ℂ (Matrix (Fin a) (Fin a) ℂ)
+          (uncleTwoWallTransfer A B R L (2 * N) (N + 1) (2 * N - 1) (N + 1) 0) -
+          uncleWallGramWeight A B R ρA (N + 1) *
+            uncleWallGramWeight B A L ρB (N + 1)).re| / (m N) ^ 2 := by
+              rw [abs_div, abs_of_nonneg (sq_nonneg (m N))]
+      _ ≤ ‖LinearMap.trace ℂ (Matrix (Fin a) (Fin a) ℂ)
+          (uncleTwoWallTransfer A B R L (2 * N) (N + 1) (2 * N - 1) (N + 1) 0) -
+          uncleWallGramWeight A B R ρA (N + 1) *
+            uncleWallGramWeight B A L ρB (N + 1)‖ / (m N) ^ 2 :=
+              div_le_div_of_nonneg_right (Complex.abs_re_le_norm _) (sq_nonneg _)
+      _ ≤ (C * (m N) ^ 2 * z ^ N) / (m N) ^ 2 :=
+        div_le_div_of_nonneg_right (hbound N hN) (sq_nonneg _)
+      _ = C * z ^ N := by
+        rw [mul_right_comm C ((m N) ^ 2) (z ^ N),
+          mul_div_cancel_right₀ _ (pow_ne_zero 2 (ne_of_gt hm))]
+  have hgeom : Tendsto (fun N : ℕ ↦ C * z ^ N) atTop (𝓝 (0 : ℝ)) := by
+    have hC : Tendsto (fun _ : ℕ ↦ C) atTop (𝓝 C) := tendsto_const_nhds
+    simpa only [mul_zero] using hC.mul
+      (tendsto_pow_atTop_nhds_zero_of_lt_one hz.le hz1)
+  have he : Tendsto e atTop (𝓝 (0 : ℝ)) :=
+    squeeze_zero_norm' (by simpa only [Real.norm_eq_abs] using habs) hgeom
+  have hR := (uncleWallGramWeight_normalized_tendsto A B R ρA hρA.isHermitian
+    hFA hUB hAB).comp (tendsto_add_atTop_nat 1)
+  have hL := (uncleWallGramWeight_normalized_tendsto B A L ρB hρB.isHermitian
+    hFB hUA hBA).comp (tendsto_add_atTop_nat 1)
+  have hw : Tendsto w atTop
+      (𝓝 ((uncleWallNormSlope A B R ρA * uncleWallNormSlope B A L ρB).re)) := by
+    have hprod := (Complex.continuous_re.tendsto _).comp (hR.mul hL)
+    refine Tendsto.congr (fun N ↦ ?_) hprod
+    dsimp only [w, m, Function.comp_apply]
+    simp only [Complex.real_smul, Complex.mul_re, Complex.mul_im, Complex.ofReal_re,
+      Complex.ofReal_im, mul_zero, zero_mul, sub_zero, zero_add, add_zero,
+      div_eq_mul_inv, inv_pow]
+    ring
+  change Tendsto (fun N : ℕ ↦ s N / (m N) ^ 2) atTop _
+  simpa only [e, sub_add_cancel, zero_add] using he.add hw
+
 end MPSTensor
