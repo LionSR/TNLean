@@ -9615,3 +9615,17 @@ there is no need for a new tactic.
   add unrelated dependencies. If a shared one-step statement is needed, move that existing
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
+
+### Robustness assembly with a sharper cutoff — candidate (2026-10-29)
+
+- **Seen:** `MPS/AreaLaw/AKLV/Robustness.lean`, `NormalizedChain.lean`,
+  and `InverseGapRobustness.lean`.
+- **Pattern:** Build the minimizing ground vector from an absolute excited-energy
+  lower bound, combine its gap with the projected residual and tail, and reconstruct
+  the normalized regional sums from the two removed bonds.
+- **Decision:** The refinement keeps the accepted robustness proofs byte-for-byte,
+  as explicitly required for this task. Consequently its assembly and private
+  scalar phase estimate repeat those proofs. A future change that permits editing
+  the accepted modules can extract cutoff-independent assembly lemmas; no new
+  tactic is needed. The strengthened high-energy diagonal comparison itself is
+  proved once and reused by both new robustness statements.

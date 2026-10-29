@@ -12,6 +12,7 @@ import TNLean.MPS.AreaLaw.AKLV.ApproximateGroundVector
 import TNLean.MPS.AreaLaw.AKLV.CodimensionOneGap
 import TNLean.MPS.AreaLaw.AKLV.GroundStateTail
 import TNLean.MPS.AreaLaw.AKLV.HighEnergyMass
+import TNLean.MPS.AreaLaw.AKLV.InverseGapRobustness
 import TNLean.MPS.AreaLaw.AKLV.LowSpectrumGap
 import TNLean.MPS.AreaLaw.AKLV.NormalizedChain
 import TNLean.MPS.AreaLaw.AKLV.ProjectionEnergy
