@@ -68,7 +68,7 @@ private theorem unitaryBetween_smul_of_norm_eq_one
   have hcc : c * star c = 1 := by
     have h := Complex.mul_conj c
     rw [Complex.normSq_eq_norm_sq, hc] at h
-    simpa only [one_pow, Complex.ofReal_one] using h
+    simpa only [one_pow, Complex.ofReal_one, starRingEnd_apply] using h
   have hcc' : star c * c = 1 := by rw [mul_comm, hcc]
   constructor
   · change (c • A)ᴴ * (c • A) = 1

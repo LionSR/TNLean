@@ -151,3 +151,16 @@ staircase gate operation, MPO scalar law and Mathlib exponential topology.
 It does not depend on either local-criterion proof: its path statement and
 its hosted checking can proceed independently of their canonical-source
 comparison prerequisites. The Blueprint proof dependency reflects this.
+
+## Hosted phase scalar and inherited converse repairs
+
+Job `123542838347` on `90e49c616` reached the independent phase
+deformation and reported one mismatch between the conjugation ring map and
+the scalar star in its unit-norm identity. The proof now evaluates the ring
+map by `starRingEnd_apply`; the same scalar normalization is used in the
+transpose converse. Parent #10315 job `123542394010` compiled the full actual
+time-reversal necessity and reached its converse. Its recorded-boundary
+projection repair is propagated here, including explicit boundary arguments
+in the transpose gate transport and proving the coarse local equation before
+instantiating the block canonical record. No statements or hypotheses change,
+and no local Lean was run.
