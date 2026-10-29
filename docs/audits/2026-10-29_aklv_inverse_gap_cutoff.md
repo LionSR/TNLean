@@ -218,3 +218,46 @@ main-integration head: its exact-head CI must run separately. The PR remains
 a bounded improvement to the accepted #9837 robustness result, supporting
 #9838–#9840; raw-chain normalization and the whole area-law/MPS conclusions
 remain outside this refinement. The parent coordinates readiness and merger.
+
+## Reconciliation with subsequent main changes
+
+The existing PR was rechecked at public head
+`365e8d5063c1a5b29c77a5aeea32d05ce2c471ea`: no other author had changed its
+branch, no local build process was running, and no review comments or review
+requests were outstanding. Current main was freshly fetched at
+`7137c7c7452f91c21ebdd7283536fe09939fd62f`. Root dependency pins and the
+accepted AKLV proof modules were unchanged.
+
+The merge produced one conflict, between appended tactic-ledger entries.
+Every current-main entry was preserved. The refinement's same two entries,
+25 lines in total, now appear once under the ledger's existing Candidates
+section. Removing precisely those added lines returns the exact main ledger;
+this avoids competing with unrelated end-of-file appends. No other author's
+content was removed or rewritten.
+
+The resulting main-relative diff remains six scoped paths. The inverse-gap
+proof and its four signatures are byte-identical to the previously reviewed
+public head; all eleven accepted proof modules match main. Main's accepted
+Blueprint content remains an exact prefix, and the role-registry merge
+preserves main's newer Hastings labels while retaining the same four AKLV
+registrations. A separate native reviewer checked the final integration diff
+and ledger relocation: **PASS**, with no proof/statement change, prerequisite
+reversion or overlap with the separate original-chain normalization bridge
+#10371. The reviewer made no edits, ran no builds and took no remote actions.
+
+Fresh verification after reconciliation passed: the pinned AKLV build
+(3261 jobs), strict warnings-as-errors elaboration, four public exports with
+only `propext`, `Classical.choice`, `Quot.sound` in their transitive dependency
+closures, maximal-energy and small-gap endpoint checks, import generation,
+global role checks and all eight role-tool tests, pinned formatting, Blueprint
+synchronization and reverse declaration coverage. The pinned paper-gap
+checker resolved all 279 current-main slugs. No Mathlib or dependency source
+rebuild, pin upgrade, new mathematical assumption or proof bypass was used.
+
+Before publication of this reconciliation, the old-head CI run 40919572908
+had passed the Lean build/strict/timing gates, module policy, inline diagrams
+and PDF checks; its web-page validation was still running. That status is
+kept distinct from validation of the reconciled head, which requires its own
+exact-head CI. Readiness and merge transitions remain centrally coordinated.
+This PR continues to refine the normalized #9837 robustness theorem only;
+it does not duplicate #10371 or claim the whole area-law/MPS obligations.
