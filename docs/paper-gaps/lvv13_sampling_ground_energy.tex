@@ -154,6 +154,35 @@ its ground-energy exponent.
 A replacement construction is still required before the unrestricted
 preprint conclusion can be claimed.
 
+\section{The actual high-probability event}
+
+The probability estimate itself is preserved in
+\path{TNLean/MPS/AreaLaw/ViableSet/SampledProjector.lean}.
+The underlying law is the actual product of uniform letters on
+$\{0,\ldots,n-1\}^{\ell\times m}$, with the last label denoting the
+identity padding letter. For fixed physical ground data, $m\ge0$ and
+$\eta>0$, put $R=C^m+1$ and choose
+\begin{align*}
+ \ell&=\left\lceil
+   \frac{2R^2+2R\eta/3}{\eta^2}\log(8q^n n^3)
+   \right\rceil+1,\\
+ \kappa&=\left\lceil 2m/n+2\log(4\ell n^4)\right\rceil.
+\end{align*}
+The joint event $\|K-A\|<\eta$ and at most $\kappa$ occurrences of every
+letter in every sampled word has probability at least $1-1/(2n^3)$,
+hence at least the source's $1-1/n^3$. The matrix-accuracy failure and
+all-word multiplicity failure are each bounded by $1/(4n^3)$ under this
+same product law.
+
+This assertion specifies the distribution and the joint event. It is
+stronger than existence of one successful family, and is not inferred
+from the separate existence-only or bracketed sampling constructions.
+Its explicit count retains the ground-energy dependence in
+(\ref{eq:lvv_sampling_energy_dependence}), consistently with the published
+Methods correction. It does not recover the preprint's energy-independent
+exponent or choose unknown-energy trials. The distinction between this
+probability theorem and a trial-energy algorithm remains essential.
+
 \section{Overall scaling and an unknown energy}
 
 The scalar $C^m$ is not itself an obstacle to using the left-factor

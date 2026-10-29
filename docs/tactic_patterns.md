@@ -10052,3 +10052,18 @@ there is no need for a new tactic.
   tail and normalized sequential output. No new matrix overlap or
   normalization proof is introduced. The scoped tactic-pattern scan
   reported no repeated blocks at the default thresholds.
+
+### Actual product-uniform sampling probabilities — preserved argument (2026-10-29)
+
+- **Pattern:** A successful finite sample must satisfy both a matrix-norm
+  accuracy condition and all sampled-word multiplicity conditions.
+- **Reuse:** The restored upstream `ViableSet/SampledProjector.lean` uses
+  Mathlib's product-uniform law, `iIndepFun_pi`, evaluation maps and identical
+  distributions. QICLean's matrix Bernstein theorem controls the actual
+  matrix average; its one-dimensional case controls letter counts.
+- **Combination:** Both bad events are measured under the same sample law.
+  Their union bound proves the joint good event has probability at least
+  `1 - 1 / (2 * L^3)`, with explicit sample and multiplicity counts.
+- **Boundary:** Existence of one good sample, including the distinct
+  bracketed construction, does not establish this probability statement.
+  The upstream mathematical declarations and proofs are preserved unchanged.
