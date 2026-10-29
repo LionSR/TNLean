@@ -5782,17 +5782,20 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{SF}
     \notready
     \discussion{6019}
-    \uses{ThmFund1, def:mpu_source_uv}
-    Let $\mathcal U$ be a simple tensor under the source's standing
-    canonical-form-II convention. Its standard form is the depth-two form of
-    the two-site block $\mathcal U_2$ determined by the source unitaries
+    \uses{ThmFund1, def:mpu_source_uv,
+        lem:mpu_simple_reduced_literal_standard_form}
+    Let $\mathcal U$ be a simple tensor with positive physical and bond
+    dimensions. Choose its simple canonical representative $\mathcal V$,
+    of no larger bond dimension and with the same periodic operator at every
+    positive length. Its standard form is the depth-two form of the two-site
+    block $\mathcal V_2$ determined by the literal source unitaries
     \begin{align}
         u & \colon\mathbb C^d\otimes\mathbb C^d
         \longrightarrow\mathbb C^\ell\otimes\mathbb C^r, \\
         v & \colon\mathbb C^r\otimes\mathbb C^\ell
         \longrightarrow\mathbb C^d\otimes\mathbb C^d.
     \end{align}
-    On four consecutive blocked legs its unitary is
+    On four original sites its unitary is
     \begin{align}
         U & =v_{23}v_{41}u_{12}u_{34}.
     \end{align}
@@ -12343,4 +12346,114 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     satisfy the coprimality condition in
     Definition~\ref{def:mpu_admissible_symmetry_equivalence}.
     % Source lines: paper_v2.tex 2203--2235.
+\end{lemma}
+
+\subsection{Simple reduced representatives at the original scale}
+
+\begin{lemma}[Doubled rectangular bond maps]
+    \label{lem:mpu_doubled_rectangular_bond_map}
+    \lean{MPOTensor.doubledBondMap, MPOTensor.doubleLayer_rectangularSandwich}
+    \notready
+    For a rectangular matrix $A$, write $\widehat A=\overline A\otimes A$,
+    with the canonical enumeration of the product indices.
+    If $V^{ij}=AU^{ij}B$, then its double-layer letters satisfy
+    \[
+        E_V^{ij}=\widehat A E_U^{ij}\widehat B.
+    \]
+    This identity holds for arbitrary rectangular matrices; it does not
+    require an inverse or an isometry.
+\end{lemma}
+
+\begin{lemma}[Normalized diagonal insertions]
+    \label{lem:mpu_normalized_diagonal_insertions}
+    \lean{MPOTensor.normalizedDiagonal_eq_smul_sum_diagonal,
+        MPOTensor.IsMPUSimple.letter_mul_normalizedDiagonal_mul_letter,
+        MPOTensor.simple2_of_normalizedDiagonal_insertion}
+    \notready
+    \uses{def:mpu_simple, def:mpu_double_layer}
+    For double-layer letters $E^{ij}$, let
+    $E=d^{-1}\sum_{q=0}^{d-1}E^{qq}$, where $d>0$.
+    A simple tensor satisfies
+    \[
+        E^{ij} E E^{kl}=E^{ij}E^{kl}.
+    \]
+    Conversely, suppose this insertion identity holds and
+    $E^J=\rho\Phi$ for some integer $J>0$, with a column $\rho$ and row $\Phi$.
+    Then
+    \[
+        E^{ij}E^{kl}=E^{ij}\rho\Phi E^{kl}.
+    \]
+    Indeed, expanding the last copy of $E$ gives
+    $E^{ij}E^2=E^{ij}E$, so induction permits inserting every positive power.
+\end{lemma}
+
+\begin{lemma}[Doubled open words under a rectangular reduction]
+    \label{lem:mpu_doubled_open_word_reduction}
+    \lean{MPOTensor.doubleLayer_evalWord_of_isReduction}
+    \notready
+    \uses{lem:mpu_doubled_rectangular_bond_map}
+    Suppose $AB=\Id$ and $AU^wB=V^w$ for every open physical word $w$,
+    including the empty word. For every pair of words $\sigma,\tau$ of the
+    same length $N\geq0$,
+    \[
+        \widehat A E_U^{\sigma_1\tau_1}\cdots
+        E_U^{\sigma_N\tau_N}\widehat B
+        =E_V^{\sigma_1\tau_1}\cdots E_V^{\sigma_N\tau_N}.
+    \]
+    This follows by applying the preceding lemma to the $N$-site blocks.
+    The full open-word identities are required, rather than their
+    single-letter consequences alone.
+\end{lemma}
+
+\begin{lemma}[Simplicity descends to a canonical reduction]
+    \label{lem:mpu_simple_canonical_reduction}
+    \lean{MPOTensor.IsMPUSimple.normalizedDiagonal_insertion_of_isReduction,
+        MPOTensor.IsMPUCanonicalFormII.isMPUSimple_of_isReduction}
+    \notready
+    \uses{lem:mpu_doubled_open_word_reduction,
+        lem:mpu_normalized_diagonal_insertions, def:mpu_canonical_form_ii}
+    Let $d>0$, let $U$ be simple, and suppose $AB=\Id$ and $AU^wB=V^w$
+    for every open word $w$. Then the double layer of $V$ satisfies
+    \[
+        E_V^{ij}E_VE_V^{kl}=E_V^{ij}E_V^{kl}.
+    \]
+    If $V$ is in canonical form II, then $V$ is simple at the same physical
+    scale. To prove the first assertion, contract the insertion identity for
+    $U$ between $\widehat A$ and $\widehat B$ and use the two- and three-letter
+    word identities. For the second assertion, insert the rank-one power of
+    the canonical normalized diagonal. This argument does not replace $V$
+    by a further physical block.
+\end{lemma}
+
+\begin{lemma}[Simple reduced canonical representative]
+    \label{lem:mpu_simple_reduced_canonical_representative}
+    \lean{MPOTensor.IsMPUSimple.exists_reduced_cfii_representative}
+    \notready
+    \uses{thm:mpu_reduced_cfii_representative,
+        lem:mpu_simple_canonical_reduction}
+    Let $d,D>0$ and let $U$ be a simple MPU tensor of bond dimension $D$.
+    There is a simple tensor $V$ in canonical form II, of bond dimension
+    $0<E\leq D$, such that $V^{(N)}=U^{(N)}$ for every $N>0$.
+    The canonical representative is normal, so equality of the periodic
+    families supplies a rectangular reduction of all open words onto it.
+    The preceding lemma then supplies simplicity at the original scale.
+\end{lemma}
+
+\begin{lemma}[Literal standard form of a reduced simple MPU]
+    \label{lem:mpu_simple_reduced_literal_standard_form}
+    \lean{MPOTensor.IsMPUSimple.exists_reduced_twoSiteStandardFormData}
+    \notready
+    \uses{lem:mpu_simple_reduced_canonical_representative,
+        def:mpu_supplied_two_site_standard_form, ThmFund1}
+    Every simple MPU tensor $U$ with $d,D>0$ has a simple canonical
+    representative $V$, with $0<E\leq D$ and $V^{(N)}=U^{(N)}$ for all $N>0$,
+    whose two-site block has standard form with the literal corrected source
+    gates
+    \[
+        u=Y_2Y_1,\qquad v=X_1X_2.
+    \]
+    The input tensor need not be in canonical form II or have full bond
+    support. The sole physical blocking in this conclusion is the two-site
+    blocking in the standard form of \cite[Definition~III.9]{Cirac2017MPU}.
+    No virtual similarity between the potentially unequal bond spaces is asserted.
 \end{lemma}

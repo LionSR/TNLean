@@ -9640,3 +9640,19 @@ there is no need for a new tactic.
   add unrelated dependencies. If a shared one-step statement is needed, move that existing
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
+
+### Rectangular reduction of doubled words — promoted (2026-10-29)
+
+- **Pattern:** Apply a full-word reduction to a physical block, double its
+  rectangular bond maps, and decode the blocked physical indices.
+- **Defined in:** `MPS/MPU/SimpleReduction.lean`,
+  `doubleLayer_evalWord_of_isReduction`.
+- **Reuse:** Promotes the existing `doubledBondMap` and
+  `doubleLayer_rectangularSandwich` from `SimpleSupportCompression.lean`;
+  the support-compression and full-word-reduction arguments share their owner.
+- **Related extraction:** `simple2_of_normalizedDiagonal_insertion` in
+  `SuppliedFixedWitnesses.lean` factors the existing positive-power insertion
+  argument. Both the old supplied-witness theorem and the new canonical
+  reduction theorem use that proof; no second induction was copied.
+- **Scope:** A one-letter sandwich alone is insufficient. The reduction must
+  contract every open word, including the empty word.
