@@ -188,9 +188,21 @@ space $\widetilde G_\eta$ satisfies the corrected reverse residual bound
         \le80e^{(17+\eta+\alpha)/8-m/16}.
 \end{align}
 This follows from shifted soft/hard coercivity and an exponential moment on
-the actual soft window. The scale restriction is explicit. Choosing the
-order for a prescribed accuracy and converting these residuals into the
-source's directed spectral comparisons remain separate proof obligations.
+the actual soft window. For $\eta,w,\delta>0$, set
+\begin{align*}
+    \rho&=\min\left\{1,\frac w2,
+                         \frac{\delta w^2}{2(\eta+2)}\right\},&
+    m&=\left\lceil35+2\eta+16\log(80/\rho)\right\rceil.
+\end{align*}
+This order is uniform in the chain, local dimension and Hamiltonian. Both
+actual residuals are at most $\rho$, and $0\le E_0-E_s\le\rho$.
+The soft space below $E_s+\eta+w$ is $\delta$-close to the original space
+below $E_0+\eta$, and the original space below $E_0+\eta+w$ is
+$\delta$-close to the soft space below $E_s+\eta$. These corrected
+comparisons use the same original minima and the actual eigenbases. They
+concern one interval, equal scale and order, and positive bandwidth and
+enlargement. Independent order and scale, the printed gap prescription,
+and efficient tensor representations remain separate.
 
 This obstruction is distinct from the incorrect cluster-approximation
 estimate, recorded in the separate note
@@ -198,7 +210,7 @@ estimate, recorded in the separate note
 {\emph{Support Size and Negative Local Terms in the ALVV Cluster Approximation}}.
 The corrected scalar soft-truncation estimates are not refuted here, and no
 failure of every subsequent conclusion follows from this counterexample.
-The physical soft-truncation comparison remains open under
+The unrestricted soft-truncation conclusions remain open under
 \href{https://github.com/LionSR/TNLean/issues/9847}{issue 9847} and the
 \href{https://github.com/LionSR/TNLean/issues/9833}{ALVV tracker}.
 

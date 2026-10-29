@@ -9974,3 +9974,17 @@ there is no need for a new tactic.
   results; no additional cluster operator, component decomposition, or tactic
   is needed. The endpoint and component arguments are centralized in their
   mathematical lemmas.
+
+
+### Counting narrow spectral windows — promoted (2026-10-29)
+
+- **Pattern:** Bound the ceiling count of windows of width twice a residual,
+  multiply by the squared width, and use the residual's upper bound by one.
+- **Abstraction:** The Mathlib-only QICLean module
+  `Analysis/SpectralWindowCount.lean` supplies
+  `Real.spectral_window_count_bound` and `Real.spectral_window_budget_bound`.
+- **Refactored occurrences:** The duplicate private budgets in
+  `PhysicalLowEnergyCloseness.lean` and `PhysicalLowEnergyFamily.lean` are
+  removed. Both existing physical constructions and the new directed
+  comparison use the same scalar estimates. Their physical statements and
+  constants are unchanged. No tactic or compatibility alias is introduced.

@@ -126,30 +126,6 @@ theorem exists_chebyshev_nested_viability_of_polynomial_family
       (fun r ↦ Matrix.toEuclideanCLM (𝕜 := ℂ) (n := e) (M r))
       ((hfilter _).trans hM) hS hdelta (sq_nonneg _))
 
-/-- The corrected spectral-window count is controlled by the physical
-residual budget. ALVV, arXiv:1602.08828v2, `lem:hard-trunc`, lines 955–968;
-see https://sirui-lu.com/QICLean/paper-gaps/alvv16_hard_truncation_windows.pdf. -/
-private theorem physical_low_energy_window_bound
-    (E0 eta xi w delta : ℝ) (hE0 : 0 ≤ E0) (hE04 : E0 ≤ 4)
-    (heta : 0 ≤ eta) (hxi : 0 < xi) (hxi1 : xi ≤ 1)
-    (hw : 0 ≤ w) (hdelta : 0 ≤ delta)
-    (hsmall : 2 * (6 + eta) * xi ≤ delta * w ^ 2) :
-    (⌈(E0 + eta) / (2 * xi)⌉₊ : ℝ) * (xi + xi) ^ 2 ≤
-      delta * (w + xi) ^ 2 := by
-  have hceil := (Nat.ceil_lt_add_one
-    (div_nonneg (add_nonneg hE0 heta) (by positivity : 0 ≤ 2 * xi))).le
-  calc
-    _ ≤ ((E0 + eta) / (2 * xi) + 1) * (xi + xi) ^ 2 :=
-      mul_le_mul_of_nonneg_right hceil (sq_nonneg _)
-    _ = 2 * (E0 + eta) * xi + 4 * xi ^ 2 := by
-      field_simp
-      ring
-    _ ≤ 2 * (6 + eta) * xi := by
-      nlinarith only [mul_nonneg hxi.le (sub_nonneg.mpr hxi1),
-        mul_nonneg (sub_nonneg.mpr hE04) hxi.le]
-    _ ≤ delta * w ^ 2 := hsmall
-    _ ≤ delta * (w + xi) ^ 2 := by gcongr; linarith only [hxi]
-
 /-- One threshold controls every cutoff below the prescribed bandwidth.
 ALVV, arXiv:1602.08828v2, `lem:hard-trunc`, lines 955–968, and
 Theorem `t:aisgapless`, lines 1027–1041. -/
@@ -300,7 +276,7 @@ private theorem exists_five_region_physical_buffered_targets
     have hxi : 0 < xi := by positivity
     have hsmallc : 2 * (6 + c) * xi ≤ epsilon * w ^ 2 :=
       (mul_le_mul_of_nonneg_right (by linarith only [hce]) hxi.le).trans hsmall
-    have hbudget := physical_low_energy_window_bound E0 c xi w epsilon hE0 hE04
+    have hbudget := Real.spectral_window_budget_bound E0 c xi w epsilon hE0 hE04
       hc.le hxi hxi1 hw.le hepsilon.le hsmallc
     refine ⟨Submodule.isCloseTo_spectralSpanLE_of_perturbation
       (hpos ∅).isHermitian.eigenvectorBasis (hpos K).isHermitian.eigenvectorBasis

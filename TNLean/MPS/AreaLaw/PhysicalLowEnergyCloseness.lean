@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.FiveRegionTruncationResidual
+import QICLean.Analysis.SpectralWindowCount
 
 /-!
 # Closeness at shifted physical low-energy cutoffs
@@ -22,30 +23,6 @@ open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 namespace TNLean.MPS.AreaLaw
 
 open Matrix
-
-/-- The finite spectral-window estimate is small when the residual is at most
-one and the shifted-cutoff budget controls `2*(6+eta)*xi`. Auxiliary to ALVV,
-arXiv:1602.08828v2, `lem:hard-trunc`, lines 955–968. -/
-private theorem low_energy_window_bound
-    (E0 eta xi w delta : ℝ) (hE0 : 0 ≤ E0) (hE04 : E0 ≤ 4)
-    (heta : 0 ≤ eta) (hxi : 0 < xi) (hxi1 : xi ≤ 1)
-    (hw : 0 ≤ w) (hdelta : 0 ≤ delta)
-    (hsmall : 2 * (6 + eta) * xi ≤ delta * w ^ 2) :
-    (⌈(E0 + eta) / (2 * xi)⌉₊ : ℝ) * (xi + xi) ^ 2 ≤
-      delta * (w + xi) ^ 2 := by
-  have hceil := (Nat.ceil_lt_add_one
-    (div_nonneg (add_nonneg hE0 heta) (by positivity : 0 ≤ 2 * xi))).le
-  calc
-    _ ≤ ((E0 + eta) / (2 * xi) + 1) * (xi + xi) ^ 2 :=
-      mul_le_mul_of_nonneg_right hceil (sq_nonneg _)
-    _ = 2 * (E0 + eta) * xi + 4 * xi ^ 2 := by
-      field_simp
-      ring
-    _ ≤ 2 * (6 + eta) * xi := by
-      nlinarith only [mul_nonneg hxi.le (sub_nonneg.mpr hxi1),
-        mul_nonneg (sub_nonneg.mpr hE04) hxi.le]
-    _ ≤ delta * w ^ 2 := hsmall
-    _ ≤ delta * (w + xi) ^ 2 := by gcongr; linarith only [hxi]
 
 /-- A physical clipping threshold makes the residual meet any positive
 shifted-cutoff accuracy budget. Auxiliary to ALVV, arXiv:1602.08828v2,
@@ -166,7 +143,7 @@ theorem exists_five_region_physical_low_energy_closeness
     apply (WithLp.ofLp_injective 2)
     simpa only [I, Matrix.ofLp_toEuclideanCLM, WithLp.ofLp_smul, Complex.coe_smul]
       using (hpos T).isHermitian.mulVec_eigenvectorBasis j
-  have hwindow := low_energy_window_bound E0 eta xi w delta hE0 hE04 heta.le
+  have hwindow := Real.spectral_window_budget_bound E0 eta xi w delta hE0 hE04 heta.le
     hxi hxi1 hw.le hdelta.le hsmall
   have hbudget :
       (⌈(E0 + eta - 0) / (2 * xi)⌉₊ : ℝ) * (xi + xi) ^ 2 ≤

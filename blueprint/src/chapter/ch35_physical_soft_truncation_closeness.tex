@@ -1,0 +1,82 @@
+\section{Directed soft spectral comparisons at prescribed accuracy}
+
+\begin{lemma}[Both residuals with the same attained minima]
+    \label{lem:interval_physical_soft_common_residuals}
+    \lean{TNLean.MPS.AreaLaw.exists_interval_physical_soft_residuals}
+    \leanok
+    For a positive unit nearest-neighbour chain and a prescribed interval,
+    the original-window and soft-window residual bounds of
+    Theorems~\ref{thm:interval_physical_soft_truncation_residual} and
+    \ref{thm:interval_physical_soft_reverse_residual} can be obtained with
+    the same attained original regional minima and original ground energy.
+    The original ground energy is its actual canonical minimum. For every
+    admissible approximate regional energy and integer $m\ge1$ with
+    $m/2\ge10$, the soft ground energy is its own canonical minimum, chosen
+    before the bandwidth. Both residual bounds then apply to one literal
+    soft Hamiltonian, retaining the reverse scale condition.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:interval_physical_soft_truncation_residual,
+        thm:interval_physical_soft_reverse_residual}
+    The two constructions return normalized minimizing witnesses and
+    positive lower bounds for each original regional matrix. Such attained
+    minima are equal. After identifying them, the same argument identifies
+    the centered original ground energies. The actual soft ground witnesses
+    identify their canonical minima as well. No spectral comparison is
+    assumed in these identifications.
+\end{proof}
+
+\begin{theorem}[Uniform order and both directed physical soft comparisons]
+    \label{thm:interval_physical_soft_low_energy_closeness}
+    \lean{TNLean.MPS.AreaLaw.exists_interval_physical_soft_low_energy_closeness}
+    \leanok
+    Let $\eta,w,\delta>0$, and put
+    \begin{align*}
+        \rho&=\min\left\{1,\frac w2,
+                    \frac{\delta w^2}{2(\eta+2)}\right\},&
+        m&=\left\lceil35+2\eta+16\log(80/\rho)\right\rceil.
+    \end{align*}
+    This order is chosen before all chain lengths, local dimensions,
+    intervals and Hamiltonians. For every finite positive unit
+    nearest-neighbour chain and every interval, one can choose its attained
+    original regional minima and common minimizing vector before the
+    approximate regional energy. Let $S$ be the sum of these minima and
+    $E_0\in[0,2]$ the true minimum of $H-S\Id$.
+
+    For every $e_J-10\le\varepsilon'_J\le e_J$, define
+    \begin{align*}
+        \widetilde H
+          =H-A_J+\varepsilon'_J\Id+h_{m,m}(A_J-\varepsilon'_J\Id).
+    \end{align*}
+    It has an actual centered minimum $E_s$ with
+    $\widetilde H\le H$ and $0\le E_0-E_s\le\rho$. Write
+    \begin{align*}
+        G_c&=\mathbf1_{(-\infty,E_0+c]}(H-S\Id)\mathcal H,&
+        \widetilde G_c&=\mathbf1_{(-\infty,E_s+c]}
+                         (\widetilde H-S\Id)\mathcal H.
+    \end{align*}
+    Then $\widetilde G_{\eta+w}$ is $\delta$-close to $G_\eta$ and
+    $G_{\eta+w}$ is $\delta$-close to $\widetilde G_\eta$.
+    Empty and endpoint intervals are included. No spectral gap, ground-space
+    dimension, residual or subspace comparison is assumed.
+
+    This is a corrected auxiliary for one interval, equal scale and order,
+    and positive bandwidth and enlargement. It does not assert the first
+    printed uniform energy estimate or the gap prescription of
+    \cite{Arad2016RigorousRG}; see
+    \cite{gap:alvv16_soft_truncation_energy_estimate}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:interval_physical_soft_common_residuals}
+    The scalar order estimate in \cite{QICLean2026Blueprint} gives
+    $\alpha=(m/2)2^{-m}\le1/4$, the reverse scale condition, and a common
+    residual budget at most $\rho$. Thus both actual restrictions of
+    $H-\widetilde H$ have norm at most $\rho$. The ground-energy residual
+    estimate gives $E_0-E_s\le\rho$; its sign follows from
+    $\widetilde H\le H$. Finally,
+    $\rho\le1$, $\rho\le w/2$, and
+    $2(\eta+2)\rho\le\delta w^2$ give both directed comparisons from the
+    finite-window perturbation estimate. Each cutoff is measured relative
+    to its own actual ground energy and uses the corresponding actual
+    Hermitian eigenbasis.
+\end{proof}
