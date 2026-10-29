@@ -11,15 +11,15 @@ import TNLean.MPS.ParentHamiltonian.CyclicTranslation
 # Periodic closure of the actual single-domain-wall boundary space
 
 For an injective full perturbation letter, the intersection of the actual
-source space `S_N` and its one-site cyclic translate consists of the two
-periodic sector vectors, for every `N≥2`, the domain starting from the
+source space \(S_N\) and its one-site cyclic translate consists of the two
+periodic sector vectors, for every \(N\ge2\), the domain starting from the
 source two-site uncle interaction. Full coefficient spans extend
 the cyclic word identity to arbitrary pairs of coefficient matrices. The
 boundary trace classification then removes both walls and makes the two
 diagonal boundaries scalar.
 
-Source: arXiv:1210.6613, Lemma `closure`, source lines 1117–1127, and
-Appendix `intersection-closure`, source lines 1943–1984.
+Source: arXiv:1210.6613, Lemma "closure", source lines 1117–1127, and
+Appendix "intersection-closure", source lines 1943–1984.
 -/
 
 noncomputable section
@@ -115,7 +115,7 @@ private theorem cyclicTranslateState_one_mpv (A : MPSTensor d a) (n : ℕ) :
   exact Matrix.trace_mul_comm _ _
 
 /-- The source periodic closure is derived from full perturbation injectivity
-for every chain length at least two. Source: arXiv:1210.6613, Lemma `closure`,
+for every chain length at least two. Source: arXiv:1210.6613, Lemma "closure",
 lines 1117–1127 and Appendix closure proof, lines 1943–1984. -/
 theorem uncleBoundarySpace_inf_cyclicTranslate
     (A : MPSTensor d a) (B : MPSTensor d b)

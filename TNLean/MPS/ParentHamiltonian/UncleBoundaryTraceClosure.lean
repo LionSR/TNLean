@@ -16,9 +16,9 @@ cyclic has zero off-diagonal blocks and scalar diagonal blocks. Thus it
 retains only the two periodic sector traces.
 
 This is the coefficient-uniqueness step in arXiv:1210.6613, Appendix
-`intersection-closure`, the closure proof at source lines 1943–1984.
-The cyclic pairing used here must still be derived from the actual shifted
-open-chain spaces before this gives the source's full periodic closure.
+"intersection-closure", the closure proof at source lines 1943–1984.
+Applying this classification to the actual shifted open-chain boundary
+spaces gives the source's periodic closure.
 -/
 
 noncomputable section
