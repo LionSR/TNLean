@@ -123,6 +123,7 @@ theorem uncleWallCorrelation_succ (A : MPSTensor d a) (B : MPSTensor d b)
   rw [sum_evalWord_mul_conjTranspose B hB]
   simp [uncleWallCorrelation, uncleWallSeed, Kraus.mixedMapLM_apply,
     Matrix.mul_assoc, Matrix.mul_sum, Matrix.sum_mul]
+  exact Finset.sum_comm
 
 /-- The finite Gram recurrence separates propagation, both cross terms,
 and the one-site wall Gram matrix; arXiv:1210.6613, proof of Lemma
@@ -136,17 +137,39 @@ theorem uncleWallGram_succ (A : MPSTensor d a) (B : MPSTensor d b)
       (uncleWallCrossMap A R (uncleWallCorrelation A B R n))ᴴ +
       ∑ i, R i * (R i)ᴴ := by
   classical
+  let W (σ : Fin n → Fin d) := uncleDomainWallWord A B R (List.ofFn σ)
+  let V (σ : Fin n → Fin d) := Kraus.evalWord B (List.ofFn σ)
+  have hdiag (i : Fin d) :
+      ∑ σ, (A i * W σ) * (A i * W σ)ᴴ =
+        A i * uncleWallGram A B R n * (A i)ᴴ := by
+    simpa only [Matrix.conjTranspose_mul, Matrix.mul_assoc] using
+      sum_mul_pair (A i) W (fun σ ↦ (W σ)ᴴ) (A i)ᴴ
+  have hcross (i : Fin d) :
+      ∑ σ, (A i * W σ) * (R i * V σ)ᴴ =
+        A i * uncleWallCorrelation A B R n * (R i)ᴴ := by
+    simpa only [Matrix.conjTranspose_mul, Matrix.mul_assoc] using
+      sum_mul_pair (A i) W (fun σ ↦ (V σ)ᴴ) (R i)ᴴ
+  have hcrossStar (i : Fin d) :
+      ∑ σ, (R i * V σ) * (A i * W σ)ᴴ =
+        (A i * uncleWallCorrelation A B R n * (R i)ᴴ)ᴴ := by
+    simpa only [Matrix.conjTranspose_sum, Matrix.conjTranspose_mul,
+      Matrix.conjTranspose_conjTranspose] using congrArg Matrix.conjTranspose (hcross i)
+  have hwall (i : Fin d) :
+      ∑ σ, (R i * V σ) * (R i * V σ)ᴴ = R i * (R i)ᴴ := by
+    have h := sum_mul_pair (R i) V (fun σ ↦ (V σ)ᴴ) (R i)ᴴ
+    rw [show (∑ σ, V σ * (V σ)ᴴ) = 1 from
+      sum_evalWord_mul_conjTranspose B hB n, Matrix.mul_one] at h
+    simpa only [Matrix.conjTranspose_mul, Matrix.mul_assoc] using h
   rw [uncleWallGram, sum_ofFn_cons
     (fun w ↦ uncleDomainWallWord A B R w * (uncleDomainWallWord A B R w)ᴴ) n]
-  simp only [uncleDomainWallWord, Matrix.conjTranspose_add, Matrix.conjTranspose_mul,
-    Matrix.add_mul, Matrix.mul_add]
-  simp_rw [← Matrix.mul_assoc]
-  simp only [Finset.sum_add_distrib, sum_mul_pair]
-  rw [sum_evalWord_mul_conjTranspose B hB]
-  simp [uncleWallGram, uncleWallCorrelation, uncleWallCrossMap_apply,
-    Kraus.mapLM_apply, Kraus.map_apply, Matrix.conjTranspose_sum,
-    Matrix.conjTranspose_mul, Matrix.mul_assoc, Matrix.mul_sum, Matrix.sum_mul,
-    add_assoc, add_left_comm, add_comm]
+  change (∑ i, ∑ σ, (A i * W σ + R i * V σ) *
+    (A i * W σ + R i * V σ)ᴴ) = _
+  simp only [Matrix.conjTranspose_add, Matrix.add_mul, Matrix.mul_add,
+    Finset.sum_add_distrib]
+  simp_rw [hdiag, hcross, hcrossStar, hwall]
+  simp only [Kraus.mapLM_apply, Kraus.map_apply, uncleWallCrossMap_apply,
+    Matrix.conjTranspose_sum]
+  abel
 
 /-- Exact finite geometric expansion of the actual wall correlation;
 arXiv:1210.6613, the mixed-transfer sum in \(\Xi_R\). -/
