@@ -188,3 +188,15 @@ actual gate identities abstractly. A separate private wrapper constructs
 that record from the original factors and supplies those identities. This
 avoids repeated conversion through the large adjoint/conjugate constructor
 inside the FT comparison. Public statements are unchanged; no local Lean.
+
+## Verified-head kernel diagnostics on `089de43ff`
+
+Job `123599250948` records the exact `089de43ff` PR head and still reaches
+the 200,000-heartbeat kernel limit in the generic comparison. The rank
+reindexing and matrix algebra are now separated into a private theorem over
+arbitrary boundary matrices and supplied factors, with the already-derived
+FT equations as its input. A second private theorem derives those equations
+from the actual canonical tensors and even periodic symmetry. This keeps
+canonical boundary projections out of the finite matrix conversions. The
+public source statement still derives all gates and gauges internally. The
+parent strict namespace repair is included; no local Lean command was run.

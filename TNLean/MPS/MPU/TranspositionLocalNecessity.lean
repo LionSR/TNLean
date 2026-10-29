@@ -88,13 +88,16 @@ private theorem transpose_local_phase_of_gate_gauges
   rw [hD, hY, Matrix.smul_kronecker]
   rfl
 
-/-- Gate comparison at derived square ranks, kept abstract in the supplied factor
-record. Source: CPSV17, `UUtransposetrick`, lines 1258–1288. -/
-private theorem source_transposition_certificate_of_gate_transport
-    {d D : ℕ} {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
-    (hsimple : IsMPUSimple U) (S : SourceFactors U hU.ρ)
-    (hr : r[U] = d) (hl : ℓ[U] = d)
-    (T : SourceFactors (MPOTensor.physicalTransposeTensor U) hU.physicalTransposeTensor.ρ)
+/-- Pure supplied-gate algebra after the actual FT comparison. Keeping the
+canonical records out of this conversion avoids unfolding their weights.
+Source: CPSV17, `UUtransposetrick`, lines 1258–1288. -/
+private theorem transposition_certificate_of_supplied_gate_gauges
+    {d D : ℕ} {U : MPOTensor d D}
+    {ρ ρ' : Matrix (Fin D) (Fin D) ℂ}
+    (S : SourceFactors U ρ)
+    (T : SourceFactors (MPOTensor.physicalTransposeTensor U) ρ')
+    (hr : r[U] = d) (hl : ℓ[U] = d) (hd : 0 < d)
+    (huS : (SourceFactors.sourceU U S).IsUnitaryBetween)
     (hTU : SourceFactors.sourceU (MPOTensor.physicalTransposeTensor U) T =
       Matrix.reindex
         (Equiv.prodCongr (finCongr (source_ranks_physicalTransposeTensor U).2.symm)
@@ -105,7 +108,21 @@ private theorem source_transposition_certificate_of_gate_transport
         (Equiv.prodCongr (finCongr (source_ranks_physicalTransposeTensor U).1.symm)
           (finCongr (source_ranks_physicalTransposeTensor U).2.symm))
         (SourceFactors.sourceU U S)ᵀ)
-    (hTR : ∀ N : ℕ, 1 < N → Even N → mpo U N = (mpo U N)ᵀ) :
+    (hGauges :
+      ∃ (hrFT : r[MPOTensor.physicalTransposeTensor U] = r[U])
+        (hlFT : ℓ[MPOTensor.physicalTransposeTensor U] = ℓ[U])
+        (x : Matrix.unitaryGroup (Fin ℓ[MPOTensor.physicalTransposeTensor U]) ℂ)
+        (y : Matrix.unitaryGroup (Fin r[MPOTensor.physicalTransposeTensor U]) ℂ),
+        SourceFactors.sourceU (MPOTensor.physicalTransposeTensor U) T =
+          ((x : Matrix _ _ ℂ) ⊗ₖ (y : Matrix _ _ ℂ)) *
+            Matrix.reindex
+              (Equiv.prodCongr (finCongr hlFT.symm) (finCongr hrFT.symm))
+              (Equiv.refl _) (SourceFactors.sourceU U S) ∧
+        SourceFactors.sourceV (MPOTensor.physicalTransposeTensor U) T =
+          Matrix.reindex (Equiv.refl _)
+              (Equiv.prodCongr (finCongr hrFT.symm) (finCongr hlFT.symm))
+              (SourceFactors.sourceV U S) *
+            (star (y : Matrix _ _ ℂ) ⊗ₖ star (x : Matrix _ _ ℂ))) :
     ∃ (c : ℂ)
       (x : Matrix.unitaryGroup (Fin d) ℂ), ‖c‖ = 1 ∧
       Matrix.reindex (Equiv.prodCongr (finCongr hl) (finCongr hr)) (Equiv.refl _)
@@ -115,17 +132,7 @@ private theorem source_transposition_certificate_of_gate_transport
           (Matrix.reindex (Equiv.refl _)
             (Equiv.prodCongr (finCongr hr) (finCongr hl)) (SourceFactors.sourceV U S))ᵀ := by
   classical
-  have hEq : ∀ N : ℕ, 1 < N → Even N →
-      mpo U N = mpo (MPOTensor.physicalTransposeTensor U) N := by
-    intro N hN heven
-    rw [mpo_physicalTransposeTensor]
-    exact hTR N hN heven
-  have huS := hU.sourceFactors_sourceU_isUnitaryBetween hsimple S
-  have huT := hU.physicalTransposeTensor.sourceFactors_sourceU_isUnitaryBetween
-    (hU.isMPUSimple_physicalTransposeTensor hsimple) T
-  obtain ⟨hrFT, hlFT, X, Y, hu, hv⟩ :=
-    hU.exists_supplied_source_gate_unitary_gauges_of_mpo_eq_even
-      hU.physicalTransposeTensor S T huS huT hEq
+  obtain ⟨hrFT, hlFT, X, Y, hu, hv⟩ := hGauges
   let L := finCongr hl
   let R := finCongr hr
   let LA := finCongr ((source_ranks_physicalTransposeTensor U).2.trans hr)
@@ -173,10 +180,51 @@ private theorem source_transposition_certificate_of_gate_transport
     rw [hVA, hVFT] at h
     simpa only [X', Y', Matrix.star_eq_conjTranspose, Matrix.conjTranspose_reindex] using h
   have hA : A.IsCoisometry := (huS.reindex _ (Equiv.prodCongr L R) (Equiv.refl _)).2
-  let : NeZero d := hU.neZero_phys
+  let : NeZero d := ⟨Nat.ne_of_gt hd⟩
   obtain ⟨c, x, hc, hlocal⟩ := transpose_local_phase_of_gate_gauges A B hA X' Y' hfirst hsecond
   exact ⟨c, x, hc, hlocal⟩
 
+
+
+/-- Gate comparison at derived square ranks, kept abstract in the supplied factor
+record. Source: CPSV17, `UUtransposetrick`, lines 1258–1288. -/
+private theorem source_transposition_certificate_of_gate_transport
+    {d D : ℕ} {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
+    (hsimple : IsMPUSimple U) (S : SourceFactors U hU.ρ)
+    (hr : r[U] = d) (hl : ℓ[U] = d)
+    (T : SourceFactors (MPOTensor.physicalTransposeTensor U) hU.physicalTransposeTensor.ρ)
+    (hTU : SourceFactors.sourceU (MPOTensor.physicalTransposeTensor U) T =
+      Matrix.reindex
+        (Equiv.prodCongr (finCongr (source_ranks_physicalTransposeTensor U).2.symm)
+          (finCongr (source_ranks_physicalTransposeTensor U).1.symm))
+        (Equiv.refl _) (SourceFactors.sourceV U S)ᵀ)
+    (hTV : SourceFactors.sourceV (MPOTensor.physicalTransposeTensor U) T =
+      Matrix.reindex (Equiv.refl _)
+        (Equiv.prodCongr (finCongr (source_ranks_physicalTransposeTensor U).1.symm)
+          (finCongr (source_ranks_physicalTransposeTensor U).2.symm))
+        (SourceFactors.sourceU U S)ᵀ)
+    (hTR : ∀ N : ℕ, 1 < N → Even N → mpo U N = (mpo U N)ᵀ) :
+    ∃ (c : ℂ)
+      (x : Matrix.unitaryGroup (Fin d) ℂ), ‖c‖ = 1 ∧
+      Matrix.reindex (Equiv.prodCongr (finCongr hl) (finCongr hr)) (Equiv.refl _)
+          (SourceFactors.sourceU U S) =
+        c • ((x : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ
+          (x : Matrix (Fin d) (Fin d) ℂ)ᵀ) *
+          (Matrix.reindex (Equiv.refl _)
+            (Equiv.prodCongr (finCongr hr) (finCongr hl)) (SourceFactors.sourceV U S))ᵀ := by
+  classical
+  have hEq : ∀ N : ℕ, 1 < N → Even N →
+      mpo U N = mpo (MPOTensor.physicalTransposeTensor U) N := by
+    intro N hN heven
+    rw [mpo_physicalTransposeTensor]
+    exact hTR N hN heven
+  have huS := hU.sourceFactors_sourceU_isUnitaryBetween hsimple S
+  have huT := hU.physicalTransposeTensor.sourceFactors_sourceU_isUnitaryBetween
+    (hU.isMPUSimple_physicalTransposeTensor hsimple) T
+  have hGauges := hU.exists_supplied_source_gate_unitary_gauges_of_mpo_eq_even
+    hU.physicalTransposeTensor S T huS huT hEq
+  exact transposition_certificate_of_supplied_gate_gauges S T hr hl
+    (Nat.pos_of_ne_zero hU.neZero_phys.out) huS hTU hTV hGauges
 
 /-- Use the actual transpose factors in the abstract comparison. Source:
 CPSV17, `UUtransposetrick`, lines 1258–1288. -/
