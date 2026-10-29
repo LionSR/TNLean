@@ -9785,7 +9785,19 @@ there is no need for a new tactic.
   trace and identify the resulting physical configuration sum.
 - **Reuse:** Promote the existing canonical five-segment configuration
   equivalence and its evaluation theorem for their actual second consumer.
-  Use `AlgEquiv.quasispectrum_eq` when the same finite linear map is
-  estimated under another matrix norm.
+  Use `spectralRadius_eq_of_unital` and `AlgEquiv.spectrum_eq` when the
+  same finite linear map is estimated under another matrix norm.
 - **Decision:** Keep one configuration equivalence and derive all rates from
   actual mixed maps; do not assume the overlap estimate being established.
+### Canonical transfer replacement in the actual wall contraction — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleNormFactorization.lean`, two long transfer factors.
+- **Pattern:** Subtract the actual canonical projection one factor at a time;
+  apply geometric pure-transfer decay, actual wall-map linear bounds, and
+  positivity-preserving norm contractivity to the remaining factors.
+- **Reuse:** The primitive decay is stated once in `UnclePrimitiveTransfer`;
+  existing finite-dimensional trace continuity bounds the scalar contraction.
+- **Notes:** The private unital-power contraction also appears in
+  `UnclePinnedTrialNorm.lean`. These are two proof occurrences across two
+  separately stacked branches; consolidate into a shared lemma before a third
+  proof copy, without duplicating a generic channel contractivity theory.
