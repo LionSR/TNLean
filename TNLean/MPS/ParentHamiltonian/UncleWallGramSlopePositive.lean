@@ -167,7 +167,8 @@ theorem exists_uncleWallNormSlope_pos_of_injective_perturbation [NeZero a] [NeZe
     have h := finrank_le_of_span_eq_top hPert.span_eq_top
     simpa [Module.finrank_matrix] using h
   have ha : 0 < a := Nat.pos_of_ne_zero (NeZero.ne a)
-  have hd : b * b < d := lt_of_lt_of_le (by nlinarith) hdim
+  have hd : b * b < d :=
+    lt_of_lt_of_le (Nat.mul_self_lt_mul_self (show b < a + b by omega)) hdim
   exact exists_uncleWallNormSlope_pos A B ρ hρ hd
 
 end MPSTensor
