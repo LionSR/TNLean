@@ -66,18 +66,21 @@ theorem evalWord_normalForm (hD : 2 ≤ D) (w : List (Fin 2)) :
           · simp only [List.length_cons, zero_mul, add_zero]
             have hdiv := Nat.mod_add_div w.length D
             nlinarith
-          · simp only [Kraus.evalWord_cons, tensor, Matrix.cons_val_succ', Matrix.cons_val_zero', hp, pow_zero, one_mul]
+          · simp only [Kraus.evalWord_cons, tensor, Matrix.cons_val_succ',
+              Matrix.cons_val_zero', hp, pow_zero, one_mul]
             rw [shift_pow_mod]
         · by_cases hreturn : k = D - 2
           · right; right
             refine ⟨0, l, n + 1, m, by omega, hl, ?_, ?_⟩
             · simp only [List.length_cons]
               nlinarith
-            · simp only [Kraus.evalWord_cons, tensor, Matrix.cons_val_succ', Matrix.cons_val_zero', hmat,
+            · simp only [Kraus.evalWord_cons, tensor, Matrix.cons_val_succ',
+                Matrix.cons_val_zero', hmat,
                 ← Matrix.mul_assoc, jump_shift_pow_jump hD k hk,
                 ite_eq_left hreturn, pow_zero, one_mul]
           · left
-            simp only [Kraus.evalWord_cons, tensor, Matrix.cons_val_succ', Matrix.cons_val_zero', hmat,
+            simp only [Kraus.evalWord_cons, tensor, Matrix.cons_val_succ',
+              Matrix.cons_val_zero', hmat,
               ← Matrix.mul_assoc, jump_shift_pow_jump hD k hk,
               ite_eq_right hreturn, zero_mul]
 
