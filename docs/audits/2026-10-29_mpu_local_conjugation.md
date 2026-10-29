@@ -110,3 +110,13 @@ product factors by named equalities. The reported unused instances/simp
 argument and proof-local `letI` warnings are also removed. These are source
 repairs only; no local Lean command was run, and the new head still requires
 hosted validation.
+
+## Hosted follow-up on `fdbdf8916`
+
+Job `123426591346` accepted the repaired normalized-factor fields and
+rank-removal helpers. The remaining source errors were star applied to a
+spectator `if`, and bare unitary coercions in two `change` expressions picking
+the `CStarMatrix` multiplication instance. Explicit spectator equality cases
+and explicit matrix coercions repair those sites; product-map unfolding
+also exposes the remaining inverse reindex cancellation. No local Lean was
+run; the new head awaits hosted validation.

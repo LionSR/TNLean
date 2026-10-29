@@ -151,7 +151,8 @@ noncomputable def mapStar {U : MPOTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
   have hweight : sourceWeight (d := d) (ρ.map (starRingEnd ℂ)) =
       (sourceWeight (d := d) ρ).map (starRingEnd ℂ) := by
     ext i j
-    simp [sourceWeight, Matrix.kroneckerMap_apply, Matrix.one_apply]
+    by_cases hij : i.1 = j.1 <;>
+      simp [sourceWeight, Matrix.kroneckerMap_apply, Matrix.one_apply, hij]
   refine {
     X₁ := Matrix.reindex (Equiv.refl _) er (S.X₁.map (starRingEnd ℂ))
     Y₁ := Matrix.reindex er (Equiv.refl _) (S.Y₁.map (starRingEnd ℂ))
@@ -263,7 +264,9 @@ private theorem remove_source_rank_reindex_left
     (el : a ≃ a') (er : b ≃ b')
     (x : Matrix a' a' ℂ) (y : Matrix b' b' ℂ) (u : Matrix (a × b) p ℂ) :
     Matrix.reindex (Equiv.prodCongr el.symm er.symm) (Equiv.refl _)
-        ((x ⊗ₖ y) * Matrix.reindex (Equiv.prodCongr el er) (Equiv.refl _) u) =
+        (((x : Matrix (Fin ℓ[MPOTensor.mapStar U]) (Fin ℓ[MPOTensor.mapStar U]) ℂ) ⊗ₖ
+          (y : Matrix (Fin r[MPOTensor.mapStar U]) (Fin r[MPOTensor.mapStar U]) ℂ)) *
+          Matrix.reindex (Equiv.prodCongr el er) (Equiv.refl _) u) =
       (Matrix.reindex el.symm el.symm x ⊗ₖ Matrix.reindex er.symm er.symm y) * u := by
   change Matrix.reindexLinearEquiv ℂ ℂ (Equiv.prodCongr el.symm er.symm)
       (Equiv.refl _) ((x ⊗ₖ y) *
@@ -353,10 +356,12 @@ theorem IsMPUCanonicalFormII.exists_local_conjugation_gauges
         (Matrix.reindex (Equiv.prodCongr el er) (Equiv.refl _)
           ((SourceFactors.sourceU U S).map (starRingEnd ℂ))) =
       Matrix.reindex (Equiv.prodCongr el.symm er.symm) (Equiv.refl _)
-        ((x ⊗ₖ y) * Matrix.reindex (Equiv.prodCongr el er) (Equiv.refl _)
+        (((x : Matrix (Fin ℓ[MPOTensor.mapStar U]) (Fin ℓ[MPOTensor.mapStar U]) ℂ) ⊗ₖ
+          (y : Matrix (Fin r[MPOTensor.mapStar U]) (Fin r[MPOTensor.mapStar U]) ℂ)) *
+          Matrix.reindex (Equiv.prodCongr el er) (Equiv.refl _)
           (SourceFactors.sourceU U S)) at h
     rw [remove_source_rank_reindex_left] at h
-    simpa [x', y', Matrix.reindex_apply] using h
+    simpa [x', y', Matrix.reindex_apply, Prod.map] using h
   · have h := congrArg
       (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr er.symm el.symm)) hv
     rw [S.sourceV_mapStar] at h
@@ -365,9 +370,10 @@ theorem IsMPUCanonicalFormII.exists_local_conjugation_gauges
           ((SourceFactors.sourceV U S).map (starRingEnd ℂ))) =
       Matrix.reindex (Equiv.refl _) (Equiv.prodCongr er.symm el.symm)
         (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr er el) (SourceFactors.sourceV U S) *
-          (yᴴ ⊗ₖ xᴴ)) at h
+          ((y : Matrix (Fin r[MPOTensor.mapStar U]) (Fin r[MPOTensor.mapStar U]) ℂ)ᴴ ⊗ₖ
+            (x : Matrix (Fin ℓ[MPOTensor.mapStar U]) (Fin ℓ[MPOTensor.mapStar U]) ℂ)ᴴ)) at h
     rw [remove_source_rank_reindex_right] at h
-    simpa [x', y', Matrix.reindex_apply, Matrix.star_eq_conjTranspose] using h
+    simpa [x', y', Matrix.reindex_apply, Prod.map, Matrix.star_eq_conjTranspose] using h
 
 /-- The forward local conjugation equations have one common symmetric or
 skew-symmetric case for the actual supplied source gates. This completes
