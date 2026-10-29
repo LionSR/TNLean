@@ -106,10 +106,7 @@ private theorem uncle_uniform_middle
         (uncleDomainWallWord B A L x * Kraus.evalWord A y *
           Kraus.evalWord A p * uncleDomainWallWord A B R r))) := by
     funext σ
-    simpa only [uncleTwoWallCoefficient, Matrix.mul_assoc] using
-      Matrix.trace_mul_comm (Kraus.evalWord A p * uncleDomainWallWord A B R r)
-        (Kraus.evalWord B (u ++ List.ofFn σ ++ v) *
-          uncleDomainWallWord B A L x * Kraus.evalWord A y)
+    exact uncleTwoWallCoefficient_rotate A B R L p r (u ++ List.ofFn σ ++ v) x y
   rw [hfun]
   simpa only [Matrix.one_mul] using uncleInteractionES_uniform_slice_right_eq_zero A B R L 1
     (uncleDomainWallWord B A L x * Kraus.evalWord A y *

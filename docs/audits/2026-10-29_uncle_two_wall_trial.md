@@ -83,7 +83,27 @@ trial energy d^(-2) times the sum, over the four endpoint bonds and exterior
 configurations, of norm(h R phi)^2. Contraction bounds it by the same sum of
 norm(R phi)^2. These are finite identities and inequalities with no supplied
 energy/support/gap hypothesis. They do not yet prove the source O(N) rate;
-that requires actual pinned-wall endpoint-state estimates. Norm growth, small ground-sector overlaps,
+that requires actual pinned-wall endpoint-state estimates.
+
+`UncleTrialPinnedWalls.lean` now derives those endpoint residual expressions.
+The one-wall concatenation identity splits walls inside/outside a chosen end.
+At each cut the pure A/A or B/B contribution is killed by the actual local
+projector. This leaves A_i R_j, R_i B_j, B_i L_j, or L_i A_j respectively.
+
+Four coordinate theorems apply this to the actual cyclic trial restrictions
+at N-1,2N,4N-1,5N. Their pinned sites are N,2N,4N,5N. The two R endpoints
+retain exactly the L-wall sum on 4N through 5N; the two L endpoints retain
+exactly the R-wall sum on N through 2N, using rectangular trace rotation.
+All fixed exterior words are explicitly numbered physical segments.
+
+`uncleTrialPinnedEndpointState` records these four explicit local vectors.
+Their projected images equal the actual endpoint residuals, and the actual
+trial energy is bounded by d^(-2) times their squared-norm sum. This removes
+one moving-wall sum before contraction, so the remaining estimate concerns
+actual one-wall vectors rather than the original two-wall trial. No support
+or rate premise is introduced. The remaining O(N) step is to estimate these
+explicit finite norms using the parallel one-wall Gram/mixed-map calculation
+and the source normalized-transfer estimates. Norm growth, small ground-sector overlaps,
 generic nonzero leading coefficients, removal of the complete ground
 projection and the finite-dimensional variational spectral conclusion
 remain open in this slice. The one-wall transfer recursion is parallel work.
