@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.PowerProjector
+import TNLean.Algebra.MatrixL2Contraction
 import QICLean.Probability.MatrixBernstein
 import Mathlib.MeasureTheory.Integral.Pi
 import Mathlib.Probability.UniformOn
@@ -22,7 +23,8 @@ inequality, the case of `1 × 1` matrices, bounds the number of occurrences of e
 word. A union bound gives Corollary `c:agsp` with explicit `ℓ` and `κ`, and a witness: a choice of
 words for which both properties hold.
 
-The probability space is the product `Fin ℓ → Fin m → Fin n` of `ℓ m` independent uniform letters.
+Throughout, `n = L` is the number of sites, and of letters. The probability space is the product
+`Fin ℓ → Fin m → Fin L` of `ℓ m` independent uniform letters.
 The ground energy satisfies `0 ≤ ε₀ ≤ n - 1` (`groundEnergy_nonneg_and_le`), so `C ≥ 1` is well
 defined; neither bound is assumed.
 
@@ -105,13 +107,9 @@ instance (ℓ m L : ℕ) [NeZero L] : IsProbabilityMeasure (sampleMeasure ℓ m 
   infer_instance
 
 /-- Every word of length `m` has probability `n^{-m}`. -/
-theorem measureReal_wordMeasure_singleton (m L : ℕ) [NeZero L] (I : Fin m → Fin L) :
+lemma measureReal_wordMeasure_singleton (m L : ℕ) [NeZero L] (I : Fin m → Fin L) :
     (wordMeasure m L).real {I} = ((L : ℝ) ^ m)⁻¹ := by
-  have hI : ({I} : Set (Fin m → Fin L)) = Set.univ.pi fun p ↦ {I p} := by
-    ext J
-    simp [funext_iff]
-  rw [measureReal_def, hI, wordMeasure, Measure.pi_pi]
-  simp [uniformOn_univ]
+  simp [measureReal_def, wordMeasure, uniformOn_univ]
 
 
 /-! ### The sampled projector -/
@@ -138,7 +136,7 @@ noncomputable def sampledProjector
 
 /-- The sampled projector is the average of the sampled terms `C^m P_{I_j}`, the form in which
 Theorem `t:mcb` applies (`algo53.tex`, line 641). -/
-theorem sampledProjector_eq_average
+lemma sampledProjector_eq_average
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) :
     sampledProjector h E₀ I = (ℓ : ℝ)⁻¹ • ∑ k, scaledBondComplementWord h E₀ (I k) := by
@@ -148,7 +146,7 @@ theorem sampledProjector_eq_average
 /-- The ground energy lies between `0` and `n - 1`: `0 ≤ H ≤ n - 1` and `ε₀ = ⟨Γ, HΓ⟩`. Hence
 `C = (1 - ε₀/n)⁻¹` is well defined and at least one. Landau, Vazirani and Vidick,
 arXiv:1307.5143v1, `algo53.tex`, lines 283–284 and 607. -/
-theorem groundEnergy_nonneg_and_le [NeZero L]
+lemma groundEnergy_nonneg_and_le [NeZero L]
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
@@ -179,7 +177,7 @@ theorem groundEnergy_nonneg_and_le [NeZero L]
 
 /-- A letter `P_i = 1 - H_i` is a contraction, since `0 ≤ P_i ≤ 1`. Landau, Vazirani and Vidick,
 arXiv:1307.5143v1, `algo53.tex`, lines 606 and 641. -/
-theorem norm_bondComplement_le_one
+lemma norm_bondComplement_le_one
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1) (i : Fin L) :
     ‖bondComplement h i‖ ≤ 1 := by
@@ -194,32 +192,18 @@ theorem norm_bondComplement_le_one
   have hB0 : 0 ≤ bondComplement h i := sub_nonneg.mpr hP1
   exact (CStarAlgebra.norm_le_one_iff_of_nonneg _ hB0).mpr (sub_le_self _ hP0)
 
-/-- A word `P_I` in the letters is a contraction, so `‖C^m P_I‖ ≤ C^m`. Landau, Vazirani and
-Vidick, arXiv:1307.5143v1, `algo53.tex`, line 641. -/
-theorem norm_bondComplementWord_le_one
+/-- A word `P_I` in the letters is a contraction, `‖P_I‖ ≤ 1`. Landau, Vazirani and Vidick,
+arXiv:1307.5143v1, `algo53.tex`, line 641. -/
+lemma norm_bondComplementWord_le_one
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1) {m : ℕ} (I : Fin m → Fin L) :
     ‖bondComplementWord h I‖ ≤ 1 := by
-  have key : ∀ l : List (Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ a ∈ l, ‖a‖ ≤ 1) → ‖l.prod‖ ≤ 1 := by
-    intro l
-    induction l with
-    | nil =>
-      intro _
-      exact (CStarAlgebra.norm_le_one_iff_of_nonneg _ zero_le_one).mpr le_rfl
-    | cons a l ih =>
-      intro hl
-      rw [List.prod_cons]
-      calc ‖a * l.prod‖ ≤ ‖a‖ * ‖l.prod‖ := norm_mul_le _ _
-        _ ≤ 1 * 1 := mul_le_mul (hl a (by simp)) (ih fun b hb ↦ hl b (by simp [hb]))
-            (norm_nonneg _) zero_le_one
-        _ = 1 := one_mul 1
-  refine key _ fun a ha ↦ ?_
+  refine Matrix.l2_opNorm_list_prod_le_one _ fun a ha ↦ ?_
   obtain ⟨j, rfl⟩ := List.mem_ofFn.mp ha
   exact norm_bondComplement_le_one h h0 h1 _
 
-/-- With `0 ≤ ε₀ < n`, the normalization `C` is at least one, so `R = C^m + 1 ≥ 1`. -/
-theorem one_le_powerNormalization [NeZero L] {E₀ : ℝ} (hE₀ : 0 ≤ E₀) (hE₀L : E₀ < L) :
+/-- With `0 ≤ ε₀ < n`, the normalization `C = (1 - ε₀/n)⁻¹` is at least one. -/
+lemma one_le_powerNormalization [NeZero L] {E₀ : ℝ} (hE₀ : 0 ≤ E₀) (hE₀L : E₀ < L) :
     1 ≤ powerNormalization L E₀ := by
   have hL : (0 : ℝ) < L := Nat.cast_pos.mpr (Nat.pos_of_neZero L)
   have h1 : 0 < 1 - E₀ / L := by rw [sub_pos, div_lt_one hL]; exact hE₀L
@@ -229,7 +213,7 @@ theorem one_le_powerNormalization [NeZero L] {E₀ : ℝ} (hE₀ : 0 ≤ E₀) (
 /-- **The mean of a sampled term.** For a uniform word `I`, `E[C^m P_I] = A`, by the expansion
 `eq:a-exp`. Landau, Vazirani and Vidick, arXiv:1307.5143v1, `algo53.tex`, lines 606–611 and
 641. -/
-theorem integral_scaledBondComplementWord [NeZero L]
+lemma integral_scaledBondComplementWord [NeZero L]
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) (m : ℕ) :
     ∫ I, scaledBondComplementWord h E₀ I ∂wordMeasure m L = powerProjector (∑ i, h i) L E₀ m := by
   rw [integral_fintype (Integrable.of_finite), powerProjector_eq_sum_bondComplementWord
@@ -242,7 +226,7 @@ theorem integral_scaledBondComplementWord [NeZero L]
 
 /-- **The deviation bound `R = C^m + 1`.** Landau, Vazirani and Vidick, arXiv:1307.5143v1,
 `algo53.tex`, line 641. -/
-theorem norm_scaledBondComplementWord_sub_le [NeZero L]
+lemma norm_scaledBondComplementWord_sub_le [NeZero L]
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
@@ -254,18 +238,17 @@ theorem norm_scaledBondComplementWord_sub_le [NeZero L]
     pow_nonneg (zero_le_one.trans (one_le_powerNormalization hE₀ (by linarith))) m
   calc _ ≤ ‖scaledBondComplementWord h E₀ I‖ + ‖powerProjector (∑ i, h i) L E₀ m‖ :=
         norm_sub_le _ _
-    _ ≤ powerNormalization L E₀ ^ m * 1 + 1 := by
+    _ ≤ powerNormalization L E₀ ^ m + 1 := by
         rw [norm_powerProjector (Nat.pos_of_neZero L) h h0 h1 hgs hΔ m,
           scaledBondComplementWord, norm_smul, Real.norm_of_nonneg hC]
         gcongr
-        exact norm_bondComplementWord_le_one h h0 h1 I
-    _ = _ := by rw [mul_one]
+        exact mul_le_of_le_one_right hC (norm_bondComplementWord_le_one h h0 h1 I)
 
 /-- **Accuracy of the sampled projector** (item 1 of Corollary `c:agsp`, in the
 non-asymptotic form given by Theorem `t:mcb`). For `ℓ ≥ 1` independent uniform words and
 `t > 0`, `P(‖K - A‖ ≥ t) ≤ 2 q^n exp (-ℓ t² / (2 R² + 2 R t / 3))` with `R = C^m + 1`.
 Landau, Vazirani and Vidick, arXiv:1307.5143v1, `algo53.tex`, lines 616–624 and 640–643. -/
-theorem measureReal_le_norm_sampledProjector_sub_le [NeZero L]
+lemma measureReal_le_norm_sampledProjector_sub_le [NeZero L]
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
@@ -322,17 +305,15 @@ theorem measureReal_le_norm_sampledProjector_sub_le [NeZero L]
       (∀ I, ‖f I‖ ≤ R ^ 2) → ‖∫ I, f I ∂sampleMeasure ℓ m L‖ ≤ R ^ 2 := fun f hf ↦ by
     simpa using norm_integral_le_of_norm_le_const (μ := sampleMeasure ℓ m L)
       (Filter.Eventually.of_forall hf)
-  have hsq : ∀ I, ‖X 0 I - A‖ ^ 2 ≤ R ^ 2 := fun I ↦
-    pow_le_pow_left₀ (norm_nonneg _) (norm_scaledBondComplementWord_sub_le h h0 h1 hgs hΔ _) 2
-  have hV₁ := hvar (fun I ↦ (X 0 I - A) * (X 0 I - A)ᴴ) fun I ↦ by
-    refine (norm_mul_le _ _).trans ?_
-    rw [Matrix.l2_opNorm_conjTranspose, ← sq]
-    exact hsq I
-  have hV₂ := hvar (fun I ↦ (X 0 I - A)ᴴ * (X 0 I - A)) fun I ↦ by
-    refine (norm_mul_le _ _).trans ?_
-    rw [Matrix.l2_opNorm_conjTranspose, ← sq]
-    exact hsq I
-  have hmax := max_le hV₁ hV₂
+  have hsq : ∀ I, ‖X 0 I - A‖ * ‖X 0 I - A‖ ≤ R ^ 2 := fun I ↦ by
+    have := norm_scaledBondComplementWord_sub_le h h0 h1 hgs hΔ (I 0)
+    rw [← sq]
+    gcongr
+  have hmax := max_le
+    (hvar (fun I ↦ (X 0 I - A) * (X 0 I - A)ᴴ) fun I ↦
+      (CStarRing.norm_self_mul_star (x := X 0 I - A)).le.trans (hsq I))
+    (hvar (fun I ↦ (X 0 I - A)ᴴ * (X 0 I - A)) fun I ↦
+      (CStarRing.norm_star_mul_self (x := X 0 I - A)).le.trans (hsq I))
   gcongr
 
 /-! ### Letter multiplicities -/
@@ -387,7 +368,7 @@ private theorem integral_centredIndicator_sq_le [NeZero L] (j : Fin L) :
 uniform word of length `m` has mean `m/n` and variance at most `m/n`, and Bernstein's inequality
 gives `P(Y_j ≥ m/n + t) ≤ exp (-(t²/2) / (m/n + t/3))`. Landau, Vazirani and Vidick,
 arXiv:1307.5143v1, `algo53.tex`, lines 646–649, where the tail is stated as `e^{-Ω(a²)}`. -/
-theorem measureReal_le_letterCount_le [NeZero L] (m : ℕ) (j : Fin L) {t : ℝ} (ht : 0 ≤ t) :
+lemma measureReal_le_letterCount_le [NeZero L] (m : ℕ) (j : Fin L) {t : ℝ} (ht : 0 ≤ t) :
     (wordMeasure m L).real {I | (m : ℝ) / L + t ≤ letterCount I j} ≤
       Real.exp (-(t ^ 2 / 2 / ((m : ℝ) / L + t / 3))) := by
   rcases ht.eq_or_lt with rfl | ht0
@@ -447,7 +428,7 @@ theorem measureReal_le_letterCount_le [NeZero L] (m : ℕ) (j : Fin L) {t : ℝ}
 `m/n + t` times in one of `ℓ` independent uniform words is at most
 `ℓ n exp (-(t²/2) / (m/n + t/3))`, by a union bound over the words and the letters. Landau,
 Vazirani and Vidick, arXiv:1307.5143v1, `algo53.tex`, lines 646–649. -/
-theorem measureReal_exists_le_letterCount_le [NeZero L] (ℓ m : ℕ) {t : ℝ} (ht : 0 ≤ t) :
+lemma measureReal_exists_le_letterCount_le [NeZero L] (ℓ m : ℕ) {t : ℝ} (ht : 0 ≤ t) :
     (sampleMeasure ℓ m L).real {I | ∃ k j, (m : ℝ) / L + t ≤ letterCount (I k) j} ≤
       ℓ * L * Real.exp (-(t ^ 2 / 2 / ((m : ℝ) / L + t / 3))) := by
   have hset : {I : Fin ℓ → Fin m → Fin L | ∃ k j, (m : ℝ) / L + t ≤ letterCount (I k) j} =
@@ -467,7 +448,7 @@ theorem measureReal_exists_le_letterCount_le [NeZero L] (ℓ m : ℕ) {t : ℝ} 
 /-! ### The size of `C^m` -/
 
 /-- `C = (1 - ε₀/n)⁻¹ = 1 + ε₀/(n - ε₀)`. -/
-theorem powerNormalization_eq [NeZero L] {E₀ : ℝ} (hE₀L : E₀ < L) :
+lemma powerNormalization_eq [NeZero L] {E₀ : ℝ} (hE₀L : E₀ < L) :
     powerNormalization L E₀ = 1 + E₀ / (L - E₀) := by
   have hL : (L : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr (NeZero.ne L)
   have hd : (L : ℝ) - E₀ ≠ 0 := sub_ne_zero.mpr hE₀L.ne'
@@ -476,7 +457,7 @@ theorem powerNormalization_eq [NeZero L] {E₀ : ℝ} (hE₀L : E₀ < L) :
   ring
 
 /-- **The normalization grows with the ground energy:** `C^m ≤ exp (ε₀ m / (n - ε₀))`. -/
-theorem powerNormalization_pow_le_exp [NeZero L] {E₀ : ℝ} (hE₀ : 0 ≤ E₀) (hE₀L : E₀ < L)
+lemma powerNormalization_pow_le_exp [NeZero L] {E₀ : ℝ} (hE₀ : 0 ≤ E₀) (hE₀L : E₀ < L)
     (m : ℕ) : powerNormalization L E₀ ^ m ≤ Real.exp (E₀ * m / (L - E₀)) := by
   have hC : 0 ≤ powerNormalization L E₀ :=
     zero_le_one.trans (one_le_powerNormalization hE₀ hE₀L)
@@ -492,7 +473,7 @@ theorem powerNormalization_pow_le_exp [NeZero L] {E₀ : ℝ} (hE₀ : 0 ≤ E�
 `m = ⌈((n - ε₀)/Δ) log (1/η)⌉`, `C^m ≤ n (1/η)^{ε₀/Δ}`. Hence `C^m`, and with it the number
 `sampledProjectorWordCount` of sampled words, is polynomial in `n` and `1/η` when `ε₀/Δ` is
 bounded; for `ε₀` of order `n` it is not. -/
-theorem powerNormalization_pow_ceil_le [NeZero L] {E₀ Δ η : ℝ} (hE₀ : 0 ≤ E₀)
+lemma powerNormalization_pow_ceil_le [NeZero L] {E₀ Δ η : ℝ} (hE₀ : 0 ≤ E₀)
     (hE₀L : E₀ + 1 ≤ L) (hΔ : 0 < Δ) (hη : 0 < η) (hη1 : η ≤ 1) :
     powerNormalization L E₀ ^ ⌈((L - E₀) / Δ) * Real.log (1 / η)⌉₊ ≤
       L * (1 / η) ^ (E₀ / Δ) := by
