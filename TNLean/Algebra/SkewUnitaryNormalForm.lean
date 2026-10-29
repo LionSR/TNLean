@@ -72,12 +72,12 @@ theorem exists_unitary_congruence_interleavedSkewForm
     rw [mem_unitaryGroup_iff]
     rw [Matrix.star_eq_conjTranspose, ← hfstar, ← map_mul,
       (mem_orthogonalGroup_iff _ _).mp hO, map_one]
-  have hΣ : f (interleavedSkewFormFin m) = complexInterleavedSkewFormFin m := by
+  have hSigma : f (interleavedSkewFormFin m) = complexInterleavedSkewFormFin m := by
     ext i j
     simp [f, complexInterleavedSkewFormFin]
   have hΛ : Λ = (f O)ᵀ * complexInterleavedSkewFormFin m * f O := by
     have h := congrArg f hnormal
-    simpa only [map_mul, hftranspose, hreal, hΣ] using h.symm
+    simpa only [map_mul, hftranspose, hreal, hSigma] using h.symm
   refine ⟨f O * S, (unitaryGroup (Fin (2 * m)) ℂ).mul_mem hOc hS, ?_⟩
   rw [hfactor, hΛ, Matrix.transpose_mul]
   simp only [mul_assoc]
