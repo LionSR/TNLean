@@ -60,3 +60,13 @@ The pinned revision already provides
 `QICLean/Kraus/Injectivity.lean`. Its identical local declaration in
 `TNLean/MPS/Core/Blocking.lean` is removed to avoid declaring the name twice.
 Existing callers and the blueprint retain the same theorem name and statement.
+
+The pinned QICLean revision also provides the identical
+`WordMultiplicity.wordCoefficient` definition in
+`QICLean.Algebra.WordCoefficient`. `TNLean/Algebra/TwoMarkerScalarRecovery.lean`
+imports that module and removes its duplicate definition. The public name,
+ordered-word sum, and existing uses are unchanged. The modified module passed
+strict elaboration and the Mathlib standard linters with warnings as errors
+in the combined entropy/approximation verification checkout. This repair was
+identified by the full-library build of PR #10404; that build verifies the
+combined dependency revision rather than this PR's narrower QICLean pin.
