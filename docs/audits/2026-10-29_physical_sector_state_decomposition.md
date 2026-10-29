@@ -26,3 +26,8 @@ No local Lean, Lake, build, elaboration or checkdecls is run, as requested.
 The two public declarations and their Blueprint statement/proof are notready.
 Native checks and source review do not establish hosted kernel acceptance.
 No persistent Lean fixtures are introduced.
+
+Independent bounded review found no mathematical or pinned-API mismatch
+in the word-range characterizations, disjointness, mixed-word witnesses or
+actual pullback coefficients. Image-branch equalities close explicitly via
+the shared coordinate identities. Native checks pass.
