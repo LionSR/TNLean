@@ -28,7 +28,7 @@ theorem range_localObservable_empty_le {d : ℕ}
     (S : StarSubalgebra ℂ (AlgebraicLocalAlgebra d)) :
     (localObservable d ∅).range ≤ S := by
   classical
-  letI : Subsingleton (Config d ∅) := ⟨fun f g => by
+  let : Subsingleton (Config d ∅) := ⟨fun f g => by
     funext x
     exact False.elim (by simpa using x.2)⟩
   let x₀ : Config d ∅ := fun x => False.elim (by simpa using x.2)
@@ -102,7 +102,7 @@ theorem mem_range_localInclusion_iff_commute_outside_singletons
     apply (mem_range_localInclusion_iff_commute_complement hK A).mpr
     intro B
     rw [commute_iff_eq]
-    apply (localObservable d Γ).injective
+    apply localObservable_injective d Γ
     rw [map_mul, map_mul]
     have hAll := commute_localObservable_of_singletons (Γ \ K) (localObservable d Γ A)
       (fun x hx C => by
