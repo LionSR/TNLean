@@ -3,11 +3,11 @@
 
 The norm calculation of
 \cite[low-energy-state lemma]{FernandezGonzalez2015Uncle}
-uses injective unital diagonal blocks, their faithful stationary dual
-trace-one densities, and strict mixed-transfer damping in both
-orientations. The exact finite transfer contraction and the moving-wall
-bounds give the normalized squared-norm limit and its generic quadratic
-growth under these canonical spectral conditions.
+uses unital diagonal blocks and their faithful stationary dual trace-one
+densities. Full perturbation span implies diagonal injectivity and strict
+mixed-transfer damping in both orientations. The exact finite transfer
+contraction and the moving-wall bounds then give the normalized squared-norm
+limit and its generic quadratic growth.
 
 \begin{lemma}[Diagonal injectivity from perturbation span]
     \label{lem:uncle_diagonal_injectivity}
@@ -21,6 +21,29 @@ growth under these canonical spectral conditions.
     The two diagonal block projections are surjective linear maps. Their
     images of the perturbation letters are precisely the letters of the
     two diagonal blocks, so their spans are the entire block algebras.
+\end{proof}
+
+\begin{lemma}[Mixed damping from perturbation span]
+    \label{lem:uncle_mixed_damping_from_span}
+    \lean{MPSTensor.uncleBoundaryLetter_mixedMapSpectralRadius_lt_one,
+        MPSTensor.uncleBoundaryLetter_mixedMapSpectralRadius_reverse_lt_one}
+    \notready
+    \uses{def:uncle_boundary_space}
+    Suppose that the one-site perturbation letters span the full block
+    algebra, the diagonal transfers are unital, and they have faithful
+    stationary dual densities. Both mixed transfers have spectral radius
+    strictly below one.
+\end{lemma}
+\begin{proof}
+    Embed a mixed eigenvector as the upper off-diagonal block of the
+    block-diagonal channel. Unital contractivity bounds its eigenvalue
+    modulus by one. If equality holds, the faithful stationary density
+    forces equality in the Schwarz inequality and hence an intertwining
+    identity for every adjoint Kraus letter. Full perturbation span supplies
+    coefficients selecting zero in the first diagonal block and the identity
+    in the second. Contracting the intertwining identity gives a zero
+    eigenvector, a contradiction. Conjugate transpose treats the reverse
+    orientation.
 \end{proof}
 
 \begin{lemma}[Geometric convergence of a normalized injective block]
@@ -81,15 +104,16 @@ growth under these canonical spectral conditions.
     \notready
     \uses{lem:uncle_trial_norm_factorization_error,
         thm:uncle_wall_gram_linear_limit,cor:uncle_wall_gram_pair_generic_positive,
-        lem:uncle_diagonal_injectivity}
-    Under the stated canonical spectral conditions, the actual source
-    trial satisfies
+        lem:uncle_diagonal_injectivity,lem:uncle_mixed_damping_from_span}
+    Under the stated canonical normalization and strict mixed damping,
+    the actual source trial satisfies
     \[
         \frac{\lVert\phi_N\rVert^2}{(N+1)^2}
         \longrightarrow\operatorname{Re}(\kappa_R\kappa_L).
     \]
     If a full perturbation span is possible for the fixed diagonal
-    blocks, then for almost every pair $(R,L)$ there are $c,C>0$ such
+    blocks, it supplies the strict mixed damping needed for this limit.
+    For almost every pair $(R,L)$ there are $c,C>0$ such
     that, for all sufficiently large $N$,
     \[
         c(N+1)^2\le\lVert\phi_N\rVert^2\le C(N+1)^2.

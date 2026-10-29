@@ -7,13 +7,12 @@ transfer norm identity in #10320 and the actual wall Gram calculations in
 #10317. No local Lean build, elaboration, or checkdecls was run.
 
 The source context is the normalized standard form: unital diagonal
-blocks, faithful stationary dual trace-one densities, and strict mixed
-transfer damping in both orientations. The mixed damping conditions are
-stated explicitly as the source off-diagonal-damping prerequisite. This
-component does not silently replace them by operator norm below one or
-claim that the earlier standard-form-to-mixed-gap bridge has been derived.
-The new Blueprint statement states this canonical spectral scope and
-remains `notready`.
+blocks and faithful stationary dual trace-one densities. The final generic
+norm theorem derives strict mixed damping in both orientations from the
+full perturbation witness. Intermediate transfer estimates retain explicit
+mixed-gap inputs for reuse, while the final theorem has no supplied
+mixed-gap, diagonal-injectivity or primitivity hypothesis. All new Blueprint
+entries remain `notready`.
 
 `UnclePrimitiveTransfer.lean` derives actual pure-block geometric decay
 from block injectivity and unitality. The adjoint letter family is
@@ -24,6 +23,16 @@ maps makes fixed matrices scalar. The stationary trace functional then
 identifies the canonical projection and gives a strict complementary
 spectral-radius gap. No primitive, complementary-gap, or convergence
 hypothesis is introduced into the public bound.
+
+`UncleMixedDamping.lean` derives strict mixed damping from the actual full
+perturbation span. The block-diagonal channel is unital with a faithful
+stationary block density. A peripheral mixed eigenvector satisfies the
+Kraus intertwining identities by the existing QICLean weighted Schwarz
+equality. Coefficients isolating the second block identity and zero first
+block force that eigenvector to vanish. Conjugate transpose proves the
+reverse mixed gap. This removes the previously explicit mixed spectral
+assumptions from the main generic norm theorem; it does not replace them
+by an operator-norm-below-one premise.
 
 `UncleNormFactorization.lean` replaces the two separated pure transfer
 powers in the actual finite contraction by those canonical projections.
