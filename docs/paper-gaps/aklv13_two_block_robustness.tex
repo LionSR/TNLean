@@ -130,8 +130,9 @@ The actual favorable square-degree filter and initial product approximation
 are constructed for every window selected by the universal scalar choice
 that fits in the chain. The fixed-window changing-target sequence is now constructed by actual
 normalized polynomial images with an exact product rank budget. Finite
-small windows, the summed logarithmic rank estimate, the accuracy-dependent
-enlarged-window optimization, and the entropy argument remain further tasks.
+small windows and the entropy argument remain further tasks. The
+accuracy-dependent enlarged-window optimization is completed below,
+including exact boundary alternatives for chains too short for that window.
 \section{The initial product overlap}
 
 At source line 1023, the product-overlap inequality is printed with
@@ -162,7 +163,6 @@ $\|\psi_0-\Gamma\|^2\le1/16$.
 This is the initial step of the changing-target construction, with the
 available-window restriction stated separately; it is not the full
 sequence or entropy theorem.
-\end{document}
 
 \section{The coherent changing-target sequence}
 
@@ -192,7 +192,7 @@ logarithmic estimate and final entropy summation remain separate tasks.
 The accuracy-dependent enlarged-window argument at lines 1503--1517 is
 also separate and is not replaced by this fixed-window recursion.
 
-\section{Accuracy-dependent windows and the remaining rank comparison}
+\section{Accuracy-dependent windows and the sharp rank comparison}
 
 The construction in \doclink{TNLean/MPS/AreaLaw/AKLV/AccuracyWindow}
 chooses the source's accuracy-dependent enlarged window at a prescribed
@@ -217,13 +217,39 @@ logarithm
 32(\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1)\log(q(\ell+1)),\,
 (s-\lfloor s/2\rfloor)\log q\bigr\}.
 \end{align*}
-The source's optimized rate at lines 1503--1517 still requires a uniform
-bound for this expression of the form
-$C_A[u^3/g+(z^3/g)^{1/4}(u+\log(z+1))]$.
-The exact logarithmic identity does not establish that comparison.
-A sufficient elimination plan is to split at $z=s_0$, absorb the smaller
-scale into the proved initial logarithmic budget, and control the degree
-and window costs by the fourth-root increment at the larger scale.
-The subsequent marginal-tail and sequential MPS construction must use
-that proved comparison, rather than substitute an exponential-in-accuracy
-rank estimate or the independent chain area law.
+The construction in \doclink{TNLean/MPS/AreaLaw/AKLV/OptimizedRankBound}
+now proves the uniform comparison
+\begin{align*}
+ \log B\le C_A\left[\frac{u^3}{g}+
+      \left(\frac{z^3}{g}\right)^{1/4}(u+\log(z+1))\right].
+\end{align*}
+The universal coefficient depends only on the already universal $A$.
+For $z\le s_0$, the actual degree is at most $66s_0^2$, and the extra
+logarithmic rank cost is absorbed by the initial cost. For $s_0\le z$,
+one has $m<z+1$, $2t+s\le4225z$, and the actual degree is at most
+$66m^2$. The sharp polynomial-rank formula therefore has exponent at
+most $2432m$. The exact boundary alternative has logarithmic cost at
+most $s_0\log q+2m\log q$, which is absorbed by the same bound.
+No exponential-in-degree replacement is used.
+
+The physical theorem in
+\doclink{TNLean/MPS/AreaLaw/AKLV/SharpPerCutApproximation}
+derives $q\ge2$ and $g\le1$ from the two distinct spectral values and
+the original unique-ground positive-contraction chain, independently
+of window fit. Neither is a new hypothesis. The actual excited spectral
+value $\mu+g$ remains explicit; the statement is not asserted for every
+arbitrary projector-gap lower bound without choosing an actual gap.
+
+Finally \doclink{TNLean/MPS/AreaLaw/AKLV/SharpMPSApproximation}
+sets $\rho=\epsilon^2/[16(L+1)]$. The actual per-cut approximants give
+Schmidt discarded mass at most $\rho$. Sequential truncation by the
+leading marginal spectral projections has squared error at most
+$\epsilon^2/16$ and cut ranks at most $B$. Its normalization is therefore
+an actual unit matrix product state within norm error $\epsilon$, with
+the same bond bound and
+$z=\log(2048(L+1)/\epsilon^2)$. The returned vector is that normalized
+ordered product. The proof uses no independent area-law or matrix
+product approximation existence theorem. This completes this sharp
+approximation route; the entropy summation from the separate coherent
+changing-target sequence remains a further task.
+\end{document}

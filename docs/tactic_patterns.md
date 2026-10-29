@@ -10037,3 +10037,18 @@ there is no need for a new tactic.
 - **Consumer:** `AKLV/AccuracyWindow.lean` obtains the actual same-cut
   initialized filter image when the window fits and the exact ground vector
   otherwise. No smaller replacement window or independent area law is used.
+
+### Accuracy scales and quadratic degree costs — promoted (2026-10-29)
+
+- **Pattern:** Bound a ceiling of a fourth root by an accuracy logarithm,
+  then convert a quadratic degree bound into the linear exponent in the
+  sharp AKLV rank formula.
+- **Abstraction:** `aklvAccuracyIncrement_lt_log_add_one` in
+  `MPS/AreaLaw/AKLV/OptimizedRankScale.lean` is used by both the actual-degree
+  and logarithmic-rank comparisons. `aklv_rank_exponent_le_of_degree_le_square`
+  in `OptimizedRankLog.lean` supplies both logarithmic base comparisons.
+- **Notes:** The existing QIC homogeneous Ky Fan overlap inequality and the
+  existing `norm_inv_norm_smul_sub_le_two_mul` are reused for the marginal
+  tail and normalized sequential output. No new matrix overlap or
+  normalization proof is introduced. The scoped tactic-pattern scan
+  reported no repeated blocks at the default thresholds.
