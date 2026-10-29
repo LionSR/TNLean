@@ -214,6 +214,7 @@
     \label{thm:mpu_finite_heisenberg_forward_local_action}
     \lean{SpinChain.finiteChainLocalObservable_localInclusion,
         SpinChain.bufferedMPULocalAction,
+        SpinChain.exists_finiteChainLocalObservable_bufferedMPULocalAction,
         SpinChain.bufferedMPULocalAction_compatible,
         SpinChain.bufferedMPULocalAction_eq_finiteChainLocalObservable,
         SpinChain.bufferedMPUAlgebraicAction,
@@ -413,4 +414,79 @@
     finite conjugation and rotates the neighbourhood by the same
     amount. Finite cyclic induction therefore gives the assertion
     at every site.
+\end{proof}
+
+\begin{lemma}[Actual translation covariance of the completed forward action]
+    \label{lem:mpu_finite_heisenberg_translation_covariance}
+    \lean{SpinChain.translateRegion_finiteChainRegion,
+        SpinChain.algebraicLocalTranslation_intervalCoordinates,
+        SpinChain.quasiLocalTranslation_intervalCoordinates,
+        SpinChain.intervalCoordinates_localInclusion_localTranslation,
+        SpinChain.intervalCoordinates_finiteChainMPOMatrix,
+        SpinChain.intervalCoordinates_finiteChainConjugation,
+        SpinChain.algebraicLocalTranslation_finiteChainConjugation,
+        SpinChain.quasiLocalTranslation_finiteChainConjugation,
+        SpinChain.bufferedMPUQuasiLocalAction_translation_quasiLocalObservable,
+        SpinChain.bufferedMPUQuasiLocalAction_translation}
+    \notready
+    \uses{thm:mpu_finite_heisenberg_completed_forward_action}
+    Translation of an interval observable shifts its integer anchor
+    without changing its consecutive-coordinate matrix. The same is
+    true of actual finite MPO conjugation. Consequently the completed
+    forward action $F$ under the preceding supplied standard-form
+    hypotheses commutes with every integer lattice translation:
+    \[
+        F(\tau_t(X))=\tau_t(F(X)),\qquad t\in\mathbb Z.
+    \]
+    Covariance is derived from the actual homogeneous finite operators;
+    no covariance or inverse hypothesis is supplied. This is the
+    forward translation statement in
+    \cite[lines~2292--2306]{Cirac2017MPU}, with the source restriction
+    recorded in \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
+\end{lemma}
+\begin{proof}
+    Canonical translation and consecutive coordinates give the same
+    site numbering after shifting the interval anchor. Their local
+    representatives agree after canonical inclusion. The periodic
+    MPO matrix in these coordinates is independent of the anchor,
+    so actual finite conjugation translates with its input. The
+    translated interval satisfies the same buffer inequalities.
+    Apply the already derived finite-chain evaluation of $F$ on both
+    intervals. The resulting equality on finite local observables
+    extends to the completion by continuity and density.
+\end{proof}
+
+
+\begin{lemma}[Actual forward propagation in the supplied block radius]
+    \label{lem:mpu_finite_heisenberg_forward_propagation}
+    \lean{SpinChain.bufferedMPUAlgebraicAction_supportedIn,
+        SpinChain.bufferedMPUQuasiLocalAction_supportedIn}
+    \notready
+    \uses{thm:mpu_finite_heisenberg_completed_forward_action,
+        lem:mpu_singleton_generation_and_inverse_reflection}
+    Under the preceding supplied positive block and standard-form
+    hypotheses, the actual completed forward endomorphism $F$ sends
+    every observable supported in $\Lambda$ to an observable supported
+    in
+    \[
+        \Lambda+([-4k,4k]\cap\mathbb Z).
+    \]
+    The same support statement holds before completion in the algebraic
+    local algebra. No output support or inverse property is supplied
+    as a hypothesis. This is the forward propagation ingredient of
+    \cite[lines~2298--2306]{Cirac2017MPU}, with the radius expressed
+    in the supplied block length. Its bond-dimension bound and inverse
+    assembly remain separate as in
+    \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
+\end{lemma}
+\begin{proof}
+    For a one-site observable at $x$, choose the actual chain
+    $[x-2k,x+4k)$ of length $6k>1$. The established finite-chain
+    formula represents its output in precisely that finite-region
+    algebra. This window is contained in the stated neighbourhood
+    of $x$. The full one-site algebras generate each finite supported
+    algebra; applying the forward homomorphism therefore places
+    its whole image in the neighbourhood algebra. The completed
+    evaluation formula gives the same support statement for every
+    finite supported quasi-local observable.
 \end{proof}
