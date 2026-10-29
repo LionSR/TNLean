@@ -15,9 +15,9 @@ lower bound there, and hence the same contraction in arbitrary ground
 multiplicity. This supports ALVV, arXiv:1602.08828v2, `lem:dl` and
 `thm:FF-tH`, lines 1508–1519 and 1562–1568.
 
-The local terms are orthogonal projections. The reduction from general positive contractions is proved in
-`PhysicalRangeDetectability.lean`. The regional truncated Hamiltonian
-remains a separate construction.
+The local terms are orthogonal projections. The reduction from general
+positive contractions is proved in `PhysicalRangeDetectability.lean`.
+The regional truncated Hamiltonian remains a separate construction.
 -/
 
 open Matrix
