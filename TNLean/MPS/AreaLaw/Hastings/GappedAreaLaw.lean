@@ -41,6 +41,11 @@ eq. `smd`, so the printed `S_max = c₀ ξ' ln ξ' ln D 2^{ξ' ln D}` is not cla
 `docs/paper-gaps/hastings07_relent_constants.tex` and
 `docs/paper-gaps/hastings07_doubling_constants.tex`.
 
+The smaller-length qualifications above concern the statements in this module.
+`Hastings.SourceLength` constructs a numerical arbitrary-support Lieb–Robinson pair
+and proves the printed entropy-bound shape at an enlarged admissible length, while
+retaining these fixed-length corrections.
+
 ## Main results
 
 * `exists_regionEntropy_prefix_le`: eq. `entbd`, with `ξ' = 6ζ` and `C₁ = max (K ζ³) 1`,

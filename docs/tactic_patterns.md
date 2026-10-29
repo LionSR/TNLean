@@ -24,6 +24,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Support of an internal-bond sum — promoted (2026-10-29)
+
+- **Pattern:** Apply support under finite sums, then enlarge the two-site support
+  of each internal bond to its enclosing interval.
+- **Defined in:** The existing
+  `TNLean.MPS.AreaLaw.isSupportedOn_sum_internal_bonds` in
+  `MPS/AreaLaw/FiveRegionHamiltonian.lean`, now public without a statement change.
+- **Refactored occurrences:** The two new uses in
+  `MPS/AreaLaw/AKLV/Normalization.lean` call that same lemma; the original three
+  uses in `FiveRegionHamiltonian.lean` are retained. No parallel support API or
+  new tactic is introduced.
+
+
 ### Matrices of submodule orthogonal projections — promoted (2026-10-26)
 
 - **Pattern:** Form `Matrix.toEuclideanLin.symm W.starProjection.toLinearMap`
@@ -9660,6 +9673,19 @@ there is no need for a new tactic.
   assume a spectral gap. No new tactic or parallel spectral-space notion is
   introduced.
 
+- **Buffered extension (2026-10-29):**
+  `MPS/AreaLaw/PhysicalLowEnergyFamily.lean` supplies one residual estimate
+  uniformly for all smaller positive bandwidths, so both nested targets use
+  the same clipping. Its scalar threshold and ceiling estimate repeat the
+  earlier private scalar estimates (two occurrences across two files).
+  The two vector-norm estimates share one local function; the standard
+  `norm_sub_rev` equality is composed directly in the reverse order instead
+  of simplifying the full physical matrix expression.
+- **Existential factors:** The three-line extraction of the second conjunct
+  from an existential tensor decomposition appeared in three modules during
+  this extension. The new occurrence uses the existing `Exists.imp` with
+  conjunction projection directly; a new tactic is unnecessary.
+
 ### Increasing an exact matrix product bond bound — promoted (2026-10-28)
 
 - **Seen:** The uniform polynomial-family bound in
@@ -9684,3 +9710,30 @@ there is no need for a new tactic.
 - **Scope:** The abstract auxiliary is used once by the physical theorem,
   keeping all basis choices and the final elementary expansion in one place.
   No tactic or additional closeness predicate is needed.
+
+### Nearest-neighbour crossing weights — promoted (2026-10-29)
+
+- **Pattern:** Specialize the ordered designated-support product bound to
+  adjacent pairs and identity padding; identify its weighted crossing sum
+  with the actual multiplicity of the unique crossing letter.
+- **Seen:** `MPS/AreaLaw/ViableSet/SampledPowerRank.lean`, interior and endpoint cuts.
+- **Abstraction:** Reuses QICLean's
+  `Entropy.operatorSchmidtRank_cutOperator_list_prod_le` rather than repeating
+  the noncommutative rank-product induction. Local support geometry remains
+  in the chain specialization.
+- **Notes:** The finite-index multiplicity bridge requires `BEq` and
+  `LawfulBEq`, preserving the list's equality instance. The actual-module
+  imported audit uses Lean's `--setup` and a single explicit `importArts`
+  entry, so no provider namespace or compiled dependency is copied.
+
+### Canonical eigenvectors in Euclidean coordinates — candidate (2026-10-29)
+
+- **Seen:** The canonical-eigenvector identities in
+  `MPS/AreaLaw/FiveRegionTruncationResidual.lean` and
+  `MPS/AreaLaw/AKLV/TwoBlockTruncation.lean`.
+- **Reuse:** Each identity uses `Matrix.IsHermitian.mulVec_eigenvectorBasis`;
+  `WithLp.ofLp_injective`, `Matrix.ofLp_toEuclideanCLM` and the existing scalar
+  conversion transport that theorem to Euclidean coordinates.
+- **Candidate:** A QICLean lemma stating the Euclidean-coordinate version would
+  remove this recurring coordinate conversion. The eigenvector theorem itself
+  is already reused; no new spectral argument or tactic is introduced here.

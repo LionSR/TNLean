@@ -71,6 +71,7 @@ import TNLean.MPS.AreaLaw.OpenMPSOperatorAction
 import TNLean.MPS.AreaLaw.OpenMPSProduct
 import TNLean.MPS.AreaLaw.OpenMPSRank
 import TNLean.MPS.AreaLaw.OpenMPSSpan
+import TNLean.MPS.AreaLaw.OriginalLowEnergyFamily
 import TNLean.MPS.AreaLaw.OverlapEnergy
 import TNLean.MPS.AreaLaw.PartialSwap
 import TNLean.MPS.AreaLaw.PhysicalChebyshevViability
@@ -83,6 +84,7 @@ import TNLean.MPS.AreaLaw.PhysicalDGSharpApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGViability
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.PhysicalLowEnergyCloseness
+import TNLean.MPS.AreaLaw.PhysicalLowEnergyFamily
 import TNLean.MPS.AreaLaw.PhysicalPeriodicPolynomialFamily
 import TNLean.MPS.AreaLaw.PhysicalPolynomialTensorFamily
 import TNLean.MPS.AreaLaw.PolynomialFilterParameters

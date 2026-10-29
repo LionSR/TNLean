@@ -74,7 +74,7 @@ theorem card_internal_bonds_le (L lo hi : ℕ) :
 /-- The sum of the actual internal bonds is supported on its site interval.
 Auxiliary to ALVV's regional hard truncation, `def:hard-trunc`, lines 873–886.
 This is only a support statement and requires no local dimension hypothesis. -/
-private theorem isSupportedOn_sum_internal_bonds (L q lo hi : ℕ)
+theorem isSupportedOn_sum_internal_bonds (L q lo hi : ℕ)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h i) (interval L i.val (i.val + 2))) :

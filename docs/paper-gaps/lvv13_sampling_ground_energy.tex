@@ -142,18 +142,28 @@ The uniform polynomial construction for unrestricted gapped chains
 requires a different approximate projection or a derived energy
 reduction. The published supplementary material, page~6, points to the
 replacement proposed by Huang~\cite{Huang2015GroundState}, based on
-Hastings and Osborne, for arbitrary ground energy. The remaining
-formalization choices are therefore to establish the published
-energy-dependent construction, state its bounded-energy specialization
-explicitly, and derive a replacement construction before claiming the
-unrestricted preprint conclusion.
+Hastings and Osborne, for arbitrary ground energy. The energy-dependent construction must retain its ground-energy exponent.
+A replacement construction is still required before the unrestricted
+preprint conclusion can be claimed.
 
-This note records a mathematical counterexample and a comparison of the
-source versions; neither the counterexample nor the sampling estimates are
-yet Lean theorems. The missing construction is tracked by issues
-\#9822 and \#9823 under \#9832. Spectral-power and deterministic
-error-reduction estimates alone do not establish the missing
-uniform sampling statement.
+The normalization estimate in~(\ref{eq:lvv_sampling_energy_dependence})
+and the resulting sampled operator approximation are now formalized in
+QICLean. For positive-contraction interactions, a unit ground vector and
+a positive lower gap, the construction produces one actual word family
+whose normalized sum approximates both the power and the ground
+projection, and whose letter counts are simultaneously bounded. The
+explicit positive sample count retains the factor
+$n^2Q^{2\varepsilon_0/\varepsilon}$. The corresponding source is QICLean's
+module \path{QICLean/Probability/PhysicalPowerSampling.lean}.
+
+TNLean's module \path{TNLean/MPS/AreaLaw/ViableSet/SampledPowerRank.lean}
+adds the spatial estimate for the same word family: across every chain
+cut, its normalized sum has operator Schmidt rank at most
+$\ell q^{2u}$, where every letter count is strictly below $u$.
+The counterexample above has not been formalized. Neither of these new
+results supplies a polynomial sample count with degree independent of
+the ground energy. The remaining unrestricted construction is tracked by
+issues \#9822 and \#9823 under \#9832.
 
 \bibliographystyle{alpha}
 \bibliography{references}

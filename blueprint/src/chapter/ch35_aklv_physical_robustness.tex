@@ -1,0 +1,61 @@
+\section{Physical robustness at the source polynomial threshold}
+
+\begin{theorem}[Robustness for a window with at least six interactions]
+    \label{thm:aklv_physical_robustness}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_physical_robustness}
+    \leanok
+    \uses{def:aklv_normalization_regions,def:aklv_two_block_truncation}
+    Let $s\ge6$, $a+s+1\le L$, and let $0\le h_i\le\Id$ be supported on
+    $\{i,i+1\}$. Suppose $\Omega$ is a unit ground vector of
+    $H'=\sum_i h_i$ with energy $\mu$ and actual first excited energy
+    $\mu+g$, where $g>0$, and suppose
+    $H'-\mu\Id\ge g(\Id-|\Omega\rangle\langle\Omega|)$.
+    The genuine reference minima $e_j$ can be chosen before $t$, with
+    $E_0+\sum_j e_j=\mu$ and $0\le E_0\le6$.
+    For every
+    \begin{align}
+        t\ge\frac{1024}{g}\left(\frac{E_0}{g}+1\right),
+        \label{eq:aklv_physical_polynomial_threshold}
+    \end{align}
+    form the actual two-exterior truncation $B$ at cuts $a+2,a+s-1$
+    with those same minima. It has an actual phase-aligned unit ground
+    vector $\phi$, its gap is at least $9g/10$, and
+    \begin{align}
+        \|\phi-\Omega\|^2\le\frac{e^{-t/16}}{100}.
+        \label{eq:aklv_physical_robustness_error}
+    \end{align}
+    This gives the polynomial-threshold and exponential conclusions of
+    \cite[Theorem~6.1]{Arad2013AreaLaw} for the original bounded-term setting
+    and the stated window range. The support and normalization corrections
+    are recorded in \cite{gap:aklv13_two_block_robustness}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:aklv_two_block_scaled_low_cluster,
+        thm:chain_positive_nearest_neighbor_gap_upper}
+    The two distinct spectral values force $q\ge2$.
+    The original endpoint trial vector gives $g\le1$.
+    Put $C_1=10^6\cdot64e^{3/4}$ and $\tau=e^{-t/16}$.
+    Since $E_0\ge0$, (\ref{eq:aklv_physical_polynomial_threshold}) implies
+    $t\ge1024/g$. Moreover,
+    \begin{align*}
+        \log C_1&\le61, & -\log g&\le g^{-1}-1, & g^{-1}&\ge1.
+    \end{align*}
+    These inequalities give
+    \begin{align*}
+        g+8\log\frac{C_1}{\tau g}
+        &=\frac{t}{2}+g+8(\log C_1-\log g)\le t,
+    \end{align*}
+    and $g+11\le t$. Thus $0<\tau\le1$ and
+    $t\ge\Theta(g,\tau)$.
+    Theorem~\ref{thm:aklv_two_block_scaled_low_cluster} supplies an actual
+    canonical ground eigenvector with gap at least $9g/10$ and squared
+    phase error at most $\tau/100$. Multiplying it by the inverse phase
+    preserves its norm and eigenvalue and yields $\phi$ satisfying
+    (\ref{eq:aklv_physical_robustness_error}).
+\end{proof}
+
+% The original nearest-neighbour/norm-one context is retained from source
+% lines879--925. Theorem6.1 does not explicitly quantify over arbitrary independent
+% exterior matrices. The present statement keeps s>=6 explicit; smaller windows
+% remain separate, as documented by the cited source note.

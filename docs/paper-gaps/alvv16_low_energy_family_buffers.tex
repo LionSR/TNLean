@@ -1,0 +1,140 @@
+\documentclass{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{Buffers in the ALVV Low-Energy Improving-Family Construction}
+\author{}
+\date{October 29, 2026}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source regime}
+
+Theorem~4.8 of Arad, Landau, Vazirani and Vidick~\cite{Arad2016RigorousRG},
+\href{https://arxiv.org/abs/1602.08828v2}{arXiv:1602.08828v2}, has source
+label \texttt{t:aisgapless}. In \path{local_alg_arxiv_v2.tex}, line~1027,
+its bandwidths satisfy
+\begin{align}
+    \eta_{\mathrm{LD}}\ge\eta_1\ge\frac{2\mu}{\log n},\qquad \mu>0.
+    \label{eq:ld_source_bandwidth}
+\end{align}
+The proof at lines~1037--1040 uses the buffer
+\begin{align}
+    w=\frac{\mu}{3\log n}.
+    \label{eq:ld_source_buffer}
+\end{align}
+For an integer $n\ge2$, one has $\log n>0$, hence $w>0$ and
+$\eta_1\ge6w>3w$. The source's two clipped cutoffs differ by $w$, while
+the lower original cutoff is smaller than the upper original cutoff by $3w$.
+In the bounded statement below, $\eta$ denotes this source cutoff $\eta_1$,
+rather than the density bandwidth $\eta_{\mathrm{LD}}$.
+These inequalities concern $n\ge2$. They do not supply an argument for
+$n=0$ or $n=1$, where the positive-log substitution is unavailable.
+
+\section{The bounded five-region conclusion}
+
+The physical construction considered here has local dimension $q\ge2$,
+window parameter $\ell\ge1$, and integer positions satisfying
+\begin{align}
+    a+2\ell\le b,\qquad b+2\ell\le L-1.
+    \label{eq:ld_five_region_geometry}
+\end{align}
+In particular, $L\ge4\ell+1\ge5$; small chains are not covered by this
+geometry. Let the supported nearest-neighbour terms satisfy $0\le h_i\le I$.
+Their actual regional minima $e_j$ define the centered original Hamiltonian
+$H_0=H-(\sum_j e_j)I$, whose ground energy $E_0$ lies in $[0,4]$.
+Clip the three bulks, retain the two windows, and denote the resulting
+centered Hamiltonian by $\widetilde H$.
+
+For $\varepsilon>0$, $w>0$ and $3w<\eta$, put
+\begin{align}
+    C_*&=288e^{11/8},\notag\\
+    t&=21+\eta+8\log\!\left(
+       \frac{C_*}{\min\{1,\varepsilon w^2/[2(6+\eta)]\}}\right),\notag\\
+    R&=3t+4\ell.
+    \label{eq:ld_common_threshold}
+\end{align}
+The bounded conclusion uses this one actual truncation for all
+spectral comparisons and for the polynomial decomposition. Its targets are
+\begin{align}
+    T_-&=\mathbf1_{(-\infty,E_0+\eta-2w]}(\widetilde H)\mathcal H,\notag\\
+    T_+&=\mathbf1_{(-\infty,E_0+\eta-w]}(\widetilde H)\mathcal H.
+    \label{eq:ld_nested_targets}
+\end{align}
+They satisfy $T_-\subseteq T_+$, and the one-sided comparisons are
+\begin{align}
+    \mathbf1_{(-\infty,E_0+\eta]}(H_0)\mathcal H
+      &\text{ is }\varepsilon\text{-close to }T_+,\notag\\
+    T_-&\text{ is }\varepsilon\text{-close to }
+      \mathbf1_{(-\infty,E_0+\eta-3w]}(H_0)\mathcal H.
+    \label{eq:ld_physical_sandwich}
+\end{align}
+The reference energy is the original centered ground energy $E_0$.
+No equality with the clipped ground energy, equality of the two target
+spaces, or spectral gap between their cutoffs is asserted.
+
+The strict inequality $3w<\eta$ makes the lower original bandwidth positive.
+The existing finite spectral-window comparison uses lower floor zero and
+requires its source cutoff to exceed that floor. At $\eta=3w$ and $E_0=0$
+this condition fails. A negative lower floor with an adjusted window-count
+constant could address that endpoint, but the bounded statement does not
+claim it. The source regime (\ref{eq:ld_source_bandwidth}) for $n\ge2$
+already lies strictly inside the stated buffer range.
+
+The common polynomial family on $J=[a+\ell,b+\ell+1)$ has at most $D^2$
+operators, where $D=(q\ell^2)^{20\ell}$. Applying the actual degree-$\ell^2$
+Chebyshev polynomial gives the squared shrinking coefficient
+\begin{align}
+    \Delta=\left(2\exp\!\left[-2\ell^2
+      \sqrt{\frac{w}{R-(E_0+\eta-2w)}}\right]\right)^2.
+    \label{eq:ld_explicit_filter_error}
+\end{align}
+The finite decomposition concerns that same polynomial of
+$\widetilde H$. It transfers viability from $T_+$ to $T_-$ with error
+$\Delta/(1-\delta)^2$. The unsquared polynomial need not be positive;
+the relevant closed-cutoff and sign corrections are documented in the
+companion spectral-projector and Chebyshev-positivity notes.
+
+\section{Returning to the original spectral windows}
+
+The same constructed family can be applied to a subspace viable for the
+original upper window, with both comparison losses retained. If
+$\delta\ge0$ and $2(\delta+\varepsilon)<1$, the first comparison gives
+viability $2(\delta+\varepsilon)$ for $T_+$. After the filter, the error
+for $T_-$ is $\Delta/[1-2(\delta+\varepsilon)]^2$. Transferring once more
+to the original lower window gives
+\begin{align}
+    \delta_{\mathrm{out}}=
+      2\left(\frac{\Delta}{[1-2(\delta+\varepsilon)]^2}
+        +\varepsilon\right).
+    \label{eq:ld_original_window_error}
+\end{align}
+Both transfers use ALVV's closeness-composition lemma
+(\texttt{l:close}, source lines 484--489).
+The family, actual polynomial and exterior tensor factors are the same
+ones chosen before the viable subspace. No additional closeness or
+factorization hypothesis is introduced. This corollary does not remove
+the geometric or buffer restrictions and does not identify
+(\ref{eq:ld_original_window_error}) with the clipped-target error.
+
+\section{What remains for the full source theorem}
+
+The full source theorem must retain its separate uncompleted status until
+all of the following are derived: the substitution
+(\ref{eq:ld_source_buffer}) with its length hypotheses, the desired
+$D^{12}\Delta$ estimate and printed asymptotic parameters, placement at
+arbitrary prescribed middle blocks including short and boundary blocks,
+and the finite exceptional chain lengths. In particular, $n=2,3,4$ have
+positive logarithm but do not satisfy (\ref{eq:ld_five_region_geometry})
+for $\ell\ge1$. Direct short-region constructions are required there.
+The low-density bootstrap and the sampled merge-tree induction are
+additional results. The false soft-cluster estimate is not used in this
+hard-truncation argument.
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}

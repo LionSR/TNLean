@@ -1,0 +1,172 @@
+\section{Spatial rank of the sampled normalized power}
+\label{sec:lvv_sampled_power_rank}
+
+Consider a chain of $L\ge0$ sites, each of dimension $q\ge1$.
+Let $I$ index its adjacent pairs. An operator $P_i$ is supported on pair
+$i,i+1$ for every $i\in I$. Adjoin a letter $\ast$, put $P_\ast=1$, and
+write $P_w=P_{w(0)}\cdots P_{w(m-1)}$ for a word $w$ of length $m$.
+Let $C_a(w)$ be the number of occurrences of the letter $a$ in $w$.
+Denote operator Schmidt rank across the cut after $k$ sites by
+$\operatorname{SR}_k$.
+
+\begin{theorem}[The unique crossing letter]
+    \label{thm:lvv_padded_nn_word_rank}
+    \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_padded_nn_word_le}
+    \leanok
+    At an interior cut $0<k<L$, let $a_k$ be the letter on the adjacent
+    pair crossing that cut. Then
+    \begin{align}
+        \operatorname{SR}_k(P_w)\le q^{2C_{a_k}(w)}.
+        \label{eq:lvv_padded_nn_word_rank}
+    \end{align}
+    This is the ordered-word estimate of~\cite[Section~2.3.1]{Landau2015Polynomial}, with the paired-index correction
+    recorded in~\cite{gap:lvv13_paired_matrix_decomposition}.
+\end{theorem}
+\begin{proof}\leanok
+    A letter away from the crossing pair acts on one side and contributes
+    rank at most one. The crossing pair meets either side in one site,
+    so its rank is at most $q^2$. The general ordered-support product bound
+    therefore gives~(\ref{eq:lvv_padded_nn_word_rank}), with the actual
+    multiplicity of the crossing letter. No commutation is required.
+\end{proof}
+
+\begin{theorem}[One sample family, all spatial cuts]
+    \label{thm:lvv_padded_nn_sample_rank}
+    \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_padded_nn_word_le_of_counts,
+        TNLean.MPS.AreaLaw.operatorSchmidtRank_padded_nn_sample_sum_le,
+        TNLean.MPS.AreaLaw.operatorSchmidtRank_sampled_nn_complements_le}
+    \leanok
+    \uses{thm:lvv_padded_nn_word_rank}
+    Let $\sigma$ be a family of $\ell$ words such that
+    $C_a(\sigma(b))\le u$ for every sample $b$ and letter $a$.
+    For arbitrary complex coefficients $z_b$ and every cut $k\ge0$,
+    \begin{align}
+        \operatorname{SR}_k(P_{\sigma(b)})
+        &\le q^{2u},\\
+        \operatorname{SR}_k\left(\sum_b z_bP_{\sigma(b)}\right)
+        &\le \ell q^{2u}.
+        \label{eq:lvv_padded_nn_sample_rank}
+    \end{align}
+    The same bound holds after scalar normalization, and applies in
+    particular to the complements $P_i=1-h_i$ of adjacent-pair terms.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:lvv_padded_nn_word_rank}
+    At an interior cut, apply~(\ref{eq:lvv_padded_nn_word_rank}) to each word.
+    At an endpoint cut, every letter acts on one side, so every word has
+    rank at most one. Finally use subadditivity and the fact that scalar
+    multiplication does not increase operator Schmidt rank. The identity
+    and $h_i$ are supported on the same pair, hence so is $1-h_i$.
+\end{proof}
+
+\begin{theorem}[The normalized power sample with spatial rank control]
+    \label{thm:lvv_sampled_nn_power_rank}
+    \lean{TNLean.MPS.AreaLaw.exists_sampled_nn_power_approximation_with_rank}
+    \leanok
+    \uses{thm:lvv_padded_nn_sample_rank}
+    Let $0\le h_i\le1$ be supported on the adjacent pairs, and set
+    $H=\sum_{i\in I}h_i$, $n=|I|+1$. Suppose that $\Omega$ is a unit vector,
+    $H\Omega=E_0\Omega$, and
+    $H-E_0\,1\ge\Delta(1-\Pi)$, where $\Delta>0$ and
+    $\Pi=|\Omega\rangle\langle\Omega|$.
+    Choose $Q\ge1$, $\eta>0$, and an integer $p\ge1$ with $2q^L<4^p$.
+    Put
+    \begin{align}
+        C&=(1-E_0/n)^{-1},\\
+        m&=\left\lceil\frac{n-E_0}{\Delta}\log Q\right\rceil,\\
+        S&=n^2\exp\left(\frac{2E_0\log Q}{\Delta}\right),\\
+        \ell&=\left\lceil\frac{16p^2S}{\eta^2}\right\rceil+1,\\
+        u&=\left\lceil\frac{m/n+\log(2n\ell)}{\log2}\right\rceil.
+        \label{eq:lvv_sampled_nn_power_parameters}
+    \end{align}
+    Then $\ell>0$, and there is one family $\sigma$ of $\ell$ words of length
+    $m$ over $I\sqcup\{\ast\}$ such that, for
+    \begin{align}
+        A=[C(1-H/n)]^m,\qquad
+        K=\frac{C^m}{\ell}\sum_bP_{\sigma(b)},
+        \label{eq:lvv_sampled_nn_power_operator}
+    \end{align}
+    one has
+    \begin{align}
+        \|K-A\|&<\eta,\\
+        \|K-\Pi\|&<\eta+Q^{-1},\\
+        C_a(\sigma(b))&<u\quad\text{for every }b,a,\\
+        \operatorname{SR}_k(K)&\le\ell q^{2u}\quad\text{for every }k\ge0.
+        \label{eq:lvv_sampled_nn_power_conclusions}
+    \end{align}
+    The ground-energy dependence agrees with the published sampling
+    argument~\cite[supplement, Proposition~1, p.~6]{Landau2015Published}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:lvv_padded_nn_sample_rank}
+    The finite uniform sampling theorem gives the first three conclusions
+    on a single actual word family. Its proof derives the word mean from
+    the expansion of $[C(1-H/n)]^m$ and uses the norm bound $\|P_w\|\le1$.
+    The displayed choices make the matrix failure probability strictly
+    below $1/2$ and the frequency failure probability at most $1/2$.
+    Apply Theorem~\ref{thm:lvv_padded_nn_sample_rank} to this same family,
+    with coefficients $C^m/\ell$.
+\end{proof}
+
+The factor $S=n^2Q^{2E_0/\Delta}$ remains in the sample count. Thus this
+construction does not establish the unrestricted polynomial sample count
+printed in the first preprint version. The distinction between that
+version and the published theorem is explained in the note on ground-energy
+normalization accompanying this development.
+
+\begin{theorem}[Sampled left factors for a specified ground energy]
+    \label{thm:lvv_sampled_left_error_reduction}
+    \lean{TNLean.MPS.AreaLaw.exists_sampled_nn_errorReduction}
+    \leanok
+    \uses{thm:lvv_sampled_nn_power_rank,thm:lvv_simultaneous_cut_decomposition,
+        thm:lvv_projection_error_reduction,thm:lvv_operator_bond_growth}
+    Under the physical hypotheses of Theorem~\ref{thm:lvv_sampled_nn_power_rank},
+    let $0<\delta\le1$ and $p\ge1$ satisfy $2q^L<4^p$.
+    In~(\ref{eq:lvv_sampled_nn_power_parameters}), choose
+    $Q=8/\delta$, $\eta=\delta/8$, and put $r=\ell q^{2u}$.
+    The actual ground energy $E_0$ is specified before these parameters
+    and the sampled family are chosen.
+
+    There is one sampled operator $K$, with its actual word family as
+    in~(\ref{eq:lvv_sampled_nn_power_operator}), such that
+    $\|K-\Pi\|<\delta/4$ and the following holds at every cut $i\le L$.
+    There are $a\le r$ pairs of operators $A_j,B_j$, acting on the first
+    $i$ sites and the remaining sites respectively, such that
+    \begin{align}
+        K=\sum_{j=1}^{a}A_j\otimes B_j.
+        \label{eq:lvv_sampled_left_factor_decomposition}
+    \end{align}
+    Every $A_j$ has operator Schmidt rank at most $r$ at each internal
+    cut of the first $i$ sites. These factors may be chosen so that for
+    every $(i,s,b,1/2)$-viable finite set $S$, the actual family
+    \begin{align}
+        S'=\{A_js:1\le j\le a,\ s\in S\}
+        \label{eq:lvv_sampled_left_factor_family}
+    \end{align}
+    is $(i,as,r\max(1,b),\delta)$-viable.
+    In particular, $|S'|\le as\le rs$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:lvv_sampled_nn_power_rank,thm:lvv_simultaneous_cut_decomposition,
+        thm:lvv_projection_error_reduction,thm:lvv_operator_bond_growth}
+    The chosen parameters give
+    $\eta+Q^{-1}=\delta/4<1/2$.
+    Theorem~\ref{thm:lvv_sampled_nn_power_rank} supplies a single actual
+    sampled family with this projection error and rank at most $r$ at
+    all cuts. Theorem~\ref{thm:lvv_simultaneous_cut_decomposition}
+    constructs~(\ref{eq:lvv_sampled_left_factor_decomposition}), with
+    $a\le r$ and the asserted internal ranks of its left factors.
+    These choices precede the choice of $S$.
+
+    The deterministic projection estimate,
+    Theorem~\ref{thm:lvv_projection_error_reduction}, gives overlap loss
+    at most $4(\delta/4)=\delta$.
+    Theorem~\ref{thm:lvv_operator_bond_growth} bounds the bonds of
+    $A_js$ by $r\max(1,b)$, and there are at most $a|S|$ such vectors.
+\end{proof}
+
+The sample count still contains
+$\exp(2E_0\log(8/\delta)/\Delta)$. This theorem does not give a construction
+uniform in an unknown ground energy or an energy-independent polynomial
+sample count. An energy-selection argument or a different approximate
+projection is required for that further conclusion.

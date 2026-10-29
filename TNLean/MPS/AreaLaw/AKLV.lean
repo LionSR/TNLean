@@ -12,8 +12,12 @@ import TNLean.MPS.AreaLaw.AKLV.ChebyshevFilter
 import TNLean.MPS.AreaLaw.AKLV.CutTransport
 import TNLean.MPS.AreaLaw.AKLV.FullFrequencyRank
 import TNLean.MPS.AreaLaw.AKLV.LowFrequencyPower
+import TNLean.MPS.AreaLaw.AKLV.Normalization
 import TNLean.MPS.AreaLaw.AKLV.OneMarkerRank
+import TNLean.MPS.AreaLaw.AKLV.PhysicalRobustness
 import TNLean.MPS.AreaLaw.AKLV.PolynomialRank
 import TNLean.MPS.AreaLaw.AKLV.ShortWindow
+import TNLean.MPS.AreaLaw.AKLV.SpectralCluster
+import TNLean.MPS.AreaLaw.AKLV.TwoBlockTruncation
 import TNLean.MPS.AreaLaw.AKLV.WidthPolynomial
 import TNLean.MPS.AreaLaw.AKLV.WindowFrequencyRank

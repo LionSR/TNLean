@@ -27,13 +27,16 @@ and MPS approximation are parallel consequences of a marginal tail estimate. The
 MPS proof uses one sequential truncation of the state. Independent approximating
 vectors at separate cuts would not by themselves produce that conclusion.
 
-The current Hastings development includes a physical approximate factorization and
-an entropy conclusion at its stated Lieb–Robinson length. Its quantitative bound
-uses the corrected doubling constants, with growth proportional to
-$4^{\xi'\log q}$ in place of the printed $2^{\xi'\log q}$. The identification
-with the source's full Lieb–Robinson hypothesis and the printed quantitative
-constant remain separate questions. The precise qualifications are recorded in
-`docs/paper-gaps/hastings07_lemma1_decay_length.tex`,
+The Hastings development constructs a physical approximate factorization and
+proves the entropy bound through the source's mutual-information and doubling
+argument. A numerical Lieb–Robinson estimate applies to arbitrary finite supports.
+Writing $c_R=2(R+1)2^{2R+1}e^{2R}$, the pair $V=40c_RJ$, $\xi_C=80$ gives
+$\Xi=\max(2V/\Delta,80)$. At this admissible enlarged length the entropy is at
+most $c_0(6\Xi)\log(6\Xi)\log q\,2^{(6\Xi)\log q}$, with $c_0$ depending
+only on the range. This recovers the printed shape by a valid choice of the
+existential source parameters. The factor of two in the doubling exponent at a
+fixed smaller length remains necessary. The length convention and positivity
+qualifications are recorded in `docs/paper-gaps/hastings07_lemma1_decay_length.tex`,
 `hastings07_relent_constants.tex` and `hastings07_doubling_constants.tex`.
 
 For the viable-set construction, the relevant quantifier order is different. The
@@ -73,9 +76,18 @@ central cut is at most
 $[q(\ell+1)]^{16(\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1)}$.
 For $\ell\ge1$, the source base $q\ell$ is available with exponent
 $96\max(\lfloor\ell/s\rfloor,\lfloor\sqrt\ell\rfloor)$.
-The commuting-gap count includes the documented correction. Combining the
-spectral suppression with this same operator, then deriving the required
-robustness and entropy conclusions, are distinct steps.
+The commuting-gap count includes the documented correction. An actual Chebyshev
+polynomial of the same supported Hamiltonian has both this rank bound and its
+spectral suppression estimate. The two exterior truncations are also constructed
+from the original positive-contraction interactions, with genuine regional minima
+and normalized energy $E_0\in[0,6]$. For windows of at least six interactions,
+$t\ge(1024/g)(E_0/g+1)$ gives an actual truncated gap at least $9g/10$ and a
+phase-aligned unit ground vector with squared error at most $e^{-t/16}/100$.
+The original gap bound $g\le1$ is derived from the physical hypotheses.
+The local support and middle-normalization corrections, and the finite-window
+restriction, are recorded in `docs/paper-gaps/aklv13_two_block_robustness.tex`.
+The favorable approximate-projector parameter choice, entropy argument, and
+approximation sequence remain distinct steps.
 
 For a unique ground vector on an open chain with $q\ge2$ and $0\le h_j\le I$,
 the gap is at most one. An endpoint unitary with zero expectation in that vector
@@ -102,17 +114,31 @@ vector has bond bound $r^2B$. This reference is chosen before the viable space
 to be trimmed. It supports collective trimming; it does not supply a sampled
 merge construction.
 
-The sampling results provide one actual sample with both a matrix-mean error
-bound and simultaneous word-frequency bounds whenever the explicit sum of the
-two failure bounds is less than one. This is not yet the physical power-filter
-application, whose ground-energy dependence must still be retained.
+The power-filter application now constructs one actual sample satisfying both
+operator-norm approximations, all letter-count bounds, and every spatial Schmidt
+rank bound $\ell q^{2u}$. Its explicit sample count retains the ground-energy
+factor $\exp(2E_0\log Q/\Delta)$. The same sample is used for the norm and rank
+conclusions. This supplies the physical sampling step with its stated cost; it
+does not imply a polynomial bound uniform in the unknown ground energy. At a specified
+ground energy, the actual sampled operator supplies cut factors chosen before all
+input viable families. They improve half-viability to prescribed error with
+cardinality and internal bond bounds derived from the same sample. The stated
+ground vector currently precedes sampling in this theorem; an assertion with the
+family before all ground vectors requires the corresponding quantifier order.
 
-The low-energy construction is a separate problem. Approximation below an energy
-cutoff generally permits a slightly larger output cutoff. The corresponding
-error-reduction argument therefore involves nested target spaces, not a single
-gapped projector. The soft-truncation and merge-tree arguments also require a
-correct replacement for the false printed cluster estimate. Neither a degenerate
-area law nor a single global MPS approximation supplies these missing steps.
+For low-energy targets, one actual clipped Hamiltonian now supplies both buffered
+spectral comparisons and a common polynomial improving family. The family and its
+tensor factors are selected before the viable subspace, with cardinality at most
+$D^2$, where $D=(q\ell^2)^{20\ell}$, and nested-target loss
+$\Delta/(1-\delta)^2$ between the clipped targets. Composing the two actual
+spectral comparisons gives improvement between the original windows, with loss
+$2(\Delta/[1-2(\delta+\varepsilon)]^2+\varepsilon)$ when
+$\delta\ge0$ and $2(\delta+\varepsilon)<1$.
+The result retains interior geometry and a strict buffer $3w<\eta$. The source parameter bounds, low-density induction, short regions,
+and sampled tree still require further arguments. The soft-truncation argument
+also requires a correct replacement for the false printed cluster estimate.
+Neither the degenerate area law nor a single global MPS approximation supplies
+these steps.
 
 The exact formal statements, their source passages, and their verification evidence
 are recorded in the blueprint and the dated audit reports. A statement identified as a formalization of a source theorem must carry the

@@ -17,15 +17,18 @@
 
 \begin{theorem}[Support of an internal bond]
     \label{thm:internal_bond_region_subset}
-    \lean{TNLean.MPS.AreaLaw.internal_bond_support_subset}
+    \lean{TNLean.MPS.AreaLaw.internal_bond_support_subset,
+        TNLean.MPS.AreaLaw.isSupportedOn_sum_internal_bonds}
     \leanok
     \uses{def:five_region_bond_partition}
-    If $i\in I(l,h)$, then $\{i,i+1\}\subseteq R(l,h)$.
+    If $i\in I(l,h)$, then $\{i,i+1\}\subseteq R(l,h)$. Consequently,
+    a sum of interactions supported on these internal bonds is supported on
+    $R(l,h)$.
 \end{theorem}
 \begin{proof}
     \leanok
     The inequalities $l\le i$ and $i+1<h$ hold by definition; both sites
-    lie in the chain because $i+1<L$.
+    lie in the chain because $i+1<L$. Support is preserved by finite sums.
 \end{proof}
 
 \begin{theorem}[The number of internal bonds]
