@@ -491,12 +491,14 @@
     "ch:one_dimensional_preliminaries": {
       "theorems": [
         "thm:factorial_commutator_conjugation",
-        "thm:chain_local_imaginary_time"
+        "thm:chain_local_imaginary_time",
+        "thm:aklv_robustness"
       ],
       "corollaries": [],
       "notes": {
         "thm:factorial_commutator_conjugation": "Kept as converted by hand in #10267",
-        "thm:chain_local_imaginary_time": "Kept as converted by hand in #10267"
+        "thm:chain_local_imaginary_time": "Kept as converted by hand in #10267",
+        "thm:aklv_robustness": "Source Theorem 6.1: normalized ground-vector and spectral-gap robustness under two-sided energy truncation"
       }
     },
     "ch:one_dimensional_open_mps": {
@@ -544,13 +546,13 @@
     },
     "ch:hastings_window": {
       "theorems": [
-        "thm:hastings_area_law",
-        "thm:hastings_mps_gapped_chain"
+        "thm:hastings_area_law_source",
+        "thm:hastings_mps_source"
       ],
       "corollaries": [],
       "notes": {
-        "thm:hastings_area_law": "Hastings' area law for gapped chains, the main theorem of Hastings 2007",
-        "thm:hastings_mps_gapped_chain": "Matrix product state approximation of the gapped ground state"
+        "thm:hastings_area_law_source": "Hastings' printed entropy bound at an admissible interaction-proportional Lieb–Robinson pair",
+        "thm:hastings_mps_source": "Matrix product state approximation at the same admissible source length"
       }
     },
     "ch:entropy_scaling": {

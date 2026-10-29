@@ -33,6 +33,104 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
 % Lean: TNLean.Lattice.gaussianFilteredTerm_sub_smul_one and
 % TNLean.Lattice.gaussianFilteredTerm_sub_smul_one_sub (filtering fixes scalars).
 
+\subsection*{Velocity, length and energy units}
+
+\begin{lemma}[The chain commutator bound with a numerical prefactor]
+    \label{thm:hastings_chain_lieb_robinson}
+    \lean{TNLean.MPS.AreaLaw.ChainSupport.edist_le,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_numeric,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_hastings,
+        TNLean.MPS.AreaLaw.chainLRVelocity_sub_one_pos}
+    \leanok
+    \uses{def:chain_model,thm:qc_lr_finsets_numeric}
+    Let $H$ be a range-$R$ chain Hamiltonian with term norms at most $J\ge0$.
+    Put $c_R=2(R+1)2^{2R+1}e^{2R}$. Let $A$ and $B$ act on finite sets
+    $X$ and $Y$, and let the integer $d\ge0$ be a lower bound for every
+    distance between a site in $X$ and a site in $Y$. Then
+    \begin{align}
+        \|[e^{itH}Ae^{-itH},B]\|
+         & \le4|X|\,\|A\|\,\|B\|e^{2c_RJ|t|-d}.
+        \label{eq:hastings_numeric_chain_bound}
+    \end{align}
+    Consequently, every positive $v\ge8c_RJ$ and every $\xi_C\ge8$ satisfy
+    \begin{align}
+        \|[e^{itH}Ae^{-itH},B]\|
+         & \le4|X|\,\|A\|\,\|B\|e^{-d/\xi_C}
+        \label{eq:hastings_chain_time_cone}
+    \end{align}
+    whenever $|t|\le d/v$. The distance condition is vacuous for an empty
+    support. These are the velocity and length estimates used in
+    \cite[lines 96--112]{Hastings2007AreaLaw}, with the reciprocal-length
+    convention of~\cite{gap:hastings07_lemma1_decay_length}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:qc_lr_finsets_numeric}
+    Each interaction support contains at most $R+1$ sites, has diameter at
+    most $R$, and the sum of the interaction norms meeting a site is at most
+    $2^{2R+1}J$. Substitute these bounds and $\mu=1$ into
+    Lemma~\ref{thm:qc_lr_finsets_numeric}. If $|t|\le d/v$, then
+    $2c_RJ|t|\le d/4$, while $d/\xi_C\le d/8$; hence
+    $2c_RJ|t|-d\le-d/\xi_C$.
+\end{proof}
+
+\begin{lemma}[Energy and time rescaling]
+    \label{thm:hastings_energy_time_rescaling}
+    \lean{QuantumCircuit.heisenbergEvolution_smul,
+        QuantumCircuit.heisenbergEvolution_inv_smul_mul}
+    \leanok
+    For every real $c$ and every pair of operators $H,A$,
+    \begin{align}
+        e^{it(cH)}Ae^{-it(cH)}=e^{i(ct)H}Ae^{-i(ct)H}.
+        \label{eq:hastings_energy_time_rescaling}
+    \end{align}
+    In particular, if $\Delta E\ne0$, evolution under $H/\Delta E$ at time
+    $\Delta E\,t$ agrees with evolution under $H$ at time $t$.
+\end{lemma}
+\begin{proof}\leanok
+    Both exponential generators in
+    (\ref{eq:hastings_energy_time_rescaling}) agree by associativity of
+    scalar multiplication.
+\end{proof}
+
+\begin{lemma}[The factorization lengths and admissible velocities]
+    \label{thm:hastings_source_lengths}
+    \lean{TNLean.MPS.AreaLaw.lemmaOneLength_eq_sourceLength,
+        TNLean.MPS.AreaLaw.lemmaOneEndpointLength_eq_sourceLength,
+        TNLean.MPS.AreaLaw.chainLRVelocity_gapRescaling,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_hastings_rescaled,
+        TNLean.MPS.AreaLaw.two_mul_lemmaOneEndpointLength_le_sourceLength}
+    \leanok
+    \uses{thm:hastings_chain_lieb_robinson}
+    For $\Delta E>0$ and $J\ge0$, put $u_0=1+c_RJ/\Delta E$, with $c_R$ as
+    in Lemma~\ref{thm:hastings_chain_lieb_robinson}. For every $\kappa\ge8$,
+    the pair $(\kappa\Delta E\,u_0,8)$ satisfies
+    (\ref{eq:hastings_chain_time_cone}). The two lengths of the
+    factorization are therefore
+    \begin{align}
+        \hat\xi   & =16u_0=\max\{2(8\Delta E\,u_0)/\Delta E,8\},
+        \label{eq:hastings_source_length_normalized}              \\
+        \tilde\xi & =20u_0=\max\{2(10\Delta E\,u_0)/\Delta E,8\}.
+        \label{eq:hastings_source_length_enlarged}
+    \end{align}
+    For $J>0$ the gap-independent pair $(v_*,\xi_{C,*})=(40c_RJ,80)$ is
+    also admissible. Its source length satisfies
+    \begin{align}
+        \max\{2v_*/\Delta E,80\}\ge2\tilde\xi.
+        \label{eq:hastings_source_length_comparison}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:hastings_chain_lieb_robinson}
+    The identity $\Delta E(u_0-1)=c_RJ$ gives
+    $\kappa\Delta E\,u_0\ge8c_RJ$. Apply
+    Lemma~\ref{thm:hastings_chain_lieb_robinson}; cancellation of
+    $\Delta E$ gives (\ref{eq:hastings_source_length_normalized}) and
+    (\ref{eq:hastings_source_length_enlarged}). The maximum in
+    (\ref{eq:hastings_source_length_comparison}) is at least each of
+    $80c_RJ/\Delta E$ and $80$, and hence at least their average
+    $40(1+c_RJ/\Delta E)=2\tilde\xi$.
+\end{proof}
+
 \subsection*{Gaussian-filtered operators}
 
 \begin{definition}[Gaussian-filtered operator]
@@ -451,14 +549,37 @@ $X_{j-l+1,j+l}$.
         \item $\|O_B\|\le1$ and $O_B$ is supported on $X_{j-l+1,j+l}$;
         \item $\|O_BO_LO_R-P_0\|\le C_1e^{-l/\xi'}$.
     \end{enumerate}
-    Every $\xi'>6\xi$ absorbs the $\sqrt q\propto\sqrt l$ prefactor of
-    \cite[lines 903--907]{Hastings2007AreaLaw}, whereas $\xi'=6\xi$
-    \cite[lines 124--144]{Hastings2007AreaLaw} and positivity of $O_B$
-    \cite[lines 912--913]{Hastings2007AreaLaw} are not claimed, and $(v_0,2)$
-    is not shown to be a Lieb--Robinson pair in the source's sense
-    \cite{gap:hastings07_lemma1_decay_length}. Replacing $O_B$ by
-    $O_B^\dagger O_B\ge0$ gives rate $e^{-l/(2\xi')}$ by
-    Lemma~\ref{thm:hastings_positive_factorization}.
+    The argument of the appendix gives the error
+    $\mathcal O(\Delta E^{-2}J^2\sqrt q\,e^{-l/(6\xi)})$
+    \cite[lines 903--907]{Hastings2007AreaLaw}, a polynomial in $l$ times
+    $e^{-l/(6\xi)}$, since the localization of the boundary average carries
+    the factor $\sqrt q$, proportional to $\sqrt l$. Every rate $\xi'>6\xi$
+    absorbs the polynomial, but the rate $\xi'=6\xi$ of
+    \cite[lines 124--144]{Hastings2007AreaLaw} does not follow; both the
+    doubled $q$ and the condition $\xi'>6\xi$ are recorded in
+    \cite{gap:hastings07_gaussian_average_exponent}. This is a quantitatively
+    weaker version of Lemma~\ref{lem:hastings_lemma1}, also without the
+    positivity of $O_B$; the note
+    added to \cite{Hastings2007AreaLaw} (lines 912--913) records that the
+    construction need not give a Hermitian positive $O_B$, while its other
+    properties hold.
+
+    Here the length is $\xi=8\max(2v_0/\Delta E,1)$, with $v_0$ the
+    velocity in the chain localization estimate. The commutator bound behind
+    that estimate is linear in the size of the support, as in the source. The
+    quadratic factor of the localization enters with supports of at most $6R$
+    sites for the parts and of $O(R+l)$ sites for the boundary operator, where
+    the faster decay of that term absorbs the resulting polynomial in $l$; it
+    changes the constant, not the length or the rate.
+    The numerical finite-support estimate of
+    Lemma~\ref{thm:hastings_chain_lieb_robinson} shows that the physical
+    pair $(8v_0,8)$ is admissible. The constant $C_1$
+    depends only on $R$, $J$, $\Delta E$ and $\xi'$: it is the same for every
+    length of the chain, every local dimension and every gapped ground state.
+    No polynomial bound on $C_1$ in $\xi$ alone is asserted here, unlike
+    Lemma~\ref{lem:hastings_lemma1}.
+    Replacing $O_B$ by $O_B^\dagger O_B$ gives the positive version at the rate
+    $e^{-l/(2\xi')}$, as in Lemma~\ref{thm:hastings_positive_factorization}.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_cutoff_pair, thm:hastings_moved_estimate,
@@ -515,21 +636,28 @@ $X_{j-l+1,j+l}$.
     \leanok
     \uses{thm:hastings_projector_factorization_scaled,
         thm:hastings_positive_factorization}
-    For every $\kappa>6$ there exists $K=K(R,\kappa)\ge0$ such that, under the
-    assumptions of Lemma~\ref{thm:hastings_projector_factorization} with
-    $\hat\xi$ as in (\ref{eq:hastings_lemma1_hat_xi}), for every $j$ and $l$
-    there exist $O_B,O_L,O_R$ satisfying items 1--2 of
-    Lemma~\ref{thm:hastings_projector_factorization} and
+    Let $\kappa>6$. There is a constant $K\ge0$, depending only on $R$ and
+    $\kappa$, with the following property. Under the assumptions of
+    Lemma~\ref{thm:hastings_projector_factorization}, with $\hat\xi$ the
+    length of Lemma~\ref{thm:hastings_projector_factorization_scaled}, for
+    every cut $j$ and every $l$ there are operators $O_B$, $O_L$, $O_R$ with
+    the properties of Lemma~\ref{thm:hastings_projector_factorization} and
     \begin{align}
-        \|O_BO_LO_R-P_0\| & \le K\hat\xi^3e^{-l/(\kappa\hat\xi)}.
+        \|O_BO_LO_R-P_0\|\le K\hat\xi^3e^{-l/(\kappa\hat\xi)}.
         \label{eq:hastings_lemma1_polynomial_constant}
     \end{align}
-    Replacing $O_B$ by $O_B^\dagger O_B\ge0$ gives rate
-    $e^{-l/(2\kappa\hat\xi)}$ with another constant $K(R,\kappa)$
-    \cite[lines 258--262]{Hastings2007AreaLaw},
-    \cite{gap:hastings07_lemma1_positivity_rate,
-        gap:hastings07_lemma1_decay_length,
-        gap:hastings07_gaussian_average_exponent}.
+    The same holds with $O_B$ positive semidefinite, with another such constant
+    and the rate $e^{-l/(2\kappa\hat\xi)}$, as in
+    Lemma~\ref{thm:hastings_positive_factorization}
+    and~\cite{gap:hastings07_lemma1_positivity_rate}.
+    So the constant of the factorization at the rate $\xi'=\kappa\hat\xi$ is
+    bounded by a polynomial in $\hat\xi$, as Lemma~\ref{lem:hastings_lemma1}
+    requires~\cite[lines 258--262]{Hastings2007AreaLaw}. For the source's
+    nearest-neighbour terms ($R=1$) the constant $K$ depends only on
+    $\kappa$. The rate $\xi'=6\hat\xi$ is not reached at $\hat\xi$ itself.
+    The physical pair giving $\hat\xi$ is identified in
+    Lemma~\ref{thm:hastings_source_lengths}; the fixed-length restriction is
+    recorded in~\cite{gap:hastings07_gaussian_average_exponent}.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_projector_factorization_scaled,
@@ -554,18 +682,29 @@ $X_{j-l+1,j+l}$.
         TNLean.MPS.AreaLaw.lemmaOneEndpointLength_eq}
     \leanok
     \uses{thm:hastings_lemma1_polynomial_constant}
-    With $v_0=1+c_RJ/\Delta E$, $\hat\xi=8\max(2v_0,1)$, and raised velocity
-    $v'=\tfrac54v_0$, set $\tilde\xi=8\max(2v',1)=\tfrac54\hat\xi$. There
-    exists $K=K(R)\ge0$ such that, under the assumptions of
-    Lemma~\ref{thm:hastings_projector_factorization}, for every $j$ and $l$
-    there exist $O_B,O_L,O_R$ satisfying items 1--2 of
-    Lemma~\ref{thm:hastings_projector_factorization} and
+    In units of the gap let $v_0=1+c_RJ/\Delta E$ be the velocity of the
+    chain estimate, so that $\hat\xi=8\max(2v_0,1)$, and let
+    $\tilde\xi=8\max(2v',1)$ be the length for the raised velocity
+    $v'=\tfrac54v_0$; thus $\tilde\xi=\tfrac54\hat\xi$. There is a constant
+    $K\ge0$, depending only on $R$, with the following property. Under the
+    assumptions of Lemma~\ref{thm:hastings_projector_factorization}, for
+    every cut $j$ and every $l$ there are operators $O_B$, $O_L$, $O_R$ with
+    the properties of Lemma~\ref{thm:hastings_projector_factorization} and
     \begin{align}
-        \|O_BO_LO_R-P_0\| & \le K\tilde\xi^3e^{-l/(6\tilde\xi)},
+        \|O_BO_LO_R-P_0\|\le K\tilde\xi^3e^{-l/(6\tilde\xi)}.
         \label{eq:hastings_lemma1_endpoint}
     \end{align}
-    and with $O_B\ge0$ at rate $e^{-l/(12\tilde\xi)}$
-    \cite[lines 96--112, 141--142]{Hastings2007AreaLaw},
+    The same holds with $O_B$ positive semidefinite, with another such
+    constant and the rate $e^{-l/(12\tilde\xi)}$. This is the printed rate
+    $\xi'=6\xi$ of \cite[lines 141--142]{Hastings2007AreaLaw} for the length
+    $\xi=\tilde\xi$, reached by choosing the length anew and not at
+    $\hat\xi$. The choice is admissible because the source fixes
+    $\xi=\max(2v/\Delta E,\xi_C)$ only through some Lieb--Robinson pair
+    $(v,\xi_C)$ \cite[lines 96--112]{Hastings2007AreaLaw}, and a bound valid
+    for $|t|\le l/v$ remains valid for $|t|\le l/v'$ when
+    $v'\ge v$. Lemma~\ref{thm:hastings_source_lengths} identifies the
+    physical pair for $\tilde\xi$ as
+    $(10\Delta E(1+c_RJ/\Delta E),8)$, with the length convention of
     \cite{gap:hastings07_lemma1_decay_length}.
 \end{lemma}
 \begin{proof}\leanok
@@ -628,3 +767,66 @@ non-positive factorization at $\xi'>6\xi$ (or $\xi'=6\tilde\xi$ for the raised
 length $\tilde\xi=\tfrac54\hat\xi$) and the positive semidefinite
 replacement $O_B^\dagger O_B$ at rate $e^{-l/(2\xi')}$, rather than
 Lemma~\ref{lem:hastings_lemma1} as printed.
+
+\begin{lemma}[An interaction-proportional Lieb--Robinson velocity]
+    \label{thm:hastings_source_pair}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_hastings_source}
+    \leanok
+    \uses{thm:hastings_chain_lieb_robinson}
+    Let $H$ be a range-$R$ chain Hamiltonian with interaction norms at most
+    $J>0$, and put $c_R=2(R+1)2^{2R+1}e^{2R}$. Then $v=40c_RJ$ and
+    $\xi_C=80$ form a Lieb--Robinson pair: for operators $A,B$ supported on
+    finite sets $X,Y$ whose mutual distances are at least the integer
+    $d\ge0$, and for $|t|\le d/v$,
+    \begin{align}
+        \|[e^{itH}Ae^{-itH},B]\|
+        \le4|X|\,\|A\|\,\|B\|e^{-d/80}.
+        \label{eq:hastings_interaction_proportional_pair}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:hastings_chain_lieb_robinson}
+    The coefficient $c_RJ$ is positive. Apply
+    Lemma~\ref{thm:hastings_chain_lieb_robinson} with $v=40c_RJ\ge8c_RJ$
+    and $\xi_C=80\ge8$.
+\end{proof}
+
+\begin{lemma}[Positive factorization at the source length]
+    \label{thm:hastings_source_factorization}
+    \lean{TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef_source,
+        TNLean.MPS.AreaLaw.exists_projectorFactorization_source}
+    \leanok
+    \uses{thm:hastings_lemma1_endpoint,thm:hastings_source_pair}
+    For each range $R$ there is a constant $K\ge0$, depending only on $R$,
+    with the following property. Let $H$ be a range-$R$ chain Hamiltonian
+    with interaction norms at most $J\ge0$ and a unit ground vector
+    $\Omega$ separated from the remaining spectrum by $\Delta E>0$.
+    Set $v=40c_RJ$, $s=\max\{2v/\Delta E,80\}$ and $\xi'=6s$. At every
+    cut $j$ and length $l$ there are operators $O_B,O_L,O_R$ satisfying
+    the support conditions of Lemma~\ref{lem:hastings_lemma1}, such that
+    $O_B$ is a positive semidefinite contraction, $O_L,O_R$ are commuting
+    orthogonal projections, and
+    \begin{align}
+        \|O_BO_LO_R-|\Omega\rangle\langle\Omega|\|
+        \le Ks^3e^{-l/\xi'}.
+        \label{eq:hastings_positive_source_factorization}
+    \end{align}
+    Thus the positive and contraction forms have the same source rate
+    at this choice of length. The fixed-length correction and the
+    distinction between positive semidefinite and positive definite
+    operators remain as recorded in
+    \cite{gap:hastings07_lemma1_positivity_rate}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:hastings_lemma1_endpoint,thm:hastings_factorization_mono}
+    The source length satisfies $s\ge2\zeta$, where
+    $\zeta=20(1+c_RJ/\Delta E)$. The positive form of
+    Lemma~\ref{thm:hastings_lemma1_endpoint} supplies the required
+    operators with error at most $K\zeta^3e^{-l/(12\zeta)}$. Since
+    $\zeta\le s$ and $12\zeta\le6s$,
+    \begin{align}
+        K\zeta^3e^{-l/(12\zeta)}\le Ks^3e^{-l/(6s)}.
+        \label{eq:hastings_positive_source_comparison}
+    \end{align}
+    Increase the error bound without changing any of the operators.
+\end{proof}
