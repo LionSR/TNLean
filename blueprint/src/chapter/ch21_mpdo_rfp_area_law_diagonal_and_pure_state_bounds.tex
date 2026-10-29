@@ -1,4 +1,4 @@
-\begin{theorem}[Rank of diagonal coefficients across a periodic cut]
+\begin{lemma}[Rank of diagonal coefficients across a periodic cut]
     \label{thm:mpo_diagonal_cut_rank}
     \lean{MPOTensor.diagonalCutMatrix,
         MPOTensor.diagonalCutMatrix_rank_le}
@@ -16,7 +16,7 @@
     \end{align}
     Then the ordinary complex rank of $P$ satisfies
     $\rank_{\C}P\le D^2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:mpo_eval_word_append}
     For each word, write
@@ -31,7 +31,7 @@
     factors $P$ through the $D^2$-dimensional space indexed by pairs $(a,b)$.
 \end{proof}
 
-\begin{theorem}[Rank under faithful scalar extension]
+\begin{lemma}[Rank under faithful scalar extension]
     \label{thm:matrix_rank_scalar_extension}
     \lean{Matrix.rank_map_algebraMap}
     \leanok
@@ -39,7 +39,7 @@
     $\iota:K\hookrightarrow L$ be the inclusion, and let $A$ be a finite
     matrix over $K$. Then
     $\rank_{L}\!\left((\iota(A_{ij}))_{ij}\right)=\rank_{K}A$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For every finite selection of columns, the selected columns are linearly
     independent over $K$ if and only if their scalar extensions are linearly
@@ -63,7 +63,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
 The corresponding generic result is proved in the companion quantum-channel volume~\cite[``Classical mutual information is bounded by ordinary rank'']{QICLean2026Blueprint}.
 
 
-\begin{theorem}[Classical estimate for normalized diagonal cut coefficients]
+\begin{lemma}[Classical estimate for normalized diagonal cut coefficients]
     \label{thm:mpo_diagonal_cut_classical_mutual_information}
     \lean{MPOTensor.diagonalCut_classicalMutualInformation_le_two_log}
     \leanok
@@ -71,15 +71,15 @@ The corresponding generic result is proved in the companion quantum-channel volu
     Let $D\geq1$, and let $W$ be a real diagonal coefficient matrix across a
     periodic cut of an MPO with bond dimension $D$. Suppose its scalar
     extension to $\C$ is the cut matrix $P^{\C}$ from
-    Theorem~\ref{thm:mpo_diagonal_cut_rank}.
+    Lemma~\ref{thm:mpo_diagonal_cut_rank}.
     If $Z>0$ and $P=Z^{-1}W$ is a joint probability distribution, then
     $I(X:Y)_P\leq2\log D$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Normalization by the nonzero scalar $Z^{-1}$ does not change real rank.
     Faithful scalar extension does not change rank by
-    Theorem~\ref{thm:matrix_rank_scalar_extension}; hence
-    Theorem~\ref{thm:mpo_diagonal_cut_rank} gives
+    Lemma~\ref{thm:matrix_rank_scalar_extension}; hence
+    Lemma~\ref{thm:mpo_diagonal_cut_rank} gives
     $\rank_{\R}P\leq D^2$.
     Applying \cite[``Classical mutual information is bounded by ordinary rank'']{QICLean2026Blueprint} gives
     $I(X:Y)_P\leq\log\rank_{\R}P$, and monotonicity of the
@@ -129,7 +129,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     \end{align}
 \end{proof}
 
-\begin{theorem}[Classical estimate for a positive diagonal finite-chain operator]
+\begin{lemma}[Classical estimate for a positive diagonal finite-chain operator]
     \label{thm:mpo_diagonal_finite_chain_classical_mutual_information}
     \lean{MPOTensor.diagonalCutMatrix_apply_eq_mpo,
         MPOTensor.diagonalCutRealMatrix_map_ofReal_of_posSemidef,
@@ -141,10 +141,10 @@ The corresponding generic result is proved in the companion quantum-channel volu
     Let $D\geq1$. Suppose that $\rho^{(L+R)}(M)$ is diagonal and positive
     semidefinite, and that $Z>0$. Then $W_{x,y}\geq0$, the scalar extension of
     $W$ to $\C$ is the diagonal cut matrix of
-    Theorem~\ref{thm:mpo_diagonal_cut_rank}, and $\widehat P$ is a joint
+    Lemma~\ref{thm:mpo_diagonal_cut_rank}, and $\widehat P$ is a joint
     probability distribution. Its classical mutual information satisfies
     $I(X:Y)_{\widehat P}\leq2\log D$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpo_diagonal_cut_classical_mutual_information}
     Positive semidefiniteness makes every diagonal entry real and non-negative,
@@ -154,7 +154,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
         =Z^{-1}\sum_{x,y}W_{x,y}=1$.
     Thus $\widehat P$ is a joint probability distribution. Diagonality says
     that these coefficients constitute the full classical finite-chain state,
-    and Theorem~\ref{thm:mpo_diagonal_cut_classical_mutual_information} gives
+    and Lemma~\ref{thm:mpo_diagonal_cut_classical_mutual_information} gives
     the bound.
 \end{proof}
 
@@ -170,7 +170,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
 \begin{proof}\leanok
     \uses{thm:mpo_diagonal_finite_chain_classical_mutual_information, lem:mpo_diagonal_cut_mass_trace}
     Global diagonality and positivity give the fixed-length hypotheses of
-    Theorem~\ref{thm:mpo_diagonal_finite_chain_classical_mutual_information}.
+    Lemma~\ref{thm:mpo_diagonal_finite_chain_classical_mutual_information}.
     Since the chain operator is diagonal,
     \begin{align}
         Z
@@ -186,7 +186,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
 The corresponding generic result is proved in the companion quantum-channel volume~\cite[``Positivity of the operator-Schmidt rank'']{QICLean2026Blueprint}.
 
 
-\begin{theorem}[Two virtual boundaries bound the operator-Schmidt rank]
+\begin{lemma}[Two virtual boundaries bound the operator-Schmidt rank]
     \label{thm:mpdo_periodic_cut_operator_schmidt_rank}
     \lean{MPOTensor.periodicCutLeftFactor,
         MPOTensor.periodicCutRightFactor,
@@ -223,7 +223,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     $\tr(AB)=\sum_{a,b}A_{ab}B_{ba}$ with the normalization scalar absorbed into
     the left factor, formalizing the two-virtual-boundary factorization in
     \cite[Proposition~4.5]{Cirac2016MPDO_arXiv}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Split each closed virtual word into its left and right products. Expanding
@@ -431,7 +431,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
 The corresponding generic result is proved in the companion quantum-channel volume~\cite[``Mutual information from operator-Schmidt rank'']{QICLean2026Blueprint}.
 
 
-\begin{theorem}[Finite-chain mutual information from the operator bond]
+\begin{lemma}[Finite-chain mutual information from the operator bond]
     \label{thm:mpdo_finite_chain_mutual_information_two_log}
     \lean{MPOTensor.mutualInfoChain_le_two_log_bondDim}
     \leanok
@@ -445,7 +445,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     \end{align}
     The bound holds for all cuts $0\leq L\leq N$ without assuming local
     purification or canonical form.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpdo_split_normalized_mpo, lem:mpdo_chain_mutual_information_bipartition, thm:mpdo_periodic_cut_operator_schmidt_rank}
@@ -463,7 +463,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     vanishes. Hence $D>0$, which justifies the last logarithmic identity.
 \end{proof}
 
-\begin{theorem}[Finite-chain mutual-information estimate for matrix product density operators]
+\begin{lemma}[Finite-chain mutual-information estimate for matrix product density operators]
     \label{thm:mpdo_finite_chain_mutual_information_four_log}
     \lean{MPOTensor.IsMPDO.mutualInfoChain_le_four_log_bondDim}
     \leanok
@@ -476,12 +476,12 @@ The corresponding generic result is proved in the companion quantum-channel volu
         I_L^{(N)} & \leq 4\log D.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpdo, thm:mpdo_finite_chain_mutual_information_two_log}
     Global positivity gives positivity at the chosen positive chain
-    length, so Theorem~\ref{thm:mpdo_finite_chain_mutual_information_two_log}
+    length, so Lemma~\ref{thm:mpdo_finite_chain_mutual_information_two_log}
     gives $I_L^{(N)}\leq 2\log D$, and the same nonzero-trace argument gives
     $D>0$, hence $0\leq\log D$ and $2\log D\leq4\log D$.
 \end{proof}
@@ -506,20 +506,20 @@ The corresponding generic result is proved in the companion quantum-channel volu
     instance, a product of full-rank single-site density matrices has
     $\rank(\rho_L)=(\rank q)^L$ while $I_L=0$).
 
-    Theorem~\ref{thm:mpdo_finite_chain_mutual_information_two_log} provides the
+    Lemma~\ref{thm:mpdo_finite_chain_mutual_information_two_log} provides the
     uniform bound $I_L^{(N)}\leq2\log D$ whenever the finite-chain operator is
     positive semidefinite with positive trace. For diagonal states,
-    Theorem~\ref{thm:mpo_diagonal_finite_chain_classical_mutual_information}
+    Lemma~\ref{thm:mpo_diagonal_finite_chain_classical_mutual_information}
     gives an independent verification.
 
     While the finite-chain bound $I_L^{(N)}\leq 2\log D$ holds uniformly, the
     iterated thermodynamic limit in \cite[Proposition~4.5]{Cirac2016MPDO_arXiv}
-    can fail, as demonstrated by Theorem~\ref{thm:parity_mpdo_no_thermodynamic_limit}
+    can fail, as demonstrated by Lemma~\ref{thm:parity_mpdo_no_thermodynamic_limit}
     and documented in \cite{gap:cpgsv17_mpdo_mutual_information_bound}.
     The channel-image case is treated in
-    Theorem~\ref{thm:local_channel_image_mutual_info_bound}, pure states in
-    Proposition~\ref{prop:pure_mutual_info_bound}, and locally purified states
-    in Theorem~\ref{thm:lpdo_mutual_info_bound}.
+    Lemma~\ref{thm:local_channel_image_mutual_info_bound}, pure states in
+    Lemma~\ref{prop:pure_mutual_info_bound}, and locally purified states
+    in Lemma~\ref{thm:lpdo_mutual_info_bound}.
 \end{remark}
 
 \begin{definition}[Block entropy and area-law saturation for pure states]
@@ -645,7 +645,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     $S_L^{(N)}(A)=S_{N-L}^{(N)}(A)$.
 \end{proof}
 
-\begin{proposition}[Pure-state area-law monotonicity]\label{prop:pure_area_monotone}
+\begin{lemma}[Pure-state area-law monotonicity]\label{prop:pure_area_monotone}
     \lean{pureBlockEntropy_monotone}
     \leanok
     \uses{def:pure_sal, lem:schmidt_symmetry, lem:blockEntropy_doubledTensor}
@@ -653,11 +653,11 @@ The corresponding generic result is proved in the companion quantum-channel volu
     let $A$ be an MPS tensor with $V^{(N)}(A)\neq0$. For every block length $L$
     with $2L+1\le N$, covering $1\le L<\lfloor N/2\rfloor$,
     $S_L^{(N)}(A)\le S_{L+1}^{(N)}(A)$.
-\end{proposition}
+\end{lemma}
 \begin{proof}\leanok
     \uses{prop:mutual_info_monotone}
     Applying the block-entropy form of strong subadditivity underlying
-    Proposition~\ref{prop:mutual_info_monotone} to the purification
+    Lemma~\ref{prop:mutual_info_monotone} to the purification
     MPDO of $A$ gives
     $S_{N-L}+S_L\le S_{L+1}+S_{N-L-1}$, which by the Schmidt
     symmetry $S_{N-L}=S_L$ and $S_{N-L-1}=S_{L+1}$ reduces to
@@ -851,7 +851,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     are equal. Hence $S_L^{(N)}(A)=S_{L+1}^{(N)}(A)$.
 \end{proof}
 
-\begin{theorem}[A renormalization fixed point has a constant block-entropy chain]
+\begin{corollary}[A renormalization fixed point has a constant block-entropy chain]
     \label{thm:rfp_constant_entropy}
     \lean{MPSTensor.pureBlockEntropy_eq_of_isTransferIdempotent}
     \leanok
@@ -867,7 +867,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
         =S_{\lfloor N/2\rfloor}^{(N)}(A).
         \notag
     \end{align}
-\end{theorem}
+\end{corollary}
 \begin{proof}\leanok
     \uses{thm:rfp-saturates-area-law, lem:pure_sal_const}
     The fixed point saturates the area law
@@ -916,7 +916,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     which the normalization fixes to one.
 \end{proof}
 
-\begin{proposition}[Pure-state area-law upper bound]\label{prop:pure_area_upper}
+\begin{lemma}[Pure-state area-law upper bound]\label{prop:pure_area_upper}
     \lean{MPSTensor.pureBlockEntropy_le}
     \leanok
     \uses{lem:operator_schmidt_rank, lem:trace_one_positive_rank, lem:reduced_pure_block_state_density}
@@ -925,7 +925,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     $S_L^{(N)}(A)\leq2\log D$, uniformly in $L$ and $N$. This is the area law of
     \cite[Section~3, line~599]{Cirac2016MPDO_arXiv}: the block entropy is bounded
     by a constant independent of the block size.
-\end{proposition}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:operator_schmidt_rank, lem:trace_one_positive_rank, lem:reduced_pure_block_state_density}
     The reduced state $\rho_L^{(N)}(A)$ is a density matrix
@@ -1018,7 +1018,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     $S_{N-L}=S_L$, so $I_L=2S_L$.
 \end{proof}
 
-\begin{proposition}[Pure-state mutual-information bound]\label{prop:pure_mutual_info_bound}
+\begin{lemma}[Pure-state mutual-information bound]\label{prop:pure_mutual_info_bound}
     \lean{mutualInfoChain_doubledTensor_le}
     \leanok
     \uses{prop:pure_area_upper, lem:mutual_info_doubled}
@@ -1028,10 +1028,10 @@ The corresponding generic result is proved in the companion quantum-channel volu
     $\ketbra{V^{(N)}(A)}{V^{(N)}(A)}$, the mutual information between a block
     of $L$ spins and the rest satisfies $I_L\leq4\log D$, uniformly in $L$ and
     $N$.
-\end{proposition}
+\end{lemma}
 \begin{proof}\leanok
     For a pure state, $I_L=2S_L^{(N)}(A)$, since the global entropy $S_N$
     vanishes and a block and its complement share the same Schmidt spectrum.
     The block-entropy bound $S_L^{(N)}(A)\leq2\log D$
-    (Proposition~\ref{prop:pure_area_upper}) then gives $I_L\leq4\log D$.
+    (Lemma~\ref{prop:pure_area_upper}) then gives $I_L\leq4\log D$.
 \end{proof}

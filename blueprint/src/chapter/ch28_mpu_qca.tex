@@ -1,142 +1,6 @@
-\section{Finite-region observable algebras}
+\section{Supports and commutants of local observables}
 
-\begin{definition}[Finite-region local algebra]
-    \label{def:qca_local_algebra}
-    \lean{SpinChain.Config,SpinChain.LocalAlgebra}
-    \leanok
-    Fix a nonnegative integer $d$.  For a finite region
-    $\Lambda\subset\mathbb Z$, the configuration space and local observable
-    algebra are
-    \begin{align}
-        \operatorname{Config}_d(\Lambda)
-         & =\{0,\ldots,d-1\}^{\Lambda},                     \\
-        \mathcal A_\Lambda
-         & =M_{\operatorname{Config}_d(\Lambda)}(\mathbb C)
-        \cong M_d^{\otimes\Lambda}.
-    \end{align}
-    The algebra $\mathcal A_\Lambda$ carries its operator norm.  This is the
-    finite-region construction used in the QCA appendix of
-    \cite{Cirac2017MPU}; no completion is taken here.
-\end{definition}
-
-\begin{definition}[Canonical inclusion of finite-region observables]
-    \label{def:qca_local_inclusion}
-    \lean{SpinChain.localInclusion}
-    \leanok
-    \uses{def:qca_local_algebra}
-    If $\Lambda\subseteq\Gamma$ are finite regions, define
-    \begin{align}
-        \iota_{\Lambda,\Gamma} & \colon\mathcal A_\Lambda\longrightarrow
-        \mathcal A_\Gamma,                                                      \\
-        \iota_{\Lambda,\Gamma}(A)
-                               & = A\otimes \mathbf 1_{\Gamma\setminus\Lambda}.
-    \end{align}
-    Here product configurations are identified with configurations on
-    $\Gamma$.  This is a unital star-algebra homomorphism.
-\end{definition}
-
-\begin{lemma}[Injectivity of the finite-region inclusion]
-    \label{lem:qca_local_inclusion_injective}
-    \lean{SpinChain.localInclusion_injective}
-    \leanok
-    \uses{def:qca_local_inclusion}
-    For $d>0$, the map $\iota_{\Lambda,\Gamma}$ is injective.
-\end{lemma}
-
-\begin{proof}\leanok
-    Since $d>0$, choose a configuration $c$ on
-    $\Gamma\setminus\Lambda$.  For configurations $x,y$ on $\Lambda$,
-    \begin{align}
-        \iota_{\Lambda,\Gamma}(A)((x,c),(y,c))
-         & =A(x,y)\cdot\mathbf 1_{\Gamma\setminus\Lambda}(c,c)
-        =A(x,y).
-    \end{align}
-    Hence $\iota_{\Lambda,\Gamma}(A)=\iota_{\Lambda,\Gamma}(B)$ implies
-    $A=B$.
-\end{proof}
-
-\begin{lemma}[Operator-norm preservation]
-    \label{lem:qca_local_inclusion_norm}
-    \lean{SpinChain.localInclusion_norm}
-    \leanok
-    \uses{def:qca_local_inclusion}
-    If $d>0$, then for every $A\in\mathcal A_\Lambda$,
-    \begin{align}
-        \lVert\iota_{\Lambda,\Gamma}(A)\rVert & =\lVert A\rVert.
-    \end{align}
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{lem:qca_local_inclusion_injective}
-    An injective star-algebra homomorphism between complex $C^*$-algebras is
-    isometric.
-\end{proof}
-
-\begin{lemma}[Isometry of the finite-region inclusion]
-    \label{lem:qca_local_inclusion_isometry}
-    \lean{SpinChain.localInclusion_isometry}
-    \leanok
-    \uses{def:qca_local_inclusion}
-    For $d>0$, the map $\iota_{\Lambda,\Gamma}$ is an operator-norm isometry.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{lem:qca_local_inclusion_injective}
-    Injectivity and the general theorem that an injective star-algebra
-    homomorphism between complex $C^*$-algebras is an isometry give the norm identity.
-\end{proof}
-
-\begin{lemma}[Identity inclusion]
-    \label{lem:qca_local_inclusion_refl}
-    \lean{SpinChain.localInclusion_refl}
-    \leanok
-    \uses{def:qca_local_inclusion}
-    For every finite region $\Lambda$,
-    $\iota_{\Lambda,\Lambda}$ is the identity on $\mathcal A_\Lambda$.
-\end{lemma}
-
-\begin{proof}\leanok
-    When the two regions agree, their complement is empty.  Hence
-    \begin{align}
-        \iota_{\Lambda,\Lambda}(A)
-         & =A\otimes\mathbf 1_{\varnothing}
-        =A\otimes 1
-        =A.
-    \end{align}
-\end{proof}
-
-\begin{lemma}[Composition of finite-region inclusions]
-    \label{lem:qca_local_inclusion_trans}
-    \lean{SpinChain.localInclusion_trans}
-    \leanok
-    \uses{def:qca_local_inclusion}
-    If $\Lambda\subseteq\Gamma\subseteq\Delta$, then
-    \begin{align}
-        \iota_{\Gamma,\Delta}\circ\iota_{\Lambda,\Gamma}
-         & =\iota_{\Lambda,\Delta}.
-    \end{align}
-\end{lemma}
-
-\begin{proof}\leanok
-    The complement decomposes as the disjoint union
-    \begin{align}
-        \Delta\setminus\Lambda
-         & =(\Gamma\setminus\Lambda)\sqcup(\Delta\setminus\Gamma), \\
-        \mathbf 1_{\Delta\setminus\Lambda}
-         & =\mathbf 1_{\Gamma\setminus\Lambda}
-        \otimes\mathbf 1_{\Delta\setminus\Gamma}.
-    \end{align}
-    Therefore
-    \begin{align}
-        \iota_{\Gamma,\Delta}(\iota_{\Lambda,\Gamma}(A))
-         & =(A\otimes\mathbf 1_{\Gamma\setminus\Lambda})
-        \otimes\mathbf 1_{\Delta\setminus\Gamma}         \\
-         & =A\otimes\mathbf 1_{\Delta\setminus\Lambda}   \\
-         & =\iota_{\Lambda,\Delta}(A).
-    \end{align}
-\end{proof}
-
-\begin{theorem}[Disjoint finite-region observables commute]
+\begin{lemma}[Disjoint finite-region observables commute]
     \label{thm:qca_disjoint_local_inclusion_commute}
     \lean{SpinChain.localInclusion_commute_of_disjoint}
     \leanok
@@ -153,7 +17,7 @@
     In \cite[lines~2292--2300]{Cirac2017MPU}, this identity provides the local commutativity of disjoint regions in the
     quasi-local algebra.
     % Source context: paper_v2.tex 2292--2300.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     For configurations $x,y$ on $\Lambda\cup\Gamma$, split each intermediate
@@ -171,7 +35,7 @@
     Reversing the two factors gives the same scalar product.
 \end{proof}
 
-\begin{theorem}[Finite relative commutant]
+\begin{lemma}[Finite relative commutant]
     \label{thm:qca_finite_relative_commutant}
     \lean{SpinChain.mem_range_localInclusion_iff_commute_complement}
     \leanok
@@ -188,7 +52,7 @@
     \end{align}
     Unlike the results of Schumacher--Werner or the QCA appendix of \cite{Cirac2017MPU}, this lemma is a finite-dimensional tensor-factor
     identity.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:amplified_center_scalar}
@@ -232,7 +96,7 @@ matrix factors $\mathcal B_1=M_I(\mathbb C)$ and $\mathcal B_2=M_J(\mathbb C)$
 as in \cite[lines~2320--2334]{Cirac2017MPU} and \cite{gap:gnvw12_support_algebra_full_matrix_scope}
 suffice.
 
-\begin{theorem}[Adjoint of a right coefficient block]
+\begin{lemma}[Adjoint of a right coefficient block]
     \label{thm:qca_operator_block_adjoint}
     \lean{Matrix.operatorBlock_conjTranspose}
     \leanok
@@ -241,7 +105,7 @@ suffice.
         (X^\dagger)^{\mathrm R}_{ij}
          & =\bigl(X^{\mathrm R}_{ji}\bigr)^\dagger.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     At the $(r,s)$ entry, both sides equal
@@ -306,7 +170,7 @@ suffice.
     generated by all right coefficients.
 \end{definition}
 
-\begin{theorem}[Left coefficient generators belong to the support algebra]
+\begin{lemma}[Left coefficient generators belong to the support algebra]
     \label{thm:qca_left_coefficient_mem_support}
     \lean{Matrix.bipartite_slice_mem_left_support_algebra}
     \leanok
@@ -316,7 +180,7 @@ suffice.
         X^{\mathrm L}_{rs}
          & \in\operatorname{Spp}_{\mathrm L}(\mathcal A).
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:qca_left_coefficient_set, def:qca_left_support_algebra}
@@ -324,7 +188,7 @@ suffice.
     star-algebra closure.
 \end{proof}
 
-\begin{theorem}[Right coefficient generators belong to the support algebra]
+\begin{lemma}[Right coefficient generators belong to the support algebra]
     \label{thm:qca_right_coefficient_mem_support}
     \lean{Matrix.operator_block_mem_right_support_algebra}
     \leanok
@@ -334,7 +198,7 @@ suffice.
         X^{\mathrm R}_{ij}
          & \in\operatorname{Spp}_{\mathrm R}(\mathcal A).
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:qca_right_coefficient_set, def:qca_right_support_algebra}
@@ -342,7 +206,7 @@ suffice.
     star-algebra closure.
 \end{proof}
 
-\begin{theorem}[Reconstruction from left coefficients]
+\begin{lemma}[Reconstruction from left coefficients]
     \label{thm:qca_left_coefficient_reconstruction}
     \lean{Matrix.eq_sum_left_coefficient_kronecker_single}
     \leanok
@@ -350,14 +214,14 @@ suffice.
     \begin{align}
         X & =\sum_{r,s\in J}X^{\mathrm L}_{rs}\otimes E_{rs}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     At the entry $((i,r),(j,s))$, only the matrix unit $E_{rs}$ contributes,
     and its coefficient is $X^{\mathrm L}_{rs}(i,j)=X((i,r),(j,s))$.
 \end{proof}
 
-\begin{theorem}[Reconstruction from right coefficients]
+\begin{lemma}[Reconstruction from right coefficients]
     \label{thm:qca_right_coefficient_reconstruction}
     \lean{Matrix.eq_sum_single_kronecker_right_coefficient}
     \leanok
@@ -365,14 +229,14 @@ suffice.
     \begin{align}
         X & =\sum_{i,j\in I}E_{ij}\otimes X^{\mathrm R}_{ij}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     At the entry $((i,r),(j,s))$, only the matrix unit $E_{ij}$ contributes,
     and its coefficient is $X^{\mathrm R}_{ij}(r,s)=X((i,r),(j,s))$.
 \end{proof}
 
-\begin{theorem}[Minimality of the left support algebra]
+\begin{lemma}[Minimality of the left support algebra]
     \label{thm:qca_left_support_minimality}
     \lean{Matrix.left_support_algebra_le_iff}
     \leanok
@@ -384,7 +248,7 @@ suffice.
          & X^{\mathrm L}_{rs}\in\mathcal B
         \quad\text{for every }X\in\mathcal A\text{ and }r,s\in J.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:qca_left_coefficient_set, def:qca_left_support_algebra}
@@ -392,7 +256,7 @@ suffice.
     $\operatorname{Coeff}_{\mathrm L}(\mathcal A)$ gives the equivalence.
 \end{proof}
 
-\begin{theorem}[Minimality of the right support algebra]
+\begin{lemma}[Minimality of the right support algebra]
     \label{thm:qca_right_support_minimality}
     \lean{Matrix.right_support_algebra_le_iff}
     \leanok
@@ -404,7 +268,7 @@ suffice.
          & X^{\mathrm R}_{ij}\in\mathcal C
         \quad\text{for every }X\in\mathcal A\text{ and }i,j\in I.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:qca_right_coefficient_set, def:qca_right_support_algebra}
@@ -428,7 +292,7 @@ suffice.
     conjunction of two one-sided containment conditions.
 \end{definition}
 
-\begin{theorem}[Coefficient criterion for the Kronecker-product submodule]
+\begin{lemma}[Coefficient criterion for the Kronecker-product submodule]
     \label{thm:qca_mem_kronecker_submodule_iff}
     \lean{Matrix.mem_kroneckerSubmodule_iff}
     \leanok
@@ -443,7 +307,7 @@ suffice.
         X^{\mathrm R}_{ij}\in T
         \quad\text{for every }i,j\in I.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:qca_kronecker_submodule}
@@ -459,7 +323,7 @@ suffice.
     sum of Kronecker products from $S$ and $T$.
 \end{proof}
 
-\begin{theorem}[Kronecker-submodule criterion for left support]
+\begin{lemma}[Kronecker-submodule criterion for left support]
     \label{thm:qca_left_support_tensor_submodule}
     \lean{Matrix.left_support_algebra_le_iff_le_kronecker_submodule}
     \leanok
@@ -471,17 +335,17 @@ suffice.
         \mathcal A & \subseteq
         \mathcal B\boxtimes M_J(\mathbb C).
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:qca_left_support_minimality, thm:qca_mem_kronecker_submodule_iff}
-    By Theorem~\ref{thm:qca_mem_kronecker_submodule_iff} with the right
+    By Lemma~\ref{thm:qca_mem_kronecker_submodule_iff} with the right
     submodule the full matrix space, membership in the Kronecker span is
     exactly membership of every left coefficient in $\mathcal B$, so
-    Theorem~\ref{thm:qca_left_support_minimality} gives the equivalence.
+    Lemma~\ref{thm:qca_left_support_minimality} gives the equivalence.
 \end{proof}
 
-\begin{theorem}[Kronecker-submodule criterion for right support]
+\begin{lemma}[Kronecker-submodule criterion for right support]
     \label{thm:qca_right_support_kronecker_submodule}
     \lean{Matrix.right_support_algebra_le_iff_le_kronecker_submodule}
     \leanok
@@ -492,16 +356,16 @@ suffice.
         \quad\Longleftrightarrow\quad
         \mathcal A & \subseteq M_I(\mathbb C)\boxtimes\mathcal C.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:qca_right_support_minimality, thm:qca_mem_kronecker_submodule_iff}
     The coefficient criterion reduces the right-hand containment to membership
     of every right block in $\mathcal C$.  This is equivalent to the left-hand
-    inclusion by Theorem~\ref{thm:qca_right_support_minimality}.
+    inclusion by Lemma~\ref{thm:qca_right_support_minimality}.
 \end{proof}
 
-\begin{theorem}[Two-sided support-algebra containment]
+\begin{lemma}[Two-sided support-algebra containment]
     \label{thm:qca_two_sided_support_containment}
     \lean{Matrix.le_support_kroneckerSubmodule}
     \leanok
@@ -522,17 +386,17 @@ suffice.
     the two one-sided inclusions.  In \cite[lines~2320--2334]{Cirac2017MPU}, the MPU appendix applies this construction
     to
     $\mathcal R_{2x}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:qca_mem_kronecker_submodule_iff, thm:qca_left_coefficient_mem_support, thm:qca_right_coefficient_mem_support}
     If $X\in\mathcal A$, every left coefficient of $X$ lies in the left support
     algebra and every right coefficient lies in the right support algebra.
-    Theorem~\ref{thm:qca_mem_kronecker_submodule_iff} places $X$ in their
+    Lemma~\ref{thm:qca_mem_kronecker_submodule_iff} places $X$ in their
     Kronecker-product submodule.
 \end{proof}
 
-\begin{theorem}[Left Kronecker commutation is coefficientwise]
+\begin{lemma}[Left Kronecker commutation is coefficientwise]
     \label{thm:qca_left_kronecker_commute_iff}
     \lean{Matrix.commute_left_kronecker_embed_iff}
     \leanok
@@ -543,7 +407,7 @@ suffice.
         [B,X^{\mathrm L}_{rs}] & =0
         \quad\text{for every }r,s\in J.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     For $i,j\in I$ and $r,s\in J$, the two product entries are
@@ -559,7 +423,7 @@ suffice.
     $[B,X^{\mathrm L}_{rs}]=0$ for every $r,s\in J$.
 \end{proof}
 
-\begin{theorem}[Right Kronecker commutation is coefficientwise]
+\begin{lemma}[Right Kronecker commutation is coefficientwise]
     \label{thm:qca_right_kronecker_commute_iff}
     \lean{Matrix.commute_right_kronecker_embed_iff}
     \leanok
@@ -570,7 +434,7 @@ suffice.
         [C,X^{\mathrm R}_{ij}] & =0
         \quad\text{for every }i,j\in I.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     For $i,j\in I$ and $r,s\in J$, the two product entries are
@@ -586,7 +450,7 @@ suffice.
     $[C,X^{\mathrm R}_{ij}]=0$ for every $i,j\in I$.
 \end{proof}
 
-\begin{theorem}[Left support-algebra centralizer]
+\begin{lemma}[Left support-algebra centralizer]
     \label{thm:qca_left_support_centralizer}
     \lean{Matrix.left_kronecker_embed_mem_centralizer_iff}
     \leanok
@@ -602,11 +466,11 @@ suffice.
         \operatorname{Spp}_{\mathrm L}(\mathcal A)'
          & =\{B\in M_I(\mathbb C)\mid B\otimes\mathbf 1_J\in\mathcal A'\}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:qca_left_coefficient_mem_support, thm:qca_left_kronecker_commute_iff, def:qca_left_coefficient_set, def:qca_left_support_algebra}
-    By Theorem~\ref{thm:qca_left_kronecker_commute_iff}, commutation of
+    By Lemma~\ref{thm:qca_left_kronecker_commute_iff}, commutation of
     $B\otimes\mathbf 1_J$ with every $X\in\mathcal A$ is equivalent to
     commutation of $B$ with every left coefficient.  The coefficient set is
     closed under adjoints because $\mathcal A$ is a star-subalgebra.  The
@@ -616,7 +480,7 @@ suffice.
     generator membership.
 \end{proof}
 
-\begin{theorem}[Right support-algebra centralizer]
+\begin{lemma}[Right support-algebra centralizer]
     \label{thm:qca_right_support_centralizer}
     \lean{Matrix.right_kronecker_embed_mem_centralizer_iff}
     \leanok
@@ -632,20 +496,20 @@ suffice.
         \operatorname{Spp}_{\mathrm R}(\mathcal A)'
          & =\{C\in M_J(\mathbb C)\mid \mathbf 1_I\otimes C\in\mathcal A'\}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:qca_operator_block_adjoint, thm:qca_right_coefficient_mem_support, thm:qca_right_kronecker_commute_iff, def:qca_right_coefficient_set, def:qca_right_support_algebra}
-    By Theorem~\ref{thm:qca_right_kronecker_commute_iff}, commutation of
+    By Lemma~\ref{thm:qca_right_kronecker_commute_iff}, commutation of
     $\mathbf 1_I\otimes C$ with every $X\in\mathcal A$ is equivalent to
-    commutation of $C$ with every right coefficient.  Theorem~\ref{thm:qca_operator_block_adjoint}
+    commutation of $C$ with every right coefficient.  Lemma~\ref{thm:qca_operator_block_adjoint}
     shows that the right coefficient set is closed under adjoints.  The
     universal property of the generated star-subalgebra extends commutation to
     all of $\operatorname{Spp}_{\mathrm R}(\mathcal A)$; the converse follows
     from generator membership.
 \end{proof}
 
-\begin{theorem}[Commutation of overlapping support algebras]
+\begin{lemma}[Commutation of overlapping support algebras]
     \label{thm:qca_overlapping_support_algebras_commute}
     \lean{Matrix.supportAlgebras_commute_of_overlappingLifts_commute}
     \leanok
@@ -683,7 +547,7 @@ suffice.
     full complex matrix algebras, which as documented in \cite[lines~2300--2306, 2313--2334]{Cirac2017MPU} and \cite{gap:gnvw12_support_algebra_full_matrix_scope} suffices for the MPU
     application to homogeneous spin
     chains.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:qca_left_coefficient_set, def:qca_right_coefficient_set, def:qca_left_support_algebra, def:qca_right_support_algebra}
@@ -739,7 +603,7 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Algebraic product of commuting factors]
+\begin{lemma}[Algebraic product of commuting factors]
     \label{thm:qca_commuting_factor_product}
     \lean{StarSubalgebra.commutingMulMap_range,
         StarSubalgebra.sup_toSubmodule_eq_mul}
@@ -755,7 +619,7 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     \end{align}
     Thus every element of the join is a finite complex-linear sum of
     products $ab$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:qca_commuting_factor_multiplication}
@@ -772,16 +636,16 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     multiplication map.
 \end{proof}
 
-\begin{theorem}[Product of two full matrix factors]
+\begin{lemma}[Product of two full matrix factors]
     \label{thm:qca_commuting_full_matrix_product}
     \lean{StarSubalgebra.commutingMulMap_injective_of_equiv_matrix,
         StarSubalgebra.commutingSupEquivMatrix,
         StarSubalgebra.nonempty_equiv_sup_matrix,
         StarSubalgebra.finrank_sup_of_equiv_matrix}
-    \notready
+    \leanok
     \uses{def:qca_commuting_factor_multiplication}
-    Suppose that $\mathcal C$ is a nontrivial complex star-algebra,
-    that $p,q>0$, and that
+    Suppose that $\mathcal C=M_I(\mathbb C)$ for a finite nonempty set
+    $I$, that $p,q>0$, and that
     \begin{align}
         \mathcal A & \cong M_p(\mathbb C), \notag \\
         \mathcal B & \cong M_q(\mathbb C)
@@ -799,9 +663,9 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     \cite[lines~2119--2138]{SchumacherWerner2004QCA}, which in \cite[lines~1270--1308]{Gross2012IndexTheory} and \cite{gap:gnvw12_cscom_single_block_scope} is used for the adjacent
     support
     algebras.
-\end{theorem}
+\end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:qca_commuting_factor_multiplication,
         thm:qca_commuting_factor_product}
     The source of the multiplication homomorphism is
@@ -812,12 +676,12 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     This is a simple ring.  The kernel of a unital homomorphism from a
     simple ring to a nonzero ring is not the whole ring, and is therefore
     zero.  Hence multiplication is injective.  Its image is the join by
-    Theorem~\ref{thm:qca_commuting_factor_product}; the matrix presentation
+    Lemma~\ref{thm:qca_commuting_factor_product}; the matrix presentation
     and dimension formula in
     Equation~(\ref{eq:qca_commuting_full_matrix_product}) follow.
 \end{proof}
 
-\begin{theorem}[Canonical Kronecker coordinates]
+\begin{lemma}[Canonical Kronecker coordinates]
     \label{thm:qca_commuting_factor_kronecker_coordinates}
     \lean{Matrix.leftKroneckerEmbed_sup_rightKroneckerEmbed_toSubmodule}
     \leanok
@@ -834,7 +698,7 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
         \{S\otimes T\mid S\in\mathcal S,\ T\in\mathcal T\}.
         \label{eq:qca_commuting_factor_kronecker_coordinates}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:qca_commuting_factor_product}
@@ -850,221 +714,7 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     (\ref{eq:qca_commuting_factor_kronecker_coordinates}).
 \end{proof}
 
-\begin{definition}[Translation of a finite region]
-    \label{def:qca_translate_region}
-    \lean{SpinChain.translateRegion,SpinChain.mem_translateRegion,
-        SpinChain.mem_translateRegion_add,SpinChain.translateRegion_zero,
-        SpinChain.translateRegion_add,
-        SpinChain.translateRegion_mono}
-    \leanok
-    For a finite region $\Lambda\subset\mathbb Z$ and $a\in\mathbb Z$, define
-    \begin{align}
-        \Lambda+a & =\{i+a\mid i\in\Lambda\}.
-    \end{align}
-    Thus
-    \begin{align}
-        j\in\Lambda+a & \iff j-a\in\Lambda, \\
-        \Lambda+0     & =\Lambda,           \\
-        (\Lambda+a)+b & =\Lambda+(a+b).
-    \end{align}
-    If $\Lambda\subseteq\Gamma$, then $\Lambda+a\subseteq\Gamma+a$.
-\end{definition}
-
-\begin{definition}[Sumset of finite regions]
-    \label{def:qca_region_sumset}
-    \lean{SpinChain.regionSumset,SpinChain.mem_regionSumset,
-        SpinChain.regionSumset_singleton_right,SpinChain.regionSumset_mono,
-        SpinChain.regionSumset_mono_left,SpinChain.regionSumset_mono_right,
-        SpinChain.regionSumset_zero_left,SpinChain.regionSumset_zero_right,
-        SpinChain.regionSumset_assoc}
-    \leanok
-    \uses{def:qca_translate_region}
-    For finite regions $\Lambda,\mathcal N\subset\mathbb Z$, define their
-    sumset by
-    \begin{align}
-        \Lambda+\mathcal N
-         & =\{i+a\mid i\in\Lambda,\ a\in\mathcal N\}.
-    \end{align}
-    Hence $j\in\Lambda+\mathcal N$ exactly when $j=i+a$ for some
-    $i\in\Lambda$ and $a\in\mathcal N$. The sumset is monotone in both
-    arguments, and the singleton $\{0\}$ is an identity. A singleton
-    displacement recovers translation,
-    \begin{align}
-        \Lambda+\{a\} & =\Lambda+a.
-    \end{align}
-    Sumsets are associative:
-    \begin{align}
-        (\Lambda+\mathcal N)+\mathcal M & =\Lambda+(\mathcal N+\mathcal M).
-    \end{align}
-    These identities support composition of propagation bounds; in the QCA appendix of \cite{Cirac2017MPU}, $\Lambda+\mathcal N$ is the
-    enlarged finite region in the propagation
-    condition.
-\end{definition}
-
-\begin{definition}[Translation of sites and configurations]
-    \label{def:qca_finite_configuration_translation}
-    \lean{SpinChain.siteTranslation_apply_val,
-        SpinChain.siteTranslation_symm_apply_val,SpinChain.Config.translation,
-        SpinChain.Config.translation_apply,SpinChain.Config.translation_symm_apply}
-    \leanok
-    \uses{def:qca_local_algebra, def:qca_translate_region}
-    Translation gives bijections
-    \begin{align}
-        t_{a,\Lambda} & \colon\Lambda\longrightarrow\Lambda+a,
-                      & t_{a,\Lambda}(i)                       & =i+a,    \\
-        T_{a,\Lambda} & \colon\operatorname{Config}_d(\Lambda)
-        \longrightarrow\operatorname{Config}_d(\Lambda+a),
-                      & (T_{a,\Lambda}x)(j)                    & =x(j-a).
-    \end{align}
-    Their inverses translate sites and configurations by $-a$.
-\end{definition}
-
-\begin{definition}[Finite-region translation of local observables]
-    \label{def:qca_finite_local_translation}
-    \lean{SpinChain.localTranslation,SpinChain.localTranslation_apply}
-    \leanok
-    \uses{def:qca_local_algebra, def:qca_finite_configuration_translation}
-    Relabelling configurations defines a star-algebra equivalence
-    \begin{align}
-        \tau_{a,\Lambda} & \colon\mathcal A_\Lambda
-        \longrightarrow\mathcal A_{\Lambda+a},                          \\
-        \tau_{a,\Lambda}(A)(x,y)
-                         & =A(T_{a,\Lambda}^{-1}x,T_{a,\Lambda}^{-1}y).
-    \end{align}
-    This is the finite-region translation associated with the lattice
-    translation $i\mapsto i+a$.
-\end{definition}
-
-\begin{lemma}[Norm preservation of finite-region translation]
-    \label{lem:qca_finite_local_translation_norm}
-    \lean{SpinChain.localTranslation_norm,
-        SpinChain.localTranslation_isometry}
-    \leanok
-    \uses{def:qca_finite_local_translation}
-    Let $d$ be a nonnegative integer, let $\Lambda\subset\mathbb Z$ be finite,
-    and let $a\in\mathbb Z$. For every $A\in\mathcal A_\Lambda$,
-    \begin{align}
-        \lVert\tau_{a,\Lambda}(A)\rVert & =\lVert A\rVert.
-    \end{align}
-    Consequently, $\tau_{a,\Lambda}$ is an isometry from
-    $\mathcal A_\Lambda$ onto $\mathcal A_{\Lambda+a}$.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{def:qca_finite_local_translation}
-    Translation bijectively relabels the configuration basis. The resulting
-    star-algebra equivalence between the two finite matrix algebras preserves
-    the operator norm. Applying this identity to $A-B$ and using linearity gives
-    \begin{align}
-        \lVert\tau_{a,\Lambda}(A)-\tau_{a,\Lambda}(B)\rVert
-         & =\lVert\tau_{a,\Lambda}(A-B)\rVert
-        =\lVert A-B\rVert,
-    \end{align}
-    so distances are preserved.
-\end{proof}
-
-\begin{lemma}[Finite-region translation action laws]
-    \label{lem:qca_finite_translation_action}
-    \lean{SpinChain.siteTranslation_zero,SpinChain.siteTranslation_add,
-        SpinChain.Config.translation_apply_siteTranslation,
-        SpinChain.Config.translation_zero,SpinChain.Config.translation_add,
-        SpinChain.localTranslation_apply_translation,
-        SpinChain.localTranslation_zero,SpinChain.localTranslation_add}
-    \leanok
-    \uses{def:qca_finite_configuration_translation, def:qca_finite_local_translation}
-    Translation by zero acts trivially on sites, configurations, and
-    finite-region observables. Successive translations by $a$ and $b$ agree
-    with translation by $a+b$. Pointwise, for $i\in\Lambda$,
-    $x,y\in\operatorname{Config}_d(\Lambda)$, and
-    $A\in\mathcal A_\Lambda$,
-    \begin{align}
-        t_{0,\Lambda}(i)                   & =i,                                      \\
-        t_{b,\Lambda+a}(t_{a,\Lambda}(i))
-                                           & =t_{a+b,\Lambda}(i),                     \\
-        (T_{a,\Lambda}x)(t_{a,\Lambda}(i)) & =x(i),                                   \\
-        (T_{b,\Lambda+a}T_{a,\Lambda}x)
-        (t_{b,\Lambda+a}(t_{a,\Lambda}(i)))
-                                           & =(T_{a+b,\Lambda}x)(t_{a+b,\Lambda}(i)), \\
-        (\tau_{a,\Lambda}(A))(T_{a,\Lambda}x,T_{a,\Lambda}y)
-                                           & =A(x,y),                                 \\
-        (\tau_{b,\Lambda+a}\tau_{a,\Lambda}(A))
-        (T_{b,\Lambda+a}T_{a,\Lambda}x,
-        T_{b,\Lambda+a}T_{a,\Lambda}y)
-                                           & =(\tau_{a+b,\Lambda}(A))
-        (T_{a+b,\Lambda}x,T_{a+b,\Lambda}y).
-    \end{align}
-    These identities express the additive action without identifying the
-    distinct configuration spaces before applying their canonical translation
-    bijections.
-\end{lemma}
-
-\begin{proof}\leanok
-    The site identities follow from
-    \begin{align}
-        (i+a)+b & =i+(a+b).
-    \end{align}
-    Relabelling a configuration is precomposition by the inverse site
-    translation, so evaluation at the corresponding translated site gives
-    \begin{align}
-        (T_{a,\Lambda}x)(t_{a,\Lambda}(i)) & =x(i).
-    \end{align}
-    Applying this identity successively proves the configuration action laws.
-    Finally, the local observable translation relabels both matrix indices by
-    $T_{a,\Lambda}^{-1}$; evaluating on translated configurations therefore
-    gives $A(x,y)$, and applying this entrywise identity successively proves the
-    local observable action laws.
-\end{proof}
-
-\begin{lemma}[Naturality of finite-region translation]
-    \label{lem:qca_finite_local_translation_naturality}
-    \lean{SpinChain.localTranslation_localInclusion}
-    \leanok
-    \uses{def:qca_local_inclusion, def:qca_translate_region, def:qca_finite_local_translation}
-    If $\Lambda\subseteq\Gamma$, then for every
-    $A\in\mathcal A_\Lambda$,
-    \begin{align}
-        \tau_{a,\Gamma}(\iota_{\Lambda,\Gamma}(A))
-         & =\iota_{\Lambda+a,\Gamma+a}(\tau_{a,\Lambda}(A)).
-    \end{align}
-\end{lemma}
-
-\begin{proof}\leanok
-    The lattice translation identifies $\Gamma\setminus\Lambda$ with
-    $(\Gamma+a)\setminus(\Lambda+a)$. Hence relabelling configurations
-    carries the identity on the first complement to the identity on the
-    second complement, and
-    \begin{align}
-        \tau_{a,\Gamma}(A\otimes\mathbf 1_{\Gamma\setminus\Lambda})
-         & =\tau_{a,\Lambda}(A)
-        \otimes\mathbf 1_{(\Gamma+a)\setminus(\Lambda+a)}.
-    \end{align}
-\end{proof}
-
-\begin{definition}[Algebraic local algebra]
-    \label{def:qca_algebraic_local_algebra}
-    \lean{SpinChain.instDirectedSystemLocalAlgebra,
-        SpinChain.AlgebraicLocalAlgebra,SpinChain.localObservable,
-        SpinChain.localObservable_localInclusion}
-    \leanok
-    \uses{def:qca_local_algebra, def:qca_local_inclusion, lem:qca_local_inclusion_refl, lem:qca_local_inclusion_trans}
-    The finite-region local algebras form a directed system under the maps
-    $\iota_{\Lambda,\Gamma}$.  Its algebraic direct limit is the algebraic
-    local algebra
-    \begin{align}
-        \mathcal A_{\mathrm{loc}}
-         & =\varinjlim_{\Lambda\Subset\mathbb Z}\mathcal A_\Lambda.
-    \end{align}
-    For every finite region $\Lambda$, write
-    $\iota_\Lambda\colon\mathcal A_\Lambda\to\mathcal A_{\mathrm{loc}}$
-    for the canonical inclusion.  Whenever $\Lambda\subseteq\Gamma$, these
-    inclusions satisfy
-    \begin{align}
-        \iota_\Gamma\circ\iota_{\Lambda,\Gamma} & =\iota_\Lambda.
-    \end{align}
-    This is the union
-    $\bigcup_{\Lambda\Subset\mathbb Z}\mathcal A_\Lambda$ in the Appendix of
-    \cite{Cirac2017MPU}.  No norm completion is taken.
-\end{definition}
+\section{Periodic matrix product unitaries on a finite chain}
 
 \begin{definition}[Finite-chain realization of a periodic MPU]
     \label{def:mpu_finite_chain_realization}
@@ -1099,7 +749,7 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     from triples of such words to configurations on the interval.
 \end{definition}
 
-\begin{theorem}[Decomposition of an arbitrary anchored interval]
+\begin{lemma}[Decomposition of an arbitrary anchored interval]
     \label{thm:mpu_anchored_residual_decomposition}
     \lean{SpinChain.nextBlockPrefix_lt,
         SpinChain.nextBlockPrefix_aligned,
@@ -1123,7 +773,7 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     $a+p+tL+r$. If $N<q(a,L)$, then $p=N$ and $m=s=0$. The anchored
     configuration reads the prefix, middle blocks, and suffix in exactly
     this increasing site order.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpu_anchored_residual_configurations,
@@ -1136,7 +786,7 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     $N<q(a,L)$, one has $p=N$ and both other lengths vanish.
 \end{proof}
 
-\begin{theorem}[Finite-chain MPO entries with residual sites]
+\begin{lemma}[Finite-chain MPO entries with residual sites]
     \label{thm:mpu_anchored_residual_mpo_entry}
     \lean{SpinChain.finiteChainMPOMatrix_apply_config,
         SpinChain.finiteChainMPOMatrix_apply_anchoredResidualConfig,
@@ -1159,7 +809,7 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     This holds at every integer anchor and for arbitrary $L,p,m,s$,
     including an empty middle word. Neither unitarity nor divisibility
     of $N$ by $L$ is assumed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:mpdo_physical_blocking_residuals,
@@ -1193,7 +843,7 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     complex scalars, and the adjoint.
 \end{proof}
 
-\begin{theorem}[Conjugation coefficients in residual-word coordinates]
+\begin{lemma}[Conjugation coefficients in residual-word coordinates]
     \label{thm:mpu_anchored_residual_conjugation_entry}
     \lean{SpinChain.finiteChainConjugation_localInclusion_apply_entry,
         SpinChain.finiteChainConjugation_localInclusion_anchoredResidualTrace}
@@ -1224,7 +874,7 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     Both MPO factors retain their residual prefix and suffix products.
     This finite-chain identity does not assert independence of the
     interval or support of the conjugated observable.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpu_anchored_residual_mpo_entry,
@@ -1265,7 +915,7 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     $M_{a;p,k,s}$ for the finite-chain MPO matrix in these two bases.
 \end{definition}
 
-\begin{theorem}[Anchored three-block operator identity]
+\begin{lemma}[Anchored three-block operator identity]
     \label{thm:mpu_anchored_three_block_operator}
     \lean{MPOTensor.threeBlockFiniteChainMatrix_slice,
         Matrix.intertwiner_of_slices,
@@ -1298,7 +948,7 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     standard form and does not yet identify the right-hand side with
     a site-indexed local inclusion or prove independence of the
     enclosing interval.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpu_original_site_three_block_window_entry,
@@ -1329,183 +979,9 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     No stabilization in $N$ is asserted.
 \end{definition}
 
-\begin{definition}[Operator norm on the local algebra]
-    \label{def:qca_algebraic_local_operator_norm}
-    \lean{SpinChain.algebraicLocalOperatorNorm,
-        SpinChain.algebraicLocalOperatorNorm_localObservable,
-        SpinChain.instNormAlgebraicLocalAlgebra,
-        SpinChain.norm_localObservable}
-    \leanok
-    \uses{def:qca_algebraic_local_algebra, lem:qca_local_inclusion_norm}
-    Assume $d>0$.  If a local observable $A\in\mathcal A_{\mathrm{loc}}$
-    is represented by $A_\Lambda\in\mathcal A_\Lambda$ on a finite region
-    $\Lambda$, define its operator norm by
-    \begin{align}
-        \lVert A\rVert & =\lVert A_\Lambda\rVert.
-    \end{align}
-    This definition is independent of the finite region and chosen
-    representative, giving the norm completed in the Appendix of
-    \cite{Cirac2017MPU} to obtain the quasi-local algebra.
-\end{definition}
+\section{Locality and translation covariance}
 
-\begin{proof}\leanok
-    If $A_\Lambda$ and $A_\Gamma$ represent the same local observable, then
-    the defining relation for the inductive limit gives a finite region
-    $\Delta\supseteq\Lambda\cup\Gamma$ such that
-    \begin{align}
-        \iota_{\Lambda,\Delta}(A_\Lambda)
-         & =\iota_{\Gamma,\Delta}(A_\Gamma).
-    \end{align}
-    Both inclusions preserve the operator norm, so
-    $\lVert A_\Lambda\rVert=\lVert A_\Gamma\rVert$.
-\end{proof}
-
-\begin{definition}[Normed star algebra of local observables]
-    \label{def:qca_algebraic_local_normed_star_algebra}
-    \lean{SpinChain.instNormedAddCommGroupAlgebraicLocalAlgebra,
-        SpinChain.instNormedRingAlgebraicLocalAlgebra,
-        SpinChain.instNormedAlgebraAlgebraicLocalAlgebra}
-    \leanok
-    \uses{def:qca_algebraic_local_operator_norm}
-    For $d>0$, the local algebra with the operator norm is a normed complex
-    star algebra.  No completeness assertion is made.
-\end{definition}
-
-\begin{proof}\leanok
-    Taking finite-region representatives of the local observables and enlarging
-    their regions to a common finite region reduces the claims to a single matrix algebra: the norm axioms, the product
-    inequality, and compatibility with complex scalar multiplication then
-    follow from the corresponding properties of the finite-region matrix
-    algebra.
-\end{proof}
-
-\begin{lemma}[C-star identity for local observables]
-    \label{lem:qca_algebraic_local_norm_star_mul_self}
-    \lean{SpinChain.norm_star_mul_self}
-    \leanok
-    \uses{def:qca_algebraic_local_normed_star_algebra}
-    For $d>0$ and every local observable $A$,
-    \begin{align}
-        \lVert A^*A\rVert & =\lVert A\rVert^2.
-    \end{align}
-\end{lemma}
-
-\begin{proof}\leanok
-    For a finite region $\Lambda$ and a representative
-    $A_\Lambda\in\mathcal A_\Lambda$,
-    \begin{align}
-        \lVert A^*A\rVert
-         & =\lVert A_\Lambda^*A_\Lambda\rVert
-        =\lVert A_\Lambda\rVert^2
-        =\lVert A\rVert^2.
-    \end{align}
-\end{proof}
-
-\begin{definition}[C-star axiom structure on local observables]
-    \label{def:qca_algebraic_local_cstar_ring}
-    \lean{SpinChain.instCStarRingAlgebraicLocalAlgebra}
-    \leanok
-    \uses{lem:qca_algebraic_local_norm_star_mul_self}
-    The normed star algebra of local observables satisfies the $C^*$-norm identity.
-\end{definition}
-
-\begin{proof}\leanok
-    The C-star identity gives the required norm inequality in the reverse
-    direction; submultiplicativity gives the other direction.
-\end{proof}
-
-\begin{lemma}[Local observables embed isometrically]
-    \label{lem:qca_local_observable_isometry}
-    \lean{SpinChain.localObservable_isometry}
-    \leanok
-    \uses{def:qca_algebraic_local_operator_norm}
-    For $d>0$ and every finite region $\Lambda$, the canonical map
-    \begin{align}
-        \iota_\Lambda\colon\mathcal A_\Lambda
-         & \longrightarrow\mathcal A_{\mathrm{loc}}
-    \end{align}
-    is an operator-norm isometry.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{def:qca_algebraic_local_operator_norm}
-    The norm of $\iota_\Lambda(A)$ is defined to be the operator norm of its
-    representative $A\in\mathcal A_\Lambda$.  Hence
-    $\lVert\iota_\Lambda(A)\rVert=\lVert A\rVert$; applying this equality to
-    differences proves preservation of distance.
-\end{proof}
-
-\begin{theorem}[Star-algebra universal property]
-    \label{thm:qca_algebraic_local_algebra_universal}
-    \lean{SpinChain.algebraicLocalAlgebraLift,
-        SpinChain.algebraicLocalAlgebraLift_localObservable,
-        SpinChain.algebraicLocalAlgebra_starAlgHom_ext,
-        SpinChain.algebraicLocalAlgebraLift_unique}
-    \leanok
-    \uses{def:qca_algebraic_local_algebra}
-    Let $B$ be a complex star algebra.  Suppose that for every finite region
-    $\Lambda$ there is a star-algebra homomorphism
-    $g_\Lambda\colon\mathcal A_\Lambda\to B$.  Whenever
-    $\Lambda\subseteq\Gamma$, suppose that
-    \begin{align}
-        g_\Gamma\circ\iota_{\Lambda,\Gamma} & =g_\Lambda.
-    \end{align}
-    Then there is a unique star-algebra homomorphism
-    $g\colon\mathcal A_{\mathrm{loc}}\to B$ satisfying
-    $g\circ\iota_\Lambda=g_\Lambda$ for every finite region $\Lambda$.
-\end{theorem}
-
-\begin{proof}\leanok
-    Define $g$ on a local observable represented by
-    $A\in\mathcal A_\Lambda$ as $g_\Lambda(A)$.  Compatibility makes this
-    independent of the representing region.  Since each $g_\Lambda$ preserves
-    addition, multiplication, the unit, scalar multiplication, and the star
-    operation, so does $g$.  Every element of the direct limit has a
-    finite-region representative, which also proves uniqueness.
-\end{proof}
-
-\begin{definition}[Support of a local observable]
-    \label{def:qca_supported_in}
-    \lean{SpinChain.SupportedIn}
-    \leanok
-    \uses{def:qca_algebraic_local_algebra}
-    A local observable $A\in\mathcal A_{\mathrm{loc}}$ is supported in the
-    finite region $\Lambda$ if it lies in the image of
-    $\iota_\Lambda\colon\mathcal A_\Lambda\to\mathcal A_{\mathrm{loc}}$.
-\end{definition}
-
-\begin{theorem}[Finite supports of local observables]
-    \label{thm:qca_local_observable_finite_support}
-    \lean{SpinChain.localObservable_injective,SpinChain.SupportedIn.mono,
-        SpinChain.SupportedIn.union_left,SpinChain.SupportedIn.union_right,
-        SpinChain.SupportedIn.add,SpinChain.SupportedIn.mul,
-        SpinChain.SupportedIn.star,SpinChain.SupportedIn.zero,
-        SpinChain.SupportedIn.one,SpinChain.exists_supportedIn}
-    \leanok
-    \uses{def:qca_supported_in, lem:qca_local_inclusion_injective}
-    Every local observable is supported in some finite region.  If $A$ is
-    supported in $\Lambda$ and $\Lambda\subseteq\Gamma$, then $A$ is supported
-    in $\Gamma$.  If $A$ and $B$ are supported in $\Lambda$ and $\Gamma$,
-    respectively, then $A+B$ and $AB$ are supported in $\Lambda\cup\Gamma$.
-    The adjoint $A^*$ is supported in $\Lambda$, and both $0$ and $1$ are
-    supported in every finite region.  For positive on-site dimension, each
-    map $\iota_\Lambda$ is injective.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{def:qca_algebraic_local_algebra, lem:qca_local_inclusion_injective}
-    Enlarge representatives by tensoring with the identity on the added sites.
-    Two representatives can therefore be moved to the finite union of their
-    regions, where sums and products are formed.  The canonical inclusions are
-    unital star-algebra homomorphisms, so they preserve the adjoint, zero, and
-    the unit.  For $d>0$, every transition map between finite-region algebras is
-    injective; the canonical map from each member of such a directed system to
-    its direct limit is therefore injective.  Finally, every element of an
-    algebraic direct limit has a representative in one member of the directed
-    system.
-\end{proof}
-
-\begin{theorem}[Disjointly supported local observables commute]
+\begin{lemma}[Disjointly supported local observables commute]
     \label{thm:qca_disjoint_supported_local_commute}
     \lean{SpinChain.localObservable_commute_of_disjoint,
         SpinChain.SupportedIn.commute_of_disjoint}
@@ -1526,14 +1002,14 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     the construction in \cite[lines~2292--2300]{Cirac2017MPU}, not a named
     theorem of the appendix.
     % Source context: paper_v2.tex 2292--2300.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:qca_disjoint_local_inclusion_commute}
     For representatives $X=\iota_\Lambda(A)$ and
     $Y=\iota_\Gamma(B)$, embedding both into
     $\mathcal A_{\Lambda\cup\Gamma}$ reduces the commutator to
-    Theorem~\ref{thm:qca_disjoint_local_inclusion_commute} gives
+    Lemma~\ref{thm:qca_disjoint_local_inclusion_commute} gives
     \begin{align}
         XY
          & =\iota_{\Lambda\cup\Gamma}
@@ -1546,7 +1022,7 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Algebraic-local relative commutant]
+\begin{lemma}[Algebraic-local relative commutant]
     \label{thm:qca_algebraic_local_relative_commutant}
     \lean{SpinChain.supportedIn_iff_commute_disjoint}
     \leanok
@@ -1563,7 +1039,7 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     \end{align}
     This characterizes locally supported observables on the inductive limit
     algebra.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:qca_finite_relative_commutant, thm:qca_disjoint_supported_local_commute, thm:qca_local_observable_finite_support}
@@ -1577,376 +1053,6 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
     $A=\iota_{\Lambda,\Lambda\cup\Delta}(A_\Lambda)$ for some
     $A_\Lambda\in\mathcal A_\Lambda$. Hence
     $X=\iota_\Lambda(A_\Lambda)$.
-\end{proof}
-
-\begin{definition}[Algebraic-local translation homomorphism]
-    \label{def:qca_algebraic_local_translation_hom}
-    \lean{SpinChain.algebraicLocalTranslationHom,
-        SpinChain.algebraicLocalTranslationHom_localObservable}
-    \leanok
-    \uses{def:qca_finite_local_translation, def:qca_algebraic_local_algebra}
-    For $a\in\mathbb Z$, finite-region translations induce a star-algebra
-    homomorphism
-    \begin{align}
-        \tau_a\colon\mathcal A_{\mathrm{loc}} & \longrightarrow
-        \mathcal A_{\mathrm{loc}}
-    \end{align}
-    determined on every finite-region representative by
-    \begin{align}
-        \tau_a(\iota_\Lambda(A))
-         & =\iota_{\Lambda+a}(\tau_{a,\Lambda}(A)).
-    \end{align}
-\end{definition}
-
-\begin{proof}\leanok
-    \uses{def:qca_translate_region, def:qca_algebraic_local_algebra, lem:qca_finite_local_translation_naturality, thm:qca_algebraic_local_algebra_universal}
-    Naturality gives, for $\Lambda\subseteq\Gamma$,
-    \begin{align}
-        \iota_{\Gamma+a}\!\left(\tau_{a,\Gamma}(\iota_{\Lambda,\Gamma}(A))\right)
-         & =\iota_{\Gamma+a}\!\left(\iota_{\Lambda+a,\Gamma+a}(\tau_{a,\Lambda}(A))\right) \\
-         & =\iota_{\Lambda+a}(\tau_{a,\Lambda}(A)).
-    \end{align}
-    Hence the finite-region maps form a compatible family and induce the stated
-    homomorphism on the algebraic direct limit.
-\end{proof}
-
-\begin{lemma}[Action laws for algebraic-local translation homomorphisms]
-    \label{lem:qca_algebraic_local_translation_hom_action}
-    \lean{SpinChain.algebraicLocalTranslationHom_zero,
-        SpinChain.algebraicLocalTranslationHom_add}
-    \leanok
-    \uses{def:qca_algebraic_local_translation_hom}
-    The homomorphisms satisfy
-    \begin{align}
-        \tau_0            & =\operatorname{id}, \\
-        \tau_b\circ\tau_a & =\tau_{a+b}.
-    \end{align}
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{def:qca_translate_region, def:qca_algebraic_local_algebra, lem:qca_finite_translation_action, thm:qca_algebraic_local_algebra_universal}
-    On a representative $A\in\mathcal A_\Lambda$, the two sides of the
-    composition law are represented on the equal finite regions
-    $(\Lambda+a)+b$ and $\Lambda+(a+b)$. The finite-region action identity
-    therefore gives
-    \begin{align}
-        \tau_b(\tau_a(\iota_\Lambda(A)))
-         & =\iota_{\Lambda+(a+b)}
-        (\tau_{a+b,\Lambda}(A))
-        =\tau_{a+b}(\iota_\Lambda(A)).
-    \end{align}
-    The zero law is proved in the same way. Equality on all finite-region
-    representatives determines equality on the algebraic direct limit.
-\end{proof}
-
-\begin{definition}[Translation of algebraic-local observables]
-    \label{def:qca_algebraic_local_translation}
-    \lean{SpinChain.algebraicLocalTranslation,
-        SpinChain.algebraicLocalTranslation_apply,
-        SpinChain.algebraicLocalTranslation_localObservable}
-    \leanok
-    \uses{def:qca_algebraic_local_translation_hom}
-    For every $a\in\mathbb Z$, the homomorphism $\tau_a$ is a star-algebra
-    automorphism of $\mathcal A_{\mathrm{loc}}$, and on finite-region
-    representatives
-    \begin{align}
-        \tau_a(\iota_\Lambda(A))
-         & =\iota_{\Lambda+a}(\tau_{a,\Lambda}(A)).
-    \end{align}
-\end{definition}
-
-\begin{proof}\leanok
-    \uses{def:qca_algebraic_local_translation_hom, lem:qca_algebraic_local_translation_hom_action}
-    The homomorphism action laws give
-    \begin{align}
-        \tau_{-a}\circ\tau_a & =\tau_0=\operatorname{id}, \\
-        \tau_a\circ\tau_{-a} & =\tau_0=\operatorname{id}.
-    \end{align}
-    Thus $\tau_a$ is bijective with inverse $\tau_{-a}$. The formula on
-    finite-region representatives is the defining formula for the homomorphism.
-\end{proof}
-
-\begin{lemma}[Algebraic-local translation action laws]
-    \label{lem:qca_algebraic_local_translation_action}
-    \lean{SpinChain.algebraicLocalTranslation_zero,
-        SpinChain.algebraicLocalTranslation_add,
-        SpinChain.algebraicLocalTranslation_symm}
-    \leanok
-    \uses{def:qca_algebraic_local_translation}
-    The automorphisms form an additive action of $\mathbb Z$:
-    \begin{align}
-        \tau_0            & =\operatorname{id}, \\
-        \tau_b\circ\tau_a & =\tau_{a+b},        \\
-        \tau_a^{-1}       & =\tau_{-a}.
-    \end{align}
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{def:qca_algebraic_local_translation, lem:qca_algebraic_local_translation_hom_action}
-    The first two identities are the homomorphism action laws expressed as
-    identities of star-algebra automorphisms. Taking $b=-a$ in the composition
-    law gives
-    \begin{align}
-        \tau_{-a}\circ\tau_a & =\tau_0=\operatorname{id}, \\
-        \tau_a\circ\tau_{-a} & =\tau_0=\operatorname{id},
-    \end{align}
-    which is the inverse identity.
-\end{proof}
-
-\begin{lemma}[Exact translation of algebraic-local supports]
-    \label{lem:qca_algebraic_local_translation_support}
-    \lean{SpinChain.algebraicLocalTranslation_supportedIn,
-        SpinChain.algebraicLocalTranslation_supportedIn_iff}
-    \leanok
-    \uses{def:qca_supported_in, def:qca_algebraic_local_translation}
-    A local observable $A$ is supported in a finite region $\Lambda$ if and only
-    if $\tau_a(A)$ is supported in $\Lambda+a$.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{def:qca_translate_region, def:qca_algebraic_local_translation, lem:qca_algebraic_local_translation_hom_action}
-    If $A=\iota_\Lambda(A_\Lambda)$, then
-    \begin{align}
-        \tau_a(A)
-         & =\iota_{\Lambda+a}(\tau_{a,\Lambda}(A_\Lambda)),
-    \end{align}
-    which proves the forward implication. Applying the same argument to
-    $\tau_a(A)$ with displacement $-a$ and using
-    $\tau_{-a}\tau_a=\operatorname{id}$ and
-    $(\Lambda+a)-a=\Lambda$, for the reverse implication.
-\end{proof}
-
-\begin{lemma}[Norm isometry of algebraic-local translation]
-    \label{lem:qca_algebraic_local_translation_isometry}
-    \lean{SpinChain.norm_algebraicLocalTranslation,
-        SpinChain.algebraicLocalTranslation_isometry}
-    \leanok
-    \uses{def:qca_algebraic_local_operator_norm, def:qca_algebraic_local_translation}
-    If $d>0$, then every translation preserves the operator norm and distance:
-    \begin{align}
-        \lVert\tau_a(A)\rVert           & =\lVert A\rVert,   \\
-        \lVert\tau_a(A)-\tau_a(B)\rVert & =\lVert A-B\rVert.
-    \end{align}
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{def:qca_algebraic_local_operator_norm, def:qca_algebraic_local_translation, lem:qca_finite_local_translation_norm, thm:qca_local_observable_finite_support}
-    For $A_\Lambda\in\mathcal A_\Lambda$ with
-    $A=\iota_\Lambda(A_\Lambda)$, finite-region translation is a star-algebra
-    equivalence of matrix algebras, hence preserves the operator norm. Therefore
-    \begin{align}
-        \lVert\tau_a(A)\rVert
-         & =\lVert\tau_{a,\Lambda}(A_\Lambda)\rVert
-        =\lVert A_\Lambda\rVert
-        =\lVert A\rVert.
-    \end{align}
-    Applying this equality to $A-B$ gives distance preservation.
-\end{proof}
-
-\begin{definition}[C-star structure on a completion]
-    \label{def:completion_cstar_algebra}
-    \lean{UniformSpace.Completion.toComplAlgHom,
-        UniformSpace.Completion.toComplStarAlgHom,
-        UniformSpace.Completion.coe_toComplStarAlgHom,
-        UniformSpace.Completion.instStar,UniformSpace.Completion.coe_star,
-        UniformSpace.Completion.instContinuousStar,
-        UniformSpace.Completion.instStarRing,
-        UniformSpace.Completion.instCStarRing,
-        UniformSpace.Completion.instStarModule,
-        UniformSpace.Completion.instCStarAlgebra}
-    \leanok
-    The norm completion of a complex normed star algebra satisfying the C-star
-    identity carries the continuously extended involution and a C-star algebra
-    structure. The canonical map into the completion is a star-algebra
-    homomorphism.
-\end{definition}
-
-\begin{proof}\leanok
-    Extend the isometric involution continuously. The algebraic identities and
-    the C-star identity hold on the dense canonical image and hence on the
-    completion.
-\end{proof}
-
-\begin{definition}[Quasi-local observable algebra]
-    \label{def:qca_quasi_local_algebra}
-    \lean{SpinChain.QuasiLocalAlgebra,SpinChain.algebraicToQuasiLocal}
-    \leanok
-    \uses{def:qca_algebraic_local_cstar_ring, def:qca_algebraic_local_normed_star_algebra, def:completion_cstar_algebra}
-    For $d>0$, the quasi-local observable algebra is the operator-norm
-    completion
-    \begin{align}
-        \mathcal A
-         & =\overline{\mathcal A_{\mathrm{loc}}}^{\lVert\cdot\rVert}.
-    \end{align}
-    The involution on $\mathcal A$ is the unique continuous extension of the
-    involution on $\mathcal A_{\mathrm{loc}}$.  It makes $\mathcal A$ a complex
-    C-star algebra, and the canonical star-algebra homomorphism
-    \begin{align}
-        j\colon\mathcal A_{\mathrm{loc}} & \longrightarrow\mathcal A
-    \end{align}
-    is the completion map.
-\end{definition}
-
-\begin{proof}\leanok
-    The involution is isometric on $\mathcal A_{\mathrm{loc}}$, hence extends
-    continuously to the completion.  The identities
-    $(A+B)^*=A^*+B^*$, $(AB)^*=B^*A^*$, and $(A^*)^*=A$
-    hold on the dense subalgebra $j(\mathcal A_{\mathrm{loc}})$ and therefore
-    on $\mathcal A$.  The conjugate-linear identity
-    $(cA)^*=\overline cA^*$ extends by the same argument.  Density also extends
-    \begin{align}
-        \lVert A^*A\rVert & =\lVert A\rVert^2,
-    \end{align}
-    so the completed algebra satisfies the C-star identity.
-\end{proof}
-
-\begin{definition}[Finite-region quasi-local observable]
-    \label{def:qca_quasi_local_observable}
-    \lean{SpinChain.quasiLocalObservable}
-    \leanok
-    \uses{def:qca_quasi_local_algebra, def:qca_algebraic_local_algebra}
-    For every finite region $\Lambda$, define
-    \begin{align}
-        j_\Lambda\colon\mathcal A_\Lambda & \longrightarrow\mathcal A,
-                                          & j_\Lambda                  & =j\circ\iota_\Lambda.
-    \end{align}
-\end{definition}
-
-\begin{lemma}[Finite-region observables in the quasi-local algebra]
-    \label{lem:qca_quasi_local_observable}
-    \lean{SpinChain.norm_algebraicToQuasiLocal,
-        SpinChain.norm_quasiLocalObservable,
-        SpinChain.quasiLocalObservable_isometry,
-        SpinChain.quasiLocalObservable_injective,
-        SpinChain.quasiLocalObservable_localInclusion}
-    \leanok
-    \uses{def:qca_quasi_local_observable, def:qca_algebraic_local_operator_norm, def:qca_algebraic_local_algebra}
-    For every finite region $\Lambda$, the map $j_\Lambda$ is an injective
-    isometry.  If $\Lambda\subseteq\Gamma$, then
-    \begin{align}
-        j_\Gamma\circ\iota_{\Lambda,\Gamma} & =j_\Lambda.
-    \end{align}
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{def:qca_quasi_local_observable, def:qca_algebraic_local_operator_norm, def:qca_algebraic_local_algebra}
-    The algebraic inclusion $\iota_\Lambda$ and the completion map $j$ both
-    preserve the norm.  Their composite is therefore an isometry and hence
-    injective.  Compatibility follows from
-    $\iota_\Gamma\circ\iota_{\Lambda,\Gamma}=\iota_\Lambda$.
-\end{proof}
-
-\begin{theorem}[Density of the canonical completion map]
-    \label{thm:completion_map_dense_range}
-    \lean{UniformSpace.Completion.denseRange_toComplStarAlgHom}
-    \leanok
-    \uses{def:completion_cstar_algebra}
-    The canonical star-algebra homomorphism from a normed star algebra into its
-    completion has dense range.
-\end{theorem}
-
-\begin{proof}\leanok
-    This is the defining density property of the completion.
-\end{proof}
-
-\begin{theorem}[Density of finite-region observables]
-    \label{thm:qca_quasi_local_density}
-    \lean{SpinChain.denseRange_algebraicToQuasiLocal,
-        SpinChain.dense_iUnion_range_quasiLocalObservable}
-    \leanok
-    \uses{def:qca_quasi_local_algebra, def:qca_quasi_local_observable, thm:qca_local_observable_finite_support, thm:completion_map_dense_range}
-    Algebraic local observables are dense in the quasi-local algebra.  Equivalently,
-    \begin{align}
-        \overline{j(\mathcal A_{\mathrm{loc}})}
-         & =\overline{\bigcup_{\Lambda\Subset\mathbb Z}
-            j_\Lambda(\mathcal A_\Lambda)}
-        =\mathcal A.
-    \end{align}
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:qca_local_observable_finite_support}
-    Density of $j(\mathcal A_{\mathrm{loc}})$ is the defining density property
-    of the completion.  Every algebraic local observable has a representative
-    in some finite region, so
-    \begin{align}
-        j(\mathcal A_{\mathrm{loc}})
-         & =\bigcup_{\Lambda\Subset\mathbb Z}j_\Lambda(\mathcal A_\Lambda),
-    \end{align}
-    and taking closures yields
-    \begin{align}
-        \overline{\bigcup_{\Lambda\Subset\mathbb Z} j_\Lambda(\mathcal A_\Lambda)}
-         & = \overline{j(\mathcal A_{\mathrm{loc}})} = \mathcal A.
-    \end{align}
-\end{proof}
-
-In the setting of \cite[lines~2292--2306]{Cirac2017MPU}, lattice translation acts covariantly on the quasi-local
-algebra.
-
-\begin{definition}[Extension of star-algebra equivalences to completions]
-    \label{def:completion_star_alg_equiv}
-    \lean{UniformSpace.Completion.mapStarAlgEquiv,
-        UniformSpace.Completion.mapStarAlgEquiv_apply,
-        UniformSpace.Completion.mapStarAlgEquiv_coe}
-    \leanok
-    Let $A$ and $B$ be complex normed star algebras, and let
-    $f\colon A\to B$ be a star-algebra equivalence.  If $f$ and $f^{-1}$ are
-    continuous, then $f$ extends to a star-algebra equivalence
-    \begin{align}
-        \widehat f\colon\widehat A & \longrightarrow\widehat B
-    \end{align}
-    between their norm completions.  Its underlying map is the continuous
-    extension of $f$.  Writing $j_A$ and $j_B$ for the canonical maps into the
-    completions, the extension satisfies
-    \begin{align}
-        \widehat f(j_A(x)) & =j_B(f(x)).
-    \end{align}
-\end{definition}
-
-\begin{proof}\leanok
-    Applying the completion functor to $f$ and $f^{-1}$ shows that on the dense canonical
-    images their composites satisfy
-    \begin{align}
-        \widehat{f^{-1}}\bigl(\widehat f(j_A(x))\bigr) & =j_A(x), &
-        \widehat f\bigl(\widehat{f^{-1}}(j_B(y))\bigr) & =j_B(y).
-    \end{align}
-    Continuity gives the two inverse identities on the completions.
-    Multiplication, addition, scalar multiplication, and the star operation
-    commute with the extension because the corresponding identities hold on
-    the canonical images and both sides are continuous.
-\end{proof}
-
-\begin{definition}[Translation of quasi-local observables]
-    \label{def:qca_quasi_local_translation}
-    \lean{SpinChain.quasiLocalTranslation,
-        SpinChain.quasiLocalTranslation_apply,
-        SpinChain.quasiLocalTranslation_algebraicToQuasiLocal,
-        SpinChain.quasiLocalTranslation_quasiLocalObservable}
-    \leanok
-    \uses{def:completion_star_alg_equiv, def:qca_algebraic_local_translation, def:qca_quasi_local_algebra, def:qca_quasi_local_observable, lem:qca_algebraic_local_translation_isometry}
-    For $d>0$ and every $a\in\mathbb Z$, algebraic-local translation extends to
-    a star-algebra automorphism
-    \begin{align}
-        \tau_a\colon\mathcal A & \longrightarrow\mathcal A
-    \end{align}
-    of the quasi-local algebra.  On the dense algebraic-local subalgebra and on
-    finite-region observables it satisfies
-    \begin{align}
-        \tau_a(j(A)) & =j(\tau_a(A)),
-        \label{eq:qca_trans_dense}                                  \\
-        \tau_a(j_\Lambda(A_\Lambda))
-                     & =j_{\Lambda+a}(\tau_{a,\Lambda}(A_\Lambda)).
-        \label{eq:qca_trans_finite}
-    \end{align}
-\end{definition}
-
-\begin{proof}\leanok
-    \uses{def:completion_star_alg_equiv, def:qca_algebraic_local_translation, def:qca_quasi_local_algebra, def:qca_quasi_local_observable, lem:qca_algebraic_local_translation_action, lem:qca_algebraic_local_translation_isometry}
-    Algebraic-local translation and its inverse translation by $-a$ are
-    operator-norm isometries, hence continuous.  Extend this equivalence to the
-    norm completion to obtain~(\ref{eq:qca_trans_dense}).
-    Substituting $A=\iota_\Lambda(A_\Lambda)$ and applying the finite-region
-    translation formula yields~(\ref{eq:qca_trans_finite}).
 \end{proof}
 
 \begin{lemma}[Quasi-local translation action laws]
@@ -1993,7 +1099,7 @@ algebra.
     definition of a one-dimensional QCA.
 \end{definition}
 
-\begin{theorem}[Pointwise characterization of translation covariance]
+\begin{lemma}[Pointwise characterization of translation covariance]
     \label{thm:qca_translation_covariant_iff}
     \lean{SpinChain.translationCovariant_iff}
     \leanok
@@ -2004,7 +1110,7 @@ algebra.
         \omega\bigl(\tau_a(A)\bigr)=\tau_a\bigl(\omega(A)\bigr)
     \end{align}
     for every $a\in\mathbb Z$ and every $A\in\mathcal A$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:qca_translation_covariant}
@@ -2012,7 +1118,7 @@ algebra.
     which applies directly to the two composites in the definition.
 \end{proof}
 
-\begin{theorem}[Translation covariance from unit translation]
+\begin{lemma}[Translation covariance from unit translation]
     \label{thm:qca_translation_covariant_iff_commute_one}
     \lean{SpinChain.translationCovariant_iff_commute_one}
     \leanok
@@ -2022,7 +1128,7 @@ algebra.
     \begin{align}
         \omega\circ\tau_1=\tau_1\circ\omega.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:qca_translation_covariant, lem:qca_quasi_local_translation_action}
@@ -2048,7 +1154,7 @@ algebra.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Identity and composition of translation-covariant automorphisms]
+\begin{lemma}[Identity and composition of translation-covariant automorphisms]
     \label{thm:qca_translation_covariant_identity_composition}
     \lean{SpinChain.translationCovariant_refl,
         SpinChain.TranslationCovariant.trans}
@@ -2061,7 +1167,7 @@ algebra.
         A\longmapsto\eta\bigl(\omega(A)\bigr),
     \end{align}
     which first applies $\omega$ and then $\eta$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:qca_translation_covariant}
@@ -2142,7 +1248,7 @@ algebra.
     canonical embeddings identifies the image of this enlargement with $x$.
 \end{proof}
 
-\begin{theorem}[Disjointly supported quasi-local observables commute]
+\begin{lemma}[Disjointly supported quasi-local observables commute]
     \label{thm:qca_disjoint_quasi_local_commute}
     \lean{SpinChain.quasiLocalObservable_commute_of_disjoint,
         SpinChain.QuasiLocalSupportedIn.commute_of_disjoint}
@@ -2162,7 +1268,7 @@ algebra.
     \cite[lines~2292--2300]{Cirac2017MPU}; it is not stated there as a separate
     theorem.
     % Source context: paper_v2.tex 2292--2300.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:qca_disjoint_supported_local_commute}
@@ -2234,7 +1340,7 @@ exact local support via the Weyl twirl.
     finite average sum to one; applying this contraction to $M-X$ gives the bound.
 \end{proof}
 
-\begin{theorem}[Exact support from outside commutation]
+\begin{lemma}[Exact support from outside commutation]
     \label{thm:qca_quasi_local_supported_iff_commute_disjoint}
     \lean{SpinChain.quasiLocalSupportedIn_iff_commute_disjoint}
     \leanok
@@ -2250,7 +1356,7 @@ exact local support via the Weyl twirl.
     \end{align}
     As in \cite{Cirac2017MPU,SchumacherWerner2004QCA}, this equivalence characterizes local support through commutants on complementary
     regions in the UHF algebra.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:qca_disjoint_quasi_local_commute, lem:qca_quasi_local_observable, thm:qca_quasi_local_density, lem:qca_local_inclusion_norm, thm:mpu_reindex_unitary, def:qca_complementary_weyl_twirl, lem:qca_complementary_weyl_twirl_eq}
@@ -2274,7 +1380,7 @@ As used in \cite{Cirac2017MPU,Gross2012IndexTheory,SchumacherWerner2004QCA}, the
 scalar multiples of the
 identity.
 
-\begin{theorem}[Scalar center of the homogeneous quasi-local algebra]
+\begin{lemma}[Scalar center of the homogeneous quasi-local algebra]
     \label{thm:qca_quasi_local_center_scalar}
     \lean{SpinChain.existsUnique_eq_smul_one_of_commute_quasiLocalObservable,
         SpinChain.existsUnique_eq_smul_one_of_commute,
@@ -2297,11 +1403,11 @@ identity.
         \{z\in\mathcal A\mid za=az\text{ for every }a\in\mathcal A\}
          & =\mathbb C\mathbf 1.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:qca_quasi_local_supported_iff_commute_disjoint, def:qca_quasi_local_supported_in, lem:qca_quasi_local_observable}
-    By Theorem~\ref{thm:qca_quasi_local_supported_iff_commute_disjoint}
+    By Lemma~\ref{thm:qca_quasi_local_supported_iff_commute_disjoint}
     with $\Lambda=\varnothing$, the commutation hypothesis gives
     $z\in j_\varnothing(\mathcal A_\varnothing)$, so there is an
     $A\in\mathcal A_\varnothing$ with $z=j_\varnothing(A)$.  Let
@@ -2333,6 +1439,8 @@ identity.
     \end{align}
     Hence $Z(\mathcal A)=\mathbb C\mathbf 1$.
 \end{proof}
+
+\section{Quantum cellular automata}
 
 The appendix requires that ``there exists a finite subset
 $\mathcal N\subset\mathbb Z$'' such that, for every finite
@@ -2538,7 +1646,7 @@ condition.
     $\lambda=g+n\in\Gamma+\mathcal N$.
 \end{proof}
 
-\begin{theorem}[Inverse propagation and inverse covariance]
+\begin{lemma}[Inverse propagation and inverse covariance]
     \label{thm:qca_inverse_propagation}
     \lean{SpinChain.PropagatesWithin.symm,
         SpinChain.HasFinitePropagation.symm,
@@ -2555,7 +1663,7 @@ condition.
     Schumacher and Werner \cite[Theorem~6, Corollary~7]{SchumacherWerner2004QCA}
     derive inverse locality through generalized Margolus partitioning; the
     proof here establishes it via commutants on complementary regions.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:qca_disjoint_region_sumset_neg_iff, thm:qca_quasi_local_supported_iff_commute_disjoint}
@@ -2598,7 +1706,7 @@ condition.
     $\omega^{-1}$.
 \end{definition}
 
-\begin{theorem}[Exact interface for quantum cellular automata]
+\begin{lemma}[Exact interface for quantum cellular automata]
     \label{thm:qca_iff_mk_projections}
     \lean{SpinChain.isQCA_iff,SpinChain.IsQCA.mk,
         SpinChain.IsQCA.translationCovariant,
@@ -2609,7 +1717,7 @@ condition.
     quantum cellular automaton if and only if it is translation covariant and
     has finite forward propagation.  These two properties therefore construct an
     automaton, and every quantum cellular automaton satisfies each of them.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:qca}
@@ -2617,14 +1725,14 @@ condition.
     its introduction and elimination rules.
 \end{proof}
 
-\begin{theorem}[Identity quantum cellular automaton]
+\begin{lemma}[Identity quantum cellular automaton]
     \label{thm:qca_identity}
     \lean{SpinChain.isQCA_refl}
     \leanok
     \uses{def:qca}
     For $d>0$, the identity automorphism of $\mathcal A$ is a quantum cellular
     automaton.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:qca_finite_propagation, def:qca_propagates_within, def:qca_region_sumset, thm:qca_iff_mk_projections, thm:qca_translation_covariant_identity_composition}
@@ -2633,7 +1741,7 @@ condition.
     remains unchanged, and $\Lambda+\{0\}=\Lambda$.
 \end{proof}
 
-\begin{theorem}[Composition of quantum cellular automata]
+\begin{lemma}[Composition of quantum cellular automata]
     \label{thm:qca_composition}
     \lean{SpinChain.IsQCA.trans}
     \leanok
@@ -2642,7 +1750,7 @@ condition.
     $\mathcal A$, then $\eta\circ\omega$ is a quantum cellular automaton.  This
     composite first applies $\omega$ and then $\eta$.  No propagation condition
     for either inverse is required.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:qca_iff_mk_projections, thm:qca_translation_covariant_identity_composition, lem:qca_forward_propagation_comp}
@@ -2654,14 +1762,14 @@ condition.
     $\eta\circ\omega$.  Hence the composite is a quantum cellular automaton.
 \end{proof}
 
-\begin{theorem}[Inverse quantum cellular automaton]
+\begin{lemma}[Inverse quantum cellular automaton]
     \label{thm:qca_inverse}
     \lean{SpinChain.IsQCA.symm}
     \leanok
     \uses{def:qca}
     Let $d>0$.  If $\omega$ is a quantum cellular automaton on $\mathcal A$, then
     $\omega^{-1}$ is also a quantum cellular automaton.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:qca_iff_mk_projections, thm:qca_inverse_propagation}
@@ -2670,427 +1778,7 @@ condition.
     automaton.
 \end{proof}
 
-\begin{definition}[Expansion of a blocked region]
-    \label{def:qca_expanded_region}
-    \lean{SpinChain.expandedRegion,SpinChain.blockSiteEquiv}
-    \leanok
-    Let $L>0$ be a block length and let $\Lambda\subset\mathbb Z$ be finite.
-    The expansion of $\Lambda$ is
-    \begin{align}
-        \widehat\Lambda_L
-         & =\{Lx+r:x\in\Lambda,\ 0\leq r<L\}.
-    \end{align}
-    Every $z\in\widehat\Lambda_L$ has unique block coordinates $(x,r)$ with
-    $x\in\Lambda$ and $0\leq r<L$.  Increasing $r$ gives the consecutive-site
-    order within the block, matching in \cite[lines~2308 and 2313--2320]{Cirac2017MPU} the finite-region site
-    grouping.
-\end{definition}
-
-\begin{theorem}[Coordinates and monotonicity of expanded regions]
-    \label{thm:qca_expanded_region_coordinates}
-    \lean{SpinChain.mem_expandedRegion,SpinChain.expandedRegion_mono,
-        SpinChain.mem_expandedRegion_blockSite,
-        SpinChain.blockSiteEquiv_apply_fst_val,
-        SpinChain.blockSiteEquiv_apply_snd,
-        SpinChain.blockSiteEquiv_symm_apply_val}
-    \leanok
-    \uses{def:qca_expanded_region}
-    An integer $z$ belongs to $\widehat\Lambda_L$ exactly when its quotient by
-    $L$ belongs to $\Lambda$.  The inverse block-coordinate map sends $(x,r)$
-    to $Lx+r$, and $\Lambda\subseteq\Gamma$ implies
-    $\widehat\Lambda_L\subseteq\widehat\Gamma_L$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{def:qca_expanded_region}
-    Under Euclidean division by the positive integer $L$, the quotient and
-    residue are unique, the residue lies in $\{0,\ldots,L-1\}$, and taking the
-    inverse coordinates gives $Lx+r$.  Monotonicity follows by retaining the
-    same quotient and residue.
-\end{proof}
-
-\begin{definition}[Blocking equivalence for finite configurations]
-    \label{def:qca_configuration_blocking}
-    \lean{SpinChain.Config.blocking}
-    \leanok
-    \uses{def:qca_expanded_region}
-    For on-site dimension $d$, configurations of $d^L$-level blocked spins on
-    $\Lambda$ are equivalent to configurations of $d$-level spins on
-    $\widehat\Lambda_L$.  The blocked label at $x$ is decoded into its ordered
-    length-$L$ word, and its $r$th letter is placed at $Lx+r$.
-\end{definition}
-
-\begin{theorem}[Evaluation and restriction of blocked configurations]
-    \label{thm:qca_configuration_blocking_formulas}
-    \lean{SpinChain.Config.blocking_apply,
-        SpinChain.Config.blocking_symm_apply,
-        SpinChain.Config.restrict_blocking}
-    \leanok
-    \uses{def:qca_configuration_blocking, thm:qca_expanded_region_coordinates}
-    Evaluation at $Lx+r$ reads the $r$th letter of the blocked spin at $x$.
-    Conversely, encoding collects these letters in increasing residue order.
-    At the configuration level, decoding commutes with restriction from
-    $\Gamma$ to $\Lambda\subseteq\Gamma$.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{def:qca_configuration_blocking, thm:qca_expanded_region_coordinates}
-    The two evaluation formulas are the inverse laws for the ordered word
-    encoding.  Restriction preserves the quotient block coordinate and residue,
-    so both sides have the same value at every expanded site.
-\end{proof}
-
-\begin{definition}[Finite local-algebra blocking equivalence]
-    \label{def:qca_local_blocking}
-    \lean{SpinChain.localBlocking}
-    \leanok
-    \uses{def:qca_local_algebra, def:qca_configuration_blocking}
-    Reindexing matrix rows and columns by the configuration blocking
-    equivalence gives a star-algebra equivalence
-    \begin{align}
-        \mathcal A^{(d^L)}_\Lambda
-         & \simeq \mathcal A^{(d)}_{\widehat\Lambda_L}.
-    \end{align}
-    This is the finite-region equivalence underlying the algebraic-local
-    blocking construction below.  No quasi-local completion, compatibility
-    with translations, propagation statement, circuit representation, or
-    conjugation of quantum cellular automata is asserted here.
-\end{definition}
-
-\begin{theorem}[Finite local-algebra blocking formulas]
-    \label{thm:qca_local_blocking_formulas}
-    \lean{SpinChain.localBlocking_apply,SpinChain.localBlocking_norm,
-        SpinChain.localBlocking_isometry}
-    \leanok
-    \uses{def:qca_local_blocking}
-    Matrix entries are reindexed by applying the inverse configuration
-    equivalence to both indices.  The blocking equivalence preserves the
-    operator norm and is an isometry.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{def:qca_local_blocking}
-    The entry formula is matrix reindexing.  A star-algebra equivalence between
-    finite matrix algebras preserves the C-star norm and hence distances.
-\end{proof}
-
-\begin{definition}[Finite block hull]
-    \label{def:qca_block_hull}
-    \lean{SpinChain.blockHull}
-    \leanok
-    For $L>0$ and a finite original region $\Delta\subset\mathbb Z$, define
-    its block hull by
-    \begin{align}
-        \operatorname{Hull}_L(\Delta)
-         & =\{\lfloor z/L\rfloor:z\in\Delta\}.
-    \end{align}
-    This is the finite set of length-$L$ blocks that meet $\Delta$.
-\end{definition}
-
-\begin{lemma}[Block-hull containment and monotonicity]
-    \label{lem:qca_block_hull_properties}
-    \lean{SpinChain.subset_expandedRegion_blockHull,SpinChain.blockHull_mono,
-        SpinChain.blockHull_expandedRegion}
-    \leanok
-    \uses{def:qca_block_hull, def:qca_expanded_region}
-    Let $L>0$.  Every finite original region is contained in the expansion of
-    its block hull,
-    \begin{align}
-        \Delta\subseteq
-        \widehat{\operatorname{Hull}_L(\Delta)}_L.
-    \end{align}
-    If $\Delta\subseteq\Theta$, then
-    $\operatorname{Hull}_L(\Delta)\subseteq
-        \operatorname{Hull}_L(\Theta)$.  Expansion and block hull are exact in the
-    blocked direction:
-    \begin{align}
-        \operatorname{Hull}_L(\widehat\Lambda_L) & =\Lambda.
-    \end{align}
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{def:qca_block_hull, thm:qca_expanded_region_coordinates}
-    The quotient coordinate of each $z\in\Delta$ belongs to the image defining
-    the hull, which proves containment after expansion.  Monotonicity follows
-    by retaining the same point $z$ in the larger region.  Finally, every
-    expanded site has quotient in $\Lambda$, while for each $x\in\Lambda$ the
-    site $Lx$ belongs to $\widehat\Lambda_L$ and has quotient $x$.  Hence
-    $\operatorname{Hull}_L(\widehat\Lambda_L)=\Lambda$.
-\end{proof}
-
-\begin{lemma}[Blocking commutes with finite local inclusions]
-    \label{lem:qca_local_blocking_inclusion}
-    \lean{SpinChain.localBlocking_localInclusion}
-    \leanok
-    \uses{def:qca_local_blocking, thm:qca_configuration_blocking_formulas, def:qca_local_inclusion}
-    Let $L>0$.  For finite blocked regions $\Lambda\subseteq\Gamma$, the
-    square formed by finite blocking and the two canonical local inclusions
-    commutes:
-    \begin{align}
-        \mathcal B_{L,\Gamma}\,\iota_{\Lambda,\Gamma}
-         & =\iota_{\widehat\Lambda_L,\widehat\Gamma_L}\,
-        \mathcal B_{L,\Lambda}.
-    \end{align}
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{thm:qca_local_blocking_formulas, thm:qca_configuration_blocking_formulas}
-    For configurations $x,y$ on $\widehat\Gamma_L$, let $\widetilde x$ and
-    $\widetilde y$ be their block encodings on $\Gamma$.  The two matrix
-    entries in the commuting square are
-    \begin{align}
-        \bigl[\mathcal B_{L,\Gamma}
-            (\iota_{\Lambda,\Gamma}(A))\bigr]_{x,y}
-         & =A_{\widetilde x|_\Lambda,\widetilde y|_\Lambda}
-        \mathbf 1_{\{\widetilde x|_{\Gamma\setminus\Lambda}
-        =\widetilde y|_{\Gamma\setminus\Lambda}\}},         \\
-        \bigl[\iota_{\widehat\Lambda_L,\widehat\Gamma_L}
-            (\mathcal B_{L,\Lambda}(A))\bigr]_{x,y}
-         & =A_{\widetilde x|_\Lambda,\widetilde y|_\Lambda}
-        \mathbf 1_{\{x|_{\widehat\Gamma_L\setminus\widehat\Lambda_L}
-                =y|_{\widehat\Gamma_L\setminus\widehat\Lambda_L}\}}.
-    \end{align}
-    Restriction commutes with block encoding, and decoding identifies
-    $\Gamma\setminus\Lambda$ with the original sites in
-    $\widehat\Gamma_L\setminus\widehat\Lambda_L$.  Hence the two indicator
-    conditions are equivalent and the entries agree.
-\end{proof}
-
-\begin{definition}[Forward and reverse algebraic-local blocking maps]
-    \label{def:qca_algebraic_blocking_maps}
-    \lean{SpinChain.algebraicLocalBlockingHom,
-        SpinChain.algebraicLocalUnblockingHom}
-    \leanok
-    \uses{def:qca_algebraic_local_algebra, def:qca_local_blocking, def:qca_block_hull}
-    Let $L>0$.  The compatible finite blocking maps induce a star-algebra
-    homomorphism
-    \begin{align}
-        \mathcal B_L:\mathcal A_{\mathrm{loc}}^{(d^L)}
-        \longrightarrow\mathcal A_{\mathrm{loc}}^{(d)}.
-    \end{align}
-    In the reverse direction there is a star-algebra homomorphism
-    \begin{align}
-        \mathcal U_L:\mathcal A_{\mathrm{loc}}^{(d)}
-        \longrightarrow\mathcal A_{\mathrm{loc}}^{(d^L)}.
-    \end{align}
-    A representative on an arbitrary original region $\Delta$ is included into
-    $\widehat{\operatorname{Hull}_L(\Delta)}_L$ before inverting the finite
-    blocking.
-\end{definition}
-
-\begin{proof}\leanok
-    \uses{lem:qca_block_hull_properties, lem:qca_local_blocking_inclusion, thm:qca_algebraic_local_algebra_universal}
-    For $\Lambda\subseteq\Gamma$, the finite commuting square gives
-    \begin{align}
-        \iota_{\widehat\Gamma_L}
-        \mathcal B_{L,\Gamma}(\iota_{\Lambda,\Gamma}(A))
-         & =\iota_{\widehat\Lambda_L}\mathcal B_{L,\Lambda}(A),
-    \end{align}
-    so the forward finite-region maps form a compatible family.  For the
-    reverse family, block-hull monotonicity sends $\Delta\subseteq\Theta$ to
-    $\operatorname{Hull}_L(\Delta)\subseteq
-        \operatorname{Hull}_L(\Theta)$.  Transitivity of the canonical inclusions
-    and the inverse commuting square then give
-    \begin{align}
-        \iota_{\operatorname{Hull}_L(\Theta)}
-        \mathcal U_{L,\Theta}(\iota_{\Delta,\Theta}(A))
-         & =\iota_{\operatorname{Hull}_L(\Delta)}
-        \mathcal U_{L,\Delta}(A).
-    \end{align}
-    The universal property of the algebraic direct limit therefore induces
-    both star-algebra homomorphisms.
-\end{proof}
-
-\begin{lemma}[Evaluation of the algebraic-local blocking maps]
-    \label{lem:qca_algebraic_blocking_maps_evaluation}
-    \lean{SpinChain.algebraicLocalBlockingHom_localObservable,
-        SpinChain.algebraicLocalUnblockingHom_localObservable,
-        SpinChain.algebraicLocalBlockingHom_comp_unblockingHom}
-    \leanok
-    \uses{def:qca_algebraic_blocking_maps, lem:qca_block_hull_properties}
-    Let $L>0$.  The forward map applies finite blocking to a representative on
-    $\Lambda$ and regards the result as supported on $\widehat\Lambda_L$.  The
-    reverse map enlarges a representative on $\Delta$ to the expansion of its
-    block hull, applies the inverse finite blocking equivalence, and regards
-    the result as supported on $\operatorname{Hull}_L(\Delta)$.  The forward
-    composite is the identity,
-    \begin{align}
-        \mathcal B_L\mathcal U_L
-         & =\operatorname{id}_{\mathcal A_{\mathrm{loc}}^{(d)}}.
-    \end{align}
-    This holds for every on-site dimension $d$.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{lem:qca_local_blocking_inclusion, lem:qca_block_hull_properties}
-    These are the evaluation formulas for the two compatible-family lifts.
-    Forward compatibility is the commuting square.  Reverse compatibility
-    follows by monotonicity of block hulls, composition of local inclusions,
-    and the same square applied in the inverse direction.  Forward blocking
-    after the reverse map reduces to the canonical inclusion of $\Delta$ into
-    its expanded block hull.
-\end{proof}
-
-\begin{definition}[Algebraic-local site-blocking equivalence]
-    \label{def:qca_algebraic_blocking}
-    \lean{SpinChain.algebraicLocalBlocking}
-    \leanok
-    \uses{def:qca_algebraic_blocking_maps}
-    For $d>0$ and $L>0$, forward blocking gives a star-algebra equivalence
-    \begin{align}
-        \mathcal A_{\mathrm{loc}}^{(d^L)}
-         & \simeq \mathcal A_{\mathrm{loc}}^{(d)}.
-    \end{align}
-    In \cite[lines~2308 and 2313--2320]{Cirac2017MPU}, this equivalence is the algebraic-local change of site
-    grouping.
-\end{definition}
-
-\begin{proof}\leanok
-    \uses{lem:qca_algebraic_blocking_maps_evaluation, thm:qca_local_observable_finite_support, lem:qca_local_blocking_inclusion}
-    The identity $\mathcal B_L\mathcal U_L=\operatorname{id}$ makes
-    $\mathcal B_L$ surjective.  For injectivity, represent two blocked
-    observables on finite regions $\Lambda$ and $\Gamma$, enlarge both to
-    $\Omega=\Lambda\cup\Gamma$, and suppose their images under
-    $\mathcal B_L$ agree.  Injectivity of the canonical map from the finite
-    algebra on $\widehat\Omega_L$, followed by injectivity of
-    $\mathcal B_{L,\Omega}$ and the finite commuting square, gives equality of
-    the two representatives in the algebra on $\Omega$.  Thus
-    $\mathcal B_L$ is bijective, with inverse $\mathcal U_L$, and defines the
-    stated star-algebra equivalence.
-\end{proof}
-
-\begin{lemma}[Algebraic-local blocking formulas and norm]
-    \label{lem:qca_algebraic_blocking_formulas}
-    \lean{SpinChain.algebraicLocalBlocking_apply,
-        SpinChain.algebraicLocalBlocking_localObservable,
-        SpinChain.algebraicLocalBlocking_symm_apply,
-        SpinChain.algebraicLocalBlocking_symm_localObservable,
-        SpinChain.algebraicLocalBlocking_symm_localObservable_expandedRegion,
-        SpinChain.algebraicLocalBlocking_norm,
-        SpinChain.algebraicLocalBlocking_isometry,
-        SpinChain.algebraicLocalBlocking_symm_isometry}
-    \leanok
-    \uses{def:qca_algebraic_blocking, lem:qca_algebraic_blocking_maps_evaluation}
-    Let $d>0$ and $L>0$.  The equivalence agrees with the forward lift, and
-    its inverse agrees with the block-hull unblocking map.  For
-    $A\in\mathcal A^{(d^L)}_\Lambda$ and
-    $C\in\mathcal A^{(d)}_\Delta$,
-    \begin{align}
-        \mathcal B_L\bigl(\iota_\Lambda(A)\bigr)
-         & =\iota_{\widehat\Lambda_L}
-        \bigl(\mathcal B_{L,\Lambda}(A)\bigr),    \\
-        \mathcal B_L^{-1}\bigl(\iota_\Delta(C)\bigr)
-         & =\iota_{\operatorname{Hull}_L(\Delta)}
-        \left(\mathcal B^{-1}_{L,\operatorname{Hull}_L(\Delta)}
-        \bigl(\iota_{\Delta,
-                    \widehat{\operatorname{Hull}_L(\Delta)}_L}(C)\bigr)\right).
-    \end{align}
-    In particular, if $C\in\mathcal A^{(d)}_{\widehat\Lambda_L}$, then
-    \begin{align}
-        \mathcal B_L^{-1}\bigl(\iota_{\widehat\Lambda_L}(C)\bigr)
-         & =\iota_\Lambda\bigl(\mathcal B_{L,\Lambda}^{-1}(C)\bigr).
-    \end{align}
-    The forward and inverse maps are operator-norm isometries.  In particular,
-    each preserves the norm.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{lem:qca_algebraic_blocking_maps_evaluation, lem:qca_block_hull_properties, thm:qca_local_blocking_formulas, def:qca_algebraic_local_operator_norm}
-    The first two formulas are the evaluation identities for the forward and
-    reverse maps.  For an expanded region, the block-hull identity removes the
-    enlargement and leaves the inverse finite blocking equivalence.  On a
-    finite representative, forward norm preservation reduces to norm
-    preservation by finite blocking and by the canonical local inclusion;
-    distance preservation follows by applying the norm identity to
-    differences.  The inverse isometry follows from the forward isometry and
-    the right-inverse identity, rather than repeating the norm calculation.
-\end{proof}
-
-\begin{definition}[Quasi-local site-blocking equivalence]
-    \label{def:qca_quasi_local_blocking}
-    \lean{SpinChain.quasiLocalBlocking}
-    \leanok
-    \uses{def:qca_quasi_local_algebra, def:qca_algebraic_blocking, lem:qca_algebraic_blocking_formulas}
-    For $d>0$ and $L>0$, site blocking extends uniquely by continuity to a
-    star-algebra equivalence
-    \begin{align}
-        \overline{\mathcal B}_L:
-        \mathcal A^{(d^L)} & \simeq\mathcal A^{(d)}.
-    \end{align}
-    In \cite[lines~2308 and 2313--2320]{Cirac2017MPU}, this extension completes the change of site
-    grouping.
-\end{definition}
-
-\begin{proof}\leanok
-    \uses{lem:qca_algebraic_blocking_formulas, def:completion_star_alg_equiv}
-    The algebraic blocking equivalence and its inverse are isometries, hence
-    continuous.  Extending both maps to the operator-norm completions gives
-    mutually inverse star-algebra homomorphisms.
-\end{proof}
-
-\begin{lemma}[Quasi-local blocking evaluation and norm]
-    \label{lem:qca_quasi_local_blocking_formulas}
-    \lean{SpinChain.quasiLocalBlocking_apply,
-        SpinChain.quasiLocalBlocking_algebraicToQuasiLocal,
-        SpinChain.quasiLocalBlocking_symm_algebraicToQuasiLocal,
-        SpinChain.quasiLocalBlocking_quasiLocalObservable,
-        SpinChain.quasiLocalBlocking_symm_quasiLocalObservable,
-        SpinChain.quasiLocalBlocking_symm_quasiLocalObservable_expandedRegion,
-        SpinChain.norm_quasiLocalBlocking,
-        SpinChain.quasiLocalBlocking_isometry}
-    \leanok
-    \uses{def:qca_quasi_local_blocking, lem:qca_algebraic_blocking_formulas, lem:qca_quasi_local_observable}
-    Let $d>0$ and $L>0$.  Write $j^{(d)}$ for the canonical map from the
-    algebraic-local algebra into its completion.  The underlying map of
-    $\overline{\mathcal B}_L$ is the continuous extension of $\mathcal B_L$,
-    and on the two dense algebraic-local subalgebras,
-    \begin{align}
-        \overline{\mathcal B}_L\bigl(j^{(d^L)}(A)\bigr)
-         & =j^{(d)}\bigl(\mathcal B_L(A)\bigr),
-        \label{eq:qca_blocking_dense_fwd}              \\
-        \overline{\mathcal B}_L^{-1}\bigl(j^{(d)}(C)\bigr)
-         & =j^{(d^L)}\bigl(\mathcal B_L^{-1}(C)\bigr).
-        \label{eq:qca_blocking_dense_rev}
-    \end{align}
-    For $A\in\mathcal A^{(d^L)}_\Lambda$ and
-    $C\in\mathcal A^{(d)}_\Delta$, these identities become
-    \begin{align}
-        \overline{\mathcal B}_L\bigl(j^{(d^L)}_\Lambda(A)\bigr)
-         & =j^{(d)}_{\widehat\Lambda_L}
-        \bigl(\mathcal B_{L,\Lambda}(A)\bigr),
-        \label{eq:qca_blocking_fin_fwd}               \\
-        \overline{\mathcal B}_L^{-1}\bigl(j^{(d)}_\Delta(C)\bigr)
-         & =j^{(d^L)}_{\operatorname{Hull}_L(\Delta)}
-        \left(\mathcal B^{-1}_{L,\operatorname{Hull}_L(\Delta)}
-        \bigl(\iota_{\Delta,
-                    \widehat{\operatorname{Hull}_L(\Delta)}_L}(C)\bigr)\right).
-        \label{eq:qca_blocking_fin_rev}
-    \end{align}
-    If $C\in\mathcal A^{(d)}_{\widehat\Lambda_L}$, the inverse formula reduces
-    exactly to
-    \begin{align}
-        \overline{\mathcal B}_L^{-1}
-        \bigl(j^{(d)}_{\widehat\Lambda_L}(C)\bigr)
-         & =j^{(d^L)}_\Lambda\bigl(\mathcal B_{L,\Lambda}^{-1}(C)\bigr).
-        \label{eq:qca_blocking_fin_exact}
-    \end{align}
-    Finally, for all quasi-local observables $X$ and $Y$ on the blocked chain,
-    \begin{align}
-        \lVert\overline{\mathcal B}_L(X)\rVert & =\lVert X\rVert,
-        \label{eq:qca_blocking_norm}                                \\
-        \lVert\overline{\mathcal B}_L(X)-
-        \overline{\mathcal B}_L(Y)\rVert       & =\lVert X-Y\rVert.
-        \label{eq:qca_blocking_dist}
-    \end{align}
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{def:completion_star_alg_equiv, def:qca_quasi_local_observable, lem:qca_algebraic_blocking_formulas, lem:qca_block_hull_properties}
-    Equalities~(\ref{eq:qca_blocking_dense_fwd}) and~(\ref{eq:qca_blocking_dense_rev}) are the defining continuous extensions of the algebraic equivalence and its inverse.
-    Composing them with the finite-region canonical maps gives~(\ref{eq:qca_blocking_fin_fwd}) and~(\ref{eq:qca_blocking_fin_rev}).
-    The exact formula~(\ref{eq:qca_blocking_fin_exact}) uses $\operatorname{Hull}_L(\widehat\Lambda_L)=\Lambda$.
-    Because a star-algebra equivalence of C-star algebras preserves the norm, (\ref{eq:qca_blocking_norm}) holds, and applying it to $X-Y$ gives~(\ref{eq:qca_blocking_dist}).
-\end{proof}
+\section{Grouping the sites of a quantum cellular automaton}
 
 \begin{lemma}[Support transformation under site blocking]
     \label{lem:qca_quasi_local_blocking_support}
@@ -3119,183 +1807,6 @@ condition.
     gives the forward support bounds.  For the reverse implication in the
     exact statement, apply inverse blocking and simplify the inverse composite
     and the block hull of the expanded region.
-\end{proof}
-
-\begin{lemma}[Expansion of a translated blocked region]
-    \label{lem:qca_expanded_region_translation}
-    \lean{SpinChain.expandedRegion_translateRegion}
-    \leanok
-    \uses{def:qca_translate_region, def:qca_expanded_region}
-    Let $L>0$, let $a\in\mathbb Z$, and let $\Lambda\subset\mathbb Z$ be a
-    finite blocked region.  Then
-    \begin{align}
-        \widehat{\Lambda+a}_L
-         & =\widehat\Lambda_L+aL.
-    \end{align}
-    In \cite[lines~2308 and 2313--2320]{Cirac2017MPU}, this identity is the translation rule for the site
-    grouping.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{thm:qca_expanded_region_coordinates}
-    Each original site has the unique form $xL+r$ with $0\leq r<L$.
-    Translation of the blocked coordinate by $a$ sends this site to
-    $(x+a)L+r=xL+r+aL$.  The argument is unchanged when $x$ or $a$ is
-    negative.
-\end{proof}
-
-\begin{definition}[Carry-aware blocked neighborhood]
-    \label{def:qca_blocked_neighborhood}
-    \lean{SpinChain.blockedNeighborhood}
-    \leanok
-    \uses{def:qca_expanded_region, def:qca_block_hull, def:qca_region_sumset}
-    Let $L>0$ and let $\mathcal N\subset\mathbb Z$ be a finite original-lattice
-    neighborhood.  Write $\widehat{\{0\}}_L=\{0,\ldots,L-1\}$ for the sites in
-    the reference block.  Define the induced blocked-lattice neighborhood by
-    \begin{align}
-        \mathcal C_L(\mathcal N)
-         & =\operatorname{Hull}_L
-        \bigl(\widehat{\{0\}}_L+\mathcal N\bigr).
-    \end{align}
-    The full reference block is included because the block reached after a
-    displacement can depend on the starting residue; in \cite[lines~2308 and 2313--2320]{Cirac2017MPU}, this set captures the finite-region
-    geometry implicit in the grouping of
-    sites.
-\end{definition}
-
-\begin{lemma}[Residue description of the blocked neighborhood]
-    \label{lem:qca_blocked_neighborhood_membership}
-    \lean{SpinChain.mem_blockedNeighborhood,
-        SpinChain.mem_blockedNeighborhood_iff_exists_eq}
-    \leanok
-    \uses{def:qca_blocked_neighborhood, thm:qca_expanded_region_coordinates}
-    Let $L>0$, let $\mathcal N\subset\mathbb Z$ be finite, and let
-    $b\in\mathbb Z$.  Then
-    \begin{align}
-        b\in\mathcal C_L(\mathcal N)
-        \quad\Longleftrightarrow\quad
-         & \exists r\in\{0,\ldots,L-1\},\ \exists n\in\mathcal N,
-        \quad \left\lfloor\frac{r+n}{L}\right\rfloor=b,             \\
-        \quad\Longleftrightarrow\quad
-         & \exists r,s\in\{0,\ldots,L-1\},\ \exists n\in\mathcal N,
-        \quad r+n=bL+s.
-    \end{align}
-    The quotient is the Euclidean quotient by the positive integer $L$.
-    Consequently these formulas include negative displacements and both
-    positive and negative block carries.  In general,
-    $\operatorname{Hull}_L(\mathcal N)$ alone omits some carries caused by the
-    starting residue, making explicit for \cite[lines~2313--2320]{Cirac2017MPU} the implicit boundary
-    geometry.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{def:qca_blocked_neighborhood, def:qca_block_hull, thm:qca_expanded_region_coordinates}
-    An element of $\widehat{\{0\}}_L+\mathcal N$ has the form $r+n$ with
-    $0\leq r<L$ and $n\in\mathcal N$.  Taking its block coordinate gives the
-    first equivalence.  Euclidean division writes $r+n=bL+s$ with the unique
-    remainder $0\leq s<L$, which gives the second equivalence without any sign
-    restriction on $n$.
-\end{proof}
-
-\begin{lemma}[Exact block hull after adding a neighborhood]
-    \label{lem:qca_block_hull_region_sumset}
-    \lean{SpinChain.blockHull_regionSumset_expandedRegion}
-    \leanok
-    \uses{def:qca_blocked_neighborhood, def:qca_region_sumset, def:qca_expanded_region, def:qca_block_hull}
-    Let $L>0$.  For every finite blocked region $\Lambda$ and every finite
-    original-lattice neighborhood $\mathcal N$,
-    \begin{align}
-        \operatorname{Hull}_L
-        \bigl(\widehat\Lambda_L+\mathcal N\bigr)
-         & =\Lambda+\mathcal C_L(\mathcal N).
-    \end{align}
-    In \cite[lines~2313--2320]{Cirac2017MPU}, this equality is the exact finite-region carry identity associated with the site
-    grouping.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{lem:qca_blocked_neighborhood_membership, thm:qca_expanded_region_coordinates}
-    Every expanded site has the form $xL+r$ with $x\in\Lambda$ and $0\leq r<L$.
-    For $n\in\mathcal N$, Euclidean division gives
-    \begin{align}
-        \left\lfloor\frac{xL+r+n}{L}\right\rfloor
-         & =x+\left\lfloor\frac{r+n}{L}\right\rfloor.
-    \end{align}
-    The second summand ranges over exactly $\mathcal C_L(\mathcal N)$ by
-    Lemma~\ref{lem:qca_blocked_neighborhood_membership}.  This proves both
-    inclusions, including for negative $x$ and $n$.
-\end{proof}
-
-\begin{lemma}[Carry-aware expansion containment]
-    \label{lem:qca_region_sumset_expanded_region_subset}
-    \lean{SpinChain.regionSumset_expandedRegion_subset}
-    \leanok
-    \uses{lem:qca_block_hull_region_sumset, lem:qca_block_hull_properties}
-    Let $L>0$.  For every finite blocked region $\Lambda$ and every finite
-    original-lattice neighborhood $\mathcal N$,
-    \begin{align}
-        \widehat\Lambda_L+\mathcal N
-         & \subseteq
-        \widehat{\Lambda+\mathcal C_L(\mathcal N)}_L.
-    \end{align}
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{lem:qca_block_hull_region_sumset, lem:qca_block_hull_properties}
-    Every finite original region is contained in the expansion of its block
-    hull; applying this containment to
-    $\widehat\Lambda_L+\mathcal N$ and using
-    Lemma~\ref{lem:qca_block_hull_region_sumset} identifies that hull.
-\end{proof}
-
-\begin{lemma}[Algebraic-local blocking intertwines scaled translations]
-    \label{lem:qca_algebraic_blocking_translation}
-    \lean{SpinChain.algebraicLocalBlocking_translation}
-    \leanok
-    \uses{lem:qca_expanded_region_translation, def:qca_algebraic_blocking, def:qca_algebraic_local_translation}
-    Let $d,L>0$.  If $\mathcal B_L$ denotes the algebraic-local blocking
-    equivalence, then for every $a\in\mathbb Z$,
-    \begin{align}
-        \mathcal B_L\,\tau^{(d^L)}_a
-         & =\tau^{(d)}_{aL}\,\mathcal B_L.
-    \end{align}
-    In \cite[lines~2308 and 2313--2320]{Cirac2017MPU}, this intertwining identity is the translation rule induced by the blocking of
-    sites.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{lem:qca_expanded_region_translation, lem:qca_algebraic_blocking_formulas, def:qca_algebraic_local_translation}
-    On a representative supported in a finite blocked region $\Lambda$, both
-    sides apply the same matrix reindexing.  Their supports agree because
-    \begin{align}
-        \widehat{\Lambda+a}_L
-         & =\widehat\Lambda_L+aL.
-    \end{align}
-    Equality on all finite-region representatives proves the identity on the
-    algebraic direct limit.
-\end{proof}
-
-\begin{lemma}[Quasi-local blocking intertwines scaled translations]
-    \label{lem:qca_quasi_local_blocking_translation}
-    \lean{SpinChain.quasiLocalBlocking_translation}
-    \leanok
-    \uses{lem:qca_algebraic_blocking_translation, def:qca_quasi_local_blocking, def:qca_quasi_local_translation}
-    Let $d,L>0$.  If $\overline{\mathcal B}_L$ denotes the quasi-local blocking
-    equivalence, then for every $a\in\mathbb Z$,
-    \begin{align}
-        \overline{\mathcal B}_L\,\overline\tau^{(d^L)}_a
-         & =\overline\tau^{(d)}_{aL}\,\overline{\mathcal B}_L.
-    \end{align}
-    In \cite[lines~2308 and 2313--2320]{Cirac2017MPU}, this identity is the completed translation rule induced by the site
-    grouping.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{lem:qca_algebraic_blocking_translation, lem:qca_quasi_local_blocking_formulas, def:qca_quasi_local_translation}
-    The two sides are continuous maps on the quasi-local algebra.  On the dense
-    algebraic-local subalgebra their values agree by
-    Lemma~\ref{lem:qca_algebraic_blocking_translation}.  They therefore agree
-    on the completion.
 \end{proof}
 
 In the representation theorem of \cite[line~2308]{Cirac2017MPU}, finite blocking preserves the one-dimensional quantum cellular automaton
@@ -3397,7 +1908,7 @@ grouping.
     $\mathcal C_L(\mathcal N)$ for $\omega^{[L]}$.
 \end{proof}
 
-\begin{theorem}[Translation covariance of the blocked automorphism]
+\begin{lemma}[Translation covariance of the blocked automorphism]
     \label{thm:qca_blocked_translation_covariant_iff}
     \lean{SpinChain.translationCovariant_blockedAutomorphism_iff}
     \leanok
@@ -3413,11 +1924,11 @@ grouping.
     Thus blocked unit-translation covariance records commutation of $\omega$
     with translation by $L$, not necessarily commutation with original unit
     translation.  For $L\neq1$, the latter condition can be strictly stronger.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:qca_blocked_automorphism_apply, thm:qca_translation_covariant_iff_commute_one, lem:qca_quasi_local_blocking_translation}
-    By Theorem~\ref{thm:qca_translation_covariant_iff_commute_one}, translation
+    By Lemma~\ref{thm:qca_translation_covariant_iff_commute_one}, translation
     covariance on the blocked chain is equivalent to commutation with blocked
     unit translation.  Under $\overline{\mathcal B}_L$, blocked unit translation
     corresponds to original translation by $L$.  Conjugating the commutation
@@ -3437,7 +1948,7 @@ grouping.
     \uses{thm:qca_blocked_translation_covariant_iff}
     Translation covariance of $\omega$ gives commutation with
     $\overline\tau^{(d)}_L$, so
-    Theorem~\ref{thm:qca_blocked_translation_covariant_iff} gives translation covariance of $\omega^{[L]}$.
+    Lemma~\ref{thm:qca_blocked_translation_covariant_iff} gives translation covariance of $\omega^{[L]}$.
 \end{proof}
 
 \begin{lemma}[Blocked quantum cellular automaton]
@@ -3561,7 +2072,7 @@ representation.
     the claim.
 \end{proof}
 
-\begin{theorem}[Finite propagation becomes nearest-neighbor]
+\begin{lemma}[Finite propagation becomes nearest-neighbor]
     \label{thm:qca_finite_propagation_exists_blocked_nearest_neighbor}
     \lean{SpinChain.HasFinitePropagation.exists_blocked_nearest_neighbor}
     \leanok
@@ -3573,7 +2084,7 @@ representation.
     \begin{align}
         \Lambda+([-1,1]\cap\mathbb Z).
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:qca_propagates_within_blocked, lem:qca_blocked_neighborhood_canonical_nearest_neighbor, lem:qca_propagation_neighborhood_mono}
@@ -3584,7 +2095,7 @@ representation.
     monotonicity then give the nearest-neighbor bound.
 \end{proof}
 
-\begin{theorem}[A QCA becomes nearest-neighbor after blocking]
+\begin{lemma}[A QCA becomes nearest-neighbor after blocking]
     \label{thm:qca_exists_blocked_nearest_neighbor}
     \lean{SpinChain.IsQCA.exists_blocked_nearest_neighbor}
     \leanok
@@ -3598,16 +2109,18 @@ representation.
     \begin{align}
         \Lambda+([-1,1]\cap\mathbb Z).
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:qca_blocked, thm:qca_finite_propagation_exists_blocked_nearest_neighbor}
-    Theorem~\ref{thm:qca_finite_propagation_exists_blocked_nearest_neighbor} applied
+    Lemma~\ref{thm:qca_finite_propagation_exists_blocked_nearest_neighbor} applied
     to the finite propagation of $\omega$ at
     the canonical positive block length gives nearest-neighbor propagation; at the same length, site blocking
     preserves both finite propagation and translation covariance, hence the
     QCA property.
 \end{proof}
+
+\section{Support algebras of a quantum cellular automaton}
 
 Lines~2292--2298 of \cite{Cirac2017MPU} specify the finite local
 algebras, their canonical inclusions, translation covariance, and the locality
@@ -3641,7 +2154,7 @@ adjacent-pair ordering convention.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Finite-region restriction is an embedding]
+\begin{lemma}[Finite-region restriction is an embedding]
     \label{thm:qca_finite_region_restriction_embedding}
     \lean{SpinChain.PropagatesWithin.quasiLocalObservable_localRestriction,
         SpinChain.PropagatesWithin.localRestriction_injective}
@@ -3654,7 +2167,7 @@ adjacent-pair ordering convention.
         \bigl(\omega_{\Lambda,\mathcal N}(A)\bigr)
          & =\omega\bigl(\iota_\Lambda(A)\bigr).
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:qca_finite_region_restriction}
@@ -3665,7 +2178,7 @@ adjacent-pair ordering convention.
     of $\iota_\Lambda$ then gives equality of the two local observables.
 \end{proof}
 
-\begin{theorem}[Enlargement of finite-region restrictions]
+\begin{lemma}[Enlargement of finite-region restrictions]
     \label{thm:qca_finite_region_restriction_enlargement}
     \lean{SpinChain.PropagatesWithin.localRestriction_localInclusion}
     \leanok
@@ -3678,7 +2191,7 @@ adjacent-pair ordering convention.
          & =\iota_{\Lambda+\mathcal N,\Gamma+\mathcal N}
         \bigl(\omega_{\Lambda,\mathcal N}(A)\bigr).
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:qca_finite_region_restriction_embedding}
@@ -3687,7 +2200,7 @@ adjacent-pair ordering convention.
     target inclusion gives the equality.
 \end{proof}
 
-\begin{theorem}[Translation of finite-region restrictions]
+\begin{lemma}[Translation of finite-region restrictions]
     \label{thm:qca_finite_region_restriction_translation}
     \lean{SpinChain.PropagatesWithin.localRestriction_translation}
     \leanok
@@ -3703,7 +2216,7 @@ adjacent-pair ordering convention.
             (\omega_{\Lambda,\mathcal N}(A))\bigr).
     \end{align}
     Here $(\Lambda+a)+\mathcal N=(\Lambda+\mathcal N)+a$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:qca_finite_region_restriction_embedding, lem:qca_quasi_local_translation_action}
@@ -3736,7 +2249,7 @@ adjacent-pair ordering convention.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Canonical inclusions in bipartite coordinates]
+\begin{lemma}[Canonical inclusions in bipartite coordinates]
     \label{thm:qca_bipartite_local_algebra_inclusions}
     \lean{SpinChain.bipartiteLocalAlgebraEquiv_localInclusion_left,
         SpinChain.bipartiteLocalAlgebraEquiv_localInclusion_right}
@@ -3749,7 +2262,7 @@ adjacent-pair ordering convention.
         \beta_{\Gamma,\Delta}(\iota_{\Delta,\Gamma\cup\Delta}(B))
          & =\mathbf 1\otimes B.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:qca_bipartite_local_algebra_coordinates}
@@ -3890,7 +2403,7 @@ adjacent-pair ordering convention.
     $d$.
 \end{definition}
 
-\begin{theorem}[Adjacent-pair support containment]
+\begin{lemma}[Adjacent-pair support containment]
     \label{thm:qca_adjacent_pair_support_containment}
     \lean{SpinChain.PropagatesWithin.evenPairLocalImage_le_support_kroneckerSubmodule}
     \leanok
@@ -3911,18 +2424,18 @@ adjacent-pair ordering convention.
     at \cite[lines~2322--2328]{Cirac2017MPU} Cirac et al. state only the weaker inclusion in the left support algebra
     tensored with the unrestricted right physical
     factor.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:qca_two_sided_support_containment}
-    By Theorem~\ref{thm:qca_two_sided_support_containment} applied to $S_x$ in
+    By Lemma~\ref{thm:qca_two_sided_support_containment} applied to $S_x$ in
     the ordered coordinates of (\ref{eq:qca_site_image}), its left support
     is $\mathcal R_{2x}$ and its right support is
     $\mathcal R_{2x+1}$ by (\ref{eq:qca_RR2x}), which gives
     (\ref{eq:qca_adjacent_pair_containment}).
 \end{proof}
 
-\begin{theorem}[Physical support of the site-indexed support algebras]
+\begin{lemma}[Physical support of the site-indexed support algebras]
     \label{thm:qca_site_indexed_support_regions}
     \lean{SpinChain.matrixToQuasiLocalObservable_supportedIn,
         SpinChain.PropagatesWithin.embeddedSupportAlgebra_even_supportedIn,
@@ -3941,7 +2454,7 @@ adjacent-pair ordering convention.
     equation \texttt{RR2x} in \cite[lines~1261--1274]{Gross2012IndexTheory}, with \cite{gap:gnvw12_site_dependent_adjacent_generation_scope} recording the
     fixed-$d$
     scope.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     An element of $\widehat{\mathcal R}_{2x}$ is the canonical image of a
@@ -3950,7 +2463,7 @@ adjacent-pair ordering convention.
     $\widehat{\mathcal R}_{2x+1}$ in $\mathcal A_{P_x}$.
 \end{proof}
 
-\begin{theorem}[Generation by two disjoint finite regions]
+\begin{lemma}[Generation by two disjoint finite regions]
     \label{thm:qca_disjoint_region_generation}
     \lean{SpinChain.range_localObservable_mono,
         SpinChain.range_localObservable_union}
@@ -3974,7 +2487,7 @@ adjacent-pair ordering convention.
     observables on disjoint groups of cells used in \cite[lines~592--596]{Gross2012IndexTheory} and proved in \cite[lines~341--364]{SchumacherWerner2004QCA} for finite
     cell
     partitions.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:qca_bipartite_local_algebra_inclusions,
@@ -4024,7 +2537,7 @@ adjacent-pair ordering convention.
     $i=2\lfloor i/2\rfloor$ or $i=2\lfloor i/2\rfloor+1$.
 \end{proof}
 
-\begin{theorem}[Generation of the algebraic local algebra by the pair algebras]
+\begin{lemma}[Generation of the algebraic local algebra by the pair algebras]
     \label{thm:qca_even_pair_algebraic_generation}
     \lean{SpinChain.range_localObservable_biUnion_evenPair_le,
         SpinChain.iSup_range_localObservable_evenPair}
@@ -4041,7 +2554,7 @@ adjacent-pair ordering convention.
     \end{align}
     The completion is not involved: this is an equality of algebras of local
     observables.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:qca_disjoint_region_generation, lem:qca_even_pair_cover,
@@ -4085,7 +2598,7 @@ adjacent-pair ordering convention.
     proper or that it fails to be norm closed is made here.
 \end{definition}
 
-\begin{theorem}[Images of the pair algebras lie in the join]
+\begin{lemma}[Images of the pair algebras lie in the join]
     \label{thm:qca_evenPair_image_in_support_algebra_join}
     \lean{SpinChain.PropagatesWithin.quasiLocalObservable_evenPair_mem_supportAlgebraJoin,
         SpinChain.PropagatesWithin.algebraicToQuasiLocal_mem_supportAlgebraJoin}
@@ -4108,7 +2621,7 @@ adjacent-pair ordering convention.
     at \cite[lines~1276--1278]{Gross2012IndexTheory}, specialized as in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope} to the homogeneous
     fixed-$d$
     setting.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:qca_adjacent_pair_support_containment,
@@ -4131,7 +2644,7 @@ adjacent-pair ordering convention.
     $\omega\circ j$ is a star-algebra homomorphism, so its image lies in $G$.
 \end{proof}
 
-\begin{theorem}[Norm-closed generation by the support algebras]
+\begin{lemma}[Norm-closed generation by the support algebras]
     \label{thm:qca_support_algebra_topological_generation}
     \lean{SpinChain.PropagatesWithin.supportAlgebraJoin_topologicalClosure_eq_top}
     \leanok
@@ -4152,7 +2665,7 @@ adjacent-pair ordering convention.
     (\ref{eq:qca_support_algebra_topological_generation}), specialized as in \cite{gap:gnvw12_site_dependent_adjacent_generation_scope} to the homogeneous
     fixed-$d$
     setting.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:qca_evenPair_image_in_support_algebra_join,
@@ -4228,7 +2741,7 @@ adjacent-pair ordering convention.
     Unfolding the three pair definitions and comparing their six sites gives both disjointness relations.
 \end{proof}
 
-\begin{theorem}[Canonical inclusions in tripartite coordinates]
+\begin{lemma}[Canonical inclusions in tripartite coordinates]
     \label{thm:qca_consecutive_pair_tripartite_coordinates}
     \lean{SpinChain.tripartiteLocalAlgebraEquiv_localInclusion_left,
         SpinChain.tripartiteLocalAlgebraEquiv_localInclusion_right}
@@ -4240,7 +2753,7 @@ adjacent-pair ordering convention.
     $X\mapsto X\otimes\mathbf 1$, and the canonical inclusion from
     $\Gamma\cup\Delta$ is $Y\mapsto\mathbf 1\otimes Y$, with the ordered
     factors $\Lambda,\Gamma,\Delta$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:qca_tripartite_local_coordinates,
@@ -4253,7 +2766,7 @@ adjacent-pair ordering convention.
     overlapping lifts, respectively.
 \end{proof}
 
-\begin{theorem}[Commutation across the common physical pair]
+\begin{lemma}[Commutation across the common physical pair]
     \label{thm:qca_consecutive_support_algebras_commute}
     \lean{
         SpinChain.PropagatesWithin.embeddedOddSupport_commute_embeddedEvenSupport_add_one}
@@ -4262,7 +2775,7 @@ adjacent-pair ordering convention.
     For every $x\in\mathbb Z$, the canonically embedded support algebras
     $\widehat{\mathcal R}_{2x+1}$ and
     $\widehat{\mathcal R}_{2x+2}$ commute elementwise.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:qca_consecutive_pair_geometry,
@@ -4293,14 +2806,14 @@ adjacent-pair ordering convention.
     Define $Q_{2x}=L_x$ and $Q_{2x+1}=P_x$.
 \end{definition}
 
-\begin{theorem}[Unified physical localization]
+\begin{lemma}[Unified physical localization]
     \label{thm:qca_unified_support_algebra_region}
     \lean{SpinChain.PropagatesWithin.embeddedSupportAlgebra_supportedIn}
     \leanok
     \uses{def:qca_support_algebra_region,
         def:qca_site_indexed_support_algebras}
     Every element of $\widehat{\mathcal R}_y$ is supported in $Q_y$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:qca_support_algebra_region,
@@ -4310,7 +2823,7 @@ adjacent-pair ordering convention.
     $\widehat{\mathcal R}_{2x+1}$ gives the three-site support.
 \end{proof}
 
-\begin{theorem}[Classification of overlapping support regions]
+\begin{lemma}[Classification of overlapping support regions]
     \label{thm:qca_support_region_overlap_classification}
     \lean{SpinChain.PropagatesWithin.supportRegion_disjoint_or_consecutive}
     \leanok
@@ -4320,7 +2833,7 @@ adjacent-pair ordering convention.
         (y,z) & =(2x+1,2x+2)
     \end{align}
     for some $x$, or unless this ordered pair is reversed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:qca_support_algebra_region}
@@ -4329,7 +2842,7 @@ adjacent-pair ordering convention.
     intersect exactly for the displayed consecutive odd--even pair.
 \end{proof}
 
-\begin{theorem}[Pairwise commutation of distinct support algebras]
+\begin{lemma}[Pairwise commutation of distinct support algebras]
     \label{thm:qca_site_indexed_support_algebras_commute}
     \lean{SpinChain.PropagatesWithin.embeddedSupportAlgebra_pairwise_commute}
     \leanok
@@ -4348,7 +2861,7 @@ adjacent-pair ordering convention.
     \cite[lines~2313--2329]{Cirac2017MPU}; see
     \cite{gap:gnvw12_site_dependent_adjacent_generation_scope} for the
     homogeneous scope of the adjacent-generation theorem.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:qca_support_region_overlap_classification,
@@ -4356,7 +2869,7 @@ adjacent-pair ordering convention.
         thm:qca_consecutive_support_algebras_commute,
         thm:qca_disjoint_quasi_local_commute}
     In the exceptional odd--even order apply
-    Theorem~\ref{thm:qca_consecutive_support_algebras_commute}; the reversed
+    Lemma~\ref{thm:qca_consecutive_support_algebras_commute}; the reversed
     order follows by symmetry.  Every remaining ordered pair has disjoint
     physical supports, so disjoint quasi-locality applies.
 \end{proof}
@@ -4458,7 +2971,7 @@ adjacent-pair ordering convention.
     a finite-region inclusion leaves the quasi-local observable unchanged.
 \end{proof}
 
-\begin{theorem}[Two-site translation covariance of the support algebras]
+\begin{lemma}[Two-site translation covariance of the support algebras]
     \label{thm:qca_site_indexed_support_algebras_two_site_covariance}
     \lean{SpinChain.PropagatesWithin.embeddedEvenSupportAlgebra_map_quasiLocalTranslation_two,
         SpinChain.PropagatesWithin.embeddedOddSupportAlgebra_map_quasiLocalTranslation_two,
@@ -4501,7 +3014,7 @@ adjacent-pair ordering convention.
     As recorded in \cite{gap:sw04_support_covariance_scope} and \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}, the statement treats the one-dimensional translation-invariant
     setting with homogeneous cell size
     $d$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:qca_quasi_local_coefficient_compression,
@@ -4546,6 +3059,8 @@ adjacent-pair ordering convention.
     $2x+3=2(x+1)+1$ gives (\ref{eq:qca_two_site_covariance}) and
     (\ref{eq:qca_two_site_covariance_parities}).
 \end{proof}
+
+\section{Quantum cellular automata from finite-local data}
 
 In \cite[lines~2300--2306]{Cirac2017MPU}, eventual constancy of finite-chain
 conjugation defines a norm-preserving star-algebra automorphism of
@@ -4809,14 +3324,14 @@ completion from compatible forward and inverse finite-local actions.
     for every finite region $\Lambda$ and every $A\in\mathcal A_\Lambda$.
 \end{definition}
 
-\begin{theorem}[Propagation from a finite-local support bound]
+\begin{lemma}[Propagation from a finite-local support bound]
     \label{thm:qca_compatible_local_propagation}
     \lean{SpinChain.CompatibleLocalAutomorphism.propagatesWithin_quasiLocalEquiv}
     \leanok
     \uses{def:qca_compatible_local_support_bound, lem:qca_compatible_quasi_local_finite_evaluation, def:qca_propagates_within}
     If the forward family has support bound $\mathcal N$, then the completed
     automorphism $\overline F$ propagates within $\mathcal N$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:qca_compatible_local_support_bound, lem:qca_compatible_quasi_local_finite_evaluation}
@@ -4868,18 +3383,18 @@ completion from compatible forward and inverse finite-local actions.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Translation covariance from unit translation]
+\begin{lemma}[Translation covariance from unit translation]
     \label{thm:qca_compatible_translation_covariant}
     \lean{SpinChain.CompatibleLocalAutomorphism.translationCovariant_quasiLocalEquiv}
     \leanok
     \uses{lem:qca_compatible_algebraic_unit_translation, lem:qca_compatible_quasi_local_dense_evaluation, def:qca_quasi_local_translation, thm:qca_translation_covariant_iff_commute_one}
     If the finite-local unit-translation formula holds, then the completed
     automorphism $\overline F$ is translation covariant.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:qca_compatible_algebraic_unit_translation, lem:qca_compatible_quasi_local_dense_evaluation, def:qca_quasi_local_translation, thm:qca_translation_covariant_iff_commute_one}
-    By Theorem~\ref{thm:qca_translation_covariant_iff_commute_one}, it suffices
+    By Lemma~\ref{thm:qca_translation_covariant_iff_commute_one}, it suffices
     to prove that $\overline F$ commutes with translation by one site.  By continuity
     on the completion, on every $A\in\mathcal A_{\mathrm{loc}}$,
     \begin{align}
@@ -4892,7 +3407,7 @@ completion from compatible forward and inverse finite-local actions.
     identity extends from the canonical dense subalgebra to the completion.
 \end{proof}
 
-\begin{theorem}[QCA induced by compatible finite-local actions]
+\begin{lemma}[QCA induced by compatible finite-local actions]
     \label{thm:qca_compatible_local_automorphism}
     \lean{SpinChain.CompatibleLocalAutomorphism.isQCA_quasiLocalEquiv}
     \leanok
@@ -4901,7 +3416,7 @@ completion from compatible forward and inverse finite-local actions.
     operator norm, has a finite support bound, and satisfies the finite-local
     unit-translation formula.  Then the completed automorphism $\overline F$ is
     a one-dimensional QCA.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:qca_compatible_local_propagation, thm:qca_compatible_translation_covariant}
@@ -4910,401 +3425,6 @@ completion from compatible forward and inverse finite-local actions.
     are exactly the two defining properties of a one-dimensional QCA.
 \end{proof}
 
-\begin{definition}[Coordinates on a consecutive integer interval]
-    \label{def:local_interval_coordinates}
-    \lean{SpinChain.intervalCoordinates, SpinChain.intervalCoordinates_apply}
-    \leanok
-    \uses{def:mpu_finite_chain_realization}
-    For $a\in\mathbb Z$ and $N\geq0$, put
-    $I(a,N)=\{a,a+1,\ldots,a+N-1\}$. The site numbering $i\mapsto a+i$
-    identifies configurations on $I(a,N)$ with length-$N$ configurations.
-    Reindexing both matrix coordinates gives a star-algebra equivalence
-    $C_{a,N}:\mathcal A_{I(a,N)}\to M_{d^N}(\mathbb C)$.
-    Explicitly, $C_{a,N}(X)_{\sigma\tau}=X_{\widetilde\sigma\widetilde\tau}$,
-    where $\widetilde\sigma(a+i)=\sigma_i$.
-    This includes $N=0$ and the one-dimensional algebra on the empty interval.
-\end{definition}
-
-\begin{theorem}[Local inclusions in interval coordinates]
-    \label{thm:local_interval_coordinate_inclusion}
-    \lean{SpinChain.finiteChainRegion_subset_expanded,
-        SpinChain.intervalCoordinates_localInclusion_apply}
-    \leanok
-    Let $b,c\geq0$, $I=I(a,N)$ and $J=I(a-b,b+N+c)$. Then $I\subseteq J$.
-    For configurations $\sigma,\tau$ on $b+N+c$ consecutive sites,
-    \begin{align}
-        C_{a-b,b+N+c}(\iota_{I,J}(X))_{\sigma\tau}
-         & =C_{a,N}(X)_{\sigma|_M\,\tau|_M}
-        \prod_{i\notin M}\delta_{\sigma_i,\tau_i},
-    \end{align}
-    where $M=\{b,b+1,\ldots,b+N-1\}$ and $\sigma|_M$ denotes the
-    configuration $i\mapsto\sigma_{b+i}$ on $N$ sites.
-    In \cite[Appendix]{Cirac2017MPU}, this formula is the identity-tensor inclusion
-    expressed in increasing integer-site coordinates.
-\end{theorem}
-\begin{proof}\leanok
-    \uses{def:local_interval_coordinates, def:qca_local_inclusion}
-    Restriction to $I$ selects the middle $N$ coordinates. Equality of the
-    two configurations on $J\setminus I$ is equality on all added sites.
-    Substituting these identifications into the local inclusion formula gives the matrix entry.
-\end{proof}
-
-\begin{theorem}[Consecutive observables in the quasi-local algebra]
-    \label{thm:quasi_local_interval_observable}
-    \lean{SpinChain.quasiLocalIntervalObservable,
-        SpinChain.quasiLocalIntervalObservable_apply,
-        SpinChain.norm_quasiLocalIntervalObservable}
-    \leanok
-    For $d>0$ and $a\in\mathbb Z$, coordinate reindexing and the finite-region
-    inclusion give a star-algebra inclusion
-    $j_{a,k}:M_{d^k}(\mathbb C)\to\mathcal A$, including $k=0$.
-    It preserves the matrix operator norm: $\|j_{a,k}(X)\|=\|X\|$.
-    In \cite[Section~3]{Nachtergaele1996Spectral}, this embedding is the interval observable
-    convention.
-\end{theorem}
-\begin{proof}\leanok
-    \uses{def:local_interval_coordinates, def:qca_quasi_local_observable}
-    The coordinate equivalence is isometric between the finite matrix
-    algebras, and the finite-region inclusion preserves norm in the completion.
-\end{proof}
-
-\begin{definition}[Compatible finite-region states]
-    \label{def:qca_compatible_local_state}
-    \lean{SpinChain.CompatibleLocalState,
-        SpinChain.CompatibleLocalState.functional,
-        SpinChain.CompatibleLocalState.compatible,
-        SpinChain.CompatibleLocalState.norm_le,
-        SpinChain.CompatibleLocalState.map_one,
-        SpinChain.CompatibleLocalState.nonneg_star_mul_self}
-    \leanok
-    \uses{def:qca_local_algebra}
-    A compatible family of finite-region states consists of complex-linear
-    functionals $f_\Lambda\colon\mathcal A_\Lambda\to\C$, indexed by finite
-    regions $\Lambda\Subset\Z$, such that, for every inclusion
-    $\Lambda\subseteq\Gamma$ and every $X\in\mathcal A_\Lambda$,
-    \begin{align}
-        f_\Gamma(\iota_{\Lambda,\Gamma}(X)) & =f_\Lambda(X),
-                                            & |f_\Lambda(X)|         & \leq\lVert X\rVert, \\
-        f_\Lambda(I)                        & =1,
-                                            & f_\Lambda(X^\dagger X) & \geq0.
-    \end{align}
-\end{definition}
-
-\begin{definition}[Algebraic extension of compatible states]
-    \label{def:qca_compatible_state_algebraic_extension}
-    \lean{SpinChain.CompatibleLocalState.algebraicFunctional,
-        SpinChain.CompatibleLocalState.algebraicContinuousFunctional}
-    \leanok
-    \uses{def:qca_compatible_local_state, def:qca_algebraic_local_algebra,
-        def:qca_algebraic_local_normed_star_algebra}
-    Compatibility determines a complex-linear functional
-    $f_{\mathrm{loc}}\colon\mathcal A_{\mathrm{loc}}\to\C$ by
-    $f_{\mathrm{loc}}(\iota_\Lambda(X))=f_\Lambda(X)$.
-    For $d>0$, this functional is continuous in the operator-norm topology.
-\end{definition}
-
-\begin{theorem}[Contractivity of the algebraic extension]
-    \label{thm:qca_compatible_state_algebraic_bound}
-    \lean{SpinChain.CompatibleLocalState.algebraicFunctional_localObservable,
-        SpinChain.CompatibleLocalState.algebraicFunctional_norm_le}
-    \leanok
-    \uses{def:qca_compatible_state_algebraic_extension}
-    For every finite region $\Lambda$ and $X\in\mathcal A_\Lambda$,
-    $f_{\mathrm{loc}}(\iota_\Lambda(X))=f_\Lambda(X)$.
-    If $d>0$, then $|f_{\mathrm{loc}}(A)|\leq\lVert A\rVert$ for every
-    $A\in\mathcal A_{\mathrm{loc}}$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{def:qca_compatible_state_algebraic_extension,
-        def:qca_algebraic_local_operator_norm}
-    The direct-limit property gives the stated values. Every algebraic local
-    observable has a finite-region representative, and its norm is the norm
-    of that representative. Thus
-    $|f_{\mathrm{loc}}(\iota_\Lambda(X))|
-        =|f_\Lambda(X)|\leq\lVert X\rVert=\lVert\iota_\Lambda(X)\rVert$.
-\end{proof}
-
-\begin{definition}[Continuous extension to the quasi-local algebra]
-    \label{def:qca_compatible_state_completion}
-    \lean{SpinChain.CompatibleLocalState.quasiLocalFunctional}
-    \leanok
-    \uses{def:qca_quasi_local_algebra,
-        thm:qca_compatible_state_algebraic_bound}
-    For $d>0$, let $\omega\colon\mathcal A\to\C$ be the continuous linear
-    extension of $f_{\mathrm{loc}}$ to the operator-norm completion.
-\end{definition}
-
-\begin{theorem}[Evaluation of the continuous extension]
-    \label{thm:qca_compatible_state_evaluation}
-    \lean{SpinChain.CompatibleLocalState.quasiLocalFunctional_algebraicToQuasiLocal,
-        SpinChain.CompatibleLocalState.quasiLocalFunctional_quasiLocalObservable}
-    \leanok
-    \uses{def:qca_compatible_state_completion, def:qca_quasi_local_observable}
-    For every algebraic local observable $A$, one has
-    $\omega(j(A))=f_{\mathrm{loc}}(A)$. For every finite region $\Lambda$ and
-    $X\in\mathcal A_\Lambda$, one has $\omega(j_\Lambda(X))=f_\Lambda(X)$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{def:qca_compatible_state_completion,
-        thm:qca_compatible_state_algebraic_bound}
-    Continuous extension preserves the values on the original normed space,
-    giving the finite-region formula at $A=\iota_\Lambda(X)$.
-\end{proof}
-
-\begin{theorem}[Unique positive normalized extension]
-    \label{thm:qca_compatible_state_extension}
-    \lean{SpinChain.CompatibleLocalState.quasiLocalFunctional_nonneg_star_mul_self,
-        SpinChain.CompatibleLocalState.quasiLocalFunctional_one,
-        SpinChain.CompatibleLocalState.quasiLocalFunctional_norm_le,
-        SpinChain.CompatibleLocalState.norm_quasiLocalFunctional,
-        SpinChain.CompatibleLocalState.quasiLocalFunctional_unique,
-        SpinChain.CompatibleLocalState.existsUnique_quasiLocalFunctional}
-    \leanok
-    \uses{def:qca_compatible_state_completion}
-    Every compatible family of finite-region states, with $d>0$, has a unique
-    continuous complex-linear extension $\omega\colon\mathcal A\to\C$
-    with the prescribed finite-region values. It satisfies
-    $\omega(I)=1$, $\lVert\omega\rVert=1$, and, for every $A\in\mathcal A$,
-    $|\omega(A)|\leq\lVert A\rVert$ and $\omega(A^\dagger A)\geq0$.
-    Compatibility of the finite-region functionals is an explicit hypothesis.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{thm:qca_compatible_state_evaluation,
-        thm:qca_compatible_state_algebraic_bound,
-        def:qca_quasi_local_algebra,
-        def:qca_algebraic_local_algebra}
-    The sets defined by $|\omega(A)|\leq\lVert A\rVert$ and
-    $\omega(A^\dagger A)\geq0$ are closed, since multiplication, involution,
-    and $\omega$ are continuous. These inequalities hold on the dense
-    algebraic local subalgebra, hence on its completion. Evaluation at a
-    finite-region identity gives $\omega(I)=1$ and
-    $1\leq\lVert\omega\rVert$; contractivity gives the reverse inequality.
-    Two continuous extensions agree on all finite-region observables,
-    then on the algebraic local algebra, and therefore on its completion.
-\end{proof}
-
-\begin{definition}[States and pure states of the quasi-local algebra]
-    \label{def:qca_state_space_purity}
-    \lean{SpinChain.quasiLocalStateSpace, SpinChain.IsPureQuasiLocalState}
-    \leanok
-    Let $d>0$, and let $\mathcal A_d$ denote the quasi-local observable algebra.
-    Its state space consists of all continuous complex-linear functionals
-    $\omega$ such that $\|\omega\|=1$, $\omega(I)=1$, and
-    $\omega(X^*X)\ge0$ for every $X\in\mathcal A_d$.
-    A state is pure if it is an extreme point of this set, viewed as a real
-    convex set. Translation invariance is not required of these functionals.
-    In \cite[Section~1 and Section~3]{Nachtergaele1996Spectral}, these conditions define states and
-    purity.
-\end{definition}
-
-\begin{theorem}[Support in convex constituents]
-    \label{thm:qca_state_convex_support}
-    \lean{SpinChain.quasiLocalState_left_apply_eq_zero_of_convex_decomposition,
-        SpinChain.quasiLocalState_left_projection_eq_one_of_convex_decomposition}
-    \leanok
-    Let $\phi,\psi$ be states, let $0<t<1$, and set
-    $\omega=(1-t)\phi+t\psi$.
-    If $\omega(X^*X)=0$, then $\phi(X^*X)=0$.
-    If $\omega$ is a state, $P=P^*=P^2$, and $\omega(P)=1$, then
-    $\phi(P)=1$.
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{def:qca_state_space_purity}
-    Positivity gives two nonnegative real numbers whose strictly positive
-    weighted sum is zero, so both numbers vanish; applied to $I-P$,
-    $(I-P)^*(I-P)=I-P$ and normalization gives the projection assertion.
-\end{proof}
-
-\begin{theorem}[Purity from unique supported-state determination]
-    \label{thm:qca_purity_of_supported_uniqueness}
-    \lean{SpinChain.isPureQuasiLocalState_of_unique_supported_state}
-    \leanok
-    Let $\omega$ be a state, and let $(P_i)_{i\in J}$ be any family of
-    self-adjoint projections with $\omega(P_i)=1$.
-    Suppose every state $\phi$ satisfying $\phi(P_i)=1$ for every $i\in J$
-    equals $\omega$. Then $\omega$ is pure.
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{thm:qca_state_convex_support, def:qca_state_space_purity}
-    In a nontrivial convex decomposition of $\omega$, each constituent
-    has expectation one on every $P_i$. The uniqueness hypothesis forces
-    the left constituent to equal $\omega$, which is the extreme-point
-    condition.
-\end{proof}
-
-\begin{theorem}[Convexity of the quasi-local state space]
-    \label{thm:quasi_local_state_space_convex}
-    \lean{SpinChain.convex_quasiLocalStateSpace}
-    \leanok
-    The normalized positive continuous functionals on the quasi-local algebra
-    form a convex set over the real numbers.
-\end{theorem}
-\begin{proof}\leanok
-    \uses{def:qca_state_space_purity}
-    If $\varphi,\psi$ are states and $a,b\geq0$ satisfy $a+b=1$, then
-    $\|a\varphi+b\psi\|\leq a+b=1$ and $(a\varphi+b\psi)(I)=1$.
-    Since $\|I\|=1$, evaluation at the identity gives the reverse norm bound.
-    Positivity follows by taking the same convex combination of their
-    nonnegative values on adjoint squares.
-\end{proof}
-
-\begin{theorem}[Pure states in finite convex decompositions]
-    \label{thm:finite_pure_state_decomposition}
-    \lean{SpinChain.exists_eq_of_isPureQuasiLocalState_of_finite_decomposition}
-    \leanok
-    Let $\varphi$ be pure among all states of the quasi-local algebra.
-    Suppose that $\omega_i$ are states indexed by a finite set, that
-    $w_i\geq0$ and $\sum_iw_i=1$, and that
-    $\varphi=\sum_iw_i\omega_i$. Then $\varphi=\omega_i$ for some $i$.
-    No translation-invariance condition is imposed on these states.
-\end{theorem}
-\begin{proof}\leanok
-    \uses{thm:quasi_local_state_space_convex, def:qca_state_space_purity}
-    The state $\varphi$ belongs to the convex hull of the $\omega_i$.
-    This hull is contained in the full state space, so extremality in the
-    state space implies extremality in the smaller hull. Every extreme
-    point of the convex hull of a finite set belongs to that set.
-\end{proof}
-
-\begin{lemma}[Expansion of a consecutive blocked interval]
-    \label{lem:qca_blocking_interval_region}
-    \lean{SpinChain.expandedRegion_finiteChainRegion}
-    \leanok
-    For $L>0$, $a\in\mathbb Z$ and $N\geq0$, the expansion of the
-    blocked interval $I(a,N)$ is
-    \begin{align}
-        \widehat{I(a,N)}_L=I(aL,NL).
-    \end{align}
-    Negative starts and the empty interval are included.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{def:local_interval_coordinates, def:qca_expanded_region}
-    Euclidean division by $L$ shows that the quotient $q=\lfloor z/L\rfloor$ of an integer $z$
-    satisfies $a\leq q<a+N$ exactly when $aL\leq z<(a+N)L$.
-\end{proof}
-
-\begin{theorem}[Finite blocking in consecutive matrix coordinates]
-    \label{thm:qca_blocking_interval_coordinates}
-    \lean{SpinChain.intervalCoordinates_localBlocking}
-    \leanok
-    Let $L>0$, $d\geq0$, $a\in\mathbb Z$ and $N\geq0$.
-    Let $e_{N,L}$ decode the $N$ blocked spins into $NL$ consecutive
-    spins, placing residue $r$ of blocked site $i$ at site $Li+r$.
-    Define the matrix reindexing
-    $\mathcal R_{N,L}(X)_{\sigma\tau}
-        =X_{e_{N,L}^{-1}(\sigma),e_{N,L}^{-1}(\tau)}$.
-    Then
-    \begin{align}
-        C^{(d)}_{aL,NL}\,\mathcal B_L
-        \bigl((C^{(d^L)}_{a,N})^{-1}(X)\bigr)
-        =\mathcal R_{N,L}(X).
-    \end{align}
-    Here the target region is identified using
-    $\widehat{I(a,N)}_L=I(aL,NL)$, expressing the site grouping of \cite[Appendix, lines~2308 and 2313--2320]{Cirac2017MPU}
-    in consecutive interval
-    coordinates.
-\end{theorem}
-\begin{proof}\leanok
-    \uses{lem:qca_blocking_interval_region, def:local_interval_coordinates,
-        def:qca_configuration_blocking, thm:qca_local_blocking_formulas}
-    The site $L(a+i)+r$ has interval coordinate $Li+r$ relative to $aL$.
-    Thus decoding followed by consecutive numbering agrees with flattening
-    the blocked configurations on both matrix indices.
-\end{proof}
-
-\begin{theorem}[Blocking of quasi-local interval observables]
-    \label{thm:qca_blocking_quasi_local_interval}
-    \lean{SpinChain.quasiLocalBlocking_quasiLocalIntervalObservable}
-    \leanok
-    For $d>0$, $L>0$, $a\in\mathbb Z$, $N\geq0$ and
-    $X\in M_{(d^L)^N}(\mathbb C)$,
-    \begin{align}
-        \overline{\mathcal B}_L
-        \bigl(j^{(d^L)}_{a,N}(X)\bigr)
-        =j^{(d)}_{aL,NL}\bigl(\mathcal R_{N,L}(X)\bigr).
-    \end{align}
-\end{theorem}
-\begin{proof}\leanok
-    \uses{thm:qca_blocking_interval_coordinates,
-        lem:qca_quasi_local_blocking_formulas,
-        thm:quasi_local_interval_observable}
-    Evaluating the completed blocking equivalence on the finite interval
-    representative and applying the finite coordinate identity gives the formula.
-\end{proof}
-\begin{definition}[Pushforward of functionals by a star-algebra equivalence]
-    \label{def:qca_functional_star_equivalence}
-    \lean{SpinChain.quasiLocalFunctionalCongr,
-        SpinChain.quasiLocalFunctionalCongr_apply}
-    \leanok
-    Let $d_1,d_2>0$ and let
-    $e:\mathcal A_{d_1}\to\mathcal A_{d_2}$ be a star-algebra isomorphism.
-    The induced continuous complex-linear equivalence between functional
-    spaces is $T_e\omega=\omega\circ e^{-1}$; thus
-    $(T_e\omega)(X)=\omega(e^{-1}X)$.
-\end{definition}
-
-\begin{theorem}[Star-algebra equivalence preserves states and purity]
-    \label{thm:qca_state_purity_star_equivalence}
-    \lean{SpinChain.norm_quasiLocalFunctionalCongr,
-        SpinChain.quasiLocalFunctionalCongr_mem_stateSpace_iff,
-        SpinChain.quasiLocalFunctionalCongr_image_stateSpace,
-        SpinChain.isPureQuasiLocalState_quasiLocalFunctionalCongr_iff}
-    \leanok
-    Under the preceding hypotheses, $\|T_e\omega\|=\|\omega\|$.
-    In addition, $T_e$ maps the entire state space of $\mathcal A_{d_1}$ onto
-    the entire state space of $\mathcal A_{d_2}$, and $T_e\omega$ is pure
-    if and only if $\omega$ is pure. No translation invariance is assumed.
-    Here purity follows the extreme-point convention of
-    \cite[Section~3, lines~1469--1482]{Nachtergaele1996Spectral} on the state space.
-\end{theorem}
-\begin{proof}\leanok
-    \uses{def:qca_functional_star_equivalence,def:qca_state_space_purity}
-    A star-algebra isomorphism of complex C-star algebras is isometric.
-    Inverse precomposition therefore preserves the dual norm. It also
-    preserves the identity and adjoint squares, so it maps the state spaces
-    onto one another. Its restriction to real scalars is a linear
-    equivalence, and linear equivalences carry extreme points to extreme
-    points.
-\end{proof}
-
-\begin{definition}[A blocked-chain functional on the original lattice]
-    \label{def:qca_blocking_functional}
-    \lean{SpinChain.quasiLocalBlockingFunctional,
-        SpinChain.quasiLocalBlockingFunctional_apply}
-    \leanok
-    Let $d,L>0$ and let
-    $\mathcal B_L:\mathcal A_{d^L}\to\mathcal A_d$ be the site-blocking
-    isomorphism. A continuous functional $\omega$ on the blocked chain
-    defines the original-lattice functional
-    $T_L\omega=\omega\circ\mathcal B_L^{-1}$.
-    In \cite[lines~825--836]{Nachtergaele1996Spectral}, this pullback is the state transformation associated with the regrouping of
-    sites.
-    \uses{def:qca_functional_star_equivalence,def:qca_quasi_local_blocking}
-\end{definition}
-
-\begin{theorem}[Site grouping preserves states and purity]
-    \label{thm:qca_blocking_state_purity}
-    \lean{SpinChain.norm_quasiLocalBlockingFunctional,
-        SpinChain.quasiLocalBlockingFunctional_mem_stateSpace_iff,
-        SpinChain.isPureQuasiLocalState_quasiLocalBlockingFunctional_iff}
-    \leanok
-    The functional $T_L\omega$ has the same norm as $\omega$, is a state
-    exactly when $\omega$ is a state, and is pure exactly when $\omega$ is
-    pure. This applies to all state functionals, without an invariance
-    condition under translations.
-\end{theorem}
-\begin{proof}\leanok
-    \uses{def:qca_blocking_functional,thm:qca_state_purity_star_equivalence}
-    The star-algebra equivalence theorem applied to $\mathcal B_L$ gives all stated properties.
-\end{proof}
 
 \input{chapter/ch28_qca_support_factors}
 

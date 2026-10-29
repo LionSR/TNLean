@@ -1,4 +1,4 @@
-\begin{theorem}[Commutation of adjacent two-site basic support projectors]
+\begin{lemma}[Commutation of adjacent two-site basic support projectors]
     \label{thm:appendixB_two_site_basic_support_projectors_commute}
     \lean{MPSTensor.AppendixBStructuralData.twoSiteBasicSupportProjection_commute_lifts}
     \leanok
@@ -9,7 +9,7 @@
     basic-vector form in \cite[Definition~3.9, Equations~(3.16)--(3.18), and
         Appendix~B]{Cirac2016MPDO_arXiv},
     $(P_2)_{01}(P_2)_{12} =(P_2)_{12}(P_2)_{01}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -26,7 +26,7 @@
         \notag
     \end{align}
     respectively. By
-    Theorem~\ref{thm:appendixB_virtual_bond_projectors_commute}, the two
+    Lemma~\ref{thm:appendixB_virtual_bond_projectors_commute}, the two
     products agree. The following support-location schematic records the
     one-site embedding and the two overlapping physical supports without
     depicting the doubled $U\cdots U^*$ operator networks in the identities
@@ -86,7 +86,7 @@
     source projector $Q_{XB}$ acts on $\mathcal H_X\otimes\mathcal H_B$.
 \end{definition}
 
-\begin{theorem}[The (AX) factor action]
+\begin{lemma}[The (AX) factor action]
     \label{thm:appendixB_qax_factor_action}
     \leanok
     \uses{def:appendixB_qax, thm:pair_lift_kronecker_matrices, def:three_coordinate_identification}
@@ -97,16 +97,16 @@
     local action in \cite[Definition~D.2]{Cirac2016MPDO_arXiv}. It does not
     construct a projector for an arbitrary factorization
     $\mathcal H_A\otimes\mathcal H_X\otimes\mathcal H_B$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     The left identity in
-    Theorem~\ref{thm:pair_lift_kronecker_matrices} evaluated at
+    Lemma~\ref{thm:pair_lift_kronecker_matrices} evaluated at
     $\widehat Q_{AX}$ gives the displayed matrix action.
 \end{proof}
 
-\begin{theorem}[The (XB) factor action]
+\begin{lemma}[The (XB) factor action]
     \label{thm:appendixB_qxb_factor_action}
     \leanok
     \uses{def:appendixB_qax, thm:pair_lift_kronecker_matrices, def:three_coordinate_identification}
@@ -117,12 +117,12 @@
     local action in \cite[Definition~D.2]{Cirac2016MPDO_arXiv}. It does not
     construct a projector for an arbitrary factorization
     $\mathcal H_A\otimes\mathcal H_X\otimes\mathcal H_B$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     The right identity in
-    Theorem~\ref{thm:pair_lift_kronecker_matrices} evaluated at
+    Lemma~\ref{thm:pair_lift_kronecker_matrices} evaluated at
     $\widehat Q_{XB}$ gives the displayed matrix action.
 \end{proof}
 
@@ -164,7 +164,7 @@
     projector, hence is idempotent.
 \end{proof}
 
-\begin{theorem}[Appendix B overlapping two-site commutation]
+\begin{lemma}[Appendix B overlapping two-site commutation]
     \label{thm:appendixB_overlapping_two_site_commutation}
     \lean{MPSTensor.AppendixBStructuralData.hasOverlappingTwoSiteCommutation}
     \leanok
@@ -190,7 +190,7 @@
     \cite[Definition~D.2]{Cirac2016MPDO_arXiv}, they therefore satisfy the
     algebraic overlapping two-site condition of
     Definition~\ref{def:overlapping_two_site_supports}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -200,7 +200,7 @@
     of $P_2$ commute, their complementary lifts commute as well.
 \end{proof}
 
-\begin{theorem}[Three-site intersection of adjacent parent kernels]
+\begin{lemma}[Three-site intersection of adjacent parent kernels]
     \label{thm:three_site_ground_space_adjacent_parent_kernels}
     \lean{MPSTensor.adjacent_localTerm_eq_zero_iff_mem_groundSpace_succ}
     \lean{MPSTensor.groundSpace_three_eq_adjacent_twoSite_parent_kernels}
@@ -211,18 +211,18 @@
     More generally, on $L+1$ sites, simultaneous annihilation by the two
     adjacent length-$L$ parent interactions is equivalent to membership in
     $G_{L+1}(A)$ whenever $A$ is injective and $L>1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    By Theorem~\ref{thm:ground_space_intersection}, a three-site vector belongs
+    By Lemma~\ref{thm:ground_space_intersection}, a three-site vector belongs
     to $G_3(A)$ exactly when its restrictions to both adjacent pairs belong to
     $G_2(A)$. Since $\ker q_2(A)=G_2(A)$, this is equivalent to annihilation
-    by both adjacent terms. Theorem~\ref{thm:local_term_two_three_ax_xb_lifts}
+    by both adjacent terms. Lemma~\ref{thm:local_term_two_three_ax_xb_lifts}
     identifies these terms with the two displayed lifts.
 \end{proof}
 
-\begin{theorem}[Appendix B coefficient-space analog of the Appendix D kernel datum]
+\begin{lemma}[Appendix B coefficient-space analog of the Appendix D kernel datum]
     \label{thm:appendixB_definition_d2_coefficient_analogue}
     \lean{MPSTensor.AppendixBStructuralData.hasAppendixD2ParentCommutingHamiltonian}
     \leanok
@@ -259,21 +259,21 @@
     $\mathcal H_X\otimes\mathcal H_B$. For a normal left-canonical RFP tensor,
     injectivity follows from the RFP structural theorem and is not an
     additional hypothesis.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     Idempotency and commutation are
-    Theorem~\ref{thm:appendixB_overlapping_two_site_commutation}. The two
+    Lemma~\ref{thm:appendixB_overlapping_two_site_commutation}. The two
     coefficient representatives are $q_2(A)$, and
-    Theorem~\ref{thm:three_site_ground_space_adjacent_parent_kernels} gives
+    Lemma~\ref{thm:three_site_ground_space_adjacent_parent_kernels} gives
     the remaining kernel equation.
     % Source-scope note: this Appendix D corollary is not the argument printed
     % for RFP => NNCPH.  The proof at source lines 1305--1307 instead refers
     % directly to the structural characterization.
 \end{proof}
 
-\begin{theorem}[Chain embedding of the three-site commutator]
+\begin{lemma}[Chain embedding of the three-site commutator]
     \label{thm:three_site_commutator_chain_transport}
     \lean{MPSTensor.cyclicRestrictₗ_three_localTerm_left}
     \lean{MPSTensor.cyclicRestrictₗ_three_localTerm_right}
@@ -314,7 +314,7 @@
     Because the two cyclic windows at $N=2$ (which is not part of
     \cite[Theorem~3.10]{Cirac2016MPDO_arXiv}) contain the same sites in
     opposite orders, the hypothesis $N>2$ is essential to this translation.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -329,24 +329,24 @@
     identity.
 \end{proof}
 
-\begin{theorem}[Appendix B adjacent commutation on periodic chains]
+\begin{lemma}[Appendix B adjacent commutation on periodic chains]
     \label{thm:appendixB_adjacent_chain_commutation}
     \lean{MPSTensor.AppendixBStructuralData.adjacent_twoSite_localTerms_commute}
     \leanok
     \uses{thm:appendixB_overlapping_two_site_commutation, thm:three_site_commutator_chain_transport}
     For every Appendix~B structural datum and every periodic chain of length
     $N>2$, the adjacent translated length-two parent interactions commute.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    Theorem~\ref{thm:appendixB_overlapping_two_site_commutation} gives the
+    Lemma~\ref{thm:appendixB_overlapping_two_site_commutation} gives the
     three-site commutator, and
-    Theorem~\ref{thm:three_site_commutator_chain_transport} places it at every
+    Lemma~\ref{thm:three_site_commutator_chain_transport} places it at every
     adjacent pair on the periodic chain.
 \end{proof}
 
-\begin{theorem}[Left-canonical RFP commutation and zero energy]
+\begin{lemma}[Left-canonical RFP commutation and zero energy]
     \label{thm:left_canonical_rfp_chain_commutation}
     \lean{MPSTensor.AppendixBStructuralData.isNNCPH}
     \lean{MPSTensor.rfp_implies_nncph_of_leftCanonical}
@@ -360,11 +360,11 @@
     interaction. The removal of the left-canonical hypothesis and the
     ground-space spanning equation in
     \cite[Definition~3.9]{Cirac2016MPDO_arXiv} remain separate.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    By Theorem~\ref{thm:appendixB_adjacent_chain_commutation}, the Appendix~B
+    By Lemma~\ref{thm:appendixB_adjacent_chain_commutation}, the Appendix~B
     structural theorem yields a datum whose adjacent translated parent
     interactions commute, and
     Lemma~\ref{lem:nncph_from_adjacent_two_site_commutation} upgrades this to

@@ -27,7 +27,7 @@ develops an operator-norm refinement motivated by that discussion.
     family and $N$, not on an accuracy or a block partition.
 \end{definition}
 
-\begin{theorem}[Range and isometricity of the sector encoder]
+\begin{lemma}[Range and isometricity of the sector encoder]
     \label{thm:ldp_sector_encoder_range}
     \lean{MPSTensor.range_sectorEncoder, MPSTensor.isIsometry_sectorEncoder}
     \leanok
@@ -35,7 +35,7 @@ develops an operator-norm refinement motivated by that discussion.
     For every length, $\operatorname{ran}F_{A,N}$ is the span of the
     original periodic sector vectors. If those vectors are linearly
     independent, $F_{A,N}^\dagger F_{A,N}=I_b$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:ldpolar_decomposition, thm:ldpolar_injective}
     For $P=(V_{A,N}^\dagger V_{A,N})^{1/2}$, the polar identities
@@ -62,21 +62,21 @@ develops an operator-norm refinement motivated by that discussion.
     where $V_k$ is the polar isometry of the $\ell_k$-site blocked tensor.
 \end{definition}
 
-\begin{theorem}[The register seed is isometric]
+\begin{lemma}[The register seed is isometric]
     \label{thm:ldp_register_encoder_isometric}
     \lean{MPSPreparation.registerCfg_injective,
         MPSPreparation.isIsometry_registerEncoder}
     \leanok
     \uses{def:ldp_register_block_encoders}
     The common register encoder satisfies $J^\dagger J=I_b$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Reading any one register recovers its word, so distinct labels give
     distinct physical basis configurations. The corresponding columns
     of the identity matrix are orthonormal.
 \end{proof}
 
-\begin{theorem}[A genuine unitary implements the whole block encoder]
+\begin{lemma}[A genuine unitary implements the whole block encoder]
     \label{thm:ldp_whole_block_encoder}
     \lean{MPSPreparation.exists_isLocalCircuitOfDepth_registerEncoder,
         MPSPreparation.mul_registerEncoder_eq_blockIsometryEncoder}
@@ -92,15 +92,15 @@ develops an operator-norm refinement motivated by that discussion.
     $S$. Then a single genuine local unitary $U$ has depth at most $CL$
     and satisfies $UJ=W$ and $W^\dagger W=I_b$.
     The constant precedes $A$, the pair vectors, and the partition.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:ldp_coherent_sector_circuit, thm:ldp_register_encoder_isometric}
-    Theorem~\ref{thm:ldp_coherent_sector_circuit} chooses one circuit
+    Lemma~\ref{thm:ldp_coherent_sector_circuit} chooses one circuit
     whose action agrees on every column of $J$. Therefore $UJ=W$ as
     matrices, and $W^\dagger W=J^\dagger U^\dagger UJ=I_b$.
 \end{proof}
 
-\begin{theorem}[Complex Gram and cross entries]
+\begin{lemma}[Complex Gram and cross entries]
     \label{thm:ldp_sector_gram_cross_entries}
     \lean{MPSTensor.gram_sectorColumnMatrix_apply,
         MPSTensor.cross_blockIsometryEncoder_sectorColumnMatrix_apply}
@@ -114,13 +114,13 @@ develops an operator-norm refinement motivated by that discussion.
          & =\langle We_i,\phi_N(A_j)\rangle.
         \label{eq:ldp_sector_complex_entries}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expanding matrix multiplication and the Euclidean inner product in
     the common physical configuration basis gives both identities.
 \end{proof}
 
-\begin{theorem}[Perturbation of the fixed polar encoder]
+\begin{lemma}[Perturbation of the fixed polar encoder]
     \label{thm:ldp_polar_frame_bound}
     \lean{Matrix.norm_polarPos_sub_one_le, Matrix.norm_polarIso_sub_isometry_le}
     \leanok
@@ -133,7 +133,7 @@ develops an operator-norm refinement motivated by that discussion.
         \|F-W\|                   & \le\sqrt{\eta+2\zeta}+\eta.
         \label{eq:ldp_polar_frame_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:ldp_sqrt_lipschitz, thm:ldpolar_decomposition, thm:ldpolar_injective}
     The square-root Lipschitz bound at $I$ gives the first inequality.
@@ -144,7 +144,7 @@ develops an operator-norm refinement motivated by that discussion.
     the second bound.
 \end{proof}
 
-\begin{theorem}[Coherent local conversion through a common seed]
+\begin{lemma}[Coherent local conversion through a common seed]
     \label{thm:ldp_common_encoder_conversion}
     \lean{QuantumCircuit.IsLocalCircuitOfDepth.norm_encoder_conversion_le}
     \leanok
@@ -184,7 +184,7 @@ develops an operator-norm refinement motivated by that discussion.
     \end{center}
     The physical boxes denote complete circuits, not elementary gates
     on $N$ sites. The logical wire carries every superposition at once.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:qc_circuit_inverse_composition}
     Inversion and composition give the depth. Since
@@ -193,7 +193,7 @@ develops an operator-norm refinement motivated by that discussion.
     $\|U\|=1$ gives the conversion error bound.
 \end{proof}
 
-\begin{theorem}[Conversion of canonical sector encoders]
+\begin{lemma}[Conversion of canonical sector encoders]
     \label{thm:ldp_canonical_encoder_conversion}
     \lean{MPSPreparation.norm_sectorEncoder_conversion_le}
     \leanok
@@ -215,14 +215,14 @@ develops an operator-norm refinement motivated by that discussion.
         +\bigl(\sqrt{\eta_B+2\zeta_B}+\eta_B\bigr).
         \label{eq:ldp_encoder_conversion_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:ldp_polar_frame_bound, thm:ldp_common_encoder_conversion}
     Both $U_AJ$ and $U_BJ$ are isometries. Applying
-    Theorem~\ref{thm:ldp_polar_frame_bound} to each family, using the
+    Lemma~\ref{thm:ldp_polar_frame_bound} to each family, using the
     monotonicity of the square root in (\ref{eq:ldp_encoder_defects}),
     and combining the two bounds through
-    Theorem~\ref{thm:ldp_common_encoder_conversion} yields
+    Lemma~\ref{thm:ldp_common_encoder_conversion} yields
     the stated conversion bound.
 \end{proof}
 
@@ -239,5 +239,5 @@ conversion theorem in Section~\ref{sec:ldp_coherent_groundspace_conversion}.
 Its proof gives Gram and complex cross estimates for a common partition
 and an exact whole-encoder construction when the chosen block scale exceeds
 the ring length. Parent kernels are identified only at the valid interaction
-range of Theorem~\ref{thm:ldp_sector_encoder_parent_kernel}; see also
+range of Lemma~\ref{thm:ldp_sector_encoder_parent_kernel}; see also
 \cite{gap:mswc24_coherent_sector_encoder_scope}.

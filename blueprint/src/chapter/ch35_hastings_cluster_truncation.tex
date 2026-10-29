@@ -33,7 +33,7 @@ consists of terms whose supports meet the cluster support
     \emph{admissible} if $C\cap\partial C'=\emptyset$ for all $C,C'\in U$.
 \end{definition}
 
-\begin{theorem}[Clusters that meet]
+\begin{lemma}[Clusters that meet]
     \label{thm:hastings_clusters_meet}
     \lean{TNLean.Lattice.ClusterExpansion.subset_of_connected_of_disjoint_boundary,
         TNLean.Lattice.ClusterExpansion.eq_of_isCluster_of_inter_nonempty,
@@ -48,7 +48,7 @@ consists of terms whose supports meet the cluster support
     disjoint, $\partial C_U=\bigcup_{C\in U}\partial C$, and if
     $n_C+n_{\partial C}\le Sn_C$ for all $C\in U$, then
     $n_{C_U}+n_{\partial C_U}\le Sn_{C_U}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     If $C$ is connected, $C\cap C'\ne\emptyset$, and $C\cap\partial C'=\emptyset$,
@@ -58,7 +58,7 @@ consists of terms whose supports meet the cluster support
     the additive size bound.
 \end{proof}
 
-\begin{theorem}[Words containing a set of terms]
+\begin{lemma}[Words containing a set of terms]
     \label{thm:hastings_words_inclusion_exclusion}
     \lean{TNLean.Lattice.ClusterExpansion.sum_pow_eq_sum_words,
         TNLean.Lattice.ClusterExpansion.sum_powerset_neg_one_pow_card_disjoint,
@@ -72,14 +72,14 @@ consists of terms whose supports meet the cluster support
         \sum_{D\subseteq C}(-1)^{|D|}\Bigl(\sum_{k\notin B\cup D}a_k\Bigr)^n.
         \label{eq:hastings_words_inclusion_exclusion}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     For $X\cap B=\emptyset$,
     $\sum_{D\subseteq C\setminus X}(-1)^{|D|}=[C\subseteq X]$.
 \end{proof}
 
-\begin{theorem}[The cluster part as a sum of words]
+\begin{lemma}[The cluster part as a sum of words]
     \label{thm:hastings_cluster_part_words}
     \lean{TNLean.Lattice.ClusterExpansion.hasSum_div_factorial_smul_pow,
         TNLean.Lattice.ClusterExpansion.hasSum_words_clusterPart}
@@ -88,7 +88,7 @@ consists of terms whose supports meet the cluster support
     For $H=\sum_{k\in K}H_k$ and disjoint $B,C\subseteq K$, the words whose
     letter set contains $C$ and avoids $B$, weighted by $(-\beta)^n/n!$, sum to
     $\rho(\beta,C)$ of (\ref{eq:hastings_cluster_part}) with boundary $B$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Sum (\ref{eq:hastings_words_inclusion_exclusion}) weighted by
@@ -109,7 +109,7 @@ consists of terms whose supports meet the cluster support
     \cite[lines 1101--1104]{Hastings2006Solving}.
 \end{definition}
 
-\begin{theorem}[Inclusion and exclusion for one word]
+\begin{lemma}[Inclusion and exclusion for one word]
     \label{thm:hastings_word_large_clusters}
     \lean{TNLean.Lattice.ClusterExpansion.mem_largeConnected,
         TNLean.Lattice.ClusterExpansion.forall_isCluster_iff,
@@ -124,14 +124,14 @@ consists of terms whose supports meet the cluster support
         =\sum_{U}(-1)^{|U|}.
         \label{eq:hastings_word_large_clusters}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Such $U$ are precisely the subsets of the set $L$ of large clusters of $A$,
     and $\sum_{U\subseteq L}(-1)^{|U|}=[L=\emptyset]$.
 \end{proof}
 
-\begin{theorem}[The truncated operator by inclusion and exclusion]
+\begin{lemma}[The truncated operator by inclusion and exclusion]
     \label{thm:hastings_truncation_inclusion_exclusion}
     \lean{TNLean.Lattice.ClusterExpansion.hasSum_truncatedExpTerm,
         TNLean.Lattice.ClusterExpansion.truncatedExp_eq_sum,
@@ -149,15 +149,15 @@ consists of terms whose supports meet the cluster support
     \end{align}
     \cite[lines 1197--1225]{Hastings2006Solving},
     \cite{gap:hastings05_cluster_boundary}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Substitute (\ref{eq:hastings_word_large_clusters}) into
     Definition~\ref{def:hastings_truncated_expansion}, exchange sums, and apply
-    Theorem~\ref{thm:hastings_cluster_part_words} (with $\rho(\beta,\emptyset)=e^{-\beta H}$).
+    Lemma~\ref{thm:hastings_cluster_part_words} (with $\rho(\beta,\emptyset)=e^{-\beta H}$).
 \end{proof}
 
-\begin{theorem}[The bound summed by the percolation estimate]
+\begin{lemma}[The bound summed by the percolation estimate]
     \label{thm:hastings_truncation_trace_bound}
     \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_sub_truncatedExp_le}
     \leanok
@@ -171,12 +171,12 @@ consists of terms whose supports meet the cluster support
         \le\|O\|Z\sum_{U\neq\emptyset}\prod_{C\in U}y^{n_C}.
         \label{eq:hastings_truncation_trace_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:hastings_truncation_inclusion_exclusion,
         thm:hastings_cluster_part_several, thm:hastings_clusters_meet}
-    Apply Theorems~\ref{thm:hastings_cluster_part_several}
+    Apply Lemmas~\ref{thm:hastings_cluster_part_several}
     and~\ref{thm:hastings_clusters_meet} to each term of
     (\ref{eq:hastings_truncation_inclusion_exclusion}).
 \end{proof}
@@ -197,7 +197,7 @@ consists of terms whose supports meet the cluster support
     exactly $A$ \cite[lines 1268--1269]{Hastings2006Solving}.
 \end{definition}
 
-\begin{theorem}[The truncated operator as a sum of products over clusters]
+\begin{lemma}[The truncated operator as a sum of products over clusters]
     \label{thm:hastings_truncation_cluster_products}
     \lean{TNLean.Lattice.ClusterExpansion.truncatedExp_eq_sum_clusterOp,
         TNLean.Lattice.ClusterExpansion.clusterOp_union,
@@ -215,7 +215,7 @@ consists of terms whose supports meet the cluster support
     the overlap graph when each $H_k$ acts on $S_k$), then
     $E_A=\prod_{C\in\mathrm{clusters}(A)}E_C$ with commuting factors
     \cite[lines 1108--1110]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:hastings_cluster_operator, thm:hastings_clusters_meet}
@@ -225,16 +225,52 @@ consists of terms whose supports meet the cluster support
     $E_{A\cup B}=E_AE_B$; induct over the clusters partitioning $A$.
 \end{proof}
 
-\begin{theorem}[The operator of a cluster acts on its sites]
+\begin{lemma}[The operator of a cluster acts on its sites]
     \label{thm:hastings_cluster_operator_support}
     \lean{TNLean.Lattice.ClusterExpansion.clusterOp_mem_supportedOperators}
     \leanok
     \uses{def:hastings_cluster_operator, thm:hastings_trotter_product_form}
     If each $H_k$ acts on $S_k$, then $E_C$ acts on $\bigcup_{k\in C}S_k$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:hastings_trotter_product_form}
     For every $D\subseteq C$, $H_D$ and $e^{-\beta H_D}$ act on
     $\bigcup_{k\in C}S_k$.
+\end{proof}
+
+\begin{lemma}[The truncated operator in matrix product form]
+    \label{thm:hastings_truncated_product_form}
+    \lean{TNLean.Lattice.ClusterExpansion.IsLargeWalk,
+        TNLean.Lattice.ClusterExpansion.noncommProd_apply_of_pairwiseDisjoint,
+        TNLean.Lattice.ClusterExpansion.noLargeCluster_iff_filter,
+        TNLean.Lattice.ClusterExpansion.truncatedExp_eq_mul,
+        TNLean.Lattice.ClusterExpansion.sum_clusterOp_apply,
+        TNLean.Lattice.ClusterExpansion.isLocalCoefficient_clusterCoeff,
+        TNLean.Lattice.ClusterExpansion.sum_prod_clusterCoeff,
+        TNLean.Lattice.ClusterExpansion.hasProductForm_sum_clusterOp,
+        TNLean.Lattice.ClusterExpansion.hasProductForm_truncatedExp}
+    \leanok
+    \uses{def:hastings_product_form, def:hastings_truncated_expansion,
+        def:hastings_cluster_of_terms}
+    On $\Lambda\ne\emptyset$, if each $H_k$ acts on $S_k$ and $T$ consists of
+    overlap-connected sets $C$ with $\operatorname{diam}(\bigcup_{k\in C}S_k)>l$,
+    then $\rho(\beta,l)$ has a matrix product form of range $l$
+    \cite[lines 1256--1279]{Hastings2006Solving},
+    \cite{gap:hastings05_planar_domain_scope}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:hastings_truncation_cluster_products,
+        thm:hastings_cluster_operator_support,
+        thm:hastings_product_form_supported_radius, thm:hastings_product_form_mul}
+    By Lemmas~\ref{thm:hastings_truncation_cluster_products}
+    and~\ref{thm:hastings_cluster_operator_support},
+    $\rho(\beta,l)=\sum_A\prod_{C\in\mathrm{clusters}(A)}E_C$, where empty-support
+    terms factor out as a scalar multiple of $1$ and each remaining cluster $C$
+    acts on $S_C=\bigcup_{k\in C}S_k$ with $\operatorname{diam}S_C\le l$ and
+    pairwise disjoint $S_C$. Indexing each site by its containing cluster (if
+    any) and matrix-unit labels $(a_j,b_j)$ expresses $\sum_A\prod_CE_C$ in the
+    form (\ref{eq:hastings_mpf}) of range $l$; conclude by
+    Lemma~\ref{thm:hastings_product_form_mul}.
 \end{proof}

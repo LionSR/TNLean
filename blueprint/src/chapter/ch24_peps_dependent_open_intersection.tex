@@ -110,20 +110,20 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     $A_v^f(\eta,s)=\delta_{s,\eta}$.
 \end{definition}
 
-\begin{theorem}[Partial averages are injective on invariants]%
+\begin{lemma}[Partial averages are injective on invariants]%
     \label{thm:peps_partial_averaging_injective}
     \lean{TNLean.PEPS.DependentBondNetwork.isGInjective_partialAveragingSite}
     \leanok
     \uses{def:peps_partial_averaging_site,
         def:peps_g_injective}
     At every vertex $v$, $P_v^f$ is $G$-injective for $\rho_v^f$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Right translation in (\ref{eq:peps_partial_average}) gives
     $P_v^f\rho_v^f(g)=P_v^f$, and $P_v^f|_{(\C^{\mathcal X_v})^{\rho_v^f}}=\Id$.
 \end{proof}
 
-\begin{theorem}[Coherent expansion of a partially averaged network]%
+\begin{lemma}[Coherent expansion of a partially averaged network]%
     \label{thm:peps_partial_network_expansion}
     \lean{TNLean.PEPS.DependentBondNetwork.network_partialAveragingSite,
         TNLean.PEPS.DependentBondNetwork.bondRegrouping_network_partialAveragingSite,
@@ -146,7 +146,7 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
          & =|G|^{-n}\sum_q\prod_e B_e^f(q)_{\gamma_e^+,\gamma_e^-}.
         \nonumber
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_partial_averaging_site}
     Substitute (\ref{eq:peps_partial_average}) into
@@ -156,7 +156,7 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     the definition of $b_B$ gives (\ref{eq:peps_partial_network_sum}).
 \end{proof}
 
-\begin{theorem}[Selected vertex gauges preserve the contraction]%
+\begin{lemma}[Selected vertex gauges preserve the contraction]%
     \label{thm:peps_partial_vertex_gauge}
     \lean{TNLean.PEPS.DependentBondNetwork.network_partialAveragingSite_bondGauge,
         TNLean.PEPS.DependentBondNetwork.network_partialAveragingSite_vertexGauge}
@@ -167,7 +167,7 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     In particular, for $B_e=U_e(p_e)$, replacing
     $p_e\mapsto f_{h(e)}(q_{h(e)})p_ef_{t(e)}(q_{t(e)})^{-1}$ preserves
     $\mathcal N_{A^f}(B)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_partial_network_expansion}
     Reindexing (\ref{eq:peps_partial_network_sum}) by $r\mapsto rq$ and using
@@ -175,7 +175,7 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     multiplicativity of $U_e$ specializes this to $B_e=U_e(p_e)$.
 \end{proof}
 
-\begin{theorem}[Uncut bonds retain representation support under partial averaging]%
+\begin{lemma}[Uncut bonds retain representation support under partial averaging]%
     \label{thm:peps_partial_uncut_support}
     \lean{TNLean.PEPS.DependentBondNetwork.physicalBondSlice_network_partialAveragingSite_mem_range,
         TNLean.PEPS.DependentBondNetwork.physicalBondSlice_mem_range_of_mem_partialCutSpace}
@@ -186,7 +186,7 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     for every $\tau$. Consequently, if $e\notin C$ and
     $\psi\in\mathcal S_{A^f,C}$, then $S_{e,\tau}\psi\in\operatorname{im}F_e$
     for every $\tau$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_partial_network_expansion}
     When $B_e=I$, $B_e^f(q)=U_e(f_{h(e)}(q_{h(e)})f_{t(e)}(q_{t(e)})^{-1})\in\operatorname{im}F_e$,
@@ -217,7 +217,7 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     $Q_e^C(p)$ at $p\in\Lambda_e$.
 \end{definition}
 
-\begin{theorem}[Interior representation columns and exterior full ranges]%
+\begin{lemma}[Interior representation columns and exterior full ranges]%
     \label{thm:peps_open_bond_ranges}
     \lean{TNLean.PEPS.DependentBondNetwork.bondMatrix_range_le_openBondMatrix_range,
         TNLean.PEPS.DependentBondNetwork.openBondMatrix_range_eq_top}
@@ -226,7 +226,7 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     If $e\notin C$, then
     $\operatorname{im}F_e\subseteq\operatorname{im}\widetilde F_e^C$; if
     $e\in C$, then $\operatorname{im}\widetilde F_e^C=\C^{X_e\times X_e}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_open_bond_generators}
     By (\ref{eq:peps_open_bond_columns}), extending $c\in\C^G$ by $0$ on
@@ -235,7 +235,7 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     $\widetilde F_e^Cc=\sum_{a,b}x_{a,b}E_{a,b}=x$.
 \end{proof}
 
-\begin{theorem}[A coherent expansion with a free exterior]%
+\begin{lemma}[A coherent expansion with a free exterior]%
     \label{thm:peps_open_bond_expansion}
     \lean{TNLean.PEPS.DependentBondNetwork.exists_openBondCoefficients_of_slices}
     \leanok
@@ -247,10 +247,10 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
         c(p)\,b_{(Q_e^C(p_e))_e}.
         \label{eq:peps_open_bond_expansion}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_open_bond_ranges}
-    By Theorem~\ref{thm:peps_open_bond_ranges}, every bond slice of
+    By Lemma~\ref{thm:peps_open_bond_ranges}, every bond slice of
     $\mathcal R\psi$ lies in $\operatorname{im}\widetilde F_e^C$, so the
     product-range criterion gives $\mathcal R\psi=(\bigotimes_e\widetilde F_e^C)c$;
     applying $\mathcal R^{-1}$ yields (\ref{eq:peps_open_bond_expansion}).
@@ -259,60 +259,60 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
 \subsection{Open cut intersections from removable internal labels}
 \label{sec:peps_dependent_open_intersection}
 
-\begin{theorem}[Identity insertions away from a cut]%
+\begin{lemma}[Identity insertions away from a cut]%
     \label{thm:peps_network_in_open_cut}
     \lean{TNLean.PEPS.DependentBondNetwork.network_mem_cutSpace_of_eq_one}
     \leanok
     If $B_e=I$ for all $e\notin C$, then $\mathcal N_A(B)\in\mathcal S_{A,C}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For $M_B(\eta)=\prod_{e\in C}B_e(\eta_{e,+},\eta_{e,-})$,
     (\ref{eq:peps_open_network_notation}) and (\ref{eq:peps_open_cut_notation})
     give $\mathcal C_{A,C}(M_B)=\mathcal N_A(B)$.
 \end{proof}
 
-\begin{theorem}[Monotonicity under additional cuts]%
+\begin{lemma}[Monotonicity under additional cuts]%
     \label{thm:peps_cut_space_mono}
     \lean{TNLean.PEPS.DependentBondNetwork.cutSpace_mono}
     \leanok
     If $C\subseteq C'$, then
     $\mathcal S_{A,C}\subseteq\mathcal S_{A,C'}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_network_in_open_cut}
     Each coordinate-basis column of $\mathcal C_{A,C}$ is a network
     $\mathcal N_A(B)$ with $B_e=I$ for $e\notin C$ (hence for $e\notin C'$), so
-    it lies in $\mathcal S_{A,C'}$ by Theorem~\ref{thm:peps_network_in_open_cut}.
+    it lies in $\mathcal S_{A,C'}$ by Lemma~\ref{thm:peps_network_in_open_cut}.
 \end{proof}
 
-\begin{theorem}[Physical images of cut ranges]%
+\begin{lemma}[Physical images of cut ranges]%
     \label{thm:peps_cut_space_physical_image}
     \lean{TNLean.PEPS.DependentBondNetwork.map_cutSpace}
     \leanok
     For finite $Y_v$ and linear maps $F_v:\C^{Y_v}\to\C^{Z_v}$,
     $(\bigotimes_v F_v)(\mathcal S_{A,C})=\mathcal S_{FA,C}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By (\ref{eq:peps_open_cut_notation}),
     $(\bigotimes_vF_v)\mathcal C_{A,C}(M)=\mathcal C_{FA,C}(M)$ for all $M$;
     taking images gives the claim.
 \end{proof}
 
-\begin{theorem}[Averaging bare bond products]%
+\begin{lemma}[Averaging bare bond products]%
     \label{thm:peps_average_bond_product}
     \lean{TNLean.PEPS.DependentBondNetwork.averagingProjector_matrixBondProduct}
     \leanok
     For representations $\rho_v$ on $\C^{\mathcal X_v}$ with averaging tensors
     $A^0$ and $\mathcal P=\bigotimes_v P_v$, every matrix family $B$ satisfies
     $\mathcal P b_B=\mathcal N_{A^0}(B)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $b_B=\mathcal N_I(B)$ and $P_vI=A_v^0$, applying
     $\mathcal P=\bigotimes_vP_v$ to (\ref{eq:peps_open_network_notation}) gives
     $\mathcal P b_B=\mathcal N_{A^0}(B)$.
 \end{proof}
 
-\begin{theorem}[Removing internal labels after averaging]%
+\begin{lemma}[Removing internal labels after averaging]%
     \label{thm:peps_open_product_in_cut}
     \lean{TNLean.PEPS.DependentBondNetwork.averagingProjector_openBondProduct_mem_cutSpace}
     \leanok
@@ -328,22 +328,22 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     With $\mathcal P^f=\bigotimes_vP_v^f$, every
     $a\in\prod_e\Lambda_e$ satisfies
     $\mathcal P^f b_{(Q_e^C(a_e))_e}\in\mathcal S_{A^f,C}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_average_bond_product,
         thm:peps_partial_vertex_gauge,
         thm:peps_network_in_open_cut}
     Set $p_e=g$ if $a_e=[g]$ and $p_e=1$ if $a_e=[x,y]$, and choose $q$
     satisfying (\ref{eq:peps_open_remove_labels}). By
-    Theorems~\ref{thm:peps_average_bond_product}
+    Lemmas~\ref{thm:peps_average_bond_product}
     and~\ref{thm:peps_partial_vertex_gauge},
     $\mathcal P^f b_{(Q_e^C(a_e))_e}=\mathcal N_{A^f}(Q^C(a))=\mathcal N_{A^f}((Q^C(a))^f(q))$,
     whose interior bond matrices are
     $U_e(f_{h(e)}(q_{h(e)})p_ef_{t(e)}(q_{t(e)})^{-1})=I$ for $e\notin C$, so
-    Theorem~\ref{thm:peps_network_in_open_cut} places it in $\mathcal S_{A^f,C}$.
+    Lemma~\ref{thm:peps_network_in_open_cut} places it in $\mathcal S_{A^f,C}$.
 \end{proof}
 
-\begin{theorem}[Intersection of partially averaged open cut ranges]%
+\begin{lemma}[Intersection of partially averaged open cut ranges]%
     \label{thm:peps_partial_open_cut_intersection}
     \lean{TNLean.PEPS.DependentBondNetwork.iInf_partialCutSpace_eq_of_remove_labels}
     \leanok
@@ -357,7 +357,7 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
         =\mathcal S_{A^f,C_0}.
         \label{eq:peps_partial_open_intersection}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_partial_uncut_support,
         thm:peps_open_bond_expansion,
@@ -365,11 +365,11 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
         thm:peps_cut_space_mono}
     If $\psi\in\bigcap_{i\in I}\mathcal S_{A^f,C_i}$, then for each $e\notin C_0$
     choosing $i$ with $e\notin C_i$ gives $S_{e,\tau}\psi\in\operatorname{im}F_e$
-    by Theorem~\ref{thm:peps_partial_uncut_support}, so
-    Theorem~\ref{thm:peps_open_bond_expansion} yields
+    by Lemma~\ref{thm:peps_partial_uncut_support}, so
+    Lemma~\ref{thm:peps_open_bond_expansion} yields
     $\psi=\sum_a c(a)b_{Q^{C_0}(a)}$. Since $I\ne\varnothing$ and
     $(P_v^f)^2=P_v^f$, $\mathcal P^f\psi=\psi$, and
-    Theorem~\ref{thm:peps_open_product_in_cut} gives
+    Lemma~\ref{thm:peps_open_product_in_cut} gives
     \begin{align}
         \psi=\sum_a c(a)\mathcal P^f b_{Q^{C_0}(a)}
         \in\mathcal S_{A^f,C_0}.
@@ -377,31 +377,31 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     \end{align}
     Conversely, $C_0\subseteq C_i$ implies
     $\mathcal S_{A^f,C_0}\subseteq\mathcal S_{A^f,C_i}$ by
-    Theorem~\ref{thm:peps_cut_space_mono}.
+    Lemma~\ref{thm:peps_cut_space_mono}.
 \end{proof}
 
-\begin{theorem}[Open cut intersection for invariant injective tensors]%
+\begin{lemma}[Open cut intersection for invariant injective tensors]%
     \label{thm:peps_open_cut_intersection}
     \lean{TNLean.PEPS.DependentBondNetwork.iInf_cutSpace_eq_of_remove_labels}
     \leanok
     \uses{def:peps_partial_incident_representation,
         def:peps_g_injective}
     Suppose every $Y_v$ is finite and $T_v$ is $G$-injective for $\rho_v^f$.
-    Under the hypotheses of Theorem~\ref{thm:peps_partial_open_cut_intersection}
+    Under the hypotheses of Lemma~\ref{thm:peps_partial_open_cut_intersection}
     on $(C_i)_{i\in I}$ and $C_0$,
     \begin{align}
         \bigcap_{i\in I}\mathcal S_{A,C_i}=\mathcal S_{A,C_0}.
         \label{eq:peps_open_cut_intersection}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_g_injective_left_inverse,
         thm:peps_partial_open_cut_intersection,
         thm:peps_cut_space_physical_image}
     Set $\mathcal T=\bigotimes_vT_v$, choose $L_v$ with $L_vT_v=P_v^f$ by
-    Theorem~\ref{thm:peps_g_injective_left_inverse}, and put
+    Lemma~\ref{thm:peps_g_injective_left_inverse}, and put
     $\mathcal L=\bigotimes_vL_v$. Since $L_vT_v=P_v^f$ and $T_vP_v^f=T_v$,
-    Theorem~\ref{thm:peps_cut_space_physical_image} gives
+    Lemma~\ref{thm:peps_cut_space_physical_image} gives
     $\mathcal L(\mathcal S_{A,C})=\mathcal S_{A^f,C}$,
     $\mathcal T(\mathcal S_{A^f,C})=\mathcal S_{A,C}$, and
     $\mathcal T\mathcal L|_{\mathcal S_{A,C}}=\Id$. Applying
@@ -453,7 +453,7 @@ outside $\Omega$ as part of one joint boundary.
     with range $\widehat{\mathcal S}_{A,\Omega,C}=\operatorname{im}\widehat\Gamma_{A,\Omega,C}$.
 \end{definition}
 
-\begin{theorem}[Regional slices lie in local tensor ranges]%
+\begin{lemma}[Regional slices lie in local tensor ranges]%
     \label{thm:peps_lifted_cut_local_slice}
     \lean{TNLean.PEPS.DependentBondNetwork.liftedCutMap_slice_mem_range,
         TNLean.PEPS.DependentBondNetwork.slice_mem_range_of_mem_liftedCutSpace}
@@ -463,7 +463,7 @@ outside $\Omega$ as part of one joint boundary.
     physical slice $s\mapsto\psi(\sigma[v\leftarrow s])$ lies in
     $\operatorname{im}T_v$; in particular this holds for
     $\psi=\widehat\Gamma_{A,\Omega,C}(M)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_lifted_cut,
         def:peps_outside_physical_config}
@@ -482,7 +482,7 @@ outside $\Omega$ as part of one joint boundary.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Covering regions force product physical support]%
+\begin{lemma}[Covering regions force product physical support]%
     \label{thm:peps_lifted_cover_support}
     \lean{TNLean.PEPS.DependentBondNetwork.iInf_liftedCutSpace_le_range_product}
     \leanok
@@ -496,10 +496,10 @@ outside $\Omega$ as part of one joint boundary.
         \subseteq\mathcal H_A.
         \label{eq:peps_lifted_cover_support}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_lifted_cut_local_slice}
-    By Theorem~\ref{thm:peps_lifted_cut_local_slice} (when $v\in\Omega_i$) or
+    By Lemma~\ref{thm:peps_lifted_cut_local_slice} (when $v\in\Omega_i$) or
     surjectivity of $T_v$, every slice at $v$ lies in $\operatorname{im}T_v$,
     so the product-range criterion yields (\ref{eq:peps_lifted_cover_support}).
 \end{proof}
@@ -516,7 +516,7 @@ outside $\Omega$ as part of one joint boundary.
     $o_v(r_C\beta)=(R\beta)_v$.
 \end{definition}
 
-\begin{theorem}[Full cut ranges lie in the lifted range and local support]%
+\begin{lemma}[Full cut ranges lie in the lifted range and local support]%
     \label{thm:peps_full_cut_in_lifted_support}
     \lean{TNLean.PEPS.DependentBondNetwork.cutSpace_le_liftedCutSpace,
         TNLean.PEPS.DependentBondNetwork.cutSpace_le_range_product}
@@ -527,7 +527,7 @@ outside $\Omega$ as part of one joint boundary.
     $\mathcal S_{A,C}\subseteq\widehat{\mathcal S}_{A,\Omega,C}$.
     For every cut $C$,
     $\mathcal S_{A,C}\subseteq\operatorname{im}(\bigotimes_vT_v)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_outside_cut_config,
         def:peps_lifted_cut}
@@ -587,7 +587,7 @@ outside $\Omega$ as part of one joint boundary.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Contraction of the reconstructed boundary]%
+\begin{lemma}[Contraction of the reconstructed boundary]%
     \label{thm:peps_reconstructed_boundary_contraction}
     \lean{TNLean.PEPS.DependentBondNetwork.cutMap_reconstructedCutBoundary}
     \leanok
@@ -604,7 +604,7 @@ outside $\Omega$ as part of one joint boundary.
             \psi_\sigma\right](\sigma_{\Omega^c}).
         \label{eq:peps_reconstructed_contraction}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_reconstructed_cut_boundary,
         def:peps_lifted_cut,
@@ -624,7 +624,7 @@ outside $\Omega$ as part of one joint boundary.
     and interchanging the remaining sums gives (\ref{eq:peps_reconstructed_contraction}).
 \end{proof}
 
-\begin{theorem}[Full cut reconstruction inside product physical support]%
+\begin{lemma}[Full cut reconstruction inside product physical support]%
     \label{thm:peps_lifted_cut_reconstruction}
     \lean{TNLean.PEPS.DependentBondNetwork.cutSpace_eq_liftedCutSpace_inf_range_product,
         TNLean.PEPS.DependentBondNetwork.liftedCutSpace_inf_range_product_le_cutSpace}
@@ -638,11 +638,11 @@ outside $\Omega$ as part of one joint boundary.
         =\widehat{\mathcal S}_{A,\Omega,C}\cap\mathcal H_A.
         \label{eq:peps_lifted_reconstruction}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_full_cut_in_lifted_support,
         thm:peps_reconstructed_boundary_contraction}
-    Theorem~\ref{thm:peps_full_cut_in_lifted_support} gives
+    Lemma~\ref{thm:peps_full_cut_in_lifted_support} gives
     $\mathcal S_{A,C}\subseteq\widehat{\mathcal S}_{A,\Omega,C}\cap\mathcal H_A$.
     Conversely, for $\psi=\widehat\Gamma_{A,\Omega,C}(M)\in\mathcal H_A$,
     choose $L_v:\C^{Y_v}\to\C^{\mathcal X_v}$ ($v\notin\Omega$) with
@@ -656,7 +656,7 @@ outside $\Omega$ as part of one joint boundary.
 \subsection{Intersections of lifted regional ranges}
 \label{sec:peps_lifted_cut_intersection}
 
-\begin{theorem}[Covering lifted intersections equal full cut intersections]%
+\begin{lemma}[Covering lifted intersections equal full cut intersections]%
     \label{thm:peps_lifted_cut_intersection}
     \lean{TNLean.PEPS.DependentBondNetwork.iInf_liftedCutSpace_eq_iInf_cutSpace,
         TNLean.PEPS.DependentBondNetwork.liftedCutSpace_eq_cutSpace_of_cover_or_surjective,
@@ -681,18 +681,18 @@ outside $\Omega$ as part of one joint boundary.
         =\mathcal S_{A,C}\cap\mathcal S_{A,E}.
         \label{eq:peps_two_lifted_intersection}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_lifted_cover_support,
         thm:peps_lifted_cut_reconstruction,
         thm:peps_full_cut_in_lifted_support}
     Combine (\ref{eq:peps_lifted_cover_support}) and
     (\ref{eq:peps_lifted_reconstruction}) with
-    Theorem~\ref{thm:peps_full_cut_in_lifted_support}; the one- and two-region
+    Lemma~\ref{thm:peps_full_cut_in_lifted_support}; the one- and two-region
     identities are the $|I|=1,2$ cases of (\ref{eq:peps_lifted_intersection}).
 \end{proof}
 
-\begin{theorem}[Canonical reduction of a lifted intersection]%
+\begin{lemma}[Canonical reduction of a lifted intersection]%
     \label{thm:peps_lifted_canonical_intersection}
     \lean{TNLean.PEPS.DependentBondNetwork.iInf_liftedCutSpace_eq_map_representationAveragingSite}
     \leanok
@@ -701,19 +701,19 @@ outside $\Omega$ as part of one joint boundary.
     Let $G$ be finite, suppose every $Y_v$ is finite, and let $T_v$ be
     $G$-injective for $\rho_v$ with averaging tensors $A^0$. For a nonempty
     family $(\Omega_i,C_i)_{i\in I}$ satisfying the hypotheses of
-    Theorem~\ref{thm:peps_lifted_cut_intersection} and
+    Lemma~\ref{thm:peps_lifted_cut_intersection} and
     $\mathcal T=\bigotimes_vT_v$,
     \begin{align}
         \bigcap_{i\in I}\widehat{\mathcal S}_{A,\Omega_i,C_i}
         =\mathcal T\left(\bigcap_{i\in I}\mathcal S_{A^0,C_i}\right).
         \label{eq:peps_lifted_canonical_intersection}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_g_injective_left_inverse,
         thm:peps_lifted_cut_intersection}
     Choose $L_v$ with $L_vT_v=P_v$ by
-    Theorem~\ref{thm:peps_g_injective_left_inverse} and set
+    Lemma~\ref{thm:peps_g_injective_left_inverse} and set
     $\mathcal L=\bigotimes_vL_v$. Since $L_vT_v=P_v$ and $T_vP_v=T_v$,
     $\mathcal L\mathcal C_{A,C}(M)=\mathcal C_{A^0,C}(M)$ and
     $\mathcal T\mathcal C_{A^0,C}(M)=\mathcal C_{A,C}(M)$ for all $C,M$, so
@@ -722,14 +722,14 @@ outside $\Omega$ as part of one joint boundary.
     (\ref{eq:peps_lifted_canonical_intersection}).
 \end{proof}
 
-\begin{theorem}[A common inverse realizes canonical membership and recovery]%
+\begin{lemma}[A common inverse realizes canonical membership and recovery]%
     \label{thm:peps_lifted_common_inverse}
     \lean{TNLean.PEPS.DependentBondNetwork.exists_liftedCutSpace_common_localInverse}
     \leanok
     \uses{def:peps_lifted_cut,
         def:peps_g_injective}
     Under the hypotheses of
-    Theorem~\ref{thm:peps_lifted_canonical_intersection}, there exists
+    Lemma~\ref{thm:peps_lifted_canonical_intersection}, there exists
     $L_v:\C^{Y_v}\to\C^{\mathcal X_v}$ with $\mathcal L=\bigotimes_vL_v$ such
     that for every cut $C$, boundary $M$, and
     $\psi\in\bigcap_i\widehat{\mathcal S}_{A,\Omega_i,C_i}$,
@@ -741,12 +741,12 @@ outside $\Omega$ as part of one joint boundary.
         \mathcal T\mathcal L\psi      & =\psi.
         \nonumber
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_g_injective_left_inverse,
         thm:peps_lifted_cut_intersection}
     Choosing $L_v$ with $L_vT_v=P_v$ by
-    Theorem~\ref{thm:peps_g_injective_left_inverse} gives
+    Lemma~\ref{thm:peps_g_injective_left_inverse} gives
     (\ref{eq:peps_lifted_inverse_boundary}). For
     $\psi\in\bigcap_i\widehat{\mathcal S}_{A,\Omega_i,C_i}=\bigcap_i\mathcal S_{A,C_i}$
     by (\ref{eq:peps_lifted_intersection}), writing $\psi=\mathcal C_{A,C_i}(M_i)$

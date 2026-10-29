@@ -20,7 +20,7 @@ The two separated contractions in \cite[proof of Theorem~5.2]{OpenAI2026Polynomi
     enumerated as $i\mapsto e_i$ ($0\le i<r$), with grouped endpoints and fixed halfspaces $\C^{u_{e_i}},\C^{v_{e_i}}$.
 \end{definition}
 
-\begin{theorem}[The common ordered register spaces]
+\begin{lemma}[The common ordered register spaces]
     \label{thm:peps_partial_fixed_layout}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.mem_partialPositions_iff}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSlotEquiv_apply}
@@ -30,15 +30,15 @@ The two separated contractions in \cite[proof of Theorem~5.2]{OpenAI2026Polynomi
     \leanok
     \uses{def:peps_partial_fixed_positions,thm:peps_partial_source_order}
     At reference index $i$, the source has distinct grouped endpoints from $e_i$ and halfspaces $\C^{u_{e_i}},\C^{v_{e_i}}$. Every partial branch $\xi\in\Xi_{\mathcal A}$ has this exact ordered source-register layout, and $e\in\mathcal E_{\mathcal A}$ if and only if $p_e\in\mathcal A$ or $q_e\in\mathcal A$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_source_circuit_incidence,thm:peps_affected_owner_equality,
         thm:peps_partial_source_order}
-    Combine Theorem~\ref{thm:peps_source_circuit_incidence}, Theorem~\ref{thm:peps_affected_owner_equality}, and Theorem~\ref{thm:peps_partial_source_order} on the filtered list (\ref{eq:peps_partial_fixed_positions}).
+    Combine Lemma~\ref{thm:peps_source_circuit_incidence}, Lemma~\ref{thm:peps_affected_owner_equality}, and Lemma~\ref{thm:peps_partial_source_order} on the filtered list (\ref{eq:peps_partial_fixed_positions}).
 \end{proof}
 
-\begin{theorem}[Preparation in the fixed chronological sources]
+\begin{lemma}[Preparation in the fixed chronological sources]
     \label{thm:peps_partial_fixed_preparation}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_partial_source_preparation}
     \leanok
@@ -55,12 +55,12 @@ The two separated contractions in \cite[proof of Theorem~5.2]{OpenAI2026Polynomi
         W_\xi=V_\xi P_{\eta_\xi}.
         \label{eq:peps_partial_fixed_preparation}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_partial_source_inventory,thm:peps_partial_fixed_layout,
         thm:peps_source_preparation,thm:peps_common_source_lists}
-    Transport the normalized source inventory of Theorem~\ref{thm:peps_partial_source_inventory} along the common layout of Theorem~\ref{thm:peps_partial_fixed_layout} and Theorem~\ref{thm:peps_common_source_lists}, then apply Theorem~\ref{thm:peps_source_preparation}.
+    Transport the normalized source inventory of Lemma~\ref{thm:peps_partial_source_inventory} along the common layout of Lemma~\ref{thm:peps_partial_fixed_layout} and Lemma~\ref{thm:peps_common_source_lists}, then apply Lemma~\ref{thm:peps_source_preparation}.
 \end{proof}
 
 \begin{definition}[The original label and vector at a position]
@@ -79,7 +79,7 @@ The two separated contractions in \cite[proof of Theorem~5.2]{OpenAI2026Polynomi
     \end{align}
 \end{definition}
 
-\begin{theorem}[Recovery of the locally selected source vectors]
+\begin{lemma}[Recovery of the locally selected source vectors]
     \label{thm:peps_partial_original_source_vector}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceVectorAt_norm}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isTouched_of_source_endpoint}
@@ -88,16 +88,16 @@ The two separated contractions in \cite[proof of Theorem~5.2]{OpenAI2026Polynomi
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_partial_source_preparation_with_original_vectors}
     \leanok
     \uses{def:peps_partial_original_source_vector,thm:peps_partial_fixed_preparation}
-    Every $e_i\in\mathcal E_{\mathcal A}$ belongs to a touched gate $g_i$, $\|\nu_{e,\alpha}\|=1$, and (\ref{eq:peps_partial_fixed_preparation}) of Theorem~\ref{thm:peps_partial_fixed_preparation} holds with $\eta_{\xi,i}=\eta^{\mathrm{orig}}_{\xi,i}$ from (\ref{eq:peps_partial_original_source_vector}), which depends only on $\xi_{g_i}$.
-\end{theorem}
+    Every $e_i\in\mathcal E_{\mathcal A}$ belongs to a touched gate $g_i$, $\|\nu_{e,\alpha}\|=1$, and (\ref{eq:peps_partial_fixed_preparation}) of Lemma~\ref{thm:peps_partial_fixed_preparation} holds with $\eta_{\xi,i}=\eta^{\mathrm{orig}}_{\xi,i}$ from (\ref{eq:peps_partial_original_source_vector}), which depends only on $\xi_{g_i}$.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_source_circuit_incidence,thm:peps_partial_source_order,
         thm:peps_partial_fixed_layout,thm:peps_partial_fixed_preparation}
-    By Theorem~\ref{thm:peps_source_circuit_incidence}, $e_i\in\mathcal E_{\mathcal A}$ implies $C_{g_i}\cap\mathcal A\ne\varnothing$, and comparing the ordered source inventory (Theorem~\ref{thm:peps_partial_source_order}) with the common layout (Theorem~\ref{thm:peps_partial_fixed_layout}) identifies the $i$th prepared vector in (\ref{eq:peps_partial_fixed_preparation}) with $\eta^{\mathrm{orig}}_{\xi,i}$.
+    By Lemma~\ref{thm:peps_source_circuit_incidence}, $e_i\in\mathcal E_{\mathcal A}$ implies $C_{g_i}\cap\mathcal A\ne\varnothing$, and comparing the ordered source inventory (Lemma~\ref{thm:peps_partial_source_order}) with the common layout (Lemma~\ref{thm:peps_partial_fixed_layout}) identifies the $i$th prepared vector in (\ref{eq:peps_partial_fixed_preparation}) with $\eta^{\mathrm{orig}}_{\xi,i}$.
 \end{proof}
 
-\begin{theorem}[Two contractions for the prepared sources]
+\begin{lemma}[Two contractions for the prepared sources]
     \label{thm:peps_actual_source_selective_partition}
     \lean{TNLean.Lattice.PartyCircuit.Word.exists_selective_partition_of_word}
     \leanok
@@ -118,12 +118,12 @@ The two separated contractions in \cite[proof of Theorem~5.2]{OpenAI2026Polynomi
         \notag
     \end{align}
     and taking the original free vectors recovers $VP_{\mathrm{fill}(\zeta)}=W$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_source_preparation,thm:peps_selective_preparation_recovery,
         thm:peps_selective_partition}
-    Write $W=VP_\eta$ by Theorem~\ref{thm:peps_source_preparation} and apply Theorem~\ref{thm:peps_selective_partition} and Theorem~\ref{thm:peps_selective_preparation_recovery} to the internal unit vectors prepared by $P_{\mathrm{fix}}$.
+    Write $W=VP_\eta$ by Lemma~\ref{thm:peps_source_preparation} and apply Lemma~\ref{thm:peps_selective_partition} and Lemma~\ref{thm:peps_selective_preparation_recovery} to the internal unit vectors prepared by $P_{\mathrm{fix}}$.
 \end{proof}
 
 \begin{definition}[Choices as labels at touched occurrences]
@@ -139,7 +139,7 @@ The two separated contractions in \cite[proof of Theorem~5.2]{OpenAI2026Polynomi
     For affected parties $\mathcal A$, $\xi\mapsto(\xi_g)_{g:\,C_g\cap\mathcal A\neq\varnothing}$ defines a bijection $\Xi_{\mathcal A}\cong\prod_{g:\,C_g\cap\mathcal A\neq\varnothing}\Xi_g$; at $\mathcal A=P$, with $\mathcal G^+=\{g:C_g\neq\varnothing\}$, this is $\Xi_P\cong\prod_{g\in\mathcal G^+}\Xi_g$, and restriction gives the projection $\pi_{\mathcal A}\colon\Xi_P\to\Xi_{\mathcal A}$.
 \end{definition}
 
-\begin{theorem}[Projected choices keep the original labels]
+\begin{lemma}[Projected choices keep the original labels]
     \label{thm:peps_touched_labels}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.choiceAt_projectAllChoices}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.choiceAt_choicesOfTouchedLabels}
@@ -149,13 +149,13 @@ The two separated contractions in \cite[proof of Theorem~5.2]{OpenAI2026Polynomi
     \leanok
     \uses{def:peps_touched_labels}
     For $\xi\in\Xi_P$ and $g$ with $C_g\cap\mathcal A\ne\varnothing$, $(\pi_{\mathcal A}\xi)_g=\xi_g$; moreover, $C_g\cap P\ne\varnothing\iff C_g\ne\varnothing$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     By structural induction on the chronological composition, touched gates retain $\xi_g$ while untouched gates have singleton choice sets.
 \end{proof}
 
-\begin{theorem}[Labels visible at one party]
+\begin{lemma}[Labels visible at one party]
     \label{thm:peps_incident_gate_labels}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partySelector_affectedOwner_all_apply}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isTouched_groupedParty_iff}
@@ -166,13 +166,13 @@ The two separated contractions in \cite[proof of Theorem~5.2]{OpenAI2026Polynomi
     \leanok
     \uses{thm:peps_touched_labels,def:compression_operator_gate_labels}
     For $p\in P$, the occurrences touched by $\mathcal A=\{p\}$ are $\{g\in\mathcal G^+:p\in C_g\}$, giving $\Xi_{\{p\}}\cong\prod_{g\in\mathcal G^+,\,p\in C_g}\Xi_g$ with $(\pi_{\{p\}}\xi)_g=(\xi_p)_g=\xi_g$ for all $\xi\in\Xi_P$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    Apply Theorem~\ref{thm:peps_touched_labels} at $\mathcal A=\{p\}$.
+    Apply Lemma~\ref{thm:peps_touched_labels} at $\mathcal A=\{p\}$.
 \end{proof}
 
-\begin{theorem}[Coefficients factor over participating occurrences]
+\begin{lemma}[Coefficients factor over participating occurrences]
     \label{thm:peps_chronological_coefficients}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.coefficient_eq_prod_dite}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.coefficient_all_eq_prod_nonemptyGateLocations}
@@ -184,13 +184,13 @@ The two separated contractions in \cite[proof of Theorem~5.2]{OpenAI2026Polynomi
         \label{eq:peps_chronological_coefficients}
     \end{align}
     (\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, \texttt{04-compression.tex}, lines 351--381 and 565--573).
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Induction on the chronological composition multiplies coefficients over disjoint occurrence sets, with untouched occurrences contributing $1$.
 \end{proof}
 
-\begin{theorem}[Mixed coefficients at the original gate occurrences]
+\begin{lemma}[Mixed coefficients at the original gate occurrences]
     \label{thm:peps_mixed_chronological_coefficients}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.coefficient_all_mul_conj_eq_prod_nonemptyGateLocations}
     \leanok
@@ -203,13 +203,13 @@ The two separated contractions in \cite[proof of Theorem~5.2]{OpenAI2026Polynomi
         \label{eq:peps_mixed_chronological_coefficients}
     \end{align}
     (\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, \texttt{04-compression.tex}, lines 351--381 and 565--573).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_chronological_coefficients}
     Multiply (\ref{eq:peps_chronological_coefficients}) for $\xi$ by the complex conjugate of (\ref{eq:peps_chronological_coefficients}) for $\zeta$.
 \end{proof}
 
-\begin{theorem}[Reindexing the mixed expansion by gate labels]
+\begin{lemma}[Reindexing the mixed expansion by gate labels]
     \label{thm:peps_mixed_gate_label_sum}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_coefficient_all_mul_conj_smul_eq_sum_nonemptyGateLabels}
     \leanok
@@ -225,7 +225,7 @@ The two separated contractions in \cite[proof of Theorem~5.2]{OpenAI2026Polynomi
         \label{eq:peps_mixed_gate_label_sum}
     \end{align}
     (\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, \texttt{04-compression.tex}, lines 351--381 and 565--573).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_touched_labels,thm:peps_mixed_chronological_coefficients}
     Substitute (\ref{eq:peps_mixed_chronological_coefficients}) and reindex by $(\eta,\theta)=(e\xi,e\zeta)$.

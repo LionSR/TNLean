@@ -36,7 +36,7 @@ with single-site operators and finite-range scalar factors
     \cite[lines 1024--1039]{Hastings2006Solving}.
 \end{definition}
 
-\begin{theorem}[Operators supported near a specified centre]
+\begin{lemma}[Operators supported near a specified centre]
     \label{thm:hastings_product_form_supported_radius}
     \lean{TNLean.Lattice.hasProductForm_of_mem_supportedOperators_radius}
     \leanok
@@ -44,7 +44,7 @@ with single-site operators and finite-range scalar factors
     If $i_0\in\Lambda$ and $X\subseteq\{j\in\Lambda:d_\Lambda(i_0,j)\le R\}$,
     then every operator supported on $X$ has a matrix product form of range $R$
     \cite[lines 1053--1061]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Take $\mathcal A=\{1,\dots,q\}^2$ and $\rho_j(a_j,b_j)=|a_j\rangle\langle b_j|$;
     place the $X$-matrix element of the operator in $F_{i_0}$ (which depends
@@ -52,20 +52,20 @@ with single-site operators and finite-range scalar factors
     $j\notin X$, so (\ref{eq:hastings_mpf}) holds entrywise.
 \end{proof}
 
-\begin{theorem}[Operators supported on a small set]
+\begin{lemma}[Operators supported on a small set]
     \label{thm:hastings_product_form_supported}
     \lean{TNLean.Lattice.hasProductForm_of_mem_supportedOperators}
     \leanok
     \uses{thm:hastings_product_form_supported_radius}
     If $\emptyset\ne X\subseteq\Lambda$ satisfies $\operatorname{diam}X\le R$,
     then every operator supported on $X$ has a matrix product form of range $R$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Pick $i_0\in X$ and apply
-    Theorem~\ref{thm:hastings_product_form_supported_radius}.
+    Lemma~\ref{thm:hastings_product_form_supported_radius}.
 \end{proof}
 
-\begin{theorem}[Products of matrix product forms]
+\begin{lemma}[Products of matrix product forms]
     \label{thm:hastings_product_form_mul}
     \lean{
         TNLean.Lattice.HasProductForm.mul,
@@ -77,7 +77,7 @@ with single-site operators and finite-range scalar factors
     \uses{def:hastings_product_form}
     Operators with matrix product forms of range $l$ contain $1$ and are closed
     under multiplication, finite ordered products, and powers.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For forms over $\mathcal A$ and $\mathcal B$, take index set
     $\mathcal A\times\mathcal B$, site operators $\rho_j(a)\sigma_j(b)$, and
@@ -85,7 +85,7 @@ with single-site operators and finite-range scalar factors
     \cite[lines 1068--1077]{Hastings2006Solving}.
 \end{proof}
 
-\begin{theorem}[Trotter products with prescribed centres]
+\begin{lemma}[Trotter products with prescribed centres]
     \label{thm:hastings_trotter_product_form_radius}
     \lean{TNLean.Lattice.hasProductForm_trotterProduct_of_radius}
     \leanok
@@ -99,14 +99,14 @@ with single-site operators and finite-range scalar factors
     \end{align}
     has a matrix product form of range $R$
     \cite[lines 1053--1077]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each $\exp(-\tfrac\beta nH_{i_k})$ is supported on $X_{i_k}$; apply
-    Theorems~\ref{thm:hastings_product_form_supported_radius}
+    Lemmas~\ref{thm:hastings_product_form_supported_radius}
     and~\ref{thm:hastings_product_form_mul}.
 \end{proof}
 
-\begin{theorem}[Trotter products have a matrix product form]
+\begin{lemma}[Trotter products have a matrix product form]
     \label{thm:hastings_trotter_product_form}
     \lean{
         TNLean.Lattice.LocalHamiltonian.hasProductForm_trotterProduct,
@@ -130,44 +130,8 @@ with single-site operators and finite-range scalar factors
     \end{align}
     has a matrix product form of range $R$
     \cite[lines 1048--1077]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Combine Theorems~\ref{thm:hastings_product_form_supported}
+    Combine Lemmas~\ref{thm:hastings_product_form_supported}
     and~\ref{thm:hastings_product_form_mul}.
-\end{proof}
-
-\begin{theorem}[The truncated operator in matrix product form]
-    \label{thm:hastings_truncated_product_form}
-    \lean{TNLean.Lattice.ClusterExpansion.IsLargeWalk,
-        TNLean.Lattice.ClusterExpansion.noncommProd_apply_of_pairwiseDisjoint,
-        TNLean.Lattice.ClusterExpansion.noLargeCluster_iff_filter,
-        TNLean.Lattice.ClusterExpansion.truncatedExp_eq_mul,
-        TNLean.Lattice.ClusterExpansion.sum_clusterOp_apply,
-        TNLean.Lattice.ClusterExpansion.isLocalCoefficient_clusterCoeff,
-        TNLean.Lattice.ClusterExpansion.sum_prod_clusterCoeff,
-        TNLean.Lattice.ClusterExpansion.hasProductForm_sum_clusterOp,
-        TNLean.Lattice.ClusterExpansion.hasProductForm_truncatedExp}
-    \leanok
-    \uses{def:hastings_product_form, def:hastings_truncated_expansion,
-        def:hastings_cluster_of_terms}
-    On $\Lambda\ne\emptyset$, if each $H_k$ acts on $S_k$ and $T$ consists of
-    overlap-connected sets $C$ with $\operatorname{diam}(\bigcup_{k\in C}S_k)>l$,
-    then $\rho(\beta,l)$ has a matrix product form of range $l$
-    \cite[lines 1256--1279]{Hastings2006Solving},
-    \cite{gap:hastings05_planar_domain_scope}.
-\end{theorem}
-\begin{proof}
-    \leanok
-    \uses{thm:hastings_truncation_cluster_products,
-        thm:hastings_cluster_operator_support,
-        thm:hastings_product_form_supported_radius, thm:hastings_product_form_mul}
-    By Theorems~\ref{thm:hastings_truncation_cluster_products}
-    and~\ref{thm:hastings_cluster_operator_support},
-    $\rho(\beta,l)=\sum_A\prod_{C\in\mathrm{clusters}(A)}E_C$, where empty-support
-    terms factor out as a scalar multiple of $1$ and each remaining cluster $C$
-    acts on $S_C=\bigcup_{k\in C}S_k$ with $\operatorname{diam}S_C\le l$ and
-    pairwise disjoint $S_C$. Indexing each site by its containing cluster (if
-    any) and matrix-unit labels $(a_j,b_j)$ expresses $\sum_A\prod_CE_C$ in the
-    form (\ref{eq:hastings_mpf}) of range $l$; conclude by
-    Theorem~\ref{thm:hastings_product_form_mul}.
 \end{proof}
