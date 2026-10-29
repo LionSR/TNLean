@@ -27,6 +27,12 @@ at one forces its uniqueness. Under explicitly multiplicity-aware generic
 C2 this derives a unique dominant normal block and actual physical residual
 convergence, without either conclusion as a premise.
 
+The same module's `exists_normalized_diagonal_dualFixedPoint` derives a
+strictly positive real diagonal dual fixed point with sum one from each
+actual canonical dual fixed-point field. Positive definiteness supplies
+real positive diagonal entries; division by their positive sum preserves
+the stationary equation. No additional stationary-density premise is added.
+
 The full weighted C2 half-chain spectrum theorem remains unfinished. In a
 multiblock representation, excluding peripheral eigenvalue values different
 from one does not exclude repeated unit-weight blocks. A unique dominant
