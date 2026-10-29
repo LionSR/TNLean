@@ -259,6 +259,34 @@ order or a fixed number of blocks.
 This exact pure-output result supplies no general approximation estimate or
 source QCcc block/control decomposition.
 
+\section{Pure native input and output on their original ports}
+For a $B$-dimension-bounded native channel $\Psi$ with physical input and
+output dimension $d\ge2$, suppose
+$\Psi(\ketbra{\psi}{\psi})=\ketbra{\phi}{\phi}$ and
+$\langle\phi,\phi\rangle=1$. For $N\ge2$ and
+$k=\lceil\log_d B\rceil$, let $V_{\rm port}$ be the explicit product
+isometry that places each qudit on its original port and initializes its
+data and scratch digits to zero. The bounded compiler and the exact
+pure-output theorem give the actual vector identity
+\begin{align}
+    U(V_{\rm port}\psi\otimes\ket{0_A})
+     & =V_{\rm port}\phi\otimes\eta,
+     & \langle\eta,\eta\rangle                 & =1,
+     & \operatorname{depth}_{\rm intersite}(U) & \le2kT.
+\end{align}
+The same unitary retains the full logical channel identity
+(\ref{eq:scope_unitary_port_io}). Both the compiled channel and its
+normalized environment are derived, not supplied as additional premises.
+The designated memory is zero in the actual final vector, while the
+additional environment need not reset or factor over sites. The dimension
+bound must be fixed independently of the chain length in a family.
+This specialization is source-written without local Lean compilation;
+its declaration is
+\leanid{QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_physicalPort_pure_output}
+in \doclink{TNLean/Circuit/Channel/BoundedPortPureOutput}.
+It does not settle the adaptive block count, measurement/control order,
+approximate pure-output estimates or unrestricted enlarged-site comparison.
+
 \section{Remaining comparison and source conditions}
 The finite local-unitary dilation, product-zero environment initialization,
 and one final disposal are proved by~(\ref{eq:scope_deferred_dilation}).

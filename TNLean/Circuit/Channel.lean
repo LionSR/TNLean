@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.Circuit.Channel.ApproximateConversion
 import TNLean.Circuit.Channel.AsymptoticConversion
+import TNLean.Circuit.Channel.BoundedPortPureOutput
 import TNLean.Circuit.Channel.Conversion
 import TNLean.Circuit.Channel.DataInitialization
 import TNLean.Circuit.Channel.DimensionBoundedConversion
