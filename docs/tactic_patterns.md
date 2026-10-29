@@ -9629,3 +9629,14 @@ there is no need for a new tactic.
   the accepted modules can extract cutoff-independent assembly lemmas; no new
   tactic is needed. The strengthened high-energy diagonal comparison itself is
   proved once and reused by both new robustness statements.
+
+### Boundary operator norm from its positive cap — candidate (2026-10-29)
+
+- **Seen:** `MPS/AreaLaw/AKLV/HighEnergyMass.lean`, `ProjectionEnergy.lean`,
+  and `InverseGapRobustness.lean`; the targeted pattern scan reports three uses.
+- **Pattern:** Convert `0 ≤ A ≤ 2I` to `‖A‖ ≤ 2` with
+  `CStarAlgebra.norm_le_iff_le_algebraMap` and the scalar-matrix identity.
+- **Decision:** A future mathematical helper can replace the three proofs.
+  Promotion across the older call sites is deferred because this refinement
+  explicitly requires preserving all accepted AKLV proof bytes. No additional
+  tactic or alternate operator norm is introduced.
