@@ -121,8 +121,15 @@ theorem uncleWallCorrelation_succ (A : MPSTensor d a) (B : MPSTensor d b)
   simp_rw [← Matrix.mul_assoc]
   simp only [Finset.sum_add_distrib, sum_mul_pair]
   rw [sum_evalWord_mul_conjTranspose B hB]
-  simp only [Matrix.mul_one, Kraus.mixedMapLM_apply]
-  exact Finset.sum_comm
+  have hswap :
+      (∑ i : Fin d, ∑ σ : Fin n → Fin d,
+        A i * uncleDomainWallWord A B R (List.ofFn σ) *
+          (Kraus.evalWord B (List.ofFn σ))ᴴ * (B i)ᴴ) =
+      ∑ σ : Fin n → Fin d, ∑ i : Fin d,
+        A i * uncleDomainWallWord A B R (List.ofFn σ) *
+          (Kraus.evalWord B (List.ofFn σ))ᴴ * (B i)ᴴ := Finset.sum_comm
+  simpa [uncleWallCorrelation, uncleWallSeed, Kraus.mixedMapLM_apply,
+    Matrix.mul_assoc, Matrix.mul_sum, Matrix.sum_mul] using hswap
 
 /-- The finite Gram recurrence separates propagation, both cross terms,
 and the one-site wall Gram matrix; arXiv:1210.6613, proof of Lemma
