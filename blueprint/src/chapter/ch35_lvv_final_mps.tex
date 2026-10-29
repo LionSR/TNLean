@@ -1,0 +1,70 @@
+\section{A normalized matrix product state in the final span}
+\label{sec:lvv_final_mps}
+
+The finite-span estimate and the full-left viable witness give the final extraction
+in \cite{Landau2015Polynomial}. The argument uses the actual finite family and
+does not appeal to a separate ground-state approximation theorem.
+
+\begin{lemma}[Bond bound for a finite left span]
+    \label{thm:lvv_left_span_bond}
+    \lean{TNLean.MPS.AreaLaw.isOpenMPS_leftChain_of_mem_span}
+    \leanok
+    \uses{thm:left_mps_finite_span}
+    Let $S$ be a finite family of vectors on the first $i$ sites. Suppose each
+    member, read as a vector on an $i$-site chain, has MPS bond dimension at most
+    $\max\{1,b\}$. Then every $v\in\operatorname{span}S$, in the same coordinates,
+    is an MPS with bond dimension at most $|S|\max\{1,b\}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Write $v=\sum_{s\in S}c_ss$. At each internal cut $k$, the coefficient
+    matrix satisfies $M_k(v)=\sum_{s\in S}c_sM_k(s)$. Scalar multiplication
+    does not increase matrix rank and rank is subadditive under finite sums.
+    Therefore
+    \begin{align}
+        \operatorname{rank}M_k(v)
+        \le\sum_{s\in S}\operatorname{rank}M_k(s)
+        \le|S|\max\{1,b\}.
+    \end{align}
+    The characterization of open-boundary MPS by their internal cut ranks gives
+    the assertion. Reading the left block as a chain is linear; if two members
+    become equal under this reading, the image family has smaller cardinality.
+\end{proof}
+
+\begin{lemma}[Normalized MPS witness from a viable final family]
+    \label{thm:lvv_final_span_mps}
+    \lean{TNLean.MPS.AreaLaw.IsViable.exists_openMPS_of_forall_isLeftOpenMPS}
+    \leanok
+    \uses{thm:lvv_left_span_bond}
+    Let $S$ be a finite $(L,\delta)$-viable family for a chain vector $\Gamma$.
+    Suppose its members have individual effective MPS bond bound $\max\{1,b\}$.
+    There exists a full-chain vector $\psi$ such that
+    \begin{align}
+        \|\psi\|=1,\qquad
+        |\langle\psi,\Gamma\rangle|\ge1-\delta,
+    \end{align}
+    and $\psi$ is an open-boundary MPS of bond dimension at most
+    $|S|\max\{1,b\}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    At the final cut the right block has a single configuration. Thus a unit
+    viable witness, read on the full left block, lies in $\operatorname{span}S$.
+    This reading is an isometry, so the witness retains its norm and overlap.
+    Apply the finite-span bond estimate.
+\end{proof}
+
+\begin{lemma}[Final extraction with the recorded size bound]
+    \label{thm:lvv_final_viable_mps}
+    \lean{TNLean.MPS.AreaLaw.IsViableMPS.exists_openMPS}
+    \leanok
+    \uses{thm:lvv_final_span_mps}
+    An $(L,s,b,\delta)$-viable family gives a normalized full-chain MPS
+    $\psi$ of bond dimension at most $s\max\{1,b\}$ with
+    $|\langle\psi,\Gamma\rangle|\ge1-\delta$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Its actual cardinality is at most $s$. Enlarge the finite-span bond bound
+    by this inequality.
+\end{proof}

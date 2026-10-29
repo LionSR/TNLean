@@ -569,12 +569,16 @@
     "ch:gapped_chain_algorithms": {
       "theorems": [
         "thm:chain_boundary_net_polynomial",
-        "thm:alvv_collective_trim"
+        "thm:alvv_collective_trim",
+        "thm:lvv_uniform_successive_approximation",
+        "thm:lvv_successive_arbitrary_accuracy"
       ],
       "corollaries": [],
       "notes": {
         "thm:chain_boundary_net_polynomial": "Boundary net of polynomial size used to glue a left state at a cut",
-        "thm:alvv_collective_trim": "Trimming a viable subspace on the chain (Arad et al.), the step the opening names"
+        "thm:alvv_collective_trim": "Trimming a viable subspace on the chain (Arad et al.), the step the opening names",
+        "thm:lvv_uniform_successive_approximation": "Uniform polynomial successive viable families and final approximation from their retained span",
+        "thm:lvv_successive_arbitrary_accuracy": "Arbitrary accuracy with polynomial size and bond bounds via product-state extension"
       }
     },
     "ch:peps_ft": {
