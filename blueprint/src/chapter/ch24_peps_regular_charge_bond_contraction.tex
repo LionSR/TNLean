@@ -1,4 +1,4 @@
-\begin{theorem}[Character insertions and the closed graph contraction]
+\begin{lemma}[Character insertions and the closed graph contraction]
     \label{thm:peps_regular_charge_bond_contraction}
     \lean{TNLean.PEPS.regularChargeMatrix_eq_leftRegular_diagonal,
         TNLean.PEPS.graphInsertedBondNetwork_averagingSite_charge}
@@ -25,14 +25,14 @@
     \cite[charge definition and detection]{Schuch2010PEPS}, lines 2449--2486.
     It makes no original-spin measurement or general semiregular
     isometry claim for the character insertions.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The regular permutation matrices leave one surviving intermediate label,
     giving the displayed matrix entry. Substitute this identity into the
     proved closed contraction with arbitrary bond insertions.
 \end{proof}
 
-\begin{theorem}[Conjugation of a character insertion by a flux]
+\begin{lemma}[Conjugation of a character insertion by a flux]
     \label{thm:peps_regular_charge_flux_conjugation}
     \lean{TNLean.PEPS.leftRegular_diagonal_character_conjugate}
     \leanok
@@ -44,7 +44,7 @@
     This is the virtual coefficient identity in
     \cite[braiding of charges with fluxes]{Schuch2010PEPS}, lines 2569--2581.
     The physical braid remains a separate assertion.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Evaluate the translated charge matrix with both endpoint translations
     equal to $k$. Its entries vanish off the diagonal; the diagonal entry

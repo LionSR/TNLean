@@ -132,8 +132,8 @@ The inverse-gap cutoff removes this specific source-rate obstruction: the
 starting-cutoff term `log d * √((t₀+s)/g)` no longer inherits `g⁻³ᐟ²` from
 `t₀ ∝ g⁻²`. This file does not prove the final entropy or MPS rate. The
 independent rank logarithm, scalar schedules, entropy assembly and sequential
-MPS conversion remain with their respective workers. No publication, CI run
-or merge is performed by this refinement task.
+MPS conversion remain with their respective workers. Initial delivery was local; subsequent publication and integration are
+recorded below. No repository merge or review approval is performed by the owner.
 
 ## Integration with the current prerequisite
 
@@ -161,3 +161,60 @@ Canonical `leanblueprint checkdecls` was attempted: its executable built, then
 failed because the unbuilt repository-wide `TNLean.olean` is absent. This is
 not a canonical declaration-check pass. The targeted declaration/export checks
 passed; full-root declaration, web/PDF and ChkTeX gates remain for hosted CI.
+
+## Integration onto main after the prerequisite merge
+
+PR #10327, which addresses the normalized robustness obligation in #9837,
+was squash-merged into main at
+`6da5dd6c42ae8a911097290fac25b673286cd1ae`. That main head and both public
+branches were freshly fetched. The existing refinement head
+`b0e62a1ff38cc6c71fa301f94449ad855ebf4c25` is preserved as a parent while
+main is merged normally; no force push or history rewrite is used.
+
+The squash caused two add/add conflicts: the generated AKLV aggregator and
+its Blueprint section. They were resolved by keeping the exact accepted main
+content and appending the existing refinement. All eleven accepted AKLV proof
+modules remain byte-identical to main. The new proof module remains
+byte-identical to its independently reviewed and previously green public head.
+The accepted Blueprint section is still an exact prefix of the extended file.
+No prerequisite, unrelated main change, dependency pin or source result is
+reverted.
+
+Main introduced `blueprint/roles.json` after the original branch point. Its
+registry did not yet contain the three newly merged AKLV headline results.
+The integration registers those three existing labels and the stronger
+inverse-gap robustness theorem, with mathematical-role notes, under the
+one-dimensional preliminaries chapter. This preserves the accepted theorem
+environments and proof text. Thus the main-target refinement is six paths:
+the original five plus this required role registry entry. The global role
+check passes.
+
+A separate native integration reviewer independently checked the exact
+six-path working-tree diff against `6da5dd6c`, all eleven accepted proof files,
+the unchanged new proof file, the exact accepted Blueprint prefix and the
+four role registrations. Verdict: **PASS**. No mathematical hypotheses or
+conclusions changed; the reviewer made no edits and ran no builds.
+
+After integrating main, the pinned AKLV target build passed again (3261 jobs)
+and the new proof module passed strict warnings-as-errors elaboration with
+strict implicits and standard Mathlib linters. All four declarations were
+checked through the public aggregator; their transitive dependency closures
+again contain only `propext`, `Classical.choice`, `Quot.sound`. Maximal-energy
+and small-gap endpoint calculations passed. The temporary Lean source was
+removed. Exact root dependency pins and the existing Mathlib cache were
+verified before these checks; no Mathlib source build or pin change occurred.
+
+Pinned formatting and the global mathematical-role check passed; all eight
+role-tool unit tests passed. Import generation, Blueprint source/declaration
+synchronization and reverse coverage, forbidden-token, reader-facing prose,
+numbered-file and whitespace checks passed. The pinned paper-gap checker
+resolved all 276 referenced slugs on current main.
+
+The existing PR #10331 is being retargeted to main. Its earlier stacked-head
+CI run 40894754380 passed all applicable jobs, including full Lean/strict/timing
+checks, Blueprint web validation, ChkTeX, deterministic formatting, the main
+PDF and the FT-MPS volume. That earlier success is not claimed for the new
+main-integration head: its exact-head CI must run separately. The PR remains
+a bounded improvement to the accepted #9837 robustness result, supporting
+#9838–#9840; raw-chain normalization and the whole area-law/MPS conclusions
+remain outside this refinement. The parent coordinates readiness and merger.

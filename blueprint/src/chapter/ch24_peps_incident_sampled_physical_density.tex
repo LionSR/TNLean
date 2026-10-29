@@ -49,7 +49,7 @@ independent, and each source uses one shared sample index at its two endpoints.
     boundary spaces implies Definition~\ref{def:peps_word_eval_comparison}.
 \end{proof}
 
-\begin{theorem}[Remaining operations at an owner with a singleton fibre]
+\begin{lemma}[Remaining operations at an owner with a singleton fibre]
     \label{thm:peps_singleton_fibre_local_part}
     \lean{TNLean.Lattice.PartyCircuit.Word.restrict_localPart_mapOwner_eval_heq_of_singleton_fiber}
     \leanok
@@ -57,7 +57,7 @@ independent, and each source uses one shared sample index at its two endpoints.
         def:peps_single_party_selector,def:peps_party_registers}
     Let $f:P\to Q$ satisfy $f^{-1}(\{q\})=\{p\}$, and let $U:a\to b$ be a
     chronological word with source-register list $s_U$ and local part
-    $L(U):s_Ua\to b$ (Theorem~\ref{thm:peps_source_preparation};
+    $L(U):s_Ua\to b$ (Lemma~\ref{thm:peps_source_preparation};
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}). Under the canonical
     identifications of $((s_Ua)_p)^f$ and $(b_p)^f$,
     \begin{align}
@@ -65,7 +65,7 @@ independent, and each source uses one shared sample index at its two endpoints.
         \label{eq:peps_singleton_fibre_local_part}
     \end{align}
     % Source: 04-compression.tex, lines 383--434 and 565--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -79,14 +79,14 @@ independent, and each source uses one shared sample index at its two endpoints.
         thm:peps_owner_evaluation_identification,
         thm:peps_party_restriction_canonical_layouts}
     We induct on $U$. Source-free elementary steps satisfy~(\ref{eq:peps_singleton_fibre_local_part})
-    by Theorem~\ref{thm:peps_source_free_local_part_restriction},
-    Theorem~\ref{thm:peps_owner_selection_commutation}, and
-    Theorem~\ref{thm:peps_owner_evaluation_identification}. Compositions and
-    framed words follow from Theorem~\ref{thm:peps_selected_source_owner_registers},
-    Theorem~\ref{thm:peps_retained_spectator_framing},
-    Theorem~\ref{thm:peps_register_move_retained_prefix},
-    Theorem~\ref{thm:peps_owner_framed_word}, and
-    Theorem~\ref{thm:peps_operator_composition_framing}. At a pair source with
+    by Lemma~\ref{thm:peps_source_free_local_part_restriction},
+    Lemma~\ref{thm:peps_owner_selection_commutation}, and
+    Lemma~\ref{thm:peps_owner_evaluation_identification}. Compositions and
+    framed words follow from Lemma~\ref{thm:peps_selected_source_owner_registers},
+    Lemma~\ref{thm:peps_retained_spectator_framing},
+    Lemma~\ref{thm:peps_register_move_retained_prefix},
+    Lemma~\ref{thm:peps_owner_framed_word}, and
+    Lemma~\ref{thm:peps_operator_composition_framing}. At a pair source with
     distinct owners $p_1\ne p_2$, either $f(p_1)\ne f(p_2)$ so both local parts
     are $\Id$, or $f(p_1)=f(p_2)\ne q$ (since $f^{-1}(\{q\})=\{p\}$ has size
     $1$) so its merged preparation is erased at $q$.
@@ -97,7 +97,7 @@ retain every party, and let $g_p:P\to Q_p=\{p\}\sqcup\{*\}$ retain $p$ and map
 $P\setminus\{p\}$ to $*$. Write $p_{\rm all}=g_{\rm all}(p)$ and $p_p=g_p(p)$,
 and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto *$.
 
-\begin{theorem}[A gate in the singleton and all-party expansions]
+\begin{lemma}[A gate in the singleton and all-party expansions]
     \label{thm:peps_singleton_gate_comparison}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_partialWord_all_gate_localPart_eval_heq_singleton_projection}
     \leanok
@@ -118,7 +118,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     between $(s_{W_\xi}(a^\gamma t)^{g_{\rm all}})_{p_{\rm all}}$ and
     $((b^\gamma t)^{g_{\rm all}})_{p_{\rm all}}$.
     % Source: 04-compression.tex, lines 351--434 and 565--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -129,16 +129,16 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
         thm:peps_party_restriction_canonical_layouts,
         thm:peps_owner_evaluation_identification}
     If $p\in\gamma(C)$, $\chi$ and $\xi$ select the same branch of $G$ by
-    Theorem~\ref{thm:peps_incident_gate_labels}, so applying
-    Theorem~\ref{thm:peps_singleton_fibre_local_part} to $g_{\rm all}$ and $g_p$
-    with Theorem~\ref{thm:peps_owner_evaluation_identification} gives~(\ref{eq:peps_singleton_gate_comparison}).
+    Lemma~\ref{thm:peps_incident_gate_labels}, so applying
+    Lemma~\ref{thm:peps_singleton_fibre_local_part} to $g_{\rm all}$ and $g_p$
+    with Lemma~\ref{thm:peps_owner_evaluation_identification} gives~(\ref{eq:peps_singleton_gate_comparison}).
     If $p\notin\gamma(C)$ (including $C=\varnothing$), $(L(W_\xi))|_{p_{\rm all}}=\Id$
-    by Theorem~\ref{thm:peps_all_gate_nonincident_identity}, while $V_\chi$
+    by Lemma~\ref{thm:peps_all_gate_nonincident_identity}, while $V_\chi$
     places the complete gate at $*\ne p_p$ and restricts at $p_p$ to the same
-    spectator identity by Theorem~\ref{thm:peps_source_free_local_part_restriction}.
+    spectator identity by Lemma~\ref{thm:peps_source_free_local_part_restriction}.
 \end{proof}
 
-\begin{theorem}[A circuit in the singleton and all-party expansions]
+\begin{lemma}[A circuit in the singleton and all-party expansions]
     \label{thm:peps_singleton_circuit_comparison}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_partialWord_all_localPart_eval_heq_singleton_projection}
     \leanok
@@ -155,7 +155,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     between $(s_{W_\xi}a^{g_{\rm all}})_{p_{\rm all}}$ and
     $(b^{g_{\rm all}})_{p_{\rm all}}$.
     % Source: 04-compression.tex, lines 351--434 and 565--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -167,19 +167,19 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
         thm:peps_selected_local_part_framing,
         thm:peps_selected_local_part_erased_frame,
         thm:peps_owner_evaluation_identification}
-    By Theorem~\ref{thm:peps_partial_fixed_layout},
-    Theorem~\ref{thm:peps_singleton_all_source_layout}, and
-    Theorem~\ref{thm:peps_singleton_all_original_layout}, the selected boundary
+    By Lemma~\ref{thm:peps_partial_fixed_layout},
+    Lemma~\ref{thm:peps_singleton_all_source_layout}, and
+    Lemma~\ref{thm:peps_singleton_all_original_layout}, the selected boundary
     and source-prefix lists of $W_\xi$ and $V_\chi^{\iota_p}$ coincide at
     $p_{\rm all}$. Induction on $\mathcal W$ using
-    Theorem~\ref{thm:peps_selected_local_part_composition} for compositions,
-    Theorem~\ref{thm:peps_selected_local_part_framing} and
-    Theorem~\ref{thm:peps_selected_local_part_erased_frame} for framing, and
-    Theorem~\ref{thm:peps_singleton_gate_comparison} for gates, followed by
-    Theorem~\ref{thm:peps_singleton_fibre_local_part} for $\iota_p$, yields~(\ref{eq:peps_singleton_circuit_comparison}).
+    Lemma~\ref{thm:peps_selected_local_part_composition} for compositions,
+    Lemma~\ref{thm:peps_selected_local_part_framing} and
+    Lemma~\ref{thm:peps_selected_local_part_erased_frame} for framing, and
+    Lemma~\ref{thm:peps_singleton_gate_comparison} for gates, followed by
+    Lemma~\ref{thm:peps_singleton_fibre_local_part} for $\iota_p$, yields~(\ref{eq:peps_singleton_circuit_comparison}).
 \end{proof}
 
-\begin{theorem}[The prepared operator determined by incident labels]
+\begin{lemma}[The prepared operator determined by incident labels]
     \label{thm:peps_prepared_incident_operator}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_partialSourceWord_eval_eq_incidentSourceWord}
     \leanok
@@ -189,7 +189,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     Let $\mathcal W:a\to b$ be a chronological circuit with private product
     input $\psi$ (Definition~\ref{def:peps_actual_private_preparation}) and
     all-party partial choice $\xi$ with incident gate labels $\eta=\xi_p$
-    (Theorem~\ref{thm:peps_incident_gate_labels};
+    (Lemma~\ref{thm:peps_incident_gate_labels};
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}). Let $T_\xi$ be the
     prepared all-party word (Definition~\ref{def:peps_canonical_source_residual})
     and $D_{p,\eta}$ the incident source word
@@ -201,7 +201,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
         \label{eq:peps_prepared_incident_operator}
     \end{align}
     % Source: 04-compression.tex, lines 137--139, 246--267, 351--434 and 565--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -212,15 +212,15 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
         thm:peps_owner_evaluation_identification,
         thm:peps_operator_composition_framing,
         thm:peps_party_restriction_canonical_layouts}
-    By Theorem~\ref{thm:peps_incident_gate_labels}, $\xi_p$ reconstructs
-    $\pi_{\{p\}}\xi$, so Theorem~\ref{thm:peps_singleton_circuit_comparison}
+    By Lemma~\ref{thm:peps_incident_gate_labels}, $\xi_p$ reconstructs
+    $\pi_{\{p\}}\xi$, so Lemma~\ref{thm:peps_singleton_circuit_comparison}
     equates the restricted canonical residuals. Restricting the private
     preparation $\psi$ framed by the source registers via
-    Theorem~\ref{thm:peps_retained_spectator_framing},
-    Theorem~\ref{thm:peps_owner_selection_commutation}, and
-    Theorem~\ref{thm:peps_owner_framed_word}, and composing via
-    Theorem~\ref{thm:peps_operator_composition_framing} and
-    Theorem~\ref{thm:peps_party_restriction_canonical_layouts}, gives~(\ref{eq:peps_prepared_incident_operator}).
+    Lemma~\ref{thm:peps_retained_spectator_framing},
+    Lemma~\ref{thm:peps_owner_selection_commutation}, and
+    Lemma~\ref{thm:peps_owner_framed_word}, and composing via
+    Lemma~\ref{thm:peps_operator_composition_framing} and
+    Lemma~\ref{thm:peps_party_restriction_canonical_layouts}, gives~(\ref{eq:peps_prepared_incident_operator}).
 \end{proof}
 
 \begin{definition}[Ordered endpoint registers and their operators]
@@ -247,7 +247,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     % Source: 04-compression.tex, lines 279--309 and 565--588.
 \end{definition}
 
-\begin{theorem}[The ordered endpoint word contains no pair preparation]
+\begin{lemma}[The ordered endpoint word contains no pair preparation]
     \label{thm:peps_endpoint_register_word_sources}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.sources_endpointRegisterWord}
     \leanok
@@ -256,7 +256,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     $\mathcal E(\mathcal D)$ of Definition~\ref{def:peps_ordered_endpoint_register_operators}
     has empty pair-source inventory (\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}).
     % Source: 04-compression.tex, lines 279--309 and 565--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -266,7 +266,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     has empty source inventory.
 \end{proof}
 
-\begin{theorem}[The register list of filtered endpoint data]
+\begin{lemma}[The register list of filtered endpoint data]
     \label{thm:peps_filtered_endpoint_register_layout}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.endpointRegisterData_filter_layout}
     \leanok
@@ -278,7 +278,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     satisfies $\ell(\mathcal D_R|_f)=S_R|_f$
     (\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}).
     % Source: 04-compression.tex, lines 279--309, 409--434 and 565--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -290,7 +290,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     $\ell$, giving $\ell(\mathcal D_R|_f)=\ell(\mathcal D_R)|_f=S_R|_f$.
 \end{proof}
 
-\begin{theorem}[Restriction retains the ordered endpoint operators]
+\begin{lemma}[Restriction retains the ordered endpoint operators]
     \label{thm:peps_restricted_ordered_endpoint_operators}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.restrict_endpointWord_eval_heq_registerWord}
     \leanok
@@ -305,7 +305,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
         \label{eq:peps_restricted_ordered_endpoint_operators}
     \end{align}
     % Source: 04-compression.tex, lines 279--309, 409--434 and 565--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -313,10 +313,10 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
         thm:peps_operator_composition_framing,
         thm:peps_party_restriction_canonical_layouts,thm:peps_party_restriction}
     Identify $Z_R$ with $\mathcal E(\mathcal D_R)$ via
-    Theorem~\ref{thm:peps_word_structural_congruence} and induct on
-    $\mathcal D_R$: by Theorem~\ref{thm:peps_party_restriction},
-    Theorem~\ref{thm:peps_operator_composition_framing}, and
-    Theorem~\ref{thm:peps_party_restriction_canonical_layouts}, each pair
+    Lemma~\ref{thm:peps_word_structural_congruence} and induct on
+    $\mathcal D_R$: by Lemma~\ref{thm:peps_party_restriction},
+    Lemma~\ref{thm:peps_operator_composition_framing}, and
+    Lemma~\ref{thm:peps_party_restriction_canonical_layouts}, each pair
     $(r,T)$ with $f(\operatorname{owner}(r))=1$ is retained and frames the tail,
     while each pair with $f(\operatorname{owner}(r))=0$ restricts to $\Id$,
     giving~(\ref{eq:peps_restricted_ordered_endpoint_operators}).
@@ -341,7 +341,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     With $r_e=\min(u_e,v_e)$, endpoint matrix families $L,H$
     (Definition~\ref{def:peps_original_sampled_endpoint_factors}), and gate
     labels $\alpha_i,\beta_i$ reconstructed from $\eta,\theta$ at $e_i$
-    (Theorem~\ref{thm:peps_incident_gate_labels}), set
+    (Lemma~\ref{thm:peps_incident_gate_labels}), set
     \begin{align}
         A_i & =L_{e_i,\alpha_i\beta_i,j_p(i)}
         (\omega_{e_i,\alpha_i\beta_i}),       \\
@@ -367,15 +367,15 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
         thm:peps_endpoint_register_word_sources,
         thm:peps_singleton_all_source_layout,
         thm:peps_party_restriction_canonical_layouts,def:peps_owner_sources}
-    By Theorem~\ref{thm:peps_filtered_endpoint_register_layout} and
-    Theorem~\ref{thm:peps_singleton_all_source_layout}, relabelling
+    By Lemma~\ref{thm:peps_filtered_endpoint_register_layout} and
+    Lemma~\ref{thm:peps_singleton_all_source_layout}, relabelling
     $\ell(\mathcal D_{p,\eta,\theta,j_p,\omega}|_{p_p})$ by $\iota_p$ yields
     $(S_{\rm all}\varnothing)_{p_{\rm all}}$, and $U_{p,\eta,\theta,j_p,\omega}$
-    is source-free by Theorem~\ref{thm:peps_endpoint_register_word_sources} and
+    is source-free by Lemma~\ref{thm:peps_endpoint_register_word_sources} and
     Definition~\ref{def:peps_owner_sources}.
 \end{proof}
 
-\begin{theorem}[The sampled endpoint operator determined by incident labels]
+\begin{lemma}[The sampled endpoint operator determined by incident labels]
     \label{thm:peps_incident_sampled_endpoint_comparison}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_sampledEndpointInputWord_eval_eq_incidentSampledEndpointWord}
     \leanok
@@ -397,7 +397,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     on $(S_{\rm all}\varnothing)_{p_{\rm all}}$
     (\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}).
     % Source: 04-compression.tex, lines 253--267, 279--355, 409--434 and 565--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -405,14 +405,14 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
         thm:peps_incident_gate_labels,thm:peps_singleton_all_source_layout,
         thm:peps_owner_evaluation_identification,
         thm:peps_party_restriction_canonical_layouts}
-    By Theorem~\ref{thm:peps_restricted_ordered_endpoint_operators},
+    By Lemma~\ref{thm:peps_restricted_ordered_endpoint_operators},
     $U^{\rm all}_{\xi,\zeta,j,\omega}|_{p_{\rm all}}$ is the word of its
-    retained endpoint data at $p_{\rm all}$. By Theorem~\ref{thm:peps_incident_gate_labels},
+    retained endpoint data at $p_{\rm all}$. By Lemma~\ref{thm:peps_incident_gate_labels},
     $\xi_p$ and $\zeta_p$ preserve the gate labels at every occurrence $e_i$
     incident to $p$, so its endpoint maps coincide with~(\ref{eq:peps_incident_sampled_endpoints})
-    at $j_p(i)=j(e_i)$. Applying Theorem~\ref{thm:peps_singleton_all_source_layout},
-    Theorem~\ref{thm:peps_owner_evaluation_identification}, and
-    Theorem~\ref{thm:peps_party_restriction_canonical_layouts} yields~(\ref{eq:peps_incident_sampled_endpoint_comparison}).
+    at $j_p(i)=j(e_i)$. Applying Lemma~\ref{thm:peps_singleton_all_source_layout},
+    Lemma~\ref{thm:peps_owner_evaluation_identification}, and
+    Lemma~\ref{thm:peps_party_restriction_canonical_layouts} yields~(\ref{eq:peps_incident_sampled_endpoint_comparison}).
 \end{proof}
 
 \begin{definition}[The physical factor constructed from incident labels]
@@ -450,7 +450,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     % Source: 04-compression.tex, lines 253--267, 279--355, 409--434 and 574--579.
 \end{definition}
 
-\begin{theorem}[The physical factor equals its incident construction]
+\begin{lemma}[The physical factor equals its incident construction]
     \label{thm:peps_incident_sampled_physical_factor_comparison}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sampledPhysicalFactor_eq_incidentSampledPhysicalFactor}
     \leanok
@@ -460,14 +460,14 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     for all-party choices $\xi,\zeta$ and a global sample assignment $j$ with
     restriction $j_p(i)=j(e_i)$, the local physical factor
     $M^{\xi,\zeta}_{j,p_{\rm all}}$
-    (Theorem~\ref{thm:peps_actual_sampled_physical_factors}) satisfies
+    (Lemma~\ref{thm:peps_actual_sampled_physical_factors}) satisfies
     \begin{align}
         M^{\xi,\zeta}_{j,p_{\rm all}}
          & =M^{\rm inc}_{p,\xi_p,\zeta_p,j_p,\omega}.
         \label{eq:peps_incident_sampled_physical_factor_comparison}
     \end{align}
     % Source: 04-compression.tex, lines 565--588, especially 574--579.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -476,8 +476,8 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
         def:peps_incident_sampled_physical_factor,
         lem:peps_word_eval_comparison_fixed_layouts,
         lem:peps_word_eval_comparison_of_equality}
-    By Theorem~\ref{thm:peps_prepared_incident_operator} and
-    Theorem~\ref{thm:peps_incident_sampled_endpoint_comparison} (with
+    By Lemma~\ref{thm:peps_prepared_incident_operator} and
+    Lemma~\ref{thm:peps_incident_sampled_endpoint_comparison} (with
     Lemma~\ref{lem:peps_word_eval_comparison_fixed_layouts} and
     Lemma~\ref{lem:peps_word_eval_comparison_of_equality}), the matrices of
     $T_\xi|_{p_{\rm all}}$, $T_\zeta|_{p_{\rm all}}$, and
@@ -487,7 +487,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 \end{proof}
 
 
-\begin{theorem}[Restricting samples to the original incident slots]
+\begin{lemma}[Restricting samples to the original incident slots]
     \label{thm:peps_incident_source_sample_compatibility}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_sourceSampleAssignment_eq}
     \leanok
@@ -506,7 +506,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
         \label{eq:peps_incident_source_sample_compatibility}
     \end{align}
     % Source: 04-compression.tex, lines 342--417 and 568--579.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -518,7 +518,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     giving~(\ref{eq:peps_incident_source_sample_compatibility}).
 \end{proof}
 
-\begin{theorem}[The original physical sum in incident factors]
+\begin{lemma}[The original physical sum in incident factors]
     \label{thm:peps_incident_pure_sampled_physical_sum}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_incidentPhysicalSum}
     \leanok
@@ -527,7 +527,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
         thm:peps_actual_pure_sampled_physical_sum}
     For finite $P$, in the setting of
     Definition~\ref{def:peps_incident_sampled_physical_factor} and
-    Theorem~\ref{thm:peps_actual_pure_sampled_physical_sum} with $N$ source
+    Lemma~\ref{thm:peps_actual_pure_sampled_physical_sum} with $N$ source
     slots, empty-party gate scalar $\lambda_W$, choice coefficients $c_\xi$,
     and $j_p(i)=j(e_i)$, the source-replaced physical operator satisfies
     \begin{align}
@@ -540,7 +540,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
         \label{eq:peps_incident_pure_sampled_physical_sum}
     \end{align}
     % Source: 04-compression.tex, lines 253--267, 351--381 and 565--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -549,10 +549,10 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     Substitute $M^{\xi,\zeta}_{j,p_{\rm all}}=M^{\rm inc}_{p,\xi_p,\zeta_p,j_p,\omega}$
     from~(\ref{eq:peps_incident_sampled_physical_factor_comparison}) into each
     summand of~(\ref{eq:peps_actual_pure_sampled_physical_sum}) of
-    Theorem~\ref{thm:peps_actual_pure_sampled_physical_sum}.
+    Lemma~\ref{thm:peps_actual_pure_sampled_physical_sum}.
 \end{proof}
 
-\begin{theorem}[Restriction of arbitrary endpoint operators]
+\begin{lemma}[Restriction of arbitrary endpoint operators]
     \label{thm:peps_endpoint_selected_register_comparison}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.endpointDataAt}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.endpointRegisterData_partialSlots}
@@ -564,7 +564,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     ordered endpoint word $Z_R(M,N)$ to $p$ equals
     $\mathcal E(\mathcal D_R(M,N)|_p)$ under the canonical register
     identification, and equal endpoint data lists evaluate to equal operators.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Filtering the ordered endpoint-register list $\mathcal D_R(M,N)$ by owner
@@ -585,7 +585,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     ordered ket/bra label pair of $(\xi,\zeta)$ at $e$.
 \end{definition}
 
-\begin{theorem}[The ordered word of the original sampled operators]
+\begin{lemma}[The ordered word of the original sampled operators]
     \label{thm:peps_original_sampled_endpoint_operator_word}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.projectedSlotChoice_eq_allSourceLabel}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allPartialSlotChoice_eq_allSourceLabel}
@@ -595,7 +595,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     The sampled endpoint word coincides with the ordered endpoint word
     $Z_R(A_{\cdot,\xi,\zeta,j,\omega},B_{\cdot,\xi,\zeta,j,\omega})$ of the
     operators in Definition~\ref{def:peps_original_sampled_endpoint_operators}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Projecting $(\xi,\zeta)$ at each surviving slot in the complete ordered slot
@@ -603,7 +603,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     matching Definition~\ref{def:peps_original_sampled_endpoint_operators}.
 \end{proof}
 
-\begin{theorem}[Incident labels determine the selected endpoint operators]
+\begin{lemma}[Incident labels determine the selected endpoint operators]
     \label{thm:peps_incident_sampled_endpoint_register_representation}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.incidentSampledEndpointWord_eval_heq_endpointRegisterWord}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.incidentPartialSlotChoice_eq_allSourceLabel}
@@ -616,7 +616,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     $(\eta,\theta)=(\xi_p,\zeta_p)$ and $j_p(i)=j(e_i)$ its endpoint operators
     equal $A_{e_i,\xi,\zeta,j,\omega}$ and $B_{e_i,\xi,\zeta,j,\omega}$ from
     Definition~\ref{def:peps_original_sampled_endpoint_operators}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Unfolding the layout and owner identifications in $U_{p,\eta,\theta,j_p,\omega}$
@@ -625,22 +625,22 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     the filtered endpoint-register lists and their evaluated operators.
 \end{proof}
 
-\begin{theorem}[Restriction of the sampled endpoint word]
+\begin{lemma}[Restriction of the sampled endpoint word]
     \label{thm:peps_sampled_endpoint_incident_comparison}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_sampledEndpointWord_eval_heq_incidentSampledEndpointWord}
     \leanok
     \uses{thm:peps_endpoint_selected_register_comparison,thm:peps_original_sampled_endpoint_operator_word,thm:peps_incident_sampled_endpoint_register_representation}
     Under the canonical register identification, the restriction to $p$ of the
     original sampled endpoint word equals $U_{p,\xi_p,\zeta_p,j_p,\omega}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    Combine Theorem~\ref{thm:peps_original_sampled_endpoint_operator_word},
-    Theorem~\ref{thm:peps_endpoint_selected_register_comparison}, and
-    Theorem~\ref{thm:peps_incident_sampled_endpoint_register_representation}.
+    Combine Lemma~\ref{thm:peps_original_sampled_endpoint_operator_word},
+    Lemma~\ref{thm:peps_endpoint_selected_register_comparison}, and
+    Lemma~\ref{thm:peps_incident_sampled_endpoint_register_representation}.
 \end{proof}
 
-\begin{theorem}[Owner and layout identification of endpoint registers]
+\begin{lemma}[Owner and layout identification of endpoint registers]
     \label{thm:peps_endpoint_register_owner_transport}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.endpointRegisterWord_eval_heq_mapOwner_castLayouts}
     \leanok
@@ -649,12 +649,12 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     relabelling $\mathcal E(\mathcal D)$ by $f$ and identifying its boundary
     lists preserves its evaluated operator under the canonical memory
     identification.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_party_restriction,thm:peps_owner_evaluation_identification}
-    Combine the layout-identification invariance of Theorem~\ref{thm:peps_party_restriction}
-    with the owner-relabelling identity of Theorem~\ref{thm:peps_owner_evaluation_identification}.
+    Combine the layout-identification invariance of Lemma~\ref{thm:peps_party_restriction}
+    with the owner-relabelling identity of Lemma~\ref{thm:peps_owner_evaluation_identification}.
 \end{proof}
 
 \begin{definition}[Equality of selected remaining operations]
@@ -667,7 +667,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     the induced memory identifications.
 \end{definition}
 
-\begin{theorem}[A lifted singleton gate expansion]
+\begin{lemma}[A lifted singleton gate expansion]
     \label{thm:peps_lifted_singleton_gate_comparison}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isSelectedLocalPartComparison_partialWord_all_gate}
     \leanok
@@ -676,13 +676,13 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     $\xi$, and $\chi=\pi_{\{p\}}\xi$, the all-party partial word $W_\xi$ and
     the relabelled singleton partial word $V_\chi^{\iota_p}$ satisfy
     Definition~\ref{def:peps_selected_local_part_comparison} at $p_{\rm all}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_singleton_gate_comparison,thm:peps_singleton_fibre_local_part}
-    Combine Theorem~\ref{thm:peps_singleton_gate_comparison} and
-    Theorem~\ref{thm:peps_singleton_fibre_local_part} (applied to $\iota_p$,
+    Combine Lemma~\ref{thm:peps_singleton_gate_comparison} and
+    Lemma~\ref{thm:peps_singleton_fibre_local_part} (applied to $\iota_p$,
     where $\iota_p^{-1}(\{p_{\rm all}\})=\{p_p\}$) in the setting of
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
     (\texttt{04-compression.tex}, lines 351--434 and 565--588).

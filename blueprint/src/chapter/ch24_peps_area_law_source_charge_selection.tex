@@ -7,7 +7,7 @@ The construction below is an auxiliary step in the proof of
 state and label sequence while allowing any $W>0$ and
 fixed interpolation interval $[p_0,p_1]\subset(0,1)$.
 
-\begin{theorem}[Nonvanishing and the eigen-equation in augmented coordinates]
+\begin{lemma}[Nonvanishing and the eigen-equation in augmented coordinates]
     \label{thm:arealaw-augmented-prevector-properties}
     \lean{TNLean.PEPS.AreaLaw.Scan.augmented_prevector_properties_of_global}
     \leanok
@@ -20,15 +20,15 @@ fixed interpolation interval $[p_0,p_1]\subset(0,1)$.
         \label{eq:arealaw-augmented-prevector-properties}
     \end{align}
     where $\mathcal H_{\rm sym}$ is the replica-symmetric subspace (\cite[Section~8, lines~130--153 and~421--438]{OpenAI2026AreaLaw}).
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_augmented_prevector_symmetry,thm:al_scan_global_replica_energy,
         thm:al_augmented_prevector_norm}
-    Follows from Theorems~\ref{thm:al_augmented_prevector_norm}, \ref{thm:al_augmented_prevector_symmetry}, and~\ref{thm:al_scan_global_replica_energy} via $H_{\rm aug}\mathrm{pre}=UH_{\rm glob}v=e\,\mathrm{pre}$.
+    Follows from Lemmas~\ref{thm:al_augmented_prevector_norm}, \ref{thm:al_augmented_prevector_symmetry}, and~\ref{thm:al_scan_global_replica_energy} via $H_{\rm aug}\mathrm{pre}=UH_{\rm glob}v=e\,\mathrm{pre}$.
 \end{proof}
 
-\begin{theorem}[Selected density from the rough norm difference]
+\begin{lemma}[Selected density from the rough norm difference]
     \label{thm:arealaw-density-from-rough-endpoint}
     \lean{TNLean.PEPS.AreaLaw.Scan.selected_density_of_rough_endpoint}
     \leanok
@@ -47,14 +47,14 @@ fixed interpolation interval $[p_0,p_1]\subset(0,1)$.
         \left[B+2nmT+R_k^{\rm end}(d,c,K,C_i+2nmC_b)\right].
         \label{eq:arealaw-density-from-rough-endpoint}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:arealaw-rough-selection-numerator,thm:arealaw-selected-density-normalization}
-    By Theorem~\ref{thm:arealaw-rough-selection-numerator}, $(A+2nm(kT+b))/k\le B+2nmT+R_k^{\rm end}(d,c,K,C_i+2nmC_b)$; dividing by $KnD$ via Theorem~\ref{thm:arealaw-selected-density-normalization} and $aK=W$ gives (\ref{eq:arealaw-density-from-rough-endpoint}).
+    By Lemma~\ref{thm:arealaw-rough-selection-numerator}, $(A+2nm(kT+b))/k\le B+2nmT+R_k^{\rm end}(d,c,K,C_i+2nmC_b)$; dividing by $KnD$ via Lemma~\ref{thm:arealaw-selected-density-normalization} and $aK=W$ gives (\ref{eq:arealaw-density-from-rough-endpoint}).
 \end{proof}
 
-\begin{theorem}[One physical state and label sequence for charge selection]
+\begin{lemma}[One physical state and label sequence for charge selection]
     \label{thm:arealaw-source-charge-selection}
     \lean{
         TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_density_energy}
@@ -62,7 +62,7 @@ fixed interpolation interval $[p_0,p_1]\subset(0,1)$.
     \uses{def:area_law_hamiltonian,def:al_scan_actual_histories,
         def:al_scan_actual_energy_terms,thm:al_scan_target_typical_window_uniform_dimension}
     Fix $R\in\mathbb N$, $J\geq0$, $\Delta>0$, and
-    $C_T\geq0$. By Theorem~\ref{thm:al_scan_target_typical_window_uniform_dimension}, there exists $C_{\rm tr}>0$ (independent of $q,C_1,m_*,P$; cf.\ \cite[Proposition~4.5 and Section~9, lines~49--59]{OpenAI2026AreaLaw}) such that for every
+    $C_T\geq0$. By Lemma~\ref{thm:al_scan_target_typical_window_uniform_dimension}, there exists $C_{\rm tr}>0$ (independent of $q,C_1,m_*,P$; cf.\ \cite[Proposition~4.5 and Section~9, lines~49--59]{OpenAI2026AreaLaw}) such that for every
     $q\geq1$, $C_1>0$, $m_*\in\mathbb N$ with $3m_*\leq C_1$, and $P\in\mathbb R$, there
     exist $C_{\rm target},c_t>0$ and $C_{\rm ent},e_{\rm ent}\in\mathbb R$, and for every scanner exponent tuple $(\ell,\mu,\kappa,\nu,e_{\rm in})$ with
     $0<\ell<1$, $0<\kappa<\mu<1-\ell$, $\nu>0$, and $\kappa\le e_{\rm in}<1$, there exist
@@ -86,7 +86,7 @@ fixed interpolation interval $[p_0,p_1]\subset(0,1)$.
     $S_\Omega(\{x\in A:0<d(x)\leq j\})\leq C_e(nL^\eta+n)$ for $0\leq j\leq L$.
 
     Put $X=A\cap T$, $S_0=A\cap T_L$, let $g>0$ be the normalized amplified gap in
-    Theorem~\ref{thm:al_scan_target_typical_window}, and set
+    Lemma~\ref{thm:al_scan_target_typical_window}, and set
     $\varepsilon_t=\min\{n^{-1000},g/4\}$, $w=n^{3/5}$, and $\delta_t=n^{-100}$.
     Then $m,M>0$, $K\geq8$, $8Km\leq L$, $|S_0|\leq(C_T+1)n^2$,
     $X\subseteq S_0$, and the truncated Hamiltonian $\widetilde H$ has a unit ground vector
@@ -149,7 +149,7 @@ fixed interpolation interval $[p_0,p_1]\subset(0,1)$.
               & \leq B_{\rm rough}+R_k^{\rm Bell}(d,c_U,K).
         \label{eq:arealaw-charge-selection}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_scan_target_typical_window,thm:al_global_schmidt_bell_prevector,
@@ -159,37 +159,37 @@ fixed interpolation interval $[p_0,p_1]\subset(0,1)$.
         thm:arealaw-generic-charge-energy,thm:arealaw-generic-selected-energy,
         lem:al_scanner_scale_facts,thm:area_law_band_count_growth,
         thm:arealaw-rough-endpoint-remainder-limit}
-    Fix $C_{\rm tr}$ before $q$, then $(C_{\rm target},c_t,C_{\rm ent},e_{\rm ent})$, and then $(C,C_l,N)$. For $n\ge N$, Theorems~\ref{thm:al_scan_target_typical_window}, \ref{thm:al_global_schmidt_bell_prevector}, and~\ref{thm:al_positive_prefix_entropy_transfer} yield $(\widetilde\Omega,E,z,\lambda_k,\mathrm{pre}_k)$ and transfer prefix entropies within $n^{-247}$. Theorems~\ref{thm:al_scan_actual_rough_upper} and~\ref{thm:arealaw-physical-endpoint-loss} control the endpoint norms, and Theorem~\ref{thm:arealaw-augmented-prevector-properties} feeds $\mathrm{pre}_k$ into Theorems~\ref{thm:arealaw-generic-charge-energy}, \ref{thm:arealaw-generic-selected-energy}, and~\ref{thm:arealaw-actual-selected-energy} to select $(s_k,p_k)$, which together with (\ref{eq:arealaw-density-from-rough-endpoint}) gives (\ref{eq:arealaw-charge-selection}).
+    Fix $C_{\rm tr}$ before $q$, then $(C_{\rm target},c_t,C_{\rm ent},e_{\rm ent})$, and then $(C,C_l,N)$. For $n\ge N$, Lemmas~\ref{thm:al_scan_target_typical_window}, \ref{thm:al_global_schmidt_bell_prevector}, and~\ref{thm:al_positive_prefix_entropy_transfer} yield $(\widetilde\Omega,E,z,\lambda_k,\mathrm{pre}_k)$ and transfer prefix entropies within $n^{-247}$. Lemmas~\ref{thm:al_scan_actual_rough_upper} and~\ref{thm:arealaw-physical-endpoint-loss} control the endpoint norms, and Lemma~\ref{thm:arealaw-augmented-prevector-properties} feeds $\mathrm{pre}_k$ into Lemmas~\ref{thm:arealaw-generic-charge-energy}, \ref{thm:arealaw-generic-selected-energy}, and~\ref{thm:arealaw-actual-selected-energy} to select $(s_k,p_k)$, which together with (\ref{eq:arealaw-density-from-rough-endpoint}) gives (\ref{eq:arealaw-charge-selection}).
 \end{proof}
 
-\begin{theorem}[Moment radii from marginal smallness]
+\begin{lemma}[Moment radii from marginal smallness]
     \label{thm:arealaw-sharp-smallness}
     \lean{TNLean.PEPS.AreaLaw.Scan.sharpSmallness_le_moment_radius}
     \leanok
     If $B\geq1$ and $a\sqrt B\leq\min\{c_0,1\}/10$, then
     $10a\leq c_0/\sqrt B$ and $10a\leq1$ (\cite[Proposition~9.2]{OpenAI2026AreaLaw}).
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Divide $10a\sqrt B\leq\min\{c_0,1\}$ by $\sqrt B\geq1$.
 \end{proof}
 
 % Auxiliary density consequence for Proposition 9.2.
-\begin{theorem}[Physical selected density for arbitrary scanner exponents]
+\begin{lemma}[Physical selected density for arbitrary scanner exponents]
     \label{thm:arealaw-source-selected-density}
     \lean{
         TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_source_density}
     \leanok
     \uses{thm:arealaw-source-charge-selection}
-    Fix $R\in\mathbb N$, $J\geq0$, $\Delta>0$, and $C_T\geq0$, with $C_{\rm tr}>0$ as in Theorem~\ref{thm:arealaw-source-charge-selection}. For every $q\geq1$, $C_1>0$, $m_*\in\mathbb N$ ($3m_*\leq C_1$), and $P\in\mathbb R$, there exist $C_{\rm target}>0$ and $0<c\leq1/2$; for every admissible $(\ell,\mu,\kappa,\nu,e_{\rm in})$ there exist $C\geq1$ and $C_l\geq0$; and for every $C_e\geq0$ there exist $C_\delta>0$, $C_{l,\delta}\geq0$, and $N\geq2$ (preceding the physical instance and $W$).
+    Fix $R\in\mathbb N$, $J\geq0$, $\Delta>0$, and $C_T\geq0$, with $C_{\rm tr}>0$ as in Lemma~\ref{thm:arealaw-source-charge-selection}. For every $q\geq1$, $C_1>0$, $m_*\in\mathbb N$ ($3m_*\leq C_1$), and $P\in\mathbb R$, there exist $C_{\rm target}>0$ and $0<c\leq1/2$; for every admissible $(\ell,\mu,\kappa,\nu,e_{\rm in})$ there exist $C\geq1$ and $C_l\geq0$; and for every $C_e\geq0$ there exist $C_\delta>0$, $C_{l,\delta}\geq0$, and $N\geq2$ (preceding the physical instance and $W$).
 
-    Under the geometric hypotheses and scales (\ref{eq:arealaw-scanner-scales}) of Theorem~\ref{thm:arealaw-source-charge-selection} for $n\ge N$ and $X=A\cap T$, assume that for $0\leq j\leq L$,
+    Under the geometric hypotheses and scales (\ref{eq:arealaw-scanner-scales}) of Lemma~\ref{thm:arealaw-source-charge-selection} for $n\ge N$ and $X=A\cap T$, assume that for $0\leq j\leq L$,
     \begin{align}
         S_\Omega(X) & \leq C_en^{1+e_{\rm in}},          &
         S_\Omega(\{x\in A:0<d(x)\leq j\})
                     & \leq C_e(nL^{e_{\rm in}}+n).\notag
     \end{align}
-    Then $1\le 2r_0\le D\le m/4$, and $(\widetilde\Omega,E,z,\lambda_k,\mathrm{pre}_k)$ from Theorem~\ref{thm:arealaw-source-charge-selection} is fixed before $W$.
+    Then $1\le 2r_0\le D\le m/4$, and $(\widetilde\Omega,E,z,\lambda_k,\mathrm{pre}_k)$ from Lemma~\ref{thm:arealaw-source-charge-selection} is fixed before $W$.
     For any $W\geq1$ with $a=W/K$, $\varepsilon=n^{-\nu}$, and $ar_0^2\leq c$, (\ref{eq:arealaw-charge-budgets}) at $\eta=e_{\rm in}$ satisfies
     \begin{align}
         B_{\rm rough}
@@ -201,24 +201,24 @@ fixed interpolation interval $[p_0,p_1]\subset(0,1)$.
     \end{align}
     and there exists $\rho_k\ge0$ with $\rho_k\to0$ such that for all sufficiently large $k$, the selected $(s_k,p_k)\in\{0,\ldots,nm-1\}\times[\varepsilon/2,\varepsilon]$ satisfies (\ref{eq:arealaw-charge-selection}) (with $p_0=\varepsilon/2,p_1=\varepsilon$) and
     $\mathcal Q_k/(KnD)\leq\delta_n+\rho_k$ (\cite[Proposition~9.2, lines~475--490]{OpenAI2026AreaLaw}).
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:arealaw-source-charge-selection,thm:scanner_rounded_admissibility,
         thm:al_scan_radius_dimension_smallness,thm:al_scan_transport_coefficients_log,
         thm:arealaw-target-entropy-transfer,thm:arealaw-source-rough-budget-power,
         thm:arealaw-selected-density-delta}
-    By Theorems~\ref{thm:scanner_rounded_admissibility}, \ref{thm:al_scan_radius_dimension_smallness}, \ref{thm:arealaw-target-entropy-transfer}, and~\ref{thm:arealaw-source-rough-budget-power}, $ar_0^2\le c$ implies $a\ell_{\dim}\le c_t$ and the bound on $B_{\rm rough}$ in (\ref{eq:arealaw-source-density}). By Theorem~\ref{thm:al_scan_transport_coefficients_log}, $G=C_{\rm ent}\ell_{\dim}^{e_{\rm ent}}\le C_t(\log n)^{C_{l,\delta}}$. Setting $C_\delta=4(C_1+1)(6C_e+13+6\log q+2C_t)C_s$, $\gamma=4(C_1+1)/(Wnm\varepsilon)$, and $\rho_k=|\gamma R_k^{\rm end}|\to0$, Theorem~\ref{thm:arealaw-selected-density-delta} and (\ref{eq:arealaw-charge-selection}) give $\mathcal Q_k/(KnD)\le\delta_n+\rho_k$.
+    By Lemmas~\ref{thm:scanner_rounded_admissibility}, \ref{thm:al_scan_radius_dimension_smallness}, \ref{thm:arealaw-target-entropy-transfer}, and~\ref{thm:arealaw-source-rough-budget-power}, $ar_0^2\le c$ implies $a\ell_{\dim}\le c_t$ and the bound on $B_{\rm rough}$ in (\ref{eq:arealaw-source-density}). By Lemma~\ref{thm:al_scan_transport_coefficients_log}, $G=C_{\rm ent}\ell_{\dim}^{e_{\rm ent}}\le C_t(\log n)^{C_{l,\delta}}$. Setting $C_\delta=4(C_1+1)(6C_e+13+6\log q+2C_t)C_s$, $\gamma=4(C_1+1)/(Wnm\varepsilon)$, and $\rho_k=|\gamma R_k^{\rm end}|\to0$, Lemma~\ref{thm:arealaw-selected-density-delta} and (\ref{eq:arealaw-charge-selection}) give $\mathcal Q_k/(KnD)\le\delta_n+\rho_k$.
 \end{proof}
 
 % Auxiliary density-to-energy consequence for Proposition 9.2.
-\begin{theorem}[Physical selected energy for arbitrary scanner exponents]
+\begin{lemma}[Physical selected energy for arbitrary scanner exponents]
     \label{thm:arealaw-source-selected-energy}
     \lean{
         TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_source_density_energy}
     \leanok
     \uses{thm:arealaw-source-selected-density}
-    Under the hypotheses of Theorem~\ref{thm:arealaw-source-selected-density} with $P=100$, there exist common coefficients $C_\delta>0$ and $C_{l,\delta}\ge0$ (chosen after the scanner exponents and $C_e\ge0$, before the physical system and $W$) such that for $W\ge1$, $a=W/K$ with $ar_0^2\le c$, $\varepsilon=n^{-\nu}$, and $\delta_n$ defined by (\ref{eq:arealaw-source-density}), the truncated ground energy $e$ and gap $g/2$ satisfy $e/(g/2)\le C_\delta n^{-1000}$, and there exist $\rho_k,\rho_{E,k}\ge0$ tending to $0$ such that for all sufficiently large $k$, the selected $(s_k,p_k)\in\{0,\ldots,nm-1\}\times[\varepsilon/2,\varepsilon]$ satisfies (\ref{eq:arealaw-charge-selection}), $\mathcal Q_k/(KnD)\le\delta_n+\rho_k$, and
+    Under the hypotheses of Lemma~\ref{thm:arealaw-source-selected-density} with $P=100$, there exist common coefficients $C_\delta>0$ and $C_{l,\delta}\ge0$ (chosen after the scanner exponents and $C_e\ge0$, before the physical system and $W$) such that for $W\ge1$, $a=W/K$ with $ar_0^2\le c$, $\varepsilon=n^{-\nu}$, and $\delta_n$ defined by (\ref{eq:arealaw-source-density}), the truncated ground energy $e$ and gap $g/2$ satisfy $e/(g/2)\le C_\delta n^{-1000}$, and there exist $\rho_k,\rho_{E,k}\ge0$ tending to $0$ such that for all sufficiently large $k$, the selected $(s_k,p_k)\in\{0,\ldots,nm-1\}\times[\varepsilon/2,\varepsilon]$ satisfies (\ref{eq:arealaw-charge-selection}), $\mathcal Q_k/(KnD)\le\delta_n+\rho_k$, and
     \begin{align}
         E_{{\rm def},k}
          & :=\frac{\mu_k-e}{g/2}
@@ -228,24 +228,24 @@ fixed interpolation interval $[p_0,p_1]\subset(0,1)$.
         \label{eq:arealaw-source-energy}
     \end{align}
     matching \cite[Proposition~9.2, lines~368--381 and 492--533]{OpenAI2026AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:arealaw-source-selected-density,thm:arealaw-selected-energy-density,
         thm:arealaw-selected-energy-vanishing-remainder}
-    With $g_*=g/2$ and density coefficients $(C_{\delta,0},C_{l,\delta,0})$ from Theorem~\ref{thm:arealaw-source-selected-density}, set
+    With $g_*=g/2$ and density coefficients $(C_{\delta,0},C_{l,\delta,0})$ from Lemma~\ref{thm:arealaw-source-selected-density}, set
     $C_\delta=\max\{C_{\delta,0},(C+1)/g_*\}$, $C_{l,\delta}=\max\{C_{l,\delta,0},C_l\}$,
-    $A=CW^2n^\ell D^2(\log n)^{C_l}$, and $\rho_{E,k}=(A|\rho_k|^{1/8}+r_k)/g_*\to0$ (Theorem~\ref{thm:arealaw-selected-energy-vanishing-remainder}). Applying Theorem~\ref{thm:arealaw-selected-energy-density} to (\ref{eq:arealaw-charge-selection}) gives (\ref{eq:arealaw-source-energy}).
+    $A=CW^2n^\ell D^2(\log n)^{C_l}$, and $\rho_{E,k}=(A|\rho_k|^{1/8}+r_k)/g_*\to0$ (Lemma~\ref{thm:arealaw-selected-energy-vanishing-remainder}). Applying Lemma~\ref{thm:arealaw-selected-energy-density} to (\ref{eq:arealaw-charge-selection}) gives (\ref{eq:arealaw-source-energy}).
 \end{proof}
 
-\begin{theorem}[Uniform comparisons for a prescribed physical charge state]
+\begin{lemma}[Uniform comparisons for a prescribed physical charge state]
     \label{thm:arealaw-supplied-target-norm-bounds}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_suppliedTarget_actualCharge_norm_bounds}
     \leanok
     \uses{thm:al_scan_common_status_budget,def:actual_sharp_lower_remainder}
     Fix $q\geq1$, $R\in\mathbb N$, and $C_r>0$.
     There exists $C_B>0$ (depending only on $q,R,C_r$) such that under the geometric hypotheses of
-    Theorem~\ref{thm:al_scan_common_status_budget} with $K,m,M>0$ and
+    Lemma~\ref{thm:al_scan_common_status_budget} with $K,m,M>0$ and
     $r_0=\lceil C_r(\log n)^2\rceil$, $\mathcal B=C_BnD(\log n)^{12}\geq1$.
     For a range-$R$ Hamiltonian $H$, unit vector $\Omega$, $\Delta>0$, and a ground vector $\widetilde\Omega$ of $\widetilde H$ with energy $e_t$ and projector gap $g/2$, set
     $C_0=512\mathrm e\,(2/g)$ and $c_0=(32\sqrt{1+2/g})^{-1}$.
@@ -294,11 +294,11 @@ fixed interpolation interval $[p_0,p_1]\subset(0,1)$.
         \label{eq:arealaw-supplied-sharp-bounds}
     \end{align}
     matching \cite[Proposition~9.2, lines~386--395]{OpenAI2026AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_scan_supplied_status_moments,thm:actual_supplied_rough_lower_weight,
         thm:arealaw-sharp-smallness,thm:al_actual_sharp_upper,
         thm:actual_scan_supplied_prevector_sharp_lower}
-    Choose $C_B$ from Theorem~\ref{thm:al_scan_supplied_status_moments}. Since $r_0\ge1$ and $ar_0^2\le1/2$ imply $0<a\le1/2$, Theorem~\ref{thm:actual_supplied_rough_lower_weight} yields (\ref{eq:arealaw-supplied-rough-lower}). When $a\sqrt{\mathcal B}\le\min\{c_0,1\}/10$, Theorem~\ref{thm:arealaw-sharp-smallness} gives $10a\le\min\{c_0/\sqrt{\mathcal B},1\}$, so Theorems~\ref{thm:al_scan_supplied_status_moments}, \ref{thm:al_actual_sharp_upper}, and~\ref{thm:actual_scan_supplied_prevector_sharp_lower} yield (\ref{eq:arealaw-supplied-sharp-bounds}).
+    Choose $C_B$ from Lemma~\ref{thm:al_scan_supplied_status_moments}. Since $r_0\ge1$ and $ar_0^2\le1/2$ imply $0<a\le1/2$, Lemma~\ref{thm:actual_supplied_rough_lower_weight} yields (\ref{eq:arealaw-supplied-rough-lower}). When $a\sqrt{\mathcal B}\le\min\{c_0,1\}/10$, Lemma~\ref{thm:arealaw-sharp-smallness} gives $10a\le\min\{c_0/\sqrt{\mathcal B},1\}$, so Lemmas~\ref{thm:al_scan_supplied_status_moments}, \ref{thm:al_actual_sharp_upper}, and~\ref{thm:actual_scan_supplied_prevector_sharp_lower} yield (\ref{eq:arealaw-supplied-sharp-bounds}).
 \end{proof}

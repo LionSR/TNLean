@@ -1,7 +1,7 @@
 % SCP10, source lines 1818--1915. Untwisted tori with coarse periods at least three.
 % This is a scope-restricted physical fixed-point theorem, not the unrestricted source label.
 
-\begin{theorem}[Isometric equivalence with the canonical physical support]%
+\begin{lemma}[Isometric equivalence with the canonical physical support]%
     \label{thm:peps_g_isometric_canonical_support}
     \lean{TNLean.PEPS.IsGIsometric.exists_canonicalSupportEquiv}
     \leanok
@@ -13,7 +13,7 @@
     $JT=\sqrt c\,P_\rho$. This support identification for
     \cite[Observations~6.4 and~6.6]{Schuch2010PEPS} requires no surjectivity
     onto either ambient coordinate space.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The normalized adjoint is already isometric on $\operatorname{ran}T$.
@@ -37,7 +37,7 @@
     fine boundary legs.
 \end{definition}
 
-\begin{theorem}[Exact state and symmetry in bundle coordinates]%
+\begin{lemma}[Exact state and symmetry in bundle coordinates]%
     \label{thm:peps_two_by_two_bundle_coordinates}
     \lean{TNLean.PEPS.graphBondNetwork_twoByTwoBundledGraphSite,
         TNLean.PEPS.torusBondNetwork_eq_twoByTwoBundledGraphSite,
@@ -53,7 +53,7 @@
     translation and leaves the physical block map unchanged. Thus the
     bundled incident representation is precisely the eight-leg regular
     representation in different coordinates.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Under the displayed two-label bijection on every edge label,
@@ -62,7 +62,7 @@
     equality of physical maps.
 \end{proof}
 
-\begin{theorem}[Identification of the original coarse tensor]%
+\begin{lemma}[Identification of the original coarse tensor]%
     \label{thm:peps_two_by_two_original_canonical}
     \lean{TNLean.PEPS.graphIncidentRepresentation_leftRegularMatrix,
         TNLean.PEPS.IsGIsometric.isGIsometric_torusIncidentFamily,
@@ -80,7 +80,7 @@
     $J=c^{-1/2}T_A^*$ and satisfying $JT_A=\sqrt c\,T_0$.
     This identifies the coarse tensor with the original tensor on physical
     support, with its scalar normalization retained.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The transposed inverse regular matrix on an outgoing leg has the same
@@ -90,7 +90,7 @@
     equivalence to the incident-coordinate original tensor yields $J$.
 \end{proof}
 
-\begin{theorem}[G-isometry of bundled coarse sites]%
+\begin{lemma}[G-isometry of bundled coarse sites]%
     \label{thm:peps_two_by_two_bundled_isometry}
     \lean{TNLean.PEPS.isGIsometric_twoByTwoBundledGraphSite}
     \leanok
@@ -100,7 +100,7 @@
     If every fine site is regular $G$-isometric, then every bundled
     coarse site is $G$-isometric for its bundled incident representation.
     There is no independent hypothesis about the blocked Gram matrix.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The explicit four-site Gram calculation gives G-isometry on all eight
@@ -126,7 +126,7 @@
     remain in their original ambient spaces.
 \end{definition}
 
-\begin{theorem}[Derived support membership of the fine state]%
+\begin{lemma}[Derived support membership of the fine state]%
     \label{thm:peps_two_by_two_fine_support}
     \lean{TNLean.PEPS.twoByTwoPhysicalRegroupingIsometry_fineState,
         TNLean.PEPS.twoByTwoFineState_mem_physicalSupport}
@@ -137,7 +137,7 @@
     The physical regrouping satisfies $W\Psi_a=\Psi_B$, and the
     fine state belongs to $S_a$. These statements require no symmetry or
     additional support hypothesis.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The geometric bond bijection gives $W\Psi_a=\Psi_B$.
@@ -145,7 +145,7 @@
     to its virtual bond vector, hence $\Psi_B\in\operatorname{ran}T_B$.
 \end{proof}
 
-\begin{theorem}[Physical four-site renormalization on a regular torus]%
+\begin{lemma}[Physical four-site renormalization on a regular torus]%
     \label{thm:peps_two_by_two_physical_renormalization}
     \lean{TNLean.PEPS.exists_regularTwoByTwoPhysicalSupportIsometry}
     \leanok
@@ -174,7 +174,7 @@
     equivalence identifies the coarse canonical tensor with $A$ in the
     untwisted periodic specialization of
     \cite[Observations~6.5--6.6]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Applying physical support accessibility and regular bundle separation to

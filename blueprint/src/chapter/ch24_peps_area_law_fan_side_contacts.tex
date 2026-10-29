@@ -10,7 +10,7 @@ fine cell only along its elementary base.
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % These are boundary identities, not the full two-family proposition.
 
-\begin{theorem}[A triangle meets its own cell sides along its base]
+\begin{lemma}[A triangle meets its own cell sides along its base]
     \label{thm:area_law_fan_own_side_contact}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_inter_dyadicCellSide}
     \leanok
@@ -22,7 +22,7 @@ fine cell only along its elementary base.
     \begin{align}
         P_i\cap E=e_i\cap E.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_cell_fan,thm:area_law_cell_fan_cover,
         thm:area_law_elementary_side_boundary_geometry}
@@ -34,7 +34,7 @@ fine cell only along its elementary base.
     inclusion follows from $e_i\subseteq P_i$.
 \end{proof}
 
-\begin{theorem}[Contact with a distinct cell passes through the base]
+\begin{lemma}[Contact with a distinct cell passes through the base]
     \label{thm:area_law_fan_other_cell_contact}
     \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_cellFanPolygon_inter_closedCell_eq}
     \leanok
@@ -48,7 +48,7 @@ fine cell only along its elementary base.
         P_i\cap\overline{Q_{\ell_h}(w)}
         =e_i\cap\overline{Q_{\ell_h}(w)}.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_fine_cells_disjoint,thm:area_law_cell_fan_cover}
     The half-open fine cells $Q_{\ell_k}(z)$ and $Q_{\ell_h}(w)$ are disjoint,

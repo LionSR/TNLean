@@ -7,7 +7,7 @@ $\langle O\rangle_L=\langle\Phi_L(A),O\Phi_L(A)\rangle/Z_L$,
 with value zero when $Z_L=0$. The trace $\operatorname{Tr}$ below is taken
 on the virtual matrix space, whereas $\tr$ is the trace of a virtual matrix.
 
-\begin{theorem}[Finite periodic trace ratio]
+\begin{lemma}[Finite periodic trace ratio]
     \label{thm:periodic_string_trace_ratio}
     \lean{MPSTensor.mpvExpectation_finKronecker_const_eq_trace_div,
         MPSTensor.physicalObservableTransfer_singleton,
@@ -22,7 +22,7 @@ on the virtual matrix space, whereas $\tr$ is the trace of a virtual matrix.
         \label{eq:periodic_string_trace_ratio}
     \end{align}
     Both sides use the zero convention at a vanishing periodic vector.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:ldp_observable_transfer_products}
@@ -40,7 +40,7 @@ It is the pure canonical regime of
 \cite[lines~147--160]{PerezGarcia2008StringOrder}, with the eigenspace
 condition retained rather than only uniqueness of the eigenvalue as a set.
 
-\begin{theorem}[Eventual periodic normalization]
+\begin{lemma}[Eventual periodic normalization]
     \label{thm:periodic_string_normalization}
     \lean{MPSTensor.pureCanonical_mpvState_inner_self_tendsto_one,
         MPSTensor.pureCanonical_eventually_mpvState_ne_zero}
@@ -49,7 +49,7 @@ condition retained rather than only uniqueness of the eigenvalue as a set.
     Under these canonical purity assumptions, $Z_L\to1$ as $L\to\infty$.
     In particular, $\Phi_L(A)\ne0$ for all sufficiently large $L$.
     No nonvanishing assertion at every short length is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:canonical_transfer_stationary_trace_limit,
@@ -60,7 +60,7 @@ condition retained rather than only uniqueness of the eigenvalue as a set.
     $Z_L=\operatorname{Tr}(\E_A^L)\to1$.
 \end{proof}
 
-\begin{theorem}[Thermodynamic limit with fixed physical support]
+\begin{lemma}[Thermodynamic limit with fixed physical support]
     \label{thm:periodic_string_fixed_support}
     \lean{MPSTensor.pureCanonical_mpvExpectation_appendObservable_tendsto,
         MPSTensor.pureCanonical_mpvExpectation_block_string_tendsto,
@@ -81,7 +81,7 @@ condition retained rather than only uniqueness of the eigenvalue as a set.
     $x\otimes u^{\otimes N}\otimes y$.
     The middle length is fixed before the exterior $n$ tends to infinity;
     no exchange of limits or rate uniform in $N$ is asserted.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:periodic_string_normalization,
@@ -92,12 +92,12 @@ condition retained rather than only uniqueness of the eigenvalue as a set.
     dimensionality give
     $\operatorname{Tr}(F\E_A^n)\to\operatorname{Tr}(FP)
         =\tr[\Lambda F(\Id)]$, while by
-    Theorem~\ref{thm:periodic_string_normalization} the denominator tends to
+    Lemma~\ref{thm:periodic_string_normalization} the denominator tends to
     one. Tensor-product insertions give the stated physical string
     specializations.
 \end{proof}
 
-\begin{theorem}[Exact periodic symmetry phase]
+\begin{lemma}[Exact periodic symmetry phase]
     \label{thm:periodic_string_exact_phase}
     \lean{MPSTensor.trace_twistedTransferIter_eq_phase_mul_trace_transfer_pow,
         MPSTensor.mpvExpectation_finKronecker_const_eq_phase_pow}
@@ -113,7 +113,7 @@ condition retained rather than only uniqueness of the eigenvalue as a set.
     The numerator identity
     $\operatorname{Tr}(\E_u^L)=\mu^L\operatorname{Tr}(\E_A^L)$
     holds also at zero periodic vectors, without purity or normalization.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:periodic_string_trace_ratio,
@@ -126,7 +126,7 @@ condition retained rather than only uniqueness of the eigenvalue as a set.
     (\ref{eq:periodic_string_exact_phase}).
 \end{proof}
 
-\begin{theorem}[Full-ring spectral alternatives]
+\begin{lemma}[Full-ring spectral alternatives]
     \label{thm:periodic_string_spectral_alternatives}
     \lean{MPSTensor.pureCanonical_mpvExpectation_fullRing_dichotomy,
         MPSTensor.pureCanonical_mpvExpectation_fullRing_tendsto_zero,
@@ -145,7 +145,7 @@ condition retained rather than only uniqueness of the eigenvalue as a set.
     for display RL (lines 381--388), its phase-adjusted value tends to one,
     while the unadjusted complex sequence has no limit whenever $\mu\ne1$.
     No implication concerning a parameterized Hamiltonian gap is asserted.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:pgwsvc08_twisted_spectral_radius,
