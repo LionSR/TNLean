@@ -24,7 +24,7 @@ Source: arXiv:1210.6613, Lemma exptransferoperator and the normalized
 two-block setting of Lemma lowenergystates, lines 1165–1265.
 -/
 
-open scoped Matrix BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator ENNReal
+open scoped Matrix BigOperators ComplexOrder MatrixOrder TNOperatorSpace ENNReal
 
 namespace MPSTensor
 
@@ -102,11 +102,7 @@ theorem uncleBoundaryLetter_mixedMapSpectralRadius_lt_one [NeZero a] [NeZero b]
   have hOne : Matrix.rectangularKrausMap K 1 = 1 := by
     change (∑ i, K i * 1 * (K i)ᴴ) = 1
     simpa only [Kraus.IsUnital, Matrix.mul_one] using hKU
-  suffices hLocal : spectralRadius ℂ
-      ((Module.End.toContinuousLinearMap (Matrix (Fin a) (Fin b) ℂ))
-        (Kraus.mixedMapLM A B)) < 1 by
-    simpa only [Kraus.mixedMapSpectralRadius, spectralRadius,
-      AlgEquiv.quasispectrum_eq] using hLocal
+  unfold Kraus.mixedMapSpectralRadius
   apply spectralRadius_lt_one_of_eigenvalues_lt_one
   intro μ hμ
   obtain ⟨X, hX⟩ := hμ.exists_hasEigenvector
@@ -126,7 +122,8 @@ theorem uncleBoundaryLetter_mixedMapSpectralRadius_lt_one [NeZero a] [NeZero b]
     ext i j
     exact congrArg (fun T ↦ T (Sum.inl i) (Sum.inr j)) hM
   have hEK : Module.End.HasEigenvalue (Matrix.rectangularKrausMap K) μ :=
-    hasEigenvalue_of_eigenvector_eq _ μ M hEM hMne
+    Module.End.hasEigenvalue_of_hasEigenvector
+      ⟨Module.End.mem_eigenspace_iff.mpr hEM, hMne⟩
   have hle := hCP.eigenvalue_norm_le_one_of_map_one_eq_one hOne μ hEK
   by_contra hn
   have hnorm : ‖μ‖ = 1 := le_antisymm hle (le_of_not_gt hn)
@@ -134,7 +131,8 @@ theorem uncleBoundaryLetter_mixedMapSpectralRadius_lt_one [NeZero a] [NeZero b]
     K hKU hρ hF M μ hEM hnorm
   have hComm := Kraus.kraus_commute_of_ks_equality K hKU M hKS
   have hInter (i : Fin d) : X * (B i)ᴴ = μ • ((A i)ᴴ * X) := by
-    have h := congrArg (fun T ↦ T.submatrix Sum.inl Sum.inr) (hComm i)
+    ext j k
+    have h := congrArg (fun T ↦ T (Sum.inl j) (Sum.inr k)) (hComm i)
     rw [hEM] at h
     simpa [K, M, Matrix.fromBlocks_multiply, Matrix.fromBlocks_conjTranspose] using h
   obtain ⟨c, hcA, hcB⟩ := uncleBoundary_separating_coefficients A B R L hPert
@@ -146,7 +144,7 @@ theorem uncleBoundaryLetter_mixedMapSpectralRadius_lt_one [NeZero a] [NeZero b]
         simp_rw [Matrix.mul_smul]
       _ = ∑ i, c i • (μ • ((A i)ᴴ * X)) := by simp_rw [hInter]
       _ = μ • ((∑ i, c i • (A i)ᴴ) * X) := by
-        rw [Finset.sum_mul, Finset.smul_sum]
+        rw [Matrix.sum_mul, Finset.smul_sum]
         apply Finset.sum_congr rfl
         intro i _
         rw [Matrix.smul_mul]
@@ -170,11 +168,7 @@ theorem uncleBoundaryLetter_mixedMapSpectralRadius_reverse_lt_one [NeZero a] [Ne
     Kraus.mixedMapSpectralRadius B A < 1 := by
   have hgap := uncleBoundaryLetter_mixedMapSpectralRadius_lt_one
     A B R L hPert hUA hUB ρA hρA ρB hρB hFA hFB
-  suffices hLocal : spectralRadius ℂ
-      ((Module.End.toContinuousLinearMap (Matrix (Fin b) (Fin a) ℂ))
-        (Kraus.mixedMapLM B A)) < 1 by
-    simpa only [Kraus.mixedMapSpectralRadius, spectralRadius,
-      AlgEquiv.quasispectrum_eq] using hLocal
+  unfold Kraus.mixedMapSpectralRadius
   apply spectralRadius_lt_one_of_eigenvalues_lt_one
   intro μ hμ
   obtain ⟨X, hX⟩ := hμ.exists_hasEigenvector
@@ -190,13 +184,18 @@ theorem uncleBoundaryLetter_mixedMapSpectralRadius_reverse_lt_one [NeZero a] [Ne
     exact hX.2 (by simpa only [Matrix.conjTranspose_conjTranspose,
       Matrix.conjTranspose_zero] using congrArg Matrix.conjTranspose h)
   have hEig : Module.End.HasEigenvalue (Kraus.mixedMapLM A B) (star μ) :=
-    hasEigenvalue_of_eigenvector_eq _ _ Xᴴ hEXstar hne
+    Module.End.hasEigenvalue_of_hasEigenvector
+      ⟨Module.End.mem_eigenspace_iff.mpr hEXstar, hne⟩
   have hSpec : star μ ∈ spectrum ℂ (Kraus.mixedMapLM A B) :=
     Module.End.hasEigenvalue_iff_mem_spectrum.mp hEig
+  have hQspec : star μ ∈ quasispectrum ℂ
+      ((Module.End.toContinuousLinearMap (Matrix (Fin a) (Fin b) ℂ))
+        (Kraus.mixedMapLM A B)) := by
+    rw [AlgEquiv.quasispectrum_eq (R := ℂ)]
+    exact spectrum_subset_quasispectrum ℂ _ hSpec
   have hbound : (‖star μ‖₊ : ℝ≥0∞) ≤ Kraus.mixedMapSpectralRadius A B := by
-    unfold Kraus.mixedMapSpectralRadius
-    rw [spectralRadius_eq_of_unital, AlgEquiv.spectrum_eq]
-    exact le_iSup_of_le (star μ) (le_iSup_of_le hSpec le_rfl)
+    unfold Kraus.mixedMapSpectralRadius spectralRadius
+    exact le_iSup_of_le (star μ) (le_iSup_of_le hQspec le_rfl)
   have hlt := hbound.trans_lt hgap
   simpa only [norm_star] using (show ‖star μ‖ < 1 by exact_mod_cast hlt)
 
