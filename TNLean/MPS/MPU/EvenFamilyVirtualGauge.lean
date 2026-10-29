@@ -56,7 +56,8 @@ theorem IsMPUCanonicalFormII.exists_unitary_virtual_sign_gauge_of_mpo_eq_even
   have hA := hU.isNormalTensor_normalizedFlattening
   have hB := hV.isNormalTensor_normalizedFlattening
   have hEvenTop : Filter.Tendsto (fun n : ℕ ↦ 2 * n) Filter.atTop Filter.atTop :=
-    Filter.tendsto_atTop_mono (fun n ↦ by omega) Filter.tendsto_id
+    Filter.tendsto_atTop_mono (f := fun n : ℕ ↦ n) (fun n ↦ by omega)
+      Filter.tendsto_id
   obtain ⟨_, hzero | ⟨_, hdim, X, η, hη, hrel⟩⟩ := hA.overlap_dichotomy hB
   · exfalso
     have hCrossSelf : ∀ᶠ n : ℕ in Filter.atTop,
