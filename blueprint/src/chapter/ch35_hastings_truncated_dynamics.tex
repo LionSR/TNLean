@@ -17,7 +17,7 @@ generally, for $W$ supported on $S\subseteq K$ and a subset $s$ of terms
 supported inside $K$, the shell consists of omitted terms ($k\notin s$) whose
 supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
 
-\begin{theorem}[Support of the truncated filter]
+\begin{lemma}[Support of the truncated filter]
     \label{thm:hastings_truncated_support}
     \lean{TNLean.Lattice.hermitianUnitaryPath_conj_mem_supportedOperators,
         TNLean.Lattice.gaussianFilteredTerm_mem_supportedOperators}
@@ -27,14 +27,14 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
     $\widetilde W$ act on $K$; in particular, $M_i$ in
     (\ref{eq:hastings_truncated_mi}) acts within distance $l_{proj}$ of $i$
     \cite[lines 302--304]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Operators supported on $K$ form a closed subalgebra, hence contain
     $e^{iHt}We^{-iHt}$ and its Gaussian integral $\widetilde W$.
 \end{proof}
 
-\begin{theorem}[Comparison of two evolutions]
+\begin{lemma}[Comparison of two evolutions]
     \label{thm:hastings_truncated_evolution_comparison}
     \lean{TNLean.Lattice.norm_conj_sub_conj_le}
     \leanok
@@ -46,7 +46,7 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
         \label{eq:hastings_truncated_evolution_comparison}
     \end{align}
     \cite[lines 1469--1482]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The map $f(s)=e^{iHs}\tau'_{t-s}(W)e^{-iHs}$ satisfies $f(0)=\tau'_t(W)$,
@@ -54,7 +54,7 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
     $\|f'(s)\|=\|[H-H',\tau'_{t-s}(W)]\|\le\varepsilon$.
 \end{proof}
 
-\begin{theorem}[Filtering a comparison of evolutions]
+\begin{lemma}[Filtering a comparison of evolutions]
     \label{thm:hastings_truncated_filter_comparison}
     \lean{TNLean.Lattice.norm_gaussianFilteredTerm_sub_le}
     \leanok
@@ -64,16 +64,16 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
     then the Gaussian filters $\widetilde W_H$ and $\widetilde W_{H'}$ satisfy
     $\|\widetilde W_H-\widetilde W_{H'}\|\le\varepsilon+2\|W\|e^{-(T\Delta E)^2/(2q)}$
     \cite[eq.~(dmi), lines 1524--1533]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:hastings_filtered_locality}
     Split the Gaussian integral at $|t|=T$ as in
-    Theorem~\ref{thm:hastings_filtered_locality}, using integrand bound
+    Lemma~\ref{thm:hastings_filtered_locality}, using integrand bound
     $\varepsilon$ on $[-T,T]$ and $2\|W\|$ on $\mathbb R\setminus[-T,T]$.
 \end{proof}
 
-\begin{theorem}[Lieb--Robinson bound against an operator on several sites]
+\begin{lemma}[Lieb--Robinson bound against an operator on several sites]
     \label{thm:hastings_truncated_multisite_lieb_robinson}
     \lean{TNLean.Lattice.norm_commutator_heisenbergEvolution_le_graphDistance_finset}
     \leanok
@@ -86,7 +86,7 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
         \|[B,\tau_t(A)]\|\le2|Y|\,C\,|S|\,\|A\|\,\|B\|\,e^{v|t|-\mu m}.
         \label{eq:hastings_truncated_multisite_lieb_robinson}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:qc_graph_lieb_robinson_finset, lem:qc_site_expectation_commutator}
@@ -97,7 +97,7 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
     Theorem~\ref{thm:qc_graph_lieb_robinson_finset}.
 \end{proof}
 
-\begin{theorem}[The omitted terms against the truncated evolution]
+\begin{lemma}[The omitted terms against the truncated evolution]
     \label{thm:hastings_truncated_omitted_commutator}
     \lean{TNLean.Lattice.norm_commutator_sub_truncated_le}
     \leanok
@@ -111,25 +111,25 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
         \label{eq:hastings_truncated_omitted_commutator}
     \end{align}
     \cite[lines 1469--1505]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:hastings_truncated_support,
         thm:hastings_truncated_multisite_lieb_robinson}
-    By Theorem~\ref{thm:hastings_truncated_support}, $e^{iH_su}We^{-iH_su}$ acts
+    By Lemma~\ref{thm:hastings_truncated_support}, $e^{iH_su}We^{-iH_su}$ acts
     on $K$, so omitted terms with $X_k\cap K=\emptyset$ commute with it; for
     $X_k\cap K\ne\emptyset$, apply
     (\ref{eq:hastings_truncated_multisite_lieb_robinson}) with $|X_k|\le v_R$.
 \end{proof}
 
-\begin{theorem}[Hastings' truncated approximation]
+\begin{lemma}[Hastings' truncated approximation]
     \label{thm:hastings_truncated_approximation}
     \lean{TNLean.Lattice.norm_gaussianFilteredTerm_sub_truncated_le_sum,
         TNLean.Lattice.norm_gaussianFilteredTerm_sub_truncated_le,
         TNLean.Lattice.truncated_approx_gaussianFilteredTerm}
     \leanok
     \uses{def:hastings_gaussian_filtered_term}
-    In the setting of Theorem~\ref{thm:hastings_truncated_omitted_commutator},
+    In the setting of Lemma~\ref{thm:hastings_truncated_omitted_commutator},
     if $\|h_k\|\le J$ and $N=|\{k\notin s:X_k\cap K\ne\emptyset\}|$, then the
     filter $M$ of $W$ under $H_s$ acts on $K$, satisfies $\|M\|\le\|W\|$ (and
     $M=M^\dagger$ if $W=W^\dagger$), and for all $q,T,\mu\ge0$,
@@ -140,7 +140,7 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
     \end{align}
     \cite[eq.~(apb), lines 300--320]{Hastings2006Solving},
     \cite{gap:hastings05_truncated_dynamics}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:hastings_truncated_support,
@@ -148,20 +148,20 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
         thm:hastings_truncated_filter_comparison,
         thm:hastings_truncated_omitted_commutator,
         thm:hastings_gaussian_filtered_spectral}
-    Combine Theorems~\ref{thm:hastings_truncated_omitted_commutator},
+    Combine Lemmas~\ref{thm:hastings_truncated_omitted_commutator},
     \ref{thm:hastings_truncated_evolution_comparison}, and
     \ref{thm:hastings_truncated_filter_comparison} with
-    Theorems~\ref{thm:hastings_truncated_support}
+    Lemmas~\ref{thm:hastings_truncated_support}
     and~\ref{thm:hastings_gaussian_filtered_spectral}.
 \end{proof}
 
-\begin{theorem}[The truncated approximation at the time window $T=q/\Delta E$]
+\begin{lemma}[The truncated approximation at the time window $T=q/\Delta E$]
     \label{thm:hastings_truncated_approximation_time}
     \lean{TNLean.Lattice.exp_neg_sq_div_eq_of_time_eq,
         TNLean.Lattice.norm_gaussianFilteredTerm_sub_truncated_le_of_time}
     \leanok
     \uses{thm:hastings_truncated_approximation}
-    In the setting of Theorem~\ref{thm:hastings_truncated_approximation} with
+    In the setting of Lemma~\ref{thm:hastings_truncated_approximation} with
     $q\ge0$ and $\Delta E>0$, setting $T=q/\Delta E$ gives
     \begin{align}
         \|\widetilde W-M\|\le2v_RC\,|S|\,\|W\|\,J\,N\,\frac{q}{\Delta E}\,
@@ -169,20 +169,20 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
         \label{eq:hastings_truncated_approximation_time}
     \end{align}
     \cite[lines 337--349]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:hastings_truncated_approximation}
     Substitute $T=q/\Delta E$ into (\ref{eq:hastings_truncated_approximation}).
 \end{proof}
 
-\begin{theorem}[Ground vectors under the truncated approximation]
+\begin{lemma}[Ground vectors under the truncated approximation]
     \label{thm:hastings_truncated_facld}
     \lean{TNLean.Lattice.norm_sub_starProjection_truncated_apply_le,
         TNLean.Lattice.norm_truncated_apply_sub_inner_smul_le}
     \leanok
     \uses{thm:hastings_truncated_approximation_time, thm:hastings05_facld}
-    In the setting of Theorem~\ref{thm:hastings_truncated_approximation} with
+    In the setting of Lemma~\ref{thm:hastings_truncated_approximation} with
     $q\ge0$, ground energy $E_0$, gap $\Delta E>0$, ground projection $P$, and
     \begin{align}
         \delta=3\|W\|e^{-q/2}+2v_RC\,|S|\,\|W\|\,J\,N\,\frac{q}{\Delta E}\,
@@ -193,22 +193,22 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
     a unique unit ground state $\Omega$ satisfies
     $\|M\Omega-\langle\Omega,M\Omega\rangle\Omega\|\le\delta$
     \cite[eq.~(facld), lines 322--348 and 375--387]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:hastings_truncated_approximation_time, thm:hastings05_facld}
-    Combine Theorem~\ref{thm:hastings05_facld} with
+    Combine Lemma~\ref{thm:hastings05_facld} with
     (\ref{eq:hastings_truncated_approximation_time}).
 \end{proof}
 
-\begin{theorem}[The sum of the truncated approximations]
+\begin{lemma}[The sum of the truncated approximations]
     \label{thm:hastings_truncated_sum}
     \lean{TNLean.Lattice.norm_sum_truncated_sub_le,
         TNLean.Lattice.norm_sum_truncated_sub_le_card}
     \leanok
     \uses{thm:hastings_truncated_approximation_time,
         thm:hastings05_sum_approximation}
-    In the setting of Theorem~\ref{thm:hastings_truncated_approximation} with
+    In the setting of Lemma~\ref{thm:hastings_truncated_approximation} with
     $q,\mu\ge0$, $\Delta E>0$, and $H=\sum_ih_i=H^\dagger$, let each $h_i$
     (supported on $X_i\subseteq K_i$) be filtered under $\sum_{k\in s_i}h_k$ to
     $M_i$, where the $N_i$ omitted terms meeting $K_i$ satisfy
@@ -220,12 +220,12 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
     \end{align}
     which is at most $|\{i\}|\bigl(2v_R^2CJ^2N_0(q/\Delta E)e^{vq/\Delta E-\mu m}+2Je^{-q/2}\bigr)$
     when $N_i\le N_0$ \cite[lines 343--374]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:hastings_truncated_approximation_time,
         thm:hastings05_sum_approximation}
-    Combine Theorem~\ref{thm:hastings05_sum_approximation} with
+    Combine Lemma~\ref{thm:hastings05_sum_approximation} with
     (\ref{eq:hastings_truncated_approximation_time}) for each $W=h_i$, and use
     $|X_i|\le v_R$, $\|h_i\|\le J$, $N_i\le N_0$.
 \end{proof}
@@ -237,14 +237,14 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
     $JO(e^{-l_{proj}/l_{fac}})$ \cite{gap:hastings05_truncated_dynamics}.
 \end{remark}
 
-\begin{theorem}[The exponential decay of eq.~(facld)]
+\begin{lemma}[The exponential decay of eq.~(facld)]
     \label{thm:hastings_truncated_facld_decay}
     \lean{TNLean.Lattice.exists_norm_sub_starProjection_truncated_apply_le_exp,
         TNLean.Lattice.exists_norm_truncated_apply_sub_inner_smul_le_exp,
         Real.add_one_pow_mul_le_mul_exp}
     \leanok
     \uses{thm:hastings_truncated_facld}
-    In the setting of Theorem~\ref{thm:hastings_truncated_facld}, let $J\ge0$,
+    In the setting of Lemma~\ref{thm:hastings_truncated_facld}, let $J\ge0$,
     $0<c_1v<\mu$, and $l_{fac}=2/\min(c_1\Delta E,\mu-c_1v)$. For each
     $l\in\mathbb N$, let $M_l$ be the truncated filter of $W$ at
     $q=c_1l\Delta E$ with separation $m=l-3R$ and shell count
@@ -255,7 +255,7 @@ supports meet $K$ \cite{gap:hastings05_truncated_dynamics}.
     for a unique ground state $\Omega$
     \cite[eq.~(facld), lines 322--349]{Hastings2006Solving},
     \cite{gap:hastings05_truncated_dynamics}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:hastings_truncated_facld}

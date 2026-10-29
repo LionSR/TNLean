@@ -75,7 +75,7 @@ state the two models separately following
     so $\partial_\Lambda\varnothing=\partial_\Lambda\Lambda=\varnothing$.
 \end{definition}
 
-\begin{theorem}[Interaction range and rectangular coordinates]
+\begin{lemma}[Interaction range and rectangular coordinates]
     \label{thm:area_law_domain_identifications}
     \lean{
         TNLean.Lattice.exists_walk_length_le_iff_edist_le,
@@ -100,7 +100,7 @@ state the two models separately following
     $R\ge1$. The nearest-neighbor graph on $\{0,\ldots,w-1\}\times\{0,\ldots,h-1\}$
     is isomorphic to the induced graph on that integer rectangle, identifying
     their configurations and range-$1$ pair supports.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $d_\Lambda(x,y)$ is the infimum of walk lengths (or $+\infty$), a walk
     of length $0$ has $x=y$, so $\operatorname{diam}_{d_\Lambda}X\le0$ with
@@ -145,7 +145,7 @@ state the two models separately following
     $\Lambda$, $H$, $\Omega$, and $A\subseteq\Lambda$.
 \end{definition}
 
-\begin{theorem}[Uniqueness from a positive global gap]
+\begin{lemma}[Uniqueness from a positive global gap]
     \label{thm:area_law_ground_eigenspace}
     \lean{Matrix.IsGappedGroundState.eigenspace_eq_span}
     \leanok
@@ -155,7 +155,7 @@ state the two models separately following
     (\ref{eq:area_law_projector_gap}) with $\Delta>0$. Then
     $\ker(H-E_0I)=\operatorname{span}_{\mathbb C}\{\Omega\}$, giving the
     uniqueness assertion in \cite[Proposition~4.5]{OpenAI2026AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     If $H\psi=E_0\psi$, then (\ref{eq:area_law_projector_gap}) gives
     $0\ge\Delta\|\psi-\langle\Omega,\psi\rangle\Omega\|^2$, so $\Delta>0$
@@ -164,7 +164,7 @@ state the two models separately following
     $\operatorname{span}_{\mathbb C}\{\Omega\}\subseteq\ker(H-E_0I)$.
 \end{proof}
 
-\begin{theorem}[Regional reductions of pure vectors]
+\begin{lemma}[Regional reductions of pure vectors]
     \label{thm:area_law_regional_state_identities}
     \lean{
         TNLean.Lattice.reducedState_posSemidef,
@@ -202,7 +202,7 @@ state the two models separately following
     % build/sections/01-preliminaries.tex, sec:prelim, lines 10--25.
     % This entry records regional-state identities only; it does not mark a
     % source-labelled continuity, gap-equivalence, or area-law theorem complete.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $|\Omega\rangle\langle\Omega|\ge0$ and $\operatorname{Tr}_{\Lambda\setminus A}$
     preserves positivity and trace, (\ref{eq:area_law_reduced_positive}) and
@@ -215,7 +215,7 @@ state the two models separately following
     (\ref{eq:area_law_empty_entropy})--(\ref{eq:area_law_full_entropy}).
 \end{proof}
 
-\begin{theorem}[Marginal trace norm from the full-system gap]
+\begin{lemma}[Marginal trace norm from the full-system gap]
     \label{thm:peps_gap_marginal_trace_norm}
     \lean{FiniteProduct.re_trace_abs_reducedPure_sub_le_sqrt_energy}
     \leanok
@@ -236,7 +236,7 @@ state the two models separately following
          & \leq 2\sqrt{\frac{\operatorname{Re}\langle\phi,H\phi\rangle-E_0}{\Delta}}.
         \label{eq:peps_gap_marginal_distance}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:al_amp_pure_trace_distance}
@@ -252,15 +252,15 @@ state the two models separately following
     \end{align}
 \end{proof}
 
-\begin{theorem}[A sufficient energy bound for marginal approximation]
+\begin{lemma}[A sufficient energy bound for marginal approximation]
     \label{thm:peps_gap_marginal_one_sixteenth}
     \lean{FiniteProduct.re_trace_abs_reducedPure_sub_le_one_sixteenth_of_energy}
     \leanok
     \uses{thm:peps_gap_marginal_trace_norm}
-    Under the hypotheses of Theorem~\ref{thm:peps_gap_marginal_trace_norm}, if
+    Under the hypotheses of Lemma~\ref{thm:peps_gap_marginal_trace_norm}, if
     $\operatorname{Re}\langle\phi,H\phi\rangle-E_0\leq\Delta/1024$, then
     $\|\rho_X^\phi-\rho_X^\Omega\|_1\leq1/16$ for every $X\subseteq V$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_gap_marginal_trace_norm}
@@ -284,7 +284,7 @@ state the two models separately following
 \begin{proof}
     \leanok
     \uses{thm:area_law_closed_constant}
-    Theorem~\ref{thm:area_law_closed_constant} proves the bound with
+    Corollary~\ref{thm:area_law_closed_constant} proves the bound with
     $C=C_{\rm AL}(q,R,J,\Delta)$ assembled as follows. Write
     $I_\Omega(B:C)=S_\Omega(B)+S_\Omega(C)-S_\Omega(B\cup C)$ for disjoint
     $B,C\subseteq\Lambda$, and let $Z$ be the endpoints of $\partial_\Lambda A$.
@@ -306,7 +306,7 @@ state the two models separately following
         \label{eq:area_law_collar_information}
     \end{align}
     for the exponents $\varepsilon,\alpha,\beta$ of
-    Theorem~\ref{thm:area_law_exponent_gaps}. Constraint-product amplification
+    Lemma~\ref{thm:area_law_exponent_gaps}. Constraint-product amplification
     then gives, for each $M\ge1$, a radius $r\le C_Mn^{(1-\varepsilon)/\alpha}$
     with $L_n+2r=o(n^\beta)$ and
     \begin{align}
@@ -453,7 +453,7 @@ state the two models separately following
     $A_i^{\mathrm h}=(A_i+A_i^*)/2$ for each $i\in\mathcal I_L$.
 \end{definition}
 
-\begin{theorem}[Support and norm of the Hermitian terms]
+\begin{lemma}[Support and norm of the Hermitian terms]
     \label{thm:square_hermitian_term_properties}
     \lean{
         TNLean.PEPS.Approximation.SquareHamiltonian.hermitianTerm_supported,
@@ -465,7 +465,7 @@ state the two models separately following
     For every $L,q\ge0$, $J\in\mathbb R$, and $i\in\mathcal I_L$, the term
     $A_i^{\mathrm h}$ is supported on $S_i$ and satisfies
     $(A_i^{\mathrm h})^*=A_i^{\mathrm h}$ and $\|A_i^{\mathrm h}\|\le J$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The algebra of operators supported on $S_i$ is $*$-closed, so it contains
@@ -473,14 +473,14 @@ state the two models separately following
     and $\|A_i^{\mathrm h}\|\le(\|A_i\|+\|A_i^*\|)/2=\|A_i\|\le J$.
 \end{proof}
 
-\begin{theorem}[The sum of the Hermitian terms]
+\begin{lemma}[The sum of the Hermitian terms]
     \label{thm:square_hermitian_term_sum}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.sum_hermitianTerm}
     \leanok
     \uses{def:square_hermitian_term}
     For the Hermitian Hamiltonian $H=H^*$,
     $\sum_{i\in\mathcal I_L} A_i^{\mathrm h}=H$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Since $\sum_{i\in\mathcal I_L}A_i=H$ and $H^*=H$, we have
@@ -498,7 +498,7 @@ state the two models separately following
     \cite{OpenAI2026PolynomialPEPS,OpenAI2026AreaLaw}.
 \end{definition}
 
-\begin{theorem}[Relabelling the original interaction supports]
+\begin{lemma}[Relabelling the original interaction supports]
     \label{thm:square_interaction_support_relabel}
     \lean{TNLean.PEPS.Approximation.squareAreaLawSupport_val_eq_nearestNeighborSupport}
     \leanok
@@ -508,34 +508,34 @@ state the two models separately following
     the singleton or two-endpoint support of $j$
     \cite[Section~1]{OpenAI2026PolynomialPEPS}. Then $X_i=D_{e(i)}$ for every
     $i\in\mathcal I_L$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For $i=v$, $D_{e(v)}=\{\sigma(v)\}=\sigma(\{v\})=X_v$; for $i=(v,w)$,
     $D_{e(v,w)}=\{\sigma(v),\sigma(w)\}=\sigma(\{v,w\})=X_{(v,w)}$.
 \end{proof}
 
-\begin{theorem}[Designated supports are admissible at range one]
+\begin{lemma}[Designated supports are admissible at range one]
     \label{thm:square_area_law_support_admissible}
     \lean{TNLean.PEPS.Approximation.squareAreaLawSupport_isAdmissibleSupport}
     \leanok
     \uses{def:square_area_law_support,thm:area_law_domain_identifications}
     For every $i\in\mathcal I_L$, $X_i\ne\varnothing$ and
     $\operatorname{diam}_{d_\Lambda}X_i\le1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:area_law_domain_identifications}, $X_v=\{\sigma(v)\}$
+    By Lemma~\ref{thm:area_law_domain_identifications}, $X_v=\{\sigma(v)\}$
     is a singleton ($\operatorname{diam}_{d_\Lambda}X_v=0$) and
     $X_{(v,w)}=\{\sigma(v),\sigma(w)\}$ is an adjacent pair in $\Lambda$
     ($\operatorname{diam}_{d_\Lambda}X_{(v,w)}=1$).
 \end{proof}
 
-\begin{theorem}[Distinct designated supports]
+\begin{lemma}[Distinct designated supports]
     \label{thm:square_area_law_support_injective}
     \lean{TNLean.PEPS.Approximation.squareAreaLawSupport_injective}
     \leanok
     \uses{def:square_area_law_support,thm:square_area_law_support_admissible}
     The map $i\mapsto X_i$ on $\mathcal I_L$ is injective.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $|X_v|=1$ and $|X_{(v,w)}|=2$, vertex and edge supports are disjoint;
     since every edge $(v,w)$ has forward orientation, $\{\sigma(v),\sigma(w)\}$
@@ -552,25 +552,25 @@ state the two models separately following
     to $U\Omega\in\mathcal H_\Lambda$.
 \end{definition}
 
-\begin{theorem}[Norm in integer coordinates]
+\begin{lemma}[Norm in integer coordinates]
     \label{thm:norm_square_area_law_state}
     \lean{TNLean.PEPS.Approximation.norm_squareAreaLawState}
     \leanok
     \uses{def:square_area_law_state}
     For every $\Omega$, $\|U\Omega\|=\|\Omega\|$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The map $U$ permutes the orthonormal configuration basis.
 \end{proof}
 
-\begin{theorem}[Supported Hermitian parts]
+\begin{lemma}[Supported Hermitian parts]
     \label{thm:square_hermitian_term_supported_algebra}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.hermitianTerm_mem_supportedOperators}
     \leanok
     \uses{def:square_hermitian_term}
     For every $i\in\mathcal I_L$, $A_i^{\mathrm h}$ belongs to the algebra of
     operators supported on $S_i$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The algebra of operators supported on $S_i$ is closed under adjoints and
     linear combinations, hence contains $A_i^{\mathrm h}=(A_i+A_i^*)/2$.
@@ -598,22 +598,22 @@ state the two models separately following
     $0\le\|A_v\|\le J$).
 \end{definition}
 
-\begin{theorem}[Exact Hamiltonian in integer coordinates]
+\begin{lemma}[Exact Hamiltonian in integer coordinates]
     \label{thm:square_area_law_hamiltonian_operator}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.toAreaLawHamiltonian_operator}
     \leanok
     \uses{def:square_area_law_hamiltonian,thm:square_hermitian_term_sum}
     The interaction family of Definition~\ref{def:square_area_law_hamiltonian}
     has total Hamiltonian $H_{\mathrm{int}}=UHU^*$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:square_area_law_support_injective} and
-    Theorem~\ref{thm:square_hermitian_term_sum},
+    By Lemma~\ref{thm:square_area_law_support_injective} and
+    Lemma~\ref{thm:square_hermitian_term_sum},
     $H_{\mathrm{int}}=\sum_{i\in\mathcal I_L}U A_i^{\mathrm h}U^*
         =U\bigl(\sum_{i\in\mathcal I_L}A_i^{\mathrm h}\bigr)U^*=UHU^*$.
 \end{proof}
 
-\begin{theorem}[The original nearest-neighbor interaction family]
+\begin{lemma}[The original nearest-neighbor interaction family]
     \label{thm:square_nearest_neighbor_terms}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_nearestNeighbor_terms}
     \leanok
@@ -628,7 +628,7 @@ state the two models separately following
         \|T_j\|                  & \le J,                   &
         \sum_{j\in\mathcal I}T_j & =H_{\mathrm{int}}.\notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:square_interaction_support_relabel,
         thm:square_area_law_hamiltonian_operator,thm:square_hermitian_term_properties,
@@ -638,16 +638,16 @@ state the two models separately following
         def:square_hermitian_term}
     With the bijection $e:\mathcal I_L\to\mathcal I$, set
     $T_{e(i)}=U A_i^{\mathrm h}U^*$. By
-    Theorem~\ref{thm:square_interaction_support_relabel}, $D_{e(i)}=X_i$; by
-    Theorem~\ref{thm:square_hermitian_term_properties}, $T_{e(i)}$ is Hermitian
+    Lemma~\ref{thm:square_interaction_support_relabel}, $D_{e(i)}=X_i$; by
+    Lemma~\ref{thm:square_hermitian_term_properties}, $T_{e(i)}$ is Hermitian
     and supported on $D_{e(i)}$ with $\|T_{e(i)}\|\le J$; and by
-    Theorem~\ref{thm:square_hermitian_term_sum} and
-    Theorem~\ref{thm:square_area_law_hamiltonian_operator},
+    Lemma~\ref{thm:square_hermitian_term_sum} and
+    Lemma~\ref{thm:square_area_law_hamiltonian_operator},
     $\sum_{j\in\mathcal I}T_j=U\bigl(\sum_{i\in\mathcal I_L}A_i^{\mathrm h}\bigr)U^*
         =UHU^*=H_{\mathrm{int}}$.
 \end{proof}
 
-\begin{theorem}[The same ground vector and full-system gap]
+\begin{lemma}[The same ground vector and full-system gap]
     \label{thm:square_area_law_ground_gap}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.isGappedGroundState_toAreaLawHamiltonian}
     \leanok
@@ -659,15 +659,15 @@ state the two models separately following
         H_{\mathrm{int}}U\Omega & =E_0U\Omega,\notag                                  \\
         H_{\mathrm{int}}-E_0I   & \ge\Delta(I-|U\Omega\rangle\langle U\Omega|).\notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Conjugate $H\Omega=E_0\Omega$ and
     $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$ by the unitary $U$ using
-    Theorem~\ref{thm:square_area_law_hamiltonian_operator} and
-    Theorem~\ref{thm:norm_square_area_law_state}.
+    Lemma~\ref{thm:square_area_law_hamiltonian_operator} and
+    Lemma~\ref{thm:norm_square_area_law_state}.
 \end{proof}
 
-\begin{theorem}[Regional entropy under relabeling of sites]
+\begin{lemma}[Regional entropy under relabeling of sites]
     \label{thm:finite_product_entropy_relabel}
     \lean{TNLean.PEPS.Approximation.finiteProductEntropy_relabel}
     \leanok
@@ -676,23 +676,23 @@ state the two models separately following
     $U_\sigma$ the unitary relabeling tensor factors of $(\mathbb C^q)^{\otimes V}$
     along $\sigma$. For every $\Omega\in(\mathbb C^q)^{\otimes V}$ and
     $A\subseteq V$, $S_{U_\sigma\Omega}(\sigma(A))=S_\Omega(A)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Relabeling configurations along $\sigma|_{A}$ and $\sigma|_{V\setminus A}$
     conjugates $\rho_{\sigma(A)}^{U_\sigma\Omega}$ by a permutation matrix to
     $\rho_A^\Omega$, preserving its spectrum and entropy.
 \end{proof}
 
-\begin{theorem}[Crossing edges in integer coordinates]
+\begin{lemma}[Crossing edges in integer coordinates]
     \label{thm:square_edge_boundary_card}
     \lean{TNLean.PEPS.Approximation.card_edgeBoundary_rectangle}
     \leanok
     \uses{thm:area_law_domain_identifications}
     For every site subset $A$ of the original grid, the number of grid edges
     with exactly one endpoint in $A$ equals $|\partial_\Lambda\sigma(A)|$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:area_law_domain_identifications}, $\sigma$ is a graph
+    By Lemma~\ref{thm:area_law_domain_identifications}, $\sigma$ is a graph
     isomorphism onto $\Lambda$, hence maps the crossing edges of $A$ bijectively
     onto $\partial_\Lambda\sigma(A)$.
 \end{proof}
@@ -730,7 +730,7 @@ state the two models separately following
     existence of $C_A$ for this family whenever $q\ge2$ and $J,\Delta>0$.
 \end{definition}
 
-\begin{theorem}[The square-grid area law for a smaller family]
+\begin{lemma}[The square-grid area law for a smaller family]
     \label{thm:square_entropy_area_law_at_mono}
     \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLawAt.mono}
     \leanok
@@ -738,7 +738,7 @@ state the two models separately following
     If the square-grid entropy area law holds for $\mathcal F$ with constant
     $C_A$ and $\mathcal F'_L\subseteq\mathcal F_L$ for all $L$, then it holds
     for $\mathcal F'$ with constant $C_A$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Every $\Omega\in\mathcal F'_L$ lies in $\mathcal F_L$.
@@ -757,10 +757,10 @@ state the two models separately following
     \leanok
     \uses{cor:rectangles,thm:rectangular_equal_side_entropy}
     Specialize Corollary~\ref{cor:rectangles} to equal side lengths via
-    Theorem~\ref{thm:rectangular_equal_side_entropy}.
+    Lemma~\ref{thm:rectangular_equal_side_entropy}.
 \end{proof}
 
-\begin{theorem}[The square-grid area law, assuming the uniform finite-domain area law]
+\begin{lemma}[The square-grid area law, assuming the uniform finite-domain area law]
     \label{thm:square_area_law_from_uniform}
     \lean{TNLean.PEPS.AreaLaw.UniformAreaLaw.squareEntropyAreaLaw,
         TNLean.PEPS.Approximation.finiteProductEntropy_le_of_areaLawBound}
@@ -771,15 +771,15 @@ state the two models separately following
     $C(q,R,J,\Delta)\ge0$, then the square-grid entropy area law of
     Definition~\ref{def:square_entropy_area_law} holds with
     $C_A(q,J,\Delta)=C(q,1,J,\Delta)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:square_area_law_hamiltonian,thm:square_area_law_ground_gap,
         thm:finite_product_entropy_relabel,thm:square_edge_boundary_card}
     For $q\ge2$ and $R=1$, Definition~\ref{def:square_area_law_hamiltonian} and
-    Theorem~\ref{thm:square_area_law_ground_gap} make $U\Omega$ a unit ground
+    Lemma~\ref{thm:square_area_law_ground_gap} make $U\Omega$ a unit ground
     vector of $H_{\mathrm{int}}$ on $\Lambda=\{0,\ldots,L-1\}^2$ with gap
-    $\Delta$. By Theorem~\ref{thm:finite_product_entropy_relabel} and
-    Theorem~\ref{thm:square_edge_boundary_card},
+    $\Delta$. By Lemma~\ref{thm:finite_product_entropy_relabel} and
+    Lemma~\ref{thm:square_edge_boundary_card},
     $S_\Omega(A)=S_{U\Omega}(\sigma(A))\le C(q,1,J,\Delta)|\partial_\Lambda\sigma(A)|
         =C(q,1,J,\Delta)|\partial_\Lambda A|$.
 \end{proof}
@@ -804,7 +804,7 @@ state the two models separately following
 \begin{proof}
     \leanok
     \uses{thm:polynomial_peps_explicit_constants}
-    Theorem~\ref{thm:polynomial_peps_explicit_constants} gives the result with
+    Corollary~\ref{thm:polynomial_peps_explicit_constants} gives the result with
     $C=C_{\rm PEPS}$ and $c=c_{\rm PEPS}$, assembled as follows. Write
     $\Lambda_L$ for the grid sites and $\mathcal H_X$ for the tensor product
     over $X\subseteq\Lambda_L$. A dyadic party tree distributes $\Omega$ from a
@@ -977,7 +977,7 @@ state the two models separately following
     union of $X_i$ is $\bigcup_{j<i,\,f(j)=f(i)}X_j$.
 \end{definition}
 
-\begin{theorem}[Inverse images of ordered two-family partitions]
+\begin{lemma}[Inverse images of ordered two-family partitions]
     \label{thm:peps_two_family_partition_inverse_image}
     \lean{TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.earlierSameFamily_comap,
         TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.card_residual_comap_le,
@@ -991,14 +991,14 @@ state the two models separately following
     $f^{-1}\bigl(\bigcup_{j<i,\,f(j)=f(i)}P_j\bigr)
         =\bigcup_{j<i,\,f(j)=f(i)}f^{-1}(P_j)$. If $f$ is injective,
     $|f^{-1}(D)|\le|D|$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Preimages preserve disjoint unions and commute with unions, and
     $|f^{-1}(D)|\le|D|$ when $f$ is injective.
 \end{proof}
 
-\begin{theorem}[Exact exponent gaps]
+\begin{lemma}[Exact exponent gaps]
     \label{thm:area_law_exponent_gaps}
     \lean{
         TNLean.PEPS.AreaLaw.Exponents.boxError,
@@ -1033,7 +1033,7 @@ state the two models separately following
         \label{eq:area_law_rho_gap}
     \end{align}
     and $p=10^6$ gives $\alpha=p/(p+1)>1-10^{-6}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Direct rational arithmetic verifies (\ref{eq:area_law_zeta_gap})--(\ref{eq:area_law_rho_gap})
     and $10^6/(10^6+1)>1-10^{-6}$.
@@ -1084,7 +1084,7 @@ state the two models separately following
     \end{align}
     and $\operatorname{dist}_\infty(T,Z)>L+n^\beta$ implies
     $N_{2r}^\Lambda(S_0)\subseteq A$ (with $L+2r=o(n^\beta)$ by
-    Theorem~\ref{thm:area_law_uniform_collar_threshold}). The amplification
+    Lemma~\ref{thm:area_law_uniform_collar_threshold}). The amplification
     bound asserts the existence of $(C_M,N)$ for every $C_0>0$ and $M\ge1$.
 \end{definition}
 
@@ -1138,9 +1138,9 @@ state the two models separately following
     By Lemma~\ref{lem:area_law_repair_rank_zero_primary_ancestor}, each such
     identifier is a unique retained primary with unchanged birth region, label,
     and $r_x=2^k$. Equal labels imply equal layer parity, so
-    Theorem~\ref{thm:area_law_primary_same_parity_separation} gives the
+    Lemma~\ref{thm:area_law_primary_same_parity_separation} gives the
     separation, and grouping by layer gives the sum bound via
-    Theorem~\ref{thm:area_law_initial_primary_error_sum}.
+    Lemma~\ref{thm:area_law_initial_primary_error_sum}.
 \end{proof}
 
 \begin{lemma}[Exceptional sites at an empty generation]
@@ -1160,10 +1160,10 @@ state the two models separately following
 \end{lemma}
 \begin{proof}
     \leanok
-    By Theorem~\ref{thm:area_law_repair_terminal_interiors_before_empty}, every
+    By Lemma~\ref{thm:area_law_repair_terminal_interiors_before_empty}, every
     terminal square was removed before $N$;
-    Theorem~\ref{thm:area_law_repair_dummy_sites_count} and
-    Theorem~\ref{thm:area_law_repair_terminal_prefix_sites} bound the dummy and
+    Lemma~\ref{thm:area_law_repair_dummy_sites_count} and
+    Lemma~\ref{thm:area_law_repair_terminal_prefix_sites} bound the dummy and
     terminal-square sites.
 \end{proof}
 
@@ -1198,45 +1198,45 @@ state the two models separately following
     Replacing $C_{\rm tpl}$ by $\max(C_{\rm tpl},1)$ preserves
     (\ref{eq:area_law_template_scale}), so assume $C_{\rm tpl}\ge1$. Fix
     $n_*\ge1$, choose $C_P,C_B$ for $C_{\rm tpl}$, $a_0=1/4$, and $c_1$ from
-    Theorem~\ref{thm:area_law_birth_separation}. Choose $u_*$ so that every
+    Lemma~\ref{thm:area_law_birth_separation}. Choose $u_*$ so that every
     $u\ge u_*$ satisfies $2\lceil C_Bu\rceil^\beta<c_1u^{\rho_0}$,
     $\lfloor\lceil C_Bu\rceil^{1-\ell_{\rm geo}}\rfloor\le u$, and
-    $C_Bu\ge n_*$ (Theorem~\ref{thm:area_law_fine_clearance} and
-    Theorem~\ref{thm:area_law_belt_replacement_scale_limit}); choose
+    $C_Bu\ge n_*$ (Lemma~\ref{thm:area_law_fine_clearance} and
+    Lemma~\ref{thm:area_law_belt_replacement_scale_limit}); choose
     $S_*\ge\max(u_*,2)$, $C>4D_0$, and $k_0$ above the thresholds of
-    Theorem~\ref{thm:area_law_repair_birth_templates},
+    Lemma~\ref{thm:area_law_repair_birth_templates},
     Lemma~\ref{lem:area_law_repair_metric_choice},
-    Theorem~\ref{thm:area_law_birth_separation},
-    Theorem~\ref{thm:area_law_repair_positive_rank_length_lower_bound}, and
-    Theorem~\ref{thm:area_law_primary_scale_limits}.
+    Lemma~\ref{thm:area_law_birth_separation},
+    Lemma~\ref{thm:area_law_repair_positive_rank_length_lower_bound}, and
+    Lemma~\ref{thm:area_law_primary_scale_limits}.
 
     For $\Lambda$ and $A$ with $b=|\partial_\Lambda A|>0$, the repair
     construction reaches a mark-free generation
-    (Theorem~\ref{thm:area_law_repair_common_empty_generation}). Non-dummy
+    (Lemma~\ref{thm:area_law_repair_common_empty_generation}). Non-dummy
     identifiers meeting $A$, ordered by nondecreasing birth rank, give $X_i$ and
     $f_i$, while dummy and terminal-square sites form $D$
-    (Theorem~\ref{thm:area_law_repair_ordered_partition_empty},
-    Theorem~\ref{thm:area_law_repair_current_birth_containment}, and
-    Theorem~\ref{thm:area_law_repair_current_disjoint}). The scanner scale
+    (Lemma~\ref{thm:area_law_repair_ordered_partition_empty},
+    Lemma~\ref{thm:area_law_repair_current_birth_containment}, and
+    Lemma~\ref{thm:area_law_repair_current_disjoint}). The scanner scale
     ($n=\lceil C_P r^{1+2\delta_0}\rceil$ for rank-$0$ primaries of side $r=2^k$,
     $n=\lceil C_B u\rceil$ for positive rank of length $u\ge u_*$) satisfies
     $\lfloor n^{1-\ell_{\rm geo}}\rfloor\le s$ and $n\ge n_*$.
 
     For $j<i$ with $f_j=f_i$, if $X_i$ has birth rank $0$ in layer $k$, so does
     $X_j$, and Lemma~\ref{lem:area_law_two_family_primaries} and
-    Theorem~\ref{thm:area_law_primary_scale_limits} give distance at least
+    Lemma~\ref{thm:area_law_primary_scale_limits} give distance at least
     $\min(t_k,2^{k-1})>2n^\beta$; otherwise
-    Theorem~\ref{thm:area_law_birth_separation_common_stage} and
-    Theorem~\ref{thm:area_law_repair_final_current_empty} give distance at least
+    Lemma~\ref{thm:area_law_birth_separation_common_stage} and
+    Lemma~\ref{thm:area_law_repair_final_current_empty} give distance at least
     $c_1u^{\rho_0}>2\lceil C_Bu\rceil^\beta$. Finally,
     Lemma~\ref{lem:area_law_two_family_exceptional_sites} and
-    Theorem~\ref{thm:area_law_repair_total_mark_prefix_count} bound $|D|\le Cb$,
+    Lemma~\ref{thm:area_law_repair_total_mark_prefix_count} bound $|D|\le Cb$,
     while Lemma~\ref{lem:area_law_two_family_primaries} and
-    Theorem~\ref{thm:area_law_repair_retained_nonprimary_error_sum} bound
+    Lemma~\ref{thm:area_law_repair_retained_nonprimary_error_sum} bound
     $\sum_in_i^{-100}\le Cb$.
 \end{proof}
 
-\begin{theorem}[Uniform area law from collar, amplification and two-family bounds]
+\begin{lemma}[Uniform area law from collar, amplification and two-family bounds]
     \label{thm:area_law_conditional_assembly}
     \lean{TNLean.PEPS.AreaLaw.uniformAreaLaw_of_collar_amplification_twoFamilies}
     \leanok
@@ -1248,7 +1248,7 @@ state the two models separately following
     (Definition~\ref{def:area_law_collar_bound}) and two-family decomposition
     (Definition~\ref{def:area_law_two_family_decomposition}) hold, then the
     uniform area law of Theorem~\ref{thm:openai_uniform_area_law} holds.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_conditional_assembly_constants}
@@ -1256,7 +1256,7 @@ state the two models separately following
     Definition~\ref{def:area_law_collar_bound}, $(C_2,N_2)$ from
     Definition~\ref{def:area_law_amplification_bound} at $(\max\{C_1,1\},100)$,
     and $C_3$ from Definition~\ref{def:area_law_two_family_decomposition} at
-    $n_*(N_1,N_2,C_2)\ge2$; Theorem~\ref{thm:area_law_conditional_assembly_constants}
+    $n_*(N_1,N_2,C_2)\ge2$; Lemma~\ref{thm:area_law_conditional_assembly_constants}
     gives $S_\Omega(A)\le C(q,C_2,C_3)|\partial_\Lambda A|$.
 \end{proof}
 
@@ -1277,7 +1277,7 @@ and template cut and cardinality bounds.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Leaf entropy identity and its lower bound]
+\begin{lemma}[Leaf entropy identity and its lower bound]
     \label{thm:area_law_collar_leaf_identity}
     \lean{FiniteProduct.mutualInformation_comm,
         FiniteProduct.mutualInformation_mono_right,
@@ -1299,7 +1299,7 @@ and template cut and cardinality bounds.
     \begin{align}
         2I(X:F) & \le2S(X)+\sum_ip_i\bigl(g_{{\rm pre},i}-g_{{\rm post},i}\bigr).\notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Purity gives $S(X\cup W)=S(U\cup Y)$, $S(X\cup Y\cup W)=S(U)$, and
@@ -1308,7 +1308,7 @@ and template cut and cardinality bounds.
     averaging over $p_i$ give the inequalities.
 \end{proof}
 
-\begin{theorem}[Transfer of mutual information to the original state]
+\begin{lemma}[Transfer of mutual information to the original state]
     \label{thm:area_law_collar_transfer}
     \lean{FiniteProduct.abs_mutualInformation_sub_le_of_traceDistance,
         FiniteProduct.mutualInformation_le_add_of_traceDistance_le_rpow}
@@ -1322,7 +1322,7 @@ and template cut and cardinality bounds.
     \end{align}
     If $\delta\le C_1n^{-500}$ and $\log\dim\mathcal H_X\le C_2n^2$ ($n\ge1$),
     then $I_\Omega(X:J)\le I_{\widetilde\Omega}(X:J)+8\sqrt{C_1}(1+C_2)n^{-248}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:al_amp_pure_trace_distance}
@@ -1332,7 +1332,7 @@ and template cut and cardinality bounds.
     $\log(e\dim\mathcal H_X)\le(1+C_2)n^2$.
 \end{proof}
 
-\begin{theorem}[Cut and size assertions of the collar bound]
+\begin{lemma}[Cut and size assertions of the collar bound]
     \label{thm:area_law_collar_cut_bounds}
     \lean{TNLean.PEPS.AreaLaw.Geometry.Template.collar_cut_card_le}
     \leanok
@@ -1341,20 +1341,20 @@ and template cut and cardinality bounds.
     $C_{\rm tpl}\ge24$, $D_0\ge1$, $L\le s_0$, $X=A\cap T$, and $S_0=A\cap T_L$,
     one has $|\partial_\Lambda X|,|\partial_\Lambda S_0|\le4n$,
     $|\partial_\Lambda(S_0\setminus X)|\le8n$, and $|S_0|\le10n^2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_template_physical_boundary,thm:area_law_template_area,
         thm:area_law_template_depth_layers,thm:al_scan_compact_collar_card}
-    Theorem~\ref{thm:area_law_template_physical_boundary} at $j=L$ bounds the
-    three cuts; Theorem~\ref{thm:area_law_template_area},
-    Theorem~\ref{thm:area_law_template_depth_layers}, and
-    Theorem~\ref{thm:al_scan_compact_collar_card} with $L\le s_0\le n$ from
+    Lemma~\ref{thm:area_law_template_physical_boundary} at $j=L$ bounds the
+    three cuts; Lemma~\ref{thm:area_law_template_area},
+    Lemma~\ref{thm:area_law_template_depth_layers}, and
+    Lemma~\ref{thm:al_scan_compact_collar_card} with $L\le s_0\le n$ from
     (\ref{eq:area_law_template_scale}) give
     $|S_0|\le|T_L|\le|T|+nL\le9ns_0+nL\le10n^2$.
 \end{proof}
 
-\begin{theorem}[The collar bound from its information inequality]
+\begin{lemma}[The collar bound from its information inequality]
     \label{thm:area_law_collar_bound_of_information}
     \lean{TNLean.PEPS.AreaLaw.sublinearCollarBound_of_mutualInformation_le}
     \leanok
@@ -1363,12 +1363,12 @@ and template cut and cardinality bounds.
     $I_\Omega(X:\Lambda\setminus S_0)\le Cn^{1-\varepsilon}$ for all $n\ge N$ in
     Definition~\ref{def:area_law_collar_bound}, then the sublinear collar bound
     holds with constant $\max(C,10)$ and threshold $N$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_collar_cut_bounds}
     Combine $I_\Omega(X:\Lambda\setminus S_0)\le Cn^{1-\varepsilon}$ with
-    Theorem~\ref{thm:area_law_collar_cut_bounds}.
+    Lemma~\ref{thm:area_law_collar_cut_bounds}.
 \end{proof}
 
 % Source: OpenAI2026PolynomialPEPS, Appendix A (app:companion),
@@ -1395,7 +1395,7 @@ subregion gap assumption.
     unit ground vector $\Omega$ satisfying (\ref{eq:area_law_projector_gap}),
     and natural-logarithm von Neumann entropy (\ref{eq:area_law_regional_entropy}).
     Uniqueness of $\Omega$ up to phase follows from (\ref{eq:area_law_projector_gap})
-    by Theorem~\ref{thm:area_law_ground_eigenspace}.
+    by Lemma~\ref{thm:area_law_ground_eigenspace}.
     % Status: proved.
 \end{remark}
 
@@ -1408,8 +1408,8 @@ subregion gap assumption.
         thm:rectangular_equal_side_entropy,thm:openai_square_area_law}
     Theorem~\ref{thm:openai_uniform_area_law} states
     \cite[Theorem~1.1]{OpenAI2026AreaLaw}, derived in
-    Theorem~\ref{thm:area_law_conditional_collar_two_families} from
-    Theorem~\ref{thm:area_law_sublinear_collar}
+    Lemma~\ref{thm:area_law_conditional_collar_two_families} from
+    Lemma~\ref{thm:area_law_sublinear_collar}
     (\cite[Proposition~9.6]{OpenAI2026AreaLaw}),
     Theorem~\ref{thm:area_law_amplification}
     (\cite[Proposition~10.2]{OpenAI2026AreaLaw}), and
@@ -1418,10 +1418,10 @@ subregion gap assumption.
     % Status: the collar, amplification and two-family propositions are
     % formalized, and so are the uniform area law and its square-grid passage.
     Replacing local terms by $A_i^{\mathrm h}$ preserves $H$
-    (Theorem~\ref{thm:square_hermitian_term_sum}), and
-    Theorem~\ref{thm:square_area_law_from_uniform} (or
+    (Lemma~\ref{thm:square_hermitian_term_sum}), and
+    Lemma~\ref{thm:square_area_law_from_uniform} (or
     Corollary~\ref{cor:rectangles} via
-    Theorem~\ref{thm:rectangular_equal_side_entropy}) specializes
+    Lemma~\ref{thm:rectangular_equal_side_entropy}) specializes
     Theorem~\ref{thm:openai_uniform_area_law} at $R=1$ to
     Theorem~\ref{thm:openai_square_area_law}
     (\cite[Proposition~2.1]{OpenAI2026PolynomialPEPS}) with
@@ -1436,7 +1436,7 @@ subregion gap assumption.
     Theorem~\ref{thm:al_lattice_positive_replacement} formalizes
     \cite[Proposition~4.3]{OpenAI2026AreaLaw}: positive contractions $k_i$ at
     anchors $a_i\in X_i$ (multiplicity at most $2^{2R(R+1)}$ by
-    Theorem~\ref{thm:al_lattice_counts}) satisfying $k_i\Omega=0$,
+    Lemma~\ref{thm:al_lattice_counts}) satisfying $k_i\Omega=0$,
     $\sum_ik_i\ge c_*^{-1}(H-E_0I)\ge(\Delta/c_*)(I-|\Omega\rangle\langle\Omega|)$,
     and $\|k_i-\mathbb E_{N_r(a_i)}k_i\|\le Ce^{-cr^\alpha}$ for all $r\ge0$.
     % Status: proved.
@@ -1453,10 +1453,10 @@ subregion gap assumption.
     Definition~\ref{def:area_law_collar_bound} states
     \cite[Proposition~9.6]{OpenAI2026AreaLaw} at $\varepsilon=10^{-5}$.
     % Status: Proposition 9.6 is proved by thm:area_law_sublinear_collar.
-    For $C_{\rm tpl}\ge24$ and $D_0\ge1$, Theorem~\ref{thm:area_law_collar_cut_bounds}
-    and Theorem~\ref{thm:area_law_collar_bound_of_information} reduce the
+    For $C_{\rm tpl}\ge24$ and $D_0\ge1$, Lemma~\ref{thm:area_law_collar_cut_bounds}
+    and Lemma~\ref{thm:area_law_collar_bound_of_information} reduce the
     collar bound to $I_\Omega(X:\Gamma\setminus S_0)\le Cn^{1-\varepsilon}$,
-    which is proved in Theorem~\ref{thm:area_law_sublinear_collar}.
+    which is proved in Lemma~\ref{thm:area_law_sublinear_collar}.
     % Status: all assertions of Proposition 9.6 are proved.
 \end{remark}
 
@@ -1469,10 +1469,10 @@ subregion gap assumption.
     \cite[Proposition~10.2]{OpenAI2026AreaLaw} at $\alpha=p/(p+1)$ with
     $p=10^6$ ($\alpha>1-10^{-6}$) and $\beta_0=1-2\cdot10^{-6}$, proved in
     Theorem~\ref{thm:area_law_amplification} with $\ell+2r=o(n^{\beta_0})$ from
-    Theorem~\ref{thm:area_law_uniform_collar_threshold}. Its specialization at
+    Lemma~\ref{thm:area_law_uniform_collar_threshold}. Its specialization at
     $A=\Gamma$ and $M=1$ \cite[Proposition~3.1]{OpenAI2026PolynomialPEPS} is
-    Theorem~\ref{thm:peps_coarse_information_of_collar} and
-    Theorem~\ref{thm:peps_coarse_information}.
+    Lemma~\ref{thm:peps_coarse_information_of_collar} and
+    Lemma~\ref{thm:peps_coarse_information}.
 \end{remark}
 
 \begin{remark}[Two-family entropy cancellation]
@@ -1500,13 +1500,13 @@ subregion gap assumption.
     \uses{thm:peps_labelled_conditional_entropy,
         thm:peps_cell_two_family_partition,thm:peps_cell_conditional_information_from_gap}
     In \cite[Lemma~3.2]{OpenAI2026PolynomialPEPS},
-    Theorem~\ref{thm:peps_labelled_conditional_entropy} and
-    Theorem~\ref{thm:peps_cell_two_family_partition} adapt the two-family
+    Lemma~\ref{thm:peps_labelled_conditional_entropy} and
+    Lemma~\ref{thm:peps_cell_two_family_partition} adapt the two-family
     ordering of \cite[Lemma~11.1]{OpenAI2026AreaLaw} to a cell with exterior
-    conditioning, yielding Theorem~\ref{thm:peps_cell_conditional_information_from_gap}.
+    conditioning, yielding Lemma~\ref{thm:peps_cell_conditional_information_from_gap}.
 \end{remark}
 
-\begin{theorem}[Sublinear information across a template collar]
+\begin{lemma}[Sublinear information across a template collar]
     \label{thm:area_law_sublinear_collar}
     \lean{TNLean.PEPS.AreaLaw.sublinearCollarBound_real}
     \leanok
@@ -1526,7 +1526,7 @@ subregion gap assumption.
         |S_0|                                                                              & \leq Cn^2,            &
         |\partial_\Lambda X|,\,|\partial_\Lambda S_0|,\,|\partial_\Lambda(S_0\setminus X)| & \le Cn.\notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:arealaw-physical-box-fixed-exponent,
         thm:arealaw-box-clearance-comparison,
@@ -1534,7 +1534,7 @@ subregion gap assumption.
         thm:area_law_collar_bound_of_information}
     With $d=2R+10$ and $e_*=2\cdot10^{-6}$,
     Theorem~\ref{thm:arealaw-physical-box-fixed-exponent} at clearance $d+1$
-    gives $C_b>0$, and Theorem~\ref{thm:arealaw-box-clearance-comparison} gives
+    gives $C_b>0$, and Lemma~\ref{thm:arealaw-box-clearance-comparison} gives
     \begin{align}
         F_{\mathrm{box},d}(r)
          & \leq (4C_b+4\log q+1)r^{1+e_*}\qquad(r\ge1).\notag
@@ -1542,24 +1542,24 @@ subregion gap assumption.
     Since $D_0>d$, Theorem~\ref{thm:template-final-information} at clearance
     $d$ supplies $C_m>0$ and $N$ with
     $2I_\Omega(X:\Lambda\setminus S_0)\leq C_m n^{1-1/100000}$ for $n\ge N$, and
-    Theorem~\ref{thm:area_law_collar_bound_of_information} gives the remaining
+    Lemma~\ref{thm:area_law_collar_bound_of_information} gives the remaining
     bounds with $C=\max(C_m/2,10)$.
 \end{proof}
 
-\begin{theorem}[Sublinear collar bound at the constants of its proof]
+\begin{lemma}[Sublinear collar bound at the constants of its proof]
     \label{thm:area_law_sublinear_collar_named}
     \lean{TNLean.PEPS.AreaLaw.sublinearCollarBound_real_of_boxEntropy,
         TNLean.PEPS.AreaLaw.sublinearCollarBound_real_of_initial}
     \leanok
     \uses{def:area_law_collar_bound}
-    In this auxiliary refinement of Theorem~\ref{thm:area_law_sublinear_collar}
+    In this auxiliary refinement of Lemma~\ref{thm:area_law_sublinear_collar}
     (carrying hypotheses absent from \cite[Proposition~9.6]{OpenAI2026AreaLaw}),
     fix $q,R,J,\Delta,D_0,C_{\mathrm{tpl}}$ as in
-    Theorem~\ref{thm:area_law_sublinear_collar}.
+    Lemma~\ref{thm:area_law_sublinear_collar}.
     \begin{enumerate}
         \item If $C_b\geq0$ satisfies
               $F_{\mathrm{box},2R+11}(r)\leq C_br^{1+e_*}$ for all $r\geq1$,
-              then the conclusions of Theorem~\ref{thm:area_law_sublinear_collar}
+              then the conclusions of Lemma~\ref{thm:area_law_sublinear_collar}
               hold with $C=\max(C_m/2,10)$ and explicit threshold $N$, where
               $C_m$ is the collar information coefficient at input
               $4C_b+4\log q+1$.
@@ -1568,34 +1568,34 @@ subregion gap assumption.
               $D>2R+10$ and $r\geq1$, then the same holds with $C_b$ produced by
               the safe-box bootstrap from $(C_0,e_0)$.
     \end{enumerate}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:arealaw-box-clearance-comparison,
         thm:template-final-information,
         thm:area_law_collar_bound_of_information,
         thm:arealaw-physical-box-fixed-exponent}
     Part~1 follows by applying
-    Theorem~\ref{thm:arealaw-box-clearance-comparison} at $d=2R+10$,
+    Lemma~\ref{thm:arealaw-box-clearance-comparison} at $d=2R+10$,
     Theorem~\ref{thm:template-final-information}, and
-    Theorem~\ref{thm:area_law_collar_bound_of_information}; part~2 follows from
+    Lemma~\ref{thm:area_law_collar_bound_of_information}; part~2 follows from
     part~1 via Theorem~\ref{thm:arealaw-physical-box-fixed-exponent}.
 \end{proof}
 
-\begin{theorem}[Sublinear collar bound at given transport constants]
+\begin{lemma}[Sublinear collar bound at given transport constants]
     \label{thm:area_law_sublinear_collar_explicit}
     \lean{TNLean.PEPS.AreaLaw.sublinearCollarBound_real_explicit}
     \leanok
     \uses{def:area_law_collar_bound}
     Fix $q,R,J,\Delta,D_0,C_{\mathrm{tpl}}$ as in
-    Theorem~\ref{thm:area_law_sublinear_collar} and transport constants
+    Lemma~\ref{thm:area_law_sublinear_collar} and transport constants
     $c_0,C_{\rm ent},e_{\rm ent},C_{\rm en},e_{\rm en}$ ($c_0>0$) satisfying the
-    step-error bound of Theorem~\ref{thm:al_scan_actual_round_transport}. With
+    step-error bound of Lemma~\ref{thm:al_scan_actual_round_transport}. With
     $C_{\rm box}$ the safe-box constant of
     Theorem~\ref{thm:arealaw-physical-box-fixed-exponent} at truncation factor
-    $2$, the conclusions of Theorem~\ref{thm:area_law_sublinear_collar} hold
+    $2$, the conclusions of Lemma~\ref{thm:area_law_sublinear_collar} hold
     with the collar constant $C_1$ and threshold $N_1$ at $C_{\rm box}$ and
     truncation factor $10$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:arealaw-physical-box-fixed-exponent,
         thm:arealaw-box-clearance-comparison,
@@ -1603,8 +1603,8 @@ subregion gap assumption.
         thm:area_law_collar_bound_of_information}
     Theorem~\ref{thm:arealaw-physical-box-fixed-exponent} yields
     $F_{\mathrm{box},2R+11}(r)\leq C_{\rm box}r^{1+e_*}$ for all $r\geq1$ with
-    $C_{\rm box}\geq0$; applying Theorem~\ref{thm:arealaw-box-clearance-comparison},
+    $C_{\rm box}\geq0$; applying Lemma~\ref{thm:arealaw-box-clearance-comparison},
     Theorem~\ref{thm:template-final-information}, and
-    Theorem~\ref{thm:area_law_collar_bound_of_information} at truncation factor
+    Lemma~\ref{thm:area_law_collar_bound_of_information} at truncation factor
     $10$ gives $(C_1,N_1)$.
 \end{proof}

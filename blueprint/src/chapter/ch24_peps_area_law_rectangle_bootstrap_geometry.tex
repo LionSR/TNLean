@@ -29,7 +29,7 @@ is $A\cap Q$; it may be empty even though the ambient rectangle is not.
     These are the data of the original finite-history collar scanner.
 \end{definition}
 
-\begin{theorem}[Weak-rectangle scanner geometry]
+\begin{lemma}[Weak-rectangle scanner geometry]
     \label{thm:rectangle_bootstrap_scanner_geometry}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_rectangleBootstrapScanner_geometry}
     \leanok
@@ -57,7 +57,7 @@ is $A\cap Q$; it may be empty even though the ambient rectangle is not.
     The target is exactly $A\cap Q$, the positive-depth prefix at
     every nonnegative integer $j$ is exactly $A\cap(Q^{+j}\setminus Q)$,
     and the truncation set at every $L'$ is exactly $A\cap Q^{+L'}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The lower-left corner belongs to $T$, and the product cardinality

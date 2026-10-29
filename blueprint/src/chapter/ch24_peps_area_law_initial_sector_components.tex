@@ -14,7 +14,7 @@ For $k\ge k_0$, $z\in F_{k,\ell_k}$, and any of the nine marks $v$ of its defini
 
 Consider the eight-triangle cell fan (Definition~\ref{def:area_law_cell_fan}) on $\overline B_\infty(v,r)$ with origin $o_{\rm S}=v-r(1,1)$, exponent $\ell$, cell index $(0,0)$, perimeter positions $\mathcal J$, cyclic successor $\tau$ (Definition~\ref{def:area_law_cell_fan_successor}), closed triangles $P_s^{\rm S}$, and final base endpoints $b_s^+$.
 Let $\sigma:\mathcal J\to\mathcal I$ be the sector assignment of Definition~\ref{def:area_law_initial_sector_assignment} from the concentric working fan of half-side $2r$.
-Equip $\mathcal J$ with the color-agreement adjacency $s\sim\tau(s)\iff\chi(\sigma(s))=\chi(\sigma(\tau(s)))$, runs $\mathcal R$ (Definition~\ref{def:area_law_fan_runs}) with run $[s]\ni s$ and closed regions $Y_R=\bigcup_{s\in R}P_s^{\rm S}$, and the unique run assignment $\lambda:\mathcal R\to\mathcal I$ satisfying $\lambda([s])=\sigma(s)$ (Theorem~\ref{thm:area_law_initial_sector_run_assignment}).
+Equip $\mathcal J$ with the color-agreement adjacency $s\sim\tau(s)\iff\chi(\sigma(s))=\chi(\sigma(\tau(s)))$, runs $\mathcal R$ (Definition~\ref{def:area_law_fan_runs}) with run $[s]\ni s$ and closed regions $Y_R=\bigcup_{s\in R}P_s^{\rm S}$, and the unique run assignment $\lambda:\mathcal R\to\mathcal I$ satisfying $\lambda([s])=\sigma(s)$ (Lemma~\ref{thm:area_law_initial_sector_run_assignment}).
 Following \cite[Section~11]{OpenAI2026AreaLaw}, define
 \begin{align}
     A      & =\{s\in\mathcal J:\sigma(s)\ne\sigma(\tau(s))\}, &
@@ -23,7 +23,7 @@ Following \cite[Section~11]{OpenAI2026AreaLaw}, define
     \label{eq:area_law_initial_cut_square}
 \end{align}
 
-\begin{theorem}[Connected components of the initial cut square]
+\begin{lemma}[Connected components of the initial cut square]
     \label{thm:area_law_initial_sector_components}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_angular_connectedComponents_equiv}
     \leanok
@@ -36,15 +36,15 @@ Following \cite[Section~11]{OpenAI2026AreaLaw}, define
          & \quad\Longleftrightarrow\quad x\in Y_R.
         \label{eq:area_law_initial_component_membership}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_cell_fan,
         thm:area_law_cell_fan_successor_endpoints,
         thm:area_law_initial_sector_colors,
         thm:area_law_fan_cut_component_correspondence}
-    The fan with origin $v-r(1,1)$ and half-side $r$ has center $v$, and Theorem~\ref{thm:area_law_cell_fan_successor_endpoints} makes $s$ and $\tau(s)$ adjacent.
-    By Theorem~\ref{thm:area_law_initial_sector_colors}, $\chi(\sigma(s))=\chi(\sigma(\tau(s)))\iff\sigma(s)=\sigma(\tau(s))$, so the color-change set is $A$ and its radial cut is $L$ in (\ref{eq:area_law_initial_cut_square}).
-    Applying Theorem~\ref{thm:area_law_fan_cut_component_correspondence} yields the unique bijection $\Phi$ satisfying (\ref{eq:area_law_initial_component_membership}).
+    The fan with origin $v-r(1,1)$ and half-side $r$ has center $v$, and Lemma~\ref{thm:area_law_cell_fan_successor_endpoints} makes $s$ and $\tau(s)$ adjacent.
+    By Lemma~\ref{thm:area_law_initial_sector_colors}, $\chi(\sigma(s))=\chi(\sigma(\tau(s)))\iff\sigma(s)=\sigma(\tau(s))$, so the color-change set is $A$ and its radial cut is $L$ in (\ref{eq:area_law_initial_cut_square}).
+    Applying Lemma~\ref{thm:area_law_fan_cut_component_correspondence} yields the unique bijection $\Phi$ satisfying (\ref{eq:area_law_initial_component_membership}).
 \end{proof}
 
 % Auxiliary to OpenAI, A two-dimensional area law from a global spectral gap,
@@ -52,14 +52,14 @@ Following \cite[Section~11]{OpenAI2026AreaLaw}, define
 % and prop:two-families, lines 299--323;
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 
-\begin{theorem}[Connected components in the closed square of half-radius]
+\begin{lemma}[Connected components in the closed square of half-radius]
     \label{thm:area_law_initial_closed_half_components}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_closedHalf_angular_connectedComponents_equiv}
     \leanok
     \uses{def:area_law_initial_sector_assignment,
         def:area_law_initial_region_colors,def:area_law_fan_runs,
         def:area_law_cell_fan_successor}
-    In the setting of Theorem~\ref{thm:area_law_initial_sector_components} (\cite[Section~11]{OpenAI2026AreaLaw}), set
+    In the setting of Lemma~\ref{thm:area_law_initial_sector_components} (\cite[Section~11]{OpenAI2026AreaLaw}), set
     \begin{align}
         \Omega_{1/2} & =\overline B_\infty(v,r/2)\setminus L.
         \label{eq:area_law_initial_closed_half_cut_square}
@@ -70,17 +70,17 @@ Following \cite[Section~11]{OpenAI2026AreaLaw}, define
          & \quad\Longleftrightarrow\quad x\in Y_R.
         \label{eq:area_law_initial_closed_half_component_membership}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_cell_fan,
         thm:area_law_cell_fan_successor_endpoints,
         thm:area_law_initial_sector_colors,
         thm:area_law_closed_half_fan_components}
-    By Theorem~\ref{thm:area_law_cell_fan_successor_endpoints} and Theorem~\ref{thm:area_law_initial_sector_colors}, $\chi(\sigma(s))=\chi(\sigma(\tau(s)))\iff\sigma(s)=\sigma(\tau(s))$, identifying the color-change set with $A$ and radial union with $L$.
-    Applying Theorem~\ref{thm:area_law_closed_half_fan_components} to (\ref{eq:area_law_initial_closed_half_cut_square}) gives the unique bijection $\Phi$ satisfying (\ref{eq:area_law_initial_closed_half_component_membership}).
+    By Lemma~\ref{thm:area_law_cell_fan_successor_endpoints} and Lemma~\ref{thm:area_law_initial_sector_colors}, $\chi(\sigma(s))=\chi(\sigma(\tau(s)))\iff\sigma(s)=\sigma(\tau(s))$, identifying the color-change set with $A$ and radial union with $L$.
+    Applying Lemma~\ref{thm:area_law_closed_half_fan_components} to (\ref{eq:area_law_initial_closed_half_cut_square}) gives the unique bijection $\Phi$ satisfying (\ref{eq:area_law_initial_closed_half_component_membership}).
 \end{proof}
 
-\begin{theorem}[A retained run belongs to its initial open region]
+\begin{lemma}[A retained run belongs to its initial open region]
     \label{thm:area_law_initial_run_open_region}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_sector_run_mem_initialOpenRegion}
     \leanok
@@ -90,16 +90,16 @@ Following \cite[Section~11]{OpenAI2026AreaLaw}, define
         def:area_law_initial_open_regions,
         def:area_law_cell_fan_successor}
     For every $R\in\mathcal R$, $\Omega\cap Y_R\subseteq U_{\lambda(R)}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_initial_sector_run_assignment,
         thm:area_law_initial_active_successor,
         def:area_law_initial_open_regions}
-    By Theorem~\ref{thm:area_law_initial_sector_run_assignment}, $x\in\Omega\cap Y_R$ satisfies
+    By Lemma~\ref{thm:area_law_initial_sector_run_assignment}, $x\in\Omega\cap Y_R$ satisfies
     \begin{align}
         x\in Y_R \subseteq \bigcup_{\substack{T\in\mathcal R \\\lambda(T)=\lambda(R)}}Y_T = X_{\lambda(R)}^0\cap\overline B_\infty(v,r) \subseteq X_{\lambda(R)}^0. \notag
     \end{align}
-    If $x\in\partial X_{\lambda(R)}^0\cap B_\infty(v,r)$, Theorem~\ref{thm:area_law_initial_active_successor} gives $s\in A$ with $x\in[v,b_s^+]\subseteq L$, contradicting $x\in\Omega=B_\infty(v,r)\setminus L$.
+    If $x\in\partial X_{\lambda(R)}^0\cap B_\infty(v,r)$, Lemma~\ref{thm:area_law_initial_active_successor} gives $s\in A$ with $x\in[v,b_s^+]\subseteq L$, contradicting $x\in\Omega=B_\infty(v,r)\setminus L$.
     Thus $x\in X_{\lambda(R)}^0\setminus\partial X_{\lambda(R)}^0=U_{\lambda(R)}$.
 \end{proof}
 % Proposed local auxiliary to geometry:initial-stars, lines 333--370,
@@ -110,20 +110,20 @@ Following \cite[Section~11]{OpenAI2026AreaLaw}, define
 % Intended Lean declaration after validation:
 % TNLean.PEPS.AreaLaw.Geometry.exists_unique_initialRegion_of_closedHalf_component
 
-\begin{theorem}[A unique initial region on each closed-half component]
+\begin{lemma}[A unique initial region on each closed-half component]
     \label{thm:area_law_initial_closed_half_unique_region}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_unique_initialRegion_of_closedHalf_component}
     \leanok
     \uses{thm:area_law_initial_closed_half_components,
         thm:area_law_initial_run_open_region,
         thm:area_law_initial_open_disjoint}
-    In the setting of Theorem~\ref{thm:area_law_initial_closed_half_components} (\cite[Section~11]{OpenAI2026AreaLaw}), for every connected component $Q\in\mathcal C(\Omega_{1/2})$ there exists a unique $i\in\mathcal I$ such that $Q\subseteq U_i$.
-\end{theorem}
+    In the setting of Lemma~\ref{thm:area_law_initial_closed_half_components} (\cite[Section~11]{OpenAI2026AreaLaw}), for every connected component $Q\in\mathcal C(\Omega_{1/2})$ there exists a unique $i\in\mathcal I$ such that $Q\subseteq U_i$.
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_initial_closed_half_components,
         thm:area_law_initial_sector_run_assignment,
         thm:area_law_initial_run_open_region,
         thm:area_law_initial_open_disjoint}
-    By Theorem~\ref{thm:area_law_initial_closed_half_components}, $Q=\Omega_{1/2}\cap Y_R\subseteq\Omega\cap Y_R$ for $R=\Phi(Q)$, so Theorem~\ref{thm:area_law_initial_run_open_region} gives $Q\subseteq U_{\lambda(R)}$.
-    Since $Q\neq\varnothing$ and $\{U_i\}_{i\in\mathcal I}$ are pairwise disjoint by Theorem~\ref{thm:area_law_initial_open_disjoint}, $i=\lambda(R)$ is unique.
+    By Lemma~\ref{thm:area_law_initial_closed_half_components}, $Q=\Omega_{1/2}\cap Y_R\subseteq\Omega\cap Y_R$ for $R=\Phi(Q)$, so Lemma~\ref{thm:area_law_initial_run_open_region} gives $Q\subseteq U_{\lambda(R)}$.
+    Since $Q\neq\varnothing$ and $\{U_i\}_{i\in\mathcal I}$ are pairwise disjoint by Lemma~\ref{thm:area_law_initial_open_disjoint}, $i=\lambda(R)$ is unique.
 \end{proof}

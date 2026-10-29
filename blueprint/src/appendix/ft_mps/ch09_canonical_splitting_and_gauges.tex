@@ -1,15 +1,15 @@
 \section{Similarities, strict splitting, and zero blocks}
 \label{sec:app_canonical_splitting}
 
-Similarity invariance and strict dimension decrease justify the induction used in Theorem~\ref{thm:irred_decomp}; the final result removes blocks that vanish at every positive length.
+Similarity invariance and strict dimension decrease justify the induction used in Lemma~\ref{thm:irred_decomp}; the final result removes blocks that vanish at every positive length.
 
-\begin{theorem}[Unitary conjugation preserves the MPV family]\label{thm:samempv_unitary}
+\begin{lemma}[Unitary conjugation preserves the MPV family]\label{thm:samempv_unitary}
     \lean{MPSTensor.sameMPV_conj_unitary}
     \leanok
     \uses{def:same_mpv}
     If $U$ is a unitary matrix, then $A$ and $U^\dagger A U$
     generate the same MPV family.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     By cyclicity of the trace,
@@ -17,29 +17,29 @@ Similarity invariance and strict dimension decrease justify the induction used i
         = \tr(A^{i_1} \cdots A^{i_N})$.
 \end{proof}
 
-\begin{theorem}[Nontrivial invariant projection gives strict two-block reduction]
+\begin{lemma}[Nontrivial invariant projection gives strict two-block reduction]
     \label{thm:lowerzero_two_block_strict}
     \lean{MPSTensor.exists_twoBlock_decomp_of_lowerZero_strict}
     \leanok
     \uses{def:same_mpv2}
-    Under the hypotheses of Theorem~\ref{thm:lowerzero_two_block},
+    Under the hypotheses of Lemma~\ref{thm:lowerzero_two_block},
     assume in addition that $P\neq0$ and $P\neq\Id$.
     Then there exist $n,m$ with $n+m=D$, $n<D$, and $m<D$, together
     with block tensors $A_1,A_2$, such that
     $A$ and $A_1\oplus A_2$ generate the same MPV family in the sense of
     Definition~\ref{def:same_mpv2}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:lowerzero_two_block}
-    Theorem~\ref{thm:lowerzero_two_block} provides the two-block decomposition
+    Lemma~\ref{thm:lowerzero_two_block} provides the two-block decomposition
     in the diagonal basis of $P$, where the $1$-eigenspace is nonempty because
     $P\neq0$ and the $0$-eigenspace is nonempty because $P\neq\Id$. Both block
     sizes are therefore positive, and $n+m=D$ then implies $n<D$ and $m<D$.
 \end{proof}
 
-\begin{theorem}[Nonzero irreducible block decomposition]%
+\begin{lemma}[Nonzero irreducible block decomposition]%
     \label{thm:nonzero_irreducible_block_decomposition}
     \lean{MPSTensor.exists_irreducible_blockDecomp_nonzeroBlocks}
     \leanok
@@ -54,12 +54,12 @@ Similarity invariance and strict dimension decrease justify the induction used i
         \label{eq:canonical_nonzero_decomp}
     \end{align}
     In addition, $\sum_{k=1}^rD_k\le D$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:irred_decomp}
     Retaining the blocks with at least one nonzero Kraus operator in the
-    irreducible block decomposition of Theorem~\ref{thm:irred_decomp} removes
+    irreducible block decomposition of Lemma~\ref{thm:irred_decomp} removes
     only all-zero irreducible blocks $C_j$, which satisfy
     $V^{(N)}(C_j)_\sigma=0$ for every $N\ge1$; this establishes
     (\ref{eq:canonical_nonzero_decomp}), and restricting the structural identity
@@ -71,10 +71,10 @@ Similarity invariance and strict dimension decrease justify the induction used i
 
 Reducing orthogonal projections yield support isometries that compress tensors to
 corner blocks, preserving matrix product vectors across direct sums (supporting
-Theorems~\ref{thm:projector_closure_irreducible_corners} and
+Lemmas~\ref{thm:projector_closure_irreducible_corners} and
 \ref{thm:projector_closure_canonical_form}).
 
-\begin{theorem}[Invariant projections are reducing under projector closure]
+\begin{lemma}[Invariant projections are reducing under projector closure]
     \label{thm:invariant_projector_closure_commutes}
     \lean{MPSTensor.commutes_of_hasInvariantProjectorClosure_of_lowerZero}
     \leanok
@@ -82,7 +82,7 @@ Theorems~\ref{thm:projector_closure_irreducible_corners} and
     Suppose that $A$ has invariant-projector closure and that $P$ is an
     orthogonal projection satisfying $(\Id-P)A^iP=0$ for all~$i$. Then $P$
     reduces every tensor matrix: $PA^i=A^iP$ for all~$i$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -93,7 +93,7 @@ Theorems~\ref{thm:projector_closure_irreducible_corners} and
     $PA^i(\Id-P)$ also vanishes. Therefore $PA^i=PA^iP=A^iP$.
 \end{proof}
 
-\begin{theorem}[Invariant-projector closure gives a reducing projection]
+\begin{lemma}[Invariant-projector closure gives a reducing projection]
     \label{thm:exists_reducing_projection_of_invariant_projector}
     \lean{MPSTensor.exists_reducing_projection_of_hasInvariantProj}
     \leanok
@@ -101,12 +101,12 @@ Theorems~\ref{thm:projector_closure_irreducible_corners} and
     If $A$ has invariant-projector closure and admits a nontrivial invariant
     projection, then it admits a nontrivial orthogonal projection commuting
     with every $A^i$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:invariant_projector_closure_commutes}
-    Theorem~\ref{thm:invariant_projector_closure_commutes} shows that the
+    Lemma~\ref{thm:invariant_projector_closure_commutes} shows that the
     nontrivial invariant projection of Definition~\ref{def:has_inv_proj}
     commutes with every $A^i$.
 \end{proof}
@@ -413,7 +413,7 @@ gauge transformations of irreducible blocks.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Irreducibility under rescaled conjugation]
+\begin{lemma}[Irreducibility under rescaled conjugation]
     \label{thm:irreducible_tensor_smul_conj}
     \lean{MPSTensor.isIrreducibleTensor_smul_conj}
     \leanok
@@ -424,7 +424,7 @@ gauge transformations of irreducible blocks.
     % Source anchor: Cirac2016MPDO_arXiv, lines 224--225.
     normalization of \cite[Section~2.3]{Cirac2016MPDO_arXiv} applied to an
     irreducible corner preserves irreducibility.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -440,7 +440,7 @@ gauge transformations of irreducible blocks.
     the kernel of $YY^\dagger$. This contradicts irreducibility of $B$.
 \end{proof}
 
-\begin{theorem}[Unital Schwarz data for an irreducible corner]
+\begin{lemma}[Unital Schwarz data for an irreducible corner]
     \label{thm:spectral_unital_gauge_schwarz_setup}
     \lean{MPSTensor.spectralUnitalGauge_schwarz_setup}
     \leanok
@@ -453,13 +453,13 @@ gauge transformations of irreducible blocks.
     \cite[Theorem~6.6]{Wolf2012Quantum}: it is a unital Kraus family and an
     irreducible tensor with an irreducible transfer map whose adjoint map has a
     positive definite fixed point.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:unital_gauge_of_pd_fixed_point, thm:irreducible_tensor_smul_conj, thm:transfer_psd_fp_pd_irred}
-    Unitality follows from Theorem~\ref{thm:unital_gauge_of_pd_fixed_point} and
-    irreducibility from Theorem~\ref{thm:irreducible_tensor_smul_conj}. The
+    Unitality follows from Lemma~\ref{thm:unital_gauge_of_pd_fixed_point} and
+    irreducibility from Lemma~\ref{thm:irreducible_tensor_smul_conj}. The
     adjoint of a unital family is trace-preserving, so its transfer map is
     a channel and has a positive semidefinite fixed point by the Ces\`aro
     argument; irreducibility of the adjoint map upgrades the fixed point to
@@ -472,7 +472,7 @@ gauge transformations of irreducible blocks.
     \leanok
     \uses{def:transfer_map}
     In the setting of
-    Theorem~\ref{thm:spectral_unital_gauge_schwarz_setup}, every transfer
+    Lemma~\ref{thm:spectral_unital_gauge_schwarz_setup}, every transfer
     eigenvalue $\mu$ of $B$ becomes the transfer eigenvalue $\mu/r$ of the
     rescaled unital gauge: the gauge conjugates the transfer map by the
     congruence with $\rho^{1/2}$ and divides it by $r$. In particular, the
