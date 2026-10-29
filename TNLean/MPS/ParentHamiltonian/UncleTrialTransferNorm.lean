@@ -76,7 +76,8 @@ private theorem trace_familyKrausMap {ι : Type*} [Fintype ι]
   rw [Finset.sum_comm_cycle]
   apply Finset.sum_congr rfl
   intro z _
-  simp [Matrix.trace, Matrix.conjTranspose_apply, Finset.sum_mul, Finset.mul_sum]
+  simp only [Matrix.trace, Matrix.diag_apply, Matrix.conjTranspose_apply,
+    star_sum, Finset.sum_mul, Finset.mul_sum]
   exact Finset.sum_comm
 
 /-- The finite contraction of the five actual transfer maps. The two wall
