@@ -5,7 +5,7 @@
     Relative to the four-endpoint patch based at $v$, the successive plaquette
     bases are $v+(1,1)$, $v+(2,1)$, and $v+(2,2)$.
 \end{definition}
-\begin{theorem}[Directed bond weights and clockwise fluxes along the route]
+\begin{lemma}[Directed bond weights and clockwise fluxes along the route]
     \label{thm:peps_two_step_string_route_holonomy}
     \lean{TNLean.PEPS.torusSecondStringCrossingOutput_up_transport,TNLean.PEPS.torusSecondStringCrossingOutput_right_transport,TNLean.PEPS.regularWalkHolonomy_torusTwoStepString_initial,TNLean.PEPS.regularWalkHolonomy_torusTwoStepString_intermediate,TNLean.PEPS.regularWalkHolonomy_torusTwoStepString_final,TNLean.PEPS.regularWalkHolonomy_torusTwoStepString_partners}
     \leanok
@@ -23,7 +23,7 @@
     These are bond-assignment calculations auxiliary to
     \cite[Section~6.6]{Schuch2010PEPS}; they do not identify the two-step
     operation with the prescribed complete braid.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_two_step_string_plaquettes,thm:peps_second_string_physical_crossing,thm:peps_initial_string_right_physical_step,thm:peps_torus_plaquette_holonomy,thm:peps_torus_swept_string_endpoint_holonomy}

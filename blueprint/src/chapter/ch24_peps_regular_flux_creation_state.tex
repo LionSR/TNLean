@@ -13,7 +13,7 @@
     of \cite[Theorem 6.17]{Schuch2010PEPS}.
 \end{definition}
 
-\begin{theorem}[Exact conjugacy-sum normalization]
+\begin{lemma}[Exact conjugacy-sum normalization]
     \label{thm:peps_regular_flux_creation_norm}
     \lean{TNLean.PEPS.regularFluxClassVector_dotProduct,TNLean.PEPS.regularFluxClassVector_conjugation,TNLean.PEPS.regularFluxClassVector_one_eq_zero,TNLean.PEPS.normalizedRegularFluxClassVector_dotProduct,TNLean.PEPS.normalizedRegularFluxClassVector_orthogonal,TNLean.PEPS.normalizedRegularFluxClassVector_conjugation,TNLean.PEPS.normalizedRegularFluxClassVector_one,TNLean.PEPS.regularFluxPairVector_eq_sum,TNLean.PEPS.regularFluxPairVector_dotProduct}
     \leanok
@@ -23,7 +23,7 @@
     has norm one and is invariant under conjugation. For $g\ne1$ it is
     orthogonal to $\delta_1$, while $\widehat\alpha_1=\delta_1$.
     In addition, $\beta_g(a,b)=\sum_z\mathbf 1_{a=zgz^{-1}b}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For every conjugate $zgz^{-1}$, precisely $c_g$ conjugating elements
     produce that conjugate. Expanding the squared norm therefore gives
@@ -43,7 +43,7 @@
     $(ab^{-1},b)$.
 \end{definition}
 
-\begin{theorem}[Equivariant accessible-register creation]
+\begin{lemma}[Equivariant accessible-register creation]
     \label{thm:peps_regular_flux_creation_matrix}
     \lean{TNLean.PEPS.regularFluxCreationMatrix_mem_unitaryGroup,TNLean.PEPS.regularFluxCreationMatrix_mulVec_single,TNLean.PEPS.regularFluxCreationMatrix_commute_conjugation,TNLean.PEPS.regularFluxPairCreationMatrix_mem_unitaryGroup,TNLean.PEPS.regularFluxPairCreationMatrix_mulVec_diagonal}
     \leanok
@@ -58,7 +58,7 @@
     This is the normalized accessible-register operation in
     \cite[Theorem 6.17]{Schuch2010PEPS}; its action on a contracted PEPS
     region is a separate assertion.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For $g\ne1$, reflect in the difference of the two orthogonal unit vectors.
     Every conjugation fixes both vectors and hence commutes with the reflection.

@@ -56,7 +56,7 @@ one-species specialization by an explicit operator decomposition.
     the displayed operator with the parent interaction.
 \end{proof}
 
-\begin{theorem}[Periodic occupation decomposition]
+\begin{lemma}[Periodic occupation decomposition]
     \label{thm:pvbs_periodic_occupation}
     \lean{MPSTensor.localTermES_pvbs_two_apply,
         MPSTensor.localTermES_pvbs_decomposition,
@@ -72,7 +72,7 @@ one-species specialization by an explicit operator decomposition.
         \label{eq:pvbs_periodic_number}
     \end{align}
     The sum defining $H_\mu$ contains both oriented windows when $N=2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:pvbs_local_projector, lem:pvbs_cyclic_geometry}
@@ -82,7 +82,7 @@ one-species specialization by an explicit operator decomposition.
     right ends of the windows, yielding (\ref{eq:pvbs_periodic_number}).
 \end{proof}
 
-\begin{theorem}[Uniform periodic PVBS lower gap bound]
+\begin{lemma}[Uniform periodic PVBS lower gap bound]
     \label{thm:pvbs_uniform_lower_gap}
     \lean{MPSTensor.parentHamiltonianES_pvbs_energy_decomposition,
         MPSTensor.pvbs_particle_number_ge_norm_sq,
@@ -99,7 +99,7 @@ one-species specialization by an explicit operator decomposition.
         c(\mu)\|v\| & \le\|H_\mu v\|.
         \label{eq:pvbs_uniform_norm_gap}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:pvbs_periodic_occupation, thm:pvbs_periodic_parent}
@@ -113,7 +113,7 @@ one-species specialization by an explicit operator decomposition.
     Cauchy--Schwarz inequality yields the norm bound.
 \end{proof}
 
-\begin{theorem}[Attainment and exact noncritical finite-ring gap]
+\begin{lemma}[Attainment and exact noncritical finite-ring gap]
     \label{thm:pvbs_exact_periodic_gap}
     \lean{MPSTensor.parentHamiltonianES_pvbs_uniformParticle,
         MPSTensor.parentHamiltonianES_pvbs_gap_le,
@@ -128,7 +128,7 @@ one-species specialization by an explicit operator decomposition.
     At $\mu=1$, the W vector is instead another zero-energy state;
     this does not assert that the finite-ring gap above the enlarged
     kernel is zero.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:pvbs_periodic_occupation, thm:pvbs_uniform_lower_gap,

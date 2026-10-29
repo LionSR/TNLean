@@ -66,7 +66,7 @@ recorded in Section~\ref{sec:peps_czx_rectangle_boundary}.
     $F_s(\sigma,c)=F_0(e_s\sigma,c)$.
 \end{definition}
 
-\begin{theorem}[Faithful physical boundary symmetry of a cyclic rectangle]%
+\begin{lemma}[Faithful physical boundary symmetry of a cyclic rectangle]%
     \label{thm:czx_wrapping_boundary}
     \lean{TNLean.PEPS.czxWrappingRectangleEffectiveBoundaryConfig_injective,
         TNLean.PEPS.czxWrappingRectangleBoundaryMatrix_mulVec_injective,
@@ -84,7 +84,7 @@ recorded in Section~\ref{sec:peps_czx_rectangle_boundary}.
         U_{R_s}F_s&=F_sO_P(A).
         \label{eq:czx_wrapping_intertwiner}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:czx_wrapping_contraction,thm:czx_rectangle_boundary_faithful,
         thm:czx_rectangle_physical_image,thm:czx_rectangle_review_mpo}
@@ -95,7 +95,7 @@ recorded in Section~\ref{sec:peps_czx_rectangle_boundary}.
     The boundary index and the even perimeter are unchanged.
 \end{proof}
 
-\begin{theorem}[Reduced-density support of a cyclic rectangle]%
+\begin{lemma}[Reduced-density support of a cyclic rectangle]%
     \label{thm:czx_wrapping_density}
     \lean{TNLean.PEPS.exists_czxWrappingRectanglePlaquetteBoundary,
         TNLean.PEPS.range_regionReducedDensity_czxWrappingRectangle,
@@ -105,7 +105,7 @@ recorded in Section~\ref{sec:peps_czx_rectangle_boundary}.
     The actual unnormalized reduced density satisfies
     $\operatorname{ran}\rho_{R_s}=\operatorname{im}A_{R_s}$ and
     $\operatorname{rank}\rho_{R_s}=2^P$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:czx_wrapping_contraction,thm:czx_rectangle_boundary_faithful,
         thm:czx_wrapping_boundary,thm:czx_rectangle_density_support,

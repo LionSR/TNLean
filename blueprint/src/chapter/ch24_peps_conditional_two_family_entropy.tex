@@ -1,6 +1,6 @@
 \section{Conditional two-family entropy estimate}
 
-\begin{theorem}[Labelled conditional information bound]
+\begin{lemma}[Labelled conditional information bound]
     \label{thm:peps_labelled_conditional_entropy}
     \lean{TNLean.PEPS.AreaLaw.regionalEntropy_conditional_le_residual_add_sum}
     \leanok
@@ -18,7 +18,7 @@
         \le 2S_\Omega(D)+\sum_i\varepsilon_i.
         \label{eq:peps_labelled_conditional_entropy}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Filtering the common order by $f_i\in\{0,1\}$ identifies each family's
     preceding union with $P_i$. Since $C\cap(G\cup B)=\varnothing$,
@@ -31,12 +31,12 @@
 
 % Source: OpenAI2026PolynomialPEPS, Lemma 3.2 (lem:cell-cmi), 02-information.tex,
 % lines 197--222.
-\begin{corollary}[Counting form of the conditional information bound]
+\begin{lemma}[Counting form of the conditional information bound]
     \label{cor:peps_cell_information_counting_form}
     \lean{TNLean.PEPS.AreaLaw.regionalEntropy_conditional_le_card_residual_add_pieceCount}
     \leanok
     \uses{thm:peps_labelled_conditional_entropy}
-    In the setting of Theorem~\ref{thm:peps_labelled_conditional_entropy}, if
+    In the setting of Lemma~\ref{thm:peps_labelled_conditional_entropy}, if
     the local dimension is $q$, the partition has $N$ pieces, and
     $\varepsilon_i=C_2$ for all $i$, then
     \begin{align}
@@ -44,7 +44,7 @@
         \le 2\lvert D\rvert\log q+NC_2.
         \label{eq:peps_cell_information_counting_form}
     \end{align}
-\end{corollary}
+\end{lemma}
 \begin{proof}\leanok
     Substitute $\sum_{i=1}^N\varepsilon_i=NC_2$ and $S_\Omega(D)\le\lvert D\rvert\log q$
     (from $\operatorname{rank}\Omega_D\le q^{\lvert D\rvert}$) into (\ref{eq:peps_labelled_conditional_entropy}).
@@ -66,12 +66,12 @@
     \end{align}
 \end{corollary}
 \begin{proof}\leanok
-    Apply Corollary~\ref{cor:peps_cell_information_counting_form} with $N=0$ pieces and $D=G$.
+    Apply Lemma~\ref{cor:peps_cell_information_counting_form} with $N=0$ pieces and $D=G$.
 \end{proof}
 
 % Source: OpenAI2026PolynomialPEPS, Lemma 3.2 (lem:cell-cmi), 02-information.tex,
 % lines 224--227, 240--241, 276--280 and 302--311.
-\begin{theorem}[Generation count of the cell recursion]
+\begin{lemma}[Generation count of the cell recursion]
     \label{thm:peps_cell_generation_count}
     \lean{TNLean.PEPS.Approximation.cellChildSide,
         TNLean.PEPS.Approximation.cellPowerThreshold,
@@ -105,12 +105,12 @@
     \end{align}
     One may take $C=\max\{C_g2^{C_g},C_g\}$, where $C_g$ is the
     generation-count constant of
-    Theorem~\ref{thm:area_law_power_recursion_depth} for $\rho=\gamma'$,
+    Lemma~\ref{thm:area_law_power_recursion_depth} for $\rho=\gamma'$,
     $S_*=u_*$ and branching bound $b$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For $u\ge u_*\ge8^{1/(\gamma'-\gamma)}$, $8u^{\gamma}\le u^{\gamma'}$, so
-    $0<u'\le u^{\gamma'}$ and Theorem~\ref{thm:area_law_power_recursion_depth} with $\rho=\gamma'$
+    $0<u'\le u^{\gamma'}$ and Lemma~\ref{thm:area_law_power_recursion_depth} with $\rho=\gamma'$
     yields (\ref{eq:peps_cell_generation_depth}). For $s\ge1$,
     $\log(s+e)\le\log(e^{2}s)=2+\log s\le2(1+\log s)$, yielding (\ref{eq:peps_cell_generation_sum}).
 \end{proof}
@@ -199,7 +199,7 @@
     \leanok
     \uses{thm:peps_cell_generation_count}
     Fix $\gamma,u_0\in\mathbb R$, and let $U(K,\gamma,\delta)$ and the
-    tile-count constant be as in Theorem~\ref{thm:peps_cell_generation_count}.
+    tile-count constant be as in Lemma~\ref{thm:peps_cell_generation_count}.
     The intermediate exponent is $\gamma'=(\max\{\gamma,0\}+1)/2$. The stopping
     scale is
     \begin{align}
@@ -212,7 +212,7 @@
     $C(\gamma,u_0)=(2+(u_*(\gamma,u_0)+1)^2)K(\gamma,u_0)$.
 \end{definition}
 
-\begin{theorem}[Bounds on the partition constants]
+\begin{lemma}[Bounds on the partition constants]
     \label{thm:peps_cell_partition_constants_bounds}
     \lean{TNLean.PEPS.Approximation.CellPartition.cellIntermediateExponent_bounds,
         TNLean.PEPS.Approximation.CellPartition.le_cellStopScale,
@@ -224,20 +224,20 @@
     For all $\gamma,u_0\in\mathbb R$ one has $u_0\le u_*(\gamma,u_0)$ and
     $u_*(\gamma,u_0)>1$, and $C(\gamma,u_0)$ and $K(\gamma,u_0)$ are positive.
     If $\gamma<1$, then $\gamma<\gamma'$ and $0<\gamma'<1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_cell_generation_count}
     The scale bounds hold because $u_*$ is a maximum containing $u_0$ and $2$.
-    The tile-count constant of Theorem~\ref{thm:peps_cell_generation_count} is
+    The tile-count constant of Lemma~\ref{thm:peps_cell_generation_count} is
     positive, hence so are $K$ and $C$. For $\gamma<1$, $\gamma'$ is the midpoint
     of $\max\{\gamma,0\}$ and $1$.
 \end{proof}
 
 % Source: OpenAI2026PolynomialPEPS, Lemma 3.2 (lem:cell-cmi), 02-information.tex,
 % lines 181--196 and 224--311.
-\begin{theorem}[Two-family partition of a cell with explicit constants]
+\begin{lemma}[Two-family partition of a cell with explicit constants]
     \label{thm:peps_cell_two_family_partition_explicit}
     \lean{TNLean.PEPS.Approximation.CellPartition.cell_twoFamily_partition}
     \leanok
@@ -254,7 +254,7 @@
     of an exterior cell whose colour is the family of the piece and from every
     earlier piece of the same family. The pieces and the remainder sites
     number at most $C(1+\log s)^{K}$ in total.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_cell_partition_constants,lem:peps_cell_generation_invariant,
         thm:peps_cell_generation_count,thm:peps_cell_partition_constants_bounds}
@@ -262,17 +262,17 @@
     from the chosen cell until the side drops below $u_*$ (for which
     $1000u^{\gamma}\le u$ and $8u^{\gamma}\le u^{\gamma'}$ hold for $u\ge u_*$,
     by the choice of the two power thresholds) terminates after finitely
-    many generations by Theorem~\ref{thm:peps_cell_generation_count}. The tiles of all generations are the pieces, and the
+    many generations by Lemma~\ref{thm:peps_cell_generation_count}. The tiles of all generations are the pieces, and the
     sites still allowed are the remainder. Each active square has at most
     $25$ children, so there are at most $25^{g}$ active squares in generation
     $g$, two tiles per active square, and at most $(u_*+1)^2$ lattice points
-    in a terminal square. Theorem~\ref{thm:peps_cell_generation_count} with
+    in a terminal square. Lemma~\ref{thm:peps_cell_generation_count} with
     branching bound $25$ bounds the total.
 \end{proof}
 
 % Source: OpenAI2026PolynomialPEPS, Lemma 3.2 (lem:cell-cmi), 02-information.tex,
 % lines 181--196 and 224--311.
-\begin{theorem}[Two-family partition of a cell]
+\begin{lemma}[Two-family partition of a cell]
     \label{thm:peps_cell_two_family_partition}
     \lean{TNLean.PEPS.Approximation.CellPartition.exists_cell_twoFamily_partition}
     \leanok
@@ -288,11 +288,11 @@
     of an exterior cell whose colour is the family of the piece and from every
     earlier piece of the same family. The pieces and the remainder sites
     number at most $C(1+\log s)^{K}$ in total.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_cell_two_family_partition_explicit,
         def:peps_cell_partition_constants,thm:peps_cell_partition_constants_bounds}
     Take $u_*$, $C$ and $K$ from
     Definition~\ref{def:peps_cell_partition_constants} and apply
-    Theorem~\ref{thm:peps_cell_two_family_partition_explicit}.
+    Lemma~\ref{thm:peps_cell_two_family_partition_explicit}.
 \end{proof}

@@ -1,7 +1,7 @@
 \section{The single-cluster bound in Hastings' cluster expansion}
 \label{sec:hastings_single_cluster_bound}
 
-\begin{theorem}[Hermitian partial sums]
+\begin{lemma}[Hermitian partial sums]
     \label{thm:hermitian_partial_sums}
     \lean{Matrix.isHermitian_sum_of_subset}
     \leanok
@@ -9,13 +9,13 @@
     equipped with an additive involution, and let $T\subseteq S$ be finite sets.
     If $A_i^\dagger=A_i$ for every $i\in S$, then
     $(\sum_{i\in T}A_i)^\dagger=\sum_{i\in T}A_i$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Conjugate transposition preserves finite sums, and each summand indexed by
     $T$ is Hermitian because $T\subseteq S$.
 \end{proof}
 
-\begin{theorem}[The single-cluster bound]
+\begin{lemma}[The single-cluster bound]
     \label{thm:hastings_single_cluster_bound}
     Let $H$ be a Hermitian Hamiltonian, let $\beta\ge0$, and put
     $Z=\operatorname{tr}e^{-\beta H}$. For a cluster $C$ and its disjoint boundary
@@ -31,7 +31,7 @@
     \end{align}
     This is the single-cluster estimate of~\cite[Section IV]{Hastings2006Solving},
     with an absolute value on the trace.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     It is the finite-sum perturbation estimate in the companion quantum-channel
     volume~\cite[``The single-cluster bound'']{QICLean2026Blueprint}, applied to
@@ -78,7 +78,7 @@
     $Y=\beta(H-H_C-H_{B(C)})$.
 \end{definition}
 
-\begin{theorem}[Removing a cluster and its boundary]
+\begin{lemma}[Removing a cluster and its boundary]
     \label{thm:hastings_cluster_removal_trace}
     \lean{TNLean.Lattice.ClusterExpansion.re_trace_exp_sub_sum_sub_sum_le}
     \leanok
@@ -89,7 +89,7 @@
         \operatorname{tr}e^{-\beta(H-H_C-H_{B(C)})}\le e^{(n_C+n_{B(C)})J\beta}Z.
         \label{eq:hastings_cluster_removal_trace}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -100,14 +100,14 @@
     applied to $-\beta H+\beta(H_C+H_{B(C)})$, gives the claim.
 \end{proof}
 
-\begin{theorem}[The boundary count in the exponent]
+\begin{lemma}[The boundary count in the exponent]
     \label{thm:hastings_cluster_exp_count}
     \lean{TNLean.Lattice.ClusterExpansion.exp_card_add_card_mul_le}
     \leanok
     Let $\|H_k\|\le J$ for $k\in C\cup B(C)$, let $\beta\ge0$, and suppose that
     $n_C+n_{B(C)}\le Sn_C$. Then
     $e^{(n_C+n_{B(C)})J\beta}\le\bigl(e^{SJ\beta}\bigr)^{n_C}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -115,7 +115,7 @@
     $(n_C+n_{B(C)})J\beta\le Sn_CJ\beta$.
 \end{proof}
 
-\begin{theorem}[The bound on the cluster part]
+\begin{lemma}[The bound on the cluster part]
     \label{thm:hastings_cluster_part_bound}
     \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_le}
     \leanok
@@ -134,7 +134,7 @@
     and with $\|H_C+H_{B(C)}\|\le(n_C+n_{B(C)})J$. The printed form fails: applied
     to $\pm O$ it would make $\rho(\beta,C)$ a multiple of $e^{-\beta H}$
     \cite{gap:hastings05_cluster_part_trace_pairing}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -148,11 +148,11 @@
         \left|\operatorname{tr}\bigl(O\rho(\beta,C)\bigr)\right|
         \le\|O\|\bigl(e^{\beta J}-1\bigr)^{n_C}\operatorname{tr}e^{-Y}.\notag
     \end{align}
-    Theorem~\ref{thm:hastings_cluster_removal_trace} gives
+    Lemma~\ref{thm:hastings_cluster_removal_trace} gives
     $\operatorname{tr}e^{-Y}\le e^{(n_C+n_{B(C)})J\beta}Z$.
 \end{proof}
 
-\begin{theorem}[The boundary count]
+\begin{lemma}[The boundary count]
     \label{thm:hastings_cluster_boundary_count}
     \lean{TNLean.Lattice.ClusterExpansion.clusterBoundary,
         TNLean.Lattice.ClusterExpansion.card_add_card_clusterBoundary_le}
@@ -173,7 +173,7 @@
     expansion needs \cite{gap:hastings05_cluster_boundary}, $N(i)$ is the set
     of terms whose support meets that of $H_i$. Their centres lie within $2R$
     of $i$, so $S$ counts the sites within distance $2R$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -181,12 +181,12 @@
     $\bigcup_{i\in C}N(i)$, which has at most $Sn_C$ elements.
 \end{proof}
 
-\begin{theorem}[Equation (percb2)]
+\begin{lemma}[Equation (percb2)]
     \label{thm:hastings_cluster_part_percb2}
     \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_le_pow}
     \leanok
     \uses{thm:hastings_cluster_part_bound}
-    In the setting of Theorem~\ref{thm:hastings_cluster_part_bound}, suppose that
+    In the setting of Lemma~\ref{thm:hastings_cluster_part_bound}, suppose that
     $n_C+n_{B(C)}\le Sn_C$. Then, with $y=(e^{J\beta}-1)e^{SJ\beta}$,
     \begin{align}
         \left|\operatorname{tr}\bigl(O\rho(\beta,C)\bigr)\right|
@@ -196,19 +196,19 @@
     This is equation (percb2) of~\cite[lines 1186--1195]{Hastings2006Solving},
     multiplied by $Z$. The source obtains $n_C+n_{B(C)}\le Sn_C$ from
     the lattice, where $S$ bounds the number of terms acting on a site; here it
-    is a hypothesis, which Theorem~\ref{thm:hastings_cluster_boundary_count}
+    is a hypothesis, which Lemma~\ref{thm:hastings_cluster_boundary_count}
     supplies.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:hastings_cluster_part_bound, thm:hastings_cluster_exp_count}
-    By Theorem~\ref{thm:hastings_cluster_exp_count},
+    By Lemma~\ref{thm:hastings_cluster_exp_count},
     $e^{(n_C+n_{B(C)})J\beta}\le e^{SJ\beta n_C}$, and
     (\ref{eq:hastings_cluster_part_bound}) gives the claim.
 \end{proof}
 
-\begin{theorem}[Several clusters]
+\begin{lemma}[Several clusters]
     \label{thm:hastings_cluster_part_several}
     \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_clusterPart_biUnion_le}
     \leanok
@@ -218,7 +218,7 @@
     $\rho(\beta,C_1,\dots,C_m)$ be the operator~(\ref{eq:hastings_cluster_part})
     for the cluster $C_1\cup\dots\cup C_m$ and the boundary
     $B(C_1)\cup\dots\cup B(C_m)$. Under the hypotheses of
-    Theorem~\ref{thm:hastings_cluster_part_bound} on these terms,
+    Lemma~\ref{thm:hastings_cluster_part_bound} on these terms,
     \begin{align}
         \left|\operatorname{tr}\bigl(O\rho(\beta,C_1,\dots,C_m)\bigr)\right|
         \le\|O\|\prod_{i=1}^m y^{n_{C_i}}Z.\notag
@@ -227,23 +227,23 @@
     of~\cite[lines 1218--1224]{Hastings2006Solving} derives in the same way as
     (percb2). For the clusters of one term of the power series, no $C_j$ meets
     $B(C_i)$, so the operator above is the source's $\rho(\beta,C_1,\dots,C_m)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:hastings_cluster_part_percb2}
     The union of the clusters has $\sum_in_{C_i}$ sites, and the union of the
     boundaries has at most $\sum_in_{B(C_i)}$ terms, so the union satisfies
-    $n_C+n_{B(C)}\le Sn_C$. Theorem~\ref{thm:hastings_cluster_part_percb2} gives
+    $n_C+n_{B(C)}\le Sn_C$. Lemma~\ref{thm:hastings_cluster_part_percb2} gives
     $\|O\|y^{\sum_in_{C_i}}Z=\|O\|\prod_iy^{n_{C_i}}Z$.
 \end{proof}
 
-\begin{theorem}[The cluster part between thermal factors]
+\begin{lemma}[The cluster part between thermal factors]
     \label{thm:hastings_cluster_part_thermal}
     \lean{TNLean.Lattice.ClusterExpansion.norm_trace_mul_exp_mul_clusterPart_mul_exp_le_pow}
     \leanok
     \uses{thm:hastings_cluster_part_percb2}
-    In the setting of Theorem~\ref{thm:hastings_cluster_part_percb2}, let $n\ge1$ and
+    In the setting of Lemma~\ref{thm:hastings_cluster_part_percb2}, let $n\ge1$ and
     $0\le k\le n-1$, and put $y=(e^{J\beta/n}-1)e^{SJ\beta/n}$. Then
     \begin{align}
         \left|\operatorname{tr}\bigl(Oe^{-k\beta H/n}\rho(\beta/n,C)
@@ -253,14 +253,14 @@
     \end{align}
     This is the bound of~\cite[lines 1322--1333]{Hastings2006Solving}, multiplied by $Z$,
     where $\rho(\beta)=e^{-\beta H}$; the source proves it as (percb2).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:hastings_cluster_part, thm:hastings_cluster_removal_trace,
         thm:hastings_cluster_exp_count}
     Put $Y=\beta(H-H_C-H_{B(C)})$. As in the proof of
-    Theorem~\ref{thm:hastings_cluster_part_bound}, $\rho(\beta/n,C)$ is the alternating sum of
+    Lemma~\ref{thm:hastings_cluster_part_bound}, $\rho(\beta/n,C)$ is the alternating sum of
     the $e^{-(Y+\sum_{i\in E}\beta H_i)/n}$ over $E\subseteq C$. The bound for alternating
     sums between thermal factors in the companion quantum-channel
     volume~\cite[``Alternating sums between thermal factors, uniform form'']{QICLean2026Blueprint},
@@ -272,15 +272,15 @@
         \le\|O\|\bigl(e^{J\beta/n}-1\bigr)^{n_C}Z^{(n-1)/n}
         \bigl(\operatorname{tr}e^{-Y}\bigr)^{1/n}.\notag
     \end{align}
-    Theorem~\ref{thm:hastings_cluster_removal_trace} gives
+    Lemma~\ref{thm:hastings_cluster_removal_trace} gives
     $\operatorname{tr}e^{-Y}\le e^{(n_C+n_{B(C)})J\beta}Z$. Taking
     $1/n$-th powers and using $Z^{(n-1)/n}Z^{1/n}=Z$ bounds the right side by
     $\|O\|(e^{J\beta/n}-1)^{n_C}e^{(n_C+n_{B(C)})J\beta/n}Z$, and
-    Theorem~\ref{thm:hastings_cluster_exp_count}, with $\beta/n$ in place of
+    Lemma~\ref{thm:hastings_cluster_exp_count}, with $\beta/n$ in place of
     $\beta$, bounds $e^{(n_C+n_{B(C)})J\beta/n}$ by $e^{SJ\beta n_C/n}$.
 \end{proof}
 
-\begin{theorem}[Products of cluster parts]
+\begin{lemma}[Products of cluster parts]
     \label{thm:hastings_cluster_part_product}
     \lean{TNLean.Lattice.ClusterExpansion.clusterPart_empty_empty,
         TNLean.Lattice.ClusterExpansion.norm_trace_mul_list_prod_clusterPart_le_pow}
@@ -300,7 +300,7 @@
     A factor with $C_j=B_j=\emptyset$ is the thermal factor $e^{-\beta H/n}$, so this bounds
     every product of thermal factors and cluster parts in the operator $\rho_m$
     of~\cite[lines 1334--1341]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -317,7 +317,7 @@
         \le\|O\|\prod_j\bigl(e^{J\beta/n}-1\bigr)^{n_{C_j}}
         \bigl(\operatorname{tr}e^{-Y_j}\bigr)^{1/n}.\notag
     \end{align}
-    Theorems~\ref{thm:hastings_cluster_removal_trace} and~\ref{thm:hastings_cluster_exp_count},
+    Lemmas~\ref{thm:hastings_cluster_removal_trace} and~\ref{thm:hastings_cluster_exp_count},
     the latter with $\beta/n$ in place of $\beta$, give
     $(\operatorname{tr}e^{-Y_j})^{1/n}\le e^{Sn_{C_j}J\beta/n}Z^{1/n}$, and the $n$ factors
     $Z^{1/n}$ multiply to $Z$.

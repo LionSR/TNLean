@@ -141,7 +141,7 @@ representation requires $w,h\ge 2$ \cite{gap:rmp_peps_examples_small_torus}.
     \cite[Appendix~A, ``The GHZ state'']{Cirac2021Matrix}.
 \end{definition}
 
-\begin{theorem}[The GHZ PEPS is the GHZ state]%
+\begin{lemma}[The GHZ PEPS is the GHZ state]%
     \label{thm:peps_ghz_state}
     \lean{TNLean.PEPS.sum_prod_ghzSiteTensor, TNLean.PEPS.stateCoeff_ghzPEPS}
     \leanok
@@ -156,7 +156,7 @@ representation requires $w,h\ge 2$ \cite{gap:rmp_peps_examples_small_torus}.
     \end{align}
     \cite[Appendix~A, ``The GHZ state'']{Cirac2021Matrix}, and for $w,h\ge2$
     the simple-graph GHZ PEPS has coefficient (\ref{eq:peps_ghz_periodic_contraction}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_torus_shift_const}
@@ -166,7 +166,7 @@ representation requires $w,h\ge 2$ \cite{gap:rmp_peps_examples_small_torus}.
     $\sigma(x,y)=h_{(x,y)}=v_{(x,y)}=i$ for a single constant $i$.
 \end{proof}
 
-\begin{theorem}[Non-injectivity of the GHZ PEPS]
+\begin{lemma}[Non-injectivity of the GHZ PEPS]
     \label{thm:peps_ghz_not_injective}
     \lean{TNLean.PEPS.ghzSiteTensor_not_linearIndependent,
         TNLean.PEPS.ghzPEPS_not_isVertexInjective}
@@ -174,7 +174,7 @@ representation requires $w,h\ge 2$ \cite{gap:rmp_peps_examples_small_torus}.
     \uses{def:peps_ghz_tensor, def:IsVertexInjective}
     For $d\ge2$, the four-leg GHZ tensor is not injective, and for $d\ge2$,
     $w,h\ge2$, the simple-graph GHZ PEPS is not vertex-injective.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_torus_site_tensor_contraction}
@@ -183,7 +183,7 @@ representation requires $w,h\ge 2$ \cite{gap:rmp_peps_examples_small_torus}.
     vector with label $1$ on the right bond and $0$ elsewhere lies in $\ker A_v$.
 \end{proof}
 
-\begin{theorem}[On-site permutations and their virtual action]
+\begin{lemma}[On-site permutations and their virtual action]
     \label{thm:peps_ghz_permutation}
     \lean{TNLean.PEPS.ghzSiteTensor_perm, TNLean.PEPS.ghzSiteTensor_add,
         TNLean.PEPS.sum_prod_ghzSiteTensor_perm,
@@ -200,12 +200,12 @@ representation requires $w,h\ge 2$ \cite{gap:rmp_peps_examples_small_torus}.
     $\sigma\mapsto\pi\circ\sigma$ for $w,h\ge 1$, and gives
     $\Coeff(\pi\circ\sigma)=\Coeff(\sigma)$ for $w,h\ge 2$ (including the
     $\Z_d$ shift $\pi(i)=i+g$).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_ghz_state}
     Bijectivity of $\pi$ gives (\ref{eq:peps_ghz_perm_cov}); reindexing $i\mapsto\pi(i)$
-    in (\ref{eq:peps_ghz_periodic_contraction}) of Theorem~\ref{thm:peps_ghz_state}
+    in (\ref{eq:peps_ghz_periodic_contraction}) of Lemma~\ref{thm:peps_ghz_state}
     gives $\Coeff(\pi\circ\sigma)=\Coeff(\sigma)$.
 \end{proof}
 
@@ -223,7 +223,7 @@ representation requires $w,h\ge 2$ \cite{gap:rmp_peps_examples_small_torus}.
     \cite[Appendix~A, ``The cluster state'']{Cirac2021Matrix}.
 \end{definition}
 
-\begin{theorem}[The cluster PEPS]%
+\begin{lemma}[The cluster PEPS]%
     \label{thm:peps_cluster_state}
     \lean{TNLean.PEPS.stateCoeff_clusterPEPS}
     \leanok
@@ -235,7 +235,7 @@ representation requires $w,h\ge 2$ \cite{gap:rmp_peps_examples_small_torus}.
                 +\sigma_v\sigma_{v+(0,1)}}.
         \label{eq:peps_cluster_coeff}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_torus_site_tensor_contraction}
@@ -269,7 +269,7 @@ representation requires $w,h\ge 2$ \cite{gap:rmp_peps_examples_small_torus}.
     \cite[Appendix~A, ``The cluster state'']{Cirac2021Matrix}.
 \end{definition}
 
-\begin{theorem}[Common graph-stabilizer eigenspace]
+\begin{lemma}[Common graph-stabilizer eigenspace]
     \label{thm:peps_graph_stabilizer_line}
     \lean{TNLean.PEPS.graphStabilizer_graphCircuitSign,
         TNLean.PEPS.graphStabilizer_fixed_iff}
@@ -277,7 +277,7 @@ representation requires $w,h\ge 2$ \cite{gap:rmp_peps_examples_small_torus}.
     \uses{def:peps_graph_stabilizers}
     For the loop-free bond family of Definition~\ref{def:peps_graph_stabilizers},
     $K_v\psi=\psi$ for all $v\in V$ if and only if $\psi=cg$ for some $c\in\C$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     With $s_v(\sigma)=\prod_{e:a(e)=v}(-1)^{\sigma_{b(e)}}\prod_{e:b(e)=v}(-1)^{\sigma_{a(e)}}$,
@@ -288,7 +288,7 @@ representation requires $w,h\ge 2$ \cite{gap:rmp_peps_examples_small_torus}.
     $g(\sigma)\psi(\sigma)=\psi(0)$, i.e.\ $\psi=\psi(0)g$.
 \end{proof}
 
-\begin{theorem}[Square-torus cluster circuit and uniqueness]
+\begin{lemma}[Square-torus cluster circuit and uniqueness]
     \label{thm:peps_cluster_stabilizer_line}
     \lean{TNLean.PEPS.stateCoeff_clusterPEPS_eq_smul_graphCircuitSign,
         TNLean.PEPS.stateCoeff_clusterPEPS_eq_smul_clusterCircuitState,
@@ -304,12 +304,12 @@ representation requires $w,h\ge 2$ \cite{gap:rmp_peps_examples_small_torus}.
         K_v=X_v Z_{v+(1,0)}Z_{v-(1,0)}Z_{v+(0,1)}Z_{v-(0,1)}.
         \label{eq:peps_cluster_stabilizer_pauli}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_cluster_state, thm:peps_graph_stabilizer_line}
-    Combine Theorem~\ref{thm:peps_cluster_state} ($\Coeff(\sigma)=2^{-N}g(\sigma)$,
-    $\Coeff(0)=2^{-N}\neq 0$) with Theorem~\ref{thm:peps_graph_stabilizer_line}.
+    Combine Lemma~\ref{thm:peps_cluster_state} ($\Coeff(\sigma)=2^{-N}g(\sigma)$,
+    $\Coeff(0)=2^{-N}\neq 0$) with Lemma~\ref{thm:peps_graph_stabilizer_line}.
 \end{proof}
 
 \section{The CZX model}%
@@ -340,7 +340,7 @@ bond-dimension-four PEPS in \cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix
     qubits of its shared side \cite{gap:rmp_peps_czx_bond_orientation}.
 \end{definition}
 
-\begin{theorem}[The CZX PEPS is a product of plaquette GHZ states]%
+\begin{lemma}[The CZX PEPS is a product of plaquette GHZ states]%
     \label{thm:peps_czx_plaquette_product}
     \lean{TNLean.PEPS.czx_bond_iff_plaquette, TNLean.PEPS.stateCoeff_czxPEPS}
     \leanok
@@ -354,7 +354,7 @@ bond-dimension-four PEPS in \cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix
     \end{align}
     \cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix},
     \cite{ChenLiuWen2011CZX}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_torus_site_tensor_contraction}
@@ -418,7 +418,7 @@ bond-dimension-four PEPS in \cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix
     $V\ket{ab}=(-1)^{ab}\ket{\bar a\bar b}$.
 \end{definition}
 
-\begin{theorem}[Pulling the symmetry through a site]%
+\begin{lemma}[Pulling the symmetry through a site]%
     \label{thm:peps_czx_pull_through}
     \lean{TNLean.PEPS.czxOnSite_mul_czxSiteTensor}
     \leanok
@@ -430,7 +430,7 @@ bond-dimension-four PEPS in \cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix
          & =\sum_{t',r',b',l'}A^{s'}_{t'r'b'l'}\,V_{t't}V_{r'r}V_{b'b}V_{l'l}.
         \label{eq:peps_czx_pull_through}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     For $s=(i,j,k,l)$, both sides are supported on the bitwise-negated indices
@@ -450,7 +450,7 @@ bond-dimension-four PEPS in \cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix
     \end{align}
 \end{definition}
 
-\begin{theorem}[The boundary action is the CZX matrix product unitary]%
+\begin{lemma}[The boundary action is the CZX matrix product unitary]%
     \label{thm:peps_czx_boundary_mpu}
     \lean{TNLean.PEPS.czxBoundaryLegs_injective,
         TNLean.PEPS.czxBoundaryEmbedding_conjTranspose_mul_self,
@@ -461,7 +461,7 @@ bond-dimension-four PEPS in \cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix
     \uses{def:peps_czx_leg_operator, def:peps_czx_boundary_embedding,
         thm:asymex_czx_kernel, def:asymex_czx_review_tensor}
     For every $N>0$ and $U_N\ket{c}=(-1)^{\sum_m c_m c_{m+1}}\ket{\bar c}$
-    (Theorem~\ref{thm:asymex_czx_kernel}), $\iota$ and $V$
+    (Lemma~\ref{thm:asymex_czx_kernel}), $\iota$ and $V$
     (Definitions~\ref{def:peps_czx_leg_operator}--\ref{def:peps_czx_boundary_embedding})
     satisfy
     \begin{align}
@@ -476,21 +476,19 @@ bond-dimension-four PEPS in \cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix
     Section~\ref{sec:peps_czx_rectangle_boundary} and
     \cite{gap:rmp_peps_czx_boundary_chain} for the rectangular-region boundary
     reduction).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:asymex_czx_kernel, thm:asymex_czx_review_kernel}
     Injectivity of $c\mapsto\bigl((c_m,c_{m+1})\bigr)_{m=0}^{N-1}$ gives
     $\iota^\dagger\iota=\Id$; applying $V$ to each pair $(c_m,c_{m+1})$ produces
     $\prod_m(-1)^{c_mc_{m+1}}\iota\ket{\bar c}=\iota U_N\ket{c}$
-    (Theorem~\ref{thm:asymex_czx_kernel}), and $U_N=(-1)^N O(A)$ by
-    Theorem~\ref{thm:asymex_czx_review_kernel}.
+    (Lemma~\ref{thm:asymex_czx_kernel}), and $U_N=(-1)^N O(A)$ by
+    Lemma~\ref{thm:asymex_czx_review_kernel}.
 \end{proof}
 
 The boundary MPU 3-cocycle anomaly is formalized in
-Theorems~\ref{thm:mpug_anomaly_three_cocycle},
-\ref{thm:mpug_anomaly_three_cocycle_gauge}, and
-\ref{thm:asymex_czx_decorated_anomaly_class}.
+Theorem~\ref{thm:mpug_anomaly_three_cocycle}, Lemma~\ref{thm:mpug_anomaly_three_cocycle_gauge}, and Lemma~\ref{thm:asymex_czx_decorated_anomaly_class}.
 
 \input{chapter/ch24_peps_czx_rectangle_boundary}
 \input{chapter/CZXWrappingRectangle}
@@ -580,7 +578,7 @@ $P_{\pi}$ permute the four factors by $\pi\in S_4$.
     $LL^T=\mathbb{1}$, $\operatorname{im}(\Pi_{\mathrm{sym}}L)=\operatorname{im}\Pi_{\mathrm{sym}}$.
 \end{proof}
 
-\begin{theorem}[$SU(2)$ covariance of the AKLT tensor]%
+\begin{lemma}[$SU(2)$ covariance of the AKLT tensor]%
     \label{thm:peps_aklt_su2}
     \lean{Matrix.mul_singletY, TNLean.PEPS.akltSiteTensor_covariant,
         Matrix.adjugate_eq_star_of_mem_specialUnitaryGroup,
@@ -593,7 +591,7 @@ $P_{\pi}$ permute the four factors by $\pi\in S_4$.
         U^{\otimes 4}A=A\,(U\otimes U\otimes V\otimes V).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Since $UY=YV$ for $V=(\operatorname{adj}U)^T$ and
@@ -603,7 +601,7 @@ $P_{\pi}$ permute the four factors by $\pi\in S_4$.
     for $U\in SU(2)$, $\operatorname{adj}U=U^\dagger$, so $V=\bar U$.
 \end{proof}
 
-\begin{theorem}[The AKLT PEPS as projected singlets]%
+\begin{lemma}[The AKLT PEPS as projected singlets]%
     \label{thm:peps_aklt_state}
     \lean{TNLean.PEPS.akltLegs_vec, TNLean.PEPS.stateCoeff_akltPEPS}
     \leanok
@@ -618,7 +616,7 @@ $P_{\pi}$ permute the four factors by $\pi\in S_4$.
     representing $\bigotimes_v\Pi_{\mathrm{sym}}$ applied to a singlet
     $\ket{01}-\ket{10}$ on every edge
     \cite[Appendix~A, ``The AKLT model'']{Cirac2021Matrix}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_torus_site_tensor_contraction}
@@ -675,7 +673,7 @@ $\ket{01}-\ket{10}+\ket{22}$; extending by $0$ would make $A=0$,
     and finite case analysis over $\{0,1\}\times\{0,1,2\}^4$.
 \end{proof}
 
-\begin{theorem}[The RVB PEPS is the superposition of singlet coverings]%
+\begin{lemma}[The RVB PEPS is the superposition of singlet coverings]%
     \label{thm:peps_rvb_state}
     \lean{TNLean.PEPS.IsTorusDimerCovering, TNLean.PEPS.rvbCoveringBonds,
         TNLean.PEPS.stateCoeff_rvbPEPS}
@@ -689,7 +687,7 @@ $\ket{01}-\ket{10}+\ket{22}$; extending by $0$ would make $A=0$,
         \notag
     \end{align}
     \cite[Appendix~A, ``The RVB state'']{Cirac2021Matrix}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_torus_site_tensor_contraction, lem:peps_rvb_local}
@@ -735,7 +733,7 @@ Let $q\ge 1$, $h\colon\{0,\ldots,q-1\}^{2}\to\mathbb{R}$, and $\beta\in\mathbb{R
     \cite[Appendix~A, ``PEPS from classical models'']{Cirac2021Matrix}.
 \end{definition}
 
-\begin{theorem}[Coefficients of the classical-model PEPS]%
+\begin{lemma}[Coefficients of the classical-model PEPS]%
     \label{thm:peps_classical_coeff}
     \lean{TNLean.PEPS.stateCoeff_classicalPEPS,
         TNLean.PEPS.conj_mul_stateCoeff_classicalPEPS,
@@ -748,7 +746,7 @@ Let $q\ge 1$, $h\colon\{0,\ldots,q-1\}^{2}\to\mathbb{R}$, and $\beta\in\mathbb{R
     $\Coeff(\sigma)=e^{-\beta H(\sigma)/2}$ and Gibbs weight
     $|\Coeff(\sigma)|^{2}=e^{-\beta H(\sigma)}$
     \cite{gap:rmp_peps_examples_small_torus}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_torus_site_tensor_contraction}
@@ -759,7 +757,7 @@ Let $q\ge 1$, $h\colon\{0,\ldots,q-1\}^{2}\to\mathbb{R}$, and $\beta\in\mathbb{R
     by (\ref{eq:peps_classical_energy_def}).
 \end{proof}
 
-\begin{theorem}[Diagonal expectation values are Gibbs averages]%
+\begin{lemma}[Diagonal expectation values are Gibbs averages]%
     \label{thm:peps_classical_expectation}
     \lean{TNLean.PEPS.expectation_classicalPEPS}
     \leanok
@@ -776,12 +774,12 @@ Let $q\ge 1$, $h\colon\{0,\ldots,q-1\}^{2}\to\mathbb{R}$, and $\beta\in\mathbb{R
         \notag
     \end{align}
     \cite[Appendix~A, ``PEPS from classical models'']{Cirac2021Matrix}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_classical_coeff}
     Substitute $\overline{\Coeff(\sigma)}\Coeff(\sigma)=e^{-\beta H(\sigma)}$
-    from Theorem~\ref{thm:peps_classical_coeff}.
+    from Lemma~\ref{thm:peps_classical_coeff}.
 \end{proof}
 
 At the critical inverse temperature $\beta_c$, power-law decay of classical
