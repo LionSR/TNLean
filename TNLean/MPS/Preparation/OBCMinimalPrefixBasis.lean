@@ -75,7 +75,9 @@ coefficients. Source: PGVWC07, MPSarchive.tex lines 444--458. -/
 @[simp] theorem physicalPrefixBasis_apply (k : Fin (N + 1))
     (hmin : B.bondDim k = cutCoefficientRank B.coeff k.val)
     (a : Fin (B.bondDim k)) (u : CutPrefixConfig d N k.val) :
-    (physicalPrefixBasis B k hmin a).val u = physicalPrefixMatrix B k u a := rfl
+    (physicalPrefixBasis B k hmin a).val u = physicalPrefixMatrix B k u a := by
+  simp only [physicalPrefixBasis, Module.Basis.map_apply, LinearEquiv.coe_ofEq_apply,
+    Module.Basis.coe_span_apply]
 
 /-- Between two minimal cuts, the original prescribed OBC site matrix
 is the matrix of the actual physical-coordinate slice. This identifies
