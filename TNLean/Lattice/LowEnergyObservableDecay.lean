@@ -22,8 +22,9 @@ use a polynomial sphere bound, absent from source lines 169–190, through the c
 partial-trace localization estimate. They remain valid auxiliary estimates;
 the growth-free physical-metric estimate of eq. `blecm` is a separate statement.
 The scalar time-window and anchor-conversion lemmas live in
-`GaussianTruncationDecayBound` and `GraphDegreeTail`. See `docs/paper-gaps/hastings05_geometric_growth_scope.tex` for
-the separate false unrestricted summation claim.
+`GaussianTruncationDecayBound` and `GraphDegreeTail`. See
+`docs/paper-gaps/hastings05_geometric_growth_scope.tex` for the separate false
+unrestricted summation claim.
 -/
 
 open GaussianFilter Matrix QuantumCircuit
