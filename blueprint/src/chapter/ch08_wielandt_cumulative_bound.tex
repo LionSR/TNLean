@@ -938,7 +938,7 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     cyclic example following the main theorem in~\cite{Sanz2010Quantum}.
 \end{definition}
 
-\begin{theorem}[Cyclic matrix identities]
+\begin{lemma}[Cyclic matrix identities]
     \label{thm:cyclic_wielandt_identities}
     \lean{MPSTensor.CyclicWielandt.shift_mul_apply,
         MPSTensor.CyclicWielandt.shift_pow_apply,
@@ -958,14 +958,14 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     The shift satisfies $S^D=I$ and is invertible. For $0\le k<D$,
     $RS^kR=R$ if $k=D-2$, and is zero otherwise. Moreover,
     $S^kRS^l=\ketbra{1+k}{D-1-l}$, with coordinates modulo $D$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     The entries of $S^n$ are $\delta_{i,j+n}$. Multiplication by a
     matrix unit then gives the two sandwich identities.
 \end{proof}
 
-\begin{theorem}[Exact cyclic word normal form]
+\begin{lemma}[Exact cyclic word normal form]
     \label{thm:cyclic_wielandt_word_normal_form}
     \lean{MPSTensor.CyclicWielandt.evalWord_normalForm}
     \notready
@@ -973,7 +973,7 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     Every word of length $L$ evaluates to zero, to $S^L$, or to
     $S^kRS^l$ for some $0\le k,l<D$ and $n,m\ge0$ satisfying
     $L=1+k+l+n(D-1)+mD$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \uses{thm:cyclic_wielandt_identities}
@@ -984,7 +984,7 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     modulo $D$.
 \end{proof}
 
-\begin{theorem}[Full span at the cyclic length]
+\begin{lemma}[Full span at the cyclic length]
     \label{thm:cyclic_wielandt_full_span}
     \lean{MPSTensor.CyclicWielandt.jump_mem_wordSpan,
         MPSTensor.CyclicWielandt.sandwich_mem_wordSpan,
@@ -995,7 +995,7 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     At $N=D(D-1)$, the cyclic family satisfies $S_N(A)=\MN{D}$.
     The omitted diagonal-unit step in the source proof is supplied as
     recorded in~\cite{gap:spwc10_cyclic_missing_diagonal}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \uses{thm:cyclic_wielandt_identities}
@@ -1007,7 +1007,7 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     gives $\ketbra{0}{0}\in S_N(A)$.
 \end{proof}
 
-\begin{theorem}[The predecessor entry obstruction]
+\begin{lemma}[The predecessor entry obstruction]
     \label{thm:cyclic_wielandt_predecessor}
     \lean{MPSTensor.CyclicWielandt.evalWord_pred_entries_eq,
         MPSTensor.CyclicWielandt.wordSpan_pred_entries_eq,
@@ -1016,7 +1016,7 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     \uses{def:cyclic_wielandt_family, def:word_span}
     Every $X\in S_{D(D-1)-1}(A)$ satisfies $X_{D-1,0}=X_{0,1}$.
     Consequently $S_{D(D-1)-1}(A)\ne\MN{D}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \uses{thm:cyclic_wielandt_word_normal_form,
@@ -1030,7 +1030,7 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     violates it.
 \end{proof}
 
-\begin{theorem}[Exact index of the cyclic example]
+\begin{lemma}[Exact index of the cyclic example]
     \label{thm:cyclic_wielandt_index}
     \lean{MPSTensor.CyclicWielandt.isNormal,
         MPSTensor.CyclicWielandt.isPrimitivePaper,
@@ -1042,7 +1042,7 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     The cyclic family is normal and primitive, and
     $\iota(A)=D(D-1)$. For $D>2$, this exceeds the classical
     Wielandt exponent $D^2-2D+2$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \uses{thm:cyclic_wielandt_full_span,
