@@ -52,3 +52,11 @@ has two headline theorems and uses lemmas for its supporting results.
 
 The extraction preserves current-main definitions and does not copy build
 artifacts from the integration checkout.
+
+## Compatibility with the current QICLean library
+
+The pinned revision already provides
+`Kraus.isNBlkInjective_of_isNBlkInjective_conjTranspose` in
+`QICLean/Kraus/Injectivity.lean`. Its identical local declaration in
+`TNLean/MPS/Core/Blocking.lean` is removed to avoid declaring the name twice.
+Existing callers and the blueprint retain the same theorem name and statement.
