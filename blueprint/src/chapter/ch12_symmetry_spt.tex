@@ -4327,6 +4327,27 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     is needed.
 \end{proof}
 
+\begin{lemma}[Transfer spectral rate from limiting correlations]
+    \label{lem:spt_transfer_rate_from_correlations}
+    \lean{MPSTensor.norm_transfer_spectrum_le_of_limitCorrelator_bound}
+    \notready
+    \discussion{9879}
+    \uses{lem:ldp_limit_correlator_eigenvalue, def:physical_connected_correlator}
+    Let the products of $L$ letters of $A$ span the bond matrix algebra,
+    suppose $\sum_i(A^i)^\dagger A^i=\Id$, and let $\rho$ have trace one.
+    Suppose $r>0$ and for every pair of observables $X,Y$ on $L$ sites
+    there are $C\in\mathbb R$ and $n_0\in\mathbb N$ with
+    $|C_{\mathrm{phys}}(X,Y;n)|\leq Cr^n$ for $n\geq n_0$.
+    Every $\lambda\ne1$ in the transfer spectrum satisfies $|\lambda|\leq r$.
+\end{lemma}
+\begin{proof}
+    The eigenvalue observables give $C_{\mathrm{phys}}(X,Y;n)=\lambda^n$. If
+    $|\lambda|>r$, the ratio $|\lambda|/r$ is greater than one and its
+    powers are unbounded. The assumed estimate at $n+n_0$ bounds these
+    powers by $C$, a contradiction. The prefactors and starting
+    separations need not be uniform over the observables.
+\end{proof}
+
 \subsection{Virtual classes at a compact limit}
 
 \begin{theorem}[The virtual class of an exact ground-state path under a transfer bound]

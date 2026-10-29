@@ -163,6 +163,7 @@ import TNLean.MPS.Preparation.SupportedLogLogPreparation
 import TNLean.MPS.Preparation.SupportedPolar
 import TNLean.MPS.Preparation.SupportedPolarTree
 import TNLean.MPS.Preparation.SupportedTreePreparation
+import TNLean.MPS.Preparation.TransferSpectrumFromCorrelations
 import TNLean.MPS.Preparation.TreeAmplitude
 import TNLean.MPS.Preparation.TreeFactorization
 import TNLean.MPS.Preparation.TreeMERA

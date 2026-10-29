@@ -61,6 +61,17 @@ predicate or continuous canonical representative is introduced.
 
 ## Limits and next mathematical steps
 
+`MPS/Preparation/TransferSpectrumFromCorrelations.lean` now writes the
+conditional passage from an ordinary limiting-correlation rate `r > 0` to
+the bound `|λ| ≤ r` for every nonunit transfer spectral value in a
+trace-preserving gauge. It reuses the existing
+`exists_limitCorrelator_eq_pow` observable construction: the chosen
+correlator is exactly `λ^n`. The upper-bound prefactor and starting
+separation may depend on the observable pair; neither needs a uniform
+bound. If `|λ| > r`, then `(|λ|/r)^n` is unbounded, contradicting that
+prefactor, also after the starting separation. This eliminates a genuine
+asymptotic step without assuming the desired transfer bound.
+
 A symmetric Gaussian low-pass filter suppresses both positive and negative
 ground-transition frequencies. Its small commutator cannot by itself bound
 an ordinary connected correlation: that argument needs a positive-frequency
@@ -70,9 +81,10 @@ claim exponential clustering. The remaining steps are:
 1. Carry out that positive-frequency ground-state correlation calculation
    with the periodic dynamical estimate, obtaining exponential decay whose
    rate depends only on the uniform physical gap and interaction strength.
-2. Use injectivity to detect every nonunit eigenvalue of the actual minimal
-   transfer operator by physical block correlations, and convert the common
-   exponential rate into a strict uniform bound `q < 1`.
+2. Pass the finite-ring connected bound to the existing limiting block
+   contractions and transport it to a trace-preserving minimal gauge.
+   The physical eigenvalue observers already exist, and the new rate lemma
+   then removes all observable-dependent prefactors to give `q < 1`.
 3. Apply the already implemented conditional exact-path class theorem.
 
 The broader gap note

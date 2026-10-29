@@ -4950,6 +4950,18 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Eliminating a geometric prefactor from a spectral rate — reused Mathlib (2026-10-29)
+
+- **Seen:** `norm_transfer_spectrum_le_of_limitCorrelator_bound` in
+  `MPS/Preparation/TransferSpectrumFromCorrelations.lean`.
+- **Pattern:** An exact eigenvalue correlator `λ^n` and an eventual bound
+  `C r^n` imply `|λ| ≤ r`, even when `C` and the starting separation depend
+  on the observables.
+- **Reuse:** `pow_unbounded_of_one_lt` for the ratio `|λ|/r`, then
+  `pow_le_pow_right₀` to shift past the starting separation.
+- **Decision:** Reuse the existing Archimedean power lemmas and physical
+  eigenvalue-observer construction; no new asymptotic tactic is introduced.
+
 ### Identifying the ground energy of two physical conditions — candidate (2026-10-29)
 
 - **Seen:** `ExactMPSGroundPath.exists_uniform_ground_line_spectral_gap` in
