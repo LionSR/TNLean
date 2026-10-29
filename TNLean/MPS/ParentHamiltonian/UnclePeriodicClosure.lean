@@ -109,9 +109,9 @@ private theorem cyclicTranslateState_one_mpv (A : MPSTensor d a) (n : ℕ) :
   change Matrix.trace (Kraus.evalWord A
     (List.ofFn (cyclicTranslateCfg (1 : Fin (n + 2)) (Fin.cons i τ)))) =
       Matrix.trace (Kraus.evalWord A (List.ofFn (Fin.cons i τ)))
-  rw [cyclicTranslateCfg_cons_append, List.ofFn_fin_append, List.ofFn_cons]
-  simp only [List.ofFn_succ, List.ofFn_zero, List.cons_append, List.nil_append,
-    Kraus.evalWord_append, Kraus.evalWord_cons, Kraus.evalWord_nil, mul_one]
+  rw [cyclicTranslateCfg_cons_append, Fin.append_right_eq_snoc,
+    List.ofFn_snoc, List.ofFn_cons]
+  simp only [Kraus.evalWord_append, Kraus.evalWord_cons, Kraus.evalWord_nil, mul_one]
   exact Matrix.trace_mul_comm _ _
 
 /-- The source periodic closure is derived from full perturbation injectivity
@@ -138,9 +138,9 @@ theorem uncleBoundarySpace_inf_cyclicTranslate
       change Matrix.trace (uncleBoundaryWord A B R L (List.ofFn (Fin.cons i τ)) * X) =
         Matrix.trace (uncleBoundaryWord A B R L
           (List.ofFn (cyclicTranslateCfg (1 : Fin (n + 2)) (Fin.cons i τ))) * Y) at hc
-      rw [cyclicTranslateCfg_cons_append, List.ofFn_fin_append, List.ofFn_cons] at hc
-      simpa only [uncleBoundaryWord, List.ofFn_succ, List.ofFn_zero,
-        uncleBoundaryWord_append, uncleBoundaryWord_singleton] using hc
+      rw [cyclicTranslateCfg_cons_append, Fin.append_right_eq_snoc,
+        uncleBoundaryWord_ofFn_cons, uncleBoundaryWord_ofFn_snoc] at hc
+      exact hc
     have hpair := uncleBoundary_cyclic_pairing_of_word_pairing A B R L hPert n X Y hword
     have hXY := eq_of_uncleBoundary_cyclic_pairing X Y hpair
     obtain ⟨α, β, hX⟩ := exists_scalar_blocks_of_uncleBoundary_trace_cyclic X
