@@ -19,7 +19,7 @@ Source: arXiv:1210.6613, proof of Lemma lowenergystates, lines 1289–1296.
 
 noncomputable section
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators InnerProductSpace
 
 namespace MPSTensor
 
@@ -110,7 +110,7 @@ theorem re_inner_uncleHamiltonianES_trial_eq_sum_endpoints
     ∑ τ : Cfg d (6 * N + 1),
       inner ℂ (uncleInteractionES A B R L (cyclicRestrictES (Fin.pos i) 2 i τ φ))
         (cyclicRestrictES (Fin.pos i) 2 i τ φ)) = _
-  simp only [map_sum, map_smul, smul_eq_mul]
+  simp only [map_sum, map_smul, smul_eq_mul, Complex.reCLM_apply]
   simp_rw [re_inner_uncleInteractionES_eq_norm_sq]
   rw [Finset.mul_sum]
 

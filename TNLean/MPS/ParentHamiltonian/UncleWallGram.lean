@@ -121,9 +121,15 @@ theorem uncleWallCorrelation_succ (A : MPSTensor d a) (B : MPSTensor d b)
   simp_rw [← Matrix.mul_assoc]
   simp only [Finset.sum_add_distrib, sum_mul_pair]
   rw [sum_evalWord_mul_conjTranspose B hB]
-  simp [uncleWallCorrelation, uncleWallSeed, Kraus.mixedMapLM_apply,
-    Matrix.mul_assoc, Matrix.mul_sum, Matrix.sum_mul]
-  exact Finset.sum_comm
+  have hswap :
+      (∑ i : Fin d, ∑ σ : Fin n → Fin d,
+        A i * uncleDomainWallWord A B R (List.ofFn σ) *
+          (Kraus.evalWord B (List.ofFn σ))ᴴ * (B i)ᴴ) =
+      ∑ σ : Fin n → Fin d, ∑ i : Fin d,
+        A i * uncleDomainWallWord A B R (List.ofFn σ) *
+          (Kraus.evalWord B (List.ofFn σ))ᴴ * (B i)ᴴ := Finset.sum_comm
+  simpa [uncleWallCorrelation, uncleWallSeed, Kraus.mixedMapLM_apply,
+    Matrix.mul_assoc, Matrix.mul_sum, Matrix.sum_mul] using hswap
 
 /-- The finite Gram recurrence separates propagation, both cross terms,
 and the one-site wall Gram matrix; arXiv:1210.6613, proof of Lemma
@@ -142,12 +148,12 @@ theorem uncleWallGram_succ (A : MPSTensor d a) (B : MPSTensor d b)
   have hdiag (i : Fin d) :
       ∑ σ, (A i * W σ) * (A i * W σ)ᴴ =
         A i * uncleWallGram A B R n * (A i)ᴴ := by
-    simpa only [Matrix.conjTranspose_mul, Matrix.mul_assoc] using
+    simpa only [uncleWallGram, W, Matrix.conjTranspose_mul, Matrix.mul_assoc] using
       sum_mul_pair (A i) W (fun σ ↦ (W σ)ᴴ) (A i)ᴴ
   have hcross (i : Fin d) :
       ∑ σ, (A i * W σ) * (R i * V σ)ᴴ =
         A i * uncleWallCorrelation A B R n * (R i)ᴴ := by
-    simpa only [Matrix.conjTranspose_mul, Matrix.mul_assoc] using
+    simpa only [uncleWallCorrelation, W, V, Matrix.conjTranspose_mul, Matrix.mul_assoc] using
       sum_mul_pair (A i) W (fun σ ↦ (V σ)ᴴ) (R i)ᴴ
   have hcrossStar (i : Fin d) :
       ∑ σ, (R i * V σ) * (A i * W σ)ᴴ =
