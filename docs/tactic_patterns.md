@@ -9773,3 +9773,14 @@ there is no need for a new tactic.
 - **Reuse:** The new occurrence uses the existing Mathlib order and ceiling
   lemmas directly. The earlier full two-sided estimate remains private;
   two occurrences do not yet require a new public helper.
+
+### The ceiling filter scale dominates the inverse-gap logarithm — candidate (2026-10-29)
+
+- **Pattern:** From `u = 1 + log q + log (1/g)`, `q≥2`, `0<g≤1`, `A≥1`,
+  and `A*u^2/g≤s`, derive `log(1/g)≤s` by comparison with `u^2`.
+- **Seen:** `MPS/AreaLaw/LowEnergyFilterParameters.lean` and
+  `MPS/AreaLaw/AKLV/FavorableParameters.lean`.
+- **Abstraction:** If another scalar application requires it, add this
+  conclusion to the shared scalar scale lemma rather than repeating the proof.
+- **Notes:** This comparison absorbs the logarithmic truncation threshold
+  into a norm ceiling linear in the integer window scale.
