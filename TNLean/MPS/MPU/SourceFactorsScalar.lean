@@ -95,8 +95,12 @@ theorem sourceU_smul {d D : ℕ} {U : MPOTensor d D}
         (Equiv.prodCongr (finCongr (source_ranks_smul U hc).2.symm)
           (finCongr (source_ranks_smul U hc).1.symm)) (Equiv.refl _)
         (sourceU U S) := by
+  let er := finCongr (source_ranks_smul U hc).1.symm
+  let el := finCongr (source_ranks_smul U hc).2.symm
   ext ⟨l, r⟩ ⟨i, j⟩
-  simp only [sourceU, smul, Matrix.reindex_apply, Matrix.smul_apply, smul_eq_mul]
+  change (∑ β : Fin D,
+      (c * S.Y₂ (el.symm l) (i, β)) * (c * S.Y₁ (er.symm r) (β, j))) =
+    c ^ 2 * (∑ β : Fin D, S.Y₂ (el.symm l) (i, β) * S.Y₁ (er.symm r) (β, j))
   rw [Finset.mul_sum]
   apply Finset.sum_congr rfl
   intro β _

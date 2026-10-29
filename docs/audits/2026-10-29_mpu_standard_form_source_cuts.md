@@ -255,3 +255,13 @@ owner. The import now names `SourceUV` directly. The record-construction
 proofs reported no errors in this run; dependent phase/assembly modules did
 not receive successful exact-head verification. This is a source repair;
 no local Lean commands were run.
+
+## Hosted diagnostics on `80c8951d6`
+
+Job `123467082476` accepted the scalar record construction and then found
+an incompletely unfolded reindex in `sourceU_smul`: the right side was still
+an opaque gate evaluation, so the sum rewrite did not match. The proof now
+changes the entry goal directly to its fully scalar two-factor sum before
+extracting the common scalar. No source statement changes. The subsequent
+phase/local/converse modules still await hosted verification; no local Lean
+command was run.
