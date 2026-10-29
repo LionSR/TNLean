@@ -47,3 +47,53 @@
     Finally, $\log D\le9\log D_{\mathrm{aux}}$ gives the displayed
     logarithmic estimate.
 \end{proof}
+
+
+\begin{lemma}[Square-degree parameters for frustration-free clipping]
+    \label{lem:aklv_frustration_free_scalar_parameters}
+    \lean{Real.exists_aklv_frustrationFree_scalar_parameters}
+    \notready
+    \uses{thm:aklv_favorable_scalar_parameters}
+    There is a universal $A\ge21$ such that the following holds for every
+    integer $q\ge2$ and $0<g\le1$. Put $g_0=g/8192$,
+    $u=1+\log q+\log(1/g)$, $u_0=1+\log q+\log(1/g_0)$, and
+    \begin{align}
+        s      & =\left\lceil Au_0^2/g_0\right\rceil,          &
+        \ell   & =s^2,                                         & t & =1024/g, & R & =2t+s,\notag \\
+        D      & =\bigl(q(s^2+1)\bigr)^{32(2s+1)},             &
+        \Delta & =4\exp\left(-4\ell\sqrt{\frac{g}{2R}}\right).
+        \label{eq:aklv_ff_scalar_choice}
+    \end{align}
+    Then $s\ge21$, $s\ge1/g$, $\ell/s=s$, $\lfloor\sqrt\ell\rfloor=s$,
+    $R>0$, $\Delta>0$, and $D\Delta\le10^{-5}<1/256$.
+    Moreover,
+    \begin{align}
+        s      & \le\frac{8192(A+1)(1+\log8192)^2}{g}u^2,\notag \\
+        \log D & \le
+        \frac{8192\cdot198(A+1)(6+2\log(A+1))(1+\log8192)^3}{g}u^3.
+        \label{eq:aklv_ff_scalar_cost}
+    \end{align}
+    The logarithm of the inverse gap is retained. These are scalar
+    parameters for the frustration-free clipping step in
+    \cite[Section~4, frustration-free area law]{Arad2013AreaLaw}; neither an
+    available physical window nor the printed sharper entropy rate is asserted.
+\end{lemma}
+\begin{proof}
+    \notready
+    \uses{thm:aklv_favorable_scalar_parameters}
+    Apply the uniform square-degree estimate at $g_0=g/8192$ and use the
+    same $s,\ell,D$. Write $R_0=2(1024+16\log(1/g_0))+s$ for its ceiling
+    and $\Delta_0$ for its shrinking coefficient. The lower scale bound
+    implies $s\ge1/g$. Hence
+    \begin{align}
+        R                  & \le2049s\le2049R_0, &
+        \frac{9g_0}{10R_0} & \le\frac{g}{2R}.
+        \notag
+    \end{align}
+    Therefore $\Delta\le\Delta_0$ and the same favorable tradeoff holds.
+    Finally $u\ge1$ and
+    $u_0=u+\log8192\le(1+\log8192)u$.
+    Substitute this comparison and $g_0=g/8192$ into the existing upper
+    scale and logarithmic-rank bounds to obtain
+    (\ref{eq:aklv_ff_scalar_cost}).
+\end{proof}
