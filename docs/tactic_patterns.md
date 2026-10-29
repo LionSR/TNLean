@@ -9640,3 +9640,15 @@ there is no need for a new tactic.
   Promotion across the older call sites is deferred because this refinement
   explicitly requires preserving all accepted AKLV proof bytes. No additional
   tactic or alternate operator norm is introduced.
+
+### Chebyshev spectral endpoint arithmetic — candidate (2026-10-29)
+
+- **Seen:** Three endpoint comparisons in `MPS/AreaLaw/AKLV/ChebyshevProjector.lean`:
+  the original normalized theorem, the frustration-free specialization, and the
+  inverse-gap variant.
+- **Pattern:** Use a nonnegative middle budget, the explicit large cutoff and
+  `e′≤6`, `g≤1` to show `e′+g/2≤2t+budget`, before invoking the spectral filter.
+- **Decision:** All occurrences are in one module, below the cross-file promotion
+  threshold. A shared scalar endpoint lemma may replace this arithmetic if a second
+  file needs it. The scan also includes the following `obtain` line, which is not
+  part of the repeated mathematical argument.

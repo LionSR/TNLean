@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw.AKLV
 
 import TNLean.MPS.AreaLaw.AKLV.ApproximateGroundVector
+import TNLean.MPS.AreaLaw.AKLV.ChebyshevProjector
 import TNLean.MPS.AreaLaw.AKLV.CodimensionOneGap
 import TNLean.MPS.AreaLaw.AKLV.GroundStateTail
 import TNLean.MPS.AreaLaw.AKLV.HighEnergyMass
@@ -18,5 +19,6 @@ import TNLean.MPS.AreaLaw.AKLV.NormalizedChain
 import TNLean.MPS.AreaLaw.AKLV.ProjectionEnergy
 import TNLean.MPS.AreaLaw.AKLV.ResidualPhase
 import TNLean.MPS.AreaLaw.AKLV.Robustness
+import TNLean.MPS.AreaLaw.AKLV.SingleWindowPolynomialRank
 import TNLean.MPS.AreaLaw.AKLV.SpectralTail
 import TNLean.MPS.AreaLaw.AKLV.Truncation

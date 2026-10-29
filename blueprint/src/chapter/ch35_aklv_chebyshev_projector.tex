@@ -1,0 +1,200 @@
+\section{Chebyshev projectors of truncated chains}
+
+The Chebyshev construction of \cite[Section~4]{Arad2013AreaLaw}
+gives an approximate ground-state projector for a separately truncated
+chain. The rank estimate below follows from the two-window polynomial
+bound by adding sites with zero interactions and then fixing their
+configurations. The spectral argument takes place on the original chain.
+
+\begin{lemma}[A Chebyshev filter for a unique ground vector]
+    \label{lem:aklv_chebyshev_ground_filter}
+    \lean{TNLean.MPS.AreaLaw.AKLV.exists_chebyshev_ground_filter}
+    \leanok
+    Let $H$ be Hermitian and let $\Omega$ be a unit vector.
+    Suppose that $H\Omega=e\Omega$, that $g>0$, and that
+    \begin{align}
+        H-eI & \ge g(I-|\Omega\rangle\langle\Omega|),\notag \\
+        H    & \le uI,\qquad e+g\le u.\notag
+    \end{align}
+    For every integer $k\ge0$ there is a real polynomial $p$ of degree
+    exactly $k$ with $p(e)=1$. For $K=p(H)$ and
+    \begin{align}
+        r & =2\exp\left(-2k\sqrt{\frac{g}{u-e}}\right),\notag
+    \end{align}
+    $K$ is Hermitian, $K\Omega=\Omega$, and
+    $\|K-|\Omega\rangle\langle\Omega|\|\le r$.
+    Every unit vector $\psi\perp\Omega$ satisfies
+    $K\psi\perp\Omega$ and $\|K\psi\|^2\le r^2$.
+\end{lemma}
+\begin{proof}\leanok
+    The gap inequality puts the spectrum in $\{e\}\cup[e+g,u]$.
+    Apply the normalized Chebyshev polynomial of
+    \cite[Lemma~4.1]{Arad2013AreaLaw}. The spectral projection at $e$
+    is $|\Omega\rangle\langle\Omega|$. Hermiticity and the fixed-vector
+    equation give invariance of its orthogonal complement.
+\end{proof}
+
+\begin{lemma}[Restriction of spectator configurations]
+    \label{lem:aklv_spectator_cut_rank}
+    \lean{TNLean.MPS.AreaLaw.AKLV.operatorSchmidtRank_le_embedOp,
+        TNLean.MPS.AreaLaw.AKLV.operatorSchmidtRank_sheetSplit_eq_cutOperator}
+    \leanok
+    Let $e:V\hookrightarrow W$ be an injection of finite sets of
+    $q$-dimensional sites. Suppose $e^{-1}(B)=A$.
+    Extend an operator $K$ on $V$ by the identity on the remaining sites
+    of $W$. If a configuration of those sites exists, then its operator
+    Schmidt rank across $B$ is at least the operator Schmidt rank of
+    $K$ across $A$. Replacing the complement of a region by its equivalent
+    set of sites outside the region leaves this rank unchanged.
+\end{lemma}
+\begin{proof}\leanok
+    Fix the same spectator configuration in every row and column.
+    The two local restrictions at the cut recover $K$.
+    Restricting each factor of a product decomposition cannot increase
+    its number of summands. The two conventions for a complement differ
+    by a change of coordinates on the exterior factor.
+\end{proof}
+
+\begin{lemma}[A single-window polynomial rank bound]
+    \label{lem:aklv_single_window_polynomial_rank}
+    \lean{TNLean.MPS.AreaLaw.AKLV.operatorSchmidtRank_aeval_single_window_le_pow,
+        TNLean.MPS.AreaLaw.AKLV.normalized_chain_polynomial_rank,
+        TNLean.MPS.AreaLaw.AKLV.normalized_chain_real_polynomial_rank}
+    \leanok
+    On a chain of $L$ sites of local dimension $q\ge1$, let $W_r$ act on sites
+    $c+r,c+r+1$ for $0\le r<2w$. Let $P_L$ act on $[0,c+1)$
+    and $P_R$ act on $[c+2w,L)$, where $w\ge1$ and
+    $c+2w\le L-1$. For every polynomial $p$ of degree at most $k\ge1$,
+    the operator $p(\sum_rW_r+P_L+P_R)$ has operator Schmidt rank at most
+    \begin{align}
+        D & =(qk)^{17(w+\lfloor k/(2w)\rfloor)}\notag
+    \end{align}
+    across $[0,c+w+1)$.
+    This applies in particular when the exterior operators are clipped
+    normalized sums of the original nearest-neighbour terms.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:aklv_spectator_cut_rank}
+    Prepend $2w+1$ spectator sites with zero interactions.
+    Use a zero first window starting at zero and put the original active
+    window at $2w+1+c$. The left exterior is the middle bulk operator of
+    the two-window estimate, and its right exterior is unchanged.
+    The selected region pulls back to $[0,c+w+1)$.
+    Apply the two-window rank estimate and restrict the spectators.
+    The supported extension is unital, so it commutes with polynomial
+    evaluation, including the constant coefficient.
+\end{proof}
+
+\begin{lemma}[The norm of a separately clipped normalized chain]
+    \label{lem:aklv_clipped_chain_norm}
+    \lean{TNLean.MPS.AreaLaw.AKLV.middleCutBudget,
+        TNLean.MPS.AreaLaw.AKLV.middleCutBudget_eq,
+        TNLean.MPS.AreaLaw.AKLV.normalized_chain_truncation_bounds}
+    \leanok
+    Let $0\le h_i\le I$, and suppose the shifted left, middle and
+    right sums $X,N,Y$ are positive. For boundary bonds $a<b$ put
+    \begin{align}
+        X & =\sum_{i<a}h_i-xI,\notag   \\
+        N & =\sum_{a<i<b}h_i-mI,\notag \\
+        Y & =\sum_{b<i}h_i-yI.\notag
+    \end{align}
+    If $t\ge0$, then
+    $H_t=X^{\le t}+N+h_a+h_b+Y^{\le t}$ is positive and
+    \begin{align}
+        H_t & \le uI,\qquad \|H_t\|\le u,\notag \\
+        u   & =2t+\#\{i:a<i<b\}+2+|m|.\notag
+    \end{align}
+    When $b+1=a+2w$, this budget is $u=2t+2w+|m|$.
+\end{lemma}
+\begin{proof}\leanok
+    Each clipped exterior lies between zero and $tI$.
+    Count the original unit bonds in the middle and bound $-m$ by $|m|$.
+\end{proof}
+
+\begin{theorem}[The physical Chebyshev projector of a clipped chain]
+    \label{thm:aklv_normalized_chain_chebyshev}
+    \lean{TNLean.MPS.AreaLaw.AKLV.exists_normalized_chain_chebyshev_filter,
+        TNLean.MPS.AreaLaw.AKLV.exists_normalized_chain_chebyshev_agsp}
+    \leanok
+    Let $h_i$ be positive nearest-neighbour contractions on a chain of
+    $q$-dimensional sites, and let $X,N,Y$ be the positive shifted sums
+    of Lemma~\ref{lem:aklv_clipped_chain_norm}.
+    Suppose $b+1=a+2w$, $w\ge1$, and
+    \begin{align}
+        H       & =\sum_i h_i-(x+m+y)I,\notag                  \\
+        H\Omega & =e\Omega,\qquad \|\Omega\|=1,\notag          \\
+        H-eI    & \ge g(I-|\Omega\rangle\langle\Omega|),\notag
+    \end{align}
+    where $0\le e\le6$ and $0<g\le1$.
+    For every $t\ge32768(e+g)/g^2$, the clipped operator $H_t$ has
+    a unit ground vector $\phi$, ground energy $e'\in[0,e]$, gap at
+    least $g/2$, and norm at most $u=2t+2w+|m|$.
+    For every $k\ge1$ there is a real polynomial $p$ of degree $k$,
+    normalized by $p(e')=1$, such that $K=p(H_t)$ is Hermitian and
+    \begin{align}
+        K\phi  & =\phi,\notag                                                        \\
+        \delta & =\left(2\exp\left(-2k\sqrt{\frac{g/2}{u-e'}}\right)\right)^2,\notag \\
+        D      & =(qk)^{17(w+\lfloor k/(2w)\rfloor)}.\notag
+    \end{align}
+    Every unit $\psi\perp\phi$ satisfies
+    $K\psi\perp\phi$ and $\|K\psi\|^2\le\delta$.
+    Across $[0,a+w+1)$ the operator Schmidt rank of $K$ is at most $D$.
+    For some real $\theta$,
+    $\|\Omega-e^{i\theta}\phi\|^2\le e^{-t/16}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:aklv_chebyshev_ground_filter,
+        lem:aklv_single_window_polynomial_rank,lem:aklv_clipped_chain_norm}
+    Apply the explicit robustness estimate for the actual exterior clipping.
+    The preceding norm bound gives its spectral ceiling.
+    Apply Lemma~\ref{lem:aklv_chebyshev_ground_filter} to the resulting
+    ground vector and gap, and then apply the single-window rank bound
+    to that same polynomial and that same clipped Hamiltonian.
+\end{proof}
+
+\begin{corollary}[An inverse-gap cutoff for the physical projector]
+    \label{cor:aklv_inverse_gap_chebyshev}
+    \lean{TNLean.MPS.AreaLaw.AKLV.exists_normalized_chain_chebyshev_agsp_of_inverse_gap_cutoff}
+    \leanok
+    All conclusions of Theorem~\ref{thm:aklv_normalized_chain_chebyshev}
+    hold already for $t\ge32768/g$, with the same actual exterior clipping,
+    polynomial, squared shrinking and rank bound. The normalized ground
+    energy may be positive.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{thm:aklv_inverse_gap_robustness,lem:aklv_chebyshev_ground_filter,
+        lem:aklv_single_window_polynomial_rank,lem:aklv_clipped_chain_norm}
+    The inverse-gap robustness comparison retains the positive
+    high-energy diagonal. Apply it to obtain the unit ground vector
+    and gap $g/2$ at this cutoff, then use the same spectral
+    construction and physical polynomial rank estimate.
+\end{proof}
+
+\begin{corollary}[Exact retention in a frustration-free chain]
+    \label{cor:aklv_frustration_free_chebyshev}
+    \lean{TNLean.MPS.AreaLaw.AKLV.exists_frustrationFree_chain_chebyshev_filter,
+        TNLean.MPS.AreaLaw.AKLV.exists_frustrationFree_chain_chebyshev_agsp}
+    \leanok
+    Suppose $0\le h_i\le I$, $H=\sum_i h_i$, $H\Omega=0$,
+    $\|\Omega\|=1$, and
+    $H\ge g(I-|\Omega\rangle\langle\Omega|)$ for $0<g\le1$.
+    With $x=m=y=0$, the preceding construction applies for
+    $t\ge32768/g$. It retains $H_t\Omega=0$ exactly and gives
+    \begin{align}
+        H_t     & \ge\frac g2(I-|\Omega\rangle\langle\Omega|),\notag              \\
+        K\Omega & =\Omega,\qquad u=2t+2w,\notag                                   \\
+        \delta  & =\left(2\exp\left(-2k\sqrt{\frac{g}{2u}}\right)\right)^2.\notag
+    \end{align}
+    The same single-cut rank bound $D$ holds.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{thm:aklv_normalized_chain_chebyshev}
+    The original regional sums are positive.
+    The inequalities $0\le H_t\le H$ and $H\Omega=0$ imply
+    $H_t\Omega=0$. The unique clipped ground line is therefore
+    $\mathbb C\Omega$, so the ground projection is unchanged.
+\end{proof}
+
+% The explicit rank estimate retains log(qk). No favorable parameter
+% optimization, or the sharper printed area-law dependence, is asserted here.
+% The unsquared normalized Chebyshev polynomial need not be positive.
