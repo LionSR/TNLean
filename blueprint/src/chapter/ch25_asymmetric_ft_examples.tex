@@ -1,0 +1,563 @@
+%% The example numbers below are those cited in the corresponding module
+%% docstrings from The asymmetric fundamental theorem of matrix product states.
+%% That lecture note is not included in Papers/ or Notes/; the statements here
+%% have been compared with the linked declarations, not with an unseen source.
+
+\section{Examples of multi-block compressions}
+
+The following examples distinguish irreducibility from normality, equality of
+word traces from gauge equivalence, and agreement of reading maps on matched
+subspaces from agreement on the whole bond space. The example numbers refer to
+\emph{The asymmetric fundamental theorem of matrix product states}. Coordinates
+are indexed from $0$, and $E_{ij}$ and $e_i$ denote the matrix units and
+coordinate vectors.
+
+\subsection{Irreducibility and word traces}
+
+\begin{lemma}[An irreducible periodic tensor]
+    % Lecture note: equation (1.1).
+    \label{lem:asym_example_periodic}
+    \lean{MultiBlockExamples.Periodic.tensorC,
+        MultiBlockExamples.Periodic.isIrreducibleAction_tensorC,
+        MultiBlockExamples.Periodic.wordSpan_tensorC_of_even,
+        MultiBlockExamples.Periodic.wordSpan_tensorC_of_odd,
+        MultiBlockExamples.Periodic.finrank_wordSpan_tensorC,
+        MultiBlockExamples.Periodic.not_isNormal_tensorC}
+    \leanok
+    The tensor of equation~(1.1) has $C^0=E_{01}$ and $C^1=E_{10}$ in $\MN{2}$.
+    The only common invariant
+    subspaces are $0$ and $\C^2$. For every positive length $n$, the span of the
+    words of length $n$ is
+    \begin{align}
+        \spn_{\C}\{C^w:|w|=n\}
+         & =\begin{cases}
+                \spn_{\C}\{E_{00},E_{11}\}, & n\text{ even}, \\
+                \spn_{\C}\{E_{01},E_{10}\}, & n\text{ odd}.
+            \end{cases}
+    \end{align}
+    Each span has dimension $2$, so $C$ is irreducible but not normal.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Multiplication by either letter changes the parity of the nonzero matrix
+    entries. The alternating words give the two indicated matrix units at
+    every positive length. If a common invariant subspace contains a nonzero
+    vector, applying the two letters produces both coordinate vectors.
+\end{proof}
+
+\begin{lemma}[Equal word traces without a gauge]
+    % Lecture note: Example 4.5.
+    \label{lem:asym_example_no_gauge}
+    \lean{MultiBlockExamples.NoGauge.tensorB,
+        MultiBlockExamples.NoGauge.tensorB',
+        MultiBlockExamples.NoGauge.evalWord_tensorB',
+        MultiBlockExamples.NoGauge.evalWord_tensorB_apply,
+        MultiBlockExamples.NoGauge.trace_evalWord_tensorB_eq,
+        MultiBlockExamples.NoGauge.trace_evalWord_tensorB'_eq_one_of_eq_replicate,
+        MultiBlockExamples.NoGauge.trace_evalWord_tensorB'_eq_zero_of_ne_replicate,
+        MultiBlockExamples.NoGauge.tensorB_one_mul_zero_and_tensorB'_commute,
+        MultiBlockExamples.NoGauge.isInvariantSubmodule_span_tensorB_iff,
+        MultiBlockExamples.NoGauge.isInvariantSubmodule_span_tensorB'_iff,
+        MultiBlockExamples.NoGauge.not_exists_conj_tensorB_eq_tensorB'}
+    \leanok
+    In Example~4.5, put $B=(E_{00}+E_{01},E_{11})$ and
+    $B'=(E_{00},E_{11})$.
+    For every word $w$, $\tr(B^w)=\tr((B')^w)$. This common trace is $2$ for
+    the empty word, $1$ for a nonempty word using only one letter, and $0$ for
+    a word using both letters. Nevertheless, no invertible $X$ satisfies
+    $XB^iX^{-1}=(B')^i$ for both letters. The only common invariant line of
+    $B$ is $\C e_0$, whereas those of $B'$ are $\C e_0$ and $\C e_1$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The matrix $(B')^w$ is diagonal, with entry $1$ at $k$ precisely when every
+    letter of $w$ equals $k$. The product $B^w$ is upper triangular with the
+    same diagonal. Also $B^0B^1-B^1B^0=E_{01}$, while the letters of $B'$ commute;
+    conjugation preserves commutation. Solving $B^iv=\lambda_i v$ and
+    $(B')^iv=\lambda_i v$ gives the stated invariant lines.
+\end{proof}
+
+\begin{lemma}[Interpolation without a constant term]
+    % Lecture note: Example 4.4.
+    \label{lem:asym_example_interpolation}
+    \lean{MultiBlockExamples.Running.exists_eval_zero_eq_zero_and_eval_eq,
+        MultiBlockExamples.Running.eq_one_and_eq_one_of_forall_add_mul_pow_eq}
+    \leanok
+    In Example~4.4, let $\nu_0,\ldots,\nu_{m-1}$ be distinct nonzero complex numbers. For any
+    $y_0,\ldots,y_{m-1}\in\C$, there is a polynomial $p$ with $p(0)=0$ and
+    $p(\nu_j)=y_j$ for every $j$. In particular, if $c_0+c_1 2^n=1+2^n$ for
+    every positive integer $n$, then $c_0=c_1=1$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Let $q$ be the Lagrange interpolant with $q(\nu_j)=y_j/\nu_j$, and put
+    $p(X)=Xq(X)$. Since $\nu_j\neq0$, this gives $p(0)=0$ and
+    $p(\nu_j)=\nu_j(y_j/\nu_j)=y_j$. For the last assertion the equations
+    at $n=1,2$ already determine both coefficients.
+\end{proof}
+
+\subsection{A diagonal tensor with two different blocks}
+
+\begin{lemma}[All reductions of a diagonal two-dimensional tensor]
+    % Lecture note: Example 6.14.
+    \label{lem:asym_example_diagonal_reductions}
+    \lean{MultiBlockExamples.Running.tensorB,
+        MultiBlockExamples.Running.blocks,
+        MultiBlockExamples.Running.isInvariantSubmodule_tensorB_iff,
+        MultiBlockExamples.Running.ord_flagVec_cases_of_z_eq_zero,
+        MultiBlockExamples.Running.exists_multiBlockCompression_each_order,
+        MultiBlockExamples.Running.exists_multiBlockCompression_upper,
+        MultiBlockExamples.Running.exists_left_eq_upper_of_ord_lt,
+        MultiBlockExamples.Running.exists_multiBlockCompression_swap,
+        MultiBlockExamples.Running.exists_left_eq_swap_of_ord_gt,
+        MultiBlockExamples.Running.redUpper_spec,
+        MultiBlockExamples.Running.redSwap_spec}
+    \leanok
+    In Example~6.14, let $B=\operatorname{diag}(1,2)$ have one letter, and let the target blocks
+    be $C_0=(1)$ and $C_1=(2)$. Its invariant subspaces are exactly
+    $0,\C e_0,\C e_1,\C^2$. A compression onto these two blocks without zero
+    slots has one of the two flags $0\subset\C e_0\subset\C^2$ and
+    $0\subset\C e_1\subset\C^2$. In bond coordinates ordered by the flag, its
+    gauge is respectively
+    \begin{align}
+        G            & =\begin{pmatrix}\alpha&\beta\\0&\delta\end{pmatrix}, &
+        \widetilde G & =\begin{pmatrix}\beta&\alpha\\\delta&0\end{pmatrix},
+                     & \alpha\delta\neq0.
+    \end{align}
+    Every such matrix defines a compression. For $G$, the reading rows are
+    $W_0=(\alpha,\beta)$ and $W_1=(0,\delta)$, and the embedding columns are
+    $V_0=(\alpha^{-1},0)^{\mathsf T}$ and
+    $V_1=(-\beta/(\alpha\delta),\delta^{-1})^{\mathsf T}$.
+    For $\widetilde G$, they are
+    $\widetilde W_1=(\beta,\alpha)$, $\widetilde W_0=(\delta,0)$,
+    $\widetilde V_1=(0,\alpha^{-1})^{\mathsf T}$ and
+    $\widetilde V_0=(\delta^{-1},-\beta/(\alpha\delta))^{\mathsf T}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    If a subspace contains $(x,y)$, invariance under $B$ implies that it
+    contains $(x,0)=2(x,y)-B(x,y)$ and $(0,y)=B(x,y)-(x,y)$.
+    Thus its only possible one-dimensional members are the coordinate lines.
+    The rows reading the first flag therefore have the first displayed form;
+    reversing the order gives the second. Direct multiplication by the inverse
+    gives upper triangular conjugated letters with the prescribed diagonal,
+    and gives the displayed reading rows and embedding columns.
+\end{proof}
+
+\begin{lemma}[Reading maps that remain different after every word]
+    % Lecture note: Examples 1.2 and 3.4.
+    \label{lem:asym_example_diagonal_words}
+    \lean{MultiBlockExamples.Running.exists_multiBlockCompression_gauge_one,
+        MultiBlockExamples.Running.exists_multiBlockCompression_gauge_unipotent,
+        MultiBlockExamples.Running.unipotent_conj_tensorB,
+        MultiBlockExamples.Running.tensorB_pow,
+        MultiBlockExamples.Running.left_mul_pow_ne_smul,
+        MultiBlockExamples.Running.remainder_pow_ne_zero}
+    \leanok
+    In Examples~1.2 and~3.4, for the tensor of
+    Lemma~\ref{lem:asym_example_diagonal_reductions}, the gauges $1$ and
+    $H=\left(\begin{smallmatrix}1&1\\0&1\end{smallmatrix}\right)$
+    have the same flag and satisfy
+    $HBH^{-1}=\left(\begin{smallmatrix}1&1\\0&2\end{smallmatrix}\right)$.
+    The reading rows of $C_0$ are $W=(1,0)$ and $\widetilde W=(1,1)$.
+    For every $n\geq0$, $WB^n=(1,0)$ and $\widetilde WB^n=(1,2^n)$ are not
+    proportional. Removing only $C_0$ leaves
+    $B-e_0(1)e_0^{\mathsf T}=\operatorname{diag}(0,2)$, whose every
+    nonnegative power is nonzero.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Compute $B^n=\operatorname{diag}(1,2^n)$. The second coordinate of a scalar
+    multiple of $(1,0)$ is zero, whereas $2^n\neq0$.
+\end{proof}
+
+\begin{lemma}[Matching and factorization in the diagonal example]
+    % Lecture note: Example 6.14.
+    \label{lem:asym_example_diagonal_matching}
+    \lean{MultiBlockExamples.Running.matching_left_right_gOne_redSwap,
+        MultiBlockExamples.Running.isAdaptedFactorization_gOne_redSwap}
+    \leanok
+    Compare $G=1$ with
+    $\widetilde G=\left(\begin{smallmatrix}\beta&\alpha\\\delta&0\end{smallmatrix}\right)$,
+    where $\alpha\delta\neq0$. The matching sends each labelled block to the
+    same labelled block in the opposite position. For $C_0$ its intersection
+    and lower sum are $U_0=\C e_0$ and $\mathcal N_0=\C e_1$; for $C_1$ they
+    are $U_1=\C e_1$ and $\mathcal N_1=\C e_0$. The reading comparisons have
+    scalars $\lambda_0=\delta$ and $\lambda_1=\alpha$, and
+    \begin{align}
+        \widetilde V_0-\delta^{-1}V_0
+                       & =\begin{pmatrix}0\\-\beta/(\alpha\delta)\end{pmatrix}, &
+        \widetilde V_1 & =\alpha^{-1}V_1.
+    \end{align}
+    With $L_0=\C e_0$, $L_1=\C e_1$, the adapted coordinates are $\Gamma=1$,
+    and the factorization is
+    \begin{align}
+        \widetilde G G^{-1}
+         & =\begin{pmatrix}1&\beta/\delta\\0&1\end{pmatrix}
+        \begin{pmatrix}0&\alpha\\\delta&0\end{pmatrix}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:asym_example_diagonal_reductions}
+    The coordinate lines have zero intersection, so the matching reverses
+    positions. Restrict the rows and columns from
+    Lemma~\ref{lem:asym_example_diagonal_reductions} to these lines and multiply
+    the two displayed factors.
+\end{proof}
+
+\subsection{Two copies of the same normal block}
+
+\begin{lemma}[Multiplicity subspaces and split compressions]
+    % Lecture note: Example 6.13.
+    \label{lem:asym_example_multiplicity}
+    \lean{MultiBlockExamples.Multiplicity.tensorC,
+        MultiBlockExamples.Multiplicity.tensorB,
+        MultiBlockExamples.Multiplicity.wordSpan_tensorC_three_eq_top_and_isNormal,
+        MultiBlockExamples.Multiplicity.tensorB_eq_kronecker,
+        MultiBlockExamples.Multiplicity.isInvariantSubmodule_lineTensor,
+        MultiBlockExamples.Multiplicity.span_eq_of_lineTensor_eq,
+        MultiBlockExamples.Multiplicity.commute_tensorB_iff_eq_kronMat,
+        MultiBlockExamples.Multiplicity.exists_split_multiBlockCompression_kronRow,
+        MultiBlockExamples.Multiplicity.exists_left_eq_kronRow_of_remainder_eq_zero}
+    \leanok
+    In Example~6.13, let $C=(\left(\begin{smallmatrix}0&1\\1&0\end{smallmatrix}\right),E_{00})$
+    and $B^i=1_2\otimes C^i$. The words of length $3$ in $C$ span $\MN{2}$,
+    so $C$ is normal. For every $u\in\C^2$, the subspace
+    $\C u\otimes\C^2$ is invariant under $B$, and equality of two such
+    subspaces for nonzero $u,\widetilde u$ implies
+    $\C u=\C\widetilde u$. A matrix commutes with both letters of $B$ exactly
+    when it is $A\otimes1_2$ for some $A\in\MN{2}$.
+
+    The split compressions onto two copies of $C$ have no zero slots. They
+    are exactly those with reading maps $W_j=a_j\otimes1_2$ and embedding
+    maps $V_j=u_j\otimes1_2$, where $a_j$ are the rows of an invertible
+    matrix $A$ and $u_j$ are the columns of $A^{-1}$. Every invertible $A$
+    supplies such a split compression.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The words $E_{00}^3$, $E_{00}^2\sigma_x$,
+    $\sigma_xE_{00}^2$ and $\sigma_xE_{00}\sigma_x$ are the four matrix
+    units. The identity $B^i(u\otimes v)=u\otimes C^iv$ proves invariance.
+    Writing a commuting matrix as four $2\times2$ blocks makes each block a
+    scalar. The same block equations identify all rectangular intertwiners
+    as $a\otimes1_2$ and $u\otimes1_2$; the compression identities then give
+    $AU=UA=1$.
+\end{proof}
+
+\begin{lemma}[Proportionality and matching with multiplicity]
+    % Lecture note: Example 6.13.
+    \label{lem:asym_example_multiplicity_matching}
+    \lean{MultiBlockExamples.Multiplicity.exists_left_mul_evalWord_eq_smul_iff,
+        MultiBlockExamples.Multiplicity.matching_left_splitRed_of_span_ne,
+        MultiBlockExamples.Multiplicity.matching_left_redOne_redAt}
+    \leanok
+    For the tensor of Lemma~\ref{lem:asym_example_multiplicity}, suppose that
+    two reading maps of the same labelled block are $a\otimes1_2$ and
+    $\widetilde a\otimes1_2$. There exist a word $w$ with $C^w\neq0$ and a
+    scalar $c$ such that
+    $(\widetilde a\otimes1_2)B^w=c(a\otimes1_2)B^w$ if and only if
+    $\widetilde a=ca$ for some scalar $c$. Each such scalar gives the identity
+    for every word.
+
+    Now let $A,\widetilde A$ define two split compressions, let $u_0$ be the
+    first column of $A^{-1}$, and let $\widetilde u_0,\widetilde u_1$ be the
+    columns of $\widetilde A^{-1}$. If $\C u_0\neq\C\widetilde u_0$, the
+    matching pairs the first position of the first compression with the
+    second position of the second. For this pair,
+    $U=\C u_0\otimes\C^2$, $\mathcal N=\C\widetilde u_0\otimes\C^2$, and
+    $\lambda=\widetilde a_1u_0\neq0$. On $U$ the second reading map is
+    $\lambda$ times the first, and
+    $\widetilde u_1-\lambda^{-1}u_0\in\C\widetilde u_0$.
+    For $A=1$ and
+    $\widetilde A=\left(\begin{smallmatrix}1&0\\1&1\end{smallmatrix}\right)$,
+    these vectors are $u_0=e_0$, $\widetilde u_0=(1,-1)^{\mathsf T}$,
+    $\widetilde u_1=e_1$, and $\lambda=1$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:asym_example_multiplicity}
+    The word identity is
+    $(\widetilde a-ca)\otimes C^w=0$; a nonzero entry of $C^w$ gives
+    $\widetilde a=ca$. Distinct first lines give distinct first invariant
+    subspaces with zero intersection. The inverse-matrix identities give
+    $\widetilde a_1u_0\neq0$ and the stated difference of columns.
+\end{proof}
+
+\subsection{One block with two different flags}
+
+\begin{lemma}[A split and a nonsplit compression onto one scalar block]
+    % Lecture note: Example 6.15.
+    \label{lem:asym_example_one_block}
+    \lean{MultiBlockExamples.OneBlock.isInvariantSubmodule_span_tensorB_iff,
+        MultiBlockExamples.OneBlock.z_eq_one_and_gInt_conj,
+        MultiBlockExamples.OneBlock.flagVec_one_firstCompression_and_lastCompression,
+        MultiBlockExamples.OneBlock.eq_toFlagData_firstCompression_or_lastCompression,
+        MultiBlockExamples.OneBlock.left_right_matching_firstCompression_lastCompression,
+        MultiBlockExamples.OneBlock.left_mulVec_e_one_and_left_mul_tensorB,
+        MultiBlockExamples.OneBlock.remainder_lastCompression_eq_zero_and_firstCompression_ne_zero}
+    \leanok
+    In Example~6.15, let
+    $B=\left(\begin{smallmatrix}1&1\\0&0\end{smallmatrix}\right)$ and
+    $C=(1)$. The invariant lines of $B$ are $\C e_0$ and $\C(e_0-e_1)$;
+    every labelled invariant flag for a compression onto $C$ is one of
+    $0\subset\C e_0\subset\C^2$ and
+    $0\subset\C(e_0-e_1)\subset\C^2$.
+    The identity gauge puts $C$ first, whereas
+    $\widetilde G=\left(\begin{smallmatrix}0&-1\\1&1\end{smallmatrix}\right)$
+    satisfies $\widetilde GB\widetilde G^{-1}=\operatorname{diag}(0,1)$.
+    Their matched reading maps and embeddings are
+    $W=(1,0)$, $\widetilde W=(1,1)$, and $V=\widetilde V=e_0$.
+    The matching sends the first block position to the second,
+    $U=\C e_0$, and $\mathcal N=\C(e_0-e_1)$.
+    Although $\widetilde We_1=1\neq0=We_1$, one has
+    $\widetilde WB=WB$. The second compression is split and the first is not.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Solving $Bv=\lambda v$ gives the two lines. The respective eigenvalues
+    are $1$ and $0$, which determine their labels and hence the two possible
+    flags. Multiplication by the displayed gauges and their inverses gives
+    the rows, columns and remainders.
+\end{proof}
+
+\begin{lemma}[Sharpness for every number of zero slots]
+    % Lecture note: Example 6.10.
+    % The two sharpness conclusions are linked at cor:asym_uniq_one_block.
+    \label{lem:asym_example_sharp_bound}
+    \lean{MultiBlockExamples.SharpnessOneBlock.tensorBGen,
+        MultiBlockExamples.SharpnessOneBlock.exists_multiBlockCompression_block_first,
+        MultiBlockExamples.SharpnessOneBlock.exists_multiBlockCompression_block_last,
+        MultiBlockExamples.SharpnessOneBlock.rowE0_mul_pow_and_rowOnes_mul_pow,
+        MultiBlockExamples.SharpnessOneBlock.pow_mul_right_eq_of_eq_colE0}
+    \leanok
+    In Example~6.10, for $z\geq1$, let the one-letter tensor $B$ on $\C^{1+z}$ satisfy
+    $Be_0=e_0$ and $Be_j=e_{j-1}$ for $1\leq j\leq z$, and put $C=(1)$.
+    It admits compressions with $C$ first and last, with respective reading
+    rows $W=e_0^{\mathsf T}$ and
+    $\widetilde W=\sum_{j=0}^z e_j^{\mathsf T}$, and common embedding $e_0$.
+    For every $n\geq0$,
+    $WB^n=\sum_{j=0}^{\min(n,z)}e_j^{\mathsf T}$ and
+    $\widetilde WB^n=\widetilde W$. These rows are proportional exactly when
+    $n\geq z$. In particular, proportionality fails at the word of length
+    $z-1=D_B-D_C-1$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The identity basis puts $C$ first. The basis
+    $e_0-e_1,\ldots,e_{z-1}-e_z,e_0$ puts it last.
+    Induction on $n$ gives the two row formulas; their zeroth coordinates
+    force the proportionality scalar to be $1$.
+\end{proof}
+
+\subsection{A four-dimensional example with a two-dimensional block}
+
+\begin{definition}[The two-letter four-dimensional tensor]
+    % Lecture note: Example 6.16.
+    \label{def:asym_example_worked}
+    \lean{MultiBlockExamples.Worked.tensorB,
+        MultiBlockExamples.Worked.tensorC₁,
+        MultiBlockExamples.Worked.tensorC₂,
+        MultiBlockExamples.Worked.tensorT,
+        MultiBlockExamples.Worked.tensorC₁',
+        MultiBlockExamples.Worked.matY,
+        MultiBlockExamples.Worked.g0Int,
+        MultiBlockExamples.Worked.gtInt}
+    \leanok
+    In Example~6.16, put
+    \begin{align}
+        B^0          & =\begin{pmatrix}-2&-2&-1&0\\2&3&1&0\\-2&-4&-1&0\\2&2&1&1\end{pmatrix}, &
+        B^1          & =\begin{pmatrix}2&0&1&3\\0&2&0&-2\\-2&-2&-1&-1\\0&0&0&0\end{pmatrix},    \\
+        G            & =\begin{pmatrix}2&2&1&1\\0&0&0&1\\1&1&1&1\\0&-1&0&1\end{pmatrix},      &
+        \widetilde G & =\begin{pmatrix}3&2&2&3\\-2&-3&-1&1\\2&2&1&2\\0&0&0&1\end{pmatrix}.
+    \end{align}
+    Let $C_0=(\left(\begin{smallmatrix}0&1\\1&0\end{smallmatrix}\right),E_{00})$,
+    $C_1=((1),(2))$,
+    $T=(\left(\begin{smallmatrix}0&1\\0&1\end{smallmatrix}\right),
+        \left(\begin{smallmatrix}0&0\\0&2\end{smallmatrix}\right))$, and
+    $Y=\left(\begin{smallmatrix}1&1\\0&1\end{smallmatrix}\right)$.
+    Write $C'_0=YC_0Y^{-1}$ and $C'_1=C_1$.
+\end{definition}
+
+\begin{lemma}[Reductions and traces of the four-dimensional tensor]
+    % Lecture note: Example 6.16.
+    \label{lem:asym_example_worked_reductions}
+    \lean{MultiBlockExamples.Worked.wordSpan_tensorC₁_three_eq_top_and_isNormal,
+        MultiBlockExamples.Worked.isInvariantSubmodule_span_tensorT_iff_and_mulVec_eq_zero,
+        MultiBlockExamples.Worked.redG_spec,
+        MultiBlockExamples.Worked.redGt_spec,
+        MultiBlockExamples.Worked.tensorC₁'_eq,
+        MultiBlockExamples.Worked.isNormal_blocks,
+        MultiBlockExamples.Worked.isNormal_blocks',
+        MultiBlockExamples.Worked.trace_evalWord_tensorB_eq_add}
+    \leanok
+    \uses{def:asym_example_worked}
+    Both families $(C_0,C_1)$ and $(C'_0,C'_1)$ are normal. The tensor $T$
+    has the unique invariant line $\C e_0$, and both letters vanish on it.
+    The gauge $G$ gives $GB^iG^{-1}=C_0^i\oplus T^i$ and is a compression
+    in the order $(C_0,0,C_1)$. The gauge $\widetilde G$ gives a compression
+    in the order $(0,C'_1,C'_0)$, with conjugated letters
+    \begin{align}
+        \widetilde GB^0\widetilde G^{-1}
+         & =\begin{pmatrix}0&2&2&-3\\0&1&2&-4\\0&0&1&0\\0&0&1&-1\end{pmatrix}, &
+        \widetilde GB^1\widetilde G^{-1}
+         & =\begin{pmatrix}0&2&3&-5\\0&2&1&-3\\0&0&1&-1\\0&0&0&0\end{pmatrix}.
+    \end{align}
+    For every nonempty word $w$,
+    $\tr(B^w)=\tr(C_0^w)+\tr(C_1^w)$; the trace at the empty word is $4$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Normality of $C_0$ follows from its length-three words spanning the matrix
+    units, and $C'_0$ is its gauge transform. The scalar block is nonzero.
+    The two equations $T^iv=\lambda_i v$ force $v\in\C e_0$.
+    Direct multiplication gives the conjugated letters. In a nonempty word,
+    the zero diagonal slot contributes zero to the trace.
+\end{proof}
+
+\begin{lemma}[Flags and comparison maps of the four-dimensional tensor]
+    % Lecture note: Example 6.16.
+    \label{lem:asym_example_worked_flags}
+    \lean{MultiBlockExamples.Worked.flagVec_redG_redGt_and_matching,
+        MultiBlockExamples.Worked.inf_sup_intertwiner_redG_redGt,
+        MultiBlockExamples.Worked.not_exists_left_redGt_eq_smul_left_redG,
+        MultiBlockExamples.Worked.finrank_flagVec_redG_inf_flagVec_redGt}
+    \leanok
+    \uses{lem:asym_example_worked_reductions}
+    Put $a=(1,0,-1,0)^{\mathsf T}$, $b=(-1,1,-1,1)^{\mathsf T}$,
+    $c=(-1,0,2,0)^{\mathsf T}$ and $d=(2,-1,-2,0)^{\mathsf T}$.
+    The two flags have
+    $M_1=\spn_{\C}\{a,b\}$, $M_2=\spn_{\C}\{a,b,c\}$,
+    $\widetilde M_1=\C c$, $\widetilde M_2=\spn_{\C}\{c,d\}$, and
+    $M_3=\widetilde M_3=\C^4$. Their intersection dimensions are
+    \begin{align}
+        \bigl(\dim(M_k\cap\widetilde M_{k'})\bigr)_{1\leq k,k'\leq3}
+         & =\begin{pmatrix}0&0&2\\1&1&3\\1&2&4\end{pmatrix}.
+    \end{align}
+    The matching sends the positions $(1,2,3)$ to $(3,1,2)$.
+    For the $C_0$ pair, $U=\spn_{\C}\{a,(-2,1,0,1)^{\mathsf T}\}$,
+    $K=0$, and $\mathcal N=\spn_{\C}\{c,d\}$; its reading comparison is
+    $\widetilde W_0x=YW_0x$ on $U$, and every column of
+    $\widetilde V_0-V_0Y^{-1}$ lies in $\mathcal N$.
+    For the zero pair the readings agree on $U$ and $\dim K=0$; for the
+    $C_1$ pair they agree on $U$ and $\dim K=1$.
+    The full reading rows of $C_1$ are
+    $W_1=(0,-1,0,1)$ and $\widetilde W_1=(-2,-3,-1,1)$, which are not proportional.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The vanishing coordinates of $Gx$ and $\widetilde Gx$ give the four
+    subspaces. Their intersections determine the matching and the dimension
+    matrix. Restrict the rows of the two gauges to the stated intersections;
+    the columns of the inverse gauges give the comparison modulo the lower
+    sums. The first coordinate rules out proportionality of $W_1$ and
+    $\widetilde W_1$.
+\end{proof}
+
+\begin{lemma}[An explicit basis adapted to the two four-dimensional flags]
+    % Lecture note: Example 6.16.
+    \label{lem:asym_example_worked_factorization}
+    \lean{MultiBlockExamples.Worked.complementVec,
+        MultiBlockExamples.Worked.complement,
+        MultiBlockExamples.Worked.gammaGauge,
+        MultiBlockExamples.Worked.isAdaptedFactorization_redG_redGt}
+    \leanok
+    \uses{lem:asym_example_worked_flags}
+    In Example~6.16, with the notation of Lemma~\ref{lem:asym_example_worked_flags}, choose
+    $L_1=M_1$, $L_2=\C c$ and $L_3=\C(0,-1,2,0)^{\mathsf T}$.
+    The adapted coordinates and factors are
+    \begin{align}
+        \Gamma                & =\begin{pmatrix}
+                                     2 & 2  & 1 & 1 \\
+                                     0 & 0  & 0 & 1 \\
+                                     1 & 2  & 1 & 0 \\
+                                     0 & -1 & 0 & 1
+                                 \end{pmatrix},  &
+        \mathsf A             & =1+E_{23},         \\
+        \widetilde{\mathsf A} & =\begin{pmatrix}
+                                     1 & 2 & 1  & -1 \\
+                                     0 & 1 & -1 & 2  \\
+                                     0 & 0 & 1  & 0  \\
+                                     0 & 0 & 0  & 1
+                                 \end{pmatrix}, &
+        P_X                   & =\begin{pmatrix}
+                                     0 & 0 & 1 & 0 \\
+                                     0 & 0 & 0 & 1 \\
+                                     1 & 1 & 0 & 0 \\
+                                     0 & 1 & 0 & 0
+                                 \end{pmatrix}.
+    \end{align}
+    Here $X_{C_0}=Y$ and $X_0=X_{C_1}=1$. The factors $\mathsf A$ and
+    $\widetilde{\mathsf A}$ are block upper triangular with identity diagonal
+    blocks in the two flag orders, and
+    $G=\mathsf A\Gamma$,
+    $\widetilde G=\widetilde{\mathsf A}P_X\Gamma$, and
+    $\widetilde GG^{-1}=\widetilde{\mathsf A}P_X\mathsf A^{-1}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The columns of $\Gamma^{-1}$ are bases of the three chosen complements.
+    Matrix multiplication gives the two gauge identities, and the displayed
+    diagonal blocks are identities.
+\end{proof}
+
+\subsection{Reading flags and explicit factorizations in coordinates}
+
+\begin{lemma}[Flags, reading rows and embedding columns of an explicit gauge]
+    \label{lem:asym_example_flag_coordinates}
+    \lean{MultiBlockExamples.flagVec,
+        MultiBlockExamples.mem_flagVec_iff,
+        MultiBlockExamples.mem_flagVec_gaugeOfMatrix,
+        MultiBlockExamples.leftRow_gaugeOfMatrix,
+        MultiBlockExamples.rightCol_gaugeOfMatrix,
+        MultiBlockExamples.matching_eq_of_flagVec_inf}
+    \leanok
+    Let a compression have gauge matrix $G$, and index the rows of $G$ by
+    its block coordinates. Its flag is
+    $M_k=\{x:(Gx)_b=0\text{ whenever }\sigma(b)\geq k\}$, where positions
+    are counted from $0$. Its reading map $W_b$ is the block row of $G$,
+    and its embedding map $V_b$ is the corresponding block column of $G^{-1}$.
+    For two compressions onto normal blocks of positive bond dimension,
+    the matching of the step at position $k$ is the least $j$ such that
+    $M_{k+1}\cap\widetilde M_{j+1}$ is not contained in $M_k$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Apply the gauge to the leading coordinate subspaces. The reading and
+    embedding maps are the coordinate projection and inclusion transported
+    through $G$ and $G^{-1}$. The characterization of the matching is its
+    first nonzero step on the quotient $M_{k+1}/M_k$.
+\end{proof}
+
+\begin{definition}[An explicit adapted factorization]
+    \label{def:asym_example_adapted_factorization}
+    \lean{MultiBlockExamples.IsAdaptedFactorization}
+    \leanok
+    For two compressions onto normal blocks of positive bond dimension,
+    an adapted factorization consists of their matching on labelled slots,
+    complements $L_k$ of $K_k$ in $U_k$, an invertible coordinate map
+    $\Gamma$ whose restriction to $L_k$ reads the corresponding block through
+    $W_{\sigma(k)}$, invertible matched-block intertwiners $X_b$, and two
+    block upper triangular matrices $\mathsf A,\widetilde{\mathsf A}$ with
+    identity diagonal blocks. They satisfy
+    $\widetilde W_{\pi(b)}x=X_bW_bx$ on the matched intersection and
+    $G=\mathsf A\Gamma$ and
+    $\widetilde G=\widetilde{\mathsf A}P_X\Gamma$, where
+    $P_X=\sum_b\iota_{\pi(b)}X_bp_b$, and $p_b,\iota_b$ are the coordinate
+    block projection and inclusion.
+\end{definition}
