@@ -26,9 +26,11 @@ import TNLean.QCA.DisjointSupport
 import TNLean.QCA.FiniteLocalRestriction
 import TNLean.QCA.FinitePropagation
 import TNLean.QCA.FinitePureStateDecomposition
+import TNLean.QCA.GNVWIndex
 import TNLean.QCA.IntervalCoordinates
 import TNLean.QCA.InversePropagation
 import TNLean.QCA.IsQCA
+import TNLean.QCA.KroneckerSupportAlgebra
 import TNLean.QCA.LocalAlgebra
 import TNLean.QCA.LocalLimit
 import TNLean.QCA.LocalNorm

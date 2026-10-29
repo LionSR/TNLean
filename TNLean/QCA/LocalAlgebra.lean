@@ -59,6 +59,15 @@ instance instFintypeConfig (d : ℕ) (Λ : Finset ℤ) : Fintype (Config d Λ) :
   change Fintype (Λ → Fin d)
   infer_instance
 
+/-- A finite region has one independent physical coordinate per site,
+so its configuration cardinality is the corresponding power of the
+on-site size. Source: GNVW, arXiv:0910.3675v2, finite cell products
+in lines 1251--1258. This also holds for zero on-site size. -/
+theorem card_config (d : ℕ) (Λ : Finset ℤ) :
+    Fintype.card (Config d Λ) = d ^ Λ.card := by
+  change Fintype.card (Λ → Fin d) = _
+  simp
+
 /-- Equality of finite-region configurations is decidable. -/
 instance instDecidableEqConfig (d : ℕ) (Λ : Finset ℤ) :
     DecidableEq (Config d Λ) := by

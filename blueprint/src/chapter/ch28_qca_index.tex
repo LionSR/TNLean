@@ -1,0 +1,92 @@
+\subsection{The homogeneous positive-rational index}
+\label{sec:qca_gnvw_index}
+
+Let $d>0$ and let $\omega$ be a nearest-neighbour star-automorphism of the
+homogeneous chain. The following uses the fixed nearest-neighbour cell
+presentation. The site-dependent source setting is recorded separately in
+\cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
+
+\begin{definition}[The fixed-cut GNVW index]
+    \label{def:qca_gnvw_index}
+    \lean{SpinChain.PropagatesWithin.supportAlgebraMatrixSize,
+        SpinChain.PropagatesWithin.supportAlgebraMatrixSize_spec,
+        SpinChain.PropagatesWithin.supportAlgebraMatrixSize_neZero,
+        SpinChain.PropagatesWithin.gnvwIndex}
+    \notready
+    \uses{thm:qca_physical_pair_adjacent_generation}
+    Choose the coherent positive matrix-size family $r(y)$ of the actual
+    support factors. Define
+    \begin{align}
+        \operatorname{ind}(\omega) & =\frac{r(0)}{d}\in\mathbb Q_{>0}.
+        \label{eq:qca_gnvw_index_fixed_cut}
+    \end{align}
+    Its codomain is the multiplicative group of positive rationals.
+    This is the homogeneous specialization of equation~dimtransfer in
+    \cite[lines~1317--1329]{Gross2012IndexTheory}.
+\end{definition}
+
+\begin{theorem}[All cut presentations of the same index]
+    \label{thm:qca_gnvw_index_dimtransfer}
+    \lean{SpinChain.PropagatesWithin.supportAlgebraMatrixSize_even_add_one,
+        SpinChain.PropagatesWithin.supportAlgebraMatrixSize_even_eq_zero,
+        SpinChain.PropagatesWithin.coe_gnvwIndex_eq_even,
+        SpinChain.PropagatesWithin.coe_gnvwIndex_eq_odd,
+        SpinChain.PropagatesWithin.coe_gnvwIndex_eq_next_even,
+        SpinChain.PropagatesWithin.gnvwIndex_ratio_eq,
+        SpinChain.PropagatesWithin.coe_gnvwIndex_eq_of_evenSupportAlgebra_equiv}
+    \notready
+    \uses{def:qca_gnvw_index,thm:qca_physical_pair_adjacent_generation}
+    For every $x\in\mathbb Z$,
+    \begin{align}
+        \operatorname{ind}(\omega)
+         & =\frac{r(2x)}{d}
+        =\frac{d}{r(2x+1)}
+        =\frac{r(2x+2)}{d}.
+        \label{eq:qca_gnvw_index_dimtransfer}
+    \end{align}
+    These are presentations using the same ordered support family. No
+    translation covariance is assumed. The value is independent of the
+    integer cut and of the chosen full-matrix presentation at that cut.
+    This is homogeneous equation~dimtransfer of
+    \cite[lines~1317--1324]{Gross2012IndexTheory}.
+\end{theorem}
+\begin{proof}
+    The two size products equal $d^2$. Cancelling the positive common odd
+    size gives $r(2x)=r(2x+2)$. Integer induction in both directions makes
+    the even size constant. Dividing the first product identity gives
+    the reciprocal odd ratio. Matrix-algebra isomorphisms identify the
+    sizes of any two presentations of the same actual factor.
+\end{proof}
+
+\begin{lemma}[Support factors of a full tensor factor]
+    \label{lem:qca_kronecker_embedding_supports}
+    \lean{Matrix.leftSupportAlgebra_range_leftKroneckerEmbed,
+        Matrix.rightSupportAlgebra_range_leftKroneckerEmbed,
+        Matrix.leftSupportAlgebra_range_rightKroneckerEmbed,
+        Matrix.rightSupportAlgebra_range_rightKroneckerEmbed}
+    \notready
+    \uses{def:qca_left_support_algebra,def:qca_right_support_algebra}
+    For finite nonempty matrix coordinates, the full left tensor factor
+    has full left support and scalar right support. The full right factor
+    has scalar left support and full right support. These are the support
+    calculations in the shift example following equation~RR2x of
+    \cite[lines~1251--1268]{Gross2012IndexTheory}.
+\end{lemma}
+\begin{proof}
+    A diagonal spectator coefficient recovers every matrix on the full
+    factor. Each coefficient on the spectator factor is a scalar multiple
+    of its identity. The coefficient-generated support algebras therefore
+    have the stated values.
+\end{proof}
+
+\begin{lemma}[Finite-region configuration count]
+    \label{lem:qca_finite_region_configuration_count}
+    \lean{SpinChain.card_config}
+    \notready
+    A region $\Lambda$ has $d^{|\Lambda|}$ configurations. In particular,
+    a physical pair has Hilbert-space dimension $d^2$ and observable-algebra
+    dimension $d^4$.
+\end{lemma}
+\begin{proof}
+    There is one independent choice among $d$ values at each site.
+\end{proof}
