@@ -130,6 +130,15 @@ and
 \leanid{MPSTensor.uniform_bondOne_ground_family_of_normal_local_kernel}.
 They use the actual normal tensor and local-kernel inclusion of the derived
 standing data; they do not assume short representations or nonvanishing.
+The source prime-length extraction now exposes these already-derived data.
+Its bond-one caller
+\leanid{MPSTensor.exists_uniform_bondOne_ground_family_of_prime_length_bound}
+starts from the fixed positive interaction, all-volume uniqueness and one
+actual nonzero prime-length bond-one ground representation at $N\geq L+4$.
+It derives the positive retained bond dimension $D_0\leq1$, hence $D_0=1$,
+and then obtains the same bond-one ground family at all permitted positive
+volumes. Neither the normal tensor nor the local-kernel inclusion is a
+hypothesis of this caller.
 The restriction is explicit: the normal tensor has bond dimension one.
 Issue \#10386 remains open for the general higher-dimensional case and
 for hosted acceptance and integration. No full-hypothesis counterexample

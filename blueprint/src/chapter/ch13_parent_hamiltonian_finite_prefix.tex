@@ -142,3 +142,25 @@
     of the trace gives exact zero momentum. Global uniqueness then
     identifies the kernel with the line of this explicit product vector.
 \end{proof}
+
+\begin{lemma}[Product-state completion from one actual prime-length ground vector]
+    \label{lem:spwc_bond_one_prime_ground_family}
+    \lean{MPSTensor.exists_uniform_bondOne_ground_family_of_prime_length_bound}
+    \notready
+    \uses{lem:spwc_bond_one_finite_prefix_ground}
+    Let $h$ be the one fixed positive interaction of range $L$, and
+    assume every permitted periodic Hamiltonian has a one-dimensional
+    zero-energy space. If one prime $N\geq L+4$ has an actual nonzero
+    bond-one MPS ground representation, then one bond-one tensor
+    generates all permitted positive-volume ground spaces, including
+    the entire finite prefix. The normal tensor and local-kernel
+    inclusion are derived rather than supplied.
+\end{lemma}
+\begin{proof}
+    Apply the actual prime-length extraction, retaining its normality
+    and local-kernel inclusion. Its positive retained dimension is at
+    most the input dimension one, hence equals one. Apply the preceding
+    product-state construction at every positive volume. The numerical
+    threshold is the general fifth-degree threshold specialized to
+    bond dimension one.
+\end{proof}

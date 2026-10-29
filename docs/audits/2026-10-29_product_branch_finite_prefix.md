@@ -25,6 +25,16 @@ each kernel. Neither short representations nor momentum equations are added
 as hypotheses. Positivity is used upstream when deriving the actual local
 kernel inclusion, not redundantly repeated on its consumer.
 
+The actual prime-length extraction now exposes the normal tensor and local
+kernel inclusion it already derived, without repeating that proof. Its
+existing eventual-only theorem remains the projection used by the quantitative
+dichotomy. The new public product caller starts only with the fixed positive
+interaction, all-volume uniqueness and one nonzero bond-one prime-length
+ground representation with N ≥ L+4. Extraction returns a positive bond
+D0 ≤ 1, hence D0=1, and supplies both standing data internally. The caller
+then constructs one actual bond-one ground family at every permitted positive
+volume. The derived B and local-kernel inclusion are not caller premises.
+
 This is a scoped product-state branch, not a resolution of #10386 for
 higher virtual dimension. No full-hypothesis counterexample is claimed.
 Both new Blueprint entries remain notready. Source/import/role/prose/TeX,
