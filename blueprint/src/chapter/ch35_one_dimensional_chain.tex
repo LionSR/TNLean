@@ -2924,7 +2924,7 @@ In particular the ground eigenspace is one-dimensional.
         TNLean.MPS.AreaLaw.stripInterval_mono}
     \leanok
     The domain is $\Lambda=\{0,\ldots,L-1\}\times\{0,\ldots,w-1\}$,
-    with column regions $X_{a,b}=[a,b)\times[0,w)\cap\Lambda$.
+    with column regions $X_{a,b}=\lbrack a,b)\times\lbrack 0,w)\cap\Lambda$.
     Put $v_R=1+2R(R+1)$, $\mu_R=2^{2R(R+1)}$, and
     $\ell_R=\log(e q^{v_R})$. Every admissible support has at most $v_R$
     sites, hence dimension at most $q^{v_R}$, and at most $\mu_R$
@@ -2957,10 +2957,10 @@ In particular the ground eigenspace is one-dimensional.
     \leanok
     \uses{def:strip_column_model}
     A crossing support has an inside site in the two bands
-    $[a,a+R)\times[0,w)$ and $[b-R,b)\times[0,w)$, after clipping by
+    $\lbrack a,a+R)\times\lbrack 0,w)$ and $\lbrack b-R,b)\times\lbrack 0,w)$, after clipping by
     $\Lambda$. There are at most $2Rw$ such sites, each contained in at
     most $\mu_R$ supports. For a partial-column prefix an inside site of
-    a crossing support lies in $[c-R,c+1)\times[0,w)$.
+    a crossing support lies in $\lbrack c-R,c+1)\times\lbrack 0,w)$.
     The diameter bound also forces every support meeting an earlier
     shell to lie inside any later shell whose radius is at least $R$
     larger. The two end intervals of the enlargement contain at most
@@ -2982,8 +2982,8 @@ In particular the ground eigenspace is one-dimensional.
     \uses{lem:strip_column_geometry}
     Put $t=1+J/\Delta$, $b=1+N_R\ell_R^2$, $B=bw$, and
     \begin{align}
-        m&=\left\lceil4+64e(J/\Delta)B+128\sqrt{tB}\right\rceil,
-        &M&=5+(64e+128)b.\notag
+        m & =\left\lceil4+64e(J/\Delta)B+128\sqrt{tB}\right\rceil,
+          & M                                                      & =5+(64e+128)b.\notag
     \end{align}
     Then $m\le Mtw$. For the buffer
     $T=X_{a-mR,b+mR}\setminus X_{a,b}$,
@@ -3000,7 +3000,7 @@ In particular the ground eigenspace is one-dimensional.
     the tail-radius condition follows from $m\ge128\sqrt{tB}$.
     Summing the actual crossing energies gives
     $\sum_j8e a_j^2\sum_{Y\text{ crossing }X_j}
-    J\log^2(e\dim\mathcal H_Y)\le32eJB/m\le\Delta/2$.
+        J\log^2(e\dim\mathcal H_Y)\le32eJB/m\le\Delta/2$.
     The logarithmic overlap cost is $m\log2$, and the sum of the
     entropy errors is at most $4096e(J/\Delta)B/m$.
 \end{proof}
@@ -3081,8 +3081,8 @@ In particular the ground eigenspace is one-dimensional.
     $L,w,J,\Delta,H,\Omega$, and a normalized matrix product vector $\Phi$
     along the physical column-snake ordering such that
     \begin{align}
-        \|\Phi-\Omega\|&\le L^{-1},
-        &D&\le e^{C(q,R)(1+J/\Delta)w^2}
+        \|\Phi-\Omega\| & \le L^{-1},
+                        & D           & \le e^{C(q,R)(1+J/\Delta)w^2}
         L^{c(q,R)\sqrt{1+J/\Delta}\,w}.\notag
     \end{align}
     Explicit choices are $c=128\sqrt{b'}$ and
