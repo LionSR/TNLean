@@ -346,3 +346,13 @@ checks its local source equation before instantiating the block canonical
 record, explicitly names the preserved boundary in gate types, supplies the
 adjoint gate theorem arguments, and rewrites the ring length with
 `Nat.mul_two`. No statement or hypothesis changes; no local Lean was run.
+
+## Hosted final converse transport diagnostics on `1d4a5c621`
+
+Job `123569650157` cleared the recorded-boundary and dependent ring-index
+errors. Its two remaining errors are confined to transporting the literal
+four-spin equation through the finite-index equivalence: one opaque
+linear-equivalence coercion and a product rewrite that reached only the
+first side. The proof now expands that coercion explicitly and transports
+all products before identifying the Kronecker factor. No statement changes;
+no local Lean command was run.
