@@ -1,4 +1,4 @@
-\begin{theorem}[Isometry of the normalized averaging site]%
+\begin{lemma}[Isometry of the normalized averaging site]%
     \label{thm:peps_averaging_site_isometry}
     \lean{TNLean.PEPS.isGIsometric_averagingSite}
     \leanok
@@ -9,13 +9,13 @@
     subspace: $\langle Px,Py\rangle=\langle x,y\rangle$ for invariant
     $x,y$. This is an auxiliary projector consequence of the isometry
     condition in \cite[Definition~6.1]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The site map is the averaging map. It is invariant, injective on
     invariant vectors, and acts as the identity on that subspace.
 \end{proof}
 
-\begin{theorem}[Exact norm of the regular torus state]%
+\begin{lemma}[Exact norm of the regular torus state]%
     \label{thm:peps_regular_averaging_torus_norm}
     \lean{TNLean.PEPS.torusBondNetwork_regular_averagingSite_norm,
         TNLean.PEPS.torusBondNetwork_regular_averagingSite_ne_zero}
@@ -33,7 +33,7 @@
     \end{align}
     This is an auxiliary normalization consequence for the regular state
     in \cite[Section~7]{Schuch2010PEPS}, with unnormalized virtual bonds.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The regular averaging projector is self-adjoint and idempotent,
     so its site Gram kernel has factor one.
@@ -42,7 +42,7 @@
     therefore $|G|^N|G|$. The group order is positive, proving nonvanishing.
 \end{proof}
 
-\begin{theorem}[Normalization under the physical state isometry]%
+\begin{lemma}[Normalization under the physical state isometry]%
     \label{thm:peps_weighted_torus_norm}
     \lean{TNLean.PEPS.norm_ne_zero_of_isometry_to_regularTorus,
         TNLean.PEPS.torusBondNetwork_blockFourthRootWeight_norm_ne_zero}
@@ -62,7 +62,7 @@
         \Psi_{U,W} & \ne0.
     \end{align}
     Both conclusions concern finite tori with positive periods.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Move the norm-preserving map across the overlap and substitute the
     regular-state equality. Physical coordinate regrouping preserves

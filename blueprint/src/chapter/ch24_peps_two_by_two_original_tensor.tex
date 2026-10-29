@@ -1,7 +1,7 @@
 % SCP10, Observation 6.6, source lines 1888--1909.
 % Original-tensor normalized corollary for untwisted coarse periods at least three.
 
-\begin{theorem}[Isometric transfer between physical realizations of one symmetry]%
+\begin{lemma}[Isometric transfer between physical realizations of one symmetry]%
     \label{thm:peps_g_isometric_physical_transport}
     \lean{TNLean.PEPS.IsGIsometric.exists_physicalSupportTransport,
         TNLean.PEPS.exists_graphGIsometricPhysicalSupportTransport}
@@ -19,7 +19,7 @@
     \end{align}
     The graph states are their bond contractions. All local physical
     alphabets may vary with the vertex.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Let $J_A=c_A^{-1/2}A^*$ be the normalized adjoint and set
@@ -41,7 +41,7 @@
     coefficients $(\psi\otimes\omega)(p,q)=\psi(p)\omega(q)$.
 \end{definition}
 
-\begin{theorem}[Normalization of a physical tensor-product identity]%
+\begin{lemma}[Normalization of a physical tensor-product identity]%
     \label{thm:peps_physical_state_normalization}
     \lean{TNLean.PEPS.norm_physicalStateProduct,
         TNLean.PEPS.norm_normalized_physicalState,
@@ -54,7 +54,7 @@
     $\widehat\psi=\|\psi\|^{-1}\psi$ of unit norm.
     If an isometry satisfies $Ix=r\,\psi\otimes\omega$ with $r>0$ and
     $\|\omega\|=1$, then $I\widehat x=\widehat\psi\otimes\omega$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The squared norm of the pair-indexed coefficients is the product of
@@ -79,7 +79,7 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[Positivity and Bell normalization]%
+\begin{lemma}[Positivity and Bell normalization]%
     \label{thm:peps_two_by_two_original_scale}
     \lean{TNLean.PEPS.norm_regularGraphNormalizedBell,
         TNLean.PEPS.twoByTwoOriginalScale_pos}
@@ -87,7 +87,7 @@
     \uses{def:peps_two_by_two_original_output}
     The scale $R$ is strictly positive. The residual graph Bell product
     $\Omega$ has Hilbert norm one.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Every square root and every denominator is positive. Each surplus
@@ -95,7 +95,7 @@
     so their product has squared norm one and hence norm one.
 \end{proof}
 
-\begin{theorem}[Normalized renormalization with the original tensor]%
+\begin{lemma}[Normalized renormalization with the original tensor]%
     \label{thm:peps_two_by_two_original_normalized}
     \lean{TNLean.PEPS.exists_regularTwoByTwoOriginalTensorIsometry}
     \leanok
@@ -125,7 +125,7 @@
     ambient physical surjectivity is assumed. This is the untwisted
     periodic specialization of
     \cite[Observation~6.6]{Schuch2010PEPS}, with the original coarse tensor.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The four-site block tensors are G-isometric from fine-site

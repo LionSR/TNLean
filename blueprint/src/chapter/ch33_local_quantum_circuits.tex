@@ -52,7 +52,7 @@ preparation of matrix product states.
     On the $N$-site chain $I=\{1,\dots,N\}$, the ring bonds are $\{k,k+1\}\pmod N$ ($\{1\}$ for $N=1$), the open-chain bonds are $\{k,k+1\}$ ($1\le k<N$), and graph bonds are the edges~\cite{Piroli2021LOCC}.
 \end{definition}
 
-\begin{theorem}[Matrix entries of a supported operator]
+\begin{lemma}[Matrix entries of a supported operator]
     \label{thm:area_law_supported_identity}
     \lean{QuantumCircuit.isSupportedOn_of_mem_supportedOperators,
         QuantumCircuit.mem_supportedOperators_of_isSupportedOn}
@@ -64,7 +64,7 @@ preparation of matrix product states.
         \item $\sigma|_S=\sigma'|_S,\,\tau|_S=\tau'|_S,\,\sigma|_{S^c}=\tau|_{S^c},\,\sigma'|_{S^c}=\tau'|_{S^c}\implies A_{\sigma\tau}=A_{\sigma'\tau'}$.
     \end{enumerate}
     This characterizes the support condition of~\cite[Lemma~3.1]{OpenAI2026AreaLaw}, \texttt{02-initial.tex}, line~39.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:qc_local_circuit}
@@ -91,13 +91,13 @@ preparation of matrix product states.
     For a finite site set $I$ and integers $d,e\ge0$, the sitewise bijection $(a,b)\mapsto ea+b$ from $\{0,\dots,d-1\}\times\{0,\dots,e-1\}$ to $\{0,\dots,de-1\}$ induces a configuration bijection $p\colon\{0,\dots,d-1\}^I\times\{0,\dots,e-1\}^I\xrightarrow{\sim}\{0,\dots,de-1\}^I$.
 \end{definition}
 
-\begin{theorem}[Support of a tensor product on paired sites]
+\begin{lemma}[Support of a tensor product on paired sites]
     \label{thm:qc_site_pair_tensor_support}
     \lean{QuantumCircuit.reindex_kronecker_mem_supportedOperators}
     \leanok
     \uses{def:qc_local_circuit,def:qc_site_pair_coordinates}
     As in~\cite{OpenAI2026PolynomialPEPS}, \texttt{02-information.tex}, lines 416--424 and 513--524, if $A$ on $(\C^d)^{\otimes I}$ is supported on $S\subseteq I$ and $B$ on $(\C^e)^{\otimes I}$ is supported on $T\subseteq I$, then $A\otimes B$ reindexed by $p$ is supported on $S\cup T$ in $(\C^{de})^{\otimes I}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By bilinearity, for $A=\bigotimes_i A_i$ ($A_i=\mathbb 1$ outside $S$) and $B=\bigotimes_i B_i$ ($B_i=\mathbb 1$ outside $T$), reindexing by $p$ identifies $A\otimes B$ with $\bigotimes_i(A_i\otimes B_i)$, where $A_i\otimes B_i=\mathbb 1$ for $i\notin S\cup T$.
 \end{proof}
@@ -236,7 +236,7 @@ preparation of matrix product states.
     The composition rule follows from $x|_{(f\circ e)(J)^c}=y|_{(f\circ e)(J)^c}\iff x|_{f(I)^c}=y|_{f(I)^c}$ and $(x\circ f)|_{e(J)^c}=(y\circ f)|_{e(J)^c}$. Disjoint ranges give commuting supports, and induction on $K$ collapses the intermediate matrix-product sum to the unique configuration matching the output on the new range and the input elsewhere.
 \end{proof}
 
-\begin{theorem}[Operators supported on a set of sites]
+\begin{lemma}[Operators supported on a set of sites]
     \label{thm:qc_supported_operator_placement}
     \lean{QuantumCircuit.exists_embedOp_eq_of_mem_supportedOperators}
     \leanok
@@ -245,7 +245,7 @@ preparation of matrix product states.
     every $Z\in\operatorname{End}((\C^d)^{\otimes n})$ with
     $\operatorname{supp}(Z)\subseteq\operatorname{im}(e)$ satisfies
     $Z=\iota_e(X)$ for some $X\in\operatorname{End}((\C^d)^{\otimes m})$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:qc_local_circuit,lem:qc_placed_operators}
     Writing $Z$ as a linear combination of $\bigotimes_{i<n}A_i$ with $A_i=I$

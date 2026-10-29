@@ -45,7 +45,7 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     physical configuration $\tau:M_e\to\{0,\ldots,d-1\}$.
 \end{definition}
 
-\begin{theorem}[Middle restriction of the blocked tensor]%
+\begin{lemma}[Middle restriction of the blocked tensor]%
     \label{thm:peps_edgeMiddleWeight_eq_on}
     \lean{TNLean.PEPS.edgeMiddleWeight_eq_on}
     \lean{TNLean.PEPS.edgeOpenMiddleWeight_eq_on}
@@ -54,7 +54,7 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     For every global physical configuration $\sigma$,
     $C_{A,M_e}(\beta,\sigma)=C_{A,M_e}(\beta,\sigma|_{M_e})$ and
     $C^{\mathrm{open}}_{A,M_e}(\lambda,\rho;\sigma)=C^{\mathrm{open}}_{A,M_e}(\lambda,\rho;\sigma|_{M_e})$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each vertex product ranges over $x\in M_e$, where $\sigma_x=(\sigma|_{M_e})_x$.
 \end{proof}
@@ -89,14 +89,14 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     $\{\eta:\partial_e(\eta)=\beta\}\simeq\mathcal C_e(\lambda,\rho)$.
 \end{definition}
 
-\begin{theorem}[Middle-indexed open tensor reindexing]%
+\begin{lemma}[Middle-indexed open tensor reindexing]%
     \label{thm:peps_edgeMiddleWeightOn_eq_edgeOpenMiddleWeightOn}
     \lean{TNLean.PEPS.edgeMiddleWeightOn_eq_edgeOpenMiddleWeightOn}
     \leanok
     \uses{def:peps_edgeMiddleWeightOn, def:peps_edgeMiddleConfigEquivOpenMiddleConfig}
     For $\beta=(a,\lambda,\rho)$ and $\tau:M_e\to\{0,\ldots,d-1\}$,
     $C_{A,M_e}((a,\lambda,\rho),\tau)=C^{\mathrm{open}}_{A,M_e}(\lambda,\rho;\tau)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Reindex the sum by the bijection of
     Definition~\ref{def:peps_edgeMiddleConfigEquivOpenMiddleConfig}; since
@@ -129,20 +129,20 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Middle tensor reindexing for an opened edge]%
+\begin{lemma}[Middle tensor reindexing for an opened edge]%
     \label{thm:peps_edgeMiddleWeight_eq_edgeOpenMiddleWeight}
     \lean{TNLean.PEPS.edgeMiddleWeight_eq_edgeOpenMiddleWeight}
     \leanok
     \uses{def:peps_edgeOpenMiddleWeight, def:peps_edgeMiddleConfigEquivOpenMiddleConfig}
     For $\beta=(a,\lambda,\rho)$,
     $C_{A,M_e}(\beta,\sigma)=C^{\mathrm{open}}_{A,M_e}(\lambda,\rho;\sigma|_{M_e})$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Reindex by Definition~\ref{def:peps_edgeMiddleConfigEquivOpenMiddleConfig}
     and compare the local factors $A_x(\eta|_x,\sigma_x)$ for $x\in M_e$.
 \end{proof}
 
-\begin{theorem}[Diagonal summand of the identity insertion]%
+\begin{lemma}[Diagonal summand of the identity insertion]%
     \label{thm:peps_edgeInsertedCoeff_identity_diagonal_summand}
     \lean{TNLean.PEPS.edgeInsertedCoeff_identity_diagonal_summand}
     \leanok
@@ -150,32 +150,32 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     On the diagonal datum $\Delta(\beta)=(a,a,\lambda,\rho)$ of
     Definition~\ref{def:peps_edgeBoundaryToInsertedBoundaryConfig}, the
     $\Id$-inserted summand equals the ordinary edge-blocked summand at $\beta$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Substitute $\Id_{a,a}=1$ and
     $C_{A,M_e}(\beta,\sigma)=C^{\mathrm{open}}_{A,M_e}(\lambda,\rho;\sigma|_{M_e})$
-    from Theorem~\ref{thm:peps_edgeMiddleWeight_eq_edgeOpenMiddleWeight}.
+    from Lemma~\ref{thm:peps_edgeMiddleWeight_eq_edgeOpenMiddleWeight}.
 \end{proof}
 
-\begin{theorem}[Off-diagonal summands of the identity insertion]%
+\begin{lemma}[Off-diagonal summands of the identity insertion]%
     \label{thm:peps_edgeInsertedCoeff_identity_offDiagonal_summand}
     \lean{TNLean.PEPS.edgeInsertedCoeff_identity_offDiagonal_summand}
     \leanok
     \uses{def:peps_edgeInsertedCoeff}
     For $\beta=(a,b,\lambda,\rho)$ with $a\ne b$, the $\Id$-inserted summand in
     Definition~\ref{def:peps_edgeInsertedCoeff} vanishes.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For $a\ne b$, $\Id_{a,b}=0$.
 \end{proof}
 
-\begin{theorem}[Identity insertion recovers the edge-blocked coefficient]%
+\begin{lemma}[Identity insertion recovers the edge-blocked coefficient]%
     \label{thm:peps_edgeInsertedCoeff_identity}
     \lean{TNLean.PEPS.edgeInsertedCoeff_identity}
     \leanok
     \uses{def:peps_edgeInsertedCoeff, def:peps_edgeBlockedCoeff, def:peps_edgeBoundaryToInsertedBoundaryConfig, def:peps_edgeBoundaryConfigEquivDiagonalInsertedBoundaryConfig, thm:peps_edgeInsertedCoeff_identity_diagonal_summand, thm:peps_edgeInsertedCoeff_identity_offDiagonal_summand}
     For every $e$ and $\sigma$, $C_A(e,\Id;\sigma)=C_A(e;\sigma)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Splitting the sum in Definition~\ref{def:peps_edgeInsertedCoeff} into
     $a=b$ and $a\ne b$ gives
@@ -191,7 +191,7 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     \end{align}
     which reindexes to $C_A(e;\sigma)$ via
     Definition~\ref{def:peps_edgeBoundaryConfigEquivDiagonalInsertedBoundaryConfig}
-    and Theorems~\ref{thm:peps_edgeInsertedCoeff_identity_diagonal_summand}
+    and Lemmas~\ref{thm:peps_edgeInsertedCoeff_identity_diagonal_summand}
     and~\ref{thm:peps_edgeInsertedCoeff_identity_offDiagonal_summand}.
 \end{proof}
 
@@ -262,20 +262,20 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     $C_A(e;\sigma)=\sum_{\beta}A_u(\beta_u,\sigma_u)C_{A,M_e}(\beta,\sigma)A_v(\beta_v,\sigma_v)$.
 \end{definition}
 
-\begin{theorem}[Edge-blocked coefficient equals the PEPS coefficient]%
+\begin{lemma}[Edge-blocked coefficient equals the PEPS coefficient]%
     \label{thm:peps_edgeBlockedCoeff_eq_stateCoeff}
     \lean{TNLean.PEPS.edgeBlockedCoeff_eq_stateCoeff}
     \leanok
     \uses{def:peps_edgeBlockedCoeff, thm:peps_stateCoeff_splitAtEdge, def:peps_virtualConfigEquivEdgeBoundary}
     For every edge $e$, $C_A(e;\sigma)=\Coeff_A(\sigma)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_virtualConfigEquivEdgeBoundary, thm:peps_edgeLeftLocalConfig_eq_of_boundaryMatches, thm:peps_edgeRightLocalConfig_eq_of_boundaryMatches}
-    Reindexing Theorem~\ref{thm:peps_stateCoeff_splitAtEdge} by
+    Reindexing Lemma~\ref{thm:peps_stateCoeff_splitAtEdge} by
     $\omega\leftrightarrow(\beta,\omega_{M_e})$ from
     Definition~\ref{def:peps_virtualConfigEquivEdgeBoundary} and using
     $\omega|_u=\beta_u$, $\omega|_v=\beta_v$ from
-    Theorems~\ref{thm:peps_edgeLeftLocalConfig_eq_of_boundaryMatches}
+    Lemmas~\ref{thm:peps_edgeLeftLocalConfig_eq_of_boundaryMatches}
     and~\ref{thm:peps_edgeRightLocalConfig_eq_of_boundaryMatches} gives
     \begin{align}
         \sum_{\omega}
@@ -291,41 +291,41 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Identity insertion equals the PEPS coefficient]%
+\begin{lemma}[Identity insertion equals the PEPS coefficient]%
     \label{thm:peps_edgeInsertedCoeff_identity_eq_stateCoeff}
     \lean{TNLean.PEPS.edgeInsertedCoeff_identity_eq_stateCoeff}
     \leanok
     \uses{thm:peps_edgeInsertedCoeff_identity, thm:peps_edgeBlockedCoeff_eq_stateCoeff}
     For every $e$ and $\sigma$, $C_A(e,\Id;\sigma)=\Coeff_A(\sigma)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Combine Theorems~\ref{thm:peps_edgeInsertedCoeff_identity}
+    Combine Lemmas~\ref{thm:peps_edgeInsertedCoeff_identity}
     and~\ref{thm:peps_edgeBlockedCoeff_eq_stateCoeff}:
     $C_A(e,\Id;\sigma)=C_A(e;\sigma)=\Coeff_A(\sigma)$.
 \end{proof}
 
-\begin{theorem}[Same state gives the same edge-blocked coefficients]%
+\begin{lemma}[Same state gives the same edge-blocked coefficients]%
     \label{thm:peps_sameState_edgeBlockedCoeff_eq}
     \lean{TNLean.PEPS.SameState.edgeBlockedCoeff_eq}
     \leanok
     \uses{def:peps_same_state, thm:peps_edgeBlockedCoeff_eq_stateCoeff}
     If $\Coeff_A=\Coeff_B$, then $C_A(e;\sigma) = C_B(e;\sigma)$ for all $e,\sigma$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_edgeBlockedCoeff_eq_stateCoeff},
+    By Lemma~\ref{thm:peps_edgeBlockedCoeff_eq_stateCoeff},
     $C_A(e;\sigma)=\Coeff_A(\sigma)=\Coeff_B(\sigma)=C_B(e;\sigma)$.
 \end{proof}
 
-\begin{theorem}[Same state gives the same identity insertions]%
+\begin{lemma}[Same state gives the same identity insertions]%
     \label{thm:peps_sameState_edgeInsertedCoeff_identity_eq}
     \lean{TNLean.PEPS.SameState.edgeInsertedCoeff_identity_eq}
     \leanok
     \uses{def:peps_same_state, thm:peps_edgeInsertedCoeff_identity_eq_stateCoeff}
     If $\Coeff_A=\Coeff_B$, then $C_A(e,\Id;\sigma) = C_B(e,\Id;\sigma)$ for all
     $e,\sigma$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_edgeInsertedCoeff_identity_eq_stateCoeff},
+    By Lemma~\ref{thm:peps_edgeInsertedCoeff_identity_eq_stateCoeff},
     $C_A(e,\Id;\sigma)=\Coeff_A(\sigma)=\Coeff_B(\sigma)=C_B(e,\Id;\sigma)$.
 \end{proof}
 
@@ -392,7 +392,7 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     predicate $\kappa$ is $\forall v,\ \inj(T_{A,\{v\}})\Longrightarrow\kappa(\{v\})$.
 \end{definition}
 
-\begin{theorem}[Singleton comparison for a vertex-injective tensor]%
+\begin{lemma}[Singleton comparison for a vertex-injective tensor]%
     \label{thm:peps_singletonRegionInjectivityComparison_of_isVertexInjective}
     \lean{TNLean.PEPS.singletonRegionInjectivityComparison_of_isVertexInjective}
     \leanok
@@ -401,26 +401,26 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     concrete predicate $\kappa(R)=\inj(T_{A,R})$ of
     Definition~\ref{def:peps_regionInjectivityDataOf} satisfies
     $\forall v,\ \inj(T_{A,\{v\}})\Longrightarrow\kappa(\{v\})$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_regionBlockedTensorInjective_of_isVertexInjective},
+    By Lemma~\ref{thm:peps_regionBlockedTensorInjective_of_isVertexInjective},
     $\kappa(\{v\})$ holds unconditionally for every $v\in V$.
 \end{proof}
 
-\begin{theorem}[Vertex injectivity gives singleton-block injectivity]%
+\begin{lemma}[Vertex injectivity gives singleton-block injectivity]%
     \label{thm:peps_singletonRegionTensorInjective}
     \lean{TNLean.PEPS.IsVertexInjective.singletonRegionTensorInjective}
     \leanok
     \uses{def:IsVertexInjective, def:peps_singletonRegionTensor}
     If $A$ is vertex-injective, then $\inj(T_{A,\{v\}})$ holds for every $v\in V$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By Definition~\ref{def:peps_singletonRegionTensor},
     $T_{A,\{v\}}=A_v$, so $\inj(T_{A,\{v\}})\iff\inj(A_v)$, which holds by
     Definition~\ref{def:IsVertexInjective}.
 \end{proof}
 
-\begin{theorem}[Singleton comparison gives the region base case]%
+\begin{lemma}[Singleton comparison gives the region base case]%
     \label{thm:peps_singletonRegionInjectivityFromVertexInjectivity}
     \lean{TNLean.PEPS.SingletonRegionInjectivityFromVertexInjectivity,
         TNLean.PEPS.SingletonRegionInjectivityFromVertexInjectivity.ofSingletonComparison}
@@ -428,13 +428,13 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     \uses{def:IsVertexInjective, def:peps_singletonRegionTensor, thm:peps_singletonRegionTensorInjective}
     If $\forall v,\ \inj(T_{A,\{v\}})\Longrightarrow\kappa(\{v\})$, then
     vertex injectivity of $A$ implies $\forall v,\ \kappa(\{v\})$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Compose Theorem~\ref{thm:peps_singletonRegionTensorInjective} with the
+    Compose Lemma~\ref{thm:peps_singletonRegionTensorInjective} with the
     hypothesis $\inj(T_{A,\{v\}})\Longrightarrow\kappa(\{v\})$.
 \end{proof}
 
-\begin{theorem}[Finite regions from singleton regions and union closure]%
+\begin{lemma}[Finite regions from singleton regions and union closure]%
     \label{thm:peps_finiteRegionInjectivityFromSingletons}
     \lean{TNLean.PEPS.RegionInjectivityUnionClosure.finset_injective_of_singletons}
     \leanok
@@ -442,10 +442,10 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     If $\kappa$ satisfies $\forall v,\ \inj(T_{A,\{v\}})\Longrightarrow\kappa(\{v\})$
     and $\kappa(R)\wedge\kappa(S)\Longrightarrow\kappa(R\cup S)$, and $A$ is
     vertex-injective, then $\kappa(R)$ holds for every finite $R\ne\varnothing$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Writing $R=\bigcup_{v\in R}\{v\}$,
-    Theorem~\ref{thm:peps_singletonRegionInjectivityFromVertexInjectivity} gives
+    Lemma~\ref{thm:peps_singletonRegionInjectivityFromVertexInjectivity} gives
     $\kappa(\{v\})$ for all $v\in R$, and
     Lemma~\ref{lem:peps_regionInjectivityUnionClosure_finite} yields $\kappa(R)$.
 \end{proof}
@@ -461,19 +461,19 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     $\kappa(M_e)\Longrightarrow\inj(T_{A,M_e})$.
 \end{definition}
 
-\begin{theorem}[Endpoint injectivity in the edge-blocked chain]%
+\begin{lemma}[Endpoint injectivity in the edge-blocked chain]%
     \label{thm:peps_edgeBlockedEndpointTensorMaps_injective}
     \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective}
     \leanok
     \uses{def:IsVertexInjective}
     If $A$ is vertex-injective, then for every edge $e=(u,v)$,
     $\inj(T_{A,u})\wedge\inj(T_{A,v})$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Specialize Definition~\ref{def:IsVertexInjective} to the endpoints $u$ and $v$.
 \end{proof}
 
-\begin{theorem}[Reducing edge-blocked injectivity to the middle block]%
+\begin{lemma}[Reducing edge-blocked injectivity to the middle block]%
     \label{thm:peps_edgeBlockedThreeSiteInjective_of_middle}
     \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_middle}
     \leanok
@@ -481,13 +481,13 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     If $A$ is vertex-injective and $e=(u,v)$ with $M_e=V\setminus\{u,v\}$, then
     $\inj(T_{A,M_e})\Longrightarrow
         \inj(T_{A,u})\wedge\inj(T_{A,M_e})\wedge\inj(T_{A,v})$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Combine $\inj(T_{A,M_e})$ with $\inj(T_{A,u})\wedge\inj(T_{A,v})$ from
     Definition~\ref{def:IsVertexInjective}.
 \end{proof}
 
-\begin{theorem}[All edge-blocked chains from middle-tensor injectivity]%
+\begin{lemma}[All edge-blocked chains from middle-tensor injectivity]%
     \label{thm:peps_edgeBlockedThreeSiteInjective_all_of_middle}
     \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_all_of_middle}
     \leanok
@@ -495,13 +495,13 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     If $A$ is vertex-injective and $\inj(T_{A,M_e})$ holds for every edge
     $e=(u,v)$, then
     $\forall e=(u,v),\ \inj(T_{A,u})\wedge\inj(T_{A,M_e})\wedge\inj(T_{A,v})$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:peps_edgeBlockedThreeSiteInjective_of_middle} at each
+    Apply Lemma~\ref{thm:peps_edgeBlockedThreeSiteInjective_of_middle} at each
     edge $e=(u,v)$.
 \end{proof}
 
-\begin{theorem}[Region injectivity gives edge-blocked injectivity]%
+\begin{lemma}[Region injectivity gives edge-blocked injectivity]%
     \label{thm:peps_edgeBlockedThreeSiteInjective_of_region}
     \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective}
     \leanok
@@ -509,13 +509,13 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     Let $e=(u,v)$ and $M_e=V\setminus\{u,v\}$. If $A$ is vertex-injective,
     $\kappa(M_e)$ holds, and $\kappa(M_e)\Longrightarrow\inj(T_{A,M_e})$, then
     $\inj(T_{A,u})\wedge\inj(T_{A,M_e})\wedge\inj(T_{A,v})$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Modus ponens gives $\inj(T_{A,M_e})$, and
-    Theorem~\ref{thm:peps_edgeBlockedThreeSiteInjective_of_middle} concludes.
+    Lemma~\ref{thm:peps_edgeBlockedThreeSiteInjective_of_middle} concludes.
 \end{proof}
 
-\begin{theorem}[Middle tensors from all middle regions]%
+\begin{lemma}[Middle tensors from all middle regions]%
     \label{thm:peps_edgeMiddleTensorInjective_all_of_region}
     \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_all}
     \leanok
@@ -523,13 +523,13 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     If $\kappa(M_e)$ and $\kappa(M_e)\Longrightarrow\inj(T_{A,M_e})$ hold for
     every edge $e=(u,v)$ with $M_e=V\setminus\{u,v\}$, then
     $\forall e,\ \inj(T_{A,M_e})$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Apply $\kappa(M_e)\Longrightarrow\inj(T_{A,M_e})$ to $\kappa(M_e)$ at each
     edge $e$.
 \end{proof}
 
-\begin{theorem}[All edge-blocked chains from middle-region injectivity]%
+\begin{lemma}[All edge-blocked chains from middle-region injectivity]%
     \label{thm:peps_edgeBlockedThreeSiteInjective_all_of_region}
     \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all}
     \leanok
@@ -537,13 +537,13 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     If $A$ is vertex-injective and $\kappa(M_e)$ and
     $\kappa(M_e)\Longrightarrow\inj(T_{A,M_e})$ hold for every edge $e=(u,v)$,
     then $\forall e=(u,v),\ \inj(T_{A,u})\wedge\inj(T_{A,M_e})\wedge\inj(T_{A,v})$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Combine Theorem~\ref{thm:peps_edgeMiddleTensorInjective_all_of_region} with
-    Theorem~\ref{thm:peps_edgeBlockedThreeSiteInjective_all_of_middle}.
+    Combine Lemma~\ref{thm:peps_edgeMiddleTensorInjective_all_of_region} with
+    Lemma~\ref{thm:peps_edgeBlockedThreeSiteInjective_all_of_middle}.
 \end{proof}
 
-\begin{theorem}[Edge-middle tensor from singleton regions, nonempty middle case]%
+\begin{lemma}[Edge-middle tensor from singleton regions, nonempty middle case]%
     \label{thm:peps_edgeMiddleTensorInjective_of_singletons}
     \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_of_singletons}
     \leanok
@@ -552,43 +552,43 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     satisfies singleton comparison, union closure, and
     $\kappa(M_e)\Longrightarrow\inj(T_{A,M_e})$, and $A$ is vertex-injective,
     then $\inj(T_{A,M_e})$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Theorem~\ref{thm:peps_finiteRegionInjectivityFromSingletons} gives
+    Lemma~\ref{thm:peps_finiteRegionInjectivityFromSingletons} gives
     $\kappa(M_e)$, and $\kappa(M_e)\Longrightarrow\inj(T_{A,M_e})$ yields
     $\inj(T_{A,M_e})$.
 \end{proof}
 
-\begin{theorem}[One edge-blocked chain from singleton regions, nonempty middle case]%
+\begin{lemma}[One edge-blocked chain from singleton regions, nonempty middle case]%
     \label{thm:peps_edgeBlockedThreeSiteInjective_of_singletons}
     \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_of_singletons}
     \leanok
     \uses{thm:peps_edgeMiddleTensorInjective_of_singletons, thm:peps_edgeBlockedThreeSiteInjective_of_middle}
     Under the hypotheses of
-    Theorem~\ref{thm:peps_edgeMiddleTensorInjective_of_singletons} at
+    Lemma~\ref{thm:peps_edgeMiddleTensorInjective_of_singletons} at
     $e=(u,v)$, $\inj(T_{A,u})\wedge\inj(T_{A,M_e})\wedge\inj(T_{A,v})$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Combine Theorem~\ref{thm:peps_edgeMiddleTensorInjective_of_singletons} with
-    Theorem~\ref{thm:peps_edgeBlockedThreeSiteInjective_of_middle}.
+    Combine Lemma~\ref{thm:peps_edgeMiddleTensorInjective_of_singletons} with
+    Lemma~\ref{thm:peps_edgeBlockedThreeSiteInjective_of_middle}.
 \end{proof}
 
-\begin{theorem}[All edge-blocked chains from singleton regions, nonempty middle case]%
+\begin{lemma}[All edge-blocked chains from singleton regions, nonempty middle case]%
     \label{thm:peps_edgeBlockedThreeSiteInjective_all_of_singletons}
     \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_of_singletons}
     \leanok
     \uses{thm:peps_edgeBlockedThreeSiteInjective_of_singletons}
     If $M_e=V\setminus\{u,v\}\ne\varnothing$ and the hypotheses of
-    Theorem~\ref{thm:peps_edgeMiddleTensorInjective_of_singletons} hold for
+    Lemma~\ref{thm:peps_edgeMiddleTensorInjective_of_singletons} hold for
     every edge $e=(u,v)$, then
     $\forall e=(u,v),\ \inj(T_{A,u})\wedge\inj(T_{A,M_e})\wedge\inj(T_{A,v})$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:peps_edgeBlockedThreeSiteInjective_of_singletons} at
+    Apply Lemma~\ref{thm:peps_edgeBlockedThreeSiteInjective_of_singletons} at
     each edge $e$.
 \end{proof}
 
-\begin{theorem}[All edge-blocked chains from singleton regions, cardinal form]%
+\begin{lemma}[All edge-blocked chains from singleton regions, cardinal form]%
     \label{thm:peps_edgeBlockedThreeSiteInjective_all_two_lt_card}
     \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeMiddleTensorInjective_all_two_lt_card}
     \lean{TNLean.PEPS.EdgeMiddleRegionInjectivityComparison.edgeBlockedThreeSiteInjective_all_two_lt_card}
@@ -599,11 +599,11 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     injectivity of $A$. If $2<|V|$, then for every edge $e=(u,v)$,
     $\inj(T_{A,M_e})$ and
     $\inj(T_{A,u})\wedge\inj(T_{A,M_e})\wedge\inj(T_{A,v})$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For each $e=(u,v)$,
-    Theorem~\ref{thm:peps_edgeMiddleVertices_nonempty_of_two_lt_card} gives
+    Lemma~\ref{thm:peps_edgeMiddleVertices_nonempty_of_two_lt_card} gives
     $M_e=V\setminus\{u,v\}\ne\varnothing$, so
-    Theorem~\ref{thm:peps_edgeBlockedThreeSiteInjective_all_of_singletons}
+    Lemma~\ref{thm:peps_edgeBlockedThreeSiteInjective_all_of_singletons}
     concludes.
 \end{proof}

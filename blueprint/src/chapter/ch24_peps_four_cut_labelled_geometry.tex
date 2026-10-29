@@ -37,7 +37,7 @@
     and let $E_{c,r}\times\{-,+\}$ be its set of cut endpoints (tail $-$ and head $+$).
 \end{definition}
 
-\begin{theorem}[The four cuts retain every labelled bond]%
+\begin{lemma}[The four cuts retain every labelled bond]%
     \label{thm:peps_labelled_cut_card}
     \lean{TNLean.PEPS.card_torusLabelledBond_two,
         TNLean.PEPS.card_torusSeamCutBonds_two,
@@ -46,7 +46,7 @@
     \leanok
     \uses{def:peps_labelled_cut}
     When $w=\ell=2$, $|E|=8$, $|E_{c,r}|=4$, $|E_{c,r}\times\{-,+\}|=8$, and $e=((x,y),d)\notin E_{x,y}$ for every $e\in E$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Direct counting gives $|E|=2\cdot2\cdot2=8$, $|E_{c,r}|=2+2=4$, and $|E_{c,r}\times\{-,+\}|=8$; furthermore $x+1\ne x$ and $y+1\ne y$ in $\mathbb Z_2$, so $((x,y),d)\notin E_{x,y}$.
 \end{proof}
@@ -108,25 +108,25 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[Gauge invariance of flatness]%
+\begin{lemma}[Gauge invariance of flatness]%
     \label{thm:peps_bond_flat_gauge}
     \lean{TNLean.PEPS.IsTorusBondFlat.torusBondGauge,
         TNLean.PEPS.isTorusBondFlat_torusBondGauge_iff}
     \leanok
     \uses{def:peps_bond_gauge,def:peps_bond_flat}
     For every $q:\Lambda\to G$, $q\cdot p$ is flat if and only if $p$ is flat.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Conjugating (\ref{eq:peps_bond_flat}) by $q_{x+1,y}$ on the left and $q_{x,y+1}$ on the right via (\ref{eq:peps_bond_gauge}) gives flatness of $q\cdot p$, and applying $q^{-1}$ gives the converse.
 \end{proof}
 
-\begin{theorem}[Comparison with upward bond labels]%
+\begin{lemma}[Comparison with upward bond labels]%
     \label{thm:peps_bond_flat_transport}
     \lean{TNLean.PEPS.isTorusBondFlat_iff_isTorusFlat}
     \leanok
     \uses{def:peps_bond_flat,lem:peps_torus_parallel_section}
     The assignment $p=(a,b)$ is bond-flat if and only if $(a,b^{-1})$ satisfies the rightward--upward flatness condition $b_{x+1,y}^{-1}a_{x,y}=a_{x,y+1}b_{x,y}^{-1}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Multiply (\ref{eq:peps_bond_flat}) on the left by $b_{x+1,y}^{-1}$ and on the right by $b_{x,y}^{-1}$.
 \end{proof}
@@ -146,13 +146,13 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[Flatness of closure labels]%
+\begin{lemma}[Flatness of closure labels]%
     \label{thm:peps_bond_closure_flat}
     \lean{TNLean.PEPS.isTorusBondFlat_closure_iff}
     \leanok
     \uses{def:peps_bond_flat,def:peps_bond_closure}
     The assignment $\kappa(g,h)$ is flat if and only if $gh=hg$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Evaluating (\ref{eq:peps_bond_flat}) on (\ref{eq:peps_bond_closure}) gives $gh=hg$ at $(x,y)=(-1,-1)$ and a trivial identity at all other plaquettes.
 \end{proof}
@@ -163,7 +163,7 @@
         TNLean.PEPS.isTorusBondFlat_relativeLabels}
     \leanok
     \uses{def:peps_bond_gauge,thm:peps_bond_flat_gauge}
-    The relative labels of $q:\Lambda\to G$ are $(q\cdot1)_e=q_{t(e)}q_{s(e)}^{-1}$, which are flat by Theorem~\ref{thm:peps_bond_flat_gauge}.
+    The relative labels of $q:\Lambda\to G$ are $(q\cdot1)_e=q_{t(e)}q_{s(e)}^{-1}$, which are flat by Lemma~\ref{thm:peps_bond_flat_gauge}.
 \end{definition}
 
 \begin{definition}[Inverse rooted path products]%
@@ -174,40 +174,40 @@
     For $w,\ell>0$, $0\le x<w$, and $0\le y<\ell$, set $A_x=a_{x-1,0}\cdots a_{0,0}$, $B_{x,y}=b_{x,y-1}^{-1}\cdots b_{x,0}^{-1}$ (empty products equal to $1$), and $q_{x,y}=(B_{x,y}A_x)^{-1}$.
 \end{definition}
 
-\begin{theorem}[Reduction to the two based holonomies]%
+\begin{lemma}[Reduction to the two based holonomies]%
     \label{thm:peps_bond_tree_closure}
     \lean{TNLean.PEPS.IsTorusBondFlat.torusBondGauge_tree}
     \leanok
     \uses{def:peps_bond_tree_gauge,def:peps_bond_flat,def:peps_bond_closure}
     If $p=(a,b)$ is flat, then $q\cdot p=\kappa(B_{0,\ell}^{-1},A_w)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_bond_flat_transport,thm:peps_torus_flat_connection_gauge}
-    Apply Theorem~\ref{thm:peps_torus_flat_connection_gauge} to $(a,b^{-1})$ via Theorem~\ref{thm:peps_bond_flat_transport} and invert the vertical relation.
+    Apply Lemma~\ref{thm:peps_torus_flat_connection_gauge} to $(a,b^{-1})$ via Lemma~\ref{thm:peps_bond_flat_transport} and invert the vertical relation.
 \end{proof}
 
-\begin{theorem}[Classification of flat labelled-bond assignments]%
+\begin{lemma}[Classification of flat labelled-bond assignments]%
     \label{thm:peps_bond_flat_classification}
     \lean{TNLean.PEPS.exists_torusBondGauge_eq_closure,
         TNLean.PEPS.isTorusBondFlat_iff_exists_eq_gauge_closure}
     \leanok
     \uses{def:peps_bond_flat,def:peps_bond_closure,def:peps_bond_gauge}
     For every $w,\ell>0$, $p$ is flat if and only if $p=q\cdot\kappa(g,h)$ (equivalently $q^{-1}\cdot p=\kappa(g,h)$) for some $q:\Lambda\to G$ and commuting $g,h\in G$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_bond_flat_transport,thm:peps_torus_flat_connection_gauge,
         thm:peps_bond_tree_closure,thm:peps_bond_closure_flat,
         thm:peps_bond_flat_gauge,def:peps_bond_gauge}
-    If $p$ is flat, Theorems~\ref{thm:peps_torus_flat_connection_gauge} and~\ref{thm:peps_bond_tree_closure} give $q\cdot p=\kappa(g,h)$ with $g=B_{0,\ell}^{-1}$ and $h=A_w$ commuting; the converse follows from Theorems~\ref{thm:peps_bond_closure_flat} and~\ref{thm:peps_bond_flat_gauge}.
+    If $p$ is flat, Lemmas~\ref{thm:peps_torus_flat_connection_gauge} and~\ref{thm:peps_bond_tree_closure} give $q\cdot p=\kappa(g,h)$ with $g=B_{0,\ell}^{-1}$ and $h=A_w$ commuting; the converse follows from Lemmas~\ref{thm:peps_bond_closure_flat} and~\ref{thm:peps_bond_flat_gauge}.
 \end{proof}
 
-\begin{theorem}[Gauge invariance of a finite orbit sum]%
+\begin{lemma}[Gauge invariance of a finite orbit sum]%
     \label{thm:peps_bond_gauge_average}
     \lean{TNLean.PEPS.sum_torusBondGauge}
     \leanok
     \uses{def:peps_bond_gauge}
     For finite $G$, $w,\ell>0$, and any function $f$ on bond assignments into a commutative additive monoid, $\sum_r f(r\cdot(q\cdot p))=\sum_r f(r\cdot p)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Reindex $\sum_r f((rq)\cdot p)$ along the bijection $r\mapsto rq$.
 \end{proof}
@@ -231,7 +231,7 @@
     For $w,\ell>0$, set $s_{k,c}(x)=k^{-1}$ if the least nonnegative representatives satisfy $x<c$ and $s_{k,c}(x)=1$ otherwise, and define $q_{c,r}(x,y)=s_{g^{-1},r}(y)s_{h,c}(x)$.
 \end{definition}
 
-\begin{theorem}[Commuting closure seams can be moved]%
+\begin{lemma}[Commuting closure seams can be moved]%
     \label{thm:peps_bond_seam_movement}
     \lean{TNLean.PEPS.torusBondGauge_horizontalClosureAt,
         TNLean.PEPS.torusBondGauge_verticalClosureAt,
@@ -247,22 +247,22 @@
         q_{c,r}\cdot\kappa(g,h)            & =\kappa_{c,r}(g,h).
         \label{eq:peps_bond_move_seams}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_four_cut_common_seam_gauge,def:peps_bond_gauge}
-    Theorem~\ref{thm:peps_four_cut_common_seam_gauge} shifts the seam along one coordinate while $gh=hg$ leaves the orthogonal component invariant; composing the two shifts gives $q_{c,r}\cdot\kappa(g,h)=\kappa_{c,r}(g,h)$.
+    Lemma~\ref{thm:peps_four_cut_common_seam_gauge} shifts the seam along one coordinate while $gh=hg$ leaves the orthogonal component invariant; composing the two shifts gives $q_{c,r}\cdot\kappa(g,h)=\kappa_{c,r}(g,h)$.
 \end{proof}
 
-\begin{theorem}[The orbit sum is independent of the seams]%
+\begin{lemma}[The orbit sum is independent of the seams]%
     \label{thm:peps_bond_seam_average}
     \lean{TNLean.PEPS.sum_torusBondGauge_closureAt}
     \leanok
     \uses{def:peps_bond_closure_at,def:peps_bond_gauge}
     For finite $G$, $w,\ell>0$, $gh=hg$, and any function $f$ into a commutative additive monoid, $\sum_q f(q\cdot\kappa_{c,r}(g,h))=\sum_q f(q\cdot\kappa(g,h))$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_bond_seam_movement,thm:peps_bond_gauge_average}
-    Combine (\ref{eq:peps_bond_move_seams}) with Theorem~\ref{thm:peps_bond_gauge_average}.
+    Combine (\ref{eq:peps_bond_move_seams}) with Lemma~\ref{thm:peps_bond_gauge_average}.
 \end{proof}
 
 \begin{definition}[Closure assignments indexed by individual bonds]%
@@ -274,48 +274,48 @@
     Write $\kappa_e(g,h)$ and $\kappa_{c,r;e}(g,h)$ ($e\in E$) for the bond assignments with components $\kappa(g,h)$ and $\kappa_{c,r}(g,h)$.
 \end{definition}
 
-\begin{theorem}[Shifted closure support]%
+\begin{lemma}[Shifted closure support]%
     \label{thm:peps_labelled_closure_support}
     \lean{TNLean.PEPS.torusLabelledClosureAt_eq_one_of_not_mem}
     \leanok
     \uses{def:peps_labelled_closure,def:peps_labelled_cut}
     If $e\notin E_{c,r}$, then $\kappa_{c,r;e}(g,h)=1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For $e\notin E_{c,r}$, neither $x+1=c$ (for $d=\mathrm H$) nor $y+1=r$ (for $d=\mathrm V$) holds in (\ref{eq:peps_labelled_cut}).
 \end{proof}
 
-\begin{theorem}[Seam movement on individual bonds]%
+\begin{lemma}[Seam movement on individual bonds]%
     \label{thm:peps_labelled_closure_gauge}
     \lean{TNLean.PEPS.exists_torusLabelledClosureGauge}
     \leanok
     \uses{def:peps_labelled_closure,def:peps_labelled_bonds}
     For $w,\ell>0$ and $gh=hg$, there exists $q:\Lambda\to G$ such that $q_{t(e)}\kappa_e(g,h)q_{s(e)}^{-1}=\kappa_{c,r;e}(g,h)$ for every $e\in E$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_bond_seam_movement}
     Evaluate $q_{c,r}\cdot\kappa(g,h)=\kappa_{c,r}(g,h)$ from (\ref{eq:peps_bond_move_seams}) on each $e\in E$.
 \end{proof}
 
-\begin{theorem}[Flatness classification on individual bonds]%
+\begin{lemma}[Flatness classification on individual bonds]%
     \label{thm:peps_labelled_flat_classification}
     \lean{TNLean.PEPS.exists_torusLabelledBondGauge_eq_closure}
     \leanok
     \uses{def:peps_labelled_pair,def:peps_bond_flat,def:peps_labelled_closure}
     For $w,\ell>0$, every flat $p:E\to G$ admits $q:\Lambda\to G$ and commuting $g,h\in G$ such that $q_{t(e)}p_eq_{s(e)}^{-1}=\kappa_e(g,h)$ for every $e\in E$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_bond_flat_classification}
-    Evaluate $q\cdot p=\kappa(g,h)$ from Theorem~\ref{thm:peps_bond_flat_classification} on each $e\in E$.
+    Evaluate $q\cdot p=\kappa(g,h)$ from Lemma~\ref{thm:peps_bond_flat_classification} on each $e\in E$.
 \end{proof}
 
-\begin{theorem}[Relative labels on the four uncut bonds]%
+\begin{lemma}[Relative labels on the four uncut bonds]%
     \label{thm:peps_labelled_uncut_flat}
     \lean{TNLean.PEPS.torusPlaquette_flat_of_uncut_relative}
     \leanok
     \uses{def:peps_labelled_cut,def:peps_labelled_pair}
     Let $w=\ell=2$. If $p_e=q_{t(e)}q_{s(e)}^{-1}$ for every $e\notin E_{c,r}$, then $b_{c+1,r}a_{c,r+1}=a_{c,r}b_{c,r}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     All four bonds in the plaquette at $(c,r)$ lie outside $E_{c,r}$, so
     \begin{align}
