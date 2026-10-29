@@ -308,3 +308,13 @@ linear equivalences with their existing composition theorem, and types the
 actual coarse factor record at the coarse canonical boundary from the start.
 This preserves all statements and uses no local Lean commands. Necessity and
 converse acceptance remains pending.
+
+## Hosted diagnostics on `fef804677`
+
+Job `123518221809` accepted the four-spin dictionary and reached the last
+two necessity comparisons. Their only diagnostics were unresolved nested
+canonical rank reindexings. Four explicit matrix entry identities now
+identify those two actual adjoint and two actual FT transports before the
+gauge equations are used. They preserve all source assumptions/conclusions
+and do not replace a mathematical comparison by an input witness. No local
+Lean commands were run; the final necessity/converse gate remains pending.

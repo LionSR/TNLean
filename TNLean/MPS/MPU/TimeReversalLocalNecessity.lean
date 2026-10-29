@@ -267,21 +267,46 @@ theorem IsMPUCanonicalFormII.exists_coarse_timeReversal_certificate
     ⟨Matrix.reindex LA LA X, Matrix.reindex_mem_unitaryGroup _ _ X.property⟩
   let Y' : Matrix.unitaryGroup (Fin (d * d)) ℂ :=
     ⟨Matrix.reindex RA RA Y, Matrix.reindex_mem_unitaryGroup _ _ Y.property⟩
+  let erA := finCongr (rightRank_physicalAdjointTensor W).symm
+  let elA := finCongr (leftRank_physicalAdjointTensor W).symm
+  let erFT := finCongr hrFT.symm
+  let elFT := finCongr hlFT.symm
+  have hUA : Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)
+      (Matrix.reindex (Equiv.prodCongr elA erA) (Equiv.refl _)
+        (SourceFactors.sourceV W S)ᴴ) = Bᴴ := by
+    ext ⟨i, j⟩ ⟨k, l⟩
+    rfl
+  have hUFT : Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)
+      (Matrix.reindex (Equiv.prodCongr elFT erFT) (Equiv.refl _)
+        (SourceFactors.sourceU W S)) = A := by
+    ext ⟨i, j⟩ ⟨k, l⟩
+    rfl
+  have hVA : Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA)
+      (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr erA elA)
+        (SourceFactors.sourceU W S)ᴴ) = Aᴴ := by
+    ext ⟨i, j⟩ ⟨k, l⟩
+    rfl
+  have hVFT : Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA)
+      (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr erFT elFT)
+        (SourceFactors.sourceV W S)) = B := by
+    ext ⟨i, j⟩ ⟨k, l⟩
+    rfl
   have hfirst : Bᴴ = ((X' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
       (Y' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)) * A := by
     have h := congrArg (Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)) hu
     dsimp only [T] at h
     rw [SourceFactors.sourceU_physicalAdjoint] at h
     rw [Matrix.reindex_kronecker_mul] at h
-    simpa only [A, B, X', Y', L, R, LA, RA, Matrix.conjTranspose_reindex] using h
+    rw [hUA, hUFT] at h
+    exact h
   have hsecond : Aᴴ = B * ((Y' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
       (X' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) := by
     have h := congrArg (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA)) hv
     dsimp only [T] at h
     rw [SourceFactors.sourceV_physicalAdjoint] at h
     rw [Matrix.reindex_mul_kronecker] at h
-    simpa only [A, B, X', Y', L, R, LA, RA, Matrix.conjTranspose_reindex,
-      Matrix.star_eq_conjTranspose] using h
+    rw [hVA, hVFT] at h
+    simpa only [X', Y', Matrix.star_eq_conjTranspose, Matrix.conjTranspose_reindex] using h
   have hA : A.IsCoisometry := (huS.reindex _ (Equiv.prodCongr L R) (Equiv.refl _)).2
   let : NeZero (d * d) := hW.neZero_phys
   obtain ⟨σ, x, hσ, hlocal⟩ := local_sign_of_adjoint_gate_gauges A B hA X' Y' hfirst hsecond
