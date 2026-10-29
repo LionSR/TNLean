@@ -182,6 +182,18 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
     tensors are not required.
 \end{definition}
 
+\begin{definition}[The general linear representation on chain states]
+    \label{def:mpug_general_linear_representation}
+    \lean{MPOTensor.GroupFamily.IsRawRepresentation.rep,
+        MPOTensor.GroupFamily.IsRawRepresentation.rep_apply}
+    \notready
+    \uses{def:mpug_operator_representation}
+    For a raw matrix product unitary representation and $N\geq1$, compose
+    the unitary representation on $(\C^d)^{\otimes N}$ with the inclusion
+    into its general linear group. The resulting linear automorphism at
+    $g\in G$ acts by the periodic operator $U_g^{(N)}$.
+\end{definition}
+
 \input{chapter/ch29_mpu_group_index}
 
 \begin{theorem}[Group fusion rules]
