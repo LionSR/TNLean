@@ -9675,3 +9675,14 @@ there is no need for a new tactic.
   needs this conversion, promote the rectangular matrix fact in QICLean and
   consume its published dependency revision rather than duplicating a new
   channel-independent matrix API in TNLean.
+
+
+### Reciprocal powers at adjacent window cuts — reused Mathlib (2026-10-29)
+
+- **Seen:** `CanonicalForm/QuadraticSolutionRephasing.lean`,
+  `QuadraticPhysicalCutWindow.lean` and the Perron-normalization child.
+- **Pattern:** cancel the common powers in a product with exponents n and n+1.
+- **Reuse:** `pow_succ`, `inv_pow`, `inv_mul_cancel_left₀` and
+  `mul_inv_cancel_left₀` give the identity directly from `pow_ne_zero`.
+- **Decision:** use the existing group-with-zero cancellation lemmas at all
+  three sites rather than copying a power-distribution proof or adding a tactic.
