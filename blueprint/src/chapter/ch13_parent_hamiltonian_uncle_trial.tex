@@ -124,6 +124,49 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
     squared restricted norm.
 \end{proof}
 
+\begin{lemma}[Pinned-wall endpoint residuals]
+    \label{lem:uncle_trial_pinned_endpoint_residuals}
+    \lean{MPSTensor.uncleDomainWallWord_append,
+        MPSTensor.uncleTwoWallCoefficient_rotate,
+        MPSTensor.uncleInteractionES_pin_upper_left,
+        MPSTensor.uncleInteractionES_pin_upper_right,
+        MPSTensor.uncleInteractionES_pin_lower_left,
+        MPSTensor.uncleInteractionES_pin_lower_right,
+        MPSTensor.uncleInteractionES_trial_pin_first_endpoint,
+        MPSTensor.uncleInteractionES_trial_pin_second_endpoint,
+        MPSTensor.uncleInteractionES_trial_pin_third_endpoint,
+        MPSTensor.uncleInteractionES_trial_pin_fourth_endpoint,
+        MPSTensor.uncleTrialPinnedEndpointState,
+        MPSTensor.uncleInteractionES_trial_eq_pinnedEndpointState,
+        MPSTensor.re_inner_uncleHamiltonianES_trial_le_pinnedEndpoint_norms}
+    \notready
+    \uses{lem:uncle_trial_endpoint_quadratic_energy,
+        lem:uncle_two_wall_interior_cancellation}
+    At the four endpoints, the actual projected residual is the image of
+    an explicit vector with one wall pinned to the cut. In local order,
+    the surviving pairs are $A_iR_j$, $R_iB_j$, $B_iL_j$, and $L_iA_j$,
+    respectively. The pinned physical sites are $N,2N,4N,5N$.
+    Denote these explicit local vectors by $\eta_{i,\tau}$. The opposite
+    wall still ranges over all $N+1$ positions in its original interval;
+    every exterior physical word is fixed by $\tau$. Then
+    \[
+        h'_P R_{i,\tau}\phi_N=h'_P\eta_{i,\tau},\qquad
+        \operatorname{Re}\langle H'_P\phi_N,\phi_N\rangle
+        \le d^{-2}\sum_{i\in E_N}\sum_\tau\|\eta_{i,\tau}\|^2.
+    \]
+    No asymptotic norm estimate is imposed as a hypothesis.
+\end{lemma}
+\begin{proof}
+    Split the wall sum at the endpoint site. The contribution with the
+    wall elsewhere has a pure A/A or B/B local pair, hence is killed by
+    the actual projector. Only the displayed pinned pair remains.
+    Splitting the two physical segments adjacent to each numbered cut
+    identifies the actual cyclic restriction with this expression.
+    For the L cuts, rotate the first rectangular wall around the trace.
+    Substitute the four derived identities into the preceding exact
+    quadratic energy sum and use local contraction.
+\end{proof}
+
 The four interval-end energy estimates, the asymptotic norm and ground-sector
 orthogonality estimates, the proper algebraic exceptional sets, and the
 variational spectral conclusion are separate steps. The exact finite

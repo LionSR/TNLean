@@ -9713,3 +9713,16 @@ there is no need for a new tactic.
   shared within this source calculation; no genericity premise is added.
 - **Notes:** This establishes the one-wall coefficient's exceptional set,
   independently of the unresolved actual two-wall norm factorization.
+
+### Removing the unpinned contribution at a wall endpoint — candidate (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTrialPinnedWalls.lean`, four endpoint orientations.
+- **Pattern:** Split the actual wall word at its end, decompose the physical
+  vector into pinned and uniform contributions, and use linearity plus the
+  actual pure-sector local-kernel theorem to delete the uniform contribution.
+- **Reuse:** `uncleDomainWallWord_append` supplies the shared word split;
+  `uncleTwoWallCoefficient_rotate` supplies the rectangular rotation, also
+  replacing the repeated rotations in the interior and middle-region proofs.
+- **Decision:** Keep four explicit matrix orientations rather than introducing
+  a parallel wall-state structure. Their coordinate proofs reuse the same
+  inside/outside and endpoint segment lemmas.
