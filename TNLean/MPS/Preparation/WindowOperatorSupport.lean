@@ -7,6 +7,7 @@ import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.CStarAlgebra.Spectrum
 import TNLean.MPS.MPDO.PhysicalGibbsEmbedding
 import TNLean.Circuit.LocalCircuit
+import TNLean.Circuit.PairProduct
 import TNLean.MPS.Preparation.WindowCorrelator
 
 /-!
@@ -46,6 +47,77 @@ theorem chainWindowOperator_eq_embedLocalOperatorAlgHom {L N a : ℕ} (ha : a < 
       MPOTensor.embedLocalOperatorAlgHom (d := d) L N (by omega) ⟨a, ha⟩ X := by
   rw [chainWindowOperator, dite_eq_left ⟨by omega, ha⟩]
   rfl
+
+/-- The consecutive chain-window inclusion is the existing general site
+embedding. Source context: arXiv:2307.01696, placing a local observable
+on a consecutive block; this is the coordinate identity between the
+finite-site and chain-window conventions. -/
+theorem chainWindowOperator_eq_embedOp {L N a : ℕ} (ha : a < N) (haL : a + L ≤ N)
+    (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
+    chainWindowOperator N a X =
+      QuantumCircuit.embedOp (fun j : Fin L => (⟨a + j.val, by omega⟩ : Fin N)) X := by
+  classical
+  let e : Fin L → Fin N := fun j => ⟨a + j.val, by omega⟩
+  ext row col
+  change chainWindowOperator N a X row col = QuantumCircuit.embedOp e X row col
+  rw [chainWindowOperator_apply ha haL, QuantumCircuit.embedOp_apply]
+  have hOff : (∀ i : Fin N, ¬ (a ≤ i.val ∧ i.val < a + L) → row i = col i) ↔
+      QuantumCircuit.AgreeOff e row col := by
+    constructor
+    · intro h i hi
+      apply h i
+      intro hInside
+      let j : Fin L := ⟨i.val - a, by omega⟩
+      apply hi j
+      apply Fin.ext
+      dsimp [e, j]
+      omega
+    · intro h i hi
+      apply h i
+      intro j hj
+      apply hi
+      have hval := congrArg Fin.val hj
+      dsimp [e] at hval
+      omega
+  rw [hOff]
+  rfl
+
+/-- Every operator supported on a consecutive window is an actual
+placement of a matrix on that complete window. Source context:
+arXiv:2307.01696, supported local observables on consecutive blocks. -/
+theorem exists_chainWindowOperator_eq_of_mem_supportedOperators
+    {L N a : ℕ} (ha : a < N) (haL : a + L ≤ N)
+    {X : Matrix (Cfg d N) (Cfg d N) ℂ}
+    (hX : X ∈ QuantumCircuit.supportedOperators d
+      {i : Fin N | a ≤ i.val ∧ i.val < a + L}) :
+    ∃ Y : Matrix (Cfg d L) (Cfg d L) ℂ, X = chainWindowOperator N a Y := by
+  classical
+  let e : Fin L → Fin N := fun j => ⟨a + j.val, by omega⟩
+  have he : Function.Injective e := by
+    intro i j hij
+    apply Fin.ext
+    have hval := congrArg Fin.val hij
+    dsimp [e] at hval
+    omega
+  have hRange : Set.range e = {i : Fin N | a ≤ i.val ∧ i.val < a + L} := by
+    ext i
+    constructor
+    · rintro ⟨j, rfl⟩
+      change a ≤ a + j.val ∧ a + j.val < a + L
+      omega
+    · intro hi
+      change a ≤ i.val ∧ i.val < a + L at hi
+      refine ⟨⟨i.val - a, by omega⟩, ?_⟩
+      apply Fin.ext
+      dsimp [e]
+      omega
+  have hX' : X ∈ QuantumCircuit.supportedOperators d (Set.range e) := by
+    rw [hRange]
+    exact hX
+  obtain ⟨Y, hY⟩ := QuantumCircuit.exists_embedOp_eq_of_mem_supportedOperators he hX'
+  refine ⟨Y, ?_⟩
+  rw [chainWindowOperator_eq_embedOp ha haL]
+  exact hY
 
 /-- Placing operators on a window preserves products (arXiv:2307.01696, Supplemental
 Material, proof of Theorem 1). -/

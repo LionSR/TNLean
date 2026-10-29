@@ -32,7 +32,12 @@ windows with the existing finite chain-window operators. It derives the
 actual forward support bound for every matrix C on the complete central
 2k-site interval: on N=p+6k+s sites, conjugating its placement at p+2k
 produces an operator supported in [p,p+6k). No source-coordinate restriction
-on C or support conclusion is a premise.
+on C or support conclusion is a premise. The existing WindowOperatorSupport
+module now identifies its chain placement with the existing general site
+embedding. Existing finite support reconstruction therefore recovers a
+window matrix from support membership; the actual forward bound applies
+to every supported central operator, not only a separately supplied
+placement matrix.
 The remaining boundary step expresses arbitrary outside single-site
 observables in these placed window algebras, uses cyclic covariance to
 cover every site, and then reflects the resulting commutators uniformly. Bare MPU-to-standard-form construction and the source bond-dimension

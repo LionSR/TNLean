@@ -363,11 +363,14 @@
 
 \begin{lemma}[Actual central-window action in the finite support algebras]
     \label{lem:mpu_finite_window_operator_support}
-    \lean{MPOTensor.bufferedWindowMatrix_eq_chainWindowOperator,
+    \lean{MPSTensor.chainWindowOperator_eq_embedOp,
+        MPSTensor.exists_chainWindowOperator_eq_of_mem_supportedOperators,
+        MPOTensor.bufferedWindowMatrix_eq_chainWindowOperator,
         MPOTensor.bufferedWindowMatrix_mem_supportedOperators,
         MPOTensor.mpo_bufferedWindow_conjugation_mem_supportedOperators,
         MPOTensor.originalSiteHeisenbergInputWindow_eq_chainWindowOperator,
-        MPOTensor.mpo_chainWindow_conjugation_mem_supportedOperators}
+        MPOTensor.mpo_chainWindow_conjugation_mem_supportedOperators,
+        MPOTensor.mpo_conjugation_mem_supportedOperators_central}
     \notready
     \uses{thm:mpu_finite_heisenberg_fixed_window,
         thm:mpu_finite_heisenberg_full_central_interval}

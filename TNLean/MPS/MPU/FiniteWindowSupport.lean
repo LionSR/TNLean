@@ -153,4 +153,30 @@ theorem mpo_chainWindow_conjugation_mem_supportedOperators
   rw [hPlaced] at h
   exact h
 
+/-- Every finite operator supported on the central interval has the
+actual standard-form forward bound; a window matrix is recovered from
+support membership rather than supplied as a separate premise.
+Source: arXiv:1703.09188, StandardForm/SF and eq:appendix-1,
+lines 603–622 and 2300–2306. -/
+theorem mpo_conjugation_mem_supportedOperators_central
+    {d D ℓ r : ℕ} {U : MPOTensor d D} (hU : U.IsMPU)
+    (k p s : ℕ) (hk : 0 < k)
+    {u : Matrix (Fin ℓ × Fin r)
+      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
+    {v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin r × Fin ℓ) ℂ}
+    (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
+    {A : Matrix (Fin (p + (3 * (2 * k) + s)) → Fin d)
+      (Fin (p + (3 * (2 * k) + s)) → Fin d) ℂ}
+    (hA : A ∈ QuantumCircuit.supportedOperators d
+      {i : Fin (p + (3 * (2 * k) + s)) |
+        p + 2 * k ≤ i.val ∧ i.val < (p + 2 * k) + 2 * k}) :
+    mpo U (p + (3 * (2 * k) + s)) * A * (mpo U (p + (3 * (2 * k) + s)))ᴴ ∈
+      QuantumCircuit.supportedOperators d
+        {i : Fin (p + (3 * (2 * k) + s)) | p ≤ i.val ∧ i.val < p + 3 * (2 * k)} := by
+  obtain ⟨C, rfl⟩ := MPSTensor.exists_chainWindowOperator_eq_of_mem_supportedOperators
+    (by omega : p + 2 * k < p + (3 * (2 * k) + s))
+    (by omega : (p + 2 * k) + 2 * k ≤ p + (3 * (2 * k) + s)) hA
+  exact mpo_chainWindow_conjugation_mem_supportedOperators hU k p s hk S C
+
 end MPOTensor
