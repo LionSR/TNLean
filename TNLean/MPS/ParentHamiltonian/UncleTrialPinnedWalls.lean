@@ -19,7 +19,7 @@ No norm growth or asymptotic energy estimate is supplied as a premise.
 
 noncomputable section
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators InnerProductSpace
 
 namespace MPSTensor
 
