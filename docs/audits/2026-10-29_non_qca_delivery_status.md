@@ -63,7 +63,7 @@ domain against the correct note. Current-head hosted acceptance is pending,
 and [#2147](https://github.com/LionSR/TNLean/issues/2147) records that precise
 classification boundary rather than claiming realizability is absent.
 
-The nonabelian local physical renormalization draft
+The nonabelian local physical renormalization PR
 [#10364](https://github.com/LionSR/TNLean/pull/10364) is reconciled at
 `0b9f106a0`, with its two verified Lean files unchanged. Its exact hosted
 combined-diagram failure is repaired by including the actual new lemma in the
