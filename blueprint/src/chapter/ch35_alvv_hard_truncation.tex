@@ -48,3 +48,44 @@
     $32e^{-(t-\eta)/8}$. Reindexing the actual orthonormal eigenbasis
     identifies its closed spectral span with the canonically ordered one.
 \end{proof}
+
+\begin{lemma}[Ordered energies and relative spectral spaces after one clipping]
+    \label{lem:alvv_single_region_spectral_comparison}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_single_region_hard_truncation_spectral_comparison}
+    \notready
+    \uses{lem:alvv_single_region_residuals}
+    In the setting of Lemma~\ref{lem:alvv_single_region_residuals}, use the
+    actual centered operators $H,F$, their ground energies $E,E'$, and
+    $\xi=32e^{-(t-\eta)/8}$, with $\eta>0$ and $t\ge\eta+7$.
+    Number the eigenvalues of each matrix in decreasing order. Whenever
+    $\lambda_i(F)\le E+\eta$,
+    \begin{equation}
+        \lambda_i(F)\le\lambda_i(H)\le\lambda_i(F)+\xi.\notag
+    \end{equation}
+    In particular, $E'\le E\le E'+\xi$.
+    For any $\delta>0$, set
+    \begin{equation}
+        \eta'=\eta+\xi+2\xi
+        \sqrt{\frac{\lceil\eta/(2\xi)\rceil}{\delta}}.\notag
+    \end{equation}
+    The enlarged clipped space $T_F(E'+\eta')$ is $\delta$-close to
+    $T_H(E+\eta)$, and the enlarged original space $T_H(E+\eta')$ is
+    $\delta$-close to $T_F(E'+\eta)$.
+    These are the actual centered operators and their own ground-energy
+    origins; arbitrary ground degeneracy is allowed. This is the
+    sufficient-cutoff consequence of
+    \cite[Proposition~4.4 and Lemma~4.5]{Arad2016RigorousRG}, with the
+    finite window count corrected as in
+    \cite{gap:alvv16_hard_truncation_windows}.
+\end{lemma}
+\begin{proof}\notready
+    \uses{lem:alvv_single_region_residuals}
+    The normalized minimum eigenvectors and positive lower certificates
+    identify the actual ground energies with the last ordered eigenvalues.
+    The derived inequality $F\le H$ gives the lower eigenvalue comparison;
+    the clipped low-space restricted error gives its upper comparison.
+    Applying the two relative spectral-window comparisons to the actual
+    original and clipped residuals gives both closeness statements, with
+    the displayed enlargement accounting for the ground shift and the
+    ceiling number of windows.
+\end{proof}
