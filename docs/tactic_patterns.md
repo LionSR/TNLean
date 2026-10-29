@@ -9736,3 +9736,15 @@ there is no need for a new tactic.
   `mul_inv_cancel_left₀` give the identity directly from `pow_ne_zero`.
 - **Decision:** use the existing group-with-zero cancellation lemmas at all
   three sites rather than copying a power-distribution proof or adding a tactic.
+### Adjacent-cut Gram recurrences — promoted shared physical identities (2026-10-29)
+
+- **Pattern:** use the physical prefix/suffix extension bijections to pass
+  between a Gram sum and the sum over one additional physical letter.
+- **Abstraction:** `prefixGram_eq_sum_of_extendCutPrefix` and
+  `suffixGram_eq_sum_of_extendCutSuffix` in
+  `MPS/Preparation/PhysicalCutGramRecurrences.lean`.
+- **Occurrences:** both recurrences for constructed canonical cut factors in
+  `OBCCanonicalRecurrences.lean`, and both recurrences for the original
+  supplied OBC factors in `OBCCanonicalPhysicalRanks.lean`.
+- **Decision:** the physical cut identities are shared; callers supply their
+  actual adjacent-factor recurrence instead of copying the double-sum proof.
