@@ -39,12 +39,12 @@ norm of matrices, rectangular ones included.
     $\ell\le d_j$, such that the cylinder projectors
     $\bigl(\ket{v_{j\ell}}\bra{v_{j\ell}}\bigr)_{D_j}\otimes\id$ have mutually
     orthogonal ranges. Their sum is
-    \[
+    \begin{align}
         P_{c,h}=\sum_{j=1}^{n}\sum_{\ell=1}^{d_j}
         \bigl(\ket{v_{j\ell}}\bra{v_{j\ell}}\bigr)_{D_j}\otimes\id .
-    \]
-    Every $D_j$ contains the inner sample and is contained in the outer
-    sample. If the outer sample is empty, then $P_{c,h}=\id$, whatever the
+        \label{eq:peps_frame_patch_proj}
+    \end{align}
+    Every $D_j$ satisfies $Q^-(c,h)\cap\Lambda\subseteq D_j\subseteq Q^+(c,h)\cap\Lambda$. If $Q^+(c,h)\cap\Lambda=\emptyset$, then $P_{c,h}=\id$, whatever the
     cylinder data. In \texttt{05-frames.tex}, lines 26--48,
     with the cylinder data of \cite[Proposition~4.1]{OpenAI2026PolynomialPEPS},
     the accuracy $\lVert(\id-P_{c,h})\Omega\rVert\le\varepsilon$ enters as
@@ -64,18 +64,19 @@ norm of matrices, rectangular ones included.
     Let $\mathcal J_{c,h}$ be a tag register with orthonormal basis
     $\{\ket{j,\ell}\}$ and let $\ket0$ be a fixed one-site unit vector. The
     hole encoder is
-    \[
+    \begin{align}
         K_{c,h}=\sum_{j,\ell}\ket{j,\ell}\otimes
         \bigl[\bigl(\ket0^{\otimes D_j}\bra{v_{j\ell}}\bigr)_{D_j}
             \otimes\id\bigr]
         \colon\mathcal H_\Lambda\to\mathcal J_{c,h}\otimes\mathcal H_\Lambda .
-    \]
+        \label{eq:peps_frame_hole_encoder}
+    \end{align}
     It keeps a site register at every site, inside the hole as well. If the
-    outer sample is empty, the tag register is one-dimensional and $K_{c,h}$
+    outer sample is empty, $\dim\mathcal J_{c,h}=1$ and $K_{c,h}$
     is the identity encoding, as in \texttt{05-frames.tex}, lines 67--69.
     On a square grid of unit spacing with $c$ a site and $h=3/2$, the inner
     sample, one sample $D_j$ of radius $r_j=2$, and the outer sample are
-    nested squares of sites, and the encoder maps the site registers to a tag
+    nested squares of sites, and $K_{c,h}$ maps the site registers to a tag
     together with the site registers.
     \input{figures/peps_frame_hole_encoder_a}
     \input{figures/peps_frame_hole_encoder_b}
@@ -89,20 +90,19 @@ norm of matrices, rectangular ones included.
     \leanok
     \uses{def:peps_frame_hole_encoder}
     As in \texttt{05-frames.tex}, equation (encoder-contraction),
-    lines 62--64, the operator $P_{c,h}$ is an orthogonal projection,
+    lines 62--64, the operator $P_{c,h}$ in~(\ref{eq:peps_frame_patch_proj}) is an orthogonal projection,
     $K_{c,h}^\dagger K_{c,h}=P_{c,h}$, and $\lVert K_{c,h}\rVert\le1$.
 \end{lemma}
 
 \begin{proof}\leanok
-    If the outer sample is empty, $K_{c,h}$ is the identity encoding and all
-    three claims are immediate. Otherwise, each cylinder projector is Hermitian
-    and idempotent because $v_{j\ell}$
-    is a unit vector, and products of distinct cylinder projectors vanish by
-    orthogonality; hence $P_{c,h}$ is an orthogonal projection. Orthogonality
-    of the tag basis gives
+    If $Q^+(c,h)\cap\Lambda=\emptyset$, $K_{c,h}$ is the identity encoding and all
+    three claims hold. Otherwise, each $(\ket{v_{j\ell}}\bra{v_{j\ell}})_{D_j}\otimes\id$ is Hermitian
+    and idempotent since $\lVert v_{j\ell}\rVert=1$, and products of distinct cylinder projectors vanish by
+    orthogonality, so $P_{c,h}^2=P_{c,h}=P_{c,h}^\dagger$. Orthonormality
+    of $\{\ket{j,\ell}\}$ in~(\ref{eq:peps_frame_hole_encoder}) gives
     $K_{c,h}^\dagger K_{c,h}=\sum_{j,\ell}
         (\ket{v_{j\ell}}\braket{0^{\otimes D_j}}{0^{\otimes D_j}}\bra{v_{j\ell}})_{D_j}
-        \otimes\id=P_{c,h}$. Finally
+        \otimes\id=P_{c,h}$, whence
     $\lVert K_{c,h}\rVert^2=\lVert K_{c,h}^\dagger K_{c,h}\rVert
         =\lVert P_{c,h}\rVert\le1$.
 \end{proof}
@@ -121,14 +121,14 @@ norm of matrices, rectangular ones included.
     \uses{def:peps_frame_hole_encoder}
     Following \cite[Definition~6.1]{OpenAI2026PolynomialPEPS}
     (\texttt{05-frames.tex}, lines 71--82), an encoded frame $\mathcal F$ consists of a site ownership assignment on
-    one sheet, a list of holes $(c,h)$ with square cylinder data and pairwise
+    one sheet, a list of holes $(c_a,h_a)_{a=1}^r$ with square cylinder data and pairwise
     disjoint outer samples, and a specified party holding each hole's tag.
     The order of the list is the fixed ordering of the appended tags. The
-    encoding $K_{\mathcal F}$ is the product of the hole encoders, with the
+    encoding $K_{\mathcal F}$ is the product of the hole encoders $K_{c_a,h_a}$, with the
     tags appended in that order, and the reference vector is
-    $\Omega_{\mathcal F}=K_{\mathcal F}\Omega$; a frame without holes is an unencoded
+    $\Omega_{\mathcal F}=K_{\mathcal F}\Omega$; a frame with $r=0$ is an unencoded
     sheet. While the source requires the outer
-    squares to be disjoint in the plane, only the resulting disjointness of their
+    squares $Q^+(c_a,h_a)$ to be disjoint in $\R^2$, only the resulting disjointness of their
     physical samples is used.
 \end{definition}
 
@@ -140,18 +140,17 @@ norm of matrices, rectangular ones included.
     \leanok
     \uses{def:peps_frame}
     For two lists of holes with disjoint outer footprints, the site parts of
-    their encodings commute on every pair of tag configurations. The tags of
-    a concatenated list are the pairs of tags of the two parts, and on such a
-    pair the site part of the encoding of the concatenation is the product of
-    the site parts of the two encodings. Hence the encodings commute after
+    their encodings commute on every pair $(s,t)$ of tag configurations. The tags of
+    a concatenated list are the pairs $(s,t)$ of tags of the two parts, on which the site part of the concatenated encoding is the product of
+    the site parts of the two encodings; hence the encodings commute under
     the natural identification of tag orderings
     (\texttt{05-frames.tex}, lines 84--85).
 \end{lemma}
 
 \begin{proof}\leanok
     The site part on a tag configuration is a product of operators supported
-    in the outer footprints of the holes of the list, so the two products
-    are supported on disjoint sets of sites. The factorization follows by
+    in the outer footprints of the holes in the list, so the two products
+    have disjoint supports and commute; the factorization on $(s,t)$ follows by
     induction on the first list.
 \end{proof}
 
@@ -163,19 +162,17 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.EncodedFrame.norm_frameEncoder_le_one}
     \leanok
     \uses{lem:peps_frame_encoder_contraction,lem:peps_frame_commute}
-    For a frame with hole projectors $P_1,\dots,P_r$,
+    For a frame $\mathcal F$ with hole projectors $P_1,\dots,P_r$,
     $K_{\mathcal F}^\dagger K_{\mathcal F}=P_1\cdots P_r$, this product is an
     orthogonal projection, and $\lVert K_{\mathcal F}\rVert\le1$.
 \end{lemma}
 
 \begin{proof}\leanok
-    Proceeding by induction on the list, write the site part on the tags $(s,t)$ as
-    $B_sR_t$, with $B_s$ from the first hole. Summing $R_t^\dagger
-        B_s^\dagger B_sR_t$ over $s$ gives $R_t^\dagger P_1R_t$, and $P_1$
-    commutes with $R_t^\dagger$ by disjointness of supports; the sum over $t$
-    is then $P_1$ times the identity for the remaining holes. The projectors
-    commute pairwise, so their product is an orthogonal projection of norm at
-    most one.
+    Proceeding by induction on $r$, write the site part on the tags $(s,t)$ as
+    $B_sR_t$, with $B_s$ from the first hole. By Lemma~\ref{lem:peps_frame_encoder_contraction} and Lemma~\ref{lem:peps_frame_commute},
+    $\sum_s R_t^\dagger B_s^\dagger B_sR_t=R_t^\dagger P_1R_t=P_1 R_t^\dagger R_t$; summing over $t$
+    then gives $P_1\cdots P_r$ by the induction hypothesis. Because $P_1,\dots,P_r$
+    commute pairwise, $P_1\cdots P_r$ is an orthogonal projection and $\lVert K_{\mathcal F}\rVert\le1$.
 \end{proof}
 
 \begin{lemma}[Telescoping on a vector]
@@ -184,17 +181,17 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.EncodedFrame.norm_act_projProd_sub_le}
     \leanok
     For contractions $A_1,\dots,A_s$ and every vector $\psi$,
-    \[
+    \begin{align}
         \lVert(A_1\cdots A_s-\id)\psi\rVert
         \le\sum_{j=1}^s\lVert(A_j-\id)\psi\rVert .
-    \]
-    In particular, if each of $r$ projectors has error at most $\varepsilon$
-    on $\psi$, so does their product up to $r\varepsilon$; no commutation is
-    assumed (\texttt{05-frames.tex}, lines 237--248).
+        \label{eq:peps_frame_telescoping}
+    \end{align}
+    In particular, if $\lVert(P_a-\id)\psi\rVert\le\varepsilon$ for $1\le a\le r$, then $\lVert(P_1\cdots P_r-\id)\psi\rVert\le r\varepsilon$ without assuming commutation
+    (\texttt{05-frames.tex}, lines 237--248).
 \end{lemma}
 
 \begin{proof}\leanok
-    Induction on $s$, from
+    Induction on $s$ using
     $(A_1R-\id)\psi=A_1(R-\id)\psi+(A_1-\id)\psi$ and $\lVert A_1\rVert\le1$.
 \end{proof}
 
@@ -205,20 +202,19 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.EncodedFrame.Frame.one_sub_mul_le_norm_refVec}
     \leanok
     \uses{lem:peps_frame_gram,lem:peps_frame_telescoping}
-    As in \texttt{05-frames.tex}, equation (frame-norm), lines 86--94, a frame with $r$ holes satisfies $\lVert\Omega_{\mathcal F}\rVert
-        =\lVert P_1\cdots P_r\Omega\rVert$. If $\lVert\Omega\rVert=1$ and every
-    hole projector satisfies $\lVert(\id-P_a)\Omega\rVert\le\varepsilon$, then
-    \[
+    As in \texttt{05-frames.tex}, equation (frame-norm), lines 86--94, a frame $\mathcal F$ with $r$ holes satisfies $\lVert\Omega_{\mathcal F}\rVert
+        =\lVert P_1\cdots P_r\Omega\rVert$. If $\lVert\Omega\rVert=1$ and
+    $\lVert(\id-P_a)\Omega\rVert\le\varepsilon$ for $1\le a\le r$, then
+    \begin{align}
         1-r\varepsilon\le\lVert\Omega_{\mathcal F}\rVert\le1 .
-    \]
+        \label{eq:peps_frame_norm}
+    \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
-    The two vectors have the same squared norm
-    $\braket{\Omega}{P_1\cdots P_r\Omega}$, because the product of the
-    projectors is an orthogonal projection. The upper bound is
-    contractivity, and the lower bound is the reverse triangle inequality
-    with the telescoping lemma.
+    By Lemma~\ref{lem:peps_frame_gram}, $P_1\cdots P_r$ is an orthogonal projection and
+    $\lVert\Omega_{\mathcal F}\rVert^2=\braket{\Omega}{P_1\cdots P_r\Omega}=\lVert P_1\cdots P_r\Omega\rVert^2$. Contractivity gives $\lVert\Omega_{\mathcal F}\rVert\le1$, and the reverse triangle inequality
+    with~(\ref{eq:peps_frame_telescoping}) of Lemma~\ref{lem:peps_frame_telescoping} gives $1-r\varepsilon\le\lVert\Omega_{\mathcal F}\rVert$.
 \end{proof}
 
 \begin{definition}[Site registers]
@@ -252,19 +248,13 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.EncodedFrame.Frame.map_owner_regs}
     \leanok
     \uses{def:peps_frame,def:peps_party_layout,def:lattice_site_registers}
-    The registers of a frame $\mathcal F$ are one register $\C^{\mathcal
-            J_a}$ for each hole $a$, held by the party holding its tag, listed in
-    the order of the holes, followed by one site register $\C^q$ for each site
-    $x\in\Lambda$, held by the site owner of $x$, listed in a fixed order of
-    the sites. This list contains every site exactly once, so taking the
-    site at a position gives a bijection from its positions to $\Lambda$.
-    More generally, if all sites in any list have site owner $p$, every site
-    register of that list is owned by $p$. Matching the
-    sheet of \texttt{05-frames.tex}, lines 13--20 (one site register at
-    each site with a specified owner, together with the tags
-    of Definition~6.1, lines 71--82), the tensor product of the frame's
-    registers is its memory in the
-    sense of Theorem~5.2 of \cite{OpenAI2026PolynomialPEPS}.
+    The registers of a frame $\mathcal F$ are one tag register $\C^{\mathcal
+            J_a}$ for each hole $a$, held by its tag owner and listed in
+    the hole order, followed by one site register $\C^q$ for each
+    $x\in\Lambda$, held by the site owner of $x$ and listed in a fixed site order. Since each $x\in\Lambda$ appears once, the site map is a bijection from site-register positions to $\Lambda$; if all sites in a list $\ell$ have site owner $p$, every site
+    register of $\ell$ has owner $p$. Matching the
+    sheet of \texttt{05-frames.tex}, lines 13--20, and Definition~6.1, lines 71--82, the tensor product of the registers of $\mathcal F$
+    is its memory in the sense of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}.
 \end{definition}
 
 \begin{lemma}[Canonical coordinates of site registers]
@@ -350,33 +340,26 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.EncodedFrame.Frame.outerHoles}
     \leanok
     \uses{def:peps_frame}
-    Old and new one-sheet frames share their untouched holes, with the same
-    encodings and tag owners; the remaining holes are the affected old holes and the affected new holes,
-    $r_{\rm old}$ of the former. There are $m$ additional square patches
-    $(c_i,u_i)$ with cylinder data, and a specified finite list of parties;
-    the source requires this list to be bounded, and its size enters, with
-    $m$ and the numbers of affected holes, the polynomial count of
-    Theorem~\ref{thm:peps_frame_small_rewrite_polynomial}.
+    Old and new one-sheet frames $\mathcal F_{\rm old},\mathcal F_{\rm new}$ share their untouched holes (with identical encodings and tag owners), alongside $r_{\rm old}$ affected old holes and $r_{\rm new}$ affected new holes, $m$ additional square patches
+    $(c_i,u_i)$ with cylinder data, and a specified finite list of parties (entering the polynomial count of
+    Theorem~\ref{thm:peps_frame_small_rewrite_polynomial}).
     Write $H^\mp(\mathcal F)$ for the unions of the physical samples of the
-    inner and outer hole squares. The four conditions of
+    inner and outer hole squares of $\mathcal F$. The four conditions of
     \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}
     (\texttt{05-frames.tex}, lines 193--207) are:
     \begin{enumerate}
-        \item every patch's outer square, and every affected old or new hole,
-              avoids the physical outer footprints of the untouched holes;
-        \item the union of the patch inner squares contains every site whose
-              site owner changes and the entire outer footprint of every
+        \item every patch outer sample $Q^+(c_i,u_i)\cap\Lambda$ and every affected old or new hole outer sample is disjoint from the outer footprints of the untouched holes;
+        \item $\bigcup_{i=1}^m (Q^-(c_i,u_i)\cap\Lambda)$ contains every site whose
+              site owner changes and the outer footprint of every
               affected old or new hole;
-        \item in each patch's outer square, the sites outside
-              $H^-(\mathcal F_{\rm old})$ have at most two old owners, and the
-              sites outside $H^-(\mathcal F_{\rm new})$ have at most two new
+        \item in each $Q^+(c_i,u_i)\cap\Lambda$, the sites outside
+              $H^-(\mathcal F_{\rm old})$ have at most two old owners, and those outside $H^-(\mathcal F_{\rm new})$ have at most two new
               owners;
-        \item all old and new site owners on the patch footprints and the
-              affected-hole footprints, and all affected tag owners, belong to
+        \item all old and new site owners on the patch and affected-hole outer footprints, and all affected tag owners, belong to
               the specified list.
     \end{enumerate}
     Patches may overlap, and affected old holes may overlap affected new
-    holes. In the canonical coordinates used below, the tags of the untouched
+    holes. In the canonical coordinates below, the tags of the untouched
     holes come first in both frames; Theorem~\ref{thm:peps_frame_small_rewrite}
     also covers arbitrary tag orderings.
 \end{definition}
@@ -391,12 +374,12 @@ norm of matrices, rectangular ones included.
     \uses{def:peps_frame_rewrite_data}
     With $K_{\rm old}$ and $K_{\rm new}$ the encodings of the affected old
     and new holes alone and $P_1,\dots,P_m$ the patch projectors in a fixed
-    order,
-    \[
+    order, define
+    \begin{align}
         M=K_{\rm new}P_m\cdots P_1K_{\rm old}^\dagger ,
-    \]
-    acting as the identity on the tags of the untouched holes. Its input
-    layout is that of $\mathcal F_{\rm old}$ and its output layout that of
+        \label{eq:peps_frame_rewrite_map}
+    \end{align}
+    extended by the identity on the tags of the untouched holes, from the register layout of $\mathcal F_{\rm old}$ to that of
     $\mathcal F_{\rm new}$ (\texttt{05-frames.tex}, lines 222--232).
 \end{definition}
 
@@ -405,17 +388,16 @@ norm of matrices, rectangular ones included.
     \lean{Matrix.l2_opNorm_kronecker_one_le,
         Matrix.l2_opNorm_one_kronecker_rect_le}
     \leanok
-    For complex matrices $A$ and $B$, not necessarily square, and identity
+    For complex matrices $A$ and $B$ (not necessarily square) and identity
     matrices $I$ of any size, $\lVert A\otimes I\rVert\le\lVert A\rVert$ and
     $\lVert I\otimes B\rVert\le\lVert B\rVert$.
 \end{theorem}
 
 \begin{proof}\leanok
-    For a vector $x=\sum_k x_k\otimes e_k$ one has
-    $(A\otimes I)x=\sum_k Ax_k\otimes e_k$, so
+    For $x=\sum_k x_k\otimes e_k$,
     $\lVert(A\otimes I)x\rVert^2=\sum_k\lVert Ax_k\rVert^2
-        \le\lVert A\rVert^2\lVert x\rVert^2$. The second bound follows by
-    exchanging the two tensor factors, which reindexes rows and columns.
+        \le\lVert A\rVert^2\lVert x\rVert^2$; the second bound follows by
+    permuting the two tensor factors.
 \end{proof}
 
 \begin{lemma}[The rewrite is a contraction]
@@ -424,14 +406,12 @@ norm of matrices, rectangular ones included.
         Matrix.l2_opNorm_reindex_le}
     \leanok
     \uses{def:peps_frame_rewrite,lem:peps_frame_gram,thm:peps_frame_identity_tensor_norm}
-    $\lVert M\rVert\le1$.
+    The canonical rewrite $M$ in~(\ref{eq:peps_frame_rewrite_map}) satisfies $\lVert M\rVert\le1$.
 \end{lemma}
 
 \begin{proof}\leanok
-    Every factor is a contraction. Tensoring with the identity on the
-    untouched tags and relabelling coordinates do not increase the operator
-    norm; the first estimate sums squared norms over the untouched tag
-    slices and introduces no dimension factor.
+    By Lemma~\ref{lem:peps_frame_gram}, $\lVert K_{\rm new}\rVert,\lVert P_i\rVert,\lVert K_{\rm old}^\dagger\rVert\le1$, and by Theorem~\ref{thm:peps_frame_identity_tensor_norm} tensoring with $\id$ on the
+    untouched tags and relabelling coordinates preserve $\lVert M\rVert\le1$.
 \end{proof}
 
 \begin{lemma}[Exact intertwining]
@@ -439,7 +419,7 @@ norm of matrices, rectangular ones included.
     \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.rewrite_mul_encoder}
     \leanok
     \uses{def:peps_frame_rewrite,lem:peps_frame_commute,lem:peps_frame_gram}
-    Under condition (1),
+    Under condition~(1) of Definition~\ref{def:peps_frame_rewrite_data},
     $MK_{\mathcal F_{\rm old}}=K_{\mathcal F_{\rm new}}P_m\cdots P_1
         Q_1\cdots Q_{r_{\rm old}}$, where $Q_1,\dots,Q_{r_{\rm old}}$ are the
     projectors of the affected old holes.
@@ -447,13 +427,11 @@ norm of matrices, rectangular ones included.
 
 \begin{proof}\leanok
     On untouched tags $u$, affected old tags $b$ and affected new tags $a$,
-    write $U_u$, $A_b$ and $B_a$ for the site parts of the encodings. By
-    condition (1) and disjointness of the old frame, $U_u$ commutes with
-    $A_b^\dagger$, with every patch projector, with $B_a$ and with the
-    affected old projectors. Summing over $b$,
+    let $U_u$, $A_b$ and $B_a$ be the site parts of the encodings. By
+    condition~(1) and Lemma~\ref{lem:peps_frame_commute}, $U_u$ commutes with
+    $A_b^\dagger$, $P_i$, $B_a$ and $Q_t$. By Lemma~\ref{lem:peps_frame_gram},
     $\sum_bA_b^\dagger U_uA_b=U_u\sum_bA_b^\dagger A_b
-        =U_uQ_1\cdots Q_{r_{\rm old}}$ by the frame Gram identity; then $U_u$
-    commutes to the left of $B_aP_m\cdots P_1$.
+        =U_uQ_1\cdots Q_{r_{\rm old}}$, and commuting $U_u$ past $B_aP_m\cdots P_1$ yields the identity.
 \end{proof}
 
 \begin{theorem}[Small-patch rewrite: canonical contraction]
@@ -466,31 +444,22 @@ norm of matrices, rectangular ones included.
     \leanok
     \uses{lem:peps_frame_rewrite_contraction,lem:peps_frame_rewrite_intertwining,
         lem:peps_frame_telescoping}
-    Under the four conditions, if every patch projector and every affected
-    old-hole projector has error at most $\varepsilon$ on $\Omega$, the
-    canonical map $M$ is a contraction and
-    \[
+    Under conditions~(1)--(4) of Definition~\ref{def:peps_frame_rewrite_data}, if every patch projector $P_i$ and affected
+    old-hole projector $Q_t$ satisfies $\lVert(\id-P_i)\Omega\rVert,\lVert(\id-Q_t)\Omega\rVert\le\varepsilon$, then $\lVert M\rVert\le1$ and
+    \begin{align}
         \lVert M\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}\rVert
         \le(m+r_{\rm old})\varepsilon .
-    \]
-    The same holds for frames whose tags are listed in any order, with $M$
-    relabelled along the identification of the two tag orderings. In this
-    first assertion of \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}, the error estimate uses condition (1) only: no
-    smallness of the errors of the untouched holes is assumed, and the
-    projectors of overlapping patches need not commute.
+        \label{eq:peps_frame_small_rewrite_err}
+    \end{align}
+    The same holds for arbitrary tag orderings after relabelling $M$ along the tag permutation. In this
+    first assertion of \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}, the error bound~(\ref{eq:peps_frame_small_rewrite_err}) uses condition~(1) only, without assuming small errors on untouched holes or commuting patch projectors.
 \end{theorem}
 
 \begin{proof}\leanok
-    By the intertwining lemma,
+    By Lemma~\ref{lem:peps_frame_rewrite_intertwining},
     $M\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}
-        =K_{\mathcal F_{\rm new}}(P_m\cdots P_1Q_1\cdots Q_{r_{\rm old}}-\id)\Omega$.
-    The encoding is a contraction, and the telescoping lemma bounds the
-    remaining vector by $(m+r_{\rm old})\varepsilon$. For another ordering of
-    the tags, the site parts of the encodings of holes with disjoint outer
-    footprints commute, so moving every tag to the new position of its hole
-    is a relabelling of the tag basis that carries one encoding to the other.
-    Relabelling the coordinates of $M$ along it keeps $M$ a contraction and
-    changes neither norm in the estimate.
+        =K_{\mathcal F_{\rm new}}(P_m\cdots P_1Q_1\cdots Q_{r_{\rm old}}-\id)\Omega$;
+    since $\lVert K_{\mathcal F_{\rm new}}\rVert\le1$ (Lemma~\ref{lem:peps_frame_gram}), Lemma~\ref{lem:peps_frame_telescoping} yields~(\ref{eq:peps_frame_small_rewrite_err}). By Lemma~\ref{lem:peps_frame_commute}, permuting the tag order relabels the tag basis by a unitary that intertwines the encodings and preserves norms.
 \end{proof}
 
 \begin{lemma}[Branch expansion]
@@ -507,21 +476,15 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.card_branch_le}
     \leanok
     \uses{def:peps_frame_rewrite}
-    A complete branch $\beta=(a,s,b)$ chooses a tag $a$ of the affected new
-    holes, one cylinder term of every patch, and a tag $b$ of the affected
-    old holes. With $C_s$ the product of the chosen cylinder projectors,
-    $M=\sum_\beta M_\beta$, where $M_\beta$ is
-    $\ket a\bra b\otimes B_aC_sA_b^\dagger$ extended by the identity on the
-    untouched tags. If every affected hole and every patch has at most $D$
-    cylinder terms, there are at most $D^{\,r_{\rm new}+m+r_{\rm old}}$
-    branches (\texttt{05-frames.tex}, lines 254--257).
+    A complete branch $\beta=(a,s,b)$ chooses an affected new tag $a$, one cylinder term per patch, and an affected old tag $b$. With $C_s$ the product of the chosen cylinder projectors,
+    $M=\sum_\beta M_\beta$, where $M_\beta=\ket a\bra b\otimes B_aC_sA_b^\dagger$ extended by $\id$ on the
+    untouched tags. If every affected hole and patch has at most $D$
+    cylinder terms, the number of branches is $N\le D^{\,r_{\rm new}+m+r_{\rm old}}$
+    (\texttt{05-frames.tex}, lines 254--257).
 \end{lemma}
 
 \begin{proof}\leanok
-    Expanding every patch projector as the sum of its cylinder projectors
-    identifies the entries of $K_{\rm new}P_m\cdots P_1K_{\rm old}^\dagger$ on
-    the tag basis. The number of tag configurations of a list is the product
-    of the numbers of cylinder terms of its members.
+    Expanding each $P_i$ via~(\ref{eq:peps_frame_patch_proj}) in~(\ref{eq:peps_frame_rewrite_map}) decomposes $K_{\rm new}P_m\cdots P_1K_{\rm old}^\dagger$ into the sum of $\ket a\bra b\otimes B_aC_sA_b^\dagger$ over the at most $D^{\,r_{\rm new}+m+r_{\rm old}}$ tuples $\beta=(a,s,b)$.
 \end{proof}
 
 \begin{lemma}[Wire classification of a branch]
@@ -537,29 +500,16 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.owners_mem_parties_of_mem_sample}
     \leanok
     \uses{def:peps_frame_rewrite_data}
-    Assume the four conditions and fix a branch $(a,s,b)$. The selected
-    square of a term $(j,\ell)$ is $D_j$, and that of the identity term of a
-    square with empty outer sample is empty; the selected squares are read
-    off from the terms of the branch position by position in the lists, so a
-    patch listed twice may carry two different terms. Every site of a
-    selected affected old-hole square, and of a
-    selected affected new-hole square, lies in a selected patch square. The
-    sites of a selected patch square not consumed by a selected old-hole
-    square have at most two old owners, and those not received by a selected
-    new-hole square have at most two new owners. A site in no selected patch
-    square has the same old and new owner. All old and new owners of sites in
-    selected squares belong to the specified list
+    Assume conditions~(1)--(4) of Definition~\ref{def:peps_frame_rewrite_data} and fix a branch $\beta=(a,s,b)$, with selected squares $D^{\rm old}_t$, $E_i$, and $D^{\rm new}_r$ read position by position from $(b,s,a)$ (empty for the identity term of an empty outer sample). Then:
+    (i) $\bigcup_t D^{\rm old}_t\cup\bigcup_r D^{\rm new}_r\subseteq\bigcup_i E_i$;
+    (ii) $E_i\setminus\bigcup_t D^{\rm old}_t$ has at most two old owners and $E_i\setminus\bigcup_r D^{\rm new}_r$ has at most two new owners;
+    (iii) every site outside $\bigcup_i E_i$ has the same old and new owner; and
+    (iv) all old and new owners of sites in $\bigcup_i E_i\cup\bigcup_t D^{\rm old}_t\cup\bigcup_r D^{\rm new}_r$ belong to the specified list
     (\texttt{05-frames.tex}, lines 267--305).
 \end{lemma}
 
 \begin{proof}\leanok
-    Every selected square contains its inner square and lies in its outer
-    square (for an empty outer sample both are empty), so condition (2) gives the first statement and the statement on
-    direct sites. A site of a patch outer square in
-    $H^-(\mathcal F_{\rm old})$ is not in an untouched hole by condition (1),
-    hence lies in the inner square of an affected old hole and so in its
-    selected square; condition (3) bounds the owners of the remaining sites.
-    The new case is symmetric, and condition (4) gives the last statement.
+    Each selected square lies between its inner and outer sample (both empty when the outer sample is empty), so condition~(2) gives (i) and (iii). By condition~(1), any site of $Q^+(c_i,u_i)\cap H^-(\mathcal F_{\rm old})$ lies in the inner sample (hence in $D^{\rm old}_t$) of some affected old hole, so $E_i\setminus\bigcup_t D^{\rm old}_t\subseteq (Q^+(c_i,u_i)\cap\Lambda)\setminus H^-(\mathcal F_{\rm old})$, which has at most two old owners by condition~(3); the new-owner case is symmetric, and condition~(4) gives (iv).
 \end{proof}
 
 \begin{lemma}[Rescaled branchwise approximation]
@@ -569,22 +519,20 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.EncodedFrame.truncationRank,
         TNLean.PEPS.EncodedFrame.truncationRank_spec}
     \leanok
-    Let $M=\sum_\beta M_\beta$ be a contraction with $N$ branches and let
-    $\lVert M_\beta-\widetilde M_\beta\rVert\le\eta$ for every branch. If
+    Let $M=\sum_\beta M_\beta$ be a contraction with $N$ branches and
+    $\lVert M_\beta-\widetilde M_\beta\rVert\le\eta$ for all $\beta$. If
     $N\eta\le\tfrac12\delta$, then
     $M_\delta=(1+\tfrac12\delta)^{-1}\sum_\beta\widetilde M_\beta$ satisfies
-    $\lVert M_\delta\rVert\le1$ and $\lVert M_\delta-M\rVert\le\delta$. For
-    $N,g\ge0$ and $\delta>0$ there is an integer $k\ge1$ with
+    $\lVert M_\delta\rVert\le1$ and $\lVert M_\delta-M\rVert\le\delta$. For any
+    $N,g\ge0$ and $\delta>0$, $k=\lceil(2Ng/\delta)^2\rceil+1\ge1$ satisfies
     $Ng/\sqrt k\le\tfrac12\delta$ (\texttt{05-frames.tex}, lines 331--341).
 \end{lemma}
 
 \begin{proof}\leanok
-    The sum $\widetilde M$ is within $\tfrac12\delta$ of $M$, so
-    $\lVert\widetilde M\rVert\le1+\tfrac12\delta$. Splitting
+    With $\widetilde M=\sum_\beta\widetilde M_\beta$, $\lVert\widetilde M-M\rVert\le N\eta\le\tfrac12\delta$, so
+    $\lVert\widetilde M\rVert\le1+\tfrac12\delta$ and $\lVert M_\delta\rVert\le1$. Writing
     $M_\delta-M=(1+\tfrac12\delta)^{-1}(\widetilde M-M)
-        -\tfrac{\delta/2}{1+\delta/2}M$ bounds the error by
-    $\delta/(1+\tfrac12\delta)\le\delta$, and
-    $k=\lceil(2Ng/\delta)^2\rceil+1$ satisfies the final inequality.
+        -\tfrac{\delta/2}{1+\delta/2}M$ gives $\lVert M_\delta-M\rVert\le\delta/(1+\tfrac12\delta)\le\delta$.
 \end{proof}
 
 \begin{lemma}[Reference error of an approximate rewrite]
@@ -593,19 +541,17 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.EncodedFrame.rewrite_error_le_inv_pow_twenty}
     \leanok
     \uses{thm:peps_frame_small_rewrite}
-    Under condition (1), if $\lVert\Omega\rVert\le1$ and
+    Under condition~(1) of Definition~\ref{def:peps_frame_rewrite_data}, if $\lVert\Omega\rVert\le1$ and
     $\lVert M_a-M\rVert\le\delta$, then
     $\lVert M_a\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}\rVert
-        \le\delta+(m+r_{\rm old})\varepsilon$. With $\varepsilon=L^{-60}$,
+        \le\delta+(m+r_{\rm old})\varepsilon$. For $\varepsilon=L^{-60}$,
     $\delta=L^{-30}$ and $m+r_{\rm old}+1\le L^{10}$, this is at most
     $L^{-20}$ (\texttt{05-frames.tex}, lines 217--218 and 343--344).
 \end{lemma}
 
 \begin{proof}\leanok
-    Splitting $M_a\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}$ as
-    $(M_a-M)\Omega_{\mathcal F_{\rm old}}$ plus the small-error rewrite difference and
-    using $\lVert\Omega_{\mathcal F_{\rm old}}\rVert\le1$ gives the general bound; the
-    specialization uses $L^{-60}\le L^{-30}$.
+    By Theorem~\ref{thm:peps_frame_small_rewrite} and $\lVert\Omega_{\mathcal F_{\rm old}}\rVert\le1$,
+    $\lVert M_a\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}\rVert\le\lVert M_a-M\rVert\lVert\Omega_{\mathcal F_{\rm old}}\rVert+\lVert M\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}\rVert\le\delta+(m+r_{\rm old})\varepsilon\le(1+m+r_{\rm old})L^{-30}\le L^{-20}$.
 \end{proof}
 
 \begin{lemma}[Chains of rank-one site operators as networks]
@@ -616,30 +562,25 @@ norm of matrices, rectangular ones included.
         Matrix.ofFn_prod_apply,
         TNLean.PEPS.SiteChain.chainOp_apply}
     \leanok
-    Let $L_0,\dots,L_{n-1}$ be operators
-    $L_j=\ket{k_j}\bra{b_j}_{S_j}\otimes\id$ on the site registers, where each
-    $k_j$ and $b_j$ is a vector on the configurations of the finite set $S_j$
-    or the product zero vector. Form the network whose vertices are the bras
-    $\bra{b_j}$ and the kets $\ket{k_j}$, kept distinct, and whose internal
-    edges join the output of a ket at a site to the input of the next bra
-    containing that site, in the order $L_{n-1},\dots,L_0$ of application.
-    The input of a bra at a site contained in no earlier factor is an open
-    input leg, and the output of a ket at a site contained in no later factor
-    is an open output leg, except that the legs of a product zero vector are
-    fixed to $0$. Then the entry of $L_0\cdots L_{n-1}$ at output
-    configuration $\sigma$ and input configuration $\tau$ vanishes unless
-    $\sigma$ and $\tau$ agree at the sites contained in no factor and carry
-    $0$ at the fixed legs, and otherwise equals the contraction of the network
-    evaluated at the open legs read off from $\sigma$ and $\tau$. No edge
+    Let $L_j=\ket{k_j}\bra{b_j}_{S_j}\otimes\id$ ($0\le j<n$) be operators on $\mathcal H_\Lambda$, where each
+    $k_j,b_j\in\mathcal H_{S_j}$ is a vector on the finite set $S_j\subseteq\Lambda$
+    or the product zero vector $\ket0^{\otimes S_j}$. Form the network with distinct vertices
+    $\bra{b_j}$ and $\ket{k_j}$ whose internal
+    edges join the output of $\ket{k_j}$ at $x\in S_j$ to the input of the next bra
+    $\bra{b_{j'}}$ ($j'<j$) with $x\in S_{j'}$, in the application order $L_{n-1},\dots,L_0$;
+    the input of $\bra{b_j}$ at $x\notin\bigcup_{j'>j}S_{j'}$ is an open
+    input leg, and the output of $\ket{k_j}$ at $x\notin\bigcup_{j'<j}S_{j'}$
+    is an open output leg, except that legs of $\ket0^{\otimes S_j}$ are
+    fixed to $0$. Then $\braket{\sigma}{L_0\cdots L_{n-1}|\tau}=0$ unless
+    $\sigma$ and $\tau$ agree outside $\bigcup_j S_j$ and equal
+    $0$ at the fixed legs, in which case $\braket{\sigma}{L_0\cdots L_{n-1}|\tau}$ equals the network contraction $Z$
+    evaluated at the open legs of $(\sigma,\tau)$. No edge
     joins a vertex to itself (\texttt{05-frames.tex}, lines 274--281).
 \end{lemma}
 
 \begin{proof}\leanok
-    Expanding the product as a sum over paths of intermediate configurations,
-    a path of nonzero weight keeps the value of a site across factors that do
-    not contain it, so it is determined by the values on the internal edges,
-    and conversely every labelling of the internal edges determines such a
-    path; along it the weight is the product of the vertex tensors.
+    Expanding $L_0\cdots L_{n-1}$ over intermediate site configurations,
+    any path of nonzero weight preserves the configuration at each site across factors $L_j$ with $x\notin S_j$; thus nonzero paths are in bijection with labellings of the internal edges, and each path weight is the product of the vertex tensors.
 \end{proof}
 
 \begin{lemma}[Whole-group truncation of a chain]
@@ -652,27 +593,19 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.SiteChain.exists_chainOp_truncation}
     \leanok
     \uses{lem:peps_frame_chain_network,thm:peps_group_tensor}
-    In the setting of the previous lemma, let every $k_j$ and $b_j$ have norm
-    at most one, and let $G$ be a set of vertices containing every vertex
+    In the setting of Lemma~\ref{lem:peps_frame_chain_network}, let $\lVert k_j\rVert,\lVert b_j\rVert\le1$ for all $j$, and let $G$ be a set of vertices containing every vertex
     with an open leg. For every $k\ge1$ there are orthonormal families of at
-    most $k$ vectors on the open-leg groups and coefficients of modulus at
-    most one such that $L_0\cdots L_{n-1}$ differs in operator norm by at most
-    $|G|/\sqrt k$ from the sum of the corresponding product terms, of which
-    there are at most $k^{|G|}$. Each product term is the tensor product of
+    most $k$ vectors on the open-leg groups and coefficients $c_i$ with $\lvert c_i\rvert\le1$
+    such that $L_0\cdots L_{n-1}$ differs in operator norm by at most
+    $\lvert G\rvert/\sqrt k$ from the sum of at most $k^{\lvert G\rvert}$ product terms $c_i T_i$, where each $T_i$ is the tensor product of
     one normalized vector on the open output legs of each ket, one
-    normalized covector on the open input legs of each bra, the product zero
-    vectors at the fixed legs, and the identity on the sites contained in no
-    factor. No constant depends on the dimensions of the sites
+    normalized covector on the open input legs of each bra, $\ket0$ or $\bra0$ at the fixed legs, and $\id$ outside $\bigcup_j S_j$, with no constant depending on $q$
     (\texttt{05-frames.tex}, lines 306--329).
 \end{lemma}
 
 \begin{proof}\leanok
-    The vertex tensors are normalized, so the whole-group truncation lemma
-    applies to the contraction $Z$. An operator read off from a tensor $W$ on
-    the open legs is $W$, reshaped as a matrix from inputs to outputs,
-    tensored with the identity on the remaining sites, so its operator norm on $W=Z-Z_k$ is
-    at most the largest Hilbert--Schmidt norm of its diagonal blocks, hence
-    at most $\lVert Z-Z_k\rVert$.
+    Since $\lVert k_j\rVert,\lVert b_j\rVert\le1$, Theorem~\ref{thm:peps_group_tensor}
+    approximates the network tensor $Z$ by $Z_k$ with $\lVert Z-Z_k\rVert\le\lvert G\rvert/\sqrt k$. Reshaping $W=Z-Z_k$ into an operator on $\mathcal H_{\bigcup_j S_j}$ tensored with $\id$ on $\Lambda\setminus\bigcup_j S_j$ gives an operator norm bounded by the Hilbert--Schmidt norm $\lVert Z-Z_k\rVert\le\lvert G\rvert/\sqrt k$.
 \end{proof}
 
 \begin{lemma}[Network of a branch]
@@ -688,25 +621,22 @@ norm of matrices, rectangular ones included.
     \leanok
     \uses{lem:peps_frame_branches,lem:peps_frame_wires,
         lem:peps_frame_chain_network}
-    Assume the four conditions and fix a branch $(a,s,b)$. Its site operator
-    $B_aC_sA_b^\dagger$ is the ordered product of the factors
-    $\ket0\bra{u'_r}$ of the affected new holes, $\ket{w_i}\bra{w_i}$ of the
-    patch terms, and $\ket{u_t}\bra0$ of the affected old holes. In its
-    network only the bras and kets of the patch terms have open legs, so at
-    most $2m$ vertices do; the open input legs of a patch bra have at most
-    two old owners, the open output legs of a patch ket have at most two new
+    Assume conditions~(1)--(4) of Definition~\ref{def:peps_frame_rewrite_data} and fix a branch $\beta=(a,s,b)$. Its site operator is
+    \begin{align}
+        B_aC_sA_b^\dagger
+        =\Bigl[\prod_r\bigl(\ket0^{\otimes D^{\rm new}_r}\bra{u'_r}\bigr)_{D^{\rm new}_r}\otimes\id\Bigr]
+        \Bigl[\prod_i\bigl(\ket{w_i}\bra{w_i}\bigr)_{E_i}\otimes\id\Bigr]
+        \Bigl[\prod_t\bigl(\ket{u_t}\bra0^{\otimes D^{\rm old}_t}\bigr)_{D^{\rm old}_t}\otimes\id\Bigr].
+        \label{eq:peps_frame_branch_factors}
+    \end{align}
+    In its network (Lemma~\ref{lem:peps_frame_chain_network}), only the $2m$ patch vertices $\bra{w_i}$ and $\ket{w_i}$ can have open legs; the open input legs of $\bra{w_i}$ have at most
+    two old owners, the open output legs of $\ket{w_i}$ have at most two new
     owners, and all these owners belong to the specified list
     (\texttt{05-frames.tex}, lines 257--305).
 \end{lemma}
 
 \begin{proof}\leanok
-    The factorization follows from the definitions of the hole encodings and
-    the cylinder projectors. A decoded old-hole ket meets a later patch bra
-    at every site of its square, and a new-hole bra meets an earlier patch
-    ket at every site of its square, by the wire classification; the zero
-    vectors carry no open legs. An open input of a patch bra is consumed by
-    no selected old-hole square, so the wire classification bounds its old
-    owners; the output case is symmetric.
+    Equation~(\ref{eq:peps_frame_branch_factors}) follows from~(\ref{eq:peps_frame_patch_proj}) and~(\ref{eq:peps_frame_hole_encoder}). By Lemma~\ref{lem:peps_frame_wires}(i), every site of $D^{\rm old}_t$ or $D^{\rm new}_r$ lies in some $E_i$, so $\ket{u_t}$ and $\bra{u'_r}$ have no open legs and the zero factors have only fixed legs. By Lemma~\ref{lem:peps_frame_wires}(ii) and (iv), the open input legs of $\bra{w_i}$ (which lie in $E_i\setminus\bigcup_t D^{\rm old}_t$) have at most two old owners in the specified list, and symmetrically for $\ket{w_i}$.
 \end{proof}
 
 \begin{theorem}[Small-patch rewrite: approximation by product terms]
@@ -720,32 +650,26 @@ norm of matrices, rectangular ones included.
     \leanok
     \uses{lem:peps_frame_branch_network,lem:peps_frame_chain_truncation,
         lem:peps_frame_rescale}
-    Assume the four conditions, and let $N$ be the number of branches and
-    $k=\lceil(4Nm/\delta)^2\rceil+1$ for $\delta>0$, for instance
-    $\delta=L^{-a}$. Every branch is approximated in operator norm within
-    $2m/\sqrt k$ by at most $k^{2m}$ product terms with coefficients of
-    modulus at most one, and the rescaled sum
+    Assume conditions~(1)--(4) of Definition~\ref{def:peps_frame_rewrite_data}, let $N$ be the number of branches, and set
+    $k=\lceil(4Nm/\delta)^2\rceil+1$ for $\delta>0$ (e.g.\ $\delta=L^{-a}$). Each branch $M_\beta$ is approximated in operator norm within
+    $2m/\sqrt k$ by at most $k^{2m}$ product terms with coefficients $\lvert c_{\beta,i}\rvert\le1$, and the rescaled sum
     $M_\delta=(1+\tfrac12\delta)^{-1}\sum_\beta\ket a\bra b\otimes
-        \bigl(\sum_ic_{\beta,i}T_{\beta,i}\bigr)$, extended by the identity on
-    the untouched tags, is a contraction with $\lVert M_\delta-M\rVert\le
-        \delta$. Each product term $T_{\beta,i}$ is the tensor product of
-    normalized vectors on the open output groups of the patch kets, normalized
-    covectors on the open input groups of the patch bras, product zero
-    vectors on the selected hole squares, and identities; by
-    Lemma~\ref{lem:peps_frame_branch_network} each open group lies on at most
-    two parties of the specified list. This formalizes the branch-network,
-    truncation and rescaling steps of the proof of the second assertion of
-    \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}. The reading of the product
-    terms as allowed monomials is
-    Theorem~\ref{thm:peps_frame_small_rewrite_monomials}, and the polynomial
-    bound on the number of terms is
-    Theorem~\ref{thm:peps_frame_small_rewrite_polynomial}.
+        \bigl(\sum_ic_{\beta,i}T_{\beta,i}\bigr)$, extended by $\id$ on
+    the untouched tags, satisfies $\lVert M_\delta\rVert\le1$ and $\lVert M_\delta-M\rVert\le
+        \delta$. Each $T_{\beta,i}$ is the tensor product of
+    normalized vectors on the open output groups of $\ket{w_i}$, normalized
+    covectors on the open input groups of $\bra{w_i}$, product zero
+    vectors on $D^{\rm old}_t$ and $D^{\rm new}_r$, and identities, with each open group supported on at most
+    two specified parties by Lemma~\ref{lem:peps_frame_branch_network}. This formalizes the branch-network,
+    truncation and rescaling steps of the second assertion of
+    \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}; see
+    Theorem~\ref{thm:peps_frame_small_rewrite_monomials} and
+    Theorem~\ref{thm:peps_frame_small_rewrite_polynomial} for the allowed-monomial expansion and polynomial count.
 \end{theorem}
 
 \begin{proof}\leanok
-    Applying the chain truncation to the network of each branch with the
-    patch vertices as groups and combining with the rescaling lemma via
-    $N\cdot 2m/\sqrt k\le\tfrac12\delta$ gives both bounds.
+    Applying Lemma~\ref{lem:peps_frame_chain_truncation} to each branch network from Lemma~\ref{lem:peps_frame_branch_network} with the at most $2m$ patch vertices as $G$, and combining with Lemma~\ref{lem:peps_frame_rescale} via
+    $N\cdot 2m/\sqrt k\le\tfrac12\delta$, gives both bounds.
 \end{proof}
 
 \begin{theorem}[Small-patch rewrite: polynomial approximation]
@@ -758,79 +682,26 @@ norm of matrices, rectangular ones included.
         lem:peps_frame_approx_reference,thm:peps_group_tensor,
         thm:peps_frame_small_rewrite_product_terms,
         thm:peps_frame_small_rewrite_monomials}
-    In the setting of the frame construction, where the projector of every
-    hole and every additional patch is a sum of $\sum_jd_j\le CL^c$
-    cylinder projectors for fixed $C$ and $c$ (\texttt{05-frames.tex}, lines
-    34--46), assume the four conditions with boundedly many affected holes and
-    additional patches and a bounded specified list of parties. Then for every
-    fixed $a>0$ the canonical map $M$ admits a contractive approximation $M_a$
-    with $\lVert M_a-M\rVert\le L^{-a}$ and a polynomial sum expansion into
-    monomials allowed by \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, whose
-    participating parties all lie in the specified list, of bounded size. In
+    In the setting of the frame construction, where every hole and additional patch projector has $\sum_jd_j\le CL^c$
+    cylinder terms (\texttt{05-frames.tex}, lines
+    34--46), assume conditions~(1)--(4) of Definition~\ref{def:peps_frame_rewrite_data} with $m,r_{\rm old},r_{\rm new}\le b$ and at most $b$ specified parties. Then for every
+    fixed $a>0$, the canonical map $M$ admits a contractive approximation $M_a$
+    with $\lVert M_a-M\rVert\le L^{-a}$ and an expansion into at most
+    \begin{align}
+        (C+1)^{3b}\bigl(16b^2(C+1)^{6b}+1\bigr)^{2b}L^{3bc+4b(3bc+\lceil a\rceil)}
+        \label{eq:peps_frame_poly_monomial_count}
+    \end{align}
+    monomials allowed by \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, each with coefficient of modulus at most $1$, at most $2b$ normalized pair sources, at most $2b$ normalized pair effects, and participating parties in the specified list. In
     particular, when $\lVert\Omega\rVert\le1$ and every additional patch
-    projector and every affected old-hole projector has error at most the
-    accuracy $\varepsilon=L^{-60}$ fixed for the frame construction
-    (\texttt{05-frames.tex}, lines 21--25), the choice $a=30$ gives
+    and affected old-hole projector has error at most $\varepsilon=L^{-60}$ on $\Omega$
+    (\texttt{05-frames.tex}, lines 21--25), choosing $a=30$ gives
     $\lVert M_{30}\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}
-        \rVert\le(2b+1)L^{-20}$, where $b$ bounds $m$, $r_{\rm old}$,
-    $r_{\rm new}$ and the number of specified parties; as in the second
-    assertion of \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}, the rewrite is a bounded
-    change with reference-vector error $O(L^{-20})$.
+        \rVert\le(2b+1)L^{-20}$, as in the second
+    assertion of \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand $M$ into its polynomially many branches. In a branch
-    $\beta=(a,s,b)$, let the old affected holes carry the terms with selected
-    squares $D^{\rm old}_t$ and unit vectors $u_t$, the new affected holes
-    the terms with selected squares $D^{\rm new}_r$ and unit vectors $u'_r$,
-    and the patches the terms with selected squares $E_i$ and unit vectors
-    $w_i$. Then $M_\beta=\ket a\bra b\otimes B_aC_sA_b^\dagger$ with
-    \[
-        A_b^\dagger=\prod_t\bigl(\ket{u_t}\bra0^{\otimes D^{\rm old}_t}
-        \bigr)_{D^{\rm old}_t}\otimes\id,\quad
-        C_s=\prod_i\bigl(\ket{w_i}\bra{w_i}\bigr)_{E_i}\otimes\id,\quad
-        B_a=\prod_r\bigl(\ket0^{\otimes D^{\rm new}_r}\bra{u'_r}
-        \bigr)_{D^{\rm new}_r}\otimes\id,
-    \]
-    the factors of $C_s$ taken in the order of the patches. Factor out the
-    tag ket $\ket a$ and bra $\bra b$, the zero bras on the squares
-    $D^{\rm old}_t$, the zero kets on the squares $D^{\rm new}_r$, and the
-    identity on the sites outside $\bigcup_iE_i$, whose old and new owners
-    agree. The residual network $Z$ has the vertices $\ket{u_t}$,
-    $\bra{w_i}$, $\ket{w_i}$ and $\bra{u'_r}$, the bra and the ket of each
-    patch term being distinct vertices; each site wire joins a ket to the
-    next bra containing that site, so there are no self-contractions. By the
-    wire classification, $\ket{u_t}$ has no open output legs and
-    $\bra{u'_r}$ has no open input legs. The open legs of $Z$ are the input
-    legs of $\bra{w_i}$ at sites of $E_i$ outside $\bigcup_tD^{\rm old}_t$
-    not reached by an earlier ket, which have at most two old owners, and
-    the output legs of $\ket{w_i}$ at sites of $E_i$ outside
-    $\bigcup_rD^{\rm new}_r$ not met by a later bra, which have at most two
-    new owners. The whole-group truncation
-    lemma (Theorem~\ref{thm:peps_group_tensor}) approximates its tensor
-    within $g/\sqrt k$ by at most $k^g$ product
-    terms with coefficients of modulus at most one, each an allowed
-    monomial, and the Hilbert-space error bounds the operator error of the
-    branch. The rescaling lemma forms $M_a$, and the reference estimate
-    with $a=30$ gives the final assertion. The branch network, its truncation
-    and the rescaled sum are formalized in the approximation by product terms
-    (Theorem~\ref{thm:peps_frame_small_rewrite_product_terms}), and the
-    reading of each product term as an allowed monomial on the registers of
-    the frames, with at most $Nk^{2m}$ monomials, in
-    Theorem~\ref{thm:peps_frame_small_rewrite_monomials}. With
-    $\sum_jd_j\le CL^c$, $m,r_{\rm old},r_{\rm new}\le b$ and at most $b$
-    specified parties, the number of
-    branches is at most $\bigl((C+1)L^c\bigr)^{3b}$, and for $\delta=L^{-a}$,
-    $L\ge1$ the count is at most
-    $(C+1)^{3b}\bigl(16b^2(C+1)^{6b}+1\bigr)^{2b}L^{3bc+4b(3bc+\lceil
-                a\rceil)}$, with at most $2b$ normalized pair sources and $2b$ normalized
-    pair effects in each monomial, and every monomial uses only the at most
-    $b$ specified parties. The bound on the participating parties is the
-    boundedness of the list in the fourth condition and does not follow from
-    the other three: every site of a selected hole square receives a zero bra
-    at its old owner and a zero ket at its new owner, and the third condition
-    does not restrict the owners inside the inner holes
-    \cite{gap:polypeps_small_rewrite_monomials}.
+    By Lemma~\ref{lem:peps_frame_branches}, $M=\sum_\beta M_\beta$ has $N\le((C+1)L^c)^{3b}$ branches $\beta=(a,s,b)$, each of the form $M_\beta=\ket a\bra b\otimes B_aC_sA_b^\dagger$ with $B_aC_sA_b^\dagger$ factored as in~(\ref{eq:peps_frame_branch_factors}) of Lemma~\ref{lem:peps_frame_branch_network}. By Theorem~\ref{thm:peps_frame_small_rewrite_product_terms} (which applies Theorem~\ref{thm:peps_group_tensor} and Lemma~\ref{lem:peps_frame_rescale} to the residual network $Z$ of Lemma~\ref{lem:peps_frame_branch_network}) and Theorem~\ref{thm:peps_frame_small_rewrite_monomials}, for $\delta=L^{-a}$ the rescaled contraction $M_a$ satisfies $\lVert M_a-M\rVert\le L^{-a}$ and expands into at most $Nk^{2m}$ allowed monomials, bounded by~(\ref{eq:peps_frame_poly_monomial_count}), each with at most $2m\le 2b$ pair sources and $2m\le 2b$ pair effects and using only the specified parties (where condition~(4) bounds the owners on the hole squares $D^{\rm old}_t$ and $D^{\rm new}_r$ that condition~(3) leaves unrestricted inside inner holes~\cite{gap:polypeps_small_rewrite_monomials}). Finally, Lemma~\ref{lem:peps_frame_approx_reference} with $a=30$ and $\varepsilon=L^{-60}$ gives $\lVert M_{30}\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}\rVert\le L^{-30}+2bL^{-60}\le(2b+1)L^{-20}$.
 \end{proof}
 
 \begin{theorem}[Small-patch rewrite as one gate]
@@ -839,31 +710,20 @@ norm of matrices, rectangular ones included.
     \leanok
     \uses{thm:peps_frame_small_rewrite_polynomial}
     In the setting of Theorem~\ref{thm:peps_frame_small_rewrite_polynomial}
-    with $a=30$, suppose that the specified list of at most $b$ parties is nonempty and
-    that the memory of the registers of $\mathcal F_{\rm old}$ is nonzero.
-    Then the contraction $M_{30}$ is the operator of a circuit from the
+    with $a=30$, suppose that the specified list $S$ of at most $b$ parties is nonempty and
+    that the memory of $\mathcal F_{\rm old}$ is nonzero.
+    Then $M_{30}$ is the operator of a circuit from the
     registers of $\mathcal F_{\rm old}$ to those of $\mathcal F_{\rm new}$
-    with at most one gate that is not private to one party. Every party taking
-    part in a gate of the circuit lies in the specified list, and the
-    expansion of the gate into monomials allowed by
-    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}---the form
-    in which the changes of \cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}
-    are composed (\texttt{06-geometry.tex}, lines 574--583)---has at most
+    with at most one nonprivate gate, participants in $S$, and an
+    expansion into monomials allowed by
+    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} (\texttt{06-geometry.tex}, lines 574--583) having at most
     $K L^e$ terms, each with at most $2b$ normalized pair effects, and
-    coefficients of total modulus at most $K L^e$, with $K$ and $e$ as in
+    coefficients of total modulus at most $K L^e$, where $K L^e$ is the bound~(\ref{eq:peps_frame_poly_monomial_count}) of
     Theorem~\ref{thm:peps_frame_small_rewrite_polynomial}.
 \end{theorem}
 
 \begin{proof}\leanok
-    The registers held by parties outside the specified list are the same in
-    the two frames: every affected tag is held by a specified party, and a
-    site register whose owner changes lies in a patch footprint, where both
-    owners are specified. Each monomial of the expansion uses only specified
-    parties, and every exchange of tensor factors in it moves a register of a
-    specified party, because the registers are moved only to bring the
-    registers of the acting parties together. Hence each monomial acts as the
-    identity on the other registers, and the sum of the monomials, restricted
-    to the registers of the specified parties, is one gate of these parties.
+    By conditions~(2) and~(4) of Definition~\ref{def:peps_frame_rewrite_data}, the registers held by parties outside $S$ are identical in $\mathcal F_{\rm old}$ and $\mathcal F_{\rm new}$, and each monomial of $M_{30}$ from Theorem~\ref{thm:peps_frame_small_rewrite_polynomial} acts as $\id$ on them and moves only registers of $S$; restricting the sum to the registers of $S$ therefore forms a single gate on $S$.
 \end{proof}
 
 \subsection{Pair sources of the rewrite gates}
@@ -898,18 +758,15 @@ pair sources with the same constant.
         TNLean.Lattice.PartyCircuit.PartyChain.isSourceBounded_toOriginalCircuit_of_one_le}
     \leanok
     \uses{def:peps_circuit_source_bound}
-    The pair-source bound with constant $r$ implies the bound with every
-    larger constant. It is preserved by composition and by placing a circuit
-    beside untouched registers, and a circuit without nonprivate operations
-    satisfies it with every constant. An allowed monomial read operation by
-    operation, each local contraction a private map and each normalized pair
-    source or pair effect a two-party gate, satisfies it with every constant
-    $r\ge1$.
+    The pair-source bound with constant $r$ implies the bound for every
+    $r'\ge r$, is preserved by composition and by tensoring with untouched spectator registers, holds for any $r$ on a circuit without nonprivate operations, and holds for every $r\ge1$ on an allowed monomial read operation by
+    operation (each local contraction as a private map and each normalized pair
+    source or pair effect as a two-party gate).
 \end{lemma}
 
 \begin{proof}\leanok
-    Every gate of the monomial read operation by operation is a single
-    pair source or a single pair effect, with coefficient one.
+    When read operation by operation, each nonprivate gate is a single
+    pair source or pair effect with coefficient $1$.
 \end{proof}
 
 \begin{lemma}[A sum of monomials as one gate keeps its pair sources]
@@ -924,21 +781,14 @@ pair sources with the same constant.
     \uses{lem:peps_circuit_source_bound_monomials}
     Let $\sum_\xi c_\xi M_\xi$ be a contraction expanded into allowed
     monomials that use only the parties of a nonempty finite set $S$ and act
-    as the identity on the other registers. Then the sum is the operator of a
-    circuit with at most one gate, whose parties lie in $S$, as in the proof
-    of Theorem~\ref{thm:peps_frame_small_rewrite_gate}, such that the
-    circuit satisfies the pair-source bound with constant $r$ whenever every
+    as $\id$ on all other registers. Then $\sum_\xi c_\xi M_\xi$ is the operator of a
+    circuit with at most one gate, whose parties lie in $S$ as in
+    Theorem~\ref{thm:peps_frame_small_rewrite_gate}, and which satisfies the pair-source bound with constant $r$ whenever every
     $M_\xi$ has at most $r$ pair sources.
 \end{lemma}
 
 \begin{proof}\leanok
-    The monomials of the gate are the parts of the $M_\xi$ on the
-    registers of $S$, with owners relabelled by the parties of $S$. A
-    monomial that uses only parties of $S$ has all of its pair sources
-    between parties of $S$, so its part on these registers keeps every pair
-    source, and relabelling owners turns a pair source into a local
-    preparation at most. The exchanges of tensor factors that bring the
-    registers of $S$ to the front and back contain no gate.
+    Restricting each $M_\xi$ to the registers of $S$ and relabelling owners into $S$ preserves or reduces the number of pair sources (turning a pair source with coincided relabelled owners into a local preparation), while the factor exchanges bringing the registers of $S$ to the front and back contain no nonprivate gates.
 \end{proof}
 
 \begin{theorem}[Pair sources of the small-patch rewrite gates]
@@ -956,14 +806,12 @@ pair sources with the same constant.
         thm:peps_guide_frame_resize_treatment_gates,
         thm:peps_guide_frame_reading_gates}
     In the setting of Theorem~\ref{thm:peps_frame_small_rewrite_gate}, the
-    circuit can be chosen to satisfy, besides the conclusions of that
-    theorem, the pair-source bound with constant $2b$. The same holds for the
-    rewrites between frames of guides and, in the dyadic protocol of
+    circuit can be chosen to satisfy the pair-source bound with constant $2b$. The same holds for the
+    guide-frame rewrites of Theorem~\ref{thm:peps_guide_frame_rewrite} and, in the dyadic protocol of
     \cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}, for the direct
-    repainting of a block, the resize of a hole and the point treatment of a
-    mark, including their forms with one footprint ratio
-    (Theorems~\ref{thm:peps_guide_frame_resize_treatment_gates}
-    and~\ref{thm:peps_guide_frame_reading_gates}). Hence every monomial of
+    repainting, hole resize, and point treatment gates of
+    Theorems~\ref{thm:peps_guide_frame_rewrite_events}, \ref{thm:peps_guide_frame_resize_treatment_gates},
+    and~\ref{thm:peps_guide_frame_reading_gates}; hence every monomial of
     these gates has at most $2b$ pair sources and at most $2b$ pair effects.
 \end{theorem}
 
@@ -977,11 +825,7 @@ pair sources with the same constant.
         thm:peps_guide_frame_resize_treatment_gates,
         thm:peps_dyadic_sampled_ratio, lem:peps_dyadic_floor,
         thm:peps_guide_frame_reading_gates, def:peps_dyadic_block_guide}
-    Each monomial of the expansion of
-    Theorem~\ref{thm:peps_frame_small_rewrite_polynomial} has at most
-    $2m\le 2b$ normalized pair sources, one for each patch vertex with open
-    output legs. Lemma~\ref{lem:peps_party_gate_source_bound} keeps this bound on
-    the gate. The rewrites between frames of guides compose this gate with
-    exchanges of tag registers, which contain no gate. The direct repainting,
-    the resizes and the point treatments are such rewrites.
+    Each monomial in Theorem~\ref{thm:peps_frame_small_rewrite_polynomial} has at most
+    $2m\le 2b$ normalized pair sources, and Lemma~\ref{lem:peps_party_gate_source_bound} preserves this bound on
+    the gate, while the tag-register exchanges in Theorem~\ref{thm:peps_guide_frame_rewrite} add no nonprivate gates.
 \end{proof}

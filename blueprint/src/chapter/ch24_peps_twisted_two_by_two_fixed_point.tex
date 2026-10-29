@@ -9,25 +9,26 @@
         TNLean.PEPS.exists_graphGIsometricInsertedPhysicalSupportTransport}
     \leanok
     Let $A_v,B_v$ be G-isometric tensors for the same unitary virtual
-    representation at each vertex of a finite simple graph. There are positive
-    factors $c_{A,v},c_{B,v}$, local physical maps $F_v$, and one isometry $I$
-    on the full product of the ranges of the $A_v$ such that, for every
-    collection of inserted bond matrices $K=(K_e)_e$,
+    representation at each vertex $v$ of a finite simple graph. There exist
+    $c_{A,v},c_{B,v}>0$, local physical maps $F_v$, and one isometry $I$ on
+    $\bigotimes_v\operatorname{ran}\mathcal P(A_v)$ (acting there by
+    $\bigotimes_v F_v$, independently of $K$) such that every inserted state
+    $\Psi_A(K)$ belongs to $\bigotimes_v\operatorname{ran}\mathcal P(A_v)$ and,
+    for every family of inserted bond matrices $K=(K_e)_e$,
     \begin{align}
         I\Psi_A(K)=\left(\prod_v\frac{\sqrt{c_{A,v}}}{\sqrt{c_{B,v}}}\right)
         \Psi_B(K).
+        \label{eq:peps_inserted_support_transport}
     \end{align}
-    Every inserted state belongs to this same product range. The isometry
-    acts there by the product of the $F_v$, independently of $K$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_g_isometric_physical_transport}
-    Choosing the local normalized-adjoint maps before choosing $K$,
-    their column Gram identities imply isometry on the product range.
-    Expanding each inserted contraction over its independent endpoint labels,
-    products of physical maps commute with this sum and every summand
-    belongs to the product range, so the local tensor identities give the
-    displayed equality with the same factors for every $K$.
+    Theorem~\ref{thm:peps_g_isometric_physical_transport} provides the local
+    normalized-adjoint maps $F_v$ and constants $c_{A,v},c_{B,v}>0$ before
+    choosing $K$, whose column Gram identities make $\bigotimes_v F_v$
+    isometric on $\bigotimes_v\operatorname{ran}\mathcal P(A_v)$. Expanding
+    $\Psi_A(K)$ over independent endpoint labels and commuting $\bigotimes_v F_v$
+    with the sum gives (\ref{eq:peps_inserted_support_transport}).
 \end{proof}
 
 \begin{definition}[Permutation bonds under two-by-two grouping]%
@@ -37,13 +38,12 @@
         TNLean.PEPS.twoByTwoPermutationBoundary,
         TNLean.PEPS.pairedLeftRegularMatrix}
     \leanok
-    Group the fine torus into disjoint two-by-two squares. Give each pair
-    of horizontal crossing bonds the same permutation $s_h$, and each pair
-    of vertical crossing bonds the same permutation $s_v$; leave all
-    internal bonds unchanged. The paired regular action is
-    $L_g^{(2)}=L_g\otimes L_g$, acting on $(a,b)$ by $(ga,gb)$.
-    Horizontal insertions act on the receiving left leg, and vertical
-    insertions on the top leg in the native downward orientation.
+    Group the fine torus into disjoint $2\times2$ squares, assign the same
+    permutation $s_h$ to each pair of horizontal crossing bonds and $s_v$ to
+    each pair of vertical crossing bonds, and leave internal bonds unchanged.
+    The paired regular action is $L_g^{(2)}=L_g\otimes L_g$, acting on $(a,b)$
+    by $(ga,gb)$, with horizontal insertions acting on the receiving left leg
+    and vertical insertions on the top leg in the native downward orientation.
 \end{definition}
 
 \begin{theorem}[Exact twisted geometric grouping]%
@@ -58,23 +58,22 @@
         TNLean.PEPS.pairedLeftRegularMatrix_eq_kronecker,
         TNLean.PEPS.torusGClosure_leftRegular_eq_twoByTwoBlocked}
     \leanok
-    For every pair of positive coarse periods $w,h$, the fine
-    contraction with the crossing permutations above equals the
-    coarse contraction of the four-site tensors with paired permutations.
-    In particular, a native closure $(g_0,h_0)$ becomes precisely the same
-    closure $(g_0,h_0)$ for the paired representation. No scalar occurs.
-    This geometric identity requires neither symmetry nor commutation of
-    the closure labels, and includes periods one and two.
+    For all coarse periods $w,h>0$ (including $1$ and $2$), the fine
+    contraction with the crossing permutations of
+    Definition~\ref{def:peps_twisted_two_by_two_coordinates} equals the coarse
+    contraction of the four-site tensors with paired permutations, with no
+    scalar factor. In particular, a native closure $(g_0,h_0)$ (without
+    assuming symmetry or $g_0h_0=h_0g_0$) becomes the closure $(g_0,h_0)$ for
+    $L^{(2)}$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:peps_twisted_two_by_two_coordinates}
-    Reindexing all fine bonds into four internal bonds per block and the two
-    labels of every coarse crossing bond, the corner-by-corner endpoint
-    identity retains the original heads of both orientations, and summing the
-    internal labels gives the four-site tensor. For a doubled
-    periodic coordinate $2x+b$, the outgoing bond crosses the seam precisely
-    when $b=1$ and $x$ is the final coarse coordinate, so the
-    two crossing bonds, and no internal bond, receive each seam insertion.
+    Reindexing the fine bonds of Definition~\ref{def:peps_twisted_two_by_two_coordinates}
+    into four internal bonds per $2\times2$ block and two labels per coarse
+    crossing bond, summing the internal labels gives the four-site tensor. For
+    a doubled periodic coordinate $2x+b$, the outgoing bond crosses the seam
+    iff $b=1$ and $x$ is the final coarse coordinate, so exactly the two
+    crossing bonds receive each seam insertion.
 \end{proof}
 
 \begin{definition}[Ordered labels for native torus seams]%
@@ -82,10 +81,10 @@
     \lean{TNLean.PEPS.torusGraphRegularLabels,
         TNLean.PEPS.torusClosureRegularLabels}
     \leanok
-    For a simple torus graph with periods at least three, express every
-    native bond in the ordered-edge orientation. A reversed native arrow
-    replaces its group label $u$ by $u^{-1}$. The horizontal periodic seam
-    carries $h_0$ and the downward vertical seam carries $g_0$.
+    For a simple torus graph with periods at least $3$, orient every native
+    bond in the ordered-edge orientation, replacing $u$ by $u^{-1}$ on reversed
+    arrows, with $h_0$ on the horizontal periodic seam and $g_0$ on the
+    downward vertical seam.
 \end{definition}
 
 \begin{theorem}[Native, paired, and ordered inserted contractions]%
@@ -100,22 +99,21 @@
         TNLean.PEPS.torusGClosure_leftRegular_eq_twoByTwoBundledGraphSite}
     \leanok
     Native torus contractions equal their ordered-edge inserted graph
-    contractions, with arbitrary site-dependent physical alphabets.
-    Bijective relabeling of both endpoints preserves every coefficient.
-    Hence the native fine closure equals the inserted coarse contraction
-    of its four-site tensors, with two regular labels on each bond.
-    The same ordered labels describe a single regular bond and a bundle
-    of regular bonds: matrix transposition under reversal is exactly group
-    inversion in both cases.
+    contractions for arbitrary site-dependent physical alphabets, and bijective
+    endpoint relabeling preserves every coefficient. Hence the native fine
+    closure equals the inserted coarse contraction of its four-site tensors
+    with two regular labels on each bond, and reversal acts by
+    $L_u^{\mathsf T}=L_{u^{-1}}$ on both single and bundled regular bonds.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:peps_twisted_torus_ordered_labels,
         thm:peps_twisted_two_by_two_geometry}
-    Under the incidence-coordinate and endpoint bijections in the finite
-    sums, a permutation matrix for left multiplication satisfies
-    $L_u^{\mathsf T}=L_{u^{-1}}$, including for simultaneous multiplication of
-    the two labels, so the resulting native and ordered contraction factors
-    agree at every endpoint, including periodic seam endpoints.
+    Under the incidence-coordinate and endpoint bijections of
+    Definition~\ref{def:peps_twisted_torus_ordered_labels} and
+    Theorem~\ref{thm:peps_twisted_two_by_two_geometry}, left-multiplication
+    permutation matrices satisfy $L_u^{\mathsf T}=L_{u^{-1}}$ on both single
+    and paired labels, matching native and ordered contraction factors at every
+    endpoint.
 \end{proof}
 
 \begin{theorem}[Inserted bonds preserve the surplus Bell state]%
@@ -126,23 +124,23 @@
         TNLean.PEPS.regularGraphOriginalOutputRegrouping,
         TNLean.PEPS.exists_regularGraphInsertedOriginalTensorIsometry}
     \leanok
-    On a bundle $(a,(b_k)_k)$, pass to relative coordinates
-    $(a,(a^{-1}b_k)_k)$. An arbitrary oriented insertion $u_e$ acts only
-    on the distinguished coordinate. Thus the inserted contraction of the
-    original tensor with surplus identity registers equals its original
-    inserted contraction times the untwisted surplus equality vectors.
-    A single physical-support isometry maps every bundled inserted
-    state to this form, with the same local normalization factors and the
-    same normalized Bell product.
+    In relative bundle coordinates $(a,(a^{-1}b_k)_k)$ for $(a,(b_k)_k)$, an
+    oriented insertion $u_e$ acts only on $a$, so the inserted contraction of
+    the original tensor with surplus identity registers equals its original
+    inserted contraction tensored with the untwisted surplus equality vectors.
+    A single physical-support isometry maps every bundled inserted state to
+    this form with the same local normalization factors and normalized Bell
+    product.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_inserted_physical_support_transport,
         thm:peps_regular_graph_surplus_factorization}
-    At a twisted head the relative label remains unchanged because
-    $(ua)^{-1}(ub_k)=a^{-1}b_k$. The sum over distinguished labels gives
-    the original inserted contraction and the independent relative sums
-    give the surplus equality vectors, so applying the uniform physical-support
-    isometry and retaining the inverse-square-root normalizations completes the proof.
+    At a twisted head, $(ua)^{-1}(ub_k)=a^{-1}b_k$ leaves the relative labels
+    invariant; summing over $a$ gives the original inserted contraction while
+    the independent relative sums give the surplus equality vectors as in
+    Theorem~\ref{thm:peps_regular_graph_surplus_factorization}, and
+    Theorem~\ref{thm:peps_inserted_physical_support_transport} supplies the
+    uniform physical-support isometry.
 \end{proof}
 
 \begin{theorem}[Nonzero native closures in one fine physical support]%
@@ -152,21 +150,19 @@
         TNLean.PEPS.twoByTwoFineClosure_mem_physicalSupport,
         TNLean.PEPS.twoByTwoSupportedClosure}
     \leanok
-    Let $A$ be a regular G-isometric four-leg tensor. Every native
-    closure is nonzero. On a doubled torus with coarse periods at least
-    three, all fine closure vectors belong to the same product block
-    physical support, pulled back by the full physical grouping unitary.
+    Let $A$ be a regular G-isometric four-leg tensor. Every native closure is
+    nonzero, and on a doubled torus with coarse periods at least $3$, all fine
+    closure vectors lie in the pullback of the product block physical support
+    under the physical grouping unitary.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_twisted_torus_graph_coordinates,
         thm:peps_inserted_physical_support_transport}
-    Identifying the four-coordinate tensor with its native four-leg form
-    expresses its closure self-overlap as the product of a positive site
-    factor, a positive power of $|G|$, and the order of the common
-    centralizer of the closure labels; because this centralizer contains
-    the identity, its order is positive and the closure is nonzero.
-    Support membership then follows from the exact inserted coarse
-    contraction and its product range membership.
+    The closure self-overlap equals a positive site factor times a positive
+    power of $|G|$ times $|\{k\in G:kg_0=g_0k,\ kh_0=h_0k\}|\ge1$, so the
+    closure is nonzero; support membership follows from
+    Theorems~\ref{thm:peps_twisted_torus_graph_coordinates} and
+    \ref{thm:peps_inserted_physical_support_transport}.
 \end{proof}
 
 \begin{theorem}[Uniform twisted fixed point and coherent superpositions]%
@@ -175,52 +171,42 @@
         TNLean.PEPS.LinearIsometry.coherent_physicalStateProduct,
         TNLean.PEPS.exists_regularTwoByTwoTwistedTensorIsometry}
     \leanok
-    Let $A$ be a homogeneous regular G-isometric tensor and let both coarse
-    periods be at least three. Write $\Psi_f(g,h)$ and $\Psi_c(g,h)$ for its
-    fine and coarse native closure vectors. There is one isometry
-    $I$ on the full fine block physical support, acting by physical grouping
-    and fixed local physical maps, such that simultaneously for every $g,h$,
+    Let $A$ be a homogeneous regular G-isometric tensor on a doubled torus with
+    coarse periods at least $3$, and write $\Psi_f(g,h)$ and $\Psi_c(g,h)$ for
+    its fine and coarse native closure vectors (with coarse tensor $A$). There
+    exist $R>0$, a unit vector $\Omega$, and one isometry $I$ on the full fine
+    block physical support (acting by physical grouping and fixed local
+    physical maps) such that for all $g,h\in G$,
     \begin{align}
         I\Psi_f(g,h) & =R\,\Psi_c(g,h)\otimes\Omega,
-                     & I\widehat{\Psi_f(g,h)}        & =\widehat{\Psi_c(g,h)}\otimes\Omega,
+                     & I\widehat{\Psi_f(g,h)}        & =\widehat{\Psi_c(g,h)}\otimes\Omega.
+        \label{eq:peps_twisted_fixed_point_pair}
     \end{align}
-    where $R>0$ retains all block and Bell factors and $\|\Omega\|=1$.
-    The coarse tensor is $A$ itself. For arbitrary complex
-    coefficients $z_{g,h}$, put $x=\sum_{g,h}z_{g,h}\Psi_f(g,h)$ and
-    $y=\sum_{g,h}z_{g,h}\Psi_c(g,h)$. Then
-    \begin{align}
-        Ix=R\,y\otimes\Omega,\qquad
-        x\ne0\ \Longleftrightarrow\ y\ne0,\qquad
-        I\widehat x=\widehat y\otimes\Omega
-    \end{align}
-    whenever these vectors are nonzero. In particular this holds for
-    arbitrary coherent sums supported on commuting closure pairs, retaining
-    all their relative coefficients and phases.
+    For any $z_{g,h}\in\C$, setting $x=\sum_{g,h}z_{g,h}\Psi_f(g,h)$ and
+    $y=\sum_{g,h}z_{g,h}\Psi_c(g,h)$ gives $Ix=R\,y\otimes\Omega$,
+    $x\ne0\iff y\ne0$, and $I\widehat x=\widehat y\otimes\Omega$ whenever
+    $x\ne0$ (in particular for coherent sums over commuting pairs $gh=hg$).
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_twisted_two_by_two_support,
         thm:peps_inserted_regular_surplus,
         thm:peps_two_by_two_original_scale,
         thm:peps_physical_state_normalization}
-    Applying the uniform inserted support isometry between the
-    four-site block tensor and the original tensor with surplus registers,
-    exact native seam coordinates identify its input and output, and their
-    positive norm relation gives the normalized equalities. Linearity then
-    gives the coherent equality with the same $I$ and $R$, whose norm relation
-    $\|x\|=R\|y\|$ establishes the nonvanishing equivalence and normalization.
+    Combining Theorems~\ref{thm:peps_twisted_two_by_two_support},
+    \ref{thm:peps_inserted_regular_surplus},
+    \ref{thm:peps_two_by_two_original_scale}, and
+    \ref{thm:peps_physical_state_normalization} gives
+    (\ref{eq:peps_twisted_fixed_point_pair}) with a single $I$ and $R>0$.
+    Linearity yields $Ix=R\,y\otimes\Omega$, and $\|x\|=R\|y\|$ gives
+    $x\ne0\iff y\ne0$ and $I\widehat x=\widehat y\otimes\Omega$.
 \end{proof}
 
 In the native periodic, physical-support specialization of
 \cite[Observation~6.6]{Schuch2010PEPS}, the all-pairs algebraic identity
-asserts a ground-state interpretation only for commuting closures. The geometric
-identity includes all positive periods, whereas physical Bell separation for
-coarse periods one and two, other boundary conditions, and extension to an
-ambient physical unitary remain outside this statement.
-
-% Remaining-scope note: docs/paper-gaps/scp10_twisted_two_by_two_regular_fixed_point.tex.
-
-The physical map is chosen before the seam labels and coefficients.
-The algebraic identity includes noncommuting labels, while the
-parent-ground-state interpretation uses commuting closures. The remaining
-period and boundary restrictions are recorded in
+(\ref{eq:peps_twisted_fixed_point_pair}) includes noncommuting labels while the
+parent-ground-state interpretation uses commuting closures $gh=hg$; the
+physical map $I$ is chosen before the seam labels and coefficients, and the
+remaining period and boundary restrictions (coarse periods $1$ and $2$, other
+boundary conditions, and ambient physical unitary extension) are recorded in
 \cite{gap:scp10_twisted_two_by_two_regular_fixed_point}.
+% Remaining-scope note: docs/paper-gaps/scp10_twisted_two_by_two_regular_fixed_point.tex.

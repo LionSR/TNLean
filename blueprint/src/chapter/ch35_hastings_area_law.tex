@@ -5,22 +5,14 @@
 % 478--503 (the window condition of the entropy gain).
 
 The contradiction argument of Section~\ref{sec:hastings_main_stage} takes the
-window facts and the strengthened doubling inequality as hypotheses. This
-section discharges all of them from the approximate factorization of the
-ground-state projector, the first lemma of~\cite{Hastings2007AreaLaw}. The
-removal of sites and the bounds on the window entropy come from
-Section~\ref{ch:hastings_window}, and the doubling inequality comes from the
-entropy gain across a cut of Section~\ref{sec:hastings_relent}, whose proof
-contains the bootstrap lemma.
-
-The entropy gain is proved when the entropy of the cut is large compared
-with the remainder $F(\xi',q)$ of the bootstrap lemma
-(Definition~\ref{def:hastings_bootstrap_remainder}). The source meets this
-condition at~\cite[lines 483--486]{Hastings2007AreaLaw}: when it fails, the
-bound $S_{\max}$ is small, and the constant $c_0$ in $S_{\max}$ is chosen
-large enough. Here the window is lengthened instead, which needs the
-contradiction argument for every window at least as long as the doubling
-window.
+window inequalities and the strengthened doubling bound as hypotheses. Here we
+discharge them from the approximate projector factorization of
+\cite[Lemma~1]{Hastings2007AreaLaw}, combining the window bounds of
+Chapter~\ref{ch:hastings_window} with the entropy gain of
+Section~\ref{sec:hastings_relent}. Whereas
+\cite[lines 483--486]{Hastings2007AreaLaw} absorbs the bootstrap remainder
+$F(\xi',q)$ (Definition~\ref{def:hastings_bootstrap_remainder}) into the
+prefactor $c_0$ of $S_{\max}$, we lengthen the window $l_0\ge\lceil\xi_0\rceil_+2^M$.
 
 \begin{theorem}[The contradiction argument for a longer window]
     \label{thm:hastings_main_stage_long_window}
@@ -32,15 +24,16 @@ window.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_doubling_window,thm:hastings_prefix_entropy_le}
-    If $i+l_0>L$, Theorem~\ref{thm:hastings_prefix_entropy_le} bounds the
-    entropy by $(L-i)_+\ln q\le l_0\ln q\le S_{\max}$.
-    Otherwise, suppose that $S(\lbrack0,i))>S_{\max}$. The assumed site-removal
-    inequality gives, for $i\le k\le i+l_0$,
-    \begin{align*}
-        S(\lbrack0,k))\ge S(\lbrack0,i))-(k-i)\ln q>2l_0\ln q.
-    \end{align*}
-    Thus the strengthened doubling inequality applies throughout this
-    window. Theorem~\ref{thm:hastings_doubling_window} gives
+    If $i+l_0>L$, Theorem~\ref{thm:hastings_prefix_entropy_le} gives
+    $S(\lbrack0,i))\le(L-i)_+\ln q\le l_0\ln q\le S_{\max}$. Otherwise, if
+    $S(\lbrack0,i))>S_{\max}$, then for $i\le k\le i+l_0$ the site-removal
+    hypothesis gives
+    \begin{align}
+        S(\lbrack0,k))\ge S(\lbrack0,i))-(k-i)\ln q>2l_0\ln q=\tfrac23\,S_{\max},
+        \notag
+    \end{align}
+    so the strengthened doubling inequality holds on $[i,i+l_0)$ and
+    Theorem~\ref{thm:hastings_doubling_window} yields
     $l_0<\lceil\xi_0\rceil_+2^M\le l_0$, a contradiction.
 \end{proof}
 
@@ -50,15 +43,16 @@ window.
         TNLean.MPS.AreaLaw.Hastings.areaLawBound}
     \leanok
     \uses{def:hastings_max_entropy_bound,def:hastings_bootstrap_remainder}
-    Let $\xi'>0$, $C_1\ge1$ and $q\ge2$. Let $\lceil\xi_0\rceil_+2^M$ be the
+    Let $\xi'>0$, $C_1\ge1$, and $q\ge2$. Let $\lceil\xi_0\rceil_+2^M$ be the
     doubling window of Definition~\ref{def:hastings_max_entropy_bound} for
-    the constants $2C_1$ and $C_2=7$ of the entropy gain, and put
-    \begin{align*}
-        l_0      & =\max\Bigl\{\lceil\xi_0\rceil_+2^M,
+    constants $2C_1$ and $C_2=7$, and define
+    \begin{align}
+        l_0 & =\max\Bigl\{\lceil\xi_0\rceil_+2^M,
         \Bigl\lceil\frac23\Bigl(\xi'\ln C_1+\frac{F(\xi',q)}{\ln q}\Bigr)
-        \Bigr\rceil_+\Bigr\},                          \\
-        S_{\max} & =3l_0\ln q .
-    \end{align*}
+        \Bigr\rceil_+\Bigr\},                          \qquad
+        S_{\max} =3l_0\ln q .
+        \label{eq:hastings_area_law_bound}
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Size of the entropy bound of the area law]
@@ -66,17 +60,23 @@ window.
     \lean{TNLean.MPS.AreaLaw.Hastings.areaLawBound_le}
     \leanok
     \uses{def:hastings_area_law_bound,def:hastings_max_entropy_bound}
-    For $\xi'>0$, $C_1\ge1$ and $q\ge2$, the bound $S_{\max}$ of
-    Definition~\ref{def:hastings_area_law_bound} is at most the bound of
-    Definition~\ref{def:hastings_max_entropy_bound} for the constants $2C_1$
-    and $7$, plus $2(\xi'\ln C_1\ln q+F(\xi',q))+3\ln q$. The added term is the
-    part that~\cite[lines 483--486]{Hastings2007AreaLaw} absorbs into the
-    constant $c_0$.
+    For $\xi'>0$, $C_1\ge1$, and $q\ge2$, the bound $S_{\max}$ of
+    Definition~\ref{def:hastings_area_law_bound} and the bound
+    $S_{\max}^{\mathrm{dbl}}=3\lceil\xi_0\rceil_+2^M\ln q$ of
+    Definition~\ref{def:hastings_max_entropy_bound} (with constants $2C_1$ and
+    $7$) satisfy
+    \begin{align}
+        S_{\max}\le S_{\max}^{\mathrm{dbl}}+2\bigl(\xi'\ln C_1\ln q+F(\xi',q)\bigr)+3\ln q,
+        \notag
+    \end{align}
+    where~\cite[lines 483--486]{Hastings2007AreaLaw} absorbs the added term into
+    $c_0$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:hastings_bootstrap_remainder,def:hastings_max_entropy_bound}
-    The maximum of two nonnegative numbers is at most their sum, and
-    $3\ln q\,\lceil x\rceil_+\le 3x\ln q+3\ln q$ for $x\ge0$.
+    Use $\max(a,b)\le a+b$ for $a,b\ge0$ and
+    $3\ln q\,\lceil x\rceil_+\le 3x\ln q+3\ln q$ for $x\ge0$ in
+    (\ref{eq:hastings_area_law_bound}).
 \end{proof}
 
 \begin{theorem}[Hastings' area law, with the approximate factorization as
@@ -87,49 +87,40 @@ window.
     \uses{def:chain_model,def:hastings_area_law_bound,
         def:hastings_factorization_at}
     Let $\Omega$ be a gapped ground vector of a finite-range Hamiltonian on a
-    chain of $L$ sites with local dimension $q$. Let $\xi'>0$ and $C_1\ge1$,
-    and suppose that for every cut $c$ and every $l$ with $c+l\le L$ there are
-    operators $O_B$, $O_L$, $O_R$ with these properties:
-    \begin{itemize}
-        \item $O_L$ and $O_R$ are commuting orthogonal projections acting on
-              the first $c$ sites and on the remaining sites;
-        \item $\|O_B\|\le1$, and $O_B$ acts on the sites of
-              $\lbrack c-l,c+l)$ that lie in the chain;
-        \item $\|O_BO_LO_R-|\Omega\rangle\langle\Omega|\|\le C_1e^{-l/\xi'}$.
-    \end{itemize}
-    Then the entropy of the first $i$ sites is at most $S_{\max}$ for every
-    $i$, with $S_{\max}$ as in Definition~\ref{def:hastings_area_law_bound}.
-    Supplying the factorization gives an area law by the argument of
-    \cite{Hastings2007AreaLaw}, equation (entbd), with the quantitative
-    changes below. Requiring
-    $C_1\ge1$ loses nothing, since enlarging $C_1$ only weakens that lemma.
-    The bound $S_{\max}$ grows as $4^{\xi'\ln q}$, not $2^{\xi'\ln q}$, as
-    recorded in~\cite{gap:hastings07_doubling_constants}. The entropy gain
-    uses the constants $2C_1$ and $7$ from
-    \cite{gap:hastings07_relent_constants}.
+    chain of $L$ sites with local dimension $q$, and let $\xi'>0$ and
+    $C_1\ge1$. Suppose that for every cut $c$ and $l\in\N$ with $c+l\le L$
+    there is an approximate factorization $(O_B,O_L,O_R)$ at $(c,l)$ with error
+    $C_1e^{-l/\xi'}$ (Definition~\ref{def:hastings_factorization_at}). Then
+    for every $i$, with $S_{\max}$ as in
+    Definition~\ref{def:hastings_area_law_bound},
+    \begin{align}
+        S(\lbrack0,i))\le S_{\max}.
+        \label{eq:hastings_area_law_entbd}
+    \end{align}
+    This derives eq.~(entbd) of \cite{Hastings2007AreaLaw} from Lemma~1, with
+    base $4^{\xi'\ln q}$ in place of $2^{\xi'\ln q}$
+    \cite{gap:hastings07_doubling_constants} and constants $2C_1$ and $7$ in
+    the entropy gain \cite{gap:hastings07_relent_constants}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_main_stage_long_window,
         thm:hastings_cut_entropy_slow,thm:hastings_window_entropy_bounds,
         thm:hastings_relent_window,thm:hastings_window_claim_of_relent,
         lem:chain_entropy_inequalities}
-    For $q\le1$ every entropy vanishes. For $q\ge2$, apply
-    Theorem~\ref{thm:hastings_main_stage_long_window} with the window length
-    $l_0$ of Definition~\ref{def:hastings_area_law_bound} and the window
-    entropy. Theorem~\ref{thm:hastings_cut_entropy_slow} gives the first
-    item, and Theorem~\ref{thm:hastings_window_entropy_bounds} the second.
-    For the third, fix a window all of whose cuts have entropy at least
-    $2S_{\max}/3=2l_0\ln q$, and let $2l\le l_0$. Take an interval
-    $\lbrack a,a+2l)$ of largest entropy in the window. The choice of $l_0$
-    gives
-    \begin{align*}
-        (l+\xi'\ln C_1)\ln q+F(\xi',q)\le 2l_0\ln q,
-    \end{align*}
-    so Theorem~\ref{thm:hastings_relent_window} applies at the cut after
-    $a+l$ sites, with the constants $2C_1$ and $7$. It bounds the entropy of
-    $\lbrack a,a+2l)$ by the entropies of $\lbrack a,a+l)$ and
-    $\lbrack a+l,a+2l)$, each at most the window entropy at length $l$, minus
-    the gain, which is the doubling inequality.
+    For $q\le1$, $S(\lbrack0,i))=0\le S_{\max}$. For $q\ge2$, apply
+    Theorem~\ref{thm:hastings_main_stage_long_window} with $l_0$ from
+    (\ref{eq:hastings_area_law_bound}) and the window entropy $S_l$:
+    Theorem~\ref{thm:hastings_cut_entropy_slow} gives hypothesis~(1), and
+    Theorem~\ref{thm:hastings_window_entropy_bounds} gives hypothesis~(2). For
+    hypothesis~(3), if $S(\lbrack0,k))\ge2S_{\max}/3=2l_0\ln q$ on $[i,i+l_0]$
+    and $2l\le l_0$, then~(\ref{eq:hastings_area_law_bound}) implies
+    \begin{align}
+        (l+\xi'\ln C_1)\ln q+F(\xi',q)\le 2l_0\ln q\le S(\lbrack0,a+l))
+        \notag
+    \end{align}
+    for every $\lbrack a,a+2l)\subseteq\lbrack i,i+l_0)$, so
+    Theorem~\ref{thm:hastings_relent_window} and
+    Theorem~\ref{thm:hastings_window_claim_of_relent} give the doubling bound.
 \end{proof}
 
 \begin{theorem}[Hastings' area law for gapped chains]
@@ -138,51 +129,36 @@ window.
     \leanok
     \uses{def:chain_model,def:hastings_area_law_bound,
         thm:hastings_lemma1_endpoint}
-    Let $R$ be a range. There is a constant $K\ge0$, depending only on $R$,
-    with the following property. Let $J\ge0$ bound the norms of the
-    interaction terms, let $\Delta E>0$, and let $\tilde\xi$ be the length of
-    Theorem~\ref{thm:hastings_lemma1_endpoint}, which depends on $R$ and
-    $J/\Delta E$ only. For every chain of $L$ sites with local dimension $q$,
-    every finite-range Hamiltonian on it of range $R$ with terms of norm at
-    most $J$, and every ground vector $\Omega$ separated by a gap $\Delta E$
-    from the rest of the spectrum, the entropy of the first $i$ sites is at
-    most $S_{\max}$ for every $i$, with $S_{\max}$ as in
-    Definition~\ref{def:hastings_area_law_bound} for $\xi'=6\tilde\xi$ and
-    $C_1=\max\{K\tilde\xi^3,1\}$. In particular $S_{\max}$ depends on $R$,
-    $J/\Delta E$ and $q$, but not on $L$, on the Hamiltonian, or on $\Omega$.
+    For every range $R\in\N$ there is a constant $K\ge0$ depending only on $R$
+    with the following property. Let $J\ge0$, $\Delta E>0$, and let $\tilde\xi$
+    be the decay length of Theorem~\ref{thm:hastings_lemma1_endpoint}
+    (depending only on $R$ and $J/\Delta E$). For every chain of $L$ sites with
+    local dimension $q$, every range-$R$ Hamiltonian with term norms at most
+    $J$, and every ground vector $\Omega$ with spectral gap $\Delta E$,
+    (\ref{eq:hastings_area_law_entbd}) holds for all $i$ with $S_{\max}$ from
+    Definition~\ref{def:hastings_area_law_bound} at $\xi'=6\tilde\xi$ and
+    $C_1=\max\{K\tilde\xi^3,1\}$. Thus $S_{\max}$ depends only on $R$,
+    $J/\Delta E$, and $q$, and is independent of $L$, $H$, and $\Omega$.
 
-    This is the main theorem of~\cite{Hastings2007AreaLaw}, equation (entbd),
-    at the printed rate $\xi'=6\xi$ for $\xi=\tilde\xi$. The length
-    $\tilde\xi$ may stand in for the source's $\xi$ because the source fixes
-    $\xi=\max(2v/\Delta E,\xi_C)$ only through some Lieb--Robinson pair
-    $(v,\xi_C)$ (lines 96--112), and raising $v$ keeps a pair
-    valid~\cite{gap:hastings07_lemma1_decay_length}. As in the source,
-    the constant $C_1$ is bounded by a polynomial in the length
-    (lines 258--262). The source takes $\xi=\max(2v/\Delta E,\xi_C)$ for a
-    Lieb--Robinson pair $(v,\xi_C)$, which gives the printed value
-    $S_{\max}=c_0\xi'\ln(\xi')\ln(D)2^{\xi'\ln D}$. Here, as in
-    Theorem~\ref{thm:hastings_lemma1_endpoint}, $\tilde\xi$ comes from a
-    chain Lieb--Robinson estimate whose prefactor grows with $J$ and whose
-    second operator acts on a single site, with the velocity raised by the
-    factor $5/4$, so it is not shown to be the length of a Lieb--Robinson
-    pair in the source's sense (lines 96--112);
-    see~\cite{gap:hastings07_lemma1_decay_length,
-        gap:hastings07_gaussian_average_exponent}. In addition $S_{\max}$
-    grows as $4^{\xi'\ln q}$, not $2^{\xi'\ln q}$, as recorded
-    in~\cite{gap:hastings07_doubling_constants}, and the entropy gain enters
-    with the constants of~\cite{gap:hastings07_relent_constants}. The printed
-    value of $S_{\max}$ is therefore not claimed.
+    This is the main theorem of~\cite{Hastings2007AreaLaw}, eq.~(entbd), at the
+    printed rate $\xi'=6\tilde\xi$ with polynomial prefactor
+    $C_1=\max\{K\tilde\xi^3,1\}$ (lines 258--262). Here $\tilde\xi$ comes from
+    the chain Lieb--Robinson estimate with $J$-dependent prefactor, single-site
+    second operator, and velocity raised by $5/4$ rather than a Lieb--Robinson
+    pair $(v,\xi_C)$ in the sense of lines
+    96--112~\cite{gap:hastings07_lemma1_decay_length,
+        gap:hastings07_gaussian_average_exponent}, and $S_{\max}$ grows as
+    $4^{\xi'\ln q}$ rather than the printed
+    $c_0\xi'\ln(\xi')\ln(D)2^{\xi'\ln D}$~\cite{gap:hastings07_doubling_constants,
+        gap:hastings07_relent_constants}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_lemma1_endpoint,
         thm:hastings_area_law_from_factorization,
         thm:hastings_factorization_mono}
-    Theorem~\ref{thm:hastings_lemma1_endpoint} gives the constant $K$, such
-    that the operators of
-    Theorem~\ref{thm:hastings_area_law_from_factorization} exist at every cut
-    and length with error $K\tilde\xi^3e^{-l/(6\tilde\xi)}$. Replace
-    $K\tilde\xi^3$ by $\max\{K\tilde\xi^3,1\}$, which only enlarges the error
-    (Theorem~\ref{thm:hastings_factorization_mono}), and apply
-    Theorem~\ref{thm:hastings_area_law_from_factorization} with
-    $\xi'=6\tilde\xi$.
+    Theorem~\ref{thm:hastings_lemma1_endpoint} gives $K\ge0$ and factorizations
+    at every $(c,l)$ with error $K\tilde\xi^3e^{-l/(6\tilde\xi)}\le C_1e^{-l/\xi'}$
+    (Theorem~\ref{thm:hastings_factorization_mono}), so
+    Theorem~\ref{thm:hastings_area_law_from_factorization} yields
+    (\ref{eq:hastings_area_law_entbd}).
 \end{proof}

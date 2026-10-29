@@ -30,10 +30,7 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
     \lean{QuantumCircuit.quditRoot, QuantumCircuit.quditFourier,
         QuantumCircuit.quditPauli}
     \leanok
-    Let $\zeta=e^{2\pi i/d}$. The Fourier matrix is
-    $F_{ab}=d^{-1/2}\zeta^{ab}$ for $a,b\in\mathbb Z_d$, and for
-    $z,x\in\mathbb Z_d$ the generalized Pauli matrix $X^xZ^z$ maps $\ket q$ to
-    $\zeta^{zq}\ket{q+x}$.
+    Let $\zeta=e^{2\pi i/d}$. For $a,b,x,z\in\mathbb Z_d$, define the Fourier matrix $F_{ab}=d^{-1/2}\zeta^{ab}$ and the generalized Pauli matrix $X^xZ^z\ket q=\zeta^{zq}\ket{q+x}$.
 \end{definition}
 
 \begin{lemma}[Fourier and Pauli matrices are unitary]
@@ -44,16 +41,11 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
         QuantumCircuit.quditPauli_apply, QuantumCircuit.quditPauli_mem_unitary}
     \leanok
     \uses{def:qc_qudit_pauli}
-    The number $\zeta$ is a primitive $d$-th root of unity, and
-    $F$ and $X^xZ^z$ are unitary. The entries are
-    $(X^xZ^z)_{pq}=\zeta^{zq}$ if $p-x=q$ and $0$ otherwise.
+    $\zeta$ is a primitive $d$-th root of unity, $F,X^xZ^z\in\mathrm U(d)$, and $(X^xZ^z)_{pq}=\zeta^{zq}\delta_{p-x,q}$.
 \end{lemma}
 \begin{proof}
     \leanok
-    The rows of $F$ are orthonormal because
-    $\sum_b\zeta^{(a-c)b}=d\,[a=c]$, the geometric sum of a $d$-th root of
-    unity $\zeta^{a-c}$ that differs from $1$ unless $a=c$. The matrix $X^xZ^z$
-    is a permutation matrix times a diagonal matrix of unimodular numbers.
+    Since $\sum_b\zeta^{(a-c)b}=d\,\delta_{ac}$, $(FF^\dagger)_{ac}=\delta_{ac}$; $X^xZ^z$ is a permutation matrix times a diagonal phase matrix.
 \end{proof}
 
 \begin{lemma}[Single-site operators, permutations of sites and sites in the state zero]
@@ -77,38 +69,17 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
         QuantumCircuit.layerOfList, QuantumCircuit.layerOfList_op}
     \leanok
     \uses{def:qc_local_circuit}
-    A vector $\ket v$ has $\ket0$ at the sites of a set $Z$ if $v(x)=0$ for
-    every configuration $x$ with $x_i\neq0$ for some $i\in Z$. A permutation
-    $\pi$ of the sites acts on vectors by $(P_\pi v)(x)=v(x\circ\pi)$. These
-    two notions, the second and third items below, and the statement on
-    scalars in the first item hold for any finite set of sites; the other
-    statements are for the ring. Then:
+    A vector $\ket v$ has $\ket0$ on $Z\subseteq I$ if $v(x)=0$ whenever $\exists i\in Z,\,x_i\neq0$. A site permutation $\pi$ acts by $(P_\pi v)(x)=v(x\circ\pi)$. Then:
     \begin{enumerate}
-        \item the operator $u$ at the site $t$ maps $\ket v$ to
-              $x\mapsto\sum_{j}u_{x_t,j}\,v(x[t\mapsto j])$, and keeps $\ket0$ at
-              the sites of $Z$ if $t\notin Z$; so does multiplication by a
-              scalar;
-        \item $P_\pi P_\sigma=P_{\pi\sigma}$, $P_\pi(\bigotimes_{i}g_{i})
-                  =(\bigotimes_{i}g_{\pi^{-1}(i)})P_\pi$, and conjugating an operator
-              $X$ placed at the sites $e_1,\dots,e_m$ by $P_\sigma$ places $X$
-              at the sites $\sigma(e_1),\dots,\sigma(e_m)$:
-              $P_\sigma XP_{\sigma^{-1}}$ is $X$ at $\sigma\circ e$;
-        \item if $\ket v$ has $\ket0$ at the sites of $Z$, then $P_\pi\ket v$
-              has $\ket0$ at the sites of $\pi(Z)$, and an operator acting on
-              sites outside $Z$, in particular a product of such operators,
-              keeps $\ket0$ at the sites of $Z$;
-        \item gates on pairwise disjoint neighbouring pairs, given by a list,
-              form a layer whose operator is the product of the gates along the
-              list.
+        \item $(u_t v)(x)=\sum_j u_{x_t,j}v(x[t\mapsto j])$, preserving $\ket0$ on $Z$ if $t\notin Z$ (as does scalar multiplication);
+        \item $P_\pi P_\sigma=P_{\pi\sigma}$, $P_\pi(\bigotimes_i g_i)=(\bigotimes_i g_{\pi^{-1}(i)})P_\pi$, and $P_\sigma\operatorname{embed}_e(X)P_{\sigma^{-1}}=\operatorname{embed}_{\sigma\circ e}(X)$;
+        \item if $\ket v$ has $\ket0$ on $Z$, then $P_\pi\ket v$ has $\ket0$ on $\pi(Z)$, and any $A\in\mathcal A_{Z^c}$ (or product thereof) preserves $\ket0$ on $Z$;
+        \item a list of unitaries on pairwise disjoint ring bonds defines a layer whose operator equals the list product.
     \end{enumerate}
 \end{lemma}
 \begin{proof}
     \leanok
-    Entrywise evaluation verifies the first two items and the layer product.
-    For the third item, $\ket v$ has $\ket0$ on $Z$ precisely when the
-    diagonal projection onto the configurations vanishing on $Z$ fixes
-    $\ket v$, and that projection commutes with every operator acting outside
-    $Z$.
+    Items (1), (2), and (4) follow by entrywise evaluation. For (3), $\ket v$ has $\ket0$ on $Z$ if and only if $\Pi_Z\ket v=\ket v$ where $\Pi_Z=\bigotimes_{i\in Z}\ketbra{0}{0}\otimes\mathbb 1_{Z^c}$, and $[\Pi_Z,A]=0$ for all $A\in\mathcal A_{Z^c}$.
 \end{proof}
 
 \begin{lemma}[One teleportation hop]
@@ -128,32 +99,17 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
     \leanok
     \uses{def:qc_qudit_pauli, lem:qc_qudit_pauli_unitary,
         lem:qc_site_permutations, lem:qc_permutation_layers}
-    A \emph{hop} consists of three distinct sites $c,e,f$ such that $\{e,f\}$
-    and $\{c,e\}$ are neighbouring pairs. Its first gate, on $\{e,f\}$,
-    applies $F$ at $e$ and then $\ket a_e\ket b_f\mapsto\ket a_e\ket{b+a}_f$;
-    its second gate, on $\{c,e\}$, applies
-    $\ket a_c\ket b_e\mapsto\ket a_c\ket{b-a}_e$ and then $F$ at $c$. Both are
-    unitary and act on their pairs. Let $\ket v$ have $\ket0$ at $e$ and $f$,
-    and let $z_c,z_e\in\mathbb Z_d$. Applying the two gates and then the
-    projection onto $\ket{z_c}$ at $c$ and $\ket{z_e}$ at $e$ gives
-    \begin{align*}
-        \frac1d\,\bigl(s_{z_c}\bigr)_c\bigl(s_{z_e}\bigr)_e
-        \bigl(X^{z_e}Z^{z_c}\bigr)_{f}P_{(c\,f)}\ket v,
-    \end{align*}
-    where $s_z\ket q=\ket{q+z}$ and $(c\,f)$ is the transposition of the
-    sites $c$ and $f$. Thus the operator acts on the sites $c,e,f$, leaving the
-    outcomes at $c$ and $e$ and placing the content of $c$ at $f$ up to the
-    unitary $X^{z_e}Z^{z_c}$.
+    A \emph{hop} $h=(c,e,f)$ consists of distinct sites with neighbouring bonds $\{e,f\}$ and $\{c,e\}$. Its unitary gates $G_{1,h}\in\mathcal A_{\{e,f\}}$ (applying $F_e$ then $\ket a_e\ket b_f\mapsto\ket a_e\ket{b+a}_f$) and $G_{2,h}\in\mathcal A_{\{c,e\}}$ (applying $\ket a_c\ket b_e\mapsto\ket a_c\ket{b-a}_e$ then $F_c$), followed by outcome projections $\Pi_{c,z_c}\Pi_{e,z_e}$ ($z_c,z_e\in\mathbb Z_d$), act on any $\ket v$ having $\ket0$ on $\{e,f\}$ by
+    \begin{align}
+        \Pi_{c,z_c}\Pi_{e,z_e}G_{2,h}G_{1,h}\ket v
+         & =\frac1d\,\bigl(s_{z_c}\bigr)_c\bigl(s_{z_e}\bigr)_e
+        \bigl(X^{z_e}Z^{z_c}\bigr)_{f}P_{(c\,f)}\ket v,\notag
+    \end{align}
+    where $s_z\ket q=\ket{q+z}$ and $(c\,f)$ transposes $c$ and $f$.
 \end{lemma}
 \begin{proof}
     \leanok
-    On a vector with $\ket0$ at $e$ and $f$, the Fourier matrix at $e$ assigns
-    amplitude $d^{-1/2}$ to every value $x_e$, and the shift copies it to $f$,
-    preparing $d^{-1/2}\sum_j\ket{j}_e\ket j_f$. The second gate and the
-    projections then give, configuration by configuration, the amplitude
-    $d^{-1/2}F_{z_c,\,x_f-z_e}=d^{-1}\zeta^{z_c(x_f-z_e)}$ for the content
-    $x_f-z_e$ moved from $c$ to $f$, matching the right-hand side while
-    configurations with $x_c\neq z_c$ or $x_e\neq z_e$ vanish on both sides.
+    On $\ket v$ with $\ket0_e\ket0_f$, $G_{1,h}$ prepares $d^{-1/2}\sum_{j\in\mathbb Z_d}\ket j_e\ket j_f$. Applying $G_{2,h}$ and $\Pi_{c,z_c}\Pi_{e,z_e}$ gives amplitude $d^{-1/2}F_{z_c,\,x_f-z_e}=d^{-1}\zeta^{z_c(x_f-z_e)}$ for the input value $x_f-z_e$ transferred from $c$ to $f$ when $(x_c,x_e)=(z_c,z_e)$, and $0$ otherwise, matching the right-hand side.
 \end{proof}
 
 \begin{theorem}[Teleportation along chains of hops in one round]
@@ -189,36 +145,11 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
     \leanok
     \uses{lem:qc_teleport_hop, def:qc_round_implementation,
         lem:qc_site_permutations}
-    A list $h_1,\dots,h_H$ of hops is \emph{valid} if every hop $h_j$ meets the
-    hops $h_{j+1},\dots,h_H$ after it in the list only through its site $c$:
-    its sites $e$ and $f$ are not sites of $h_{j+1},\dots,h_H$, and its site
-    $c$ is not a site $c$ or $e$ of one of them. Its site $c$ may be the site
-    $f$ of one of them, so the hops form chains
-    $c_0\to f_0=c_1\to f_1=\cdots$, the hops after $h_j$ in the list acting
-    before it. For a valid list and a local circuit $U$,
-    the \emph{teleportation round} applies $U$, the first gates of all hops in
-    one layer, the second gates of all hops in one layer, measures the sites
-    $c$ and $e$ of all hops, and corrects by the inverse of the product of the
-    single-site unitaries that the hops leave. Its depth is the depth of $U$
-    plus $2$. It implements $P_{h_1}\cdots P_{h_H}U$, with $P_h$ the
-    transposition of the sites $c$ and $f$ of $h$, on the vectors $\ket v$ such
-    that $U\ket v$ has $\ket0$ at the sites $e$ and $f$ of every hop, with the
-    scalar $d^{-H}$ for every outcome.
+    A hop list $\mathcal H=(h_1,\dots,h_H)$ is \emph{valid} if for every $j<k$, $\{e_j,f_j\}\cap\{c_k,e_k,f_k\}=\varnothing$ and $c_j\notin\{c_k,e_k\}$ (allowing $c_j=f_k$, so hops chain as $c_k\to f_k=c_j\to f_j$). For a valid list $\mathcal H$ and a depth-$T$ circuit $U$, the \emph{teleportation round} applies $U$, the layer $\prod_j G_{1,h_j}$, and the layer $\prod_j G_{2,h_j}$, measures $\bigcup_j\{c_j,e_j\}$, and applies the inverse Pauli frame correction. It has depth $T+2$ and implements $P_{(c_1\,f_1)}\cdots P_{(c_H\,f_H)}U$ (with scalar $d^{-H}$ for every outcome) on $\{\ket v:U\ket v\text{ has }\ket0\text{ on }\bigcup_j\{e_j,f_j\}\}$.
 \end{theorem}
 \begin{proof}
     \leanok
-    The first gates act on pairwise disjoint pairs $\{e,f\}$ and the second
-    gates on pairwise disjoint pairs $\{c,e\}$, so they form two layers. By
-    induction over the list, the projections and the two layers factor into
-    the hops one after the other: the first gate of the head $h$ of the list
-    commutes with the second gates of the other hops because its sites $e,f$
-    are not theirs, and the projections at the sites of the other hops commute
-    with the operator of $h$. Since the other hops leave $\ket0$ at $e$ and
-    $f$, Lemma~\ref{lem:qc_teleport_hop} applies to $h$. A single-site unitary
-    left at the site $c$ of $h$ by an earlier hop whose site $f$ is $c$
-    reappears at the site $f$ of $h$ after the transposition, so the hops
-    leave an outcome-dependent product of single-site unitaries after
-    $d^{-H}P_{h_1}\cdots P_{h_H}$ that the inverse correction cancels.
+    Validity ensures $\{e_j,f_j\}$ are pairwise disjoint and $\{c_j,e_j\}$ are pairwise disjoint, forming two layers, and $[G_{1,h_1},\prod_{k>1}G_{2,h_k}]=0$. By induction on $\mathcal H$ using Lemma~\ref{lem:qc_teleport_hop} and Lemma~\ref{lem:qc_site_permutations}, $h_H,\dots,h_1$ act sequentially, conjugating earlier Pauli frames from $c_j=f_k$ to $f_j$ via $P_{(c_j\,f_j)}$, so the total frame after $d^{-H}P_{(c_1\,f_1)}\cdots P_{(c_H\,f_H)}U\ket v$ is a product of single-site unitaries cancelled by its inverse.
 \end{proof}
 
 \begin{lemma}[Chains between distant sites]
@@ -248,37 +179,13 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
     \leanok
     \uses{thm:qc_teleportation_round, lem:qc_round_implementation_compose}
     \begin{enumerate}
-        \item Let $\mathcal T$ and $\mathcal B$ be valid lists of hops and $G$ a
-              layer of gates, and let $P_{\mathcal T}$, $P_{\mathcal B}$ be the
-              products of the transpositions of their hops. If $\ket v$ has
-              $\ket0$ at the sites $e,f$ of $\mathcal T$ and
-              $GP_{\mathcal T}\ket v$ has $\ket0$ at the sites $e,f$ of
-              $\mathcal B$, then every output of the teleportation round of
-              $\mathcal T$, followed by the teleportation round of $\mathcal B$
-              after $G$, is a multiple of $P_{\mathcal B}GP_{\mathcal T}\ket v$.
-              The two rounds have depth $2$ and $3$.
-        \item Let $2L<N$ and let $a$ be a site. The forward chain of the hops
-              $(a+2j,\,a+2j+1,\,a+2j+2)$, $j<L$, and the backward chain of the
-              hops $(a+2j+2,\,a+2j+1,\,a+2j)$, $j<L$, are valid. The product of
-              the transpositions of the forward chain maps $a$ to $a+2L$ and
-              fixes the sites $a+j$ with $2L<j<N$; that of the backward chain is
-              its inverse. The sites $e,f$ of the forward chain lie among
-              $a+1,\dots,a+2L$, those of the backward chain lie among
-              $a,\dots,a+2L-1$, and all sites of both chains among
-              $a,\dots,a+2L$. If $\ket v$ has $\ket0$ at the sites
-              $a+1,\dots,a+2L$, then after the forward chain the sites
-              $a,\dots,a+2L-1$ carry $\ket0$.
+        \item For valid hop lists $\mathcal T,\mathcal B$ and a layer $G$, if $\ket v$ has $\ket0$ on $\bigcup_{h\in\mathcal T}\{e_h,f_h\}$ and $GP_{\mathcal T}\ket v$ has $\ket0$ on $\bigcup_{h\in\mathcal B}\{e_h,f_h\}$, then the depth-$2$ round of $\mathcal T$ followed by the depth-$3$ round of $(\mathcal B,G)$ outputs a scalar multiple of $P_{\mathcal B}GP_{\mathcal T}\ket v$.
+        \item For $2L<N$ and $a\in\Z_N$, the forward chain $\mathcal F_{a,L}=((a+2j,a+2j+1,a+2j+2))_{j=L-1,\dots,0}$ and backward chain $\mathcal B_{a,L}=((a+2j+2,a+2j+1,a+2j))_{j=0,\dots,L-1}$ are valid inside $\{a,\dots,a+2L\}$, with $P_{\mathcal B_{a,L}}=P_{\mathcal F_{a,L}}^{-1}$, $P_{\mathcal F_{a,L}}(a)=a+2L$, and $P_{\mathcal F_{a,L}}(a+j)=a+j$ for $2L<j<N$. Moreover, $\bigcup_{h\in\mathcal F_{a,L}}\{e_h,f_h\}\subseteq\{a+1,\dots,a+2L\}$, $\bigcup_{h\in\mathcal B_{a,L}}\{e_h,f_h\}\subseteq\{a,\dots,a+2L-1\}$, and if $\ket v$ has $\ket0$ on $\{a+1,\dots,a+2L\}$, then $P_{\mathcal F_{a,L}}\ket v$ has $\ket0$ on $\{a,\dots,a+2L-1\}$.
     \end{enumerate}
 \end{lemma}
 \begin{proof}
     \leanok
-    The first item composes two applications of
-    Theorem~\ref{thm:qc_teleportation_round}. For the second, the sites
-    $a+j$ with $0\le j<N$ are distinct, the transposition of the hop $j$
-    exchanges $a+2j$ and $a+2j+2$, and the hops of the forward chain, applied
-    in the order $j=0,1,\dots$, move the content of $a$ step by step to
-    $a+2L$; each hop moves the $\ket0$ from $a+2j+2$ to $a+2j$, while
-    $a+2j+1$ keeps its $\ket0$.
+    Item (1) composes Theorem~\ref{thm:qc_teleportation_round} via Lemma~\ref{lem:qc_round_implementation_compose}. For (2), $a+j$ ($0\le j\le 2L$) are distinct modulo $N$, and the transpositions $(a+2j\;\;a+2j+2)$ for $j=0,\dots,L-1$ move $a\mapsto a+2L$ while shifting $\{a+1,\dots,a+2L\}$ onto $\{a,\dots,a+2L-1\}$.
 \end{proof}
 
 \begin{lemma}[Parallel chains]
@@ -294,19 +201,11 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
         QuantumCircuit.TeleportHop.sitePerm_flatMap_apply_of_notMem}
     \leanok
     \uses{lem:qc_teleportation_chains}
-    The product of the transpositions of a list of hops fixes every site that
-    is not a site of the list. Let valid lists of hops $\mathcal L_g$ have
-    their sites in sets $S_g$ that are pairwise disjoint. Then the
-    concatenation of the lists is valid, and the product of its transpositions
-    agrees on $S_g$ with that of $\mathcal L_g$ and fixes every site outside
-    all the $S_g$.
+    If valid hop lists $\mathcal L_g$ are supported in pairwise disjoint site sets $S_g$, their concatenation $\mathcal L$ is valid, and $P_{\mathcal L}$ agrees with $P_{\mathcal L_g}$ on each $S_g$ and fixes $I\setminus\bigcup_g S_g$ pointwise.
 \end{lemma}
 \begin{proof}
     \leanok
-    Two hops with disjoint sites satisfy the condition of validity in either
-    order. The product of the transpositions of $\mathcal L_g$ fixes the sites
-    outside $S_g$, hence maps $S_g$ into itself, and the products of the other
-    lists fix $S_g$ pointwise.
+    Hops on disjoint site sets satisfy the validity condition in either order, and each $P_{\mathcal L_g}$ is supported inside $S_g$, so their commuting product acts as $P_{\mathcal L_g}$ on $S_g$ and as the identity outside $\bigcup_g S_g$.
 \end{proof}
 
 \begin{theorem}[A layer of distant gates in depth five with measurements]
@@ -347,33 +246,11 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
         QuantumCircuit.LongRangeGate.isRoundsImplementationOn_rounds}
     \leanok
     \uses{lem:qc_teleportation_chains, lem:qc_parallel_chains}
-    A \emph{distant gate} is a two-site unitary $u$ on the sites $a$ and
-    $a+2L+1$, where $2L+1<N$; its stretch is $a,a+1,\dots,a+2L+1$ and its
-    interior the $2L$ sites $a+1,\dots,a+2L$. Let $g_1,\dots,g_n$ be distant
-    gates with pairwise disjoint stretches. Two measurement rounds of total
-    depth $5$ implement the product of the gates $g_1,\dots,g_n$ on the
-    vectors with $\ket0$ at the interiors of all the gates: the first
-    teleports the content of every site $a$ along its forward chain to
-    $a+2L$; the second applies every $u$ to the neighbouring pair
-    $\{a+2L,a+2L+1\}$ and teleports the content of every $a+2L$ back to $a$
-    along its backward chain. The depth depends neither on the distances nor
-    on the number of gates, and no outcome is post-selected.
+    Let $g_1,\dots,g_n$ be distant two-site unitaries $u_r$ on $\{a_r,a_r+2L_r+1\}$ ($2L_r+1<N$) with pairwise disjoint stretches $S_r=\{a_r,\dots,a_r+2L_r+1\}$ and interiors $I_r=\{a_r+1,\dots,a_r+2L_r\}$. Two measurement rounds of total depth $2+3=5$ implement $\prod_{r=1}^n u_r$ on $\{\ket v:\ket v\text{ has }\ket0\text{ on }\bigcup_r I_r\}$ without postselection.
 \end{theorem}
 \begin{proof}
     \leanok
-    By Lemma~\ref{lem:qc_parallel_chains} the forward chains of all the gates
-    form a valid list, and so do the backward chains, with products of
-    transpositions $P$ and $P^{-1}$: on the stretch of $g$ both agree with the
-    chains of $g$, which are inverse to each other. The forward chains need
-    $\ket0$ at the interiors; afterwards the sites $a,\dots,a+2L-1$ of every
-    gate carry $\ket0$, by Lemma~\ref{lem:qc_teleportation_chains} for its
-    own chain and since the other chains act on disjoint sites. The gates on
-    the pairs $\{a+2L,a+2L+1\}$ keep these $\ket0$, which the backward chains
-    need. By Lemma~\ref{lem:qc_teleportation_chains} every output is a
-    multiple of $P^{-1}GP\ket v$, with $G$ the product of the gates on the
-    neighbouring pairs, and $P^{-1}GP$ is the product of the conjugated gates.
-    The conjugate of $u$ at $a+2L,a+2L+1$ is $u$ at $P^{-1}(a+2L)=a$ and
-    $P^{-1}(a+2L+1)=a+2L+1$ by Lemma~\ref{lem:qc_site_permutations}.
+    By Lemmas~\ref{lem:qc_teleportation_chains} and~\ref{lem:qc_parallel_chains}, the concatenated forward chains $\mathcal T=\bigsqcup_r\mathcal F_{a_r,L_r}$ and backward chains $\mathcal B=\bigsqcup_r\mathcal B_{a_r,L_r}$ are valid with $P_{\mathcal B}=P_{\mathcal T}^{-1}$, and $P_{\mathcal T}\ket v$ has $\ket0$ on $\bigcup_r\{a_r,\dots,a_r+2L_r-1\}$, which is preserved by the nearest-neighbour layer $G=\prod_r(u_r)_{\{a_r+2L_r,a_r+2L_r+1\}}$. By Lemma~\ref{lem:qc_teleportation_chains}(1) and Lemma~\ref{lem:qc_site_permutations}(2), the two rounds implement $P_{\mathcal T}^{-1}GP_{\mathcal T}=\prod_r(u_r)_{\{a_r,a_r+2L_r+1\}}$ in depth $2+3=5$.
 \end{proof}
 
 \begin{definition}[Register gates]
@@ -397,13 +274,7 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
         QuantumCircuit.RegisterGate.two_mul_L_lt}
     \leanok
     \uses{def:qc_local_circuit, lem:qc_placed_operators}
-    A \emph{register gate} is a matrix $X$ on $2s$ sites together with a site
-    $a$ and $L\ge0$ with $2L+2s\le N$. It acts on the two registers
-    $a,\dots,a+s-1$ and $a+2L+s,\dots,a+2L+2s-1$, the first register on the
-    first $s$ sites of $X$. Its stretch is $a,\dots,a+2L+2s-1$, its interior the
-    $2L$ sites $a+s,\dots,a+s+2L-1$ strictly between the registers, and, for
-    $0\le t\le s$, its zone $t$ the $2L$ sites $a+t,\dots,a+t+2L-1$. The gate
-    acts on the ring as $X$ on its two registers, which is unitary when $X$ is.
+    A \emph{register gate} $(X,a,L)$ ($2L+2s\le N$) places a $2s$-site matrix $X$ onto the two $s$-site registers $\{a,\dots,a+s-1\}$ and $\{a+2L+s,\dots,a+2L+2s-1\}$, with stretch $S=\{a,\dots,a+2L+2s-1\}$, zone $Z_t=\{a+t,\dots,a+t+2L-1\}$ ($0\le t\le s$), and interior $I=Z_s=\{a+s,\dots,a+s+2L-1\}$.
 \end{definition}
 
 \begin{lemma}[Teleporting registers site by site]
@@ -451,30 +322,11 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
     \uses{def:qc_register_gate, thm:qc_teleportation_round,
         lem:qc_teleportation_chains, lem:qc_parallel_chains,
         lem:qc_site_permutations, lem:qc_round_implementation_compose}
-    Let $g_1,\dots,g_n$ be register gates with pairwise disjoint stretches. For
-    $0\le t<s$, the round $t$ teleports, for every gate, the content of the site
-    $a+t$ to $a+2L+t$ along a chain of $L$ hops, in one round of depth $2$. The
-    rounds $t=s-1,\dots,0$, in this order, implement the product $P$ of the
-    transpositions of all the chains on the vectors with $\ket0$ at the
-    interiors of all the gates, and their outputs have $\ket0$ at the zones $0$.
-    The rounds teleporting back, $t=0,\dots,s-1$, in this order, implement
-    $P^{-1}$ on the vectors with $\ket0$ at the zones $0$. The rounds of each
-    direction have total depth $2s$.
+    Let $g_1,\dots,g_n$ be register gates with pairwise disjoint stretches $S_r$. For $t=s-1,\dots,0$, the depth-$2$ round $\mathcal F^{(t)}=\bigsqcup_r\mathcal F_{a_r+t,L_r}$ teleports $a_r+t\mapsto a_r+2L_r+t$ while shifting $\ket0$ from $\bigcup_r Z_{r,t+1}$ to $\bigcup_r Z_{r,t}$. Thus the $s$ forward rounds have total depth $2s$, implement $P=\prod_{t=0}^{s-1}P_{\mathcal F^{(t)}}$ on $\{\ket v:\ket v\text{ has }\ket0\text{ on }\bigcup_r Z_{r,s}\}$, and leave $\ket0$ on $\bigcup_r Z_{r,0}$; the $s$ reverse rounds $\mathcal B^{(t)}=\bigsqcup_r\mathcal B_{a_r+t,L_r}$ ($t=0,\dots,s-1$) implement $P^{-1}$ on $\{\ket w:\ket w\text{ has }\ket0\text{ on }\bigcup_r Z_{r,0}\}$ in depth $2s$.
 \end{lemma}
 \begin{proof}
     \leanok
-    The chain of the site $a+t$ meets the sites $a+t,\dots,a+t+2L$, and before
-    it the sites $a+t+1,\dots,a+t+2L$ form the zone $t+1$. Starting from $\ket0$
-    at the zone $s$, the interior, the round $t$ moves the content of $a+t$ to
-    $a+t+2L$ and leaves $\ket0$ at the zone $t$, since the permutation of the
-    chain maps the zone $t+1$ together with $a+t$ onto the zone $t$ together
-    with $a+t+2L$. The chains of different gates act on disjoint stretches, so
-    the lists of all the gates are valid
-    (Lemma~\ref{lem:qc_parallel_chains}), and by
-    Theorem~\ref{thm:qc_teleportation_round} every round implements the
-    permutation of its chains. Composition
-    (Lemma~\ref{lem:qc_round_implementation_compose}) gives the claim; the
-    backward rounds run the forward ones in reverse.
+    By Lemmas~\ref{lem:qc_teleportation_chains} and~\ref{lem:qc_parallel_chains}, each $\mathcal F^{(t)}$ is valid, requires $\ket0$ on $\bigcup_r\{a_r+t+1,\dots,a_r+t+2L_r\}=\bigcup_r Z_{r,t+1}$, and maps $Z_{r,t+1}\cup\{a_r+t\}$ bijectively onto $Z_{r,t}\cup\{a_r+t+2L_r\}$, leaving $\ket0$ on $\bigcup_r Z_{r,t}$. Theorem~\ref{thm:qc_teleportation_round} and Lemma~\ref{lem:qc_round_implementation_compose} compose the $s$ forward and $s$ backward rounds of depth $2$ each.
 \end{proof}
 
 \begin{theorem}[A layer of register gates in constant depth with measurements]
@@ -491,22 +343,9 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
         QuantumCircuit.RegisterGate.exists_rounds}
     \leanok
     \uses{lem:qc_register_chains, lem:qc_round_implementation_compose}
-    Let $g_1,\dots,g_n$ be register gates with pairwise disjoint stretches, each
-    $X$ a product of at most $K$ unitaries on neighbouring sites. Then
-    measurement rounds of total depth $4s+K+2$ implement the product of the
-    gates on the vectors with $\ket0$ at the interiors of all the gates: the
-    first registers are teleported next to the second ones as in
-    Lemma~\ref{lem:qc_register_chains}, every $X$ is applied to the $2s$
-    consecutive sites $a+2L,\dots,a+2L+2s-1$ by a local circuit of depth $K$,
-    and the first registers are teleported back. The depth depends neither on
-    the distances nor on the number of gates, and no outcome is post-selected.
+    Let $g_1,\dots,g_n$ be register gates with pairwise disjoint stretches, where each $X_r$ is a product of at most $K$ nearest-neighbour unitaries on $\{1,\dots,2s\}$. Then $2s+1$ measurement rounds of total depth $4s+K+2$ implement $\prod_{r=1}^n g_r$ on $\{\ket v:\ket v\text{ has }\ket0\text{ on }\bigcup_r I_r\}$ without postselection.
 \end{theorem}
 \begin{proof}
     \leanok
-    The unitaries on the consecutive sites act inside the stretches, so they
-    keep $\ket0$ at the zones $0$, and their product $G$ is a local circuit of
-    depth $K$, applied in one round without hops of depth $K+2$. By
-    Lemma~\ref{lem:qc_register_chains} every output is a multiple of
-    $P^{-1}GP\ket v$. Conjugation by $P$ maps the consecutive sites of every
-    gate back to its two registers, so $P^{-1}GP$ is the product of the gates.
+    By Lemma~\ref{lem:qc_parallel_circuits}, the colocated product $G=\prod_r\operatorname{embed}_{\{a_r+2L_r,\dots,a_r+2L_r+2s-1\}}(X_r)$ is a local circuit of depth $K$ supported outside $\bigcup_r Z_{r,0}$, hence preserves $\ket0$ on $\bigcup_r Z_{r,0}$ and runs in a single empty-hop round of depth $K+2$. Composing the $s$ forward rounds, this local round, and the $s$ backward rounds via Lemmas~\ref{lem:qc_register_chains} and~\ref{lem:qc_round_implementation_compose} implements $P^{-1}GP=\prod_{r=1}^n g_r$ in depth $2s+(K+2)+2s=4s+K+2$.
 \end{proof}

@@ -3,14 +3,7 @@
     \lean{TNLean.PEPS.regularCorrelatedChargeState}
     \leanok
     \uses{def:peps_regular_edge_charge_contraction}
-    Let $e_0,e_1$ be ordered edges of a finite graph, and let $u$ be a
-    bond assignment. To form the correlated state $\Psi_z(u;\chi,p)$
-    auxiliary to the charge-pair formula in \cite{Schuch2010PEPS}, lines
-    2505--2535, we resolve the remote label $q$ by inserting
-    $\mathbf1_{\eta_{e_1}=q}$ on $e_1$, place
-    $\chi(pq^{-1}z\eta_{e_0})$ on $e_0$, and sum the resulting
-    closed tensor states over $q$, retaining the same original
-    site coefficients in every summand.
+    For ordered edges $e_0,e_1$ of a finite graph and bond assignment $u$, define the correlated state $\Psi_z(u;\chi,p)$ (\cite{Schuch2010PEPS}, lines 2505--2535) by summing over $q\in G$ the closed tensor state with indicator $\mathbf1_{\eta_{e_1}=q}$ on $e_1$ and weight $\chi(pq^{-1}z\eta_{e_0})$ on $e_0$.
 \end{definition}
 
 \begin{theorem}[Correlated weights in the physical cut]
@@ -22,36 +15,20 @@
     \uses{def:peps_regular_correlated_charge_state,
         def:peps_regular_weighted_open_contraction,
         thm:peps_regular_coherent_global_transport}
-    The preceding closed state has coefficient
-    \[
+    The state $\Psi_z(u;\chi,p)$ of Definition~\ref{def:peps_regular_correlated_charge_state} has components
+    \begin{align}
         \Psi_z(u;\chi,p)(\sigma)
         =\sum_{\eta:E\to G}\chi(p\eta_{e_1}^{-1}z\eta_{e_0})
-        \prod_v a_v\bigl(\eta^{u}|_v,\sigma_v\bigr).
-    \]
-    A diagonal inserted at an edge tail in a region gives precisely the
-    corresponding weighted open coefficient. Suppose $t(e_0)\in R$
-    and $t(e_1)\notin R$. If a regional matrix changes every
-    weighted boundary column by
-    \[
-        \chi(pq^{-1}\eta_{e_0})
-        \longmapsto\chi(pq^{-1}k^{-1}\eta_{e_0}),
-    \]
-    uniformly in $\chi,p,q$ and the crossing labels, its extension by
-    the identity gives
-    \[
-        (W_R\otimes I)\Psi_1(u;\chi,p)=\Psi_{k^{-1}}(u;\chi,p).
-    \]
-    In this linear contraction identity for
-    \cite{Schuch2010PEPS}, lines 2505--2535 and 2560--2581, the native
-    operation below discharges the column premise.
+        \prod_v a_v\bigl(\eta^{u}|_v,\sigma_v\bigr). \label{eq:correlated_charge_state_coeff}
+    \end{align}
+    If $t(e_0)\in R$, $t(e_1)\notin R$, and a regional operator $W_R$ transforms every weighted open column via $\chi(pq^{-1}\eta_{e_0})\mapsto\chi(pq^{-1}k^{-1}\eta_{e_0})$ uniformly in $(\chi,p,q,\theta)$, then (\cite{Schuch2010PEPS}, lines 2505--2535 and 2560--2581)
+    \begin{align}
+        (W_R\otimes I)\Psi_1(u;\chi,p)=\Psi_{k^{-1}}(u;\chi,p). \label{eq:correlated_charge_cut_global}
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    The product of the diagonal factors reduces to the factor at its
-    tail vertex, and summing the remote indicator fixes
-    $q=\eta_{e_1}$ to restore the joint character weight.
-    For each fixed $q$, the remote diagonal belongs to the common
-    complementary tensor, so passing the column action through the native
-    physical cut identity and summing over $q$ yields the global identity.
+    Summing $\mathbf1_{\eta_{e_1}=q}$ over $q\in G$ substitutes $q=\eta_{e_1}$ to give (\ref{eq:correlated_charge_state_coeff}).
+    Since $t(e_1)\notin R$, for each $q$ the indicator $\mathbf1_{\eta_{e_1}=q}$ lies in $R^c$, so applying Theorem~\ref{thm:peps_regular_coherent_global_transport} at each $q$ and summing over $q$ yields (\ref{eq:correlated_charge_cut_global}).
 \end{proof}
 
 \begin{definition}[The native remote charge edge]
@@ -59,11 +36,7 @@
     \lean{TNLean.PEPS.torusChargeFluxPartnerEdge}
     \leanok
     \uses{def:peps_torus_charge_flux_crossing_strip}
-    At $v=(x,y)$, the remote reference is the native horizontal bond
-    joining $(x+1,y)$ to $(x+2,y)$, below the eight-site crossing strip;
-    in this auxiliary native geometry for
-    \cite{Schuch2010PEPS}, lines 2505--2581, both periodic seam orientations
-    are retained.
+    At $v=(x,y)$, define the remote reference edge $e_1$ as the native horizontal bond joining $(x+1,y)$ to $(x+2,y)$ below the eight-site crossing strip $R_v$ of Definition~\ref{def:peps_torus_charge_flux_crossing_strip} (\cite{Schuch2010PEPS}, lines 2505--2581, retaining both seam orientations).
 \end{definition}
 
 \begin{theorem}[A physical crossing with the remote partner]
@@ -74,34 +47,14 @@
     \uses{def:peps_torus_charge_flux_partner_edge,
         thm:peps_regular_correlated_charge_cut,
         thm:peps_torus_charge_flux_crossing}
-    Let $G$ be finite, let the periods satisfy $w\geq5$ and $H\geq4$,
-    and let the native four-leg tensor be regular $G$-isometric.
-    For every translated crossing strip there is a regional unitary
-    $W_R$, chosen before $k,\chi,p$, whose extension by the complementary
-    identity is unitary and satisfies
-    \[
+    For finite $G$, torus periods $w\ge 5$ and $H\ge 4$, and a regular $G$-isometric four-leg tensor, on every translated strip $R=R_v$ with charge bond $e_0$, remote bond $e_1$ of Definition~\ref{def:peps_torus_charge_flux_partner_edge}, and initial flux string $u^{(0)}_k$, there exists a regional unitary $W_R$ (chosen before $k,\chi,p$, with global unitary extension $W_R\otimes I$ and no extra tree-gauge, factorization, Gram, or state-action hypotheses) such that
+    \begin{align}
         (W_R\otimes I)\Psi_1(u^{(0)}_k;\chi,p)
-        =\Psi_{k^{-1}}(u^{(0)}_k;\chi,p).
-    \]
-    Here $e_0$ is the displayed charge bond, $e_1$ is the remote
-    edge above, and $u^{(0)}_k$ is the initial flux string.
-    Thus the joint weight changes in the order
-    \[
-        \chi(p\eta_1^{-1}\eta_0)
-        \longmapsto\chi(p\eta_1^{-1}k^{-1}\eta_0).
-    \]
-    The remote label is summed in the original-spin contraction.
-    No tree gauge, factorization, Gram identity or state-action premise is
-    assumed. This remains an auxiliary local crossing consequence:
-    the identification of the complete prescribed geometric braid and
-    its reunion experiment in \cite{Schuch2010PEPS}, lines 2560--2615,
-    is separate.
+        =\Psi_{k^{-1}}(u^{(0)}_k;\chi,p), \label{eq:torus_correlated_crossing_global}
+    \end{align}
+    transforming the joint weight by $\chi(p\eta_1^{-1}\eta_0)\mapsto\chi(p\eta_1^{-1}k^{-1}\eta_0)$ (as an auxiliary local crossing step; the complete geometric braid and reunion experiment in \cite{Schuch2010PEPS}, lines 2560--2615, remain separate).
 \end{theorem}
 \begin{proof}\leanok
-    Because the remote bond tail has height $y$ while every strip vertex has
-    height $y+1$ or $y+2$, the period bound places that tail outside
-    the region, including at a seam. Applying the derived uniform
-    correlated column operation and the preceding cut identity gives the
-    state transformation, and extending the regional unitary by the
-    complementary identity preserves unitarity.
+    Since $H\ge 4$, the vertical coordinate $y$ of $t(e_1)$ is distinct from the strip heights $y+1,y+2$, so $t(e_1)\notin R_v$ across either seam.
+    Combining the uniform column unitary $W_R$ of Theorem~\ref{thm:peps_torus_charge_flux_crossing} with (\ref{eq:correlated_charge_cut_global}) of Theorem~\ref{thm:peps_regular_correlated_charge_cut} gives (\ref{eq:torus_correlated_crossing_global}).
 \end{proof}

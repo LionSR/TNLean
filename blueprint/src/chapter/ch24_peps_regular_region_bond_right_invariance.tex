@@ -8,27 +8,30 @@
         TNLean.PEPS.regionPhysicalMap_slice_halfEdgeRightMul_of_parent_annihilates}
     \leanok
     \uses{def:peps_region_ground_space, def:peps_region_parent_interaction}
-    On any finite graph region $R$, choose group elements $r_e$ on its
-    bonds, with $r_e=1$ on every crossing bond. Simultaneously
-    multiplying both exposed half-edge labels of each internal bond
-    $e$ on the right by $r_e$ leaves every canonical regional column
-    of the regular contraction unchanged. In particular this holds for one internal
-    bond, with both its endpoints in $R$. The same statement
-    holds in the presence of arbitrary inserted left group multiplications.
+    On a finite graph region $R$, choose $r_e\in G$ with $r_e=1$ for every
+    crossing bond $e\in\partial E_R$, and define the half-edge right
+    translation $(R_r\alpha)_{(v,e)}=\alpha_{(v,e)}r_e$. For the canonical
+    regular averaging contraction $\Pi_R$ (and its left-twisted variant
+    $\Pi_R^u$), every boundary column $\theta$ satisfies
+    $(\Pi_R^u\ket{\theta})\circ R_r=\Pi_R^u\ket{\theta}$, including when $r$
+    is supported on a single internal bond $e\in E_R$.
 
-    Let the physical coefficients be $a_v$, and suppose that local
-    inverse coefficients $F_v$ satisfy
-    \[
-        \sum_s F_v(\alpha,s)a_v(\eta,s)
-        =\Pi_v(\alpha,\eta),
-    \]
-    where $\Pi_v$ is the regular averaging projector. Then every
-    original regional ground vector exposed by the product of
-    the $F_v$ has this internal right invariance. Consequently,
-    every complementary slice of an arbitrary global vector
-    satisfying the original regional parent condition has this
-    invariance after exposure. Such inverse coefficients exist
-    for regular $G$-injective tensors.
+    Let the physical site coefficients $a_v$ and local inverse coefficients
+    $F_v$ satisfy
+    \begin{align}
+        \sum_s F_v(\alpha,s)a_v(\eta,s) & = \Pi_v(\alpha,\eta),
+        \label{eq:peps_regular_bond_local_inverse}
+    \end{align}
+    where $\Pi_v$ is the regular averaging projector, and put
+    $F_R=\bigotimes_{v\in R}F_v$. Then every $\phi\in\mathcal G_R$
+    (Definition~\ref{def:peps_region_ground_space}) satisfies
+    $(F_R\phi)\circ R_r=F_R\phi$. Consequently, if
+    $h_R^{\mathrm{global}}\Psi=0$
+    (Definition~\ref{def:peps_region_parent_interaction}), every exterior
+    slice $\Psi(\cdot,\tau)$ satisfies
+    $(F_R\Psi(\cdot,\tau))\circ R_r=F_R\Psi(\cdot,\tau)$. Local inverses
+    satisfying~(\ref{eq:peps_regular_bond_local_inverse}) exist whenever each
+    site tensor is regular $G$-injective.
 
     No $G$-isometry, flat-connection reconstruction, or global
     closure-span representation is assumed: this local
@@ -39,18 +42,16 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    The regular averaging kernel is unchanged when its two
-    configurations are multiplied on the right, leg by leg, by
-    the same labels: common left translation commutes with these
-    right multiplications. Changing each summed shared bond label
-    $\eta_e$ to $\eta_e r_e$ bijects the summation
-    variables while fixing the crossing condition, and associativity
-    gives the same identity in the presence of inserted left
-    group multiplications, yielding the canonical column equality.
+    Because left group translation commutes with legwise right multiplication,
+    $\Pi_v(\alpha\cdot r,\eta\cdot r)=\Pi_v(\alpha,\eta)$. Reindexing each
+    summed internal bond variable $\eta_e\mapsto\eta_e r_e$ while keeping
+    $r_e=1$ on $\partial E_R$ preserves the contraction sum, and associativity
+    $(u_e\eta_e)r_e=u_e(\eta_e r_e)$ gives
+    $(\Pi_R^u\ket{\theta})\circ R_r=\Pi_R^u\ket{\theta}$.
 
-    Applying the stated inverse coefficients to an original
-    regional column produces its canonical column, which
-    inherits the identity. Linearity extends it to the entire
-    original regional ground space. A regional parent constraint
-    places every complementary physical slice in that space.
+    By~(\ref{eq:peps_regular_bond_local_inverse}), $F_R$ maps each physical
+    open column $T_R(\theta;\cdot)$ to $\Pi_R\ket{\theta}$, so linearity over
+    $\mathcal G_R=\spn\{T_R(\theta;\cdot):\theta\}$ yields
+    $(F_R\phi)\circ R_r=F_R\phi$. Finally, $h_R^{\mathrm{global}}\Psi=0$
+    implies $\Psi(\cdot,\tau)\in\mathcal G_R$ for every $\tau$.
 \end{proof}

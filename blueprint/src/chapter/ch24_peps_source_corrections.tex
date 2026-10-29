@@ -2,16 +2,13 @@
 
 Following \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
 (\texttt{04-compression.tex}, lines 279--383),
-let $W:\mathcal H_a\to\mathcal H_b$ be a chronological composition.
-Its original source positions form the finite set $\mathcal E$.
-For $e=(g,j)$, write $\Xi_g$ for the local labels of its owning gate,
-$c_{g,\alpha}$ for the gate coefficients, and
-$\nu_{e,\alpha}\in\C^{u_e}\otimes\C^{v_e}$ for its original source vector.
-A replacement at $e$ may depend on $\alpha$, but not on labels of other gates.
-All coordinate matrices below use fixed finite orthonormal bases on the
-original input and output memories. The input matrix $\rho$ is arbitrary.
-The finite-dimensional convention is that of the manuscript, lines 5--19;
-no bound on private dimensions is imposed.
+let $W:\mathcal H_a\to\mathcal H_b$ be a chronological composition with finite
+source-occurrence set $\mathcal E$. For $e=(g,j)\in\mathcal E$, let $\Xi_g$ be
+the local branch labels of gate $g$, $c_{g,\alpha}$ its branch coefficients,
+and $\nu_{e,\alpha}\in\C^{u_e}\otimes\C^{v_e}$ its original source vector. All
+coordinate matrices use fixed finite orthonormal bases on $\mathcal H_a$ and
+$\mathcal H_b$ without private-dimension bounds (manuscript lines 5--19), and
+$\rho$ is an arbitrary input matrix.
 
 \begin{definition}[Substitution in the original composition]
     \label{def:peps_source_substitution}
@@ -21,17 +18,15 @@ no bound on private dimensions is imposed.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.selectedSourceVectors}
     \leanok
     \uses{def:peps_source_circuit,def:peps_prepared_source_gate,def:peps_partial_source_choices}
-    Given vectors $\eta_{e,\alpha}$ in the original source halfspaces,
-    replace the preparations in branch $\alpha$ of gate $g$ by these
-    vectors, retain its remaining operations, and sum with its original
-    coefficient $c_{g,\alpha}$. Compose these substituted gate operators
-    in the original order; denote the result by $W(\eta)$.
-
-    For affected parties $\mathcal A$, denote by
-    $W_{\mathcal A,\xi}(\eta)$ the partial branch obtained by the same
-    substitution at touched gates, retaining each untouched gate as its
-    original aggregate operator. For $S\subseteq\mathcal E$, let
-    $\nu[S\leftarrow\eta]$ equal $\eta$ on $S$ and $\nu$ elsewhere.
+    For vectors $\eta_{e,\alpha}\in\C^{u_e}\otimes\C^{v_e}$, let $W(\eta)$ be
+    the operator obtained by replacing the source preparations in branch
+    $\alpha$ of each gate $g$ by $\eta_{e,\alpha}$, summing with $c_{g,\alpha}$,
+    and composing in chronological order. For an affected party set
+    $\mathcal A$, let $W_{\mathcal A,\xi}(\eta)$ be the partial branch formed by
+    performing this substitution at touched gates while keeping untouched gates
+    as their aggregate operators. For $S\subseteq\mathcal E$, let
+    $\nu[S\leftarrow\eta]$ equal $\eta$ on $S$ and $\nu$ on
+    $\mathcal E\setminus S$.
 \end{definition}
 
 \begin{theorem}[Summing untouched gates]
@@ -42,47 +37,37 @@ no bound on private dimensions is imposed.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_selectedSourceVectors_eq_sum}
     \leanok
     \uses{def:peps_source_substitution}
-    Original vectors recover $W(\nu)=W$ and the original partial branches.
-    Suppose $\eta_{e,\alpha}=\nu_{e,\alpha}$ whenever the owning gate
-    of $e$ does not touch $\mathcal A$. If $J_a,J_b$ are the
-    owner-identification isometries, then
+    We have $W(\nu)=W$ and $W_{\mathcal A,\xi}(\nu)=W_{\mathcal A,\xi}$. If
+    $\eta_{e,\alpha}=\nu_{e,\alpha}$ whenever the owning gate of $e$ does not
+    touch $\mathcal A$ (in particular, for $\nu[S\leftarrow\eta]$ when every
+    $e\in S$ has an endpoint in $\mathcal A$), then under the owner
+    identifications $J_a,J_b$,
     \begin{align}
         J_b W(\eta)
          & =\sum_{\xi}c_{\mathcal A,\xi}
         W_{\mathcal A,\xi}(\eta)J_a.
         \label{eq:peps_substitution_partial}
     \end{align}
-    In particular, (\ref{eq:peps_substitution_partial}) holds for
-    $\nu[S\leftarrow\eta]$ if every position in $S$ has an endpoint
-    in $\mathcal A$.
 \end{theorem}
 
 \begin{proof}
     \lean{TNLean.Lattice.PartyCircuit.Layout.affectedOwner_mapOwner_eq_none}
     \leanok
     \uses{thm:peps_partial_source_evaluation,thm:peps_source_circuit_incidence}
-    By induction on the chronological composition, at a touched gate the
-    sum is its defining branch sum. At an untouched gate all source
-    vectors are original, and every participant has exterior owner;
-    its branch sum is therefore its original aggregate operator.
-    Composition distributes through the finite sums, while idle
-    registers tensor each term with an identity. For a composition
-    $W=W''W'$ with intermediate identification $J_c$, the two induction
-    hypotheses give
+    By induction on $W$ using Theorem~\ref{thm:peps_partial_source_evaluation}:
+    each touched gate expands into its branch sum, while each untouched gate has
+    $\eta_{e,\alpha}=\nu_{e,\alpha}$ and exterior participants, so it evaluates
+    to its original aggregate operator. For $W=W''W'$ with intermediate
+    identification $J_c$,
     \begin{align}
         J_bW''(\eta)W'(\eta)
          & =\sum_{\zeta}c_{\mathcal A,\zeta}W''_{\mathcal A,\zeta}(\eta)
         J_cW'(\eta)
         =\sum_{\zeta,\zeta'}c_{\mathcal A,\zeta}c_{\mathcal A,\zeta'}
-        W''_{\mathcal A,\zeta}(\eta)W'_{\mathcal A,\zeta'}(\eta)J_a .
+        W''_{\mathcal A,\zeta}(\eta)W'_{\mathcal A,\zeta'}(\eta)J_a,\notag
     \end{align}
-    The pairs $(\zeta',\zeta)$ are the branches $\xi$ of $W$, with
-    $c_{\mathcal A,\xi}=c_{\mathcal A,\zeta}c_{\mathcal A,\zeta'}$ and
-    $W_{\mathcal A,\xi}(\eta)=W''_{\mathcal A,\zeta}(\eta)W'_{\mathcal A,\zeta'}(\eta)$,
-    which is
-    (\ref{eq:peps_substitution_partial}). Every endpoint of a
-    selected source belongs to its owning gate, which proves the
-    final specialization.
+    giving (\ref{eq:peps_substitution_partial}); Theorem~\ref{thm:peps_source_circuit_incidence}
+    gives the specialization to $\nu[S\leftarrow\eta]$.
 \end{proof}
 
 \begin{definition}[Remaining operations after source extraction]
@@ -91,12 +76,13 @@ no bound on private dimensions is imposed.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialResidual}
     \leanok
     \uses{thm:peps_source_preparation,thm:peps_partial_fixed_layout}
-    Moving the prepared sources of a word to its initial registers
-    leaves a specified composition of its original remaining operations.
-    Identify its source-register list with any equal prescribed list.
-    Denote the resulting composition by $V$.
-    For the partial branch $W_{\mathcal A,\xi}$, use the fixed retained
-    positions $\mathcal E_{\mathcal A}$ and write $V_{\mathcal A,\xi}$.
+    Let $V$ be the residual composition obtained by extracting the prepared
+    sources of a word to its initial registers
+    (Theorem~\ref{thm:peps_source_preparation}) and identifying the source
+    register list with a prescribed equal list. For $W_{\mathcal A,\xi}$ with
+    fixed retained positions $\mathcal E_{\mathcal A}$
+    (Theorem~\ref{thm:peps_partial_fixed_layout}), denote this residual by
+    $V_{\mathcal A,\xi}$.
 \end{definition}
 
 \begin{theorem}[Recovery from the remaining operations]
@@ -110,11 +96,9 @@ no bound on private dimensions is imposed.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_partialResidual_prepare}
     \leanok
     \uses{def:peps_canonical_source_residual}
-    The composition $V$ has no pair sources. It is allowed if the
-    original word is allowed. Whenever a preparation in the prescribed
-    positions has the original ordered source inventory,
-    $VP_\eta$ is the original word operator.
-    Consequently the allowed partial branches satisfy
+    The composition $V$ is source-free, allowed when the original word is
+    allowed, and satisfies $VP_\eta=W$ for its ordered source inventory $\eta$.
+    In particular, for allowed partial branches,
     \begin{align}
         V_{\mathcal A,\xi}P_{\nu_\xi}
          & =W_{\mathcal A,\xi},
@@ -126,10 +110,9 @@ no bound on private dimensions is imposed.
 \begin{proof}
     \leanok
     \uses{thm:peps_source_preparation,thm:peps_partial_original_source_vector}
-    Rewriting the source-preparation identity along the equality of
-    ordered register lists identifies the inventory at index $i$ with the original
-    vector selected by $\xi_{g_i}$, which gives
-    (\ref{eq:peps_canonical_recovery}).
+    Combine Theorem~\ref{thm:peps_source_preparation} with the inventory
+    identification $(\nu_\xi)_i=\nu_{e_i,\xi_{g_i}}$ of
+    Theorem~\ref{thm:peps_partial_original_source_vector}.
 \end{proof}
 
 \begin{theorem}[Uniform recovery after source substitution]
@@ -140,13 +123,10 @@ no bound on private dimensions is imposed.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_partialResidual_prepare_substituted}
     \leanok
     \uses{def:peps_source_substitution,def:peps_canonical_source_residual}
-    For arbitrary $\eta$, the ordered pair-source inventory of
-    $W_{\mathcal A,\xi}(\eta)$ has the same retained positions and
-    has vector $\eta_{e_i,\xi_{g_i}}$ at position $i$.
-    If every source with both endpoints outside $\mathcal A$ retains
-    its original vector, the remaining composition is
-    $V_{\mathcal A,\xi}$, independently of the retained
-    vectors. Thus
+    For any $\eta$, $W_{\mathcal A,\xi}(\eta)$ has retained positions
+    $\mathcal E_{\mathcal A}$ and inventory $(\eta_\xi)_i=\eta_{e_i,\xi_{g_i}}$.
+    If $\eta_{e,\alpha}=\nu_{e,\alpha}$ whenever both endpoints of $e$ lie
+    outside $\mathcal A$, its residual composition is $V_{\mathcal A,\xi}$ and
     \begin{align}
         V_{\mathcal A,\xi}P_{\eta_\xi}
          & =W_{\mathcal A,\xi}(\eta),
@@ -158,25 +138,19 @@ no bound on private dimensions is imposed.
 \begin{proof}
     \leanok
     \uses{thm:peps_partial_source_order,thm:peps_canonical_source_recovery}
-    Induction preserves the complete ordered source list.
-    Surviving pair preparations change only their vectors. A source
-    whose endpoints are both exterior becomes a local preparation;
-    the stated condition keeps that local operation unchanged.
-    All other remaining operations agree. Hence
-    $W_{\mathcal A,\xi}(\eta)$ has remaining composition
-    $V_{\mathcal A,\xi}$ and ordered inventory $\eta_\xi$.
-    Theorem~\ref{thm:peps_canonical_source_recovery}, applied to this
-    word, replaces $\nu_\xi$ by $\eta_\xi$ in
-    (\ref{eq:peps_canonical_recovery}) and gives
-    (\ref{eq:peps_substituted_recovery}).
+    By Theorem~\ref{thm:peps_partial_source_order}, substitution preserves the
+    retained positions $\mathcal E_{\mathcal A}$, and since exterior-only
+    sources retain $\nu_{e,\alpha}$, the extracted residual equals
+    $V_{\mathcal A,\xi}$; Theorem~\ref{thm:peps_canonical_source_recovery} then
+    gives (\ref{eq:peps_substituted_recovery}).
 \end{proof}
 
 \begin{theorem}[Weighted matrix sums]
     \label{thm:peps_weighted_density_sum}
     \lean{Matrix.sum_smul_mul_mul_conjTranspose}
     \leanok
-    For finite coefficient families $c_\alpha,d_\beta$, rectangular
-    matrices $K_\alpha,L_\beta$, and a compatible rectangular matrix $R$,
+    For finite families $c_\alpha,d_\beta\in\C$ and compatible rectangular
+    matrices $K_\alpha,L_\beta,R$,
     \begin{align}
         \Bigl(\sum_\alpha c_\alpha K_\alpha\Bigr)R
         \Bigl(\sum_\beta d_\beta L_\beta\Bigr)^\dagger
@@ -187,8 +161,8 @@ no bound on private dimensions is imposed.
 \end{theorem}
 \begin{proof}
     \leanok
-    Distributing the products over the finite sums and conjugating the
-    coefficients in the adjoint gives the weighted matrix-sum identity.
+    Expand by bilinearity of matrix multiplication and conjugate linearity of
+    $(\cdot)^\dagger$.
 \end{proof}
 
 \begin{definition}[Corrected terms at original source positions]
@@ -200,13 +174,12 @@ no bound on private dimensions is imposed.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceTerm}
     \leanok
     \uses{def:peps_source_substitution}
-    Fix $S\subseteq\mathcal E$. A choice $u$ specifies at each $e=(g,j)\in S$
-    a local label $\alpha_e\in\Xi_g$ and an endpoint basis index $a_e$.
-    In $W$, replace the vector at $(e,\gamma)$ by the basis tensor
-    indexed by $a_e$ if $\gamma=\alpha_e$, and by zero otherwise;
-    retain original vectors outside $S$. Let $M_{S,u}$ be the resulting
-    circuit matrix. For arbitrary source matrices $E_{e,\alpha,\beta}$,
-    define
+    For $S\subseteq\mathcal E$, a choice $u=(\alpha,a)$ assigns to each
+    $e=(g,j)\in S$ a label $\alpha_e\in\Xi_g$ and an endpoint-basis index $a_e$.
+    Let $M_{S,u}$ be the matrix of $W(\eta)$ where $\eta_{e,\gamma}$ is the
+    $a_e$-th basis tensor if $e\in S$ and $\gamma=\alpha_e$, $0$ if $e\in S$ and
+    $\gamma\neq\alpha_e$, and $\nu_{e,\gamma}$ if $e\notin S$. For source
+    matrices $E_{e,\alpha,\beta}$, define
     \begin{align}
         F_S(E;\rho)
          & :=\sum_{u=(\alpha,a),\,v=(\beta,b)}
@@ -214,8 +187,6 @@ no bound on private dimensions is imposed.
         M_{S,u}\rho M_{S,v}^{\dagger}.
         \label{eq:peps_original_corrected_term}
     \end{align}
-    This definition uses the original positions and local labels,
-    before any affected set is chosen.
 \end{definition}
 
 \begin{theorem}[The empty corrected set]
@@ -223,13 +194,13 @@ no bound on private dimensions is imposed.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceTerm_empty}
     \leanok
     \uses{def:peps_original_corrected_term}
-    If $M$ is the original circuit matrix, then $F_\varnothing(E;\rho)=M\rho M^\dagger$.
+    For the original circuit matrix $M$, $F_\varnothing(E;\rho)=M\rho M^\dagger$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_source_substitution_partial}
-    There is one assignment on the empty set, its product is one,
-    and every source remains original.
+    On $S=\varnothing$, there is a single empty choice $u$ with empty product
+    $1$ and $M_{\varnothing,u}=M$ by Theorem~\ref{thm:peps_source_substitution_partial}.
 \end{proof}
 
 \begin{definition}[Partially expanded basis substitutions]
@@ -241,13 +212,11 @@ no bound on private dimensions is imposed.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialCoordinateBasisMatrix}
     \leanok
     \uses{def:peps_original_corrected_term,def:peps_partial_source_choices}
-    Let $M_{\mathcal A,\xi;S,u}$ be the matrix of the corresponding
-    substituted partial branch, expressed in the original
-    input and output coordinates via $J_a,J_b$.
-    A coordinate choice $a$ on $S$ specifies only the endpoint basis
-    indices. Write $K_{\mathcal A,\xi;S,a}$ for the same partial matrix
-    with these basis tensors at selected positions, without imposing
-    additional local-label conditions.
+    Let $M_{\mathcal A,\xi;S,u}$ be the matrix of the substituted partial branch
+    $J_b^{-1}W_{\mathcal A,\xi}(\eta)J_a$ for $u=(\alpha,a)$ in
+    Definition~\ref{def:peps_original_corrected_term}, and for an endpoint-basis
+    assignment $a$ on $S$, let $K_{\mathcal A,\xi;S,a}$ be the partial-branch
+    matrix with the $a_e$-th basis tensor at each $e\in S$ and $\nu$ outside $S$.
 \end{definition}
 
 \begin{theorem}[Partial expansion of the same corrected term]
@@ -259,39 +228,35 @@ no bound on private dimensions is imposed.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialCoordinateBasisMatrix_eq_preparedMatrix}
     \leanok
     \uses{def:peps_partial_basis_substitution}
-    Suppose every $e\in S$ has an endpoint in $\mathcal A$.
-    Then $M_{S,u}=\sum_\xi c_{\mathcal A,\xi}M_{\mathcal A,\xi;S,u}$.
-    A summand $M_{\mathcal A,\xi;S,u}$ equals
-    $K_{\mathcal A,\xi;S,a}$ if $\alpha_e=\xi_{g_e}$ at every
-    selected position, and is zero otherwise. Consequently
+    If every $e\in S$ has an endpoint in $\mathcal A$, then
+    $M_{S,u}=\sum_\xi c_{\mathcal A,\xi}M_{\mathcal A,\xi;S,u}$ with
+    $M_{\mathcal A,\xi;S,(\alpha,a)}=\mathbf 1_{\forall e\in S,\,\alpha_e=\xi_{g_e}}K_{\mathcal A,\xi;S,a}$,
+    so
     \begin{align}
         F_S(E;\rho)
          & =\sum_{\xi,\zeta}c_{\mathcal A,\xi}\overline{c_{\mathcal A,\zeta}}
         \sum_{a,b}
         \left(\prod_{e\in S}
         E_{e,\xi_{g_e},\zeta_{g_e}}(a_e,b_e)\right)
-        K_{\mathcal A,\xi;S,a}\rho K_{\mathcal A,\zeta;S,b}^{\dagger}.
+        K_{\mathcal A,\xi;S,a}\rho K_{\mathcal A,\zeta;S,b}^{\dagger},
         \label{eq:peps_corrected_partial}
     \end{align}
-    Each $K$ is the matrix of the remaining composition $V_{\mathcal A,\xi}$
-    applied to the indicated basis preparations, with the original
-    locally selected vectors at every unselected retained position.
+    where $K_{\mathcal A,\xi;S,a}$ is the prepared matrix of
+    $V_{\mathcal A,\xi}$ with basis vectors $a_e$ on $S$ and $\nu_{e_i,\xi_{g_i}}$
+    on $\mathcal E_{\mathcal A}\setminus S$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_source_substitution_partial,thm:peps_weighted_density_sum,
         thm:peps_canonical_substitution_recovery,thm:peps_source_preparation_sums}
-    Applying (\ref{eq:peps_substitution_partial}) to each basis substitution
-    and distributing the ket and bra sums via
-    (\ref{eq:peps_weighted_density_sum}) expands $F_S(E;\rho)$ over partial branches. If a selected label disagrees
-    with the branch label, its source vector is zero. Multilinearity
-    of preparation makes the corresponding matrix zero. Otherwise the
-    substitution is the prescribed basis preparation, by
-    (\ref{eq:peps_substituted_recovery}). Summing the local-label
-    conditions leaves (\ref{eq:peps_corrected_partial}). Selected
-    positions at the same gate impose the same label; the coefficient
-    of that gate still occurs only once in $c_{\mathcal A,\xi}$.
+    Expand $M_{S,u}$ by (\ref{eq:peps_substitution_partial}) and $F_S(E;\rho)$
+    by (\ref{eq:peps_weighted_density_sum}). By
+    (\ref{eq:peps_substituted_recovery}) and multilinearity of source
+    preparation (Theorem~\ref{thm:peps_source_preparation_sums}),
+    $M_{\mathcal A,\xi;S,(\alpha,a)}$ vanishes unless $\alpha_e=\xi_{g_e}$ for
+    all $e\in S$, in which case it equals $K_{\mathcal A,\xi;S,a}$, giving
+    (\ref{eq:peps_corrected_partial}).
 \end{proof}
 
 \begin{definition}[Selected retained positions]
@@ -303,39 +268,36 @@ no bound on private dimensions is imposed.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.selectedSourceCoordinateEquiv_apply}
     \leanok
     \uses{def:peps_partial_fixed_positions}
-    Let $i\mapsto e_i$ enumerate the retained positions. Set
-    $S_{\mathcal A}=\{i:e_i\in S\}$. If every selected position has an
-    affected endpoint, $i\mapsto e_i$ restricts to a bijection
-    $S_{\mathcal A}\to S$. Precomposition with this bijection identifies
-    the two families of endpoint-coordinate assignments, point by point.
+    For the retained-position enumeration $i\mapsto e_i$
+    (Definition~\ref{def:peps_partial_fixed_positions}), set
+    $S_{\mathcal A}=\{i:e_i\in S\}$. When every $e\in S$ has an endpoint in
+    $\mathcal A$, $i\mapsto e_i$ restricts to a bijection
+    $S_{\mathcal A}\to S$, inducing a bijection between endpoint-coordinate
+    assignments on $S$ and on $S_{\mathcal A}$.
 \end{definition}
 \begin{theorem}[Changing the enumeration of selected sources]
     \label{thm:peps_selected_retained_coordinates}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialCoordinateBasisMatrix_reindex}
     \leanok
     \uses{def:peps_selected_retained_positions,thm:peps_canonical_substitution_recovery}
-    Under this bijection, $K_{\mathcal A,\xi;S,a}$ is the
-    prepared matrix of $V_{\mathcal A,\xi}$ with the corresponding
-    basis vectors at $S_{\mathcal A}$ and original source vectors elsewhere.
+    Under the bijection of Definition~\ref{def:peps_selected_retained_positions},
+    $K_{\mathcal A,\xi;S,a}$ equals the prepared matrix of $V_{\mathcal A,\xi}$
+    with the corresponding basis vectors on $S_{\mathcal A}$ and original source
+    vectors outside $S_{\mathcal A}$.
 \end{theorem}
 \begin{proof}
     \leanok
-    At each retained index $i$, membership in
-    $S_{\mathcal A}$ is equivalent to $e_i\in S$, and both expressions
-    select the same coordinate in that case.
+    For each retained index $i$, $i\in S_{\mathcal A}\iff e_i\in S$, so both
+    preparations assign the same vector to slot $i$.
 \end{proof}
 
-For a fixed ordered source list, let $K_V(a)$ be the matrix obtained
-from a remaining composition $V$ by preparing its endpoint vectors
-indexed by $a$. For ket and bra endpoint families, put
-$H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and write
+For a fixed ordered source list and remaining composition $V$ with prepared
+matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
 \begin{align}
     \mathcal C_H(Y)
      & :=\sum_{a,b}\left(\prod_iY_i(a_i,b_i)\right)H(a,b).
     \label{eq:peps_source_contraction}
 \end{align}
-The endpoint families on the two sides may have different finite
-index sets.
 
 \begin{theorem}[Prepared densities as source contractions]
     \label{thm:peps_prepared_source_contraction}
@@ -343,40 +305,35 @@ index sets.
     \lean{TNLean.Lattice.PartyCircuit.Word.sourceContraction_preparedDensityCoefficient_basis}
     \leanok
     \uses{thm:peps_prepared_density_components}
-    Suppose $\eta_i=\sum_a r_i(a)u_i(a_1)\otimes v_i(a_2)$ and
-    $\zeta_i=\sum_b s_i(b)u'_i(b_1)\otimes v'_i(b_2)$.
-    With $X_i=r_i s_i^\dagger$, the prepared matrices satisfy
+    If $\eta_i=\sum_a r_i(a)u_i(a_1)\otimes v_i(a_2)$,
+    $\zeta_i=\sum_b s_i(b)u'_i(b_1)\otimes v'_i(b_2)$, and $X_i=r_i s_i^\dagger$,
+    then
     \begin{align}
         \mathcal C_{H_{V,V'}}(X)
          & =K_V(\eta)\rho K_{V'}(\zeta)^\dagger.
         \label{eq:peps_prepared_contraction}
     \end{align}
-    In particular the identity holds for the coordinate
-    vectors of arbitrary sources in independently chosen endpoint
-    orthonormal bases.
 \end{theorem}
 \begin{proof}
     \leanok
-    Pair the ket and bra assignments at each position. Expanding their
-    rank-one matrix entries gives the product of the ket coefficients
-    and conjugated bra coefficients. The finite preparation expansion
-    then gives (\ref{eq:peps_prepared_contraction}).
+    Substituting $X_i(a_i,b_i)=r_i(a_i)\overline{s_i(b_i)}$ into
+    (\ref{eq:peps_source_contraction}) and applying
+    Theorem~\ref{thm:peps_prepared_density_components} yields
+    (\ref{eq:peps_prepared_contraction}).
 \end{proof}
 
 \begin{definition}[Replacement of source operators]
     \label{def:peps_prepared_source_replacement}
     \lean{TNLean.Lattice.PartyCircuit.Word.sourceOperatorDensity}
     \leanok
-    For remaining compositions $V_\xi$ and weights $c_\xi$,
-    define
+    For remaining compositions $V_\xi$, weights $c_\xi$, and source matrices
+    $Y_{\xi,\zeta}$, define
     \begin{align}
         \mathcal R(Y)
          & :=\sum_{\xi,\zeta}c_\xi\overline{c_\zeta}
         \mathcal C_{H_{V_\xi,V_\zeta}}(Y_{\xi,\zeta}).
         \label{eq:peps_prepared_replacement}
     \end{align}
-    Source matrices may depend on both branch labels; ket and bra
-    endpoint-coordinate sets may vary with their respective branch labels.
 \end{definition}
 \begin{theorem}[The prepared corrected-subset identity]
     \label{thm:peps_prepared_subset_identity}
@@ -385,24 +342,23 @@ index sets.
     \lean{TNLean.Lattice.PartyCircuit.Word.sourceOperatorDensity_sub_prepared}
     \leanok
     \uses{def:peps_prepared_source_replacement}
-    If $X$ is any family of source matrices, then
+    For any source matrix families $X,E$,
     \begin{align}
         \mathcal R(X+E)-\mathcal R(X)
          & =\sum_{\varnothing\ne S\subseteq\{0,\ldots,r-1\}}
         \mathcal R(E\text{ on }S,\ X\text{ off }S).
         \label{eq:peps_prepared_subsets}
     \end{align}
-    For exact rank-one coordinate matrices of sources $\eta_\xi$,
-    $\mathcal R(X)=M\rho M^\dagger$, where
-    $M=\sum_\xi c_\xi K_{V_\xi}(\eta_\xi)$.
+    When $X_{\xi,\zeta,i}=\ketbra{\eta_{\xi,i}}{\eta_{\zeta,i}}$,
+    $\mathcal R(X)=M\rho M^\dagger$ for $M=\sum_\xi c_\xi K_{V_\xi}(\eta_\xi)$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_prepared_source_contraction,thm:peps_weighted_density_sum}
-    Expanding the product in (\ref{eq:peps_source_contraction}) over subsets
-    and subtracting its empty-subset term gives the subset expansion, while
-    (\ref{eq:peps_prepared_contraction}) and
-    (\ref{eq:peps_weighted_density_sum}) yield the exact-source assertion.
+    Expanding $\prod_i(X_i+E_i)-\prod_i X_i$ over nonempty
+    $S\subseteq\{0,\ldots,r-1\}$ in (\ref{eq:peps_source_contraction}) gives
+    (\ref{eq:peps_prepared_subsets}), and (\ref{eq:peps_prepared_contraction})
+    with (\ref{eq:peps_weighted_density_sum}) gives $\mathcal R(X)=M\rho M^\dagger$.
 \end{proof}
 
 \begin{theorem}[Expanding only the selected source matrices]
@@ -410,26 +366,21 @@ index sets.
     \lean{TNLean.Lattice.PartyCircuit.Word.sourceContraction_preparedDensityCoefficient_selected}
     \leanok
     \uses{thm:peps_prepared_source_contraction}
-    Let $X_i=\ketbra{\eta_i}{\zeta_i}$ in the chosen ket and bra
-    endpoint bases. For any set $S$ of positions,
+    For $X_i=\ketbra{\eta_i}{\zeta_i}$ in the endpoint bases and any position
+    subset $S$,
     \begin{align}
         \mathcal C_{H_{V,V'}}(E\text{ on }S,\ X\text{ off }S)
          & =\sum_{a,b}\left(\prod_{i\in S}E_i(a_i,b_i)\right)
         K_V(\eta[S\leftarrow a])\rho
-        K_{V'}(\zeta[S\leftarrow b])^\dagger.
+        K_{V'}(\zeta[S\leftarrow b])^\dagger,
         \label{eq:peps_selected_contraction}
     \end{align}
-    Here $a,b$ range only over endpoint-coordinate assignments on $S$,
-    and the notation on the right replaces each selected vector by
-    its endpoint basis tensor. Ket and bra bases may differ.
+    summed over endpoint-coordinate assignments $a,b$ on $S$.
 \end{theorem}
 \begin{proof}
     \leanok
-    Expanding each selected matrix in matrix units and using multilinearity of
-    (\ref{eq:peps_source_contraction}) leaves a sum over only those
-    positions; since each selected matrix unit is the rank-one coordinate
-    matrix of its ket and bra basis tensors, applying
-    (\ref{eq:peps_prepared_contraction}) to each term yields the selected-source contraction formula.
+    Expand each $E_i$ ($i\in S$) in matrix units in (\ref{eq:peps_source_contraction})
+    and apply (\ref{eq:peps_prepared_contraction}) to each term.
 \end{proof}
 
 \begin{theorem}[The corrected term in a partial expansion]
@@ -437,17 +388,16 @@ index sets.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceTerm_eq_sourceContraction}
     \leanok
     \uses{def:peps_original_corrected_term,def:peps_selected_retained_positions}
-    Suppose every $e\in S$ has an endpoint in $\mathcal A$.
-    In the common retained positions, set
+    If every $e\in S$ has an endpoint in $\mathcal A$, setting
     \begin{align}
         Y_{\xi,\zeta,i}
          & :=\begin{cases}
-                 E_{e_i,\xi_{g_i},\zeta_{g_i}},                       & e_i\in S,    \\
-                 \ketbra{\nu_{e_i,\xi_{g_i}}}{\nu_{e_i,\zeta_{g_i}}}, & e_i\notin S.
+                 E_{e_i,\xi_{g_i},\zeta_{g_i}},                       & e_i\in S,   \\
+                 \ketbra{\nu_{e_i,\xi_{g_i}}}{\nu_{e_i,\zeta_{g_i}}}, & e_i\notin S
              \end{cases}
         \label{eq:peps_partial_corrected_sources}
     \end{align}
-    The same globally defined term then satisfies
+    gives
     \begin{align}
         F_S(E;\rho)
          & =\sum_{\xi,\zeta}c_{\mathcal A,\xi}\overline{c_{\mathcal A,\zeta}}
@@ -460,10 +410,9 @@ index sets.
     \leanok
     \uses{thm:peps_corrected_partial,thm:peps_selected_retained_coordinates,
         thm:peps_selected_source_contraction}
-    Applying (\ref{eq:peps_selected_contraction}) to each partial ket--bra
-    pair and reindexing its selected coordinates along the bijection
-    $S_{\mathcal A}\to S$ recovers
-    (\ref{eq:peps_corrected_partial}).
+    Apply (\ref{eq:peps_selected_contraction}) to each $(\xi,\zeta)$ pair and
+    reindex $S_{\mathcal A}\to S$ by Theorem~\ref{thm:peps_selected_retained_coordinates}
+    to match (\ref{eq:peps_corrected_partial}).
 \end{proof}
 
 \begin{definition}[All original source positions]
@@ -472,8 +421,8 @@ index sets.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allSourceSlotEquiv_apply}
     \leanok
     \uses{def:peps_partial_fixed_positions}
-    Taking every party to be affected retains every original source
-    position. Its ordered enumeration is a bijection
+    Selecting all parties ($\mathcal A=P$) retains all $r=|\mathcal E|$ original
+    source positions, giving an enumeration bijection
     $\{0,\ldots,r-1\}\to\mathcal E$.
 \end{definition}
 \begin{theorem}[Reindexing nonempty source subsets]
@@ -481,13 +430,13 @@ index sets.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_nonempty_allSourceSlots}
     \leanok
     \uses{def:peps_all_original_source_slots}
-    This bijection identifies sums over nonempty subsets of the
-    retained indices with sums over nonempty subsets of $\mathcal E$,
-    for every function valued in a commutative additive monoid.
+    The bijection of Definition~\ref{def:peps_all_original_source_slots}
+    identifies sums over $\varnothing\ne S_0\subseteq\{0,\ldots,r-1\}$ with sums
+    over $\varnothing\ne S\subseteq\mathcal E$.
 \end{theorem}
 \begin{proof}
     \leanok
-    The induced bijection on finite subsets preserves emptiness.
+    The induced power-set bijection preserves $\varnothing$.
 \end{proof}
 
 \begin{definition}[Replacement in the complete circuit density]
@@ -496,13 +445,9 @@ index sets.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceReplacedDensity}
     \leanok
     \uses{def:peps_prepared_source_replacement,def:peps_all_original_source_slots}
-    Put $X_{e,\alpha,\beta}=\ketbra{\nu_{e,\alpha}}{\nu_{e,\beta}}$.
-    To define $\widehat\rho(Y)$, take all parties to be affected in
-    (\ref{eq:peps_prepared_replacement}), use the
-    remaining compositions $V_\xi$, and assign at position $e_i$ the matrix
-    $Y_{e_i,\xi_{g_i},\zeta_{g_i}}$. Thus $\widehat\rho(Y)$ is defined
-    directly by local source-operator replacement, independently of
-    any corrected-subset formula.
+    Set $X_{e,\alpha,\beta}=\ketbra{\nu_{e,\alpha}}{\nu_{e,\beta}}$, and define
+    $\widehat\rho(Y)$ as $\mathcal R(Y)$ in (\ref{eq:peps_prepared_replacement})
+    for $\mathcal A=P$ with $Y_{e_i,\xi_{g_i},\zeta_{g_i}}$ at slot $i$.
 \end{definition}
 \begin{theorem}[The global corrected-subset identity]
     \label{thm:peps_global_corrected_subsets}
@@ -511,10 +456,8 @@ index sets.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceReplacedDensity_sub_exact}
     \leanok
     \uses{def:peps_global_source_replacement}
-    The exact sources recover $\widehat\rho(X)=M\rho M^\dagger$.
-    Replacing precisely the original positions in $S$ gives
-    $\widehat\rho(E\text{ on }S,X\text{ off }S)=F_S(E;\rho)$.
-    Consequently
+    We have $\widehat\rho(X)=M\rho M^\dagger$,
+    $\widehat\rho(E\text{ on }S,X\text{ off }S)=F_S(E;\rho)$, and
     \begin{align}
         \widehat\rho(X+E)-M\rho M^\dagger
          & =\sum_{\varnothing\ne S\subseteq\mathcal E}F_S(E;\rho).
@@ -525,11 +468,10 @@ index sets.
     \leanok
     \uses{thm:peps_corrected_source_contraction,thm:peps_corrected_empty,
         thm:peps_prepared_subset_identity,thm:peps_all_source_subsets}
-    Applying (\ref{eq:peps_corrected_contraction}) with every party
-    affected—first to the empty selected set and then to arbitrary
-    $S$—gives the two recovery identities, and expanding the source
-    operators by (\ref{eq:peps_prepared_subsets}) before reindexing the
-    nonempty subsets by their original occurrences gives the global corrected-subset identity.
+    Apply (\ref{eq:peps_corrected_contraction}) with $\mathcal A=P$ to
+    $S=\varnothing$ (using Theorem~\ref{thm:peps_corrected_empty}) and to
+    general $S\subseteq\mathcal E$, then combine (\ref{eq:peps_prepared_subsets})
+    with Theorem~\ref{thm:peps_all_source_subsets}.
 \end{proof}
 
 \begin{definition}[Physical output after discarding retained registers]
@@ -539,15 +481,13 @@ index sets.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalSourceReplacedDensity}
     \leanok
     \uses{def:peps_global_source_replacement,def:peps_original_corrected_term}
-    Suppose the final ordered register list is the physical list
-    followed by the discarded list. Choose finite orthonormal bases
-    of both memories and their tensor-product basis on the full
-    output, mapped through the append isometry.
-    Define
+    In a product orthonormal basis of the physical and discarded output
+    memories, define
     \begin{align}
-        \rho_{\mathrm{phys}}            & :=\operatorname{Tr}_{\mathrm{disc}}(M\rho M^\dagger), \\
-        \widehat\rho_{\mathrm{phys}}(Y) & :=\operatorname{Tr}_{\mathrm{disc}}\widehat\rho(Y),   \\
+        \rho_{\mathrm{phys}}            & :=\operatorname{Tr}_{\mathrm{disc}}(M\rho M^\dagger), &
+        \widehat\rho_{\mathrm{phys}}(Y) & :=\operatorname{Tr}_{\mathrm{disc}}\widehat\rho(Y),   &
         F_S^{\mathrm{phys}}(E;\rho)     & :=\operatorname{Tr}_{\mathrm{disc}}F_S(E;\rho).
+        \label{eq:peps_physical_source_replacement}
     \end{align}
 \end{definition}
 \begin{theorem}[The physical corrected-subset identity]
@@ -557,24 +497,22 @@ index sets.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.rectangularTraceNorm_physicalSourceReplacedDensity_sub_le}
     \leanok
     \uses{def:peps_physical_source_replacement}
-    Exact sources recover $\widehat\rho_{\mathrm{phys}}(X)=\rho_{\mathrm{phys}}$.
-    The physical replacement error satisfies
+    We have $\widehat\rho_{\mathrm{phys}}(X)=\rho_{\mathrm{phys}}$ and
     \begin{align}
         \widehat\rho_{\mathrm{phys}}(X+E)-\rho_{\mathrm{phys}}
          & =\sum_{\varnothing\ne S\subseteq\mathcal E}F_S^{\mathrm{phys}}(E;\rho),
         \label{eq:peps_physical_corrected_subsets}                                 \\
         \bigl\|\widehat\rho_{\mathrm{phys}}(X+E)-\rho_{\mathrm{phys}}\bigr\|_1
          & \leq\sum_{\varnothing\ne S\subseteq\mathcal E}
-        \bigl\|F_S^{\mathrm{phys}}(E;\rho)\bigr\|_1.
+        \bigl\|F_S^{\mathrm{phys}}(E;\rho)\bigr\|_1.\notag
     \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_global_corrected_subsets}
-    Applying the linear partial trace to
-    (\ref{eq:peps_global_corrected_subsets}) and the triangle
-    inequality for the trace norm yields both conclusions. No discarded-memory dimension factor
-    appears in either assertion.
+    Apply $\operatorname{Tr}_{\mathrm{disc}}$ linearly to
+    (\ref{eq:peps_global_corrected_subsets}) and take the trace-norm triangle
+    inequality.
 \end{proof}
 
 \subsection{Preparing the original private input}
@@ -587,21 +525,13 @@ index sets.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sources_partialSourceWord}
     \leanok
     \uses{def:peps_private_product_input,def:peps_canonical_source_residual,def:peps_all_party_source_registers,def:peps_affected_owner,def:peps_partial_source_choices,thm:peps_owner_composition,thm:peps_canonical_source_recovery}
-    Let $W$ be a distributed composition with input memory $\mathcal H_a$,
-    let $\psi\in\mathcal H_a$ be its recorded private product input, and let
-    $\xi$ choose a monomial at every gate that meets a party. Write
-    $\mathcal H_S$ for its fixed source-register memory and $V_\xi$ for
-    its remaining operations when every party is selected.
-    Relabel private owners by the owner identification.
-
-    Extend the recorded preparation of $\psi$ by the identity on
-    $\mathcal H_S$, obtaining
-    $P_\psi:\mathcal H_S\otimes\C\to\mathcal H_S\otimes\mathcal H_a$.
-    The source-to-output composition is $T_\xi=V_\xi P_\psi$.
-    In the private-input and fixed-source-space setting of
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
-    (\texttt{04-compression.tex}, lines 137--139 and 246--267),
-    both compositions contain no pair-source preparations.
+    For a distributed composition $W$ with private product input
+    $\psi\in\mathcal H_a$, fixed source memory $\mathcal H_S$, and all-party
+    residual $V_\xi$, let $P_\psi:\mathcal H_S\otimes\C\to\mathcal H_S\otimes\mathcal H_a$
+    extend the owner-relabeled preparation of $\psi$ by $\Id_{\mathcal H_S}$,
+    and define the source-free source-to-output composition $T_\xi=V_\xi P_\psi$,
+    as in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
+    (\texttt{04-compression.tex}, lines 137--139 and 246--267).
 \end{definition}
 
 \begin{theorem}[Action of the private preparation]
@@ -610,22 +540,20 @@ index sets.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_partialSourceWord_tmul}
     \leanok
     \uses{def:peps_actual_private_preparation}
-    With the append and owner identifications understood,
-    every $y\in\mathcal H_S$ satisfies
+    Under the append and owner identifications, every $y\in\mathcal H_S$
+    satisfies
     \begin{align}
         P_\psi(y\otimes1) & =y\otimes\psi,
-        \label{eq:peps_actual_private_preparation} \\
-        T_\xi(y\otimes1)  & =V_\xi(y\otimes\psi).
+        \label{eq:peps_actual_private_preparation}      \\
+        T_\xi(y\otimes1)  & =V_\xi(y\otimes\psi).\notag
     \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:peps_private_product_input,lem:lattice_register_reorderings,
         thm:peps_owner_composition}
-    Because a composition extended by untouched registers acts as the identity on
-    their tensor factor, the recorded preparation after
-    relabelling owners evaluates at $1$ to the relabelled vector $\psi$ by (\ref{eq:peps_owner_composition}), and composing with $V_\xi$ gives the second identity.
-    The source lists of the recorded preparation and $V_\xi$ are empty;
-    extending by untouched registers, relabelling owners, and composing
-    preserve that property.
+    By Definition~\ref{def:peps_private_product_input},
+    Lemma~\ref{lem:lattice_register_reorderings}, and
+    (\ref{eq:peps_owner_composition}), $P_\psi(y\otimes 1)=y\otimes\psi$, and
+    applying $V_\xi$ gives $T_\xi(y\otimes 1)=V_\xi(y\otimes\psi)$.
 \end{proof}

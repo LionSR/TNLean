@@ -24,20 +24,7 @@ of a local circuit that may add product ancillas and discard them
         QuantumCircuit.IsChannelPreparedInDepth,
         QuantumCircuit.IsBondChannelPreparedInDepth}
     \leanok
-    Fix a bond geometry, for instance the pairs $\{k,k+1\}$ of the ring. A
-    \emph{channel on the bond} $B$ is a map
-    $\rho\mapsto\sum_jK_j\rho K_j^\dagger$ on density matrices of all the
-    sites, where each $K_j$ is an operator on all the sites acting trivially
-    off $B$ and
-    $\sum_jK_j^\dagger K_j=\mathbb 1$. A \emph{channel layer} is a composition
-    of channels on disjoint bonds, and a
-    \emph{local channel circuit of depth $T$} is a composition
-    $\Phi=\Phi_T\circ\dots\circ\Phi_1$ of $T$ channel layers.
-    Its dual $\Phi^\dagger=\Phi_1^\dagger\circ\dots\circ\Phi_T^\dagger$
-    replaces each channel on a bond by $A\mapsto\sum_jK_j^\dagger AK_j$. A
-    density matrix is \emph{prepared in depth $T$ by local channels} if it
-    equals $\Phi(\bigotimes_i\sigma_i)$ for a local channel circuit $\Phi$ of
-    depth $T$ and density matrices $\sigma_i$ on single sites.
+    Fix a bond geometry $(B_b)_{b\in\beta}$. A \emph{channel on bond $B$} is a map $\Phi_B(\rho)=\sum_j K_j\rho K_j^\dagger$ with $K_j\in\mathcal A_B$ and $\sum_j K_j^\dagger K_j=\mathbb 1$, with Heisenberg dual $\Phi_B^\dagger(A)=\sum_j K_j^\dagger AK_j$. A \emph{channel layer} is a composition of channels on pairwise disjoint bonds, a \emph{local channel circuit of depth $T$} is a composition $\Phi=\Phi_T\circ\cdots\circ\Phi_1$ of $T$ channel layers with dual $\Phi^\dagger=\Phi_1^\dagger\circ\cdots\circ\Phi_T^\dagger$, and $\rho$ is \emph{prepared in depth $T$ by local channels} if $\rho=\Phi(\bigotimes_i\sigma_i)$ for single-site density matrices $\sigma_i$.
 \end{definition}
 
 \begin{lemma}[Duality and complete positivity of local channel circuits]
@@ -47,25 +34,16 @@ of a local circuit that may add product ancillas and discard them
         QuantumCircuit.trace_channelCircuitMap_mul,
         QuantumCircuit.channelCircuitMap_map_toChannelLayer}
     \leanok
-    Let $\Phi$ be a local channel circuit. Then
+    Every local channel circuit $\Phi$ is CPTP and satisfies
     \begin{align}
-        \Tr(\Phi(\rho)A) & =\Tr(\rho\,\Phi^\dagger(A))
+        \Tr(\Phi(\rho)A) & =\Tr(\rho\,\Phi^\dagger(A)).
         \label{eq:qc_channel_circuit_duality}
     \end{align}
-    for all operators $\rho$ and $A$ on the sites, and $\Phi$ is trace
-    preserving and completely positive. A local circuit $U$ of depth $T$ is
-    the local channel circuit $\rho\mapsto U\rho U^\dagger$ of depth $T$ with
-    one operator per channel.
+    A depth-$T$ unitary circuit $U$ is the depth-$T$ channel circuit $\rho\mapsto U\rho U^\dagger$.
 \end{lemma}
 \begin{proof}
     \leanok
-    For one channel on a bond,
-    $\Tr\bigl(\sum_jK_j\rho K_j^\dagger A\bigr)
-        =\Tr\bigl(\rho\sum_jK_j^\dagger AK_j\bigr)$ by cyclicity of the
-    trace, and $\sum_jK_j^\dagger K_j=\mathbb 1$ makes it trace preserving
-    and completely positive. Both properties pass to compositions, hence to
-    layers and circuits. A gate $G$ on a bond is the channel with the single
-    operator $G$.
+    For a single bond channel, cyclicity of trace gives $\Tr(\sum_j K_j\rho K_j^\dagger A)=\Tr(\rho\sum_j K_j^\dagger AK_j)$, and $\sum_j K_j^\dagger K_j=\mathbb 1$ implies CPTP; both properties are preserved under composition.
 \end{proof}
 
 \begin{lemma}[Light cone of a local channel circuit]
@@ -77,19 +55,11 @@ of a local circuit that may add product ancillas and discard them
         QuantumCircuit.BondChannelLayer.dual_mem_supportedOperators,
         QuantumCircuit.ChannelLayer.dual_mem_supportedOperators}
     \leanok
-    Let $\Phi$ be a local channel circuit of depth $T$ and let $Z$ act on a
-    set of sites $X$. Then $\Phi^\dagger(Z)$ acts on the light cone of radius
-    $T$ of $X$; on the ring, on the sites within ring distance $T$ of $X$.
+    If $\Phi$ is a local channel circuit of depth $T$ and $Z\in\mathcal A_X$, then $\Phi^\dagger(Z)\in\mathcal A_{\mathcal L_T(X)}$ (on the ring, within ring distance $T$ of $X$).
 \end{lemma}
 \begin{proof}
     \leanok
-    By induction on the layers it suffices to treat one layer. The dual of a
-    channel on a bond disjoint from $X$ fixes $Z$: its operators commute with
-    $Z$, so $\sum_jK_j^\dagger ZK_j=\sum_jK_j^\dagger K_jZ=Z$. The dual of a
-    channel on a bond meeting $X$ maps operators acting on the one-step
-    neighbourhood of $X$ to such operators, since that set contains the bond.
-    The channels of a layer commute, so the dual of the layer is the dual of
-    the channels meeting $X$ applied after the dual of the others.
+    By induction on $T$ using Lemma~\ref{lem:qc_light_cone_geometries}, it suffices to treat one layer. For a bond $B\cap X=\varnothing$, $K_j\in\mathcal A_B$ commutes with $Z\in\mathcal A_X$, so $\sum_j K_j^\dagger ZK_j=(\sum_j K_j^\dagger K_j)Z=Z$; for bonds $B\cap X\ne\varnothing$, $B\subseteq\mathcal N_1(X)$, so $\sum_j K_j^\dagger ZK_j\in\mathcal A_{\mathcal N_1(X)}$.
 \end{proof}
 
 \begin{lemma}[No connected correlations beyond the light cone of channels]
@@ -103,32 +73,11 @@ of a local circuit that may add product ancillas and discard them
         QuantumCircuit.ChannelLayer.dual_mul,
         QuantumCircuit.trace_rectKronecker_mul_mul}
     \leanok
-    Let $\rho$ be prepared in depth $T$ by local channels, and let $Z$, $Z'$
-    act on sets of sites whose light cones of radius $T$ are disjoint, for
-    instance on the ring sets at distance larger than $2T$. Then
-    $\Tr(\rho ZZ')
-        =\Tr(\rho Z)\Tr(\rho Z')$.
+    If $\rho$ is prepared in depth $T$ by local channels and $Z\in\mathcal A_X$, $Z'\in\mathcal A_{X'}$ with $\mathcal L_T(X)\cap\mathcal L_T(X')=\varnothing$ (e.g., $d_{\rm ring}(X,X')>2T$), then $\Tr(\rho ZZ')=\Tr(\rho Z)\Tr(\rho Z')$.
 \end{lemma}
 \begin{proof}
     \leanok
-    The dual of a channel is not multiplicative, but the dual of one layer is
-    multiplicative on operators $Z$, $Z'$ acting on sets $X$, $Y$ whose
-    one-step neighbourhoods are disjoint. Indeed, no bond of the layer
-    meets both $X$ and $Y$. If a channel acts off a set on which an operator
-    $B$ acts, then its dual $\Psi$ satisfies $\Psi(AB)=\Psi(A)B$ and
-    $\Psi(BA)=B\Psi(A)$. Writing the dual of the layer as the dual of the
-    channels meeting $X$ after the dual of the others, and using
-    Lemma~\ref{lem:qc_channel_light_cone} for the latter applied to $Z'$,
-    one obtains the dual of $ZZ'$ as the product of the duals. By induction
-    on the layers, $\Phi^\dagger(ZZ')=\Phi^\dagger(Z)\Phi^\dagger(Z')$, and
-    the two factors act on disjoint sets. For a product density
-    $\sigma=\bigotimes_i\sigma_i$ of trace one and products
-    $\bigotimes_im_i$, $\bigotimes_im'_i$ with disjoint supports,
-    $\Tr(\sigma\bigotimes_im_im'_i)
-        =\prod_i\Tr(\sigma_im_im'_i)$, and at each site one of
-    $m_i$, $m'_i$ is the identity; bilinearity and the duality
-    $\Tr(\Phi(\sigma)A)=\Tr(\sigma\Phi^\dagger(A))$
-    conclude.
+    For a single layer $L$ and $Z\in\mathcal A_X$, $Z'\in\mathcal A_Y$ with $\mathcal N_1(X)\cap\mathcal N_1(Y)=\varnothing$, no bond of $L$ meets both $X$ and $Y$. Since $[K_j,B]=0\implies\Phi_B^\dagger(AB)=\Phi_B^\dagger(A)B$, splitting $L^\dagger$ into bonds meeting $X$ and the remaining bonds (and applying Lemma~\ref{lem:qc_channel_light_cone}) gives $L^\dagger(ZZ')=L^\dagger(Z)L^\dagger(Z')$. Induction on $T$ yields $\Phi^\dagger(ZZ')=\Phi^\dagger(Z)\Phi^\dagger(Z')$ with disjoint supports $\mathcal L_T(X),\mathcal L_T(X')$, and (\ref{eq:qc_channel_circuit_duality}) on $\rho=\Phi(\bigotimes_i\sigma_i)$ ($\Tr\sigma_i=1$) factors the trace.
 \end{proof}
 
 Ancillas are attached and discarded site by site, so the operations that
@@ -145,21 +94,13 @@ change the local dimension act on single sites.
         QuantumCircuit.OnsiteChannel.discard,
         QuantumCircuit.OnsiteChannel.discard_siteMap_apply}
     \leanok
-    An \emph{onsite channel} from sites of dimension $d$ to sites of dimension
-    $e$ is given, at each site $i$, by operators $K_{ij}\colon\C^d\to\C^e$ with
-    $\sum_jK_{ij}^\dagger K_{ij}=\mathbb 1$. It is the channel
-    $\rho\mapsto\sum_JK_J\rho K_J^\dagger$ on any finite set of sites, such as
-    the ring, with
-    $K_J=\bigotimes_iK_{iJ(i)}$ for every choice $J$ of one index per site;
-    its dual is $A\mapsto\sum_JK_J^\dagger AK_J$. Write
-    $\Phi_i(\sigma)=\sum_jK_{ij}\sigma K_{ij}^\dagger$ for its action at site
-    $i$. Attaching an ancilla of dimension $a$ in the state
-    $\tau=\sum_kw_kw_k^\dagger$ with $\sum_k\|w_k\|^2=1$ is the onsite channel
-    $X\mapsto X\otimes\tau$ from dimension $d$ to dimension $da$, and
-    discarding it is the onsite channel given by the partial trace over the
-    second factor of $\C^d\otimes\C^a$. Ancillas attached to each site and
-    local operations on a site and its ancillas are the free operations of
-    \cite{Piroli2021LOCC}.
+    An \emph{onsite channel} $\Phi=\bigotimes_i\Phi_i$ from local dimension $d$ to $e$ is defined by sitewise Kraus operators $K_{ij}\colon\C^d\to\C^e$ with $\sum_j K_{ij}^\dagger K_{ij}=\mathbb 1_d$:
+    \begin{align}
+        \Phi(\rho)      & =\sum_J K_J\rho K_J^\dagger,    &
+        \Phi^\dagger(A) & =\sum_J K_J^\dagger AK_J,       &
+        K_J             & =\bigotimes_i K_{i,J(i)}.\notag
+    \end{align}
+    Attaching an $a$-level ancilla in state $\tau=\sum_k w_k w_k^\dagger$ ($\sum_k\|w_k\|^2=1$) is the onsite channel $X_i\mapsto X_i\otimes\tau$ ($d\to da$), and discarding it is the partial trace $\operatorname{Tr}_{\C^a}$ ($da\to d$)~\cite{Piroli2021LOCC}.
 \end{definition}
 
 \begin{lemma}[Onsite channels are product channels]
@@ -171,20 +112,11 @@ change the local dimension act on single sites.
         QuantumCircuit.OnsiteChannel.trace_map_mul,
         QuantumCircuit.OnsiteChannel.discard_siteMap_attach_siteMap}
     \leanok
-    An onsite channel $\Phi$ is trace preserving and completely positive, it
-    maps $\bigotimes_i\sigma_i$ to $\bigotimes_i\Phi_i(\sigma_i)$, it satisfies
-    $\Tr(\Phi(\rho)A)=\Tr(\rho\,\Phi^\dagger(A))$, and discarding an attached
-    ancilla gives back the original operator.
+    Every onsite channel $\Phi$ is CPTP, satisfies $\Phi(\bigotimes_i\sigma_i)=\bigotimes_i\Phi_i(\sigma_i)$ and $\Tr(\Phi(\rho)A)=\Tr(\rho\,\Phi^\dagger(A))$, and satisfies $\operatorname{discard}_\tau\circ\operatorname{attach}_\tau=\operatorname{id}$.
 \end{lemma}
 \begin{proof}
     \leanok
-    The operators $K_J$ satisfy
-    $\sum_JK_J^\dagger K_J=\bigotimes_i\sum_jK_{ij}^\dagger K_{ij}=\mathbb 1$,
-    so the Kraus form gives complete positivity and trace preservation. Since
-    $K_J$ is a tensor product, $K_J(\bigotimes_i\sigma_i)K_J^\dagger
-        =\bigotimes_iK_{iJ(i)}\sigma_iK_{iJ(i)}^\dagger$, and summing over $J$
-    factorizes site by site. The duality is cyclicity of the trace. Finally,
-    the partial trace of $X\otimes\tau$ is $\Tr(\tau)X=X$.
+    We have $\sum_J K_J^\dagger K_J=\bigotimes_i\sum_j K_{ij}^\dagger K_{ij}=\mathbb 1$, $\sum_J K_J(\bigotimes_i\sigma_i)K_J^\dagger=\bigotimes_i\sum_j K_{ij}\sigma_i K_{ij}^\dagger$, $\Tr(\Phi(\rho)A)=\Tr(\rho\,\Phi^\dagger(A))$ by trace cyclicity, and $\operatorname{Tr}_{\C^a}(X_i\otimes\tau)=(\Tr\tau)X_i=X_i$.
 \end{proof}
 
 \begin{lemma}[Onsite channels do not spread supports]
@@ -196,22 +128,11 @@ change the local dimension act on single sites.
         QuantumCircuit.OnsiteChannel.dual_finKronecker,
         QuantumCircuit.rectangularKrausMap_rectKronecker_rectKronecker}
     \leanok
-    Let $\Phi$ be an onsite channel. If $Z$ acts on a set of sites $X$, then
-    $\Phi^\dagger(Z)$ acts on $X$. If in addition $Z'$ acts on a set of sites
-    disjoint from $X$, then $\Phi^\dagger(ZZ')=\Phi^\dagger(Z)\Phi^\dagger(Z')$.
-    The dual maps $\bigotimes_im_i$ to $\bigotimes_i\Phi_i^\dagger(m_i)$: for
-    any operators $K_{ij}\colon\C^d\to\C^e$, the map
-    $\rho\mapsto\sum_JK_J\rho K_J^\dagger$ with $K_J=\bigotimes_iK_{iJ(i)}$
-    sends $\bigotimes_im_i$ to $\bigotimes_i\sum_jK_{ij}m_iK_{ij}^\dagger$.
+    For any onsite channel $\Phi$, $\Phi^\dagger(\bigotimes_i m_i)=\bigotimes_i\Phi_i^\dagger(m_i)$. Consequently, $Z\in\mathcal A_X\implies\Phi^\dagger(Z)\in\mathcal A_X$, and if $Z\in\mathcal A_X$, $Z'\in\mathcal A_Y$ with $X\cap Y=\varnothing$, then $\Phi^\dagger(ZZ')=\Phi^\dagger(Z)\Phi^\dagger(Z')$.
 \end{lemma}
 \begin{proof}
     \leanok
-    The dual maps $\bigotimes_im_i$ to $\bigotimes_i\Phi_i^\dagger(m_i)$, and
-    $\Phi_i^\dagger(\mathbb 1)=\sum_jK_{ij}^\dagger K_{ij}=\mathbb 1$. Hence
-    the identity factors off $X$ are kept. For products with disjoint
-    supports, one of $m_i$, $m'_i$ is the identity at each site, so
-    $\Phi_i^\dagger(m_im'_i)=\Phi_i^\dagger(m_i)\Phi_i^\dagger(m'_i)$.
-    Linearity concludes.
+    Since $\Phi_i^\dagger(\mathbb 1_e)=\sum_j K_{ij}^\dagger K_{ij}=\mathbb 1_d$, $\Phi^\dagger(\bigotimes_i m_i)=\bigotimes_i\Phi_i^\dagger(m_i)$ preserves identity factors outside $X$; for $X\cap Y=\varnothing$, at least one of $m_i,m'_i$ is $\mathbb 1_e$ at each site $i$, so $\Phi_i^\dagger(m_im'_i)=\Phi_i^\dagger(m_i)\Phi_i^\dagger(m'_i)$.
 \end{proof}
 
 \begin{definition}[Local channel conversion]
@@ -220,19 +141,11 @@ change the local dimension act on single sites.
     \lean{QuantumCircuit.IsLocalChannelProtocol,
         QuantumCircuit.IsLocalChannelConversion}
     \leanok
-    Modeling the channel form of the circuits
-    $V'=U_\ell V_\ell\cdots U_1V_1U_0$ of \cite{Piroli2021LOCC} (with
-    ancillas attached to each site, local operations between the layers, and
-    the ancillas traced out at the end without measurements), a \emph{local
-        channel protocol of depth $T$} is a composition
-    $\Psi=\Phi_T\circ L_T\circ\Phi_{T-1}\circ\dots\circ L_1\circ\Phi_0$ of
-    channel layers $L_t$ and maps $\Phi_t$, each a composition of finitely
-    many onsite channels, which may change the local dimension; $\Phi_0$
-    contains at least one onsite channel, and $\Phi_t$ for $t\ge1$ may be
-    the identity. A matrix $\rho$ on the chain is
-    \emph{converted in depth $T$} into a matrix $\sigma$, possibly of
-    another local dimension, if $\sigma=\Psi(\rho)$ for a local channel
-    protocol $\Psi$ of depth at most $T$.
+    Modeling the ancilla-assisted circuits $V'=U_\ell V_\ell\cdots U_1V_1U_0$ of~\cite{Piroli2021LOCC}, a \emph{local channel protocol of depth $T$} is a composition
+    \begin{align}
+        \Psi & =\Phi_T\circ L_T\circ\Phi_{T-1}\circ\cdots\circ L_1\circ\Phi_0,\notag
+    \end{align}
+    where each $L_t$ is a channel layer and each $\Phi_t$ is a composition of onsite channels (changing local dimensions as needed). A matrix $\rho$ is \emph{converted in depth $T$} into $\sigma$ if $\sigma=\Psi(\rho)$ for a protocol $\Psi$ of depth at most $T$.
 \end{definition}
 
 \begin{lemma}[Basic properties of local channel conversions]
@@ -248,27 +161,11 @@ change the local dimension act on single sites.
         QuantumCircuit.IsLocalChannelConversion.exists_isKrausCPTP,
         QuantumCircuit.IsLocalChannelConversion.density}
     \leanok
-    A local channel protocol is trace preserving and completely positive.
-    Attaching ancillas, running a local channel circuit of depth $T$ and
-    discarding is a local channel protocol of depth $T$. Every density matrix
-    is converted into itself in depth $0$, a conversion in depth $T$ is a
-    conversion in every larger depth, a conversion of a density matrix is a
-    density matrix, and a density matrix prepared in depth $T$ by local
-    channels is converted in depth $T$ from a product density.
+    Every local channel protocol is CPTP (hence maps density matrices to density matrices). Attaching ancillas, running a depth-$T$ local channel circuit, and discarding ancillas is a depth-$T$ protocol. Conversion is reflexive at depth $0$, monotone in $T$, and every state prepared in depth $T$ by local channels is converted in depth $T$ from a product state.
 \end{lemma}
 \begin{proof}
     \leanok
-    By induction on the protocol, onsite channels are trace preserving and
-    completely positive by Lemma~\ref{lem:qc_onsite_channel_properties},
-    channel layers are by construction, and both properties are stable under
-    composition. Appending the layers of a circuit of depth $T$ one at a time,
-    each onsite channel keeps the depth and each layer raises it by one, while
-    attaching and discarding ancillas are onsite channels. The identity onsite
-    channel gives depth $0$, depth bounds are monotone, and any conversion is
-    realized by a trace-preserving completely positive map, which sends a
-    positive semidefinite matrix of trace one to another such matrix. Finally,
-    a preparation in depth $T$ by local channels starts from a product density
-    and is itself such a protocol.
+    By induction on Definition~\ref{def:qc_local_channel_conversion}, onsite channels (Lemma~\ref{lem:qc_onsite_channel_properties}) and channel layers (Lemma~\ref{lem:qc_local_channel_circuit_properties}) are CPTP, onsite steps add $0$ to depth, and channel layers add $1$.
 \end{proof}
 
 \begin{lemma}[Composition of conversions]
@@ -277,19 +174,11 @@ change the local dimension act on single sites.
     \lean{QuantumCircuit.IsLocalChannelConversion.trans,
         QuantumCircuit.IsLocalChannelProtocol.comp}
     \leanok
-    If $\rho$ is converted in depth $T_1$ into $\sigma$ and $\sigma$ is
-    converted in depth $T_2$ into $\tau$, then $\rho$ is converted in depth
-    $T_1+T_2$ into $\tau$.
+    If $\rho$ is converted in depth $T_1$ into $\sigma$ and $\sigma$ is converted in depth $T_2$ into $\tau$, then $\rho$ is converted in depth $T_1+T_2$ into $\tau$.
 \end{lemma}
 \begin{proof}
     \leanok
-    The composition $\Psi_2\circ\Psi_1$ of local channel protocols of depths
-    $T_1$ and $T_2$ is a local channel protocol of depth $T_1+T_2$: decomposing
-    $\Psi_2$ into its sequence of onsite channels and channel layers and
-    appending them to $\Psi_1$ one at a time places the first onsite channel of
-    $\Psi_2$ into the final onsite group $\Phi_{T_1}$ of $\Psi_1$, where each
-    onsite channel preserves the depth and each of the $T_2$ channel layers
-    increases it by one.
+    Composing protocols $\Psi_2\circ\Psi_1$ merges the initial onsite block of $\Psi_2$ into the final onsite block $\Phi_{T_1}$ of $\Psi_1$, summing the layer counts to $T_1+T_2$.
 \end{proof}
 
 \begin{lemma}[Light cone of a local channel protocol]
@@ -298,28 +187,16 @@ change the local dimension act on single sites.
         lem:qc_channel_light_cone, lem:qc_channel_light_cone_correlations}
     \lean{QuantumCircuit.IsLocalChannelProtocol.exists_dual}
     \leanok
-    Extending the light cone of a depth-$T$ circuit in the proof of
-    \cite[Theorem~1]{Malz2024Preparation} to channels and onsite operations,
-    a local channel protocol $\Psi$ of depth $T$ has a dual $\Psi^\dagger$ with
-    $\Tr(\Psi(\rho)A)=\Tr(\rho\,\Psi^\dagger(A))$ that maps operators acting
-    on a set of sites $X$ to operators acting on the sites within distance
-    $T$ of $X$, and that satisfies
+    Extending~\cite[Theorem~1]{Malz2024Preparation}, every depth-$T$ local channel protocol $\Psi$ has a dual $\Psi^\dagger$ satisfying $\Tr(\Psi(\rho)A)=\Tr(\rho\,\Psi^\dagger(A))$, mapping $\mathcal A_X$ into $\mathcal A_{\mathcal L_T(X)}$, and satisfying
     \begin{align}
         \Psi^\dagger(ZZ') & =\Psi^\dagger(Z)\,\Psi^\dagger(Z')
         \label{eq:qc_conversion_dual_mul}
     \end{align}
-    whenever $Z$ and $Z'$ act on sets whose neighbourhoods of radius $T$ are
-    disjoint.
+    whenever $\mathcal L_T(X)\cap\mathcal L_T(Y)=\varnothing$ for $Z\in\mathcal A_X$, $Z'\in\mathcal A_Y$.
 \end{lemma}
 \begin{proof}
     \leanok
-    By induction on the protocol, the base case of an onsite channel is
-    Lemma~\ref{lem:qc_onsite_channel_locality} with radius $0$; each channel
-    layer increases the radius by one by Lemma~\ref{lem:qc_channel_light_cone}
-    for the support and by the argument of
-    Lemma~\ref{lem:qc_channel_light_cone_correlations} for
-    (\ref{eq:qc_conversion_dual_mul}), while each subsequent onsite channel
-    leaves the radius unchanged.
+    By induction on Definition~\ref{def:qc_local_channel_conversion}: onsite channels preserve supports and disjoint-support products by Lemma~\ref{lem:qc_onsite_channel_locality}, and each channel layer expands the light-cone radius by $1$ and preserves disjoint-neighborhood products by Lemmas~\ref{lem:qc_channel_light_cone} and~\ref{lem:qc_channel_light_cone_correlations}.
 \end{proof}
 
 \begin{lemma}[No connected correlations after a conversion]
@@ -327,28 +204,16 @@ change the local dimension act on single sites.
     \uses{def:qc_local_channel_conversion, lem:qc_protocol_light_cone}
     \lean{QuantumCircuit.trace_mul_mul_eq_of_isLocalChannelConversion}
     \leanok
-    Extending the necessary condition in \cite{Piroli2021LOCC} for preparing
-    pure states from a product state by local unitary circuits, let $\sigma$ be
-    converted in depth $T$ from a product
-    $\bigotimes_i\sigma_i$ of one-site matrices of trace one, and let $Z$,
-    $Z'$ act on sets of sites at distance larger than $2T$. Then
-    $\Tr(\sigma ZZ')=\Tr(\sigma Z)\Tr(\sigma Z')$.
+    If $\sigma$ is converted in depth $T$ from $\rho=\bigotimes_i\sigma_i$ ($\Tr\sigma_i=1$) and $Z\in\mathcal A_X$, $Z'\in\mathcal A_{X'}$ with $d_{\rm ring}(X,X')>2T$, then $\Tr(\sigma ZZ')=\Tr(\sigma Z)\Tr(\sigma Z')$~\cite{Piroli2021LOCC}.
 \end{lemma}
 \begin{proof}
     \leanok
-    Write $\rho=\bigotimes_i\sigma_i$ and $\sigma=\Psi(\rho)$ for a local
-    channel protocol $\Psi$ of depth $T'\le T$, and let $\Psi^\dagger$ be its
-    dual from Lemma~\ref{lem:qc_protocol_light_cone}, of radius $T'$.
-    If $Z$ and $Z'$ act on sets at distance larger than $2T\ge2T'$, then
-    $\Psi^\dagger(Z)$ and $\Psi^\dagger(Z')$ act on disjoint sets, and
-    (\ref{eq:qc_conversion_dual_mul}) together with the factorization of the
-    product density $\rho$ gives
+    Write $\sigma=\Psi(\rho)$ with $\operatorname{depth}(\Psi)=T'\le T$. Since $d_{\rm ring}(X,X')>2T\ge2T'$, $\mathcal L_{T'}(X)\cap\mathcal L_{T'}(X')=\varnothing$, so Lemma~\ref{lem:qc_protocol_light_cone} and (\ref{eq:qc_conversion_dual_mul}) give
     \begin{align}
         \Tr(\sigma ZZ') & =\Tr\bigl(\rho\,\Psi^\dagger(ZZ')\bigr)
-        =\Tr\bigl(\rho\,\Psi^\dagger(Z)\Psi^\dagger(Z')\bigr) \notag \\
-                        & =\Tr\bigl(\rho\,\Psi^\dagger(Z)\bigr)
-        \Tr\bigl(\rho\,\Psi^\dagger(Z')\bigr)
-        =\Tr(\sigma Z)\Tr(\sigma Z'). \notag
+        =\Tr\bigl(\rho\,\Psi^\dagger(Z)\Psi^\dagger(Z')\bigr)
+        =\Tr\bigl(\rho\,\Psi^\dagger(Z)\bigr)\Tr\bigl(\rho\,\Psi^\dagger(Z')\bigr)
+        =\Tr(\sigma Z)\Tr(\sigma Z').\notag
     \end{align}
 \end{proof}
 
@@ -359,25 +224,12 @@ change the local dimension act on single sites.
         QuantumCircuit.blockKronecker,
         QuantumCircuit.IsBlockedLocalChannelConversion}
     \leanok
-    Following the blocking of $q$ neighbouring sites in the proof of the
-    classification of matrix product states in \cite{Piroli2021LOCC}, consider
-    a ring of $Mk$ sites of local dimension $d$. Grouping the sites
-    $jk,\dots,jk+k-1$ into one site $j$ of local dimension $d^k$ gives a ring
-    of $M$ sites. On operators, it is the isomorphism
-    $\beta_k\colon M_d^{\otimes Mk}\to M_{d^k}^{\otimes M}$ that relabels the
-    computational basis; it maps $\bigotimes_i m_i$ to
-    $\bigotimes_j\bigl(m_{jk}\otimes\dots\otimes m_{jk+k-1}\bigr)$.
-    A matrix $\rho$ on the $Mk$ sites is
-    \emph{converted in depth $T$ after blocking $k$ sites}
-    into a matrix $\sigma$ on the $M$ blocked sites if $\beta_k(\rho)$
-    is converted in depth $T$ into $\sigma$. A layer of two-site channels on the
-    blocked ring costs one unit of depth; the source realizes each gate on the
-    blocked ring by fewer than $2q^2$ nearest-neighbour gates on the original
-    ring, a compilation not carried out here
-    \cite{gap:psc21_local_channel_phase_scope}. The blocking factor $k$ is
-    part of the relation, and it is positive: blocking the whole ring into one
-    site would make every conversion between density matrices possible in
-    depth $0$.
+    Following~\cite{Piroli2021LOCC}, grouping $k\ge1$ consecutive sites $jk,\dots,jk+k-1$ of an $Mk$-site ring of local dimension $d$ into block $j\in\Z_M$ of dimension $d^k$ defines the $*$-isomorphism
+    \begin{align}
+        \beta_k\colon M_d^{\otimes Mk}\xrightarrow{\sim} M_{d^k}^{\otimes M},\qquad
+        \beta_k\Bigl(\bigotimes_{i=0}^{Mk-1}m_i\Bigr)=\bigotimes_{j=0}^{M-1}(m_{jk}\otimes\cdots\otimes m_{jk+k-1}).\notag
+    \end{align}
+    A matrix $\rho$ on $Mk$ sites is \emph{converted in depth $T$ after blocking $k$ sites} into $\sigma$ on $M$ sites if $\beta_k(\rho)$ is converted in depth $T$ into $\sigma$ on the blocked ring (compiling blocked gates into original nearest-neighbour gates is separate; see~\cite{gap:psc21_local_channel_phase_scope}).
 \end{definition}
 
 \begin{lemma}[Blocking is a channel that preserves supports]
@@ -392,23 +244,11 @@ change the local dimension act on single sites.
         QuantumCircuit.finProdFinEquiv_add_intCast,
         QuantumCircuit.preimage_siteBlock_neighbourhood_subset}
     \leanok
-    Blocking and unblocking are trace preserving and completely positive.
-    If $Z$ acts on the sites of a set $Y$ of blocks, then $\beta_k(Z)$ acts on
-    $Y$; conversely, if $W$ acts on a set $X$ of blocks and $d\ge1$, then
-    $\beta_k^{-1}(W)$ acts on the sites of the blocks in $X$. The sites of the
-    blocks within distance $r$ of $X$ lie within distance $kr$ of the sites of
-    $X$.
+    Let $\pi_k\colon\Z_{Mk}\to\Z_M$ map $jk+t\mapsto j$ ($0\le t<k$). Then $\beta_k$ and $\beta_k^{-1}$ are CPTP, $Z\in\mathcal A_{\pi_k^{-1}(Y)}\implies\beta_k(Z)\in\mathcal A_Y$, $W\in\mathcal A_X\implies\beta_k^{-1}(W)\in\mathcal A_{\pi_k^{-1}(X)}$ (for $d\ge1$), and $\pi_k^{-1}(\mathcal L_r(X))\subseteq\mathcal L_{kr}(\pi_k^{-1}(X))$.
 \end{lemma}
 \begin{proof}
     \leanok
-    A relabelling of the basis is conjugation by a permutation matrix. On
-    product operators, the factors of $\beta_k(\bigotimes_im_i)$ outside $Y$
-    are products of identities, and linearity concludes. For unblocking, an
-    operator on the original ring acts on a set of sites exactly when it
-    commutes with every operator acting on the complement; $\beta_k$ maps the
-    operators acting on the sites outside the blocks in $X$ to operators acting
-    outside $X$, which commute with $W$. Finally, the site $t+kj'$ with
-    $j'=j+m$ equals $(t+kj)+km$ modulo $Mk$.
+    Basis relabelling is unitary conjugation, hence CPTP. On product generators, $\beta_k$ groups factors blockwise, so $Z\in\mathcal A_{\pi_k^{-1}(Y)}\implies\beta_k(Z)\in\mathcal A_Y$, and commutant duality gives $\beta_k^{-1}(\mathcal A_X)\subseteq\mathcal A_{\pi_k^{-1}(X)}$. Finally, $(j+m)k+t=(jk+t)+km\pmod{Mk}$ with $|km|\le kr$ for $|m|\le r$.
 \end{proof}
 
 \begin{lemma}[Light cone and correlations after blocking]
@@ -427,36 +267,11 @@ change the local dimension act on single sites.
         QuantumCircuit.IsBlockedLocalChannelConversion.exists_dual,
         QuantumCircuit.trace_mul_mul_eq_of_isBlockedLocalChannelConversion}
     \leanok
-    Every matrix is converted in depth $0$ after blocking into its blocked
-    form, and a conversion in depth $T$ after blocking is one in every larger
-    depth. Let $\rho$ be converted in depth $T$ after blocking $k$ sites into
-    $\sigma$. A conversion in depth $T'$ of $\sigma$ on the
-    blocked ring gives a conversion of $\rho$ in depth $T+T'$ after blocking,
-    $\sigma=\Psi(\rho)$ for a channel $\Psi$, and $\sigma$ is a density
-    matrix when $\rho$ is. If $d\ge1$, there is a map $\Psi^\dagger$ with
-    $\Tr(\sigma A)=\Tr(\rho\,\Psi^\dagger(A))$ that maps operators acting on a
-    set $X$ of blocks to operators acting on the sites within distance $kT$
-    of the sites of $X$, and that is multiplicative on operators acting on
-    sets of blocks whose neighbourhoods of radius $T$ are disjoint. If
-    $\rho=\bigotimes_i\sigma_i$ with $\Tr\sigma_i=1$, and $Z$, $Z'$ act on
-    sets of blocks at distance larger than $2T$, then
-    $\Tr(\sigma ZZ')=\Tr(\sigma Z)\Tr(\sigma Z')$.
+    Every $\rho$ is converted in depth $0$ after blocking into $\beta_k(\rho)$, and blocked conversion is monotone in $T$, composes with blocked-ring conversions ($T+T'$), and is realized by a CPTP map $\Psi$ (preserving density matrices). For $d\ge1$, $\Psi^\dagger$ maps $\mathcal A_X$ ($X\subseteq\Z_M$) into $\mathcal A_{\mathcal L_{kT}(\pi_k^{-1}(X))}$, is multiplicative on block sets $X,Y$ with $\mathcal L_T(X)\cap\mathcal L_T(Y)=\varnothing$, and for $\rho=\bigotimes_{i=0}^{Mk-1}\sigma_i$ ($\Tr\sigma_i=1$) and $Z\in\mathcal A_X$, $Z'\in\mathcal A_{X'}$ with $d_{\rm ring}(X,X')>2T$, satisfies $\Tr(\sigma ZZ')=\Tr(\sigma Z)\Tr(\sigma Z')$.
 \end{lemma}
 \begin{proof}
     \leanok
-    The first statements follow from
-    Lemmas~\ref{lem:qc_local_channel_conversion_properties}
-    and~\ref{lem:qc_local_channel_conversion_trans} on the blocked ring,
-    composed with the blocking channel of
-    Lemma~\ref{lem:qc_blocking_supports}. Composing the blocking
-    channel with the protocol on the blocked ring and
-    applying Lemma~\ref{lem:qc_protocol_light_cone} there gives the dual on
-    the blocked ring, whose unblocking via Lemma~\ref{lem:qc_blocking_supports}
-    has the stated supports on the original ring. Finally, blocking maps the
-    product $\bigotimes_i\sigma_i$ to the product over the blocks of
-    $\sigma_{jk}\otimes\dots\otimes\sigma_{jk+k-1}$, each of trace
-    $\prod_t\Tr\sigma_{jk+t}=1$, so Lemma~\ref{lem:qc_local_channel_conversion_correlations}
-    on the blocked ring yields the correlation identity.
+    Combine Lemmas~\ref{lem:qc_local_channel_conversion_properties}, \ref{lem:qc_local_channel_conversion_trans}, \ref{lem:qc_protocol_light_cone}, and~\ref{lem:qc_local_channel_conversion_correlations} on the blocked ring with the support and product-state preservation of $\beta_k$ from Lemma~\ref{lem:qc_blocking_supports}.
 \end{proof}
 
 \input{chapter/ch33_local_quantum_circuits_approximate}

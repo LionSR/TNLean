@@ -60,16 +60,14 @@ For any representations on these local spaces, use
 $P_v=|G|^{-1}\sum_g\rho_v(g)$, $A_v^0(\eta,s)=(P_v)_{s,\eta}$,
 and $\mathcal P=\bigotimes_vP_v$.
 
-Products of finite-coordinate maps are taken in coefficient coordinates:
-$(\bigotimes_vF_v)x(\sigma)=\sum_\eta\prod_vF_v(\sigma_v,\eta_v)x(\eta)$.
-They compose coordinatewise. In finite dimensions their range consists
-exactly of vectors whose every one-coordinate slice lies in the
-corresponding local range. To see the reverse implication, choose
-$L_v$ with $F_vL_v$ the identity on $\operatorname{im}F_v$. Each
-single-coordinate action $F_vL_v$ fixes the vector, hence so does their
-product, giving the preimage $(\bigotimes_vL_v)\psi$.
-The same coordinatewise argument shows that a product of maps fixes a
-vector whenever each map fixes every slice at its coordinate.
+Products of finite-coordinate maps act in coefficient coordinates by
+$(\bigotimes_vF_v)x(\sigma)=\sum_\eta\prod_vF_v(\sigma_v,\eta_v)x(\eta)$
+and compose coordinatewise. In finite dimensions, $\psi\in\operatorname{im}(\bigotimes_vF_v)$
+iff every one-coordinate slice at $v$ lies in $\operatorname{im}F_v$: choosing
+$L_v$ with $F_vL_v|_{\operatorname{im}F_v}=\Id$, each single-coordinate map
+$F_vL_v$ fixes $\psi$, so $(\bigotimes_vF_v)(\bigotimes_vL_v)\psi=\psi$.
+By the same coordinatewise argument, $(\bigotimes_vM_v)\psi=\psi$ whenever
+$M_v$ fixes every slice of $\psi$ at $v$.
 
 These support and reconstruction statements provide the open-boundary
 steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
@@ -84,12 +82,10 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
         TNLean.PEPS.DependentBondNetwork.partialIncidentRepresentation_of_eq_id,
         TNLean.PEPS.DependentBondNetwork.partialIncidentRepresentation_of_eq_one}
     \leanok
-    Choose a group endomorphism $f_v:G\to G$ at each vertex and define
-    $\rho_v^f(g)=\rho_v(f_v(g))$. Its action is
-    $\rho_v^f(g)x=W_v(f_v(g))x$. When $f_v$ is the identity,
-    $\rho_v^f=\rho_v$; when $f_v(g)=1$ for every $g$, the representation
-    $\rho_v^f$ is trivial. These equalities follow by evaluating the
-    composed representation at each group element.
+    For group endomorphisms $f_v:G\to G$, define
+    $\rho_v^f(g)=\rho_v(f_v(g))$, acting by
+    $\rho_v^f(g)x=W_v(f_v(g))x$. In particular, $\rho_v^{\Id}=\rho_v$ and
+    $\rho_v^1(g)=I$.
 \end{definition}
 
 \begin{definition}[Partially averaged tensors]%
@@ -102,7 +98,7 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
         TNLean.PEPS.DependentBondNetwork.partialAveragingSite_apply}
     \leanok
     \uses{def:peps_partial_incident_representation}
-    The partially averaged tensor and its local map are
+    The partially averaged tensor $A_v^f$ and its local map $T_v=P_v^f$ are
     \begin{align}
         A_v^f(\eta,s)
               & =\frac{1}{|G|}\sum_{g\in G}W_v(f_v(g))_{s,\eta},
@@ -110,12 +106,8 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
         P_v^f & =\frac{1}{|G|}\sum_{g\in G}\rho_v^f(g).
         \nonumber
     \end{align}
-    Thus the local map of $A_v^f$ is $P_v^f$. At an identity endomorphism
-    this is the canonical incident averaging tensor. At a trivial
-    endomorphism $P_v^f=I$ and $A_v^f(\eta,s)=\delta_{s,\eta}$.
-    Indeed every vector is invariant for a trivial representation, so
-    averaging fixes it. In particular, one may average at core vertices
-    while retaining identity tensors at exterior vertices.
+    For $f_v=\Id$, $A_v^f=A_v^0$ and $P_v^f=P_v$; for $f_v=1$, $P_v^f=I$ and
+    $A_v^f(\eta,s)=\delta_{s,\eta}$.
 \end{definition}
 
 \begin{theorem}[Partial averages are injective on invariants]%
@@ -124,13 +116,11 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     \leanok
     \uses{def:peps_partial_averaging_site,
         def:peps_g_injective}
-    At every vertex, $P_v^f$ is $G$-injective for $\rho_v^f$.
+    At every vertex $v$, $P_v^f$ is $G$-injective for $\rho_v^f$.
 \end{theorem}
 \begin{proof}\leanok
-    Right multiplication permutes the group average, giving
-    $P_v^f\rho_v^f(g)=P_v^f$. Every invariant vector is fixed by every
-    summand, so $P_v^f$ is the identity on
-    $(\C^{\mathcal X_v})^{\rho_v^f}$ and is injective there.
+    Right translation in (\ref{eq:peps_partial_average}) gives
+    $P_v^f\rho_v^f(g)=P_v^f$, and $P_v^f|_{(\C^{\mathcal X_v})^{\rho_v^f}}=\Id$.
 \end{proof}
 
 \begin{theorem}[Coherent expansion of a partially averaged network]%
@@ -156,16 +146,14 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
          & =|G|^{-n}\sum_q\prod_e B_e^f(q)_{\gamma_e^+,\gamma_e^-}.
         \nonumber
     \end{align}
-    All vertex labels are summed together; neither the inserted matrices
-    nor the resulting coefficient function are required to factor further.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:peps_partial_averaging_site}
-    Expanding (\ref{eq:peps_partial_average}) independently at every vertex
-    produces the scalar $|G|^{-n}$ and one assignment $q$ of group labels, and
-    contracting the fixed incident actions gives $B_e^f(q)$ on each bond.
-    Applying the site-to-bond permutation yields the last formula, while the
-    definition of $b_B$ gives the vector equality.
+    Substitute (\ref{eq:peps_partial_average}) into
+    (\ref{eq:peps_open_network_notation}), expand over
+    $q\in G^{\mathcal V}$, and contract (\ref{eq:peps_open_incident_notation})
+    along each $e\in\mathcal E$ to obtain $B_e^f(q)$; applying $\mathcal R$ and
+    the definition of $b_B$ gives (\ref{eq:peps_partial_network_sum}).
 \end{proof}
 
 \begin{theorem}[Selected vertex gauges preserve the contraction]%
@@ -176,18 +164,15 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     \uses{def:peps_partial_averaging_site}
     For every $q:\mathcal V\to G$ and every family $B_e$,
     $\mathcal N_{A^f}(B^f(q))=\mathcal N_{A^f}(B)$.
-    In particular the replacement
-    $p_e\mapsto f_{h(e)}(q_{h(e)})p_e
-        f_{t(e)}(q_{t(e)})^{-1}$ preserves the network with bond matrices
-    $U_e(p_e)$.
+    In particular, for $B_e=U_e(p_e)$, replacing
+    $p_e\mapsto f_{h(e)}(q_{h(e)})p_ef_{t(e)}(q_{t(e)})^{-1}$ preserves
+    $\mathcal N_{A^f}(B)$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_partial_network_expansion}
-    In (\ref{eq:peps_partial_network_sum}), right multiplication
-    $r\mapsto rq$ is a bijection of vertex assignments, and the identities
-    $f_v(r_vq_v)=f_v(r_v)f_v(q_v)$ and
-    $(ab)^{-1}=b^{-1}a^{-1}$ identify the transformed summands;
-    multiplicativity of $U_e$ specializes this to representation-matrix insertions.
+    Reindexing (\ref{eq:peps_partial_network_sum}) by $r\mapsto rq$ and using
+    $(B^f(q))_e^f(r)=B_e^f(rq)$ gives $\mathcal N_{A^f}(B^f(q))=\mathcal N_{A^f}(B)$;
+    multiplicativity of $U_e$ specializes this to $B_e=U_e(p_e)$.
 \end{proof}
 
 \begin{theorem}[Uncut bonds retain representation support under partial averaging]%
@@ -196,24 +181,20 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
         TNLean.PEPS.DependentBondNetwork.physicalBondSlice_mem_range_of_mem_partialCutSpace}
     \leanok
     \uses{def:peps_partial_averaging_site}
-    If $B_e=I$, every bond slice
-    $S_{e,\tau}\mathcal N_{A^f}(B)$ belongs to
-    $\operatorname{im}F_e=\spn_{\C}\{U_e(g):g\in G\}$.
-    Consequently, if $e\notin C$ and $\psi\in\mathcal S_{A^f,C}$,
-    then $S_{e,\tau}\psi\in\operatorname{im}F_e$ for every $\tau$.
-    The boundary defining $\psi$ may correlate every exposed incidence.
+    If $B_e=I$, then
+    $S_{e,\tau}\mathcal N_{A^f}(B)\in\operatorname{im}F_e=\spn_{\C}\{U_e(g):g\in G\}$
+    for every $\tau$. Consequently, if $e\notin C$ and
+    $\psi\in\mathcal S_{A^f,C}$, then $S_{e,\tau}\psi\in\operatorname{im}F_e$
+    for every $\tau$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_partial_network_expansion}
-    For an identity insertion,
-    $B_e^f(q)=U_e(f_{h(e)}(q_{h(e)})f_{t(e)}(q_{t(e)})^{-1})$.
-    Fixing all other bond coordinates in each term of
-    (\ref{eq:peps_partial_network_sum}) leaves a scalar multiple of this
-    matrix, hence a vector in $\operatorname{im}F_e$.
-    Linearity preserves this membership through the sum over $q$.
-    Expanding an arbitrary cut boundary in coordinate vectors produces
-    networks with matrix units on $C$ and identities outside $C$,
-    so the first assertion applies to every column of the cut map.
+    When $B_e=I$, $B_e^f(q)=U_e(f_{h(e)}(q_{h(e)})f_{t(e)}(q_{t(e)})^{-1})\in\operatorname{im}F_e$,
+    so each term of $S_{e,\tau}\mathcal N_{A^f}(B)$ in
+    (\ref{eq:peps_partial_network_sum}) lies in $\operatorname{im}F_e$.
+    Expanding $M$ in (\ref{eq:peps_open_cut_notation}) in coordinate vectors
+    expresses $\psi\in\mathcal S_{A^f,C}$ as a linear combination of networks
+    $\mathcal N_{A^f}(B)$ with $B_e=I$ for $e\notin C$.
 \end{proof}
 
 \begin{definition}[Bond columns with unrestricted exterior matrices]%
@@ -222,9 +203,8 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
         TNLean.PEPS.DependentBondNetwork.openBondGenerator,
         TNLean.PEPS.DependentBondNetwork.openBondMatrix}
     \leanok
-    Fix a set $C$ of exterior bonds. The label set at bond $e$ is
-    $\Lambda_e=G\sqcup(X_e\times X_e)$. Write its two kinds of labels
-    as $[g]$ and $[a,b]$. Define matrices $Q_e^C$ by
+    For an exterior cut $C\subseteq\mathcal E$, set
+    $\Lambda_e=G\sqcup(X_e\times X_e)$ with labels $[g]$ and $[a,b]$, and define
     \begin{align}
         Q_e^C([g])   & =
         \begin{cases}0,&e\in C,\\U_e(g),&e\notin C,\end{cases}
@@ -233,9 +213,8 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
         \begin{cases}E_{a,b},&e\in C,\\U_e(1),&e\notin C.\end{cases}
         \nonumber
     \end{align}
-    Let $\widetilde F_e^C:\C^{\Lambda_e}\to\C^{X_e\times X_e}$ be
-    the matrix whose column at $p$ is $Q_e^C(p)$, read in head-row,
-    tail-column order.
+    Let $\widetilde F_e^C:\C^{\Lambda_e}\to\C^{X_e\times X_e}$ have column
+    $Q_e^C(p)$ at $p\in\Lambda_e$.
 \end{definition}
 
 \begin{theorem}[Interior representation columns and exterior full ranges]%
@@ -245,17 +224,15 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     \leanok
     \uses{def:peps_open_bond_generators}
     If $e\notin C$, then
-    $\operatorname{im}F_e\subseteq\operatorname{im}\widetilde F_e^C$.
-    If $e\in C$, then
-    $\operatorname{im}\widetilde F_e^C=\C^{X_e\times X_e}$.
+    $\operatorname{im}F_e\subseteq\operatorname{im}\widetilde F_e^C$; if
+    $e\in C$, then $\operatorname{im}\widetilde F_e^C=\C^{X_e\times X_e}$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:peps_open_bond_generators}
-    In the first case, extending any coefficient function on $G$ by zero on
-    $X_e\times X_e$ leaves the column combination unchanged.
-    In the second case, assigning a matrix $x$ coefficient zero at every
-    $[g]$ and coefficient $x_{a,b}$ at $[a,b]$ produces the image
-    $\sum_{a,b}x_{a,b}E_{a,b}=x$.
+    By (\ref{eq:peps_open_bond_columns}), extending $c\in\C^G$ by $0$ on
+    $X_e\times X_e$ gives $\widetilde F_e^Cc=F_ec$ when $e\notin C$, while for
+    $e\in C$ setting $c([g])=0$ and $c([a,b])=x_{a,b}$ gives
+    $\widetilde F_e^Cc=\sum_{a,b}x_{a,b}E_{a,b}=x$.
 \end{proof}
 
 \begin{theorem}[A coherent expansion with a free exterior]%
@@ -263,25 +240,20 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     \lean{TNLean.PEPS.DependentBondNetwork.exists_openBondCoefficients_of_slices}
     \leanok
     \uses{def:peps_open_bond_generators}
-    Suppose $S_{e,\tau}\psi\in\operatorname{im}F_e$ for every
-    $e\notin C$ and every remaining bond configuration $\tau$.
-    Then there is a function $c:\prod_e\Lambda_e\to\C$ such that
+    If $S_{e,\tau}\psi\in\operatorname{im}F_e$ for every $e\notin C$ and every
+    $\tau$, then there exists $c:\prod_e\Lambda_e\to\C$ such that
     \begin{align}
         \psi=\sum_{p\in\prod_e\Lambda_e}
         c(p)\,b_{(Q_e^C(p_e))_e}.
         \label{eq:peps_open_bond_expansion}
     \end{align}
-    No condition is imposed on slices at exterior bonds, and $c$ may
-    correlate all interior and exterior labels.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_open_bond_ranges}
-    Every slice of $\mathcal R\psi$ belongs to
-    $\operatorname{im}\widetilde F_e^C$ by the interior-bond hypothesis
-    and the full-range assertion for exterior bonds, so the product-range
-    criterion gives $\mathcal R\psi=(\bigotimes_e\widetilde F_e^C)c$.
-    Expanding this product map and undoing $\mathcal R$ yields
-    (\ref{eq:peps_open_bond_expansion}).
+    By Theorem~\ref{thm:peps_open_bond_ranges}, every bond slice of
+    $\mathcal R\psi$ lies in $\operatorname{im}\widetilde F_e^C$, so the
+    product-range criterion gives $\mathcal R\psi=(\bigotimes_e\widetilde F_e^C)c$;
+    applying $\mathcal R^{-1}$ yields (\ref{eq:peps_open_bond_expansion}).
 \end{proof}
 
 \subsection{Open cut intersections from removable internal labels}
@@ -291,14 +263,12 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     \label{thm:peps_network_in_open_cut}
     \lean{TNLean.PEPS.DependentBondNetwork.network_mem_cutSpace_of_eq_one}
     \leanok
-    For arbitrary local tensors $A$, if $B_e=I$ whenever $e\notin C$,
-    then $\mathcal N_A(B)\in\mathcal S_{A,C}$.
+    If $B_e=I$ for all $e\notin C$, then $\mathcal N_A(B)\in\mathcal S_{A,C}$.
 \end{theorem}
 \begin{proof}\leanok
-    With the boundary
-    $M_B(\eta)=\prod_{e\in C}B_e(\eta_{e,+},\eta_{e,-})$,
-    the cut contraction equals $\mathcal N_A(B)$ because every remaining
-    bond already carries the identity.
+    For $M_B(\eta)=\prod_{e\in C}B_e(\eta_{e,+},\eta_{e,-})$,
+    (\ref{eq:peps_open_network_notation}) and (\ref{eq:peps_open_cut_notation})
+    give $\mathcal C_{A,C}(M_B)=\mathcal N_A(B)$.
 \end{proof}
 
 \begin{theorem}[Monotonicity under additional cuts]%
@@ -306,43 +276,40 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     \lean{TNLean.PEPS.DependentBondNetwork.cutSpace_mono}
     \leanok
     If $C\subseteq C'$, then
-    $\mathcal S_{A,C}\subseteq\mathcal S_{A,C'}$ for arbitrary $A$.
+    $\mathcal S_{A,C}\subseteq\mathcal S_{A,C'}$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_network_in_open_cut}
-    Expanding $\mathcal S_{A,C}$ in fixed-boundary columns expresses each
-    column as a network of matrix units on $C$ and identities elsewhere,
-    which therefore has identity insertions outside $C'$ and belongs to
-    $\mathcal S_{A,C'}$; taking linear spans proves the inclusion.
+    Each coordinate-basis column of $\mathcal C_{A,C}$ is a network
+    $\mathcal N_A(B)$ with $B_e=I$ for $e\notin C$ (hence for $e\notin C'$), so
+    it lies in $\mathcal S_{A,C'}$ by Theorem~\ref{thm:peps_network_in_open_cut}.
 \end{proof}
 
 \begin{theorem}[Physical images of cut ranges]%
     \label{thm:peps_cut_space_physical_image}
     \lean{TNLean.PEPS.DependentBondNetwork.map_cutSpace}
     \leanok
-    Suppose every $Y_v$ is finite and let
-    $F_v:\C^{Y_v}\to\C^{Z_v}$. Then
+    For finite $Y_v$ and linear maps $F_v:\C^{Y_v}\to\C^{Z_v}$,
     $(\bigotimes_v F_v)(\mathcal S_{A,C})=\mathcal S_{FA,C}$.
-    The output alphabets $Z_v$ need not be finite.
 \end{theorem}
 \begin{proof}\leanok
-    The maps satisfy
-    $(\bigotimes_vF_v)\mathcal C_{A,C}=\mathcal C_{FA,C}$
-    for every boundary argument. Taking ranges gives the equality.
+    By (\ref{eq:peps_open_cut_notation}),
+    $(\bigotimes_vF_v)\mathcal C_{A,C}(M)=\mathcal C_{FA,C}(M)$ for all $M$;
+    taking images gives the claim.
 \end{proof}
 
 \begin{theorem}[Averaging bare bond products]%
     \label{thm:peps_average_bond_product}
     \lean{TNLean.PEPS.DependentBondNetwork.averagingProjector_matrixBondProduct}
     \leanok
-    For any family of representations $\rho_v$ on
-    $\C^{\mathcal X_v}$, let $A^0$ be its averaging tensors and
-    $\mathcal P=\bigotimes_v P_v$. For every matrix family $B$,
+    For representations $\rho_v$ on $\C^{\mathcal X_v}$ with averaging tensors
+    $A^0$ and $\mathcal P=\bigotimes_v P_v$, every matrix family $B$ satisfies
     $\mathcal P b_B=\mathcal N_{A^0}(B)$.
 \end{theorem}
 \begin{proof}\leanok
-    Identity tensors give $b_B=\mathcal N_I(B)$. Applying the product
-    averaging projection replaces those identity tensors by $A^0$.
+    Since $b_B=\mathcal N_I(B)$ and $P_vI=A_v^0$, applying
+    $\mathcal P=\bigotimes_vP_v$ to (\ref{eq:peps_open_network_notation}) gives
+    $\mathcal P b_B=\mathcal N_{A^0}(B)$.
 \end{proof}
 
 \begin{theorem}[Removing internal labels after averaging]%
@@ -358,7 +325,7 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
         \quad(e\notin C).
         \label{eq:peps_open_remove_labels}
     \end{align}
-    With $\mathcal P^f=\bigotimes_vP_v^f$, every label family
+    With $\mathcal P^f=\bigotimes_vP_v^f$, every
     $a\in\prod_e\Lambda_e$ satisfies
     $\mathcal P^f b_{(Q_e^C(a_e))_e}\in\mathcal S_{A^f,C}$.
 \end{theorem}
@@ -366,13 +333,14 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     \uses{thm:peps_average_bond_product,
         thm:peps_partial_vertex_gauge,
         thm:peps_network_in_open_cut}
-    Reading $p_e=g$ from a label $[g]$ and $p_e=1$ from a matrix-unit
-    label, averaging the bond product gives its network with tensors
-    $A^f$. Applying the vertex gauge for $q$ from
-    (\ref{eq:peps_open_remove_labels}) turns the matrix on every interior
-    bond into $U_e(f_{h(e)}(q_{h(e)})p_ef_{t(e)}(q_{t(e)})^{-1})=I$
-    while leaving the exterior matrices unrestricted, placing the network
-    in $\mathcal S_{A^f,C}$.
+    Set $p_e=g$ if $a_e=[g]$ and $p_e=1$ if $a_e=[x,y]$, and choose $q$
+    satisfying (\ref{eq:peps_open_remove_labels}). By
+    Theorems~\ref{thm:peps_average_bond_product}
+    and~\ref{thm:peps_partial_vertex_gauge},
+    $\mathcal P^f b_{(Q_e^C(a_e))_e}=\mathcal N_{A^f}(Q^C(a))=\mathcal N_{A^f}((Q^C(a))^f(q))$,
+    whose interior bond matrices are
+    $U_e(f_{h(e)}(q_{h(e)})p_ef_{t(e)}(q_{t(e)})^{-1})=I$ for $e\notin C$, so
+    Theorem~\ref{thm:peps_network_in_open_cut} places it in $\mathcal S_{A^f,C}$.
 \end{proof}
 
 \begin{theorem}[Intersection of partially averaged open cut ranges]%
@@ -380,11 +348,10 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     \lean{TNLean.PEPS.DependentBondNetwork.iInf_partialCutSpace_eq_of_remove_labels}
     \leanok
     \uses{def:peps_partial_averaging_site}
-    Let $(C_i)_{i\in I}$ be a nonempty family of cuts and let $C_0$ be
-    an exterior cut contained in every $C_i$. Suppose every
-    $e\notin C_0$ is uncut in at least one $C_i$, and suppose
-    (\ref{eq:peps_open_remove_labels}) holds with $C=C_0$.
-    Then
+    Let $(C_i)_{i\in I}$ be a nonempty family of cuts with $C_0\subseteq C_i$
+    for all $i\in I$ such that every $e\notin C_0$ satisfies $e\notin C_i$ for
+    some $i\in I$, and suppose (\ref{eq:peps_open_remove_labels}) holds for
+    $C=C_0$. Then
     \begin{align}
         \bigcap_{i\in I}\mathcal S_{A^f,C_i}
         =\mathcal S_{A^f,C_0}.
@@ -396,21 +363,21 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
         thm:peps_open_bond_expansion,
         thm:peps_open_product_in_cut,
         thm:peps_cut_space_mono}
-    Let $\psi$ belong to every cut range. For each interior bond choose
-    a cut leaving it uncut. Its slices then have representation support,
-    so (\ref{eq:peps_open_bond_expansion}) gives
-    $\psi=\sum_a c(a)b_{Q(a)}$ with exterior cut $C_0$.
-    Choose one cut from the nonempty family. Its local maps are $P_v^f$,
-    and $(P_v^f)^2=P_v^f$, so applying their product leaves its contraction
-    unchanged: $\mathcal P^f\psi=\psi$. Hence
+    If $\psi\in\bigcap_{i\in I}\mathcal S_{A^f,C_i}$, then for each $e\notin C_0$
+    choosing $i$ with $e\notin C_i$ gives $S_{e,\tau}\psi\in\operatorname{im}F_e$
+    by Theorem~\ref{thm:peps_partial_uncut_support}, so
+    Theorem~\ref{thm:peps_open_bond_expansion} yields
+    $\psi=\sum_a c(a)b_{Q^{C_0}(a)}$. Since $I\ne\varnothing$ and
+    $(P_v^f)^2=P_v^f$, $\mathcal P^f\psi=\psi$, and
+    Theorem~\ref{thm:peps_open_product_in_cut} gives
     \begin{align}
-        \psi=\sum_a c(a)\mathcal P^f b_{Q(a)}
-        \in\mathcal S_{A^f,C_0},
+        \psi=\sum_a c(a)\mathcal P^f b_{Q^{C_0}(a)}
+        \in\mathcal S_{A^f,C_0}.
         \label{eq:peps_partial_projected_sum}
     \end{align}
-    by removal of internal labels term by term. Conversely,
-    $C_0\subseteq C_i$ implies
-    $\mathcal S_{A^f,C_0}\subseteq\mathcal S_{A^f,C_i}$ for each $i$.
+    Conversely, $C_0\subseteq C_i$ implies
+    $\mathcal S_{A^f,C_0}\subseteq\mathcal S_{A^f,C_i}$ by
+    Theorem~\ref{thm:peps_cut_space_mono}.
 \end{proof}
 
 \begin{theorem}[Open cut intersection for invariant injective tensors]%
@@ -419,11 +386,9 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     \leanok
     \uses{def:peps_partial_incident_representation,
         def:peps_g_injective}
-    Suppose the physical alphabets are finite and every $T_v$ is
-    $G$-injective for $\rho_v^f$. Let the nonempty family $(C_i)_{i\in I}$
-    and the exterior cut $C_0$ satisfy the containment, uncut-covering,
-    and label-removal hypotheses of
-    Theorem~\ref{thm:peps_partial_open_cut_intersection}. Then
+    Suppose every $Y_v$ is finite and $T_v$ is $G$-injective for $\rho_v^f$.
+    Under the hypotheses of Theorem~\ref{thm:peps_partial_open_cut_intersection}
+    on $(C_i)_{i\in I}$ and $C_0$,
     \begin{align}
         \bigcap_{i\in I}\mathcal S_{A,C_i}=\mathcal S_{A,C_0}.
         \label{eq:peps_open_cut_intersection}
@@ -433,16 +398,14 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     \uses{thm:peps_g_injective_left_inverse,
         thm:peps_partial_open_cut_intersection,
         thm:peps_cut_space_physical_image}
-    Set $\mathcal T=\bigotimes_vT_v$. Choose $L_v$ with
-    $L_vT_v=P_v^f$ and put $\mathcal L=\bigotimes_vL_v$.
-    Physical maps commute with cut contraction, so
-    $\mathcal L\mathcal C_{A,C}(M)=\mathcal C_{A^f,C}(M)$.
-    Invariance gives $T_vP_v^f=T_v$, hence also
-    $\mathcal T\mathcal C_{A^f,C}(M)=\mathcal C_{A,C}(M)$.
-    Thus $\mathcal L$ carries the original intersection into the
-    canonical intersection; choosing one cut in the nonempty family
-    shows $\mathcal T\mathcal L\psi=\psi$ there. The reverse image
-    inclusion follows from the second contraction identity. Therefore
+    Set $\mathcal T=\bigotimes_vT_v$, choose $L_v$ with $L_vT_v=P_v^f$ by
+    Theorem~\ref{thm:peps_g_injective_left_inverse}, and put
+    $\mathcal L=\bigotimes_vL_v$. Since $L_vT_v=P_v^f$ and $T_vP_v^f=T_v$,
+    Theorem~\ref{thm:peps_cut_space_physical_image} gives
+    $\mathcal L(\mathcal S_{A,C})=\mathcal S_{A^f,C}$,
+    $\mathcal T(\mathcal S_{A^f,C})=\mathcal S_{A,C}$, and
+    $\mathcal T\mathcal L|_{\mathcal S_{A,C}}=\Id$. Applying
+    (\ref{eq:peps_partial_open_intersection}) gives
     \begin{align}
         \bigcap_i\mathcal S_{A,C_i}
         =\mathcal T\left(\bigcap_i\mathcal S_{A^f,C_i}\right)
@@ -450,8 +413,6 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
         =\mathcal S_{A,C_0}.
         \label{eq:peps_open_inverse_transport}
     \end{align}
-    The middle equality is (\ref{eq:peps_partial_open_intersection});
-    the last is the physical-image identity.
 \end{proof}
 
 \subsection{Lifted regional contractions and physical support}
@@ -470,10 +431,8 @@ outside $\Omega$ as part of one joint boundary.
         TNLean.PEPS.DependentBondNetwork.outsidePhysicalRestriction_update}
     \leanok
     Put $Y_{\Omega^c}=\prod_{v\notin\Omega}Y_v$ and write
-    $\sigma_{\Omega^c}=(\sigma_v)_{v\notin\Omega}$ for the outside
-    restriction of a physical configuration. If $v\in\Omega$, then
-    $(\sigma[v\leftarrow s])_{\Omega^c}=\sigma_{\Omega^c}$, because
-    none of the restricted coordinates has changed.
+    $\sigma_{\Omega^c}=(\sigma_v)_{v\notin\Omega}$. For $v\in\Omega$,
+    $(\sigma[v\leftarrow s])_{\Omega^c}=\sigma_{\Omega^c}$.
 \end{definition}
 
 \begin{definition}[Lifted regional cut map]%
@@ -484,19 +443,14 @@ outside $\Omega$ as part of one joint boundary.
         TNLean.PEPS.DependentBondNetwork.liftedCutSpace}
     \leanok
     \uses{def:peps_outside_physical_config}
-    For an arbitrary joint function
-    $M:\mathcal X_{\partial C}\times Y_{\Omega^c}\to\C$, define
+    For $M:\mathcal X_{\partial C}\times Y_{\Omega^c}\to\C$, define the linear map
     \begin{align}
         \widehat\Gamma_{A,\Omega,C}(M)(\sigma)
         =\sum_\beta M(r_C\beta,\sigma_{\Omega^c})w_C(\beta)
-        \prod_{v\in\Omega}A_v((R\beta)_v,\sigma_v).
+        \prod_{v\in\Omega}A_v((R\beta)_v,\sigma_v)
         \label{eq:peps_lifted_cut}
     \end{align}
-    This expression is linear in $M$. Its range is
-    $\widehat{\mathcal S}_{A,\Omega,C}
-        =\operatorname{im}\widehat\Gamma_{A,\Omega,C}$.
-    Only tensors in $\Omega$ are contracted; the outside physical
-    configuration and every exposed virtual index may be correlated in $M$.
+    with range $\widehat{\mathcal S}_{A,\Omega,C}=\operatorname{im}\widehat\Gamma_{A,\Omega,C}$.
 \end{definition}
 
 \begin{theorem}[Regional slices lie in local tensor ranges]%
@@ -505,30 +459,27 @@ outside $\Omega$ as part of one joint boundary.
         TNLean.PEPS.DependentBondNetwork.slice_mem_range_of_mem_liftedCutSpace}
     \leanok
     \uses{def:peps_lifted_cut}
-    If $v\in\Omega$ and
-    $\psi\in\widehat{\mathcal S}_{A,\Omega,C}$, then every physical
-    slice $s\mapsto\psi(\sigma[v\leftarrow s])$ belongs to
-    $\operatorname{im}T_v$. In particular this holds for
-    $\psi=\widehat\Gamma_{A,\Omega,C}(M)$ and every joint $M$.
+    If $v\in\Omega$ and $\psi\in\widehat{\mathcal S}_{A,\Omega,C}$, then every
+    physical slice $s\mapsto\psi(\sigma[v\leftarrow s])$ lies in
+    $\operatorname{im}T_v$; in particular this holds for
+    $\psi=\widehat\Gamma_{A,\Omega,C}(M)$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:peps_lifted_cut,
         def:peps_outside_physical_config}
-    Changing $\sigma_v$ leaves $\sigma_{\Omega^c}$ fixed. Separate the
-    factor at $v$ in (\ref{eq:peps_lifted_cut}) to obtain
+    Since $(\sigma[v\leftarrow s])_{\Omega^c}=\sigma_{\Omega^c}$ by
+    Definition~\ref{def:peps_outside_physical_config}, separating the factor at
+    $v\in\Omega$ in (\ref{eq:peps_lifted_cut}) gives
     \begin{align}
         \psi(\sigma[v\leftarrow s])
-         & =\sum_\beta a_\beta A_v((R\beta)_v,s),
-        \label{eq:peps_lifted_local_slice}          \\
+         & =\sum_\beta a_\beta A_v((R\beta)_v,s)\in\operatorname{im}T_v,
+        \label{eq:peps_lifted_local_slice}                               \\
         a_\beta
          & =M(r_C\beta,\sigma_{\Omega^c})w_C(\beta)
         \prod_{w\in\Omega\setminus\{v\}}
         A_w((R\beta)_w,\sigma_w).
         \nonumber
     \end{align}
-    Each vector $s\mapsto A_v((R\beta)_v,s)$ is a column of $T_v$.
-    The finite sum therefore lies in its range. A boundary realizing
-    any vector in the lifted range gives the general assertion.
 \end{proof}
 
 \begin{theorem}[Covering regions force product physical support]%
@@ -536,24 +487,21 @@ outside $\Omega$ as part of one joint boundary.
     \lean{TNLean.PEPS.DependentBondNetwork.iInf_liftedCutSpace_le_range_product}
     \leanok
     \uses{def:peps_lifted_cut}
-    Assume the physical alphabets are finite. Put
-    $\mathcal T=\bigotimes_vT_v$ and $\mathcal H_A=\operatorname{im}\mathcal T$.
-    Let $(\Omega_i,C_i)_{i\in I}$ be any family such that each vertex
-    belongs to some $\Omega_i$ or has $\operatorname{im}T_v=\C^{Y_v}$.
-    Then
+    For finite $Y_v$, put $\mathcal T=\bigotimes_vT_v$ and
+    $\mathcal H_A=\operatorname{im}\mathcal T$. If $(\Omega_i,C_i)_{i\in I}$
+    satisfies $v\in\bigcup_{i\in I}\Omega_i$ or $\operatorname{im}T_v=\C^{Y_v}$
+    for every $v\in\mathcal V$, then
     \begin{align}
         \bigcap_{i\in I}\widehat{\mathcal S}_{A,\Omega_i,C_i}
         \subseteq\mathcal H_A.
         \label{eq:peps_lifted_cover_support}
     \end{align}
-    Thus only vertices with nonsurjective local maps require regional coverage.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_lifted_cut_local_slice}
-    For a covered vertex choose a region containing it and apply its
-    local-slice conclusion. At an uncovered vertex every slice belongs
-    to the full local range. The product-range criterion then places
-    the whole vector in $\operatorname{im}\mathcal T$.
+    By Theorem~\ref{thm:peps_lifted_cut_local_slice} (when $v\in\Omega_i$) or
+    surjectivity of $T_v$, every slice at $v$ lies in $\operatorname{im}T_v$,
+    so the product-range criterion yields (\ref{eq:peps_lifted_cover_support}).
 \end{proof}
 
 \begin{definition}[Outside virtual labels read from a cut]%
@@ -561,12 +509,11 @@ outside $\Omega$ as part of one joint boundary.
     \lean{TNLean.PEPS.DependentBondNetwork.outsideCutLocalConfig,
         TNLean.PEPS.DependentBondNetwork.outsideCutLocalConfig_restriction}
     \leanok
-    Say that $C$ exposes the outside of $\Omega$ when every incidence
-    $(e,\epsilon)$ at a vertex outside $\Omega$ has $e\in C$.
-    Under this condition a cut configuration $\kappa$ determines
-    $o_v(\kappa)\in\mathcal X_v$ at every $v\notin\Omega$, by
-    $o_v(\kappa)(e,\epsilon)=\kappa_{e,\epsilon}$.
-    In particular $o_v(r_C\beta)=(R\beta)_v$.
+    A cut $C$ exposes $\Omega^c$ if $e\in C$ for every $(e,\epsilon)\in I_v$
+    with $v\notin\Omega$. Then $\kappa\in\mathcal X_{\partial C}$ determines
+    $o_v(\kappa)\in\mathcal X_v$ for $v\notin\Omega$ by
+    $o_v(\kappa)(e,\epsilon)=\kappa_{e,\epsilon}$, satisfying
+    $o_v(r_C\beta)=(R\beta)_v$.
 \end{definition}
 
 \begin{theorem}[Full cut ranges lie in the lifted range and local support]%
@@ -576,26 +523,19 @@ outside $\Omega$ as part of one joint boundary.
     \leanok
     \uses{def:peps_lifted_cut,
         def:peps_outside_cut_config}
-    If $C$ exposes the outside of $\Omega$, then
+    If $C$ exposes $\Omega^c$, then
     $\mathcal S_{A,C}\subseteq\widehat{\mathcal S}_{A,\Omega,C}$.
-    For every cut $C$, independently of this exposure condition,
+    For every cut $C$,
     $\mathcal S_{A,C}\subseteq\operatorname{im}(\bigotimes_vT_v)$.
-    These containments do not require finite physical alphabets.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:peps_outside_cut_config,
         def:peps_lifted_cut}
-    For a boundary $M$ of the full cut, define
-    $\widetilde M(\kappa,\tau)
-        =M(\kappa)\prod_{v\notin\Omega}A_v(o_v(\kappa),\tau_v)$.
-    Substituting $o_v(r_C\beta)=(R\beta)_v$ and splitting the vertex
-    product into $\Omega$ and its complement gives
-    $\widehat\Gamma_{A,\Omega,C}(\widetilde M)
-        =\mathcal C_{A,C}(M)$.
-    For the second inclusion take the virtual coefficient function
-    $x(\eta)=M(r_CR^{-1}\eta)w_C(R^{-1}\eta)$.
-    Changing the incidence sum to site coordinates shows
-    $(\bigotimes_vT_v)x=\mathcal C_{A,C}(M)$.
+    Setting $\widetilde M(\kappa,\tau)=M(\kappa)\prod_{v\notin\Omega}A_v(o_v(\kappa),\tau_v)$
+    and using $o_v(r_C\beta)=(R\beta)_v$ in (\ref{eq:peps_lifted_cut}) gives
+    $\widehat\Gamma_{A,\Omega,C}(\widetilde M)=\mathcal C_{A,C}(M)$.
+    Setting $x(\eta)=M(r_CR^{-1}\eta)w_C(R^{-1}\eta)$ gives
+    $(\bigotimes_vT_v)x=\mathcal C_{A,C}(M)$ by (\ref{eq:peps_open_cut_notation}).
 \end{proof}
 
 \subsection{Reconstructing full cuts from lifted vectors}
@@ -605,13 +545,12 @@ outside $\Omega$ as part of one joint boundary.
     \label{def:peps_cut_replace_outside}
     \lean{TNLean.PEPS.DependentBondNetwork.cutReplaceOutside}
     \leanok
-    Given $\kappa\in\mathcal X_{\partial C}$ and outside local
-    configurations $\xi\in\prod_{v\notin\Omega}\mathcal X_v$, define
-    $\kappa[\Omega^c\leftarrow\xi]$ by retaining $\kappa_{e,\epsilon}$
-    at incidences whose vertex is in $\Omega$, and replacing it by
-    $\xi_{v(e,\epsilon)}(e,\epsilon)$ at every other cut incidence.
-    This replacement is defined whether or not $C$ exposes every outside
-    incidence.
+    For $\kappa\in\mathcal X_{\partial C}$ and
+    $\xi\in\prod_{v\notin\Omega}\mathcal X_v$, define
+    $\kappa[\Omega^c\leftarrow\xi]\in\mathcal X_{\partial C}$ by
+    $(\kappa[\Omega^c\leftarrow\xi])_{e,\epsilon}=\kappa_{e,\epsilon}$ if
+    $v(e,\epsilon)\in\Omega$ and $\xi_{v(e,\epsilon)}(e,\epsilon)$ if
+    $v(e,\epsilon)\notin\Omega$.
 \end{definition}
 
 \begin{definition}[Replacing outside physical coordinates]%
@@ -621,12 +560,11 @@ outside $\Omega$ as part of one joint boundary.
         TNLean.PEPS.DependentBondNetwork.replaceOutsidePhysical_restriction}
     \leanok
     \uses{def:peps_outside_physical_config}
-    For $\tau\in Y_{\Omega^c}$, write
-    $\sigma[\Omega^c\leftarrow\tau]$ for the configuration equal to
-    $\sigma_v$ on $\Omega$ and $\tau_v$ outside $\Omega$.
-    Its outside restriction is $\tau$, and
+    For $\tau\in Y_{\Omega^c}$, define $\sigma[\Omega^c\leftarrow\tau]$ by
+    $(\sigma[\Omega^c\leftarrow\tau])_v=\sigma_v$ for $v\in\Omega$ and
+    $\tau_v$ for $v\notin\Omega$. Then
+    $(\sigma[\Omega^c\leftarrow\tau])_{\Omega^c}=\tau$ and
     $\sigma[\Omega^c\leftarrow\sigma_{\Omega^c}]=\sigma$.
-    Both identities follow by evaluating the inside and outside coordinates.
 \end{definition}
 
 \begin{definition}[Boundary reconstructed through outside local maps]%
@@ -636,10 +574,9 @@ outside $\Omega$ as part of one joint boundary.
     \uses{def:peps_cut_replace_outside,
         def:peps_outside_cut_config,
         def:peps_lifted_cut}
-    Suppose the physical alphabets are finite and $C$ exposes the outside
-    of $\Omega$. Choose arbitrary maps
-    $L_v:\C^{Y_v}\to\C^{\mathcal X_v}$ at the outside vertices.
-    For a lifted boundary $M$, define the full cut boundary
+    Suppose every $Y_v$ is finite and $C$ exposes $\Omega^c$. For
+    $L_v:\C^{Y_v}\to\C^{\mathcal X_v}$ ($v\notin\Omega$) and a lifted boundary
+    $M$, define
     \begin{align}
         K_{L,M}(\kappa)
         =\sum_{\xi\in\prod_{v\notin\Omega}\mathcal X_v}
@@ -648,8 +585,6 @@ outside $\Omega$ as part of one joint boundary.
         \prod_{v\notin\Omega}L_v(o_v(\kappa),\tau_v).
         \label{eq:peps_reconstructed_boundary}
     \end{align}
-    The old outside virtual labels $\xi$ are summed independently of the
-    new labels $o_v(\kappa)$ used by $L_v$.
 \end{definition}
 
 \begin{theorem}[Contraction of the reconstructed boundary]%
@@ -674,25 +609,19 @@ outside $\Omega$ as part of one joint boundary.
     \uses{def:peps_reconstructed_cut_boundary,
         def:peps_lifted_cut,
         def:peps_replace_outside_physical}
-    Expanding the left side as a sum over endpoint labels $\beta$, old
-    outside virtual labels $\xi$, and outside physical labels $\tau$,
-    we exchange the outside part of $\beta$ with $\xi$. This involution
-    of the two configuration sets keeps every inside local configuration
-    unchanged, replaces each outside local configuration by $\xi_v$,
-    leaves $w_C(\beta)$ invariant because every uncut bond has both ends in
-    $\Omega$, and turns the argument of $M$ into $r_C\beta$.
-
-    Splitting the tensor product over vertices into inside and outside factors
-    and summing each new outside virtual index then gives
+    Expand $\mathcal C_{A,C}(K_{L,M})(\sigma)$ via
+    (\ref{eq:peps_open_cut_notation}) and (\ref{eq:peps_reconstructed_boundary})
+    over $(\beta,\xi,\tau)$ and swap $((R\beta)_v)_{v\notin\Omega}\leftrightarrow\xi$.
+    Since $C$ exposes $\Omega^c$, every $e\notin C$ has both endpoints in
+    $\Omega$, so $w_C(\beta)$ is invariant and
+    $(r_C\beta)[\Omega^c\leftarrow\xi]$ becomes $r_C\beta$. Summing the new
+    outside virtual indices yields
     \begin{align}
         (T_vL_v)_{\sigma_v,\tau_v}
-        =\sum_{\eta\in\mathcal X_v}A_v(\eta,\sigma_v)L_v(\eta,\tau_v).
+        =\sum_{\eta\in\mathcal X_v}A_v(\eta,\sigma_v)L_v(\eta,\tau_v),
         \label{eq:peps_outside_local_composition}
     \end{align}
-    Interchanging the remaining finite sums yields
-    $\sum_\tau\prod_{v\notin\Omega}(T_vL_v)_{\sigma_v,\tau_v}
-        \psi(\sigma[\Omega^c\leftarrow\tau])$,
-    which is (\ref{eq:peps_reconstructed_contraction}).
+    and interchanging the remaining sums gives (\ref{eq:peps_reconstructed_contraction}).
 \end{proof}
 
 \begin{theorem}[Full cut reconstruction inside product physical support]%
@@ -702,38 +631,26 @@ outside $\Omega$ as part of one joint boundary.
     \leanok
     \uses{def:peps_lifted_cut,
         def:peps_outside_cut_config}
-    Suppose every physical alphabet is finite and $C$ exposes the outside
-    of $\Omega$. With $\mathcal H_A=\operatorname{im}(\bigotimes_vT_v)$,
+    Suppose every $Y_v$ is finite and $C$ exposes $\Omega^c$. With
+    $\mathcal H_A=\operatorname{im}(\bigotimes_vT_v)$,
     \begin{align}
         \mathcal S_{A,C}
         =\widehat{\mathcal S}_{A,\Omega,C}\cap\mathcal H_A.
         \label{eq:peps_lifted_reconstruction}
     \end{align}
-    In particular every lifted regional vector in product physical
-    support is a full cut contraction. No injectivity or nonempty-alphabet
-    assumption is needed.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_full_cut_in_lifted_support,
         thm:peps_reconstructed_boundary_contraction}
-    The full cut range lies in both spaces on the right by
-    Theorem~\ref{thm:peps_full_cut_in_lifted_support}.
-    Conversely, let
-    $\psi=\widehat\Gamma_{A,\Omega,C}(M)\in\mathcal H_A$.
-    For each outside vertex choose a right inverse of $T_v$ on its
-    range and extend it to a linear map $L_v$ on $\C^{Y_v}$.
-    Thus $T_vL_vq=q$ for $q\in\operatorname{im}T_v$.
-    The product-range criterion places every one-coordinate slice of
-    $\psi$ in the corresponding local range. The same holds for the
-    outside-coordinate function $\psi_\sigma$, since changing an
-    outside coordinate commutes with replacement of the outside configuration.
-    Consequently
-    $(\bigotimes_{v\notin\Omega}T_vL_v)\psi_\sigma=\psi_\sigma$,
-    by the fixed-slice product identity. Substituting in
+    Theorem~\ref{thm:peps_full_cut_in_lifted_support} gives
+    $\mathcal S_{A,C}\subseteq\widehat{\mathcal S}_{A,\Omega,C}\cap\mathcal H_A$.
+    Conversely, for $\psi=\widehat\Gamma_{A,\Omega,C}(M)\in\mathcal H_A$,
+    choose $L_v:\C^{Y_v}\to\C^{\mathcal X_v}$ ($v\notin\Omega$) with
+    $T_vL_v|_{\operatorname{im}T_v}=\Id$. Since $\psi\in\mathcal H_A$, every
+    slice of $\psi_\sigma$ at $v\notin\Omega$ lies in $\operatorname{im}T_v$, so
+    $(\bigotimes_{v\notin\Omega}T_vL_v)\psi_\sigma=\psi_\sigma$, and
     (\ref{eq:peps_reconstructed_contraction}) gives
-    $\mathcal C_{A,C}(K_{L,M})(\sigma)
-        =\psi_\sigma(\sigma_{\Omega^c})=\psi(\sigma)$.
-    This constructs a single full cut boundary for $\psi$.
+    $\mathcal C_{A,C}(K_{L,M})(\sigma)=\psi_\sigma(\sigma_{\Omega^c})=\psi(\sigma)$.
 \end{proof}
 
 \subsection{Intersections of lifted regional ranges}
@@ -747,38 +664,32 @@ outside $\Omega$ as part of one joint boundary.
     \leanok
     \uses{def:peps_lifted_cut,
         def:peps_outside_cut_config}
-    Suppose the physical alphabets are finite. Let
-    $(\Omega_i,C_i)_{i\in I}$ be a family such that each $C_i$ exposes
-    the outside of $\Omega_i$. Suppose every vertex lies in some
-    $\Omega_i$ or its local map $T_v$ is surjective. Then
+    Suppose every $Y_v$ is finite, each $C_i$ exposes $\Omega_i^c$, and every
+    $v\in\mathcal V$ satisfies $v\in\bigcup_{i\in I}\Omega_i$ or
+    $\operatorname{im}T_v=\C^{Y_v}$. Then
     \begin{align}
         \bigcap_{i\in I}\widehat{\mathcal S}_{A,\Omega_i,C_i}
         =\bigcap_{i\in I}\mathcal S_{A,C_i}.
         \label{eq:peps_lifted_intersection}
     \end{align}
-    In particular, if all omitted local maps are surjective, then
-    $\widehat{\mathcal S}_{A,\Omega,C}=\mathcal S_{A,C}$.
-    For two regions $\Omega,\Xi$ with exposed cuts $C,E$, it suffices
-    that every vertex belongs to $\Omega\cup\Xi$ or has a surjective
-    local map; in that case
+    In particular, $\widehat{\mathcal S}_{A,\Omega,C}=\mathcal S_{A,C}$ if
+    $T_v$ is surjective for all $v\notin\Omega$, and for two pairs
+    $(\Omega,C),(\Xi,E)$ with $v\in\Omega\cup\Xi$ or $T_v$ surjective for all $v$,
     \begin{align}
         \widehat{\mathcal S}_{A,\Omega,C}
         \cap\widehat{\mathcal S}_{A,\Xi,E}
         =\mathcal S_{A,C}\cap\mathcal S_{A,E}.
         \label{eq:peps_two_lifted_intersection}
     \end{align}
-    The boundary tensors realizing the two memberships are independent.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_lifted_cover_support,
         thm:peps_lifted_cut_reconstruction,
         thm:peps_full_cut_in_lifted_support}
-    A vector in every lifted range belongs to $\mathcal H_A$ by the
-    covering argument. For each $i$, reconstruction then places it in
-    $\mathcal S_{A,C_i}$. The reverse inclusion follows from the
-    inclusion of every full cut range in its lifted range. The one-region
-    and two-region assertions are the corresponding specializations of
-    this family equality.
+    Combine (\ref{eq:peps_lifted_cover_support}) and
+    (\ref{eq:peps_lifted_reconstruction}) with
+    Theorem~\ref{thm:peps_full_cut_in_lifted_support}; the one- and two-region
+    identities are the $|I|=1,2$ cases of (\ref{eq:peps_lifted_intersection}).
 \end{proof}
 
 \begin{theorem}[Canonical reduction of a lifted intersection]%
@@ -787,32 +698,27 @@ outside $\Omega$ as part of one joint boundary.
     \leanok
     \uses{def:peps_lifted_cut,
         def:peps_g_injective}
-    Let $G$ be finite and let $\rho_v$ be representations on the virtual
-    spaces. Suppose every physical alphabet is finite and $T_v$ is
-    $G$-injective for $\rho_v$. Let $(\Omega_i,C_i)_{i\in I}$ be a
-    nonempty family satisfying the exposure and coverage hypotheses of
-    Theorem~\ref{thm:peps_lifted_cut_intersection}. Put
-    $\mathcal T=\bigotimes_vT_v$. Then
+    Let $G$ be finite, suppose every $Y_v$ is finite, and let $T_v$ be
+    $G$-injective for $\rho_v$ with averaging tensors $A^0$. For a nonempty
+    family $(\Omega_i,C_i)_{i\in I}$ satisfying the hypotheses of
+    Theorem~\ref{thm:peps_lifted_cut_intersection} and
+    $\mathcal T=\bigotimes_vT_v$,
     \begin{align}
         \bigcap_{i\in I}\widehat{\mathcal S}_{A,\Omega_i,C_i}
         =\mathcal T\left(\bigcap_{i\in I}\mathcal S_{A^0,C_i}\right).
         \label{eq:peps_lifted_canonical_intersection}
     \end{align}
-    Here $A^0$ consists of the averaging tensors of the $\rho_v$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_g_injective_left_inverse,
         thm:peps_lifted_cut_intersection}
-    Replacing the lifted intersection by the intersection of full cut
-    ranges via (\ref{eq:peps_lifted_intersection}), we choose $L_v$ with
-    $L_vT_v=P_v$ and set $\mathcal L=\bigotimes_vL_v$.
-    Because the local identities $L_vT_v=P_v$ and $T_vP_v=T_v$ give
+    Choose $L_v$ with $L_vT_v=P_v$ by
+    Theorem~\ref{thm:peps_g_injective_left_inverse} and set
+    $\mathcal L=\bigotimes_vL_v$. Since $L_vT_v=P_v$ and $T_vP_v=T_v$,
     $\mathcal L\mathcal C_{A,C}(M)=\mathcal C_{A^0,C}(M)$ and
-    $\mathcal T\mathcal C_{A^0,C}(M)=\mathcal C_{A,C}(M)$ for every
-    cut $C$ and boundary $M$, the map $\mathcal L$ sends every vector in
-    the full intersection to the canonical intersection; choosing one cut
-    recovers the vector under $\mathcal T$, while the second identity
-    gives the reverse inclusion, establishing
+    $\mathcal T\mathcal C_{A^0,C}(M)=\mathcal C_{A,C}(M)$ for all $C,M$, so
+    $\bigcap_i\mathcal S_{A,C_i}=\mathcal T(\bigcap_i\mathcal S_{A^0,C_i})$;
+    combining with (\ref{eq:peps_lifted_intersection}) gives
     (\ref{eq:peps_lifted_canonical_intersection}).
 \end{proof}
 
@@ -823,35 +729,27 @@ outside $\Omega$ as part of one joint boundary.
     \uses{def:peps_lifted_cut,
         def:peps_g_injective}
     Under the hypotheses of
-    Theorem~\ref{thm:peps_lifted_canonical_intersection}, there is one
-    family $L_v:\C^{Y_v}\to\C^{\mathcal X_v}$, with
-    $\mathcal L=\bigotimes_vL_v$, such that for every cut $C$ and
-    every joint boundary $M$,
+    Theorem~\ref{thm:peps_lifted_canonical_intersection}, there exists
+    $L_v:\C^{Y_v}\to\C^{\mathcal X_v}$ with $\mathcal L=\bigotimes_vL_v$ such
+    that for every cut $C$, boundary $M$, and
+    $\psi\in\bigcap_i\widehat{\mathcal S}_{A,\Omega_i,C_i}$,
     \begin{align}
-        \mathcal L\mathcal C_{A,C}(M)=\mathcal C_{A^0,C}(M).
-        \label{eq:peps_lifted_inverse_boundary}
-    \end{align}
-    For every $\psi\in\bigcap_i\widehat{\mathcal S}_{A,\Omega_i,C_i}$,
-    the same family satisfies
-    \begin{align}
-        \mathcal L\psi           & \in\bigcap_i\mathcal S_{A^0,C_i},
-        \label{eq:peps_lifted_inverse_membership}                    \\
-        \mathcal T\mathcal L\psi & =\psi.
+        \mathcal L\mathcal C_{A,C}(M) & =\mathcal C_{A^0,C}(M),
+        \label{eq:peps_lifted_inverse_boundary}                           \\
+        \mathcal L\psi                & \in\bigcap_i\mathcal S_{A^0,C_i},
+        \label{eq:peps_lifted_inverse_membership}                         \\
+        \mathcal T\mathcal L\psi      & =\psi.
         \nonumber
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_g_injective_left_inverse,
         thm:peps_lifted_cut_intersection}
-    Theorem~\ref{thm:peps_g_injective_left_inverse} provides $L_v$ with
-    $L_vT_v=P_v$, and applying their product to a cut contraction
-    replaces each local map $T_v$ by $P_v$ while retaining the same joint
-    boundary, proving (\ref{eq:peps_lifted_inverse_boundary}) for all cuts
-    at once.
-    By (\ref{eq:peps_lifted_intersection}), the vector $\psi$ admits a
-    full boundary $M_i$ at each cut $C_i$, so applying
-    (\ref{eq:peps_lifted_inverse_boundary}) at every $i$ establishes
-    canonical membership, and choosing any $i$ from the nonempty family
-    recovers the original contraction $\mathcal T\mathcal L\psi=\psi$
-    via $T_vP_v=T_v$ at every vertex.
+    Choosing $L_v$ with $L_vT_v=P_v$ by
+    Theorem~\ref{thm:peps_g_injective_left_inverse} gives
+    (\ref{eq:peps_lifted_inverse_boundary}). For
+    $\psi\in\bigcap_i\widehat{\mathcal S}_{A,\Omega_i,C_i}=\bigcap_i\mathcal S_{A,C_i}$
+    by (\ref{eq:peps_lifted_intersection}), writing $\psi=\mathcal C_{A,C_i}(M_i)$
+    and applying (\ref{eq:peps_lifted_inverse_boundary}) with $T_vP_v=T_v$ gives
+    (\ref{eq:peps_lifted_inverse_membership}) and $\mathcal T\mathcal L\psi=\psi$.
 \end{proof}

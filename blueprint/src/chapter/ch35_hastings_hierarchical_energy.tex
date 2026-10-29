@@ -3,45 +3,40 @@
 
 % Hastings, arXiv:cond-mat/0508554v3, proj3new.tex, lines 705--720 (eq. hchy).
 
-At the end of the hierarchical construction \cite{Hastings2006Solving}
-states that, once the deficiency $b_h$ of the last level is small, some final
-state has energy close to that of the ground state, eq.~(hchy) at
-lines 709--720; the source writes ``one may show''. The step from the
-deficiency of the final projection to the energy is the following. Here the
-deficiency is measured in norm, as in
-Section~\ref{sec:hastings05_hierarchical_projection}, and the state produced
-is the normalized image of the ground state, which lies in the span of the
-final states. The second part of this section proves eq.~(hchy) for every
-final state, from the spectral windows rather than from the deficiency, first
-for the links of the open chain and then, with one further window, for the
+At the end of the hierarchical construction,
+\cite[eq.~(hchy), lines 709--720]{Hastings2006Solving} bounds the energy of a
+final state from the final deficiency $b_h$. Below we first bound the energy of
+the normalized projection of the ground state from its norm deficiency
+(Section~\ref{sec:hastings05_hierarchical_projection}), and then prove
+eq.~(hchy) for every final state directly from the spectral windows, both for
+the open chain and (with one additional window on the closing link) for the
 periodic chain \cite{gap:hastings05_hierarchical_energy}.
 
 \begin{theorem}[Energies of nearby unit vectors]
     \label{thm:hastings05_energy_nearby}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.abs_re_inner_sub_re_inner_le}
     \leanok
-    For unit vectors $\phi$, $\psi$ and every operator $M$,
+    For $\|\phi\|=\|\psi\|=1$ and any operator $M$,
     $|\operatorname{Re}\langle\phi,M\phi\rangle-\operatorname{Re}\langle\psi,M\psi\rangle|
         \le2\|M\|\,\|\phi-\psi\|$.
 \end{theorem}
 \begin{proof}
     \leanok
+    Apply Cauchy--Schwarz to
     $\langle\phi,M\phi\rangle-\langle\psi,M\psi\rangle
-        =\langle\phi-\psi,M\phi\rangle+\langle\psi,M(\phi-\psi)\rangle$,
-    and each term has modulus at most $\|M\|\,\|\phi-\psi\|$.
+        =\langle\phi-\psi,M\phi\rangle+\langle\psi,M(\phi-\psi)\rangle$.
 \end{proof}
 
 \begin{theorem}[Normalizing the image under one projection]
     \label{thm:hastings05_normalization_one}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_inv_norm_smul_toEuclideanLin_sub_le_two_mul}
     \leanok
-    If the orthogonal projection $Q$ moves the unit vector $\psi$ by at most $b$,
-    then $\|Q\psi/\|Q\psi\|-\psi\|\le2b$.
+    For an orthogonal projection $Q$ and $\|\psi\|=1$, if
+    $\|Q\psi-\psi\|\le b$, then $\|Q\psi/\|Q\psi\|-\psi\|\le2b$.
 \end{theorem}
 \begin{proof}
     \leanok
-    Normalizing a vector $v$ moves it by $|1-\|v\||\le\|v-\psi\|$, so the
-    normalized image is within $2\|Q\psi-\psi\|$ of $\psi$.
+    Use $|1-\|Q\psi\||\le\|Q\psi-\psi\|\le b$.
 \end{proof}
 
 \begin{theorem}[A final state of nearly the ground-state energy]
@@ -50,26 +45,25 @@ periodic chain \cite{gap:hastings05_hierarchical_energy}.
         TNLean.MPS.AreaLaw.LocalSolution.exists_mem_range_re_inner_sum_le_add}
     \leanok
     \uses{thm:hastings05_energy_nearby, thm:hastings05_normalization_one}
-    Let $Q$ be an orthogonal projection that moves the unit vector $\Psi$ by at
-    most $b<1$. Then some unit vector $\phi$ with $Q\phi=\phi$ and
-    $\|\phi-\Psi\|\le2b$ satisfies, for every operator $M$,
-    \begin{align*}
+    If an orthogonal projection $Q$ and $\|\Psi\|=1$ satisfy
+    $\|Q\Psi-\Psi\|\le b<1$, then $\phi=Q\Psi/\|Q\Psi\|$ satisfies $\|\phi\|=1$,
+    $Q\phi=\phi$, $\|\phi-\Psi\|\le2b$, and for every $M$,
+    \begin{align}
         \operatorname{Re}\langle\phi,M\phi\rangle
-        \le\operatorname{Re}\langle\Psi,M\Psi\rangle+4\|M\|b.
-    \end{align*}
-    For $M=\sum_{i<N}M_i$ with $\|M_i\|\le J$ the error is at most $4NJb$. With
-    $Q$ the projection onto the final states and $b=b_h$ this is
-    eq.~(hchy) of~\cite[lines 709--720]{Hastings2006Solving}, with the explicit
-    constant $4NJb_h$, for a unit vector in the span of the final states
-    $\alpha^h$ rather than one of them \cite{gap:hastings05_hierarchical_energy}.
+        \le\operatorname{Re}\langle\Psi,M\Psi\rangle+4\|M\|b
+        \label{eq:hastings05_hchy}
+    \end{align}
+    (at most $\operatorname{Re}\langle\Psi,M\Psi\rangle+4NJb$ when
+    $M=\sum_{i<N}M_i$ with $\|M_i\|\le J$)
+    \cite[eq.~(hchy), lines 709--720]{Hastings2006Solving},
+    \cite{gap:hastings05_hierarchical_energy}.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:hastings05_energy_nearby, thm:hastings05_normalization_one}
-    Since $\|Q\Psi\|\ge1-b>0$, take $\phi=Q\Psi/\|Q\Psi\|$. Then $Q\phi=\phi$,
-    $\|\phi-\Psi\|\le2b$ by Theorem~\ref{thm:hastings05_normalization_one}, and
-    Theorem~\ref{thm:hastings05_energy_nearby} gives the energy bound; for the
-    sum, $\|M\|\le NJ$.
+    Since $\|Q\Psi\|\ge1-b>0$, combine
+    Theorems~\ref{thm:hastings05_normalization_one}
+    and~\ref{thm:hastings05_energy_nearby}.
 \end{proof}
 
 \subsection*{Every final state}
@@ -80,19 +74,17 @@ periodic chain \cite{gap:hastings05_hierarchical_energy}.
         TNLean.MPS.AreaLaw.LocalSolution.abs_re_inner_sub_le_of_compressedWindowProjection}
     \leanok
     \uses{def:hastings05_compressed_window}
-    Let $A$ be Hermitian, $c$ real and $x\ge0$, and let $\phi$ be kept by the
-    projection onto the eigenvectors of $A$ with eigenvalue within $x$ of $c$.
-    Then
+    Let $c\in\mathbb R$ and $x\ge0$. If $A=A^\dagger$ and
+    $P_x(A,c)\phi=\phi$, then
     $|\operatorname{Re}\langle\phi,A\phi\rangle-c\|\phi\|^2|\le x\|\phi\|^2$.
-    If instead $\phi$ is kept by the window of a Hermitian $M$ at $c$ and $x$
-    inside the range of an orthogonal projection $Q$, then $Q\phi=\phi$ and
+    If $M=M^\dagger$, $Q$ is an orthogonal projection, and
+    $QP_x(QMQ,c)\phi=\phi$, then $Q\phi=\phi$ and
     $|\operatorname{Re}\langle\phi,M\phi\rangle-c\|\phi\|^2|\le x\|\phi\|^2$.
 \end{theorem}
 \begin{proof}\leanok
-    On the range of the window, $\|(A-c)\phi\|\le x\|\phi\|$, and
-    $\langle\phi,A\phi\rangle-c\|\phi\|^2=\langle\phi,(A-c)\phi\rangle$. For
-    the second statement, the window inside the range of $Q$ is $Q$ times the
-    window of $QMQ$, so $Q\phi=\phi$, the window of $QMQ$ keeps $\phi$, and
+    For $P_x(A,c)\phi=\phi$,
+    $|\langle\phi,(A-c)\phi\rangle|\le\|\phi\|\,\|(A-c)\phi\|\le x\|\phi\|^2$;
+    for $QP_x(QMQ,c)\phi=\phi$, $Q\phi=\phi$ and
     $\langle\phi,QMQ\phi\rangle=\langle\phi,M\phi\rangle$.
 \end{proof}
 
@@ -100,11 +92,8 @@ periodic chain \cite{gap:hastings05_hierarchical_energy}.
     \label{def:hastings05_hierarchy_sum}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchySum}
     \leanok
-    For a family $f_k^m$ indexed by levels $m$ and blocks $k$, set
-    $T_k^0(f)=0$ and $T_k^{m+1}(f)=f_k^m+T_{2k}^m(f)+T_{2k+1}^m(f)$. With
-    $f_k^m$ the operator joining the two halves of block $k$ of level $m+1$,
-    $T_0^h(f)$ is the sum of the $2^h-1$ links of an open chain of $2^h$
-    supersites.
+    For a family $f_k^m$ indexed by level $m$ and block $k$, define
+    $T_k^0(f)=0$ and $T_k^{m+1}(f)=f_k^m+T_{2k}^m(f)+T_{2k+1}^m(f)$.
 \end{definition}
 
 \begin{theorem}[The joining operators below a block]
@@ -113,23 +102,18 @@ periodic chain \cite{gap:hastings05_hierarchical_energy}.
     \leanok
     \uses{thm:hastings05_window_expectation, def:hastings05_hierarchy_sum,
         thm:hastings05_hierarchy_levels}
-    In the setting of Theorem~\ref{thm:hastings05_hierarchy_levels}, with radii
-    $x_m\ge0$, every $P_k^m$ is an orthogonal projection, and every vector
-    $\phi$ with $P_k^m\phi=\phi$ satisfies
-    \begin{align*}
+    In the setting of Theorem~\ref{thm:hastings05_hierarchy_levels} with radii
+    $x_m\ge0$, every $P_k^m$ is an orthogonal projection, and any $\phi$ with
+    $P_k^m\phi=\phi$ satisfies
+    \begin{align}
         \bigl|\operatorname{Re}\langle\phi,T_k^m(M)\phi\rangle
-        -T_k^m(c)\|\phi\|^2\bigr|\le T_k^m(x)\|\phi\|^2,
-    \end{align*}
-    where $T_k^m(x)$ sums the radius $x_{m'}$ of every joining operator of
-    level $m'$ below the block.
+        -T_k^m(c)\|\phi\|^2\bigr|\le T_k^m(x)\|\phi\|^2.
+        \label{eq:hastings05_hierarchy_sum_expectation}
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Induction on $m$. A vector kept by $P_k^{m+1}$ is kept by the window of
-    $M_k^m$ inside the range of $Q=P_{2k}^mP_{2k+1}^m$, so
-    Theorem~\ref{thm:hastings05_window_expectation} bounds the term of $M_k^m$
-    and gives $Q\phi=\phi$. Since the two halves commute, $\phi$ is kept by
-    $P_{2k}^m$ and by $P_{2k+1}^m$, and the induction hypothesis bounds the
-    two sums below them.
+    Induct on $m$: $P_k^{m+1}\phi=\phi$ implies $P_{2k}^m\phi=P_{2k+1}^m\phi=\phi$,
+    and Theorem~\ref{thm:hastings05_window_expectation} bounds the $M_k^m$ term.
 \end{proof}
 
 \begin{theorem}[Eq.~(hchy) for every final state]
@@ -137,25 +121,20 @@ periodic chain \cite{gap:hastings05_hierarchical_energy}.
     \lean{TNLean.MPS.AreaLaw.LocalSolution.re_inner_hierarchySum_le_add}
     \leanok
     \uses{thm:hastings05_hierarchy_sum_expectation}
-    In the setting of Theorem~\ref{thm:hastings05_hierarchy_sum_expectation},
-    let the centres be $c_k^m=\operatorname{Re}\langle\Psi,M_k^m\Psi\rangle$
-    for a unit vector $\Psi$. Then every unit vector $\phi$ with
-    $P_k^m\phi=\phi$ satisfies
-    \begin{align*}
+    In the setting of Theorem~\ref{thm:hastings05_hierarchy_sum_expectation}
+    with $c_k^m=\operatorname{Re}\langle\Psi,M_k^m\Psi\rangle$ for $\|\Psi\|=1$,
+    every unit vector $\phi$ with $P_k^m\phi=\phi$ satisfies
+    \begin{align}
         \operatorname{Re}\langle\phi,T_k^m(M)\phi\rangle
-        \le\operatorname{Re}\langle\Psi,T_k^m(M)\Psi\rangle+T_k^m(x).
-    \end{align*}
-    With $\Psi=\Psi_a$ and the final projection $P_0^h$, every final state
-    $\alpha^h$ satisfies eq.~(hchy)
-    of~\cite[lines 709--720]{Hastings2006Solving}, with the error
-    $\sum_{m<h}2^{h-1-m}x_m$, for the energy of the links of the open chain
+        \le\operatorname{Re}\langle\Psi,T_k^m(M)\Psi\rangle+T_k^m(x)
+        \label{eq:hastings05_hchy_every_state}
+    \end{align}
+    \cite[eq.~(hchy), lines 709--720]{Hastings2006Solving},
     \cite{gap:hastings05_hierarchical_energy}.
 \end{theorem}
 \begin{proof}\leanok
-    The expectation in $\Psi$ is additive in the operator, so
-    $T_k^m(c)=\operatorname{Re}\langle\Psi,T_k^m(M)\Psi\rangle$; apply
-    Theorem~\ref{thm:hastings05_hierarchy_sum_expectation} with
-    $\|\phi\|=1$.
+    Since $T_k^m(c)=\operatorname{Re}\langle\Psi,T_k^m(M)\Psi\rangle$, apply
+    (\ref{eq:hastings05_hierarchy_sum_expectation}) with $\|\phi\|=1$.
 \end{proof}
 
 \begin{theorem}[At most $2n$ final states]
@@ -163,41 +142,35 @@ periodic chain \cite{gap:hastings05_hierarchical_energy}.
     \lean{TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_hierarchy}
     \leanok
     \uses{thm:hastings05_hchy_every_state, thm:hastings_final_state_count}
-    In the setting of Theorem~\ref{thm:hastings05_hchy_every_state}, let
-    $H=T_0^h(M)$ satisfy $H-E_0\ge\Delta E\,(1-P)$ for an orthogonal
-    projection $P$ and $\Delta E>0$, and suppose
-    $\operatorname{Re}\langle\Psi,H\Psi\rangle+T_0^h(x)\le E_0+\Delta E/2$.
-    Then every orthonormal family of vectors kept by $P_0^h$ has at most
-    $2\operatorname{Re}\operatorname{tr}P$ members. This is the count
-    of~\cite[lines 722--730]{Hastings2006Solving} for the open chain.
+    In the setting of Theorem~\ref{thm:hastings05_hchy_every_state}, if
+    $H=T_0^h(M)$ satisfies $H-E_0\ge\Delta E(1-P)$ for an orthogonal projection
+    $P$ and $\Delta E>0$, and
+    $\operatorname{Re}\langle\Psi,H\Psi\rangle+T_0^h(x)\le E_0+\Delta E/2$,
+    then any orthonormal family kept by $P_0^h$ has size at most
+    $2\operatorname{Re}\operatorname{tr}P$
+    \cite[lines 722--730]{Hastings2006Solving}.
 \end{theorem}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:hastings05_hchy_every_state} every member has energy
-    at most $E_0+\Delta E/2$; apply
+    Combine (\ref{eq:hastings05_hchy_every_state}) with
     Theorem~\ref{thm:hastings_final_state_count}.
 \end{proof}
 
-The chain of supersites is periodic, and the link $(N,1)$ closing it into a
-ring joins the two halves of no block, so the windows of the $h$ levels leave
-its energy uncontrolled. One further window, inside the final space, controls
-it \cite{gap:hastings05_hierarchical_energy}.
+For the periodic chain of supersites, one additional spectral window controls
+the closing link $(N,1)$ \cite{gap:hastings05_hierarchical_energy}.
 
 \begin{theorem}[The window of the closing link]
     \label{thm:hastings05_closing_link_window}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_closingLinkWindow_le}
     \leanok
     \uses{thm:hastings05_hierarchy_levels, thm:hastings05_level_against_ground_state}
-    In the setting of Theorem~\ref{thm:hastings05_hierarchy_levels}, let $W$
-    be Hermitian with $\|(W-c_W)\psi\|\le\epsilon$ and $\|W-c_W\|\le K$,
-    and let $R$ project onto the eigenvectors of $P_0^hWP_0^h$ in the range of
-    $P_0^h$ with eigenvalue within $x_h$ of $c_W$. Then $R$ is an orthogonal
-    projection and $\|\psi-R\psi\|\le D_{h+1}$.
+    In the setting of Theorem~\ref{thm:hastings05_hierarchy_levels}, if
+    $W=W^\dagger$ satisfies $\|(W-c_W)\psi\|\le\epsilon$ and $\|W-c_W\|\le K$,
+    then $R=P_0^hP_{x_h}(P_0^hWP_0^h,c_W)$ is an orthogonal projection with
+    $\|\psi-R\psi\|\le D_{h+1}$.
 \end{theorem}
 \begin{proof}\leanok
-    The window $R$ is the step of a further level whose halves are $P_0^h$ and
-    the identity. The identity commutes with $P_0^h$ and does not move $\psi$,
-    so Theorem~\ref{thm:hastings05_level_against_ground_state} with the
-    deficiency $D_h$ of $P_0^h$ gives $\|\psi-R\psi\|^2\le D_{h+1}^2$.
+    Apply Theorem~\ref{thm:hastings05_level_against_ground_state} to the pair of
+    commuting projections $(P_0^h,1)$ with deficiency $D_h$.
 \end{proof}
 
 \begin{theorem}[Eq.~(hchy) for the periodic chain]
@@ -205,26 +178,23 @@ it \cite{gap:hastings05_hierarchical_energy}.
     \lean{TNLean.MPS.AreaLaw.LocalSolution.re_inner_hierarchySum_add_le_add}
     \leanok
     \uses{thm:hastings05_hchy_every_state, thm:hastings05_window_expectation}
-    In the setting of Theorem~\ref{thm:hastings05_hchy_every_state}, let $W$
-    be Hermitian, $x_W\ge0$, and let $R$ project onto the eigenvectors of
-    $P_0^hWP_0^h$ in the range of $P_0^h$ with eigenvalue within $x_W$ of
-    $\operatorname{Re}\langle\Psi,W\Psi\rangle$. Then every unit vector $\phi$
-    with $R\phi=\phi$ satisfies
-    \begin{align*}
+    In the setting of Theorem~\ref{thm:hastings05_hchy_every_state}, for
+    $W=W^\dagger$, $x_W\ge0$, and
+    $R=P_0^hP_{x_W}(P_0^hWP_0^h,\operatorname{Re}\langle\Psi,W\Psi\rangle)$,
+    every unit vector $\phi$ with $R\phi=\phi$ satisfies
+    \begin{align}
         \operatorname{Re}\langle\phi,(T_0^h(M)+W)\phi\rangle
-        \le\operatorname{Re}\langle\Psi,(T_0^h(M)+W)\Psi\rangle+T_0^h(x)+x_W.
-    \end{align*}
-    With $W=M_{N,1}$ and $\Psi=\Psi_a$, the operator $T_0^h(M)+W$ is
-    $\sum_iM_i$, and this is eq.~(hchy)
-    of~\cite[lines 709--720]{Hastings2006Solving} for every state kept by $R$,
-    a subspace of the source's final space spanned by the $\alpha^h$
+        \le\operatorname{Re}\langle\Psi,(T_0^h(M)+W)\Psi\rangle+T_0^h(x)+x_W
+        \label{eq:hastings05_hchy_periodic}
+    \end{align}
+    \cite[eq.~(hchy), lines 709--720]{Hastings2006Solving},
     \cite{gap:hastings05_hierarchical_energy}.
 \end{theorem}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:hastings05_window_expectation}, $P_0^h\phi=\phi$ and
-    $\operatorname{Re}\langle\phi,W\phi\rangle$ is within $x_W$ of
-    $\operatorname{Re}\langle\Psi,W\Psi\rangle$. Add the bound of
-    Theorem~\ref{thm:hastings05_hchy_every_state} for $T_0^h(M)$.
+    Combine Theorem~\ref{thm:hastings05_window_expectation} for $R$ (giving
+    $P_0^h\phi=\phi$ and
+    $\operatorname{Re}\langle\phi,W\phi\rangle\le\operatorname{Re}\langle\Psi,W\Psi\rangle+x_W$)
+    with (\ref{eq:hastings05_hchy_every_state}).
 \end{proof}
 
 \begin{theorem}[At most $2n$ final states of the periodic chain]
@@ -232,17 +202,15 @@ it \cite{gap:hastings05_hierarchical_energy}.
     \lean{TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_closingLink}
     \leanok
     \uses{thm:hastings05_hchy_periodic, thm:hastings_final_state_count}
-    In the setting of Theorem~\ref{thm:hastings05_hchy_periodic}, let
-    $H=T_0^h(M)+W$ satisfy $H-E_0\ge\Delta E\,(1-P)$ for an orthogonal
-    projection $P$ and $\Delta E>0$, and suppose
-    $\operatorname{Re}\langle\Psi,H\Psi\rangle+T_0^h(x)+x_W\le E_0+\Delta E/2$.
-    Then every orthonormal family of vectors kept by $R$ has at most
-    $2\operatorname{Re}\operatorname{tr}P$ members. This is the count
-    of~\cite[lines 722--730]{Hastings2006Solving} under the gap of the
-    periodic Hamiltonian.
+    In the setting of Theorem~\ref{thm:hastings05_hchy_periodic}, if
+    $H=T_0^h(M)+W$ satisfies $H-E_0\ge\Delta E(1-P)$ for an orthogonal
+    projection $P$ and $\Delta E>0$, and
+    $\operatorname{Re}\langle\Psi,H\Psi\rangle+T_0^h(x)+x_W\le E_0+\Delta E/2$,
+    then any orthonormal family kept by $R$ has size at most
+    $2\operatorname{Re}\operatorname{tr}P$
+    \cite[lines 722--730]{Hastings2006Solving}.
 \end{theorem}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:hastings05_hchy_periodic} every member has energy at
-    most $E_0+\Delta E/2$; apply
+    Combine (\ref{eq:hastings05_hchy_periodic}) with
     Theorem~\ref{thm:hastings_final_state_count}.
 \end{proof}

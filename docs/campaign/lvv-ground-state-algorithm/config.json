@@ -59,7 +59,7 @@
   },
   "sources": "https://arxiv.org/abs/1307.5143v1",
   "citationPattern": "lvv13|LandauVaziraniVidick|1307\\.5143",
-  "excludePathPattern": "ch35_one_dimensional_chain\\.tex$",
+  "excludePathPattern": "ch35_one_dimensional_[a-z_]*\\.tex$",
   "leanDirs": [
     "TNLean/MPS/AreaLaw/ViableSet"
   ],
@@ -102,14 +102,14 @@
             9821
           ],
           "physics": "The operator <i>A</i> = ((1 − <i>H</i>/<i>n</i>)/(1 − ε<sub>0</sub>/<i>n</i>))<sup><i>m</i></sup> fixes Γ and shrinks every vector orthogonal to it by a factor ((1 − ε<sub>1</sub>/<i>n</i>)/(1 − ε<sub>0</sub>/<i>n</i>))<sup><i>m</i></sup>, which is polynomially small for <i>m</i> of order (<i>n</i>/ε) log <i>n</i>. Adding the identity as an <i>n</i>-th factor, so that 1 − <i>H</i>/<i>n</i> is the average of the <i>n</i> factors 1 − <i>H</i><sub>1</sub>, …, 1 − <i>H</i><sub><i>n</i>−1</sub> and 1, and expanding the power writes <i>A</i> as an average over words in these factors, each a positive contraction since 0 ≤ <i>H<sub>i</sub></i> ≤ 1. Writing the factor across a cut as a sum of <i>d</i><sup>2</sup> products, with the two factors of each product indexed by the same pair (the paper's indices are independent, which would give a single product), shows that a word in which this factor occurs at most <i>k</i> times has operator Schmidt rank at most <i>d</i><sup>2<i>k</i></sup> across that cut.",
-          "delivers": "An operator that drives any state with constant overlap back to overlap 1 − 1/poly(<i>n</i>) with Γ, and a decomposition of it into words of controlled Schmidt rank at each cut. Its spectral properties, the expansion into words and the rank of a word are proved for any finite sum of positive contractions; they remain to be combined into one statement on the chain."
+          "delivers": "An operator that drives any state with constant overlap back to overlap 1 − 1/poly(<i>n</i>) with Γ, and a decomposition of it into words of controlled Schmidt rank at each cut. All four properties are proved on the chain of <i>n</i> ≥ 1 sites, under the source's hypotheses with any positive lower bound on the gap: <i>A</i> is positive semidefinite with norm 1 and fixes Γ; it shrinks the orthogonal complement by the stated factor and approximates the ground-state projection to accuracy η once <i>m</i> ≥ ((<i>n</i> − ε<sub>0</sub>)/ε) log(1/η); it is the average over words with the identity as the <i>n</i>-th factor; and a word with at most <i>k</i> occurrences of the factor across a cut has operator Schmidt rank at most <i>d</i><sup>2<i>k</i></sup> there."
         },
         {
           "title": "Sampling the projector",
           "issues": [
             9822
           ],
-          "physics": "The full average over words has exponentially many terms. Replacing it by an average of polynomially many words drawn at random, multiplied by the same normalization <i>C</i><sup><i>m</i></sup> with <i>C</i> = (1 − ε<sub>0</sub>/<i>n</i>)<sup>−1</sup>, gives an operator <i>K</i> close to <i>A</i> in operator norm with high probability, by the matrix Bernstein inequality, a bound of Tropp on the deviation of a sum of independent random matrices from its mean. With high probability each local term also occurs only <i>O</i>(log <i>n</i>/ε) times in every sampled word, so <i>K</i> has polynomial Schmidt rank at every cut. The number of samples grows with <i>C</i><sup>2<i>m</i></sup>, which is polynomial in <i>n</i> only when ε<sub>0</sub>/ε is bounded. Neither Mathlib nor QICLean has a matrix-valued tail bound yet, which makes this the largest new piece of the formalization; no part of it is formalized yet.",
+          "physics": "The full average over words has exponentially many terms. Replacing it by an average of polynomially many words drawn at random, multiplied by the same normalization <i>C</i><sup><i>m</i></sup> with <i>C</i> = (1 − ε<sub>0</sub>/<i>n</i>)<sup>−1</sup>, gives an operator <i>K</i> close to <i>A</i> in operator norm with high probability, by the matrix Bernstein inequality, a bound of Tropp on the deviation of a sum of independent random matrices from its mean. With high probability each local term also occurs only <i>O</i>(log <i>n</i>/ε) times in every sampled word, so <i>K</i> has polynomial Schmidt rank at every cut. The number of samples grows with <i>C</i><sup>2<i>m</i></sup>, which is polynomial in <i>n</i> only when ε<sub>0</sub>/ε is bounded. The matrix Bernstein inequality is proved in QICLean along Tropp's route: Lieb's theorem that tr exp(<i>H</i> + log <i>A</i>) is concave in <i>A</i>, subadditivity of the matrix cumulant generating function over independent summands, Tropp's rectangular bound, and the form for an average of independent identically distributed matrices that the paper quotes. The sampled projector and the corollary built on it remain.",
           "delivers": "A sampled projector <i>K</i> with ‖<i>K</i> − <i>A</i>‖ ≤ 1/poly(<i>n</i>) whose left factors at each cut map matrix product states of polynomial bond dimension to matrix product states of polynomial bond dimension."
         },
         {

@@ -25,12 +25,10 @@ the periods $n$ and $m$.
         \tn[at=(1,2), species=marked, label pos=nw]{A}
     \end{tenkz}
 \end{center}
-Translations act on the vertices and edges. Pulling a tensor back along a graph
-isomorphism $\phi$ relabels its coefficients by
-$\Coeff_{A^\phi}(\sigma)=\Coeff_A(\sigma\circ\phi)$,
-so two tensors generating the same state still do after relabelling by $\phi$. This is the
-setting in which the normal Fundamental Theorem specializes to a single
-site-independent tensor and produces the global phase of
+Translations act on vertices and edges, and pulling $A$ back along a graph
+isomorphism $\phi$ satisfies $\Coeff_{A^\phi}(\sigma)=\Coeff_A(\sigma\circ\phi)$,
+preserving equality of states and specializing the normal Fundamental Theorem to
+a site-independent tensor with the global phase of
 \cite[Theorem~3]{Molnar2018NormalPEPS}.
 
 \begin{definition}[Torus geometry and translations]%
@@ -50,19 +48,12 @@ site-independent tensor and produces the global phase of
     \lean{TNLean.PEPS.translateIncidentEdge}
     \lean{TNLean.PEPS.torusEdge_horizontal_or_vertical}
     \leanok
-    For $n,m>1$, the discrete $n\times m$ torus has vertex set
-    $\Z/n\Z\times\Z/m\Z$.
-    Its graph joins $(x,y)$ to $(x+1,y)$ and to $(x,y+1)$, with the
-    coordinates read cyclically; every edge is of one of these two forms,
-    so every edge is horizontal or vertical. Translation by $(a,b)$ is the
-    graph automorphism $\tau_{a,b}(x,y)=(x+a,y+b)$.
-    The induced action on edges sends an edge with unordered endpoint pair
-    $\{u,v\}$ to the edge with unordered endpoint pair
-    $\{\tau_{a,b}(u),\tau_{a,b}(v)\}$; in particular it preserves the
-    horizontal and vertical orientation classes. For a general graph
-    isomorphism $\phi:G\simeq G'$, the same endpoint action gives a
-    bijection on edges and a bijection from the edges incident to $v$ to
-    the edges incident to $\phi(v)$.
+    For $n,m>1$, the discrete torus graph on $\Z/n\Z\times\Z/m\Z$ has horizontal
+    edges $\{(x,y),(x+1,y)\}$ and vertical edges $\{(x,y),(x,y+1)\}$.
+    Translation $\tau_{a,b}(x,y)=(x+a,y+b)$ is a graph automorphism sending
+    $\{u,v\}\mapsto\{\tau_{a,b}(u),\tau_{a,b}(v)\}$ and preserving horizontal
+    and vertical edge classes. Any graph isomorphism $\phi:G\simeq G'$ induces
+    bijections $E(G)\simeq E(G')$ and $\partial v\simeq\partial\phi(v)$.
 \end{definition}
 
 \begin{definition}[Graph-isomorphism relabelling of a PEPS tensor]%
@@ -71,12 +62,10 @@ site-independent tensor and produces the global phase of
     \lean{TNLean.PEPS.Tensor.transport_bondDim}
     \leanok
     \uses{def:peps_tensor, def:peps_torus_geometry_translation}
-    Let $\phi:G\simeq G'$ be a graph isomorphism. The relabelled tensor
-    $A^\phi$ on $G'$ has bond dimension
-    $D^\phi_{e'}=D_{\phi^{-1}(e')}$ at every edge $e'$ of $G'$. Its local
-    tensor at $w\in G'$ is the local tensor of $A$ at $\phi^{-1}(w)$, with
-    virtual indices moved through the incident-edge bijection induced by
-    $\phi$.
+    For a graph isomorphism $\phi:G\simeq G'$, the relabelled tensor $A^\phi$ on
+    $G'$ has bond dimensions $D^\phi_{e'}=D_{\phi^{-1}(e')}$ ($e'\in E(G')$) and
+    local tensor at $w\in V(G')$ given by $A_{\phi^{-1}(w)}$ transported along
+    $\partial\phi^{-1}(w)\simeq\partial w$.
 \end{definition}
 
 \begin{theorem}[State coefficient under graph isomorphism]%
@@ -84,16 +73,18 @@ site-independent tensor and produces the global phase of
     \lean{TNLean.PEPS.stateCoeff_transport}
     \leanok
     \uses{def:peps_stateCoeff, def:peps_tensor_transport}
-    For every graph isomorphism $\phi:G\simeq G'$ and every physical
-    configuration $\sigma$ on the vertices of $G'$,
-    $\Coeff_{A^\phi}(\sigma)=\Coeff_A(\sigma\circ\phi)$.
+    For every graph isomorphism $\phi:G\simeq G'$ and physical configuration
+    $\sigma$ on $V(G')$,
+    \begin{align}
+        \Coeff_{A^\phi}(\sigma)
+         & =\Coeff_A(\sigma\circ\phi).
+        \label{eq:peps_stateCoeff_transport}
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    The edge bijection induced by $\phi$ identifies virtual configurations
-    of $A^\phi$ with virtual configurations of $A$. After this change of
-    summation variables, the local factor at $w\in G'$ becomes the local
-    factor of $A$ at $\phi^{-1}(w)$. Reindexing the finite product over
-    vertices by $\phi$ gives the coefficient equality.
+    Reindexing the virtual bond sum along $E(G)\simeq E(G')$ and the vertex
+    product along $\phi:V(G)\simeq V(G')$ in Definition~\ref{def:peps_stateCoeff}
+    yields~(\ref{eq:peps_stateCoeff_transport}).
 \end{proof}
 
 \begin{theorem}[Graph isomorphisms preserve equality of PEPS states]%
@@ -101,21 +92,18 @@ site-independent tensor and produces the global phase of
     \lean{TNLean.PEPS.SameState.transport}
     \leanok
     \uses{def:peps_same_state, thm:peps_stateCoeff_transport}
-    If two PEPS tensors on $G$ have equal state coefficients for every
-    physical configuration, then their images $A^\phi$ and $B^\phi$ along any graph
-    isomorphism $\phi:G\simeq G'$ have equal state coefficients for every
-    physical configuration on $G'$.
+    If $\Coeff_A=\Coeff_B$ on $G$ and $\phi:G\simeq G'$, then
+    $\Coeff_{A^\phi}=\Coeff_{B^\phi}$ on $G'$.
 \end{theorem}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_stateCoeff_transport},
+    By~(\ref{eq:peps_stateCoeff_transport}) of Theorem~\ref{thm:peps_stateCoeff_transport},
     \begin{align}
         \Coeff_{A^\phi}(\sigma)
          & =\Coeff_A(\sigma\circ\phi)
         =\Coeff_B(\sigma\circ\phi)
-        =\Coeff_{B^\phi}(\sigma),
+        =\Coeff_{B^\phi}(\sigma).
         \notag
     \end{align}
-    where the middle equality is the assumed equality of state coefficients.
 \end{proof}
 
 \begin{definition}[Translation-invariant torus tensor]%
@@ -123,10 +111,8 @@ site-independent tensor and produces the global phase of
     \lean{TNLean.PEPS.IsTorusTranslationInvariant}
     \leanok
     \uses{def:peps_tensor_transport, def:peps_torus_geometry_translation}
-    A PEPS tensor $A$ on the discrete torus is translation invariant if
-    $A^{\tau_{a,b}}=A$ for every translation $\tau_{a,b}$. This is
-    the setting of \cite[Theorem~3]{Molnar2018NormalPEPS}, where one tensor
-    is repeated at every site of a periodic lattice.
+    A torus PEPS tensor $A$ is translation invariant if $A^{\tau_{a,b}}=A$ for
+    all $(a,b)$ \cite[Theorem~3]{Molnar2018NormalPEPS}.
 \end{definition}
 
 \begin{theorem}[State coefficient of a translation-invariant torus tensor]%
@@ -134,19 +120,17 @@ site-independent tensor and produces the global phase of
     \lean{TNLean.PEPS.stateCoeff_translationInvariant}
     \leanok
     \uses{def:peps_torus_translation_invariant, thm:peps_stateCoeff_transport}
-    If $A$ is translation invariant on the discrete torus, then
-    $\Coeff_A(\sigma\circ\tau_{a,b})=\Coeff_A(\sigma)$ for every translation
-    $\tau_{a,b}$ and every physical configuration $\sigma$.
+    If $A^{\tau_{a,b}}=A$ for all $(a,b)$, then
+    $\Coeff_A(\sigma\circ\tau_{a,b})=\Coeff_A(\sigma)$ for all $(a,b)$ and $\sigma$.
 \end{theorem}
 \begin{proof}\leanok
-    Theorem~\ref{thm:peps_stateCoeff_transport} gives
+    By~(\ref{eq:peps_stateCoeff_transport}) and Definition~\ref{def:peps_torus_translation_invariant},
     \begin{align}
         \Coeff_A(\sigma\circ\tau_{a,b})
          & =\Coeff_{A^{\tau_{a,b}}}(\sigma)
-        =\Coeff_A(\sigma),
+        =\Coeff_A(\sigma).
         \notag
     \end{align}
-    using $A^{\tau_{a,b}}=A$ from translation invariance.
 \end{proof}
 
 \begin{definition}[Translation-invariant torus state]%
@@ -154,16 +138,13 @@ site-independent tensor and produces the global phase of
     \lean{TNLean.PEPS.IsTorusTranslationInvariantState}
     \leanok
     \uses{def:peps_stateCoeff, def:peps_torus_geometry_translation}
-    A PEPS tensor $A$ on the discrete torus represents a
-    translation-invariant state if
+    A torus PEPS tensor $A$ (possibly site-dependent) represents a
+    translation-invariant state if, for all $(a,b)$ and $\sigma$,
     \begin{align}
         \Coeff_A(\sigma\circ\tau_{a,b})
-         & =\Coeff_A(\sigma)
-        \notag
+         & =\Coeff_A(\sigma).
+        \label{eq:peps_torus_state_ti}
     \end{align}
-    for every lattice translation $\tau_{a,b}$ and every physical
-    configuration $\sigma$. This condition concerns the contracted state;
-    the local tensor family itself may depend on the lattice site.
 \end{definition}
 
 \begin{theorem}[Tensor translation invariance implies state translation invariance]%
@@ -173,16 +154,12 @@ site-independent tensor and produces the global phase of
     \leanok
     \uses{def:peps_torus_translation_invariant,
         def:peps_torus_state_translation_invariant}
-    A translation-invariant torus tensor $A$ represents a translation-invariant
-    state: for every lattice translation $\tau_{a,b}$ and physical configuration $\sigma$,
-    \begin{align}
-        \Coeff_A(\sigma\circ\tau_{a,b}) & = \Coeff_A(\sigma). \notag
-    \end{align}
+    If $A$ is translation invariant (Definition~\ref{def:peps_torus_translation_invariant}),
+    then $A$ satisfies~(\ref{eq:peps_torus_state_ti}) for all $(a,b)$ and $\sigma$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_stateCoeff_translationInvariant}
-    This is Theorem~\ref{thm:peps_stateCoeff_translationInvariant} for every
-    translation and physical configuration.
+    Immediate from Theorem~\ref{thm:peps_stateCoeff_translationInvariant}.
 \end{proof}
 
 \begin{theorem}[State equality with every translated tensor]%
@@ -192,20 +169,12 @@ site-independent tensor and produces the global phase of
     \leanok
     \uses{def:peps_torus_state_translation_invariant,
         def:peps_tensor_transport, def:peps_same_state}
-    If $A$ represents a translation-invariant state, then
-    $A$ and $A^{\tau_{a,b}}$ represent the same state for every translation:
-    \begin{align}
-        \Coeff_A(\sigma)
-         & =\Coeff_{A^{\tau_{a,b}}}(\sigma).
-        \notag
-    \end{align}
+    If $A$ satisfies~(\ref{eq:peps_torus_state_ti}), then
+    $\Coeff_A(\sigma)=\Coeff_{A^{\tau_{a,b}}}(\sigma)$ for all $(a,b)$ and $\sigma$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_stateCoeff_transport}
-    The graph-isomorphism coefficient theorem gives
-    $\Coeff_{A^{\tau_{a,b}}}(\sigma)
-        =\Coeff_A(\sigma\circ\tau_{a,b})$, and state translation invariance
-    identifies the right-hand side with $\Coeff_A(\sigma)$.
+    Combine~(\ref{eq:peps_stateCoeff_transport}) at $\phi=\tau_{a,b}$ with~(\ref{eq:peps_torus_state_ti}).
 \end{proof}
 
 \begin{definition}[Orientation-uniform bond dimensions on the torus]%
@@ -215,12 +184,10 @@ site-independent tensor and produces the global phase of
     \lean{TNLean.PEPS.TorusUniformBondDim}
     \leanok
     \uses{def:peps_torus_geometry_translation}
-    A bond-dimension function on the torus is orientation-uniform with
-    horizontal dimension $D_h$ and vertical dimension $D_v$ if
-    $D_{e_h}=D_h$ for every horizontal edge $e_h$ and $D_{e_v}=D_v$ for
-    every vertical edge $e_v$. The reference horizontal edge is the right
-    edge at the origin, and the reference vertical edge is the up edge at
-    the origin.
+    A torus bond-dimension function $D$ is orientation-uniform with values
+    $(D_h,D_v)$ if $D_{f_h}=D_h$ for every horizontal edge $f_h$ and
+    $D_{f_v}=D_v$ for every vertical edge $f_v$; write
+    $e_h=\{(0,0),(1,0)\}$ and $e_v=\{(0,0),(0,1)\}$ for the reference edges.
 \end{definition}
 
 \begin{theorem}[Translation invariance gives orientation-uniform bond dimensions]%
@@ -239,26 +206,18 @@ site-independent tensor and produces the global phase of
     \lean{TNLean.PEPS.torusUniformBondDim_of_translationInvariant}
     \leanok
     \uses{def:peps_torus_translation_invariant, def:peps_torus_uniform_bond_dim}
-    If $A$ is translation invariant on the discrete torus, then its bond
-    dimensions are orientation-uniform. Explicitly, with
-    $D_h=D_{e_h}$ at the reference right edge $e_h$ and
-    $D_v=D_{e_v}$ at the reference up edge $e_v$, one has
-    $D_{f_h}=D_h$ for every horizontal edge $f_h$ and $D_{f_v}=D_v$ for
-    every vertical edge $f_v$.
+    If $A^{\tau_{a,b}}=A$ for all $(a,b)$, then $D_A$ is orientation-uniform
+    with $D_h=D_{e_h}$ and $D_v=D_{e_v}$.
 \end{theorem}
 \begin{proof}\leanok
-    Translation invariance gives $A^{\tau_{a,b}}=A$, hence
-    $D_A(\tau_{a,b}(e))=D_A(e)$ for every edge $e$. Every horizontal edge
-    $f_h$ has the form $f_h=\tau_{a,b}(e_h)$ for a translate of the reference
-    right edge, so
+    Since $A^{\tau_{a,b}}=A$ implies $D_A(\tau_{a,b}(e))=D_A(e)$ and every
+    horizontal (respectively vertical) edge has the form $f_h=\tau_{a,b}(e_h)$
+    (respectively $f_v=\tau_{a,b}(e_v)$), we have
     \begin{align}
-        D_{f_h}
-         & =D_A(\tau_{a,b}(e_h))
-        =D_A(e_h)
-        =D_h.
+        D_{f_h} & =D_A(\tau_{a,b}(e_h))=D_A(e_h)=D_h, &
+        D_{f_v} & =D_A(\tau_{a,b}(e_v))=D_A(e_v)=D_v.
         \notag
     \end{align}
-    The same argument with the reference up edge gives $D_{f_v}=D_v$.
 \end{proof}
 
 \input{chapter/ch24_peps_ft_torus_row_cut_obstruction}
@@ -269,30 +228,25 @@ site-independent tensor and produces the global phase of
     \label{lem:peps_reference_edge_left_endpoint_staircase_window}
     \lean{TNLean.PEPS.referenceEdge_leftEndpoint_mem_staircaseWindow}
     \leanok
-    Let $L,K>0$, let $s=(a,b)$ be a staircase corner on the torus, and assume
-    $a+2L\le n$ and $2K\le m$. Let $e$ be the horizontal reference edge
-    from $(a+L-1,b+K-1)$ to $(a+L,b+K-1)$, and let $W_j$ be the $j$th
-    staircase window based at $s$. Then the left endpoint
-    $u=(a+L-1,b+K-1)$ lies in $W_j$ if and only if $1\le j$.
+    For $L,K>0$ and corner $s=(a,b)$ with $a+2L\le n$ and $2K\le m$, let
+    $e=\{u,w\}$ with $u=(a+L-1,b+K-1)$ and $w=(a+L,b+K-1)$, and let $W_j$ be the
+    $j$th staircase window based at $s$. Then $u\in W_j\iff 1\le j$.
 \end{lemma}
 \begin{proof}\leanok
-    The endpoint formula gives the two coordinate distances from the corner:
-    the column distance is $L-1$ and the row distance is $K-1$. Substituting
-    these distances into the staircase-window membership criterion gives exactly
-    $1\le j$.
+    Since $u-s=(L-1,K-1)$, substituting into the membership bounds of $W_j$
+    gives $u\in W_j\iff 1\le j$.
 \end{proof}
 
 \begin{lemma}[Right endpoint of the staircase reference edge]%
     \label{lem:peps_reference_edge_right_endpoint_staircase_window}
     \lean{TNLean.PEPS.referenceEdge_rightEndpoint_mem_staircaseWindow}
     \leanok
-    In the same notation, the right endpoint $w=(a+L,b+K-1)$ lies in $W_j$
-    if and only if $j<L$.
+    In the notation of Lemma~\ref{lem:peps_reference_edge_left_endpoint_staircase_window},
+    $w\in W_j\iff j<L$.
 \end{lemma}
 \begin{proof}\leanok
-    The right endpoint has column distance $L$ and row distance $K-1$ from
-    $s$. The row condition is automatic, while the column band contains this
-    distance precisely for $j<L$.
+    Since $w-s=(L,K-1)$, the row bound holds and the column bound of $W_j$ gives
+    $w\in W_j\iff j<L$.
 \end{proof}
 
 \begin{lemma}[Boundary windows for the staircase reference edge]%
@@ -300,14 +254,12 @@ site-independent tensor and produces the global phase of
     \lean{TNLean.PEPS.isRegionBoundaryEdge_staircaseWindow_referenceEdge}
     \leanok
     \uses{lem:peps_reference_edge_left_endpoint_staircase_window, lem:peps_reference_edge_right_endpoint_staircase_window}
-    If $j=0$ or $L\le j$, then the reference edge $e$ is a boundary edge
-    of $W_j$: exactly one of its two endpoints lies in the window.
+    If $j=0$ or $L\le j$, then $e\in\partial W_j$.
 \end{lemma}
 \begin{proof}\leanok
-    For $j=0$, Lemmas~\ref{lem:peps_reference_edge_left_endpoint_staircase_window}
-    and~\ref{lem:peps_reference_edge_right_endpoint_staircase_window} show that
-    only $w$ lies in $W_j$. For $L\le j$, the same two endpoint tests show
-    that only $u$ lies in $W_j$.
+    By Lemmas~\ref{lem:peps_reference_edge_left_endpoint_staircase_window}
+    and~\ref{lem:peps_reference_edge_right_endpoint_staircase_window},
+    $e\cap W_0=\{w\}$ and $e\cap W_j=\{u\}$ for $L\le j$.
 \end{proof}
 
 \begin{lemma}[Interior windows for the staircase reference edge]%
@@ -315,11 +267,11 @@ site-independent tensor and produces the global phase of
     \lean{TNLean.PEPS.referenceEdge_endpoints_mem_staircaseWindow_of_interior}
     \leanok
     \uses{lem:peps_reference_edge_left_endpoint_staircase_window, lem:peps_reference_edge_right_endpoint_staircase_window}
-    If $1\le j<L$, then both endpoints of $e$ lie in $W_j$.
+    If $1\le j<L$, then $u,w\in W_j$.
 \end{lemma}
 \begin{proof}\leanok
-    The left-endpoint criterion gives $u\in W_j$ from $1\le j$, and the
-    right-endpoint criterion gives $w\in W_j$ from $j<L$.
+    Combine Lemmas~\ref{lem:peps_reference_edge_left_endpoint_staircase_window}
+    and~\ref{lem:peps_reference_edge_right_endpoint_staircase_window}.
 \end{proof}
 
 \begin{lemma}[Interior windows are not boundary windows]%
@@ -327,10 +279,9 @@ site-independent tensor and produces the global phase of
     \lean{TNLean.PEPS.not_isRegionBoundaryEdge_staircaseWindow_referenceEdge_of_interior}
     \leanok
     \uses{lem:peps_reference_edge_interior_windows}
-    If $1\le j<L$, then $e$ is not a boundary edge of $W_j$.
+    If $1\le j<L$, then $e\notin\partial W_j$.
 \end{lemma}
 \begin{proof}\leanok
-    By Lemma~\ref{lem:peps_reference_edge_interior_windows}, both endpoints of
-    $e$ lie in $W_j$. The definition of a boundary edge requires exactly one
-    endpoint in the region, so $e$ is not a boundary edge of $W_j$.
+    By Lemma~\ref{lem:peps_reference_edge_interior_windows}, $u,w\in W_j$,
+    whereas $f\in\partial W_j$ requires $|f\cap W_j|=1$.
 \end{proof}

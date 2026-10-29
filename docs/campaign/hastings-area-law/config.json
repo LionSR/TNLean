@@ -59,7 +59,7 @@
   },
   "sources": "https://arxiv.org/abs/0705.2024v4",
   "citationPattern": "hastings07|Hastings2007AreaLaw|0705\\.2024",
-  "excludePathPattern": "ch35_one_dimensional_chain\\.tex$",
+  "excludePathPattern": "ch35_one_dimensional_[a-z_]*\\.tex$",
   "leanDirs": [
     "TNLean/MPS/AreaLaw/Hastings"
   ],

@@ -1,34 +1,31 @@
 \section{Product replacement at a cut}
 
 The product replacement argument of~\cite{Schuch2008EntropyScaling}
-(arXiv:0705.0292v2, lines 436--470) can be expressed directly in terms of
-coefficient spaces and cut ranks.
+(arXiv:0705.0292v2, lines 436--470) is formulated below in terms of cut
+coefficient matrices $M_k(\psi)$ and their ranks.
 
 \begin{theorem}[Product replacement does not increase cut ranks]
     \label{thm:chain_product_replacement_ranks}
     \lean{TNLean.MPS.AreaLaw.rank_cutMatrix_le_of_product_mem_ranges}
     \leanok
     \uses{def:chain_open_mps}
-    Let $\psi,\chi$ be vectors on $L$ sites of local dimension $q$, and
-    write $C=M_k(\psi)$ for the coefficient matrix at a cut $k$.
-    Suppose $u\in\operatorname{range}C$, $v\in\operatorname{range}C^{\mathsf T}$,
-    and $M_k(\chi)=uv^{\mathsf T}$. Then
-    $\operatorname{rank}M_j(\chi)\le\operatorname{rank}M_j(\psi)$ at every cut $j$.
-    No nonvanishing or normalization is required.
+    Let $\psi,\chi$ be vectors on $L$ sites of local dimension $q$, and set
+    $C=M_k(\psi)$. If $u\in\operatorname{range}C$,
+    $v\in\operatorname{range}C^{\mathsf T}$, and $M_k(\chi)=uv^{\mathsf T}$,
+    then $\operatorname{rank}M_j(\chi)\le\operatorname{rank}M_j(\psi)$ for every
+    cut $j$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_supported_cut_rank}
-    Choose $w,z$ with $Cw=u$ and $C^{\mathsf T}z=v$. The identities
+    Choose $w,z$ with $Cw=u$ and $C^{\mathsf T}z=v$. Then
     \begin{align}
         \label{eq:chain_product_replacement_local_maps}
         (uz^{\mathsf T})C=uv^{\mathsf T}
         =C{(vw^{\mathsf T})}^{\mathsf T}
     \end{align}
-    express $\chi$ both as a left-local and as a right-local linear image of
-    $\psi$. For $j\le k$, use the right-local image; for $j>k$, use the
-    left-local image. The corresponding operator acts on only one side of
-    cut $j$, so cannot increase its rank. If there are no configurations,
-    both vectors vanish and the assertion is immediate.
+    realizes $\chi$ as both a left-local ($j>k$) and right-local ($j\le k$)
+    image of $\psi$, which cannot increase $\operatorname{rank}M_j$ by
+    Theorem~\ref{thm:hastings_supported_cut_rank}.
 \end{proof}
 
 \begin{theorem}[Preservation of the bond bound]
@@ -37,13 +34,14 @@ coefficient spaces and cut ranks.
     \leanok
     \uses{thm:chain_product_replacement_ranks,def:chain_open_mps}
     Under the hypotheses of Theorem~\ref{thm:chain_product_replacement_ranks},
-    if $\psi$ is an open-boundary MPS of bond dimension at most $D$, then
-    so is $\chi$. This includes $D=0$ and empty or one-site chains.
+    if $\psi$ is an open-boundary MPS of bond dimension at most $D\ge0$, then
+    so is $\chi$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_product_replacement_ranks,thm:chain_mps_of_cut_rank}
-    Each internal cut rank of $\chi$ is at most the corresponding rank of
-    $\psi$, hence at most $D$. Apply the cut-rank characterization.
+    By Theorem~\ref{thm:chain_product_replacement_ranks},
+    $\operatorname{rank}M_j(\chi)\le\operatorname{rank}M_j(\psi)\le D$ for
+    $0<j<L$; apply Theorem~\ref{thm:chain_mps_of_cut_rank}.
 \end{proof}
 
 \begin{theorem}[Normalized product replacement]
@@ -51,23 +49,21 @@ coefficient spaces and cut ranks.
     \lean{TNLean.MPS.AreaLaw.IsOpenMPS.exists_product_overlap_ge}
     \leanok
     \uses{def:chain_open_mps}
-    Let $\psi$ be a unit open-boundary MPS of bond dimension at most $D$.
-    At any cut $k$, let $a,b$ be arbitrary target vectors on the two sides.
-    There are unit vectors $u,v$ and a unit open-boundary MPS $\chi$ of
-    bond dimension at most $D$ such that $M_k(\chi)=uv^{\mathsf T}$,
-    $\operatorname{rank}M_j(\chi)\le\operatorname{rank}M_j(\psi)$ for every $j$, and
-    $|\langle a\otimes b,\psi\rangle|
-        \le |\langle a,u\rangle|\,|\langle b,v\rangle|$.
-    The inner product on the left is taken in cut coordinates.
+    For a unit open-boundary MPS $\psi$ of bond dimension at most $D$, a cut
+    $k$, and target vectors $a,b$ on the two sides, there exist unit vectors
+    $u,v$ and a unit open-boundary MPS $\chi$ of bond dimension at most $D$
+    such that $M_k(\chi)=uv^{\mathsf T}$,
+    $\operatorname{rank}M_j(\chi)\le\operatorname{rank}M_j(\psi)$ for all $j$,
+    and $|\langle a\otimes b,\psi\rangle|\le|\langle a,u\rangle|\,|\langle b,v\rangle|$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_product_replacement_mps}
-    The product-overlap theorem in~\cite{QICLean2026Blueprint} gives unit
+    The product-overlap theorem of~\cite{QICLean2026Blueprint} gives unit
     $u\in\operatorname{range}M_k(\psi)$ and
-    $v\in\operatorname{range}{M_k(\psi)}^{\mathsf T}$ with the stated overlap
-    bound. Transport $u\otimes v$ back to the chain coordinates to define
-    $\chi$. This transport preserves norms, so $\|\chi\|=\|u\|\,\|v\|=1$.
-    Theorem~\ref{thm:chain_product_replacement_mps} preserves the bond bound.
+    $v\in\operatorname{range}{M_k(\psi)}^{\mathsf T}$ with
+    $|\langle a\otimes b,\psi\rangle|\le|\langle a,u\rangle|\,|\langle b,v\rangle|$;
+    defining $\chi$ via $M_k(\chi)=uv^{\mathsf T}$ gives $\|\chi\|=1$ and the
+    bond bound by Theorem~\ref{thm:chain_product_replacement_mps}.
 \end{proof}
 
 \begin{theorem}[Replacement at finitely many product cuts]
@@ -75,30 +71,27 @@ coefficient spaces and cut ranks.
     \lean{TNLean.MPS.AreaLaw.IsOpenMPS.exists_rank_one_at_product_cuts}
     \leanok
     \uses{def:chain_open_mps}
-    Let $\psi$ be a unit open-boundary MPS of bond dimension at most $D$,
-    let $\xi$ be a target vector, and let $S$ be a finite set of cuts.
-    Suppose that $\xi$ factors across each cut in $S$.
-    Then there is a unit open-boundary MPS $\chi$ of bond dimension at most
-    $D$ such that $|\langle\xi,\psi\rangle|\le|\langle\xi,\chi\rangle|$,
-    no cut rank of $\chi$ exceeds the corresponding cut rank of $\psi$,
-    and every cut in $S$ has rank at most one for $\chi$.
+    If $\psi$ is a unit open-boundary MPS of bond dimension at most $D$ and
+    $\xi$ factors across each cut in a finite set $S$, then there exists a unit
+    open-boundary MPS $\chi$ of bond dimension at most $D$ with
+    $|\langle\xi,\psi\rangle|\le|\langle\xi,\chi\rangle|$,
+    $\operatorname{rank}M_j(\chi)\le\operatorname{rank}M_j(\psi)$ for all $j$,
+    and $\operatorname{rank}M_k(\chi)\le1$ for all $k\in S$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_normalized_product_replacement,thm:chain_product_replacement_ranks}
-    Induct on $|S|$. At a newly selected cut, apply normalized product
-    replacement to the current approximant and the two factors of the target.
-    The overlap does not decrease. The new cut has rank at most one, and
-    all earlier rank bounds persist because no cut rank increases.
-    Normalization and the bond bound persist at each step.
+    Induct on $|S|$, applying
+    Theorem~\ref{thm:chain_normalized_product_replacement} at each cut and
+    preserving prior rank bounds via
+    Theorem~\ref{thm:chain_product_replacement_ranks}.
 \end{proof}
 
 \begin{definition}[Consecutive block products]
     \label{def:chain_copy_product}
     \lean{TNLean.MPS.AreaLaw.copyConfigurationEquiv,TNLean.MPS.AreaLaw.copyProduct}
     \leanok
-    Group the sites of a chain of length $KL$ into $K$ consecutive blocks
-    of length $L$, identifying block $i$, site $j$ with site $Li+j$.
-    For block vectors $\eta_0,\ldots,\eta_{K-1}$, define their product by
+    Partition $KL$ sites into $K$ blocks of length $L$ via $(i,j)\mapsto Li+j$,
+    and define the block product of $\eta_0,\dots,\eta_{K-1}$ by
     \begin{align}
         \label{eq:chain_copy_product_coefficients}
         \left(\bigotimes_{i=0}^{K-1}\eta_i\right)(\sigma)
@@ -111,27 +104,20 @@ coefficient spaces and cut ranks.
     \lean{TNLean.MPS.AreaLaw.norm_copyProduct,TNLean.MPS.AreaLaw.inner_copyProduct,TNLean.MPS.AreaLaw.sq_norm_inner_copyProduct}
     \leanok
     \uses{def:chain_copy_product}
-    Norms and inner products of block products are the products of the
-    corresponding block norms and inner products. In particular, their
-    squared fidelities multiply.
-\end{theorem}
-\begin{proof}\leanok
-    The map $\sigma\mapsto(\tau_0,\ldots,\tau_{K-1})$, with
-    $\tau_i(j)=\sigma(Li+j)$, is a bijection from configurations on $KL$ sites
-    to families of block configurations. Reindexing the configuration sum
-    along it and using~\eqref{eq:chain_copy_product_coefficients} gives
+    For block vectors $\eta_i,\theta_i$,
     \begin{align}
         \label{eq:chain_copy_product_inner}
         \Bigl\langle\bigotimes_{i=0}^{K-1}\eta_i,\bigotimes_{i=0}^{K-1}\theta_i\Bigr\rangle
-         & =\sum_{\tau_0,\ldots,\tau_{K-1}}\,\prod_{i=0}^{K-1}
-        \overline{\eta_i(\tau_i)}\,\theta_i(\tau_i)
-        =\prod_{i=0}^{K-1}\langle\eta_i,\theta_i\rangle.
+         & =\prod_{i=0}^{K-1}\langle\eta_i,\theta_i\rangle, &
+        \Bigl\|\bigotimes_{i=0}^{K-1}\eta_i\Bigr\|
+         & =\prod_{i=0}^{K-1}\|\eta_i\|.
     \end{align}
-    Taking $\theta_i=\eta_i$ and square roots gives
-    $\bigl\|\bigotimes_{i=0}^{K-1}\eta_i\bigr\|=\prod_{i=0}^{K-1}\|\eta_i\|$,
-    and taking squared absolute values gives
-    $\bigl|\bigl\langle\bigotimes_{i=0}^{K-1}\eta_i,\bigotimes_{i=0}^{K-1}\theta_i\bigr\rangle\bigr|^2
-        =\prod_{i=0}^{K-1}|\langle\eta_i,\theta_i\rangle|^2$.
+\end{theorem}
+\begin{proof}\leanok
+    Reindexing $\sigma\mapsto(\tau_0,\dots,\tau_{K-1})$ with
+    $\tau_i(j)=\sigma(Li+j)$ in (\ref{eq:chain_copy_product_coefficients})
+    factors $\sum_{\tau_0,\dots,\tau_{K-1}}\prod_{i=0}^{K-1}\overline{\eta_i(\tau_i)}\theta_i(\tau_i)$
+    into (\ref{eq:chain_copy_product_inner}).
 \end{proof}
 
 \begin{theorem}[Factorization at copy boundaries]
@@ -139,11 +125,12 @@ coefficient spaces and cut ranks.
     \lean{TNLean.MPS.AreaLaw.copyProduct_factors_at_boundary}
     \leanok
     \uses{def:chain_copy_product}
-    A block product factors across every boundary $tL$, for $t\ge0$.
+    Every block product $\bigotimes_{i=0}^{K-1}\eta_i$ factors across each cut
+    $tL$ ($t\ge0$).
 \end{theorem}
 \begin{proof}\leanok
-    A site $Li+j$ lies before $tL$ exactly when $i<t$.
-    Split the coefficient product into those blocks and the remaining blocks.
+    Since $Li+j<tL\iff i<t$, (\ref{eq:chain_copy_product_coefficients}) splits
+    into $\prod_{i<t}$ and $\prod_{i\ge t}$.
 \end{proof}
 
 \begin{theorem}[Replacement at all copy boundaries]
@@ -151,22 +138,27 @@ coefficient spaces and cut ranks.
     \lean{TNLean.MPS.AreaLaw.IsOpenMPS.exists_rank_one_at_copy_boundaries}
     \leanok
     \uses{def:chain_copy_product,def:chain_open_mps}
-    Given a unit MPS $\psi$ of bond dimension at most $D$ and a block-product
-    target, there is a unit MPS $\chi$ of the same bond bound with no smaller
-    overlap, no larger cut ranks, and rank at most one at every copy boundary.
+    For a unit MPS $\psi$ of bond dimension at most $D$ and a block-product
+    target $\xi=\bigotimes_{i=0}^{K-1}\eta_i$, there exists a unit MPS $\chi$
+    of bond dimension at most $D$ with
+    $|\langle\xi,\psi\rangle|\le|\langle\xi,\chi\rangle|$,
+    $\operatorname{rank}M_j(\chi)\le\operatorname{rank}M_j(\psi)$ for all $j$,
+    and $\operatorname{rank}M_{tL}(\chi)\le1$ for $0\le t\le K$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_copy_boundary_factorization,thm:chain_product_cut_iteration}
-    Apply finite-cut replacement to the boundaries $tL$, $0\le t\le K$.
+    Apply Theorems~\ref{thm:chain_copy_boundary_factorization}
+    and~\ref{thm:chain_product_cut_iteration} with $S=\{tL:0\le t\le K\}$.
 \end{proof}
 
 \begin{definition}[An interval slice]
     \label{def:chain_interval_slice}
     \lean{TNLean.MPS.AreaLaw.insertInterval,TNLean.MPS.AreaLaw.intervalSlice}
     \leanok
-    Fix a configuration outside an interval of $L$ sites starting at $a$.
-    The corresponding interval slice of a chain vector is obtained by varying
-    the configuration on that interval and keeping the exterior fixed.
+    For an interval $\{a,\dots,a+L-1\}$ and a fixed exterior configuration, the
+    \emph{interval slice} of a chain vector restricts its argument to
+    configurations on $\{a,\dots,a+L-1\}$ extended by that exterior
+    configuration.
 \end{definition}
 
 \begin{theorem}[Bond bounds for interval slices]
@@ -174,18 +166,17 @@ coefficient spaces and cut ranks.
     \lean{TNLean.MPS.AreaLaw.rank_cutMatrix_intervalSlice_le,TNLean.MPS.AreaLaw.IsOpenMPS.intervalSlice,TNLean.MPS.AreaLaw.IsOpenMPS.of_intervalSlice_eq_mul}
     \leanok
     \uses{def:chain_interval_slice,def:chain_open_mps}
-    At a local cut $0\le j\le L$, the coefficient matrix of an interval slice
-    has rank at most that of the original vector at cut $a+j$.
-    If the interval lies within the chain, every slice of an MPS of bond
-    dimension at most $D$ is an MPS of that same bond bound.
-    A vector differing from such a slice by a nonzero scalar also has this bound.
+    For any interval slice $\phi$ of $\psi$ on $\{a,\dots,a+L-1\}$ and
+    $0\le j\le L$, $\operatorname{rank}M_j(\phi)\le\operatorname{rank}M_{a+j}(\psi)$.
+    If $\{a,\dots,a+L-1\}$ lies in the chain and $\psi$ is an MPS of bond
+    dimension at most $D$, then $\phi$ and any nonzero scalar multiple of $\phi$
+    are MPS of bond dimension at most $D$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_mps_of_cut_rank}
-    The sliced coefficient matrix is a submatrix of the full coefficient matrix:
-    extend each row and column configuration by the fixed exterior values.
-    Taking a submatrix cannot increase rank. Apply the cut-rank characterization,
-    and absorb any nonzero scalar into the overall MPS coefficient.
+    Since $M_j(\phi)$ is a submatrix of $M_{a+j}(\psi)$,
+    $\operatorname{rank}M_j(\phi)\le\operatorname{rank}M_{a+j}(\psi)$; apply
+    Theorem~\ref{thm:chain_mps_of_cut_rank}.
 \end{proof}
 
 \begin{theorem}[Extension by a fixed exterior configuration]
@@ -193,35 +184,28 @@ coefficient spaces and cut ranks.
     \lean{TNLean.MPS.AreaLaw.IsOpenMPS.extend_interval_by_configuration}
     \leanok
     \uses{def:chain_open_mps}
-    Let $a,L,T$ be nonnegative integers with $a+L\leq T$, and let
-    $I=\{a,\ldots,a+L-1\}$ be the corresponding interval in a chain
-    of $T$ sites of common local dimension $q$,
-    and fix a configuration $\eta$ on its complement $E$.
-    If $\psi$ is an open-boundary matrix product state on $I$ with internal
-    bond dimensions at most $D$, define the full-chain vector by
+    For $a+L\leq T$, $I=\{a,\ldots,a+L-1\}\subseteq\{0,\ldots,T-1\}$,
+    $E=I^{\mathsf c}$, an exterior configuration $\eta\in\{0,\ldots,q-1\}^E$,
+    and an open MPS $\psi$ on $I$ of bond dimension $\le D$, the extension
     \begin{align}
         \chi(\sigma) & =
         \begin{cases}
             \psi(\sigma|_I), & \sigma|_E=\eta,   \\
-            0,               & \text{otherwise}.
+            0,               & \text{otherwise},
         \end{cases}
         \notag
     \end{align}
-    Then $\chi$ has open-boundary bond dimensions at most $\max\{1,D\}$.
-    In particular, the bound remains $D$ when $D\geq1$.
+    is an open MPS on $\{0,\ldots,T-1\}$ of bond dimension $\le\max\{1,D\}$
+    ($=D$ when $D\geq1$).
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_cut_rank_of_mps,thm:chain_mps_of_cut_rank}
-    At a cut after $j$ sites, put $k=\min\{L,(j-a)_+\}$.
-    Restriction to $I$ maps the left and right configurations to the
-    corresponding configurations at the cut after $k$ interior sites.
-    Write $M_k$ for the interior coefficient matrix, $f,g$ for these maps,
-    and $u,v$ for the two exterior matching indicators. The full coefficient
-    matrix is $\operatorname{diag}(u)M_k[f,g]\operatorname{diag}(v)$,
-    where $M_k[f,g]_{x,y}=M_k(f(x),g(y))$. Its rank is therefore at most $\operatorname{rank}M_k$.
-    This is at most $D$ for an internal cut and at most one at either endpoint.
-    The cut-rank characterization gives the assertion, including empty and
-    one-site intervals.
+    At cut $j$, put $k=\min\{L,(j-a)_+\}$; with $f,g$ the restrictions to $I$
+    and $u,v$ the exterior matching indicators,
+    $M_j(\chi)=\operatorname{diag}(u)M_k(\psi)[f,g]\operatorname{diag}(v)$, so
+    $\operatorname{rank}M_j(\chi)\le\operatorname{rank}M_k(\psi)\le\max\{1,D\}$
+    (Theorem~\ref{thm:chain_cut_rank_of_mps}), and
+    Theorem~\ref{thm:chain_mps_of_cut_rank} concludes.
 \end{proof}
 
 \begin{theorem}[Bond bounds for normalized block factors]
@@ -229,22 +213,20 @@ coefficient spaces and cut ranks.
     \lean{TNLean.MPS.AreaLaw.IsOpenMPS.copyProduct_factor}
     \leanok
     \uses{def:chain_copy_product,def:chain_open_mps}
-    If a product of unit block vectors is an MPS of bond dimension at most $D$,
-    then each block factor is an MPS of bond dimension at most $D$.
+    If $\bigotimes_{j=0}^{K-1}\eta_j$ with $\|\eta_j\|=1$ is an MPS of bond
+    dimension at most $D$, then each $\eta_i$ is an MPS of bond dimension at
+    most $D$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_interval_slice_mps}
-    Fix the factor $\eta_i$. Each unit factor $\eta_j$ has a block
-    configuration $\sigma_j$ with $\eta_j(\sigma_j)\neq0$. Fix the exterior of
-    the interval of block $i$, which starts at site $Li$, to $\sigma_j$ on every
-    block $j\neq i$. By~\eqref{eq:chain_copy_product_coefficients}, the
-    resulting interval slice $\phi$ of $\bigotimes_{j=0}^{K-1}\eta_j$ is
+    Pick $\sigma_j$ with $\eta_j(\sigma_j)\ne0$ ($j\ne i$). By
+    (\ref{eq:chain_copy_product_coefficients}), the interval slice $\phi$ on
+    block $i$ with exterior $(\sigma_j)_{j\ne i}$ satisfies
     \begin{align}
         \label{eq:chain_copy_product_slice}
         \phi(x)=\Bigl(\prod_{j\neq i}\eta_j(\sigma_j)\Bigr)\,\eta_i(x),
     \end{align}
-    a nonzero multiple of $\eta_i$. Theorem~\ref{thm:chain_interval_slice_mps}
-    gives $\eta_i$ the bond bound $D$.
+    so Theorem~\ref{thm:chain_interval_slice_mps} applies.
 \end{proof}
 
 \begin{theorem}[Scalar error amplification for a block product]
@@ -252,10 +234,10 @@ coefficient spaces and cut ranks.
     \lean{TNLean.MPS.AreaLaw.exists_copy_optimizedPureTraceError_le}
     \leanok
     \uses{def:chain_copy_product}
-    Let $K\ge1$, and let $\eta,\theta_0,\ldots,\theta_{K-1}$ be unit block vectors.
-    Write $f_i=|\langle\eta,\theta_i\rangle|^2$, $F=\prod_i f_i$, and
-    $T(f)=2\sqrt{f(1-f)}$ for $f\ge1/2$, with $T(f)=1$ otherwise.
-    If $T(F)<1$, then some $i$ satisfies
+    For $K\ge1$, unit block vectors $\eta,\theta_0,\dots,\theta_{K-1}$,
+    $f_i=|\langle\eta,\theta_i\rangle|^2$, $F=\prod_if_i$, and
+    $T(f)=2\sqrt{f(1-f)}$ for $f\ge1/2$ ($T(f)=1$ for $f<1/2$), if $T(F)<1$
+    then some $i$ satisfies
     \begin{align}
         \label{eq:chain_copy_error_amplification}
         T(f_i^K)\le T(F),\qquad
@@ -264,10 +246,9 @@ coefficient spaces and cut ranks.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_copy_product_inner}
-    Choose a factor with maximal squared fidelity, so $f_i^K\ge F$.
-    The scalar function $T$ is decreasing. Thus $T(f_i^K)\le T(F)<1$,
-    and the scalar amplification theorem in~\cite{QICLean2026Blueprint}
-    gives $\sqrt{K/4}\,T(f_i)\le T(f_i^K)$.
+    Choosing $i$ maximizing $f_i$ gives $f_i^K\ge F$, so $T(f_i^K)\le T(F)<1$;
+    the scalar amplification lemma of~\cite{QICLean2026Blueprint} gives
+    $\sqrt{K/4}\,T(f_i)\le T(f_i^K)$.
 \end{proof}
 
 \begin{theorem}[Normalized factors from rank-one copy boundaries]
@@ -275,41 +256,27 @@ coefficient spaces and cut ranks.
     \lean{TNLean.MPS.AreaLaw.exists_unit_block_factors}
     \leanok
     \uses{def:chain_copy_product}
-    Let $K\ge1$ and let $\psi$ be a unit vector on $KL$ sites.
-    If its coefficient matrix has rank at most one at every internal copy
-    boundary $tL$, $0<t<K$, then $\psi$ is a product of $K$ unit block vectors.
-    This includes blocks of length zero.
+    If $K\ge1$, $\|\psi\|=1$ on $KL$ sites, and
+    $\operatorname{rank}M_{tL}(\psi)\le1$ for all $0<t<K$, then
+    $\psi=\bigotimes_{i=0}^{K-1}\theta_i$ for unit block vectors $\theta_i$.
 \end{theorem}
 \begin{proof}\leanok
-    Write $\Psi(x_0,\ldots,x_{K-1})$ for the coefficient of $\psi$ at the
-    configuration whose block $i$ is $x_i$, and $(x_{<n},y_{\ge n})$ for the
-    configuration agreeing with $x$ on blocks $i<n$ and with $y$ on blocks
-    $i\ge n$. The coefficient matrix at $nL$ has rank at most one for every
-    $n$, since the cuts $0$ and $KL$ have rank at most one automatically.
-    Its two-by-two minors therefore vanish:
+    Write $\Psi(x_0,\dots,x_{K-1})$ for $\psi$ and $(x_{<n},y_{\ge n})$ for the
+    spliced configuration at block $n$. Since $\operatorname{rank}M_{nL}(\psi)\le1$
+    for all $0\le n\le K$, all $2\times2$ minors vanish:
     \begin{align}
         \label{eq:chain_copy_cross_ratio}
         \Psi(x)\,\Psi(y)=\Psi(x_{<n},y_{\ge n})\,\Psi(y_{<n},x_{\ge n}).
     \end{align}
-    Choose $x^0$ with $\Psi(x^0)\neq0$, and write $x^0[i\mapsto a]$ for $x^0$
-    with block $i$ replaced by $a$. Applying~\eqref{eq:chain_copy_cross_ratio}
-    at the boundary $nL$ to $(x_{<n+1},x^0_{\ge n+1})$ and $x^0$ gives
-    \begin{align}
-        \Psi(x_{<n+1},x^0_{\ge n+1})\,\Psi(x^0)
-        =\Psi(x_{<n},x^0_{\ge n})\,\Psi\bigl(x^0[n\mapsto x_n]\bigr),
-        \notag
-    \end{align}
-    and induction on $n$ yields
+    Fix $x^0$ with $\Psi(x^0)\neq0$. Applying (\ref{eq:chain_copy_cross_ratio})
+    to $(x_{<n+1},x^0_{\ge n+1})$ and $x^0$ inductively gives
     \begin{align}
         \label{eq:chain_copy_coefficient_factorization}
         \Psi(x)=\Psi(x^0)\prod_{i=0}^{K-1}
         \frac{\Psi\bigl(x^0[i\mapsto x_i]\bigr)}{\Psi(x^0)}.
     \end{align}
-    Put $w_i(a)=\Psi(x^0[i\mapsto a])/\Psi(x^0)$, absorb the scalar into the
-    first factor by setting $v_0=\Psi(x^0)\,w_0$ and $v_i=w_i$ for $i>0$, and
-    conclude $\psi=\bigotimes_{i=0}^{K-1}v_i$. Then
-    $\prod_{i=0}^{K-1}\|v_i\|=\|\psi\|=1$, so every $\|v_i\|$ is nonzero and
-    the unit vectors $v_i/\|v_i\|$ have the same product $\psi$.
+    Normalizing the resulting factors $v_i$ using
+    $\prod_{i=0}^{K-1}\|v_i\|=\|\psi\|=1$ yields unit $\theta_i=v_i/\|v_i\|$.
 \end{proof}
 
 \begin{theorem}[Product replacement by normalized MPS factors]
@@ -317,17 +284,15 @@ coefficient spaces and cut ranks.
     \lean{TNLean.MPS.AreaLaw.IsOpenMPS.exists_unit_copy_product_overlap_ge}
     \leanok
     \uses{def:chain_copy_product,def:chain_open_mps}
-    Let $K\ge1$, let $\psi$ be a unit MPS on $KL$ sites of bond dimension
-    at most $D$, and let $\xi$ be a block-product target.
-    There are unit block vectors $\theta_0,\ldots,\theta_{K-1}$, each an MPS
-    of bond dimension at most $D$, whose product has overlap with $\xi$
-    at least as large as that of $\psi$.
+    For $K\ge1$, a unit MPS $\psi$ on $KL$ sites of bond dimension at most $D$,
+    and a block-product target $\xi$, there exist unit MPS block vectors
+    $\theta_0,\dots,\theta_{K-1}$ of bond dimension at most $D$ with
+    $|\langle\xi,\psi\rangle|\le\bigl|\bigl\langle\xi,\bigotimes_{i=0}^{K-1}\theta_i\bigr\rangle\bigr|$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_copy_boundary_replacement,thm:chain_unit_copy_factors,thm:chain_copy_product_factor_mps}
-    First replace $\psi$ so that every copy boundary has rank at most one.
-    Extract unit block factors, and then apply the bond bound for factors
-    of a product MPS.
+    Combine Theorems~\ref{thm:chain_copy_boundary_replacement},
+    \ref{thm:chain_unit_copy_factors}, and~\ref{thm:chain_copy_product_factor_mps}.
 \end{proof}
 
 \begin{theorem}[Scalar amplification from an arbitrary MPS approximant]
@@ -335,22 +300,18 @@ coefficient spaces and cut ranks.
     \lean{TNLean.MPS.AreaLaw.IsOpenMPS.exists_copy_error_amplification}
     \leanok
     \uses{def:chain_copy_product,def:chain_open_mps,thm:chain_copy_error_amplification}
-    Let $K\ge1$, let $\eta$ be a unit block vector, and let $\psi$ be any unit
-    MPS on $KL$ sites of bond dimension at most $D$. Put
-    $F=\bigl|\bigl\langle\bigotimes_{i=0}^{K-1}\eta,\psi\bigr\rangle\bigr|^2$ and suppose $T(F)<1$,
-    with $T$ as in Theorem~\ref{thm:chain_copy_error_amplification}.
-    There is a unit block MPS $\theta$ of bond dimension at most $D$ such that,
-    writing $f=|\langle\eta,\theta\rangle|^2$,
+    For $K\ge1$, a unit block vector $\eta$, and a unit MPS $\psi$ on $KL$ sites
+    of bond dimension at most $D$, if
+    $F=\bigl|\bigl\langle\bigotimes_{i=0}^{K-1}\eta,\psi\bigr\rangle\bigr|^2$
+    satisfies $T(F)<1$, then there exists a unit block MPS $\theta$ of bond
+    dimension at most $D$ such that $f=|\langle\eta,\theta\rangle|^2$ satisfies
     \begin{align}
         \label{eq:chain_mps_copy_error_amplification}
         T(f^K)\le T(F),\qquad \sqrt{K/4}\,T(f)\le T(F).
     \end{align}
-    These are estimates for the scalar function of squared fidelity.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_unit_mps_copy_replacement,thm:chain_copy_product_inner,thm:chain_copy_error_amplification}
-    Replace the approximant by a product of unit MPS block factors with
-    no smaller overlap. Its squared fidelity is no smaller, and hence its
-    scalar error is no larger than $T(F)$. Apply the block-product
-    amplification theorem and select the factor it supplies.
+    Combine Theorems~\ref{thm:chain_unit_mps_copy_replacement},
+    \ref{thm:chain_copy_product_inner}, and~\ref{thm:chain_copy_error_amplification}.
 \end{proof}

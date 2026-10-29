@@ -6,33 +6,17 @@
     \lean{TNLean.PEPS.Approximation.exists_cell_conditionalMutualInformation_le_square}
     \leanok
     \uses{def:polynomial_peps_model,def:area_law_ground_entropy}
-    Fix $q\in\mathbb N$ with $q\ge1$, $J\ge0$, $\Delta>0$ and $c>0$.
-    In the cell estimate of \cite[Lemma~3.2]{OpenAI2026PolynomialPEPS},
-    there are constants $C_1>0$ and $K\ge0$, chosen before the scale, grid origin,
-    conditioning cells, system size, Hamiltonian, ground vector and exterior region,
-    with the following property.
-    Let $s\ge1$, let $o\in\mathbb R^2$, and put
-    $Q_i=o+si+[0,s)^2$ for $i\in\mathbb Z^2$.
-    Fix $i_0\in\mathbb Z^2$ and a set $A\subseteq\mathbb Z^2$ with $i_0\notin A$.
-    Let $H$ be a Hamiltonian of the square-grid model on
-    $\Lambda_L=\{1,\ldots,L\}^2$, with interaction bound $J$, and let $\Omega$
-    be its unit ground vector with full-system gap $\Delta$.
-    Set $G=\Lambda_L\cap Q_{i_0}$ and
-    $B=\Lambda_L\cap\bigcup_{i\in A}Q_i$.
-    For every $E\subseteq\Lambda_L\setminus(G\cup B)$ satisfying
-    $\operatorname{dist}_\infty(\overline{Q_{i_0}},E)\ge cs$, one has
+    Fix $q\in\mathbb N$ with $q\ge1$, $J\ge0$, $\Delta>0$, and $c>0$.
+    In \cite[Lemma~3.2]{OpenAI2026PolynomialPEPS}, there exist constants $C_1>0$ and $K\ge0$ such that for every $s\ge1$, $o\in\mathbb R^2$, $Q_i=o+si+[0,s)^2$ ($i\in\mathbb Z^2$), $i_0\in\mathbb Z^2$, $A\subseteq\mathbb Z^2\setminus\{i_0\}$, square-grid Hamiltonian $H$ on $\Lambda_L=\{1,\ldots,L\}^2$ with interaction bound $J$, unit ground vector $\Omega$ with full-system gap $\Delta$, $G=\Lambda_L\cap Q_{i_0}$, $B=\Lambda_L\cap\bigcup_{i\in A}Q_i$, and $E\subseteq\Lambda_L\setminus(G\cup B)$ with $\operatorname{dist}_\infty(\overline{Q_{i_0}},E)\ge cs$,
     \begin{align}
         I_\Omega(G:E\mid B) & \le C_1(1+\log s)^K.
-        \notag
+        \label{eq:peps_cell_cmi_from_gap}
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_sublinear_collar,
         thm:peps_square_cell_conditional_information_of_collar}
-    With range $R=1$, clearance $D_0=13$ and template constant $C_{\rm tpl}=24$,
-    the inequalities $2R+10=12<13$ and $24\le C_{\rm tpl}$ satisfy the hypotheses
-    of the sublinear collar theorem, so the conditional square-cell estimate
-    applies to the same ground vector, cell, conditioning region and exterior.
+    Taking $R=1$, $D_0=13>2R+10$, and $C_{\rm tpl}=24$ in Theorem~\ref{thm:area_law_sublinear_collar} and applying Theorem~\ref{thm:peps_square_cell_conditional_information_of_collar} yields (\ref{eq:peps_cell_cmi_from_gap}).
 \end{proof}
 
 \begin{theorem}[Information under angular separation]
@@ -40,32 +24,18 @@
     \lean{TNLean.PEPS.Approximation.angularInformationBound}
     \leanok
     \uses{def:polynomial_peps_model,def:peps_angular_separation}
-    Fix $q\in\mathbb N$ with $q\ge1$, $J\ge0$ and $\Delta>0$.
-    In~\cite[Proposition~3.4]{OpenAI2026PolynomialPEPS}, for every $a>0$,
-    $A_0\ge1$, $m_0\in\mathbb N$ and $p>0$, there are constants
-    $D,L_0\in\mathbb R$, chosen before the system size, Hamiltonian, ground
-    vector, marked points, physical regions and scale, with the following property.
-    Let $L\ge L_0$ be a natural number, let $H$ be a Hamiltonian of the
-    square-grid model on $\Lambda_L=\{1,\ldots,L\}^2$ with interaction bound $J$,
-    and let $\Omega$ be its unit ground vector with full-system gap $\Delta$.
-    Let $\mathcal V\subseteq\mathbb R^2$ consist of at most $m_0$ marked points,
-    let $X,E\subseteq\Lambda_L$ be disjoint, and let $n\in\mathbb R$ satisfy
-    $D\log L\le n\le A_0L$ and $\operatorname{diam}_\infty X\le A_0n$.
-    Put $d_{\mathcal V}(x)=\min_{v\in\mathcal V}|x-v|_\infty$, with
-    $d_{\varnothing}=+\infty$.
-    If every $x\in X$ and $y\in E$ satisfy
+    Fix $q\in\mathbb N$ with $q\ge1$, $J\ge0$, and $\Delta>0$.
+    In~\cite[Proposition~3.4]{OpenAI2026PolynomialPEPS}, for every $a>0$, $A_0\ge1$, $m_0\in\mathbb N$, and $p>0$, there exist $D,L_0\in\mathbb R$ such that for every integer $L\ge L_0$, square-grid Hamiltonian $H$ on $\Lambda_L=\{1,\ldots,L\}^2$ with interaction bound $J$, unit ground vector $\Omega$ with full-system gap $\Delta$, set $\mathcal V\subseteq\mathbb R^2$ with $|\mathcal V|\le m_0$, disjoint $X,E\subseteq\Lambda_L$, and $n\in[D\log L,A_0L]$ with $\operatorname{diam}_\infty X\le A_0n$, setting $d_{\mathcal V}(x)=\min_{v\in\mathcal V}|x-v|_\infty$ ($d_{\varnothing}=+\infty$), if
     \begin{align}
+        \forall x\in X,\ \forall y\in E,\qquad
         |x-y|_\infty & \ge a\max\{D\log L,\min(n,d_{\mathcal V}(x))\},
-        \notag
+        \label{eq:peps_angular_sep_cond}
     \end{align}
     then $I_\Omega(X:E)\le L^{-p}$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_sublinear_collar,thm:peps_angular_information_of_collar}
-    The sublinear collar theorem with $R=1$, $D_0=13$ and $C_{\rm tpl}=24$
-    follows from the original model and gap assumptions, and applying the conditional
-    angular information theorem with these fixed parameters yields constants
-    with the stated order of quantifiers.
+    Combine Theorem~\ref{thm:area_law_sublinear_collar} at $(R,D_0,C_{\rm tpl})=(1,13,24)$ with Theorem~\ref{thm:peps_angular_information_of_collar}.
 \end{proof}
 
 \begin{definition}[Closed-form cell and angular constants]
@@ -77,15 +47,7 @@
     \uses{def:peps_closed_collar_constants,def:peps_cell_information_constants,
         def:peps_angular_information_constants,
         def:peps_collar_amplification_constants}
-    For $q,R\in\mathbb N$ and $J,\Delta\in\mathbb R$, let $C=C(q,R,J,\Delta)$
-    and $N=N(q,R,J,\Delta)$ be the closed-form collar constant and threshold of
-    Definition~\ref{def:peps_closed_collar_constants}. With
-    $C_a=C_a(q,R,J,\Delta,C)$ and $N_a=N_a(q,R,J,\Delta,C)$, let
-    $C_{\rm cell}(q,R,J,\Delta,c)$ and $K_{\rm cell}(q,R,J,\Delta,c)$ be the cell
-    constants at the template constant $24$, the threshold $N$ and $(C_a,N_a)$.
-    Let $L_{\rm ang}(q,J,\Delta,a,A_0,m_0,p)$ be the angular size threshold at
-    the same data for $R=1$. The source has only site and nearest-neighbour
-    terms, which is range one; ranges $R>1$ extend it.
+    For $q,R\in\mathbb N$ and $J,\Delta\in\mathbb R$, let $(C,N)=(C(q,R,J,\Delta),N(q,R,J,\Delta))$ from Definition~\ref{def:peps_closed_collar_constants} and $(C_a,N_a)=(C_a(q,R,J,\Delta,C),N_a(q,R,J,\Delta,C))$ from Definition~\ref{def:peps_collar_amplification_constants}. Let $C_{\rm cell}(q,R,J,\Delta,c)$ and $K_{\rm cell}(q,R,J,\Delta,c)$ be the cell constants of Definition~\ref{def:peps_cell_information_constants} at $(24,N,C_a,N_a)$, and let $L_{\rm ang}(q,J,\Delta,a,A_0,m_0,p)$ be the angular threshold of Definition~\ref{def:peps_angular_information_constants} at $R=1$.
 \end{definition}
 
 \begin{theorem}[Cell and angular information at closed-form constants]
@@ -95,22 +57,12 @@
     \leanok
     \uses{def:polynomial_peps_model,def:peps_angular_scale,
         def:peps_closed_information_constants}
-    Fix $q\in\mathbb N$ with $q\ge1$, $J\ge0$ and $\Delta>0$. For every
-    $c>0$, the conclusion of
-    Theorem~\ref{thm:peps_cell_conditional_information_from_gap} holds with
-    $C_1=C_{\rm cell}(q,1,J,\Delta,c)$ and $K=K_{\rm cell}(q,1,J,\Delta,c)$. For
-    $a>0$, $A_0\in\mathbb R$, $m_0\in\mathbb N$ and an integer $p>0$, every
-    $D\ge D_{\rm ang}(J,\Delta,a,p)$ and every
-    $L_0\ge L_{\rm ang}(q,J,\Delta,a,A_0,m_0,p)$ form a slope and a threshold at
-    accuracy $L^{-p}$ in the sense of Definition~\ref{def:peps_angular_scale}.
+    Fix $q\in\mathbb N$ with $q\ge1$, $J\ge0$, and $\Delta>0$. For every $c>0$, Theorem~\ref{thm:peps_cell_conditional_information_from_gap} holds with $(C_1,K)=(C_{\rm cell}(q,1,J,\Delta,c),K_{\rm cell}(q,1,J,\Delta,c))$. For $a>0$, $A_0\in\mathbb R$, $m_0\in\mathbb N$, and integer $p>0$, every $D\ge D_{\rm ang}(J,\Delta,a,p)$ and $L_0\ge L_{\rm ang}(q,J,\Delta,a,A_0,m_0,p)$ form an angular scale at accuracy $L^{-p}$ in the sense of Definition~\ref{def:peps_angular_scale}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_collar_closed,
         thm:peps_information_of_collar_named_amplification}
-    Theorem~\ref{thm:peps_collar_closed} with $R=1$ and $D_0=13$ gives the
-    collar bound with template constant $24$, constant $C$ and threshold $N$. The constants $C_{\rm cell}$ and $K_{\rm cell}$ are positive, and
-    Theorem~\ref{thm:peps_information_of_collar_named_amplification} gives the
-    remaining conclusions.
+    Combine Theorem~\ref{thm:peps_collar_closed} at $(R,D_0,C_{\rm tpl})=(1,13,24)$ with Theorem~\ref{thm:peps_information_of_collar_named_amplification}.
 \end{proof}
 
 \begin{theorem}[Cell information at range $R$ and closed-form constants]
@@ -122,38 +74,18 @@
     \uses{def:area_law_hamiltonian,def:area_law_ground_entropy,
         def:peps_closed_information_constants,
         thm:peps_cell_conditional_information_of_collar_explicit}
-    Fix $q,R\in\mathbb N$ with $q\ge1$, $J\ge0$, $\Delta>0$ and $c>0$. The
-    constants $C_{\rm cell}(q,R,J,\Delta,c)$ and $K_{\rm cell}(q,R,J,\Delta,c)$
-    are positive, and the conclusion of
-    Theorem~\ref{thm:peps_cell_conditional_information_of_collar_explicit} holds
-    with these constants for every Hamiltonian of range $R$ with interaction bound
-    $J$ on a finite integer domain and every unit ground vector with full-system
-    gap $\Delta$, without a collar or amplification hypothesis. The source has
-    only site and nearest-neighbour terms, which is range one; ranges $R>1$ extend
-    it.
+    Fix $q,R\in\mathbb N$ with $q\ge1$, $J\ge0$, $\Delta>0$, and $c>0$. Then $C_{\rm cell}(q,R,J,\Delta,c)>0$ and $K_{\rm cell}(q,R,J,\Delta,c)>0$, and Theorem~\ref{thm:peps_cell_conditional_information_of_collar_explicit} holds with these constants for every range-$R$ Hamiltonian with interaction bound $J$ on a finite integer domain and every unit ground vector with full-system gap $\Delta$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_collar_closed,thm:peps_collar_amplification_bound,
         thm:peps_cell_information_constants_pos,
         thm:peps_cell_conditional_information_of_collar_explicit}
-    The cell constants are positive for all values of the parameters.
-    Theorem~\ref{thm:peps_collar_closed} with clearance $D_0=2R+11>2R+10$ gives
-    the collar bound at range $R$ with template constant $24$, constant $C$ and
-    threshold $N$, and Theorem~\ref{thm:peps_collar_amplification_bound} gives
-    the amplification bound at $(\max\{C,1\},1)$ with constant $C_a$ and
-    threshold $N_a$. Theorem~\ref{thm:peps_cell_conditional_information_of_collar_explicit}
-    then gives the bound.
+    Positivity follows from Theorem~\ref{thm:peps_cell_information_constants_pos}. Applying Theorem~\ref{thm:peps_collar_closed} at $D_0=2R+11$, Theorem~\ref{thm:peps_collar_amplification_bound} at $(\max\{C,1\},1)$, and Theorem~\ref{thm:peps_cell_conditional_information_of_collar_explicit} gives the bound.
 \end{proof}
 
 \subsection{Angular information at interaction range $R$}
 
-The source states Proposition~3.4 for site and nearest-neighbour terms only,
-which is interaction range one. The proof uses the Hamiltonian only through
-the cell bound of Lemma~3.2 and the information reset of Lemma~3.3 for the
-states concerned. This subsection runs the proof for any family of states
-with these two estimates, supplies them at range $R$, and so extends the
-proposition to Hamiltonians of range $R$ on the square; the range-one
-statements above are unchanged.
+This subsection extends \cite[Proposition~3.4]{OpenAI2026PolynomialPEPS} from $R=1$ to general interaction range $R$ by running the multi-scale argument for any state family satisfying the cell bound (\ref{eq:peps_cell_cmi_from_gap}) and the information reset of Theorem~\ref{thm:peps_information_reset_explicit}.
 
 \begin{definition}[The cell and reset estimates for a family of states]
     \label{def:peps_family_cell_reset_bounds}
@@ -162,16 +94,11 @@ statements above are unchanged.
     \leanok
     \uses{def:peps_angular_grid,thm:peps_cell_conditional_information_from_gap,
         thm:peps_information_reset_explicit}
-    Fix $q\in\mathbb N$, and let $\mathcal G$ assign to each $L$ a set of
-    states of the $L\times L$ square with local dimension $q$. It satisfies
-    the \emph{cell bound} with clearance coefficient $c$, prefactor $C_1$ and
-    exponent $K$ if, for every state of $\mathcal G$, the
-    conclusion of Theorem~\ref{thm:peps_cell_conditional_information_from_gap}
-    holds with these constants. It satisfies the \emph{reset bound} with width
-    $C_p$ and threshold $L_0$ at accuracy $L^{-p}$ if, for every $L\ge L_0$ and
-    every state of $\mathcal G$, the conclusion of
-    Theorem~\ref{thm:peps_information_reset_explicit} holds with the width
-    $C_p$.
+    Fix $q\in\mathbb N$. A family $\mathcal G$ of states on $\Lambda_L=\{1,\ldots,L\}^2$ with local dimension $q$ satisfies:
+    \begin{enumerate}
+        \item the \emph{cell bound} with $(c,C_1,K)$ if every $\Omega\in\mathcal G$ satisfies (\ref{eq:peps_cell_cmi_from_gap}) of Theorem~\ref{thm:peps_cell_conditional_information_from_gap};
+        \item the \emph{reset bound} with $(C_p,L_0)$ at accuracy $L^{-p}$ if for every $L\ge L_0$, every $\Omega\in\mathcal G$ satisfies Theorem~\ref{thm:peps_information_reset_explicit} with width $C_p$.
+    \end{enumerate}
 \end{definition}
 
 \begin{theorem}[Angular information for a family with the two estimates]
@@ -185,24 +112,13 @@ statements above are unchanged.
         def:peps_angular_information_constants,
         def:peps_angular_cell_reset_constants,
         def:peps_angular_single_scale_constants}
-    Let $q\in\mathbb N$, $a>0$, $A_0\in\mathbb R$, $m_0\in\mathbb N$, and let
-    $p>0$ be an integer. Let $a'=a'(a)$, $d=d(a)$ and $N_{\rm cell}(a,A_0,m_0)$
-    be as in Definition~\ref{def:peps_angular_information_constants}. Let
-    $\mathcal G$ consist of unit vectors and satisfy the cell bound with
-    $C_1>0$ and $K\ge0$ at the clearance coefficient $c_{\rm ang}(a,a',d)$ of
-    Definition~\ref{def:peps_angular_single_scale_constants}, and the reset
-    bound with $C_p>0$ and $L_0$. Then every slope $D\ge D_{\rm cell}(C_p,a',d)$
-    and every threshold at least
-    \begin{align*}
-        \max\bigl\{L_{\rm cell}\bigl(a',d,C_p,C_1,N_{\rm cell}(a,A_0,m_0),K\bigr),
-        L_0\bigr\},
-    \end{align*}
-    with $D_{\rm cell}$ and $L_{\rm cell}$ from
-    Definition~\ref{def:peps_angular_cell_reset_constants}, form an angular
-    scale for $\mathcal G$ in the sense of
-    Definition~\ref{def:peps_angular_scale}. This extends the conclusion of
-    \cite[Proposition~3.4]{OpenAI2026PolynomialPEPS} to any such family, which
-    the source does not treat.
+    Let $q\in\mathbb N$, $a>0$, $A_0\in\mathbb R$, $m_0\in\mathbb N$, and integer $p>0$. With $a'=a'(a)$, $d=d(a)$, and $N_{\rm cell}(a,A_0,m_0)$ from Definition~\ref{def:peps_angular_information_constants}, $c_{\rm ang}(a,a',d)$ from Definition~\ref{def:peps_angular_single_scale_constants}, and $(D_{\rm cell},L_{\rm cell})$ from Definition~\ref{def:peps_angular_cell_reset_constants}, if a family $\mathcal G$ of unit vectors satisfies the cell bound with $(c_{\rm ang}(a,a',d),C_1,K)$ ($C_1>0,K\ge0$) and the reset bound with $(C_p,L_0)$ ($C_p>0$), then every $D\ge D_{\rm cell}(C_p,a',d)$ and
+    \begin{align}
+        L_1 & \ge \max\bigl\{L_{\rm cell}\bigl(a',d,C_p,C_1,N_{\rm cell}(a,A_0,m_0),K\bigr),
+        L_0\bigr\}
+        \label{eq:peps_angular_family_threshold}
+    \end{align}
+    form an angular scale for $\mathcal G$ (Definition~\ref{def:peps_angular_scale}), extending \cite[Proposition~3.4]{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -213,36 +129,13 @@ statements above are unchanged.
         thm:peps_angular_reset_width_of_cell_information_explicit,
         lem:peps_angular_scale_of_site_position,
         def:peps_angular_single_scale_constants}
-    With $a'=a'(a)$ and $d=d(a)$ one has $0<a'<a/100$, $0<d<a'/4$ and $d\le1$.
-    Put $M=N_{\rm cell}(a,A_0,m_0)$ and let $L_1$ be at least the displayed
-    threshold. At one scale, the cell clearance and the cell bound at the
-    clearance coefficient $c_{\rm ang}(a,a',d)$ control the information of at
-    most $M$ selected cells, and the reset bound with width $C_p$ restores the
-    accuracy $L^{-p}$ on the cores. This one-scale reset applies at every slope
-    $D\ge D_{\rm cell}(C_p,a',d)\ge1$ and every size $L\ge L_1\ge e$, so
-    $t=D\log L\ge1$. The inequality $t\le n$ yields a dyadic cutoff with
-    $s_j=2^{-j}n$ and $t\le s_m<2t$. Every processed scale $s_j$, with $j\le m$,
-    satisfies $s_j\ge t$, so the same reset applies at each scale. Process the
-    layers from farthest to nearest the marked points, and write $A_j$ for the
-    cumulative processed set.
-
-    At scale $s_j$, the old selected cell group and the enlarged exterior lie
-    inside the two cores controlled at the preceding scale. The first old group
-    is empty. The number of new cells is at most $M$, and cumulative angular
-    separation gives $\operatorname{dist}_\infty(A_j,E)\ge as_j/2$. The
-    one-scale reset therefore restores
+    Set $M=N_{\rm cell}(a,A_0,m_0)$; for $D\ge D_{\rm cell}(C_p,a',d)\ge1$ and $L\ge L_1\ge e$, $t=D\log L\in[1,n]$ gives dyadic scales $s_j=2^{-j}n\ge t$ ($0\le j\le m$) with $t\le s_m<2t$ (Theorem~\ref{thm:peps_annular_cutoff}). At scale $s_j$, the cumulative processed set $A_j$ adds at most $M$ cells with $\operatorname{dist}_\infty(A_j,E)\ge as_j/2$ (Theorem~\ref{thm:peps_annular_separation}), and combining the cell bound at $c_{\rm ang}(a,a',d)$ (Theorem~\ref{thm:peps_selected_region_information_of_cell_bounds}) with the reset bound of width $C_p$ (Theorem~\ref{thm:peps_angular_reset_width_of_cell_information_explicit}) restores
     \begin{align}
         I_\Omega\bigl(\Lambda_L\cap A_j^{+a's_j}:
-        \Lambda_L\cap E^{+a's_j}\bigr) & \le L^{-p}.
+        \Lambda_L\cap E^{+a's_j}\bigr) & \le L^{-p}
         \notag
     \end{align}
-    Here $F^{+r}$ denotes the ambient $\ell_\infty$ enlargement of $F$. The
-    same bound is restored at each step; it is not summed over the scales. The
-    last cumulative set is $A_m=X$. Monotonicity of mutual information on both
-    regions removes the final padding and gives the bound. For an integer
-    accuracy, translating the marked points with the sites gives the slope and
-    threshold for every common translation of $\Lambda_L$. The Hamiltonian
-    enters only through the two estimates.
+    inductively by Theorem~\ref{thm:peps_annular_information_induction}. At $j=m$, $A_m=X$, and monotonicity of mutual information gives $I_\Omega(X:E)\le L^{-p}$; Lemma~\ref{lem:peps_angular_scale_of_site_position} extends this to arbitrary common translations of $\Lambda_L$.
 \end{proof}
 
 \begin{theorem}[Information of a state of the square on the integer square]
@@ -251,22 +144,12 @@ statements above are unchanged.
         TNLean.PEPS.Approximation.mutualInformation_squareAreaLawState}
     \leanok
     \uses{def:square_area_law_state,def:peps_angular_grid}
-    Let $\Omega$ be a state of the $L\times L$ square and $\tilde\Omega$ its
-    placement on the integer square of Definition~\ref{def:square_area_law_state}.
-    The mutual information of $\tilde\Omega$ between two sets of sites equals
-    that of $\Omega$ between the corresponding sets. If, for a cell of the grid
-    with origin $o-(1,1)$ and side $s$, a union of other cells, and every
-    region at distance at least $cs$ from the closed cell, the conditional
-    mutual information of $\tilde\Omega$ is at most $C$, then the same holds
-    for $\Omega$ and the grid with origin $o$.
+    For a state $\Omega$ on $\{0,\ldots,L-1\}^2$ and its placement $\tilde\Omega$ on $\Lambda_L=\{1,\ldots,L\}^2$ (Definition~\ref{def:square_area_law_state}), mutual and conditional mutual informations match under the shift $x\mapsto x+(1,1)$, so a cell bound for $\tilde\Omega$ at origin $o-(1,1)$ transfers to $\Omega$ at origin $o$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:finite_product_entropy_relabel}
-    The placement translates every site by $(1,1)$. This bijection carries the
-    cells, the unions of cells and the distances for the origin $o$ to those
-    for the origin $o-(1,1)$, and entropies are unchanged when the sites are
-    relabelled.
+    The translation $x\mapsto x+(1,1)$ is a site bijection preserving $\ell_\infty$-distances, cells, and regional entropies by Theorem~\ref{thm:finite_product_entropy_relabel}.
 \end{proof}
 
 \begin{theorem}[The two estimates at range $R$]
@@ -276,22 +159,14 @@ statements above are unchanged.
     \leanok
     \uses{def:peps_family_cell_reset_bounds,def:square_range_ground_states,
         def:peps_closed_information_constants,def:peps_reset_width_range}
-    Fix $q\ge1$, $R\ge0$, $J\ge0$ and $\Delta>0$. The unit gapped ground vectors
-    of Hamiltonians of range $R$ with term bound $J$ on the square satisfy the
-    cell bound at every $c>0$ with $C_1=C_{\rm cell}(q,R,J,\Delta,c)$ and
-    $K=K_{\rm cell}(q,R,J,\Delta,c)$, and for every $p>0$ the reset bound with
-    width $C_{p,R}(J,\Delta,p)$ and threshold $L_{0,R}(q,J,\Delta,p)$.
+    Fix $q\ge1$, $R\ge0$, $J\ge0$, and $\Delta>0$. Unit ground vectors with gap $\Delta$ of range-$R$ Hamiltonians with term bound $J$ on the square satisfy Definition~\ref{def:peps_family_cell_reset_bounds} with $(C_1,K)=(C_{\rm cell}(q,R,J,\Delta,c),K_{\rm cell}(q,R,J,\Delta,c))$ for every $c>0$ and $(C_p,L_0)=(C_{p,R}(J,\Delta,p),L_{0,R}(q,J,\Delta,p))$ for every $p>0$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_cell_information_range_closed,
         thm:peps_information_reset_range,
         thm:peps_square_state_relabel_information}
-    Place the state on the integer square. By
-    Theorem~\ref{thm:peps_square_state_relabel_information}, the relabelling of
-    the sites changes neither the cell estimate nor the mutual information, so
-    Theorem~\ref{thm:peps_cell_information_range_closed} gives the cell bound
-    and Theorem~\ref{thm:peps_information_reset_range} gives the reset.
+    Combine Theorem~\ref{thm:peps_square_state_relabel_information} with Theorems~\ref{thm:peps_cell_information_range_closed} and~\ref{thm:peps_information_reset_range}.
 \end{proof}
 
 \begin{definition}[The angular constants at range $R$]
@@ -304,25 +179,19 @@ statements above are unchanged.
         def:peps_angular_information_constants,
         def:peps_angular_cell_reset_constants,
         def:peps_angular_single_scale_constants}
-    For $q,R,m_0\in\mathbb N$ and $J,\Delta,a,A_0,p\in\mathbb R$, let
-    $a'=a'(a)$, $d=d(a)$ and $N_{\rm cell}(a,A_0,m_0)$ be as in
-    Definition~\ref{def:peps_angular_information_constants}, let
-    $c=c_{\rm ang}(a,a',d)$ be the clearance coefficient of
-    Definition~\ref{def:peps_angular_single_scale_constants}, and write
-    $C_{p,R}=C_{p,R}(J,\Delta,p)$. With $D_{\rm cell}$ and $L_{\rm cell}$ from
-    Definition~\ref{def:peps_angular_cell_reset_constants}, put
-    \begin{align*}
-        D_R(J,\Delta,a,p)           & =D_{\rm cell}(C_{p,R},a',d),                \\
+    For $q,R,m_0\in\mathbb N$ and $J,\Delta,a,A_0,p\in\mathbb R$, with $a'=a'(a)$, $d=d(a)$, $N_{\rm cell}(a,A_0,m_0)$ from Definition~\ref{def:peps_angular_information_constants}, $c=c_{\rm ang}(a,a',d)$ from Definition~\ref{def:peps_angular_single_scale_constants}, $C_{p,R}=C_{p,R}(J,\Delta,p)$ from Definition~\ref{def:peps_reset_width_range}, and $(D_{\rm cell},L_{\rm cell})$ from Definition~\ref{def:peps_angular_cell_reset_constants}, set
+    \begin{align}
+        D_R(J,\Delta,a,p)           & =D_{\rm cell}(C_{p,R},a',d), \notag         \\
         L_R(q,J,\Delta,a,A_0,m_0,p) & =\max\bigl\{L_{\rm cell}\bigl(a',d,C_{p,R},
         C_{\rm cell}(q,R,J,\Delta,c),N_{\rm cell}(a,A_0,m_0),
         K_{\rm cell}(q,R,J,\Delta,c)\bigr),L_{0,R}(q,J,\Delta,p)\bigr\}.
-    \end{align*}
-    For $J\ge0$, $\Delta>0$, $a>0$ and $p>0$,
-    \begin{align*}
-        D_R(J,\Delta,a,p) & =\frac{2400\,C_{p,R}(J,\Delta,p)}{\min\{a,1\}},
-    \end{align*}
-    because $C_{p,R}(J,\Delta,p)\ge1$, so that this term dominates both $1$
-    and $1/d=1600/\min\{a,1\}$.
+        \label{eq:peps_angular_constants_range}
+    \end{align}
+    For $J\ge0$, $\Delta>0$, $a>0$, and $p>0$, since $C_{p,R}\ge1$,
+    \begin{align}
+        D_R(J,\Delta,a,p) & =\frac{2400\,C_{p,R}(J,\Delta,p)}{\min\{a,1\}}.
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Angular information at range $R$, at closed-form constants]
@@ -331,20 +200,12 @@ statements above are unchanged.
     \leanok
     \uses{def:peps_angular_constants_range,def:peps_angular_scale,
         def:square_range_ground_states}
-    Fix $q\ge1$, $R\ge0$, $J\ge0$, $\Delta>0$, $a>0$, $A_0\in\mathbb R$,
-    $m_0\in\mathbb N$ and an integer $p>0$. For the unit gapped ground vectors
-    of Hamiltonians of range $R$ with term bound $J$ on the $L\times L$ square, every slope
-    $D\ge D_R(J,\Delta,a,p)$ and every threshold
-    $L_0\ge L_R(q,J,\Delta,a,A_0,m_0,p)$ form an angular scale at accuracy
-    $L^{-p}$. This extends \cite[Proposition~3.4]{OpenAI2026PolynomialPEPS}
-    and Theorem~\ref{thm:peps_information_from_gap_closed} from range one, the
-    only range the source treats, to range $R$.
+    Fix $q\ge1$, $R\ge0$, $J\ge0$, $\Delta>0$, $a>0$, $A_0\in\mathbb R$, $m_0\in\mathbb N$, and integer $p>0$. For unit ground vectors with gap $\Delta$ of range-$R$ Hamiltonians with term bound $J$ on the $L\times L$ square, every $D\ge D_R(J,\Delta,a,p)$ and $L_0\ge L_R(q,J,\Delta,a,A_0,m_0,p)$ form an angular scale at accuracy $L^{-p}$, extending \cite[Proposition~3.4]{OpenAI2026PolynomialPEPS} and Theorem~\ref{thm:peps_information_from_gap_closed} to range $R$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_angular_information_of_bounds,
         thm:peps_range_cell_reset_bounds,thm:peps_cell_information_range_closed,
         def:peps_reset_width_range}
-    Apply Theorem~\ref{thm:peps_angular_information_of_bounds} with the
-    estimates of Theorem~\ref{thm:peps_range_cell_reset_bounds}.
+    Combine Theorem~\ref{thm:peps_angular_information_of_bounds} with Theorem~\ref{thm:peps_range_cell_reset_bounds}.
 \end{proof}

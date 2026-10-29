@@ -1678,3 +1678,8 @@ and [#9847](https://github.com/LionSR/TNLean/issues/9847).
   `E₀ + 6√δ` and bond dimension `B_{min(δ, 1/12)}`. The energy bound after
   trimming a general low-energy vector is corrected in the QICLean note
   `lvv13_trimming_energy`.
+- [`lvv13_power_expansion_padding.tex`](lvv13_power_expansion_padding.tex)
+  (local correction, resolved) records that the expansion `eq:a-exp`
+  (arXiv:1307.5143v1, lines 606–609) of the power projector sums over words in
+  `n` letters while the Hamiltonian has `n - 1` terms; it is read with
+  `H_n = 0`, so that the last letter is the identity and the identity is exact.

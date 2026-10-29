@@ -110,5 +110,6 @@ import TNLean.MPS.AreaLaw.TwoCutOperatorForms
 import TNLean.MPS.AreaLaw.TwoWindowFamilyCardinality
 import TNLean.MPS.AreaLaw.TwoWindowOperatorForms
 import TNLean.MPS.AreaLaw.TwoWindowPolynomialMPOFamily
+import TNLean.MPS.AreaLaw.TwoWindowPolynomialRank
 import TNLean.MPS.AreaLaw.ViableSet
 import TNLean.MPS.AreaLaw.WindowCounting

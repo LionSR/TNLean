@@ -2,9 +2,8 @@
 \label{sec:peps_source_block_contraction}
 
 Fix ordered source slots with halfspaces $U_e,V_e$ and joint register
-space $\mathcal S$, as in Definition~\ref{def:peps_source_slots}.
-All source and physical input coordinates in this section remain free.
-This gives the contractions used in
+space $\mathcal S$, as in Definition~\ref{def:peps_source_slots}, with free
+source and physical input coordinates, following
 \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 \texttt{04-compression.tex}, lines 383--468.
 
@@ -22,38 +21,34 @@ This gives the contractions used in
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.preparedInputBasis_apply}
     \leanok
     \uses{def:peps_joint_source_vector}
-    Choose finite orthonormal bases $(u_{e,r})_{r\in I_e}$ of $U_e$
-    and $(v_{e,s})_{s\in J_e}$ of $V_e$. Let
-    $\mathcal A=\prod_e(I_e\times J_e)$.
-    The orthonormal basis of $\mathcal S$ indexed by $a\in\mathcal A$
-    consists of
+    For finite orthonormal bases $(u_{e,r})_{r\in I_e}$ of $U_e$ and
+    $(v_{e,s})_{s\in J_e}$ of $V_e$, let $\mathcal A=\prod_e(I_e\times J_e)$.
+    The orthonormal basis $(s_a)_{a\in\mathcal A}$ of $\mathcal S$ is given via
+    the associativity identification $\Phi$ of
+    Definition~\ref{def:peps_joint_source_vector} by
     \begin{align}
         s_a & =\Phi\bigl((u_{e,a_e^{(1)}}\otimes
-        v_{e,a_e^{(2)}})_e\bigr).
+        v_{e,a_e^{(2)}})_e\bigr),
         \label{eq:peps_source_slot_basis}
     \end{align}
-    The empty source list has its single basis vector $1\in\C$.
-    If $(f_j)_{j\in N}$ is an orthonormal basis of the original
-    input memory $\mathcal H$, the resulting orthonormal basis of
-    $\mathcal S\otimes\mathcal H$ is indexed by $(a,j)$ and satisfies
+    with $s_\varnothing=1\in\C$ for the empty slot list. For an orthonormal
+    basis $(f_j)_{j\in N}$ of $\mathcal H$, the product orthonormal basis of
+    $\mathcal S\otimes\mathcal H$ indexed by $(a,j)\in\mathcal A\times N$
+    satisfies
     \begin{align}
         s_a\otimes f_j
          & =Q_{(u_{e,a_e^{(1)}}\otimes v_{e,a_e^{(2)}})_e,\mathcal H}f_j.
         \label{eq:peps_source_input_basis}
     \end{align}
-    Both formulas use the canonical associativity identifications.
 \end{definition}
 
 \begin{proof}\leanok
     \uses{thm:peps_source_preparation_sums}
-    By induction on the ordered slots, tensoring the bases of the first two
-    halfspaces with the basis already constructed for the remaining
-    slots identifies a full assignment with its first component
-    and its restriction to the remaining slots. Tensor products and
-    isometric identifications preserve orthonormal bases, giving
-    (\ref{eq:peps_source_slot_basis}); tensoring with the input basis
-    and applying the preparation identity gives
-    (\ref{eq:peps_source_input_basis}).
+    Induction on the ordered slots shows that tensoring the endpoint bases of
+    the first slot with the inductive basis on the remaining slots preserves
+    orthonormality under $\Phi$, giving~(\ref{eq:peps_source_slot_basis});
+    tensoring with $(f_j)_{j\in N}$ and applying
+    Theorem~\ref{thm:peps_source_preparation_sums} yields~(\ref{eq:peps_source_input_basis}).
 \end{proof}
 
 \begin{definition}[The complete free-input matrix]
@@ -62,16 +57,15 @@ This gives the contractions used in
     \lean{TNLean.Lattice.PartyCircuit.Word.freeSourceMatrix_apply}
     \leanok
     \uses{def:peps_source_slot_basis,def:peps_prepared_matrix,def:peps_prepared_density_coefficient}
-    Let $T:\mathcal S\otimes\mathcal H\to\mathcal K$ be the
-    operator of a composition, and choose an orthonormal output
-    basis $(g_k)_{k\in M}$. Its complete matrix $A_T$ has row index
-    $k\in M$ and column index $(a,j)\in\mathcal A\times N$:
+    For a composition operator $T:\mathcal S\otimes\mathcal H\to\mathcal K$ and
+    an orthonormal output basis $(g_k)_{k\in M}$, the complete matrix
+    $A_T\in\C^{M\times(\mathcal A\times N)}$ has entries
     \begin{align}
         A_T(k,(a,j)) & =\langle g_k,T(s_a\otimes f_j)\rangle
-        =K_T(a)_{kj}.
+        =K_T(a)_{kj},
         \label{eq:peps_free_source_matrix}
     \end{align}
-    Here $K_T(a)$ is the prepared matrix of
+    where $K_T(a)$ is the prepared matrix of
     Definition~\ref{def:peps_prepared_density_coefficient}.
 \end{definition}
 
@@ -80,14 +74,12 @@ This gives the contractions used in
     \lean{TNLean.Lattice.PartyCircuit.Word.pureSourceMatrix}
     \leanok
     \uses{def:peps_source_slot_basis}
-    For a prescribed vector $\psi\in\mathcal H$, let $A_{T,\psi}$
-    have row index $k\in M$ and column index $a\in\mathcal A$, with
+    For $\psi\in\mathcal H$, define $A_{T,\psi}\in\C^{M\times\mathcal A}$ by
     \begin{align}
         A_{T,\psi}(k,a)
          & =\langle g_k,T(s_a\otimes\psi)\rangle.
         \label{eq:peps_pure_source_matrix}
     \end{align}
-    No normalization of $\psi$ is required.
 \end{definition}
 
 \begin{theorem}[Pure-input prepared density coefficients]
@@ -95,26 +87,22 @@ This gives the contractions used in
     \lean{TNLean.Lattice.PartyCircuit.Word.preparedDensityCoefficient_pure_eq_vecMulVec}
     \leanok
     \uses{def:peps_pure_source_matrix,def:peps_prepared_density_coefficient}
-    Let $T,T':\mathcal S\otimes\mathcal H\to\mathcal K$ be two
-    compositions, expressed in the same output basis. For independently
-    chosen $a,b\in\mathcal A$, their prepared matrices satisfy
+    For any compositions $T,T':\mathcal S\otimes\mathcal H\to\mathcal K$ in the
+    same output basis, any $\psi\in\mathcal H$, and any $a,b\in\mathcal A$,
     \begin{align}
         K_T(a)|\psi\rangle\langle\psi|K_{T'}(b)^\dagger
          & =A_{T,\psi}(:,a)A_{T',\psi}(:,b)^\dagger.
         \label{eq:peps_pure_source_density_coefficient}
     \end{align}
-    Neither normalization nor allowedness is required. The identity
-    includes the zero input vector and the empty source list.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_prepared_vector_density,def:peps_source_slot_basis,
         thm:peps_source_preparation_sums}
-    The preparation identity gives
-    $K_T(a)[\psi]=[T(s_a\otimes\psi)]=A_{T,\psi}(:,a)$.
-    Applying Theorem~\ref{thm:peps_prepared_vector_density} to the ket
-    and bra preparations gives
-    (\ref{eq:peps_pure_source_density_coefficient}).
+    By Theorem~\ref{thm:peps_source_preparation_sums} and
+    Definition~\ref{def:peps_source_slot_basis},
+    $K_T(a)[\psi]=[T(s_a\otimes\psi)]=A_{T,\psi}(:,a)$, so
+    Theorem~\ref{thm:peps_prepared_vector_density} yields~(\ref{eq:peps_pure_source_density_coefficient}).
 \end{proof}
 
 \begin{definition}[The product source matrix]
@@ -122,16 +110,14 @@ This gives the contractions used in
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.productSourceMatrix}
     \leanok
     \uses{def:peps_source_inventory}
-    Let $K_e$ be sets indexed by the ordered source positions, and put
-    $\mathcal A_K=\prod_e K_e$. For matrices
-    $X_e\in\C^{K_e\times K_e}$, define
+    For index sets $K_e$ at the ordered source positions,
+    $\mathcal A_K=\prod_e K_e$, and matrices $X_e\in\C^{K_e\times K_e}$, define
     $\mathcal X\in\C^{\mathcal A_K\times\mathcal A_K}$ by
     \begin{align}
         \mathcal X(\alpha,\beta)
          & =\prod_e X_e(\alpha_e,\beta_e).
         \label{eq:peps_product_source_matrix}
     \end{align}
-    The product over an empty source list is one.
 \end{definition}
 
 \begin{theorem}[Finite contraction of source columns]
@@ -139,35 +125,30 @@ This gives the contractions used in
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.sourceContraction_columns_eq_mul}
     \leanok
     \uses{def:peps_product_source_matrix}
-    Suppose each $K_e$ is finite. Let $\mathcal R,\mathcal T$ be
-    arbitrary sets, and let
-    $L\in\C^{\mathcal R\times\mathcal A_K}$ and
-    $M\in\C^{\mathcal T\times\mathcal A_K}$.
-    For $H(\alpha,\beta)=L(:,\alpha)M(:,\beta)^\dagger$, the
-    contraction of (\ref{eq:peps_source_contraction}) satisfies
+    For finite $K_e$, arbitrary sets $\mathcal R,\mathcal T$, matrices
+    $L\in\C^{\mathcal R\times\mathcal A_K}$,
+    $M\in\C^{\mathcal T\times\mathcal A_K}$, $X_e\in\C^{K_e\times K_e}$, and
+    $H(\alpha,\beta)=L(:,\alpha)M(:,\beta)^\dagger$, the contraction
+    (\ref{eq:peps_source_contraction}) satisfies
     \begin{align}
         \mathcal C_H(X) & =L\mathcal X M^\dagger.
         \label{eq:peps_source_column_contraction}
     \end{align}
-    The matrices $X_e$ are arbitrary complex matrices; no positivity
-    or nonvanishing condition is required.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:peps_product_source_matrix}
-    Pairing the ket and bra assignments at each source position
-    identifies them with $(\alpha,\beta)\in\mathcal A_K^2$.
-    The $(r,s)$ entry of the contraction is
-    \begin{align*}
+    By (\ref{eq:peps_product_source_matrix}), the $(r,s)$ entry of
+    $\mathcal C_H(X)$ is
+    \begin{align}
         \sum_{\alpha,\beta}
         L(r,\alpha)\overline{M(s,\beta)}
         \prod_e X_e(\alpha_e,\beta_e)
          & =\sum_{\beta,\alpha}
         L(r,\alpha)\mathcal X(\alpha,\beta)
         \overline{M(s,\beta)}
-        =(L\mathcal X M^\dagger)(r,s).
-    \end{align*}
-    The sums are finite, so their order may be interchanged.
+        =(L\mathcal X M^\dagger)(r,s).\notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Contraction on a prescribed pure input]
@@ -176,26 +157,21 @@ This gives the contractions used in
     \leanok
     \uses{def:peps_pure_source_matrix,def:peps_prepared_density_coefficient,
         def:peps_product_source_matrix}
-    In the source bases of Definition~\ref{def:peps_source_slot_basis},
-    take $K_e=I_e\times J_e$ and let $X_e$ be arbitrary complex
-    matrices on $K_e$. For the prepared coefficients
-    $H(\alpha,\beta)=K_T(\alpha)|\psi\rangle\langle\psi|
-        K_{T'}(\beta)^\dagger$, one has
+    In the bases of Definition~\ref{def:peps_source_slot_basis} with
+    $K_e=I_e\times J_e$, for any $X_e\in\C^{K_e\times K_e}$, $\psi\in\mathcal H$,
+    and $H(\alpha,\beta)=K_T(\alpha)|\psi\rangle\langle\psi|K_{T'}(\beta)^\dagger$,
     \begin{align}
         \mathcal C_H(X)
          & =A_{T,\psi}\mathcal X A_{T',\psi}^\dagger.
         \label{eq:peps_pure_source_contraction}
     \end{align}
-    The two compositions are independent, and $\psi$ need not be
-    normalized. Empty source lists and zero input vectors are included.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_pure_source_density_coefficient,
         thm:peps_source_column_contraction}
-    Substituting (\ref{eq:peps_pure_source_density_coefficient}) into
-    each prepared coefficient and applying
-    (\ref{eq:peps_source_column_contraction}) gives the claim.
+    Substitute (\ref{eq:peps_pure_source_density_coefficient}) into $H(\alpha,\beta)$
+    and apply (\ref{eq:peps_source_column_contraction}).
 \end{proof}
 
 \begin{theorem}[Physical entries of a pure prepared coefficient]
@@ -203,13 +179,9 @@ This gives the contractions used in
     \lean{TNLean.Lattice.PartyCircuit.Word.preparedDensityCoefficient_pure_partialTrace_apply}
     \leanok
     \uses{def:peps_pure_source_matrix,def:peps_prepared_density_coefficient}
-    Suppose the output consists of a physical memory followed by a
-    discarded memory. Choose finite orthonormal bases $(h_r)_{r\in X}$ and
-    $(t_z)_{z\in D}$ of these memories, and use their tensor product
-    as the output basis in (\ref{eq:peps_pure_source_matrix}).
-    For independent source assignments $\alpha,\beta\in\mathcal A$,
-    put $H_{\alpha,\beta}=K_T(\alpha)|\psi\rangle\langle\psi|
-        K_{T'}(\beta)^\dagger$. Then
+    In a product orthonormal basis $(h_r\otimes t_z)_{(r,z)\in X\times D}$ of a
+    physical and a discarded output memory, for $\alpha,\beta\in\mathcal A$ and
+    $H_{\alpha,\beta}=K_T(\alpha)|\psi\rangle\langle\psi|K_{T'}(\beta)^\dagger$,
     \begin{align}
         \bigl(\tr_D H_{\alpha,\beta}\bigr)(r,s)
          & =\sum_{z\in D}
@@ -217,14 +189,12 @@ This gives the contractions used in
         \overline{A_{T',\psi}((s,z),\beta)}.
         \label{eq:peps_pure_source_physical}
     \end{align}
-    No normalization or positivity hypothesis is imposed.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_pure_source_density_coefficient}
-    Taking the $((r,z),(s,z))$ entry of
-    (\ref{eq:peps_pure_source_density_coefficient}) and summing over
-    the common discarded index $z$ gives the claim.
+    Sum the $((r,z),(s,z))$ entry of (\ref{eq:peps_pure_source_density_coefficient})
+    over $z\in D$.
 \end{proof}
 
 \begin{theorem}[Mixed products of party matrices]
@@ -233,36 +203,29 @@ This gives the contractions used in
         TNLean.Lattice.PartyCircuit.partyProductMatrix_conjugate}
     \leanok
     \uses{def:peps_dependent_physical_product}
-    Let $P$ be finite, let $I_p$ be finite input alphabets, and let
-    $O_p$ be output alphabets. For matrices
-    $A_p,B_p\in\C^{O_p\times I_p}$ and
-    $X_p\in\C^{I_p\times I_p}$, one has
+    For finite $P$, finite input alphabets $I_p$, output alphabets $O_p$, and
+    matrices $A_p,B_p\in\C^{O_p\times I_p}$, $X_p\in\C^{I_p\times I_p}$,
     \begin{align}
         \left(\bigotimes_p B_p\right)^\dagger
-         & =\bigotimes_p B_p^\dagger,         \\
+         & =\bigotimes_p B_p^\dagger,         \notag \\
         \left(\bigotimes_p A_p\right)
         \left(\bigotimes_p X_p\right)
         \left(\bigotimes_p B_p\right)^\dagger
          & =\bigotimes_p (A_pX_pB_p^\dagger).
         \label{eq:peps_party_product_conjugation}
     \end{align}
-    The local matrices are arbitrary; the middle global matrix is
-    their prescribed product $\bigotimes_p X_p$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_dependent_product_calculus}
-    Complex conjugation preserves finite products, giving the adjoint
-    identity entrywise. Coordinatewise matrix multiplication of
-    Theorem~\ref{thm:peps_dependent_product_calculus}, applied twice,
-    gives
+    Multiplicativity of complex conjugation gives
+    $(\bigotimes_p B_p)^\dagger=\bigotimes_p B_p^\dagger$, and applying
+    Theorem~\ref{thm:peps_dependent_product_calculus} twice gives
     \begin{align}
-        \left(\bigotimes_p A_p\right)\left(\bigotimes_p X_p\right)
-         & =\bigotimes_p(A_pX_p),            \\
-        \left(\bigotimes_p(A_pX_p)\right)\left(\bigotimes_p B_p\right)^\dagger
-         & =\bigotimes_p(A_pX_pB_p^\dagger),
+        \left(\bigotimes_p A_p\right)\left(\bigotimes_p X_p\right)\left(\bigotimes_p B_p\right)^\dagger
+         & =\left(\bigotimes_p(A_pX_p)\right)\left(\bigotimes_p B_p^\dagger\right)
+        =\bigotimes_p(A_pX_pB_p^\dagger).\notag
     \end{align}
-    where the second line also uses the adjoint identity.
 \end{proof}
 
 \begin{theorem}[Tracing the private coordinates at each party]
@@ -272,32 +235,30 @@ This gives the contractions used in
     \leanok
     \uses{def:peps_dependent_physical_product,
         thm:peps_party_product_conjugation}
-    Let $P$ be finite, with physical alphabets $H_p$ and finite private
-    alphabets $D_p$. For arbitrary matrices
-    $M_p\in\C^{(H_p\times D_p)\times(H_p\times D_p)}$, identify
-    $\prod_p(H_p\times D_p)$ with
-    $(\prod_pH_p)\times(\prod_pD_p)$. Then
+    For finite $P$, physical alphabets $H_p$, finite private alphabets $D_p$,
+    and $M_p\in\C^{(H_p\times D_p)\times(H_p\times D_p)}$, under
+    $\prod_p(H_p\times D_p)\simeq(\prod_pH_p)\times(\prod_pD_p)$,
     \begin{align}
         \tr_{\prod_pD_p}\left(\bigotimes_p M_p\right)
          & =\bigotimes_p\tr_{D_p}(M_p).
         \label{eq:peps_party_product_partial_trace}
     \end{align}
-    In particular, if $O_p=H_p\times D_p$ in
-    (\ref{eq:peps_party_product_conjugation}), tracing the mixed
-    product gives $\bigotimes_p\tr_{D_p}(A_pX_pB_p^\dagger)$.
-    These identities include empty index sets.
+    For $O_p=H_p\times D_p$ in (\ref{eq:peps_party_product_conjugation}),
+    $\tr_{\prod_pD_p}\bigl((\bigotimes_p A_p)(\bigotimes_p X_p)(\bigotimes_p B_p)^\dagger\bigr)
+        =\bigotimes_p\tr_{D_p}(A_pX_pB_p^\dagger)$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_party_product_conjugation}
-    The $(a,b)$ entry of the partial trace is
-    \begin{align*}
+    By finite distributivity, the $(a,b)$ entry of the left-hand side of
+    (\ref{eq:peps_party_product_partial_trace}) is
+    \begin{align}
         \sum_{(z_p)_p}\prod_p M_p((a_p,z_p),(b_p,z_p))
          & =\prod_p\sum_{z_p\in D_p}
-        M_p((a_p,z_p),(b_p,z_p)),
-    \end{align*}
-    by finite distributivity. For the mixed product, applying
-    (\ref{eq:peps_party_product_conjugation}) and then this identity gives the claim.
+        M_p((a_p,z_p),(b_p,z_p)),\notag
+    \end{align}
+    and combining (\ref{eq:peps_party_product_conjugation}) with
+    (\ref{eq:peps_party_product_partial_trace}) gives the mixed-product trace.
 \end{proof}
 
 \begin{theorem}[Absorbing a common scalar at one party]
@@ -305,23 +266,18 @@ This gives the contractions used in
     \lean{TNLean.Lattice.PartyCircuit.partyProductMatrix_smul_at_party}
     \leanok
     \uses{def:peps_dependent_physical_product}
-    Let $P$ be finite and choose $p_0\in P$. For any family of
-    rectangular matrices $M_p$ and any $\mu\in\C$, put
-    $c_p=\mu$ when $p=p_0$ and $c_p=1$ otherwise. Then
+    For finite $P$, $p_0\in P$, rectangular matrices $M_p$, and $\mu\in\C$,
+    setting $c_{p_0}=\mu$ and $c_p=1$ for $p\neq p_0$ gives
     \begin{align}
         \bigotimes_p(c_pM_p)
          & =\mu\bigotimes_pM_p.
         \label{eq:peps_party_product_scalar}
     \end{align}
-    The scalar is absorbed once, including when it vanishes.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:peps_dependent_physical_product}
-    At each matrix entry,
-    $\prod_pc_pM_p(x_p,y_p)=\bigl(\prod_pc_p\bigr)\prod_pM_p(x_p,y_p)
-        =\mu\prod_pM_p(x_p,y_p)$, since $c_{p_0}=\mu$ and $c_p=1$ for
-    $p\ne p_0$.
+    Entrywise, $\prod_p c_pM_p(x_p,y_p)=(\prod_p c_p)\prod_p M_p(x_p,y_p)=\mu\prod_p M_p(x_p,y_p)$.
 \end{proof}
 
 \begin{theorem}[Joint contraction of all source inputs]
@@ -329,17 +285,13 @@ This gives the contractions used in
     \lean{TNLean.Lattice.PartyCircuit.Word.norm_freeSourceMatrix_le_one}
     \leanok
     \uses{def:peps_free_source_matrix}
-    If $T$ is an allowed composition, then $\|A_T\|\le1$ in the
-    Euclidean operator norm. This bounds its action on arbitrary
-    superpositions of the source and physical input coordinates,
-    independently of the number of slots and their dimensions.
+    If $T$ is an allowed composition, then $\|A_T\|\le1$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:peps_party_layout,def:peps_source_slot_basis}
-    The complete matrix is the matrix of the same operator $T$ in
-    orthonormal input and output bases. Coordinate maps preserve
-    norms, so $\|A_T\|=\|T\|\le1$.
+    Since $A_T$ represents $T$ in orthonormal bases
+    (Definition~\ref{def:peps_source_slot_basis}), $\|A_T\|=\|T\|\le 1$.
 \end{proof}
 
 \begin{theorem}[The bra-adjoint--ket contraction]
@@ -348,26 +300,20 @@ This gives the contractions used in
     \lean{TNLean.Lattice.PartyCircuit.Word.norm_freeSourceMatrix_conjTranspose_mul_le_one}
     \leanok
     \uses{def:peps_free_source_matrix}
-    Let $T$ and $T'$ be compositions with a common output
-    memory and output basis. Their source lists, source spaces,
-    source bases, and physical input memories and bases may differ.
-    Write $A=A_T$ and $B=A_{T'}$, and let $a,b$ denote the respective
-    source assignments. Then the rectangular matrix $O=B^\dagger A$
-    satisfies
+    For compositions $T,T'$ sharing an output memory and orthonormal output
+    basis, let $A=A_T$, $B=A_{T'}$, and $O=B^\dagger A$. Then
     \begin{align}
-        O_{(b,j),(a,i)} & =(K_{T'}(b)^\dagger K_T(a))_{ji}.
+        O_{(b,j),(a,i)} & =(K_{T'}(b)^\dagger K_T(a))_{ji},
         \label{eq:peps_free_source_overlap}
     \end{align}
-    Thus the bra source assignment and its physical input index form
-    the row index of $O$. If both compositions are allowed, then
-    $\|O\|\le1$.
+    and if $T,T'$ are allowed, then $\|O\|\le1$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_free_source_contraction}
-    Multiplying the matrices in (\ref{eq:peps_free_source_matrix})
-    gives (\ref{eq:peps_free_source_overlap}). The norm bound follows
-    from $\|B^\dagger A\|\le\|B^\dagger\|\|A\|=\|B\|\|A\|\le1$.
+    Multiplying (\ref{eq:peps_free_source_matrix}) gives
+    (\ref{eq:peps_free_source_overlap}), and Theorem~\ref{thm:peps_free_source_contraction}
+    gives $\|O\|\le\|B^\dagger\|\|A\|=\|B\|\|A\|\le1$.
 \end{proof}
 
 \begin{theorem}[Tracing a prepared density coefficient]
@@ -376,29 +322,22 @@ This gives the contractions used in
     \lean{TNLean.Lattice.PartyCircuit.Word.trace_preparedDensityCoefficient_eq_freeSourceMatrix}
     \leanok
     \uses{def:peps_free_source_matrix,def:peps_prepared_density_coefficient}
-    With the ket and bra input coordinates as above, let
-    $\rho\in\C^{N\times N'}$ be any rectangular matrix. No
-    contraction assumption on $T$ or $T'$ is needed for the identity
+    In the setting of Theorem~\ref{thm:peps_free_source_overlap}, for any
+    $\rho\in\C^{N\times N'}$ (where $C_{T,T'}(\rho;a,b)=K_T(a)\rho K_{T'}(b)^\dagger$
+    is the coefficient of Definition~\ref{def:peps_prepared_density_coefficient}),
     \begin{align}
         \tr\bigl(K_T(a)\rho K_{T'}(b)^\dagger\bigr)
          & =\sum_{i\in N}\sum_{j\in N'}
         \rho_{ij}\,O_{(b,j),(a,i)}.
         \label{eq:peps_free_source_trace}
     \end{align}
-    When the two branches have common source spaces and physical
-    input coordinates, this is the trace of
-    $C_{T,T'}(\rho;a,b)$ from
-    Definition~\ref{def:peps_prepared_density_coefficient}, with
-    independent endpoint bases on the two sides.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_free_source_overlap}
-    Cyclicity of the rectangular trace gives
-    $\tr(K_T(a)\rho K_{T'}(b)^\dagger)
-        =\tr(\rho K_{T'}(b)^\dagger K_T(a))$.
-    Expanding the trace and substituting the block identity
-    (\ref{eq:peps_free_source_overlap}) gives the claim.
+    By trace cyclicity and (\ref{eq:peps_free_source_overlap}),
+    $\tr(K_T(a)\rho K_{T'}(b)^\dagger)=\tr(\rho K_{T'}(b)^\dagger K_T(a))
+        =\sum_{i,j}\rho_{ij}O_{(b,j),(a,i)}$.
 \end{proof}
 
 \begin{definition}[Pair labels of the source slots]
@@ -407,12 +346,10 @@ This gives the contractions used in
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.pairIndexEquiv_apply}
     \leanok
     \uses{def:peps_source_inventory}
-    Let $R$ be a source list whose unordered pair labels are distinct
-    and contain every unordered pair of distinct parties exactly once.
-    Sending a slot to the unordered pair of its source is a
-    bijection from its slot indices to
+    If a source list $R$ has distinct unordered pair labels covering every
+    unordered pair of distinct parties, sending each slot to its unordered
+    endpoint pair defines a bijection from slot indices of $R$ to
     $\{\{p,q\}:p,q\in P,\ p\ne q\}$.
-    This identification depends only on the parties of each source.
 \end{definition}
 
 \begin{theorem}[Number of pair-source slots]
@@ -422,28 +359,26 @@ This gives the contractions used in
     \leanok
     \uses{def:peps_source_pair_index}
     For the pair slots in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    \texttt{04-compression.tex}, lines 565--585, if $P$ is finite and $R$ has
-    the pair coverage and distinctness in Definition~\ref{def:peps_source_pair_index},
-    then $|R|=\binom{|P|}{2}\le|P|^2$.
-    This includes empty and singleton party sets.
+    \texttt{04-compression.tex}, lines 565--585, if $P$ is finite and $R$
+    satisfies Definition~\ref{def:peps_source_pair_index}, then
+    $|R|=\binom{|P|}{2}\le|P|^2$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:peps_source_pair_index}
-    Under the stated bijection, the unordered pairs of distinct elements
-    have cardinality $\binom{|P|}{2}$, which is at most $|P|^2$.
+    The bijection of Definition~\ref{def:peps_source_pair_index} gives
+    $|R|=|\{\{p,q\}:p\neq q\in P\}|=\binom{|P|}{2}\le|P|^2$.
 \end{proof}
+
 \begin{definition}[Local maps on source slots]
     \label{def:peps_source_slot_maps}
     \lean{TNLean.Lattice.PartyCircuit.Word.mapSourceSlots}
     \leanok
     \uses{def:peps_source_slots,def:peps_party_layout}
-    For each slot $e$, let $L_e:U_e\to U'_e$ and
-    $M_e:V_e\to V'_e$ be continuous linear maps. Apply these maps
-    to the corresponding source registers and leave the original
-    input memory $\mathcal H$ unchanged. Denote the resulting
-    composition by $F_{L,M}$. This composition depends on the maps
-    and the ordered slots, but not on the prepared source vectors.
+    For continuous linear maps $L_e:U_e\to U'_e$ and $M_e:V_e\to V'_e$ at each
+    slot $e$, let $F_{L,M}$ denote the composition applying $L_e,M_e$ to the
+    source registers while acting as $\Id_{\mathcal H}$ on the original input
+    memory $\mathcal H$.
 \end{definition}
 
 \begin{theorem}[Action of the local source maps]
@@ -458,21 +393,16 @@ This gives the contractions used in
          & =Q_{((L_e\otimes M_e)\eta_e)_e,\mathcal H}.
         \label{eq:peps_source_slot_maps}
     \end{align}
-    If $\|L_e\|,\|M_e\|\le1$ for every slot, the composition
-    $F_{L,M}$ is allowed and contains no source preparations.
-    The identity requires neither these norm bounds nor normalization
-    of the vectors $\eta_e$.
+    If $\|L_e\|,\|M_e\|\le1$ for all $e$, then $F_{L,M}$ is allowed and
+    source-free.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_map_source_pair,thm:peps_source_preparation}
-    By induction on the ordered source slots, applying the two endpoint maps
-    of the first source and then applying the construction to the
-    remaining sources while leaving those first two registers fixed
-    moves the remaining preparation past these fixed registers to give
-    (\ref{eq:peps_source_slot_maps}). Each constituent is a local map,
-    and its allowedness follows from the corresponding endpoint norm
-    bound.
+    Induction on the ordered slots using Theorem~\ref{thm:peps_map_source_pair}
+    and Theorem~\ref{thm:peps_source_preparation} gives
+    (\ref{eq:peps_source_slot_maps}); contractivity of each $L_e,M_e$ makes
+    $F_{L,M}$ allowed.
 \end{proof}
 
 \begin{definition}[The complete matrix in source frames]
@@ -481,32 +411,30 @@ This gives the contractions used in
     \lean{TNLean.Lattice.PartyCircuit.Word.sourceFrameMatrix_eq_freeSourceMatrix}
     \leanok
     \uses{def:peps_source_slot_maps,def:peps_free_source_matrix}
-    Let $T:\mathcal S'\otimes\mathcal H\to\mathcal K$ be a
-    composition on the target halfspaces $U'_e,V'_e$. Use the finite
-    orthonormal bases of $U_e,V_e$ and the physical input and output
-    bases already specified. Define
+    For a composition $T:\mathcal S'\otimes\mathcal H\to\mathcal K$ on target
+    halfspaces $U'_e,V'_e$ and the bases of
+    Definitions~\ref{def:peps_source_slot_basis} and~\ref{def:peps_free_source_matrix},
+    define
     \begin{align}
         A_T^{L,M}(k,(a,j))
          & =\left\langle g_k,
         TQ_{(L_eu_{e,a_e^{(1)}}\otimes
-                M_ev_{e,a_e^{(2)}})_e,\mathcal H}f_j\right\rangle.
+                M_ev_{e,a_e^{(2)}})_e,\mathcal H}f_j\right\rangle,
         \label{eq:peps_source_frame_matrix}
     \end{align}
-    This is the complete free-input matrix of $T F_{L,M}$:
+    so that
     \begin{align}
         A_T^{L,M} & =A_{TF_{L,M}}.
         \label{eq:peps_source_frame_matrix_composition}
     \end{align}
-    The images of the endpoint maps need not span the target
-    halfspaces.
 \end{definition}
 
 \begin{proof}\leanok
     \uses{thm:peps_source_slot_maps}
-    Evaluating (\ref{eq:peps_source_slot_maps}) on each elementary
-    endpoint-basis preparation and each physical input basis vector
-    gives columns that agree with
-    (\ref{eq:peps_source_frame_matrix}).
+    Applying (\ref{eq:peps_source_slot_maps}) to
+    $\eta_e=u_{e,a_e^{(1)}}\otimes v_{e,a_e^{(2)}}$ on $f_j$ identifies
+    (\ref{eq:peps_source_frame_matrix}) with (\ref{eq:peps_free_source_matrix})
+    for $TF_{L,M}$.
 \end{proof}
 
 \begin{theorem}[Joint contraction in source frames]
@@ -514,21 +442,16 @@ This gives the contractions used in
     \lean{TNLean.Lattice.PartyCircuit.Word.norm_sourceFrameMatrix_le_one}
     \leanok
     \uses{def:peps_source_frame_matrix}
-    Assume that $T$ is allowed and that each $L_e$ and $M_e$ is a
-    contraction. Then $\|A_T^{L,M}\|\le1$ in the Euclidean operator norm.
-    In particular, this applies to isometric inclusions of proper
-    Schmidt subspaces. No orthonormal basis of the target halfspaces
-    is required.
+    If $T$ is allowed and $\|L_e\|,\|M_e\|\le 1$ for all $e$, then
+    $\|A_T^{L,M}\|\le1$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_source_slot_maps,thm:peps_free_source_contraction}
-    Each $L_e$ and $M_e$ is a contraction, so the composition
-    $TF_{L,M}$ is allowed. By (\ref{eq:peps_source_frame_matrix_composition})
-    and Theorem~\ref{thm:peps_free_source_contraction},
-    \begin{align*}
-        \|A_T^{L,M}\| & =\|A_{TF_{L,M}}\|\le1.
-    \end{align*}
+    By Theorem~\ref{thm:peps_source_slot_maps}, $TF_{L,M}$ is allowed, so
+    (\ref{eq:peps_source_frame_matrix_composition}) and
+    Theorem~\ref{thm:peps_free_source_contraction} give
+    $\|A_T^{L,M}\|=\|A_{TF_{L,M}}\|\le1$.
 \end{proof}
 
 \begin{theorem}[Contraction through the source columns]
@@ -537,18 +460,13 @@ This gives the contractions used in
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceContraction_preparedDensityCoefficient_pure_eq_mul}
     \uses{def:peps_actual_source_column_matrix,def:peps_product_source_matrix,
         thm:peps_pure_source_density_coefficient}
-    Let $\psi$ be the recorded private product input, let $\xi,\zeta$
-    be independent choices of gate monomials, and choose finite orthonormal
-    bases of the private input and complete output memories. For source
-    labels $x,y\in I_W$, let $C_{\xi,\zeta}(x,y)$ be the prepared output
-    coefficient of $\ketbra{\psi}{\psi}$ for the canonical remaining
-    operations $V_\xi,V_\zeta$ and elementary source vectors $b_x,b_y$.
-    For arbitrary complex matrices $X_e$ on the endpoint-coordinate pairs,
-    put $\mathcal X_{x,y}=\prod_e(X_e)_{x_e,y_e}$.
-    As the circuit-source specialization of the coordinate contraction in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    \texttt{04-compression.tex}, lines 137--139, 279--355 and 409--434,
-    the column matrices satisfy
+    For private product input $\psi$, monomial choices $\xi,\zeta$, prepared
+    output coefficients $C_{\xi,\zeta}(x,y)$ of $\ketbra{\psi}{\psi}$ for
+    residuals $V_\xi,V_\zeta$ at $b_x,b_y$ ($x,y\in I_W$), and matrices $X_e$
+    with $\mathcal X_{x,y}=\prod_e(X_e)_{x_e,y_e}$, the column matrices $M_\xi$
+    of Definition~\ref{def:peps_actual_source_column_matrix} satisfy the
+    contraction identity of \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 137--139, 279--355 and 409--434:
     \begin{align}
         \sum_{x,y\in I_W}\mathcal X_{x,y}C_{\xi,\zeta}(x,y)
          & =M_\xi\mathcal X M_\zeta^\dagger.
@@ -559,11 +477,10 @@ This gives the contractions used in
 \begin{proof}\leanok
     \uses{thm:peps_actual_private_preparation,
         thm:peps_pure_source_density_coefficient,thm:peps_source_column_contraction}
-    The action of the recorded preparation identifies the column indexed by
-    $x$ with the output coordinates of $V_\xi(b_x\otimes\psi)$.
-    The pure-input coefficient is therefore the outer product of column
-    $x$ of $M_\xi$ and column $y$ of $M_\zeta$.
-    The finite column-contraction identity gives
+    By Theorems~\ref{thm:peps_actual_private_preparation}
+    and~\ref{thm:peps_pure_source_density_coefficient},
+    $C_{\xi,\zeta}(x,y)=M_\xi(:,x)M_\zeta(:,y)^\dagger$, so
+    Theorem~\ref{thm:peps_source_column_contraction} gives
     (\ref{eq:peps_actual_pure_source_contraction}).
 \end{proof}
 
@@ -573,21 +490,17 @@ This gives the contractions used in
         TNLean.Lattice.PartyCircuit.SourceCircuit.sourcePairEquiv_apply}
     \leanok
     \uses{def:peps_source_pair_index,def:compression_operator_samples}
-    For each gate occurrence in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    its recorded source slots are in bijection with
-    the unordered pairs of distinct participants of that occurrence. The slot
-    corresponding to a pair has the original two endpoint owners. The order of
-    these endpoints, their two Euclidean spaces, and the source vector assigned
-    to the slot are retained independently of this unordered pair index.
+    For each gate occurrence $g$ in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS} with participant set
+    $C_g$, its recorded source slots are in bijection with
+    $\mathcal E(C_g)=\{\{p,q\}\subseteq C_g:p\neq q\}$, while retaining each
+    slot's ordered endpoints $(p_e,q_e)$, halfspaces, and source vectors.
     % Source: 04-compression.tex, lines 233--245, 342--364 and 568--588.
 \end{definition}
 \begin{proof}\leanok
-    The recorded slots contain each unordered pair of distinct local participants
-    exactly once. The embedding of the participants into the original party set
-    is injective, and therefore gives a bijection onto the pairs in its image.
-    Composing these two bijections gives the assertion. Under chronological
-    composition, the occurrence tags distinguish the two constituent circuits;
-    framing leaves the occurrence and its slot unchanged.
+    Composing the local pair bijection of Definition~\ref{def:peps_source_pair_index}
+    with the injective participant embedding $C_g\hookrightarrow P$ gives the
+    bijection onto $\mathcal E(C_g)$, preserved under composition and framing.
 \end{proof}
 
 \begin{definition}[Sample positions of the original circuit]
@@ -595,12 +508,10 @@ This gives the contractions used in
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceSampleEquiv}
     \leanok
     \uses{def:peps_original_source_pair_indices,def:compression_operator_samples}
-    In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, identify an
-    original source occurrence with the sample position consisting
-    of its nonempty-participant gate occurrence and its unordered endpoint pair.
-    A gate with no participants or only one participant contributes no sample
-    position. The inverse identification recovers the original recorded slot,
-    with its original endpoint order and dimensions.
+    In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, the bijection of
+    Definition~\ref{def:peps_original_source_pair_indices} identifies the source
+    occurrence set $\mathcal E$ with the set $\mathcal S$ of sample positions
+    $(g,\{p_e,q_e\})$ over occurrences $g$ with $|C_g|\ge 2$.
     % Source: 04-compression.tex, lines 568--588.
 \end{definition}
 
@@ -611,17 +522,16 @@ This gives the contractions used in
     \leanok
     \uses{def:peps_original_source_pair_indices,
         def:peps_original_source_sample_indices}
-    Let $e$ be an original source position with ordered endpoint owners
-    $p_e,q_e$, and let $p$ be any party. For the sample links in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, the sample position
-    corresponding to $e$ is incident to $p$ if and only if $p_e=p$ or $q_e=p$.
+    For an original source position $e$ with endpoints $(p_e,q_e)$ and any
+    $p\in P$ in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, the
+    sample position of $e$ is incident to $p$ if and only if $p=p_e$ or $p=q_e$.
     % Source: 04-compression.tex, lines 342--364 and 568--579.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:peps_original_source_pair_indices}
-    The pair attached to $e$ is $\{p_e,q_e\}$. Membership in this
-    two-element set is equivalent to $p_e=p$ or $q_e=p$.
+    By Definition~\ref{def:peps_original_source_pair_indices},
+    $p\in\{p_e,q_e\}\iff (p=p_e\lor p=q_e)$.
 \end{proof}
 
 \begin{definition}[Local sample positions in the original order]
@@ -631,16 +541,11 @@ This gives the contractions used in
     \uses{def:peps_partial_fixed_positions,
         def:peps_original_source_sample_indices,
         thm:peps_original_source_sample_incidence}
-    Fix a party $p$. Retain the original ordered source slots whose
-    endpoint owners include $p$, and write $r_p$ for their number.
-    Enumerating these slots in their original order gives a bijection
-    from $\{0,\ldots,r_p-1\}$ to the sample positions incident to $p$.
-    The corresponding original slot retains its ordered endpoint spaces.
-    For any sample alphabet $J$ in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    a local assignment for the sample links therefore consists
-    of a map $\{0,\ldots,r_p-1\}\to J$; no value at a sample position
-    not incident to $p$ is required. This includes the empty alphabet
-    and the empty list of incident positions.
+    For $p\in P$, enumerating the $r_p$ original ordered source slots incident
+    to $p$ defines a bijection from $\{0,\ldots,r_p-1\}$ to the sample
+    positions incident to $p$, so local sample-link assignments in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS} for sample alphabet
+    $J$ correspond to maps $\{0,\ldots,r_p-1\}\to J$.
     % Source: 04-compression.tex, lines 253--267, 383--417 and 568--579.
 \end{definition}
 
@@ -650,30 +555,24 @@ This gives the contractions used in
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allSourceSampleAssignmentEquiv}
     \leanok
     \uses{def:peps_all_original_source_slots,def:peps_original_source_sample_indices}
-    Let $w$ be a chronological source composition on an arbitrary party set
-    $P$, with original source-occurrence set $\mathcal E$ and $r$ ordered
-    source slots. Let $\mathcal S$ be its gate-tagged unordered participant-pair
-    sample positions. Write $\rho:[r]\to\mathcal E$ for the ordered source
-    enumeration and $\tau:\mathcal E\to\mathcal S$ for the source-to-sample
-    bijection, where $[r]=\{0,\ldots,r-1\}$.
-    For each $k\in\mathbb N$, write $[k]=\{0,\ldots,k-1\}$.
-    For \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    the bijection $\sigma=\tau\circ\rho$ induces the assignment bijection
+    For a chronological source composition $w$ with source-occurrence enumeration
+    $\rho:[r]\to\mathcal E$ ($[r]=\{0,\ldots,r-1\}$) and source-to-sample
+    bijection $\tau:\mathcal E\to\mathcal S$, the composite bijection
+    $\sigma=\tau\circ\rho:[r]\to\mathcal S$ induces for every $k\in\mathbb N$
+    ($[k]=\{0,\ldots,k-1\}$) the assignment bijection of
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}:
     \begin{align}
-        T:([r]\to[k]) & \longrightarrow(\mathcal S\to[k]), \\
+        T:([r]\to[k]) & \longrightarrow(\mathcal S\to[k]), &
         (Tj)(s)       & =j(\sigma^{-1}s).
+        \label{eq:peps_source_sample_assignment_bijection}
     \end{align}
-    The original source occurrence retains its ordered endpoint spaces and
-    Gaussian array. The same sample value is used at its two endpoints, and
-    empty sample alphabets and empty source sets are included.
     % Source: 04-compression.tex, lines 342--417 and 568--579.
 \end{definition}
 
 \begin{proof}\leanok
     \uses{def:peps_all_original_source_slots,def:peps_original_source_sample_indices}
-    Composing the two occurrence bijections gives $\sigma$, and precomposition
-    with $\sigma^{-1}$ is a bijection of assignment sets with inverse
-    $j\mapsto j\circ\sigma$.
+    Since $\sigma=\tau\circ\rho$ is a bijection, $j\mapsto j\circ\sigma^{-1}$
+    has inverse $j\mapsto j\circ\sigma$.
 \end{proof}
 
 \begin{theorem}[Inverse assignments at the original source occurrence]
@@ -681,18 +580,16 @@ This gives the contractions used in
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allSourceSampleAssignmentEquiv_symm_apply}
     \leanok
     \uses{def:peps_source_sample_assignment_indices}
-    For each assignment $j:\mathcal S\to[k]$ and each original source
-    occurrence $e\in\mathcal E$ in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    For every $j:\mathcal S\to[k]$ and $e\in\mathcal E$ in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     $(T^{-1}j)(\rho^{-1}e)=j(\tau e)$.
-    This identity reads the sample at the original occurrence and chooses no
-    orientation for its unordered pair.
     % Source: 04-compression.tex, lines 342--417 and 568--579.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:peps_source_sample_assignment_indices}
-    The inverse is precomposition with $\sigma=\tau\circ\rho$.
-    Thus $(T^{-1}j)(\rho^{-1}e)=j(\tau(\rho(\rho^{-1}e)))=j(\tau e)$.
+    By (\ref{eq:peps_source_sample_assignment_bijection}),
+    $(T^{-1}j)(\rho^{-1}e)=(j\circ\tau\circ\rho)(\rho^{-1}e)=j(\tau e)$.
 \end{proof}
 
 \begin{theorem}[Reindexing a common sample sum]
@@ -700,22 +597,21 @@ This gives the contractions used in
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_sourceSampleAssignments_eq}
     \leanok
     \uses{def:peps_source_sample_assignment_indices}
-    For arbitrary index sets $I,J$ and any matrix family
-    $F:([r]\to[k])\to\C^{I\times J}$, reindexing the sample sum in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS} gives
+    For any index sets $I,J$ and $F:([r]\to[k])\to\C^{I\times J}$, reindexing
+    the sample sum in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
+    gives
     \begin{align}
         \sum_{j:[r]\to[k]}F(j)
          & =\sum_{j:\mathcal S\to[k]}F(T^{-1}j).
+        \label{eq:peps_source_sample_assignment_sum}
     \end{align}
-    If $k=0$ and $r>0$, both sums are empty. If $r=0$, both assignment sets
-    are singletons, also when $k=0$. No normalization or positivity condition
-    is imposed on $F$.
     % Source: 04-compression.tex, lines 568--579.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:peps_source_sample_assignment_indices}
-    Reindexing the finite sum by the inverse bijection $T^{-1}$ gives the equality.
+    Reindex the finite sum along the bijection $T^{-1}$ of
+    Definition~\ref{def:peps_source_sample_assignment_indices}.
 \end{proof}
 
 
@@ -725,19 +621,15 @@ This gives the contractions used in
     \leanok
     \uses{def:peps_all_original_source_slots,def:peps_original_source_sample_indices,
         thm:peps_source_pair_count}
-    Let $G$ be the nonempty participant occurrences of the original
-    chronological composition in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
-    For $g\in G$, write $C_g$ for its
-    participant set and $\mathcal E(C_g)$ for the unordered pairs of
-    distinct members of $C_g$. If $N$ is the number of original source
-    slots, then
+    Let $G$ be the nonempty-participant gate occurrences of the chronological
+    composition in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, with
+    participant sets $C_g$ and unordered distinct-pair sets $\mathcal E(C_g)$.
+    The total number $N$ of original source slots satisfies
     \begin{align}
         N & =\sum_{g\in G}|\mathcal E(C_g)|
         =\sum_{g\in G}\binom{|C_g|}{2}.
         \label{eq:peps_original_source_sample_count}
     \end{align}
-    Repeated gate uses are counted as distinct occurrences, and
-    empty and singleton participant sets contribute no source slots.
     % Source: 04-compression.tex, lines 342--417 and 568--588.
 \end{theorem}
 
@@ -745,10 +637,10 @@ This gives the contractions used in
     \leanok
     \uses{def:peps_all_original_source_slots,def:peps_original_source_sample_indices,
         thm:peps_source_pair_count}
-    The original ordered source slots are in bijection with the
-    disjoint union of the sets $\mathcal E(C_g)$. Taking cardinalities
-    and summing over the original occurrences gives the first equality, and
-    the number of unordered distinct pairs in $C_g$ is $\binom{|C_g|}{2}$.
+    By Definitions~\ref{def:peps_all_original_source_slots}
+    and~\ref{def:peps_original_source_sample_indices}, the $N$ slots are in
+    bijection with $\bigsqcup_{g\in G}\mathcal E(C_g)$, and
+    $|\mathcal E(C_g)|=\binom{|C_g|}{2}$ by Theorem~\ref{thm:peps_source_pair_count}.
 \end{proof}
 
 \begin{theorem}[Distributing the source averaging factor]
@@ -756,25 +648,19 @@ This gives the contractions used in
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.inv_sampleSize_pow_allSourceSlots_eq_prod}
     \leanok
     \uses{thm:peps_original_source_sample_count}
-    With the notation of Theorem~\ref{thm:peps_original_source_sample_count},
-    distributing one averaging factor to each gate-owned sample in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS} gives,
-    for any nonnegative integer $k$,
+    In the notation of Theorem~\ref{thm:peps_original_source_sample_count}, for
+    every $k\in\mathbb N$ (with $0^{-1}=0$ in $\C$), the averaging factor in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS} factors as
     \begin{align}
         (k^{-1})^N & =\prod_{g\in G}(k^{-1})^{|\mathcal E(C_g)|}.
         \label{eq:peps_original_source_sample_averaging}
     \end{align}
-    The equality holds in $\C$, with $0^{-1}=0$ and zeroth powers
-    equal to $1$. It includes $k=0$ and an empty family of gates.
-    The scalar from empty participant occurrences remains separate.
     % Source: 04-compression.tex, lines 568--588.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_original_source_sample_count}
-    Substituting (\ref{eq:peps_original_source_sample_count}) for $N$ and
-    using the product formula
-    for powers in a commutative monoid gives the equality,
-    with no cancellation required.
+    Substitute $N=\sum_{g\in G}|\mathcal E(C_g)|$ from
+    (\ref{eq:peps_original_source_sample_count}) into $(k^{-1})^N$.
 \end{proof}

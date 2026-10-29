@@ -4,17 +4,11 @@
 % Hastings, arXiv:cond-mat/0508554v3, proj3new.tex, lines 1024--1046 (eq. mpf)
 % and 1048--1079 (the Trotter decomposition).
 
-For the density matrix at nonzero temperature, \cite[lines
-    1024--1079]{Hastings2006Solving} introduces a matrix product form in which
-every site carries one index, every site carries an operator acting on it
-alone, and the coefficients are products of functions of finite range. Every
-Trotter product of a finite-range Hamiltonian has this form exactly. The error
-between a Trotter product and the Gibbs operator is not estimated here. The
-source works on an arbitrary lattice; here the sites form a finite domain of
-the square lattice with the walk distance. The term supports lie in balls of
-radius $R$ about specified centres, as in the source. The original
-diameter-bounded statement follows as a corollary. The source's count of the
-indices at a site is not established~\cite{gap:hastings05_planar_domain_scope}.
+For nonzero-temperature density matrices on a finite square-lattice domain
+$\Lambda$ with walk distance $d_\Lambda$, \cite[lines 1024--1079]{Hastings2006Solving}
+expresses Trotter products of finite-range Hamiltonians in a matrix product form
+with single-site operators and finite-range scalar factors
+\cite{gap:hastings05_planar_domain_scope}.
 
 \begin{definition}[Matrix product form]
     \label{def:hastings_product_form}
@@ -27,24 +21,19 @@ indices at a site is not established~\cite{gap:hastings05_planar_domain_scope}.
     }
     \leanok
     \uses{def:area_law_hamiltonian}
-    Let $\Lambda$ be a finite domain with local dimension $q$, and let $l\ge0$.
-    An operator $\rho$ on $\mathcal H_\Lambda$ has a matrix product form of
-    range $l$ if there are a finite set $\mathcal A$, operators
-    $\rho_j(a)$ on the site $j$ for every site $j$ and every
-    $a\in\mathcal A$, and functions $F_i\colon\mathcal A^\Lambda\to\mathbb C$
-    for every site $i$, such that $F_i(\alpha)$ depends only on the indices
-    $\alpha_j$ with $d_\Lambda(i,j)\le l$ and
+    For a finite domain $\Lambda$ of local dimension $q$ and $l\ge0$, an
+    operator $\rho$ on $\mathcal H_\Lambda$ has a \emph{matrix product form of
+        range $l$} if there exist a finite index set $\mathcal A$, single-site
+    operators $\rho_j(a)$ ($j\in\Lambda$, $a\in\mathcal A$), and functions
+    $F_i\colon\mathcal A^\Lambda\to\mathbb C$ ($i\in\Lambda$) depending only on
+    $(\alpha_j)_{d_\Lambda(i,j)\le l}$ such that
     \begin{align}
         \label{eq:hastings_mpf}
         \rho=\sum_{\alpha\in\mathcal A^\Lambda}
         \Bigl(\prod_{i\in\Lambda}F_i(\alpha)\Bigr)
-        \bigotimes_{j\in\Lambda}\rho_j(\alpha_j).
+        \bigotimes_{j\in\Lambda}\rho_j(\alpha_j)
     \end{align}
-    This is the right-hand side of the product-form identity in~\cite[lines
-        1024--1039]{Hastings2006Solving}. The index set is the same at every site;
-    a smaller index set at one site is padded with values on which the
-    function at that site vanishes. A product form of range $l$ has every
-    larger range.
+    \cite[lines 1024--1039]{Hastings2006Solving}.
 \end{definition}
 
 \begin{theorem}[Operators supported near a specified centre]
@@ -52,24 +41,15 @@ indices at a site is not established~\cite{gap:hastings05_planar_domain_scope}.
     \lean{TNLean.Lattice.hasProductForm_of_mem_supportedOperators_radius}
     \leanok
     \uses{def:hastings_product_form}
-    Fix $i_0\in\Lambda$ and $X\subseteq\Lambda$ such that
-    $d_\Lambda(i_0,j)\le R$ for every $j\in X$.
-    Every operator supported on $X$ has a matrix product form of range $R$.
-    The centre need not belong to $X$, and $X$ may be empty.
-    This is the finite planar-domain case of the supported-factor expansion
-    in~\cite[lines 1053--1061]{Hastings2006Solving}.
+    If $i_0\in\Lambda$ and $X\subseteq\{j\in\Lambda:d_\Lambda(i_0,j)\le R\}$,
+    then every operator supported on $X$ has a matrix product form of range $R$
+    \cite[lines 1053--1061]{Hastings2006Solving}.
 \end{theorem}
 \begin{proof}\leanok
-    Take $\mathcal A=\{1,\dots,q\}^2$ and let the single-site operators be
-    the matrix units $|a_j\rangle\langle b_j|$. Attach to $i_0$ the matrix
-    element between the configurations equal to $a$ and $b$ on $X$ and
-    equal to $a_{i_0}$ off $X$. At every site outside $X$, multiply the
-    coefficient by the indicator of $a_j=b_j$, including at $i_0$ if
-    $i_0\notin X$. The matrix element reads only indices on $X$ and at
-    $i_0$, all within radius $R$; each diagonal indicator reads only its
-    own index. Supported operators vanish between configurations differing
-    off $X$, and their other entries depend only on the labels on $X$.
-    Thus~(\ref{eq:hastings_mpf}) holds entry by entry.
+    Take $\mathcal A=\{1,\dots,q\}^2$ and $\rho_j(a_j,b_j)=|a_j\rangle\langle b_j|$;
+    place the $X$-matrix element of the operator in $F_{i_0}$ (which depends
+    only on $(a_j,b_j)_{j\in X\cup\{i_0\}}$) and $\delta_{a_j,b_j}$ in $F_j$ for
+    $j\notin X$, so (\ref{eq:hastings_mpf}) holds entrywise.
 \end{proof}
 
 \begin{theorem}[Operators supported on a small set]
@@ -77,12 +57,12 @@ indices at a site is not established~\cite{gap:hastings05_planar_domain_scope}.
     \lean{TNLean.Lattice.hasProductForm_of_mem_supportedOperators}
     \leanok
     \uses{thm:hastings_product_form_supported_radius}
-    Let $X\subseteq\Lambda$ be nonempty with $d_\Lambda(x,y)\le R$ for all
-    $x,y\in X$. Every operator supported on $X$ has a matrix product form of
-    range $R$.
+    If $\emptyset\ne X\subseteq\Lambda$ satisfies $\operatorname{diam}X\le R$,
+    then every operator supported on $X$ has a matrix product form of range $R$.
 \end{theorem}
 \begin{proof}\leanok
-    Choose any $i_0\in X$ and apply the preceding theorem.
+    Pick $i_0\in X$ and apply
+    Theorem~\ref{thm:hastings_product_form_supported_radius}.
 \end{proof}
 
 \begin{theorem}[Products of matrix product forms]
@@ -95,18 +75,14 @@ indices at a site is not established~\cite{gap:hastings05_planar_domain_scope}.
     }
     \leanok
     \uses{def:hastings_product_form}
-    If $\rho$ and $\sigma$ have matrix product forms of range $l$, then so does
-    $\rho\sigma$. The identity has a matrix product form of every range, and
-    hence so does every finite ordered product and every power of operators
-    with matrix product forms of range $l$.
+    Operators with matrix product forms of range $l$ contain $1$ and are closed
+    under multiplication, finite ordered products, and powers.
 \end{theorem}
 \begin{proof}\leanok
-    With index sets $\mathcal A$ and $\mathcal B$, group the two indices at
-    each site into one index in $\mathcal A\times\mathcal B$, take the
-    products $\rho_j(a)\sigma_j(b)$ as the operators on the site $j$, and the
-    products of the two functions at each site as the new functions, as
-    in~\cite[lines 1068--1077]{Hastings2006Solving}. The operators on distinct
-    sites multiply factor by factor.
+    For forms over $\mathcal A$ and $\mathcal B$, take index set
+    $\mathcal A\times\mathcal B$, site operators $\rho_j(a)\sigma_j(b)$, and
+    site functions $F_i(\alpha)G_i(\beta)$
+    \cite[lines 1068--1077]{Hastings2006Solving}.
 \end{proof}
 
 \begin{theorem}[Trotter products with prescribed centres]
@@ -114,23 +90,20 @@ indices at a site is not established~\cite{gap:hastings05_planar_domain_scope}.
     \lean{TNLean.Lattice.hasProductForm_trotterProduct_of_radius}
     \leanok
     \uses{thm:hastings_product_form_supported_radius,thm:hastings_product_form_mul}
-    For each $i\in\Lambda$, let $H_i$ be an operator supported on
-    $X_i\subseteq\{j:d_\Lambda(i,j)\le R\}$. For any ordered list
-    $i_1,\ldots,i_m$, real $\beta$, and integer $n\ge1$,
+    If each $H_i$ ($i\in\Lambda$) is supported on
+    $X_i\subseteq\{j:d_\Lambda(i,j)\le R\}$, then for any $i_1,\dots,i_m\in\Lambda$,
+    $\beta\in\mathbb R$, and $n\in\mathbb N$ (with the $n=0$ product equal to $1$),
     \begin{align}
         \label{eq:hastings_trotter_product_radius}
         \Bigl[\prod_{k=1}^m\exp\bigl(-\tfrac\beta n H_{i_k}\bigr)\Bigr]^n
     \end{align}
-    has a matrix product form of range $R$. Neither Hermiticity nor
-    nonempty supports are required. With the separate convention that the
-    zero-step product is the identity, the conclusion also holds for $n=0$.
-    This proves the radius-based construction of~\cite[lines
-        1053--1077]{Hastings2006Solving} on the stated planar domains.
+    has a matrix product form of range $R$
+    \cite[lines 1053--1077]{Hastings2006Solving}.
 \end{theorem}
 \begin{proof}\leanok
-    The supported operators form a finite-dimensional closed algebra, so
-    each exponential is supported on $X_i$. Apply the supported-operator
-    theorem with centre $i$, then closure under finite products and powers.
+    Each $\exp(-\tfrac\beta nH_{i_k})$ is supported on $X_{i_k}$; apply
+    Theorems~\ref{thm:hastings_product_form_supported_radius}
+    and~\ref{thm:hastings_product_form_mul}.
 \end{proof}
 
 \begin{theorem}[Trotter products have a matrix product form]
@@ -147,25 +120,20 @@ indices at a site is not established~\cite{gap:hastings05_planar_domain_scope}.
         thm:hastings_product_form_supported,
         thm:hastings_product_form_mul
     }
-    Let $H=\sum_Xh_X$ be a Hamiltonian on $\Lambda$ whose nonempty term
-    supports have diameter at most $R$, let
-    $X_1,\dots,X_m$ be any finite sequence of supports, let $\beta$ be real
-    and let $n\ge1$. The Trotter product
+    For $H=\sum_Xh_X$ on $\Lambda$ with $\operatorname{diam}X\le R$ for all
+    $X\ne\emptyset$, any $X_1,\dots,X_m$, $\beta\in\mathbb R$, and
+    $n\in\mathbb N$ (with $\rho_0=1$), the Trotter product
     \begin{align}
         \label{eq:hastings_trotter_product}
         \rho_n=\Bigl[\prod_{k=1}^{m}\exp\bigl(-\tfrac{\beta}{n}h_{X_k}\bigr)
             \Bigr]^n
     \end{align}
-    has a matrix product form of range $R$. With the separate convention
-    $\rho_0=1$, the same conclusion holds at $n=0$. This is the
-    diameter-restricted specialization of the construction
-    in~\cite[lines 1048--1077]{Hastings2006Solving}.
+    has a matrix product form of range $R$
+    \cite[lines 1048--1077]{Hastings2006Solving}.
 \end{theorem}
 \begin{proof}\leanok
-    The operators supported on a set of sites form a finite-dimensional, hence
-    closed, algebra, so each factor $\exp(-\beta h_{X_k}/n)$ is supported on
-    $X_k$. Each factor therefore has a matrix product form of range $R$, and
-    so does the product and its $n$-th power.
+    Combine Theorems~\ref{thm:hastings_product_form_supported}
+    and~\ref{thm:hastings_product_form_mul}.
 \end{proof}
 
 \begin{theorem}[The truncated operator in matrix product form]
@@ -182,33 +150,24 @@ indices at a site is not established~\cite{gap:hastings05_planar_domain_scope}.
     \leanok
     \uses{def:hastings_product_form, def:hastings_truncated_expansion,
         def:hastings_cluster_of_terms}
-    Let the domain be nonempty, let every term $H_k$ act only on a set $S_k$ of
-    sites, let two terms be adjacent when their sets of sites meet, and call a
-    set of terms large when its sites contain two sites at walk distance larger
-    than $l$. Then the truncated operator $\rho(\beta,l)$ is in matrix product
-    form of range $l$. This is the matrix product form at high temperature
-    of~\cite[lines 1256--1279]{Hastings2006Solving}, on a planar domain with
-    walk distance; the count of index values is not
-    established~\cite{gap:hastings05_planar_domain_scope}.
+    On $\Lambda\ne\emptyset$, if each $H_k$ acts on $S_k$ and $T$ consists of
+    overlap-connected sets $C$ with $\operatorname{diam}(\bigcup_{k\in C}S_k)>l$,
+    then $\rho(\beta,l)$ has a matrix product form of range $l$
+    \cite[lines 1256--1279]{Hastings2006Solving},
+    \cite{gap:hastings05_planar_domain_scope}.
 \end{theorem}
-
 \begin{proof}
     \leanok
     \uses{thm:hastings_truncation_cluster_products,
         thm:hastings_cluster_operator_support,
         thm:hastings_product_form_supported_radius, thm:hastings_product_form_mul}
-    By Theorem~\ref{thm:hastings_truncation_cluster_products},
-    $\rho(\beta,l)=\sum_A\prod_CE_C$. The terms acting on no site contribute a
-    factor that is a multiple of the identity, which has a product form centred
-    at any site; the rest is a sum over families of clusters of terms acting on
-    sites, with pairwise disjoint sets of sites, none of them large. The index
-    at a site records the cluster containing it, if any, and a pair of matrix
-    unit labels. The coefficient at a site checks that its cluster is valid,
-    contains the site, and is recorded at every site of the cluster, all of
-    which lie within distance $l$; a chosen site of each cluster also carries
-    the matrix element of $E_C$, which acts only on the sites of the cluster
-    (Theorem~\ref{thm:hastings_cluster_operator_support}). A site in no cluster
-    carries a diagonal matrix unit. Summing over the indices recovers
-    $\sum_A\prod_CE_C$, and the two factors combine by
+    By Theorems~\ref{thm:hastings_truncation_cluster_products}
+    and~\ref{thm:hastings_cluster_operator_support},
+    $\rho(\beta,l)=\sum_A\prod_{C\in\mathrm{clusters}(A)}E_C$, where empty-support
+    terms factor out as a scalar multiple of $1$ and each remaining cluster $C$
+    acts on $S_C=\bigcup_{k\in C}S_k$ with $\operatorname{diam}S_C\le l$ and
+    pairwise disjoint $S_C$. Indexing each site by its containing cluster (if
+    any) and matrix-unit labels $(a_j,b_j)$ expresses $\sum_A\prod_CE_C$ in the
+    form (\ref{eq:hastings_mpf}) of range $l$; conclude by
     Theorem~\ref{thm:hastings_product_form_mul}.
 \end{proof}
