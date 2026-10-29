@@ -7,6 +7,7 @@ import TNLean.MPS.ParentHamiltonian.UncleWallGramQuadratic
 import Mathlib.LinearAlgebra.QuadraticForm.Radical
 import Mathlib.LinearAlgebra.Prod
 import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
+import Mathlib.Analysis.Matrix.MeasurableSpace
 
 /-!
 # Generic positivity of the actual one-wall norm coefficient
@@ -224,10 +225,34 @@ theorem uncleWallNormSlope_pair_ae_pos [NeZero a] [NeZero b]
     (uncleWallSlopeQuadratic_ne_zero_of_bond_sq_lt A B ρA hρA hdB hAB)
   have hS₂ : S₂ ≠ ⊤ := wallQuadratic_radical_ne_top Q₂
     (uncleWallSlopeQuadratic_ne_zero_of_bond_sq_lt B A ρB hρB hdA hBA)
-  have hnull₁ : μ (S₁.prod ⊤) = 0 := Measure.addHaar_submodule μ _
-    (fun h ↦ hS₁ (Submodule.prod_eq_top_iff.mp h).1)
-  have hnull₂ : μ ((⊤ : Submodule ℝ (Fin d → Matrix (Fin a) (Fin b) ℂ)).prod S₂) = 0 :=
-    Measure.addHaar_submodule μ _ (fun h ↦ hS₂ (Submodule.prod_eq_top_iff.mp h).2)
+  have hprod₁ : S₁.prod (⊤ : Submodule ℝ (Fin d → Matrix (Fin b) (Fin a) ℂ)) ≠ ⊤ := by
+    intro h
+    apply hS₁
+    apply eq_top_iff.mpr
+    intro R _
+    have hmem : (R, (0 : Fin d → Matrix (Fin b) (Fin a) ℂ)) ∈
+        S₁.prod (⊤ : Submodule ℝ (Fin d → Matrix (Fin b) (Fin a) ℂ)) := by
+      rw [h]
+      trivial
+    exact hmem.1
+  have hprod₂ : (⊤ : Submodule ℝ (Fin d → Matrix (Fin a) (Fin b) ℂ)).prod S₂ ≠ ⊤ := by
+    intro h
+    apply hS₂
+    apply eq_top_iff.mpr
+    intro L _
+    have hmem : ((0 : Fin d → Matrix (Fin a) (Fin b) ℂ), L) ∈
+        (⊤ : Submodule ℝ (Fin d → Matrix (Fin a) (Fin b) ℂ)).prod S₂ := by
+      rw [h]
+      trivial
+    exact hmem.2
+  have hnull₁ : μ (S₁.prod (⊤ : Submodule ℝ (Fin d → Matrix (Fin b) (Fin a) ℂ)) :
+      Set ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
+        (Fin d → Matrix (Fin b) (Fin a) ℂ))) = 0 :=
+    Measure.addHaar_submodule μ _ hprod₁
+  have hnull₂ : μ ((⊤ : Submodule ℝ (Fin d → Matrix (Fin a) (Fin b) ℂ)).prod S₂ :
+      Set ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
+        (Fin d → Matrix (Fin b) (Fin a) ℂ))) = 0 :=
+    Measure.addHaar_submodule μ _ hprod₂
   have hae₁ : ∀ᵐ P ∂μ, P.1 ∉ S₁ := by
     have hset : {P : (Fin d → Matrix (Fin a) (Fin b) ℂ) ×
         (Fin d → Matrix (Fin b) (Fin a) ℂ) | P.1 ∈ S₁} = (S₁.prod (⊤ :
