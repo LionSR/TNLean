@@ -45,7 +45,8 @@ private theorem cyclicTranslateCfg_cons_append (n : ℕ) (i : Fin d)
       simp only [Fin.val_last, h1, Fin.val_zero]
       rw [ite_eq_left (by omega)]
       omega
-    change Fin.cons i τ (Fin.last (n + 1) + 1) = _
+    change Fin.cons (α := fun _ : Fin (n + 2) ↦ Fin d) i τ
+      (Fin.last (n + 1) + 1) = _
     rw [hlast, Fin.cons_zero]
     exact (Fin.append_right τ (fun _ : Fin 1 ↦ i) 0).symm
   · have hsite : (j.castSucc : Fin (n + 2)) + 1 = j.succ := by
@@ -53,7 +54,7 @@ private theorem cyclicTranslateCfg_cons_append (n : ℕ) (i : Fin d)
       rw [Fin.val_add_eq_ite]
       simp only [Fin.val_castSucc, Fin.val_succ, h1]
       rw [ite_eq_right (by omega)]
-    change Fin.cons i τ (j.castSucc + 1) = _
+    change Fin.cons (α := fun _ : Fin (n + 2) ↦ Fin d) i τ (j.castSucc + 1) = _
     rw [hsite, Fin.cons_succ]
     exact (Fin.append_left τ (fun _ : Fin 1 ↦ i) j).symm
 
@@ -99,7 +100,7 @@ theorem uncleBoundaryMap_scalar_blocks
       α • (mpv A : NSiteSpace d N) + β • (mpv B : NSiteSpace d N) := by
   funext σ
   rw [uncleBoundaryMap_apply, uncleBoundaryWord_block, trace_uncleBlockMatrix_mul]
-  simp [Matrix.scalar_apply, ← Matrix.smul_one_eq_diagonal, Matrix.mul_smul,
+  simp [Matrix.scalar_apply, ← Matrix.smul_one_eq_diagonal,
     Matrix.trace_smul, mpv, coeff, smul_eq_mul]
 
 private theorem cyclicTranslateState_one_mpv (A : MPSTensor d a) (n : ℕ) :
