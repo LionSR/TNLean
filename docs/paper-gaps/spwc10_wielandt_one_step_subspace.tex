@@ -313,15 +313,22 @@ formalization of its third clause.\footnote{The strengthened predicate is
     \path{TNLean/Wielandt/Primitivity/Definitions.lean} and
     \path{docs/glossary.md}.}
 
-Removing this restriction requires a literal source predicate consisting of a
-positive-definite fixed point, a one-dimensional fixed eigenspace, and no
-other peripheral eigenvalues. One can then prove that a normalized completely
-positive map with these properties has no nontrivial invariant projection:
-such a projection would produce an additional positive fixed direction,
-contradicting simplicity of the fixed space. This implication supplies the
-irreducibility conjunct of the existing predicate, after which the established
-equivalences yield the literal Proposition~3. Alternatively, the three
-directions of the equivalence can be proved directly for the source predicate.
+The literal source criterion is stated directly by
+\leanid{MPSTensor.primitivePaper_iff_exists_simple_peripheral_fixedPoint} and
+\leanid{MPSTensor.hasEventuallyFullKrausRank_iff_exists_simple_peripheral_fixedPoint}
+in \path{TNLean/Wielandt/Primitivity/PeripheralCriterion.lean}.
+They require a positive-definite fixed matrix, that matrix spanning the fixed
+eigenspace, and the absence of any other peripheral eigenvalue. No separate
+irreducibility premise appears in their signatures.
+
+The reverse implication uses QICLean's criterion for a channel with a faithful
+fixed point and a unique positive fixed direction: every positive fixed matrix
+is already in the one-dimensional fixed eigenspace, so irreducibility follows.
+The forward implication uses the existing complementary fixed-point gap.
+Thus the strengthened internal predicate can be reused without strengthening
+the source-facing theorem. Compiled verification and integration of these new
+statements remain tracked by \ghissue{10276}; their blueprint node remains
+unmarked until that verification.
 
 \section{Conclusion}
 
@@ -332,11 +339,11 @@ matrix may be any element of $S_1(A)$ with the required spectral property.
 Statements for a chosen Kraus operator remain useful corollaries, but they are
 not the source theorem.
 
-One scope restriction remains: the strong-irreducibility predicate contains
-an irreducibility conjunct absent from the literal third clause of
-Proposition~3 in Ref.~\cite{Sanz2010Quantum}. The preceding section identifies
-the source-predicate argument needed to remove this restriction. The universal
-index comparison is supplied by the zero-index argument above.
+The universal index comparison and the literal peripheral criterion now have
+source-faithful replacement signatures. The former uses the zero-index
+convention, while the latter derives the internal irreducibility condition.
+The new peripheral statements still await compiled verification and
+integration in \ghissue{10276}; this note does not certify that pending step.
 
 Cumulative-span declarations and bundled analysis chains remain support
 lemmas. The source-facing quantum Wielandt conclusions concern the

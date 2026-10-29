@@ -287,6 +287,36 @@ matrices, and let $\E_K$ be its Kraus map.
     large $m$.
 \end{proof}
 
+\begin{theorem}[The simple peripheral eigenspace criterion]
+    \label{thm:wielandt_literal_peripheral_criterion}
+    \lean{MPSTensor.isStronglyIrreduciblePaper_of_simple_peripheral_fixedPoint,
+        MPSTensor.primitivePaper_iff_exists_simple_peripheral_fixedPoint,
+        MPSTensor.hasEventuallyFullKrausRank_iff_exists_simple_peripheral_fixedPoint}
+    \notready
+    \discussion{10276}
+    \uses{def:paper_primitive, def:eventually_full_kraus_rank,
+        thm:wielandt_proposition_three}
+    Let $D>0$ and suppose $\sum_i(A^i)^\dagger A^i=\Id$.
+    The following conditions are equivalent:
+    \begin{enumerate}
+        \item $\E_A$ is primitive.
+        \item The exact-length word spaces eventually equal $\MN{D}$.
+        \item There is $\rho>0$ such that $\E_A(\rho)=\rho$, the fixed
+              eigenspace is $\mathbb C\rho$, and $1$ is the only peripheral
+              eigenvalue.
+    \end{enumerate}
+    In the third condition, irreducibility is a conclusion rather than
+    an additional hypothesis. This is \cite[Proposition~3]{Sanz2010Quantum}.
+\end{theorem}
+\begin{proof}
+    For a primitive channel, the positive-definite fixed point and the
+    complementary spectral gap give the third condition. Conversely, every
+    positive fixed matrix is proportional to the given faithful fixed matrix.
+    The irreducibility criterion for a trace-preserving positive map therefore
+    excludes a nontrivial invariant projection. Together with peripheral
+    primitivity this gives eventual full Kraus rank and hence primitivity.
+\end{proof}
+
 \begin{theorem}[Normalized normal tensors are strongly irreducible]
     \label{thm:normalized_normal_strongly_irreducible}
     \lean{MPSTensor.isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank,
