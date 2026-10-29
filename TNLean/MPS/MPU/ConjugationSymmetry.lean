@@ -30,7 +30,7 @@ open scoped Matrix Kronecker BigOperators
 namespace Matrix
 
 variable {a b c : Type*} [Fintype a] [Fintype b] [Fintype c]
-  [DecidableEq a] [DecidableEq b] [DecidableEq c]
+  [DecidableEq a] [DecidableEq b]
 
 /-- Entrywise conjugation preserves both unitary identities of a rectangular
 gate, as used for the conjugate comparison in arXiv:1703.09188,

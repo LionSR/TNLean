@@ -95,3 +95,18 @@ Job `123406987298` compiled the supplied gate-comparison module and reported
 remained opaque in the two `simpa only` calls. Both calls now explicitly
 unfold `MPOTensor.mapStar`. No local Lean command was run; the repair still
 requires exact-head hosted validation.
+
+## Hosted follow-up on `dc7f40e64`
+
+Job `123420915342` now compiled `ConjugationSymmetry` and the existing gate
+Fundamental Theorem modules. It reported errors in the new source-factor
+transport: the isometry/coisometry predicates needed explicit unfolding,
+the identity entries in the source weight needed simplification, the
+right-inverse reindexing needed its actual middle coordinate types, the
+rank-removal helpers' `congr` had already solved one factor, and the local
+necessity theorem resolved an unqualified `mapStar` to the canonical-data
+operation. The repair makes each of these explicit and handles the two
+product factors by named equalities. The reported unused instances/simp
+argument and proof-local `letI` warnings are also removed. These are source
+repairs only; no local Lean command was run, and the new head still requires
+hosted validation.

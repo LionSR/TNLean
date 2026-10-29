@@ -39,9 +39,10 @@ comparison of `prop1conj` (arXiv:1703.09188, lines 1030–1033). -/
 theorem sourceCutM₂_mapStar (U : MPOTensor d D) :
     sourceCutM₂ (mapStar U) = (sourceCutM₂ U).map (starRingEnd ℂ) := rfl
 
-private theorem rank_map_star {a b : Type*} [Fintype a] [Fintype b]
+private theorem rank_map_star {a b : Type*} [Finite a] [Fintype b]
     (M : Matrix a b ℂ) : (M.map (starRingEnd ℂ)).rank = M.rank := by
   classical
+  let := Fintype.ofFinite a
   have h : M.map (starRingEnd ℂ) = Mᴴᵀ := by ext i j; rfl
   rw [h, Matrix.rank_transpose, Matrix.rank_conjTranspose]
 
@@ -62,7 +63,7 @@ theorem normalizedFlattening_mapStar (U : MPOTensor d D) :
     (mapStar U).normalizedFlattening = MPSTensor.mapStar U.normalizedFlattening := by
   ext i α β
   simp [normalizedFlattening, MPOTensor.mapStar, MPSTensor.mapStar, toMPSTensor,
-    Matrix.smul_apply, Matrix.map_apply, RCLike.star_def]
+    Matrix.smul_apply, Matrix.map_apply]
 
 /-- Canonical-form-II data, full ambient support, and the same real diagonal
 fixed matrix transport to the coefficientwise conjugate tensor. This is the
@@ -122,11 +123,11 @@ noncomputable def mapStar {a b : Type*} [Fintype a] [Fintype b]
     exact h
   V_coisometry := by
     have h := congrArg (fun M ↦ M.map (starRingEnd ℂ)) S.V_coisometry
-    simpa [Matrix.map_mul,
+    simpa [Matrix.IsCoisometry, Matrix.map_mul,
       Matrix.conjTranspose_map (starRingEnd ℂ) (by simp [Function.Semiconj])] using h
   U_coisometry := by
     have h := congrArg (fun M ↦ M.map (starRingEnd ℂ)) S.U_coisometry
-    simpa [Matrix.map_mul,
+    simpa [Matrix.IsCoisometry, Matrix.map_mul,
       Matrix.conjTranspose_map (starRingEnd ℂ) (by simp [Function.Semiconj])] using h
   diagonal_isDiag := S.diagonal_isDiag
   diagonal_posDef := S.diagonal_posDef
@@ -150,7 +151,7 @@ noncomputable def mapStar {U : MPOTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
   have hweight : sourceWeight (d := d) (ρ.map (starRingEnd ℂ)) =
       (sourceWeight (d := d) ρ).map (starRingEnd ℂ) := by
     ext i j
-    simp [sourceWeight, Matrix.kroneckerMap_apply]
+    simp [sourceWeight, Matrix.kroneckerMap_apply, Matrix.one_apply]
   refine {
     X₁ := Matrix.reindex (Equiv.refl _) er (S.X₁.map (starRingEnd ℂ))
     Y₁ := Matrix.reindex er (Equiv.refl _) (S.Y₁.map (starRingEnd ℂ))
@@ -183,15 +184,19 @@ noncomputable def mapStar {U : MPOTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     simp
   · exact (Matrix.IsIsometry.reindex _ (by
       have h := congrArg (fun M ↦ M.map (starRingEnd ℂ)) S.X₂_isometry
-      simpa [Matrix.map_mul,
+      simpa [Matrix.IsIsometry, Matrix.map_mul,
         Matrix.conjTranspose_map (starRingEnd ℂ) (by simp [Function.Semiconj])] using h)
       (Equiv.refl _) el)
-  · change Matrix.reindexLinearEquiv ℂ ℂ er (Equiv.refl _) _ *
-      Matrix.reindexLinearEquiv ℂ ℂ (Equiv.refl _) er _ = 1
+  · change Matrix.reindexLinearEquiv ℂ ℂ er (Equiv.refl (Fin D × Fin d))
+        (S.Y₁.map (starRingEnd ℂ)) *
+      Matrix.reindexLinearEquiv ℂ ℂ (Equiv.refl (Fin D × Fin d)) er
+        (S.Z₁.map (starRingEnd ℂ)) = 1
     rw [Matrix.reindexLinearEquiv_mul, ← Matrix.map_mul, S.Y₁_mul_Z₁]
     simp
-  · change Matrix.reindexLinearEquiv ℂ ℂ el (Equiv.refl _) _ *
-      Matrix.reindexLinearEquiv ℂ ℂ (Equiv.refl _) el _ = 1
+  · change Matrix.reindexLinearEquiv ℂ ℂ el (Equiv.refl (Fin d × Fin D))
+        (S.Y₂.map (starRingEnd ℂ)) *
+      Matrix.reindexLinearEquiv ℂ ℂ (Equiv.refl (Fin d × Fin D)) el
+        (S.Z₂.map (starRingEnd ℂ)) = 1
     rw [Matrix.reindexLinearEquiv_mul, ← Matrix.map_mul, S.Y₂_mul_Z₂]
     simp
 
@@ -255,7 +260,7 @@ theorem IsMPUCanonicalFormII.exists_supplied_source_gate_unitary_gauges_of_mpo_e
 
 private theorem remove_source_rank_reindex_left
     {a b a' b' p : Type*} [Fintype a] [Fintype b] [Fintype a'] [Fintype b']
-    [Fintype p] (el : a ≃ a') (er : b ≃ b')
+    (el : a ≃ a') (er : b ≃ b')
     (x : Matrix a' a' ℂ) (y : Matrix b' b' ℂ) (u : Matrix (a × b) p ℂ) :
     Matrix.reindex (Equiv.prodCongr el.symm er.symm) (Equiv.refl _)
         ((x ⊗ₖ y) * Matrix.reindex (Equiv.prodCongr el er) (Equiv.refl _) u) =
@@ -265,14 +270,21 @@ private theorem remove_source_rank_reindex_left
         Matrix.reindexLinearEquiv ℂ ℂ (Equiv.prodCongr el er) (Equiv.refl _) u) = _
   rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ (Equiv.prodCongr el.symm er.symm)
     (Equiv.prodCongr el.symm er.symm) (Equiv.refl _)]
-  congr 1
-  · exact (Matrix.kroneckerMap_reindex _ el.symm el.symm er.symm er.symm x y).symm
-  · ext i j
+  have hk : Matrix.reindexLinearEquiv ℂ ℂ (Equiv.prodCongr el.symm er.symm)
+      (Equiv.prodCongr el.symm er.symm) (x ⊗ₖ y) =
+      Matrix.reindex el.symm el.symm x ⊗ₖ Matrix.reindex er.symm er.symm y :=
+    (Matrix.kroneckerMap_reindex (fun a b : ℂ ↦ a * b)
+      el.symm el.symm er.symm er.symm x y).symm
+  have hu : Matrix.reindexLinearEquiv ℂ ℂ (Equiv.prodCongr el.symm er.symm)
+      (Equiv.refl p)
+      (Matrix.reindexLinearEquiv ℂ ℂ (Equiv.prodCongr el er) (Equiv.refl p) u) = u := by
+    ext ⟨i₁, i₂⟩ j
     simp [Matrix.reindex_apply]
+  rw [hk, hu]
 
 private theorem remove_source_rank_reindex_right
     {a b a' b' p : Type*} [Fintype a] [Fintype b] [Fintype a'] [Fintype b']
-    [Fintype p] (el : a ≃ a') (er : b ≃ b')
+    (el : a ≃ a') (er : b ≃ b')
     (x : Matrix a' a' ℂ) (y : Matrix b' b' ℂ) (v : Matrix p (b × a) ℂ) :
     Matrix.reindex (Equiv.refl _) (Equiv.prodCongr er.symm el.symm)
         (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr er el) v * (yᴴ ⊗ₖ xᴴ)) =
@@ -284,11 +296,19 @@ private theorem remove_source_rank_reindex_right
         (yᴴ ⊗ₖ xᴴ)) = _
   rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ (Equiv.refl _)
     (Equiv.prodCongr er.symm el.symm) (Equiv.prodCongr er.symm el.symm)]
-  congr 1
-  · ext i j
+  have hv : Matrix.reindexLinearEquiv ℂ ℂ (Equiv.refl p)
+      (Equiv.prodCongr er.symm el.symm)
+      (Matrix.reindexLinearEquiv ℂ ℂ (Equiv.refl p) (Equiv.prodCongr er el) v) = v := by
+    ext i ⟨j₁, j₂⟩
     simp [Matrix.reindex_apply]
-  · simp only [Matrix.conjTranspose_reindex]
-    exact (Matrix.kroneckerMap_reindex _ er.symm er.symm el.symm el.symm yᴴ xᴴ).symm
+  have hk : Matrix.reindexLinearEquiv ℂ ℂ (Equiv.prodCongr er.symm el.symm)
+      (Equiv.prodCongr er.symm el.symm) (yᴴ ⊗ₖ xᴴ) =
+      (Matrix.reindex er.symm er.symm y)ᴴ ⊗ₖ
+        (Matrix.reindex el.symm el.symm x)ᴴ := by
+    rw [Matrix.conjTranspose_reindex, Matrix.conjTranspose_reindex]
+    exact (Matrix.kroneckerMap_reindex (fun a b : ℂ ↦ a * b)
+      er.symm er.symm el.symm el.symm yᴴ xᴴ).symm
+  rw [hv, hk]
 
 /-- Global conjugation invariance produces the literal local equations for
 the actual supplied source factors of a canonical-form-II tensor. The gates
@@ -315,7 +335,7 @@ theorem IsMPUCanonicalFormII.exists_local_conjugation_gauges
   classical
   let er := finCongr (source_ranks_mapStar U).1.symm
   let el := finCongr (source_ranks_mapStar U).2.symm
-  have huT : (SourceFactors.sourceU (mapStar U) S.mapStar).IsUnitaryBetween := by
+  have huT : (SourceFactors.sourceU (MPOTensor.mapStar U) S.mapStar).IsUnitaryBetween := by
     rw [S.sourceU_mapStar]
     exact huS.map_star.reindex _ (Equiv.prodCongr el er) (Equiv.refl _)
   obtain ⟨hr, hl, x, y, hu, hv⟩ :=
@@ -371,13 +391,13 @@ theorem IsMPUCanonicalFormII.exists_local_conjugation_gauges_common_transpose_ca
         (star (y : Matrix (Fin r[U]) (Fin r[U]) ℂ) ⊗ₖ
           star (x : Matrix (Fin ℓ[U]) (Fin ℓ[U]) ℂ)) := by
   classical
-  letI : NeZero d := hU.neZero_phys
+  let : NeZero d := hU.neZero_phys
   have hpos : 0 < Fintype.card (Fin ℓ[U] × Fin r[U]) :=
     lt_of_lt_of_le (by simpa using Nat.mul_pos (NeZero.pos d) (NeZero.pos d))
       (huS.1.card_le _)
   obtain ⟨l, r⟩ := Fintype.card_pos_iff.mp hpos
-  letI : Nonempty (Fin ℓ[U]) := ⟨l⟩
-  letI : Nonempty (Fin r[U]) := ⟨r⟩
+  let : Nonempty (Fin ℓ[U]) := ⟨l⟩
+  let : Nonempty (Fin r[U]) := ⟨r⟩
   obtain ⟨x, y, hu, hv⟩ := hU.exists_local_conjugation_gauges S huS hconj
   exact ⟨x, y, Matrix.transpose_eq_self_or_transpose_eq_neg_of_gate_conjugation
     x.property y.property huS.2 hu, hu, hv⟩
