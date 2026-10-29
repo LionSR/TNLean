@@ -117,9 +117,10 @@ theorem uncleBoundaryWord_slice_mem
       (uncleBoundaryMulRight (uncleBoundaryWord A B R L v))))
   refine ⟨X, ?_⟩
   ext σ
-  simpa only [uncleBoundaryMap_apply, LinearMap.comp_apply, uncleBoundaryMulLeft_apply,
-    uncleBoundaryMulRight_apply, uncleBoundaryWord_append, uncleBoundaryMul_assoc,
-    Matrix.trace_mul_comm] using (hX (uncleBoundaryWord A B R L (List.ofFn σ))).symm
+  change Matrix.trace (uncleBoundaryWord A B R L (List.ofFn σ) * X) =
+    f (uncleBoundaryWord A B R L (u ++ List.ofFn σ ++ v))
+  rw [uncleBoundaryWord_append, uncleBoundaryWord_append, uncleBoundaryMul_assoc]
+  exact (Matrix.trace_mul_comm _ _).trans (hX (uncleBoundaryWord A B R L (List.ofFn σ))).symm
 
 private def uncleBoundaryBlockTrace {p q : ℕ}
     (e : Fin p → Fin a ⊕ Fin b) (f : Fin q → Fin a ⊕ Fin b)

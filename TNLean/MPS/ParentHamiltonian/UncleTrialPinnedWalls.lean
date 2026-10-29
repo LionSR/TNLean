@@ -169,9 +169,11 @@ private theorem uncleConfigSegment_contiguous_end {T : ℕ}
     exact Fin.ext (by change s + (n - 1) - i = 0; omega)
 
 private theorem uncleConfigSegment_contiguous_start {T : ℕ}
-    (τ : Cfg d T) (n i : ℕ) (hs : i + 1 + n ≤ T) (hn : 0 < n) (σ : Cfg d 2) :
-    uncleConfigSegment (contiguousCfg i 2 σ τ) (i + 1) n hs =
+    (τ : Cfg d T) (s n i : ℕ) (hs : s + n ≤ T) (hn : 0 < n)
+    (hi : s = i + 1) (σ : Cfg d 2) :
+    uncleConfigSegment (contiguousCfg i 2 σ τ) s n hs =
       [σ 1] ++ uncleConfigSegment τ (i + 2) (n - 1) (by omega) := by
+  subst s
   unfold uncleConfigSegment
   rw [List.ofFn_congr (show n = 1 + (n - 1) by omega), List.ofFn_add]
   apply congrArg₂ (· ++ ·)
@@ -185,5 +187,111 @@ private theorem uncleConfigSegment_contiguous_start {T : ℕ}
     rw [contiguousCfg, dif_neg (by omega)]
     apply congrArg τ
     exact Fin.ext (by change i + 1 + (1 + j.val) = i + 2 + j.val; omega)
+
+/-- The actual first endpoint residual pins the R wall at site N and
+retains precisely the source L-wall sum in the other interval.
+Source: arXiv:1210.6613, proof of Lemma lowenergystates, lines 1289–1296. -/
+theorem uncleInteractionES_trial_pin_first_endpoint
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (N : ℕ) (hN : 0 < N) (τ : Cfg d (6 * N + 1)) :
+    let p := uncleConfigSegment τ 0 (N - 1) (by omega)
+    let r := uncleConfigSegment τ (N + 1) N (by omega)
+    let w := uncleConfigSegment τ (2 * N + 1) (2 * N - 1) (by omega)
+    let x := uncleConfigSegment τ (4 * N) (N + 1) (by omega)
+    let y := uncleConfigSegment τ (5 * N + 1) N (by omega)
+    let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+      (uncleTwoWallTrialSource A B R L N)
+    uncleInteractionES A B R L
+        (cyclicRestrictES (by omega) 2 (⟨N - 1, by omega⟩ : Fin (6 * N + 1)) τ φ) =
+      uncleInteractionES A B R L ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
+        (fun σ ↦ Matrix.trace (Kraus.evalWord A p * A (σ 0) * R (σ 1) *
+          Kraus.evalWord B r * Kraus.evalWord B w *
+          uncleDomainWallWord B A L x * Kraus.evalWord A y))) := by
+  dsimp only
+  change uncleInteractionES A B R L
+    ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
+      (cyclicRestrictₗ (by omega) 2 (⟨N - 1, by omega⟩ : Fin (6 * N + 1)) τ
+        (uncleTwoWallTrialSource A B R L N))) = _
+  rw [cyclicRestrictₗ_eq_contiguousRestrictₗ (by omega) (by omega) (by omega)]
+  have hfun : contiguousRestrictₗ (N - 1) 2 (by omega) τ
+      (uncleTwoWallTrialSource A B R L N) =
+      fun σ ↦ uncleTwoWallCoefficient A B R L
+        (uncleConfigSegment τ 0 (N - 1) (by omega) ++ [σ 0])
+        (σ 1 :: uncleConfigSegment τ (N + 1) N (by omega))
+        (uncleConfigSegment τ (2 * N + 1) (2 * N - 1) (by omega))
+        (uncleConfigSegment τ (4 * N) (N + 1) (by omega))
+        (uncleConfigSegment τ (5 * N + 1) N (by omega)) := by
+    funext σ
+    simp only [contiguousRestrictₗ_apply, uncleTwoWallTrialSource]
+    rw [uncleConfigSegment_contiguous_end τ 0 N (N - 1) _ hN (by omega) σ,
+      uncleConfigSegment_contiguous_start τ N (N + 1) (N - 1) _ (by omega) (by omega) σ,
+      uncleConfigSegment_contiguous_outside τ (2 * N + 1) (2 * N - 1) (N - 1) _ σ (by omega),
+      uncleConfigSegment_contiguous_outside τ (4 * N) (N + 1) (N - 1) _ σ (by omega),
+      uncleConfigSegment_contiguous_outside τ (5 * N + 1) N (N - 1) _ σ (by omega)]
+    simp only [show N - 1 + 2 = N + 1 by omega, Nat.add_sub_cancel_right]
+  rw [hfun]
+  simpa only [uncleTwoWallCoefficient, Kraus.evalWord_append, Kraus.evalWord_cons,
+    Kraus.evalWord_nil, Matrix.mul_one, Matrix.mul_assoc] using
+      uncleInteractionES_pin_upper_left A B R L
+        (Kraus.evalWord A (uncleConfigSegment τ 0 (N - 1) (by omega)))
+        (Kraus.evalWord B (uncleConfigSegment τ (2 * N + 1) (2 * N - 1) (by omega)) *
+          uncleDomainWallWord B A L (uncleConfigSegment τ (4 * N) (N + 1) (by omega)) *
+          Kraus.evalWord A (uncleConfigSegment τ (5 * N + 1) N (by omega)))
+        (uncleConfigSegment τ (N + 1) N (by omega))
+
+/-- The actual second endpoint residual pins the R wall at site 2N and
+retains precisely the source L-wall sum in the other interval.
+Source: arXiv:1210.6613, proof of Lemma lowenergystates, lines 1289–1296. -/
+theorem uncleInteractionES_trial_pin_second_endpoint
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (N : ℕ) (hN : 0 < N) (τ : Cfg d (6 * N + 1)) :
+    let p := uncleConfigSegment τ 0 N (by omega)
+    let r := uncleConfigSegment τ N N (by omega)
+    let w := uncleConfigSegment τ (2 * N + 2) (2 * N - 2) (by omega)
+    let x := uncleConfigSegment τ (4 * N) (N + 1) (by omega)
+    let y := uncleConfigSegment τ (5 * N + 1) N (by omega)
+    let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+      (uncleTwoWallTrialSource A B R L N)
+    uncleInteractionES A B R L
+        (cyclicRestrictES (by omega) 2 (⟨2 * N, by omega⟩ : Fin (6 * N + 1)) τ φ) =
+      uncleInteractionES A B R L ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
+        (fun σ ↦ Matrix.trace (Kraus.evalWord A p * Kraus.evalWord A r * R (σ 0) *
+          B (σ 1) * Kraus.evalWord B w *
+          uncleDomainWallWord B A L x * Kraus.evalWord A y))) := by
+  dsimp only
+  change uncleInteractionES A B R L
+    ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
+      (cyclicRestrictₗ (by omega) 2 (⟨2 * N, by omega⟩ : Fin (6 * N + 1)) τ
+        (uncleTwoWallTrialSource A B R L N))) = _
+  rw [cyclicRestrictₗ_eq_contiguousRestrictₗ (by omega) (by omega) (by omega)]
+  have hfun : contiguousRestrictₗ (2 * N) 2 (by omega) τ
+      (uncleTwoWallTrialSource A B R L N) =
+      fun σ ↦ uncleTwoWallCoefficient A B R L
+        (uncleConfigSegment τ 0 N (by omega))
+        (uncleConfigSegment τ N N (by omega) ++ [σ 0])
+        (σ 1 :: uncleConfigSegment τ (2 * N + 2) (2 * N - 2) (by omega))
+        (uncleConfigSegment τ (4 * N) (N + 1) (by omega))
+        (uncleConfigSegment τ (5 * N + 1) N (by omega)) := by
+    funext σ
+    simp only [contiguousRestrictₗ_apply, uncleTwoWallTrialSource]
+    rw [uncleConfigSegment_contiguous_end τ N (N + 1) (2 * N) _ (by omega) (by omega) σ,
+      uncleConfigSegment_contiguous_start τ (2 * N + 1) (2 * N - 1) (2 * N) _
+        (by omega) (by omega) σ,
+      uncleConfigSegment_contiguous_outside τ 0 N (2 * N) _ σ (by omega),
+      uncleConfigSegment_contiguous_outside τ (4 * N) (N + 1) (2 * N) _ σ (by omega),
+      uncleConfigSegment_contiguous_outside τ (5 * N + 1) N (2 * N) _ σ (by omega)]
+    simp only [show (2 * N - 1) - 1 = 2 * N - 2 by omega, Nat.add_sub_cancel_right]
+  rw [hfun]
+  simpa only [uncleTwoWallCoefficient, Kraus.evalWord_cons, Matrix.mul_assoc] using
+    uncleInteractionES_pin_upper_right A B R L
+      (Kraus.evalWord A (uncleConfigSegment τ 0 N (by omega)))
+      (Kraus.evalWord B (uncleConfigSegment τ (2 * N + 2) (2 * N - 2) (by omega)) *
+        uncleDomainWallWord B A L (uncleConfigSegment τ (4 * N) (N + 1) (by omega)) *
+        Kraus.evalWord A (uncleConfigSegment τ (5 * N + 1) N (by omega)))
+      (uncleConfigSegment τ N N (by omega))
 
 end MPSTensor

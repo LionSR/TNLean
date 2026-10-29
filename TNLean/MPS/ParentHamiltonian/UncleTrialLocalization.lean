@@ -25,6 +25,7 @@ namespace MPSTensor
 
 variable {d a b : ℕ}
 
+/-- A local pair disjoint from a numbered segment leaves its word fixed. -/
 theorem uncleConfigSegment_contiguous_outside {T : ℕ}
     (τ : Cfg d T) (s n i : ℕ) (hs : s + n ≤ T) (σ : Cfg d 2)
     (h : s + n ≤ i ∨ i + 2 ≤ s) :
@@ -65,6 +66,7 @@ private theorem trace_evalWord_pair_mem_groundSpace {c : ℕ} (C : MPSTensor d c
   simpa only [groundSpaceMap_apply, Matrix.mul_assoc] using
     Matrix.trace_mul_comm (Kraus.evalWord C (List.ofFn σ) * Q) P
 
+/-- Fixed exterior contractions of a pure A pair lie in the actual local uncle kernel. -/
 theorem uncleInteractionES_uniform_slice_left_eq_zero
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
@@ -77,6 +79,7 @@ theorem uncleInteractionES_uniform_slice_left_eq_zero
   simpa only [LinearEquiv.apply_symm_apply, Kraus.evalWord_append, Matrix.mul_assoc] using
     trace_evalWord_pair_mem_groundSpace A (P * Kraus.evalWord A u) (Kraus.evalWord A v * Q)
 
+/-- Fixed exterior contractions of a pure B pair lie in the actual local uncle kernel. -/
 theorem uncleInteractionES_uniform_slice_right_eq_zero
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
