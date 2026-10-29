@@ -9606,3 +9606,14 @@ there is no need for a new tactic.
   add unrelated dependencies. If a shared one-step statement is needed, move that existing
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
+
+### Uniform periodic norm from transfer eigenvalues — reused trace bound (2026-10-29)
+
+- **Seen:** `MPS/Symmetry/PeriodicMPSNormLowerBound.lean` and
+  `MPS/ParentHamiltonian/WeightedCanonicalPhysicalLimit.lean`.
+- **Pattern:** Express the actual periodic squared norm as the trace of a transfer power,
+  then bound it by matrix-space dimension times a uniform eigenvalue bound.
+- **Reuse:** The existing `norm_trace_pow_le_of_spectrum_norm_le` supplies the trace estimate.
+  The public `norm_mpvState_le_bondDimension_of_unital` specializes it once to positive
+  unital maps and is reused for every canonical block; no new spectral proof or tactic.
+- **Validation:** Source-only; hosted Lean checking is pending.
