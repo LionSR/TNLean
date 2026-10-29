@@ -53,8 +53,7 @@ theorem norm_normalizedVectorExpectation_le
     {ψ : EuclideanSpace ℂ n} (hψ : ψ ≠ 0) (A : Matrix n n ℂ) :
     ‖normalizedVectorExpectation ψ A‖ ≤ ‖A‖ := by
   have hpos : 0 < ‖ψ‖ := norm_pos_iff.mpr hψ
-  have hA : ‖L A ψ‖ ≤ ‖A‖ * ‖ψ‖ := by
-    simpa only [← Matrix.cstar_norm_def] using (L A).le_opNorm ψ
+  have hA : ‖L A ψ‖ ≤ ‖A‖ * ‖ψ‖ := Matrix.l2_opNorm_mulVec A ψ
   rw [normalizedVectorExpectation, norm_div, Complex.norm_real,
     Real.norm_of_nonneg (sq_nonneg _)]
   apply (div_le_iff₀ (pow_pos hpos 2)).mpr
@@ -71,8 +70,8 @@ theorem inner_centeredObservable_eq_zero
     ⟪ψ, L (centeredObservable ψ A) ψ⟫_ℂ = 0 := by
   have hd : ((‖ψ‖ ^ 2 : ℝ) : ℂ) ≠ 0 := by
     exact_mod_cast (pow_ne_zero 2 (norm_ne_zero_iff.mpr hψ))
-  have hself : ⟪ψ, ψ⟫_ℂ = ((‖ψ‖ ^ 2 : ℝ) : ℂ) := by
-    rw [inner_self_eq_norm_sq_to_K, Complex.ofReal_pow]
+  have hself : ⟪ψ, ψ⟫_ℂ = ((‖ψ‖ ^ 2 : ℝ) : ℂ) :=
+    (inner_self_eq_norm_sq_to_K (𝕜 := ℂ) ψ).trans (Complex.ofReal_pow ‖ψ‖ 2).symm
   rw [centeredObservable, map_sub, map_smul, map_one]
   change ⟪ψ, L A ψ - normalizedVectorExpectation ψ A • ψ⟫_ℂ = 0
   rw [inner_sub_right, inner_smul_right, hself, normalizedVectorExpectation,
@@ -88,7 +87,8 @@ theorem norm_centeredObservable_le
     _ ≤ ‖A‖ + ‖normalizedVectorExpectation ψ A • (1 : Matrix n n ℂ)‖ :=
       norm_sub_le _ _
     _ ≤ ‖A‖ + ‖normalizedVectorExpectation ψ A‖ :=
-      add_le_add_left (SpectralFilter.norm_smul_one_le _) _
+      add_le_add_left
+        (SpectralFilter.norm_smul_one_le (n := n) (normalizedVectorExpectation ψ A)) ‖A‖
     _ ≤ ‖A‖ + ‖A‖ := add_le_add_left (norm_normalizedVectorExpectation_le hψ A) _
     _ = _ := by ring
 

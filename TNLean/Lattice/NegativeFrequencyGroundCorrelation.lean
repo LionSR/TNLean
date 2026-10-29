@@ -178,9 +178,17 @@ theorem inner_ground_connected_eq_negativeFrequency_commutator
           (groundEigenspace H E₀).starProjection
             (toEuclideanCLM (n := n) (𝕜 := ℂ) B ψ))⟫_ℂ := by
       rw [hline, Submodule.starProjection_singleton (𝕜 := ℂ)]
-      simp only [map_sub, map_smul, inner_sub_right, inner_smul_right, div_eq_mul_inv]
-      congr 1
-      ring
+      simp only [map_sub, map_smul, inner_sub_right, inner_smul_right]
+      let a : ℂ := ⟪ψ, toEuclideanCLM (n := n) (𝕜 := ℂ) A ψ⟫_ℂ
+      let b : ℂ := ⟪ψ, toEuclideanCLM (n := n) (𝕜 := ℂ) B ψ⟫_ℂ
+      let δ : ℂ := Complex.ofReal (‖ψ‖ ^ 2)
+      let e : ℂ := ⟪ψ, toEuclideanCLM (n := n) (𝕜 := ℂ) A
+        (toEuclideanCLM (n := n) (𝕜 := ℂ) B ψ)⟫_ℂ
+      change e - a * b / δ = e - (b / δ) * a
+      apply congrArg (fun z : ℂ ↦ e - z)
+      calc
+        a * b / δ = b * a / δ := congrArg (fun z : ℂ ↦ z / δ) (mul_comm a b)
+        _ = b / δ * a := (div_mul_eq_mul_div₀ b a δ).symm
     _ = _ := inner_ground_projected_eq_negativeFrequency_commutator hH hmin A B hψ
 
 end TNLean.Lattice
