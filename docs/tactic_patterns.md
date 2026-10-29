@@ -9651,3 +9651,16 @@ there is no need for a new tactic.
   trace representation and the actual two-site local-kernel identity supply
   the remaining steps.
 - **Decision:** One source-specific lemma suffices; no new tactic or predicate.
+
+
+### Numbered trial segments under a local restriction — reused helpers (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTrialLocalization.lean`, five physical segments.
+- **Pattern:** A local pair is either inside a numbered segment, splitting it
+  into fixed prefix, variable pair and fixed suffix, or outside the segment,
+  leaving its entire word fixed.
+- **Reuse:** Two shared segment lemmas carry all finite-index arithmetic; the
+  five segment cases reuse the existing wall and pure-parent kernel results.
+  Existing wrapping-site lemmas supply the periodic endpoint evaluations.
+- **Decision:** Keep the coordinate lemmas and direct source partition; no new
+  support predicate or assumed vanishing condition.
