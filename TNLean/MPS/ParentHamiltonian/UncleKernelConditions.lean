@@ -54,15 +54,18 @@ theorem uncleHamiltonianES_isPositive
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (N : ℕ) :
     (uncleHamiltonianES A B R L N).toLinearMap.IsPositive := by
   classical
-  change (∑ i : Fin N, (((d ^ 2 : ℕ) : ℂ)⁻¹) • ∑ τ : Cfg d N,
-    (cyclicRestrictES (Fin.pos i) 2 i τ).adjoint ∘ₗ
-      (uncleInteractionES A B R L).toLinearMap ∘ₗ
-        cyclicRestrictES (Fin.pos i) 2 i τ).IsPositive
-  apply LinearMap.isPositive_sum
+  rw [ContinuousLinearMap.isPositive_toLinearMap_iff]
+  unfold uncleHamiltonianES
+  apply ContinuousLinearMap.isPositive_sum
   intro i _
-  apply LinearMap.IsPositive.smul_of_nonneg _ (inv_nonneg.mpr (Nat.cast_nonneg _))
-  apply LinearMap.isPositive_sum
+  apply ContinuousLinearMap.IsPositive.smul_of_nonneg _
+    (inv_nonneg.mpr (Nat.cast_nonneg _))
+  apply ContinuousLinearMap.isPositive_sum
   intro τ _
+  apply (ContinuousLinearMap.isPositive_toLinearMap_iff _).mp
+  change ((cyclicRestrictES (Fin.pos i) 2 i τ).adjoint ∘ₗ
+    (uncleInteractionES A B R L).toLinearMap ∘ₗ
+      cyclicRestrictES (Fin.pos i) 2 i τ).IsPositive
   exact (uncleInteractionES_isPositive A B R L).adjoint_conj
     (cyclicRestrictES (Fin.pos i) 2 i τ)
 
