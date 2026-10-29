@@ -9712,3 +9712,15 @@ there is no need for a new tactic.
   derives the retained dimension as one and fills all short volumes.
 - **Decision:** reuse one extraction proof; do not duplicate its canonical
   reduction or add the derived standing data as hypotheses to the public caller.
+
+### Least residue padding at a fixed word degree — candidate (2026-10-29)
+
+- **Pattern:** Solve the two charge equations and total degree in residues,
+  bound the least-residue sum, and add a multiple of the modulus to one count.
+- **Seen:** The degree-seven and degree-eight reachability proofs in
+  `MPS/Examples/ShortMomentum/Charges.lean`.
+- **Abstraction:** A common least-residue construction could expose the
+  dependence on the chosen degree. The exceptional central residue at degree
+  seven still needs its separate arithmetic argument.
+- **Notes:** Two concrete occurrences in one file; the abstraction threshold
+  is not met. Reuse the current charge and count lemmas in downstream proofs.
