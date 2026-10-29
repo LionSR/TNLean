@@ -254,7 +254,7 @@ theorem uncleWallGramWeight_eq_weighted_sum (A : MPSTensor d a) (B : MPSTensor d
           star (uncleWallCrossWeight A R ρ (uncleWallCorrelation A B R m)) =
         ∑ k ∈ Finset.range m, g k := by
     rw [uncleWallCorrelation_eq_sum A B R hB]
-    simp only [map_sum, g, Finset.sum_add_distrib]
+    simp only [map_sum, star_sum, g, Finset.sum_add_distrib]
   change uncleWallGramWeight A B R ρ (n + 1) =
     (n + 1 : ℂ) * Matrix.trace (ρ * ∑ i, R i * (R i)ᴴ) +
       ∑ k ∈ Finset.range n, ((n - k : ℕ) : ℂ) * g k
