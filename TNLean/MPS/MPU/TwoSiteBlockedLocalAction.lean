@@ -8,6 +8,7 @@ import TNLean.MPS.MPU.TwoSiteSurjectivity
 import TNLean.QCA.BlockingIntervalCoordinates
 import TNLean.QCA.BlockingQCA
 import TNLean.QCA.SupportIntersection
+import TNLean.MPS.ParentHamiltonian.QuasiLocalWindowCoordinates
 
 /-!
 # Exact local action after the supplied physical blocking
@@ -24,27 +25,6 @@ lines 603–622 and 2300–2334.
 open scoped Matrix
 
 namespace SpinChain
-
-/-- Removing identity spectator sites from consecutive interval matrix
-coordinates does not change the quasi-local observable. Source context:
-arXiv:1703.09188, Appendix identity inclusions, lines 2292–2295. -/
-theorem quasiLocalIntervalObservable_chainWindowOperator
-    (d n p s : ℕ) [NeZero d] (hn : 0 < n) (a : ℤ)
-    (A : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) :
-    quasiLocalIntervalObservable d (a - p) (p + (n + s))
-      (MPSTensor.chainWindowOperator (p + (n + s)) p A) =
-        quasiLocalIntervalObservable d a n A := by
-  let B := (intervalCoordinates d a n).symm A
-  let hIncl : finiteChainRegion a n ⊆ finiteChainRegion (a - p) (p + (n + s)) := by
-    simpa only [Nat.add_assoc] using finiteChainRegion_subset_expanded a n p s
-  have h := intervalCoordinates_localInclusion_eq_bufferedWindowMatrix d n p s a B
-  rw [StarAlgEquiv.apply_symm_apply,
-    MPOTensor.bufferedWindowMatrix_eq_chainWindowOperator d n p s hn] at h
-  have hB : (intervalCoordinates d (a - p) (p + (n + s))).symm
-      (MPSTensor.chainWindowOperator (p + (n + s)) p A) = localInclusion hIncl B :=
-    (StarAlgEquiv.symm_apply_eq _).mpr h.symm
-  rw [quasiLocalIntervalObservable_apply, hB, quasiLocalObservable_localInclusion]
-  rfl
 
 variable {d D ℓ r : ℕ} [NeZero d] {U : MPOTensor d D}
   (hU : U.IsMPU) (k : ℕ) (hk : 0 < k)
@@ -122,13 +102,10 @@ theorem bufferedMPUQuasiLocalAut_central_interval_four_output
             (MPOTensor.twoLinkOutputObservable u v A)) := by
   rw [bufferedMPUQuasiLocalAut_central_interval hU k hk S a A,
     MPOTensor.originalSiteHeisenbergOutputWindow_eq_chainWindowOperator k hk u v A]
-  have h := quasiLocalIntervalObservable_chainWindowOperator d (4 * k) k k (by omega)
-    (a + (k : ℕ))
+  exact quasiLocalIntervalObservable_chainWindowOperator a (3 * (2 * k)) k
     (Matrix.reindex (MPOTensor.originalSiteHeisenbergOutputCentreEquiv d k)
       (MPOTensor.originalSiteHeisenbergOutputCentreEquiv d k)
-        (MPOTensor.twoLinkOutputObservable u v A))
-  have ha : a + (k : ℕ) - (k : ℕ) = a := by omega
-  simpa only [ha, show k + (4 * k + k) = 3 * (2 * k) by omega] using h
+        (MPOTensor.twoLinkOutputObservable u v A)) (by omega) (by omega)
 
 /-- After the actual supplied physical blocking, an arbitrary pair
 observable has precisely the four-site two-link output matrix. The
