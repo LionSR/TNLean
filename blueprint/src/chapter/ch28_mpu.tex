@@ -9720,6 +9720,41 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 1201--1252.
 \end{proof}
 
+\begin{lemma}[Source cuts of a supplied square standard form]
+    \label{lem:mpu_supplied_standard_form_source_cuts}
+    \lean{MPOTensor.TwoSiteStandardFormData.cutX₁, MPOTensor.TwoSiteStandardFormData.cutY₁, MPOTensor.TwoSiteStandardFormData.cutX₂, MPOTensor.TwoSiteStandardFormData.cutY₂, MPOTensor.TwoSiteStandardFormData.sourceCutM₁_eq_cutX₁_mul_cutY₁, MPOTensor.TwoSiteStandardFormData.sourceCutM₂_eq_cutX₂_mul_cutY₂, MPOTensor.TwoSiteStandardFormData.cutY₂_cutY₁_eq_staircaseMiddle_mul_kronecker, MPOTensor.TwoSiteStandardFormData.cutX₁_cutX₂_eq_staircaseMiddle}
+    \notready
+    Let $W$ have a supplied two-site standard form with square gates $u,v$
+    on $\mathbb C^d\otimes\mathbb C^d$ and half factors $X_1,X_2$.
+    The two source cuts of $W$ itself admit factors through
+    $\mathbb C^d\otimes\mathbb C^d$ given by
+    \begin{align}
+        \widehat X_1((i_1,i_2),\gamma;a,s)
+         & =\delta_{i_1,a}X_1(i_2,\gamma;s), \\
+        \widehat Y_1(a,s;\alpha,j)
+         & =\sum_t X_2(\alpha,a;t)u(t,s;j),  \\
+        \widehat X_2(\alpha,(i_1,i_2);t,b)
+         & =X_2(\alpha,i_1;t)\delta_{i_2,b}, \\
+        \widehat Y_2(t,b;j,\gamma)
+         & =\sum_s u(t,s;j)X_1(b,\gamma;s).
+    \end{align}
+    Thus $\mathcal M_a(W)=\widehat X_a\widehat Y_a$ for $a=1,2$.
+    Contracting $\widehat Y_2$ with $\widehat Y_1$ gives
+    $v_{23}(u_{12}\otimes u_{34})$; contracting $\widehat X_1$ with
+    $\widehat X_2$ gives $v_{23}$. These are the four-original-spin
+    matrices in \cite[lines~1237--1252]{Cirac2017MPU}, without first
+    blocking $W$ again. No normalization or source-rank equality is asserted.
+\end{lemma}
+
+\begin{proof}
+    \uses{SF}
+    Substitute the open standard-form contraction in each source cut.
+    Sum the two spectator Kronecker deltas. In the right-factor contraction,
+    the virtual sum of $X_1$ and $X_2$ is $v$; the two remaining factors are
+    $u$. The left-factor contraction uses the same virtual sum and leaves
+    the first and fourth spins fixed.
+\end{proof}
+
 \begin{proposition}[Admissible local characterization of time reversal]
     \label{prop:mpu_admissible_local_time_reversal}
     \notready

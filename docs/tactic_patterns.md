@@ -4963,6 +4963,19 @@ three-plaquette output measurement, and the routed reunion measurement.
   `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
 
 ## Candidates
+### Supplied standard-form source-cut contraction — candidate (2026-10-29)
+
+- **Pattern:** Preserve the external physical coordinates by Kronecker deltas,
+  expand the actual supplied half factors, and reorder the virtual sum once
+  to identify the middle gate.
+- **Seen:** `MPS/MPU/TwoSiteStandardFormSourceCuts.lean`, both cut
+  factorizations and both four-spin gate contractions.
+- **Abstraction:** Existing `Finset.sum_congr₂` handles consecutive two-index
+  descents. The cut identities are the reusable mathematical statements;
+  no new contraction tactic or parallel source-factor predicate is needed.
+- **Notes:** The sum over the virtual bond is consumed only by the actual
+  `v_apply` relation. No gauge or symmetry premise enters these identities.
+
 
 ### Counting nearest-neighbour bonds that meet a region — candidate (2026-10-28)
 
