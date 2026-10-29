@@ -163,7 +163,7 @@ the chain bootstrap bound.
         \label{eq:hastings_supported_cut_rank_one_sided}
     \end{align}
     one-sided operators do not increase rank. By
-    Theorem~\ref{thm:chain_cut_rank_growth}, shifting a cut by $m$ sites changes
+    Lemma~\ref{thm:chain_cut_rank_growth}, shifting a cut by $m$ sites changes
     $r_k$ by at most $q^m$, and $X$ is one-sided across cut $k+m$, so
     \begin{align}
         r_k(X\psi)\le q^m\,r_{k+m}(X\psi)\le q^m\,r_{k+m}(\psi)
@@ -269,7 +269,7 @@ the chain bootstrap bound.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_cut_rank_growth}
-    By Theorem~\ref{thm:chain_cut_rank_growth}, shifting cut $j\le L$ to $L$
+    By Lemma~\ref{thm:chain_cut_rank_growth}, shifting cut $j\le L$ to $L$
     (where the rank is at most $1$) changes the rank by at most
     $q^{L-j}\le q^{2s}$; for $j>L$ the rank is already at most $1$.
 \end{proof}

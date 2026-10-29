@@ -71,7 +71,7 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
         thm:chain_sequential_truncation_sq}
     By Theorem~\ref{thm:renyi_entropy_tail_threshold} and
     (\ref{eq:renyi_finite_entropy_threshold}), $\tau_D(\rho_{N,k})\le\delta^2/[16(N+1)]$.
-    Theorems~\ref{thm:chain_sequential_truncation_eigen}
+    Lemmas~\ref{thm:chain_sequential_truncation_eigen}
     and~\ref{thm:chain_sequential_truncation_sq} give an MPS $\Phi\ne0$ with
     $\|\Phi-\psi_N\|^2\le\delta^2/16$. Setting $\phi_N=\Phi/\|\Phi\|$ yields
     \begin{align}
@@ -96,7 +96,7 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
     \leanok
     \uses{thm:chain_sequential_truncation_eigen,thm:chain_sequential_truncation_sq}
     Since $\tau_D(\rho_{N,k})=0$ for all $0<k<N$, sequential truncation
-    (Theorems~\ref{thm:chain_sequential_truncation_eigen}
+    (Lemmas~\ref{thm:chain_sequential_truncation_eigen}
     and~\ref{thm:chain_sequential_truncation_sq}) gives $\|\Phi-\psi_N\|^2=0$.
 \end{proof}
 
@@ -151,7 +151,7 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_reduced_state_rank_error}
-    By Theorem~\ref{thm:chain_reduced_state_rank_error}, the prefix marginal of
+    By Lemma~\ref{thm:chain_reduced_state_rank_error}, the prefix marginal of
     $\phi$ has rank at most $D$ and trace-norm distance at most $\delta$ from
     $\rho_k$; the finite-dimensional Rényi approximation inequality gives
     (\ref{eq:chain_cut_renyi_approximation_lower_bound}).
