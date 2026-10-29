@@ -1,11 +1,11 @@
 {
- "reviewedAt": "2026-10-28T17:54:32Z",
+ "reviewedAt": "2026-10-29T09:46:41Z",
  "checked": [],
  "entries": [
   {
    "id": "docs/paper-gaps/hastings07_doubling_constants.tex",
    "kind": "local-correction",
-   "status": "resolved",
+   "status": "resolved-pending",
    "paper": "hastings",
    "result": "Main theorem, the doubling iteration",
    "issue": 9814,
@@ -13,7 +13,8 @@
     "TNLean": [
      9904,
      10057,
-     10076
+     10076,
+     10281
     ]
    },
    "title": "Two factors of two in the doubling iteration",
@@ -22,7 +23,7 @@
    "claims": "Each doubling lowers the entropy per site <i>S<sub>l</sub></i>/<i>l</i> by 1/ξ′, and the contradiction bounds the window length <i>l</i><sub>0</sub> by ξ′ ln(2<i>C</i><sub>1</sub>) times a power of two, giving the factor 2<sup>ξ′ ln <i>D</i></sup> in <i>S</i><sub>max</sub>.",
    "found": "Dividing the doubling inequality by 2<i>l</i> lowers <i>S<sub>l</sub></i>/<i>l</i> by 1/(2ξ′) per doubling, so twice as many doublings are needed; and the printed prefactor ξ′ ln(2<i>C</i><sub>1</sub>) is ξ<sub>0</sub>/2, while the contradiction only gives <i>l</i><sub>0</sub> &lt; ξ<sub>0</sub> times the power of two. Three facts used implicitly (2<i>C</i><sub>1</sub> &gt; 1, ln <i>C</i><sub>1</sub> + <i>C</i><sub>2</sub> ≥ 0, and the inequality only where both intervals fit in the window) are stated as hypotheses; none restricts the theorem.",
    "impact": "At the original fixed length the corrected argument gives 4 raised to ξ′ ln D. With the admissible pair (v, ξ<sub>C</sub>) = (40c<sub>R</sub>J, 80), set s = max(80c<sub>R</sub>J/ΔE, 80) and ξ′ = 6s. The bound is then c<sub>0</sub> ξ′ ln ξ′ ln D · 2<sup>ξ′ ln D</sup>, with c<sub>0</sub> depending only on the interaction range.",
-   "plan": "The fixed-length correction and the printed-form comparison at the common source length have passed local proof and source verification. The new comparison awaits submission and review; earlier pieces of the doubling argument are merged.",
+   "plan": "The fixed-length correction and the printed-form comparison at the common source length have passed local proof and source verification. The new comparison is submitted for review and remains unmerged; earlier pieces of the doubling argument are merged.",
    "stage": "area:4"
   },
   {
@@ -71,14 +72,15 @@
   {
    "id": "docs/paper-gaps/hastings07_gaussian_average_exponent.tex",
    "kind": "error",
-   "status": "resolved",
+   "status": "resolved-pending",
    "paper": "hastings",
    "result": "Lemma 1, the Gaussian filter and decay constants",
    "issue": 9811,
    "prs": {
     "TNLean": [
      9995,
-     10063
+     10063,
+     10281
     ]
    },
    "title": "Gaussian filtering and the endpoint decay rate",
@@ -87,24 +89,28 @@
    "claims": "The paper chooses q = lΔE/(6v), asserts a filtered-vector error of order e<sup>−l/(3ξ)</sup>, and states a final bound C<sub>1</sub>(ξ)e<sup>−l/(6ξ)</sup> with C<sub>1</sub> polynomial in ξ.",
    "found": "The suppression is exp(−q/2), so doubling the printed q restores the intermediate rate. At a fixed length the final estimate retains a square-root prefactor and gives only strictly slower exponential rates. An auxiliary enlarged length ζ gives a contraction bound Kζ³ exp(−l/(6ζ)). The common pair (40c<sub>R</sub>J, 80) has source length s ≥ 2ζ, so both contraction and positive semidefinite factorizations satisfy Ks³ exp(−l/(6s)).",
    "impact": "The printed Gaussian intermediate estimate needs correction. The corrected factorization reaches the stated endpoint form after choosing an enlarged admissible length, uniformly in chain length and local dimension.",
-   "plan": "The Gaussian correction is already proved. The interaction-proportional source pair and both common-length factorization statements have also passed local verification and await submission and review.",
+   "plan": "The Gaussian correction is already proved. The interaction-proportional source pair and both common-length factorization statements have also passed local verification and are submitted for review and remain unmerged.",
    "stage": "area:1"
   },
   {
    "id": "docs/paper-gaps/hastings07_lemma1_positivity_rate.tex",
    "kind": "local-correction",
-   "status": "resolved",
+   "status": "resolved-pending",
    "paper": "hastings",
    "result": "Lemma 1, positivity of the window factor",
    "issue": 9811,
-   "prs": {},
+   "prs": {
+    "TNLean": [
+     10281
+    ]
+   },
    "title": "Positive factors and the square-root loss",
    "summary": "The repair is positive semidefinite and halves the rate at a fixed length; enlarging the admissible source length restores the stated rate for positive factors as well.",
    "context": "The left and right factors of the approximate projector are orthogonal projections. The middle factor B acts on the window and need not be positive.",
    "claims": "The printed lemma asks for all three factors to be positive with error ε(l) = C<sub>1</sub>e<sup>−l/ξ′</sup>.",
-   "found": "The note added replaces B by B†B. Lemma 4 bounds the repaired error by √(1 − (1 − ε)²) + 3ε + ε² for small ε, giving a bound of order √ε and decay e<sup>−l/(2ξ′)</sup>. Positive means positive semidefinite here: a projection can have a kernel, so positive definiteness is not available in general.",
+   "found": "The note added replaces B by B†B. Lemma 4 bounds the repaired error by √(1 − (1 − ε)²) + 3ε + ε² for small ε, giving a bound of order √ε and decay e<sup>−l/(2ξ′)</sup>. The constructed factors are positive semidefinite and can have kernels; the construction does not establish positive definiteness.",
    "impact": "The positive-factor estimate has the slower rate at a fixed auxiliary length ζ. For the common source length s ≥ 2ζ it instead has error Ks³ exp(−l/(6s)), just as the contraction estimate. The correlation lemma therefore uses the same ξ′ = 6s as the area law and matrix product state approximation.",
-   "plan": "The Hermitian repair is merged. Its common-source-length application and the correlation consequence have passed local verification and await submission and review.",
+   "plan": "The Hermitian repair is merged. Its common-source-length application and the correlation consequence have passed local verification and are submitted for review and remain unmerged.",
    "stage": "area:1"
   },
   {
@@ -178,7 +184,7 @@
   {
    "id": "docs/paper-gaps/hastings07_lemma1_decay_length.tex",
    "kind": "local-correction",
-   "status": "resolved",
+   "status": "resolved-pending",
    "paper": "hastings",
    "result": "Lemma 1, the chain localization constants",
    "issue": 9811,
@@ -189,7 +195,8 @@
      10054,
      10063,
      10146,
-     10147
+     10147,
+     10281
     ]
    },
    "title": "A common Lieb–Robinson pair for every consequence",
@@ -198,13 +205,13 @@
    "claims": "The source requires a controlled prefactor, velocity v of order J, length ξ<sub>C</sub> of order one, and a factorization constant polynomial in ξ.",
    "found": "The chain commutator estimate has numerical prefactor 4 times the first-support size and no second-support cardinality factor. Its time-cone form holds for every positive v ≥ 8c<sub>R</sub>J and ξ<sub>C</sub> ≥ 8. Taking (v, ξ<sub>C</sub>) = (40c<sub>R</sub>J, 80) gives s = max(80c<sub>R</sub>J/ΔE, 80). The positive factorization, bootstrap and Rényi bounds, mutual-information step, printed entropy bound, matrix product state threshold and correlation lemma all use ξ′ = 6s.",
    "impact": "The former restriction on matching the source parameters is removed. The gap-dependent auxiliary velocities remain valid intermediate estimates, while the final common velocity is proportional to J. The reciprocal-length convention and the fixed-length corrections remain explicit.",
-   "plan": "All common-parameter statements have passed the full local build, strict checks, standard-axiom and blueprint declaration checks, and mathematical source review. They await submission and review.",
+   "plan": "All common-parameter statements have passed the full local build, strict checks, standard-axiom and blueprint declaration checks, and mathematical source review. They are submitted for review and remain unmerged.",
    "stage": "area:1"
   },
   {
    "id": "docs/paper-gaps/hastings07_mps_entropy_stage.tex",
    "kind": "narrower",
-   "status": "resolved",
+   "status": "resolved-pending",
    "paper": "hastings",
    "result": "Matrix product states, the Hamiltonian application",
    "issue": 9815,
@@ -213,7 +220,8 @@
      9992,
      10059,
      10069,
-     10078
+     10078,
+     10281
     ]
    },
    "title": "The conditional entropy premise and the Hamiltonian application",
@@ -222,20 +230,21 @@
    "claims": "For ground states of gapped chains, the preceding area law and factorization provide constants uniform in the cut and chain length.",
    "found": "The conditional theorem takes the entropy and factorization bounds as hypotheses, just as the paper's construction does, and gives an unnormalized matrix product vector Φ. For N &lt; 2, Φ = Ψ<sub>0</sub>; for N ≥ 2, ‖Φ − Ψ<sub>0</sub>‖² ≤ (N − 1)4C<sub>1</sub>²e<sup>2/ξ′</sup>(k′/k<sub>0</sub>)<sup>−1/(ξ′ ln D)</sup>, with k′ ≥ k<sub>0</sub>. For a gapped chain the area law supplies k<sub>0</sub> = ⌈exp(2S<sub>max</sub>)/2⌉ and Lemma 1 supplies the factorization, both independent of the chain length. The source-length theorem uses ξ′ = 6s and the printed S<sub>max</sub> = c<sub>0</sub> ξ′ ln ξ′ ln D · 2<sup>ξ′ ln D</sup>.",
    "impact": "The conditional entropy premise is discharged from the Hamiltonian, and no restriction on matching the source length remains. The squared-norm and normalization conventions remain explicit.",
-   "plan": "The conditional construction and earlier Hamiltonian applications are merged. The common-source-length application, with its threshold from the printed entropy maximum, has passed local verification and awaits submission and review.",
+   "plan": "The conditional construction and earlier Hamiltonian applications are merged. The common-source-length application, with its threshold from the printed entropy maximum, has passed local verification and is submitted for review and remains unmerged.",
    "stage": "mps:1"
   },
   {
    "id": "docs/paper-gaps/hastings07_renyi_bootstrap_orders.tex",
    "kind": "narrower",
-   "status": "resolved",
+   "status": "resolved-pending",
    "paper": "hastings",
    "result": "Lemma 2, the Rényi form",
    "issue": 9813,
    "prs": {
     "TNLean": [
      10085,
-     10105
+     10105,
+     10281
     ]
    },
    "title": "The orders of the Rényi bootstrap lemma",
@@ -244,7 +253,7 @@
    "claims": "For sufficiently large α, maximizing the Rényi entropy under the tail constraints gives a series that converges whenever e<sup>−2α/ξ′</sup>(D<sup>2</sup>)<sup>1−α</sup> &lt; 1, and the bound differs from the von Neumann bound only in the function replacing F(ξ′, D).",
    "found": "The paper's maximization uses concavity of t ↦ t<sup>α</sup> and so covers 0 &lt; α &lt; 1 with the convergence condition, with 4 ln D − ln(1 − (D<sup>2</sup>)<sup>1−α</sup>e<sup>−2α/ξ′</sup>)/(1 − α) in place of F(ξ′, D). For α &gt; 1, where the condition always holds, concavity of the logarithm gives S<sub>α</sub> ≤ S, so the von Neumann bound applies with F(ξ′, D) itself.",
    "impact": "No. Every order is covered, so the restriction to orders below one is removed.",
-   "plan": "Both order ranges are already proved. Their common-source-length forms at ξ′ = 6s have passed local verification and await submission and review; they carry no inherited restriction on the Lieb–Robinson parameters.",
+   "plan": "Both order ranges are already proved. Their common-source-length forms at ξ′ = 6s have passed local verification and are submitted for review and remain unmerged; they carry no inherited restriction on the Lieb–Robinson parameters.",
    "stage": "area:2"
   },
   {

@@ -2,7 +2,7 @@
   "slug": "hastings-area-law",
   "pageTitle": "Hastings' Area Law · TNLean",
   "heading": "Hastings' area law for gapped one-dimensional ground states",
-  "lede": "Hastings' 2007 argument for the one-dimensional area law and polynomial matrix product state approximation is now fully proved and verified locally in Lean, with one common Lieb–Robinson pair throughout. The new contributions are being prepared for review; local verification and merged coverage are distinguished below. The proof factors the ground-state projector near a cut and uses the resulting mutual-information gain to bound the entanglement entropy independently of chain length.",
+  "lede": "Hastings' 2007 argument for the one-dimensional area law and polynomial matrix product state approximation is now fully proved and verified locally in Lean, with one common Lieb–Robinson pair throughout. The new contributions have been submitted for review; local verification and merged coverage are distinguished below. The proof factors the ground-state projector near a cut and uses the resulting mutual-information gain to bound the entanglement entropy independently of chain length.",
   "description": "Hastings' one-dimensional area law in Lean 4: verified proofs, review status and corrections to the printed argument.",
   "tabs": [
     {
@@ -77,7 +77,7 @@
             9811,
             9810
           ],
-          "physics": "Fix a cut between sites <i>j</i> and <i>j</i> + 1 and a length <i>l</i>. Lemma 1 constructs three contractions: <i>O<sub>L</sub></i> acting left of the cut, <i>O<sub>R</sub></i> acting right of it, and <i>O<sub>B</sub></i> acting on the window of 2<i>l</i> sites around it. Their product approximates the projector <i>P</i><sub>0</sub> onto Ψ<sub>0</sub> in operator norm. The construction splits <i>H</i> into left, buffer and right parts, centres each at the ground state, and averages each against a Gaussian under time evolution. The gap makes these averages nearly annihilate Ψ<sub>0</sub>; the Lieb–Robinson bound makes them nearly local. Spectral cutoffs of the localized left and right parts give orthogonal projections <i>O<sub>L</sub></i>, <i>O<sub>R</sub></i>. A localized Gaussian average in the interaction picture gives the window contraction. This first window factor need not be positive. Lemma 4 replaces it by <i>O<sub>B</sub></i><sup>†</sup><i>O<sub>B</sub></i>, which is positive semidefinite; positive definiteness is neither required nor generally possible.",
+          "physics": "Fix a cut between sites <i>j</i> and <i>j</i> + 1 and a length <i>l</i>. Lemma 1 constructs three contractions: <i>O<sub>L</sub></i> acting left of the cut, <i>O<sub>R</sub></i> acting right of it, and <i>O<sub>B</sub></i> acting on the window of 2<i>l</i> sites around it. Their product approximates the projector <i>P</i><sub>0</sub> onto Ψ<sub>0</sub> in operator norm. The construction splits <i>H</i> into left, buffer and right parts, centres each at the ground state, and averages each against a Gaussian under time evolution. The gap makes these averages nearly annihilate Ψ<sub>0</sub>; the Lieb–Robinson bound makes them nearly local. Spectral cutoffs of the localized left and right parts give orthogonal projections <i>O<sub>L</sub></i>, <i>O<sub>R</sub></i>. A localized Gaussian average in the interaction picture gives the window contraction. This first window factor need not be positive. Lemma 4 replaces it by <i>O<sub>B</sub></i><sup>†</sup><i>O<sub>B</sub></i>, which is positive semidefinite; the constructed factors can have kernels.",
           "delivers": "At an original fixed localization length, the Gaussian construction retains a square-root prefactor, and making the window factor positive also incurs a square-root loss in the error. The common admissible source length <i>s</i> absorbs both losses: the contraction and positive semidefinite versions each satisfy ‖<i>O<sub>B</sub>O<sub>L</sub>O<sub>R</sub></i> − <i>P</i><sub>0</sub>‖ ≤ <i>K s</i><sup>3</sup>e<sup>−<i>l</i>/(6<i>s</i>)</sup>. Thus the source rate ξ′ = 6<i>s</i> holds with a polynomial factorization constant, uniformly in the chain length, the cut and the local dimension. The fixed-length corrections remain recorded in the paper-gap notes."
         },
         {
@@ -169,5 +169,10 @@
       "Matrix product state",
       "A vector on a chain written as a contraction of one tensor per site, with open ends. Every internal Schmidt rank is at most the corresponding bond dimension. For a nonzero vector on a chain of at least two sites, the minimal possible maximal bond dimension equals the largest Schmidt rank across internal cuts; an arbitrary representation may have larger bonds."
     ]
-  ]
+  ],
+  "includePRs": {
+    "TNLean": [
+      10281
+    ]
+  }
 }
