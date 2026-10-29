@@ -1,0 +1,27 @@
+\section{Embeddings of physical coordinate spaces}
+
+\begin{definition}[Euclidean extension by zero]
+    \label{def:physical_euclidean_extension_zero}
+    \lean{Function.Embedding.euclideanExtendByZero,
+        Function.Embedding.euclideanExtendByZero_apply_image,
+        Function.Embedding.euclideanExtendByZero_apply_not_mem_range}
+    \notready
+    For an injection $e:I\hookrightarrow J$ of finite sets, let
+    $E_e:\mathbb C^I\to\mathbb C^J$ extend each coefficient family by zero:
+    \begin{align}
+        (E_e\xi)(j) & =
+        \begin{cases}
+            \xi(i), & j=e(i),       \\
+            0,      & j\notin e(I).
+        \end{cases}
+    \end{align}
+    Then $E_e$ is a linear isometry. In particular, this applies to an
+    injection of dependent configuration sets induced by a family of
+    physical embeddings.
+\end{definition}
+\begin{proof}
+    \notready
+    The sum of $|(E_e\xi)(j)|^2$ over $j\in J$ equals the sum of
+    $|\xi(i)|^2$ over $i\in I$, since every coefficient outside $e(I)$ is
+    zero and each coefficient in $e(I)$ occurs once.
+\end{proof}
