@@ -22,7 +22,7 @@
     \cite[Section~7, ``Kitaev's code state'']{Schuch2010PEPS}.
 \end{definition}
 
-\begin{theorem}[The tiling respects periodic nearest neighbors]%
+\begin{lemma}[The tiling respects periodic nearest neighbors]%
     \label{thm:peps_kitaev_periodic_tiling}
     \lean{TNLean.PEPS.kitaevDoubleCoordinateEquiv_apply,
         TNLean.PEPS.kitaevTiledRight_left, TNLean.PEPS.kitaevTiledUp_down,
@@ -39,7 +39,7 @@
     nearest-neighbor step on the fine torus. The orientation of the
     elementary tensor changes across every such bond, including bonds
     crossing a periodic seam.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     In each coordinate, division by two gives a unique coarse coordinate
@@ -114,7 +114,7 @@ pairs obey the corresponding reversed-order convention.
     $T_0$ or $T_1$ for each of the four corners.
 \end{definition}
 
-\begin{theorem}[Global contraction of the elementary checkerboard PEPS]%
+\begin{lemma}[Global contraction of the elementary checkerboard PEPS]%
     \label{thm:peps_kitaev_global_blocking}
     \lean{TNLean.PEPS.kitaevPeriodicFineCoeff_eq_blocked,
         TNLean.PEPS.kitaevPeriodicFineCoeff_eq_colorNetwork,
@@ -141,7 +141,7 @@ pairs obey the corresponding reversed-order convention.
     under physical regrouping. The tensor $K$ is the dual toric-code tensor
     with physical order $(\sigma_3,\sigma_0,\sigma_1,\sigma_2)$.
     There is no additional scalar factor.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The fine horizontal and vertical bonds partition into four internal
@@ -152,7 +152,7 @@ pairs obey the corresponding reversed-order convention.
     boundary at $v$ is
     $(V_v,H_v,\operatorname{swap}V_{v-e_y},
         \operatorname{swap}H_{v-e_x})$.
-    Theorem~\ref{thm:peps_kitaev_checkerboard_blocking} forces the two
+    Lemma~\ref{thm:peps_kitaev_checkerboard_blocking} forces the two
     labels of every crossing pair to agree. Every pair with unequal
     labels makes the product zero. The surviving global bond assignments
     are therefore in bijection with $(a,b)$ through
@@ -162,7 +162,7 @@ pairs obey the corresponding reversed-order convention.
     identity identifies $K$ with the dual toric-code tensor.
 \end{proof}
 
-\begin{theorem}[Unitary physical regrouping of the global checkerboard state]%
+\begin{lemma}[Unitary physical regrouping of the global checkerboard state]%
     \label{thm:peps_kitaev_global_physical_blocking}
     \lean{TNLean.PEPS.kitaevPhysicalBlockingEquiv,
         TNLean.PEPS.kitaevPhysicalBlockingMatrix,
@@ -174,7 +174,7 @@ pairs obey the corresponding reversed-order convention.
     Let $R\ket{\sigma}=\ket{(\sigma_v)_v}$ be the physical regrouping
     from single fine spins to four-spin coarse sites. Then
     $R^\dagger R=1$, $RR^\dagger=1$ and $R\Psi_T=\Psi_K$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The disjoint tiling makes $\sigma\mapsto(\sigma_v)_v$ a bijection

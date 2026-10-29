@@ -17,7 +17,7 @@ arbitrary spectator memory, with no bound on the spectator dimension.
     applies $\langle e_i|_a\otimes I_K$ and then prepares $|e_i\rangle_b$.
 \end{definition}
 
-\begin{theorem}[Local message summands]
+\begin{lemma}[Local message summands]
     \label{thm:peps_local_message_summands}
     \lean{TNLean.Lattice.PartyCircuit.Word.isAllowed_localDiscard}
     \lean{TNLean.Lattice.PartyCircuit.Word.eval_localDiscard_tmul}
@@ -32,7 +32,7 @@ arbitrary spectator memory, with no bound on the spectator dimension.
         \label{eq:peps_message_summand_action}
     \end{align}
     with the first output register owned by $b$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_local_message_summand}
@@ -41,7 +41,7 @@ arbitrary spectator memory, with no bound on the spectator dimension.
     (\ref{eq:peps_message_summand_action}).
 \end{proof}
 
-\begin{theorem}[The exact message identity]
+\begin{lemma}[The exact message identity]
     \label{thm:peps_exact_message_identity}
     \lean{TNLean.Lattice.PartyCircuit.Word.sum_eval_transferTerm}
     \leanok
@@ -52,7 +52,7 @@ arbitrary spectator memory, with no bound on the spectator dimension.
         =I_{H\otimes K}.
         \label{eq:peps_exact_message_identity}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_local_message_summands}
@@ -72,7 +72,7 @@ arbitrary spectator memory, with no bound on the spectator dimension.
     segment to the second monomial.
 \end{definition}
 
-\begin{theorem}[Operators and pair effects of composed monomials]
+\begin{lemma}[Operators and pair effects of composed monomials]
     \label{thm:peps_compose_actual_monomials}
     \lean{TNLean.Lattice.PartyCircuit.PartyChain.eval_prependWord}
     \lean{TNLean.Lattice.PartyCircuit.PartyChain.isAllowed_prependWord}
@@ -86,7 +86,7 @@ arbitrary spectator memory, with no bound on the spectator dimension.
     allowedness and pair-effect count. For composable monomials $M,N$, their
     composition $N\circ M$ has operator $N\circ M$, pair-effect count
     $r_{N\circ M}=r_N+r_M$, and is allowed whenever $M$ and $N$ are allowed.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_compose_actual_monomials}
@@ -94,7 +94,7 @@ arbitrary spectator memory, with no bound on the spectator dimension.
     Definition~\ref{def:peps_compose_actual_monomials}.
 \end{proof}
 
-\begin{theorem}[The finite expansion of a message]
+\begin{lemma}[The finite expansion of a message]
     \label{thm:peps_message_expansion_count}
     \lean{TNLean.Lattice.PartyCircuit.gate_toGate_eq_sum}
     \lean{TNLean.Lattice.PartyCircuit.PartyGate.transfer}
@@ -106,7 +106,7 @@ arbitrary spectator memory, with no bound on the spectator dimension.
     The unit-weighted list of message summands for $H$ has length $\dim H$,
     absolute coefficient sum $\dim H$, allowed terms with $0$ pair effects, and
     evaluated operator $I_{H\otimes K}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_exact_message_identity}
@@ -126,7 +126,7 @@ arbitrary spectator memory, with no bound on the spectator dimension.
     lists $(c_jd_k,N_k\circ M_j)$ in lexicographic order on $(j,k)$.
 \end{definition}
 
-\begin{theorem}[Operator and resources of composed expansions]
+\begin{lemma}[Operator and resources of composed expansions]
     \label{thm:peps_composed_gate_resources}
     \lean{TNLean.Lattice.PartyCircuit.PartyGate.gate_comp}
     \lean{TNLean.Lattice.PartyCircuit.PartyGate.length_comp}
@@ -139,11 +139,11 @@ arbitrary spectator memory, with no bound on the spectator dimension.
     and has coefficient sum $(\sum_j|c_j|)(\sum_k|d_k|)$. If all terms of $L$
     and $K$ are allowed with at most $r$ and $s$ pair effects, respectively,
     then all terms of $K\circ L$ are allowed with at most $r+s$ pair effects.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_compose_actual_monomials}
-    Bilinearity and Theorem~\ref{thm:peps_compose_actual_monomials} give
+    Bilinearity and Lemma~\ref{thm:peps_compose_actual_monomials} give
     $\sum_{j,k}c_jd_k(N_k\circ M_j)=G_K G_L$, $|K\circ L|=|L||K|$,
     $\sum_{j,k}|c_jd_k|=(\sum_j|c_j|)(\sum_k|d_k|)$, allowedness, and the effect
     bound $r+s$.
@@ -167,7 +167,7 @@ arbitrary spectator memory, with no bound on the spectator dimension.
     defines the message-free expansion $\mathcal E(M)$.
 \end{definition}
 
-\begin{theorem}[Exact expansion and resources of bounded messages]
+\begin{lemma}[Exact expansion and resources of bounded messages]
     \label{thm:peps_message_expansion}
     \uses{def:peps_message_monomial}
     \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.eval_expand}
@@ -183,16 +183,16 @@ arbitrary spectator memory, with no bound on the spectator dimension.
         =\prod_{j=1}^{s}d_j.
         \label{eq:peps_message_expansion_size}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:peps_message_expansion_count,thm:peps_composed_gate_resources}
     \leanok
     Induct over the segments and transfers of $M$ using
-    Theorems~\ref{thm:peps_message_expansion_count}
+    Lemmas~\ref{thm:peps_message_expansion_count}
     and~\ref{thm:peps_composed_gate_resources}.
 \end{proof}
 
-\begin{theorem}[Polynomial cost of boundedly many messages]
+\begin{lemma}[Polynomial cost of boundedly many messages]
     \label{thm:peps_message_expansion_polynomial}
     \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.expansion_size_le}
     \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.expansion_size_le_of_power_bounds}
@@ -201,7 +201,7 @@ arbitrary spectator memory, with no bound on the spectator dimension.
     $|\mathcal E(M)|=\sum_{(c,N)\in\mathcal E(M)}|c|\le D^m$. If
     $d_j\le C_DL^v$ ($C_D,L\ge 1$, $v\in\N$), both quantities are at most
     $C_D^mL^{vm}$, as in Theorem~5.2, assumption~3.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_message_expansion}
@@ -243,7 +243,7 @@ parties, using message monomials as in
 % lines 32--43; Theorem 5.2, lines 143--149.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 
-\begin{theorem}[Expansion of a gate without messages]
+\begin{lemma}[Expansion of a gate without messages]
     \label{thm:peps_message_gate_segment_expansion}
     \lean{TNLean.Lattice.PartyCircuit.MessageGate.expand_map_segment}
     \leanok
@@ -251,7 +251,7 @@ parties, using message monomials as in
         def:peps_message_gate_expand}
     Viewing a list $A=((c_j,M_j))_{j=0}^{K-1}$ of message-free party monomials
     as single-segment message monomials gives $\widetilde A=A$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -260,7 +260,7 @@ parties, using message monomials as in
     $((c_j\cdot 1,M_j))$ recovers $A$.
 \end{proof}
 
-\begin{theorem}[Operator and effect count under message expansion]
+\begin{lemma}[Operator and effect count under message expansion]
     \label{thm:peps_message_gate_eval}
     \lean{TNLean.Lattice.PartyCircuit.MessageGate.eval_expand,
         TNLean.Lattice.PartyCircuit.MessageGate.isAllowed_expand,
@@ -270,16 +270,16 @@ parties, using message monomials as in
     The expanded list $\widetilde L$ evaluates to $G_L$. If every $M_j$ is
     allowed with at most $r$ pair effects, then every term of $\widetilde L$ is
     allowed with at most $r$ pair effects.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:peps_message_expansion}
     \leanok
-    By Theorem~\ref{thm:peps_message_expansion},
+    By Lemma~\ref{thm:peps_message_expansion},
     $\sum_t a_{j,t}N_{j,t}=M_j$ and each $N_{j,t}$ is allowed with $r_{M_j}\le r$
     pair effects, so $\sum_{j,t}c_ja_{j,t}N_{j,t}=\sum_j c_jM_j=G_L$.
 \end{proof}
 
-\begin{theorem}[Term count and coefficient sum]
+\begin{lemma}[Term count and coefficient sum]
     \label{thm:peps_message_gate_size}
     \lean{TNLean.Lattice.PartyCircuit.MessageGate.expansion_size,
         TNLean.Lattice.PartyCircuit.MessageGate.expansion_size_le,
@@ -297,7 +297,7 @@ parties, using message monomials as in
         \label{eq:peps_message_gate_size}
     \end{align}
     and if $|c_j|\le C$ ($C\ge 0$), then $\sum_{(c,N)\in\widetilde L}|c|\le KCD^m$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:peps_message_expansion}
     \leanok
@@ -317,7 +317,7 @@ parties, using message monomials as in
     embedding $\iota$ and unchanged spectator memory.
 \end{definition}
 
-\begin{theorem}[Operator and occurrences of the constructed gate]
+\begin{lemma}[Operator and occurrences of the constructed gate]
     \label{thm:peps_message_gate_circuit_properties}
     \lean{TNLean.Lattice.PartyCircuit.MessageGate.eval_toOriginalCircuit,
         TNLean.Lattice.PartyCircuit.MessageGate.nonprivateCount_toOriginalCircuit,
@@ -327,30 +327,30 @@ parties, using message monomials as in
     The gate of Definition~\ref{def:peps_message_gate_circuit} has operator
     equal to the relabelling of $G_L\otimes I$, nonprivate gate count $1$, and
     participant set $\iota(C)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_message_gate_eval}
-    By Theorem~\ref{thm:peps_message_gate_eval}, $\widetilde L$ evaluates to
+    By Lemma~\ref{thm:peps_message_gate_eval}, $\widetilde L$ evaluates to
     $G_L$ with $\|G_L\|\le 1$, and Definition~\ref{def:peps_message_gate_circuit}
     inserts one nonprivate occurrence on $\iota(C)$.
 \end{proof}
 
-\begin{theorem}[Resource bounds for the constructed gate]
+\begin{lemma}[Resource bounds for the constructed gate]
     \label{thm:peps_message_gate_circuit_bounds}
     \lean{TNLean.Lattice.PartyCircuit.MessageGate.isExpansionBounded_toOriginalCircuit,
         TNLean.Lattice.PartyCircuit.MessageGate.isMonomialBounded_toOriginalCircuit}
     \leanok
     \uses{def:peps_message_gate_circuit}
-    Under the hypotheses of Theorem~\ref{thm:peps_message_gate_size}, if
+    Under the hypotheses of Lemma~\ref{thm:peps_message_gate_size}, if
     $\sum_{(c,M)\in L}|c|\le S$, each $M_j$ has at most $r$ pair effects, and
     $|L|\le K$, then the gate of Definition~\ref{def:peps_message_gate_circuit}
     has at most $r$ pair effects per monomial, coefficient sum at most $SD^m$,
     and at most $\lceil KD^m\rceil$ terms.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_message_gate_eval,thm:peps_message_gate_size}
-    Apply Theorems~\ref{thm:peps_message_gate_eval}
+    Apply Lemmas~\ref{thm:peps_message_gate_eval}
     and~\ref{thm:peps_message_gate_size} to $\widetilde L$.
 \end{proof}

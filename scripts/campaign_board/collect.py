@@ -464,6 +464,8 @@ def blueprint_status(cfg: dict, checkouts: dict[str, Checkout], cites: re.Patter
                     count["proved"] += 1
                 else:
                     count["stated"] += 1
+            if not any(count.values()):
+                continue  # a chapter opening that only \input's its sections
             title = re.search(r"\\chapter\{(.*?)\}", source)
             chapters.append({"repo": repo["name"], "path": path,
                              "title": title.group(1) if title else pathlib.Path(path).stem, **count})

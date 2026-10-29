@@ -35,7 +35,7 @@ complete operators. We give the corresponding exact constructions.
     satisfies $\|G\|\leq1$.
 \end{definition}
 
-\begin{theorem}[Prepared branches and the complete gate]
+\begin{lemma}[Prepared branches and the complete gate]
     \label{thm:peps_prepared_gate_properties}
     \lean{TNLean.Lattice.PartyCircuit.PreparedSourceGate.branchWord_isAllowed}
     \lean{TNLean.Lattice.PartyCircuit.PreparedSourceGate.sources_branchWord}
@@ -45,18 +45,18 @@ complete operators. We give the corresponding exact constructions.
     In Definition~\ref{def:peps_prepared_source_gate}, each $F_\xi$ is allowed
     with ordered source list $((e;U_e,V_e;\eta_{\xi,e}))_{e\in E}$, and
     $\|G\|\le 1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_source_preparation,def:peps_prepared_source_gate}
     Since $\|\eta_{\xi,e}\|=1$ and $T_\xi$ is source-free and allowed,
-    Theorem~\ref{thm:peps_source_preparation} and
+    Lemma~\ref{thm:peps_source_preparation} and
     Definition~\ref{def:peps_prepared_source_gate} imply that $F_\xi=T_\xi Q_{\eta_\xi,\mathcal H_a}$
     is allowed with source list $((e;U_e,V_e;\eta_{\xi,e}))_{e\in E}$ and $\|G\|\le 1$.
 \end{proof}
 
-\begin{theorem}[Construction from the original branch operators]
+\begin{lemma}[Construction from the original branch operators]
     \label{thm:peps_prepared_gate_exists}
     \lean{TNLean.Lattice.PartyCircuit.Word.exists_preparedSourceGate}
     \leanok
@@ -65,12 +65,12 @@ complete operators. We give the corresponding exact constructions.
     $\|\sum_{\xi\in\Xi}c_\xi W_\xi\|\leq1$, then there exist common finite
     source data (Definition~\ref{def:peps_prepared_source_gate}) with the same
     $c_\xi$ such that $G=\sum_{\xi\in\Xi}c_\xi W_\xi$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_finite_source_gate}
-    By Theorem~\ref{thm:peps_finite_source_gate}, there exist common finite
+    By Lemma~\ref{thm:peps_finite_source_gate}, there exist common finite
     spaces $U_e,V_e$, unit vectors $\eta_{\xi,e}$, and source-free allowed words
     $T_\xi$ with $T_\xi Q_{\eta_\xi,\mathcal H_a}=W_\xi$ for all $\xi\in\Xi$;
     substituting into~(\ref{eq:peps_prepared_gate_sum}) gives
@@ -96,7 +96,7 @@ complete operators. We give the corresponding exact constructions.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Equality of grouped owners]
+\begin{lemma}[Equality of grouped owners]
     \label{thm:peps_affected_owner_equality}
     \lean{TNLean.Lattice.PartyCircuit.affectedOwner_eq_iff}
     \lean{TNLean.Lattice.PartyCircuit.PairSource.affectedOwner_ne_iff}
@@ -105,7 +105,7 @@ complete operators. We give the corresponding exact constructions.
     For $g$ as in Definition~\ref{def:peps_affected_owner}, $g(p)=g(q)$ if and
     only if $p=q$ or $p,q\notin\mathcal A$. Consequently, for $p\neq q$,
     $g(p)\neq g(q)$ if and only if $\{p,q\}\cap\mathcal A\neq\varnothing$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -114,7 +114,7 @@ complete operators. We give the corresponding exact constructions.
     $P\setminus\mathcal A$ to $*\notin\mathcal A$.
 \end{proof}
 
-\begin{theorem}[The surviving ordered source occurrences]
+\begin{lemma}[The surviving ordered source occurrences]
     \label{thm:peps_affected_source_occurrences}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.mem_mapOwner_affectedOwner}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.map_partyPair_affectedOwner}
@@ -127,16 +127,16 @@ complete operators. We give the corresponding exact constructions.
     $\{p,q\}\cap\mathcal A\neq\varnothing$ and replacing $(p,q)$ by
     $(g(p),g(q))$. In particular, $S_g=\varnothing$ if and only if
     $p,q\notin\mathcal A$ for every $(p,q;U,V;\eta)\in S$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:peps_owner_sources,thm:peps_owner_sources_internal,
         thm:peps_affected_owner_equality}
     Combine Definition~\ref{def:peps_owner_sources},
-    Theorem~\ref{thm:peps_owner_sources_internal}, and the criterion
+    Lemma~\ref{thm:peps_owner_sources_internal}, and the criterion
     $g(p)\neq g(q)\iff\{p,q\}\cap\mathcal A\neq\varnothing$ of
-    Theorem~\ref{thm:peps_affected_owner_equality}.
+    Lemma~\ref{thm:peps_affected_owner_equality}.
 \end{proof}
 
 \begin{definition}[Retaining a complete operation at one grouped owner]
@@ -150,7 +150,7 @@ complete operators. We give the corresponding exact constructions.
     as a local operation at $q$ while leaving $\ell^f$ untouched.
 \end{definition}
 
-\begin{theorem}[Exact action of an untouched aggregate]
+\begin{lemma}[Exact action of an untouched aggregate]
     \label{thm:peps_grouped_block_map}
     \lean{TNLean.Lattice.PartyCircuit.Word.groupedBlockMap_spec}
     \lean{TNLean.Lattice.PartyCircuit.Word.eval_groupedBlockMap}
@@ -164,18 +164,18 @@ complete operators. We give the corresponding exact constructions.
         \label{eq:peps_grouped_block_action}
     \end{align}
     If $\|D\|\leq1$, then $D^f_{\ell}$ is source-free and allowed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_owner_concatenation,def:peps_grouped_block_map}
     By Definition~\ref{def:peps_grouped_block_map} and
-    Theorem~\ref{thm:peps_owner_concatenation}, $R_{f,b}DR_{f,a}^{-1}$ cancels
+    Lemma~\ref{thm:peps_owner_concatenation}, $R_{f,b}DR_{f,a}^{-1}$ cancels
     with the factor isometries in $R_{f,a\ell}$ and $R_{f,b\ell}$ to yield~(\ref{eq:peps_grouped_block_action}),
     and $\|R_{f,b}DR_{f,a}^{-1}\|=\|D\|\le 1$.
 \end{proof}
 
-\begin{theorem}[Grouping preserves the weighted gate sum]
+\begin{lemma}[Grouping preserves the weighted gate sum]
     \label{thm:peps_grouped_gate_sum}
     \lean{TNLean.Lattice.PartyCircuit.Word.eval_sum_mapOwner_comp}
     \leanok
@@ -186,12 +186,12 @@ complete operators. We give the corresponding exact constructions.
          & =R_{f,b}\left(\sum_\xi c_\xi F_\xi\right).
         \label{eq:peps_grouped_gate_sum}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_owner_composition}
-    Sum $F_\xi^fR_{f,a}=R_{f,b}F_\xi$ (Theorem~\ref{thm:peps_owner_composition})
+    Sum $F_\xi^fR_{f,a}=R_{f,b}F_\xi$ (Lemma~\ref{thm:peps_owner_composition})
     with weights $c_\xi$.
 \end{proof}
 
@@ -204,7 +204,7 @@ complete operators. We give the corresponding exact constructions.
     and $f:P\to Q$, define $G^f=R_{f,b}GR_{f,a}^{-1}$.
 \end{definition}
 
-\begin{theorem}[The original expansion and aggregate norm after grouping]
+\begin{lemma}[The original expansion and aggregate norm after grouping]
     \label{thm:peps_prepared_gate_grouped}
     \lean{TNLean.Lattice.PartyCircuit.PreparedSourceGate.evalAtOwners_eq_sum}
     \lean{TNLean.Lattice.PartyCircuit.PreparedSourceGate.norm_evalAtOwners_le_one}
@@ -212,13 +212,13 @@ complete operators. We give the corresponding exact constructions.
     \uses{def:peps_prepared_gate_grouped,def:peps_owner_composition}
     In Definition~\ref{def:peps_prepared_gate_grouped},
     $G^f=\sum_\xi c_\xi F_\xi^f$ and $\|G^f\|\leq1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_grouped_gate_sum,thm:peps_prepared_gate_properties}
     Compose~(\ref{eq:peps_grouped_gate_sum}) with $R_{f,a}^{-1}$ and apply
-    $\|G\|\le 1$ from Theorem~\ref{thm:peps_prepared_gate_properties}.
+    $\|G\|\le 1$ from Lemma~\ref{thm:peps_prepared_gate_properties}.
 \end{proof}
 
 \subsection{Preparing only the fixed sources}
@@ -255,7 +255,7 @@ complete operators. We give the corresponding exact constructions.
     $e\in E\setminus E_{\rm free}$.
 \end{definition}
 
-\begin{theorem}[Only the fixed sources are prepared]
+\begin{lemma}[Only the fixed sources are prepared]
     \label{thm:peps_selective_preparation_sources}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.isAllowed_prepareSelected}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.sources_prepareSelected}
@@ -266,7 +266,7 @@ complete operators. We give the corresponding exact constructions.
     is $((e;U_e,V_e;\eta_e))_{e\in E\setminus E_{\rm free}}$ in the order of
     $E$. If $\|\eta_e\|=1$ for all $e\in E\setminus E_{\rm free}$, then
     $\Phi_\eta$ is allowed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -278,7 +278,7 @@ complete operators. We give the corresponding exact constructions.
     of $\eta_e$.
 \end{proof}
 
-\begin{theorem}[Uniform recovery of every completed preparation]
+\begin{lemma}[Uniform recovery of every completed preparation]
     \label{thm:peps_selective_preparation_recovery}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.eval_prepareSelected_prepareFreeSlots}
     \leanok
@@ -290,18 +290,18 @@ complete operators. We give the corresponding exact constructions.
          & =Q_{\theta,\mathcal H_\ell}.
         \label{eq:peps_selective_recovery}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:peps_selective_preparation,thm:peps_source_preparation}
     Induct on $E$ using Definition~\ref{def:peps_selective_preparation} and
-    Theorem~\ref{thm:peps_source_preparation}: at $e\in E_{\rm free}$, preparing
+    Lemma~\ref{thm:peps_source_preparation}: at $e\in E_{\rm free}$, preparing
     $\zeta_e$ commutes with $\Phi_\eta$ on the remaining positions, while at
     $e\in E\setminus E_{\rm free}$ both sides prepare $\eta_e$.
 \end{proof}
 
-\begin{theorem}[Two contractions independent of the free source vectors]
+\begin{lemma}[Two contractions independent of the free source vectors]
     \label{thm:peps_selective_partition}
     \lean{TNLean.Lattice.PartyCircuit.Word.exists_selective_partition}
     \leanok
@@ -322,16 +322,16 @@ complete operators. We give the corresponding exact constructions.
         Q^{\rm free}_{\zeta,\mathcal H_\ell}.
         \label{eq:peps_selective_all_vectors}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_selective_preparation_sources,
         thm:peps_internal_source_factorization,
         thm:peps_selective_preparation_recovery}
-    By Theorem~\ref{thm:peps_selective_preparation_sources}, all sources of
+    By Lemma~\ref{thm:peps_selective_preparation_sources}, all sources of
     $T\Phi_\eta$ belong to $E\setminus E_{\rm free}$ and are internal to $f$, so
-    Theorem~\ref{thm:peps_internal_source_factorization} gives
+    Lemma~\ref{thm:peps_internal_source_factorization} gives
     $A_+,A_-$ with $\|A_\pm\|\le 1$ satisfying~(\ref{eq:peps_selective_partition});
     right-multiplying by $Q^{\rm free}_{\zeta,\mathcal H_\ell}$ and applying~(\ref{eq:peps_selective_recovery})
     gives~(\ref{eq:peps_selective_all_vectors}).
@@ -347,10 +347,10 @@ complete operators. We give the corresponding exact constructions.
     For a word $W:a\to b$ and a spectator list $\ell$, define
     $W_{\ell}=\mathrm{Exch}_{\ell,b}\circ W_{[\ell]}\circ\mathrm{Exch}_{a,\ell}:a\ell\to b\ell$,
     which exchanges $\ell$ in front of $a$, applies $W$ framed by $\ell$, and
-    exchanges $\ell$ back after $b$ (Theorem~\ref{thm:peps_register_exchange}).
+    exchanges $\ell$ back after $b$ (Lemma~\ref{thm:peps_register_exchange}).
 \end{definition}
 
-\begin{theorem}[Exact spectator extension]
+\begin{lemma}[Exact spectator extension]
     \label{thm:peps_append_spectators}
     \lean{TNLean.Lattice.PartyCircuit.Word.isAllowed_appendTail}
     \lean{TNLean.Lattice.PartyCircuit.Word.sources_appendTail}
@@ -365,19 +365,19 @@ complete operators. We give the corresponding exact constructions.
          & =C_{b,\ell}^{-1}(W\otimes I_{\mathcal H_\ell}).
         \label{eq:peps_append_spectators}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_register_exchange,thm:peps_source_preparation}
-    By Theorem~\ref{thm:peps_register_exchange} and
-    Theorem~\ref{thm:peps_source_preparation}, on $x\otimes y\in\mathcal H_a\otimes\mathcal H_\ell$
+    By Lemma~\ref{thm:peps_register_exchange} and
+    Lemma~\ref{thm:peps_source_preparation}, on $x\otimes y\in\mathcal H_a\otimes\mathcal H_\ell$
     the three steps of $W_{\ell}$ send $x\otimes y\mapsto y\otimes x\mapsto y\otimes Wx\mapsto Wx\otimes y$,
     giving~(\ref{eq:peps_append_spectators}) while preserving the source list
     and allowedness of $W$.
 \end{proof}
 
-\begin{theorem}[Relabelling a composition beside spectators]
+\begin{lemma}[Relabelling a composition beside spectators]
     \label{thm:peps_owner_spectator_extension}
     \lean{TNLean.Lattice.PartyCircuit.Word.mapOwner_appendTail_heq}
     \leanok
@@ -389,14 +389,14 @@ complete operators. We give the corresponding exact constructions.
     concatenation identifications $(at)^g=a^g t^g$ and $(bt)^g=b^g t^g$,
     $(W_t)^g=(W^g)_{t^g}$.
     % Source: 04-compression.tex, lines 233--267 and 409--434.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_append_spectators,def:peps_owner_composition,
         def:peps_owner_layout,thm:peps_register_exchange}
     By Definition~\ref{def:peps_owner_composition},
     Definition~\ref{def:peps_owner_layout}, and
-    Theorem~\ref{thm:peps_register_exchange}, for any register $r$ and block
+    Lemma~\ref{thm:peps_register_exchange}, for any register $r$ and block
     $A$,
     \begin{align}
         (\mathrm{frame}_r\,w)^g
@@ -416,7 +416,7 @@ complete operators. We give the corresponding exact constructions.
 \end{proof}
 
 
-\begin{theorem}[Congruence under equal register lists]
+\begin{lemma}[Congruence under equal register lists]
     \label{thm:peps_word_structural_congruence}
     \lean{TNLean.Lattice.PartyCircuit.Word.comp_heq}
     \lean{TNLean.Lattice.PartyCircuit.Word.frame_heq}
@@ -434,14 +434,14 @@ complete operators. We give the corresponding exact constructions.
     identity on $W$, and $W=W'$ implies equality of their evaluated operators
     under the induced memory identifications.
     % Source: 04-compression.tex, lines 233--267 and 351--381.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Substituting the register-list and word equalities reduces each assertion
     to reflexivity.
 \end{proof}
 
-\begin{theorem}[Relabelling equal register lists]
+\begin{lemma}[Relabelling equal register lists]
     \label{thm:peps_owner_layout_identification}
     \lean{TNLean.Lattice.PartyCircuit.Word.mapOwner_castLayouts}
     \leanok
@@ -452,13 +452,13 @@ complete operators. We give the corresponding exact constructions.
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     $(W[h_a,h_b])^f=W^f[h_a^f,h_b^f]$.
     % Source: 04-compression.tex, lines 383--434 and 565--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Substituting $h_a$ and $h_b$ reduces both sides to $W^f$.
 \end{proof}
 
-\begin{theorem}[Restriction commutes with relabelling owners]
+\begin{lemma}[Restriction commutes with relabelling owners]
     \label{thm:peps_owner_selection_commutation}
     \lean{TNLean.Lattice.PartyCircuit.Word.restrict_mapOwner_heq}
     \leanok
@@ -472,20 +472,20 @@ complete operators. We give the corresponding exact constructions.
         \label{eq:peps_owner_selection_commutation}
     \end{align}
     % Source: 04-compression.tex, lines 383--434 and 565--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_word_structural_congruence,
         thm:peps_owner_layout_identification,thm:peps_party_restriction}
-    Induct on $W$ using Theorem~\ref{thm:peps_party_restriction},
-    Theorem~\ref{thm:peps_word_structural_congruence}, and
-    Theorem~\ref{thm:peps_owner_layout_identification}: a local operation or
+    Induct on $W$ using Lemma~\ref{thm:peps_party_restriction},
+    Lemma~\ref{thm:peps_word_structural_congruence}, and
+    Lemma~\ref{thm:peps_owner_layout_identification}: a local operation or
     register at $p\in P$ is retained by $B$ after $f$ if and only if
     $p\in f^{-1}(B)$.
 \end{proof}
 
 
-\begin{theorem}[Evaluation under relabelling owners]
+\begin{lemma}[Evaluation under relabelling owners]
     \label{thm:peps_owner_evaluation_identification}
     \lean{TNLean.Lattice.PartyCircuit.Word.eval_mapOwner_heq}
     \leanok
@@ -496,17 +496,17 @@ complete operators. We give the corresponding exact constructions.
     $\mathcal H_{b^f}=\mathcal H_b$ (Definition~\ref{def:peps_owner_layout}),
     $\operatorname{eval}(W^f)=\operatorname{eval}(W)$.
     % Source: 04-compression.tex, lines 383--434 and 565--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_owner_composition,def:peps_owner_layout}
     By Definition~\ref{def:peps_owner_layout} and
-    Theorem~\ref{thm:peps_owner_composition}, $R_{f,a}$ and $R_{f,b}$ act as
+    Lemma~\ref{thm:peps_owner_composition}, $R_{f,a}$ and $R_{f,b}$ act as
     $\Id$ under the memory identifications, so $W^fR_{f,a}=R_{f,b}W$ reduces to
     $\operatorname{eval}(W^f)=\operatorname{eval}(W)$.
 \end{proof}
 
-\begin{theorem}[Relabelling a framed word]
+\begin{lemma}[Relabelling a framed word]
     \label{thm:peps_owner_framed_word}
     \lean{TNLean.Lattice.PartyCircuit.Word.mapOwner_frameList_heq}
     \leanok
@@ -518,17 +518,17 @@ complete operators. We give the corresponding exact constructions.
     and $(sb)^f=s^fb^f$, the framed word $F_s(W):sa\to sb$ satisfies
     $(F_s(W))^f=F_{s^f}(W^f)$.
     % Source: 04-compression.tex, lines 233--267, 409--434 and 565--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_owner_composition,def:peps_owner_layout,
         thm:peps_word_structural_congruence}
     Induct on $s$ using Definition~\ref{def:peps_owner_composition},
     Definition~\ref{def:peps_owner_layout}, and
-    Theorem~\ref{thm:peps_word_structural_congruence}.
+    Lemma~\ref{thm:peps_word_structural_congruence}.
 \end{proof}
 
-\begin{theorem}[Source registers at an owner with a singleton fibre]
+\begin{lemma}[Source registers at an owner with a singleton fibre]
     \label{thm:peps_selected_source_owner_registers}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.atParty_layout_mapOwner_of_singleton_fiber}
     \leanok
@@ -540,7 +540,7 @@ complete operators. We give the corresponding exact constructions.
     (Definition~\ref{def:peps_owner_sources}). Then
     $(\ell_{S_f})_q=((\ell_S)_p)^f$.
     % Source: 04-compression.tex, lines 383--434 and 565--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_source_inventory,def:peps_owner_sources,
@@ -552,7 +552,7 @@ complete operators. We give the corresponding exact constructions.
     relabelling selection at $p$.
 \end{proof}
 
-\begin{theorem}[Coordinate endpoint spaces recover the fixed source list]
+\begin{lemma}[Coordinate endpoint spaces recover the fixed source list]
     \label{thm:peps_partial_slot_coordinate_layout}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.slotLayout_partialSlots_eq_layout}
     \leanok
@@ -563,17 +563,17 @@ complete operators. We give the corresponding exact constructions.
     (Definition~\ref{def:peps_partial_fixed_positions}), concatenating the
     two-register lists with grouped owners under $g_{\mathcal A}$ and endpoint
     spaces $\C^{u_{e_i}},\C^{v_{e_i}}$ yields the register list of the fixed
-    partial source inventory (Theorem~\ref{thm:peps_partial_fixed_layout}).
+    partial source inventory (Lemma~\ref{thm:peps_partial_fixed_layout}).
     % Source: 04-compression.tex, lines 253--267 and 342--417.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_partial_fixed_layout}
     Follows directly from the slot-space specification in
-    Theorem~\ref{thm:peps_partial_fixed_layout}.
+    Lemma~\ref{thm:peps_partial_fixed_layout}.
 \end{proof}
 
-\begin{theorem}[Selected source lists in two owner groupings]
+\begin{lemma}[Selected source lists in two owner groupings]
     \label{thm:peps_singleton_all_source_layout}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.mapOwner_atParty_partialSlots_eq_allResidualSourceLayout}
     \leanok
@@ -588,14 +588,14 @@ complete operators. We give the corresponding exact constructions.
     map $q_p\mapsto g(p)$ and $*\mapsto *$. Then
     $(S_p|_{q_p})^{\lambda_p}=S_P|_{g(p)}$.
     % Source: 04-compression.tex, lines 253--267, 342--417 and 409--434.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_partial_slot_coordinate_layout,thm:peps_partial_fixed_layout,
         thm:peps_incident_gate_labels,def:peps_affected_owner}
-    By Theorem~\ref{thm:peps_partial_slot_coordinate_layout},
-    Theorem~\ref{thm:peps_partial_fixed_layout}, and
-    Theorem~\ref{thm:peps_incident_gate_labels}, traversing the original source
+    By Lemma~\ref{thm:peps_partial_slot_coordinate_layout},
+    Lemma~\ref{thm:peps_partial_fixed_layout}, and
+    Lemma~\ref{thm:peps_incident_gate_labels}, traversing the original source
     occurrences in order retains in both $(S_p|_{q_p})^{\lambda_p}$ and
     $S_P|_{g(p)}$ precisely the half-registers with original owner $p$, mapped
     to owner $g(p)$ with unchanged endpoint spaces.
@@ -613,16 +613,16 @@ complete operators. We give the corresponding exact constructions.
     $\psi\in\mathcal H_a$ with preparation word $P_\psi:\C\to\mathcal H_a$ in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, let
     $\chi_\eta\in\Xi_{\{p\}}$ be the singleton partial choice determined by
-    $\eta$ (Theorem~\ref{thm:peps_incident_gate_labels}) and
+    $\eta$ (Lemma~\ref{thm:peps_incident_gate_labels}) and
     $V_{p,\chi_\eta}:S_p a^{g_p}\to b^{g_p}$ its canonical source-free residual
     (Definition~\ref{def:peps_canonical_source_residual}). Set
     $U_{p,\eta}=V_{p,\chi_\eta}\circ F_{S_p}(P_\psi^{g_p})$ and define
     $K_{p,\eta}=(U_{p,\eta}|_{q_p})^{\lambda_p}:S_P|_{g(p)}\to(b^g)|_{g(p)}$
-    under the identification of Theorem~\ref{thm:peps_singleton_all_source_layout}.
+    under the identification of Lemma~\ref{thm:peps_singleton_all_source_layout}.
     % Source: 04-compression.tex, lines 253--267, 342--417, 409--434 and 565--588.
 \end{definition}
 
-\begin{theorem}[No pair preparations in the incident-label word]
+\begin{lemma}[No pair preparations in the incident-label word]
     \label{thm:peps_incident_source_word_sources}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sources_incidentSourceWord}
     \leanok
@@ -631,27 +631,27 @@ complete operators. We give the corresponding exact constructions.
     Definition~\ref{def:peps_incident_source_word}, $K_{p,\eta}$ has empty
     pair-source inventory (\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}).
     % Source: 04-compression.tex, lines 253--267, 409--434 and 565--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_incident_source_word,thm:peps_canonical_source_recovery,
         thm:peps_source_preparation,thm:peps_party_restriction,
         def:peps_owner_composition}
     By Definition~\ref{def:peps_incident_source_word} and
-    Theorem~\ref{thm:peps_canonical_source_recovery}, both $P_\psi$ and
+    Lemma~\ref{thm:peps_canonical_source_recovery}, both $P_\psi$ and
     $V_{p,\chi_\eta}$ are source-free, and framing, composition, restriction
-    (Theorem~\ref{thm:peps_party_restriction}), and owner relabelling
+    (Lemma~\ref{thm:peps_party_restriction}), and owner relabelling
     (Definition~\ref{def:peps_owner_composition}) introduce no pair sources.
 \end{proof}
 
 
-\begin{theorem}[Selected original lists in two owner groupings]
+\begin{lemma}[Selected original lists in two owner groupings]
     \label{thm:peps_singleton_all_original_layout}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.mapOwner_selected_originalLayout_eq}
     \leanok
     \uses{def:peps_affected_owner,thm:peps_incident_gate_labels,
         def:peps_owner_layout,thm:peps_party_restriction}
-    In the notation of Theorem~\ref{thm:peps_singleton_all_source_layout}, for
+    In the notation of Lemma~\ref{thm:peps_singleton_all_source_layout}, for
     any ordered register list $\ell$ on $P$
     (\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}),
     \begin{align}
@@ -660,19 +660,19 @@ complete operators. We give the corresponding exact constructions.
         \label{eq:peps_singleton_all_original_layout}
     \end{align}
     % Source: 04-compression.tex, lines 409--434 and 565--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_affected_owner,thm:peps_incident_gate_labels,
         def:peps_owner_layout,thm:peps_party_restriction}
     Induct on $\ell$ using Definition~\ref{def:peps_affected_owner},
     Definition~\ref{def:peps_owner_layout}, and
-    Theorem~\ref{thm:peps_party_restriction}: a register in $\ell$ is retained
+    Lemma~\ref{thm:peps_party_restriction}: a register in $\ell$ is retained
     on both sides if and only if its owner is $p$, in which case $\lambda_p$
     maps $q_p\mapsto g(p)$.
 \end{proof}
 
-\begin{theorem}[Tensor maps under equal memory spaces]
+\begin{lemma}[Tensor maps under equal memory spaces]
     \label{thm:peps_tensor_map_memory_congruence}
     \lean{TNLean.Lattice.PartyCircuit.mapL_heq}
     \leanok
@@ -684,10 +684,10 @@ complete operators. We give the corresponding exact constructions.
     under these identifications, then $T\otimes U=T'\otimes U'$ under
     $A\otimes C=A'\otimes C'$ and $B\otimes D=B'\otimes D'$.
     % Source: 04-compression.tex, lines 233--267, 409--434 and 565--588.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Substituting the space equalities via
-    Theorem~\ref{thm:peps_basis_memory_equalities} reduces $T\otimes U=T'\otimes U'$
+    Lemma~\ref{thm:peps_basis_memory_equalities} reduces $T\otimes U=T'\otimes U'$
     to congruence of $\otimes$.
 \end{proof}
