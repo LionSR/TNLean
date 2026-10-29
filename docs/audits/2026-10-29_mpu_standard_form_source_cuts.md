@@ -38,6 +38,17 @@ finite-dimensional range and matrix right-inverse theorems then construct the
 two right inverses. Thus the whole normalized record is now derived, with no
 normalization, inverse, rank or gauge-existence witness added as an input.
 
+The necessary zero-index rank conclusion is also derived, with its input
+stated at the even original lengths. Adjoint invariance of `mpo U (2*N)`
+compares the direct two-site block of U with its physical adjoint. Existing
+same-family canonical FT identifies the ranks; adjunction exchanges them.
+The proved growth formulas give `d*r = ℓ*d`; canceling the positive d gives
+`r=ℓ`, and simplicity's `r*ℓ=d*d` then gives `r=ℓ=d`. The canonical datum
+for the direct block is constructed by the existing blocking theorem and
+its adjoint by the existing physical-adjoint theorem; neither is an input
+witness. Only one two-site blocking is used, and no odd-length symmetry is
+inferred.
+
 ## Remaining source steps
 
 The physical-adjoint coarse factors must be constructed in the same actual
@@ -47,8 +58,8 @@ the local gauges. Its operator-family hypothesis must be obtained while
 retaining the paper's even-chain convention. No extra eight-spin blocking
 may replace the required four-spin equation.
 
-No literal forward local time-reversal certificate, converse, transposition
-criterion or zero-index theorem is claimed here. The exact and admissible
+No literal forward local time-reversal certificate, converse or transposition
+criterion is claimed here. The exact and admissible
 Blueprint propositions remain `notready`; #7020 remains open. The full-support
 restriction is already documented in
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`.

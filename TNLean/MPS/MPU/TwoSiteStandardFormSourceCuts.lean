@@ -7,6 +7,7 @@ import TNLean.MPS.MPU.TwoSiteStandardForm
 import TNLean.MPS.MPU.StaircaseGates
 import QICLean.Algebra.MatrixIsometryKronecker
 import TNLean.MPS.MPU.Index
+import TNLean.MPS.MPU.RepresentativeIndex
 import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 
 /-!
@@ -341,5 +342,47 @@ noncomputable def IsMPUCanonicalFormII.twoSiteSourceFactors
   · change Matrix.reindexLinearEquiv ℂ ℂ el (Equiv.refl _) S.cutY₂ *
       Matrix.reindexLinearEquiv ℂ ℂ (Equiv.refl _) el Z₂ = 1
     rw [Matrix.reindexLinearEquiv_mul, hZ₂, Matrix.reindexLinearEquiv_one]
+
+/-- Actual adjoint invariance at the even original chain lengths forces
+both source ranks of the original simple canonical tensor to equal its
+physical dimension. Only a single two-site blocking is used. Source:
+arXiv:1703.09188, `PropChiral`, lines 1201–1252, including the zero-index
+observation preceding the proposition. The hypothesis is on original
+lengths, not on a further blocking of the supplied standard form. -/
+theorem IsMPUCanonicalFormII.sourceRanks_eq_phys_of_even_mpo_eq_adjoint
+    {d D : ℕ} {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
+    (hsimple : IsMPUSimple U)
+    (hTR : ∀ N : ℕ, 1 < N → Even N → mpo U N = (mpo U N)ᴴ) :
+    r[U] = d ∧ ℓ[U] = d := by
+  have hEq : ∀ N : ℕ, 1 < N →
+      mpo (blockTensor U 2) N =
+        mpo (physicalAdjointTensor (blockTensor U 2)) N := by
+    intro N hN
+    ext σ τ
+    rw [mpo_physicalAdjointTensor]
+    have h := congrArg (fun M ↦ M
+        ((MPSTensor.blockedConfigEquiv d N 2) σ)
+        ((MPSTensor.blockedConfigEquiv d N 2) τ))
+      (hTR (N * 2) (by omega) ⟨N, by omega⟩)
+    simpa only [mpo_blockTensor_eq_reindex, Matrix.reindex_apply,
+      Equiv.symm_symm, Matrix.conjTranspose_apply] using h
+  let hB := hU.blockTensor 2 (by decide)
+  have hsame := hB.sourceRanks_eq_of_mpo_eq hB.physicalAdjointTensor hEq
+  have hbalanced : ℓ[blockTensor U 2] = r[blockTensor U 2] := by
+    simpa only [rightRank_physicalAdjointTensor] using hsame.1
+  obtain ⟨hr, hl⟩ := hU.twoSite_sourceRanks hsimple
+  simp only [blockTwo_eq_blockTensor_reindex, rightRank_reindexPhysical,
+    leftRank_reindexPhysical] at hr hl
+  have hrℓ : r[U] = ℓ[U] := by
+    apply mul_left_cancel₀ hU.neZero_phys.out
+    calc
+      d * r[U] = r[blockTensor U 2] := hr.symm
+      _ = ℓ[blockTensor U 2] := hbalanced.symm
+      _ = d * ℓ[U] := hl.trans (Nat.mul_comm _ _)
+  have hprod := (hU.isMPUSimple_tfae.out 1 2).mp hsimple
+  rw [hrℓ] at hprod
+  have hℓ : ℓ[U] = d :=
+    (mul_self_inj (Nat.zero_le _) (Nat.zero_le _)).mp hprod
+  exact ⟨hrℓ.trans hℓ, hℓ⟩
 
 end MPOTensor

@@ -9722,7 +9722,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{lemma}[Source cuts of a supplied square standard form]
     \label{lem:mpu_supplied_standard_form_source_cuts}
-    \lean{MPOTensor.TwoSiteStandardFormData.cutX₁, MPOTensor.TwoSiteStandardFormData.cutY₁, MPOTensor.TwoSiteStandardFormData.cutX₂, MPOTensor.TwoSiteStandardFormData.cutY₂, MPOTensor.TwoSiteStandardFormData.sourceCutM₁_eq_cutX₁_mul_cutY₁, MPOTensor.TwoSiteStandardFormData.sourceCutM₂_eq_cutX₂_mul_cutY₂, MPOTensor.TwoSiteStandardFormData.cutY₂_cutY₁_eq_staircaseMiddle_mul_kronecker, MPOTensor.TwoSiteStandardFormData.cutX₁_cutX₂_eq_staircaseMiddle, MPOTensor.IsMPUCanonicalFormII.twoSite_cutX₁_weighted_isometry, MPOTensor.IsMPUCanonicalFormII.twoSite_cutX₂_isIsometry, MPOTensor.IsMPUCanonicalFormII.twoSite_sourceRanks, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors}
+    \lean{MPOTensor.TwoSiteStandardFormData.cutX₁, MPOTensor.TwoSiteStandardFormData.cutY₁, MPOTensor.TwoSiteStandardFormData.cutX₂, MPOTensor.TwoSiteStandardFormData.cutY₂, MPOTensor.TwoSiteStandardFormData.sourceCutM₁_eq_cutX₁_mul_cutY₁, MPOTensor.TwoSiteStandardFormData.sourceCutM₂_eq_cutX₂_mul_cutY₂, MPOTensor.TwoSiteStandardFormData.cutY₂_cutY₁_eq_staircaseMiddle_mul_kronecker, MPOTensor.TwoSiteStandardFormData.cutX₁_cutX₂_eq_staircaseMiddle, MPOTensor.IsMPUCanonicalFormII.twoSite_cutX₁_weighted_isometry, MPOTensor.IsMPUCanonicalFormII.twoSite_cutX₂_isIsometry, MPOTensor.IsMPUCanonicalFormII.twoSite_sourceRanks, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors, MPOTensor.IsMPUCanonicalFormII.sourceRanks_eq_phys_of_even_mpo_eq_adjoint}
     \notready
     Let $W$ have a supplied two-site standard form with unitary gates
     $u:\mathbb C^d\otimes\mathbb C^d\to\mathbb C^\ell\otimes\mathbb C^r$ and
@@ -9752,7 +9752,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\widehat X_2^\dagger\widehat X_2=\Id$. In this canonical construction,
     the actual cut ranks are $d r$ and $\ell d$. The right factors have
     full row rank, hence right inverses; together these give normalized
-    source factors at the same boundary $\rho$.
+    source factors at the same boundary $\rho$. If the original canonical
+    tensor $U$ is simple and $U^{(N)}=U^{(N)\dagger}$ at every even original
+    length $N>1$, then $r(U)=\ell(U)=d$.
 \end{lemma}
 
 \begin{proof}
@@ -9768,6 +9770,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Simplicity persists under blocking; the rank-product saturation argument
     gives the ranks $dr$ and $\ell d$. Each cut factors through its displayed
     pair space, so its right factor has full row rank and a right inverse.
+    For the last assertion, adjoint invariance at original lengths $2N$
+    identifies the periodic families of the direct two-site block and its
+    adjoint. Their cut ranks agree by the Fundamental Theorem, while
+    adjunction exchanges the two cuts. Thus $dr(U)=\ell(U)d$, so
+    $r(U)=\ell(U)$. Simplicity gives $r(U)\ell(U)=d^2$, hence both equal $d$.
 \end{proof}
 
 \begin{proposition}[Admissible local characterization of time reversal]
