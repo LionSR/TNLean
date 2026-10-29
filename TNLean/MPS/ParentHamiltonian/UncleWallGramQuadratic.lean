@@ -108,10 +108,11 @@ theorem uncleWallSlopeQuadratic_apply
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ) :
     uncleWallSlopeQuadratic A B ρ hSpect R = (uncleWallNormSlope A B R ρ).re := by
-  change (Matrix.trace (ρ * ∑ i, R i * (R i)ᴴ)).re +
-    2 * (uncleWallCrossWeight A R ρ (uncleWallCorrelationLimit A B R)).re =
-      (uncleWallNormSlope A B R ρ).re
+  rw [uncleWallSlopeQuadratic, LinearMap.BilinMap.toQuadraticMap_apply]
+  simp only [uncleWallSlopeBilin, LinearMap.mk₂_apply,
+    LinearMap.restrictScalars_apply, uncleWallCorrelationLimitLinear_apply]
   rw [uncleWallNormSlope, Complex.add_re, Complex.add_re, Complex.star_def, Complex.conj_re]
+  simp only [uncleWallCrossWeight_apply, uncleWallCrossMap_apply, Matrix.mul_assoc]
   ring
 
 /-- The source normalized wall quadratic form is nonnegative at every wall;
