@@ -145,3 +145,15 @@ compiled-blueprint checks remain with common integration.
 Place `ch35_aklv_initialization.tex` after
 `ch35_aklv_favorable_parameters.tex`. No generated aggregator, chapter
 registration or dependency-pin change is included.
+
+## Completed integration checks
+
+The integrated mathematical revision
+`908de62f163b9505312b914a2fad03dafa23948d`, with QICLean pinned to
+`01f237e808b03fb0612ceb617f9bca2c407da927`, passed the full 15,106-job
+library build and strict checks. The imported foundation audit reports only
+`propext`, `Classical.choice`, and `Quot.sound`. Source synchronization,
+compiled blueprint declaration checks, prose, proof-integrity and timing
+checks also passed. No full-build job reached the 25-second warning
+threshold. Mathlib was not rebuilt. The complete local check record is
+`/tmp/tnlean-moments-initialization-gates.json`.

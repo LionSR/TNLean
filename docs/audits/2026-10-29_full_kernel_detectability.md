@@ -19,6 +19,12 @@ private checks and an imported two-declaration foundation audit. Only
 propext, Classical.choice and Quot.sound occur. Exact source and object
 hashes are recorded in
 `/tmp/tnlean-kernel-detectability-20261029/manifest.json`.
-Ordinary combined-library and blueprint verification remain pending at
-this preparation stage. Range-projectivization and the regional truncated
-Hamiltonian are separate remaining parts of the frustration-free argument.
+The integrated theorem subsequently passed the full 15,106-job library
+build, strict production checks, an imported foundation audit, and compiled
+blueprint declaration checks at revision
+`908de62f163b9505312b914a2fad03dafa23948d`. The companion spectral theorem
+was checked at `d41577c2965094ee0f1067fce107aa59088d653e`, with the
+documentation-only successor `01f237e808b03fb0612ceb617f9bca2c407da927`
+pinned by TNLean. Neither library rebuilt Mathlib from source.
+Range-projectivization and the regional truncated Hamiltonian remain
+separate parts of the frustration-free argument.
