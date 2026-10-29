@@ -185,10 +185,13 @@ theorem norm_mpvState_le_bondDimension_of_unital
   have hBound := norm_trace_pow_le_of_spectrum_norm_le (Kraus.transferMap A) 1 hSpec N
   rw [hTrace, ← ofReal_norm_mpvState_sq A N] at hBound
   have hSq : ‖mpvState A N‖ ^ 2 ≤ (D : ℝ) ^ 2 := by
-    simpa only [Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg (sq_nonneg _),
-      Module.finrank_matrix, Fintype.card_fin, Module.finrank_self, mul_one, one_pow,
-      Nat.cast_mul, pow_two] using hBound
-  nlinarith [norm_nonneg (mpvState A N), Nat.cast_nonneg (R := ℝ) D]
+    calc
+      ‖mpvState A N‖ ^ 2 ≤ |‖mpvState A N‖ ^ 2| := le_abs_self _
+      _ ≤ (D : ℝ) ^ 2 := by
+        simpa only [Complex.norm_real, Real.norm_eq_abs, Module.finrank_matrix,
+          Fintype.card_fin, Module.finrank_self, mul_one, one_pow, Nat.cast_mul,
+          pow_two] using hBound
+  nlinarith [norm_nonneg (mpvState A N), Nat.cast_nonneg (α := ℝ) D]
 
 /-- A uniform bound on all transfer eigenvalues other than one bounds the
 squared periodic MPS norm. Unital positivity makes the eigenvalue one
