@@ -27,7 +27,7 @@ irreducibility hypothesis. The channel-generic implication is supplied by QICLea
   at lines 420–430 and Proposition 3 (`prop:equiv`), lines 504–555.
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor
 
