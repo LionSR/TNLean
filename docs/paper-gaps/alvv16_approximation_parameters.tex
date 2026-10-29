@@ -219,6 +219,34 @@ supply measurable dependence on the earlier spaces. The source theorem
 merge analysis, adaptive probability, energy-estimation invariant, final
 spectral extraction and computational cost require their own proofs.
 
+
+\section*{Automatic parameters for this witness}
+
+The numerical tail and filter conditions in the bounded witness above can
+be derived uniformly from the physical input. Choose a universal $C\ge1$
+from the scalar parameter theorem, before the chain and Hamiltonian, and put
+\[
+  m=\max\{q,50\},\quad v=1+\log m+\log(1/g),\quad
+  \ell=\lceil Cv^2/g\rceil,\quad D=(m\ell^2)^{22\ell}.
+\]
+Then $\ell\ge21$ and
+\[
+  \log D\le22(C+1)(6+2\log(C+1))v^3/g.
+\]
+Take $t=\ell$ and $\Delta=10^{-5}D^{-12}$. The scalar contraction
+estimate holds uniformly up to $8\ell$, hence throughout the required
+range $R\le3t+4\ell=7\ell$. The truncation tail estimate is at most
+$g/(10^6m)$, which supplies the required extra factor $1/m$.
+Thus the physical recursive witness has a version with no supplied
+numerical tail or filter hypotheses. The families still precede every
+sampling size and child space.
+
+This parameter substitution does not identify the witness with the
+printed modified merge procedure. Its block leaves, final trim, capped
+gap and ranks of recorded generators remain as stated above. It does
+not prove an adaptive joint success probability, the energy-estimation
+invariant, final spectral extraction or the claimed running time.
+
 \bibliographystyle{unsrt}
 \bibliography{references}
 \end{document}

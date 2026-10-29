@@ -460,3 +460,44 @@
     $\xi^2$ to obtain the displayed integer bound. The invariant keeps
     the same original $G$ at every step.
 \end{proof}
+
+
+\begin{theorem}[Automatic parameters for the physical witness tree]
+    \label{thm:physical_dg_interval_tree_parameters}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interval_tree}
+    \leanok
+    \uses{thm:physical_dg_recursive_interval_spaces,thm:dg_accuracy_scalar_parameters}
+    There are universal constants $C\ge1$ and $K>0$, chosen before the
+    chain and Hamiltonian, with the following property. Under the physical
+    hypotheses of the preceding theorem put
+    \[
+      g=\min\{\gamma,1\},\quad m=\max\{q,50\},\quad
+      v=1+\log m+\log(1/g),\quad
+      \ell=\lceil Cv^2/g\rceil,\quad D=(m\ell^2)^{22\ell}.
+    \]
+    Then $\ell\ge21$ and
+    \[
+      \log D\le {22(C+1)(6+2\log(C+1))\over g}\,v^3.
+    \]
+    The common reference and the actual parent families of the preceding
+    theorem can be constructed with these parameters, before every
+    sampling size and child space. For every $0<\beta<1$, its actual
+    balanced recursion has the same original-ground-space viability
+    $3/200$, dimension bound $M=D^6s^3$, recorded-generator count $M$
+    and recorded-generator rank bound $10^6D_{\rm ref}^2(L+1)M$.
+    No numerical tail or filter estimate is assumed.
+
+    The capped gap, block leaves, one final trim and distinction from the
+    printed adaptive algorithm remain those of the preceding theorem and
+    \cite{gap:alvv16_approximation_parameters}. The recorded-generator
+    rank bound is not assigned unchanged to their entire span.
+\end{theorem}
+\begin{proof}\leanok
+    Apply the uniform scalar theorem with $m=\max\{q,50\}$.
+    Set $t=\ell$ and $\Delta=10^{-5}D^{-12}$. Its uniform tradeoff for
+    $R\le8\ell$ implies the required filter estimate for
+    $R\le3t+4\ell=7\ell$, and its tail estimate is at most
+    $g/(10^6m)$. Since $m\ge50$, all hypotheses of the conditional
+    recursive-witness theorem follow. Its actual families, operation and
+    recorded spanning vectors give the conclusion.
+\end{proof}
