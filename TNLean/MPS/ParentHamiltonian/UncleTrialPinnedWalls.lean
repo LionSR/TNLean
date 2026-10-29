@@ -151,7 +151,8 @@ theorem uncleInteractionES_pin_lower_right
   simp only [Matrix.mul_assoc] at hfun hkill ⊢
   rw [hfun, map_add, map_add, hkill, add_zero]
 
-private theorem uncleConfigSegment_contiguous_end {T : ℕ}
+/-- A pair crossing the end of a numbered segment varies only its final letter. -/
+theorem uncleConfigSegment_contiguous_end {T : ℕ}
     (τ : Cfg d T) (s n i : ℕ) (hs : s + n ≤ T) (hn : 0 < n)
     (hi : s + n = i + 1) (σ : Cfg d 2) :
     uncleConfigSegment (contiguousCfg i 2 σ τ) s n hs =
@@ -168,7 +169,8 @@ private theorem uncleConfigSegment_contiguous_end {T : ℕ}
     apply congrArg σ
     exact Fin.ext (by change s + (n - 1) - i = 0; omega)
 
-private theorem uncleConfigSegment_contiguous_start {T : ℕ}
+/-- A pair crossing the start of a numbered segment varies only its first letter. -/
+theorem uncleConfigSegment_contiguous_start {T : ℕ}
     (τ : Cfg d T) (s n i : ℕ) (hs : s + n ≤ T) (hn : 0 < n)
     (hi : s = i + 1) (σ : Cfg d 2) :
     uncleConfigSegment (contiguousCfg i 2 σ τ) s n hs =

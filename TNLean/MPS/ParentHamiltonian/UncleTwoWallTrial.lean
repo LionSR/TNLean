@@ -183,6 +183,39 @@ theorem uncleConfigSegment_cast {T U : ℕ} (h : T = U) (σ : Cfg d U)
   funext j
   exact congrArg σ (Fin.ext rfl)
 
+/-- Numbered adjacent physical words concatenate to their union. -/
+theorem uncleConfigSegment_add {T : ℕ} (σ : Cfg d T) (s m n : ℕ)
+    (hs : s + (m + n) ≤ T) :
+    uncleConfigSegment σ s (m + n) hs =
+      uncleConfigSegment σ s m (by omega) ++
+        uncleConfigSegment σ (s + m) n (by omega) := by
+  unfold uncleConfigSegment
+  rw [List.ofFn_add]
+  apply congrArg₂ (· ++ ·)
+  · apply congrArg List.ofFn
+    funext j
+    rfl
+  · apply congrArg List.ofFn
+    funext j
+    exact congrArg σ (Fin.ext (by change s + (m + j.val) = s + m + j.val; omega))
+
+/-- Evaluate a trial after the exact total-length cast using physical
+coordinates in the target chain. -/
+theorem uncleTwoWallTrial_cast_apply_segments
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (p r q s t T : ℕ)
+    (h : p + r + q + s + t = T) (σ : Cfg d T) :
+    uncleTwoWallTrial A B R L p r q s t (σ ∘ Fin.cast h) =
+      uncleTwoWallCoefficient A B R L
+        (uncleConfigSegment σ 0 p (by omega))
+        (uncleConfigSegment σ p r (by omega))
+        (uncleConfigSegment σ (p + r) q (by omega))
+        (uncleConfigSegment σ (p + r + q) s (by omega))
+        (uncleConfigSegment σ (p + r + q + s) t (by omega)) := by
+  rw [uncleTwoWallTrial_apply_segments]
+  simp only [uncleConfigSegment_cast]
+
 /-- The actual source trial is the five-segment trial transported by the
 finite-length equality, for every positive source size. Source:
 arXiv:1210.6613, phiN-def, lines 1196–1224. -/
@@ -206,6 +239,18 @@ private theorem norm_config_cast {T U : ℕ} (h : T = U) (f : NSiteSpace d T) :
       ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d T)).symm f‖ := by
   cases h
   rfl
+
+/-- The Euclidean norm of any actual trial is preserved by its finite
+physical-length cast. -/
+theorem norm_uncleTwoWallTrial_cast
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (p r q s t T : ℕ)
+    (h : p + r + q + s + t = T) :
+    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d T)).symm
+        (fun σ ↦ uncleTwoWallTrial A B R L p r q s t (σ ∘ Fin.cast h))‖ =
+      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (p + r + q + s + t))).symm
+        (uncleTwoWallTrial A B R L p r q s t)‖ := norm_config_cast h _
 
 /-- The actual source norm is exactly the five-segment trial norm; the
 finite-length transport is a reindexing, not a norm approximation.

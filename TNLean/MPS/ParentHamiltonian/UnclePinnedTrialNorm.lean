@@ -124,4 +124,60 @@ theorem norm_uncleTwoWallTrial_one_wall_sq_le_mul
     _ = ((a : ℝ) ^ 2 * K * C) * s := by ring
     _ ≤ D * s := mul_le_mul_of_nonneg_right (by dsimp [D]; linarith) (Nat.cast_nonneg s)
 
+/-- The complementary actual trial with its second wall interval pinned
+also has a uniform linear squared-norm bound in the first moving interval.
+Source: arXiv:1210.6613, proof of Lemma lowenergystates, lines 1289–1296. -/
+theorem norm_uncleTwoWallTrial_second_wall_sq_le_mul
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (hA : Kraus.mapLM A 1 = 1) (hB : Kraus.mapLM B 1 = 1)
+    (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosDef)
+    (hρA : Kraus.adjointMap A ρ = ρ)
+    (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
+    ∃ C : ℝ, 0 < C ∧ ∀ p r q t : ℕ,
+      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (p + r + q + 1 + t))).symm
+          (uncleTwoWallTrial A B R L p r q 1 t)‖ ^ 2 ≤ C * r := by
+  obtain ⟨C, hC, hR⟩ := uncleWallGramMap_apply_l2_opNorm_le_mul A B R ρ hρ hρA hB hSpect
+  let S := (Matrix.trace (uncleWallGram B A L 1)).re
+  have hS : 0 ≤ S :=
+    (Complex.nonneg_iff.mp (uncleWallGram_posSemidef B A L 1).trace_nonneg).1
+  let K := S + 1
+  have hK : 0 < K := by dsimp [K]; linarith
+  have hL (X : Matrix (Fin a) (Fin a) ℂ) :
+      ‖uncleWallGramMap B A L 1 X‖ ≤ K * ‖X‖ := by
+    exact (uncleWallGramMap_apply_l2_opNorm_le_trace B A L 1 X).trans
+      (mul_le_mul_of_nonneg_right (by dsimp [K]; linarith) (norm_nonneg X))
+  have hTotal (p r q t : ℕ) (X : Matrix (Fin a) (Fin a) ℂ) :
+      ‖uncleTwoWallTransfer A B R L p r q 1 t X‖ ≤ (C * K * r) * ‖X‖ := by
+    change ‖((Kraus.mapLM A) ^ p)
+      (uncleWallGramMap A B R r (((Kraus.mapLM B) ^ q)
+        (uncleWallGramMap B A L 1 (((Kraus.mapLM A) ^ t) X))))‖ ≤ _
+    calc
+      _ ≤ ‖uncleWallGramMap A B R r (((Kraus.mapLM B) ^ q)
+          (uncleWallGramMap B A L 1 (((Kraus.mapLM A) ^ t) X)))‖ :=
+        unital_transfer_pow_norm_le A hA p _
+      _ ≤ C * r * ‖((Kraus.mapLM B) ^ q)
+          (uncleWallGramMap B A L 1 (((Kraus.mapLM A) ^ t) X))‖ := hR r _
+      _ ≤ C * r * ‖uncleWallGramMap B A L 1 (((Kraus.mapLM A) ^ t) X)‖ :=
+        mul_le_mul_of_nonneg_left (unital_transfer_pow_norm_le B hB q _)
+          (mul_nonneg hC.le (Nat.cast_nonneg r))
+      _ ≤ C * r * (K * ‖((Kraus.mapLM A) ^ t) X‖) :=
+        mul_le_mul_of_nonneg_left (hL _) (mul_nonneg hC.le (Nat.cast_nonneg r))
+      _ ≤ C * r * (K * ‖X‖) := mul_le_mul_of_nonneg_left
+        (mul_le_mul_of_nonneg_left (unital_transfer_pow_norm_le A hA t X) hK.le)
+          (mul_nonneg hC.le (Nat.cast_nonneg r))
+      _ = _ := by ring
+  let D := (a : ℝ) ^ 2 * C * K + 1
+  have hD : 0 < D := by dsimp [D]; positivity
+  refine ⟨D, hD, fun p r q t ↦ ?_⟩
+  rw [norm_uncleTwoWallTrial_sq_eq_trace_transfer]
+  calc
+    _ ≤ ‖LinearMap.trace ℂ (Matrix (Fin a) (Fin a) ℂ)
+        (uncleTwoWallTransfer A B R L p r q 1 t)‖ := Complex.re_le_norm _
+    _ ≤ (a : ℝ) ^ 2 * (C * K * r) :=
+      norm_linearMap_trace_le_entry_bound _ _ (hTotal p r q t)
+    _ = ((a : ℝ) ^ 2 * C * K) * r := by ring
+    _ ≤ D * r := mul_le_mul_of_nonneg_right (by dsimp [D]; linarith) (Nat.cast_nonneg r)
+
 end MPSTensor
