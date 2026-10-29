@@ -181,3 +181,19 @@ correction: its printed bound $d^2+2$ fails on an eight-qubit chain with
 unique ground state and gap one. The corrected bound is $d^2+3$, as
 shown in \cite{gap:alvv16_frustration_free_truncation_rank}. The regional
 rank theorem is separate from the detectability results above.
+
+\begin{theorem}[Fixed vectors of the physical parity product]
+    \label{thm:physical_parity_product_fixed_space}
+    \lean{TNLean.MPS.AreaLaw.physicalParityProduct_apply_eq_self_iff}
+    \leanok
+    Let the bond operators $h_i$ be orthogonal projections. Fix $p\in\mathbb N$
+    and select the indices for which $i\bmod2=p$. The actual parity product
+    fixes $x$ if and only if $h_ix=0$ for every selected bond.
+    This equivalence needs neither commutativity nor locality.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:physical_detectability}
+    Extend the selected bond sequence by zero terms and apply the
+    common-kernel characterization of complementary projection products
+    from \cite{QICLean2026Blueprint}. All padding terms vanish.
+\end{proof}

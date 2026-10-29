@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.DetectabilityLemma
+import QICLean.Analysis.ComplementProdKernel
 import QICLean.Analysis.ProjectionGeometry
 import TNLean.Algebra.GappedGroundState
 import TNLean.Circuit.EntropySupport
@@ -252,6 +253,27 @@ theorem physicalParityProduct_isStarProjection
   ContinuousLinearMap.isStarProjection_complementProd
     (parityTerm_isStarProjection h hp p) (parityTerm_commute h hs p) (L - 1)
 
+/-- The fixed vectors of an actual parity product are precisely the vectors
+annihilated by its selected physical bonds. This assertion requires no
+commutativity or support hypothesis. ALVV, arXiv:1602.08828v2,
+`def:FF-tH` and `thm:FF-tH`, lines 1467–1487 and 1543–1550. -/
+theorem physicalParityProduct_apply_eq_self_iff
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hp : ∀ i, IsStarProjection (h i)) (p : ℕ)
+    (x : EuclideanSpace ℂ (Fin L → Fin q)) :
+    physicalParityProduct h p x = x ↔
+      ∀ i : Fin (L - 1), i.val % 2 = p →
+        Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (h i) x = 0 := by
+  rw [physicalParityProduct, ContinuousLinearMap.complementProd_apply_eq_self_iff
+    (parityTerm_isStarProjection h hp p)]
+  constructor
+  · intro hx i hi
+    simpa only [parityTerm, dite_eq_left i.isLt, ite_eq_left hi] using hx i.val i.isLt
+  · intro hx k hk
+    by_cases hkp : k % 2 = p
+    · simpa only [parityTerm, dite_eq_left hk, ite_eq_left hkp] using hx ⟨k, hk⟩ hkp
+    · simp only [parityTerm, dite_eq_left hk, ite_eq_right hkp, _root_.zero_apply]
+
 /-- The converse estimate for the actual physical even/odd product, for
 every unit vector. The constant three strengthens the stated constant four.
 ALVV, arXiv:1602.08828v2, `lem:dl-converse`, lines 1528–1537. -/
@@ -309,20 +331,9 @@ theorem physicalParityProduct_fixes_kernel
     (hp : ∀ i, IsStarProjection (h i)) {z : EuclideanSpace ℂ (Fin L → Fin q)}
     (hz : Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (∑ i, h i) z = 0)
     (p : ℕ) : physicalParityProduct h p z = z := by
-  have hterm : ∀ k, parityTerm h p k z = 0 := by
-    intro k
-    unfold parityTerm
-    split_ifs with hk hkpar
-    · exact bond_apply_eq_zero_of_sum h hp hz ⟨k, hk⟩
-    · rfl
-    · rfl
-  have hprod : ∀ n, ContinuousLinearMap.complementProd (parityTerm h p) n z = z := by
-    intro n
-    induction n with
-    | zero => rfl
-    | succ n ih =>
-      rw [ContinuousLinearMap.complementProd_succ_apply, ih, hterm, sub_zero]
-  exact hprod (L - 1)
+  apply (physicalParityProduct_apply_eq_self_iff h hp p z).mpr
+  intro i _
+  exact bond_apply_eq_zero_of_sum h hp hz i
 
 /-- The actual detectability operator fixes the entire original ground kernel.
 ALVV, arXiv:1602.08828v2, `def:DLO`, lines 1496–1501. -/
