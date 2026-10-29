@@ -42,8 +42,9 @@ theorem physicalDeform_cycleTensorOfMPS (hn : 3 ≤ n) (A : MPSTensor d D)
   unfold physicalDeform cycleTensorOfMPS
   apply congrArg (Tensor.mk (fun _ ↦ D))
   funext v η t
-  simp only [MPSTensor.rotatePhysical, Finset.sum_apply, Matrix.smul_apply, smul_eq_mul]
+  simp only [MPSTensor.rotatePhysical, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
 
+omit [NeZero n] in
 /-- A constant graph physical product map is exactly the chain tensor power.
 Source: arXiv:2011.12127, Section IV.C, lines 2035–2037. -/
 theorem globalPhysicalMap_const_eq_onSiteTensorPow (Λ : Matrix (Fin d) (Fin d) ℂ) :
