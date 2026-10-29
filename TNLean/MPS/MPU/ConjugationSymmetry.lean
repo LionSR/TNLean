@@ -111,7 +111,8 @@ theorem mpo_map_star (W : MPOTensor d D) (N : ℕ) :
     starRingEnd ℂ (Matrix.trace (evalWord W (List.ofFn σ) (List.ofFn τ)))
   rw [evalWord_ofFn, evalWord_ofFn, AddMonoidHom.map_trace]
   congr 1
-  simpa only [List.map_ofFn, Function.comp_def, RingHom.mapMatrix_apply] using
+  simpa only [List.map_ofFn, Function.comp_def, RingHom.mapMatrix_apply,
+    MPOTensor.mapStar] using
     (map_list_prod (starRingEnd ℂ).mapMatrix
       (List.ofFn fun i : Fin N ↦ W (σ i) (τ i))).symm
 
@@ -142,7 +143,7 @@ def TwoSiteStandardFormData.mapStar
     simpa only [Matrix.map_apply, map_sum, map_mul] using
       congrArg (starRingEnd ℂ) (S.v_apply i₁ i₂ s t)
   · intro i j α γ
-    simpa only [Matrix.map_apply, map_sum, map_mul] using
+    simpa only [MPOTensor.mapStar, Matrix.map_apply, map_sum, map_mul] using
       congrArg (starRingEnd ℂ) (S.W_apply i j α γ)
 
 /-- Entrywise conjugation of the unshifted layer conjugates its supplied

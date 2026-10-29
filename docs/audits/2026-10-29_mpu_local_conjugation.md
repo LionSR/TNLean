@@ -87,3 +87,11 @@ draft. Repair `16f7fe07f` unfolds function composition under List.ofFn, uses
 a shared universe-polymorphic unitary helper with explicit gate arguments,
 and supplies the ring length to the circuit equality. Existing hosted logs
 were used for that source repair. No new local Lean command was run.
+
+## Hosted follow-up on `a754965fb`
+
+Job `123406987298` compiled the supplied gate-comparison module and reported
+`ConjugationSymmetry.lean:114,145`: the new tensor-level `mapStar` definition
+remained opaque in the two `simpa only` calls. Both calls now explicitly
+unfold `MPOTensor.mapStar`. No local Lean command was run; the repair still
+requires exact-head hosted validation.
