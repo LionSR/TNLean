@@ -29,7 +29,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     The two spectral indicators have disjoint support when $u\le t$.
 \end{proof}
 
-\begin{theorem}[Boundary energy off-diagonal decay]
+\begin{lemma}[Boundary energy off-diagonal decay]
     \label{thm:aklv_boundary_energy_tail}
     \lean{TNLean.MPS.AreaLaw.AKLV.norm_boundary_spectral_offDiagonal_le,
         TNLean.MPS.AreaLaw.AKLV.norm_two_boundary_spectral_offDiagonal_le,
@@ -46,7 +46,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     \end{align}
     The second inequality is the estimate of
     \cite[Lemma~6.6(2)]{Arad2013AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_local_imaginary_time,lem:aklv_spectral_separation}
     Center each boundary term as $O_j=h_j-I/2$. Then $\|O_j\|\le1/2$,
@@ -82,19 +82,19 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     $\|y\|$ by $2e^{rc}\|x\|$. Multiply by $Q_te^{-rB}$ for the tail.
 \end{proof}
 
-\begin{theorem}[Explicit eigenvector energy tail on a chain]
+\begin{lemma}[Explicit eigenvector energy tail on a chain]
     \label{thm:aklv_ground_energy_tail}
     \lean{TNLean.MPS.AreaLaw.AKLV.norm_groundState_highProjection_le_exp}
     \leanok
     \uses{def:chain_model}
-    Under the assumptions of Theorem~\ref{thm:aklv_boundary_energy_tail},
+    Under the assumptions of Lemma~\ref{thm:aklv_boundary_energy_tail},
     let $(B+h_a+h_b)x=ex$ with $0\le e\le6$. For every real $t$,
     \begin{align}
         \|Q_tx\|\le2e^{-(t-20)/8}\|x\|.
     \end{align}
     This applies to the ground vector after the regional energy shifts of
     \cite[Section~6.1]{Arad2013AreaLaw} and proves its Lemma~6.7.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:aklv_boundary_energy_tail,lem:aklv_eigenvector_moment}
     Take $r=1/8$, $C=4$ and $c=20$ in
