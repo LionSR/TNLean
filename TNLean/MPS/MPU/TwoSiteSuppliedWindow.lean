@@ -85,7 +85,7 @@ private theorem twoSiteSuppliedHeisenbergMatrix_apply {d D ℓ r p s : ℕ}
         finProdFinEquiv (x.2.2, e.2.1.2)] e.2.2))
     (Fin.append f.1 (Fin.append ![f.2.1.1, finProdFinEquiv j, f.2.1.2] f.2.2)) = _
   simp only [mpo_apply, mpoMatrixEntry, List.ofFn_fin_append, twoSiteBufferedTrace,
-    List.ofFn_succ, List.ofFn_zero]
+    List.ofFn_succ, List.ofFn_zero, Matrix.cons_val_zero, Matrix.cons_val_succ]
 
 /-- The actual finite periodic matrix intertwines the central one-cell
 input observable with the four-half-site output, with arbitrary supplied
@@ -97,9 +97,11 @@ theorem twoSiteSuppliedHeisenbergMatrix_intertwiner {d D ℓ r : ℕ}
     {v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
     (S : TwoSiteStandardFormData W u v) (p s : ℕ)
     (A : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
-    twoSiteSuppliedHeisenbergMatrix W p s * Matrix.rightKroneckerEmbed A =
-      Matrix.rightKroneckerEmbed (twoLinkOutputObservable u v A) *
-        twoSiteSuppliedHeisenbergMatrix W p s := by
+    Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.hMul (twoSiteSuppliedHeisenbergMatrix W p s)
+        (Matrix.rightKroneckerEmbed A) =
+      Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.hMul
+        (Matrix.rightKroneckerEmbed (twoLinkOutputObservable u v A))
+        (twoSiteSuppliedHeisenbergMatrix W p s) := by
   classical
   ext row col
   rcases row with ⟨e, x⟩
@@ -137,8 +139,9 @@ theorem twoSiteSuppliedHeisenbergMatrix_conjugation {d D ℓ r : ℕ}
     {v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
     (S : TwoSiteStandardFormData W u v) (p s : ℕ)
     (A : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
-    twoSiteSuppliedHeisenbergMatrix W p s * Matrix.rightKroneckerEmbed A *
-        (twoSiteSuppliedHeisenbergMatrix W p s)ᴴ =
+    Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.hMul
+        (Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.hMul (twoSiteSuppliedHeisenbergMatrix W p s)
+          (Matrix.rightKroneckerEmbed A)) (twoSiteSuppliedHeisenbergMatrix W p s)ᴴ =
       Matrix.rightKroneckerEmbed (m := SuppliedOutputExterior d p s)
         (twoLinkOutputObservable u v A) := by
   rw [twoSiteSuppliedHeisenbergMatrix_intertwiner S p s A, Matrix.mul_assoc,
