@@ -1,0 +1,19 @@
+\begin{lemma}[Identity extensions respect physical embeddings]
+    \label{lem:physical_spectator_embedding_transport}
+    \lean{ContinuousLinearMap.rightFiberwiseMap_extendByZero}
+    \notready
+    \uses{def:physical_euclidean_extension_zero}
+    Let $e:I\hookrightarrow J$ and $g:S\hookrightarrow T$ be injections of
+    finite sets, and let $G$ and $H$ be linear operators on
+    $\mathbb C^I$ and $\mathbb C^J$. Suppose $HE_e=E_eG$. Then
+    \begin{align}
+        (H\otimes I_T)E_{e\times g} & =E_{e\times g}(G\otimes I_S).
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \notready
+    Fixing an outside coordinate $g(s)$ in an embedded vector gives the
+    embedding of its original active vector at $s$. At outside coordinates
+    outside $g(S)$, the active vector is zero. Apply the assumed active
+    intertwining to the first vectors and linearity to the zero vectors.
+\end{proof}
