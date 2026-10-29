@@ -5034,6 +5034,14 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Diagonal hard-truncation spectral values — candidate (2026-10-29)
+
+- **Pattern:** Rewrite a diagonal Hamiltonian's functional calculus with
+  `Matrix.cfc_diagonal` and finite-range continuity, then evaluate a basis state.
+- **Seen:** `MPS/Examples/HardTruncationCutoff.lean`, for the actual clipping
+  and its closed low-energy projection.
+- **Decision:** Existing diagonal functional calculus suffices; no new tactic.
+
 ### Recovering letters by an identity contraction — candidate (2026-10-29)
 
 - **Seen:** `isInjective_uncleTensor_of_isInjective_perturbation` in
