@@ -71,6 +71,18 @@ noncomputable def bufferedMPULocalAction {d D : ℕ} {U : MPOTensor d D}
   finiteChainLocalObservable hU (actionBuffer_spec k Λ).1 (actionBufferAnchor k Λ)
     (actionBuffer_spec k Λ).2.1
 
+/-- The finite-local action is represented by an actual chain with
+all required original-site buffers. The chain and its geometric bounds
+are constructed explicitly, including empty supported regions.
+Source: arXiv:1703.09188, finite-chain limit, lines 2300--2306. -/
+theorem exists_finiteChainLocalObservable_bufferedMPULocalAction
+    {d D : ℕ} {U : MPOTensor d D} (hU : U.IsMPU) (k : ℕ) (Λ : Finset ℤ) :
+    ∃ (b : ℤ) (N : ℕ) (hN : 1 < N) (hΛ : Λ ⊆ finiteChainRegion b N),
+      (∀ x ∈ Λ, b ≤ x - (2 * k : ℕ) ∧ x + (4 * k : ℕ) ≤ b + N) ∧
+      bufferedMPULocalAction hU k Λ = finiteChainLocalObservable hU hN b hΛ :=
+  ⟨actionBufferAnchor k Λ, actionBufferLength k Λ, (actionBuffer_spec k Λ).1,
+    (actionBuffer_spec k Λ).2.1, (actionBuffer_spec k Λ).2.2, rfl⟩
+
 /-- The actual finite-local forward family is compatible with every
 canonical inclusion, as a consequence of the derived buffered-chain
 identity. Source: arXiv:1703.09188, Appendix lines 2292--2306. -/

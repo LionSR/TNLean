@@ -26,6 +26,7 @@ import TNLean.QCA.FiniteLocalRestriction
 import TNLean.QCA.FinitePropagation
 import TNLean.QCA.FinitePureStateDecomposition
 import TNLean.QCA.IntervalCoordinates
+import TNLean.QCA.IntervalTranslation
 import TNLean.QCA.InversePropagation
 import TNLean.QCA.IsQCA
 import TNLean.QCA.LocalAlgebra

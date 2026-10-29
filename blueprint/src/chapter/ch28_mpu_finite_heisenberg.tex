@@ -214,6 +214,7 @@
     \label{thm:mpu_finite_heisenberg_forward_local_action}
     \lean{SpinChain.finiteChainLocalObservable_localInclusion,
         SpinChain.bufferedMPULocalAction,
+        SpinChain.exists_finiteChainLocalObservable_bufferedMPULocalAction,
         SpinChain.bufferedMPULocalAction_compatible,
         SpinChain.bufferedMPULocalAction_eq_finiteChainLocalObservable,
         SpinChain.bufferedMPUAlgebraicAction,
@@ -308,4 +309,45 @@
     is exactly the retained identity-tensor factor. Applying $e^{-1}$
     to the forward commutators and using this characterization gives
     the finite inverse support assertion.
+\end{proof}
+
+
+\begin{lemma}[Actual translation covariance of the completed forward action]
+    \label{lem:mpu_finite_heisenberg_translation_covariance}
+    \lean{SpinChain.translateRegion_finiteChainRegion,
+        SpinChain.algebraicLocalTranslation_intervalCoordinates,
+        SpinChain.quasiLocalTranslation_intervalCoordinates,
+        SpinChain.intervalCoordinates_localInclusion_localTranslation,
+        SpinChain.intervalCoordinates_finiteChainMPOMatrix,
+        SpinChain.intervalCoordinates_finiteChainConjugation,
+        SpinChain.algebraicLocalTranslation_finiteChainConjugation,
+        SpinChain.quasiLocalTranslation_finiteChainConjugation,
+        SpinChain.bufferedMPUQuasiLocalAction_translation_quasiLocalObservable,
+        SpinChain.bufferedMPUQuasiLocalAction_translation}
+    \notready
+    \uses{thm:mpu_finite_heisenberg_completed_forward_action}
+    Translation of an interval observable shifts its integer anchor
+    without changing its consecutive-coordinate matrix. The same is
+    true of actual finite MPO conjugation. Consequently the completed
+    forward action $F$ under the preceding supplied standard-form
+    hypotheses commutes with every integer lattice translation:
+    \[
+        F(\tau_t(X))=\tau_t(F(X)),\qquad t\in\mathbb Z.
+    \]
+    Covariance is derived from the actual homogeneous finite operators;
+    no covariance or inverse hypothesis is supplied. This is the
+    forward translation statement in
+    \cite[lines~2292--2306]{Cirac2017MPU}, with the source restriction
+    recorded in \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
+\end{lemma}
+\begin{proof}
+    Canonical translation and consecutive coordinates give the same
+    site numbering after shifting the interval anchor. Their local
+    representatives agree after canonical inclusion. The periodic
+    MPO matrix in these coordinates is independent of the anchor,
+    so actual finite conjugation translates with its input. The
+    translated interval satisfies the same buffer inequalities.
+    Apply the already derived finite-chain evaluation of $F$ on both
+    intervals. The resulting equality on finite local observables
+    extends to the completion by continuity and density.
 \end{proof}

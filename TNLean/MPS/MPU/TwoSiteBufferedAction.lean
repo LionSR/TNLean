@@ -101,13 +101,6 @@ theorem intervalCoordinates_localInclusion_eq_bufferedWindowMatrix
     Matrix.rightKroneckerEmbed_apply, Matrix.kroneckerMap_apply, Matrix.one_apply]
   rw [mul_comm]
 
-private theorem intervalCoordinates_finiteChainMPOMatrix {d D : ℕ}
-    (U : MPOTensor d D) (N : ℕ) (a : ℤ) :
-    intervalCoordinates d a N (finiteChainMPOMatrix U N a) = MPOTensor.mpo U N := by
-  classical
-  ext row col
-  simp [intervalCoordinates_apply, finiteChainMPOMatrix, Matrix.reindex_apply]
-
 /-- Actual finite-chain conjugation of a fixed standard-form window is
 independent of every original-site buffer and of the ambient chain length.
 The equality is in the existing algebraic local algebra, using canonical

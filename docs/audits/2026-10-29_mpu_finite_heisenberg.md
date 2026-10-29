@@ -102,6 +102,16 @@ outside-singleton commutant characterization and generic finite inverse
 support reflection in FiniteInverseLocality. These algebraic ingredients
 do not assert an actual MPU inverse family or a completed automorphism.
 
+`QCA/IntervalTranslation.lean` identifies actual interval translation
+with an anchor shift preserving consecutive-coordinate matrices. The
+existing actual finite-MPO coordinate lemma is promoted to
+FiniteChainConjugation and reused, together with its actual conjugation
+formula. `TwoSiteTranslationCovariance.lean` then derives covariance of
+actual finite conjugation and of the completed forward action under
+every integer translation. The proof shifts an actual sufficiently
+buffered chain and uses density; no covariance premise or inverse is
+introduced.
+
 This is still not the full bare-MPU source theorem. It does not yet
 construct the supplied standard form from bare MPU data or the complete
 inverse family. No compatible-local-automorphism datum, induced QCA,
@@ -117,5 +127,5 @@ The present proof reuses the supplied rectangular open contraction and
 therefore does not assume a homogeneous-intermediate circuit presentation.
 
 Native source/import/prose/format/whitespace/integrity checks only.
-No local Lean invocation/build/checkdecls or cache mutation. All nine scoped Blueprint
+No local Lean invocation/build/checkdecls or cache mutation. All ten scoped Blueprint
 entries remain notready pending hosted verification and integration.
