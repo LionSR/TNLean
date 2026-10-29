@@ -229,3 +229,12 @@ gate in canonical rank coordinates, while source V is unchanged. Thus the
 new even-family virtual sign does cancel in the actual gate contractions;
 no gate equality is added as a premise. The assembly with the existing
 unitary factor comparison remains to be written and verified.
+
+## Hosted diagnostics on `263232656`
+
+Job `123461441038` reached the scalar transport module and reported unknown
+`sourceU`/`sourceV` identifiers: its dependency closure did not include their
+owner. The import now names `SourceUV` directly. The record-construction
+proofs reported no errors in this run; dependent phase/assembly modules did
+not receive successful exact-head verification. This is a source repair;
+no local Lean commands were run.
