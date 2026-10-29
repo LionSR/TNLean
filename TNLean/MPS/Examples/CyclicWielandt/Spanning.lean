@@ -73,10 +73,10 @@ theorem sandwich_mem_wordSpan (hD : 2 ≤ D) (k l n m : ℕ) :
       1 + k + l + n * (D - 1) + m * D := by omega
   rwa [hlen] at hm
 
+omit [NeZero D] in
 /-- All reduced pairs except the final pair have padding to `D(D-1)`.
 Source: arXiv:0909.5347, source lines 697–700, with the missing diagonal
 handled separately as documented in the module's local-fix note. -/
-omit [NeZero D] in
 theorem exists_full_length_padding (hD : 2 ≤ D) {k l : ℕ}
     (hk : k < D) (hl : l < D) (hexcept : ¬(k = D - 1 ∧ l = D - 1)) :
     ∃ n m : ℕ, D * (D - 1) = 1 + k + l + n * (D - 1) + m * D := by
