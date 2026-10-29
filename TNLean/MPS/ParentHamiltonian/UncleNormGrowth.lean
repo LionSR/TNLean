@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.UncleNormFactorization
 import TNLean.MPS.ParentHamiltonian.UncleWallGramGeneric
+import TNLean.MPS.ParentHamiltonian.UncleMixedDamping
 
 /-!
 # Generic quadratic norm growth of the actual two-wall trial
@@ -12,8 +13,9 @@ import TNLean.MPS.ParentHamiltonian.UncleWallGramGeneric
 The exact source trial has normalized squared norm converging to the product
 of its two actual wall coefficients. Their derived generic positivity gives
 both quadratic upper and lower bounds for almost every pair of walls.
-The individual diagonal block injectivities are derived from the full
-perturbation span, rather than supplied as extra hypotheses.
+The individual diagonal block injectivities and strict mixed damping are
+derived from the full perturbation span and canonical normalization,
+rather than supplied as extra hypotheses.
 
 Source: arXiv:1210.6613, Lemma lowenergystates, first assertion,
 lines 1196–1265. The ground-space overlaps and spectral variational
@@ -128,8 +130,6 @@ theorem uncleTwoWallTrialSource_ae_quadratic_norm_growth [NeZero a] [NeZero b]
     (ρA : Matrix (Fin a) (Fin a) ℂ) (hρA : ρA.PosDef) (htrA : Matrix.trace ρA = 1)
     (ρB : Matrix (Fin b) (Fin b) ℂ) (hρB : ρB.PosDef) (htrB : Matrix.trace ρB = 1)
     (hFA : Kraus.adjointMap A ρA = ρA) (hFB : Kraus.adjointMap B ρB = ρB)
-    (hAB : Kraus.mixedMapSpectralRadius A B < 1)
-    (hBA : Kraus.mixedMapSpectralRadius B A < 1)
     (μ : Measure ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
       (Fin d → Matrix (Fin b) (Fin a) ℂ))) [IsAddHaarMeasure μ] :
     ∀ᵐ P ∂μ, ∃ c C : ℝ, 0 < c ∧ 0 < C ∧ ∀ᶠ N : ℕ in atTop,
@@ -139,6 +139,10 @@ theorem uncleTwoWallTrialSource_ae_quadratic_norm_growth [NeZero a] [NeZero b]
       ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B P.1 P.2 N)‖ ^ 2 ≤ C * ((N + 1 : ℕ) : ℝ) ^ 2 := by
   obtain ⟨hIA, hIB⟩ := uncleBoundaryLetter_isInjective_diagonal_blocks A B R₀ L₀ hPert
+  have hAB := uncleBoundaryLetter_mixedMapSpectralRadius_lt_one
+    A B R₀ L₀ hPert hUA hUB ρA hρA ρB hρB hFA hFB
+  have hBA := uncleBoundaryLetter_mixedMapSpectralRadius_reverse_lt_one
+    A B R₀ L₀ hPert hUA hUB ρA hρA ρB hρB hFA hFB
   have hae := uncleWallNormSlope_pair_ae_pos A B R₀ L₀ hPert
     ρA hρA ρB hρB hFA hFB hUA hUB hAB hBA μ
   filter_upwards [hae] with P hP
