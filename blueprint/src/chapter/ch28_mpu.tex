@@ -12483,3 +12483,24 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     parity proposition. In particular a virtual sign from even-chain
     comparison has not been identified with $\sigma_{\mathrm{int}}(U)$.
 \end{lemma}
+
+\begin{lemma}[Commuting weights remove stabilized nilpotent transients]
+    \label{lem:mpu_stabilized_commuting_weighted_trace}
+    \lean{Matrix.StabilizedRankOneData.isNilpotent_pow_sub_power,
+        Matrix.StabilizedRankOneData.trace_mul_pow_eq_of_commute}
+    \notready
+    Let $E$ be a finite complex matrix and suppose that, for some $J>0$,
+    every power $E^n$ with $n\geq J$ equals a normalized rank-one projector
+    $P=E^J$. Then $E^k-P$ is nilpotent for every $k>0$. If $F$ commutes
+    with $E$, then
+    \[
+        \tr(FE^k)=\tr(FP),\qquad k>0.
+    \]
+    Indeed, $E^k-P=E^k(\Id-P)$ and the complementary idempotent shows
+    that its $J$th power vanishes. Since $F$ commutes with this difference,
+    their product is nilpotent and has trace zero. The hypotheses here
+    describe a stabilized matrix; no assertion that a particular twisted
+    transfer has these properties is made. This is the linear-algebra step
+    needed to remove transient terms in a subsequent use of
+    Lemma~\ref{lem:mpu_intrinsic_blocked_twisted_trace}.
+\end{lemma}

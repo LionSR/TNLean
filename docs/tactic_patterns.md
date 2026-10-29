@@ -9634,3 +9634,17 @@ there is no need for a new tactic.
 - **Decision:** The resulting actual twisted-transfer power identity is a
   mathematical lemma, shared by the exchange-commutation and blocked-trace
   proofs. No custom tactic or new source predicate is needed.
+
+### Commuting weights on stabilized trace powers — candidate (2026-10-29)
+
+- **Pattern:** Factor a positive power minus its stabilized projector as
+  `E^k * (1 - P)`. Idempotence of the complement and eventual stabilization
+  make it nilpotent. A commuting weight preserves nilpotence, hence gives
+  zero trace for that difference.
+- **Defined in:** `Algebra/StabilizedWeightedTrace.lean`, using the existing
+  QIC `Matrix.StabilizedRankOneData`, Mathlib complementary idempotents,
+  `Commute.isNilpotent_mul_left`, and nilpotent matrix traces.
+- **Decision:** Reuse the existing stabilized-data structure; no new spectral
+  predicate or source witness is introduced. The new result eliminates
+  transient terms in commuting weighted traces rather than reproving
+  stabilization or the existing unweighted nilpotent trace theorem.

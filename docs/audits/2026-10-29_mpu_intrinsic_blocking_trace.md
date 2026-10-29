@@ -38,3 +38,27 @@ TeX formatting, tactic scan, width/integrity and diff checks. No local Lean/Lake
 command was run. All six new public declarations remain `notready` pending
 hosted verification. This draft is stacked on the independently verified
 intrinsic-trace draft #10311; it does not depend on the local-criterion drafts.
+
+## Commuting weighted nilpotent elimination
+
+`Algebra/StabilizedWeightedTrace.lean` now proves the needed linear-algebra
+step on the existing QIC `Matrix.StabilizedRankOneData`. For a stabilized
+matrix `E`, each positive power minus `P = E^J` is nilpotent, since it is
+`E^k * (1 - P)` and the complementary idempotent kills its `J`th power.
+A weight commuting with `E` commutes with this transient; Mathlib's commuting
+nilpotent-product theorem and nilpotent trace theorem then give
+`trace (F * E^k) = trace (F * E^J)` for every positive `k`.
+
+This is not an MPU statement with an assumed spectral witness. The actual
+canonical comparison of the twisted transfer to the normalized transfer
+still has to be derived before this generic algebra lemma can be used to
+claim intrinsic parity. The existing green canonical necessity proof cancels
+the even-family virtual phase before constructing its local sign; it does
+not identify those signs. The constants must therefore remain separate in
+the continuation. Source parity can use the first two intrinsic values if a
+formula `τₖ = C η^k` with `η² = 1` is derived; it does not require or assert
+`η = τ₁` or `C = 1`.
+
+The two new algebra declarations have scope-matching `notready` anchors;
+there are now eight new public declarations in this draft. No local Lean/Lake
+commands were run, and this extension remains source-written and uncompiled.
