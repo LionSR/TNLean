@@ -315,11 +315,7 @@ theorem IsMPUCanonicalFormII.twoSite_sourceRanks
     {d D : ℕ} {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
     (hsimple : IsMPUSimple U) :
     r[MPOTensor.blockTwo U] = d * r[U] ∧ ℓ[MPOTensor.blockTwo U] = ℓ[U] * d := by
-  have hone : MPOTensor.blockTensor U 1 =
-      MPOTensor.reindexPhysical (MPSTensor.singleBlockEquiv d) U := by
-    funext i j
-    simp [MPOTensor.blockTensor, MPSTensor.wordOfBlock, Kraus.wordOfBlock_one,
-      MPOTensor.reindexPhysical]
+  have hone := MPOTensor.blockTensor_one_eq_reindexPhysical U
   have hSone : IsMPUSimple (MPOTensor.blockTensor U 1) := by
     rw [hone]
     exact hsimple.reindexPhysical _

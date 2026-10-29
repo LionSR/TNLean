@@ -9223,6 +9223,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{lem:mpu_local_conjugation_contract}
     \lean{Matrix.IsUnitaryBetween.map_star, MPOTensor.mapStar, MPOTensor.mpo_map_star, MPOTensor.TwoSiteStandardFormData.mapStar, MPOTensor.twoSiteUnshiftedLayer_map_star, MPOTensor.twoSiteShiftedLayer_map_star, MPOTensor.TwoSiteStandardFormData.map_star_mpo_eq_of_gate_conjugation}
     \notready
+    One-site blocking is the original tensor in its canonically identified
+    one-letter physical alphabet.
     Let $W$ have a supplied two-site standard form with unitary gates $u,v$,
     and let $x,y$ be unitaries satisfying
     \begin{align}
@@ -9722,7 +9724,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{lemma}[Source cuts of a supplied square standard form]
     \label{lem:mpu_supplied_standard_form_source_cuts}
-    \lean{MPOTensor.TwoSiteStandardFormData.cutX₁, MPOTensor.TwoSiteStandardFormData.cutY₁, MPOTensor.TwoSiteStandardFormData.cutX₂, MPOTensor.TwoSiteStandardFormData.cutY₂, MPOTensor.TwoSiteStandardFormData.sourceCutM₁_eq_cutX₁_mul_cutY₁, MPOTensor.TwoSiteStandardFormData.sourceCutM₂_eq_cutX₂_mul_cutY₂, MPOTensor.TwoSiteStandardFormData.cutY₂_cutY₁_eq_staircaseMiddle_mul_kronecker, MPOTensor.TwoSiteStandardFormData.cutX₁_cutX₂_eq_staircaseMiddle, MPOTensor.IsMPUCanonicalFormII.twoSite_cutX₁_weighted_isometry, MPOTensor.IsMPUCanonicalFormII.twoSite_cutX₂_isIsometry, MPOTensor.IsMPUCanonicalFormII.twoSite_sourceRanks, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors, MPOTensor.IsMPUCanonicalFormII.sourceRanks_eq_phys_of_even_mpo_eq_adjoint, MPOTensor.IsMPUCanonicalFormII.blockTwo, MPOTensor.IsMPUCanonicalFormII.isMPUSimple_blockTwo, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors_sourceU, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors_sourceV, MPOTensor.TwoSiteStandardFormData.reindexRanks}
+    \lean{MPOTensor.TwoSiteStandardFormData.cutX₁, MPOTensor.TwoSiteStandardFormData.cutY₁, MPOTensor.TwoSiteStandardFormData.cutX₂, MPOTensor.TwoSiteStandardFormData.cutY₂, MPOTensor.TwoSiteStandardFormData.sourceCutM₁_eq_cutX₁_mul_cutY₁, MPOTensor.TwoSiteStandardFormData.sourceCutM₂_eq_cutX₂_mul_cutY₂, MPOTensor.TwoSiteStandardFormData.cutY₂_cutY₁_eq_staircaseMiddle_mul_kronecker, MPOTensor.TwoSiteStandardFormData.cutX₁_cutX₂_eq_staircaseMiddle, MPOTensor.IsMPUCanonicalFormII.twoSite_cutX₁_weighted_isometry, MPOTensor.IsMPUCanonicalFormII.twoSite_cutX₂_isIsometry, MPOTensor.IsMPUCanonicalFormII.twoSite_sourceRanks, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors, MPOTensor.IsMPUCanonicalFormII.sourceRanks_eq_phys_of_even_mpo_eq_adjoint, MPOTensor.IsMPUCanonicalFormII.blockTwo, MPOTensor.IsMPUCanonicalFormII.isMPUSimple_blockTwo, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors_sourceU, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors_sourceV, MPOTensor.TwoSiteStandardFormData.reindexRanks, MPOTensor.blockTensor_one_eq_reindexPhysical}
     \notready
     Let $W$ have a supplied two-site standard form with unitary gates
     $u:\mathbb C^d\otimes\mathbb C^d\to\mathbb C^\ell\otimes\mathbb C^r$ and

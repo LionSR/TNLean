@@ -166,7 +166,7 @@ private theorem coarse_gates_eq_four_spin_gates
     apply Equiv.ext
     rintro ⟨a, s⟩
     apply Fin.ext
-    change a.val * r[U] + s.val = a.val * d + s.val
+    change s.val + r[U] * a.val = s.val + d * a.val
     rw [hrU]
   have hel : el.trans L = (Equiv.prodCongr el₀ (Equiv.refl (Fin d))).trans finProdFinEquiv := by
     apply Equiv.ext

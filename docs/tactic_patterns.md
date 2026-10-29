@@ -24,6 +24,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### One-site MPO blocking as physical relabeling — promoted (2026-10-29)
+
+- **Pattern:** Expand one-site blocking into singleton words and identify
+  its decoded physical letter with the original alphabet.
+- **Defined in:** `MPS/MPDO/PhysicalBlocking.lean`,
+  `MPOTensor.blockTensor_one_eq_reindexPhysical`.
+- **Refactored occurrences:** remove the identical private helpers from
+  `IdentityIndex.lean` and `InjectiveSourceIndex.lean`; both use the public
+  theorem, as does the new exact coarse-rank proof.
+- **Notes:** This is an actual MPO blocking identity at its existing owner;
+  no deprecated aliases or additional matrix layer is introduced.
+
+
 ### Conjugating a rectangular unitary identity — promoted (2026-10-29)
 
 - **Pattern:** Commute entrywise complex conjugation with the adjoint and

@@ -155,3 +155,10 @@ original length 2N, so its supplied standard-form tensor W=blockTwo U has
 adjoint symmetry at every blocked length N>1. This argument does not replace
 that premise by symmetry only at even lengths of W, which would amount to
 original lengths divisible by four. No such stronger deduction is claimed.
+
+The one-site-blocking physical relabeling step reached three occurrences
+across the identity-index, injective-index and new coarse-rank proofs. It is
+promoted at its existing `PhysicalBlocking` owner and both identical private
+helpers are removed. The final dictionary's finite-pair arithmetic uses the
+pinned encoding literally as `s + r*a`, then the derived rank equality;
+no alternate index convention is introduced.
