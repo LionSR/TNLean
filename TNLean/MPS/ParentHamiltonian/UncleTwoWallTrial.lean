@@ -51,8 +51,11 @@ theorem uncleTwoWallCoefficient_eq_sum (A : MPSTensor d a) (B : MPSTensor d b)
             Kraus.evalWord B (v.drop (i + 1))) * Kraus.evalWord B w *
           (Kraus.evalWord B (x.take j) * L (x.get j) *
             Kraus.evalWord A (x.drop (j + 1))) * Kraus.evalWord A y) := by
-  simp [uncleTwoWallCoefficient, uncleDomainWallWord_eq_sum, Matrix.mul_sum,
-    Matrix.sum_mul, Matrix.trace_sum]
+  rw [uncleTwoWallCoefficient, uncleDomainWallWord_eq_sum A B R v]
+  simp only [Matrix.mul_sum, Matrix.sum_mul, Matrix.trace_sum]
+  refine Finset.sum_congr rfl fun i _ ↦ ?_
+  rw [uncleDomainWallWord_eq_sum B A L x]
+  simp only [Matrix.mul_sum, Matrix.sum_mul, Matrix.trace_sum]
 
 /-- The finite two-wall trial on five consecutive segments. The moving
 interval lengths are r and s; no norm or nonvanishing is assumed.
