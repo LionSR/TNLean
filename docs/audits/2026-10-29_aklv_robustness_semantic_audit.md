@@ -98,6 +98,8 @@ Fresh owner verification after the independent review:
   removed; no new axioms or proof bypasses were introduced.
 - Generated import consistency, changed-declaration Blueprint coverage,
   forbidden-token checks and whitespace checks passed.
+- The pinned deterministic LaTeX formatter passed for both changed Blueprint
+  files after a whitespace-only alignment correction. ChkTeX is unavailable.
 - The amended paper-gap note rendered using a temporary standalone wrapper
   omitting the unavailable shared preamble; this is a limited TeX check.
 

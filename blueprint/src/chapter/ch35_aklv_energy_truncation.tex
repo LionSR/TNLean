@@ -15,8 +15,8 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     \leanok
     For Hermitian $B$, any operator $O$, real $t,u$ and $r\ge0$,
     \begin{align}
-        \|Q_tOP_u\|&\le e^{-r(t-u)}\|e^{rB}Oe^{-rB}\|,\notag\\
-        \|Q_te^{-rB}\|&\le e^{-rt},\qquad
+        \|Q_tOP_u\|    & \le e^{-r(t-u)}\|e^{rB}Oe^{-rB}\|,\notag \\
+        \|Q_te^{-rB}\| & \le e^{-rt},\qquad
         \|e^{rB}P_u\|\le e^{ru}.
     \end{align}
     If $u\le t$, then $Q_tP_u=0$.
@@ -40,9 +40,9 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     be any bond set, and put $B=\sum_{i\in I_0}h_i-zI$ for real $z$.
     For any bonds $a,b$ and $u\le t$,
     \begin{align}
-        \|Q_th_aP_u\|&\le e^{-(t-u)/8},\notag\\
-        \|Q_t(h_a+h_b)P_u\|&\le2e^{-(t-u)/8},\notag\\
-        \|e^{B/8}(h_a+h_b)e^{-B/8}\|&\le4.
+        \|Q_th_aP_u\|                & \le e^{-(t-u)/8},\notag \\
+        \|Q_t(h_a+h_b)P_u\|          & \le2e^{-(t-u)/8},\notag \\
+        \|e^{B/8}(h_a+h_b)e^{-B/8}\| & \le4.
     \end{align}
     The second inequality is the estimate of
     \cite[Lemma~6.6(2)]{Arad2013AreaLaw}.
@@ -67,8 +67,8 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     Suppose $r\ge0$, $c>0$, $\|e^{rB}Ae^{-rB}\|\le C$, and
     $|e|+C\le c/2$. Then
     \begin{align}
-        \|e^{rB}x\|&\le2e^{rc}\|x\|,\notag\\
-        \|Q_tx\|&\le2e^{-r(t-c)}\|x\|.
+        \|e^{rB}x\| & \le2e^{rc}\|x\|,\notag \\
+        \|Q_tx\|    & \le2e^{-r(t-c)}\|x\|.
     \end{align}
     Also $\|Q_cy\|\le c^{-1}\|By\|$ for every vector $y$.
 \end{lemma}
@@ -149,8 +149,8 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     $B=L+N+R$, and $K=\min(L,tI)+N+A+\min(R,tI)$.
     For $t\ge0$ and every vector $v$,
     \begin{align}
-        tQ_t&\le\min(L,tI)+N+\min(R,tI)\le K,\notag\\
-        t\|Q_tv\|^2&\le\langle v,Kv\rangle.
+        tQ_t        & \le\min(L,tI)+N+\min(R,tI)\le K,\notag \\
+        t\|Q_tv\|^2 & \le\langle v,Kv\rangle.
     \end{align}
     For $t>0$, $\|Q_tv\|\le\sqrt{\langle v,Kv\rangle/t}$.
     If additionally $A\le2I$ and $\|v\|=1$, then
@@ -196,8 +196,8 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     For $t>0$ and $\|v\|=1$,
     \begin{align}
         \langle P_tv,HP_tv\rangle
-        &\le\langle v,Kv\rangle+4\|Q_tv\|\notag\\
-        &\le\langle v,Kv\rangle+4\sqrt{\langle v,Kv\rangle/t}.
+         & \le\langle v,Kv\rangle+4\|Q_tv\|\notag                \\
+         & \le\langle v,Kv\rangle+4\sqrt{\langle v,Kv\rangle/t}.
     \end{align}
     This is the corrected explicit comparison used in
     \cite[Lemma~6.5(2)]{Arad2013AreaLaw}.
@@ -240,8 +240,8 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     $w=-\alpha\phi+\beta v$. Then $w\perp\Omega$ and
     \begin{align}
         a\bigl(|\alpha|^2+|\beta|^2\|v\|^2\bigr)
-        &\le\langle w,Kw\rangle
-          =|\alpha|^2e'+|\beta|^2\langle v,Kv\rangle.
+         & \le\langle w,Kw\rangle
+        =|\alpha|^2e'+|\beta|^2\langle v,Kv\rangle.
     \end{align}
     Since $e'<a$ and $\beta\ne0$, this proves the lower bound on
     $\phi^\perp$. Split an arbitrary vector along $\phi$ to obtain the
@@ -274,7 +274,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     $\langle\Omega,P_tv\rangle=-\langle\Omega,Q_tv\rangle$, the original
     gap and the projected-energy comparison give
     \begin{align}
-        g&\le g/2+4q+(e+2g)q^2.
+        g & \le g/2+4q+(e+2g)q^2.
     \end{align}
     But $q^2\le g/1024$ and $e+2g\le8$, so the right side is at most
     $81g/128<g$, a contradiction. Rescaling proves the homogeneous
@@ -352,10 +352,10 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     \uses{def:chain_model}
     For boundary bonds $a<b$ and scalar shifts $x,m,y$, put
     \begin{align}
-        L&=\sum_{i<a}h_i-xI,\qquad
+        L & =\sum_{i<a}h_i-xI,\qquad
         N=\sum_{a<i<b}h_i-mI,\qquad
-        R=\sum_{i>b}h_i-yI,\notag\\
-        A&=h_a+h_b,\qquad H=L+N+R+A.
+        R=\sum_{i>b}h_i-yI,\notag      \\
+        A & =h_a+h_b,\qquad H=L+N+R+A.
     \end{align}
     The three regional operators commute by their disjoint supports, and
     $H=\sum_i h_i-(x+m+y)I$.
@@ -380,8 +380,8 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     $K=\min(L,tI)+N+A+\min(R,tI)$ has a unit ground vector $\phi$ and
     ground energy $e'\in[0,e]$ with
     \begin{align}
-        K-e'I&\ge\frac g2(I-|\phi\rangle\langle\phi|),\notag\\
-        \|\Omega-e^{i\theta}\phi\|^2&\le e^{-t/16}
+        K-e'I                        & \ge\frac g2(I-|\phi\rangle\langle\phi|),\notag \\
+        \|\Omega-e^{i\theta}\phi\|^2 & \le e^{-t/16}
     \end{align}
     for some real $\theta$. These are explicit universal constants in
     \cite[Theorem~6.1]{Arad2013AreaLaw}, in its normalized setting.
@@ -396,8 +396,8 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     Lemma~\ref{lem:aklv_residual_phase} yields
     \begin{align}
         \|\Omega-e^{i\theta}\phi\|^2
-        &\le2(20\eta/g+2\eta)^2
-          \le968g^{-2}e^{-(t-40)/8}.
+         & \le2(20\eta/g+2\eta)^2
+        \le968g^{-2}e^{-(t-40)/8}.
     \end{align}
     The cutoff implies $tg\ge32768$. Since
     $\log968\le967$, $g\log g\ge g-1$ and $g\le1$,
