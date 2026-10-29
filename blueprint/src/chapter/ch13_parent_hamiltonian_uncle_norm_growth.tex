@@ -1,0 +1,154 @@
+\section{Quadratic norm growth of the two-wall trial}
+\label{sec:uncle_trial_norm_growth}
+
+The norm calculation of
+\cite[low-energy-state lemma]{FernandezGonzalez2015Uncle}
+uses unital diagonal blocks and their faithful stationary dual trace-one
+densities. Full perturbation span implies diagonal injectivity and strict
+mixed-transfer damping in both orientations. The exact finite transfer
+contraction and the moving-wall bounds then give the normalized squared-norm
+limit and its generic quadratic growth.
+
+\begin{lemma}[Diagonal injectivity from perturbation span]
+    \label{lem:uncle_diagonal_injectivity}
+    \lean{MPSTensor.uncleBoundaryLetter_isInjective_diagonal_blocks}
+    \notready
+    \uses{def:uncle_boundary_space}
+    Full span of the one-site perturbation letters implies injectivity
+    of each diagonal block separately.
+\end{lemma}
+\begin{proof}
+    The two diagonal block projections are surjective linear maps. Their
+    images of the perturbation letters are precisely the letters of the
+    two diagonal blocks, so their spans are the entire block algebras.
+\end{proof}
+
+\begin{lemma}[Mixed damping from perturbation span]
+    \label{lem:uncle_mixed_damping_from_span}
+    \lean{MPSTensor.uncleBoundaryLetter_mixedMapSpectralRadius_lt_one,
+        MPSTensor.uncleBoundaryLetter_mixedMapSpectralRadius_reverse_lt_one}
+    \notready
+    \uses{def:uncle_boundary_space}
+    Suppose that the one-site perturbation letters span the full block
+    algebra, the diagonal transfers are unital, and they have faithful
+    stationary dual densities. Both mixed transfers have spectral radius
+    strictly below one.
+\end{lemma}
+\begin{proof}
+    Embed a mixed eigenvector as the upper off-diagonal block of the
+    block-diagonal channel. Unital contractivity bounds its eigenvalue
+    modulus by one. If equality holds, the faithful stationary density
+    forces equality in the Schwarz inequality and hence an intertwining
+    identity for every adjoint Kraus letter. Full perturbation span supplies
+    coefficients selecting zero in the first diagonal block and the identity
+    in the second. Contracting the intertwining identity gives a zero
+    eigenvector, a contradiction. Conjugate transpose treats the reverse
+    orientation.
+\end{proof}
+
+\begin{lemma}[Geometric convergence of a normalized injective block]
+    \label{lem:uncle_injective_transfer_decay}
+    \lean{MPSTensor.uncleTransfer_isPrimitive_of_injective_unital,
+        MPSTensor.uncleTransfer_complement_spectralRadius_lt_one,
+        MPSTensor.uncleTransfer_pow_sub_projection_bound}
+    \notready
+    \uses{lem:uncle_diagonal_injectivity}
+    Let $A$ be an injective unital block with stationary dual density
+    $\rho$ of trace one. Write $E(X)=\sum_iA_iXA_i^*$ and
+    $P(X)=\operatorname{tr}(\rho X)I$. The transfer is primitive, its
+    complement $E-P$ has spectral radius strictly below one, and there
+    are $C>0$ and $0<r<1$ such that
+    \[
+        \lVert E^n(X)-P(X)\rVert\le Cr^n\lVert X\rVert
+    \]
+    for every positive integer $n$ and every matrix $X$.
+\end{lemma}
+\begin{proof}
+    The adjoint letter family is injective and trace preserving, hence
+    primitive, and peripheral primitivity transports back to the original
+    family. Irreducibility makes each fixed matrix a scalar multiple of
+    the identity. The stationary trace functional then shows that every
+    eigenvalue of $E-P$ has modulus strictly below one. Finally
+    $E^n=P+(E-P)^n$ for $n\ge1$, and geometric power decay gives the bound.
+\end{proof}
+
+\begin{lemma}[Quantitative factorization error]
+    \label{lem:uncle_trial_norm_factorization_error}
+    \lean{MPSTensor.uncleTwoWallTransfer_factorization_bound}
+    \notready
+    \uses{lem:uncle_injective_transfer_decay,lem:uncle_wall_gram_linear_bounds,
+        lem:uncle_wall_rank_one_contraction,thm:uncle_trial_norm_transfer}
+    Under the stated canonical spectral conditions, let $T_N$ denote the
+    actual source transfer contraction. There are $C>0$ and $0<z<1$ such
+    that, for every positive $N$,
+    \[
+        \left|\operatorname{Tr}(T_N)-\eta_R(N+1)\eta_L(N+1)\right|
+        \le C(N+1)^2z^N.
+    \]
+\end{lemma}
+\begin{proof}
+    Replace the first long transfer power by its canonical projection,
+    then the second. The two errors are bounded by geometric sequences
+    times the product of the two actual moving-wall map bounds. The
+    remaining pure transfer is contractive, as is the normalized canonical
+    projection. The operator trace is a continuous linear functional on
+    the finite-dimensional space of endomorphisms. The two rank-one
+    contractions give exactly the product of the finite wall weights.
+\end{proof}
+
+\begin{theorem}[Normalized norm limit and generic quadratic growth]
+    \label{thm:uncle_trial_generic_quadratic_norm}
+    \lean{MPSTensor.uncleTwoWallTrialSource_normalized_norm_sq_tendsto,
+        MPSTensor.uncleTwoWallTrialSource_eventual_norm_bounds,
+        MPSTensor.uncleTwoWallTrialSource_ae_quadratic_norm_growth}
+    \notready
+    \uses{lem:uncle_trial_norm_factorization_error,
+        thm:uncle_wall_gram_linear_limit,cor:uncle_wall_gram_pair_generic_positive,
+        lem:uncle_diagonal_injectivity,lem:uncle_mixed_damping_from_span}
+    Under the stated canonical normalization and strict mixed damping,
+    the actual source trial satisfies
+    \[
+        \frac{\lVert\phi_N\rVert^2}{(N+1)^2}
+        \longrightarrow\operatorname{Re}(\kappa_R\kappa_L).
+    \]
+    If a full perturbation span is possible for the fixed diagonal
+    blocks, it supplies the strict mixed damping needed for this limit.
+    For almost every pair $(R,L)$ there are $c,C>0$ such
+    that, for all sufficiently large $N$,
+    \[
+        c(N+1)^2\le\lVert\phi_N\rVert^2\le C(N+1)^2.
+    \]
+    The measure is an arbitrary additive Haar measure on the real space
+    of both walls.
+\end{theorem}
+\begin{proof}
+    Divide the quantitative error by $(N+1)^2$. Its geometric upper bound
+    tends to zero, while the normalized wall weights converge to their
+    actual slopes. Almost every pair has both slopes positive, so their
+    product has positive real part. Convergence then bounds the normalized
+    squared norm above and below by positive constants.
+\end{proof}
+
+\begin{lemma}[Gram limits of the two periodic ground vectors]
+    \label{lem:uncle_ground_gram_limits}
+    \lean{MPSTensor.uncleMPV_norm_sq_tendsto_one,MPSTensor.uncleGroundGram_tendsto}
+    \notready
+    \uses{lem:uncle_injective_transfer_decay,lem:uncle_diagonal_injectivity,
+        lem:uncle_mixed_damping_from_span}
+    Under the same normalized canonical data and full perturbation span,
+    the actual periodic ground vectors satisfy
+    \[
+        \lVert\psi_A^N\rVert^2\longrightarrow1,\qquad
+        \lVert\psi_B^N\rVert^2\longrightarrow1,\qquad
+        \langle\psi_A^N,\psi_B^N\rangle\longrightarrow0.
+    \]
+\end{lemma}
+\begin{proof}
+    The actual pure transfer powers converge in operator norm to their
+    canonical rank-one contractions. Their operator traces therefore tend
+    to the trace of the canonical contraction, which is the density trace,
+    namely one. The exact transfer trace identity identifies these with
+    the periodic squared norms. Strict mixed damping makes the mixed power
+    trace tend to zero, and hence the actual periodic inner product does
+    also. All transfer conditions were derived from the stated source data.
+\end{proof}
