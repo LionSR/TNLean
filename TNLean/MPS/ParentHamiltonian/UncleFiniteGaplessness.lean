@@ -62,7 +62,7 @@ theorem uncleHamiltonianES_ae_eventually_exists_pos_eigenvalue_lt
     (ρB : Matrix (Fin b) (Fin b) ℂ) (hρB : ρB.PosDef) (htrB : Matrix.trace ρB = 1)
     (hFA : Kraus.adjointMap A ρA = ρA) (hFB : Kraus.adjointMap B ρB = ρB)
     (μ : Measure ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
-      (Fin d → Matrix (Fin b) (Fin a) ℂ))) [IsAddHaarMeasure μ] :
+      (Fin d → Matrix (Fin b) (Fin a) ℂ))) [μ.IsAddHaarMeasure] :
     ∀ᵐ P ∂μ, Kraus.IsInjective (uncleBoundaryLetter A B P.1 P.2) →
       ∀ ε : ℝ, 0 < ε → ∀ᶠ N : ℕ in atTop,
         ∃ λ : ℝ, 0 < λ ∧ λ < ε ∧
