@@ -1363,10 +1363,13 @@ assumptions. That application requires deriving uniform factorization and
 entropy bounds and applying them to the approximation theorem. For chains
 with at least two sites, the entropy bound gives a common positive integer
 `k₀ ≥ exp(2 S_j)/2`; shorter chains need no truncation.
-Both bounds are now derived: the area law gives the entropy bound, and Lemma 1
-with a constant independent of the chain gives the factorization, so the estimate
-holds under the Hamiltonian assumptions alone, with the quantitative restrictions of
-the formalized Lemma 1.
+Both bounds are derived at the common source length `s = max(80c_R J/ΔE,80)`,
+using the admissible pair `(40c_R J,80)`. The threshold is
+`k₀ = ceil(exp(2 Smax)/2)` with the printed entropy maximum
+`Smax = c₀(6s) log(6s) log q 2^((6s) log q)`. Thus the factorization, entropy
+threshold and approximation use one interaction-proportional velocity, with
+constants independent of chain length. The earlier gap-rescaled estimates remain
+valid auxiliary statements.
 
 ### One-dimensional area law after Hastings: the threshold of the spectral cut-offs
 
@@ -1549,23 +1552,23 @@ terms meeting `K` (scope restriction), with `l_fac = 2 / min(c₁ΔE, μ − c�
 ### One-dimensional area law after Hastings: the decay length of Lemma 1
 
 [hastings07_lemma1_decay_length.tex](hastings07_lemma1_decay_length.tex)
-(scope restriction, open) compares the chain Lieb–Robinson estimate with
-Hastings's bound (arXiv:0705.2024v4, lines 96–112). The chain commutator bound is
-linear in the support, as in the source. Its quadratic localization factor enters
-with supports of at most `6R` sites for the parts and of `O(R + l)` sites for the
-boundary operator, where the faster decay of that term absorbs the polynomial in
-`l`; it changes the constant, not the length or the rate. It differs in having a prefactor that
-grows with `J` and a single-site second operator, so `(v₀, 2)` is not shown to be
-a source pair. The length `ξ = 8 max(2v₀/ΔE, 1)` is not homogeneous in `(J, ΔE)`;
-applied to `H/ΔE`, Lemma 1 holds with the homogeneous length
-`16(1 + c_R J/ΔE)`. The factorization constant is uniform in chain length and
-local dimension, and at the rate `ξ' = κ ξ̂` with `κ > 6` it is at most `K ξ̂³`
-with `K` depending only on `R` and `κ`, the source's polynomial bound in `ξ`
-(lines 258–262). The endpoint rate `ξ' = 6ξ` is reached at the length
-`(5/4) ξ̂` of a Lieb–Robinson pair with inflated velocity, which the source
-allows because it fixes `ξ` only through some pair (lines 96–112); at a fixed
-length the argument needs `ξ' > 6ξ`. A Lieb–Robinson pair in the source's
-form remains open under issue #9811.
+(local correction, resolved) identifies the Lieb–Robinson pairs used in
+Hastings's factorization (arXiv:0705.2024v4, lines 96–112 and 139–142). The
+commutator estimate now has numerical prefactor `4`, a linear first-support
+factor, and an arbitrary finite second support. With `c_R = 2(R+1)2^(2R+1)e^(2R)`,
+every positive velocity `v ≥ 8c_R J` and length scale `ξ_C ≥ 8` satisfy the
+time-cone bound. Rescaling `H` by `1/ΔE` multiplies physical time by `ΔE`;
+the velocities `8ΔE(1+c_R J/ΔE)` and `10ΔE(1+c_R J/ΔE)` give exactly the
+factorization lengths `ξ̂ = 16(1+c_R J/ΔE)` and `ζ = (5/4)ξ̂`. The endpoint
+factorization has error `K ζ³ exp(-l/(6ζ))`, uniformly in chain length and
+local dimension, with `K` depending only on `R`. For `J > 0` the pair
+`(40c_R J,80)` has velocity proportional to `J` and source length at least
+`2ζ`. All five source-parameter bootstrap, Rényi, entropy-gain and matrix product
+state conclusions now use that same length and pair. The auxiliary velocities
+containing `ΔE` are kept as valid auxiliary estimates; the new pair gives
+the source's order-`J` dependence directly. The fixed-length Gaussian and positivity corrections remain documented
+separately. The reciprocal-length reading of the printed time-cone formula is
+an explicit local correction.
 
 ## ALVV: the operator-norm cluster approximation
 
