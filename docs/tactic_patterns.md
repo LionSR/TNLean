@@ -9651,3 +9651,16 @@ there is no need for a new tactic.
   trace representation and the actual two-site local-kernel identity supply
   the remaining steps.
 - **Decision:** One source-specific lemma suffices; no new tactic or predicate.
+
+### Moving-wall finite Gram expansion — candidate (2026-10-29)
+
+- **Pattern:** Split a sum over fixed-length configurations with
+  `Fin.consEquiv`, expand a rectangular wall recurrence, and regroup
+  matrix products before using a unital word sum.
+- **Seen:** The two recurrences in
+  `MPS/ParentHamiltonian/UncleWallGram.lean`.
+- **Abstraction:** The private `sum_ofFn_cons` shares the configuration
+  reindexing. Correlation and Gram recurrences have different cross terms;
+  no additional public tactic is justified by these two occurrences.
+- **Notes:** Keep the finite coefficient identity separate from asymptotic
+  positivity and from estimates for the actual two-wall state.

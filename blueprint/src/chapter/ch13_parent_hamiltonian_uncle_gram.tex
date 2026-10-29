@@ -1,0 +1,85 @@
+\section{Finite Gram identities for a moving wall}
+\label{sec:uncle_wall_gram}
+
+The norm argument in
+\cite[proof of the low-energy-state lemma]{FernandezGonzalez2015Uncle}
+contains a finite weighted mixed-transfer sum for each moving wall. The
+following identities derive that sum directly from the single-wall words.
+They require the unital and stationary normalizations used in the source,
+but require neither an asymptotic norm bound nor perturbation injectivity.
+
+\begin{definition}[Moving-wall Gram and correlation matrices]
+    \label{def:uncle_wall_gram}
+    \lean{MPSTensor.uncleWallGram,MPSTensor.uncleWallCorrelation,
+        MPSTensor.uncleWallSeed,MPSTensor.uncleWallCrossMap,
+        MPSTensor.uncleWallGramWeight,MPSTensor.uncleWallCrossWeight}
+    \notready
+    \uses{def:uncle_two_wall_trial}
+    Let $W_R(w)$ be the sum with one wall in the word $w$, with $A$ to
+    its left and $B$ to its right. Define
+    \[
+        Z_n=\sum_{|w|=n}W_R(w)B(w)^*,\qquad
+        Y_n=\sum_{|w|=n}W_R(w)W_R(w)^*.
+    \]
+    Write $F(X)=\sum_i A_iXB_i^*$,
+    $C=\sum_i R_iB_i^*$, $G=\sum_iR_iR_i^*$, and
+    $J(X)=\sum_i A_iXR_i^*$. For a left density $\rho$, put
+    $\eta_n=\operatorname{tr}(\rho Y_n)$,
+    $\ell(X)=\operatorname{tr}(\rho J(X))$, and
+    $c_0=\operatorname{tr}(\rho G)$.
+\end{definition}
+
+\begin{lemma}[Exact finite wall recurrences]
+    \label{lem:uncle_wall_gram_recurrence}
+    \lean{MPSTensor.uncleWallCorrelation_succ,MPSTensor.uncleWallGram_succ,
+        MPSTensor.uncleWallCorrelation_eq_sum,
+        MPSTensor.uncleWallGramWeight_succ,
+        MPSTensor.uncleWallGram_posSemidef,MPSTensor.uncleWallGramWeight_nonneg}
+    \notready
+    \uses{def:uncle_wall_gram}
+    Suppose $\sum_iB_iB_i^*=I$. Then $Z_0=Y_0=0$ and
+    \[
+        Z_{n+1}=F(Z_n)+C,\qquad
+        Y_{n+1}=E_A(Y_n)+J(Z_n)+J(Z_n)^*+G.
+    \]
+    In particular, $Z_n=\sum_{k=0}^{n-1}F^k(C)$ and $Y_n$ is positive
+    semidefinite. If $\rho$ is Hermitian and $E_A^*(\rho)=\rho$, then
+    \[
+        \eta_{n+1}=\eta_n+c_0+\ell(Z_n)+\overline{\ell(Z_n)}.
+    \]
+    If $\rho$ is positive semidefinite, every $\eta_n$ is nonnegative.
+\end{lemma}
+\begin{proof}
+    Split each physical word into its first letter and its tail and use
+    $W_R(iw)=A_iW_R(w)+R_iB(w)$. Unitality makes the sum of
+    $B(w)B(w)^*$ equal to the identity. Expanding the two Gram factors
+    gives the two conjugate cross terms. The stationary density removes
+    the diagonal transfer in the trace.
+\end{proof}
+
+\begin{theorem}[Finite weighted mixed-transfer formula]
+    \label{thm:uncle_wall_gram_finite_sum}
+    \lean{MPSTensor.uncleWallGramWeight_eq_weighted_sum}
+    \notready
+    \uses{lem:uncle_wall_gram_recurrence}
+    Under the same unital and Hermitian stationary normalizations,
+    \[
+        \eta_{n+1}=(n+1)c_0+
+        \sum_{k=0}^{n-1}(n-k)
+        \bigl(\ell(F^k(C))+\overline{\ell(F^k(C))}\bigr).
+    \]
+    The sum is empty at $n=0$. At $n=1$ the expression is
+    $2c_0+2\operatorname{Re}\ell(C)$.
+\end{theorem}
+\begin{proof}
+    Substitute the finite geometric expansion for $Z_n$ in the scalar
+    recurrence. Each mixed power $F^k(C)$ occurs once for every later
+    extension of the word, hence exactly $n-k$ times.
+\end{proof}
+
+The corresponding identities for the other wall follow by exchanging
+$A,B$ and replacing $R$ by $L$. Establishing the two-wall norm asymptotic
+still requires the separating-transfer error estimate, decay of the
+mixed transfer powers, and strict positivity of the limiting coefficients
+outside the source exceptional sets. Finite nonnegativity alone does not
+supply the required positive quadratic growth.

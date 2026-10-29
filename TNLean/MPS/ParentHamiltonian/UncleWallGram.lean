@@ -20,7 +20,7 @@ lines 1230–1265. Neither asymptotic norm growth nor generic positivity is
 assumed or concluded here.
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators ComplexOrder
 
 namespace MPSTensor
 
