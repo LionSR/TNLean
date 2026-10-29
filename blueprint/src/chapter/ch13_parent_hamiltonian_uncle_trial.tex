@@ -1,0 +1,63 @@
+\section{Two-domain-wall trial vectors}
+\label{sec:uncle_two_wall_trial}
+
+The variational argument of
+\cite[equation defining $\phi_N$, low-energy-state lemma]{FernandezGonzalez2015Uncle}
+uses the earlier normalized standard form: the two diagonal blocks have
+unital transfer operators of spectral radius one, faithful trace-one dual
+fixed densities, and no other peripheral eigenvalues. Distinct blocks have
+mixed transfer spectral radius strictly below one. These conditions are
+needed for the asymptotic estimates and do not follow merely from the full
+perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
+
+\begin{definition}[The finite two-wall trial]
+    \label{def:uncle_two_wall_trial}
+    \lean{MPSTensor.uncleTwoWallCoefficient,
+        MPSTensor.uncleTwoWallCoefficient_eq_sum,
+        MPSTensor.uncleTwoWallTrial,MPSTensor.uncleTwoWallTrialSource}
+    \notready
+    \uses{def:uncle_boundary_space}
+    For five consecutive words $u,v,w,x,y$, define the coefficient
+    \[
+        \operatorname{tr}\!\left(A(u)\,R(v)\,B(w)\,L(x)\,A(y)\right),
+    \]
+    where $R(v)$ and $L(x)$ are the sums with one rectangular wall at each
+    position of their respective words. Thus the coefficient is precisely
+    the independent double sum over both wall positions. On a chain of
+    length $6N+1$ with $N\ge1$, choose consecutive segment lengths
+    $N,N+1,2N-1,N+1,N$. In coordinates numbered from zero, the first wall
+    ranges from $N$ through $2N$, and the second from $4N$ through $5N$.
+    Denote the resulting vector by $\phi_N$.
+\end{definition}
+
+\begin{lemma}[Interior moving-wall cancellation]
+    \label{lem:uncle_two_wall_interior_cancellation}
+    \lean{MPSTensor.uncleBoundaryWord_slice_mem,
+        MPSTensor.uncleInteractionES_upper_wall_slice_eq_zero,
+        MPSTensor.uncleInteractionES_lower_wall_slice_eq_zero,
+        MPSTensor.uncleInteractionES_twoWall_slice_first_eq_zero,
+        MPSTensor.uncleInteractionES_twoWall_slice_second_eq_zero}
+    \notready
+    \uses{def:uncle_two_wall_trial,thm:uncle_periodic_ground_space}
+    Fix all exterior physical letters, and vary two adjacent physical
+    letters entirely inside either moving-wall interval. The resulting
+    two-site vector is annihilated by the actual uncle local projector.
+    This algebraic cancellation requires neither perturbation injectivity
+    nor canonical normalization.
+\end{lemma}
+\begin{proof}
+    Concatenation multiplies the single-wall coefficient words by the
+    bilinear product defining $S_n$. A fixed exterior contraction therefore
+    composes a linear functional with multiplication by the two fixed
+    exterior coefficient words. Trace duality represents that functional
+    by a boundary matrix, so its two-site range lies in $S_2$, the actual
+    local projector kernel. Reading the upper or lower rectangular block
+    gives the first or second wall interval, respectively. For the latter,
+    the rectangular trace identity rotates the fixed exterior first wall
+    around the trace. Each wall position is included in the moving sum.
+\end{proof}
+
+The four interval-end contributions, the asymptotic norm and ground-sector
+orthogonality estimates, the proper algebraic exceptional sets, and the
+variational spectral conclusion are separate steps. The preceding local
+cancellation does not yet assert finite-volume gaplessness.
