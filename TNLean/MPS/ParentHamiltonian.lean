@@ -307,6 +307,7 @@ import TNLean.MPS.ParentHamiltonian.UncleTwoWallTrial
 import TNLean.MPS.ParentHamiltonian.UncleVirtualRescaling
 import TNLean.MPS.ParentHamiltonian.UncleWallGram
 import TNLean.MPS.ParentHamiltonian.UncleWallGramAsymptotics
+import TNLean.MPS.ParentHamiltonian.UncleWallGramGeneric
 import TNLean.MPS.ParentHamiltonian.UncleWallGramQuadratic
 import TNLean.MPS.ParentHamiltonian.UncleWallGramSlopePositive
 import TNLean.MPS.ParentHamiltonian.UniqueGroundState
