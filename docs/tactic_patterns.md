@@ -5034,6 +5034,14 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Canonical matrix spectral spans after reindexing — candidate (2026-10-29)
+
+- **Pattern:** Unfold the actual matrix eigenbasis/eigenvalue reindexing and
+  identify the two spectral spans by image inclusions.
+- **Seen:** `MPS/AreaLaw/ALVV/HardTruncationResidual.lean`, both actual residuals.
+- **Decision:** One private span identity suffices. The basis application uses
+  `OrthonormalBasis.reindex_apply`, rather than definitional equality.
+
 ### Recovering letters by an identity contraction — candidate (2026-10-29)
 
 - **Seen:** `isInjective_uncleTensor_of_isInjective_perturbation` in

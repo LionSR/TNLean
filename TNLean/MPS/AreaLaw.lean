@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw
 
 import TNLean.MPS.AreaLaw.AKLV
+import TNLean.MPS.AreaLaw.ALVV
 import TNLean.MPS.AreaLaw.AreaLaw
 import TNLean.MPS.AreaLaw.BandDissolution
 import TNLean.MPS.AreaLaw.BandInformation
