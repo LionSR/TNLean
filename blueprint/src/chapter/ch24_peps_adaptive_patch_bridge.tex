@@ -5,7 +5,7 @@ Proposition~4.1 of \cite{OpenAI2026PolynomialPEPS}, \texttt{03-patches.tex},
 lines 563--603: a vector in the sum of nested cylinder spaces is turned into
 square cylinder data at the same radii.
 
-\begin{theorem}[Square samples in integer coordinates]
+\begin{lemma}[Square samples in integer coordinates]
     \label{thm:peps_square_sample_integer_coordinates}
     \lean{TNLean.PEPS.Approximation.squareSample_integerCoordinates,
         TNLean.PEPS.Approximation.integerCoordinates_add_one_eq_latticePos}
@@ -15,7 +15,7 @@ square cylinder data at the same radii.
     $\{x\in\Lambda:\max\{|x_1-c_1|,|x_2-c_2|\}\le r\}$. Translating
     $\{0,\ldots,L-1\}^2$ by $(1,1)$ recovers the lattice positions of
     \cite{OpenAI2026PolynomialPEPS}, \texttt{00-introduction.tex}, lines 21--25.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -24,7 +24,7 @@ square cylinder data at the same radii.
     Immediate from $\|x-c\|_\infty=\max\{|x_1-c_1|,|x_2-c_2|\}$.
 \end{proof}
 
-\begin{theorem}[Square patches from nested cylinders]
+\begin{lemma}[Square patches from nested cylinders]
     \label{thm:peps_square_patch_of_nested_cylinders}
     \lean{TNLean.PEPS.EncodedFrame.exists_squarePatch_of_mem_iSup_dependentRegionCylinder}
     \leanok
@@ -40,7 +40,7 @@ square cylinder data at the same radii.
         \lVert(\id-\Pi)\Omega\rVert & \le\lVert\Omega-v\rVert.
         \label{eq:peps_square_patch_nested_cylinders}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -59,7 +59,7 @@ square cylinder data at the same radii.
     $W_j=\sum_{i<j}\operatorname{ran}(P_{S_i}\otimes\id_{D_j\setminus D_i})\subseteq\mathcal H_{D_j}$.
     The innovation $T_j=(\id-P_{W_j})S_j\subseteq\mathcal H_{D_j}$ satisfies
     $d_j=\dim T_j\le\dim S_j$. Choosing an orthonormal basis
-    $(v_{j\ell})_{\ell=0}^{d_j-1}$ of each $T_j$, Theorems~\ref{thm:peps_nested_cylinder_orthogonalization}
+    $(v_{j\ell})_{\ell=0}^{d_j-1}$ of each $T_j$, Lemmas~\ref{thm:peps_nested_cylinder_orthogonalization}
     and \ref{thm:peps_nested_cylinder_projector_sum} show that
     \begin{align}
         \Pi=\sum_{j=0}^{m-1}\sum_{\ell=0}^{d_j-1}
@@ -70,7 +70,7 @@ square cylinder data at the same radii.
     (\texttt{03-patches.tex}, lines 563--603).
 \end{proof}
 
-\begin{theorem}[Exact square patches at bounded radius]
+\begin{lemma}[Exact square patches at bounded radius]
     \label{thm:peps_bounded_radius_square_patch}
     \lean{TNLean.PEPS.Approximation.exists_squarePatch_integerCoordinates_of_radius_le_four}
     \leanok
@@ -81,7 +81,7 @@ square cylinder data at the same radii.
     \begin{align}
         \sum_jd_j & \le q^{81}, & (\id-\Pi)\Omega & =0. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -89,8 +89,8 @@ square cylinder data at the same radii.
         thm:peps_square_sample_integer_coordinates,
         thm:peps_closed_square_card,
         def:peps_regional_cylinder}
-    Apply Theorem~\ref{thm:peps_square_patch_of_nested_cylinders} with $m=1$,
-    $r_0=u$, $S_0=\mathcal H_{D_0}$, and $v=\Omega$; Theorem~\ref{thm:peps_closed_square_card}
+    Apply Lemma~\ref{thm:peps_square_patch_of_nested_cylinders} with $m=1$,
+    $r_0=u$, $S_0=\mathcal H_{D_0}$, and $v=\Omega$; Lemma~\ref{thm:peps_closed_square_card}
     gives $|D_0|\le81$ for $u\le4$, so $\sum_jd_j\le\dim\mathcal H_{D_0}=q^{|D_0|}\le q^{81}$
     (\cite{OpenAI2026PolynomialPEPS}, \texttt{03-patches.tex}, lines 53--54).
 \end{proof}
@@ -135,14 +135,14 @@ square cylinder data at the same radii.
         thm:peps_patch_count_polynomial,
         def:square_area_law_state}
     On the integer domain (translated by $(1,1)$ via
-    Theorem~\ref{thm:peps_square_sample_integer_coordinates}),
-    Theorem~\ref{thm:peps_square_patch_of_nested_cylinders} for $u\ge4$ gives
+    Lemma~\ref{thm:peps_square_sample_integer_coordinates}),
+    Lemma~\ref{thm:peps_square_patch_of_nested_cylinders} for $u\ge4$ gives
     error at most $L^{-p}$ and at most $m(u)L^{R_0}\le(1+B_0/2)L^{R_0+1}$ terms,
-    while Theorem~\ref{thm:peps_bounded_radius_square_patch} for $u<4$ gives
+    while Lemma~\ref{thm:peps_bounded_radius_square_patch} for $u<4$ gives
     error $0$ and at most $q^{81}$ terms.
 \end{proof}
 
-\begin{theorem}[Adaptive patches at a given area-law constant]
+\begin{lemma}[Adaptive patches at a given area-law constant]
     \label{thm:peps_adaptive_patch_supply_of_area_law_at}
     \lean{TNLean.PEPS.Approximation.adaptivePatchPrefactor_pos,
         TNLean.PEPS.Approximation.adaptivePatchExponent_pos,
@@ -160,22 +160,22 @@ square cylinder data at the same radii.
     cylinder terms and error at most $L^{-p}$
     (\cite[Proposition~4.1]{OpenAI2026PolynomialPEPS}, \texttt{03-patches.tex},
     lines 26--54 and 534--603).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{lem:peps_adaptive_patch_supply_core,
         thm:peps_nested_patch_cylinder_approximation_explicit,
         def:peps_nested_patches,thm:peps_nested_patch_sizes}
-    By Theorem~\ref{thm:peps_nested_patch_sizes}, the $m=\lfloor u/2\rfloor+1\le\frac{B_0}{2}\log L+1$
+    By Lemma~\ref{thm:peps_nested_patch_sizes}, the $m=\lfloor u/2\rfloor+1\le\frac{B_0}{2}\log L+1$
     nested patches have radii in $[u,2u]$;
-    Theorem~\ref{thm:peps_nested_patch_cylinder_approximation_explicit} gives
+    Lemma~\ref{thm:peps_nested_patch_cylinder_approximation_explicit} gives
     $R_0>0$ and the cylinder approximation for $4\le u\le B_0\log L$, so
     Lemma~\ref{lem:peps_adaptive_patch_supply_core} yields the patches with
     $c=R_0+1$.
 \end{proof}
 
-\begin{theorem}[Adaptive patches from the square entropy area law]
+\begin{lemma}[Adaptive patches from the square entropy area law]
     \label{thm:peps_adaptive_patch_constraint_of_area_law}
     \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLaw.adaptivePatchConstraint}
     \leanok
@@ -183,12 +183,12 @@ square cylinder data at the same radii.
     The square-grid entropy area law implies the adaptive patch constraint
     (\cite[Proposition~4.1]{OpenAI2026PolynomialPEPS}, \texttt{03-patches.tex},
     lines 26--54 and 534--603).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:peps_adaptive_patch_supply_of_area_law_at}
-    Apply Theorem~\ref{thm:peps_adaptive_patch_supply_of_area_law_at} to the
+    Apply Lemma~\ref{thm:peps_adaptive_patch_supply_of_area_law_at} to the
     area-law constant $C_A\ge0$ supplied at $(q,J,\Delta)$.
 \end{proof}
 
@@ -207,8 +207,7 @@ square cylinder data at the same radii.
     \leanok
     \uses{thm:openai_square_area_law,
         thm:peps_adaptive_patch_constraint_of_area_law}
-    Combine Theorems~\ref{thm:openai_square_area_law} and
-    \ref{thm:peps_adaptive_patch_constraint_of_area_law}.
+    Combine Theorem~\ref{thm:openai_square_area_law} and Lemma~\ref{thm:peps_adaptive_patch_constraint_of_area_law}.
 \end{proof}
 
 \subsection{Adaptive patches at interaction range \texorpdfstring{$R$}{R}}
@@ -233,7 +232,7 @@ Definitions~\ref{def:peps_range_nested_patches} and
     set $c_R=R_0^{(R)}+1$.
 \end{definition}
 
-\begin{theorem}[Adaptive patches at range $R$ at a given area-law constant]
+\begin{lemma}[Adaptive patches at range $R$ at a given area-law constant]
     \label{thm:peps_range_adaptive_patch_supply}
     \lean{TNLean.PEPS.Approximation.rangeNestedPatchRadiusExponent_pos,
         TNLean.PEPS.Approximation.rangeAdaptivePatchExponent_pos,
@@ -257,7 +256,7 @@ Definitions~\ref{def:peps_range_nested_patches} and
         \item for $0<u\le B_0\log L$, there is an adaptive square patch with at
               most $C(q,B_0)L^{c_R}$ cylinder terms and error at most $L^{-p}$.
     \end{enumerate}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:peps_closed_square_entropy_explicit,
@@ -268,7 +267,7 @@ Definitions~\ref{def:peps_range_nested_patches} and
         lem:peps_range_patch_energy_parameter_choice}
     Since $u+s_Rj\in[u,2u]$ is nondecreasing,
     Lemma~\ref{lem:peps_closed_square_entropy_explicit} gives (1), which with
-    Theorem~\ref{thm:peps_range_nested_patch_minimizer_marginal_closeness} at
+    Lemma~\ref{thm:peps_range_nested_patch_minimizer_marginal_closeness} at
     $\kappa_R$ and Lemma~\ref{lem:peps_closed_square_cylinder_core} gives (2);
     since $s_R\ge2$ implies $m_R\le\frac{B_0}{2}\log L+1$,
     Lemma~\ref{lem:peps_adaptive_patch_supply_core} gives (3).

@@ -14,7 +14,7 @@ monomial expansion \cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}.
     $W^{[0]}=1$ and $W^{[t+1]}=W_tW^{[t]}$.
 \end{definition}
 
-\begin{theorem}[Chronological composition]
+\begin{lemma}[Chronological composition]
     \label{thm:peps_original_chronology_composition}
     \leanok
     \uses{def:peps_original_chronology_composite}
@@ -39,7 +39,7 @@ monomial expansion \cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}.
     and any participating-set property or monomial bound $(K,r,S)$ (at most $K$
     terms, $r$ pair effects per term, and coefficient sum $S$) holding for all
     $W_t$ also holds for $W^{[T]}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By induction on $T$, $W^{[t+1]}=W_tW^{[t]}$ (Definition~\ref{def:peps_original_chronology_composite})
     has occurrences equal to the disjoint union of those of $W^{[t]}$ and $W_t$
@@ -56,7 +56,7 @@ monomial expansion \cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}.
     $L$ is assigned its recorded sum $\sum_{m\in L}m$.
 \end{definition}
 
-\begin{theorem}[Exact local operator sums]
+\begin{lemma}[Exact local operator sums]
     \label{thm:peps_original_exact_gate_maps}
     \leanok
     \uses{def:peps_original_recorded_gate_maps}
@@ -65,7 +65,7 @@ monomial expansion \cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}.
     For every original distributed circuit $W$, $\widehat W=W$ (including
     private operations), with zero local approximation error and unchanged
     contraction and pair-effect conditions.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     At a nonprivate occurrence with monomial list $L$, the prescribed gate is
     $\sum_{m\in L}m$ (error $\bigl\|\sum_{m\in L}m-\sum_{m\in L}m\bigr\|=0$),
@@ -74,7 +74,7 @@ monomial expansion \cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}.
     unchanged; induction on $W$ gives $\widehat W=W$.
 \end{proof}
 
-\begin{theorem}[Original monomial and expansion bounds]
+\begin{lemma}[Original monomial and expansion bounds]
     \label{thm:peps_original_produced_resource_bounds}
     \leanok
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.monomialCount_produce_le_of_isMonomialBounded}
@@ -82,7 +82,7 @@ monomial expansion \cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}.
     If every original monomial list has $|L|\le K$, then every produced
     occurrence has $|L|\le K$; if $W$ has pair-effect bound $r$ and
     coefficient-sum bound $S$, then any $r'\ge r$ and $S'\ge S$ also bound $W$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each produced occurrence retains its original list $L$ (so $|L|\le K$), and
     transitivity of $\le$ extends $(r,S)$ to $(r',S')$ across all monomials.
