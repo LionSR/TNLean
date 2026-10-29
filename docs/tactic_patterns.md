@@ -9903,3 +9903,17 @@ there is no need for a new tactic.
   use these shared matrix estimates. Their former private proofs were moved
   to the companion library without compatibility aliases. Physical coercivity
   and the high-energy weighted maps are still derived from the actual chain.
+
+### Finite word series grouped by their exact support — candidate (2026-10-29)
+
+- **Pattern:** Partition a finite sum of words by the image of its label map,
+  then transfer a finite sum of convergent exact-support series to a selector.
+- **Seen:** `hasSum_truncatedExpTerm_clusterOp` in
+  `Lattice/ClusterExpansion/ClusterFactorization.lean` and
+  `clusterPart_empty_boundary_eq_sum_clusterOp` in
+  `Lattice/ClusterExpansion/MandatoryLabels.lean`.
+- **Reuse:** `Finset.sum_fiberwise_of_maps_to`, `hasSum_sum`, and uniqueness
+  of sums perform the regrouping. A filter condition already implied by
+  the chosen support is removed pointwise.
+- **Decision:** The existing finite-sum and convergence lemmas provide the
+  common mechanism. No new selector or cluster operator is introduced.
