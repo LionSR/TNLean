@@ -17,7 +17,7 @@
     vertex.
 \end{proof}
 
-\begin{theorem}[Bond-inserted state as an edge insertion]
+\begin{lemma}[Bond-inserted state as an edge insertion]
     \label{thm:peps_deformedRegionStateAssembled_bondInserted_eq_smul_edgeInsertedCoeff}
     \lean{TNLean.PEPS.deformedRegionStateAssembled_bondInserted_eq_smul_edgeInsertedCoeff}
     \leanok
@@ -35,13 +35,13 @@
     \end{align}
     Here $p_B(R)=\prod_{g\notin\partial R}D_B(g)$, and $\mathcal O_{R,f}$ is
     the boundary-edge orientation.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
-    Theorem~\ref{thm:peps_deformedRegionState_bondInsertedRegionInsert}
+    Lemma~\ref{thm:peps_deformedRegionState_bondInsertedRegionInsert}
     rewrites the deformed state as
     $C_B(R,f,M;\omega_R,\omega_{V\setminus R})$.
-    Theorem~\ref{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff}
+    Lemma~\ref{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff}
     gives
     \begin{align}
         C_B(R,f,M;\omega_R,\omega_{V\setminus R})
@@ -54,7 +54,7 @@
     configuration with $\omega$.
 \end{proof}
 
-\begin{theorem}[Window-independence of a bond insertion]
+\begin{lemma}[Window-independence of a bond insertion]
     \label{thm:peps_bondInserted_windowIndependent}
     \lean{TNLean.PEPS.bondInserted_windowIndependent}
     \leanok
@@ -71,11 +71,11 @@
         \Psi^{\mathrm{as}}_{B,R_2,I_{B,R_2,e,M_2}}(\omega).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Applying
-    Theorem~\ref{thm:peps_deformedRegionStateAssembled_bondInserted_eq_smul_edgeInsertedCoeff}
+    Lemma~\ref{thm:peps_deformedRegionStateAssembled_bondInserted_eq_smul_edgeInsertedCoeff}
     to each of the two regions gives, for $i=1,2$,
     \begin{align}
         \Psi^{\mathrm{as}}_{B,R_i,I_{B,R_i,e,M_i}}(\omega)

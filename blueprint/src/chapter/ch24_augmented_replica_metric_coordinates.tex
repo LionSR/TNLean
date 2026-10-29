@@ -11,7 +11,7 @@ spaces by $\mathcal X_I$ and $\mathcal X_J$. Relabelling sites along $a$
 induces a bijection $e_0:\mathcal X_I\to\mathcal X_J$ and, on $k$ replicas,
 the coordinatewise bijection $e_k:\mathcal X_I^k\to\mathcal X_J^k$.
 
-\begin{theorem}[Subsystem permutations in augmented coordinates]
+\begin{lemma}[Subsystem permutations in augmented coordinates]
     \label{thm:al_augmented_subsystem_action}
     \lean{TNLean.PEPS.AreaLaw.Scan.augmentedReplicaConfigurationEquiv_subsystemPerm}
     \leanok
@@ -23,7 +23,7 @@ the coordinatewise bijection $e_k:\mathcal X_I^k\to\mathcal X_J^k$.
     \begin{align*}
         e_k\bigl(\rho_Q(\sigma)x\bigr)=\rho_{a(Q)}(\sigma)e_k(x).
     \end{align*}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     At site $a(i)$ and replica $j$, both sides take the value of $x$
     at site $i$ and replica $\sigma^{-1}(j)$ when $i\in Q$, and at replica $j$
@@ -31,7 +31,7 @@ the coordinatewise bijection $e_k:\mathcal X_I^k\to\mathcal X_J^k$.
     $a(i)\in a(Q)$, so the two configurations agree at every coordinate.
 \end{proof}
 
-\begin{theorem}[Replica metrics in augmented coordinates]
+\begin{lemma}[Replica metrics in augmented coordinates]
     \label{thm:al_augmented_replica_metric_coordinates}
     \lean{TNLean.PEPS.AreaLaw.Scan.replicaMetric_submatrix_augmentedReplicaConfigurationEquiv}
     \leanok
@@ -43,7 +43,7 @@ the coordinatewise bijection $e_k:\mathcal X_I^k\to\mathcal X_J^k$.
     \begin{align*}
         W^{J}_{a(Q),k}(x,y)=W^{I}_{Q,k}\bigl(e_k^{-1}x,e_k^{-1}y\bigr).
     \end{align*}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:al_augmented_subsystem_action}
     The bijection $e_0$ gives $|\mathcal X_I|=|\mathcal X_J|=N$, so the

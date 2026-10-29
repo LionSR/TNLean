@@ -12,7 +12,7 @@ each retained factor by its radius-$r$ local version, and
 Section~\ref{sec:al_channel_word_omission} removes distant events and
 combines the two.
 
-\begin{theorem}[Products of roots are contractions and telescope]
+\begin{lemma}[Products of roots are contractions and telescope]
     \label{thm:al_contraction_word_telescope}
     \lean{TNLean.PEPS.AreaLaw.norm_contractionWord_le_one,
         TNLean.PEPS.AreaLaw.norm_contractionWord_sub_le}
@@ -23,20 +23,20 @@ combines the two.
     $D_w'$ from $k_i'$. Then $\|D_w\|\le1$, and
     $\|(I-k_i)^{1/2}-(I-k_i')^{1/2}\|\le\varepsilon$ for all $i$ implies
     $\|D_w-D_w'\|\le m\varepsilon$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each $(I-k_i)^{1/2}$ is a contraction, so $\|D_w\|\le1$; telescoping
     $GX-G'X'=G(X-X')+(G-G')X'$ by induction on $m$ gives
     $\|D_w-D_w'\|\le m\varepsilon$.
 \end{proof}
 
-\begin{theorem}[Expected truncation error on retained events]
+\begin{lemma}[Expected truncation error on retained events]
     \label{thm:al_contraction_word_expected_truncation}
     \lean{TNLean.PEPS.AreaLaw.integrable_and_integral_norm_contractionWord_sub_le,
         TNLean.PEPS.AreaLaw.integrable_and_integral_norm_contractionWord_retained_sub_le}
     \leanok
     \uses{thm:al_contraction_word_telescope}
-    In the setting of Theorem~\ref{thm:al_contraction_word_telescope},
+    In the setting of Lemma~\ref{thm:al_contraction_word_telescope},
     let the alphabet be finite, let $\mu_t$ be the Poisson-word law at
     $t\ge0$, and for a subset $P$ of retained labels let $w_P$ be the
     retained subword of $w$. If
@@ -46,16 +46,16 @@ combines the two.
         \int\|D_{w_P}-D_{w_P}'\|\,d\mu_t(w)\le\varepsilon\,|P|\,t.
         \label{eq:al_contraction_word_expected_truncation}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:al_contraction_word_telescope},
+    By Lemma~\ref{thm:al_contraction_word_telescope},
     $\|D_{w_P}-D_{w_P}'\|\le2$ (giving integrability) and
     $\|D_{w_P}-D_{w_P}'\|\le\varepsilon|w_P|$; since $w_P$ has the
     Poisson-word law on $P$ with mean length $|P|t$, integrating yields
     (\ref{eq:al_contraction_word_expected_truncation}).
 \end{proof}
 
-\begin{theorem}[Labels anchored near a set]
+\begin{lemma}[Labels anchored near a set]
     \label{thm:al_retained_anchor_count}
     \lean{TNLean.PEPS.AreaLaw.graphBall_subset_graphNeighborhood_two_mul,
         TNLean.PEPS.AreaLaw.card_filter_anchor_mem_graphNeighborhood_le,
@@ -67,33 +67,33 @@ combines the two.
     then for every $S\subseteq\Lambda$ and $r\ge0$, $d_\Lambda(a_i,S)\le r$
     implies $N_r(a_i)\subseteq N_{2r}(S)$, and at most $2\mu|S|(1+r)^2$
     labels satisfy $d_\Lambda(a_i,S)\le r$ (in particular with $\mu=\mu_R$
-    of Theorem~\ref{thm:al_lattice_counts} for range-$R$ admissible
+    of Lemma~\ref{thm:al_lattice_counts} for range-$R$ admissible
     supports).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The triangle inequality gives $N_r(a_i)\subseteq N_{2r}(S)$. Each
     retained $a_i$ lies in some $N_r(s)$ ($s\in S$) of cardinality at most
-    $2(1+r)^2$ (Theorem~\ref{thm:al_lattice_counts}), with at most $\mu$
+    $2(1+r)^2$ (Lemma~\ref{thm:al_lattice_counts}), with at most $\mu$
     labels per site.
 \end{proof}
 
-\begin{theorem}[Support of the truncated products]
+\begin{lemma}[Support of the truncated products]
     \label{thm:al_truncated_product_support}
     \lean{TNLean.PEPS.AreaLaw.contractionWord_siteExpectation_mem_supportedOperators}
     \leanok
-    In the setting of Theorem~\ref{thm:al_retained_anchor_count}, for
+    In the setting of Lemma~\ref{thm:al_retained_anchor_count}, for
     $0\le k_i\le I$ with $d_\Lambda(a_i,S)\le r$ and conditional
     expectations $E_{i,r}$ onto $N_r(a_i)$, every product of
     $(I-E_{i,r}k_i)^{1/2}$ is supported on $N_{2r}(S)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:al_retained_anchor_count}
     Each $(I-E_{i,r}k_i)^{1/2}$ is supported on
     $N_r(a_i)\subseteq N_{2r}(S)$ by
-    Theorem~\ref{thm:al_retained_anchor_count}.
+    Lemma~\ref{thm:al_retained_anchor_count}.
 \end{proof}
 
-\begin{theorem}[Truncation of the retained product for general constraints]
+\begin{lemma}[Truncation of the retained product for general constraints]
     \label{thm:al_domain_product_truncation}
     \lean{TNLean.PEPS.AreaLaw.exists_domainConstraintWord_truncation}
     \leanok
@@ -113,20 +113,20 @@ combines the two.
         \le At\,|S|\,(1+r)^2e^{-\gamma r^\alpha}.
         \label{eq:al_domain_product_truncation}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:al_contraction_word_expected_truncation,
         thm:al_retained_anchor_count,thm:al_truncated_product_support}
     Since $\|(I-k_i)^{1/2}-(I-E_{i,r}k_i)^{1/2}\|\le\|k_i-E_{i,r}k_i\|^{1/2}
         \le C^{1/2}e^{-cr^\alpha/2}$, combining
     (\ref{eq:al_contraction_word_expected_truncation}) with
-    Theorems~\ref{thm:al_retained_anchor_count}
+    Lemmas~\ref{thm:al_retained_anchor_count}
     and~\ref{thm:al_truncated_product_support} gives
     (\ref{eq:al_domain_product_truncation}) with $A=2\mu C^{1/2}$ and
     $\gamma=c/2$.
 \end{proof}
 
-\begin{theorem}[Truncation of the retained constraint product]
+\begin{lemma}[Truncation of the retained constraint product]
     \label{thm:al_lattice_product_truncation}
     \lean{TNLean.PEPS.AreaLaw.exists_latticeConstraintWord_truncation}
     \leanok
@@ -138,7 +138,7 @@ combines the two.
     the exact positive constraints $k_i$ of
     Theorem~\ref{thm:al_lattice_positive_replacement} (anchored at
     $a_i\in X_i$) satisfy the conclusion of
-    Theorem~\ref{thm:al_domain_product_truncation} for all
+    Lemma~\ref{thm:al_domain_product_truncation} for all
     $S\subseteq\Lambda$, integers $r\ge0$, and $t\ge0$
     (\cite[Lemma~10.1]{OpenAI2026AreaLaw}): every $L(w)$ is a contraction
     supported on $N_{2r}(S)$, $\|D_{\rm ret}-L\|$ is $\mu_t$-integrable,
@@ -148,15 +148,15 @@ combines the two.
         \le Ct\,|S|\,(1+r)^2e^{-cr^\alpha}.
         \label{eq:al_lattice_product_truncation}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:al_lattice_quasilocal_roots,
         thm:al_contraction_word_expected_truncation,
         thm:al_retained_anchor_count,thm:al_truncated_product_support}
-    Theorem~\ref{thm:al_lattice_quasilocal_roots} bounds each root error
+    Lemma~\ref{thm:al_lattice_quasilocal_roots} bounds each root error
     by $Ce^{-cr^\alpha}$, and combining
     (\ref{eq:al_contraction_word_expected_truncation}) with
-    Theorems~\ref{thm:al_retained_anchor_count}
+    Lemmas~\ref{thm:al_retained_anchor_count}
     and~\ref{thm:al_truncated_product_support} yields
     (\ref{eq:al_lattice_product_truncation}).
 \end{proof}

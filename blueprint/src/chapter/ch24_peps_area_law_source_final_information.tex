@@ -9,7 +9,7 @@ resulting bound is conditional on the complete physical scanner hypotheses and
 the original target and positive-prefix entropy inputs; it neither constructs
 those inputs nor claims the full area law.
 
-\begin{theorem}[The target dimension]
+\begin{lemma}[The target dimension]
     \label{thm:physical-information-dimension}
     \lean{TNLean.PEPS.AreaLaw.Scan.log_exp_configuration_card_le_of_card}
     \leanok
@@ -19,7 +19,7 @@ those inputs nor claims the full area law.
         \log(e\dim\mathcal H_X)
         \leq 1+(C_{\rm vol}\log q)n^2.
     \]
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -28,7 +28,7 @@ those inputs nor claims the full area law.
     without any dependence on the dimension of the far region.
 \end{proof}
 
-\begin{theorem}[The concrete source's final-scale conditional information]
+\begin{lemma}[The concrete source's final-scale conditional information]
     \label{thm:source-final-information}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_finalScale_mutualInformation,TNLean.PEPS.AreaLaw.Scan.CollarScan.sourceFinalInformationThreshold,TNLean.PEPS.AreaLaw.Scan.CollarScan.sourceFinalInformationConstant,TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_finalScale_mutualInformation_of_threshold_le}
     \leanok
@@ -68,7 +68,7 @@ those inputs nor claims the full area law.
     \]
     In particular, the exact maximum exponent is $0.999952$ and the
     displayed paper exponent is $0.99999$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

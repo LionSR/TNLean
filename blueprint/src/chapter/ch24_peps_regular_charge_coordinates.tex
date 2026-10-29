@@ -17,7 +17,7 @@
     translations. No original-spin measurement is asserted.
 \end{definition}
 
-\begin{theorem}[Matrix units and the exact support-overlap pairing]
+\begin{lemma}[Matrix units and the exact support-overlap pairing]
     \label{thm:peps_regular_charge_coordinates_pairing}
     \lean{TNLean.PEPS.regularChargeMatrix_eq_sum_single,
         TNLean.PEPS.regularChargeMatrix_inner}
@@ -36,7 +36,7 @@
         \sum_{r\in G}\overline{\chi(px^{-1}r)}\psi(q(x')^{-1}r).
     \end{align}
     Thus different relative translations have disjoint matrix support.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     At a row $r$, only $g=x^{-1}r$ contributes to the matrix-unit sum.
     The surviving column is $yx^{-1}r$. Different relative translations
@@ -45,7 +45,7 @@
     displayed formula.
 \end{proof}
 
-\begin{theorem}[Orthogonality and norm of the accessible charge matrices]
+\begin{lemma}[Orthogonality and norm of the accessible charge matrices]
     \label{thm:peps_regular_charge_coordinates_orthogonality}
     \lean{TNLean.PEPS.regularChargeMatrix_orthogonal,
         TNLean.PEPS.regularChargeMatrix_normSq}
@@ -63,7 +63,7 @@
     for every $p,x,y$. These are auxiliary accessible-coordinate identities
     in \cite[charge-detection proof]{Schuch2010PEPS}, lines 2470--2486;
     constructing the complete original-spin detector remains separate.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For equal relative translations, translated character orthogonality
     with parameters $px^{-1}$ and $q(x')^{-1}$ gives the vanishing inner
@@ -72,7 +72,7 @@
     is $|G|$.
 \end{proof}
 
-\begin{theorem}[The internal label is absorbed by unknown vertex translations]
+\begin{lemma}[The internal label is absorbed by unknown vertex translations]
     \label{thm:peps_regular_charge_coordinates_internal_label}
     \lean{TNLean.PEPS.regularChargeMatrix_internalLabel}
     \leanok
@@ -86,14 +86,14 @@
     underlying the final sentence of
     \cite[charge-detection proof]{Schuch2010PEPS}, lines 2483--2486.
     It is not a probabilistic or original-spin information-theoretic assertion.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Cancelling $q q^{-1}$ and $p^{-1}p$ in the relative column coordinate and
     character argument of every matrix entry gives the identity.
 \end{proof}
 
-\begin{theorem}[Independent translation covariance and nonvanishing]
+\begin{lemma}[Independent translation covariance and nonvanishing]
     \label{thm:peps_regular_charge_coordinates_covariance}
     \lean{TNLean.PEPS.regularChargeMatrix_translate_apply,
         TNLean.PEPS.regularChargeMatrix_ne_zero}
@@ -110,7 +110,7 @@
     matrix $A_\chi(p;x,y)$ is nonzero. These are auxiliary identities from
     the accessible charge coordinates of
     \cite[charge detection]{Schuch2010PEPS}, lines 2470--2486.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Substituting the translated row and column coordinates and cancelling the
     inverse translations gives the covariance formula, while

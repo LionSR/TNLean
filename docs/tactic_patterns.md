@@ -4950,6 +4950,18 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Recovering letters by an identity contraction — candidate (2026-10-29)
+
+- **Seen:** `isInjective_uncleTensor_of_isInjective_perturbation` in
+  `MPS/ParentHamiltonian/UncleInjectivity.lean`.
+- **Pattern:** Full one-site span gives coefficients of the identity.
+  Contracting one physical leg of a bilinear two-site family with those
+  coefficients recovers every one-site letter, so its span is full too.
+- **Reuse:** `Submodule.mem_span_range_iff_exists_fun`, block-matrix
+  injectivity and finite-sum scalar/matrix distribution.
+- **Decision:** Use one full-identity contraction in place of four separate
+  block witnesses. One occurrence does not justify a new tactic.
+
 ### Counting nearest-neighbour bonds that meet a region — candidate (2026-10-28)
 
 - **Pattern:** Bound the number of nearest-neighbour bonds meeting a finite
@@ -9773,8 +9785,8 @@ there is no need for a new tactic.
   trace and identify the resulting physical configuration sum.
 - **Reuse:** Promote the existing canonical five-segment configuration
   equivalence and its evaluation theorem for their actual second consumer.
-  Use `AlgEquiv.quasispectrum_eq` when the same finite linear map is
-  estimated under another matrix norm.
+  Use `spectralRadius_eq_of_unital` and `AlgEquiv.spectrum_eq` when the
+  same finite linear map is estimated under another matrix norm.
 - **Decision:** Keep one configuration equivalence and derive all rates from
   actual mixed maps; do not assume the overlap estimate being established.
 ### Canonical transfer replacement in the actual wall contraction — candidate (2026-10-29)
