@@ -50,7 +50,8 @@ theorem uncleInteractionES_pin_upper_left
   have hkill := uncleInteractionES_uniform_slice_left_eq_zero A B R L P
     (uncleDomainWallWord A B R v * Q) [] []
   simp only [List.nil_append, List.append_nil, List.ofFn_succ, List.ofFn_zero,
-    Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one, Matrix.mul_assoc] at hkill
+    Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one, Fin.succ_zero_eq_one,
+    Matrix.mul_assoc] at hkill
   simp only [Matrix.mul_assoc] at hfun hkill ⊢
   rw [hfun, map_add, map_add, hkill, zero_add]
 
@@ -78,13 +79,16 @@ theorem uncleInteractionES_pin_upper_right
     simp only [uncleDomainWallWord, Kraus.evalWord_cons, Kraus.evalWord_nil,
       Matrix.mul_zero, Matrix.mul_one, zero_add, Matrix.mul_add, Matrix.add_mul,
       Matrix.trace_add]
-    congr 1
-    simpa only [Matrix.mul_assoc] using Matrix.trace_mul_comm
-      (P * uncleDomainWallWord A B R u) (B (σ 0) * B (σ 1) * Q)
+    simpa only [Matrix.mul_assoc] using congrArg
+      (fun z : ℂ ↦ Matrix.trace
+        (P * Kraus.evalWord A u * R (σ 0) * B (σ 1) * Q) + z)
+      (Matrix.trace_mul_comm
+        (P * uncleDomainWallWord A B R u) (B (σ 0) * B (σ 1) * Q))
   have hkill := uncleInteractionES_uniform_slice_right_eq_zero A B R L 1
     (Q * P * uncleDomainWallWord A B R u) [] []
   simp only [List.nil_append, List.append_nil, List.ofFn_succ, List.ofFn_zero,
-    Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one, Matrix.one_mul] at hkill
+    Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one, Matrix.one_mul,
+    Fin.succ_zero_eq_one] at hkill
   simp only [Matrix.mul_assoc] at hfun hkill ⊢
   rw [hfun, map_add, map_add, hkill, add_zero]
 
@@ -113,7 +117,8 @@ theorem uncleInteractionES_pin_lower_left
   have hkill := uncleInteractionES_uniform_slice_right_eq_zero A B R L P
     (uncleDomainWallWord B A L v * Q) [] []
   simp only [List.nil_append, List.append_nil, List.ofFn_succ, List.ofFn_zero,
-    Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one, Matrix.mul_assoc] at hkill
+    Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one, Fin.succ_zero_eq_one,
+    Matrix.mul_assoc] at hkill
   simp only [Matrix.mul_assoc] at hfun hkill ⊢
   rw [hfun, map_add, map_add, hkill, zero_add]
 
@@ -141,13 +146,16 @@ theorem uncleInteractionES_pin_lower_right
     simp only [uncleDomainWallWord, Kraus.evalWord_cons, Kraus.evalWord_nil,
       Matrix.mul_zero, Matrix.mul_one, zero_add, Matrix.mul_add, Matrix.add_mul,
       Matrix.trace_add]
-    congr 1
-    simpa only [Matrix.mul_assoc] using Matrix.trace_mul_comm
-      (P * uncleDomainWallWord B A L u) (A (σ 0) * A (σ 1) * Q)
+    simpa only [Matrix.mul_assoc] using congrArg
+      (fun z : ℂ ↦ Matrix.trace
+        (P * Kraus.evalWord B u * L (σ 0) * A (σ 1) * Q) + z)
+      (Matrix.trace_mul_comm
+        (P * uncleDomainWallWord B A L u) (A (σ 0) * A (σ 1) * Q))
   have hkill := uncleInteractionES_uniform_slice_left_eq_zero A B R L 1
     (Q * P * uncleDomainWallWord B A L u) [] []
   simp only [List.nil_append, List.append_nil, List.ofFn_succ, List.ofFn_zero,
-    Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one, Matrix.one_mul] at hkill
+    Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one, Matrix.one_mul,
+    Fin.succ_zero_eq_one] at hkill
   simp only [Matrix.mul_assoc] at hfun hkill ⊢
   rw [hfun, map_add, map_add, hkill, add_zero]
 
@@ -162,10 +170,16 @@ theorem uncleConfigSegment_contiguous_end {T : ℕ}
   apply congrArg₂ (· ++ ·)
   · apply congrArg List.ofFn
     funext j
-    exact dif_neg (by omega)
+    change contiguousCfg i 2 σ τ ⟨s + j.val, by omega⟩ = τ ⟨s + j.val, by omega⟩
+    rw [contiguousCfg, dite_eq_right (by
+      change ¬(i ≤ s + j.val ∧ s + j.val < i + 2)
+      omega)]
   · simp only [List.ofFn_succ, List.ofFn_zero]
     congr 1
-    rw [contiguousCfg, dif_pos (by omega)]
+    change contiguousCfg i 2 σ τ ⟨s + (n - 1), by omega⟩ = σ 0
+    rw [contiguousCfg, dite_eq_left (by
+      change i ≤ s + (n - 1) ∧ s + (n - 1) < i + 2
+      omega)]
     apply congrArg σ
     exact Fin.ext (by change s + (n - 1) - i = 0; omega)
 
@@ -179,14 +193,21 @@ theorem uncleConfigSegment_contiguous_start {T : ℕ}
   unfold uncleConfigSegment
   rw [List.ofFn_congr (show n = 1 + (n - 1) by omega), List.ofFn_add]
   apply congrArg₂ (· ++ ·)
-  · simp only [List.ofFn_succ, List.ofFn_zero, Nat.add_zero]
+  · simp only [List.ofFn_succ, List.ofFn_zero]
     congr 1
-    rw [contiguousCfg, dif_pos (by omega)]
+    change contiguousCfg i 2 σ τ ⟨i + 1, by omega⟩ = σ 1
+    rw [contiguousCfg, dite_eq_left (by
+      change i ≤ i + 1 ∧ i + 1 < i + 2
+      omega)]
     apply congrArg σ
     exact Fin.ext (by change i + 1 - i = 1; omega)
   · apply congrArg List.ofFn
     funext j
-    rw [contiguousCfg, dif_neg (by omega)]
+    change contiguousCfg i 2 σ τ ⟨i + 1 + (1 + j.val), by omega⟩ =
+      τ ⟨i + 2 + j.val, by omega⟩
+    rw [contiguousCfg, dite_eq_right (by
+      change ¬(i ≤ i + 1 + (1 + j.val) ∧ i + 1 + (1 + j.val) < i + 2)
+      omega)]
     apply congrArg τ
     exact Fin.ext (by change i + 1 + (1 + j.val) = i + 2 + j.val; omega)
 
@@ -216,7 +237,9 @@ theorem uncleInteractionES_trial_pin_first_endpoint
     ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
       (cyclicRestrictₗ (by omega) 2 (⟨N - 1, by omega⟩ : Fin (6 * N + 1)) τ
         (uncleTwoWallTrialSource A B R L N))) = _
-  rw [cyclicRestrictₗ_eq_contiguousRestrictₗ (by omega) (by omega) (by omega)]
+  rw [cyclicRestrictₗ_eq_contiguousRestrictₗ
+    (i := (⟨N - 1, by omega⟩ : Fin (6 * N + 1))) (L := 2)
+    (by omega) (by omega) (by change N - 1 + 2 ≤ 6 * N + 1; omega)]
   have hfun : contiguousRestrictₗ (N - 1) 2 (by omega) τ
       (uncleTwoWallTrialSource A B R L N) =
       fun σ ↦ uncleTwoWallCoefficient A B R L
@@ -232,7 +255,7 @@ theorem uncleInteractionES_trial_pin_first_endpoint
       uncleConfigSegment_contiguous_outside τ (2 * N + 1) (2 * N - 1) (N - 1) _ σ (by omega),
       uncleConfigSegment_contiguous_outside τ (4 * N) (N + 1) (N - 1) _ σ (by omega),
       uncleConfigSegment_contiguous_outside τ (5 * N + 1) N (N - 1) _ σ (by omega)]
-    simp only [show N - 1 + 2 = N + 1 by omega, Nat.add_sub_cancel_right]
+    simp only [show N - 1 + 2 = N + 1 by omega, Nat.add_sub_cancel_right, List.singleton_append]
   rw [hfun]
   simpa only [uncleTwoWallCoefficient, Kraus.evalWord_append, Kraus.evalWord_cons,
     Kraus.evalWord_nil, Matrix.mul_one, Matrix.mul_assoc] using
@@ -269,7 +292,9 @@ theorem uncleInteractionES_trial_pin_second_endpoint
     ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
       (cyclicRestrictₗ (by omega) 2 (⟨2 * N, by omega⟩ : Fin (6 * N + 1)) τ
         (uncleTwoWallTrialSource A B R L N))) = _
-  rw [cyclicRestrictₗ_eq_contiguousRestrictₗ (by omega) (by omega) (by omega)]
+  rw [cyclicRestrictₗ_eq_contiguousRestrictₗ
+    (i := (⟨2 * N, by omega⟩ : Fin (6 * N + 1))) (L := 2)
+    (by omega) (by omega) (by change 2 * N + 2 ≤ 6 * N + 1; omega)]
   have hfun : contiguousRestrictₗ (2 * N) 2 (by omega) τ
       (uncleTwoWallTrialSource A B R L N) =
       fun σ ↦ uncleTwoWallCoefficient A B R L
@@ -286,7 +311,8 @@ theorem uncleInteractionES_trial_pin_second_endpoint
       uncleConfigSegment_contiguous_outside τ 0 N (2 * N) _ σ (by omega),
       uncleConfigSegment_contiguous_outside τ (4 * N) (N + 1) (2 * N) _ σ (by omega),
       uncleConfigSegment_contiguous_outside τ (5 * N + 1) N (2 * N) _ σ (by omega)]
-    simp only [show (2 * N - 1) - 1 = 2 * N - 2 by omega, Nat.add_sub_cancel_right]
+    simp only [show (2 * N - 1) - 1 = 2 * N - 2 by omega,
+      Nat.add_sub_cancel_right, List.singleton_append]
   rw [hfun]
   simpa only [uncleTwoWallCoefficient, Kraus.evalWord_cons, Matrix.mul_assoc] using
     uncleInteractionES_pin_upper_right A B R L
@@ -322,7 +348,9 @@ theorem uncleInteractionES_trial_pin_third_endpoint
     ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
       (cyclicRestrictₗ (by omega) 2 (⟨4 * N - 1, by omega⟩ : Fin (6 * N + 1)) τ
         (uncleTwoWallTrialSource A B R L N))) = _
-  rw [cyclicRestrictₗ_eq_contiguousRestrictₗ (by omega) (by omega) (by omega)]
+  rw [cyclicRestrictₗ_eq_contiguousRestrictₗ
+    (i := (⟨4 * N - 1, by omega⟩ : Fin (6 * N + 1))) (L := 2)
+    (by omega) (by omega) (by change 4 * N - 1 + 2 ≤ 6 * N + 1; omega)]
   have hfun : contiguousRestrictₗ (4 * N - 1) 2 (by omega) τ
       (uncleTwoWallTrialSource A B R L N) =
       fun σ ↦ uncleTwoWallCoefficient A B R L
@@ -341,7 +369,7 @@ theorem uncleInteractionES_trial_pin_third_endpoint
       uncleConfigSegment_contiguous_outside τ N (N + 1) (4 * N - 1) _ σ (by omega),
       uncleConfigSegment_contiguous_outside τ (5 * N + 1) N (4 * N - 1) _ σ (by omega)]
     simp only [show (2 * N - 1) - 1 = 2 * N - 2 by omega,
-      show 4 * N - 1 + 2 = 4 * N + 1 by omega, Nat.add_sub_cancel_right]
+      show 4 * N - 1 + 2 = 4 * N + 1 by omega, Nat.add_sub_cancel_right, List.singleton_append]
   rw [hfun]
   simpa only [uncleTwoWallCoefficient_rotate, Kraus.evalWord_append, Kraus.evalWord_cons,
     Kraus.evalWord_nil, Matrix.mul_one, Matrix.mul_assoc] using
@@ -378,7 +406,9 @@ theorem uncleInteractionES_trial_pin_fourth_endpoint
     ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
       (cyclicRestrictₗ (by omega) 2 (⟨5 * N, by omega⟩ : Fin (6 * N + 1)) τ
         (uncleTwoWallTrialSource A B R L N))) = _
-  rw [cyclicRestrictₗ_eq_contiguousRestrictₗ (by omega) (by omega) (by omega)]
+  rw [cyclicRestrictₗ_eq_contiguousRestrictₗ
+    (i := (⟨5 * N, by omega⟩ : Fin (6 * N + 1))) (L := 2)
+    (by omega) (by omega) (by change 5 * N + 2 ≤ 6 * N + 1; omega)]
   have hfun : contiguousRestrictₗ (5 * N) 2 (by omega) τ
       (uncleTwoWallTrialSource A B R L N) =
       fun σ ↦ uncleTwoWallCoefficient A B R L
@@ -395,7 +425,7 @@ theorem uncleInteractionES_trial_pin_fourth_endpoint
       uncleConfigSegment_contiguous_outside τ 0 N (5 * N) _ σ (by omega),
       uncleConfigSegment_contiguous_outside τ N (N + 1) (5 * N) _ σ (by omega),
       uncleConfigSegment_contiguous_outside τ (2 * N + 1) (2 * N - 1) (5 * N) _ σ (by omega)]
-    simp only [Nat.add_sub_cancel_right]
+    simp only [Nat.add_sub_cancel_right, List.singleton_append]
   rw [hfun]
   simpa only [uncleTwoWallCoefficient_rotate, Kraus.evalWord_cons, Matrix.mul_assoc] using
     uncleInteractionES_pin_lower_right A B R L
