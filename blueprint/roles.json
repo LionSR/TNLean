@@ -492,14 +492,12 @@
       "theorems": [
         "thm:factorial_commutator_conjugation",
         "thm:chain_local_imaginary_time",
-        "thm:aklv_robustness",
         "thm:aklv_original_chain_robustness"
       ],
       "corollaries": [],
       "notes": {
         "thm:factorial_commutator_conjugation": "Kept as converted by hand in #10267",
         "thm:chain_local_imaginary_time": "Kept as converted by hand in #10267",
-        "thm:aklv_robustness": "Source Theorem 6.1: normalized ground-vector and spectral-gap robustness under two-sided energy truncation",
         "thm:aklv_original_chain_robustness": "Source Theorem 6.1 from the original chain, deriving the regional normalization and six-bond energy bound"
       }
     },
