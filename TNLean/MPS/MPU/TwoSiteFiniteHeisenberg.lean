@@ -469,6 +469,81 @@ theorem mpo_bufferedWindow_conjugation {d D ℓ r : ℕ}
     originalSiteHeisenbergOutputEquiv, originalWindowMatrix_eq_buffer,
     originalSiteHeisenbergInputWindow, originalSiteHeisenbergOutputWindow] using h
 
+
+/-- Original consecutive coordinates on the complete central two-block
+input algebra. Source: arXiv:1703.09188, StandardForm and physical blocking,
+lines 603--622. -/
+noncomputable def originalSiteHeisenbergCentreEquiv (d k : ℕ) :
+    HalfPair (MPSTensor.blockPhysDim d k) ≃ (Fin (2 * k) → Fin d) :=
+  finProdFinEquiv.trans ((twoSiteDirectBlockEquiv d k).symm.trans
+    (MPSTensor.decodeBlockEquiv d (2 * k)))
+
+private theorem originalWindowMiddleEquiv_block (d k : ℕ)
+    (w : Fin 3 → Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k))
+    (i : Fin 3) (j : Fin (2 * k)) :
+    originalWindowMiddleEquiv d k w (finProdFinEquiv (i, j)) =
+      MPSTensor.decodeBlock d (2 * k) ((twoSiteDirectBlockEquiv d k).symm (w i)) j := by
+  simp [originalWindowMiddleEquiv, MPSTensor.blockedConfigEquiv,
+    Equiv.arrowCongr, Equiv.curry, Function.comp]
+
+private theorem originalInputWindow_middle (d k : ℕ)
+    (e : Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k) ×
+      Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k))
+    (c : HalfPair (MPSTensor.blockPhysDim d k)) :
+    (fun i : Fin (2 * k) ↦
+      ((windowInputHeadEquiv (MPSTensor.blockPhysDim d k)).trans
+        (originalWindowMiddleEquiv d k)) (e, c)
+          ⟨2 * k + i.val, by omega⟩) = originalSiteHeisenbergCentreEquiv d k c := by
+  funext i
+  have hi : (⟨2 * k + i.val, by omega⟩ : Fin (3 * (2 * k))) =
+      finProdFinEquiv ((1 : Fin 3), i) := by
+    apply Fin.ext
+    change 2 * k + i.val = i.val + (2 * k) * 1
+    omega
+  rw [hi]
+  exact originalWindowMiddleEquiv_block d k _ 1 i
+
+private theorem originalInputWindow_outside_eq_iff (d k : ℕ)
+    (e e' : Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k) ×
+      Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k))
+    (c c' : HalfPair (MPSTensor.blockPhysDim d k)) :
+    (∀ i : Fin (3 * (2 * k)), ¬ (2 * k ≤ i.val ∧ i.val < 2 * k + 2 * k) →
+      ((windowInputHeadEquiv (MPSTensor.blockPhysDim d k)).trans
+        (originalWindowMiddleEquiv d k)) (e, c) i =
+      ((windowInputHeadEquiv (MPSTensor.blockPhysDim d k)).trans
+        (originalWindowMiddleEquiv d k)) (e', c') i) ↔ e = e' := by
+  constructor
+  · intro h
+    apply Prod.ext
+    · apply (twoSiteDirectBlockEquiv d k).symm.injective
+      apply (MPSTensor.decodeBlockEquiv d (2 * k)).injective
+      funext j
+      have hj := h (finProdFinEquiv ((0 : Fin 3), j)) (by
+        change ¬ (2 * k ≤ j.val + (2 * k) * 0 ∧
+          j.val + (2 * k) * 0 < 2 * k + 2 * k)
+        omega)
+      simpa only [Equiv.trans_apply, originalWindowMiddleEquiv_block] using hj
+    · apply (twoSiteDirectBlockEquiv d k).symm.injective
+      apply (MPSTensor.decodeBlockEquiv d (2 * k)).injective
+      funext j
+      have hj := h (finProdFinEquiv ((2 : Fin 3), j)) (by
+        change ¬ (2 * k ≤ j.val + (2 * k) * 2 ∧
+          j.val + (2 * k) * 2 < 2 * k + 2 * k)
+        omega)
+      simpa only [Equiv.trans_apply, originalWindowMiddleEquiv_block] using hj
+  · intro h
+    subst e'
+    intro i hi
+    obtain ⟨⟨b, j⟩, rfl⟩ := finProdFinEquiv.surjective i
+    fin_cases b
+    · simp only [Equiv.trans_apply, originalWindowMiddleEquiv_block]
+    · exfalso
+      apply hi
+      change 2 * k ≤ j.val + (2 * k) * 1 ∧
+        j.val + (2 * k) * 1 < 2 * k + 2 * k
+      omega
+    · simp only [Equiv.trans_apply, originalWindowMiddleEquiv_block]
+
 end MPOTensor
 
 
@@ -595,5 +670,108 @@ theorem finiteChainLocalObservable_originalSiteHeisenbergWindow
   change localObservable d _ (finiteChainConjugation hU hN (a - p)
     (localInclusion hΛ _)) = _
   rw [hconj, localObservable_localInclusion]
+
+
+/-- The input-window algebra is exactly the canonical full algebra of
+its central \(2k\) consecutive original sites. In particular the window
+formula applies to every observable there. Source: arXiv:1703.09188,
+StandardForm and eq:appendix-1, lines 603--622 and 2300--2306. -/
+theorem intervalCoordinates_centralInclusion_originalSiteHeisenbergInputWindow
+    (d k : ℕ) (a : ℤ)
+    (A : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ) :
+    intervalCoordinates d a (3 * (2 * k))
+      (localInclusion (show finiteChainRegion (a + (2 * k : ℕ)) (2 * k) ⊆
+        finiteChainRegion a (3 * (2 * k)) by
+          intro x hx
+          simp only [finiteChainRegion, Finset.mem_Ico] at *
+          omega)
+        ((intervalCoordinates d (a + (2 * k : ℕ)) (2 * k)).symm
+          (Matrix.reindex (MPOTensor.originalSiteHeisenbergCentreEquiv d k)
+            (MPOTensor.originalSiteHeisenbergCentreEquiv d k) A))) =
+      MPOTensor.originalSiteHeisenbergInputWindow d k A := by
+  classical
+  let e := (MPOTensor.windowInputHeadEquiv (MPSTensor.blockPhysDim d k)).trans
+    (MPOTensor.originalWindowMiddleEquiv d k)
+  ext row col
+  obtain ⟨⟨ex, c⟩, rfl⟩ := e.surjective row
+  obtain ⟨⟨ex', c'⟩, rfl⟩ := e.surjective col
+  have h := intervalCoordinates_localInclusion_apply d (a + (2 * k : ℕ))
+    (2 * k) (2 * k) (2 * k)
+    ((intervalCoordinates d (a + (2 * k : ℕ)) (2 * k)).symm
+      (Matrix.reindex (MPOTensor.originalSiteHeisenbergCentreEquiv d k)
+        (MPOTensor.originalSiteHeisenbergCentreEquiv d k) A))
+  have ha : a + (2 * k : ℕ) - (2 * k : ℕ) = a := by omega
+  have hlen : (2 * k + 2 * k) + 2 * k = 3 * (2 * k) := by omega
+  rw [ha, hlen] at h
+  rw [h]
+  simp only [StarAlgEquiv.apply_symm_apply, e, MPOTensor.originalInputWindow_middle,
+    MPOTensor.originalInputWindow_outside_eq_iff,
+    MPOTensor.originalSiteHeisenbergInputWindow, Matrix.reindex_apply,
+    Equiv.symm_apply_apply, Matrix.rightKroneckerEmbed_apply,
+    Matrix.kroneckerMap_apply, Matrix.one_apply]
+  rw [mul_comm]
+
+
+/-- Every observable on the complete central interval has a fixed
+algebraic-local output under actual finite-chain MPU conjugation, for
+all original-site buffers. No compatibility assertion is supplied.
+Source: arXiv:1703.09188, eq:appendix-1, lines 2300--2306, restricted
+here to one complete central interval. -/
+theorem exists_finiteChainLocalObservable_central_interval
+    {d D ℓ r : ℕ} {U : MPOTensor d D} (hU : U.IsMPU) (k : ℕ) (a : ℤ)
+    {u : Matrix (Fin ℓ × Fin r)
+      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
+    {v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin r × Fin ℓ) ℂ}
+    (S : MPOTensor.TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.blockTensor U k)) u v)
+    (B : LocalAlgebra d (finiteChainRegion (a + (2 * k : ℕ)) (2 * k))) :
+    ∃ C : LocalAlgebra d (finiteChainRegion a (3 * (2 * k))),
+      ∀ (p s : ℕ) (hN : 1 < p + (3 * (2 * k) + s)),
+        finiteChainLocalObservable hU hN (a - p)
+          (show finiteChainRegion (a + (2 * k : ℕ)) (2 * k) ⊆
+            finiteChainRegion (a - p) (p + (3 * (2 * k) + s)) by
+              intro x hx
+              simp only [finiteChainRegion, Finset.mem_Ico] at *
+              omega) B = localObservable d (finiteChainRegion a (3 * (2 * k))) C := by
+  classical
+  let E := MPOTensor.originalSiteHeisenbergCentreEquiv d k
+  let A := Matrix.reindex E.symm E.symm
+    (intervalCoordinates d (a + (2 * k : ℕ)) (2 * k) B)
+  have hA : Matrix.reindex E E A =
+      intervalCoordinates d (a + (2 * k : ℕ)) (2 * k) B := by
+    ext row col
+    simp [A, Matrix.reindex_apply]
+  let hcentral : finiteChainRegion (a + (2 * k : ℕ)) (2 * k) ⊆
+      finiteChainRegion a (3 * (2 * k)) := by
+    intro x hx
+    simp only [finiteChainRegion, Finset.mem_Ico] at *
+    omega
+  have hinput : (intervalCoordinates d a (3 * (2 * k))).symm
+      (MPOTensor.originalSiteHeisenbergInputWindow d k A) = localInclusion hcentral B := by
+    apply (intervalCoordinates d a (3 * (2 * k))).injective
+    rw [StarAlgEquiv.apply_symm_apply]
+    have h := intervalCoordinates_centralInclusion_originalSiteHeisenbergInputWindow d k a A
+    change intervalCoordinates d a (3 * (2 * k))
+      (localInclusion hcentral ((intervalCoordinates d (a + (2 * k : ℕ)) (2 * k)).symm
+        (Matrix.reindex E E A))) = _ at h
+    rw [hA, StarAlgEquiv.symm_apply_apply] at h
+    exact h.symm
+  refine ⟨(intervalCoordinates d a (3 * (2 * k))).symm
+    (MPOTensor.originalSiteHeisenbergOutputWindow k u v A), ?_⟩
+  intro p s hN
+  let hwindow : finiteChainRegion a (3 * (2 * k)) ⊆
+      finiteChainRegion (a - p) (p + (3 * (2 * k) + s)) := by
+    simpa only [Nat.add_assoc] using
+      finiteChainRegion_subset_expanded a (3 * (2 * k)) p s
+  have h := finiteChainLocalObservable_originalSiteHeisenbergWindow hU k p s hN a S A
+  change localObservable d _ (finiteChainConjugation hU hN (a - p)
+    (localInclusion hwindow _)) = _ at h
+  rw [hinput] at h
+  have hcomp := DFunLike.congr_fun (localInclusion_trans hcentral hwindow) B
+  change localInclusion hwindow (localInclusion hcentral B) =
+    localInclusion (hcentral.trans hwindow) B at hcomp
+  rw [hcomp] at h
+  exact h
 
 end SpinChain

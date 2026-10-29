@@ -55,6 +55,15 @@ and both buffers: the actual finite-chain expression represents the same
 fixed output observable. Compatibility is concluded for this input algebra,
 rather than assumed as a new premise.
 
+The input algebra is also identified intrinsically with the complete
+canonical algebra on the central2k consecutive original sites. The direct
+physical-block decoder gives its full configuration bijection, and the
+other two block indices are proved to be exactly the exterior coordinates.
+`exists_finiteChainLocalObservable_central_interval` takes an arbitrary
+observable on that central interval and constructs one fixed local output
+on the surrounding6k sites which all actual original-site buffered finite
+conjugations represent. This removes any selected-coordinate-family premise.
+
 This is still not the full source stabilization theorem. It does not yet
 assemble arbitrary supported observables; no compatible-local-action datum,
 induced QCA, radius 4D⁴, or MPU/QCA index comparison is claimed. The exact

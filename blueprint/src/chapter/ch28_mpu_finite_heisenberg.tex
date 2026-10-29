@@ -141,3 +141,34 @@
     the canonical inclusion into the algebraic local algebra. The
     latter identifies all enlargements of the fixed output interval.
 \end{proof}
+
+
+\begin{theorem}[The full central interval algebra has a buffered local action]
+    \label{thm:mpu_finite_heisenberg_full_central_interval}
+    \lean{MPOTensor.originalSiteHeisenbergCentreEquiv,
+        SpinChain.intervalCoordinates_centralInclusion_originalSiteHeisenbergInputWindow,
+        SpinChain.exists_finiteChainLocalObservable_central_interval}
+    \notready
+    \uses{thm:mpu_finite_heisenberg_canonical_window}
+    Under the preceding hypotheses, every observable on
+    $[a+2k,a+4k)$ has a fixed output observable on $[a,a+6k)$.
+    For every original-site buffering $[a-p,a+6k+s)$ of length
+    greater than one, actual finite MPU conjugation of the canonical
+    input inclusion represents this fixed output in the algebraic
+    local algebra. Thus the complete algebra on the central $2k$
+    sites is covered, rather than a chosen family of coefficient
+    slices. Arbitrary supported-region and inverse-family assembly
+    remain separate from this instance of
+    \cite[lines~2300--2306]{Cirac2017MPU}; see
+    \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
+\end{theorem}
+\begin{proof}
+    The direct-block decoding bijection identifies the middle input
+    coordinates with all configurations on the central $2k$ sites.
+    Reading the three consecutive blocks shows that the middle
+    restriction has exactly these coordinates, whereas equality
+    outside it is exactly equality of the other two block indices.
+    The input-window matrix is therefore the canonical inclusion of
+    the complete central algebra. Apply the preceding buffered action
+    and compose the two canonical input inclusions.
+\end{proof}
