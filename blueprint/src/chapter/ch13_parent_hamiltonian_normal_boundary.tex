@@ -9,7 +9,7 @@ vector, and $A$ being \emph{$L_0$-block-injective} means
 $\spn\{A^u : |u|=L_0\} = \MN{D}$, so a relation valid on every length-$L_0$
 product extends by linearity to all of $\MN{D}$.
 
-\begin{theorem}[Common right factor from suffix equations]
+\begin{lemma}[Common right factor from suffix equations]
     \label{thm:block_word_strip_right_factor}
     \lean{MPSTensor.exists_right_factor_of_block_word_compatibility}
     \leanok
@@ -20,7 +20,7 @@ product extends by linearity to all of $\MN{D}$.
     $Y_w \in \MN{D}$ such that $Z_u A^w = A^u Y_w$ for every word $u$ of
     length~$L_0$, then there exists $X \in \MN{D}$ with $Z_u = A^u X$ for
     every word $u$ of length $L_0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -33,7 +33,7 @@ product extends by linearity to all of $\MN{D}$.
     common factor $X$.
 \end{proof}
 
-\begin{theorem}[Common boundary matrix from spanning word identities]
+\begin{lemma}[Common boundary matrix from spanning word identities]
     \label{thm:word_span_common_boundary_matrix}
     \lean{MPSTensor.exists_common_boundary_matrix_of_word_identities_of_wordSpan_eq_top}
     \leanok
@@ -43,7 +43,7 @@ product extends by linearity to all of $\MN{D}$.
     for every length-$K$ word $w$, there is a matrix $Y_w$ such that
     $Z_b A^w = F_bY_w$ for every $b\in B$, then there is a single matrix $Y$
     such that $Z_b = F_bY$ for every $b\in B$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -55,7 +55,7 @@ product extends by linearity to all of $\MN{D}$.
     of $\MN{D}$, evaluating the identity on $\Id$ gives $Z_b = F_b Y$.
 \end{proof}
 
-\begin{theorem}[Injectivity-length commutation from length-$m$ commutation]
+\begin{lemma}[Injectivity-length commutation from length-$m$ commutation]
     \label{thm:block_word_strip_commutes}
     \lean{MPSTensor.commutes_block_words_of_commutes_long_words_of_isNBlkInjective}
     \leanok
@@ -63,7 +63,7 @@ product extends by linearity to all of $\MN{D}$.
     If $A$ is $L_0$-block-injective with $L_0 > 0$, $m \ge L_0$, and
     $X \in \MN{D}$ commutes with every length-$m$ product $A^\omega$, then $X$
     already commutes with every length-$L_0$ product $A^u$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -71,12 +71,12 @@ product extends by linearity to all of $\MN{D}$.
     $|w| = m - L_0$, the hypothesis gives
     $X A^u A^w = A^u A^w X = A^u(A^w X)$.
     Thus the family $Z_u := X A^u$ satisfies the hypothesis of
-    Theorem~\ref{thm:block_word_strip_right_factor}, yielding a matrix $R$ with
+    Lemma~\ref{thm:block_word_strip_right_factor}, yielding a matrix $R$ with
     $X A^u = A^u R$ for all $|u| = L_0$. Decomposing $\Id$ in the span of the
     length-$L_0$ words shows $R = X$, hence $X A^u = A^u X$.
 \end{proof}
 
-\begin{theorem}[Centrality from length-$m$ commutation]
+\begin{lemma}[Centrality from length-$m$ commutation]
     \label{thm:block_word_strip_central}
     \lean{MPSTensor.commutes_all_of_commutes_long_words_of_isNBlkInjective}
     \leanok
@@ -84,11 +84,11 @@ product extends by linearity to all of $\MN{D}$.
     If $A$ is $L_0$-block-injective with $L_0 > 0$, $m \ge L_0$, and
     $X \in \MN{D}$ commutes with every length-$m$ word product, then $X$
     commutes with every matrix in $\MN{D}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    By Theorem~\ref{thm:block_word_strip_commutes}, $X$ commutes with every
+    By Lemma~\ref{thm:block_word_strip_commutes}, $X$ commutes with every
     length-$L_0$ word product. These products span $\MN{D}$ by block
     injectivity, so linearity gives $XM = MX$ for every $M \in \MN{D}$.
 \end{proof}
@@ -164,17 +164,17 @@ product extends by linearity to all of $\MN{D}$.
     \lean{MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_long_word_commutes}
     \leanok
     \uses{thm:block_word_strip_central}
-    Under the hypotheses of Theorem~\ref{thm:block_word_strip_central}, one has
+    Under the hypotheses of Lemma~\ref{thm:block_word_strip_central}, one has
     $X A^i = A^i X$ for every physical index $i$.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    Theorem~\ref{thm:block_word_strip_central} specialized to $M = A^i$ gives
+    Lemma~\ref{thm:block_word_strip_central} specialized to $M = A^i$ gives
     $X A^i = A^i X$.
 \end{proof}
 
-\begin{theorem}[MPS-line containment from length-$m$ commutation]
+\begin{lemma}[MPS-line containment from length-$m$ commutation]
     \label{thm:ground_space_map_mpv_of_long_word_commutes}
     \lean{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes}
     \leanok
@@ -182,16 +182,16 @@ product extends by linearity to all of $\MN{D}$.
     Let $A$ be injective after blocking $L_0>0$ sites, and let $m \ge L_0$. If
     a boundary matrix $X$ commutes with every length-$m$ word product, then
     $\Gamma_N(X)\in\spn\{V^{(N)}(A)\}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    Theorem~\ref{thm:block_word_strip_central} makes $X$ commute with the whole
+    Lemma~\ref{thm:block_word_strip_central} makes $X$ commute with the whole
     matrix algebra. The center of $\MN{D}$ consists of scalar matrices, so
     $X=c\Id$, and therefore $\Gamma_N(X)=cV^{(N)}(A)$.
 \end{proof}
 
-\begin{theorem}[MPS-line containment from positive-length commutation]
+\begin{lemma}[MPS-line containment from positive-length commutation]
     \label{thm:ground_space_map_mpv_of_positive_word_commutes}
     \lean{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_positive_word_commutes}
     \leanok
@@ -199,17 +199,17 @@ product extends by linearity to all of $\MN{D}$.
     Let $A$ be injective after blocking $L_0>0$ sites. If $X$ commutes with
     every word product of some positive length $m$, then
     $\Gamma_N(X)\in\spn\{V^{(N)}(A)\}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     Lemma~\ref{lem:word_commutation_multiple_lengths} amplifies the length-$m$
     commutation hypothesis to length $L_0\,m \ge L_0$, so
-    Theorem~\ref{thm:ground_space_map_mpv_of_long_word_commutes} places
+    Lemma~\ref{thm:ground_space_map_mpv_of_long_word_commutes} places
     $\Gamma_N(X)$ in $\spn\{V^{(N)}(A)\}$.
 \end{proof}
 
-\begin{theorem}[MPS-line containment from two one-sided equations]
+\begin{lemma}[MPS-line containment from two one-sided equations]
     \label{thm:ground_space_map_mpv_of_common_middle}
     \lean{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility}
     \leanok
@@ -222,7 +222,7 @@ product extends by linearity to all of $\MN{D}$.
     \end{align}
     for every pair of physical letters $a,b$. Then
     $\Gamma_N(X)\in\spn\{V^{(N)}(A)\}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -232,7 +232,7 @@ product extends by linearity to all of $\MN{D}$.
     $\spn\{V^{(N)}(A)\}$.
 \end{proof}
 
-\begin{theorem}[Boundary equality implies containment in the MPS line]
+\begin{lemma}[Boundary equality implies containment in the MPS line]
     \label{thm:ground_space_map_mpv_of_wrapped_witness_comparison}
     \lean{MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison}
     \leanok
@@ -250,7 +250,7 @@ product extends by linearity to all of $\MN{D}$.
     $Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)}$,
     for every word $\mu$ on the complementary sites. Then
     $\Gamma_N(X)\in\spn\{V^{(N)}(A)\}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -260,11 +260,11 @@ product extends by linearity to all of $\MN{D}$.
         A^\mu A^bX & = Y_\mu A^b, \notag \\
         XA^aA^\mu  & = A^aY_\mu, \notag
     \end{align}
-    and Theorem~\ref{thm:ground_space_map_mpv_of_common_middle} places
+    and Lemma~\ref{thm:ground_space_map_mpv_of_common_middle} places
     $\Gamma_N(X)$ in $\spn\{V^{(N)}(A)\}$.
 \end{proof}
 
-\begin{theorem}[Closure-property step for periodic chains]
+\begin{lemma}[Closure-property step for periodic chains]
     \label{thm:conditional_normal_range_reduction_witness_comparison}
     \lean{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison}
     \leanok
@@ -281,7 +281,7 @@ product extends by linearity to all of $\MN{D}$.
     are supplemented, for every $\mu$, by
     $Y^+_{\tau^+_\eta(\mu)} = Y^-_{\tau^-_\eta(\mu)}$.
     Then $\mathcal G_{N,L}(A)\subseteq \spn\{V^{(N)}(A)\}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -296,6 +296,6 @@ product extends by linearity to all of $\MN{D}$.
         Y^+_{\tau^+_\eta(\mu)}
          & = Y^-_{\tau^-_\eta(\mu)}, \notag
     \end{align}
-    and Theorem~\ref{thm:ground_space_map_mpv_of_wrapped_witness_comparison}
+    and Lemma~\ref{thm:ground_space_map_mpv_of_wrapped_witness_comparison}
     places $\Gamma_N(X)$ in $\spn\{V^{(N)}(A)\}$.
 \end{proof}

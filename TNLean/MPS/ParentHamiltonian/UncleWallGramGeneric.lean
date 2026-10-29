@@ -30,8 +30,21 @@ namespace MPSTensor
 
 variable {d a b : ℕ}
 
+private theorem wallMatrix_secondCountableTopology (a b : ℕ) :
+    SecondCountableTopology (Matrix (Fin a) (Fin b) ℂ) := by
+  let : SecondCountableTopology (Fin b → ℂ) := inferInstance
+  exact inferInstanceAs (SecondCountableTopology (Fin a → Fin b → ℂ))
+
+private theorem wallFamily_secondCountableTopology (d a b : ℕ) :
+    SecondCountableTopology (Fin d → Matrix (Fin a) (Fin b) ℂ) := by
+  let : SecondCountableTopology (Matrix (Fin a) (Fin b) ℂ) :=
+    wallMatrix_secondCountableTopology a b
+  infer_instance
+
 private theorem wallFamily_borelSpace (d a b : ℕ) :
     BorelSpace (Fin d → Matrix (Fin a) (Fin b) ℂ) := by
+  let : SecondCountableTopology (Matrix (Fin a) (Fin b) ℂ) :=
+    wallMatrix_secondCountableTopology a b
   let : BorelSpace (Fin b → ℂ) := Pi.borelSpace
   let : BorelSpace (Matrix (Fin a) (Fin b) ℂ) := Pi.borelSpace
   exact Pi.borelSpace
@@ -152,6 +165,8 @@ theorem uncleWallSlopeQuadratic_zero_measure [NeZero a] [NeZero b]
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1)
     (μ : Measure (Fin d → Matrix (Fin a) (Fin b) ℂ)) [Measure.IsAddHaarMeasure μ] :
     μ {R | uncleWallSlopeQuadratic A B ρ hSpect R = 0} = 0 := by
+  let : SecondCountableTopology (Fin d → Matrix (Fin a) (Fin b) ℂ) :=
+    wallFamily_secondCountableTopology d a b
   let : BorelSpace (Fin d → Matrix (Fin a) (Fin b) ℂ) := wallFamily_borelSpace d a b
   have hset : {R | uncleWallSlopeQuadratic A B ρ hSpect R = 0} =
       ((uncleWallSlopeQuadratic A B ρ hSpect).radical :
@@ -212,7 +227,11 @@ theorem uncleWallNormSlope_pair_ae_pos [NeZero a] [NeZero b]
       (Fin d → Matrix (Fin b) (Fin a) ℂ))) [Measure.IsAddHaarMeasure μ] :
     ∀ᵐ P ∂μ, 0 < uncleWallNormSlope A B P.1 ρA ∧
       0 < uncleWallNormSlope B A P.2 ρB := by
+  let : SecondCountableTopology (Fin d → Matrix (Fin a) (Fin b) ℂ) :=
+    wallFamily_secondCountableTopology d a b
   let : BorelSpace (Fin d → Matrix (Fin a) (Fin b) ℂ) := wallFamily_borelSpace d a b
+  let : SecondCountableTopology (Fin d → Matrix (Fin b) (Fin a) ℂ) :=
+    wallFamily_secondCountableTopology d b a
   let : BorelSpace (Fin d → Matrix (Fin b) (Fin a) ℂ) := wallFamily_borelSpace d b a
   let : BorelSpace ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
       (Fin d → Matrix (Fin b) (Fin a) ℂ)) := Prod.borelSpace

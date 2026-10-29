@@ -14,7 +14,7 @@ cell in a layer $k\ge k_0$ participates in this subdivision rule.
 % This exposes the existing indexed affine interpolation assertion.
 % Its complete mathematical statement and proof are unchanged.
 
-\begin{theorem}[Indexed affine parameters of an elementary side]
+\begin{lemma}[Indexed affine parameters of an elementary side]
     \label{thm:area_law_indexed_side_interpolation}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_endpoints_lineMap}
     \leanok
@@ -42,7 +42,7 @@ cell in a layer $k\ge k_0$ participates in this subdivision rule.
             (h+1)/2, & \varepsilon_s=1.
         \end{cases}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_cell_fan}
     Parametrize side $s$ by a signed coordinate $u\in[-1,1]$, with affine
@@ -53,7 +53,7 @@ cell in a layer $k\ge k_0$ participates in this subdivision rule.
     and $h$, giving affine parameters $h/2$ and $(h+1)/2$.
 \end{proof}
 
-\begin{theorem}[Geometry of an elementary side]
+\begin{lemma}[Geometry of an elementary side]
     \label{thm:area_law_elementary_side_geometry}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_endpoints_cases,
         TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_segment_subset_whole}
@@ -64,7 +64,7 @@ cell in a layer $k\ge k_0$ participates in this subdivision rule.
     elementary segments. Either the side is undivided and $(u,v)=(a,b)$,
     or the side is subdivided and $(u,v)$ is $(a,(a+b)/2)$ or
     $((a+b)/2,b)$. In all cases $[u,v]\subseteq[a,b]$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_indexed_side_interpolation}
     In the affine parametrization of $[a,b]$ by $[0,1]$, the endpoints
@@ -87,7 +87,7 @@ cell in a layer $k\ge k_0$ participates in this subdivision rule.
     $[a_s,(a_s+b_s)/2]$ and $[(a_s+b_s)/2,b_s]$ when $\varepsilon_s=1$.
 \end{definition}
 
-\begin{theorem}[Criterion for a divided side]
+\begin{lemma}[Criterion for a divided side]
     \label{thm:area_law_actual_side_mask_iff}
     \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayerSplitMask_eq_true_iff}
     \leanok
@@ -96,13 +96,13 @@ cell in a layer $k\ge k_0$ participates in this subdivision rule.
     and only if there exist a layer $h\ge k_0$, an index $w\in F_{h,\ell_h}$,
     and a corner index $\varepsilon\in\{0,1\}^2$ such that corner
     $\varepsilon$ of the fine cell $w$ equals $(a_s+b_s)/2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_actual_side_mask}
     This is the defining condition for $\varepsilon_s=1$.
 \end{proof}
 
-\begin{theorem}[Opposing corners are elementary endpoints]
+\begin{lemma}[Opposing corners are elementary endpoints]
     \label{thm:area_law_elementary_corner_endpoint}
     \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_corner_on_elementarySide}
     \leanok
@@ -112,7 +112,7 @@ cell in a layer $k\ge k_0$ participates in this subdivision rule.
     cell of a layer $h\ge k_0$. If a corner of the cell indexed by $w$ lies
     on an elementary segment of the cell indexed by $z$ under the midpoint
     subdivision, then that corner is an endpoint of the elementary segment.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_corner_side_subdivision,def:area_law_actual_side_mask,
         thm:area_law_elementary_side_geometry}

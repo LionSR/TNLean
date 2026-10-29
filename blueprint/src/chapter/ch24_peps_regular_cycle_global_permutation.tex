@@ -1,4 +1,4 @@
-\begin{theorem}[Global contraction of a fixed cycle permutation]%
+\begin{lemma}[Global contraction of a fixed cycle permutation]%
     \label{thm:peps_regular_cycle_global_permutation}
     \lean{TNLean.PEPS.exists_unitary_regularCycleGlobalPermutation}
     \leanok
@@ -23,7 +23,7 @@
     \end{align}
     Both vectors are contractions. The unitary is chosen before all
     cycle assignments, boundary configurations and common exterior data.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Local $G$-isometry gives the all-boundary-column unitary. The identity
     vertex gauge moves common crossing operators into one boundary map
@@ -33,7 +33,7 @@
     Extension by the complementary physical identity preserves unitarity.
 \end{proof}
 
-\begin{theorem}[Global controlled conjugation with common exterior data]%
+\begin{lemma}[Global controlled conjugation with common exterior data]%
     \label{thm:peps_regular_two_cycle_global_conjugation}
     \lean{TNLean.PEPS.exists_unitary_regularTwoCycleGlobalConjugation}
     \leanok
@@ -48,7 +48,7 @@
     This auxiliary contraction identity implements controlled cycle conjugation.
     The prescribed lattice string crossing, inverse partner and measurement
     loop in \cite[Section 6.6, fluxon braiding]{Schuch2010PEPS} are not asserted.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Applying the global permutation theorem to the conjugation-equivariant
     controlled conjugation $\Phi$ gives the unitary.

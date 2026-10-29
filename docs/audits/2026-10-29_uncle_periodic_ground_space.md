@@ -35,10 +35,15 @@ already derives limiting-tensor injectivity from the same full-perturbation
 condition and reuses the existing canonical-parent limit theorems. The
 present theorem classifies the explicitly defined actual uncle operator.
 
-All work is source-written and remains a draft. Independent source review
-found no mathematical or API mismatch in the final assembly. Import
-regeneration, committed-head prose, tactic-pattern, line/integrity,
-Blueprint source-reference and TeX formatting checks were run. No local
-Lean elaboration/build or new Lean fixture was used. Hosted verification
-and integration remain required before #10285 can close. Generic
-finite-volume gaplessness, #10286, is not established here.
+Hosted verification passed at exact source head
+`df8447539a` ([job](https://github.com/LionSR/TNLean/actions/runs/40884647836/job/123486022052)):
+the full 14990-job build and all strict Lean checks passed, including the
+latest canonical trace-duality and actual positivity dependencies. The
+actual finite-kernel Blueprint theorem and proof are now leanok. The PR
+remains draft and #10285 stays open for final review and integration.
+
+Independent source/API review, native import/prose/tactic/format/integrity
+checks and Blueprint source synchronization also pass. No local Lean
+elaboration/build or persistent Lean fixture was used. Generic finite-volume
+gaplessness has its own assembled draft #10326 and acceptance obligations;
+it is not inferred merely from the finite-kernel theorem.

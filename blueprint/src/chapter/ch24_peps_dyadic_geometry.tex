@@ -19,9 +19,9 @@ $\{-8<x<2\}$ and no change off it, the label $A$ on the open square, and the lab
 $C$ on the exterior band $\{-8<x<0\}$. The schedule of guides is then constructed,
 these properties are derived from the disjointness of the bands, and the estimates
 are moved to every square of the hierarchy. This gives
-Theorem~\ref{thm:peps_dyadic_angular_separation}, which is Lemma~7.2 for the
+Lemma~\ref{thm:peps_dyadic_angular_separation}, which is Lemma~7.2 for the
 labellings that the schedule specifies; Lemma~7.2 for the guides sampled under the
-source's tie convention is Theorem~\ref{thm:peps_dyadic_angular_separation_sampled}. A guide of the
+source's tie convention is Lemma~\ref{thm:peps_dyadic_angular_separation_sampled}. A guide of the
 source is a partition of the plane into open chambers, with labels on boundaries
 sampled after one small generic displacement; here a guide is a labelling of the
 whole plane, and two labellings that agree off finitely many interface curves
@@ -60,7 +60,7 @@ $A$, $B$, $C$ below are permitted to coincide.
     $\{-8<x<0\}\subset\{0<s<n,\ -n<d<0\}$. Every closed band
     $\{\alpha\le x\le\beta\}$ with $-8\le\alpha\le\beta\le8$, the closure of the
     changed set of each elementary edge birth or death, and the closure of the
-    central region of Theorem~\ref{thm:peps_dyadic_central_clearance} have
+    central region of Lemma~\ref{thm:peps_dyadic_central_clearance} have
     diameter at most $n$.
 \end{lemma}
 
@@ -139,7 +139,7 @@ $A$, $B$, $C$ below are permitted to coincide.
     and symmetrically $d_z>\alpha'w(s_z)$.
 \end{proof}
 
-\begin{theorem}[Angular separation of the central birth]
+\begin{lemma}[Angular separation of the central birth]
     \label{thm:peps_dyadic_central_clearance}
     \lean{TNLean.PEPS.Approximation.centralRegion, TNLean.PEPS.Approximation.centralBirth_clearance}
     \leanok
@@ -156,7 +156,7 @@ $A$, $B$, $C$ below are permitted to coincide.
     The guide after the central birth is sketched below, with the bands
     $\{0<x<1\}$ and their corner taperings magnified and $\mathcal V$ marked by dots.
     \input{figures/peps_dyadic_central_clearance}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     With $u=\min(y_1,n-y_1)$ and $v=\min(y_2,n-y_2)$, the four bounds $d\ge w(s)$
@@ -166,7 +166,7 @@ $A$, $B$, $C$ below are permitted to coincide.
     where $f(z)=A$.
 \end{proof}
 
-\begin{theorem}[Angular separation of the edge births and deaths]
+\begin{lemma}[Angular separation of the edge births and deaths]
     \label{thm:peps_dyadic_band_clearance}
     \lean{TNLean.PEPS.Approximation.BandOperation.clearance, TNLean.PEPS.Approximation.auxBirthB, TNLean.PEPS.Approximation.auxBirthA, TNLean.PEPS.Approximation.auxBirthC, TNLean.PEPS.Approximation.mainDeathC, TNLean.PEPS.Approximation.mainDeathA, TNLean.PEPS.Approximation.mainBirthC, TNLean.PEPS.Approximation.mainDeathB}
     \leanok
@@ -178,7 +178,7 @@ $A$, $B$, $C$ below are permitted to coincide.
     every $y\in\overline{\{f_b\ne f_a\}}$ and every $z$ with $f_s(z)\ne P_\circ$,
     $|y-z|\ge a_0\min\{n,d_{\mathcal V}(y)\}$, where $\mathcal V$ is the pair of
     endpoints of the edge (\cite[Lemma~7.2]{OpenAI2026PolynomialPEPS}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Since $\{f_b\ne f_a\}\subset\{\alpha\le x\le\beta\}$ is contained in a closed
@@ -187,7 +187,7 @@ $A$, $B$, $C$ below are permitted to coincide.
     band $\{\alpha'<x<\beta'\}$, where $f_s(z)=P_\circ$.
 \end{proof}
 
-\begin{theorem}[Angular separation of the lens exchange]
+\begin{lemma}[Angular separation of the lens exchange]
     \label{thm:peps_dyadic_lens_clearance}
     \lean{TNLean.PEPS.Approximation.lensExchange_clearance}
     \leanok
@@ -197,7 +197,7 @@ $A$, $B$, $C$ below are permitted to coincide.
     $y\in\overline{\{p:\neg(f_m(p)=f_{\rm aux}(p)=C)\}}$ and $z\in\partial Y$
     satisfy $|y-z|\ge a_0\min\{n,d_{\mathcal V}(y)\}$
     (\cite[Lemma~7.2]{OpenAI2026PolynomialPEPS}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     A point $z\in\partial Y$ is either in $\mathcal V$ (where the bound is
@@ -221,7 +221,7 @@ $A$, $B$, $C$ below are permitted to coincide.
     A repainting of $S=[0,n]^2$ ($n>0$) starts from a guide $g$ equal to $A$ on
     $(0,n)^2$ and to $C_e$ on the exterior neighbor $\{0<s<n,\ -n<d<0\}$ across
     each edge $e$. The central guide equals $B$ on the central region $R$ of
-    Theorem~\ref{thm:peps_dyadic_central_clearance} and $g$ off $R$. For a list
+    Lemma~\ref{thm:peps_dyadic_central_clearance} and $g$ off $R$. For a list
     $E$ of completed edges, the completed guide $g_E$ replaces the band
     $\{-8<x<2\}$ of each $e\in E$ in the central guide by the word $C_e\mid B$ at
     $0$. Along the next edge $e\notin E$, the main guide $g_{E,e}(W)$ replaces the
@@ -300,7 +300,7 @@ $A$, $B$, $C$ below are permitted to coincide.
     with closures and boundaries, and $\{z:|y-z|\ge c\}$ is closed.
 \end{proof}
 
-\begin{theorem}[Separation of the unmodified bands]
+\begin{lemma}[Separation of the unmodified bands]
     \label{thm:peps_dyadic_angular_separation}
     \lean{TNLean.PEPS.Approximation.blockRepainting_central, TNLean.PEPS.Approximation.blockRepainting_auxStep, TNLean.PEPS.Approximation.blockRepainting_mainStep, TNLean.PEPS.Approximation.blockRepainting_exchange, TNLean.PEPS.Approximation.RepaintingBaseline.clearance_central, TNLean.PEPS.Approximation.RepaintingBaseline.dist_le_central, TNLean.PEPS.Approximation.RepaintingBaseline.clearance_auxStep, TNLean.PEPS.Approximation.RepaintingBaseline.clearance_mainStep, TNLean.PEPS.Approximation.RepaintingBaseline.clearance_exchange, TNLean.PEPS.Approximation.BandOperation.clearance_bandUpdate, TNLean.PEPS.Approximation.BandOperation.dist_le_bandUpdate, TNLean.PEPS.Approximation.dist_le_of_mem_closure_edgeLens, TNLean.PEPS.Approximation.RepaintingBaseline.exchange_changed_subset, TNLean.PEPS.Approximation.RepaintingBaseline.dist_le_exchange}
     \leanok
@@ -327,12 +327,12 @@ $A$, $B$, $C$ below are permitted to coincide.
     \end{enumerate}
     This proves~\cite[Lemma~7.2]{OpenAI2026PolynomialPEPS} (and the diameter bound
     of lines 421--424) for the schedule labellings; the sampled version is
-    Theorem~\ref{thm:peps_dyadic_angular_separation_sampled}.
-\end{theorem}
+    Lemma~\ref{thm:peps_dyadic_angular_separation_sampled}.
+\end{lemma}
 
 \begin{proof}\leanok
     By Lemma~\ref{lem:peps_dyadic_schedule_guides}, the schedule guides satisfy the
-    hypotheses of Theorems~\ref{thm:peps_dyadic_central_clearance},
+    hypotheses of Lemmas~\ref{thm:peps_dyadic_central_clearance},
     \ref{thm:peps_dyadic_band_clearance}, and~\ref{thm:peps_dyadic_lens_clearance}.
     Since $\overline Y\subset\{-7\le x\le-7/2\}$,
     Lemma~\ref{lem:peps_dyadic_band_disjoint} bounds the diameters by $n$, and
@@ -399,7 +399,7 @@ $A$, $B$, $C$ below are permitted to coincide.
     $\{f_1'\ne c\}\subset\overline{\{f_1\ne c\}}$, and
     $\{\neg(f_1'=f_2'=C)\}\subset\overline{\{\neg(f_1=f_2=C)\}}$ (also when
     intersected with any open set). Consequently, all bounds of
-    Theorem~\ref{thm:peps_dyadic_angular_separation} hold with the same
+    Lemma~\ref{thm:peps_dyadic_angular_separation} hold with the same
     $a_0=1/5000$ for any readings of the schedule guides after $v$.
 \end{lemma}
 
@@ -408,7 +408,7 @@ $A$, $B$, $C$ below are permitted to coincide.
     $f_1'(p)=f_1(p+\varepsilon v)=f_2(p+\varepsilon v)=f_2'(p)$ for small
     $\varepsilon>0$. Constant labellings read themselves, and shrinking closures
     preserves all distance and diameter bounds of
-    Theorem~\ref{thm:peps_dyadic_angular_separation}.
+    Lemma~\ref{thm:peps_dyadic_angular_separation}.
 \end{proof}
 
 \begin{lemma}[Readings of the schedule exist]
@@ -475,14 +475,14 @@ and~\ref{lem:peps_dyadic_readings_exist}.
 
 % Source: 06-geometry.tex, Lemma 7.2 (lem:geometry-angular), statement lines
 % 254--273, proof lines 275--319, revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-\begin{theorem}[Separation for the source's sampled guides]
+\begin{lemma}[Separation for the source's sampled guides]
     \label{thm:peps_dyadic_angular_separation_sampled}
     \lean{TNLean.PEPS.Approximation.exists_isChamberSampling_blockRepainting, TNLean.PEPS.Approximation.blockRepainting_central_of_chamberSampling, TNLean.PEPS.Approximation.blockRepainting_auxStep_of_chamberSampling, TNLean.PEPS.Approximation.blockRepainting_mainStep_of_chamberSampling, TNLean.PEPS.Approximation.blockRepainting_exchange_of_chamberSampling}
     \leanok
     \uses{thm:peps_dyadic_angular_separation, lem:peps_dyadic_sampled_guides, lem:peps_dyadic_chamber_sampling}
     Let $a_0=1/5000$, $n>0$, and let $v$ be a generic displacement. For the
     repainting of an $n$-block $S$, the chamber-sampled guides after $v$ exist and
-    satisfy all bounds of Theorem~\ref{thm:peps_dyadic_angular_separation}: every
+    satisfy all bounds of Lemma~\ref{thm:peps_dyadic_angular_separation}: every
     elementary birth or death has changed region of diameter at most $n$ and
     satisfies~(\ref{eq:pdg_angular_separation}) for its sampled surrounding guide,
     and every $y$ in the closure of the positions not equal to $C_e$ on both
@@ -490,7 +490,7 @@ and~\ref{lem:peps_dyadic_readings_exist}.
     $\operatorname{dist}(y,\partial Y)\ge a_0\min\{n,d_{\mathcal V}(y)\}$. This
     is~\cite[Lemma~7.2]{OpenAI2026PolynomialPEPS} under the source's tie convention
     (lines 69--80) for arbitrary (possibly coinciding) labels $A,B,C_e,\ast$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     By Lemma~\ref{lem:peps_dyadic_chamber_sampling}, the chamber-sampled guides
@@ -519,7 +519,7 @@ and~\ref{lem:peps_dyadic_readings_exist}.
     about $\mathcal V$ and adds no labels $\ne P_\circ$, so any $y$ in the closure
     of the remaining changed region satisfies $d_{\mathcal V}(y)\ge t$, hence
     $\min(n,d_{\mathcal V}(y))=\max\{t,\min(n,d_{\mathcal V}(y))\}$, and
-    Theorem~\ref{thm:peps_dyadic_angular_separation} gives the bound.
+    Lemma~\ref{thm:peps_dyadic_angular_separation} gives the bound.
 \end{proof}
 
 \begin{lemma}[Outer holes on the birth side]
@@ -626,7 +626,7 @@ and~\ref{lem:peps_dyadic_readings_exist}.
     near $c$, and on $\partial U$ it adds at most $P$ to $I_f(c)$.
 \end{proof}
 
-\begin{theorem}[No changed true vertex in the bulk operations]
+\begin{lemma}[No changed true vertex in the bulk operations]
     \label{thm:peps_dyadic_no_changed_vertex}
     \lean{TNLean.PEPS.Approximation.BandOperation.InsertsOne,
         TNLean.PEPS.Approximation.auxBirthB_insertsOne,
@@ -659,7 +659,7 @@ and~\ref{lem:peps_dyadic_readings_exist}.
               incident labels of its new sheet inside $Y$ and of its old sheet
               outside $Y$ (\cite[Section~7, lines 375--382, 389--398]{OpenAI2026PolynomialPEPS}).
     \end{enumerate}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     By Lemma~\ref{lem:peps_dyadic_floor}, the $a_0t$-neighborhood $U$ of the
@@ -895,7 +895,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     $\mathcal P(v,t)$.
 \end{proof}
 
-\begin{theorem}[Disjoint outer holes in the temporary guides]
+\begin{lemma}[Disjoint outer holes in the temporary guides]
     \label{thm:peps_dyadic_temporary_holes}
     \lean{TNLean.PEPS.Approximation.isTrueVertex_homogenize_cases, TNLean.PEPS.Approximation.le_dist_of_isTrueVertex_homogenize, TNLean.PEPS.Approximation.homogenize_outerHoles_disjoint, TNLean.PEPS.Approximation.IsDisplacedReading.preimage_subset_closure, TNLean.PEPS.Approximation.IsDisplacedReading.isTrueVertex, TNLean.PEPS.Approximation.homogenize_reading_outerHoles_disjoint}
     \leanok
@@ -907,7 +907,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     distinct true vertices are at sup distance at least $t/1000$; hence for
     $\epsilon_0<1/4000$ their closed radius-$2\epsilon_0t$ outer hole squares are
     pairwise disjoint (\cite[Section~7, lines 347--351]{OpenAI2026PolynomialPEPS}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     By Lemmas~\ref{lem:peps_dyadic_incident_change}(3),
@@ -920,7 +920,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     contained in those of the homogenized guide.
 \end{proof}
 
-\begin{theorem}[One patch ratio for the point treatment]
+\begin{lemma}[One patch ratio for the point treatment]
     \label{thm:peps_dyadic_point_ratio}
     \lean{TNLean.PEPS.Approximation.SquareEdge.par_smul, TNLean.PEPS.Approximation.SquareEdge.nor_inv_smul, TNLean.PEPS.Approximation.bandWidth_inv_mul, TNLean.PEPS.Approximation.mem_edgeBand_inv_smul, TNLean.PEPS.Approximation.bandCoord_inv_smul, TNLean.PEPS.Approximation.mem_centralRegion_inv_smul, TNLean.PEPS.Approximation.bandUpdate_inv_smul, TNLean.PEPS.Approximation.comp_bandWord, TNLean.PEPS.Approximation.bandUpdate_comp, TNLean.PEPS.Approximation.comp_mainWords, TNLean.PEPS.Approximation.comp_auxWords, TNLean.PEPS.Approximation.exists_mainWords_comp, TNLean.PEPS.Approximation.exists_auxWords_comp, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale.centralGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale.completedGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale.mainGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale.auxGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale.isUnmodifiedGuide, TNLean.PEPS.Approximation.RepaintingBaseline.IsRelabel, TNLean.PEPS.Approximation.RepaintingBaseline.IsRelabel.centralGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRelabel.completedGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRelabel.isUnmodifiedGuide, TNLean.PEPS.Approximation.IsConicalAt, TNLean.PEPS.Approximation.IsSquareCorner.trichotomy, TNLean.PEPS.Approximation.SquareEdge.par_add_smul, TNLean.PEPS.Approximation.SquareEdge.nor_add_smul, TNLean.PEPS.Approximation.mem_edgeBand_conical, TNLean.PEPS.Approximation.bandCoord_conical, TNLean.PEPS.Approximation.mem_centralRegion_conical, TNLean.PEPS.Approximation.isConicalAt_blockGuide, TNLean.PEPS.Approximation.IsConicalAt.bandUpdate, TNLean.PEPS.Approximation.RepaintingBaseline.IsUnmodifiedGuide.isConicalAt, TNLean.PEPS.Approximation.isTrueVertex_comp_iff, TNLean.PEPS.Approximation.isTrueVertex_comp_homeomorph, TNLean.PEPS.Approximation.similarityInv, TNLean.PEPS.Approximation.similarityInv_apply, TNLean.PEPS.Approximation.image_similarity_closedBall, TNLean.PEPS.Approximation.HasTwoOwnerFootprints.congr, TNLean.PEPS.Approximation.referenceRepainting, TNLean.PEPS.Approximation.nbrBlock_zero_mem_blockWindow, TNLean.PEPS.Approximation.isRelabel_referenceRepainting, TNLean.PEPS.Approximation.isRescale_blockBaseline, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_congr, TNLean.PEPS.Approximation.RepaintingBaseline.finite_isUnmodifiedGuide, TNLean.PEPS.Approximation.pointTreated, TNLean.PEPS.Approximation.classRep, TNLean.PEPS.Approximation.classRep_spec, TNLean.PEPS.Approximation.injOn_range_classRep, TNLean.PEPS.Approximation.TemplateIndex, TNLean.PEPS.Approximation.footprintTemplate, TNLean.PEPS.Approximation.cornerOffset, TNLean.PEPS.Approximation.isSquareCorner_cornerOffset, TNLean.PEPS.Approximation.blockCorner_sub_blockCorner, TNLean.PEPS.Approximation.blockIndex_mem_blockWindow, TNLean.PEPS.Approximation.exists_reference_eq, TNLean.PEPS.Approximation.exists_template_eq, TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio, TNLean.PEPS.Approximation.homogenize_iUnion_eq_of_mem_ball, TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio_iUnion, TNLean.PEPS.Approximation.exists_template_injOn}
     \leanok
@@ -934,7 +934,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     two-owner condition $(\overline B(v,2t),H_v,\epsilon_0t,\nu t)$, where $H_v$
     is its set of true vertices in $\overline B(v,3t)$
     (\cite[Section~7, lines 464--505]{OpenAI2026PolynomialPEPS}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Rescaling by $1/n$ reduces to the unit square, where by
@@ -948,7 +948,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     agrees with single-corner homogenization on $\overline B(v,4t)$.
 \end{proof}
 
-\begin{theorem}[One patch ratio for direct repaintings and resizings]
+\begin{lemma}[One patch ratio for direct repaintings and resizings]
     \label{thm:peps_dyadic_block_ratio}
     \lean{TNLean.PEPS.Approximation.blockWindow, TNLean.PEPS.Approximation.BlockSlot, TNLean.PEPS.Approximation.blockSlot, TNLean.PEPS.Approximation.blockSlotLabel, TNLean.PEPS.Approximation.blockSlotLabel_blockSlot, TNLean.PEPS.Approximation.floor_mem_Icc, TNLean.PEPS.Approximation.blockGuide_eq_blockSlot, TNLean.PEPS.Approximation.exists_blockGuide_footprintRatio, TNLean.PEPS.Approximation.exists_directRepainting_footprintRatio, TNLean.PEPS.Approximation.exists_resizing_footprintRatio, TNLean.PEPS.Approximation.exists_resizing_footprintRatio_mixed, TNLean.PEPS.Approximation.blockGuide_eq_classRep, TNLean.PEPS.Approximation.norm_smul_inv_sub_lt_iff, TNLean.PEPS.Approximation.mem_Icc_of_mem_holeRadius_pair}
     \leanok
@@ -968,7 +968,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
               $\overline B(v,2n)$
               (\cite[Section~7, lines 515--520, 534--540]{OpenAI2026PolynomialPEPS}).
     \end{enumerate}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     In units of $s$ about $v\in s\mathbb Z^2$, any $s$-block guide on
@@ -980,18 +980,18 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     $h_n\le h_{2n}\le2h_n$ for $n<t$.
 \end{proof}
 
-\begin{theorem}[Patch ratios for the sampled guides]
+\begin{lemma}[Patch ratios for the sampled guides]
     \label{thm:peps_dyadic_sampled_ratio}
     \lean{TNLean.PEPS.Approximation.IsDisplacedReading.range_subset, TNLean.PEPS.Approximation.IsDisplacedReading.eq_on_ball, TNLean.PEPS.Approximation.IsRayConstant.comp_affine, TNLean.PEPS.Approximation.IsRayConstant.pointTreated, TNLean.PEPS.Approximation.HasLineWalls.pointTreated, TNLean.PEPS.Approximation.isChamberSampling_pointTreated, TNLean.PEPS.Approximation.isRayConstant_footprintTemplate, TNLean.PEPS.Approximation.IsLocallyInLines.preimage_affine, TNLean.PEPS.Approximation.HasLineWalls.comp_affine, TNLean.PEPS.Approximation.hasLineWalls_footprintTemplate, TNLean.PEPS.Approximation.HasLineWalls.eventually_eq_of_sameSide, TNLean.PEPS.Approximation.IsDisplacedReading.of_sameSide, TNLean.PEPS.Approximation.finite_wallNormals, TNLean.PEPS.Approximation.HasLineWalls.finite_genericReadings, TNLean.PEPS.Approximation.exists_template_footprintRatio_reading, TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio_reading, TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio_iUnion_reading, TNLean.PEPS.Approximation.exists_blockGuide_footprintRatio_reading, TNLean.PEPS.Approximation.exists_directRepainting_footprintRatio_reading, TNLean.PEPS.Approximation.exists_resizing_footprintRatio_reading, TNLean.PEPS.Approximation.exists_resizing_footprintRatio_mixed_reading}
     \leanok
     \uses{thm:peps_dyadic_point_ratio, thm:peps_dyadic_block_ratio, lem:peps_dyadic_readings_exist, lem:peps_dyadic_chamber_sampling}
     There exists $\nu>0$, depending only on the fixed constants, such that for
     every generic displacement $v$ the conclusions of
-    Theorems~\ref{thm:peps_dyadic_point_ratio} and~\ref{thm:peps_dyadic_block_ratio}
+    Lemmas~\ref{thm:peps_dyadic_point_ratio} and~\ref{thm:peps_dyadic_block_ratio}
     hold for the readings after $v$ (i.e., the chamber-sampled guides of
     Lemma~\ref{lem:peps_dyadic_chamber_sampling}), with holes at their own true
     vertices (\cite[Section~7, lines 73--77, 559--563]{OpenAI2026PolynomialPEPS}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Reading after $v$ commutes with similarity and relabelling: if $f(u)=\sigma(T((u-c)/s))$
@@ -1005,7 +1005,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     the resulting finite set of template readings gives a single $\nu>0$.
 \end{proof}
 
-\begin{theorem}[Explicit footprint ratios for the readings of block guides]
+\begin{lemma}[Explicit footprint ratios for the readings of block guides]
     \label{thm:peps_dyadic_block_reading_ratio}
     \lean{TNLean.PEPS.Approximation.IsDisplacedReading.blockGuide_eq_of_mem,
         TNLean.PEPS.Approximation.IsDisplacedReading.blockCorner_mem_closure,
@@ -1029,11 +1029,11 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     $2n$-blocks satisfies the two-owner condition with working set the closed
     square of radius $2n$ about a grid corner, holes at its true vertices within
     $4n$ of that corner, each of radius $h_n$ or $h_{2n}$, and footprint radius
-    $2\nu n$. Hence the ratio of Theorem~\ref{thm:peps_dyadic_sampled_ratio} for
+    $2\nu n$. Hence the ratio of Lemma~\ref{thm:peps_dyadic_sampled_ratio} for
     the resizings can be taken equal to $\nu_1$, in place of the minimum given by
     the compactness observation of~\cite[Section~7]{OpenAI2026PolynomialPEPS},
     lines 447--479 and 529--541.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     A reading of a block guide carries the label of a block on the open interior
@@ -1054,7 +1054,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     excluded set.
 \end{proof}
 
-\begin{theorem}[The direct repainting at the constants of the protocol]
+\begin{lemma}[The direct repainting at the constants of the protocol]
     \label{thm:peps_dyadic_direct_repainting_constants}
     \lean{TNLean.PEPS.Approximation.IsDirectRepaintingRatio,
         TNLean.PEPS.Approximation.directRepaintingRatio,
@@ -1071,26 +1071,26 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
         thm:peps_protocol_constants}
     For $\epsilon_0>0$ and any $K_0$, let
     $\nu_3=\min(\epsilon_0/\max(K_0,1),1)/4$. Every $\nu\in(0,\nu_3]$ serves as
-    the ratio of Theorem~\ref{thm:peps_dyadic_sampled_ratio} for the direct
+    the ratio of Lemma~\ref{thm:peps_dyadic_sampled_ratio} for the direct
     repaintings at levels $n\le K_0t$. This is a smallness condition on
     $\nu$ given $K_0$ and $\epsilon_0$, so the constants of
-    Theorem~\ref{thm:peps_protocol_constants} can be chosen in the order
+    Lemma~\ref{thm:peps_protocol_constants} can be chosen in the order
     of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, \texttt{06-geometry.tex}, lines
     559--570, with such a $\nu$.
 
     Fix such constants and $t>0$ at which the separations of
-    Theorem~\ref{thm:peps_protocol_constants} hold, for instance $t=D\log L$ with
+    Lemma~\ref{thm:peps_protocol_constants} hold, for instance $t=D\log L$ with
     $L\ge2$. Let $0<n\le K_0t$, let the holes have radius $h_n=\epsilon_0\min(n,t)$ and
     the patches radius $u=\nu n/2$, and let $b$ be the patch bound of
-    Theorem~\ref{thm:peps_protocol_constants}. For the readings after a generic
+    Lemma~\ref{thm:peps_protocol_constants}. For the readings after a generic
     displacement of two guides uniform on the $n$-blocks that differ only on one block,
     the two-owner conditions for footprints of radius $2u=\nu n$ assumed in
-    Theorem~\ref{thm:peps_guide_frame_rewrite_events} hold, and the direct repainting of
+    Lemma~\ref{thm:peps_guide_frame_rewrite_events} hold, and the direct repainting of
     the block is one gate as there, with this $b$ and at most $2b$ pair sources in
     each monomial. The remaining hypotheses of that theorem on the input vector,
     true-vertex sets, disjoint holes and patch data are retained; no further geometric
     condition is imposed (lines 507--527 and 574--583).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_dyadic_block_reading_ratio,
@@ -1100,10 +1100,10 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     The hole radius satisfies $h_n\ge\epsilon_0n/\max(K_0,1)$ by
     Lemma~\ref{lem:peps_dyadic_small_radius}, so $\nu\le\nu_3$ gives
     $2\nu n\le h_n/2<h_n$ and $2\nu n\le n/2<n$, and
-    Theorem~\ref{thm:peps_dyadic_block_reading_ratio} gives the two-owner
+    Lemma~\ref{thm:peps_dyadic_block_reading_ratio} gives the two-owner
     condition with footprint radius $\nu n$. The
     separation $3u+4r<n$, the patch count and $18\le b$ are those of
-    Theorem~\ref{thm:peps_protocol_constants}.
+    Lemma~\ref{thm:peps_protocol_constants}.
     The source-bounded rewrite gives the same circuit with at most $2b$ pair sources
     in each monomial.
 \end{proof}
@@ -1138,7 +1138,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     (Definition~\ref{def:peps_dyadic_anchor}).
 \end{definition}
 
-\begin{theorem}[Counts of the hierarchy and the schedule]
+\begin{lemma}[Counts of the hierarchy and the schedule]
     \label{thm:peps_dyadic_hierarchy_counts}
     \lean{TNLean.PEPS.Approximation.three_mul_card_dyadicSquare_add_one, TNLean.PEPS.Approximation.three_mul_card_dyadicSquare_lt, TNLean.PEPS.Approximation.three_mul_card_dyadicJunction_le, TNLean.PEPS.Approximation.three_mul_schedule_le, TNLean.PEPS.Approximation.three_mul_schedule_le_cube}
     \leanok
@@ -1147,7 +1147,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     If $2^k<2L$, there are fewer than $16L^2/3$ squares, and $M$ times the total
     number of squares and junctions is at most $80ML^2/3\le80ML^3/3$ (for
     $L\ge1$).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Scale $j$ has $4^{k-j}$ squares and $(2^{k-j}+1)^2\le4\cdot4^{k-j}$ junctions,
@@ -1190,7 +1190,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     $[2^jr,2^j(r+1)]$ and $[2^js,2^j(s+1)]$, respectively.
 \end{definition}
 
-\begin{theorem}[Bounded lifetime incidence]
+\begin{lemma}[Bounded lifetime incidence]
     \label{thm:peps_dyadic_lifetime_incidence}
     \lean{TNLean.PEPS.Approximation.card_range_blockNear_le, TNLean.PEPS.Approximation.card_range_cornerNear_le, TNLean.PEPS.Approximation.card_dyadicSquare_near_le, TNLean.PEPS.Approximation.card_dyadicJunction_near_le, TNLean.PEPS.Approximation.card_gates_le_of_near}
     \leanok
@@ -1200,7 +1200,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     Hence, if each repainting and junction resize has at most $G$ gates, any party
     participating only in events $c$-near its block participates in at most
     $4G(4c+4)^2$ gates (\cite[Proposition~7.1, item~2, lines 611--618]{OpenAI2026PolynomialPEPS}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_dyadic_address_locality}
@@ -1224,7 +1224,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     blocks with $\max(|q-(u-1)|,|t-(v-1)|)\le1$.
 \end{definition}
 
-\begin{theorem}[Active labels in party form]
+\begin{lemma}[Active labels in party form]
     \label{thm:peps_dyadic_active_label_parties}
     \lean{TNLean.PEPS.Approximation.levelLabels_eq_party, TNLean.PEPS.Approximation.OwnsLevelBlock.scale, TNLean.PEPS.Approximation.levelLabels_empty_eq_party, TNLean.PEPS.Approximation.levelLabels_eq_party_of_subset, TNLean.PEPS.Approximation.repaintingUses_of_levelLabels, TNLean.PEPS.Approximation.incidentLabels_blockGuide_corner, TNLean.PEPS.Approximation.junctionUses_of_incidentLabels}
     \leanok
@@ -1241,7 +1241,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
               junction resize at $(j,u,v)$
               (\cite[Section~7, lines 585--609]{OpenAI2026PolynomialPEPS}).
     \end{enumerate}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_dyadic_active_labels}
@@ -1252,7 +1252,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     parties used by the resize at $(j,u,v)$.
 \end{proof}
 
-\begin{theorem}[Lifetime participation of block parties]
+\begin{lemma}[Lifetime participation of block parties]
     \label{thm:peps_dyadic_lifetime_parties}
     \lean{TNLean.PEPS.Approximation.RepaintingUses.near, TNLean.PEPS.Approximation.JunctionUses.near, TNLean.PEPS.Approximation.card_dyadicJunction_uses_le, TNLean.PEPS.Approximation.card_gates_le_of_uses}
     \leanok
@@ -1263,14 +1263,14 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     event has at most $G$ gates and each gate involves only parties used by its
     event, every block party participates in at most $41G\le64G$ gates
     (\cite[Proposition~7.1, item~2, lines 597--618]{OpenAI2026PolynomialPEPS}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_dyadic_lifetime_incidence}
     A repainting at scale $j'\in\{j-1,j\}$ using $(j,r,s)$ has block interval
     touching $[2^jr,2^j(r+1)]$ in each coordinate, so it is $0$-near $(j,r,s)$,
     giving at most $2(4\cdot0+4)^2=32$ repaintings by
-    Theorem~\ref{thm:peps_dyadic_lifetime_incidence}. A junction resize using
+    Lemma~\ref{thm:peps_dyadic_lifetime_incidence}. A junction resize using
     $(j,r,s)$ has scale $j$ and indices $(u,v)\in\{r,r+1,r+2\}\times\{s,s+1,s+2\}$,
     giving at most $9$ junctions, and $32+9=41\le64$.
 \end{proof}
@@ -1292,7 +1292,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     (\cite[Proposition~7.1, \texttt{06-geometry.tex}, lines 82--221, 328--339, 507--541]{OpenAI2026PolynomialPEPS}).
 \end{definition}
 
-\begin{theorem}[Counts of the protocol schedule]
+\begin{lemma}[Counts of the protocol schedule]
     \label{thm:peps_dyadic_protocol_schedule_counts}
     \lean{TNLean.PEPS.Approximation.mem_eventSchedule, TNLean.PEPS.Approximation.nodup_eventSchedule, TNLean.PEPS.Approximation.pairwise_rank_eventSchedule, TNLean.PEPS.Approximation.length_eventSchedule_le, TNLean.PEPS.Approximation.BulkOp.length_ops, TNLean.PEPS.Approximation.length_edgeOps, TNLean.PEPS.Approximation.length_largeRepaintingOps, TNLean.PEPS.Approximation.length_eventOps_le, TNLean.PEPS.Approximation.length_protocolSchedule_le, TNLean.PEPS.Approximation.length_protocolSchedule_le_cube, TNLean.PEPS.Approximation.card_filter_event_le, TNLean.PEPS.Approximation.RepaintOp.IsAuxInit, TNLean.PEPS.Approximation.BulkOp.countP_isAuxInit_ops, TNLean.PEPS.Approximation.countP_isAuxInit_edgeOps, TNLean.PEPS.Approximation.countP_isAuxInit_eventOps_le, TNLean.PEPS.Approximation.countP_isAuxInit_protocolSchedule_le}
     \leanok
@@ -1302,11 +1302,11 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     at most $4$ auxiliary-sheet initializations. If $2^k<2L$, the schedule has at
     most $5040L^3$ changes
     (\cite[Proposition~7.1, item~2]{OpenAI2026PolynomialPEPS}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_dyadic_hierarchy_counts}
-    Since $9+4\cdot45=189$, Theorem~\ref{thm:peps_dyadic_hierarchy_counts} with
+    Since $9+4\cdot45=189$, Lemma~\ref{thm:peps_dyadic_hierarchy_counts} with
     $M=189$ bounds the total number of changes by $80\cdot189\,L^3/3=5040L^3$.
 \end{proof}
 
@@ -1331,8 +1331,8 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     $C\mid A\mid B\mid C$. By Lemma~\ref{lem:peps_dyadic_unmodified_vertices},
     every true vertex of an auxiliary guide is an endpoint of its edge (at most $2$
     points), and translation preserves true-vertex counts. With at most $4$
-    initializations per event (Theorem~\ref{thm:peps_dyadic_protocol_schedule_counts}),
-    Theorem~\ref{thm:peps_dyadic_hierarchy_counts} with $M=8$ gives at most
+    initializations per event (Lemma~\ref{thm:peps_dyadic_protocol_schedule_counts}),
+    Lemma~\ref{thm:peps_dyadic_hierarchy_counts} with $M=8$ gives at most
     $640L^3/3\le214L^3$ frozen holes.
 \end{proof}
 
@@ -1353,7 +1353,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     (\cite[Proposition~7.1, item~1; \texttt{06-geometry.tex}, lines 91--100, 627--643]{OpenAI2026PolynomialPEPS}).
 \end{definition}
 
-\begin{theorem}[Parties of the protocol]
+\begin{lemma}[Parties of the protocol]
     \label{thm:peps_dyadic_protocol_parties}
     \lean{TNLean.PEPS.Approximation.DyadicSquare.toTriple_injective, TNLean.PEPS.Approximation.DyadicSquare.ofTriple_toTriple, TNLean.PEPS.Approximation.protocolPlacement_inGrid, TNLean.PEPS.Approximation.protocolPlacement_blockBounded, TNLean.PEPS.Approximation.card_protocolParty_le, TNLean.PEPS.Approximation.three_mul_card_protocolParty_lt, TNLean.PEPS.Approximation.inl_ne_guidePlaceholder, TNLean.PEPS.Approximation.labelParty_toTriple, TNLean.PEPS.Approximation.labelParty_guidePlaceholder, TNLean.PEPS.Approximation.labelParty_injOn, TNLean.PEPS.Approximation.levelLabels_mem_validLabels}
     \leanok
@@ -1363,19 +1363,19 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     $\pi_S$ is injective on $\mathcal L_{\rm val}$, and at every level $2^j$
     ($j<k$) all block labels of the level lie in $\mathcal L_{\rm val}$
     (\cite[Proposition~7.1, item~1]{OpenAI2026PolynomialPEPS}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_dyadic_hierarchy_counts}
     Each square has at most its block party and $\ast_S$, so $|P|$ is at most twice
-    the square count of Theorem~\ref{thm:peps_dyadic_hierarchy_counts}. A hierarchy
+    the square count of Lemma~\ref{thm:peps_dyadic_hierarchy_counts}. A hierarchy
     square is uniquely determined by $(j,r,s)$ and distinct from $\ast_S$, so
     $\pi_S$ is injective on $\mathcal L_{\rm val}$. At level $2^j$ ($j<k$), root
     blocks have indices $<2^{k-j}$ and their parents have scale $j+1\le k$ and
     indices $<2^{k-j-1}$, so all level labels lie in $\mathcal L_{\rm val}$.
 \end{proof}
 
-\begin{theorem}[Labels inside a repainting]
+\begin{lemma}[Labels inside a repainting]
     \label{thm:peps_dyadic_repainting_valid_labels}
     \lean{TNLean.PEPS.Approximation.protocolLevelLabels, TNLean.PEPS.Approximation.newParty_mem_validLabels, TNLean.PEPS.Approximation.blockRepainting_mem_validLabels}
     \leanok
@@ -1384,15 +1384,15 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     the central guide, of any completed guide $g_E$, and of any main or auxiliary
     guide along an edge lies in $\mathcal L_{\rm val}$
     (\cite[\texttt{06-geometry.tex}, lines 82--100, 585--609]{OpenAI2026PolynomialPEPS}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_dyadic_active_labels, thm:peps_dyadic_protocol_parties}
     Combine Lemma~\ref{lem:peps_dyadic_active_labels}(2) with
-    Theorem~\ref{thm:peps_dyadic_protocol_parties}.
+    Lemma~\ref{thm:peps_dyadic_protocol_parties}.
 \end{proof}
 
-\begin{theorem}[Owners of the treated and directly repainted guides]
+\begin{lemma}[Owners of the treated and directly repainted guides]
     \label{thm:peps_dyadic_guide_owners}
     \lean{TNLean.PEPS.Approximation.homogenize_mem,
         TNLean.PEPS.Approximation.shiftGuide_mem,
@@ -1403,23 +1403,23 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \leanok
     \uses{thm:peps_dyadic_repainting_valid_labels, def:peps_guide_frame}
     At level $2^j$ ($j<k$), the level block guides (before and after a direct
-    repainting), the guides of Theorem~\ref{thm:peps_dyadic_repainting_valid_labels}
+    repainting), the guides of Lemma~\ref{thm:peps_dyadic_repainting_valid_labels}
     shifted to a block and homogenized on any set to a label in
     $\mathcal L_{\rm val}$, and their readings after any displacement all take
     values in $\mathcal L_{\rm val}$; for any guide $f$ with values in
     $\mathcal L_{\rm val}$, two sites $u,v$ of its encoded frame under $\pi_S$
     have $\pi_S(f(u))=\pi_S(f(v))$ if and only if $f(u)=f(v)$
     (\cite[\texttt{06-geometry.tex}, lines 82--100, 328--339, 507--527]{OpenAI2026PolynomialPEPS}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_dyadic_repainting_valid_labels, thm:peps_dyadic_protocol_parties}
     Shifting, homogenizing to a label in $\mathcal L_{\rm val}$, and taking a
     reading preserve $\mathcal L_{\rm val}$-valuedness, and $\pi_S$ is injective on
-    $\mathcal L_{\rm val}$ by Theorem~\ref{thm:peps_dyadic_protocol_parties}.
+    $\mathcal L_{\rm val}$ by Lemma~\ref{thm:peps_dyadic_protocol_parties}.
 \end{proof}
 
-\begin{theorem}[Locality of the parties of an event]
+\begin{lemma}[Locality of the parties of an event]
     \label{thm:peps_dyadic_protocol_locality}
     \lean{TNLean.PEPS.Approximation.EventUses.scale_le, TNLean.PEPS.Approximation.EventUses.anchor_dist_le}
     \leanok
@@ -1428,7 +1428,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     and in each coordinate their addresses differ by at most $12$ times the side of
     either party's square
     (\cite[Proposition~7.1, item~3]{OpenAI2026PolynomialPEPS}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_dyadic_address_locality}
@@ -1468,7 +1468,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \end{enumerate}
 \end{definition}
 
-\begin{theorem}[Block indices near a block or a corner]
+\begin{lemma}[Block indices near a block or a corner]
     \label{thm:peps_dyadic_block_index_near}
     \lean{TNLean.PEPS.Approximation.floor_div_mem_Icc, TNLean.PEPS.Approximation.blockIndex_of_dist_blockCorner_lt, TNLean.PEPS.Approximation.abs_blockIndex_sub_le}
     \leanok
@@ -1477,14 +1477,14 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     $(\lfloor p_1/n\rfloor,\lfloor p_2/n\rfloor)\in\{u-1,u\}\times\{v-1,v\}$; if
     $\operatorname{dist}(p,S)<n$ for the closed $n$-block $S=(r,s)$, then
     $\max(|\lfloor p_1/n\rfloor-r|,|\lfloor p_2/n\rfloor-s|)\le1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     For $na-n<y<nb+n$, dividing by $n$ gives $a-1\le\lfloor y/n\rfloor\le b$;
     apply this with $a=b=u$ and with $a=r,b=r+1$.
 \end{proof}
 
-\begin{theorem}[Parties of the junction resizes and the direct repaintings]
+\begin{lemma}[Parties of the junction resizes and the direct repaintings]
     \label{thm:peps_dyadic_patch_rewrite_parties}
     \lean{TNLean.PEPS.Approximation.GuidePatchRewrite.parties_subset, TNLean.PEPS.Approximation.junctionUses_of_blockGuide_eq, TNLean.PEPS.Approximation.repaintingUses_of_blockGuide_eq, TNLean.PEPS.Approximation.GuidePatchRewrite.IsJunctionResize.uses, TNLean.PEPS.Approximation.GuidePatchRewrite.IsDirectRepainting.uses}
     \leanok
@@ -1496,18 +1496,18 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     every block party in $P(\mathcal D)$ for a direct repainting of $S$ is used by
     the repainting of $S$
     (\cite[Section~7, lines 500--541, 585--594]{OpenAI2026PolynomialPEPS}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_dyadic_block_index_near, thm:peps_dyadic_active_label_parties}
     Since $R_h>0$, $\overline B(h,R_h)$ is a neighborhood of $h$, so
     $I_f(h)\subset f(\overline B(h,R_h))\subset f(F(\mathcal D))$. The block-index
-    bounds of Theorem~\ref{thm:peps_dyadic_block_index_near} and the owner
-    characterizations of Theorem~\ref{thm:peps_dyadic_active_label_parties} then
+    bounds of Lemma~\ref{thm:peps_dyadic_block_index_near} and the owner
+    characterizations of Lemma~\ref{thm:peps_dyadic_active_label_parties} then
     place every block party of $P(\mathcal D)$ among those used by the event.
 \end{proof}
 
-\begin{theorem}[Patch nets of the junction resizes and the direct repaintings]
+\begin{lemma}[Patch nets of the junction resizes and the direct repaintings]
     \label{thm:peps_dyadic_patch_rewrite_nets}
     \lean{TNLean.PEPS.Approximation.exists_junctionResize, TNLean.PEPS.Approximation.exists_directRepainting}
     \leanok
@@ -1526,7 +1526,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
               cover $S$ and the four corner outer holes of radius $2h_n$
               (\cite[Section~7, lines 500--541]{OpenAI2026PolynomialPEPS}).
     \end{enumerate}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_dyadic_nets, lem:peps_dyadic_small_radius,
@@ -1539,7 +1539,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     $(2\epsilon_0+3\nu)n<n$ of $S$.
 \end{proof}
 
-\begin{theorem}[Lifetime participation for small-patch rewrites]
+\begin{lemma}[Lifetime participation for small-patch rewrites]
     \label{thm:peps_dyadic_patch_rewrite_lifetime}
     \lean{TNLean.PEPS.Approximation.card_gates_le_of_guidePatchRewrites}
     \leanok
@@ -1549,12 +1549,12 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     a block party participates in a gate only when it lies in $P(\mathcal D)$,
     then every block party participates in at most $64G$ gates
     (\cite[Proposition~7.1, item~2]{OpenAI2026PolynomialPEPS}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_dyadic_lifetime_parties}
-    Combine Theorem~\ref{thm:peps_dyadic_patch_rewrite_parties} with
-    Theorem~\ref{thm:peps_dyadic_lifetime_parties}.
+    Combine Lemma~\ref{thm:peps_dyadic_patch_rewrite_parties} with
+    Lemma~\ref{thm:peps_dyadic_lifetime_parties}.
 \end{proof}
 
 \begin{definition}[Local guides of a large-scale repainting]
@@ -1573,7 +1573,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     all $p\in F(\mathcal D)$.
 \end{definition}
 
-\begin{theorem}[The guides of a repainting are local]
+\begin{lemma}[The guides of a repainting are local]
     \label{thm:peps_dyadic_local_guides}
     \lean{TNLean.PEPS.Approximation.SquareEdge.point_mem_closedSquare, TNLean.PEPS.Approximation.edgeBand_subset_thickening, TNLean.PEPS.Approximation.edgeTreated_subset_thickening, TNLean.PEPS.Approximation.cornerTreated_subset_thickening, TNLean.PEPS.Approximation.edgeLens_subset_thickening, TNLean.PEPS.Approximation.RepaintingBaseline.finalLabel_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.guide_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.oldLabel_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.nbrLabel_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.edgeWords_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_guide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_const, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.update, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.homogenize, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.piecewise, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.bandUpdate, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.changed_subset, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_centralGuide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_completedGuide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_mainGuide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_auxGuide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_treatedStartMain, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_treatedAux, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_exchangedMain, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_exchangedAux}
     \leanok
@@ -1589,7 +1589,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
               over the same base agree where $\operatorname{dist}(p,S)\ge n/2$
               (\cite[Section~7, lines 585--596]{OpenAI2026PolynomialPEPS}).
     \end{enumerate}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_dyadic_schedule_guides, lem:peps_dyadic_active_labels}
@@ -1599,7 +1599,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     since $g=A$ on $(0,n)^2$ and $g=C_e$ at distance $n/2$ across $e$.
 \end{proof}
 
-\begin{theorem}[Parties of the large-scale repaintings]
+\begin{lemma}[Parties of the large-scale repaintings]
     \label{thm:peps_dyadic_large_repainting_parties}
     \lean{TNLean.PEPS.Approximation.repaintingUses_of_mem_localLabels, TNLean.PEPS.Approximation.GuidePatchRewrite.IsLargeRepaintingStep.uses}
     \leanok
@@ -1609,18 +1609,18 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     every block party in $P(\mathcal D)$ for any large-scale repainting step
     $\mathcal D$ of $S$ — is used by the repainting of $S$
     (\cite[Section~7, lines 585--596]{OpenAI2026PolynomialPEPS}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_dyadic_patch_rewrite_parties, thm:peps_dyadic_local_guides}
-    By Theorem~\ref{thm:peps_dyadic_block_index_near} and
-    Theorem~\ref{thm:peps_dyadic_active_label_parties}, every block label within
+    By Lemma~\ref{thm:peps_dyadic_block_index_near} and
+    Lemma~\ref{thm:peps_dyadic_active_label_parties}, every block label within
     sup distance $2^{j'}$ of $S$ (along with the new party $B$ of $S$) is used by
     the repainting of $S$, and $P(\mathcal D)\subset\mathcal L_{\rm loc}$ by
     Definition~\ref{def:peps_dyadic_local_guides}.
 \end{proof}
 
-\begin{theorem}[Patch nets of the large-scale repaintings]
+\begin{lemma}[Patch nets of the large-scale repaintings]
     \label{thm:peps_dyadic_large_repainting_nets}
     \lean{TNLean.PEPS.Approximation.exists_largeRepaintingStep_of_cover, TNLean.PEPS.Approximation.exists_pointTreatment, TNLean.PEPS.Approximation.exists_bulkStep}
     \leanok
@@ -1642,7 +1642,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
               and the affected outer holes
               (\cite[Section~7, lines 383--387, 421--430]{OpenAI2026PolynomialPEPS}).
     \end{enumerate}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:peps_dyadic_nets, thm:peps_dyadic_local_guides}
@@ -1651,10 +1651,10 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     $(1+2\epsilon_0+3\nu)t<2t\le n$; in item~2,
     $\{f_{\rm old}\ne f_{\rm new}\}$ and the outer holes lie within
     $n/2+R\le3n/4$ of $S$ (inside a ball of radius $5n/4$ about the center of $S$)
-    by Theorem~\ref{thm:peps_dyadic_local_guides}(2), and $3n/4+3\nu n\le n$.
+    by Lemma~\ref{thm:peps_dyadic_local_guides}(2), and $3n/4+3\nu n\le n$.
 \end{proof}
 
-\begin{theorem}[Lifetime participation with large-scale repaintings]
+\begin{lemma}[Lifetime participation with large-scale repaintings]
     \label{thm:peps_dyadic_large_repainting_lifetime}
     \lean{TNLean.PEPS.Approximation.card_gates_le_of_repaintingRewrites}
     \leanok
@@ -1665,17 +1665,17 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     $\mathcal D$ for its event, and a block party participates in a gate only when
     it lies in $P(\mathcal D)$, then every block party participates in at most
     $64G$ gates (\cite[Proposition~7.1, item~2]{OpenAI2026PolynomialPEPS}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_dyadic_patch_rewrite_parties, thm:peps_dyadic_large_repainting_parties,
         thm:peps_dyadic_lifetime_parties}
-    Combine Theorems~\ref{thm:peps_dyadic_patch_rewrite_parties},
+    Combine Lemmas~\ref{thm:peps_dyadic_patch_rewrite_parties},
     \ref{thm:peps_dyadic_large_repainting_parties},
     and~\ref{thm:peps_dyadic_lifetime_parties}.
 \end{proof}
 
-\begin{theorem}[Lifetime participation of the protocol parties]
+\begin{lemma}[Lifetime participation of the protocol parties]
     \label{thm:peps_dyadic_protocol_lifetime}
     \lean{TNLean.PEPS.Approximation.participation_le_of_eventUses, TNLean.PEPS.Approximation.participation_le_of_repaintingRewrites, TNLean.PEPS.Approximation.card_gates_event_le, TNLean.PEPS.Approximation.participation_le_of_schedule}
     \leanok
@@ -1688,12 +1688,12 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     gates; for the protocol schedule with at most $b$ gates per change, $G\le189b$
     and the bound is $64\cdot189b$
     (\cite[Proposition~7.1, item~2]{OpenAI2026PolynomialPEPS}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_dyadic_lifetime_parties, thm:peps_dyadic_large_repainting_lifetime,
         thm:peps_dyadic_protocol_schedule_counts}
-    Combine Theorems~\ref{thm:peps_dyadic_lifetime_parties},
+    Combine Lemmas~\ref{thm:peps_dyadic_lifetime_parties},
     \ref{thm:peps_dyadic_large_repainting_lifetime},
     and~\ref{thm:peps_dyadic_protocol_schedule_counts}, noting that $\ast_S$ is
     used by only $1$ event ($\le G\le64G$ gates).
@@ -1707,7 +1707,7 @@ of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} (\texttt{06-geometry.tex},
 lines 12--53) as a statement about distributed constructions in the sense of
 Definition~\ref{def:peps_distributed_construction} whose chronology is cut into
 changes; see~\cite{gap:polypeps_prop71_consequences_interface}. The existence
-of such a protocol is Proposition~\ref{prop:peps_dyadic_protocol}.
+of such a protocol is Lemma~\ref{prop:peps_dyadic_protocol}.
 
 \begin{definition}[Dyadic distribution protocols and the Section 8 bounds]
     \label{def:peps_dyadic_protocol}
@@ -1832,7 +1832,7 @@ of such a protocol is Proposition~\ref{prop:peps_dyadic_protocol}.
     (\texttt{06-geometry.tex}, lines 29--30).
 \end{definition}
 
-\begin{proposition}[Distribution through a dyadic hierarchy]
+\begin{lemma}[Distribution through a dyadic hierarchy]
     \label{prop:peps_dyadic_protocol}
     \lean{TNLean.PEPS.Approximation.largeSizeDyadicProtocolConsequences}
     \leanok
@@ -1844,7 +1844,7 @@ of such a protocol is Proposition~\ref{prop:peps_dyadic_protocol}.
     of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}, applied with patch and
     information power $60$ (\texttt{07-assembly.tex}, line 11). In particular,
     the existence assertion of Definition~\ref{def:peps_dyadic_protocol} holds.
-\end{proposition}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_protocol_from_angular_and_patch_bounds,
@@ -1883,7 +1883,7 @@ of such a protocol is Proposition~\ref{prop:peps_dyadic_protocol}.
     $\nu_2\le1/20000$, both bounds hold.
 \end{proof}
 
-\begin{theorem}[The constants of the distribution protocol]
+\begin{lemma}[The constants of the distribution protocol]
     \label{thm:peps_dyadic_protocol_explicit_constants}
     \lean{TNLean.PEPS.Approximation.largeSizeDyadicProtocol_of_le,
         TNLean.PEPS.Approximation.largeSizeDyadicProtocolBounds,
@@ -1923,7 +1923,7 @@ of such a protocol is Proposition~\ref{prop:peps_dyadic_protocol}.
     $k_K$, and $2b$ pair effects and pair sources per monomial. The prefactor $G$
     of the small-patch rewrites enters only the expansion constant; the
     threshold $L_1$ is that of Proposition~3.4.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_protocol_from_angular_and_patch_bounds,
@@ -1939,7 +1939,7 @@ of such a protocol is Proposition~\ref{prop:peps_dyadic_protocol}.
     monomials and coefficient sum at most $GL^{k_K}$.
 \end{proof}
 
-\begin{theorem}[Consequences of the Section 8 protocol bounds]
+\begin{lemma}[Consequences of the Section 8 protocol bounds]
     \label{thm:peps_dyadic_protocol_consequences}
     \lean{TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.rectangularTraceNorm_physicalDensity_sub_le,
         TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.separationBounded,
@@ -1958,20 +1958,20 @@ of such a protocol is Proposition~\ref{prop:peps_dyadic_protocol}.
               nonprivate gate has link anchors differing in each coordinate by
               at most $b$ times the side of either endpoint square.
     \end{enumerate}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_protocol_density, thm:peps_dyadic_lifetime_parties}
     The changes are contractions, $\lVert r_0\rVert=1$, and the circuit and
     reference vectors agree at the first stage, so the first item is
-    Theorem~\ref{thm:peps_protocol_density} with
+    Lemma~\ref{thm:peps_protocol_density} with
     $C_{\rm ch}=C_N$ and $C_{\rm step}=C_{\rm hole}=C_E$. The second is the address bound of
     item~3 applied to the two endpoints of a link. For the last, the participation
     of a party is the number of nonprivate gates of all changes in which it
-    participates, and Theorem~\ref{thm:peps_dyadic_lifetime_parties} bounds it.
+    participates, and Lemma~\ref{thm:peps_dyadic_lifetime_parties} bounds it.
 \end{proof}
 
-\begin{theorem}[Retained norm of a protocol with the Section 8 bounds]
+\begin{lemma}[Retained norm of a protocol with the Section 8 bounds]
     \label{thm:peps_dyadic_protocol_retained_norm}
     \lean{TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.retained_norm_and_trace_le}
     \leanok
@@ -1987,12 +1987,12 @@ of such a protocol is Proposition~\ref{prop:peps_dyadic_protocol}.
     \end{align}
     without renormalizing any intermediate vector
     (\cite[Section~8.1]{OpenAI2026PolynomialPEPS}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_protocol_retained_norm}
-    As in the proof of Theorem~\ref{thm:peps_dyadic_protocol_consequences}, the
-    hypotheses of Theorem~\ref{thm:peps_protocol_density} hold with
+    As in the proof of Lemma~\ref{thm:peps_dyadic_protocol_consequences}, the
+    hypotheses of Lemma~\ref{thm:peps_protocol_density} hold with
     $C_{\rm ch}=C_N$ and $C_{\rm step}=C_{\rm hole}=C_E$, and
-    Theorem~\ref{thm:peps_protocol_retained_norm} gives both estimates.
+    Lemma~\ref{thm:peps_protocol_retained_norm} gives both estimates.
 \end{proof}

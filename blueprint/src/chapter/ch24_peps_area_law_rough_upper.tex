@@ -1,6 +1,6 @@
 \section{The rough upper comparison for a given label sequence}
 
-\begin{theorem}[The physical upper comparison with a vanishing remainder]
+\begin{lemma}[The physical upper comparison with a vanishing remainder]
     \label{thm:al_global_schmidt_bell_rough_upper}
     \lean{TNLean.PEPS.AreaLaw.eventually_suppliedGlobalSchmidtBellPrevector_rough_upper}
     \leanok
@@ -16,7 +16,7 @@
     \end{align}
     for all sufficiently large $k$, form the physical prevector $\xi_k$ from
     $\Omega$ and $\lambda_k$ as in
-    Theorem~\ref{thm:al_global_schmidt_bell_prevector}.
+    Lemma~\ref{thm:al_global_schmidt_bell_prevector}.
 
     Fix a finite index set $J$, a finite nested list $\mathcal R$ of regions
     disjoint from $X$, and $K\geq8$. Following
@@ -53,7 +53,7 @@
          & =\frac{\log4+(d^2+cK)\log(k+2)}{k}\longrightarrow0.
         \label{eq:al_rough_upper_rate}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Express the auxiliary mass (\ref{eq:al_rough_upper_label_mass}) in
@@ -65,7 +65,7 @@
 
 \section{The sharp upper comparison}
 
-\begin{theorem}[Sharp upper rate for the fill and charge roots]
+\begin{lemma}[Sharp upper rate for the fill and charge roots]
     \label{thm:al_actual_sharp_upper}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.eventually_actualScan_suppliedPrevector_sharp_upper}
     \leanok
@@ -111,7 +111,7 @@
         R_{d,c,K}(k) & \longrightarrow0.
         \label{eq:al_actual_sharp_remainder}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_scan_band_nesting,thm:al_scan_receiving_regions,
@@ -119,7 +119,7 @@
         thm:al_scan_actual_fill_admission,thm:al_scan_actual_charge_admissible}
     Combine all completed and pre-charge partitions up to $nm$ into one finite
     family; terminal maps preserve the partitions and mean-tree weights, and
-    Theorem~\ref{thm:al_scan_band_nesting} provides the common band order.
+    Lemma~\ref{thm:al_scan_band_nesting} provides the common band order.
     Applying the sharp upper comparison of
     \cite[Section~8, lines~383--418]{OpenAI2026AreaLaw} in symmetric
     coordinates with exponent $1/4$ gives the prefactors $2(1/4)a=a/2$,
@@ -127,27 +127,27 @@
     (\ref{eq:al_actual_sharp_rate})--(\ref{eq:al_actual_sharp_remainder}).
 \end{proof}
 
-\begin{theorem}[One physical label sequence with the sharp upper rate]
+\begin{lemma}[One physical label sequence with the sharp upper rate]
     \label{thm:al_actual_sharp_prevector}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_schmidtBellPrevector_sharp_upper}
     \leanok
     \uses{thm:al_global_schmidt_bell_prevector,thm:al_actual_sharp_upper}
-    In Theorem~\ref{thm:al_actual_sharp_upper}, if $\Omega_t$ is an eigenvector
+    In Lemma~\ref{thm:al_actual_sharp_upper}, if $\Omega_t$ is an eigenvector
     of a physical Hamiltonian with eigenvalue $e$, there is a single label
     sequence $\lambda_k$ whose prevector has mean-replica energy $e$, full copy
     symmetry, label $\lambda_k$ on both auxiliary registers, selected mass bound
     (\ref{eq:al_rough_upper_label_mass}), $\log\dim\lambda_k-kS(\psi_C)=o(k)$,
     and sharp upper rate (\ref{eq:al_actual_sharp_rate}) at every fill and
     charge root.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_global_schmidt_bell_prevector,thm:al_actual_sharp_upper}
-    Select $\lambda_k$ via Theorem~\ref{thm:al_global_schmidt_bell_prevector}
-    and apply Theorem~\ref{thm:al_actual_sharp_upper}.
+    Select $\lambda_k$ via Lemma~\ref{thm:al_global_schmidt_bell_prevector}
+    and apply Lemma~\ref{thm:al_actual_sharp_upper}.
 \end{proof}
 
-\begin{theorem}[The truncated target instance with an explicit power margin]
+\begin{lemma}[The truncated target instance with an explicit power margin]
     \label{thm:al_source_target_actual_sharp_upper}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_target_actualSharpUpper}
     \leanok
@@ -176,7 +176,7 @@
     (assuming $|T|\leq C_Tn^2$, $|T_d\setminus T_{d-1}|\leq n$ for
     $1\leq d\leq L$, and $d_T(x)>2L+10r_0$ for all cut-edge endpoints $x$ of
     $A$) admits a single truncated unit vector $\Omega_t$ satisfying
-    Theorem~\ref{thm:al_scan_target_typical_window}, $m,K\geq1$, and the common
+    Lemma~\ref{thm:al_scan_target_typical_window}, $m,K\geq1$, and the common
     status and moment parameters
     \begin{align}
         B   & =C_B nD(\log n)^{12}\geq1, &
@@ -191,20 +191,20 @@
     $K_{\mathrm{mom}}=C_0B$ (giving the target-instance step under the explicit
     margin (\ref{eq:al_source_target_sharp_margin}) in
     \cite[Proposition~9.6]{OpenAI2026AreaLaw}).
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_scan_target_typical_window,thm:al_scan_common_status_budget,
         thm:al_scan_status_scale_separation,thm:al_moment_weight_smallness,
         thm:al_scan_common_moment_interval,thm:al_actual_sharp_upper}
-    Theorem~\ref{thm:al_scan_target_typical_window} supplies $\Omega_t$, and
-    Theorem~\ref{thm:al_scan_common_status_budget} bounds all completed and
+    Lemma~\ref{thm:al_scan_target_typical_window} supplies $\Omega_t$, and
+    Lemma~\ref{thm:al_scan_common_status_budget} bounds all completed and
     pre-charge statuses on $\Omega_t$ by $B$ in
     (\ref{eq:al_source_target_sharp_budget}). By
-    Theorems~\ref{thm:al_scan_status_scale_separation} and
+    Lemmas~\ref{thm:al_scan_status_scale_separation} and
     \ref{thm:al_moment_weight_smallness}, the margin
     (\ref{eq:al_source_target_sharp_margin}) ensures $6a\leq\min\{c_0/\sqrt B,1\}$,
-    so Theorem~\ref{thm:al_scan_common_moment_interval} yields
+    so Lemma~\ref{thm:al_scan_common_moment_interval} yields
     (\ref{eq:al_actual_sharp_moments}) with $K_{\mathrm{mom}}=C_0B$ and
-    Theorem~\ref{thm:al_actual_sharp_upper} gives (\ref{eq:al_actual_sharp_rate}).
+    Lemma~\ref{thm:al_actual_sharp_upper} gives (\ref{eq:al_actual_sharp_rate}).
 \end{proof}
