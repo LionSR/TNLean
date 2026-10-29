@@ -160,3 +160,86 @@
     The actual supplied gate identity $\ell r=d_k^2$ gives the second
     ratio presentation.
 \end{proof}
+
+
+\begin{lemma}[The periodic physical family determines the induced QCA]
+    \label{lem:mpu_actual_qca_family_independence}
+    \lean{SpinChain.mpuQuasiLocalEquiv_eq_of_mpo_eq,
+        SpinChain.mpuQuasiLocalEquiv_eq_bufferedMPUQuasiLocalAut}
+    \notready
+    \uses{thm:mpu_actual_qca,lem:mpu_actual_blocked_nearest_neighbour}
+    Two MPU tensors on the same positive physical alphabet, possibly
+    with different bond dimensions, induce identical actual quasi-local
+    automorphisms if their periodic physical operators agree at every
+    length greater than one. The named actual automorphism also equals
+    the completed automorphism from any supplied standard form of any
+    positive block of that same tensor.
+\end{lemma}
+\begin{proof}
+    \notready
+    A common finite chain contains a given local observable and both
+    source-radius buffers. The two actual finite conjugations coincide
+    because their physical periodic matrices coincide. Faithfulness
+    gives equality on the local algebra, and continuity and completion
+    density give equality on the quasi-local algebra. The supplied
+    standard-form automorphism has the same finite evaluation formula.
+\end{proof}
+
+\begin{lemma}[The canonical MPU index is the logarithm of its actual QCA index]
+    \label{lem:mpu_canonical_actual_log_index}
+    \lean{SpinChain.canonicalMPU_blocked_propagatesWithin,
+        SpinChain.canonicalMPU_index_eq_neg_logb_gnvwIndex}
+    \notready
+    \uses{lem:mpu_actual_blocked_gnvw_index,lem:mpu_actual_qca_family_independence}
+    Let an MPU be in canonical form II, and let its positive-length
+    $k$-block tensor be simple. Its named actual induced automorphism,
+    grouped in cells of length $k$, has nearest-neighbour propagation.
+    At this scale its positive rational index satisfies
+    \begin{align}
+        \operatorname{ind}_{\rm MPU}
+         & =-\log_2\!\left(\operatorname{ind}_{\rm QCA}\right).
+    \end{align}
+    The canonical source gates, least support algebra, matrix size and
+    nearest-neighbour propagation are derived.
+\end{lemma}
+\begin{proof}
+    \notready
+    The actual support formula gives
+    $\operatorname{ind}_{\rm QCA}=\ell_k/d^k$.
+    The canonical MPU index at that same simple block is
+    $-\log_2(\ell_k/d^k)$. Equality with the actual named automorphism
+    is Lemma~\ref{lem:mpu_actual_qca_family_independence}.
+\end{proof}
+
+\begin{theorem}[The actual MPU--QCA index comparison after a derived blocking]
+    \label{thm:mpu_actual_log_index_comparison}
+    \lean{SpinChain.exists_blocked_mpu_index_comparison}
+    \notready
+    \uses{lem:mpu_canonical_actual_log_index,lem:mpu_actual_qca_family_independence}
+    Every MPU on positive physical and bond dimensions $d,D$ has a
+    positive block length $k\le D^2$ such that its actual induced QCA,
+    grouped in blocks of length $k$, has nearest-neighbour propagation
+    and
+    \begin{align}
+        \operatorname{ind}_{\rm MPU}
+         & =-\log_2\!\left(\operatorname{ind}_{\rm QCA}\right).
+    \end{align}
+    Here the left side is the public MPU index, chosen through a reduced
+    canonical representative; the right side is the positive rational
+    index of the actual blocked automorphism. No canonical datum,
+    support-factor presentation or index identity is an input.
+    This is the corrected normalization of
+    \cite[Appendix, lines~2329--2334]{Cirac2017MPU}, recorded in
+    \cite{gap:mpu_qca_index_normalization}.
+\end{theorem}
+\begin{proof}
+    \notready
+    Choose a reduced canonical representative of bond dimension
+    $E\le D$ with the same positive-length periodic operators.
+    It has a simple block of length $k\le E^2\le D^2$.
+    Lemma~\ref{lem:mpu_canonical_actual_log_index} gives the comparison
+    for that representative. The public MPU index agrees with its
+    canonical index. Lemma~\ref{lem:mpu_actual_qca_family_independence}
+    identifies the actual quasi-local automorphisms, and therefore also
+    the actual blocked automorphisms and their positive rational indices.
+\end{proof}
