@@ -28,7 +28,7 @@ such a vector in the kernel complement. This lemma supplies only the final
 finite spectral argument of
 \cite[proof of the gaplessness theorem]{FernandezGonzalez2015Uncle}.
 
-\begin{corollary}[Subtracting the actual ground-space projection]
+\begin{lemma}[Subtracting the actual ground-space projection]
     \label{cor:uncle_variational_projection_bound}
     \lean{MPSTensor.exists_pos_eigenvalue_uncleHamiltonianES_lt_of_projection_bound}
     \leanok
@@ -40,7 +40,7 @@ finite spectral argument of
         <\varepsilon(\|v\|^2-\|Pv\|^2)
     \]
     yields an actual eigenvalue $0<\mu<\varepsilon$ of $H'_P$.
-\end{corollary}
+\end{lemma}
 \begin{proof}\leanok
     Put $w=v-Pv$. Then $w$ is orthogonal to the kernel,
     $H'_Pw=H'_Pv$, and $\langle H'_Pv,Pv\rangle=0$ by symmetry.
