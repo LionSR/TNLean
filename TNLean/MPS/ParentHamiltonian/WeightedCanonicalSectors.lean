@@ -174,12 +174,21 @@ theorem hasEigenvalue_of_block {k : Fin h.r} {μ : ℂ}
 /-- Spectral-radius normalization supplies a unit-weight sector, without
 assuming that any canonical weight was already equal to one. Source:
 PGVWC07, normalized Condition C2, lines 954–963. -/
-theorem exists_weight_eq_one [NeZero D]
+theorem exists_weight_eq_one
     (hRadius : spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
         (Kraus.transferMap A)) = 1) :
     ∃ k, h.weight k = 1 := by
   classical
+  have hD : D ≠ 0 := by
+    intro hzero
+    subst D
+    have hMapZero :
+        ((Module.End.toContinuousLinearMap (Matrix (Fin 0) (Fin 0) ℂ))
+          (Kraus.transferMap A)) = 0 := Subsingleton.elim _ _
+    rw [hMapZero, spectralRadius_zero] at hRadius
+    exact zero_ne_one hRadius
+  letI : NeZero D := ⟨hD⟩
   by_contra hnone
   have hlt : ∀ k, h.weight k < 1 := by
     intro k
@@ -241,7 +250,7 @@ theorem weight_eq_one_unique_of_simple_fixedEigenvalue
 multiplicity, determines a unique unit-weight canonical block. No dominant
 sector is supplied as a premise. Source: PGVWC07, lines 954–963; the
 multiplicity convention is explained in the module docstring. -/
-theorem existsUnique_weight_eq_one_of_c2 [NeZero D]
+theorem existsUnique_weight_eq_one_of_c2
     (hRadius : spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
         (Kraus.transferMap A)) = 1)
@@ -258,7 +267,7 @@ theorem existsUnique_weight_eq_one_of_c2 [NeZero D]
 C2 and the actual weighted decomposition. The remainder convergence is a
 conclusion, not an assumption. Source: PGVWC07, Theorem 6, lines 970–993,
 with normalized generic C2 at lines 954–963. -/
-theorem exists_dominantBlock_physical_limit_of_c2 [NeZero D]
+theorem exists_dominantBlock_physical_limit_of_c2
     (hRadius : spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
         (Kraus.transferMap A)) = 1)
@@ -300,7 +309,7 @@ theorem isNormalTensor_of_weight_eq_one_of_c2
 /-- The actual weighted state has a unique dominant normal block, and its
 physical remainder tends to zero, from canonical form and normalized generic
 C2 alone. Source: PGVWC07, Theorem 6, lines 954–993. -/
-theorem exists_dominantNormalBlock_physical_limit_of_c2 [NeZero D]
+theorem exists_dominantNormalBlock_physical_limit_of_c2
     (hRadius : spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
         (Kraus.transferMap A)) = 1)
