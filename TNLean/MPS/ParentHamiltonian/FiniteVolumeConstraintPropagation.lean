@@ -78,8 +78,10 @@ theorem periodicLocalInteractionES_mpvState_eq_zero_of_groundSpaceES_le_ker
   let U := cyclicActiveBlockConfigLinearIsometryEquiv d L hLM i
   apply U.injective
   rw [map_zero]
-  simp only [periodicLocalInteractionES, dif_pos hLM, U, LinearEquiv.conj_apply,
-    LinearMap.comp_apply, LinearEquiv.apply_symm_apply]
+  rw [show U (periodicLocalInteractionES h i (mpvState A M)) =
+    ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (M - L))
+      (LinearMap.toContinuousLinearMap h) (U (mpvState A M)) from
+        cyclicActiveBlock_periodicLocalInteractionES_apply h hLM i _]
   change ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (M - L))
     (LinearMap.toContinuousLinearMap h) (U (mpvState A M)) = 0
   apply PiLp.ext
