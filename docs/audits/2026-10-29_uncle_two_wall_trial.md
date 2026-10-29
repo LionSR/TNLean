@@ -56,10 +56,22 @@ premise of these cancellation results.
 
 ## Remaining work and verification boundary
 
-The full global cyclic restriction calculation, including the nonwrapping
-and wrapping uniform intervals, still needs assembly. The four bonds at
-wall-window endpoints require actual estimates; cancellation alone does not
-bound their total energy. Norm growth, small ground-sector overlaps,
+`UncleTrialLocalization.lean` now derives the full global cyclic cancellation.
+Numbered physical segments are defined by their actual finite coordinates.
+A generic inside/outside segment calculation separates a varying pair from
+its fixed exterior. The five nonwrapping regions use the two moving-wall
+cancellations and the existing pure A/B local-kernel inclusions. The periodic
+bond at site 6N rotates the last and first A letters together by trace cyclicity.
+Three existing wrapping-site evaluation lemmas are promoted for reuse rather
+than copied.
+
+The exact surviving set is {N-1,2N,4N-1,5N}; its cardinality is proved to be
+four for N positive. Every cyclic local projector outside this set kills the
+actual source trial. Expanding the actual uncle Hamiltonian and deleting
+these zero summands proves H phi is exactly the sum of its four endpoint
+contributions. No support condition is supplied as a hypothesis. The four
+endpoint contributions still require actual estimates; this exact reduction
+alone does not bound their total energy. Norm growth, small ground-sector overlaps,
 generic nonzero leading coefficients, removal of the complete ground
 projection and the finite-dimensional variational spectral conclusion
 remain open in this slice. The one-wall transfer recursion is parallel work.
