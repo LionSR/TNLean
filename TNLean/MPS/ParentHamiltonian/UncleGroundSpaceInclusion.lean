@@ -17,7 +17,7 @@ both periodic MPS vectors. No injectivity of the perturbation or limiting
 tensor is needed for this direction.
 
 This is the containment step in arXiv:1210.6613, Theorem
-`thm:gs-subspace-uncle`, lines 1050–1068. The reverse containment requires
+thm:gs-subspace-uncle, lines 1050–1068. The reverse containment requires
 the source's intersection and closure properties and is not asserted here.
 -/
 
@@ -50,7 +50,7 @@ private theorem trace_mul_uncleBlockMatrix
 
 /-- A boundary matrix supported on the first diagonal block recovers the
 first tensor's two-site boundary map. Source: arXiv:1210.6613,
-`eq:uncletensor-2site` and proof of `thm:gs-subspace-uncle`, lines 1050–1068. -/
+eq:uncletensor-2site and proof of thm:gs-subspace-uncle, lines 1050–1068. -/
 theorem groundSpaceMap_uncleTensor_left
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
@@ -67,7 +67,7 @@ theorem groundSpaceMap_uncleTensor_left
 
 /-- A boundary matrix supported on the second diagonal block recovers the
 second tensor's two-site boundary map. Source: arXiv:1210.6613,
-`eq:uncletensor-2site` and proof of `thm:gs-subspace-uncle`, lines 1050–1068. -/
+eq:uncletensor-2site and proof of thm:gs-subspace-uncle, lines 1050–1068. -/
 theorem groundSpaceMap_uncleTensor_right
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
@@ -83,7 +83,7 @@ theorem groundSpaceMap_uncleTensor_right
     Kraus.evalWord, decodeBlock]
 
 /-- The first blocked local parent space lies in the uncle boundary space.
-Source: arXiv:1210.6613, proof of `thm:gs-subspace-uncle`, lines 1050–1068. -/
+Source: arXiv:1210.6613, proof of thm:gs-subspace-uncle, lines 1050–1068. -/
 theorem groundSpace_blockTensor_le_uncleTensor_left
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
@@ -93,7 +93,7 @@ theorem groundSpace_blockTensor_le_uncleTensor_left
   exact ⟨uncleBlockMatrix X 0 0 0, groundSpaceMap_uncleTensor_left A B R L X⟩
 
 /-- The second blocked local parent space lies in the uncle boundary space.
-Source: arXiv:1210.6613, proof of `thm:gs-subspace-uncle`, lines 1050–1068. -/
+Source: arXiv:1210.6613, proof of thm:gs-subspace-uncle, lines 1050–1068. -/
 theorem groundSpace_blockTensor_le_uncleTensor_right
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
@@ -130,7 +130,7 @@ private theorem uncleInteractionES_apply_eq_zero_of_blocked_groundSpace
 
 /-- The actual two-site uncle interaction annihilates the first local parent
 space, without a perturbation-injectivity premise. Source: arXiv:1210.6613,
-proof of `thm:gs-subspace-uncle`, lines 1050–1068. -/
+proof of thm:gs-subspace-uncle, lines 1050–1068. -/
 theorem uncleInteractionES_apply_eq_zero_left
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
@@ -142,7 +142,7 @@ theorem uncleInteractionES_apply_eq_zero_left
 
 /-- The actual two-site uncle interaction annihilates the second local parent
 space, without a perturbation-injectivity premise. Source: arXiv:1210.6613,
-proof of `thm:gs-subspace-uncle`, lines 1050–1068. -/
+proof of thm:gs-subspace-uncle, lines 1050–1068. -/
 theorem uncleInteractionES_apply_eq_zero_right
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
@@ -179,7 +179,7 @@ private theorem uncleHamiltonianES_apply_eq_zero_of_parent_windows
 
 /-- Every periodic first-sector parent ground vector is annihilated by the
 actual uncle Hamiltonian. Source: arXiv:1210.6613, proof of
-`thm:gs-subspace-uncle`, lines 1050–1068. -/
+thm:gs-subspace-uncle, lines 1050–1068. -/
 theorem uncleHamiltonianES_apply_eq_zero_of_mem_chainGroundSpace_left
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
@@ -193,7 +193,7 @@ theorem uncleHamiltonianES_apply_eq_zero_of_mem_chainGroundSpace_left
 
 /-- Every periodic second-sector parent ground vector is annihilated by the
 actual uncle Hamiltonian. Source: arXiv:1210.6613, proof of
-`thm:gs-subspace-uncle`, lines 1050–1068. -/
+thm:gs-subspace-uncle, lines 1050–1068. -/
 theorem uncleHamiltonianES_apply_eq_zero_of_mem_chainGroundSpace_right
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
@@ -207,7 +207,7 @@ theorem uncleHamiltonianES_apply_eq_zero_of_mem_chainGroundSpace_right
 
 /-- The span of the two actual periodic MPS vectors lies in the uncle
 Hamiltonian kernel. This is the lower inclusion of arXiv:1210.6613,
-`thm:gs-subspace-uncle`, lines 1050–1068; no converse or dimension assertion
+thm:gs-subspace-uncle, lines 1050–1068; no converse or dimension assertion
 is made without the intersection and closure arguments. -/
 theorem span_mpv_le_ker_uncleHamiltonianES
     (A : MPSTensor d a) (B : MPSTensor d b)

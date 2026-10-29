@@ -180,3 +180,27 @@ infinite-volume Hamiltonian is included here.
     Equality of the kernel requires the separate intersection and closure
     properties and is not concluded from this inclusion.
 \end{proof}
+
+\begin{theorem}[Local conditions for the uncle kernel]
+    \label{thm:uncle_kernel_local_conditions}
+    \lean{MPSTensor.uncleInteractionES_isPositive,
+        MPSTensor.uncleInteractionES_apply_eq_zero_iff,
+        MPSTensor.uncleHamiltonianES_apply_eq_zero_iff}
+    \notready
+    \uses{thm:two_block_uncle_parent_limit,def:two_block_uncle_tensor}
+    At each periodic length $N\ge2$, a vector is in $\ker H'_P$ if and only
+    if every cyclic two-site slice lies in $\ker h'_P$. After grouping its
+    two physical sites, this local kernel is precisely the boundary-map
+    range of $U$. The statement does not require injectivity.
+\end{theorem}
+\begin{proof}
+    The local interaction is an orthogonal-complement projector conjugated
+    by the physical configuration isometry, hence positive. Every cyclic
+    summand has the form $R^*h'_PR$ and is positive. For positive physical
+    dimension, the averaging coefficient is strictly positive, so the
+    kernel of their sum is their common kernel. Vanishing of
+    $R^*h'_PR$ on a vector forces the nonnegative quadratic form of
+    $h'_P$ on its slice to vanish, and therefore forces the slice into
+    $\ker h'_P$. The converse is immediate. At physical dimension zero,
+    the full configuration space is empty and the assertion holds directly.
+\end{proof}

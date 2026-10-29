@@ -19,7 +19,15 @@ limit needs a separate injectivity argument. The limit theorems remain in
 `UncleParentLimit.lean`; draft #10308 derives their injectivity premise from
 the source perturbation condition. This PR is independent of that draft.
 
-The reverse kernel inclusion is not supplied: the source's open-chain
+The companion `UncleKernelConditions.lean` identifies the actual Hamiltonian
+kernel with all cyclic local uncle-kernel conditions. It proves positivity
+by conjugating the existing orthogonal-complement projector and reuses
+QICLean's `WeightedPositiveKernel.apply_weighted_sum_eq_zero_iff`. The
+physical-dimension-zero case is handled directly, so no extra dimension
+hypothesis is needed. The local kernel is explicitly the transported
+uncle boundary-map range.
+
+The reverse kernel inclusion into the two-sector span is not supplied: the source's open-chain
 intersection identity and periodic closure identity remain necessary.
 Neither equality nor exact degeneracy follows from the containment alone.
 The issue stays open and the new Blueprint entry is pending verification.
