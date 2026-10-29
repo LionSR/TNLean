@@ -9441,9 +9441,9 @@ spectral split → block extraction → MPV calculation → strict bounds
   in `PEPS/AreaLaw/SafeRectangleAreaLaw.lean`, using
   `exists_regionalEntropy_safe_rect_le_linear`.
 - **Disposition:** the second occurrence was the unused post-area-law theorem
-  `exists_uniform_boxEntropy_improvement_real`. Its hypothesis-free linear
-  input already implies every output exponent it states. The theorem and its
-  isolated Blueprint entry were removed rather than abstracting that duplicate
+  `exists_uniform_boxEntropy_improvement_real`. Its linear entropy input already
+  implies every output exponent without an initial power-law bound. The theorem
+  and its isolated Blueprint entry were removed rather than abstracting that duplicate
   proof. The independent integer-clearance bootstrap is retained. See
   `docs/audits/2026-10-29_real_clearance_corollary_removal.md` and issue #10152.
 

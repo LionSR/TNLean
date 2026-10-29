@@ -23,6 +23,15 @@ implies `F_d(r) ≤ K r` by `Real.sSup_le`, including an empty collection. Hence
 No initial power-law bound, input coefficient, or source bootstrap is needed
 for that consequence.
 
+The coefficient is chosen from fixed `q`, `R`, `J` and `Δ` before the real
+clearance and every physical instance. The retained clearance hypothesis is
+literally the removed one, `d * Q.size < supDist t z` for every rectangle site
+and boundary endpoint. The retained result allows every `d ≥ 0`, hence every
+`d > 2R+10` in the removed statement. Its assumptions on the local Hamiltonian
+and gapped ground vector are unchanged. Finally, the removed exponent is
+`e' = (1 - BootstrapParameters.ell e₀) * e ≥ 0`, by the existing parameter
+bounds, so the general linear consequence applies with the same quantifier order.
+
 ## Why deletion is the chosen resolution
 
 The removed proof already used precisely this linear bound. Its initial bound
