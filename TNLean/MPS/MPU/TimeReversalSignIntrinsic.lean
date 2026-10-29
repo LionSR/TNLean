@@ -165,6 +165,17 @@ theorem TwoSiteStandardFormData.timeReversalSign_eq_intrinsic
     timeReversalSign u v = intrinsicTimeReversalSign W := by
   rw [timeReversalSign, intrinsicTimeReversalSign, S.timeReversalTrace_eq_periodicTrace]
 
+/-- Equality of the actual two-site periodic operators determines the
+intrinsic trace, including between different ambient bond dimensions.
+No standard-form choice or canonical presentation is required.
+Source: arXiv:1703.09188, `prop:sigma-well-defined`, lines 1613--1627. -/
+theorem intrinsicTimeReversalSign_eq_of_mpo_two_eq
+    {D' : ℕ} {W : MPOTensor d D} {W' : MPOTensor d D'}
+    (hEq : mpo W 2 = mpo W' 2) :
+    intrinsicTimeReversalSign W = intrinsicTimeReversalSign W' := by
+  rw [intrinsicTimeReversalSign, intrinsicTimeReversalSign,
+    timeReversalPeriodicTrace, timeReversalPeriodicTrace, hEq]
+
 /-- Equality of the actual two-block periodic operators gives representative
 independence of the trace sign, even at different ambient bond dimensions.
 No canonical presentation, source-cut choices or comparison gauges are
@@ -175,9 +186,8 @@ theorem TwoSiteStandardFormData.timeReversalSign_eq_of_mpo_two_eq
     {u v u' v' : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ}
     (S : TwoSiteStandardFormData W u v) (S' : TwoSiteStandardFormData W' u' v')
     (hEq : mpo W 2 = mpo W' 2) : timeReversalSign u v = timeReversalSign u' v' := by
-  rw [S.timeReversalSign_eq_intrinsic, S'.timeReversalSign_eq_intrinsic,
-    intrinsicTimeReversalSign, intrinsicTimeReversalSign,
-    timeReversalPeriodicTrace, timeReversalPeriodicTrace, hEq]
+  rw [S.timeReversalSign_eq_intrinsic, S'.timeReversalSign_eq_intrinsic]
+  exact intrinsicTimeReversalSign_eq_of_mpo_two_eq hEq
 
 /-- The intrinsic sign expression is continuous in the actual tensor,
 independently of all source-factor choices. Source context:

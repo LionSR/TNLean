@@ -9759,3 +9759,18 @@ removed after the dependency audit exposed it.
   new spectral predicate or supplied similarity premise is added to the
   source-facing canonical statements. The derived scalar constant remains
   explicit, avoiding an unjustified normalization to one.
+
+### Intrinsic trace transport through actual periodic families — promoted (2026-10-29)
+
+- **Pattern:** The intrinsic trace is a fixed swap-contracted expression in
+  the length-two physical matrix. Equality of actual blocked periodic
+  operators therefore transports it without a bond-space gauge.
+- **Defined in:** `MPS/MPU/TimeReversalSignIntrinsic.lean`,
+  `intrinsicTimeReversalSign_eq_of_mpo_two_eq`; extracted from the existing
+  supplied-standard-form independence proof, which now calls it.
+- **Second consumer:** `MPS/MPU/IntrinsicBlockingParity.lean` first uses the
+  existing exact blocked-MPO reindexing to transport every positive blocked
+  trace, then removes the canonical input assumption from intrinsic parity
+  using the existing reduced representative.
+- **Decision:** Promote the existing physical-matrix argument, preserving
+  positive-length scope and avoiding source-factor transport across bonds.

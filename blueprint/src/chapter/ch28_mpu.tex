@@ -12974,3 +12974,46 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     unwinding in \cite[lines~1643--1733]{Cirac2017MPU}. The unrestricted
     source proposition remains separate.
 \end{lemma}
+
+\begin{lemma}[Intrinsic blocked traces depend only on the physical family]
+    \label{lem:mpu_intrinsic_blocked_trace_representative}
+    \lean{MPOTensor.intrinsicTimeReversalSign_eq_of_mpo_two_eq,
+        MPOTensor.intrinsicTimeReversalSign_blockTensor_eq_of_mpo_eq}
+    \notready
+    Let $U,V$ have the same physical dimension, with possibly different bond
+    dimensions. Equality $U^{(2)}=V^{(2)}$ gives
+    $\sigma_{\mathrm{int}}(U)=\sigma_{\mathrm{int}}(V)$.
+    If $U^{(N)}=V^{(N)}$ for every $N>0$, then for every $k>0$,
+    \[
+        \sigma_{\mathrm{int}}(U_k)=\sigma_{\mathrm{int}}(V_k).
+    \]
+    Indeed, the actual two-site periodic operators of the $k$-site blocks
+    are the same coordinate reindexing of the original length-$2k$ operators.
+    Equality at length zero and an identification of bond spaces are unnecessary.
+\end{lemma}
+
+\begin{lemma}[Intrinsic time-reversal blocking parity for arbitrary MPUs]
+    \label{lem:mpu_intrinsic_blocking_parity}
+    \lean{MPOTensor.IsMPU.intrinsic_blocking_trace_parity}
+    \notready
+    \uses{lem:mpu_intrinsic_blocked_trace_representative,
+        lem:mpu_canonical_intrinsic_blocking_parity,
+        thm:mpu_reduced_cfii_representative}
+    Let $d,D>0$ and let $U$ be an MPU tensor satisfying
+    $U^{(N)}=U^{(N)\dagger}$ at every even $N>1$. For each $k>0$,
+    \[
+        \sigma_{\mathrm{int}}(U_k)=
+        \begin{cases}
+            \sigma_{\mathrm{int}}(U),   & k\text{ odd},  \\
+            \sigma_{\mathrm{int}}(U_2), & k\text{ even}.
+        \end{cases}
+    \]
+    Choose a reduced canonical representative with the same positive-length
+    physical family. That family equality preserves the actual adjoint
+    symmetry and all the intrinsic blocked traces. Apply the canonical
+    result and transfer the identities back. Thus no canonical form,
+    full-support datum or simplicity assumption is required for the input.
+    This proves the intrinsic numerical parity pattern. The particular
+    blocked gates in \cite[lines~1657--1729]{Cirac2017MPU} and their
+    sequential unwinding remain a separate construction.
+\end{lemma}

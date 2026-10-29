@@ -96,6 +96,7 @@ import TNLean.MPS.MPU.IntervalJointSuffixFactorization
 import TNLean.MPS.MPU.IntervalMergingSupport
 import TNLean.MPS.MPU.IntervalParentColumns
 import TNLean.MPS.MPU.IntervalRegisterLayout
+import TNLean.MPS.MPU.IntrinsicBlockingParity
 import TNLean.MPS.MPU.InverseCompatibleComparisonUnitarity
 import TNLean.MPS.MPU.InverseCompatibleCutComparison
 import TNLean.MPS.MPU.InverseCompatibleFamilyProperties
