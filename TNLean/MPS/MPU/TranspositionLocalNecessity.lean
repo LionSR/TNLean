@@ -69,13 +69,13 @@ private theorem transpose_local_phase_of_gate_gauges
     ((Matrix.isUnitaryBetween_iff_mem_unitaryGroup _).mpr Y.property).map_star
   have hUnit : (Ybar * (X : Matrix (Fin q) (Fin q) ℂ)).IsUnitaryBetween :=
     hYunit.mul _ _ ((Matrix.isUnitaryBetween_iff_mem_unitaryGroup _).mpr X.property)
-  have hGram : (star c * c) • (1 : Matrix (Fin q) (Fin q) ℂ) = 1 := by
+  have hGram : (c * star c) • (1 : Matrix (Fin q) (Fin q) ℂ) = 1 := by
     have h := hUnit.1
     rw [hYX] at h
     simpa only [Matrix.IsIsometry, Matrix.conjTranspose_smul, Matrix.conjTranspose_one,
       Matrix.smul_mul, Matrix.mul_smul, smul_smul, Matrix.one_mul] using h
   let i : Fin q := ⟨0, NeZero.pos q⟩
-  have hc : star c * c = 1 := by
+  have hc : c * star c = 1 := by
     have h := congrArg (fun M : Matrix (Fin q) (Fin q) ℂ ↦ M i i) hGram
     simpa only [Matrix.smul_apply, Matrix.one_apply, ↓reduceIte,
       smul_eq_mul, mul_one] using h
@@ -88,15 +88,14 @@ private theorem transpose_local_phase_of_gate_gauges
   rw [hD, hY, Matrix.smul_kronecker]
   rfl
 
-/-- Actual even-chain transposition symmetry gives a literal local phase
-certificate for the supplied normalized source factors. All gauges and
-square-rank identifications are derived. Source: CPSV17,
-`prop:local-char-transposition` and `UUtransposetrick`, lines 1258–1288. -/
-theorem IsMPUCanonicalFormII.exists_source_transposition_phase_certificate
+/-- Gate comparison at derived square ranks, kept abstract in the supplied factor
+record. Source: CPSV17, `UUtransposetrick`, lines 1258–1288. -/
+private theorem source_transposition_certificate_of_even_symmetry
     {d D : ℕ} {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
     (hsimple : IsMPUSimple U) (S : SourceFactors U hU.ρ)
+    (hr : r[U] = d) (hl : ℓ[U] = d)
     (hTR : ∀ N : ℕ, 1 < N → Even N → mpo U N = (mpo U N)ᵀ) :
-    ∃ (hr : r[U] = d) (hl : ℓ[U] = d) (c : ℂ)
+    ∃ (c : ℂ)
       (x : Matrix.unitaryGroup (Fin d) ℂ), ‖c‖ = 1 ∧
       Matrix.reindex (Equiv.prodCongr (finCongr hl) (finCongr hr)) (Equiv.refl _)
           (SourceFactors.sourceU U S) =
@@ -105,7 +104,6 @@ theorem IsMPUCanonicalFormII.exists_source_transposition_phase_certificate
           (Matrix.reindex (Equiv.refl _)
             (Equiv.prodCongr (finCongr hr) (finCongr hl)) (SourceFactors.sourceV U S))ᵀ := by
   classical
-  obtain ⟨hr, hl⟩ := hU.sourceRanks_eq_phys_of_even_mpo_eq_transpose hsimple hTR
   let T := SourceFactors.physicalTranspose hU hsimple S hr hl
   have hEq : ∀ N : ℕ, 1 < N → Even N →
       mpo U N = mpo (MPOTensor.physicalTransposeTensor U) N := by
@@ -167,8 +165,29 @@ theorem IsMPUCanonicalFormII.exists_source_transposition_phase_certificate
     rw [hVA, hVFT] at h
     simpa only [X', Y', Matrix.star_eq_conjTranspose, Matrix.conjTranspose_reindex] using h
   have hA : A.IsCoisometry := (huS.reindex _ (Equiv.prodCongr L R) (Equiv.refl _)).2
-  letI : NeZero d := hU.neZero_phys
+  let : NeZero d := hU.neZero_phys
   obtain ⟨c, x, hc, hlocal⟩ := transpose_local_phase_of_gate_gauges A B hA X' Y' hfirst hsecond
+  exact ⟨c, x, hc, hlocal⟩
+
+/-- Actual even-chain transposition symmetry gives a literal local phase
+certificate for the supplied normalized source factors. All gauges and
+square-rank identifications are derived. Source: CPSV17,
+`prop:local-char-transposition` and `UUtransposetrick`, lines 1258–1288. -/
+theorem IsMPUCanonicalFormII.exists_source_transposition_phase_certificate
+    {d D : ℕ} {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
+    (hsimple : IsMPUSimple U) (S : SourceFactors U hU.ρ)
+    (hTR : ∀ N : ℕ, 1 < N → Even N → mpo U N = (mpo U N)ᵀ) :
+    ∃ (hr : r[U] = d) (hl : ℓ[U] = d) (c : ℂ)
+      (x : Matrix.unitaryGroup (Fin d) ℂ), ‖c‖ = 1 ∧
+      Matrix.reindex (Equiv.prodCongr (finCongr hl) (finCongr hr)) (Equiv.refl _)
+          (SourceFactors.sourceU U S) =
+        c • ((x : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ
+          (x : Matrix (Fin d) (Fin d) ℂ)ᵀ) *
+          (Matrix.reindex (Equiv.refl _)
+            (Equiv.prodCongr (finCongr hr) (finCongr hl)) (SourceFactors.sourceV U S))ᵀ := by
+  obtain ⟨hr, hl⟩ := hU.sourceRanks_eq_phys_of_even_mpo_eq_transpose hsimple hTR
+  obtain ⟨c, x, hc, hlocal⟩ :=
+    source_transposition_certificate_of_even_symmetry hU hsimple S hr hl hTR
   exact ⟨hr, hl, c, x, hc, hlocal⟩
 
 /-- The actual chosen source standard form has the literal four-original-spin
@@ -192,6 +211,14 @@ theorem IsMPUCanonicalFormII.exists_local_transposition_certificate
   obtain ⟨hr, hl, c, x, hc, h⟩ :=
     hU.blockTwo.exists_source_transposition_phase_certificate
       (hU.isMPUSimple_blockTwo hsimple) (hU.twoSiteSourceFactors hsimple) hTR
+  change Matrix.reindex (Equiv.prodCongr (finCongr hl) (finCongr hr)) (Equiv.refl _)
+      (SourceFactors.sourceU (ρ := hU.ρ) (MPOTensor.blockTwo U)
+        (hU.twoSiteSourceFactors hsimple)) =
+    c • ((x : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
+      (x : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᵀ) *
+      (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr (finCongr hr) (finCongr hl))
+        (SourceFactors.sourceV (ρ := hU.ρ) (MPOTensor.blockTwo U)
+          (hU.twoSiteSourceFactors hsimple)))ᵀ at h
   obtain ⟨hrB, hlB⟩ := hU.twoSite_sourceRanks hsimple
   have hrU : r[U] = d := mul_left_cancel₀ hU.neZero_phys.out (hrB.symm.trans hr)
   have hlU : ℓ[U] = d := mul_right_cancel₀ hU.neZero_phys.out (hlB.symm.trans hl)
@@ -226,7 +253,9 @@ theorem IsMPUCanonicalFormII.exists_local_transposition_certificate
       (x₀ : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
         (x₀ : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᵀ := by
     change Matrix.reindex (Equiv.prodCongr e.symm e.symm)
-      (Equiv.prodCongr e.symm e.symm) _ = _
+      (Equiv.prodCongr e.symm e.symm)
+      ((x : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
+        (x : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᵀ) = _
     dsimp only [x₀]
     rw [Matrix.transpose_reindex]
     exact (Matrix.kroneckerMap_reindex (fun a b : ℂ ↦ a * b)

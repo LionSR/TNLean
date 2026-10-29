@@ -191,20 +191,21 @@ theorem IsMPUCanonicalFormII.mpo_standardForm_even_eq_transpose_of_local_certifi
     obtain ⟨hA, hB⟩ := coarse_gates_eq_four_spin_gates hU hsimple hrU hlU hr hl
     rw [hA, hB]
     have h := congrArg E hlocal
-    rw [Matrix.smul_mul, map_smul,
-      ← Matrix.reindexLinearEquiv_mul ℂ ℂ p p p] at h
+    rw [Matrix.smul_mul, map_smul] at h
+    conv_rhs at h => rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ p p p]
     have hK : E ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
         (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᵀ) =
         (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
           (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᵀ := by
-      change Matrix.reindex (Equiv.prodCongr e e) (Equiv.prodCongr e e) _ = _
+      simp only [E, p, Matrix.coe_reindexLinearEquiv]
       dsimp only [x']
       rw [Matrix.transpose_reindex]
       exact (Matrix.kroneckerMap_reindex (fun a b : ℂ ↦ a * b) e e e e
         (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
         (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᵀ).symm
     rw [hK] at h
-    simp only [Matrix.transpose_reindex] at ⊢
+    simp only [E, p, Matrix.coe_reindexLinearEquiv,
+      Matrix.transpose_reindex] at h ⊢
     rw [Matrix.smul_mul]
     exact h
   exact hU.blockTwo.mpo_even_eq_transpose_of_source_local_certificate

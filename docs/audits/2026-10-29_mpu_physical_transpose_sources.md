@@ -164,3 +164,16 @@ projection repair is propagated here, including explicit boundary arguments
 in the transpose gate transport and proving the coarse local equation before
 instantiating the block canonical record. No statements or hypotheses change,
 and no local Lean was run.
+
+## Hosted necessity diagnostics on `1833e965e`
+
+Job `123569707562` cleared the phase-deformation scalar-coercion failure and
+reached the local necessity module. Its concrete failures were the scalar
+Gram factor order, a deterministic timeout in the combined rank derivation
+and gauge comparison, and the preserved-boundary projection when applying
+the four-spin dictionary. The comparison now takes the already derived
+square ranks in a private helper over the abstract supplied factor record;
+the public statement still derives those ranks. The scalar order and
+preserved boundary are explicit. The converse also consumes the parent
+the targeted right-hand index-transport repair. No statements or hypotheses changed;
+no local Lean command was run.
