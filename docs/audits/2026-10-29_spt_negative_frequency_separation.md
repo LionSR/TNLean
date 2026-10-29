@@ -101,3 +101,12 @@ specialized complex integral identity directly after changing the endpoint.
 The centering estimates use explicit two-term addition monotonicity. The
 rate module's reported unnecessary tactic sequencing is also removed.
 No mathematical statements changed and no local Lean command was run.
+
+## Verified-head diagnostics on `5df07c430`
+
+Job `123592310784` records `PR_HEAD_SHA` exactly as
+`5df07c430bfd60f6a00d9eb4b6c411426590ccb7`. It compiles observable
+centering, the Gaussian frequency rate and sharp ground covariance. Its
+only primary failure is the namespace of the specialized complex integral
+identity: the pinned declaration is global, so the proof now uses
+`_root_.integral_complex_ofReal`. No local Lean command was run.
