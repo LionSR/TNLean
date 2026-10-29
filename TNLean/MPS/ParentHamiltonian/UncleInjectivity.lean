@@ -93,6 +93,8 @@ theorem isInjective_uncleTensor_of_isInjective_perturbation {d a b : ℕ}
   rw [← hPert.span_eq_top]
   apply Submodule.span_le.mpr
   rintro _ ⟨j, rfl⟩
+  change uncleBlockMatrix (A j) (R j) (L j) (B j) ∈
+    Submodule.span ℂ (Set.range (uncleTensor A B R L))
   rw [← hContract j]
   exact Submodule.sum_mem _ fun i _ ↦ Submodule.smul_mem _ (c i)
     (Submodule.subset_span ⟨(decodeBlockEquiv d 2).symm ![i, j], rfl⟩)
