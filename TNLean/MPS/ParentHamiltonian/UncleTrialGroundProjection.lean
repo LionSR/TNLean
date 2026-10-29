@@ -53,7 +53,7 @@ theorem uncleTwoWallTrialSource_span_projection_tendsto_zero
   have hcrossNorm : Tendsto (fun N : ℕ ↦
       ‖inner ℂ (mpvState A (6 * N + 1)) (mpvState B (6 * N + 1))‖)
       atTop (nhds (0 : ℝ)) := by
-    simpa only [norm_zero] using (hGram.2.2.comp hlen).norm
+    simpa only [Function.comp_apply, norm_zero] using (hGram.2.2.comp hlen).norm
   have hcross := hcrossNorm.eventually
     (eventually_lt_nhds (show (0 : ℝ) < 1 / 4 by norm_num))
   have hleft := inner_mpvState_left_uncleTwoWallTrialSource_tendsto_zero A B R L hUA hBA
