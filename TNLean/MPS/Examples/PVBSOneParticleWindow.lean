@@ -33,8 +33,7 @@ theorem pvbsEdge_first_cut_minor (q : ℂ) (N : ℕ) :
         pvbsEdge q (N + 2) (Fin.cons 0 (Fin.cons 1 (0 : Cfg 2 N))) -
       pvbsEdge q (N + 2) (Fin.cons 1 (Fin.cons 1 (0 : Cfg 2 N))) *
         pvbsEdge q (N + 2) (Fin.cons 0 0) = q := by
-  simp only [pvbsEdge_first, pvbsEdge_cons_zero, pvbsEdge_cons_one,
-    pvbsVacuum_first, pvbsEdge_zero, mul_one, one_mul, mul_zero, zero_mul, sub_zero]
+  simp
 
 /-- No nonzero vector can have the same exact pure geometric
 one-particle vector on two neighbouring windows of length at least two.
@@ -83,7 +82,8 @@ theorem pvbsVacuum_snoc (N : ℕ) (σ : Cfg 2 N) (i : Fin 2) :
     · rintro ⟨rfl, rfl⟩
       funext j
       refine Fin.lastCases (by simp) (fun _ ↦ by simp) j
-  by_cases hi : i = 0 <;> simp [pvbsVacuum, Pi.single_apply, heq, hi]
+  simp only [pvbsVacuum, Pi.single_apply, heq]
+  by_cases hσ : σ = 0 <;> by_cases hi : i = 0 <;> simp [hσ, hi]
 
 /-- Appending the one particle at the right endpoint gives its actual
 geometric weight. Source: the PVBS coefficients in arXiv:1112.4097,
@@ -95,9 +95,12 @@ theorem pvbsEdge_snoc (q : ℂ) (N : ℕ) (σ : Cfg 2 N) (i : Fin 2) :
   | zero =>
     have hσ : σ = 0 := Subsingleton.elim _ _
     subst σ
-    fin_cases i <;> simp [pvbsEdge, pvbsVacuum]
+    fin_cases i <;> simp [pvbsEdge]
   | succ N ih =>
     obtain ⟨⟨a, τ⟩, rfl⟩ := (Fin.consEquiv fun _ : Fin (N + 1) ↦ Fin 2).surjective σ
+    change pvbsEdge q (N + 1 + 1) (Fin.snoc (Fin.cons a τ) i) =
+      if i = 0 then pvbsEdge q (N + 1) (Fin.cons a τ)
+      else q ^ (N + 1) * pvbsVacuum (N + 1) (Fin.cons a τ)
     rw [← Fin.cons_snoc_eq_snoc_cons]
     fin_cases a <;> fin_cases i <;>
       simp [pvbsEdge_cons_zero, pvbsEdge_cons_one, pvbsVacuum_cons, pvbsVacuum_snoc,
@@ -113,6 +116,8 @@ theorem pvbsEdge_cyclic_step (q : ℂ) (N : ℕ) (hq : q ^ (N + 1) = 1)
     q * pvbsEdge q (N + 1) (fun j ↦ σ (finRotate (N + 1) j)) =
       pvbsEdge q (N + 1) σ := by
   obtain ⟨⟨a, τ⟩, rfl⟩ := (Fin.consEquiv fun _ : Fin (N + 1) ↦ Fin 2).surjective σ
+  change q * pvbsEdge q (N + 1) (fun j ↦ Fin.cons a τ (finRotate (N + 1) j)) =
+    pvbsEdge q (N + 1) (Fin.cons a τ)
   rw [← Fin.snoc_eq_cons_rotate, pvbsEdge_snoc]
   fin_cases a
   · simp
