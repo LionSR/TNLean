@@ -242,3 +242,34 @@
     and the inclusion into the algebraic local algebra all preserve the
     physical operator norm.
 \end{proof}
+
+
+\begin{theorem}[Completed actual isometric forward endomorphism]
+    \label{thm:mpu_finite_heisenberg_completed_forward_action}
+    \lean{SpinChain.bufferedMPUAlgebraicAction_isometry,
+        SpinChain.bufferedMPUQuasiLocalAction,
+        SpinChain.bufferedMPUQuasiLocalAction_apply,
+        SpinChain.bufferedMPUQuasiLocalAction_algebraicToQuasiLocal,
+        SpinChain.bufferedMPUQuasiLocalAction_quasiLocalObservable,
+        SpinChain.bufferedMPUQuasiLocalAction_isometry,
+        SpinChain.norm_bufferedMPUQuasiLocalAction}
+    \notready
+    \uses{thm:mpu_finite_heisenberg_forward_local_action}
+    For positive physical dimension, the preceding actual forward action
+    extends to an isometric unital star-algebra endomorphism of the
+    quasi-local algebra. Its value on each finite observable is the
+    canonical completed image of the actual buffered finite-chain
+    conjugation already constructed. No inverse or surjectivity is
+    assumed. This supplies the completed forward map in
+    \cite[lines~2296--2306]{Cirac2017MPU}; the inverse and full source
+    automorphism statement remain separate as in
+    \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
+\end{theorem}
+\begin{proof}
+    Norm preservation makes the actual algebraic-local homomorphism an
+    isometry. The uniform completion extends its ring homomorphism;
+    preservation of complex scalars and the involution follow from the
+    corresponding identities on the dense algebraic local algebra.
+    Completion preserves the isometry. Evaluation on a finite observable
+    follows from the extension formula on the canonical dense image.
+\end{proof}
