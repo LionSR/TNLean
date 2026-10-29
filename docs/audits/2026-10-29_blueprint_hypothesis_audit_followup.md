@@ -33,10 +33,19 @@ multiplication maps, and evaluation at the identity equates the factors.
 This removes the unnecessary finite-index premise and works for any `Sort`
 of generators. Existing consumers retain the same conclusions.
 
-The new support node remains `notready`: these changed Lean proofs have not
-been compiled locally, following the user's no-build instruction. Their
-hosted verification and integration remain open. This change does not close
-#7726 or claim a complete signature audit of every multiple-anchor node.
+The new support node remains `notready` while integration is pending. Exact
+historical head `b930ce68ef139badc6010f56a307b527a3691f51` passed the
+[hosted build](https://github.com/LionSR/TNLean/actions/runs/40919421992/job/123629836921):
+the log records the matching `PR_HEAD_SHA`, a successful full build, and strict
+`: ok` for the complete `TNLean/PEPS/CycleMPSChainArc.lean` module followed by
+`All strict Lean checks passed`. Every reported applicable check succeeded.
+
+The refreshed branch reconciles main
+`c7d2992c89c16d85237e18557ff292979b3a67b4`, preserving the cancellation
+module byte-for-byte and retaining main's chapter relocations. Fresh combined-head
+hosted checks and integration remain open. No local Lean command was run,
+following the user's instruction. This change does not close #7726 or claim
+a complete signature audit of every multiple-anchor node.
 
 ## Remaining boundary
 
