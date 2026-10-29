@@ -9777,3 +9777,13 @@ there is no need for a new tactic.
 - **Decision:** Two occurrences across two files, below the promotion threshold.
   The periodic operator proof reuses the shared
   `ContinuousLinearMap.rightFiberwiseMap_extendByZero` for spectator extension.
+
+### Invariant finite cyclic lines — candidate (2026-10-29)
+
+- **Seen:** `MPS/Examples/PVBSPureWindowMatchingVolume.lean`.
+- **Pattern:** Turn an actual one-step eigenvector equation into line invariance,
+  then use `Fin.cyclic_induction` and `cyclicTranslateState_add` for all offsets.
+- **Reuse:** The existing cyclic induction helper handles the finite index;
+  `Submodule.smul_mem` handles arbitrary eigenvector phases.
+- **Decision:** No manual predecessor induction or new translation predicate is
+  introduced. The actual vector phase remains available in the one-step equation.
