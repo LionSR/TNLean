@@ -215,6 +215,88 @@ theorem coarse_gates_eq_four_spin_gates
     simp only [Matrix.reindexLinearEquiv_comp_apply, Equiv.trans_refl,
       Equiv.refl_trans, hcols]
 
+private theorem source_adjoint_certificate_of_even_symmetry
+    {q D : ℕ} {U : MPOTensor q D} (hU : IsMPUCanonicalFormII U)
+    (hsimple : IsMPUSimple U) (S : SourceFactors U hU.ρ)
+    (hr : r[U] = q) (hl : ℓ[U] = q)
+    (hTR : ∀ N : ℕ, 1 < N → Even N → mpo U N = (mpo U N)ᴴ) :
+    ∃ (σ : ℂ) (x : Matrix.unitaryGroup (Fin q) ℂ),
+      (σ = 1 ∨ σ = -1) ∧
+      Matrix.reindex (Equiv.prodCongr (finCongr hl) (finCongr hr)) (Equiv.refl _)
+          (SourceFactors.sourceU U S) =
+        σ • ((x : Matrix (Fin q) (Fin q) ℂ) ⊗ₖ
+          (x : Matrix (Fin q) (Fin q) ℂ)ᴴ) *
+          (Matrix.reindex (Equiv.refl _)
+            (Equiv.prodCongr (finCongr hr) (finCongr hl)) (SourceFactors.sourceV U S))ᴴ := by
+  classical
+  let T := SourceFactors.physicalAdjoint hU hsimple S hr hl
+  have hEq : ∀ N : ℕ, 1 < N → Even N →
+      mpo U N = mpo (MPOTensor.physicalAdjointTensor U) N := by
+    intro N hN heven
+    rw [mpo_physicalAdjointTensor_eq_conjTranspose]
+    exact hTR N hN heven
+  have huS := hU.sourceFactors_sourceU_isUnitaryBetween hsimple S
+  have huT := hU.physicalAdjointTensor.sourceFactors_sourceU_isUnitaryBetween
+    (hU.isMPUSimple_physicalAdjointTensor hsimple) T
+  obtain ⟨hrFT, hlFT, X, Y, hu, hv⟩ :=
+    hU.exists_supplied_source_gate_unitary_gauges_of_mpo_eq_even
+      hU.physicalAdjointTensor S T huS huT hEq
+  let L := finCongr hl
+  let R := finCongr hr
+  let LA := finCongr ((leftRank_physicalAdjointTensor U).trans hr)
+  let RA := finCongr ((rightRank_physicalAdjointTensor U).trans hl)
+  let A := Matrix.reindex (Equiv.prodCongr L R) (Equiv.refl _) (SourceFactors.sourceU U S)
+  let B := Matrix.reindex (Equiv.refl _) (Equiv.prodCongr R L) (SourceFactors.sourceV U S)
+  let X' : Matrix.unitaryGroup (Fin q) ℂ :=
+    ⟨Matrix.reindex LA LA X, Matrix.reindex_mem_unitaryGroup _ _ X.property⟩
+  let Y' : Matrix.unitaryGroup (Fin q) ℂ :=
+    ⟨Matrix.reindex RA RA Y, Matrix.reindex_mem_unitaryGroup _ _ Y.property⟩
+  let erA := finCongr (rightRank_physicalAdjointTensor U).symm
+  let elA := finCongr (leftRank_physicalAdjointTensor U).symm
+  let erFT := finCongr hrFT.symm
+  let elFT := finCongr hlFT.symm
+  have hUA : Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)
+      (Matrix.reindex (Equiv.prodCongr elA erA) (Equiv.refl _)
+        (SourceFactors.sourceV U S)ᴴ) = Bᴴ := by
+    ext ⟨i, j⟩ ⟨k, l⟩
+    rfl
+  have hUFT : Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)
+      (Matrix.reindex (Equiv.prodCongr elFT erFT) (Equiv.refl _)
+        (SourceFactors.sourceU U S)) = A := by
+    ext ⟨i, j⟩ ⟨k, l⟩
+    rfl
+  have hVA : Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA)
+      (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr erA elA)
+        (SourceFactors.sourceU U S)ᴴ) = Aᴴ := by
+    ext ⟨i, j⟩ ⟨k, l⟩
+    rfl
+  have hVFT : Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA)
+      (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr erFT elFT)
+        (SourceFactors.sourceV U S)) = B := by
+    ext ⟨i, j⟩ ⟨k, l⟩
+    rfl
+  have hfirst : Bᴴ = ((X' : Matrix (Fin q) (Fin q) ℂ) ⊗ₖ
+      (Y' : Matrix (Fin q) (Fin q) ℂ)) * A := by
+    have h := congrArg (Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)) hu
+    dsimp only [T] at h
+    rw [SourceFactors.sourceU_physicalAdjoint] at h
+    rw [Matrix.reindex_kronecker_mul] at h
+    rw [hUA, hUFT] at h
+    exact h
+  have hsecond : Aᴴ = B * ((Y' : Matrix (Fin q) (Fin q) ℂ)ᴴ ⊗ₖ
+      (X' : Matrix (Fin q) (Fin q) ℂ)ᴴ) := by
+    have h := congrArg (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA)) hv
+    dsimp only [T] at h
+    rw [SourceFactors.sourceV_physicalAdjoint] at h
+    rw [Matrix.reindex_mul_kronecker] at h
+    rw [hVA, hVFT] at h
+    simpa only [X', Y', Matrix.star_eq_conjTranspose, Matrix.conjTranspose_reindex] using h
+  have hA : A.IsCoisometry := (huS.reindex _ (Equiv.prodCongr L R) (Equiv.refl _)).2
+  let : NeZero q := hU.neZero_phys
+  obtain ⟨σ, x, hσ, hlocal⟩ := local_sign_of_adjoint_gate_gauges A B hA X' Y' hfirst hsecond
+  exact ⟨σ, x, hσ, hlocal⟩
+
+
 /-- Global adjoint symmetry at even standard-form lengths yields an actual local
 sign certificate for the normalized coarse source gates, in physical-block
 coordinates. The rank equalities, adjoint factors and comparison gauges are
@@ -245,71 +327,8 @@ theorem IsMPUCanonicalFormII.exists_coarse_timeReversal_certificate
   obtain ⟨hrB, hlB⟩ := hU.twoSite_sourceRanks hsimple
   have hr : r[W] = d * d := hrB.trans (congrArg (d * ·) hrU)
   have hl : ℓ[W] = d * d := hlB.trans (congrArg (· * d) hlU)
-  let T := SourceFactors.physicalAdjoint hW hSW S hr hl
-  have hEq : ∀ N : ℕ, 1 < N → Even N →
-      mpo W N = mpo (MPOTensor.physicalAdjointTensor W) N := by
-    intro N hN heven
-    rw [mpo_physicalAdjointTensor_eq_conjTranspose]
-    exact hTR N hN heven
-  have huS := hW.sourceFactors_sourceU_isUnitaryBetween hSW S
-  have huT := hW.physicalAdjointTensor.sourceFactors_sourceU_isUnitaryBetween
-    (hW.isMPUSimple_physicalAdjointTensor hSW) T
-  obtain ⟨hrFT, hlFT, X, Y, hu, hv⟩ :=
-    hW.exists_supplied_source_gate_unitary_gauges_of_mpo_eq_even
-      hW.physicalAdjointTensor S T huS huT hEq
-  let L := finCongr hl
-  let R := finCongr hr
-  let LA := finCongr ((leftRank_physicalAdjointTensor W).trans hr)
-  let RA := finCongr ((rightRank_physicalAdjointTensor W).trans hl)
-  let A := Matrix.reindex (Equiv.prodCongr L R) (Equiv.refl _) (SourceFactors.sourceU W S)
-  let B := Matrix.reindex (Equiv.refl _) (Equiv.prodCongr R L) (SourceFactors.sourceV W S)
-  let X' : Matrix.unitaryGroup (Fin (d * d)) ℂ :=
-    ⟨Matrix.reindex LA LA X, Matrix.reindex_mem_unitaryGroup _ _ X.property⟩
-  let Y' : Matrix.unitaryGroup (Fin (d * d)) ℂ :=
-    ⟨Matrix.reindex RA RA Y, Matrix.reindex_mem_unitaryGroup _ _ Y.property⟩
-  let erA := finCongr (rightRank_physicalAdjointTensor W).symm
-  let elA := finCongr (leftRank_physicalAdjointTensor W).symm
-  let erFT := finCongr hrFT.symm
-  let elFT := finCongr hlFT.symm
-  have hUA : Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)
-      (Matrix.reindex (Equiv.prodCongr elA erA) (Equiv.refl _)
-        (SourceFactors.sourceV W S)ᴴ) = Bᴴ := by
-    ext ⟨i, j⟩ ⟨k, l⟩
-    rfl
-  have hUFT : Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)
-      (Matrix.reindex (Equiv.prodCongr elFT erFT) (Equiv.refl _)
-        (SourceFactors.sourceU W S)) = A := by
-    ext ⟨i, j⟩ ⟨k, l⟩
-    rfl
-  have hVA : Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA)
-      (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr erA elA)
-        (SourceFactors.sourceU W S)ᴴ) = Aᴴ := by
-    ext ⟨i, j⟩ ⟨k, l⟩
-    rfl
-  have hVFT : Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA)
-      (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr erFT elFT)
-        (SourceFactors.sourceV W S)) = B := by
-    ext ⟨i, j⟩ ⟨k, l⟩
-    rfl
-  have hfirst : Bᴴ = ((X' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
-      (Y' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)) * A := by
-    have h := congrArg (Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)) hu
-    dsimp only [T] at h
-    rw [SourceFactors.sourceU_physicalAdjoint] at h
-    rw [Matrix.reindex_kronecker_mul] at h
-    rw [hUA, hUFT] at h
-    exact h
-  have hsecond : Aᴴ = B * ((Y' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
-      (X' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) := by
-    have h := congrArg (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA)) hv
-    dsimp only [T] at h
-    rw [SourceFactors.sourceV_physicalAdjoint] at h
-    rw [Matrix.reindex_mul_kronecker] at h
-    rw [hVA, hVFT] at h
-    simpa only [X', Y', Matrix.star_eq_conjTranspose, Matrix.conjTranspose_reindex] using h
-  have hA : A.IsCoisometry := (huS.reindex _ (Equiv.prodCongr L R) (Equiv.refl _)).2
-  let : NeZero (d * d) := hW.neZero_phys
-  obtain ⟨σ, x, hσ, hlocal⟩ := local_sign_of_adjoint_gate_gauges A B hA X' Y' hfirst hsecond
+  obtain ⟨σ, x, hσ, hlocal⟩ :=
+    source_adjoint_certificate_of_even_symmetry hW hSW S hr hl hTR
   exact ⟨hr, hl, σ, x, hσ, hlocal⟩
 
 /-- The literal four-original-spin time-reversal certificate for the actual

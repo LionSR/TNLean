@@ -318,3 +318,14 @@ identify those two actual adjoint and two actual FT transports before the
 gauge equations are used. They preserve all source assumptions/conclusions
 and do not replace a mathematical comparison by an input witness. No local
 Lean commands were run; the final necessity/converse gate remains pending.
+
+## Kernel checking on `e960a6cb9`
+
+Hosted job `123531678652` cleared the two rank-transport type mismatches.
+Its only primary failure was a deterministic kernel timeout checking
+`exists_coarse_timeReversal_certificate`; the later unknown constant was a
+cascade. The actual normalized-source adjoint comparison is now a private
+theorem over an abstract source record. The public coarse wrapper derives
+its actual ranks and applies that theorem, so the large coarse constructor
+is no longer unfolded throughout the generic comparison proof. Statements
+and hypotheses are unchanged; no local Lean command was run.
