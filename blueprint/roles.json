@@ -165,14 +165,16 @@
         "thm:half_chain_source_limit",
         "thm:parent_hamiltonian_unique_gs",
         "thm:unique_gs_injective",
-        "thm:unique_gs_normal"
+        "thm:unique_gs_normal",
+        "thm:half_chain_general_c2_source"
       ],
       "corollaries": [],
       "notes": {
         "thm:half_chain_source_limit": "Source theorem: Perez-Garcia et al. Theorem 6, half-chain interpretation",
         "thm:parent_hamiltonian_unique_gs": "Source theorem: Perez-Garcia et al. Theorem 10, uniqueness throughout the interaction range",
         "thm:unique_gs_injective": "Unique ground state for injective tensors, stated in the opening",
-        "thm:unique_gs_normal": "Unique ground state for normal tensors at range L_0+1, stated in the opening"
+        "thm:unique_gs_normal": "Unique ground state for normal tensors at range L_0+1, stated in the opening",
+        "thm:half_chain_general_c2_source": "PGVWC07 Theorem 6: half-chain spectrum of the actual general weighted canonical tensor under normalized generic C2"
       }
     },
     "ch:parent_hamiltonian_commuting_and_gap": {
