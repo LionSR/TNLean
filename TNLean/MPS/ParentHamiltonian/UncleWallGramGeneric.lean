@@ -163,7 +163,7 @@ theorem uncleWallSlopeQuadratic_zero_measure [NeZero a] [NeZero b]
     (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosDef)
     (hA : Kraus.adjointMap A ρ = ρ) (hB : Kraus.mapLM B 1 = 1)
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1)
-    (μ : Measure (Fin d → Matrix (Fin a) (Fin b) ℂ)) [Measure.IsAddHaarMeasure μ] :
+    (μ : Measure (Fin d → Matrix (Fin a) (Fin b) ℂ)) [hμ : Measure.IsAddHaarMeasure μ] :
     μ {R | uncleWallSlopeQuadratic A B ρ hSpect R = 0} = 0 := by
   let : SecondCountableTopology (Fin d → Matrix (Fin a) (Fin b) ℂ) :=
     wallFamily_secondCountableTopology d a b
@@ -176,7 +176,7 @@ theorem uncleWallSlopeQuadratic_zero_measure [NeZero a] [NeZero b]
     exact (uncleWallSlopeQuadratic_mem_radical_iff A B ρ hρ.posSemidef hA hB hSpect R).symm
   rw [hset]
   exact @Measure.addHaar_submodule (Fin d → Matrix (Fin a) (Fin b) ℂ)
-    _ _ _ hBorel _ μ _ _
+    _ _ _ hBorel _ μ hμ _
     (uncleWallSlopeQuadratic_radical_ne_top A B R₀ L₀ hPert ρ hρ hSpect)
 
 /-- Almost every wall has strictly positive actual limiting Gram slope
@@ -226,7 +226,7 @@ theorem uncleWallNormSlope_pair_ae_pos [NeZero a] [NeZero b]
     (hAB : Kraus.mixedMapSpectralRadius A B < 1)
     (hBA : Kraus.mixedMapSpectralRadius B A < 1)
     (μ : Measure ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
-      (Fin d → Matrix (Fin b) (Fin a) ℂ))) [Measure.IsAddHaarMeasure μ] :
+      (Fin d → Matrix (Fin b) (Fin a) ℂ))) [hμ : Measure.IsAddHaarMeasure μ] :
     ∀ᵐ P ∂μ, 0 < uncleWallNormSlope A B P.1 ρA ∧
       0 < uncleWallNormSlope B A P.2 ρB := by
   let : SecondCountableTopology (Fin d → Matrix (Fin a) (Fin b) ℂ) :=
@@ -282,12 +282,12 @@ theorem uncleWallNormSlope_pair_ae_pos [NeZero a] [NeZero b]
       Set ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
         (Fin d → Matrix (Fin b) (Fin a) ℂ))) = 0 :=
     @Measure.addHaar_submodule ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
-      (Fin d → Matrix (Fin b) (Fin a) ℂ)) _ _ _ hBorel _ μ _ _ hprod₁
+      (Fin d → Matrix (Fin b) (Fin a) ℂ)) _ _ _ hBorel _ μ hμ _ hprod₁
   have hnull₂ : μ ((⊤ : Submodule ℝ (Fin d → Matrix (Fin a) (Fin b) ℂ)).prod S₂ :
       Set ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
         (Fin d → Matrix (Fin b) (Fin a) ℂ))) = 0 :=
     @Measure.addHaar_submodule ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
-      (Fin d → Matrix (Fin b) (Fin a) ℂ)) _ _ _ hBorel _ μ _ _ hprod₂
+      (Fin d → Matrix (Fin b) (Fin a) ℂ)) _ _ _ hBorel _ μ hμ _ hprod₂
   have hae₁ : ∀ᵐ P ∂μ, P.1 ∉ S₁ := by
     have hset : {P : (Fin d → Matrix (Fin a) (Fin b) ℂ) ×
         (Fin d → Matrix (Fin b) (Fin a) ℂ) | P.1 ∈ S₁} = (S₁.prod (⊤ :
