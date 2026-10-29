@@ -25,7 +25,7 @@ presentation. The site-dependent source setting is recorded separately in
     \cite[lines~1317--1329]{Gross2012IndexTheory}.
 \end{definition}
 
-\begin{theorem}[All cut presentations of the same index]
+\begin{lemma}[All cut presentations of the same index]
     \label{thm:qca_gnvw_index_dimtransfer}
     \lean{SpinChain.PropagatesWithin.supportAlgebraMatrixSize_even_add_one,
         SpinChain.PropagatesWithin.supportAlgebraMatrixSize_even_eq_zero,
@@ -51,7 +51,7 @@ presentation. The site-dependent source setting is recorded separately in
     integer cut and of the chosen full-matrix presentation at that cut.
     This is homogeneous equation~dimtransfer of
     \cite[lines~1317--1324]{Gross2012IndexTheory}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     The two size products equal $d^2$. Cancelling the positive common odd
     size gives $r(2x)=r(2x+2)$. Integer induction in both directions makes
@@ -114,7 +114,7 @@ presentation. The site-dependent source setting is recorded separately in
     compatibility of the finite-region embeddings give the assertions.
 \end{proof}
 
-\begin{theorem}[Direct shift normalization]
+\begin{lemma}[Direct shift normalization]
     \label{thm:qca_gnvw_index_shift}
     \lean{SpinChain.quasiLocalTranslation_propagatesWithin_singleton,
         SpinChain.quasiLocalTranslation_propagatesWithin_neg_one,
@@ -157,7 +157,7 @@ presentation. The site-dependent source setting is recorded separately in
     orientation check. The repeated even subscript in the source scalar
     support example at line~1268 is corrected as documented in
     \cite{gap:gnvw12_site_dependent_adjacent_generation_scope}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     Translation has its singleton propagation neighbourhood, which lies
     inside the nearest-neighbour interval. It maps the full source-pair
