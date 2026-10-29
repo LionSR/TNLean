@@ -259,9 +259,15 @@ viability error at most $3/200$ and dimension at most $M=D^6s^3$.
 It is spanned by at most $M$ recorded vectors, each with internal-cut rank at
 most $10^6D_{\rm ref}^2(L+1)M$. This rank bound is for those recorded
 vectors; an arbitrary linear combination can require an additional factor.
-The physical recursion still displays its scalar filter hypotheses explicitly.
-Instantiating them, constructing an adaptive joint probability law and completing
-the final spectral extraction remain separate obligations.
+The numerical filter and tail conditions are also discharged. With
+$m=\max(q,50)$, $g=\min(\gamma,1)$ and
+$v=1+\log m+\log(1/g)$, a universal $C$ gives
+$\ell=\lceil Cv^2/g\rceil$ and $D=(m\ell^2)^{22\ell}$, with
+$\log D\le22(C+1)[6+2\log(C+1)]v^3/g$.
+Thus these numerical estimates are conclusions of the physical recursive
+existence theorem. The block leaves, final trim and capped gap remain explicit.
+An adaptive joint probability law and final spectral extraction remain separate
+obligations.
 
 The power-filter application constructs one actual sample with both norm estimates,
 all letter-count bounds, and every spatial rank bound $\ell q^{2u}$.
