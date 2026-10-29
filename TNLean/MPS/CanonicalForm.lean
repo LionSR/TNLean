@@ -35,6 +35,7 @@ import TNLean.MPS.CanonicalForm.PhaseCover
 import TNLean.MPS.CanonicalForm.ProjectorClosure
 import TNLean.MPS.CanonicalForm.ProjectorClosureDecomposition
 import TNLean.MPS.CanonicalForm.ProjectorClosureSpectral
+import TNLean.MPS.CanonicalForm.QuadraticCanonicalOBCWindow
 import TNLean.MPS.CanonicalForm.QuadraticPerronNormalization
 import TNLean.MPS.CanonicalForm.QuadraticPhysicalCutWindow
 import TNLean.MPS.CanonicalForm.QuadraticPrescribedOBCWindow

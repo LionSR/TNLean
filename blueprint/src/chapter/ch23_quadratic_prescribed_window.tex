@@ -92,3 +92,71 @@
     prescribed representation. Only the forced coordinate
     identification is made; the representation is not replaced.
 \end{proof}
+
+\begin{lemma}[The original canonical OBC bonds are physical cut ranks]
+    \label{lem:quadratic_canonical_obc_physical_ranks}
+    \lean{OBCChainTensor.physicalPrefixMatrix_gram_step,
+        OBCChainTensor.physicalPrefixMatrix_zero_gram,
+        OBCChainTensor.physicalPrefixMatrix_gram_eq_density,
+        OBCChainTensor.physicalSuffixMatrix_step,
+        OBCChainTensor.physicalSuffixMatrix_last,
+        OBCChainTensor.physicalSuffixMatrix_gram_step,
+        OBCChainTensor.physicalSuffixMatrix_coisometry,
+        OBCChainTensor.bondDim_eq_cutCoefficientRank_of_canonical,
+        OBCChainTensor.coeff_ne_zero_of_faithful_density,
+        OBCChainTensor.withBondBound,
+        OBCChainTensor.withBondBound_tensor,
+        OBCChainTensor.withBondBound_coeff}
+    \notready
+    \uses{lem:quadratic_prescribed_prefix_basis}
+    Let $B$ be the prescribed OBC tensor, with arbitrary common bond
+    bound. Assume its source canonical equations
+    \[
+        \sum_i B_i^{[j]}B_i^{[j]\dagger}=I,\qquad
+        \sum_i B_i^{[j]\dagger}\Lambda_j B_i^{[j]}=\Lambda_{j+1},
+        \qquad\Lambda_0=I,\quad\Lambda_j>0.
+    \]
+    At every cut, its actual prefix Gram is $\Lambda_j$ and its
+    actual suffix Gram is the identity. Its original bond dimension
+    is therefore exactly the physical cut rank. The represented
+    vector is nonzero. Replacing only a verified common upper bound
+    retains every original bond space, site matrix and coefficient.
+\end{lemma}
+\begin{proof}
+    The physical extension bijections give the forward prefix and
+    backward suffix Gram recursions. Induct from the two scalar
+    boundaries. Faithfulness makes the prefix columns independent.
+    If the physical coefficient matrix is $M=FG$, the suffix identity
+    $GG^\dagger=I$ gives $MG^\dagger=F$, hence equality of the physical
+    rank and the original bond dimension. Faithfulness at the last
+    scalar bond also excludes a zero represented vector.
+\end{proof}
+
+\begin{lemma}[Quadratic existence for the original canonical OBC window]
+    \label{lem:quadratic_original_canonical_obc_window}
+    \lean{MPSTensor.canonicalOBC_bondDim_le_of_mpv_eq,
+        MPSTensor.canonicalOBCWithSquaredBound,
+        MPSTensor.quadraticCanonicalOBCWindow,
+        MPSTensor.quadraticCanonicalOBCWindow_apply,
+        MPSTensor.exists_quadraticSolution_canonicalOBCWindow}
+    \notready
+    \uses{lem:quadratic_canonical_obc_physical_ranks,
+        lem:quadratic_prescribed_obc_window_solution}
+    Let the original canonical OBC tensor represent the actual
+    length-$N$ state of a TI tensor $A$ satisfying C1 at $L_0$, with
+    $N>2L_0+D^4$. Its original window admits a solution of the
+    quadratic system. No common bond bound by $D^2$, nonzero-state
+    premise, canonical TI representative, comparison gauge, window
+    identity or quadratic solution is supplied. OBC uniqueness is
+    unnecessary; the source canonical equations above suffice.
+\end{lemma}
+\begin{proof}
+    The preceding lemma identifies the original bond dimensions
+    with physical cut ranks. Opening a periodic trace contraction
+    gives the bound $D^2$ for every such rank. This changes only the
+    common upper bound recorded for the original rectangular tensors.
+    The state is nonzero by faithfulness. Apply the prescribed-window
+    theorem, with its internally derived Perron normalization and
+    window gauges. The resulting window entries are the original
+    supplied site entries in the proved doubled coordinates.
+\end{proof}

@@ -324,8 +324,24 @@ consumes the actual nonzero state, its C1 TI representation, the full
 window size regime, the original bounded OBC representation and their
 actual coefficient equality. It assumes no canonical TI form, window
 gauge, solution or bond equality. This writes the prescribed-window
-existence direction; all new proofs remain pending hosted verification
-and integration. The original combined source theorem is not accepted,
+existence direction.
+
+The common OBC bound is now derived for an arbitrary prescribed canonical
+OBC tensor. The source density recursion identifies its original physical
+prefix Gram with the faithful density; row normalization and the scalar
+right boundary identify its original suffix Gram with the identity. These
+identities force every original bond dimension to be the actual physical
+cut rank. The existing periodic rank bound supplies $D^2$ internally.
+Changing only the common upper bound retains the original bond spaces,
+site matrices and exact coefficient vector. Faithfulness also derives
+nonvanishing of the physical state. Thus
+\leanid{MPSTensor.exists_quadraticSolution_canonicalOBCWindow}
+uses the given canonical equations, C1 and the original coefficient equality,
+with no supplied squared-bond bound, state nonvanishing, canonical TI gauge,
+window gauge or solution. It identifies the original supplied site entries
+rather than selecting another canonical representation.
+
+All new proofs remain pending hosted verification and integration. The original combined source theorem is not accepted,
 and its unrestricted converse remains false.
 
 \section{Open classification gap and verdict}

@@ -43,6 +43,24 @@ the prescribed-window existence direction. The known false claim that every
 algebraic solution represents the prescribed state is unchanged and remains
 corrected by the same-state/root-phase converse in #10381.
 
+The source canonical OBC conditions now remove the remaining common-bound
+premise as well. OBCCanonicalPhysicalRanks derives the actual prefix Gram
+from the given faithful density recursion, derives the suffix Gram identity
+from row normalization, and proves every original bond dimension equals its
+physical cut rank. Faithfulness at the right scalar endpoint derives actual
+state nonvanishing. QuadraticCanonicalOBCWindow reuses the existing periodic
+cut-rank bound to derive D², changes only the common bound, and applies the
+actual prescribed-window supplier. The rectangular tensor and dependent
+virtual-path coefficient sum are retained definitionally; a public entry
+identity displays the original supplied site matrix. The final theorem
+therefore uses the source's canonical equations and actual coefficient
+equality without a supplied D² bound or nonzero-state hypothesis.
+
+Both the constructed canonical factors and the original given factors use
+the shared PhysicalCutGramRecurrences identities. Their four forward/backward
+Gram proofs have been refactored onto the same physical extension lemmas,
+rather than copying the double-sum calculation into another representation.
+
 All new Blueprint entries are notready. Source synchronization, imports,
 mathematical roles, reader-facing prose, TeX formatting, file-size, tactic
 scan, integrity and full-branch whitespace checks are used. No local Lean,

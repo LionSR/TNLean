@@ -96,6 +96,7 @@ import TNLean.MPS.Preparation.OBCCanonicalConfigurations
 import TNLean.MPS.Preparation.OBCCanonicalCutBases
 import TNLean.MPS.Preparation.OBCCanonicalEndpoints
 import TNLean.MPS.Preparation.OBCCanonicalForm
+import TNLean.MPS.Preparation.OBCCanonicalPhysicalRanks
 import TNLean.MPS.Preparation.OBCCanonicalRecurrences
 import TNLean.MPS.Preparation.OBCMinimalPrefixBasis
 import TNLean.MPS.Preparation.OBCPrefixFactors
@@ -120,6 +121,7 @@ import TNLean.MPS.Preparation.PaddedBondState
 import TNLean.MPS.Preparation.PairLayer
 import TNLean.MPS.Preparation.PartialIsometryPreparation
 import TNLean.MPS.Preparation.PhaseWeightCounterexample
+import TNLean.MPS.Preparation.PhysicalCutGramRecurrences
 import TNLean.MPS.Preparation.PolarCompression
 import TNLean.MPS.Preparation.PolarFrame
 import TNLean.MPS.Preparation.PolarIsometryTree
