@@ -7,13 +7,13 @@
 
 \input{./command}
 
-\title{Scope of the Physical-Deformation Ground-Space Correspondence Relative to CPGSV21}
+\title{Graph Physical Deformation and Its Periodic-Chain Comparison}
 \author{}
-\date{2026-09-23}
+\date{2026-09-23, revised 2026-10-29}
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{clarification}{open}
 
 \section{Source statement}
 
@@ -29,31 +29,68 @@ where $\partial e$ is the support of the interaction term. The source asserts
 that the map $\Lambda^{\otimes V}$ establishes a one-to-one correspondence
 between the ground spaces of the parent Hamiltonians of $\ket\psi$ and $\ket{\psi'}$.
 
-\section{Formalization scope}
+\section{Graph correspondence}
 
-The formal development in \texttt{TNLean/MPS/ParentHamiltonian/PhysicalDeformation.lean}
-and Chapter~13 of the blueprint formalizes this correspondence specifically for
-one-dimensional matrix product states on a periodic chain with $N$ sites,
-establishing
-\begin{align}\label{eq:cpgsv21_physical_deformation_general_graph_ground_space}
-    \mathcal G_{N,L}(\Lambda A) & = \Lambda^{\otimes N}\,\mathcal G_{N,L}(A)
+The correspondence on an arbitrary finite graph is formalized. For a family
+of regions $R_i\subseteq V$, let $\mathcal G(A)$ be the full physical vectors
+whose complementary slices lie in the regional spaces $\mathcal G_{R_i}(A)$.
+For arbitrary invertible on-site maps $F_v$, their product $F_V$ gives
+\begin{align}\label{eq:cpgsv21_physical_deformation_graph_transport}
+    \mathcal G(A^F) & = F_V\mathcal G(A).
 \end{align}
-and $\ker H_N(\Lambda A) = \Lambda^{\otimes N}\ker H_N(A)$ for an invertible matrix
-$\Lambda\in\mathrm{M}_d(\C)$ in the finite-chain range $0 < N$ and $L\le N$.\footnote{Formal
-    declaration: \leanid{MPSTensor.ker_parentHamiltonian_rotatePhysical}.} The general-graph
-formulation of Section~IV.C of Ref.~\cite{Cirac2021Matrix} is not formalized.
+It restricts to an isomorphism of these spaces and preserves their
+dimensions. When the positive local interactions are transported by
+inverse-adjoint congruence as in
+(\ref{eq:cpgsv21_physical_deformation_general_graph_interaction}), the same
+map identifies the kernels of their full Hamiltonians. No injectivity or
+translation-invariance assumption is imposed on the tensor.\footnote{Formal
+    declarations: \leanid{TNLean.PEPS.map_regionParentGroundSpace_physicalDeform},
+    \leanid{TNLean.PEPS.regionParentGroundSpacePhysicalEquiv},
+    \leanid{TNLean.PEPS.finrank_regionParentGroundSpace_physicalDeform}, and
+    \leanid{TNLean.PEPS.map_ker_regionParentHamiltonian_physicalDeform}, in
+    \doclink{TNLean/PEPS/ParentHamiltonian/RegionPhysicalGroundSpaceTransport}.
+    Local interactions are treated in
+    \doclink{TNLean/PEPS/ParentHamiltonian/RegionPhysicalDeformation}.}
+Invertibility gives ground-space correspondence; the stronger statement
+that the full spectra agree requires unitary on-site maps.\footnote{See
+    \doclink{TNLean/PEPS/ParentHamiltonian/RegionPhysicalHamiltonianTransport}.}
+The former absence of the graph theorem is therefore resolved.
 
-\section{Elimination plan}
+\section{Periodic-chain comparison still to be assembled}
 
-Closing the scope restriction requires formalizing tensor network states and their
-parent Hamiltonians on an arbitrary finite graph $G=(V,E)$, with interaction terms
-supported on neighbourhoods $\partial e$ of edges $e\in E$. For an invertible on-site
-operator $\Lambda$, the corresponding graph-level physical deformation
-$\Lambda^{\otimes V}$ must be shown to transform each local interaction term according
-to~(\ref{eq:cpgsv21_physical_deformation_general_graph_interaction}) and to map the kernel
-intersection $\bigcap_{e\in E} \ker h_e$ onto $\bigcap_{e\in E} \ker h'_e$. The present
-periodic-chain theorem follows by specializing the general-graph statement to a cycle
-graph $C_N$ with contiguous edge windows of length $L$.
+The periodic-chain theorem independently proves
+\begin{align}\label{eq:cpgsv21_physical_deformation_general_graph_ground_space}
+    \mathcal G_{N,L}(\Lambda A) & = \Lambda^{\otimes N}\mathcal G_{N,L}(A)
+\end{align}
+and the corresponding Hamiltonian-kernel identity for $0<N$ and $L\le N$.\footnote{Formal declaration:
+    \leanid{MPSTensor.ker_parentHamiltonian_rotatePhysical}, in
+    \doclink{TNLean/MPS/ParentHamiltonian/PhysicalDeformation}.}
+For $N\ge3$ and $0<L<N$, ordering the sites of an arc identifies its regional
+space with the local matrix product space of length $L$, including bond
+dimension zero.\footnote{Formal declaration:
+    \leanid{TNLean.PEPS.map_regionGroundSpace_cycleTensorOfMPS}, in
+    \doclink{TNLean/PEPS/ParentHamiltonian/CycleGroundSpace}.}
+The remaining comparison must assemble these local identifications into
+one identification of full parent spaces and physical product maps. This
+is a compatibility obligation, not a missing graph correspondence.
+
+The cases outside that proper-arc range require separate treatment.
+In particular, for $L=N$ the graph region is the entire closed cycle and
+has no crossing virtual bonds. Its regional contraction has only a scalar
+boundary coefficient. In contrast, the local matrix product space used by
+the chain theorem retains an arbitrary boundary matrix $X$ and consists of
+$\sigma\mapsto\operatorname{tr}(A^{\sigma_1}\cdots A^{\sigma_N}X)$.
+These are different boundary prescriptions; a direct equality must not be
+assumed. For example, the two diagonal letters
+$A^0=\operatorname{diag}(1,0)$ and $A^1=\operatorname{diag}(0,1)$ on a
+three-site ring give the closed-state line generated by
+$|000\rangle+|111\rangle$, whereas arbitrary boundary matrices yield the
+two-dimensional span of $|000\rangle$ and $|111\rangle$.
+The one- and two-site chain cases also lie outside the present simple-cycle
+construction. The chain results in these cases remain valid as proved;
+the proposed comparison needs the appropriate graph and boundary
+conventions. The remaining assembly and its precise domain are tracked in
+\url{https://github.com/LionSR/TNLean/issues/7936}.
 
 \begin{thebibliography}{1}
     \bibitem{Cirac2021Matrix}

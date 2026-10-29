@@ -5,12 +5,12 @@ the two cuts in
 \cite[Proposition~5.7]{Arad2016RigorousRG}.
 The matrix-factor exchange is the existing construction in
 Definition~\ref{def:chain_middle_factor_exchange} and
-Theorem~\ref{thm:chain_middle_factor_exchange}; its separate cardinality
-identity is Theorem~\ref{thm:chain_middle_factor_exchange_card}.
+Lemma~\ref{thm:chain_middle_factor_exchange}; its separate cardinality
+identity is Lemma~\ref{thm:chain_middle_factor_exchange_card}.
 No ordering of physical sites or matrix product representation is asserted
 by these regional identities.
 
-\begin{theorem}[From numbered middle coordinates to the actual middle region]
+\begin{lemma}[From numbered middle coordinates to the actual middle region]
     \label{thm:regional_middle_from_numbered_three_regions}
     \lean{TNLean.MPS.AreaLaw.exists_regional_exterior_of_natural_threeSplit_decomposition}
     \leanok
@@ -38,7 +38,7 @@ by these regional identities.
     \end{align}
     The middle matrices are the prescribed $V_t$ transported by $e_E$; only
     the exterior coefficients change. The bijection need not carry any order.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The two inverse identities for $e_E$ first turn the given decomposition
     into one with actual $E$ configurations. Restriction identifies the actual
@@ -95,7 +95,7 @@ by these regional identities.
     before any exterior coefficient matrices are supplied.
 \end{definition}
 
-\begin{theorem}[Transfer of a fixed middle family between regions]
+\begin{lemma}[Transfer of a fixed middle family between regions]
     \label{thm:regional_middle_exterior_transfer}
     \lean{FiniteProduct.exists_changingRegional_exterior_family}
     \leanok
@@ -115,7 +115,7 @@ by these regional identities.
     \end{align}
     The family $\widetilde V$ is the one already prescribed above and is
     independent of $M$. Empty regions and empty local sets are included.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:regional_middle_configuration_splittings,
         def:regional_middle_transferred_family,thm:chain_middle_factor_exchange}

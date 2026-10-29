@@ -52,14 +52,14 @@ volume~\cite[``Controlled dependent partial trace'', ``Diagonal blocks of the co
     \end{align}
 \end{definition}
 
-\begin{theorem}[$\mathcal T_0$ is trace-preserving completely positive]
+\begin{lemma}[$\mathcal T_0$ is trace-preserving completely positive]
     \label{thm:mpdo_t0_map_cptp}
     \lean{MPOTensor.ExplicitEtaOperators.t0Map_isKrausCPTP}
     \lean{MPOTensor.PhysicalSectorFactorization.t0Map_isKrausCPTP}
     \leanok
     \uses{def:mpdo_t0_map}
     The map $\mathcal T_0$ is trace-preserving and completely positive.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
 
@@ -87,14 +87,14 @@ volume~\cite[``Controlled dependent partial trace'', ``Diagonal blocks of the co
     \end{align}
 \end{definition}
 
-\begin{theorem}[$\mathcal S_2$ is trace-preserving completely positive]
+\begin{lemma}[$\mathcal S_2$ is trace-preserving completely positive]
     \label{thm:mpdo_s2_map_cptp}
     \lean{MPOTensor.ExplicitEtaOperators.s2Map_isKrausCPTP}
     \lean{MPOTensor.PhysicalSectorFactorization.s2Map_isKrausCPTP}
     \leanok
     \uses{def:mpdo_s2_map}
     The shift $\mathcal S_2$ is trace-preserving and completely positive.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
 
@@ -158,14 +158,14 @@ volume~\cite[``Controlled dependent partial trace'', ``Diagonal blocks of the co
 % traced factor to be 3l. The correction is documented in
 % docs/paper-gaps/cpgsv17_mpdo_s0_trace_subspin_typo.tex.
 
-\begin{theorem}[$\mathcal S_0$ is trace-preserving completely positive]
+\begin{lemma}[$\mathcal S_0$ is trace-preserving completely positive]
     \label{thm:mpdo_s0_map_cptp}
     \lean{MPOTensor.ExplicitEtaOperators.s0Map_isKrausCPTP}
     \lean{MPOTensor.PhysicalSectorFactorization.s0Map_isKrausCPTP}
     \leanok
     \uses{def:mpdo_s0_map}
     The map $\mathcal S_0$ is trace-preserving and completely positive.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
 
@@ -193,14 +193,14 @@ volume~\cite[``Controlled dependent partial trace'', ``Diagonal blocks of the co
     \end{align}
 \end{definition}
 
-\begin{theorem}[$\mathcal T_2$ is trace-preserving completely positive]
+\begin{lemma}[$\mathcal T_2$ is trace-preserving completely positive]
     \label{thm:mpdo_t2_map_cptp}
     \lean{MPOTensor.ExplicitEtaOperators.t2Map_isKrausCPTP}
     \lean{MPOTensor.PhysicalSectorFactorization.t2Map_isKrausCPTP}
     \leanok
     \uses{def:mpdo_t2_map}
     The shift $\mathcal T_2$ is trace-preserving and completely positive.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
 
@@ -222,7 +222,7 @@ volume~\cite[``Controlled dependent partial trace'', ``Diagonal blocks of the co
     $(R_k\otimes L_l)\otimes(R_l\otimes L_h)$.
 \end{definition}
 
-\begin{theorem}[The fiberwise partial traces are trace-preserving completely
+\begin{lemma}[The fiberwise partial traces are trace-preserving completely
         positive]
     \label{thm:mpdo_fiberwise_partial_trace_maps_cptp}
     \lean{MPOTensor.ExplicitEtaOperators.t0SectorMap_isKrausCPTP}
@@ -231,7 +231,7 @@ volume~\cite[``Controlled dependent partial trace'', ``Diagonal blocks of the co
     \uses{def:mpdo_fiberwise_partial_trace_maps}
     Every fiberwise form of $\mathcal T_0$ and $\mathcal S_0$ is
     trace-preserving and completely positive.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
 
@@ -262,14 +262,14 @@ volume~\cite[``Controlled dependent partial trace'', ``Diagonal blocks of the co
     same inverse regroupings as the corresponding global shifts.
 \end{definition}
 
-\begin{theorem}[The fiberwise shifts are trace-preserving completely positive]
+\begin{lemma}[The fiberwise shifts are trace-preserving completely positive]
     \label{thm:mpdo_fiberwise_shifts_cptp}
     \lean{MPOTensor.ExplicitEtaOperators.s2SectorMap_isKrausCPTP}
     \lean{MPOTensor.ExplicitEtaOperators.t2SectorMap_isKrausCPTP}
     \leanok
     \uses{def:mpdo_fiberwise_shifts}
     Every fiberwise shift is trace-preserving and completely positive.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
 

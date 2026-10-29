@@ -29,7 +29,7 @@
     \cite[Section~5]{GarreRubio2023MPOSym}.
 \end{definition}
 
-\begin{theorem}[Joint boundary injectivity]
+\begin{lemma}[Joint boundary injectivity]
     \label{thm:mpo_joint_inserted_injective}
     \lean{MPSTensor.MPOSymmetry.blockInsertedGroundSpaceMap_injective,
         MPSTensor.MPOSymmetry.span_range_blockInsertedEvalWord_eq_top,
@@ -44,7 +44,7 @@
     $\prod_x\MN{D_x}$, and $\dim\mathcal S'_{W,N}=\sum_xD_x^2$.
     At fixed $N$, the boundary map varies continuously with the tensor
     entries and insertions. The physical block columns need not be orthogonal.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_extended_intersection}
@@ -60,7 +60,7 @@
     sum of products of matrix entries, giving continuity.
 \end{proof}
 
-\begin{theorem}[Joint restriction intersection]
+\begin{lemma}[Joint restriction intersection]
     \label{thm:mpo_joint_inserted_intersection}
     \lean{MPSTensor.MPOSymmetry.blockInsertedGroundSpaceMap_restrictLast,
         MPSTensor.MPOSymmetry.blockInsertedGroundSpaceMap_restrictFirst,
@@ -71,7 +71,7 @@
         MPSTensor.MPOSymmetry.contiguousRestrictₗ_blockInsertedGroundSpace_mem}
     \leanok
     \uses{def:mpo_joint_inserted_boundary}
-    Under the hypotheses of Theorem~\ref{thm:mpo_joint_inserted_injective},
+    Under the hypotheses of Lemma~\ref{thm:mpo_joint_inserted_injective},
     for $L\geq2$,
     \begin{align}
         (\mathcal S'_{W,L}\otimes\C^d)
@@ -80,7 +80,7 @@
     \end{align}
     Every positive-length contiguous restriction of a vector in
     $\mathcal S'_{W,N}$ lies in the corresponding shorter extended support.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_inserted_injective,thm:mpo_mixed_extended_intersection}
@@ -95,7 +95,7 @@
     proves closure under contiguous restrictions.
 \end{proof}
 
-\begin{theorem}[Exact joint open-chain kernel]
+\begin{lemma}[Exact joint open-chain kernel]
     \label{thm:mpo_joint_inserted_open_kernel}
     \lean{MPSTensor.MPOSymmetry.mem_ker_blockInsertedParentInteraction_iff,
         MPSTensor.MPOSymmetry.ker_openInteractionHamiltonianES_blockInserted_eq,
@@ -103,7 +103,7 @@
         MPSTensor.MPOSymmetry.continuous_ker_openInteractionHamiltonianES_blockInserted_starProjection}
     \leanok
     \uses{def:mpo_joint_inserted_boundary}
-    Under the hypotheses of Theorem~\ref{thm:mpo_joint_inserted_injective},
+    Under the hypotheses of Lemma~\ref{thm:mpo_joint_inserted_injective},
     put $h'_W=I-\Pi_{\mathcal S'_{W,2}}$ and
     $H'^{\mathrm{open}}_{W,N}=\sum_{i=0}^{N-2}h'_{W,i,i+1}$.
     For $N\geq2$,
@@ -113,7 +113,7 @@
     \end{align}
     Along a continuous family satisfying these hypotheses, the orthogonal
     projector onto this kernel is continuous at each fixed $N\geq2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:mpo_joint_inserted_injective,thm:mpo_joint_inserted_intersection,

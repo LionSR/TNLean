@@ -1,6 +1,6 @@
 \section{Entropy cost of a partial depth row}
 
-\begin{theorem}[Regional increment bound]
+\begin{lemma}[Regional increment bound]
     \label{thm:area_partial_row_increment}
     \lean{TNLean.PEPS.AreaLaw.abs_regionalEntropy_union_sub_le}
     \leanok
@@ -9,7 +9,7 @@
     \begin{align}
         |S_\Omega(R\cup B)-S_\Omega(R)| & \le S_\Omega(B). \label{eq:partial_row_increment}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Subadditivity gives $S_\Omega(R\cup B)\le S_\Omega(R)+S_\Omega(B)$, while applying subadditivity to $R^c=(R\cup B)^c\sqcup B$ with pure-state complement equality $S_\Omega(X)=S_\Omega(X^c)$ gives
     \begin{align}
@@ -19,7 +19,7 @@
     \end{align}
 \end{proof}
 
-\begin{theorem}[Partial template row]
+\begin{lemma}[Partial template row]
     \label{thm:area_template_partial_row}
     \lean{TNLean.PEPS.AreaLaw.Geometry.template_partial_row_entropy_le}
     \leanok
@@ -30,15 +30,15 @@
         -S_\Omega\bigl(A\cap(T_{j-1}\setminus T)\bigr)\right|
         \le n\log q. \label{eq:template_partial_row}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_partial_row_increment,thm:area_law_entropy_dimension,thm:area_law_template_depth_layers}
-    Setting $R=A\cap(T_{j-1}\setminus T)$ and $B=A\cap Y$ gives $R\cap B=\varnothing$ and $|B|\le|Y|\le n$ (Theorem~\ref{thm:area_law_template_depth_layers}); combining (\ref{eq:partial_row_increment}) with $S_\Omega(B)\le|B|\log q\le n\log q$ (Theorem~\ref{thm:area_law_entropy_dimension}) yields (\ref{eq:template_partial_row}).
+    Setting $R=A\cap(T_{j-1}\setminus T)$ and $B=A\cap Y$ gives $R\cap B=\varnothing$ and $|B|\le|Y|\le n$ (Lemma~\ref{thm:area_law_template_depth_layers}); combining (\ref{eq:partial_row_increment}) with $S_\Omega(B)\le|B|\log q\le n\log q$ (Lemma~\ref{thm:area_law_entropy_dimension}) yields (\ref{eq:template_partial_row}).
 \end{proof}
 
 \subsection{Finite weighted dyadic summation}
 
-\begin{theorem}[From side-length bounds to a dyadic moment]
+\begin{lemma}[From side-length bounds to a dyadic moment]
     \label{thm:area_law_weighted_dyadic_sum}
     \lean{TNLean.PEPS.AreaLaw.Geometry.sum_weighted_dyadic_rpow_le}
     \leanok
@@ -47,7 +47,7 @@
         \sum_{k=0}^{K} a_k(2^k)^{1+e}
         \le \left(A+\frac{B}{2^e-1}\right)(2^K)^e. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Writing $a_k(2^k)^{1+e}=(2^ka_k)(2^e)^k$ and using $2^e>1$,
     \begin{align}
@@ -60,7 +60,7 @@
 
 \section{Safe rectangles in template coverings}
 
-\begin{theorem}[Safety from template separation]
+\begin{lemma}[Safety from template separation]
     \label{thm:area_template_safe_rectangles}
     \lean{TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_of_subset_ambientDilation,
         TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_cappedDyadicPartition_core,
@@ -69,7 +69,7 @@
     \uses{def:area_law_template,def:area_law_safe_rectangle,thm:area_template_dyadic_rectangle,
         thm:area_law_capped_dyadic_partition}
     For a cut-separated template $T$, integer $D_0\ge1$, and $0\le j\le s_0$ (\cite[Lemma~9.4]{OpenAI2026AreaLaw}), every integer rectangle $Q\subseteq T_j$ with $\operatorname{size}(Q)\le s_0$ is safe; in particular, if $2^K\le s_0$, every square in the scale-$K$ capped dyadic partitions of $T$ and $T_j\setminus T$ is safe.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:area_law_template_dyadic_clearance,thm:area_template_dyadic_rectangle,
         thm:area_law_capped_dyadic_partition}
@@ -77,10 +77,10 @@
     \begin{align}
         D_0\operatorname{size}(Q)\le D_0s_0 < 4D_0s_0-j < \|p-z\|_\infty-j \le \|x-z\|_\infty, \notag
     \end{align}
-    and by Theorem~\ref{thm:area_template_dyadic_rectangle} and Theorem~\ref{thm:area_law_capped_dyadic_partition}, every selected square has size $2^k\le2^K\le s_0$.
+    and by Lemma~\ref{thm:area_template_dyadic_rectangle} and Lemma~\ref{thm:area_law_capped_dyadic_partition}, every selected square has size $2^k\le2^K\le s_0$.
 \end{proof}
 
-\begin{theorem}[Weighted covering of the template core]
+\begin{lemma}[Weighted covering of the template core]
     \label{thm:area_law_template_weighted_core_cover}
     \lean{TNLean.PEPS.AreaLaw.Geometry.Template.sum_rpow_cappedDyadicPartition_core_le}
     \leanok
@@ -90,27 +90,27 @@
         \sum_{Q\in\mathcal P}\operatorname{side}(Q)^{1+e}
         \le \left(18+\frac{4}{2^e-1}\right)n s_0^e. \label{eq:template_core_cover}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_template_core_selected_count,thm:area_law_capped_dyadic_moment}
-    Combine the count bounds $2^Ka_K\le18n$ and $2^ka_k\le4n$ ($k<K$) of Theorem~\ref{thm:area_law_template_core_selected_count} with Theorem~\ref{thm:area_law_capped_dyadic_moment} at $L=s_0$.
+    Combine the count bounds $2^Ka_K\le18n$ and $2^ka_k\le4n$ ($k<K$) of Lemma~\ref{thm:area_law_template_core_selected_count} with Lemma~\ref{thm:area_law_capped_dyadic_moment} at $L=s_0$.
 \end{proof}
 
 \section{Weighted coverings of template shells}
 
-\begin{theorem}[Shell area and cap count]
+\begin{lemma}[Shell area and cap count]
     \label{thm:area_template_shell_cap}
     \lean{TNLean.PEPS.AreaLaw.Geometry.Template.card_shell_le,TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_shell_at_cap_le}
     \leanok
     \uses{def:area_law_template,def:area_law_capped_dyadic_partition}
     For a template $T$ with $C_{\rm tpl}\ge24$ and $0\le j\le L\le s_0$, one has $|T_j\setminus T|\le nj$; if $L<2^{K+1}$, the cap-scale count $a_K$ of the capped dyadic partition of $T_j\setminus T$ satisfies $2^K a_K\le2n$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_template_depth_layers,thm:area_law_capped_dyadic_partition}
-    Summing $|T_i\setminus T_{i-1}|\le n$ (Theorem~\ref{thm:area_law_template_depth_layers}) gives $|T_j\setminus T|\le nj$, and disjointness (Theorem~\ref{thm:area_law_capped_dyadic_partition}) gives $4^Ka_K\le|T_j\setminus T|\le nL<2n2^K$.
+    Summing $|T_i\setminus T_{i-1}|\le n$ (Lemma~\ref{thm:area_law_template_depth_layers}) gives $|T_j\setminus T|\le nj$, and disjointness (Lemma~\ref{thm:area_law_capped_dyadic_partition}) gives $4^Ka_K\le|T_j\setminus T|\le nL<2n2^K$.
 \end{proof}
 
-\begin{theorem}[Weighted shell covering]
+\begin{lemma}[Weighted shell covering]
     \label{thm:area_template_weighted_shell}
     \lean{TNLean.PEPS.AreaLaw.Geometry.Template.sum_rpow_cappedDyadicPartition_shell_le}
     \leanok
@@ -120,15 +120,15 @@
         \sum_{Q\in\mathcal P_{\rm sh}} \operatorname{side}(Q)^{1+e}
         \le \left(2+\frac{14}{2^e-1}\right)nL^e. \label{eq:template_shell_cover}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_template_shell_cap,thm:area_law_template_shell_selected_count,thm:area_law_capped_dyadic_moment}
-    Combine $2^Ka_K\le2n$ (Theorem~\ref{thm:area_template_shell_cap}) and $2^ka_k\le14n$ ($k<K$; Theorem~\ref{thm:area_law_template_shell_selected_count}) with Theorem~\ref{thm:area_law_capped_dyadic_moment}.
+    Combine $2^Ka_K\le2n$ (Lemma~\ref{thm:area_template_shell_cap}) and $2^ka_k\le14n$ ($k<K$; Lemma~\ref{thm:area_law_template_shell_selected_count}) with Lemma~\ref{thm:area_law_capped_dyadic_moment}.
 \end{proof}
 
 \section{Entropy from a box estimate at one exponent}
 
-\begin{theorem}[Template entropy from a box estimate at one exponent]
+\begin{lemma}[Template entropy from a box estimate at one exponent]
     \label{thm:area_template_safe_box_entropy}
     \lean{TNLean.PEPS.AreaLaw.Geometry.template_entropy_bounds_of_real_safe_box}
     \leanok
@@ -144,7 +144,7 @@
         S_\Omega\bigl(A\cap((T_{j-1}\setminus T)\cup Y)\bigr)
          & \le C_+\left(2+\frac{14}{2^e-1}\right)nL^e+n\log q. \label{eq:tpl_entropy_prefix}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \lean{TNLean.PEPS.AreaLaw.cast_supDist}
     \uses{lem:area_law_template_dyadic_clearance,
@@ -153,5 +153,5 @@
         thm:area_law_capped_dyadic_partition,
         thm:area_law_capped_dyadic_entropy_cover_of_forall}
     For any square $Q\subseteq T_j$ ($j\le s_0$) of side $u\le s_0$ in the capped dyadic partitions of $T$ (capped at $2^K\le s_0$) or $T_j\setminus T$ (capped at $2^K\le L\le s_0$), Lemma~\ref{lem:area_law_template_dyadic_clearance} gives $\operatorname{dist}_\infty(Q,Z)\ge\operatorname{dist}_\infty(T_j,Z)>4D_0s_0-j>D_0s_0\ge D_0u$, so $S_\Omega(A\cap Q)\le C_+u^{1+e}$.
-    Combining Theorem~\ref{thm:area_law_capped_dyadic_entropy_cover_of_forall} with (\ref{eq:template_core_cover}) and (\ref{eq:template_shell_cover}) yields (\ref{eq:tpl_entropy_core})--(\ref{eq:tpl_entropy_shell}), and adding (\ref{eq:template_partial_row}) to (\ref{eq:tpl_entropy_shell}) at $j-1$ yields (\ref{eq:tpl_entropy_prefix}).
+    Combining Lemma~\ref{thm:area_law_capped_dyadic_entropy_cover_of_forall} with (\ref{eq:template_core_cover}) and (\ref{eq:template_shell_cover}) yields (\ref{eq:tpl_entropy_core})--(\ref{eq:tpl_entropy_shell}), and adding (\ref{eq:template_partial_row}) to (\ref{eq:tpl_entropy_shell}) at $j-1$ yields (\ref{eq:tpl_entropy_prefix}).
 \end{proof}

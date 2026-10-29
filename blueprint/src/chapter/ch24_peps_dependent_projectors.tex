@@ -51,7 +51,7 @@ ends of that bond and the dual action at its tail.
     $A_v^0(\eta,s)=|G|^{-1}\sum_gW_v(g)_{s,\eta}$.
 \end{definition}
 
-\begin{theorem}[Canonical tensors are $G$-injective]%
+\begin{lemma}[Canonical tensors are $G$-injective]%
     \label{thm:peps_dependent_averaging_injective}
     \lean{TNLean.PEPS.DependentBondNetwork.isGInjective_representationAveragingSite,
         TNLean.PEPS.DependentBondNetwork.isGInjective_averagingSite}
@@ -59,14 +59,14 @@ ends of that bond and the dual action at its tail.
     \uses{def:peps_dependent_averaging_site, def:peps_g_injective}
     Every $A_v^0$ is $G$-injective for its representation $\rho_v$.
     In particular this holds for independently chosen incident bond actions.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Right multiplication by $\rho_v(g)$ permutes the group average, so
     $P_v\rho_v(g)=P_v$. On the invariant subspace $P_v$ is the identity,
     hence is injective there.
 \end{proof}
 
-\begin{theorem}[Expansion of the canonical contraction]%
+\begin{lemma}[Expansion of the canonical contraction]%
     \label{thm:peps_dependent_projector_expansion}
     \lean{TNLean.PEPS.DependentBondNetwork.network_sum,
         TNLean.PEPS.DependentBondNetwork.network_mul,
@@ -91,7 +91,7 @@ ends of that bond and the dual action at its tail.
     No semi-regularity or unitarity is required in this independent-bond
     version of the projector contraction of \cite[Theorem~5.9]{Schuch2010PEPS}.
     % Source: Papers/1001.3807/paper_v3.tex:1582--1621.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_dependent_incidence_sums, def:peps_dependent_incident_action}
     Expanding each local average collects the factor $|G|^{-n}$, and regrouping
@@ -100,7 +100,7 @@ ends of that bond and the dual action at its tail.
     (\ref{eq:peps_dependent_incidence_sum}).
 \end{proof}
 
-\begin{theorem}[Vertex gauges preserve canonical networks]%
+\begin{lemma}[Vertex gauges preserve canonical networks]%
     \label{thm:peps_dependent_vertex_gauge}
     \lean{TNLean.PEPS.DependentBondNetwork.network_averagingSite_bondGauge,
         TNLean.PEPS.DependentBondNetwork.network_averagingSite_vertexGauge}
@@ -113,7 +113,7 @@ ends of that bond and the dual action at its tail.
     in particular, the group-label change
     $p_e\mapsto q_{h(e)}p_eq_{t(e)}^{-1}$ preserves the canonical network.
     % Source: eq:2d-ug-sym and eq:2d:move-strings.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_dependent_projector_expansion}
     Changing the vertex summation variable from $r$ to $rq$ in
@@ -135,7 +135,7 @@ ends of that bond and the dual action at its tail.
     those maps on every coordinate vector.
 \end{definition}
 
-\begin{theorem}[Physical changes commute with cut contraction]%
+\begin{lemma}[Physical changes commute with cut contraction]%
     \label{thm:peps_dependent_physical_contraction}
     \lean{TNLean.PEPS.DependentBondNetwork.physicalMap_cutMap,
         TNLean.PEPS.DependentBondNetwork.physicalMap_network}
@@ -146,14 +146,14 @@ ends of that bond and the dual action at its tail.
     every bond-matrix family $B$,
     $\mathcal F\mathcal C_{A,C}(M)=\mathcal C_{FA,C}(M)$ and
     $\mathcal F\mathcal N_A(B)=\mathcal N_{FA}(B)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expanding the product physical map, interchanging the finite physical and
     incidence sums, and distributing the product of the local sums leaves
     the factors $M(r_C\beta)w_C(\beta)$ and $w_B(\beta)$ unchanged.
 \end{proof}
 
-\begin{theorem}[A common inverse preserves every cut boundary]%
+\begin{lemma}[A common inverse preserves every cut boundary]%
     \label{thm:peps_dependent_common_inverse}
     \lean{TNLean.PEPS.DependentBondNetwork.exists_physicalMap_to_representationAveragingSite,
         TNLean.PEPS.DependentBondNetwork.physicalMap_recover_representationAveragingSite,
@@ -180,7 +180,7 @@ ends of that bond and the dual action at its tail.
         =\mathcal T\left(\bigcap_{i\in J}\mathcal S_{A^0,C_i}\right).
         \label{eq:peps_dependent_cut_transport}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_g_injective_left_inverse,
         thm:peps_dependent_physical_contraction}
@@ -207,7 +207,7 @@ ends of that bond and the dual action at its tail.
     Define the product invariant projection $\mathcal P=\bigotimes_vP_v$.
 \end{definition}
 
-\begin{theorem}[Projecting a bare product and fixing a canonical cut]%
+\begin{lemma}[Projecting a bare product and fixing a canonical cut]%
     \label{thm:peps_dependent_average_projection}
     \lean{TNLean.PEPS.DependentBondNetwork.averagingProjector_cutMap,
         TNLean.PEPS.DependentBondNetwork.averagingProjector_network_identitySite}
@@ -217,7 +217,7 @@ ends of that bond and the dual action at its tail.
     matrices $B_e$,
     $\mathcal P\mathcal C_{A^0,C}(M)=\mathcal C_{A^0,C}(M)$ and
     $\mathcal P\mathcal N_I(B)=\mathcal N_{A^0}(B)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_dependent_averaging_injective,
         thm:peps_dependent_common_inverse, thm:peps_dependent_physical_contraction}

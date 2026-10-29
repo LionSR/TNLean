@@ -20,7 +20,7 @@
     \leanok
 \end{definition}
 
-\begin{theorem}[Two-site charge expansion]
+\begin{lemma}[Two-site charge expansion]
     \label{thm:peps_regular_two_site_charge_expansion}
     Put $N=|G|$ and
     $A_{\chi,p;x,y}(r,s)=\mathbf1_{s=yx^{-1}r}\chi(px^{-1}r)$.
@@ -36,7 +36,7 @@
     \lean{TNLean.PEPS.regularTwoSiteChargeColumn_apply,TNLean.PEPS.regularTwoSiteChargeColumn_eq_projector}
     \uses{def:peps_regular_two_site_charge_coordinates,def:peps_regular_charge_coordinates}
     \leanok
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expand both local averages and sum the shared label. For each $x,y$ its value
     is forced to be $x^{-1}\alpha_{i_0}$, giving the displayed charge matrix.
@@ -53,7 +53,7 @@
     \leanok
 \end{definition}
 
-\begin{theorem}[Canonical charge projection and local averages]
+\begin{lemma}[Canonical charge projection and local averages]
     \label{thm:peps_regular_two_site_charge_detector}
     The operator $\widehat D_\chi$ is a positive Hermitian projection, commutes with
     $P_I\otimes P_J$, and satisfies
@@ -67,7 +67,7 @@
     \lean{TNLean.PEPS.regularTwoSiteChargeDetector_properties,TNLean.PEPS.regularTwoSiteChargeDetector_column,TNLean.PEPS.regularTwoSiteChargeDetector_other_column,TNLean.PEPS.regularTwoSiteChargeDetector_translate_entries,TNLean.PEPS.regularTwoSiteChargeDetector_commute_projector}
     \uses{thm:peps_regular_two_site_charge_expansion,def:peps_regular_two_site_charge_detector}
     \leanok
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The shared-pair projector commutes with independent endpoint translations.
     Tensoring with the identity preserves this commutation and the projection
@@ -89,7 +89,7 @@
     \leanok
 \end{definition}
 
-\begin{theorem}[Two-site physical charge measurement]
+\begin{lemma}[Two-site physical charge measurement]
     \label{thm:peps_regular_two_site_physical_charge_measurement}
     Assume the two original site maps are regular $G$-isometric, with their positive
     local isometry factors. Their product $T$ satisfies
@@ -107,7 +107,7 @@
     \lean{TNLean.PEPS.exists_physicalProjectionFamily,TNLean.PEPS.regularTwoSitePhysicalChargeColumn_eq_image,TNLean.PEPS.exists_regularTwoSitePhysicalChargeProjector,TNLean.PEPS.exists_regularTwoSitePhysicalChargeMeasurement}
     \uses{thm:peps_regular_two_site_charge_detector,def:peps_regular_two_site_physical_charge_column}
     \leanok
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Derive $T^\dagger T=c(P_I\otimes P_J)$ with $c>0$ from the two local Gram
     identities. Then $Q_\chi=c^{-1}T\widehat D_\chi T^\dagger$ is the required
@@ -122,7 +122,7 @@ still requires its lattice geometry and nondegenerate contraction comparison;
 no six-spin creation or parent-Hamiltonian assertion is included here.
 
 
-\begin{theorem}[Nonzero original two-site charge columns]
+\begin{lemma}[Nonzero original two-site charge columns]
     \label{thm:peps_regular_two_site_charge_nonzero}
     Suppose $I_0,J_0$ are nonempty. At the reconstructed diagonal shared row $k$,
     \[
@@ -139,7 +139,7 @@ no six-spin creation or parent-Hamiltonian assertion is included here.
         TNLean.PEPS.regularTwoSitePhysicalChargeColumn_ne_zero_of_mem_regularChargeLabels}
     \uses{thm:peps_regular_two_site_charge_expansion,def:peps_regular_two_site_physical_charge_column,thm:peps_regular_charge_labels}
     \leanok
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The remaining legs force both translations to be the identity. Choose

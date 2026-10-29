@@ -23,7 +23,7 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
     \end{align}
 \end{definition}
 
-\begin{theorem}[An entropy threshold for the discarded weight]
+\begin{lemma}[An entropy threshold for the discarded weight]
     \label{thm:renyi_entropy_tail_threshold}
     \lean{TNLean.MPS.AreaLaw.one_sub_kyFanNorm_le_of_renyiEntropy_le}
     \leanok
@@ -35,7 +35,7 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
         \label{eq:renyi_tail_threshold}
     \end{align}
     then $\tau_D(\rho)\le T$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     For $\tau_D(\rho)>0$, Lemma~2 of~\cite{VerstraeteCirac2006Faithfully} and
@@ -49,7 +49,7 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Normalized approximation on a finite chain]
+\begin{lemma}[Normalized approximation on a finite chain]
     \label{thm:renyi_finite_mps_approximation}
     \lean{TNLean.MPS.AreaLaw.exists_normalized_isOpenMPS_of_renyiEntropy_le}
     \leanok
@@ -64,15 +64,15 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
     \end{align}
     then there exists a unit MPS $\phi_N$ of bond dimension at most $D$ with
     $\||\psi_N\rangle\langle\psi_N|-|\phi_N\rangle\langle\phi_N|\|_1\le\delta$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:renyi_entropy_tail_threshold,thm:chain_sequential_truncation_eigen,
         thm:chain_sequential_truncation_sq}
-    By Theorem~\ref{thm:renyi_entropy_tail_threshold} and
+    By Lemma~\ref{thm:renyi_entropy_tail_threshold} and
     (\ref{eq:renyi_finite_entropy_threshold}), $\tau_D(\rho_{N,k})\le\delta^2/[16(N+1)]$.
-    Lemmas~\ref{thm:chain_sequential_truncation_eigen}
-    and~\ref{thm:chain_sequential_truncation_sq} give an MPS $\Phi\ne0$ with
+    Lemma~\ref{thm:chain_sequential_truncation_eigen}
+    and Theorem~\ref{thm:chain_sequential_truncation_sq} give an MPS $\Phi\ne0$ with
     $\|\Phi-\psi_N\|^2\le\delta^2/16$. Setting $\phi_N=\Phi/\|\Phi\|$ yields
     \begin{align}
         \|\phi_N-\psi_N\|
@@ -84,20 +84,20 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
         \le2\|\phi_N-\psi_N\|\le\delta$.
 \end{proof}
 
-\begin{theorem}[Exact representation from marginal ranks]
+\begin{lemma}[Exact representation from marginal ranks]
     \label{thm:renyi_zero_exact_mps}
     \lean{TNLean.MPS.AreaLaw.isOpenMPS_of_regionState_rank_le}
     \leanok
     \uses{def:chain_open_mps}
     If $\|\psi_N\|=1$ and $\operatorname{rank}\rho_{N,k}\le D$ for every
     $0<k<N$, then $\psi_N$ is an MPS of bond dimension at most $D$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:chain_sequential_truncation_eigen,thm:chain_sequential_truncation_sq}
     Since $\tau_D(\rho_{N,k})=0$ for all $0<k<N$, sequential truncation
-    (Lemmas~\ref{thm:chain_sequential_truncation_eigen}
-    and~\ref{thm:chain_sequential_truncation_sq}) gives $\|\Phi-\psi_N\|^2=0$.
+    (Lemma~\ref{thm:chain_sequential_truncation_eigen}
+    and Theorem~\ref{thm:chain_sequential_truncation_sq}) gives $\|\Phi-\psi_N\|^2=0$.
 \end{proof}
 
 \begin{theorem}[Logarithmic R\'enyi entropy implies efficient approximation]
@@ -130,12 +130,12 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
         +t\log\frac{\varepsilon^2}{16(N+1)}.
         \label{eq:renyi_family_entropy_threshold}
     \end{align}
-    Apply Theorem~\ref{thm:renyi_finite_mps_approximation} for $0<\alpha<1$ and
-    Theorem~\ref{thm:renyi_zero_exact_mps} for $\alpha=0$ (where
+    Apply Lemma~\ref{thm:renyi_finite_mps_approximation} for $0<\alpha<1$ and
+    Lemma~\ref{thm:renyi_zero_exact_mps} for $\alpha=0$ (where
     $S_0(\rho_{N,k})=\log\operatorname{rank}\rho_{N,k}\le\log D_N$).
 \end{proof}
 
-\begin{theorem}[Rényi lower bound at a chain cut]
+\begin{lemma}[Rényi lower bound at a chain cut]
     \label{thm:chain_cut_renyi_approximation_lower_bound}
     \lean{TNLean.MPS.AreaLaw.IsOpenMPS.renyiEntropy_leftBlock_add_log_error_le_log}
     \leanok
@@ -148,7 +148,7 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
         S_\alpha(\rho_k)+\frac{\alpha}{\alpha-1}\log(1-\delta) & \le\log D
     \end{align}
     \cite{Schuch2008EntropyScaling,gap:swvc08_renyi_bond_dimension_sign}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_reduced_state_rank_error}
     By Lemma~\ref{thm:chain_reduced_state_rank_error}, the prefix marginal of
@@ -157,7 +157,7 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
     (\ref{eq:chain_cut_renyi_approximation_lower_bound}).
 \end{proof}
 
-\begin{theorem}[Rényi lower bound on an arbitrary contiguous block]
+\begin{lemma}[Rényi lower bound on an arbitrary contiguous block]
     \label{thm:chain_block_renyi_approximation_lower_bound}
     \lean{TNLean.MPS.AreaLaw.IsOpenMPS.rank_regionState_sdiff_leftBlock_le_sq,
         TNLean.MPS.AreaLaw.IsOpenMPS.rank_regionState_leftBlock_le_max,
@@ -174,7 +174,7 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
         +\frac{\alpha}{\alpha-1}\log(1-\delta) & \le2\log D
     \end{align}
     \cite{Schuch2008EntropyScaling,gap:swvc08_interior_block_bond_rank}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_reduced_state_rank_error}
     Writing $B=T\setminus R$ for nested prefixes $R\subseteq T$, complementary
@@ -215,7 +215,7 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Power-law Rényi obstruction]
+\begin{lemma}[Power-law Rényi obstruction]
     \label{thm:mps_renyi_power_growth_obstruction}
     \lean{TNLean.MPS.AreaLaw.not_isEfficientlyApproximableByMPS_of_renyi_power_growth}
     \leanok
@@ -229,7 +229,7 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
     \end{align}
     then $(\psi_N)_{N\in\mathcal N}$ is not efficiently approximable by MPS
     \cite[lines 309--315]{Schuch2008EntropyScaling}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:efficient_mps_renyi_logarithmic_bound}
     For $N\ge1$, (\ref{eq:mps_renyi_power_growth_hypotheses}) gives
@@ -238,7 +238,7 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
     $\log(N+1)=o((N+1)^\kappa)$.
 \end{proof}
 
-\begin{theorem}[Regional entropy from a spectral tail]
+\begin{lemma}[Regional entropy from a spectral tail]
     \label{thm:chain_von_neumann_spectral_tail}
     \lean{TNLean.MPS.AreaLaw.regionEntropy_le_log_rank_add_spectral_tail}
     \leanok
@@ -249,14 +249,14 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
         S_\psi(R) & \le\log D+\varepsilon |R|\log q+\log2
     \end{align}
     \cite[lines 278--305]{Schuch2008EntropyScaling}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Apply the spectral-concentration entropy bound of
     \cite[``Spectral concentration and von Neumann entropy'']{QICLean2026Blueprint}
     on $\dim\mathcal H_R=q^{|R|}$.
 \end{proof}
 
-\begin{theorem}[Single-boundary entropy bound at small approximation error]
+\begin{lemma}[Single-boundary entropy bound at small approximation error]
     \label{thm:chain_von_neumann_prefix_error}
     \lean{TNLean.MPS.AreaLaw.IsOpenMPS.regionEntropy_leftBlock_le_log_add_half_error}
     \leanok
@@ -268,7 +268,7 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
         \label{eq:chain_von_neumann_prefix_error}
         S_\psi(R) & \le\log D+\frac{\delta}{2}|R|\log q+\log2.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_reduced_state_rank_error,thm:chain_von_neumann_spectral_tail}
     Since $\operatorname{rank}\rho_{\phi,R}\le\max(1,D)$, the half-error
@@ -278,11 +278,11 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
     (\ref{eq:chain_von_neumann_spectral_tail}) with $\log\max(1,D)=\log D$.
 \end{proof}
 
-\begin{theorem}[Two-boundary entropy bound at small approximation error]
+\begin{lemma}[Two-boundary entropy bound at small approximation error]
     \label{thm:chain_von_neumann_block_error}
     \lean{TNLean.MPS.AreaLaw.IsOpenMPS.regionEntropy_sdiff_leftBlock_le_two_log_add_half_error}
     \leanok
-    Under the hypotheses of Theorem~\ref{thm:chain_von_neumann_prefix_error},
+    Under the hypotheses of Lemma~\ref{thm:chain_von_neumann_prefix_error},
     every contiguous block $R$ satisfies
     \begin{align}
         \label{eq:chain_von_neumann_block_error}
@@ -290,7 +290,7 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
     \end{align}
     \cite[lines 269--305]{Schuch2008EntropyScaling},
     \cite{gap:swvc08_von_neumann_error_range,gap:swvc08_interior_block_bond_rank}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_von_neumann_spectral_tail,thm:chain_block_renyi_approximation_lower_bound}
     By (\ref{eq:chain_block_rank_product}),
@@ -299,7 +299,7 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
     $\log(\max(1,D)^2)=2\log D$.
 \end{proof}
 
-\begin{theorem}[Arbitrarily small linear entropy bounds]
+\begin{lemma}[Arbitrarily small linear entropy bounds]
     \label{thm:efficient_mps_von_neumann_bound}
     \lean{TNLean.MPS.AreaLaw.IsEfficientlyApproximableByMPS.exists_vonNeumann_bound}
     \leanok
@@ -310,7 +310,7 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
         \label{eq:efficient_mps_von_neumann_bound}
         S_{\psi_N}(R_N) & \le K+m\log(N+1)+\varepsilon N.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_von_neumann_block_error}
     Apply (\ref{eq:chain_von_neumann_block_error}) with
@@ -318,7 +318,7 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
     and $|R_N|\le N$.
 \end{proof}
 
-\begin{theorem}[Linear von Neumann entropy obstructs efficient approximation]
+\begin{lemma}[Linear von Neumann entropy obstructs efficient approximation]
     \label{thm:mps_linear_von_neumann_obstruction}
     \lean{TNLean.MPS.AreaLaw.not_isEfficientlyApproximableByMPS_of_linear_vonNeumann_growth}
     \leanok
@@ -332,7 +332,7 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
     then $(\psi_N)_{N\in\mathcal N}$ is not efficiently approximable by MPS
     \cite[lines 278--305]{Schuch2008EntropyScaling},
     \cite{gap:swvc08_von_neumann_error_range,gap:swvc08_interior_block_bond_rank}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:efficient_mps_von_neumann_bound}
     Choosing $\varepsilon=c\eta/2$ in (\ref{eq:efficient_mps_von_neumann_bound})
