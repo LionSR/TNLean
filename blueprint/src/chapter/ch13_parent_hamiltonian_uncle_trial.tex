@@ -90,6 +90,40 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
     the four displayed summands.
 \end{proof}
 
+\begin{lemma}[The actual endpoint quadratic energy]
+    \label{lem:uncle_trial_endpoint_quadratic_energy}
+    \lean{MPSTensor.norm_uncleInteractionES_apply_le,
+        MPSTensor.norm_uncleInteractionES_le_one,
+        MPSTensor.re_inner_uncleInteractionES_eq_norm_sq,
+        MPSTensor.re_inner_uncleInteractionES_bounds,
+        MPSTensor.re_inner_uncleHamiltonianES_trial_eq_sum_endpoints,
+        MPSTensor.re_inner_uncleHamiltonianES_trial_le_endpoint_norms}
+    \notready
+    \uses{lem:uncle_trial_four_bond_localization,def:two_block_uncle_tensor}
+    The actual local uncle projector is a contraction, and
+    \[
+        0\le\operatorname{Re}\langle h'_P v,v\rangle
+        =\|h'_P v\|^2\le\|v\|^2.
+    \]
+    Let $R_{i,\tau}$ restrict to the ordered cyclic pair starting at $i$
+    with fixed exterior configuration $\tau$. The actual finite trial satisfies
+    \[
+        \operatorname{Re}\langle H'_P\phi_N,\phi_N\rangle
+        =d^{-2}\sum_{i\in E_N}\sum_\tau\|h'_P R_{i,\tau}\phi_N\|^2
+        \le d^{-2}\sum_{i\in E_N}\sum_\tau\|R_{i,\tau}\phi_N\|^2.
+    \]
+    The latter finite bound does not yet assert the source's linear energy rate.
+\end{lemma}
+\begin{proof}
+    The local interaction is an isometric conjugate of an orthogonal projector.
+    Orthogonal projection contracts norms, and its real quadratic form equals
+    the squared projected norm. Expand the preceding four-bond identity,
+    move each restriction adjoint through the inner product, and apply that
+    local quadratic identity. The real scalar $d^{-2}$ is nonnegative,
+    so contraction bounds each squared projected norm by the corresponding
+    squared restricted norm.
+\end{proof}
+
 The four interval-end energy estimates, the asymptotic norm and ground-sector
 orthogonality estimates, the proper algebraic exceptional sets, and the
 variational spectral conclusion are separate steps. The exact finite

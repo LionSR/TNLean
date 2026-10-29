@@ -9664,3 +9664,15 @@ there is no need for a new tactic.
   Existing wrapping-site lemmas supply the periodic endpoint evaluations.
 - **Decision:** Keep the coordinate lemmas and direct source partition; no new
   support predicate or assumed vanishing condition.
+
+
+### Conjugated projector contraction and quadratic form — reused Mathlib (2026-10-29)
+
+- **Seen:** `MPS/ParentHamiltonian/UncleTrialEnergy.lean`.
+- **Pattern:** The actual interaction is an isometric conjugate of a submodule
+  projection; transport norm and inner-product statements through that isometry.
+- **Reuse:** `Submodule.norm_starProjection_apply_le`,
+  `Submodule.re_inner_starProjection_eq_normSq` and the isometry's norm/inner
+  preservation give both claims directly. The endpoint quadratic sum reuses
+  the already-derived global cancellation identity and adjoint-inner identity.
+- **Decision:** No new projection structure or automation; use the library lemmas.
