@@ -127,7 +127,10 @@ theorem intervalCoordinates_finiteChainMPOMatrix {d D : ℕ}
     intervalCoordinates d a N (finiteChainMPOMatrix U N a) = MPOTensor.mpo U N := by
   classical
   ext row col
-  simp [intervalCoordinates_apply, finiteChainMPOMatrix, Matrix.reindex_apply]
+  change MPOTensor.mpo U N
+    ((finiteChainConfigEquiv d N a).symm (finiteChainConfigEquiv d N a row))
+    ((finiteChainConfigEquiv d N a).symm (finiteChainConfigEquiv d N a col)) = _
+  simp only [Equiv.symm_apply_apply]
 
 /-- Actual finite-chain unitary conjugation in consecutive coordinates.
 The periodic matrix and its ordering do not depend on the interval anchor.
@@ -136,8 +139,7 @@ theorem intervalCoordinates_finiteChainConjugation {d D : ℕ} {U : MPOTensor d 
     (hU : U.IsMPU) {N : ℕ} (hN : 1 < N) (a : ℤ)
     (A : LocalAlgebra d (finiteChainRegion a N)) :
     intervalCoordinates d a N (finiteChainConjugation hU hN a A) =
-      Matrix.mul (Matrix.mul (MPOTensor.mpo U N) (intervalCoordinates d a N A))
-        (MPOTensor.mpo U N)ᴴ := by
+      MPOTensor.mpo U N * intervalCoordinates d a N A * (MPOTensor.mpo U N)ᴴ := by
   rw [finiteChainConjugation_apply, map_mul, map_mul, map_star,
     intervalCoordinates_finiteChainMPOMatrix, Matrix.star_eq_conjTranspose]
 
