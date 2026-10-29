@@ -55,10 +55,10 @@ full build and final strict-check success. All four issues remain open.
 
 | Issue | Draft and verified source head | Individual changed Lean checks | Remaining gate |
 |---|---|---:|---|
-| [#10275](https://github.com/LionSR/TNLean/issues/10275) | [#10289](https://github.com/LionSR/TNLean/pull/10289), `2a9ea772` | 3/3 | Reconcile current main and obtain fresh acceptance before integration. |
-| [#10276](https://github.com/LionSR/TNLean/issues/10276) | [#10294](https://github.com/LionSR/TNLean/pull/10294), `6ec6e186` | 2/2 | Integrate its actual #10289 base stack; do not assess it against a different PR base. |
-| [#10277](https://github.com/LionSR/TNLean/issues/10277) | [#10302](https://github.com/LionSR/TNLean/pull/10302), `f3e72c028` | 2/2 | QICLean [#987](https://github.com/LionSR/QICLean/pull/987) acceptance, coherent accepted repin across all three dependency files, current-main reconciliation and integration. |
-| [#10279](https://github.com/LionSR/TNLean/issues/10279) | [#10307](https://github.com/LionSR/TNLean/pull/10307), `3a087f5c7` | 7/7 | Current-main reconciliation and fresh acceptance; preserve the resolved missing-diagonal correction and the printed CP family without adding trace preservation. |
+| [#10275](https://github.com/LionSR/TNLean/issues/10275) | [#10289](https://github.com/LionSR/TNLean/pull/10289), `2a9ea772` | 3/3 | Reconciled head `ba68e62be`; fresh exact-head acceptance and integration remain. |
+| [#10276](https://github.com/LionSR/TNLean/issues/10276) | [#10294](https://github.com/LionSR/TNLean/pull/10294), `6ec6e186` | 2/2 | Reconciled head `83e2e92c2` on actual #10289 base; fresh acceptance and stack integration remain. |
+| [#10277](https://github.com/LionSR/TNLean/issues/10277) | [#10302](https://github.com/LionSR/TNLean/pull/10302), `f3e72c028` | 2/2 | QICLean [#987](https://github.com/LionSR/QICLean/pull/987) acceptance, coherent accepted repin across all three dependency files, fresh acceptance and integration. Reconciled head `73ebff776` preserves the existing draft pin. |
+| [#10279](https://github.com/LionSR/TNLean/issues/10279) | [#10307](https://github.com/LionSR/TNLean/pull/10307), `3a087f5c7` | 7/7 | Reconciled head `3c4b0a6de` needs fresh acceptance and integration; preserve the resolved missing-diagonal correction and the printed CP family without adding trace preservation. |
 
 The stochastic upstream PR remains draft/open. Its newer verified head is
 `c4cbc544f7`, while the verified downstream snapshot explicitly pins `7a1bc092`.
