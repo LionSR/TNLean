@@ -182,14 +182,11 @@ theorem uncleBoundaryLetter_mixedMapSpectralRadius_reverse_lt_one [NeZero a] [Ne
       Matrix.conjTranspose_zero] using congrArg Matrix.conjTranspose h)
   have hEig : Module.End.HasEigenvalue (Kraus.mixedMapLM A B) (star μ) :=
     hasEigenvalue_of_eigenvector_eq _ _ Xᴴ hEXstar hne
-  have hSpec : star μ ∈ spectrum ℂ
-      ((Module.End.toContinuousLinearMap (Matrix (Fin a) (Fin b) ℂ))
-        (Kraus.mixedMapLM A B)) := by
-    rw [AlgEquiv.spectrum_eq]
-    exact Module.End.hasEigenvalue_iff_mem_spectrum.mp hEig
+  have hSpec : star μ ∈ spectrum ℂ (Kraus.mixedMapLM A B) :=
+    Module.End.hasEigenvalue_iff_mem_spectrum.mp hEig
   have hbound : (‖star μ‖₊ : ℝ≥0∞) ≤ Kraus.mixedMapSpectralRadius A B := by
     unfold Kraus.mixedMapSpectralRadius
-    rw [spectralRadius_eq_of_unital]
+    rw [spectralRadius_eq_of_unital, AlgEquiv.spectrum_eq]
     exact le_iSup_of_le (star μ) (le_iSup_of_le hSpec le_rfl)
   have hlt := hbound.trans_lt hgap
   simpa only [norm_star] using (show ‖star μ‖ < 1 by exact_mod_cast hlt)
