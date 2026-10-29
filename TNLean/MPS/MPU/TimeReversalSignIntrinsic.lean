@@ -58,7 +58,11 @@ private noncomputable def pairExchange (d : ℕ) :
 
 private theorem pairExchange_apply (i j : (Fin d × Fin d) × (Fin d × Fin d)) :
     pairExchange d i j = if i.1 = j.2 ∧ i.2 = j.1 then 1 else 0 := by
-  simp [pairExchange, Matrix.reindex_apply, Matrix.swapMatrix_apply]
+  change Matrix.swapMatrix (d * d)
+      (finProdFinEquiv i.1, finProdFinEquiv i.2)
+      (finProdFinEquiv j.1, finProdFinEquiv j.2) = _
+  rw [Matrix.swapMatrix_apply]
+  simp only [Equiv.apply_eq_iff_eq]
 
 private theorem pairExchange_mul_apply
     (M : Matrix ((Fin d × Fin d) × (Fin d × Fin d))
@@ -103,7 +107,7 @@ private theorem twoSiteShiftedLayer_two
       rw [Matrix.mul_apply]
       simp_rw [mul_pairExchange_apply, pairExchange_mul_apply]
       simp [Fintype.sum_prod_type, staircaseMiddle, Matrix.kroneckerMap_apply,
-        Matrix.one_apply, mul_ite, ite_mul, mul_comm, mul_left_comm, mul_assoc]
+        Matrix.one_apply, mul_ite, ite_mul, mul_comm]
 
 /-- The gate trace is the trace of exchange against the actual periodic
 operator on two physical blocks. No unitarity or symmetry is needed for
@@ -120,8 +124,9 @@ theorem TwoSiteStandardFormData.timeReversalTrace_eq_periodicTrace
   let f := finTwoArrowEquiv (Fin d × Fin d)
   let q := (finTwoArrowEquiv (Fin (d * d))).trans p.symm
   have hq : (twoSitePairConfigEquiv d 2).symm.trans f = q := by
-    ext z
-    apply Prod.ext <;> rfl
+    apply Equiv.ext
+    intro z
+    rfl
   have h := congrArg (Matrix.reindexRingEquiv ℂ f)
     (TwoSiteStandardFormData.mpo_eq_shifted_mul_unshifted (N := 2) W u v S)
   simp only [map_mul, Matrix.coe_reindexRingEquiv] at h
@@ -195,7 +200,7 @@ theorem intrinsicTimeReversalSign_eq_on_path
     (W : ℝ → MPOTensor (d * d) D) (hW : ContinuousOn W (Set.Icc (0 : ℝ) 1))
     (hpoint : ∀ t ∈ Set.Icc (0 : ℝ) 1,
       ∃ u v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ,
-      ∃ S : TwoSiteStandardFormData (W t) u v,
+      ∃ _S : TwoSiteStandardFormData (W t) u v,
       ∃ σ : ℂ, ∃ x : Matrix.unitaryGroup (Fin d × Fin d) ℂ,
         (σ = 1 ∨ σ = -1) ∧
         staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u) =

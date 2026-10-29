@@ -38,7 +38,7 @@ private theorem staircaseMiddle_conjTranspose
   ext ⟨⟨a, b⟩, c, e⟩ ⟨⟨a', b'⟩, c', e'⟩
   by_cases haa : a = a' <;> by_cases hee : e = e' <;>
     simp [staircaseMiddle, Matrix.conjTranspose_apply, Matrix.kroneckerMap_apply,
-      Matrix.one_apply, haa, hee, eq_comm]
+      haa, hee, eq_comm]
 
 /-- The literal three-gate time-reversal equation determines the normalized
 trace sign of the actual supplied standard form. Source:
