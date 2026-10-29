@@ -134,7 +134,8 @@ noncomputable def uncleBoundaryMulRight (N : Matrix (Fin (a + b)) (Fin (a + b)) 
   map_smul' c M := by
     obtain ⟨A, R, L, B, rfl⟩ := exists_eq_uncleBlockMatrix M
     obtain ⟨A', R', L', B', rfl⟩ := exists_eq_uncleBlockMatrix N
-    simp only [uncleBlockMatrix_smul, uncleBoundaryMul_block, Matrix.smul_mul, smul_add]
+    simp only [uncleBlockMatrix_smul, uncleBoundaryMul_block, Matrix.smul_mul, smul_add,
+      RingHom.id_apply]
 
 /-- Left multiplication in the boundary product, as a linear map. -/
 noncomputable def uncleBoundaryMulLeft (M : Matrix (Fin (a + b)) (Fin (a + b)) ℂ) :
@@ -150,7 +151,8 @@ noncomputable def uncleBoundaryMulLeft (M : Matrix (Fin (a + b)) (Fin (a + b)) �
   map_smul' c N := by
     obtain ⟨A, R, L, B, rfl⟩ := exists_eq_uncleBlockMatrix M
     obtain ⟨A', R', L', B', rfl⟩ := exists_eq_uncleBlockMatrix N
-    simp only [uncleBlockMatrix_smul, uncleBoundaryMul_block, Matrix.mul_smul, smul_add]
+    simp only [uncleBlockMatrix_smul, uncleBoundaryMul_block, Matrix.mul_smul, smul_add,
+      RingHom.id_apply]
 
 @[simp] theorem uncleBoundaryMulRight_apply
     (N M : Matrix (Fin (a + b)) (Fin (a + b)) ℂ) :
