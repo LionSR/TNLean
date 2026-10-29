@@ -89,6 +89,19 @@ noncomputable def uncleWallSlopeBilin
       Matrix.trace_smul, smul_eq_mul]
     ring
 
+/-- The bilinear contraction evaluates to the explicit finite trace
+pairing and the genuine convergent correlation series;
+arXiv:1210.6613, proof of Lemma lowenergystates. -/
+theorem uncleWallSlopeBilin_apply
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (ρ : Matrix (Fin a) (Fin a) ℂ)
+    (hSpect : Kraus.mixedMapSpectralRadius A B < 1)
+    (R S : Fin d → Matrix (Fin a) (Fin b) ℂ) :
+    uncleWallSlopeBilin A B ρ hSpect R S =
+      (Matrix.trace (ρ * ∑ i, R i * (S i)ᴴ)).re +
+        2 * (Matrix.trace (ρ * ∑ i,
+          A i * uncleWallCorrelationLimit A B R * (S i)ᴴ)).re := rfl
+
 /-- The actual source norm coefficient as a real quadratic form on the
 space of rectangular walls; arXiv:1210.6613, proof of Lemma lowenergystates.
 No positivity or genericity premise is used in this definition. -/
@@ -108,8 +121,10 @@ theorem uncleWallSlopeQuadratic_apply
     (hSpect : Kraus.mixedMapSpectralRadius A B < 1)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ) :
     uncleWallSlopeQuadratic A B ρ hSpect R = (uncleWallNormSlope A B R ρ).re := by
-  simp [uncleWallSlopeQuadratic, uncleWallSlopeBilin, uncleWallNormSlope,
-    uncleWallCrossWeight_apply, uncleWallCrossMap_apply, Complex.add_re]
+  rw [uncleWallSlopeQuadratic, LinearMap.BilinMap.toQuadraticMap_apply]
+  rw [uncleWallSlopeBilin_apply]
+  rw [uncleWallNormSlope, Complex.add_re, Complex.add_re, Complex.star_def, Complex.conj_re]
+  simp only [uncleWallCrossWeight_apply, uncleWallCrossMap_apply, Matrix.mul_assoc]
   ring
 
 /-- The source normalized wall quadratic form is nonnegative at every wall;
