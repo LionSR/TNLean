@@ -1,0 +1,59 @@
+\subsection{The prescribed bounded open-boundary window}
+\label{sec:quadratic_prescribed_obc_window}
+
+\begin{lemma}[Physical prefix bases of the prescribed minimal representation]
+    \label{lem:quadratic_prescribed_prefix_basis}
+    \lean{OBCChainTensor.linearIndependent_physicalPrefixMatrix,
+        OBCChainTensor.cutColumnSpace_eq_span_physicalPrefixMatrix,
+        OBCChainTensor.physicalPrefixBasis,
+        OBCChainTensor.physicalPrefixBasis_apply,
+        OBCChainTensor.toMatrix_cutSlice_physicalPrefixBasis}
+    \notready
+    At a minimal bond of any prescribed OBC representation, its own
+    physical prefix columns form a basis of the actual physical cut
+    column space. Between two minimal bonds, the matrix of physical
+    coordinate slicing in these bases is the original supplied site
+    matrix.
+\end{lemma}
+\begin{proof}
+    The actual coefficient matrix factors through the prescribed
+    prefix and suffix factors. Its rank equals the bond dimension,
+    so the prefix columns are independent. The physical column
+    space is contained in their span, and equality of dimensions
+    gives equality of spaces. The original adjacent-prefix recursion
+    then identifies each supplied site matrix with physical slicing.
+\end{proof}
+
+\begin{lemma}[A quadratic solution over the prescribed OBC window]
+    \label{lem:quadratic_prescribed_obc_window_solution}
+    \lean{MPSTensor.prescribedOBC_window_bondDim_eq,
+        MPSTensor.prescribedOBCWindowBondEquiv,
+        MPSTensor.quadraticPrescribedOBCWindow,
+        MPSTensor.prescribedOBCWindowCutBases,
+        MPSTensor.quadraticPrescribedOBCWindow_eq_physicalCutWindow,
+        MPSTensor.exists_quadraticSolution_prescribedOBCWindow}
+    \notready
+    \uses{lem:quadratic_prescribed_prefix_basis,
+        lem:quadratic_injective_physical_cut,
+        lem:quadratic_actual_physical_window_solution}
+    Let $A$ be a canonical TI tensor of positive bond dimension $D$
+    satisfying C1 at length $L_0$, with $N>2L_0+D^4$. Let $B$ be any
+    prescribed OBC representation of its actual length-$N$ state,
+    with all bonds bounded by $D^2$. Then every bond at the
+    $D^4+1$ cuts of the reconstruction window has dimension exactly
+    $D^2$. The original site matrices of $B$ in this window, expressed
+    in the resulting doubled coordinates, admit a solution of the
+    quadratic system. No solution, comparison gauge, or bond equality
+    is supplied. The prescribed representation may in particular
+    be the canonical one; uniqueness is unnecessary.
+\end{lemma}
+\begin{proof}
+    At each window cut, C1 forces physical rank $D^2$. This rank is
+    at most the original bond dimension, which is at most $D^2$.
+    Hence the bond is minimal. The preceding lemma derives physical
+    cut bases from the original prefix columns and identifies the
+    original sites with physical slicing. The solution construction
+    for any physical cut-basis window therefore applies to this very
+    prescribed representation. Only the forced coordinate
+    identification is made; the representation is not replaced.
+\end{proof}

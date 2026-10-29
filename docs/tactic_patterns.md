@@ -9699,3 +9699,17 @@ there is no need for a new tactic.
 - **Decision:** a matrix-factor comparison lemma suffices; the common-bound
   padding remains only in the actual boundary contractions, not in the
   rectangular local formula.
+
+
+### Prescribed minimal OBC prefix factors — promoted physical-basis helper (2026-10-29)
+
+- **Pattern:** derive independence and physical column-space equality of an
+  actual original prefix factor from the prefix-suffix factorization and
+  equality of physical rank and bond dimension.
+- **Abstraction:** `OBCChainTensor.physicalPrefixBasis` and
+  `toMatrix_cutSlice_physicalPrefixBasis` in `Preparation/OBCMinimalPrefixBasis.lean`.
+- **Caller:** `CanonicalForm/QuadraticPrescribedOBCWindow.lean` derives minimality
+  from C1 and the source bond bound, then identifies the original supplied
+  window by the shared basis/slicing helper.
+- **Decision:** no new gauge predicate or repeated matrix-entry comparison;
+  use the actual physical prefix recursion and existing finite-rank lemmas.

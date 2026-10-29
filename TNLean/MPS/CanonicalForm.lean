@@ -36,6 +36,7 @@ import TNLean.MPS.CanonicalForm.ProjectorClosure
 import TNLean.MPS.CanonicalForm.ProjectorClosureDecomposition
 import TNLean.MPS.CanonicalForm.ProjectorClosureSpectral
 import TNLean.MPS.CanonicalForm.QuadraticPhysicalCutWindow
+import TNLean.MPS.CanonicalForm.QuadraticPrescribedOBCWindow
 import TNLean.MPS.CanonicalForm.QuadraticReconstruction
 import TNLean.MPS.CanonicalForm.QuadraticReconstructionConverse
 import TNLean.MPS.CanonicalForm.QuadraticSolutionRephasing
