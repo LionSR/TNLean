@@ -9627,3 +9627,13 @@ there is no need for a new tactic.
   add unrelated dependencies. If a shared one-step statement is needed, move that existing
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
+
+### Local interaction separation by a joint boundary map — candidate
+- **Pattern:** compose an arbitrary local interaction with the joint boundary
+  map, extend vanishing from a spanning word family using
+  `LinearMap.ext_on_range`, and evaluate on `Pi.single` to isolate a block.
+- **Seen:** `MPS/ParentHamiltonian/ArbitraryInteractionBlockDegeneracy.lean`.
+- **Notes:** one occurrence. The implementation reuses Mathlib `LinearMap.lsum`
+  and `lsum_piSingle`; it avoids entrywise expansion of the local interaction.
+  Positivity is used separately via QICLean's
+  `WeightedPositiveKernel.apply_sum_eq_zero_iff`.

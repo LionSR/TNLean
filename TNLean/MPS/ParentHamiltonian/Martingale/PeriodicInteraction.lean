@@ -86,6 +86,21 @@ theorem periodicLocalInteractionES_smul (c : ℂ)
       ContinuousLinearMap.toLinearMap_smul]
   · simp
 
+/-- Extending the zero local interaction gives zero. -/
+@[simp] theorem periodicLocalInteractionES_zero (i : Fin N) :
+    periodicLocalInteractionES
+      (0 : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R)) i = 0 := by
+  simp [periodicLocalInteractionES]
+
+/-- Extension to a cyclic window preserves positivity. -/
+theorem periodicLocalInteractionES_isPositive
+    {h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R)}
+    (hh : h.IsPositive) (i : Fin N) :
+    (periodicLocalInteractionES h i).IsPositive := by
+  apply LinearMap.nonneg_iff_isPositive.mp
+  simpa only [periodicLocalInteractionES_zero] using
+    periodicLocalInteractionES_mono (LinearMap.nonneg_iff_isPositive.mpr hh) i
+
 /-- A zero local interaction gives a zero periodic Hamiltonian. -/
 @[simp] theorem periodicInteractionHamiltonianES_zero (N : ℕ) :
     periodicInteractionHamiltonianES
