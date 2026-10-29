@@ -81,14 +81,14 @@ theorem uncleHamiltonianES_apply_eq_zero_iff
       ∀ (i : Fin N) (τ : Cfg d N),
         uncleInteractionES A B R L (cyclicRestrictES (Fin.pos i) 2 i τ v) = 0 := by
   classical
-  letI : NeZero N := ⟨by omega⟩
+  let : NeZero N := ⟨by omega⟩
   by_cases hd : d = 0
   · subst d
     constructor
     · intro _ i τ
       exact Fin.elim0 (τ 0)
     · intro _
-      letI : IsEmpty (Cfg 0 N) := ⟨fun τ ↦ Fin.elim0 (τ 0)⟩
+      let : IsEmpty (Cfg 0 N) := ⟨fun τ ↦ Fin.elim0 (τ 0)⟩
       simp [uncleHamiltonianES]
   let c : ℝ := ((d ^ 2 : ℕ) : ℝ)⁻¹
   have hc : 0 < c := inv_pos.mpr (Nat.cast_pos.mpr (pow_pos (Nat.pos_of_ne_zero hd) 2))
@@ -107,8 +107,9 @@ theorem uncleHamiltonianES_apply_eq_zero_iff
     ext ψ
     simp [uncleHamiltonianES, K, c, Fintype.sum_prod_type, Finset.smul_sum]
   change (uncleHamiltonianES A B R L N).toLinearMap v = 0 ↔ _
-  rw [hsum, WeightedPositiveKernel.apply_weighted_sum_eq_zero_iff
-    (w := fun _ : Fin N × Cfg d N ↦ c) (P := K) (fun _ ↦ hc) hK v]
+  rw [hsum]
+  refine (WeightedPositiveKernel.apply_weighted_sum_eq_zero_iff
+    (w := fun _ : Fin N × Cfg d N ↦ c) (P := K) (fun _ ↦ hc) hK v).trans ?_
   constructor
   · intro h i τ
     have hz : Complex.re ⟪K (i, τ) v, v⟫_ℂ = 0 := by rw [h (i, τ)]; simp
