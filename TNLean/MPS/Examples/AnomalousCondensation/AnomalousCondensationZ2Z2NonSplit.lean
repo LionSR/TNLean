@@ -53,8 +53,8 @@ certificates. It would not remove a flag or intertwiner proof, since those are
 already shared. Retain the named integer certificates and their direct checks;
 the defect module obtains the generic sixteen-pair assembly from target normality
 and the assembled word-trace identity.
-This records the decision on issue #7845 without asserting that the common flag
-positions differ between the four cases.
+The audit `docs/audits/2026-10-29_condensation_pair_certificates.md` records
+the common flag position and the four distinct numerical certificates.
 
 ## Main results
 

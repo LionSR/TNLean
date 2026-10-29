@@ -49,9 +49,9 @@ proofs. A single `Fin 4 × Fin 4` family would therefore replace these data entr
 by dependent dimension cases and gauge cases without removing a compression
 argument. The complete assembly already uses `pairTarget` and the generic
 compression existence theorem in the defect module. Keep the explicit entries
-for their dimension-specific equalities and integer certificates. This is the
-decision on issue #7845; the shared constructions, rather than another indexed
-family of them, own the repeated proof pattern.
+for their dimension-specific equalities and integer certificates. The audit
+`docs/audits/2026-10-29_condensation_pair_certificates.md` records this choice.
+The shared constructions own the repeated proof pattern.
 
 ## Main definitions
 
