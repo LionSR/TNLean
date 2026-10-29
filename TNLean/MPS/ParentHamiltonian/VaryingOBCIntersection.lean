@@ -70,7 +70,7 @@ theorem obc_overlap_boundary_mul_eq
 three-site boundary. Its explicit value is the sum of the right
 boundary times the adjoint first-site tensor.
 Source: PGVWC07, Theorem 9 proof, lines 1224–1234. -/
-theorem obc_threeSite_boundary_reconstruction
+theorem obc_three_site_boundary_reconstruction
     (A : I → Matrix a b ℂ) (B : J → Matrix b c ℂ) (C : K → Matrix c e ℂ)
     (hA : ∑ i, A i * (A i)ᴴ = (1 : Matrix a a ℂ))
     (hB : Submodule.span ℂ (Set.range B) = ⊤)
@@ -100,7 +100,7 @@ theorem obc_threeSite_boundary_reconstruction
 /-- The common boundary gives the actual three-site trace coefficients,
 with all four virtual leg spaces allowed to differ.
 Source: PGVWC07, Theorem 9 proof, lines 1224–1234. -/
-theorem obc_threeSite_trace_reconstruction
+theorem obc_three_site_trace_reconstruction
     (A : I → Matrix a b ℂ) (B : J → Matrix b c ℂ) (C : K → Matrix c e ℂ)
     (hA : ∑ i, A i * (A i)ᴴ = (1 : Matrix a a ℂ))
     (hB : Submodule.span ℂ (Set.range B) = ⊤)
@@ -110,7 +110,7 @@ theorem obc_threeSite_trace_reconstruction
     (i : I) (j : J) (k : K) :
     Matrix.trace (X k * A i * B j) =
       Matrix.trace ((∑ t, Y t * (A t)ᴴ) * A i * B j * C k) := by
-  rw [obc_threeSite_boundary_reconstruction A B C hA hB X Y hOverlap k]
+  rw [obc_three_site_boundary_reconstruction A B C hA hB X Y hOverlap k]
   simpa only [Matrix.mul_assoc] using
     Matrix.trace_mul_comm (C k) ((∑ t, Y t * (A t)ᴴ) * A i * B j)
 
@@ -120,7 +120,7 @@ boundary families are obtained from the local conditions rather than
 supplied as global reconstruction data.
 Source: PGVWC07, Theorem 9 proof, equation unique-OBC and the displayed
 Y construction, lines 1212–1234. -/
-theorem obc_threeSite_reconstruction_of_pair_sections
+theorem obc_three_site_reconstruction_of_pair_sections
     (A : I → Matrix a b ℂ) (B : J → Matrix b c ℂ) (C : K → Matrix c e ℂ)
     (hA : ∑ i, A i * (A i)ᴴ = (1 : Matrix a a ℂ))
     (hB : Submodule.span ℂ (Set.range B) = ⊤)
@@ -143,13 +143,13 @@ theorem obc_threeSite_reconstruction_of_pair_sections
     (hX i j k).symm.trans (hY i j k)
   refine ⟨∑ t, Y t * (A t)ᴴ, ?_⟩
   intro i j k
-  exact (hX i j k).trans (obc_threeSite_trace_reconstruction A B C hA hB X Y hOverlap i j k)
+  exact (hX i j k).trans (obc_three_site_trace_reconstruction A B C hA hB X Y hOverlap i j k)
 
 /-- Blocking two consecutive rectangular canonical site families
 preserves the row-isometry identity. This supplies the isometry step
 when the open-boundary reconstruction is iterated over longer blocks.
 Source: PGVWC07, Theorem 9 proof, lines 1224–1237. -/
-theorem obc_block_rowIsometry [DecidableEq b]
+theorem obc_block_row_isometry [DecidableEq b]
     (A : I → Matrix a b ℂ) (B : J → Matrix b c ℂ)
     (hA : ∑ i, A i * (A i)ᴴ = (1 : Matrix a a ℂ))
     (hB : ∑ j, B j * (B j)ᴴ = (1 : Matrix b b ℂ)) :
