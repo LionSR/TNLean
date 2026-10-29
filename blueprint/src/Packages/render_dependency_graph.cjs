@@ -18,10 +18,21 @@ async function layoutInWorker(dot, assetRoot) {
       workerData: {dot, assetRoot},
       resourceLimits: {stackSizeMb: LAYOUT_STACK_MB},
     });
-    worker.once('message', resolve);
-    worker.once('error', reject);
+    let settled = false;
+    worker.once('message', result => {
+      settled = true;
+      resolve(result);
+    });
+    worker.once('error', error => {
+      settled = true;
+      reject(error);
+    });
     worker.once('exit', code => {
-      if (code !== 0) reject(new Error('Graphviz worker exited with code ' + code));
+      if (settled) return;
+      settled = true;
+      reject(new Error(code === 0
+        ? 'Graphviz worker exited without a result'
+        : 'Graphviz worker exited with code ' + code));
     });
   });
 }

@@ -7,7 +7,7 @@ edge is the entrywise conjugate of the matrix on an unreversed edge.
 This conjugation follows from exchanging the two physical endpoints;
 it does not require real representation matrices.
 
-\begin{theorem}[Coordinate changes on reversed bonds]%
+\begin{lemma}[Coordinate changes on reversed bonds]%
     \label{thm:peps_oriented_coordinate_swap}
     \lean{TNLean.PEPS.bondCoordinateMatrix_map_star,
         TNLean.PEPS.bondCoordinateMatrix_map_star_mulVec}
@@ -22,7 +22,7 @@ it does not require real representation matrices.
         \label{eq:peps_oriented_transposed_coordinate}
     \end{align}
     Here $\operatorname{vec}(M)(a,b)=M_{a,b}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The coefficient of $T(Q)$ is $Q_{a,c}\overline{Q_{b,d}}$.
     Exchanging both endpoint pairs gives
@@ -54,7 +54,7 @@ it does not require real representation matrices.
     $M_o(Q)=M((T_e(Q))_e)$.
 \end{definition}
 
-\begin{theorem}[Cancellation of oriented coordinates]%
+\begin{lemma}[Cancellation of oriented coordinates]%
     \label{thm:peps_oriented_coordinate_inverse}
     \lean{TNLean.PEPS.map_star_mul_eq_one,
         TNLean.PEPS.graphOrientedRegionCoordinateMatrix_mul_conjTranspose}
@@ -63,7 +63,7 @@ it does not require real representation matrices.
     If $AB=1$, then $\overline A\,\overline B=1$.
     Consequently $QQ^\dagger=1$ implies
     $T_R^o(Q)T_R^o(Q^\dagger)=1$ for every region and orientation.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Taking entrywise conjugates of the finite sums defining $AB$ gives $\overline A\,\overline B=1$.
     Applying this identity to each $Q_e$, its conjugate on a
@@ -72,7 +72,7 @@ it does not require real representation matrices.
     factors proves the regional assertion.
 \end{proof}
 
-\begin{theorem}[Coordinate change for every boundary vector]%
+\begin{lemma}[Coordinate change for every boundary vector]%
     \label{thm:peps_oriented_coordinate_open}
     \lean{TNLean.PEPS.graphOrientedOpenBoundaryFactor_coordinates,
         TNLean.PEPS.graphOrientedOpenInternalFactor_coordinates,
@@ -106,7 +106,7 @@ it does not require real representation matrices.
         T_R^o(Q)\mathcal S_R(U,1,o) & =\mathcal S_R(L,1,o).
         \label{eq:peps_oriented_coordinate_range}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_oriented_coordinate_swap,
         thm:peps_oriented_coordinate_inverse}
@@ -142,7 +142,7 @@ it does not require real representation matrices.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Regional blocks preserve every parent condition]%
+\begin{lemma}[Regional blocks preserve every parent condition]%
     \label{thm:peps_oriented_coordinate_blocks}
     \lean{TNLean.PEPS.mixedPhysicalProductMatrix_oriented_boundary_coordinates,
         TNLean.PEPS.regionOperatorBlock_graphNumberedBondFamilyMatrix_oriented_coordinates_maps,
@@ -153,7 +153,7 @@ it does not require real representation matrices.
     The mixed product of crossing blocks and internal coordinate matrices
     is $b_R(Q;\gamma_Y,\gamma_X)T_R^o(Q)$.
     Under the hypotheses of
-    Theorem~\ref{thm:peps_oriented_coordinate_open}, every exterior
+    Lemma~\ref{thm:peps_oriented_coordinate_open}, every exterior
     block of $M_o(Q)$ sends the regional range for $A^{U,1,o}$ into
     that for $A^{L,1,o}$. Thus, for every region family $\mathcal R$,
     \begin{align}
@@ -162,7 +162,7 @@ it does not require real representation matrices.
         \label{eq:peps_oriented_coordinate_parent_inclusion}
     \end{align}
     No coverage condition is needed for this inclusion.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_oriented_bond_family_blocks,
         thm:peps_oriented_coordinate_open,thm:peps_oriented_open_range,
@@ -179,7 +179,7 @@ it does not require real representation matrices.
     proving~(\ref{eq:peps_oriented_coordinate_parent_inclusion}).
 \end{proof}
 
-\begin{theorem}[Global inverses]%
+\begin{lemma}[Global inverses]%
     \label{thm:peps_oriented_global_coordinate_inverse}
     \lean{TNLean.PEPS.graphNumberedBondFamilyMatrix_oriented_coordinates_rightInverse,
         TNLean.PEPS.graphNumberedBondFamilyMatrix_oriented_coordinates_injective}
@@ -188,18 +188,18 @@ it does not require real representation matrices.
     If $QQ^\dagger=1$, then $M_o(Q)M_o(Q^\dagger)=1$ on the
     full target physical space. If $Q^\dagger Q=1$, then $M_o(Q)$
     is injective on the full source physical space.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_oriented_coordinate_inverse,
         thm:peps_oriented_bond_family_algebra}
     Each edge factor and its inverse cancel, as do the conjugated factors
     on reversed edges, so their global product
-    cancels by Theorem~\ref{thm:peps_oriented_bond_family_algebra}.
+    cancels by Lemma~\ref{thm:peps_oriented_bond_family_algebra}.
     Applying the same identity to $Q^\dagger$ yields a left inverse
     under $Q^\dagger Q=1$ and hence injectivity.
 \end{proof}
 
-\begin{theorem}[Full parent spaces under oriented coordinates]%
+\begin{lemma}[Full parent spaces under oriented coordinates]%
     \label{thm:peps_oriented_coordinate_parent}
     \lean{TNLean.PEPS.map_regionParentGroundSpace_oriented_coordinates_eq,
         TNLean.PEPS.finrank_regionParentGroundSpace_oriented_coordinates_eq,
@@ -218,7 +218,7 @@ it does not require real representation matrices.
     family, let $H_U,H_L$ be sums of positive regional interactions
     whose kernels are exactly the respective regional contraction
     ranges. Then $M_o(Q)\ker H_U=\ker H_L$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_oriented_coordinate_blocks,
         thm:peps_oriented_global_coordinate_inverse,
@@ -237,7 +237,7 @@ it does not require real representation matrices.
     \leanok
     \uses{thm:peps_oriented_coordinate_parent}
     Under the hypotheses of
-    Theorem~\ref{thm:peps_oriented_coordinate_parent}, define
+    Lemma~\ref{thm:peps_oriented_coordinate_parent}, define
     $E_Q^o:\mathcal P_{\mathcal R}(A^{U,1,o})
         \simeq\mathcal P_{\mathcal R}(A^{L,1,o})$ to be the restriction
     of $M_o(Q)$. Its inverse is the restriction of $M_o(Q^\dagger)$.

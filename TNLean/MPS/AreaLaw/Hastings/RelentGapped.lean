@@ -4,47 +4,30 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.RelentFromBootstrap
-import TNLean.MPS.AreaLaw.Hastings.LemmaOneConstant
+import TNLean.MPS.AreaLaw.Hastings.LiebRobinson
 
 /-!
 # The entropy gain across a cut of a gapped chain
 
-Hastings' eq. `relent` (arXiv:0705.2024v4, `law16.tex`, lines 234–242) bounds the mutual
-information of the two intervals of `l` sites beside a cut of large entropy from below, for the
-ground state of a gapped chain. Its proof (lines 413–503) combines Lemma 1, the approximate
-factorization of the ground-state projector, with the bootstrap lemma and the monotonicity of
-the relative entropy. This file supplies Lemma 1 at the printed rate
-(`exists_projectorFactorization_endpoint`) to `relent_of_projectorFactorization_of_le_entropy`,
-so that the hypotheses are those of the source: a gapped ground state of a chain Hamiltonian,
-and the window condition of line 483 on the entropy of the cut. The length is
-`ζ = lemmaOneEndpointLength R J ΔE`, the rate is `ξ' = 6ζ` as at lines 141–142, and the
-constant is `C₁ = K ζ³`, polynomial in `ζ` as at lines 258–262, with `K` depending only on `R`.
-The relative-entropy step uses the effect `O_Bᴴ O_B` (route 1 of the note added), so Lemma 1 is
-used in its form without positivity, at the full rate.
+Hastings' eq. `relent` (arXiv:0705.2024v4, lines 234–242 and 413–503)
+bounds the mutual information of the two intervals beside a cut of large
+entropy. This file derives it from the Hamiltonian assumptions and the
+source's entropy-window condition. The relative-entropy step uses the
+effect `O_Bᴴ O_B`, so the contraction form of approximate factorization
+suffices.
 
-**Local fix (explicit constants):** the bound holds with `C₁` replaced by `2 C₁` and with
-`C₂ = relentConst`; only the values of the constants move. Documented in
-`docs/paper-gaps/hastings07_relent_constants.tex`.
+**Scope restriction (auxiliary velocity):** the endpoint below uses
+`ζ = lemmaOneEndpointLength R J ΔE`, `ξ' = 6ζ` and `C₁ = K ζ³`. Its
+admissible physical Lieb–Robinson velocity is
+`10ΔE * chainLRVelocity R (J/ΔE)`, which includes a gap-dependent term
+rather than being expressed as a fixed multiple of `J`. The common order-`J` source-parameter
+version is proved in `Hastings/SourceConsequences.lean`. See
+`docs/paper-gaps/hastings07_lemma1_decay_length.tex` for this distinction
+and the reciprocal-length convention.
 
-**Scope restriction (the length of Lemma 1):** the length `ζ = (5/4) ξ̂` comes from the chain
-Lieb–Robinson estimate with its velocity raised by `5/4`. It may stand in for the source's `ξ`
-because the source fixes `ξ = max(2v/ΔE, ξ_C)` only through some Lieb–Robinson pair `(v, ξ_C)`
-(lines 96–112), and raising `v` keeps a pair valid. The chain estimate's prefactor grows with
-`J` and its second operator acts on one site, so `ζ` has the form of `max(2v/ΔE, ξ_C)` but is
-not shown to arise from a pair satisfying eq. `lrb`.
-Documented in `docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
-`docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
-
-## Main results
-
-* `exists_relent_of_isGappedGroundState`: eq. `relent` for the ground state of a gapped chain,
-  at `ξ' = 6ζ` with `C₁ = K ζ³` and `K` independent of the chain, the interaction strength and
-  the gap.
-
-## References
-
-* M. B. Hastings, *An area law for one-dimensional quantum systems*, J. Stat. Mech. (2007)
-  P08024, arXiv:0705.2024v4, `References/0705.2024/law16.tex`, lines 234–267 and 413–503.
+**Local fix (explicit constants):** the bound uses `2 C₁` and
+`C₂ = relentConst`. These changes affect only numerical constants and
+are recorded in `docs/paper-gaps/hastings07_relent_constants.tex`.
 -/
 
 open Matrix

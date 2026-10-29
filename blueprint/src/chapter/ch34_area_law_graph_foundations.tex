@@ -1,9 +1,15 @@
-\chapter{Interaction counting in lattice domains}
+\chapter{Entropy and counting on lattice domains}
 \label{ch:area_graph_foundations}
 
+This chapter collects the counting estimates and entropy identities on finite
+lattice domains used throughout the proof of the two-dimensional area law
+\cite[Section~2]{OpenAI2026AreaLaw}: counts of the interactions near a set of
+sites, and the dimension and continuity bounds for the entropy of a region.
+Propagation in the graph distance is treated in
+Chapter~\ref{ch:lattice_propagation}.
+
 % Independent auxiliary results for the 2026 area-law paper.
-% Exact counting and target coefficients are added below; the last section
-% specializes graph-distance propagation (Lemma 4.1) to lattice domains.
+% Exact counting and target coefficients are added below.
 
 To establish the combinatorial counting bounds of
 \cite[Sections~2 and~4]{OpenAI2026AreaLaw}, let $G$ be a graph on a site
@@ -13,7 +19,7 @@ not stay inside a single interaction support.
 
 \section{Walks through overlapping supports}
 
-\begin{theorem}[Interaction-chain walk]
+\begin{lemma}[Interaction-chain walk]
     \label{thm:area_chain_walk}
     \lean{TNLean.PEPS.AreaLaw.exists_walk_length_le_sum_of_isChain,
         TNLean.PEPS.AreaLaw.exists_walk_length_le_mul_of_isChain}
@@ -24,7 +30,7 @@ not stay inside a single interaction support.
     If $x\in X_0$ and $y\in X_m$, there is a walk from $x$ to $y$ of length
     at most $\sum_{j=0}^m r(X_j)$. For the common range $R$, this is
     $(m+1)R$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     We proceed by induction on $m$. When $m=0$, the range condition on
@@ -34,7 +40,7 @@ not stay inside a single interaction support.
     from $z$ to $y$ has length at most $\sum_{j=0}^m r(X_j)$.
 \end{proof}
 
-\begin{theorem}[Distance and component restrictions]
+\begin{lemma}[Distance and component restrictions]
     \label{thm:area_chain_components}
     \uses{thm:area_chain_walk}
     \lean{TNLean.PEPS.AreaLaw.edist_le_mul_of_isChain,
@@ -44,11 +50,11 @@ not stay inside a single interaction support.
         TNLean.PEPS.AreaLaw.not_isChain_of_edist_eq_top,
         TNLean.PEPS.AreaLaw.not_isChain_of_mul_lt_edist}
     \leanok
-    Under the common-range hypotheses of Theorem~\ref{thm:area_chain_walk},
+    Under the common-range hypotheses of Lemma~\ref{thm:area_chain_walk},
     $d_G(x,y)\le(m+1)R$, and $x,y$ belong to the same connected component.
     Consequently no such chain exists when the components differ,
     when $d_G(x,y)=\infty$, or when $(m+1)R<d_G(x,y)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_chain_walk}
@@ -68,7 +74,7 @@ not stay inside a single interaction support.
     $\ell(a,b)=|a_1-b_1|+|a_2-b_2|$. In particular, $\ell(a,a)=0$.
 \end{definition}
 
-\begin{theorem}[Walk displacement]
+\begin{lemma}[Walk displacement]
     \label{thm:area_walk_displacement}
     \uses{def:area_lattice_displacement}
     \lean{TNLean.PEPS.AreaLaw.latticeL1Distance_triangle,
@@ -80,7 +86,7 @@ not stay inside a single interaction support.
     has displacement at most one. A walk $p$ from $a$ to $b$ then satisfies
     $\ell(\iota(a),\iota(b))\le |p|$. If $d_G(a,b)\le R<\infty$, the
     displacement is at most $R$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Coordinate absolute values satisfy the triangle inequality, and
@@ -91,11 +97,11 @@ not stay inside a single interaction support.
 \end{proof}
 
 The exact ambient cardinality and its graph-ball consequences are given in
-Theorem~\ref{thm:area_diamond_count}.
+Lemma~\ref{thm:area_diamond_count}.
 
 \section{Original-support weights}
 
-\begin{theorem}[Supports containing a specified site]
+\begin{lemma}[Supports containing a specified site]
     \label{thm:area_support_count}
     \lean{TNLean.PEPS.AreaLaw.card_supportFamily_le_pow_card_erase,
         TNLean.PEPS.AreaLaw.card_supportFamily_le_pow}
@@ -104,14 +110,14 @@ Theorem~\ref{thm:area_diamond_count}.
     distinct subsets of $B$, each containing $a$. Then
     $|\mathcal F|\le2^{|B\setminus\{a\}|}$. If $a\in B$, this equals
     $2^{|B|-1}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Deleting $a$ maps the family injectively into the power set of
     $B\setminus\{a\}$, since inserting $a$ recovers the original support.
 \end{proof}
 
-\begin{theorem}[Per-site interaction weight]
+\begin{lemma}[Per-site interaction weight]
     \label{thm:area_site_weight}
     \uses{thm:area_support_count}
     \lean{TNLean.PEPS.AreaLaw.sum_supportWeights_containing_le}
@@ -120,7 +126,7 @@ Theorem~\ref{thm:area_diamond_count}.
     $w_X\le J$ and $J\ge0$. Suppose each support containing $a$ is contained
     in $B$, where $a\in B$. Then
     $\sum_{X\in\mathcal F:\,a\in X}w_X\le2^{|B|-1}J$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_support_count}
@@ -128,7 +134,7 @@ Theorem~\ref{thm:area_diamond_count}.
     bound to the subfamily of supports containing $a$ yields the estimate.
 \end{proof}
 
-\begin{theorem}[Weights meeting a region]
+\begin{lemma}[Weights meeting a region]
     \label{thm:area_region_weight}
     \lean{TNLean.PEPS.AreaLaw.sum_supportWeights_meeting_le_sum_siteWeights,
         TNLean.PEPS.AreaLaw.sum_supportWeights_meeting_le}
@@ -142,7 +148,7 @@ Theorem~\ref{thm:area_diamond_count}.
     \end{align}
     If each inner site sum is at most $b$, the left side of
     (\ref{eq:area_region_weight}) is at most $|S|b$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Every support meeting $S$ appears at least once on the right-hand
@@ -166,7 +172,7 @@ Theorem~\ref{thm:area_diamond_count}.
     Repeated supports are permitted in the chain.
 \end{definition}
 
-\begin{theorem}[Uniform chain-weight growth]
+\begin{lemma}[Uniform chain-weight growth]
     \label{thm:area_chain_growth}
     \uses{thm:area_region_weight,def:area_chain_weight}
     \lean{TNLean.PEPS.AreaLaw.interactionChainWeightSum_le_pow}
@@ -174,7 +180,7 @@ Theorem~\ref{thm:area_diamond_count}.
     Suppose the original weights are nonnegative, every original support
     has cardinality at most $v$, and every site weight sum is at most $b\ge0$.
     Then $W_n(X)\le(vb)^n$ for each $X\in\mathcal F$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_region_weight,def:area_chain_weight}
@@ -186,6 +192,8 @@ Theorem~\ref{thm:area_diamond_count}.
 \end{proof}
 
 \input{chapter/ch34_area_law_diamond_counting}
-\input{chapter/ch34_area_law_graph_propagation}
-\input{chapter/ch34_area_law_region_localization}
-\input{chapter/ch34_supported_gaussian_integral}
+\input{chapter/ch24_peps_entropy_dimension}
+\input{chapter/ch24_peps_regional_entropy_continuity}
+\input{chapter/ch24_peps_area_law_regional_reindex}
+\input{chapter/ch24_peps_area_law_vertex_boundaries}
+\input{chapter/ch24_peps_area_law_zero_boundary}

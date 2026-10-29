@@ -37,11 +37,11 @@
     under the size hypotheses (\ref{eq:peps_window_fit})
     and (\ref{eq:peps_window_complement_fit}). Since
     $e\in\partial W_{\mathrm L}$,
-    Theorem~\ref{thm:peps_regionInsertedCoeff_injective} applied to the
+    Lemma~\ref{thm:peps_regionInsertedCoeff_injective} applied to the
     region $W_{\mathrm L}$ gives $M=M'$.
 \end{proof}
 
-\begin{theorem}[Window coefficient identity from a region insertion transfer]%
+\begin{lemma}[Window coefficient identity from a region insertion transfer]%
     \label{thm:peps_windowEdgeCoeffIdentityWitness_of_transfer}
     \lean{TNLean.PEPS.exists_windowEdgeCoeffIdentityWitness_of_transfer}
     \leanok
@@ -64,7 +64,7 @@
         C_B(W_{\mathrm L},e,Z\,\iota_e(M)\,Z^{-1};\sigma,\tau).
         \label{eq:peps_window_transfer_coeff}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The transfer determines a gauge $Z$ by the region insertion algebra:
@@ -75,7 +75,7 @@
     which yields the coefficient-identity datum with $Z_{\mathrm{ref}}=Z$.
 \end{proof}
 
-\begin{theorem}[Window coefficient identity from single-vertex realization]%
+\begin{lemma}[Window coefficient identity from single-vertex realization]%
     \label{thm:peps_windowEdgeCoeffIdentityWitness_of_realizes}
     \lean{TNLean.PEPS.exists_windowEdgeCoeffIdentityWitness_of_realizes}
     \leanok
@@ -94,7 +94,7 @@
     there exist $Z,Z_{\mathrm{ref}}\in\GL(D_B(e))$ and a bond-dimension
     identification $\iota_e:\MN{D_A(e)}\simeq\MN{D_B(e)}$ such that the
     coefficient-identity datum at $e$ is nonempty.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The two realized boundary transfers determine a region insertion transfer:
@@ -106,6 +106,6 @@
         T_e(MM') & =T_e(M)T_e(M').
         \notag
     \end{align}
-    Theorem~\ref{thm:peps_windowEdgeCoeffIdentityWitness_of_transfer} then
+    Lemma~\ref{thm:peps_windowEdgeCoeffIdentityWitness_of_transfer} then
     gives the two gauges and the nonempty coefficient-identity datum.
 \end{proof}

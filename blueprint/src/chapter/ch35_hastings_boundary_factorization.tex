@@ -12,7 +12,7 @@ for the Gaussian time average of variance $\eta$, and let $a$ and $v$ be the
 constants of the chain Lieb--Robinson bound for terms of range $R$ and norm at
 most $J$.
 
-\begin{theorem}[The boundary operator of Lemma~1]
+\begin{lemma}[The boundary operator of Lemma~1]
     \label{thm:hastings_boundary_factorization}
     \lean{TNLean.MPS.AreaLaw.Hastings.ChainHamiltonian.exists_boundaryOperator_factorization}
     \leanok
@@ -40,7 +40,7 @@ most $J$.
     $H_0=M_L+M_R$ and the cut-offs of the localized parts, this is the
     operator $O_B$ of Lemma~1 of \cite{Hastings2007AreaLaw}, constructed at
     lines 881--901.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:hastings_interaction_average, thm:hastings_interaction_average_last}
     Put $A=H_0$ and $B=H'-H_0$, so that $A+B=H'$, and let

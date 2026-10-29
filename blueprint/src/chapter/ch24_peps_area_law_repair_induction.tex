@@ -34,7 +34,7 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
 
 % Source: 10-geometry.tex, child scales, lines 404--409;
 % geometry:descendant-count, lines 670--681.
-\begin{theorem}[Scales of descendants]
+\begin{lemma}[Scales of descendants]
     \label{thm:area_law_repair_descendant_scales}
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairStage_scale_eq_iterate}
     \leanok
@@ -45,7 +45,7 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
         S_{i+n}(q) & =d^{[n]}\bigl(S_i(\alpha_{i,n}(q))\bigr).
         \label{eq:area_law_repair_descendant_scales}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_repair_ancestors,def:area_law_repair_terminal_children}
     By induction on $n$: $n=0$ is immediate, and for $q\in K_{i+n+1}$ with $p=\pi_{i+n}(q)$,
@@ -126,21 +126,21 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
 % lines 478 and 486--514.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % Auxiliary consequence under the stated metric hypotheses; no coverage assertion.
-\begin{theorem}[Disjoint current regions at every generation]
+\begin{lemma}[Disjoint current regions at every generation]
     \label{thm:area_law_repair_current_disjoint}
     \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.current_pairwise_disjoint}
     \leanok
     \uses{def:area_law_repair_stage,lem:area_law_repair_metric_invariants}
     Under the metric hypotheses of Lemma~\ref{lem:area_law_repair_metric_invariants}, for every
     $j\ge0$ and distinct $i,k\in I_j$, one has $R_i^{(j)}\cap R_k^{(j)}=\varnothing$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:area_law_initial_open_disjoint,
         lem:area_law_repair_metric_invariants,def:area_law_repair_birth,
         thm:area_law_repair_next_disjoint}
-    Induct on $j$: $j=0$ is Theorem~\ref{thm:area_law_initial_open_disjoint}, and the step $j\to j+1$
-    follows from Theorem~\ref{thm:area_law_repair_next_disjoint} since
+    Induct on $j$: $j=0$ is Lemma~\ref{thm:area_law_initial_open_disjoint}, and the step $j\to j+1$
+    follows from Lemma~\ref{thm:area_law_repair_next_disjoint} since
     Lemma~\ref{lem:area_law_repair_metric_invariants} makes the $Q(v_p^{(j)},S_p^{(j)})$ pairwise disjoint
     and $U(v_p^{(j)},S_p^{(j)},H)\subseteq B(v_p^{(j)},S_p^{(j)},H)\subseteq Q(v_p^{(j)},S_p^{(j)})$
     by Definition~\ref{def:area_law_repair_birth}.
@@ -150,14 +150,14 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
 % geometry:repair-induction, lines 474--478 and 526--536;
 % current actual regions, lines 558--561.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-\begin{theorem}[Current regions avoid earlier terminal squares]
+\begin{lemma}[Current regions avoid earlier terminal squares]
     \label{thm:area_law_repair_current_terminal_disjoint}
     \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.current_disjoint_earlierTerminalSquares}
     \leanok
     \uses{def:area_law_repair_ancestors,lem:area_law_repair_metric_invariants}
     Under the metric hypotheses of Lemma~\ref{lem:area_law_repair_metric_invariants}, every
     $j\ge0$ and $i\in I_j$ satisfy $R_i^{(j)}\cap\mathcal E_j=\varnothing$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -188,15 +188,15 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
     \leanok
     \uses{thm:area_law_repair_margins,
         thm:area_law_initial_repair_mark_facts}
-    Theorem~\ref{thm:area_law_repair_margins} gives $d(S)\le(a_0/1000)S$ for $S\ge T$, while
-    Theorem~\ref{thm:area_law_initial_repair_mark_facts} gives $S_p^{(0)}=2^{\lfloor\zeta k\rfloor}\ge S_*$
+    Lemma~\ref{thm:area_law_repair_margins} gives $d(S)\le(a_0/1000)S$ for $S\ge T$, while
+    Lemma~\ref{thm:area_law_initial_repair_mark_facts} gives $S_p^{(0)}=2^{\lfloor\zeta k\rfloor}\ge S_*$
     for $k\ge k_0$ large and $\frac14$-separation of initial marks.
 \end{proof}
 
 % Source: 10-geometry.tex, initial marks, lines 325--330;
 % integral recursion and supporting lines, lines 545--558.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-\begin{theorem}[Marks on the translated integer mesh]
+\begin{lemma}[Marks on the translated integer mesh]
     \label{thm:area_law_repair_marks_integer_mesh}
     \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.repairStage_location_mem_affineMesh}
     \leanok
@@ -204,7 +204,7 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
         lem:area_law_repair_metric_invariants}
     Under the hypotheses of Lemma~\ref{lem:area_law_repair_metric_invariants} with $S_*\ge1$,
     every $j\ge0$ and $p\in K_j$ satisfy $v_p^{(j)}\in o+\mathbb Z^2$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -213,17 +213,17 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
         lem:area_law_repair_metric_invariants,
         thm:area_law_repair_halfside_integral,def:area_law_repair_children}
     At $j=0$, $\ell_k=\lfloor\zeta k\rfloor\ge1$ for $k\ge k_0\ge50{,}000{,}000$, so
-    Theorems~\ref{thm:area_law_initial_repair_mark_facts}, \ref{thm:area_law_adjacent_fine_meshes},
+    Lemmas~\ref{thm:area_law_initial_repair_mark_facts}, \ref{thm:area_law_adjacent_fine_meshes},
     and \ref{thm:area_law_belt_marks_quarter_mesh} place $v_p^{(0)}\in o+\mathbb Z^2$.
     At $j\to j+1$, $S_p^{(j)}\ge S_*\ge1$ (Lemma~\ref{lem:area_law_repair_metric_invariants}) implies
-    $d(S_p^{(j)})\in\mathbb Z$ (Theorem~\ref{thm:area_law_repair_halfside_integral}), so
+    $d(S_p^{(j)})\in\mathbb Z$ (Lemma~\ref{thm:area_law_repair_halfside_integral}), so
     $v_p^{(j)}+d(S_p^{(j)})\omega\in o+\mathbb Z^2$ for $\omega\in\{-1,0,1\}^2$.
 \end{proof}
 
 % Source: 10-geometry.tex, positive boundary and its endpoints, lines 102--105;
 % simultaneous repair, lines 393--417; lattice coverage, lines 545--561.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-\begin{theorem}[Current regions and earlier terminal interiors cover the lattice]
+\begin{lemma}[Current regions and earlier terminal interiors cover the lattice]
     \label{thm:area_law_repair_lattice_cover_before}
     \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.lattice_mem_current_or_terminal_before}
     \leanok
@@ -237,17 +237,17 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
         \cup\Bigl(\bigcup_{0\le t<j}E_{\mathrm{term}}(\mathcal D_t)\Bigr).
         \label{eq:area_law_repair_lattice_cover_before}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:area_law_repair_stage,thm:area_law_initial_lattice_partition,
         thm:area_law_repair_marks_integer_mesh,lem:area_law_repair_metric_invariants,
         thm:area_law_repair_next_lattice_cover}
-    Induct on $j$: $j=0$ is Theorem~\ref{thm:area_law_initial_lattice_partition} (since $b>0$ implies
+    Induct on $j$: $j=0$ is Lemma~\ref{thm:area_law_initial_lattice_partition} (since $b>0$ implies
     $Z\ne\varnothing$), and the step $j\to j+1$ follows from
-    Lemma~\ref{lem:area_law_repair_metric_invariants}, Theorem~\ref{thm:area_law_repair_marks_integer_mesh},
-    and Theorem~\ref{thm:area_law_repair_next_lattice_cover}.
+    Lemma~\ref{lem:area_law_repair_metric_invariants}, Lemma~\ref{thm:area_law_repair_marks_integer_mesh},
+    and Lemma~\ref{thm:area_law_repair_next_lattice_cover}.
 \end{proof}
 
 \subsection{The induction step}
@@ -343,7 +343,7 @@ $K_s=\{y:a_s\times y\ge0,\ y\times b_s\ge0\}$, and open cone defined by strict i
 
 % Source: 10-geometry.tex, lines 393--417, and geometry:repair-induction,
 % lines 497--514.
-\begin{theorem}[Isolated stars at the children of one repair]
+\begin{lemma}[Isolated stars at the children of one repair]
     \label{thm:area_law_repair_child_stars}
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairChildAssignment,
         TNLean.PEPS.AreaLaw.Geometry.isIsolatedStar_repairChild}
@@ -356,7 +356,7 @@ $K_s=\{y:a_s\times y\ge0,\ y\times b_s\ge0\}$, and open cone defined by strict i
     remnants $R_i\setminus(v+[-d,d]^2)$ (keeping labels $\xi_i$) and replacements $U(v,S,H)$
     (with opposite labels $1-\lambda_\sigma(H)$, Definition~\ref{def:area_law_repair_birth}),
     then $c+[-\rho,\rho]^2$ is an isolated star for every $0<\rho<d/2$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -370,7 +370,7 @@ $K_s=\{y:a_s\times y\ge0,\ y\times b_s\ge0\}$, and open cone defined by strict i
 \end{proof}
 
 % Source: 10-geometry.tex, geometry:repair-induction, lines 479--514.
-\begin{theorem}[One generation of the repair]
+\begin{lemma}[One generation of the repair]
     \label{thm:area_law_repair_generation_step}
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairCurrentSectorAssignment_eq,
         TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.isIsolatedStar_succ,
@@ -384,21 +384,21 @@ $K_s=\{y:a_s\times y\ge0,\ y\times b_s\ge0\}$, and open cone defined by strict i
     equals the star's wedge assignment, every $q\in K_{j+1}$ has an isolated star of radius
     $a_0S_q^{(j+1)}$ in $\mathcal D_{j+1}$, and Definition~\ref{def:area_law_uniform_repair_conclusion}(5)
     holds at generation $j+1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:area_law_repair_child_stars,lem:area_law_repair_metric_invariants}
     Since $6d(S_p)\le a_0S_p$, the working square lies in the parent star, identifying $\sigma_p^R$
     with the star assignment. Other parents' removal squares avoid $v_p+(-2d(S_p),2d(S_p))^2$ by
-    Lemma~\ref{lem:area_law_repair_metric_invariants}, so Theorem~\ref{thm:area_law_repair_child_stars}
+    Lemma~\ref{lem:area_law_repair_metric_invariants}, so Lemma~\ref{thm:area_law_repair_child_stars}
     gives isolated stars of radius $a_0d(S_p)<d(S_p)/2$ at all children in $K_{j+1}$ and restricts
     same-label contacts of each fresh replacement to child marks in $K_{j+1}$.
 \end{proof}
 
 % Source: 10-geometry.tex, geometry:initial-stars, lines 332--349, and
 % geometry:repair-induction, lines 471--543.
-\begin{theorem}[Uniform repair induction from the initial isolated stars]
+\begin{lemma}[Uniform repair induction from the initial isolated stars]
     \label{thm:area_law_uniform_repair_induction_conditional}
     \lean{TNLean.PEPS.AreaLaw.Geometry.uniformRepairInductionStatement_of_initialIsolatedStars}
     \leanok
@@ -409,7 +409,7 @@ $K_s=\{y:a_s\times y\ge0,\ y\times b_s\ge0\}$, and open cone defined by strict i
     If there exists $a_1>0$ such that for every width $C_0$ and sufficiently large $k_0$ the
     initial stage $\mathcal D_0$ has isolated stars with constant $a_1$, then the uniform repair
     induction statement (Definition~\ref{def:area_law_uniform_repair_conclusion}) holds.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -418,12 +418,12 @@ $K_s=\{y:a_s\times y\ge0,\ y\times b_s\ge0\}$, and open cone defined by strict i
         lem:area_law_repair_metric_choice}
     Set $a_0=\min(a_1,1/4)$ and choose $T$ and $k_0$ by Lemma~\ref{lem:area_law_repair_metric_choice}.
     Monotonicity (Lemma~\ref{lem:area_law_isolated_star_mono}) gives initial stars at constant $a_0$,
-    Theorem~\ref{thm:area_law_repair_generation_step} propagates items (1) and (5) by induction on $j$,
+    Lemma~\ref{thm:area_law_repair_generation_step} propagates items (1) and (5) by induction on $j$,
     and Lemma~\ref{lem:area_law_repair_metric_invariants} supplies items (2), (3), (4), (6), and (7).
 \end{proof}
 
 % Source: 10-geometry.tex, geometry:repair-induction, lines 471--485.
-\begin{theorem}[Uniform repair induction]
+\begin{lemma}[Uniform repair induction]
     \label{thm:area_law_uniform_repair_induction}
     \lean{TNLean.PEPS.AreaLaw.Geometry.uniformRepairInductionStatement_holds}
     \leanok
@@ -431,19 +431,19 @@ $K_s=\{y:a_s\times y\ge0,\ y\times b_s\ge0\}$, and open cone defined by strict i
         thm:area_law_initial_stars}
     The uniform repair induction statement (Definition~\ref{def:area_law_uniform_repair_conclusion})
     holds for $(\mathcal D_j)_{j\ge0}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:area_law_uniform_repair_induction_conditional,
         thm:area_law_initial_stars}
-    Immediate from Theorems~\ref{thm:area_law_initial_stars} and
+    Immediate from Lemmas~\ref{thm:area_law_initial_stars} and
     \ref{thm:area_law_uniform_repair_induction_conditional}.
 \end{proof}
 
 % Source: 10-geometry.tex, child marks, lines 404--409 and 506--514;
 % geometry:descendant-count, lines 670--681.
-\begin{theorem}[A child is determined by its parent and offset]
+\begin{lemma}[A child is determined by its parent and offset]
     \label{thm:area_law_repair_parent_offset}
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairMarkOffset,
         TNLean.PEPS.AreaLaw.Geometry.repairMarkParent_repairMarkOffset_injective}
@@ -456,7 +456,7 @@ $K_s=\{y:a_s\times y\ge0,\ y\times b_s\ge0\}$, and open cone defined by strict i
         \label{eq:area_law_repair_parent_offset}
     \end{align}
     is injective.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By Definition~\ref{def:area_law_repair_terminal_children}, each $q\in K_{j+1}$ is uniquely
     determined by its nonterminal parent $\pi_j(q)\in K_j$ and centered offset $e_j(q)-(1,1)$.
@@ -464,13 +464,13 @@ $K_s=\{y:a_s\times y\ge0,\ y\times b_s\ge0\}$, and open cone defined by strict i
 
 % Source: 10-geometry.tex, initial marks, lines 325--363, and child marks,
 % lines 404--409 and 506--514.
-\begin{theorem}[Finitely many marks at each generation]
+\begin{lemma}[Finitely many marks at each generation]
     \label{thm:area_law_repair_finite_marks}
     \lean{TNLean.PEPS.AreaLaw.Geometry.finite_repairStage_markIndex}
     \leanok
     \uses{def:area_law_repair_stage,thm:area_law_repair_parent_offset}
     For every generation $j\ge0$, the mark family $K_j$ is finite.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_repair_parent_offset}
     $K_0=M$ is finite by Definition~\ref{def:area_law_repair_stage}, and
@@ -479,7 +479,7 @@ $K_s=\{y:a_s\times y\ge0,\ y\times b_s\ge0\}$, and open cone defined by strict i
 
 % Source: 10-geometry.tex, geometry:descendant-count, lines 670--681;
 % child marks, lines 404--409 and 506--514.
-\begin{theorem}[The number of descendant marks]
+\begin{lemma}[The number of descendant marks]
     \label{thm:area_law_repair_descendant_marks}
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairMarkAncestor_parent_offset_injective,
         TNLean.PEPS.AreaLaw.Geometry.card_repairMarkAncestor_fiber_succ_le,
@@ -499,18 +499,18 @@ $K_s=\{y:a_s\times y\ge0,\ y\times b_s\ge0\}$, and open cone defined by strict i
         \qquad |F_n(p)|\le9^n.
         \label{eq:area_law_repair_descendant_count}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_repair_parent_offset,thm:area_law_repair_finite_marks}
-    $F_n(p)\subseteq K_{i+n}$ is finite by Theorem~\ref{thm:area_law_repair_finite_marks};
-    (\ref{eq:area_law_repair_ancestor_map}) and Theorem~\ref{thm:area_law_repair_parent_offset}
+    $F_n(p)\subseteq K_{i+n}$ is finite by Lemma~\ref{thm:area_law_repair_finite_marks};
+    (\ref{eq:area_law_repair_ancestor_map}) and Lemma~\ref{thm:area_law_repair_parent_offset}
     give the injection $F_{n+1}(p)\hookrightarrow F_n(p)\times\{0,1,2\}^2$, and $|F_0(p)|=1$
     yields (\ref{eq:area_law_repair_descendant_count}) by induction.
 \end{proof}
 
 % Source: 10-geometry.tex, geometry:descendant-count, lines 670--686.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-\begin{theorem}[Descendants of one initial mark through finitely many generations]
+\begin{lemma}[Descendants of one initial mark through finitely many generations]
     \label{thm:area_law_repair_root_prefix_count}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_repairMarkAncestor_prefix_layer_bound}
     \leanok
@@ -524,7 +524,7 @@ $K_s=\{y:a_s\times y\ge0,\ y\times b_s\ge0\}$, and open cone defined by strict i
         \sum_{0\le j<N}|F_j(p)| & \le K(k+1)^K.
         \label{eq:area_law_repair_root_prefix_count}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -532,17 +532,17 @@ $K_s=\{y:a_s\times y\ge0,\ y\times b_s\ge0\}$, and open cone defined by strict i
         thm:area_law_repair_descendant_marks,
         thm:area_law_repair_descendant_scales,
         lem:area_law_repair_metric_invariants,def:area_law_repair_ancestors}
-    Take $K$ from Theorem~\ref{thm:area_law_repair_descendant_count} ($M=1$) and induct on $N$:
+    Take $K$ from Lemma~\ref{thm:area_law_repair_descendant_count} ($M=1$) and induct on $N$:
     if $F_N(p)=\varnothing$ the sum is unchanged, while if $q\in F_N(p)$ then
     $d^{[N]}(S_p^{(0)})=S_N(q)\ge S_*$ by (\ref{eq:area_law_repair_descendant_scales}) and
     Lemma~\ref{lem:area_law_repair_metric_invariants}, so (\ref{eq:area_law_repair_descendant_count})
-    and Theorem~\ref{thm:area_law_repair_descendant_count} give (\ref{eq:area_law_repair_root_prefix_count}).
+    and Lemma~\ref{thm:area_law_repair_descendant_count} give (\ref{eq:area_law_repair_root_prefix_count}).
 \end{proof}
 
 % Source: 10-geometry.tex, geometry:descendant-count and
 % geometry:total-repairs, lines 668--692.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-\begin{theorem}[A uniform bound for marks in finitely many generations]
+\begin{lemma}[A uniform bound for marks in finitely many generations]
     \label{thm:area_law_repair_total_mark_prefix_count}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_markIndex_prefix_bound}
     \leanok
@@ -556,15 +556,15 @@ $K_s=\{y:a_s\times y\ge0,\ y\times b_s\ge0\}$, and open cone defined by strict i
         \sum_{0\le j<N}|K_j| & \le M(2C_0+1)^2b.
         \label{eq:area_law_repair_total_mark_prefix_count}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:area_law_repair_ancestors,thm:area_law_repair_finite_marks,
         thm:area_law_repair_root_prefix_count,
         thm:area_law_initial_repair_weighted_sum}
-    Take $K>0$ from Theorem~\ref{thm:area_law_repair_root_prefix_count}, $B>0$ from
-    Theorem~\ref{thm:area_law_initial_repair_weighted_sum} at exponent $K$, and $M=576KB$.
+    Take $K>0$ from Lemma~\ref{thm:area_law_repair_root_prefix_count}, $B>0$ from
+    Lemma~\ref{thm:area_law_initial_repair_weighted_sum} at exponent $K$, and $M=576KB$.
     With $w_N(p)=\sum_{0\le j<N}|F_j(p)|\le K(k+1)^K$ when $S_p^{(0)}\le2^k$, partitioning
     $K_j=\bigsqcup_{p\in K_0}F_j(p)$ gives
     \begin{align}
@@ -575,7 +575,7 @@ $K_s=\{y:a_s\times y\ge0,\ y\times b_s\ge0\}$, and open cone defined by strict i
 
 % Source: 10-geometry.tex, initial marks, lines 325--363, and
 % geometry:repair-induction, termination argument, lines 538--541.
-\begin{theorem}[A common empty generation]
+\begin{lemma}[A common empty generation]
     \label{thm:area_law_repair_common_empty_generation}
     \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.exists_isEmpty_markIndex}
     \leanok
@@ -583,11 +583,11 @@ $K_s=\{y:a_s\times y\ge0,\ y\times b_s\ge0\}$, and open cone defined by strict i
         thm:area_law_repair_finite_marks}
     Under the hypotheses of Lemma~\ref{lem:area_law_repair_metric_invariants}, there exists
     $N\ge0$ such that $K_N=\varnothing$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:area_law_repair_metric_invariants,
         thm:area_law_repair_finite_marks}
-    Since $K_0$ is finite (Theorem~\ref{thm:area_law_repair_finite_marks}), choose $M$ with
+    Since $K_0$ is finite (Lemma~\ref{thm:area_law_repair_finite_marks}), choose $M$ with
     $S_0(p)\le M$ for all $p\in K_0$, and choose $N$ with $M<S_*2^N$. Any $q\in K_N$ would satisfy
     \begin{align}
         S_*2^N\le S_N(q)2^N
@@ -599,13 +599,13 @@ $K_s=\{y:a_s\times y\ge0,\ y\times b_s\ge0\}$, and open cone defined by strict i
 
 % Source: 10-geometry.tex, child marks, lines 404--409, and
 % geometry:repair-induction, termination argument, lines 538--541.
-\begin{theorem}[Emptiness persists after termination]
+\begin{lemma}[Emptiness persists after termination]
     \label{thm:area_law_repair_empty_persistence}
     \lean{TNLean.PEPS.AreaLaw.Geometry.isEmpty_repairStage_markIndex_add}
     \leanok
     \uses{def:area_law_repair_ancestors}
     If $K_j=\varnothing$, then $K_{j+n}=\varnothing$ for every $n\ge0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The ancestor map $\alpha_{j,n}:K_{j+n}\to K_j=\varnothing$ (Definition~\ref{def:area_law_repair_ancestors})
     forces $K_{j+n}=\varnothing$.
@@ -614,7 +614,7 @@ $K_s=\{y:a_s\times y\ge0,\ y\times b_s\ge0\}$, and open cone defined by strict i
 % Source: 10-geometry.tex, initial marks, lines 325--363,
 % geometry:trim-margins, lines 380--394, and geometry:repair-induction,
 % termination argument, lines 538--541.
-\begin{theorem}[Thresholds for a common empty generation]
+\begin{lemma}[Thresholds for a common empty generation]
     \label{thm:area_law_repair_uniform_empty_thresholds}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_isEmpty_repairStage_markIndex}
     \leanok
@@ -623,10 +623,10 @@ $K_s=\{y:a_s\times y\ge0,\ y\times b_s\ge0\}$, and open cone defined by strict i
     For every $0<a_0\le1/4$ there exists $T$ such that for every $S_*\ge T$ and width $C_0$
     there exists $K$ such that for every finite domain, cut, and $k_0\ge K$, some generation
     $N\ge0$ satisfies $K_N=\varnothing$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:area_law_repair_metric_choice,
         thm:area_law_repair_common_empty_generation}
     Immediate from Lemma~\ref{lem:area_law_repair_metric_choice} and
-    Theorem~\ref{thm:area_law_repair_common_empty_generation}.
+    Lemma~\ref{thm:area_law_repair_common_empty_generation}.
 \end{proof}
