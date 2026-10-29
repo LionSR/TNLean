@@ -41,6 +41,15 @@ moves from N through 2N and the L wall from 4N through 5N. Thus there are
 exactly (N+1)^2 summands, with two long separating uniform intervals around
 the periodic chain. N=0 is not used by the asymptotic source argument.
 
+The public `uncleTwoWallTrial_append_apply` evaluates the general trial on
+the actual nested five-way Fin.append configuration, giving exactly the five
+List.ofFn coefficient words. `uncleConfigSegment_eq_drop_take` identifies
+numbered physical words with their exact list slices. This proves the
+pointwise source-to-five-segment cast identity and
+`norm_uncleTwoWallTrialSource_eq`: the actual source norm equals the actual
+five-segment norm. The cast is the proved total-length equality for N>0,
+not an assumed isometry or approximate factorization.
+
 For arbitrary exterior words and a virtual linear functional, varying a
 pair inside a single-wall coefficient word gives a member of the actual
 two-site boundary space. The proof composes the existing bilinear boundary

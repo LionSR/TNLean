@@ -113,6 +113,121 @@ def uncleTwoWallTrialSource (A : MPSTensor d a) (B : MPSTensor d b)
     (uncleConfigSegment σ (4 * N) (N + 1) (by omega))
     (uncleConfigSegment σ (5 * N + 1) N (by omega))
 
+private theorem uncleTwoWallCoefficient_five_list_cuts
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (u r w x y : List (Fin d)) :
+    let z := u ++ (r ++ (w ++ (x ++ y)))
+    uncleTwoWallCoefficient A B R L (z.take u.length) ((z.drop u.length).take r.length)
+      ((z.drop (u.length + r.length)).take w.length)
+      ((z.drop (u.length + r.length + w.length)).take x.length)
+      (z.drop (u.length + r.length + w.length + x.length)) =
+        uncleTwoWallCoefficient A B R L u r w x y := by
+  simp only [← List.drop_drop, List.drop_left, List.take_left]
+
+/-- Evaluate the actual five-segment trial on the nested physical append.
+This identifies the finite tuple coefficient used in the source norm sum,
+arXiv:1210.6613, phiN-def and the proof of Lemma lowenergystates. -/
+theorem uncleTwoWallTrial_append_apply
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (p r q s t : ℕ)
+    (u : Cfg d p) (v : Cfg d r) (w : Cfg d q) (x : Cfg d s) (y : Cfg d t) :
+    uncleTwoWallTrial A B R L p r q s t
+        (Fin.append (Fin.append (Fin.append (Fin.append u v) w) x) y) =
+      uncleTwoWallCoefficient A B R L
+        (List.ofFn u) (List.ofFn v) (List.ofFn w) (List.ofFn x) (List.ofFn y) := by
+  simp only [uncleTwoWallTrial, List.ofFn_fin_append]
+  simpa only [List.length_ofFn, List.append_assoc] using
+    uncleTwoWallCoefficient_five_list_cuts A B R L
+      (List.ofFn u) (List.ofFn v) (List.ofFn w) (List.ofFn x) (List.ofFn y)
+
+/-- A numbered physical segment is the corresponding exact list slice. -/
+theorem uncleConfigSegment_eq_drop_take {T : ℕ} (σ : Cfg d T)
+    (s n : ℕ) (hs : s + n ≤ T) :
+    uncleConfigSegment σ s n hs = ((List.ofFn σ).drop s).take n := by
+  apply List.ext_getElem
+  · simp only [uncleConfigSegment, List.length_ofFn, List.length_take, List.length_drop]
+    omega
+  · intro j hj hk
+    simp [uncleConfigSegment, Nat.add_comm]
+
+/-- Every coefficient of the general trial uses its five exact numbered
+physical segments. The last segment reaches the end of the chain. -/
+theorem uncleTwoWallTrial_apply_segments
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (p r q s t : ℕ)
+    (σ : Cfg d (p + r + q + s + t)) :
+    uncleTwoWallTrial A B R L p r q s t σ =
+      uncleTwoWallCoefficient A B R L
+        (uncleConfigSegment σ 0 p (by omega))
+        (uncleConfigSegment σ p r (by omega))
+        (uncleConfigSegment σ (p + r) q (by omega))
+        (uncleConfigSegment σ (p + r + q) s (by omega))
+        (uncleConfigSegment σ (p + r + q + s) t (by omega)) := by
+  simp only [uncleTwoWallTrial, uncleConfigSegment_eq_drop_take, List.drop_zero]
+  have hlast : (((List.ofFn σ).drop (p + r + q + s)).take t) =
+      (List.ofFn σ).drop (p + r + q + s) := by
+    apply List.take_of_length_le
+    simp only [List.length_drop, List.length_ofFn]
+    omega
+  rw [hlast]
+
+/-- Numbered physical segments commute with the actual finite-length cast. -/
+theorem uncleConfigSegment_cast {T U : ℕ} (h : T = U) (σ : Cfg d U)
+    (s n : ℕ) (hs : s + n ≤ T) :
+    uncleConfigSegment (σ ∘ Fin.cast h) s n hs =
+      uncleConfigSegment σ s n (by omega) := by
+  apply congrArg List.ofFn
+  funext j
+  exact congrArg σ (Fin.ext rfl)
+
+/-- The actual source trial is the five-segment trial transported by the
+finite-length equality, for every positive source size. Source:
+arXiv:1210.6613, phiN-def, lines 1196–1224. -/
+theorem uncleTwoWallTrialSource_cast_apply
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (N : ℕ) (hN : 0 < N) (σ : Cfg d (6 * N + 1)) :
+    uncleTwoWallTrialSource A B R L N σ =
+      uncleTwoWallTrial A B R L N (N + 1) (2 * N - 1) (N + 1) N
+        (σ ∘ Fin.cast (by omega : N + (N + 1) + (2 * N - 1) + (N + 1) + N =
+          6 * N + 1)) := by
+  rw [uncleTwoWallTrial_apply_segments]
+  simp only [uncleConfigSegment_cast, uncleTwoWallTrialSource,
+    show N + (N + 1) = 2 * N + 1 by omega,
+    show 2 * N + 1 + (2 * N - 1) = 4 * N by omega,
+    show 4 * N + (N + 1) = 5 * N + 1 by omega]
+
+private theorem norm_config_cast {T U : ℕ} (h : T = U) (f : NSiteSpace d T) :
+    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d U)).symm (fun σ ↦ f (σ ∘ Fin.cast h))‖ =
+      ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d T)).symm f‖ := by
+  cases h
+  rfl
+
+/-- The actual source norm is exactly the five-segment trial norm; the
+finite-length transport is a reindexing, not a norm approximation.
+Source: arXiv:1210.6613, phiN-def and Lemma lowenergystates. -/
+theorem norm_uncleTwoWallTrialSource_eq
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (N : ℕ) (hN : 0 < N) :
+    ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+        (uncleTwoWallTrialSource A B R L N)‖ =
+      ‖(WithLp.linearEquiv 2 ℂ
+          (NSiteSpace d (N + (N + 1) + (2 * N - 1) + (N + 1) + N))).symm
+        (uncleTwoWallTrial A B R L N (N + 1) (2 * N - 1) (N + 1) N)‖ := by
+  have hfun : uncleTwoWallTrialSource A B R L N =
+      fun σ ↦ uncleTwoWallTrial A B R L N (N + 1) (2 * N - 1) (N + 1) N
+        (σ ∘ Fin.cast (by omega : N + (N + 1) + (2 * N - 1) + (N + 1) + N =
+          6 * N + 1)) := by
+    funext σ
+    exact uncleTwoWallTrialSource_cast_apply A B R L N hN σ
+  rw [hfun]
+  exact norm_config_cast (by omega) _
+
 /-- Arbitrary fixed exterior words and a linear virtual contraction preserve
 membership of a varying local pair in the actual two-site boundary space.
 This is the local cancellation step of arXiv:1210.6613, lines 1289–1296. -/
