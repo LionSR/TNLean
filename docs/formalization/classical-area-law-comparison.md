@@ -71,6 +71,19 @@ estimate is suitable. The resulting bounds are polynomial in length at fixed loc
 dimension, gap and precision constant. This supports the LVV successive-family
 argument, but does not establish the sharper printed rates or a running-time bound.
 
+A product-ancilla argument now gives arbitrary accuracy from that same successive
+construction. For fixed local dimension $q\ge2$ and gap lower bound $\Delta>0$,
+the polynomial coefficient and degree are chosen before both length $L$ and
+integer accuracy parameter $R\ge1$. The original chain is extended to
+$N=L+2R^2$ sites with actual on-site penalties whose product ground state and
+gap lower bound one are proved. The padded gap lower bound is $\min(\Delta,1)$, independent
+of $R$. One padded successive run is chosen before the original ground pair;
+a phase-aligned unit vector in its actual stage-$L$ retained span has squared
+error at most $R^{-2}$ and MPS bond bound $P(N+1)^d$. All intermediate families
+retain uniform polynomial size and bond bounds. This is an additional
+consequence of the corrected construction, rather than a claim of the printed
+LVV rates or a computational running-time theorem.
+
 Several quantitative distinctions must remain visible when comparing the proofs.
 The size-trimming estimate uses the library's constant-cut bond bound and corrected
 matrix-net exponent. Independent bond trimming requires the documented quadratic
@@ -79,10 +92,9 @@ bound with a degree independent of the ground energy; the published LVV version
 records that dependence. These points are documented in the corresponding
 `docs/paper-gaps/lvv13_*.tex` notes.
 
-The ALVV and AKLV constructions use a common companion revision based on
-QICLean main `acda92aa`, preserving its matrix Bernstein theorem. The added
-low-energy, entropy and interpolation results are compiled together rather than
-being assumed from independent dependency revisions.
+The ALVV, LVV and AKLV constructions use one pinned companion revision,
+preserving the matrix Bernstein theorem. The low-energy, entropy and
+interpolation results are compiled together.
 
 The AKLV polynomial rank estimate now applies to the original supported
 Hamiltonian, with no supplied tensor decomposition or rank hypothesis. For a
@@ -157,8 +169,11 @@ contraction factor $4/(4+\gamma)$, for arbitrary kernel dimension and without
 a gap cap. Replacement of arbitrary positive contraction terms by their actual
 range projections now preserves the bond supports and the full original kernel,
 and increases the Hamiltonian in operator order. The same contraction follows
-with the original gap. The regional truncated Hamiltonian and its spectral
-and spatial rank conclusions remain open. The printed regional rank bound
+with the original gap. The regional truncated Hamiltonian is now constructed
+from the actual outside bonds and internal parity products. It is positive,
+has exactly the full original kernel, and its internal replacement has norm
+at most two. Its spectral gap and spatial rank conclusions remain open.
+The printed regional rank bound
 $d^2+2$ also needs an additive correction: an eight-qubit example with unique
 ground and gap one has rank seven at the middle cut. The corrected general
 bound is $d^2+3$, documented in
@@ -210,8 +225,8 @@ With comparison error $1/200$, its additive contribution is already $1/100$;
 a final $1/100$ claim requires retuning that precision.
 The low-density induction requires sampling between distinct nested targets
 and a dyadic rank estimate; the fixed-ground-space induction does not provide
-it. The sampled tree and a correct replacement for the false printed
-soft-cluster estimate also remain open.
+it. The sampled tree and the physical cluster/MPO rank construction also
+remain open.
 
 The scalar soft truncation is formalized with the corrected cap $t(1+\log m)$,
 its polynomial and geometric remainders, and an exponential-weight estimate.
@@ -226,7 +241,17 @@ and the centered ground energy is at most two. No gap or ground-space-rank
 hypothesis is imposed. For equal order and scale, the constructed physical
 soft Hamiltonian is Hermitian, lies below the original Hamiltonian, and satisfies
 $\|(H-\widetilde H_{m,m})|_{G_\eta}\|\le80e^{(17+\eta)/8-m/16}$.
-The reverse comparison on the soft Hamiltonian's low-energy subspace remains open.
+The reverse residual is also proved on the actual soft window, with bound
+$80e^{(17+\eta+\alpha)/8-m/16}$, where $\alpha=(m/2)2^{-m}$ and
+$m/2\ge17+\eta+\alpha$.
+Both residuals use the same constructed regional minima and actual ground energies.
+For $\eta,w,\delta>0$, put
+$\rho=\min(1,w/2,\delta w^2/[2(\eta+2)])$ and choose
+$m=\lceil35+2\eta+16\log(80/\rho)\rceil$ before all chain and Hamiltonian data.
+The actual centered energies satisfy $0\le E_0-E_s\le\rho$, and both
+directed spectral-subspace comparisons have accuracy $\delta$ after enlarging
+the target ground-relative window by $w$. This covers one interval with equal
+scale and order; it does not assert the printed gap prescription.
 
 The same-matrix soft/hard inequalities also retain the source's approximate
 minimum: if $A-\varepsilon'_J I\ge0$ and $r-10\le\varepsilon'_J$, then
@@ -244,15 +269,29 @@ $H\ge\lambda I$ and $\beta\ge0$, it gives
 $e^{\beta\lambda}\|R_S^H(\beta)\|\le(e^\beta-1)^{|S|}$.
 The lower energy may be negative. The proof derives the exact Duhamel
 identity and its norm induction; no partition function is used.
-The spatial cluster remainder and the construction and rank of its MPO
-remain separate obligations.
+A corrected tail now applies to the existing truncation on the actual path of
+$N$ interaction labels. For Hermitian $h_i$, if $r>0$, $H=\sum_i h_i$, $\|h_i\|\le1$,
+$H\ge\lambda I$, $\beta\ge0$, and $b=2(e^\beta-1)\le1$, then
+\[
+ e^{\beta\lambda}\|e^{-\beta H}-M_r\|
+ \le e^{N^2b^r}-1.
+\]
+Here $M_r$ retains the exact-support terms whose path components have fewer
+than $r$ labels. Inclusion--exclusion, interval-window geometry, the injective
+minimum-label marker and the weighted component count are derived explicitly.
+No commutation premise is needed for this norm estimate. The cutoff counts
+interaction labels, and the energy normalization and factor two are essential
+qualifications. The physical spatial factorization, MPO construction and its
+cut-rank estimate remain separate obligations.
 
 The first printed uniform energy estimate for soft truncation has
 a separate three-qubit counterexample with fixed gap $1/2$, recorded in
 `docs/paper-gaps/alvv16_soft_truncation_energy_estimate.tex`. This is an exact
 mathematical calculation, not a Lean counterexample theorem; its conclusion is
-confined to that uniform energy estimate. A corrected physical spectral comparison
-and a sufficient cluster/MPO approximation remain to be proved.
+confined to that uniform energy estimate. The corrected equal-scale-and-order
+physical spectral comparisons are established as described above. Independent
+scale and order, the source gap prescription, and efficient cluster/MPO
+representations remain separate obligations.
 
 The exact formal statements, their source passages, and their verification evidence
 are recorded in the blueprint and the dated audit reports. A statement identified as a formalization of a source theorem must carry the
