@@ -9843,3 +9843,15 @@ there is no need for a new tactic.
 - **Notes:** The favorable scale requires the conclusions before its width is
   selected. This argument is specific to a rank-one ground-space gap; the
   degenerate case does not have the same endpoint bound.
+
+### Squared triangle bounds through a third vector — promoted (2026-10-29)
+
+- **Pattern:** Bound a squared vector distance by twice the sum of the two
+  squared distances through an intermediate vector.
+- **Seen:** The original-ground comparison in `AKLV/Initialization.lean` and
+  both target comparisons in `AKLV/VariableWindowRefinement.lean`.
+- **Abstraction:** Use Mathlib's `norm_sub_le_norm_sub_add_norm_sub`, square
+  by `pow_le_pow_left₀`, then compose with `add_sq_le`.
+- **Refactored occurrences:** All three comparisons now reuse `add_sq_le`;
+  the additional hand-written squared-difference nonnegativity argument is
+  removed from the initialization proof. No new generic theorem is needed.

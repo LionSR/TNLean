@@ -225,8 +225,7 @@ theorem exists_aklv_physical_product_initialization :
       (Real.exp_le_one_iff.mpr (by linarith)) (by norm_num))
   have hψΩ : ‖ψ - Ω‖ ^ 2 ≤ 1 / 16 := by
     have htri := norm_sub_le_norm_sub_add_norm_sub ψ φ Ω
-    have hsquare := pow_le_pow_left₀ (norm_nonneg _) htri 2
-    have hcross := sq_nonneg (‖ψ - φ‖ - ‖φ - Ω‖)
+    have hsquare := (pow_le_pow_left₀ (norm_nonneg _) htri 2).trans add_sq_le
     nlinarith
   exact ⟨hq, hg1, hs, hlogD, e, E0, E, φ, p, hregional, hEeq, hE0, hE6,
     hBpos, hBnorm, hE, hφ, heigen, hprojector, hclose, hdegree, hpE, hfix, hrank,
