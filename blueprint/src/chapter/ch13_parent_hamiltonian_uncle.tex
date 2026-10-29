@@ -184,10 +184,12 @@ infinite-volume Hamiltonian is included here.
 \begin{theorem}[Local conditions for the uncle kernel]
     \label{thm:uncle_kernel_local_conditions}
     \lean{MPSTensor.uncleInteractionES_isPositive,
+        MPSTensor.uncleHamiltonianES_isPositive,
         MPSTensor.uncleInteractionES_apply_eq_zero_iff,
         MPSTensor.uncleHamiltonianES_apply_eq_zero_iff}
     \notready
     \uses{thm:two_block_uncle_parent_limit,def:two_block_uncle_tensor}
+    The local interaction and every finite periodic Hamiltonian are positive.
     At each periodic length $N\ge2$, a vector is in $\ker H'_P$ if and only
     if every cyclic two-site slice lies in $\ker h'_P$. After grouping its
     two physical sites, this local kernel is precisely the boundary-map
