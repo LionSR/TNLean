@@ -24,6 +24,25 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Faithful bipartite matrix embeddings — promoted (2026-10-29)
+
+- **Pattern:** Convert a left or right Kronecker embedding through ordered
+  bipartite finite-region coordinates and then into the quasi-local algebra.
+  Previously the local-inclusion identity and inverse-equivalence cancellation
+  were written separately for both factors at each use.
+- **Defined in:** `QCA/BipartiteQuasiLocalEmbedding.lean`, the canonical
+  `bipartiteMatrixToQuasiLocalObservable`, its injectivity and left/right
+  evaluation and full-factor range theorems.
+- **Refactored occurrences:** `QCA/SupportAlgebraGeneration.lean`,
+  `QCA/CanonicalAdjacentSupportGeneration.lean`, and the direct shift-image
+  calculations in `QCA/GNVWShift.lean`. The actual finite-image range identity
+  is exposed once as
+  `evenPairLocalImage_map_bipartiteMatrixToQuasiLocalObservable`.
+- **Status:** Source-written helper promotion, with hosted elaboration pending;
+  no local Lean invocation. No new support predicate or alternate local image
+  is introduced.
+
+
 ### Matrices of submodule orthogonal projections — promoted (2026-10-26)
 
 - **Pattern:** Form `Matrix.toEuclideanLin.symm W.starProjection.toLinearMap`

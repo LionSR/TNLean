@@ -12,6 +12,7 @@ import TNLean.QCA.AdjacentSupportGeneration
 import TNLean.QCA.AlgebraicBlocking
 import TNLean.QCA.AlgebraicTranslation
 import TNLean.QCA.BipartiteLocalAlgebra
+import TNLean.QCA.BipartiteQuasiLocalEmbedding
 import TNLean.QCA.BipartiteSupportAlgebra
 import TNLean.QCA.Blocking
 import TNLean.QCA.BlockingIntervalCoordinates
@@ -27,6 +28,7 @@ import TNLean.QCA.FiniteLocalRestriction
 import TNLean.QCA.FinitePropagation
 import TNLean.QCA.FinitePureStateDecomposition
 import TNLean.QCA.GNVWIndex
+import TNLean.QCA.GNVWShift
 import TNLean.QCA.IntervalCoordinates
 import TNLean.QCA.InversePropagation
 import TNLean.QCA.IsQCA

@@ -90,8 +90,10 @@ theorem supportAlgebraMatrixSize_even_eq_zero
   | zero => simp only [mul_zero]
   | succ i hi => rw [supportAlgebraMatrixSize_even_add_one, hi]
   | pred i hi =>
-      have hstep := supportAlgebraMatrixSize_even_add_one hω (i - 1)
-      rw [show i - 1 + 1 = i by ring] at hstep
+      have hstep := supportAlgebraMatrixSize_even_add_one hω (-(i : ℤ) - 1)
+      rw [show -(i : ℤ) - 1 + 1 = -(i : ℤ) by ring] at hstep
+      have harg : -((i + 1 : ℕ) : ℤ) = -(i : ℤ) - 1 := by omega
+      rw [harg]
       exact hstep.symm.trans hi
 
 /-- The homogeneous GNVW index at the fixed cut zero, in exactly the
@@ -143,6 +145,24 @@ theorem coe_gnvwIndex_eq_next_even
   simpa only [show 2 * (x + 1) = 2 * x + 2 by ring]
     using coe_gnvwIndex_eq_even hω (x + 1)
 
+/-- Matrix-size uniqueness for an explicit presentation of an actual even
+support factor; GNVW, arXiv:0910.3675v2, lines 1278--1324. -/
+theorem supportAlgebraMatrixSize_even_eq_of_equiv
+    (hω : PropagatesWithin ω (Finset.Icc (-1) 1)) (x : ℤ) {s : ℕ}
+    (e : ↥(evenSupportAlgebra hω x) ≃⋆ₐ[ℂ] Matrix (Fin s) (Fin s) ℂ) :
+    supportAlgebraMatrixSize hω (2 * x) = s := by
+  obtain ⟨eChosen⟩ := (supportAlgebraMatrixSize_spec hω).2.1 x
+  exact Matrix.matrixAlgEquiv_fin_eq (eChosen.symm.trans e).toAlgEquiv
+
+/-- Matrix-size uniqueness for an explicit presentation of an actual odd
+support factor; GNVW, arXiv:0910.3675v2, lines 1278--1324. -/
+theorem supportAlgebraMatrixSize_odd_eq_of_equiv
+    (hω : PropagatesWithin ω (Finset.Icc (-1) 1)) (x : ℤ) {s : ℕ}
+    (e : ↥(oddSupportAlgebra hω x) ≃⋆ₐ[ℂ] Matrix (Fin s) (Fin s) ℂ) :
+    supportAlgebraMatrixSize hω (2 * x + 1) = s := by
+  obtain ⟨eChosen⟩ := (supportAlgebraMatrixSize_spec hω).2.2.1 x
+  exact Matrix.matrixAlgEquiv_fin_eq (eChosen.symm.trans e).toAlgEquiv
+
 /-- Any explicit full-matrix presentation of an actual even support
 factor computes the same index. Matrix-size uniqueness removes the
 choice of presentation; GNVW, arXiv:0910.3675v2, lines 1278--1324. -/
@@ -150,10 +170,7 @@ theorem coe_gnvwIndex_eq_of_evenSupportAlgebra_equiv
     (hω : PropagatesWithin ω (Finset.Icc (-1) 1)) (x : ℤ) {s : ℕ}
     (e : ↥(evenSupportAlgebra hω x) ≃⋆ₐ[ℂ] Matrix (Fin s) (Fin s) ℂ) :
     (gnvwIndex hω : ℚ) = (s : ℚ) / (d : ℚ) := by
-  obtain ⟨eChosen⟩ := (supportAlgebraMatrixSize_spec hω).2.1 x
-  have hsize : supportAlgebraMatrixSize hω (2 * x) = s :=
-    Matrix.matrixAlgEquiv_fin_eq (eChosen.symm.trans e).toAlgEquiv
-  rw [coe_gnvwIndex_eq_even hω x, hsize]
+  rw [coe_gnvwIndex_eq_even hω x, supportAlgebraMatrixSize_even_eq_of_equiv hω x e]
 
 end PropagatesWithin
 end SpinChain

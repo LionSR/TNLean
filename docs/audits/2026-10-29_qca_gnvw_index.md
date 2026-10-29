@@ -32,10 +32,26 @@ and scalar support on its spectator. The configuration-cardinality
 lemma in LocalAlgebra identifies a pair's matrix size with d², including
 the general zero-dimension case for the cardinality identity itself.
 
-Remaining in #7039: the direct finite image calculations for translations
-by -1 and +1, and their d and d⁻¹ index values. These are not assumed or
-claimed by the current ratio layer. The source shift moves observables
-left and is translation by -1, not by +1.
+`GNVWShift.lean` now also gives the complete direct -1/+1 calculations.
+Translation first has actual singleton propagation, enlarged to nearest
+neighbours. Surjectivity of finite-region translation identifies the actual
+source-pair image with the full left/right target algebra. The promoted
+faithful bipartite embedding reflects this to the actual finite local image
+in canonical left/right Kronecker coordinates. The four generic coefficient
+calculations determine full/scalar support. Matrix-algebra size uniqueness
+then gives sizes (d²,1) and (1,d²), so the single positive-rational index is
+d and d⁻¹ respectively. No composition or index-inversion premise is used.
+The source Heisenberg shift is exactly translation by -1: observables move
+left and states move right. The printed repeated even support subscript at
+line1268 is documented as a local fix in the existing homogeneous gap note.
+
+The repeated finite bipartite embedding computations were promoted to
+BipartiteQuasiLocalEmbedding and the existing Generation/Canonical callers
+were refactored. The actual finite-image map theorem is exposed once and
+reused for both translations. This promotion is recorded in the tactic ledger.
+
+All source obligations of the homogeneous #7039 leaf are now source-written.
+Hosted Lean verification and integration remain pending; the issue stays open.
 
 The induced stabilized MPU QCA and its local evaluation required by #7040
 are not yet present in the current QCA source tree. The existing

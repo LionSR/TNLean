@@ -61,6 +61,43 @@ theorem oddSupportAlgebra_sup_evenSupportAlgebra_eq_top
   · rintro ⟨A, rfl⟩
     exact ⟨CStarMatrix.ofMatrixStarAlgEquiv A, rfl⟩
 
+/-- The actual finite image maps to the automorphic image of its source
+pair under the faithful canonical bipartite embedding. Source: GNVW,
+arXiv:0910.3675v2, local image before AARReven, lines 1251--1287. -/
+theorem evenPairLocalImage_map_bipartiteMatrixToQuasiLocalObservable
+    (hω : PropagatesWithin ω (Finset.Icc (-1) 1)) (x : ℤ) :
+    (evenPairLocalImage hω x).map
+      (bipartiteMatrixToQuasiLocalObservable (disjoint_leftPair_rightPair x)) =
+        (ω.toStarAlgHom.comp (quasiLocalObservable d (evenPair x))).range := by
+  let hdisj := disjoint_leftPair_rightPair x
+  let htarget := regionSumset_evenPair x
+  let e := bipartiteLocalAlgebraEquiv (d := d) hdisj
+  ext z
+  constructor
+  · rintro ⟨X, hX, rfl⟩
+    rw [evenPairLocalImage, bipartiteLocalRestrictionRange,
+      StarSubalgebra.bipartiteReindex] at hX
+    obtain ⟨b, hb, rfl⟩ := StarSubalgebra.mem_map.mp hX
+    obtain ⟨A, hA⟩ := (mem_transport_localRestrictionRange_iff hω htarget b).mp hb
+    refine ⟨A, ?_⟩
+    change ω (quasiLocalObservable d (evenPair x) A) =
+      quasiLocalObservable d (leftPair x ∪ rightPair x)
+        (e.symm (bipartiteLocalAlgebraEquiv hdisj b))
+    rw [StarAlgEquiv.symm_apply_apply, hA]
+    exact (quasiLocalObservable_transport_localRestriction hω htarget A).symm
+  · rintro ⟨A, rfl⟩
+    let b := htarget ▸ hω.localRestriction (evenPair x) A
+    refine ⟨e b, ?_, ?_⟩
+    · rw [evenPairLocalImage, bipartiteLocalRestrictionRange,
+        StarSubalgebra.bipartiteReindex]
+      apply StarSubalgebra.mem_map.mpr
+      refine ⟨b, ?_, rfl⟩
+      exact (mem_transport_localRestrictionRange_iff hω htarget b).mpr ⟨A, rfl⟩
+    · change quasiLocalObservable d (leftPair x ∪ rightPair x) (e.symm (e b)) =
+        ω (quasiLocalObservable d (evenPair x) A)
+      rw [StarAlgEquiv.symm_apply_apply]
+      exact quasiLocalObservable_transport_localRestriction hω htarget A
+
 /-- The finite local image is the join of the ordered left and right
 support factors in canonical bipartite coordinates. This is an equality
 of bundled star-subalgebras, rather than only their underlying subspaces;
@@ -74,56 +111,15 @@ theorem evenPairLocalImage_eq_sup_supportAlgebra
         (Matrix.rightKroneckerEmbed (m := Config d (leftPair x))) := by
   classical
   let hdisj := disjoint_leftPair_rightPair x
-  let htarget := regionSumset_evenPair x
-  let e := bipartiteLocalAlgebraEquiv (d := d) hdisj
-  let φ := (quasiLocalObservable d (leftPair x ∪ rightPair x)).comp e.symm.toStarAlgHom
-  have hφ : Function.Injective φ :=
-    (quasiLocalObservable_injective d (leftPair x ∪ rightPair x)).comp e.symm.injective
+  let φ := bipartiteMatrixToQuasiLocalObservable (d := d) hdisj
+  have hφ : Function.Injective φ := bipartiteMatrixToQuasiLocalObservable_injective hdisj
   have hleft : φ.comp (Matrix.leftKroneckerEmbed (n := Config d (rightPair x))) =
-      matrixToQuasiLocalObservable d (leftPair x) := by
-    apply StarAlgHom.ext
-    intro A
-    have hi := bipartiteLocalAlgebraEquiv_localInclusion_left hdisj (CStarMatrix.ofMatrix A)
-    change quasiLocalObservable d (leftPair x ∪ rightPair x)
-      (e.symm (Matrix.leftKroneckerEmbed A)) = _
-    rw [← hi, StarAlgEquiv.symm_apply_apply, quasiLocalObservable_localInclusion]
-    rfl
+      matrixToQuasiLocalObservable d (leftPair x) :=
+    StarAlgHom.ext (bipartiteMatrixToQuasiLocalObservable_leftKroneckerEmbed hdisj)
   have hright : φ.comp (Matrix.rightKroneckerEmbed (m := Config d (leftPair x))) =
-      matrixToQuasiLocalObservable d (rightPair x) := by
-    apply StarAlgHom.ext
-    intro A
-    have hi := bipartiteLocalAlgebraEquiv_localInclusion_right hdisj (CStarMatrix.ofMatrix A)
-    change quasiLocalObservable d (leftPair x ∪ rightPair x)
-      (e.symm (Matrix.rightKroneckerEmbed A)) = _
-    rw [← hi, StarAlgEquiv.symm_apply_apply, quasiLocalObservable_localInclusion]
-    rfl
-  have himage : (evenPairLocalImage hω x).map φ =
-      (ω.toStarAlgHom.comp (quasiLocalObservable d (evenPair x))).range := by
-    ext z
-    constructor
-    · rintro ⟨X, hX, rfl⟩
-      rw [evenPairLocalImage, bipartiteLocalRestrictionRange,
-        StarSubalgebra.bipartiteReindex] at hX
-      obtain ⟨b, hb, rfl⟩ := StarSubalgebra.mem_map.mp hX
-      obtain ⟨A, hA⟩ := (mem_transport_localRestrictionRange_iff hω htarget b).mp hb
-      refine ⟨A, ?_⟩
-      change ω (quasiLocalObservable d (evenPair x) A) =
-        quasiLocalObservable d (leftPair x ∪ rightPair x)
-          (e.symm (bipartiteLocalAlgebraEquiv hdisj b))
-      rw [StarAlgEquiv.symm_apply_apply, hA]
-      exact (quasiLocalObservable_transport_localRestriction hω htarget A).symm
-    · rintro ⟨A, rfl⟩
-      let b := htarget ▸ hω.localRestriction (evenPair x) A
-      refine ⟨e b, ?_, ?_⟩
-      · rw [evenPairLocalImage, bipartiteLocalRestrictionRange,
-          StarSubalgebra.bipartiteReindex]
-        apply StarSubalgebra.mem_map.mpr
-        refine ⟨b, ?_, rfl⟩
-        exact (mem_transport_localRestrictionRange_iff hω htarget b).mpr ⟨A, rfl⟩
-      · change quasiLocalObservable d (leftPair x ∪ rightPair x) (e.symm (e b)) =
-          ω (quasiLocalObservable d (evenPair x) A)
-        rw [StarAlgEquiv.symm_apply_apply]
-        exact quasiLocalObservable_transport_localRestriction hω htarget A
+      matrixToQuasiLocalObservable d (rightPair x) :=
+    StarAlgHom.ext (bipartiteMatrixToQuasiLocalObservable_rightKroneckerEmbed hdisj)
+  have himage := evenPairLocalImage_map_bipartiteMatrixToQuasiLocalObservable hω x
   apply StarSubalgebra.map_injective hφ
   rw [StarSubalgebra.map_sup, StarSubalgebra.map_map, StarSubalgebra.map_map, hleft, hright,
     himage, range_image_evenPair_eq_adjacentSupportJoin hω x]
