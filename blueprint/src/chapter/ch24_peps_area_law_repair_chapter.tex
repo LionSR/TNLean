@@ -1,0 +1,25 @@
+%% ==================================================
+%% Chapter: Repairing the regions
+%% ==================================================
+\chapter{Repairing the regions}%
+\label{ch:peps_area_law_repair}
+
+Near the marked points of the cells, the initial regions may meet in ways
+that no collar separates. They are repaired recursively
+\cite[Section~11]{OpenAI2026AreaLaw}: each step removes a small square about
+every current mark from all existing regions and adjoins replacement regions
+cut from a fan, which may create new marks at a smaller scale. This chapter
+defines the repair, proves by a uniform induction that the marks die out after
+finitely many steps, separates each new region from the older ones, and gives
+explicit thresholds for the constants of the two-family decomposition.
+
+\input{chapter/ch24_peps_area_law_simultaneous_repair}
+\input{chapter/ch24_peps_area_law_repair_regions}
+\input{chapter/ch24_peps_area_law_initial_stars}
+\input{chapter/ch24_peps_area_law_repair_induction}
+\input{chapter/ch24_peps_area_law_repair_generations}
+\input{chapter/ch24_peps_area_law_belt_replacement_templates}
+\input{chapter/ch24_peps_area_law_descendant_cut_clearance}
+\input{chapter/ch24_peps_area_law_birth_separation}
+\input{chapter/ch24_peps_area_law_repair_lengths}
+\input{chapter/ch24_peps_area_law_two_family_thresholds}
