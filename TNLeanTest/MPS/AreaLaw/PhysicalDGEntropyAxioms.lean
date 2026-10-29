@@ -3,6 +3,8 @@ import TNLean.MPS.AreaLaw.PhysicalDGEntropy
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
+/-! Public declarations and standard foundations for physical ground-space entropy bounds. -/
+
 run_cmd do
   let env ← Lean.getEnv
   let expected := #[``propext, ``Classical.choice, ``Quot.sound]
