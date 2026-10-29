@@ -178,7 +178,8 @@ theorem block_matrices_eq_zero_of_wordTupleSpanTop_trace
       (Matrix.piTraceForm (fun k : Fin r ↦ Fin (dim k)) Δ) := by
     apply Submodule.span_le.mpr
     rintro M ⟨w, rfl⟩
-    simpa only [LinearMap.mem_ker, Matrix.piTraceForm_apply, wordTuple] using hΔ w
+    change Matrix.piTraceForm (fun k : Fin r ↦ Fin (dim k)) Δ (wordTuple A L w) = 0
+    simpa only [Matrix.piTraceForm_apply, wordTuple] using hΔ w
   have hzero : Δ = 0 := Matrix.eq_zero_of_forall_sum_trace_mul_eq_zero Δ
     (fun M ↦ hle (by rw [hSpan]; exact Submodule.mem_top))
   exact fun k ↦ congrFun hzero k
