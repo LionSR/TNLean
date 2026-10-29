@@ -23,7 +23,7 @@ not enter the injectivity hypothesis. No genericity assertion is made.
 ## References
 
 Fernández-González et al., arXiv:1210.6613, definition of injective
-perturbation and Lemma `lemma:inj-perturbation`,
+perturbation and Lemma "lemma:inj-perturbation",
 `Papers/1210.6613/UncleHMPS.tex`, lines 973–1016. The source treats a
 block-injective background with positive block dimensions. The algebraic
 implication proved here needs only the stated full perturbation span and
@@ -57,7 +57,7 @@ private theorem uncleBlockMatrix_one {a b : ℕ} :
   rw [Matrix.fromBlocks_one, map_one]
 
 /-- An injective perturbation gives an injective uncle tensor, as in
-arXiv:1210.6613, Lemma `lemma:inj-perturbation`, lines 973–1016.
+arXiv:1210.6613, Lemma "lemma:inj-perturbation", lines 973–1016.
 The full one-site perturbation span supplies identity coefficients; their
 contraction with the first uncle leg recovers the full one-site family.
 The algebraic implication needs no separate block-injectivity or positive
@@ -99,8 +99,8 @@ theorem isInjective_uncleTensor_of_isInjective_perturbation {d a b : ℕ}
 
 /-- The source injective-perturbation condition discharges the injectivity
 input of the existing two-site uncle interaction limit. Source:
-arXiv:1210.6613, Lemma `lemma:inj-perturbation` and Theorem
-`thm:unclehamiltonian`, lines 910–1016. -/
+arXiv:1210.6613, Lemma "lemma:inj-perturbation" and Theorem
+"thm:unclehamiltonian", lines 910–1016. -/
 theorem tendsto_parentInteractionES_twoBlockPerturbation_of_isInjective_perturbation
     {d a b : ℕ} (A P : MPSTensor d a) (B Q : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
@@ -114,7 +114,7 @@ theorem tendsto_parentInteractionES_twoBlockPerturbation_of_isInjective_perturba
 
 /-- The source injective-perturbation condition gives the uncle-Hamiltonian
 limit at each fixed periodic length. Source: arXiv:1210.6613,
-Lemma `lemma:inj-perturbation` and Theorem `thm:unclehamiltonian`,
+Lemma "lemma:inj-perturbation" and Theorem "thm:unclehamiltonian",
 lines 910–1016. -/
 theorem tendsto_parentHamiltonianES_twoBlockPerturbation_of_isInjective_perturbation
     {d a b : ℕ} (A P : MPSTensor d a) (B Q : MPSTensor d b)
