@@ -1,0 +1,31 @@
+# Circle coefficient comparison on Mathlib objects
+
+Issue: #8318. Source: arXiv:2502.20257, lines 1927–1931, with the existing
+finite-discrete clarification in
+`docs/paper-gaps/fbc25_circle_complex_units_cohomology.tex`.
+
+The circle coefficient object is now literally
+`Rep.ofMulDistribMulAction G Circle`. The existing scoped trivial action is
+generalized from complex units to a commutative coefficient group, so both
+coefficient objects use the same convention. Mathlib has no canonical global
+trivial action; keeping this convention scoped permits nontrivial actions.
+
+Deleted, without compatibility aliases:
+
+- `Circle.trivialMulDistribMulAction`; replaced by the common scoped action.
+- `circleH2Representation`; replaced by Mathlib's representation.
+- `circleH2ToComplexUnitsH2` and `complexUnitsH2ToCircleH2`; replaced directly by
+  `groupCohomology.map` along the existing coefficient homomorphisms.
+- `circleH2EquivComplexUnitsH2`; replaced by
+  `circleToComplexUnits_map_bijective`, a theorem about the induced Mathlib map.
+
+The left-inverse, injectivity and surjectivity theorems are renamed around
+the actual maps. Their mathematical arguments are retained. No hypotheses
+are added; injectivity holds for every group and surjectivity uses finiteness.
+The Blueprint and gap note cite the direct-map statements.
+
+Validation: exact pinned Mathlib source inspected, stale-name census, source
+formatting, tactic-pattern scan, Blueprint declaration-source scan and
+`git diff --check`. No new tactic pattern is introduced by this restatement.
+No Lean elaboration or build was run, as requested. The updated Blueprint
+node is explicitly pending verification; #8318 remains open until acceptance.

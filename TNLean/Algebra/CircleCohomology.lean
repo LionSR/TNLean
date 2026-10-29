@@ -40,20 +40,6 @@ open scoped ScalarCohomology
 
 variable {G : Type} [Group G]
 
-set_option warn.classDefReducibility false in
-/-- The trivial action of `G` on the circle group. -/
-def Circle.trivialMulDistribMulAction : MulDistribMulAction G Circle where
-  smul _ z := z
-  one_smul _ := rfl
-  mul_smul _ _ _ := rfl
-  smul_one _ := rfl
-  smul_mul _ _ _ := rfl
-
-/-- The representation of `G` on the circle group with trivial action. -/
-abbrev circleH2Representation (G : Type) [Group G] : Rep ℤ G :=
-  @Rep.ofMulDistribMulAction G Circle _ _
-    (Circle.trivialMulDistribMulAction (G := G))
-
 /-- Taking the unit phase retracts the inclusion of the circle into the
 nonzero complex numbers. -/
 @[simp]
@@ -96,9 +82,7 @@ noncomputable def ScalarCocycle.positiveResidual (ω : ScalarCocycle G) :
 /-- Taking pointwise unit phase preserves the scalar cocycle equation. -/
 theorem ScalarCocycle.circlePhase_isMulCocycle₂ {ω : ScalarCocycle G}
     (hω : groupCohomology.IsMulCocycle₂ ω) :
-    @groupCohomology.IsMulCocycle₂ G Circle _ _
-      (Circle.trivialMulDistribMulAction (G := G)).toSMul
-      ω.circlePhase := by
+    groupCohomology.IsMulCocycle₂ ω.circlePhase := by
   intro g h k
   change Complex.unitsPhase (ω (g * h, k)) * Complex.unitsPhase (ω (g, h)) =
     Complex.unitsPhase (ω (h, k)) * Complex.unitsPhase (ω (g, h * k))
@@ -169,7 +153,7 @@ theorem ScalarCocycle.H2π_circlePhaseInclusion [Finite G]
 /-- Inclusion of circle coefficients as a morphism of trivial
 representations. -/
 def circleToComplexUnitsRepHom (G : Type) [Group G] :
-    circleH2Representation G ⟶ Rep.ofMulDistribMulAction G ℂˣ := by
+    Rep.ofMulDistribMulAction G Circle ⟶ Rep.ofMulDistribMulAction G ℂˣ := by
   apply Rep.ofHom
   refine ⟨Circle.toUnits.toAdditive.toIntLinearMap, ?_⟩
   intro g
@@ -177,7 +161,7 @@ def circleToComplexUnitsRepHom (G : Type) [Group G] :
 
 /-- Unit phase as a morphism of trivial representations. -/
 def complexUnitsPhaseRepHom (G : Type) [Group G] :
-    Rep.ofMulDistribMulAction G ℂˣ ⟶ circleH2Representation G := by
+    Rep.ofMulDistribMulAction G ℂˣ ⟶ Rep.ofMulDistribMulAction G Circle := by
   apply Rep.ofHom
   refine ⟨Complex.unitsPhase.toAdditive.toIntLinearMap, ?_⟩
   intro g
@@ -186,7 +170,7 @@ def complexUnitsPhaseRepHom (G : Type) [Group G] :
 /-- Unit phase is a left inverse to inclusion at the representation level. -/
 theorem circleToComplexUnitsRepHom_comp_complexUnitsPhaseRepHom (G : Type) [Group G] :
     circleToComplexUnitsRepHom G ≫ complexUnitsPhaseRepHom G =
-      𝟙 (circleH2Representation G) := by
+      𝟙 (Rep.ofMulDistribMulAction G Circle) := by
   ext z
   exact Complex.unitsPhase_toUnits z
 
@@ -196,7 +180,7 @@ theorem circleToComplexUnitsRepHom_comp_complexUnitsPhaseRepHom (G : Type) [Grou
 of a complex-unit-valued cocycle. -/
 noncomputable def ScalarCocycle.circlePhaseMathlibCocycle {G : Type} [Group G]
     (ω : groupCohomology.cocycles₂ (Rep.ofMulDistribMulAction G ℂˣ)) :
-    groupCohomology.cocycles₂ (circleH2Representation G) :=
+    groupCohomology.cocycles₂ (Rep.ofMulDistribMulAction G Circle) :=
   groupCohomology.mapCocycles₂ (MonoidHom.id G)
     (complexUnitsPhaseRepHom G) ω
 
@@ -214,25 +198,11 @@ theorem ScalarCocycle.H2π_map_circlePhaseMathlibCocycle
         (groupCohomology.cocyclesOfIsMulCocycle₂ hω) := by
   exact (ScalarCocycle.H2π_circlePhaseInclusion hω).symm
 
-/-- The coefficient-inclusion map
-`H²(G, U(1)) → H²(G, ℂˣ)`. -/
-noncomputable def circleH2ToComplexUnitsH2 (G : Type) [Group G] :
-    groupCohomology.H2 (circleH2Representation G) ⟶
-      groupCohomology.H2 (Rep.ofMulDistribMulAction G ℂˣ) :=
-  groupCohomology.map (MonoidHom.id G) (circleToComplexUnitsRepHom G) 2
-
-/-- The coefficient phase map
-`H²(G, ℂˣ) → H²(G, U(1))`. -/
-noncomputable def complexUnitsH2ToCircleH2 (G : Type) [Group G] :
-    groupCohomology.H2 (Rep.ofMulDistribMulAction G ℂˣ) ⟶
-      groupCohomology.H2 (circleH2Representation G) :=
-  groupCohomology.map (MonoidHom.id G) (complexUnitsPhaseRepHom G) 2
-
 /-- Taking coefficient phase after coefficient inclusion is the identity on
 `H²(G, U(1))`.  No finiteness hypothesis on `G` is needed. -/
-theorem complexUnitsH2ToCircleH2_leftInverse (G : Type) [Group G] :
-    Function.LeftInverse (complexUnitsH2ToCircleH2 G)
-      (circleH2ToComplexUnitsH2 G) := by
+theorem complexUnitsPhase_map_leftInverse (G : Type) [Group G] :
+    Function.LeftInverse (groupCohomology.map (MonoidHom.id G) (complexUnitsPhaseRepHom G) 2)
+      (groupCohomology.map (MonoidHom.id G) (circleToComplexUnitsRepHom G) 2) := by
   intro x
   change (groupCohomology.map (MonoidHom.id G)
       (circleToComplexUnitsRepHom G) 2 ≫
@@ -245,22 +215,23 @@ theorem complexUnitsH2ToCircleH2_leftInverse (G : Type) [Group G] :
 
 /-- Coefficient inclusion is injective on degree-two group cohomology for any
 group. -/
-theorem circleH2ToComplexUnitsH2_injective (G : Type) [Group G] :
-    Function.Injective (circleH2ToComplexUnitsH2 G) :=
-  (complexUnitsH2ToCircleH2_leftInverse G).injective
+theorem circleToComplexUnits_map_injective (G : Type) [Group G] :
+    Function.Injective (groupCohomology.map (MonoidHom.id G) (circleToComplexUnitsRepHom G) 2) :=
+  (complexUnitsPhase_map_leftInverse G).injective
 
 /-- For a finite group, every `ℂˣ`-valued degree-two cohomology class has the
 included pointwise-phase cocycle as a `U(1)`-valued representative. -/
-theorem circleH2ToComplexUnitsH2_surjective (G : Type) [Group G] [Finite G] :
-    Function.Surjective (circleH2ToComplexUnitsH2 G) := by
+theorem circleToComplexUnits_map_surjective (G : Type) [Group G] [Finite G] :
+    Function.Surjective
+      (groupCohomology.map (MonoidHom.id G) (circleToComplexUnitsRepHom G) 2) := by
   intro x
   obtain ⟨ω, hω, rfl⟩ := ScalarCocycle.exists_H2π_eq x
-  refine ⟨groupCohomology.H2π (circleH2Representation G)
+  refine ⟨groupCohomology.H2π (Rep.ofMulDistribMulAction G Circle)
     (ScalarCocycle.circlePhaseMathlibCocycle
       (groupCohomology.cocyclesOfIsMulCocycle₂ hω)), ?_⟩
   change groupCohomology.map (MonoidHom.id G)
       (circleToComplexUnitsRepHom G) 2
-        (groupCohomology.H2π (circleH2Representation G)
+        (groupCohomology.H2π (Rep.ofMulDistribMulAction G Circle)
           (ScalarCocycle.circlePhaseMathlibCocycle
             (groupCohomology.cocyclesOfIsMulCocycle₂ hω))) =
     groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
@@ -268,23 +239,19 @@ theorem circleH2ToComplexUnitsH2_surjective (G : Type) [Group G] [Finite G] :
   rw [groupCohomology.H2π_comp_map_apply]
   exact ScalarCocycle.H2π_map_circlePhaseMathlibCocycle hω
 
-/-- For a finite group with trivial coefficient action, inclusion of the
-circle into the nonzero complex numbers induces the algebraic comparison
+/-- For a finite group with trivial coefficient action, Mathlib's cohomology
+map induced by circle inclusion is bijective in degree two.
 
-`H²(G, U(1)) ≃ H²(G, ℂˣ)`.
-
-This proves the finite-discrete algebraic comparison asserted in
-arXiv:2502.20257, line 1931.  The source footnote instead discusses sheaf
+This is the finite-discrete algebraic comparison asserted in
+arXiv:2502.20257, line 1931. The source footnote instead discusses sheaf
 cohomology with topological coefficient groups; see
 `docs/paper-gaps/fbc25_circle_complex_units_cohomology.tex`.
 
 Mathlib's low-degree interface places the acting group and coefficient ring in
-the same universe, so this canonical comparison is stated for `G : Type`. -/
-noncomputable def circleH2EquivComplexUnitsH2 (G : Type) [Group G] [Finite G] :
-    groupCohomology.H2 (circleH2Representation G) ≃ₗ[ℤ]
-      groupCohomology.H2 (Rep.ofMulDistribMulAction G ℂˣ) :=
-  LinearEquiv.ofBijective (circleH2ToComplexUnitsH2 G).hom
-    ⟨circleH2ToComplexUnitsH2_injective G,
-      circleH2ToComplexUnitsH2_surjective G⟩
+the same universe, so the comparison is stated for `G : Type`. -/
+theorem circleToComplexUnits_map_bijective (G : Type) [Group G] [Finite G] :
+    Function.Bijective
+      (groupCohomology.map (MonoidHom.id G) (circleToComplexUnitsRepHom G) 2) :=
+  ⟨circleToComplexUnits_map_injective G, circleToComplexUnits_map_surjective G⟩
 
 end TNLean.Algebra

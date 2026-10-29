@@ -8366,10 +8366,10 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         TNLean.Algebra.ScalarCocycle.H2π_circlePhaseInclusion,
         TNLean.Algebra.ScalarCocycle.circlePhaseMathlibCocycle,
         TNLean.Algebra.ScalarCocycle.H2π_map_circlePhaseMathlibCocycle,
-        TNLean.Algebra.circleH2ToComplexUnitsH2_injective,
-        TNLean.Algebra.circleH2ToComplexUnitsH2_surjective,
-        TNLean.Algebra.circleH2EquivComplexUnitsH2}
-    \leanok
+        TNLean.Algebra.circleToComplexUnits_map_injective,
+        TNLean.Algebra.circleToComplexUnits_map_surjective,
+        TNLean.Algebra.circleToComplexUnits_map_bijective}
+    \notready
     \uses{thm:mpug_h2_group_cohomology_comparison,
         thm:mpug_positive_generalized_cocycle}
     Let $G$ be finite, with $U(1)$ and $\C^\times$ carrying the trivial
@@ -8401,7 +8401,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \cite[line~1931]{FrancoRubio2025MPUGauging}.
 \end{theorem}
 
-\begin{proof}\leanok
+\begin{proof}
     \uses{thm:mpug_positive_generalized_cocycle}
     The phase map $q(z)=z/|z|$ is multiplicative and satisfies
     $q(u)=u$ for $u\in U(1)$, so it preserves the cocycle equation and
