@@ -113,9 +113,10 @@ theorem wordSpan_pred_entries_eq (hD : 2 ≤ D)
     apply Submodule.span_le.mpr
     rintro _ ⟨σ, rfl⟩
     apply LinearMap.mem_ker.mpr
-    change _ - _ = 0
-    exact sub_eq_zero.mpr (evalWord_pred_entries_eq hD (List.ofFn σ) (by simp))
-  have hz : f X = 0 := LinearMap.mem_ker.mp (hle hX)
+    simpa [f] using
+      sub_eq_zero.mpr (evalWord_pred_entries_eq hD (List.ofFn σ) (by simp))
+  have hz : X ((D - 1 : ℕ) : Fin D) 0 - X 0 1 = 0 := by
+    simpa [f] using LinearMap.mem_ker.mp (hle hX)
   exact sub_eq_zero.mp hz
 
 /-- The exact word span is proper at length `D(D-1)-1`.
@@ -131,6 +132,6 @@ theorem wordSpan_pred_ne_top (hD : 2 ≤ D) :
     simp only [Fin.val_natCast, Fin.val_zero,
       Nat.mod_eq_of_lt (show D - 1 < D by omega)] at hv
     omega
-  simp [Matrix.single_apply, hlast] at hX
+  simp [hlast] at hX
 
 end MPSTensor.CyclicWielandt
