@@ -90,10 +90,21 @@ private theorem transpose_local_phase_of_gate_gauges
 
 /-- Gate comparison at derived square ranks, kept abstract in the supplied factor
 record. Source: CPSV17, `UUtransposetrick`, lines 1258–1288. -/
-private theorem source_transposition_certificate_of_even_symmetry
+private theorem source_transposition_certificate_of_gate_transport
     {d D : ℕ} {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
     (hsimple : IsMPUSimple U) (S : SourceFactors U hU.ρ)
     (hr : r[U] = d) (hl : ℓ[U] = d)
+    (T : SourceFactors (MPOTensor.physicalTransposeTensor U) hU.physicalTransposeTensor.ρ)
+    (hTU : SourceFactors.sourceU (MPOTensor.physicalTransposeTensor U) T =
+      Matrix.reindex
+        (Equiv.prodCongr (finCongr (source_ranks_physicalTransposeTensor U).2.symm)
+          (finCongr (source_ranks_physicalTransposeTensor U).1.symm))
+        (Equiv.refl _) (SourceFactors.sourceV U S)ᵀ)
+    (hTV : SourceFactors.sourceV (MPOTensor.physicalTransposeTensor U) T =
+      Matrix.reindex (Equiv.refl _)
+        (Equiv.prodCongr (finCongr (source_ranks_physicalTransposeTensor U).1.symm)
+          (finCongr (source_ranks_physicalTransposeTensor U).2.symm))
+        (SourceFactors.sourceU U S)ᵀ)
     (hTR : ∀ N : ℕ, 1 < N → Even N → mpo U N = (mpo U N)ᵀ) :
     ∃ (c : ℂ)
       (x : Matrix.unitaryGroup (Fin d) ℂ), ‖c‖ = 1 ∧
@@ -104,7 +115,6 @@ private theorem source_transposition_certificate_of_even_symmetry
           (Matrix.reindex (Equiv.refl _)
             (Equiv.prodCongr (finCongr hr) (finCongr hl)) (SourceFactors.sourceV U S))ᵀ := by
   classical
-  let T := SourceFactors.physicalTranspose hU hsimple S hr hl
   have hEq : ∀ N : ℕ, 1 < N → Even N →
       mpo U N = mpo (MPOTensor.physicalTransposeTensor U) N := by
     intro N hN heven
@@ -153,21 +163,41 @@ private theorem source_transposition_certificate_of_even_symmetry
   have hfirst : Bᵀ = ((X' : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ
       (Y' : Matrix (Fin d) (Fin d) ℂ)) * A := by
     have h := congrArg (Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)) hu
-    dsimp only [T] at h
-    rw [SourceFactors.sourceU_physicalTranspose, Matrix.reindex_kronecker_mul] at h
+    rw [hTU, Matrix.reindex_kronecker_mul] at h
     rw [hUA, hUFT] at h
     exact h
   have hsecond : Aᵀ = B * ((Y' : Matrix (Fin d) (Fin d) ℂ)ᴴ ⊗ₖ
       (X' : Matrix (Fin d) (Fin d) ℂ)ᴴ) := by
     have h := congrArg (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA)) hv
-    dsimp only [T] at h
-    rw [SourceFactors.sourceV_physicalTranspose, Matrix.reindex_mul_kronecker] at h
+    rw [hTV, Matrix.reindex_mul_kronecker] at h
     rw [hVA, hVFT] at h
     simpa only [X', Y', Matrix.star_eq_conjTranspose, Matrix.conjTranspose_reindex] using h
   have hA : A.IsCoisometry := (huS.reindex _ (Equiv.prodCongr L R) (Equiv.refl _)).2
   let : NeZero d := hU.neZero_phys
   obtain ⟨c, x, hc, hlocal⟩ := transpose_local_phase_of_gate_gauges A B hA X' Y' hfirst hsecond
   exact ⟨c, x, hc, hlocal⟩
+
+
+/-- Use the actual transpose factors in the abstract comparison. Source:
+CPSV17, `UUtransposetrick`, lines 1258–1288. -/
+private theorem source_transposition_certificate_of_even_symmetry
+    {d D : ℕ} {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
+    (hsimple : IsMPUSimple U) (S : SourceFactors U hU.ρ)
+    (hr : r[U] = d) (hl : ℓ[U] = d)
+    (hTR : ∀ N : ℕ, 1 < N → Even N → mpo U N = (mpo U N)ᵀ) :
+    ∃ (c : ℂ)
+      (x : Matrix.unitaryGroup (Fin d) ℂ), ‖c‖ = 1 ∧
+      Matrix.reindex (Equiv.prodCongr (finCongr hl) (finCongr hr)) (Equiv.refl _)
+          (SourceFactors.sourceU U S) =
+        c • ((x : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ
+          (x : Matrix (Fin d) (Fin d) ℂ)ᵀ) *
+          (Matrix.reindex (Equiv.refl _)
+            (Equiv.prodCongr (finCongr hr) (finCongr hl)) (SourceFactors.sourceV U S))ᵀ := by
+  let T : SourceFactors (MPOTensor.physicalTransposeTensor U)
+      hU.physicalTransposeTensor.ρ := SourceFactors.physicalTranspose hU hsimple S hr hl
+  exact source_transposition_certificate_of_gate_transport hU hsimple S hr hl T
+    (SourceFactors.sourceU_physicalTranspose hU hsimple S hr hl)
+    (SourceFactors.sourceV_physicalTranspose hU hsimple S hr hl) hTR
 
 /-- Actual even-chain transposition symmetry gives a literal local phase
 certificate for the supplied normalized source factors. All gauges and

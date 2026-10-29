@@ -177,3 +177,14 @@ the public statement still derives those ranks. The scalar order and
 preserved boundary are explicit. The converse also consumes the parent
 the targeted right-hand index-transport repair. No statements or hypotheses changed;
 no local Lean command was run.
+
+## Hosted kernel checking on `e9e28f1a6`
+
+Job `123583284136` cleared the scalar-order and recorded-boundary failures.
+Its remaining primary diagnostic was a deterministic kernel timeout in the
+transpose comparison; the unknown private constant was a cascade. The
+comparison now takes the transformed factor record and its already-proved
+actual gate identities abstractly. A separate private wrapper constructs
+that record from the original factors and supplies those identities. This
+avoids repeated conversion through the large adjoint/conjugate constructor
+inside the FT comparison. Public statements are unchanged; no local Lean.
