@@ -28,10 +28,10 @@
     \end{align}
 \end{definition}
 \begin{proof}\leanok
-    Since $L_x,L_y\ge3$, the three remaining sides of $p_v$ contain vertices at height $y+1\neq y$, so their ordered edges are distinct from $(x,y)\to(x+1,y)$ and carry $1$; the reverse-ordered product along $p_v$ (Theorem~\ref{thm:peps_regular_walk_holonomy}) is $1\cdot1\cdot1\cdot g=g$.
+    Since $L_x,L_y\ge3$, the three remaining sides of $p_v$ contain vertices at height $y+1\neq y$, so their ordered edges are distinct from $(x,y)\to(x+1,y)$ and carry $1$; the reverse-ordered product along $p_v$ (Lemma~\ref{thm:peps_regular_walk_holonomy}) is $1\cdot1\cdot1\cdot g=g$.
 \end{proof}
 
-\begin{theorem}[Four-site measurement of native plaquette holonomy]%
+\begin{lemma}[Four-site measurement of native plaquette holonomy]%
     \label{thm:peps_torus_plaquette_holonomy_measurement}
     \lean{TNLean.PEPS.IsGIsometric.exists_torusPlaquette_physicalMeasurement,
         TNLean.PEPS.IsGIsometric.exists_torusPlaquette_holonomy_cutMeasurement}
@@ -51,12 +51,12 @@
         Q_\perp M_u            & =0.
         \label{eq:peps_plaquette_arbitrary_closed_measurement}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Passing regular $G$-isometry to incident-edge coordinates via Theorem~\ref{thm:peps_regular_torus_incident_isometry} and applying Theorem~\ref{thm:peps_closed_walk_class_physical_measurement} to the connected walk $p_v$ on $R_v$ gives (\ref{eq:peps_plaquette_holonomy_measurement}); factoring $M_u$ across $\partial R_v$ via Theorem~\ref{thm:peps_regular_boundary_route} and Theorem~\ref{thm:peps_regular_open_region_projector} gives (\ref{eq:peps_plaquette_arbitrary_closed_measurement}).
+    Passing regular $G$-isometry to incident-edge coordinates via Lemma~\ref{thm:peps_regular_torus_incident_isometry} and applying Lemma~\ref{thm:peps_closed_walk_class_physical_measurement} to the connected walk $p_v$ on $R_v$ gives (\ref{eq:peps_plaquette_holonomy_measurement}); factoring $M_u$ across $\partial R_v$ via Lemma~\ref{thm:peps_regular_boundary_route} and Lemma~\ref{thm:peps_regular_open_region_projector} gives (\ref{eq:peps_plaquette_arbitrary_closed_measurement}).
 \end{proof}
 
-\begin{theorem}[Detection of a native one-bond flux string]%
+\begin{lemma}[Detection of a native one-bond flux string]%
     \label{thm:peps_torus_plaquette_flux_class_measurement}
     \lean{TNLean.PEPS.IsGIsometric.exists_torusPlaquette_fluxClass_measurement,
         TNLean.PEPS.IsGIsometric.exists_torusPlaquette_fluxClass_cutMeasurement}
@@ -64,13 +64,13 @@
     \uses{thm:peps_torus_plaquette_holonomy_measurement,
         def:peps_torus_plaquette_flux_insertion,
         thm:peps_regular_open_region_projector}
-    Under the hypotheses of Theorem~\ref{thm:peps_torus_plaquette_holonomy_measurement} (\cite[Theorem~6.15]{Schuch2010PEPS}), the measurement $\{Q_C\}_C\cup\{Q_\perp\}$ on $R_v$ satisfies, for the cut matrix $M_{v,g}=M_{u^{v,g}}$ of every one-bond flux string $u^{v,g}$,
+    Under the hypotheses of Lemma~\ref{thm:peps_torus_plaquette_holonomy_measurement} (\cite[Theorem~6.15]{Schuch2010PEPS}), the measurement $\{Q_C\}_C\cup\{Q_\perp\}$ on $R_v$ satisfies, for the cut matrix $M_{v,g}=M_{u^{v,g}}$ of every one-bond flux string $u^{v,g}$,
     \begin{align}
         Q_CM_{v,g}      & =\mathbf1_{\{[g]=C\}}M_{v,g}, &
         Q_\perp M_{v,g} & =0.
         \label{eq:peps_plaquette_flux_closed_measurement}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Substitute (\ref{eq:peps_plaquette_flux_holonomy}) into (\ref{eq:peps_plaquette_arbitrary_closed_measurement}).
 \end{proof}
@@ -90,22 +90,22 @@
     \end{align}
 \end{definition}
 \begin{proof}\leanok
-    Since $L_x,L_y\ge3$, the four sides of $p_v$ have distinct ordered endpoint pairs, so side $i$ contributes $g$ and the other three contribute $1$ in Theorem~\ref{thm:peps_regular_walk_holonomy}.
+    Since $L_x,L_y\ge3$, the four sides of $p_v$ have distinct ordered endpoint pairs, so side $i$ contributes $g$ and the other three contribute $1$ in Lemma~\ref{thm:peps_regular_walk_holonomy}.
 \end{proof}
 
-\begin{theorem}[A single flux measurement for all four attachment directions]%
+\begin{lemma}[A single flux measurement for all four attachment directions]%
     \label{thm:peps_torus_plaquette_all_sides_measurement}
     \lean{TNLean.PEPS.IsGIsometric.exists_torusPlaquette_allSides_cutMeasurement}
     \leanok
     \uses{thm:peps_torus_plaquette_holonomy_measurement,
         def:peps_torus_plaquette_all_sides_insertion}
-    Under the hypotheses of Theorem~\ref{thm:peps_torus_plaquette_holonomy_measurement} (\cite[proof of Theorem~6.15]{Schuch2010PEPS}, without asserting parent-Hamiltonian excitation membership), the single measurement $\{Q_C\}_C\cup\{Q_\perp\}$ on $R_v$ (independent of $i,g$) satisfies, for all $i\in\{0,1,2,3\}$, $g\in G$, and $M_{v,i,g}=M_{u^{v,i,g}}$,
+    Under the hypotheses of Lemma~\ref{thm:peps_torus_plaquette_holonomy_measurement} (\cite[proof of Theorem~6.15]{Schuch2010PEPS}, without asserting parent-Hamiltonian excitation membership), the single measurement $\{Q_C\}_C\cup\{Q_\perp\}$ on $R_v$ (independent of $i,g$) satisfies, for all $i\in\{0,1,2,3\}$, $g\in G$, and $M_{v,i,g}=M_{u^{v,i,g}}$,
     \begin{align}
         Q_CM_{v,i,g}      & =\mathbf1_{\{[g]=C\}}M_{v,i,g}, &
         Q_\perp M_{v,i,g} & =0.
         \label{eq:peps_plaquette_all_sides_measurement}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Substitute (\ref{eq:peps_plaquette_all_sides_holonomy}) into (\ref{eq:peps_plaquette_arbitrary_closed_measurement}).
 \end{proof}
@@ -115,7 +115,7 @@
     \lean{TNLean.PEPS.IsGIsometric.torusPlaquette_cutMatrix_orthogonal_of_class_ne}
     \leanok
     \uses{thm:peps_torus_plaquette_holonomy_measurement}
-    Under Theorem~\ref{thm:peps_torus_plaquette_holonomy_measurement} (\cite[Theorem~6.15]{Schuch2010PEPS}), if bond assignments $u,w$ satisfy $[\operatorname{Hol}_u(p_v)]\neq[\operatorname{Hol}_w(p_v)]$, then
+    Under Lemma~\ref{thm:peps_torus_plaquette_holonomy_measurement} (\cite[Theorem~6.15]{Schuch2010PEPS}), if bond assignments $u,w$ satisfy $[\operatorname{Hol}_u(p_v)]\neq[\operatorname{Hol}_w(p_v)]$, then
     \begin{align}
         M_u^\dagger M_w & =0.
         \label{eq:peps_plaquette_class_orthogonality}

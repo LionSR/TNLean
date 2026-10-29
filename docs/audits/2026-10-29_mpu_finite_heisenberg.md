@@ -83,6 +83,14 @@ algebraic direct-limit universal property constructs
 operator-norm preservation. The small generic nested-inclusion lemma in
 FiniteChainConjugation is reused to avoid repeating inclusion composition.
 
+`TwoSiteQuasiLocalAction.lean` now completes the actual forward map using
+Mathlib's existing `UniformSpace.Completion.mapRingHom` and
+`Isometry.completion_map`. Scalar and involution identities are proved
+on the canonical dense image. The resulting
+`bufferedMPUQuasiLocalAction` is an actual isometric unital star-algebra
+endomorphism, with exact algebraic-local and finite-observable evaluation
+formulas. No inverse or surjectivity premise is introduced.
+
 This is still not the full bare-MPU source theorem. It does not yet
 construct the supplied standard form from bare MPU data or the complete
 inverse family. No compatible-local-automorphism datum, induced QCA,
@@ -98,5 +106,5 @@ The present proof reuses the supplied rectangular open contraction and
 therefore does not assume a homogeneous-intermediate circuit presentation.
 
 Native source/import/prose/format/whitespace/integrity checks only.
-No local Lean invocation/build/checkdecls or cache mutation. All seven scoped Blueprint
+No local Lean invocation/build/checkdecls or cache mutation. All eight scoped Blueprint
 entries remain notready pending hosted verification and integration.

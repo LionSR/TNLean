@@ -181,7 +181,7 @@
     gives $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$ for every $j$.
 \end{proof}
 
-\begin{theorem}[Crossing-tail spans give periodic single-block states]
+\begin{lemma}[Crossing-tail spans give periodic single-block states]
     \label{thm:block_diagonal_boundary_periodic_components_from_crossing_span}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_crossing_pgvwc_comparison_bnt_c1}
     \leanok
@@ -211,7 +211,7 @@
          & \in\mathcal G_{N,L}(A_j).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -223,7 +223,7 @@
     $\Gamma_N^{A_j}(\mu_j^NX_j)$ in $\mathcal G_{N,L}(A_j)$.
 \end{proof}
 
-\begin{theorem}[Short crossing-tail spans give periodic single-block states]
+\begin{lemma}[Short crossing-tail spans give periodic single-block states]
     \label{thm:block_diagonal_boundary_periodic_components_from_short_crossing_span}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_short_crossing_span_bnt_c1}
     \leanok
@@ -260,7 +260,7 @@
     \end{align}
     % The remaining input is the span at the shorter crossing tails, recorded
     % in docs/paper-gaps/cpgsv21_block_diagonal_parent_ground_space.tex.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -273,7 +273,7 @@
     Lemma~\ref{lem:unital_block_separating_product_span} gives the
     simultaneous product span at length $N-i$. Hence every boundary-crossing
     interval has the tail-word spanning property, and
-    Theorem~\ref{thm:block_diagonal_boundary_periodic_components_from_crossing_span}
+    Lemma~\ref{thm:block_diagonal_boundary_periodic_components_from_crossing_span}
     gives the block-diagonal boundary conditions and
     $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$ for every $j$.
 \end{proof}
@@ -294,7 +294,7 @@
     given by $(T_s\psi)(\sigma)=\psi(T_s\sigma)$.
 \end{definition}
 
-\begin{theorem}[Cyclic translations compose]
+\begin{lemma}[Cyclic translations compose]
     \label{thm:parent_cyclic_translate_add}
     \lean{MPSTensor.cyclicTranslateState_add}
     \leanok
@@ -305,7 +305,7 @@
         T_s(T_t\psi) & =T_{s+t}\psi.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -378,7 +378,7 @@
     gives the asserted matrix identities.
 \end{proof}
 
-\begin{theorem}[A global change of cut gives periodic single-block states]
+\begin{lemma}[A global change of cut gives periodic single-block states]
     \label{thm:block_diagonal_boundary_periodic_components_from_global_cut}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_pgvwc07_of_dualFixedPoint}
     \leanok
@@ -412,7 +412,7 @@
     \end{align}
     No simultaneous spanning assumption is imposed at the short crossing
     tails.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -436,7 +436,7 @@
         \notag
     \end{align}
     The length bound and
-    Theorem~\ref{thm:pgvwc_product_span_source_length} imply that the
+    Lemma~\ref{thm:pgvwc_product_span_source_length} imply that the
     simultaneous products of length $N-L_0$ span the product algebra.
     Therefore,
     Lemma~\ref{lem:block_boundary_intertwiner_from_global_cut} gives, block by
@@ -457,7 +457,7 @@
     in its periodic chain space.
 \end{proof}
 
-\begin{theorem}[Doubly normalized global-cut boundary closing]
+\begin{lemma}[Doubly normalized global-cut boundary closing]
     \label{thm:block_diagonal_boundary_periodic_components_doubly_normalized}
     \lean{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_of_global_cut_bnt_c1_pgvwc07}
     \leanok
@@ -492,7 +492,7 @@
     This theorem is restricted to the case in which the positive dual fixed
     matrices of the source normalization are all the identity, with normalized
     self-overlap imposed separately.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:bnt_block_diagonal_open_boundary_matrices_source_length_doubly_normalized, thm:pgvwc_product_span_doubly_normalized, lem:parent_cyclic_translate_preserves_chain_space, lem:block_boundary_intertwiner_from_global_cut}
@@ -544,12 +544,12 @@
 \begin{proof}
     \leanok
     \uses{thm:block_diagonal_chain_space_global_cut_independent}
-    By Theorem~\ref{thm:block_diagonal_chain_space_global_cut_independent},
+    By Lemma~\ref{thm:block_diagonal_chain_space_global_cut_independent},
     the periodic chain space equals the sum of the single-block periodic chain
     spaces.
 \end{proof}
 
-\begin{theorem}[Periodic block decomposition and block-space independence]
+\begin{lemma}[Periodic block decomposition and block-space independence]
     \label{thm:block_diagonal_chain_space_global_cut_independent}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_pgvwc07_of_dualFixedPoint}
     \leanok
@@ -562,17 +562,17 @@
         \notag
     \end{align}
     The open-boundary spaces $G_N(A_j)$ also form an internal sum.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:block_diagonal_boundary_periodic_components_from_global_cut, lem:block_diagonal_boundary_representation_inclusion, lem:block_diagonal_boundary_closing_equality, thm:pgvwc_block_space_independence_source_length}
-    Theorem~\ref{thm:block_diagonal_boundary_periodic_components_from_global_cut}
+    Lemma~\ref{thm:block_diagonal_boundary_periodic_components_from_global_cut}
     gives the forward inclusion in the displayed equality. Every periodic
     single-block vector is a periodic vector for the block-diagonal tensor,
     which gives the reverse inclusion.
     For independence, if $\phi_j=\Gamma_N^{A^j}(X_j)$ satisfy
-    $\sum_j\phi_j=0$, then Theorem~\ref{thm:pgvwc_block_space_independence_source_length} and
+    $\sum_j\phi_j=0$, then Lemma~\ref{thm:pgvwc_block_space_independence_source_length} and
     nondegeneracy of the trace pairing give
     \begin{align}
         \sum_j\Gamma_N^{A^j}(X_j)=0
@@ -588,13 +588,13 @@
     sum.
 \end{proof}
 
-\begin{theorem}[Doubly normalized periodic block decomposition and independence]
+\begin{lemma}[Doubly normalized periodic block decomposition and independence]
     \label{thm:block_diagonal_chain_space_global_cut_independent_doubly_normalized}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_and_iSupIndep_of_global_cut_bnt_c1_pgvwc07}
     \leanok
     \uses{thm:block_diagonal_boundary_periodic_components_doubly_normalized}
     Under the hypotheses of
-    Theorem~\ref{thm:block_diagonal_boundary_periodic_components_doubly_normalized},
+    Lemma~\ref{thm:block_diagonal_boundary_periodic_components_doubly_normalized},
     \begin{align}
         \mathcal G_{N,L}\!\left(\bigoplus_j\mu_jA_j\right)
          & =
@@ -602,18 +602,18 @@
         \notag
     \end{align}
     and the open-boundary spaces $G_N(A_j)$ form an internal sum.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:block_diagonal_chain_space_global_cut_independent}
     Applying
-    Theorem~\ref{thm:block_diagonal_chain_space_global_cut_independent}
+    Lemma~\ref{thm:block_diagonal_chain_space_global_cut_independent}
     with $\Lambda_j=\Id$ yields the result, since left canonicity gives the
     required dual fixed-point identity and the remaining hypotheses are
     unchanged.
 \end{proof}
 
-\begin{theorem}[Doubly normalized periodic block decomposition]
+\begin{lemma}[Doubly normalized periodic block decomposition]
     \label{thm:block_diagonal_chain_space_global_cut_doubly_normalized}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_eq_iSup_of_global_cut_bnt_c1_pgvwc07}
     \leanok
@@ -641,17 +641,17 @@
         \sum_j\mathcal G_{N,L}(A_j).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:block_diagonal_chain_space_global_cut_independent_doubly_normalized}
     By
-    Theorem~\ref{thm:block_diagonal_chain_space_global_cut_independent_doubly_normalized},
+    Lemma~\ref{thm:block_diagonal_chain_space_global_cut_independent_doubly_normalized},
     the periodic chain space equals the sum of the single-block periodic chain
     spaces.
 \end{proof}
 
-\begin{theorem}[Unique decomposition into open-boundary block spaces]
+\begin{lemma}[Unique decomposition into open-boundary block spaces]
     \label{thm:block_diagonal_chain_unique_decomposition_source_length}
     \lean{MPSTensor.exists_unique_sum_groundSpace_of_chainGroundSpace_toTensorFromBlocks_pgvwc07_of_dualFixedPoint}
     \leanok
@@ -677,7 +677,7 @@
         \quad\text{for every }j.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:bnt_block_diagonal_open_boundary_matrices_source_length}
@@ -711,13 +711,13 @@
     containments yield the inclusion.
 \end{proof}
 
-\begin{theorem}[Doubly normalized kernel containment from a global cut]
+\begin{lemma}[Doubly normalized kernel containment from a global cut]
     \label{thm:block_diagonal_kernel_global_cut_doubly_normalized}
     \lean{MPSTensor.ker_parentHamiltonian_toTensorFromBlocks_le_bntMPSVectorSpan_of_global_cut_bnt_c1_pgvwc07}
     \leanok
     \uses{thm:block_diagonal_chain_space_global_cut_doubly_normalized, lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
     Under the hypotheses of
-    Theorem~\ref{thm:block_diagonal_boundary_periodic_components_doubly_normalized},
+    Lemma~\ref{thm:block_diagonal_boundary_periodic_components_doubly_normalized},
     suppose in addition that, for every $j$,
     \begin{align}
         \mathcal G_{N,L}(A_j)
@@ -734,11 +734,11 @@
     This theorem is restricted to the doubly normalized case in which every
     positive dual fixed matrix is the identity and normalized self-overlap is
     assumed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:block_diagonal_chain_space_global_cut_doubly_normalized, lem:block_diagonal_kernel_to_bnt_span_from_chain_splitting}
-    Theorem~\ref{thm:block_diagonal_chain_space_global_cut_doubly_normalized}
+    Lemma~\ref{thm:block_diagonal_chain_space_global_cut_doubly_normalized}
     identifies the periodic chain space of the block sum with the sum of the
     single-block chain spaces; applying the assumed
     containment to each summand and identifying the

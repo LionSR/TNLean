@@ -1,7 +1,7 @@
 \subsection{Graph isomorphisms and the vertical reference edge}
 \label{subsec:peps_witness_transport}
 
-\begin{theorem}[Composition of pushforwards along graph isomorphisms]%
+\begin{lemma}[Composition of pushforwards along graph isomorphisms]%
     \label{thm:peps_graph_transport_composition}
     \lean{TNLean.PEPS.Edge.map_trans}
     \lean{TNLean.PEPS.Tensor.transport_trans}
@@ -12,7 +12,7 @@
     $\psi(\phi(e))=(\psi\circ\phi)(e)$.
     For every tensor $A$ on $G$, one also has
     $(A^\phi)^\psi=A^{\psi\circ\phi}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_tensor_transport}
     Both edge maps send the endpoint pair of $e$ to the same pair.
@@ -22,7 +22,7 @@
     Thus the local components agree at every physical and virtual index.
 \end{proof}
 
-\begin{theorem}[Pulling a coefficient identity back along a graph isomorphism]%
+\begin{lemma}[Pulling a coefficient identity back along a graph isomorphism]%
     \label{thm:peps_edge_witness_pullback}
     \lean{TNLean.PEPS.exists_edgeCoeffIdentityWitness_of_transport}
     \leanok
@@ -53,7 +53,7 @@
     \end{align}
     for every inserted matrix $N$ and every physical configuration
     on $R$ and its complement, with the equal bond spaces identified.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_regionInsertedCoeff_transport,
         thm:peps_region_injective_identification}
@@ -67,7 +67,7 @@
     Finally, $\phi(e_-)=f_-\in R'$ implies $e_-\in\phi^{-1}(R')$.
 \end{proof}
 
-\begin{theorem}[A vertical reference-edge coefficient identity]%
+\begin{lemma}[A vertical reference-edge coefficient identity]%
     \label{thm:peps_vertical_arc_window_witness}
     \lean{TNLean.PEPS.exists_verticalEdgeCoeffIdentityWitness_of_normalArcWindows}
     \leanok
@@ -82,7 +82,7 @@
     inserted matrix and every physical configuration on the two regions.
     This is the vertical reference construction in the two-dimensional
     argument of~\cite{Molnar2018NormalPEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_horizontal_arc_window_witness,
         thm:peps_torus_coordinate_swap_windows, thm:peps_sameState_transport,
@@ -97,5 +97,5 @@
     Since $K+1<h$, neither edge crosses a coordinate seam, and
     coordinate exchange preserves the first endpoint in the chosen
     edge ordering. Pull the horizontal identity and its
-    injective regions back by Theorem~\ref{thm:peps_edge_witness_pullback}.
+    injective regions back by Lemma~\ref{thm:peps_edge_witness_pullback}.
 \end{proof}

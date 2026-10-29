@@ -50,7 +50,7 @@ contraction of local tensors is proved separately.
     basis of $\mathcal H_R$.
 \end{definition}
 
-\begin{theorem}[Subnormalized physical density]
+\begin{lemma}[Subnormalized physical density]
     \label{thm:peps_distributed_construction_density}
     \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction.physicalDensity_posSemidef,
         TNLean.Lattice.PartyCircuit.DistributedConstruction.trace_physicalDensity_le_one}
@@ -58,7 +58,7 @@ contraction of local tensors is proved separately.
     \uses{def:peps_distributed_construction_density}
     The physical density $\rho$ in Definition~\ref{def:peps_distributed_construction_density}
     satisfies $\rho\ge 0$ and $\operatorname{Tr}\rho\leq1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Since $|W\psi\rangle\langle W\psi|\ge 0$ and $\operatorname{Tr}_{\mathcal H_R}$
@@ -67,7 +67,7 @@ contraction of local tensors is proved separately.
     $\|x_p\|=1$.
 \end{proof}
 
-\begin{theorem}[A fixed inverse power meets the per-gate error tolerance]
+\begin{lemma}[A fixed inverse power meets the per-gate error tolerance]
     \label{thm:peps_fixed_power_gate_budget}
     \lean{TNLean.Lattice.PartyCircuit.inversePower_le_sourceGateBudget_half}
     \leanok
@@ -77,16 +77,16 @@ contraction of local tensors is proved separately.
         L^{-q}\le \frac{L^{-p}}{16\max\{1,M\}}.
         \label{eq:peps_fixed_power_gate_budget}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_approximate_gate_real_accuracy}
     Since $C,L\ge1$, we have $1\le\max\{1,M\}\le CL^n$; applying
-    Theorem~\ref{thm:peps_approximate_gate_real_accuracy} to $\max\{1,M\}$ and
+    Lemma~\ref{thm:peps_approximate_gate_real_accuracy} to $\max\{1,M\}$ and
     dividing by $16\max\{1,M\}>0$ yields~(\ref{eq:peps_fixed_power_gate_budget}).
 \end{proof}
 
-\begin{theorem}[Monotonicity in the local approximation tolerance]
+\begin{lemma}[Monotonicity in the local approximation tolerance]
     \label{thm:peps_original_approximation_budget}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsGateApproximation.mono}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.isGateApproximation_budget_of_power_bound}
@@ -94,10 +94,10 @@ contraction of local tensors is proved separately.
     If local gate expansions approximate the original gates within $\delta_1\le\delta_2$,
     they also do so within $\delta_2$ with the same operators, monomial lists,
     contraction bounds, and allowedness. Under the hypotheses of
-    Theorem~\ref{thm:peps_fixed_power_gate_budget}, expansions at accuracy
+    Lemma~\ref{thm:peps_fixed_power_gate_budget}, expansions at accuracy
     $\delta_1=L^{-q}$ satisfy the per-gate tolerance
     $\delta_2=L^{-p}/(16\max\{1,M\})$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_fixed_power_gate_budget}
@@ -105,7 +105,7 @@ contraction of local tensors is proved separately.
     $\|G_g-\widetilde G_g\|\le\delta_2$ by transitivity and~(\ref{eq:peps_fixed_power_gate_budget}).
 \end{proof}
 
-\begin{theorem}[A positive polynomial coefficient bound]
+\begin{lemma}[A positive polynomial coefficient bound]
     \label{thm:peps_original_coefficient_majorant}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.exists_one_le_isExpansionBounded_of_termwise_power_bounds}
     \leanok
@@ -117,16 +117,16 @@ contraction of local tensors is proved separately.
         B=(1+C_KC_C)L^{u+v}.
         \label{eq:peps_original_coefficient_majorant}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_original_coefficient_sum}
-    Since $L\ge 1$, $B\ge 1$, and by Theorem~\ref{thm:peps_original_coefficient_sum}
+    Since $L\ge 1$, $B\ge 1$, and by Lemma~\ref{thm:peps_original_coefficient_sum}
     each gate's coefficient sum satisfies
     $\sum_\xi|c_\xi|\le K C_CL^v\le C_KC_CL^{u+v}\le B$.
 \end{proof}
 
-\begin{theorem}[Finite expansion bounds and replacement coefficients]
+\begin{lemma}[Finite expansion bounds and replacement coefficients]
     \label{thm:peps_original_finite_expansion_bound}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isMonomialBounded_mono}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.exists_isMonomialBounded}
@@ -137,18 +137,18 @@ contraction of local tensors is proved separately.
     most $r$ pair effects and each gate has coefficient sum $\sum_\xi|c_\xi|\le B$,
     then for any replacement accuracy $\delta>0$, every gate of the physical-first
     source replacement $R$ has branch-coefficient sum at most $B$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:peps_physical_first_occurrences,thm:peps_source_only_resources}
     \leanok
     Finiteness of the gate list yields a common length bound $K$.
     The coefficient sum bound $\le B$ follows from
-    Theorem~\ref{thm:peps_physical_first_occurrences} and
-    Theorem~\ref{thm:peps_source_only_resources}, as the final exchange of
+    Lemma~\ref{thm:peps_physical_first_occurrences} and
+    Lemma~\ref{thm:peps_source_only_resources}, as the final exchange of
     physical and auxiliary registers adds no gate and alters no coefficient.
 \end{proof}
 
-\begin{theorem}[Physical approximation after replacement and sampling]
+\begin{lemma}[Physical approximation after replacement and sampling]
     \label{thm:peps_sampled_original_density}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.exists_physicalFirst_sourceSample_original_error_le}
     \leanok
@@ -182,24 +182,24 @@ contraction of local tensors is proved separately.
         \label{eq:peps_original_sample_error}
     \end{align}
     % Source: 04-compression.tex, lines 137--151, 199--229 and 342--381.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_physical_first_exact_sources,thm:peps_actual_source_sampling,
         thm:peps_auxiliary_register_finiteness,thm:peps_original_finite_expansion_bound}
     Preparing each $\psi_p:\mathbb C\to H_p$ locally prepares $\psi$ with no
-    pair source. By Theorems~\ref{thm:peps_auxiliary_register_finiteness}
+    pair source. By Lemmas~\ref{thm:peps_auxiliary_register_finiteness}
     and~\ref{thm:peps_original_finite_expansion_bound}, $R$ is an allowed
     contraction circuit with finite-dimensional discarded registers, participation
     bound $\ell$, and coefficient-sum bound $B$.
-    Theorem~\ref{thm:peps_actual_source_sampling} provides Schmidt data and a
+    Lemma~\ref{thm:peps_actual_source_sampling} provides Schmidt data and a
     sample $\omega$ with $\|\widehat\rho_R(\omega)-\rho_R\|_1\le\varepsilon/4$,
-    while Theorem~\ref{thm:peps_physical_first_exact_sources} gives
+    while Lemma~\ref{thm:peps_physical_first_exact_sources} gives
     $\|\rho_R-\rho_W\|_1\le\varepsilon/2$. The triangle inequality yields~(\ref{eq:peps_original_sample_error}).
 \end{proof}
 
 
-\begin{theorem}[Sampling from approximate original gates]
+\begin{lemma}[Sampling from approximate original gates]
     \label{thm:peps_approximate_source_sample}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.exists_sourceSample_approximate_error_le}
     \leanok
@@ -228,16 +228,16 @@ contraction of local tensors is proved separately.
     sampled physical operator $\widehat\rho$ satisfies
     $\|\widehat\rho-\rho_G\|_1\le\varepsilon$, where $\rho_G$ is the physical
     density of the original gate circuit.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_sampled_original_density,thm:peps_approximate_physical_error,thm:peps_finite_whole_party_input}
-    By Theorem~\ref{thm:peps_finite_whole_party_input}, the initial party memories
+    By Lemma~\ref{thm:peps_finite_whole_party_input}, the initial party memories
     admit finite orthonormal bases. Rescaling by $(1+\delta_a)^{-1}\le 1$
     preserves participants, pair-effect counts $\le r$, and coefficient sums
-    $\le B$. Theorem~\ref{thm:peps_sampled_original_density} gives
+    $\le B$. Lemma~\ref{thm:peps_sampled_original_density} gives
     $\|\widehat\rho-\rho_W\|_1\le3\varepsilon/4$, and
-    Theorem~\ref{thm:peps_approximate_physical_error} gives
+    Lemma~\ref{thm:peps_approximate_physical_error} gives
     $\|\rho_W-\rho_G\|_1\le4M\delta_a\le\varepsilon/4$, so
     \begin{align}
         \|\widehat\rho-\rho_G\|_1
@@ -246,7 +246,7 @@ contraction of local tensors is proved separately.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Explicit polynomial dimensions of the replacement links]
+\begin{lemma}[Explicit polynomial dimensions of the replacement links]
     \label{thm:peps_physical_first_link_polynomial}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_physicalFirstNetworkAlphabet_le_power}
     \leanok
@@ -284,33 +284,33 @@ contraction of local tensors is proved separately.
         L^{\max(2a_{\mathrm{br}},a_{\mathrm{sam}})}.
         \label{eq:peps_physical_first_link_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_physical_first_branch_polynomial,thm:peps_physical_first_sample_polynomial,thm:peps_source_alphabet_polynomial}
-    By Theorem~\ref{thm:peps_physical_first_branch_polynomial}, each gate has at
+    By Lemma~\ref{thm:peps_physical_first_branch_polynomial}, each gate has at
     most $C_{\mathrm{br}}L^{a_{\mathrm{br}}}$ branches. Since
     $|\operatorname{Sources}(R)|\le N\binom{b}{2}$,
-    Theorem~\ref{thm:peps_physical_first_sample_polynomial} gives
+    Lemma~\ref{thm:peps_physical_first_sample_polynomial} gives
     $k<C_{\mathrm{sam}}L^{a_{\mathrm{sam}}}$. Because $|\mathcal A_e|$ is the
     squared branch count on star links and $k$ on sample links,
-    Theorem~\ref{thm:peps_source_alphabet_polynomial} yields~(\ref{eq:peps_physical_first_link_bound}).
+    Lemma~\ref{thm:peps_source_alphabet_polynomial} yields~(\ref{eq:peps_physical_first_link_bound}).
 \end{proof}
 
-\begin{theorem}[Trace bounded by the trace norm]
+\begin{lemma}[Trace bounded by the trace norm]
     \label{thm:peps_trace_le_trace_norm}
     \lean{TNLean.Lattice.Compression.norm_trace_le_rectangularTraceNorm}
     \leanok
     Every complex square matrix $X$ satisfies
     $\lvert\operatorname{Tr}X\rvert\le\|X\|_1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Since $\|I\|\le 1$, trace-norm duality gives
     $\lvert\operatorname{Tr}X\rvert=\lvert\overline{\operatorname{Tr}(X^\dagger I)}\rvert\le\|X\|_1$.
 \end{proof}
 
-\begin{theorem}[Adding an absolute error to a pure-state approximation]
+\begin{lemma}[Adding an absolute error to a pure-state approximation]
     \label{thm:peps_absolute_error_pure_state}
     \lean{TNLean.Lattice.Compression.rectangularTraceNorm_sub_pure_le_of_retained_density}
     \leanok
@@ -322,17 +322,17 @@ contraction of local tensors is proved separately.
         \lvert\operatorname{Tr}\rho-1\rvert       & \le\eta.
         \label{eq:peps_absolute_error_pure_state}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_trace_le_trace_norm}
     The first bound in~(\ref{eq:peps_absolute_error_pure_state}) is the triangle
-    inequality; the second follows from Theorem~\ref{thm:peps_trace_le_trace_norm}
+    inequality; the second follows from Lemma~\ref{thm:peps_trace_le_trace_norm}
     applied to $\rho-|\Omega\rangle\langle\Omega|$ since
     $\operatorname{Tr}|\Omega\rangle\langle\Omega|=\|\Omega\|^2=1$.
 \end{proof}
 
-\begin{theorem}[Absolute error and retained norm]
+\begin{lemma}[Absolute error and retained norm]
     \label{thm:peps_compression_retained_norm}
     \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction.rectangularTraceNorm_compression_sub_pure_le}
     \leanok
@@ -348,14 +348,14 @@ contraction of local tensors is proved separately.
         1-\eta\le\operatorname{Re}\operatorname{Tr}\rho & \le1.
         \label{eq:peps_compression_retained_norm}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_absolute_error_pure_state,thm:peps_distributed_construction_density}
-    Theorem~\ref{thm:peps_absolute_error_pure_state} gives
+    Lemma~\ref{thm:peps_absolute_error_pure_state} gives
     $\|\sigma-|\Omega\rangle\langle\Omega|\|_1\le\kappa+\eta$ and
     $1-\operatorname{Re}\operatorname{Tr}\rho\le\lvert\operatorname{Tr}\rho-1\rvert\le\eta$,
-    while Theorem~\ref{thm:peps_distributed_construction_density} gives
+    while Lemma~\ref{thm:peps_distributed_construction_density} gives
     $\operatorname{Tr}\rho\le 1$.
 \end{proof}
 
@@ -371,7 +371,7 @@ contraction of local tensors is proved separately.
     $\sum_\xi c_\xi M_\xi$ of its recorded monomial expansion.
 \end{definition}
 
-\begin{theorem}[The operators of the expansions keep the physical density]
+\begin{lemma}[The operators of the expansions keep the physical density]
     \label{thm:peps_distributed_construction_gate_maps_density}
     \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction.physicalDensity_toGateMapConstruction}
     \leanok
@@ -379,7 +379,7 @@ contraction of local tensors is proved separately.
     The gate-map construction of
     Definition~\ref{def:peps_distributed_construction_gate_maps} has the same
     physical density $\rho$ as the original distributed construction.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Each recorded expansion sums to its gate operator, so chronological
@@ -387,7 +387,7 @@ contraction of local tensors is proved separately.
     and retained registers $R$.
 \end{proof}
 
-\begin{theorem}[Separate arity and lifetime bounds for link incidence]
+\begin{lemma}[Separate arity and lifetime bounds for link incidence]
     \label{thm:peps_separate_arity_incidence}
     \lean{TNLean.Lattice.Compression.card_incidentDistributedLinks_le_of_arity_lifetime,
         TNLean.Lattice.PartyCircuit.SourceCircuit.card_incidentSourceDensityLinks_le_of_arity_lifetime,
@@ -408,13 +408,13 @@ contraction of local tensors is proved separately.
     at any tolerance $\delta>0$ of an original circuit $W$ with expansion bound
     $(r,S)$, arity bound $a$, and lifetime bound $b$, as in
     \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:compression_incidence_containment,thm:compression_gate_incidence_bound,
         thm:compression_tagging_cardinality,thm:peps_physical_first_original_locality,
         thm:peps_source_only_resources,thm:peps_physical_first_occurrences,
         thm:peps_original_produced_resource_bounds}
-    By Theorems~\ref{thm:compression_incidence_containment},
+    By Lemmas~\ref{thm:compression_incidence_containment},
     \ref{thm:compression_gate_incidence_bound}, and~\ref{thm:compression_tagging_cardinality},
     each $g\in G_p=\{g\in G:p\in P_g\}$ contributes at most $|P_g|-1$ star links
     and $|P_g|-1$ sample links incident to $p$, so
@@ -423,7 +423,7 @@ contraction of local tensors is proved separately.
         \le |G_p|\,2(a-1)\le2b(a-1).\notag
     \end{align}
     Restricting to nonempty occurrences gives the source-circuit bound. By
-    Theorems~\ref{thm:peps_physical_first_original_locality},
+    Lemmas~\ref{thm:peps_physical_first_original_locality},
     \ref{thm:peps_source_only_resources}, \ref{thm:peps_physical_first_occurrences},
     and~\ref{thm:peps_original_produced_resource_bounds}, the physical-first
     replacement $R$ and recorded-expansion reading preserve participant sets and
@@ -473,19 +473,19 @@ contraction of local tensors is proved separately.
         thm:peps_distributed_construction_gate_maps_density,
         thm:peps_separate_arity_incidence,thm:peps_compression_retained_norm}
     By Definition~\ref{def:peps_distributed_construction_gate_maps} and
-    Theorem~\ref{thm:peps_distributed_construction_gate_maps_density}, the
+    Lemma~\ref{thm:peps_distributed_construction_gate_maps_density}, the
     recorded expansions reproduce each gate operator with zero approximation
     error and preserve $\rho_i$. Since $a\le b$, applying
-    Theorem~\ref{thm:peps_uniform_approximate_operator_network_of_le} with
+    Lemma~\ref{thm:peps_uniform_approximate_operator_network_of_le} with
     common bound $b$ yields $\sigma_i$ and $D_e$ satisfying the first two bounds
     in~(\ref{eq:peps_separate_arity_network}) and the common-gate locality of
     links. Because reexpansion and rescaling preserve participant sets and
-    lifetimes, Theorem~\ref{thm:peps_separate_arity_incidence} gives
+    lifetimes, Lemma~\ref{thm:peps_separate_arity_incidence} gives
     $|I_j|\le 2b(a-1)$ on the same replacement network. Finally,
-    Theorem~\ref{thm:peps_compression_retained_norm} yields~(\ref{eq:peps_separate_arity_pure}).
+    Lemma~\ref{thm:peps_compression_retained_norm} yields~(\ref{eq:peps_separate_arity_pure}).
 \end{proof}
 
-\begin{theorem}[Compression of a family of distributed constructions with explicit constants]
+\begin{lemma}[Compression of a family of distributed constructions with explicit constants]
     \label{thm:peps_distributed_construction_compression_of_le}
     \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction.uniform_sampled_network_of_le,
         TNLean.Lattice.PartyCircuit.DistributedConstruction.uniform_sampled_network_of_sum_le,
@@ -493,27 +493,27 @@ contraction of local tensors is proved separately.
     \leanok
     \uses{def:peps_compression_constants}
     Under the hypotheses of
-    Theorem~\ref{thm:peps_distributed_construction_compression} and with the
+    Lemma~\ref{thm:peps_distributed_construction_compression} and with the
     constants of Definition~\ref{def:peps_compression_constants}, for every
     $p\in\mathbb R$, $C_p\ge C(r,b,C_N,C_D,C_K,C_C)$, and integer
     $\alpha_p\ge\alpha(r,b,n,d,u,v,p)$, every member admits an operator tensor
     network $\sigma_L$ as in
-    Theorem~\ref{thm:peps_distributed_construction_compression} with
+    Lemma~\ref{thm:peps_distributed_construction_compression} with
     $\dim\mathcal V_e\le C_pL^{\alpha_p}$. If the termwise coefficient bound is
     replaced by $\sum_\xi|c_\xi|\le C_SL^s$, the same holds for all
     $C_p\ge C_\Sigma(r,b,C_N,C_D,C_K,C_S)$ and
     $\alpha_p\ge\alpha_{\mathrm{net}}(r,b,n,d,u,s,p)$.
     % Source: 04-compression.tex, lines 137--175, 199--208 and 565--588.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_uniform_approximate_operator_network_of_le,thm:peps_distributed_construction_gate_maps_density}
-    Apply Theorem~\ref{thm:peps_uniform_approximate_operator_network_of_le} to
+    Apply Lemma~\ref{thm:peps_uniform_approximate_operator_network_of_le} to
     the exact recorded-expansion construction of
-    Theorem~\ref{thm:peps_distributed_construction_gate_maps_density}.
+    Lemma~\ref{thm:peps_distributed_construction_gate_maps_density}.
 \end{proof}
 
-\begin{theorem}[Compression of a family of distributed constructions]
+\begin{lemma}[Compression of a family of distributed constructions]
     \label{thm:peps_distributed_construction_compression}
     \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction.exists_uniform_sampled_network}
     \leanok
@@ -537,28 +537,28 @@ contraction of local tensors is proved separately.
     where each node meets at most $2b(b-1)$ virtual links and both endpoints of
     every link participate in a common nonprivate gate of $\mathcal C_i$.
     % Source: 04-compression.tex, lines 137--175.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_distributed_construction_compression_of_le,def:peps_compression_constants}
     Set $C_p=C(r,b,C_N,C_D,C_K,C_C)$ and $\alpha_p=\alpha(r,b,n,d,u,v,p)$ from
     Definition~\ref{def:peps_compression_constants} and apply
-    Theorem~\ref{thm:peps_distributed_construction_compression_of_le}
-    (via Theorem~\ref{thm:peps_uniform_approximate_operator_network} and
-    Theorem~\ref{thm:peps_distributed_construction_gate_maps_density}) to the
+    Lemma~\ref{thm:peps_distributed_construction_compression_of_le}
+    (via Lemma~\ref{thm:peps_uniform_approximate_operator_network} and
+    Lemma~\ref{thm:peps_distributed_construction_gate_maps_density}) to the
     exact recorded expansions.
 \end{proof}
 
-\begin{theorem}[The compressed network and the retained norm]
+\begin{lemma}[The compressed network and the retained norm]
     \label{thm:peps_compression_retained_norm_network}
     \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction.exists_uniform_sampled_network_sub_pure_le}
     \leanok
     Combining the message-free case of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}
     with \cite[Remark~5.3]{OpenAI2026PolynomialPEPS}, under the hypotheses of
-    Theorem~\ref{thm:peps_distributed_construction_compression}, if unit vectors
+    Lemma~\ref{thm:peps_distributed_construction_compression}, if unit vectors
     $\Omega_L$ satisfy $\|\rho_L-|\Omega_L\rangle\langle\Omega_L|\|_1\le\eta_L$
     for every member, then for every $p>0$ the operator tensor network
-    $\sigma_L$ of Theorem~\ref{thm:peps_distributed_construction_compression}
+    $\sigma_L$ of Lemma~\ref{thm:peps_distributed_construction_compression}
     also satisfies
     \begin{align}
         \|\sigma_L-|\Omega_L\rangle\langle\Omega_L|\|_1 & \le L^{-p}+\eta_L,                               &
@@ -566,11 +566,11 @@ contraction of local tensors is proved separately.
         \label{eq:peps_compression_retained_norm_network}
     \end{align}
     % Source: 04-compression.tex, lines 137--175 and 602--611.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_compression_retained_norm,thm:peps_distributed_construction_compression}
-    Apply Theorem~\ref{thm:peps_compression_retained_norm} with $\kappa=L^{-p}$
+    Apply Lemma~\ref{thm:peps_compression_retained_norm} with $\kappa=L^{-p}$
     to the network $\sigma_L$ of
-    Theorem~\ref{thm:peps_distributed_construction_compression}.
+    Lemma~\ref{thm:peps_distributed_construction_compression}.
 \end{proof}
