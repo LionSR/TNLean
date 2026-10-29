@@ -290,6 +290,45 @@ absorbs blocks whose states differ only by a weight or a phase power, which
 separates the source's pairwise different block states
 \cite[lines~1329--1330]{PerezGarcia2007MPSReps} from the formal hypothesis.
 
+\section{Actual W blocking and prime-divisor bounds, 2026-10-29}
+
+For $k>0$ the actual local encoding
+\[
+    U_k|0\rangle=|0\rangle^{\otimes k},\qquad
+    U_k|1\rangle=k^{-1/2}|W_k\rangle
+\]
+is an isometry. The W vector has squared norm $k$ and no vacuum component,
+so the two columns are orthonormal. At $m$ sites the tensor power satisfies
+\[
+    U_k^{\otimes m}|W_m\rangle=k^{-1/2}|W_{mk}\rangle,
+    \qquad
+    U_k^{\otimes m}\frac{|W_m\rangle}{\sqrt m}
+    =\frac{|W_{mk}\rangle}{\sqrt{mk}} \quad(m>0),
+\]
+with the existing flattening of consecutive physical blocks. The identities
+are derived from the actual coefficients, rather than assumed as blocking
+hypotheses.
+
+Consequently, any periodic tensor of bond dimension $D$ representing
+$cW_{mk}$ compresses, after physical blocking and the adjoint physical map,
+to a qubit tensor of the same bond dimension representing $c\sqrt k\,W_m$.
+No preservation of block injectivity or primitivity under this compression
+is asserted or needed: the existing prime-length theorem constructs its
+canonical reduction from the compressed tensor itself. For every positive
+$N$ represented in this way and every prime divisor $p\mid N$,
+\[
+    p<2\max\bigl\{(D^2+1)^2,3(D-1)((D^2+1)^2+1)\bigr\}.
+\]
+For example, $N=2p$ is covered by a bound on $p$, although it has a small
+divisor. This is not the claimed general bound on $N$: numbers with only
+small prime factors remain uncontrolled by this estimate, and the
+Micha\l{}ek--Shitov logarithmic injectivity bound remains missing.
+The new declarations
+\leanid{MPSTensor.rectKronecker_wBlockEncoding_mulVec_normalized} and
+\leanid{MPSTensor.prime_divisor_lt_of_mpv_eq_smul_wIndicator} are
+source-written and await hosted acceptance. They are elementary consequences
+of the W vector, not additional source statements attributed to the review.
+
 \section{Local fix: the single-block threshold}
 
 For $b=1$ the printed inequality $N/2\leq 3(b-1)(L_0+1)$ reads $N\leq0$. It

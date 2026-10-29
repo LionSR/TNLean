@@ -567,3 +567,90 @@ trace illustrates this failure.
 \end{remark}
 
 %% ===================================================================
+
+
+\begin{lemma}[Vacuum and normalized W encoding of one block]
+    \label{lem:w_state_block_encoding}
+    \lean{MPSTensor.norm_sq_wIndicator,
+        MPSTensor.norm_wIndicator,
+        MPSTensor.norm_normalized_wIndicator,
+        MPSTensor.wBlockEncoding,
+        MPSTensor.wBlockEncoding_conjTranspose_mul_self,
+        MPSTensor.rectKronecker_wBlockEncoding_isometry}
+    \notready
+    \uses{def:w_indicator}
+    The unnormalized W vector has squared norm $N$. For $k>0$, the map
+    \[
+        U_k|0\rangle=|0\rangle^{\otimes k},\qquad
+        U_k|1\rangle=k^{-1/2}|W_k\rangle
+    \]
+    is an isometry from a qubit into the actual $k$-site physical space.
+    Every tensor power $U_k^{\otimes m}$ is also an isometry.
+\end{lemma}
+\begin{proof}
+    Splitting the first physical bit gives
+    $W_{N+1}=|0\rangle W_N+|1\rangle|0\rangle^{\otimes N}$.
+    The two summands are orthogonal, so induction gives squared norm $N$.
+    The vacuum has norm one and is orthogonal to $W_k$. Thus the two
+    displayed columns are orthonormal, and the Gram matrix of their tensor
+    power is the tensor power of the identity.
+\end{proof}
+
+\begin{lemma}[Actual W vectors under isometric blocking]
+    \label{lem:w_state_isometric_blocking}
+    \lean{MPSTensor.rectKronecker_wBlockEncoding_mulVec_wIndicator,
+        MPSTensor.rectKronecker_wBlockEncoding_mulVec_normalized}
+    \notready
+    \uses{lem:w_state_block_encoding, lem:eval_word_block}
+    With the usual flattening of $m$ consecutive blocks of $k$ sites,
+    \[
+        U_k^{\otimes m}|W_m\rangle=k^{-1/2}|W_{mk}\rangle.
+    \]
+    Consequently, for $k,m>0$,
+    \[
+        U_k^{\otimes m}\frac{|W_m\rangle}{\sqrt m}
+        =\frac{|W_{mk}\rangle}{\sqrt{mk}}.
+    \]
+    These are identities of the actual single-excitation vectors, applied
+    to the blocking device of \cite[lines~2090--2097]{PerezGarcia2007MPSReps}.
+\end{lemma}
+\begin{proof}
+    A single excitation belongs to exactly one block. Separate the first
+    block from the remaining blocks: the W amplitude is the sum of the
+    first-block W amplitude times the remaining vacuum amplitude and the
+    first-block vacuum amplitude times the remaining W amplitude.
+    The encoding satisfies precisely this recurrence, with the common
+    factor $k^{-1/2}$. Induct on the number of blocks and use
+    $\sqrt{mk}=\sqrt m\sqrt k$ for the normalized identity.
+\end{proof}
+
+\begin{lemma}[Same-bond compression and a bound on every prime divisor]
+    \label{lem:w_state_prime_divisor_bound}
+    \lean{MPSTensor.mpv_wBlockCompression_of_eq_wIndicator,
+        MPSTensor.prime_divisor_lt_of_mpv_eq_smul_wIndicator}
+    \notready
+    \discussion{2947}
+    \uses{lem:w_state_isometric_blocking, thm:w_state_prime_bound}
+    Suppose a tensor $A$ of bond dimension $D$ has periodic vector
+    $cW_{mk}$, with $k>0$. Block $k$ consecutive physical sites and apply
+    $U_k^\dagger$ to each physical leg. The resulting qubit tensor has the
+    same bond dimension and periodic vector $c\sqrt k\,W_m$.
+    Hence, if $N>0$, $c\ne0$, and the periodic vector of $A$ is $cW_N$,
+    every prime divisor $p$ of $N$ satisfies
+    \[
+        p<2\max\bigl\{(D^2+1)^2,
+        3(D-1)((D^2+1)^2+1)\bigr\}.
+    \]
+    This includes, for example, $N=2p$. It does not bound $N$ in terms
+    of $D$ when all prime factors of $N$ are small; the review's general
+    $D^3\log D=\Omega(N)$ bound remains separate
+    \cite{gap:rmp_w_state_ti_bound}.
+\end{lemma}
+\begin{proof}
+    The physical action on a periodic vector is the tensor product of the
+    local physical matrices. Apply the adjoint of the isometry in
+    Lemma~\ref{lem:w_state_isometric_blocking}; its Gram matrix is the identity.
+    For a prime divisor write $N=pk$ with $k>0$. The compressed coefficient
+    $c\sqrt k$ is nonzero, so Lemma~\ref{thm:w_state_prime_bound} applies
+    to the actual compressed tensor.
+\end{proof}

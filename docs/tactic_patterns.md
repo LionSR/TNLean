@@ -9724,3 +9724,12 @@ there is no need for a new tactic.
 - **Decision:** Three branch occurrences in one file, below the two-file promotion
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
+
+### Actual W-vector blocking through the vacuum recurrence — candidate (2026-10-29)
+
+- **Seen:** `MPS/Examples/WStateBlocking.lean`, norm counting and the tensor-power encoding.
+- **Pattern:** Reindex a sum by `Fin.consEquiv`, use `Fintype.sum_prod_type`, and split the
+  physical qubit with `Fin.sum_univ_two`; the existing PVBS recurrence separates the
+  remaining W vector and vacuum. Block flattening uses the existing word concatenation.
+- **Decision:** One file, below the two-file promotion threshold. The private recurrence
+  lemmas retain the shared algebra once; no new tactic or general blocking framework.
