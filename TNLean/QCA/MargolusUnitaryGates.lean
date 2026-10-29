@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.QCA.GNVWIndex
 import TNLean.Algebra.MatrixStarEquivSpatial
+import QICLean.Algebra.MatrixIsometryKronecker
 
 /-!
 # Unitary gates from the actual adjacent support factors
@@ -245,5 +246,83 @@ theorem exists_margolus_unitary_gates
   · intro a b
     rw [← hOutput]
     exact margolusOutputRule_kronecker hω x a b
+
+private theorem unitary_kronecker
+    {p q : Type*} [Fintype p] [Fintype q] [DecidableEq p] [DecidableEq q]
+    (P : Matrix p p ℂ) (Q : Matrix q q ℂ)
+    (hP : P.IsUnitaryBetween) (hQ : Q.IsUnitaryBetween) :
+    (P ⊗ₖ Q).IsUnitaryBetween := by
+  refine ⟨hP.1.kronecker P Q hQ.1, ?_⟩
+  change (P ⊗ₖ Q) * (P ⊗ₖ Q)ᴴ = 1
+  rw [Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul, hP.2, hQ.2]
+  exact Matrix.one_kronecker_one
+
+private theorem kronecker_conjugation
+    {p q : Type*} [Fintype p] [Fintype q] [DecidableEq p] [DecidableEq q]
+    (P A : Matrix p p ℂ) (Q B : Matrix q q ℂ) :
+    (P * A * Pᴴ) ⊗ₖ (Q * B * Qᴴ) =
+      (P ⊗ₖ Q) * (A ⊗ₖ B) * (P ⊗ₖ Q)ᴴ := by
+  rw [Matrix.mul_kronecker_mul, Matrix.mul_kronecker_mul,
+    Matrix.conjTranspose_kronecker]
+
+/-- The intermediate factor rotations preserve unitarity of both gates.
+Source: Schumacher–Werner, lines 1033–1041. -/
+theorem margolus_basisChange_unitary
+    {p q i j : Type*} [Fintype p] [Fintype q] [Fintype i] [Fintype j]
+    [DecidableEq p] [DecidableEq q] [DecidableEq i] [DecidableEq j]
+    (P : Matrix p p ℂ) (Q : Matrix q q ℂ)
+    (hP : P.IsUnitaryBetween) (hQ : Q.IsUnitaryBetween)
+    (U : Matrix (p × q) i ℂ) (V : Matrix j (p × q) ℂ)
+    (hU : U.IsUnitaryBetween) (hV : V.IsUnitaryBetween) :
+    ((P ⊗ₖ Q) * U).IsUnitaryBetween ∧ (V * (P ⊗ₖ Q)ᴴ).IsUnitaryBetween := by
+  have hK := unitary_kronecker P Q hP hQ
+  exact ⟨hK.mul _ U hU, hV.mul V _ (hK.conjTranspose _)⟩
+
+/-- An independent unitary basis change in each intermediate factor,
+inserted after the input gate, cancels against the same change in the
+factor coordinates. Source: Schumacher–Werner, lines 1033–1041. -/
+theorem margolus_basisChange_input
+    {p q i : Type*} [Fintype p] [Fintype q] [Fintype i]
+    [DecidableEq p] [DecidableEq q] [DecidableEq i]
+    (P : Matrix p p ℂ) (Q : Matrix q q ℂ)
+    (hP : P.IsUnitaryBetween) (hQ : Q.IsUnitaryBetween)
+    (U : Matrix (p × q) i ℂ) (A : Matrix p p ℂ) (B : Matrix q q ℂ) :
+    ((P ⊗ₖ Q) * U)ᴴ * ((P * A * Pᴴ) ⊗ₖ (Q * B * Qᴴ)) * ((P ⊗ₖ Q) * U) =
+      Uᴴ * (A ⊗ₖ B) * U := by
+  let K := P ⊗ₖ Q
+  have hK : Kᴴ * K = 1 := (unitary_kronecker P Q hP hQ).1
+  have htensor : (P * A * Pᴴ) ⊗ₖ (Q * B * Qᴴ) = K * (A ⊗ₖ B) * Kᴴ :=
+    kronecker_conjugation P A Q B
+  rw [htensor, Matrix.conjTranspose_mul]
+  change Uᴴ * Kᴴ * (K * (A ⊗ₖ B) * Kᴴ) * (K * U) = _
+  calc
+    Uᴴ * Kᴴ * (K * (A ⊗ₖ B) * Kᴴ) * (K * U) =
+        Uᴴ * (Kᴴ * K) * (A ⊗ₖ B) * (Kᴴ * K) * U := by
+      simp only [Matrix.mul_assoc]
+    _ = Uᴴ * (A ⊗ₖ B) * U := by rw [hK, Matrix.mul_one, Matrix.mul_one]
+
+/-- The corresponding inverse basis changes before the output gate
+cancel the rotated intermediate factor coordinates. This is the
+cancelling basis freedom, not a translation constraint on arbitrary gates.
+Source: Schumacher–Werner, lines 1033–1041. -/
+theorem margolus_basisChange_output
+    {p q i : Type*} [Fintype p] [Fintype q] [Fintype i]
+    [DecidableEq p] [DecidableEq q] [DecidableEq i]
+    (P : Matrix p p ℂ) (Q : Matrix q q ℂ)
+    (hP : P.IsUnitaryBetween) (hQ : Q.IsUnitaryBetween)
+    (V : Matrix i (p × q) ℂ) (A : Matrix p p ℂ) (B : Matrix q q ℂ) :
+    (V * (P ⊗ₖ Q)ᴴ) * ((P * A * Pᴴ) ⊗ₖ (Q * B * Qᴴ)) *
+        (V * (P ⊗ₖ Q)ᴴ)ᴴ = V * (A ⊗ₖ B) * Vᴴ := by
+  let K := P ⊗ₖ Q
+  have hK : Kᴴ * K = 1 := (unitary_kronecker P Q hP hQ).1
+  have htensor : (P * A * Pᴴ) ⊗ₖ (Q * B * Qᴴ) = K * (A ⊗ₖ B) * Kᴴ :=
+    kronecker_conjugation P A Q B
+  rw [htensor, Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose]
+  change (V * Kᴴ) * (K * (A ⊗ₖ B) * Kᴴ) * (K * Vᴴ) = _
+  calc
+    (V * Kᴴ) * (K * (A ⊗ₖ B) * Kᴴ) * (K * Vᴴ) =
+        V * (Kᴴ * K) * (A ⊗ₖ B) * (Kᴴ * K) * Vᴴ := by
+      simp only [Matrix.mul_assoc]
+    _ = V * (A ⊗ₖ B) * Vᴴ := by rw [hK, Matrix.mul_one, Matrix.mul_one]
 
 end SpinChain.PropagatesWithin

@@ -107,3 +107,30 @@ using the adjacent-generation equalities of
     formula. Substitute the prescribed factor products into the two
     actual local-rule identities.
 \end{proof}
+
+\begin{lemma}[Cancelling intermediate basis freedom]
+    \label{lem:qca_margolus_basis_freedom}
+    \lean{SpinChain.PropagatesWithin.margolus_basisChange_unitary,
+        SpinChain.PropagatesWithin.margolus_basisChange_input,
+        SpinChain.PropagatesWithin.margolus_basisChange_output}
+    \notready
+    \uses{lem:qca_margolus_spatial_unitaries}
+    Let $P,Q$ be independent unitary basis changes on two intermediate
+    factors, and write $K=P\otimes Q$. The changed input and output gates
+    $U'=KU$ and $V'=VK^*$ are unitary whenever $U,V$ are unitary. For all
+    factor observables $A,B$,
+    \begin{align}
+        U'^*((PAP^*)\otimes(QBQ^*))U' & =U^*(A\otimes B)U,\notag \\
+        V'((PAP^*)\otimes(QBQ^*))V'^* & =V(A\otimes B)V^*.
+    \end{align}
+    Thus a basis rotation on each actual intermediate factor cancels
+    between its input and output appearances. This is the freedom in
+    \cite[lines~1033--1041]{SchumacherWerner2004QCA}; it imposes no invented
+    translation constraint on an arbitrary pair of gates.
+\end{lemma}
+\begin{proof}
+    \notready
+    Kronecker products preserve both unitary identities. Substitution of
+    the changed gates gives $K^*K=I$ on both sides of the intermediate
+    observable; cancellation proves the two identities.
+\end{proof}

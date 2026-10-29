@@ -26,9 +26,11 @@ The current domain is a homogeneous positive-dimensional chain and an
 actual nearest-neighbour star-automorphism. Gates may depend on position.
 This establishes the finite spatial and local product-rule steps of
 issue 7035, not its full translation-covariant generalized Margolus
-partitioning theorem. Still remaining are an assembled alternating-layer
-action on the full local algebra, its translation compatibility against
-the original QCA, and the cancelling intermediate basis-change freedom.
+partitioning theorem. Independent unitary changes of the intermediate
+factor bases preserve gate unitarity and cancel in both actual product
+local rules, as in source lines 1033–1041. Still remaining are an assembled
+alternating-layer action on the full local algebra and its translation
+compatibility against the original QCA.
 No selected compact-SVD or MPU source-factor presentation is identified.
 
 No Lean executable, elaboration or build was run, as requested. All new
