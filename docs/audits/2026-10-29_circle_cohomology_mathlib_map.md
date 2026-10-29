@@ -29,3 +29,17 @@ formatting, tactic-pattern scan, Blueprint declaration-source scan and
 `git diff --check`. No new tactic pattern is introduced by this restatement.
 No Lean elaboration or build was run, as requested. The updated Blueprint
 node is explicitly pending verification; #8318 remains open until acceptance.
+
+## Current-main reconciliation
+
+The original head `9d36dabe23565f51100687218490af20e8151870` passed the hosted
+full build and strict checks for both changed algebra modules in job
+123421331593; the log records that exact `PR_HEAD_SHA`. No source repair was
+needed. The merge with main `c7d2992c89c16d85237e18557ff292979b3a67b4` retains
+both algebra source files byte-for-byte and carries the declaration tags to
+the relocated circle-coefficient entry in `ch29_mpu_cocycles.tex`. The former
+chapter retains main's contents exactly. Native import, declaration-sync,
+role, prose, formatting and whitespace checks pass. Hosted verification of
+the refreshed combined head and repository integration remain pending; the
+Blueprint entry stays pending and #8318 remains open. No local Lean command
+was run.
