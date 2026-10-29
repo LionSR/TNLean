@@ -4,7 +4,7 @@ The physical renormalization of matrix product density operators rests on
 channel extensions, projector-controlled positive sums, and physical closures of
 virtual contractions.
 
-\begin{theorem}[Multiplicativity from reflected short contractions]
+\begin{lemma}[Multiplicativity from reflected short contractions]
     \label{thm:reflected_short_contractions_multiplicative}
     \lean{LinearMap.map_mul_of_reflected_moments}
     \leanok
@@ -21,7 +21,7 @@ virtual contractions.
     Then $V(xy)=Vx\,Vy$ for every $x,y\in B$.
     No finite-dimensionality, positivity, traciality, or unitality of
     $V$ is required beyond the stated quadratic faithfulness.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Put $d=Vx\,Vy-V(xy)$. Expanding $\tau_A(d^*d)$ gives four
     terms. The reflected four-point identity evaluates the first,
@@ -43,7 +43,7 @@ establish it.
 % stated in ch21_mpdo_rfp_simple_local_normalized_preparations.tex after the eta preparations.
 
 
-\begin{theorem}[Tensor extension preserves trace-preserving complete positivity]
+\begin{lemma}[Tensor extension preserves trace-preserving complete positivity]
     \label{thm:mpdo_tensor_map_id_cptp}
     \lean{Matrix.tensorMapIdLM_isKrausCPTP}
     \lean{Matrix.idTensorMapLM_isKrausCPTP}
@@ -63,7 +63,7 @@ establish it.
         \notag
     \end{align}
     are trace-preserving and completely positive.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The first assertion is the tensor-extension closure theorem. For the
@@ -177,7 +177,7 @@ is stated in \cite[``State-preparation map'']{QICLean2026Blueprint}.
     \end{align}
 \end{proof}
 
-\begin{theorem}[One- and two-site physical closures]
+\begin{lemma}[One- and two-site physical closures]
     \label{thm:phys_close_one_two}
     \lean{MPOTensor.physCloseN_one_eq_physClose1,
         MPOTensor.physCloseN_two_eq_physClose2}
@@ -194,7 +194,7 @@ is stated in \cite[``State-preparation map'']{QICLean2026Blueprint}.
          & =\tr(M^{i_0j_0}M^{i_1j_1}X).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Under these identifications, the length-one and length-two word
@@ -288,7 +288,7 @@ leaving the remaining sites unchanged.
     \hfil\par
 \end{definition}
 
-\begin{theorem}[Pure-state specialization of the physical-map fixed point]
+\begin{lemma}[Pure-state specialization of the physical-map fixed point]
     \label{thm:pure_doubled_tensor_rfp_via_ts}
     \lean{MPSTensor.doubledTensor_isRFPViaTS_iff_isTransferIdempotent,
         MPSTensor.doubledTensor_isRFPViaTS_iff_hasPhysicalBlockingIsometry}
@@ -325,7 +325,7 @@ leaving the remaining sites unchanged.
     $\mathcal S(Y)=\tr_2(U^\dagger YU)$ after extending $V$ to a unitary with
     a fixed pure ancilla. If $d=0$, both matrix spaces are trivial and the
     unique zero maps give $\mathcal S$ and $\mathcal T$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:physical_blocking_isometry_iff_transfer_idempotence, thm:rfp_via_ts_physical_trace_idempotent, thm:matrix_support_completion_cptp}
@@ -418,7 +418,7 @@ leaving the remaining sites unchanged.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Fibonacci boundary transition recurrence]
+\begin{lemma}[Fibonacci boundary transition recurrence]
     \label{thm:cpsv_fibonacci_boundary_recurrence}
     \lean{MPSTensor.FibonacciBoundary.x_one,
         MPSTensor.FibonacciBoundary.x_succ}
@@ -431,7 +431,7 @@ leaving the remaining sites unchanged.
         x^{n+1}_{\alpha1} & =x^n_{\alpha0}+2x^n_{\alpha1}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -453,7 +453,7 @@ leaving the remaining sites unchanged.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Characteristic recurrence for periodic Fibonacci transition counts]
+\begin{lemma}[Characteristic recurrence for periodic Fibonacci transition counts]
     \label{thm:cpsv_fibonacci_periodic_count_recurrence}
     \lean{MPSTensor.FibonacciBoundary.periodicTransitionCount_add_two_add}
     \leanok
@@ -463,7 +463,7 @@ leaving the remaining sites unchanged.
         a_{N+2}+a_N & =3a_{N+1}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -473,14 +473,14 @@ leaving the remaining sites unchanged.
     diagonal sums gives $a_{N+2}+a_N=3a_{N+1}$.
 \end{proof}
 
-\begin{theorem}[First periodic Fibonacci transition counts]
+\begin{lemma}[First periodic Fibonacci transition counts]
     \label{thm:cpsv_fibonacci_periodic_count_values}
     \lean{MPSTensor.FibonacciBoundary.periodicTransitionCount_one,
         MPSTensor.FibonacciBoundary.periodicTransitionCount_two}
     \leanok
     \uses{def:cpsv_fibonacci_periodic_count, thm:cpsv_fibonacci_boundary_recurrence}
     The first two periodic transition counts are $a_1=3$ and $a_2=7$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -489,7 +489,7 @@ leaving the remaining sites unchanged.
     diagonal boundary labels gives $a_1=3$ and $a_2=7$.
 \end{proof}
 
-\begin{theorem}[Golden-ratio formula for periodic Fibonacci transition counts]
+\begin{lemma}[Golden-ratio formula for periodic Fibonacci transition counts]
     \label{thm:cpsv_fibonacci_periodic_count_golden_ratio}
     \lean{MPSTensor.FibonacciBoundary.periodicTransitionCount_eq_goldenRatio}
     \leanok
@@ -502,7 +502,7 @@ leaving the remaining sites unchanged.
         a_N & =\tau_+^{2N}+\tau_-^{2N}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -514,7 +514,7 @@ leaving the remaining sites unchanged.
     now follows from the same recurrence for $a_N$.
 \end{proof}
 
-\begin{theorem}[Periodic Fibonacci transition counts are not geometric]
+\begin{lemma}[Periodic Fibonacci transition counts are not geometric]
     \label{thm:cpsv_fibonacci_transition_not_geometric}
     \lean{MPSTensor.FibonacciBoundary.periodicTransitionCount_not_geometric}
     \leanok
@@ -522,7 +522,7 @@ leaving the remaining sites unchanged.
     As asserted at \cite[Appendix~D, line~2125]{Cirac2016MPDO_arXiv} for the
     transition-count sequence, there are no $r,s\in\N$ such that
     $a_N=rs^{N-1}$ for every $N>0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -548,7 +548,7 @@ leaving the remaining sites unchanged.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Open-boundary Fibonacci operator ranks]
+\begin{lemma}[Open-boundary Fibonacci operator ranks]
     \label{thm:cpsv_fibonacci_open_boundary_rank}
     \lean{MPSTensor.FibonacciBoundary.rank_openBoundaryOperator_eq_x}
     \leanok
@@ -559,7 +559,7 @@ leaving the remaining sites unchanged.
         \operatorname{rank}\rho^{(n)}_{\alpha\beta}(A)
          & =x^n_{\alpha\beta}.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -573,7 +573,7 @@ leaving the remaining sites unchanged.
     diagonal entries.
 \end{proof}
 
-\begin{theorem}[Fibonacci periodic operator-rank formula]
+\begin{lemma}[Fibonacci periodic operator-rank formula]
     \label{thm:cpsv_fibonacci_periodic_rank}
     \lean{MPSTensor.FibonacciBoundary.rank_mpo_toMPOTensor_eq_periodicTransitionCount,
         MPSTensor.FibonacciBoundary.rank_mpo_toMPOTensor_eq_goldenRatio}
@@ -591,7 +591,7 @@ leaving the remaining sites unchanged.
         =\tau_+^{2N}+\tau_-^{2N}.
         \label{eq:cpsv_fib_periodic_rank}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -604,7 +604,7 @@ leaving the remaining sites unchanged.
     equality.
 \end{proof}
 
-\begin{theorem}[Fibonacci periodic operator ranks are not geometric]
+\begin{lemma}[Fibonacci periodic operator ranks are not geometric]
     \label{thm:cpsv_fibonacci_operator_rank_not_geometric}
     \lean{MPSTensor.FibonacciBoundary.rank_mpo_toMPOTensor_not_geometric}
     \leanok
@@ -614,7 +614,7 @@ leaving the remaining sites unchanged.
     As in the operator-level conclusion of
     \cite[Appendix~D, line~2125]{Cirac2016MPDO_arXiv}, there are no $r,s\in\N$
     such that $\operatorname{rank}\rho^{(N)}(A)=rs^{N-1}$ for every $N>0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -624,7 +624,7 @@ leaving the remaining sites unchanged.
     $7=3s$, which is impossible in $\N$.
 \end{proof}
 
-\begin{theorem}[The Fibonacci boundary tensor is not a strong fixed point]
+\begin{lemma}[The Fibonacci boundary tensor is not a strong fixed point]
     \label{thm:cpsv_fibonacci_not_strong_rfp}
     \lean{MPSTensor.FibonacciBoundary.toMPOTensor_not_isStrongRFP}
     \leanok
@@ -633,7 +633,7 @@ leaving the remaining sites unchanged.
     support prescribed in Definition~\ref{def:cpsv_fibonacci_support_tensor}.
     Then its canonical diagonal MPO tensor is not a strong renormalization
     fixed point.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -740,7 +740,7 @@ leaving the remaining sites unchanged.
     positivity and the trace. The argument for $\mathcal S$ is identical.
 \end{proof}
 
-\begin{theorem}[Global action of the renormalization maps]
+\begin{lemma}[Global action of the renormalization maps]
     \label{thm:mpdo_global_renormalization_maps}
     \lean{MPOTensor.refineFirstSite_physCloseN,
         MPOTensor.coarsenFirstTwoSites_physCloseN,
@@ -763,7 +763,7 @@ leaving the remaining sites unchanged.
     In particular, these identities hold for every periodic MPO operator.
     Thus the renormalization channels act on periodic rings of arbitrary
     length \cite[Appendix~C, lines~1333--1341]{Cirac2016MPDO_arXiv}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -798,7 +798,7 @@ leaving the remaining sites unchanged.
     \end{align}
 \end{proof}
 
-\begin{theorem}[One-site positivity at a renormalization fixed point]
+\begin{lemma}[One-site positivity at a renormalization fixed point]
     \label{thm:mpdo_rfp_one_site_positivity}
     \lean{MPOTensor.IsRFPViaTS.isMPDO_of_mpo_one_posSemidef}
     \lean{MPOTensor.IsRFPViaTS.isMPDO_iff_mpo_one_posSemidef}
@@ -808,12 +808,12 @@ leaving the remaining sites unchanged.
     by the two channels of Definition~\ref{def:is_rfp_via_ts}.
     Then $\rho^{(N)}(M)\succeq0$ at every positive length if and only
     if $\rho^{(1)}(M)\succeq0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     One direction follows by setting $N=1$. For the converse, repeated
     application of the localized refinement channel sends
     $\rho^{(N)}(M)$ to $\rho^{(N+1)}(M)$ by
-    Theorem~\ref{thm:mpdo_global_renormalization_maps}, and complete positivity
+    Lemma~\ref{thm:mpdo_global_renormalization_maps}, and complete positivity
     preserves each matrix inequality.
 \end{proof}
 
@@ -832,7 +832,7 @@ leaving the remaining sites unchanged.
     Equivalently, $M^{ii}=A^i$ and $M^{ij}=0$ for $i\ne j$.
 \end{definition}
 
-\begin{theorem}[Operator and rank of the diagonal pure-state embedding]
+\begin{lemma}[Operator and rank of the diagonal pure-state embedding]
     \label{thm:to_mpo_diagonal_rank}
     \lean{MPSTensor.evalWord_toMPOTensor,
         MPSTensor.mpo_toMPOTensor,
@@ -848,7 +848,7 @@ leaving the remaining sites unchanged.
          & =\#\{\sigma:V^{(N)}(A)_\sigma\ne0\}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -858,14 +858,14 @@ leaving the remaining sites unchanged.
     formula follows by counting the nonzero entries of a diagonal matrix.
 \end{proof}
 
-\begin{theorem}[Transfer map of the diagonal pure-state embedding]%
+\begin{lemma}[Transfer map of the diagonal pure-state embedding]%
     \label{thm:to_mpo_transfer_map}
     \lean{MPSTensor.toMPOTensor_transferMap}
     \leanok
     \uses{def:to_mpo_tensor, def:mpo_transfer_map, def:transfer_map}
     The transfer map of the diagonal MPO associated to $A$ agrees with the
     original MPS transfer map: $\E_{A^{\mathrm{MPO}}}=\E_A$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -876,7 +876,7 @@ leaving the remaining sites unchanged.
     is the defining formula for $\E_A$.
 \end{proof}
 
-\begin{theorem}[Pure-state recovery of transfer-map idempotence]%
+\begin{lemma}[Pure-state recovery of transfer-map idempotence]%
     \label{thm:to_mpo_zcl_iff_transfer_idempotent}
     \lean{MPSTensor.toMPOTensor_isZCL_iff_isTransferIdempotent}
     \leanok
@@ -890,29 +890,29 @@ leaving the remaining sites unchanged.
         \E_A\circ\E_A=\E_A.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:mpo_is_zcl, def:mps_transfer_idempotence, thm:to_mpo_transfer_map}
     Both conditions assert idempotence of the corresponding transfer map.
-    Theorem~\ref{thm:to_mpo_transfer_map} identifies those transfer maps, so
+    Lemma~\ref{thm:to_mpo_transfer_map} identifies those transfer maps, so
     the two predicates are equivalent.
 \end{proof}
 
-\begin{theorem}[Pure-state recovery of zero correlation length]%
+\begin{lemma}[Pure-state recovery of zero correlation length]%
     \label{thm:to_mpo_zcl_iff_zcl}
     \lean{MPSTensor.toMPOTensor_isZCL_iff_mps_isZCL}
     \leanok
     \uses{thm:to_mpo_zcl_iff_transfer_idempotent, thm:zcl_iff_idempotent_transfer}
     For an MPS tensor $A$, the diagonal MPO embedding has idempotent transfer
     map if and only if $A$ has zero correlation length.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:to_mpo_zcl_iff_transfer_idempotent, thm:zcl_iff_idempotent_transfer}
-    Theorem~\ref{thm:to_mpo_zcl_iff_transfer_idempotent} reduces idempotence of
+    Lemma~\ref{thm:to_mpo_zcl_iff_transfer_idempotent} reduces idempotence of
     the embedded transfer map to idempotence of $\E_A$, which is equivalent to
     zero correlation length by Theorem~\ref{thm:zcl_iff_idempotent_transfer}.
 \end{proof}

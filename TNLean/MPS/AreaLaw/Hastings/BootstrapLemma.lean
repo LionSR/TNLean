@@ -4,48 +4,28 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.ChainBootstrap
-import TNLean.MPS.AreaLaw.Hastings.LemmaOneConstant
+import TNLean.MPS.AreaLaw.Hastings.LiebRobinson
 
 /-!
 # Hastings' bootstrap lemma from the approximate factorization
 
-Lemma 2 of Hastings, *An area law for one-dimensional quantum systems* (arXiv:0705.2024v4,
-`References/0705.2024/law16.tex`, lines 280–311), bounds the entropy `S_j` of the first `j`
-sites of the ground state `Ψ₀` by `ln k + ξ' ln(2 C₁²/P) ln D + F(ξ', D)`, for every mixture
-`ρ` of pure states of Schmidt rank at most `k` across the cut with overlap
-`⟨Ψ₀, ρ Ψ₀⟩ = P > 0`. Its proof uses the Hamiltonian only through Lemma 1, the approximate
-factorization `‖O_B O_L O_R − P₀‖ ≤ C₁ e^{-m/ξ'}` (eq. `prodapprox`, lines 246–267).
+Hastings' Lemma 2 (arXiv:0705.2024v4, lines 280–311) bounds the entropy
+at a cut by `log k + ξ' log(2 C₁²/P) log q + bootstrapRemainder ξ' q`,
+for a unit-trace mixture of vectors of Schmidt rank at most `k` whose
+overlap with the ground state is `P > 0`. The first theorem below derives
+this estimate from the approximate factorization at that cut. The second
+supplies that factorization from the Hamiltonian assumptions.
 
-This file first states the bound with Lemma 1 in the form `IsFactorizationAt` in which it is
-produced, at the cut `j` and every length `m`, and then discharges Lemma 1 by
-`exists_projectorFactorization_endpoint`. The result is a quantitatively restricted Lemma 2 on
-Hastings' own hypotheses: a chain Hamiltonian of finite range and finite interaction strength with
-a unique gapped ground state. With `ζ = lemmaOneEndpointLength R J ΔE = (5/4) ξ̂` the length of
-Lemma 1 at the printed rate, the bound holds at `ξ' = 6ζ` (lines 139–142) with the constant
-`C₁ = K ζ³`, where `K` depends only on the range. The length `ζ` may stand in for the source's
-`ξ`: the source fixes `ξ = max(2v/ΔE, ξ_C)` only through some Lieb–Robinson pair, and a bound
-valid for `|t| ≤ l/v` stays valid for a larger velocity (lines 96–112), so raising the chain
-velocity by `5/4` is a legitimate choice. The constant `C₁` is bounded by a polynomial in the
-length, as the source requires (lines 258–262), and is uniform in the chain length, local
-dimension, Hamiltonian, ground state, cut and mixture.
-
-The source's sites carry nearest-neighbour terms (lines 85–93), which it obtains from any
-finite range by grouping sites; here the range `R` is arbitrary.
-
-**Scope restriction (quantitative bounds):** `exists_entropy_le_of_overlap_schmidtRank_mixture`
-inherits the quantitative restriction of the formalized Lemma 1. Its length
-`ζ = (5/4) lemmaOneLength R (J/ΔE) 1` comes from the chain Lieb–Robinson estimate with the
-velocity raised by `5/4`. That estimate is linear in the size of the support, as in the source
-(lines 96–112), but its prefactor grows with `J` and its second operator acts on one site, so
-`ζ` is not shown to be the source's `max(2v/ΔE, ξ_C)` for a Lieb–Robinson pair in the source's
-sense. Documented in `docs/paper-gaps/hastings07_lemma1_decay_length.tex` and
-`docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
-
-## Main results
-
-* `entropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt`: the bootstrap bound from
-  the factorization at the cut `j` and every length.
-* `exists_entropy_le_of_overlap_schmidtRank_mixture`: Lemma 2.
+**Scope restriction (auxiliary velocity):** the Hamiltonian endpoint in this
+module uses `ζ = lemmaOneEndpointLength R J ΔE`, `ξ' = 6ζ` and `C₁ = K ζ³`.
+Its admissible physical Lieb–Robinson pair has velocity
+`10ΔE * chainLRVelocity R (J/ΔE)` and decay length `8`. This velocity
+contains a term proportional to the gap; it is not expressed as a fixed
+range-dependent multiple of `J`. The conclusion at `ζ` is a valid
+auxiliary estimate. The source's order-`J` choice, with all consequences
+at one common length, is proved in `Hastings/SourceConsequences.lean`.
+See `docs/paper-gaps/hastings07_lemma1_decay_length.tex` for the physical
+rescaling and the reciprocal-length convention of the printed bound.
 -/
 
 namespace TNLean.MPS.AreaLaw.Hastings

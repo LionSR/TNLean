@@ -5,7 +5,7 @@ handles the case where each block's transfer map is trace-preserving; the
 reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital},
     line~316]{DeLasCuevas2017Irreducible}) is carried out in the proof.
 
-\begin{theorem}[Periodic Fundamental Theorem]
+\begin{theorem}[Fundamental Theorem for periodic tensors]
     \label{thm:periodic_ft}
     \lean{MPSTensor.fundamentalTheorem_periodic_equalCase_derivedPeriods}
     \leanok
@@ -52,9 +52,9 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     \leanok
     \uses{thm:spectral_periodic_period_existence,
         thm:periodic_ft_supplied_periods}
-    Theorem~\ref{thm:spectral_periodic_period_existence} yields a positive
+    Lemma~\ref{thm:spectral_periodic_period_existence} yields a positive
     period $m_j$ for each block $A_j$ and $n_k$ for each block $B_k$. Applying
-    Theorem~\ref{thm:periodic_ft_supplied_periods} with these derived periods
+    Corollary~\ref{thm:periodic_ft_supplied_periods} with these derived periods
     gives every conclusion.
 \end{proof}
 
@@ -62,7 +62,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     The matrix-product-vector identities are taken at positive lengths, following the convention that the empty word is not a physical chain; this extends to length zero since the empty-word coefficient equals the bond dimension. The scalars $\xi_j$ are made explicit rather than absorbed into $S_{\pi(j)}$ as in \cite[lines~667--671]{DeLasCuevas2017Irreducible}, allowing the statement to speak directly about the given multiplicity matrices.
 \end{remark}
 
-\begin{theorem}[Periodic Fundamental Theorem with given periods]%
+\begin{corollary}[Fundamental Theorem for periodic tensors with given periods]%
     \label{thm:periodic_ft_supplied_periods}
     \lean{MPSTensor.fundamentalTheorem_periodic_equalCase_irreducibleForm}
     \leanok
@@ -73,7 +73,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     spectrally $m_j$-periodic and each $B_k$ is spectrally $n_k$-periodic
     (Definition~\ref{def:spectral_periodic_tensor}). Then the conclusions of
     Theorem~\ref{thm:periodic_ft} hold for these specified periods.
-\end{theorem}
+\end{corollary}
 
 \begin{proof}\leanok
     \uses{thm:periodic_ft_equal_case_trace_preserving,
@@ -106,7 +106,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     normalizing similarities.
 \end{proof}
 
-\begin{theorem}[Diagonal multiplicity gauge from equal powers]
+\begin{lemma}[Diagonal multiplicity gauge from equal powers]
     \label{thm:zgauge_construction}
     \lean{MPSTensor.zgauge_construction}
     \leanok
@@ -118,7 +118,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
         Z^m           & =\Id, \notag        \\
         Z\,\diag(\nu) & =\diag(\mu). \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Setting $Z=\diag(\mu_i/\nu_i)_{i\in I}$ and applying the two diagonal
@@ -126,7 +126,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     \ref{lem:z_gauge_diagonal_mul} yields both equations.
 \end{proof}
 
-\begin{theorem}[Scalar multiplicity gauge from power sums]
+\begin{lemma}[Scalar multiplicity gauge from power sums]
     \label{thm:equalcase_zgauge_power_sums}
     \lean{MPSTensor.equalCase_zgauge_of_power_sums}
     \leanok
@@ -138,10 +138,10 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     integer~$k$. Then the two lists determine the same multiset, and there is
     a diagonal $Z$ satisfying $Z^m=\Id$ and
     $Z\,\diag(\nu)=\diag(\mu)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    Theorem~\ref{thm:zgauge_construction} constructs the diagonal matrix $Z$,
+    Lemma~\ref{thm:zgauge_construction} constructs the diagonal matrix $Z$,
     while the Newton--Girard power-sum identity recovers the multiplicity
     multiset.
 \end{proof}
@@ -224,7 +224,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     use the same scalar in the similarity and in the multiplicity relation.
 \end{definition}
 
-\begin{theorem}[Equal-case coefficient extraction]%
+\begin{lemma}[Equal-case coefficient extraction]%
     \label{thm:periodic_equalcase_coefficient_extraction}
     \lean{MPSTensor.SectorDecomposition.coeff_eq_of_sameMPV_of_matched_basis}
     \leanok
@@ -260,7 +260,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     which is what the source means at
     \cite[lines~667--671]{DeLasCuevas2017Irreducible} by absorbing the phase
     into $S_j$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Expanding both vectors along the basis $\{A_j\}_{j\in J}$ by
@@ -271,18 +271,18 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     Theorem~\ref{thm:pgvwc07_normalized_periodic_state_vector_decomposition} the term
     for an index with $m_j\nmid N$ contributes the zero vector, so the
     combination runs over the indices with $m_j\mid N$, and by
-    Theorem~\ref{thm:periodic_basis_nonzero_subfamily_li} those vectors are
+    Lemma~\ref{thm:periodic_basis_nonzero_subfamily_li} those vectors are
     independent for every large $N$. Each coefficient therefore vanishes.
 \end{proof}
 
-\begin{theorem}[Blockwise multiplicity gauge in the equal case]%
+\begin{lemma}[Blockwise multiplicity gauge in the equal case]%
     \label{thm:periodic_equalcase_blockwise_zgauge}
     \lean{MPSTensor.equalCase_blockwise_zgauge}
     \leanok
     \uses{thm:periodic_equalcase_coefficient_extraction,
         lem:matched_sector_weight_pow_equiv_period, thm:zgauge_construction}
     Under the hypotheses of
-    Theorem~\ref{thm:periodic_equalcase_coefficient_extraction}, for every
+    Lemma~\ref{thm:periodic_equalcase_coefficient_extraction}, for every
     $j\in J$ the multiplicity matrices $R_j$ and $S_{\pi(j)}$ have the same
     size $r_j$, and there are a reordering $\tau$ of the diagonal entries of
     $S_{\pi(j)}$ and a diagonal matrix $Z_j$ with
@@ -297,18 +297,18 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     against the rescaled multiplicity matrix $\zeta_jR_j$, and the rescaling
     is in general not trivial even for period one, as the pair of blocks
     $B_j=e^{i\theta}A_j$ shows.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     For each $j\in J$,
-    Theorem~\ref{thm:periodic_equalcase_coefficient_extraction} compares the
+    Lemma~\ref{thm:periodic_equalcase_coefficient_extraction} compares the
     power sums of $R_j$ and $S_{\pi(j)}$ at every multiple of $m_j$ beyond
     $N_0$, with scalar $\zeta_j^{-1}$. Feeding that progression to
     Lemma~\ref{lem:matched_sector_weight_pow_equiv_period} gives the equality
     of sizes, the reordering $\tau$, and the entry identity
     $\nu_{\pi(j),\tau(q)}^{m_j}=(\zeta_j\mu_{j,q})^{m_j}$. Since the entries
     $\zeta_j\mu_{j,q}$ are nonzero,
-    Theorem~\ref{thm:zgauge_construction} produces the diagonal $Z_j$ with the
+    Lemma~\ref{thm:zgauge_construction} produces the diagonal $Z_j$ with the
     two displayed properties.
 \end{proof}
 
@@ -331,7 +331,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     scalar matrix is central.
 \end{proof}
 
-\begin{theorem}[Global multiplicity gauge and similarity]%
+\begin{lemma}[Global multiplicity gauge and similarity]%
     \label{thm:periodic_equalcase_global_zgauge}
     \lean{MPSTensor.equalCase_global_zgauge_of_blockwise}
     \leanok
@@ -368,7 +368,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     \cite[lines~689--690]{DeLasCuevas2017Irreducible}, with $Y$ the direct sum
     $\bigoplus_{j\in J} T_j\otimes Y_j$ of the copy reorderings and the
     blockwise similarities.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:pgvwc07_normalized_periodic_state_vector_decomposition}
@@ -392,14 +392,14 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     Theorem~\ref{thm:pgvwc07_normalized_periodic_state_vector_decomposition}.
 \end{proof}
 
-\begin{theorem}[Matched periods for trace-preserving repeated blocks]%
+\begin{lemma}[Matched periods for trace-preserving repeated blocks]%
     \label{thm:periodic_repeated_blocks_period_eq_tp}
     \lean{MPSTensor.IsPeriodic.period_eq_of_hetRepeatedBlocks}
     \leanok
     \uses{def:periodic_tensor}
     Let $A$ and $B$ be periodic tensors of periods $m$ and $n$ whose block maps
     are trace preserving. If $A$ and $B$ are repeated blocks, then $m=n$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:repeated_blocks_peripheral_spectrum}
@@ -474,9 +474,9 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
         lem:left_canonical_irreducible_same_phase_unitary_gauge}
     Equality of the generated matrix-product vectors is in particular
     proportionality, so
-    Theorem~\ref{thm:periodic_multiplicity_nondecaying_overlap} yields
+    Lemma~\ref{thm:periodic_multiplicity_nondecaying_overlap} yields
     non-decaying partners and
-    Theorem~\ref{thm:periodic_conditional_block_matching} matches the two
+    Lemma~\ref{thm:periodic_conditional_block_matching} matches the two
     bases, each matched pair carrying a similarity with a unit-modulus scalar
     $\xi_j$. Since the blocks are left canonical and irreducible,
     Lemma~\ref{lem:left_canonical_irreducible_same_phase_unitary_gauge}
@@ -485,21 +485,21 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
         A_j^i          & =\xi_jU_jB_{\pi(j)}^iU_j^\dagger, \notag \\
         U_jU_j^\dagger & =\Id_{D_j}. \notag
     \end{align} The matched periods agree by
-    Theorem~\ref{thm:periodic_repeated_blocks_period_eq_tp}. That same $\xi_j$
+    Lemma~\ref{thm:periodic_repeated_blocks_period_eq_tp}. That same $\xi_j$
     relates the matrix-product vectors of the matched pair at every length, so
-    Theorem~\ref{thm:periodic_equalcase_coefficient_extraction} compares the
+    Lemma~\ref{thm:periodic_equalcase_coefficient_extraction} compares the
     multiplicity power sums at every large multiple of $m_j$, and
     Lemma~\ref{lem:matched_sector_weight_pow_equiv_period} turns that
     comparison into the reordering $T_j$ and the entry identities
     $\nu_{\pi(j),\tau_j(l)}^{m_j}=(\xi_j\mu_{j,l})^{m_j}$. The ratios
     $z_{j,l}=\nu_{\pi(j),\tau_j(l)}/(\xi_j\mu_{j,l})$ are therefore $m_j$-th
     roots of unity; they are collected into the diagonal $Z_j$, and
-    Theorem~\ref{thm:periodic_equalcase_global_zgauge} constructs the
+    Lemma~\ref{thm:periodic_equalcase_global_zgauge} constructs the
     global $Z$ and the unitary similarity $Y$.
 \end{proof}
 
 
-\begin{theorem}[Unit-modulus multiplicities under equal matrix-product vectors]
+\begin{corollary}[Unit-modulus multiplicities under equal matrix-product vectors]
     \label{thm:periodic_equalcase_unit_weights}
     \lean{MPSTensor.weight_norm_eq_one_of_sameMPV₂Pos}
     \leanok
@@ -509,7 +509,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     the hypotheses of Theorem~\ref{thm:periodic_ft_equal_case_trace_preserving},
     if every multiplicity of $B$ has modulus one, then every multiplicity
     of $A$ has modulus one.
-\end{theorem}
+\end{corollary}
 
 \begin{proof}\leanok
     \uses{thm:periodic_ft_equal_case_trace_preserving}

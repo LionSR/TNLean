@@ -29,9 +29,9 @@ rectangular and vertex-boundary implication in
     \uses{thm:openai_uniform_area_law,thm:rectangular_entropy_from_uniform,
         thm:area_law_conditional_vertex_bounds}
     Theorem~\ref{thm:openai_uniform_area_law} supplies the uniform constant.
-    Theorem~\ref{thm:rectangular_entropy_from_uniform} applies it at range
+    Lemma~\ref{thm:rectangular_entropy_from_uniform} applies it at range
     one to the rectangle, and
-    Theorem~\ref{thm:area_law_conditional_vertex_bounds} gives the two vertex
+    Lemma~\ref{thm:area_law_conditional_vertex_bounds} gives the two vertex
     bounds on every finite induced domain.
 \end{proof}
 
@@ -62,7 +62,7 @@ rectangular and vertex-boundary implication in
     their designated supports are their singleton and endpoint sets.
 \end{definition}
 
-\begin{theorem}[Lossless Hermitian replacement]
+\begin{lemma}[Lossless Hermitian replacement]
     \label{thm:rectangular_hermitian_terms}
     \lean{TNLean.PEPS.AreaLaw.RectangularHamiltonian.hermitianTerm,
         TNLean.PEPS.AreaLaw.RectangularHamiltonian.hermitianTerm_mem_supportedOperators,
@@ -73,7 +73,7 @@ rectangular and vertex-boundary implication in
     Replacing every summand $h_i$ by $k_i=(h_i+h_i^*)/2$ preserves its
     designated support, gives $k_i=k_i^*$ and $\|k_i\|\le J$, and preserves
     the total: $\sum_i k_i=H$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:rectangular_hamiltonian}
@@ -82,7 +82,7 @@ rectangular and vertex-boundary implication in
     so $\sum_i k_i=(H+H^*)/2=H$.
 \end{proof}
 
-\begin{theorem}[Identification with range-one domain interactions]
+\begin{lemma}[Identification with range-one domain interactions]
     \label{thm:rectangular_domain_hamiltonian}
     \lean{TNLean.PEPS.AreaLaw.rectangleAreaLawSupport,
         TNLean.PEPS.AreaLaw.rectangleAreaLawSupport_injective,
@@ -99,7 +99,7 @@ rectangular and vertex-boundary implication in
     gives a range-one interaction family with bound $J$ and total $UHU^*$.
     The vector $U\Omega$ has the same norm and ground energy, and satisfies
     the same global projector gap with parameter $\Delta$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:rectangular_hermitian_terms}
@@ -120,7 +120,7 @@ rectangular and vertex-boundary implication in
     every edge crossing $A$.
 \end{definition}
 
-\begin{theorem}[Exact edge and vertex boundary counts]
+\begin{lemma}[Exact edge and vertex boundary counts]
     \label{thm:rectangular_boundary_transport}
     \lean{TNLean.PEPS.AreaLaw.card_edgeBoundary_rectangular,
         TNLean.PEPS.AreaLaw.mem_endpointBoundary_iff_adj,
@@ -135,7 +135,7 @@ rectangular and vertex-boundary implication in
     bijectively to the corresponding integer-domain sets. Consequently,
     $|\partial_V A|\le4|\partial_{\rm in}A|$ and
     $|\partial_V A|\le2|Z_A|$, including empty boundaries.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:rectangular_vertex_boundaries}
@@ -162,7 +162,7 @@ rectangular and vertex-boundary implication in
     \end{align}
 \end{definition}
 
-\begin{theorem}[Rectangular bounds from the uniform finite-domain area law]
+\begin{lemma}[Rectangular bounds from the uniform finite-domain area law]
     \label{thm:rectangular_entropy_from_uniform}
     \lean{TNLean.PEPS.AreaLaw.regionalEntropy_rectangleAreaLawState,
         TNLean.PEPS.AreaLaw.UniformAreaLaw.rectangularEntropyAreaLaw}
@@ -171,7 +171,7 @@ rectangular and vertex-boundary implication in
     \cite[Theorem~1.1]{OpenAI2026AreaLaw}. Then
     Definition~\ref{def:rectangular_entropy_area_law} holds, with the
     range-one constant $C(q,1,J,\Delta)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:rectangular_domain_hamiltonian,thm:rectangular_boundary_transport}
@@ -183,7 +183,7 @@ rectangular and vertex-boundary implication in
     the two vertex forms in~(\ref{eq:rectangular_entropy_bounds}).
 \end{proof}
 
-\begin{theorem}[Equal-side consequence]
+\begin{lemma}[Equal-side consequence]
     \label{thm:rectangular_equal_side_entropy}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.toRectangularHamiltonian,
         TNLean.PEPS.AreaLaw.RectangularEntropyAreaLaw.squareEntropyAreaLaw}
@@ -191,7 +191,7 @@ rectangular and vertex-boundary implication in
     The rectangular entropy bound implies the square-grid entropy statement
     used in \cite[Proposition~2.1]{OpenAI2026PolynomialPEPS}, with its original
     restriction $q\ge2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:rectangular_hamiltonian,def:rectangular_entropy_area_law}

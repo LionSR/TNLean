@@ -9,10 +9,29 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw.LocalSolution
 
 import TNLean.MPS.AreaLaw.LocalSolution.ClosingLink
+import TNLean.MPS.AreaLaw.LocalSolution.CoordinateSliceApproximation
+import TNLean.MPS.AreaLaw.LocalSolution.CoordinateSliceBox
+import TNLean.MPS.AreaLaw.LocalSolution.CoordinateSliceHierarchy
 import TNLean.MPS.AreaLaw.LocalSolution.FinalStateCount
 import TNLean.MPS.AreaLaw.LocalSolution.FinalStateEnergy
+import TNLean.MPS.AreaLaw.LocalSolution.FiniteHierarchyApproximation
+import TNLean.MPS.AreaLaw.LocalSolution.FiniteHierarchyEdges
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchicalEnergy
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchicalProjection
+import TNLean.MPS.AreaLaw.LocalSolution.HierarchyApproximation
+import TNLean.MPS.AreaLaw.LocalSolution.HierarchyConstruction
+import TNLean.MPS.AreaLaw.LocalSolution.HierarchyEdgePartition
+import TNLean.MPS.AreaLaw.LocalSolution.HierarchyEdges
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchyLevels
+import TNLean.MPS.AreaLaw.LocalSolution.HierarchyNesting
+import TNLean.MPS.AreaLaw.LocalSolution.HierarchyRadius
+import TNLean.MPS.AreaLaw.LocalSolution.PeriodicChainApproximation
+import TNLean.MPS.AreaLaw.LocalSolution.PeriodicCoarsening
+import TNLean.MPS.AreaLaw.LocalSolution.PeriodicPhysicalHierarchy
+import TNLean.MPS.AreaLaw.LocalSolution.PeriodicPhysicalMetric
+import TNLean.MPS.AreaLaw.LocalSolution.PhysicalEnergy
+import TNLean.MPS.AreaLaw.LocalSolution.RoundedPeriodicApproximation
+import TNLean.MPS.AreaLaw.LocalSolution.RoundedPeriodicCoarsening
+import TNLean.MPS.AreaLaw.LocalSolution.RoundedPeriodicGeometry
 import TNLean.MPS.AreaLaw.LocalSolution.SupersiteFinalState
 import TNLean.MPS.AreaLaw.LocalSolution.SupersiteHierarchy

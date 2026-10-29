@@ -10,7 +10,7 @@ arguments. One keeps the enlarged collar inside the cut. The other turns a
 good clock realization into a local unitary that nearly restores the
 reference state. Neither uses the clocks or the spectral estimates.
 
-\begin{theorem}[Enlarged collars stay inside the cut]
+\begin{lemma}[Enlarged collars stay inside the cut]
     \label{thm:area_law_amplification_cut_clearance}
     \lean{TNLean.PEPS.AreaLaw.exists_threshold_graphNeighborhood_collar_subset}
     \leanok
@@ -23,7 +23,7 @@ reference state. Neither uses the clocks or the spectral estimates.
     $T$ with $\operatorname{dist}_\infty(T,Z)>L+n^\beta$ satisfy
     $N_{2r}^\Lambda(S_0)\subseteq A$, establishing the last assertion of
     Proposition~10.2 of \cite{OpenAI2026AreaLaw} from its radius bound.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_uniform_collar_threshold,
@@ -34,7 +34,7 @@ reference state. Neither uses the clocks or the spectral estimates.
     $N_{2r}^\Lambda(S_0)\subseteq A$.
 \end{proof}
 
-\begin{theorem}[Amplification from its radius and output bounds]
+\begin{lemma}[Amplification from its radius and output bounds]
     \label{thm:area_law_amplification_of_radius_output}
     \lean{TNLean.PEPS.AreaLaw.amplificationBound_of_radius_output}
     \leanok
@@ -47,7 +47,7 @@ reference state. Neither uses the clocks or the spectral estimates.
     $J\subseteq\Lambda\setminus N_{2r}^\Lambda(S_0)$. Then the amplification
     bound holds, reducing Proposition~10.2 of \cite{OpenAI2026AreaLaw} to its
     radius and output bounds.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_amplification_cut_clearance}
@@ -55,7 +55,7 @@ reference state. Neither uses the clocks or the spectral estimates.
     radius from the hypothesis yields the cut-clearance clause.
 \end{proof}
 
-\begin{theorem}[Truncated products on a good realization]
+\begin{lemma}[Truncated products on a good realization]
     \label{thm:area_law_amplification_before_polar}
     \lean{TNLean.PEPS.AreaLaw.norm_truncated_restoring_le,
         TNLean.PEPS.AreaLaw.norm_truncated_adjoint_sub_le}
@@ -74,7 +74,7 @@ reference state. Neither uses the clocks or the spectral estimates.
     restoring vector in the proof of Proposition~10.2 of \cite{OpenAI2026AreaLaw}, the two estimates preceding the polar decomposition hold: $\|L'\zeta\|\le1+3\varepsilon$, and if in addition $M_0\ge1$ and
     $D_{\rm ret}^\dagger w=w$ for a vector with $\|w\|\le1$, then
     $\|(L')^\dagger w-w\|\le\varepsilon$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Decomposing
@@ -84,7 +84,7 @@ reference state. Neither uses the clocks or the spectral estimates.
     the same operator norm, at most $\varepsilon/M_0\le\varepsilon$.
 \end{proof}
 
-\begin{theorem}[From an accurate adjoint to a local unitary]
+\begin{lemma}[From an accurate adjoint to a local unitary]
     \label{thm:area_law_amplification_unitary_error}
     \lean{TNLean.PEPS.AreaLaw.norm_sub_sq_le_of_adjoint_error,
         TNLean.PEPS.AreaLaw.exists_unitary_kronecker_sub_le}
@@ -101,7 +101,7 @@ reference state. Neither uses the clocks or the spectral estimates.
     $\|(U\otimes I)\phi-\eta\|\le a+\sqrt{2a+2b+b^2}$, bounding the direct and unitary errors in the proof of
     Proposition~10.2 of \cite{OpenAI2026AreaLaw} without assuming invertibility of
     $R'$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The real part of $\langle\eta,(R'\otimes I)\phi\rangle$ equals that of
@@ -112,7 +112,7 @@ reference state. Neither uses the clocks or the spectral estimates.
     most the sum of the direct and adjoint errors.
 \end{proof}
 
-\begin{theorem}[A local unitary from a good realization]
+\begin{lemma}[A local unitary from a good realization]
     \label{thm:area_law_amplification_unitary_of_good_realization}
     \lean{TNLean.PEPS.AreaLaw.exists_unitary_kronecker_sub_le_of_good_realization}
     \leanok
@@ -130,7 +130,7 @@ reference state. Neither uses the clocks or the spectral estimates.
     and that $\|((L'R_0)\otimes I)^\dagger\eta-\phi\|\le a$. Then some unitary
     $U$ on $\mathcal H$ satisfies
     $\|(U\otimes I)\phi-\eta\|\le a+\sqrt{2a+6\varepsilon+9\varepsilon^2}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_amplification_before_polar,

@@ -32,7 +32,7 @@ chains, one tensor per site, which is the setting of
 
 \subsection{Matrix product states on the closed chain}
 
-\begin{theorem}[Cycle blocking hypotheses from arc injectivity]%
+\begin{lemma}[Cycle blocking hypotheses from arc injectivity]%
     \label{thm:peps_cycleNormalPEPSBlockingHypotheses}
     \lean{TNLean.PEPS.cycleArcFrom}
     \lean{TNLean.PEPS.NormalCycleArcInjectivityHypotheses}
@@ -56,7 +56,7 @@ chains, one tensor per site, which is the setting of
               $T_v=A(v+1,L)$ satisfy $T_v\subseteq S_v$, $S_v\setminus T_v=\{v\}$,
               and $\inj(S_v),\inj(T_v),\inj(S_v^c),\inj(T_v^c)$.
     \end{enumerate}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Disjointness, covering, and $\partial(R,B)=\{e\}$ follow from cyclic-distance
     arithmetic since $n-2L\ge L>0$. Every arc $A(v,\ell)$ with $L\le\ell<n$ is a
@@ -99,9 +99,9 @@ chains, one tensor per site, which is the setting of
     \uses{thm:peps_cycleNormalPEPSBlockingHypotheses, thm:fundamentalTheorem_normalPEPS_connected, lem:peps_injectiveRegion_union_pos}
     Since $D_e>0$, Lemma~\ref{lem:peps_injectiveRegion_union_pos} gives union
     closure for $\inj_A\wedge\inj_B$.
-    Theorem~\ref{thm:peps_cycleNormalPEPSBlockingHypotheses} then supplies the
+    Lemma~\ref{thm:peps_cycleNormalPEPSBlockingHypotheses} then supplies the
     normal blocking hypotheses with unique crossings on the connected cycle, and
-    Theorem~\ref{thm:fundamentalTheorem_normalPEPS_connected} yields
+    Corollary~\ref{thm:fundamentalTheorem_normalPEPS_connected} yields
     (\ref{eq:peps_normal_mps_cycle_gauge}).
 \end{proof}
 
@@ -119,8 +119,8 @@ chains, one tensor per site, which is the setting of
 \begin{proof}\leanok
     \uses{thm:peps_cycleNormalPEPSBlockingHypotheses, thm:fundamentalTheorem_normalPEPS_gauge_unique, lem:peps_injectiveRegion_union_pos}
     Combine Lemma~\ref{lem:peps_injectiveRegion_union_pos} and
-    Theorem~\ref{thm:peps_cycleNormalPEPSBlockingHypotheses} with the per-edge
-    uniqueness Theorem~\ref{thm:fundamentalTheorem_normalPEPS_gauge_unique}.
+    Lemma~\ref{thm:peps_cycleNormalPEPSBlockingHypotheses} with the per-edge
+    uniqueness Lemma~\ref{thm:fundamentalTheorem_normalPEPS_gauge_unique}.
 \end{proof}
 
 \begin{definition}[Cycle tensor of a matrix tensor]%
@@ -153,7 +153,7 @@ chains, one tensor per site, which is the setting of
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:trace_eval_word_eq_sum_cyclic}
-    By Theorem~\ref{thm:trace_eval_word_eq_sum_cyclic},
+    By Lemma~\ref{thm:trace_eval_word_eq_sum_cyclic},
     $\tr(A^{i_1}\cdots A^{i_n})=\sum_{\alpha}\prod_{v=1}^n (A^{i_v})_{\alpha_{v-1},\alpha_v}$,
     which matches the cycle contraction after identifying $\alpha_v$ with the
     bond label on $e_v$.
@@ -353,7 +353,7 @@ size to $n \ge 2L + 1$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{def:eval_word, thm:wordspan_blk_inj_succ}
-    By induction on $m\ge L$ via Theorem~\ref{thm:wordspan_blk_inj_succ}: writing
+    By induction on $m\ge L$ via Lemma~\ref{thm:wordspan_blk_inj_succ}: writing
     $\Id=\sum_{|u|=L}\alpha_u A^u$ expresses any $P\in\MN{D}$ as
     $\sum_{i,|w|=L-1}\alpha_{iw} A^i(A^w P)$, and expanding each $A^w P$ in
     $\{A^y:|y|=m\}$ yields a combination of length-$(m+1)$ word products.
@@ -432,7 +432,7 @@ size to $n \ge 2L + 1$.
     Regarding $A$ and $B$ as constant chains on $n$ sites,
     Corollary~\ref{cor:fundamentalTheorem_normalMPSChain_of_overlap} gives bond
     gauges $(Z_v)_{v=0}^{n-1}$ with $B^i=Z_v A^i Z_{v+1}^{-1}$, and
-    Theorem~\ref{thm:mps_chain_gaugeEquiv_sameState} at length $n$ yields
+    Lemma~\ref{thm:mps_chain_gaugeEquiv_sameState} at length $n$ yields
     $B^w = Z_0 A^w Z_0^{-1}$.
 \end{proof}
 
