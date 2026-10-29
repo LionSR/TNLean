@@ -255,26 +255,6 @@
    "impact": "No. Every order is covered, so the restriction to orders below one is removed.",
    "plan": "Both order ranges are already proved. Their common-source-length forms at ξ′ = 6s have passed local verification and are submitted for review and remain unmerged; they carry no inherited restriction on the Lieb–Robinson parameters.",
    "stage": "area:2"
-  },
-  {
-   "id": "docs/paper-gaps/lvv13_constant_bond.tex",
-   "kind": "narrower",
-   "status": "open",
-   "paper": "hastings",
-   "result": "Cited result, constant bond dimension at one cut",
-   "prs": {
-    "TNLean": [
-     10164,
-     10221
-    ]
-   },
-   "title": "A constant bond dimension with different constants",
-   "summary": "Nothing is wrong with the cited paper. This note concerns a lemma of Landau, Vazirani and Vidick, listed here because they attribute it to Hastings' area law; the formalization proves a bond dimension of the same form as theirs, independent of the chain length and of the cut, but with constants taken from a different area-law argument, not Hastings' argument.",
-   "context": "Their polynomial-time algorithm for ground states of gapped chains needs, at every cut, a number B<sub>δ</sub> independent of the chain length such that keeping the B<sub>δ</sub> largest Schmidt vectors of the ground state Γ leaves a normalized vector of overlap at least 1 − δ with Γ. They quote this from Hastings' area law and its later sharpening, without proof.",
-   "claims": "B<sub>δ</sub> = exp(O(ε<sup>−1</sup> log<sup>3</sup> d log(1/δ))), for a chain of qudits of dimension d with gap ε and nearest-neighbour terms 0 ≤ H<sub>i</sub> ≤ 1.",
-   "found": "The formalization proves the statement for every δ &gt; 0 and every cut from the one-dimensional area law already in the library, not from Hastings' argument: B<sub>δ</sub> is the exponential of an affine function of log(1/δ), independent of the chain length and the cut, but with slope and intercept taken from that area law rather than the dependence ε<sup>−1</sup> log<sup>3</sup> d. A related counting factor in their size-trimming step becomes (D + 1)D in place of D.",
-   "impact": "None for the existence statements, and none for Hastings' theorems: nothing else on this page depends on this lemma. Their later steps use only that B<sub>δ</sub> is independent of the chain length and the cut, so the different constant changes the explicit running time, not the conclusions.",
-   "plan": "Derive their dependence on ε<sup>−1</sup> log<sup>3</sup> d from the sharper area law of Arad, Kitaev, Landau and Vazirani if the explicit running time is ever wanted; that work is followed on the tab for ground states in polynomial time."
   }
  ]
 }
