@@ -21,7 +21,8 @@ lines 624–648 and 1237–1252; raw decomposition uniqueness is FBC25,
 arXiv:2502.20257, `lem:deco`, lines 1052–1066.
 
 **Scope restriction (canonical ambient presentation):** The canonical
-corollary takes an ambient canonical presentation explicitly. The supplied standard form and its minimal cut ranks do not
+corollary takes an ambient canonical presentation explicitly. The supplied
+standard form and its minimal cut ranks do not
 imply minimality or canonicality of the ambient virtual space. This is
 not the unrestricted local symmetry criterion; see
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
