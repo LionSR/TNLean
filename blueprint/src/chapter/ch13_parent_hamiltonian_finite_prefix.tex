@@ -388,3 +388,23 @@
     Apply the standard one-sided reconstruction with this inverse and
     zero coefficients on the other two physical letters.
 \end{proof}
+
+\begin{lemma}[Actual endpoint charge coefficients on an overlap]
+    \label{lem:short_volume_weyl_overlap_charge_coefficients}
+    \lean{MPSTensor.ShortMomentum.exists_overlap_charge_coefficients}
+    \notready
+    \uses{lem:short_volume_weyl_cyclic_phase, lem:short_volume_weyl_local_spaces}
+    Suppose every restriction obtained by fixing the first or last site
+    of a vector lies in the corresponding boundary MPS space.
+    There are functions of the total charge for each fixed endpoint
+    whose product with the actual full-word phase equals each physical
+    coefficient. Their equality on overlapping interior words is not
+    supplied as a premise. Values at unreachable endpoint charges
+    may remain arbitrary.
+\end{lemma}
+\begin{proof}
+    Apply the exact actual local-space characterization to each endpoint
+    restriction. Subtract that endpoint's charge, and cancel its scalar
+    exponent together with the actual concatenation cocycle. This gives
+    the asserted normalization by the full-word phase on both sides.
+\end{proof}
