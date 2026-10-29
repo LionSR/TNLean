@@ -58,9 +58,8 @@ EXPECTED_WIRES = [
 
 
 def entry(source: str, title: str) -> str:
-    return source.split(r"\begin{theorem}[" + title + "]", 1)[1].split(
-        r"\end{proof}", 1
-    )[0]
+    begin = re.compile(r"\\begin\{(?:theorem|lemma|corollary)\}\[" + re.escape(title) + r"\]")
+    return begin.split(source, 1)[1].split(r"\end{proof}", 1)[0]
 
 
 def check_source(generic: str, marginal: str) -> list[str]:
@@ -128,7 +127,8 @@ def check_rejected_mutations(generic: str, marginal: str) -> None:
 
     for changed in (
         marginal.replace("every tuple", "each normalized tuple", 1),
-        marginal.replace(r"\end{theorem}", "Both sides have trace one.\n" + r"\end{theorem}", 1),
+        re.sub(r"(?=\\end\{(?:theorem|lemma|corollary)\})",
+               lambda _: "Both sides have trace one.\n", marginal, count=1),
     ):
         assert changed != marginal
         try:

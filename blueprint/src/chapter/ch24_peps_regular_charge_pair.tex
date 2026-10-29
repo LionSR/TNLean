@@ -17,7 +17,7 @@
     creation operation requires a separate physical contraction comparison.
 \end{definition}
 
-\begin{theorem}[Simultaneous-translation invariance of the charge pair]
+\begin{lemma}[Simultaneous-translation invariance of the charge pair]
     \label{thm:peps_regular_charge_pair_invariance}
     \lean{TNLean.PEPS.regularChargePairCoefficient_left_invariant,
         TNLean.PEPS.regularChargePairOperator_commute,
@@ -36,14 +36,14 @@
         =\Pi(\chi,p).
     \]
     No invariance premise on $\chi$ is needed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The relative coordinate satisfies $(xh)^{-1}(xg)=h^{-1}g$.
     Thus the diagonal entries are unchanged by the simultaneous permutation.
     The permutation matrix is unitary, giving the conjugation identity.
 \end{proof}
 
-\begin{theorem}[Normalization and the nontrivial-charge orthogonality]
+\begin{lemma}[Normalization and the nontrivial-charge orthogonality]
     \label{thm:peps_regular_charge_pair_normalization}
     \lean{TNLean.PEPS.regularChargePairCoefficient_normSq,
         TNLean.PEPS.normalizedRegularChargePairCoefficient_normSq,
@@ -60,7 +60,7 @@
     orthogonal to the normalized uniform vector
     $\Omega(g,h)=|G|^{-1}$. This latter orthogonality needs only
     irreducibility and nontriviality, without unitarity of the representation.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For each fixed $h$, translated character orthogonality gives squared
     norm $|G|$ upon summing over $g$. Summing over $h$ gives $|G|^2$.

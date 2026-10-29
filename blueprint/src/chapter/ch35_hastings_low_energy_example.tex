@@ -26,7 +26,7 @@ On a chain of $m+3$ spins $1/2$, with sites $0,1,\ldots,m+2$, let
 and let $H=\sum_iH_i$. The source does not specify the chain beyond site $0$;
 further sites with $H_i=S^z_i$ would only add scalars on the ground space.
 
-\begin{theorem}[The Hamiltonian of the example]
+\begin{lemma}[The Hamiltonian of the example]
     \label{thm:hastings_low_energy_example_hamiltonian}
     \lean{TNLean.Lattice.LowEnergyExample.hamiltonian_eq_diagonal,
         TNLean.Lattice.LowEnergyExample.groundEnergy_le,
@@ -40,7 +40,7 @@ further sites with $H_i=S^z_i$ would only add scalars on the ground space.
     free. In particular a vector $v$ satisfies $Hv=E_0v$ exactly when
     $Pv=v$, for the orthogonal projection $P$ onto these two
     configurations.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Sum the terms: the operators on site $0$ add to zero. The remaining
     operator is diagonal in the product basis, with diagonal entry
@@ -54,7 +54,7 @@ $S^z_1$ is reversed there, which changes the ground configurations but not
 the dimension of the ground space or the conclusions below
 \cite{gap:hastings05_low_energy_example}.
 
-\begin{theorem}[The compressions fail to commute near site $0$]
+\begin{lemma}[The compressions fail to commute near site $0$]
     \label{thm:hastings_low_energy_example_commutators}
     \lean{TNLean.Lattice.LowEnergyExample.not_commute_compress_term_zero_one,
         TNLean.Lattice.LowEnergyExample.not_commute_compress_term_one_two,
@@ -65,7 +65,7 @@ the dimension of the ground space or the conclusions below
     The compressions $PH_0P$, $PH_1P$ and $PH_2P$ to the ground space
     pairwise fail to commute, while $PH_0P$ commutes with $PH_iP$ for every
     $i\ge3$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     On the ground space $S^z_k$ is a scalar for every $k\neq0$, and an
     operator on site $0$ acts through its $2\times2$ matrix. So $PH_0P$,

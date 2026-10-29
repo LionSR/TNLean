@@ -20,7 +20,7 @@ Then $\ker h_L = \mathcal G_L(A)$, the range-$L$ parent Hamiltonian is
 $H_N^{(L)} = \sum_i (h_L)_i$, and $\GS(H)=\ker(H-E_0(H)\Id)$ denotes the ground
 eigenspace.
 
-\begin{theorem}[GHZ two-site parent space]\label{thm:ghz_ground_space_two}
+\begin{lemma}[GHZ two-site parent space]\label{thm:ghz_ground_space_two}
     \lean{MPSTensor.ghz_groundSpace_two_eq_span}
     \leanok
     \uses{def:ghz_tensor, def:ground_space_parent, def:two_site_ket}
@@ -31,7 +31,7 @@ eigenspace.
         \spn_{\C}\{\ket{00},\ket{11}\}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -45,14 +45,14 @@ eigenspace.
     is $\spn_{\C}\{\ket{00},\ket{11}\}$.
 \end{proof}
 
-\begin{theorem}[Constant GHZ product vectors satisfy the cyclic constraints]
+\begin{lemma}[Constant GHZ product vectors satisfy the cyclic constraints]
     \label{thm:constant_ket_mem_ghz_chain_ground_space}
     \lean{MPSTensor.constantKet_mem_ghz_chainGroundSpace}
     \leanok
     \uses{def:ghz_tensor, def:chain_ground_space, def:constant_ket, thm:ghz_ground_space_two}
     For $N\ge2$ and $a\in\{0,1\}$, one has
     $\ket{a}^{\otimes N}\in\mathcal G_{N,2}(A_{\mathrm{GHZ}})$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -74,7 +74,7 @@ eigenspace.
     so $\ket{a}^{\otimes N}\in\mathcal G_{N,2}(A_{\mathrm{GHZ}})$.
 \end{proof}
 
-\begin{theorem}[GHZ periodic nearest-neighbour ground space]
+\begin{lemma}[GHZ periodic nearest-neighbour ground space]
     \label{thm:ghz_chain_ground_space_two}
     \lean{MPSTensor.ghz_chainGroundSpace_two_eq_constant_span}
     \leanok
@@ -91,7 +91,7 @@ eigenspace.
         \}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -123,7 +123,7 @@ eigenspace.
         \psi(1,\ldots,1)\ket{1}^{\otimes N}.
         \notag
     \end{align}
-    Conversely, Theorem~\ref{thm:constant_ket_mem_ghz_chain_ground_space}
+    Conversely, Lemma~\ref{thm:constant_ket_mem_ghz_chain_ground_space}
     gives
     $\ket{0}^{\otimes N},\ket{1}^{\otimes N}
         \in\mathcal G_{N,2}(A_{\mathrm{GHZ}})$, and hence their span lies in
@@ -143,7 +143,7 @@ eigenspace.
     By the cyclic-window equality
     $\mathcal G_{N,2}(A_{\mathrm{GHZ}})
         =\spn\{\ket{0}^{\otimes N},\ket{1}^{\otimes N}\}$ of
-    Theorem~\ref{thm:ghz_chain_ground_space_two}, the periodic
+    Lemma~\ref{thm:ghz_chain_ground_space_two}, the periodic
     nearest-neighbour parent Hamiltonian of
     \cite[lines~1194--1196 and line~2205]{Cirac2021Matrix} (with the two-site
     space and interaction also displayed in
@@ -172,7 +172,7 @@ eigenspace.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Cluster three-site parent space is the stabilizer eigenspace]
+\begin{lemma}[Cluster three-site parent space is the stabilizer eigenspace]
     \label{thm:cluster_ground_space_three_eigenspace}
     \lean{MPSTensor.cluster_groundSpace_three_eq_eigenspace}
     \leanok
@@ -184,7 +184,7 @@ eigenspace.
         \notag
     \end{align}
     the $+1$ eigenspace of $K = \sigma^z_1\sigma^x_2\sigma^z_3$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -207,7 +207,7 @@ eigenspace.
     $\Gamma_3(X) = 2q^3\,v$, so $v = \Gamma_3(X/(2q^3)) \in \mathcal G_3(A)$.
 \end{proof}
 
-\begin{theorem}[The stabilizer has eigenvalue $-1$ on the source's matrices]
+\begin{lemma}[The stabilizer has eigenvalue $-1$ on the source's matrices]
     \label{thm:cluster_source_ground_space_three_eigenspace}
     \lean{MPSTensor.clusterSourceTensor, MPSTensor.clusterSource_groundSpace_three_eq_eigenspace_neg_one}
     \leanok
@@ -230,7 +230,7 @@ eigenspace.
         \notag
     \end{align}
     the $-1$ eigenspace of $K = \sigma^z_1\sigma^x_2\sigma^z_3$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -268,7 +268,7 @@ eigenspace.
     results below assume $N\ge3$.
 \end{definition}
 
-\begin{theorem}[Cluster stabilizer ground space is the periodic chain ground space]
+\begin{lemma}[Cluster stabilizer ground space is the periodic chain ground space]
     \label{thm:cluster_stabilizer_chain_ground_space}
     \lean{MPSTensor.cluster_iInf_eigenspace_eq_chainGroundSpace}
     \leanok
@@ -280,7 +280,7 @@ eigenspace.
          & = \mathcal G_{N,3}(A_{\mathrm{cl}}).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -293,11 +293,11 @@ eigenspace.
     $K$; conversely, if every restriction is fixed by $K$, then evaluating at
     the window extracted from $\sigma$ with outside assignment $\sigma$ itself
     gives $(K_i\psi)(\sigma) = \psi(\sigma)$. By
-    Theorem~\ref{thm:cluster_ground_space_three_eigenspace}, a restriction is
+    Lemma~\ref{thm:cluster_ground_space_three_eigenspace}, a restriction is
     fixed by $K$ exactly when it lies in $\mathcal G_3(A_{\mathrm{cl}})$.
 \end{proof}
 
-\begin{theorem}[The cluster state spans the common $+1$ eigenspace of the $ZXZ$ stabilizers]
+\begin{lemma}[The cluster state spans the common $+1$ eigenspace of the $ZXZ$ stabilizers]
     \label{thm:cluster_stabilizer_unique_gs}
     \lean{MPSTensor.cluster_iInf_eigenspace_eq_mpvSubmodule, MPSTensor.cluster_stabilizer_unique_gs}
     \leanok
@@ -309,22 +309,22 @@ eigenspace.
         \notag
     \end{align}
     and this common eigenspace is one-dimensional.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:cluster_stabilizer_chain_ground_space, thm:cluster_normal, thm:chain_ground_space_eq_mpv_normal, thm:parent_hamiltonian_unique_gs}
-    By Theorem~\ref{thm:cluster_stabilizer_chain_ground_space} the common
+    By Lemma~\ref{thm:cluster_stabilizer_chain_ground_space} the common
     eigenspace is $\mathcal G_{N,3}(A_{\mathrm{cl}})$. The cluster tensor is
     injective after blocking $L_0 = 2$ sites
-    (Theorem~\ref{thm:cluster_normal}), so
-    Theorem~\ref{thm:chain_ground_space_eq_mpv_normal} with $L = 3 \le N$
+    (Lemma~\ref{thm:cluster_normal}), so
+    Lemma~\ref{thm:chain_ground_space_eq_mpv_normal} with $L = 3 \le N$
     gives $\mathcal G_{N,3}(A_{\mathrm{cl}}) = \C\,V^{(N)}(A_{\mathrm{cl}})$,
     and Theorem~\ref{thm:parent_hamiltonian_unique_gs} gives
     $\dim\mathcal G_{N,3}(A_{\mathrm{cl}}) = 1$.
 \end{proof}
 
-\begin{theorem}[Periodic ground space for the source cluster matrices]
+\begin{lemma}[Periodic ground space for the source cluster matrices]
     \label{thm:cluster_source_stabilizer_chain_ground_space}
     \lean{MPSTensor.clusterSource_iInf_eigenspace_eq_chainGroundSpace}
     \leanok
@@ -335,12 +335,12 @@ eigenspace.
         \bigcap_i\{\psi : K_i\psi = -\psi\}
          & = \mathcal G_{N,3}(A_{\mathrm{src}}).\notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:cluster_source_ground_space_three_eigenspace, rem:cyclic_window_operators, def:chain_ground_space}
     The three-site calculation in
-    Theorem~\ref{thm:cluster_source_ground_space_three_eigenspace} identifies
+    Lemma~\ref{thm:cluster_source_ground_space_three_eigenspace} identifies
     $\mathcal G_3(A_{\mathrm{src}})$ with the $-1$ eigenspace of $K=ZXZ$.
     The periodic ground space imposes this local condition at every position
     around the ring. Because each translated operator $K_i$ acts only on its
@@ -367,7 +367,7 @@ eigenspace.
     defining condition for $\psi\in\mathcal G_{N,3}(A_{\mathrm{src}})$.
 \end{proof}
 
-\begin{theorem}[Source cluster ground state]\label{thm:cluster_source_periodic_ground_state}
+\begin{lemma}[Source cluster ground state]\label{thm:cluster_source_periodic_ground_state}
     \lean{MPSTensor.clusterSource_mpv_eq_globalZ, MPSTensor.clusterSource_mpv_ne_zero, MPSTensor.clusterSource_iInf_eigenspace_eq_mpvSubmodule, MPSTensor.clusterSource_stabilizer_unique_gs, MPSTensor.clusterSource_hamiltonian_eigenspace_eq_mpvSubmodule, MPSTensor.clusterSource_energy_lower_bound}
     \leanok
     \uses{def:cluster_tensor, thm:cluster_source_ground_space_three_eigenspace, def:cluster_chain_stabilizer, def:mpv_submodule}
@@ -390,7 +390,7 @@ eigenspace.
     and even $N\ge3$, the periodic chain has ground energy $-N$ and a
     normalized ground state unique up to phase.
     % Source location: Papers/quant-ph_0608197/MPSarchive.tex, lines 374--387.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -434,7 +434,7 @@ eigenspace.
     Conversely, if $K_iw=-w$ for every $i$, then $K_i(Uw)=Uw$; applying $U$
     again returns $w$. Thus $U$ maps the common $+1$ eigenspace bijectively
     onto the common $-1$ eigenspace. By
-    Theorem~\ref{thm:cluster_stabilizer_unique_gs} and
+    Lemma~\ref{thm:cluster_stabilizer_unique_gs} and
     (\ref{eq:cluster_source_vector}),
     \begin{align}
         \bigcap_i\{v:K_iv=-v\} & =\C\ket{V^{(N)}(A_{\mathrm{src}})}.\notag
@@ -467,7 +467,7 @@ eigenspace.
     convention is the $+1$ eigenspace of $\sigma^z_1\sigma^x_2\sigma^z_3$.
     Since each $K_i$ is a self-adjoint involution, $\tfrac12(\Id-K_i)$ is the
     orthogonal projector onto its $-1$ eigenspace, and
-    Theorem~\ref{thm:cluster_stabilizer_unique_gs} says that the cluster state
+    Lemma~\ref{thm:cluster_stabilizer_unique_gs} says that the cluster state
     is the unique ground state of
     $\sum_i \tfrac12(\Id - \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2})$, with
     ground energy $0$.
@@ -481,7 +481,7 @@ eigenspace.
     $\sum_i \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2}$ with the sign as printed.
     Both statements are correct for their own tensors: on the matrices
     $A_{\mathrm{src}}$ displayed there every stabilizer has eigenvalue $-1$
-    (Theorem~\ref{thm:cluster_source_ground_space_three_eigenspace}), while on
+    (Lemma~\ref{thm:cluster_source_ground_space_three_eigenspace}), while on
     $A_{\mathrm{cl}}$ it has eigenvalue $+1$. The two tensors are related by
     $A_{\mathrm{src}}^t = \sqrt2\,\sigma^x A^t$ for the tensor $A$ of
     \cite[lines~2364--2369]{Cirac2021Matrix}, and since
@@ -489,12 +489,12 @@ eigenspace.
     every site, which conjugates each $K_i$ to $-K_i$ and exchanges the two
     Hamiltonians $\sum_i K_i$ and $-\sum_i K_i = \sum_i(\Id-K_i) - N\Id$.
     As recorded in \cite{gap:rmp_example_parent_hamiltonian_scope},
-    Theorem~\ref{thm:cluster_source_periodic_ground_state} proves this on-site
+    Lemma~\ref{thm:cluster_source_periodic_ground_state} proves this on-site
     relation for the matrix product vectors and identifies the ground energy
     and eigenspace for the printed matrices.
 \end{remark}
 
-\begin{theorem}[AKLT two-site parent space]\label{thm:aklt_ground_space_two}
+\begin{lemma}[AKLT two-site parent space]\label{thm:aklt_ground_space_two}
     \lean{MPSTensor.mem_aklt_groundSpace_two_iff}
     \leanok
     \uses{def:aklt_tensor, def:ground_space_parent}
@@ -510,7 +510,7 @@ eigenspace.
         2v_{00} + v_{12} + v_{21} = 0.
         \label{eq:aklt_two_site_constraints}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -538,15 +538,15 @@ eigenspace.
 \begin{remark}[AKLT two-site parent space as a span]\label{rem:aklt_ground_space_two_span}
     % The spanning set and the dimension count are not formalized; the formal
     % statement is the coordinate description of
-    % Theorem~\ref{thm:aklt_ground_space_two}.
+    % Lemma~\ref{thm:aklt_ground_space_two}.
     The constraints (\ref{eq:aklt_two_site_constraints}) of
-    Theorem~\ref{thm:aklt_ground_space_two} describe $\mathcal G_2(A)$ as the
+    Lemma~\ref{thm:aklt_ground_space_two} describe $\mathcal G_2(A)$ as the
     four-dimensional span of $\ket{01}-\ket{10}$, $\ket{02}-\ket{20}$,
     $\ket{00}-2\ket{12}$, and $\ket{00}-2\ket{21}$. This span is the spin-0
     and spin-1 subspace of two spin-1 particles.
 \end{remark}
 
-\begin{theorem}[AKLT three-site intersection property]
+\begin{lemma}[AKLT three-site intersection property]
     \label{thm:aklt_ground_space_intersection_two}
     \lean{MPSTensor.aklt_groundSpace_intersection_two, MPSTensor.aklt_mem_groundSpace_three_of_inLeftGround_of_inRightGround}
     \leanok
@@ -564,7 +564,7 @@ eigenspace.
     \cite[line~2095]{Cirac2021Matrix} asks to check by hand; it is not an
     instance of the general intersection property, since the AKLT tensor is
     not injective on one site.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -575,7 +575,7 @@ eigenspace.
     be a three-site vector whose restrictions $\psi(i,\cdot,\cdot)$ and
     $\psi(\cdot,\cdot,k)$ all lie in $\mathcal G_2(A)$, so that each satisfies
     (\ref{eq:aklt_two_site_constraints}). With $c$, $b$ as in the proof of
-    Theorem~\ref{thm:aklt_ground_space_two}, the products $A^aA^bA^c$ give
+    Lemma~\ref{thm:aklt_ground_space_two}, the products $A^aA^bA^c$ give
     \begin{align}
         \Gamma_3(X)
          & = c^3(X_{00}-X_{11})\ket{000}
@@ -606,7 +606,7 @@ eigenspace.
     $\psi = \Gamma_3(X/(c^2b^2)) \in \mathcal G_3(A)$.
 \end{proof}
 
-\begin{theorem}[Unique ground state of the two-site AKLT parent Hamiltonian]
+\begin{lemma}[Unique ground state of the two-site AKLT parent Hamiltonian]
     \label{thm:aklt_chain_ground_space_two}
     \lean{MPSTensor.aklt_chainGroundSpace_two_eq_mpvSubmodule, MPSTensor.aklt_parentHamiltonian_two_unique_gs}
     \leanok
@@ -624,7 +624,7 @@ eigenspace.
     periodic sites the two-site chain ground space is
     $\mathcal G_2(A_{\mathrm{AKLT}})$ itself, so the condition $N\ge3$ is
     necessary.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -633,22 +633,22 @@ eigenspace.
     window restricts on either side to a cyclic two-site window, so both
     restrictions of $\psi|_{[i,i+2],\tau}$ lie in
     $\mathcal G_2(A_{\mathrm{AKLT}})$, and
-    Theorem~\ref{thm:aklt_ground_space_intersection_two} places
+    Lemma~\ref{thm:aklt_ground_space_intersection_two} places
     $\psi|_{[i,i+2],\tau}$ in $\mathcal G_3(A_{\mathrm{AKLT}})$. Hence
     $\mathcal G_{N,2}(A_{\mathrm{AKLT}})\subseteq\mathcal G_{N,3}(A_{\mathrm{AKLT}})$.
     The AKLT tensor is injective after blocking $L_0 = 2$ sites
-    (Theorem~\ref{thm:aklt_normal}), so
-    Theorem~\ref{thm:chain_ground_space_eq_mpv_normal} with $L = 3\le N$ gives
+    (Lemma~\ref{thm:aklt_normal}), so
+    Lemma~\ref{thm:chain_ground_space_eq_mpv_normal} with $L = 3\le N$ gives
     $\mathcal G_{N,3}(A_{\mathrm{AKLT}}) = \C\,V^{(N)}(A_{\mathrm{AKLT}})$.
     The reverse inclusion holds because the periodic MPS vector satisfies
     every cyclic two-site constraint
     (Lemma~\ref{lem:mpv_mem_chain_ground_space}). Finally,
-    Theorem~\ref{thm:mpv_ne_zero_blk_injective} with $L_0 = 2 < N$ gives
+    Lemma~\ref{thm:mpv_ne_zero_blk_injective} with $L_0 = 2 < N$ gives
     $V^{(N)}(A_{\mathrm{AKLT}})\ne0$, so
     $\dim\mathcal G_{N,2}(A_{\mathrm{AKLT}}) = 1$.
 \end{proof}
 
-\begin{theorem}[Fourfold open-boundary degeneracy of the AKLT chain]
+\begin{lemma}[Fourfold open-boundary degeneracy of the AKLT chain]
     \label{thm:aklt_open_ground_space}
     \lean{MPSTensor.aklt_ker_openParentHamiltonianES_two_le_groundSpaceES, MPSTensor.aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES, MPSTensor.aklt_finrank_ker_openParentHamiltonianES_two, MPSTensor.aklt_ker_openParentHamiltonianES_two_eq_span_openState, MPSTensor.aklt_finrank_ker_openParentHamiltonianES_three}
     \leanok
@@ -680,12 +680,12 @@ eigenspace.
     passage together with the three-site intersection check of
     \cite[line~2095]{Cirac2021Matrix}, which the review prints for the
     periodic chain. As a consequence of
-    Theorem~\ref{thm:open_parent_hamiltonian_kernel_finrank} at $L_{0}=2$,
+    Lemma~\ref{thm:open_parent_hamiltonian_kernel_finrank} at $L_{0}=2$,
     and not as a statement of the review, the three-site open-chain parent
     Hamiltonian also has a four-dimensional kernel for $N\ge3$.
-    Theorem~\ref{thm:aklt_parent_hamiltonian} proves the spin-$0$ statement of
+    Lemma~\ref{thm:aklt_parent_hamiltonian} proves the spin-$0$ statement of
     the same passage.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -694,11 +694,11 @@ eigenspace.
     of $\mathcal G_{2}(A_{\mathrm{AKLT}})$. For $N\ge3$, a kernel vector
     satisfies every nonwrapping two-site constraint. Each nonwrapping
     three-site window restricts on either side to a nonwrapping two-site
-    window, so Theorem~\ref{thm:aklt_ground_space_intersection_two} places
+    window, so Lemma~\ref{thm:aklt_ground_space_intersection_two} places
     every three-site restriction in $\mathcal G_{3}(A_{\mathrm{AKLT}})$; this
     is the local check of \cite[line~2095]{Cirac2021Matrix}, used here on
     nonwrapping windows. The AKLT tensor is injective after blocking
-    $L_{0}=2$ sites (Theorem~\ref{thm:aklt_normal}). For $N\ge3$, with $s$
+    $L_{0}=2$ sites (Lemma~\ref{thm:aklt_normal}). For $N\ge3$, with $s$
     ranging over starts satisfying $s+3\le N$ and $\tau$ over complementary
     configurations,
     \begin{align}
@@ -711,8 +711,8 @@ eigenspace.
     \end{align}
     The last step is the open-chain intersection theorem.
     The reverse inclusion holds for every tensor. The span description is
-    Theorem~\ref{thm:ground_space_span_open_states}, and
-    Theorem~\ref{thm:open_parent_hamiltonian_kernel_finrank} with $D=2$ gives
+    Lemma~\ref{thm:ground_space_span_open_states}, and
+    Lemma~\ref{thm:open_parent_hamiltonian_kernel_finrank} with $D=2$ gives
     dimension $D^{2}=4$.
 \end{proof}
 
@@ -747,7 +747,7 @@ eigenspace.
     $h=\vec S_0\cdot\vec S_1+\tfrac13(\vec S_0\cdot\vec S_1)^2$.
 \end{definition}
 
-\begin{theorem}[The AKLT term and the spin-two projector]%
+\begin{lemma}[The AKLT term and the spin-two projector]%
     \label{thm:aklt_spin_two_projector}
     \lean{MPSTensor.spinExchange_spinOneOperator_zero_one_apply,
         MPSTensor.spinOneOperator_sum_mul_self,
@@ -775,7 +775,7 @@ eigenspace.
     which writes the Hamiltonian as a sum of spin-$2$ projectors, $P^{(2)}$ is
     the two-site parent interaction of the AKLT tensor, namely the orthogonal
     projector onto $\mathcal G_2(A_{\mathrm{AKLT}})^{\perp}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -790,7 +790,7 @@ eigenspace.
     $\sum_kw_kw_k^{\mathsf T}/\lVert w_k\rVert^{2}$ for the five vectors
     $\ket{11}$, $\ket{22}$, $\ket{01}+\ket{10}$, $\ket{02}+\ket{20}$,
     $\ket{12}+2\ket{00}+\ket{21}$. Hence $Q$ is real symmetric and idempotent,
-    and by Theorem~\ref{thm:aklt_ground_space_two} its kernel, cut out by the
+    and by Lemma~\ref{thm:aklt_ground_space_two} its kernel, cut out by the
     five constraints (\ref{eq:aklt_two_site_constraints}), equals
     $\mathcal G_2(A_{\mathrm{AKLT}})$. A self-adjoint idempotent is the
     orthogonal projector onto the orthogonal complement of its kernel. The same
@@ -802,7 +802,7 @@ eigenspace.
     $\vec S_0\cdot\vec S_1$, which is the range of $Q$.
 \end{proof}
 
-\begin{theorem}[Ground state of the AKLT Hamiltonian]%
+\begin{lemma}[Ground state of the AKLT Hamiltonian]%
     \label{thm:aklt_polynomial_ground_state}
     \lean{MPSTensor.cyclicRestrictₗ_spinExchange,
         MPSTensor.aklt_localTerm_two_apply,
@@ -834,7 +834,7 @@ eigenspace.
     The ground energy $-\tfrac{2N}{3}$ is derived here from the identity above;
     the local source states only the ground-state property, for no specified
     boundary condition.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -843,13 +843,13 @@ eigenspace.
         thm:aklt_chain_ground_space_two}
     Restricting a chain vector to the window $i,i+1$ turns
     $\vec S_i\cdot\vec S_{i+1}$ into $\vec S_0\cdot\vec S_1$, so
-    Theorem~\ref{thm:aklt_spin_two_projector} identifies the local term of the
+    Lemma~\ref{thm:aklt_spin_two_projector} identifies the local term of the
     two-site parent Hamiltonian at $i$ as $\tfrac12\bigl(h_i+\tfrac23\bigr)$.
     Summing over the $N$ bonds gives the identity. The parent Hamiltonian is
     positive by Lemma~\ref{lem:transported_es_positive}, so a nonzero $v$ with
     $H_{\mathrm{AKLT},N}v=\mu v$ satisfies $\mu+\tfrac{2N}{3}\ge0$. By
-    Theorem~\ref{thm:parent_hamiltonian_kernel_eq_chain_ground_space} and
-    Theorem~\ref{thm:aklt_chain_ground_space_two}, the eigenspace for
+    Lemma~\ref{thm:parent_hamiltonian_kernel_eq_chain_ground_space} and
+    Lemma~\ref{thm:aklt_chain_ground_space_two}, the eigenspace for
     $-\tfrac{2N}{3}$ equals
     $\ker H^{(2)}_{N,\mathrm{AKLT}}=\mathcal G_{N,2}(A_{\mathrm{AKLT}})
         =\C\,V^{(N)}(A_{\mathrm{AKLT}})$, which is one-dimensional.
@@ -872,7 +872,7 @@ eigenspace.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Ground energy of the open AKLT chain]%
+\begin{lemma}[Ground energy of the open AKLT chain]%
     \label{thm:aklt_open_polynomial_ground_space}
     \lean{MPSTensor.akltOpenHamiltonianES_add_eq_parent,
         MPSTensor.akltOpenHamiltonianES_add_isPositive,
@@ -895,7 +895,7 @@ eigenspace.
     The degeneracy is the open-boundary statement
     of~\cite[lines~1171--1174]{Cirac2021Matrix}; the explicit energy is
     the consequence of the polynomial normalization used here.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:aklt_open_ground_space, thm:aklt_spin_two_projector,
         lem:open_parent_hamiltonian_es_positive}
@@ -907,7 +907,7 @@ eigenspace.
     energy bound is attained precisely on that space.
 \end{proof}
 
-\begin{theorem}[Singlet and triplet AKLT edge modes]%
+\begin{lemma}[Singlet and triplet AKLT edge modes]%
     \label{thm:aklt_parent_hamiltonian}
     \lean{MPSTensor.akltOpenHamiltonianES_ground_spinZero_finrank,
         MPSTensor.akltBoundarySpin, MPSTensor.aklt_spinOne_commutator,
@@ -936,7 +936,7 @@ eigenspace.
     eigenspaces for $0$ and $2$ have dimensions $1$ and $3$, respectively.
     The singlet count is stated in~\cite[lines~1171--1174]{Cirac2021Matrix};
     the triplet description follows from the displayed action.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:aklt_open_polynomial_ground_space, thm:aklt_normal,
         thm:ground_space_map_injective_blk, lem:isNBlkInjective_of_le}

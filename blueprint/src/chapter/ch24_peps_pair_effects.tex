@@ -33,7 +33,7 @@ pair effect by a cyclic insertion into a fresh register stack.
     Theorem~\ref{thm:peps_pair_effects_party} gives $\widetilde G_m$ and
     $\Gamma_m$ satisfying (\ref{eq:peps_pair_effects_source_error}), the
     $Km^r$ monomial bound, coefficient sum $\sum_\xi|c_\xi|$, and register
-    ownership. Applying Theorem~\ref{thm:peps_grouped_sources} to each monomial
+    ownership. Applying Lemma~\ref{thm:peps_grouped_sources} to each monomial
     combines all sources on each unordered party pair into a single normalized
     pair source while preserving the monomial operators, count, coefficients,
     and output space.
@@ -62,11 +62,11 @@ pair effect by a cyclic insertion into a fresh register stack.
 
 \begin{proof}\leanok
     \uses{thm:peps_pair_effects_operator,thm:peps_party_terms_source_only,thm:peps_party_ownership}
-    Theorem~\ref{thm:peps_pair_effects_operator} gives
+    Lemma~\ref{thm:peps_pair_effects_operator} gives
     (\ref{eq:peps_pair_effects_party_error}), the monomial count $\le Km^r$, and
-    coefficient sum $\sum_\xi|c_\xi|$; Theorem~\ref{thm:peps_party_terms_source_only}
+    coefficient sum $\sum_\xi|c_\xi|$; Lemma~\ref{thm:peps_party_terms_source_only}
     shows that each term is an allowed source-only composition; and
-    Theorem~\ref{thm:peps_party_ownership} gives the stack register ownership.
+    Lemma~\ref{thm:peps_party_ownership} gives the stack register ownership.
 \end{proof}
 
 Throughout, $\eta\in\mathcal W$ is a unit vector in a finite-dimensional
@@ -88,7 +88,7 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Insertions as register permutations]
+\begin{lemma}[Insertions as register permutations]
     \label{thm:peps_insertion_permutation}
     \lean{CyclicInsertion.insertAt_perm}
     \lean{CyclicInsertion.cyclicInsertion_eq_sum_addRight}
@@ -100,21 +100,21 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
     so $T_m=m^{-1}\sum_{k=0}^{m-1}U_{(+k)}I_0$. On
     $\mathcal W=\mathcal U\otimes\mathcal V$, $U_\sigma$ permutes the
     $\mathcal U$ and $\mathcal V$ coordinates by $\sigma$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Verify $I_{\sigma(k)}=U_\sigma I_k$ and the pair-coordinate action of
     $U_\sigma$ on product basis vectors.
 \end{proof}
 
-\begin{theorem}[Contractivity and the fixed vector]
+\begin{lemma}[Contractivity and the fixed vector]
     \label{thm:peps_cyclic_insertion_basic}
     \lean{CyclicInsertion.norm_cyclicInsertion_le_one}
     \lean{CyclicInsertion.cyclicInsertion_self}
     \leanok
     \uses{def:peps_cyclic_insertion}
     The map $T_m$ satisfies $\|T_m\|\le 1$ and $T_m\eta=\eta^{\otimes m}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Since $\|\eta\|=1$, each $I_k$ is an isometry with $I_k\eta=\eta^{\otimes m}$,
@@ -122,7 +122,7 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
     and $T_m\eta=\eta^{\otimes m}$.
 \end{proof}
 
-\begin{theorem}[One-effect estimate]
+\begin{lemma}[One-effect estimate]
     \label{thm:peps_one_effect_estimate}
     \lean{CyclicInsertion.norm_cyclicInsertion_of_inner_eq_zero}
     \lean{CyclicInsertion.norm_cyclicInsertion_sub_ideal_le}
@@ -136,7 +136,7 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
     $T_m=P_m$ if $\{\eta\}^\perp=\{0\}$), and
     $\|(T_m-P_m)\otimes\mathbf 1_{\mathcal S}\|\le m^{-1/2}$ for any spectator
     space $\mathcal S$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_cyclic_insertion_basic}
@@ -144,7 +144,7 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
     and $\|I_kv\|=\|v\|$, so $\|\sum_{k=0}^{m-1}I_kv\|^2=m\|v\|^2$ and
     $\|T_mv\|=\|v\|/\sqrt m$. For any $v\in\mathcal W$, set
     $v_\perp=v-\langle\eta,v\rangle\eta\perp\eta$; by
-    Theorem~\ref{thm:peps_cyclic_insertion_basic},
+    Lemma~\ref{thm:peps_cyclic_insertion_basic},
     $\|(T_m-P_m)v\|=\|T_mv_\perp\|=\|v_\perp\|/\sqrt m\le\|v\|/\sqrt m$, with
     equality on any nonzero $v\in\{\eta\}^\perp$. Tensoring with
     $\mathbf 1_{\mathcal S}$ preserves the norm bound.
@@ -191,7 +191,7 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
     $\bigotimes_{\zeta\neq\xi}|\eta_{(M_\zeta)}\rangle$.
 \end{definition}
 
-\begin{theorem}[Error of one replaced monomial]
+\begin{lemma}[Error of one replaced monomial]
     \label{thm:peps_replaced_monomial_error}
     \lean{TNLean.Lattice.PartyCircuit.EffectChain.norm_replace_sub_le}
     \lean{TNLean.Lattice.PartyCircuit.EffectChain.norm_eval_le_one}
@@ -206,7 +206,7 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
         \le\frac n{\sqrt m}.
         \label{eq:peps_replaced_monomial_error}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_cyclic_insertion_basic,thm:peps_one_effect_estimate}
@@ -218,12 +218,12 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
         =\bigl(\mathbf 1\otimes(\widetilde{M'}_m-I_{M'})\bigr)\circ(T_m\otimes\mathbf 1)\circ F_0
         +(\mathbf 1\otimes I_{M'})\circ\bigl((T_m-P_m)\otimes\mathbf 1\bigr)\circ F_0.\notag
     \end{align}
-    By Theorems~\ref{thm:peps_cyclic_insertion_basic}
+    By Lemmas~\ref{thm:peps_cyclic_insertion_basic}
     and~\ref{thm:peps_one_effect_estimate} and the induction hypothesis, the
     two terms have norms at most $(n-1)/\sqrt m$ and $1/\sqrt m$.
 \end{proof}
 
-\begin{theorem}[Expansion of a replaced monomial]
+\begin{lemma}[Expansion of a replaced monomial]
     \label{thm:peps_replaced_monomial_expansion}
     \lean{TNLean.Lattice.PartyCircuit.EffectChain.replace_eq_sum}
     \lean{TNLean.Lattice.PartyCircuit.EffectChain.norm_replaceTerm_le_one}
@@ -232,7 +232,7 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
     For an allowed monomial $M$ with $n$ pair effects,
     $\widetilde M_m=m^{-n}\sum_{\kappa\in\{0,\dots,m-1\}^n}\widetilde M_{m,\kappa}$
     with $\|\widetilde M_{m,\kappa}\|\le 1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_cyclic_insertion}
@@ -241,7 +241,7 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
     contractions $F_i$ and isometries $I_{\kappa_i}$.
 \end{proof}
 
-\begin{theorem}[Pair-effect elimination, operator estimates]
+\begin{lemma}[Pair-effect elimination, operator estimates]
     \label{thm:peps_pair_effects_operator}
     \lean{TNLean.Lattice.PartyCircuit.pairEffectElimination}
     \lean{TNLean.Lattice.PartyCircuit.norm_inventoryVector}
@@ -262,7 +262,7 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
     and $\widetilde G_m$ is a weighted sum of at most $Km^r$ contractions with
     absolute coefficient sum $\sum_\xi|c_\xi|$, establishing the operator
     estimates of \cite[Lemma~5.1]{OpenAI2026PolynomialPEPS}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_replaced_monomial_error,thm:peps_replaced_monomial_expansion}
@@ -276,14 +276,14 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
         +\bigl(\widetilde G_{L,m}-G_L\otimes|\Gamma_{L,m}\rangle\bigr)
         \otimes|\eta_{(\xi)}\rangle.\notag
     \end{align}
-    Theorem~\ref{thm:peps_replaced_monomial_error} bounds the first term by
+    Lemma~\ref{thm:peps_replaced_monomial_error} bounds the first term by
     $|c_\xi|n_\xi/\sqrt m\le|c_\xi|r/\sqrt m$, yielding (\ref{eq:peps_pair_effects_operator}).
-    Theorem~\ref{thm:peps_replaced_monomial_expansion} expands each
+    Lemma~\ref{thm:peps_replaced_monomial_expansion} expands each
     $c_\xi\widetilde M_{\xi,m}$ into $m^{n_\xi}\le m^r$ contractions with
     coefficients $c_\xi m^{-n_\xi}$ summing in modulus to $|c_\xi|$.
 \end{proof}
 
-\begin{theorem}[Combining pair sources]
+\begin{lemma}[Combining pair sources]
     \label{thm:peps_pair_combine}
     \lean{EuclideanSpace.pairCombine}
     \lean{EuclideanSpace.norm_pairCombine}
@@ -292,7 +292,7 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
     $\eta'\in\mathcal U'\otimes\mathcal V'$, the regrouped pair vector
     $\eta\otimes\eta'\in(\mathcal U\otimes\mathcal U')\otimes(\mathcal V\otimes\mathcal V')$
     satisfies $\|\eta\otimes\eta'\|=\|\eta\|\,\|\eta'\|$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Regrouping the product coordinates factors
@@ -335,7 +335,7 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
     \cite[Section~5.1]{OpenAI2026PolynomialPEPS}, lines 32--35.
 \end{definition}
 
-\begin{theorem}[Insertion by pair sources]
+\begin{lemma}[Insertion by pair sources]
     \label{thm:peps_insertion_by_sources}
     \lean{TNLean.Lattice.PartyCircuit.stackIso_prepWord}
     \lean{TNLean.Lattice.PartyCircuit.stackIso_insWord}
@@ -350,14 +350,14 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
     preparing $\eta$ in the $m-1$ positions other than $k$ with the input pair
     in position $k$ is an allowed source-only composition equal to $I_k$, and
     preparing $\eta$ in all $m$ positions yields $\eta^{\otimes m}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Induct on $m$: for $k=0$, prepare $\eta$ in the remaining $m-1$ positions;
     for $k>0$, prepare $\eta$ in position $0$ and apply $I_{k-1}$ to the rest.
 \end{proof}
 
-\begin{theorem}[The expansion is source-only]
+\begin{lemma}[The expansion is source-only]
     \label{thm:peps_party_terms_source_only}
     \lean{TNLean.Lattice.PartyCircuit.PartyChain.replaceTerm_toEffectChain}
     \lean{TNLean.Lattice.PartyCircuit.termList_toGate}
@@ -373,16 +373,16 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
     identifying each effect stack on $(p,q)$ with $m$ pair registers owned by
     $(p,q)$ makes every term of $\widetilde G_m$ an allowed source-only
     composition and prepares $\Gamma_m$ by normalized pair sources.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_insertion_by_sources}
-    By Theorem~\ref{thm:peps_insertion_by_sources}, each insertion $I_{\kappa_i}$
+    By Lemma~\ref{thm:peps_insertion_by_sources}, each insertion $I_{\kappa_i}$
     and each idle stack preparation $\eta^{\otimes m}$ is an allowed
     source-only composition, as is each segment $F_i$ of $M_\xi$.
 \end{proof}
 
-\begin{theorem}[Ownership of the additional registers]
+\begin{lemma}[Ownership of the additional registers]
     \label{thm:peps_party_ownership}
     \lean{TNLean.Lattice.PartyCircuit.pairRegs_eq}
     \lean{TNLean.Lattice.PartyCircuit.PartyChain.owner_stackRegs}
@@ -394,14 +394,14 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
     The output registers of $\widetilde G_m$ consist of the output registers of
     $G$ together with $m$ registers of $p$ and $m$ registers of $q$ for each
     effect occurrence on $(p,q)$ across all monomials.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     By induction on the monomials and their effect chains, concatenating the
     two-party register stacks of each effect occurrence.
 \end{proof}
 
-\begin{theorem}[Combining pair sources on one pair of parties]
+\begin{lemma}[Combining pair sources on one pair of parties]
     \label{thm:peps_party_combine_sources}
     \lean{TNLean.Lattice.PartyCircuit.eval_combineSources}
     \lean{TNLean.Lattice.PartyCircuit.isAllowed_combineSources}
@@ -414,14 +414,14 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
     $\eta$ and merging the local registers into $\mathcal U\otimes\mathcal U'$
     at $p$ and $\mathcal V\otimes\mathcal V'$ at $q$ equals the preparation of
     $\eta\otimes\eta'$ with $\|\eta\otimes\eta'\|=\|\eta\|\,\|\eta'\|$
-    (Theorem~\ref{thm:peps_pair_combine}).
-\end{theorem}
+    (Lemma~\ref{thm:peps_pair_combine}).
+\end{lemma}
 
 \begin{proof}\leanok
     Verify agreement on product vectors under the local regrouping isometry.
 \end{proof}
 
-\begin{corollary}[Stack length and rescaling]
+\begin{lemma}[Stack length and rescaling]
     \label{cor:peps_pair_effects_rescaling}
     \lean{TNLean.Lattice.PartyCircuit.stackLength}
     \lean{TNLean.Lattice.PartyCircuit.stackLength_spec}
@@ -429,7 +429,7 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
     \lean{TNLean.Lattice.PartyCircuit.replaceGate_rescaled_stackLength}
     \leanok
     \uses{thm:peps_pair_effects_operator}
-    In the setting of Theorem~\ref{thm:peps_pair_effects_operator}, if
+    In the setting of Lemma~\ref{thm:peps_pair_effects_operator}, if
     $\|G\|\le 1$, $\delta>0$, $S\ge\sum_\xi|c_\xi|$, and
     $m=\lceil(rS/\delta)^2\rceil+1$, then
     $\|\widetilde G_m-G\otimes|\Gamma_m\rangle\|\le\delta$,
@@ -440,7 +440,7 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
         \le 2\delta.
         \label{eq:peps_pair_effects_rescaling}
     \end{align}
-\end{corollary}
+\end{lemma}
 
 \begin{proof}\leanok
     Since $\sqrt m\ge rS/\delta$, (\ref{eq:peps_pair_effects_operator}) gives
