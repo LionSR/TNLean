@@ -501,3 +501,59 @@
     recursive-witness theorem follow. Its actual families, operation and
     recorded spanning vectors give the conclusion.
 \end{proof}
+
+
+\begin{lemma}[Full-interval generators and native matrix product states]
+    \label{lem:full_interval_mps_span}
+    \lean{TNLean.MPS.AreaLaw.fullIntervalRead,
+        TNLean.MPS.AreaLaw.rank_cutMatrix_fullIntervalRead,
+        TNLean.MPS.AreaLaw.isOpenMPS_fullIntervalRead_of_rank_le,
+        TNLean.MPS.AreaLaw.isOpenMPS_fullIntervalRead_of_mem_span}
+    \leanok
+    \uses{thm:open_mps_finite_span}
+    Read a vector on $[0,L)$ on native chain configurations by restricting
+    the configuration to the recorded interval sites. Its regional cut
+    after $k$ sites has the same rank as its native chain coefficient
+    matrix at that cut. Hence a recorded vector of internal Schmidt ranks
+    at most $R$ is an open-boundary matrix product state of bond at most
+    $R$ in the native chain coordinates. If $n$ such vectors span a space,
+    every vector in that space, read in the same coordinates, has bond
+    at most $nR$.
+\end{lemma}
+\begin{proof}\leanok
+    Identify the full interval with the full left block and apply the
+    existing left-block cut identity. The internal-cut characterization
+    gives the generator representation. Apply the finite-span theorem to
+    the actual finite image of the recorded generators; its cardinality
+    is at most $n$, including repeated or zero generators.
+\end{proof}
+
+\begin{theorem}[Native matrix product states in the actual recursive root]
+    \label{thm:physical_dg_interval_tree_mps}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_dg_interval_tree_mps}
+    \leanok
+    \uses{thm:physical_dg_interval_tree_parameters,lem:full_interval_mps_span}
+    In the automatic-parameter theorem, retain the same actual parent
+    families, literal operations, balanced recursion and original global
+    ground-space viability at every interval. Put $M=D^6s^3$ and
+    $D_{\rm ref}=r_G^2B$ as before. Every vector in the actual recursively
+    constructed root space on $[0,L)$, read on native chain configurations,
+    is an open-boundary matrix product state of bond at most
+    \[
+      10^6D_{\rm ref}^2(L+1)M^2.
+    \]
+    This is the bound for the entire root space. The bound for each
+    recorded generator is $10^6D_{\rm ref}^2(L+1)M$.
+    No independent matrix product approximation replaces the root space.
+    The capped gap, block leaves and one final trim remain explicit;
+    adaptive joint probability, final spectral extraction and running
+    time remain separate, as recorded
+    in~\cite{gap:alvv16_approximation_parameters}.
+\end{theorem}
+\begin{proof}\leanok
+    The automatic tree gives at most $n\le M$ recorded generators of the
+    actual root, each with internal-cut ranks at most
+    $R=10^6D_{\rm ref}^2(L+1)M$. The preceding lemma gives bond $nR\le MR$
+    for every vector in their span. The literal parent identities and all
+    intermediate viability conclusions are retained unchanged.
+\end{proof}
