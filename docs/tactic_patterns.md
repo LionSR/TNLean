@@ -9664,3 +9664,14 @@ there is no need for a new tactic.
   no additional public tactic is justified by these two occurrences.
 - **Notes:** Keep the finite coefficient identity separate from asymptotic
   positivity and from estimates for the actual two-wall state.
+
+### Exact increments followed by Cesaro convergence — candidate (2026-10-29)
+
+- **Pattern:** Express an actual finite coefficient as the sum of its
+  derived increments, prove convergence of those increments by continuity,
+  and use `Filter.Tendsto.cesaro_smul` for the coefficient divided by length.
+- **Seen:** `MPS/ParentHamiltonian/UncleWallGramAsymptotics.lean`.
+- **Abstraction:** Existing Mathlib Cesaro convergence already supplies the
+  general analytic step; no new tactic or generic averaging API is needed.
+- **Notes:** Spectral-radius damping supplies summability of the genuine
+  mixed series. A positive limiting slope is a separate mathematical claim.

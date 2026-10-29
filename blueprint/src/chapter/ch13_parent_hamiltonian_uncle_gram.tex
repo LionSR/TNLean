@@ -83,3 +83,31 @@ still requires the separating-transfer error estimate, decay of the
 mixed transfer powers, and strict positivity of the limiting coefficients
 outside the source exceptional sets. Finite nonnegativity alone does not
 supply the required positive quadratic growth.
+
+\begin{theorem}[Linear limiting wall coefficient]
+    \label{thm:uncle_wall_gram_linear_limit}
+    \lean{MPSTensor.uncleWallCorrelationLimit,MPSTensor.uncleWallNormSlope,
+        MPSTensor.uncleWallCorrelation_summable,
+        MPSTensor.uncleWallCorrelation_tendsto,
+        MPSTensor.uncleWallGramWeight_normalized_tendsto}
+    \notready
+    \uses{thm:uncle_wall_gram_finite_sum}
+    Suppose also that the mixed transfer operator $F$ has spectral radius
+    strictly below one. Then the actual mixed series
+    \[
+        Z_\infty=\sum_{k=0}^{\infty}F^k(C)
+    \]
+    converges, $Z_n\to Z_\infty$, and
+    \[
+        \frac{\eta_n}{n}\longrightarrow
+        \kappa_R:=c_0+\ell(Z_\infty)+\overline{\ell(Z_\infty)}.
+    \]
+    Strict positivity of $\kappa_R$ is not part of this assertion.
+\end{theorem}
+\begin{proof}
+    The strict spectral-radius bound gives a geometric bound for all
+    mixed transfer powers, so the actual correlation series is summable.
+    Continuity of the wall contraction makes the exact Gram increments
+    converge to $\kappa_R$. Their Ces\`aro averages equal
+    $\eta_n/n$ and converge to the same limit.
+\end{proof}
