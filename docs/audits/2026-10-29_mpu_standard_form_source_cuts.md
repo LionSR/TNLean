@@ -102,3 +102,56 @@ matrix entry formulas, resolves spectator cases and actual rank equivalences,
 and uses `Classical.choose` for the right inverses. These are source repairs;
 new extension proofs and the repaired head remain uncompiled pending hosted
 validation. No local Lean command was run.
+
+## Hosted diagnostics on stacked `0f8c0d5c4`
+
+Job `123436139104` accepted the canonical physical reindex construction,
+then found namespace shadowing in the promoted simplicity declaration,
+a parenthesis mismatch in the normalized-cut calculation, and continuation
+syntax in the selected first Y-Gram application. The raw tensor operation
+is qualified and the two explicit proof expressions are corrected; reported
+unused map simplifications are removed. Blueprint job `123436138960`
+rejected a raw equation-label citation in prose; it is replaced by the
+source line reference. These repairs still await exact-head hosted checks.
+
+## Written literal forward certificate
+
+`TimeReversalLocalNecessity.lean` now derives the coarse certificate from
+actual even-original-length family equality using the arbitrary supplied-
+factor Fundamental Theorem. This is a genuine dependency on draft #10303,
+so #10315 is stacked on its current branch; #10311 remains independent.
+The two gauge equations give `(YX) ⊗ (XY)=I` after cancelling the actual
+coisometric coarse gate. The existing scalar Kronecker lemma gives reciprocal
+scalar matrices; unitarity then makes the scalar equal to its inverse and
+hence ±1. No local certificate or gauge-existence premise is assumed.
+
+The explicit four-spin coordinate dictionary is also written. Coarse-rank
+identifications compose with the source pair encodings, and the original
+source-rank equalities give their exact physical-pair encodings. Reindexing
+the middle and unshifted layers identifies the actual coarse gates with
+`V23(u₀⊗u₀)` and `V23` for the original selected gates transported only by
+the derived canonical rank equalities. Transporting the actual coarse sign
+certificate back therefore gives the literal four-original-spin equation.
+
+This completes the written forward argument for the constructed simple
+reduced canonical source standard form. It does not establish unrestricted
+arbitrary supplied standard forms, the converse, transposition or kernel
+acceptance. All source and auxiliary Blueprint nodes remain `notready`, and
+#7020 stays open. The whole extension is source-only and awaits hosted
+verification; no local Lean commands were run.
+
+The actual pointwise supplier is also written:
+`exists_twoSiteStandardFormData_timeReversal_certificate` returns the square
+standard-form record and its derived literal certificate together. The
+record is constructed by `TwoSiteStandardFormData.reindexRanks` from the
+existing half factors, rather than assumed. This discharges the pointwise
+certificate/data premise of the intrinsic-sign theorem for these constructed
+canonical source forms. No continuity of gates, factors, gauges or sign
+witnesses is required for that application. An unrestricted source path
+still needs the availability of these source presentations pointwise.
+
+The length hypothesis is load-bearing: the premise is on U at every even
+original length 2N, so its supplied standard-form tensor W=blockTwo U has
+adjoint symmetry at every blocked length N>1. This argument does not replace
+that premise by symmetry only at even lengths of W, which would amount to
+original lengths divisible by four. No such stronger deduction is claimed.

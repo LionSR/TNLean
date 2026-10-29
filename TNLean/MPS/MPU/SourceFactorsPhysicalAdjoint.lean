@@ -75,7 +75,7 @@ is unchanged. Source: arXiv:1703.09188, `ThmFund1`, lines 563–601,
 and the cut exchange preceding `PropChiral`, lines 1196–1207. -/
 theorem IsMPUCanonicalFormII.isMPUSimple_physicalAdjointTensor
     {d D : ℕ} {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
-    (hsimple : IsMPUSimple U) : IsMPUSimple (physicalAdjointTensor U) := by
+    (hsimple : IsMPUSimple U) : IsMPUSimple (MPOTensor.physicalAdjointTensor U) := by
   have hrank : r[U] * ℓ[U] = d * d := (hU.isMPUSimple_tfae.out 1 2).mp hsimple
   apply (hU.physicalAdjointTensor.isMPUSimple_tfae.out 1 2).mpr
   rw [rightRank_physicalAdjointTensor, leftRank_physicalAdjointTensor, mul_comm]
@@ -128,7 +128,7 @@ private theorem normalized_cut_gram_transport
   have hA : A * Aᴴ = 1 := by
     simp only [A, Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose, hL.eq]
     calc
-      (Xtᴴ * L * X) * (Xᴴ * L * Xt) = Xtᴴ * L * (X * Xᴴ * L * Xt) := by
+      (Xtᴴ * L * X) * (Xᴴ * (L * Xt)) = Xtᴴ * L * (X * Xᴴ * L * Xt) := by
         simp only [Matrix.mul_assoc]
       _ = 1 := by rw [hproj, hXt]
   rw [hYt, Matrix.conjTranspose_mul]
@@ -152,8 +152,9 @@ theorem IsMPUCanonicalFormII.sourceFactors_Y₁_mul_conjTranspose
     (sourceWeight_posDef (d := d) hU.ρ_posDef).isHermitian
     (S.sourceCutM₁_eq.symm.trans T.sourceCutM₁_eq)
     S.X₁_weighted_isometry T.X₁_weighted_isometry T.Y₁_mul_Z₁
-    (by simpa only [Matrix.mul_one] using hU.sourceY₁_mul_conjTranspose hsimple
-      (hU.isMPUSimple_physicalAdjointTensor hsimple))
+    (by simpa only [Matrix.mul_one] using
+      (hU.sourceY₁_mul_conjTranspose hsimple
+        (hU.isMPUSimple_physicalAdjointTensor hsimple)))
   simpa only [Matrix.mul_one] using h
 
 /-- The weighted second Y Gram formula for every supplied normalized record
@@ -183,11 +184,11 @@ noncomputable def SourceFactors.physicalAdjoint
     {d D : ℕ} {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
     (hsimple : IsMPUSimple U)
     (S : SourceFactors U hU.ρ) (hr : r[U] = d) (hl : ℓ[U] = d) :
-    SourceFactors (physicalAdjointTensor U) hU.ρ := by
+    SourceFactors (MPOTensor.physicalAdjointTensor U) hU.ρ := by
   classical
-  let er : Fin ℓ[U] ≃ Fin r[physicalAdjointTensor U] :=
+  let er : Fin ℓ[U] ≃ Fin r[MPOTensor.physicalAdjointTensor U] :=
     finCongr (rightRank_physicalAdjointTensor U).symm
-  let el : Fin r[U] ≃ Fin ℓ[physicalAdjointTensor U] :=
+  let el : Fin r[U] ≃ Fin ℓ[MPOTensor.physicalAdjointTensor U] :=
     finCongr (leftRank_physicalAdjointTensor U).symm
   have hd : (d : ℂ) ≠ 0 := by exact_mod_cast hU.neZero_phys.out
   have hY₁ := hU.sourceFactors_Y₁_mul_conjTranspose hsimple S
@@ -244,13 +245,13 @@ theorem SourceFactors.sourceU_physicalAdjoint
     (S : SourceFactors U hU.ρ) (hr : r[U] = d) (hl : ℓ[U] = d) :
     let er := finCongr (rightRank_physicalAdjointTensor U).symm
     let el := finCongr (leftRank_physicalAdjointTensor U).symm
-    SourceFactors.sourceU (physicalAdjointTensor U)
+    SourceFactors.sourceU (MPOTensor.physicalAdjointTensor U)
         (SourceFactors.physicalAdjoint hU hsimple S hr hl) =
       Matrix.reindex (Equiv.prodCongr el er) (Equiv.refl _) (SourceFactors.sourceV U S)ᴴ := by
   dsimp only
   ext ⟨l, r⟩ ⟨i, j⟩
   simp [SourceFactors.sourceU, SourceFactors.sourceV, SourceFactors.physicalAdjoint,
-    Matrix.reindex_apply, Matrix.conjTranspose_apply, map_sum, map_mul]
+    Matrix.reindex_apply, Matrix.conjTranspose_apply]
 
 /-- The adjoint record's shifted gate is the adjoint of the actual supplied
 unshifted gate, in the canonical swapped-rank coordinates. Source:
@@ -261,12 +262,12 @@ theorem SourceFactors.sourceV_physicalAdjoint
     (S : SourceFactors U hU.ρ) (hr : r[U] = d) (hl : ℓ[U] = d) :
     let er := finCongr (rightRank_physicalAdjointTensor U).symm
     let el := finCongr (leftRank_physicalAdjointTensor U).symm
-    SourceFactors.sourceV (physicalAdjointTensor U)
+    SourceFactors.sourceV (MPOTensor.physicalAdjointTensor U)
         (SourceFactors.physicalAdjoint hU hsimple S hr hl) =
       Matrix.reindex (Equiv.refl _) (Equiv.prodCongr er el) (SourceFactors.sourceU U S)ᴴ := by
   dsimp only
   ext ⟨i, j⟩ ⟨r, l⟩
   simp [SourceFactors.sourceU, SourceFactors.sourceV, SourceFactors.physicalAdjoint,
-    Matrix.reindex_apply, Matrix.conjTranspose_apply, map_sum, map_mul]
+    Matrix.reindex_apply, Matrix.conjTranspose_apply]
 
 end MPOTensor

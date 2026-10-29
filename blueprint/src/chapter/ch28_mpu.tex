@@ -9722,7 +9722,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{lemma}[Source cuts of a supplied square standard form]
     \label{lem:mpu_supplied_standard_form_source_cuts}
-    \lean{MPOTensor.TwoSiteStandardFormData.cutX₁, MPOTensor.TwoSiteStandardFormData.cutY₁, MPOTensor.TwoSiteStandardFormData.cutX₂, MPOTensor.TwoSiteStandardFormData.cutY₂, MPOTensor.TwoSiteStandardFormData.sourceCutM₁_eq_cutX₁_mul_cutY₁, MPOTensor.TwoSiteStandardFormData.sourceCutM₂_eq_cutX₂_mul_cutY₂, MPOTensor.TwoSiteStandardFormData.cutY₂_cutY₁_eq_staircaseMiddle_mul_kronecker, MPOTensor.TwoSiteStandardFormData.cutX₁_cutX₂_eq_staircaseMiddle, MPOTensor.IsMPUCanonicalFormII.twoSite_cutX₁_weighted_isometry, MPOTensor.IsMPUCanonicalFormII.twoSite_cutX₂_isIsometry, MPOTensor.IsMPUCanonicalFormII.twoSite_sourceRanks, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors, MPOTensor.IsMPUCanonicalFormII.sourceRanks_eq_phys_of_even_mpo_eq_adjoint, MPOTensor.IsMPUCanonicalFormII.blockTwo, MPOTensor.IsMPUCanonicalFormII.isMPUSimple_blockTwo}
+    \lean{MPOTensor.TwoSiteStandardFormData.cutX₁, MPOTensor.TwoSiteStandardFormData.cutY₁, MPOTensor.TwoSiteStandardFormData.cutX₂, MPOTensor.TwoSiteStandardFormData.cutY₂, MPOTensor.TwoSiteStandardFormData.sourceCutM₁_eq_cutX₁_mul_cutY₁, MPOTensor.TwoSiteStandardFormData.sourceCutM₂_eq_cutX₂_mul_cutY₂, MPOTensor.TwoSiteStandardFormData.cutY₂_cutY₁_eq_staircaseMiddle_mul_kronecker, MPOTensor.TwoSiteStandardFormData.cutX₁_cutX₂_eq_staircaseMiddle, MPOTensor.IsMPUCanonicalFormII.twoSite_cutX₁_weighted_isometry, MPOTensor.IsMPUCanonicalFormII.twoSite_cutX₂_isIsometry, MPOTensor.IsMPUCanonicalFormII.twoSite_sourceRanks, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors, MPOTensor.IsMPUCanonicalFormII.sourceRanks_eq_phys_of_even_mpo_eq_adjoint, MPOTensor.IsMPUCanonicalFormII.blockTwo, MPOTensor.IsMPUCanonicalFormII.isMPUSimple_blockTwo, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors_sourceU, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors_sourceV, MPOTensor.TwoSiteStandardFormData.reindexRanks}
     \notready
     Let $W$ have a supplied two-site standard form with unitary gates
     $u:\mathbb C^d\otimes\mathbb C^d\to\mathbb C^\ell\otimes\mathbb C^r$ and
@@ -9804,7 +9804,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     actual adjoint coarse record without extra normalization witnesses.
     These are the normalized cut constructions underlying
     \cite[lines~1237--1252]{Cirac2017MPU}; the Gram formulas are
-    \cite[equation~\texttt{eq:MPUnice3}]{FrancoRubio2025MPUGauging}.
+    \cite[lines~1326--1398]{FrancoRubio2025MPUGauging}.
 \end{lemma}
 
 \begin{proof}
@@ -9818,6 +9818,51 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     two cut factorizations. The displayed old left-factor normalizations
     give the new right inverses, and their old Gram identities give the new
     left-factor normalizations. Direct contraction gives the two adjoint gates.
+\end{proof}
+
+\begin{lemma}[Forward local time reversal for the constructed canonical standard form]
+    \label{lem:mpu_canonical_forward_local_time_reversal}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_coarse_timeReversal_certificate, MPOTensor.IsMPUCanonicalFormII.exists_local_timeReversal_certificate, MPOTensor.IsMPUCanonicalFormII.exists_twoSiteStandardFormData_timeReversal_certificate}
+    \notready
+    Let $U$ be a simple reduced canonical-form-II tensor, and suppose that
+    $U^{(N)}=U^{(N)\dagger}$ at every even original length $N>1$.
+    Construct its actual source standard form with gates $u,v$. Its source
+    ranks equal the physical dimension $d$. In the canonical identifications
+    of both rank spaces with $\mathbb C^d$, write these same gates as $u_0,v_0$.
+    There exist a unitary $x$ on $\mathbb C^d\otimes\mathbb C^d$ and
+    $\sigma\in\{1,-1\}$ such that
+    \begin{align}
+        (v_0)_{23}(u_0\otimes u_0)
+         & =\sigma(x\otimes x^\dagger)(v_0)_{23}^\dagger.
+    \end{align}
+    This is the forward four-original-spin equation of
+    \cite[lines~1237--1252]{Cirac2017MPU} for the standard form constructed
+    from the chosen reduced canonical source. No gauge or local-equation
+    witness is assumed. The actual square standard-form data are supplied
+    together with the certificate by relabeling the existing half factors.
+    No continuity of any such choice is needed. Arbitrary supplied standard forms, the converse and
+    the transposition criterion are separate obligations; the unrestricted
+    source proposition remains unformalized. The reduced presentation
+    restriction is recorded in \cite{gap:mpu_canonical_form_full_support}.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:mpu_supplied_standard_form_source_cuts,
+        lem:mpu_normalized_physical_adjoint_source_factors, FundamentalMPU}
+    The actual coarse source factors have gates
+    $A=v_{23}(u\otimes u)$ and $B=v_{23}$. Adjoint symmetry at original
+    lengths $2N$ identifies the periodic families of the two-site block and
+    its adjoint. Apply the supplied-factor Fundamental Theorem to their
+    actual normalized records. In physical-block coordinates its unitary
+    gauges $X,Y$ satisfy $B^\dagger=(X\otimes Y)A$ and
+    $A^\dagger=B(Y^\dagger\otimes X^\dagger)$. Taking the adjoint of the
+    second equation and substituting the first gives
+    $A=(YX\otimes XY)A$. Cancel $A$ to obtain $YX\otimes XY=\Id$.
+    Thus $YX=c\Id$ and $XY=c^{-1}\Id$. Unitarity gives $Y=cX^\dagger$,
+    whence also $XY=c\Id$ and $c=c^{-1}$. Therefore $c=\pm1$.
+    The explicit physical-pair and rank identifications transport this
+    relation back to the displayed four-spin equation, with $x=X^\dagger$.
+    Only one two-site blocking has been used; no odd-length symmetry follows.
 \end{proof}
 
 \begin{proposition}[Admissible local characterization of time reversal]

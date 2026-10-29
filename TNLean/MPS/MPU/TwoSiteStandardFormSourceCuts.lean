@@ -45,6 +45,37 @@ variable {d D ℓ r : ℕ} {W : MPOTensor (d * d) D}
   {u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
   {v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
 
+/-- Transport the actual supplied standard form along identifications of
+its two source spaces. The gates and half factors are relabeled directly;
+no new standard-form witness is assumed. Source: arXiv:1703.09188,
+`StandardForm`, lines 603–617, and the rank identifications in `PropChiral`,
+lines 1237–1252. -/
+noncomputable def reindexRanks {ℓ' r' : ℕ}
+    (S : TwoSiteStandardFormData W u v) (el : Fin ℓ ≃ Fin ℓ') (er : Fin r ≃ Fin r') :
+    TwoSiteStandardFormData W
+      (Matrix.reindex (Equiv.prodCongr el er) (Equiv.refl _) u)
+      (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr er el) v) := by
+  have hl : ℓ = ℓ' := by simpa only [Fintype.card_fin] using Fintype.card_congr el
+  have hr : r = r' := by simpa only [Fintype.card_fin] using Fintype.card_congr er
+  refine {
+    phys_pos := S.phys_pos
+    bond_pos := S.bond_pos
+    left_pos := hl ▸ S.left_pos
+    right_pos := hr ▸ S.right_pos
+    X₁ := Matrix.reindex (Equiv.refl _) er S.X₁
+    X₂ := Matrix.reindex (Equiv.refl _) el S.X₂
+    u_unitary := S.u_unitary.reindex _ (Equiv.prodCongr el er) (Equiv.refl _)
+    v_unitary := S.v_unitary.reindex _ (Equiv.refl _) (Equiv.prodCongr er el)
+    v_apply := ?_
+    W_apply := ?_ }
+  · intro i₁ i₂ s t
+    exact S.v_apply i₁ i₂ (er.symm s) (el.symm t)
+  · intro i j α γ
+    rw [S.W_apply]
+    refine Fintype.sum_equiv el _ _ (fun t ↦ ?_)
+    refine Fintype.sum_equiv er _ _ (fun s ↦ ?_)
+    simp [Matrix.reindex_apply]
+
 /-- Left factor of the first cut of the supplied tensor: retain its first
 output spin and the original right half factor. Source: arXiv:1703.09188,
 `eq:block-twosites`, lines 1237–1244, and `eq:sf-svd`, lines 479–506. -/
@@ -401,6 +432,61 @@ noncomputable def IsMPUCanonicalFormII.twoSiteSourceFactors
   · change Matrix.reindexLinearEquiv ℂ ℂ el (Equiv.refl _) S.cutY₂ *
       Matrix.reindexLinearEquiv ℂ ℂ (Equiv.refl _) el Z₂ = 1
     rw [Matrix.reindexLinearEquiv_mul, hZ₂, Matrix.reindexLinearEquiv_one]
+
+/-- The normalized coarse record has the literal four-spin unshifted gate,
+with only its canonical rank and physical-pair identifications. Source:
+arXiv:1703.09188, `eq:block-twosites`, lines 1237–1249. -/
+theorem IsMPUCanonicalFormII.twoSiteSourceFactors_sourceU
+    {d D : ℕ} {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
+    (hsimple : IsMPUSimple U) :
+    let er := finProdFinEquiv.trans (finCongr (hU.twoSite_sourceRanks hsimple).1.symm)
+    let el := finProdFinEquiv.trans (finCongr (hU.twoSite_sourceRanks hsimple).2.symm)
+    SourceFactors.sourceU (MPOTensor.blockTwo U) (hU.twoSiteSourceFactors hsimple) =
+      Matrix.reindex (Equiv.prodCongr el er)
+        (Equiv.prodCongr finProdFinEquiv finProdFinEquiv)
+        (staircaseMiddle (A := Fin ℓ[U]) (E := Fin r[U])
+          (sourceV U hU.ρ hU.ρ_posDef) *
+            (sourceU U hU.ρ hU.ρ_posDef ⊗ₖ sourceU U hU.ρ hU.ρ_posDef)) := by
+  let S := hU.twoSiteStandardFormData hsimple
+  let er := finProdFinEquiv.trans (finCongr (hU.twoSite_sourceRanks hsimple).1.symm)
+  let el := finProdFinEquiv.trans (finCongr (hU.twoSite_sourceRanks hsimple).2.symm)
+  change SourceFactors.sourceU (MPOTensor.blockTwo U) (hU.twoSiteSourceFactors hsimple) =
+    Matrix.reindex (Equiv.prodCongr el er)
+      (Equiv.prodCongr finProdFinEquiv finProdFinEquiv) _
+  rw [← S.cutY₂_cutY₁_eq_staircaseMiddle_mul_kronecker]
+  apply Matrix.ext
+  rintro ⟨l, r⟩ ⟨i, j⟩
+  change (∑ β : Fin D, S.cutY₂ (el.symm l) (i, β) * S.cutY₁ (er.symm r) (β, j)) =
+    ∑ β : Fin D,
+      S.cutY₂ (el.symm l) (finProdFinEquiv (finProdFinEquiv.symm i), β) *
+        S.cutY₁ (er.symm r) (β, finProdFinEquiv (finProdFinEquiv.symm j))
+  simp only [Equiv.apply_symm_apply]
+
+/-- The normalized coarse record has the literal middle shifted gate on
+four original spins. Source: arXiv:1703.09188, `eq:block-twosites`, lines 1237–1249. -/
+theorem IsMPUCanonicalFormII.twoSiteSourceFactors_sourceV
+    {d D : ℕ} {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
+    (hsimple : IsMPUSimple U) :
+    let er := finProdFinEquiv.trans (finCongr (hU.twoSite_sourceRanks hsimple).1.symm)
+    let el := finProdFinEquiv.trans (finCongr (hU.twoSite_sourceRanks hsimple).2.symm)
+    SourceFactors.sourceV (MPOTensor.blockTwo U) (hU.twoSiteSourceFactors hsimple) =
+      Matrix.reindex (Equiv.prodCongr finProdFinEquiv finProdFinEquiv)
+        (Equiv.prodCongr er el)
+        (staircaseMiddle (A := Fin d) (E := Fin d) (sourceV U hU.ρ hU.ρ_posDef)) := by
+  let S := hU.twoSiteStandardFormData hsimple
+  let er := finProdFinEquiv.trans (finCongr (hU.twoSite_sourceRanks hsimple).1.symm)
+  let el := finProdFinEquiv.trans (finCongr (hU.twoSite_sourceRanks hsimple).2.symm)
+  change SourceFactors.sourceV (MPOTensor.blockTwo U) (hU.twoSiteSourceFactors hsimple) =
+    Matrix.reindex (Equiv.prodCongr finProdFinEquiv finProdFinEquiv)
+      (Equiv.prodCongr er el) _
+  rw [← S.cutX₁_cutX₂_eq_staircaseMiddle]
+  apply Matrix.ext
+  rintro ⟨i, j⟩ ⟨r, l⟩
+  change (∑ β : Fin D, S.cutX₁ (i, β) (er.symm r) * S.cutX₂ (β, j) (el.symm l)) =
+    ∑ β : Fin D,
+      S.cutX₁ (finProdFinEquiv (finProdFinEquiv.symm i), β) (er.symm r) *
+        S.cutX₂ (β, finProdFinEquiv (finProdFinEquiv.symm j)) (el.symm l)
+  simp only [Equiv.apply_symm_apply]
 
 /-- Actual adjoint invariance at the even original chain lengths forces
 both source ranks of the original simple canonical tensor to equal its
