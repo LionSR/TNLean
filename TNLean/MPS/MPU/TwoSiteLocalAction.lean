@@ -24,6 +24,8 @@ bond-dimension radius and completed automorphism remain separate. See
 `docs/paper-gaps/mpu_qca_complete_block_heisenberg_scope.tex`.
 -/
 
+open scoped ComplexOrder
+
 namespace SpinChain
 
 attribute [local instance] CStarMatrix.instNorm CStarMatrix.instNormedAddCommGroup
@@ -43,7 +45,7 @@ private theorem actionBuffer_spec (k : ℕ) (Λ : Finset ℤ) :
       Λ ⊆ finiteChainRegion (actionBufferAnchor k Λ) (actionBufferLength k Λ) ∧
       ∀ x ∈ Λ, actionBufferAnchor k Λ ≤ x - (2 * k : ℕ) ∧
         x + (4 * k : ℕ) ≤ actionBufferAnchor k Λ + actionBufferLength k Λ := by
-  have hbounds : ∀ x ∈ Λ, -(Λ.sup Int.natAbs : ℤ) ≤ x ∧ x ≤ (Λ.sup Int.natAbs : ℤ) := by
+  have hbounds : ∀ x ∈ Λ, -((Λ.sup Int.natAbs : ℕ) : ℤ) ≤ x ∧ x ≤ ((Λ.sup Int.natAbs : ℕ) : ℤ) := by
     intro x hx
     apply abs_le.mp
     rw [Int.abs_eq_natAbs]
