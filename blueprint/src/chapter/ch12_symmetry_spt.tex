@@ -4244,7 +4244,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     \lean{MPSTensor.interactionHamiltonian_isHermitian,
         MPSTensor.norm_gaussianFilteredTerm_interactionHamiltonian_commutator_le,
         MPSTensor.norm_gaussianFilteredTerm_interactionHamiltonian_commutator_le_exp}
-    \notready
+    \leanok
     \discussion{9879}
     \uses{aux:interaction-hamiltonian-lieb-robinson, thm:hastings_filtered_locality}
     Let $H_N$ be the periodic Hamiltonian of a Hermitian two-site interaction
@@ -4272,7 +4272,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
         \label{eq:spt_gaussian_commutator_exp}
     \end{align}
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     On $|t|\leq T$, monotonicity replaces the time factor in the periodic
     propagation estimate by $e^{8e^aT}-1$. On the remaining times use
     $\|[e^{itH_N}Ae^{-itH_N},B]\|\leq2\|A\|\|B\|$.
@@ -4289,7 +4289,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     \label{lem:spt_exact_ground_gaussian_bounds}
     \lean{MPSTensor.ExactMPSGroundPath.exists_uniform_ground_line_spectral_gap,
         MPSTensor.ExactMPSGroundPath.exists_uniform_gaussian_ground_bounds}
-    \notready
+    \leanok
     \discussion{9879}
     \uses{def:spt_exact_mps_gapped_phase, thm:hastings_gaussian_filtered_spectral,
         thm:hastings_filtered_no_ground_component}
@@ -4316,7 +4316,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     \cite[equations \texttt{tighter}, \texttt{tighter2}]{Hastings2007AreaLaw}
     with a constant supplied by the physical path.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The least energies in the gap condition and the unique-ground-line
     condition agree: each is at most the other. Thus every eigenvalue is
     either the ground energy or at least $\Delta$ above it, and the ground
@@ -4800,7 +4800,7 @@ choosing minimal canonical representatives are separate steps below.
 \begin{lemma}[Transfer spectral rate from limiting correlations]
     \label{lem:spt_transfer_rate_from_correlations}
     \lean{MPSTensor.norm_transfer_spectrum_le_of_limitCorrelator_bound}
-    \notready
+    \leanok
     \discussion{9879}
     \uses{lem:ldp_limit_correlator_eigenvalue, def:physical_connected_correlator}
     Let the products of $L$ letters of $A$ span the bond matrix algebra,
@@ -4810,7 +4810,7 @@ choosing minimal canonical representatives are separate steps below.
     $|C_{\mathrm{phys}}(X,Y;n)|\leq Cr^n$ for $n\geq n_0$.
     Every $\lambda\ne1$ in the transfer spectrum satisfies $|\lambda|\leq r$.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The eigenvalue observables give $C_{\mathrm{phys}}(X,Y;n)=\lambda^n$. If
     $|\lambda|>r$, the ratio $|\lambda|/r$ is greater than one and its
     powers are unbounded. The assumed estimate at $n+n_0$ bounds these

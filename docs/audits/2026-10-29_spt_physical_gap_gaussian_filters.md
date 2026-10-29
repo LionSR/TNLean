@@ -95,9 +95,14 @@ the converse or its classification biconditional.
 
 ## Verification boundary
 
-The user expressly requested source writing without Lean compilation or
-builds. The new code is therefore an uncompiled proof candidate. Blueprint
-entries remain `notready`, and #9879 remains open. Source/API inspection,
-import generation, formatting and proof-integrity checks do not establish
-kernel acceptance. No proof placeholders or persistent Lean fixtures are
-introduced.
+Hosted build job 123413107049 at exact code head
+`2d8f37537046fa78007ba85a172883f732a5d0ca` compiled all three new modules,
+completed the full 14985-job repository build and passed strict Lean checks
+on every new file. Blueprint web job 123413106943 and PDF job 123413107135
+also passed, as did module-policy, inline-diagram and changed-compilation-time
+checks. The three ingredient Blueprint nodes and proofs now carry `leanok`.
+
+No local Lean invocation, build, elaboration or persistent fixture was used.
+The actual ordinary-clustering, limit and minimal-gauge steps remain open,
+as does #9879. These verified Gaussian/rate ingredients do not establish the
+unrestricted physical-gap converse or classification biconditional.
