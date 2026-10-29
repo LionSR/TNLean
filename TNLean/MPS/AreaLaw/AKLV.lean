@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.MPS.AreaLaw.AKLV.ApproximateGroundVector
 import TNLean.MPS.AreaLaw.AKLV.CodimensionOneGap
+import TNLean.MPS.AreaLaw.AKLV.FrustrationFreeClipping
 import TNLean.MPS.AreaLaw.AKLV.GroundStateTail
 import TNLean.MPS.AreaLaw.AKLV.HighEnergyMass
 import TNLean.MPS.AreaLaw.AKLV.LowSpectrumGap

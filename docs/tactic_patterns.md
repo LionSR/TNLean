@@ -9724,3 +9724,17 @@ there is no need for a new tactic.
 - **Decision:** Three branch occurrences in one file, below the two-file promotion
   threshold. Before extending this pattern to another module, move the value equality
   before the case distinction or reuse `Fin.val_inj`; no new tactic is needed.
+
+
+### Exact ground preservation from positive order — existing lemma (2026-10-29)
+
+- **Consumer:** `MPS/AreaLaw/AKLV/FrustrationFreeClipping.lean` derives exact
+  preservation of the original zero-energy ground vector from `0 ≤ K ≤ H`.
+- **Reuse:** `Matrix.mulVec_eq_smul_of_order_sandwich` at energy zero avoids
+  redoing termwise kernel arguments or functional calculus. Existing
+  `orthogonal_clipped_energy_ge` at energy zero already gives the inverse-gap
+  cutoff; no separate clipping-gap framework is introduced.
+- **Candidate:** The final orthogonal decomposition reuses
+  `re_inner_smul_add_eigenvector`, as does `CodimensionOneGap.lean`. A future
+  consolidation may expose that final gap-lifting step; this bounded wrapper
+  introduces no new tactic or general projector structure.
