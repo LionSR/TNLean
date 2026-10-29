@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.UncleWallGramQuadratic
 import Mathlib.LinearAlgebra.QuadraticForm.Radical
+import Mathlib.LinearAlgebra.Prod
 import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
 
 /-!
@@ -179,5 +180,79 @@ theorem uncleWallNormSlope_ae_pos [NeZero a] [NeZero b]
   rw [uncleWallSlopeQuadratic_apply] at hR
   exact ⟨hR, (Complex.nonneg_iff.mp
     (uncleWallNormSlope_nonneg A B R ρ hρ.posSemidef hA hB hSpect)).2⟩
+
+/-- For almost every pair of walls, both actual one-wall limiting
+coefficients are strictly positive. A single additive Haar measure on
+the pair space is used; independence of component measures is not a
+hypothesis. Source: arXiv:1210.6613, proof of Lemma lowenergystates,
+the two quadratic coefficients in the norm factorization. -/
+theorem uncleWallNormSlope_pair_ae_pos [NeZero a] [NeZero b]
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (R₀ : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L₀ : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R₀ L₀))
+    (ρA : Matrix (Fin a) (Fin a) ℂ) (hρA : ρA.PosDef)
+    (ρB : Matrix (Fin b) (Fin b) ℂ) (hρB : ρB.PosDef)
+    (hA : Kraus.adjointMap A ρA = ρA) (hB : Kraus.adjointMap B ρB = ρB)
+    (hUA : Kraus.mapLM A 1 = 1) (hUB : Kraus.mapLM B 1 = 1)
+    (hAB : Kraus.mixedMapSpectralRadius A B < 1)
+    (hBA : Kraus.mixedMapSpectralRadius B A < 1)
+    (μ : Measure ((Fin d → Matrix (Fin a) (Fin b) ℂ) ×
+      (Fin d → Matrix (Fin b) (Fin a) ℂ))) [IsAddHaarMeasure μ] :
+    ∀ᵐ P ∂μ, 0 < uncleWallNormSlope A B P.1 ρA ∧
+      0 < uncleWallNormSlope B A P.2 ρB := by
+  have hdim : (a + b) * (a + b) ≤ d := by
+    have h := finrank_le_of_span_eq_top hPert.span_eq_top
+    simpa [Module.finrank_matrix] using h
+  have ha : 0 < a := Nat.pos_of_ne_zero (NeZero.ne a)
+  have hb : 0 < b := Nat.pos_of_ne_zero (NeZero.ne b)
+  have hdA : a * a < d :=
+    lt_of_lt_of_le (Nat.mul_self_lt_mul_self (show a < a + b by omega)) hdim
+  have hdB : b * b < d :=
+    lt_of_lt_of_le (Nat.mul_self_lt_mul_self (show b < a + b by omega)) hdim
+  let Q₁ := uncleWallSlopeQuadratic A B ρA hAB
+  let Q₂ := uncleWallSlopeQuadratic B A ρB hBA
+  let S₁ := Q₁.radical
+  let S₂ := Q₂.radical
+  have hQ₁ : ∀ R, 0 ≤ Q₁ R :=
+    uncleWallSlopeQuadratic_nonneg A B ρA hρA.posSemidef hA hUB hAB
+  have hQ₂ : ∀ L, 0 ≤ Q₂ L :=
+    uncleWallSlopeQuadratic_nonneg B A ρB hρB.posSemidef hB hUA hBA
+  have hS₁ : S₁ ≠ ⊤ := wallQuadratic_radical_ne_top Q₁
+    (uncleWallSlopeQuadratic_ne_zero_of_bond_sq_lt A B ρA hρA hdB hAB)
+  have hS₂ : S₂ ≠ ⊤ := wallQuadratic_radical_ne_top Q₂
+    (uncleWallSlopeQuadratic_ne_zero_of_bond_sq_lt B A ρB hρB hdA hBA)
+  have hnull₁ : μ (S₁.prod ⊤) = 0 := addHaar_submodule μ _
+    (fun h ↦ hS₁ (Submodule.prod_eq_top_iff.mp h).1)
+  have hnull₂ : μ ((⊤ : Submodule ℝ (Fin d → Matrix (Fin a) (Fin b) ℂ)).prod S₂) = 0 :=
+    addHaar_submodule μ _ (fun h ↦ hS₂ (Submodule.prod_eq_top_iff.mp h).2)
+  have hae₁ : ∀ᵐ P ∂μ, P.1 ∉ S₁ := by
+    have hset : {P : (Fin d → Matrix (Fin a) (Fin b) ℂ) ×
+        (Fin d → Matrix (Fin b) (Fin a) ℂ) | P.1 ∈ S₁} = (S₁.prod (⊤ :
+        Submodule ℝ (Fin d → Matrix (Fin b) (Fin a) ℂ)) : Set _) := by
+      ext P
+      simp
+    rw [ae_iff]
+    simpa only [not_not, hset] using hnull₁
+  have hae₂ : ∀ᵐ P ∂μ, P.2 ∉ S₂ := by
+    have hset : {P : (Fin d → Matrix (Fin a) (Fin b) ℂ) ×
+        (Fin d → Matrix (Fin b) (Fin a) ℂ) | P.2 ∈ S₂} = ((⊤ :
+        Submodule ℝ (Fin d → Matrix (Fin a) (Fin b) ℂ)).prod S₂ : Set _) := by
+      ext P
+      simp
+    rw [ae_iff]
+    simpa only [not_not, hset] using hnull₂
+  filter_upwards [hae₁, hae₂] with P hP₁ hP₂
+  have hp₁ : 0 < Q₁ P.1 := lt_of_le_of_ne (hQ₁ P.1)
+    (fun h ↦ hP₁ ((wallQuadratic_mem_radical_iff Q₁ hQ₁ P.1).mpr h.symm))
+  have hp₂ : 0 < Q₂ P.2 := lt_of_le_of_ne (hQ₂ P.2)
+    (fun h ↦ hP₂ ((wallQuadratic_mem_radical_iff Q₂ hQ₂ P.2).mpr h.symm))
+  change 0 < uncleWallSlopeQuadratic A B ρA hAB P.1 at hp₁
+  change 0 < uncleWallSlopeQuadratic B A ρB hBA P.2 at hp₂
+  rw [uncleWallSlopeQuadratic_apply] at hp₁ hp₂
+  exact ⟨Complex.pos_iff.mpr ⟨hp₁, (Complex.nonneg_iff.mp
+      (uncleWallNormSlope_nonneg A B P.1 ρA hρA.posSemidef hA hUB hAB)).2⟩,
+    Complex.pos_iff.mpr ⟨hp₂, (Complex.nonneg_iff.mp
+      (uncleWallNormSlope_nonneg B A P.2 ρB hρB.posSemidef hB hUA hBA)).2⟩⟩
 
 end MPSTensor

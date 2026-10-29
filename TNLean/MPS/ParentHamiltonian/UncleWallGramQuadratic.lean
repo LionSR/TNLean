@@ -124,6 +124,22 @@ theorem uncleWallSlopeQuadratic_nonneg
   rw [uncleWallSlopeQuadratic_apply]
   exact (Complex.nonneg_iff.mp (uncleWallNormSlope_nonneg A B R ρ hρ hA hB hSpect)).1
 
+/-- The explicit annihilator wall makes the actual coefficient a nonzero
+quadratic form whenever the physical dimension exceeds the right-block
+matrix dimension. Source: arXiv:1210.6613, proof of Lemma lowenergystates. -/
+theorem uncleWallSlopeQuadratic_ne_zero_of_bond_sq_lt [NeZero a] [NeZero b]
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (ρ : Matrix (Fin a) (Fin a) ℂ) (hρ : ρ.PosDef) (hd : b * b < d)
+    (hSpect : Kraus.mixedMapSpectralRadius A B < 1) :
+    uncleWallSlopeQuadratic A B ρ hSpect ≠ 0 := by
+  obtain ⟨R, _, _, hR⟩ := exists_uncleWallNormSlope_pos A B ρ hρ hd
+  intro hzero
+  have hq := congrArg
+    (fun Q : QuadraticForm ℝ (Fin d → Matrix (Fin a) (Fin b) ℂ) ↦ Q R) hzero
+  change uncleWallSlopeQuadratic A B ρ hSpect R = 0 at hq
+  rw [uncleWallSlopeQuadratic_apply] at hq
+  exact (ne_of_gt (Complex.pos_iff.mp hR).1) hq
+
 /-- The actual quadratic coefficient is not identically zero in the source
 full-perturbation setting with a faithful density;
 arXiv:1210.6613, proof of Lemma lowenergystates, nonzero quadratic coefficient. -/
