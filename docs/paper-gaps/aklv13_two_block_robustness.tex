@@ -191,3 +191,39 @@ and the proved initial logarithmic budget; the source's further summed
 logarithmic estimate and final entropy summation remain separate tasks.
 The accuracy-dependent enlarged-window argument at lines 1503--1517 is
 also separate and is not replaced by this fixed-window recursion.
+
+\section{Accuracy-dependent windows and the remaining rank comparison}
+
+The construction in \doclink{TNLean/MPS/AreaLaw/AKLV/AccuracyWindow}
+chooses the source's accuracy-dependent enlarged window at a prescribed
+physical cut. A fitting enlarged window admits the actual initial window
+at that same cut. Refinement applies the actual polynomial to that actual
+initialized state. The two widths can have different regional minima;
+no equality of their normalization Hamiltonians is assumed.
+If the enlarged window does not fit, the ground vector itself is the
+exact per-cut approximant, using the coefficient-rank bound
+$q^{\min\{k,L-k\}}$. Thus endpoints and short chains need no supplied window.
+The upper bound one for the actual gap is derived in the fitting case,
+and is not a hypothesis of the all-cut statement.
+
+For squared error $0<\rho\le1$, put $z=\log(128/\rho)$,
+$m=\lceil\sqrt{\sqrt{z^3/g}}\rceil$, $s=s_0+2m$,
+$t=T(g)+16z$, and $\ell=\lceil z\sqrt{(2t+s)/g}\rceil$.
+The actual per-cut squared error is at most $\rho$. Its common rank budget
+is the maximum of the exact filtered rank and exact boundary rank, with
+logarithm
+\begin{align*}
+\max\bigl\{\log D_0+
+32(\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1)\log(q(\ell+1)),\,
+(s-\lfloor s/2\rfloor)\log q\bigr\}.
+\end{align*}
+The source's optimized rate at lines 1503--1517 still requires a uniform
+bound for this expression of the form
+$C_A[u^3/g+(z^3/g)^{1/4}(u+\log(z+1))]$.
+The exact logarithmic identity does not establish that comparison.
+A sufficient elimination plan is to split at $z=s_0$, absorb the smaller
+scale into the proved initial logarithmic budget, and control the degree
+and window costs by the fourth-root increment at the larger scale.
+The subsequent marginal-tail and sequential MPS construction must use
+that proved comparison, rather than substitute an exponential-in-accuracy
+rank estimate or the independent chain area law.

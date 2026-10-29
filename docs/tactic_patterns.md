@@ -10013,3 +10013,27 @@ there is no need for a new tactic.
 - **Scope:** This is the first such moving-target sequence in this argument.
   The existing LVV recursion retains its own mathematical invariant; no
   generic recursion framework or tactic is introduced.
+
+### Reciprocal square-root factors in selected polynomial degrees — candidate (2026-10-29)
+
+- **Pattern:** For positive gap and spectral ceiling, the product
+  `sqrt (W/g) * sqrt ((9*g/10)/W)` is `sqrt (9/10)`. This converts a
+  ceiling degree bound into the exponent of a shrinking estimate.
+- **Occurrences:** `AKLV/SequenceParameters.lean` uses a constant coefficient;
+  `AKLV/OptimizedTailParameters.lean` uses the actual accuracy logarithm.
+- **Reuse:** Both use Mathlib's `Real.sqrt_mul`, exact field cancellation,
+  and nonnegative square-root bounds. These are two occurrences across two
+  files; a third consumer should factor the shared scalar identity before
+  another copy is written.
+
+### Centered-window failure and exact cut rank — helper theorems (2026-10-29)
+
+- **Pattern:** An accuracy-dependent window centered at a fixed cut may
+  fail to fit on a finite chain.
+- **Abstraction:** `aklv_centered_window_iff` retains the exact left and
+  right margins, including odd widths. The failure alternative uses
+  `aklv_rank_cutMatrix_le_pow_min`, which directly reuses the existing
+  endpoint-rank transport theorem rather than repeating configuration counts.
+- **Consumer:** `AKLV/AccuracyWindow.lean` obtains the actual same-cut
+  initialized filter image when the window fits and the exact ground vector
+  otherwise. No smaller replacement window or independent area law is used.
