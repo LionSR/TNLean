@@ -43,8 +43,7 @@ theorem toMatrix_paired_orthonormalBasis
     OrthonormalBasis.coe_toBasis, OrthonormalBasis.repr_apply_apply,
     OrthonormalBasis.reindex_apply, Equiv.symm_apply_apply]
   fin_cases a <;> fin_cases b <;>
-    simp [hB, B.inner_eq_ite, interleavedSkewForm, Matrix.kronecker_apply,
-      Matrix.one_apply, eq_comm]
+    simp [hB, B.inner_eq_ite, interleavedSkewForm, Matrix.one_apply, eq_comm]
 
 /-- A real skew-symmetric orthogonal matrix is orthogonally congruent to the
 interleaved sum of `!![0, 1; -1, 0]` blocks, with the source's orientation.
