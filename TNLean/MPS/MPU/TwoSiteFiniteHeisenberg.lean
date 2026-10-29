@@ -584,7 +584,10 @@ private theorem originalSiteHeisenbergCentreEquiv_block (d k : ℕ)
   rw [originalSiteHeisenbergCentreEquiv_eq_blockedConfigEquiv]
   simp [MPSTensor.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp]
 
-private def fourHalfWordEquiv (b : ℕ) : FourHalves b ≃ (Fin 4 → Fin b) where
+/-- Four consecutive output half-block indices in their actual word order.
+Source: CPSV17, StandardForm and Appendix index comparison,
+lines 603–622 and 2313–2334. -/
+def originalSiteHeisenbergOutputBlockEquiv (b : ℕ) : FourHalves b ≃ (Fin 4 → Fin b) where
   toFun c := ![c.1.1, c.1.2, c.2.1, c.2.2]
   invFun f := ((f 0, f 1), (f 2, f 3))
   left_inv _ := rfl
@@ -594,7 +597,8 @@ private def fourHalfWordEquiv (b : ℕ) : FourHalves b ≃ (Fin 4 → Fin b) whe
 Source: CPSV17, StandardForm, lines 603–622. -/
 noncomputable def originalSiteHeisenbergOutputCentreEquiv (d k : ℕ) :
     FourHalves (MPSTensor.blockPhysDim d k) ≃ (Fin (4 * k) → Fin d) :=
-  (fourHalfWordEquiv (MPSTensor.blockPhysDim d k)).trans (MPSTensor.blockedConfigEquiv d 4 k)
+  (originalSiteHeisenbergOutputBlockEquiv (MPSTensor.blockPhysDim d k)).trans
+    (MPSTensor.blockedConfigEquiv d 4 k)
 
 private theorem originalSiteHeisenbergOutputWindowEquiv_half (d k : ℕ)
     (e : HalfPair (MPSTensor.blockPhysDim d k))
@@ -634,7 +638,7 @@ theorem originalSiteHeisenbergOutputWindowEquiv_middle (d k : ℕ)
     rw [hidx, originalSiteHeisenbergOutputWindowEquiv_half]
   have hcentre : originalSiteHeisenbergOutputCentreEquiv d k c (finProdFinEquiv (t, j)) =
       MPSTensor.decodeBlock d k (![c.1.1, c.1.2, c.2.1, c.2.2] t) j := by
-    simp [originalSiteHeisenbergOutputCentreEquiv, fourHalfWordEquiv,
+    simp [originalSiteHeisenbergOutputCentreEquiv, originalSiteHeisenbergOutputBlockEquiv,
       MPSTensor.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp]
   rw [hcentre]
   fin_cases t
