@@ -1,5 +1,16 @@
 # Tactic Pattern Ledger
 
+### Exponential weights and energy windows — candidate (2026-10-29)
+
+- **Seen:** `MPS/AreaLaw/AKLV/SpectralTail.lean` and `GroundStateTail.lean`.
+- **Pattern:** Express a Hermitian exponential and a threshold projection in
+  the scalar functional calculus, multiply there, and apply `norm_cfc_le`.
+- **Abstraction:** `Matrix.IsHermitian.exp_real_smul_eq_cfc` centralizes the
+  exponential identity. The high and low weight bounds are public lemmas in
+  `SpectralTail.lean`; a future ownership cleanup can move these general
+  matrix results to QICLean together with the adjacent weighted-projection API.
+- **Decision:** Mathematical lemmas suffice; no new tactic is needed.
+
 Living registry of repeated proof patterns, maintained under the process in
 [`docs/tactic_development.md`](tactic_development.md). Agents and contributors:
 **consult the promoted section before writing proofs; append candidates when

@@ -1,0 +1,89 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{command}
+\providecommand{\leanid}[1]{\begingroup\urlstyle{sf}\path{#1}\endgroup}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{Constants in the AKLV Energy-Truncation Argument}
+\author{}
+\date{2026-10-29}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved for the off-diagonal and eigenvector tails}
+
+\section{Source and normalization}
+Arad, Kitaev, Landau and Vazirani, arXiv:1301.1162v1,
+Sections~6.1 and~6.3, consider positive nearest-neighbour terms bounded
+by the identity. After regional scalar shifts the ground energy is in
+$[0,6]$. Put $A=H_2+H_{s-1}$ and $B=H-A$.
+In Section~6.3, $P_t=\mathbf 1_{(-\infty,t)}(B)$ has a strict threshold;
+write $Q_t=1-P_t$. The truncation in Section~6.1 is the continuous
+function $x\mapsto\min(x,t)$, so choosing either side at equality in its
+spectral formula produces the same operator.
+
+\section{The cross term and two typographical slips}
+The Cauchy--Schwarz calculation in the proof of Lemma~6.5 gives
+\begin{align}
+    |\langle P_tv,AQ_tv\rangle|
+    &\le \|A\|\,\|P_tv\|\,\|Q_tv\|
+    \le 2\sqrt{\langle v,H^{(t)}v\rangle/t}
+\end{align}
+for a unit vector and positive $t$, using the first assertion of that lemma.
+The last expression bounds the unsquared modulus in this calculation.
+Squaring gives the different estimate
+$|\langle P_tv,AQ_tv\rangle|^2\le4\langle v,H^{(t)}v\rangle/t$.
+The proof of Lemma~6.6(1) uses $\epsilon_0$, where the printed expansion
+has $\epsilon$. Positivity of $A$ gives
+$\langle Q_t\Gamma,HQ_t\Gamma\rangle\ge
+\langle Q_t\Gamma,BQ_t\Gamma\rangle$; the comparison printed in the prose
+after that expansion has the opposite sign.
+
+\section{Recovering the off-diagonal constant}
+The printed commutator bound $\|Q_i\|\le2\cdot4^i i!$ sums at $r=1/8$
+to $4$, while Lemma~6.6(2) states coefficient $2$.
+For each boundary bond replace $h_j$ by $O_j=h_j-I/2$.
+Then $\|O_j\|\le1/2$, and the local Hadamard bound gives
+$\|e^{B/8}O_je^{-B/8}\|\le1$.
+For $t\ge u$, $Q_tP_u=0$, so the scalar shifts disappear and
+\begin{align}
+    \|Q_tAP_u\|&\le e^{-(t-u)/8}
+      \sum_{j\in\{2,s-1\}}\|e^{B/8}O_je^{-B/8}\|
+      \le2e^{-(t-u)/8}.
+\end{align}
+The proved statement is
+\leanid{TNLean.MPS.AreaLaw.AKLV.norm_two_boundary_spectral_offDiagonal_le}.
+Its hypotheses are the original local positive contractions and their
+supports; no commutator-growth or spectral-tail bound is supplied.
+The complement may have an arbitrary real scalar shift.
+
+\section{An explicit eigenvector tail}
+Let $(B+A)x=ex$, $0\le e\le6$, $W=e^{B/8}$ and $y=Wx$.
+The uncentered local estimate gives $\|WAW^{-1}\|\le4$, hence
+$\|By\|\le10\|y\|$. The spectral inverse above energy $20$ gives
+$\|Q_{20}y\|\le\|By\|/20\le\|y\|/2$.
+The low part satisfies $\|P_{20}y\|\le e^{20/8}\|x\|$, so
+$\|y\|\le2e^{20/8}\|x\|$. For every real $t$,
+\begin{align}
+    \|Q_tx\|&\le\|Q_te^{-B/8}\|\,\|y\|
+      \le2e^{-(t-20)/8}\|x\|.
+\end{align}
+This alternative to the shell induction of Lemma~6.7 is proved by
+\leanid{TNLean.MPS.AreaLaw.AKLV.norm_groundState_highProjection_le_exp}.
+It applies to every eigenvector in this energy range, including the unit
+ground vector. It requires neither a gap nor uniqueness.
+
+\section{Remaining robustness conclusions}
+Separate clipping of the two exterior blocks, its positive order bounds,
+and its agreement with the original operator on the low-energy subspace
+are proved using QICLean's energy truncation. The full Hamiltonian is not
+clipped in place of the exterior blocks, and the ALVV regional approximation
+theorem is not substituted for this construction.
+
+Theorem~6.1 remains unformalized here. Still needed are the high-energy
+mass estimate for low-energy vectors of the actual two-sided truncation,
+the quantitative low-spectrum gap argument, and the closing phase-aligned
+squared-distance estimate. No completion mark in this contribution asserts
+these remaining conclusions.
+\end{document}

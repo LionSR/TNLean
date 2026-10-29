@@ -1,0 +1,140 @@
+\section{Energy tails and two-sided truncation}
+
+The off-diagonal estimate and the eigenvector tail of
+\cite[Lemmas~6.6--6.7]{Arad2013AreaLaw} have explicit constants.
+In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
+
+\begin{lemma}[Spectral separation by imaginary time]
+    \label{lem:aklv_spectral_separation}
+    \lean{Matrix.IsHermitian.exp_real_smul_eq_cfc,
+        Matrix.IsHermitian.norm_spectral_offDiagonal_le_exp_conjugation,
+        Matrix.IsHermitian.spectralProjectionGE_mul_one_sub_eq_zero,
+        Matrix.IsHermitian.spectral_offDiagonal_add_eq,
+        Matrix.IsHermitian.norm_highProjection_mul_exp_neg_le,
+        Matrix.IsHermitian.norm_exp_mul_lowProjection_le}
+    \leanok
+    For Hermitian $B$, any operator $O$, real $t,u$ and $r\ge0$,
+    \begin{align}
+        \|Q_tOP_u\|&\le e^{-r(t-u)}\|e^{rB}Oe^{-rB}\|,\notag\\
+        \|Q_te^{-rB}\|&\le e^{-rt},\qquad
+        \|e^{rB}P_u\|\le e^{ru}.
+    \end{align}
+    If $u\le t$, then $Q_tP_u=0$.
+    In that case $Q_t(B+O)P_u=Q_tOP_u$ as well.
+\end{lemma}
+\begin{proof}\leanok
+    Functional calculus gives $e^{rB}=\exp(r\,\cdot)(B)$ and the last
+    two estimates by bounding the scalar function on the spectral intervals.
+    Insert the inverse exponentials in $Q_tOP_u$ for the first estimate.
+    The two spectral indicators have disjoint support when $u\le t$.
+\end{proof}
+
+\begin{theorem}[Boundary energy off-diagonal decay]
+    \label{thm:aklv_boundary_energy_tail}
+    \lean{TNLean.MPS.AreaLaw.AKLV.norm_boundary_spectral_offDiagonal_le,
+        TNLean.MPS.AreaLaw.AKLV.norm_two_boundary_spectral_offDiagonal_le,
+        TNLean.MPS.AreaLaw.AKLV.norm_exp_conjugation_two_boundary_le_four}
+    \leanok
+    \uses{def:chain_model}
+    Let $0\le h_i\le I$ be nearest-neighbour terms on a chain, let $I_0$
+    be any bond set, and put $B=\sum_{i\in I_0}h_i-zI$ for real $z$.
+    For any bonds $a,b$ and $u\le t$,
+    \begin{align}
+        \|Q_th_aP_u\|&\le e^{-(t-u)/8},\notag\\
+        \|Q_t(h_a+h_b)P_u\|&\le2e^{-(t-u)/8},\notag\\
+        \|e^{B/8}(h_a+h_b)e^{-B/8}\|&\le4.
+    \end{align}
+    The second inequality is the estimate of
+    \cite[Lemma~6.6(2)]{Arad2013AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_local_imaginary_time,lem:aklv_spectral_separation}
+    Center each boundary term as $O_j=h_j-I/2$. Then $\|O_j\|\le1/2$,
+    so Theorem~\ref{thm:chain_local_imaginary_time} gives
+    $\|e^{B/8}O_je^{-B/8}\|\le1$. Since $Q_tP_u=0$, centering preserves
+    the off-diagonal block. Apply Lemma~\ref{lem:aklv_spectral_separation}
+    and add the two estimates. Applying the imaginary-time estimate directly
+    to $h_a,h_b$, whose norms are at most one, gives the bound $4$.
+\end{proof}
+
+\begin{lemma}[Exponential moment of an eigenvector]
+    \label{lem:aklv_eigenvector_moment}
+    \lean{Matrix.IsHermitian.norm_highProjection_apply_le,
+        Matrix.IsHermitian.norm_exp_apply_eigenvector_le,
+        Matrix.IsHermitian.norm_highProjection_eigenvector_le_exp}
+    \leanok
+    Let $B$ be Hermitian and $(B+A)x=ex$ for real $e$.
+    Suppose $r\ge0$, $c>0$, $\|e^{rB}Ae^{-rB}\|\le C$, and
+    $|e|+C\le c/2$. Then
+    \begin{align}
+        \|e^{rB}x\|&\le2e^{rc}\|x\|,\notag\\
+        \|Q_tx\|&\le2e^{-r(t-c)}\|x\|.
+    \end{align}
+    Also $\|Q_cy\|\le c^{-1}\|By\|$ for every vector $y$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:aklv_spectral_separation}
+    The function $\mathbf1_{[c,\infty)}(\lambda)/\lambda$ has norm at most
+    $c^{-1}$ and its product with $\lambda$ is the high spectral indicator.
+    For $y=e^{rB}x$, $By=ey-e^{rB}Ae^{-rB}y$, so
+    $\|Q_cy\|\le c^{-1}(|e|+C)\|y\|\le\|y\|/2$.
+    Since $\|P_cy\|\le e^{rc}\|x\|$, the triangle inequality bounds
+    $\|y\|$ by $2e^{rc}\|x\|$. Multiply by $Q_te^{-rB}$ for the tail.
+\end{proof}
+
+\begin{theorem}[Explicit eigenvector energy tail on a chain]
+    \label{thm:aklv_ground_energy_tail}
+    \lean{TNLean.MPS.AreaLaw.AKLV.norm_groundState_highProjection_le_exp}
+    \leanok
+    \uses{def:chain_model}
+    Under the assumptions of Theorem~\ref{thm:aklv_boundary_energy_tail},
+    let $(B+h_a+h_b)x=ex$ with $0\le e\le6$. For every real $t$,
+    \begin{align}
+        \|Q_tx\|\le2e^{-(t-20)/8}\|x\|.
+    \end{align}
+    This applies to the ground vector after the regional energy shifts of
+    \cite[Section~6.1]{Arad2013AreaLaw} and proves its Lemma~6.7.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:aklv_boundary_energy_tail,lem:aklv_eigenvector_moment}
+    Take $r=1/8$, $C=4$ and $c=20$ in
+    Lemma~\ref{lem:aklv_eigenvector_moment}, using $|e|+4\le10$.
+\end{proof}
+
+\begin{definition}[Separate truncation of the exterior blocks]
+    \label{def:aklv_two_sided_truncation}
+    \lean{TNLean.MPS.AreaLaw.AKLV.twoSidedEnergyTruncation}
+    \leanok
+    For exterior operators $L,R$ and a middle operator $M$, put
+    \begin{align}
+        H^{(t)}=\min(L,tI)+M+\min(R,tI).
+    \end{align}
+    In \cite[Section~6.1]{Arad2013AreaLaw}, $L=H_L+H_1$,
+    $R=H_s+H_R$, and $M=H_2+\cdots+H_{s-1}$.
+\end{definition}
+
+\begin{lemma}[Order bounds and agreement below the cutoff]
+    \label{lem:aklv_truncation_low_agreement}
+    \lean{Matrix.IsHermitian.energyTruncation_mul_lowProjection_eq,
+        TNLean.MPS.AreaLaw.AKLV.twoSidedEnergyTruncation_bounds,
+        TNLean.MPS.AreaLaw.AKLV.twoSidedEnergyTruncation_mul_lowProjection_eq}
+    \leanok
+    \uses{def:aklv_two_sided_truncation}
+    If $L,M,R\ge0$, $t\ge0$ and $M\le mI$, then
+    $0\le H^{(t)}\le L+M+R$ and $H^{(t)}\le(2t+m)I$.
+    If $B,L,R$ are Hermitian, $L\le B$, $R\le B$, and both exterior
+    blocks commute with $B$, then
+    \begin{align}
+        H^{(t)}P_t=(L+M+R)P_t.
+    \end{align}
+    The middle term need not commute with $B$.
+\end{lemma}
+\begin{proof}\leanok
+    Sum the scalar clipping order inequalities. Diagonalize $L,B$
+    simultaneously. Their eigenvalues obey $\ell_j\le b_j$, and whenever
+    $b_j<t$, $\min(\ell_j,t)=\ell_j$. Thus $\min(L,tI)P_t=LP_t$.
+    Repeat for $R$ and add the unchanged middle term.
+\end{proof}
+
+% Theorem 6.1 remains open: no completion mark asserts the low-spectrum
+% gap or the final phase-aligned squared-distance estimate.
