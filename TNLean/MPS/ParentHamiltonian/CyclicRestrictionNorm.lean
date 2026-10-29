@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
 import TNLean.MPS.ParentHamiltonian.CyclicWindowIndex
+import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 
 /-!
 # The norm partition for actual cyclic restrictions
