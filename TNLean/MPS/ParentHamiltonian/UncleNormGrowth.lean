@@ -146,8 +146,8 @@ theorem uncleTwoWallTrialSource_ae_quadratic_norm_growth
     intro hb
     subst b
     simpa using htrB
-  letI : NeZero a := ⟨ha⟩
-  letI : NeZero b := ⟨hb⟩
+  let : NeZero a := ⟨ha⟩
+  let : NeZero b := ⟨hb⟩
   obtain ⟨hIA, hIB⟩ := uncleBoundaryLetter_isInjective_diagonal_blocks A B R₀ L₀ hPert
   have hAB := uncleBoundaryLetter_mixedMapSpectralRadius_lt_one
     A B R₀ L₀ hPert hUA hUB ρA hρA ρB hρB hFA hFB

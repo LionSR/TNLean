@@ -145,7 +145,7 @@ theorem uncleTwoWallTransfer_factorization_bound [NeZero a] [NeZero b]
       _ = K * ((N + 1 : ℕ) : ℝ) ^ 2 * z ^ N * ‖X‖ := by dsimp [K, m]; ring
   let V := Matrix (Fin a) (Fin a) ℂ
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
-  letI : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
+  let : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
   let tr : (V →L[ℂ] V) →L[ℂ] ℂ :=
     ((LinearMap.trace ℂ V).comp (ContinuousLinearMap.coeLM ℂ)).toContinuousLinearMap
   refine ⟨(‖tr‖ + 1) * K, z, by positivity, hz, hz1, fun N hN ↦ ?_⟩

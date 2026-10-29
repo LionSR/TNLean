@@ -40,10 +40,10 @@ theorem uncleMPV_norm_sq_tendsto_one
     intro ha
     subst a
     simpa using htr
-  letI : NeZero a := ⟨ha⟩
+  let : NeZero a := ⟨ha⟩
   let V := Matrix (Fin a) (Fin a) ℂ
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
-  letI : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
+  let : FiniteDimensional ℂ (V →L[ℂ] V) := Φ.toLinearEquiv.finiteDimensional
   let f := (Matrix.traceLinearMap (Fin a) ℂ ℂ).comp
     (mulLeftLinearMap (n := Fin a) ℂ ρ)
   let P := f.smulRight (1 : V)
@@ -105,8 +105,8 @@ theorem uncleGroundGram_tendsto
     intro hb
     subst b
     simpa using htrB
-  letI : NeZero a := ⟨ha⟩
-  letI : NeZero b := ⟨hb⟩
+  let : NeZero a := ⟨ha⟩
+  let : NeZero b := ⟨hb⟩
   obtain ⟨hIA, hIB⟩ := uncleBoundaryLetter_isInjective_diagonal_blocks A B R L hPert
   refine ⟨uncleMPV_norm_sq_tendsto_one A hIA hUA ρA htrA hFA,
     uncleMPV_norm_sq_tendsto_one B hIB hUB ρB htrB hFB, ?_⟩
