@@ -446,7 +446,8 @@ theorem pairTraceSeparatingAt_of_pairWordTupleSpanTop {D₁ D₂ : ℕ}
       LinearMap.ker (Matrix.prodTraceForm (Fin D₁) (Fin D₂) (ΔA, ΔB)) := by
     apply Submodule.span_le.mpr
     rintro M ⟨w, rfl⟩
-    simpa only [LinearMap.mem_ker, Matrix.prodTraceForm_apply, pairWordTuple] using hΔ w
+    change Matrix.prodTraceForm (Fin D₁) (Fin D₂) (ΔA, ΔB) (pairWordTuple A B S w) = 0
+    simpa only [Matrix.prodTraceForm_apply, pairWordTuple] using hΔ w
   exact Prod.mk.inj (Matrix.eq_zero_of_forall_trace_mul_add_eq_zero (ΔA, ΔB)
     (fun M ↦ hle (by rw [hSpan]; exact Submodule.mem_top)))
 
@@ -484,7 +485,8 @@ theorem pairTraceSeparatingUpTo_of_pairCumulativeWordTupleSpanTop {D₁ D₂ : �
       LinearMap.ker (Matrix.prodTraceForm (Fin D₁) (Fin D₂) (ΔA, ΔB)) := by
     apply Submodule.span_le.mpr
     rintro M ⟨w, hw, rfl⟩
-    simpa only [LinearMap.mem_ker, Matrix.prodTraceForm_apply, pairEvalWordTuple] using hΔ w hw
+    change Matrix.prodTraceForm (Fin D₁) (Fin D₂) (ΔA, ΔB) (pairEvalWordTuple A B w) = 0
+    simpa only [Matrix.prodTraceForm_apply, pairEvalWordTuple] using hΔ w hw
   exact Prod.mk.inj (Matrix.eq_zero_of_forall_trace_mul_add_eq_zero (ΔA, ΔB)
     (fun M ↦ hle (by rw [hSpan]; exact Submodule.mem_top)))
 
@@ -550,7 +552,8 @@ theorem pairTraceSeparatingAll_of_pairAllWordsSpanTop {D₁ D₂ : ℕ}
       LinearMap.ker (Matrix.prodTraceForm (Fin D₁) (Fin D₂) (ΔA, ΔB)) := by
     apply Submodule.span_le.mpr
     rintro M ⟨w, rfl⟩
-    simpa only [LinearMap.mem_ker, Matrix.prodTraceForm_apply, pairEvalWordTuple] using hΔ w
+    change Matrix.prodTraceForm (Fin D₁) (Fin D₂) (ΔA, ΔB) (pairEvalWordTuple A B w) = 0
+    simpa only [Matrix.prodTraceForm_apply, pairEvalWordTuple] using hΔ w
   exact Prod.mk.inj (Matrix.eq_zero_of_forall_trace_mul_add_eq_zero (ΔA, ΔB)
     (fun M ↦ hle (by rw [hSpan]; exact Submodule.mem_top)))
 
