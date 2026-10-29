@@ -9722,12 +9722,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{lemma}[Source cuts of a supplied square standard form]
     \label{lem:mpu_supplied_standard_form_source_cuts}
-    \lean{MPOTensor.TwoSiteStandardFormData.cutX₁, MPOTensor.TwoSiteStandardFormData.cutY₁, MPOTensor.TwoSiteStandardFormData.cutX₂, MPOTensor.TwoSiteStandardFormData.cutY₂, MPOTensor.TwoSiteStandardFormData.sourceCutM₁_eq_cutX₁_mul_cutY₁, MPOTensor.TwoSiteStandardFormData.sourceCutM₂_eq_cutX₂_mul_cutY₂, MPOTensor.TwoSiteStandardFormData.cutY₂_cutY₁_eq_staircaseMiddle_mul_kronecker, MPOTensor.TwoSiteStandardFormData.cutX₁_cutX₂_eq_staircaseMiddle}
+    \lean{MPOTensor.TwoSiteStandardFormData.cutX₁, MPOTensor.TwoSiteStandardFormData.cutY₁, MPOTensor.TwoSiteStandardFormData.cutX₂, MPOTensor.TwoSiteStandardFormData.cutY₂, MPOTensor.TwoSiteStandardFormData.sourceCutM₁_eq_cutX₁_mul_cutY₁, MPOTensor.TwoSiteStandardFormData.sourceCutM₂_eq_cutX₂_mul_cutY₂, MPOTensor.TwoSiteStandardFormData.cutY₂_cutY₁_eq_staircaseMiddle_mul_kronecker, MPOTensor.TwoSiteStandardFormData.cutX₁_cutX₂_eq_staircaseMiddle, MPOTensor.IsMPUCanonicalFormII.twoSite_cutX₁_weighted_isometry, MPOTensor.IsMPUCanonicalFormII.twoSite_cutX₂_isIsometry, MPOTensor.IsMPUCanonicalFormII.twoSite_sourceRanks, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors}
     \notready
-    Let $W$ have a supplied two-site standard form with square gates $u,v$
-    on $\mathbb C^d\otimes\mathbb C^d$ and half factors $X_1,X_2$.
+    Let $W$ have a supplied two-site standard form with unitary gates
+    $u:\mathbb C^d\otimes\mathbb C^d\to\mathbb C^\ell\otimes\mathbb C^r$ and
+    $v:\mathbb C^r\otimes\mathbb C^\ell\to\mathbb C^d\otimes\mathbb C^d$,
+    and half factors $X_1,X_2$.
     The two source cuts of $W$ itself admit factors through
-    $\mathbb C^d\otimes\mathbb C^d$ given by
+    $\mathbb C^d\otimes\mathbb C^r$ and
+    $\mathbb C^\ell\otimes\mathbb C^d$, respectively, given by
     \begin{align}
         \widehat X_1((i_1,i_2),\gamma;a,s)
          & =\delta_{i_1,a}X_1(i_2,\gamma;s), \\
@@ -9743,7 +9746,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $v_{23}(u_{12}\otimes u_{34})$; contracting $\widehat X_1$ with
     $\widehat X_2$ gives $v_{23}$. These are the four-original-spin
     matrices in \cite[lines~1237--1252]{Cirac2017MPU}, without first
-    blocking $W$ again. No normalization or source-rank equality is asserted.
+    blocking $W$ again. When this standard form is constructed from a simple
+    canonical tensor with boundary $\rho$, its coarse left factors satisfy
+    $\widehat X_1^\dagger(\Id_{d^2}\otimes\rho)\widehat X_1=\Id$ and
+    $\widehat X_2^\dagger\widehat X_2=\Id$. In this canonical construction,
+    the actual cut ranks are $d r$ and $\ell d$. The right factors have
+    full row rank, hence right inverses; together these give normalized
+    source factors at the same boundary $\rho$.
 \end{lemma}
 
 \begin{proof}
@@ -9752,7 +9761,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Sum the two spectator Kronecker deltas. In the right-factor contraction,
     the virtual sum of $X_1$ and $X_2$ is $v$; the two remaining factors are
     $u$. The left-factor contraction uses the same virtual sum and leaves
-    the first and fourth spins fixed.
+    the first and fourth spins fixed. The first coarse left factor is
+    $\Id_d\otimes X_1$ and the second is $X_2\otimes\Id_d$, after
+    the stated coordinate regroupings. Their normalizations follow from
+    those of the original source factors by taking these tensor products.
+    Simplicity persists under blocking; the rank-product saturation argument
+    gives the ranks $dr$ and $\ell d$. Each cut factors through its displayed
+    pair space, so its right factor has full row rank and a right inverse.
 \end{proof}
 
 \begin{proposition}[Admissible local characterization of time reversal]

@@ -4975,6 +4975,10 @@ three-plaquette output measurement, and the routed reunion measurement.
   no new contraction tactic or parallel source-factor predicate is needed.
 - **Notes:** The sum over the virtual bond is consumed only by the actual
   `v_apply` relation. No gauge or symmetry premise enters these identities.
+  The canonical construction now derives both coarse normalizations by
+  Kronecker products and actual cut ranks by existing blocking saturation.
+  Full row rank gives right inverses through Mathlib's matrix surjectivity
+  theorem; no duplicate inverse-construction tactic is introduced.
 
 
 ### Counting nearest-neighbour bonds that meet a region — candidate (2026-10-28)
