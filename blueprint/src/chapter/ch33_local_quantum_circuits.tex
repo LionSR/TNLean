@@ -29,7 +29,10 @@ GHZ-type states in constant depth, teleport sites along chains of neighbouring
 pairs, and apply gates on pairs of distant sites or of distant registers in
 constant depth. Circuits of channels on neighbouring pairs, with ancillas
 attached and discarded site by site, obey the same light cone.
-Chapter~\ref{ch:log_depth_preparation} applies these results to the
+This chapter treats unitary circuits;
+Chapters~\ref{ch:circuits_measurements}--\ref{ch:circuits_lieb_robinson} treat
+measurements and long-range gates, circuits of channels, and Lieb--Robinson
+bounds. Chapter~\ref{ch:log_depth_preparation} applies these results to the
 preparation of matrix product states.
 
 \section{Operators on sets of sites and local circuits}
@@ -358,11 +361,3 @@ preparation of matrix product states.
     \leanok
     Items (1)--(2) follow from Lemma~\ref{lem:qc_placed_operators}. For (3), a window of length $2$ lies in $\{a',a'+1\}$ with $a'=\min(a,n-1)$. For (4), each gate lies in a contiguous window of length $\min(m,n)\ge2$, hence factors into at most $K_{\min(m,n)}$ nearest-neighbour gates by Theorem~\ref{thm:qc_bounded_unitary_two_site_gates}, so $C(d,m)=\sum_{l=2}^m K_l$ suffices.
 \end{proof}
-
-\input{chapter/ch33_local_quantum_circuits_measurements}
-\input{chapter/ch33_local_quantum_circuits_teleportation}
-\input{chapter/ch33_local_quantum_circuits_channels}
-\input{chapter/ch33_local_quantum_circuits_physical_ports}
-\input{chapter/ch33_local_quantum_circuits_lieb_robinson}
-\input{chapter/ch33_supported_projected_relative_evolution}
-\input{chapter/ch33_area_law_site_oscillation}
