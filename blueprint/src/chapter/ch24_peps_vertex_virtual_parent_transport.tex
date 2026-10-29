@@ -1,7 +1,7 @@
 \section{Exact image of the common virtual conditions}%
 \label{sec:peps_vertex_virtual_parent_transport}
 
-\begin{theorem}[Contraction preserves the common regional conditions]%
+\begin{lemma}[Contraction preserves the common regional conditions]%
     \label{thm:peps_vertex_virtual_parent_forward}
     \lean{TNLean.PEPS.dependentRegionConfigEquiv,
         TNLean.PEPS.globalVertexTensorMap_apply,
@@ -25,7 +25,7 @@
         \subseteq\mathcal K_{\mathrm{phys}}.
     \]
     This implication requires no injectivity of the site maps.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Split an independent virtual configuration into its coordinates
@@ -37,7 +37,7 @@
     summand satisfies the physical regional condition.
 \end{proof}
 
-\begin{theorem}[Exact physical image of the common virtual conditions]%
+\begin{lemma}[Exact physical image of the common virtual conditions]%
     \label{thm:peps_vertex_virtual_parent_transport}
     \lean{TNLean.PEPS.vertexVirtualParentGroundSpace_map_globalVertexTensorMap}
     \leanok
@@ -57,7 +57,7 @@
     \cite[Section~IV.C.1]{Cirac2021Matrix}.
     Identifying $\mathcal K_{\mathrm{virt}}$ with the global paired-bond
     space remains a separate assertion.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The forward inclusion follows from the preceding theorem and

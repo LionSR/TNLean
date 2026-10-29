@@ -37,14 +37,14 @@
     This definition describes one fusion layer. The arbitrary-chain
     recursion, the density decomposition, and the physical commuting Gibbs
     decomposition for $N\geq2$ are given in
-    Theorems~\ref{thm:mpdo_topological_projector_recursion},
+    Lemmas~\ref{thm:mpdo_topological_projector_recursion},
     \ref{thm:mpdo_topological_density_decomposition}, and
     \ref{thm:mpdo_physical_coordinate_gibbs_at_least_two}, respectively.
     The source boundary at $N=1$ is recorded in
     Remark~\ref{rem:mpdo_topological_gibbs_length_one_boundary}.
 \end{definition}
 
-\begin{theorem}[Projection property of one fusion layer]%
+\begin{lemma}[Projection property of one fusion layer]%
     \label{thm:mpdo_topological_projector_one_fusion}
     \lean{MPOTensor.BNTFusionCoisometryFamily.projectorQBlock_eq_unweighted}
     \lean{MPOTensor.BNTFusionCoisometryFamily.projectorQBlock_isStarProjection}
@@ -73,7 +73,7 @@
     $U_{\alpha,\beta}U_{\alpha,\beta}^{\dagger}=\Id$, the operator
     $U_{\alpha,\beta}^{\dagger}Q_{\alpha,\beta}U_{\alpha,\beta}$ is also an
     orthogonal projection on the product bond space.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The trace-power hypothesis and length independence force every diagonal
     entry of $\chi_{\alpha,\beta,\gamma}$ to equal one. Thus
@@ -132,7 +132,7 @@
     \cite[lines~999--1010]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{theorem}[Fixed-label recursive fusion identity]%
+\begin{lemma}[Fixed-label recursive fusion identity]%
     \label{thm:mpdo_topological_projector_recursion}
     \lean{MPOTensor.BNTFusionCoisometryFamily.%
         sequentialFusionCoisometry_mul_conjTranspose}
@@ -191,11 +191,11 @@
     \cite{gap:cpsv16_figure11_fusion_coisometry}.
 
     This theorem fixes the initial label and the list of appended labels.
-    In Theorem~\ref{thm:mpdo_topological_density_decomposition}, the direct
+    In Lemma~\ref{thm:mpdo_topological_density_decomposition}, the direct
     sum is taken over all labels and multiplicity coordinates. The commutator
     is a separate assertion; see
     \cite{gap:cpsv16_topological_projector_recursion}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok\uses{thm:mpdo_bnt_length_independent_zipper}
     The base case has no appended labels and represents the one-site chain,
     whose fusion history is unique. In the induction step, tensoring the
@@ -284,7 +284,7 @@ right-hand side is the corresponding block of $Q_3$.
     virtual product is the word evaluation of the original tensor.
 \end{proof}
 
-\begin{theorem}[Positivity of the terminal transfer matrices]%
+\begin{lemma}[Positivity of the terminal transfer matrices]%
     \label{thm:mpdo_terminal_transfer_positivity}
     \lean{MPOTensor.BNTFusionTensorClause.%
         physTraceTransfer_verticalBNTMPO_posSemidef}
@@ -300,12 +300,12 @@ right-hand side is the corresponding block of $Q_3$.
     The trace closes the horizontal operator leg and leaves the two bond
     indices of the vertically read tensor $M_\gamma$ open. See
     \cite{gap:cpsv16_topological_projector_recursion}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpdo_algebra_clause_terminal_transfer_positivity}
     Because the fusion identities imply the algebra identities for the same
     vertical decomposition,
-    Theorem~\ref{thm:mpdo_algebra_clause_terminal_transfer_positivity} applies
+    Lemma~\ref{thm:mpdo_algebra_clause_terminal_transfer_positivity} applies
     directly.
 \end{proof}
 
@@ -367,7 +367,7 @@ right-hand side is the corresponding block of $Q_3$.
     the complementary tensor factors of each block.
 \end{definition}
 
-\begin{theorem}[Density decomposition from fusion on the nonzero sectors]%
+\begin{lemma}[Density decomposition from fusion on the nonzero sectors]%
     \label{thm:mpdo_fusion_clause_topological_density_decomposition}
     \lean{MPOTensor.BNTFusionTensorClause.%
         singleKrausMap_verticalCoisometry_mpo_eq_topologicalDensityOperatorSucc}
@@ -406,7 +406,7 @@ right-hand side is the corresponding block of $Q_3$.
     exact reconstruction from the retained sectors rather than a
     square-unitary identity. See
     \cite{gap:cpgsv17_vertical_isometry_zero_sector}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:mpdo_topological_projector_recursion, lem:mpdo_sitewise_physical_coordinate_congruence}
     In retained coordinates, the one-site entries are block diagonal in the
@@ -417,7 +417,7 @@ right-hand side is the corresponding block of $Q_3$.
     the reverse equality.
 \end{proof}
 
-\begin{theorem}[Density decomposition of an RFP MPDO]%
+\begin{lemma}[Density decomposition of an RFP MPDO]%
     \label{thm:mpdo_topological_density_decomposition}
     \lean{MPOTensor.exists_topologicalDensityDecomposition_of_isRFPViaTS}
     \leanok
@@ -443,7 +443,7 @@ right-hand side is the corresponding block of $Q_3$.
     exact reconstruction from the retained nonzero sectors rather than a
     square-unitary identity. See
     \cite{gap:cpgsv17_vertical_isometry_zero_sector}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor, thm:mpdo_topological_projector_recursion, lem:mpdo_sitewise_physical_coordinate_congruence}
     Under the normalized BNT-refined horizontal hypothesis, the vertical
@@ -461,7 +461,7 @@ right-hand side is the corresponding block of $Q_3$.
     every site, gives (\ref{eq:rfp_density_reverse}).
 \end{proof}
 
-\begin{corollary}[Commuting density factors from fusion on the nonzero sectors]%
+\begin{lemma}[Commuting density factors from fusion on the nonzero sectors]%
     \label{cor:mpdo_fusion_clause_topological_density_factor_commutator}
     \lean{MPOTensor.BNTFusionTensorClause.%
         topologicalDensityOperatorSucc_eq_multiplicityWeight_mul_recursiveFactor}
@@ -484,7 +484,7 @@ right-hand side is the corresponding block of $Q_3$.
     \end{align}
     Thus the multiplicity factor commutes with the reconstructed
     recursive factor. No length-independence or spectral hypothesis is used.
-\end{corollary}
+\end{lemma}
 \begin{proof}\leanok
     In every sitewise label and multiplicity configuration, $A_N$ is a scalar
     multiple of the identity on the corresponding product bond space, so it

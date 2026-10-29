@@ -14,13 +14,13 @@ integers $a,b,\ell$ and positions $0\le p,s<2\ell$, put
 These statements provide supporting locality algebra for
 \cite[Proposition~5.7]{Arad2016RigorousRG}.
 
-\begin{theorem}[The central regions lie in the selected middle]
+\begin{lemma}[The central regions lie in the selected middle]
     \label{thm:selected_middle_core_inclusions}
     \lean{TNLean.MPS.AreaLaw.core_and_strict_core_subset_selected_middle}
     \leanok
     For the data above, $K\subseteq E$ and $Z\subseteq E$.
     No separation assumption on $a,b$ is needed for these inclusions.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The inequalities $p<2\ell$ and $s\ge0$ show that the left endpoint of
     $E$ is no greater than that of $K$, while its right endpoint is no
@@ -28,12 +28,12 @@ These statements provide supporting locality algebra for
     intervals proves the assertions.
 \end{proof}
 
-\begin{theorem}[Cardinality of the selected collars]
+\begin{lemma}[Cardinality of the selected collars]
     \label{thm:selected_middle_collar_cardinality}
     \lean{TNLean.MPS.AreaLaw.card_selected_middle_sdiff_strict_core_le}
     \leanok
     If $a+2\ell\le b$, then $|C|\le4\ell$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The complement of the strict core within $E$ is
     \begin{align}
@@ -46,7 +46,7 @@ These statements provide supporting locality algebra for
     so the cardinality of their union is at most $4\ell$.
 \end{proof}
 
-\begin{theorem}[Middle and crossing factors chosen before the exterior operators]
+\begin{lemma}[Middle and crossing factors chosen before the exterior operators]
     \label{thm:selected_middle_fixed_physical_data}
     \lean{TNLean.MPS.AreaLaw.exists_physical_selected_window_fixed_middle_data}
     \leanok
@@ -112,7 +112,7 @@ These statements provide supporting locality algebra for
     with $H^L_{B_1}=H^R_{B_1}=0$.
     The sites $e_L,e_R$ may coincide. No positive-local-dimension assumption
     is imposed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:selected_middle_core_inclusions,thm:three_region_partial_support,
         thm:three_region_middle_lift_equality,thm:three_region_middle_embedding,

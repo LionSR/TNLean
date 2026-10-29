@@ -73,3 +73,15 @@ and Kronecker transport as a separate equality. Both are repaired in source;
 the reported unused simp arguments and proof-local `letI` warning are also
 removed. The intrinsic module was not reached by this failed job, so no
 kernel acceptance for its proof is inferred. No local Lean command was run.
+
+## Main integration on 2026-10-29
+
+Merged `origin/main` at `55b8f9d56d909a1d32d58dad3a2b25ed967128c6`.
+The chapter conflict retained all intrinsic-trace and pointwise-certificate
+results and their scope. Supporting statements use the current mathematical
+role classification; both independent tactic-ledger entries were retained.
+The two sign Lean modules are byte-for-byte unchanged from the previously
+accepted `4695979e5` head. Role application/check and its eight Python tests,
+import generation, reader prose, declaration coverage, TeX formatting,
+ChkTeX and whitespace checks were run. Combined-head hosted checks remain
+pending; no local Lean or PDF/web build was run.

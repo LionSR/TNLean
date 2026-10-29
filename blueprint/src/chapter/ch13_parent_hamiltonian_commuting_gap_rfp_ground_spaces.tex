@@ -66,7 +66,7 @@
 
 \begin{proof}
     \leanok
-    Theorem~\ref{thm:parent_hamiltonian_kernel_le_chain_ground_space} gives
+    Lemma~\ref{thm:parent_hamiltonian_kernel_le_chain_ground_space} gives
     $\ker H_L^{(N)}(B)\subseteq\mathcal G_{N,L}(B)$. Together with the
     splitting hypothesis,
     \begin{align}
@@ -286,7 +286,7 @@
     commutation equations follow.
 \end{proof}
 
-\begin{theorem}[Renormalization fixed points have commuting nearest-neighbor local terms]\label{thm:rfp_implies_nncph}
+\begin{lemma}[Renormalization fixed points have commuting nearest-neighbor local terms]\label{thm:rfp_implies_nncph}
     \lean{MPSTensor.rfp_implies_nncph}
     \leanok
     \uses{def:mps_transfer_idempotence, def:is_nncph, def:nt_cpsv}
@@ -295,7 +295,7 @@
     every chain length $N>2$ the two-site local terms commute. This theorem
     records the commutation part of the nearest-neighbor source condition, not
     the ground-space spanning part.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:cpsv_normal_tp_gauge, lem:rfp_parent_gauge_invariance, thm:left_canonical_rfp_chain_commutation, thm:gauge_invariance_normal}
@@ -313,7 +313,7 @@
     Conjugating the parent interactions back proves the claim.
 \end{proof}
 
-\begin{theorem}[Renormalization fixed points satisfy the NNCPH commutation and zero-energy equations]%
+\begin{lemma}[Renormalization fixed points satisfy the NNCPH commutation and zero-energy equations]%
     \label{thm:rfp_implies_nncph_ground_state}
     \lean{MPSTensor.rfp_implies_nncph_ground_state}
     \leanok
@@ -330,17 +330,17 @@
     \end{align}
     The zero-energy equation (\ref{eq:nncph_terms_annihilate}) is the parent-Hamiltonian
     frustration-freeness statement.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:rfp_implies_nncph, lem:parent_hamiltonian_ff}
-    Theorem~\ref{thm:rfp_implies_nncph} gives the commutation identity
+    Lemma~\ref{thm:rfp_implies_nncph} gives the commutation identity
     (\ref{eq:nncph_terms_commute}), and Lemma~\ref{lem:parent_hamiltonian_ff}
     at $L=2$ gives the annihilation identity (\ref{eq:nncph_terms_annihilate}).
 \end{proof}
 
-\begin{theorem}[Nearest-neighbor parent ground spaces for a single normal RFP tensor]%
+\begin{lemma}[Nearest-neighbor parent ground spaces for a single normal RFP tensor]%
     \label{thm:rfp_single_normal_nncph_ground_spaces}
     \lean{MPSTensor.rfp_hasParentHamiltonianGroundSpaceSpanning_single}
     \lean{MPSTensor.rfp_implies_hasNNCPHGroundSpaces_single}
@@ -354,7 +354,7 @@
     Its translated two-site interactions also commute and annihilate
     $V^{(N)}(A)$. Hence the singleton family satisfies the all-chain
     nearest-neighbor commuting parent-Hamiltonian ground-space condition.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:cpsv_normal_eventually_injective, thm:rfp_nt_injective, thm:parent_hamiltonian_kernel_eq_chain_ground_space, thm:chain_ground_space_eq_mpv_blk, lem:bnt_span_eq_sum_mpv_submodules, thm:rfp_implies_nncph_ground_state}
@@ -367,12 +367,12 @@
          & =\mathcal G_{N,2}(A) =\spn\bigl\{V^{(N)}(A)\bigr\}. \notag
     \end{align}
     The span of the matrix product vectors of the singleton family is the last
-    space in this equality. Theorem~\ref{thm:rfp_implies_nncph_ground_state}
+    space in this equality. Lemma~\ref{thm:rfp_implies_nncph_ground_state}
     gives commutation and zero energy on every chain of length greater than
     two.
 \end{proof}
 
-\begin{theorem}[Commuting nearest-neighbor terms for distinct multiplicity-one RFP sectors]%
+\begin{lemma}[Commuting nearest-neighbor terms for distinct multiplicity-one RFP sectors]%
     \label{thm:rfp_multiplicity_one_bnt_nncph}
     \lean{MPSTensor.IsBNTCanonicalForm.rfp_implies_nncph_basisDirectSum}
     \leanok
@@ -382,7 +382,7 @@
     tensor. If $B$ is a renormalization fixed point, then for every $N>2$
     its translated two-site parent interactions commute pairwise. Thus $B$
     satisfies the nearest-neighbor commuting parent-Hamiltonian condition.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The fixed-point equation gives residual tensors $U_j$ whose matrix-entry
@@ -411,7 +411,7 @@
     proves the claim.
 \end{proof}
 
-\begin{theorem}[Nearest-neighbor parent ground spaces for distinct multiplicity-one RFP sectors]%
+\begin{lemma}[Nearest-neighbor parent ground spaces for distinct multiplicity-one RFP sectors]%
     \label{thm:rfp_multiplicity_one_bnt_parent_ground_spaces}
     \lean{MPSTensor.IsBNTCanonicalForm.rfp_hasParentHamiltonianGroundSpaceSpanning_basisDirectSum}
     \leanok
@@ -425,7 +425,7 @@
         \ker H_2^{(N)}(B)
          & =\spn\bigl\{V^{(N)}(A_j):j=1,\ldots,g\bigr\}. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The residual isometry equations imply that the simultaneous one-site
@@ -444,7 +444,7 @@
     identity completes the proof.
 \end{proof}
 
-\begin{theorem}[Forward NNCPH ground spaces for distinct multiplicity-one RFP sectors]%
+\begin{lemma}[Forward NNCPH ground spaces for distinct multiplicity-one RFP sectors]%
     \label{thm:rfp_multiplicity_one_bnt_has_nncph_ground_spaces}
     \lean{MPSTensor.IsBNTCanonicalForm.rfp_implies_hasNNCPHGroundSpaces_basisDirectSum}
     \leanok
@@ -462,14 +462,14 @@
     \cite[Theorem~3.10]{Cirac2016MPDO_arXiv}, $B$ therefore satisfies the
     all-chain nearest-neighbor commuting parent-Hamiltonian ground-space
     condition.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:rfp_multiplicity_one_bnt_nncph, thm:rfp_multiplicity_one_bnt_parent_ground_spaces, rem:nncph_ground_spaces_decomposition}
-    Theorem~\ref{thm:rfp_multiplicity_one_bnt_nncph} gives pairwise
+    Lemma~\ref{thm:rfp_multiplicity_one_bnt_nncph} gives pairwise
     commutation of the translated two-site interactions for every $N>2$.
     The parent-Hamiltonian construction gives the zero-energy equation.
-    Theorem~\ref{thm:rfp_multiplicity_one_bnt_parent_ground_spaces} identifies
+    Lemma~\ref{thm:rfp_multiplicity_one_bnt_parent_ground_spaces} identifies
     its kernel with the span of the periodic matrix product vectors of the
     distinct sectors. These are the three clauses of the all-chain condition.
 \end{proof}

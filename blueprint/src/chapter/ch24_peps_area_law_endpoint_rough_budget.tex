@@ -19,20 +19,20 @@ mass lower bound; all root and filtered norms below use this sequence.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Vanishing endpoint remainder]
+\begin{lemma}[Vanishing endpoint remainder]
     \label{thm:arealaw-rough-endpoint-remainder-limit}
     \lean{TNLean.PEPS.AreaLaw.Scan.tendsto_roughEndpointRemainder}
     \leanok
     For fixed $d,c,K,C$, the remainder in
     (\ref{eq:arealaw-rough-endpoint-remainder}) tends to zero as $k\to\infty$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:arealaw-rough-endpoint-remainder}
     Both $R_k^{\rm Bell}(d,c,K)$ and $\log(k+2)/k$ tend to zero as $k\to\infty$.
 \end{proof}
 
-\begin{theorem}[Initial-to-final physical endpoint loss]
+\begin{lemma}[Initial-to-final physical endpoint loss]
     \label{thm:arealaw-physical-endpoint-loss}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.eventually_actualScan_suppliedPrevector_endpoint_budget}
     \leanok
@@ -54,7 +54,7 @@ mass lower bound; all root and filtered norms below use this sequence.
     \end{align}
     Here $N_k^{\rm initial}$ and $N_k^{\rm final}$ are the squared filtered
     norms at the fill endpoints $(0,0)$ and $(H,0)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_augmented_prevector_norm,thm:al_scan_actual_initial_log_norm,
@@ -69,7 +69,7 @@ mass lower bound; all root and filtered norms below use this sequence.
     log-norm bound gives the endpoint loss inequality.
 \end{proof}
 
-\begin{theorem}[The original-state entropy input]
+\begin{lemma}[The original-state entropy input]
     \label{thm:arealaw-source-endpoint-loss}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_source_actualScan_suppliedPrevector_endpoint_budget,TNLean.PEPS.AreaLaw.Scan.CollarScan.source_actualScan_suppliedPrevector_endpoint_budget_of_threshold_le}
     \leanok
@@ -88,7 +88,7 @@ mass lower bound; all root and filtered norms below use this sequence.
     \end{align}
     All geometric and same-sequence premises of the preceding theorem
     are retained.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:al_positive_prefix_entropy_transfer,
@@ -99,7 +99,7 @@ mass lower bound; all root and filtered norms below use this sequence.
     label sequence then yields the endpoint loss bound.
 \end{proof}
 
-\begin{theorem}[The accumulated selection numerator]
+\begin{lemma}[The accumulated selection numerator]
     \label{thm:arealaw-rough-selection-numerator}
     \lean{TNLean.PEPS.AreaLaw.Scan.roughSelectionBudget_le_of_endpoint_budget}
     \leanok
@@ -114,14 +114,14 @@ mass lower bound; all root and filtered norms below use this sequence.
     \end{align}
     In the scanner entropy bound,
     $T=C_{\rm ent}aK\,a^{1/4}\ell^{e_{\rm ent}}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:arealaw-rough-endpoint-remainder}
     Divide the endpoint and logarithmic error bounds by $k$ and expand.
 \end{proof}
 
-\begin{theorem}[Density at the same selected point]
+\begin{lemma}[Density at the same selected point]
     \label{thm:arealaw-selected-density-normalization}
     \lean{TNLean.PEPS.AreaLaw.Scan.selected_density_le_of_normalized_budget}
     \leanok
@@ -134,7 +134,7 @@ mass lower bound; all root and filtered norms below use this sequence.
         \label{eq:arealaw-selected-density-normalization}
     \end{align}
     Here $b=p_1-p_0$ for the selected parameter interval.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Dividing $Q\leq B/(\rho H b)$ by $KnD>0$ and substituting

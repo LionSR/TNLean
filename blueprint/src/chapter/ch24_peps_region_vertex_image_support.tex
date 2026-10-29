@@ -7,7 +7,7 @@
     the regional vector.
 \end{definition}
 
-\begin{theorem}[Site-image conditions from regional support]%
+\begin{lemma}[Site-image conditions from regional support]%
     \label{thm:peps_region_vertex_image_support}
     \lean{TNLean.PEPS.regionIncidentWeight_update,
         TNLean.PEPS.regionVertexPhysicalSlice_mem_localTensorMap_range,
@@ -21,7 +21,7 @@
     image conditions. No injectivity or positive-bond hypothesis is
     needed. This is a consequence of the finite contractions in
     \cite[Section IV.C.1]{Cirac2021Matrix}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Expand a regional vector as a sum over incident-edge
@@ -32,7 +32,7 @@
     does the slice. Apply this to a parent region containing each vertex.
 \end{proof}
 
-\begin{theorem}[Exact virtual reconstruction for a covering parent family]%
+\begin{lemma}[Exact virtual reconstruction for a covering parent family]%
     \label{thm:peps_covering_parent_virtual_image}
     \lean{TNLean.PEPS.vertexVirtualParentGroundSpace_map_globalVertexTensorMap_of_cover,
         TNLean.PEPS.ker_regionParentHamiltonian_eq_virtual_image_of_cover}
@@ -44,7 +44,7 @@
     image under the product site map of the common genuine virtual
     regional bond space. The kernel of any positive exact-kernel
     parent Hamiltonian with finitely many terms on these regions has the same description.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The regional conditions imply the site-image conditions by the

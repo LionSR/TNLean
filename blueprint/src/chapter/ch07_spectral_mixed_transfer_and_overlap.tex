@@ -98,32 +98,32 @@ Kadison--Schwarz rigidity (\cite[Theorem~5.3]{Wolf2012Quantum}) applied to a blo
 embedding of the eigenvector forces gauge-phase equivalence between two injective
 (or irreducible trace-preserving) tensors.
 
-\begin{theorem}[Eigenvalue bound]\label{thm:eigenvalue_bound}
+\begin{lemma}[Eigenvalue bound]\label{thm:eigenvalue_bound}
     \lean{Kraus.eigenvalue_norm_le_one}
     \leanok
     \uses{def:mixed_transfer}
     Let $A$ and $B$ be normalized MPS tensors. Every eigenvalue $\mu$ of
     $F_{AB}$ satisfies $|\mu|\leq1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:eigenvalue_bound_rect}
     The equal-bond-dimension case $D_1=D_2=D$ of
-    Theorem~\ref{thm:eigenvalue_bound_rect} yields $|\mu|\leq1$ using only the
+    Lemma~\ref{thm:eigenvalue_bound_rect} yields $|\mu|\leq1$ using only the
     trace-preserving normalization (\ref{eq:spec_tp_normalization}) and the
     general eigenvalue bound for trace-preserving Kraus maps, without appealing
     to Perron--Frobenius theory.
 \end{proof}
 
-\begin{theorem}[Rectangular eigenvalue bound]\label{thm:eigenvalue_bound_rect}
+\begin{lemma}[Rectangular eigenvalue bound]\label{thm:eigenvalue_bound_rect}
     \lean{Kraus.eigenvalue_norm_le_one₂}
     \leanok
     \uses{def:mixed_transfer_rect}
     Let $A$ and $B$ be normalized MPS tensors of bond dimensions
     $D_1\geq1$ and $D_2\geq1$. Every eigenvalue $\mu$ of
     $F_{AB}^{\mathrm{rect}}$ satisfies $|\mu|\leq1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Since $F_{AB}^{\mathrm{rect}}$ is the mixed Kraus map of the two matrix
@@ -142,7 +142,7 @@ embedding of the eigenvector forces gauge-phase equivalence between two injectiv
 \begin{proof}\leanok
     \uses{thm:eigenvalue_bound}
     The spectral radius is the maximum of $|\mu|$ over the eigenvalues, and
-    each satisfies $|\mu|\leq1$ by Theorem~\ref{thm:eigenvalue_bound}.
+    each satisfies $|\mu|\leq1$ by Lemma~\ref{thm:eigenvalue_bound}.
 \end{proof}
 
 \begin{theorem}[Spectral radius $\ge 1$ implies gauge-phase equivalence]%
@@ -242,13 +242,13 @@ embedding of the eigenvector forces gauge-phase equivalence between two injectiv
     in the canonical-form reduction of Chapter~\ref{ch:canonical}.
 \end{remark}
 
-\begin{theorem}[Strict transfer-operator gap]\label{thm:transfer_operator_gap}
+\begin{lemma}[Strict transfer-operator gap]\label{thm:transfer_operator_gap}
     \lean{MPSTensor.spectralRadius_mixedTransfer_lt_one}
     \leanok
     \uses{def:gauge_phase_equiv, def:injective, def:mixed_transfer}
     Let $A$ and $B$ be injective normalized MPS tensors that are not
     gauge-phase equivalent. Then $\rho_{\spec}(F_{AB})<1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spectral_radius_le_one, thm:modulus_one_gauge}
@@ -294,7 +294,7 @@ embedding of the eigenvector forces gauge-phase equivalence between two injectiv
     trivial, giving $D_1\leq D_2$.
 \end{proof}
 
-\begin{theorem}[Rectangular transfer-operator gap]\label{thm:transfer_operator_gap_rect}
+\begin{lemma}[Rectangular transfer-operator gap]\label{thm:transfer_operator_gap_rect}
     \lean{MPSTensor.mixedTransferSpectralRadius₂_lt_one_of_dim_ne}
     \leanok
     \uses{def:mixed_transfer_rect, def:injective}
@@ -302,12 +302,12 @@ embedding of the eigenvector forces gauge-phase equivalence between two injectiv
     $B$ an injective normalized tensor of bond dimension $D_2$, with
     $D_1\neq D_2$. Then
     $\rho_{\spec}(F_{AB}^{\mathrm{rect}})<1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:eigenvalue_bound_rect, thm:gauged_intertwining_core, thm:rectangular_intertwining_dim_eq}
-    Theorem~\ref{thm:eigenvalue_bound_rect} gives $|\mu|\leq1$ for every
+    Lemma~\ref{thm:eigenvalue_bound_rect} gives $|\mu|\leq1$ for every
     eigenvalue of $F_{AB}^{\mathrm{rect}}$. If its spectral radius were
     $1$, there would be a modulus-one eigenvector
     $X\in M_{D_1\times D_2}(\C)\setminus\{0\}$.
@@ -318,7 +318,7 @@ embedding of the eigenvector forces gauge-phase equivalence between two injectiv
     contradicting the hypothesis.
 \end{proof}
 
-\begin{theorem}[Rectangular transfer powers below unit spectral radius]%
+\begin{lemma}[Rectangular transfer powers below unit spectral radius]%
     \label{thm:rectangular_transfer_pow_zero}
     \lean{Kraus.mixedMapLM_pow_tendsto_zero_of_spectralRadius_lt_one}
     \leanok
@@ -333,7 +333,7 @@ embedding of the eigenvector forces gauge-phase equivalence between two injectiv
         (F_{AB}^{\mathrm{rect}})^n(X)\longrightarrow0.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
 
@@ -343,18 +343,18 @@ embedding of the eigenvector forces gauge-phase equivalence between two injectiv
     limit.
 \end{proof}
 
-\begin{theorem}[Rectangular overlap decay]\label{thm:overlap_decay_rect}
+\begin{lemma}[Rectangular overlap decay]\label{thm:overlap_decay_rect}
     \lean{MPSTensor.mpvOverlap_tendsto_zero_of_dim_ne}
     \leanok
     \uses{def:mpv_overlap, def:injective}
     If $D_1\neq D_2$ and both tensors are injective and normalized, then
     $O_{AB}(N)\to0$ as $N\to\infty$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:transfer_operator_gap_rect, thm:overlap_trace_rect}
     The gap $\rho_{\spec}(F_{AB}^{\mathrm{rect}})<1$ from
-    Theorem~\ref{thm:transfer_operator_gap_rect} and
+    Lemma~\ref{thm:transfer_operator_gap_rect} and
     Lemma~\cite[``Powers vanish below unit spectral radius'']{QICLean2026Blueprint} imply operator-norm convergence
     $(F_{AB}^{\mathrm{rect}})^N\to0$, so its operator trace tends to zero.
     The identity (\ref{eq:spectral_overlap_trace_rect}) therefore gives
@@ -366,7 +366,7 @@ embedding of the eigenvector forces gauge-phase equivalence between two injectiv
 The spectral radius on complex Banach algebras satisfies two standard
 identities used in the overlap and fixed-point analysis.
 
-\begin{theorem}[Spectral radius under nonzero scaling]%
+\begin{lemma}[Spectral radius under nonzero scaling]%
     \label{thm:spectral_radius_smul}
     \lean{spectralRadius_smul}
     \leanok
@@ -376,7 +376,7 @@ identities used in the overlap and fixed-point analysis.
         \rho_{\spec}(ca) & =|c|\,\rho_{\spec}(a).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Multiplication by $c$ sends the spectrum of $a$ onto the spectrum of
@@ -384,7 +384,7 @@ identities used in the overlap and fixed-point analysis.
     formula.
 \end{proof}
 
-\begin{theorem}[Spectral radius of a nonzero idempotent]%
+\begin{lemma}[Spectral radius of a nonzero idempotent]%
     \label{thm:idempotent_spectral_radius_one}
     \lean{IsIdempotentElem.spectralRadius_eq_one_of_ne_zero}
     \leanok
@@ -393,7 +393,7 @@ identities used in the overlap and fixed-point analysis.
         \rho_{\spec}(a) & =1.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The identity $a^2=a$ gives $a(a-1)=0$. Since $a\ne0$, the element $a-1$
@@ -421,20 +421,20 @@ proved in Section~\ref{sec:app_spectral_decay}.
     yields $a=0$.
 \end{proof}
 
-\begin{theorem}[Transfer powers converge to zero]\label{thm:transfer_pow_zero}
+\begin{lemma}[Transfer powers converge to zero]\label{thm:transfer_pow_zero}
     \lean{MPSTensor.mixedTransfer_pow_tendsto_zero}
     \leanok
     \uses{def:mixed_transfer, def:gauge_phase_equiv, def:injective}
     Let $A$ and $B$ be injective normalized tensors that are not gauge-phase
     equivalent. Then $F_{AB}^n(X)\to0$ for every $X\in\MN{D}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:transfer_operator_gap, thm:rectangular_transfer_pow_zero}
     The gap $\rho_{\spec}(F_{AB})<1$ from
-    Theorem~\ref{thm:transfer_operator_gap} and the equal-bond-dimension case
-    of Theorem~\ref{thm:rectangular_transfer_pow_zero} give
+    Lemma~\ref{thm:transfer_operator_gap} and the equal-bond-dimension case
+    of Lemma~\ref{thm:rectangular_transfer_pow_zero} give
     $F_{AB}^n(X)\to0$ for every $X$.
 \end{proof}
 
@@ -459,7 +459,7 @@ proved in Section~\ref{sec:app_spectral_decay}.
         =\sum_{p,q}(F_{AB}^N(E_{pq}))_{pq}.
         \notag
     \end{align}
-    Theorem~\ref{thm:transfer_pow_zero} makes every summand tend to zero.
+    Lemma~\ref{thm:transfer_pow_zero} makes every summand tend to zero.
     Since the sum is finite, $O_{AB}(N)\to0$.
 \end{proof}
 
@@ -477,7 +477,7 @@ Wolf~\cite[Section~6.2]{Wolf2012Quantum}. In place of the full matrix algebra
 span, the argument uses the strict positive definiteness of the Perron--Frobenius
 fixed point.
 
-\begin{theorem}[Gauge-equivalence from irreducible-TP spectral radius]
+\begin{lemma}[Gauge-equivalence from irreducible-TP spectral radius]
     \label{thm:modulus_one_gauge_irr_tp}
     \lean{MPSTensor.modulus_one_eigenvalue_implies_gauge_of_irreducible_TP,
         MPSTensor.gaugePhaseEquiv_of_krausGaugePhaseEquiv}
@@ -486,7 +486,7 @@ fixed point.
     Let $A$ and $B$ be irreducible trace-preserving normalized MPS tensors
     of bond dimension~$D$. If $\rho_{\spec}(F_{AB})\geq1$, then $A$ and $B$
     are gauge-phase equivalent.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -497,7 +497,7 @@ fixed point.
     Kadison--Schwarz equality proceed as before, making the
     relevant positive products of the gauged intertwiner nonzero
     positive semidefinite fixed points. Under irreducibility,
-    Theorem~\ref{thm:transfer_psd_fp_pd_irred} makes these fixed points positive
+    Lemma~\ref{thm:transfer_psd_fp_pd_irred} makes these fixed points positive
     definite, so the gauged intertwiner is invertible.
     Lemma~\ref{thm:gauged_intertwining_core} gives
     (\ref{eq:spectral_gauged_intertwining}), and
@@ -505,7 +505,7 @@ fixed point.
     equivalence.
 \end{proof}
 
-\begin{theorem}[Strict transfer-operator gap (irreducible-TP)]%
+\begin{lemma}[Strict transfer-operator gap (irreducible-TP)]%
     \label{thm:transfer_operator_gap_irr_tp}
     \lean{MPSTensor.spectralRadius_mixedTransfer_lt_one_of_irreducible_TP}
     \leanok
@@ -513,16 +513,16 @@ fixed point.
     Let $A$ and $B$ be irreducible trace-preserving normalized MPS tensors
     of the same bond dimension that are not gauge-phase equivalent. Then
     $\rho_{\spec}(F_{AB})<1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spectral_radius_le_one, thm:modulus_one_gauge_irr_tp}
     Lemma~\ref{thm:spectral_radius_le_one} gives
     $\rho_{\spec}(F_{AB})\leq1$, while the contrapositive of
-    Theorem~\ref{thm:modulus_one_gauge_irr_tp} excludes equality.
+    Lemma~\ref{thm:modulus_one_gauge_irr_tp} excludes equality.
 \end{proof}
 
-\begin{theorem}[Overlap decay (irreducible-TP)]%
+\begin{lemma}[Overlap decay (irreducible-TP)]%
     \label{thm:overlap_decay_irr_tp}
     \lean{MPSTensor.mpvOverlap_tendsto_zero_of_irreducible_TP}
     \leanok
@@ -530,16 +530,16 @@ fixed point.
     Let $A$ and $B$ be irreducible trace-preserving normalized tensors of
     the same bond dimension that are not gauge-phase equivalent. Then
     $O_{AB}(N)\to0$ as $N\to\infty$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:transfer_operator_gap_irr_tp, thm:overlap_trace}
-    Theorem~\ref{thm:transfer_operator_gap_irr_tp} gives
+    Lemma~\ref{thm:transfer_operator_gap_irr_tp} gives
     $\rho_{\spec}(F_{AB})<1$, so $F_{AB}^N\to0$. The overlap--trace identity
     (\ref{eq:spectral_overlap_trace}) gives $O_{AB}(N)\to0$.
 \end{proof}
 
-\begin{theorem}[Rectangular transfer-operator gap (irreducible-TP)]%
+\begin{lemma}[Rectangular transfer-operator gap (irreducible-TP)]%
     \label{thm:transfer_operator_gap_rect_irr_tp}
     \lean{MPSTensor.mixedTransferSpectralRadius₂_lt_one_of_dim_ne_of_irreducible_TP}
     \leanok
@@ -547,7 +547,7 @@ fixed point.
     Let $A$ and $B$ be irreducible trace-preserving normalized tensors of
     bond dimensions $D_1$ and $D_2$, respectively, with $D_1\neq D_2$.
     Then $\rho_{\spec}(F_{AB}^{\mathrm{rect}})<1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -557,24 +557,24 @@ fixed point.
     $B$ separately to unital families $A'$ and $B'$ produces a nonzero gauged
     intertwiner $X'$. The matrix $X'X'^\dagger$ is a nonzero positive
     semidefinite fixed point of the appropriate transfer map on $\MN{D_1}$, so
-    Theorem~\ref{thm:transfer_psd_fp_pd_irred} makes it positive definite; thus
+    Lemma~\ref{thm:transfer_psd_fp_pd_irred} makes it positive definite; thus
     $X'$ has full row rank and $D_1\leq D_2$. Similarly, $X'^\dagger X'$ is
     positive definite, so $X'$ has full column rank and $D_2\leq D_1$,
     forcing $D_1=D_2$, a contradiction.
 \end{proof}
 
-\begin{theorem}[Rectangular overlap decay (irreducible-TP)]%
+\begin{lemma}[Rectangular overlap decay (irreducible-TP)]%
     \label{thm:overlap_decay_rect_irr_tp}
     \lean{MPSTensor.mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP}
     \leanok
     \uses{def:mpv_overlap, def:irreducible_tensor}
     If $D_1\neq D_2$ and both tensors are irreducible and trace-preserving
     normalized, then $O_{AB}(N)\to0$ as $N\to\infty$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:transfer_operator_gap_rect_irr_tp, thm:overlap_trace_rect}
-    Theorem~\ref{thm:transfer_operator_gap_rect_irr_tp} gives
+    Lemma~\ref{thm:transfer_operator_gap_rect_irr_tp} gives
     $\rho_{\spec}(F_{AB}^{\mathrm{rect}})<1$, so
     $(F_{AB}^{\mathrm{rect}})^N\to0$. The rectangular overlap--trace identity
     (\ref{eq:spectral_overlap_trace_rect}) gives $O_{AB}(N)\to0$.
@@ -604,7 +604,7 @@ for their mixed transfer operator, establishing gauge-phase equivalence.
     zero, contradicting the hypothesis.
 \end{proof}
 
-\begin{theorem}[Gauge-phase equivalence from unit-modulus overlap]%
+\begin{lemma}[Gauge-phase equivalence from unit-modulus overlap]%
     \label{thm:nt_overlap_norm_one_gauge}
     \lean{MPSTensor.gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP}
     \leanok
@@ -616,12 +616,12 @@ for their mixed transfer operator, establishing gauge-phase equivalence.
     gauge-phase equivalent.
     % Same-bond-dimension case of \cite[Lemma~equalMPS]{Cirac2016MPDO_arXiv};
     % proportionality of MPVs is not assumed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:overlap_norm_one_implies_spectral_radius_ge_one, thm:modulus_one_gauge_irr_tp}
     By Lemma~\ref{lem:overlap_norm_one_implies_spectral_radius_ge_one}, the
     mixed-transfer spectral radius is at least~$1$, and
-    Theorem~\ref{thm:modulus_one_gauge_irr_tp} then gives gauge-phase
+    Lemma~\ref{thm:modulus_one_gauge_irr_tp} then gives gauge-phase
     equivalence.
 \end{proof}

@@ -33,7 +33,7 @@ This local construction appears in
 % and prop:two-families, lines 299--310;
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 
-\begin{theorem}[Closed square centered at a point]
+\begin{lemma}[Closed square centered at a point]
     \label{thm:area_law_centered_dyadic_cell_ball}
     \lean{TNLean.PEPS.AreaLaw.Geometry.closure_centered_dyadicCell_eq_closedBall}
     \leanok
@@ -48,7 +48,7 @@ This local construction appears in
     \end{align}
     This is the centered square used in the local fan construction of
     \cite[Section~11]{OpenAI2026AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_dyadic_closures}
     The closure of $Q$ is the product of the closed coordinate intervals
@@ -60,7 +60,7 @@ This local construction appears in
 % Source: 10-geometry.tex, prop:two-families, lines 201--209;
 % geometry:initial-stars, lines 333--370, especially 352--370.
 
-\begin{theorem}[Closed half-radius scale]
+\begin{lemma}[Closed half-radius scale]
     \label{thm:area_law_initial_closed_half_radius}
     \lean{TNLean.PEPS.AreaLaw.Geometry.fineScaleIndex_closed_half_radius_eq}
     \leanok
@@ -78,7 +78,7 @@ This local construction appears in
     \end{align}
     This is the scale relation for the half-radius square in the initial-star
     geometry of \cite[Section~11]{OpenAI2026AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:area_law_fine_belt_scales,thm:area_law_adjacent_fine_meshes}
     Since $k\ge50{,}000{,}000$, we have $\ell_k\ge5$ and
@@ -86,7 +86,7 @@ This local construction appears in
     Dividing by $128$ proves~(\ref{eq:area_law_closed_half_radius}).
 \end{proof}
 
-\begin{theorem}[Unique sector assignment and closed restriction]
+\begin{lemma}[Unique sector assignment and closed restriction]
     \label{thm:area_law_actual_sector_assignment}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_unique_initialRegion_sector_assignment}
     \leanok
@@ -104,7 +104,7 @@ This local construction appears in
         X_i^0\cap\overline B_\infty(v,r)
          & =\bigcup_{\substack{s\in\mathcal J \\\sigma(s)=i}}P_s^{\rm S}.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_belt_marks_closed_cell,
         thm:area_law_fine_cell_containment,thm:area_law_fine_belt_scales,
@@ -157,5 +157,5 @@ This local construction appears in
     \uses{thm:area_law_actual_sector_assignment}
     The initial sector assignment is the unique map
     $\sigma:\mathcal J\to\mathcal I$ from
-    Theorem~\ref{thm:area_law_actual_sector_assignment}.
+    Lemma~\ref{thm:area_law_actual_sector_assignment}.
 \end{definition}
