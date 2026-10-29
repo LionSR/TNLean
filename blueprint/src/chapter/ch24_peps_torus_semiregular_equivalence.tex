@@ -19,7 +19,7 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[Supported overlaps under the composed bond transformation]%
+\begin{lemma}[Supported overlaps under the composed bond transformation]%
     \label{thm:peps_torus_semiregular_supported_overlap}
     \lean{TNLean.PEPS.torusSemiRegularBondMap_dotProduct}
     \leanok
@@ -33,14 +33,14 @@
         \langle\mathcal T_Q\psi,\mathcal T_Q\phi\rangle
         =\langle\psi,\phi\rangle.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since the product of $C_Q$ is an isometry, removing it from the overlap
     and applying overlap preservation for the product of $F$ on the
     matching-sector support gives the identity.
 \end{proof}
 
-\begin{theorem}[The weighted torus state under a chosen Fourier intertwiner]%
+\begin{lemma}[The weighted torus state under a chosen Fourier intertwiner]%
     \label{thm:peps_torus_semiregular_chosen_fourier_state}
     \lean{TNLean.PEPS.torusSemiRegularBondMap_blockFourthRootWeight}
     \leanok
@@ -66,7 +66,7 @@
     The representation matrices and Fourier intertwiner are explicit
     hypotheses of this auxiliary statement of the physical transformation
     in \cite[Section~7]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The weighted contraction has matching-sector support, and
     the product of $F$ sends it to the averaging-site state of $L$.
@@ -75,7 +75,7 @@
     the stated transformation.
 \end{proof}
 
-\begin{theorem}[An ambient physical isometry for the chosen block construction]%
+\begin{lemma}[An ambient physical isometry for the chosen block construction]%
     \label{thm:peps_torus_semiregular_isometric_extension}
     \lean{TNLean.PEPS.exists_isometric_torusSemiRegularBondMap}
     \leanok
@@ -94,7 +94,7 @@
                                        & =\langle\psi,\phi\rangle.
     \end{align}
     The overlap identity holds for all vectors in the original physical space.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Extending $F$ to an isometry $T$ satisfying $TE_V=FE_V$, multiplicativity
     of product matrices shows that their products agree on
@@ -103,7 +103,7 @@
     both physical product maps in $\mathcal U$ are isometries.
 \end{proof}
 
-\begin{theorem}[Finite-torus equivalence from a multiplicity-one semi-regular representation]%
+\begin{lemma}[Finite-torus equivalence from a multiplicity-one semi-regular representation]%
     \label{thm:peps_torus_multiplicity_one_semiregular_equivalence}
     \lean{TNLean.PEPS.exists_isometric_multiplicityOneSemiRegular_torusState}
     \leanok
@@ -129,7 +129,7 @@
     This is the finite-torus realization of the local physical equivalence
     in \cite[Section~7]{Schuch2010PEPS}; the representation and Fourier data
     are conclusions rather than additional hypotheses.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     From the orthonormal Fourier basis of the regular representation, with
     each irreducible repeated by its dimension, the associated single-copy

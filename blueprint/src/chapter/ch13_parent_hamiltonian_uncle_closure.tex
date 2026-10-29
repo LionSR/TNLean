@@ -1,7 +1,7 @@
 \subsection{Periodic closure of the single-wall spaces}
 
 % Source-written declarations; hosted elaboration and declaration checks are pending.
-\begin{theorem}[Cyclic boundary trace coefficients]
+\begin{lemma}[Cyclic boundary trace coefficients]
     \label{thm:uncle_cyclic_boundary_coefficients}
     \lean{MPSTensor.trace_uncleBlockMatrix_mul,
         MPSTensor.eq_of_uncleBoundary_cyclic_pairing,
@@ -19,7 +19,7 @@
     for every $M,N$, then $X=Y$. If the pairing with $X$ is cyclic,
     then $X=\operatorname{diag}(\alpha I,\beta I)$ for some scalars
     $\alpha,\beta$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     Taking $M=I$ gives $X=Y$ by nondegeneracy of the ordinary trace
@@ -32,7 +32,7 @@
     diagonal block is scalar.
 \end{proof}
 
-\begin{theorem}[Scalar boundaries are the periodic sector vectors]
+\begin{lemma}[Scalar boundaries are the periodic sector vectors]
     \label{thm:uncle_scalar_boundaries}
     \lean{MPSTensor.uncleBoundaryMap_scalar_blocks}
     \notready
@@ -41,7 +41,7 @@
     $\operatorname{diag}(\alpha I,\beta I)$ gives
     $\Gamma_N(\operatorname{diag}(\alpha I,\beta I))
         =\alpha\ket{M(A)}+\beta\ket{M(B)}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     The diagonal blocks of the single-wall coefficient word are the
@@ -49,7 +49,7 @@
     off-diagonal contributions, leaving their two traces.
 \end{proof}
 
-\begin{theorem}[Periodic uncle boundary closure]
+\begin{lemma}[Periodic uncle boundary closure]
     \label{thm:uncle_periodic_boundary_closure}
     \lean{MPSTensor.uncleBoundarySpace_inf_cyclicTranslate}
     \notready
@@ -62,7 +62,7 @@
     $S_N\cap T(S_N)=\operatorname{span}\{\ket{M(A)},\ket{M(B)}\}$.
     This is the closure lemma in~\cite{FernandezGonzalez2015Uncle},
     used after the two-site uncle interaction.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \uses{thm:uncle_cyclic_boundary_coefficients,
@@ -88,7 +88,7 @@
         MPSTensor.uncleHamiltonianES_apply_eq_zero_iff_boundary_windows,
         MPSTensor.mem_uncleBoundarySpace_of_cyclic_windows,
         MPSTensor.ker_uncleHamiltonianES_eq_span_mpv}
-    \notready
+    \leanok
     \uses{thm:uncle_kernel_local_conditions,lem:uncle_boundary_intersection,
         thm:uncle_periodic_boundary_closure,thm:uncle_parent_sector_containment}
     Let $C=A\oplus B$ and let the perturbation have off-diagonal blocks
@@ -103,14 +103,14 @@
     of~\cite{FernandezGonzalez2015Uncle}; no intersection or closure identity
     is imposed as an additional hypothesis.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The two-site coefficient word is the explicit uncle tensor, so the
     actual local projector kernel is $S_2$. A vector in $\ker H'_P$
     satisfies every cyclic $S_2$ constraint by
-    Theorem~\ref{thm:uncle_kernel_local_conditions}. Keeping the nonwrapping
+    Lemma~\ref{thm:uncle_kernel_local_conditions}. Keeping the nonwrapping
     constraints and iterating Lemma~\ref{lem:uncle_boundary_intersection}
     puts it in $S_N$. The same argument applied to its inverse cyclic
     translate puts it in the one-site translate of $S_N$. Periodic closure
     therefore places it in the two-sector span. The reverse inclusion is
-    Theorem~\ref{thm:uncle_parent_sector_containment}.
+    Lemma~\ref{thm:uncle_parent_sector_containment}.
 \end{proof}

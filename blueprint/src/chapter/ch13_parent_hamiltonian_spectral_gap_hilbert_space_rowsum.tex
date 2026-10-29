@@ -18,14 +18,14 @@
     $\ell^2(\{0,\ldots,d-1\}^N)$.
 \end{definition}
 
-\begin{theorem}[Kernel under the canonical $\ell^2$ identification]
+\begin{lemma}[Kernel under the canonical $\ell^2$ identification]
     \label{thm:parent_ground_space_es_kernel}
     \lean{MPSTensor.parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES}
     \leanok
     Under the canonical $\ell^2$ identification of the $N$-site state space, the
     parent ground space is exactly the kernel of the corresponding
     parent Hamiltonian.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -188,7 +188,7 @@
     local projector with membership in $G_L^{\mathrm{ES}}(A)$.
 \end{proof}
 
-\begin{theorem}[End-site and cyclic coordinate identifications]
+\begin{lemma}[End-site and cyclic coordinate identifications]
     \label{thm:adjacent_local_term_coordinate_identifications}
     \lean{MPSTensor.restrictLast_eq_cyclicRestrictES_zero,
         MPSTensor.tailRestrictₗ_one_eq_restrictFirst,
@@ -216,7 +216,7 @@
          & =\iota_L^{-1}R^{\mathrm{cyc}}_{1,\tau}v.
     \end{align}
     No hypothesis on the physical or virtual dimension is required.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -229,7 +229,7 @@
     coordinates.
 \end{proof}
 
-\begin{theorem}[Adjacent three-site kernels and excitation projections]
+\begin{lemma}[Adjacent three-site kernels and excitation projections]
     \label{thm:adjacent_two_site_local_terms_open_chain}
     \lean{MPSTensor.ker_localTermES_two_three_zero,
         MPSTensor.ker_localTermES_two_three_one,
@@ -250,7 +250,7 @@
         P_{\mathcal V_{1,2}(B)^\perp} & =h_1.
     \end{align}
     These identities require neither injectivity nor a nonzero bond dimension.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -264,7 +264,7 @@
     orthogonal projector with a prescribed range gives the final two identities.
 \end{proof}
 
-\begin{theorem}[Zero energy gives the cyclic local constraints]
+\begin{lemma}[Zero energy gives the cyclic local constraints]
     \label{thm:parent_hamiltonian_kernel_le_chain_ground_space}
     \lean{MPSTensor.ker_parentHamiltonian_le_chainGroundSpace}
     \leanok
@@ -273,7 +273,7 @@
     finite periodic parent Hamiltonian, $H_N(A,L)\psi=0$, then every cyclic
     length-$L$ restriction of $\psi$ lies in the local MPS ground space.
     Equivalently, $\ker H_N(A,L)\subseteq G_L^{(N)}(A)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -327,7 +327,7 @@
     $G_{L,\mathrm{ES}}^{(N)}(A)=e_N^{-1}G_L^{(N)}(A)$.
 \end{definition}
 
-\begin{theorem}[The finite-volume kernel is the cyclic constraint space]
+\begin{lemma}[The finite-volume kernel is the cyclic constraint space]
     \label{thm:parent_hamiltonian_kernel_eq_chain_ground_space}
     \lean{MPSTensor.ker_parentHamiltonian_eq_chainGroundSpace}
     \lean{MPSTensor.parentHamiltonianGroundSpaceES_eq_chainGroundSpaceES}
@@ -339,19 +339,19 @@
     $\mathcal K_N^{\mathrm{ES}}(A,L)=e_N^{-1}G_L^{(N)}(A)$, where
     $\mathcal K_N^{\mathrm{ES}}(A,L)$ is the zero-energy space of
     $H_{N,L}^{\mathrm{ES}}(A)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     The inclusion $\ker H_N(A,L)\subseteq G_L^{(N)}(A)$ is
-    Theorem~\ref{thm:parent_hamiltonian_kernel_le_chain_ground_space}. For
+    Lemma~\ref{thm:parent_hamiltonian_kernel_le_chain_ground_space}. For
     the converse, a vector in $G_L^{(N)}(A)$ satisfies all local equations
     $h_i(A,L)\psi=0$. Therefore
     $H_N(A,L)\psi=\sum_i h_i(A,L)\psi=0$.
     The Hilbert-space statement is the same equality under $e_N^{-1}$.
 \end{proof}
 
-\begin{theorem}[Intersection property for two adjacent local kernels]
+\begin{lemma}[Intersection property for two adjacent local kernels]
     \label{thm:adjacent_local_kernels_ground_space_es}
     \lean{MPSTensor.mem_groundSpaceES_succ_of_adjacent_localTermES_eq_zero}
     \lean{MPSTensor.adjacent_localTermES_eq_zero_of_mem_groundSpaceES_succ}
@@ -366,7 +366,7 @@
         \quad & \Longleftrightarrow\quad
         v\in G_{L+1}^{\mathrm{ES}}(A). \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -374,7 +374,7 @@
     Lemma~\ref{lem:local_term_es_kernel_restrictions} translates the two local
     kernel assumptions into the left and right $L$-site ground conditions. The
     open-chain intersection property,
-    Theorem~\ref{thm:ground_space_intersection}, then grows back the shared
+    Lemma~\ref{thm:ground_space_intersection}, then grows back the shared
     $(L-1)$-site overlap to the $(L+1)$-site ground space. The converse uses
     the forward restriction lemmas for ground-space vectors and the same
     kernel--restriction characterization.
@@ -475,7 +475,7 @@
     \leanok
     The Hilbert-space Hamiltonian is positive by
     Lemma~\ref{lem:transported_es_positive}, and its Hilbert-space ground
-    space is its kernel by Theorem~\ref{thm:parent_ground_space_es_kernel}.
+    space is its kernel by Lemma~\ref{thm:parent_ground_space_es_kernel}.
     Therefore the abstract spectral-theorem conversion of
     Lemma~\ref{lem:quadratic_form_to_norm_bound} applies directly. The
     explicit constant is positive because $L>1$ implies $4L>0$.
@@ -496,7 +496,7 @@
     $y\in V\cap(U\cap V)^\perp$.
 \end{definition}
 
-\begin{theorem}[Projector defect bounds the Friedrichs overlap]
+\begin{lemma}[Projector defect bounds the Friedrichs overlap]
     \label{thm:projector_defect_to_friedrichs}
     \lean{Submodule.isFriedrichsBound_of_norm_starProjection_comp_sub_inf_starProjection_le}
     \leanok
@@ -507,7 +507,7 @@
         \|P_UP_V-P_{U\cap V}\| & \le\eta, \notag
     \end{align}
     then the Friedrichs overlap of $U$ and $V$ is at most $\eta$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

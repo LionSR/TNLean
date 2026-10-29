@@ -12,7 +12,7 @@
     $\mathfrak G_2$ and $\mathfrak G_3$ for these reindexings of matrices.
 \end{definition}
 
-\begin{theorem}[Global direct-sum form of the sector closures]
+\begin{lemma}[Global direct-sum form of the sector closures]
     \label{thm:mpdo_global_sector_closure_decomposition}
     \lean{MPOTensor.PhysicalSectorFactorization.twoSiteGlobalClosure_eq,
         MPOTensor.PhysicalSectorFactorization.threeSiteGlobalClosure_eq}
@@ -30,7 +30,7 @@
         \notag
     \end{align}
     Every matrix entry between distinct sector tuples vanishes.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -70,7 +70,7 @@
     carry the operator $\eta_{k,h}$.
 \end{definition}
 
-\begin{theorem}[Positivity of the two-site sector bond]
+\begin{lemma}[Positivity of the two-site sector bond]
     \label{thm:mpdo_physical_sector_two_site_bond_pos}
     \lean{MPOTensor.PhysicalSectorFactorization.sectorCoordinateBond_pos}
     \leanok
@@ -79,7 +79,7 @@
     \cite[Appendix~C.2, lines~1446--1450]{Cirac2016MPDO_arXiv}, namely that
     $\eta_{k,h}$ is positive semidefinite for every pair of sectors, the sector
     bond $B_{\mathrm{sector}}$ is positive semidefinite.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -111,7 +111,7 @@
     $\{0,1\}\to\{0,\ldots,d-1\}$.
 \end{definition}
 
-\begin{theorem}[Two-site translation identities]
+\begin{lemma}[Two-site translation identities]
     \label{thm:mpdo_physical_two_site_translation_identities}
     \lean{MPOTensor.PhysicalSectorFactorization.reindex_embedLocalOperator_two_zero,
         MPOTensor.PhysicalSectorFactorization.reindex_embedLocalOperator_two_one}
@@ -122,18 +122,18 @@
     $B_{01}=B_{\mathrm{physical}}$ and
     $B_{10}=S B_{\mathrm{physical}}S^{-1}$, where
     $S(x\otimes y)=y\otimes x$ exchanges the two physical factors.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:mpdo_physical_two_site_bond, thm:mpdo_generic_two_site_translation_identities}
     Since the pair-coordinate matrix of $B_{\mathrm{physical}}$ is the operator
     in Definition~\ref{def:mpdo_physical_two_site_bond},
-    Theorem~\ref{thm:mpdo_generic_two_site_translation_identities} applied to
+    Lemma~\ref{thm:mpdo_generic_two_site_translation_identities} applied to
     $B_{\mathrm{physical}}$ gives the stated formulas.
 \end{proof}
 
-\begin{theorem}[Positivity of the physical two-site bond]
+\begin{lemma}[Positivity of the physical two-site bond]
     \label{thm:mpdo_physical_two_site_bond_pos}
     \lean{MPOTensor.PhysicalSectorFactorization.physicalPairBond_pos,
         MPOTensor.PhysicalSectorFactorization.physicalBond_pos}
@@ -142,7 +142,7 @@
     Suppose that $\eta_{k,h}$ is positive semidefinite for every pair of
     sectors. Then $B_{\mathrm{physical}}$ is positive semidefinite, both with
     pair indices and with two-site configuration indices.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -171,7 +171,7 @@
     canonical associator.
 \end{definition}
 
-\begin{theorem}[Three-site translation identities]
+\begin{lemma}[Three-site translation identities]
     \label{thm:mpdo_three_site_pair_lifts}
     \lean{MPOTensor.PhysicalSectorFactorization.reindex_embedLocalOperator_zero,
         MPOTensor.PhysicalSectorFactorization.reindex_embedLocalOperator_one}
@@ -182,7 +182,7 @@
     sites $0$ and $1$ are respectively
     $(B_{\mathrm{physical}})_{01}=B_{01}$ and
     $(B_{\mathrm{physical}})_{12}=B_{12}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -192,7 +192,7 @@
     These are precisely the matrix entries of $B_{01}$ and $B_{12}$.
 \end{proof}
 
-\begin{theorem}[Commutativity on a fixed sector triple]
+\begin{lemma}[Commutativity on a fixed sector triple]
     \label{thm:mpdo_fixed_sector_adjacent_bonds_comm}
     \lean{MPOTensor.PhysicalSectorFactorization.adjacentSectorBonds_comm}
     \leanok
@@ -214,7 +214,7 @@
     {Cirac2016MPDO_arXiv}, the two operators commute:
     $C_{01}^{k,l,h}C_{12}^{k,l,h}
         =C_{12}^{k,l,h}C_{01}^{k,l,h}$.
-\end{theorem}
+\end{lemma}
 
 On the sector triple $(k,l,h)$, the two operators act on distinct neighboring
 factors, while the outer factors $B_k^L$ and $B_h^R$ remain unchanged. Their
@@ -229,7 +229,7 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
     follows from the mixed-product identity for tensor products.
 \end{proof}
 
-\begin{theorem}[Commutativity of adjacent physical bonds]
+\begin{lemma}[Commutativity of adjacent physical bonds]
     \label{thm:mpdo_physical_adjacent_bonds_comm}
     \lean{MPOTensor.PhysicalSectorFactorization.physicalBond_zero_one_comm}
     \leanok
@@ -243,27 +243,27 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
          & =(B_{\mathrm{physical}})_{12}(B_{\mathrm{physical}})_{01}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     Regrouping the three-site sector coordinates into the direct sum over
     triples $(k,l,h)$ makes the two bonds block diagonal with blocks
     $C_{01}^{k,l,h}$ and $C_{12}^{k,l,h}$, which commute by
-    Theorem~\ref{thm:mpdo_fixed_sector_adjacent_bonds_comm}. Conjugating by the
+    Lemma~\ref{thm:mpdo_fixed_sector_adjacent_bonds_comm}. Conjugating by the
     three-fold physical coordinate unitary preserves the equality, and the
     three-site translation identities then give the displayed physical
     commutator.
 \end{proof}
 
-\begin{theorem}[Agreement outside a cyclic window]
+\begin{lemma}[Agreement outside a cyclic window]
     \label{thm:mpdo_agreement_outside_cyclic_window}
     \lean{MPOTensor.agreesOutsideWindow_iff}
     \leanok
     Let $W_i^L=\{i,i+1,\ldots,i+L-1\}$ be a cyclic window of length
     $L\leq N$. Two configurations agree outside $W_i^L$ precisely when their
     values agree at every site not contained in $W_i^L$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Replacing the entries in $W_i^L$ does not affect any complementary site.
@@ -272,14 +272,14 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
     second configuration.
 \end{proof}
 
-\begin{theorem}[Multiplicativity of cyclic local embeddings]
+\begin{lemma}[Multiplicativity of cyclic local embeddings]
     \label{thm:mpdo_cyclic_local_embedding_mul}
     \lean{MPOTensor.embedLocalOperator_mul}
     \leanok
     Let $E_i^L$ embed an operator on $L$ consecutive sites into an
     $N$-site periodic chain at the cyclic window beginning at $i$. Then
     $E_i^L(BC)=E_i^L(B)E_i^L(C)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_cyclic_local_embedding_reindex}
@@ -288,7 +288,7 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
     $B\otimes\Id$, so the assertion follows from the mixed-product identity.
 \end{proof}
 
-\begin{theorem}[Commutativity on disjoint cyclic windows]
+\begin{lemma}[Commutativity on disjoint cyclic windows]
     \label{thm:mpdo_disjoint_cyclic_local_embeddings_comm}
     \lean{MPOTensor.embedLocalOperator_commute_of_not_cyclicWindowsOverlap}
     \leanok
@@ -296,7 +296,7 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
     Let $L\leq N$, and let $W_i^L$ and $W_j^L$ be disjoint cyclic windows in
     an $N$-site periodic chain. For arbitrary operators $B$ and $C$ on $L$
     sites, $E_i^L(B)E_j^L(C)=E_j^L(C)E_i^L(B)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Evaluating both sides on a chain amplitude expresses the first order of
@@ -306,7 +306,7 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
     the two finite sums gives the reverse order.
 \end{proof}
 
-\begin{theorem}[Adjacent physical bonds on periodic chains]
+\begin{lemma}[Adjacent physical bonds on periodic chains]
     \label{thm:mpdo_periodic_adjacent_physical_bonds_comm}
     \lean{MPOTensor.PhysicalSectorFactorization.physicalBond_adjacent_comm}
     \leanok
@@ -325,7 +325,7 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
         (B_{\mathrm{physical}})_{i,i+1}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -333,10 +333,10 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
     identifies them with the bonds beginning at sites $0$ and $1$,
     respectively. Since embedding an operator into a fixed cyclic window
     preserves products, the assertion follows from
-    Theorem~\ref{thm:mpdo_physical_adjacent_bonds_comm}.
+    Lemma~\ref{thm:mpdo_physical_adjacent_bonds_comm}.
 \end{proof}
 
-\begin{theorem}[Commutativity of the crossed two-site translates]
+\begin{lemma}[Commutativity of the crossed two-site translates]
     \label{thm:mpdo_physical_two_site_crossed_bonds_comm}
     \lean{MPOTensor.PhysicalSectorFactorization.physicalBond_two_zero_one_comm}
     \leanok
@@ -346,7 +346,7 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
     $(0,1)$ and $(1,0)$, yet still satisfy the translated-bond commutativity of
     \cite[Appendix~C.2, Proposition~C.8]{Cirac2016MPDO_arXiv}:
     $B_{01}B_{10}=B_{10}B_{01}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -362,7 +362,7 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
     by the two-fold physical coordinate unitary proves the claim.
 \end{proof}
 
-\begin{theorem}[Disjoint physical bonds on periodic chains]
+\begin{lemma}[Disjoint physical bonds on periodic chains]
     \label{thm:mpdo_periodic_disjoint_physical_bonds_comm}
     \lean{MPOTensor.PhysicalSectorFactorization.physicalBond_disjoint_comm}
     \leanok
@@ -376,16 +376,16 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
         (B_{\mathrm{physical}})_{j,j+1}
         =(B_{\mathrm{physical}})_{j,j+1}
         (B_{\mathrm{physical}})_{i,i+1}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    This is Theorem~\ref{thm:mpdo_disjoint_cyclic_local_embeddings_comm}
+    This is Lemma~\ref{thm:mpdo_disjoint_cyclic_local_embeddings_comm}
     applied to the same physical bond operator in both windows. No positivity
     or additional property of the sector factorization is needed for this
     locality step.
 \end{proof}
 
-\begin{theorem}[Pairwise commutativity of the physical bonds]
+\begin{lemma}[Pairwise commutativity of the physical bonds]
     \label{thm:mpdo_periodic_pairwise_physical_bonds_comm}
     \lean{MPOTensor.PhysicalSectorFactorization.physicalBond_pairwise_comm}
     \leanok
@@ -403,23 +403,23 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
         (B_{\mathrm{physical}})_{i,i+1}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     For $N=2$, equal translates commute trivially, while the two distinct
     translates commute by
-    Theorem~\ref{thm:mpdo_physical_two_site_crossed_bonds_comm}. For $N\geq3$,
+    Lemma~\ref{thm:mpdo_physical_two_site_crossed_bonds_comm}. For $N\geq3$,
     if the two cyclic supports are disjoint,
-    Theorem~\ref{thm:mpdo_periodic_disjoint_physical_bonds_comm} applies.
+    Lemma~\ref{thm:mpdo_periodic_disjoint_physical_bonds_comm} applies.
     Otherwise, Lemma~\ref{lem:two_site_cyclic_window_overlap_cases} shows that
     the two starting sites either coincide or are cyclic neighbors; the
     coincident case is immediate, and the two neighboring orientations follow
-    from Theorem~\ref{thm:mpdo_periodic_adjacent_physical_bonds_comm} and its
+    from Lemma~\ref{thm:mpdo_periodic_adjacent_physical_bonds_comm} and its
     symmetric equality.
 \end{proof}
 
-\begin{theorem}[Exact product of physical-sector bonds]
+\begin{lemma}[Exact product of physical-sector bonds]
     \label{thm:mpdo_exact_physical_sector_bond_product}
     \lean{MPOTensor.PhysicalSectorFactorization.mpo_eq_product_physicalBond}
     \leanok
@@ -436,7 +436,7 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
          & =B_0B_1\cdots B_{N-1}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -450,7 +450,7 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
     the two factors are the ordinary and crossed bonds.
 \end{proof}
 
-\begin{theorem}[Unit scalar in the physical-sector product]
+\begin{lemma}[Unit scalar in the physical-sector product]
     \label{thm:mpdo_physical_sector_bond_product_unit_scalar}
     \lean{MPOTensor.PhysicalSectorFactorization.exists_positive_scalar_mpo_eq_product_physicalBond}
     \leanok
@@ -461,15 +461,15 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
     Here the bonds are the canonical bonds determined by $F$, and one may
     take $c=1$. No positivity hypothesis on the neighboring operators
     $\eta_{k,h}$ is required.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     Setting $c=1$ in
-    Theorem~\ref{thm:mpdo_exact_physical_sector_bond_product} gives the claim.
+    Lemma~\ref{thm:mpdo_exact_physical_sector_bond_product} gives the claim.
 \end{proof}
 
-\begin{theorem}[Positive translation-invariant bond datum]
+\begin{lemma}[Positive translation-invariant bond datum]
     \label{thm:mpdo_positive_translation_invariant_bond_data}
     \lean{MPOTensor.PhysicalSectorFactorization.translationInvariantBondData}
     \leanok
@@ -479,16 +479,16 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
     its cyclic translates commute on every periodic chain of length at least
     two. Thus it determines a single translation-invariant positive bond
     datum.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     Positivity is
-    Theorem~\ref{thm:mpdo_physical_two_site_bond_pos}; pairwise commutativity
-    is Theorem~\ref{thm:mpdo_periodic_pairwise_physical_bonds_comm}.
+    Lemma~\ref{thm:mpdo_physical_two_site_bond_pos}; pairwise commutativity
+    is Lemma~\ref{thm:mpdo_periodic_pairwise_physical_bonds_comm}.
 \end{proof}
 
-\begin{theorem}[$\eta$-local structure from a positive physical-sector factorization]
+\begin{lemma}[$\eta$-local structure from a positive physical-sector factorization]
     \label{thm:mpdo_eta_local_structure_of_positive_physical_sector_factorization}
     \lean{MPOTensor.PhysicalSectorFactorization.etaLocalStructureData}
     \lean{MPOTensor.PhysicalSectorFactorization.fixedProductTensorData}
@@ -503,17 +503,17 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
     If the virtual dimension of $K$ is positive, then $K$ itself is a fixed
     tensor representation of this product family with the same virtual
     dimension and normalization scalar $1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    Theorem~\ref{thm:mpdo_positive_translation_invariant_bond_data} gives the
+    Lemma~\ref{thm:mpdo_positive_translation_invariant_bond_data} gives the
     positive translation-invariant bond and its pairwise commuting
-    translates. Theorem~\ref{thm:mpdo_exact_physical_sector_bond_product}
+    translates. Lemma~\ref{thm:mpdo_exact_physical_sector_bond_product}
     realizes every finite-chain operator with normalization scalar $1$.
 \end{proof}
 
-\begin{corollary}[$\eta$-local structure from SAL]%
+\begin{lemma}[$\eta$-local structure from SAL]%
     \label{cor:mpdo_eta_local_structure_of_is_sal}
     \lean{MPOTensor.nonempty_etaLocalStructureData_of_isSAL}
     \leanok
@@ -523,13 +523,13 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
     cyclic translates commute pairwise and whose ordered product is the
     finite-chain density operator at every length $N\geq2$, with normalization
     scalar one.
-\end{corollary}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    Theorem~\ref{thm:mpdo_eta_coherent_positive_choice} provides the positive
+    Lemma~\ref{thm:mpdo_eta_coherent_positive_choice} provides the positive
     physical-sector factorization, to which
-    Theorem~\ref{thm:mpdo_eta_local_structure_of_positive_physical_sector_factorization}
+    Lemma~\ref{thm:mpdo_eta_local_structure_of_positive_physical_sector_factorization}
     applies.
 \end{proof}
 
@@ -552,8 +552,8 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
     \uses{thm:mpdo_exact_physical_sector_bond_product, thm:mpdo_eta_coherent_positive_choice}
     SAL implies that the virtual dimension is positive. The positive
     physical-sector factorization is given by
-    Theorem~\ref{thm:mpdo_eta_coherent_positive_choice}, with $K$ serving as
+    Lemma~\ref{thm:mpdo_eta_coherent_positive_choice}, with $K$ serving as
     the fixed tensor for its selected bond. The exact product identity is
-    Theorem~\ref{thm:mpdo_exact_physical_sector_bond_product}, and normality
+    Lemma~\ref{thm:mpdo_exact_physical_sector_bond_product}, and normality
     is the given hypothesis on the doubled-index tensor.
 \end{proof}

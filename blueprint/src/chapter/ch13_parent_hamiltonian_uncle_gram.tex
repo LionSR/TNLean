@@ -57,7 +57,7 @@ but require neither an asymptotic norm bound nor perturbation injectivity.
     the diagonal transfer in the trace.
 \end{proof}
 
-\begin{theorem}[Finite weighted mixed-transfer formula]
+\begin{lemma}[Finite weighted mixed-transfer formula]
     \label{thm:uncle_wall_gram_finite_sum}
     \lean{MPSTensor.uncleWallGramWeight_eq_weighted_sum}
     \notready
@@ -70,7 +70,7 @@ but require neither an asymptotic norm bound nor perturbation injectivity.
     \]
     The sum is empty at $n=0$. At $n=1$ the expression is
     $2c_0+2\operatorname{Re}\ell(C)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     Substitute the finite geometric expansion for $Z_n$ in the scalar
     recurrence. Each mixed power $F^k(C)$ occurs once for every later
@@ -84,7 +84,7 @@ mixed transfer powers, and strict positivity of the limiting coefficients
 outside the source exceptional sets. Finite nonnegativity alone does not
 supply the required positive quadratic growth.
 
-\begin{theorem}[Linear limiting wall coefficient]
+\begin{lemma}[Linear limiting wall coefficient]
     \label{thm:uncle_wall_gram_linear_limit}
     \lean{MPSTensor.uncleWallCorrelationLimit,MPSTensor.uncleWallNormSlope,
         MPSTensor.uncleWallCorrelation_summable,
@@ -103,7 +103,7 @@ supply the required positive quadratic growth.
         \kappa_R:=c_0+\ell(Z_\infty)+\overline{\ell(Z_\infty)}.
     \]
     Strict positivity of $\kappa_R$ is not part of this assertion.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     The strict spectral-radius bound gives a geometric bound for all
     mixed transfer powers, so the actual correlation series is summable.
@@ -153,7 +153,7 @@ Quadratic dependence and the structure of the zero set give the generic
 conclusion below. The positive witness alone does not constitute an
 almost-everywhere statement.
 
-\begin{theorem}[The actual quadratic coefficient and its exceptional subspace]
+\begin{lemma}[The actual quadratic coefficient and its exceptional subspace]
     \label{thm:uncle_wall_gram_generic_positive}
     \lean{MPSTensor.uncleWallCorrelationLimitLinear,
         MPSTensor.uncleWallSlopeBilin,MPSTensor.uncleWallSlopeBilin_apply,
@@ -177,7 +177,7 @@ almost-everywhere statement.
     slopes form an open dense set, and the zero slopes have measure zero
     for every additive Haar measure on that finite-dimensional real space.
     In particular, almost every wall has strictly positive actual slope.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     The convergent mixed correlation series is complex linear in $R$.
     For two walls $R,S$, its actual slope is the diagonal of the real
@@ -204,7 +204,7 @@ derived for the actual wall coefficient, rather than supplied as a
 hypothesis. The separating-transfer estimate relating both coefficients
 to the norm of the actual two-wall trial remains a further step.
 
-\begin{corollary}[Simultaneous positivity for a pair of walls]
+\begin{lemma}[Simultaneous positivity for a pair of walls]
     \label{cor:uncle_wall_gram_pair_generic_positive}
     \lean{MPSTensor.uncleWallSlopeQuadratic_ne_zero_of_bond_sq_lt,
         MPSTensor.uncleWallNormSlope_pair_ae_pos}
@@ -217,7 +217,7 @@ to the norm of the actual two-wall trial remains a further step.
     $\kappa_R>0$ and $\kappa_L>0$, with respect to every additive Haar
     measure on the real space of both walls. No independence condition
     on component measures is needed.
-\end{corollary}
+\end{lemma}
 \begin{proof}
     Full perturbation span implies that the physical dimension exceeds
     each separate block's matrix dimension. The two zero-slope radicals

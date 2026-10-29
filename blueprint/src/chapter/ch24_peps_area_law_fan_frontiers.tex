@@ -16,7 +16,7 @@ endpoint.
 % Source: 10-geometry.tex, prop:two-families, lines 308--323 and 545--559;
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 
-\begin{theorem}[Boundaries in a finite closed cover]
+\begin{lemma}[Boundaries in a finite closed cover]
     \label{thm:area_law_finite_cover_frontier}
     \lean{TNLean.PEPS.AreaLaw.Geometry.finiteCover_frontier_subset}
     \leanok
@@ -30,7 +30,7 @@ endpoint.
          & \subseteq\partial Q\cup
         \bigcup_{\substack{f\in\mathcal E \\f\ne e}}(P_e\cap P_f).
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Let $x\in\partial P_e$ with $x\notin\partial Q$.
     Since $P_e$ is closed, $x\in P_e\subseteq\overline Q$, so
@@ -42,7 +42,7 @@ endpoint.
     $x\in\partial P_e$.
 \end{proof}
 
-\begin{theorem}[Fan boundaries lie on outer or radial edges]
+\begin{lemma}[Fan boundaries lie on outer or radial edges]
     \label{thm:area_law_fan_frontier_primitives}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_frontier_subset_outer_and_radials}
     \leanok
@@ -52,13 +52,13 @@ endpoint.
         \partial P_e & \subseteq\partial Q\cup
         \bigcup_{f\in\mathcal E}[c,v_f].
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_finite_cover_frontier,
         thm:area_law_cell_fan_cover,
         thm:area_law_fan_triangle_contact,thm:area_law_cell_fan_intersections}
     Because the closed fan triangles $P_e$ have union $\overline Q$,
-    Theorem~\ref{thm:area_law_finite_cover_frontier} places every boundary
+    Lemma~\ref{thm:area_law_finite_cover_frontier} places every boundary
     point of $P_e$ outside $\partial Q$ in some intersection $P_e\cap P_f$
     ($f\ne e$). Any point in $P_e\cap P_f$ is either the center $c$ or a
     second common point distinct from $c$; in the latter case the

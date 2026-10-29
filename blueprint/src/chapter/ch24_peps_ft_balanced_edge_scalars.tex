@@ -53,7 +53,7 @@ constant.
     $\prod_{e\ni v}c_{v,e}=1$ for all $v\in V$.
 \end{definition}
 
-\begin{theorem}[Multiplication of oriented edge scalars]%
+\begin{lemma}[Multiplication of oriented edge scalars]%
     \label{thm:edgeScalarAt_mul}
     \lean{TNLean.PEPS.edgeScalarAt_mul}
     \leanok
@@ -63,63 +63,63 @@ constant.
     % The endpoint-action convention is the equation in Definition~\ref{def:edgeGaugeAt}.
     % No independent source picture occurs here; the old scalar diagram suppressed the
     % boundary (deg(u)+deg(w)-2,2) of the two-vertex tensor network.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By Definition~\ref{def:edgeScalarAt}, $(cd)_{v,e}=c_ed_e=c_{v,e}d_{v,e}$ at
     the lower endpoint and $(cd)_{v,e}=(c_ed_e)^{-1}=c_e^{-1}d_e^{-1}=c_{v,e}d_{v,e}$
     at the upper endpoint.
 \end{proof}
 
-\begin{theorem}[Inversion of oriented edge scalars]%
+\begin{lemma}[Inversion of oriented edge scalars]%
     \label{thm:edgeScalarAt_inv}
     \lean{TNLean.PEPS.edgeScalarAt_inv}
     \leanok
     \uses{def:edgeScalarAt}
     For any edge-scalar family $c$, $(c^{-1})_{v,e}=c_{v,e}^{-1}$ on every
     oriented half-edge $(v,e)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By Definition~\ref{def:edgeScalarAt}, $(c^{-1})_{v,e}=c_e^{-1}=c_{v,e}^{-1}$
     at the lower endpoint and $(c^{-1})_{v,e}=(c_e^{-1})^{-1}=c_{v,e}^{-1}$ at
     the upper endpoint.
 \end{proof}
 
-\begin{theorem}[Nonzero oriented edge scalars]%
+\begin{lemma}[Nonzero oriented edge scalars]%
     \label{thm:edgeScalarAt_ne_zero}
     \lean{TNLean.PEPS.edgeScalarAt_ne_zero}
     \leanok
     \uses{def:edgeScalarAt}
     For any edge-scalar family $c\in(\C^\times)^E$, $c_{v,e}\ne 0$ for all $v\in e$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By Definition~\ref{def:edgeScalarAt}, $c_{v,e}\in\{c_e,c_e^{-1}\}\subset\C^\times$.
 \end{proof}
 
-\begin{theorem}[Product of balanced edge scalars]%
+\begin{lemma}[Product of balanced edge scalars]%
     \label{thm:IsVertexBalanced_mul}
     \lean{TNLean.PEPS.IsVertexBalanced.mul}
     \leanok
     \uses{def:IsVertexBalanced, thm:edgeScalarAt_mul}
     If $c$ and $d$ are vertex-balanced, then $cd$ is vertex-balanced.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:edgeScalarAt_mul},
+    By Lemma~\ref{thm:edgeScalarAt_mul},
     $\prod_{e\ni v}(cd)_{v,e}=(\prod_{e\ni v}c_{v,e})(\prod_{e\ni v}d_{v,e})=1\cdot 1=1$.
 \end{proof}
 
-\begin{theorem}[Inverse of balanced edge scalars]%
+\begin{lemma}[Inverse of balanced edge scalars]%
     \label{thm:IsVertexBalanced_inv}
     \lean{TNLean.PEPS.IsVertexBalanced.inv}
     \leanok
     \uses{def:IsVertexBalanced, thm:edgeScalarAt_inv}
     If $c$ is vertex-balanced, then $c^{-1}$ is vertex-balanced.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:edgeScalarAt_inv},
+    By Lemma~\ref{thm:edgeScalarAt_inv},
     $\prod_{e\ni v}(c^{-1})_{v,e}=(\prod_{e\ni v}c_{v,e})^{-1}=1^{-1}=1$.
 \end{proof}
 
-\begin{theorem}[Reflexivity of balanced edge-scalar equivalence]%
+\begin{lemma}[Reflexivity of balanced edge-scalar equivalence]%
     \label{thm:GaugeEquivModEdgeScalars_refl}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.refl}
     \leanok
@@ -127,13 +127,13 @@ constant.
     For every edge-gauge family $X$, $X\sim_{\mathrm{bal}}X$ via $c_e=1$.
     % This is the same algebraic endpoint convention as
     % Definition~\ref{def:edgeGaugeAt}, not a separate tensor-network identity.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     With $c_e=1$, $c_{v,e}=1$, $X_{v,e}=c_{v,e}X_{v,e}$, and
     $\prod_{e\ni v}c_{v,e}=1$.
 \end{proof}
 
-\begin{theorem}[Symmetry of balanced edge-scalar equivalence]%
+\begin{lemma}[Symmetry of balanced edge-scalar equivalence]%
     \label{thm:GaugeEquivModEdgeScalars_symm}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.symm}
     \leanok
@@ -141,37 +141,37 @@ constant.
     If $X\sim_{\mathrm{bal}}Y$ via $c$, then $Y\sim_{\mathrm{bal}}X$ via $c^{-1}$.
     % The inverse endpoint action is already stated exactly by
     % Definition~\ref{def:edgeGaugeAt}; there is no additional source figure.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    From $X_{v,e}=c_{v,e}Y_{v,e}$ and Theorem~\ref{thm:edgeScalarAt_ne_zero} we
+    From $X_{v,e}=c_{v,e}Y_{v,e}$ and Lemma~\ref{thm:edgeScalarAt_ne_zero} we
     get $Y_{v,e}=c_{v,e}^{-1}X_{v,e}$, and $c^{-1}$ is balanced by
-    Theorem~\ref{thm:IsVertexBalanced_inv}.
+    Lemma~\ref{thm:IsVertexBalanced_inv}.
 \end{proof}
 
-\begin{theorem}[Transitivity of balanced edge-scalar equivalence]%
+\begin{lemma}[Transitivity of balanced edge-scalar equivalence]%
     \label{thm:GaugeEquivModEdgeScalars_trans}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.trans}
     \leanok
     \uses{def:GaugeEquivModEdgeScalars, thm:IsVertexBalanced_mul, thm:edgeScalarAt_mul}
     If $X\sim_{\mathrm{bal}}Y$ via $c$ and $Y\sim_{\mathrm{bal}}Z$ via $d$,
     then $X\sim_{\mathrm{bal}}Z$ via $cd$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:edgeScalarAt_mul},
+    By Lemma~\ref{thm:edgeScalarAt_mul},
     $X_{v,e}=c_{v,e}Y_{v,e}=(c_{v,e}d_{v,e})Z_{v,e}=(cd)_{v,e}Z_{v,e}$, and $cd$
-    is balanced by Theorem~\ref{thm:IsVertexBalanced_mul}.
+    is balanced by Lemma~\ref{thm:IsVertexBalanced_mul}.
 \end{proof}
 
-\begin{theorem}[The balanced edge-scalar quotient is an equivalence relation]%
+\begin{lemma}[The balanced edge-scalar quotient is an equivalence relation]%
     \label{thm:GaugeEquivModEdgeScalars_equivalence}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.equivalence}
     \leanok
     \uses{thm:GaugeEquivModEdgeScalars_refl, thm:GaugeEquivModEdgeScalars_symm, thm:GaugeEquivModEdgeScalars_trans}
     The relation $\sim_{\mathrm{bal}}$ on edge-gauge families is an equivalence
     relation.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Combine Theorems~\ref{thm:GaugeEquivModEdgeScalars_refl},
+    Combine Lemmas~\ref{thm:GaugeEquivModEdgeScalars_refl},
     \ref{thm:GaugeEquivModEdgeScalars_symm},
     and~\ref{thm:GaugeEquivModEdgeScalars_trans}.
 \end{proof}
@@ -182,47 +182,47 @@ constant.
     \leanok
     \uses{def:GaugeEquivModEdgeScalars, thm:GaugeEquivModEdgeScalars_equivalence}
     The setoid on edge-gauge families with equivalence relation
-    $\sim_{\mathrm{bal}}$ from Theorem~\ref{thm:GaugeEquivModEdgeScalars_equivalence}.
+    $\sim_{\mathrm{bal}}$ from Lemma~\ref{thm:GaugeEquivModEdgeScalars_equivalence}.
 \end{definition}
 
-\begin{theorem}[Balanced edge scalars preserve the local gauge action]%
+\begin{lemma}[Balanced edge scalars preserve the local gauge action]%
     \label{thm:GaugeEquivModEdgeScalars_gaugeVertex_eq}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.gaugeVertex_eq}
     \leanok
     \uses{def:GaugeEquivModEdgeScalars, def:gaugeVertex}
     If $X\sim_{\mathrm{bal}}Y$, then $(A^X)_v(\eta,\sigma)=(A^Y)_v(\eta,\sigma)$
     for all $v,\eta,\sigma$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok\uses{def:GaugeEquivModEdgeScalars, def:gaugeVertex}
     In Definition~\ref{def:gaugeVertex}, each summand for $(A^X)_v$ differs from
     that for $(A^Y)_v$ by the factor $\prod_{e\ni v}c_{v,e}=1$.
 \end{proof}
 
-\begin{theorem}[Balanced edge scalars preserve the gauged tensor]%
+\begin{lemma}[Balanced edge scalars preserve the gauged tensor]%
     \label{thm:GaugeEquivModEdgeScalars_applyGauge_eq}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.applyGauge_eq}
     \leanok
     \uses{thm:GaugeEquivModEdgeScalars_gaugeVertex_eq, def:applyGauge}
     If $X\sim_{\mathrm{bal}}Y$, then $A^X=A^Y$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:GaugeEquivModEdgeScalars_gaugeVertex_eq} at each
+    Apply Lemma~\ref{thm:GaugeEquivModEdgeScalars_gaugeVertex_eq} at each
     $v,\eta,\sigma$ in Definition~\ref{def:applyGauge}.
 \end{proof}
 
-\begin{theorem}[Balanced edge scalars preserve the gauged state]%
+\begin{lemma}[Balanced edge scalars preserve the gauged state]%
     \label{thm:GaugeEquivModEdgeScalars_applyGauge_sameState}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.applyGauge_sameState}
     \leanok
     \uses{thm:GaugeEquivModEdgeScalars_applyGauge_eq, def:peps_same_state}
     If $X\sim_{\mathrm{bal}}Y$, then $\Coeff_{A^X}(\sigma)=\Coeff_{A^Y}(\sigma)$
     for every physical configuration $\sigma$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Immediate from $A^X=A^Y$ (Theorem~\ref{thm:GaugeEquivModEdgeScalars_applyGauge_eq}).
+    Immediate from $A^X=A^Y$ (Lemma~\ref{thm:GaugeEquivModEdgeScalars_applyGauge_eq}).
 \end{proof}
 
-\begin{theorem}[Gauge uniqueness modulo balanced edge scalars]%
+\begin{lemma}[Gauge uniqueness modulo balanced edge scalars]%
     \label{thm:gauge_unique_mod_edge_scalars}
     \lean{TNLean.PEPS.gauge_unique_mod_edge_scalars}
     \leanok
@@ -231,12 +231,12 @@ constant.
     % Correction documented in docs/paper-gaps/peps_gauge_edge_scalars.tex.
     % Nonzero bond spaces are part of the injectivity hypothesis, as in the
     % existence direction; see docs/paper-gaps/peps_injective_ft_section3_route.tex.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For each $v\in V$, $(A^X)_v=(A^Y)_v$ and injectivity of $A_v$ equate the
     incident gauge products $\prod_{e\ni v}X_{v,e}=\prod_{e\ni v}Y_{v,e}$.
     Since $D_A(e)>0$ and each $X_{v,e},Y_{v,e}$ is invertible,
-    Theorem~\ref{thm:peps_piProductFormsScalar} yields $c_{v,e}\in\C^\times$
+    Lemma~\ref{thm:peps_piProductFormsScalar} yields $c_{v,e}\in\C^\times$
     with $X_{v,e}=c_{v,e}Y_{v,e}$ and $\prod_{e\ni v}c_{v,e}=1$; taking $c_e$
     at the lower endpoint of $e$ forces $c_{v,e}=c_e^{-1}$ at the upper
     endpoint, so $X\sim_{\mathrm{bal}}Y$.
@@ -280,7 +280,7 @@ remaining $v$-incident edges determine $\eta$ completely.
     $\eta_e=\mu_e=\eta'_e$.
 \end{proof}
 
-\begin{theorem}[Inserted-site scalar extraction from two region proportionalities]%
+\begin{lemma}[Inserted-site scalar extraction from two region proportionalities]%
     \label{thm:peps_component_eq_of_regionProportional}
     \lean{TNLean.PEPS.component_eq_of_regionProportional}
     \leanok
@@ -293,7 +293,7 @@ remaining $v$-incident edges determine $\eta$ completely.
          & =\frac{c_S}{c_R}\,C_v(\eta,\sigma).
         \label{eq:peps_inserted_ratio}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     With $b(\mu,\eta)\in\partial R$ the boundary label induced by $\mu\in\partial S$
     and $\eta\in\mc V_v$, and $m>0$ the interior bond multiplicity,
@@ -314,7 +314,7 @@ remaining $v$-incident edges determine $\eta$ completely.
     (\ref{eq:peps_inserted_ratio}).
 \end{proof}
 
-\begin{corollary}[Per-vertex gauge relation from two two-block proportionalities]%
+\begin{lemma}[Per-vertex gauge relation from two two-block proportionalities]%
     \label{cor:peps_component_eq_gaugeVertex_of_twoBlockProportional}
     \lean{TNLean.PEPS.component_eq_gaugeVertex_of_twoBlockProportional}
     \leanok
@@ -327,10 +327,10 @@ remaining $v$-incident edges determine $\eta$ completely.
          & =\frac{c_S}{c_R}\,C_v(\eta,\sigma).
         \label{eq:peps_vertex_gauge_ratio}
     \end{align}
-\end{corollary}
+\end{lemma}
 \begin{proof}\leanok
     By Definition~\ref{def:peps_regionTwoBlock}, $B_{A,R}=c_RB_{C,R}$ and
     $B_{A,S}=c_SB_{C,S}$ mean $A_R=c_RC_R$ and $A_S=c_SC_S$, so
-    Theorem~\ref{thm:peps_component_eq_of_regionProportional} yields
+    Lemma~\ref{thm:peps_component_eq_of_regionProportional} yields
     (\ref{eq:peps_vertex_gauge_ratio}).
 \end{proof}
