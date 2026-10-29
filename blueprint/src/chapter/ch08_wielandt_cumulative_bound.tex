@@ -115,7 +115,7 @@ eventual exact-word spanning, and spectral strong irreducibility.
     and index in \cite[Proposition~2]{Sanz2010Quantum}.
 \end{definition}
 
-\begin{theorem}[Equality of the stochastic indices]
+\begin{lemma}[Equality of the stochastic indices]
     \label{thm:stochastic_wielandt_indices}
     \lean{MPSTensor.stochasticFamily_iIndex,
         MPSTensor.stochasticFamily_qIndex}
@@ -124,7 +124,7 @@ eventual exact-word spanning, and spectral strong irreducibility.
         def:wielandt_q_index}
     For every entrywise nonnegative real $D\times D$ matrix $a$ with
     $D>0$, the matrix-unit family satisfies $q(\E_K)=p(a)=\iota(K)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     The three sets of admissible positive lengths coincide:
@@ -135,7 +135,7 @@ eventual exact-word spanning, and spectral strong irreducibility.
     Taking the infima gives the equalities.
 \end{proof}
 
-\begin{theorem}[Primitive stochastic embedding]
+\begin{lemma}[Primitive stochastic embedding]
     \label{thm:primitive_stochastic_embedding}
     \lean{MPSTensor.stochasticFamily_isPrimitivePaper,
         MPSTensor.stochasticFamily_primitive_and_indices}
@@ -146,13 +146,13 @@ eventual exact-word spanning, and spectral strong irreducibility.
     $D>0$. Then its matrix-unit quantum embedding is primitive and
     $q(\E_K)=p(a)=\iota(K)$, as in
     \cite[Proposition~2]{Sanz2010Quantum}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \uses{thm:stochastic_wielandt_indices}
     A strictly positive positive-length power of $a$ gives full vector
     spreading at that length. The index equalities hold by
-    Theorem~\ref{thm:stochastic_wielandt_indices}.
+    Lemma~\ref{thm:stochastic_wielandt_indices}.
 \end{proof}
 
 \begin{definition}[Strengthened strong irreducibility]
