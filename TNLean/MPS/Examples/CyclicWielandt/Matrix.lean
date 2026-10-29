@@ -88,7 +88,7 @@ theorem shift_pow_mul_single (n : ℕ) (i j : Fin D) (c : ℂ) :
     shift D ^ n * Matrix.single i j c = Matrix.single (i + (n : Fin D)) j c := by
   ext a b
   by_cases hjb : j = b <;>
-    simp [Matrix.mul_apply, Matrix.single_apply, shift_pow_apply, ite_and,
+    simp [Matrix.mul_apply, Matrix.single_apply, shift_pow_apply,
       mul_ite, ite_mul, eq_comm, hjb]
 
 /-- Shift powers translate the column of a matrix unit in the opposite direction.
@@ -98,7 +98,7 @@ theorem single_mul_shift_pow (n : ℕ) (i j : Fin D) (c : ℂ) :
   ext a b
   have hcol : j = b + (n : Fin D) ↔ j - (n : Fin D) = b := (sub_eq_iff_eq_add).symm
   by_cases hia : i = a <;>
-    simp [Matrix.mul_apply, Matrix.single_apply, shift_pow_apply, ite_and,
+    simp [Matrix.mul_apply, Matrix.single_apply, shift_pow_apply,
       mul_ite, hcol, eq_comm, hia]
 
 /-- The shift-jump-shift words are concrete matrix units.

@@ -46,7 +46,7 @@ private theorem shift_pow_mem (n : ℕ) :
 Source: arXiv:0909.5347, source lines 697–700. -/
 theorem jump_mem_wordSpan (hD : 2 ≤ D) (n : ℕ) :
     jump D ∈ Kraus.wordSpan (tensor D) (1 + n * (D - 1)) := by
-  have hdim : D - 2 + 2 = D := by omega
+  have hstep : D - 2 + 1 = D - 1 := by omega
   induction n with
   | zero => simpa using Kraus.pow_mem_wordSpan' (tensor D) 1 1
   | succ n ih =>
@@ -54,7 +54,11 @@ theorem jump_mem_wordSpan (hD : 2 ≤ D) (n : ℕ) :
         (show jump D ∈ Kraus.wordSpan (tensor D) 1 from by
           simpa using Kraus.pow_mem_wordSpan' (tensor D) 1 1)
       rw [jump_return hD] at hm
-      convert hm using 1 <;> nlinarith
+      have hlen : 1 + (n + 1) * (D - 1) = 1 + n * (D - 1) + (D - 2) + 1 := by
+        rw [Nat.add_mul, one_mul]
+        omega
+      rw [← hlen] at hm
+      exact hm
 
 /-- The source's exact-length constraint suffices for membership of a
 shifted jump. Source: arXiv:0909.5347, source lines 697–700. -/
@@ -65,11 +69,14 @@ theorem sandwich_mem_wordSpan (hD : 2 ≤ D) (k l n m : ℕ) :
     (mul_mem (mul_mem (shift_pow_mem k) (jump_mem_wordSpan hD n)) (shift_pow_mem l))
     (shift_pow_mem (m * D))
   rw [shift_pow_mul_dim, mul_one] at hm
-  convert hm using 1 <;> omega
+  have hlen : k + (1 + n * (D - 1)) + l + m * D =
+      1 + k + l + n * (D - 1) + m * D := by omega
+  rwa [hlen] at hm
 
 /-- All reduced pairs except the final pair have padding to `D(D-1)`.
 Source: arXiv:0909.5347, source lines 697–700, with the missing diagonal
 handled separately as documented in the module's local-fix note. -/
+omit [NeZero D] in
 theorem exists_full_length_padding (hD : 2 ≤ D) {k l : ℕ}
     (hk : k < D) (hl : l < D) (hexcept : ¬(k = D - 1 ∧ l = D - 1)) :
     ∃ n m : ℕ, D * (D - 1) = 1 + k + l + n * (D - 1) + m * D := by
@@ -126,7 +133,7 @@ theorem wordSpan_full_length (hD : 2 ≤ D) :
     Kraus.wordSpan (tensor D) (D * (D - 1)) = ⊤ := by
   let T := Kraus.wordSpan (tensor D) (D * (D - 1))
   have hI : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ T := by
-    have hm := shift_pow_mem (D * (D - 1))
+    have hm := shift_pow_mem (D := D) (D * (D - 1))
     have hpow : shift D ^ (D * (D - 1)) = 1 := by
       rw [Nat.mul_comm D (D - 1), shift_pow_mul_dim]
     rw [hpow] at hm

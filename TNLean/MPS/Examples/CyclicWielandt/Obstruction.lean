@@ -26,6 +26,7 @@ namespace MPSTensor.CyclicWielandt
 
 variable {D : ℕ} [NeZero D]
 
+omit [NeZero D] in
 private theorem no_pred_length_padding (hD : 2 ≤ D) {k l n m : ℕ}
     (hs : k + l = 2 * D - 3) :
     D * (D - 1) - 1 ≠ 1 + k + l + n * (D - 1) + m * D := by
@@ -62,13 +63,13 @@ private theorem sandwich_pred_entries_zero (hD : 2 ≤ D) {k l n m : ℕ}
   rw [sandwich_eq_single]
   constructor
   · rw [Matrix.single_apply]
-    apply if_neg
+    apply ite_eq_right
     rintro ⟨hrow, hcol⟩
     have hk' := (return_coordinate_iff hD k hk).1 hrow
     have hl' : l = D - 1 := cast_eq_last hD hl (sub_eq_zero.mp hcol).symm
     exact no_pred_length_padding hD (k := k) (l := l) (n := n) (m := m) (by omega) hlen
   · rw [Matrix.single_apply]
-    apply if_neg
+    apply ite_eq_right
     rintro ⟨hrow, hcol⟩
     have hk' : k = D - 1 := cast_eq_last hD hk
       (add_left_cancel (hrow.trans (one_add_last hD).symm))
