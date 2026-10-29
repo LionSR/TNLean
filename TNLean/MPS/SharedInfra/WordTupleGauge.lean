@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Defs
 import Mathlib.LinearAlgebra.Finsupp.LinearCombination
-import QICLean.Algebra.MatrixTracePairing
+import QICLean.Algebra.TraceFormDuality
 
 /-!
 # Finite simultaneous MPS word spans and gauge transport
@@ -175,29 +175,13 @@ theorem block_matrices_eq_zero_of_wordTupleSpanTop_trace
     ∀ k, Δ k = 0 := by
   classical
   have hle : Submodule.span ℂ (Set.range (wordTuple A L)) ≤ LinearMap.ker
-      (∑ k : Fin r, (Matrix.traceBilinForm _ (Δ k)).comp
-        (LinearMap.proj (R := ℂ)
-          (φ := fun j : Fin r ↦ Matrix (Fin (dim j)) (Fin (dim j)) ℂ) k)) :=
-    Submodule.span_le.2 (by
-      rintro M ⟨w, rfl⟩
-      simpa [LinearMap.sum_apply, wordTuple] using hΔ w)
-  have hZeroOnSpan :
-      ∀ M : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-        M ∈ Submodule.span ℂ (Set.range (wordTuple A L)) →
-        (∑ k : Fin r, Matrix.trace (Δ k * M k)) = 0 := fun M hM ↦ by
-    simpa [LinearMap.sum_apply] using hle hM
-  intro k
-  apply (Matrix.ext_iff_trace_mul_right (A := Δ k) (B := 0)).2
-  intro N
-  have hsum := hZeroOnSpan (Function.update 0 k N) (by
-    rw [hSpan]
-    exact Submodule.mem_top)
-  rw [Finset.sum_eq_single k
-      (fun j _ hj => by
-        rw [Function.update_of_ne hj, Pi.zero_apply, mul_zero, Matrix.trace_zero])
-      (fun hk => absurd (Finset.mem_univ k) hk),
-    Function.update_self] at hsum
-  simpa using hsum
+      (Matrix.piTraceForm (fun k : Fin r ↦ Fin (dim k)) Δ) := by
+    apply Submodule.span_le.mpr
+    rintro M ⟨w, rfl⟩
+    simpa only [LinearMap.mem_ker, Matrix.piTraceForm_apply, wordTuple] using hΔ w
+  have hzero : Δ = 0 := Matrix.eq_zero_of_forall_sum_trace_mul_eq_zero Δ
+    (fun M ↦ hle (by rw [hSpan]; exact Submodule.mem_top))
+  exact fun k ↦ congrFun hzero k
 
 /-- Reindexing the common physical alphabet by an equivalence preserves the
 simultaneous word-tuple span.

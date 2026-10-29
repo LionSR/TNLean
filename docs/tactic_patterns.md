@@ -4234,37 +4234,26 @@ three-plaquette output measurement, and the routed reunion measurement.
   module imports it, preserving the same name and binders for every existing consumer.
   Actual varying-bond interval identification uses the same coordinate transport.
 
-### MPDO pair-trace separation duality
-- **Pattern:** use Hahn--Banach separation for a proper pair-matrix submodule,
-  represent the separating functional as a pair trace, and contradict trace
-  separation by proving the representing pair is zero.
-- **Reuse:** the private file-local helper
-  `pair_matrix_span_top_of_pair_trace_separating` in
-  `TNLean/MPS/MPDO/BiCFDerivation/Core.lean`.
-- **Result:** three copies in the homogeneous, cumulative, and all-word pair-span
-  criteria now reduce to generator membership facts. Public theorem statements and
-  trace-pairing order are unchanged.
-- **Update (2026-09-19):** the representation step is no longer proved from matrix
-  units. `Matrix.exists_trace_representation` is now the inverse of the linear equivalence with the
-  dual space induced by the nondegenerate trace form
-  (`Matrix.traceBilinForm`, `Matrix.traceBilinForm_nondegenerate`, and Mathlib's
-  `LinearMap.BilinForm.toDual`), and the pi- and pair-indexed corollaries are
-  three-line consequences of it. The separation step itself still runs by hand,
-  because no nondegeneracy statement exists yet for the pi-indexed or product trace
-  form; once one does, `Matrix.family_submodule_eq_top_of_trace_separating` and
-  `pair_matrix_span_top_of_pair_trace_separating` become one-line consequences.
-- **Update (2026-10-02):** the ordinary representation, finite-family
-  representation, and family span criterion are public in
-  `MPS/SharedInfra/MatrixFamilyTracePairing.lean`. The MPDO criteria and
-  the prescribed-length converse for the joint parent boundary map reuse
-  these proofs. No parallel product bilinear form is needed.
-- **Candidate (2026-09-19):** "a trace pairing that vanishes on a generating set
-  vanishes on its span" now appears twice as `Submodule.span_le` into the kernel of
-  the trace functional: `pair_trace_zero_on_span` in
-  `TNLean/MPS/MPDO/BiCFDerivation/Core.lean` and
-  `block_matrices_eq_zero_of_wordTupleSpanTop_trace` in
-  `TNLean/MPS/SharedInfra/WordTupleGauge.lean`. A third occurrence should be
-  abstracted into a single lemma over an indexed family of trace forms.
+### MPDO pair-trace separation duality — upstream reuse (2026-10-29)
+
+- **Pattern:** conclude that a family or product matrix subspace is the whole
+  algebra from trace separation, or that a boundary family is zero from a
+  full word span and vanishing pairings.
+- **Reuse:** QICLean's `Matrix.eq_top_of_pi_trace_separating`,
+  `Matrix.eq_top_of_prod_trace_separating`,
+  `Matrix.eq_zero_of_forall_sum_trace_mul_eq_zero`, and
+  `Matrix.eq_zero_of_forall_trace_mul_add_eq_zero` in
+  `QICLean/Algebra/TraceFormDuality.lean`. Generator vanishing extends to the
+  span by `Submodule.span_le` into the kernel of `piTraceForm` or `prodTraceForm`.
+- **Refactored occurrences:** the homogeneous, cumulative and all-word MPDO
+  pair criteria, simultaneous word-family separation, joint parent-boundary
+  injectivity, and joint inserted-boundary spanning. The remaining single
+  trace representation uses Mathlib's `LinearMap.BilinForm.toDual` directly.
+- **Deletion:** the three local public matrix-family wrappers and four private
+  pair-trace wrappers have no surviving call sites. The audit is
+  `docs/audits/2026-10-29_trace_form_duality_reuse.md` (#7850).
+- **Validation status:** source and deterministic import checks only; the user
+  requested writing without local Lean compilation. The change remains a draft.
 
 ### Martingale coefficient upper bound
 - **Pattern:** prove `((1 : ℝ) / (4 * (L : ℝ))) ≤ 1` from `hL : 1 < L` by
