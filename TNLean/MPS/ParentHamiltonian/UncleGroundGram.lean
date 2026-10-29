@@ -39,7 +39,7 @@ theorem uncleMPV_norm_sq_tendsto_one
   have ha : a ≠ 0 := by
     intro ha
     subst a
-    simpa using htr
+    simp at htr
   let : NeZero a := ⟨ha⟩
   let V := Matrix (Fin a) (Fin a) ℂ
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
@@ -62,12 +62,14 @@ theorem uncleMPV_norm_sq_tendsto_one
     · simpa only [mul_zero] using
         (tendsto_pow_atTop_nhds_zero_of_lt_one hr.le hr1).const_mul C
   have htrace0 : Tendsto (fun N ↦ tr (Φ (E ^ N - P))) atTop (nhds (0 : ℂ)) := by
-    simpa only [map_zero] using (tr.continuous.tendsto 0).comp hsmall
+    simpa only [Function.comp_def, map_zero] using (tr.continuous.tendsto 0).comp hsmall
   have htrace_eq (N : ℕ) : tr (Φ (E ^ N - P)) = LinearMap.trace ℂ V (E ^ N) - 1 := by
     change LinearMap.trace ℂ V (E ^ N - P) = _
     rw [map_sub]
-    simp only [P, LinearMap.trace_smulRight, f, LinearMap.comp_apply,
-      Matrix.traceLinearMap_apply, mulLeftLinearMap_apply, Matrix.mul_one, htr]
+    change LinearMap.trace ℂ V (E ^ N) - LinearMap.trace ℂ V (f.smulRight (1 : V)) = _
+    rw [LinearMap.trace_smulRight]
+    change LinearMap.trace ℂ V (E ^ N) - Matrix.trace (ρ * (1 : V)) = _
+    rw [Matrix.mul_one, htr]
   have htrace : Tendsto (fun N ↦ LinearMap.trace ℂ V (E ^ N)) atTop (nhds (1 : ℂ)) :=
     tendsto_sub_nhds_zero_iff.mp (htrace0.congr htrace_eq)
   have hnorm (N : ℕ) : (LinearMap.trace ℂ V (E ^ N)).re = ‖mpvState A N‖ ^ 2 := by
@@ -77,7 +79,7 @@ theorem uncleMPV_norm_sq_tendsto_one
         trace_mixedMapLM_rect_pow_eq_mpvOverlap A A N
     rw [htraceN]
     rw [mpvOverlap_eq_star_mpvInner, mpvInner, Complex.star_def, Complex.conj_re]
-    exact inner_self_eq_norm_sq _
+    exact inner_self_eq_norm_sq (𝕜 := ℂ) _
   have hre := (Complex.continuous_re.tendsto (1 : ℂ)).comp htrace
   simpa only [Complex.one_re] using hre.congr hnorm
 
@@ -100,11 +102,11 @@ theorem uncleGroundGram_tendsto
   have ha : a ≠ 0 := by
     intro ha
     subst a
-    simpa using htrA
+    simp at htrA
   have hb : b ≠ 0 := by
     intro hb
     subst b
-    simpa using htrB
+    simp at htrB
   let : NeZero a := ⟨ha⟩
   let : NeZero b := ⟨hb⟩
   obtain ⟨hIA, hIB⟩ := uncleBoundaryLetter_isInjective_diagonal_blocks A B R L hPert

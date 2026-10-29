@@ -1,0 +1,335 @@
+\section{Entropy of twisted closures}%
+\label{sec:peps_twisted_closure_entropy}
+
+Group elements inserted on the regular bonds of a region twist its open
+tensor. This section computes the cross Gram matrices of twisted regions,
+shows that closures with complementary twists have a common reduced density,
+and deduces the entropy of superpositions of closures on rectangles inside the
+torus.
+
+\begin{lemma}[Expansion of a twisted-region cross Gram matrix]%
+    \label{thm:peps_regular_twisted_gram_expansion}
+    \lean{TNLean.PEPS.regularOpenRegionMatrix_apply_group,
+        TNLean.PEPS.regularOpenRegionMatrix_crossGram_apply_group,
+        TNLean.PEPS.prod_twistedSiteGram_eq_sum_compatible,
+        TNLean.PEPS.regularTwistedOpenRegionMatrix_crossGram_eq_sum_compatible}
+    \leanok
+    \uses{def:peps_regular_twisted_region}
+    Suppose the original site maps satisfy $A_v^\dagger A_v=c_v\Pi_v$.
+    The entries of $(T_R^u)^\dagger T_R^w$ are obtained by summing over
+    two internal-bond configurations and one translation $q_v$ per vertex.
+    At each incident half-bond the constraint is
+    \begin{align}
+        \eta^u_{v,e}=q_v\theta^w_{v,e}.
+    \end{align}
+    The prescribed crossing configurations are retained, and the scalar
+    from the local averages is $(\prod_{v\in R}c_v)|G|^{-|R|}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_site_gram}
+    Expanding both open contractions, summing the physical indices
+    independently, and substituting each original local Gram identity at its
+    two transformed virtual configurations gives the result.
+\end{proof}
+
+\begin{lemma}[Synchronization through common identity bonds]%
+    \label{thm:peps_regular_twisted_synchronization}
+    \lean{TNLean.PEPS.regionLabels_eq_of_subgraph_internalEdge_eq,
+        TNLean.PEPS.IsTwistedRegionLabelCompatible,
+        TNLean.PEPS.IsTwistedRegionLabelCompatible.tail_eq,
+        TNLean.PEPS.IsTwistedRegionLabelCompatible.head_eq,
+        TNLean.PEPS.IsTwistedRegionLabelCompatible.internalEdge_intertwining,
+        TNLean.PEPS.IsTwistedRegionLabelCompatible.exists_common_label,
+        TNLean.PEPS.isTwistedRegionLabelCompatible_iff_exists_translation,
+        TNLean.PEPS.sum_twistedRegionLabelCompatible_eq_sum_translation}
+    \leanok
+    Suppose the region has a connected spanning subgraph on whose bonds
+    both assignments $u,w$ are the identity. Suppose also that both are
+    the identity on crossing bonds. Then compatibility is equivalent to
+    one common translation $x$, with
+    \begin{align}
+        q_v=x,\qquad \eta_e=x\theta_e,\qquad
+        u_ex=xw_e\quad\text{for every internal bond }e.
+    \end{align}
+    Consequently the sum over compatible vertex translations is the
+    corresponding restricted sum over $x\in G$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_twisted_gram_expansion}
+    The tail constraint gives $\eta_e=q_{s(e)}\theta_e$, while cancellation
+    in the head constraint gives $u_eq_{s(e)}=q_{t(e)}w_e$.
+    Along each common identity bond this equates the endpoint translations,
+    so connectedness makes them constant, and the boundary identity operators then
+    give the common translation of every crossing label.
+\end{proof}
+
+\begin{lemma}[Counting with a restricted common translation]%
+    \label{thm:peps_regular_twisted_boundary_count}
+    \lean{TNLean.PEPS.regionBoundaryLabel_eq_iff,
+        TNLean.PEPS.sum_boundaryRestriction_filtered_translations_eq_card,
+        TNLean.PEPS.sum_regionBoundary_filtered_translations_eq_card}
+    \leanok
+    \uses{thm:peps_regular_twisted_synchronization}
+    Let $I_R$ count the internal bonds and let $F\subseteq G$ be any
+    allowed set of common translations. With crossing configurations
+    $\mu,\nu$, the number of translated pairs of bond assignments is
+    \begin{align}
+        |G|^{I_R}\sum_{x\in F}\mathbf{1}_{\mu=x\nu}.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    For fixed $x$, the second assignment determines the first: its crossing
+    labels are fixed and every internal label is free, while the boundary conditions
+    agree exactly when $\mu=x\nu$.
+\end{proof}
+
+\begin{lemma}[Weighted translations on the invariant boundary]%
+    \label{thm:peps_regular_weighted_boundary_translation}
+    \lean{TNLean.PEPS.toMatrix_regularBoundaryRepresentation_mul_projector,
+        TNLean.PEPS.regularBoundaryWeightedTranslation,
+        TNLean.PEPS.regularBoundaryWeightedTranslation_apply,
+        TNLean.PEPS.regularBoundaryWeightedTranslation_mul_projector,
+        TNLean.PEPS.regularBoundaryProjector_mul_weightedTranslation_mul_projector}
+    \leanok
+    \uses{def:peps_regular_boundary_state}
+    For weights $a_x\in\mathbb C$, let
+    $W_a=\sum_x a_x L_x^{\otimes b}$. Its matrix entries are
+    $(W_a)_{\mu,\nu}=\sum_x a_x\mathbf{1}_{\mu=x\nu}$.
+    If $P$ is the invariant-boundary projector, then
+    \begin{align}
+        W_aP=\left(\sum_xa_x\right)P,
+        \qquad PW_aP=\left(\sum_xa_x\right)P.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Every common translation fixes every vector in the range of $P$;
+    summing this identity with the specified weights and using $P^2=P$ yields both equalities.
+\end{proof}
+
+\begin{lemma}[Twisted-region cross Gram matrix]%
+    \label{thm:peps_regular_twisted_region_cross_gram}
+    \lean{TNLean.PEPS.sum_regularBoundary_filtered_translation_eq_weightedTranslation,
+        TNLean.PEPS.regularTwistedOpenRegionMatrix_crossGram_of_connected,
+        TNLean.PEPS.regularTwistedOpenRegionMatrix_projected_crossGram_of_connected}
+    \leanok
+    \uses{thm:peps_regular_twisted_synchronization, thm:peps_regular_weighted_boundary_translation}
+    Under the hypotheses of
+    Lemma~\ref{thm:peps_regular_twisted_synchronization}, put
+    \begin{align}
+        F_{u,w}=\{x\in G:u_ex=xw_e\text{ for every internal bond }e\},
+        \qquad
+        \kappa_R=\left(\prod_{v\in R}c_v\right)
+        \frac{|G|^{I_R+1}}{|G|^{|R|}}.
+    \end{align}
+    The maps satisfy
+    \begin{align}
+        (T_R^u)^\dagger T_R^w
+        =\frac{\kappa_R}{|G|}\sum_{x\in F_{u,w}}L_x^{\otimes b},
+        \qquad
+        P(T_R^u)^\dagger T_R^wP
+        =\kappa_R\frac{|F_{u,w}|}{|G|}P.
+    \end{align}
+    These are auxiliary finite-region identities with identity operators
+    on crossing bonds. The general torus cut of
+    \cite[Theorem~6.9]{Schuch2010PEPS} remains separate
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_twisted_boundary_count}
+    By the expansion and synchronization lemmas, counting the free
+    internal labels contributes $|G|^{I_R}$ and leaves the prefactor
+    $\kappa_R/|G|$. On the invariant boundary each remaining translation
+    acts identically, giving the projected formula.
+\end{proof}
+
+\begin{lemma}[Superpositions with a common boundary density]%
+    \label{thm:peps_regular_closure_superposition_density}
+    \lean{TNLean.PEPS.regularClosureSuperpositionMap_conjTranspose_mul,
+        TNLean.PEPS.regularClosureSuperpositionMap,
+        TNLean.PEPS.regularClosureSuperpositionFactor,
+        TNLean.PEPS.regularClosureSuperpositionMap_mul_projector,
+        TNLean.PEPS.regularClosureSuperpositionState,
+        TNLean.PEPS.regularClosureSuperpositionState_eq_sum,
+        TNLean.PEPS.regularClosureSuperpositionState_eq_sum_of_gram,
+        TNLean.PEPS.exists_normalization_regularClosureSuperpositionState}
+    \leanok
+    \uses{thm:peps_regular_weighted_boundary_translation,
+        thm:peps_regular_boundary_physical_realization}
+    Let $b=n+1$, let $P$ be the regular boundary projector, and suppose
+    specified cut maps satisfy
+    \begin{align}
+        A^\dagger A=c_AP,\quad c_A>0,\qquad
+        PN_s^\dagger N_tP=k_{s,t}P.
+    \end{align}
+    For coefficients $\lambda_s$, put
+    $B_\lambda=(\sum_s\lambda_sN_s)P$ and
+    $K_\lambda=AB_\lambda^{\mathsf T}$. If $K_\lambda\ne0$, a positive
+    scalar normalizes its coefficient vector, whose reduced density is
+    \begin{align}
+        \rho_A=
+        \frac{1}{c_A|G|^n}APA^\dagger.
+    \end{align}
+    This density is independent of $\lambda$. It has rank $|G|^n$,
+    satisfies $\rho_A^2=|G|^{-n}\rho_A$, and has entropy $n\log|G|$.
+    This is a conditional matrix statement; identification of its Gram
+    hypotheses with a PEPS contraction is separate.
+\end{lemma}
+
+\begin{proof}\leanok
+    Expanding the mixed Gram matrices gives
+    \begin{align}
+        B_\lambda^\dagger B_\lambda=\kappa_\lambda P,\qquad
+        \kappa_\lambda=\sum_{s,t}\overline{\lambda_s}\lambda_t k_{s,t}.
+    \end{align}
+    Nonvanishing of $K_\lambda$ implies $B_\lambda\ne0$, so positivity of
+    its Gram matrix and its nonzero trace imply $\kappa_\lambda>0$.
+    Normalizing $A$ and $B_\lambda$ by their positive square-root factors
+    and applying the physical boundary density calculation completes the proof.
+\end{proof}
+
+\begin{lemma}[Common density for PEPS with complementary twists]%
+    \label{thm:peps_regular_twisted_cut_entropy}
+    \lean{TNLean.PEPS.regularTwistedSite_eq_of_trivial_on_incident,
+        TNLean.PEPS.regularTwistedOpenRegionMatrix_eq_of_trivial_on_incident,
+        TNLean.PEPS.regularClosureSuperpositionState_eq_twistedCut_sum,
+        TNLean.PEPS.regularTwistedPhysicalCutSuperposition,
+        TNLean.PEPS.exists_normalization_regularTwistedPhysicalCutSuperposition}
+    \leanok
+    \uses{thm:peps_regular_closure_superposition_density}
+    Let every site tensor of a finite graph be regular $G$-isometric.
+    Let $R$ be nonempty and connected, with $b=n+1$ crossing bonds.
+    Consider a finite family of bond assignments $u^{(s)}$, all equal
+    to the identity on edges incident to $R$. Suppose their common
+    identity bonds contain a connected spanning subgraph of $R^c$.
+    Let $\psi_s$ be the physical PEPS across the cut with
+    assignment $u^{(s)}$.
+
+    There is one $c_R>0$ such that the untwisted region map
+    satisfies $T_R^\dagger T_R=c_RP$. Every nonzero superposition
+    $\sum_s\lambda_s\psi_s$ has a positive normalization whose reduced
+    density on $R$ is the same operator
+    \begin{align}
+        \rho_R=\frac{1}{c_R|G|^n}T_RPT_R^\dagger.
+    \end{align}
+    In particular its rank is $|G|^n$, its nonzero spectrum is flat,
+    and its entropy is $n\log|G|$.
+    This is an auxiliary finite-cut statement with twists confined to
+    the complement, rather than the arbitrary torus cut of
+    \cite[Theorem~6.9]{Schuch2010PEPS}
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_regular_twisted_region_cross_gram, thm:peps_open_region_cut}
+    Identity operators on edges incident to $R$ leave its open
+    map unchanged, and the connected-region calculation derives its positive
+    Gram factor from the local isometries. The twisted-region calculation
+    derives each projected complementary mixed Gram matrix as a scalar
+    multiple of $P$. Exact contraction across the cut identifies the
+    superposition with the matrix state of
+    Lemma~\ref{thm:peps_regular_closure_superposition_density}, which then yields the common reduced density, rank, and entropy without assuming a Gram identity for a whole region.
+\end{proof}
+
+\input{chapter/ch24_peps_regular_ginjective_simply_connected_entropy}
+
+\input{chapter/ch24_peps_rectangle_realization}
+
+\input{chapter/ch24_peps_stripe_local_equivalence}
+
+\begin{lemma}[Closure seams avoid a strictly interior rectangle]%
+    \label{thm:peps_torus_interior_rectangle_seam_exclusion}
+    \lean{TNLean.PEPS.torusNonseamGraph_not_horizontal_wrap,
+        TNLean.PEPS.torusNonseamGraph_not_vertical_wrap,
+        TNLean.PEPS.torusRightEdge_not_incident_rectangle_of_wrap,
+        TNLean.PEPS.torusUpEdge_not_incident_rectangle_of_wrap}
+    \leanok
+    \uses{def:peps_torus_rectangular_grid}
+    Suppose both circumferences are at least three. Wrap bonds are absent
+    from the ordinary rectangular grid. If a rectangle lies strictly
+    between the first and last coordinate values in both directions,
+    no wrap bond is incident to it.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_torus_rectangle_cut_connectivity}
+    A wrap bond has coordinate values $0$ and $w-1$, or $0$ and $\ell-1$.
+    Their difference cannot be one for a circumference at least three,
+    and neither endpoint can lie in the stated interior rectangle.
+\end{proof}
+
+\begin{lemma}[Regular isometry in incident-edge coordinates]%
+    \label{thm:peps_regular_torus_incident_isometry}
+    \lean{TNLean.PEPS.torusIncidentCoordinates_injective,
+        TNLean.PEPS.torusIncidentCoordinates,
+        TNLean.PEPS.IsGIsometric.exists_torusIncidentSiteGram,
+        TNLean.PEPS.IsGIsometric.isGIsometric_torusIncidentSite,
+        TNLean.PEPS.torusClosureEdgeAssignment_eq_one_of_nonseam,
+        TNLean.PEPS.torusClosureEdgeAssignment_eq_one_on_rectangle_incident}
+    \leanok
+    \uses{thm:peps_regular_torus_closure_cut_identification}
+    Suppose both torus dimensions are at least three. A tensor which is
+    $G$-isometric for the four-leg regular action remains $G$-isometric
+    when its virtual coordinates are indexed by incident graph edges.
+    Every closure assignment is the identity on the ordinary grid and
+    on every edge incident to a strictly interior rectangle.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_torus_interior_rectangle_seam_exclusion}
+    The four incident-edge labels determine the four virtual coordinates
+    bijectively and intertwine simultaneous left multiplication. Thus
+    their group-average Gram matrices agree. The claims about assignments
+    follow from the exclusion of wrap bonds.
+\end{proof}
+
+\begin{lemma}[Entropy of closure superpositions on interior rectangles]%
+    \label{thm:peps_regular_torus_interior_rectangle_entropy}
+    \lean{TNLean.PEPS.torusClosureSuperpositionCut_eq_twistedCutSuperposition,
+        TNLean.PEPS.torusClosureSuperpositionCut,
+        TNLean.PEPS.exists_normalization_torusClosureSuperpositionCut_rectangle}
+    \leanok
+    Let $A$ be regular $G$-isometric on a torus of width and height at
+    least three. Let $R$ be a coordinate rectangle of positive side
+    lengths satisfying
+    \begin{align}
+        0<x_0,\quad x_0+x_1<w,\qquad
+        0<y_0,\quad y_0+y_1<\ell.
+    \end{align}
+    Write $b$ for its number of crossing bonds and $P$ for the invariant
+    boundary projector. There is one $c_R>0$ with
+    $T_R^\dagger T_R=c_RP$. For any finite family of closure pairs
+    $(g_s,h_s)$ and coefficients $\lambda_s$ such that
+    $\sum_s\lambda_s\psi_{g_s,h_s}\ne0$, a positive normalization of this
+    torus vector has reduced density on $R$
+    \begin{align}
+        \rho_R=\frac{1}{c_R|G|^{b-1}}T_RPT_R^\dagger.
+    \end{align}
+    Hence the normalized reduced density is independent of the
+    superposition. It has rank $|G|^{b-1}$ and flat nonzero spectrum,
+    and its von Neumann entropy is $(b-1)\log|G|$.
+    This proves the strictly interior rectangular case of the entropy
+    calculation in \cite[Theorem~6.9]{Schuch2010PEPS}. The present case
+    also permits noncommuting closure pairs. The source's full statement
+    concerns commuting sectors and arbitrary topologically trivial
+    regions \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_torus_rectangle_cut_connectivity,
+        thm:peps_regular_twisted_cut_entropy,
+        thm:peps_regular_torus_incident_isometry}
+    The coordinate bounds give connected $R$, a nonempty boundary, and
+    connected $R^c$ after removing all wrap bonds, and the closure assignments
+    are the identity on this complementary grid and on all edges incident
+    to $R$. Rewriting the local regular isometry in incident-edge
+    coordinates and identifying the native closure superposition with its
+    twisted graph contraction allows
+    Lemma~\ref{thm:peps_regular_twisted_cut_entropy} to apply: nonvanishing gives
+    the positive normalization, and the same region map and constant apply
+    to every choice of coefficients.
+\end{proof}

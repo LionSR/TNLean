@@ -238,3 +238,118 @@ consists of terms whose supports meet the cluster support
     For every $D\subseteq C$, $H_D$ and $e^{-\beta H_D}$ act on
     $\bigcup_{k\in C}S_k$.
 \end{proof}
+
+\begin{lemma}[The truncated operator in matrix product form]
+    \label{thm:hastings_truncated_product_form}
+    \lean{TNLean.Lattice.ClusterExpansion.IsLargeSupport,
+        TNLean.Lattice.ClusterExpansion.noncommProd_apply_of_pairwiseDisjoint,
+        TNLean.Lattice.ClusterExpansion.noLargeCluster_iff_filter,
+        TNLean.Lattice.ClusterExpansion.truncatedExp_eq_mul,
+        TNLean.Lattice.ClusterExpansion.sum_clusterOp_apply,
+        TNLean.Lattice.ClusterExpansion.isLocalCoefficient_clusterCoeff,
+        TNLean.Lattice.ClusterExpansion.sum_prod_clusterCoeff,
+        TNLean.Lattice.ClusterExpansion.hasProductForm_sum_clusterOp,
+        TNLean.Lattice.ClusterExpansion.hasProductForm_truncatedExp,
+        TNLean.Lattice.ClusterExpansion.hasProductForm_truncatedExp_of_dist_le}
+    \leanok
+    \uses{def:hastings_product_form, def:hastings_truncated_expansion,
+        def:hastings_cluster_of_terms}
+    Let the domain be nonempty, let every term $H_k$ act only on a set $S_k$ of
+    sites, let two terms be adjacent when their sets of sites meet, and call a
+    set of terms large when its sites contain two sites at distance larger
+    than $l$. Then the truncated operator $\rho(\beta,l)$ is in matrix product
+    form of range $l$. This is the matrix product form at high temperature
+    of~\cite[lines 1256--1279]{Hastings2006Solving}, on every finite metric
+    lattice. The local index count is given below.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:hastings_truncation_cluster_products,
+        thm:hastings_cluster_operator_support,
+        thm:hastings_product_form_supported_radius, thm:hastings_product_form_mul}
+    By Lemmas~\ref{thm:hastings_truncation_cluster_products}
+    and~\ref{thm:hastings_cluster_operator_support},
+    $\rho(\beta,l)=\sum_A\prod_{C\in\mathrm{clusters}(A)}E_C$, where empty-support
+    terms factor out as a scalar multiple of $1$ and each remaining cluster $C$
+    acts on $S_C=\bigcup_{k\in C}S_k$ with $\operatorname{diam}S_C\le l$ and
+    pairwise disjoint $S_C$. Indexing each site by its containing cluster (if
+    any) and matrix-unit labels $(a_j,b_j)$ expresses $\sum_A\prod_CE_C$ in the
+    form (\ref{eq:hastings_mpf}) of range $l$; conclude by
+    Lemma~\ref{thm:hastings_product_form_mul}.
+\end{proof}
+
+\begin{lemma}[Local index ranges of the truncated operator]
+    \label{thm:hastings_truncated_index_count}
+    \lean{TNLean.Lattice.ProductForm.restrict,
+        TNLean.Lattice.ProductForm.card_index_restrict,
+        TNLean.Lattice.ClusterExpansion.clusterProductForm,
+        TNLean.Lattice.ClusterExpansion.clusterIndexSet,
+        TNLean.Lattice.ClusterExpansion.localClusterProductForm,
+        TNLean.Lattice.ClusterExpansion.coeff_clusterProductForm_eq_zero_of_not_mem_clusterIndexSet,
+        TNLean.Lattice.ClusterExpansion.card_clusterIndexSet_le,
+        TNLean.Lattice.ClusterExpansion.IsValidCluster.subset_centres_ball,
+        TNLean.Lattice.ClusterExpansion.card_clusterIndexSet_le_ball,
+        TNLean.Lattice.ClusterExpansion.card_index_localClusterProductForm_le,
+        TNLean.Lattice.ClusterExpansion.exists_productForm_truncatedExp_card_index,
+        TNLean.Lattice.ClusterExpansion.exists_productForm_truncatedExp_pow_card_index,
+        TNLean.Lattice.ClusterExpansion.exists_productForm_truncatedExp_card_index_of_polynomial_growth,
+        TNLean.Lattice.ClusterExpansion.exists_productForm_truncatedExp_pow_card_index_of_polynomial_growth}
+    \leanok
+    \uses{thm:hastings_truncated_product_form, thm:hastings_product_form_mul}
+    Let the site set be nonempty, let $q\ge1$, and suppose that each
+    $H_k$ is supported within distance $R\ge0$ of its centre $c_k$. For $l\ge0$, put
+    \begin{align*}
+        M_i=\#\{k:d(i,c_k)\le l+R\}.
+    \end{align*}
+    The actual diameter-truncated operator $\rho(\beta,l)$ has a matrix
+    product form of range $l$ with site index sets satisfying
+    \begin{align*}
+        |\mathcal A_i|\le q^2(1+2^{M_i}).
+    \end{align*}
+    Its $m$-th power has index ranges at most
+    $[q^2(1+2^{M_i})]^m$; if the terms are Hermitian and $m$ is even,
+    this power is positive semidefinite. If, moreover,
+    $M_i\le C(\lceil l+R\rceil+1)^D$ for every $i$, these bounds become
+    \begin{align*}
+        q^2\bigl(1+2^{C(\lceil l+R\rceil+1)^D}\bigr),\qquad
+        \bigl[q^2\bigl(1+2^{C(\lceil l+R\rceil+1)^D}\bigr)\bigr]^m.
+    \end{align*}
+    This makes explicit the polynomial volume growth used in the source's
+    exponential dimensional estimates
+    \cite[lines 1273--1275 and 1318--1320]{Hastings2006Solving}; a metric
+    alone does not imply such growth\cite{gap:hastings05_planar_domain_scope}.
+\end{lemma}
+\begin{proof}\leanok
+    Delete index values that record a cluster not containing their site;
+    its coefficient is zero at that site. A retained cluster containing $i$
+    has diameter at most $l$. Each of its terms acts on some site $j$, so
+    $d(i,c_k)\le d(i,j)+d(j,c_k)\le l+R$. There are at most $2^{M_i}$
+    possible sets of these terms. The additional value records no cluster,
+    and each choice has $q^2$ matrix-unit labels. Empty-support terms split
+    off as a scalar factor whose index sets have one element.
+    Products multiply the index cardinalities, giving the bound for powers.
+\end{proof}
+
+\begin{lemma}[Polynomial ball growth in the integer lattice]
+    \label{lem:hastings_integer_lattice_ball_count}
+    \lean{TNLean.Lattice.card_centres_integerLattice_ball_le,
+        TNLean.Lattice.card_centres_integerLattice_ball_le_polynomial,
+        TNLean.Lattice.card_centres_ball_le_polynomial_of_dist_le,
+        TNLean.Lattice.card_centres_ball_le_polynomial_of_isometry}
+    \leanok
+    For distinct centres in $\mathbb Z^D$ with the coordinate maximum
+    metric, every radius-$r$ ball contains at most
+    $(2\lceil r\rceil+1)^D\le2^D(\lceil r\rceil+1)^D$ centres.
+    The same bound holds for every metric on a finite integer-lattice
+    domain that dominates coordinate maximum distance, including its
+    intrinsic walk metric. More generally, it transfers through any
+    injective coordinate map that does not increase distances.
+    Thus Lemma~\ref{thm:hastings_truncated_index_count} applies with
+    $C=2^D$ on these lattices.
+\end{lemma}
+\begin{proof}\leanok
+    Every coordinate of a centre in the ball lies in an integer interval
+    with $2\lceil r\rceil+1$ elements. Containment in the product of these
+    intervals proves the first bound. The second follows from
+    $2\lceil r\rceil+1\le2(\lceil r\rceil+1)$.
+\end{proof}
