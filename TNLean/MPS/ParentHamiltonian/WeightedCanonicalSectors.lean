@@ -57,8 +57,8 @@ theorem exists_normalized_diagonal_dualFixedPoint (k : Fin h.r) :
       _ = Matrix.diagonal ((s : ℂ)⁻¹ • (fun a => ((Λ a a).re : ℂ))) := by
         congr 1
         funext a
-        simp only [lam, Complex.ofReal_div, Pi.smul_apply, smul_eq_mul, div_eq_mul_inv,
-          mul_comm]
+        change (((Λ a a).re / s : ℝ) : ℂ) = (s : ℂ)⁻¹ * ((Λ a a).re : ℂ)
+        rw [Complex.ofReal_div, div_eq_mul_inv, mul_comm]
       _ = _ := by rw [Matrix.diagonal_smul, hDiagReal]
   refine ⟨lam, fun a => div_pos (hPositive a) hs, ?_, ?_⟩
   · change (∑ a, (Λ a a).re / s) = 1
@@ -104,7 +104,10 @@ noncomputable def sectorProjection (k : Fin h.r) : Matrix (Fin D) (Fin D) ℂ :=
 private theorem sectorProjection_diag (k j : Fin h.r) (a : Fin (h.dim j)) :
     h.sectorProjection k (h.index ⟨j, a⟩) (h.index ⟨j, a⟩) = if j = k then 1 else 0 := by
   classical
-  simp [sectorProjection, Matrix.blockProjection, Matrix.reindex_apply]
+  by_cases hj : j = k
+  · subst j
+    simp [sectorProjection, Matrix.blockProjection, Matrix.reindex_apply]
+  · simp [sectorProjection, Matrix.blockProjection, Matrix.reindex_apply, hj]
 
 /-- Every canonical sector is nonzero because its bond dimension is positive.
 Source: PGVWC07, Theorem 4, lines 745–751, with the positive-block convention. -/
@@ -112,7 +115,7 @@ theorem sectorProjection_ne_zero (k : Fin h.r) : h.sectorProjection k ≠ 0 := b
   intro hz
   have hentry := h.sectorProjection_diag k k ⟨0, h.dim_pos k⟩
   rw [hz] at hentry
-  simpa using hentry
+  simp at hentry
 
 /-- The transfer eigenvalue of a canonical sector projection is the square
 of its canonical weight. Source: PGVWC07, Theorem 4, lines 745–757. -/
@@ -130,8 +133,8 @@ theorem transferMap_sectorProjection (k : Fin h.r) :
     (congrArg Matrix.blockDiagonal' (funext fun j => ?_))
   by_cases hj : j = k
   · subst j
-    simp only [if_pos rfl, Kraus.transferMap_apply, Matrix.mul_one, h.unital]
-  · simp only [hj, ite_false, map_zero, smul_zero]
+    simp [Pi.smul_apply, Kraus.transferMap_apply, h.unital]
+  · simp [hj, Pi.smul_apply]
 
 /-- Each squared canonical weight occurs in the actual transfer spectrum.
 Source: PGVWC07, Theorem 4, lines 745–757. -/
@@ -149,25 +152,26 @@ theorem hasEigenvalue_of_block {k : Fin h.r} {μ : ℂ}
     Module.End.HasEigenvalue (Kraus.transferMap A) ((h.weight k : ℂ) ^ 2 * μ) := by
   classical
   obtain ⟨X, hX⟩ := hμ.exists_hasEigenvector
-  let Y := Matrix.reindex h.index h.index (Matrix.blockDiagonal' (Pi.single k X))
+  let blocks : ∀ j, Matrix (Fin (h.dim j)) (Fin (h.dim j)) ℂ := Pi.single k X
+  let Y := Matrix.reindex h.index h.index (Matrix.blockDiagonal' blocks)
   have hYne : Y ≠ 0 := by
     intro hz
     apply hX.2
     ext a b
     have hentry := congrFun (congrFun hz (h.index ⟨k, a⟩)) (h.index ⟨k, b⟩)
-    simpa [Y, Matrix.reindex_apply] using hentry
+    simpa [Y, blocks, Matrix.reindex_apply] using hentry
   have hY : Kraus.transferMap A Y = ((h.weight k : ℂ) ^ 2 * μ) • Y := by
     dsimp only [Y]
     rw [h.transferMap_reindex_blockDiagonal]
     change _ = Matrix.reindex h.index h.index
-      (((h.weight k : ℂ) ^ 2 * μ) • Matrix.blockDiagonal' (Pi.single k X))
+      (((h.weight k : ℂ) ^ 2 * μ) • Matrix.blockDiagonal' blocks)
     rw [← Matrix.blockDiagonal'_smul]
     refine congrArg (Matrix.reindex h.index h.index)
       (congrArg Matrix.blockDiagonal' (funext fun j => ?_))
     by_cases hj : j = k
     · subst j
-      simp only [Pi.single_eq_same, Pi.smul_apply, hX.apply_eq_smul, smul_smul]
-    · simp only [Pi.single_eq_of_ne hj, map_zero, Pi.smul_apply, smul_zero]
+      simp only [blocks, Pi.single_eq_same, Pi.smul_apply, hX.apply_eq_smul, smul_smul]
+    · simp only [blocks, Pi.single_eq_of_ne hj, map_zero, Pi.smul_apply, smul_zero]
   exact Module.End.hasEigenvalue_of_hasEigenvector
     ⟨Module.End.mem_eigenspace_iff.mpr hY, hYne⟩
 
@@ -186,7 +190,7 @@ theorem exists_weight_eq_one
     have hMapZero :
         ((Module.End.toContinuousLinearMap (Matrix (Fin 0) (Fin 0) ℂ))
           (Kraus.transferMap A)) = 0 := Subsingleton.elim _ _
-    rw [hMapZero, spectralRadius_zero] at hRadius
+    rw [hMapZero, spectrum.spectralRadius_zero] at hRadius
     exact zero_ne_one hRadius
   let : NeZero D := ⟨hD⟩
   by_contra hnone
@@ -200,7 +204,7 @@ theorem exists_weight_eq_one
     by_cases hkj : k = j
     · subst j
       simp [Matrix.blockDiagonal'_apply_eq, Matrix.diagonal_apply, Matrix.one_apply]
-    · simp [Matrix.blockDiagonal'_apply_ne _ _ _ hkj, Matrix.diagonal_apply, hkj]
+    · simp [Matrix.blockDiagonal'_apply_ne _ _ _ hkj, hkj]
   have hNorm : ‖Kraus.transferMap A 1‖ < 1 := by
     rw [Kraus.transferMap_apply]
     simp only [Matrix.mul_one]
@@ -242,9 +246,7 @@ theorem weight_eq_one_unique_of_simple_fixedEigenvalue
   by_contra hkj
   have hentry := congrFun (congrFun hc (h.index ⟨j, ⟨0, h.dim_pos j⟩⟩))
     (h.index ⟨j, ⟨0, h.dim_pos j⟩⟩)
-  have hbad : (0 : ℂ) = 1 := by
-    simpa [h.sectorProjection_diag, Ne.symm hkj] using hentry
-  exact zero_ne_one hbad
+  simp [h.sectorProjection_diag, Ne.symm hkj] at hentry
 
 /-- The normalized generic C2 hypothesis, counted with algebraic
 multiplicity, determines a unique unit-weight canonical block. No dominant
