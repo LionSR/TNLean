@@ -35,7 +35,9 @@ noncomputable def physicalPairParentTerm (β : ι → Type*) [∀ k, Fintype (β
       (S := (k : {k : {k : ι // k ≠ i} // k ≠ ⟨j, hji⟩}) → β k.val.val)
       (LinearMap.range (rectangularPairBoundary A B))ᗮ.starProjection).toLinearMap
 
-private theorem physicalPairParentTerm_in_coordinates
+/-- Reading the actual local term in pair/outside coordinates gives the
+complementary pair projection extended by identity. -/
+theorem physicalPairParentTerm_in_coordinates
     (β : ι → Type*) [∀ k, Fintype (β k)] (i j : ι) (hji : j ≠ i)
     (A : β i → Matrix a b ℂ) (B : β j → Matrix b c ℂ)
     (v : EuclideanSpace ℂ ((k : ι) → β k)) :
