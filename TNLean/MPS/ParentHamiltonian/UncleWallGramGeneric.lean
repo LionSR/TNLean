@@ -8,6 +8,7 @@ import Mathlib.LinearAlgebra.QuadraticForm.Radical
 import Mathlib.LinearAlgebra.Prod
 import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
 import Mathlib.Analysis.Matrix.MeasurableSpace
+import Mathlib.MeasureTheory.Constructions.BorelSpace.Complex
 
 /-!
 # Generic positivity of the actual one-wall norm coefficient
