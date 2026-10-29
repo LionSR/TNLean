@@ -122,7 +122,9 @@ Source: PGVWC07, MPSarchive.tex lines 921--931. -/
 @[simp] theorem periodicCutBasis_apply {A : MPSTensor d D} (hk : k ≤ N)
     (hleft : Kraus.IsNBlkInjective A k) (hright : Kraus.IsNBlkInjective A (N - k))
     (a : Fin D × Fin D) (σ : Fin k → Fin d) :
-    (periodicCutBasis hk hleft hright a).val σ = leftCutVector A k a σ := rfl
+    (periodicCutBasis hk hleft hright a).val σ = leftCutVector A k a σ := by
+  simp only [periodicCutBasis, Module.Basis.map_apply, LinearEquiv.coe_ofEq_apply,
+    Module.Basis.coe_span_apply]
 
 /-- Condition C1 on both sides makes the actual physical Schmidt cut
 rank exactly the squared virtual dimension.
