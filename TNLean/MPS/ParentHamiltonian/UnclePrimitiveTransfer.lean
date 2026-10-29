@@ -186,7 +186,7 @@ theorem uncleTransfer_pow_sub_projection_bound [NeZero D]
   let V := Matrix (Fin D) (Fin D) ℂ
   let P := uncleDensityProjection ρ
   let N := Kraus.mapLM A - P
-  let Φ := Module.End.toContinuousLinearMap V
+  let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   have hgap : spectralRadius ℂ (Φ N) < 1 :=
     uncleTransfer_complement_spectralRadius_lt_one A hA hU ρ htr hfix
   obtain ⟨C, r, hC, hr, hr1, hgeom⟩ :=
