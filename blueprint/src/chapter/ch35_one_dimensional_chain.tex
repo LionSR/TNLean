@@ -838,6 +838,127 @@ windows and the three bulk labels.
     These are~(\ref{eq:chain_two_window_crossing_forms}), including $q=0$.
 \end{proof}
 
+\begin{theorem}[The operator Schmidt rank of a polynomial]
+    \label{thm:chain_two_window_polynomial_rank}
+    \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_aeval_two_window_le_pow}
+    \leanok
+    \uses{def:chain_model}
+    Let $L,q,\ell,a,b,k$ be natural numbers with $\ell\ge1$, $k\ge1$,
+    $a+2\ell\le b$ and $b+2\ell\le L-1$.
+    Use the $4\ell+3$ labels $\mathcal I$ in
+    (\ref{eq:chain_two_window_alphabet}).
+    Let $F_\alpha$ be complex operators on the chain, with $F_{x_r}$
+    supported on $[a+r,a+r+2)$ and
+    $F_{y_r}$ on $[b+r,b+r+2)$ for
+    $0\le r<2\ell$. The three bulk operators are independently given,
+    with $F_\lambda,F_\mu,F_\rho$ supported on $[0,a+1)$,
+    $[a+2\ell,b+1)$ and
+    $[b+2\ell,L)$, respectively.
+    Put $H=\sum_{\alpha\in\mathcal I}F_\alpha$, and let
+    $P\in\mathbb C[X]$ have degree at most $k$.
+    For $\delta\in\{0,1\}$, set
+    \begin{align}
+        J_\delta & =[a+\ell+\delta,b+\ell+1).
+        \label{eq:chain_two_window_polynomial_target}
+    \end{align}
+    Then the operator Schmidt rank across $J_\delta$ and its complement
+    satisfies
+    \begin{align}
+        \operatorname{OSR}_{J_\delta\mid J_\delta^c}\bigl(P(H)\bigr)
+         & \le(qk)^{17\left(\ell+\left\lfloor k/(2\ell)\right\rfloor\right)}.
+        \label{eq:chain_two_window_polynomial_rank}
+    \end{align}
+    The local dimension may be zero or one. With one-based endpoints
+    $i_1=a+\ell+1$ and $i_2=b+\ell+1$, the choice $\delta=0$ gives the
+    block $\{i_1,\ldots,i_2\}$ of
+    \cite[Proposition~5.7]{Arad2016RigorousRG}; $\delta=1$ gives
+    $\{i_1+1,\ldots,i_2\}$, the region between its two named cuts.
+    This is an explicit rank bound for that proposition.
+    Matrix product operator representations and its algorithmic conclusions
+    are separate assertions.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:chain_two_window_factors,thm:chain_fixed_frequency_uniform_bound,
+        thm:chain_two_window_count_sum,thm:chain_two_window_count_power}
+    If $q=0$, the fit conditions imply $L>0$, so the chain space is
+    zero-dimensional and every operator is zero. The rank is therefore zero.
+    If $q=1$, every cut configuration space is a singleton, so the operator
+    Schmidt rank is at most one; this is at most the right-hand side of
+    (\ref{eq:chain_two_window_polynomial_rank}), since $k\ge1$.
+    Henceforth assume $q\ge2$ and put $B_k=\lfloor k/(2\ell)\rfloor$.
+
+    For a frequency vector $\alpha:\mathcal I\to\mathbb N$ of total $r$,
+    let $W_\alpha$ be the sum of all ordered products of $r$ members of
+    the family whose multiplicity vector is $\alpha$.
+    At $r=0$, the empty product is the identity.
+    Fix $p,s\in\{0,\ldots,2\ell-1\}$ and put
+    $E_{p,s}=[a+p+1,b+s+1)$.
+    Let $\mathcal F^{p,s}_{r,i,j}$ denote the frequency slice in
+    (\ref{eq:chain_fixed_frequency_set}), with $u=x_p$ and $v=y_s$.
+    Define
+    \begin{align}
+        R_{r,i,j}
+         & =(r+1)^{4\ell}
+        \binom{r+i+1}{2i+1}\binom{r+j+1}{2j+1}
+        q^{2(i+j)+4\ell}.
+        \label{eq:chain_two_window_slice_rank_factor}
+    \end{align}
+    For arbitrary complex scalars $c_\alpha$, one has
+    \begin{align}
+        \operatorname{OSR}_{J_\delta\mid J_\delta^c}\!\left(
+        \sum_{\alpha\in\mathcal F^{p,s}_{r,i,j}}c_\alpha W_\alpha\right)
+         & \le R_{r,i,j}.
+        \label{eq:chain_two_window_weighted_slice_rank}
+    \end{align}
+    Indeed, Theorem~\ref{thm:chain_two_window_factors} gives the same two
+    crossing factors for their tensor identities and their bounds $q^2$.
+    Apply the weighted frequency-sum bound across the middle cut in
+    \cite{QICLean2026Blueprint}, followed by
+    Theorem~\ref{thm:chain_fixed_frequency_uniform_bound}.
+    Changing from $E_{p,s}$ to $J_\delta$ costs at most
+    $q^{2|E_{p,s}\triangle J_\delta|}$, by expanding the matrix units on
+    the sites that change sides. The endpoint estimate gives
+    \begin{align}
+        |E_{p,s}\triangle J_\delta|
+         & \le |p+1-\ell-\delta|+|s-\ell|\le2\ell.
+        \label{eq:chain_two_window_polynomial_cut_change}
+    \end{align}
+    Thus the two crossing contributions $q^{2i}q^{2j}$ and the change of
+    cut give $q^{2(i+j)+4\ell}$ in
+    (\ref{eq:chain_two_window_slice_rank_factor}).
+    Both binomial upper indices retain the $+1$ printed in
+    \cite[proof of Proposition~5.7]{Arad2016RigorousRG}; the interpolation
+    spanning and ordered-gap count are detailed in
+    \cite{gap:aklv13_interpolation_and_word_count}.
+
+    Choose a label of smallest frequency in each window, once for each
+    $\alpha$. If its total is $r\le k$, both chosen frequencies are at
+    most $B_k$. The simultaneous low-frequency partition of
+    \cite{QICLean2026Blueprint} therefore groups $H^r$ by a pair of
+    window labels and their two frequencies $i,j\le B_k$.
+    Every frequency vector belongs to exactly one group.
+    Its group is a weighted slice as in
+    (\ref{eq:chain_two_window_weighted_slice_rank}), using the indicator
+    of the two chosen labels as the scalar weight.
+    There are $(2\ell)^2$ ordered choices of the labels.
+    Operator Schmidt rank is subadditive and cannot increase under scalar
+    multiplication. Therefore
+    \begin{align}
+        \operatorname{OSR}_{J_\delta\mid J_\delta^c}\bigl(P(H)\bigr)
+         & \le(2\ell)^2\sum_{r=0}^{k}
+        \sum_{i=0}^{B_k}\sum_{j=0}^{B_k}R_{r,i,j}.
+        \label{eq:chain_two_window_polynomial_degree_sum}
+    \end{align}
+    Here all degrees $0,\ldots,k$ are included, and multiplying a power
+    by its coefficient in $P$ introduces no further rank factor.
+    Theorem~\ref{thm:chain_two_window_count_sum} bounds the right-hand
+    side by the product in~(\ref{eq:chain_two_window_count_factor}), with
+    $d=q$ and $b=B_k$. Since $B_k\le k$, $q\ge2$, $\ell\ge1$ and $k\ge1$,
+    Theorem~\ref{thm:chain_two_window_count_power} bounds that product by
+    $(qk)^{17(\ell+B_k)}$, proving
+    (\ref{eq:chain_two_window_polynomial_rank}).
+\end{proof}
+
 \begin{lemma}[Marginal moment and tail bounds at a cut]
     \label{lem:chain_marginal_tail}
     \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.surprisalTail_regionState_le,
@@ -6589,6 +6710,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
 \input{chapter/ch35_copy_region_entropy}
 \input{chapter/ch35_chain_trimming}
 \input{chapter/ch35_lvv_viable_sets}
+\input{chapter/ch35_lvv_power_projector}
 \input{chapter/ch35_collective_trimming}
 \input{chapter/ch35_chain_gluing}
 

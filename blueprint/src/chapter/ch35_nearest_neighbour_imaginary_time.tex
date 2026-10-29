@@ -1,0 +1,71 @@
+\section{Local imaginary-time conjugation}
+
+\begin{theorem}[Conjugation from factorial commutator growth]
+    \label{thm:factorial_commutator_conjugation}
+    \lean{Matrix.norm_exp_conjugation_le_two}
+    \leanok
+    Let $H,O$ be complex square matrices on a finite index set, and put
+    $\operatorname{ad}_H(X)=HX-XH$. Suppose that, for every $m\in\N$,
+    \begin{align}
+        \bigl\lVert\operatorname{ad}_H^m(O)\bigr\rVert
+        \le 4^m m!\lVert O\rVert.
+    \end{align}
+    For $0\le s\le1/8$,
+    \begin{align}
+        \bigl\lVert e^{sH}Oe^{-sH}\bigr\rVert\le2\lVert O\rVert.
+    \end{align}
+    This is the conditional exponential-series estimate used
+    in~\cite[lines 795--837]{Arad2014Connecting}.
+\end{theorem}
+\begin{proof}\leanok
+    Left and right multiplication by $H$ commute. Exponentiating their
+    difference gives the Hadamard expansion
+    \begin{align}
+        e^{sH}Oe^{-sH}
+         & =\sum_{m=0}^{\infty}\frac{s^m}{m!}\operatorname{ad}_H^m(O).
+    \end{align}
+    The series converges absolutely, since $4s\le1/2$, and
+    \begin{align}
+        \bigl\lVert e^{sH}Oe^{-sH}\bigr\rVert
+         & \le\sum_{m=0}^{\infty}(4s)^m\lVert O\rVert
+        \le\sum_{m=0}^{\infty}2^{-m}\lVert O\rVert
+        =2\lVert O\rVert.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Short imaginary-time conjugation on a chain]
+    \label{thm:chain_local_imaginary_time}
+    \lean{TNLean.MPS.AreaLaw.norm_exp_conjugation_nearest_neighbour_shift_le_two}
+    \leanok
+    \uses{def:chain_model}
+    Let $L,q,c\in\N$, and let $I$ be a set of nearest-neighbour bonds of the
+    chain $\{0,\ldots,L-1\}$. For each $i\in I$, let $h_i$ act on
+    $\{i,i+1\}$ and satisfy $0\le h_i\le\Id$. Set $H=\sum_{i\in I}h_i$.
+    Let $O$ act on $\lbrack c,c+2)\cap\lbrack 0,L)$. For every $z\in\C$ and
+    $0\le t\le1/8$,
+    \begin{align}
+        \bigl\lVert e^{t(H-z\Id)}Oe^{-t(H-z\Id)}\bigr\rVert
+        \le 2\lVert O\rVert.
+    \end{align}
+    This is a nearest-neighbour consequence of the commutator argument
+    in~\cite[lines 795--880]{Arad2014Connecting}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:factorial_commutator_conjugation}
+    Write $O_m=\operatorname{ad}_H^m(O)$. Disjoint supports commute, so $O_m$
+    acts on $\lbrack \max(0,c-m),c+2+m)\cap\lbrack 0,L)$. At most $2m+3$ original bonds
+    meet this interval. Since $0\le h_i\le\Id$, centering at $\Id/2$ gives
+    $\lVert[h_i,X]\rVert\le\lVert X\rVert$. Consequently
+    $\lVert O_{m+1}\rVert\le4(m+1)\lVert O_m\rVert$, and induction gives
+    $\lVert O_m\rVert\le4^m m!\lVert O\rVert$. For every $X$,
+    \begin{align}
+        [H-z\Id,X]=[H,X].
+    \end{align}
+    Applying Theorem~\ref{thm:factorial_commutator_conjugation} to $H-z\Id$ yields
+    \begin{align}
+        \bigl\lVert e^{t(H-z\Id)}Oe^{-t(H-z\Id)}\bigr\rVert
+         & \le\sum_{m=0}^{\infty}\frac{t^m}{m!}\lVert O_m\rVert
+        \le\sum_{m=0}^{\infty}2^{-m}\lVert O\rVert
+        =2\lVert O\rVert.
+    \end{align}
+\end{proof}
