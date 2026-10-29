@@ -62,6 +62,7 @@ import TNLean.MPS.AreaLaw.InteriorLowEnergyFamily
 import TNLean.MPS.AreaLaw.IntervalCollectiveTrimming
 import TNLean.MPS.AreaLaw.IntervalMPOTransfer
 import TNLean.MPS.AreaLaw.IntervalNeighborhoodEntropy
+import TNLean.MPS.AreaLaw.IntervalSampledImage
 import TNLean.MPS.AreaLaw.IntervalSlice
 import TNLean.MPS.AreaLaw.IntervalSymmDiff
 import TNLean.MPS.AreaLaw.IntervalUnion
@@ -93,6 +94,7 @@ import TNLean.MPS.AreaLaw.PhysicalDGGlobalApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGIntervalTrimming
 import TNLean.MPS.AreaLaw.PhysicalDGReferenceSpace
 import TNLean.MPS.AreaLaw.PhysicalDGReferenceTrimming
+import TNLean.MPS.AreaLaw.PhysicalDGSampledNode
 import TNLean.MPS.AreaLaw.PhysicalDGSharpApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGViability
 import TNLean.MPS.AreaLaw.PhysicalDetectability

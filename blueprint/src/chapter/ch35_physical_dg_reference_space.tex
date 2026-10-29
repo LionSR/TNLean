@@ -257,3 +257,63 @@
     canonical configuration identification carries the constructed
     candidate to the stated parent interval and preserves dimension.
 \end{proof}
+
+
+\begin{theorem}[One sampled and trimmed physical parent interval]
+    \label{thm:physical_dg_sampled_node}
+    \lean{TNLean.MPS.AreaLaw.exists_measurable_interval_word_image_event,
+        TNLean.MPS.AreaLaw.exists_physical_dg_sampled_interval_node_event}
+    \leanok
+    \uses{thm:actual_adjacent_interval_merge,thm:physical_dg_interval_trimming}
+    Under the physical hypotheses of the common-reference theorem,
+    fix the actual full ground space $G$ and let $r_G=\dim G$.
+    Choose its common reference at error $10^{-4}$, with
+    $D_{\rm ref}=r_G^2B$, before all intervals, and put
+    $\xi=(1000D_{\rm ref}\sqrt{L+1})^{-1}$.
+    Suppose the physical filter parameters satisfy $m\ge\max\{q,50\}$,
+    $\ell\ge1$, $t\ge21$, the inequalities
+    \[
+      288e^{11/8}e^{-(t-g)/8}\le {g\over10^6m},\qquad
+      \bigl(2e^{-2\ell^2\sqrt{(4g/5)/R}}\bigr)^2\le\Delta
+      \quad(0<R\le3t+4\ell),
+    \]
+    and $D^{12}\Delta\le10^{-5}$, where
+    $D=(m\ell^2)^{22\ell}$.
+    For every parent $[p,r)$ of length greater than $4\ell$, the physical
+    construction chooses a target of dimension $r_G$ and an operator
+    family of size at most $D^2$, before the child spaces and $s\ge1$.
+
+    Let both adjacent children be $3/200$-viable for the same global $G$
+    and have dimension at most $D^6s^3$. Form their actual tensor merge
+    $W$ in the parent interval, and write $Q=\dim W$ and
+    $a=\lceil\log_D(D^2s)\rceil$.
+    There is a measurable event of Haar unitaries whose failure measure
+    is at most
+    \[
+      \eta=\begin{cases}
+        0,&Q\le s,\\
+        \bigl(1+2/\sqrt{3s/(32Q)}\bigr)^{2r_G}Qe^{-s/16},&s<Q.
+      \end{cases}
+    \]
+    For every unitary in this event, sample $\min\{s,Q\}$ basis vectors,
+    apply all actual length-$a$ operator words, and collectively trim
+    their image at threshold $\xi$. The resulting space has dimension
+    at most $D^6s^3$ and is $3/200$-viable for the original global $G$,
+    with the whole exterior retained.
+
+    This is a long-interval, capped-gap auxiliary construction. It does
+    not include the short-interval branch, a uniform choice of $s$,
+    adaptive measurability, or a recursively selected tree. It uses one
+    final collective trim rather than identifying this operation with
+    the source's interleaved trims.
+\end{theorem}
+\begin{proof}\leanok
+    The merge is $3/100$-viable for $G$. Transfer to the constructed
+    target costs at most $2(3/100+10^{-4})<1/4$.
+    The actual Haar sample and word images give dimension at most
+    $D^6s^3$ and target error at most
+    $(1024/9)10^{-5}s^{-2}$. Transfer back to $G$ bounds the error by
+    $1/400$. Collective trimming then gives error at most
+    $4/400+6/10000+1/250<3/200$.
+    The reference uses the genuine two-boundary rank $D_{\rm ref}^2$.
+\end{proof}
