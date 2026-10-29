@@ -10,9 +10,9 @@ in trace norm. The second extends the matrix product form of
 Section~\ref{sec:hastings_product_form} to every temperature by taking an even
 power of the high-temperature form. This section proves both steps for general
 operators. The truncated density matrix $\rho(\beta,l_{\mathrm{proj}})$ of the
-cluster expansion enters only through the hypotheses, and the error bound at
-every temperature \cite[lines 1322--1349]{Hastings2006Solving} is not proved
-here. The trace norm of a square matrix $D$ is
+cluster expansion enters only through the hypotheses. Its error bound at
+every temperature \cite[lines 1322--1349]{Hastings2006Solving} is proved in
+Section~\ref{sec:hastings_temperature_error}. The trace norm of a square matrix $D$ is
 $\|D\|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
 
 \begin{lemma}[The trace norm from expectation values]
@@ -79,10 +79,9 @@ $\|D\|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
     eq.~(mplt) of \cite[lines 1303--1317]{Hastings2006Solving}, with positive
     semidefiniteness in place of the source's positive definiteness, which
     would need $\rho(\beta/m,l_{\mathrm{proj}})$ to be
-    invertible~\cite{gap:hastings05_mplt_positivity}. The count of
-    index values in lines 1318--1320 is not established; it is the count
-    recorded as open for
-    Lemma~\ref{thm:hastings_trotter_product_form_radius}.
+    invertible~\cite{gap:hastings05_mplt_positivity}. The local index ranges
+    and their growth under powers are proved in
+    Lemma~\ref{thm:hastings_truncated_index_count}.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_product_form_mul}
@@ -122,11 +121,12 @@ $\|D\|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
 
 \begin{lemma}[The truncated operator at every temperature]
     \label{thm:hastings_truncated_all_temperatures}
-    \lean{TNLean.Lattice.ClusterExpansion.hasProductForm_truncatedExp_pow_of_even}
+    \lean{TNLean.Lattice.ClusterExpansion.hasProductForm_truncatedExp_pow_of_even,
+        TNLean.Lattice.ClusterExpansion.hasProductForm_truncatedExp_pow_of_even_of_dist_le}
     \leanok
     \uses{def:hastings_product_form, def:hastings_truncated_expansion,
         def:hastings_cluster_of_terms}
-    Let the domain be nonempty, let every term $H_k$ be Hermitian and act only
+    Let the finite metric lattice be nonempty, let every term $H_k$ be Hermitian and act only
     on a set $S_k$ of sites, with clusters and largeness as in
     Lemma~\ref{thm:hastings_truncated_product_form}, and let $m$ be even.
     Then $\rho(\beta,l)^m$ is in matrix product form of range $l$ and positive
@@ -144,4 +144,31 @@ $\|D\|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
     Lemma~\ref{thm:hastings_truncated_product_form} and Hermitian by
     Lemma~\ref{thm:hastings_truncated_positivity}, so
     Lemma~\ref{thm:hastings_thermal_all_temperatures} applies.
+\end{proof}
+
+\begin{lemma}[The least sufficient even number of factors]
+    \label{thm:hastings_even_temperature_factors}
+    \lean{TNLean.Lattice.ClusterExpansion.evenTemperatureFactors,
+        TNLean.Lattice.ClusterExpansion.evenTemperatureFactors_spec,
+        TNLean.Lattice.ClusterExpansion.evenTemperatureFactors_le,
+        TNLean.Lattice.ClusterExpansion.exp_evenTemperatureFactors_mul_sub_one_le}
+    \leanok
+    For $\beta>0$ and $\beta_0>0$, put
+    $n=2\lceil\beta/(2\beta_0)\rceil$. Then $n\ge2$ is the least
+    positive even integer with $\beta/n\le\beta_0$, and
+    \begin{align*}
+        \beta/\beta_0\le n<\beta/\beta_0+2.
+    \end{align*}
+    Consequently, for every $A\ge0$,
+    $e^{nA}-1\le e^{(\beta/\beta_0+2)A}-1$.
+    This supplies the exact rounding bound for the choice in
+    \cite[lines 1307--1312]{Hastings2006Solving} and its corrected
+    error estimate\cite{gap:hastings05_temperature_factor_count}.
+\end{lemma}
+\begin{proof}\leanok
+    The ceiling lies between $\beta/(2\beta_0)$ and
+    $\beta/(2\beta_0)+1$. Multiplication by two gives the displayed
+    interval and $\beta/n\le\beta_0$. Any sufficient positive even
+    integer is $2k$ with $k\ge\beta/(2\beta_0)$, hence is at least $n$.
+    The last inequality follows from monotonicity of the exponential.
 \end{proof}
