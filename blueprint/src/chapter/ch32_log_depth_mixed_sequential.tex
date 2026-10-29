@@ -21,7 +21,7 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[Coefficients of the central product]
+\begin{lemma}[Coefficients of the central product]
     \label{thm:ldp_central_coefficients}
     \lean{MPSPreparation.mixedProductMap_apply,
         MPSPreparation.eval_reverseTransposeChain, MPSPreparation.eval_mixedChain}
@@ -37,7 +37,7 @@
     \end{align}
     Reversing the right site order and transposing each matrix gives
     precisely the original left-to-right physical matrix product.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:ldp_central_input}
@@ -46,7 +46,7 @@
     identity, since transposition reverses the order of matrix multiplication.
 \end{proof}
 
-\begin{theorem}[Isometric factorization of virtual-pair coefficients]
+\begin{lemma}[Isometric factorization of virtual-pair coefficients]
     \label{thm:ldp_pair_coefficient_factorization}
     \lean{MPSPreparation.chainPairMatrix, MPSPreparation.sequentialEvaluation,
         MPSPreparation.sequentialEvaluation_isIsometry,
@@ -59,7 +59,7 @@
     the outer bond has dimension one, every bond has dimension at most
     $D^2$, and each site map $Q_p$ is an isometry from its inward bond
     to its outward bond and physical site. In particular, $E^\dagger E=\Id$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:seqanc_sweep_matrix_remainder, thm:seqanc_support_propagation,
@@ -94,14 +94,14 @@
     either exterior boundary.
 \end{definition}
 
-\begin{theorem}[Two-sided factorization of a matrix product isometry]
+\begin{lemma}[Two-sided factorization of a matrix product isometry]
     \label{thm:ldp_mixed_sequential_general}
     \lean{MPSPreparation.exists_mixed_isometric_factorization}
     \leanok
     \uses{def:ldp_central_input, def:ldp_mixed_sequential}
     If the matrix product $V$ of (\ref{eq:ldp_central_input}) is an isometry,
     it has a mixed sequential factorization about its chosen central site.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldp_pair_coefficient_factorization, def:ldp_central_input}
@@ -114,7 +114,7 @@
     proves that the central map is an isometry.
 \end{proof}
 
-\begin{theorem}[Mixed sequential factorization of a polar isometry]
+\begin{lemma}[Mixed sequential factorization of a polar isometry]
     \label{thm:ldp_mixed_sequential_polar}
     \lean{MPSPreparation.exists_eq_mixedChain, MPSPreparation.mixedPolarIsoMatrix,
         MPSPreparation.mixedPolarIsoMatrix_eq_mixedProductMap,
@@ -133,13 +133,13 @@
     the full-input isometry assertion therefore fails. As recorded in
     \cite{gap:mswc24_mixed_polar_injectivity_scope}, the corrected
     support-restricted factorization is given below in
-    Theorem~\ref{thm:ldp_mixed_polar_support}.
-\end{theorem}
+    Lemma~\ref{thm:ldp_mixed_polar_support}.
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:ldp_mixed_sequential_general, thm:ldp_central_coefficients,
         thm:ldpolar_tensor_injective, lem:ldp_sequential_factorization_first_inputs}
-    By Theorem~\ref{thm:ldpolar_tensor_injective}, $V^\dagger V=\Id$.
+    By Lemma~\ref{thm:ldpolar_tensor_injective}, $V^\dagger V=\Id$.
     Lemma~\ref{lem:ldp_sequential_factorization_first_inputs} expresses
     $V=BP^{-1}$ in the matrix-product coefficients of the given chain.
     Splitting the chain at the chosen site and orienting its right part inward
