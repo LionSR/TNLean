@@ -10093,3 +10093,15 @@ there is no need for a new tactic.
   actual powered construction is proved once in
   `MPS/AreaLaw/IndependentPhysicalDGPower.lean`; no spectral assumption or
   final viable-space witness is added to the physical inputs.
+
+### Regrouping physical projection products — promoted (2026-10-29)
+
+- **Pattern:** Split a physical parity product by an arbitrary predicate on
+  the bonds while retaining the prescribed order inside both factors.
+- **Abstraction:** `physicalParityProduct_partition` uses the generic
+  `ContinuousLinearMap.complementProd_partition` from QICLean. The two
+  physical parity factors in the regional gap argument use this result.
+- **Related estimate:** QICLean's `IsStarProjection.norm_sub_apply_sq_le`
+  bounds the residual of a product by its two separate residuals without
+  a triangle-inequality loss. The regional gap argument applies it to both
+  parity products. No commutativity between the two parities is required.

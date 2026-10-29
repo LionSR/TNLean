@@ -243,3 +243,85 @@ rank theorem is separate from the detectability results above.
     $h_i^Jx=0$ for every internal bond. Together with the outside bonds,
     these are exactly the common-kernel conditions for the original sum.
 \end{proof}
+
+\begin{lemma}[Partition and removed mass of the physical parity products]
+    \label{lem:physical_parity_partition_mass}
+    \lean{TNLean.MPS.AreaLaw.physicalParityProduct_partition}
+    \lean{TNLean.MPS.AreaLaw.sum_norm_sq_sub_physicalParityProduct_le}
+    \leanok
+    Let $P_p$ denote the full complementary projection product of parity
+    $p\in\{0,1\}$, and let $H=\sum_i h_i$. Any partition of the bonds
+    splits $P_p$ into its two restricted parity products. Moreover, for
+    every vector $x$,
+    \[
+        \|(I-P_0)x\|^2+\|(I-P_1)x\|^2\le\langle x,Hx\rangle.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:physical_detectability}
+    Bonds of the same parity have disjoint support and commute. Thus
+    their complementary projections may be regrouped. The commuting
+    projection union bound controls each removed mass by the sum of
+    the corresponding bond energies. Adding the two parities gives
+    the stated inequality.
+\end{proof}
+
+\begin{lemma}[The original detectability product and truncated energy]
+    \label{lem:physical_ff_truncated_converse}
+    \lean{TNLean.MPS.AreaLaw.sum_norm_sq_sub_physicalParityProduct_le_truncation}
+    \lean{TNLean.MPS.AreaLaw.one_sub_three_mul_truncated_energy_le_norm_sq_physicalDetectability}
+    \leanok
+    Let $\widetilde H_J$ be the actual regional truncation above.
+    For every vector $x$,
+    \[
+        \|(I-P_0)x\|^2+\|(I-P_1)x\|^2
+        \le\langle x,\widetilde H_Jx\rangle.
+    \]
+    Consequently, for every unit vector $x$,
+    \[
+        1-3\langle x,\widetilde H_Jx\rangle
+        \le\|P_1P_0x\|^2.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:physical_ff_regional_truncation,lem:physical_parity_partition_mass}
+    Write each full parity product as the internal product followed by
+    the outside product. For an orthogonal projection $Q$,
+    $\|x-Qy\|^2\le\|x-Qx\|^2+\|x-y\|^2$.
+    Apply this inequality to the internal parity products and bound
+    the outside removed masses by the outside bond energies.
+    The converse estimate for two orthogonal projections then gives
+    the second inequality.
+\end{proof}
+
+\begin{theorem}[The nonzero gap of the regional frustration-free truncation]
+    \label{thm:physical_ff_regional_gap}
+    \lean{TNLean.MPS.AreaLaw.physicalFrustrationFreeTruncation_energy_ge_of_spectral_gap}
+    \lean{TNLean.MPS.AreaLaw.physicalFrustrationFreeTruncation_spectral_gap}
+    \leanok
+    Suppose that $\gamma>0$ and
+    $\operatorname{spec}(H)\subseteq\{0\}\cup[\gamma,\infty)$.
+    Then
+    \[
+        \operatorname{spec}(\widetilde H_J)
+        \subseteq\{0\}\cup
+        \left[\frac{\gamma}{3(4+\gamma)},\infty\right).
+    \]
+    Every unit vector orthogonal to $\ker\widetilde H_J$ has energy
+    at least $\gamma/[3(4+\gamma)]$.
+    No uniqueness assumption or upper bound on $\gamma$ is needed.
+    In particular, for $0<\gamma\le1$ the lower bound is at least
+    $\gamma/15$. This proves the gap conclusion of
+    \cite[Section 6.1]{Arad2016RigorousRG}; the false printed
+    additive rank constant remains separate.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:physical_ff_regional_kernel,lem:physical_ff_truncated_converse}
+    The kernels of $H$ and $\widetilde H_J$ agree. On their common
+    orthogonal complement, detectability gives
+    $\|P_1P_0x\|^2\le4/(4+\gamma)$ for unit $x$.
+    Combining this with the preceding converse estimate and rearranging
+    yields the energy bound. Apply that bound to every nonzero
+    eigenvector of the positive operator $\widetilde H_J$ to obtain
+    the spectral conclusion.
+\end{proof}
