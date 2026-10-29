@@ -134,7 +134,8 @@ private def fiveConfigEquiv (p r q s t : ℕ) :
     Cfg d p × (Cfg d r × (Cfg d q × (Cfg d s × Cfg d t))) ≃
       Cfg d (p + r + q + s + t) := by
   let e₁ := (Equiv.prodAssoc (Cfg d p) (Cfg d r) (Cfg d q × (Cfg d s × Cfg d t))).symm
-  let e₂ := (Fin.appendEquiv (α := Fin d) p r).prodCongr (Equiv.refl (Cfg d q × (Cfg d s × Cfg d t)))
+  let e₂ := (Fin.appendEquiv (α := Fin d) p r).prodCongr
+    (Equiv.refl (Cfg d q × (Cfg d s × Cfg d t)))
   let e₃ := (Equiv.prodAssoc (Cfg d (p + r)) (Cfg d q) (Cfg d s × Cfg d t)).symm
   let e₄ := (Fin.appendEquiv (α := Fin d) (p + r) q).prodCongr (Equiv.refl (Cfg d s × Cfg d t))
   let e₅ := (Equiv.prodAssoc (Cfg d (p + r + q)) (Cfg d s) (Cfg d t)).symm
