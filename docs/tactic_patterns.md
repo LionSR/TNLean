@@ -9640,3 +9640,14 @@ there is no need for a new tactic.
   add unrelated dependencies. If a shared one-step statement is needed, move that existing
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
+
+### Unit matrices as exact gauges — promoted Mathlib construction (2026-10-29)
+
+- **Pattern:** convert an actual matrix unitary into the matrix-ring unit
+  used by a tensor gauge equivalence, with its adjoint as inverse.
+- **Abstraction:** Mathlib's `Unitary.toUnits`; no determinant witness or
+  nonsingular-matrix inverse proof is necessary.
+- **Occurrences:** the phase-gauge and exact rephased-gauge conclusions in
+  `MPS/CanonicalForm/QuadraticReconstructionConverse.lean`.
+- **Decision:** reuse the existing unitary-to-unit construction directly;
+  no project-specific conversion structure or tactic is introduced.

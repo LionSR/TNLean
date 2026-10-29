@@ -1,0 +1,84 @@
+\subsection{Same-state reconstruction and explicit rephasing}
+\label{sec:quadratic_same_state_converse}
+
+\begin{lemma}[Rephasing within the same quadratic system]
+    \label{lem:quadratic_solution_rephasing}
+    \lean{MPSTensor.QuadraticReconstructionSolution.rephase,
+        MPSTensor.QuadraticReconstructionSolution.rephase_tensor,
+        MPSTensor.QuadraticReconstructionSolution.mpv_rephase}
+    \notready
+    \uses{def:pgvwc07_quadratic_system}
+    Let $(B,Y_j,Z_j)$ solve the quadratic system and let $|\xi|=1$.
+    Then the same system has the solution
+    \[
+        \widehat B_i=\xi B_i,\qquad
+        \widehat Y_j=\xi^{-j}Y_j,\qquad
+        \widehat Z_j=\xi^{j+1}Z_j.
+    \]
+    If $\xi^N=1$, the actual length-$N$ vectors of $B$ and
+    $\widehat B$ are equal.
+\end{lemma}
+\begin{proof}
+    The scalar product at a site is $\xi^{-j}\xi^{j+1}=\xi$,
+    whereas the scalar product at an internal inverse equation is
+    $\xi^{-(j+1)}\xi^{j+1}=1$. Unit modulus preserves row
+    normalization. A length-$N$ periodic trace is multiplied by
+    $\xi^N$, proving the vector equality.
+\end{proof}
+
+\begin{lemma}[Corrected converse for an actual same-state solution]
+    \label{lem:quadratic_same_state_unitary_phase}
+    \lean{MPSTensor.QuadraticReconstructionSolution.exists_unitary_phase_of_same_state,
+        MPSTensor.QuadraticReconstructionSolution.unitGaugePhaseEquiv_of_same_state}
+    \notready
+    \uses{def:pgvwc07_quadratic_system, thm:pgvwc07_fixed_length_intertwiner}
+    Let $A$ be a translation-invariant canonical tensor satisfying
+    condition C1 at length $L_0$, and let $B$ be the tensor of a solution
+    over a supplied OBC window. Assume
+    \[
+        N>2L_0+D^4,\qquad V^{(N)}(A)=V^{(N)}(B)\ne0.
+    \]
+    Then $A$ is row normalized and there are a unitary $U$ and a scalar
+    $\xi$ with $|\xi|=1$, $\xi^N=1$ and
+    \[
+        A_i=\xi U B_i U^\dagger
+    \]
+    for every letter. No injectivity or canonical-form hypothesis on
+    the solution tensor $B$ is added. The size condition provides both
+    endpoint cuts through the actual fixed-length state equality;
+    these cuts are not inferred from the internal quadratic equations.
+\end{lemma}
+\begin{proof}
+    Condition C1 reduces the canonical tensor to one positive weighted
+    block, with row sum $\lambda^2I$. The solution equation gives
+    the row sum $I$ for $B$. The corrected weighted finite-length
+    uniqueness theorem gives $\lambda=1$ and the displayed unitary
+    conjugation and phase. Its complete-cut argument constructs all
+    $D^4+1$ intertwiners, including the two endpoint cuts. Equality of
+    the actual nonzero vectors forces $\xi^N=1$.
+\end{proof}
+
+\begin{lemma}[An actual rephased solution with exact unitary gauge]
+    \label{lem:quadratic_same_state_exact_rephased_solution}
+    \lean{MPSTensor.QuadraticReconstructionSolution.exists_rephased_solution_exact_gauge_of_same_state}
+    \notready
+    \uses{lem:quadratic_solution_rephasing, lem:quadratic_same_state_unitary_phase}
+    Under the preceding hypotheses, the explicitly rephased solution
+    over the same window has tensor $\widehat B_i=\xi B_i$, preserves
+    the actual length-$N$ state, and satisfies
+    \[
+        A_i=U\widehat B_iU^\dagger.
+    \]
+    In particular $\widehat B$ is exactly gauge equivalent to $A$.
+    This is the corrected same-state converse; it does not assert that
+    an arbitrary algebraic solution represents the prescribed state,
+    or construct the solution from a unique OBC canonical window.
+    The remaining source scope is recorded in
+    \cite{gap:pgvwc07_quadratic_reconstruction_phase} and
+    \cite{gap:pgvwc07_intertwiner_chain_off_by_one}.
+\end{lemma}
+\begin{proof}
+    Apply the two preceding lemmas with the derived root of unity.
+    A unitary matrix is a unit of the matrix ring, with its adjoint
+    as inverse, so the same matrix gives the exact gauge equivalence.
+\end{proof}
