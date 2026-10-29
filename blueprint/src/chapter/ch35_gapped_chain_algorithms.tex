@@ -8,21 +8,22 @@ Vidick~\cite{Arad2016RigorousRG} gave a more efficient renormalization
 algorithm. Both build the approximation one cut at a time. At each cut they
 keep a small set of vectors on the sites to the left of the cut, a viable
 set, whose span still contains the left half of a good approximation. This
-chapter formalizes viable sets, trimming them to polynomial size and
-polynomial bond dimension, reducing their error by an approximate ground-state
-projector, the initial and final cuts of the construction, gluing a left state
-at a cut, and the polynomial filters with their families of coefficients on two
-windows.
+chapter formalizes viable sets, gluing a left state at a cut, trimming viable
+sets to polynomial bond dimension and polynomial size, reducing their error by
+an approximate ground-state projector, the initial and final cuts of the
+construction, and the polynomial filters with their families of coefficients
+on two windows.
 
 \input{chapter/ch35_lvv_viable_sets}
 \input{chapter/ch35_lvv_power_projector}
 \input{chapter/ch35_lvv_sampled_projector}
 \input{chapter/ch35_chain_trimming}
+\input{chapter/ch35_chain_gluing}
+\input{chapter/ch35_lvv_size_trimming}
 \input{chapter/ch35_collective_trimming}
 \input{chapter/ch35_lvv_successive_trimming}
 \input{chapter/ch35_lvv_error_reduction}
 \input{chapter/ch35_lvv_endpoints}
-\input{chapter/ch35_chain_gluing}
 \input{chapter/ch35_polynomial_filter_parameters}
 
 \section{Operator Schmidt rank of polynomials of a two-window family}
@@ -184,6 +185,7 @@ windows.
 \input{chapter/ch35_trace_core_slices}
 \input{chapter/ch35_retained_core_families}
 \input{chapter/ch35_physical_interval_transport}
+\input{chapter/ch35_matrix_factor_exchange}
 \input{chapter/ch35_regional_middle_factors}
 \input{chapter/ch35_selected_middle_mpo_family}
 \input{chapter/ch35_interval_mpo_transfer}
@@ -191,4 +193,3 @@ windows.
 \input{chapter/ch35_two_marker_scalar_recovery}
 \input{chapter/ch35_two_window_polynomial_recovery}
 \input{chapter/ch35_two_window_polynomial_mpo_family}
-\input{chapter/ch35_matrix_factor_exchange}
