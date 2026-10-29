@@ -38,13 +38,14 @@ variable {a b c e I J K : Type*}
   [Fintype a] [Fintype b] [Fintype c] [Fintype e]
   [Fintype I] [Fintype J] [Fintype K] [DecidableEq a]
 
+omit [Fintype J] in
 private theorem eq_of_trace_mul_spanning_rectangular
     (B : J → Matrix b c ℂ) (hB : Submodule.span ℂ (Set.range B) = ⊤)
     (M N : Matrix c b ℂ)
     (h : ∀ j, Matrix.trace (M * B j) = Matrix.trace (N * B j)) : M = N := by
   have hlin :
-      (Matrix.traceLinearMap c ℂ ℂ).comp (Matrix.mulLeftLinearMap c ℂ M) =
-        (Matrix.traceLinearMap c ℂ ℂ).comp (Matrix.mulLeftLinearMap c ℂ N) := by
+      (Matrix.traceLinearMap c ℂ ℂ).comp (_root_.mulLeftLinearMap c ℂ M) =
+        (Matrix.traceLinearMap c ℂ ℂ).comp (_root_.mulLeftLinearMap c ℂ N) := by
     apply LinearMap.ext_on_range hB
     intro j
     exact h j
@@ -52,6 +53,7 @@ private theorem eq_of_trace_mul_spanning_rectangular
   intro T
   exact DFunLike.congr_fun hlin T
 
+omit [Fintype I] [Fintype J] [Fintype K] [DecidableEq a] in
 /-- The middle-site C1 condition identifies the two actual rectangular
 boundary products in overlapping two-site trace representations.
 Source: PGVWC07, Theorem 9 proof, lines 1220–1224. -/
@@ -66,6 +68,7 @@ theorem obc_overlap_boundary_mul_eq
   intro j
   exact (hOverlap i j k).trans (Matrix.trace_mul_cycle (Y i) (B j) (C k))
 
+omit [Fintype J] [Fintype K] in
 /-- The source's canonical isometry construction produces one actual
 three-site boundary. Its explicit value is the sum of the right
 boundary times the adjoint first-site tensor.
@@ -97,6 +100,7 @@ theorem obc_three_site_boundary_reconstruction
       intro i _
       exact Matrix.mul_assoc (C k) (Y i) (A i)ᴴ
 
+omit [Fintype J] [Fintype K] in
 /-- The common boundary gives the actual three-site trace coefficients,
 with all four virtual leg spaces allowed to differ.
 Source: PGVWC07, Theorem 9 proof, lines 1224–1234. -/
@@ -114,6 +118,7 @@ theorem obc_three_site_trace_reconstruction
   simpa only [Matrix.mul_assoc] using
     Matrix.trace_mul_comm (C k) ((∑ t, Y t * (A t)ᴴ) * A i * B j)
 
+omit [Fintype J] [Fintype K] in
 /-- Two adjacent local trace representations of an actual three-site
 coefficient family combine into one three-site representation. The
 boundary families are obtained from the local conditions rather than
@@ -145,6 +150,7 @@ theorem obc_three_site_reconstruction_of_pair_sections
   intro i j k
   exact (hX i j k).trans (obc_three_site_trace_reconstruction A B C hA hB X Y hOverlap i j k)
 
+omit [Fintype a] in
 /-- Blocking two consecutive rectangular canonical site families
 preserves the row-isometry identity. This supplies the isometry step
 when the open-boundary reconstruction is iterated over longer blocks.

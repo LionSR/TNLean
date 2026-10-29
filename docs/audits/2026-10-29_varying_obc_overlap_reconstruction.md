@@ -39,3 +39,19 @@ Blueprint entry remains notready. Source-only checks cover pinned APIs,
 generated imports, Blueprint declarations including duplicate tags,
 mathematical roles, reader-facing prose, formatter, width/whitespace,
 proof integrity and tactic-pattern scanning. Hosted checking is required.
+
+## Repair from hosted downstream diagnostics
+
+The completed hosted build of downstream #10422 in run `40948270486`, job
+`123726050809`, reported unknown `Matrix.mulLeftLinearMap` names in this
+module and unused section instances. The pinned Mathlib source declares the
+rectangular multiplication map at the root namespace, despite its docstring's
+old qualified spelling. The repair uses `_root_.mulLeftLinearMap` at both
+sites and omits the unused physical-alphabet instances and decidable equality
+from the overlap theorem, together with the resulting unused instances in
+its consumers and the unused row-index finiteness in the blocking theorem.
+No linear-algebra argument, reconstruction formula, or source hypothesis is
+strengthened. Root independent source/API review passed. Native checks pass;
+no local Lean, Lake, elaboration, or build was run, and the repaired source
+requires fresh hosted verification. Existing blueprint readiness remains
+unchanged.
