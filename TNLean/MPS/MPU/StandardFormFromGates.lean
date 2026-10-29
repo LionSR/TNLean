@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.FundamentalTheoremGates
+import TNLean.Algebra.UnitaryKronecker
 
 /-!
 # Constructing a standard-form MPU from its two gates
@@ -123,10 +124,16 @@ theorem mpo_standardFormTensorOfGates_eq_of_gate_gauges
         (v * (star (y : Matrix (Fin r) (Fin r) ℂ) ⊗ₖ
           star (x : Matrix (Fin ℓ) (Fin ℓ) ℂ)))) N := by
   let S := standardFormTensorOfGatesData u v hu hv
-  have hu' := ((Matrix.isUnitaryBetween_coe_unitaryGroup x).kronecker _ _
-    (Matrix.isUnitaryBetween_coe_unitaryGroup y)).mul _ _ hu
-  have hv' := hv.mul _ _ ((Matrix.isUnitaryBetween_star_coe_unitaryGroup y).kronecker _ _
-    (Matrix.isUnitaryBetween_star_coe_unitaryGroup x))
+  have hx : (x : Matrix (Fin ℓ) (Fin ℓ) ℂ).IsUnitaryBetween :=
+    (Matrix.isUnitaryBetween_iff_mem_unitaryGroup _).mpr x.prop
+  have hy : (y : Matrix (Fin r) (Fin r) ℂ).IsUnitaryBetween :=
+    (Matrix.isUnitaryBetween_iff_mem_unitaryGroup _).mpr y.prop
+  have hxstar : (star (x : Matrix (Fin ℓ) (Fin ℓ) ℂ)).IsUnitaryBetween := by
+    simpa only [Matrix.star_eq_conjTranspose] using hx.conjTranspose _
+  have hystar : (star (y : Matrix (Fin r) (Fin r) ℂ)).IsUnitaryBetween := by
+    simpa only [Matrix.star_eq_conjTranspose] using hy.conjTranspose _
+  have hu' := (hx.kronecker _ _ hy).mul _ _ hu
+  have hv' := hv.mul _ _ (hystar.kronecker _ _ hxstar)
   exact S.mpo_eq_of_gate_gauges x y (standardFormTensorOfGatesData _ _ hu' hv')
 
 /-- Schumacher--Werner's second gate has intermediate order
