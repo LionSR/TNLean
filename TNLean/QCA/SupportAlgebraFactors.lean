@@ -75,16 +75,16 @@ theorem adjacentSupportJoin_commute
     apply Commute.symm
     apply commute_of_mem_sup (hw := hz')
     · intro s hs
-      exact (embeddedSupportAlgebra_pairwise_commute hω _ _ (by omega) s hs r hr).symm
+      exact (embeddedSupportAlgebra_pairwise_commute hω (by omega) s hs r hr).symm
     · intro s hs
-      exact (embeddedSupportAlgebra_pairwise_commute hω _ _ (by omega) s hs r hr).symm
+      exact (embeddedSupportAlgebra_pairwise_commute hω (by omega) s hs r hr).symm
   · intro r hr
     apply Commute.symm
     apply commute_of_mem_sup (hw := hz')
     · intro s hs
-      exact (embeddedSupportAlgebra_pairwise_commute hω _ _ (by omega) s hs r hr).symm
+      exact (embeddedSupportAlgebra_pairwise_commute hω (by omega) s hs r hr).symm
     · intro s hs
-      exact (embeddedSupportAlgebra_pairwise_commute hω _ _ (by omega) s hs r hr).symm
+      exact (embeddedSupportAlgebra_pairwise_commute hω (by omega) s hs r hr).symm
 
 /-- An element of one adjacent-support join which commutes with its actual
 image-pair algebra is scalar. It commutes with every other image pair by
@@ -105,7 +105,7 @@ theorem existsUnique_eq_smul_one_of_mem_adjacentSupportJoin_commute_image
   by_cases hyx : y = x
   · subst y
     exact hcomm A
-  · exact adjacentSupportJoin_commute hω x y hyx.symm hz
+  · exact adjacentSupportJoin_commute hω x y (Ne.symm hyx) hz
       (quasiLocalObservable_evenPair_mem_adjacentSupportJoin hω y A)
 
 /-- Every actual embedded support algebra has scalar center, by generation
@@ -120,9 +120,9 @@ theorem embeddedSupportAlgebra_isCentral
       intro t r hr
       by_cases hty : t = y
       · subst t
-        exact ⟨congrArg Subtype.val ((Subalgebra.mem_center_iff.mp hz) ⟨r, hr⟩).symm⟩
-      · exact embeddedSupportAlgebra_pairwise_commute hω y t hty.symm z z.2 r hr
-    obtain ⟨c, hc, _⟩ := existsUnique_eq_smul_one_of_commute z hcomm
+        exact congrArg Subtype.val ((Subalgebra.mem_center_iff.mp hz) ⟨r, hr⟩).symm
+      · exact embeddedSupportAlgebra_pairwise_commute hω (Ne.symm hty) z z.2 r hr
+    obtain ⟨c, hc, _⟩ := existsUnique_eq_smul_one_of_commute (z : QuasiLocalAlgebra d) hcomm
     rw [Algebra.mem_bot]
     refine ⟨c, Subtype.ext ?_⟩
     change algebraMap ℂ (QuasiLocalAlgebra d) c = (z : QuasiLocalAlgebra d)
@@ -200,11 +200,23 @@ theorem exists_supportAlgebra_matrixSizes
     · exact hE (y / 2)
     · exact hO (y / 2)
   · intro x
-    simpa [r] using eE x
+    have hmod : (2 * x) % 2 = 0 := by omega
+    have hdiv : (2 * x) / 2 = x := by omega
+    have hr : r (2 * x) = rE x := by
+      simp only [r, hmod, ↓reduceIte, hdiv]
+    change Nonempty (↥(evenSupportAlgebra hω x) ≃⋆ₐ[ℂ]
+      Matrix (Fin (r (2 * x))) (Fin (r (2 * x))) ℂ)
+    rw [hr]
+    exact eE x
   · intro x
     have hmod : (2 * x + 1) % 2 ≠ 0 := by omega
     have hdiv : (2 * x + 1) / 2 = x := by omega
-    simpa only [r, if_neg hmod, hdiv] using eO x
+    have hr : r (2 * x + 1) = rO x := by
+      simp only [r, hmod, ↓reduceIte, hdiv]
+    change Nonempty (↥(oddSupportAlgebra hω x) ≃⋆ₐ[ℂ]
+      Matrix (Fin (r (2 * x + 1))) (Fin (r (2 * x + 1))) ℂ)
+    rw [hr]
+    exact eO x
 
 end PropagatesWithin
 end SpinChain
