@@ -3,6 +3,7 @@
 \begin{theorem}[A uniform bound for the physical truncation threshold]
     \label{thm:low_energy_threshold_bound}
     \lean{Real.low_energy_threshold_le}
+    \leanok
     Fix $\eta_{\mathrm{LD}}>0$, and let $0\le\eta_1\le\eta_{\mathrm{LD}}$
     and $w>0$. Set $g=\min\{w,1\}$, $C_*=288e^{11/8}$, and
     \begin{align}
@@ -14,7 +15,7 @@
     \end{align}
     Then $t\le T+16\log(1/g)$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The positive number $z_0=g^2/[400(6+\eta_{\mathrm{LD}})]$ is at most
     both $1$ and $w^2/[400(6+\eta_1)]$. Bound the denominator in
     (\ref{eq:ld_uniform_threshold}) below by $z_0$ and expand the logarithm.
@@ -23,6 +24,7 @@
 \begin{theorem}[A strict finite count-contraction tradeoff]
     \label{thm:low_energy_scalar_parameters}
     \lean{Real.exists_low_energy_scalar_parameters}
+    \leanok
     For each fixed $\eta_{\mathrm{LD}}>0$ there is a constant $A\ge21$
     with the following property. Let $q\ge2$, $w>0$,
     $3w<\eta_1\le\eta_{\mathrm{LD}}$, and $0\le E_0\le4$.
@@ -44,7 +46,7 @@
         \label{eq:ld_strict_tradeoff}
     \end{align}
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:low_energy_threshold_bound}
     Set $C_H=(3T+52)/2$ and use the joint scalar parameter estimate.
     The selected scale satisfies $\ell\ge\log(1/g)$, hence
@@ -58,6 +60,7 @@
 \begin{theorem}[A physical interior family at the low-energy buffer scale]
     \label{thm:interior_low_energy_original_family}
     \lean{TNLean.MPS.AreaLaw.exists_interior_low_energy_original_filter_family}
+    \leanok
     Fix $\eta_{\mathrm{LD}}>0$. One constant $A\ge21$ can be chosen before
     the length $L\ge2$, local dimension $q\ge2$, coefficient $\mu>0$,
     target bandwidth $\eta_1$ and Hamiltonian, subject to
@@ -87,7 +90,7 @@
     $g=\min\{\mu/(3\log L),1\}$. See
     \cite{gap:alvv16_low_energy_family_buffers}.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:low_energy_scalar_parameters,cor:original_low_energy_filter_family}
     Since $L\ge2$, its logarithm is positive and
     $\eta_1\ge6w>3w$. Apply the physical original-window family
