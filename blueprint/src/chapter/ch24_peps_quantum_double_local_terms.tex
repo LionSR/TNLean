@@ -30,7 +30,7 @@ Let $G$ be a finite group. At one blocked site, place virtual colors $(p,q,r,s)$
     \end{tenkz}
 \end{tenkzequation}
 
-\begin{theorem}[Comparison of physical orientation conventions]
+\begin{lemma}[Comparison of physical orientation conventions]
     \label{thm:peps_quantum_double_k_orientation}
     \lean{TNLean.PEPS.quantumDoubleDualToK,
         TNLean.PEPS.quantumDoubleDualToK_spins,
@@ -38,7 +38,7 @@ Let $G$ be a finite group. At one blocked site, place virtual colors $(p,q,r,s)$
     \leanok
     \uses{def:peps_quantum_double_k_tensor}
     For $F_{\rm dual}(p,q,r,s)=(ps^{-1},qp^{-1},qr^{-1},rs^{-1})$ and $J(y_1,y_2,y_3,y_4)=(y_2^{-1},y_3,y_4,y_1^{-1})$, one has $J\circ F_{\rm dual}=F$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $(qp^{-1})^{-1}=pq^{-1}$ and $(ps^{-1})^{-1}=sp^{-1}$, $J(F_{\rm dual}(p,q,r,s))=F(p,q,r,s)$.
 \end{proof}
@@ -60,7 +60,7 @@ Let $G$ be a finite group. At one blocked site, place virtual colors $(p,q,r,s)$
     \end{align}
 \end{definition}
 
-\begin{theorem}[Local tensor image]
+\begin{lemma}[Local tensor image]
     \label{thm:peps_quantum_double_local_image}
     \lean{TNLean.PEPS.quantumDoubleKSpins_range,
         TNLean.PEPS.quantumDoubleKHolonomy_spins,
@@ -80,7 +80,7 @@ Let $G$ be a finite group. At one blocked site, place virtual colors $(p,q,r,s)$
         =\operatorname{span}\{\ket{a,b,c,d}:abcd=1\}.
         \label{eq:peps_qd_local_image}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Every $(a,b,c,d)=F(p,q,r,s)$ satisfies $abcd=1$, and conversely $abcd=1$ gives $F(1,a^{-1},(ab)^{-1},(abc)^{-1})=(a,b,c,d)$, proving (\ref{eq:peps_qd_local_image}). Since $P_0$ is diagonal with $\{0,1\}$ entries, $P_0$ and $h_0=I-P_0$ are orthogonal projectors and $\operatorname{ran}P_0=\ker h_0$.
 \end{proof}
@@ -132,7 +132,7 @@ Contracting the east leg of a left tensor with the west leg of a right tensor ov
     \end{align}
 \end{definition}
 
-\begin{theorem}[The normalized bond projector fixes the contraction]
+\begin{lemma}[The normalized bond projector fixes the contraction]
     \label{thm:peps_quantum_double_bond_fixed}
     \lean{TNLean.PEPS.quantumDoubleKBondAction_mul,
         TNLean.PEPS.quantumDoubleKBondAction_one,
@@ -152,7 +152,7 @@ Contracting the east leg of a left tensor with the west leg of a right tensor ov
                               & h_e\Psi_{p,r,s;t,v,w} & =0.
         \label{eq:peps_qd_bond_fixed}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $V_u$ is a unitary representation of $G$, $A_e=|G|^{-1}\sum_{u\in G}V_u$ is the orthogonal projector onto the $G$-invariant subspace. In (\ref{eq:peps_qd_bond_contraction}), $V_u$ sends the summand at $x$ to the summand at $ux$, so reindexing $x\mapsto ux$ gives (\ref{eq:peps_qd_bond_fixed}).
 \end{proof}
@@ -161,7 +161,7 @@ The factor $|G|^{-1}$ in (\ref{eq:peps_qd_bond_average}) is necessary: for $S_e=
 % Local correction and remaining scope are recorded in
 % docs/paper-gaps/scp10_quantum_double_local_hamiltonian.tex.
 
-\begin{theorem}[Two-block tensor image]
+\begin{lemma}[Two-block tensor image]
     \label{thm:peps_quantum_double_bond_image}
     \lean{TNLean.PEPS.quantumDoubleKPairLocalProjector,
         TNLean.PEPS.quantumDoubleKHolonomy_bondLeft,
@@ -186,7 +186,7 @@ The factor $|G|^{-1}$ in (\ref{eq:peps_qd_bond_average}) is necessary: for $S_e=
         =\{v:P_{00}v=v\text{ and }\forall u\in G,\,V_uv=v\}.
         \label{eq:peps_qd_bond_image}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each $V_u$ preserves $abcd$ and $efgh$, so $V_u$ and $A_e$ commute with $P_{00}$, making $Q_e=A_eP_{00}$ an orthogonal projector with $\operatorname{ran}\mathsf C\subseteq\operatorname{ran}Q_e$. Conversely, for $\xi=(a,b,c,d;e,f,g,h)$ with $abcd=efgh=1$, setting $\beta(\xi)=(a,b^{-1},(bc)^{-1};efg,fg,g)$ gives
     \begin{align}
@@ -257,7 +257,7 @@ Contracting four copies of $K$ at NW, NE, SE, SW over the shared N, W, S, E bond
     \end{align}
 \end{definition}
 
-\begin{theorem}[Plaquette flatness of the four-block contraction]
+\begin{lemma}[Plaquette flatness of the four-block contraction]
     \label{thm:peps_quantum_double_hole_fixed}
     \lean{TNLean.PEPS.quantumDoubleKPlaquetteHolonomy_spins,
         TNLean.PEPS.quantumDoubleKPlaquetteProjector_isStarProjection,
@@ -267,12 +267,12 @@ Contracting four copies of $K$ at NW, NE, SE, SW over the shared N, W, S, E bond
     \leanok
     \uses{def:peps_quantum_double_hole_projector}
     The operators $P_\square$ and $h_\square$ are orthogonal projectors, and $P_\square\Phi_\beta=\Phi_\beta$, $h_\square\Phi_\beta=0$ for every $\beta$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each summand of (\ref{eq:peps_qd_hole_contraction}) has hole spins $(xy^{-1},yz^{-1},zw^{-1},wx^{-1})$ with product $(xy^{-1})(yz^{-1})(zw^{-1})(wx^{-1})=1$, so the $\{0,1\}$-diagonal projector $P_\square$ fixes $\Phi_\beta$.
 \end{proof}
 
-\begin{theorem}[Commutation at the northern bond]
+\begin{lemma}[Commutation at the northern bond]
     \label{thm:peps_quantum_double_hole_commute}
     \lean{TNLean.PEPS.quantumDoubleKPlaquetteTopBond,
         TNLean.PEPS.quantumDoubleKPlaquetteHolonomy_topBond,
@@ -283,7 +283,7 @@ Contracting four copies of $K$ at NW, NE, SE, SW over the shared N, W, S, E bond
     \uses{def:peps_quantum_double_bond_average,
         def:peps_quantum_double_hole_projector}
     Let $W_u=V_u\otimes I$ act by $V_u$ on $(\sigma_{NW},\sigma_{NE})$ and the identity on $(\sigma_{SE},\sigma_{SW})$. Then $P_\square$ commutes with $W_u$ for all $u\in G$ and with $|G|^{-1}\sum_{u\in G}W_u$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $H_\square(W_u\sigma)=uH_\square(\sigma)u^{-1}$, one has $H_\square(W_u\sigma)=1\iff H_\square(\sigma)=1$, so $P_\square$ commutes with each $W_u$ and with their average.
 \end{proof}

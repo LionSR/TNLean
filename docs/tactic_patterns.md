@@ -4973,6 +4973,17 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Decision:** One use. Keep the mathematical extraction in its named helper
   and reuse the existing Gaussian spectral and ground-space estimates; no
   new tactic or duplicate eigenbasis calculation is needed.
+### Recovering letters by an identity contraction — candidate (2026-10-29)
+
+- **Seen:** `isInjective_uncleTensor_of_isInjective_perturbation` in
+  `MPS/ParentHamiltonian/UncleInjectivity.lean`.
+- **Pattern:** Full one-site span gives coefficients of the identity.
+  Contracting one physical leg of a bilinear two-site family with those
+  coefficients recovers every one-site letter, so its span is full too.
+- **Reuse:** `Submodule.mem_span_range_iff_exists_fun`, block-matrix
+  injectivity and finite-sum scalar/matrix distribution.
+- **Decision:** Use one full-identity contraction in place of four separate
+  block witnesses. One occurrence does not justify a new tactic.
 
 ### Counting nearest-neighbour bonds that meet a region — candidate (2026-10-28)
 
@@ -9631,3 +9642,16 @@ there is no need for a new tactic.
 - **Reuse:** The endpoint and independent phase theorems call these mathematical helpers;
   they do not repeat finite-trace reconstruction or a virtual-gauge uniqueness proof.
 - **Validation:** Source-written only; hosted Lean checking remains pending.
+### Euclidean matrix action bounds — promoted upstream reuse (2026-10-29)
+
+- **Pattern:** Bound a matrix acting on a Euclidean vector by the product
+  of its operator norm and the vector norm.
+- **Canonical API:** Mathlib `Matrix.l2_opNorm_mulVec`, already imported by
+  the matrix operator-norm interface; its action is definitionally the
+  same as `Matrix.toEuclideanCLM`.
+- **Refactored occurrences:** `Lattice/ObservableCentering.lean`,
+  `Lattice/GaussianGroundFrequencySeparation.lean`, and
+  `Lattice/GaussianConnectedCorrelation.lean` now invoke the existing theorem
+  directly instead of repeating the norm-identification and `le_opNorm` proof.
+- **Related API:** QICLean's `Entropy.norm_toEuclideanLin_le` gives the same
+  bound, but its entropy import is unnecessary for these matrix-only modules.

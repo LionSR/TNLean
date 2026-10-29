@@ -123,13 +123,13 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     is vacuous.
 \end{definition}
 
-\begin{theorem}[Empty open-chain coefficient]
+\begin{lemma}[Empty open-chain coefficient]
     \label{thm:varying_bond_obc_coeff_zero}
     \lean{OBCChainTensor.coeff_zero}
     \leanok
     \uses{def:varying_bond_obc_coeff}
     At $N=0$, the open-chain coefficient is $1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -138,14 +138,14 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     Its product contains no factors and therefore equals $1$.
 \end{proof}
 
-\begin{theorem}[Vanishing from a zero virtual dimension]
+\begin{lemma}[Vanishing from a zero virtual dimension]
     \label{thm:varying_bond_obc_zero_bond}
     \lean{OBCChainTensor.coeff_eq_zero_of_bondDim_eq_zero}
     \leanok
     \uses{def:varying_bond_obc_coeff}
     If $D_k=0$ for some $k\in\{0,\ldots,N\}$, then
     $c_A(\sigma)=0$ for every physical configuration $\sigma$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -169,13 +169,13 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     matrices into the off-diagonal blocks of an $ND\times ND$ cyclic matrix.
 \end{definition}
 
-\begin{theorem}[Empty padded-chain coefficient]
+\begin{lemma}[Empty padded-chain coefficient]
     \label{thm:varying_bond_obc_zero_pad_zero}
     \lean{OBCChainTensor.coeff_zeroPad_zero}
     \leanok
     \uses{def:varying_bond_obc_zero_pad, def:non_ti_chain}
     At $N=0$, the coefficient of the padded square chain is $D$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -183,7 +183,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     The empty matrix product is the $D\times D$ identity, whose trace is $D$.
 \end{proof}
 
-\begin{theorem}[Zero-extension of a dependent finite sum]
+\begin{lemma}[Zero-extension of a dependent finite sum]
     \label{thm:pi_fin_sum_zero_extension}
     \lean{Fintype.sum_piFin_castLE_extend_zero}
     \leanok
@@ -192,7 +192,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     the sum of $f$ over $\prod_{i\in I}\{0,\ldots,r_i-1\}$ equals its sum over
     $\prod_{i\in I}\{0,\ldots,s_i-1\}$ after extending $f$ by zero outside
     the smaller Cartesian product.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -201,7 +201,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     original bound. Split the larger sum into this subset and its complement.
 \end{proof}
 
-\begin{theorem}[Cyclic path expansion for a square chain]
+\begin{lemma}[Cyclic path expansion for a square chain]
     \label{thm:chain_coeff_sum_cyclic}
     \lean{MPSChainTensor.coeff_eq_sum_cyclic}
     \leanok
@@ -215,7 +215,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
         (B_k^{\sigma_k})_{g(k),g(k+1)}.
         \label{eq:chain_coeff_sum_cyclic}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -224,7 +224,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     apply the cyclic trace expansion for a closed matrix product.
 \end{proof}
 
-\begin{theorem}[Positive-length coefficient preservation]
+\begin{lemma}[Positive-length coefficient preservation]
     \label{thm:varying_bond_obc_zero_pad_coeff}
     \lean{OBCChainTensor.coeff_zeroPad}
     \leanok
@@ -239,20 +239,20 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     No positivity assumption is imposed on the intermediate dimensions. The
     endpoint conditions already imply $D\geq1$ whenever such a chain exists.
     The equality concerns only this fixed length.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:chain_coeff_sum_cyclic, thm:pi_fin_sum_zero_extension, def:varying_bond_obc_coeff, def:varying_bond_obc_zero_pad}
     Expanding the left-hand side by~(\ref{eq:chain_coeff_sum_cyclic}) and extending the
     dependent sum in~(\ref{eq:varying_bond_obc_coeff}) to the common dimension
-    $D$ via Theorem~\ref{thm:pi_fin_sum_zero_extension} isolates the rectangular bond ranges: every extended path
+    $D$ via Lemma~\ref{thm:pi_fin_sum_zero_extension} isolates the rectangular bond ranges: every extended path
     outside those ranges has a zero matrix entry. For the
     remaining paths, the one-dimensional endpoint spaces identify the last
     virtual coordinate with the first, so the products agree term by term.
 \end{proof}
 
-\begin{theorem}[Padded coefficient with a zero virtual dimension]
+\begin{lemma}[Padded coefficient with a zero virtual dimension]
     \label{thm:varying_bond_obc_zero_pad_zero_bond}
     \lean{OBCChainTensor.coeff_zeroPad_eq_zero_of_bondDim_eq_zero}
     \leanok
@@ -260,7 +260,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     Let $N\geq1$. If $D_k=0$ for some
     $k\in\{0,\ldots,N\}$, then the padded square-chain coefficient vanishes
     for every physical configuration.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -289,7 +289,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     depends on the fixed length $N$.
 \end{definition}
 
-\begin{theorem}[Fixed-length cyclic block average]
+\begin{lemma}[Fixed-length cyclic block average]
     \label{thm:chain_cyclic_block_average}
     \lean{MPSChainTensor.mpv_cyclicBlockTensor_eq_average}
     \leanok
@@ -306,7 +306,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     identifies this with the physical-configuration rotation in
     \cite[Theorem~3]{PerezGarcia2007Matrix}. This identity concerns only the
     fixed length $N$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -337,7 +337,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
 % Scope restriction (supplied OBC representation): PGVWC07 Theorem 3 also
 % obtains this input from purity via its OBC representation theorem. See
 % docs/paper-gaps/pgvwc07_site_independent_scope.tex.
-\begin{theorem}[Conditional site-independent matrices at fixed length]
+\begin{lemma}[Conditional site-independent matrices at fixed length]
     \label{thm:pgvwc07_site_independent_matrices}
     \lean{OBCChainTensor.pgvwc07_site_independent_matrices,
         OBCChainTensor.exists_pgvwc07_site_independent_tensor}
@@ -350,7 +350,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     bond dimension $ND$ with the same length-$N$ coefficients.
     The constructed tensor depends on $N$, and the equality holds only
     at this ring length.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -554,7 +554,7 @@ criteria follow \cite[Theorems~7 and~8]{PerezGarcia2007Matrix}.
     Lemma~\ref{lem:pgvwc07_quadratic_system_units}.
 \end{proof}
 
-\begin{theorem}[Obtaining the translation-invariant canonical form]
+\begin{lemma}[Obtaining the translation-invariant canonical form]
     \label{thm:pgvwc07_quadratic_reconstruction}
     \notready
     \uses{def:pgvwc07_quadratic_system}
@@ -585,7 +585,7 @@ criteria follow \cite[Theorems~7 and~8]{PerezGarcia2007Matrix}.
     \cite[Theorem~8]{PerezGarcia2007Matrix} carry a residual finite-ring phase defect
     \cite{gap:pgvwc07_quadratic_reconstruction_phase}, which is resolved by the explicit
     phase $\xi$ in (\ref{eq:pgvwc07_quadratic_reconstruction_phase_conjugacy}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \uses{lem:pgvwc07_chain_combination, lem:pgvwc07_kronecker_intertwiner, lem:pgvwc07_quadratic_system_units, lem:pgvwc07_solution_chain}
@@ -745,7 +745,7 @@ on a finite ring by an $N$th-root phase
     entrywise.
 \end{proof}
 
-\begin{theorem}[Fixed-length intertwiner]
+\begin{lemma}[Fixed-length intertwiner]
     \label{thm:pgvwc07_fixed_length_intertwiner}
     \lean{MPSTensor.exists_intertwiner_of_fixedLength_mpv_eq,
         MPSTensor.exists_pgvwc07_chain_root}
@@ -762,7 +762,7 @@ on a finite ring by an $N$th-root phase
         RC_i & =\tfrac1x\,B_iR \qquad\text{for every }i.
         \label{eq:pgvwc07_fixed_length_intertwiner}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -935,14 +935,14 @@ on a finite ring by an $N$th-root phase
     \uses{thm:pgvwc07_fixed_length_intertwiner,
         lem:pgvwc07_intertwiner_unitary}
     For $\lambda_B=\lambda_C=1$,
-    Theorem~\ref{thm:pgvwc07_fixed_length_intertwiner} gives $R\neq0$ and
+    Lemma~\ref{thm:pgvwc07_fixed_length_intertwiner} gives $R\neq0$ and
     $x\neq0$ with $RC_i=\tfrac1xB_iR$, and
     Lemma~\ref{lem:pgvwc07_intertwiner_unitary} turns $R$ into a unitary $U$
     with $|x|=1$ and $B_i=xUC_iU^\dagger$. The coefficients then satisfy
     $V^{(N)}(B)=x^NV^{(N)}(C)=x^NV^{(N)}(B)$, and since the state is nonzero,
     $x^N=1$; take $\xi=x$. For general weights, $\lambda_B^{-1}B$ and
     $\lambda_B^{-1}C$ represent the same state and the first is unital, so
-    Theorem~\ref{thm:pgvwc07_fixed_length_intertwiner} gives $R$ and $x$ for
+    Lemma~\ref{thm:pgvwc07_fixed_length_intertwiner} gives $R$ and $x$ for
     this pair. The same $R$ satisfies
     $R\,(\lambda_C^{-1}C_i)=y^{-1}(\lambda_B^{-1}B_i)R$ with
     $y=x\lambda_C/\lambda_B$, and
@@ -967,10 +967,10 @@ on a finite ring by an $N$th-root phase
     an $N$th root of unity are two canonical representations of the same
     nonzero state on $N>3$ sites, and unitary conjugation acts trivially in
     bond dimension one \cite{gap:pgvwc07_quadratic_reconstruction_phase}.
-    The corrected statement is Theorem~\ref{thm:pgvwc07_ti_uniqueness}.
+    The corrected statement is Lemma~\ref{thm:pgvwc07_ti_uniqueness}.
 \end{theorem}
 
-\begin{theorem}[Uniqueness of the canonical form, corrected]
+\begin{lemma}[Uniqueness of the canonical form, corrected]
     \label{thm:pgvwc07_ti_uniqueness}
     \lean{MPSTensor.pgvwc07_uniqueness_of_canonical_form,
         MPSTensor.pgvwc07_uniqueness_of_canonical_form_rephased,
@@ -991,10 +991,10 @@ on a finite ring by an $N$th-root phase
     unit-modulus phase $\xi$.
 
     Uniqueness of the open-boundary canonical representation is not needed;
-    Theorem~\ref{thm:pgvwc07_fixed_length_intertwiner} obtains the intertwiners
+    Lemma~\ref{thm:pgvwc07_fixed_length_intertwiner} obtains the intertwiners
     directly from injectivity, yielding the conclusion recorded in
     \cite{gap:pgvwc07_ti_uniqueness_scope}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1007,7 +1007,7 @@ on a finite ring by an $N$th-root phase
     $B$ with a single block: $\sum_iB_iB_i^\dagger=\lambda_B^2\,\Id$ with
     $0<\lambda_B\le1$. The tensors $\lambda_B^{-1}B$ and $\lambda_B^{-1}C$
     represent the same state and the first is unital and $L_0$-block
-    injective, so Theorem~\ref{thm:pgvwc07_fixed_length_intertwiner} gives
+    injective, so Lemma~\ref{thm:pgvwc07_fixed_length_intertwiner} gives
     $R\neq0$ and $x\neq0$ with $R\,(\lambda_B^{-1}C_i)=\tfrac1x(\lambda_B^{-1}B_i)R$,
     and $R$ is invertible by Lemma~\ref{lem:pgvwc07_intertwiner_unitary}.
     Hence $C_i=\tfrac1xR^{-1}B_iR$ is conjugate to a nonzero multiple of
@@ -1087,7 +1087,7 @@ on the bond as a physical operation on the local index.
 For an injective tensor $A$, the physical realisation map encodes the
 effect of inserting a virtual matrix $X$ on the bond as a $d\times d$
 operation on the physical indices. Its multiplicativity
-(Theorem~\ref{thm:physRealize_mul}) turns the bond algebra into an algebra
+(Lemma~\ref{thm:physRealize_mul}) turns the bond algebra into an algebra
 acting on the physical leg, and is the source of the algebra homomorphism
 used in the virtual bond gauge.
 
@@ -1148,7 +1148,7 @@ used in the virtual bond gauge.
     $\Phi_A\circ\Psi_A=\id_{\MN{D}}$.
 \end{proof}
 
-\begin{theorem}[Physical realisation is multiplicative]%
+\begin{lemma}[Physical realisation is multiplicative]%
     \label{thm:physRealize_mul}
     \lean{MPSTensor.physRealize_mul}
     \leanok
@@ -1156,7 +1156,7 @@ used in the virtual bond gauge.
     Let $A$ be an injective MPS tensor.
     For all $X,Y\in\MN{D}$,
     $O_A(XY)=O_A(X)O_A(Y)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -1183,7 +1183,7 @@ used in the virtual bond gauge.
     \label{rem:physRealize_mul_general}
     \uses{thm:physRealize_mul, def:injective, def:decomposition_map}
     When $d>D^2$, the decomposition map $\Psi_A$ need not be unique.
-    Nevertheless, Theorem~\ref{thm:physRealize_mul} is already the
+    Nevertheless, Lemma~\ref{thm:physRealize_mul} is already the
     general injective statement: for the fixed choice of $\Psi_A$ in
     Definition~\ref{def:decomposition_map}, the associated physical
     realisation map $O_A$ is multiplicative.
@@ -1275,10 +1275,10 @@ insertion data.
     for some $Y$ depending on $X$.
     Since all three site tensors on each side are injective,
     the physical realisation maps $O_A,O_B$ are algebra homomorphisms
-    by Theorem~\ref{thm:physRealize_mul}.
+    by Lemma~\ref{thm:physRealize_mul}.
     Setting $T(X)=Y$ defines a $\C$-linear multiplicative map,
     hence a nonzero $\C$-algebra endomorphism of $\MN{D}$, which is
-    bijective by Theorem~\ref{thm:simplicity}.
+    bijective by Lemma~\ref{thm:simplicity}.
     Skolem--Noether (Theorem~\cite[``Skolem--Noether'']{QICLean2026Blueprint}) gives
     $Z\in\GL_D(\C)$ with $T(X)=Z^{-1}XZ$.
 \end{proof}

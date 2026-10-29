@@ -20,7 +20,7 @@
     Define $J=2^{-1/2}K_3^\dagger$.
 \end{definition}
 
-\begin{theorem}[Derived physical and color support isometries]
+\begin{lemma}[Derived physical and color support isometries]
     \label{thm:peps_kitaev_physical_support}
     \lean{TNLean.PEPS.kitaevPhysicalParity_permMatrix_mem_unitaryGroup,
         TNLean.PEPS.kitaevPhysicalZeroEmbedding_isIsometry,
@@ -35,7 +35,7 @@
     Both $E_P$ and $J$ are isometries. These formulas give explicit support
     coordinates for the physical implementation in the footnote to the blocking
     construction of \cite[Section~7]{Schuch2010PEPS}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The parity permutation is involutive over the binary field, and
@@ -62,7 +62,7 @@
     Define $J_v=E_{V,v}J$.
 \end{definition}
 
-\begin{theorem}[Physical reduction of the native block]
+\begin{lemma}[Physical reduction of the native block]
     \label{thm:peps_kitaev_native_physical_support}
     \lean{TNLean.PEPS.kitaevNativePhysicalParity_permMatrix_mem_unitaryGroup,
         TNLean.PEPS.kitaevNativePhysicalZeroEmbedding_isIsometry,
@@ -89,7 +89,7 @@
     block. It includes seam-crossing plaquettes, but does not assert a globally
     tiled renormalization or an alternating tensor field on an odd torus; see
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_kitaev_physical_support,

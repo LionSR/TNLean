@@ -64,8 +64,8 @@ theorem norm_centered_ground_correlation_le_gaussian
     let F := gaussianNegativeFrequencyOperator h ε H A
     have hcomm : ‖F * B - B * F‖ ≤ K :=
       norm_commutator_gaussianNegativeFrequencyOperator_le h hH A B hε hT hC hv hLR
-    have hnorm (M : Matrix n n ℂ) : ‖L M ψ‖ ≤ ‖M‖ * ‖ψ‖ := by
-      simpa only [← Matrix.cstar_norm_def] using (L M).le_opNorm ψ
+    have hnorm (M : Matrix n n ℂ) : ‖L M ψ‖ ≤ ‖M‖ * ‖ψ‖ :=
+      Matrix.l2_opNorm_mulVec M ψ
     calc
       _ ≤ ‖ψ‖ * ‖L (F * B - B * F) ψ‖ := norm_inner_le_norm _ _
       _ ≤ ‖ψ‖ * (‖F * B - B * F‖ * ‖ψ‖) :=

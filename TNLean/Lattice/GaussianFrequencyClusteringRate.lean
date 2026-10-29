@@ -77,7 +77,10 @@ theorem exists_gaussianFrequencyClusteringRate
     apply Real.exp_le_exp.mpr
     have hmul := mul_le_mul_of_nonneg_right hκa hℓpos.le
     dsimp only [a] at hmul
-    nlinarith
+    calc
+      -ℓ * Δ / (4 * v) = -(Δ / (4 * v) * ℓ) := by ring
+      _ ≤ -(κ * ℓ) := neg_le_neg hmul
+      _ = -κ * ℓ := by ring
   have hquarter : Real.exp (-ℓ / 4) ≤ Real.exp (-κ * ℓ) := by
     apply Real.exp_le_exp.mpr
     nlinarith [mul_le_mul_of_nonneg_right hκquarter hℓpos.le]

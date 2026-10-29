@@ -10,7 +10,7 @@ the active boundaries; see \cite[Section~11]{OpenAI2026AreaLaw}.
 % Local layer exclusion is included below; active fan interfaces and
 % isolated stars remain separate.
 
-\begin{theorem}[Nonadjacent layers avoid fine neighborhoods]
+\begin{lemma}[Nonadjacent layers avoid fine neighborhoods]
     \label{thm:area_law_local_layer_exclusion}
     \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_dist_nonadjacent_fineScale}
     \leanok
@@ -22,7 +22,7 @@ the active boundaries; see \cite[Section~11]{OpenAI2026AreaLaw}.
         \|x-y\|_\infty & \ge16t_k.
     \end{align}
     The threshold is uniform in the finite endpoint set and origin.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_dyadic_nonadjacent,thm:area_law_scale_side_ratios}
     The scale-ratio estimate with exponent gap five gives $32t_k\le2^k$.
@@ -30,7 +30,7 @@ the active boundaries; see \cite[Section~11]{OpenAI2026AreaLaw}.
     $\|x-y\|_\infty\ge(C_0-1)2^{\max(k,h)}/2\ge2^k/2\ge16t_k$.
 \end{proof}
 
-\begin{theorem}[Only neighboring layers occur nearby]
+\begin{lemma}[Only neighboring layers occur nearby]
     \label{thm:area_law_local_layer_indices}
     \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_nearby_indices}
     \leanok
@@ -41,7 +41,7 @@ the active boundaries; see \cite[Section~11]{OpenAI2026AreaLaw}.
     \begin{align}
         h & \le k+1, & k & \le h+1.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_local_layer_exclusion}
     A difference of at least two would give distance at least $16t_k$,
@@ -58,7 +58,7 @@ the active boundaries; see \cite[Section~11]{OpenAI2026AreaLaw}.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Belt marks lie on the quarter mesh]
+\begin{lemma}[Belt marks lie on the quarter mesh]
     \label{thm:area_law_belt_marks_quarter_mesh}
     \lean{TNLean.PEPS.AreaLaw.Geometry.beltMarks_subset_affineMesh}
     \leanok
@@ -71,7 +71,7 @@ the active boundaries; see \cite[Section~11]{OpenAI2026AreaLaw}.
     In particular, cells of sides $t/2$, $t$ and $2t$, where
     $t=2^\ell$ and $\ell\ge1$, have all their marks on the same
     mesh $\mathcal M(o,t/4)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     A mark of a cell of side $2^j$ is $o+2^j(z+e/2)$, where
     $e\in\{0,1,2\}^2$. Since $\ell\le j+1$, the vector
@@ -79,7 +79,7 @@ the active boundaries; see \cite[Section~11]{OpenAI2026AreaLaw}.
     $o+(2^\ell/4)2^{j+1-\ell}(2z+e)$.
 \end{proof}
 
-\begin{theorem}[Distinct mesh points are separated]
+\begin{lemma}[Distinct mesh points are separated]
     \label{thm:area_law_affine_mesh_point_separation}
     \lean{TNLean.PEPS.AreaLaw.Geometry.affineMesh_dist_ge}
     \leanok
@@ -88,7 +88,7 @@ the active boundaries; see \cite[Section~11]{OpenAI2026AreaLaw}.
     \begin{align}
         \|x-y\|_\infty & \ge q.
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     At least one coordinate of the integer vectors indexing $x$ and
     $y$ differs. Its difference has absolute value at least one, so
@@ -96,7 +96,7 @@ the active boundaries; see \cite[Section~11]{OpenAI2026AreaLaw}.
     absolute value at least $q$.
 \end{proof}
 
-\begin{theorem}[Clearance from a nonincident allowed line]
+\begin{lemma}[Clearance from a nonincident allowed line]
     \label{thm:area_law_affine_mesh_line_clearance}
     \lean{TNLean.PEPS.AreaLaw.Geometry.affineMesh_line_dist_ge}
     \leanok
@@ -108,7 +108,7 @@ the active boundaries; see \cite[Section~11]{OpenAI2026AreaLaw}.
         \|x-y\|_\infty & \ge q/2\qquad(y\in L).
     \end{align}
     Thus on a quarter mesh the clearance is at least $t/8$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_affine_mesh_point_separation}
     If $u=v$, use the point-separation bound. Otherwise, the supporting
@@ -119,7 +119,7 @@ the active boundaries; see \cite[Section~11]{OpenAI2026AreaLaw}.
     or differences is bounded by twice that distance. The result follows.
 \end{proof}
 
-\begin{theorem}[Clearance from a nonincident allowed segment]
+\begin{lemma}[Clearance from a nonincident allowed segment]
     \label{thm:area_law_affine_mesh_segment_clearance}
     \lean{TNLean.PEPS.AreaLaw.Geometry.affineMesh_segment_dist_ge_of_not_mem}
     \leanok
@@ -130,7 +130,7 @@ the active boundaries; see \cite[Section~11]{OpenAI2026AreaLaw}.
     $\|p-x\|_\infty\ge q/2$.
     This estimate is used in the isolation arguments for the initial stars
     and recursive repair in \cite[Section~11]{OpenAI2026AreaLaw}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_affine_mesh_point_separation,thm:area_law_affine_mesh_line_clearance}
     If $a=b$, then $x=a\ne p$, so mesh-point separation gives the

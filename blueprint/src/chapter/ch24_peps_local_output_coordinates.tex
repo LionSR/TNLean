@@ -28,7 +28,7 @@ All coordinate bases in this section are finite orthonormal bases.
     output isometry is defined analogously.
 \end{definition}
 
-\begin{theorem}[Regrouping physical and discarded coordinates]
+\begin{lemma}[Regrouping physical and discarded coordinates]
     \label{thm:peps_partition_output_coordinates}
     \lean{TNLean.Lattice.PartyCircuit.Word.repr_effectMap}
     \leanok
@@ -42,7 +42,7 @@ All coordinate bases in this section are finite orthonormal bases.
     isometries preserve the coordinate pairs $(x,i)$ and $(y,j)$, respectively.
     For $v\in\C^X\otimes D$, taking the partial inner product with $e_x$
     followed by the $d_i$-coordinate recovers the $(x,i)$-coordinate of $v$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_partition_output_bases}
@@ -53,7 +53,7 @@ All coordinate bases in this section are finite orthonormal bases.
     tensors to all $v\in\C^X\otimes D$.
 \end{proof}
 
-\begin{theorem}[Output coordinates under owner relabelling]
+\begin{lemma}[Output coordinates under owner relabelling]
     \label{thm:peps_owner_output_coordinates}
     \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwner_mapOwner_tensorBasis_coordinates}
     \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwner_mapOwner_partitionBasis_coordinates}
@@ -66,7 +66,7 @@ All coordinate bases in this section are finite orthonormal bases.
     vector. Partitioning into affected and exterior registers after the two
     relabellings therefore gives the coordinates $((x,i),(y,j))$ described
     above.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_partition_output_coordinates}
@@ -76,7 +76,7 @@ All coordinate bases in this section are finite orthonormal bases.
     applying the partition coordinate identity gives the claim.
 \end{proof}
 
-\begin{theorem}[Coordinates of a local Schmidt expansion]
+\begin{lemma}[Coordinates of a local Schmidt expansion]
     \label{thm:peps_local_schmidt_output_coordinates}
     \lean{TNLean.Lattice.PartyCircuit.Layout.partition_coordinates_eq_separated}
     \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwner_mapOwner_coordinates_eq_separated}
@@ -100,7 +100,7 @@ All coordinate bases in this section are finite orthonormal bases.
     where $C_{x,V}$ and $C_{y,W}$ are the physical-coordinate projections of
     $V$ and $W$. The same formula holds before either of the two owner
     relabellings in the corresponding bases.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_partition_output_coordinates,thm:peps_owner_output_coordinates}
@@ -113,7 +113,7 @@ All coordinate bases in this section are finite orthonormal bases.
     owner relabellings gives the final claim.
 \end{proof}
 
-\begin{theorem}[Original physical dimensions after the two owner maps]
+\begin{lemma}[Original physical dimensions after the two owner maps]
     \label{thm:peps_affected_original_dimensions}
     \lean{TNLean.Lattice.PartyCircuit.Layout.affectedOutputIso}
     \lean{TNLean.Lattice.PartyCircuit.affectedFamilyPhysicalBasis}
@@ -128,7 +128,7 @@ All coordinate bases in this section are finite orthonormal bases.
     isometric to $\bigotimes_{p\in A}\C^{d_p}$, with orthonormal basis indexed
     by tuples $(s_p)_{p\in A}\in\prod_{p\in A}\{0,\ldots,d_p-1\}$ and dimension
     $\prod_{p\in A}d_p$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Filtering registers by side after the composite owner relabelling selects

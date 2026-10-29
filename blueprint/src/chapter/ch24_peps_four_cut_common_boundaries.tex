@@ -96,7 +96,7 @@ independent site tensors $A_v:V^4\times P\to\C$.
     equals $\delta_{\eta,\theta}$.
 \end{proof}
 
-\begin{theorem}[Fixed-boundary expansion of a cut range]%
+\begin{lemma}[Fixed-boundary expansion of a cut range]%
     \label{thm:peps_four_cut_common_boundary_span}
     \lean{TNLean.PEPS.torusCutCoeff_bondBoundary,
         TNLean.PEPS.torusCutMap_eq_sum_single,
@@ -118,7 +118,7 @@ independent site tensors $A_v:V^4\times P\to\C$.
         \notag
     \end{align}
     In particular, $\mathcal C^A_{c,r}\delta_\eta=\mathcal N_A(\widehat E^{\mathrm h,c}_\eta,\widehat E^{\mathrm v,r}_\eta)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_four_cut_common_product_boundary}
     Multiplying $M^O_{c,r}(R_{c,r}(\beta))$ of
@@ -197,7 +197,7 @@ independent site tensors $A_v:V^4\times P\to\C$.
     of Definition~\ref{def:peps_torus_g_closure}.
 \end{definition}
 
-\begin{theorem}[Uniform closures belong to every cut range]%
+\begin{lemma}[Uniform closures belong to every cut range]%
     \label{thm:peps_four_cut_common_uniform_membership}
     \lean{TNLean.PEPS.torusBondNetwork_closureAt_eq_sitewiseTorusGClosure,
         TNLean.PEPS.torusCutMap_closureBoundary,
@@ -214,14 +214,14 @@ independent site tensors $A_v:V^4\times P\to\C$.
         \label{eq:peps_common_uniform_membership}
     \end{align}
     and on $X=(\Z/2\Z)^2$, $\mathcal Z_A\subseteq\mathcal S^A$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_torus_commuting_closure_seams,thm:peps_four_cut_common_boundary_span}
     Setting $B(t,r,b,l;(v,s))=A_v(t,r,b,l;s)$ preserves $\rho(k)$-invariance at
-    each $(v,s)$. Applying Theorem~\ref{thm:peps_torus_commuting_closure_seams}
+    each $(v,s)$. Applying Lemma~\ref{thm:peps_torus_commuting_closure_seams}
     to $B$ at $v\mapsto(v,\sigma_v)$ together with
     (\ref{eq:peps_common_boundary_network}) of
-    Theorem~\ref{thm:peps_four_cut_common_boundary_span} gives
+    Lemma~\ref{thm:peps_four_cut_common_boundary_span} gives
     (\ref{eq:peps_common_uniform_membership}), and taking spans yields
     $\mathcal Z_A\subseteq\mathcal S^A$.
 \end{proof}
@@ -235,7 +235,7 @@ independent site tensors $A_v:V^4\times P\to\C$.
     $\bar x<\bar c$ and $s_{k,c}(x)=1$ otherwise.
 \end{definition}
 
-\begin{theorem}[Cyclic seam identities]%
+\begin{lemma}[Cyclic seam identities]%
     \label{thm:peps_four_cut_common_seam_gauge}
     \lean{TNLean.PEPS.torusSeamGauge_horizontal,
         TNLean.PEPS.torusSeamGauge_vertical,
@@ -250,7 +250,7 @@ independent site tensors $A_v:V^4\times P\to\C$.
         \label{eq:peps_common_seam_vertical}
     \end{align}
     If $kl=lk$, then $s_{k,c}(x)l=ls_{k,c}(x)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Checking $x+1=0$, $x+1=c$, and the intervals between them gives
     (\ref{eq:peps_common_seam_horizontal}); inverting with $k^{-1}$ in place of
@@ -258,7 +258,7 @@ independent site tensors $A_v:V^4\times P\to\C$.
     commutes with $l$ when $kl=lk$.
 \end{proof}
 
-\begin{theorem}[Matched commuting closures belong to every cut range]%
+\begin{lemma}[Matched commuting closures belong to every cut range]%
     \label{thm:peps_four_cut_common_matched_membership}
     \lean{TNLean.PEPS.torusBondNetwork_matchedClosureAt_eq_matchedTorusGClosure,
         TNLean.PEPS.torusCutMap_matchedClosureBoundary,
@@ -277,16 +277,16 @@ independent site tensors $A_v:V^4\times P\to\C$.
         \label{eq:peps_common_matched_membership}
     \end{align}
     and on $X=(\Z/2\Z)^2$, $\mathcal Z_A\subseteq\mathcal S^A$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:peps_four_cut_common_seam_gauge,
         thm:peps_four_cut_common_vertex_gauge,thm:peps_four_cut_common_boundary_span}
-    Applying Theorem~\ref{thm:peps_four_cut_common_vertex_gauge} with
+    Applying Lemma~\ref{thm:peps_four_cut_common_vertex_gauge} with
     $q_v=s_{h,c}(v_x)$ and then $q_v=s_{g^{-1},r}(v_y)$ uses
     (\ref{eq:peps_common_seam_horizontal})--(\ref{eq:peps_common_seam_vertical})
-    of Theorem~\ref{thm:peps_four_cut_common_seam_gauge} to shift both seams to
+    of Lemma~\ref{thm:peps_four_cut_common_seam_gauge} to shift both seams to
     $(0,0)$ while commuting with the transverse label, and
     (\ref{eq:peps_common_boundary_network}) of
-    Theorem~\ref{thm:peps_four_cut_common_boundary_span} gives
+    Lemma~\ref{thm:peps_four_cut_common_boundary_span} gives
     (\ref{eq:peps_common_matched_membership}) and $\mathcal Z_A\subseteq\mathcal S^A$.
 \end{proof}

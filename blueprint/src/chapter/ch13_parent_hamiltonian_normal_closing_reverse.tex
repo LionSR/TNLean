@@ -67,7 +67,7 @@ left-multiplied boundary comparison.
     gives the desired comparison.
 \end{proof}
 
-\begin{theorem}[Left-multiplied comparison of boundary matrices]
+\begin{lemma}[Left-multiplied comparison of boundary matrices]
     \label{thm:closure_property_wrapped_mirror_left_word_products_ground_space}
     \lean{MPSTensor.closure_property_wrapped_mirror_left_word_products_of_groundSpaceMap}
     \leanok
@@ -86,7 +86,7 @@ left-multiplied boundary comparison.
         \left(Y_M(\tau^+_\eta(\mu))A^jA^\sigma\right).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -111,7 +111,7 @@ left-multiplied boundary comparison.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Left-multiplied coordinate comparison at the periodic boundary]
+\begin{lemma}[Left-multiplied coordinate comparison at the periodic boundary]
     \label{thm:closure_property_mirror_left_word_products_ground_space}
     \lean{MPSTensor.closure_property_mirror_left_word_products_of_groundSpaceMap}
     \leanok
@@ -130,7 +130,7 @@ left-multiplied boundary comparison.
         \left(A^\mu A^jXA^\sigma\right).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -177,7 +177,7 @@ left-multiplied boundary comparison.
     \leanok
     Let $Y_i(\tau)$ be the representation matrices given by
     Lemma~\ref{lem:chain_ground_space_window_witnesses}. By
-    Theorem~\ref{thm:boundary_closing_right_products_chain_ground_space},
+    Lemma~\ref{thm:boundary_closing_right_products_chain_ground_space},
     $Y_M(\tau^+_\eta(\mu))A^j = Y_{M+1-L_0}(\tau^-_\eta(\mu))A^j$.
     Fixing the first physical letter in the two length-$(L_0+1)$ windows gives
     \begin{align}
@@ -193,7 +193,7 @@ left-multiplied boundary comparison.
     The two restrictions are therefore equal.
 \end{proof}
 
-\begin{theorem}[Boundary-matrix product for the two boundary-crossing restrictions]
+\begin{lemma}[Boundary-matrix product for the two boundary-crossing restrictions]
     \label{thm:closure_property_auxiliary_boundary_product_chain_ground_space}
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap}
     \leanok
@@ -223,11 +223,11 @@ left-multiplied boundary comparison.
         Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
-    Theorem~\ref{thm:closure_property_mirror_left_word_products_ground_space}
+    Lemma~\ref{thm:closure_property_mirror_left_word_products_ground_space}
     gives, for every boundary letter $\eta$, physical letter $j$, and words
     $\alpha,\sigma$ of length $L_0$,
     \begin{align}
@@ -238,7 +238,7 @@ left-multiplied boundary comparison.
         \left(A^\mu A^jXA^\sigma\right).
         \notag
     \end{align}
-    Theorem~\ref{thm:closure_property_auxiliary_boundary_product_ground_space_left_words}
+    Lemma~\ref{thm:closure_property_auxiliary_boundary_product_ground_space_left_words}
     applies this left-multiplied comparison together with the one-sided
     boundary products and gives the displayed boundary conditions
     $\rho^+_{j,\sigma}$ and $\rho^-_{j,\sigma}$, including
@@ -250,7 +250,7 @@ left-multiplied boundary comparison.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Product equality at the periodic boundary]
+\begin{lemma}[Product equality at the periodic boundary]
     \label{thm:boundary_closing_word_equation_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_closing_product_eq_of_chainGroundSpace}
     \leanok
@@ -267,12 +267,12 @@ left-multiplied boundary comparison.
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^jA^\sigma.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:closure_property_auxiliary_boundary_product_chain_ground_space, thm:boundary_closing_product_pointwise_compatible_boundary_assignments}
-    Theorem~\ref{thm:closure_property_auxiliary_boundary_product_chain_ground_space}
+    Lemma~\ref{thm:closure_property_auxiliary_boundary_product_chain_ground_space}
     gives boundary conditions $\rho^+_{j,\sigma}$ and
     $\rho^-_{j,\sigma}$ satisfying
     \begin{align}
@@ -292,7 +292,7 @@ left-multiplied boundary comparison.
         Y_{M+1-L_0}(\rho^-_{j,\sigma})A^jA^\sigma.
         \notag
     \end{align}
-    Theorem~\ref{thm:boundary_closing_product_pointwise_compatible_boundary_assignments}
+    Lemma~\ref{thm:boundary_closing_product_pointwise_compatible_boundary_assignments}
     replaces these auxiliary conditions by the displayed boundary conditions
     for the periodic-boundary comparison:
     \begin{align}
@@ -303,7 +303,7 @@ left-multiplied boundary comparison.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Right-product equality at the periodic boundary]
+\begin{lemma}[Right-product equality at the periodic boundary]
     \label{thm:boundary_closing_right_products_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_right_products_eq_of_chainGroundSpace}
     \leanok
@@ -321,7 +321,7 @@ left-multiplied boundary comparison.
         Y_{M+1-L_0}(\tau^{-}_{\eta}(\mu))A^j.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -335,7 +335,7 @@ left-multiplied boundary comparison.
         \notag
     \end{align}
     satisfies $Z_jA^\sigma=0$ for every word $\sigma$ of length $L_0$ by
-    Theorem~\ref{thm:boundary_closing_word_equation_chain_ground_space}. Since
+    Lemma~\ref{thm:boundary_closing_word_equation_chain_ground_space}. Since
     $A$ is $L_0$-block-injective,
     $\spn\{A^\sigma:|\sigma|=L_0\} = \MD$.
     Applying Lemma~\ref{lem:padded_complement_annihilation} gives $Z_j=0$, hence
@@ -347,7 +347,7 @@ left-multiplied boundary comparison.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Equality of the two boundary-matrix families]
+\begin{lemma}[Equality of the two boundary-matrix families]
     \label{thm:wrapped_mirror_witness_agree_chain_ground_space}
     \lean{MPSTensor.wrapped_mirror_witness_agree_of_chainGroundSpace}
     \leanok
@@ -390,7 +390,7 @@ left-multiplied boundary comparison.
     Then the two families satisfy the boundary-matrix comparison required for
     equality of the two restrictions crossing the periodic cut:
     $Y^{+}_{\tau^{+}_{\eta}(\mu)} = Y^{-}_{\tau^{-}_{\eta}(\mu)}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -430,7 +430,7 @@ left-multiplied boundary comparison.
         \label{eq:boundary_restriction_matrix_id}
     \end{align}
     Together with (\ref{eq:boundary_restriction_matrix_id}),
-    Theorem~\ref{thm:boundary_closing_right_products_chain_ground_space}
+    Lemma~\ref{thm:boundary_closing_right_products_chain_ground_space}
     gives, for every physical letter $j$,
     \begin{align}
         Y^{+}_{\tau^{+}_{\eta}(\mu)} A^j
@@ -442,7 +442,7 @@ left-multiplied boundary comparison.
     desired equality of boundary matrices.
 \end{proof}
 
-\begin{theorem}[Change of cut on the full ring]
+\begin{lemma}[Change of cut on the full ring]
     \label{thm:full_ring_boundary_change_of_cut}
     \lean{MPSTensor.groundSpaceMap_mul_eq_of_cyclicTranslate_groundSpaceMap_eq}
     \leanok
@@ -454,7 +454,7 @@ left-multiplied boundary comparison.
         \notag
     \end{align}
     then $\Gamma_{L_0}(XA^j)=\Gamma_{L_0}(A^jY)$ for every physical letter $j$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -471,7 +471,7 @@ left-multiplied boundary comparison.
     \end{align}
 \end{proof}
 
-\begin{theorem}[One-step full-ring boundary comparison]
+\begin{lemma}[One-step full-ring boundary comparison]
     \label{thm:full_ring_boundary_intertwines_step}
     \lean{MPSTensor.full_ring_boundary_intertwines_of_cyclicTranslate_groundSpaceMap_eq}
     \leanok
@@ -483,12 +483,12 @@ left-multiplied boundary comparison.
         \notag
     \end{align}
     then $XA^j=A^jY$ for every physical letter $j$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:full_ring_boundary_change_of_cut, thm:ground_space_map_injective_blk}
-    Theorem~\ref{thm:full_ring_boundary_change_of_cut} gives
+    Lemma~\ref{thm:full_ring_boundary_change_of_cut} gives
     \begin{align}
         \Gamma_{L_0}(XA^j)
          & =\Gamma_{L_0}(A^jY),
@@ -497,7 +497,7 @@ left-multiplied boundary comparison.
     and injectivity of $\Gamma_{L_0}$ gives $XA^j=A^jY$.
 \end{proof}
 
-\begin{theorem}[Full-ring boundary comparison]
+\begin{lemma}[Full-ring boundary comparison]
     \label{thm:full_ring_boundary_intertwines}
     \lean{MPSTensor.full_ring_boundary_intertwines_of_chainGroundSpace}
     \leanok
@@ -505,7 +505,7 @@ left-multiplied boundary comparison.
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, and let
     $\psi\in\mathcal G_{L_0+1,L_0+1}(A)$ satisfy
     $\psi=\Gamma_{L_0+1}(X)$. Then $XA^j=A^jX$ for every physical letter $j$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -513,7 +513,7 @@ left-multiplied boundary comparison.
     Let $s$ denote the cut shift by $L_0$ and $Y_i$ the boundary matrix of
     the translated state at cut $i$. Translation invariance of the chain space,
     the cyclic open-chain reduction, and the composition law yield compatible
-    matrices at successive cuts. Theorem~\ref{thm:full_ring_boundary_intertwines_step}
+    matrices at successive cuts. Lemma~\ref{thm:full_ring_boundary_intertwines_step}
     gives the single-letter comparison, and induction on the word $w$ gives
     \begin{align}
         Y_i A^w
@@ -526,7 +526,7 @@ left-multiplied boundary comparison.
     then gives $XA^j=A^jX$ for every letter $j$.
 \end{proof}
 
-\begin{theorem}[Minimal-ring ground-space containment]
+\begin{lemma}[Minimal-ring ground-space containment]
     \label{thm:full_ring_ground_space_containment}
     \lean{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_full_ring}
     \leanok
@@ -537,13 +537,13 @@ left-multiplied boundary comparison.
          & \subseteq \spn\{V^{(L_0+1)}(A)\}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:cyclic_normal_open_chain_range_reduction, thm:full_ring_boundary_intertwines, thm:ground_space_map_mpv_of_long_word_commutes}
     Let $\psi\in\mathcal G_{L_0+1,L_0+1}(A)$. The cyclic open-chain reduction
-    gives $\psi=\Gamma_{L_0+1}(X)$. Theorem~\ref{thm:full_ring_boundary_intertwines}
+    gives $\psi=\Gamma_{L_0+1}(X)$. Lemma~\ref{thm:full_ring_boundary_intertwines}
     shows that $X$ commutes with every letter, and hence with every word of
     length $L_0$. The long-word commutation theorem then places $\psi$ in
     $\spn\{V^{(L_0+1)}(A)\}$.
@@ -558,14 +558,14 @@ $L_0<L\le N$ by combining the boundary-crossing comparison with the open-chain
 range reduction. In the minimal-ring case $N=L_0+1$, the full-ring change-of-cut
 theorem replaces the complementary-word comparison.
 
-\begin{theorem}[Chain ground space is spanned by the MPS vector in the injective case]%
+\begin{lemma}[Chain ground space is spanned by the MPS vector in the injective case]%
     \label{thm:chain_ground_space_eq_mpv_blk}
     \lean{MPSTensor.chainGroundSpace_eq_mpvSubmodule}
     \leanok
     \uses{def:chain_ground_space, def:mpv_submodule, def:injective}
     If $A$ is injective, $D \ge 1$, $N \ge 2$, and $1 < L \le N$, then
     $\mathcal G_{N,L}(A) = \spn\bigl\{V^{(N)}(A)\bigr\}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -573,14 +573,14 @@ theorem replaces the complementary-word comparison.
     Let $\psi \in \mathcal G_{N,L}(A)$. The non-wrapping window conditions and
     Lemma~\ref{lem:contiguous_mem_ground_space} imply $\psi \in G_{N}(A)$, so
     $\psi = \Gamma_{N}(X)$ for some boundary matrix $X$. The periodic boundary
-    condition now applies Theorem~\ref{thm:boundary_matrix_commutes} and forces
+    condition now applies Lemma~\ref{thm:boundary_matrix_commutes} and forces
     $X$ to commute with every letter $A^{j}$. Since $A$ is injective, the
     letters generate the full matrix algebra, hence $X$ is scalar. Therefore
     $\psi$ is proportional to $V^{(N)}(A)$, while the reverse inclusion is
     Lemma~\ref{lem:mpv_mem_chain_ground_space}.
 \end{proof}
 
-\begin{theorem}[Normal tensor: $\mathcal G_{N,L}(A)\subseteq\spn\{V^{(N)}(A)\}$]
+\begin{lemma}[Normal tensor: $\mathcal G_{N,L}(A)\subseteq\spn\{V^{(N)}(A)\}$]
     \label{thm:normal_range_reduction_containment}
     \lean{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction}
     \leanok
@@ -588,7 +588,7 @@ theorem replaces the complementary-word comparison.
     If $A$ is normal, $D \ge 1$, and injective after blocking $L_0>0$ sites,
     with $N \ge 2$, $L_0+1\le N$, and $L_0 < L \le N$, then
     $\mathcal G_{N,L}(A) \subseteq \spn\bigl\{V^{(N)}(A)\bigr\}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -599,7 +599,7 @@ theorem replaces the complementary-word comparison.
          & \subseteq\mathcal G_{N,L_0+1}(A),
         \notag
     \end{align}
-    and Theorem~\ref{thm:full_ring_ground_space_containment} applies to the
+    and Lemma~\ref{thm:full_ring_ground_space_containment} applies to the
     minimal ring. If $N>L_0+1$, the open-chain containment gives
     $\psi=\Gamma_N(X)$. The two boundary-crossing cyclic-window constraints give
     \begin{align}
@@ -617,7 +617,7 @@ theorem replaces the complementary-word comparison.
     $\psi \in \spn\{V^{(N)}(A)\}$.
 \end{proof}
 
-\begin{theorem}[Chain ground space is spanned by the MPS vector in the normal case]%
+\begin{lemma}[Chain ground space is spanned by the MPS vector in the normal case]%
     \label{thm:chain_ground_space_eq_mpv_normal}
     \lean{MPSTensor.chainGroundSpace_eq_mpvSubmodule_normal}
     \leanok
@@ -625,7 +625,7 @@ theorem replaces the complementary-word comparison.
     If $A$ is normal, $D \ge 1$, and injective after blocking $L_0>0$ sites,
     with $N \ge 2$, $L_0+1\le N$, and $L_0 < L \le N$, then
     $\mathcal G_{N,L}(A) = \spn\bigl\{V^{(N)}(A)\bigr\}$.
-\end{theorem}
+\end{lemma}
 
 \begin{theorem}[Unique ground state throughout the block-injective interaction range]%
     \label{thm:parent_hamiltonian_unique_gs}
@@ -643,7 +643,7 @@ theorem replaces the complementary-word comparison.
     \leanok
     \uses{def:normal, thm:chain_ground_space_eq_mpv_normal, thm:mpv_ne_zero_blk_injective}
     Block injectivity at the positive length $L_0$ makes $A$ normal. Hence
-    Theorem~\ref{thm:chain_ground_space_eq_mpv_normal} gives
+    Lemma~\ref{thm:chain_ground_space_eq_mpv_normal} gives
     \begin{align}
         \mathcal G_{N,L}(A)
          & =\spn\bigl\{V^{(N)}(A)\bigr\}.
@@ -659,24 +659,24 @@ theorem replaces the complementary-word comparison.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Unique ground state on the periodic chain]%
+\begin{lemma}[Unique ground state on the periodic chain]%
     \label{thm:ground_space_unique_periodic}
     \lean{MPSTensor.groundSpace_unique_periodic}
     \leanok
     \uses{thm:chain_ground_space_eq_mpv_blk, def:has_unique_ground_state, lem:mpv_eq_ground_space_map_one, thm:ground_space_map_injective}
     For an injective tensor $A$ with $D \ge 1$, if $N \ge 2$ and
     $1 < L \le N$, then the periodic chain ground space is one-dimensional.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:chain_ground_space_eq_mpv_blk, lem:mpv_eq_ground_space_map_one, thm:ground_space_map_injective}
-    By Theorem~\ref{thm:chain_ground_space_eq_mpv_blk}, the ground space is the
+    By Lemma~\ref{thm:chain_ground_space_eq_mpv_blk}, the ground space is the
     line $\spn\bigl\{V^{(N)}(A)\bigr\}$. It remains to show that the MPV is
     nonzero. If $V^{(N)}(A)=0$, then
     Lemma~\ref{lem:mpv_eq_ground_space_map_one} gives
     $\Gamma_{N}(\Id)=\Gamma_{N}(0)$. Since $A$ is injective and $N > 0$,
-    Theorem~\ref{thm:ground_space_map_injective} forces $\Id = 0$, a
+    Lemma~\ref{thm:ground_space_map_injective} forces $\Id = 0$, a
     contradiction. Therefore the spanning line is one-dimensional.
 \end{proof}
 
