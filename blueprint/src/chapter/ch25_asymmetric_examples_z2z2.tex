@@ -16,9 +16,10 @@ factor of the group to the second, motivated by anomalous
 $\Z_2\times\Z_2$ symmetry-protected topological phases~\cite{ChenGuWen2011}.
 The four operators do not form an exact representation. After an on-site
 dressing they do (Lemma~\ref{thm:asymex_z2z2_exact}), and the anomaly
-class of the dressed representation has the detector values of the type-II
-class (Lemma~\ref{thm:asymex_z2z2_anomaly_class}); in particular it is
-nontrivial.
+class of the dressed representation is the type-II class
+(Lemma~\ref{thm:asymex_z2z2_anomaly_class}). The original family has the
+same nontrivial class after blocking two physical sites
+(Lemma~\ref{lem:asymex_z2z2_blocked_anomaly}).
 Matrix product operator symmetries of this kind are reviewed
 in~\cite[Section~III.A.6]{Cirac2021Matrix}. The local tensors are built from
 the letters of the CZX matrix product
@@ -141,8 +142,8 @@ for the bond-two tensors. The multiplication phases are retained in
 Lemma~\ref{thm:asymex_z2z2_fusion}. The dressed exact representation
 is given in Lemma~\ref{thm:asymex_z2z2_exact}, and its nontrivial
 anomaly detectors in Lemma~\ref{thm:asymex_z2z2_anomaly_class}.
-These detector values concern the dressed family; they do not identify
-the full cohomology class of the original family.
+Lemma~\ref{lem:asymex_z2z2_blocked_anomaly} identifies the class of the
+original family after two-site blocking, retaining its odd-ring obstruction.
 
 \begin{center}
     \tenkzkernel
@@ -1084,6 +1085,97 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     value $-1$ at $xy$ shows that the class is nontrivial, and
     Lemma~\ref{thm:asymex_klein_complete_classification} identifies its
     class from these three products.
+\end{proof}
+
+
+\begin{definition}[The original family blocked by two sites]
+    \label{def:asymex_z2z2_blocked}
+    \lean{Z2Z2Condensation.blockedTensor, Z2Z2Condensation.blockedFamily}
+    \leanok
+    \uses{def:asymex_z2z2_tensors}
+    Pair adjacent physical sites of the original tensors, with ket and bra
+    labels paired separately. For $O=(o_0,o_1)$ and $I=(i_0,i_1)$, put
+    $B_g^{(O,I)}=M_g^{(o_0,i_0)}M_g^{(o_1,i_1)}$. The physical dimension
+    is sixteen; the bond dimensions remain $D_g$.
+\end{definition}
+
+\begin{lemma}[Exact multiplication after two-site blocking]
+    \label{lem:asymex_z2z2_blocked_exact}
+    \lean{Z2Z2Condensation.mpo_blockedTensor,
+        Z2Z2Condensation.fusionSign_kleinEquiv,
+        Z2Z2Condensation.mpo_symTensor_mul_even,
+        Z2Z2Condensation.blockedTensor_isNormal,
+        Z2Z2Condensation.blockedFamily_isNormalRepresentation,
+        Z2Z2Condensation.mpo_blockedTensor_one,
+        Z2Z2Condensation.mpo_blockedTensor_mul_inv,
+        Z2Z2Condensation.raw_odd_square_ne_identity}
+    \leanok
+    \uses{def:asymex_z2z2_blocked, thm:asymex_z2z2_fusion,
+        thm:asymex_z2z2_normal}
+    Each doubled-index tensor $B_g$ is normal. On every ring of $N>0$
+    blocked sites its periodic operator is $U_{g,2N}$, up to regrouping
+    physical configurations. These operators satisfy
+    $U_{g,2N}U_{h,2N}=U_{gh,2N}$, $U_{e,2N}=\Id$ and
+    $U_{g,2N}U_{g^{-1},2N}=\Id$. On every odd raw ring,
+    $U_{xy,L}^2=-U_{e,L}\neq U_{e,L}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Closing a ring of $N$ blocks closes the original ring of $2N$ sites.
+    The projective factor is $\lambda(g,h)^{2N}=1$, where
+    $\lambda(g,h)=(-1)^{g_1h_2}$. Blocking and bijective physical
+    relabeling preserve normality. On an odd ring
+    $\lambda(xy,xy)^L=-1$, and $U_{e,L}=\Id\neq0$.
+\end{proof}
+
+\begin{lemma}[The anomaly of the original blocked family]
+    \label{lem:asymex_z2z2_blocked_anomaly}
+    \lean{Z2Z2Condensation.blockedXFusionData,
+        Z2Z2Condensation.blockedXyFusionData,
+        Z2Z2Condensation.blockedYFamily,
+        Z2Z2Condensation.blockedYFusionData,
+        Z2Z2Condensation.blockedFamily_comap_xHom,
+        Z2Z2Condensation.blockedFamily_comap_yHom,
+        Z2Z2Condensation.blockedFamily_comap_xyHom,
+        Z2Z2Condensation.blockedXFusionData_isAssociator,
+        Z2Z2Condensation.blockedXyFusionData_isAssociator,
+        Z2Z2Condensation.cyclicInvariant_omega_blockedFamily_x,
+        Z2Z2Condensation.cyclicInvariant_omega_blockedFamily_y,
+        Z2Z2Condensation.cyclicInvariant_omega_blockedFamily_xy,
+        Z2Z2Condensation.cyclicInvariant_omega_blockedFamily,
+        Z2Z2Condensation.omega_blockedFamily_cohomologousTo_kleinCocycle,
+        Z2Z2Condensation.not_isTrivialGaugeClass_omega_blockedFamily}
+    \leanok
+    \uses{lem:asymex_z2z2_blocked_exact, thm:asymex_z2z2_split,
+        thm:asymex_z2z2_nonsplit, thm:mpug_family_restriction_omega,
+        thm:asymex_klein_complete_classification}
+    For every choice of fusion tensors of $g\mapsto B_g$, its anomaly
+    three-cocycle $\omega_B$ satisfies
+    $\omega_B(g,e,g)\omega_B(g,g,g)=(-1)^{g_1g_2}$.
+    Consequently $[\omega_B]=[(-1)^{a_1b_2c_2}]\neq0$.
+    This is the mixed type-II row of~\cite{GarreRubio2023MPOSym}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Restrict to the three subgroups of order two. On $\{e,y\}$ all
+    bonds have dimension one and the identity matrices are fusion tensors.
+    On $\{e,x\}$ and $\{e,xy\}$ use the original square-compression
+    witnesses $(V_x,W_x)$ and $(V_{xy},W_{xy})$. The second square
+    originally reduces to $-M_e$, whose two-site block equals $B_e$.
+    With identity fusion matrices when a factor is $e$, the two trees of
+    three generators are $V_g\otimes\Id$ and $\Id\otimes V_g$.
+    For the actual raw triple tensor $T_g=(M_g\cdot M_g)\cdot M_g$,
+    direct integer multiplication gives, for every doubled letter $a$,
+    $(V_g\otimes\Id)T_g^a=s_g(\Id\otimes V_g)T_g^a$, with
+    $s_x=1$ and $s_{xy}=-1$. Right multiplication extends this equality
+    to every nonempty word. The blocked triple tensor is the two-site
+    block of $T_g$, so it has the same tree comparison. Thus the three
+    detectors are $(+1,+1,-1)$. Fusion-gauge invariance makes them valid
+    for every fusion choice, and
+    Lemma~\ref{thm:asymex_klein_complete_classification} identifies the
+    class. The value $-1$ proves nontriviality.
 \end{proof}
 
 \subsection{The eight scalar representatives}
