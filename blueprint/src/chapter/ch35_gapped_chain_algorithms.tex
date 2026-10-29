@@ -1,11 +1,11 @@
 \chapter{Ground states of gapped chains in polynomial time}
 \label{ch:gapped_chain_algorithms}
 
-Landau, Vazirani and Vidick~\cite{Landau2015Polynomial} showed that a
-matrix product state approximating the ground state of a gapped chain can
-be computed in polynomial time, and Arad, Landau, Vazirani and
-Vidick~\cite{Arad2016RigorousRG} gave a more efficient renormalization
-algorithm. Both build the approximation one cut at a time. At each cut they
+Landau, Vazirani and Vidick~\cite{Landau2015Published} construct ground-state
+approximations by successive viable sets. Their sampling bound depends on
+the ground energy, as discussed in~\cite{gap:lvv13_sampling_ground_energy}.
+Arad, Landau, Vazirani and Vidick~\cite{Arad2016RigorousRG} gave a more
+efficient renormalization algorithm. Both build the approximation one cut at a time. At each cut they
 keep a small set of vectors on the sites to the left of the cut, a viable
 set, whose span still contains the left half of a good approximation. This
 chapter formalizes viable sets, trimming them to polynomial size and

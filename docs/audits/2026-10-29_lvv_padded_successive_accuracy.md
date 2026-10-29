@@ -80,7 +80,24 @@ reports only the four existing mismatches in the base revision's
 `ch35_aklv_energy_truncation.tex`. The ground-energy note compiles with its
 bibliography without unresolved references or layout warnings.
 
-The integrated mathematical development previously passed a full Lake build,
-strict checks of the successive-construction modules, and blueprint
-declaration checks. Fresh compiled checks of this extracted branch are
-reported in the pull request.
+The mathematical sources at commit `105ba5beb5` passed fresh verification
+on 2026-10-29. The subsequent changes only clarify the chapter introduction
+and record these results.
+
+- The canonical locked full-library build passed (15,045 jobs), including
+  the complete QICLean library at the pinned revision.
+- All 36 changed mathematical modules passed separate Lean elaboration
+  with warnings as errors, both automatic implicit options disabled,
+  Mathlib standard linters and the package synthesis-depth limit.
+- Axiom inspection of the complete successor, successive-family,
+  uniform approximation and arbitrary-accuracy theorems reported only
+  `propext`, `Classical.choice` and `Quot.sound`.
+- Blueprint/source synchronization passed, and every new reference
+  resolves in the active blueprint. After the full build,
+  `leanblueprint checkdecls` checked all 30,601 blueprint declaration names.
+- `python3 scripts/paper_gap_leanid_sync.py --check` passed for all 3,287
+  declaration names cited in the paper-gap notes.
+
+The manual axiom inspection used standard input and left no Lean fixture.
+These checks are recorded in
+[TNLean #10362](https://github.com/LionSR/TNLean/pull/10362).
