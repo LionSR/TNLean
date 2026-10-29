@@ -69,6 +69,10 @@ def uncleTwoWallTrial (A : MPSTensor d a) (B : MPSTensor d b)
     ((z.drop (p + r)).take q) ((z.drop (p + r + q)).take s)
     (z.drop (p + r + q + s))
 
+/-- The physical word on a numbered consecutive segment. -/
+def uncleConfigSegment {T : ℕ} (σ : Cfg d T) (s n : ℕ) (h : s + n ≤ T) :
+    List (Fin d) := List.ofFn fun j : Fin n ↦ σ ⟨s + j.val, by omega⟩
+
 /-- The source trial on 6N+1 sites, with wall intervals N through 2N and
 4N through 5N in zero-based coordinates. For N positive the five lengths
 are N, N+1, 2N-1, N+1, N, giving exactly the source two separated windows.
@@ -76,10 +80,12 @@ Source: arXiv:1210.6613, phiN-def, lines 1196–1224. -/
 def uncleTwoWallTrialSource (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (N : ℕ) : NSiteSpace d (6 * N + 1) := fun σ ↦
-  let z := List.ofFn σ
-  uncleTwoWallCoefficient A B R L (z.take N) ((z.drop N).take (N + 1))
-    ((z.drop (2 * N + 1)).take (2 * N - 1))
-    ((z.drop (4 * N)).take (N + 1)) (z.drop (5 * N + 1))
+  uncleTwoWallCoefficient A B R L
+    (uncleConfigSegment σ 0 N (by omega))
+    (uncleConfigSegment σ N (N + 1) (by omega))
+    (uncleConfigSegment σ (2 * N + 1) (2 * N - 1) (by omega))
+    (uncleConfigSegment σ (4 * N) (N + 1) (by omega))
+    (uncleConfigSegment σ (5 * N + 1) N (by omega))
 
 /-- Arbitrary fixed exterior words and a linear virtual contraction preserve
 membership of a varying local pair in the actual two-site boundary space.
