@@ -35,14 +35,14 @@ and distinctions. The blueprint states this unique-ground scope explicitly.
 
 ## Source and verification
 
-The new module is extracted without proof changes from TNLean revision
-`5148dccca8`; its SHA-256 is
-`e833d3541f9b21a2d611fdc03dc1cdac4cab77ad81f51aacfd907bc7d6961927`.
+The new module is extracted from TNLean revision `5148dccca8`. One
+exponential comparison is shortened using `gcongr` after normalizing its
+exponent by `ring`; the statements and mathematical argument are unchanged.
 The existing source definitions and dependency pins are preserved. In
 particular, older integration copies of `Lattice/ProductForm.lean` and
 `Lattice/GaussianFilteredTermLocalization.lean` are not included.
 
-The source passed an initial strict elaboration with Mathlib standard
-linters and warnings as errors in the AKLV verification checkout. The
+Both the original and shortened proofs passed strict elaboration with
+Mathlib standard linters and warnings as errors in the AKLV verification checkout. The
 ordinary build at the unchanged main dependency pin, axiom check and
 blueprint checks are recorded in the pull request when complete.
