@@ -220,6 +220,7 @@ import TNLean.MPS.MPU.TransferStabilization
 import TNLean.MPS.MPU.TransferStabilizationConverse
 import TNLean.MPS.MPU.TranspositionLocalNecessity
 import TNLean.MPS.MPU.TranspositionLocalSufficiency
+import TNLean.MPS.MPU.TranspositionPhaseDeformation
 import TNLean.MPS.MPU.TreeAmplificationGateBounds
 import TNLean.MPS.MPU.TreeDepthBounds
 import TNLean.MPS.MPU.TruncatedSymmetryGrowth

@@ -10154,7 +10154,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     ranks, implies transpose symmetry on its even periodic rings.
     These are the two implications in \cite[lines~1266--1288]{Cirac2017MPU}
     for the constructed canonical source form. Arbitrary supplied standard
-    forms and phase deformation remain separate; see
+    forms remain separate; see
     \cite{gap:mpu_canonical_form_full_support}.
 \end{lemma}
 
@@ -10171,6 +10171,46 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     internal unitary and gives equality on the even rings of the original
     tensor. The four-spin dictionary transports the given local equation
     without enlarging its antecedent.
+\end{proof}
+
+\begin{lemma}[Continuous removal of the local transposition phase]
+    \label{lem:mpu_transposition_phase_deformation}
+    \lean{MPOTensor.transpositionPhaseScalar, MPOTensor.norm_transpositionPhaseScalar,
+        MPOTensor.transpositionPhaseScalar_sq_mul, MPOTensor.continuous_transpositionPhaseScalar,
+        MPOTensor.transpositionPhaseScalar_zero,
+        MPOTensor.TwoSiteStandardFormData.transpositionPhaseDeformation,
+        MPOTensor.mpo_transpositionPhaseDeformation_eq_transpose,
+        MPOTensor.continuous_transpositionPhaseDeformation,
+        MPOTensor.transposition_local_phase_deformation,
+        MPOTensor.transposition_local_phase_deformation_one}
+    \notready
+    Let $W$ have supplied two-site standard-form gates $u,v$ and half factors
+    $X_1,X_2$, and let $\phi\in\mathbb R$. Set
+    $\delta_t=e^{-it\phi/2}$, $W_t=\delta_t W$ and $u_t=\delta_t u$.
+    Then $(u_t,v,X_1,X_2)$ is an actual standard form of $W_t$, and both
+    $t\mapsto W_t$ and $t\mapsto u_t$ are continuous, starting at $W,u$.
+    At every chain length where $W^{(N)}$ is transpose invariant, so is
+    $W_t^{(N)}$. If the square gates satisfy
+    $v_{23}(u\otimes u)=e^{i\phi}(x\otimes x^T)v_{23}^T$, then
+    \begin{align}
+        v_{23}(u_t\otimes u_t)
+         & =e^{i(1-t)\phi}(x\otimes x^T)v_{23}^T.
+    \end{align}
+    In particular the endpoint $t=1$ has local phase one, with the same
+    shifted gate and virtual unitary. This is the explicit deformation in
+    \cite[lines~1285--1288]{Cirac2017MPU}, without a continuous choice of
+    arguments for a varying family of phases.
+\end{lemma}
+
+\begin{proof}
+    \uses{SF, lem:mpu_canonical_even_transposition_iff}
+    Since $|\delta_t|=1$, multiplying the unshifted gate by $\delta_t$
+    preserves its two unitary identities. The open contraction is linear in
+    that gate, giving exactly $W_t$. The periodic operators obey
+    $W_t^{(N)}=\delta_t^N W^{(N)}$, which preserves transpose symmetry.
+    The two unshifted gates in the local equation contribute $\delta_t^2$,
+    and $\delta_t^2e^{i\phi}=e^{i(1-t)\phi}$. The complex exponential and
+    scalar multiplication give continuity.
 \end{proof}
 
 \begin{proposition}[Local characterization of transposition]

@@ -2,8 +2,8 @@
 
 Current source state: actual factor transport, forward local phase and even-ring
 converse for the chosen simple reduced canonical standard form are written.
-The explicit phase deformation, unrestricted presentations and exact-head
-hosted acceptance remain. Earlier stage-specific scope notes below describe
+The explicit phase deformation is also written on arbitrary supplied standard
+forms. Unrestricted local criteria and exact-head hosted acceptance remain. Earlier stage-specific scope notes below describe
 the transport and forward/converse pieces separately.
 
 Source: `Papers/1703.09188/paper_v2.tex:1258–1288`, transposition subsection,
@@ -112,3 +112,26 @@ added to the global side. This equivalence is source-written and uncompiled.
 The unrestricted supplied-standard-form scope, explicit phase deformation
 and exact-head hosted validation remain open; source and auxiliary Blueprint
 nodes stay `notready` and #7020 stays open.
+
+## Explicit phase deformation on actual supplied standard forms
+
+`TranspositionPhaseDeformation.lean` writes the source path
+`δ(t)=exp(-itφ/2)`, `u(t)=δ(t)u`, `W(t)=δ(t)W`, leaving the half factors
+and shifted gate unchanged. The constructor proves both unitary gate
+identities and the actual open tensor contraction. Its tensor and gate paths
+are continuous and start at the originals. Every original transpose symmetry
+is retained at exactly the same chain lengths by the actual MPO scalar law.
+The literal four-spin equation has phase `exp(i(1-t)φ)`, hence phase one at
+`t=1`, with the same virtual unitary and shifted gate.
+
+This path result applies to any supplied standard form; it does not require
+a canonical presentation, continuous choices of source factors, or a
+continuous argument function. The initial real phase is fixed. All ten new
+public declarations are source-written and remain uncompiled. The source
+local-characterization scope outside the chosen canonical construction and
+exact-head hosted acceptance remain open.
+
+The child stack is refreshed onto parent #10315 head `e960a6cb9`. The four
+rank transports in its transpose necessity proof use explicit entry
+identities, matching the concrete canonical reindex defect diagnosed in the
+adjoint parent. No statement or hypothesis changes, and no local Lean was run.

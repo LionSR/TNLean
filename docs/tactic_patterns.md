@@ -9725,3 +9725,16 @@ removed after the dependency audit exposed it.
 - **Abstraction:** The mathematical periodic cancellation is already shared.
   The sign/phase algebra differs under adjunction and transposition; no
   duplicate symmetry-predicate family or new closure axiom is introduced.
+
+### Unit phase scalar multiplication of rectangular gates — candidate (2026-10-29)
+
+- **Pattern:** Derive `c*star c=1` from unit norm, then pull the two scalars
+  out of both gate Gram products.
+- **Seen:** Sign-gauge construction in `TimeReversalLocalSufficiency.lean`,
+  phase-gauge construction in `TranspositionLocalSufficiency.lean`, and
+  actual standard-form scalar deformation in `TranspositionPhaseDeformation.lean`.
+- **Next:** A companion-library rectangular-unitary scalar lemma can replace
+  these after the prerequisite stack is accepted; the current private helper
+  proves both identities once within the deformation module.
+- **Related reuse:** The local scalar path uses the existing actual `mpo_smul`
+  law and `TwoSiteStandardFormData` structure; no new path predicate is added.

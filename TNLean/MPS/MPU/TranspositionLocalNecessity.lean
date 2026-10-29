@@ -128,19 +128,44 @@ theorem IsMPUCanonicalFormII.exists_source_transposition_phase_certificate
     ⟨Matrix.reindex LA LA (X : Matrix _ _ ℂ), Matrix.reindex_mem_unitaryGroup _ _ X.property⟩
   let Y' : Matrix.unitaryGroup (Fin d) ℂ :=
     ⟨Matrix.reindex RA RA (Y : Matrix _ _ ℂ), Matrix.reindex_mem_unitaryGroup _ _ Y.property⟩
+  let erA := finCongr (source_ranks_physicalTransposeTensor U).1.symm
+  let elA := finCongr (source_ranks_physicalTransposeTensor U).2.symm
+  let erFT := finCongr hrFT.symm
+  let elFT := finCongr hlFT.symm
+  have hUA : Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)
+      (Matrix.reindex (Equiv.prodCongr elA erA) (Equiv.refl _)
+        (SourceFactors.sourceV U S)ᵀ) = Bᵀ := by
+    ext ⟨i, j⟩ ⟨k, l⟩
+    rfl
+  have hUFT : Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)
+      (Matrix.reindex (Equiv.prodCongr elFT erFT) (Equiv.refl _)
+        (SourceFactors.sourceU U S)) = A := by
+    ext ⟨i, j⟩ ⟨k, l⟩
+    rfl
+  have hVA : Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA)
+      (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr erA elA)
+        (SourceFactors.sourceU U S)ᵀ) = Aᵀ := by
+    ext ⟨i, j⟩ ⟨k, l⟩
+    rfl
+  have hVFT : Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA)
+      (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr erFT elFT)
+        (SourceFactors.sourceV U S)) = B := by
+    ext ⟨i, j⟩ ⟨k, l⟩
+    rfl
   have hfirst : Bᵀ = ((X' : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ
       (Y' : Matrix (Fin d) (Fin d) ℂ)) * A := by
     have h := congrArg (Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)) hu
     dsimp only [T] at h
     rw [SourceFactors.sourceU_physicalTranspose, Matrix.reindex_kronecker_mul] at h
-    simpa only [A, B, X', Y', L, R, LA, RA, Matrix.transpose_reindex] using h
+    rw [hUA, hUFT] at h
+    exact h
   have hsecond : Aᵀ = B * ((Y' : Matrix (Fin d) (Fin d) ℂ)ᴴ ⊗ₖ
       (X' : Matrix (Fin d) (Fin d) ℂ)ᴴ) := by
     have h := congrArg (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA)) hv
     dsimp only [T] at h
     rw [SourceFactors.sourceV_physicalTranspose, Matrix.reindex_mul_kronecker] at h
-    simpa only [A, B, X', Y', L, R, LA, RA, Matrix.transpose_reindex,
-      Matrix.star_eq_conjTranspose, Matrix.conjTranspose_reindex] using h
+    rw [hVA, hVFT] at h
+    simpa only [X', Y', Matrix.star_eq_conjTranspose, Matrix.conjTranspose_reindex] using h
   have hA : A.IsCoisometry := (huS.reindex _ (Equiv.prodCongr L R) (Equiv.refl _)).2
   letI : NeZero d := hU.neZero_phys
   obtain ⟨c, x, hc, hlocal⟩ := transpose_local_phase_of_gate_gauges A B hA X' Y' hfirst hsecond
