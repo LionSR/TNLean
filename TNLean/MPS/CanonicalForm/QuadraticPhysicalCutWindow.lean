@@ -118,7 +118,7 @@ noncomputable def quadraticWindowCutBases [NeZero D] {A : MPSTensor d D}
       finProdFinEquiv.symm)
 
 /-- The original physical OBC site matrices, in the exact reindexed
-canonical window, admit a quadratic solution. Any actual physical cut
+canonical window, have a quadratic solution. Any actual physical cut
 bases are allowed, including the canonical weighted Schmidt bases.
 No window gauge or solution is an input.
 Source: PGVWC07, first clause of Theorem 8, lines 1139--1169. -/
@@ -149,7 +149,8 @@ theorem quadraticPhysicalCutWindow_cutSiteMatrix [NeZero D] {A : MPSTensor d D}
   classical
   ext a b
   simp only [quadraticPhysicalCutWindow, quadraticWindowCutBases, LinearMap.toMatrix_apply,
-    Module.Basis.reindex_apply, Module.Basis.repr_reindex_apply, Matrix.reindex_apply, Matrix.submatrix_apply,
+    Module.Basis.reindex_apply, Module.Basis.repr_reindex_apply, Matrix.reindex_apply,
+    Matrix.submatrix_apply,
     cutSiteMatrix]
 
 end MPSTensor
