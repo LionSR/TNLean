@@ -94,6 +94,23 @@ theorem bufferedMPULocalAction_compatible {d D ℓ r : ℕ} {U : MPOTensor d D}
   rw [finiteChainLocalObservable_localInclusion]
   exact DFunLike.congr_fun h A
 
+/-- The actual finite-local forward family agrees with every sufficiently
+buffered original-site finite chain, not just the canonical chain chosen
+in its definition. Source: arXiv:1703.09188, eq:appendix-1, lines 2300--2306. -/
+theorem bufferedMPULocalAction_eq_finiteChainLocalObservable
+    {d D ℓ r : ℕ} {U : MPOTensor d D} (hU : U.IsMPU) (k : ℕ) (hk : 0 < k)
+    {u : Matrix (Fin ℓ × Fin r)
+      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
+    {v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin r × Fin ℓ) ℂ}
+    (S : MPOTensor.TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.blockTensor U k)) u v)
+    (Λ : Finset ℤ) (b : ℤ) (N : ℕ) (hN : 1 < N) (hΛ : Λ ⊆ finiteChainRegion b N)
+    (hb : ∀ x ∈ Λ, b ≤ x - (2 * k : ℕ) ∧ x + (4 * k : ℕ) ≤ b + N) :
+    bufferedMPULocalAction hU k Λ = finiteChainLocalObservable hU hN b hΛ :=
+  finiteChainLocalObservable_eq_of_twoSiteStandardForm_buffers hU k hk S Λ
+    (actionBufferAnchor k Λ) b (actionBufferLength k Λ) N (actionBuffer_spec k Λ).1 hN
+    (actionBuffer_spec k Λ).2.1 hΛ (actionBuffer_spec k Λ).2.2 hb
+
 /-- The actual compatible forward action on the existing algebraic local
 algebra. No inverse or completed automorphism is asserted here.
 Source: arXiv:1703.09188, Appendix lines 2292--2306. -/

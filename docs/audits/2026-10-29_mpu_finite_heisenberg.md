@@ -89,7 +89,10 @@ Mathlib's existing `UniformSpace.Completion.mapRingHom` and
 on the canonical dense image. The resulting
 `bufferedMPUQuasiLocalAction` is an actual isometric unital star-algebra
 endomorphism, with exact algebraic-local and finite-observable evaluation
-formulas. No inverse or surjectivity premise is introduced.
+formulas. `bufferedMPUQuasiLocalAction_finiteChainConjugation` identifies
+this completed value with actual finite MPU conjugation on every ambient
+interval satisfying the derived buffer bounds, rather than only the
+canonical chosen chain. No inverse or surjectivity premise is introduced.
 
 The finite one-site generation proof is now shared with the inverse
 work in QCA/SingletonGeneration. The forward equalizer argument consumes
