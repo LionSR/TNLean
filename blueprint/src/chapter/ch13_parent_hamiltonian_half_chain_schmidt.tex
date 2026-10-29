@@ -623,6 +623,20 @@ conjugate-transposed tensor.
     geometric sequence tends to zero, and there are finitely many blocks.
 \end{proof}
 
+\begin{lemma}[Normalized diagonal dual fixed point of a canonical block]
+    \label{lem:half_chain_canonical_normalized_dual}
+    \lean{MPSTensor.PGVWC07CanonicalFormData.exists_normalized_diagonal_dualFixedPoint}
+    \notready
+    Each canonical block has a strictly positive diagonal dual fixed point
+    $\operatorname{diag}(\lambda_a)$ with $\sum_a\lambda_a=1$.
+\end{lemma}
+\begin{proof}
+    The canonical dual fixed point $\Lambda$ is diagonal and positive
+    definite, so its diagonal entries are real and strictly positive.
+    Divide them by their positive sum. Linearity preserves the dual
+    fixed-point equation.
+\end{proof}
+
 \begin{lemma}[Transfer eigenvectors of canonical sectors]
     \label{lem:half_chain_canonical_sector_eigenvalues}
     \lean{MPSTensor.PGVWC07CanonicalFormData.transferMap_reindex_blockDiagonal,

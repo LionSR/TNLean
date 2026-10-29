@@ -25,11 +25,46 @@ peripheral degeneracy is counted with multiplicity, as distinguished in
 one-block hypothesis about distinct eigenvalue values is unchanged.
 -/
 
-open scoped Matrix Matrix.Norms.L2Operator ComplexOrder Topology ENNReal
+open scoped Matrix BigOperators Matrix.Norms.L2Operator ComplexOrder Topology ENNReal
 
 namespace MPSTensor.PGVWC07CanonicalFormData
 
 variable {d D : ℕ} {A : MPSTensor d D} (h : PGVWC07CanonicalFormData A)
+
+/-- Each canonical block supplies its own strictly positive diagonal dual
+fixed point normalized to trace one. No stationary density is assumed in
+addition to the canonical data. Source: PGVWC07, Theorem 4, lines 753–755,
+and Theorem 6, lines 970–993. -/
+theorem exists_normalized_diagonal_dualFixedPoint (k : Fin h.r) :
+    ∃ lam : Fin (h.dim k) → ℝ, (∀ a, 0 < lam a) ∧ (∑ a, lam a = 1) ∧
+      ∑ i, (h.blocks k i)ᴴ * (Matrix.diagonal fun a => (lam a : ℂ)) * h.blocks k i =
+        Matrix.diagonal fun a => (lam a : ℂ) := by
+  classical
+  letI : NeZero (h.dim k) := ⟨(h.dim_pos k).ne'⟩
+  obtain ⟨Λ, hΛ, hDiag, hFix⟩ := h.dual_fixedPoint k
+  have hPositive : ∀ a, 0 < (Λ a a).re := fun a =>
+    (Complex.pos_iff.mp (hΛ.diag_pos (i := a))).1
+  have hReal : ∀ a, ((Λ a a).re : ℂ) = Λ a a := fun a =>
+    Complex.ext rfl (Complex.pos_iff.mp (hΛ.diag_pos (i := a))).2
+  have hDiagReal : Matrix.diagonal (fun a => ((Λ a a).re : ℂ)) = Λ := by
+    rw [show (fun a => ((Λ a a).re : ℂ)) = Matrix.diag Λ from funext hReal]
+    exact hDiag.diagonal_diag
+  let s : ℝ := ∑ a, (Λ a a).re
+  have hs : 0 < s := Finset.sum_pos (fun a _ => hPositive a) Finset.univ_nonempty
+  let lam : Fin (h.dim k) → ℝ := fun a => (Λ a a).re / s
+  have hNormalized : Matrix.diagonal (fun a => (lam a : ℂ)) = (s : ℂ)⁻¹ • Λ := by
+    calc
+      _ = Matrix.diagonal ((s : ℂ)⁻¹ • (fun a => ((Λ a a).re : ℂ))) := by
+        congr 1
+        funext a
+        simp only [lam, Complex.ofReal_div, Pi.smul_apply, smul_eq_mul, div_eq_mul_inv,
+          mul_comm]
+      _ = _ := by rw [Matrix.diagonal_smul, hDiagReal]
+  refine ⟨lam, fun a => div_pos (hPositive a) hs, ?_, ?_⟩
+  · change (∑ a, (Λ a a).re / s) = 1
+    rw [← Finset.sum_div]
+    exact div_self hs.ne'
+  · simp only [hNormalized, Matrix.mul_smul, Matrix.smul_mul, ← Finset.smul_sum, hFix]
 
 /-- A block diagonal observable evolves independently in each weighted
 canonical sector. Source: PGVWC07, Theorem 4, lines 745–757. -/
