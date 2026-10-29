@@ -138,7 +138,7 @@ theorem exists_uncleWallNormSlope_pos [NeZero a] [NeZero b]
   have hM : M ≠ 0 := by
     intro h
     have he := congrFun (congrFun h 0) 0
-    simp [M, Matrix.single_apply] at he
+    simp [M] at he
   let R : Fin d → Matrix (Fin a) (Fin b) ℂ := fun i ↦ c i • M
   have hR : R ≠ 0 := by
     intro h
