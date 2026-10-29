@@ -1,0 +1,109 @@
+\section{Rectangular reconstruction for varying-bond open chains}
+\label{sec:parent_varying_obc_reconstruction}
+
+Consider three consecutive canonical open-chain sites with finite
+physical alphabets $I,J,K$ and rectangular matrices
+\begin{align}
+    A_i & \in M_{a,b}(\mathbb C), &
+    B_j & \in M_{b,c}(\mathbb C), &
+    C_k & \in M_{c,e}(\mathbb C).
+\end{align}
+The virtual coordinate spaces may differ at every cut. The following
+identities are the local reconstruction step of the open-boundary
+uniqueness proof in \cite[Theorem~9, lines~1212--1237]{PerezGarcia2007Matrix}.
+They concern rectangular trace representations before any induction over
+an entire chain or comparison with a Hamiltonian kernel.
+
+\begin{lemma}[Matching the boundary products on an overlap]
+    \label{lem:varying_obc_overlap_boundary_products}
+    \lean{Matrix.obc_overlap_boundary_mul_eq}
+    \notready
+    Assume that $\operatorname{span}\{B_j\}=M_{b,c}(\mathbb C)$.
+    Let $X_k\in M_{c,a}(\mathbb C)$ and $Y_i\in M_{e,b}(\mathbb C)$ satisfy
+    \begin{align}
+        \operatorname{tr}(X_kA_iB_j) & =\operatorname{tr}(Y_iB_jC_k)
+    \end{align}
+    for every $i,j,k$. Then $X_kA_i=C_kY_i$ for every $i,k$.
+\end{lemma}
+\begin{proof}
+    \notready
+    Cyclicity gives
+    $\operatorname{tr}(Y_iB_jC_k)=\operatorname{tr}(C_kY_iB_j)$.
+    By the spanning assumption, equality of these trace functionals on
+    all $B_j$ gives equality on every matrix in $M_{b,c}(\mathbb C)$.
+    The rectangular trace pairing is nondegenerate, so $X_kA_i=C_kY_i$.
+\end{proof}
+
+\begin{lemma}[The canonical adjoint reconstruction]
+    \label{lem:varying_obc_three_site_reconstruction}
+    \lean{Matrix.obc_threeSite_boundary_reconstruction,
+        Matrix.obc_threeSite_trace_reconstruction}
+    \notready
+    \uses{lem:varying_obc_overlap_boundary_products}
+    In addition assume the canonical row-isometry identity
+    $\sum_iA_iA_i^*=I_a$. Define the actual common boundary
+    \begin{align}
+        Z & =\sum_iY_iA_i^*\in M_{e,a}(\mathbb C).
+    \end{align}
+    Then $X_k=C_kZ$ for every $k$, and
+    \begin{align}
+        \operatorname{tr}(X_kA_iB_j) & =\operatorname{tr}(ZA_iB_jC_k)
+    \end{align}
+    for every $i,j,k$.
+\end{lemma}
+\begin{proof}
+    \notready
+    The preceding overlap identity and the canonical normalization give
+    \begin{align}
+        X_k & =X_k\sum_iA_iA_i^*
+        =\sum_iC_kY_iA_i^*=C_kZ.
+    \end{align}
+    Substitute this equality in the original trace representation and
+    move $C_k$ cyclically to the right. This is precisely the adjoint
+    boundary construction in the source proof.
+\end{proof}
+
+\begin{lemma}[Two adjacent section conditions give a three-site representation]
+    \label{lem:varying_obc_pair_sections_reconstruct}
+    \lean{Matrix.obc_threeSite_reconstruction_of_pair_sections}
+    \notready
+    \uses{lem:varying_obc_three_site_reconstruction}
+    Assume the same row-isometry and middle-site spanning conditions.
+    Let $\phi:I\times J\times K\to\mathbb C$. Suppose that for every
+    fixed $k$ there is a matrix $X_k$ with
+    $\phi(i,j,k)=\operatorname{tr}(X_kA_iB_j)$, and for every fixed $i$
+    there is a matrix $Y_i$ with
+    $\phi(i,j,k)=\operatorname{tr}(Y_iB_jC_k)$. Then there is one
+    $Z\in M_{e,a}(\mathbb C)$ such that
+    \begin{align}
+        \phi(i,j,k) & =\operatorname{tr}(ZA_iB_jC_k)
+    \end{align}
+    simultaneously for every $i,j,k$.
+\end{lemma}
+\begin{proof}
+    \notready
+    Choose boundary matrices from the two local section conditions. Their
+    trace representations agree because they both give $\phi$.
+    The canonical adjoint reconstruction supplies the common boundary.
+\end{proof}
+
+\begin{lemma}[Blocking preserves the rectangular row isometry]
+    \label{lem:varying_obc_block_row_isometry}
+    \lean{Matrix.obc_block_rowIsometry}
+    \notready
+    If $\sum_iA_iA_i^*=I_a$ and $\sum_jB_jB_j^*=I_b$, then the blocked
+    family satisfies
+    \begin{align}
+        \sum_{i,j}(A_iB_j)(A_iB_j)^* & =I_a.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \notready
+    Reverse the product under adjoints and first sum over the middle
+    physical letter:
+    \begin{align}
+        \sum_{i,j}A_iB_jB_j^*A_i^*
+         & =\sum_iA_i\Bigl(\sum_jB_jB_j^*\Bigr)A_i^*
+        =\sum_iA_iA_i^*=I_a.
+    \end{align}
+\end{proof}
