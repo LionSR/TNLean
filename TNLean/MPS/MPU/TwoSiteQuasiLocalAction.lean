@@ -99,6 +99,22 @@ theorem bufferedMPUQuasiLocalAction_quasiLocalObservable (Λ : Finset ℤ)
     bufferedMPUQuasiLocalAction_algebraicToQuasiLocal]
   rfl
 
+/-- The actual completed forward action equals original-site finite
+MPU conjugation on every sufficiently buffered interval. This is the
+finite-chain formula with compatibility derived from the supplied
+standard form, rather than a value only on the canonically chosen chain.
+Source: arXiv:1703.09188, eq:appendix-1, lines 2300--2306. -/
+theorem bufferedMPUQuasiLocalAction_finiteChainConjugation
+    (Λ : Finset ℤ) (b : ℤ) (N : ℕ) (hN : 1 < N) (hΛ : Λ ⊆ finiteChainRegion b N)
+    (hb : ∀ x ∈ Λ, b ≤ x - (2 * k : ℕ) ∧ x + (4 * k : ℕ) ≤ b + N)
+    (A : LocalAlgebra d Λ) :
+    bufferedMPUQuasiLocalAction hU k hk S (quasiLocalObservable d Λ A) =
+      quasiLocalObservable d (finiteChainRegion b N)
+        (finiteChainConjugation hU hN b (localInclusion hΛ A)) := by
+  rw [bufferedMPUQuasiLocalAction_quasiLocalObservable,
+    bufferedMPULocalAction_eq_finiteChainLocalObservable hU k hk S Λ b N hN hΛ hb]
+  rfl
+
 /-- The actual completed forward endomorphism is isometric, with no
 surjectivity or inverse assumption. Source: arXiv:1703.09188,
 Appendix norm completion in lines 2296--2306. -/

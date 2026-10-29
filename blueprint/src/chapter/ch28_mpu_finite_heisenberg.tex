@@ -215,6 +215,7 @@
     \lean{SpinChain.finiteChainLocalObservable_localInclusion,
         SpinChain.bufferedMPULocalAction,
         SpinChain.bufferedMPULocalAction_compatible,
+        SpinChain.bufferedMPULocalAction_eq_finiteChainLocalObservable,
         SpinChain.bufferedMPUAlgebraicAction,
         SpinChain.norm_bufferedMPULocalAction,
         SpinChain.norm_bufferedMPUAlgebraicAction}
@@ -251,6 +252,7 @@
         SpinChain.bufferedMPUQuasiLocalAction_apply,
         SpinChain.bufferedMPUQuasiLocalAction_algebraicToQuasiLocal,
         SpinChain.bufferedMPUQuasiLocalAction_quasiLocalObservable,
+        SpinChain.bufferedMPUQuasiLocalAction_finiteChainConjugation,
         SpinChain.bufferedMPUQuasiLocalAction_isometry,
         SpinChain.norm_bufferedMPUQuasiLocalAction}
     \notready
@@ -259,7 +261,9 @@
     extends to an isometric unital star-algebra endomorphism of the
     quasi-local algebra. Its value on each finite observable is the
     canonical completed image of the actual buffered finite-chain
-    conjugation already constructed. No inverse or surjectivity is
+    conjugation already constructed. The same formula holds for every
+    sufficiently buffered ambient interval, without imposing divisibility
+    on its length. No inverse or surjectivity is
     assumed. This supplies the completed forward map in
     \cite[lines~2296--2306]{Cirac2017MPU}; the inverse and full source
     automorphism statement remain separate as in
