@@ -297,3 +297,14 @@ factor alias before the two gate rewrites. The source now removes the empty
 simplification, specifies both pair dimensions, and unfolds exactly that
 factor alias before applying the existing gate identities. The converse has
 not yet been accepted; no local Lean command was run.
+
+## Hosted diagnostics on `36f753cb8`
+
+Job `123487768537` found dependent rewriting of a source-rank natural inside
+finite-index coercions, two nested reindex conversions, and the canonical
+weight alias in the final necessity comparison. The proof now applies the
+rank equality to an explicit natural-valued function, composes the matrix
+linear equivalences with their existing composition theorem, and types the
+actual coarse factor record at the coarse canonical boundary from the start.
+This preserves all statements and uses no local Lean commands. Necessity and
+converse acceptance remains pending.

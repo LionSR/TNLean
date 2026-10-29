@@ -174,7 +174,7 @@ theorem coarse_gates_eq_four_spin_gates
     rintro ⟨a, s⟩
     apply Fin.ext
     change s.val + r[U] * a.val = s.val + d * a.val
-    rw [hrU]
+    exact congrArg (fun n : ℕ ↦ s.val + n * a.val) hrU
   have hel : el.trans L = (Equiv.prodCongr el₀ (Equiv.refl (Fin d))).trans finProdFinEquiv := by
     apply Equiv.ext
     rintro ⟨t, b⟩
@@ -197,13 +197,23 @@ theorem coarse_gates_eq_four_spin_gates
   dsimp only
   constructor
   · rw [hU.twoSiteSourceFactors_sourceU hsimple, hu]
-    change Matrix.reindex ((Equiv.prodCongr el er).trans (Equiv.prodCongr L R)) p _ =
-      Matrix.reindex (F.trans p) p _
-    rw [hrows]
+    let M := staircaseMiddle (A := Fin ℓ[U]) (E := Fin r[U])
+      (sourceV U hU.ρ hU.ρ_posDef) *
+        (sourceU U hU.ρ hU.ρ_posDef ⊗ₖ sourceU U hU.ρ hU.ρ_posDef)
+    change Matrix.reindexLinearEquiv ℂ ℂ (Equiv.prodCongr L R) (Equiv.refl _)
+        (Matrix.reindexLinearEquiv ℂ ℂ (Equiv.prodCongr el er) p M) =
+      Matrix.reindexLinearEquiv ℂ ℂ p p
+        (Matrix.reindexLinearEquiv ℂ ℂ F (Equiv.refl _) M)
+    simp only [Matrix.reindexLinearEquiv_comp_apply, Equiv.trans_refl,
+      Equiv.refl_trans, hrows]
   · rw [hU.twoSiteSourceFactors_sourceV hsimple, hv]
-    change Matrix.reindex p ((Equiv.prodCongr er el).trans (Equiv.prodCongr R L)) _ =
-      Matrix.reindex p (G.trans p) _
-    rw [hcols]
+    let M := staircaseMiddle (A := Fin d) (E := Fin d) (sourceV U hU.ρ hU.ρ_posDef)
+    change Matrix.reindexLinearEquiv ℂ ℂ (Equiv.refl _) (Equiv.prodCongr R L)
+        (Matrix.reindexLinearEquiv ℂ ℂ p (Equiv.prodCongr er el) M) =
+      Matrix.reindexLinearEquiv ℂ ℂ p p
+        (Matrix.reindexLinearEquiv ℂ ℂ (Equiv.refl _) G M)
+    simp only [Matrix.reindexLinearEquiv_comp_apply, Equiv.trans_refl,
+      Equiv.refl_trans, hcols]
 
 /-- Global adjoint symmetry at even standard-form lengths yields an actual local
 sign certificate for the normalized coarse source gates, in physical-block
@@ -229,7 +239,7 @@ theorem IsMPUCanonicalFormII.exists_coarse_timeReversal_certificate
   classical
   let W := MPOTensor.blockTwo U
   let hW := hU.blockTwo
-  let S := hU.twoSiteSourceFactors hsimple
+  let S : SourceFactors W hW.ρ := hU.twoSiteSourceFactors hsimple
   have hSW := hU.isMPUSimple_blockTwo hsimple
   obtain ⟨hrU, hlU⟩ := hU.sourceRanks_eq_phys_of_standardForm_even_mpo_eq_adjoint hsimple hTR
   obtain ⟨hrB, hlB⟩ := hU.twoSite_sourceRanks hsimple
