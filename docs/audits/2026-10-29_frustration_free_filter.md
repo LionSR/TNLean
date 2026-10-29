@@ -82,7 +82,17 @@ The corrected polynomial count is documented in the companion-owned note:
 https://sirui-lu.com/QICLean/paper-gaps/aklv13_interpolation_and_word_count.pdf.
 The separate detectability-based replacement #10328 is not duplicated.
 
-Full native mathematical/API reviews and source/Blueprint checks precede
-publication. No local Lean, Lake, build, elaboration or declaration check
-is run. The new filter statement/proof and imported dependency statement
-remain unready; exact-head hosted acceptance is separate. Keep #9838 OPEN.
+Root and two independent full native mathematical/pinned-API reviews passed
+the final 205-line source at SHA256
+`f922a1b8d38dd1e59b290ef13e79bfbdbda67c5ca5760c286334c789d6a35319`.
+The explicit Hermiticity argument projects the actual PSD certificate before
+transporting the decomposition into the generic polynomial constructor.
+Generated imports, full Blueprint/source synchronization with reverse public
+coverage and duplicate detection, roles, reader-facing prose, manifest
+agreement, paper-gap references, pinned TeX formatting, configured ChkTeX,
+source width/integrity, imported proof/entry hashes and whitespace pass. The
+scanner found three small bond-filter extensionality blocks in this one file;
+that candidate and the two-use quotient arithmetic are recorded in the ledger.
+No local Lean, Lake, build, elaboration or declaration check ran. The new filter
+statement/proof and imported dependency statement remain unready; exact-head
+hosted acceptance is separate. Keep #9838 OPEN.
