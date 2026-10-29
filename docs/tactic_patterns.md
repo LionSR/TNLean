@@ -9814,3 +9814,16 @@ there is no need for a new tactic.
   parameter after reaching the full regional space. It handles a zero target
   by the standard projection simplifier, rather than copying the earlier
   coordinate proof. No new tactic or second matrix-unit family is introduced.
+
+### Restricting an ambient operator to a submodule — candidate (2026-10-29)
+
+- **Seen:** The last composition estimate in QICLean
+  `Analysis/WeightedProjection.lean`,
+  `norm_le_of_subtypeL_comp_eq_domRestrict`, and the private
+  `norm_domRestrict_le` in `MPS/AreaLaw/RegionalExponentialMoment.lean`.
+- **Pattern:** Write a domain restriction as composition with the submodule
+  inclusion, apply `opNorm_comp_le`, and use `Submodule.norm_subtypeL_le`.
+- **Reuse:** Mathlib supplies both inequalities. The new occurrence is isolated
+  in one private lemma. If a third independent occurrence is needed, expose
+  the generic domain-restriction inequality in QICLean and refactor these
+  two occurrences; no tactic is needed.
