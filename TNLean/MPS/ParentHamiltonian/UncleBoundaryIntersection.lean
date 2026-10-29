@@ -43,10 +43,10 @@ theorem restrictLast_mem_uncleBoundarySpace
     ((uncleTraceRight X).comp (uncleBoundaryMulRight (uncleBoundaryLetter A B R L i)))
   refine ⟨Y, ?_⟩
   ext σ
-  simpa only [uncleBoundaryMap_apply, restrictLast_apply, uncleBoundaryWord_ofFn_snoc,
-    uncleTraceRight, LinearMap.comp_apply, LinearMap.mulRight_apply,
-    Matrix.traceLinearMap_apply, uncleBoundaryMulRight_apply, Matrix.trace_mul_comm] using
-      (hY (uncleBoundaryWord A B R L (List.ofFn σ))).symm
+  change Matrix.trace (uncleBoundaryWord A B R L (List.ofFn σ) * Y) =
+    Matrix.trace (uncleBoundaryWord A B R L (List.ofFn (Fin.snoc σ i)) * X)
+  rw [uncleBoundaryWord_ofFn_snoc]
+  exact (Matrix.trace_mul_comm _ _).trans (hY (uncleBoundaryWord A B R L (List.ofFn σ))).symm
 
 /-- Fixing the initial site preserves the source boundary-space constraint. -/
 theorem restrictFirst_mem_uncleBoundarySpace
@@ -60,10 +60,10 @@ theorem restrictFirst_mem_uncleBoundarySpace
     ((uncleTraceRight X).comp (uncleBoundaryMulLeft (uncleBoundaryLetter A B R L i)))
   refine ⟨Y, ?_⟩
   ext σ
-  simpa only [uncleBoundaryMap_apply, restrictFirst_apply, uncleBoundaryWord_ofFn_cons,
-    uncleTraceRight, LinearMap.comp_apply, LinearMap.mulRight_apply,
-    Matrix.traceLinearMap_apply, uncleBoundaryMulLeft_apply, Matrix.trace_mul_comm] using
-      (hY (uncleBoundaryWord A B R L (List.ofFn σ))).symm
+  change Matrix.trace (uncleBoundaryWord A B R L (List.ofFn σ) * Y) =
+    Matrix.trace (uncleBoundaryWord A B R L (List.ofFn (Fin.cons i σ)) * X)
+  rw [uncleBoundaryWord_ofFn_cons]
+  exact (Matrix.trace_mul_comm _ _).trans (hY (uncleBoundaryWord A B R L (List.ofFn σ))).symm
 
 /-- Two overlapping source boundary descriptions reconstruct one boundary
 matrix on the larger chain. This proves the reverse intersection inclusion
@@ -103,12 +103,12 @@ theorem mem_uncleBoundarySpace_of_overlap
         rw [sum_smul_uncleBoundaryWord_cons A B R L c hc]
       _ = ∑ i, c i * Matrix.trace
           (uncleBoundaryWord A B R L (i :: List.ofFn w) * X k) := by
-        simp [Matrix.sum_mul, Matrix.smul_mul, Matrix.trace_sum, Matrix.trace_smul]
+        simp [Matrix.sum_mul, Matrix.trace_sum, Matrix.trace_smul]
       _ = ∑ i, c i * Matrix.trace
           (uncleBoundaryWord A B R L (List.ofFn w ++ [k]) * Y i) := by
         simp_rw [hCompat]
       _ = _ := by
-        simp [Z, Matrix.mul_sum, Matrix.mul_smul, Matrix.trace_sum, Matrix.trace_smul]
+        simp [Z, Matrix.mul_sum, Matrix.trace_sum, Matrix.trace_smul]
   have hExtend (k : Fin d) (M : Matrix (Fin (a + b)) (Fin (a + b)) ℂ) :
       Matrix.trace (M * X k) =
         Matrix.trace (uncleBoundaryMul M (uncleBoundaryLetter A B R L k) * Z) := by
