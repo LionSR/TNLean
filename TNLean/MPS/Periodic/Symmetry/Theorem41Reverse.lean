@@ -67,6 +67,7 @@ def PRefinementInverseRootKrausRankBound (d D p : ℕ) : Prop :=
 /-- A bounded-Kraus-rank root hypothesis is enough to recover the existing
 inverse canonicalization hypothesis. -/
 theorem pRefinementInverseCanonicalization_of_rootKrausRankBound
+    {p : ℕ}
     (hRoot : PRefinementInverseRootKrausRankBound d D p) :
     PRefinementInverseCanonicalization d D p := by
   intro B hB hDivisible
