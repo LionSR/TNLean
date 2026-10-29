@@ -29,16 +29,18 @@ namespace MPSTensor
 
 variable {d r N L : ℕ} {dim : Fin r → ℕ}
 
-/-- A local interaction killing a weighted sum of periodic blocks kills each
-weighted summand, provided complementary words span the block matrix algebra.
-No parent-interaction or positivity assumption is used at this local step.
-Source: PGVWC07, Theorem 11, `2blocks.1`, proof lines 1418–1422. -/
-theorem periodicLocalInteractionES_smul_mpvState_eq_zero_of_wordTupleSpanTop
+/-- Complementary word spanning turns actual local annihilation of a weighted
+block sum into annihilation of every virtual boundary in each weighted block.
+Source: PGVWC07, Theorem 11, `2blocks.1`, proof lines 1418–1422; SPWC10,
+arXiv:0909.5347, Theorem 5 proof, lines 869–880. -/
+theorem weighted_boundary_eq_zero_of_periodicLocalInteractionES_eq_zero
     (A : (j : Fin r) → MPSTensor d (dim j)) (c : Fin r → ℂ)
     (h : MPVSpace d L →ₗ[ℂ] MPVSpace d L)
     (hLN : L ≤ N) (hSpan : WordTupleSpanTop A (N - L)) (i : Fin N)
     (hzero : periodicLocalInteractionES h i (∑ j, c j • mpvState (A j) N) = 0) :
-    ∀ j, periodicLocalInteractionES h i (c j • mpvState (A j) N) = 0 := by
+    ∀ j (X : Matrix (Fin (dim j)) (Fin (dim j)) ℂ),
+      c j • h ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
+        (groundSpaceMap (A j) L X)) = 0 := by
   classical
   let U := cyclicActiveBlockConfigLinearIsometryEquiv d L hLN i
   let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
@@ -70,14 +72,29 @@ theorem periodicLocalInteractionES_smul_mpvState_eq_zero_of_wordTupleSpanTop
       wordTuple, LinearMap.sum_apply, LinearMap.proj_apply,
       map_sum, map_smul, ContinuousLinearMap.coe_coe,
       ContinuousLinearMap.rightFiber, WithLp.toLp_zero, LinearMap.zero_apply] using hτ
-  have hEach (j : Fin r) (X : Matrix (Fin (dim j)) (Fin (dim j)) ℂ) :
-      c j • h (e (groundSpaceMap (A j) L X)) = 0 := by
-    have hsingle := LinearMap.lsum_piSingle ℂ
-      (fun j => Matrix (Fin (dim j)) (Fin (dim j)) ℂ) ℂ
-      (fun j => c j • h.comp (e.toLinearMap.comp (groundSpaceMap (A j) L))) j X
-    have heq := LinearMap.congr_fun hT (Pi.single j X)
-    simpa only [T, hsingle, LinearMap.zero_apply, LinearMap.smul_apply,
-      LinearMap.comp_apply] using heq
+  intro j X
+  have hsingle := LinearMap.lsum_piSingle ℂ
+    (fun j => Matrix (Fin (dim j)) (Fin (dim j)) ℂ) ℂ
+    (fun j => c j • h.comp (e.toLinearMap.comp (groundSpaceMap (A j) L))) j X
+  have heq := LinearMap.congr_fun hT (Pi.single j X)
+  simpa only [T, hsingle, LinearMap.zero_apply, LinearMap.smul_apply,
+    LinearMap.comp_apply] using heq
+
+/-- A local interaction killing a weighted sum of periodic blocks kills each
+weighted summand, provided complementary words span the block matrix algebra.
+No parent-interaction or positivity assumption is used at this local step.
+Source: PGVWC07, Theorem 11, `2blocks.1`, proof lines 1418–1422. -/
+theorem periodicLocalInteractionES_smul_mpvState_eq_zero_of_wordTupleSpanTop
+    (A : (j : Fin r) → MPSTensor d (dim j)) (c : Fin r → ℂ)
+    (h : MPVSpace d L →ₗ[ℂ] MPVSpace d L)
+    (hLN : L ≤ N) (hSpan : WordTupleSpanTop A (N - L)) (i : Fin N)
+    (hzero : periodicLocalInteractionES h i (∑ j, c j • mpvState (A j) N) = 0) :
+    ∀ j, periodicLocalInteractionES h i (c j • mpvState (A j) N) = 0 := by
+  classical
+  let U := cyclicActiveBlockConfigLinearIsometryEquiv d L hLN i
+  let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
+  have hEach := weighted_boundary_eq_zero_of_periodicLocalInteractionES_eq_zero
+    A c h hLN hSpan i hzero
   intro j
   apply U.injective
   rw [map_zero]
