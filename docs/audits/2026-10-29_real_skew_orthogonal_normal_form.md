@@ -36,21 +36,40 @@ The order matters: `x, J x` gives the negative of the source's matrix `Y`;
 paired form with **minus** Mathlib's split `Matrix.J`, then enumerates the pairs
 on `Fin (2*m)`. No sign or split/interleaved identification is assumed.
 
-## Remaining assembly
+## Paired basis and matrix assembly
 
-The foundation alone is not the orthogonal normal-form theorem. The next step
-is a dimension induction constructing a complete orthonormal paired basis:
+`OrthogonalComplexStructureBasis.lean` now writes the dimension induction
+constructing a complete orthonormal paired basis:
 choose a unit vector, restrict to the invariant complement of its two-plane,
 and combine the two-plane basis with the inductive complement basis. The
-zero-dimensional case must be included. Reindex that basis to `Fin (2*m)` and
-prove `Oᵀ * Σ_m * O = A` with `O` real orthogonal. Finally combine this with
-`exists_skew_unitary_congruence` to obtain the direct complex Youla statement.
-Neither supplying an orthogonal-congruence witness as a hypothesis nor simply
-renaming a Hermitian similarity theorem would complete this step.
+zero-dimensional case uses the empty orthonormal family. Spanning follows
+from linear independence and the cardinality matching the finrank, using
+Mathlib's existing basis constructor.
+
+`OrthogonalSkewNormalForm.lean` reindexes that basis to `Fin (2*m)` and writes
+`Matrix.exists_orthogonal_congruence_interleavedSkewForm`, with conclusion
+`Oᵀ * Σ_m * O = A` and `O` real orthogonal. It uses Mathlib's change-of-basis
+matrix identities. The only hypotheses are real orthogonality and skew
+symmetry; no chosen pair decomposition is supplied by the caller.
+
+`SkewUnitaryNormalForm.lean` combines this result with
+`exists_skew_unitary_congruence` to write the direct complex Youla statement
+`x = Uᵀ * Σ_m * U`. Its only hypotheses are skew symmetry and unitarity on
+`Fin (2*m)`. The complex intermediate matrix's real-entry property supplies
+an actual real matrix; real orthogonality and skew symmetry are transported
+through the injective entrywise real-to-complex ring homomorphism. The final
+unitary is the product of the complexified real orthogonal witness and the
+existing symmetric unitary witness. No determinant assumption is introduced.
+
+These are full source-level proof candidates for the missing matrix
+normal-form obligation, not verification evidence. The separate full MPU
+classification and its standard-form hypotheses are outside this slice.
 
 ## Verification boundary
 
 The new source is written without local Lean builds or compilation at the
-user's request. Its new Blueprint ingredients remain `notready`; `corconj`
-and the full source normal-form obligation are not promoted. No proof
-placeholders, axioms or persistent Lean test fixtures are introduced.
+user's request. All new Blueprint ingredients and both normal-form nodes
+remain `notready`; `corconj` is not promoted. The remaining acceptance work
+is compilation, diagnostics repair, the package linters and declaration
+checking before integration. No proof placeholders, axioms or persistent
+Lean test fixtures are introduced.
