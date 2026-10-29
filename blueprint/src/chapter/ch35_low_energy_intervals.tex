@@ -70,6 +70,36 @@
     units; extend their family by zero to the stated count.
 \end{proof}
 
+\begin{theorem}[Enlarging the five-region target region]
+    \label{thm:low_energy_regional_family}
+    \lean{TNLean.MPS.AreaLaw.exists_five_region_low_energy_family_on_larger_region}
+    Let $q\ge2$, $\ell\ge1$, $a+2\ell\le b$, and
+    $b+2\ell\le L-1$. Let $\varepsilon,w>0$ and $3w<\eta$, with
+    supported positive unit nearest-neighbour terms as in
+    Theorem~\ref{thm:physical_low_energy_filter_family}. Put
+    $J_0=\{a+\ell,\ldots,b+\ell\}$. Let $J$ be any set of sites with
+    $J_0\subseteq J$ and $|J\setminus J_0|\le2\ell$, and set
+    $D=(q\ell^2)^{22\ell}$. The attained regional energies, threshold,
+    centered original Hamiltonian and clipped Hamiltonian can be chosen
+    with the same bounds and both spectral comparisons as in that theorem.
+    On $\mathcal H_J$ there is one family $(W_j)_{j=1}^N$ with $N\le D^2$,
+    chosen before every viable subspace. If $S$ is $\delta$-viable for the
+    clipped upper target and $\delta<1$, then $\sum_jW_jS$ has dimension
+    at most $N\dim S$ and is $\Delta/(1-\delta)^2$-viable for the clipped
+    lower target, with the same explicit $\Delta$ as in that theorem.
+\end{theorem}
+\begin{proof}
+    \uses{thm:physical_low_energy_filter_family,
+      thm:actual_clipped_polynomial_family,thm:chebyshev_nested_polynomial_family}
+    Keep the physical truncation and its two spectral comparisons.
+    Decomposing its degree-$\ell^2$ polynomial on $J$ multiplies the
+    squared core count by at most $q^{2|J\setminus J_0|}$.
+    The collar bound gives
+    $(q\ell^2)^{40\ell}q^{4\ell}\le D^2$.
+    Apply the common-polynomial viability estimate to this family and
+    the same clipped Hamiltonian.
+\end{proof}
+
 \begin{theorem}[A low-energy improving family on every interval]
     \label{thm:physical_low_energy_interval_family}
     \lean{TNLean.MPS.AreaLaw.exists_physical_low_energy_interval_family}
@@ -103,8 +133,7 @@
 \end{theorem}
 \begin{proof}
     \uses{thm:low_energy_source_count,thm:low_energy_joint_scalar_parameters,
-      thm:short_region_spanning_family,thm:physical_low_energy_filter_family,
-      thm:actual_clipped_polynomial_family}
+      thm:short_region_spanning_family,thm:low_energy_regional_family}
     For $|J|>4\ell$, inward effective cuts give a five-region core
     $J_0\subseteq J$ with $|J\setminus J_0|\le2\ell$. Apply the actual
     physical truncation construction and decompose its polynomial on $J$.

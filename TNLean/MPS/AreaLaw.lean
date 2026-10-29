@@ -65,6 +65,7 @@ import TNLean.MPS.AreaLaw.LogarithmicAreaLaw
 import TNLean.MPS.AreaLaw.LogarithmicSeparation
 import TNLean.MPS.AreaLaw.LowEnergyFilterParameters
 import TNLean.MPS.AreaLaw.LowEnergyIntervalFamily
+import TNLean.MPS.AreaLaw.LowEnergyRegionalFamily
 import TNLean.MPS.AreaLaw.LowEnergySourceScale
 import TNLean.MPS.AreaLaw.MPSApproximation
 import TNLean.MPS.AreaLaw.MPSReferenceSpace
