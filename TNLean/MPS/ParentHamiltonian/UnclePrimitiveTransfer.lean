@@ -152,9 +152,10 @@ private theorem uncleTransfer_pow_decomposition
     ext X
     simp [P, uncleDensityProjection, Module.End.mul_apply, hf1]
   have hPE : P * E = P := by
-    ext X
-    change uncleDensityFunctional ρ (Kraus.mapLM A X) • 1 =
-      uncleDensityFunctional ρ X • 1
+    apply LinearMap.ext
+    intro X
+    change uncleDensityFunctional ρ (Kraus.mapLM A X) •
+      (1 : Matrix (Fin D) (Fin D) ℂ) = uncleDensityFunctional ρ X • 1
     rw [uncleDensityFunctional_map A ρ hfix]
   have hEP : E * P = P := by
     ext X
