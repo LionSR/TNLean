@@ -54,14 +54,16 @@ private theorem wordKrausMap_eq_pow (A : MPSTensor d a) (n : ℕ) :
 
 private theorem familyKrausMap_comp
     {ι κ α β γ : Type*} [Fintype ι] [Fintype κ]
-    [Fintype α] [Fintype β] [Fintype γ]
+    [Fintype β] [Fintype γ]
     (C : ι → Matrix α β ℂ) (E : κ → Matrix β γ ℂ) :
     (Matrix.rectangularKrausMap C).comp (Matrix.rectangularKrausMap E) =
       Matrix.rectangularKrausMap (fun z : ι × κ ↦ C z.1 * E z.2) := by
   apply LinearMap.ext
   intro X
-  simp [Matrix.rectangularKrausMap, LinearMap.comp_apply, Fintype.sum_prod_type,
-    Matrix.mul_sum, Matrix.sum_mul, Matrix.conjTranspose_mul, Matrix.mul_assoc]
+  change (∑ i, C i * (∑ j, E j * X * (E j)ᴴ) * (C i)ᴴ) =
+    ∑ z : ι × κ, (C z.1 * E z.2) * X * (C z.1 * E z.2)ᴴ
+  simp only [Matrix.mul_sum, Matrix.sum_mul, Fintype.sum_prod_type,
+    Matrix.conjTranspose_mul, Matrix.mul_assoc]
 
 private theorem trace_familyKrausMap {ι : Type*} [Fintype ι]
     (C : ι → Matrix (Fin a) (Fin a) ℂ) :
@@ -75,6 +77,7 @@ private theorem trace_familyKrausMap {ι : Type*} [Fintype ι]
   apply Finset.sum_congr rfl
   intro z _
   simp [Matrix.trace, Matrix.conjTranspose_apply, Finset.sum_mul, Finset.mul_sum]
+  exact Finset.sum_comm
 
 /-- The finite contraction of the five actual transfer maps. The two wall
 maps are rectangular and act on the actual A/B bond spaces. Source:
@@ -124,19 +127,21 @@ theorem trace_uncleTwoWallTransfer_join_exterior
   change LinearMap.trace ℂ (Matrix (Fin a) (Fin a) ℂ) (E ^ p * (M * E ^ t)) =
     LinearMap.trace ℂ (Matrix (Fin a) (Fin a) ℂ) (E ^ (p + t) * (M * E ^ 0))
   rw [pow_zero, mul_one, ← mul_assoc,
-    LinearMap.trace_mul_comm (E ^ p * M) (E ^ t), ← mul_assoc, ← pow_add, Nat.add_comm t p]
+    LinearMap.trace_mul_comm (R := ℂ) (M := Matrix (Fin a) (Fin a) ℂ)
+      (E ^ p * M) (E ^ t), ← mul_assoc, ← pow_add, Nat.add_comm t p]
 
 private def fiveConfigEquiv (p r q s t : ℕ) :
     Cfg d p × (Cfg d r × (Cfg d q × (Cfg d s × Cfg d t))) ≃
       Cfg d (p + r + q + s + t) := by
   let e₁ := (Equiv.prodAssoc (Cfg d p) (Cfg d r) (Cfg d q × (Cfg d s × Cfg d t))).symm
-  let e₂ := (Fin.appendEquiv p r).prodCongr (Equiv.refl (Cfg d q × (Cfg d s × Cfg d t)))
+  let e₂ := (Fin.appendEquiv (α := Fin d) p r).prodCongr
+    (Equiv.refl (Cfg d q × (Cfg d s × Cfg d t)))
   let e₃ := (Equiv.prodAssoc (Cfg d (p + r)) (Cfg d q) (Cfg d s × Cfg d t)).symm
-  let e₄ := (Fin.appendEquiv (p + r) q).prodCongr (Equiv.refl (Cfg d s × Cfg d t))
+  let e₄ := (Fin.appendEquiv (α := Fin d) (p + r) q).prodCongr (Equiv.refl (Cfg d s × Cfg d t))
   let e₅ := (Equiv.prodAssoc (Cfg d (p + r + q)) (Cfg d s) (Cfg d t)).symm
-  let e₆ := (Fin.appendEquiv (p + r + q) s).prodCongr (Equiv.refl (Cfg d t))
+  let e₆ := (Fin.appendEquiv (α := Fin d) (p + r + q) s).prodCongr (Equiv.refl (Cfg d t))
   exact e₁.trans (e₂.trans (e₃.trans (e₄.trans (e₅.trans (e₆.trans
-    (Fin.appendEquiv (p + r + q + s) t))))))
+    (Fin.appendEquiv (α := Fin d) (p + r + q + s) t))))))
 
 private theorem fiveConfigEquiv_apply (p r q s t : ℕ)
     (z : Cfg d p × (Cfg d r × (Cfg d q × (Cfg d s × Cfg d t)))) :
@@ -163,9 +168,11 @@ theorem norm_uncleTwoWallTrial_sq_eq_trace_transfer
     ‖uncleTwoWallTrial A B R L p r q s t σ‖ ^ 2) = _
   rw [← (fiveConfigEquiv (d := d) p r q s t).sum_comp
     (fun σ ↦ ‖uncleTwoWallTrial A B R L p r q s t σ‖ ^ 2)]
-  simp only [Fintype.sum_prod_type, fiveConfigEquiv_apply,
-    uncleTwoWallTrial_append_apply, trace_uncleTwoWallTransfer_eq_sum,
-    map_sum, Complex.mul_conj, Complex.ofReal_re, Complex.normSq_eq_norm_sq]
+  simp only [Fintype.sum_prod_type, fiveConfigEquiv_apply, uncleTwoWallTrial_append_apply]
+  rw [trace_uncleTwoWallTransfer_eq_sum]
+  change _ = Complex.reCLM _
+  simp only [map_sum, Complex.reCLM_apply, Complex.star_def,
+    Complex.mul_conj, Complex.ofReal_re, Complex.normSq_eq_norm_sq]
 
 /-- The actual source trial norm is the cyclic contraction with separation
 lengths 2N in A and 2N−1 in B, and two moving intervals of N+1 sites.
