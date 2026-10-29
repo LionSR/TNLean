@@ -200,3 +200,18 @@ from the actual canonical tensors and even periodic symmetry. This keeps
 canonical boundary projections out of the finite matrix conversions. The
 public source statement still derives all gates and gauges internally. The
 parent strict namespace repair is included; no local Lean command was run.
+
+
+## Verified-head matrix-dimension separation on `bafe85cf9`
+
+Job123608857183 records exact PR_HEAD_SHA
+`bafe85cf931180c77e5dae888e8014d8e6cba6a8`. The only primary failure is still
+whnf at 200,000 heartbeats in the private supplied-gate comparison; the
+following unknown constant is a cascade. Its ostensibly pure signature
+still contained actual transpose-tensor source ranks. The helper now takes
+four ordinary natural-number dimensions, four actual matrices and explicit
+rank equalities. Its coordinate and unitary algebra is unchanged. The small
+source wrapper instantiates those matrices and equalities from the actual
+supplied factors and the already-derived FT equations. No public premise,
+heartbeat setting or mathematical scope changes. The fresh head is
+source-written pending hosted acceptance; no local Lean was run.

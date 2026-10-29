@@ -89,82 +89,85 @@ private theorem transpose_local_phase_of_gate_gauges
   rfl
 
 /-- Pure supplied-gate algebra after the actual FT comparison. Keeping the
-canonical records out of this conversion avoids unfolding their weights.
+tensor records and source-rank definitions out of this conversion avoids
+unfolding either canonical weights or tensor operations in matrix reindexing.
 Source: CPSV17, `UUtransposetrick`, lines 1258–1288. -/
 private theorem transposition_certificate_of_supplied_gate_gauges
-    {d D : ℕ} {U : MPOTensor d D}
-    {ρ ρ' : Matrix (Fin D) (Fin D) ℂ}
-    (S : SourceFactors U ρ)
-    (T : SourceFactors (MPOTensor.physicalTransposeTensor U) ρ')
-    (hr : r[U] = d) (hl : ℓ[U] = d) (hd : 0 < d)
-    (huS : (SourceFactors.sourceU U S).IsUnitaryBetween)
-    (hTU : SourceFactors.sourceU (MPOTensor.physicalTransposeTensor U) T =
+    {d l r lT rT : ℕ}
+    (u : Matrix (Fin l × Fin r) (Fin d × Fin d) ℂ)
+    (v : Matrix (Fin d × Fin d) (Fin r × Fin l) ℂ)
+    (uT : Matrix (Fin lT × Fin rT) (Fin d × Fin d) ℂ)
+    (vT : Matrix (Fin d × Fin d) (Fin rT × Fin lT) ℂ)
+    (hr : r = d) (hl : l = d) (hrSwap : rT = l) (hlSwap : lT = r)
+    (hd : 0 < d)
+    (huS : u.IsUnitaryBetween)
+    (hTU : uT =
       Matrix.reindex
-        (Equiv.prodCongr (finCongr (source_ranks_physicalTransposeTensor U).2.symm)
-          (finCongr (source_ranks_physicalTransposeTensor U).1.symm))
-        (Equiv.refl _) (SourceFactors.sourceV U S)ᵀ)
-    (hTV : SourceFactors.sourceV (MPOTensor.physicalTransposeTensor U) T =
+        (Equiv.prodCongr (finCongr hlSwap.symm)
+          (finCongr hrSwap.symm))
+        (Equiv.refl _) vᵀ)
+    (hTV : vT =
       Matrix.reindex (Equiv.refl _)
-        (Equiv.prodCongr (finCongr (source_ranks_physicalTransposeTensor U).1.symm)
-          (finCongr (source_ranks_physicalTransposeTensor U).2.symm))
-        (SourceFactors.sourceU U S)ᵀ)
+        (Equiv.prodCongr (finCongr hrSwap.symm)
+          (finCongr hlSwap.symm))
+        uᵀ)
     (hGauges :
-      ∃ (hrFT : r[MPOTensor.physicalTransposeTensor U] = r[U])
-        (hlFT : ℓ[MPOTensor.physicalTransposeTensor U] = ℓ[U])
-        (x : Matrix.unitaryGroup (Fin ℓ[MPOTensor.physicalTransposeTensor U]) ℂ)
-        (y : Matrix.unitaryGroup (Fin r[MPOTensor.physicalTransposeTensor U]) ℂ),
-        SourceFactors.sourceU (MPOTensor.physicalTransposeTensor U) T =
+      ∃ (hrFT : rT = r)
+        (hlFT : lT = l)
+        (x : Matrix.unitaryGroup (Fin lT) ℂ)
+        (y : Matrix.unitaryGroup (Fin rT) ℂ),
+        uT =
           ((x : Matrix _ _ ℂ) ⊗ₖ (y : Matrix _ _ ℂ)) *
             Matrix.reindex
               (Equiv.prodCongr (finCongr hlFT.symm) (finCongr hrFT.symm))
-              (Equiv.refl _) (SourceFactors.sourceU U S) ∧
-        SourceFactors.sourceV (MPOTensor.physicalTransposeTensor U) T =
+              (Equiv.refl _) u ∧
+        vT =
           Matrix.reindex (Equiv.refl _)
               (Equiv.prodCongr (finCongr hrFT.symm) (finCongr hlFT.symm))
-              (SourceFactors.sourceV U S) *
+              v *
             (star (y : Matrix _ _ ℂ) ⊗ₖ star (x : Matrix _ _ ℂ))) :
     ∃ (c : ℂ)
       (x : Matrix.unitaryGroup (Fin d) ℂ), ‖c‖ = 1 ∧
       Matrix.reindex (Equiv.prodCongr (finCongr hl) (finCongr hr)) (Equiv.refl _)
-          (SourceFactors.sourceU U S) =
+          u =
         c • ((x : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ
           (x : Matrix (Fin d) (Fin d) ℂ)ᵀ) *
           (Matrix.reindex (Equiv.refl _)
-            (Equiv.prodCongr (finCongr hr) (finCongr hl)) (SourceFactors.sourceV U S))ᵀ := by
+            (Equiv.prodCongr (finCongr hr) (finCongr hl)) v)ᵀ := by
   classical
   obtain ⟨hrFT, hlFT, X, Y, hu, hv⟩ := hGauges
   let L := finCongr hl
   let R := finCongr hr
-  let LA := finCongr ((source_ranks_physicalTransposeTensor U).2.trans hr)
-  let RA := finCongr ((source_ranks_physicalTransposeTensor U).1.trans hl)
-  let A := Matrix.reindex (Equiv.prodCongr L R) (Equiv.refl _) (SourceFactors.sourceU U S)
-  let B := Matrix.reindex (Equiv.refl _) (Equiv.prodCongr R L) (SourceFactors.sourceV U S)
+  let LA := finCongr (hlSwap.trans hr)
+  let RA := finCongr (hrSwap.trans hl)
+  let A := Matrix.reindex (Equiv.prodCongr L R) (Equiv.refl _) u
+  let B := Matrix.reindex (Equiv.refl _) (Equiv.prodCongr R L) v
   let X' : Matrix.unitaryGroup (Fin d) ℂ :=
     ⟨Matrix.reindex LA LA (X : Matrix _ _ ℂ), Matrix.reindex_mem_unitaryGroup _ _ X.property⟩
   let Y' : Matrix.unitaryGroup (Fin d) ℂ :=
     ⟨Matrix.reindex RA RA (Y : Matrix _ _ ℂ), Matrix.reindex_mem_unitaryGroup _ _ Y.property⟩
-  let erA := finCongr (source_ranks_physicalTransposeTensor U).1.symm
-  let elA := finCongr (source_ranks_physicalTransposeTensor U).2.symm
+  let erA := finCongr hrSwap.symm
+  let elA := finCongr hlSwap.symm
   let erFT := finCongr hrFT.symm
   let elFT := finCongr hlFT.symm
   have hUA : Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)
       (Matrix.reindex (Equiv.prodCongr elA erA) (Equiv.refl _)
-        (SourceFactors.sourceV U S)ᵀ) = Bᵀ := by
+        vᵀ) = Bᵀ := by
     ext ⟨i, j⟩ ⟨k, l⟩
     rfl
   have hUFT : Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)
       (Matrix.reindex (Equiv.prodCongr elFT erFT) (Equiv.refl _)
-        (SourceFactors.sourceU U S)) = A := by
+        u) = A := by
     ext ⟨i, j⟩ ⟨k, l⟩
     rfl
   have hVA : Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA)
       (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr erA elA)
-        (SourceFactors.sourceU U S)ᵀ) = Aᵀ := by
+        uᵀ) = Aᵀ := by
     ext ⟨i, j⟩ ⟨k, l⟩
     rfl
   have hVFT : Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA)
       (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr erFT elFT)
-        (SourceFactors.sourceV U S)) = B := by
+        v) = B := by
     ext ⟨i, j⟩ ⟨k, l⟩
     rfl
   have hfirst : Bᵀ = ((X' : Matrix (Fin d) (Fin d) ℂ) ⊗ₖ
@@ -223,7 +226,11 @@ private theorem source_transposition_certificate_of_gate_transport
     (hU.isMPUSimple_physicalTransposeTensor hsimple) T
   have hGauges := hU.exists_supplied_source_gate_unitary_gauges_of_mpo_eq_even
     hU.physicalTransposeTensor S T huS huT hEq
-  exact transposition_certificate_of_supplied_gate_gauges S T hr hl
+  exact transposition_certificate_of_supplied_gate_gauges
+    (SourceFactors.sourceU U S) (SourceFactors.sourceV U S)
+    (SourceFactors.sourceU (MPOTensor.physicalTransposeTensor U) T)
+    (SourceFactors.sourceV (MPOTensor.physicalTransposeTensor U) T)
+    hr hl (source_ranks_physicalTransposeTensor U).1 (source_ranks_physicalTransposeTensor U).2
     (Nat.pos_of_ne_zero hU.neZero_phys.out) huS hTU hTV hGauges
 
 /-- Use the actual transpose factors in the abstract comparison. Source:
