@@ -79,7 +79,7 @@ theorem uncleInteractionES_pin_upper_right
     simp only [uncleDomainWallWord, Kraus.evalWord_cons, Kraus.evalWord_nil,
       Matrix.mul_zero, Matrix.mul_one, zero_add, Matrix.mul_add, Matrix.add_mul,
       Matrix.trace_add]
-    simpa only [Matrix.mul_assoc] using congrArg
+    simpa only [Pi.add_apply, Matrix.mul_assoc] using congrArg
       (fun z : ℂ ↦ Matrix.trace
         (P * Kraus.evalWord A u * R (σ 0) * B (σ 1) * Q) + z)
       (Matrix.trace_mul_comm
@@ -146,7 +146,7 @@ theorem uncleInteractionES_pin_lower_right
     simp only [uncleDomainWallWord, Kraus.evalWord_cons, Kraus.evalWord_nil,
       Matrix.mul_zero, Matrix.mul_one, zero_add, Matrix.mul_add, Matrix.add_mul,
       Matrix.trace_add]
-    simpa only [Matrix.mul_assoc] using congrArg
+    simpa only [Pi.add_apply, Matrix.mul_assoc] using congrArg
       (fun z : ℂ ↦ Matrix.trace
         (P * Kraus.evalWord B u * L (σ 0) * A (σ 1) * Q) + z)
       (Matrix.trace_mul_comm
