@@ -59,15 +59,18 @@ The ground-space basis argument now constructs the spectral refinements in
 arbitrary finite dimension. A non-scalar compression gives a proper spectral
 split; scalar terminal spaces need no further separation. Both cross terms
 are retained, giving decay rate $\gamma/2^n$ for ground-space dimension $n$.
-For the full-Hamiltonian filtered local terms, summation gives a bound independent
-of the number of sites when the ground-space dimension, local norm budget,
-gap and polynomial sphere-growth constants are fixed. The unrestricted metric
+For both the full-Hamiltonian filtered terms and the actual locally truncated
+terms, summation gives a bound independent of the number of sites when the
+ground-space dimension, local norm budget, gap, localization support and
+polynomial sphere-growth constants are fixed. The truncated terms are filtered
+a second time under the original Hamiltonian to estimate their ground-space
+commutators. Their norms are bounded by the original interaction norms, so the
+original site budget is retained. No gap for a truncated Hamiltonian is assumed. The unrestricted metric
 claim is false on bounded-degree trees. The corresponding mathematical
 counterexample and the geometric qualification are recorded in
 `docs/paper-gaps/hastings05_tree_basis_counterexample.tex` and
-`hastings05_geometric_growth_scope.tex`. The locally truncated basis theorem, the assembly of actual retained-space
-coordinates into tensors, and the thermal index bound in terms of a local
-radius remain separate obligations. The source explicitly makes no claim
+`hastings05_geometric_growth_scope.tex`. The assembly of retained-space coordinates into tensors and the thermal index
+bound in terms of a local radius remain separate obligations. The source explicitly makes no claim
 of bounding the intermediate matrix-product dimensions (lines 104–109);
 its retained-basis expansion is in Section III, lines 630–685.
 An additional bound on those dimensions would be a further result.

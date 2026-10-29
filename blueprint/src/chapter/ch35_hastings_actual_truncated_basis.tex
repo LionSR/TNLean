@@ -1,0 +1,93 @@
+\section{A ground-space basis for the actual locally truncated filters}
+
+The operators here are the local filters of \cite{Hastings2006Solving},
+not their replacements under the full Hamiltonian. The polynomial sphere
+bound and the fixed localization parameters remain explicit. The generic
+spectral refinement uses the corrected constant of
+\cite{gap:hastings05_basis_refinement}; the geometric restriction is
+explained in \cite{gap:hastings05_two_dim_ground_basis}.
+
+\begin{lemma}[Compressed commutators of separate local observables]
+    \label{lem:hastings_separate_observable_compressed_decay}
+    \lean{TNLean.Lattice.norm_groundCompression_observables_commutator_le_exp,
+        TNLean.Lattice.norm_groundCompression_observables_commutator_le_exp_edist}
+    \leanok
+    Let $H=\sum_i h_i$ satisfy the local support, norm-budget, gap and
+    polynomial sphere assumptions of
+    Theorem~\ref{thm:hastings_full_hamiltonian_uniform_basis}.
+    Let $W_j$ be a separate family of observables, supported on sets $K_j$
+    containing anchors $c_j$, with diameter at most $R_{\rm obs}$ and
+    cardinality at most $v_{\rm obs}$. Put
+    $\gamma=\min\{1/4,\Delta E/(8v)\}$, where
+    $v=2v_R|b_0|e^{2R}+1$ uses the generator support parameters.
+    Put $C_{R,v_{\rm obs}}=2(2+4|b_0|e^{2R})v_{\rm obs}^2|K_g|S(1,k_g)+6$.
+    Then
+    \[
+      \|[PW_jP,PW_iP]\|
+      \le C_{R,v_{\rm obs}}e^{\gamma(2R_{\rm obs}+1)}
+        \|W_j\|\|W_i\| e^{-\gamma d(c_j,c_i)}.
+    \]
+    The final factor is zero between disconnected components. The same
+    estimate holds without the anchor factor when the two supports are
+    separated by the indicated neighborhood radius.
+\end{lemma}
+\begin{proof}\leanok
+    Filter each observable a second time under the original Hamiltonian.
+    Its ground-space compression is unchanged. Apply the existing Gaussian
+    leakage and locality estimates with time window $T=l/(4v)$ and filter
+    parameter $T\Delta E$. All three errors are bounded by $e^{-\gamma l}$.
+    The generator cardinality determines $v$; the observable cardinality
+    determines the prefactor. Convert support separation to anchor distance
+    by the graph triangle inequality, including disconnected components.
+\end{proof}
+
+\begin{theorem}[A uniform basis for locally truncated filters]
+    \label{thm:hastings_actual_truncated_basis_polynomial_growth}
+    \lean{TNLean.Lattice.exists_groundSpaceBasis_sum_norm_offDiagonalPartFamily_truncated_le}
+    \leanok
+    Let the positive on-site dimension and the Hamiltonian data satisfy
+    Theorem~\ref{thm:hastings_full_hamiltonian_uniform_basis}, with terms
+    indexed by sites and $i\in X_i$. Choose retained sets $s_i$ and regions
+    $K_i$ such that $X_i\subseteq K_i$ and $X_j\subseteq K_i$ for every
+    $j\in s_i$. Assume that the $K_i$ have diameter at most $R_{\rm obs}$
+    and cardinality at most $v_{\rm obs}$.
+    Define the actual local Hamiltonians and their Gaussian filters by
+    \[
+      H_i^{\rm loc}=\sum_{j\in s_i}h_j,\qquad
+      M_i=\frac{\Delta E}{\sqrt{2\pi r}}
+       \int_{\mathbb R} e^{-(t\Delta E)^2/(2r)}
+       e^{itH_i^{\rm loc}}h_i e^{-itH_i^{\rm loc}}\,dt
+       \quad(r>0).
+    \]
+    There is an orthonormal basis of the actual $n$-dimensional ground
+    eigenspace in which
+    \[
+      \sum_i\|\operatorname{offdiag}(PM_iP)\|
+      \le (n-1)^2\sqrt{n^3 C(1+2n^3)^n}\,
+          |b_0||K_g|S(\gamma/2^n,k_g),
+      \qquad
+      C=C_{R,v_{\rm obs}}e^{\gamma(2R_{\rm obs}+1)}.
+    \]
+    This constant is independent of the numbers of terms and sites when
+    $n$, the generator parameters, the gap, the polynomial-growth constants
+    and the localization support bounds are fixed.
+\end{theorem}
+\begin{proof}\leanok
+    The actual filters are Hermitian, satisfy $\|M_i\|\le\|h_i\|$, and
+    remain supported on $K_i$, since each integrand acts there.
+    Apply Lemma~\ref{lem:hastings_separate_observable_compressed_decay}
+    to their actual ground-space compressions. The constructed weighted
+    basis theorem supplies at most $n-1$ original anchors.
+    Normalize using the original weights $\|h_i\|$, so their original
+    sitewise budget is retained. The off-diagonal norm estimate and the
+    anchor-list length give the two factors $n-1$. The weighted shell sum
+    completes the bound. No truncated-Hamiltonian gap, supplied basis,
+    separated spectrum, conditioning bound or assumed commutator estimate
+    is used.
+\end{proof}
+
+The uniformity asserted here keeps the localization support bounds fixed.
+It does not assert the same constant when those bounds grow with system
+size, nor establish the printed sharper quantitative prefactor. The counterexample without the geometric growth restriction is a separate
+mathematical construction, described in
+\cite{gap:hastings05_tree_basis_counterexample}.

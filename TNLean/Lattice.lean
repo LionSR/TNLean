@@ -36,11 +36,13 @@ import TNLean.Lattice.GroundSpaceCompression
 import TNLean.Lattice.HeisenbergDuhamel
 import TNLean.Lattice.LocalHamiltonian
 import TNLean.Lattice.LowEnergyBasisIteration
+import TNLean.Lattice.LowEnergyBasisTruncatedUniform
 import TNLean.Lattice.LowEnergyBasisUniformGeneral
 import TNLean.Lattice.LowEnergyCommutator
 import TNLean.Lattice.LowEnergyCommutatorExample
 import TNLean.Lattice.LowEnergyCommutatorSum
 import TNLean.Lattice.LowEnergyDecayKernel
+import TNLean.Lattice.LowEnergyObservableDecay
 import TNLean.Lattice.LowEnergyWeightedRowSum
 import TNLean.Lattice.MarginalTails
 import TNLean.Lattice.MetricInteractionGraph

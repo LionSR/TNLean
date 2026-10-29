@@ -10205,3 +10205,19 @@ there is no need for a new tactic.
 - **Check:** The tactic scan reports no repeated blocks at its default
   thresholds after combining the redundant nested witness constructors.
   No new custom tactic is needed.
+
+### Weighted basis bounds summed over original anchors — candidate (2026-10-29)
+
+- **Pattern:** Apply the shared weighted-kernel basis theorem, bound each
+  off-diagonal operator by `(n-1)` times its entries, and sum the actual
+  anchor list using the original interaction norm budget.
+- **Seen:** The full-Hamiltonian and locally truncated basis theorems in
+  `Lattice/LowEnergyBasisUniformGeneral.lean` and
+  `Lattice/LowEnergyBasisTruncatedUniform.lean`.
+- **Existing abstractions:** The companion's
+  `ApproximateDiagonalization.exists_orthonormalBasis_uniform_weighted_kernel`
+  and TNLean's `sum_weight_list_graphDecayKernel_le` already supply the
+  spectral construction and weighted summation.
+- **Candidate:** If another physical family needs the identical final
+  assembly, factor its remaining entry-to-operator sum before a third copy.
+  No new tactic or alternate off-diagonal definition is introduced.
