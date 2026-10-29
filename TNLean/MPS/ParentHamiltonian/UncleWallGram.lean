@@ -85,6 +85,12 @@ private theorem sum_ofFn_cons {V : Type*} [AddCommMonoid V]
   rw [← (Fin.consEquiv (fun _ : Fin (n + 1) => Fin d)).sum_comp]
   simp [Fintype.sum_prod_type, List.ofFn_cons]
 
+private theorem sum_mul_pair {ι : Type*} [Fintype ι] {r s t u v : ℕ}
+    (U : Matrix (Fin r) (Fin s) ℂ) (f : ι → Matrix (Fin s) (Fin t) ℂ)
+    (g : ι → Matrix (Fin t) (Fin u) ℂ) (V : Matrix (Fin u) (Fin v) ℂ) :
+    (∑ i, U * f i * g i * V) = U * (∑ i, f i * g i) * V := by
+  simp [Matrix.mul_sum, Matrix.sum_mul, Matrix.mul_assoc]
+
 private theorem sum_evalWord_mul_conjTranspose (B : MPSTensor d b)
     (hB : Kraus.mapLM B 1 = 1) (n : ℕ) :
     ∑ σ : Fin n → Fin d, Kraus.evalWord B (List.ofFn σ) *
@@ -110,8 +116,9 @@ theorem uncleWallCorrelation_succ (A : MPSTensor d a) (B : MPSTensor d b)
   classical
   rw [uncleWallCorrelation, sum_ofFn_cons]
   simp only [uncleDomainWallWord, Kraus.evalWord_cons, Matrix.conjTranspose_mul,
-    Matrix.add_mul, Matrix.mul_assoc, Finset.sum_add_distrib]
-  simp_rw [← Matrix.mul_sum, ← Matrix.sum_mul]
+    Matrix.add_mul]
+  simp_rw [← Matrix.mul_assoc]
+  simp only [Finset.sum_add_distrib, sum_mul_pair]
   rw [sum_evalWord_mul_conjTranspose B hB]
   simp [uncleWallCorrelation, uncleWallSeed, Kraus.mixedMapLM_apply,
     Matrix.mul_assoc, Matrix.mul_sum, Matrix.sum_mul]
@@ -130,8 +137,9 @@ theorem uncleWallGram_succ (A : MPSTensor d a) (B : MPSTensor d b)
   classical
   rw [uncleWallGram, sum_ofFn_cons]
   simp only [uncleDomainWallWord, Matrix.conjTranspose_add, Matrix.conjTranspose_mul,
-    Matrix.add_mul, Matrix.mul_add, Matrix.mul_assoc, Finset.sum_add_distrib]
-  simp_rw [← Matrix.mul_sum, ← Matrix.sum_mul]
+    Matrix.add_mul, Matrix.mul_add]
+  simp_rw [← Matrix.mul_assoc]
+  simp only [Finset.sum_add_distrib, sum_mul_pair]
   rw [sum_evalWord_mul_conjTranspose B hB]
   simp [uncleWallGram, uncleWallCorrelation, uncleWallCrossMap_apply,
     Kraus.mapLM_apply, Kraus.map_apply, Matrix.conjTranspose_sum,
