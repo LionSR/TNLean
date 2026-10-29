@@ -63,14 +63,20 @@ theorem low_energy_threshold_le
 
 
 /-- At fixed density bandwidth, one constant controls the square-degree
-filter for every smaller physical bandwidth. The prescribed threshold and
-its physical lower bound precede this scalar estimate. The exact count
-retains the capped width. ALVV, arXiv:1602.08828v2, Theorem
-`t:aisgapless`, lines 1027–1041. -/
-theorem exists_low_energy_scalar_parameters (etaLD : ℝ) (hLD : 0 < etaLD) :
+filter and the larger count needed after adding at most two window lengths
+to the target region. The strict width margin gives the strict tradeoff
+at exponent `22*ell`. ALVV, arXiv:1602.08828v2,
+Theorem `t:aisgapless`, lines 1027–1041. -/
+theorem exists_low_energy_joint_scalar_parameters (etaLD : ℝ) (hLD : 0 < etaLD) :
     let T := 21 + etaLD + 8 * log (400 * (288 * exp (11 / 8)) * (6 + etaLD))
     let CH := (3 * T + 52) / 2
     ∃ A : ℝ, 1 ≤ A ∧ 21 ≤ A ∧
+      (∀ (q : ℕ) (g : ℝ), 2 ≤ q → 0 < g → g ≤ 1 →
+        let u := 1 + log (q : ℝ) + log (1 / g)
+        let ell : ℕ := ⌈A * u ^ 2 / g⌉₊
+        let D := (q * ell ^ 2) ^ (22 * ell)
+        21 ≤ ell ∧ log (D : ℝ) ≤
+          22 * (A + 1) * (6 + 2 * log (A + 1)) / g * u ^ 3) ∧
       ∀ (q : ℕ) (eta w E0 t : ℝ), 2 ≤ q → 0 < w → 3 * w < eta → eta ≤ etaLD →
       t = 21 + eta + 8 * log ((288 * exp (11 / 8)) /
         min 1 ((1 / 200 : ℝ) * w ^ 2 / (2 * (6 + eta)))) →
@@ -78,7 +84,7 @@ theorem exists_low_energy_scalar_parameters (etaLD : ℝ) (hLD : 0 < etaLD) :
       let g := min w 1
       let u := 1 + log (q : ℝ) + log (1 / g)
       let ell : ℕ := ⌈A * u ^ 2 / g⌉₊
-      let D := (q * ell ^ 2) ^ (18 * ell + 2 * (ell ^ 2 / ell))
+      let D := (q * ell ^ 2) ^ (22 * ell)
       let R := 3 * t + 4 * (ell : ℝ) - (E0 + eta - 2 * w)
       let Delta := (2 * exp (-2 * ((ell ^ 2 : ℕ) : ℝ) * sqrt (w / R))) ^ 2
       21 ≤ ell ∧ 0 < R ∧ R ≤ 2 * CH * (ell : ℝ) ∧ 0 < Delta ∧
@@ -95,7 +101,12 @@ theorem exists_low_energy_scalar_parameters (etaLD : ℝ) (hLD : 0 < etaLD) :
     linarith only [hLD, hlog]
   obtain ⟨A, hA, hA21, _hAM, _hAlog, hall⟩ :=
     exists_dg_scalar_parameters CH 0 (by dsimp only [CH]; positivity)
-  refine ⟨A, hA, hA21, ?_⟩
+  refine ⟨A, hA, hA21, ?_, ?_⟩
+  · intro q g hq hg hg1 u ell D
+    obtain ⟨_hlower, _hupper, hscale, _hcount, hlogD, _htrade, _htail⟩ :=
+      hall q g hq hg hg1
+    have hell : (21 : ℝ) ≤ (ell : ℝ) := hA21.trans hscale
+    exact ⟨by exact_mod_cast hell, hlogD⟩
   intro q eta w E0 t hq hw hbuffer heta ht hcut hE0 hE04 g u ell D R Delta
   have hg : 0 < g := lt_min hw zero_lt_one
   have hg1 : g ≤ 1 := min_le_right _ _
@@ -126,22 +137,10 @@ theorem exists_low_energy_scalar_parameters (etaLD : ℝ) (hLD : 0 < etaLD) :
     dsimp only [CH, R]
     nlinarith only [htup, hellb, hmul, hE0, hbuffer, hw]
   have hDelta : 0 < Delta := by dsimp only [Delta]; positivity
-  let Daux := (q * ell ^ 2) ^ (22 * ell)
-  have hdiv : ell ^ 2 / ell = ell := by
-    rw [pow_two, Nat.mul_div_cancel ell (by omega : 0 < ell)]
-  have hbase : 1 < q * ell ^ 2 := by
-    have hsq : 1 ≤ ell ^ 2 := one_le_pow₀ (show 1 ≤ ell by omega)
-    nlinarith only [Nat.mul_le_mul_left q hsq, hq]
-  have hDlt : D < Daux := by
-    dsimp only [D, Daux]
-    rw [hdiv]
-    apply pow_lt_pow_right₀ hbase
-    omega
+  have hbase : 0 < q * ell ^ 2 := by positivity
   have hDpos : 0 < (D : ℝ) := by
-    exact_mod_cast (show 0 < D from Nat.pow_pos (by omega : 0 < q * ell ^ 2))
-  have hDcastlt : (D : ℝ) < (Daux : ℝ) := by exact_mod_cast hDlt
-  refine ⟨hell, hR, hRup, hDelta,
-    (log_le_log hDpos hDcastlt.le).trans hlogD, ?_⟩
+    exact_mod_cast (show 0 < D from Nat.pow_pos hbase)
+  refine ⟨hell, hR, hRup, hDelta, hlogD, ?_⟩
   have hDelEq : Delta = 4 * exp (-4 * (ell : ℝ) ^ 2 * sqrt (w / R)) := by
     dsimp only [Delta]
     rw [mul_pow, ← exp_nat_mul, Nat.cast_pow, show (2 : ℝ) ^ 2 = 4 by norm_num]
@@ -149,20 +148,66 @@ theorem exists_low_energy_scalar_parameters (etaLD : ℝ) (hLD : 0 < etaLD) :
     congr 1
     congr 1
     ring
-  have hsqrt : sqrt ((4 * g / 5) / R) ≤ sqrt (w / R) :=
-    sqrt_le_sqrt (div_le_div_of_nonneg_right (by linarith only [hgw, hg]) hR.le)
-  have hDelLe : Delta ≤ 4 * exp (-(4 * (ell : ℝ) ^ 2 * sqrt ((4 * g / 5) / R))) := by
+  have hsqrt : sqrt ((4 * g / 5) / R) < sqrt (w / R) :=
+    sqrt_lt_sqrt (by positivity)
+      (div_lt_div_of_pos_right (by linarith only [hgw, hg]) hR)
+  have hDelLt : Delta < 4 * exp (-(4 * (ell : ℝ) ^ 2 * sqrt ((4 * g / 5) / R))) := by
     rw [hDelEq]
-    exact mul_le_mul_of_nonneg_left (exp_le_exp.mpr
-      (by nlinarith only [mul_le_mul_of_nonneg_left hsqrt (sq_nonneg (ell : ℝ))]))
-      (by norm_num)
-  have hpowlt : (D : ℝ) ^ 12 < (Daux : ℝ) ^ 12 := by gcongr
+    have hsquare : 0 < (ell : ℝ) ^ 2 := by positivity
+    have hproduct := mul_lt_mul_of_pos_left hsqrt hsquare
+    exact mul_lt_mul_of_pos_left (exp_lt_exp.mpr
+      (by nlinarith only [hproduct])) (by norm_num)
   calc
-    (D : ℝ) ^ 12 * Delta < (Daux : ℝ) ^ 12 * Delta :=
-      mul_lt_mul_of_pos_right hpowlt hDelta
-    _ ≤ (Daux : ℝ) ^ 12 *
+    (D : ℝ) ^ 12 * Delta < (D : ℝ) ^ 12 *
         (4 * exp (-(4 * (ell : ℝ) ^ 2 * sqrt ((4 * g / 5) / R)))) :=
-      mul_le_mul_of_nonneg_left hDelLe (by positivity)
+      mul_lt_mul_of_pos_left hDelLt (pow_pos hDpos 12)
     _ ≤ 1 / 100000 := htrade R hR hRup
+
+/-- At fixed density bandwidth, one constant controls the square-degree
+filter for every smaller physical bandwidth. The prescribed threshold and
+its physical lower bound precede this scalar estimate. The exact count
+retains the capped width. ALVV, arXiv:1602.08828v2, Theorem
+`t:aisgapless`, lines 1027–1041. -/
+theorem exists_low_energy_scalar_parameters (etaLD : ℝ) (hLD : 0 < etaLD) :
+    let T := 21 + etaLD + 8 * log (400 * (288 * exp (11 / 8)) * (6 + etaLD))
+    let CH := (3 * T + 52) / 2
+    ∃ A : ℝ, 1 ≤ A ∧ 21 ≤ A ∧
+      ∀ (q : ℕ) (eta w E0 t : ℝ), 2 ≤ q → 0 < w → 3 * w < eta → eta ≤ etaLD →
+      t = 21 + eta + 8 * log ((288 * exp (11 / 8)) /
+        min 1 ((1 / 200 : ℝ) * w ^ 2 / (2 * (6 + eta)))) →
+      19 + eta ≤ t → 0 ≤ E0 → E0 ≤ 4 →
+      let g := min w 1
+      let u := 1 + log (q : ℝ) + log (1 / g)
+      let ell : ℕ := ⌈A * u ^ 2 / g⌉₊
+      let D := (q * ell ^ 2) ^ (18 * ell + 2 * (ell ^ 2 / ell))
+      let R := 3 * t + 4 * (ell : ℝ) - (E0 + eta - 2 * w)
+      let Delta := (2 * exp (-2 * ((ell ^ 2 : ℕ) : ℝ) * sqrt (w / R))) ^ 2
+      21 ≤ ell ∧ 0 < R ∧ R ≤ 2 * CH * (ell : ℝ) ∧ 0 < Delta ∧
+      log (D : ℝ) ≤ 22 * (A + 1) * (6 + 2 * log (A + 1)) / g * u ^ 3 ∧
+      (D : ℝ) ^ 12 * Delta < 1 / 100000 := by
+  intro T CH
+  obtain ⟨A, hA, hA21, _hcount, hall⟩ := exists_low_energy_joint_scalar_parameters etaLD hLD
+  refine ⟨A, hA, hA21, ?_⟩
+  intro q eta w E0 t hq hw hbuffer heta ht hcut hE0 hE04 g u ell D R Delta
+  obtain ⟨hell, hR, hRup, hDelta, hlogD, htrade⟩ :=
+    hall q eta w E0 t hq hw hbuffer heta ht hcut hE0 hE04
+  change 21 ≤ ell at hell
+  let Daux := (q * ell ^ 2) ^ (22 * ell)
+  have hdiv : ell ^ 2 / ell = ell := by
+    rw [pow_two, Nat.mul_div_cancel ell (by omega : 0 < ell)]
+  have hbase : 1 ≤ q * ell ^ 2 := by
+    have hsq : 1 ≤ ell ^ 2 := one_le_pow₀ (show 1 ≤ ell by omega)
+    nlinarith only [Nat.mul_le_mul_left q hsq, hq]
+  have hDle : D ≤ Daux := by
+    dsimp only [D, Daux]
+    rw [hdiv]
+    exact Nat.pow_le_pow_right (by omega) (by omega)
+  have hDpos : 0 < (D : ℝ) := by
+    exact_mod_cast (show 0 < D from Nat.pow_pos (by omega : 0 < q * ell ^ 2))
+  have hDcastle : (D : ℝ) ≤ (Daux : ℝ) := by exact_mod_cast hDle
+  refine ⟨hell, hR, hRup, hDelta,
+    (log_le_log hDpos hDcastle).trans hlogD, ?_⟩
+  exact (mul_le_mul_of_nonneg_right
+    (pow_le_pow_left₀ hDpos.le hDcastle 12) hDelta.le).trans_lt htrade
 
 end Real

@@ -30,6 +30,13 @@ norm budget `b₀` of each site and the polynomial growth of the graph spheres b
 explicit constant above; the printed dependence `O(J²/(c₁ l ΔE δλ_j))` is not established.
 Documented in `docs/paper-gaps/hastings05_two_dim_ground_basis.tex`.
 
+**Scope restriction (basis refinement):** The off-diagonal conclusions
+`sum_norm_offDiagonalPartFamily_le_oibu_levels` and `sum_norm_offDiagonalPartFamily_le_oibu`
+use a supplied basis with the stated spectral separation or refinement data. The construction
+and termination of the general refinement, including scalar terminal classes, remain to be
+proved. The commutator and shell-sum estimates do not require that construction. See
+`docs/paper-gaps/hastings05_two_dim_ground_basis.tex`.
+
 ## Main results
 
 * `add_one_pow_mul_exp_neg_le`, `sum_add_one_pow_mul_exp_neg_le`,

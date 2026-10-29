@@ -92,6 +92,28 @@ threshold printed at source line 955, together with the exponential
 conclusion at line 960. No perturbation, residual, truncated ground vector,
 closeness estimate, or upper bound on the original gap is supplied.
 
+\section{The stronger logarithmic threshold}
+
+The same actual exponential residual comparison gives the stronger sufficient
+condition
+\begin{align*}
+ t\ge T(g):=1024+16\log(1/g).
+\end{align*}
+Indeed, setting $\tau=e^{-t/16}$ in the spectral comparison requires only
+\begin{align*}
+ t&\ge g+11,&
+ t&\ge2g+16\log(C_1/g),& C_1&=10^6\cdot64e^{3/4}.
+\end{align*}
+These follow from $0<g\le1$, $\log C_1\le61$, and $t\ge T(g)$.
+The physical endpoint argument derives $g\le1$ from the original chain.
+Thus the actual phase-aligned vector, gap and exponential error are available
+above a logarithmic threshold independently of $E_0$.
+The actual clipped Chebyshev filter, its spectral ceiling and sharp rank
+bound are available at the same threshold. Since $T(g)\le1024/g$, the earlier
+polynomial-threshold conclusions follow as corollaries without changing
+their physical hypotheses. The later favorable-parameter and entropy
+construction remains separate.
+
 \section{The remaining finite-window restriction}
 
 The proved geometry assumes $s\ge6$, so the six boundary labels are

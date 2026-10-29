@@ -26,9 +26,15 @@ smallest difference `levelGap` between distinct labels in one class is positive,
 matrix element is bounded at the first level separating its two vectors. By induction on the
 level, with all commutators of the compressions at most `K` and those with `B` at most `K_B`, the
 elements of `B` are bounded at every level by `levelBoundB`, which is linear in `K_B`; when the
-iteration separates every pair after `L` levels, as the source's iteration ends once every
-off-diagonal element is bounded, this bounds the off-diagonal part of `B`. With two levels, the
+supplied iteration separates every pair after `L` levels, this bounds the off-diagonal
+part of `B`. With two levels, the
 bound is written out (`norm_inner_le_of_two_levels`).
+
+**Scope restriction (basis refinement):** The basis, diagonal compression data and eventual
+pair separation are supplied. This module proves conditional estimates for that data; it does
+not construct or prove termination of the source's refinement. Scalar terminal classes need
+not separate further and are not covered by the pair-separation hypothesis. The missing
+existence step is recorded in `docs/paper-gaps/hastings05_two_dim_ground_basis.tex`.
 
 ## Main statements
 

@@ -1324,18 +1324,16 @@ slope `c₁` with `v c₁ < 1/2`.
 ### Local solution of gapped Hamiltonians: a basis of a degenerate ground space
 
 [hastings05_two_dim_ground_basis.tex](hastings05_two_dim_ground_basis.tex)
-(local correction, resolved) records the treatment of a degenerate ground space in Hastings,
-*Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, lines 1678–1705). In an
-eigenbasis of `P M_j P` with eigenvalues `r ≠ s`, the off-diagonal part of `P M_i P` has norm
-at most `‖[P M_i P, P M_j P]‖ / |r - s|`, and a ground state is an approximate eigenvector of
-`M_i` up to that off-diagonal part. Every dimension is treated: one compression with simple
-spectrum gives `(n - 1) ‖[P M_i P, P M_j P]‖ / δ`, and repeated eigenvalues are resolved by the
-source's iteration over further compressions, made rigorous by an identity for the matrix
-elements at each level and assembled by induction over any number of levels; the cross terms the
-sketch omits are kept (a local correction). The basis is given. Eq. `oibu` is proved with an
-explicit constant independent of the size of the system, for any number of levels; its printed
-dependence `O(J²/(c₁ l ΔE δλ_j))` is not established, the constant growing like `(v/ΔE)^D` on a
-lattice of dimension `D`.
+(scope restriction, open) records the conditional commutator estimates for a
+degenerate ground space in Hastings, *Solving gapped Hamiltonians locally*
+(arXiv:cond-mat/0508554v3, lines 1678–1708). In an eigenbasis of a compressed
+operator, its distinct eigenvalues control off-diagonal matrix elements by the
+commutator divided by their separation. The proved finite-iteration estimates
+retain the cross terms omitted from the sketch and apply in every dimension,
+but take the basis, diagonal labels and eventual pair separation as inputs.
+They do not construct the refinement or treat its scalar terminal classes.
+Those existence and termination steps, and the printed length-dependent
+constant in equation `oibu`, remain open.
 
 ### One-dimensional area law after Hastings: the entropy gain constants
 
@@ -1696,3 +1694,8 @@ and [#9847](https://github.com/LionSR/TNLean/issues/9847).
   bound on `‖A v‖`; a two-dimensional example disproves it without one. The
   source's `A` is Hermitian and fixes `Γ`, so `‖A v‖ ≥ 1/2`, and the new error is
   `δ + 4 ‖K - A‖` in place of `2 δ`, a constant absorbed by the choice of `q(n)`.
+- [`lvv13_power_expansion_padding.tex`](lvv13_power_expansion_padding.tex)
+  (local correction, resolved) records that the expansion `eq:a-exp`
+  (arXiv:1307.5143v1, lines 606–609) of the power projector sums over words in
+  `n` letters while the Hamiltonian has `n - 1` terms; it is read with
+  `H_n = 0`, so that the last letter is the identity and the identity is exact.

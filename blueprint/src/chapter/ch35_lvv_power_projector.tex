@@ -1,0 +1,187 @@
+\section{The power approximate ground-state projector}
+\label{sec:lvv_power_projector}
+
+Landau, Vazirani and Vidick approximate the projection onto the ground state of
+a gapped chain by a power of $1-H/n$, and later replace that power by an average
+of polynomially many terms of its
+expansion~\cite[lines 599--616]{Landau2015Polynomial}. This section treats the
+power itself on the chain of $L$ sites $0,\ldots,L-1$ with local dimension $q$, and writes $n=L$
+for the number of sites. The bonds are $0,\ldots,L-2$; bond $i$ is the pair of
+sites $\{i,i+1\}$. The Hamiltonian is
+$H=\sum_{i=0}^{L-2}H_i$, with $H_i$ acting as the identity off $\{i,i+1\}$ and
+$0\le H_i\le1$~\cite[lines 283--284]{Landau2015Polynomial}. The unit vector
+$\Gamma$ satisfies $H\Gamma=\varepsilon_0\Gamma$ and
+$H-\varepsilon_0\ge\Delta(1-|\Gamma\rangle\langle\Gamma|)$ for some $\Delta>0$.
+The gap $\varepsilon=\varepsilon_1-\varepsilon_0$ of the source is such a
+$\Delta$, and every statement below holds for every such $\Delta$, with
+$\varepsilon_1$ replaced by $\varepsilon_0+\Delta$.
+
+\begin{definition}[Bond Hamiltonians on the chain]
+    \label{def:lvv_bond_hamiltonian}
+    \lean{TNLean.MPS.AreaLaw.bondSupport,
+        TNLean.MPS.AreaLaw.bondSupport_injective,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.ofBonds,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.ofBonds_operator,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.posSemidef_ofBonds_term}
+    \leanok
+    \uses{def:chain_model}
+    A family of bond terms $H_0,\ldots,H_{L-2}$ as above defines a Hamiltonian of
+    range one with interaction norm at most one: its term at the support
+    $\{i,i+1\}$ is $H_i$, and its terms at single sites vanish. Distinct bonds
+    have distinct supports, so each term is a single $H_i$ or zero; hence its terms
+    are positive semidefinite with norm at most one, and its sum is $H=\sum_iH_i$.
+\end{definition}
+
+\begin{definition}[The power projector]
+    \label{def:lvv_power_projector}
+    \lean{TNLean.MPS.AreaLaw.powerProjector}
+    \leanok
+    For a matrix $H$, a positive integer $n$, a real number $\varepsilon_0$ and
+    $m\ge0$, put
+    \begin{align}
+        A=\Bigl(\frac{1-H/n}{1-\varepsilon_0/n}\Bigr)^{m}.
+        \label{eq:lvv_power_projector}
+    \end{align}
+    This is the operator of~\cite[lines 599--600]{Landau2015Polynomial}.
+\end{definition}
+
+\begin{theorem}[Positivity, norm and the ground state]
+    \label{thm:lvv_power_projector_basic}
+    \lean{TNLean.MPS.AreaLaw.posSemidef_powerProjector,
+        TNLean.MPS.AreaLaw.norm_powerProjector,
+        TNLean.MPS.AreaLaw.powerProjector_apply_ground}
+    \leanok
+    \uses{def:lvv_power_projector, def:chain_model}
+    Let $L\ge1$, and let $A$ be defined by~(\ref{eq:lvv_power_projector}) with
+    $n=L$. Then $A$ is positive semidefinite, $\|A\|=1$ and $A\Gamma=\Gamma$.
+    This is the first assertion of~\cite[line 602]{Landau2015Polynomial}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Since $0\le H_i\le1$ for the $n-1$ bonds, $0\le H\le n-1$; evaluating on
+    $\Gamma$ gives $\varepsilon_0\le n-1$. The gap inequality places every
+    eigenvalue of $H$ either at $\varepsilon_0$, with eigenvector a multiple of
+    $\Gamma$, or in $[\varepsilon_0+\Delta,n-1]$. Put
+    $\varepsilon^*=\min(\varepsilon_0+\Delta,n)$. The function
+    $f(t)=((n-t)/(n-\varepsilon_0))^m$ equals $1$ at $\varepsilon_0$ and lies in
+    $[0,((n-\varepsilon^*)/(n-\varepsilon_0))^m]$ on $[\varepsilon^*,n]$, and
+    $A=f(H)$. Hence $A\ge0$, the spectral projection of $H$ at $\varepsilon_0$
+    is $|\Gamma\rangle\langle\Gamma|$, $A|\Gamma\rangle\langle\Gamma|
+        =|\Gamma\rangle\langle\Gamma|$ and $\|A\|=1$.
+\end{proof}
+
+\begin{theorem}[Contraction of the excited states]
+    \label{thm:lvv_power_cutdown}
+    \lean{TNLean.MPS.AreaLaw.norm_inner_powerProjector_le}
+    \leanok
+    \uses{def:lvv_power_projector, def:chain_model}
+    Let $L\ge1$, $n=L$ and $\varepsilon_1=\varepsilon_0+\Delta$. For every unit
+    vector $\Gamma^\perp$ orthogonal to $\Gamma$,
+    \begin{align*}
+        |\langle\Gamma^\perp,A\Gamma^\perp\rangle|
+        \le\Bigl(\frac{1-\varepsilon_1/n}{1-\varepsilon_0/n}\Bigr)^{m}.
+    \end{align*}
+    This is equation e:cutdown of~\cite[line 603]{Landau2015Polynomial}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The gap inequality at $\Gamma^\perp$ gives
+    $\langle\Gamma^\perp,H\Gamma^\perp\rangle\ge\varepsilon_0+\Delta$, and
+    $H\le n-1$ gives $\langle\Gamma^\perp,H\Gamma^\perp\rangle\le n-1$. Hence
+    $\varepsilon_1\le n-1$, and the spectrum of $H$ lies in
+    $\{\varepsilon_0\}\cup[\varepsilon_1,n]$. With
+    $r=(n-\varepsilon_1)/(n-\varepsilon_0)$, the functional calculus of the
+    proof of Theorem~\ref{thm:lvv_power_projector_basic} gives
+    $\|A-|\Gamma\rangle\langle\Gamma|\|\le r^m$. Since
+    $|\Gamma\rangle\langle\Gamma|\Gamma^\perp=0$,
+    $|\langle\Gamma^\perp,A\Gamma^\perp\rangle|\le\|A\Gamma^\perp\|
+        =\|(A-|\Gamma\rangle\langle\Gamma|)\Gamma^\perp\|\le r^m$, and
+    $r=(1-\varepsilon_1/n)/(1-\varepsilon_0/n)$.
+\end{proof}
+
+\begin{theorem}[A logarithmic number of factors]
+    \label{thm:lvv_power_threshold}
+    \lean{TNLean.MPS.AreaLaw.norm_powerProjector_sub_le}
+    \leanok
+    \uses{def:lvv_power_projector, def:chain_model}
+    Let $L\ge1$, $n=L$ and $\eta>0$. If
+    $m\ge((n-\varepsilon_0)/\Delta)\log(1/\eta)$, then
+    $\|A-|\Gamma\rangle\langle\Gamma|\|\le\eta$. With $\eta=c_\varepsilon/(2q(n))$
+    this gives the choice $m=\Theta(\varepsilon^{-1}n\log(q(n)/c_\varepsilon))$
+    of~\cite[lines 602--603]{Landau2015Polynomial}, which makes the bound of
+    Theorem~\ref{thm:lvv_power_cutdown} at most $c_\varepsilon/(2q(n))$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    With $\varepsilon^*$ as in the proof of
+    Theorem~\ref{thm:lvv_power_projector_basic},
+    $\|A-|\Gamma\rangle\langle\Gamma|\|\le((n-\varepsilon^*)/(n-\varepsilon_0))^m$.
+    If $\varepsilon^*=\varepsilon_0+\Delta$ this is
+    $(1-\Delta/(n-\varepsilon_0))^m\le e^{-m\Delta/(n-\varepsilon_0)}$, and
+    otherwise it is $0^m\le e^{-m\Delta/(n-\varepsilon_0)}$. The hypothesis on $m$ gives
+    $e^{-m\Delta/(n-\varepsilon_0)}\le\eta$.
+\end{proof}
+
+\begin{definition}[Letters and words]
+    \label{def:lvv_power_letters}
+    \lean{TNLean.MPS.AreaLaw.paddedBond,
+        TNLean.MPS.AreaLaw.bondComplement,
+        TNLean.MPS.AreaLaw.bondComplementWord,
+        TNLean.MPS.AreaLaw.sum_paddedBond}
+    \leanok
+    \uses{def:chain_model}
+    Put $H_{L-1}=0$, and for $i=0,\ldots,L-1$ let $P_i=1-H_i$; the last letter
+    $P_{L-1}$ is the identity. For a word $I=(i_1,\ldots,i_m)$ in
+    $\{0,\ldots,L-1\}$ put $P_I=P_{i_1}\cdots P_{i_m}$, the factors in the order
+    of the word. Then $\sum_{i=0}^{L-1}H_i=H$. The source sums over $n$ letters
+    although $H$ has $n-1$ terms; the letter $P_{L-1}=1$ is the reading that
+    makes its expansion exact~\cite{gap:lvv13_power_expansion_padding}.
+\end{definition}
+
+\begin{theorem}[Expansion into words]
+    \label{thm:lvv_power_expansion}
+    \lean{TNLean.MPS.AreaLaw.powerProjector_eq_sum_bondComplementWord}
+    \leanok
+    \uses{def:lvv_power_projector, def:lvv_power_letters}
+    Let $L\ge1$, $n=L$ and $C=1/(1-\varepsilon_0/n)$. Then
+    \begin{align*}
+        A=C^m\frac{1}{n^m}\sum_{I\in\{0,\ldots,n-1\}^m}P_I.
+    \end{align*}
+    This is equation eq:a-exp of~\cite[lines 606--609]{Landau2015Polynomial}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Since $\sum_{i=0}^{n-1}P_i=n-H$, the base of the power is
+    $C(1-H/n)=(C/n)\sum_iP_i$. Expanding the $m$-th power of this sum, without
+    commuting the letters, gives the sum of $P_I$ over all words $I$ of length
+    $m$.
+\end{proof}
+
+\begin{theorem}[Rank of a word across a cut]
+    \label{thm:lvv_power_word_rank}
+    \lean{TNLean.MPS.AreaLaw.operatorSchmidtRank_cutOperator_bondComplementWord_le}
+    \leanok
+    \uses{def:lvv_power_letters}
+    Let $b\le L-2$, and let $I$ be a word in which the letter $P_b$ occurs at most
+    $k$ times. Across the cut between the sites $b$ and $b+1$, the operator
+    $P_I$ has operator Schmidt rank at most $q^{2k}$. This is the bound behind
+    equation e:decomp of~\cite[lines 584--588]{Landau2015Polynomial}, where the
+    cut $(i,i+1)$ is crossed only by $P_i$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The letter $P_i$ acts as the identity off $\{i,i+1\}$ for $i\le L-2$, and
+    $P_{L-1}=1$ acts on no site. Only the letter $P_b$ acts on both sides of the
+    cut, and it acts on one site to the left of it. An operator acting as the
+    identity off a set $X$ meeting both sides has rank at most $q^{2|X\cap\{0,\ldots,b\}|}$ across
+    the cut, an operator acting on one side has rank at most one, and the rank of
+    a product is at most the product of the ranks. Hence $P_I$ has rank at most
+    $q^{2c}$, where $c\le k$ is the number of occurrences of $P_b$ in $I$. For
+    $q\ge1$ this is at most $q^{2k}$; for $q=0$ and $L\ge2$ the space of
+    configurations of the sites left of the cut is empty, and the rank is zero.
+\end{proof}

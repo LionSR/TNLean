@@ -39,6 +39,16 @@ fixed smaller length remains necessary. The length convention and positivity
 qualifications are recorded in `docs/paper-gaps/hastings07_lemma1_decay_length.tex`,
 `hastings07_relent_constants.tex` and `hastings07_doubling_constants.tex`.
 
+For Hastings' 2006 programme, the local truncated filters and thermal truncated
+exponentials are constructed from the interactions. The later hierarchy still
+takes its operator and projector families and recursion estimates as inputs.
+The original-Hamiltonian assembly, existence of the degenerate-basis refinement,
+final tensor bond bounds, and thermal index bound in terms of a local radius
+remain to be proved. The conditional basis estimates apply to any dimension, but
+assume a chosen refinement separating every pair; scalar terminal classes and
+refinement existence require an additional argument. This qualification is
+recorded in `docs/paper-gaps/hastings05_two_dim_ground_basis.tex`.
+
 For the viable-set construction, the relevant quantifier order is different. The
 family at a cut is selected from the Hamiltonian and the preceding family before
 the ground energy and ground vector are supplied. Its viability is then asserted
@@ -81,8 +91,9 @@ polynomial of the same supported Hamiltonian has both this rank bound and its
 spectral suppression estimate. The two exterior truncations are also constructed
 from the original positive-contraction interactions, with genuine regional minima
 and normalized energy $E_0\in[0,6]$. For windows of at least six interactions,
-$t\ge(1024/g)(E_0/g+1)$ gives an actual truncated gap at least $9g/10$ and a
+$t\ge1024+16\log(1/g)$ gives an actual truncated gap at least $9g/10$ and a
 phase-aligned unit ground vector with squared error at most $e^{-t/16}/100$.
+The earlier polynomial sufficient threshold remains a corollary.
 The original gap bound $g\le1$ is derived from the physical hypotheses.
 The local support and middle-normalization corrections, and the finite-window
 restriction, are recorded in `docs/paper-gaps/aklv13_two_block_robustness.tex`.
@@ -92,8 +103,13 @@ the actual degree-$\ell$ Chebyshev polynomial has amplitude at most
 $2\exp[-2\ell\sqrt{(9g/10)/(2t+s)}]$ and rank at most
 $[q(\ell+1)]^{32(\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1)}$.
 No spectral ceiling, projector gap or spatial decomposition is supplied.
-The favorable approximate-projector parameter choice, entropy argument, and
-moving-ground-state approximation sequence remain distinct steps.
+A universal scalar choice now sets $s=\lceil Au^2/g\rceil$, degree $s^2$ and
+$t_0=1024+16\log(1/g)$, where $u=1+\log q+\log(1/g)$.
+Its actual rank budget and squared shrinking coefficient satisfy
+$D\delta\le10^{-5}<1/256$, and $\log D\le C u^3/g$ with an explicit
+constant. The physical favorable filter, product-overlap initialization,
+phase-aligned moving-ground-state recursion, and entropy conclusion still need
+to be assembled.
 
 For a unique ground vector on an open chain with $q\ge2$ and $0\le h_j\le I$,
 the gap is at most one. An endpoint unitary with zero expectation in that vector
@@ -120,43 +136,47 @@ vector has bond bound $r^2B$. This reference is chosen before the viable space
 to be trimmed. It supports collective trimming; it does not supply a sampled
 merge construction.
 
-The power-filter application now constructs one actual sample satisfying both
-operator-norm approximations, all letter-count bounds, and every spatial Schmidt
-rank bound $\ell q^{2u}$. Its explicit sample count retains the ground-energy
-factor $\exp(2E_0\log Q/\Delta)$. The same sample is used for the norm and rank
-conclusions. This supplies the physical sampling step with its stated cost; it
-does not imply a polynomial bound uniform in the unknown ground energy. At a specified
-ground energy, the actual sampled operator supplies cut factors chosen before all
-input viable families. They improve half-viability to prescribed error with
-cardinality and internal bond bounds derived from the same sample. A strengthened statement chooses the sample and each cut's factors before every
-normalized vector in the unique ground line, using one internally chosen reference
-and equality of their rank-one projections. This still specifies the ground energy
-before sampling. The [published Methods](https://people.eecs.berkeley.edu/~vazirani/pubs/1dalg.pdf)
-states an energy-dependent complexity
-exponent and advertises the uniform polynomial case for bounded ground energy.
-Its proof explicitly removes the unknown overall scalar by normalization.
-The remaining issue is selecting word lengths and relative-error budgets without
-an exact energy input, rather than computing that scalar.
+The power-filter application constructs one actual sample with both norm estimates,
+all letter-count bounds, and every spatial rank bound $\ell q^{2u}$.
+At a specified energy, the sample and its cut factors precede every unit vector
+in the ground line and every viable input family. A further scalar-free theorem
+uses a supplied width-one bracket $[a,a+1]$ and chooses its word length and sample
+budget before the actual energy as well. With $n$ equal to the number of terms
+plus one, it uses $m=\lceil(n-a)\log Q/\Delta\rceil$ and retains the cost
+$n^2\exp(4(a+1)\log Q/\Delta)$. The actual unscaled sample $T$ approximates
+$\beta P_0$ to relative error $\eta+1/Q$, with
+$\beta=(1-E_0/n)^m>0$; its same cut factors give the size, bond and viability
+bounds. Choosing the bracket, formalizing the source success probability, and
+the complete running-time argument remain separate.
 
-For low-energy targets, one actual clipped Hamiltonian now supplies both buffered
-spectral comparisons and a common polynomial improving family. The family and its
-tensor factors are selected before the viable subspace, with cardinality at most
-$D^2$, where $D=(q\ell^2)^{20\ell}$, and nested-target loss
-$\Delta/(1-\delta)^2$ between the clipped targets. Composing the two actual
-spectral comparisons gives improvement between the original windows, with loss
-$2(\Delta/[1-2(\delta+\varepsilon)]^2+\varepsilon)$ when
+The [published Methods section](https://people.eecs.berkeley.edu/~vazirani/pubs/1dalg.pdf)
+states the energy-dependent complexity exponent and permits omission of the
+unknown overall scalar after output normalization. Its advertised uniform
+polynomial case has bounded ground energy. The bracket theorem retains that
+energy dependence; it does not supply an energy-independent polynomial degree.
+
+For low-energy targets, one actual clipped Hamiltonian supplies both buffered
+spectral comparisons and a common polynomial improving family. The interior
+family has at most $D^2$ terms with $D=(q\ell^2)^{20\ell}$.
+The prescribed-interval construction now also treats short, empty and endpoint
+intervals. It uses the common budget $D=(q\ell^2)^{22\ell}$, transports the
+actual long-interval family to the prescribed region, and reuses configuration
+matrix units on short regions. The family precedes every viable input subspace.
+One constant at fixed density bandwidth is chosen before the chain and
+Hamiltonian, with strict clipped-filter tradeoff $D^{12}\Delta<10^{-5}$.
+The explicit source-scale count retains the logarithmic correction in
+$\log L/\mu$ and absorbs the capped width into a density-bandwidth constant.
+
+The clipped targets improve error to $\Delta/(1-\delta)^2$.
+For the original windows the two spectral comparisons instead give
+$2(\Delta/[1-2(\delta+\varepsilon)]^2+\varepsilon)$, assuming
 $\delta\ge0$ and $2(\delta+\varepsilon)<1$.
-The result retains interior geometry and a strict buffer $3w<\eta$. The interior parameter substitution now chooses its constant at fixed density
-bandwidth before the chain and Hamiltonian. It proves the strict clipped-filter
-tradeoff $D^{12}\Delta<10^{-5}$ with an explicit count retaining
-$g=\min(\mu/(3\log L),1)$. This tradeoff and the original-window error remain
-separate; the fixed comparison error contributes $1/100$ before the positive
-filter term, so a final $1/100$ claim would require retuning it. The low-density
-induction, short and boundary regions, and sampled tree still require further
-arguments. The soft-truncation argument
-also requires a correct replacement for the false printed cluster estimate.
-Neither the degenerate area law nor a single global MPS approximation supplies
-these steps.
+With comparison error $1/200$, its additive contribution is already $1/100$;
+a final $1/100$ claim requires retuning that precision.
+The low-density induction requires sampling between distinct nested targets
+and a dyadic rank estimate; the fixed-ground-space induction does not provide
+it. The sampled tree and a correct replacement for the false printed
+soft-cluster estimate also remain open.
 
 The exact formal statements, their source passages, and their verification evidence
 are recorded in the blueprint and the dated audit reports. A statement identified as a formalization of a source theorem must carry the

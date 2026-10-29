@@ -64,6 +64,8 @@ import TNLean.MPS.AreaLaw.LocalSolution
 import TNLean.MPS.AreaLaw.LogarithmicAreaLaw
 import TNLean.MPS.AreaLaw.LogarithmicSeparation
 import TNLean.MPS.AreaLaw.LowEnergyFilterParameters
+import TNLean.MPS.AreaLaw.LowEnergyIntervalFamily
+import TNLean.MPS.AreaLaw.LowEnergySourceScale
 import TNLean.MPS.AreaLaw.MPSApproximation
 import TNLean.MPS.AreaLaw.MPSReferenceSpace
 import TNLean.MPS.AreaLaw.NearestNeighbourImaginaryTime
@@ -142,5 +144,6 @@ import TNLean.MPS.AreaLaw.TwoCutOperatorForms
 import TNLean.MPS.AreaLaw.TwoWindowFamilyCardinality
 import TNLean.MPS.AreaLaw.TwoWindowOperatorForms
 import TNLean.MPS.AreaLaw.TwoWindowPolynomialMPOFamily
+import TNLean.MPS.AreaLaw.TwoWindowPolynomialRank
 import TNLean.MPS.AreaLaw.ViableSet
 import TNLean.MPS.AreaLaw.WindowCounting

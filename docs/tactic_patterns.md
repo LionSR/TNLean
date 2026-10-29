@@ -9773,3 +9773,44 @@ there is no need for a new tactic.
 - **Reuse:** The new occurrence uses the existing Mathlib order and ceiling
   lemmas directly. The earlier full two-sided estimate remains private;
   two occurrences do not yet require a new public helper.
+
+### Real spectral membership from a nonzero eigenvector — promoted (2026-10-29)
+
+- **Pattern:** Derive that the ground energy belongs to the real spectrum before
+  comparing it with an attained excited energy.
+- **Seen:** Basis-expansion arguments in `AKLV/PhysicalRobustness.lean` and
+  `AKLV/ClippedFilter.lean`; the logarithmic-threshold extension would have
+  introduced a third copy.
+- **Defined in:** QICLean `Analysis/PositiveGapUniqueness.lean`,
+  `Matrix.mem_spectrum_real_of_mulVec_eq_smul`. It transports Mathlib's
+  eigenvector-to-spectrum implication and needs only a nonzero eigenvector.
+- **Refactored occurrences:** The common physical robustness construction uses
+  this identity once. Both threshold variants and both filter variants reuse
+  that construction. No Hermiticity, normalization, or gap assumption is
+  added to the generic matrix identity.
+
+### The ceiling filter scale dominates the inverse-gap logarithm — candidate (2026-10-29)
+
+- **Pattern:** From `u = 1 + log q + log (1/g)`, `q≥2`, `0<g≤1`, `A≥1`,
+  and `A*u^2/g≤s`, derive `log(1/g)≤s` by comparison with `u^2`.
+- **Seen:** `MPS/AreaLaw/LowEnergyFilterParameters.lean` and
+  `MPS/AreaLaw/AKLV/FavorableParameters.lean`.
+- **Abstraction:** If another scalar application requires it, add this
+  conclusion to the shared scalar scale lemma rather than repeating the proof.
+- **Notes:** This comparison absorbs the logarithmic truncation threshold
+  into a norm ceiling linear in the integer window scale.
+
+### A short-region family spanning the whole regional space — promoted (2026-10-29)
+
+- **Seen:** The two existing short improving-family proofs in
+  `MPS/AreaLaw/ShortRegionViableFamily.lean` and the nested-target application
+  in `MPS/AreaLaw/LowEnergyIntervalFamily.lean`.
+- **Lemma:** `exists_short_actual_region_spanning_family` in
+  `MPS/AreaLaw/ShortRegionViableFamily.lean` exposes the existing matrix-unit
+  construction and its exact-full-span consequence. The former private name
+  is removed; both previous consumers and the new target-pair proof use the
+  same construction.
+- **Notes:** The new short-target proof chooses a smaller positive error
+  parameter after reaching the full regional space. It handles a zero target
+  by the standard projection simplifier, rather than copying the earlier
+  coordinate proof. No new tactic or second matrix-unit family is introduced.

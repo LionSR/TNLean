@@ -165,18 +165,50 @@ Its additive term is already $1/100$, before the positive filter
 contribution. No final original-window error of $1/100$ is asserted.
 Such a target requires a smaller comparison error.
 
-\section{What remains for the full source theorem}
+\section{Prescribed intervals and the explicit source scale}
 
-The interior substitution and finite tradeoff above do not complete the
-full source theorem. Placement at arbitrary prescribed middle blocks,
-including short and boundary blocks, remains to be constructed. The exact
-capped logarithmic estimate has not been restated as the printed soft
-asymptotic formula. The cases $L=0,1$ lack the positive-log substitution;
-lengths 2--4 have positive logarithm but fail the five-region geometry for
-$\ell\ge1$. More generally, the geometry may fail at the selected scale
-and requires a short-region construction. The low-density bootstrap and
-the sampled merge-tree induction are additional results. The false
-soft-cluster estimate is not used.
+For $L\ge2$ and $q\ge2$, the construction now applies to every prescribed
+interval, including empty intervals and either chain endpoint. If
+$|J|>4\ell$, inward effective cuts give a core $J_0\subseteq J$ with
+$|J\setminus J_0|\le2\ell$. The actual polynomial is decomposed on $J$,
+using the existing regional transport and collar count. The joint count is
+$D=(q\ell^2)^{22\ell}$. Its strict tradeoff comes from
+$w\ge g>4g/5$, so the physical contraction is strictly smaller than the
+comparison contraction even at the full joint count.
+
+For $|J|\le4\ell$, the existing configuration matrix units give the
+family. They span the full regional space from every nonzero viable
+subspace. Choosing $\Delta=1/(200000D^{12})$ gives a strict tradeoff;
+zero targets are handled directly. In this case the two target spaces can
+be the original spectral spaces, so their comparison losses are zero.
+No separate short-region matrix-unit construction is introduced.
+
+The cap is absorbed explicitly. Put $M=\max\{1,\eta_{\mathrm{LD}}/6\}$.
+Since $w\le\eta_{\mathrm{LD}}/6$, one has
+\begin{align*}
+    1/g&\le M/w,& \log(1/g)&=\max\{\log(1/w),0\}.
+\end{align*}
+For $K=22(A+1)[6+2\log(A+1)]$, the actual joint count therefore obeys
+\begin{align}
+    \log D\le 3KM\frac{\log L}{\mu}
+      \left[1+\log q+
+        \max\left\{\log\left(\frac{3\log L}{\mu}\right),0\right\}\right]^3.
+    \label{eq:ld_all_interval_source_count}
+\end{align}
+This is a finite source-scale estimate. It does not assert the false
+identity $g=w$ when $w>1$. The same family also gives the original-window
+error in (\ref{eq:ld_original_window_error}) with $\varepsilon=1/200$;
+that error is distinct from the improving-family parameter $\Delta$.
+
+\section{Remaining qualifications}
+
+The finite theorem uses the positive-log convention $L\ge2$ and
+nontrivial qudit dimension $q\ge2$, at fixed positive density bandwidth.
+Its displayed count is retained explicitly rather than replaced by an
+unspecified soft asymptotic expression. The full source programme also
+requires the low-density bootstrap and sampled merge-tree induction.
+Efficient central tensor representations and running-time claims are
+separate. The false soft-cluster estimate is not used.
 
 \bibliographystyle{unsrt}
 \bibliography{references}

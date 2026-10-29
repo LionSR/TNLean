@@ -18,7 +18,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{local-correction}{resolved}
+\gapnote{scope-restriction}{open}
 
 Hastings, \emph{Solving gapped Hamiltonians locally}~\cite{Hastings2006Solving},
 \href{https://arxiv.org/abs/cond-mat/0508554v3}{arXiv:cond-mat/0508554v3},
@@ -56,17 +56,27 @@ bounds the first term.
 
 \section{Status}
 
-Every dimension $n$ is treated, by the source's iteration over further
-compressions with any number of levels (the last three sections), ending when
-every pair of basis vectors is separated, as the source's iteration ends. The
-basis is taken as given, as the source chooses it, and the $j$ maximizing
-$\delta\lambda_j$ is not chosen, since the bounds hold for every $j$. The sum of
-eq.~\texttt{oibu} is bounded independently of the size of the system, for the
-iteration with any number of levels. Two differences from the source remain,
-both local corrections: the cross terms of the iteration, which the sketch omits,
-are kept; and the constant in eq.~\texttt{oibu} is explicit but does not have the
-printed form $O(J^2/(c_1l\Delta E\,\delta\lambda_j))$, which is not established
-here.
+The conditional estimates cover every dimension $n$ and any finite number of
+refinement levels. Their inputs include an orthonormal basis, the successive
+compressed operators and their diagonal labels on each class, and the
+hypothesis that every distinct pair of basis vectors is separated at some
+level. Under these hypotheses the sum in eq.~\texttt{oibu} is bounded
+independently of the number of sites and terms.
+
+This does not construct the basis or the refinement asserted in source
+lines 1678--1708. A faithful existence theorem must choose the spectral
+refinements and prove termination. A terminal class on which all remaining
+compressions are scalar need not split into one-dimensional classes; its
+off-diagonal elements vanish in any orthonormal basis, and this case must be
+included without a separation hypothesis. The scalar case already prevents
+separation from being imposed as a general source hypothesis.
+
+The cross terms omitted from the source sketch are retained in the proved
+conditional estimates. Their constants are explicit, but the printed form
+$O(J^2/(c_1l\Delta E\,\delta\lambda_j))$ is not established here.
+The remaining task is to prove existence and termination of the refinement,
+including scalar terminal classes, and then apply the conditional estimates
+to the constructed data.
 
 \section{A compression with simple spectrum}
 

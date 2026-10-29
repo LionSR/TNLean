@@ -25,9 +25,11 @@ import TNLean.MPS.AreaLaw.ViableSet.Gluing
 import TNLean.MPS.AreaLaw.ViableSet.GluingBounds
 import TNLean.MPS.AreaLaw.ViableSet.GluingCoordinates
 import TNLean.MPS.AreaLaw.ViableSet.GluingSupport
+import TNLean.MPS.AreaLaw.ViableSet.IntervalPowerSampling
 import TNLean.MPS.AreaLaw.ViableSet.LeftColumns
 import TNLean.MPS.AreaLaw.ViableSet.LeftCoordinates
 import TNLean.MPS.AreaLaw.ViableSet.OperatorAction
+import TNLean.MPS.AreaLaw.ViableSet.PowerProjector
 import TNLean.MPS.AreaLaw.ViableSet.SampledErrorReduction
 import TNLean.MPS.AreaLaw.ViableSet.SampledGroundLine
 import TNLean.MPS.AreaLaw.ViableSet.SampledPowerRank

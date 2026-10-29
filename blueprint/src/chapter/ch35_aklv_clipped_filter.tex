@@ -90,3 +90,29 @@
     gives the displayed exponent. The squared shrinking estimate follows on
     $\phi^\perp$.
 \end{proof}
+
+\begin{corollary}[The clipped filter above a logarithmic threshold]
+    \label{cor:aklv_logarithmic_clipped_filter}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_logarithmic_clipped_chebyshev_filter}
+    \leanok
+    \uses{def:aklv_logarithmic_threshold,thm:aklv_clipped_physical_filter}
+    Under the physical hypotheses of
+    Theorem~\ref{thm:aklv_clipped_physical_filter}, one has $q\ge2$ and
+    $g\le1$. The regional minima can be chosen before $t$ so that every
+    conclusion of that theorem holds already for
+    \begin{align*}
+        t\ge T(g)=1024+16\log(1/g).
+    \end{align*}
+    In particular, the actual ground vector, projector gap, spectral ceiling,
+    and same-cut polynomial rank bound require no supplied auxiliary data.
+\end{corollary}
+\begin{proof}
+    \leanok
+    \uses{thm:aklv_logarithmic_robustness,
+        lem:aklv_clipped_hamiltonian_data,thm:aklv_physical_chebyshev_filter}
+    Use the stronger logarithmic robustness theorem to construct the
+    actual ground vector. The norm, spatial decomposition and Chebyshev
+    argument of Theorem~\ref{thm:aklv_clipped_physical_filter} then apply
+    unchanged to the same clipped matrix. The polynomial-threshold
+    version follows from $T(g)\le1024/g$ and $E_0\ge0$.
+\end{proof}

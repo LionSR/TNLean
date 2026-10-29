@@ -1,0 +1,140 @@
+\section{Low-energy families on prescribed intervals}
+
+\begin{theorem}[The capped width and its logarithm]
+    \label{thm:low_energy_cap}
+    \lean{Real.low_energy_cap_bound}
+    If $w>0$ and $6w\le\eta_{\mathrm{LD}}$, set
+    $g=\min\{w,1\}$ and $M=\max\{1,\eta_{\mathrm{LD}}/6\}$.
+    Then $g^{-1}\le M/w$ and
+    $\log(g^{-1})=\max\{\log(w^{-1}),0\}$.
+\end{theorem}
+\begin{proof}
+    If $w\le1$, then $g=w$ and $M\ge1$.
+    If $w>1$, then $g=1$ and $w\le\eta_{\mathrm{LD}}/6\le M$.
+\end{proof}
+
+\begin{theorem}[An explicit count at the source scale]
+    \label{thm:low_energy_source_count}
+    \lean{Real.low_energy_count_le_source_scale}
+    Let $L\ge2$, $q\ge1$, $\mu>0$, and $K\ge0$. Set
+    $w=\mu/(3\log L)$ and $g=\min\{w,1\}$, and suppose
+    $6w\le\eta_{\mathrm{LD}}$. If a count satisfies
+    \begin{align*}
+        \log D\le\frac K g[1+\log q+\log(1/g)]^3,
+    \end{align*}
+    then, with $M=\max\{1,\eta_{\mathrm{LD}}/6\}$,
+    \begin{align}
+        \log D\le 3KM\frac{\log L}{\mu}
+        \left[1+\log q+
+          \max\left\{\log\left(\frac{3\log L}{\mu}\right),0\right\}\right]^3.
+        \label{eq:ld_source_scale_count}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \uses{thm:low_energy_cap}
+    Apply the two preceding bounds and use $1/w=3\log L/\mu$.
+\end{proof}
+
+\begin{theorem}[The joint scalar count and strict contraction]
+    \label{thm:low_energy_joint_scalar_parameters}
+    \lean{Real.exists_low_energy_joint_scalar_parameters}
+    Under the numerical assumptions of
+    Theorem~\ref{thm:low_energy_scalar_parameters}, the constant can be
+    chosen so that its logarithmic bound and strict tradeoff hold at the
+    larger count $D=(q\ell^2)^{22\ell}$. The lower bound $\ell\ge21$
+    and logarithmic estimate hold for every $q\ge2$ and $0<g\le1$ at the
+    chosen scale, before any physical threshold or ground energy is given.
+\end{theorem}
+\begin{proof}
+    \uses{thm:low_energy_threshold_bound}
+    The denominator has the same norm bound as before. The strict width
+    inequality $w\ge g>4g/5$ makes the physical contraction strictly
+    smaller than the scalar comparison contraction. Thus the full joint
+    count retains the strict product bound.
+\end{proof}
+
+\begin{theorem}[One spanning family on a short region]
+    \label{thm:short_region_spanning_family}
+    \lean{TNLean.MPS.AreaLaw.exists_short_actual_region_spanning_family}
+    Let $q\ge2$, $\ell\ge1$ and $|J|\le4\ell$, and put
+    $D=(q\ell^2)^{22\ell}$. For every finite complementary Hilbert
+    space, there is a family $(F_j)_{j=1}^{D^2}$ on $\mathcal H_J$,
+    chosen before every target subspace. If a nonzero target has a
+    $\delta$-viable subspace $S\subseteq\mathcal H_J$ with $\delta<1$,
+    then $\sum_jF_jS=\mathcal H_J$, and this enlargement is zero-viable.
+\end{theorem}
+\begin{proof}
+    Configuration matrix units send every nonzero subspace onto a family
+    spanning the entire regional space. Viability below one for a nonzero
+    target forces $S\ne0$. There are $q^{2|J|}\le q^{8\ell}$ matrix
+    units; extend their family by zero to the stated count.
+\end{proof}
+
+\begin{theorem}[A low-energy improving family on every interval]
+    \label{thm:physical_low_energy_interval_family}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_low_energy_interval_family}
+    Fix $\eta_{\mathrm{LD}}>0$. A constant $A\ge21$ can be chosen before
+    $L\ge2$, $q\ge2$, $\mu>0$, the bandwidth
+    $2\mu/\log L\le\eta_1\le\eta_{\mathrm{LD}}$, and the supported
+    positive unit nearest-neighbour Hamiltonian. Put
+    \begin{align*}
+        w&=\mu/(3\log L),& g&=\min\{w,1\},&
+        u&=1+\log q+\log(1/g),\\
+        \ell&=\lceil Au^2/g\rceil,& D&=(q\ell^2)^{22\ell},&
+        K&=22(A+1)[6+2\log(A+1)].
+    \end{align*}
+    Then $\ell\ge21$, and $D$ satisfies
+    (\ref{eq:ld_source_scale_count}).
+
+    For every prescribed interval $J=[p,r)\subseteq[0,L)$, including
+    empty intervals and intervals meeting either endpoint, there are a
+    centered original Hamiltonian $C=H-s\Id$ with an attained ground
+    energy $E_0$, nested subspaces $T_-\subseteq T_+$, a positive
+    parameter $\Delta$ and a family of $D^2$ operators on $\mathcal H_J$.
+    The original spectral space below $E_0+\eta_1$ is $1/200$-close to
+    $T_+$, and $T_-$ is $1/200$-close to the original space below
+    $E_0+\eta_1-3w$. Moreover $D^{12}\Delta<10^{-5}$.
+    These choices precede every viable subspace. If $S$ is
+    $\delta$-viable for $T_+$ with $\delta<1$, then $\sum_jF_jS$ has
+    dimension at most $D^2\dim S$ and is
+    $\Delta/(1-\delta)^2$-viable for $T_-$.
+    This supports \cite[Theorem~4.8]{Arad2016RigorousRG} with the finite
+    parameters displayed above.
+\end{theorem}
+\begin{proof}
+    \uses{thm:low_energy_source_count,thm:low_energy_joint_scalar_parameters,
+      thm:short_region_spanning_family,thm:physical_low_energy_filter_family,
+      thm:actual_clipped_polynomial_family}
+    For $|J|>4\ell$, inward effective cuts give a five-region core
+    $J_0\subseteq J$ with $|J\setminus J_0|\le2\ell$. Apply the actual
+    physical truncation construction and decompose its polynomial on $J$.
+    The regional-family count gains at most $q^{2|J\setminus J_0|}$,
+    which fits the joint count. Its strict width margin gives the stated
+    tradeoff. Extending the family by zero preserves every image span.
+
+    For $|J|\le4\ell$, use the existing matrix units and choose
+    $\Delta=1/(200000D^{12})$. Take $T_+$ and $T_-$ to be the two
+    original spectral spaces. The zero target is included; otherwise
+    the enlarged regional space is the whole space and has zero error.
+    Thus both cases give the same dimension and viability conclusions.
+\end{proof}
+
+\begin{theorem}[The same family on the original spectral windows]
+    \label{thm:physical_original_low_energy_interval_family}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_original_low_energy_interval_family}
+    All choices in Theorem~\ref{thm:physical_low_energy_interval_family}
+    can be retained simultaneously with the following additional conclusion.
+    If $S$ is $\delta$-viable for the original upper window,
+    $\delta\ge0$ and $2(\delta+1/200)<1$, then $\sum_jF_jS$ is viable
+    for the original lower window with error
+    \begin{align*}
+        2\left(\frac{\Delta}{[1-2(\delta+1/200)]^2}+\frac1{200}\right).
+    \end{align*}
+    Its dimension is still at most $D^2\dim S$. The improving-family
+    parameter and the final original-window error remain distinct.
+\end{theorem}
+\begin{proof}
+    \uses{thm:physical_low_energy_interval_family}
+    Apply closeness composition before and after the improvement, using
+    the same fixed family and the two physical comparisons.
+\end{proof}
