@@ -356,3 +356,14 @@ linear-equivalence coercion and a product rewrite that reached only the
 first side. The proof now expands that coercion explicitly and transports
 the right-hand product before identifying the Kronecker factor. No statement changes;
 no local Lean command was run.
+
+## Full build and strict necessity/converse on `160dc15b5`
+
+Verified-head job `123583866714` completed the full build and reports both
+`TimeReversalLocalNecessity.lean` and `TimeReversalLocalSufficiency.lean`
+strict checks as `ok`. The only strict failure was in the newly touched
+blocking owner: its second reopened namespace had never redeclared the
+physical and bond dimension variables, which ordinary implicit inference
+accepted but strict `autoImplicit=false` rejected. Both dimensions are now
+declared at that namespace boundary. No statement changed and no local Lean
+command was run. Exact repaired-head acceptance remains pending.

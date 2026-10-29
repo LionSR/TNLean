@@ -144,6 +144,8 @@ theorem Continuous.blockTensor {X : Type*} [TopologicalSpace X] {d D : ℕ}
 
 namespace MPOTensor
 
+variable {d D : ℕ}
+
 /-- Canonical identification between the doubled physical index of an
 `L`-site MPO block and the `L`-site block of the doubled MPS index.
 
