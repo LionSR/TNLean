@@ -12,13 +12,13 @@ The strip is the rectangular induced lattice domain with sites equivalent to
 `Fin L × Fin w`. Interactions are the distinct admissible supports of
 `TNLean.Lattice.LocalHamiltonian`; columns are never blocked into larger physical sites.
 
-This is geometric input for the extension proposed in issue #9552 of the
-one-dimensional note, not a theorem stated in that note. Its counting argument is the
+This is geometric input for a strip extension of the one-dimensional note,
+not a theorem stated in that note. Its counting argument is the
 strip counterpart of `part1_arealaw.tex`, lines 29–53, and its separated shells correspond
 to Lemma `lem:singlesplit`, lines 388–403.
 
-**Local fix (support size):** issue #9552 claims dimension at most `q^(R+1)` for a
-lattice support. A diameter-two cross already has five sites. The valid bound is
+**Local fix (support size):** the one-dimensional support dimension `q^(R+1)` does not
+extend to lattice supports. A diameter-two cross has five sites. The valid bound is
 `q^(1+2R(R+1))`, independent of strip width; at most `2^(2R(R+1))` distinct supports
 contain a specified site. These bounds are supplied by the existing lattice counting
 results. They change the constants depending on `q,R`, without changing width scaling.

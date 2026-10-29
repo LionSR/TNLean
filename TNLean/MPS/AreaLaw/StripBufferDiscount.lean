@@ -8,7 +8,7 @@ import TNLean.MPS.AreaLaw.StripGeometry
 /-!
 # Buffered discount and entropy bound for a strip
 
-This is the strip extension proposed in issue #9552. The proof applies the arbitrary-site
+This is a strip extension of the one-dimensional note. The proof applies the arbitrary-site
 logarithmic buffered discount to the actual lattice Hamiltonian, with uniform weights
 `2/m`, and derives the energy bound `Δ/2` from its cut budget. The Araki–Lieb closure uses
 at most `2mRw` physical sites in the buffer. The constants are fixed before either side

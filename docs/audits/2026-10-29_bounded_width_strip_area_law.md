@@ -130,3 +130,10 @@ add a role failure. These unrelated failures were left unchanged.
 Not run locally: the full TNLean library build, whole-root `lake exe checkdecls`,
 or Blueprint web/PDF rendering. Hosted CI remains a separate validation gate.
 There is no remaining mathematical blocker for the scoped strip result.
+
+## Reader-facing source citations
+
+The finishing preflight found five reader-facing prose diagnostics for issue
+numbers in Lean comments. The comments now cite the one-dimensional note and
+retain the explicit strip-extension caveat and corrected lattice-support size.
+The mathematical declarations and proof bodies are unchanged.

@@ -14,8 +14,8 @@ The ordering lists columns consecutively and reverses the row order in every sec
 column. The number of physical sites remains `L*w`, each of local dimension `q`.
 The entropy and marginal-tail inputs below concern the actual lattice ground vector.
 
-This develops the strip extension proposed in issue #9552, using the one-dimensional
-note's marginal tail bound and sequential truncation argument. It does not treat the
+This develops a strip extension of the one-dimensional note, using its marginal
+tail bound and sequential truncation argument. It does not treat the
 strip as a chain of `q^w`-dimensional sites.
 -/
 
@@ -479,7 +479,7 @@ theorem exists_stripMPS_norm_sub_le {L w q R : ℕ} {J Δ : ℝ}
   · exact (Nat.floor_le (Real.exp_pos _).le).trans (strip_bond_bound hL hw hJ hΔ)
 
 /-- The constants in the complete strip MPS theorem precede both dimensions and all
-Hamiltonian data. This is the MPS approximation extension requested by issue #9552. -/
+Hamiltonian data. This extends the one-dimensional note's MPS approximation to strips. -/
 theorem stripMPSApproximation (q R : ℕ) :
     ∃ C c : ℝ, 0 ≤ C ∧ 0 ≤ c ∧ ∀ L w : ℕ, 1 ≤ L → 1 ≤ w → 1 ≤ q →
       ∀ J Δ : ℝ, 0 ≤ J → 0 < Δ →
