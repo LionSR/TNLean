@@ -22,10 +22,10 @@ Source: arXiv:1010.3732, Sections II.C.1–2 and II.F.2, and Appendix C.
 
 **Scope restriction (one-site injective endpoints with exact covariance):**
 The concluding phase theorem uses the same endpoint domain as the existing
-forward construction. The several-block and original scalar-character
-extensions are recorded in
-`docs/paper-gaps/spc11_uniform_gap_injective_scope.tex` and
-`docs/paper-gaps/rmp_spt_fixed_point_trivial_character.tex`.
+forward construction. The restriction to one-site injective original endpoints
+with exact covariance, and the remaining source-classification comparison, are
+recorded in `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`, in the
+section on the source-written physical converse and endpoint domain.
 -/
 
 open scoped Matrix BigOperators TNLean.Algebra.ScalarCohomology

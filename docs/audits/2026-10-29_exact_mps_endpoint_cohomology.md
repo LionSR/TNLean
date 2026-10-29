@@ -31,8 +31,10 @@ prescribed exact virtual covariance, the domain of the existing forward
 construction. It does not assert the unrestricted several-block
 classification or the forward construction for arbitrary original scalar
 symmetry characters. Those scopes remain recorded in
-`docs/paper-gaps/spc11_uniform_gap_injective_scope.tex` and
-`docs/paper-gaps/rmp_spt_fixed_point_trivial_character.tex`.
+the endpoint-domain section of
+`docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`. The older compact-gap
+and fixed-point-character notes record resolved restrictions of those separate
+results and are not evidence that this endpoint domain has been enlarged.
 
 Validation is source-only: declaration and dependency inspection, proof-integrity
 scan, generated import check, tactic-pattern scan, prose checks, whitespace and
