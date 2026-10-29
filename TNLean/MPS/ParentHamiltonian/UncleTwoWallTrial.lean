@@ -150,7 +150,7 @@ theorem uncleConfigSegment_eq_drop_take {T : ℕ} (σ : Cfg d T)
   · simp only [uncleConfigSegment, List.length_ofFn, List.length_take, List.length_drop]
     omega
   · intro j hj hk
-    simp [uncleConfigSegment, Nat.add_comm]
+    simp [uncleConfigSegment]
 
 /-- Every coefficient of the general trial uses its five exact numbered
 physical segments. The last segment reaches the end of the chain. -/
@@ -268,11 +268,13 @@ private theorem uncleBoundaryBlockTrace_upper_word
     (P : Matrix (Fin a) (Fin a) ℂ) (Q : Matrix (Fin b) (Fin a) ℂ) (w : List (Fin d)) :
     uncleBoundaryBlockTrace Sum.inl Sum.inr P Q (uncleBoundaryWord A B R L w) =
       Matrix.trace (P * uncleDomainWallWord A B R w * Q) := by
+  let e : Matrix (Fin a ⊕ Fin b) (Fin a ⊕ Fin b) ℂ ≃ₐ[ℂ]
+      Matrix (Fin (a + b)) (Fin (a + b)) ℂ :=
+    Matrix.reindexAlgEquiv ℂ ℂ finSumFinEquiv
   rw [uncleBoundaryWord_block]
   change Matrix.trace (P *
-    ((Matrix.reindexAlgEquiv ℂ ℂ finSumFinEquiv).symm
-      ((Matrix.reindexAlgEquiv ℂ ℂ finSumFinEquiv)
-        (Matrix.fromBlocks _ _ _ _))).toBlocks₁₂ * Q) = _
+    (e.symm (e (Matrix.fromBlocks (Kraus.evalWord A w) (uncleDomainWallWord A B R w)
+      (uncleDomainWallWord B A L w) (Kraus.evalWord B w)))).toBlocks₁₂ * Q) = _
   rw [AlgEquiv.symm_apply_apply]
   rfl
 
@@ -283,11 +285,13 @@ private theorem uncleBoundaryBlockTrace_lower_word
     (P : Matrix (Fin b) (Fin b) ℂ) (Q : Matrix (Fin a) (Fin b) ℂ) (w : List (Fin d)) :
     uncleBoundaryBlockTrace Sum.inr Sum.inl P Q (uncleBoundaryWord A B R L w) =
       Matrix.trace (P * uncleDomainWallWord B A L w * Q) := by
+  let e : Matrix (Fin a ⊕ Fin b) (Fin a ⊕ Fin b) ℂ ≃ₐ[ℂ]
+      Matrix (Fin (a + b)) (Fin (a + b)) ℂ :=
+    Matrix.reindexAlgEquiv ℂ ℂ finSumFinEquiv
   rw [uncleBoundaryWord_block]
   change Matrix.trace (P *
-    ((Matrix.reindexAlgEquiv ℂ ℂ finSumFinEquiv).symm
-      ((Matrix.reindexAlgEquiv ℂ ℂ finSumFinEquiv)
-        (Matrix.fromBlocks _ _ _ _))).toBlocks₂₁ * Q) = _
+    (e.symm (e (Matrix.fromBlocks (Kraus.evalWord A w) (uncleDomainWallWord A B R w)
+      (uncleDomainWallWord B A L w) (Kraus.evalWord B w)))).toBlocks₂₁ * Q) = _
   rw [AlgEquiv.symm_apply_apply]
   rfl
 
