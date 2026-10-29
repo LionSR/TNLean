@@ -62,7 +62,7 @@ theorem finiteChainConjugation_symm_mem_range_of_twoSiteStandardForm_buffers
     intro hd
     have hpos := S.phys_pos
     simp [MPSTensor.blockPhysDim_eq_pow, hd, hk.ne'] at hpos
-  letI : NeZero d := ⟨hd⟩
+  let : NeZero d := ⟨hd⟩
   apply inverse_mem_range_localInclusion_of_forward_support hJ hK
     (finiteChainConjugation hU hN a) B
   intro x hx C
@@ -93,7 +93,7 @@ theorem finiteChainConjugation_symm_mem_range_of_twoSiteStandardForm_buffers
     simpa only [hb, hlen, finiteChainLocalObservable_localInclusion] using
       hA p s (show 1 < p + (3 * (2 * k) + s) by omega)
   refine ⟨Δ, hΔ, hdisjoint, A, ?_⟩
-  apply (localObservable d (finiteChainRegion a N)).injective
+  apply localObservable_injective d (finiteChainRegion a N)
   rw [localObservable_localInclusion]
   exact hActual.symm
 
