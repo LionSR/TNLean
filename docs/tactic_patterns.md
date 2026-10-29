@@ -9680,3 +9680,15 @@ there is no need for a new tactic.
 - **Abstraction:** the helper already removes the repeated common-buffer and
   completion proof. No tactic is needed; a public generalization should wait for
   an independent caller.
+
+### Complete finite windows by prefixing an existing tail equivalence — candidate (2026-10-29)
+
+- **Seen:** `MPS/MPU/TwoSiteSuppliedWindow.lean`.
+- **Pattern:** Combine the existing complete three-cell-plus-tail coordinate
+  equivalence with a prefix using `Equiv.prodAssoc` and `Fin.appendEquiv`.
+- **Reuse:** No input/output head-coordinate proof is copied. The existing
+  arbitrary buffered word intertwiner is evaluated in these complete
+  coordinates, and actual unitary-between data gives conjugation.
+- **Notes:** Returning to the original coordinates reuses
+  `Matrix.reindexLinearEquiv_mul` with all three equivalences explicit,
+  together with `Matrix.conjTranspose_reindex`; no new reindex algebra is built.
