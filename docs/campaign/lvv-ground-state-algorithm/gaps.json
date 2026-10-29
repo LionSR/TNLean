@@ -1,5 +1,5 @@
 {
- "reviewedAt": "2026-10-28T17:39:00Z",
+ "reviewedAt": "2026-10-29T00:00:00Z",
  "checked": [
   {
    "result": "Lemmas claim:energy-overlap and claim:overlap",
@@ -210,6 +210,27 @@
    "found": "A double sum with independent indices factors as (∑ <i>E<sub>j</sub></i>) ⊗ (∑ <i>F<sub>k</sub></i>), a single product, which a general two-site operator is not: the positive contraction |00⟩⟨00| + |11⟩⟨11| needs two products, and it occurs in a gapped chain with positive terms. Writing the operator through its blocks <i>E<sub>ab</sub></i> ⊗ <i>B<sub>ab</sub></i>, with both factors indexed by the same pair (<i>a</i>, <i>b</i>), gives <i>d</i><sup>2</sup> terms, and the bound <i>d</i><sup>2<i>k</i></sup> for a word follows.",
    "impact": "None; the count used by the algorithm is the corrected one.",
    "plan": "Nothing further; the bound on the operator Schmidt rank of an ordered word is proved for any finite set of sites."
+  },
+  {
+   "id": "docs/paper-gaps/lvv13_power_expansion_padding.tex",
+   "kind": "local-correction",
+   "status": "resolved",
+   "paper": "lvv",
+   "result": "Equation eq:a-exp, the expansion of the power projector",
+   "issue": 9821,
+   "stage": "alg:4",
+   "prs": {
+    "TNLean": [
+     10268
+    ]
+   },
+   "title": "The n-th letter of the power expansion is the identity",
+   "summary": "The expansion of the power projector into words sums over <i>n</i> letters although the Hamiltonian has <i>n</i> − 1 terms; reading the extra letter as the identity makes the identity exact, and the formal statement uses that reading.",
+   "context": "The operator <i>A</i> = <i>C</i><sup><i>m</i></sup>(1 − <i>H</i>/<i>n</i>)<sup><i>m</i></sup>, with <i>C</i> = (1 − ε<sub>0</sub>/<i>n</i>)<sup>−1</sup>, is expanded as an average over words in the factors <i>P<sub>i</sub></i> = 1 − <i>H<sub>i</sub></i>, so that it can later be sampled word by word.",
+   "claims": "<i>A</i> = <i>C</i><sup><i>m</i></sup> <i>n</i><sup>−<i>m</i></sup> Σ<sub><i>I</i> ∈ {1,…,<i>n</i>}<sup><i>m</i></sup></sub> <i>P<sub>I</sub></i>, with <i>P<sub>I</sub></i> the ordered product of the letters of <i>I</i> (lines 606–609).",
+   "found": "<i>H</i> has only the terms <i>H</i><sub>1</sub>, …, <i>H</i><sub><i>n</i>−1</sub>, so <i>P<sub>n</sub></i> is undefined. With <i>H<sub>n</sub></i> = 0, that is <i>P<sub>n</sub></i> = 1, the letters sum to <i>n</i> − <i>H</i> and the identity holds exactly. The extra letter acts on no site, so it never crosses a cut and leaves the rank estimate unchanged.",
+   "impact": "None; the expansion, the spectral bounds and the rank estimate hold as stated with this reading.",
+   "plan": "Nothing further; the reading is part of the formal definition of the letters."
   },
   {
    "id": "docs/paper-gaps/lvv13_leading_net_point.tex",
