@@ -73,8 +73,8 @@ This does not supply global boundary-space membership from local constraints.
 whenever the shared middle has at least eight sites, by full actual word
 span, the existing trace-pairing reconstruction, and the actual inverse
 fourth power of the first letter. The two exceptional overlap steps
-producing eight and nine sites remain to be proved before iteration
-from seven-site constraints is justified.
+producing eight and nine sites are derived in `ShortIntersections.lean`.
+Together these now justify iteration from seven-site constraints.
 
 ## Proposed fixed-interaction construction: obligations still open
 
@@ -85,28 +85,33 @@ The local interaction would be the orthogonal-complement projector of
 the direct sum of these two spaces, embedded in disjoint physical
 alphabets. This gives one fixed positive local term once constructed.
 
+The actual main-sector kernel classification is now source-written in
+`PeriodicKernel.lean`. The eight- and nine-site overlaps use actual endpoint
+charge functions and finite charge bridges. All later overlaps use the actual
+full middle word span. Existing contiguous-window induction therefore derives
+global boundary membership from seven-site local constraints. Cyclic closure
+identifies the actual periodic parent-Hamiltonian kernel with the trace-MPS line
+at every length at least eight, and that actual vector is nonzero. At length
+seven the actual main-sector kernel is zero.
+
+This route does not require a separate completeness theorem for a presented
+homogeneous word algebra. Neither an open-chain reconstruction identity nor a
+periodic-kernel classification is supplied as a hypothesis.
+
 The following are still required before any full counterexample claim:
 
-1. Prove that the actual seven-site main relations imply adjacent cyclic
-   q-commutation and transfer of five equal letters, in every surrounding
-   physical configuration.
-2. Prove completeness of the homogeneous relations and classify their
-   **periodic** solutions at all lengths at least eight: the main sector
-   should have exactly the actual nonzero trace-MPS line. The exceptional
-   length-seven zero space is now derived separately. Reachable charges
-   or a normality witness alone do not prove long-volume uniqueness.
-3. Prove that the disjoint-alphabet local direct sum forces every global
-   solution into the direct sum of the two uniform global sectors.
-4. Supply the actual weighted one-particle overlap obstruction and its
-   nontrivial cyclic phase, then assemble the fixed-projector kernel
-   calculation at **all** permitted positive lengths.
-5. Check the source's entire hypothesis set and the intended meaning of
-   its all-volume conclusion. In particular, the already proved eventual
-   fixed-tensor branch is not contradicted by an exceptional short length.
+1. Assemble the disjoint-alphabet fixed local direct-sum interaction and show
+   that every global solution decomposes into the two uniform physical sectors.
+2. Combine the main-sector kernel theorem with the actual weighted one-particle
+   sector at the matching length and its zero kernel at all longer lengths.
+3. Check the source's entire hypothesis set and the intended meaning of its
+   all-volume conclusion. In particular, the already proved eventual fixed-tensor
+   branch is not contradicted by an exceptional short length.
 
-The separate one-particle overlap development addresses item 4. No
-supplied local-kernel classification, finite-volume representation, or
-norm-growth premise is being substituted for the remaining proof.
+The independent physical-sector and one-particle developments address the first
+two items. This branch does not yet assert their full combined fixed-interaction
+classification. No finite-volume representation or zero-momentum premise is
+being substituted for the remaining proof.
 
 ## Verification boundary
 

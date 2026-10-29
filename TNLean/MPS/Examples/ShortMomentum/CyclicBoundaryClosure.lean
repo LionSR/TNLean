@@ -13,9 +13,10 @@ agreeing across the cyclic cut must be scalar multiples of the periodic
 trace vector. The coefficient is derived by eliminating every noncentral
 charge with two actual phase-detecting words.
 
-This does not assume or prove that overlapping seven-site constraints
-already yield the global boundary space; that remains the outstanding
-open-chain reconstruction step in the proposed fixed interaction.
+This module does not assume or prove that overlapping seven-site constraints
+already yield the global boundary space. The separate open-chain reconstruction
+and its actual periodic-kernel application are assembled in
+`PeriodicKernel.lean`.
 Source context: SPWC10, arXiv:0909.5347, Theorem 5, main.tex lines 850--880;
 see `docs/audits/2026-10-29_weyl_short_volume_candidate.md`.
 -/
