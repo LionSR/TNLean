@@ -175,3 +175,17 @@ its square cancels in the two-letter source gate. Another gate-level block
 would change the required four-spin equation and does not resolve this step.
 The stack also incorporates #10303's explicit inverse-reindex cancellation
 repair from `0d5a17aee`; exact-head hosted verification is still pending.
+
+## Written even-family virtual descent
+
+`EvenFamilyVirtualGauge.lean` now proves an actual unblocked virtual gauge
+with sign from equality of the even periodic families. No new family/gauge
+existence premise is introduced and no additional physical blocking occurs.
+The existing normal overlap dichotomy rules out vanishing cross-overlap
+because along `2*n` the cross-overlap is the self-overlap and tends to one.
+Its other branch supplies an invertible gauge and unit phase. A nonzero
+length-two periodic vector forces the phase square to one. Existing
+canonical irreducible normalization then makes the virtual gauge unitary
+while retaining the sign. The scalar must still be threaded through the
+source-factor comparison before this removes the local criterion's length
+restriction. The new theorem is source-written and uncompiled.

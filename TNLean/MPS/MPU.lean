@@ -54,6 +54,7 @@ import TNLean.MPS.MPU.EncodedUniformMergingCircuit
 import TNLean.MPS.MPU.EndpointBondEncoding
 import TNLean.MPS.MPU.EndpointGramNormalization
 import TNLean.MPS.MPU.Equivalence
+import TNLean.MPS.MPU.EvenFamilyVirtualGauge
 import TNLean.MPS.MPU.ExactBoundedCutRankCircuit
 import TNLean.MPS.MPU.ExactCleanAmplificationCircuit
 import TNLean.MPS.MPU.ExactUniformMerging

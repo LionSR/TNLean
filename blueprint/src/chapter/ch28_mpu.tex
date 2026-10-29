@@ -9822,6 +9822,32 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     left-factor normalizations. Direct contraction gives the two adjoint gates.
 \end{proof}
 
+\begin{lemma}[Even-family virtual rigidity up to a sign]
+    \label{lem:mpu_even_family_virtual_sign_gauge}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_unitary_virtual_sign_gauge_of_mpo_eq_even}
+    \notready
+    Let $U,V$ be reduced canonical-form-II MPU tensors with equal periodic
+    operators at every even length greater than one. Their bond dimensions
+    agree, and there are a virtual unitary $z$ and a sign $\eta\in\{1,-1\}$
+    such that $V^{ij}=\eta zU^{ij}z^\dagger$ for every physical pair $i,j$.
+    No equality at odd lengths is inferred. This is the virtual comparison
+    needed in the even-length setting of
+    \cite[lines~1209--1252]{Cirac2017MPU}; reconstructing the four-spin
+    gates remains a separate step. The presentation restriction is recorded
+    in \cite{gap:mpu_canonical_form_full_support}.
+\end{lemma}
+
+\begin{proof}
+    \uses{thm:cpsv_normal_overlap_dichotomy}
+    Equality along the even subsequence makes the cross-overlap equal the
+    self-overlap there, whose limit is one. The normal-tensor overlap
+    dichotomy therefore rules out vanishing cross-overlap and gives an
+    unblocked invertible gauge with a unit phase $\eta$. The nonzero periodic
+    vector at length two forces $\eta^2=1$. Left canonical normalization and
+    irreducibility replace the invertible gauge by a unitary without changing
+    the phase.
+\end{proof}
+
 \begin{lemma}[Forward local time reversal for the constructed canonical standard form]
     \label{lem:mpu_canonical_forward_local_time_reversal}
     \lean{MPOTensor.IsMPUCanonicalFormII.exists_coarse_timeReversal_certificate, MPOTensor.IsMPUCanonicalFormII.exists_local_timeReversal_certificate, MPOTensor.IsMPUCanonicalFormII.exists_twoSiteStandardFormData_timeReversal_certificate}

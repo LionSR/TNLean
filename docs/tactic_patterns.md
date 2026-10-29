@@ -9652,3 +9652,11 @@ there is no need for a new tactic.
   add unrelated dependencies. If a shared one-step statement is needed, move that existing
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
+
+### Unbounded-subsequence exclusion in overlap rigidity — candidate (2026-10-29)
+
+- **Pattern:** Compose the overlap limit with an unbounded subsequence;
+  equality on that subsequence identifies the cross-overlap with a self-overlap.
+- **Seen:** `MPS/MPU/EvenFamilyVirtualGauge.lean` (even-family virtual descent).
+- **Abstraction:** Reuse the existing normal overlap dichotomy and
+  `Filter.tendsto_atTop_mono`; no separate blocked-family predicate is needed.
