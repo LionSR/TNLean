@@ -23,11 +23,18 @@ does not refute general site-dependent MPS or an unspecified interaction
 convention below seven sites. The exact source comparison is in
 `docs/audits/2026-10-29_short_volume_sector_model.md` in #10420.
 
-Theorem 11 in #7684 is a separate remaining boundary: [#10361](https://github.com/LionSR/TNLean/pull/10361)
-proves the arbitrary positive-interaction block argument under explicit
-gauge-phase separation. That condition still needs reconciliation with the
-source's literal finite-ring-vector inequality. Theorem 9's completed
-heterogeneous construction does not discharge it.
+Theorem 11 in #7684 has a separate source-formulation boundary:
+[#10361](https://github.com/LionSR/TNLean/pull/10361) proves the arbitrary
+positive-interaction block argument under explicit gauge-phase separation.
+[#10426](https://github.com/LionSR/TNLean/pull/10426), head `3b61b971e`, writes
+an actual normalized 13-site counterexample to the literal weighted-vector
+alternative: three nonzero canonical bond-one blocks satisfy C1 and pairwise
+vector inequality, but two cancel and an actual positive interaction kills
+the sum without killing the first block. Interpreting different states
+projectively excludes the example. Its source/API review and native checks
+pass; hosted acceptance and an explicit source-interpretation disposition
+remain. This does not claim an unqualified refutation of the physical
+statement or close #7684.
 
 ## Prepared implementation and integration queue
 
@@ -64,6 +71,13 @@ domain against the correct note. Current-head hosted acceptance is pending,
 and [#2147](https://github.com/LionSR/TNLean/issues/2147) records that precise
 classification boundary rather than claiming realizability is absent.
 
+The trace-form migration [#10292](https://github.com/LionSR/TNLean/pull/10292)
+keeps its verified head `73c47deec`: every applicable check, including web/PDF,
+now passes. Read-only merge-tree against the snapshot main is clean, and main
+has no edits to its seven owned Lean paths. No new source repair is warranted;
+[#7850](https://github.com/LionSR/TNLean/issues/7850) stays open for final
+combined-head acceptance, review and integration.
+
 The nonabelian local physical renormalization PR
 [#10364](https://github.com/LionSR/TNLean/pull/10364) is reconciled at
 `0b9f106a0`, with its two verified Lean files unchanged. Its exact hosted
@@ -72,6 +86,10 @@ fragment. Two XeLaTeX passes give all 11 expected boundary signatures with no
 unresolved reference, overflow or audit finding. The new local block proof
 addresses [#8947](https://github.com/LionSR/TNLean/issues/8947) at that explicit
 scope; full-lattice commutation, topology and parent transport remain open.
+[#10425](https://github.com/LionSR/TNLean/pull/10425), head `ee4ad0b28`, audits
+the claimed older completion packets: the located restoration is incomplete,
+contains reconstructed rather than original files and lacks the source-parent
+proof dependency. Historical review prose is not delivered proof evidence.
 
 New source in these chains remains `notready` until its appropriate proof
 acceptance. Native checks do not substitute for Lean. The current user
@@ -101,6 +119,7 @@ The live open-PR inventory already contains the following work. These are
 ownership and delivery pointers, not a second implementation assignment or a
 claim of current-head kernel acceptance:
 
+- [#10402](https://github.com/LionSR/TNLean/pull/10402): bounded-width strips, with the actual snake geometry, original-space entropy and MPS approximation. An independent source audit confirms the construction and exact-head three-module hosted strict success at `9733d9f44`; full acceptance/integration remain.
 - [#10404](https://github.com/LionSR/TNLean/pull/10404): AKLV entropy and sharp MPS approximation.
 - [#10390](https://github.com/LionSR/TNLean/pull/10390): AKLV polynomial rank estimate.
 - [#10331](https://github.com/LionSR/TNLean/pull/10331): inverse-gap robustness cutoff.
