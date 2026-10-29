@@ -294,4 +294,113 @@ theorem uncleInteractionES_trial_pin_second_endpoint
         Kraus.evalWord A (uncleConfigSegment τ (5 * N + 1) N (by omega)))
       (uncleConfigSegment τ N N (by omega))
 
+/-- The actual third endpoint residual pins the L wall at site 4N and
+retains precisely the source R-wall sum, after the rectangular trace rotation.
+Source: arXiv:1210.6613, proof of Lemma lowenergystates, lines 1289–1296. -/
+theorem uncleInteractionES_trial_pin_third_endpoint
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (N : ℕ) (hN : 0 < N) (τ : Cfg d (6 * N + 1)) :
+    let p := uncleConfigSegment τ 0 N (by omega)
+    let r := uncleConfigSegment τ N (N + 1) (by omega)
+    let w := uncleConfigSegment τ (2 * N + 1) (2 * N - 2) (by omega)
+    let x := uncleConfigSegment τ (4 * N + 1) N (by omega)
+    let y := uncleConfigSegment τ (5 * N + 1) N (by omega)
+    let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+      (uncleTwoWallTrialSource A B R L N)
+    uncleInteractionES A B R L
+        (cyclicRestrictES (by omega) 2 (⟨4 * N - 1, by omega⟩ : Fin (6 * N + 1)) τ φ) =
+      uncleInteractionES A B R L ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
+        (fun σ ↦ Matrix.trace (Kraus.evalWord B w * B (σ 0) * L (σ 1) *
+          Kraus.evalWord A x * Kraus.evalWord A y * Kraus.evalWord A p *
+          uncleDomainWallWord A B R r))) := by
+  dsimp only
+  change uncleInteractionES A B R L
+    ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
+      (cyclicRestrictₗ (by omega) 2 (⟨4 * N - 1, by omega⟩ : Fin (6 * N + 1)) τ
+        (uncleTwoWallTrialSource A B R L N))) = _
+  rw [cyclicRestrictₗ_eq_contiguousRestrictₗ (by omega) (by omega) (by omega)]
+  have hfun : contiguousRestrictₗ (4 * N - 1) 2 (by omega) τ
+      (uncleTwoWallTrialSource A B R L N) =
+      fun σ ↦ uncleTwoWallCoefficient A B R L
+        (uncleConfigSegment τ 0 N (by omega))
+        (uncleConfigSegment τ N (N + 1) (by omega))
+        (uncleConfigSegment τ (2 * N + 1) (2 * N - 2) (by omega) ++ [σ 0])
+        (σ 1 :: uncleConfigSegment τ (4 * N + 1) N (by omega))
+        (uncleConfigSegment τ (5 * N + 1) N (by omega)) := by
+    funext σ
+    simp only [contiguousRestrictₗ_apply, uncleTwoWallTrialSource]
+    rw [uncleConfigSegment_contiguous_end τ (2 * N + 1) (2 * N - 1) (4 * N - 1) _
+        (by omega) (by omega) σ,
+      uncleConfigSegment_contiguous_start τ (4 * N) (N + 1) (4 * N - 1) _
+        (by omega) (by omega) σ,
+      uncleConfigSegment_contiguous_outside τ 0 N (4 * N - 1) _ σ (by omega),
+      uncleConfigSegment_contiguous_outside τ N (N + 1) (4 * N - 1) _ σ (by omega),
+      uncleConfigSegment_contiguous_outside τ (5 * N + 1) N (4 * N - 1) _ σ (by omega)]
+    simp only [show (2 * N - 1) - 1 = 2 * N - 2 by omega,
+      show 4 * N - 1 + 2 = 4 * N + 1 by omega, Nat.add_sub_cancel_right]
+  rw [hfun]
+  simpa only [uncleTwoWallCoefficient_rotate, Kraus.evalWord_append, Kraus.evalWord_cons,
+    Kraus.evalWord_nil, Matrix.mul_one, Matrix.mul_assoc] using
+      uncleInteractionES_pin_lower_left A B R L
+        (Kraus.evalWord B (uncleConfigSegment τ (2 * N + 1) (2 * N - 2) (by omega)))
+        (Kraus.evalWord A (uncleConfigSegment τ (5 * N + 1) N (by omega)) *
+          Kraus.evalWord A (uncleConfigSegment τ 0 N (by omega)) *
+          uncleDomainWallWord A B R (uncleConfigSegment τ N (N + 1) (by omega)))
+        (uncleConfigSegment τ (4 * N + 1) N (by omega))
+
+/-- The actual fourth endpoint residual pins the L wall at site 5N and
+retains precisely the source R-wall sum, after the rectangular trace rotation.
+Source: arXiv:1210.6613, proof of Lemma lowenergystates, lines 1289–1296. -/
+theorem uncleInteractionES_trial_pin_fourth_endpoint
+    (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
+    (N : ℕ) (hN : 0 < N) (τ : Cfg d (6 * N + 1)) :
+    let p := uncleConfigSegment τ 0 N (by omega)
+    let r := uncleConfigSegment τ N (N + 1) (by omega)
+    let w := uncleConfigSegment τ (2 * N + 1) (2 * N - 1) (by omega)
+    let x := uncleConfigSegment τ (4 * N) N (by omega)
+    let y := uncleConfigSegment τ (5 * N + 2) (N - 1) (by omega)
+    let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
+      (uncleTwoWallTrialSource A B R L N)
+    uncleInteractionES A B R L
+        (cyclicRestrictES (by omega) 2 (⟨5 * N, by omega⟩ : Fin (6 * N + 1)) τ φ) =
+      uncleInteractionES A B R L ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
+        (fun σ ↦ Matrix.trace (Kraus.evalWord B w * Kraus.evalWord B x * L (σ 0) *
+          A (σ 1) * Kraus.evalWord A y * Kraus.evalWord A p *
+          uncleDomainWallWord A B R r))) := by
+  dsimp only
+  change uncleInteractionES A B R L
+    ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
+      (cyclicRestrictₗ (by omega) 2 (⟨5 * N, by omega⟩ : Fin (6 * N + 1)) τ
+        (uncleTwoWallTrialSource A B R L N))) = _
+  rw [cyclicRestrictₗ_eq_contiguousRestrictₗ (by omega) (by omega) (by omega)]
+  have hfun : contiguousRestrictₗ (5 * N) 2 (by omega) τ
+      (uncleTwoWallTrialSource A B R L N) =
+      fun σ ↦ uncleTwoWallCoefficient A B R L
+        (uncleConfigSegment τ 0 N (by omega))
+        (uncleConfigSegment τ N (N + 1) (by omega))
+        (uncleConfigSegment τ (2 * N + 1) (2 * N - 1) (by omega))
+        (uncleConfigSegment τ (4 * N) N (by omega) ++ [σ 0])
+        (σ 1 :: uncleConfigSegment τ (5 * N + 2) (N - 1) (by omega)) := by
+    funext σ
+    simp only [contiguousRestrictₗ_apply, uncleTwoWallTrialSource]
+    rw [uncleConfigSegment_contiguous_end τ (4 * N) (N + 1) (5 * N) _
+        (by omega) (by omega) σ,
+      uncleConfigSegment_contiguous_start τ (5 * N + 1) N (5 * N) _ hN (by omega) σ,
+      uncleConfigSegment_contiguous_outside τ 0 N (5 * N) _ σ (by omega),
+      uncleConfigSegment_contiguous_outside τ N (N + 1) (5 * N) _ σ (by omega),
+      uncleConfigSegment_contiguous_outside τ (2 * N + 1) (2 * N - 1) (5 * N) _ σ (by omega)]
+    simp only [Nat.add_sub_cancel_right]
+  rw [hfun]
+  simpa only [uncleTwoWallCoefficient_rotate, Kraus.evalWord_cons, Matrix.mul_assoc] using
+    uncleInteractionES_pin_lower_right A B R L
+      (Kraus.evalWord B (uncleConfigSegment τ (2 * N + 1) (2 * N - 1) (by omega)))
+      (Kraus.evalWord A (uncleConfigSegment τ (5 * N + 2) (N - 1) (by omega)) *
+        Kraus.evalWord A (uncleConfigSegment τ 0 N (by omega)) *
+        uncleDomainWallWord A B R (uncleConfigSegment τ N (N + 1) (by omega)))
+      (uncleConfigSegment τ (4 * N) N (by omega))
+
 end MPSTensor

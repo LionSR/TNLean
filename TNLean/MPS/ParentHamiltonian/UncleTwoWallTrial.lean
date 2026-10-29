@@ -39,6 +39,18 @@ def uncleTwoWallCoefficient (A : MPSTensor d a) (B : MPSTensor d b)
   Matrix.trace (Kraus.evalWord A u * uncleDomainWallWord A B R v *
     Kraus.evalWord B w * uncleDomainWallWord B A L x * Kraus.evalWord A y)
 
+/-- Rotate the first rectangular wall around the actual two-wall trace.
+Source: arXiv:1210.6613, the two-wall coefficient in phiN-def. -/
+theorem uncleTwoWallCoefficient_rotate (A : MPSTensor d a) (B : MPSTensor d b)
+    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
+    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (p r w x y : List (Fin d)) :
+    uncleTwoWallCoefficient A B R L p r w x y =
+      Matrix.trace (Kraus.evalWord B w * uncleDomainWallWord B A L x *
+        (Kraus.evalWord A y * Kraus.evalWord A p * uncleDomainWallWord A B R r)) := by
+  simpa only [uncleTwoWallCoefficient, Matrix.mul_assoc] using
+    Matrix.trace_mul_comm (Kraus.evalWord A p * uncleDomainWallWord A B R r)
+      (Kraus.evalWord B w * uncleDomainWallWord B A L x * Kraus.evalWord A y)
+
 /-- Concatenating a one-wall word separates walls in its left and right
 pieces. Source: arXiv:1210.6613, the one-wall sums in phiN-def. -/
 theorem uncleDomainWallWord_append (A : MPSTensor d a) (B : MPSTensor d b)
@@ -119,7 +131,7 @@ theorem uncleBoundaryWord_slice_mem
   ext σ
   change Matrix.trace (uncleBoundaryWord A B R L (List.ofFn σ) * X) =
     f (uncleBoundaryWord A B R L (u ++ List.ofFn σ ++ v))
-  rw [uncleBoundaryWord_append, uncleBoundaryWord_append, uncleBoundaryMul_assoc]
+  simp only [uncleBoundaryWord_append, uncleBoundaryMul_assoc]
   exact (Matrix.trace_mul_comm _ _).trans (hX (uncleBoundaryWord A B R L (List.ofFn σ))).symm
 
 private def uncleBoundaryBlockTrace {p q : ℕ}
@@ -229,16 +241,7 @@ theorem uncleInteractionES_twoWall_slice_second_eq_zero
         uncleDomainWallWord B A L (u ++ List.ofFn σ ++ v) *
           (Kraus.evalWord A y * Kraus.evalWord A p * uncleDomainWallWord A B R r))) := by
     funext σ
-    unfold uncleTwoWallCoefficient
-    calc
-      _ = Matrix.trace ((Kraus.evalWord A p * uncleDomainWallWord A B R r) *
-          (Kraus.evalWord B w * uncleDomainWallWord B A L (u ++ List.ofFn σ ++ v) *
-            Kraus.evalWord A y)) := by simp only [Matrix.mul_assoc]
-      _ = Matrix.trace ((Kraus.evalWord B w *
-          uncleDomainWallWord B A L (u ++ List.ofFn σ ++ v) * Kraus.evalWord A y) *
-            (Kraus.evalWord A p * uncleDomainWallWord A B R r)) :=
-        Matrix.trace_mul_comm _ _
-      _ = _ := by simp only [Matrix.mul_assoc]
+    exact uncleTwoWallCoefficient_rotate A B R L p r w (u ++ List.ofFn σ ++ v) y
   rw [hslice]
   exact uncleInteractionES_lower_wall_slice_eq_zero A B R L (Kraus.evalWord B w)
     (Kraus.evalWord A y * Kraus.evalWord A p * uncleDomainWallWord A B R r) u v
