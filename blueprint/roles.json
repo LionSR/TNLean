@@ -497,8 +497,7 @@
       "corollaries": [],
       "notes": {
         "thm:factorial_commutator_conjugation": "Kept as converted by hand in #10267",
-        "thm:chain_local_imaginary_time": "Kept as converted by hand in #10267",
-        "thm:aklv_robustness": "Source Theorem 6.1: normalized ground-vector and spectral-gap robustness under two-sided energy truncation"
+        "thm:chain_local_imaginary_time": "Kept as converted by hand in #10267"
       }
     },
     "ch:one_dimensional_open_mps": {

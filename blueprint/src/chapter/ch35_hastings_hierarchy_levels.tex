@@ -190,36 +190,6 @@ supersites $k,k+1$~\cite[lines 609--628]{Hastings2006Solving}.
     Lemma~\ref{thm:hastings05_hierarchy_levels} applies.
 \end{proof}
 
-\begin{lemma}[The final states on supersites]
-    \label{thm:hastings05_supersite_final_states}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.isStarProjection_supersiteHierarchy,
-        TNLean.MPS.AreaLaw.LocalSolution.abs_re_inner_supersiteHierarchySum_sub_le,
-        TNLean.MPS.AreaLaw.LocalSolution.re_inner_supersiteHierarchySum_le_add,
-        TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_supersiteHierarchy,
-        TNLean.MPS.AreaLaw.LocalSolution.norm_sub_supersiteClosingLinkWindow_le,
-        TNLean.MPS.AreaLaw.LocalSolution.re_inner_supersiteHierarchySum_add_le_add,
-        TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_supersiteClosingLink}
-    \leanok
-    \uses{thm:hastings05_supersite_hierarchy,
-        thm:hastings05_hierarchy_sum_expectation, thm:hastings05_hchy_every_state,
-        thm:hastings05_final_state_count_hierarchy,
-        thm:hastings05_closing_link_window, thm:hastings05_hchy_periodic,
-        thm:hastings05_final_state_count_periodic}
-    If each $M_k^m=(M_k^m)^\dagger$ is supported on $B_k^{m+1}$, then every
-    $P_k^m$ is an orthogonal projection and
-    Lemmas~\ref{thm:hastings05_hierarchy_sum_expectation},
-    \ref{thm:hastings05_hchy_every_state},
-    \ref{thm:hastings05_final_state_count_hierarchy},
-    \ref{thm:hastings05_closing_link_window},
-    \ref{thm:hastings05_hchy_periodic},
-    and~\ref{thm:hastings05_final_state_count_periodic} hold without assuming
-    $[P_{2k}^m,P_{2k+1}^m]=0$.
-\end{lemma}
-\begin{proof}\leanok
-    Lemma~\ref{thm:hastings05_supersite_hierarchy} supplies
-    $[P_{2k}^m,P_{2k+1}^m]=0$.
-\end{proof}
-
 \begin{lemma}[The residual of a sum]
     \label{thm:hastings05_sum_residual}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_toEuclideanLin_sum_sub_le}

@@ -363,7 +363,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     $L,N,R\ge0$ and puts the ground energy in $[0,6]$.
 \end{definition}
 
-\begin{theorem}[Ground-vector and gap robustness under exterior truncation]
+\begin{lemma}[Ground-vector and gap robustness under exterior truncation]
     \label{thm:aklv_robustness}
     \lean{TNLean.MPS.AreaLaw.AKLV.exists_robust_ground_twoSidedEnergyTruncation,
         TNLean.MPS.AreaLaw.AKLV.normalized_chain_robustness}
@@ -385,7 +385,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     \end{align}
     for some real $\theta$. These are explicit universal constants in
     \cite[Theorem~6.1]{Arad2013AreaLaw}, in its normalized setting.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:aklv_clipped_gap,lem:aklv_projected_residual,lem:aklv_residual_phase}
     The original supports give the regional commutations and decomposition,
