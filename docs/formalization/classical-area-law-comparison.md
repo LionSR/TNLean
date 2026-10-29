@@ -13,7 +13,7 @@ has been formalized.
 
 | Source | How the spectral information is used | Principal conclusion or distinction |
 |---|---|---|
-| [Hastings, *Solving Gapped Hamiltonians Locally*](https://arxiv.org/abs/cond-mat/0508554) | Gaussian filtering and locality turn Hamiltonian terms into approximately local terms that almost preserve the ground state separately. | A local projective description and generalized MPS approximation; the setting is not confined to a chain. |
+| [Hastings, *Solving Gapped Hamiltonians Locally*](https://arxiv.org/abs/cond-mat/0508554) | Gaussian filtering and locality turn Hamiltonian terms into approximately local terms that almost preserve the ground state separately. | A local projective description and generalized MPS representation; no bound on intermediate dimensions is asserted, and the setting is not confined to a chain. |
 | [Hastings, *An Area Law for One Dimensional Quantum Systems*](https://arxiv.org/abs/0705.2024) | A local factorization of the ground projection feeds an entropy argument at doubling scales. | An area law and Schmidt-tail estimates, which yield a global MPS approximation. |
 | [Schuch–Wolf–Verstraete–Cirac](https://arxiv.org/abs/0705.0292) | Entropy conditions are compared directly with Schmidt tails, without deriving those conditions from a Hamiltonian gap. | A von Neumann area law alone does not ensure efficient MPS approximation; suitable Rényi control gives a stronger sufficient condition. |
 | [Arad–Kitaev–Landau–Vazirani](https://arxiv.org/abs/1301.1162) | Chebyshev polynomials suppress excited energies while a separate argument controls the resulting Schmidt ranks. | A sharper area law and subpolynomial bond dimension, with a subexponential approximation algorithm. |
@@ -40,19 +40,37 @@ qualifications are recorded in `docs/paper-gaps/hastings07_lemma1_decay_length.t
 `hastings07_relent_constants.tex` and `hastings07_doubling_constants.tex`.
 
 For Hastings' 2006 programme, the local truncated filters and thermal truncated
-exponentials are constructed from the interactions. A further construction now
-produces the neighbouring-pair family on a regularly blocked physical ring,
-from the original Hamiltonian and its unique gapped ground vector. Pair support,
-norms and residuals are derived, including the closing pair. The total error is
-at most $2N\ell\varepsilon_{\mathrm{loc}}$ on $2N\ell$ sites, with the
-actual omitted-shell count retained in $\varepsilon_{\mathrm{loc}}$. The
-lower operator bound uses the original ground projector. This first regular
-periodic construction does not supply the full hierarchy: the general recursion,
-existence of the degenerate-basis refinement, final tensor bond bounds, and thermal
-index bound in terms of a local radius remain to be proved. The conditional basis estimates apply to any dimension, but
-assume a chosen refinement separating every pair; scalar terminal classes and
-refinement existence require an additional argument. This qualification is
-recorded in `docs/paper-gaps/hastings05_two_dim_ground_basis.tex`.
+exponentials are constructed from the interactions. On a physical ring, an
+actual rounded grouping assigns the filtered terms to neighbouring pairs,
+including the closing pair. The spectral hierarchy is then constructed through
+all binary levels, with an additional window for the closing edge. Under the
+local residual estimate assumed at the beginning of the source's Section III,
+a nearby unit vector belongs to every retained descendant space. The original
+Hamiltonian gap bounds every orthonormal family in the final retained space
+by twice the rank of the original ground projection. In the unique-ground-state
+case, the local residual is derived directly from the original spectral gap;
+no pair family or residual estimate is supplied. The final retained dimension
+is at most two. The spectral-window centres depend on expectations in the
+specified ground vector. The corrected deficiency recurrence is retained.
+Membership in these spectral spaces does not itself give tensor coefficients
+or intermediate bond bounds.
+
+The ground-space basis argument now constructs the spectral refinements in
+arbitrary finite dimension. A non-scalar compression gives a proper spectral
+split; scalar terminal spaces need no further separation. Both cross terms
+are retained, giving decay rate $\gamma/2^n$ for ground-space dimension $n$.
+For the full-Hamiltonian filtered local terms, summation gives a bound independent
+of the number of sites when the ground-space dimension, local norm budget,
+gap and polynomial sphere-growth constants are fixed. The unrestricted metric
+claim is false on bounded-degree trees. The corresponding mathematical
+counterexample and the geometric qualification are recorded in
+`docs/paper-gaps/hastings05_tree_basis_counterexample.tex` and
+`hastings05_geometric_growth_scope.tex`. The locally truncated basis theorem, the assembly of actual retained-space
+coordinates into tensors, and the thermal index bound in terms of a local
+radius remain separate obligations. The source explicitly makes no claim
+of bounding the intermediate matrix-product dimensions (lines 104–109);
+its retained-basis expansion is in Section III, lines 630–685.
+An additional bound on those dimensions would be a further result.
 
 For the viable-set construction, the relevant quantifier order is different. The
 family at a cut is selected from the Hamiltonian and the preceding family before
@@ -154,7 +172,12 @@ $\epsilon$, with
 The universal constants precede the chain, gap and accuracy. The physical
 hypotheses derive $q\ge2$ and $g\le1$, independently of a fitting window.
 The actual first-excited-energy hypothesis remains explicit. No independent
-MPS-existence theorem is used. The sharper entropy summation remains open.
+MPS-existence theorem is used. The same actual filter sequence also gives
+finite dyadic tail bounds and the entropy estimate
+$S_k(\Omega)\le Cg^{-1}(1+\log q+\log(1/g))^3$ at every cut.
+Exact smaller-side dimension bounds cover endpoints and chains where the
+initial window does not fit. The constant precedes all physical data.
+The actual first-excited-energy qualification remains explicit here as well.
 
 For a unique ground vector on an open chain with $q\ge2$ and $0\le h_j\le I$,
 the gap is at most one. An endpoint unitary with zero expectation in that vector
@@ -190,8 +213,9 @@ has exactly the full original kernel, and its internal replacement has norm
 at most two. Its nonzero spectrum is now bounded below by
 $\gamma/[3(4+\gamma)]$, using the original physical detectability product
 on the common full-kernel complement. No uniqueness or upper-gap assumption
-is added. A formal proof of the corrected spatial rank bound remains open.
-The printed regional rank bound
+is added. The actual regional truncation now also has operator Schmidt rank
+at most $q^2+3$ at every cut, derived solely from the original nearest-neighbour
+supports. No decomposition or rank hypothesis is supplied. The printed regional rank bound
 $d^2+2$ also needs an additive correction: an eight-qubit example with unique
 ground and gap one has rank seven at the middle cut. The corrected general
 bound is $d^2+3$, documented in
@@ -211,8 +235,22 @@ $4\delta+6\varepsilon+4\xi\sqrt{(\ell-1)D_{\mathrm{ref}}^2}$.
 Adjacent child spaces merge in the actual coordinates of their union, with
 dimension at most the product of their dimensions and viability error
 at most the sum of their errors. The target remains the same possibly
-entangled full global ground space. These results supply individual
-operations needed by the sampled tree; the tree induction remains open.
+entangled full global ground space. A long-parent theorem now composes these operations with the literal Haar
+sample and actual powered operator family. Its measurable event is defined
+for fixed child spaces; every successful unitary gives the actual sampled
+word image and collective trim, of dimension at most $D^6s^3$ and viability
+error at most $3/200$ for the original full ground space. The target and
+improving family precede the child spaces and sample size. The corrected
+complex net exponent is $2r$, where $r$ is the ground-space dimension.
+
+The sample size can be chosen uniformly: for $D\ge2$, $r\ge1$ and
+$0<\beta\le1$, put
+$A=1+\log r+\log D+\log(1/\beta)$ and
+$s=\lceil4096rA\rceil\le4097rA$.
+For every merged dimension $Q\le D^{12}s^6$, the failure estimate is at most
+$e^{-s/64}\le\beta$; if $Q\le s$, the sample is the entire merged space
+and the failure is zero. The recursive tree and an adaptive joint probability
+law remain separate obligations.
 
 The power-filter application constructs one actual sample with both norm estimates,
 all letter-count bounds, and every spatial rank bound $\ell q^{2u}$.
@@ -264,8 +302,9 @@ $k=\lceil\log_{D_0}(D_0^2s)\rceil$ gives a polynomial output dimension
 $D_0^6s^3$. When $D_0^{12}\Delta_0\le b<1$, the sampling-scale estimate
 cancels the powers of $D_0$ and yields
 $\Delta_0^k/c^2\le(1024/9)b/s^2$.
-These are estimates for actual operator words. The sampled-node probability
-and the recursive tree construction remain open.
+These are estimates for actual operator words, used by the sampled-parent
+event above. The low-density induction between distinct nested targets is
+still separate from that fixed-ground-space construction.
 
 The scalar soft truncation is formalized with the corrected cap $t(1+\log m)$,
 its polynomial and geometric remainders, and an exponential-weight estimate.
@@ -334,11 +373,20 @@ The first printed uniform energy estimate for soft truncation has
 a separate three-qubit counterexample with fixed gap $1/2$, recorded in
 `docs/paper-gaps/alvv16_soft_truncation_energy_estimate.tex`. This is an exact
 mathematical calculation, not a Lean counterexample theorem; its conclusion is
-confined to that uniform energy estimate. The corrected equal-scale-and-order
-physical spectral comparisons are established as described above. Independent
-scale and order, the source gap prescription, and a soft-truncation MPO
-with the required polynomial parameter bounds remain separate obligations.
-The actual cluster MPO above supplies one ingredient for that final task.
+confined to that uniform energy estimate. Independent order and scale are now treated through the exact identity
+$h_{m,t}(x)=(t/m)h_{m,m}(mx/t)$. Choosing $t=3m$ preserves the physical
+exponential moment and makes every heat parameter at most $1/3$.
+The actual finite heat sum has coefficient budget at most $t2^{m+1}$;
+approximating its heat terms directly gives an actual interval MPO.
+For $\rho=\min(1,w/2,\delta w^2/[2(\eta+2)])$, the choice
+$m=\lceil12+2\eta/3+(16/3)\log(80/\rho)\rceil$ precedes all physical
+data and gives the same two directed window comparisons and
+$0\le E_0-E_s\le\rho$. For every requested MPO error $\xi>0$, an
+explicit logarithmic cutoff $\ell$ gives bond dimension
+$(1+Nq^2)+(m+1)\ell^2q^\ell$ for this same actual soft Hamiltonian.
+The norm error follows from the corrected cluster tail and the heat coefficient
+budget. This treats one interval; the full multi-region construction and a
+running-time theorem remain open.
 
 The exact formal statements, their source passages, and their verification evidence
 are recorded in the blueprint and the dated audit reports. A statement identified as a formalization of a source theorem must carry the
