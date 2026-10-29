@@ -26,7 +26,7 @@ Definition~\ref{def:peps_quantum_double_k_tensor}.
     $D(a,b)=(a,b^{-1}a)$, with inverse $D^{-1}(a,d)=(a,ad^{-1})$.
     The elementary block map has coefficients
     \begin{align}
-        B_\alpha(x)&=\sum_{p,q,r,s}
+        B_\alpha(x) & =\sum_{p,q,r,s}
         T(n_1,p;e_0,q;x_1)T(e_1,q;s_0,r;x_2)
         T(s_1,r;w_0,s;x_3)T(w_1,s;n_0,p;x_4).
         \label{eq:peps_qd_elementary_block}
@@ -63,10 +63,10 @@ Definition~\ref{def:peps_quantum_double_k_tensor}.
     Let $A(p,q,r,s)=(pq^{-1},qr^{-1},rs^{-1})$ and
     $R_c(z)=\delta_{z,A(c)}$. On the entire four-spin space set
     \begin{align}
-        P(x)&=(x_1^{-1},x_2^{-1},x_3^{-1},x_1^{-1}x_2^{-1}x_3^{-1}x_4^{-1}),\\
-        P^{-1}(a,b,c,h)&=(a^{-1},b^{-1},c^{-1},h^{-1}abc),\\
-        Q(a,b,c,h)&=(a,b,c,(abc)^{-1}h),\\
-        M_\alpha(a,b,c,h)&=\delta_{d(\alpha),1}\delta_{h,1}R_{c(\alpha)}(a,b,c).
+        P(x)              & =(x_1^{-1},x_2^{-1},x_3^{-1},x_1^{-1}x_2^{-1}x_3^{-1}x_4^{-1}), \\
+        P^{-1}(a,b,c,h)   & =(a^{-1},b^{-1},c^{-1},h^{-1}abc),                              \\
+        Q(a,b,c,h)        & =(a,b,c,(abc)^{-1}h),                                           \\
+        M_\alpha(a,b,c,h) & =\delta_{d(\alpha),1}\delta_{h,1}R_{c(\alpha)}(a,b,c).
         \label{eq:peps_qd_physical_renorm}
     \end{align}
     Thus $P$ inverts the original-arrow basis and extracts ordered holonomy.
@@ -74,7 +74,7 @@ Definition~\ref{def:peps_quantum_double_k_tensor}.
     all four surplus virtual factors remain, fixed by $\bra1$.
 \end{definition}
 
-\begin{theorem}[Local physical renormalization]
+\begin{lemma}[Local physical renormalization]
     \label{thm:peps_qd_physical_renorm}
     \lean{TNLean.PEPS.quantumDoubleElementaryBlock_physicalRG,
         TNLean.PEPS.quantumDoubleRenormReducedTensor_reconstruct,
@@ -85,7 +85,7 @@ Definition~\ref{def:peps_quantum_double_k_tensor}.
     \uses{def:peps_qd_physical_renorm,def:peps_quantum_double_k_tensor}
     For every finite group, without a commutativity assumption,
     \begin{align}
-        B_{D^{-1}\alpha}(P^{-1}y)&=M_\alpha(y)
+        B_{D^{-1}\alpha}(P^{-1}y) & =M_\alpha(y)
         =\delta_{d(\alpha),1}K_{c(\alpha)}(Qy).
         \label{eq:peps_qd_physical_rg}
     \end{align}
@@ -93,7 +93,7 @@ Definition~\ref{def:peps_quantum_double_k_tensor}.
     spaces. In ket notation their matrices satisfy
     $\widehat P B\widehat D^{-1}=M$.
     This assertion concerns one four-site block.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:peps_qd_elementary_block,def:peps_qd_physical_renorm}
     The equality $d(D^{-1}\alpha)=c(D^{-1}\alpha)$ is equivalent to
@@ -105,7 +105,7 @@ Definition~\ref{def:peps_quantum_double_k_tensor}.
     bijectivity, hence unitarity of the permutation matrices.
 \end{proof}
 
-\begin{theorem}[Exact normalization]
+\begin{lemma}[Exact normalization]
     \label{thm:peps_qd_physical_rg_normalization}
     \lean{TNLean.PEPS.quantumDoubleRenormColorEquiv,
         TNLean.PEPS.quantumDoubleRenormReducedTensor_mul_conjTranspose,
@@ -116,11 +116,13 @@ Definition~\ref{def:peps_quantum_double_k_tensor}.
     The retained map satisfies $RR^\dagger=|G|I$; consequently
     $N=|G|^{-1/2}R$ satisfies $NN^\dagger=I$.
     The elementary-block identity (\ref{eq:peps_qd_physical_rg}) has scalar one.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:peps_qd_physical_renorm}
-    The color map $(p,q,r,s)\mapsto(A(p,q,r,s),s)$ is a bijection with
-    inverse $((a,b,c),t)\mapsto(abct,bct,ct,t)$.
+    The color map $(p,q,r,s)\mapsto(A(p,q,r,s),s)$ is bijective, with inverse
+    \begin{align}
+        ((a,b,c),t)\mapsto(abct,bct,ct,t).\notag
+    \end{align}
     Reindexing the Gram sum by this bijection leaves $|G|$ identical
     contributions on each diagonal entry and zero off the diagonal.
     Multiplication by $|G|^{-1/2}$ on both factors gives the normalized identity.

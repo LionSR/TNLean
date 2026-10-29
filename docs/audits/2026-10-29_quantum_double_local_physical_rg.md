@@ -85,3 +85,25 @@ No full repository root build was run. No Blueprint rendering or
 installed. Source synchronization and compiled resolution of all new links
 passed instead. No macOS-only cache-seeding test was applicable on Linux.
 Hosted CI is required for full-repository validation.
+
+## Current-main delivery refresh
+
+The published source head `77c529651f0a014259c93be49f066572b3f41cfb`
+passed the hosted full 15006-job build and strict Lean checks in job
+`123633992613`; the job's `PR_HEAD_SHA` matches. The production module and
+existing regression remain byte-identical during the present reconciliation
+with main `c7d2992c89c16d85237e18557ff292979b3a67b4`.
+
+The exact hosted Blueprint failure was the combined source-construction
+fragment's unresolved reference to the new local physical renormalization
+lemma. The renderer now includes that actual proved entry, rather than a
+synthetic label or a suppressed warning. The combined fragment passes both XeLaTeX passes with all 11 expected boundary signatures, no unresolved reference, no overfull box and no audit findings. The inverse color map is displayed to avoid a narrow-fragment overflow.
+
+The new chapter input follows main's
+quantum-double chapter relocation. Its two supporting results and the prose
+reference follow the current registered lemma roles.
+
+No local Lean, Lake, elaboration or checkdecls is run for this refresh.
+Fresh combined-head hosted acceptance and integration remain distinct from
+the earlier verified source. This local block construction does not settle
+full-lattice placement, common kernels, topology or parent-space transport.
