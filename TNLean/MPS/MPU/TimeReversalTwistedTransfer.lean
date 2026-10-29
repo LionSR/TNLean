@@ -105,14 +105,6 @@ theorem timeReversalTwistedTransfer_pow_eq_sum_evalWord
   intro σ _
   rw [evalWord_mulTensor, hR]
 
-private theorem swap_mul_kronecker
-    (A B : Matrix (Fin D) (Fin D) ℂ) :
-    Matrix.swapMatrix D * (A ⊗ₖ B) = (B ⊗ₖ A) * Matrix.swapMatrix D := by
-  classical
-  ext ⟨i, j⟩ ⟨k, l⟩
-  simp [Matrix.mul_apply, Fintype.sum_prod_type, Matrix.swapMatrix_apply,
-    Matrix.kroneckerMap_apply, ite_and, ite_mul, mul_ite, mul_comm]
-
 /-- The actual twisted transfer commutes with exchange of its two bond
 factors. Exchanging them simply exchanges the two physical-word summation
 variables. Source context: arXiv:1703.09188, `eq:sigma-from-trace` and the
@@ -125,7 +117,7 @@ theorem swapMatrix_commute_timeReversalTwistedTransfer (U : MPOTensor d D) :
   change Matrix.swapMatrix D * timeReversalTwistedTransfer U =
     timeReversalTwistedTransfer U * Matrix.swapMatrix D
   simp only [h, Matrix.mul_smul, Matrix.smul_mul, Finset.mul_sum, Finset.sum_mul,
-    swap_mul_kronecker]
+    Matrix.swapMatrix_mul_kronecker]
   congr 1
   rw [Finset.sum_comm]
 
