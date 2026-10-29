@@ -158,9 +158,8 @@ theorem cutoff_mul_sq_norm_highProjection_le_energy
   have hQ : IsStarProjection (ι Q) :=
     ((hL.isHermitian.add hN.isHermitian).add hR.isHermitian
       |>.isStarProjection_spectralProjectionGE t).map ι
-  have hpositive : (ι (K - (t : ℂ) • Q)).IsPositive := by
-    apply (ContinuousLinearMap.isPositive_toLinearMap_iff _).mp
-    exact Matrix.isPositive_toEuclideanLin_iff.mpr (Matrix.le_iff.mp hle)
+  have hpositive : (ι (K - (t : ℂ) • Q)).IsPositive :=
+    (Matrix.le_iff.mp hle).isPositive_toEuclideanCLM
   have h := hpositive.re_inner_nonneg_right x
   rw [map_sub, map_smul] at h
   change 0 ≤ (⟪x, ι K x - (t : ℂ) • ι Q x⟫_ℂ).re at h

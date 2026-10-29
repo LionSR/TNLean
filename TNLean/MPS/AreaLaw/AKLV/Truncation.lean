@@ -25,6 +25,14 @@ namespace Matrix
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
+/-- Positive semidefinite matrices give positive operators on the
+Euclidean Hilbert space. This transports the quadratic order used
+throughout AKLV, arXiv:1301.1162v1, Section 6.3. -/
+theorem PosSemidef.isPositive_toEuclideanCLM {A : Matrix n n ℂ} (hA : A.PosSemidef) :
+    (toEuclideanCLM (n := n) (𝕜 := ℂ) A).IsPositive :=
+  (ContinuousLinearMap.isPositive_toLinearMap_iff _).mp
+    (isPositive_toEuclideanLin_iff.mpr hA)
+
 /-- Clipping a commuting operator below a larger operator does not change
 its action on the larger operator's strict low-energy subspace. This is
 the finite-dimensional spectral argument for AKLV, arXiv:1301.1162v1,

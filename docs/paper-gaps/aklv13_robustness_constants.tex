@@ -11,7 +11,7 @@
 \date{2026-10-29}
 \begin{document}
 \maketitle
-\gapnote{local-correction}{resolved for the off-diagonal and eigenvector tails}
+\gapnote{local-correction}{resolved in the normalized robustness theorem}
 
 \section{Source and normalization}
 Arad, Kitaev, Landau and Vazirani, arXiv:1301.1162v1,
@@ -79,15 +79,40 @@ This alternative to the shell induction of Lemma~6.7 is proved by
 It applies to every eigenvector in this energy range, including the unit
 ground vector. It requires neither a gap nor uniqueness.
 
-\section{Remaining robustness conclusions}
+\section{Explicit robustness constants and the final statement}
 Separate clipping of the two exterior blocks, its positive order bounds,
 and its agreement with the original operator on the low-energy subspace
-are proved using QICLean's energy truncation. The full Hamiltonian is not
-clipped in place of the exterior blocks, and the ALVV regional approximation
-theorem is not substituted for this construction.
+use QICLean's energy truncation. The full Hamiltonian is not clipped in
+place of the exterior blocks, and no ALVV regional approximation theorem
+is substituted for this construction.
 
-Theorem~6.1 remains unformalized here. Still needed are the projected-energy
-comparison, the quantitative low-spectrum gap argument, and the closing phase-aligned
-squared-distance estimate. No completion mark in this contribution asserts
-these remaining conclusions.
+The projected-energy comparison is
+$\langle P_tv,HP_tv\rangle\le\langle v,H^{(t)}v\rangle+4\|Q_tv\|$.
+For $tg^2\ge1024(e+g)$ it implies that every unit vector orthogonal to
+the original ground vector has clipped energy at least $e+g/2$.
+A min--max argument constructs the actual clipped ground vector and
+proves its gap is at least $g/2$.
+
+The projected original ground vector has residual at most
+$10\exp(-(t-40)/16)$. Combining this with the absolute excited-energy
+threshold gives a phase-aligned squared-distance bound
+$968g^{-2}\exp(-(t-40)/8)$.
+For $t\ge32768(e+g)/g^2$, this is at most $\exp(-t/16)$.
+The final statement is
+\leanid{TNLean.MPS.AreaLaw.AKLV.normalized_chain_robustness}.
+
+Its hypotheses are the original nearest-neighbour supports and
+$0\le h_i\le I$, the two boundary bonds, the three scalar energy shifts,
+positivity of the resulting regional blocks, a unit original ground
+vector with $0\le e\le6$, and the original gap $0<g\le1$ in operator
+form. The three positivity assumptions and energy bound are the
+normalization fixed in Section~6.1. Regional commutations and the sum
+decomposition are derived from the actual supports and cuts. No
+spectral tail, commutator-growth bound, clipped gap, residual estimate
+or closeness of the ground vectors is supplied as an assumption.
+The conclusion uses the actual separate clipping, an actual ground
+eigenvector, the operator gap inequality, and an explicit complex phase.
+Constructing the normalization from an unshifted Hamiltonian is the
+source's preceding reduction; this theorem is stated on the normalized
+data of Theorem~6.1.
 \end{document}

@@ -1,5 +1,15 @@
 # Tactic Pattern Ledger
 
+### Matrix positivity on the Euclidean operator space — promoted (2026-10-29)
+
+- **Seen:** `MPS/AreaLaw/AKLV/HighEnergyMass.lean`, `ProjectionEnergy.lean`,
+  `LowSpectrumGap.lean`, and `Robustness.lean`.
+- **Pattern:** Combine `Matrix.isPositive_toEuclideanLin_iff` and
+  `ContinuousLinearMap.isPositive_toLinearMap_iff` to transport a matrix order bound.
+- **Abstraction:** `Matrix.PosSemidef.isPositive_toEuclideanCLM` in
+  `MPS/AreaLaw/AKLV/Truncation.lean`; all four repeated positivity proofs use it.
+- **Decision:** A mathematical transport lemma removes the repeated coercion proof.
+
 ### Exponential weights and energy windows — candidate (2026-10-29)
 
 - **Seen:** `MPS/AreaLaw/AKLV/SpectralTail.lean` and `GroundStateTail.lean`.
