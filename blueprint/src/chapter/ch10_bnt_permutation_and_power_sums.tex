@@ -6,7 +6,7 @@ and per-block gauge phases. The argument turns the eventual equality of spans
 into an invertible change-of-basis matrix, then analyses its asymptotics through
 the overlaps.
 
-\begin{theorem}[Permutation rigidity for equal block counts]
+\begin{lemma}[Permutation rigidity for equal block counts]
     \label{thm:bnt_perm_same_card}
     \lean{MPSTensor.exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho}
     \leanok
@@ -19,7 +19,7 @@ the overlaps.
     the MPV states agree for all sufficiently large system sizes $N$, then
     there is a permutation $\pi$ of $\{1, \ldots, g\}$ such that $A_j$ and
     $B_{\pi(j)}$ have the same bond dimension and are gauge-phase equivalent.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok\uses{lem:bnt_eventual_change_basis, thm:overlap_decay, thm:overlap_decay_rect}
     For large $N$, Lemma~\ref{lem:bnt_eventual_change_basis} gives an
@@ -43,8 +43,8 @@ the overlaps.
     $\overline{u_j(N)}\to0$ and hence $u_j(N)\to0$. Thus
     $O_{B_jB_j}(N)\to0$, contradicting $O_{B_jB_j}(N)\to1$.
     Thus each $B_j$ has a matched block $A_{f(j)}$ with non-decaying mixed
-    overlap. Theorems~\ref{thm:overlap_decay_rect}
-    and~\ref{thm:overlap_decay} then force equal bond dimension and
+    overlap. Lemma~\ref{thm:overlap_decay_rect}
+    and Theorem~\ref{thm:overlap_decay} then force equal bond dimension and
     gauge-phase equivalence for each match. Off-diagonal decay within the
     $B$-family makes $f$ injective, hence bijective, and its inverse is the
     required permutation.
@@ -77,7 +77,7 @@ the overlaps.
     enough that both families are linearly independent and the assumed span
     equality holds, the common span has the same dimension when computed
     from the $A$-family or the $B$-family, so $g_A = g_B$. After identifying
-    the two index sets, Theorem~\ref{thm:bnt_perm_same_card} yields the
+    the two index sets, Lemma~\ref{thm:bnt_perm_same_card} yields the
     permutation conclusion.
 \end{proof}
 
@@ -90,7 +90,7 @@ The overlap dichotomy also shows that the MPV states of distinct normal
 blocks are non-proportional at arbitrarily large lengths, which enters the
 exact sector matching.
 
-\begin{theorem}[Non-equivalent irreducible TP blocks are eventually non-proportional]
+\begin{lemma}[Non-equivalent irreducible TP blocks are eventually non-proportional]
     \label{thm:not_gauge_phase_eventually_not_proportional}
     \lean{MPSTensor.exists_ge_not_forall_mpv_eq_mul_of_not_gaugePhaseEquiv_of_irreducible_TP}
     \lean{MPSTensor.exists_ge_not_forall_mpv_eq_mul_of_blocksNotGaugePhaseEquiv_of_irreducible_TP}
@@ -103,7 +103,7 @@ exact sector matching.
     Consequently, in an already separated same-dimensional BNT block family,
     any two distinct blocks have such non-proportional MPV states at
     arbitrarily large lengths.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Suppose that for all sufficiently large $N$ one had
@@ -143,7 +143,7 @@ multiset with multiplicity.
 % hypothesis is the nonzero-coefficient local correction recorded in
 % docs/paper-gaps/cpsv16_bnt_uniqueness_zero_coefficient.tex; the
 % alternative routes are in docs/paper-gaps/cpsv16_power_sum_alternative_route.tex.
-\begin{theorem}[Finite-range equal power sums imply equal multisets]
+\begin{lemma}[Finite-range equal power sums imply equal multisets]
     \label{thm:bounded_power_sum_multiset}
     \lean{Matrix.sum_pow_eq_implies_multiset_eq_of_le_card,
         Matrix.sum_pow_eq_implies_nonzero_multiset_eq_of_le_max_length,
@@ -163,7 +163,7 @@ multiset with multiplicity.
     list form $\sum_{k=1}^{x_a} \lambda_{a,k}^N = \sum_{k=1}^{x_b} \lambda_{b,k}^N$
     for $1 \le N \le \max(x_a,x_b)$ gives equality of the nonzero multisets; if
     it also holds at $N=0$ then $x_a=x_b$ and the full lists agree.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -194,7 +194,7 @@ multiset with multiplicity.
     \uses{thm:bounded_power_sum_multiset}
     Suppose that every power sum with $1\leq N\leq m$ vanishes. Comparing
     $\lambda_0,\ldots,\lambda_{m-1}$ with the empty family in
-    Theorem~\ref{thm:bounded_power_sum_multiset} gives $m=0$, contradicting
+    Lemma~\ref{thm:bounded_power_sum_multiset} gives $m=0$, contradicting
     $m\geq 1$.
 \end{proof}
 

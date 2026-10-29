@@ -132,7 +132,7 @@ truncation instead.
     distinct even when their holders coincide. Grouping the copies
     by their holders gives a product across parties; each grouped
     vector has norm equal to the product of the copy norms, hence one.
-    Theorem~\ref{thm:lattice_sheet_initialization} splits each party's
+    Lemma~\ref{thm:lattice_sheet_initialization} splits each party's
     private memory into its labelled copies and restores their prescribed
     order. Every map is private, and its action on the product vector
     is exact.
@@ -371,7 +371,7 @@ truncation instead.
 \begin{proof}
     \leanok
     \uses{thm:lattice_sheet_birth_bounded}
-    This is Theorem~\ref{thm:lattice_sheet_birth_bounded} on the chain of
+    This is Lemma~\ref{thm:lattice_sheet_birth_bounded} on the chain of
     $L$ sites, with the real parameter $L\ge0$ and the exponent $p$. The
     environment of a sheet is exactly $E$. The reversed construction uses
     the information environment after the death.
@@ -408,7 +408,7 @@ truncation instead.
 \begin{proof}
     \leanok
     \uses{thm:lattice_sheet_exchange_bounded}
-    This is Theorem~\ref{thm:lattice_sheet_exchange_bounded} on the chain of
+    This is Lemma~\ref{thm:lattice_sheet_exchange_bounded} on the chain of
     $L$ sites, with the real parameter $L\ge0$ and the exponent $p$. Its
     splitting regions are $T,E$. The returned monomial consists of the register
     reordering and the private correction at $P$, and uses no pair resource.
@@ -1294,7 +1294,7 @@ with the retained-copy correction of
         \label{eq:chain_middle_link_congestion}
     \end{align}
     Here $3120=2\cdot40\cdot39$ is the degree bound in
-    Theorem~\ref{thm:peps_distributed_construction_compression} at $b=40$,
+    Lemma~\ref{thm:peps_distributed_construction_compression} at $b=40$,
     from \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     This gives a coarse bound for the routing argument of
     \cite[Part~II, proof of Theorem~B]{TNLean2026OneDimensional}.

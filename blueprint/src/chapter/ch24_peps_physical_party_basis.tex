@@ -44,7 +44,7 @@ Let $P$ be a finite party set with a repetition-free ordering $p_1,\ldots,p_m$ o
 \end{definition}
 
 
-\begin{theorem}[Prescribed physical columns under an owner map]
+\begin{lemma}[Prescribed physical columns under an owner map]
     \label{thm:peps_physical_owner_columns}
     \lean{TNLean.Lattice.PartyCircuit.mapOwnerIso_familyPhysicalListBasis_apply_heq}
     \leanok
@@ -57,19 +57,19 @@ Let $P$ be a finite party set with a repetition-free ordering $p_1,\ldots,p_m$ o
         \otimes e_{f(p_{m-1}),y_{f(p_{m-1})}}\otimes1.
         \label{eq:peps_physical_owner_columns}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_basis_owner_memory}
-    By Theorem~\ref{thm:peps_basis_owner_memory}, $U_f$ acts as the identity on each tensor factor $\C^{\delta_{f(p_j)}}$, so induction on $\mathbf p$ gives (\ref{eq:peps_physical_owner_columns}).
+    By Lemma~\ref{thm:peps_basis_owner_memory}, $U_f$ acts as the identity on each tensor factor $\C^{\delta_{f(p_j)}}$, so induction on $\mathbf p$ gives (\ref{eq:peps_physical_owner_columns}).
 \end{proof}
 
-\begin{theorem}[Singleton physical memory of each party]
+\begin{lemma}[Singleton physical memory of each party]
     \label{thm:peps_singleton_physical_memory}
     \lean{TNLean.Lattice.PartyCircuit.atParty_familyPhysicalLayout_of_mem}
     \leanok
     For any party $p$ in a repetition-free physical list $a$, the party-restricted list $a_p$ is the single register $H_p$, with memory $M(a_p)=H_p\otimes\C$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -81,10 +81,10 @@ Let $P$ be a finite party set with a repetition-free ordering $p_1,\ldots,p_m$ o
     \lean{TNLean.Lattice.PartyCircuit.familyPhysicalPartyBasis}
     \leanok
     \uses{thm:peps_singleton_physical_memory}
-    By Theorem~\ref{thm:peps_singleton_physical_memory}, for $p$ in a repetition-free physical list, define the orthonormal basis of $M(a_p)=H_p\otimes\C$ by $b_p(j):=e_{p,j}\otimes1$.
+    By Lemma~\ref{thm:peps_singleton_physical_memory}, for $p$ in a repetition-free physical list, define the orthonormal basis of $M(a_p)=H_p\otimes\C$ by $b_p(j):=e_{p,j}\otimes1$.
 \end{definition}
 
-\begin{theorem}[Partitioning a single selected register]
+\begin{lemma}[Partitioning a single selected register]
     \label{thm:peps_selected_head_partition}
     \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_selectedHead_of_tail_excluded_heq}
     \leanok
@@ -92,14 +92,14 @@ Let $P$ be a finite party set with a repetition-free ordering $p_1,\ldots,p_m$ o
     \begin{align}
         U_p^a(e\otimes y) & = (e\otimes1)\otimes y.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     Since $p$ owns no tail register, partitioning the tail sends $y\mapsto 1\otimes y\in\C\otimes K$, and adjoining the selected head $e\in H$ via associativity yields $(e\otimes1)\otimes y$.
 \end{proof}
 
-\begin{theorem}[Grouping prescribed physical columns in arbitrary local coordinates]
+\begin{lemma}[Grouping prescribed physical columns in arbitrary local coordinates]
     \label{thm:peps_basis_physical_columns_local_coordinates}
     \lean{TNLean.Lattice.PartyCircuit.groupByPartyIso_familyPhysicalListBasis_eq_partyListBasis}
     \leanok
@@ -110,14 +110,14 @@ Let $P$ be a finite party set with a repetition-free ordering $p_1,\ldots,p_m$ o
         b_{\mathbf d,\mathbf p}\bigl((x_{p_j})_{j=0}^{m-1}\bigr)
         = b_{a,\mathbf p}\bigl((y_{p_j})_{j=0}^{m-1}\bigr).
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_selected_head_partition,def:peps_party_tensor_basis}
-    By induction on $\mathbf p$: for $\mathbf p=\varnothing$ both sides equal $1\in\C$, and for a nonempty list Theorem~\ref{thm:peps_selected_head_partition} separates the head factor as $e_{p_0,x_{p_0}}\otimes1=b_{p_0}(y_{p_0})$ while the induction hypothesis transforms the tail into $b_{p_1}(y_{p_1})\otimes\cdots\otimes b_{p_{m-1}}(y_{p_{m-1}})\otimes1$.
+    By induction on $\mathbf p$: for $\mathbf p=\varnothing$ both sides equal $1\in\C$, and for a nonempty list Lemma~\ref{thm:peps_selected_head_partition} separates the head factor as $e_{p_0,x_{p_0}}\otimes1=b_{p_0}(y_{p_0})$ while the induction hypothesis transforms the tail into $b_{p_1}(y_{p_1})\otimes\cdots\otimes b_{p_{m-1}}(y_{p_{m-1}})\otimes1$.
 \end{proof}
 
-\begin{theorem}[Compatibility of physical and party coordinates]
+\begin{lemma}[Compatibility of physical and party coordinates]
     \label{thm:peps_family_physical_party_basis}
     \lean{TNLean.Lattice.PartyCircuit.familyLabelledPhysicalBasis_eq_partyGroupedBasis}
     \leanok
@@ -128,13 +128,13 @@ Let $P$ be a finite party set with a repetition-free ordering $p_1,\ldots,p_m$ o
         \otimes(e_{p_m,x_{p_m}}\otimes1)\otimes1,
     \end{align}
     so $E_x=B^a_x$ (Definition~\ref{def:peps_party_grouped_basis}).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     \uses{def:peps_party_grouped_basis,def:peps_family_physical_output,
         def:peps_singleton_physical_basis,thm:peps_selected_head_partition}
-    Inducting on the repetition-free party list via Theorem~\ref{thm:peps_selected_head_partition} separates each head factor as $e_{p_i,x_{p_i}}\otimes1=b_{p_i}(x_{p_i})$ (Definition~\ref{def:peps_singleton_physical_basis}), and applying $G_a^{-1}$ gives $E_x=B^a_x$ by Definition~\ref{def:peps_party_grouped_basis}.
+    Inducting on the repetition-free party list via Lemma~\ref{thm:peps_selected_head_partition} separates each head factor as $e_{p_i,x_{p_i}}\otimes1=b_{p_i}(x_{p_i})$ (Definition~\ref{def:peps_singleton_physical_basis}), and applying $G_a^{-1}$ gives $E_x=B^a_x$ by Definition~\ref{def:peps_party_grouped_basis}.
 \end{proof}
 
 \begin{definition}[Joint physical and private basis of one party]
@@ -144,7 +144,7 @@ Let $P$ be a finite party set with a repetition-free ordering $p_1,\ldots,p_m$ o
     Given orthonormal bases $(b_p(x))_{x\in X_p}$ of $M(a_p)$ and $(f_p(y))_{y\in F_p}$ of $M(c_p)$, the joint basis of $M((a\mathbin{+\!+}c)_p)$ (under $(a\mathbin{+\!+}c)_p=a_p\mathbin{+\!+}c_p$) has columns $J_{a_p,c_p}^{-1}(b_p(x_p)\otimes f_p(y_p))$ for $(x_p,y_p)\in X_p\times F_p$.
 \end{definition}
 
-\begin{theorem}[Concatenating physical and private party bases]
+\begin{lemma}[Concatenating physical and private party bases]
     \label{thm:peps_party_grouped_basis_append}
     \lean{TNLean.Lattice.PartyCircuit.partyGroupedBasis_append}
     \leanok
@@ -152,7 +152,7 @@ Let $P$ be a finite party set with a repetition-free ordering $p_1,\ldots,p_m$ o
     \begin{align}
         B^{a+c}_{(x,y)}=J_{a,c}^{-1}(B^a_x\otimes B^c_y).
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -164,18 +164,18 @@ These coordinate identities apply to the local contractions in
 \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 \texttt{04-compression.tex}, lines 137--151 and 565--588.
 
-\begin{theorem}[Party memories after selecting all original parties]
+\begin{lemma}[Party memories after selecting all original parties]
     \label{thm:peps_selected_physical_party_layouts}
     \lean{TNLean.Lattice.PartyCircuit.Layout.atParty_none_mapOwner_all}
     \leanok
     \lean{TNLean.Lattice.PartyCircuit.Layout.atParty_some_mapOwner_all}
     \uses{def:peps_affected_owner,def:peps_party_registers,def:peps_owner_layout}
     For $Q=P\sqcup\{*\}$, the inclusion $\iota:P\to Q$ in the all-party selection of \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, and any register list $a$, one has $(\iota_*a)_*=\varnothing$ and $(\iota_*a)_{\iota(p)}=\iota_*(a_p)$ for all $p\in P$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_excluded_mapped_owners,thm:peps_basis_owner_restriction}
-    Since $*\notin\iota(P)$ and $\iota^{-1}(\{\iota(p)\})=\{p\}$, Theorems~\ref{thm:peps_excluded_mapped_owners} and~\ref{thm:peps_basis_owner_restriction} give $(\iota_*a)_*=\varnothing$ and $(\iota_*a)_{\iota(p)}=\iota_*(a_p)$.
+    Since $*\notin\iota(P)$ and $\iota^{-1}(\{\iota(p)\})=\{p\}$, Lemmas~\ref{thm:peps_excluded_mapped_owners} and~\ref{thm:peps_basis_owner_restriction} give $(\iota_*a)_*=\varnothing$ and $(\iota_*a)_{\iota(p)}=\iota_*(a_p)$.
 \end{proof}
 
 % Polynomial-PEPS Theorem 5.2, 04-compression.tex, lines 137--151 and 565--588.
@@ -187,25 +187,25 @@ These coordinate identities apply to the local contractions in
     \leanok
     \lean{TNLean.Lattice.PartyCircuit.selectedFamilyPhysicalPartyBasis}
     \uses{thm:peps_selected_physical_party_layouts,def:peps_singleton_physical_basis}
-    For $d:P\to\mathbb N$ and a repetition-free list $\mathbf p$ of $P$, set $X_*:=\{\bullet\}$ and $X_{\iota(p)}:=\{0,\ldots,d(p)-1\}$. Define the orthonormal basis $b^{\mathrm{sel}}_q$ of $M((\iota_*a)_q)$ by $b^{\mathrm{sel}}_{*}(\bullet):=1\in\C$ at $q=*$, and by transporting $b_p$ (Definition~\ref{def:peps_singleton_physical_basis}) along the owner isometry and Theorem~\ref{thm:peps_selected_physical_party_layouts} at $q=\iota(p)$.
+    For $d:P\to\mathbb N$ and a repetition-free list $\mathbf p$ of $P$, set $X_*:=\{\bullet\}$ and $X_{\iota(p)}:=\{0,\ldots,d(p)-1\}$. Define the orthonormal basis $b^{\mathrm{sel}}_q$ of $M((\iota_*a)_q)$ by $b^{\mathrm{sel}}_{*}(\bullet):=1\in\C$ at $q=*$, and by transporting $b_p$ (Definition~\ref{def:peps_singleton_physical_basis}) along the owner isometry and Lemma~\ref{thm:peps_selected_physical_party_layouts} at $q=\iota(p)$.
 \end{definition}
 
 % Polynomial-PEPS Theorem 5.2, 04-compression.tex, lines 137--151, 409--417 and 565--588.
 
 
-\begin{theorem}[Original physical columns after selecting all parties]
+\begin{lemma}[Original physical columns after selecting all parties]
     \label{thm:peps_selected_family_physical_columns}
     \lean{TNLean.Lattice.PartyCircuit.selectedFamilyPhysicalPartyBasis_none_apply_heq}
     \leanok
     \lean{TNLean.Lattice.PartyCircuit.selectedFamilyPhysicalPartyBasis_some_apply_heq}
     \uses{def:peps_selected_family_physical_basis}
     Under the memory identifications of Definition~\ref{def:peps_selected_family_physical_basis}, $b^{\mathrm{sel}}_{*,\bullet}=1$ and $b^{\mathrm{sel}}_{\iota(p),j}=b_{p,j}$ for all $p\in P$ and $j\in X_{\iota(p)}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_selected_family_physical_basis,thm:peps_basis_memory_equalities,
         thm:peps_basis_owner_memory}
-    Immediate from Definition~\ref{def:peps_selected_family_physical_basis} and Theorems~\ref{thm:peps_basis_memory_equalities} and~\ref{thm:peps_basis_owner_memory}.
+    Immediate from Definition~\ref{def:peps_selected_family_physical_basis} and Lemmas~\ref{thm:peps_basis_memory_equalities} and~\ref{thm:peps_basis_owner_memory}.
 \end{proof}
 
 
@@ -238,7 +238,7 @@ These coordinate identities apply to the local contractions in
 
 
 
-\begin{theorem}[The exterior scalar in original physical configurations]
+\begin{lemma}[The exterior scalar in original physical configurations]
     \label{thm:peps_selected_physical_product_scalar}
     \lean{TNLean.Lattice.PartyCircuit.partyProductMatrix_selectedFamilyPhysicalConfig}
     \leanok
@@ -251,7 +251,7 @@ These coordinate identities apply to the local contractions in
         \prod_{p\in P}(M_{\iota(p)})_{x_p,y_p}.
         \label{eq:peps_selected_physical_product_scalar}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:peps_selected_physical_configurations}
@@ -273,7 +273,7 @@ These coordinate identities apply to the local contractions in
 
 
 
-\begin{theorem}[The grouped basis in original physical configurations]
+\begin{lemma}[The grouped basis in original physical configurations]
     \label{thm:peps_selected_physical_basis_grouped}
     \lean{TNLean.Lattice.PartyCircuit.selectedFamilyPhysicalPartyBasis_grouped}
     \leanok
@@ -285,7 +285,7 @@ These coordinate identities apply to the local contractions in
         B_{e^{-1}(x)} & = U_\iota E_x.
         \label{eq:peps_selected_physical_basis_grouped}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_physical_owner_columns,
@@ -293,13 +293,13 @@ These coordinate identities apply to the local contractions in
         thm:peps_selected_family_physical_columns,thm:peps_basis_empty_first_party,
         thm:peps_basis_grouping_equality,thm:peps_basis_memory_equalities,
         thm:peps_basis_party_recursion}
-    By Theorems~\ref{thm:peps_physical_owner_columns}, \ref{thm:peps_basis_physical_columns_local_coordinates}, and~\ref{thm:peps_selected_family_physical_columns}, grouping $U_\iota E_x$ along $(\iota(p_0),\ldots,\iota(p_{m-1}))$ yields the ordered product of $b^{\mathrm{sel}}_{\iota(p_j)}(x_{p_j})$; prepending $*$ prepends $1=b^{\mathrm{sel}}_{*}(\bullet)$ by Theorems~\ref{thm:peps_basis_empty_first_party} and~\ref{thm:peps_basis_party_recursion}, and applying $G_{\mathbf q,\iota_*a}^{-1}$ with Theorems~\ref{thm:peps_basis_memory_equalities} and~\ref{thm:peps_basis_grouping_equality} gives (\ref{eq:peps_selected_physical_basis_grouped}).
+    By Lemmas~\ref{thm:peps_physical_owner_columns}, \ref{thm:peps_basis_physical_columns_local_coordinates}, and~\ref{thm:peps_selected_family_physical_columns}, grouping $U_\iota E_x$ along $(\iota(p_0),\ldots,\iota(p_{m-1}))$ yields the ordered product of $b^{\mathrm{sel}}_{\iota(p_j)}(x_{p_j})$; prepending $*$ prepends $1=b^{\mathrm{sel}}_{*}(\bullet)$ by Lemmas~\ref{thm:peps_basis_empty_first_party} and~\ref{thm:peps_basis_party_recursion}, and applying $G_{\mathbf q,\iota_*a}^{-1}$ with Lemmas~\ref{thm:peps_basis_memory_equalities} and~\ref{thm:peps_basis_grouping_equality} gives (\ref{eq:peps_selected_physical_basis_grouped}).
 \end{proof}
 
 
 
 
-\begin{theorem}[Separating the physical and private grouped bases]
+\begin{lemma}[Separating the physical and private grouped bases]
     \label{thm:peps_selected_physical_private_basis_grouped}
     \lean{TNLean.Lattice.PartyCircuit.selectedPhysicalPrivateBasis_grouped}
     \leanok
@@ -312,9 +312,9 @@ These coordinate identities apply to the local contractions in
         \bigl(B^{\iota_*a}_x\otimes B^{\iota_*c}_e\bigr).
         \label{eq:peps_selected_physical_private_basis_grouped}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_party_grouped_basis_append,thm:peps_basis_memory_equalities}
-    Apply Theorem~\ref{thm:peps_party_grouped_basis_append} to $\iota_*a$ and $\iota_*c$ and transport along $\iota_*(a\mathbin{+\!+}c)=\iota_*a\mathbin{+\!+}\iota_*c$ via Theorem~\ref{thm:peps_basis_memory_equalities}.
+    Apply Lemma~\ref{thm:peps_party_grouped_basis_append} to $\iota_*a$ and $\iota_*c$ and transport along $\iota_*(a\mathbin{+\!+}c)=\iota_*a\mathbin{+\!+}\iota_*c$ via Lemma~\ref{thm:peps_basis_memory_equalities}.
 \end{proof}

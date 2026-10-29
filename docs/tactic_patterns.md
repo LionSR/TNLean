@@ -5008,6 +5008,33 @@ three-plaquette output measurement, and the routed reunion measurement.
   theorem; no duplicate inverse-construction tactic is introduced.
 
 
+### Constancy of a continuous trace sign — candidate (2026-10-29)
+
+- **Pattern:** A finite matrix-product/trace expression is continuous by
+  `Continuous.matrix_mul`, `Continuous.matrix_kronecker` and
+  `Continuous.matrix_trace`. A local identity puts its value in `{1,-1}`.
+- **Seen:** `MPS/MPU/TimeReversalSignIntrinsic.lean`,
+  `intrinsicTimeReversalSign_eq_on_path`.
+- **Abstraction:** Mathlib's
+  `IsPreconnected.eq_one_or_eq_neg_one_of_sq_eq` already supplies the
+  topological step; no local connectedness tactic or parallel sign predicate
+  is needed.
+- **Notes:** Continuity of all gate, source-factor and sign witnesses is unnecessary.
+  The trace equals an intrinsic polynomial in the actual tensor, so only
+  tensor continuity and pointwise local certificates are used.
+
+### Recovering letters by an identity contraction — candidate (2026-10-29)
+
+- **Seen:** `isInjective_uncleTensor_of_isInjective_perturbation` in
+  `MPS/ParentHamiltonian/UncleInjectivity.lean`.
+- **Pattern:** Full one-site span gives coefficients of the identity.
+  Contracting one physical leg of a bilinear two-site family with those
+  coefficients recovers every one-site letter, so its span is full too.
+- **Reuse:** `Submodule.mem_span_range_iff_exists_fun`, block-matrix
+  injectivity and finite-sum scalar/matrix distribution.
+- **Decision:** Use one full-identity contraction in place of four separate
+  block witnesses. One occurrence does not justify a new tactic.
+
 ### Counting nearest-neighbour bonds that meet a region — candidate (2026-10-28)
 
 - **Pattern:** Bound the number of nearest-neighbour bonds meeting a finite
@@ -9689,3 +9716,30 @@ removed after the dependency audit exposed it.
 - **Abstraction:** The public `exists_twoSiteStandardFormData_sourceFactors`
   supplies the actual data; no SVD or standard-form witness is added downstream.
   The converse uses the existing periodic gauge cancellation theorem.
+
+### Intrinsic blocked traces from a product-tensor diagonal — candidate (2026-10-29)
+
+- **Pattern:** Expand `normalizedDiagonal (mulTensor U U)` powers with the
+  existing normalized-diagonal word formula and `evalWord_mulTensor`, then
+  contract each Kronecker summand with the existing QIC swap-trace identity.
+- **Seen:** `MPS/MPU/TimeReversalTwistedTransfer.lean`.
+- **Reuse:** `normalizedDiagonal_pow_eq_sum_evalWord`, `evalWord_mulTensor`,
+  `Matrix.trace_swapMatrix_mul_kronecker`, and the existing physical-word
+  decoding equivalence. No new tensor-product expansion induction is copied.
+- **Decision:** The resulting actual twisted-transfer power identity is a
+  mathematical lemma, shared by the exchange-commutation and blocked-trace
+  proofs. No custom tactic or new source predicate is needed.
+
+### Commuting weights on stabilized trace powers — candidate (2026-10-29)
+
+- **Pattern:** Factor a positive power minus its stabilized projector as
+  `E^k * (1 - P)`. Idempotence of the complement and eventual stabilization
+  make it nilpotent. A commuting weight preserves nilpotence, hence gives
+  zero trace for that difference.
+- **Defined in:** `Algebra/StabilizedWeightedTrace.lean`, using the existing
+  QIC `Matrix.StabilizedRankOneData`, Mathlib complementary idempotents,
+  `Commute.isNilpotent_mul_left`, and nilpotent matrix traces.
+- **Decision:** Reuse the existing stabilized-data structure; no new spectral
+  predicate or source witness is introduced. The new result eliminates
+  transient terms in commuting weighted traces rather than reproving
+  stabilization or the existing unweighted nilpotent trace theorem.

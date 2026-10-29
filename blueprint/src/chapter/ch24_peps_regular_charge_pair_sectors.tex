@@ -1,4 +1,4 @@
-\begin{theorem}[Contragredient regular charge]
+\begin{lemma}[Contragredient regular charge]
     \label{thm:peps_regular_contragredient_charge}
     \lean{TNLean.PEPS.regularChargeLabels_inv_mem}
     \leanok
@@ -8,7 +8,7 @@
     regular charge character. For unitary characters, this contragredient charge of
     \cite[charge-pair creation]{Schuch2010PEPS} (lines 2514--2518) equals
     $\overline\chi$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The contragredient representation is irreducible, and its character
     is $g\mapsto\chi(g^{-1})$. Every irreducible character occurs in
@@ -24,7 +24,7 @@
     finite family of regular irreducible characters.
 \end{definition}
 
-\begin{theorem}[The two original-spin charge slices of the correlated pair]
+\begin{lemma}[The two original-spin charge slices of the correlated pair]
     \label{thm:peps_regular_physical_charge_pair_slices}
     \lean{TNLean.PEPS.regularChargePairCoefficient_top,
         TNLean.PEPS.regularChargePairCoefficient_middle,
@@ -47,7 +47,7 @@
     This is an auxiliary shared-bond slice statement. The regional assertion is derived separately by contraction
     slicing along the two internal bonds; no regional factorization is
     assumed in this slice statement.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Character cyclicity identifies the second slice with the translated
     dual character, and applying the already derived complete original-spin

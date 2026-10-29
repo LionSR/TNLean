@@ -21,7 +21,7 @@ site-dependent local tensors, the matrix product is closed by boundary vectors.
 \end{definition}
 
 The boundary vectors are the scalars $v_L=v_R=1$.
-Theorem~\ref{thm:product_state_mps} identifies the resulting contraction
+Lemma~\ref{thm:product_state_mps} identifies the resulting contraction
 with the product vector; Corollary~\ref{cor:product_state_ti} gives the
 translation-invariant specialization and its periodic closure.
 
@@ -55,7 +55,7 @@ translation-invariant specialization and its periodic closure.
     Both sides are $v_L^{\mathsf T}A^{\sigma_1}\cdots A^{\sigma_N}v_R$.
 \end{proof}
 
-\begin{theorem}[Product states are MPS with $D=1$]\label{thm:product_state_mps}
+\begin{lemma}[Product states are MPS with $D=1$]\label{thm:product_state_mps}
     \lean{MPSTensor.siteOpenCoeff_productSiteTensor}
     \leanok
     \uses{def:product_state_tensor, def:site_open_coeff}
@@ -73,7 +73,7 @@ translation-invariant specialization and its periodic closure.
     so that
     $\ket{\psi}=\sum_{i_1,\ldots,i_N}a^{i_1,[1]}\cdots a^{i_N,[N]}\,
         \ket{i_1,\ldots,i_N}$ is the matrix product state of this tensor.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -96,7 +96,7 @@ translation-invariant specialization and its periodic closure.
 \begin{proof}
     \leanok
     \uses{thm:product_state_mps, lem:site_open_coeff_const}
-    Combining Theorem~\ref{thm:product_state_mps} with
+    Combining Lemma~\ref{thm:product_state_mps} with
     Lemma~\ref{lem:site_open_coeff_const} gives the open-boundary statement.
     Because the trace of a $1\times1$ matrix is its sole entry, the periodic
     closure agrees with the open-boundary contraction.
