@@ -56,7 +56,7 @@ theorem gaussianCauchyTransform_eq_integral (h : ℝ≥0) {ε : ℝ}
   let F : ℝ → ℝ → ℂ := fun t s ↦
     Complex.exp (-(ε : ℂ) * s) * Complex.exp (((ω + s : ℝ) : ℂ) * t * Complex.I)
   have hFNorm (t s : ℝ) : ‖F t s‖ = Real.exp (-ε * s) := by
-    simp [F, norm_mul, Complex.norm_exp]
+    simp [F, Complex.norm_exp]
   have hdecay : Integrable (fun s : ℝ ↦ Real.exp (-ε * s)) ν :=
     integrableOn_exp_mul_Ioi (neg_lt_zero.mpr hε) 0
   have hmajor : Integrable (fun p : ℝ × ℝ ↦ (1 : ℝ) * Real.exp (-ε * p.2))
@@ -68,7 +68,8 @@ theorem gaussianCauchyTransform_eq_integral (h : ℝ≥0) {ε : ℝ}
       dsimp only [Function.uncurry, F]
       fun_prop
     · exact Filter.Eventually.of_forall fun p ↦ by
-        simp only [Function.uncurry_apply_pair, hFNorm, one_mul, le_refl]
+        change ‖F p.1 p.2‖ ≤ 1 * Real.exp (-ε * p.2)
+        rw [hFNorm, one_mul]
   have hLaplace (t : ℝ) :
       ((ε : ℂ) - Complex.I * t)⁻¹ * Complex.exp ((ω : ℂ) * t * Complex.I) =
         ∫ s, F t s ∂ν := by
@@ -181,7 +182,13 @@ theorem tendsto_normalized_gaussianCauchyTransform_cutoff
     dsimp only [h]
     rw [NNReal.coe_inv, Real.coe_toNNReal _ (div_nonneg hq.le (sq_nonneg Δ)),
       Real.coe_toNNReal _ (div_nonneg (sq_nonneg Δ) hq.le), inv_div]
-  simpa only [hinv, gaussianNegativeFrequencyCutoff] using
-    tendsto_normalized_gaussianCauchyTransform h hh ω
+  have hcut : gaussianNegativeFrequencyCutoff q Δ ω =
+      (gaussianReal 0 h⁻¹).real (Set.Ici ω) := by
+    rw [gaussianNegativeFrequencyCutoff, hinv]
+  change Filter.Tendsto (fun ε : ℝ ↦ (GaussianFilter.kernel h⁻¹ 0 : ℂ) *
+    gaussianCauchyTransform h ε ω) (nhdsWithin 0 (Set.Ioi 0))
+    (nhds (gaussianNegativeFrequencyCutoff q Δ ω : ℂ))
+  rw [hcut]
+  exact tendsto_normalized_gaussianCauchyTransform h hh ω
 
 end TNLean.Lattice

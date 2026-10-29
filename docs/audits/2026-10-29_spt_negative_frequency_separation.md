@@ -110,3 +110,15 @@ centering, the Gaussian frequency rate and sharp ground covariance. Its
 only primary failure is the namespace of the specialized complex integral
 identity: the pinned declaration is global, so the proof now uses
 `_root_.integral_complex_ofReal`. No local Lean command was run.
+
+## Downstream transform diagnostics on `7d3a109db5`
+
+Job `123604215169` records the child PR head exactly as
+`7d3a109db55e51cabc3da978af6cd4147fff16db`. It reaches the actual transform
+and reports an opaque uncurried integrand in the joint-integrability bound,
+and a final simplification that rewrites the inverse variance only on one
+side. The bound now changes directly to the two-variable integrand before
+using its norm identity. The final argument identifies only the probability
+tail with the cutoff, retaining the original actual time variance and its
+normalization throughout the integral. Reported unused simp arguments are
+removed. No statement or parameter changes; no local Lean command was run.
