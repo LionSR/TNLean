@@ -6,57 +6,37 @@
     \lean{TNLean.PEPS.AreaLaw.uniformAreaLaw_of_twoFamilies}
     \leanok
     \uses{def:area_law_two_family_decomposition,def:area_law_ground_entropy}
-    Suppose that for every integer $R\ge0$ there are real constants
-    $D_0>2R+10$ and $C_{\rm tpl}\ge24$ for which the two-family decomposition
-    of Definition~\ref{def:area_law_two_family_decomposition} holds.
-    Then, for every pair of integers $q\ge1$, $R\ge0$ and every
-    $J,\Delta>0$, there is a constant $C\ge0$ with the following property.
-    For every finite induced domain $\Lambda$, every admissible Hamiltonian
-    of range $R$ and interaction bound $J$ with a unit ground vector $\Omega$
-    and global spectral gap at least $\Delta$, and every $A\subseteq\Lambda$,
+    Suppose that every integer $R\ge0$ admits constants $D_0>2R+10$ and $C_{\rm tpl}\ge24$ satisfying the two-family decomposition of Definition~\ref{def:area_law_two_family_decomposition} (supplied by Theorem~\ref{thm:area_law_two_family_decomposition}).
+    Then for all integers $q\ge1$, $R\ge0$ and reals $J,\Delta>0$, there exists $C\ge0$ such that for every finite induced domain $\Lambda$, admissible Hamiltonian of range $R$ and interaction bound $J$ with unit ground vector $\Omega$ and global gap $\ge\Delta$, and cut $A\subseteq\Lambda$ (\cite[Theorem~1.1, Section~11]{OpenAI2026AreaLaw}),
     \begin{align}
         S_\Omega(A) & \le C|\partial_\Lambda A|.\notag
     \end{align}
-    The constant is independent of the domain, Hamiltonian, ground vector,
-    and cut. This is the reduction in the proof of
-    \cite[Theorem~1.1, Section~11]{OpenAI2026AreaLaw}, with the geometric
-    decomposition as its hypothesis; Theorem~\ref{thm:area_law_two_family_decomposition}
-    supplies that hypothesis.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:area_law_sublinear_collar,
         thm:area_law_conditional_collar_two_families}
-    Fix $q,R,J,\Delta$ and choose $D_0,C_{\rm tpl}$ from the hypothesis
-    for this range $R$. Theorem~\ref{thm:area_law_sublinear_collar}
-    proves the collar bound at this same pair, since $D_0>2R+10$ and
-    $C_{\rm tpl}\ge24$. Theorem~\ref{thm:area_law_conditional_collar_two_families}
-    then applies to this collar bound and the assumed two-family
-    decomposition, and gives the asserted constant.
+    Choosing $D_0>2R+10$ and $C_{\rm tpl}\ge24$ for $R$, Theorem~\ref{thm:area_law_sublinear_collar} establishes the sublinear collar bound at $(D_0,C_{\rm tpl})$, and Theorem~\ref{thm:area_law_conditional_collar_two_families} yields $S_\Omega(A)\le C|\partial_\Lambda A|$.
 \end{proof}
 
 \subsection{Safe rectangles as consequences of the area law}
 
-The uniform area law gives a linear entropy bound for safe rectangles.
-Together with the buffered-rectangle estimate, this yields the recurrence
-in the proof of~\cite[Proposition~3.3]{OpenAI2026AreaLaw} with one pair of
-constants for all admissible real clearances.
+The uniform area law implies a linear entropy bound for safe rectangles, which together with the buffered-rectangle estimate yields the recurrence of~\cite[Proposition~3.3]{OpenAI2026AreaLaw} uniformly in the real clearance $d$.
 
 \begin{theorem}[Boundary of a rectangle avoiding cut endpoints]
     \label{thm:area_law_safe_rectangle_boundary}
     \lean{TNLean.PEPS.AreaLaw.card_edgeBoundary_rectRegion_le_of_disjoint}
     \leanok
     \uses{def:area_law_safe_rectangle,def:area_law_cell_counts}
-    Let $\Lambda\subset\mathbb Z^2$ be finite, let $A\subseteq\Lambda$, and
-    let $Z_A$ be the endpoints of the edges crossing $A$. If an integer
-    rectangle $Q$ satisfies $Q\cap Z_A=\varnothing$, then
-    $|\partial_\Lambda(A\cap Q)|\le48\operatorname{size}(Q)$.
+    For finite $\Lambda\subset\mathbb Z^2$, $A\subseteq\Lambda$ with cut-edge endpoint set $Z_A$, and any integer rectangle $Q$ with $Q\cap Z_A=\varnothing$,
+    \begin{align}
+        |\partial_\Lambda(A\cap Q)| \le 48\operatorname{size}(Q). \label{eq:safe_rect_boundary}
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_physical_ambient_boundary,
         lem:area_law_ambient_boundary_layers,thm:area_law_buffer_contours}
-    The physical-to-ambient comparison used in
-    \cite[Lemma~9.4]{OpenAI2026AreaLaw} and the first outer layer give
+    By Theorem~\ref{thm:area_law_physical_ambient_boundary}, Lemma~\ref{lem:area_law_ambient_boundary_layers}, and Theorem~\ref{thm:area_law_buffer_contours} (\cite[Lemma~9.4]{OpenAI2026AreaLaw}) with $\operatorname{size}(Q)\ge1$,
     \begin{align}
         |\partial_\Lambda(A\cap Q)|
          & \le |\partial Q|
@@ -64,8 +44,6 @@ constants for all admissible real clearances.
         \le16\bigl(\operatorname{size}(Q)+2\bigr)
         \le48\operatorname{size}(Q).\notag
     \end{align}
-    The layer estimate is the rectangle dilation bound with both radii
-    equal to one, and every integer rectangle has size at least one.
 \end{proof}
 
 \begin{theorem}[Linear entropy for rectangles with real clearance]
@@ -73,35 +51,15 @@ constants for all admissible real clearances.
     \lean{TNLean.PEPS.AreaLaw.exists_regionalEntropy_safe_rect_le_linear}
     \leanok
     \uses{def:area_law_safe_rectangle,def:area_law_ground_entropy}
-    Fix integers $q\ge1$, $R\ge0$ and reals $J\ge0$, $\Delta>0$.
-    There is a constant $K\ge0$ with the following property for every real
-    $d\ge0$. Let $\Lambda$ be a finite induced domain, let $H$ be an
-    admissible Hamiltonian of range $R$ and interaction bound $J$, and let
-    $\Omega$ be a unit vector with eigenvalue $E_0$ satisfying the
-    full-system projector gap (\ref{eq:area_law_projector_gap}).
-    For any cut $A\subseteq\Lambda$ and integer rectangle $Q$ such that
-    $d\operatorname{size}(Q)<\|t-z\|_\infty$ for every $t\in Q$ and
-    $z\in Z_A$,
+    For integers $q\ge1$, $R\ge0$ and reals $J\ge0$, $\Delta>0$, there exists $K\ge0$ such that for all $d\ge0$, finite induced domains $\Lambda$, range-$R$ interaction-$J$ Hamiltonians $H$, unit eigenvectors $\Omega$ satisfying the projector gap (\ref{eq:area_law_projector_gap}), cuts $A\subseteq\Lambda$, and integer rectangles $Q$ with $d\operatorname{size}(Q)<\|t-z\|_\infty$ ($\forall t\in Q,z\in Z_A$; \cite[Theorem~1.1, Section~3]{OpenAI2026AreaLaw}),
     \begin{align}
-        S_\Omega(A\cap Q)\le K\operatorname{size}(Q).\notag
+        S_\Omega(A\cap Q)\le K\operatorname{size}(Q). \label{eq:safe_rect_linear_entropy}
     \end{align}
-    The constant is independent of $d$ and all physical instances.
-    This is a consequence of~\cite[Theorem~1.1]{OpenAI2026AreaLaw} for
-    the rectangles defined in Section~3 of that paper.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:openai_uniform_area_law,thm:area_law_safe_rectangle_boundary}
-    Apply the uniform area law at interaction bound $J+1>0$, keeping every
-    interaction term, the total Hamiltonian and the vector $\Omega$
-    unchanged. Let $C\ge0$ be its constant and put $K=48C$.
-    A point $z\in Q\cap Z_A$ would give
-    $d\operatorname{size}(Q)<\|z-z\|_\infty=0$, contradicting $d\ge0$.
-    Thus $Q\cap Z_A=\varnothing$, and
-    \begin{align}
-        S_\Omega(A\cap Q)
-        \le C|\partial_\Lambda(A\cap Q)|
-        \le48C\operatorname{size}(Q).\notag
-    \end{align}
+    Let $C\ge0$ be the constant of Theorem~\ref{thm:openai_uniform_area_law} at interaction bound $J+1>0$, and set $K=48C$.
+    Since $d\ge0$ and $d\operatorname{size}(Q)<\|t-z\|_\infty$ force $Q\cap Z_A=\varnothing$, Theorem~\ref{thm:openai_uniform_area_law} and (\ref{eq:safe_rect_boundary}) give $S_\Omega(A\cap Q)\le C|\partial_\Lambda(A\cap Q)|\le48C\operatorname{size}(Q)$.
 \end{proof}
 
 \begin{theorem}[Joint buffer and fixed-clearance entropy recurrence]
@@ -109,63 +67,36 @@ constants for all admissible real clearances.
     \lean{TNLean.PEPS.AreaLaw.exists_initialBuffer_and_real_boxEntropy_recurrence}
     \leanok
     \uses{def:area_law_safe_rectangle,def:area_law_ground_entropy}
-    Fix integers $q\ge1$, $R\ge0$ and reals $J\ge0$, $\Delta>0$.
-    There are an integer $c\ge1$ and a real $b\ge0$ such that both assertions
-    below hold for every real $d>2R+10$.
-
-    Let $\Lambda$ be any finite induced domain, let $H$ be an admissible
-    Hamiltonian of range $R$ and interaction bound $J$, and let $\Omega$
-    be a unit eigenvector with eigenvalue $E_0$ satisfying the full-system
-    projector gap. Let $A\subseteq\Lambda$ and let $Q$ satisfy
-    $d\operatorname{size}(Q)<\|t-z\|_\infty$ for every $t\in Q$ and
-    $z\in Z_A$. For every integer $r\ge1$ and integer rectangle $Q_0$ with
-    $\operatorname{size}(Q_0)\le r$ and $Q_0^{+cr}\subseteq Q$, put
-    $X=A\cap Q_0$ and $T=(A\cap Q_0^{+cr})\setminus X$. Then
-    \begin{align}
-        S_\Omega(X\cup T)-S_\Omega(T)
-        \le\tfrac12S_\Omega(X)+br.\notag
-    \end{align}
-
-    For each fixed $d$, let
-    \begin{align}
-        F_d(r) & =\sup\bigl\{S_\Omega(A\cap Q):
-        \operatorname{size}(Q)\le r,\notag                          \\
-               & \hspace{2em}d\operatorname{size}(Q)<\|t-z\|_\infty
-        \quad\forall t\in Q,\ \forall z\in Z_A\bigr\}.\notag
-    \end{align}
-    This supremum ranges over all finite domains, admissible Hamiltonians,
-    eigenvalues, unit eigenvectors with the full-system projector gap, cuts and
-    integer rectangles at the fixed $q,R,J,\Delta,d$; the supremum of an
-    empty collection is taken to be zero. Put $p_0=(2c+5)^{-2}$.
-    For all integers $M,r\ge1$,
-    \begin{align}
-        F_d(Mr)
-         & \le\bigl[(1-p_0/2)M^2+(p_0/2)\,4(c+2)M\bigr]F_d(r)
-        +bM^2r.\notag
-    \end{align}
-    The buffer estimate is that of~\cite[Lemma~3.2]{OpenAI2026AreaLaw};
-    the multiplicative coefficient is the one in the recurrence in the
-    proof of~\cite[Proposition~3.3]{OpenAI2026AreaLaw}.
+    For integers $q\ge1$, $R\ge0$ and reals $J\ge0$, $\Delta>0$, there exist an integer $c\ge1$ and real $b\ge0$ such that for every $d>2R+10$:
+    \begin{enumerate}
+        \item For any instance $(\Lambda,H,\Omega,A,Q)$ as in Theorem~\ref{thm:area_law_safe_rectangle_linear_entropy}, integer $r\ge1$, and rectangle $Q_0$ with $\operatorname{size}(Q_0)\le r$ and $Q_0^{+cr}\subseteq Q$, setting $X=A\cap Q_0$ and $T=(A\cap Q_0^{+cr})\setminus X$ (\cite[Lemma~3.2]{OpenAI2026AreaLaw}),
+              \begin{align}
+                  S_\Omega(X\cup T)-S_\Omega(T)
+                  \le\tfrac12S_\Omega(X)+br.\notag
+              \end{align}
+        \item Defining the supremum over all such instances (with $\sup\varnothing=0$)
+              \begin{align}
+                  F_d(r) & =\sup\bigl\{S_\Omega(A\cap Q):
+                  \operatorname{size}(Q)\le r,\ d\operatorname{size}(Q)<\|t-z\|_\infty
+                  \ \forall t\in Q,z\in Z_A\bigr\}, \label{eq:Fd_def}
+              \end{align}
+              and $p_0=(2c+5)^{-2}$, for all integers $M,r\ge1$ (\cite[Proposition~3.3]{OpenAI2026AreaLaw}),
+              \begin{align}
+                  F_d(Mr)
+                   & \le\bigl[(1-p_0/2)M^2+(p_0/2)\,4(c+2)M\bigr]F_d(r)
+                  +bM^2r.\notag
+              \end{align}
+    \end{enumerate}
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_initial_buffer,
         thm:area_law_safe_rectangle_linear_entropy,
         thm:area_law_regional_state_identities}
-    Choose $c\ge1$ and $b_0\ge0$ from the real-clearance buffer estimate,
-    and $K\ge0$ from the linear entropy bound. Set $b=\max\{b_0,K\}$.
-    Since $b_0r\le br$, the buffer conclusion holds with these same $c,b$.
-
-    Fix $d>2R+10$. Entropy nonnegativity and the linear bound give
-    $0\le F_d(t)\le Kt$ for every integer $t\ge0$, including an empty
-    collection in the supremum. Write
-    $\alpha=(1-p_0/2)M^2+(p_0/2)\,4(c+2)M$.
-    Since $0\le p_0\le1$, one has $\alpha\ge0$; and $M\ge1$ gives
-    $M\le M^2$. Consequently,
+    Choose $(c,b_0)$ from Theorem~\ref{thm:area_law_initial_buffer} and $K$ from Theorem~\ref{thm:area_law_safe_rectangle_linear_entropy}, and set $b=\max\{b_0,K\}$.
+    By (\ref{eq:safe_rect_linear_entropy}) and Theorem~\ref{thm:area_law_regional_state_identities}, $0\le F_d(t)\le Kt$ for all $t\ge0$; since $\alpha=(1-p_0/2)M^2+2p_0(c+2)M\ge0$ and $M\le M^2$,
     \begin{align}
-        F_d(Mr)\le KMr\le bM^2r
-        \le\alpha F_d(r)+bM^2r.\notag
+        F_d(Mr)\le KMr\le bM^2r \le\alpha F_d(r)+bM^2r.\notag
     \end{align}
-    All constants were chosen before $d$ and the physical data.
 \end{proof}
 
 \begin{theorem}[Improvement of the exponent at fixed real clearance]
@@ -174,41 +105,16 @@ constants for all admissible real clearances.
     \leanok
     \uses{thm:area_law_real_box_recurrence_after_area_law,
         def:area_law_bootstrap_parameters}
-    Fix integers $q\ge1$, $R\ge0$ and reals $J\ge0$, $\Delta>0$.
-    Fix $e_0$ with $e_*<e_0<1$, where $e_*=2\cdot10^{-6}$, and fix
-    $C_{\rm box}\ge0$. Put $\ell=\ell(e_0)$ as in
-    Definition~\ref{def:area_law_bootstrap_parameters}.
-    There is a constant $C>0$ such that the following implication holds
-    for every $e$ with $e_*<e\le e_0$ and every real $d>2R+10$.
-
-    Let $F_d(r)$ be the supremum over the physical instances and safe
-    rectangles at fixed $q,R,J,\Delta,d$ specified in
-    Theorem~\ref{thm:area_law_real_box_recurrence_after_area_law}.
-    If $F_d(r)\le C_{\rm box}r^{1+e}$ for every integer $r\ge1$, then
-    $F_d(r)\le Cr^{1+(1-\ell)e}$ for every integer $r\ge1$.
-    The constant $C$ is chosen before $e,d$ and all physical instances.
-    This gives the exponent improvement in the proof of
-    \cite[Proposition~9.5]{OpenAI2026AreaLaw} as a consequence of the
-    uniform area law.
+    Fix integers $q\ge1$, $R\ge0$, reals $J\ge0$, $\Delta>0$, $C_{\rm box}\ge0$, and $e_0\in(e_*,1)$ with $e_*=2\cdot10^{-6}$ and $\ell=\ell(e_0)$ from Definition~\ref{def:area_law_bootstrap_parameters}.
+    There exists $C>0$ (chosen before $e,d$ and all instances) such that for all $e\in(e_*,e_0]$ and $d>2R+10$, if $F_d(r)$ in (\ref{eq:Fd_def}) satisfies $F_d(r)\le C_{\rm box}r^{1+e}$ for all $r\ge1$, then $F_d(r)\le Cr^{1+(1-\ell)e}$ for all $r\ge1$ (\cite[Proposition~9.5]{OpenAI2026AreaLaw}).
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:area_law_safe_rectangle_linear_entropy,
         thm:area_law_bootstrap_margins}
-    Choose $K\ge0$ from the linear safe-rectangle estimate and set
-    $C=\max\{K,1\}>0$. These constants precede $e$ and $d$.
-    Fix admissible $e,d$ and an integer $r\ge1$.
-    Every entropy in the defining collection for $F_d(r)$ is at most
-    $Ks\le Kr$, where $s\le r$ is the size of its rectangle.
-    Since $Kr\ge0$, this also bounds an empty collection under the
-    stated supremum convention. Thus $F_d(r)\le Kr$.
-
-    The parameter bounds give $0<\ell<1$; hence
-    $e'=(1-\ell)e>0$. Since $r\ge1$, one has $r\le r^{1+e'}$,
-    and therefore
+    Take $K\ge0$ from Theorem~\ref{thm:area_law_safe_rectangle_linear_entropy} and set $C=\max\{K,1\}>0$, so (\ref{eq:safe_rect_linear_entropy}) implies $F_d(r)\le Kr$.
+    By Theorem~\ref{thm:area_law_bootstrap_margins}, $0<\ell<1$, so $e'=(1-\ell)e>0$ and for all $r\ge1$,
     \begin{align}
         F_d(r)\le Kr\le Cr\le Cr^{1+e'}.\notag
     \end{align}
-    The linear bound proves the conclusion uniformly, including every
-    instance satisfying the assumed bound with coefficient $C_{\rm box}$.
 \end{proof}

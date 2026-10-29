@@ -29,12 +29,10 @@ injectivity condition together with the local inverse it provides.
     \lean{TNLean.PEPS.Tensor}
     \leanok
     \uses{def:peps_edge, def:peps_incident_edge}
-    A PEPS tensor on $G$ with physical dimension $d$ consists of a bond
-    dimension $D_e$ for every edge $e$, together with a local tensor at each
-    vertex $v$ whose virtual indices are indexed by the edges incident to $v$
-    and whose physical index lies in $\{0,\ldots,d-1\}$.
-    The local tensor at $v$ has one physical leg and one virtual leg for each
-    incident edge:
+    A PEPS tensor $A$ on $G=(V,E)$ with physical dimension $d$ consists of a bond
+    dimension $D_e$ for each $e\in E$ and a local tensor
+    $A_v:\prod_{e\ni v}\{0,\ldots,D_e-1\}\times\{0,\ldots,d-1\}\to\C$ at each
+    $v\in V$, with one physical leg and one virtual leg per incident edge:
     \input{figures/peps_tensor}
 \end{definition}
 
@@ -43,8 +41,8 @@ injectivity condition together with the local inverse it provides.
     \lean{TNLean.PEPS.VirtualConfig}
     \leanok
     \uses{def:peps_tensor, def:peps_edge}
-    A \emph{virtual configuration} assigns to every edge $e$ one basis index in
-    the corresponding bond space of dimension $D_e$.
+    A \emph{virtual configuration} is an assignment
+    $\eta\in\prod_{e\in E}\{0,\ldots,D_e-1\}$.
 \end{definition}
 
 \begin{definition}[Splitting and reindexing virtual configurations]
@@ -55,12 +53,10 @@ injectivity condition together with the local inverse it provides.
     \lean{TNLean.PEPS.virtualConfigCongr}
     \leanok
     \uses{def:peps_virtual_config}
-    A predicate on the edges splits a virtual configuration canonically into
-    its restrictions to the selected and unselected edges. An equality
-    between two bond-dimension families also induces a canonical reindexing
-    between their virtual configurations.  For a vertex $v$, selecting the
-    incident edges splits a virtual configuration into its local labels at $v$
-    and the labels on all nonincident edges.
+    An edge predicate $p$ splits a virtual configuration $\eta$ into
+    $(\eta|_p,\eta|_{\neg p})$. A bond-dimension equality $h:D=D'$ induces a
+    canonical reindexing $\iota_h$ of virtual configurations. For $v\in V$,
+    selecting incident edges splits $\eta$ into $(\eta|_v,\eta|_{\not\ni v})$.
 \end{definition}
 
 \begin{theorem}[Evaluation laws for splitting and reindexing]
@@ -75,14 +71,15 @@ injectivity condition together with the local inverse it provides.
     \lean{TNLean.PEPS.virtualConfigCongr_mergeVirtualConfig}
     \leanok
     \uses{def:peps_virtual_config_split_reindex, def:peps_virtual_config_merge}
-    The two restrictions recover the original edge labels on their respective
-    domains. Reindexing acts edgewise by the corresponding identification of
-    bond indices, commutes with piecewise merging, and splitting a piecewise
-    merge recovers its selected and unselected inputs.
+    On their respective domains, $(\eta|_p)(e)=\eta(e)$ and
+    $(\eta|_{\neg p})(e)=\eta(e)$. With $m_p(\eta,\xi)$ the piecewise merge of
+    Definition~\ref{def:peps_virtual_config_merge},
+    $(\iota_h\eta)(e)=h_e(\eta(e))$,
+    $\iota_h(m_p(\eta,\xi))=m_p(\iota_h\eta,\iota_h\xi)$, and
+    $(m_p(\eta,\xi)|_p,m_p(\eta,\xi)|_{\neg p})=(\eta|_p,\xi|_{\neg p})$.
 \end{theorem}
 \begin{proof}\leanok
-    Each identity follows by evaluating at an edge and distinguishing whether
-    that edge satisfies the selection predicate.
+    Evaluate at $e\in E$ and split by whether $p(e)$ holds.
 \end{proof}
 
 \begin{definition}[Piecewise and regionwise merge of virtual configurations]
@@ -91,11 +88,11 @@ injectivity condition together with the local inverse it provides.
     \lean{TNLean.PEPS.regionMerge}
     \leanok
     \uses{def:peps_virtual_config}
-    Given two virtual configurations and a predicate on edges, their
-    \emph{piecewise merge} reads the first configuration on selected edges and
-    the second configuration elsewhere. For a vertex region, the
-    \emph{regionwise merge} selects precisely the edges incident to that
-    region.
+    For virtual configurations $\eta,\xi$ and an edge predicate $p$, the
+    \emph{piecewise merge} $m_p(\eta,\xi)$ is defined by
+    $m_p(\eta,\xi)(e)=\eta(e)$ if $p(e)$ and $\xi(e)$ otherwise. For a region
+    $R\subseteq V$, the \emph{regionwise merge} $m_R(\eta,\xi)$ takes $p(e)$ to
+    hold iff $e$ is incident to $R$.
 \end{definition}
 
 \begin{theorem}[Readback laws for merged configurations]
@@ -107,14 +104,13 @@ injectivity condition together with the local inverse it provides.
     \lean{TNLean.PEPS.regionMerge_of_not_incident}
     \leanok
     \uses{def:peps_virtual_config_merge}
-    A piecewise merge reads the first input on a selected edge and the second
-    input on an unselected edge; merging a configuration with itself leaves it
-    unchanged. In particular, a regionwise merge reads the first input on
-    region-incident edges and the second input on all remaining edges.
+    Under Definition~\ref{def:peps_virtual_config_merge},
+    $m_p(\eta,\xi)(e)=\eta(e)$ if $p(e)$, $m_p(\eta,\xi)(e)=\xi(e)$ if
+    $\neg p(e)$, and $m_p(\eta,\eta)=\eta$. In particular,
+    $m_R(\eta,\xi)(e)=\eta(e)$ for $e$ incident to $R$ and $\xi(e)$ otherwise.
 \end{theorem}
 \begin{proof}\leanok
-    Evaluating the merge at an edge and using the defining alternative according
-    to whether the edge is selected proves each readback law.
+    Evaluate $m_p(\eta,\xi)(e)$ by case distinction on $p(e)$.
 \end{proof}
 
 \begin{theorem}[Vertex products through a regionwise merge]
@@ -124,17 +120,18 @@ injectivity condition together with the local inverse it provides.
     \lean{TNLean.PEPS.complementProd_eq_merge}
     \leanok
     \uses{def:peps_virtual_config_merge}
-    The vertex product on a region reads the first input of its regionwise
-    merge. A product on a second region reads the second input whenever the
-    two configurations agree on edges incident to both regions. Consequently,
-    agreement on the boundary of a region lets the complementary product read
-    the second input through the same merge.
+    Put $\Pi_R(\eta,\sigma)=\prod_{v\in R}A_v(\eta|_v,\sigma_v)$. Then
+    $\Pi_R(m_R(\eta,\xi),\sigma)=\Pi_R(\eta,\sigma)$, and if $\eta(e)=\xi(e)$
+    for every $e$ incident to both $R$ and $S$, then
+    $\Pi_S(m_R(\eta,\xi),\sigma)=\Pi_S(\xi,\sigma)$. In particular, if
+    $\eta=\xi$ on $\partial R$, then
+    $\Pi_{V\setminus R}(m_R(\eta,\xi),\sigma)=\Pi_{V\setminus R}(\xi,\sigma)$.
 \end{theorem}
 \begin{proof}\leanok
-    Comparing the local tensor entry at every vertex shows that each incident
-    edge is read from the prescribed input, while an edge incident to both
-    regions is handled by the assumed agreement; a boundary edge is the
-    corresponding special case for a region and its complement.
+    By Theorem~\ref{thm:peps_virtual_config_merge_readback},
+    $m_R(\eta,\xi)|_v=\eta|_v$ for $v\in R$, while for $v\in S$ any edge $e\ni v$
+    also incident to $R$ satisfies $\eta(e)=\xi(e)$; taking $S=V\setminus R$
+    specializes this to $\partial R$.
 \end{proof}
 
 \begin{theorem}[Constant-cardinality fiber sum]
@@ -142,16 +139,13 @@ injectivity condition together with the local inverse it provides.
     \lean{TNLean.PEPS.sum_comp_of_config_fiber_card}
     \leanok
     \uses{def:peps_virtual_config}
-    Let a finite set map to the virtual configurations so that every fiber has
-    cardinality $n$. For every function $g$ into an additive commutative
-    monoid,
-    $\sum_x g(m(x))=n\mathbin{\boldsymbol{\cdot}}\sum_{\eta}g(\eta)$,
-    where the first sum ranges over the finite set and the second over all
-    virtual configurations.
+    If $m:X\to\prod_e\{0,\ldots,D_e-1\}$ has fibers $|m^{-1}(\eta)|=n$ for all
+    $\eta$, then for every function $g$ into an additive commutative monoid,
+    $\sum_{x\in X} g(m(x))=n\mathbin{\boldsymbol{\cdot}}\sum_{\eta}g(\eta)$.
 \end{theorem}
 \begin{proof}\leanok
-    Grouping the first sum by the value of $m$ repeats each grouped summand
-    exactly $n$ times by the common fiber-cardinality hypothesis.
+    Partitioning $X$ into the fibers $m^{-1}(\eta)$ repeats each summand
+    $g(\eta)$ exactly $|m^{-1}(\eta)|=n$ times.
 \end{proof}
 
 \begin{definition}[PEPS state coefficient]
@@ -159,10 +153,9 @@ injectivity condition together with the local inverse it provides.
     \lean{TNLean.PEPS.stateCoeff}
     \leanok
     \uses{def:peps_tensor, def:peps_virtual_config}
-    For a physical configuration $\sigma$ on the vertices, the PEPS state
-    coefficient is obtained by summing over all virtual configurations and,
-    for each such configuration, multiplying the local tensor entries over all
-    vertices.
+    For a physical configuration $\sigma:V\to\{0,\ldots,d-1\}$, the PEPS state
+    coefficient is
+    $\Coeff_A(\sigma)=\sum_{\eta}\prod_{v\in V}A_v(\eta|_v,\sigma_v)$.
 \end{definition}
 
 \begin{definition}[Equality of PEPS states]
@@ -170,23 +163,22 @@ injectivity condition together with the local inverse it provides.
     \lean{TNLean.PEPS.SameState}
     \leanok
     \uses{def:peps_stateCoeff}
-    Two PEPS tensors represent the same state if all their state coefficients
-    agree for every physical configuration.
+    Two PEPS tensors $A,B$ represent the same state if
+    $\Coeff_A(\sigma)=\Coeff_B(\sigma)$ for all $\sigma$.
 \end{definition}
 
 \subsection{Gauge transformations on the bonds}
 
-An invertible matrix on an edge acts on its two endpoint tensors by opposite
-oriented insertions. Absorbing such a matrix on every edge gives a gauge
-transformation that leaves the generated state unchanged.
+An invertible matrix $X_e\in\GL(D_e)$ on an edge acts on its two endpoint
+tensors by opposite oriented insertions; absorbing $X_e$ on every edge gives a
+gauge transformation preserving $\Coeff_A$.
 
 \begin{definition}[Edge gauge at a vertex]%
     \label{def:edgeGaugeAt}
     \lean{TNLean.PEPS.edgeGaugeAt}
     \leanok
-    For an edge $e=(u,w)$ with $u<w$ and gauge $X_e\in\GL(D_e)$,
-    the gauge matrix applied at vertex $v$ is $X_e$ if $v=u$ and
-    $(X_e^{-1})^\top$ if $v=w$.
+    For an edge $e=(u,w)$ with $u<w$ and $X_e\in\GL(D_e)$, the endpoint gauge
+    matrix at $v\in\{u,w\}$ is
     % Formula: the two endpoint actions of the ordered edge e=(u,w) are X_e and
     % (X_e^{-1})^top.  No standalone source figure states this convention.
     % Ink-to-index/type verdict: the old scalar picture suppressed the physical and
@@ -208,10 +200,8 @@ transformation that leaves the generated state unchanged.
     \lean{TNLean.PEPS.gaugeVertex}
     \leanok
     \uses{def:edgeGaugeAt}
-    The gauged tensor at vertex $v$ is $A^X_v$. For each incident edge $ie$,
-    write $M_{ie}$ for the matrix specified by
-    Definition~\ref{def:edgeGaugeAt}, applied at the vertex $v$ to the gauge
-    on the underlying edge of $ie$. Then
+    Writing $M_{ie}=X_{v,e}$ from Definition~\ref{def:edgeGaugeAt} for each
+    incident edge $ie=(v,e)$, the gauged vertex tensor $(A^X)_v$ is
     % Formula: the displayed component equation is the gauge action at v.
     % Ink-to-index/type verdict: Papers/1804.04964/paper_normal.tex:1212--1314
     % draws only particular vertices.  The general object has boundary
@@ -232,8 +222,8 @@ transformation that leaves the generated state unchanged.
     \lean{TNLean.PEPS.applyGauge}
     \leanok
     \uses{def:gaugeVertex}
-    The PEPS tensor obtained by applying edge-gauge matrices to $A$, with
-    vertex tensors $A^X_v$.
+    Applying $X\in\prod_e\GL(D_e)$ to $A$ yields the PEPS tensor $A^X$ with
+    vertex tensors $(A^X)_v$ from Definition~\ref{def:gaugeVertex}.
 \end{definition}
 
 \begin{definition}[Absorb edge gauges]%
@@ -241,10 +231,8 @@ transformation that leaves the generated state unchanged.
     \lean{TNLean.PEPS.absorbEdgeGauges}
     \leanok
     \uses{def:applyGauge}
-    Given a tensor family $B$ and an oriented gauge matrix $X_e$ on every edge,
-    the absorbed tensor family is $\widetilde B=B^X$; at each vertex, its
-    local tensor is obtained by inserting the oriented endpoint matrices on
-    the incident virtual legs.
+    For a tensor family $B$ and edge gauges $X=(X_e)_e$, the absorbed tensor
+    family is $\widetilde B=B^X$.
 \end{definition}
 
 \begin{theorem}[Absorbed gauges keep the bond spaces]%
@@ -252,12 +240,11 @@ transformation that leaves the generated state unchanged.
     \lean{TNLean.PEPS.absorbEdgeGauges_bondDim}
     \leanok
     \uses{def:peps_absorbEdgeGauges}
-    The absorbed tensor family has $D_{\widetilde B}(e)=D_B(e)$ for every
-    edge $e$.
+    For every edge $e$, $D_{\widetilde B}(e)=D_B(e)$.
 \end{theorem}
 \begin{proof}\leanok
-    Since $\widetilde B=B^X$ is defined with the same bond-dimension function as
-    $B$, one has $D_{\widetilde B}(e)=D_{B^X}(e)=D_B(e)$ for every edge $e$.
+    By Definition~\ref{def:peps_absorbEdgeGauges},
+    $D_{\widetilde B}(e)=D_{B^X}(e)=D_B(e)$.
 \end{proof}
 
 \begin{theorem}[Local formula for absorbed gauges]%
@@ -265,17 +252,13 @@ transformation that leaves the generated state unchanged.
     \lean{TNLean.PEPS.absorbEdgeGauges_component}
     \leanok
     \uses{def:peps_absorbEdgeGauges, def:gaugeVertex}
-    If $M_{ie}$ is the oriented endpoint matrix attached to an incident edge
-    $ie$ at $v$, then
+    With $M_{ie}=X_{v,e}$ on each $ie\ni v$,
     $\widetilde B_v(\eta,\sigma)
-        =\sum_{\eta'}(\prod_{ie}M_{ie}(\eta(ie),\eta'(ie)))
+        =\sum_{\eta'}(\prod_{ie\ni v}M_{ie}(\eta(ie),\eta'(ie)))
         B_v(\eta',\sigma)$.
 \end{theorem}
 \begin{proof}\leanok
-    Expanding $\widetilde B=B^X$ at a vertex gives
-    $\widetilde B_v(\eta,\sigma)=(B^X)_v(\eta,\sigma)
-        =\sum_{\eta'}(\prod_{ie}M_{ie}(\eta(ie),\eta'(ie)))
-        B_v(\eta',\sigma)$.
+    Unfold $\widetilde B_v=(B^X)_v$ using Definition~\ref{def:gaugeVertex}.
 \end{proof}
 
 \begin{definition}[Gauge equivalence for PEPS]%
@@ -283,9 +266,8 @@ transformation that leaves the generated state unchanged.
     \lean{TNLean.PEPS.GaugeEquiv}
     \leanok
     \uses{def:gaugeVertex}
-    Two PEPS tensors $A,B$ are gauge-equivalent if they have the same bond
-    dimensions and $B$ is obtained from $A$ by applying invertible gauge
-    matrices on each edge.
+    Two PEPS tensors $A,B$ are gauge-equivalent ($A\sim B$) if $D_A=D_B$ and
+    $B=A^X$ for some $X\in\prod_e\GL(D_e)$.
 \end{definition}
 
 \begin{theorem}[Gauge invariance of PEPS state]%
@@ -293,8 +275,8 @@ transformation that leaves the generated state unchanged.
     \lean{TNLean.PEPS.applyGauge_stateCoeff}
     \leanok
     \uses{def:applyGauge, def:peps_stateCoeff}
-    Applying a gauge to a PEPS tensor preserves the state coefficients.
-    Along each internal edge, the two endpoint insertions cancel:
+    For every $\sigma$, $\Coeff_{A^X}(\sigma)=\Coeff_A(\sigma)$, since on each
+    edge $e=(u,w)$ the endpoint insertions satisfy
     % Formula: contraction of X_e with the transposed inverse on the other endpoint
     % gives the Kronecker delta.  Ink-to-index/type verdict: i and k remain free, so
     % this identity kernel has (V,P)=(2,0).  It has no separate source figure; the
@@ -311,35 +293,24 @@ transformation that leaves the generated state unchanged.
     \lean{TNLean.PEPS.GaugeEquiv.sameState}
     \leanok
     \uses{def:GaugeEquivPEPS, def:peps_same_state, thm:applyGauge_stateCoeff}
-    If $A \sim B$ are gauge-equivalent PEPS tensors, then they represent the same state:
-    for every physical configuration $\sigma$,
-    \begin{align}
-        \Coeff_A(\sigma) = \Coeff_B(\sigma). \notag
-    \end{align}
+    If $A \sim B$, then $\Coeff_A(\sigma) = \Coeff_B(\sigma)$ for all $\sigma$.
 \end{theorem}
 
 \subsection{Vertex injectivity and the local inverse}
 
-When the linear map from the coefficient space on virtual configurations to
-$\C^d$, sending the basis vector at $\eta_v$ to $A_v(\eta_v,\cdot)$, is
-injective, the family is linearly independent and the map has a left inverse.
-This inverse turns a matrix inserted on an incident bond into an operation on
-the physical leg, the construction that drives the gauge extraction in later
-sections.
+When the local tensor map $\Phi_v:\eta_v\mapsto A_v(\eta_v,\cdot)\in\C^d$ is
+injective, a left inverse $\Psi_v$ converts virtual bond insertions at $v$ into
+physical operators on $\C^d$.
 
 \begin{definition}[Vertex injectivity]%
     \label{def:IsVertexInjective}
     \lean{TNLean.PEPS.IsVertexInjective}
     \leanok
-    A PEPS tensor $A$ is \emph{vertex-injective} if, at every vertex $v$, the
-    family of physical vectors
-    $(A_v(\eta,\cdot)\in\C^d)_{\eta}$ indexed by virtual configurations $\eta$
-    on the edges incident to $v$ is linearly independent in $\C^d$.
-    Equivalently, extending $A_v$ by linearity to a map from the free vector
-    space on virtual configurations into the physical space $\C^d$ gives a
-    linear map with trivial kernel. This matches the injectivity formulation
-    of \cite[Section~3]{Molnar2018NormalPEPS}, where the local tensor is
-    interpreted as a map from virtual configurations to the physical space.
+    A PEPS tensor $A$ is \emph{vertex-injective} if at every $v\in V$ the family
+    $(A_v(\eta,\cdot)\in\C^d)_{\eta}$ indexed by local virtual configurations
+    $\eta\in\mathcal V_v=\prod_{e\ni v}\{0,\ldots,D_e-1\}$ is linearly
+    independent in $\C^d$, i.e., its linear extension has $\ker A_v=\{0\}$ as in
+    \cite[Section~3]{Molnar2018NormalPEPS}.
     % Formula: A_v : tensor_{e incident to v} C^{D_e} -> C^d and ker(A_v)=0.
     % Ink-to-index: the west wire bundles the virtual indices on every edge
     % incident to v; the east wire is the physical vector A_v(eta,cdot).
@@ -366,9 +337,8 @@ sections.
     \lean{TNLean.PEPS.localTensorMap}
     \leanok
     \uses{def:peps_tensor, def:peps_incident_edge}
-    For a fixed vertex $v$, the family of local physical vectors
-    $\eta\mapsto A_v(\eta,\cdot)$ extends by linearity to a map from the
-    coefficient space on local virtual configurations at $v$ into $\C^d$.
+    At $v\in V$, the local tensor map $\Phi_v:\C^{\mathcal V_v}\to\C^d$ is
+    $\Phi_v(c)(\tau)=\sum_{\eta\in\mathcal V_v}c(\eta)A_v(\eta,\tau)$.
 \end{definition}
 
 \begin{lemma}[Trivial kernel in explicit coordinates]%
@@ -376,14 +346,12 @@ sections.
     \lean{TNLean.PEPS.IsVertexInjective.localCoeff_eq_zero_of_contract_zero}
     \leanok
     \uses{def:IsVertexInjective, def:peps_localTensorMap}
-    If $A$ is vertex-injective and $R$ is a coefficient function on the local
-    virtual configurations at $v$ satisfying
-    $\sum_{\eta}R(\eta)A_v(\eta,\tau)=0$ for every physical index $\tau$, then
-    $R=0$.
+    If $A$ is vertex-injective and $\Phi_v(R)(\tau)=\sum_{\eta}R(\eta)A_v(\eta,\tau)=0$
+    for all $\tau$, then $R=0$.
 \end{lemma}
 \begin{proof}\leanok
-    The hypothesis says that the local tensor map sends $R$ to the zero vector.
-    Vertex injectivity makes this map injective, hence $R=0$.
+    Since $\Phi_v(R)=0$ and $\ker\Phi_v=\{0\}$ by
+    Definition~\ref{def:IsVertexInjective}, $R=0$.
 \end{proof}
 
 \begin{definition}[Local left inverse]%
@@ -391,10 +359,8 @@ sections.
     \lean{TNLean.PEPS.localLeftInverseAt}
     \leanok
     \uses{def:peps_localTensorMap}
-    If the family of local physical vectors $(A_v(\eta,\cdot))_{\eta}$ indexed
-    by the virtual configurations $\eta$ at $v$ is linearly independent, one may
-    choose a linear map $\Psi_v$ from $\C^d$ to the coefficient space on local
-    virtual configurations at $v$ such that $\Psi_v\circ\Phi_v=\Id$.
+    When $\Phi_v$ is injective, choose a linear map
+    $\Psi_v:\C^d\to\C^{\mathcal V_v}$ with $\Psi_v\circ\Phi_v=\Id$.
 \end{definition}
 
 \begin{definition}[Physical realization of a local virtual operator]%
@@ -402,9 +368,8 @@ sections.
     \lean{TNLean.PEPS.physRealizeLocalOpAt}
     \leanok
     \uses{def:peps_localTensorMap, def:peps_localLeftInverse}
-    For an endomorphism $T$ of the coefficient space on local virtual
-    configurations at $v$, define the local physical operator
-    $O_T=\Phi_v\circ T\circ\Psi_v$.
+    For $T\in\End(\C^{\mathcal V_v})$, define the physical realization
+    $O_T=\Phi_v\circ T\circ\Psi_v\in\End(\C^d)$.
 \end{definition}
 
 \begin{theorem}[Local virtual operations on the image]%
@@ -412,11 +377,12 @@ sections.
     \lean{TNLean.PEPS.physRealizeLocalOpAt_spec}
     \leanok
     \uses{def:peps_physRealizeLocalOp}
-    For every coefficient function $c$ on the local virtual configurations at
-    $v$, one has $O_T(\Phi_v(c))=\Phi_v(Tc)$.
+    For every $c\in\C^{\mathcal V_v}$, $O_T(\Phi_v(c))=\Phi_v(Tc)$.
 \end{theorem}
 \begin{proof}\leanok
-    This follows from $\Psi_v\circ\Phi_v=\Id$.
+    By Definitions~\ref{def:peps_localLeftInverse}
+    and~\ref{def:peps_physRealizeLocalOp},
+    $O_T\Phi_v=\Phi_vT\Psi_v\Phi_v=\Phi_vT$.
 \end{proof}
 
 \begin{theorem}[Injectivity of local physical realization]%
@@ -424,14 +390,12 @@ sections.
     \lean{TNLean.PEPS.physRealizeLocalOpAt_injective}
     \leanok
     \uses{def:peps_physRealizeLocalOp, thm:peps_physRealizeLocalOp_spec, def:peps_localTensorMap}
-    Suppose the family of local physical vectors at $v$ is linearly
-    independent. If two virtual operations at $v$ have the same canonical
-    physical realization, then they agree.
+    If $\Phi_v$ is injective and $O_T=O_{T'}$, then $T=T'$.
 \end{theorem}
 \begin{proof}\leanok
-    Evaluating both physical realizations on vectors in the image of the local
-    tensor map gives equality because linear independence makes that map
-    injective.
+    By Theorem~\ref{thm:peps_physRealizeLocalOp_spec},
+    $\Phi_v(Tc)=O_T(\Phi_v(c))=O_{T'}(\Phi_v(c))=\Phi_v(T'c)$, so injectivity
+    of $\Phi_v$ gives $T=T'$.
 \end{proof}
 
 \begin{definition}[Local projector]%
@@ -439,8 +403,7 @@ sections.
     \lean{TNLean.PEPS.localProjectorAt}
     \leanok
     \uses{def:peps_physRealizeLocalOp}
-    The local projector is the physical realization of the identity virtual
-    operator, $P_v=\Phi_v\circ\Psi_v$.
+    The local projector is $P_v=O_{\Id}=\Phi_v\circ\Psi_v$.
 \end{definition}
 
 \begin{definition}[Virtual pullback of a local physical operator]%
@@ -448,10 +411,9 @@ sections.
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt}
     \leanok
     \uses{def:peps_localTensorMap, def:peps_localLeftInverse}
-    In the local injectivity step used in the physical-to-virtual direction of
-    the insertion-algebra argument in \cite[Section~3]{Molnar2018NormalPEPS},
-    for a physical operator $O$ on the local physical space at $v$, define
-    its virtual pullback by $\Psi_v\circ O\circ\Phi_v$.
+    In the physical-to-virtual step of \cite[Section~3]{Molnar2018NormalPEPS},
+    for $O\in\End(\C^d)$ at $v$, define its virtual pullback
+    $T_O=\Psi_v\circ O\circ\Phi_v\in\End(\C^{\mathcal V_v})$.
 \end{definition}
 
 \begin{theorem}[Virtual pullback realizes the projected physical action]%
@@ -459,13 +421,13 @@ sections.
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_spec}
     \leanok
     \uses{def:peps_localVirtualOpOfPhysicalOp, def:peps_physRealizeLocalOp, def:peps_localProjector}
-    For every coefficient function $c$, applying the local tensor map after
-    the virtual pullback gives the projection of $O(\Phi_v(c))$ onto the
-    image of $\Phi_v$.
+    For every $c\in\C^{\mathcal V_v}$,
+    $\Phi_v(T_Oc)=P_v(O(\Phi_v(c)))$.
 \end{theorem}
 \begin{proof}\leanok
-    Expanding the definitions, the chosen left inverse gives
-    $\Psi_v\Phi_v=\Id$, and the remaining map is the local projector.
+    By Definitions~\ref{def:peps_localProjector}
+    and~\ref{def:peps_localVirtualOpOfPhysicalOp},
+    $\Phi_vT_O=\Phi_v\Psi_vO\Phi_v=P_vO\Phi_v$.
 \end{proof}
 
 \begin{theorem}[Virtual pullback for image-preserving physical actions]%
@@ -473,13 +435,13 @@ sections.
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_realizes_of_projector}
     \leanok
     \uses{thm:peps_localVirtualOpOfPhysicalOp_spec}
-    If $O$ sends every vector in the image of $\Phi_v$ back into that image,
-    then its virtual pullback realizes exactly the action of $O$ on
-    $\Phi_v(c)$.
+    If $O(\operatorname{im}\Phi_v)\subseteq\operatorname{im}\Phi_v$, then
+    $\Phi_v(T_Oc)=O(\Phi_v(c))$ for all $c\in\C^{\mathcal V_v}$.
 \end{theorem}
 \begin{proof}\leanok
-    The preceding theorem and the image-preservation hypothesis give the
-    equality.
+    Since $P_v|_{\operatorname{im}\Phi_v}=\Id$,
+    Theorem~\ref{thm:peps_localVirtualOpOfPhysicalOp_spec} gives
+    $\Phi_v(T_Oc)=P_v(O(\Phi_v(c)))=O(\Phi_v(c))$.
 \end{proof}
 
 \begin{theorem}[Recovery of a virtual operation from a physical realization]%
@@ -487,14 +449,13 @@ sections.
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_eq_of_realizes}
     \leanok
     \uses{def:peps_localTensorMap, thm:peps_localVirtualOpOfPhysicalOp_spec}
-    Suppose the family of local physical vectors at $v$ is linearly
-    independent. If a physical operator $O$ realizes a virtual operation $T$ on
-    every vector in the image of $\Phi_v$, then pulling back $O$ recovers $T$.
+    Suppose $\Phi_v$ is injective. If $O(\Phi_v(c))=\Phi_v(Tc)$ for all
+    $c\in\C^{\mathcal V_v}$, then $T_O=T$.
 \end{theorem}
 \begin{proof}\leanok
-    After applying the local tensor map, both virtual operations have the same
-    image. Linear independence makes the local tensor map injective, so the
-    virtual operations agree.
+    By Theorem~\ref{thm:peps_localVirtualOpOfPhysicalOp_spec},
+    $\Phi_v(T_Oc)=P_v(\Phi_v(Tc))=\Phi_v(Tc)$, and injectivity of $\Phi_v$
+    gives $T_O=T$.
 \end{proof}
 
 \begin{theorem}[Extensionality of physical-to-virtual pullback]%
@@ -502,22 +463,19 @@ sections.
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_eq_iff_projected_action_eq}
     \leanok
     \uses{def:peps_localTensorMap, thm:peps_localVirtualOpOfPhysicalOp_spec}
-    Suppose the family of local physical vectors at $v$ is linearly
-    independent. Two physical endpoint operations then have the same virtual
-    pullback exactly when their projected actions agree on every vector in the
-    image of the local tensor map. For every coefficient function $c$,
+    When $\Phi_v$ is injective, two physical operations $O,O'\in\End(\C^d)$
+    satisfy
     \begin{align}
         T_O=T_{O'}
         \quad\Longleftrightarrow\quad
-        P_vO\Phi_v(c)=P_vO'\Phi_v(c).
+        \forall c\in\C^{\mathcal V_v},\ P_vO\Phi_v(c)=P_vO'\Phi_v(c).
         \notag
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Applying the local tensor map to the two virtual pullbacks and using the
-    pullback specification gives the equivalence: the converse follows from
-    injectivity of the local tensor map, while the forward direction is
-    obtained by rewriting the two virtual pullbacks.
+    By Theorem~\ref{thm:peps_localVirtualOpOfPhysicalOp_spec},
+    $P_vO\Phi_v(c)=\Phi_v(T_Oc)$ and $P_vO'\Phi_v(c)=\Phi_v(T_{O'}c)$;
+    injectivity of $\Phi_v$ gives the equivalence.
 \end{proof}
 
 \begin{theorem}[Pullback of the canonical physical realization]%
@@ -525,13 +483,12 @@ sections.
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_physRealizeLocalOpAt}
     \leanok
     \uses{def:peps_physRealizeLocalOp, thm:peps_physRealizeLocalOp_spec, thm:peps_localVirtualOpOfPhysicalOp_eq_of_realizes}
-    Pulling back the canonical physical realization of a virtual operation
-    recovers the original virtual operation.
+    When $\Phi_v$ is injective, $T_{O_T}=T$.
 \end{theorem}
 \begin{proof}\leanok
-    The canonical physical realization agrees with the virtual operation on
-    the image of the local tensor map, so the preceding recovery theorem
-    recovers the virtual operation.
+    Combine Theorem~\ref{thm:peps_physRealizeLocalOp_spec} with
+    Theorem~\ref{thm:peps_localVirtualOpOfPhysicalOp_eq_of_realizes} for
+    $O=O_T$.
 \end{proof}
 
 \begin{theorem}[Physical realization of a pulled-back physical operator]%
@@ -539,14 +496,12 @@ sections.
     \lean{TNLean.PEPS.physRealizeLocalOpAt_localVirtualOpOfPhysicalOpAt}
     \leanok
     \uses{def:peps_physRealizeLocalOp, def:peps_localVirtualOpOfPhysicalOp, def:peps_localProjector}
-    Let $P_v=\Phi_v\circ\Psi_v$ be the local projector, and let
-    $T_O=\Psi_v\circ O\circ\Phi_v$ be the virtual pullback of a physical
-    operator $O$. Then
-    $\Phi_v\circ T_O\circ\Psi_v=P_v\circ O\circ P_v$.
+    With $P_v=\Phi_v\circ\Psi_v$ and $T_O=\Psi_v\circ O\circ\Phi_v$,
+    $O_{T_O}=\Phi_v\circ T_O\circ\Psi_v=P_v\circ O\circ P_v$.
 \end{theorem}
 \begin{proof}\leanok
-    Expanding the definitions of the physical realization, the virtual pullback,
-    and the local projector gives the identity.
+    Unfold Definitions~\ref{def:peps_physRealizeLocalOp},
+    \ref{def:peps_localProjector}, and~\ref{def:peps_localVirtualOpOfPhysicalOp}.
 \end{proof}
 
 \begin{theorem}[Projected local recovery]%
@@ -554,15 +509,12 @@ sections.
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_eq_of_projected_realization_eq}
     \leanok
     \uses{thm:peps_physRealizeLocalOp_injective, thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp}
-    Suppose that the compressed physical action $P_vOP_v$ agrees with the
-    canonical physical realization of a virtual operation $T$. Then the
-    virtual pullback of $O$ is $T$.
+    When $\Phi_v$ is injective, $P_vOP_v=O_T$ implies $T_O=T$.
 \end{theorem}
 \begin{proof}\leanok
-    The physical realization of the virtual pullback of $O$ is
-    $P_vOP_v$. By hypothesis this is the physical realization of $T$.
-    Injectivity of the canonical physical realization gives equality of the
-    virtual operations.
+    By Theorem~\ref{thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp},
+    $O_{T_O}=P_vOP_v=O_T$, so Theorem~\ref{thm:peps_physRealizeLocalOp_injective}
+    yields $T_O=T$.
 \end{proof}
 
 \begin{theorem}[Projected local recovery equivalence]%
@@ -570,14 +522,11 @@ sections.
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_eq_iff_projected_realization_eq}
     \leanok
     \uses{thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp, thm:peps_localVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
-    The compressed physical action $P_vOP_v$ is the canonical physical
-    realization of a virtual operation $T$ if and only if the virtual
-    pullback of $O$ is $T$.
+    When $\Phi_v$ is injective, $P_vOP_v=O_T\iff T_O=T$.
 \end{theorem}
 \begin{proof}\leanok
-    One implication follows by realizing both virtual operations physically and
-    using the formula for the physical realization of a pulled-back operator.
-    The converse is the preceding recovery theorem.
+    Combine Theorems~\ref{thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp}
+    and~\ref{thm:peps_localVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}.
 \end{proof}
 
 \begin{definition}[Matrix action on one incident virtual edge]%
@@ -585,10 +534,10 @@ sections.
     \lean{TNLean.PEPS.localIncidentMatrixOp}
     \leanok
     \uses{def:peps_incident_edge, def:peps_localVirtualConfigSplitAt}
-    A matrix on one edge incident to $v$ acts on the coefficient space of local
-    virtual configurations by applying the matrix to that edge coordinate and
-    summing over the input edge index while keeping the residual virtual
-    configuration fixed.
+    Under the split $\eta\leftrightarrow(i,\eta_{\widehat e})$ at an incident
+    edge $e\ni v$ from Definition~\ref{def:peps_localVirtualConfigSplitAt}, a
+    matrix $M\in\MN{D_e}$ defines $T_{v,e}(M)\in\End(\C^{\mathcal V_v})$ by
+    $(T_{v,e}(M)c)(i,\eta_{\widehat e})=\sum_j M_{ij}c(j,\eta_{\widehat e})$.
 \end{definition}
 
 \begin{theorem}[One-edge matrix action on a basis configuration]%
@@ -596,15 +545,12 @@ sections.
     \lean{TNLean.PEPS.localIncidentMatrixOp_single}
     \leanok
     \uses{def:peps_localIncidentMatrixOp, def:peps_localVirtualConfigSplitAt}
-    If the coefficient function is the unit basis function at one local virtual
-    configuration, and the matrix acts on the distinguished incident edge, the
-    result is the sum over the new distinguished edge index with the residual
-    local boundary held fixed.
+    For the basis vector $e_{(j,\lambda)}\in\C^{\mathcal V_v}$,
+    $T_{v,e}(M)e_{(j,\lambda)}=\sum_i M_{ij}e_{(i,\lambda)}$.
 \end{theorem}
 \begin{proof}\leanok
-    Evaluating both sides on a local virtual configuration and splitting into
-    the two cases according to whether the residual boundary agrees with the
-    fixed residual boundary proves the formula.
+    Evaluate Definition~\ref{def:peps_localIncidentMatrixOp} on $(i,\eta_{\widehat e})$
+    and split by whether $\eta_{\widehat e}=\lambda$.
 \end{proof}
 
 \begin{theorem}[Local tensor form of a one-edge basis action]%
@@ -612,13 +558,12 @@ sections.
     \lean{TNLean.PEPS.localTensorMap_localIncidentMatrixOp_single}
     \leanok
     \uses{thm:peps_localIncidentMatrixOp_single, def:peps_localTensorMap}
-    Applying the local tensor map after a one-edge matrix action on a basis
-    virtual configuration gives the corresponding linear combination of local
-    tensor components.
+    For every $(j,\lambda)$ and physical index $\tau$,
+    $\Phi_v(T_{v,e}(M)e_{(j,\lambda)})(\tau)=\sum_i M_{ij}A_v((i,\lambda),\tau)$.
 \end{theorem}
 \begin{proof}\leanok
-    The preceding coefficient identity and linearity of the local tensor
-    map give the linear combination.
+    Apply $\Phi_v$ to Theorem~\ref{thm:peps_localIncidentMatrixOp_single} by
+    linearity.
 \end{proof}
 
 \begin{theorem}[Physical realization of one-edge virtual matrix action]%
@@ -626,13 +571,12 @@ sections.
     \lean{TNLean.PEPS.localIncidentMatrixOp_physicalRealizationAt}
     \leanok
     \uses{def:peps_localIncidentMatrixOp, def:peps_physRealizeLocalOp, thm:peps_physRealizeLocalOp_spec}
-    If the family of local physical vectors at $v$ is linearly independent,
-    then a matrix acting on one edge incident to $v$ is realized by a physical
-    operator on the physical space at $v$.
+    If $\Phi_v$ is injective, then $O_{T_{v,e}(M)}\in\End(\C^d)$ satisfies
+    $O_{T_{v,e}(M)}(\Phi_v(c))=\Phi_v(T_{v,e}(M)c)$ for all
+    $c\in\C^{\mathcal V_v}$.
 \end{theorem}
 \begin{proof}\leanok
-    Applying the physical realization of local virtual operations to the
-    one-edge matrix action gives the physical operator.
+    Apply Theorem~\ref{thm:peps_physRealizeLocalOp_spec} to $T=T_{v,e}(M)$.
 \end{proof}
 
 \begin{definition}[Split at one incident edge]%
@@ -640,24 +584,23 @@ sections.
     \lean{TNLean.PEPS.localVirtualConfigSplitAt}
     \leanok
     \uses{def:peps_tensor, def:peps_incident_edge}
-    Choosing one incident edge at $v$ identifies the set of local virtual
-    configurations with the product of the bond index on that edge and the
-    residual indices on the remaining incident edges.
+    For an incident edge $e\ni v$, the bijection
+    $\mathcal V_v\simeq\{0,\ldots,D_e-1\}\times\prod_{f\ni v,\,f\ne e}\{0,\ldots,D_f-1\}$
+    writes $\eta\in\mathcal V_v$ as $(\eta(e),\eta_{\widehat e})$.
 \end{definition}
 
 \subsection{Edge-centred decomposition of a contraction}
 
-Fixing an edge $e=(u,v)$ splits the vertex set into the two endpoints and the
-middle region $V\setminus\{u,v\}$. The state coefficient factors accordingly,
-which is the starting point for the edge-middle reduction of the next section.
+Fixing an edge $e=(u,v)$ splits $V$ into $\{u\}$, $M_e=V\setminus\{u,v\}$, and
+$\{v\}$, factoring $\Coeff_A(\sigma)$ for the edge-middle reduction of
+Section~\ref{sec:peps_edge_middle}.
 
 \begin{definition}[Middle region of an edge]%
     \label{def:peps_edgeMiddleVertices}
     \lean{TNLean.PEPS.edgeMiddleVertices}
     \leanok
     \uses{def:peps_edge}
-    For an edge $e=(u,v)$, the middle region is the complement
-    $V\setminus\{u,v\}$.
+    For an edge $e=(u,v)$, the middle region is $M_e=V\setminus\{u,v\}$.
 \end{definition}
 
 \begin{theorem}[Edge-centered vertex partition]%
@@ -665,11 +608,10 @@ which is the starting point for the edge-middle reduction of the next section.
     \lean{TNLean.PEPS.edgeVertices_union}
     \leanok
     \uses{def:peps_edgeMiddleVertices}
-    For an edge $e=(u,v)$, the three regions $\{u\}$,
-    $V\setminus\{u,v\}$, and $\{v\}$ cover the whole vertex set.
+    For an edge $e=(u,v)$, $V=\{u\}\cup(V\setminus\{u,v\})\cup\{v\}$.
 \end{theorem}
 \begin{proof}\leanok
-    Every vertex is either $u$, $v$, or different from both.
+    Every $x\in V$ satisfies $x=u$, $x=v$, or $x\in V\setminus\{u,v\}$.
 \end{proof}
 
 \begin{theorem}[Nonempty middle region from a cardinal bound]%
@@ -677,12 +619,10 @@ which is the starting point for the edge-middle reduction of the next section.
     \lean{TNLean.PEPS.edgeMiddleVertices_nonempty_of_two_lt_card}
     \leanok
     \uses{def:peps_edgeMiddleVertices}
-    If $2<|V|$, then for every edge $e=(u,v)$ the middle region
-    $V\setminus\{u,v\}$ is nonempty.
+    If $2<|V|$, then $V\setminus\{u,v\}\ne\varnothing$ for every edge $e=(u,v)$.
 \end{theorem}
 \begin{proof}\leanok
-    The middle region has cardinality $|V|-2$. Hence
-    $2<|V|$ gives $|V|-2>0$.
+    Since $|V\setminus\{u,v\}|=|V|-2$, $2<|V|$ gives $|V\setminus\{u,v\}|>0$.
 \end{proof}
 
 \begin{theorem}[Product splitting at an edge]%
@@ -690,8 +630,7 @@ which is the starting point for the edge-middle reduction of the next section.
     \lean{TNLean.PEPS.prod_univ_splitAtEdge}
     \leanok
     \uses{def:peps_edgeMiddleVertices, thm:peps_edgeVertices_union}
-    For any edge $e=(u,v)$ and any function $f$ on the vertex set with values
-    in a commutative monoid $M$,
+    For any edge $e=(u,v)$ and $f:V\to M$ into a commutative monoid $M$,
     \begin{align}
         \prod_{x\in V}f(x)
          & =f(u)\left(\prod_{x\in V\setminus\{u,v\}}f(x)\right)f(v).
@@ -699,8 +638,7 @@ which is the starting point for the edge-middle reduction of the next section.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Isolating the two distinguished endpoints in the product over $V$ and
-    grouping the remaining factors into the middle region gives the factorization.
+    Split the product over the partition of Theorem~\ref{thm:peps_edgeVertices_union}.
 \end{proof}
 
 \begin{theorem}[PEPS coefficient splitting at an edge]%
@@ -708,13 +646,13 @@ which is the starting point for the edge-middle reduction of the next section.
     \lean{TNLean.PEPS.stateCoeff_splitAtEdge}
     \leanok
     \uses{def:peps_stateCoeff, def:peps_edgeMiddleVertices, thm:peps_prod_univ_splitAtEdge}
-    For any edge $e=(u,v)$, each summand in the PEPS coefficient factors into
-    the tensor contribution at $u$, the product over the middle region
-    $V\setminus\{u,v\}$, and the tensor contribution at $v$.
+    For any edge $e=(u,v)$,
+    $\Coeff_A(\sigma)=\sum_{\eta}A_u(\eta|_u,\sigma_u)
+        (\prod_{x\in V\setminus\{u,v\}}A_x(\eta|_x,\sigma_x))A_v(\eta|_v,\sigma_v)$.
 \end{theorem}
 \begin{proof}\leanok
-    Expanding the state coefficient and applying the product splitting at the
-    chosen edge to the per-vertex product inside each summand factors each term.
+    Apply Theorem~\ref{thm:peps_prod_univ_splitAtEdge} to each summand in
+    Definition~\ref{def:peps_stateCoeff}.
 \end{proof}
 
 \begin{definition}[Edge-centered boundary data]%
@@ -722,10 +660,10 @@ which is the starting point for the edge-middle reduction of the next section.
     \lean{TNLean.PEPS.EdgeBoundaryConfig}
     \leanok
     \uses{def:peps_tensor, def:peps_localVirtualConfigSplitAt}
-    For an edge $e=(u,v)$, the boundary data consist of the virtual index on
-    $e$, the remaining virtual indices incident to $u$, and the remaining
-    virtual indices incident to $v$. These are the indices over which the
-    endpoint tensors couple to the blocked middle region.
+    For an edge $e=(u,v)$, an edge-boundary configuration is a triple
+    $\beta=(a,\lambda,\rho)$ consisting of $a\in\{0,\ldots,D_e-1\}$ on $e$ and
+    residual configurations $\lambda$ on $\{f\ni u:f\ne e\}$ and $\rho$ on
+    $\{f\ni v:f\ne e\}$.
 \end{definition}
 
 \begin{definition}[Boundary data read from a virtual configuration]%
@@ -733,9 +671,8 @@ which is the starting point for the edge-middle reduction of the next section.
     \lean{TNLean.PEPS.edgeBoundaryOfVirtualConfig}
     \leanok
     \uses{def:peps_edgeBoundaryConfig, def:peps_virtual_config}
-    A global virtual configuration determines edge-centered boundary data by
-    reading the index on the distinguished edge and the residual endpoint
-    indices.
+    A global virtual configuration $\eta$ determines the boundary configuration
+    $\partial_e(\eta)=(\eta(e),\eta|_{u,\widehat e},\eta|_{v,\widehat e})$.
 \end{definition}
 
 \begin{definition}[Boundary compatibility at an edge]%
@@ -743,9 +680,9 @@ which is the starting point for the edge-middle reduction of the next section.
     \lean{TNLean.PEPS.edgeBoundaryMatches}
     \leanok
     \uses{def:peps_edgeBoundaryConfig, def:peps_virtual_config}
-    A global virtual configuration is compatible with fixed edge-centered
-    boundary data if it has the prescribed index on the distinguished edge and
-    the prescribed residual indices at both endpoint stars.
+    A global virtual configuration $\eta$ is compatible with
+    $\beta=(a,\lambda,\rho)$ if $\partial_e(\eta)=\beta$, i.e., $\eta(e)=a$,
+    $\eta|_{u,\widehat e}=\lambda$, and $\eta|_{v,\widehat e}=\rho$.
 \end{definition}
 
 \begin{definition}[Middle configurations over fixed boundary data]%
@@ -753,9 +690,8 @@ which is the starting point for the edge-middle reduction of the next section.
     \lean{TNLean.PEPS.EdgeMiddleConfig}
     \leanok
     \uses{def:peps_edgeBoundaryMatches}
-    For fixed boundary data $\beta$, the middle configurations are the subtype
-    of global virtual configurations satisfying the compatibility condition with
-    $\beta$.
+    For fixed boundary data $\beta$, the middle configuration space is the
+    fiber $\{\eta:\partial_e(\eta)=\beta\}$.
 \end{definition}
 
 \begin{definition}[Virtual configurations fibred by edge boundary data]%
@@ -763,9 +699,9 @@ which is the starting point for the edge-middle reduction of the next section.
     \lean{TNLean.PEPS.virtualConfigEquivEdgeBoundary}
     \leanok
     \uses{def:peps_edgeBoundaryOfVirtualConfig, def:peps_edgeMiddleConfig}
-    A global virtual configuration is equivalently a choice of edge-centered
-    boundary data together with a middle configuration in the corresponding
-    fibre.
+    Fiberwise decomposition by $\partial_e$ identifies global virtual
+    configurations $\eta$ with pairs $(\beta,\eta_{M_e})$ where
+    $\partial_e(\eta_{M_e})=\beta$.
 \end{definition}
 
 \begin{definition}[Left endpoint local configuration from boundary data]%
@@ -773,8 +709,9 @@ which is the starting point for the edge-middle reduction of the next section.
     \lean{TNLean.PEPS.edgeLeftLocalConfig}
     \leanok
     \uses{def:peps_edgeBoundaryConfig, def:peps_localVirtualConfigSplitAt}
-    The left endpoint local virtual configuration is reconstructed from the
-    edge index and the residual data on the left endpoint star.
+    From $\beta=(a,\lambda,\rho)$, the left endpoint local configuration
+    $\beta_u\in\mathcal V_u$ is reconstructed from $(a,\lambda)$ via
+    Definition~\ref{def:peps_localVirtualConfigSplitAt}.
 \end{definition}
 
 \begin{definition}[Right endpoint local configuration from boundary data]%
@@ -782,8 +719,9 @@ which is the starting point for the edge-middle reduction of the next section.
     \lean{TNLean.PEPS.edgeRightLocalConfig}
     \leanok
     \uses{def:peps_edgeBoundaryConfig, def:peps_localVirtualConfigSplitAt}
-    The right endpoint local virtual configuration is reconstructed from the
-    edge index and the residual data on the right endpoint star.
+    From $\beta=(a,\lambda,\rho)$, the right endpoint local configuration
+    $\beta_v\in\mathcal V_v$ is reconstructed from $(a,\rho)$ via
+    Definition~\ref{def:peps_localVirtualConfigSplitAt}.
 \end{definition}
 
 \begin{theorem}[Left endpoint reconstruction for compatible boundary data]%
@@ -791,9 +729,7 @@ which is the starting point for the edge-middle reduction of the next section.
     \lean{TNLean.PEPS.edgeLeftLocalConfig_eq_of_boundaryMatches}
     \leanok
     \uses{def:peps_edgeBoundaryMatches, def:peps_edgeLeftLocalConfig}
-    If a global virtual configuration is compatible with boundary data, then its
-    restriction to the left endpoint star is the local configuration reconstructed
-    from those data.
+    If $\partial_e(\eta)=\beta$, then $\eta|_u=\beta_u$.
 \end{theorem}
 
 \begin{theorem}[Right endpoint reconstruction for compatible boundary data]%
@@ -801,9 +737,7 @@ which is the starting point for the edge-middle reduction of the next section.
     \lean{TNLean.PEPS.edgeRightLocalConfig_eq_of_boundaryMatches}
     \leanok
     \uses{def:peps_edgeBoundaryMatches, def:peps_edgeRightLocalConfig}
-    If a global virtual configuration is compatible with boundary data, then its
-    restriction to the right endpoint star is the local configuration
-    reconstructed from those data.
+    If $\partial_e(\eta)=\beta$, then $\eta|_v=\beta_v$.
 \end{theorem}
 
 \begin{definition}[Boundary data with an inserted edge matrix]%
@@ -811,10 +745,9 @@ which is the starting point for the edge-middle reduction of the next section.
     \lean{TNLean.PEPS.EdgeInsertedBoundaryConfig}
     \leanok
     \uses{def:peps_tensor, def:peps_localVirtualConfigSplitAt}
-    For an edge $e=(u,v)$, inserted-edge boundary data consist of two
-    independent indices on the bond $e$, together with the residual virtual
-    indices incident to $u$ and to $v$. These are the boundary indices used
-    when a matrix is inserted on the distinguished bond.
+    For an edge $e=(u,v)$, inserted-edge boundary data are quadruples
+    $\beta=(a,b,\lambda,\rho)$ with $a,b\in\{0,\ldots,D_e-1\}$ on $e$ and
+    residual configurations $\lambda$ at $u$ and $\rho$ at $v$.
 \end{definition}
 
 \begin{definition}[Diagonal inserted-edge boundary data]%
@@ -822,10 +755,8 @@ which is the starting point for the edge-middle reduction of the next section.
     \lean{TNLean.PEPS.edgeBoundaryToInsertedBoundaryConfig}
     \leanok
     \uses{def:peps_edgeBoundaryConfig, def:peps_edgeInsertedBoundaryConfig}
-    Ordinary edge-centered boundary data determine inserted-edge boundary data
-    by using the same bond index at both endpoints. This is the diagonal
-    boundary datum selected by the identity matrix in the edge-insertion
-    coefficient.
+    Ordinary boundary data $\beta=(a,\lambda,\rho)$ map to diagonal
+    inserted-edge boundary data $\Delta(\beta)=(a,a,\lambda,\rho)$.
 \end{definition}
 
 \begin{definition}[Right-endpoint inserted-boundary reindexing]%
@@ -833,10 +764,9 @@ which is the starting point for the edge-middle reduction of the next section.
     \lean{TNLean.PEPS.edgeBoundaryRightIndexEquivInsertedBoundaryConfig}
     \leanok
     \uses{def:peps_edgeBoundaryConfig, def:peps_edgeInsertedBoundaryConfig}
-    Ordinary edge-boundary data together with an independent right endpoint
-    bond index are equivalent to inserted-edge boundary data. The ordinary
-    boundary gives the left bond index and the two residual endpoint
-    boundaries.
+    Pairs $((a,\lambda,\rho),b)$ of ordinary boundary data and a right bond
+    index $b$ identify bijectively with inserted-edge boundary data
+    $(a,b,\lambda,\rho)$.
 \end{definition}
 
 \begin{definition}[Left-endpoint inserted-boundary reindexing]%
@@ -844,10 +774,9 @@ which is the starting point for the edge-middle reduction of the next section.
     \lean{TNLean.PEPS.edgeBoundaryLeftIndexEquivInsertedBoundaryConfig}
     \leanok
     \uses{def:peps_edgeBoundaryConfig, def:peps_edgeInsertedBoundaryConfig}
-    Ordinary edge-boundary data together with an independent left endpoint
-    bond index are equivalent to inserted-edge boundary data. The ordinary
-    boundary gives the right bond index and the two residual endpoint
-    boundaries.
+    Pairs $((b,\lambda,\rho),a)$ of ordinary boundary data and a left bond
+    index $a$ identify bijectively with inserted-edge boundary data
+    $(a,b,\lambda,\rho)$.
 \end{definition}
 
 \begin{definition}[Diagonal inserted-boundary configurations]%
@@ -855,9 +784,8 @@ which is the starting point for the edge-middle reduction of the next section.
     \lean{TNLean.PEPS.EdgeDiagonalInsertedBoundaryConfig}
     \leanok
     \uses{def:peps_edgeInsertedBoundaryConfig}
-    The diagonal inserted-boundary configurations are those inserted-edge
-    boundary data for which the two distinguished bond indices agree. This is
-    the support of the identity matrix inside the inserted-boundary sum.
+    The diagonal inserted-boundary configurations are the subtype
+    $\{(a,b,\lambda,\rho):a=b\}$.
 \end{definition}
 
 \begin{definition}[Diagonal boundary reindexing]%
@@ -865,7 +793,6 @@ which is the starting point for the edge-middle reduction of the next section.
     \lean{TNLean.PEPS.edgeBoundaryConfigEquivDiagonalInsertedBoundaryConfig}
     \leanok
     \uses{def:peps_edgeBoundaryConfig, def:peps_edgeDiagonalInsertedBoundaryConfig, def:peps_edgeBoundaryToInsertedBoundaryConfig}
-    Ordinary edge-boundary data are equivalent to diagonal inserted-boundary
-    data. This is the finite reindexing map used after the identity matrix has
-    removed all off-diagonal inserted-boundary summands.
+    The diagonal map $\Delta:(a,\lambda,\rho)\mapsto(a,a,\lambda,\rho)$ is a
+    bijection onto the diagonal inserted-boundary configurations.
 \end{definition}

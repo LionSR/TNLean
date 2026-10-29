@@ -1,10 +1,6 @@
 \section{Fixed sources for the chronological partial expansion}
 
-The two separated contractions in
-\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
-(\texttt{04-compression.tex}, lines 342--434) act on common free inputs obtained by placing the sources of every partial branch in the same ordered
-register spaces, with the order inherited from the original gate
-occurrences before any branch labels are chosen.
+The two separated contractions in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS} (\texttt{04-compression.tex}, lines 342--434) act on common free inputs obtained by placing the sources of every partial branch into fixed ordered register spaces inherited from the original gate occurrences.
 
 \begin{definition}[The retained source positions]
     \label{def:peps_partial_fixed_positions}
@@ -13,20 +9,15 @@ occurrences before any branch labels are chosen.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSlotEquiv}
     \leanok
     \uses{thm:peps_partial_source_order}
-    Let $\mathcal E$ be the original ordered source positions and let
-    $\mathcal A$ be the affected parties. Retain the ordered sublist
+    For original ordered source positions $\mathcal E$ and affected parties $\mathcal A$, retain the ordered sublist
     \begin{align}
         \mathcal E_{\mathcal A}
         =\{e\in\mathcal E:
-        p_e\in\mathcal A\text{ or }q_e\in\mathcal A\}.
+        p_e\in\mathcal A\text{ or }q_e\in\mathcal A\},
+        \qquad r=|\mathcal E_{\mathcal A}|,
+        \label{eq:peps_partial_fixed_positions}
     \end{align}
-    Write $r=|\mathcal E_{\mathcal A}|$. Reading this sublist in order
-    gives a bijection from $\{0,\ldots,r-1\}$ to its positions.
-    The reference source list assigns to the corresponding position
-    $e$ its grouped endpoints, its fixed halfspaces
-    $\C^{u_e}$ and $\C^{v_e}$, and the zero vector. Thus the reference
-    list specifies common register spaces. Its vectors will be
-    replaced by the normalized vectors of each partial branch.
+    enumerated as $i\mapsto e_i$ ($0\le i<r$), with grouped endpoints and fixed halfspaces $\C^{u_{e_i}},\C^{v_{e_i}}$.
 \end{definition}
 
 \begin{theorem}[The common ordered register spaces]
@@ -38,25 +29,13 @@ occurrences before any branch labels are chosen.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.layout_partialSlots_eq}
     \leanok
     \uses{def:peps_partial_fixed_positions,thm:peps_partial_source_order}
-    The source at reference index $i$ has the grouped original
-    endpoints of its enumerated position $e_i$ and the halfspaces
-    $\C^{u_{e_i}}$, $\C^{v_{e_i}}$. The endpoints remain distinct.
-    Every partial branch has precisely this ordered source-register
-    layout, independently of its labels. Membership in the reference
-    list is equivalent to having an affected endpoint.
+    At reference index $i$, the source has distinct grouped endpoints from $e_i$ and halfspaces $\C^{u_{e_i}},\C^{v_{e_i}}$. Every partial branch $\xi\in\Xi_{\mathcal A}$ has this exact ordered source-register layout, and $e\in\mathcal E_{\mathcal A}$ if and only if $p_e\in\mathcal A$ or $q_e\in\mathcal A$.
 \end{theorem}
-
 \begin{proof}
     \leanok
     \uses{thm:peps_source_circuit_incidence,thm:peps_affected_owner_equality,
         thm:peps_partial_source_order}
-    Filtering the fixed exhaustive list of original positions by endpoint
-    incidence without repetitions gives the stated bijection.
-    At least one endpoint of every retained position is affected, so
-    grouping exterior owners cannot identify its two endpoints.
-    The ordered inventory formula of
-    Theorem~\ref{thm:peps_partial_source_order} gives the same endpoint
-    spaces for every branch.
+    Combine Theorem~\ref{thm:peps_source_circuit_incidence}, Theorem~\ref{thm:peps_affected_owner_equality}, and Theorem~\ref{thm:peps_partial_source_order} on the filtered list (\ref{eq:peps_partial_fixed_positions}).
 \end{proof}
 
 \begin{theorem}[Preparation in the fixed chronological sources]
@@ -64,39 +43,24 @@ occurrences before any branch labels are chosen.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_partial_source_preparation}
     \leanok
     \uses{thm:peps_partial_fixed_layout,thm:peps_source_preparation}
-    Let the chronological composition be allowed. For every partial
-    choice $\xi$ there are unit vectors
+    For an allowed chronological composition and every partial choice $\xi\in\Xi_{\mathcal A}$, there exist unit vectors
     \begin{align}
         \eta_{\xi,i}\in
         \C^{u_{e_i}}\otimes\C^{v_{e_i}},
         \qquad 0\leq i<r,
+        \label{eq:peps_partial_fixed_unit_vectors}
     \end{align}
-    and an allowed composition $V_\xi$ containing no pair sources,
-    such that the ordered source list of the partial branch
-    consists of these vectors at the reference positions.
-    If $P_{\eta_\xi}$ prepares them and leaves the original input
-    registers unchanged, then
+    and a source-free allowed composition $V_\xi$ (whose input and output register layouts are independent of $\xi$) such that, with $P_{\eta_\xi}$ preparing $(\eta_{\xi,i})_{i=0}^{r-1}$,
     \begin{align}
         W_\xi=V_\xi P_{\eta_\xi}.
+        \label{eq:peps_partial_fixed_preparation}
     \end{align}
-    The input register list of $V_\xi$ is the common source layout
-    followed by the grouped original inputs. Its output register list
-    is the grouped original output list. Both lists are independent
-    of $\xi$. The assertion includes an empty source list and an
-    empty set of partial choices.
 \end{theorem}
-
 \begin{proof}
     \leanok
     \uses{thm:peps_partial_source_inventory,thm:peps_partial_fixed_layout,
         thm:peps_source_preparation,thm:peps_common_source_lists}
-    Equal ordered layouts identify the two halfspaces at each source
-    position, and transferring the normalized source vectors along
-    these identifications produces the reference list as
-    the branch's source inventory. The source-preparation theorem
-    moves this inventory to the initial registers and gives an allowed
-    remaining composition containing no sources. Its exact recovery
-    identity is the displayed equality.
+    Transport the normalized source inventory of Theorem~\ref{thm:peps_partial_source_inventory} along the common layout of Theorem~\ref{thm:peps_partial_fixed_layout} and Theorem~\ref{thm:peps_common_source_lists}, then apply Theorem~\ref{thm:peps_source_preparation}.
 \end{proof}
 
 \begin{definition}[The original label and vector at a position]
@@ -107,17 +71,12 @@ occurrences before any branch labels are chosen.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSlotVector}
     \leanok
     \uses{def:peps_partial_source_choices,def:peps_partial_fixed_positions}
-    For a touched gate occurrence $g$, a partial choice $\xi$ determines
-    its original label $\xi_g\in\Xi_g$. Write $\nu_{e,\alpha}$ for
-    the original vector of source position $e=(g,j)$ at local label
-    $\alpha\in\Xi_g$. At the retained reference index $i$, with
-    original position $e_i=(g_i,j_i)$, define
+    For a touched gate occurrence $g$, $\xi\in\Xi_{\mathcal A}$ determines $\xi_g\in\Xi_g$. Writing $\nu_{e,\alpha}\in\C^{u_e}\otimes\C^{v_e}$ for the source vector at $e=(g,j)$ and $\alpha\in\Xi_g$, set at reference index $i$ ($e_i=(g_i,j_i)$):
     \begin{align}
         \eta^{\mathrm{orig}}_{\xi,i}
-        :=\nu_{e_i,\xi_{g_i}}.
+        :=\nu_{e_i,\xi_{g_i}}\in\C^{u_{e_i}}\otimes\C^{v_{e_i}}.
+        \label{eq:peps_partial_original_source_vector}
     \end{align}
-    Both sides belong to the fixed coordinate space
-    $\C^{u_{e_i}}\otimes\C^{v_{e_i}}$.
 \end{definition}
 
 \begin{theorem}[Recovery of the locally selected source vectors]
@@ -129,32 +88,13 @@ occurrences before any branch labels are chosen.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_partial_source_preparation_with_original_vectors}
     \leanok
     \uses{def:peps_partial_original_source_vector,thm:peps_partial_fixed_preparation}
-    Every retained source belongs to a touched gate. All vectors
-    $\nu_{e,\alpha}$ have norm one. The source record at a
-    retained position is its original endpoint pair, grouped by
-    affected ownership, together with
-    $\eta^{\mathrm{orig}}_{\xi,i}$ in the fixed halfspaces.
-
-    Consequently any exact representation of the ordered source
-    inventory in the reference positions uses precisely these vectors.
-    In Theorem~\ref{thm:peps_partial_fixed_preparation} one may take
-    $\eta_{\xi,i}=\eta^{\mathrm{orig}}_{\xi,i}$. In particular, this
-    vector depends only on the local label at its original owning
-    gate, independently of every other gate label.
+    Every $e_i\in\mathcal E_{\mathcal A}$ belongs to a touched gate $g_i$, $\|\nu_{e,\alpha}\|=1$, and (\ref{eq:peps_partial_fixed_preparation}) of Theorem~\ref{thm:peps_partial_fixed_preparation} holds with $\eta_{\xi,i}=\eta^{\mathrm{orig}}_{\xi,i}$ from (\ref{eq:peps_partial_original_source_vector}), which depends only on $\xi_{g_i}$.
 \end{theorem}
-
 \begin{proof}
     \leanok
     \uses{thm:peps_source_circuit_incidence,thm:peps_partial_source_order,
         thm:peps_partial_fixed_layout,thm:peps_partial_fixed_preparation}
-    A retained endpoint belongs to its owning gate, so that gate is
-    touched. Induction on the chronological composition recovers its
-    chosen local label and original vector. At a gate the vector is
-    the given normalized source vector; composition and idle registers
-    preserve its occurrence. Comparing the two ordered inventory lists
-    at reference index $i$ equates their source records and hence
-    the vectors in their common halfspaces; substitution
-    in the fixed preparation gives the final assertion.
+    By Theorem~\ref{thm:peps_source_circuit_incidence}, $e_i\in\mathcal E_{\mathcal A}$ implies $C_{g_i}\cap\mathcal A\ne\varnothing$, and comparing the ordered source inventory (Theorem~\ref{thm:peps_partial_source_order}) with the common layout (Theorem~\ref{thm:peps_partial_fixed_layout}) identifies the $i$th prepared vector in (\ref{eq:peps_partial_fixed_preparation}) with $\eta^{\mathrm{orig}}_{\xi,i}$.
 \end{proof}
 
 \begin{theorem}[Two contractions for the prepared sources]
@@ -162,48 +102,28 @@ occurrences before any branch labels are chosen.
     \lean{TNLean.Lattice.PartyCircuit.Word.exists_selective_partition_of_word}
     \leanok
     \uses{thm:peps_source_preparation,thm:peps_selective_partition}
-    Let $W$ be an allowed composition and divide its parties into two
-    sides. Choose a set of free positions in its ordered source
-    list, containing every source that crosses the division. Let
-    $P_{\mathrm{fix}}$ prepare the original source vectors at the
-    remaining positions. There are an allowed composition $V$
-    containing no pair sources, and two allowed compositions $A_+,A_-$
-    containing no pair sources, such that
+    For an allowed composition $W$, a bipartition of its parties, and a set of free source positions containing all cut-crossing sources, let $P_{\mathrm{fix}}$ prepare the original vectors at the remaining (fixed) positions. Then there exist source-free allowed compositions $V,A_+,A_-$ (chosen independently of the free vectors) such that
     \begin{align}
         \|A_+\|\leq1,\qquad \|A_-\|\leq1,
         \qquad
         J_{\mathrm{out}}VP_{\mathrm{fix}}
-        =(A_+\otimes A_-)J_{\mathrm{free}}.
+        =(A_+\otimes A_-)J_{\mathrm{free}},
+        \label{eq:peps_actual_source_selective_partition}
     \end{align}
-    Here $J_{\mathrm{free}}$ and $J_{\mathrm{out}}$ group the input
-    and output registers by side. The equality holds on the entire
-    free input space. The maps $V,A_+,A_-$ can be chosen before any
-    vectors are chosen at the free source positions.
-
-    More precisely, for every family $\zeta$ of vectors at those
-    positions, let $P_\zeta^{\mathrm{free}}$ prepare that family and
-    let $P_{\mathrm{fill}(\zeta)}$ prepare the whole source list,
-    retaining the original vectors at fixed positions. Then
+    where $J_{\mathrm{free}},J_{\mathrm{out}}$ group registers by side. For any family $\zeta$ of free source vectors with preparation $P_\zeta^{\mathrm{free}}$ and full preparation $P_{\mathrm{fill}(\zeta)}=P_{\mathrm{fix}}P_\zeta^{\mathrm{free}}$,
     \begin{align}
         J_{\mathrm{out}}VP_{\mathrm{fill}(\zeta)}
         =(A_+\otimes A_-)J_{\mathrm{free}}
-        P_\zeta^{\mathrm{free}}.
+        P_\zeta^{\mathrm{free}},
+        \notag
     \end{align}
-    Taking the original source vectors gives the same equality with
-    $VP_{\mathrm{fill}(\zeta)}=W$.
+    and taking the original free vectors recovers $VP_{\mathrm{fill}(\zeta)}=W$.
 \end{theorem}
-
 \begin{proof}
     \leanok
     \uses{thm:peps_source_preparation,thm:peps_selective_preparation_recovery,
         thm:peps_selective_partition}
-    Enumerating the source list in its original halfspaces,
-    the source-preparation theorem gives $W=VP_\eta$ with $V$
-    allowed and containing no sources. Because every fixed source is internal
-    to one side and its original vector has norm one, selective
-    factorization applies to $V$ and these fixed preparations; its equality
-    holds before evaluating any free source vectors, and hence
-    specializes both to arbitrary $\zeta$ and to the original vectors.
+    Write $W=VP_\eta$ by Theorem~\ref{thm:peps_source_preparation} and apply Theorem~\ref{thm:peps_selective_partition} and Theorem~\ref{thm:peps_selective_preparation_recovery} to the internal unit vectors prepared by $P_{\mathrm{fix}}$.
 \end{proof}
 
 \begin{definition}[Choices as labels at touched occurrences]
@@ -216,15 +136,7 @@ occurrences before any branch labels are chosen.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allChoicesNonemptyLabelsEquiv}
     \leanok
     \uses{def:peps_partial_original_source_vector}
-    For affected parties $\mathcal A$, the map
-    $\xi\mapsto(\xi_g)_{g:\,C_g\cap\mathcal A\neq\varnothing}$ is a
-    bijection from $\Xi_{\mathcal A}$ onto
-    $\prod_{g:\,C_g\cap\mathcal A\neq\varnothing}\Xi_g$, also when some
-    $\Xi_g$ is empty. For $\mathcal A=P$ the touched occurrences are
-    those of $\mathcal G^+=\{g:C_g\neq\varnothing\}$, so
-    $\Xi_P\cong\prod_{g\in\mathcal G^+}\Xi_g$. Restricting
-    $\xi\in\Xi_P$ to the occurrences touched by $\mathcal A$ gives the
-    projection $\pi_{\mathcal A}\colon\Xi_P\to\Xi_{\mathcal A}$.
+    For affected parties $\mathcal A$, $\xi\mapsto(\xi_g)_{g:\,C_g\cap\mathcal A\neq\varnothing}$ defines a bijection $\Xi_{\mathcal A}\cong\prod_{g:\,C_g\cap\mathcal A\neq\varnothing}\Xi_g$; at $\mathcal A=P$, with $\mathcal G^+=\{g:C_g\neq\varnothing\}$, this is $\Xi_P\cong\prod_{g\in\mathcal G^+}\Xi_g$, and restriction gives the projection $\pi_{\mathcal A}\colon\Xi_P\to\Xi_{\mathcal A}$.
 \end{definition}
 
 \begin{theorem}[Projected choices keep the original labels]
@@ -236,16 +148,11 @@ occurrences before any branch labels are chosen.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allChoicesNonemptyLabelsEquiv_apply}
     \leanok
     \uses{def:peps_touched_labels}
-    For $\xi\in\Xi_P$ and an occurrence $g$ touched by $\mathcal A$,
-    $(\pi_{\mathcal A}\xi)_g=\xi_g$. An occurrence is touched by $P$
-    exactly when $C_g\neq\varnothing$.
+    For $\xi\in\Xi_P$ and $g$ with $C_g\cap\mathcal A\ne\varnothing$, $(\pi_{\mathcal A}\xi)_g=\xi_g$; moreover, $C_g\cap P\ne\varnothing\iff C_g\ne\varnothing$.
 \end{theorem}
-
 \begin{proof}
     \leanok
-    Induction on the chronological composition shows that at a touched gate both
-    choices record the same local label, while at an untouched gate the
-    choice set is a singleton.
+    By structural induction on the chronological composition, touched gates retain $\xi_g$ while untouched gates have singleton choice sets.
 \end{proof}
 
 \begin{theorem}[Labels visible at one party]
@@ -258,20 +165,11 @@ occurrences before any branch labels are chosen.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.choicesOfOriginalGateLabelsAt_eq_projectAllChoices}
     \leanok
     \uses{thm:peps_touched_labels,def:compression_operator_gate_labels}
-    Let $p\in P$ and take $\mathcal A=\{p\}$ after grouping owners
-    for all parties. The occurrences touched by $\{p\}$ are exactly the
-    occurrences $g\in\mathcal G^+$ with $p\in C_g$. Hence a choice in
-    $\Xi_{\{p\}}$ is the same as a local assignment
-    $\prod_{g\in\mathcal G^+,\,p\in C_g}\Xi_g$ on the gates containing
-    $p$, and for $\xi\in\Xi_P$ the local assignment $\xi_p$ recovers
-    $\pi_{\{p\}}\xi$. No label at a gate not containing $p$ is used.
+    For $p\in P$, the occurrences touched by $\mathcal A=\{p\}$ are $\{g\in\mathcal G^+:p\in C_g\}$, giving $\Xi_{\{p\}}\cong\prod_{g\in\mathcal G^+,\,p\in C_g}\Xi_g$ with $(\pi_{\{p\}}\xi)_g=(\xi_p)_g=\xi_g$ for all $\xi\in\Xi_P$.
 \end{theorem}
-
 \begin{proof}
     \leanok
-    Because a grouped owner selects the original party $p$ exactly, comparing
-    the two partial choices label by label via
-    Theorem~\ref{thm:peps_touched_labels} yields the equivalence.
+    Apply Theorem~\ref{thm:peps_touched_labels} at $\mathcal A=\{p\}$.
 \end{proof}
 
 \begin{theorem}[Coefficients factor over participating occurrences]
@@ -280,21 +178,16 @@ occurrences before any branch labels are chosen.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.coefficient_all_eq_prod_nonemptyGateLocations}
     \leanok
     \uses{def:peps_touched_labels}
-    For $\xi\in\Xi_{\mathcal A}$,
-    $c_\xi=\prod_g c_{g,\xi_g}$ over the occurrences touched by
-    $\mathcal A$, with factor one at the other occurrences. For
-    $\xi\in\Xi_P$ this is $c_\xi=\prod_{g\in\mathcal G^+}c_{g,\xi_g}$,
-    so each factor depends only on the label $\xi_g$ at its own occurrence,
-    as in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    \texttt{04-compression.tex}, lines 351--381 and 565--573.
+    For $\xi\in\Xi_{\mathcal A}$, $c_\xi=\prod_{g:\,C_g\cap\mathcal A\ne\varnothing} c_{g,\xi_g}$; in particular, for $\xi\in\Xi_P$,
+    \begin{align}
+        c_\xi & =\prod_{g\in\mathcal G^+}c_{g,\xi_g}
+        \label{eq:peps_chronological_coefficients}
+    \end{align}
+    (\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, \texttt{04-compression.tex}, lines 351--381 and 565--573).
 \end{theorem}
-
 \begin{proof}
     \leanok
-    By induction on the chronological composition, composition multiplies
-    the coefficients and the products over the two disjoint occurrence
-    sets; restricting the product over all occurrences to $\mathcal G^+$
-    keeps precisely the occurrences where the touched condition holds.
+    Induction on the chronological composition multiplies coefficients over disjoint occurrence sets, with untouched occurrences contributing $1$.
 \end{proof}
 
 \begin{theorem}[Mixed coefficients at the original gate occurrences]
@@ -302,27 +195,18 @@ occurrences before any branch labels are chosen.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.coefficient_all_mul_conj_eq_prod_nonemptyGateLocations}
     \leanok
     \uses{def:peps_touched_labels}
-    Let $w$ be a chronological source composition on an arbitrary party set
-    $P$, and let $\xi,\zeta\in\Xi_P$ be two all-party choices. Write
-    $\mathcal G^+=\{g:C_g\neq\varnothing\}$ for the original nonempty
-    participant occurrences and $c_{g,\alpha}$ for their branch coefficients.
-    Then
+    For any chronological source composition on $P$ and $\xi,\zeta\in\Xi_P$,
     \begin{align}
         c_\xi\overline{c_\zeta}
         =\prod_{g\in\mathcal G^+}
-        c_{g,\xi_g}\overline{c_{g,\zeta_g}}.
+        c_{g,\xi_g}\overline{c_{g,\zeta_g}}
+        \label{eq:peps_mixed_chronological_coefficients}
     \end{align}
-    For the expansion in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
-    (\texttt{04-compression.tex}, lines 351--381 and 565--573), the product over an empty occurrence set is one, while empty-participant
-    occurrences remain in the residual composition and contribute no factor
-    to this coefficient product.
+    (\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, \texttt{04-compression.tex}, lines 351--381 and 565--573).
 \end{theorem}
-
 \begin{proof}\leanok
     \uses{thm:peps_chronological_coefficients}
-    Applying Theorem~\ref{thm:peps_chronological_coefficients} to each choice and using
-    $\overline{c_\zeta}=\prod_{g\in\mathcal G^+}\overline{c_{g,\zeta_g}}$
-    multiplies the two products term by term.
+    Multiply (\ref{eq:peps_chronological_coefficients}) for $\xi$ by the complex conjugate of (\ref{eq:peps_chronological_coefficients}) for $\zeta$.
 \end{proof}
 
 \begin{theorem}[Reindexing the mixed expansion by gate labels]
@@ -330,31 +214,19 @@ occurrences before any branch labels are chosen.
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_coefficient_all_mul_conj_smul_eq_sum_nonemptyGateLabels}
     \leanok
     \uses{def:peps_touched_labels}
-    With the same chronological composition, let
-    $L=\prod_{g\in\mathcal G^+}\Xi_g$ and let
-    $e\colon\Xi_P\to L$ be the bijection that records each original gate
-    label. For arbitrary index sets $I,J$ and any matrix family
-    $K\colon\Xi_P\times\Xi_P\to\C^{I\times J}$,
+    With $L=\prod_{g\in\mathcal G^+}\Xi_g$, the bijection $e\colon\Xi_P\to L$ of Definition~\ref{def:peps_touched_labels}, and any $K\colon\Xi_P\times\Xi_P\to\C^{I\times J}$,
     \begin{align}
         \sum_{\xi\in\Xi_P}\sum_{\zeta\in\Xi_P}
         c_\xi\overline{c_\zeta}\,K(\xi,\zeta)
          & =\sum_{\eta\in L}\sum_{\theta\in L}
         \left(\prod_{g\in\mathcal G^+}
         c_{g,\eta_g}\overline{c_{g,\theta_g}}\right)
-        K(e^{-1}\eta,e^{-1}\theta).
+        K(e^{-1}\eta,e^{-1}\theta)
+        \label{eq:peps_mixed_gate_label_sum}
     \end{align}
-    In the expansion of
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
-    (\texttt{04-compression.tex}, lines 351--381 and 565--573), the identity includes empty party sets and empty label sets:
-    an empty label-function set gives an empty sum, and an empty occurrence set
-    gives a singleton label-function set and coefficient one.
+    (\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, \texttt{04-compression.tex}, lines 351--381 and 565--573).
 \end{theorem}
-
 \begin{proof}\leanok
     \uses{def:peps_touched_labels,thm:peps_mixed_chronological_coefficients}
-    Replacing each mixed coefficient via
-    Theorem~\ref{thm:peps_mixed_chronological_coefficients} and reindexing the outer
-    sum by $\eta=e\xi$ and the inner sum by $\theta=e\zeta$
-    uses the inverse identities to rewrite
-    $K(\xi,\zeta)=K(e^{-1}\eta,e^{-1}\theta)$.
+    Substitute (\ref{eq:peps_mixed_chronological_coefficients}) and reindex by $(\eta,\theta)=(e\xi,e\zeta)$.
 \end{proof}

@@ -1,22 +1,13 @@
 \section{Schmidt coordinates and one Gaussian source law}
 
-We use the original source positions of a chronological composition,
-with the notation of Definition~\ref{def:peps_source_substitution}.
-Write $\mathcal E$ for these positions, $\Xi_g$ for the labels of gate $g$,
-and $\nu_{e,\alpha}\in\C^{u_e}\otimes\C^{v_e}$ for the normalized
-source vector at position $e=(g,j)$ in local branch $\alpha$.
-All choices below are made by original position and local label.
-They precede any choice of affected parties or partial branch.
-The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-\texttt{04-compression.tex}, lines 279--434.
+With the notation of Definition~\ref{def:peps_source_substitution}, write $\mathcal E$ for the original source positions of a chronological composition, $\Xi_g$ for the branch labels of gate $g$, and $\nu_{e,\alpha}\in\C^{u_e}\otimes\C^{v_e}$ for the normalized source vector at position $e=(g,j)$ in local branch $\alpha\in\Xi_g$. All choices below depend only on $(e,\alpha)$ prior to any choice of affected parties or partial branch (\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, \texttt{04-compression.tex}, lines 279--434).
 
 \begin{definition}[Coordinates of an original source]
     \label{def:peps_source_coordinates}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceCoordinates}
     \leanok
-    Let $z_{e,\alpha}\in\C^{u_ev_e}$ be the coordinates of
-    $\nu_{e,\alpha}$ in the tensor product of the standard orthonormal
-    endpoint bases. Put $r_e=\min(u_e,v_e)$.
+    Let $z_{e,\alpha}\in\C^{u_ev_e}$ be the coordinate vector of
+    $\nu_{e,\alpha}$ in the tensor-product standard orthonormal endpoint basis, and set $r_e=\min(u_e,v_e)$.
 \end{definition}
 
 \begin{theorem}[Local Schmidt frames chosen before partial expansion]
@@ -25,11 +16,7 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_local_schmidt_source_frames}
     \leanok
     \uses{def:peps_source_coordinates}
-    For every original position $e=(g,j)$ and local label $\alpha\in\Xi_g$,
-    the vector $z_{e,\alpha}$ has norm one. There are weights
-    $\lambda_{e,\alpha,t}\geq0$, summing to one, and matrices
-    $E_{e,\alpha}:\C^{r_e}\to\C^{u_e}$ and
-    $F_{e,\alpha}:\C^{r_e}\to\C^{v_e}$ such that
+    For every $e=(g,j)\in\mathcal E$ and $\alpha\in\Xi_g$, $\|z_{e,\alpha}\|=1$, and there exist weights $\lambda_{e,\alpha,t}\geq0$ with $\sum_{t=1}^{r_e}\lambda_{e,\alpha,t}=1$ and matrices $E_{e,\alpha}:\C^{r_e}\to\C^{u_e}$, $F_{e,\alpha}:\C^{r_e}\to\C^{v_e}$ such that
     \begin{align}
         E_{e,\alpha}^{\dagger}E_{e,\alpha}
          & =F_{e,\alpha}^{\dagger}F_{e,\alpha}=I,         \\
@@ -38,18 +25,11 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
         E_{e,\alpha}|t\rangle\otimes F_{e,\alpha}|t\rangle.
         \label{eq:peps_local_schmidt_source}
     \end{align}
-    The same choices represent every retained source in every partial
-    expansion: one reads the label of its original owning gate.
-    For two partial branches, the mixed source matrix is the outer product
-    of these two represented vectors.
+    For any partial branches $\xi,\zeta$, every retained source at slot $i$ with original position $e=(g,j)$ has coordinate vector $z_{e,\xi_g}$ and mixed source matrix $z_{e,\xi_g}z_{e,\zeta_g}^{\dagger}$.
 \end{theorem}
 
 \begin{proof}\leanok
-    Coordinates in an orthonormal basis preserve the norm, and the finite
-    Schmidt decomposition applies to each $z_{e,\alpha}$ independently. Because the
-    retained vector at a partial slot is its original source vector at the
-    selected local label, both the vector and outer-product assertions
-    follow by substitution.
+    Orthonormal coordinates give $\|z_{e,\alpha}\|=\|\nu_{e,\alpha}\|=1$, and the finite Schmidt decomposition yields (\ref{eq:peps_local_schmidt_source}) for each $(e,\alpha)$. Since a retained partial slot evaluates $\nu_{e,\xi_g}$ at its original gate label $\xi_g$, the vector and outer-product identities follow by substitution.
 \end{proof}
 
 \begin{theorem}[Finite Schmidt support in arbitrary endpoint spaces]
@@ -57,20 +37,15 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \lean{TNLean.Lattice.PartyCircuit.PairSource.exists_probability_schmidt_isometries}
     \leanok
     Let $U,V$ be complex inner-product spaces and let
-    $z$ in the algebraic tensor product $U\otimes V$ have norm one
-    (cf.~\cite[Proposition~1.1]{Wolf2012Quantum}). There exist a natural number $r$,
-    nonnegative weights $\lambda_t$ with $\sum_t\lambda_t=1$, and linear
-    isometries $f:\C^r\to U$, $g:\C^r\to V$ such that
+    $z\in U\otimes V$ satisfy $\|z\|=1$
+    (cf.~\cite[Proposition~1.1]{Wolf2012Quantum}). There exist $r\in\N$, weights $\lambda_t\ge 0$ with $\sum_{t=1}^r\lambda_t=1$, and linear isometries $f:\C^r\to U$, $g:\C^r\to V$ such that
     \begin{align}
         z=\sum_{t=1}^{r}\sqrt{\lambda_t}\,f|t\rangle\otimes g|t\rangle.
     \end{align}
 \end{theorem}
 
 \begin{proof}\leanok
-    An algebraic tensor belongs to the tensor product of two finite-dimensional
-    subspaces. Choosing orthonormal coordinates on these subspaces, applying the
-    finite Schmidt decomposition, and composing the Schmidt frames with the
-    coordinate inclusions preserves both the vector and its norm.
+    Since $z\in U_0\otimes V_0$ for finite-dimensional subspaces $U_0\subseteq U$ and $V_0\subseteq V$, applying the finite Schmidt decomposition in orthonormal coordinates on $U_0,V_0$ and composing the Schmidt frames with the isometric inclusions $U_0\hookrightarrow U$, $V_0\hookrightarrow V$ gives the decomposition.
 \end{proof}
 
 \begin{definition}[A single law indexed by original sources]
@@ -79,12 +54,7 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceGaussianLaw}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceGaussianLawIsProbabilityMeasure}
     \leanok
-    Fix a sample count $k\geq0$. For every $e=(g,j)$, every ordered pair
-    $(\alpha,\beta)\in\Xi_g^2$, every $0\leq s<k$, and every
-    $p,q\in\{1,\ldots,r_e\}$, choose a standard circular complex Gaussian
-    coordinate $\omega_{e,\alpha,\beta,s,p,q}$. Give all these coordinates
-    their product probability law, denoted by $\mathbb P_k$.
-    The ordered pair of local labels is part of the sample index.
+    Fix $k\geq0$. Let $\mathbb P_k$ be the product probability law of independent standard circular complex Gaussian variables $\omega_{e,\alpha,\beta,s,p,q}$ indexed by $e=(g,j)\in\mathcal E$, $(\alpha,\beta)\in\Xi_g^2$, $0\leq s<k$, and $p,q\in\{1,\ldots,r_e\}$.
 \end{definition}
 
 \begin{theorem}[Fixed selections retain the Gaussian law]
@@ -93,18 +63,11 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.measurePreserving_selected_sourceGaussian}
     \leanok
     \uses{def:peps_source_gaussian_law}
-    Selecting a fixed original position and a fixed ordered pair of local
-    labels gives the standard Gaussian law on its sample coordinates.
-    More generally, for any $S\subseteq\mathcal E$ and fixed labels
-    $\alpha_e,\beta_e$ for $e\in S$, the selected families are independent
-    with their prescribed Gaussian laws. The labels in this assertion are
-    chosen independently of the random sample.
+    For any fixed $e=(g,j)\in\mathcal E$ and $(\alpha,\beta)\in\Xi_g^2$, the projection $\omega\mapsto(\omega_{e,\alpha,\beta,s,p,q})_{s,p,q}$ has the standard product Gaussian law under $\mathbb P_k$. More generally, for any $S\subseteq\mathcal E$ and deterministic labels $(\alpha_e,\beta_e)\in\Xi_g^2$ ($e\in S$), the families $(\omega_{e,\alpha_e,\beta_e,s,p,q})_{s,p,q}$ ($e\in S$) are independent with their prescribed Gaussian laws.
 \end{theorem}
 
 \begin{proof}\leanok
-    Coordinate projections preserve product measures, so projecting first to
-    the selected original positions and then to the fixed
-    ordered local labels at those positions retains the product Gaussian law.
+    Coordinate projections preserve product measures, so projecting $\mathbb P_k$ first to $S\subseteq\mathcal E$ and then to the fixed index $(\alpha_e,\beta_e)$ at each $e\in S$ preserves the product Gaussian law.
 \end{proof}
 
 \begin{definition}[Sampled source operators]
@@ -113,10 +76,7 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceGaussianCorrection}
     \leanok
     \uses{thm:peps_local_schmidt_sources,def:peps_source_gaussian_law}
-    For $k>0$, let $\widehat X_{e,\alpha\beta}$ be the average of the
-    Gaussian product operators in Equation~(5.6) of the manuscript,
-    mapped by $E_{e,\alpha},F_{e,\alpha}$ on the ket side and
-    $E_{e,\beta},F_{e,\beta}$ on the bra side. Thus
+    For $k>0$, let $U_s$ and $V_s$ be the quarter-power weighted Gaussian and conjugate-Gaussian matrices of \cite[Equation~(5.6)]{OpenAI2026PolynomialPEPS} formed from $(\omega_{e,\alpha,\beta,s,p,q})_{p,q}$ and $(\overline{\omega_{e,\alpha,\beta,s,p,q}})_{p,q}$, and define
     \begin{align}
         \widehat X_{e,\alpha\beta}
          & =\frac1k\sum_{s=0}^{k-1}
@@ -126,8 +86,6 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
          & =z_{e,\alpha}z_{e,\beta}^{\dagger},\qquad
         \Delta_{e,\alpha\beta}=\widehat X_{e,\alpha\beta}-X_{e,\alpha\beta}.
     \end{align}
-    Here $U_s$ uses the Gaussian coordinates and $V_s$ their complex
-    conjugates, with the quarter-power weights of that equation.
 \end{definition}
 
 \begin{theorem}[Unbiasedness of the original-source construction]
@@ -139,27 +97,16 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceGaussianCorrection_eq_transport}
     \leanok
     \uses{thm:peps_local_schmidt_sources,thm:peps_source_gaussian_selection,def:peps_sampled_source_matrix}
-    For every $k>0$, the Schmidt weights and frames may be chosen so that
-    each $\widehat X_{e,\alpha\beta}$ is integrable and
+    For every $k>0$ and any weights $\lambda_{e,\alpha,t}\ge 0$ and frames $E_{e,\alpha},F_{e,\alpha}$ satisfying (\ref{eq:peps_local_schmidt_source}) (chosen as in Theorem~\ref{thm:peps_local_schmidt_sources} prior to all $S$ and partial branches), each $\widehat X_{e,\alpha\beta}$ is integrable,
     \begin{align}
         \mathbb E_k\widehat X_{e,\alpha\beta}=X_{e,\alpha\beta},
-        \qquad \mathbb E_k\Delta_{e,\alpha\beta}=0.
+        \qquad \mathbb E_k\Delta_{e,\alpha\beta}=0,
     \end{align}
-    The choices precede all corrected subsets and partial branches.
-    More generally, these assertions hold for any nonnegative weights and
-    endpoint matrices representing the source vectors as in
-    (\ref{eq:peps_local_schmidt_source}).
-    The ambient correction is the four-frame image of the
-    centered correction in Schmidt coordinates.
+    and $\Delta_{e,\alpha\beta}=(E_{e,\alpha}\otimes F_{e,\alpha})\delta_{e,\alpha\beta}(E_{e,\beta}\otimes F_{e,\beta})^{\dagger}$, where $\delta_{e,\alpha\beta}$ is the centered correction in Schmidt coordinates.
 \end{theorem}
 
 \begin{proof}\leanok
-    By the single-source expectation formula and the projection from
-    Theorem~\ref{thm:peps_source_gaussian_selection}, the exact source
-    representation identifies the mean with $X_{e,\alpha\beta}$.
-    Subtraction gives the centered identity, and linearity of the four-frame
-    map gives the final assertion, with the required representatives
-    coming from Theorem~\ref{thm:peps_local_schmidt_sources}.
+    By Theorem~\ref{thm:peps_source_gaussian_selection} and the single-source expectation formula, (\ref{eq:peps_local_schmidt_source}) gives $\mathbb E_k\widehat X_{e,\alpha\beta}=X_{e,\alpha\beta}$, whence $\mathbb E_k\Delta_{e,\alpha\beta}=0$. Linearity of $M\mapsto(E_{e,\alpha}\otimes F_{e,\alpha})M(E_{e,\beta}\otimes F_{e,\beta})^{\dagger}$ yields the transport identity.
 \end{proof}
 
 \begin{theorem}[Covariance at original corrected positions]
@@ -170,40 +117,31 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integral_sourceCorrection_product_eq_zero}
     \leanok
     \uses{thm:peps_source_gaussian_selection}
-    Fix $k>0$, $S\subseteq\mathcal E$, deterministic local labels
-    $\alpha_e,\beta_e$, and nonnegative weights. Let $\delta_e$ denote
-    the centered Schmidt-coordinate source matrix at these labels, and set
+    Fix $k>0$, $S\subseteq\mathcal E$, deterministic labels $\alpha_e,\beta_e\in\Xi_g$, and weights $\lambda_{e,\alpha,t}\ge 0$. Let $\delta_e=\delta_{e,\alpha_e\beta_e}$ be the centered Schmidt-coordinate source matrix, and for $u,v\in\prod_{e\in S}\{1,\ldots,r_e\}^2$ set
     \begin{align}
         Z_{u,v}(\omega) & =\prod_{e\in S}(\delta_e(\omega))_{u_e,v_e}, \\
         p_{\alpha}(u)   & =\prod_{e\in S}
         \lambda_{e,\alpha_e,(u_e)_1}\lambda_{e,\alpha_e,(u_e)_2}.
     \end{align}
-    Both $u_e$ and $v_e$ are independent pairs of Schmidt indices.
-    Every conjugate pair product is integrable, and
+    Then $Z_{u,v}\overline{Z_{u',v'}}$ is integrable for all $u,v,u',v'$,
     \begin{align}
         \mathbb E_k[Z_{u,v}\overline{Z_{u',v'}}]
          & =\mathbf1_{u=u'}\mathbf1_{v=v'}\,
-        k^{-|S|}\sqrt{p_{\alpha}(u)p_{\beta}(v)}.
+        k^{-|S|}\sqrt{p_{\alpha}(u)p_{\beta}(v)},
         \label{eq:peps_actual_gaussian_covariance}
     \end{align}
-    If $S$ is nonempty, then $\mathbb E_k Z_{u,v}=0$.
+    and $\mathbb E_k Z_{u,v}=0$ whenever $S\ne\varnothing$.
 \end{theorem}
 
 \begin{proof}\leanok
-    The product is the selected Gaussian coefficient with
-    the same original positions and ordered local labels.
-    Substituting its diagonal covariance formula and using independence multiplies
-    the factors $k^{-1}$, one for each original corrected position.
+    By Theorem~\ref{thm:peps_source_gaussian_selection}, the factors $(\delta_e(\omega))_{u_e,v_e}$ ($e\in S$) are independent with the single-source centered Gaussian law, so multiplying their mean-zero and diagonal covariance identities over $e\in S$ yields $\mathbb E_k Z_{u,v}=0$ for $S\ne\varnothing$ and (\ref{eq:peps_actual_gaussian_covariance}).
 \end{proof}
 
 \begin{theorem}[Expansion in selected multilinear arguments]
     \label{thm:peps_selected_multilinear_expansion}
     \lean{MultilinearMap.map_piecewise_sum_smul}
     \leanok
-    Let $T$ be a complex multilinear map, let $S$ be a finite set of its
-    argument positions, and fix the arguments $x_i$ outside $S$.
-    Replacing argument $i\in S$ by a finite sum
-    $\sum_j c_{ij}v_{ij}$ gives
+    Let $T$ be a complex multilinear map, let $S$ be a finite set of argument positions, and fix $x_i$ for $i\notin S$. Replacing each $x_i$ ($i\in S$) by $\sum_{j\in J_i} c_{ij}v_{ij}$ gives
     \begin{align}
         T\bigl(x[S\leftarrow\textstyle\sum_j c_{ij}v_{ij}]\bigr)
          & =\sum_{a\in\prod_{i\in S}J_i}
@@ -213,9 +151,7 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 \end{theorem}
 
 \begin{proof}\leanok
-    Restricting the multilinear map to the selected arguments and expanding
-    the finite sums brings out one scalar per selected
-    position by multilinearity; the empty selected set gives a single summand.
+    Restricting $T$ to the arguments in $S$ with $x_{S^c}$ fixed gives a multilinear map on $\prod_{i\in S}V_i$, and expanding the finite sums by multilinearity pulls out $\prod_{i\in S}c_{i,a_i}$.
 \end{proof}
 
 \begin{theorem}[Frame-mapped sources in prepared words]
@@ -224,33 +160,18 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \leanok
     \uses{thm:peps_selected_multilinear_expansion,
         thm:peps_prepared_source_contraction}
-    Let $V,V'$ be words acting after the same ordered pair-source layout,
-    with finite orthonormal coordinates on the input and output memories
-    and on each source halfspace. Ket and bra endpoint bases may differ.
-    Fix arbitrary source vectors $\eta_i,\zeta_i$ and a selected set $S$.
-    For $i\in S$, let $M_i$ have independent row indices $K_i^2$ and
-    column indices $(K'_i)^2$, and map it by arbitrary endpoint
-    families $u_i,v_i$ and $u'_i,v'_i$.
-    Contracting these mapped matrices against the prepared
-    density coefficient, with $|\eta_i\rangle\langle\zeta_i|$ elsewhere,
-    equals
+    Let $V,V'$ be words acting after a common ordered pair-source layout with finite orthonormal bases on the input/output memories and source halfspaces. Fix source vectors $\eta_i,\zeta_i$ and a subset $S$ of slots. For $i\in S$, let $M_i\in\operatorname{Mat}_{K_i^2\times(K'_i)^2}(\C)$ be mapped by endpoint families $u_i,v_i$ on the ket side and $u'_i,v'_i$ on the bra side. Contracting these mapped matrices against the prepared density coefficient of $(V,V')$ on $S$, with $|\eta_i\rangle\langle\zeta_i|$ outside $S$, yields
     \begin{align}
         \sum_{a\in\prod_{i\in S}K_i^2}
         \sum_{b\in\prod_{i\in S}(K'_i)^2}
         \Bigl(\prod_{i\in S}(M_i)_{a_i,b_i}\Bigr)
-        K_V(\eta^{a})\rho K_{V'}(\zeta^{b})^{\dagger}.
+        K_V(\eta^{a})\rho K_{V'}(\zeta^{b})^{\dagger},
     \end{align}
-    Here $\eta_i^a=u_i((a_i)_1)\otimes v_i((a_i)_2)$ on $S$ and
-    $\eta_i$ elsewhere; the bra definition is analogous.
-    The matrix $K_V$ is the preparation followed by $V$.
+    where $\eta_i^a=u_i((a_i)_1)\otimes v_i((a_i)_2)$ for $i\in S$ and $\eta_i^a=\eta_i$ for $i\notin S$ (and similarly for $\zeta^b$ using $u'_i,v'_i,\zeta_i$), and $K_V(\eta^a)$ is the matrix of $V$ after preparing $\eta^a$.
 \end{theorem}
 
 \begin{proof}\leanok
-    Expanding each mapped matrix as the sum of its entries times the
-    corresponding rank-one endpoint matrices and applying
-    Theorem~\ref{thm:peps_selected_multilinear_expansion} identifies
-    each rank-one source contraction with the prepared ket and
-    bra matrices, separating the independent ket and bra assignments.
+    Writing each frame-mapped matrix at $i\in S$ as $\sum_{a_i,b_i}(M_i)_{a_i,b_i}|\eta_i^{a_i}\rangle\langle\zeta_i^{b_i}|$, Theorem~\ref{thm:peps_selected_multilinear_expansion} expands the contraction over $(a,b)\in\prod_{i\in S}K_i^2\times\prod_{i\in S}(K'_i)^2$, and Theorem~\ref{thm:peps_prepared_source_contraction} identifies each rank-one summand with $K_V(\eta^a)\rho K_{V'}(\zeta^b)^{\dagger}$.
 \end{proof}
 
 \begin{definition}[Schmidt assignments at retained original positions]
@@ -261,14 +182,7 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSchmidtSourceVectors}
     \leanok
     \uses{def:peps_selected_retained_positions}
-    Let $S\subseteq\mathcal E$ and suppose every position in $S$ has an
-    endpoint among the affected parties $\mathcal A$.
-    The ordered retained slots identify the selected partial slots
-    bijectively with $S$. Hence their Schmidt assignments are identified
-    with $\prod_{e\in S}\{1,\ldots,r_e\}^2$ by reading the same original
-    position. For a partial branch $\xi$, replace a selected source by
-    the two endpoint frame columns at its original local label, indexed
-    independently by this assignment, and keep all other sources original.
+    Let $S\subseteq\mathcal E$ have every position incident to the affected parties $\mathcal A$, so the selected retained partial slots correspond bijectively to $S$ and their Schmidt index tuples identify with $\prod_{e\in S}\{1,\ldots,r_e\}^2$. For a partial branch $\xi$ and $u\in\prod_{e\in S}\{1,\ldots,r_e\}^2$, define the source family that places $E_{e,\xi_g}|(u_e)_1\rangle\otimes F_{e,\xi_g}|(u_e)_2\rangle$ at each selected slot with original position $e=(g,j)\in S$ and retains $\nu_{e,\xi_g}$ at all other slots.
 \end{definition}
 
 \begin{theorem}[Corrected terms in Schmidt coordinates]
@@ -277,31 +191,20 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \leanok
     \uses{def:peps_partial_schmidt_assignments,thm:peps_prepared_source_frames,
         thm:peps_unbiased_original_sources,thm:peps_corrected_source_contraction}
-    Under the preceding incidence condition, suppose the fixed weights
-    and frames represent every original source vector. For every sample
-    $\omega$ and every input matrix $\rho$, the globally defined corrected
-    term satisfies
+    Suppose every position in $S\subseteq\mathcal E$ is incident to $\mathcal A$ and the fixed weights and frames satisfy (\ref{eq:peps_local_schmidt_source}). For every sample $\omega$ and input matrix $\rho$,
     \begin{align}
         F_S(\Delta(\omega))
          & =\sum_{\xi,\zeta}c_{\mathcal A,\xi}
         \overline{c_{\mathcal A,\zeta}}
         \sum_{u,v}Z^{\xi,\zeta}_{u,v}(\omega)
-        K_{\xi,u}\rho K_{\zeta,v}^{\dagger}.
+        K_{\xi,u}\rho K_{\zeta,v}^{\dagger},
         \label{eq:peps_corrected_gaussian_sum}
     \end{align}
-    Here $Z^{\xi,\zeta}$ reads the original positions and the
-    local labels selected by $\xi,\zeta$. The matrices $K_{\xi,u}$ are
-    the source-free residual words with the source vectors of
-    Definition~\ref{def:peps_partial_schmidt_assignments} prepared at their inputs.
-    Each gate coefficient occurs once on each side.
+    where $Z^{\xi,\zeta}_{u,v}(\omega)=\prod_{e=(g,j)\in S}(\delta_{e,\xi_g\zeta_g}(\omega))_{u_e,v_e}$ and $K_{\xi,u}$ is the residual word of $\xi$ with the source vectors of Definition~\ref{def:peps_partial_schmidt_assignments} prepared at its inputs.
 \end{theorem}
 
 \begin{proof}\leanok
-    Expressing the corrected term as its partial-branch source
-    contraction and using the fact that the ambient correction is the four-frame
-    image of its Schmidt correction, Theorem~\ref{thm:peps_prepared_source_frames}
-    at the selected retained slots together with their original-position
-    identification gives the claim.
+    Expressing $F_S(\Delta(\omega))$ as the partial-branch source contraction (Theorem~\ref{thm:peps_corrected_source_contraction}) and writing $\Delta_{e,\xi_g\zeta_g}=(E_{e,\xi_g}\otimes F_{e,\xi_g})\delta_{e,\xi_g\zeta_g}(E_{e,\zeta_g}\otimes F_{e,\zeta_g})^{\dagger}$ (Theorem~\ref{thm:peps_unbiased_original_sources}), Theorem~\ref{thm:peps_prepared_source_frames} applied across the bijection of Definition~\ref{def:peps_partial_schmidt_assignments} yields (\ref{eq:peps_corrected_gaussian_sum}).
 \end{proof}
 
 \begin{theorem}[Pointwise physical error of the sampled operators]
@@ -310,12 +213,7 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.rectangularTraceNorm_physical_sampledSourceMatrix_sub_le}
     \leanok
     \uses{def:peps_sampled_source_matrix,thm:peps_physical_corrected_subsets}
-    Suppose the final memory is the ordered tensor product of physical
-    and discarded registers. Choose finite orthonormal bases on the
-    input and both output factors. Let $\widehat\rho_{\rm phys}(\omega)$
-    be the operator obtained from the independently defined local sampled
-    source replacements, followed by the trace over discarded registers.
-    Then, for every sample and every input matrix,
+    Suppose the final memory is the ordered tensor product of physical and discarded registers with finite orthonormal bases on the input and both output factors. Let $\widehat\rho_{\rm phys}(\omega)$ be the physical operator obtained by substituting $\widehat X_{e,\alpha\beta}(\omega)$ for $X_{e,\alpha\beta}$ and tracing out the discarded registers. For every sample $\omega$ and input matrix $\rho$,
     \begin{align}
         \widehat\rho_{\rm phys}(\omega)-\rho_{\rm phys}
          & =\sum_{\varnothing\ne S\subseteq\mathcal E}
@@ -327,12 +225,5 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 \end{theorem}
 
 \begin{proof}\leanok
-    Substituting the sampled operators into the nonempty-subset
-    expansion of local source replacements and applying the triangle inequality
-    after the final partial trace gives both claims.
+    Substituting $\widehat X_{e,\alpha\beta}=X_{e,\alpha\beta}+\Delta_{e,\alpha\beta}$ into Theorem~\ref{thm:peps_physical_corrected_subsets} gives the subset expansion, and the triangle inequality for $\|\cdot\|_1$ gives the norm bound.
 \end{proof}
-
-The statements above construct the source samples and derive their
-covariance and density identities. Bounding each physical corrected term
-requires the further identification of its original registers with the
-separated affected and exterior contractions.

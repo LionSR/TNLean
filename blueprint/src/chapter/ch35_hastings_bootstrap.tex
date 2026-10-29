@@ -4,30 +4,27 @@
 % Hastings, arXiv:0705.2024v4, law16.tex, lines 280--411 (Lemma 2, label ble,
 % and its proof).
 
-The bootstrap lemma of \cite{Hastings2007AreaLaw} turns an overlap of the ground
-state with a mixture of states of bounded Schmidt rank into a bound on the
-entanglement entropy across a cut. Its proof has three steps: the approximate
-factorization of the ground-state projector maps the mixture to mixtures of
-slightly larger Schmidt rank with large overlap, the overlap at each scale bounds
-the Schmidt coefficients beyond that rank, and the entropy of Schmidt
-coefficients obeying these geometric tail bounds is maximized. This section
-states the three steps with explicit constants. The lemma for the ground state
-of a gapped chain combines them with the factorization of
-\cite[Lemma~1]{Hastings2007AreaLaw}.
+The bootstrap lemma of \cite{Hastings2007AreaLaw} converts overlap of a ground
+state with a mixture of bounded-Schmidt-rank states into a cut-entropy bound in
+three steps: approximate factorization of the ground-state projector maps the
+mixture to higher-rank mixtures with large overlap, overlap at each scale bounds
+the Schmidt tail, and the entropy under geometric tail constraints is
+maximized. Combining these steps with \cite[Lemma~1]{Hastings2007AreaLaw} yields
+the chain bootstrap bound.
 
 \begin{theorem}[Gibbs' inequality]
     \label{thm:hastings_gibbs_inequality}
     \lean{TNLean.MPS.AreaLaw.Hastings.probabilityEntropy_le_sum_mul_neg_log}
     \leanok
-    Let $p$ be a probability vector on a finite set and let $w$ be positive
-    weights with $\sum_zw_z\le1$. Then
+    For a probability vector $p$ and weights $w_z>0$ with $\sum_zw_z\le1$,
     \begin{align}
         H(p)\le-\sum_zp_z\ln w_z.
+        \label{eq:hastings_gibbs_inequality}
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    For $p_z>0$, $p_z\ln(w_z/p_z)\le w_z-p_z$ since $\ln t\le t-1$; for
-    $p_z=0$ the term is $0\le w_z$. Summing gives
+    Since $\ln t\le t-1$, $p_z\ln(w_z/p_z)\le w_z-p_z$ for $p_z>0$ (and $0\le w_z$
+    for $p_z=0$); summing over $z$ gives
     $H(p)+\sum_zp_z\ln w_z\le\sum_zw_z-1\le0$.
 \end{proof}
 
@@ -38,116 +35,104 @@ of a gapped chain combines them with the factorization of
         TNLean.MPS.AreaLaw.Hastings.probabilityEntropy_le_of_scale_tails
     }
     \leanok
-    Let $p_0,\dots,p_{N-1}$ be a probability vector and let $K\ge1$, $D\ge2$
-    and $0<x<1$. If
-    for every $n\ge0$ the mass of the entries of index at least $KD^{2n}$ is at
-    most $x^{n+1}$, then
+    Let $p_0,\dots,p_{N-1}$ be a probability vector, $K\ge1$, $D\ge2$, and
+    $0<x<1$. If $\sum_{a\ge KD^{2n}}p_a\le x^{n+1}$ for all $n\ge0$, then
     \begin{align}
         H(p)\le\ln K-\ln(1-x)+x\bigl(\ln(D^2-1)-\ln x\bigr)
         +\frac{x^2\,(2\ln D-\ln x)}{1-x}.
+        \label{eq:hastings_geometric_tail_entropy}
     \end{align}
-    In particular, with $x=e^{-2/\xi'}$ and $K=kD^{2m+2}$ for $k\ge1$, a
-    natural number $m$ and $\xi'>0$,
+    For $x=e^{-2/\xi'}$ ($\xi'>0$) and $K=kD^{2m+2}$ ($k\ge1$, $m\in\mathbb N$),
     \begin{align}
-        H(p)\le\ln k+(2m+2+\xi')\ln D+1+\ln(D^2-1)+\ln(\xi'/2+1).
+        H(p)\le\ln k+(2m+2+\xi')\ln D+1+\ln(D^2-1)+\ln(\xi'/2+1)
+        \label{eq:hastings_scale_tail_entropy}
     \end{align}
-    This is the maximization in the proof of
-    \cite[Lemma~2]{Hastings2007AreaLaw}, lines 357--390, where it is applied
-    to the squared Schmidt coefficients in decreasing order.
+    \cite[Lemma~2, lines 357--390]{Hastings2007AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_gibbs_inequality}
-    The source finds the maximum by saturating every constraint; here the same
-    value comes from Theorem~\ref{thm:hastings_gibbs_inequality} against the
-    saturating weights. On the block of indices in $[KD^{2(n-1)},KD^{2n})$, of
-    size $KD^{2(n-1)}(D^2-1)$, and on $[0,K)$ for $n=0$, put the weight
-    $(1-x)x^n$ divided by the size of the block. The weights of the indices
-    below $KD^{2N}$ add up to $1-x^{N+1}$, so the weights of the indices below
-    $N\le KD^{2N}$ add up to at most $1$, and $-\ln$ of a weight is $\ln K-\ln(1-x)$ plus one
-    increment for each threshold $KD^{2i}\le a$ below the index $a$. Averaging
-    against $p$ and bounding the mass beyond each threshold by $x^{i+1}$ gives
-    the first bound. With $x=e^{-2/\xi'}$ one has $x/(1-x)\le\xi'/2$, which
-    gives the three estimates of the source, lines 386--389.
+    Apply (\ref{eq:hastings_gibbs_inequality}) with weights
+    $w_a=(1-x)/K$ on $[0,K)$ and
+    $w_a=(1-x)x^n/\bigl(KD^{2(n-1)}(D^2-1)\bigr)$ on $[KD^{2(n-1)},KD^{2n})$
+    for $n\ge1$; these sum to $1-x^{N+1}\le1$ on $[0,KD^{2N})$, and bounding
+    $\sum_{a\ge KD^{2i}}p_a\le x^{i+1}$ gives
+    (\ref{eq:hastings_geometric_tail_entropy}). For $x=e^{-2/\xi'}$,
+    $x/(1-x)\le\xi'/2$ yields (\ref{eq:hastings_scale_tail_entropy})
+    \cite[lines 386--389]{Hastings2007AreaLaw}.
 \end{proof}
 
 \begin{theorem}[The component orthogonal to a unit vector]
     \label{thm:hastings_orthogonal_component}
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_sq_sub_normSq_inner_eq}
     \leanok
-    For a unit vector $\Psi$ and any vector $v$,
+    For $\|\Psi\|=1$ and any vector $v$,
     \begin{align}
         \|v\|^2-|\langle\Psi,v\rangle|^2=\bigl\|v-\langle\Psi,v\rangle\Psi\bigr\|^2.
+        \label{eq:hastings_orthogonal_component}
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Expand the square on the right and use $\|\Psi\|=1$.
+    Expand the right-hand side of (\ref{eq:hastings_orthogonal_component}) using
+    $\|\Psi\|=1$.
 \end{proof}
 
 \begin{theorem}[Overlap with the ground state after an approximate projector]
     \label{thm:hastings_bootstrap_overlap}
     \lean{TNLean.MPS.AreaLaw.Hastings.overlap_ge_of_norm_sub_vecMulVec_le}
     \leanok
-    Let $\Psi_0$ be a unit vector and $\rho=\sum_iw_i|\psi_i\rangle\langle\psi_i|$
-    a mixture of unit trace with $\langle\Psi_0,\rho\Psi_0\rangle=P>0$. If an
-    operator $O$ satisfies $\|O-|\Psi_0\rangle\langle\Psi_0|\|\le\epsilon$, then
+    Let $\|\Psi_0\|=1$, $\rho=\sum_iw_i|\psi_i\rangle\langle\psi_i|$ with
+    $\operatorname{tr}\rho=1$ and $\langle\Psi_0,\rho\Psi_0\rangle=P>0$, and
+    $\|O-|\Psi_0\rangle\langle\Psi_0|\|\le\epsilon$. Then
     \begin{align}
         \langle\Psi_0,O\rho O^\dagger\Psi_0\rangle
         \ge\Bigl(1-\frac{2\epsilon^2}{P}\Bigr)\operatorname{tr}(O\rho O^\dagger),
+        \label{eq:hastings_bootstrap_overlap}
     \end{align}
-    and $\operatorname{tr}(O\rho O^\dagger)>0$ when $\epsilon<\sqrt P$. This is
-    equation \texttt{hg} of \cite[Lemma~2]{Hastings2007AreaLaw}, lines
-    317--331, with $\epsilon=C_1(\xi)e^{-m/\xi'}$.
+    and $\operatorname{tr}(O\rho O^\dagger)>0$ when $\epsilon<\sqrt P$
+    \cite[Lemma~2, eq.~(hg), lines 317--331]{Hastings2007AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_orthogonal_component}
-    Write $a=\langle\Psi_0,O\rho O^\dagger\Psi_0\rangle$ and
-    $b=\operatorname{tr}((1-P_0)O\rho O^\dagger)$, where
-    $P_0=|\Psi_0\rangle\langle\Psi_0|$. The weighted Minkowski inequality gives
-    $a\ge(\sqrt P-\epsilon)^2$ for $\epsilon\le\sqrt P$, and
-    $(1-P_0)O=(1-P_0)(O-P_0)$ gives $b\le\epsilon^2$. For $\epsilon<\sqrt P$
-    the trace $a+b$ is positive and
-    $b/(a+b)\le\epsilon^2/((\sqrt P-\epsilon)^2+\epsilon^2)\le2\epsilon^2/P$,
-    since $(\sqrt P-\epsilon)^2+\epsilon^2=2(\epsilon-\sqrt P/2)^2+P/2$. For
-    $\epsilon\ge\sqrt P$ the bound is trivial.
+    Set $P_0=|\Psi_0\rangle\langle\Psi_0|$,
+    $a=\langle\Psi_0,O\rho O^\dagger\Psi_0\rangle$, and
+    $b=\operatorname{tr}((1-P_0)O\rho O^\dagger)$. For $\epsilon<\sqrt P$,
+    Minkowski's inequality gives $a\ge(\sqrt P-\epsilon)^2$ and
+    $(1-P_0)O=(1-P_0)(O-P_0)$ gives $b\le\epsilon^2$, so $a+b>0$ and
+    $b/(a+b)\le\epsilon^2/\bigl(2(\epsilon-\sqrt P/2)^2+P/2\bigr)\le2\epsilon^2/P$.
+    For $\epsilon\ge\sqrt P$, $1-2\epsilon^2/P<0$.
 \end{proof}
 
 \begin{theorem}[Overlap with a vector of bounded Schmidt rank]
     \label{thm:hastings_schmidt_overlap_tail}
     \lean{TNLean.MPS.AreaLaw.Hastings.normSq_dotProduct_le_kyFanNorm}
     \leanok
-    Let $\varphi$ be a bipartite vector with coefficient matrix $C_\varphi$, and
-    let $\rho_\varphi=C_\varphi C_\varphi^\dagger$ be its unnormalized reduced
-    operator on the first factor, of trace $\|\varphi\|^2$. For a vector $\psi$
-    of Schmidt rank at most $K$, with $K$ less than the dimension of the first
-    factor,
+    For a bipartite vector $\varphi$ with coefficient matrix $C_\varphi$ and
+    reduced operator $\rho_\varphi=C_\varphi C_\varphi^\dagger$, any $\psi$ of
+    Schmidt rank at most $K$ (below the first-factor dimension) satisfies
     $|\langle\varphi,\psi\rangle|^2\le\|\psi\|^2\,\|\rho_\varphi\|_{(K)}$, where
-    $\|\cdot\|_{(K)}$ is the sum of the $K$ largest eigenvalues.
+    $\|\cdot\|_{(K)}$ is the Ky Fan $K$-norm.
 \end{theorem}
 \begin{proof}\leanok
-    For $\psi=0$ both sides vanish. Otherwise,
-    normalizing $\psi$ reduces it to the variational
-    characterization of the maximal overlap with states of Schmidt rank at most
-    $K$ by the Ky Fan norm.
+    For $\psi\ne0$, normalize $\psi$ and apply the Ky Fan variational bound for
+    rank-$K$ overlaps.
 \end{proof}
 
 \begin{theorem}[The Schmidt tail from one mixture]
     \label{thm:hastings_mixture_tail}
     \lean{TNLean.MPS.AreaLaw.Hastings.one_sub_kyFanNorm_le_of_schmidtRank_mixture}
     \leanok
-    Let $\Psi$ be a unit bipartite vector with reduced density matrix
-    $\rho_\Psi$, let $K$ be a natural number and $\eta\ge0$, and let
-    $w_1,\dots,w_r\ge0$ and $\psi_1,\dots,\psi_r$ be vectors of Schmidt rank at
-    most $K$ with $W=\sum_iw_i\|\psi_i\|^2>0$. If
+    Let $\|\Psi\|=1$ have reduced state $\rho_\Psi$, let $K\in\mathbb N$,
+    $\eta\ge0$, and let $\psi_1,\dots,\psi_r$ have Schmidt rank at most $K$ with
+    weights $w_i\ge0$ and $W=\sum_iw_i\|\psi_i\|^2>0$. If
     $(1-\eta)W\le\sum_iw_i|\langle\Psi,\psi_i\rangle|^2$, then
     $1-\|\rho_\Psi\|_{(K)}\le\eta$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_schmidt_overlap_tail}
-    If $K$ is at least the dimension of the first factor, then
-    $\|\rho_\Psi\|_{(K)}=\operatorname{tr}\rho_\Psi=1$. Otherwise
+    If $K$ is at least the first-factor dimension,
+    $\|\rho_\Psi\|_{(K)}=\operatorname{tr}\rho_\Psi=1$; otherwise
     Theorem~\ref{thm:hastings_schmidt_overlap_tail} gives
-    $|\langle\Psi,\psi_i\rangle|^2\le\|\psi_i\|^2\|\rho_\Psi\|_{(K)}$ for each $i$,
-    so $(1-\eta)W\le W\|\rho_\Psi\|_{(K)}$, and dividing by $W$ gives the bound.
+    $(1-\eta)W\le\sum_iw_i|\langle\Psi,\psi_i\rangle|^2\le W\|\rho_\Psi\|_{(K)}$.
 \end{proof}
 
 \begin{theorem}[The cut rank under supported operators]
@@ -162,37 +147,28 @@ of a gapped chain combines them with the factorization of
     }
     \leanok
     \uses{def:chain_model}
-    For finite-dimensional spaces $\mathcal H_1$ and $\mathcal H_2$, an operator
-    of the form $X\otimes1$ or $1\otimes X$ does not increase the rank of the
-    coefficient matrix of a vector of $\mathcal H_1\otimes\mathcal H_2$. On the
-    chain of $L$ sites with local dimension $q\ge1$, consider the cut after $k$
-    sites and the Schmidt rank of a vector across it. Writing the chain as the
-    product of the first $k$ sites and the remaining sites, the coefficient
-    matrix of $X\psi$ across the cut is the coefficient matrix of the vector
-    $X\psi$ in these two factors, with $X$ written as an operator on the
-    product. Hence an operator
-    supported on the first $k$ sites, or on the sites after them, does not
-    increase the Schmidt rank. An operator supported on the first $k+m$ sites,
-    with $k+m\le L$, increases it by a factor of at most $q^{2m}$. For an
-    operator supported on the $2m$ sites around the cut, with $D=q$, this is
-    the bound $K\mapsto KD^{2m}$ on the Schmidt rank in the proof of
-    \cite[Lemma~2]{Hastings2007AreaLaw}, lines 321--322.
+    On $\mathcal H_1\otimes\mathcal H_2$, $X\otimes1$ and $1\otimes X$ do not
+    increase the coefficient-matrix rank. On an $L$-site chain of local
+    dimension $q\ge1$, let $r_k(\psi)$ be the Schmidt rank across cut $k$. If
+    $X$ acts on $\{0,\dots,k-1\}$ or $\{k,\dots,L-1\}$, then
+    $r_k(X\psi)\le r_k(\psi)$; if $X$ acts on $\{0,\dots,k+m-1\}$ ($k+m\le L$),
+    then $r_k(X\psi)\le q^{2m}r_k(\psi)$
+    \cite[Lemma~2, lines 321--322]{Hastings2007AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_cut_rank_growth}
-    Write $C_\psi$ for the coefficient matrix of $\psi$ in
-    $\mathcal H_1\otimes\mathcal H_2$. Then
+    Since
     \begin{align}
         C_{(X\otimes1)\psi}=XC_\psi,\qquad C_{(1\otimes X)\psi}=C_\psi X^{\mathsf T},
+        \label{eq:hastings_supported_cut_rank_one_sided}
     \end{align}
-    and multiplying a matrix on one side does not increase its rank. For the
-    second statement write $r_k(\psi)$ for the Schmidt rank of $\psi$ across
-    the cut after $k$ sites. Moving a cut by $m$ sites changes the Schmidt
-    rank by a factor of at most $q^m$, and across the cut after $k+m$ sites
-    the operator $X$ acts on one side, so
+    one-sided operators do not increase rank. By
+    Theorem~\ref{thm:chain_cut_rank_growth}, shifting a cut by $m$ sites changes
+    $r_k$ by at most $q^m$, and $X$ is one-sided across cut $k+m$, so
     \begin{align}
         r_k(X\psi)\le q^m\,r_{k+m}(X\psi)\le q^m\,r_{k+m}(\psi)
         \le q^{2m}\,r_k(\psi).
+        \label{eq:hastings_supported_cut_rank_shift}
     \end{align}
 \end{proof}
 
@@ -200,11 +176,12 @@ of a gapped chain combines them with the factorization of
     \label{def:hastings_bootstrap_remainder}
     \lean{TNLean.MPS.AreaLaw.Hastings.bootstrapRemainder}
     \leanok
-    For $\xi'>0$ and a natural number $D\ge2$, put
+    For $\xi'>0$ and $D\in\mathbb N$ with $D\ge2$, set
     \begin{align}
-        F(\xi',D)=(\xi'+4)\ln D+1+\ln(D^2-1)+\ln(\xi'/2+1),
+        F(\xi',D)=(\xi'+4)\ln D+1+\ln(D^2-1)+\ln(\xi'/2+1)
+        \label{eq:hastings_bootstrap_remainder}
     \end{align}
-    as in \cite[Lemma~2]{Hastings2007AreaLaw}, lines 304--309.
+    \cite[Lemma~2, lines 304--309]{Hastings2007AreaLaw}.
 \end{definition}
 
 \begin{theorem}[The Schmidt tail from overlaps with mixtures of bounded Schmidt rank]
@@ -212,30 +189,26 @@ of a gapped chain combines them with the factorization of
     \lean{TNLean.MPS.AreaLaw.Hastings.exists_eigenvalues₀_tail_le_of_schmidtRank_mixtures,
         TNLean.MPS.AreaLaw.Hastings.eigenvalues₀_nonneg_and_sum_eq_one}
     \leanok
-    Let $\Psi$ be a unit bipartite vector with reduced density matrix
-    $\rho_\Psi$, let $k$ and $D$ be natural numbers, and let $\xi'>0$ and
-    $c\ge1$. Suppose that at every scale $s$
-    with $ce^{-2s/\xi'}<1$ some mixture of states of Schmidt rank at most
-    $kD^{2s}$, of positive total weight, has normalized overlap with $\Psi$ at
-    least $1-ce^{-2s/\xi'}$. Then the eigenvalues $p_1\ge p_2\ge\dots$ of
-    $\rho_\Psi$ form a probability vector, and there is a natural number $m'$
-    with $m'<\tfrac{\xi'}{2}\ln c+1$ such that for every $n\ge0$
+    Let $\|\Psi\|=1$ have reduced state $\rho_\Psi$ with eigenvalues
+    $p_1\ge p_2\ge\dots$, and let $k,D\in\mathbb N$, $\xi'>0$, and $c\ge1$. If
+    for every $s\in\mathbb N$ with $ce^{-2s/\xi'}<1$ some mixture of states of
+    Schmidt rank at most $kD^{2s}$ has normalized overlap with $\Psi$ at least
+    $1-ce^{-2s/\xi'}$, then $(p_a)$ is a probability vector and there exists
+    $m'\in\mathbb N$ with $m'<\tfrac{\xi'}{2}\ln c+1$ such that for all
+    $n\ge0$,
     \begin{align}
-        \sum_{a>kD^{2(m'+1+n)}}p_a\le e^{-2(n+1)/\xi'}.
+        \sum_{a>kD^{2(m'+1+n)}}p_a\le e^{-2(n+1)/\xi'}
+        \label{eq:hastings_bootstrap_schmidt_tail}
     \end{align}
-    These are equations \texttt{constraint} and \texttt{constraint2} in the
-    proof of \cite[Lemma~2]{Hastings2007AreaLaw}, lines 333--356.
+    \cite[Lemma~2, eqs.~(constraint) and (constraint2), lines 333--356]{Hastings2007AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_mixture_tail}
-    Since $\rho_\Psi=C_\Psi C_\Psi^\dagger$ is positive semidefinite with
-    $\operatorname{tr}\rho_\Psi=\lVert\Psi\rVert^2=1$, its eigenvalues are
-    nonnegative and sum to $\operatorname{tr}\rho_\Psi=1$.
-    At each such scale Theorem~\ref{thm:hastings_mixture_tail} bounds the mass
-    of the Schmidt coefficients beyond the first
-    $kD^{2s}$ by $ce^{-2s/\xi'}$, which is equation \texttt{constraint}. Let $m'$ be the least
-    natural number with $ce^{-2m'/\xi'}\le1$; then $2m'<\xi'\ln c+2$, and the
-    scale $m'+1+n$ satisfies $ce^{-2(m'+1+n)/\xi'}\le e^{-2(n+1)/\xi'}<1$.
+    Since $\rho_\Psi\ge0$ and $\operatorname{tr}\rho_\Psi=\|\Psi\|^2=1$, $(p_a)$
+    is a probability vector, and Theorem~\ref{thm:hastings_mixture_tail} gives
+    $\sum_{a>kD^{2s}}p_a\le ce^{-2s/\xi'}$ whenever $ce^{-2s/\xi'}<1$. Taking
+    the least $m'\in\mathbb N$ with $ce^{-2m'/\xi'}\le1$ gives
+    $m'<\tfrac{\xi'}2\ln c+1$ and $ce^{-2(m'+1+n)/\xi'}\le e^{-2(n+1)/\xi'}<1$.
 \end{proof}
 
 \begin{theorem}[Entropy from overlaps with mixtures of bounded Schmidt rank]
@@ -243,27 +216,20 @@ of a gapped chain combines them with the factorization of
     \lean{TNLean.MPS.AreaLaw.Hastings.vonNeumannEntropy_le_of_schmidtRank_mixtures}
     \leanok
     \uses{def:hastings_bootstrap_remainder}
-    Let $\Psi$ be a unit bipartite vector with reduced density matrix
-    $\rho_\Psi$, and let $k\ge1$, $D\ge2$, $\xi'>0$ and $c\ge1$. Suppose that at
-    every scale $s$ with $ce^{-2s/\xi'}<1$ some mixture of states of Schmidt
-    rank at most $kD^{2s}$, of positive total weight, has normalized overlap with
-    $\Psi$ at least $1-ce^{-2s/\xi'}$. Then
+    Under the hypotheses of Theorem~\ref{thm:hastings_bootstrap_schmidt_tail}
+    with $k\ge1$ and $D\ge2$,
     \begin{align}
-        S(\rho_\Psi)\le\ln k+\xi'\ln(c)\ln D+F(\xi',D).
+        S(\rho_\Psi)\le\ln k+\xi'\ln(c)\ln D+F(\xi',D)
+        \label{eq:hastings_bootstrap_stage}
     \end{align}
-    This is a stage of \cite[Lemma~2]{Hastings2007AreaLaw}: it takes the mixtures
-    at every scale as a hypothesis, and with $c=2C_1(\xi)^2/P$ its conclusion
-    is equation \texttt{bootstrap}.
+    \cite[Lemma~2, eq.~(bootstrap)]{Hastings2007AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_geometric_tail_entropy,
         thm:hastings_bootstrap_schmidt_tail}
-    By the spectral definition of von Neumann entropy,
-    $S(\rho_\Psi)=-\sum_a p_a\ln p_a$, where the $p_a$ are its eigenvalues.
-    Theorem~\ref{thm:hastings_bootstrap_schmidt_tail} gives the scale $m'$, with
-    $2m'+2\le\xi'\ln c+4$, and the constraints at the scales $m'+1+n$. These are
-    the hypotheses of the second form of
-    Theorem~\ref{thm:hastings_geometric_tail_entropy}.
+    Combine (\ref{eq:hastings_bootstrap_schmidt_tail}) and
+    $2m'+2\le\xi'\ln c+4$ from Theorem~\ref{thm:hastings_bootstrap_schmidt_tail}
+    with (\ref{eq:hastings_scale_tail_entropy}).
 \end{proof}
 
 \begin{theorem}[Cut coordinates preserve inner products]
@@ -271,14 +237,11 @@ of a gapped chain combines them with the factorization of
     \lean{TNLean.MPS.AreaLaw.Hastings.star_cutVector_dotProduct}
     \leanok
     \uses{def:chain_model}
-    For vectors $x,y$ on the chain of $L$ sites and a cut $j$, write
-    $\hat x,\hat y$ for their coordinates in the product of the first $j$
-    sites and the remaining sites. Then
-    $\langle\hat x,\hat y\rangle=\langle x,y\rangle$.
+    For chain vectors $x,y$ and their bipartite coordinates $\hat x,\hat y$
+    across cut $j$, $\langle\hat x,\hat y\rangle=\langle x,y\rangle$.
 \end{theorem}
 \begin{proof}\leanok
-    The coordinates across the cut are a relabelling of the configurations of
-    the chain.
+    Bipartite cut coordinates reindex the chain configuration basis.
 \end{proof}
 
 \begin{theorem}[The entropy of a cut from its coefficient matrix]
@@ -286,16 +249,14 @@ of a gapped chain combines them with the factorization of
     \lean{TNLean.MPS.AreaLaw.Hastings.regionEntropy_interval_eq}
     \leanok
     \uses{def:chain_model}
-    For a vector $\Omega$ on the chain of $L$ sites and a cut $j$, the partial
-    trace of $|\Omega\rangle\langle\Omega|$ over the sites after the first $j$,
-    an unnormalized reduced operator of trace $\|\Omega\|^2$, is
-    $C_\Omega C_\Omega^\dagger$ for the coefficient matrix $C_\Omega$ across
-    the cut, so its entropy is the entropy of $C_\Omega C_\Omega^\dagger$.
+    For a chain vector $\Omega$ with coefficient matrix $C_\Omega$ across cut
+    $j$, the reduced operator of $|\Omega\rangle\langle\Omega|$ on
+    $\{0,\dots,j-1\}$ is $C_\Omega C_\Omega^\dagger$, so its regional entropy
+    equals $S(C_\Omega C_\Omega^\dagger)$.
 \end{theorem}
 \begin{proof}\leanok
-    The partial trace over the second factor of $|\Omega\rangle\langle\Omega|$
-    is $C_\Omega C_\Omega^\dagger$ in the cut coordinates, and the first $j$
-    sites are the interval $\{0,\dots,j-1\}$.
+    In cut coordinates across $\{0,\dots,j-1\}$, the partial trace over the
+    complement of $|\Omega\rangle\langle\Omega|$ is $C_\Omega C_\Omega^\dagger$.
 \end{proof}
 
 \begin{theorem}[The cut rank past the end of the chain]
@@ -303,15 +264,14 @@ of a gapped chain combines them with the factorization of
     \lean{TNLean.MPS.AreaLaw.Hastings.rank_cutMatrix_le_pow_of_lt}
     \leanok
     \uses{def:chain_model}
-    On the chain of $L$ sites with local dimension $q\ge1$, if $L<j+s$ then
-    every vector has Schmidt rank at most $q^{2s}$ across the cut after $j$
-    sites.
+    On an $L$-site chain of local dimension $q\ge1$, if $L<j+s$ then every
+    vector has Schmidt rank at most $q^{2s}$ across cut $j$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:chain_cut_rank_growth}
-    If $j\le L$, moving the cut to the end of the chain costs a factor at most
-    $q^{L-j}\le q^{2s}$, and the cut at the end has Schmidt rank at most one.
-    If $j>L$, the cut already contains the whole chain.
+    By Theorem~\ref{thm:chain_cut_rank_growth}, shifting cut $j\le L$ to $L$
+    (where the rank is at most $1$) changes the rank by at most
+    $q^{L-j}\le q^{2s}$; for $j>L$ the rank is already at most $1$.
 \end{proof}
 
 \begin{theorem}[One scale of the bootstrap on the chain]
@@ -319,34 +279,28 @@ of a gapped chain combines them with the factorization of
     \lean{TNLean.MPS.AreaLaw.Hastings.exists_mixture_rank_cutMatrix_le_overlap_of_factorization}
     \leanok
     \uses{def:chain_model}
-    Let $\Omega$ be a unit vector on the chain of $L$ sites with local
-    dimension $q\ge1$, let $j$ be a cut, and let $\xi'$ and $C_1$ be real.
-    Suppose that for every natural number $m$ with $j+m\le L$ there are
-    operators $O_B$ supported on the first $j+m$ sites, $O_L$ supported on the
-    first $j$ sites and $O_R$ supported on the sites after them, with
-    $\|O_BO_LO_R-|\Omega\rangle\langle\Omega|\|\le C_1e^{-m/\xi'}$. Let $w_1,\dots,w_r\ge0$ and
-    $\psi_1,\dots,\psi_r$ be vectors of Schmidt rank at most $k\ge1$ across the
-    cut, with $\sum_iw_i\|\psi_i\|^2=1$ and
-    $P=\sum_iw_i|\langle\psi_i,\Omega\rangle|^2>0$. If $s$ is a natural number
-    with $c\,e^{-2s/\xi'}<1$, where $c=2C_1^2/P$, then some mixture of vectors of
-    Schmidt rank at most $kq^{2s}$ across the cut, of positive total weight,
-    has normalized overlap at least $1-c\,e^{-2s/\xi'}$ with $\Omega$. This is
-    equation \texttt{hg} in the proof of \cite[Lemma~2]{Hastings2007AreaLaw},
-    lines 315--331. No sign is required of $\xi'$: for $\xi'=0$ the exponents
-    $-m/\xi'$ and $-2s/\xi'$ are read as $0$. The lemma is applied with
-    $\xi'>0$ in Theorem~\ref{thm:hastings_bootstrap_chain_stage}.
+    Let $\|\Omega\|=1$ on an $L$-site chain of local dimension $q\ge1$, $j$ be a
+    cut, and $\xi',C_1\in\mathbb R$. Suppose that for every $m\in\mathbb N$ with
+    $j+m\le L$ there exist $O_B,O_L,O_R$ supported on $\{0,\dots,j+m-1\}$,
+    $\{0,\dots,j-1\}$, and $\{j,\dots,L-1\}$ such that
+    $\|O_BO_LO_R-|\Omega\rangle\langle\Omega|\|\le C_1e^{-m/\xi'}$. Let
+    $\psi_1,\dots,\psi_r$ have Schmidt rank at most $k\ge1$ across cut $j$ with
+    $w_i\ge0$, $\sum_iw_i\|\psi_i\|^2=1$, and
+    $P=\sum_iw_i|\langle\psi_i,\Omega\rangle|^2>0$. Set $c=2C_1^2/P$. For every
+    $s\in\mathbb N$ with $ce^{-2s/\xi'}<1$ (reading $-s/\xi'=0$ if $\xi'=0$),
+    some mixture of vectors of Schmidt rank at most $kq^{2s}$ across cut $j$ has
+    normalized overlap at least $1-ce^{-2s/\xi'}$ with $\Omega$
+    \cite[Lemma~2, eq.~(hg), lines 315--331]{Hastings2007AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_bootstrap_overlap, thm:hastings_supported_cut_rank,
         thm:hastings_terminal_cut_rank}
-    When $j+s\le L$, the operator $O=O_BO_LO_R$ maps each $\psi_i$ to a vector
-    of Schmidt rank at most $kq^{2s}$ by
-    Theorem~\ref{thm:hastings_supported_cut_rank}, and
+    For $j+s\le L$, set $O=O_BO_LO_R$ at $m=s$: each $O\psi_i$ has Schmidt rank
+    at most $kq^{2s}$ by Theorem~\ref{thm:hastings_supported_cut_rank}, and
     Theorem~\ref{thm:hastings_bootstrap_overlap} with
-    $\epsilon=C_1e^{-s/\xi'}<\sqrt P$ gives the mixture
-    $\sum_iw_i|O\psi_i\rangle\langle O\psi_i|$ the stated overlap. When
-    $j+s>L$, the vector $\Omega$ itself serves, by
-    Theorem~\ref{thm:hastings_terminal_cut_rank}.
+    $\epsilon=C_1e^{-s/\xi'}<\sqrt P$ gives the overlap for
+    $\sum_iw_i|O\psi_i\rangle\langle O\psi_i|$. For $j+s>L$, take $\Omega$
+    itself by Theorem~\ref{thm:hastings_terminal_cut_rank}.
 \end{proof}
 
 \begin{theorem}[The bootstrap bound on the chain, stage form]
@@ -354,34 +308,26 @@ of a gapped chain combines them with the factorization of
     \lean{TNLean.MPS.AreaLaw.Hastings.entropy_le_of_overlap_schmidtRank_mixture_of_factorization}
     \leanok
     \uses{def:chain_model, def:hastings_bootstrap_remainder}
-    Let $\Omega$ be a unit vector on the chain of $L$ sites with local
-    dimension $q\ge2$, let $j$ be a cut, and let $\xi'>0$ and $C_1\ge1$.
-    Suppose that for every natural number $m$ with $j+m\le L$ there are
-    operators $O_B$ supported on the first $j+m$ sites, $O_L$ supported on the
-    first $j$ sites and $O_R$ supported on the sites after them, with
+    In the setting of Theorem~\ref{thm:hastings_bootstrap_scale} with $q\ge2$,
+    $\xi'>0$, $C_1\ge1$, and
     \begin{align}
-        \|O_BO_LO_R-|\Omega\rangle\langle\Omega|\|\le C_1e^{-m/\xi'}.
+        \|O_BO_LO_R-|\Omega\rangle\langle\Omega|\|\le C_1e^{-m/\xi'}
+        \label{eq:hastings_bootstrap_chain_stage_hyp}
     \end{align}
-    Let $w_1,\dots,w_r\ge0$ and let $\psi_1,\dots,\psi_r$ be vectors of Schmidt
-    rank at most $k\ge1$ across the cut after $j$ sites, with
-    $\sum_iw_i\|\psi_i\|^2=1$ and
-    $P=\sum_iw_i|\langle\psi_i,\Omega\rangle|^2>0$. Then the entropy $S_j$ of
-    the reduced density matrix of $\Omega$ on the first $j$ sites satisfies
+    for all $j+m\le L$, the entropy $S_j$ of $\Omega$ on $\{0,\dots,j-1\}$
+    satisfies
     \begin{align}
-        S_j\le\ln k+\xi'\ln\bigl(2C_1^2/P\bigr)\ln q+F(\xi',q).
+        S_j\le\ln k+\xi'\ln\bigl(2C_1^2/P\bigr)\ln q+F(\xi',q)
+        \label{eq:hastings_bootstrap_chain_stage}
     \end{align}
-    This is a stage of
-    \cite[Lemma~2]{Hastings2007AreaLaw}: the factorization of Lemma~1 is a
-    hypothesis, and the Hamiltonian does not enter.
+    \cite[Lemma~2]{Hastings2007AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_bootstrap_stage, thm:hastings_bootstrap_scale,
         thm:hastings_cut_coordinates, thm:hastings_cut_entropy}
-    By Theorems~\ref{thm:hastings_cut_coordinates}
-    and~\ref{thm:hastings_cut_entropy}, the statement is the bipartite one of
-    Theorem~\ref{thm:hastings_bootstrap_stage} for the coefficient vectors across
-    the cut, with $c=2C_1^2/P\ge1$ and $D=q$. Its hypothesis at each scale is
-    Theorem~\ref{thm:hastings_bootstrap_scale}.
+    Combine Theorems~\ref{thm:hastings_cut_coordinates},
+    \ref{thm:hastings_cut_entropy}, \ref{thm:hastings_bootstrap_scale}, and
+    \ref{thm:hastings_bootstrap_stage} with $c=2C_1^2/P\ge1$ and $D=q$.
 \end{proof}
 
 \begin{theorem}[The bootstrap bound from the factorization at one cut]
@@ -389,20 +335,18 @@ of a gapped chain combines them with the factorization of
     \lean{TNLean.MPS.AreaLaw.Hastings.entropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt}
     \leanok
     \uses{def:hastings_factorization_at, def:hastings_bootstrap_remainder}
-    Let $\Omega$ be a unit vector on the chain of $L$ sites with local
-    dimension $q\ge2$, let $j$ be a cut, and let $\xi'>0$ and $C_1\ge1$.
-    Suppose that at the cut $j$ and every length $m$ there is an approximate
-    factorization of $|\Omega\rangle\langle\Omega|$ with error
-    $C_1e^{-m/\xi'}$. Then the conclusion of
-    Theorem~\ref{thm:hastings_bootstrap_chain_stage} holds for every mixture
-    as there.
+    If $\|\Omega\|=1$ on an $L$-site chain of local dimension $q\ge2$ admits an
+    approximate factorization (Definition~\ref{def:hastings_factorization_at})
+    of $|\Omega\rangle\langle\Omega|$ at cut $j$ with error $C_1e^{-m/\xi'}$
+    ($\xi'>0$, $C_1\ge1$) for every $m\in\mathbb N$, then
+    (\ref{eq:hastings_bootstrap_chain_stage}) holds for every mixture as in
+    Theorem~\ref{thm:hastings_bootstrap_chain_stage}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_bootstrap_chain_stage, thm:hastings_factorization_bootstrap_form}
-    An approximate factorization at the cut $j$ and length $m$ has $O_B$
-    supported on the sites $j-m,\dots,j+m-1$, hence on the first $j+m$
-    sites, so it supplies the hypothesis of
-    Theorem~\ref{thm:hastings_bootstrap_chain_stage}.
+    By Theorem~\ref{thm:hastings_factorization_bootstrap_form}, $O_B$ supported
+    on $\{j-m,\dots,j+m-1\}$ is supported on $\{0,\dots,j+m-1\}$, so
+    Theorem~\ref{thm:hastings_bootstrap_chain_stage} applies.
 \end{proof}
 
 \begin{theorem}[The bootstrap lemma]
@@ -411,39 +355,22 @@ of a gapped chain combines them with the factorization of
     \leanok
     \uses{def:chain_model, def:hastings_bootstrap_remainder,
         thm:hastings_lemma1_endpoint}
-    Let $R$ be a range. There is a constant $K\ge1$, depending only on $R$,
-    with the following property. Let $H$ be a Hamiltonian on a chain of $L$
-    sites with local dimension $D$, a sum of terms of range $R$ and norm at
-    most $J\ge0$, whose ground state $\Psi_0$ is unique with gap $\Delta E>0$
-    above the ground energy. Let $\tilde\xi$ be the length of
-    Theorem~\ref{thm:hastings_lemma1_endpoint}, and set $\xi'=6\tilde\xi$ and
-    $C_1=K\tilde\xi^3$. Let $\rho$
-    be a density matrix of unit trace that is a mixture of pure states of
-    Schmidt rank at most $k\ge1$ across the cut between sites $j$ and $j+1$, with
-    $\langle\Psi_0,\rho\Psi_0\rangle=P>0$. (The case $k=0$ is vacuous: a vector
-    of Schmidt rank zero vanishes, and then $P=0$.) Then
+    For every range $R$ there exists $K=K(R)\ge1$ such that, for any Hamiltonian
+    $H$ of range $R$, term norm bound $J\ge0$, unique ground state $\Psi_0$, and
+    gap $\Delta E>0$ on $L$ sites of local dimension $D$, with $\tilde\xi$ from
+    Theorem~\ref{thm:hastings_lemma1_endpoint}, $\xi'=6\tilde\xi$, and
+    $C_1=K\tilde\xi^3$, any unit-trace mixture $\rho$ of pure states of Schmidt
+    rank at most $k\ge1$ across cut $j$ with
+    $P=\langle\Psi_0,\rho\Psi_0\rangle>0$ satisfies
     \begin{align}
         S(\rho^0_{1,j})\le\ln k+\xi'\ln\bigl(2C_1^2/P\bigr)\ln D+F(\xi',D),
+        \label{eq:hastings_bootstrap}
     \end{align}
-    where $\rho^0_{1,j}$ is the reduced density matrix of
-    $|\Psi_0\rangle\langle\Psi_0|$ on sites $1,\dots,j$. This is a quantitatively restricted form of
-    \cite[Lemma~2]{Hastings2007AreaLaw}, lines 280--311, at the printed rate
-    $\xi'=6\xi$ for the length $\xi=\tilde\xi$. The length $\tilde\xi$ may
-    stand in for the source's $\xi$: the source fixes
-    $\xi=\max(2v/\Delta E,\xi_C)$ only through some Lieb--Robinson pair, and a
-    bound valid for $|t|\le l/v$ stays valid for a larger velocity
-    \cite[lines 96--112]{Hastings2007AreaLaw}, so raising the velocity of the
-    chain estimate is a legitimate choice
-    \cite{gap:hastings07_lemma1_decay_length}. The constant $C_1$ is bounded
-    by a polynomial in the length, as the source requires, and is uniform in
-    the chain length, local dimension, Hamiltonian, ground state, cut and
-    mixture. The result inherits the remaining restriction of the formalized
-    Lemma~1: the length $\tilde\xi$ comes from the chain Lieb--Robinson
-    estimate with its velocity raised by $5/4$. That estimate is linear in the
-    size of the support, as in the source, but its prefactor grows with $J$
-    and its second operator acts on one site, so $\tilde\xi$ is not shown to
-    be the source's $\max(2v/\Delta E,\xi_C)$ for a Lieb--Robinson pair in the
-    source's sense
+    where $\rho^0_{1,j}=\operatorname{tr}_{X_{j+1,N}}|\Psi_0\rangle\langle\Psi_0|$.
+    This is \cite[Lemma~2, lines 280--311]{Hastings2007AreaLaw} at
+    $\xi'=6\tilde\xi$ with $C_1$ polynomial in $\tilde\xi$, inheriting the
+    raised-velocity chain localization length $\tilde\xi$ of
+    Theorem~\ref{thm:hastings_lemma1_endpoint}
     \cite{gap:hastings07_lemma1_decay_length,
         gap:hastings07_gaussian_average_exponent}.
 \end{theorem}
@@ -451,13 +378,9 @@ of a gapped chain combines them with the factorization of
     \uses{thm:hastings_lemma1_endpoint,
         thm:hastings_bootstrap_factorization_at, thm:hastings_factorization_mono,
         lem:chain_entropy_inequalities}
-    Theorem~\ref{thm:hastings_lemma1_endpoint} gives a constant $K_0\ge0$
-    depending only on $R$ and an approximate factorization of the
-    ground-state projector with error $K_0\tilde\xi^3e^{-m/(6\tilde\xi)}$ at
-    every cut and length; it also holds with $K=\max(K_0,1)$, and then
-    $C_1=K\tilde\xi^3\ge1$ since $\tilde\xi\ge20$.
-    For $D\ge2$,
-    Theorem~\ref{thm:hastings_bootstrap_factorization_at} gives the bound.
-    For $D=1$ the entropy vanishes, while the right side is nonnegative,
-    with the convention $\ln0=0$ in the term $\ln(D^2-1)$ of $F(\xi',D)$.
+    Theorem~\ref{thm:hastings_lemma1_endpoint} gives $K_0(R)\ge0$; set
+    $K=\max(K_0,1)$ so $C_1=K\tilde\xi^3\ge1$ (since $\tilde\xi\ge20$). For
+    $D\ge2$, Theorem~\ref{thm:hastings_bootstrap_factorization_at} gives
+    (\ref{eq:hastings_bootstrap}); for $D=1$, $S(\rho^0_{1,j})=0$ and the
+    right-hand side is nonnegative under $\ln0=0$.
 \end{proof}

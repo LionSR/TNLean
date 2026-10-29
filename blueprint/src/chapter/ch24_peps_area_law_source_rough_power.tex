@@ -5,88 +5,63 @@
     \label{thm:arealaw-target-entropy-transfer}
     \lean{TNLean.PEPS.AreaLaw.Scan.eventually_abs_regionalEntropy_sub_le_of_truncation}
     \leanok
-    Fix a local dimension $q\geq1$, a normalized gap $g>0$ and a
-    volume coefficient $C_{\rm vol}$.  For all sufficiently large $n$,
-    uniformly over the finite lattice, two unit vectors $\Omega$ and
-    $\widetilde\Omega$, and a region $X$ of size at most
-    $C_{\rm vol}n^2$, the trace-distance bound
+    For $q\ge1$, $g>0$, $C_{\rm vol}$, $n\gg1$, any unit vectors $\Omega,\widetilde\Omega$, and any region $X$ with $|X|\le C_{\rm vol}n^2$,
     \begin{align}
         \operatorname{dist}_{\rm tr}
         (|\widetilde\Omega\rangle\langle\widetilde\Omega|,
         |\Omega\rangle\langle\Omega|)
-         & \leq\sqrt{2\min\{n^{-1000},g/4\}/g}
-    \end{align}
-    implies
-    \begin{align}
-        |S(\widetilde\Omega_X)-S(\Omega_X)| & \leq n^{-247}.
+        \le\sqrt{2\min\{n^{-1000},g/4\}/g}
+        \implies
+        |S(\widetilde\Omega_X)-S(\Omega_X)| \le n^{-247}.
         \label{eq:arealaw-target-entropy-transfer}
     \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:area_law_regional_entropy_continuity}
-    The trace distance is at most $\sqrt{2/g}\,n^{-500}$.
-    At trace distance $t$, regional entropy continuity bounds the entropy
-    difference by $4\sqrt t(1+|X|\log q)$, and for large $n$ the
-    one-power margin between $n^{-250}n^2$ and $n^{-247}$ absorbs the fixed
-    coefficient and the quadratic volume bound $|X|\leq C_{\rm vol}n^2$.
+    At trace distance $t\le\sqrt{2/g}\,n^{-500}$, Theorem~\ref{thm:area_law_regional_entropy_continuity} gives $|S(\widetilde\Omega_X)-S(\Omega_X)|\le4\sqrt t(1+|X|\log q)\le4(2/g)^{1/4}n^{-250}(1+C_{\rm vol}n^2\log q)\le n^{-247}$ for $n\gg1$.
 \end{proof}
 
 \begin{theorem}[The rough bound has the source entropy power]
     \label{thm:arealaw-source-rough-budget-power}
     \lean{TNLean.PEPS.AreaLaw.Scan.roughBudget_le_source_power}
     \leanok
-    Let $n\geq2$, $q\geq1$, $L\leq n$, $D\geq1$,
-    $e,C_e\geq0$, $W\geq1$, and $D\leq2n^e$.
-    Suppose the positive selected mass and target estimates satisfy
+    For $n\ge2$, $q\ge1$, $L\le n$, $1\le D\le2n^e$, $e,C_e\ge0$, and $W\ge1$, if
     \begin{align}
-        1-n^{-100}   & \leq z,                            &
-        S_t          & \leq C_en^{1+e}+n^{-247},\nonumber   \\
-        |\log d-S_t| & \leq n^{3/5}-\log z,               &
-        B_{\rm sh}   & \leq C_e(nL^e+n)+n^{-247}.
+        1-n^{-100}   & \le z,                                                &
+        S_t          & \le C_en^{1+e}+n^{-247},\notag                          \\
+        |\log d-S_t| & \le n^{3/5}-\log z,                                   &
+        B_{\rm sh}   & \le C_e(nL^e+n)+n^{-247}, \label{eq:rough_budget_hyp}
     \end{align}
-    Then the rough expression obeys
+    then
     \begin{align}
         2\log d-\log z+
         W\left(\frac{B_{\rm sh}}z+1+3nD\log q\right)
-         & \leq(6C_e+13+6\log q)Wn^{1+e}.
+         & \le(6C_e+13+6\log q)Wn^{1+e}.
         \label{eq:arealaw-source-rough-budget-power}
     \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
-    Since $n\geq2$, the mass bound $1-n^{-100}\leq z$ gives $z\geq1/2$ and
-    $-\log z\leq1$. With $N=n^{1+e}$, these estimates bound the target term
-    $2\log d-\log z$ by $(2C_e+7)N$, the shell term $B_{\rm sh}/z$ by
-    $4(C_e+1)N$, and the mismatch term $1+3nD\log q$ by $2(1+3\log q)N$;
-    multiplying the target bound by $W\geq1$ and summing yields the stated
-    inequality.
+    Since $n\ge2$, $z\ge1-n^{-100}\ge1/2$ and $-\log z\le1$, so with $N=n^{1+e}$, (\ref{eq:rough_budget_hyp}) gives $2\log d-\log z\le(2C_e+7)N\le(2C_e+7)WN$, $B_{\rm sh}/z\le4(C_e+1)N$, and $1+3nD\log q\le2(1+3\log q)N$; summing yields (\ref{eq:arealaw-source-rough-budget-power}).
 \end{proof}
 
 \begin{theorem}[Principal terms of the selected-density bound]
     \label{thm:arealaw-selected-density-principal}
     \lean{TNLean.PEPS.AreaLaw.Scan.selectedDensity_budget_le_principal}
     \leanok
-    Let $n,m$ be positive integers, $W,\varepsilon,C_1>0$,
-    $a,C_r,C_t\geq0$, and let $e,C_l,B,G,R$ be real.
-    If $B\leq C_rWn^{1+e}$ and $G\leq C_t(\log n)^{C_l}$, then
+    For integers $n,m\ge1$, $W,\varepsilon,C_1>0$, $a,C_r,C_t\ge0$, and $e,C_l,B,G,R\in\mathbb R$, if $B\le C_rWn^{1+e}$ and $G\le C_t(\log n)^{C_l}$, then with $C=2(C_1+1)(C_r+2C_t)$,
     \begin{align}
         \frac{2(C_1+1)}{Wnm\varepsilon}
         \bigl(B+2nm\,GW a^{1/4}+R\bigr)
-          & \leq C\frac{n^e/m+a^{1/4}(\log n)^{C_l}}{\varepsilon}
-        +\frac{2(C_1+1)}{Wnm\varepsilon}R,\nonumber               \\
-        C & =2(C_1+1)(C_r+2C_t).
+         & \le C\frac{n^e/m+a^{1/4}(\log n)^{C_l}}{\varepsilon}
+        +\frac{2(C_1+1)}{Wnm\varepsilon}R.
         \label{eq:arealaw-selected-density-principal}
     \end{align}
-    No sign restriction on $B,G,R$ is required.
 \end{theorem}
 \begin{proof}
     \leanok
-    Substituting the upper bounds on $B$ and $G$ and cancelling the positive
-    factors $W$ and $n$ bounds the first two terms by $2(C_1+1)C_rn^e/(m\varepsilon)$
-    and $4(C_1+1)C_ta^{1/4}(\log n)^{C_l}/\varepsilon$. Because both quotients
-    are nonnegative, replacing their individual coefficients by their sum $C$
-    while leaving the remainder term unchanged gives the result.
+    Substituting $B\le C_rWn^{1+e}$ and $G\le C_t(\log n)^{C_l}$, cancelling $Wn$, and bounding each nonnegative coefficient by $C=2(C_1+1)(C_r+2C_t)$ gives (\ref{eq:arealaw-selected-density-principal}).
 \end{proof}
 
 % Source: OpenAI2026AreaLaw, Proposition 9.2, sections/08-scanner.tex,
@@ -95,130 +70,76 @@
     \label{thm:arealaw-selected-density-delta}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.selectedDensity_budget_le_delta}
     \leanok
-    Adopt the exponents and rounded scales of
-    Lemma~\ref{lem:al_scanner_scale_facts}, and suppose its estimates
-    hold with constant $C_s\geq1$. Let $W,C_1>0$, put $a=W/K$,
-    and suppose $C_r,C_t\geq0$ and
-    \begin{align}
-        B & \leq C_rWn^{1+e},       \\
-        G & \leq C_t(\log n)^{C_l}.
-    \end{align}
-    Set
-    \begin{align}
-        c        & =\frac{2(C_1+1)}{Wnm(\epsilon/2)}, \\
-        C_\delta & =4(C_1+1)(C_r+2C_t)C_s.
-    \end{align}
-    Then, for every real $R$,
+    Under the exponents and rounded scales of Lemma~\ref{lem:al_scanner_scale_facts} with constant $C_s\ge1$, let $W,C_1>0$, $a=W/K$, $C_r,C_t\ge0$, $B\le C_rWn^{1+e}$, and $G\le C_t(\log n)^{C_l}$.
+    Setting $c=\frac{2(C_1+1)}{Wnm(\epsilon/2)}$ and $C_\delta=4(C_1+1)(C_r+2C_t)C_s$, for all $R\in\mathbb R$,
     \begin{align}
         c\bigl(B+2nm\,GW a^{1/4}+R\bigr)
-         & \leq C_\delta\epsilon^{-1}
-        \bigl(n^{e-\mu}+a^{1/4}(\log n)^{C_l}\bigr)+cR.
+         & \le C_\delta\epsilon^{-1}
+        \bigl(n^{e-\mu}+a^{1/4}(\log n)^{C_l}\bigr)+cR. \notag
     \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{lem:al_scanner_scale_facts,thm:arealaw-selected-density-principal}
-    Applying Theorem~\ref{thm:arealaw-selected-density-principal} with
-    interpolation length $\epsilon/2$ bounds the left-hand side in terms of
-    $n^e/m$ and $a^{1/4}(\log n)^{C_l}$. The scale estimate
-    $n^e/m\leq C_sn^{e-\mu}$ and the inequality $C_s\geq1$ on the nonnegative
-    second term then absorb $C_s$ into $C_\delta$, while the remainder term
-    $cR$ is unchanged.
+    Applying (\ref{eq:arealaw-selected-density-principal}) of Theorem~\ref{thm:arealaw-selected-density-principal} at $\varepsilon=\epsilon/2$ and using $n^e/m\le C_sn^{e-\mu}$ ($C_s\ge1$) from Lemma~\ref{lem:al_scanner_scale_facts} yields the bound.
 \end{proof}
 
 \begin{theorem}[Energy from the selected density]
     \label{thm:arealaw-selected-energy-density}
     \lean{TNLean.PEPS.AreaLaw.Scan.selectedEnergy_le_of_density_le_add}
     \leanok
-    Let $d,\delta,\rho,A,t\geq0$, let $g>0$, and suppose
-    $d\leq\delta+\rho$ and $0\leq p\leq\epsilon$. If
+    For $d,\delta,\rho,A,t\ge0$, $g>0$, $d\le\delta+\rho$, $0\le p\le\epsilon$, and $e,r,E\in\mathbb R$,
     \begin{align}
-        E & \leq\frac{e+A((1-p)d^{1/8}+(1-p)t+p)+r}{g},
+        E \le\frac{e+A((1-p)d^{1/8}+(1-p)t+p)+r}{g}
+        \implies
+        E \le\frac A g(\delta^{1/8}+\epsilon+t)
+        +\frac e g+\frac{A\rho^{1/8}+r}{g}. \notag
     \end{align}
-    then
-    \begin{align}
-        E & \leq\frac A g(\delta^{1/8}+\epsilon+t)
-        +\frac e g+\frac{A\rho^{1/8}+r}{g}.
-    \end{align}
-    No sign assumption is made on $e,r$ or $E$.
 \end{theorem}
 \begin{proof}
     \leanok
-    Since $d\leq\delta+\rho$, subadditivity of the eighth root gives
-    $d^{1/8}\leq\delta^{1/8}+\rho^{1/8}$. Using $1-p\leq1$ on the nonnegative
-    terms $(1-p)d^{1/8}$ and $(1-p)t$, bounding $p$ by $\epsilon$, and
-    separating the $\rho^{1/8}$ contribution after multiplying by $A/g$ yields
-    the stated inequality.
+    Combine $d^{1/8}\le(\delta+\rho)^{1/8}\le\delta^{1/8}+\rho^{1/8}$, $1-p\le1$, and $p\le\epsilon$.
 \end{proof}
 
 \begin{theorem}[Vanishing selected-energy remainder]
     \label{thm:arealaw-selected-energy-vanishing-remainder}
     \lean{TNLean.PEPS.AreaLaw.Scan.tendsto_selectedEnergy_remainder}
     \leanok
-    Fix $A,g\in\mathbb R$, with division by zero assigned the value zero
-    for this scalar extension. If $\rho_k\to0$ and $r_k\to0$ along any
-    fixed filter on their index set, then
+    For fixed $A,g\in\mathbb R$ (with division by $0$ equal to $0$), if $\rho_k\to0$ and $r_k\to0$ along a filter, then
     \begin{align}
-        \frac{A|\rho_k|^{1/8}+r_k}{g} & \longrightarrow0.
+        \frac{A|\rho_k|^{1/8}+r_k}{g} \longrightarrow0. \notag
     \end{align}
-    The coefficients are fixed before this limit is taken. In the physical
-    application $g>0$, so this is the ordinary quotient by the spectral gap.
 \end{theorem}
 \begin{proof}
     \leanok
-    Because the absolute value and eighth root are continuous at zero,
-    $|\rho_k|^{1/8}\to0$, and linearity gives $A|\rho_k|^{1/8}+r_k\to0$.
-    When $g\ne0$, multiplying by $1/g$ preserves this limit; when $g=0$, the
-    extended quotient vanishes identically.
+    Continuity of $x\mapsto|x|^{1/8}$ at $0$ and linearity give $A|\rho_k|^{1/8}+r_k\to0$, which is preserved upon dividing by $g$.
 \end{proof}
 
 \begin{theorem}[Ordered-limit closure at the selected point]
     \label{thm:arealaw-selected-density-power}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_final_selectedDensity_le}
     \leanok
-    Fix $q\geq1$, $C_e,C_t\geq0$, $C_1>0$ and a real logarithmic
-    exponent $C_l$.  There is a size threshold $N\geq2$ before all
-    physical scalar inputs, remainders and selected points.  For $n\geq N$
-    use the final rounded scales
+    For $q\ge1$, $C_e,C_t\ge0$, $C_1>0$, and $C_l\in\mathbb R$, there exists $N\ge2$ such that for all $n\ge N$ with rounded scales
     \begin{align}
-        L & =\lfloor n^{1-\ell}\rfloor,      &
-        m & =\lfloor n^\mu\rfloor,           &
-        K & =L\mathbin{\mathrm{div}}(8m),    &
-        D & =\lceil n^\kappa\rceil,\nonumber                                                       \\
-        a & =W/K,                            & \varepsilon & =n^{-\nu}, & 1 & \leq W\leq n^\omega.
+        L & =\lfloor n^{1-\ell}\rfloor,   &
+        m & =\lfloor n^\mu\rfloor,        &
+        K & =L\mathbin{\mathrm{div}}(8m), &
+        D & =\lceil n^\kappa\rceil,\notag                                                            \\
+        a & =W/K,                         & \varepsilon & =n^{-\nu}, & 1 & \le W\le n^\omega, \notag
     \end{align}
-    Assume the displayed target-mass, entropy, selected-dimension and shell
-    bounds, with $e$ equal to the source box-error exponent, and
-    $G\leq C_t(\log n)^{C_l}$.  Let $R_k\to0$ for this fixed instance.
-    Suppose that eventually in $k$ there is a point $(x,p)$, with
-    $p\in[p_0,p_1]$, for which a quantity $d_k(x,p)$ satisfies
+    if (\ref{eq:rough_budget_hyp}) holds at the source box-error exponent $e$, $G\le C_t(\log n)^{C_l}$, $R_k\to0$, and for $k\gg1$ there exists $(x,p)$ with $p\in[p_0,p_1]$ satisfying $\mathcal P_k(x,p)$ and
     \begin{align}
-        d_k(x,p) & \leq\frac{2(C_1+1)}{Wnm\varepsilon}
-        \bigl(B_{\rm rough}+2nm\,GW a^{1/4}+R_k\bigr),
+        d_k(x,p) & \le\frac{2(C_1+1)}{Wnm\varepsilon}
+        \bigl(B_{\rm rough}+2nm\,GW a^{1/4}+R_k\bigr), \notag
     \end{align}
-    together with any attached proposition $\mathcal P_k(x,p)$.
-    Then eventually the same selected point satisfies
-    $d_k(x,p)\leq\varepsilon$ and $\mathcal P_k(x,p)$.
+    then eventually $d_k(x,p)\le\varepsilon$ and $\mathcal P_k(x,p)$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:arealaw-source-rough-budget-power,
         thm:arealaw-selected-density-principal,
         thm:arealaw-source-density-final}
-    These rounded scales give $K\geq1$, $m>0$, $L\leq n$ and
-    $D\leq2n^e$.  Combining the two preceding scalar bounds with the
-    numerical strict-margin theorem at coefficient $2C$ bounds the principal
-    part by $\varepsilon/2$.  With $n,W$ and the physical inputs fixed, the
-    scaled remainder term $2(C_1+1)R_k/(Wnm\varepsilon)$ is also eventually at
-    most $\varepsilon/2$, so adding the two bounds at the same point $(x,p)$
-    gives $d_k(x,p)\leq\varepsilon$ without interchanging the large-scale and
-    replica limits.
+    Combining (\ref{eq:arealaw-source-rough-budget-power}) and (\ref{eq:arealaw-selected-density-principal}) with Theorem~\ref{thm:arealaw-source-density-final} at coefficient $2C$ bounds the principal part by $\varepsilon/2$ for $n\ge N$, while $R_k\to0$ ensures $\frac{2(C_1+1)}{Wnm\varepsilon}R_k\le\varepsilon/2$ for $k\gg1$.
 \end{proof}
 
-In the physical application, one target window and one label sequence remain
-fixed throughout. For that window, the original target entropy bound and the
-target-window spectral estimate yield the displayed target hypotheses, while
-the unnormalized selection inequality enters as an explicit premise. The
-scanner theorem then discharges this premise and preserves the energy and
-sharp-comparison conclusions at the same charge point, without yet asserting
-final energy absorption, the entropy telescope, or the area law.
+In the physical application, fixing the target window and label sequence yields (\ref{eq:rough_budget_hyp}), and Theorem~\ref{thm:al_scanner_source} discharges the selection premise while preserving the energy and sharp-comparison bounds at $(x,p)$ (prior to final energy absorption, the entropy telescope, and the area law).

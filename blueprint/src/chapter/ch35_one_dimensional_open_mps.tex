@@ -1,0 +1,507 @@
+\chapter{Open-boundary matrix product states and sequential truncation}
+\label{ch:one_dimensional_open_mps}
+
+A vector on a chain is an open-boundary matrix product state of bond
+dimension at most $D$ exactly when the Schmidt rank across every cut of
+the chain is at most $D$. This chapter proves that characterization and
+bounds the error made by truncating the Schmidt decompositions across
+the cuts one after another. Chapter~\ref{ch:one_dimensional_chain} combines
+this bound with the area law to prove Theorem~B.
+
+\section{Cut ranks of matrix product states}
+
+\begin{definition}[Open-boundary matrix product states and cut matrices]
+    \label{def:chain_open_mps}
+    \lean{
+        TNLean.MPS.AreaLaw.IsOpenMPS,
+        TNLean.MPS.AreaLaw.IsOpenMPS.smul,
+        TNLean.MPS.AreaLaw.leftBlock,
+        TNLean.MPS.AreaLaw.mem_leftBlock,
+        TNLean.MPS.AreaLaw.leftBlock_eq_interval,
+        TNLean.MPS.AreaLaw.cutMatrix,
+        TNLean.MPS.AreaLaw.cutMatrix_apply
+    }
+    \leanok
+    \uses{def:chain_model}
+    Let $L,q,D$ be natural numbers. A vector $\psi$ on $L$ sites of local
+    dimension $q$ is an \emph{open-boundary matrix product state of bond
+        dimension at most $D$} when there are natural numbers $r_0,\ldots,r_L$
+    with $r_0=r_L=1$ and $r_k\leq D$ for $0<k<L$, a scalar $c\in\mathbb C$,
+    and matrices $A_i(s)\in\mathbb C^{r_i\times r_{i+1}}$ such that
+    \begin{align}
+        \psi(x_0,\ldots,x_{L-1})
+         & =c\bigl(A_0(x_0)\cdots A_{L-1}(x_{L-1})\bigr)_{0,0}. \notag
+    \end{align}
+    The empty product is the identity on $\mathbb C$, so at $L=0$ this
+    condition reads $\psi(\varnothing)=c$. Only the internal bond dimensions
+    are bounded by $D$. Scaling $\psi$ scales $c$.
+    The \emph{left block} of $k$ sites is the interval $[0,k)$, and the
+    \emph{cut matrix} at $k$ has the configurations of the left block as rows
+    and those of the remaining sites as columns; its rank is the Schmidt
+    rank across the cut.
+\end{definition}
+
+\begin{lemma}[Products of one-site coefficients]
+    \label{thm:chain_site_product_mps}
+    \lean{TNLean.MPS.AreaLaw.isOpenMPS_prod,
+        TNLean.MPS.AreaLaw.isOpenMPS_operator_entries_prod,
+        TNLean.MPS.AreaLaw.isOpenMPS_operator_entries_rectKronecker,
+        TNLean.MPS.AreaLaw.isOpenMPS_operator_entries_embed_one_site,
+        TNLean.MPS.AreaLaw.isOpenMPS_operator_entries_of_supported_singleton}
+    \leanok
+    \uses{def:chain_open_mps,def:qc_local_circuit}
+    Let $L,q$ be natural numbers and let $Q$ be an alphabet with
+    $q$ elements. Given complex functions $f_i$ on $Q$, one at each site, the vector
+    $\phi(w)=\prod_{i=0}^{L-1}f_i(w_i)$ has internal bond bound one.
+    For a complex operator $M$, regard its entries as a vector on the
+    paired local alphabet by putting
+    \begin{align}
+        v_M\bigl((x_0,y_0),\ldots,(x_{L-1},y_{L-1})\bigr)
+         & =M_{x,y}. \notag
+    \end{align}
+    If $M=M_0\otimes\cdots\otimes M_{L-1}$ for one-site matrices
+    $M_i$, then $v_M$ has internal bond bound one. The same is true
+    for every operator supported on a single site, including the
+    placement of an arbitrary one-site matrix with the identity at
+    all other sites. Empty products and zero local dimension are
+    included; a single-site placement presupposes a site in the chain.
+    These identities give the bond-one ingredients for
+    \cite[Proposition~5.7]{Arad2016RigorousRG}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:chain_open_mps,lem:qc_placed_operators,
+        thm:qc_supported_operator_placement}
+    For a site product take the scalar multiplying the contraction
+    to be one, all virtual dimensions to be one, and
+    $A_i(s)_{0,0}=f_i(s)$. The unique virtual path gives $\phi(w)$.
+    For tensor products of operators apply this construction to
+    $f_i(x_i,y_i)=(M_i)_{x_i,y_i}$. An operator supported on one site
+    is the placement of a one-site matrix; its other one-site factors
+    are identities, so the same construction applies.
+\end{proof}
+
+\begin{lemma}[Bond-one states are scalar multiples of site products]
+    \label{thm:chain_bond_one_products}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.exists_eq_mul_prod,
+        TNLean.MPS.AreaLaw.IsOpenMPS.exists_operator_entries_eq_mul_prod,
+        TNLean.MPS.AreaLaw.isOpenMPS_one_iff_exists_eq_mul_prod}
+    \leanok
+    \uses{def:chain_open_mps}
+    A complex vector $\psi$ on $L$ sites of local dimension $q$ has an
+    open-boundary matrix product representation with internal bond
+    bound one if and only if there are a scalar $c\in\mathbb C$ and
+    one-site functions $f_i$ such that
+    \begin{align}
+        \psi(w) & =c\prod_{i=0}^{L-1}f_i(w_i). \notag
+    \end{align}
+    In particular, if the paired entries of a complex operator $M$
+    have bond bound one, then there are one-site matrices $A_i$ and
+    a scalar $c$ such that
+    \begin{align}
+        M_{x,y} & =c\prod_{i=0}^{L-1}(A_i)_{x_i,y_i}. \notag
+    \end{align}
+    The statements include the zero vector, empty alphabets and the
+    empty chain. For the empty chain the product is one and the
+    scalar $c$ is unrestricted.
+    These identities give the bond-one ingredients for
+    \cite[Proposition~5.7]{Arad2016RigorousRG}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:chain_open_mps,thm:chain_site_product_mps}
+    Choose an open-boundary representation. If one virtual bond has
+    dimension zero, there is no virtual path and $\psi=0$; take
+    $c=0$ and all $f_i=1$. Otherwise every virtual dimension is one.
+    Put $f_i(s)=A_i(s)_{0,0}$. The unique virtual path gives
+    $\psi(w)=c\prod_{i=0}^{L-1}f_i(w_i)$. The converse follows from
+    Lemma~\ref{thm:chain_site_product_mps}, followed by multiplication
+    by $c$. For the operator assertion, pair the two physical labels
+    at each site and take $(A_i)_{a,b}=f_i(a,b)$. The pairing and
+    unpairing are inverse bijections, so the row and column labels
+    are recovered without conjugation.
+\end{proof}
+
+\begin{lemma}[Bounded internal cut ranks give a matrix product state]
+    \label{thm:chain_mps_of_cut_rank}
+    \lean{
+        TNLean.MPS.AreaLaw.isOpenMPS_of_internal_cutMatrix_rank_le,
+        TNLean.MPS.AreaLaw.isOpenMPS_of_cutMatrix_rank_le,
+        Submodule.exists_fin_span_of_finrank_le,
+        TNLean.MPS.AreaLaw.glueLeft,
+        TNLean.MPS.AreaLaw.sliceMatrix,
+        TNLean.MPS.AreaLaw.sliceMatrix_apply,
+        TNLean.MPS.AreaLaw.rank_sliceMatrix_le,
+        TNLean.MPS.AreaLaw.sliceSpace,
+        TNLean.MPS.AreaLaw.finrank_sliceSpace_le,
+        TNLean.MPS.AreaLaw.glueLeft_snoc,
+        TNLean.MPS.AreaLaw.slice_mem_sliceSpace
+    }
+    \leanok
+    Let $L,q,D$ be natural numbers and let $\psi$ be a vector on $L$ sites
+    of local dimension $q$. If every internal cut matrix, at $0<k<L$, has
+    rank at most $D$, then $\psi$ is an open-boundary matrix product state
+    of bond dimension at most $D$. In particular, the conclusion holds
+    when every cut matrix has rank at most $D$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:chain_open_mps}
+    Suppose first that $L\geq2$ and $D\geq1$. The two boundary cut matrices
+    have rank at most $1\leq D$. Let $V_k$ be the column space of the cut
+    matrix at $k$, and choose a spanning family $u_k$ of $D$ vectors.
+    Slicing at a fixed value of site $k$ maps $V_{k+1}$ into $V_k$.
+    Expressing these slices in the chosen spanning families gives square
+    matrices $A_k(s)$ and boundary vectors $v_L,v_R$ with
+    $\psi(x)=v_L^{\mathsf T}A_0(x_0)\cdots A_{L-1}(x_{L-1})v_R$.
+    Absorb $v_L^{\mathsf T}$ into the first matrix and $v_R$ into the last;
+    these are distinct matrices because $L\geq2$. Their rectangular
+    dimensions have singleton endpoints and internal dimensions $D$.
+    If $L\geq2$ and $D=0$, the cut matrix at $1$ vanishes, hence $\psi=0$.
+    Set every internal bond dimension to zero and take zero site matrices
+    and $c=0$. If $L=0$, take $c=\psi(\varnothing)$. If $L=1$, take
+    $c=1$ and the $1\times1$ matrices $A_0(s)_{0,0}=\psi(s)$.
+    The assertion about all cuts follows by restricting to internal cuts.
+\end{proof}
+
+\begin{lemma}[Cut ranks characterize open-boundary matrix product states]
+    \label{thm:chain_cut_rank_of_mps}
+    \lean{
+        TNLean.MPS.AreaLaw.rank_cutMatrix_le_bondDim,
+        TNLean.MPS.AreaLaw.IsOpenMPS.rank_cutMatrix_le,
+        TNLean.MPS.AreaLaw.isOpenMPS_iff_internal_cutMatrix_rank_le
+    }
+    \leanok
+    Let $\psi$ be a vector on $L$ sites of local dimension $q$.
+    If $\psi$ is a scalar multiple of a rectangular open-boundary
+    contraction with bond dimensions $d_0,\ldots,d_L$, then its cut
+    matrix $M_k$ satisfies $\operatorname{rank}M_k\le d_k$ for
+    $0\le k\le L$. In particular, $\psi$ is an open-boundary matrix
+    product state of bond dimension at most $D$ if and only if
+    $\operatorname{rank}M_k\le D$ at every internal cut $0<k<L$.
+    No normalization is required. The endpoint ranks are at most one;
+    when $L\le1$ there are no internal rank conditions, even for $D=0$.
+    This is the single-cut rank observation used in the truncation-error
+    lower bound of~\cite{Schuch2008EntropyScaling}; see also the sequential
+    truncation proposition in~\cite[Part IIa]{TNLean2026OneDimensional}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:chain_open_mps,thm:chain_mps_of_cut_rank}
+    Split a virtual path at bond $k$. For each fixed
+    bond index $\alpha\in\{0,\ldots,d_k-1\}$, the sums over the remaining
+    virtual indices on the two sides are independent. Hence
+    \begin{align}
+        M_k(a,b)=c\sum_{\alpha=0}^{d_k-1}U_k(a,\alpha)V_k(\alpha,b).
+    \end{align}
+    Absorbing $c$ into $U_k$ factors $M_k$ through $\mathbb C^{d_k}$,
+    so its rank is at most $d_k$. This remains valid when $d_k=0$:
+    the sum is empty and the cut matrix vanishes. At the endpoints,
+    $d_0=d_L=1$. The converse is
+    Lemma~\ref{thm:chain_mps_of_cut_rank}, which includes empty and
+    one-site chains.
+\end{proof}
+
+\begin{lemma}[Reduced states at a chain cut]
+    \label{thm:chain_reduced_state_rank_error}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.rank_regionState_leftBlock_le,
+        TNLean.MPS.AreaLaw.rectangularTraceNorm_regionState_leftBlock_sub_le}
+    \leanok
+    For vectors $\psi,\phi$ on a finite chain, write
+    $\rho_k=\operatorname{Tr}_{k+1,\ldots,L}|\psi\rangle\langle\psi|$ and
+    $\sigma_k=\operatorname{Tr}_{k+1,\ldots,L}|\phi\rangle\langle\phi|$.
+    Then $\|\rho_k-\sigma_k\|_1\le
+        \bigl\||\psi\rangle\langle\psi|-|\phi\rangle\langle\phi|\bigr\|_1$.
+    If $\phi$ is an open-boundary MPS of bond dimension at most $D$,
+    then $\operatorname{rank}\sigma_k\le D$ at every internal cut.
+    Neither assertion requires normalized vectors. These are the partial-trace
+    and rank estimates used in the approximation lower bound
+    of~\cite{Schuch2008EntropyScaling}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:chain_cut_rank_of_mps}
+    In cut coordinates the reduced state is $CC^\dagger$, where $C$ is
+    the coefficient matrix of $\phi$. Thus
+    $\operatorname{rank}\sigma_k=\operatorname{rank}C\le D$.
+    Reindexing configurations preserves the full trace norm, and partial
+    trace contracts it. Apply these two facts to
+    $|\psi\rangle\langle\psi|-|\phi\rangle\langle\phi|$.
+\end{proof}
+
+\begin{lemma}[Spectral-tail lower bound for MPS approximation]
+    \label{thm:chain_spectral_tail_lower_bound}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.sum_descEigenvalue_leftBlock_tail_le_traceNorm}
+    \leanok
+    Let $\psi$ be a unit vector on a chain of $L$ sites, and let $\phi$
+    be an open-boundary matrix product state of bond dimension at most $D$.
+    At an internal cut $0<k<L$, let $\lambda_1\ge\cdots\ge\lambda_M\ge0$
+    be the eigenvalues of the prefix reduction $\rho_k$ of $\psi$. Then
+    \begin{align}
+        \sum_{j=D+1}^{M}\lambda_j
+         & \le\bigl\||\psi\rangle\langle\psi|
+        -|\phi\rangle\langle\phi|\bigr\|_1.
+        \label{eq:chain_spectral_tail_lower_bound}
+    \end{align}
+    The sum is zero when $D\ge M$. Neither normalization of $\phi$ nor
+    a small-error assumption is required. This is the approximation lower
+    bound of~\cite[Eq.~(eps-lower), source lines 246--264]{Schuch2008EntropyScaling}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:chain_reduced_state_rank_error}
+    Denote the trace error in (\ref{eq:chain_spectral_tail_lower_bound}) by $E$.
+    The prefix reduction of $\phi$ has rank at most $D$.
+    If $E<1$, the optimized pure-state error and Ky Fan overlap estimates
+    bound the discarded mass by $E/2\le E$; see
+    \cite[``Discarded marginal spectrum at small pure-state error'']{QICLean2026Blueprint}.
+    If $E\ge1$, positivity and $\operatorname{tr}\rho_k=1$ bound the
+    discarded mass by $1\le E$. This proves
+    (\ref{eq:chain_spectral_tail_lower_bound}) in both cases.
+\end{proof}
+
+\begin{lemma}[Growth of chain cut ranks]
+    \label{thm:chain_cut_rank_growth}
+    \lean{
+        TNLean.MPS.AreaLaw.rank_cutMatrix_add_le,
+        TNLean.MPS.AreaLaw.rank_cutMatrix_le_add,
+        TNLean.MPS.AreaLaw.rank_cutMatrix_le_pow_min_mul,
+        TNLean.MPS.AreaLaw.rank_cutMatrix_le_pow_forty_mul
+    }
+    \leanok
+    \uses{def:chain_open_mps}
+    Let $L,q$ be natural numbers and let $\psi$ be a vector on $L$ sites
+    of local dimension $q$. Write $r_k$ for the rank of its cut matrix at
+    $k$. For natural numbers $a,d$ with $a+d\leq L$, one has
+    \begin{align}
+        r_{a+d} & \leq q^d r_a,
+                & r_a           & \leq q^d r_{a+d}. \notag
+    \end{align}
+    Consequently, if $a\leq k\leq b\leq L$ and $r_a,r_b\leq R$, then
+    \begin{align}
+        r_k & \leq q^{\min\{k-a,b-k\}}R. \notag
+    \end{align}
+    If, in addition, $q\geq1$ and $b-a\leq80w$ for a natural number $w$,
+    then
+    \begin{align}
+        r_k & \leq q^{40w}R. \notag
+    \end{align}
+    These bounds apply without a normalization or nonvanishing assumption
+    on $\psi$; in particular, the first three bounds also allow $q=0$.
+    They give the internal-cut estimate used when passing from blocks to
+    sites in \cite[Part~II, proof of Theorem~B]{TNLean2026OneDimensional}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:chain_open_mps}
+    Regard the coefficients at two adjacent cuts as two flattenings of a
+    tensor with factors corresponding to the left sites, one site, and
+    the right sites. A rank factorization of the first flattening through
+    a space of dimension $r$ gives a factorization of the second through
+    a space of dimension $qr$: retain the one-site coordinate together
+    with the factorization index. Thus moving one site to the left
+    factor increases the rank by at most a factor $q$. Transposition gives
+    the same estimate when moving it to the right factor. Iterating proves
+    the first two inequalities, including zero-dimensional factors.
+    Applying them from the nearer endpoint gives the minimum-exponent
+    estimate. Finally,
+    $\min\{k-a,b-k\}\leq40w$ because the two distances sum to $b-a\leq80w$.
+    Monotonicity of $q^n$ for $q\geq1$ gives the last bound.
+\end{proof}
+
+\section{Sequential truncation}
+
+\begin{lemma}[Sequential truncation in ordered orthonormal bases]
+    \label{thm:chain_sequential_truncation_full}
+    \lean{
+        TNLean.MPS.AreaLaw.prefixBasisProjection,
+        TNLean.MPS.AreaLaw.isOpenMPS_sequentialTruncation_prefixBasisProjection
+    }
+    \leanok
+    \uses{def:chain_open_mps}
+    Let $L,q,D$ be natural numbers and let $\psi$ be a vector on the chain
+    of $L$ sites of local dimension $q$. For each internal cut $0<k<L$,
+    let $N_k=\dim\mathcal H_{[0,k)}$ and choose an ordered orthonormal basis
+    $b_{k,0},\ldots,b_{k,N_k-1}$ of $\mathcal H_{[0,k)}$. Let $\Pi_k$ be
+    the orthogonal projection onto the span of its first $\min\{D,N_k\}$
+    vectors, and put $P_k=\Pi_k\otimes1$. Define
+    \begin{align}
+        \Phi       & =P_1P_2\cdots P_{L-1}\psi, \notag                         \\
+        \epsilon_k & =\operatorname{Re}\langle\psi,(1-P_k)\psi\rangle . \notag
+    \end{align}
+    Then $\Phi$ is an open-boundary matrix product state with every internal
+    bond dimension at most $D$, and
+    \begin{align}
+        \|\Phi-\psi\|\le\sum_{k=1}^{L-1}\sqrt{\epsilon_k}. \notag
+    \end{align}
+    Empty products act as the identity, so this includes $L=0$ and $L=1$,
+    without a choice of basis at a boundary cut. If $D\ge N_k$, then
+    $\Pi_k=1$.
+
+    This statement holds for every choice of ordered orthonormal bases.
+    Proposition~7.1 of \cite[Part~IIa]{TNLean2026OneDimensional} is the
+    instance in which $\psi$ is a unit vector and each basis is an
+    eigenbasis of the reduced state at its cut, ordered by nonincreasing
+    eigenvalue, with any choice of eigenvectors in a repeated-eigenvalue
+    space. That instance, with $\epsilon_k$ identified as the sum of the
+    discarded eigenvalues, is Lemma~\ref{thm:chain_sequential_truncation_eigen}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:chain_open_mps, thm:chain_mps_of_cut_rank,
+        lem:chain_sequential_truncation}
+    Each $P_k$ is an orthogonal projection, hence a contraction. Telescoping
+    gives
+    $\Phi-\psi=\sum_k P_1\cdots P_{k-1}(P_k-1)\psi$,
+    and $\|(1-P_k)\psi\|^2=\epsilon_k$, proving the error bound.
+    At cut $k$, the vector $P_k\cdots P_{L-1}\psi$ lies in
+    $\operatorname{ran}\Pi_k\otimes\mathcal H_{[k,L)}$, so its cut rank
+    is at most $\min\{D,N_k\}\le D$. The remaining factors act on the
+    left of that cut and cannot increase this rank.
+    Lemma~\ref{thm:chain_mps_of_cut_rank} gives the stated representation
+    of $\Phi$.
+\end{proof}
+
+\begin{lemma}[Sequential truncation onto leading eigenvectors]
+    \label{thm:chain_sequential_truncation_eigen}
+    \lean{TNLean.MPS.AreaLaw.isOpenMPS_sequentialTruncation_leadingEigenprojection}
+    \leanok
+    \uses{def:chain_open_mps}
+    Let $L,q,D$ be natural numbers and let $\psi$ be a unit vector on the
+    chain of $L$ sites of local dimension $q$. For each internal cut
+    $0<k<L$, let $\rho_k$ be the reduced state of $\psi$ on
+    $\mathcal H_{[0,k)}$, let $\Pi_k$ be the projection onto the span of
+    the eigenvectors of $\rho_k$ belonging to its $\min\{D,N_k\}$ largest
+    eigenvalues, counted with multiplicity, and let $\epsilon_k(D)$ be the
+    sum of the remaining eigenvalues. With $P_k=\Pi_k\otimes1$, the vector
+    $\Phi=P_1P_2\cdots P_{L-1}\psi$ is an open-boundary matrix product state
+    with every internal bond dimension at most $D$, and
+    \begin{align}
+        \|\Phi-\psi\|\le\sum_{k=1}^{L-1}\sqrt{\epsilon_k(D)}. \notag
+    \end{align}
+    This is Proposition~7.1 of \cite[Part~IIa]{TNLean2026OneDimensional}.
+    Within a repeated eigenvalue the eigenvectors are taken from one fixed
+    orthonormal eigenbasis; every other choice is covered by
+    Lemma~\ref{thm:chain_sequential_truncation_full}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:chain_open_mps, thm:chain_mps_of_cut_rank,
+        lem:chain_sequential_truncation}
+    Each $\Pi_k$ is an orthogonal projection of rank
+    $\min\{D,N_k\}\le D$, and the trace of $(1-\Pi_k)\rho_k$ is
+    $\operatorname{tr}\rho_k$ minus the sum of the $\min\{D,N_k\}$ largest
+    eigenvalues, that is $\epsilon_k(D)$, since
+    $\operatorname{tr}\rho_k=\|\psi\|^2=1$. The estimates of
+    Lemma~\ref{lem:chain_sequential_truncation} hold for any orthogonal
+    projections on the first $k$ sites: the cut rank of $\Phi$ at cut $k$ is
+    at most the rank of $\Pi_k$, and
+    $\|\Phi-\psi\|\le\sum_k\sqrt{\operatorname{tr}((1-\Pi_k)\rho_k)}$,
+    because $\|(1-P_k)\psi\|^2=\operatorname{tr}((1-\Pi_k)\rho_k)$.
+    Lemma~\ref{thm:chain_mps_of_cut_rank} turns the rank bound into the
+    stated representation, and substituting $\epsilon_k(D)$ for each trace
+    gives the error bound. The argument is the proof of
+    Lemma~\ref{thm:chain_sequential_truncation_full}, applied to the
+    eigenprojections directly.
+\end{proof}
+
+\begin{lemma}[Squared error of sequential truncation]
+    \label{thm:chain_sequential_truncation_sq}
+    \lean{
+        TNLean.MPS.AreaLaw.norm_sequentialTruncation_leadingEigenprojection_sub_sq_le,
+        TNLean.MPS.AreaLaw.norm_sub_sequentialTruncation_sq_le}
+    \leanok
+    \uses{thm:chain_sequential_truncation_eigen}
+    In the setting of Lemma~\ref{thm:chain_sequential_truncation_eigen},
+    \begin{align}
+        \|\Phi-\psi\|^2\le\sum_{k=1}^{L-1}\epsilon_k(D). \notag
+    \end{align}
+    Verstraete and Cirac~\cite{VerstraeteCirac2006Faithfully} state this
+    bound with a factor $2$ on the right; the form here implies theirs.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Write $\Phi_0=\psi$ and $\Phi_j=P_{L-j}\Phi_{j-1}$, so that
+    $\Phi=\Phi_{L-1}$. For an orthogonal projection $P$,
+    \begin{align}
+        \psi-P\Phi_{j-1} & =P(\psi-\Phi_{j-1})+(1-P)\psi, \notag
+    \end{align}
+    and the two terms are orthogonal, since $P^*=P=P^2$ gives
+    \begin{align}
+        \langle P(\psi-\Phi_{j-1}),(1-P)\psi\rangle
+         & =\langle\psi-\Phi_{j-1},(P-P^2)\psi\rangle=0. \notag
+    \end{align}
+    Hence
+    $\|\psi-\Phi_j\|^2\le\|\psi-\Phi_{j-1}\|^2+\|(1-P_{L-j})\psi\|^2$,
+    and $\|(1-P_k)\psi\|^2=\operatorname{tr}((1-\Pi_k)\rho_k)=\epsilon_k(D)$.
+    Summing over the steps gives the bound.
+\end{proof}
+
+\begin{lemma}[Sequential truncation at an entropy threshold]
+    \label{lem:chain_sequential_truncation}
+    \lean{
+        Matrix.schmidtCoeffMatrix_kronecker_one_mulVec,
+        Matrix.toEuclideanLin_one_apply,
+        Matrix.toEuclideanLin_mul_apply,
+        Entropy.localLift_sub,
+        Entropy.exists_localLift_eq_localLift_of_subset,
+        Entropy.norm_sq_toEuclideanLin_localLift_eq_trace,
+        Entropy.norm_toEuclideanLin_localLift_le,
+        Entropy.trace_regionState_eq_one,
+        Matrix.PosSemidef.trace_complement_spectralProjectionGE_le_surprisalTail,
+        Matrix.PosSemidef.rank_spectralProjectionGE_exp_le,
+        TNLean.MPS.AreaLaw.cutMatrix_localLift,
+        TNLean.MPS.AreaLaw.rank_cutMatrix_localLift_le,
+        TNLean.MPS.AreaLaw.rank_cutMatrix_zero_le,
+        TNLean.MPS.AreaLaw.rank_cutMatrix_le_one_of_le,
+        TNLean.MPS.AreaLaw.LeftBlockMatrix,
+        TNLean.MPS.AreaLaw.cutTruncation,
+        TNLean.MPS.AreaLaw.sequentialTruncation,
+        TNLean.MPS.AreaLaw.leftBlock_mono,
+        TNLean.MPS.AreaLaw.norm_sub_sequentialTruncation_le,
+        TNLean.MPS.AreaLaw.exists_sequentialTruncation_eq_localLift,
+        TNLean.MPS.AreaLaw.rank_cutMatrix_sequentialTruncation_le,
+        TNLean.MPS.AreaLaw.exists_sequentialTruncation
+    }
+    \leanok
+    \uses{def:chain_open_mps}
+    Let $\psi$ be a unit vector on $L$ sites and let $w$ be a real number. For
+    each cut $k$,
+    $1\le k\le L-1$, let $S_k$ be the entropy of the first $k$ sites, let
+    $\Pi_k$ be the spectral projector of their reduced state onto the
+    eigenvalues at least $e^{-(S_k+w)}$, an operator on the first $k$ sites,
+    and let $P_k=\Pi_k\otimes1$ be its extension by the identity on the
+    remaining sites. Then the regional projector $\Pi_k$ has rank at most
+    $e^{S_k+w}$, the mass $\|(1-P_k)\psi\|^2$ discarded by $P_k$ is at most
+    the surprisal tail of the reduced state beyond $w$, and the vector
+    $\Phi=P_1P_2\cdots P_{L-1}\psi$ has cut rank at most
+    $\max\{1,e^{S_k+w}\}$ across every cut $k$ of the chain, the trivial
+    cuts at its ends included; it satisfies
+    \begin{align}
+        \|\psi-\Phi\|\le\sum_{k=1}^{L-1}\sqrt{\text{tail}_k(w)} .
+    \end{align}
+    This is the entropy-threshold form used in the proof of Theorem~B
+    of \cite{TNLean2026OneDimensional}. The prescribed-dimension statement,
+    with the actual discarded masses, is stated separately in
+    Lemma~\ref{thm:chain_sequential_truncation_full}.
+    A common entropy slack and a prescribed number of retained eigenvectors
+    need not give the same projectors; see
+    \cite{gap:tnlean_one_dimensional_threshold_truncation}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:chain_open_mps}
+    Write $M_k(\psi)$ for the cut matrix of $\psi$ at $k$, with the
+    configurations of the first $k$ sites as rows. For an operator $\Pi$ on
+    the first $k$ sites, the extension $\Pi\otimes1$ acts on it by left
+    multiplication,
+    \begin{align}
+        M_k\bigl((\Pi\otimes1)\psi\bigr)=\Pi\,M_k(\psi),
+    \end{align}
+    so the cut rank of $(\Pi\otimes1)\psi$ is at most the rank of $\Pi$; the
+    rank of the extended operator itself, which is the rank of $\Pi$ times the
+    dimension of the remaining sites, plays no role. The projector on the
+    smallest block is
+    applied last, and the product of the projectors on blocks of size at most
+    $k$ is one extension of an operator on the first $k$ sites ending in
+    $\Pi_k$. The distance follows by induction from
+    $\psi-P_k\Phi'=(1-P_k)\psi+P_k(\psi-\Phi')$ and the contraction property
+    of a projector, and $\|(1-P_k)\psi\|^2$ is the trace of $1-\Pi_k$ against
+    the reduced state, the mass of the eigenvalues below the threshold, which
+    is at most the surprisal tail.
+\end{proof}
