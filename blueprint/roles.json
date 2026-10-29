@@ -146,7 +146,8 @@
       "theorems": [
         "thm:ft_canonical_form_same_structure",
         "thm:pgvwc07_ti_uniqueness_printed",
-        "thm:fundamentalTheorem_injective_chain"
+        "thm:fundamentalTheorem_injective_chain",
+        "thm:obc_schmidt_canonical"
       ],
       "corollaries": [
         "thm:fundamentalTheorem_injective_chain_gaugePhase",
@@ -157,7 +158,8 @@
       "notes": {
         "thm:ft_canonical_form_same_structure": "Fundamental Theorem for block-diagonal canonical forms with the same block structure",
         "thm:pgvwc07_ti_uniqueness_printed": "Source theorem: Perez-Garcia et al. Theorem 7, uniqueness of the canonical form",
-        "thm:fundamentalTheorem_injective_chain": "Fundamental Theorem for injective chains, the chain theorem of the opening paragraph"
+        "thm:fundamentalTheorem_injective_chain": "Fundamental Theorem for injective chains, the chain theorem of the opening paragraph",
+        "thm:obc_schmidt_canonical": "Exact normalized-state OBC existence with both Schmidt canonical equations and faithful diagonal cut densities"
       }
     },
     "ch:parent_hamiltonian": {

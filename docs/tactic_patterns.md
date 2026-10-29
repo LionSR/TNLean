@@ -9640,3 +9640,16 @@ there is no need for a new tactic.
   add unrelated dependencies. If a shared one-step statement is needed, move that existing
   mathematical lemma to a lower matrix-analysis module and reuse it; do not duplicate its
   statement or introduce a new tactic.
+
+### Adjacent physical cut Gram identities — promoted helpers (2026-10-29)
+
+- **Pattern:** reindex a physical configuration sum by restriction and the
+  letter at one cut site, then apply the actual adjacent-factor recursion.
+- **Occurrences:** both density and suffix-Gram recurrences in
+  `MPS/Preparation/OBCCanonicalRecurrences.lean`, and the two endpoint Gram
+  identifications in `OBCCanonicalEndpoints.lean`.
+- **Abstraction:** the explicit `extendCutPrefixEquiv`, `extendCutSuffixEquiv`,
+  `initialCutSuffixEquiv`, and `finalCutPrefixEquiv` in
+  `OBCCanonicalConfigurations.lean` centralize the configuration geometry.
+- **Decision:** the existing `Equiv.sum_comp` suffices after these mathematical
+  bijections; no tactic or parallel sum API is needed.

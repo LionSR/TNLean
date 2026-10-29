@@ -1,0 +1,121 @@
+\subsection{Schmidt canonical form on an open chain}
+\label{sec:obc_schmidt_canonical}
+
+\begin{lemma}[Weighted Schmidt bases at physical cuts]
+    \label{lem:obc_weighted_schmidt_cut_bases}
+    \lean{MPSPreparation.exists_weightedSchmidtCutBasis,
+        MPSPreparation.exists_canonicalCutBasisFamily}
+    \notready
+    \uses{def:varying_bond_obc_chain}
+    Let $M_k$ be the physical coefficient matrix of a finite state at cut
+    $k$, with rank $r_k$. Its compact singular-value decomposition
+    $M_k=V_k^\dagger D_kU_k$ gives a basis of its column space consisting
+    of the columns of $F_k=V_k^\dagger D_k$. In this basis the suffix
+    coefficient matrix is $G_k=U_k$, so
+    \[
+        F_k^\dagger F_k=D_k^2>0,\qquad G_kG_k^\dagger=I_{r_k}.
+    \]
+    For a normalized state on a positive number of sites, these bases
+    can be chosen simultaneously with endpoint vectors $1$ and $\psi$.
+    The endpoint Gram matrices are both the scalar identity, and the
+    endpoint suffix factors are row coisometries as well.
+\end{lemma}
+\begin{proof}
+    The inverse $D_k^{-1}V_k$ proves independence of the weighted left
+    singular vectors. The equation $F_k=M_kU_k^\dagger$ places them
+    in the physical column space, whose dimension is $r_k$. Their
+    coordinates reconstruct the right factor $U_k$. At the two
+    one-dimensional endpoints choose $1$ and the actual normalized
+    state; normalization gives the same unit Gram and suffix equations.
+\end{proof}
+
+\begin{lemma}[Physical configuration bijections and endpoint Grams]
+    \label{lem:obc_canonical_configurations_endpoints}
+    \lean{MPSPreparation.extendCutPrefixEquiv,
+        MPSPreparation.extendCutSuffixEquiv,
+        MPSPreparation.initialCutSuffixEquiv,
+        MPSPreparation.finalCutPrefixEquiv,
+        MPSPreparation.cutPrefixMatrix_zero_gram,
+        MPSPreparation.cutPrefixMatrix_last_gram,
+        MPSPreparation.cutSuffixMatrix_zero_coisometry,
+        MPSPreparation.cutSuffixMatrix_last_coisometry}
+    \notready
+    \uses{lem:obc_weighted_schmidt_cut_bases}
+    Adjoining one physical letter gives bijections from the preceding
+    prefix configurations times the letter to the next prefix
+    configurations, and from the letter times the next suffix
+    configurations to the preceding suffix configurations. The final
+    prefixes and initial suffixes are each in bijection with the full
+    physical configurations. Thus all sums in the endpoint normalization
+    and adjacent-cut Gram identities enumerate the actual configurations
+    exactly once.
+\end{lemma}
+\begin{proof}
+    Restrict a configuration away from the cut site and record the
+    letter at that site. These operations are inverse to adjoining
+    that letter. At the endpoints the empty configuration spaces are
+    singletons, and the remaining configuration is the full chain.
+\end{proof}
+
+\begin{lemma}[Canonical equations from adjacent physical cut factors]
+    \label{lem:obc_canonical_cut_recurrences}
+    \lean{MPSPreparation.cutBondDensity,
+        MPSPreparation.cutBondDensity_step,
+        MPSPreparation.cutSuffixMatrix_gram_step,
+        MPSPreparation.sum_cutSiteMatrix_mul_conjTranspose_eq_one,
+        MPSPreparation.trace_cutBondDensity_step}
+    \notready
+    \uses{lem:obc_weighted_schmidt_cut_bases,
+        lem:obc_canonical_configurations_endpoints}
+    Let $A_k^i$ be the coordinate matrices between the chosen adjacent
+    cut bases, and put $\Lambda_k=F_k^\dagger F_k$. The actual prefix
+    and suffix recursions give
+    \[
+        \sum_i(A_k^i)^\dagger\Lambda_kA_k^i=\Lambda_{k+1},
+        \qquad
+        G_kG_k^\dagger=
+        \sum_i A_k^i(G_{k+1}G_{k+1}^\dagger)(A_k^i)^\dagger.
+    \]
+    In particular, if both suffix factors are row coisometries, then
+    $\sum_i A_k^i(A_k^i)^\dagger=I$ and
+    $\operatorname{tr}\Lambda_{k+1}=\operatorname{tr}\Lambda_k$.
+\end{lemma}
+\begin{proof}
+    Expand the physical prefix and suffix factors by the same coordinate
+    slicing matrices, and use the preceding bijections to take their
+    Grams. Cyclicity of the trace and the right-canonical equation
+    give trace preservation.
+\end{proof}
+
+\begin{theorem}[Simultaneous OBC Schmidt canonical form]
+    \label{thm:obc_schmidt_canonical}
+    \lean{OBCChainTensor.exists_canonical_coeff_eq}
+    \notready
+    \uses{lem:obc_canonical_cut_recurrences, thm:seqanc_cut_rank_bounds}
+    Let $N>0$, and let $\psi$ be a normalized state on $N$ sites of
+    physical dimension $d$. There is an exact OBC representation
+    $c_A=\psi$ with bonds
+    \[
+        D_k=\operatorname{rank}_k\psi\le d^{\lfloor N/2\rfloor}
+    \]
+    and matrices $\Lambda_k\in\mathrm M_{D_k}(\mathbb C)$ satisfying,
+    for every site $k$,
+    \[
+        \sum_i A_k^i(A_k^i)^\dagger=I_{D_k},\qquad
+        \sum_i(A_k^i)^\dagger\Lambda_kA_k^i=\Lambda_{k+1}.
+    \]
+    Both endpoint densities are the scalar identity. Every
+    $\Lambda_k$ is diagonal with strictly positive real diagonal
+    entries, is positive definite, and has trace one. This is the
+    normalized-state OBC canonical form of
+    \cite[Theorem~1, conditions~1--3]{PerezGarcia2007Matrix}.
+\end{theorem}
+\begin{proof}
+    Use the weighted Schmidt cut bases from the first lemma in the
+    existing exact minimal-bond construction. The endpoint basis vectors
+    give the original coefficient tensor without changing its phase.
+    The preceding recurrences prove both canonical equations. The Gram
+    diagonals are the squares of the retained positive singular values.
+    The initial trace is one and is preserved at every site. The physical
+    cut-rank bound gives the stated common bond bound.
+\end{proof}
