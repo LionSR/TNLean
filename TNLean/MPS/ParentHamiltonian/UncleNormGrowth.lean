@@ -121,7 +121,7 @@ squared-norm growth. The coefficient product is positive by the derived
 proper-radical exceptional-set theorem, not by a norm-growth premise.
 A single additive Haar measure on the pair space is used. Source:
 arXiv:1210.6613, Lemma lowenergystates, first assertion, lines 1196–1265. -/
-theorem uncleTwoWallTrialSource_ae_quadratic_norm_growth [NeZero a] [NeZero b]
+theorem uncleTwoWallTrialSource_ae_quadratic_norm_growth
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R₀ : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L₀ : Fin d → Matrix (Fin b) (Fin a) ℂ)
@@ -138,6 +138,16 @@ theorem uncleTwoWallTrialSource_ae_quadratic_norm_growth [NeZero a] [NeZero b]
           (uncleTwoWallTrialSource A B P.1 P.2 N)‖ ^ 2 ∧
       ‖(WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
           (uncleTwoWallTrialSource A B P.1 P.2 N)‖ ^ 2 ≤ C * ((N + 1 : ℕ) : ℝ) ^ 2 := by
+  have ha : a ≠ 0 := by
+    intro ha
+    subst a
+    simpa using htrA
+  have hb : b ≠ 0 := by
+    intro hb
+    subst b
+    simpa using htrB
+  letI : NeZero a := ⟨ha⟩
+  letI : NeZero b := ⟨hb⟩
   obtain ⟨hIA, hIB⟩ := uncleBoundaryLetter_isInjective_diagonal_blocks A B R₀ L₀ hPert
   have hAB := uncleBoundaryLetter_mixedMapSpectralRadius_lt_one
     A B R₀ L₀ hPert hUA hUB ρA hρA ρB hρB hFA hFB
