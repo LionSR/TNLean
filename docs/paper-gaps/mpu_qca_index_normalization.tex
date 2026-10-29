@@ -65,11 +65,17 @@ positive rational index.
 The finite output-family calculation derives its least left support
 algebra and matrix size from the supplied unitary gates. It does not
 assume a support-factor presentation or identify an arbitrary supplied
-gate with a selected singular-value factorization. The remaining actual
-QCA comparison must identify this finite family with the canonical
-nearest-neighbour pair image of the induced automorphism before applying
-the GNVW index construction. That assembly is distinct from the printed
-factor-of-two correction, and remains pending Lean checking.
+gate with a selected singular-value factorization. The actual
+QCA comparison now identifies this finite family with the canonical
+nearest-neighbour pair image of the induced automorphism after the
+supplied physical blocking. The source-written declarations
+\leanid{SpinChain.blocked_bufferedMPUQuasiLocalAut_evenSupportEquiv_zero} and
+\leanid{SpinChain.coe_gnvwIndex_blocked_bufferedMPUQuasiLocalAut}
+derive the actual matrix size and positive rational index $\ell/d^k$.
+This assembly is distinct from the printed factor-of-two correction and
+remains pending Lean checking. Arbitrary regrouping independence and a
+comparison with the public logarithmic MPU index are not asserted by
+these positive-rational declarations.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -130,4 +130,137 @@ theorem bufferedMPUQuasiLocalAut_central_interval_four_output
   have ha : a + (k : ℕ) - (k : ℕ) = a := by omega
   simpa only [ha, show k + (4 * k + k) = 3 * (2 * k) by omega] using h
 
+/-- After the actual supplied physical blocking, an arbitrary pair
+observable has precisely the four-site two-link output matrix. The
+finite identity and blocking coordinate equations derive the action.
+Source: arXiv:1703.09188, Appendix, lines 2313–2334. -/
+theorem blocked_bufferedMPUQuasiLocalAut_pair_interval [NeZero k]
+    (a : ℤ)
+    (A : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ) :
+    blockedAutomorphism d k (bufferedMPUQuasiLocalAut hU k hk S)
+      (quasiLocalIntervalObservable (MPSTensor.blockPhysDim d k) a 2
+        (Matrix.reindex (finTwoArrowEquiv (Fin (MPSTensor.blockPhysDim d k))).symm
+          (finTwoArrowEquiv (Fin (MPSTensor.blockPhysDim d k))).symm A)) =
+      quasiLocalIntervalObservable (MPSTensor.blockPhysDim d k) (a - 1) 4
+        (Matrix.reindex (MPOTensor.originalSiteHeisenbergOutputBlockEquiv
+          (MPSTensor.blockPhysDim d k))
+          (MPOTensor.originalSiteHeisenbergOutputBlockEquiv (MPSTensor.blockPhysDim d k))
+          (MPOTensor.twoLinkOutputObservable u v A)) := by
+  have hE₂ : (finTwoArrowEquiv (Fin (MPSTensor.blockPhysDim d k))).symm.trans
+      (MPSTensor.blockedConfigEquiv d 2 k) = MPOTensor.originalSiteHeisenbergCentreEquiv d k := by
+    apply Equiv.ext
+    intro c
+    exact (MPOTensor.originalSiteHeisenbergCentreEquiv_eq_blockedConfigEquiv d k c).symm
+  have hInput : Matrix.reindex (MPSTensor.blockedConfigEquiv d 2 k)
+      (MPSTensor.blockedConfigEquiv d 2 k)
+      (Matrix.reindex (finTwoArrowEquiv (Fin (MPSTensor.blockPhysDim d k))).symm
+        (finTwoArrowEquiv (Fin (MPSTensor.blockPhysDim d k))).symm A) =
+      Matrix.reindex (MPOTensor.originalSiteHeisenbergCentreEquiv d k)
+        (MPOTensor.originalSiteHeisenbergCentreEquiv d k) A := by
+    rw [← hE₂]
+    rfl
+  have hOutput : Matrix.reindex (MPSTensor.blockedConfigEquiv d 4 k)
+      (MPSTensor.blockedConfigEquiv d 4 k)
+      (Matrix.reindex (MPOTensor.originalSiteHeisenbergOutputBlockEquiv
+        (MPSTensor.blockPhysDim d k))
+        (MPOTensor.originalSiteHeisenbergOutputBlockEquiv (MPSTensor.blockPhysDim d k))
+        (MPOTensor.twoLinkOutputObservable u v A)) =
+      Matrix.reindex (MPOTensor.originalSiteHeisenbergOutputCentreEquiv d k)
+        (MPOTensor.originalSiteHeisenbergOutputCentreEquiv d k)
+        (MPOTensor.twoLinkOutputObservable u v A) := rfl
+  have hF := bufferedMPUQuasiLocalAut_central_interval_four_output hU k hk S
+    ((a - 2) * (k : ℤ)) A
+  have hStart : (a - 2) * (k : ℤ) + (2 * k : ℕ) = a * k := by push_cast; ring
+  have hEnd : (a - 2) * (k : ℤ) + (k : ℕ) = (a - 1) * k := by ring
+  rw [hStart, hEnd] at hF
+  apply (quasiLocalBlocking d k).injective
+  rw [blockedAutomorphism_apply, StarAlgEquiv.apply_symm_apply,
+    quasiLocalBlocking_quasiLocalIntervalObservable,
+    quasiLocalBlocking_quasiLocalIntervalObservable, hInput, hOutput]
+  exact hF
+
+/-- The actual blocked pair image is supported on its four adjacent
+sites, for every observable in the complete input-pair algebra.
+Source: arXiv:1703.09188, Appendix, lines 2313–2318. -/
+theorem blocked_bufferedMPUQuasiLocalAut_pair_supportedIn [NeZero k]
+    (a : ℤ) {X : QuasiLocalAlgebra (MPSTensor.blockPhysDim d k)}
+    (hX : QuasiLocalSupportedIn X (finiteChainRegion a 2)) :
+    QuasiLocalSupportedIn
+      (blockedAutomorphism d k (bufferedMPUQuasiLocalAut hU k hk S) X)
+      (finiteChainRegion (a - 1) 4) := by
+  classical
+  obtain ⟨B, rfl⟩ := hX
+  let E := (finTwoArrowEquiv (Fin (MPSTensor.blockPhysDim d k))).symm
+  let A := Matrix.reindex E.symm E.symm
+    (intervalCoordinates (MPSTensor.blockPhysDim d k) a 2 B)
+  have hA : Matrix.reindex E E A =
+      intervalCoordinates (MPSTensor.blockPhysDim d k) a 2 B := by
+    ext row col
+    simp only [A, Matrix.reindex_apply, Equiv.symm_apply_apply]
+  have hinput : quasiLocalIntervalObservable (MPSTensor.blockPhysDim d k) a 2
+      (Matrix.reindex E E A) = quasiLocalObservable _ (finiteChainRegion a 2) B := by
+    rw [hA, quasiLocalIntervalObservable_apply, StarAlgEquiv.symm_apply_apply]
+  have h := blocked_bufferedMPUQuasiLocalAut_pair_interval hU k hk S a A
+  change blockedAutomorphism d k (bufferedMPUQuasiLocalAut hU k hk S)
+    (quasiLocalIntervalObservable _ a 2 (Matrix.reindex E E A)) = _ at h
+  rw [hinput] at h
+  exact ⟨_, h.symm⟩
+
+/-- Intersecting the two actual overlapping pair-image bounds derives
+nearest-neighbour support for every blocked singleton.
+Source: arXiv:1703.09188, Appendix, lines 2313–2318. -/
+theorem blocked_bufferedMPUQuasiLocalAut_singleton_supportedIn [NeZero k]
+    (x : ℤ) {X : QuasiLocalAlgebra (MPSTensor.blockPhysDim d k)}
+    (hX : QuasiLocalSupportedIn X {x}) :
+    QuasiLocalSupportedIn
+      (blockedAutomorphism d k (bufferedMPUQuasiLocalAut hU k hk S) X)
+      (finiteChainRegion (x - 1) 3) := by
+  have hleft : ({x} : Finset ℤ) ⊆ finiteChainRegion (x - 1) 2 := by
+    simp only [Finset.singleton_subset_iff, finiteChainRegion, Finset.mem_Ico]
+    omega
+  have hright : ({x} : Finset ℤ) ⊆ finiteChainRegion x 2 := by
+    simp only [Finset.singleton_subset_iff, finiteChainRegion, Finset.mem_Ico]
+    omega
+  have h₁ := blocked_bufferedMPUQuasiLocalAut_pair_supportedIn hU k hk S (x - 1)
+    (hX.mono hleft)
+  have h₂ := blocked_bufferedMPUQuasiLocalAut_pair_supportedIn hU k hk S x
+    (hX.mono hright)
+  have hInter : finiteChainRegion (x - 1 - 1) 4 ∩ finiteChainRegion (x - 1) 4 =
+      finiteChainRegion (x - 1) 3 := by
+    ext y
+    simp only [finiteChainRegion, Finset.mem_inter, Finset.mem_Ico]
+    omega
+  simpa only [hInter] using h₁.inter h₂
+
+/-- The actual supplied-block automorphism has the nearest-neighbour
+propagation needed by the GNVW support-factor construction. It is derived
+from the literal pair action, not supplied as a locality hypothesis.
+Source: arXiv:1703.09188, Appendix, lines 2313–2318. -/
+theorem blocked_bufferedMPUQuasiLocalAut_propagatesWithin [NeZero k] :
+    PropagatesWithin (blockedAutomorphism d k (bufferedMPUQuasiLocalAut hU k hk S))
+      (Finset.Icc (-1) 1) := by
+  classical
+  intro Λ X hX
+  obtain ⟨A, rfl⟩ := hX
+  let b := MPSTensor.blockPhysDim d k
+  let ω := blockedAutomorphism d k (bufferedMPUQuasiLocalAut hU k hk S)
+  let K := regionSumset Λ (Finset.Icc (-1) 1)
+  let T := (quasiLocalObservable b K).range.comap
+    (ω.toStarAlgHom.comp (algebraicToQuasiLocal b))
+  have hsites : ∀ x ∈ Λ, (localObservable b {x}).range ≤ T := by
+    intro x hx z hz
+    obtain ⟨B, rfl⟩ := hz
+    have h := blocked_bufferedMPUQuasiLocalAut_singleton_supportedIn hU k hk S x
+      (show QuasiLocalSupportedIn (quasiLocalObservable b {x} B) {x} from ⟨B, rfl⟩)
+    have hsub : finiteChainRegion (x - 1) 3 ⊆ K := by
+      intro y hy
+      have hy' := Finset.mem_Ico.mp hy
+      apply (mem_regionSumset y Λ _).mpr
+      refine ⟨x, hx, y - x, ?_, by omega⟩
+      simp only [Finset.mem_Icc]
+      omega
+    exact h.mono hsub
+  exact range_localObservable_le_of_singletons Λ T hsites ⟨A, rfl⟩
+
 end SpinChain

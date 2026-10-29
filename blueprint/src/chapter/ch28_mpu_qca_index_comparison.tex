@@ -22,7 +22,8 @@
         A\longmapsto(v\otimes v)
         (I_r\otimes uAu^\dagger\otimes I_\ell)(v\otimes v)^\dagger
     \]
-    is a star-homomorphism. Its least left support algebra is
+    is a star-homomorphism. The dimensions satisfy $\ell r=d^2$, so
+    $\ell/d=d/r$. Its least left support algebra is
     $v(I_r\otimes M_\ell)v^\dagger$, and hence has matrix size $\ell$.
     This is the finite output-family step in
     \cite[Appendix, lines~2322--2334]{Cirac2017MPU}.
@@ -93,4 +94,70 @@
     the fixed six-block output. Remove the two identity exterior
     blocks using its exact four-block placement and canonical
     interval inclusions.
+\end{proof}
+
+
+\begin{lemma}[Actual nearest-neighbour action after the supplied blocking]
+    \label{lem:mpu_actual_blocked_nearest_neighbour}
+    \lean{MPOTensor.originalSiteHeisenbergCentreEquiv_eq_blockedConfigEquiv,
+        MPOTensor.originalSiteHeisenbergOutputBlockEquiv,
+        SpinChain.blocked_bufferedMPUQuasiLocalAut_pair_interval,
+        SpinChain.blocked_bufferedMPUQuasiLocalAut_pair_supportedIn,
+        SpinChain.blocked_bufferedMPUQuasiLocalAut_singleton_supportedIn,
+        SpinChain.blocked_bufferedMPUQuasiLocalAut_propagatesWithin}
+    \notready
+    \uses{lem:mpu_actual_complete_interval_four_output,
+        lem:mpu_qca_support_intersection}
+    Let $\omega$ be the actual supplied-standard-form automorphism and
+    group its original sites in blocks of length $k>0$. The resulting
+    automorphism has physical cell size $d_k=d^k$. Its actual action
+    on every two-cell interval $[a,a+2)$ is the two-link output matrix
+    on $[a-1,a+3)$. It has nearest-neighbour propagation on the blocked
+    chain, without a supplied locality hypothesis.
+\end{lemma}
+\begin{proof}
+    The actual blocking equivalence transports the complete two-block
+    input and four-block output matrices to consecutive cell coordinates.
+    A singleton belongs to either of its two adjacent input pairs.
+    Intersecting their output regions gives exactly its three-cell
+    neighbourhood. Finite one-site generation then gives this same
+    nearest-neighbour propagation for every finite support.
+\end{proof}
+
+\begin{lemma}[The actual blocked MPU has GNVW index $\ell/d_k$]
+    \label{lem:mpu_actual_blocked_gnvw_index}
+    \lean{SpinChain.blocked_bufferedMPUQuasiLocalAut_evenSupportEquiv_zero,
+        SpinChain.blocked_bufferedMPUQuasiLocalAut_supportAlgebraMatrixSize_zero,
+        SpinChain.coe_gnvwIndex_blocked_bufferedMPUQuasiLocalAut,
+        SpinChain.coe_gnvwIndex_blocked_bufferedMPUQuasiLocalAut_eq_phys_div_right}
+    \notready
+    \uses{lem:mpu_actual_blocked_nearest_neighbour,
+        lem:mpu_actual_two_link_left_support,
+        lem:mpu_qca_left_support_coordinate_transport,
+        thm:qca_gnvw_index_dimtransfer}
+    Under the supplied positive-block standard-form hypotheses, the
+    actual blocked automorphism has canonical even support factor
+    $\mathcal R_0$ on the cell pair $\{-1,0\}$ isomorphic to $M_\ell$.
+    Its chosen matrix size at this cut is therefore $\ell$, and its
+    positive rational GNVW index is
+    \[
+        \operatorname{ind}_{\mathrm{QCA}}
+        =\frac{\ell}{d_k}=\frac{d_k}{r},\qquad d_k=d^k.
+    \]
+    This is the actual support-factor comparison after the source's
+    grouping of sites in \cite[Appendix, lines~2313--2334]{Cirac2017MPU}.
+    Independence of arbitrary regrouping is not asserted here. The
+    Appendix normalization correction is recorded in
+    \cite{gap:mpu_qca_index_normalization}.
+\end{lemma}
+\begin{proof}
+    The exact finite action identifies the canonical ordered even-pair
+    image with the actual two-link family in its left and right
+    configuration coordinates. The canonical bipartite embedding is
+    faithful, so this is an equality of finite image algebras. Transport
+    the derived least left support through those independent coordinate
+    bijections to obtain its full-matrix presentation of size $\ell$.
+    Matrix-size uniqueness computes the chosen GNVW size and ratio.
+    The actual supplied gate identity $\ell r=d_k^2$ gives the second
+    ratio presentation.
 \end{proof}
