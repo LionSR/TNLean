@@ -33,8 +33,9 @@ uses square ranks explicitly; the symmetry supplier derives them. All
 factors use the recorded canonical boundary. Arbitrary ambient presentations
 remain covered by `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
 
-The phase-sensitive local equations, their even-ring converse, arbitrary
-supplied standard forms, and the phase-continuity conclusion remain. The
+The phase-sensitive forward local equations are now written as described
+below. Their even-ring converse, arbitrary supplied standard forms, and the
+phase-deformation conclusion remain. The
 source transposition proposition and all new auxiliary tags remain
 `notready`; #7020 stays open. The time-reversal construction and its
 PropChiral scope are separate and unchanged in this isolated worktree.
@@ -62,3 +63,27 @@ submatrix evaluations in the gate identities. The simplicity rank product
 now has an explicit type, and the gate proofs finish their actual entry
 identities by definitional reduction after the conjugation simplification.
 No mathematical statement changes and no local Lean command was run.
+
+## Actual even-family forward phase criterion
+
+`TranspositionLocalNecessity.lean` now derives both source-factor gauge
+equations from the actual even periodic family, using the transported
+transpose record and the existing even-family FT. Transposing the second
+relation and cancelling the coisometric gate gives
+`(conj(Y)*X) ⊗ (conj(X)*Y) = 1`. The scalar Kronecker theorem supplies a
+scalar matrix; unitarity gives its unit norm. Substituting it gives the actual
+local phase certificate, with no assumed comparison gauge or transform.
+Mathlib's existing `Matrix.mul_left_injective_of_inv` performs the cancellation.
+
+For the standard form actually constructed from a simple reduced canonical
+source, the coarse ranks derive the original rank identifications. The
+existing four-original-spin dictionary then yields exactly
+`V23(u₀⊗u₀)=c(x⊗xᵀ)V23ᵀ`, with `norm c=1`. Its finite-chain premise is
+only on even lengths of `W=blockTwo U` (original multiples of four); no
+extra physical block or odd-length symmetry is inserted. Exponential forms
+are also written using the principal argument. This is pointwise existence,
+not continuity of the argument choice.
+
+The four new phase declarations remain source-written and uncompiled.
+The actual even-ring converse and the explicit phase deformation are still
+open. The full source proposition remains `notready` and #7020 remains open.

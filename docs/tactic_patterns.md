@@ -9700,3 +9700,16 @@ removed after the dependency audit exposed it.
   `SourceFactors.physicalAdjoint`, and `SourceFactors.mapStar`. No parallel
   admissibility or transpose-source predicate is introduced. The square-rank
   supplier derives its ranks from actual even-family symmetry.
+
+### Cancelling the coisometric factor — upstream reuse (2026-10-29)
+
+- **Pattern:** From `A = K*A` and `A*Aᴴ=1`, derive `K=1` before applying
+  the scalar Kronecker theorem.
+- **Existing owner:** Mathlib `Matrix.mul_left_injective_of_inv` in
+  `LinearAlgebra/Matrix/NonsingularInverse.lean`.
+- **Reuse:** `MPS/MPU/TranspositionLocalNecessity.lean` applies the existing
+  injectivity theorem directly instead of copying the multiplication proof.
+- **Related occurrences:** the earlier conjugation and adjoint gate arguments
+  multiply by the adjoint explicitly; they can use the same upstream theorem
+  when their owned dependency stacks are next integrated. No local matrix
+  cancellation wrapper or new tactic is introduced.

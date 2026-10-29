@@ -218,6 +218,7 @@ import TNLean.MPS.MPU.TransferMatrix
 import TNLean.MPS.MPU.TransferMultiplicity
 import TNLean.MPS.MPU.TransferStabilization
 import TNLean.MPS.MPU.TransferStabilizationConverse
+import TNLean.MPS.MPU.TranspositionLocalNecessity
 import TNLean.MPS.MPU.TreeAmplificationGateBounds
 import TNLean.MPS.MPU.TreeDepthBounds
 import TNLean.MPS.MPU.TruncatedSymmetryGrowth

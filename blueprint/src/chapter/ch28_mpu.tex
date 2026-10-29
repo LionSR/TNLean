@@ -10097,6 +10097,45 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     gives $r\ell=d^2$, hence both equal $d$.
 \end{proof}
 
+\begin{lemma}[Forward transposition phase for actual canonical source factors]
+    \label{lem:mpu_canonical_source_transposition_phase}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_source_transposition_phase_certificate, MPOTensor.IsMPUCanonicalFormII.exists_source_transposition_exponential_certificate, MPOTensor.IsMPUCanonicalFormII.exists_local_transposition_certificate, MPOTensor.IsMPUCanonicalFormII.exists_local_transposition_exponential_certificate}
+    \notready
+    Let $U$ be a simple reduced canonical tensor and construct its actual
+    standard form $W$ with gates $u,v$. If
+    $W^{(N)}=(W^{(N)})^T$ at every even length $N>1$, then $r(U)=\ell(U)=d$.
+    In the corresponding canonical rank identifications there are a unitary
+    $x$ on $\mathbb C^d\otimes\mathbb C^d$ and a phase $c$, $|c|=1$, such that
+    \begin{align}
+        v_{23}(u\otimes u) & =c(x\otimes x^T)v_{23}^T.
+    \end{align}
+    The scalar can equivalently be written as $c=e^{i\phi}$ with real $\phi$.
+    More generally, even-chain transpose symmetry of a simple reduced canonical
+    tensor gives the corresponding phase equation for any normalized source
+    factors at its specified canonical weight. All comparison gauges are
+    derived from the actual periodic family. These are forward consequences
+    of \cite[lines~1258--1288]{Cirac2017MPU}, under the presentation restriction
+    in \cite{gap:mpu_canonical_form_full_support}. The unrestricted supplied
+    standard forms, converse and phase deformation remain separate.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:mpu_physical_transpose_source_factors,
+        lem:mpu_even_family_supplied_source_gauges,
+        lem:mpu_canonical_forward_local_time_reversal}
+    The actual transpose factors have gates $B^T,A^T$. Their two gauge
+    equations are $B^T=(X\otimes Y)A$ and
+    $A^T=B(Y^\dagger\otimes X^\dagger)$. Transpose the second and substitute
+    the first, then cancel $A$, to obtain
+    $(\overline YX)\otimes(\overline XY)=\Id$.
+    Therefore $\overline YX=c\Id$. Unitarity forces $|c|=1$ and
+    $\overline Y=cX^\dagger$. Substitution gives
+    $A=c(X^\dagger\otimes\overline X)B^T$. Take $x=X^\dagger$ and use
+    the explicit four-spin coordinate dictionary. The principal argument of
+    $c$ supplies the pointwise exponential form; no continuity of that choice
+    is asserted.
+\end{proof}
+
 \begin{proposition}[Local characterization of transposition]
     \label{prop:local-char-transposition}
     \notready
