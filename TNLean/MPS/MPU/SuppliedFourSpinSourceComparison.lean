@@ -52,10 +52,8 @@ private theorem sourceV_contraction_transport
   apply Finset.sum_congr rfl
   intro s _
   rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro t _
-  apply Finset.sum_congr rfl
-  intro β _
+  apply Finset.sum_congr₂
+  intro t _ β _
   ring
 
 namespace TwoSiteStandardFormData
