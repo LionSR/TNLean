@@ -224,14 +224,14 @@ theorem norm_uncleTrialPinnedGlobalState_sq_le_mul
     exact (hL p r q t).trans
       (mul_le_mul_of_nonneg_right hLC (Nat.cast_nonneg r))
   rcases (mem_uncleTrialEndpointBonds_iff N hN i).mp hi with rfl | rfl | rfl | rfl
-  · simpa only [uncleTrialPinnedGlobalState] using
+  · simpa only [uncleTrialPinnedGlobalState, ite_true] using
       hRcast N (3 * N - 1) (N + 1) N (by omega)
-  · simpa only [uncleTrialPinnedGlobalState, ite_eq_right (ne_of_gt h01)] using
+  · simpa only [uncleTrialPinnedGlobalState, ite_true, ite_eq_right (ne_of_gt h01)] using
       hRcast (2 * N) (2 * N - 1) (N + 1) N (by omega)
-  · simpa only [uncleTrialPinnedGlobalState,
+  · simpa only [uncleTrialPinnedGlobalState, ite_true,
       ite_eq_right (ne_of_gt (h01.trans h12)), ite_eq_right (ne_of_gt h12)] using
       hLcast N (N + 1) (2 * N - 1) (2 * N) (by omega)
-  · simpa only [uncleTrialPinnedGlobalState,
+  · simpa only [uncleTrialPinnedGlobalState, ite_true,
       ite_eq_right (ne_of_gt (h01.trans (h12.trans h23))),
       ite_eq_right (ne_of_gt (h12.trans h23)), ite_eq_right (ne_of_gt h23)] using
       hLcast N (N + 1) (3 * N - 1) N (by omega)
