@@ -1,10 +1,9 @@
 \section{Finite-domain area laws and polynomial PEPS approximation}
 \label{sec:finite_domain_area_law}
 
-An entropy bound for every cut and an approximation of the entire vector are
-different assertions. The first concerns arbitrary finite induced lattice
-domains. The second asks for one compatible tensor representation on the
-original open square. We state the two models separately, following
+An entropy bound for every cut on arbitrary finite induced lattice domains and a
+compatible tensor approximation on the open square are distinct assertions; we
+state the two models separately following
 \cite{OpenAI2026AreaLaw,OpenAI2026PolynomialPEPS}.
 
 \begin{definition}[Induced lattice domain]
@@ -20,30 +19,27 @@ original open square. We state the two models separately, following
         TNLean.Lattice.card_regionConfig
     }
     \leanok
-    Let $\Lambda\subset\mathbb Z^2$ be finite. Join sites at coordinate distance
-    one, and let $d_\Lambda$ be distance in this induced graph, with value
-    $+\infty$ between distinct components. For $X\subseteq\Lambda$ and an integer
-    $r\ge0$, the closed graph neighborhood
+    Let $\Lambda\subset\mathbb Z^2$ be finite (possibly empty, perforated, or
+    disconnected). Join sites at $\ell_1$-distance $1$, and let $d_\Lambda$ be
+    the induced-graph distance ($d_\Lambda=+\infty$ between distinct components).
+    For $X\subseteq\Lambda$ and an integer $r\ge0$, the closed graph neighborhood is
     \begin{align}
         N_r^\Lambda(X) & =\{y\in\Lambda:\ d_\Lambda(x,y)\le r
-        \text{ for some }x\in X\}
+        \text{ for some }x\in X\}.
         \label{eq:area_law_graph_neighborhood}
     \end{align}
-    consists of the sites joined to some site of $X$ by an induced walk of
-    length at most $r$. At every site put $\mathbb C^q$,
-    $q\ge1$. In configuration coordinates the physical Hilbert space is
+    With site space $\mathbb C^q$ ($q\ge1$), the physical Hilbert space in
+    configuration coordinates is
     \begin{align}
         \label{eq:area_law_state_space}
-        \mathcal H_\Lambda & =\mathbb C^{\{\sigma:\Lambda\to\{0,\ldots,q-1\}\}},
-    \end{align}
-    \begin{align}
+        \mathcal H_\Lambda     & =\mathbb C^{\{\sigma:\Lambda\to\{0,\ldots,q-1\}\}}, \\
         \label{eq:area_law_dimension}
         \dim\mathcal H_\Lambda & =q^{|\Lambda|}.
     \end{align}
-    Restriction to $A$ and $\Lambda\setminus A$ identifies the configuration set
-    with the product of the two regional configuration sets. The configuration
-    set of a region $A$ has $q^{|A|}$ elements. Empty domains,
-    holes, and disconnected components are permitted.
+    For $A\subseteq\Lambda$, restriction to $A$ and $\Lambda\setminus A$
+    identifies $\{0,\ldots,q-1\}^\Lambda\simeq
+        \{0,\ldots,q-1\}^A\times\{0,\ldots,q-1\}^{\Lambda\setminus A}$, with
+    $|\{0,\ldots,q-1\}^A|=q^{|A|}$.
 \end{definition}
 
 \begin{definition}[Finite-range interactions and boundary]
@@ -64,22 +60,19 @@ original open square. We state the two models separately, following
     }
     \leanok
     \uses{def:area_law_domain}
-    Fix an integer $R\ge0$ and $J>0$. For each nonempty
-    $X\subseteq\Lambda$ with $\operatorname{diam}_{d_\Lambda}X\le R$, assign
-    one Hermitian operator $h_X$ supported on $X$, with $\|h_X\|\le J$.
-    The assigned operator may be zero, and acts as the identity on the
-    complementary tensor factors. Define
+    Fix an integer $R\ge0$ and $J>0$. For each nonempty $X\subseteq\Lambda$ with
+    $\operatorname{diam}_{d_\Lambda}X\le R$, assign one Hermitian operator
+    $h_X=h_X^*$ supported on $X$ (extended by $I_{\Lambda\setminus X}$, possibly
+    $h_X=0$) with Euclidean operator norm $\|h_X\|\le J$. For
+    $A\subseteq\Lambda$, define
     \begin{align}
         \label{eq:area_law_hamiltonian}
-        H & =\sum_{\varnothing\ne X\subseteq\Lambda,\ \operatorname{diam}_{d_\Lambda}X\le R}h_X,
-    \end{align}
-    \begin{align}
+        H                  & =\sum_{\varnothing\ne X\subseteq\Lambda,\ \operatorname{diam}_{d_\Lambda}X\le R}h_X, \\
         \label{eq:area_law_boundary}
         \partial_\Lambda A & =
-        \{\{x,y\}:x\in A,\ y\in\Lambda\setminus A,\ d_\Lambda(x,y)=1\}.
+        \{\{x,y\}:x\in A,\ y\in\Lambda\setminus A,\ d_\Lambda(x,y)=1\},
     \end{align}
-    The norm is the Euclidean operator norm. Boundary edges are unordered and
-    counted once; empty and full cuts have empty boundary.
+    so $\partial_\Lambda\varnothing=\partial_\Lambda\Lambda=\varnothing$.
 \end{definition}
 
 \begin{theorem}[Interaction range and rectangular coordinates]
@@ -100,22 +93,20 @@ original open square. We state the two models separately, following
     }
     \leanok
     \uses{def:area_law_domain,def:area_law_hamiltonian}
-    A pair has induced distance at most $R$ if and only if an induced walk of
-    length at most $R$ joins it. Every singleton is an admissible support at
-    every range, and at range zero the admissible supports are exactly the
-    singletons. Adjacent pairs are admissible at range one.
-    The nearest-neighbor graph on
-    $\{0,\ldots,w-1\}\times\{0,\ldots,h-1\}$ is the induced graph of that
-    integer rectangle, with the corresponding identification of configurations
-    and range-one pair supports.
+    For $x,y\in\Lambda$, $d_\Lambda(x,y)\le R$ if and only if an induced walk of
+    length at most $R$ joins $x$ and $y$. Every singleton $\{x\}$ is admissible
+    for every $R\ge0$; at $R=0$ the admissible supports are precisely the
+    singletons; adjacent pairs $\{x,y\}$ ($d_\Lambda(x,y)=1$) are admissible for
+    $R\ge1$. The nearest-neighbor graph on $\{0,\ldots,w-1\}\times\{0,\ldots,h-1\}$
+    is isomorphic to the induced graph on that integer rectangle, identifying
+    their configurations and range-$1$ pair supports.
 \end{theorem}
 \begin{proof}\leanok
-    The extended graph distance is the least walk length, or infinity when no
-    walk exists. A zero-length walk has equal endpoints. A nonempty support of
-    diameter zero therefore has one element. The coordinate embedding preserves
-    horizontal and vertical nearest neighbors and is bijective onto the integer
-    rectangle. Restricting configurations along this bijection gives the last
-    identification.
+    Since $d_\Lambda(x,y)$ is the infimum of walk lengths (or $+\infty$), a walk
+    of length $0$ has $x=y$, so $\operatorname{diam}_{d_\Lambda}X\le0$ with
+    $X\ne\varnothing$ forces $|X|=1$. The coordinate embedding is a graph
+    isomorphism onto $\{0,\ldots,w-1\}\times\{0,\ldots,h-1\}$, inducing the
+    configuration and support identifications.
 \end{proof}
 
 \begin{definition}[Ground vector and regional entropy]
@@ -133,30 +124,25 @@ original open square. We state the two models separately, following
     }
     \leanok
     \uses{def:area_law_hamiltonian}
-    For a unit vector $\Omega$, a real $E_0$, and $\Delta>0$, the eigenvector and
-    full-system projector-gap conditions are
+    For a unit vector $\Omega$, $E_0\in\mathbb R$, and $\Delta>0$, the gapped
+    ground-state conditions (imposed only on the full Hamiltonian $H$) are
     \begin{align}
         \label{eq:area_law_ground_vector}
-        H\Omega & =E_0\Omega,
-    \end{align}
-    \begin{align}
+        H\Omega & =E_0\Omega,                                \\
         \label{eq:area_law_projector_gap}
-        H-E_0I & \ge\Delta(I-|\Omega\rangle\langle\Omega|).
+        H-E_0I  & \ge\Delta(I-|\Omega\rangle\langle\Omega|).
     \end{align}
-    For $A\subseteq\Lambda$, put
+    For $A\subseteq\Lambda$, the Hermitian reduced state and natural-logarithm
+    von Neumann entropy ($0\log0=0$) are
     \begin{align}
         \label{eq:area_law_reduced_state}
-        \rho_A & =\operatorname{Tr}_{\Lambda\setminus A}|\Omega\rangle\langle\Omega|,
-    \end{align}
-    \begin{align}
+        \rho_A      & =\operatorname{Tr}_{\Lambda\setminus A}|\Omega\rangle\langle\Omega|, \\
         \label{eq:area_law_regional_entropy}
-        S_\Omega(A) & =-\operatorname{Tr}\rho_A\log\rho_A.
+        S_\Omega(A) & =-\operatorname{Tr}(\rho_A\log\rho_A).
     \end{align}
-    All logarithms are natural, with $0\log0=0$. The reduced matrix is Hermitian,
-    including when its spectrum contains zero. No condition is imposed on the
-    gap of a Hamiltonian restricted to a smaller region.
-    The uniform boundary assertion requires a single finite constant for each
-    $q,R,J,\Delta$, chosen before every domain, Hamiltonian, ground vector, and cut.
+    The uniform area law asserts that for each $(q,R,J,\Delta)$ there exists
+    $C<\infty$ such that $S_\Omega(A)\le C|\partial_\Lambda A|$ for all finite
+    $\Lambda$, $H$, $\Omega$, and $A\subseteq\Lambda$.
 \end{definition}
 
 \begin{theorem}[Uniqueness from a positive global gap]
@@ -164,20 +150,18 @@ original open square. We state the two models separately, following
     \lean{Matrix.IsGappedGroundState.eigenspace_eq_span}
     \leanok
     \uses{def:area_law_ground_entropy}
-    Let $H$ be a complex matrix indexed by a finite set, let $E_0$ be real,
-    and let $\Omega$ be a unit vector satisfying
-    (\ref{eq:area_law_ground_vector}) and
-    (\ref{eq:area_law_projector_gap}) with $\Delta>0$.
-    As an elementary consequence of the global gap giving the uniqueness
-    assertion in \cite[Proposition~4.5]{OpenAI2026AreaLaw}, the eigenspace of
-    $H$ at $E_0$ is $\operatorname{span}_{\mathbb C}\{\Omega\}$.
+    Let $H$ be a finite-dimensional complex matrix, $E_0\in\mathbb R$, and
+    $\Omega$ a unit vector satisfying (\ref{eq:area_law_ground_vector}) and
+    (\ref{eq:area_law_projector_gap}) with $\Delta>0$. Then
+    $\ker(H-E_0I)=\operatorname{span}_{\mathbb C}\{\Omega\}$, giving the
+    uniqueness assertion in \cite[Proposition~4.5]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
-    For an eigenvector $\psi$ at $E_0$, the gap inequality gives
-    $0\ge\Delta\|\psi-\langle\Omega,\psi\rangle\Omega\|^2$.
-    Since $\Delta>0$, $\psi=\langle\Omega,\psi\rangle\Omega$.
-    Conversely, $H\Omega=E_0\Omega$ puts every scalar multiple of $\Omega$
-    in this eigenspace.
+    If $H\psi=E_0\psi$, then (\ref{eq:area_law_projector_gap}) gives
+    $0\ge\Delta\|\psi-\langle\Omega,\psi\rangle\Omega\|^2$, so $\Delta>0$
+    implies $\psi=\langle\Omega,\psi\rangle\Omega$. Conversely,
+    (\ref{eq:area_law_ground_vector}) gives
+    $\operatorname{span}_{\mathbb C}\{\Omega\}\subseteq\ker(H-E_0I)$.
 \end{proof}
 
 \begin{theorem}[Regional reductions of pure vectors]
@@ -192,11 +176,11 @@ original open square. We state the two models separately, following
     }
     \leanok
     \uses{def:area_law_domain,def:area_law_ground_entropy}
-    Let $\Lambda\subset\mathbb Z^2$ be finite, let $q\ge0$ be an integer,
-    and let $\Omega\in\mathcal H_\Lambda$. Under the density and entropy
-    conventions of \cite[Section~2]{OpenAI2026AreaLaw}, for every
-    $A\subseteq\Lambda$, the regional reduction defined in
-    Definition~\ref{def:area_law_ground_entropy} satisfies
+    Let $\Lambda\subset\mathbb Z^2$ be finite, $q\ge0$ an integer (allowing
+    $q=0$ or $\Lambda=\varnothing$), and $\Omega\in\mathcal H_\Lambda$. Under
+    the conventions of \cite[Section~2]{OpenAI2026AreaLaw} and
+    Definition~\ref{def:area_law_ground_entropy}, every $A\subseteq\Lambda$
+    satisfies
     \begin{align}
         \rho_A                  & \ge0,
         \label{eq:area_law_reduced_positive}     \\
@@ -206,43 +190,29 @@ original open square. We state the two models separately, following
     If $\|\Omega\|=1$, then for every $A\subseteq\Lambda$,
     \begin{align}
         \operatorname{Tr}\rho_A & =1,
-        \label{eq:area_law_reduced_unit_trace} \\
-        S_\Omega(A)             & \ge0.
-        \label{eq:area_law_entropy_nonnegative}
-    \end{align}
-    If $\|\Omega\|=1$, the empty region and the full region also satisfy
-    \begin{align}
-        S_\Omega(\varnothing) & =0,
-        \label{eq:area_law_empty_entropy} \\
-        S_\Omega(\Lambda)     & =0.
+        \label{eq:area_law_reduced_unit_trace}  \\
+        S_\Omega(A)             & \ge0,
+        \label{eq:area_law_entropy_nonnegative} \\
+        S_\Omega(\varnothing)   & =0,
+        \label{eq:area_law_empty_entropy}       \\
+        S_\Omega(\Lambda)       & =0.
         \label{eq:area_law_full_entropy}
     \end{align}
-    No Hamiltonian or spectral-gap hypothesis is required. The identities include
-    empty domains and regions and use the one-dimensional empty tensor product.
-    The site dimension $q$ may here be zero, in which case $\mathcal H_\Lambda$
-    is the zero space for nonempty $\Lambda$; the standing assumption $q\ge1$
-    of Definition~\ref{def:area_law_domain} is not needed.
     % Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a,
     % build/sections/01-preliminaries.tex, sec:prelim, lines 10--25.
     % This entry records regional-state identities only; it does not mark a
     % source-labelled continuity, gap-equivalence, or area-law theorem complete.
 \end{theorem}
 \begin{proof}\leanok
-    The pure-state matrix $|\Omega\rangle\langle\Omega|$ is positive semidefinite.
-    Restriction of configurations to $A$ and its complement changes only the
-    coordinates, and partial trace preserves positivity and trace. Thus
-    $\operatorname{Tr}\rho_A=\operatorname{Tr}|\Omega\rangle\langle\Omega|
-        =\|\Omega\|^2$. For a unit vector, the reduced matrix is positive with trace
-    one. Its eigenvalues lie in $[0,1]$, so each term $-\lambda\log\lambda$ in
-    its entropy is nonnegative, with $0\log0=0$.
-
-    For the empty region, the reduced matrix acts on a one-dimensional space.
-    For the full region, write $\rho_\Lambda=MM^*$ using the coefficient matrix
-    of the vector under the configuration splitting. The complement has one
-    configuration, so $M$ has one column and $\rho_\Lambda$ has rank at most one.
-    A positive trace-one matrix of rank at most one has one eigenvalue equal to
-    one and all remaining eigenvalues zero. Its entropy therefore vanishes in
-    both cases.
+    Since $|\Omega\rangle\langle\Omega|\ge0$ and $\operatorname{Tr}_{\Lambda\setminus A}$
+    preserves positivity and trace, (\ref{eq:area_law_reduced_positive}) and
+    (\ref{eq:area_law_reduced_trace}) hold. When $\|\Omega\|=1$, $\rho_A\ge0$
+    and $\operatorname{Tr}\rho_A=1$ force $\operatorname{spec}(\rho_A)\subseteq[0,1]$,
+    so $-\lambda\log\lambda\ge0$ gives (\ref{eq:area_law_entropy_nonnegative}).
+    For $A=\varnothing$ or $A=\Lambda$, the complement has $q^0=1$ configuration,
+    so the coefficient matrix $M$ with $\rho_A=MM^*$ has rank at most $1$ and
+    $\operatorname{spec}(\rho_A)\subseteq\{0,1\}$, giving
+    (\ref{eq:area_law_empty_entropy})--(\ref{eq:area_law_full_entropy}).
 \end{proof}
 
 \begin{theorem}[Marginal trace norm from the full-system gap]
@@ -250,19 +220,16 @@ original open square. We state the two models separately, following
     \lean{FiniteProduct.re_trace_abs_reducedPure_sub_le_sqrt_energy}
     \leanok
     \uses{def:area_law_ground_entropy}
-    Let $\mathcal H=\bigotimes_{v\in V}\mathcal H_v$ be a finite tensor product
-    of finite-dimensional complex Hilbert spaces. Let $H$ be an operator on
-    $\mathcal H$ and let $E_0\in\R$. Suppose that $\Omega$ is a unit vector
-    and $\Delta>0$, with
+    On $\mathcal H=\bigotimes_{v\in V}\mathcal H_v$, let $H$ be an operator,
+    $E_0\in\R$, $\Delta>0$, and $\Omega\in\mathcal H$ a unit vector satisfying
     \begin{align}
         H\Omega & = E_0\Omega, \notag                         \\
         H-E_0I  & \geq\Delta(I-|\Omega\rangle\langle\Omega|).
         \label{eq:peps_gap_projector_bound}
     \end{align}
-    For a unit vector $\phi$ and a region $X\subseteq V$, put
-    $\rho_X^\phi=\operatorname{Tr}_{V\setminus X}|\phi\rangle\langle\phi|$
-    and define $\rho_X^\Omega$ in the same way. As in the gap-to-marginal
-    estimate in the
+    For any unit vector $\phi\in\mathcal H$ and $X\subseteq V$, with
+    $\rho_X^\psi=\operatorname{Tr}_{V\setminus X}|\psi\rangle\langle\psi|$, as in
+    the
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L339-L365}{proof of Proposition 4.1},
     \begin{align}
         \|\rho_X^\phi-\rho_X^\Omega\|_1
@@ -273,16 +240,15 @@ original open square. We state the two models separately, following
 \begin{proof}
     \leanok
     \uses{lem:al_amp_pure_trace_distance}
-    With $e=\operatorname{Re}\langle\phi,H\phi\rangle-E_0$, taking the
-    expectation of~(\ref{eq:peps_gap_projector_bound}) in $\phi$ gives
-    $1-|\langle\Omega,\phi\rangle|^2\leq e/\Delta$.
-    Contractivity under partial trace and the trace norm formula for two pure
-    states give
+    With $e=\operatorname{Re}\langle\phi,H\phi\rangle-E_0$, pairing
+    (\ref{eq:peps_gap_projector_bound}) with $\phi$ gives
+    $1-|\langle\Omega,\phi\rangle|^2\leq e/\Delta$. Partial-trace contractivity
+    and Lemma~\ref{lem:al_amp_pure_trace_distance} yield
     \begin{align}
         \|\rho_X^\phi-\rho_X^\Omega\|_1
          & \leq\bigl\||\phi\rangle\langle\phi|-|\Omega\rangle\langle\Omega|\bigr\|_1
         =2\sqrt{1-|\langle\Omega,\phi\rangle|^2}
-        \leq2\sqrt{e/\Delta}.
+        \leq2\sqrt{e/\Delta}.\notag
     \end{align}
 \end{proof}
 
@@ -291,22 +257,15 @@ original open square. We state the two models separately, following
     \lean{FiniteProduct.re_trace_abs_reducedPure_sub_le_one_sixteenth_of_energy}
     \leanok
     \uses{thm:peps_gap_marginal_trace_norm}
-    Under the hypotheses of Theorem~\ref{thm:peps_gap_marginal_trace_norm}, suppose
-    in addition that
-    \begin{align}
-        \operatorname{Re}\langle\phi,H\phi\rangle-E_0\leq\frac{\Delta}{1024}.
-    \end{align}
-    Then, for every region $X\subseteq V$,
-    \begin{align}
-        \|\rho_X^\phi-\rho_X^\Omega\|_1\leq\frac1{16}.
-    \end{align}
+    Under the hypotheses of Theorem~\ref{thm:peps_gap_marginal_trace_norm}, if
+    $\operatorname{Re}\langle\phi,H\phi\rangle-E_0\leq\Delta/1024$, then
+    $\|\rho_X^\phi-\rho_X^\Omega\|_1\leq1/16$ for every $X\subseteq V$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_gap_marginal_trace_norm}
-    Since $\Delta>0$, the quotient of the excess energy by $\Delta$ is at
-    most $1/1024$. Theorem~\ref{thm:peps_gap_marginal_trace_norm} bounds the
-    full trace norm by $2\sqrt{1/1024}=1/16$.
+    Substitute $(\operatorname{Re}\langle\phi,H\phi\rangle-E_0)/\Delta\le1/1024$
+    and $2\sqrt{1/1024}=1/16$ into (\ref{eq:peps_gap_marginal_distance}).
 \end{proof}
 
 \begin{theorem}[Uniform finite-domain area law]
@@ -314,60 +273,52 @@ original open square. We state the two models separately, following
     \lean{TNLean.PEPS.AreaLaw.uniformAreaLaw}
     \leanok
     \uses{def:area_law_domain,def:area_law_hamiltonian,def:area_law_ground_entropy}
-    In Theorem~1.1 of \cite{OpenAI2026AreaLaw}, for fixed integers $q\ge1$,
-    $R\ge0$ and reals $J,\Delta>0$, there is a finite constant
-    $C=C(q,R,J,\Delta)$ such that every finite induced domain with the
-    above interaction bounds and a unique unit ground vector, up to phase,
-    satisfying the full-system projector gap obeys
-    $S_\Omega(A)\le C|\partial_\Lambda A|$ for every $A\subseteq\Lambda$.
-    The same constant applies to all domains, interaction families, and cuts.
+    In \cite[Theorem~1.1]{OpenAI2026AreaLaw}, for fixed integers $q\ge1$,
+    $R\ge0$ and reals $J,\Delta>0$, there exists $C=C(q,R,J,\Delta)<\infty$ such
+    that for every finite induced domain $\Lambda$, every Hamiltonian $H$ of
+    Definition~\ref{def:area_law_hamiltonian}, every unit ground vector $\Omega$
+    satisfying (\ref{eq:area_law_ground_vector})--(\ref{eq:area_law_projector_gap}),
+    and every $A\subseteq\Lambda$, one has
+    $S_\Omega(A)\le C|\partial_\Lambda A|$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:area_law_closed_constant}
-    Theorem~\ref{thm:area_law_closed_constant} has the same hypotheses and gives
-    the bound with $C=C_{\rm AL}(q,R,J,\Delta)$. That constant is assembled
-    along the following argument.
+    Theorem~\ref{thm:area_law_closed_constant} proves the bound with
+    $C=C_{\rm AL}(q,R,J,\Delta)$ assembled as follows. Write
+    $I_\Omega(B:C)=S_\Omega(B)+S_\Omega(C)-S_\Omega(B\cup C)$ for disjoint
+    $B,C\subseteq\Lambda$, and let $Z$ be the endpoints of $\partial_\Lambda A$.
+    If $b=|\partial_\Lambda A|=0$, then $S_\Omega(A)=0$; assume $b>0$.
 
-    For disjoint $B,C\subseteq\Lambda$ write
-    $I_\Omega(B:C)=S_\Omega(B)+S_\Omega(C)-S_\Omega(B\cup C)$, and let $Z$ be the
-    set of endpoints of the edges in $\partial_\Lambda A$. Empty and full cuts
-    have zero entropy, and so does every cut with $\partial_\Lambda A=\varnothing$.
-    Put $b=|\partial_\Lambda A|>0$.
-
-    The global gap first gives an exponent below volume: for a box $Q$ of side
-    at most $r$, sufficiently far from $Z$,
+    The global gap yields a sub-volume box bound: for a box $Q$ of side at most
+    $r$ far from $Z$,
     \begin{align}
         S_\Omega(A\cap Q) & \le Cr^{1+e_0},\qquad e_0<1.
         \label{eq:area_law_initial_box}
     \end{align}
-    Spectral filtering replaces $H$ by positive quasi-local constraints that
-    annihilate $\Omega$ and keep a global gap. A replica argument then compares
-    two bounds on a filtered norm while a finite randomized scan moves the
-    partition through a collar. Repeating the comparison improves the exponent
-    in (\ref{eq:area_law_initial_box}) and gives, for a template $T$ at scale
-    $n$ and $L_n=\lfloor n^{1-\varepsilon}\rfloor$,
+    Spectral filtering replaces $H$ by positive quasi-local constraints
+    annihilating $\Omega$, and a replica-scanner bootstrap improves
+    (\ref{eq:area_law_initial_box}) to the collar bound at scale $n$ with
+    $L_n=\lfloor n^{1-\varepsilon}\rfloor$:
     \begin{align}
         I_\Omega\bigl(A\cap T:\Lambda\setminus(A\cap T_{L_n})\bigr)
-         & \le Cn^{1-\varepsilon}.
+         & \le Cn^{1-\varepsilon},
         \label{eq:area_law_collar_information}
     \end{align}
-    Here $\varepsilon$, $\alpha$ and $\beta$ are the exponents of
-    Theorem~\ref{thm:area_law_exponent_gaps}. Products of the positive
-    constraints amplify this bound. For every $M\ge1$
-    there is a radius $r\le C_Mn^{(1-\varepsilon)/\alpha}$ with
-    $L_n+2r=o(n^\beta)$ such that
+    for the exponents $\varepsilon,\alpha,\beta$ of
+    Theorem~\ref{thm:area_law_exponent_gaps}. Constraint-product amplification
+    then gives, for each $M\ge1$, a radius $r\le C_Mn^{(1-\varepsilon)/\alpha}$
+    with $L_n+2r=o(n^\beta)$ and
     \begin{align}
         I_\Omega(A\cap T:J)
          & \le C_Mn^{-M}
-        \qquad\text{for every }
-        J\subseteq\Lambda\setminus N_{2r}^\Lambda(A\cap T_{L_n}).
+        \qquad\bigl(J\subseteq\Lambda\setminus N_{2r}^\Lambda(A\cap T_{L_n})\bigr).
         \label{eq:area_law_amplified_information}
     \end{align}
 
-    The planar construction partitions $A$ into a residual set $D$ and an
-    ordered family of pieces $X_i\subseteq A\cap T_i$ with labels
-    $f_i\in\{0,1\}$, templates $T_i$ at scales $n_i$, and
+    The two-family decomposition partitions $A$ into $D$ and ordered pieces
+    $X_i\subseteq A\cap T_i$ with labels $f_i\in\{0,1\}$ and templates $T_i$ at
+    scales $n_i$ satisfying
     \begin{align}
         |D| & \le Cb,
         \qquad
@@ -381,41 +332,32 @@ original open square. We state the two models separately, following
         \label{eq:area_law_partition_clearance}
     \end{align}
     Put $S_i=A\cap(T_i)_{L_{n_i}}$ and
-    $J_i=(\Lambda\setminus A)\cup\bigcup_{j<i,\,f_j=f_i}X_j$, and let $r_i$ be
-    the radius in (\ref{eq:area_law_amplified_information}) at scale $n_i$, with
-    the scale threshold large enough that $L_{n_i}+2r_i<n_i^\beta$. A walk of
-    length at most $2r_i$ starting in $S_i$ stays within ambient distance
-    $n_i^\beta$ of $T_i$. By (\ref{eq:area_law_partition_clearance}) it meets no
-    earlier piece of the same family, and it cannot leave $A$, since its first
-    step out of $A$ would end at a point of $Z$. Hence
-    $J_i\cap N_{2r_i}^\Lambda(S_i)=\varnothing$. With $M=100$,
-    (\ref{eq:area_law_amplified_information}) and monotonicity of mutual
-    information give
+    $J_i=(\Lambda\setminus A)\cup\bigcup_{j<i,\,f_j=f_i}X_j$, with $L_{n_i}+2r_i<n_i^\beta$.
+    By (\ref{eq:area_law_partition_clearance}), any walk of length at most
+    $2r_i$ from $S_i$ stays in $A$ and avoids $\bigcup_{j<i,\,f_j=f_i}X_j$, so
+    $J_i\cap N_{2r_i}^\Lambda(S_i)=\varnothing$. At $M=100$,
+    (\ref{eq:area_law_amplified_information}) and monotonicity give
     \begin{align}
         I_\Omega(X_i:J_i)\le I_\Omega(A\cap T_i:J_i)
          & \le Cn_i^{-100}=:\eta_i.
         \label{eq:area_law_piece_information}
     \end{align}
-    For one family $f$, with $A_f=\bigcup_{f_i=f}X_i$ and
-    $E_f=\sum_{f_i=f}\eta_i$, the chain rule, purity and subadditivity
-    give
+    For $f\in\{0,1\}$, $A_f=\bigcup_{f_i=f}X_i$, and $E_f=\sum_{f_i=f}\eta_i$,
+    the chain rule, purity, and subadditivity give
     \begin{align}
         S_\Omega(A)+\sum_{f_i=f}S_\Omega(X_i)-E_f
          & \le S_\Omega\bigl((\Lambda\setminus A)\cup A_f\bigr)
         =S_\Omega(D\cup A_{1-f})
-        \nonumber                                               \\
-         & \le S_\Omega(D)+\sum_{f_i=1-f}S_\Omega(X_i).
+        \le S_\Omega(D)+\sum_{f_i=1-f}S_\Omega(X_i).
         \label{eq:area_law_family_chain}
     \end{align}
-    Adding (\ref{eq:area_law_family_chain}) for $f=0$ and $f=1$ cancels every
-    piece entropy. With (\ref{eq:area_law_partition_counts}),
+    Summing (\ref{eq:area_law_family_chain}) over $f\in\{0,1\}$ and applying
+    (\ref{eq:area_law_partition_counts}) yields
     \begin{align}
         S_\Omega(A)\le S_\Omega(D)+\frac12\sum_i\eta_i
          & \le|D|\log q+\frac C2\sum_in_i^{-100}\le C'b.
         \label{eq:area_law_final_bound}
     \end{align}
-    Every threshold and constant above depends only on $q,R,J,\Delta$, and is
-    chosen before the domain and the cut.
 \end{proof}
 
 \begin{definition}[Open-square Hamiltonian and PEPS approximation]
@@ -431,37 +373,33 @@ original open square. We state the two models separately, following
         TNLean.PEPS.Approximation.PolynomialPEPSApproximation
     }
     \leanok
-    On the original open $L\times L$ graph, let
+    On the open $L\times L$ grid, let $H=H^*$ be a sum of site and edge terms
     \begin{align}
         H       & =\sum_v h_v+\sum_e h_e,
         \label{eq:polynomial_peps_hamiltonian} \\
         \|h_v\| & \le J,
         \label{eq:polynomial_peps_site_bound}  \\
-        \|h_e\| & \le J,
+        \|h_e\| & \le J.
         \label{eq:polynomial_peps_edge_bound}
     \end{align}
-    where terms are supported on their designated sites or edges, and only the
-    total $H$ is assumed Hermitian. For a unit vector $\Omega$, a real $E_0$,
-    and $\Delta>0$, the gapped ground-vector condition for this $H$ is
+    For a unit vector $\Omega$, $E_0\in\mathbb R$, and $\Delta>0$, the gapped
+    ground-state condition is
     \begin{align}
         H\Omega=E_0\Omega,
         \qquad
         H-E_0I & \ge\Delta(I-|\Omega\rangle\langle\Omega|).
         \label{eq:polynomial_peps_projector_gap}
     \end{align}
-    A PEPS approximation with parameters $C,c$
-    is a tensor family on those same edges with positive dimensions $D_e$
-    satisfying $D_e\le CL^c$ for every edge $e$, and a nonzero contracted vector
-    $\Phi$ such that, for some $\theta\in\mathbb R$,
+    A PEPS approximation with parameters $C,c>0$ is a tensor family on the grid
+    edges with bond dimensions $1\le D_e\le CL^c$ and nonzero contracted vector
+    $\Phi$ satisfying, for some $\theta\in\mathbb R$,
     \begin{align}
         \left\|\frac{\Phi}{\|\Phi\|}-e^{i\theta}\Omega\right\| & \le L^{-1}.
         \label{eq:polynomial_peps_vector_error}
     \end{align}
-    The norm in (\ref{eq:polynomial_peps_vector_error}) is the Euclidean norm
-    of the entire vector.
-    The local tensor maps need not be isometries and the bond dimensions need not
-    be equal. The uniform approximation assertion requires $C,c>0$ to be chosen
-    for fixed $q\ge2$, $J,\Delta>0$ before all $L\ge2$, Hamiltonians, and ground vectors.
+    Uniform polynomial PEPS approximation requires $C,c>0$ depending only on
+    $(q,J,\Delta)$ ($q\ge2$, $J,\Delta>0$) prior to all $L\ge2$, $H$, and
+    $\Omega$.
 \end{definition}
 
 \begin{lemma}[Minimizing phase]
@@ -472,23 +410,17 @@ original open square. We state the two models separately, following
         TNLean.PEPS.Approximation.hasPEPSApproximation_iff_iInf
     }
     \leanok
-    For vectors $u,v$ in a complex normed space, the function
-    $\theta\mapsto\|u-e^{i\theta}v\|$ attains its minimum over $\mathbb R$.
-    Consequently a bound $\varepsilon$ holds at some phase if and only if
-    \begin{align}
-        \min_{\theta\in\mathbb R}\|u-e^{i\theta}v\| & \le\varepsilon,
-    \end{align}
-    and (\ref{eq:polynomial_peps_vector_error}) holds for some $\theta$ if and only
-    if it holds with the minimum over $\theta$, as in the printed target error.
+    For vectors $u,v$ in a complex normed space, $\theta\mapsto\|u-e^{i\theta}v\|$
+    attains its minimum on $\mathbb R$. Thus $\exists\theta\in\mathbb R$,
+    $\|u-e^{i\theta}v\|\le\varepsilon$ if and only if
+    $\min_{\theta\in\mathbb R}\|u-e^{i\theta}v\|\le\varepsilon$, matching
+    (\ref{eq:polynomial_peps_vector_error}).
 \end{lemma}
-
 \begin{proof}
     \leanok
     \uses{def:polynomial_peps_model}
-    The function is continuous and $2\pi$-periodic, so its range is the image
-    of the compact interval $[0,2\pi]$ and contains its least element. A bound
-    at one phase bounds the infimum, and a bound on the infimum holds at a
-    minimizing phase.
+    Since $\theta\mapsto\|u-e^{i\theta}v\|$ is continuous and $2\pi$-periodic,
+    it attains its minimum on the compact interval $[0,2\pi]$.
 \end{proof}
 
 \begin{definition}[Original interaction labels]
@@ -497,10 +429,9 @@ original open square. We state the two models separately, following
     \leanok
     \uses{def:polynomial_peps_model}
     Let $\mathcal I_L$ be the disjoint union of the vertices of the open
-    square and its forward nearest-neighbor edges. Every undirected edge
-    has exactly one such orientation. The original term indexed by a
-    vertex is its site term, and the term indexed by a forward edge is
-    the term on the corresponding undirected edge.
+    $L\times L$ square and its forward nearest-neighbor edges, assigning to
+    $i=v$ the site term $A_v=h_v$ and to $i=(v,w)$ the undirected edge term
+    $A_{(v,w)}=h_{\{v,w\}}$.
 \end{definition}
 
 \begin{definition}[Designated interaction supports]
@@ -508,8 +439,8 @@ original open square. We state the two models separately, following
     \lean{TNLean.PEPS.Approximation.squareInteractionSupport}
     \leanok
     \uses{def:square_interaction_labels}
-    The support $S_i$ is $\{v\}$ for the vertex label $i=v$, and
-    $\{v,w\}$ for the forward edge label $i=(v,w)$.
+    For $i\in\mathcal I_L$, define its support $S_i=\{v\}$ if $i=v$ and
+    $S_i=\{v,w\}$ if $i=(v,w)$.
 \end{definition}
 
 \begin{definition}[Hermitian local terms]
@@ -517,13 +448,9 @@ original open square. We state the two models separately, following
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.hermitianTerm}
     \leanok
     \uses{def:square_interaction_labels}
-    Only the original total Hamiltonian is assumed Hermitian; for the
-    Hermitian replacement of the local terms in
-    \cite[Theorem~1.1]{OpenAI2026PolynomialPEPS}, for each original term
-    $A_i$, put
-    \begin{align*}
-        A_i^{\mathrm h} & =\frac{A_i+A_i^*}{2}.
-    \end{align*}
+    For the Hermitian replacement of local terms in
+    \cite[Theorem~1.1]{OpenAI2026PolynomialPEPS}, set
+    $A_i^{\mathrm h}=(A_i+A_i^*)/2$ for each $i\in\mathcal I_L$.
 \end{definition}
 
 \begin{theorem}[Support and norm of the Hermitian terms]
@@ -535,17 +462,15 @@ original open square. We state the two models separately, following
     }
     \leanok
     \uses{def:square_interaction_support,def:square_hermitian_term}
-    Each $A_i^{\mathrm h}$ is supported on $S_i$, is Hermitian, and
-    satisfies $\|A_i^{\mathrm h}\|\le J$. These conclusions hold for
-    every $L,q\ge0$ and every real interaction bound allowed by the
-    original model, including empty grids and zero local dimension.
+    For every $L,q\ge0$, $J\in\mathbb R$, and $i\in\mathcal I_L$, the term
+    $A_i^{\mathrm h}$ is supported on $S_i$ and satisfies
+    $(A_i^{\mathrm h})^*=A_i^{\mathrm h}$ and $\|A_i^{\mathrm h}\|\le J$.
 \end{theorem}
 \begin{proof}
     \leanok
-    The supported operators form an algebra closed under adjoints, and
-    hence under real linear combinations. Thus the Hermitian part has
-    the same support. Its adjoint equals itself, and
-    $\|A_i^{\mathrm h}\|\le\|A_i\|\le J$.
+    The algebra of operators supported on $S_i$ is $*$-closed, so it contains
+    $A_i^{\mathrm h}=(A_i+A_i^*)/2$, with $(A_i^{\mathrm h})^*=A_i^{\mathrm h}$
+    and $\|A_i^{\mathrm h}\|\le(\|A_i\|+\|A_i^*\|)/2=\|A_i\|\le J$.
 \end{proof}
 
 \begin{theorem}[The sum of the Hermitian terms]
@@ -553,16 +478,13 @@ original open square. We state the two models separately, following
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.sum_hermitianTerm}
     \leanok
     \uses{def:square_hermitian_term}
-    For the original Hermitian Hamiltonian $H$,
-    \begin{align*}
-        \sum_{i\in\mathcal I_L} A_i^{\mathrm h} & =H.
-    \end{align*}
+    For the Hermitian Hamiltonian $H=H^*$,
+    $\sum_{i\in\mathcal I_L} A_i^{\mathrm h}=H$.
 \end{theorem}
 \begin{proof}
     \leanok
-    The bijection from forward edges to undirected edges gives
-    $\sum_i A_i=H$. Taking Hermitian parts commutes with this finite
-    sum, and the Hermitian part of $H$ is $H$ itself.
+    Since $\sum_{i\in\mathcal I_L}A_i=H$ and $H^*=H$, we have
+    $\sum_{i\in\mathcal I_L}A_i^{\mathrm h}=(H+H^*)/2=H$.
 \end{proof}
 
 \begin{definition}[Original interaction supports in the integer rectangle]
@@ -570,14 +492,10 @@ original open square. We state the two models separately, following
     \lean{TNLean.PEPS.Approximation.squareAreaLawSupport}
     \leanok
     \uses{def:square_interaction_support,thm:area_law_domain_identifications}
-    Let $L\ge0$ be an integer, and identify the original square-grid sites
-    with $\Lambda=\{0,\ldots,L-1\}^2$ by the coordinate bijection $\sigma$.
-    To view the original square Hamiltonian as a finite-domain interaction
-    family in \cite{OpenAI2026PolynomialPEPS,OpenAI2026AreaLaw}, for an
-    original site or forward-edge label $i$, define its designated support by
-    \begin{align*}
-        X_i & =\sigma(S_i).
-    \end{align*}
+    For $L\ge0$, let $\sigma$ be the coordinate bijection from the open
+    $L\times L$ square to $\Lambda=\{0,\ldots,L-1\}^2$, and set
+    $X_i=\sigma(S_i)$ for each $i\in\mathcal I_L$
+    \cite{OpenAI2026PolynomialPEPS,OpenAI2026AreaLaw}.
 \end{definition}
 
 \begin{theorem}[Relabelling the original interaction supports]
@@ -585,20 +503,15 @@ original open square. We state the two models separately, following
     \lean{TNLean.PEPS.Approximation.squareAreaLawSupport_val_eq_nearestNeighborSupport}
     \leanok
     \uses{def:square_area_law_support,def:peps_square_edge_correspondence}
-    Let $\sigma$ be the coordinate bijection from the original square-grid
-    sites to $\Lambda=\{0,\ldots,L-1\}^2$, with any total order on $\Lambda$.
-    Let $e$ send an original site $v$ to $\sigma(v)$ and an original forward
-    edge $(v,w)$ to the edge with endpoints $\sigma(v),\sigma(w)$.
-    For a site or edge label $j$ in $\Lambda$, let $D_j$ be its singleton or
-    two-endpoint support as in \cite[Section~1]{OpenAI2026PolynomialPEPS}.
-    Then $X_i=D_{e(i)}$ for every original interaction label $i$, where
-    $X_i=\sigma(S_i)$ as in Definition~\ref{def:square_area_law_support}.
+    With any total order on $\Lambda=\{0,\ldots,L-1\}^2$, let $e$ map $v\mapsto\sigma(v)$
+    and $(v,w)\mapsto\{\sigma(v),\sigma(w)\}$, and let $D_j\subseteq\Lambda$ be
+    the singleton or two-endpoint support of $j$
+    \cite[Section~1]{OpenAI2026PolynomialPEPS}. Then $X_i=D_{e(i)}$ for every
+    $i\in\mathcal I_L$.
 \end{theorem}
 \begin{proof}\leanok
-    For a site label, the image of its singleton is the singleton of its
-    image. For a forward-edge label $(v,w)$, the edge correspondence and
-    graph isomorphism preserve the unordered pair of endpoints, so
-    $D_{e(i)}=\{\sigma(v),\sigma(w)\}=\sigma(\{v,w\})=X_i$.
+    For $i=v$, $D_{e(v)}=\{\sigma(v)\}=\sigma(\{v\})=X_v$; for $i=(v,w)$,
+    $D_{e(v,w)}=\{\sigma(v),\sigma(w)\}=\sigma(\{v,w\})=X_{(v,w)}$.
 \end{proof}
 
 \begin{theorem}[Designated supports are admissible at range one]
@@ -606,16 +519,14 @@ original open square. We state the two models separately, following
     \lean{TNLean.PEPS.Approximation.squareAreaLawSupport_isAdmissibleSupport}
     \leanok
     \uses{def:square_area_law_support,thm:area_law_domain_identifications}
-    For every original site or forward-edge label $i$, the set $X_i$ is a
-    nonempty support of induced graph diameter at most one in $\Lambda$.
+    For every $i\in\mathcal I_L$, $X_i\ne\varnothing$ and
+    $\operatorname{diam}_{d_\Lambda}X_i\le1$.
 \end{theorem}
 \begin{proof}\leanok
-    If $i=v$ is a site label, then $X_i=\{\sigma(v)\}$ is a singleton,
-    and every singleton is an admissible support at every range.
-    If $i=(v,w)$ is a forward-edge label, then $v$ and $w$ are adjacent
-    in the square grid, so $X_i=\{\sigma(v),\sigma(w)\}$ is a pair of
-    adjacent sites of the integer rectangle. Adjacent pairs are admissible
-    at range one.
+    By Theorem~\ref{thm:area_law_domain_identifications}, $X_v=\{\sigma(v)\}$
+    is a singleton ($\operatorname{diam}_{d_\Lambda}X_v=0$) and
+    $X_{(v,w)}=\{\sigma(v),\sigma(w)\}$ is an adjacent pair in $\Lambda$
+    ($\operatorname{diam}_{d_\Lambda}X_{(v,w)}=1$).
 \end{proof}
 
 \begin{theorem}[Distinct designated supports]
@@ -623,13 +534,12 @@ original open square. We state the two models separately, following
     \lean{TNLean.PEPS.Approximation.squareAreaLawSupport_injective}
     \leanok
     \uses{def:square_area_law_support,thm:square_area_law_support_admissible}
-    Distinct original interaction labels have distinct supports $X_i$.
+    The map $i\mapsto X_i$ on $\mathcal I_L$ is injective.
 \end{theorem}
 \begin{proof}\leanok
-    Site supports are singletons, whereas every edge has two distinct
-    endpoints. Two equal unordered edge supports have equal ordered
-    endpoints or reversed ordered endpoints. The latter case is excluded
-    because both edges have the prescribed forward orientation.
+    Since $|X_v|=1$ and $|X_{(v,w)}|=2$, vertex and edge supports are disjoint;
+    since every edge $(v,w)$ has forward orientation, $\{\sigma(v),\sigma(w)\}$
+    uniquely determines $(v,w)$.
 \end{proof}
 
 \begin{definition}[The original state in integer coordinates]
@@ -637,11 +547,9 @@ original open square. We state the two models separately, following
     \lean{TNLean.PEPS.Approximation.squareAreaLawState}
     \leanok
     \uses{thm:area_law_domain_identifications}
-    For an integer $q\ge0$, let $U$ be the unitary induced by the site
-    bijection $\sigma$ on the corresponding configuration spaces.
-    The integer-domain vector corresponding to an original vector
-    $\Omega$ is $U\Omega$. The local dimension and every physical
-    tensor factor remain the same.
+    For an integer $q\ge0$, let $U$ be the unitary on configuration spaces
+    induced by the site bijection $\sigma$, mapping an original vector $\Omega$
+    to $U\Omega\in\mathcal H_\Lambda$.
 \end{definition}
 
 \begin{theorem}[Norm in integer coordinates]
@@ -649,13 +557,10 @@ original open square. We state the two models separately, following
     \lean{TNLean.PEPS.Approximation.norm_squareAreaLawState}
     \leanok
     \uses{def:square_area_law_state}
-    For every original vector $\Omega$,
-    \begin{align*}
-        \|U\Omega\| & =\|\Omega\|.
-    \end{align*}
+    For every $\Omega$, $\|U\Omega\|=\|\Omega\|$.
 \end{theorem}
 \begin{proof}\leanok
-    The coordinate identification permutes an orthonormal basis.
+    The map $U$ permutes the orthonormal configuration basis.
 \end{proof}
 
 \begin{theorem}[Supported Hermitian parts]
@@ -663,13 +568,12 @@ original open square. We state the two models separately, following
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.hermitianTerm_mem_supportedOperators}
     \leanok
     \uses{def:square_hermitian_term}
-    The Hermitian part $A_i^{\mathrm h}$ of every original interaction
-    belongs to the algebra of operators supported on its designated
-    site or edge $S_i$.
+    For every $i\in\mathcal I_L$, $A_i^{\mathrm h}$ belongs to the algebra of
+    operators supported on $S_i$.
 \end{theorem}
 \begin{proof}\leanok
-    This algebra is closed under adjoints and real linear combinations, so it
-    contains $(A_i+A_i^*)/2$.
+    The algebra of operators supported on $S_i$ is closed under adjoints and
+    linear combinations, hence contains $A_i^{\mathrm h}=(A_i+A_i^*)/2$.
 \end{proof}
 
 \begin{definition}[The original square Hamiltonian as a finite-domain interaction]
@@ -680,17 +584,18 @@ original open square. We state the two models separately, following
         thm:square_area_law_support_injective,
         def:square_area_law_state,thm:square_hermitian_term_properties,
         thm:square_hermitian_term_supported_algebra}
-    Let $H=\sum_i A_i$ be an original Hermitian square Hamiltonian with
-    interaction bound $J\in\mathbb R$. At every designated support set
-    \begin{align*}
-        h_{X_i} & =U A_i^{\mathrm h}U^*,
-    \end{align*}
-    and put $h_X=0$ at every other admissible range-one support.
-    This defines a Hermitian interaction family on $\Lambda$, with the
-    same bound $\|h_X\|\le J$. Indeed, any unused admissible support
-    contains a site $v$, whose original term gives $0\le\|A_v\|\le J$.
-    An empty lattice has no admissible supports. Neither a nonempty lattice
-    nor a positive local dimension is required.
+    For a Hermitian square Hamiltonian $H=\sum_{i\in\mathcal I_L} A_i$ with
+    bound $J\in\mathbb R$ ($L,q\ge0$), define a range-$1$ interaction family on
+    $\Lambda$ by
+    \begin{align}
+        h_X & =\begin{cases}
+                   U A_i^{\mathrm h}U^* & \text{if }X=X_i\text{ for }i\in\mathcal I_L, \\
+                   0                    & \text{otherwise},
+               \end{cases}\notag
+    \end{align}
+    so $h_X^*=h_X$ and $\|h_X\|\le J$ for every admissible $X\subseteq\Lambda$
+    (any admissible $X\ne\varnothing$ contains some $v$, giving
+    $0\le\|A_v\|\le J$).
 \end{definition}
 
 \begin{theorem}[Exact Hamiltonian in integer coordinates]
@@ -698,15 +603,14 @@ original open square. We state the two models separately, following
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.toAreaLawHamiltonian_operator}
     \leanok
     \uses{def:square_area_law_hamiltonian,thm:square_hermitian_term_sum}
-    The finite-domain interaction has total Hamiltonian
-    \begin{align*}
-        H_{\mathrm{int}} & =UHU^*.
-    \end{align*}
+    The interaction family of Definition~\ref{def:square_area_law_hamiltonian}
+    has total Hamiltonian $H_{\mathrm{int}}=UHU^*$.
 \end{theorem}
 \begin{proof}\leanok
-    The support map is injective and every unused support contributes
-    zero. Thus the sum is $\sum_i U A_i^{\mathrm h}U^*$.
-    Conjugation is linear and $\sum_i A_i^{\mathrm h}=H$.
+    By Theorem~\ref{thm:square_area_law_support_injective} and
+    Theorem~\ref{thm:square_hermitian_term_sum},
+    $H_{\mathrm{int}}=\sum_{i\in\mathcal I_L}U A_i^{\mathrm h}U^*
+        =U\bigl(\sum_{i\in\mathcal I_L}A_i^{\mathrm h}\bigr)U^*=UHU^*$.
 \end{proof}
 
 \begin{theorem}[The original nearest-neighbor interaction family]
@@ -715,17 +619,15 @@ original open square. We state the two models separately, following
     \leanok
     \uses{def:polynomial_peps_model,def:square_area_law_hamiltonian,
         def:area_law_nearest_neighbor_support}
-    Let $H$ be an original square Hamiltonian with interaction bound $J\in\mathbb R$.
-    Index the sites and unordered nearest-neighbor edges of $\Lambda$ by
-    $\mathcal I$, and let $D_j$ be the singleton or endpoint pair of $j$.
-    There exist operators $(T_j)_{j\in\mathcal I}$ such that each $T_j$ is
-    supported on $D_j$ and
-    \begin{align*}
-        T_j^*                    & =T_j,              & \|T_j\| & \le J, &
-        \sum_{j\in\mathcal I}T_j & =H_{\mathrm{int}}.
-    \end{align*}
-    The assertion holds for every side length and local dimension, and for
-    every choice of order on the rectangle sites.
+    Let $H$ be an original square Hamiltonian with interaction bound $J\in\mathbb R$,
+    and index the sites and unordered nearest-neighbor edges of $\Lambda$ by
+    $\mathcal I$ with supports $D_j\subseteq\Lambda$. There exist operators
+    $(T_j)_{j\in\mathcal I}$ supported on $D_j$ satisfying
+    \begin{align}
+        T_j^*                    & =T_j,                    &
+        \|T_j\|                  & \le J,                   &
+        \sum_{j\in\mathcal I}T_j & =H_{\mathrm{int}}.\notag
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:square_interaction_support_relabel,
@@ -734,12 +636,15 @@ original open square. We state the two models separately, following
         thm:area_law_supported_identity,def:square_area_law_support,
         thm:area_law_domain_identifications,def:peps_square_edge_correspondence,
         def:square_hermitian_term}
-    Let $e$ be the site and edge correspondence, and put
-    $T_{e(i)}=U A_i^{\mathrm h}U^*$. The support identity gives $D_{e(i)}=X_i$.
-    The Hermitian part preserves the original support and norm bound, and
-    unitary conjugation preserves Hermiticity and the norm. Finally, the
-    bijection $e$ preserves the finite sum, so
-    $\sum_jT_j=U(\sum_i A_i^{\mathrm h})U^*=UHU^*=H_{\mathrm{int}}$.
+    With the bijection $e:\mathcal I_L\to\mathcal I$, set
+    $T_{e(i)}=U A_i^{\mathrm h}U^*$. By
+    Theorem~\ref{thm:square_interaction_support_relabel}, $D_{e(i)}=X_i$; by
+    Theorem~\ref{thm:square_hermitian_term_properties}, $T_{e(i)}$ is Hermitian
+    and supported on $D_{e(i)}$ with $\|T_{e(i)}\|\le J$; and by
+    Theorem~\ref{thm:square_hermitian_term_sum} and
+    Theorem~\ref{thm:square_area_law_hamiltonian_operator},
+    $\sum_{j\in\mathcal I}T_j=U\bigl(\sum_{i\in\mathcal I_L}A_i^{\mathrm h}\bigr)U^*
+        =UHU^*=H_{\mathrm{int}}$.
 \end{proof}
 
 \begin{theorem}[The same ground vector and full-system gap]
@@ -747,25 +652,19 @@ original open square. We state the two models separately, following
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.isGappedGroundState_toAreaLawHamiltonian}
     \leanok
     \uses{thm:square_area_law_hamiltonian_operator,thm:norm_square_area_law_state}
-    Let $E_0,\Delta\in\mathbb R$. If an original unit vector $\Omega$
-    satisfies
-    \begin{align*}
-        H\Omega & =E_0\Omega,                                \\
-        H-E_0I  & \ge\Delta(I-|\Omega\rangle\langle\Omega|),
-    \end{align*}
-    then $U\Omega$ is a unit vector satisfying
-    \begin{align*}
-        H_{\mathrm{int}}U\Omega & =E_0U\Omega,                                  \\
-        H_{\mathrm{int}}-E_0I
-                                & \ge\Delta(I-|U\Omega\rangle\langle U\Omega|).
-    \end{align*}
-    The conclusion holds for any real lower-gap parameter $\Delta$.
-    In particular, a positive original full-system gap is preserved.
+    Let $E_0,\Delta\in\mathbb R$. If a unit vector $\Omega$ satisfies
+    $H\Omega=E_0\Omega$ and $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$,
+    then $\|U\Omega\|=1$ and
+    \begin{align}
+        H_{\mathrm{int}}U\Omega & =E_0U\Omega,\notag                                  \\
+        H_{\mathrm{int}}-E_0I   & \ge\Delta(I-|U\Omega\rangle\langle U\Omega|).\notag
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Conjugating the eigenvector equation and the positive semidefinite
-    gap defect by the unitary $U$, together with norm preservation, gives both
-    relations.
+    Conjugate $H\Omega=E_0\Omega$ and
+    $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$ by the unitary $U$ using
+    Theorem~\ref{thm:square_area_law_hamiltonian_operator} and
+    Theorem~\ref{thm:norm_square_area_law_state}.
 \end{proof}
 
 \begin{theorem}[Regional entropy under relabeling of sites]
@@ -773,20 +672,15 @@ original open square. We state the two models separately, following
     \lean{TNLean.PEPS.Approximation.finiteProductEntropy_relabel}
     \leanok
     \uses{def:area_law_ground_entropy}
-    Let $\sigma:V\to W$ be a bijection of finite site sets, let $q\ge0$, and
-    let $U_\sigma$ be the unitary that relabels the tensor factors of
-    $(\mathbb C^q)^{\otimes V}$ along $\sigma$. For every vector $\Omega$ and
-    every $A\subseteq V$,
-    \begin{align*}
-        S_{U_\sigma\Omega}(\sigma(A)) & =S_\Omega(A).
-    \end{align*}
-    No normalization of $\Omega$ is required.
+    Let $\sigma:V\to W$ be a bijection of finite site sets, $q\ge0$, and
+    $U_\sigma$ the unitary relabeling tensor factors of $(\mathbb C^q)^{\otimes V}$
+    along $\sigma$. For every $\Omega\in(\mathbb C^q)^{\otimes V}$ and
+    $A\subseteq V$, $S_{U_\sigma\Omega}(\sigma(A))=S_\Omega(A)$.
 \end{theorem}
 \begin{proof}\leanok
-    Relabeling the sites of $\sigma(A)$ and of its complement identifies the
-    reduced matrix of $U_\sigma\Omega$ on $\sigma(A)$ with the reduced matrix
-    of $\Omega$ on $A$, conjugated by a permutation of configurations. A
-    permutation leaves the spectrum, and hence the entropy, unchanged.
+    Relabeling configurations along $\sigma|_{A}$ and $\sigma|_{V\setminus A}$
+    conjugates $\rho_{\sigma(A)}^{U_\sigma\Omega}$ by a permutation matrix to
+    $\rho_A^\Omega$, preserving its spectrum and entropy.
 \end{proof}
 
 \begin{theorem}[Crossing edges in integer coordinates]
@@ -794,14 +688,13 @@ original open square. We state the two models separately, following
     \lean{TNLean.PEPS.Approximation.card_edgeBoundary_rectangle}
     \leanok
     \uses{thm:area_law_domain_identifications}
-    For every set $A$ of sites of the original grid, the number of original
-    edges with exactly one endpoint in $A$ equals $|\partial_\Lambda\sigma(A)|$
-    in the integer rectangle $\Lambda$.
+    For every site subset $A$ of the original grid, the number of grid edges
+    with exactly one endpoint in $A$ equals $|\partial_\Lambda\sigma(A)|$.
 \end{theorem}
 \begin{proof}\leanok
-    The coordinate bijection $\sigma$ is a graph isomorphism onto the induced
-    graph of $\Lambda$. It therefore maps the crossing edges of $A$
-    bijectively onto those of $\sigma(A)$.
+    By Theorem~\ref{thm:area_law_domain_identifications}, $\sigma$ is a graph
+    isomorphism onto $\Lambda$, hence maps the crossing edges of $A$ bijectively
+    onto $\partial_\Lambda\sigma(A)$.
 \end{proof}
 
 \begin{definition}[The square-grid entropy area-law statement]
@@ -809,18 +702,15 @@ original open square. We state the two models separately, following
     \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLaw}
     \leanok
     \uses{def:polynomial_peps_model,def:area_law_ground_entropy}
-    The square-grid entropy area law is the assertion that for every integer
-    $q\ge2$ and all reals $J,\Delta>0$ there is a constant
-    $C_A=C_A(q,J,\Delta)\ge0$ with the following property. For every $L$, every
-    Hamiltonian of the original model with interaction bound $J$, and every
-    unit vector $\Omega$ and real $E_0$ satisfying
-    $H\Omega=E_0\Omega$ and $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$,
-    every set $A$ of sites of the grid satisfies
-    \begin{align*}
-        S_\Omega(A) & \le C_A|\partial_\Lambda A|,
-    \end{align*}
-    where $\partial_\Lambda A$ is the set of grid edges with exactly one
-    endpoint in $A$. The constant is chosen before $L$, $H$, $\Omega$ and $A$.
+    The square-grid entropy area law asserts that for every integer $q\ge2$ and
+    $J,\Delta>0$ there exists $C_A=C_A(q,J,\Delta)\ge0$ such that for every $L$,
+    every Hamiltonian $H$ of Definition~\ref{def:polynomial_peps_model} with
+    bound $J$, every unit vector $\Omega$ and $E_0\in\mathbb R$ satisfying
+    (\ref{eq:polynomial_peps_projector_gap}), and every site subset $A$,
+    \begin{align}
+        S_\Omega(A) & \le C_A|\partial_\Lambda A|,\notag
+    \end{align}
+    where $\partial_\Lambda A$ is the set of grid edges with one endpoint in $A$.
 \end{definition}
 
 \begin{definition}[The square-grid entropy area law at a given constant]
@@ -829,18 +719,15 @@ original open square. We state the two models separately, following
         TNLean.PEPS.Approximation.SquareEntropyAreaLaw.exists_squareEntropyAreaLawAt}
     \leanok
     \uses{def:square_entropy_area_law}
-    Let $q$ be an integer, $C_A$ a real number, and fix a family of states,
-    consisting for each $L$ of some vectors on the grid of side $L$ with local
-    dimension $q$. The square-grid entropy area law holds for the family with
-    constant $C_A$ if $C_A\ge0$ and, for every $L$, every state $\Omega$ of
-    the family and every set $A$ of sites, $S_\Omega(A)\le C_A|\partial_\Lambda A|$.
-    The ground states of the model at $J$ and $\Delta$ form the family of unit
-    vectors $\Omega$ for which some Hamiltonian of the original model with
-    interaction bound $J$ and some real $E_0$ satisfy $H\Omega=E_0\Omega$ and
-    $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$. The square-grid
-    entropy area law of Definition~\ref{def:square_entropy_area_law} says that
-    for $q\ge2$ and $J,\Delta>0$ some constant $C_A$ has this property for
-    that family.
+    For an integer $q$, $C_A\in\mathbb R$, and a family $\mathcal F=(\mathcal F_L)_L$
+    of states on the $L\times L$ grid with local dimension $q$, the square-grid
+    entropy area law holds for $\mathcal F$ with constant $C_A$ if $C_A\ge0$ and
+    $S_\Omega(A)\le C_A|\partial_\Lambda A|$ for all $L$, $\Omega\in\mathcal F_L$,
+    and $A$. The ground states of the model at $(J,\Delta)$ are the unit vectors
+    $\Omega$ satisfying (\ref{eq:polynomial_peps_projector_gap}) for some $H$ of
+    Definition~\ref{def:polynomial_peps_model} with bound $J$ and some
+    $E_0\in\mathbb R$; Definition~\ref{def:square_entropy_area_law} asserts the
+    existence of $C_A$ for this family whenever $q\ge2$ and $J,\Delta>0$.
 \end{definition}
 
 \begin{theorem}[The square-grid area law for a smaller family]
@@ -848,12 +735,13 @@ original open square. We state the two models separately, following
     \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLawAt.mono}
     \leanok
     \uses{def:square_entropy_area_law_at}
-    If the square-grid entropy area law holds for a family of states with
-    constant $C_A$, it holds with the same constant for every smaller family.
+    If the square-grid entropy area law holds for $\mathcal F$ with constant
+    $C_A$ and $\mathcal F'_L\subseteq\mathcal F_L$ for all $L$, then it holds
+    for $\mathcal F'$ with constant $C_A$.
 \end{theorem}
 \begin{proof}
     \leanok
-    Every state of the smaller family belongs to the larger one.
+    Every $\Omega\in\mathcal F'_L$ lies in $\mathcal F_L$.
 \end{proof}
 
 \begin{theorem}[Entropy area law on the square grid]
@@ -861,16 +749,15 @@ original open square. We state the two models separately, following
     \lean{TNLean.PEPS.AreaLaw.squareEntropyAreaLaw}
     \leanok
     \uses{def:square_entropy_area_law}
-    As Proposition~2.1 of \cite{OpenAI2026PolynomialPEPS}, the range-one
-    square-domain specialization of Theorem~1.1 and Corollary~1.2 of
-    \cite{OpenAI2026AreaLaw}, the square-grid entropy area law holds.
+    The square-grid entropy area law of Definition~\ref{def:square_entropy_area_law}
+    holds \cite[Proposition~2.1]{OpenAI2026PolynomialPEPS}, as the $R=1$ square
+    specialization of \cite[Theorem~1.1 and Corollary~1.2]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{cor:rectangles,thm:rectangular_equal_side_entropy}
-    The edge-boundary bound of Corollary~\ref{cor:rectangles}, specialized to
-    equal sides by Theorem~\ref{thm:rectangular_equal_side_entropy}, gives the
-    result.
+    Specialize Corollary~\ref{cor:rectangles} to equal side lengths via
+    Theorem~\ref{thm:rectangular_equal_side_entropy}.
 \end{proof}
 
 \begin{theorem}[The square-grid area law, assuming the uniform finite-domain area law]
@@ -879,36 +766,35 @@ original open square. We state the two models separately, following
         TNLean.PEPS.Approximation.finiteProductEntropy_le_of_areaLawBound}
     \leanok
     \uses{def:square_entropy_area_law,def:area_law_ground_entropy}
-    Assume the uniform finite-domain area-law assertion: for fixed $q\ge1$,
-    $R\ge0$ and $J,\Delta>0$, one constant $C(q,R,J,\Delta)\ge0$ bounds
-    $S_\Omega(A)$ by $C|\partial_\Lambda A|$ for every finite induced domain,
-    every interaction family of range $R$ and bound $J$, every gapped unit
-    ground vector, and every cut. Then the square-grid entropy area law holds,
-    with $C_A(q,J,\Delta)=C(q,1,J,\Delta)$.
+    If the uniform finite-domain area law of
+    Definition~\ref{def:area_law_ground_entropy} holds with constant
+    $C(q,R,J,\Delta)\ge0$, then the square-grid entropy area law of
+    Definition~\ref{def:square_entropy_area_law} holds with
+    $C_A(q,J,\Delta)=C(q,1,J,\Delta)$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:square_area_law_hamiltonian,thm:square_area_law_ground_gap,
         thm:finite_product_entropy_relabel,thm:square_edge_boundary_card}
-    Since $q\ge2$, the assumption applies with $R=1$. Placing $H$ on the
-    integer rectangle $\Lambda$ through its Hermitian interaction parts makes
-    $U\Omega$ a unit ground vector of the resulting Hamiltonian with the same
-    full-system gap $\Delta$. Applying the assumed bound to the cut $\sigma(A)$
-    then gives the result, since its entropy equals $S_\Omega(A)$ and its
-    crossing edges correspond bijectively to the original crossing edges of $A$.
+    For $q\ge2$ and $R=1$, Definition~\ref{def:square_area_law_hamiltonian} and
+    Theorem~\ref{thm:square_area_law_ground_gap} make $U\Omega$ a unit ground
+    vector of $H_{\mathrm{int}}$ on $\Lambda=\{0,\ldots,L-1\}^2$ with gap
+    $\Delta$. By Theorem~\ref{thm:finite_product_entropy_relabel} and
+    Theorem~\ref{thm:square_edge_boundary_card},
+    $S_\Omega(A)=S_{U\Omega}(\sigma(A))\le C(q,1,J,\Delta)|\partial_\Lambda\sigma(A)|
+        =C(q,1,J,\Delta)|\partial_\Lambda A|$.
 \end{proof}
-
 
 \begin{theorem}[Polynomial PEPS approximation]
     \label{thm:openai_polynomial_peps}
     \lean{TNLean.PEPS.Approximation.polynomialPEPSApproximation}
     \leanok
     \uses{def:polynomial_peps_model,lem:polynomial_peps_minimizing_phase}
-    In Theorem~1.1 of \cite{OpenAI2026PolynomialPEPS}, fix an integer $q\ge2$
-    and reals $J,\Delta>0$. There are $C,c>0$, depending only on these
-    parameters, such that for every $L\ge2$, every Hamiltonian in the
-    preceding model with a unique unit ground vector, up to phase, satisfying
-    (\ref{eq:polynomial_peps_projector_gap}) has a nonzero PEPS on the original open
-    grid with $D_e\le CL^c$ for every edge $e$ and
+    In \cite[Theorem~1.1]{OpenAI2026PolynomialPEPS}, for fixed $q\ge2$ and
+    $J,\Delta>0$, there exist $C,c>0$ such that for every $L\ge2$, every
+    Hamiltonian $H$ of Definition~\ref{def:polynomial_peps_model}, and every unit
+    ground vector $\Omega$ satisfying (\ref{eq:polynomial_peps_projector_gap}),
+    there is a nonzero PEPS $\Phi$ on the open $L\times L$ grid with
+    $D_e\le CL^c$ for every edge $e$ and
     \begin{align}
         \min_{\theta\in\mathbb R}
         \left\|\frac{\Phi}{\|\Phi\|}-e^{i\theta}\Omega\right\| & \le L^{-1}.
@@ -918,20 +804,14 @@ original open square. We state the two models separately, following
 \begin{proof}
     \leanok
     \uses{thm:polynomial_peps_explicit_constants}
-    Theorem~\ref{thm:polynomial_peps_explicit_constants} has the same
-    hypotheses and gives the approximation with $C=C_{\rm PEPS}$ and
-    $c=c_{\rm PEPS}$. Those constants are assembled along the following
-    argument.
-
-    Write $\Lambda_L$ for the sites of the grid and $\mathcal H_X$ for the
-    tensor product of the site spaces in $X\subseteq\Lambda_L$. The physical
-    registers are distributed among parties indexed by dyadic squares, starting
-    from one party holding $\Omega$ and ending with one party per site. The
-    area-law and collar estimates make the mutual information across tapered
-    buffers smaller than any fixed inverse power of $L$, which
-    lets an owner split its purification approximately. Near a square of
-    logarithmic size, the ground vector is projected with high accuracy onto a
-    sum of mutually orthogonal subspaces
+    Theorem~\ref{thm:polynomial_peps_explicit_constants} gives the result with
+    $C=C_{\rm PEPS}$ and $c=c_{\rm PEPS}$, assembled as follows. Write
+    $\Lambda_L$ for the grid sites and $\mathcal H_X$ for the tensor product
+    over $X\subseteq\Lambda_L$. A dyadic party tree distributes $\Omega$ from a
+    single root party to one party per site. Across tapered buffers, the
+    area-law and collar bounds reduce mutual information below any fixed
+    $L^{-p}$, allowing approximate purification splits. Near logarithmic-scale
+    squares, $\Omega$ projects onto a sum of orthogonal subspaces
     \begin{align}
         \operatorname{span}\{v_{jk}\}_{k=1}^{d_j}
         \otimes\mathcal H_{\Lambda_L\setminus X_j},
@@ -939,14 +819,9 @@ original open square. We state the two models separately, following
         \sum_jd_j & \le C_0L^{c_0},
         \label{eq:polynomial_peps_rank_bound}
     \end{align}
-    with nested square samples $X_j$ and orthonormal vectors
-    $v_{jk}\in\mathcal H_{X_j}$. Each party takes part in boundedly many
-    operations with other parties during its whole lifetime, and each such
-    operation is a sum of polynomially many products of private contractions
-    and bipartite vectors or covectors.
-
-    Telescoping the accumulated errors of these contractions, the final vector
-    $\Psi$ and the final reference vector $\Omega\otimes\Xi$ satisfy
+    for nested squares $X_j$ and orthonormal $v_{jk}\in\mathcal H_{X_j}$.
+    Telescoping the polynomial-rank party operations yields a final vector
+    $\Psi$ and reference $\Omega\otimes\Xi$ satisfying
     \begin{align}
         \|\Psi-\Omega\otimes\Xi\| & \le CL^{-17},
         \qquad\|\Psi\|\le1,
@@ -958,39 +833,32 @@ original open square. We state the two models separately, following
         \label{eq:polynomial_peps_protocol_density}
     \end{align}
     Density compression replaces the bipartite resources by polynomial sums of
-    product operators and gives an operator network $\sigma$ on the party graph
+    product operators, producing an operator network $\sigma$ on the party graph
     with polynomial link dimensions and
     \begin{align}
         \bigl\|\sigma-|\Omega\rangle\langle\Omega|\bigr\|_1
          & \le\eta:=CL^{-5}.
         \label{eq:polynomial_peps_compressed_density}
     \end{align}
-    If $\eta<1$, write $E=\sigma-|\Omega\rangle\langle\Omega|$ and
-    $a_z=\langle\Omega|z\rangle$ for product basis vectors $|z\rangle$. Since
-    $\sum_z\|E|z\rangle\|^2\le\eta^2$ and $\sum_z|a_z|^2=1$, some $z$ has
-    $a_z\ne0$ and $\|E|z\rangle\|\le\eta|a_z|$. The column $v=\sigma|z\rangle$
-    is then nonzero, has the same virtual dimensions, and satisfies
+    For $\eta<1$, let $E=\sigma-|\Omega\rangle\langle\Omega|$ and
+    $a_z=\langle\Omega|z\rangle$. Since $\sum_z\|E|z\rangle\|^2\le\eta^2$ and
+    $\sum_z|a_z|^2=1$, some product basis state $|z\rangle$ has $a_z\ne0$ and
+    $\|E|z\rangle\|\le\eta|a_z|$, so $v=\sigma|z\rangle\ne0$ satisfies
     \begin{align}
         \min_{\theta\in\mathbb R}
         \left\|\frac{v}{\|v\|}-e^{i\theta}\Omega\right\|
          & \le2\eta.
         \label{eq:polynomial_peps_column_error}
     \end{align}
-    Routing each link horizontally and then vertically through the anchors of
-    the dyadic blocks has edge congestion at most a constant $\chi$, also after
-    folding the padded grid into the $L\times L$ grid. If every link has
-    dimension at most $C_1L^k$, grouping the links crossing each grid edge
-    gives
+    Routing links with congestion at most $\chi$ and link dimension at most
+    $C_1L^k$ gives bond dimensions
     \begin{align}
         D_e & \le(C_1L^k)^\chi=C_1^\chi L^{k\chi}.
         \label{eq:polynomial_peps_routed_bond}
     \end{align}
-    For $L\ge L_0$ the error $2CL^{-5}$ is at most $L^{-1}$, so
-    (\ref{eq:polynomial_peps_column_error}) gives
-    (\ref{eq:polynomial_peps_phase_error}). Each of the finitely many sizes
-    $2\le L<L_0$ has an exact representation with bond dimensions bounded
-    independently of the Hamiltonian, which is absorbed by enlarging the
-    prefactor in (\ref{eq:polynomial_peps_routed_bond}).
+    For $L\ge L_0$, $2CL^{-5}\le L^{-1}$, so (\ref{eq:polynomial_peps_column_error})
+    yields (\ref{eq:polynomial_peps_phase_error}); sizes $2\le L<L_0$ are
+    absorbed by enlarging the prefactor in (\ref{eq:polynomial_peps_routed_bond}).
 \end{proof}
 
 \begin{definition}[Polygonal lattice templates]
@@ -1009,10 +877,9 @@ original open square. We state the two models separately, following
     }
     \leanok
     \uses{def:area_law_domain,def:area_law_hamiltonian}
-    Following Definition~9.3 of \cite{OpenAI2026AreaLaw}, fix $D_0>0$ and a
-    sufficiently large positive numerical constant $C_{\rm tpl}$ before
-    choosing templates. A template with positive integer parameters $n,s_0$
-    is a nonempty finite $T\subset\mathbb Z^2$ with
+    Following \cite[Definition~9.3]{OpenAI2026AreaLaw}, fix $D_0>0$ and
+    $C_{\rm tpl}>0$. A template with integer parameters $n,s_0\ge1$ is a
+    nonempty finite $T\subset\mathbb Z^2$ satisfying
     \begin{align}
         T                            & =\bigcup_{a=0}^{N_0-1}(P_a\cap\mathbb Z^2),
         \label{eq:area_law_template_cover}                                         \\
@@ -1020,29 +887,24 @@ original open square. We state the two models separately, following
         \label{eq:area_law_template_pieces}                                        \\
         C_{\rm tpl}N_0(s_0+1)        & \le n,
         \label{eq:area_law_template_scale}                                         \\
-        \operatorname{diam}_\infty T & \le n.
+        \operatorname{diam}_\infty T & \le n,
         \label{eq:area_law_template_diameter}
     \end{align}
-    Each $P_a$ is a closed convex rectangle or triangle of sup-norm diameter at
-    most $s_0$, with side slopes in $\{0,\infty,1,-1\}$. Triangles have
-    noncollinear vertices and rectangles have nonzero sides; this ordinary
-    reading of the source's polygons is recorded in
-    \cite{gap:arealaw2d_nondegenerate_templates}. The union may be
-    disconnected. Geometric estimates require a uniform lower bound on
-    $C_{\rm tpl}$, chosen independently of the template.
-    Separation from a fixed cut set $Z$ means
-    $\operatorname{dist}_\infty(T,Z)>4D_0s_0$. For the fixed cut
-    $A\subseteq\Lambda$ of (\ref{eq:area_law_boundary}), put
+    where each $P_a\subset\mathbb R^2$ is a nondegenerate closed convex
+    rectangle or triangle \cite{gap:arealaw2d_nondegenerate_templates} with
+    $\operatorname{diam}_\infty P_a\le s_0$ and side slopes in
+    $\{0,\infty,1,-1\}$. Separation from a cut endpoint set $Z$ means
+    $\operatorname{dist}_\infty(T,Z)>4D_0s_0$. For $A\subseteq\Lambda$ as in
+    (\ref{eq:area_law_boundary}), define the ambient dilation, core, and collar
     \begin{align}
         T_j & =T+([-j,j]^2\cap\mathbb Z^2),
         \label{eq:area_law_template_dilation} \\
         X   & =A\cap T,
         \label{eq:area_law_template_core}     \\
-        Q_j & =A\cap(T_j\setminus T).
+        Q_j & =A\cap(T_j\setminus T),
         \label{eq:area_law_template_collar}
     \end{align}
-    In particular, $T_0=T$. These are ambient dilations, not the induced-graph
-    neighborhoods (\ref{eq:area_law_graph_neighborhood}).
+    so $T_0=T$.
 \end{definition}
 
 \begin{definition}[Rectangle templates, unions and omitted pieces]
@@ -1056,19 +918,16 @@ original open square. We state the two models separately, following
     \leanok
     \uses{def:area_law_template}
     \begin{enumerate}
-        \item Let $C_{\rm tpl}\ge1$ and $C_{\rm tpl}(s_0+1)\le n$. An integer
-              rectangle $Q=([x_0,x_1]\times[y_0,y_1])\cap\mathbb Z^2$ with at
-              most $s_0$ sites along each axis, including a thin rectangle of
-              one row or one column, defines the template with the single piece
+        \item For $C_{\rm tpl}\ge1$ and $C_{\rm tpl}(s_0+1)\le n$, an integer
+              rectangle $Q=([x_0,x_1]\times[y_0,y_1])\cap\mathbb Z^2$ with
+              $x_1-x_0+1,y_1-y_0+1\le s_0$ defines the one-piece template
               $P=[x_0,x_1+\tfrac12]\times[y_0,y_1+\tfrac12]$.
-        \item For templates $T$ and $T'$ with parameters $(n,s_0)$ and $N_0$
-              and $N_0'$ pieces, with $C_{\rm tpl}(N_0+N_0')(s_0+1)\le n$ and
+        \item For templates $T,T'$ with parameters $(n,s_0)$ and piece counts
+              $N_0,N_0'$ satisfying $C_{\rm tpl}(N_0+N_0')(s_0+1)\le n$ and
               $\operatorname{diam}_\infty(T\cup T')\le n$, the union template
-              $T\cup T'$ has the pieces of $T$ followed by those of $T'$. The
-              union need not be connected.
-        \item For $C_{\rm tpl}\ge0$, the template obtained from $T$ by deleting
-              the pieces with $P_a\cap\mathbb Z^2=\varnothing$ has the same
-              point set.
+              $T\cup T'$ concatenates their piece lists.
+        \item For $C_{\rm tpl}\ge0$, omitting pieces with
+              $P_a\cap\mathbb Z^2=\varnothing$ from $T$ preserves the point set.
     \end{enumerate}
 \end{definition}
 
@@ -1088,24 +947,21 @@ original open square. We state the two models separately, following
     }
     \leanok
     \uses{def:area_law_template_instances}
-    The piece $P$ of a rectangle template is nondegenerate with horizontal and
-    vertical sides, and $P\cap\mathbb Z^2=Q$, so the rectangle template is
-    $Q$ with one piece. The union template has point set $T\cup T'$ and
-    $N_0+N_0'$ pieces, and omitting empty pieces keeps the point set. If every endpoint of a crossing
-    edge of the cut has sup-norm distance more than $D|Q|$ from $Q$, where
-    $|Q|$ is the larger side, and $4D_0s_0\le D|Q|$, then the rectangle
-    template is separated from the cut. After empty pieces are omitted, every
-    sampled piece is nonempty and the number of pieces does not increase.
+    In Definition~\ref{def:area_law_template_instances}, $P$ is nondegenerate
+    with axis-aligned sides and $P\cap\mathbb Z^2=Q$ ($N_0=1$); $T\cup T'$ has
+    point set $T\cup T'$ and $N_0+N_0'$ pieces; and omitting empty pieces
+    preserves $T$, leaves only nonempty pieces, and does not increase $N_0$. If
+    $\operatorname{dist}_\infty(Q,Z)>D|Q|$ with $|Q|$ the larger side of $Q$
+    and $4D_0s_0\le D|Q|$, then $Q$ is separated from $Z$.
 \end{lemma}
-
 \begin{proof}
     \leanok
-    The sup-norm diameter of $P$ is at most $|Q|-\tfrac12\le s_0$, and an
-    integer $a$ satisfies $a\le b+\tfrac12$ exactly when $a\le b$. The
-    diameter of $Q$ is less than $s_0\le n$. The clearance assumption gives
-    $\operatorname{dist}_\infty(Q,Z)>D|Q|\ge4D_0s_0$. At least one piece of a
-    template is nonempty because the template is nonempty, and decreasing
-    $N_0$ preserves $C_{\rm tpl}N_0(s_0+1)\le n$ when $C_{\rm tpl}\ge0$.
+    Since $a\in\mathbb Z$ satisfies $a\le b+\tfrac12\iff a\le b$, we have
+    $P\cap\mathbb Z^2=Q$ with $\operatorname{diam}_\infty P\le|Q|-\tfrac12\le s_0$
+    and $\operatorname{diam}_\infty Q<s_0\le n$. The clearance condition gives
+    $\operatorname{dist}_\infty(Q,Z)>D|Q|\ge4D_0s_0$. Since $T\ne\varnothing$,
+    at least one piece has $P_a\cap\mathbb Z^2\ne\varnothing$, and reducing
+    $N_0$ preserves $C_{\rm tpl}N_0(s_0+1)\le n$ for $C_{\rm tpl}\ge0$.
 \end{proof}
 
 \begin{definition}[Ordered two-family partition]
@@ -1115,12 +971,10 @@ original open square. We state the two models separately, following
         TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.earlierSameFamily
     }
     \leanok
-    A finite region $A$ is partitioned into a residual set $D$ and pairwise
-    disjoint pieces $X_i$. Each piece has a family label in $\{0,1\}$, and one
-    finite order induces the order within each family. For a piece $X_i$ in
-    family $f$, the earlier same-family region is
-    $\bigcup_{j<i,\,f(j)=f}X_j$. No size, separation, or information bound is
-    assumed in this definition.
+    An ordered two-family partition of a finite set $A$ is a partition
+    $A=D\mathbin{\dot\cup}\bigsqcup_i X_i$ into a residual set $D$ and ordered
+    pieces $X_i$ with family labels $f(i)\in\{0,1\}$. The earlier same-family
+    union of $X_i$ is $\bigcup_{j<i,\,f(j)=f(i)}X_j$.
 \end{definition}
 
 \begin{theorem}[Inverse images of ordered two-family partitions]
@@ -1130,19 +984,18 @@ original open square. We state the two models separately, following
         TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.comap}
     \leanok
     \uses{def:area_law_two_family_partition}
-    Let $A\subseteq V$ be finite, with an ordered two-family partition
-    whose residual is $D$ and pieces $P_i$. If $W$ is finite and $f:W\to V$, then $f^{-1}(A)$ has
-    the partition with residual $f^{-1}(D)$ and pieces $f^{-1}(P_i)$,
-    retaining the same labels, families and order. Inverse images commute
-    with the union of all earlier pieces in a given family. If $f$ is
-    injective, the residual cardinality does not increase.
+    For a finite $A\subseteq V$ with ordered two-family partition
+    $A=D\mathbin{\dot\cup}\bigsqcup_i P_i$ and a map $f:W\to V$ on a finite set
+    $W$, $f^{-1}(A)=f^{-1}(D)\mathbin{\dot\cup}\bigsqcup_i f^{-1}(P_i)$ is an
+    ordered two-family partition with the same labels, families, and order, and
+    $f^{-1}\bigl(\bigcup_{j<i,\,f(j)=f(i)}P_j\bigr)
+        =\bigcup_{j<i,\,f(j)=f(i)}f^{-1}(P_j)$. If $f$ is injective,
+    $|f^{-1}(D)|\le|D|$.
 \end{theorem}
 \begin{proof}
     \leanok
-    Inverse images preserve disjointness and unions. The family and order
-    conditions concern only the retained labels, so they are unchanged.
-    The final cardinality bound follows by restricting the injection $f$
-    to the residual set. Empty inverse-image pieces retain their labels.
+    Preimages preserve disjoint unions and commute with unions, and
+    $|f^{-1}(D)|\le|D|$ when $f$ is injective.
 \end{proof}
 
 \begin{theorem}[Exact exponent gaps]
@@ -1166,28 +1019,24 @@ original open square. We state the two models separately, following
         TNLean.PEPS.AreaLaw.Exponents.geometry_gaps
     }
     \leanok
-    The final box error exponent is $e_*=2\cdot10^{-6}$, and the scanner choices are
-    $(\mu,\nu,\ell_{\rm sc},\omega,\kappa)=(1/4,1/1000,1/100000,1/20000,1/1000000)$.
-    The amplification uses $\varepsilon=10^{-5}$ and $\alpha=p/(p+1)$.
-    Set $\beta=1-2\cdot10^{-6}$, $\delta_0=2\cdot10^{-7}$,
-    $\zeta=1-\delta_0/2$, $\rho_0=(1+\beta)/2$, and $\ell_{\rm geo}=10^{-5}$.
-    Then
+    Set $e_*=2\cdot10^{-6}$,
+    $(\mu,\nu,\ell_{\rm sc},\omega,\kappa)=(1/4,1/1000,1/100000,1/20000,1/1000000)$,
+    $\varepsilon=10^{-5}$, $\alpha=p/(p+1)$, $\beta=1-2\cdot10^{-6}$,
+    $\delta_0=2\cdot10^{-7}$, $\zeta=1-\delta_0/2$, $\rho_0=(1+\beta)/2$, and
+    $\ell_{\rm geo}=10^{-5}$. Then
     \begin{align}
         (1+2\delta_0)\beta              & <\zeta<1,
         \label{eq:area_law_zeta_gap}                       \\
         (1+2\delta_0)(1-\ell_{\rm geo}) & <1,
         \label{eq:area_law_ell_gap}                        \\
-        1-\ell_{\rm geo}                & <\beta<\rho_0<1.
+        1-\ell_{\rm geo}                & <\beta<\rho_0<1,
         \label{eq:area_law_rho_gap}
     \end{align}
-    The choice $p=10^6$ also satisfies $p/(p+1)>1-10^{-6}$. The scanner
-    exponent $\ell_{\rm sc}$ and the geometric exponent $\ell_{\rm geo}$ are
-    separate choices, which happen to have the same value.
+    and $p=10^6$ gives $\alpha=p/(p+1)>1-10^{-6}$.
 \end{theorem}
 \begin{proof}\leanok
-    Substituting the stated rational values and comparing integers after
-    multiplying by positive denominators shows that each gap is strictly
-    positive.
+    Direct rational arithmetic verifies (\ref{eq:area_law_zeta_gap})--(\ref{eq:area_law_rho_gap})
+    and $10^6/(10^6+1)>1-10^{-6}$.
 \end{proof}
 
 \begin{definition}[The sublinear collar bound]
@@ -1197,25 +1046,19 @@ original open square. We state the two models separately, following
         TNLean.PEPS.AreaLaw.sublinearCollarBound_iff_exists_sublinearCollarBoundAt}
     \leanok
     \uses{def:area_law_ground_entropy,def:area_law_template,thm:area_law_exponent_gaps}
-    Fix $q,R,J,\Delta$ and the template constants $D_0,C_{\rm tpl}$. For
-    disjoint $B,C\subseteq\Lambda$ write
-    $I_\Omega(B:C)=S_\Omega(B)+S_\Omega(C)-S_\Omega(B\cup C)$. The sublinear
-    collar bound of Proposition~9.6 of \cite{OpenAI2026AreaLaw} for these
-    constants is the assertion that there are $C$ and
-    $N$ with the following property. Let $n\ge N$, let $\Omega$ be the gapped
-    ground vector of an admissible Hamiltonian on a finite induced domain
-    $\Lambda$, let $A\subseteq\Lambda$, and let $T$ be a template with parameters
-    $(n,s_0)$ separated from the endpoints of the cut edges. Put
-    $L=\lfloor n^{1-\varepsilon}\rfloor$, $X=A\cap T$ and $S_0=A\cap T_L$, and
-    suppose $L\le s_0$. Then
-    \begin{align*}
-        I_\Omega(X:\Lambda\setminus S_0) & \le Cn^{1-\varepsilon},
-        \qquad |S_0|\le Cn^2,
-    \end{align*}
-    and each of the cuts $X$, $S_0$ and $S_0\setminus X$ has at most $Cn$
-    crossing edges. When this property holds for a given pair $(C,N)$, we say
-    that the sublinear collar bound holds with constant $C$ and threshold $N$;
-    the sublinear collar bound is the existence of such a pair.
+    Fix $q,R,J,\Delta$ and $D_0,C_{\rm tpl}$. The sublinear collar bound
+    \cite[Proposition~9.6]{OpenAI2026AreaLaw} holds with constant $C$ and
+    threshold $N$ if for every $n\ge N$, every gapped ground vector $\Omega$ of
+    an admissible Hamiltonian on a finite induced domain $\Lambda$, every
+    $A\subseteq\Lambda$, and every template $T$ with parameters $(n,s_0)$
+    separated from $Z$ with $L=\lfloor n^{1-\varepsilon}\rfloor\le s_0$, setting
+    $X=A\cap T$ and $S_0=A\cap T_L$ gives
+    \begin{align}
+        I_\Omega(X:\Lambda\setminus S_0)                                                   & \le Cn^{1-\varepsilon}, &
+        |S_0|                                                                              & \le Cn^2,               &
+        |\partial_\Lambda X|,\,|\partial_\Lambda S_0|,\,|\partial_\Lambda(S_0\setminus X)| & \le Cn.\notag
+    \end{align}
+    The sublinear collar bound is the existence of such $(C,N)$.
 \end{definition}
 
 \begin{definition}[The amplification bound]
@@ -1225,29 +1068,24 @@ original open square. We state the two models separately, following
         TNLean.PEPS.AreaLaw.amplificationBound_iff_forall_exists_amplificationBoundAt}
     \leanok
     \uses{def:area_law_ground_entropy,def:area_law_radius_exponent}
-    Fix $q,R,J,\Delta$. The amplification bound of Proposition~10.2 of
-    \cite{OpenAI2026AreaLaw} is the assertion that for every
-    $C_0>0$ and every integer $M\ge1$ there are $C_M$ and $N$ with the
-    following property. Let $n\ge\max(2,N)$, let $\Omega$ be the gapped ground
-    vector of an admissible Hamiltonian on a finite induced domain $\Lambda$,
-    let $A\subseteq\Lambda$ and let $T\subset\mathbb Z^2$ be finite. Put
-    $L=\lfloor n^{1-\varepsilon}\rfloor$, $X=A\cap T$, $S_0=A\cap T_L$ and
-    $Y=S_0\setminus X$. Suppose that $|S_0|\le C_0n^2$, that each of the cuts
-    $X$, $Y$, $S_0$ has at most $C_0n$ crossing edges, and that
-    $I_\Omega(X:\Lambda\setminus S_0)\le C_0n^{1-\varepsilon}$. Then there is
-    an integer $r\le C_Mn^{(1-\varepsilon)/\alpha}$ such that
-    \begin{align*}
+    Fix $q,R,J,\Delta$. The amplification bound
+    \cite[Proposition~10.2]{OpenAI2026AreaLaw} holds at $(C_0,M)$ ($C_0>0$,
+    $M\ge1$) with constant $C_M$ and threshold $N$ if for every
+    $n\ge\max(2,N)$, every gapped ground vector $\Omega$ of an admissible
+    Hamiltonian on $\Lambda$, every $A\subseteq\Lambda$, and every finite
+    $T\subset\mathbb Z^2$, setting $L=\lfloor n^{1-\varepsilon}\rfloor$,
+    $X=A\cap T$, $S_0=A\cap T_L$, and $Y=S_0\setminus X$, the hypotheses
+    $|S_0|\le C_0n^2$, $|\partial_\Lambda X|,|\partial_\Lambda Y|,|\partial_\Lambda S_0|\le C_0n$,
+    and $I_\Omega(X:\Lambda\setminus S_0)\le C_0n^{1-\varepsilon}$ imply that
+    there exists an integer $r\le C_Mn^{(1-\varepsilon)/\alpha}$ such that
+    \begin{align}
         I_\Omega(X':J) & \le C_Mn^{-M}
-        \qquad\text{for every }X'\subseteq X\text{ and every }
-        J\subseteq\Lambda\setminus N_{2r}^\Lambda(S_0).
-    \end{align*}
-    If in addition $\operatorname{dist}_\infty(T,Z)>L+n^\beta$, where $Z$ is the
-    set of endpoints of the cut edges, then $N_{2r}^\Lambda(S_0)\subseteq A$;
-    its further assertion $L+2r=o(n^\beta)$ follows from the radius bound by
-    Theorem~\ref{thm:area_law_uniform_collar_threshold}.
-    When this property holds for given $C_0$, $M$ and a given pair $(C_M,N)$,
-    we say that the amplification bound holds at $(C_0,M)$ with constant $C_M$
-    and threshold $N$.
+        \qquad\bigl(X'\subseteq X,\ J\subseteq\Lambda\setminus N_{2r}^\Lambda(S_0)\bigr),\notag
+    \end{align}
+    and $\operatorname{dist}_\infty(T,Z)>L+n^\beta$ implies
+    $N_{2r}^\Lambda(S_0)\subseteq A$ (with $L+2r=o(n^\beta)$ by
+    Theorem~\ref{thm:area_law_uniform_collar_threshold}). The amplification
+    bound asserts the existence of $(C_M,N)$ for every $C_0>0$ and $M\ge1$.
 \end{definition}
 
 \begin{definition}[The two-family decomposition]
@@ -1256,23 +1094,23 @@ original open square. We state the two models separately, following
     \leanok
     \uses{def:area_law_template,def:area_law_two_family_partition,
         thm:area_law_exponent_gaps}
-    Fix the template constants $D_0,C_{\rm tpl}$. The two-family decomposition
-    of Proposition~11.2 of \cite{OpenAI2026AreaLaw}
-    for these constants is the assertion that for every $n_*\ge1$ there is $C$
-    with the following property. For every finite induced domain $\Lambda$ and
-    every $A\subseteq\Lambda$ with $b=|\partial_\Lambda A|>0$, with $Z$ the set
-    of endpoints of the cut edges, there is an ordered two-family partition of
-    $A$ into a residual set $D$ and nonempty pieces $X_i$ with labels $f_i$,
-    together with templates $T_i$ with parameters $(n_i,s_i)$, such that
-    $|D|\le Cb$, $X_i\subseteq A\cap T_i$, each $T_i$ is separated from $Z$,
-    $\lfloor n_i^{1-\ell_{\rm geo}}\rfloor\le s_i$, $n_i\ge n_*$,
-    \begin{align*}
-        \operatorname{dist}_\infty(T_i,Z) & >2n_i^\beta,
-        \qquad
+    Fix $D_0,C_{\rm tpl}$. The two-family decomposition
+    \cite[Proposition~11.2]{OpenAI2026AreaLaw} asserts that for every $n_*\ge1$
+    there exists $C$ such that for every finite induced domain $\Lambda$ and
+    every $A\subseteq\Lambda$ with $b=|\partial_\Lambda A|>0$ and cut endpoints
+    $Z$, there is an ordered two-family partition
+    $A=D\mathbin{\dot\cup}\bigsqcup_i X_i$ ($X_i\ne\varnothing$, labels $f_i$)
+    and templates $T_i$ with parameters $(n_i,s_i)$ separated from $Z$ satisfying
+    \begin{align}
+        |D|                                   & \le Cb,                    &
+        \sum_in_i^{-100}                      & \le Cb,                    &
+        X_i                                   & \subseteq A\cap T_i,\notag          \\
+        \lfloor n_i^{1-\ell_{\rm geo}}\rfloor & \le s_i,                   &
+        n_i                                   & \ge n_*,                   & \notag \\
+        \operatorname{dist}_\infty(T_i,Z)     & >2n_i^\beta,               &
         \operatorname{dist}_\infty\Bigl(T_i,
-        \bigcup_{j<i,\,f_j=f_i}X_j\Bigr)>2n_i^\beta,
-    \end{align*}
-    and $\sum_in_i^{-100}\le Cb$.
+        \bigcup_{j<i,\,f_j=f_i}X_j\Bigr)      & >2n_i^\beta.\notag
+    \end{align}
 \end{definition}
 
 \begin{lemma}[Retained primaries]
@@ -1283,29 +1121,26 @@ original open square. We state the two models separately, following
     \uses{lem:area_law_repair_rank_zero_primary_ancestor,
         thm:area_law_primary_same_parity_separation,
         thm:area_law_initial_primary_error_sum}
-    At every generation of the repair construction, an identifier of birth rank
-    zero other than the dummy is a retained primary of a layer $k\ge k_0$, and
-    its characteristic length is $r=2^k$. Its closed birth region lies at
-    distance at least $\min(t_k,r/2)$ from the closed birth region of every
-    other identifier of birth rank zero with the same label. For every
-    $C_P>0$ there is a constant $M$, chosen before the origin, the domain, the
-    cut and the construction parameters, such that every finite set of such
-    identifiers satisfies
-    \begin{align*}
+    At every repair generation, any non-dummy identifier of birth rank $0$ is a
+    retained primary of layer $k\ge k_0$ with characteristic length $r=2^k$, and
+    its closed birth region has $\ell_\infty$-distance at least $\min(t_k,r/2)$
+    from that of every other rank-$0$ identifier with the same label. For every
+    $C_P>0$ there exists $M$ (independent of the origin, $\Lambda$, $A$, and
+    the construction parameters) such that for layer width $C$, every finite set
+    of such identifiers satisfies
+    \begin{align}
         \sum_x\bigl\lceil C_P\,r_x^{1+2\delta_0}\bigr\rceil^{-100}
-         & \le M(2C+1)^2\,|\partial_\Lambda A|,
-    \end{align*}
-    where $C$ is the layer width.
+         & \le M(2C+1)^2\,|\partial_\Lambda A|.\notag
+    \end{align}
 \end{lemma}
-
 \begin{proof}
     \leanok
-    The identifier is the image of a unique original primary, and retention
-    preserves its birth region, its label and its characteristic length. Equal
-    labels of primaries mean equal layer parity, so the separation of primary
-    birth regions of the same parity applies. For the sum, distinct
-    identifiers come from distinct primaries; grouping them by layer bounds the
-    sum by the weighted count of primaries over finitely many layers.
+    By Lemma~\ref{lem:area_law_repair_rank_zero_primary_ancestor}, each such
+    identifier is a unique retained primary with unchanged birth region, label,
+    and $r_x=2^k$. Equal labels imply equal layer parity, so
+    Theorem~\ref{thm:area_law_primary_same_parity_separation} gives the
+    separation, and grouping by layer gives the sum bound via
+    Theorem~\ref{thm:area_law_initial_primary_error_sum}.
 \end{proof}
 
 \begin{lemma}[Exceptional sites at an empty generation]
@@ -1315,21 +1150,21 @@ original open square. We state the two models separately, following
     \uses{thm:area_law_repair_terminal_interiors_before_empty,
         thm:area_law_repair_dummy_sites_count,
         thm:area_law_repair_terminal_prefix_sites}
-    At a generation $N$ of the repair construction without marks, suppose that
-    the marks of the generations before $N$ number at most
-    $M(2C+1)^2|\partial_\Lambda A|$ in total. Then the sites of $A$ in the dummy
-    region or in a terminal square number at most
-    \begin{align*}
+    At a mark-free generation $N$, if the total number of marks before $N$ is at
+    most $M(2C+1)^2|\partial_\Lambda A|$, then the number of sites of $A$ in the
+    dummy region or in a terminal square is at most
+    \begin{align}
         2\bigl(2(C+1)2^{k_0}+1\bigr)^2|\partial_\Lambda A|
-        +(2S_*+1)^2M(2C+1)^2|\partial_\Lambda A|.
-    \end{align*}
+        +(2S_*+1)^2M(2C+1)^2|\partial_\Lambda A|.\notag
+    \end{align}
 \end{lemma}
-
 \begin{proof}
     \leanok
-    At an empty generation every terminal square was removed at an earlier
-    generation. The two terms bound the dummy sites and the sites of the
-    terminal squares of those generations.
+    By Theorem~\ref{thm:area_law_repair_terminal_interiors_before_empty}, every
+    terminal square was removed before $N$;
+    Theorem~\ref{thm:area_law_repair_dummy_sites_count} and
+    Theorem~\ref{thm:area_law_repair_terminal_prefix_sites} bound the dummy and
+    terminal-square sites.
 \end{proof}
 
 \begin{theorem}[Two families with separated birth templates]
@@ -1337,11 +1172,10 @@ original open square. We state the two models separately, following
     \lean{TNLean.PEPS.AreaLaw.twoFamilyDecomposition}
     \leanok
     \uses{def:area_law_two_family_decomposition}
-    For all real $D_0$ and $C_{\rm tpl}$ the two-family decomposition of
-    Definition~\ref{def:area_law_two_family_decomposition} holds. This is
-    Proposition~11.2 of \cite{OpenAI2026AreaLaw}.
+    For all $D_0,C_{\rm tpl}\in\mathbb R$, the two-family decomposition of
+    Definition~\ref{def:area_law_two_family_decomposition} holds
+    \cite[Proposition~11.2]{OpenAI2026AreaLaw}.
 \end{theorem}
-
 \begin{proof}
     \leanok
     \uses{thm:area_law_repair_birth_templates,
@@ -1361,48 +1195,45 @@ original open square. We state the two models separately, following
         thm:area_law_repair_retained_nonprimary_error_sum,
         lem:area_law_two_family_primaries,
         lem:area_law_two_family_exceptional_sites}
-    The constant $C_{\rm tpl}$ enters a template only through
-    $C_{\rm tpl}N_0(s_0+1)\le n$, whose other factors are nonnegative, so a
-    template for $\max(C_{\rm tpl},1)$ is a template for $C_{\rm tpl}$. We may
-    therefore assume $C_{\rm tpl}\ge1$.
-    Fix $n_*\ge1$. The constants are chosen in the order of the source. First
-    take the template coefficients $C_P$ and $C_B$ for $C_{\rm tpl}$, the
-    isolation constant $a_0=1/4$, and the separation constant $c_1$. Next take
-    $u_*$ so large that every $u\ge u_*$ satisfies
-    $2\lceil C_Bu\rceil^\beta<c_1u^{\rho_0}$,
-    $\lfloor\lceil C_Bu\rceil^{1-\ell_{\rm geo}}\rfloor\le u$ and
-    $C_Bu\ge n_*$, and take the stopping scale $S_*\ge\max(u_*,2)$ above the
-    thresholds of the template, isolation and separation estimates. Then take
-    the layer width $C>4D_0$, and finally $k_0$ above the thresholds of the
-    templates, of the isolation hypotheses, of birth separation, of the lower
-    bound $u\ge u_*$ for the characteristic lengths of positive birth rank, and
-    of the primary scale limits with factor $1/8$ and $n_*$.
+    Replacing $C_{\rm tpl}$ by $\max(C_{\rm tpl},1)$ preserves
+    (\ref{eq:area_law_template_scale}), so assume $C_{\rm tpl}\ge1$. Fix
+    $n_*\ge1$, choose $C_P,C_B$ for $C_{\rm tpl}$, $a_0=1/4$, and $c_1$ from
+    Theorem~\ref{thm:area_law_birth_separation}. Choose $u_*$ so that every
+    $u\ge u_*$ satisfies $2\lceil C_Bu\rceil^\beta<c_1u^{\rho_0}$,
+    $\lfloor\lceil C_Bu\rceil^{1-\ell_{\rm geo}}\rfloor\le u$, and
+    $C_Bu\ge n_*$ (Theorem~\ref{thm:area_law_fine_clearance} and
+    Theorem~\ref{thm:area_law_belt_replacement_scale_limit}); choose
+    $S_*\ge\max(u_*,2)$, $C>4D_0$, and $k_0$ above the thresholds of
+    Theorem~\ref{thm:area_law_repair_birth_templates},
+    Lemma~\ref{lem:area_law_repair_metric_choice},
+    Theorem~\ref{thm:area_law_birth_separation},
+    Theorem~\ref{thm:area_law_repair_positive_rank_length_lower_bound}, and
+    Theorem~\ref{thm:area_law_primary_scale_limits}.
 
-    Let $\Lambda$ and $A$ with $b=|\partial_\Lambda A|>0$ be given, and run the
-    repair construction at the prescribed origin. It reaches a generation
-    without marks. The non-dummy identifiers whose current regions meet $A$,
-    ordered by nondecreasing birth rank, give the pieces $X_i$ and their
-    labels; the residual set $D$ consists of the sites in the dummy region or
-    in a terminal square. Each piece lies in the lattice sample of the closed
-    birth region of its identifier, and that sample is the point set of a
-    template with both endpoint clearances. Its scanner scale is
-    $n=\lceil C_P\,r^{1+2\delta_0}\rceil$ for a primary of side $r=2^k$ and
-    $n=\lceil C_Bu\rceil$ for an identifier of positive birth rank and
-    characteristic length $u$. The primary scale limits and the choice of
-    $u_*$ give $\lfloor n^{1-\ell_{\rm geo}}\rfloor\le s$ and $n\ge n_*$.
+    For $\Lambda$ and $A$ with $b=|\partial_\Lambda A|>0$, the repair
+    construction reaches a mark-free generation
+    (Theorem~\ref{thm:area_law_repair_common_empty_generation}). Non-dummy
+    identifiers meeting $A$, ordered by nondecreasing birth rank, give $X_i$ and
+    $f_i$, while dummy and terminal-square sites form $D$
+    (Theorem~\ref{thm:area_law_repair_ordered_partition_empty},
+    Theorem~\ref{thm:area_law_repair_current_birth_containment}, and
+    Theorem~\ref{thm:area_law_repair_current_disjoint}). The scanner scale
+    ($n=\lceil C_P r^{1+2\delta_0}\rceil$ for rank-$0$ primaries of side $r=2^k$,
+    $n=\lceil C_B u\rceil$ for positive rank of length $u\ge u_*$) satisfies
+    $\lfloor n^{1-\ell_{\rm geo}}\rfloor\le s$ and $n\ge n_*$.
 
-    For the ordered clearance, let $j<i$ have the same label. Then the birth
-    rank of $X_j$ is at most that of $X_i$. If $X_i$ is a primary of layer $k$,
-    so is $X_j$, and the closed birth regions are at distance at least
-    $\min(t_k,2^{k-1})$, which exceeds $2n^\beta$ by the primary scale limits.
-    Otherwise birth separation at a common generation, with final regions equal
-    to current regions at an empty generation, gives distance at least
-    $c_1u^{\rho_0}>2\lceil C_Bu\rceil^\beta$.
-
-    Finally, $|D|\le Cb$ by Lemma~\ref{lem:area_law_two_family_exceptional_sites}
-    and the total mark count. The sum $\sum_in_i^{-100}$ splits into the
-    primaries, bounded by Lemma~\ref{lem:area_law_two_family_primaries}, and the
-    retained identifiers of positive birth rank, bounded by their error sum.
+    For $j<i$ with $f_j=f_i$, if $X_i$ has birth rank $0$ in layer $k$, so does
+    $X_j$, and Lemma~\ref{lem:area_law_two_family_primaries} and
+    Theorem~\ref{thm:area_law_primary_scale_limits} give distance at least
+    $\min(t_k,2^{k-1})>2n^\beta$; otherwise
+    Theorem~\ref{thm:area_law_birth_separation_common_stage} and
+    Theorem~\ref{thm:area_law_repair_final_current_empty} give distance at least
+    $c_1u^{\rho_0}>2\lceil C_Bu\rceil^\beta$. Finally,
+    Lemma~\ref{lem:area_law_two_family_exceptional_sites} and
+    Theorem~\ref{thm:area_law_repair_total_mark_prefix_count} bound $|D|\le Cb$,
+    while Lemma~\ref{lem:area_law_two_family_primaries} and
+    Theorem~\ref{thm:area_law_repair_retained_nonprimary_error_sum} bound
+    $\sum_in_i^{-100}\le Cb$.
 \end{proof}
 
 \begin{theorem}[Uniform area law from collar, amplification and two-family bounds]
@@ -1411,50 +1242,39 @@ original open square. We state the two models separately, following
     \leanok
     \uses{def:area_law_collar_bound,def:area_law_amplification_bound,
         def:area_law_two_family_decomposition,def:area_law_ground_entropy}
-    Suppose that for all $q\ge1$, $R\ge0$ and $J,\Delta>0$ there are template
-    constants $D_0,C_{\rm tpl}$ for which the sublinear collar bound and the
-    two-family decomposition hold, and that the amplification bound holds for
-    all such $q,R,J,\Delta$. Then the conclusion of
-    Theorem~\ref{thm:openai_uniform_area_law} holds, proving Theorem~1.1 of
-    \cite{OpenAI2026AreaLaw} conditionally on the three propositions: for each
-    $q,R,J,\Delta$ there is one $C\ge0$ such that
-    $S_\Omega(A)\le C|\partial_\Lambda A|$ for every finite induced domain,
-    every admissible Hamiltonian with a gapped ground vector $\Omega$, and
-    every $A\subseteq\Lambda$.
+    If for all $q\ge1$, $R\ge0$, and $J,\Delta>0$ the amplification bound
+    (Definition~\ref{def:area_law_amplification_bound}) holds and there exist
+    $D_0,C_{\rm tpl}$ for which the sublinear collar bound
+    (Definition~\ref{def:area_law_collar_bound}) and two-family decomposition
+    (Definition~\ref{def:area_law_two_family_decomposition}) hold, then the
+    uniform area law of Theorem~\ref{thm:openai_uniform_area_law} holds.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:area_law_conditional_assembly_constants}
-    Fix $q,R,J,\Delta$ and take template constants $D_0,C_{\rm tpl}$ with the
-    collar bound and the two-family decomposition. Choose the collar constant
-    $C_1$ and threshold $N_1$, then the amplification constant $C_2$ and
-    threshold $N_2$ at the input constant $\max\{C_1,1\}$ and the order $100$,
-    and then a two-family constant $C_3$ at the lower scale
-    $n_*(N_1,N_2,C_2)\ge2$.
-    Theorem~\ref{thm:area_law_conditional_assembly_constants} gives the bound
-    with the constant $C(q,C_2,C_3)\ge0$, which is chosen before the domain
-    and the cut.
+    Fix $(q,R,J,\Delta)$ and choose $(C_1,N_1)$ from
+    Definition~\ref{def:area_law_collar_bound}, $(C_2,N_2)$ from
+    Definition~\ref{def:area_law_amplification_bound} at $(\max\{C_1,1\},100)$,
+    and $C_3$ from Definition~\ref{def:area_law_two_family_decomposition} at
+    $n_*(N_1,N_2,C_2)\ge2$; Theorem~\ref{thm:area_law_conditional_assembly_constants}
+    gives $S_\Omega(A)\le C(q,C_2,C_3)|\partial_\Lambda A|$.
 \end{proof}
 
-The proof of Proposition~9.6 of \cite{OpenAI2026AreaLaw} combines the scanner
-estimates with three steps that use no estimate of the scan: an exact entropy
-identity at each leaf, the transfer from the truncated to the original ground
-state, and the cut and size assertions of the proposition. The results below
-prove these steps. Theorem~\ref{thm:area_law_sublinear_collar} combines
-them with the physical scanner estimates to prove the information inequality.
+The proof of \cite[Proposition~9.6]{OpenAI2026AreaLaw} combines the physical
+scanner estimates with three scanner-independent ingredients established below:
+a leaf entropy identity, mutual-information transfer from the truncated state,
+and template cut and cardinality bounds.
 
 \begin{definition}[Leaf quantities of the sharp comparisons]
     \label{def:area_law_collar_leaf_quantities}
     \lean{FiniteProduct.collarPreQuantity,FiniteProduct.collarPostQuantity}
     \leanok
     \uses{def:area_law_ground_entropy}
-    Let $\psi$ be a vector of a finite tensor product over a site set $V$, and
-    let $X,U,Y,W\subseteq V$. Put
-    \begin{align*}
-        g_{\rm pre} & =S(X\cup U)+S(W)-S(Y),
-        \qquad
-        g_{\rm post}=S(U)+S(U\cup Y)-S(Y).
-    \end{align*}
+    For a vector $\psi$ on a finite site set $V$ and $X,U,Y,W\subseteq V$, set
+    \begin{align}
+        g_{\rm pre}  & =S(X\cup U)+S(W)-S(Y),       &
+        g_{\rm post} & =S(U)+S(U\cup Y)-S(Y).\notag
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Leaf entropy identity and its lower bound]
@@ -1466,28 +1286,26 @@ them with the physical scanner estimates to prove the information inequality.
         FiniteProduct.two_mutualInformation_le_collarLeaf_average}
     \leanok
     \uses{def:area_law_collar_leaf_quantities}
-    Let $X,U,Y,W$ be pairwise disjoint sets covering $V$. As in the leaf
-    entropy identity and the lower bound after the leaf average in the proof
-    of Proposition~9.6 of \cite{OpenAI2026AreaLaw}, for every vector $\psi$,
+    For a partition $V=X\mathbin{\dot\cup}U\mathbin{\dot\cup}Y\mathbin{\dot\cup}W$
+    and any vector $\psi$ \cite[proof of Proposition~9.6]{OpenAI2026AreaLaw},
     \begin{align}
         2S(X)+g_{\rm pre}-g_{\rm post} & =I(X:W)+I(X:Y\cup W).
         \label{eq:area_law_collar_leaf_identity}
     \end{align}
-    If a set $F$ lies in $W$, then $2I(X:F)\le2S(X)+g_{\rm pre}-g_{\rm post}$.
-    Consequently, for finitely many leaves with weights $p_i\ge0$ summing to one,
-    each with its own partition $X,U_i,Y_i,W_i$ of $V$ and with $F\subseteq W_i$
-    for every $i$,
-    \begin{align*}
-        2I(X:F) & \le2S(X)+\sum_ip_i\bigl(g_{{\rm pre},i}-g_{{\rm post},i}\bigr).
-    \end{align*}
+    If $F\subseteq W$, then $2I(X:F)\le2S(X)+g_{\rm pre}-g_{\rm post}$; for
+    weights $p_i\ge0$ with $\sum_ip_i=1$ and partitions
+    $V=X\mathbin{\dot\cup}U_i\mathbin{\dot\cup}Y_i\mathbin{\dot\cup}W_i$ with
+    $F\subseteq W_i$,
+    \begin{align}
+        2I(X:F) & \le2S(X)+\sum_ip_i\bigl(g_{{\rm pre},i}-g_{{\rm post},i}\bigr).\notag
+    \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
-    Purity gives $S(X\cup W)=S(U\cup Y)$, $S(X\cup Y\cup W)=S(U)$ and
-    $S(Y\cup W)=S(X\cup U)$, and the identity follows by expanding both mutual
-    informations. Strong subadditivity makes mutual information monotone in each
-    argument, and both $W$ and $Y\cup W$ contain $F$. Multiplying the bound at
-    each leaf by $p_i$ and summing gives the average inequality.
+    Purity gives $S(X\cup W)=S(U\cup Y)$, $S(X\cup Y\cup W)=S(U)$, and
+    $S(Y\cup W)=S(X\cup U)$, yielding (\ref{eq:area_law_collar_leaf_identity}).
+    Monotonicity of mutual information along $F\subseteq W\subseteq Y\cup W$ and
+    averaging over $p_i$ give the inequalities.
 \end{proof}
 
 \begin{theorem}[Transfer of mutual information to the original state]
@@ -1496,24 +1314,21 @@ them with the physical scanner estimates to prove the information inequality.
         FiniteProduct.mutualInformation_le_add_of_traceDistance_le_rpow}
     \leanok
     \uses{def:area_law_ground_entropy}
-    Let $\Omega,\widetilde\Omega$ be unit vectors at trace distance $\delta$, and
-    let $X,J$ be disjoint. Then
-    \begin{align*}
+    For unit vectors $\Omega,\widetilde\Omega$ with trace distance $\delta$ and
+    disjoint $X,J$,
+    \begin{align}
         |I_\Omega(X:J)-I_{\widetilde\Omega}(X:J)|
-         & \le8\sqrt\delta\,\log(e\dim\mathcal H_X).
-    \end{align*}
-    In particular, if $\delta\le C_1n^{-500}$ and
-    $\log\dim\mathcal H_X\le C_2n^2$ for an integer $n\ge1$, then
-    $I_\Omega(X:J)\le I_{\widetilde\Omega}(X:J)+8\sqrt{C_1}(1+C_2)n^{-248}$.
-    The dimension of $J$ does not enter.
+         & \le8\sqrt\delta\,\log(e\dim\mathcal H_X).\notag
+    \end{align}
+    If $\delta\le C_1n^{-500}$ and $\log\dim\mathcal H_X\le C_2n^2$ ($n\ge1$),
+    then $I_\Omega(X:J)\le I_{\widetilde\Omega}(X:J)+8\sqrt{C_1}(1+C_2)n^{-248}$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{lem:al_amp_pure_trace_distance}
-    Applying \cite[Lemma~2.1]{OpenAI2026AreaLaw} to the joint reductions on
-    $X\cup J$, whose trace distance is at most $\delta$ by
-    Lemma~\ref{lem:al_amp_pure_trace_distance}, gives the first inequality;
-    then $\sqrt{C_1n^{-500}}=\sqrt{C_1}\,n^{-250}$ and
+    Apply \cite[Lemma~2.1]{OpenAI2026AreaLaw} on $X\cup J$ via
+    Lemma~\ref{lem:al_amp_pure_trace_distance}, and substitute
+    $\sqrt{C_1n^{-500}}=\sqrt{C_1}\,n^{-250}$ and
     $\log(e\dim\mathcal H_X)\le(1+C_2)n^2$.
 \end{proof}
 
@@ -1522,20 +1337,21 @@ them with the physical scanner estimates to prove the information inequality.
     \lean{TNLean.PEPS.AreaLaw.Geometry.Template.collar_cut_card_le}
     \leanok
     \uses{def:area_law_template}
-    Let $T$ be a template with parameters $(n,s_0)$ separated from the cut, with
-    $C_{\rm tpl}\ge24$ and $D_0\ge1$, and let $L\le s_0$. Put $X=A\cap T$ and
-    $S_0=A\cap T_L$. Then the cuts of $X$ and $S_0$ have at most $4n$ edges, the
-    cut of $S_0\setminus X$ has at most $8n$ edges, and $|S_0|\le10n^2$.
+    For a template $T$ with parameters $(n,s_0)$ separated from $Z$, with
+    $C_{\rm tpl}\ge24$, $D_0\ge1$, $L\le s_0$, $X=A\cap T$, and $S_0=A\cap T_L$,
+    one has $|\partial_\Lambda X|,|\partial_\Lambda S_0|\le4n$,
+    $|\partial_\Lambda(S_0\setminus X)|\le8n$, and $|S_0|\le10n^2$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:area_law_template_physical_boundary,thm:area_law_template_area,
         thm:area_law_template_depth_layers,thm:al_scan_compact_collar_card}
-    The cut bounds are those of
-    Theorem~\ref{thm:area_law_template_physical_boundary} with $j=L$, since
-    $S_0\setminus X=A\cap(T_L\setminus T)$. The set $S_0$ lies in $T_L$, and
-    $|T_L|\le|T|+nL\le9ns_0+nL$ by the area and depth-layer bounds. The scale
-    condition $C_{\rm tpl}N_0(s_0+1)\le n$ gives $L\le s_0\le n$.
+    Theorem~\ref{thm:area_law_template_physical_boundary} at $j=L$ bounds the
+    three cuts; Theorem~\ref{thm:area_law_template_area},
+    Theorem~\ref{thm:area_law_template_depth_layers}, and
+    Theorem~\ref{thm:al_scan_compact_collar_card} with $L\le s_0\le n$ from
+    (\ref{eq:area_law_template_scale}) give
+    $|S_0|\le|T_L|\le|T|+nL\le9ns_0+nL\le10n^2$.
 \end{proof}
 
 \begin{theorem}[The collar bound from its information inequality]
@@ -1543,17 +1359,15 @@ them with the physical scanner estimates to prove the information inequality.
     \lean{TNLean.PEPS.AreaLaw.sublinearCollarBound_of_mutualInformation_le}
     \leanok
     \uses{def:area_law_collar_bound}
-    Let $C_{\rm tpl}\ge24$ and $D_0\ge1$. Suppose there are $C$ and $N$ such
-    that, in the setting of Definition~\ref{def:area_law_collar_bound},
-    $I_\Omega(X:\Lambda\setminus S_0)\le Cn^{1-\varepsilon}$ whenever $n\ge N$.
-    Then the sublinear collar bound holds for $D_0,C_{\rm tpl}$, reducing
-    Proposition~9.6 of \cite{OpenAI2026AreaLaw} to its information inequality.
+    For $C_{\rm tpl}\ge24$ and $D_0\ge1$, if there exist $C,N$ such that
+    $I_\Omega(X:\Lambda\setminus S_0)\le Cn^{1-\varepsilon}$ for all $n\ge N$ in
+    Definition~\ref{def:area_law_collar_bound}, then the sublinear collar bound
+    holds with constant $\max(C,10)$ and threshold $N$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:area_law_collar_cut_bounds}
-    Taking the constant $\max(C,10)$ combines the assumed information
-    inequality with the remaining assertions of
+    Combine $I_\Omega(X:\Lambda\setminus S_0)\le Cn^{1-\varepsilon}$ with
     Theorem~\ref{thm:area_law_collar_cut_bounds}.
 \end{proof}
 
@@ -1563,16 +1377,10 @@ them with the physical scanner estimates to prove the information inequality.
 \section{Companion area-law inputs}
 \label{sec:peps_companion_inputs}
 
-The proof of Theorem~\ref{thm:openai_polynomial_peps} uses several results of
-the area-law companion \cite{OpenAI2026AreaLaw}, which are listed in
-\cite[Appendix~A]{OpenAI2026PolynomialPEPS}. All of them concern the original
-ground vector $\Omega$ of the full system; no subregion is assigned a gap of its
-own. The remarks below compare each listed result with the statement of this
-chapter that expresses it. No statement below adds a hypothesis to the
-printed one. The appendix also records that the companion takes its replica
-limit at each fixed finite instance; this concerns the companion's proof of
-the collar bound, and the statements below concern only the original one-copy
-state.
+The proof of Theorem~\ref{thm:openai_polynomial_peps} uses the results of
+\cite{OpenAI2026AreaLaw} listed in \cite[Appendix~A]{OpenAI2026PolynomialPEPS},
+all concerning the full-system one-copy ground vector $\Omega$ with no
+subregion gap assumption.
 % Proof status of each statement (proved or assumed) is tracked in
 % docs/formalization/openai-area-law-peps.md, not in displayed prose.
 
@@ -1580,18 +1388,14 @@ state.
     \label{rem:peps_companion_model}
     \uses{def:area_law_domain,def:area_law_hamiltonian,
         def:area_law_ground_entropy,thm:area_law_ground_eigenspace}
-    The companion allows every finite induced domain $\Gamma\subset\mathbb Z^2$
-    with local dimension $q$, and one Hermitian term $h_X$ with
-    $\|h_X\|\le J$ for each nonempty support $X$ of induced-graph diameter at
-    most $R$. It assumes a unit ground vector $\Omega$ with
-    $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$, and its entropies use
-    natural logarithms \cite[Appendix~A]{OpenAI2026PolynomialPEPS}.
-    Definitions~\ref{def:area_law_domain}, \ref{def:area_law_hamiltonian}
-    and~\ref{def:area_law_ground_entropy} state exactly this model: zero terms
-    are allowed, the domain need not be connected, norms are operator norms,
-    and entropy is the von Neumann entropy with natural logarithms. Uniqueness
-    of the ground vector up to phase is not a separate hypothesis. It follows
-    from the gap inequality by Theorem~\ref{thm:area_law_ground_eigenspace}.
+    Definitions~\ref{def:area_law_domain}, \ref{def:area_law_hamiltonian},
+    and~\ref{def:area_law_ground_entropy} match \cite[Appendix~A]{OpenAI2026PolynomialPEPS}:
+    finite induced domains $\Gamma\subset\mathbb Z^2$ with site dimension $q$,
+    Hermitian terms $h_X$ ($\operatorname{diam}_{d_\Gamma}X\le R$, $\|h_X\|\le J$),
+    unit ground vector $\Omega$ satisfying (\ref{eq:area_law_projector_gap}),
+    and natural-logarithm von Neumann entropy (\ref{eq:area_law_regional_entropy}).
+    Uniqueness of $\Omega$ up to phase follows from (\ref{eq:area_law_projector_gap})
+    by Theorem~\ref{thm:area_law_ground_eigenspace}.
     % Status: proved.
 \end{remark}
 
@@ -1602,44 +1406,39 @@ state.
         thm:area_law_sublinear_collar,thm:area_law_amplification,
         thm:square_hermitian_term_sum,thm:square_area_law_from_uniform,
         thm:rectangular_equal_side_entropy,thm:openai_square_area_law}
-    Theorem~1.1 and Corollary~1.2 of \cite{OpenAI2026AreaLaw} give
-    Proposition~2.1 of \cite{OpenAI2026PolynomialPEPS}, with $\Gamma$ the
-    $L\times L$ grid and $R=1$. Theorem~\ref{thm:openai_uniform_area_law}
-    states the uniform finite-domain area law with the printed quantifiers: one
-    constant $C(q,R,J,\Delta)$ serves every domain, interaction family and cut.
-    Theorem~\ref{thm:area_law_conditional_collar_two_families} derives it from
-    Propositions~9.6 and~11.2 of \cite{OpenAI2026AreaLaw}.
-    The collar proposition is Theorem~\ref{thm:area_law_sublinear_collar};
-    amplification is Theorem~\ref{thm:area_law_amplification}.
+    Theorem~\ref{thm:openai_uniform_area_law} states
+    \cite[Theorem~1.1]{OpenAI2026AreaLaw}, derived in
+    Theorem~\ref{thm:area_law_conditional_collar_two_families} from
+    Theorem~\ref{thm:area_law_sublinear_collar}
+    (\cite[Proposition~9.6]{OpenAI2026AreaLaw}),
+    Theorem~\ref{thm:area_law_amplification}
+    (\cite[Proposition~10.2]{OpenAI2026AreaLaw}), and
+    Theorem~\ref{thm:area_law_two_family_decomposition}
+    (\cite[Proposition~11.2]{OpenAI2026AreaLaw}).
     % Status: the collar, amplification and two-family propositions are
     % formalized, and so are the uniform area law and its square-grid passage.
-    The site and edge terms of the
-    original model need not be Hermitian individually. Replacing each by its
-    Hermitian part keeps its support and norm bound and leaves the total
-    Hamiltonian unchanged (Theorem~\ref{thm:square_hermitian_term_sum}).
-    Theorem~\ref{thm:square_area_law_from_uniform} then specializes the uniform
-    area law to the square at range one with $C_A(q,J,\Delta)=C(q,1,J,\Delta)$,
-    and Theorem~\ref{thm:rectangular_equal_side_entropy} gives the same
-    conclusion through the rectangle corollary, giving Proposition~2.1
-    (Theorem~\ref{thm:openai_square_area_law}) from the uniform area law.
+    Replacing local terms by $A_i^{\mathrm h}$ preserves $H$
+    (Theorem~\ref{thm:square_hermitian_term_sum}), and
+    Theorem~\ref{thm:square_area_law_from_uniform} (or
+    Corollary~\ref{cor:rectangles} via
+    Theorem~\ref{thm:rectangular_equal_side_entropy}) specializes
+    Theorem~\ref{thm:openai_uniform_area_law} at $R=1$ to
+    Theorem~\ref{thm:openai_square_area_law}
+    (\cite[Proposition~2.1]{OpenAI2026PolynomialPEPS}) with
+    $C_A(q,J,\Delta)=C(q,1,J,\Delta)$.
     % Status: Proposition 2.1 is formalized through the uniform area law.
 \end{remark}
 
 \begin{remark}[Positive replacement]
     \label{rem:peps_companion_positive_replacement}
     \uses{thm:al_lattice_positive_replacement,thm:al_lattice_counts}
-    For every integer $k\ge1$ and $\alpha=k/(k+1)$, the appendix uses positive
-    contractions $k_i$ at the original anchors, of uniformly bounded anchor
-    multiplicity, with $k_i\Omega=0$,
-    $\sum_ik_i\ge c_*^{-1}(H-E_0I)\ge(\Delta/c_*)(I-|\Omega\rangle\langle\Omega|)$
-    and $\|k_i-\mathbb E_{N_r(a_i)}k_i\|\le Ce^{-cr^\alpha}$ for every integer
-    $r\ge0$ \cite[Proposition~4.3]{OpenAI2026AreaLaw}.
-    Theorem~\ref{thm:al_lattice_positive_replacement} states this for every
-    choice of anchors $a_i\in X_i$, with constants depending only on
-    $k,R,J,\Delta$ and under the weaker condition $J\ge0$.
-    Its tail estimate is stated for conditional expectation onto every
-    induced-graph ball. At most $2^{2R(R+1)}$ labels share an anchor, by
-    Theorem~\ref{thm:al_lattice_counts}.
+    For $k\ge1$ and $\alpha=k/(k+1)$,
+    Theorem~\ref{thm:al_lattice_positive_replacement} formalizes
+    \cite[Proposition~4.3]{OpenAI2026AreaLaw}: positive contractions $k_i$ at
+    anchors $a_i\in X_i$ (multiplicity at most $2^{2R(R+1)}$ by
+    Theorem~\ref{thm:al_lattice_counts}) satisfying $k_i\Omega=0$,
+    $\sum_ik_i\ge c_*^{-1}(H-E_0I)\ge(\Delta/c_*)(I-|\Omega\rangle\langle\Omega|)$,
+    and $\|k_i-\mathbb E_{N_r(a_i)}k_i\|\le Ce^{-cr^\alpha}$ for all $r\ge0$.
     % Status: proved.
 \end{remark}
 
@@ -1648,27 +1447,16 @@ state.
     \uses{def:area_law_template,def:area_law_collar_bound,
         thm:area_law_collar_cut_bounds,thm:area_law_collar_bound_of_information,
         thm:area_law_sublinear_collar}
-    Definition~\ref{def:area_law_template} states the templates of
-    \cite[Definition~9.3]{OpenAI2026AreaLaw} with the printed conditions
-    $n\ge C_{\rm tpl}N_0(s_0+1)$, $\operatorname{diam}_\infty T\le n$ and
-    $\operatorname{dist}_\infty(T,Z_A)>4D_0s_0$; the polygons are read as
-    nondegenerate \cite{gap:arealaw2d_nondegenerate_templates}.
-    Definition~\ref{def:area_law_collar_bound} states the sublinear collar
-    bound, Proposition~9.6 of \cite{OpenAI2026AreaLaw}, with
-    $\varepsilon=10^{-5}$, $\ell=\lfloor n^{1-\varepsilon}\rfloor\le s_0$,
-    $X=A\cap T$ and $S_0=A\cap T_\ell$: at every scale beyond a uniform
-    threshold, $I_\Omega(X:\Gamma\setminus S_0)\le Cn^{1-\varepsilon}$,
-    $|S_0|\le Cn^2$, and each of $X$, $S_0\setminus X$ and $S_0$ has at most $Cn$
-    crossing edges.
+    Definition~\ref{def:area_law_template} states
+    \cite[Definition~9.3]{OpenAI2026AreaLaw} with nondegenerate polygons
+    \cite{gap:arealaw2d_nondegenerate_templates}, and
+    Definition~\ref{def:area_law_collar_bound} states
+    \cite[Proposition~9.6]{OpenAI2026AreaLaw} at $\varepsilon=10^{-5}$.
     % Status: Proposition 9.6 is proved by thm:area_law_sublinear_collar.
-    For $C_{\rm tpl}\ge24$ and $D_0\ge1$, which
-    the standing choices of a large $C_{\rm tpl}$ and of $D_0>2R+10$ ensure, the
-    size and crossing-edge assertions hold for every separated template
-    (Theorem~\ref{thm:area_law_collar_cut_bounds}), so
-    Theorem~\ref{thm:area_law_collar_bound_of_information} reduces the
-    proposition to the information inequality alone. This inequality,
-    together with the size and crossing-edge bounds, is
-    Theorem~\ref{thm:area_law_sublinear_collar}.
+    For $C_{\rm tpl}\ge24$ and $D_0\ge1$, Theorem~\ref{thm:area_law_collar_cut_bounds}
+    and Theorem~\ref{thm:area_law_collar_bound_of_information} reduce the
+    collar bound to $I_\Omega(X:\Gamma\setminus S_0)\le Cn^{1-\varepsilon}$,
+    which is proved in Theorem~\ref{thm:area_law_sublinear_collar}.
     % Status: all assertions of Proposition 9.6 are proved.
 \end{remark}
 
@@ -1678,35 +1466,23 @@ state.
         thm:area_law_uniform_collar_threshold,
         thm:peps_coarse_information_of_collar,thm:peps_coarse_information}
     Definition~\ref{def:area_law_amplification_bound} states
-    Proposition~10.2 of \cite{OpenAI2026AreaLaw} as printed in the appendix:
-    from the three collar bounds with a common constant $C_0$, for every integer
-    $M\ge1$ and every sufficiently large $n$, a radius
-    $r\le C_Mn^{(1-\varepsilon)/\alpha}$ with $I_\Omega(X':E)\le C_Mn^{-M}$ for
-    every $X'\subseteq X$ and every $E\subseteq\Gamma\setminus N_{2r}(S_0)$,
-    and $N_{2r}(S_0)\subseteq A$ when
-    $\operatorname{dist}_\infty(T,Z_A)>\ell+n^{\beta_0}$, where
-    $\beta_0=1-2\cdot10^{-6}$. The exponent $\alpha=p/(p+1)$ is fixed with
-    $p=10^6$, an admissible choice for the requirement $\alpha>1-10^{-6}$.
-    The remaining assertion $\ell+2r=o(n^{\beta_0})$ follows from the radius
-    bound (Theorem~\ref{thm:area_law_uniform_collar_threshold}). The bound
-    holds for every gap $\Delta>0$ (Theorem~\ref{thm:area_law_amplification}).
-    Its application in \cite[Proposition~3.1]{OpenAI2026PolynomialPEPS}, with
-    $A=\Gamma$ and $M=1$, is Theorem~\ref{thm:peps_coarse_information_of_collar},
-    which derives it from the sublinear collar bound.
-    Theorem~\ref{thm:peps_coarse_information} establishes the original-gap
-    conclusion using the physical collar theorem.
+    \cite[Proposition~10.2]{OpenAI2026AreaLaw} at $\alpha=p/(p+1)$ with
+    $p=10^6$ ($\alpha>1-10^{-6}$) and $\beta_0=1-2\cdot10^{-6}$, proved in
+    Theorem~\ref{thm:area_law_amplification} with $\ell+2r=o(n^{\beta_0})$ from
+    Theorem~\ref{thm:area_law_uniform_collar_threshold}. Its specialization at
+    $A=\Gamma$ and $M=1$ \cite[Proposition~3.1]{OpenAI2026PolynomialPEPS} is
+    Theorem~\ref{thm:peps_coarse_information_of_collar} and
+    Theorem~\ref{thm:peps_coarse_information}.
 \end{remark}
 
 \begin{remark}[Two-family entropy cancellation]
     \label{rem:peps_companion_two_family_entropy}
     \uses{thm:area_law_two_family_entropy}
-    For a pure state and an ordered partition
-    $A=D\mathbin{\dot\cup}\bigcup_iX_i$ into two labelled families, the bounds
-    $I(X_i:A^c\cup\bigcup_{j<i,\,f_j=f_i}X_j)\le\delta_i$ give
-    $S(A)\le S(D)+\frac12\sum_i\delta_i$
-    \cite[Lemma~11.1]{OpenAI2026AreaLaw}.
-    Theorem~\ref{thm:area_law_two_family_entropy} states this for a unit vector
-    in any finite tensor product of finite-dimensional spaces.
+    Theorem~\ref{thm:area_law_two_family_entropy} formalizes
+    \cite[Lemma~11.1]{OpenAI2026AreaLaw}: for a pure state and an ordered
+    two-family partition $A=D\mathbin{\dot\cup}\bigsqcup_iX_i$, the bounds
+    $I(X_i:A^c\cup\bigcup_{j<i,\,f_j=f_i}X_j)\le\delta_i$ imply
+    $S(A)\le S(D)+\frac12\sum_i\delta_i$.
     % Status: proved.
 \end{remark}
 
@@ -1714,32 +1490,20 @@ state.
     \label{rem:peps_companion_two_families}
     \uses{def:area_law_two_family_decomposition,
         thm:area_law_two_family_decomposition}
-    Definition~\ref{def:area_law_two_family_decomposition} states
-    Proposition~11.2 of \cite{OpenAI2026AreaLaw} as printed in the appendix:
-    for every cut with $b=|\partial_\Gamma A|>0$ and every lower scale $n_*$, a
-    partition with $|D|\le Cb$, nonempty pieces $X_i\subseteq A\cap T_i$,
-    separated templates with $n_i\ge n_*$ and
-    $\lfloor n_i^{1-\varepsilon}\rfloor\le s_i$, both clearances
-    $2n_i^{\beta_0}$, and $\sum_in_i^{-100}\le Cb$, with $C$ depending only on
-    $n_*$ and the template constants.
-    Theorem~\ref{thm:area_law_two_family_decomposition} proves it for all real
-    $D_0$ and $C_{\rm tpl}$.
+    Definition~\ref{def:area_law_two_family_decomposition} and
+    Theorem~\ref{thm:area_law_two_family_decomposition} state and prove
+    \cite[Proposition~11.2]{OpenAI2026AreaLaw} for all $D_0,C_{\rm tpl}\in\mathbb R$.
 \end{remark}
 
 \begin{remark}[The adaptation to a cell]
     \label{rem:peps_companion_cell}
     \uses{thm:peps_labelled_conditional_entropy,
         thm:peps_cell_two_family_partition,thm:peps_cell_conditional_information_from_gap}
-    The appendix states that \cite[Lemma~3.2]{OpenAI2026PolynomialPEPS}
-    adapts the ordering of Lemma~11.1 of \cite{OpenAI2026AreaLaw} to a cell
-    with arbitrary exterior conditioning, and that this adaptation is proved in
-    the approximation article rather than imported. Its entropy estimate is
-    Theorem~\ref{thm:peps_labelled_conditional_entropy}, and its two-family
-    partition of a cell is Theorem~\ref{thm:peps_cell_two_family_partition}.
-    Neither obtains a conditional information bound by conditioning a
-    mutual-information inequality.
-    Together these give the cell estimate of
-    Theorem~\ref{thm:peps_cell_conditional_information_from_gap}.
+    In \cite[Lemma~3.2]{OpenAI2026PolynomialPEPS},
+    Theorem~\ref{thm:peps_labelled_conditional_entropy} and
+    Theorem~\ref{thm:peps_cell_two_family_partition} adapt the two-family
+    ordering of \cite[Lemma~11.1]{OpenAI2026AreaLaw} to a cell with exterior
+    conditioning, yielding Theorem~\ref{thm:peps_cell_conditional_information_from_gap}.
 \end{remark}
 
 \begin{theorem}[Sublinear information across a template collar]
@@ -1747,53 +1511,39 @@ state.
     \lean{TNLean.PEPS.AreaLaw.sublinearCollarBound_real}
     \leanok
     \uses{def:area_law_collar_bound}
-    In~\cite[Proposition~9.6]{OpenAI2026AreaLaw}, fix $q,R\in\mathbb N$ with
-    $q\geq1$, real parameters $J\geq0$ and $\Delta>0$, and real template
-    constants $D_0>2R+10$ and $C_{\mathrm{tpl}}\geq24$. There are
-    $C\in\mathbb R$ and
-    $N\in\mathbb N$, chosen before all the following finite data.
-    Let $\Lambda$ be a finite induced square-lattice domain, let $H$ be
-    an admissible Hamiltonian with parameters $(q,R,J)$, and let
-    $\Omega$ be its normalized ground vector at energy $E_0$ with
-    full-system projector gap $\Delta$. Let $A\subseteq\Lambda$ and
-    let $Z$ be the endpoints of its cut edges. For every template $T$
+    In~\cite[Proposition~9.6]{OpenAI2026AreaLaw}, fix integers $q\geq1$,
+    $R\ge0$, reals $J\geq0$, $\Delta>0$, $D_0>2R+10$, and
+    $C_{\mathrm{tpl}}\geq24$. There exist $C\in\mathbb R$ and $N\in\mathbb N$
+    such that for every finite induced domain $\Lambda$, admissible Hamiltonian
+    $H$ with parameters $(q,R,J)$, unit ground vector $\Omega$ with gap
+    $\Delta$, cut $A\subseteq\Lambda$ with cut endpoints $Z$, and template $T$
     with parameters $(C_{\mathrm{tpl}},n,s_0)$ satisfying $n\geq N$,
     $\operatorname{dist}_\infty(T,Z)>4D_0s_0$, and
-    $L=\lfloor n^{1-1/100000}\rfloor\leq s_0$, put $X=A\cap T$ and
-    $S_0=A\cap T_L$. Then
+    $L=\lfloor n^{1-1/100000}\rfloor\leq s_0$, setting $X=A\cap T$ and
+    $S_0=A\cap T_L$ gives
     \begin{align}
-        I_\Omega(X:\Lambda\setminus S_0)
-              & \leq Cn^{1-1/100000}, \\
-        |S_0| & \leq Cn^2,
+        I_\Omega(X:\Lambda\setminus S_0)                                                   & \leq Cn^{1-1/100000}, &
+        |S_0|                                                                              & \leq Cn^2,            &
+        |\partial_\Lambda X|,\,|\partial_\Lambda S_0|,\,|\partial_\Lambda(S_0\setminus X)| & \le Cn.\notag
     \end{align}
-    and each of $X$, $S_0$, and $S_0\setminus X$ has at most $Cn$
-    crossing edges in $\Lambda$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:arealaw-physical-box-fixed-exponent,
         thm:arealaw-box-clearance-comparison,
         thm:template-final-information,
         thm:area_law_collar_bound_of_information}
-    Put $d=2R+10$. The physical safe-box bound at the integer clearance
-    $d+1$ gives $C_b>0$ at exponent $1+e_*$, where
-    $e_*=2\cdot10^{-6}$. The clearance comparison gives
+    With $d=2R+10$ and $e_*=2\cdot10^{-6}$,
+    Theorem~\ref{thm:arealaw-physical-box-fixed-exponent} at clearance $d+1$
+    gives $C_b>0$, and Theorem~\ref{thm:arealaw-box-clearance-comparison} gives
     \begin{align}
         F_{\mathrm{box},d}(r)
-         & \leq (4C_b+4\log q+1)r^{1+e_*}
+         & \leq (4C_b+4\log q+1)r^{1+e_*}\qquad(r\ge1).\notag
     \end{align}
-    at every positive integer scale. The conditional template
-    information theorem at clearance $d$, which requires only $d\geq1$,
-    gives $C_m>0$ and a threshold, before all finite instances, for
-    which $2I_\Omega(X:\Lambda\setminus S_0)\leq C_m n^{1-1/100000}$.
-    The hypothesis $D_0>d$ ensures that every template separated at
-    the prescribed real clearance $D_0$ is also separated at $d$.
-    The estimate therefore applies to the same original vector and
-    the unchanged regions $X$ and $S_0$.
-
-    Dividing the information coefficient by two and applying
-    Theorem~\ref{thm:area_law_collar_bound_of_information} shows that the
-    single constant $\max(C_m/2,10)$ also bounds the three cuts and the
-    collar cardinality, with the same threshold.
+    Since $D_0>d$, Theorem~\ref{thm:template-final-information} at clearance
+    $d$ supplies $C_m>0$ and $N$ with
+    $2I_\Omega(X:\Lambda\setminus S_0)\leq C_m n^{1-1/100000}$ for $n\ge N$, and
+    Theorem~\ref{thm:area_law_collar_bound_of_information} gives the remaining
+    bounds with $C=\max(C_m/2,10)$.
 \end{proof}
 
 \begin{theorem}[Sublinear collar bound at the constants of its proof]
@@ -1802,25 +1552,21 @@ state.
         TNLean.PEPS.AreaLaw.sublinearCollarBound_real_of_initial}
     \leanok
     \uses{def:area_law_collar_bound}
-    This is an auxiliary refinement of
-    Theorem~\ref{thm:area_law_sublinear_collar} with two hypotheses that
-    \cite[Proposition~9.6]{OpenAI2026AreaLaw} does not carry. Fix the data
-    $q,R,J,\Delta,D_0,C_{\mathrm{tpl}}$ of that theorem.
+    In this auxiliary refinement of Theorem~\ref{thm:area_law_sublinear_collar}
+    (carrying hypotheses absent from \cite[Proposition~9.6]{OpenAI2026AreaLaw}),
+    fix $q,R,J,\Delta,D_0,C_{\mathrm{tpl}}$ as in
+    Theorem~\ref{thm:area_law_sublinear_collar}.
     \begin{enumerate}
-        \item Suppose $C_b\geq0$ satisfies
-              $F_{\mathrm{box},2R+11}(r)\leq C_br^{1+e_*}$ for every
-              integer $r\geq1$. Then there are truncation and transport
-              constants of the scanner such that the conclusions of
-              Theorem~\ref{thm:area_law_sublinear_collar} hold with
-              $C=\max(C_m/2,10)$, where $C_m$ is the collar information
-              coefficient at the input $4C_b+4\log q+1$, and with a
-              threshold $N$ given by an explicit formula in $C_b$ and these
-              constants.
-        \item Suppose $C_0\geq0$ and $0<e_0<1$ satisfy
-              $F_{\mathrm{box},D}(r)\leq C_0r^{1+e_0}$ for every integer
-              $D>2R+10$ and every integer $r\geq1$. Then the same holds with
-              $C_b$ the constant produced by the safe-box bootstrap from
-              $C_0$ and $e_0$.
+        \item If $C_b\geq0$ satisfies
+              $F_{\mathrm{box},2R+11}(r)\leq C_br^{1+e_*}$ for all $r\geq1$,
+              then the conclusions of Theorem~\ref{thm:area_law_sublinear_collar}
+              hold with $C=\max(C_m/2,10)$ and explicit threshold $N$, where
+              $C_m$ is the collar information coefficient at input
+              $4C_b+4\log q+1$.
+        \item If $C_0\geq0$ and $0<e_0<1$ satisfy
+              $F_{\mathrm{box},D}(r)\leq C_0r^{1+e_0}$ for all integers
+              $D>2R+10$ and $r\geq1$, then the same holds with $C_b$ produced by
+              the safe-box bootstrap from $(C_0,e_0)$.
     \end{enumerate}
 \end{theorem}
 \begin{proof}\leanok
@@ -1828,16 +1574,11 @@ state.
         thm:template-final-information,
         thm:area_law_collar_bound_of_information,
         thm:arealaw-physical-box-fixed-exponent}
-    For the first part, the clearance comparison turns the bound at
-    clearance $2R+11$ into the bound with constant $4C_b+4\log q+1$ at
-    the integer clearance $d=2R+10$. The template information theorem at
-    clearance $d$ gives the information coefficient $C_m$ and its
-    threshold as formulas, and
-    Theorem~\ref{thm:area_law_collar_bound_of_information} converts them
-    into the constant $\max(C_m/2,10)$ for all the conclusions. For the
-    second part, the physical safe-box bootstrap of
-    Theorem~\ref{thm:arealaw-physical-box-fixed-exponent} gives $C_b$
-    from the initial bound, and the first part applies.
+    Part~1 follows by applying
+    Theorem~\ref{thm:arealaw-box-clearance-comparison} at $d=2R+10$,
+    Theorem~\ref{thm:template-final-information}, and
+    Theorem~\ref{thm:area_law_collar_bound_of_information}; part~2 follows from
+    part~1 via Theorem~\ref{thm:arealaw-physical-box-fixed-exponent}.
 \end{proof}
 
 \begin{theorem}[Sublinear collar bound at given transport constants]
@@ -1845,32 +1586,25 @@ state.
     \lean{TNLean.PEPS.AreaLaw.sublinearCollarBound_real_explicit}
     \leanok
     \uses{def:area_law_collar_bound}
-    Fix the data $q,R,J,\Delta,D_0,C_{\mathrm{tpl}}$ of
-    Theorem~\ref{thm:area_law_sublinear_collar}, and real numbers
-    $c_0,C_{\rm ent},e_{\rm ent},C_{\rm en},e_{\rm en}$ with $c_0>0$ for
-    which the common step-error bound of
-    Theorem~\ref{thm:al_scan_actual_round_transport} holds. Let $C_{\rm box}$
-    be the safe-box constant of the bootstrap of
-    Theorem~\ref{thm:arealaw-physical-box-fixed-exponent} started from the
-    explicit initial box estimate, with the truncation constant at the factor
-    $2$ and these transport constants. Then the conclusions of
-    Theorem~\ref{thm:area_law_sublinear_collar} hold with the constant $C_1$
-    and the threshold $N_1$ of the collar bound at $C_{\rm box}$, the
-    truncation constant at the factor $10$ and these transport constants.
+    Fix $q,R,J,\Delta,D_0,C_{\mathrm{tpl}}$ as in
+    Theorem~\ref{thm:area_law_sublinear_collar} and transport constants
+    $c_0,C_{\rm ent},e_{\rm ent},C_{\rm en},e_{\rm en}$ ($c_0>0$) satisfying the
+    step-error bound of Theorem~\ref{thm:al_scan_actual_round_transport}. With
+    $C_{\rm box}$ the safe-box constant of
+    Theorem~\ref{thm:arealaw-physical-box-fixed-exponent} at truncation factor
+    $2$, the conclusions of Theorem~\ref{thm:area_law_sublinear_collar} hold
+    with the collar constant $C_1$ and threshold $N_1$ at $C_{\rm box}$ and
+    truncation factor $10$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:arealaw-physical-box-fixed-exponent,
         thm:arealaw-box-clearance-comparison,
         thm:template-final-information,
         thm:area_law_collar_bound_of_information}
-    The bootstrap of Theorem~\ref{thm:arealaw-physical-box-fixed-exponent},
-    run from the explicit initial box estimate at the given transport
-    constants, gives $F_{\mathrm{box},2R+11}(r)\leq C_{\rm box}r^{1+e_*}$ for
-    every integer $r\geq1$, with $C_{\rm box}\geq0$. The argument of the first
-    part of Theorem~\ref{thm:area_law_sublinear_collar_named} is then run at
-    the same transport constants and the truncation constant at the factor
-    $10$: the clearance comparison passes to clearance $2R+10$, the template
-    information theorem gives the information coefficient and its threshold,
-    and Theorem~\ref{thm:area_law_collar_bound_of_information} converts them
-    into $C_1$ and $N_1$.
+    Theorem~\ref{thm:arealaw-physical-box-fixed-exponent} yields
+    $F_{\mathrm{box},2R+11}(r)\leq C_{\rm box}r^{1+e_*}$ for all $r\geq1$ with
+    $C_{\rm box}\geq0$; applying Theorem~\ref{thm:arealaw-box-clearance-comparison},
+    Theorem~\ref{thm:template-final-information}, and
+    Theorem~\ref{thm:area_law_collar_bound_of_information} at truncation factor
+    $10$ gives $(C_1,N_1)$.
 \end{proof}

@@ -43,21 +43,22 @@ with their multiplicities. All norms are operator norms.
         TNLean.PEPS.AreaLaw.channelWordOmissionDefect_bounds,
         TNLean.PEPS.AreaLaw.channelWordOmissionDefect_append_sub_le}
     \leanok
-    Suppose $0\le k_i\le\mathbb 1$ for every label. Every $\mathcal E_w$ is
-    linear and contractive on differences, and
-    $0\le D_P(w;B)\le2\|B\|$. Appending a label $i$ to $w$ does not increase
-    the defect when $P(i)$ holds, and increases it by at most
-    $\|(\mathcal E_i-\mathrm{id})(\mathcal E_{w|_P}(B))\|$ otherwise.
+    Suppose $0\le k_i\le\mathbb 1$ for every $i\in F$. Every $\mathcal E_w$ is
+    linear with $\|\mathcal E_w(A-R)\|\le\|A-R\|$ and
+    $0\le D_P(w;B)\le2\|B\|$. For any $i\in F$, $D_P(wi;B)\le D_P(w;B)$ when
+    $P(i)$ holds, and
+    $D_P(wi;B)-D_P(w;B)\le\|(\mathcal E_i-\mathrm{id})(\mathcal E_{w|_P}(B))\|$
+    when $\neg P(i)$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_channel_word_norm,thm:al_root_channel_contraction,
         thm:al_channel_word_append}
     Linearity holds letter by letter, and contractivity follows from
-    Theorem~\ref{thm:al_channel_word_norm} applied to a difference. With
-    $A=\mathcal E_w(B)$ and $R=\mathcal E_{w|_P}(B)$, a retained letter acts
-    on both, so the new defect is $\|\mathcal E_i(A-R)\|\le\|A-R\|$. An omitted
-    letter acts only on $A$, and
-    $\|\mathcal E_i(A)-R\|\le\|\mathcal E_i(A-R)\|+\|\mathcal E_i(R)-R\|$.
+    Theorem~\ref{thm:al_channel_word_norm}. With $A=\mathcal E_w(B)$ and
+    $R=\mathcal E_{w|_P}(B)$, if $P(i)$ holds then
+    $D_P(wi;B)=\|\mathcal E_i(A-R)\|\le\|A-R\|=D_P(w;B)$; if $\neg P(i)$, then
+    $D_P(wi;B)=\|\mathcal E_i(A)-R\|\le\|\mathcal E_i(A-R)\|+\|\mathcal E_i(R)-R\|
+        \le D_P(w;B)+\|(\mathcal E_i-\mathrm{id})(R)\|$.
 \end{proof}
 
 \begin{theorem}[Finite prefix increments]
@@ -65,15 +66,16 @@ with their multiplicities. All norms are operator norms.
     \lean{PoissonWord.sum_prefix_increment}
     \leanok
     Let $f$ be a real function on finite words over any alphabet. For a word
-    $w=(i_0,\ldots,i_{m-1})$, let $w_{<j}$ be its first $j$ letters. Then
-    \begin{align*}
+    $w=(i_0,\ldots,i_{m-1})$, let $w_{<j}=(i_0,\ldots,i_{j-1})$. Then
+    \begin{align}
         \sum_{j=0}^{m-1}\bigl(f(w_{<j}i_j)-f(w_{<j})\bigr)
         =f(w)-f(\varnothing).
-    \end{align*}
+        \label{eq:al_poisson_prefix_increment}
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Since $w_{<j}i_j=w_{<j+1}$, the successive differences telescope
-    between the empty word and $w$.
+    Since $w_{<j}i_j=w_{<j+1}$, the sum telescopes from $w_{<0}=\varnothing$ to
+    $w_{<m}=w$.
 \end{proof}
 
 \begin{theorem}[Omitted-prefix telescope]
@@ -81,19 +83,20 @@ with their multiplicities. All norms are operator norms.
     \uses{def:al_channel_word_omission_defect}
     \lean{TNLean.PEPS.AreaLaw.channelWordOmissionDefect_le_sum_prefix}
     \leanok
-    Suppose $0\le k_i\le\mathbb 1$ for every label. With $w_{<j}$ the prefix
+    Suppose $0\le k_i\le\mathbb 1$ for every $i\in F$. With $w_{<j}$ the prefix
     of length $j$,
-    \begin{align*}
+    \begin{align}
         D_P(w;B)\le\sum_{0\le j<m,\ \neg P(i_j)}
         \|(\mathcal E_{i_j}-\mathrm{id})(\mathcal E_{w_{<j}|_P}(B))\|.
-    \end{align*}
+        \label{eq:al_channel_word_omission_telescope}
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_channel_word_omission_bounds,thm:al_poisson_prefix_increment}
-    Since the defect of the empty word vanishes, applying
-    Theorem~\ref{thm:al_poisson_prefix_increment} to the defect and bounding
-    each increment by Theorem~\ref{thm:al_channel_word_omission_bounds} gives
-    the inequality.
+    Since $D_P(\varnothing;B)=0$, applying (\ref{eq:al_poisson_prefix_increment})
+    to $f(u)=D_P(u;B)$ and bounding each increment by
+    Theorem~\ref{thm:al_channel_word_omission_bounds} gives
+    (\ref{eq:al_channel_word_omission_telescope}).
 \end{proof}
 
 For a finite alphabet $A$ and $t\ge0$, let $\nu_{A,t}$ be the law of the
@@ -105,21 +108,21 @@ word recorded by independent rate-one clocks on $[0,t]$, one for each label.
         PoissonWord.integral_sum_omitted_partition_prefix}
     \leanok
     Let $F$ be finite, let $P$ be a predicate on $F$, and put
-    $F_P=\{i\in F:P(i)\}$. Suppose a real function $H(u,i)$, for words $u$
-    over $F_P$ and $i\in F$, satisfies $0\le H(u,i)\le M$ for a real
-    constant $M$. For $t\ge0$, the sum over omitted positions is integrable
-    under $\nu_{F,t}$ and
-    \begin{align*}
+    $F_P=\{i\in F:P(i)\}$. If $0\le H(u,i)\le M$ for words $u$ over $F_P$ and
+    $i\in F$, then for $t\ge0$ the omitted-position sum is $\nu_{F,t}$-integrable
+    and
+    \begin{align}
         \int\sum_{0\le j<|w|,\ \neg P(i_j)}H(w_{<j}|_P,i_j)\,d\nu_{F,t}(w)
         =\int_0^t\sum_{i\in F,\ \neg P(i)}\int H(u,i)\,d\nu_{F_P,s}(u)\,ds.
-    \end{align*}
+        \label{eq:al_poisson_omitted_prefix_occupation}
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     Following
     \cite[``Real occupation at omitted labels'']{QICLean2026Blueprint},
-    setting the kernel to zero on retained labels and applying the retained-prefix
-    identity gives the integral formula, while bounding the sum by $M|w|$ and
-    using the finite expectation of the Poisson word length gives integrability.
+    bounding the sum by $M|w|$ and using $\int|w|\,d\nu_{F,t}(w)<\infty$ gives
+    integrability, while setting the kernel to zero on $F_P$ in the retained-prefix
+    occupation identity gives (\ref{eq:al_poisson_omitted_prefix_occupation}).
 \end{proof}
 
 \begin{theorem}[Expected defect as a time integral]
@@ -127,23 +130,26 @@ word recorded by independent rate-one clocks on $[0,t]$, one for each label.
     \uses{def:al_channel_word_omission_defect}
     \lean{TNLean.PEPS.AreaLaw.integrable_and_integral_channelWordOmissionDefect_le}
     \leanok
-    Suppose $0\le k_i\le\mathbb 1$ for every label of a finite set $F$, and
-    put $F_P=\{i\in F:P(i)\}$. Then $w\mapsto D_P(w;B)$ is integrable under
-    $\nu_{F,t}$, and its integral is at most
-    \begin{align*}
-        \int_0^t\sum_{i\in F,\ \neg P(i)}\int
+    Suppose $0\le k_i\le\mathbb 1$ for every $i$ in a finite set $F$, and put
+    $F_P=\{i\in F:P(i)\}$. Then $w\mapsto D_P(w;B)$ is $\nu_{F,t}$-integrable
+    and
+    \begin{align}
+        \int D_P(w;B)\,d\nu_{F,t}(w)
+        \le\int_0^t\sum_{i\in F,\ \neg P(i)}\int
         \|(\mathcal E_i-\mathrm{id})(\mathcal E_u(B))\|\,d\nu_{F_P,s}(u)\,ds.
-    \end{align*}
+        \label{eq:al_channel_word_expected_omission}
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_channel_word_omission_bounds,thm:al_channel_word_omission_telescope,
         thm:al_channel_word_filter,thm:al_poisson_omitted_prefix_occupation}
-    The defect is bounded and hence integrable. Integrating the telescope of
-    Theorem~\ref{thm:al_channel_word_omission_telescope}, identifying the filtered
-    word with its word over $F_P$ via Theorem~\ref{thm:al_channel_word_filter},
-    and applying Theorem~\ref{thm:al_poisson_omitted_prefix_occupation} to
-    $H(u,i)=\|(\mathcal E_i-\mathrm{id})(\mathcal E_u(B))\|\in[0,2\|B\|]$
-    yields the bound.
+    Since $0\le D_P(w;B)\le 2\|B\|$ by Theorem~\ref{thm:al_channel_word_omission_bounds},
+    $D_P(\cdot;B)$ is integrable. Integrating (\ref{eq:al_channel_word_omission_telescope}),
+    identifying $\mathcal E_{w_{<j}|_P}$ with the word over $F_P$ via
+    Theorem~\ref{thm:al_channel_word_filter}, and applying
+    (\ref{eq:al_poisson_omitted_prefix_occupation}) to
+    $H(u,i)=\|(\mathcal E_i-\mathrm{id})(\mathcal E_u(B))\|\in[0,2\|B\|]$ yields
+    (\ref{eq:al_channel_word_expected_omission}).
 \end{proof}
 
 \subsection{One omitted event}
@@ -154,49 +160,53 @@ word recorded by independent rate-one clocks on $[0,t]$, one for each label.
     \lean{TNLean.PEPS.AreaLaw.norm_localRootChannel_sub_self_le_exp_sum_siteOscillation,
         TNLean.PEPS.AreaLaw.norm_spectatorRootChannel_sub_self_le_exp_of_component_support}
     \leanok
-    Let $0\le k\le\mathbb 1$, let $(K_l)_{l\ge0}$ be increasing sets of
-    sites, let $C\ge0$, $c>0$ and $0<\alpha\le1$, and suppose
+    Let $0\le k\le\mathbb 1$, let $(K_l)_{l\ge0}$ be increasing site sets, let
+    $C\ge0$, $c>0$, and $0<\alpha\le1$, and suppose
     $\|k-E_{K_l}k\|\le Ce^{-cl^\alpha}$ for $0\le l\le n$. With
     $A=2+8\sqrt Ce^{c/2}$, every $B$ satisfies
-    \begin{align*}
+    \begin{align}
         \|\mathcal E_{K_n}(B)-B\|\le\sum_{l=0}^nAe^{-cl^\alpha/2}
         \sum_{z\in K_l}d_z(B).
-    \end{align*}
-    For graph balls $K_l=N_l(a)$, if $k$ acts on the component of $a$ and
-    $n$ is at least the largest distance from $a$ in that component, the
-    left side is $\|\mathcal E(B)-B\|$ for the full channel of $k$.
+        \label{eq:al_channel_event_error}
+    \end{align}
+    For $K_l=N_l(a)$, if $k$ is supported on the component of $a$ and $n$ is at
+    least the maximum distance from $a$ in that component, then
+    $\mathcal E_{K_n}(B)=\mathcal E(B)$ on the left-hand side of
+    (\ref{eq:al_channel_event_error}).
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_channel_shell_exp_bound,thm:qc_component_channel_stabilization}
     Summing the shell bounds of Theorem~\ref{thm:al_channel_shell_exp_bound}
-    over $0\le l\le n$ gives the inequality, and for the second claim the
-    radius-$n$ local channel equals the full channel.
+    over $0\le l\le n$ gives (\ref{eq:al_channel_event_error}), and
+    Theorem~\ref{thm:qc_component_channel_stabilization} gives
+    $\mathcal E_{N_n(a)}=\mathcal E$.
 \end{proof}
 
 \begin{theorem}[Component support from the tails]
     \label{thm:al_component_support_of_tail}
     \lean{TNLean.PEPS.AreaLaw.mem_supportedOperators_reachable_of_forall_tail}
     \leanok
-    If $\|k-E_{N_l(a)}k\|\le Ce^{-cl^\alpha}$ for every $l$, with $c,\alpha>0$,
-    then $k$ acts on the component of $a$.
+    If $\|k-E_{N_l(a)}k\|\le Ce^{-cl^\alpha}$ for every $l\ge0$, with
+    $c,\alpha>0$, then $k$ is supported on the connected component of $a$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:qc_graph_ball_stabilization}
-    Beyond the largest distance from $a$ in its component, the balls equal
-    the component, while the right side tends to zero.
+    For $l$ beyond the maximum distance from $a$ in its component $C_a$,
+    $N_l(a)=C_a$ by Theorem~\ref{thm:qc_graph_ball_stabilization}, while
+    $Ce^{-cl^\alpha}\to 0$ as $l\to\infty$, so $k=E_{C_a}k$.
 \end{proof}
 
 \begin{theorem}[Anchors whose balls contain a site]
     \label{thm:al_graph_ball_anchor_count}
     \lean{TNLean.PEPS.AreaLaw.card_graphBall_anchors_le}
     \leanok
-    Let labels on a graph be anchored at $a_i$ with at most $\mu$ labels per
-    site. For every site $y$ and every $l\ge0$, at most $\mu|N_l(y)|$ labels
-    satisfy $y\in N_l(a_i)$.
+    Let labels on a graph be anchored at $a_i$ with $|\{i:a_i=x\}|\le\mu$ for
+    every site $x$. For every site $y$ and $l\ge0$,
+    $|\{i:y\in N_l(a_i)\}|\le\mu|N_l(y)|$.
 \end{theorem}
 \begin{proof}\leanok
-    The relation $y\in N_l(a_i)$ is symmetric, so such an anchor lies in
-    $N_l(y)$, and each of these sites carries at most $\mu$ labels.
+    Since $y\in N_l(a_i)\iff a_i\in N_l(y)$ and each site in $N_l(y)$ anchors
+    at most $\mu$ labels, $|\{i:y\in N_l(a_i)\}|\le\mu|N_l(y)|$.
 \end{proof}
 
 \begin{theorem}[Distance tail of the omitted anchors]
@@ -208,26 +218,26 @@ word recorded by independent rate-one clocks on $[0,t]$, one for each label.
         TNLean.PEPS.AreaLaw.sum_graphBall_exponentialDistanceProfile_le,
         TNLean.PEPS.AreaLaw.exists_sum_omitted_graphBall_exponentialDistanceProfile_le}
     \leanok
-    Let $K,\mu\ge0$, $b,\beta>0$ and $0<\alpha\le1$. There is $L\ge0$ with the
-    following property, with $\gamma=\min(b,\beta)/2$. Let $G$ be a graph on
-    a finite set whose balls satisfy $|N_l(x)|\le K(l+1)^2$, and let labels
-    be anchored at $a_i$ with at most $\mu$ labels per site. Put
-    $p(z)=e^{-\beta d(z,S)^\alpha}$, and $p(z)=0$ when $z$ is not connected
-    to $S$. If every label in a set $E$ is at distance more than $r\ge0$ from
-    $S$, then for every $N$,
-    \begin{align*}
+    Let $K,\mu\ge0$, $b,\beta>0$, and $0<\alpha\le1$, and put
+    $\gamma=\min(b,\beta)/2$. There exists $L\ge0$ such that on any finite graph
+    with $|N_l(x)|\le K(l+1)^2$ and any labels anchored at $a_i$ with at most
+    $\mu$ labels per site, setting $p(z)=e^{-\beta d(z,S)^\alpha}$ on the
+    components meeting $S$ and $p(z)=0$ elsewhere, every set $E$ of labels with
+    $d(a_i,S)>r\ge0$ for all $i\in E$ and every $N\ge0$ satisfy
+    \begin{align}
         \sum_{i\in E}\sum_{l=0}^Ne^{-bl^\alpha}\sum_{z\in N_l(a_i)}p(z)
         \le L|S|e^{-\gamma r^\alpha}.
-    \end{align*}
+        \label{eq:al_omitted_anchor_tail}
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_graph_ball_anchor_count}
-    For $z\in N_l(a_i)$ the triangle inequality and $\alpha\le1$ give
-    $r^\alpha\le l^\alpha+d(z,S)^\alpha$, so half of each decay rate pays
-    for $e^{-\gamma r^\alpha}$. What remains is bounded by summing over all
-    labels: at most $\mu K(l+1)^2$ balls of radius $l$ contain a given site,
-    and $\sum_zp(z)\le|S|K\sum_n(1+n)^2e^{-\beta n^\alpha/2}$. Both series
-    converge.
+    For $i\in E$ and $z\in N_l(a_i)$, $r^\alpha\le l^\alpha+d(z,S)^\alpha$ since
+    $0<\alpha\le1$, so $e^{-bl^\alpha}p(z)\le e^{-\gamma r^\alpha}e^{-bl^\alpha/2}e^{-\beta d(z,S)^\alpha/2}$.
+    By Theorem~\ref{thm:al_graph_ball_anchor_count}, each $z$ lies in at most
+    $\mu K(l+1)^2$ balls $N_l(a_i)$, and
+    $\sum_z e^{-\beta d(z,S)^\alpha/2}\le|S|K\sum_{n=0}^\infty(1+n)^2e^{-\beta n^\alpha/2}<\infty$,
+    giving (\ref{eq:al_omitted_anchor_tail}).
 \end{proof}
 
 \subsection{The coupled omission estimates}
@@ -237,31 +247,31 @@ word recorded by independent rate-one clocks on $[0,t]$, one for each label.
     \uses{def:al_channel_word_omission_defect}
     \lean{TNLean.PEPS.AreaLaw.exists_integrable_and_integral_channelWordOmissionDefect_le}
     \leanok
-    Let $C,K,\mu\ge0$, $c>0$ and $0<\alpha\le1$. There are $D\ge0$ and
-    $v,\gamma>0$ with the following property. Let $G$ be a graph on a finite
-    set with $|N_l(x)|\le K(l+1)^2$, and let $0\le k_i\le\mathbb 1$ be
-    anchored at $a_i$ with at most $\mu$ labels per site, acting on the
-    component of $a_i$, with $\|k_i-E_{N_l(a_i)}k_i\|\le Ce^{-cl^\alpha}$ for
-    $l$ up to a cutoff beyond all component distances. Let $B$ act on $S$
-    and a spectator, and let every label outside $P$ be at distance more
-    than $r\ge0$ from $S$. Then
-    \begin{align*}
+    Let $C,K,\mu\ge0$, $c>0$, and $0<\alpha\le1$. There exist $D\ge0$ and
+    $v,\gamma>0$ such that on any finite graph with $|N_l(x)|\le K(l+1)^2$, if
+    $0\le k_i\le\mathbb 1$ are anchored at $a_i$ with at most $\mu$ labels per
+    site, act on the component of $a_i$, and satisfy
+    $\|k_i-E_{N_l(a_i)}k_i\|\le Ce^{-cl^\alpha}$ up to a cutoff beyond all
+    component distances, then for any $B$ supported on $S$ and a spectator and
+    any $P$ with $d(a_i,S)>r\ge0$ whenever $\neg P(i)$,
+    \begin{align}
         \int D_P(w;B)\,d\nu_{F,t}(w)\le Dt|S|\|B\|e^{vt-\gamma r^\alpha}.
-    \end{align*}
+        \label{eq:al_graph_channel_omission}
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_channel_word_expected_omission,thm:al_channel_event_error,
         thm:al_omitted_anchor_tail,thm:al_actual_channel_uniform_bounds,
         thm:al_channel_poisson_graph_growth,thm:al_retained_anchor_fibers}
-    The retained labels satisfy the same hypotheses. By
-    Theorem~\ref{thm:al_channel_poisson_graph_growth}, the expected
-    oscillation of the retained process at time $s$ and site $z$ is at most
-    $2\|B\|e^{vs}p(z)$, with $\beta=c/(4\cdot2^\alpha)$. Integrating the
-    one-event bound of Theorem~\ref{thm:al_channel_event_error} against this
-    gives, for each omitted label, a bound by the inner sum of
-    Theorem~\ref{thm:al_omitted_anchor_tail}. Summing over the omitted labels
-    and integrating over $s\in(0,t]$ in
-    Theorem~\ref{thm:al_channel_word_expected_omission} completes the estimate.
+    By Theorem~\ref{thm:al_channel_poisson_graph_growth} (applied via
+    Theorem~\ref{thm:al_retained_anchor_fibers} and
+    Theorem~\ref{thm:al_actual_channel_uniform_bounds} to $F_P$),
+    $\int d_z(\mathcal E_u(B))\,d\nu_{F_P,s}(u)\le 2\|B\|e^{vs}p(z)$ with
+    $\beta=c/(4\cdot2^\alpha)$. Substituting this into
+    (\ref{eq:al_channel_event_error}), summing over $\{i\in F:\neg P(i)\}$ via
+    (\ref{eq:al_omitted_anchor_tail}), and integrating over $s\in[0,t]$ in
+    (\ref{eq:al_channel_word_expected_omission}) yields
+    (\ref{eq:al_graph_channel_omission}).
 \end{proof}
 
 On a finite domain $\Lambda\subseteq\Z^2$ with its induced graph, the balls
@@ -272,25 +282,25 @@ satisfy $|N_l(x)|\le2(l+1)^2$ by Theorem~\ref{thm:al_lattice_counts}.
     \uses{def:al_channel_word_omission_defect}
     \lean{TNLean.PEPS.AreaLaw.exists_domain_integrable_and_integral_channelWordOmissionDefect_le}
     \leanok
-    Let $C,\mu\ge0$, $c>0$ and $0<\alpha\le1$. There are $A\ge0$ and
-    $v,\gamma>0$ with the following property. Let $0\le k_i\le\mathbb 1$ on a
-    finite domain $\Lambda$, anchored at $a_i$ with at most $\mu$ labels per
-    site, satisfy $\|k_i-E_{N_l(a_i)}k_i\|\le Ce^{-cl^\alpha}$ for all
-    $l\ge0$. Let $B$ act on $S$ and a finite spectator, and let every label
-    outside $P$ be at distance more than $r\ge0$ from $S$. Then, as in the
-    coupled channel estimate in the proof of the local constraint products
-    lemma, $w\mapsto D_P(w;B)$ is integrable and
-    \begin{align*}
+    Let $C,\mu\ge0$, $c>0$, and $0<\alpha\le1$. There exist $A\ge0$ and
+    $v,\gamma>0$ such that if $0\le k_i\le\mathbb 1$ on a finite domain
+    $\Lambda\subseteq\Z^2$ are anchored at $a_i$ with at most $\mu$ labels per
+    site and satisfy $\|k_i-E_{N_l(a_i)}k_i\|\le Ce^{-cl^\alpha}$ for all
+    $l\ge0$, then for any $B$ supported on $S$ and a finite spectator and any
+    $P$ with $d_\Lambda(a_i,S)>r\ge0$ whenever $\neg P(i)$, $w\mapsto D_P(w;B)$
+    is integrable and
+    \begin{align}
         \mathbb E\|\mathcal E_{\rm full}(B)-\mathcal E_{\rm ret}(B)\|
         \le At|S|\|B\|e^{vt-\gamma r^\alpha}.
-    \end{align*}
+        \label{eq:al_domain_channel_omission}
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_graph_channel_omission,thm:al_component_support_of_tail,
         thm:al_lattice_counts}
-    Theorem~\ref{thm:al_component_support_of_tail} gives the component
-    support and the largest distance in the domain serves as a common cutoff, so
-    Theorem~\ref{thm:al_graph_channel_omission} with $K=2$ yields the bound.
+    Combine Theorem~\ref{thm:al_component_support_of_tail} and
+    Theorem~\ref{thm:al_lattice_counts} ($K=2$) with
+    Theorem~\ref{thm:al_graph_channel_omission}.
 \end{proof}
 
 \begin{theorem}[Omission of distant events from the constraint product]
@@ -298,28 +308,27 @@ satisfy $|N_l(x)|\le2(l+1)^2$ by Theorem~\ref{thm:al_lattice_counts}.
     \uses{def:al_local_root_channel}
     \lean{TNLean.PEPS.AreaLaw.exists_domainConstraintWord_omission}
     \leanok
-    Under the hypotheses of Theorem~\ref{thm:al_domain_channel_omission},
-    with the same constants, suppose also $k_i\Omega=0$ for a unit vector
+    Under the hypotheses of Theorem~\ref{thm:al_domain_channel_omission}, with
+    the same constants $A,v,\gamma$, suppose $k_i\Omega=0$ for a unit vector
     $\Omega$. Fix an integer $r\ge0$ and retain the labels with
-    $d_\Lambda(a_i,S)\le r$. On each realization, let $D$ be the product of
-    all $G_i$ in occurrence order, later factors on the left, and let
-    $D_{\rm ret}$ be the product over the retained events. For every unit
-    spectator vector $\xi$,
-    \begin{align*}
+    $d_\Lambda(a_i,S)\le r$. On each realization, let $D$ and $D_{\rm ret}$ be
+    the chronological products of $G_i$ over all events and over the retained
+    events, respectively. For every unit spectator vector $\xi$,
+    \begin{align}
         \mathbb E\|(D-D_{\rm ret})B(\Omega\otimes\xi)\|
         \le At|S|\|B\|e^{vt-\gamma r^\alpha}.
-    \end{align*}
-    This is the omission estimate of the local constraint products lemma;
-    the paper assumes $S\ne\varnothing$ and $r\ge1$, neither of which is needed here.
+        \label{eq:al_domain_constraint_omission}
+    \end{align}
+    This establishes the omission estimate of \cite[Lemma~10.1]{OpenAI2026AreaLaw}
+    without requiring $S\ne\varnothing$ or $r\ge1$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_domain_channel_omission,thm:al_channel_word_vector_difference}
-    A label outside the retained set is at distance more than $r$ from
-    every site of $S$. On the vector $\Omega\otimes\xi$, every channel word
-    acts as the product of its roots $G_i$, so the vector difference is at
-    most $D_P(w;B)$ pointwise
-    (Theorem~\ref{thm:al_channel_word_vector_difference}). Integrating and
-    applying Theorem~\ref{thm:al_domain_channel_omission} gives the stated bound.
+    By Theorem~\ref{thm:al_channel_word_vector_difference}, $k_i\Omega=0$
+    implies $\|(D-D_{\rm ret})B(\Omega\otimes\xi)\|\le D_P(w;B)$ pointwise for
+    $P(i)\iff d_\Lambda(a_i,S)\le r$; integrating via
+    (\ref{eq:al_domain_channel_omission}) gives
+    (\ref{eq:al_domain_constraint_omission}).
 \end{proof}
 
 \begin{theorem}[Omission for the exact positive constraints]
@@ -327,18 +336,19 @@ satisfy $|N_l(x)|\le2(l+1)^2$ by Theorem~\ref{thm:al_lattice_counts}.
     \uses{def:al_local_root_channel}
     \lean{TNLean.PEPS.AreaLaw.exists_latticeConstraintWord_omission}
     \leanok
-    Let $p\ge1$, $R$, $J\ge0$ and $\Delta>0$, and put $\alpha=p/(p+1)$. There
-    are $A\ge0$ and $v,\gamma>0$ such that the conclusion of
-    Theorem~\ref{thm:al_domain_constraint_omission} holds for the exact
-    positive constraints of every gapped lattice Hamiltonian with ground
-    state $\Omega$, with any anchoring $a_i\in X_i$.
+    Let $p\ge1$, $R,J\ge0$, and $\Delta>0$, and put $\alpha=p/(p+1)$. There
+    exist $A\ge0$ and $v,\gamma>0$ such that
+    (\ref{eq:al_domain_constraint_omission}) holds for the exact positive
+    constraints of every gapped lattice Hamiltonian with ground state $\Omega$
+    and any anchoring $a_i\in X_i$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_domain_constraint_omission,thm:al_lattice_positive_replacement,
         thm:al_lattice_counts}
-    Theorem~\ref{thm:al_lattice_positive_replacement} gives the positivity,
-    the zero vector $\Omega$ and the tails, and
-    Theorem~\ref{thm:al_lattice_counts} bounds the anchor multiplicity.
+    Theorem~\ref{thm:al_lattice_positive_replacement} supplies $0\le k_i\le\mathbb 1$,
+    $k_i\Omega=0$, and the stretched-exponential tails, while
+    Theorem~\ref{thm:al_lattice_counts} bounds the anchor multiplicity $\mu$, so
+    Theorem~\ref{thm:al_domain_constraint_omission} applies.
 \end{proof}
 
 \subsection{The local constraint products lemma}
@@ -347,40 +357,37 @@ satisfy $|N_l(x)|\le2(l+1)^2$ by Theorem~\ref{thm:al_lattice_counts}.
     \label{thm:al_local_constraint_products}
     \lean{TNLean.PEPS.AreaLaw.exists_domainLocalConstraintProducts}
     \leanok
-    Let $C,\mu\ge0$, $c>0$ and $0<\alpha\le1$. There are $A\ge0$ and
-    $\gamma,v>0$ with the following property. Let $0\le k_i\le\mathbb 1$ be
-    finitely many operators on a finite domain $\Lambda\subseteq\Z^2$ with its
-    induced graph, anchored at $a_i$ with at most $\mu$ labels per site, and
-    with $\|k_i-E_{i,l}k_i\|\le Ce^{-cl^\alpha}$ for every $l\ge0$, where
-    $E_{i,l}$ is the conditional expectation onto $N_l(a_i)$. Put
-    $G_i=(\mathbb 1-k_i)^{1/2}$ and $G_{i,r}=(\mathbb 1-E_{i,r}k_i)^{1/2}$.
-    Fix $S\subseteq\Lambda$, an integer $r\ge0$ and $t\ge0$. At each label run
-    an independent rate-one Poisson clock on $[0,t]$. On each realization, in
-    occurrence order with later factors on the left, let $D$ be the product of
-    all $G_i$, let $D_{\rm ret}$ retain only the events with
-    $d_\Lambda(a_i,S)\le r$, and let $L$ be the same retained product with
-    each $G_i$ replaced by $G_{i,r}$. Then
-    \begin{align*}
+    Let $C,\mu\ge0$, $c>0$, and $0<\alpha\le1$. There exist $A\ge0$ and
+    $\gamma,v>0$ with the following property. Let $0\le k_i\le\mathbb 1$ on a
+    finite domain $\Lambda\subseteq\Z^2$ be anchored at $a_i$ with at most $\mu$
+    labels per site and satisfy $\|k_i-E_{i,l}k_i\|\le Ce^{-cl^\alpha}$ for all
+    $l\ge0$, where $E_{i,l}=E_{N_l(a_i)}$. Put $G_i=(\mathbb 1-k_i)^{1/2}$ and
+    $G_{i,r}=(\mathbb 1-E_{i,r}k_i)^{1/2}$. Fix $S\subseteq\Lambda$, an integer
+    $r\ge0$, and $t\ge0$, and run independent rate-one Poisson clocks on
+    $[0,t]$. On each realization, in chronological order (later factors on the
+    left), let $D$ be the product of all $G_i$, let $D_{\rm ret}$ retain the
+    events with $d_\Lambda(a_i,S)\le r$, and let $L$ replace each $G_i$ in
+    $D_{\rm ret}$ by $G_{i,r}$. Then every $L$ is a contraction supported on
+    $N_{2r}(S)$,
+    \begin{align}
         \mathbb E\|D_{\rm ret}-L\|\le At|S|(1+r)^2e^{-\gamma r^\alpha},
-    \end{align*}
-    and every $L$ is a contraction supported on $N_{2r}(S)$. If in addition
-    $k_i\Omega=0$ for a unit vector $\Omega$ and $B$ acts on $S$ and a finite
-    spectator system, then for every unit spectator vector $\xi$,
-    \begin{align*}
+        \label{eq:al_local_constraint_products_trunc}
+    \end{align}
+    and if $k_i\Omega=0$ for a unit vector $\Omega$ and $B$ acts on $S$ and a
+    finite spectator, then for every unit spectator vector $\xi$,
+    \begin{align}
         \mathbb E\|(D-D_{\rm ret})B(\Omega\otimes\xi)\|
         \le At|S|\|B\|e^{vt-\gamma r^\alpha}.
-    \end{align*}
-    All three products are read off the same clock realization, and the
-    constants depend only on $C,c,\alpha,\mu$, giving
-    \cite[Lemma~10.1]{OpenAI2026AreaLaw} without the assumptions that $S$ is
-    nonempty and $r\ge1$.
+        \label{eq:al_local_constraint_products_omit}
+    \end{align}
+    This proves \cite[Lemma~10.1]{OpenAI2026AreaLaw} on a single clock
+    realization without requiring $S\ne\varnothing$ or $r\ge1$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_domain_product_truncation,thm:al_domain_constraint_omission}
-    The retained product over the retained events of a full word is the
-    product over the retained letters of that word, in the same order. The
-    first estimate and the support clause follow from
-    Theorem~\ref{thm:al_domain_product_truncation}, and the second follows from
-    Theorem~\ref{thm:al_domain_constraint_omission}, taking the larger of the
-    two prefactors and the smaller of the two decay rates.
+    Combine Theorem~\ref{thm:al_domain_product_truncation} for
+    (\ref{eq:al_local_constraint_products_trunc}) and the support of $L$ with
+    Theorem~\ref{thm:al_domain_constraint_omission} for
+    (\ref{eq:al_local_constraint_products_omit}), taking the maximum of the two
+    prefactors $A$ and the minimum of the two decay rates $\gamma$.
 \end{proof}

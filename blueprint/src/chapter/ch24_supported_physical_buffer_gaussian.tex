@@ -10,18 +10,17 @@
         TNLean.PEPS.Approximation.squareLocalizationVelocity_eq}
     \leanok
     \uses{def:area_graph_ball_localization_constants}
-    For a real number $J$, put $C_\square=2C_0(1)$ and
-    $v_\square(J)=v(1,2J)$, with $C_0$ and $v$ as in
-    Definition~\ref{def:area_graph_ball_localization_constants}. These are the
-    constants for range one and term-norm bound $2J$, and
-    \begin{align*}
-        C_\square    & =\frac{64e^{3/2}}{1-e^{-1/2}}, &
-        v_\square(J) & =320e^2J.
-    \end{align*}
-    Thus $C_\square>0$, and $v_\square(J)\geq0$ when $J\geq0$. They are the
-    constants $C$ and $v$ of the Lieb--Robinson and localization bounds of
-    \cite{OpenAI2026PolynomialPEPS}, \texttt{02-information.tex}, lines
-    486--508, with decay rate $\mu=1/2$.
+    For $J\in\mathbb R$, with $C_0$ and $v$ as in
+    Definition~\ref{def:area_graph_ball_localization_constants}, define the
+    range-$1$, term-bound-$2J$ constants
+    \begin{align}
+        C_\square    & =2C_0(1)=\frac{64e^{3/2}}{1-e^{-1/2}}>0, &
+        v_\square(J) & =v(1,2J)=320e^2J
+        \label{eq:peps_square_localization_constants}
+    \end{align}
+    (so $v_\square(J)\geq0$ for $J\geq0$), matching the Lieb--Robinson and
+    localization constants $C,v$ of \cite{OpenAI2026PolynomialPEPS},
+    \texttt{02-information.tex}, lines 486--508, at decay rate $\mu=1/2$.
 \end{definition}
 
 \begin{theorem}[Supported Gaussian approximation of the physical buffer]
@@ -32,75 +31,58 @@
     \uses{def:polynomial_peps_model,def:qc_site_pair_coordinates,
         def:peps_frame_sheet_swap,def:qc_site_expectation,
         def:peps_square_localization_constants}
-    Fix an integer $q\ge1$ and a real number $J\ge0$.
-    There are positive constants $C,v,c$ with the following property.
-    Let $L\ge0$ be an integer and let
-    $H=\sum_x h_x+\sum_e h_e$ be a Hermitian Hamiltonian on the open
-    square $\mathcal V=\{0,\ldots,L-1\}^2$. Each original interaction
-    is supported on its designated site or nearest-neighbour edge and
-    has norm at most $J$. Let $R,C_0\subseteq\mathcal V$ be disjoint,
-    and put $Q=(R\cup C_0)^c$.
-
-    Write $\mathcal X_D=[q]^D$. Fixed finite enumerations of
-    $\mathcal X_R$ and $\mathcal X_{C_0}$ give a coordinate bijection
-    $s:\mathcal X_{\mathcal V}\to P\times\mathcal X_Q$, where
-    $P=[|\mathcal X_R|]\times[|\mathcal X_{C_0}|]$.
-    Define the doubled regrouping by
-    \begin{align*}
-        g(x,y) & =((s(x)_1,s(y)_1),(s(x)_2,s(y)_2)).
-    \end{align*}
-    Let $p$ pair the two configuration values at each physical site.
-    Let $a:\mathcal V\to\Lambda$ be the coordinate bijection to the
-    integer rectangle, and let $a_*$ be its induced bijection on paired
-    configurations. Put $u=a_*\circ p$.
-    For a coordinate bijection $b$, denote matrix reindexing by
-    $\mathcal R_b(A)(x,y)=A(b^{-1}x,b^{-1}y)$.
-
-    Let $F_R$ exchange the two copies at the sites in $R$.
-    For an arbitrary complex matrix $W$ on
-    $\mathcal X_Q\times\mathcal X_Q$, define
-    \begin{align*}
-        K  & =\mathcal R_u(H\otimes I+I\otimes H),                \\
-        F  & =\mathcal R_u(F_R),                                  \\
-        K' & =FKF^*,                                              \\
+    Fix $q\ge1$ and $J\ge0$, and set $C=C_\square$, $v=v_\square(J)$, and
+    $c=1/2$ from Definition~\ref{def:peps_square_localization_constants}
+    (or positive constants $C,v+1,c$). Let $L\ge0$ and let
+    $H=\sum_x h_x+\sum_e h_e$ be a Hermitian Hamiltonian on
+    $\mathcal V=\{0,\ldots,L-1\}^2$ with each site or nearest-neighbour term
+    satisfying $\|h_x\|,\|h_e\|\le J$. For disjoint $R,C_0\subseteq\mathcal V$,
+    put $Q=(R\cup C_0)^c$, $\mathcal X_D=[q]^D$, and
+    $P=[|\mathcal X_R|]\times[|\mathcal X_{C_0}|]$. Fixed enumerations of
+    $\mathcal X_R,\mathcal X_{C_0}$ induce a bijection
+    $s:\mathcal X_{\mathcal V}\to P\times\mathcal X_Q$ and doubled regrouping
+    \begin{align}
+        g(x,y) & =((s(x)_1,s(y)_1),(s(x)_2,s(y)_2)). \notag
+    \end{align}
+    With $p$ pairing the two copy values per site and $a:\mathcal V\to\Lambda$
+    the bijection to the integer rectangle, put $u=a_*\circ p$ and write
+    $\mathcal R_b(A)(x,y)=A(b^{-1}x,b^{-1}y)$. Let $F_R$ swap the two copies
+    on $R$. For any matrix $W$ on $\mathcal X_Q\times\mathcal X_Q$, define
+    \begin{align}
+        K  & =\mathcal R_u(H\otimes I+I\otimes H),                &
+        F  & =\mathcal R_u(F_R), \notag                             \\
+        K' & =FKF^*,                                              &
         V  & =\mathcal R_{u\circ g^{-1}}(I_{P\times P}\otimes W).
-    \end{align*}
-    Let $\partial R$ be the original nearest-neighbour edges with
-    exactly one endpoint in $R$, and put
-    \begin{align*}
-        Z_R & =\bigcup_{\{x,y\}\in\partial R}\{x,y\}.
-    \end{align*}
-    For each integer $\ell\ge0$, set
-    $B=N_\ell(a(Q)\cup a(Z_R))$, with distance measured in the
-    induced graph of $\Lambda$.
+        \label{eq:peps_supported_buffer_operators}
+    \end{align}
+    With $\partial R$ the nearest-neighbour edges meeting both $R$ and $R^c$,
+    set $Z_R=\bigcup_{\{x,y\}\in\partial R}\{x,y\}$ and, for $\ell\ge0$,
+    $B=N_\ell(a(Q)\cup a(Z_R))$ in the induced graph of $\Lambda$.
 
-    There is a differentiable path $U$ such that
-    \begin{align*}
-        U(0)  & =I,                                 \\
+    There is a differentiable path $U$ of unitaries supported on $B$ solving
+    \begin{align}
+        U(0)  & =I,                                 &
         U'(t) & =iE_B(e^{itK'}(K'-K)e^{-itK'})U(t).
-    \end{align*}
-    For every real $t$, the operator $U(t)$ is unitary and supported
-    on $B$. This same path has the following property for every
-    variance $\eta\ge0$ and every cutoff $T\ge0$.
-    With $\gamma_\eta$ the centered Gaussian measure of variance $\eta$,
-    define
-    \begin{align*}
+        \label{eq:peps_supported_buffer_unitary_ode}
+    \end{align}
+    For every $\eta,T\ge0$, with $\gamma_\eta$ the centered Gaussian measure of
+    variance $\eta$, the operators
+    \begin{align}
         M_{\eta,T}
-         & =\int_{[-T,T]}E_B(e^{itK'}Ve^{-itK'})U(t)\,d\gamma_\eta(t), \\
+         & =\int_{[-T,T]}E_B(e^{itK'}Ve^{-itK'})U(t)\,d\gamma_\eta(t), &
         \widetilde M_{\eta,T}
-         & =\int_{[-T,T]}e^{itK'}Ve^{-itK}\,d\gamma_\eta(t).
-    \end{align*}
-    Then $M_{\eta,T}$ is supported on $B$ and
-    \begin{align*}
-        \|M_{\eta,T}\| & \le\|W\|,                           \\
+         & =\int_{[-T,T]}e^{itK'}Ve^{-itK}\,d\gamma_\eta(t)
+        \label{eq:peps_supported_buffer_integrals}
+    \end{align}
+    satisfy $\operatorname{supp}(M_{\eta,T})\subseteq B$ and, including empty
+    grids or regions and $\eta=0$ or $T=0$
+    (\cite{OpenAI2026PolynomialPEPS}),
+    \begin{align}
+        \|M_{\eta,T}\| & \le\|W\|,                           &
         \|M_{\eta,T}-\widetilde M_{\eta,T}\|
                        & \le\|W\|CL^2(1+8JL^2T)e^{vT-c\ell}.
-    \end{align*}
-    The integrals retain the original restricted Gaussian measure, and this
-    spatial Gaussian approximation of \cite{OpenAI2026PolynomialPEPS} includes
-    empty grids and regions, zero variance, and zero cutoff.
-    The estimate holds with $C=C_\square$, $v=v_\square(J)$ and $c=1/2$, the
-    constants of Definition~\ref{def:peps_square_localization_constants}.
+        \label{eq:peps_supported_buffer_bounds}
+    \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
@@ -109,42 +91,29 @@
         thm:swapped_square_hamiltonian_interaction,
         thm:area_supported_gaussian_integral,
         def:peps_square_localization_constants}
-    Take $C=C_\square$, $v=v_\square(J)$ and $c=1/2$, which are the explicit
-    constants of Theorem~\ref{thm:area_supported_gaussian_integral}
-    at local dimension $q^2$, range one, and interaction bound $2J\geq0$.
-    The existence of positive constants follows by replacing $v$ by $v+1$.
-    Theorem~\ref{thm:swapped_square_hamiltonian_interaction} constructs
-    a local interaction family with these parameters and total $K'$,
-    using the Hermitian parts of the original interactions whose
-    sum is the given Hermitian operator $H$.
-
-    Theorem~\ref{thm:peps_physical_buffer_coordinates} identifies $V$
-    with the reindexed lift of $W$ from $Q$, so $V$ is supported
-    on $a(Q)$. Theorem~\ref{thm:peps_swapped_doubled_boundary_bound}
-    gives support of $K'-K$ on $a(Z_R)$ and
-    $\|K'-K\|\le8JL^2$. Coordinate reindexing preserves norms, while
-    the tensor-product norm inequality gives $\|V\|\le\|W\|$.
-
-    Applying Theorem~\ref{thm:area_supported_gaussian_integral} to these
-    operators and the common neighbourhood $B$ constructs
-    the path $U$ independently of $\eta$ and $T$, and hence the integral
-    $M_{\eta,T}$. Its support and norm conclusions give the first
-    assertion, and since $|\Lambda|=L^2$ and $T\ge0$, its error estimate
-    yields
-    \begin{align*}
+    Theorem~\ref{thm:swapped_square_hamiltonian_interaction} realizes $K'$ via
+    a range-$1$ interaction family of local dimension $q^2$ and term bound
+    $2J\ge0$ using the Hermitian parts of the terms of $H$. By
+    Theorem~\ref{thm:peps_physical_buffer_coordinates}, $V$ is supported on
+    $a(Q)$ with $\|V\|\le\|W\|$; by
+    Theorem~\ref{thm:peps_swapped_doubled_boundary_bound}, $K'-K$ is supported
+    on $a(Z_R)$ with $\|K'-K\|\le8JL^2$. Applying
+    Theorem~\ref{thm:area_supported_gaussian_integral} on $B$ with $|\Lambda|=L^2$
+    and the constants (\ref{eq:peps_square_localization_constants}) yields $U$
+    solving (\ref{eq:peps_supported_buffer_unitary_ode}) independently of
+    $\eta,T$, the bound $\|M_{\eta,T}\|\le\|V\|\le\|W\|$, and
+    \begin{align}
         \|M_{\eta,T}-\widetilde M_{\eta,T}\|
-         & \le\|V\|CL^2(1+\|K'-K\|T)e^{vT-c\ell} \\
-         & \le\|W\|CL^2(1+8JL^2T)e^{vT-c\ell}.
-    \end{align*}
+         & \le\|V\|CL^2(1+\|K'-K\|T)e^{vT-c\ell}
+        \le\|W\|CL^2(1+8JL^2T)e^{vT-c\ell}. \notag
+    \end{align}
 \end{proof}
 
 \subsection{The partially swapped Hamiltonian at interaction range $R$}
 
-The source treats only site and nearest-neighbour terms, which is
-interaction range one. The statements of this subsection extend the
-boundary estimate and the supported Gaussian approximation to a Hamiltonian
-of range $R$ on a finite domain; the range-one statements on the open square
-above are unchanged.
+The statements below extend the range-$1$ boundary and Gaussian buffer
+estimates on the open square above to Hamiltonians of interaction range $R$
+on a finite domain $\Lambda$.
 
 \begin{definition}[Crossing supports and the swap coefficient]
     \label{def:peps_crossing_supports}
@@ -152,11 +121,10 @@ above are unchanged.
         TNLean.Lattice.swapBoundaryCoefficient}
     \leanok
     \uses{def:area_law_hamiltonian}
-    Let $\Lambda$ be a finite domain, $R\ge0$ an integer and
-    $A\subseteq\Lambda$. A support of range $R$ \emph{crosses} $A$ if it meets
-    $A$ and is not contained in $A$; let $Z_R(A)$ be the union of the
-    crossing supports. With $v_R=1+2R(R+1)$ and $\mu_R=2^{v_R-1}$, put
-    $c_R=4\mu_R$.
+    For a finite domain $\Lambda$, an integer $R\ge0$, and $A\subseteq\Lambda$,
+    a range-$R$ support $X$ \emph{crosses} $A$ if $X\cap A\ne\varnothing$ and
+    $X\not\subseteq A$. Denote the union of all crossing supports by $Z_R(A)$,
+    and set $v_R=1+2R(R+1)$, $\mu_R=2^{v_R-1}$, and $c_R=4\mu_R$.
 \end{definition}
 
 \begin{lemma}[Crossing supports lie near both sides and are few]
@@ -165,19 +133,17 @@ above are unchanged.
         TNLean.Lattice.card_admissibleSupport_le}
     \leanok
     \uses{def:peps_crossing_supports}
-    Every site of $Z_R(A)$ is joined by walks of length at most $R$ to a site
-    of $A$ and to a site outside $A$. There are at most $\mu_R|\Lambda|$
-    supports of range $R$.
+    Every $z\in Z_R(A)$ is joined by walks of length at most $R$ to $A$ and to
+    $A^c$, and there are at most $\mu_R|\Lambda|$ supports of range $R$.
 \end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_crossing_supports}
-    A site $z$ of $Z_R(A)$ lies in a crossing support $X$, which contains a
-    site $x\in A$ and a site $y\notin A$. Any two sites of a support of range
-    $R$ are joined by a walk of length at most $R$, so this holds for $z,x$
-    and for $z,y$. Every support is nonempty, and at most $\mu_R$ supports
-    contain a given site by Theorem~\ref{thm:area_law_crossing_supports}, so
-    summing over the sites gives at most $\mu_R|\Lambda|$ supports.
+    Any $z\in Z_R(A)$ belongs to a range-$R$ support $X$ containing some
+    $x\in A$ and $y\notin A$, so walks of length at most $R$ join $z$ to $x$
+    and $y$. Each support is nonempty and at most $\mu_R$ supports contain any
+    given site by Theorem~\ref{thm:area_law_crossing_supports}, giving at most
+    $\mu_R|\Lambda|$ supports in total.
 \end{proof}
 
 \begin{theorem}[The partially swapped Hamiltonian at range $R$]
@@ -189,28 +155,26 @@ above are unchanged.
     \leanok
     \uses{def:area_law_hamiltonian,def:qc_site_pair_coordinates,
         def:peps_frame_sheet_swap,def:peps_crossing_supports}
-    Let $H=\sum_Xh_X$ be a Hamiltonian of range $R$ on a finite domain
-    $\Lambda$ with Hermitian terms of norm at most $J\ge0$, let
-    $A\subseteq\Lambda$, and in paired-site coordinates let
-    $K=H\otimes I+I\otimes H$ and $K'=F_AKF_A^*$. Then $K'$ is a Hamiltonian
-    of range $R$ with local dimension $q^2$, the same supports and terms of
-    norm at most $2J$. Moreover $K'-K$ is the sum of the corresponding
-    differences over the supports crossing $A$, so it is supported on
-    $Z_R(A)$ and
-    \begin{align*}
+    Let $H=\sum_Xh_X$ be a range-$R$ Hamiltonian on a finite domain $\Lambda$
+    with Hermitian terms satisfying $\|h_X\|\le J$, let $A\subseteq\Lambda$,
+    and in paired-site coordinates set $K=H\otimes I+I\otimes H$ and
+    $K'=F_AKF_A^*$. Then $K'$ is a range-$R$ Hamiltonian of local dimension
+    $q^2$ on the same supports with term norms at most $2J$, and $K'-K$ sums
+    only over supports crossing $A$, so $\operatorname{supp}(K'-K)\subseteq Z_R(A)$
+    and (extending Theorem~\ref{thm:peps_swapped_doubled_boundary_bound})
+    \begin{align}
         \|K'-K\| & \le c_RJ|\Lambda|.
-    \end{align*}
-    This extends the range-one estimate of
-    Theorem~\ref{thm:peps_swapped_doubled_boundary_bound}.
+        \label{eq:peps_swapped_local_hamiltonian_bound}
+    \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{lem:peps_crossing_supports_near_and_few}
-    Conjugating a doubled term by the swap keeps its support, and changes its
-    norm by a factor at most two. A term supported inside $A$ or disjoint
-    from it commutes with the swap after doubling, so only crossing supports
-    remain. Each remaining difference has norm at most $4J$, and there are at
-    most $\mu_R|\Lambda|$ of them.
+    Swap conjugation preserves support, scales doubled term norms by at most $2$,
+    and commutes with terms supported inside $A$ or $A^c$. By
+    Lemma~\ref{lem:peps_crossing_supports_near_and_few}, at most
+    $\mu_R|\Lambda|$ crossing supports remain, each contributing at most $4J$
+    to $\|K'-K\|$, yielding (\ref{eq:peps_swapped_local_hamiltonian_bound}).
 \end{proof}
 
 \begin{theorem}[Edge-boundary norm of the partially swapped Hamiltonian]
@@ -219,29 +183,26 @@ above are unchanged.
     \leanok
     \uses{def:area_law_hamiltonian,def:qc_site_pair_coordinates,
         def:peps_frame_sheet_swap,def:peps_crossing_supports}
-    Let $H=\sum_Xh_X$ be a Hamiltonian of range $R$ on a finite domain
-    $\Lambda$, with Hermitian terms of norm at most $J\ge0$.
-    For $A\subseteq\Lambda$, let $\partial_\Lambda A$ be its edge boundary
-    in the induced nearest-neighbour graph. In paired-site coordinates,
-    put $K=H\otimes I+I\otimes H$ and $K'=F_AKF_A^*$. Then
-    \begin{align*}
-        \|K'-K\| & \le c_Rv_RJ|\partial_\Lambda A|.
-    \end{align*}
-    This is a finite-range extension of the boundary estimate in
-    \cite{OpenAI2026PolynomialPEPS}, \texttt{02-information.tex},
-    lines 416--424 and 513--524.
+    Under the hypotheses of Theorem~\ref{thm:peps_swapped_local_hamiltonian},
+    with $\partial_\Lambda A$ the edge boundary of $A$ in the induced
+    nearest-neighbour graph of $\Lambda$,
+    \begin{align}
+        \|K'-K\| & \le c_Rv_RJ|\partial_\Lambda A|,
+        \label{eq:peps_swapped_doubled_edge_boundary}
+    \end{align}
+    extending \cite{OpenAI2026PolynomialPEPS}, \texttt{02-information.tex},
+    lines 416--424 and 513--524, to range $R$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_swapped_local_hamiltonian,
         thm:peps_sheet_swap_doubled_term_norm,thm:area_law_crossing_supports}
-    Only supports crossing $A$ contribute to $K'-K$. By
-    Theorem~\ref{thm:peps_sheet_swap_doubled_term_norm} and $\|h_X\|\le J$,
-    each difference has norm at most $4J$.
-    By Theorem~\ref{thm:area_law_crossing_supports},
-    there are at most $v_R\mu_R|\partial_\Lambda A|$ such supports.
-    The triangle inequality and $c_R=4\mu_R$ give the estimate.
-    Pairing the site coordinates preserves the operator norm.
+    By Theorems~\ref{thm:peps_swapped_local_hamiltonian} and
+    \ref{thm:peps_sheet_swap_doubled_term_norm}, only crossing supports
+    contribute to $K'-K$, each with norm at most $4J$.
+    Theorem~\ref{thm:area_law_crossing_supports} bounds their count by
+    $v_R\mu_R|\partial_\Lambda A|$, and $c_R=4\mu_R$ yields
+    (\ref{eq:peps_swapped_doubled_edge_boundary}).
 \end{proof}
 
 \begin{theorem}[Supported Gaussian approximation of the physical buffer at range $R$]
@@ -252,28 +213,25 @@ above are unchanged.
         thm:peps_physical_buffer_coordinates,
         thm:area_supported_gaussian_integral,
         def:area_graph_ball_localization_constants}
-    Fix $q\ge1$ and $J\ge0$, and let $H$ be a Hamiltonian of range $R$ on a
-    finite domain $\Lambda$ with terms of norm at most $J$. Let
-    $A,C\subseteq\Lambda$ be disjoint with buffer $Q=(A\cup C)^c$, and define
-    $K$, $K'$ and $V$ as in
-    Theorem~\ref{thm:peps_supported_physical_buffer_gaussian}, now directly
-    in the coordinates of $\Lambda$. For each integer $\ell\ge0$ put
-    $B=N_\ell(Q\cup Z_R(A))$. Then the conclusions of
-    Theorem~\ref{thm:peps_supported_physical_buffer_gaussian} hold, with the
-    error bound
-    \begin{align*}
+    Fix $q\ge1$ and $J\ge0$, let $H$ be a range-$R$ Hamiltonian on a finite
+    domain $\Lambda$ with term norms at most $J$, and let $A,C\subseteq\Lambda$
+    be disjoint with $Q=(A\cup C)^c$. Define $K,K',V$ as in
+    (\ref{eq:peps_supported_buffer_operators}) in $\Lambda$-coordinates, and
+    set $B=N_\ell(Q\cup Z_R(A))$ for $\ell\ge0$. Then the conclusions of
+    Theorem~\ref{thm:peps_supported_physical_buffer_gaussian} hold with
+    \begin{align}
         \|M_{\eta,T}-\widetilde M_{\eta,T}\|
          & \le\|W\|\,2C_0(R)|\Lambda|(1+c_RJ|\Lambda|T)e^{v(R,2J)T-\ell/2}.
-    \end{align*}
-    This extends Theorem~\ref{thm:peps_supported_physical_buffer_gaussian},
-    which treats range one on the open square, to range $R$.
+        \label{eq:peps_supported_buffer_range_bound}
+    \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
-    Theorem~\ref{thm:peps_swapped_local_hamiltonian} writes $K'$ as a
-    Hamiltonian of range $R$ with term bound $2J$, with $K'-K$ supported on
-    $Z_R(A)$ of norm at most $c_RJ|\Lambda|$, and
-    Theorem~\ref{thm:peps_physical_buffer_coordinates} places $V$ on $Q$
-    with $\|V\|\le\|W\|$. Theorem~\ref{thm:area_supported_gaussian_integral}
-    at range $R$ and term bound $2J$ then gives the claim.
+    Combine Theorem~\ref{thm:peps_swapped_local_hamiltonian}
+    ($\operatorname{supp}(K'-K)\subseteq Z_R(A)$ and
+    $\|K'-K\|\le c_RJ|\Lambda|$) and
+    Theorem~\ref{thm:peps_physical_buffer_coordinates}
+    ($\operatorname{supp}(V)\subseteq Q$ and $\|V\|\le\|W\|$) with
+    Theorem~\ref{thm:area_supported_gaussian_integral} at range $R$ and term
+    bound $2J$.
 \end{proof}

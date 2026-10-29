@@ -9,8 +9,8 @@
     \lean{TNLean.PEPS.AreaLaw.latticeDiamond,
         TNLean.PEPS.AreaLaw.mem_latticeDiamond}
     \leanok
-    For $a\in\Z^2$ and a nonnegative integer $R$, let
-    $D_R(a)=\{x\in\Z^2:\ell(a,x)\le R\}$ be the finite lattice diamond.
+    For $a\in\Z^2$ and $R\in\N$, define the lattice diamond
+    $D_R(a)=\{x\in\Z^2:\ell(a,x)\le R\}$.
 \end{definition}
 
 \begin{theorem}[Exact lattice diamond count]
@@ -21,33 +21,28 @@
         TNLean.PEPS.AreaLaw.card_le_diamond_of_walks,
         TNLean.PEPS.AreaLaw.card_le_diamond_of_edist_le}
     \leanok
-    As the local counting bound of \cite[Section~2]{OpenAI2026AreaLaw},
-    the diamond $D_R(a)$ has cardinality $v_R=1+2R(R+1)$.
-    Let $\iota:V\to\Z^2$ be injective. A finite set $S\subseteq V$
-    with $\ell(\iota(a),\iota(x))\le R$ for each $x\in S$ has at most
-    $v_R$ elements. If every graph edge has displacement at most one,
-    the same bound holds when every $x\in S$ is reached from $a$ by a
-    graph walk of length at most $R$, or when $d_G(a,x)\le R$.
+    As in \cite[Section~2]{OpenAI2026AreaLaw},
+    $|D_R(a)|=v_R=1+2R(R+1)$. If $\iota:V\to\Z^2$ is injective and
+    $S\subseteq V$ is finite with $\ell(\iota(a),\iota(x))\le R$ for all
+    $x\in S$, then $|S|\le v_R$. If every edge of a graph $G$ on $V$ has
+    $\ell$-displacement at most $1$, the bound $|S|\le v_R$ also holds
+    whenever each $x\in S$ is joined to $a$ by a $G$-walk of length at most
+    $R$, or when $d_G(a,x)\le R$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:area_lattice_diamond,thm:area_walk_displacement}
-    Translating and reflecting the diamond moves its anchor to zero.
-    For $x\in[-R,R]\cap\Z$, the vertical fiber has
-    $2(R-|x|)+1$ sites, and distinct fibers are disjoint, so
+    Translation reduces $a$ to $0$. Partitioning $D_R(0)$ into vertical
+    fibers of size $2(R-|x|)+1$ ($x\in[-R,R]\cap\Z$) and inducting on $R$
+    (increment $(2R+1)\cdot2+2=4R+4$) gives
     \begin{align}
         |D_R(0)| & =\sum_{x=-R}^R\bigl(2(R-|x|)+1\bigr)
         =1+2R(R+1).
         \label{eq:area_diamond_rows}
     \end{align}
-    The second equality follows by induction on $R$: the initial sum is
-    one, and increasing $R$ by one adds two sites to each of the $2R+1$
-    existing fibers together with two one-site endpoint fibers, for a
-    total increment of $4R+4$ matching the difference of the right-hand
-    side of (\ref{eq:area_diamond_rows}). Finally, any injective
-    coordinate map embeds $S$ into the diamond, and the
-    walk-displacement bound applied to a shortest walk yields the two
-    graph-distance consequences.
+    For injective $\iota$, $\iota(S)\subseteq D_R(\iota(a))$ gives
+    $|S|\le v_R$, and Theorem~\ref{thm:area_walk_displacement} reduces the
+    walk and $d_G(a,x)\le R$ hypotheses to $\ell(\iota(a),\iota(x))\le R$.
 \end{proof}
 
 \begin{theorem}[Exact lattice interaction weight bounds]
@@ -60,67 +55,55 @@
         TNLean.PEPS.AreaLaw.interactionChainWeightSum_le_diamond_pow,
         TNLean.PEPS.AreaLaw.interactionChainWeightSum_norm_le_diamond_pow}
     \leanok
-    Following \cite[Sections~2 and~4]{OpenAI2026AreaLaw}, let $V$ be a
-    finite graph embedded injectively in $\Z^2$, with edge displacement
-    at most one. Let $\mathcal F$ be a finite family of
-    distinct finite supports such that any two sites in a support admit
-    a walk in $V$ of length at most the nonnegative integer $R$.
-    Set $v_R=1+2R(R+1)$ and $\mu_R=2^{v_R-1}$. Each support in $\mathcal F$ has
-    at most $v_R$ sites, and at most $\mu_R$ supports in $\mathcal F$ contain
-    any given site $a$. For $J\ge0$ and real weights $w_X\le J$,
+    Following \cite[Sections~2 and~4]{OpenAI2026AreaLaw}, let $V$ be a finite
+    graph embedded injectively into $\Z^2$ with edge displacement at most $1$,
+    and let $\mathcal F$ be a finite family of distinct supports $X\subseteq V$
+    of $V$-walk diameter at most $R\in\N$. With $v_R=1+2R(R+1)$ and
+    $\mu_R=2^{v_R-1}$, every $X\in\mathcal F$ and $a\in V$ satisfy
+    $|X|\le v_R$ and $|\{X\in\mathcal F:a\in X\}|\le\mu_R$. For $J\ge0$ and
+    weights $w_X\le J$ (in particular $w_X=\lVert h_X\rVert\le J$),
     \begin{align}
-        \sum_{X\in\mathcal F:\,a\in X}w_X & \le\mu_RJ.
+        \sum_{X\in\mathcal F:\,a\in X}w_X & \le\mu_RJ,
         \label{eq:area_diamond_site}
     \end{align}
-    If in addition $w_X\ge0$ for each $X\in\mathcal F$, then
+    and if $0\le w_X\le J$ for all $X\in\mathcal F$, then for every
+    $X\in\mathcal F$ and $n\in\N$,
     \begin{align}
-        W_n(X) & \le(v_R\mu_RJ)^n
+        W_n(X) & \le(v_R\mu_RJ)^n.
         \label{eq:area_diamond_chain}
     \end{align}
-    for every $X\in\mathcal F$ (allowing repeated supports in the chain). Both
-    bounds apply in particular to the operator-norm weights
-    $w_X=\lVert h_X\rVert$ for elements $h_X$ of any seminormed additive
-    group with $\lVert h_X\rVert\le J$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:area_diamond_count,thm:area_support_count,
         thm:area_chain_growth}
-    A nonempty support $X\in\mathcal F$ lies in the graph ball of radius $R$
-    around any of its sites, and such a ball has at most $v_R$ sites; the empty
-    support has no sites. Hence every support has at most $v_R$ sites. For any
-    fixed site $a$, every support containing $a$ lies in the ball of radius $R$
-    around $a$, so deleting $a$ injects the family of supports containing $a$
-    into the subsets of the remaining at most $v_R-1$ sites,
-    giving at most $\mu_R$ supports. Bounding each term by $J$
-    gives~(\ref{eq:area_diamond_site}), and applying the chain-growth bound with
-    $v=v_R$ and $b=\mu_RJ$ yields (\ref{eq:area_diamond_chain}). Since
-    seminorms are nonnegative, the same inequalities hold for
-    $w_X=\lVert h_X\rVert$.
+    Every nonempty $X\in\mathcal F$ lies in a radius-$R$ ball around any
+    $a\in X$, so $|X|\le v_R$ by Theorem~\ref{thm:area_diamond_count}, and
+    $X\mapsto X\setminus\{a\}$ injects $\{X\in\mathcal F:a\in X\}$ into the
+    power set of at most $v_R-1$ sites, giving
+    $|\{X\in\mathcal F:a\in X\}|\le\mu_R$ by
+    Theorem~\ref{thm:area_support_count}. Bounding $w_X\le J$ yields
+    (\ref{eq:area_diamond_site}), and Theorem~\ref{thm:area_chain_growth}
+    with $v=v_R$ and $b=\mu_RJ$ yields~(\ref{eq:area_diamond_chain}).
 \end{proof}
 
 \section{Chains reaching a target}
 
-Let $\mathcal F$ be a finite family of distinct finite supports in a graph
-$G$ on $V$, and let $w_X\in\R$. Walks in $G$ are not restricted to lie within a
-single support, and $G$ need not be finite or connected.
+Let $\mathcal F$ be a finite family of distinct finite supports in a graph $G$
+on $V$, and let $w_X\in\R$.
 
 \begin{definition}[Chain weight at a target]
     \label{def:area_target_chain}
     \lean{TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum}
     \leanok
-    For a target site $y\in V$ and a finite support $X$, define
+    For $y\in V$ and finite $X\subseteq V$, define recursively
     \begin{align}
-        T_0^y(X) & =\mathbf1_{\{y\in X\}},
-        \label{eq:area_target_initial}
-    \end{align}
-    \begin{align}
+        T_0^y(X)     & =\mathbf1_{\{y\in X\}},
+        \label{eq:area_target_initial}         \\
         T_{n+1}^y(X) & =
         \sum_{Y\in\mathcal F:\,Y\cap X\ne\varnothing}w_YT_n^y(Y).
         \label{eq:area_target_step}
     \end{align}
-    Thus $T_0^y(X)$ tests whether $y\in X$, and supports in $\mathcal F$ may be
-    revisited at subsequent steps.
 \end{definition}
 
 \begin{theorem}[Nonnegative target weights]
@@ -129,15 +112,15 @@ single support, and $G$ need not be finite or connected.
     \lean{TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_nonneg,
         TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_le}
     \leanok
-    If $w_Y\ge0$ for each $Y\in\mathcal F$, then
-    $0\le T_n^y(X)\le W_n(X)$ for every finite support $X$ and every $n\ge0$.
+    If $w_Y\ge0$ for all $Y\in\mathcal F$, then $0\le T_n^y(X)\le W_n(X)$ for
+    every finite $X\subseteq V$ and $n\ge0$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:area_target_chain,def:area_chain_weight}
-    At $n=0$, the indicator lies in $\{0,1\}$. The claim for general $n$
-    follows by induction from (\ref{eq:area_target_step}) and
-    (\ref{eq:area_chain_step}) since $w_Y\ge0$.
+    By induction on $n$ from $T_0^y(X)=\mathbf1_{\{y\in X\}}\in\{0,1\}$,
+    (\ref{eq:area_target_step}), and~(\ref{eq:area_chain_step}) since
+    $w_Y\ge0$.
 \end{proof}
 
 \begin{theorem}[Exact exclusion of distant targets]
@@ -147,22 +130,20 @@ single support, and $G$ need not be finite or connected.
         TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_eq_zero_of_lt_edist,
         TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_eq_zero_of_edist_eq_top}
     \leanok
-    Suppose every pair of sites in each $X\in\mathcal F$ is connected by a walk
-    in $G$ of length at most $R\ge0$. Fix $X\in\mathcal F$ and $a\in X$. For
-    any real weights $w_Y$, one has $T_n^y(X)=0$ whenever there is no walk from
-    $a$ to $y$ of length at most $(n+1)R$, and in particular whenever
-    $(n+1)R<d_G(a,y)$ (including $d_G(a,y)=\infty$).
+    Suppose every pair of sites in each $X\in\mathcal F$ is joined by a
+    $G$-walk of length at most $R\ge0$. For $X\in\mathcal F$, $a\in X$, and
+    any $w_Y\in\R$, $T_n^y(X)=0$ whenever no walk of length at most $(n+1)R$
+    joins $a$ to $y$, and in particular whenever $(n+1)R<d_G(a,y)$ (including
+    $d_G(a,y)=\infty$).
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:area_target_chain}
-    Proceeding by induction on $n$, the base case $n=0$ holds because any
-    $y\in X$ is connected to $a$ by a walk of length at most $R$. For the
-    inductive step, if $Y\in\mathcal F$ meets $X$ at a site $z$, any walk from
-    $z$ to $y$ of length at most $(n+1)R$ concatenates with a walk from $a$ to
-    $z$ of length at most $R$ to give a walk from $a$ to $y$ of length at most
-    $(n+2)R$. By the induction hypothesis, $T_n^y(Y)=0$ for every $Y$ meeting
-    $X$, so every term in~(\ref{eq:area_target_step}) vanishes.
+    Induct on $n$: at $n=0$, $y\in X$ implies $d_G(a,y)\le R$; for the step,
+    if $z\in Y\cap X$ and a walk of length $\le(n+1)R$ joins $z$ to $y$,
+    concatenating with a walk of length $\le R$ from $a$ to $z$ gives a walk of
+    length $\le(n+2)R$, so otherwise $T_n^y(Y)=0$ for all $Y\cap X\ne\varnothing$
+    in~(\ref{eq:area_target_step}).
 \end{proof}
 
 \begin{theorem}[Graph-distance indicator bound]
@@ -170,25 +151,25 @@ single support, and $G$ need not be finite or connected.
     \uses{def:area_target_chain}
     \lean{TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_le_indicator_pow}
     \leanok
-    Under the range hypotheses of Theorem~\ref{thm:area_target_zero},
-    suppose $w_Y\ge0$, $|Y|\le v$ for each $Y\in\mathcal F$, and
-    $\sum_{Y\in\mathcal F:\,x\in Y}w_Y\le b$ for every site $x$, where
-    $v\in\N$ and $b\ge0$. For $X\in\mathcal F$,
-    $a\in X$, and $n\ge0$,
+    Under the range hypothesis of Theorem~\ref{thm:area_target_zero}, suppose
+    $w_Y\ge0$, $|Y|\le v\in\N$ for all $Y\in\mathcal F$, and
+    $\sum_{Y\in\mathcal F:\,x\in Y}w_Y\le b$ for all $x\in V$ ($b\ge0$). For
+    $X\in\mathcal F$, $a\in X$, and $n\ge0$,
     \begin{align}
-        T_n^y(X) & \le(vb)^n\mathbf1_{\{d_G(a,y)\le(n+1)R\}}.
+        T_n^y(X) & \le(vb)^n\mathbf1_{\{d_G(a,y)\le(n+1)R\}},
         \label{eq:area_target_indicator}
     \end{align}
-    In the finite lattice setting of Theorem~\ref{thm:area_diamond_budget},
-    this holds with $v=v_R$ and $b=\mu_RJ$.
+    which holds with $v=v_R$ and $b=\mu_RJ$ in the setting of
+    Theorem~\ref{thm:area_diamond_budget}.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:area_target_domination,thm:area_target_zero,
         thm:area_chain_growth}
-    If $d_G(a,y)\le(n+1)R$, then $T_n^y(X)\le W_n(X)\le(vb)^n$;
-    otherwise $T_n^y(X)=0$ by Theorem~\ref{thm:area_target_zero}. The lattice
-    specialization follows from the bounds $v=v_R$ and $b=\mu_RJ$.
+    Combine $T_n^y(X)\le W_n(X)\le(vb)^n$ (Theorems~\ref{thm:area_target_domination}
+    and~\ref{thm:area_chain_growth}) when $d_G(a,y)\le(n+1)R$ with
+    $T_n^y(X)=0$ (Theorem~\ref{thm:area_target_zero}) when
+    $d_G(a,y)>(n+1)R$.
 \end{proof}
 
 \section{Exponential generating series}
@@ -198,8 +179,8 @@ single support, and $G$ need not be finite or connected.
     \uses{def:area_target_chain}
     \lean{TNLean.PEPS.AreaLaw.interactionChainTargetWeightSum_le_exponential}
     \leanok
-    Under the hypotheses of Theorem~\ref{thm:area_target_indicator}, let
-    $d_G(a,y)=D\in\N$ and $\mu\ge0$, and set $\kappa=vb$. Then
+    Under the hypotheses of Theorem~\ref{thm:area_target_indicator}, for
+    $d_G(a,y)=D\in\N$, $\mu\ge0$, and $\kappa=vb$,
     \begin{align}
         T_n^y(X) & \le e^{\mu R-\mu D}(\kappa e^{\mu R})^n.
         \label{eq:area_chain_exponential}
@@ -208,10 +189,10 @@ single support, and $G$ need not be finite or connected.
 \begin{proof}
     \leanok
     \uses{thm:area_target_domination,thm:area_chain_growth,thm:area_target_zero}
-    The right-hand side of~(\ref{eq:area_chain_exponential}) equals
-    $\kappa^n e^{\mu((n+1)R-D)}$. When $D\le(n+1)R$, the exponential factor is
-    at least $1$ and $T_n^y(X)\le W_n(X)\le\kappa^n$; when $D>(n+1)R$,
-    $T_n^y(X)=0$ while the right-hand side is nonnegative.
+    Since $e^{\mu R-\mu D}(\kappa e^{\mu R})^n=\kappa^n e^{\mu((n+1)R-D)}$,
+    the bound follows from $T_n^y(X)\le W_n(X)\le\kappa^n\le\kappa^n e^{\mu((n+1)R-D)}$
+    for $D\le(n+1)R$ and $T_n^y(X)=0\le\kappa^n e^{\mu((n+1)R-D)}$ for
+    $D>(n+1)R$.
 \end{proof}
 
 \begin{definition}[Interaction-chain series]
@@ -219,8 +200,7 @@ single support, and $G$ need not be finite or connected.
     \uses{def:area_target_chain}
     \lean{TNLean.PEPS.AreaLaw.interactionChainPropagationSeries}
     \leanok
-    For $t\in\R$, the exponential generating series of the target-chain
-    weights is
+    For $t\in\R$, define the exponential generating series
     \begin{align}
         S_t^y(X) & =\sum_{n=0}^{\infty}\frac{(2|t|)^n}{n!}T_n^y(X).
         \label{eq:area_chain_series}
@@ -232,10 +212,9 @@ single support, and $G$ need not be finite or connected.
     \uses{def:area_chain_series}
     \lean{TNLean.PEPS.AreaLaw.interactionChainPropagationSeries_summable_and_le}
     \leanok
-    Under the hypotheses of Theorem~\ref{thm:area_chain_exponential},
-    the scalar interaction-chain series in~(\ref{eq:area_chain_series})
-    from the proof of \cite[Lemma~4.1]{OpenAI2026AreaLaw} converges and
-    satisfies
+    Under the hypotheses of Theorem~\ref{thm:area_chain_exponential}, the
+    series~(\ref{eq:area_chain_series}) from the proof of
+    \cite[Lemma~4.1]{OpenAI2026AreaLaw} converges and satisfies
     \begin{align}
         S_t^y(X) & \le e^{\mu R-\mu D}
         \exp\!\bigl(2|t|\,vb\,e^{\mu R}\bigr).
@@ -246,15 +225,15 @@ single support, and $G$ need not be finite or connected.
     \leanok
     \uses{thm:area_chain_exponential,thm:area_target_domination,
         def:area_chain_series}
-    Set $C=e^{\mu R-\mu D}$ and $A=vb\,e^{\mu R}$. By the coefficient bound,
+    With $C=e^{\mu R-\mu D}$ and $A=vb\,e^{\mu R}$,
+    (\ref{eq:area_chain_exponential}) gives
     \begin{align}
         0\le\frac{(2|t|)^n}{n!}T_n^y(X)
-         & \le C\frac{(2|t|A)^n}{n!}.
+         & \le C\frac{(2|t|A)^n}{n!},
         \label{eq:area_series_comparison}
     \end{align}
-    Since the right-hand side sums to $C\exp(2|t|A)$, comparison gives
-    summability and (\ref{eq:area_chain_series_bound}) follows by summing
-    (\ref{eq:area_series_comparison}).
+    and summing~(\ref{eq:area_series_comparison}) over $n\ge0$ yields
+    summability and~(\ref{eq:area_chain_series_bound}).
 \end{proof}
 
 \begin{theorem}[Series vanishing between components]
@@ -262,13 +241,12 @@ single support, and $G$ need not be finite or connected.
     \uses{def:area_chain_series}
     \lean{TNLean.PEPS.AreaLaw.interactionChainPropagationSeries_eq_zero_of_edist_eq_top}
     \leanok
-    Under the range hypotheses of Theorem~\ref{thm:area_target_zero},
-    if $d_G(a,y)=\infty$, then $S_t^y(X)=0$ for every $t\in\R$ and any real
-    weights $w_Y$.
+    Under the range hypothesis of Theorem~\ref{thm:area_target_zero}, if
+    $d_G(a,y)=\infty$, then $S_t^y(X)=0$ for all $t\in\R$ and $w_Y\in\R$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:area_target_zero,def:area_chain_series}
-    By Theorem~\ref{thm:area_target_zero}, $T_n^y(X)=0$ for every $n$, so every
-    term in~(\ref{eq:area_chain_series}) vanishes.
+    By Theorem~\ref{thm:area_target_zero}, $T_n^y(X)=0$ for all $n\ge0$ in
+    (\ref{eq:area_chain_series}).
 \end{proof}

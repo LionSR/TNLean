@@ -144,10 +144,10 @@
     volume~\cite[``Alternating sums of shifted exponentials'']{QICLean2026Blueprint},
     applied with $Y=\beta(H-H_C-H_{B(C)})$ and the terms $\beta H_i$, $i\in C$, of
     norm at most $\beta J$, gives
-    \begin{align*}
+    \begin{align}
         \left|\operatorname{tr}\bigl(O\rho(\beta,C)\bigr)\right|
-        \le\|O\|\bigl(e^{\beta J}-1\bigr)^{n_C}\operatorname{tr}e^{-Y}.
-    \end{align*}
+        \le\|O\|\bigl(e^{\beta J}-1\bigr)^{n_C}\operatorname{tr}e^{-Y}.\notag
+    \end{align}
     Theorem~\ref{thm:hastings_cluster_removal_trace} gives
     $\operatorname{tr}e^{-Y}\le e^{(n_C+n_{B(C)})J\beta}Z$.
 \end{proof}
@@ -161,9 +161,9 @@
     that $H_j$ acts on some site of $C$. Suppose that every site $i\in C$ has a
     set $N(i)$ of at most $S$ sites that contains $i$ and every $j$ for which
     $H_j$ acts on $i$. Then
-    \begin{align*}
-        n_C+n_{B(C)}\le Sn_C.
-    \end{align*}
+    \begin{align}
+        n_C+n_{B(C)}\le Sn_C.\notag
+    \end{align}
     In~\cite[lines 181--183]{Hastings2006Solving}, $N(i)$ is the set of sites
     within the interaction range $R$ of $i$, of which there are at most $S$,
     and $H_j$ acts only on sites within distance $R$ of $j$. This is the second
@@ -219,10 +219,10 @@
     for the cluster $C_1\cup\dots\cup C_m$ and the boundary
     $B(C_1)\cup\dots\cup B(C_m)$. Under the hypotheses of
     Theorem~\ref{thm:hastings_cluster_part_bound} on these terms,
-    \begin{align*}
+    \begin{align}
         \left|\operatorname{tr}\bigl(O\rho(\beta,C_1,\dots,C_m)\bigr)\right|
-        \le\|O\|\prod_{i=1}^m y^{n_{C_i}}Z.
-    \end{align*}
+        \le\|O\|\prod_{i=1}^m y^{n_{C_i}}Z.\notag
+    \end{align}
     This is the bound on $\rho(\beta,C_1,C_2,\dots)$ that the remark
     of~\cite[lines 1218--1224]{Hastings2006Solving} derives in the same way as
     (percb2). For the clusters of one term of the power series, no $C_j$ meets
@@ -266,12 +266,12 @@
     volume~\cite[``Alternating sums between thermal factors, uniform form'']{QICLean2026Blueprint},
     with the weights $k/n$, $1/n$ and $(n-k-1)/n$ and the terms $\beta H_i$ of norm at most
     $\beta J$, gives
-    \begin{align*}
+    \begin{align}
         \left|\operatorname{tr}\bigl(Oe^{-k\beta H/n}\rho(\beta/n,C)
         e^{-(n-k-1)\beta H/n}\bigr)\right|
         \le\|O\|\bigl(e^{J\beta/n}-1\bigr)^{n_C}Z^{(n-1)/n}
-        \bigl(\operatorname{tr}e^{-Y}\bigr)^{1/n}.
-    \end{align*}
+        \bigl(\operatorname{tr}e^{-Y}\bigr)^{1/n}.\notag
+    \end{align}
     Theorem~\ref{thm:hastings_cluster_removal_trace} gives
     $\operatorname{tr}e^{-Y}\le e^{(n_C+n_{B(C)})J\beta}Z$. Taking
     $1/n$-th powers and using $Z^{(n-1)/n}Z^{1/n}=Z$ bounds the right side by
@@ -312,11 +312,11 @@
     volume~\cite[``Products of alternating sums, uniform form'']{QICLean2026Blueprint}, with
     the operator $O$ before the first factor, the identity before the others, the weight $1/n$
     on every factor and the terms $\beta H_i$ of norm at most $\beta J$, gives
-    \begin{align*}
+    \begin{align}
         \left|\operatorname{tr}\bigl(O\rho(\beta/n,C_0)\cdots\rho(\beta/n,C_{n-1})\bigr)\right|
         \le\|O\|\prod_j\bigl(e^{J\beta/n}-1\bigr)^{n_{C_j}}
-        \bigl(\operatorname{tr}e^{-Y_j}\bigr)^{1/n}.
-    \end{align*}
+        \bigl(\operatorname{tr}e^{-Y_j}\bigr)^{1/n}.\notag
+    \end{align}
     Theorems~\ref{thm:hastings_cluster_removal_trace} and~\ref{thm:hastings_cluster_exp_count},
     the latter with $\beta/n$ in place of $\beta$, give
     $(\operatorname{tr}e^{-Y_j})^{1/n}\le e^{Sn_{C_j}J\beta/n}Z^{1/n}$, and the $n$ factors

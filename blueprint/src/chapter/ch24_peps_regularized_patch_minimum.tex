@@ -27,24 +27,20 @@ of the September 24, 2026 polynomial-PEPS manuscript.
     }
     \leanok
     \uses{def:peps_regional_operator_extension}
-    Let $b>0$ and $a_0,\ldots,a_{m-1}\in\R$, and put $A=\sum_j a_j$. Define
-    \begin{align*}
+    For $b>0$ and $a_0,\ldots,a_{m-1}\in\R$ with $A=\sum_j a_j$, define
+    \begin{align}
         \mathcal D & =\prod_{j=0}^{m-1}
-        \{x_j\in\operatorname{End}(\mathcal H_{X_j}):x_j\ge0,\ \tr x_j=1\},         \\
-        K_j(x)     & =(x_j+bI_{X_j})^{-a_j/2},\qquad L_j(x)=\widehat{K_j(x)}_{X_j}, \\
-        M(x)       & =L_{m-1}(x)\cdots L_0(x),                                      \\
-        \Psi(x)    & =M(x)\Omega,\qquad F(x)=\|\Psi(x)\|.
-    \end{align*}
-    The densities are independent for different indices, including indices
-    with the same region. The powers act on the full regional space.
-    For $m=0$, the product is the identity and $F=1$.
+        \{x_j\in\operatorname{End}(\mathcal H_{X_j}):x_j\ge0,\ \tr x_j=1\},         \notag \\
+        K_j(x)     & =(x_j+bI_{X_j})^{-a_j/2},\qquad L_j(x)=\widehat{K_j(x)}_{X_j}, \notag \\
+        M(x)       & =L_{m-1}(x)\cdots L_0(x),                                      \notag \\
+        \Psi(x)    & =M(x)\Omega,\qquad F(x)=\|\Psi(x)\|
+        \label{eq:peps_regularized_patch_objective}
+    \end{align}
+    (with $M(x)=I$ and $F(x)=1$ when $m=0$).
 
-    In the special case of two occurrences $X_0=X_1=X$, write
-    $K_j=(x_j+bI_X)^{-a_j/2}$. The upper line below carries $\mathcal H_X$;
-    the lower line carries the complementary tensor factor
-    $\mathcal H_{V\setminus X}$, which may be one-dimensional.
-    This picture illustrates repeated support only; the general family of
-    regions remains arbitrary.
+    For two occurrences $X_0=X_1=X$ with $K_j=(x_j+bI_X)^{-a_j/2}$, the upper
+    wire below carries $\mathcal H_X$ and the lower wire carries
+    $\mathcal H_{V\setminus X}$:
     % Formula: ((K_1 tensor I)(K_0 tensor I) Omega)_{i,alpha}
     % = sum_{j,k} (K_1)_{i,j}(K_0)_{j,k} Omega_{k,alpha}.
     % Source: 03-patches.tex lines 73--90 at adc7f1241b42e322a6451854ab7e4b4c146bf78a.
@@ -80,23 +76,17 @@ of the September 24, 2026 polynomial-PEPS manuscript.
             \tnmark[form=label, label pos=s]{on outsideoutput 0.5}{$\alpha$}
         \end{tenkz}
     \end{center}
-    Reading from $\Omega$ on the right, $K_0\otimes I$ acts first and
-    $K_1\otimes I$ acts second. Thus the displayed output is
-    $\Psi(x)=(K_1\otimes I)(K_0\otimes I)\Omega$.
+    Reading right to left from $\Omega$, $\Psi(x)=(K_1\otimes I)(K_0\otimes I)\Omega$.
 \end{definition}
 
-For a qubit example, take $X=V$, $b=1$, $a_0=a_1=2$,
-$x_0=\ketbra{0}{0}$ and $x_1=\ketbra{+}{+}$, where
-$\ket{+}=(\ket{0}+\ket{1})/\sqrt2$. Then
-\[
-    K_0=\begin{pmatrix}1/2&0\\0&1\end{pmatrix},\qquad
-    K_1=\begin{pmatrix}3/4&-1/4\\-1/4&3/4\end{pmatrix}.
-\]
-The product order matters:
-$(K_1K_0)_{01}=-1/4$, whereas $(K_0K_1)_{01}=-1/8$.
-The complementary space is $\C$ in this example, so the lower identities
-are scalar identities.
-
+For a single-qubit example ($X=V$, $b=1$, $a_0=a_1=2$,
+$x_0=\ketbra{0}{0}$, $x_1=\ketbra{+}{+}$ with
+$\ket{+}=(\ket{0}+\ket{1})/\sqrt2$),
+\begin{align}
+    K_0 & =\begin{pmatrix}1/2&0\\0&1\end{pmatrix},                &
+    K_1 & =\begin{pmatrix}3/4&-1/4\\-1/4&3/4\end{pmatrix}, \notag
+\end{align}
+so $(K_1K_0)_{01}=-1/4\ne-1/8=(K_0K_1)_{01}$.
 
 \begin{lemma}[Compactness and continuity]
     \label{lem:peps_regularized_patch_compact_continuous}
@@ -108,21 +98,16 @@ are scalar identities.
     }
     \leanok
     \uses{def:peps_regularized_patch_objective}
-    The set $\mathcal D$ is compact and nonempty. Each $L_j$ and the
-    objective $F$ are continuous on $\mathcal D$.
+    The set $\mathcal D$ is compact and nonempty, and each $L_j$ and $F$ are
+    continuous on $\mathcal D$.
 \end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_regional_extension_norm}
-    In finite dimension, the positive semidefinite trace-one matrices form a
-    compact set. Their finite product is compact. Since $\|\Omega\|=1$,
-    some global configuration has a nonzero coefficient in $\Omega$.
-    Restricting that configuration to each region gives
-    $d_j=\dim\mathcal H_{X_j}>0$. The densities $I_{X_j}/d_j$ prove
-    nonemptiness. For $b>0$, the shifted matrices are positive definite,
-    and their fixed real powers vary continuously. Identity extension,
-    finite ordered multiplication, evaluation on $\Omega$, and the norm
-    preserve continuity.
+    Each factor of $\mathcal D$ is compact in finite dimension and contains
+    $I_{X_j}/\dim\mathcal H_{X_j}$ (since $\|\Omega\|=1$ implies
+    $\dim\mathcal H_{X_j}>0$). Since $x_j+bI_{X_j}\ge bI_{X_j}>0$ on $\mathcal D$,
+    $K_j$, $L_j$, $M$, and $F$ are continuous.
 \end{proof}
 
 \begin{theorem}[Bounds for every feasible tuple]
@@ -134,28 +119,26 @@ are scalar identities.
     }
     \leanok
     \uses{def:peps_regularized_patch_objective}
-    Suppose $a_j\ge0$ for every $j$.
-    For every $x\in\mathcal D$, every $j$, and every $\xi\in\mathcal H_V$,
-    \[
+    If $a_j\ge0$ for all $j$, then for every $x\in\mathcal D$, $j$, and
+    $\xi\in\mathcal H_V$,
+    \begin{align}
         (1+b)^{-a_j/2}\|\xi\|
-        \le\|L_j(x)\xi\|\le b^{-a_j/2}\|\xi\|.
-    \]
-    Consequently, every $x\in\mathcal D$ satisfies
-    \[
-        0<(1+b)^{-A/2}\le F(x)\le b^{-A/2}.
-    \]
+         & \le\|L_j(x)\xi\|\le b^{-a_j/2}\|\xi\|,
+        \label{eq:peps_regularized_patch_filter_bounds} \\
+        0<(1+b)^{-A/2}
+         & \le F(x)\le b^{-A/2}.
+        \label{eq:peps_regularized_patch_objective_bounds}
+    \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_regional_extension_norm}
-    A positive semidefinite trace-one matrix satisfies $0\le x_j\le I$.
-    The eigenvalues of $x_j+bI$ therefore lie in $[b,1+b]$.
-    The negative power has operator norm at most $b^{-a_j/2}$, while its
-    inverse has norm at most $(1+b)^{a_j/2}$.
-    Applying the identity-extension inequality to the factor and its inverse
-    gives the upper and lower bounds, and applying these bounds successively
-    in the order $L_0,\ldots,L_{m-1}$ with $\|\Omega\|=1$ gives the objective
-    bounds without exchanging any two factors.
+    Since $0\le x_j\le I_{X_j}$, the spectrum of $x_j+bI_{X_j}$ lies in
+    $[b,1+b]$, so $\|K_j(x)\|\le b^{-a_j/2}$ and $\|K_j(x)^{-1}\|\le(1+b)^{a_j/2}$.
+    Theorem~\ref{thm:peps_regional_extension_norm} gives
+    (\ref{eq:peps_regularized_patch_filter_bounds}), and iterating across
+    $L_0,\ldots,L_{m-1}$ on $\|\Omega\|=1$ gives
+    (\ref{eq:peps_regularized_patch_objective_bounds}).
 \end{proof}
 
 \begin{definition}[Minimum and normalization]
@@ -166,13 +149,12 @@ are scalar identities.
     }
     \leanok
     \uses{def:peps_regularized_patch_objective}
-    Define the minimum value and normalized output by
-    \[
-        N=\inf_{x\in\mathcal D}F(x),\qquad
-        \widehat\Psi(x)=F(x)^{-1}\Psi(x).
-    \]
-    Under the nonnegative-weight hypothesis, the preceding theorem makes
-    this normalization well defined for every feasible tuple.
+    Define
+    \begin{align}
+        N               & =\inf_{x\in\mathcal D}F(x), &
+        \widehat\Psi(x) & =F(x)^{-1}\Psi(x).
+        \label{eq:peps_regularized_patch_minimum_def}
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Attainment and common value]
@@ -187,24 +169,19 @@ are scalar identities.
     }
     \leanok
     \uses{def:peps_regularized_patch_minimum}
-    There exists $x_*\in\mathcal D$ such that $F(x_*)\le F(x)$ for all
-    $x\in\mathcal D$. Every minimizer in $\mathcal D$ has objective value $N$.
-    If all $a_j\ge0$, then
-    \[
-        0<(1+b)^{-A/2}\le N\le b^{-A/2},\qquad
-        \|\widehat\Psi(x)\|=1\quad(x\in\mathcal D).
-    \]
-    At every minimizer $x_*\in\mathcal D$,
-    $\widehat\Psi(x_*)=N^{-1}M(x_*)\Omega$.
+    There exists $x_*\in\mathcal D$ attaining $F(x_*)=N=\min_{x\in\mathcal D}F(x)$,
+    where $\widehat\Psi(x_*)=N^{-1}M(x_*)\Omega$. If $a_j\ge0$ for all $j$, then
+    \begin{align}
+        0<(1+b)^{-A/2}      & \le N\le b^{-A/2},       &
+        \|\widehat\Psi(x)\| & =1\quad(x\in\mathcal D).
+        \label{eq:peps_regularized_patch_minimum_bounds}
+    \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{lem:peps_regularized_patch_compact_continuous,thm:peps_regularized_patch_bounds}
-    A continuous real-valued function on a nonempty compact set attains
-    its minimum. The value at any minimizing point is the least element
-    of $F(\mathcal D)$, hence its infimum. Evaluating the bounds for every
-    feasible tuple at a minimizer gives the bounds on $N$; positivity permits
-    division by $F(x)$, and at a minimizer this divisor equals $N$.
+    Combine Lemma~\ref{lem:peps_regularized_patch_compact_continuous} with
+    (\ref{eq:peps_regularized_patch_objective_bounds}).
 \end{proof}
 
 \begin{corollary}[Exponential regularization]
@@ -215,45 +192,34 @@ are scalar identities.
     }
     \leanok
     \uses{def:peps_regularized_patch_minimum}
-    Assume all $a_j\ge0$ and set $b=e^{-R}$. For every real $R$ and
-    every feasible tuple $x$,
-    \[
-        (1+e^{-R})^{-A/2}\le F(x)\le e^{RA/2}.
-    \]
-    For $R\ge0$, the minimum satisfies
-    \[
-        2^{-A/2}\le N\le e^{RA/2}.
-    \]
+    If $a_j\ge0$ for all $j$ and $b=e^{-R}$ ($R\in\R$), then every
+    $x\in\mathcal D$ satisfies
+    \begin{align}
+        (1+e^{-R})^{-A/2} & \le F(x)\le e^{RA/2},          &
+        2^{-A/2}          & \le N\le e^{RA/2}\quad(R\ge0).
+        \label{eq:peps_regularized_patch_exp_bounds}
+    \end{align}
 \end{corollary}
 \begin{proof}
     \leanok
     \uses{thm:peps_regularized_patch_bounds,thm:peps_regularized_patch_minimum}
-    Substituting $b=e^{-R}>0$ gives the first display; if $R\ge0$, then
-    $1+e^{-R}\le2$, so the nonpositive exponent $-A/2$ gives
-    $(1+e^{-R})^{-A/2}\ge2^{-A/2}$.
+    Set $b=e^{-R}$ in (\ref{eq:peps_regularized_patch_objective_bounds}) and
+    (\ref{eq:peps_regularized_patch_minimum_bounds}), using $1+e^{-R}\le2$ for
+    $R\ge0$.
 \end{proof}
-
-The argument allows empty or repeated regions, zero weights, and singular
-densities. Neither nestedness of the regions nor commutation of their
-filters is required. It gives the same minimum value for every minimizer,
-without asserting uniqueness or smooth dependence of a minimizer on $R$.
-
 
 \begin{theorem}[The logarithmic minimum]
     \label{thm:peps_regularized_patch_log_minimum}
     \lean{TNLean.PEPS.isLeast_log_regularizedPatchObjective}
     \leanok
     \uses{def:peps_regularized_patch_minimum}
-    Assume all $a_j\ge0$. Then $\log N$ is the attained minimum of
-    $x\mapsto\log F(x)$ on $\mathcal D$.
+    If $a_j\ge0$ for all $j$, then $\log N=\min_{x\in\mathcal D}\log F(x)$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_regularized_patch_minimum}
-    At any feasible minimizer $x_*$, one has $F(x_*)=N>0$ and
-    $N\le F(x)$ for every $x\in\mathcal D$. Monotonicity of the
-    logarithm on the positive real numbers gives
-    $\log N\le\log F(x)$, with equality at $x_*$.
+    Apply monotonicity of $\log$ on $(0,\infty)$ to
+    Theorem~\ref{thm:peps_regularized_patch_minimum}.
 \end{proof}
 
 \begin{theorem}[Cylinder approximation from ordered inverse filters]
@@ -263,40 +229,34 @@ without asserting uniqueness or smooth dependence of a minimizer on $R$.
     \uses{def:peps_regularized_patch_objective,def:peps_regional_cylinder}
     In the first-head expansion of the
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L484-L532}{proof of Proposition 4.1},
-    let $X_0\subseteq\cdots\subseteq X_{m-1}$, let $a_j\ge0$ and $b>0$, put
-    $A=\sum_ja_j$, and let $\Omega$ be a unit vector. For every
-    $x\in\mathcal D$ there are subspaces $S_j\subseteq\mathcal H_{X_j}$ with
-    $\dim S_j\le1/b$ and a vector
-    $v\in\sum_j\mathcal C_{X_j}(S_j)$ such that
+    let $X_0\subseteq\cdots\subseteq X_{m-1}$, $a_j\ge0$, $b>0$, $A=\sum_ja_j$,
+    and $\|\Omega\|=1$. Every $x\in\mathcal D$ admits subspaces
+    $S_j\subseteq\mathcal H_{X_j}$ with $\dim S_j\le1/b$ and
+    $v\in\sum_j\mathcal C_{X_j}(S_j)$ satisfying (including non-minimizers $x$,
+    repeated regions, $a_j=0$, singular $x_j$, and $m=0$)
     \begin{align}
         \|\Omega-v\| & \le F(x)\,(2b)^{A/2}.
         \label{eq:peps_patch_inverse_cylinder}
     \end{align}
-    The tuple $x$ need not be a minimizer, and repeated regions, zero weights,
-    singular densities, and $m=0$ are admitted.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_regional_extension_algebra,
         thm:peps_regional_extension_norm,thm:peps_cylinder_projector}
-    Splitting $(x_j+bI)^{a_j/2}=H_j+T_j$ into the spectral part on eigenvalues
-    of $x_j$ at least $b$ and the remaining part gives
-    $\operatorname{rank}H_j\le1/b$ and $\|T_j\|\le(2b)^{a_j/2}$ because $x_j$
-    has trace one. The
-    product $(x_0+bI)^{a_0/2}\cdots(x_{m-1}+bI)^{a_{m-1}/2}$ inverts the
-    filter product $M(x)$, so $\Omega$ is this product applied to
-    $\Psi(x)$. Writing $G_j=H_j+T_j$ and expanding according to the first index
-    $j$ at which a head occurs gives
+    Split $G_j=(x_j+bI)^{a_j/2}=H_j+T_j$ into the spectral part $H_j$ on
+    eigenvalues of $x_j$ in $[b,1]$ ($\operatorname{rank}H_j\le1/b$ since
+    $\tr x_j=1$) and the tail $T_j$ ($\|T_j\|\le(2b)^{a_j/2}$). Since
+    $G_0\cdots G_{m-1}=M(x)^{-1}$, we have $\Omega=G_0\cdots G_{m-1}\Psi(x)$ and
     \begin{align}
         G_0G_1\cdots G_{m-1}
          & =\sum_{j=0}^{m-1}T_0\cdots T_{j-1}\,H_j\,G_{j+1}\cdots G_{m-1}
         +T_0\cdots T_{m-1}.
         \label{eq:peps_patch_first_head_expansion}
     \end{align}
-    The preceding tails act inside $X_j$ because the regions
-    are nested, so the $j$th term lies in the cylinder over the range
-    $S_j$ of $T_0\cdots T_{j-1}H_j$ on $X_j$, whose dimension is at most
-    $\operatorname{rank}H_j$. The remaining term contains only tails and
-    has norm at most $(2b)^{A/2}\|\Psi(x)\|$, which gives
+    Since $X_0\subseteq\cdots\subseteq X_{m-1}$, the $j$th summand of
+    (\ref{eq:peps_patch_first_head_expansion}) applied to $\Psi(x)$ lies in
+    $\mathcal C_{X_j}(S_j)$ for $S_j=\operatorname{ran}(T_0\cdots T_{j-1}H_j|_{X_j})$
+    ($\dim S_j\le\operatorname{rank}H_j\le1/b$), while
+    $\|T_0\cdots T_{m-1}\Psi(x)\|\le(2b)^{A/2}F(x)$, giving
     (\ref{eq:peps_patch_inverse_cylinder}).
 \end{proof}

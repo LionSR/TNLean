@@ -6,11 +6,11 @@
     \lean{TNLean.PEPS.AreaLaw.nearestNeighborSupport}
     \leanok
     \uses{def:area_law_domain}
-    Let $\Lambda\subset\mathbb Z^2$ be finite and let $E_\Lambda$ be its
-    unordered nearest-neighbor edges. Index supports by the disjoint union
-    $I=\Lambda\sqcup E_\Lambda$, assigning $S_v=\{v\}$ to a site and
-    $S_{\{x,y\}}=\{x,y\}$ to an edge. For $A\subseteq\Lambda$, put
-    $C(A)=\{i\in I:S_i\cap A\ne\varnothing,\ S_i\setminus A\ne\varnothing\}$.
+    For finite $\Lambda\subset\mathbb Z^2$ with unordered nearest-neighbor edges $E_\Lambda$, index supports by $I=\Lambda\sqcup E_\Lambda$ with $S_v=\{v\}$ and $S_{\{x,y\}}=\{x,y\}$, and for $A\subseteq\Lambda$ set
+    \begin{align}
+        C(A) & =\{i\in I:S_i\cap A\ne\varnothing,\ S_i\setminus A\ne\varnothing\}.
+        \label{eq:area_law_crossing_supports}
+    \end{align}
 \end{definition}
 
 \begin{theorem}[One inside endpoint]
@@ -21,17 +21,11 @@
         TNLean.PEPS.AreaLaw.card_pair_insideConfig_of_crossing
     }
     \leanok
-    A singleton cannot meet both sides of a cut in any finite set.
-    If $\{x,y\}$ meets both sides of $A$, then
-    $\{x,y\}\cap A=\{v\}$ for exactly one endpoint $v$.
-    For an alphabet of cardinality $q\ge0$, the set of configurations on
-    this intersection has cardinality $q$.
+    No singleton $\{v\}$ meets both $A$ and $\Lambda\setminus A$. If $\{x,y\}$ meets both $A$ and $\Lambda\setminus A$, then $\{x,y\}\cap A=\{v\}$ is a singleton, and for a $q$-element alphabet ($q\ge0$), the configuration set on $\{x,y\}\cap A$ has cardinality $q$.
 \end{theorem}
 \begin{proof}
     \leanok
-    If $x\in A$, the crossing condition forces $y\notin A$;
-    otherwise it forces $y\in A$. A function on a singleton is determined
-    by its value at that point.
+    Since $\{x,y\}\cap A\ne\varnothing$ and $\{x,y\}\setminus A\ne\varnothing$, exactly one of $x,y$ belongs to $A$, so $|\{x,y\}\cap A|=1$ and its $q$-alphabet configuration space has size $q^1=q$.
 \end{proof}
 
 \begin{theorem}[Crossing supports and unordered edges]
@@ -44,18 +38,12 @@
     }
     \leanok
     \uses{def:area_law_nearest_neighbor_support,def:area_law_hamiltonian}
-    For every $A\subseteq\Lambda$, no on-site index belongs to $C(A)$,
-    and an edge index belongs to $C(A)$ exactly when the edge lies in
-    $\partial_\Lambda A$. Consequently $|C(A)|=|\partial_\Lambda A|$.
-    For every $i\in C(A)$ and every integer $q\ge0$, the configuration
-    set on $S_i\cap A$ has cardinality $q$.
+    For every $A\subseteq\Lambda$, $C(A)=\partial_\Lambda A\subseteq E_\Lambda$, so $|C(A)|=|\partial_\Lambda A|$, and for every $i\in C(A)$ and integer $q\ge0$, the $q$-alphabet configuration set on $S_i\cap A$ has cardinality $q$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:area_law_crossing_inside_endpoint}
-    Every crossing support is an edge in $\partial_\Lambda A$, so
-    $|C(A)|=|\partial_\Lambda A|$, and $S_i\cap A$ is a singleton with $q$
-    configurations.
+    Apply Theorem~\ref{thm:area_law_crossing_inside_endpoint} to (\ref{eq:area_law_crossing_supports}).
 \end{proof}
 
 \begin{theorem}[Exact weighted crossing sum]
@@ -63,23 +51,18 @@
     \lean{TNLean.PEPS.AreaLaw.nearestNeighbor_crossing_budget}
     \leanok
     \uses{def:area_law_nearest_neighbor_support,def:area_law_hamiltonian}
-    Let $m,q\ge0$ be integers, $A_j\subseteq\Lambda$ for $0\le j<m$,
-    and let $a_j,J\in\mathbb R$. If $d_{ij}$ denotes the cardinality of
-    the configuration set on $S_i\cap A_j$ for an alphabet of size $q$, then
+    For integers $m,q\ge0$, $A_j\subseteq\Lambda$ ($0\le j<m$), $a_j,J\in\mathbb R$, and $d_{ij}=q^{|S_i\cap A_j|}$,
     \begin{align}
         \sum_{j=0}^{m-1}a_j^2\sum_{i\in C(A_j)}d_{ij}^2J
-         & =q^2J\sum_{j=0}^{m-1}a_j^2|\partial_\Lambda A_j|.
+         & =q^2J\sum_{j=0}^{m-1}a_j^2|\partial_\Lambda A_j|
         \label{eq:area_law_exact_crossing_sum}
     \end{align}
-    This is the combinatorial identity used in the nearest-neighbor
-    matrix-unit estimate of \cite[Section~4]{OpenAI2026PolynomialPEPS}.
+    (\cite[Section~4]{OpenAI2026PolynomialPEPS}).
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:area_law_crossing_support_count}
-    Every summand in the inner sum has $d_{ij}=q$, and there are exactly
-    $|\partial_\Lambda A_j|$ such summands. Substitute these identities
-    and factor out $q^2J$.
+    By Theorem~\ref{thm:area_law_crossing_support_count}, $d_{ij}=q$ for all $i\in C(A_j)$ and $|C(A_j)|=|\partial_\Lambda A_j|$.
 \end{proof}
 
 \begin{theorem}[A square-grid maximizing family with controlled energy]
@@ -88,28 +71,8 @@
     \leanok
     \uses{def:polynomial_peps_model,def:area_law_nearest_neighbor_support,
         def:square_area_law_hamiltonian}
-    Let $L,q,m\ge0$ be integers and $J\in\mathbb R$. Let $H$ be an original
-    square-grid Hamiltonian with interaction bound $J$, and let $\Omega$
-    be a unit vector with $H\Omega=E_0\Omega$ and
-    $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$, where
-    $E_0,\Delta\in\mathbb R$. Write $\Lambda$ for its integer square
-    domain, $U$ for the canonical configuration isometry,
-    $\widetilde H=UHU^*$ and $\widetilde\Omega=U\Omega$.
-    Fix any linear order on the sites of $\Lambda$; the assertion holds
-    for every such choice.
-
-    Supply nested regions $D_0\subseteq\cdots\subseteq D_{m-1}\subseteq\Lambda$
-    such that each unordered nearest-neighbor edge belongs to
-    $\partial_\Lambda D_j$ for at most one $j$, and weights $0<a_j\le1$.
-    A feasible regional filter has the form
-    $K_j=V_j\operatorname{diag}(p_{j,r}^{a_j/2})V_j^*$, where $V_j$ is
-    unitary, $p_{j,r}\ge0$ and $\sum_r p_{j,r}=1$. Extend each filter
-    by the identity outside $D_j$ and put
-    $\psi(K)=K_{m-1}\cdots K_0\widetilde\Omega$.
-    There is one feasible family $K$ such that every feasible family $K'$
-    satisfies $\|\psi(K')\|\le\|\psi(K)\|$, and, with
-    $\psi=\psi(K)$, $\phi=\psi/\|\psi\|$ and
-    $B=q^2J\sum_{j=0}^{m-1}a_j^2|\partial_\Lambda D_j|$,
+    Let $L,q,m\ge0$ be integers, $J,E_0,\Delta\in\mathbb R$, $H$ an original square-grid Hamiltonian with interaction bound $J$, and $\Omega$ a unit vector satisfying $H\Omega=E_0\Omega$ and $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$. Write $\Lambda$ for the integer square domain, $U$ for the canonical configuration isometry, $\widetilde H=UHU^*$, and $\widetilde\Omega=U\Omega$.
+    For any nested regions $D_0\subseteq\cdots\subseteq D_{m-1}\subseteq\Lambda$ whose boundaries $\partial_\Lambda D_j$ are pairwise disjoint in $E_\Lambda$, and weights $0<a_j\le1$, let feasible regional filters take the form $K_j=V_j\operatorname{diag}(p_{j,r}^{a_j/2})V_j^*$ ($V_j$ unitary, $p_{j,r}\ge0$, $\sum_r p_{j,r}=1$), extended by $\Id$ outside $D_j$, with $\psi(K)=K_{m-1}\cdots K_0\widetilde\Omega$. Then there exists a feasible family $K$ maximizing $\|\psi(K')\|$ over all feasible $K'$, and with $\psi=\psi(K)$, $\phi=\psi/\|\psi\|$, and $B=q^2J\sum_{j=0}^{m-1}a_j^2|\partial_\Lambda D_j|$,
     \begin{align}
         0 & < \|\psi\|,                                & \|\phi\| & =1, \notag \\
         |\operatorname{Re}\langle\phi,\widetilde H\phi\rangle-E_0|
@@ -117,33 +80,12 @@
         \Delta\bigl(1-|\langle\widetilde\Omega,\phi\rangle|^2\bigr)
           & \le B. \label{eq:square_zero_floor_energy}
     \end{align}
-    This is the square-grid specialization of the maximizing-family
-    estimate in~\cite{QICLean2026ZeroFloorEnergy}, corresponding to the
-    companion source of~\cite{OpenAI2026PolynomialPEPS}. The spectral
-    feasible families used here and their comparison with the source's
-    filter coordinates are discussed in~\cite{gap:oai26_zero_floor_energy_scope};
-    the scope of the physical specialization is recorded
-    in~\cite{gap:polypeps_square_zero_floor_optimizer_scope}.
+    This specializes~\cite{QICLean2026ZeroFloorEnergy} to~\cite{OpenAI2026PolynomialPEPS}; see~\cite{gap:oai26_zero_floor_energy_scope} and~\cite{gap:polypeps_square_zero_floor_optimizer_scope}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:square_nearest_neighbor_terms,thm:square_area_law_ground_gap,
         thm:area_law_crossing_support_count,thm:area_law_nearest_neighbor_budget}
-    Replace the original terms by their Hermitian parts and transport them
-    by $U$. The resulting site and unordered-edge terms have the same bound
-    $J$ and sum to $\widetilde H$. On-site supports are never split, and
-    the edge hypothesis says that each two-site support is split at most
-    once. The sharp zero-floor maximizing-family estimate
-    of~\cite{QICLean2026ZeroFloorEnergy} gives one feasible global maximizer,
-    nonzero output, unit normalization and absolute energy error at most
-    $\sum_j a_j^2\sum_{i\in C(D_j)}d_{ij}^2J$.
-    By~(\ref{eq:area_law_exact_crossing_sum}), this sum equals $B$.
-    Evaluate the transported projector gap on this same unit vector:
-    \begin{align}
-        \Delta\bigl(1-|\langle\widetilde\Omega,\phi\rangle|^2\bigr)
-         & \le\operatorname{Re}\langle\phi,\widetilde H\phi\rangle-E_0
-        \le|\operatorname{Re}\langle\phi,\widetilde H\phi\rangle-E_0|
-        \le B. \notag
-    \end{align}
+    Transporting the Hermitian parts of the terms of $H$ by $U$ (Theorem~\ref{thm:square_nearest_neighbor_terms}) gives site and edge terms of norm $\le J$ summing to $\widetilde H$, each split by at most one $D_j$. The zero-floor optimizer bound of~\cite{QICLean2026ZeroFloorEnergy} together with (\ref{eq:area_law_exact_crossing_sum}) gives a global maximizer $K$ with $|\operatorname{Re}\langle\phi,\widetilde H\phi\rangle-E_0|\le B$, and Theorem~\ref{thm:square_area_law_ground_gap} yields $\Delta(1-|\langle\widetilde\Omega,\phi\rangle|^2)\le\operatorname{Re}\langle\phi,\widetilde H\phi\rangle-E_0\le B$.
 \end{proof}
 
 \subsection{Positive filters on the original square}
@@ -165,12 +107,7 @@
     }
     \leanok
     \uses{def:peps_pinned_regional_matrix}
-    Let $V_L=\{0,\ldots,L-1\}^2$, let $q,m\ge0$ be integers, and
-    supply regions $X_j\subseteq V_L$ for $0\le j<m$. A positive regional
-    filter $F_j$ is a positive semidefinite matrix indexed by the
-    configurations $X_j\to\{0,\ldots,q-1\}$. The regional matrix determines
-    the filter. Singular matrices are allowed.
-    Its lift $\widehat F_j$ has matrix entries
+    On $V_L=\{0,\ldots,L-1\}^2$ with integers $q,m\ge0$ and regions $X_j\subseteq V_L$ ($0\le j<m$), a positive regional filter $F_j\ge0$ is a positive semidefinite matrix on $\{0,\ldots,q-1\}^{X_j}$ with lift
     \begin{align}
         (\widehat F_j)_{x,y}
          & =\begin{cases}
@@ -178,23 +115,13 @@
                 0                         & \text{otherwise}.
             \end{cases}\notag
     \end{align}
-    For real weights $a_j$, call $F=(F_j)_{j=0}^{m-1}$ admissible when
-    $\sum_r\lambda_r(F_j)^{2/a_j}=1$ for every $j$, where the powers are
-    real powers of nonnegative eigenvalues, with $2/0=0$, $0^0=1$, and
-    $0^t=0$ for $t\ne0$.
-    For every state $\Omega$, set
+    For $a_j\in\mathbb R$, a family $F=(F_j)_{j=0}^{m-1}$ is \emph{admissible} if $\sum_r\lambda_r(F_j)^{2/a_j}=1$ for all $j$ (with $2/0=0$, $0^0=1$, $0^t=0$ for $t\ne0$). For a state $\Omega$, set
     \begin{align}
-        \psi(F,\Omega) & =\widehat F_{m-1}\cdots\widehat F_0\Omega,
-        \notag                                                      \\
-        \phi(F,\Omega) & =\|\psi(F,\Omega)\|^{-1}\psi(F,\Omega).
+        \psi(F,\Omega) & =\widehat F_{m-1}\cdots\widehat F_0\Omega, &
+        \phi(F,\Omega) & =\|\psi(F,\Omega)\|^{-1}\psi(F,\Omega)
         \label{eq:pinned_filter_output}
     \end{align}
-    The empty product is the identity and $0^{-1}=0$, so the normalized
-    output is defined even when the output vanishes. A maximizing family
-    is admissible and satisfies
-    $\|\psi(G,\Omega)\|\le\|\psi(F,\Omega)\|$ for every admissible family $G$.
-    These are the positive filters and ascending application order of the
-    companion source of~\cite{OpenAI2026PolynomialPEPS}.
+    (with $0^{-1}=0$). An admissible family $F$ is \emph{maximizing} if $\|\psi(G,\Omega)\|\le\|\psi(F,\Omega)\|$ for all admissible $G$ (\cite{OpenAI2026PolynomialPEPS}).
 \end{definition}
 
 \begin{definition}[Regional coordinates in the integer square]
@@ -209,14 +136,7 @@
     }
     \leanok
     \uses{def:pinned_square_filters,thm:area_law_domain_identifications}
-    Let $\sigma:V_L\to\Lambda$ be the canonical site bijection, let $U$
-    be its configuration isometry, and write $D_j=\sigma(X_j)$.
-    Restriction of $\sigma$ gives a configuration bijection $R_j$ on each
-    region. Conjugating $F_j$ by its permutation matrix gives $K_j(F)$ on
-    $D_j$. Conversely, conjugation by the inverse permutation gives
-    $F_j(K)$ from every floor-zero feasible matrix $K_j$.
-    The natural-indexed sequence of regions is extended by the empty set
-    after $m$; the ordered product uses only $0\le j<m$.
+    Let $\sigma:V_L\to\Lambda$ be the canonical site bijection with configuration isometry $U$ and $D_j=\sigma(X_j)$ (extended by $\varnothing$ for $j\ge m$). Conjugating $F_j$ by the regional configuration bijection induced by $\sigma|_{X_j}$ defines $K_j(F)$ on $D_j$, with inverse $F_j(K)$.
 \end{definition}
 
 \begin{theorem}[All admissible families in either coordinate system]
@@ -229,24 +149,11 @@
     }
     \leanok
     \uses{def:pinned_filter_coordinates}
-    For arbitrary real weights, every feasible family $K$ satisfies
-    $K(F(K))=K$, and every positive family $F$ whose canonical matrices are
-    feasible satisfies $F(K(F))=F$.
-    If $a_j>0$ for every $j$, then $F$ is admissible if and only if every
-    $K_j(F)$ is floor-zero feasible at weight $a_j$, and every feasible
-    family $K$ has an admissible inverse $F(K)$.
-    No nesting, positive dimension, invertibility or bound $a_j\le1$
-    is required.
+    Every feasible family $K$ satisfies $K(F(K))=K$, and every positive family $F$ with feasible $K(F)$ satisfies $F(K(F))=F$. If $a_j>0$ for all $j$, then $F$ is admissible if and only if each $K_j(F)$ is floor-zero feasible at weight $a_j$.
 \end{theorem}
 \begin{proof}
     \leanok
-    Permutation conjugation preserves positive semidefiniteness and
-    eigenvalues. For a positive weight, floor-zero feasibility is
-    equivalent to positive semidefiniteness and
-    $\sum_r\lambda_r^{2/a_j}=1$, including singular matrices and empty
-    configuration sets. Conjugation by the inverse permutation gives
-    both exact inverse identities. The eigenvalue characterization is
-    proved in~\cite{QICLean2026FilterFeasibility}.
+    Permutation conjugation preserves positivity and spectra, and for $a_j>0$ floor-zero feasibility is equivalent to $F_j\ge0$ and $\sum_r\lambda_r(F_j)^{2/a_j}=1$ (\cite{QICLean2026FilterFeasibility}).
 \end{proof}
 
 \begin{theorem}[Ascending output and global maximality]
@@ -260,8 +167,7 @@
     }
     \leanok
     \uses{def:pinned_filter_coordinates}
-    For every family $F$ and vector $\Omega$, the regional lift is the
-    usual tensor-factor action and
+    For every family $F$ and vector $\Omega$,
     \begin{align}
         U\psi(F,\Omega) & =\widehat K_{m-1}(F)\cdots\widehat K_0(F)U\Omega,
         \notag                                                              \\
@@ -270,24 +176,12 @@
         \widehat K_{m-1}(F)\cdots\widehat K_0(F)U\Omega.
         \label{eq:pinned_filter_coordinates}
     \end{align}
-    The normalization identity holds also at zero output. If all $a_j>0$,
-    $F$ is a maximizing admissible family if and only if $K(F)$ is feasible
-    and its output norm is at least that of every feasible canonical
-    family. Repeated regions retain their separate filter occurrences.
+    If $a_j>0$ for all $j$, then $F$ is a maximizing admissible family if and only if $K(F)$ is feasible and maximizes $\|\widehat K'_{m-1}\cdots\widehat K'_0U\Omega\|$ over all feasible $K'$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:pinned_filter_coordinates}
-    The complement-agreement entries agree with the tensor-factor lift.
-    The ascending sequence of applications gives the reversed matrix
-    product. The identity $U\widehat F_j=\widehat K_j(F)U$ preserves every
-    factor in its position; these ordered-action identities are proved
-    in~\cite{QICLean2026FilterOutput}. Since $U$ preserves norms and scalar
-    multiplication, normalization commutes with $U$, including at zero.
-    For the forward maximum implication, pull an arbitrary canonical
-    competitor $K'$ back to $F(K')$, compare its original output with that
-    of $F$, and use $K(F(K'))=K'$. For the reverse implication, map every
-    original admissible competitor forward and use the same norm identity.
+    Since $U\widehat F_j=\widehat K_j(F)U$ (\cite{QICLean2026FilterOutput}) and $U$ is an isometry, (\ref{eq:pinned_filter_coordinates}) holds; Theorem~\ref{thm:pinned_filter_coordinates} then identifies the admissible and feasible maximization problems.
 \end{proof}
 
 \begin{definition}[Forward crossings of an original region]
@@ -298,9 +192,7 @@
     }
     \leanok
     \uses{def:peps_forward_square_edges}
-    Orient every horizontal edge to the right and every vertical edge up.
-    For $X\subseteq V_L$, let $b(X)$ be the number of these forward edges
-    with exactly one endpoint in $X$. Each physical edge is counted once.
+    For $X\subseteq V_L$, let $b(X)$ denote the number of forward-oriented (rightward horizontal and upward vertical) grid edges with exactly one endpoint in $X$.
 \end{definition}
 
 \begin{theorem}[Forward and unordered crossing counts]
@@ -308,17 +200,12 @@
     \lean{TNLean.PEPS.Approximation.Pinned.NestedFilter.Energy.card_edgeBoundary_eq_crossingCount}
     \leanok
     \uses{def:pinned_filter_crossings,def:pinned_filter_coordinates}
-    For every original-grid region $X$, its once-counted crossing number
-    equals $|\partial_\Lambda\sigma(X)|$.
+    For every $X\subseteq V_L$, $b(X)=|\partial_\Lambda\sigma(X)|$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_square_bonds_boundary,thm:square_edge_boundary_card}
-    Forgetting the fixed forward orientation identifies the forward edges
-    with the original unordered edges. The rectangle graph isomorphism
-    then identifies their crossings with $\partial_\Lambda\sigma(X)$.
-    Crossing is symmetric in the endpoints, so changing their order
-    changes neither the predicate nor its cardinality.
+    Combine Theorem~\ref{thm:peps_square_bonds_boundary} and Theorem~\ref{thm:square_edge_boundary_card} under the graph isomorphism $\sigma$.
 \end{proof}
 
 \begin{theorem}[An original-grid maximizing family with energy and fidelity bounds]
@@ -326,14 +213,7 @@
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_pinned_maximizer_energy_fidelity}
     \leanok
     \uses{def:polynomial_peps_model,def:pinned_square_filters,def:pinned_filter_crossings}
-    Let $H$ be an original square-grid Hamiltonian with real interaction
-    bound $J$. Suppose $\|\Omega\|=1$, $H\Omega=E_0\Omega$, and
-    $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$, where
-    $E_0,\Delta\in\mathbb R$. Supply nested regions
-    $X_0\subseteq\cdots\subseteq X_{m-1}$ such that each forward edge
-    crosses at most one $X_j$, and weights $0<a_j\le1$.
-    There is one maximizing admissible family $F$ whose output
-    $\psi=\psi(F,\Omega)$ and normalization $\phi=\phi(F,\Omega)$ satisfy
+    Let $H$ be an original square-grid Hamiltonian with real interaction bound $J$, and let $\|\Omega\|=1$ satisfy $H\Omega=E_0\Omega$ and $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$ ($E_0,\Delta\in\mathbb R$). For nested regions $X_0\subseteq\cdots\subseteq X_{m-1}\subseteq V_L$ such that each forward edge crosses at most one $X_j$, and weights $0<a_j\le1$, there exists a maximizing admissible family $F$ whose output $\psi=\psi(F,\Omega)$ and normalization $\phi=\phi(F,\Omega)$ from (\ref{eq:pinned_filter_output}) satisfy
     \begin{align}
         0 & <\|\psi\|,                                  & \|\phi\| & =1, \notag \\
         |\operatorname{Re}\langle\phi,H\phi\rangle-E_0|
@@ -342,26 +222,11 @@
           & \le q^2J\sum_{j=0}^{m-1}b(X_j)a_j^2.
         \label{eq:pinned_square_energy}
     \end{align}
-    There is no sign assumption on $J$ or $\Delta$, and $L,q,m$ may be zero.
-    Only the total Hamiltonian must be Hermitian. The adapted source
-    definitions and the remaining model and geometric scope are recorded
-    in~\cite{gap:polypeps_square_zero_floor_optimizer_scope}.
+    The adapted source definitions and scope are recorded in~\cite{gap:polypeps_square_zero_floor_optimizer_scope}.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:square_zero_floor_maximizer_energy,thm:pinned_filter_output_maximum,
         thm:pinned_filter_crossings,thm:square_area_law_hamiltonian_operator}
-    Choose a linear order on the canonical sites internally. Apply
-    Theorem~\ref{thm:square_zero_floor_maximizer_energy} once to the original
-    Hamiltonian with its original real bound $J$. Pull its chosen canonical
-    family $K$ back to $F(K)$.
-    Theorem~\ref{thm:pinned_filter_output_maximum} gives maximality against
-    every admissible family and identifies both outputs exactly. The
-    configuration isometry satisfies
-    $\langle U\phi,(UHU^*)U\phi\rangle=\langle\phi,H\phi\rangle$ and
-    $\langle U\Omega,U\phi\rangle=\langle\Omega,\phi\rangle$.
-    Thus its energy and fidelity inequalities become
-    (\ref{eq:pinned_square_energy}), with the same $\Delta$.
-    Theorem~\ref{thm:pinned_filter_crossings} identifies their budgets with
-    the once-counted original crossings. No second maximizer is chosen.
+    Pull the maximizer $K$ of Theorem~\ref{thm:square_zero_floor_maximizer_energy} back to $F=F(K)$ via Theorem~\ref{thm:pinned_filter_output_maximum}, and transport (\ref{eq:square_zero_floor_energy}) through $U$ using Theorem~\ref{thm:square_area_law_hamiltonian_operator} and Theorem~\ref{thm:pinned_filter_crossings}.
 \end{proof}

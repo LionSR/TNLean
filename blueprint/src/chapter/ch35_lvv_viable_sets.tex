@@ -134,18 +134,18 @@ whose range is the span of the columns of $M_i(\psi)$.
     $S'$ has at most $q|S|$ members. Let $w$ be an open matrix product state on
     $n$ sites with bond dimension at most $b'=\max(1,b)$, and let $f$ be a
     vector on one site. For a cut after $j<n$ sites,
-    \[
-        M_j(w\otimes f)=M_j(w)\,R_j,\qquad
-        (R_j)_{z',(z,x)}=\delta_{z'z}\,f(x),
-    \]
+    \begin{align}
+        M_j(w\otimes f)  & =M_j(w)\,R_j,              &
+        (R_j)_{z',(z,x)} & =\delta_{z'z}\,f(x),\notag
+    \end{align}
     so $\operatorname{rank}M_j(w\otimes f)\le\operatorname{rank}M_j(w)\le b'$,
     while the new cut after $n$ sites gives $M_n(w\otimes f)=wf^{\mathsf T}$, of
     rank at most $1\le b'$. With $f=|k\rangle$, every member of $S'$ has bond
     dimension at most $b'$. For the witness, decomposing site $i$ on the basis
     gives, for each configuration $\beta$ of the sites after $i$,
-    \[
-        M_i(\phi)_{\cdot,\beta}=\sum_k M_{i-1}(\phi)_{\cdot,(k,\beta)}\otimes|k\rangle.
-    \]
+    \begin{align}
+        M_i(\phi)_{\cdot,\beta}=\sum_k M_{i-1}(\phi)_{\cdot,(k,\beta)}\otimes|k\rangle.\notag
+    \end{align}
     When the columns of $M_{i-1}(\phi)$ lie in $\operatorname{Span}(S)$, each
     summand lies in $\operatorname{Span}(S')$, so the columns of $M_i(\phi)$ do as
     well; the witness $\phi$ is unchanged.

@@ -12,13 +12,9 @@ produces the global gauge family that relates the two tensors.
     \label{def:peps_finiteRegionKernelDescent}
     \lean{TNLean.PEPS.FiniteRegionKernelDescent}
     \leanok
-    Let $V$ be a vertex type with decidable equality. A finite kernel descent
-    datum is a predicate $K$ on finite subsets $S\subseteq V$ together with
-    implications
+    For a vertex type $V$ with decidable equality, a finite kernel descent
+    datum is a predicate $K$ on finite subsets $S\subseteq V$ satisfying
     $j\in S\Longrightarrow K(S)\Longrightarrow K(S\setminus\{j\})$.
-    In the edge-blocking proof, $K(S)$ is the assertion that the boundary
-    coefficients $c_{\rho}$, with the virtual indices exposed at that stage,
-    give zero after the tensors in $S$ have been contracted.
 \end{definition}
 
 \begin{lemma}[Finite descent of kernel conditions]%
@@ -27,15 +23,15 @@ produces the global gauge family that relates the two tensors.
     \lean{TNLean.PEPS.FiniteRegionKernelDescent.descend}
     \leanok
     \uses{def:peps_finiteRegionKernelDescent}
-    For a finite kernel descent datum and any finite $R\subseteq V$,
-    $K(R)\Longrightarrow K(\varnothing)$. More generally, if
-    $K(\varnothing)\Longrightarrow Q$, then $K(R)\Longrightarrow Q$.
+    For a finite kernel descent datum $K$ and any finite $R\subseteq V$,
+    $K(R)\Longrightarrow K(\varnothing)$; hence
+    $(K(\varnothing)\Longrightarrow Q)\Longrightarrow(K(R)\Longrightarrow Q)$.
 \end{lemma}
 \begin{proof}\leanok
-    By induction on the finite set $R$, if $R=\varnothing$ there is nothing to
-    prove, and otherwise writing $R=S\cup\{j\}$ with $j\notin S$ lets the
-    deletion implication give $K(R)\Longrightarrow K(S)$ and the induction
-    hypothesis give $K(S)\Longrightarrow K(\varnothing)$.
+    Induct on $|R|$: for $R=S\cup\{j\}$ with $j\notin S$,
+    Definition~\ref{def:peps_finiteRegionKernelDescent} gives
+    $K(R)\Longrightarrow K(S)$ and the induction hypothesis gives
+    $K(S)\Longrightarrow K(\varnothing)$.
 \end{proof}
 
 \begin{definition}[Edge-middle kernel descent data]%
@@ -44,15 +40,13 @@ produces the global gauge family that relates the two tensors.
         TNLean.PEPS.EdgeMiddleKernelDescentData}
     \leanok
     \uses{def:peps_edgeMiddleTensorFamily, def:peps_finiteRegionKernelDescent}
-    Let $e=(u,v)$ and $M_e=V\setminus\{u,v\}$. An edge-middle kernel descent
-    datum is indexed by boundary labels $\rho$ consisting of the two residual
-    endpoint configurations. It assigns to every finitely supported coefficient
-    family $c=(c_{\rho})_{\rho}$ a finite kernel descent datum $K_c(S)$ such that
+    At $e=(u,v)$ with $M_e=V\setminus\{u,v\}$, an edge-middle kernel descent
+    datum assigns to each finitely supported family $c=(c_{\rho})_{\rho}$ on
+    residual endpoint boundary labels a finite kernel descent datum $K_c$ such that
     \begin{align}
         \left(\forall\tau,\
         \sum_{\rho}c_{\rho}T_{A,M_e}^{\rho}(\tau)=0\right)
-         & \Longrightarrow K_c(M_e),
-        \notag                                       \\
+         & \Longrightarrow K_c(M_e),                 &
         K_c(\varnothing)
          & \Longrightarrow \forall\rho,\ c_{\rho}=0.
         \notag
@@ -65,21 +59,17 @@ produces the global gauge family that relates the two tensors.
         TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_kernelDescent}
     \leanok
     \uses{def:peps_edgeMiddleKernelDescentData, lem:peps_finiteRegionKernelDescent, thm:peps_edgeBlockedThreeSiteInjective_of_middle}
-    Let $e=(u,v)$ and $M_e=V\setminus\{u,v\}$. If an edge-middle kernel descent
-    datum is given, then $T_{A,M_e}$ is injective. Consequently, if $A$ is
-    vertex-injective, the edge-blocked three-site chain at $e$ is injective.
+    Let $e=(u,v)$ and $M_e=V\setminus\{u,v\}$. Given an edge-middle kernel
+    descent datum, $\inj(T_{A,M_e})$ holds; if $A$ is also vertex-injective,
+    then $\inj(T_{A,u})\wedge\inj(T_{A,M_e})\wedge\inj(T_{A,v})$.
 \end{theorem}
 \begin{proof}\leanok
-    Let $c=(c_{\rho})_{\rho}$ be a finite linear relation among the middle
-    tensor vectors:
-    $\sum_{\rho}c_{\rho}T_{A,M_e}^{\rho}(\tau)=0$ for every $\tau$.
-    The initial part of the descent datum gives $K_c(M_e)$. The finite descent
-    lemma gives $K_c(M_e)\Longrightarrow K_c(\varnothing)$, and the terminal
-    part gives $\forall\rho,\ c_{\rho}=0$. Thus every finite relation is
-    trivial, which is $\inj(T_{A,M_e})$. Vertex injectivity at
-    $u$ and $v$ gives $\inj(T_{A,u})$ and
-    $\inj(T_{A,v})$; the edge-blocked three-site injectivity at
-    $e$ follows.
+    If $\sum_{\rho}c_{\rho}T_{A,M_e}^{\rho}(\tau)=0$ for all $\tau$, then
+    Definition~\ref{def:peps_edgeMiddleKernelDescentData} and
+    Lemma~\ref{lem:peps_finiteRegionKernelDescent} give
+    $K_c(M_e)\Longrightarrow K_c(\varnothing)\Longrightarrow\forall\rho,\ c_{\rho}=0$,
+    proving $\inj(T_{A,M_e})$. Theorem~\ref{thm:peps_edgeBlockedThreeSiteInjective_of_middle}
+    then gives the three-site claim.
 \end{proof}
 
 \begin{theorem}[Edge blocking preserves injectivity]%
@@ -87,60 +77,26 @@ produces the global gauge family that relates the two tensors.
     \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective}
     \leanok
     \uses{def:IsVertexInjective, def:peps_edgeBlockedThreeSiteInjective, thm:peps_edgeMiddleTensorInjective_of_kernelDescent, lem:peps_localCoeff_eq_zero_of_contract_zero, lem:peps_not_edgeMiddleTensorInjective_of_isEmpty}
-    For a tensor map or blocked tensor family $T$, write
-    $\inj(T)$ for the assertion that $T$ is injective. If $A$
-    is vertex-injective and every bond dimension is positive, then for every
+    If $A$ is vertex-injective and $\forall f\in E,\ \dim A_f>0$, then for every
     edge $e=(u,v)$,
-    $\inj(T_{A,u})$, $\inj(T_{A,V\setminus\{u,v\}})$, and
-    $\inj(T_{A,v})$.
-    Here $T_{A,u}$ and $T_{A,v}$ are the two endpoint tensor maps, and
-    $T_{A,V\setminus\{u,v\}}$ is the blocked middle tensor family. This is the
-    precise assertion after the edge-blocking diagram in
-    \cite[Section~3]{Molnar2018NormalPEPS}. The positive-bond hypothesis is the
-    source's standing assumption that injective PEPS have nonzero virtual bond
-    spaces. Without it, an empty complement configuration space can make the
-    middle tensor vanish identically;
+    $\inj(T_{A,u})\wedge\inj(T_{A,V\setminus\{u,v\}})\wedge\inj(T_{A,v})$
+    (\cite[Section~3]{Molnar2018NormalPEPS}; without $\dim A_f>0$, an empty
+    complement configuration space can force $T_{A,V\setminus\{u,v\}}=0$ by
     Lemmas~\ref{lem:peps_edgeMiddleTensorFamily_eq_zero_of_isEmpty}
-    and~\ref{lem:peps_not_edgeMiddleTensorInjective_of_isEmpty} record
-    this obstruction.
+    and~\ref{lem:peps_not_edgeMiddleTensorInjective_of_isEmpty}).
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_edgeMiddleTensorInjective_of_kernelDescent, lem:peps_localCoeff_eq_zero_of_contract_zero}
-    Fix $e=(u,v)$ and put $M_e=V\setminus\{u,v\}$. From vertex injectivity,
-    construct the edge-middle descent datum required by
-    Theorem~\ref{thm:peps_edgeMiddleTensorInjective_of_kernelDescent}: for each
-    finite relation
-    $\sum_{\rho}c_{\rho}T_{A,M_e}^{\rho}(\tau)=0$ for every $\tau$,
-    the associated conditions $K_c(S)$ satisfy $K_c(M_e)$,
-    $j\in S\Longrightarrow K_c(S)\Longrightarrow K_c(S\setminus\{j\})$, and
-    $K_c(\varnothing)\Longrightarrow \forall\rho,\ c_{\rho}=0$. The descent
-    implication is the local contraction identity: for $j\in S$, vertex
-    injectivity at $j$ gives a left inverse $L_j$, and applying $L_j$ to the
-    relation contracts away that tensor,
-    $j\in S,\ K_c(S)\mathrel{\stackrel{L_j}{\Longrightarrow}}
-        K_c(S\setminus\{j\})$.
-    The contraction at $j$ uses the factorization
-    \begin{align}
-        \mc C_e
-         & \cong
-        \mc V_j
-        \times
-        \prod_{\substack{f\ne e \\ f\not\ni j}}
-        \{0,\ldots,\dim A_f-1\},
-        \notag
-    \end{align}
-    where $\mc C_e$ is the complement virtual-configuration space for
-    the distinguished edge $e$ and $\mc V_j$ is the local virtual
-    configuration space at $j$. The terminal step
-    $K_c(\varnothing)\Longrightarrow \forall\rho,\ c_{\rho}=0$ isolates each
-    boundary coefficient by surjectivity of the boundary labelling, which is
-    where the positive bond dimensions are used to fill the interior virtual
-    indices of a configuration.
-    The kernel descent theorem gives $\inj(T_{A,M_e})$. The same
-    theorem, together with vertex injectivity at $u$ and $v$, gives
-    $\inj(T_{A,u})$, $\inj(T_{A,M_e})$, and
-    $\inj(T_{A,v})$ as the edge-blocked three-site injectivity
-    assertion.
+    Fix $e=(u,v)$ and $M_e=V\setminus\{u,v\}$. For any relation
+    $\sum_{\rho}c_{\rho}T_{A,M_e}^{\rho}=0$, define $K_c(S)$ to mean that the
+    partial contraction over $S\subseteq M_e$ vanishes. For $j\in S$, splitting
+    the complement virtual space as
+    $\mc C_e\cong\mc V_j\times\prod_{f\ne e,\,f\not\ni j}\{0,\ldots,\dim A_f-1\}$
+    and applying Lemma~\ref{lem:peps_localCoeff_eq_zero_of_contract_zero} at $j$
+    gives $K_c(S)\Longrightarrow K_c(S\setminus\{j\})$. Since $\dim A_f>0$,
+    residual boundary configurations lift to $\mc C_e$, giving
+    $K_c(\varnothing)\Longrightarrow\forall\rho,\ c_{\rho}=0$.
+    Theorem~\ref{thm:peps_edgeMiddleTensorInjective_of_kernelDescent} concludes.
 \end{proof}
 
 \begin{theorem}[Local virtual insertion realized physically on either endpoint]%
@@ -148,10 +104,9 @@ produces the global gauge family that relates the two tensors.
     \lean{TNLean.PEPS.edgeVirtualInsertionPhysicalRealization}
     \leanok
     \uses{def:IsVertexInjective, def:peps_localIncidentMatrixOp, thm:peps_localIncidentMatrixOp_physicalRealization}
-    Let $A$ be vertex-injective and let $e=(u,v)$ be an edge. For every
-    matrix $M$ on the bond space of $e$, the one-leg virtual action induced
-    by $M$ on the local tensor at $u$, and likewise at $v$, is realized by
-    a physical operator on that endpoint's physical space.
+    If $A$ is vertex-injective and $e=(u,v)$, then for every $M\in\MN{D_A(e)}$
+    there exist physical operators $O_1$ at $u$ and $O_2$ at $v$ such that
+    $O_1\Phi_u=\Phi_uT_{u,e}(M^{\mathsf T})$ and $O_2\Phi_v=\Phi_vT_{v,e}(M)$.
     On a closed three-site chain, the corresponding state equality is
     % Formula (paper_normal.tex:303--352): inserting M on the (1,2) bond equals
     % applying O_1 to the physical leg of A_1 and also equals applying O_2 to the
@@ -189,8 +144,8 @@ produces the global gauge family that relates the two tensors.
     % thm:peps_edgeInsertedCoeff_endpointPhysicalRealization.
 \end{theorem}
 \begin{proof}\leanok
-    Applying the one-edge realization theorem to the two endpoint incidences of
-    the distinguished edge gives both physical operators.
+    Apply Theorem~\ref{thm:peps_localIncidentMatrixOp_physicalRealization} at
+    the two endpoint incidences of $e=(u,v)$.
 \end{proof}
 
 \begin{theorem}[Left-endpoint projected recovery]%
@@ -198,16 +153,13 @@ produces the global gauge family that relates the two tensors.
     \lean{TNLean.PEPS.edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eqAt}
     \leanok
     \uses{thm:peps_localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq, def:peps_localIncidentMatrixOp}
-    Let $e=(u,v)$ and suppose the family of local physical vectors at the left
-    endpoint $u$ is linearly independent. A physical operator at that endpoint
-    then pulls back to the one-edge virtual action of $M^{\mathsf T}$ if and
-    only if its compressed physical action is the canonical realization of that
-    one-edge virtual action.
+    Let $e=(u,v)$ and assume $\inj(\Phi_u)$. Then for any physical operator $O_1$
+    at $u$,
+    $\Psi_uO_1\Phi_u=T_{u,e}(M^{\mathsf T})\iff P_uO_1P_u=\Phi_uT_{u,e}(M^{\mathsf T})\Psi_u$.
 \end{theorem}
 \begin{proof}\leanok
-    This is the projected local recovery equivalence applied to the left
-    incident edge of $e$, with the transpose convention used by the
-    left-endpoint coefficient identity.
+    Specialize Theorem~\ref{thm:peps_localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
+    to $T_{u,e}(M^{\mathsf T})$ at the left endpoint $u$.
 \end{proof}
 
 \begin{theorem}[Right-endpoint projected recovery]%
@@ -215,15 +167,13 @@ produces the global gauge family that relates the two tensors.
     \lean{TNLean.PEPS.edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eqAt}
     \leanok
     \uses{thm:peps_localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq, def:peps_localIncidentMatrixOp}
-    Let $e=(u,v)$ and suppose the family of local physical vectors at the right
-    endpoint $v$ is linearly independent. A physical operator at that endpoint
-    then pulls back to the one-edge virtual action of $M$ if and only if its
-    compressed physical action is the canonical realization of that one-edge
-    virtual action.
+    Let $e=(u,v)$ and assume $\inj(\Phi_v)$. Then for any physical operator $O_2$
+    at $v$,
+    $\Psi_vO_2\Phi_v=T_{v,e}(M)\iff P_vO_2P_v=\Phi_vT_{v,e}(M)\Psi_v$.
 \end{theorem}
 \begin{proof}\leanok
-    This is the projected local recovery equivalence applied to the right
-    incident edge of $e$.
+    Specialize Theorem~\ref{thm:peps_localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
+    to $T_{v,e}(M)$ at the right endpoint $v$.
 \end{proof}
 
 \begin{theorem}[Endpoint recovery of a common virtual insertion]%
@@ -231,28 +181,16 @@ produces the global gauge family that relates the two tensors.
     \lean{TNLean.PEPS.edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
     \leanok
     \uses{thm:peps_edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq, thm:peps_edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
-    Let $e=(u,v)$. If
+    Let $e=(u,v)$ with $\inj(\Phi_u)$ and $\inj(\Phi_v)$. If
     $P_uO_1P_u=\Phi_uT_{u,e}(M^{\mathsf T})\Psi_u$ and
     $P_vO_2P_v=\Phi_vT_{v,e}(M)\Psi_v$, then
     $\Psi_uO_1\Phi_u=T_{u,e}(M^{\mathsf T})$ and
-    $\Psi_vO_2\Phi_v=T_{v,e}(M)$.
-    Here $T_{w,e}(N)$ denotes the virtual operator on the legs incident to $w$
-    which acts by $N$ on the leg belonging to $e$ and by the identity on the
-    other incident legs.
+    $\Psi_vO_2\Phi_v=T_{v,e}(M)$, where $T_{w,e}(N)$ acts by $N$ on the leg of
+    $e$ and by $\Id$ on all other legs incident to $w$.
 \end{theorem}
 \begin{proof}\leanok
-    The endpoint equivalences give
-    \begin{align}
-        P_uO_1P_u=\Phi_uT_{u,e}(M^{\mathsf T})\Psi_u
-         & \iff
-        \Psi_uO_1\Phi_u=T_{u,e}(M^{\mathsf T}),
-        \notag  \\
-        P_vO_2P_v=\Phi_vT_{v,e}(M)\Psi_v
-         & \iff
-        \Psi_vO_2\Phi_v=T_{v,e}(M).
-        \notag
-    \end{align}
-    The two hypotheses are the left sides of these equivalences.
+    Combine Theorems~\ref{thm:peps_edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
+    and~\ref{thm:peps_edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}.
 \end{proof}
 
 \begin{theorem}[Endpoint physical-to-virtual recovery under image preservation]%
@@ -260,25 +198,16 @@ produces the global gauge family that relates the two tensors.
     \lean{TNLean.PEPS.edgePhysicalToVirtualInsertion_of_projected_realization_eq}
     \leanok
     \uses{thm:peps_edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq, thm:peps_localVirtualOpOfPhysicalOp_realizes_of_projector}
-    Let $e=(u,v)$. Suppose that
-    $P_uO_1P_u=\Phi_uT_{u,e}(M^{\mathsf T})\Psi_u$ and
-    $P_vO_2P_v=\Phi_vT_{v,e}(M)\Psi_v$. Suppose also that
-    $O_1$ maps the image of $\Phi_u$ into itself and $O_2$ maps the image of
-    $\Phi_v$ into itself. Then
-    \begin{align}
-        O_1\Phi_u
-         & =\Phi_uT_{u,e}(M^{\mathsf T}),
-        \notag                            \\
-        O_2\Phi_v
-         & =\Phi_vT_{v,e}(M).
-        \notag
-    \end{align}
+    Let $e=(u,v)$ with $\inj(\Phi_u)$ and $\inj(\Phi_v)$. If
+    $P_uO_1P_u=\Phi_uT_{u,e}(M^{\mathsf T})\Psi_u$,
+    $P_vO_2P_v=\Phi_vT_{v,e}(M)\Psi_v$, $O_1(\operatorname{im}\Phi_u)\subseteq\operatorname{im}\Phi_u$,
+    and $O_2(\operatorname{im}\Phi_v)\subseteq\operatorname{im}\Phi_v$, then
+    $O_1\Phi_u=\Phi_uT_{u,e}(M^{\mathsf T})$ and $O_2\Phi_v=\Phi_vT_{v,e}(M)$.
 \end{theorem}
 \begin{proof}\leanok
-    The preceding endpoint theorem identifies the two virtual pullbacks with
-    the one-edge actions of $M^{\mathsf T}$ and $M$. The pullback
-    specification gives the projected physical actions, and the
-    image-preservation hypotheses remove the endpoint projectors.
+    Combine Theorem~\ref{thm:peps_edgeEndpointLocalVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
+    with Theorem~\ref{thm:peps_localVirtualOpOfPhysicalOp_realizes_of_projector}
+    at $u$ and $v$.
 \end{proof}
 
 \begin{theorem}[Right-endpoint physical realization of the inserted coefficient]%
@@ -286,17 +215,22 @@ produces the global gauge family that relates the two tensors.
     \lean{TNLean.PEPS.edgeInsertedCoeff_eq_sum_right_physicalRealization}
     \leanok
     \uses{def:peps_edgeInsertedCoeff, def:peps_edgeBoundaryRightIndexEquivInsertedBoundaryConfig, thm:peps_localTensorMap_localIncidentMatrixOp_single}
-    Let $e=(u,v)$ and let $\sigma$ be a physical configuration. If a physical
-    operator on $v$ realizes the one-edge virtual matrix action on the
-    distinguished incident edge, then the inserted-edge coefficient at
-    $\sigma$ is obtained by leaving the left endpoint and open middle
-    contraction explicit and applying that physical operator to the right
-    endpoint tensor.
+    Let $e=(u,v)$. If $O_2\Phi_v=\Phi_vT_{v,e}(M)$, then for every physical
+    configuration $\sigma$,
+    \begin{align}
+        C_A(e,M;\sigma)
+         & =\sum_{\beta} A_u(\beta_u)_{\sigma_u}
+        C_{\mathrm{mid}}(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})
+        O_2(A_v(\beta_v))_{\sigma_v}.
+        \label{eq:peps_edgeInsertedCoeff_right_realization}
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Expanding the physical realization on a basis local configuration at the
-    right endpoint produces a sum over the right bond index that is then
-    reindexed together with the ordinary edge-boundary data.
+    Expand $O_2(A_v(\beta_v))_{\sigma_v}$ via
+    Theorem~\ref{thm:peps_localTensorMap_localIncidentMatrixOp_single} and
+    reindex the sum over $(\beta,j)$ along
+    Definition~\ref{def:peps_edgeBoundaryRightIndexEquivInsertedBoundaryConfig}
+    to match Definition~\ref{def:peps_edgeInsertedCoeff}.
 \end{proof}
 
 \begin{theorem}[Left-endpoint physical realization of the inserted coefficient]%
@@ -304,18 +238,22 @@ produces the global gauge family that relates the two tensors.
     \lean{TNLean.PEPS.edgeInsertedCoeff_eq_sum_left_physicalRealization}
     \leanok
     \uses{def:peps_edgeInsertedCoeff, def:peps_edgeBoundaryLeftIndexEquivInsertedBoundaryConfig, thm:peps_localTensorMap_localIncidentMatrixOp_single}
-    Let $e=(u,v)$ and let $\sigma$ be a physical configuration. If a physical
-    operator on $u$ realizes the one-edge virtual action of $M^{\mathsf T}$ on
-    the distinguished incident edge, then the inserted-edge coefficient for
-    $M$ at $\sigma$ is obtained by applying that physical operator to the left
-    endpoint tensor and leaving the open middle contraction and the right
-    endpoint explicit.
+    Let $e=(u,v)$. If $O_1\Phi_u=\Phi_uT_{u,e}(M^{\mathsf T})$, then for every
+    physical configuration $\sigma$,
+    \begin{align}
+        C_A(e,M;\sigma)
+         & =\sum_{\beta} O_1(A_u(\beta_u))_{\sigma_u}
+        C_{\mathrm{mid}}(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})
+        A_v(\beta_v)_{\sigma_v}.
+        \label{eq:peps_edgeInsertedCoeff_left_realization}
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Expanding the physical realization on a basis local configuration at the left
-    endpoint lets the transpose convert the ordinary right bond index and the new
-    left bond index into the coefficient $M_{ij}$; the resulting finite sum
-    is then reindexed with the ordinary edge-boundary data.
+    Expand $O_1(A_u(\beta_u))_{\sigma_u}$ via
+    Theorem~\ref{thm:peps_localTensorMap_localIncidentMatrixOp_single}, use
+    $(M^{\mathsf T})_{ji}=M_{ij}$, and reindex along
+    Definition~\ref{def:peps_edgeBoundaryLeftIndexEquivInsertedBoundaryConfig}
+    to match Definition~\ref{def:peps_edgeInsertedCoeff}.
 \end{proof}
 
 \begin{theorem}[Endpoint physical realizations of the inserted coefficient]%
@@ -323,16 +261,17 @@ produces the global gauge family that relates the two tensors.
     \lean{TNLean.PEPS.edgeInsertedCoeff_endpointPhysicalRealization}
     \leanok
     \uses{thm:peps_localIncidentMatrixOp_physicalRealization, thm:peps_edgeInsertedCoeff_leftPhysicalRealization, thm:peps_edgeInsertedCoeff_rightPhysicalRealization}
-    If the PEPS tensor is vertex-injective, then for every physical
-    configuration $\sigma$, each inserted edge matrix is realized by physical
-    operators at the endpoint tensors: the left endpoint realizes
-    $M^{\mathsf T}$, the right endpoint realizes $M$, and both realizations
-    reproduce the same inserted-edge coefficient at $\sigma$ in the
-    edge-centered three-site decomposition.
+    If $A$ is vertex-injective, then for every edge $e=(u,v)$ and
+    $M\in\MN{D_A(e)}$ there exist physical operators $O_1$ at $u$ and $O_2$ at
+    $v$ satisfying $O_1\Phi_u=\Phi_uT_{u,e}(M^{\mathsf T})$,
+    $O_2\Phi_v=\Phi_vT_{v,e}(M)$, and both
+    (\ref{eq:peps_edgeInsertedCoeff_right_realization}) and
+    (\ref{eq:peps_edgeInsertedCoeff_left_realization}) for all $\sigma$.
 \end{theorem}
 \begin{proof}\leanok
-    Applying the local physical-realization theorem at the two endpoints and
-    using the two coefficient identities above gives both realizations.
+    Combine Theorem~\ref{thm:peps_localIncidentMatrixOp_physicalRealization} at
+    $u$ and $v$ with Theorems~\ref{thm:peps_edgeInsertedCoeff_leftPhysicalRealization}
+    and~\ref{thm:peps_edgeInsertedCoeff_rightPhysicalRealization}.
 \end{proof}
 
 \begin{theorem}[Equal neighboring physical actions recover a virtual insertion]%
@@ -340,11 +279,9 @@ produces the global gauge family that relates the two tensors.
     \lean{TNLean.PEPS.physical_to_virtual_insertion}
     \leanok
     \uses{def:peps_edgeBlockedThreeSiteInjective, def:peps_edgeBoundaryConfig, def:peps_edgeLeftLocalConfig, def:peps_edgeRightLocalConfig, def:peps_edgeOpenMiddleWeight, def:peps_localTensorMap, def:peps_localIncidentMatrixOp}
-    Let $e=(u,v)$. Assume that the edge-blocked three-site chain at $e$ is
-    injective and that every virtual bond has positive dimension. Let $O_1,O_2$
-    be physical operators at the endpoint tensors, and
-    write $\Phi_u,\Phi_v$ for the two local tensor maps. Suppose that, for every
-    physical configuration $\sigma$,
+    Let $e=(u,v)$, assume edge-blocked three-site injectivity at $e$ and
+    $\forall f\in E,\ D(f)>0$, and let $O_1,O_2$ be physical operators at $u,v$.
+    If for every physical configuration $\sigma$,
     \begin{align}
          & \sum_{\beta}
         O_1(A_u(\beta_u))_{\sigma_u}
@@ -355,23 +292,13 @@ produces the global gauge family that relates the two tensors.
         \sum_{\beta}
         A_u(\beta_u)_{\sigma_u}
         C_{\mathrm{mid}}(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})
-        O_2(A_v(\beta_v))_{\sigma_v}.
-        \notag
+        O_2(A_v(\beta_v))_{\sigma_v},
+        \label{eq:peps_equal_neighboring_physical_actions}
     \end{align}
-    Then
-    \begin{align}
-        \exists M\in\MN{D(e)},\qquad
-        O_1\Phi_u
-         & =\Phi_uT_{u,e}(M^{\mathsf T}),
-        \notag                            \\
-        O_2\Phi_v
-         & =\Phi_vT_{v,e}(M).
-        \notag
-    \end{align}
-    In the converse part of the insertion-algebra lemma in
-    \cite[Section~3]{Molnar2018NormalPEPS}, where the recovered matrix is
-    denoted $W$, the same implication is represented diagrammatically by the
-    $O_1,O_2\mapsto W$ step:
+    then there exists $M\in\MN{D(e)}$ such that
+    $O_1\Phi_u=\Phi_uT_{u,e}(M^{\mathsf T})$ and $O_2\Phi_v=\Phi_vT_{v,e}(M)$.
+    In \cite[Section~3]{Molnar2018NormalPEPS} (where $M$ is denoted $W$), this
+    converse implication is represented diagrammatically by:
     % Formula (paper_normal.tex:355--485): O_1 acting at B_1 and O_2 acting at
     % B_2 give the same three-site state only if both arise from one bond matrix W.
     % Ink-to-index: each panel is the same closed virtual three-cycle; the first two
@@ -402,17 +329,15 @@ produces the global gauge family that relates the two tensors.
     \end{center}
 \end{theorem}
 \begin{proof}\leanok
-    Contracting the middle block out of the hypothesis leaves a bond-contracted
-    identity between the two endpoint tensors, holding for every residual
-    boundary configuration. Inverting the right endpoint of this identity writes
-    the action of $O_1$ on a left tensor vector as a bond-indexed combination of
-    left tensor vectors with the same residual; the combining coefficients are
-    read at a fixed reference right residual and define $M$. Inverting the left
-    endpoint writes the action of $O_2$ on a right tensor vector as a bond-indexed
-    combination of right tensor vectors. The left inverse identifies the two
-    coefficient families, which is the source step $V=W$, so the right-endpoint
-    combination is also governed by $M$. The reference residuals exist because
-    every virtual bond has positive dimension.
+    Injectivity of $T_{A,M_e}$ strips $C_{\mathrm{mid}}$ from
+    (\ref{eq:peps_equal_neighboring_physical_actions}), leaving
+    $\sum_{i}O_1(A_u(i,\beta_{\mathrm{L}}))\otimes A_v(i,\beta_{\mathrm{R}})
+        =\sum_{i}A_u(i,\beta_{\mathrm{L}})\otimes O_2(A_v(i,\beta_{\mathrm{R}}))$
+    for all $(\beta_{\mathrm{L}},\beta_{\mathrm{R}})$. Applying the left
+    inverses of $\Phi_v$ and $\Phi_u$ (using $D(f)>0$ to fix reference residuals)
+    expresses $O_1\Phi_u=\Phi_uT_{u,e}(M^{\mathsf T})$ and
+    $O_2\Phi_v=\Phi_vT_{v,e}(W)$, and applying both left inverses identifies
+    $M=W$.
 \end{proof}
 
 \begin{theorem}[Injectivity of an inserted edge coefficient]%
@@ -420,32 +345,17 @@ produces the global gauge family that relates the two tensors.
     \lean{TNLean.PEPS.edgeInsertedCoeff_injective}
     \leanok
     \uses{def:peps_edgeBlockedThreeSiteInjective, def:peps_edgeInsertedCoeff, thm:peps_edgeInsertedCoeff_leftPhysicalRealization, thm:peps_edgeInsertedCoeff_rightPhysicalRealization, thm:peps_physical_to_virtual_insertion}
-    Let the edge-blocked three-site chain of $B$ at $e$ be injective, and
-    assume every virtual bond of $B$ has positive dimension. If two matrices
-    $M,M'\in\MN{D_B(e)}$ give the same inserted coefficient at every physical
-    configuration, $C_B(e,\sigma,M)=C_B(e,\sigma,M')$ for every $\sigma$, then
-    $M=M'$.
+    Assume edge-blocked three-site injectivity of $B$ at $e$ and
+    $\forall f\in E,\ D_B(f)>0$. If $M,M'\in\MN{D_B(e)}$ satisfy
+    $\forall\sigma,\ C_B(e,M;\sigma)=C_B(e,M';\sigma)$, then $M=M'$.
 \end{theorem}
-
 \begin{proof}\leanok
-    Realizing $M$ on the right endpoint and $M'^{\mathsf T}$ on the left
-    endpoint, the endpoint realizations and the equality
-    $C_B(e,\sigma,M)=C_B(e,\sigma,M')$ give, for every physical configuration
-    $\sigma$,
-    \begin{align}
-         & \sum_{\beta}
-        O_1(B_u(\beta_u))_{\sigma_u}
-        C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})
-        (B_v(\beta_v))_{\sigma_v}
-        \notag          \\
-         & \qquad =
-        \sum_{\beta}
-        (B_u(\beta_u))_{\sigma_u}
-        C_{\mathrm{mid}}^B(\sigma;\beta_{\mathrm{L}},\beta_{\mathrm{R}})
-        O_2(B_v(\beta_v))_{\sigma_v}.
-        \notag
-    \end{align}
-    Theorem~\ref{thm:peps_physical_to_virtual_insertion} gives a single virtual
-    matrix realizing both endpoint operators. Endpoint uniqueness then
-    identifies this matrix with $M$ and with $M'$.
+    Realizing $M'^{\mathsf T}$ by $O_1$ at $u$ via
+    (\ref{eq:peps_edgeInsertedCoeff_left_realization}) and $M$ by $O_2$ at $v$
+    via (\ref{eq:peps_edgeInsertedCoeff_right_realization}), the hypothesis
+    $C_B(e,M';\sigma)=C_B(e,M;\sigma)$ gives
+    (\ref{eq:peps_equal_neighboring_physical_actions}) for $B$.
+    Theorem~\ref{thm:peps_physical_to_virtual_insertion} yields a single matrix
+    realizing both $O_1$ and $O_2$, which endpoint injectivity identifies with
+    both $M'$ and $M$.
 \end{proof}

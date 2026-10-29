@@ -48,26 +48,19 @@
     \lean{TNLean.PEPS.not_fourSidedBoundaryMarginCover_seven}
     \leanok
     \uses{lem:peps_normalSquareHorizontalTranslatedEdge_blockingData, lem:peps_normalSquareVerticalTranslatedEdge_blockingData}
-    A translated edge window records that a chosen edge is one of the
-    translated horizontal or vertical edge pictures, together with a
-    rectangular cover of the complementary block. Such a window gives the
-    one-edge blocking datum for that edge, hence the three injective regions
-    used in the edge-blocked chain. The coordinate right and upward edges
-    obtain such windows directly from the corresponding translated picture.
-    Equivalently, a coordinate right or upward edge obtains such a
-    window when it has the necessary room around it for the translated
-    $5\times7$ or $7\times5$ frame and the complementary cover is given.
-    The same criterion applies to an arbitrary horizontal or vertical
-    square-lattice edge after identifying it with its coordinate right or
-    upward representative. The oriented margin-and-cover datum is the same
-    criterion written as per-edge data in the rectangular coordinate model;
-    it directly gives the one-edge blocking datum, its three injective
-    regions, and the identities
-    $u_e\in R_e$, $v_e\in B_e$,
+    A \emph{translated edge window} (or equivalently an \emph{oriented
+        margin-and-cover datum}) at an edge $e=\{u_e,v_e\}$ identifies $e$ with a
+    translated horizontal edge $e_{x_0,y_0}$ in a $5\times 7$ frame
+    (Lemma~\ref{lem:peps_normalSquareHorizontalTranslatedEdge_blockingData}) or
+    a translated vertical edge $e^{\mathrm v}_{x_0,y_0}$ in a $7\times 5$ frame
+    (Lemma~\ref{lem:peps_normalSquareVerticalTranslatedEdge_blockingData}),
+    together with a rectangular cover of the complementary block $C_e$. It
+    yields the one-edge blocking datum $(R_e,B_e,C_e)$ satisfying
+    $\inj(R_e),\inj(B_e),\inj(C_e)$, $u_e\in R_e$, $v_e\in B_e$,
     $R_e\cap B_e=R_e\cap C_e=B_e\cap C_e=\varnothing$, and
-    $R_e\cup B_e\cup C_e=V$. The boundary obstruction lemmas show that these
-    translated-window and margin-cover criteria are interior criteria, not the
-    final every-edge construction in the open square-lattice model.
+    $R_e\cup B_e\cup C_e=V$. On the open $7\times 7$ lattice, the boundary
+    obstruction lemmas record that boundary edges lack the required frame
+    margins.
     % Detailed source-comparison status:
     % docs/paper-gaps/peps_normal_ft_section3_route.tex.
 \end{definition}
@@ -86,31 +79,22 @@
     \lean{TNLean.PEPS.not_forall_normalSquareEdgeMarginCover_seven}
     \leanok
     \uses{def:peps_normalSquareTranslatedEdgeWindow, def:peps_normalEdgeBlockingHypotheses}
-    Given rectangular injectivity hypotheses, finite union closure, and a
-    translated edge window at every edge of the finite square lattice, the
-    corresponding one-edge blockings determine the normal edge-blocking
-    hypotheses. This is the conditional construction;
-    constructing such windows for all edges of the $7\times7$ lattice remains
-    separate; the current open rectangular translated-window criterion does not
-    by itself produce such a family. The one-edge datum recovered from the
-    resulting hypotheses is the datum determined by the corresponding translated
-    window, and the resulting hypotheses give the three injective regions at
-    every edge, together with
-    $u_e\in R_e$, $v_e\in B_e$,
+    Under rectangular injectivity and finite union closure, a family of
+    translated edge windows (or oriented margin-and-cover data,
+    Definition~\ref{def:peps_normalSquareTranslatedEdgeWindow}) at every edge
+    $e\in E$ yields the normal edge-blocking hypotheses of
+    Definition~\ref{def:peps_normalEdgeBlockingHypotheses}, with
+    $\inj(R_e),\inj(B_e),\inj(C_e)$, $u_e\in R_e$, $v_e\in B_e$,
     $R_e\cap B_e=R_e\cap C_e=B_e\cap C_e=\varnothing$, and
-    $R_e\cup B_e\cup C_e=V$. Equivalently, it is enough to give the oriented
-    margin-and-cover data at every edge; the resulting hypotheses recover the
-    corresponding datum, give the same three injectivity conclusions, and give
-    the same endpoint, disjointness, and covering conclusions. The obstruction
-    theorem records that this interior margin-cover criterion does not by
-    itself provide data at every edge of the open $7\times7$ lattice.
+    $R_e\cup B_e\cup C_e=V$ (whereas on the open $7\times 7$ lattice no such
+    family exists for all edges simultaneously).
     % Detailed source-comparison status:
     % docs/paper-gaps/peps_normal_ft_section3_route.tex.
 \end{theorem}
 \begin{proof}\leanok
-    Applying the general construction for one-edge blocking data to the datum
-    determined by the chosen translated window at each edge establishes the
-    normal edge-blocking hypotheses.
+    Apply the blocking-datum constructor of
+    Definition~\ref{def:peps_normalSquareTranslatedEdgeWindow} at each edge
+    $e\in E$ to obtain Definition~\ref{def:peps_normalEdgeBlockingHypotheses}.
 \end{proof}
 
 \begin{lemma}[Conditional injectivity of the normal $R$ and $S$ regions]%
@@ -119,15 +103,17 @@
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.regionS_injective_of_union}
     \leanok
     \uses{def:peps_regionInjectivityData, def:peps_normalRectangleInjectivityHypotheses, lem:peps_normalSquareRegionRS_rectangular_decomposition}
-    If region injectivity is closed under unions, then the coordinate
-    square-lattice rectangular injectivity hypotheses imply that the displayed
-    regions $R$ and $S$ are injective.
+    Under rectangular injectivity
+    (Definition~\ref{def:peps_normalRectangleInjectivityHypotheses}) and union
+    closure (Definition~\ref{def:peps_regionInjectivityData}), the regions $R$
+    and $S$ with $x_0+3\le n$, $y_0+3\le m$ satisfy $\inj(R)$ and $\inj(S)$.
 \end{lemma}
 \begin{proof}\leanok
-    Region $R$ is the union of one injective $2\times3$ rectangle and one
-    injective $3\times2$ rectangle, while region $S$ is the union of two
-    injective $2\times3$ rectangles; union closure therefore implies that both
-    regions are injective.
+    By Lemma~\ref{lem:peps_normalSquareRegionRS_rectangular_decomposition},
+    $R=R_1\cup R_2$ and $S=S_1\cup S_2$ with
+    $R_1,S_1,S_2\in\mathcal R_{2\times 3}$ and
+    $R_2\in\mathcal R_{3\times 2}$; apply rectangular injectivity and union
+    closure.
 \end{proof}
 
 \begin{lemma}[Injectivity of the normal $R$, $S$, and $T$ regions]%
@@ -137,20 +123,15 @@
     \lean{TNLean.PEPS.regionBlockedTensorInjective_normalSquareRegionT}
     \leanok
     \uses{thm:peps_regionInjectivityUnionClosure_of_overlap, lem:peps_normalSquareRegionRS_injective_of_unionClosure, lem:peps_normalSquareRegionT_injective_of_cover}
-    Fix a square-lattice PEPS tensor with every bond dimension positive whose
-    blocked tensor is injective on every contiguous $2\times3$ and $3\times2$
-    rectangle. Then the displayed regions $R$ and $S$ are injective. If,
-    in addition, the displayed region $T$ has a cover by such rectangles, then $T$
-    is injective too. The union closure used here follows from the
-    overlapping union lemma, so no single-vertex injectivity is assumed.
+    Let $A$ be a square-lattice PEPS tensor with $D_A>0$ satisfying coordinate
+    rectangular injectivity for $\inj_A$. Then $\inj_A(R)$ and $\inj_A(S)$
+    hold, and if $T$ admits a rectangular cover then $\inj_A(T)$ holds as well.
 \end{lemma}
 \begin{proof}\leanok
-    The conditional injectivity of $R$ and $S$
-    (Lemma~\ref{lem:peps_normalSquareRegionRS_injective_of_unionClosure}) and the
-    conditional cover criterion for $T$
-    (Lemma~\ref{lem:peps_normalSquareRegionT_injective_of_cover}) establish the
-    claim once union closure is discharged by
-    Theorem~\ref{thm:peps_regionInjectivityUnionClosure_of_overlap}.
+    Theorem~\ref{thm:peps_regionInjectivityUnionClosure_of_overlap} gives union
+    closure for $\inj_A$; apply
+    Lemmas~\ref{lem:peps_normalSquareRegionRS_injective_of_unionClosure}
+    and~\ref{lem:peps_normalSquareRegionT_injective_of_cover}.
 \end{proof}
 
 % The comparison square and comparison region at a parametric offset, used to
@@ -164,20 +145,17 @@
     \lean{TNLean.PEPS.IsNormalSquareComparisonWindow}
     \leanok
     \uses{def:peps_squareLatticeCoordinateRegions}
-    At a coordinate offset $(a,b)$ the comparison square is the $3\times3$
-    contiguous coordinate rectangle with lower-left corner $(a,b)$. The
-    comparison region is this square with its lower-left corner $(a,b)$
-    removed, presented as the union of the $2\times3$ contiguous rectangle at
-    $(a+1,b)$ and the $3\times2$ contiguous rectangle at $(a,b+1)$. This is an
-    auxiliary one-site comparison pair carrying its omitted site at the
-    lower-left corner; it is the reflected counterpart of the displayed regions
-    $R$ and $S$, whose omitted site $S\setminus R$ sits at the lower-right
-    corner, placed at an arbitrary offset rather than at a fixed origin. The
-    interior window at $(a,b)$ for a finite $n\times m$ lattice is the placement
-    margin
-    $4\le a$, $a+9\le n$, $4\le b$, $b+9\le m$, under which every boundary edge
-    of the comparison square and of the comparison region carries the interior
-    margins of the open edge-blocking geometry.
+    At offset $(a,b)$ on the $n\times m$ lattice
+    (Definition~\ref{def:peps_squareLatticeCoordinateRegions}), the
+    \emph{comparison square} and \emph{comparison region} are
+    \begin{align}
+        S_{a,b} & = R(a,b;3,3), \notag                                       \\
+        R_{a,b} & = R(a+1,b;2,3)\cup R(a,b+1;3,2)=S_{a,b}\setminus\{(a,b)\},
+        \notag
+    \end{align}
+    and the \emph{interior comparison window} is defined by the bounds
+    $4\le a\le n-9$ and $4\le b\le m-9$, under which every boundary edge of
+    $R_{a,b}$ and $S_{a,b}$ carries the interior edge-blocking margins.
 \end{definition}
 
 \begin{lemma}[Membership in the comparison region]%
@@ -187,38 +165,24 @@
     \lean{TNLean.PEPS.insert_normalSquareComparisonRegion}
     \leanok
     \uses{def:peps_normalSquareComparisonRegions, lem:peps_squareLatticeCoordinateRegion_identities}
-    For any offset $(a,b)$ a vertex with coordinates $(x,y)$ lies in the
-    comparison region at $(a,b)$ if and only if
+    For any $(a,b)$, a vertex $(x,y)$ satisfies $(x,y)\in R_{a,b}$ if and only
+    if
     \begin{align}
          & (a+1\le x<a+3\wedge b\le y<b+3)
         \lor
         (a\le x<a+3\wedge b+1\le y<b+3).
         \label{eq:peps_comp_region_mem}
     \end{align}
-    Let $v$ be a lattice vertex and place the comparison region at $v$'s own
-    coordinates. Then $v$ lies outside that region, and inserting $v$ back in
-    recovers the full $3\times3$ comparison square placed at $v$'s coordinates.
+    In particular, for $v=(v_1,v_2)\in V$, $v\notin R_{v_1,v_2}$ and
+    $R_{v_1,v_2}\cup\{v\}=S_{v_1,v_2}$.
 \end{lemma}
 \begin{proof}\leanok
-    Membership unfolds the union of the two contiguous rectangles into
-    (\ref{eq:peps_comp_region_mem}). Placing the region at $v$'s own
-    coordinates sets $(a,b)=(x,y)=(v_1,v_2)$. The corner offset $(v_1,v_2)$ fails
-    the first disjunct because $v_1+1\le v_1$ is false, and fails the second
-    because $v_2+1\le v_2$ is false:
-    \begin{align}
-         & \neg\bigl((v_1+1\le v_1<v_1+3)
-        \wedge(v_2\le v_2<v_2+3)\bigr)
-        \notag                            \\
-         & \qquad\wedge
-        \neg\bigl((v_1\le v_1<v_1+3)
-        \wedge(v_2+1\le v_2<v_2+3)\bigr).
-        \notag
-    \end{align}
-    Thus $v$ lies outside the region. Inserting $v$ therefore yields the region
-    together with $\{(v_1,v_2)\}$, and a vertex lies in this set exactly when it
-    equals $v$ or already lies in the region. That is the membership condition
-    of the $3\times3$ square, the corner being the one cell of the square that
-    both pieces omit.
+    Unfolding $R_{a,b}=R(a+1,b;2,3)\cup R(a,b+1;3,2)$ via
+    Lemma~\ref{lem:peps_squareLatticeCoordinateRegion_identities} gives
+    (\ref{eq:peps_comp_region_mem}). At $(a,b)=(x,y)=(v_1,v_2)$, both
+    $v_1+1\le v_1$ and $v_2+1\le v_2$ are false, so $v\notin R_{v_1,v_2}$, and
+    adjoining $\{(v_1,v_2)\}$ to (\ref{eq:peps_comp_region_mem}) yields
+    $v_1\le x<v_1+3\wedge v_2\le y<v_2+3$, which is $S_{v_1,v_2}$.
 \end{proof}
 
 \begin{lemma}[Band decomposition of the comparison square complement]%
@@ -226,14 +190,14 @@
     \lean{TNLean.PEPS.compl_normalSquareComparisonSquare_eq_bands}
     \leanok
     \uses{def:peps_normalSquareComparisonRegions}
-    On a finite $n\times m$ lattice, if $a+3\le n$ and $b+3\le m$ then the
-    complement of the comparison square at $(a,b)$ is the union of the four
-    coordinate bands
+    On the $n\times m$ lattice with $a+3\le n$ and $b+3\le m$,
     \begin{align}
-         & \{(x,y):0\le x<a,\ 0\le y<m\}
+        V\setminus S_{a,b}
+         & =
+        \{(x,y):0\le x<a,\ 0\le y<m\}
         \cup
         \{(x,y):a+3\le x<n,\ 0\le y<m\}
-        \notag                           \\
+        \notag        \\
          & \qquad\cup
         \{(x,y):a\le x<a+3,\ 0\le y<b\}
         \cup
@@ -242,24 +206,9 @@
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    A vertex $(x,y)$ lies in the comparison square exactly when
-    $a\le x<a+3$ and $b\le y<b+3$. With $0\le x<n$ and $0\le y<m$ on the
-    lattice, the negation of that conjunction is membership in
-    (\ref{eq:peps_comp_square_bands}):
-    \begin{align}
-         & \neg(a\le x<a+3\wedge b\le y<b+3)
-        \notag                               \\
-         & \quad\Longleftrightarrow
-        (0\le x<a\wedge 0\le y<m)
-        \lor
-        (a+3\le x<n\wedge 0\le y<m)
-        \notag                               \\
-         & \qquad\lor
-        (a\le x<a+3\wedge 0\le y<b)
-        \lor
-        (a\le x<a+3\wedge b+3\le y<m).
-        \notag
-    \end{align}
+    For $(x,y)\in V$ ($0\le x<n$, $0\le y<m$), negating
+    $(x,y)\in S_{a,b}\Longleftrightarrow a\le x<a+3\wedge b\le y<b+3$ yields the
+    four disjuncts of (\ref{eq:peps_comp_square_bands}).
 \end{proof}
 
 \begin{lemma}[Band decomposition of the comparison region complement]%
@@ -267,39 +216,23 @@
     \lean{TNLean.PEPS.compl_normalSquareComparisonRegion_eq_bands}
     \leanok
     \uses{def:peps_normalSquareComparisonRegions, lem:peps_normalSquareComparisonRegion_membership}
-    On a finite $n\times m$ lattice, if $2\le a$, $1\le b$, $a+3\le n$, and
-    $b+3\le m$ then the complement of the comparison region at $(a,b)$ is the
-    union of the same four bands of
-    Lemma~\ref{lem:peps_normalSquareComparisonSquare_complementBands} together
-    with the $3\times2$ corner rectangle
-    $\{(x,y):a-2\le x<a+1,\ b-1\le y<b+1\}$,
-    which contains the omitted corner $(a,b)$.
+    On the $n\times m$ lattice with $2\le a$, $1\le b$, $a+3\le n$, and
+    $b+3\le m$, the complement $V\setminus R_{a,b}$ is the union of the four
+    bands of (\ref{eq:peps_comp_square_bands})
+    (Lemma~\ref{lem:peps_normalSquareComparisonSquare_complementBands}) and the
+    $3\times 2$ corner rectangle
+    $R(a-2,b-1;3,2)=\{(x,y):a-2\le x<a+1,\ b-1\le y<b+1\}$.
 \end{lemma}
 \begin{proof}\leanok
-    By (\ref{eq:peps_comp_region_mem}), a vertex $(x,y)$ lies in the complement
-    exactly when both disjuncts fail:
+    By Lemma~\ref{lem:peps_normalSquareComparisonRegion_membership},
+    $S_{a,b}=R_{a,b}\cup\{(a,b)\}$, and $(a,b)\in R(a-2,b-1;3,2)\subseteq
+        V\setminus R_{a,b}$ since $2\le a$ and $1\le b$; hence
     \begin{align}
-         & \neg(a+1\le x<a+3\wedge b\le y<b+3)
-        \notag                                 \\
-         & \qquad\wedge
-        \neg(a\le x<a+3\wedge b+1\le y<b+3).
-        \notag
-    \end{align}
-    Together with $0\le x<n$ and $0\le y<m$, this places the vertex either in
-    one of the four bands of
-    (\ref{eq:peps_comp_square_bands}) or in the $3\times2$ corner rectangle.
-    Writing $R$ for the comparison region and $S$ for the comparison square,
-    \begin{align}
-        V\setminus R
+        V\setminus R_{a,b}
          & =
-        \{(x,y):a-2\le x<a+1,\ b-1\le y<b+1\}
-        \cup(V\setminus S),
+        R(a-2,b-1;3,2)\cup(V\setminus S_{a,b}).
         \notag
     \end{align}
-    since the comparison region is the comparison square with the corner $(a,b)$
-    removed, and that corner lies in the displayed $3\times2$ rectangle. The
-    hypotheses $2\le a$ and $1\le b$ keep the corner rectangle's lower-left
-    coordinates $(a-2,b-1)$ within the lattice.
 \end{proof}
 
 \begin{lemma}[Injectivity of the comparison region and the comparison square]%
@@ -308,16 +241,16 @@
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.comparisonSquare_injective}
     \leanok
     \uses{def:peps_normalRectangleInjectivityHypotheses, def:peps_regionInjectivityData, lem:peps_squareLatticeRectangleInjectivity_rectangles, lem:peps_normalSquareWideRectangle_injective}
-    Assume rectangular injectivity and union closure. On a finite $n\times m$
-    lattice, if $a+3\le n$ and $b+3\le m$ then the comparison region at $(a,b)$
-    is injective, being the union of a $2\times3$ and a $3\times2$ rectangle,
-    and the comparison square at $(a,b)$ is injective, being a $3\times3$
-    rectangle.
+    Under rectangular injectivity
+    (Definition~\ref{def:peps_normalRectangleInjectivityHypotheses}) and union
+    closure (Definition~\ref{def:peps_regionInjectivityData}), if
+    $a+3\le n$ and $b+3\le m$, then $\inj(R_{a,b})$ and $\inj(S_{a,b})$.
 \end{lemma}
 \begin{proof}\leanok
-    Applying union closure to the rectangular injectivity of the contained
-    $2\times3$ and $3\times2$ rectangles proves injectivity of the comparison
-    region, while the comparison square is a single large rectangle.
+    For $R_{a,b}=R(a+1,b;2,3)\cup R(a,b+1;3,2)$, apply
+    Lemma~\ref{lem:peps_squareLatticeRectangleInjectivity_rectangles} and union
+    closure; for $S_{a,b}=R(a,b;3,3)$, apply
+    Lemma~\ref{lem:peps_normalSquareWideRectangle_injective}.
 \end{proof}
 
 \begin{lemma}[Injectivity of the comparison complements]%
@@ -326,17 +259,21 @@
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.compl_comparisonRegion_injective}
     \leanok
     \uses{def:peps_normalRectangleInjectivityHypotheses, def:peps_regionInjectivityData, lem:peps_normalSquareWideRectangle_injective, lem:peps_normalSquareComparisonSquare_complementBands, lem:peps_normalSquareComparisonRegion_complementBands}
-    Assume rectangular injectivity and union closure. On a finite $n\times m$
-    lattice, if $2\le a$, $2\le b$, $a+5\le n$, and $b+5\le m$ then the
-    complement of the comparison square at $(a,b)$ is injective, being the union
-    of its four surrounding bands, and the complement of the comparison region
-    at $(a,b)$ is injective, being that union together with one further corner
-    rectangle.
+    Under rectangular injectivity
+    (Definition~\ref{def:peps_normalRectangleInjectivityHypotheses}) and union
+    closure (Definition~\ref{def:peps_regionInjectivityData}), if $2\le a,b$,
+    $a+5\le n$, and $b+5\le m$, then $\inj(V\setminus S_{a,b})$ and
+    $\inj(V\setminus R_{a,b})$.
 \end{lemma}
 \begin{proof}\leanok
-    Rewriting each complement by its band decomposition and applying union
-    closure to the bands, each a large contiguous rectangle, and to the corner
-    rectangle yields injectivity of both complements.
+    Under $2\le a,b$ and $a+5\le n$, $b+5\le m$, each of the four bands in
+    (\ref{eq:peps_comp_square_bands})
+    (Lemma~\ref{lem:peps_normalSquareComparisonSquare_complementBands}) is
+    injective by Lemma~\ref{lem:peps_normalSquareWideRectangle_injective}, and
+    $R(a-2,b-1;3,2)\in\mathcal R_{3\times 2}$ in
+    Lemma~\ref{lem:peps_normalSquareComparisonRegion_complementBands} is
+    injective, so union closure gives $\inj(V\setminus S_{a,b})$ and
+    $\inj(V\setminus R_{a,b})$.
 \end{proof}
 
 \begin{definition}[Normal edge-blocking hypotheses]%
@@ -345,14 +282,15 @@
     \lean{TNLean.PEPS.NormalEdgeBlockingHypotheses}
     \leanok
     \uses{def:peps_edge, def:peps_regionInjectivityData}
-    Around one edge, the normal proof uses a blocking into three injective
-    regions: a red region containing one endpoint, a blue region containing the
-    other endpoint, and an injective complementary region. The three regions
-    are pairwise disjoint and cover the whole vertex set. The edge-blocking
-    hypotheses are precisely this one-edge datum at every edge; the red,
-    blue, and complementary regions are read off from it. The local blocking
-    picture used in the proof of
-    \cite[Theorem~3]{Molnar2018NormalPEPS}:
+    For an edge $e=\{u_e,v_e\}$ ($u_e<v_e$, Definition~\ref{def:peps_edge}) and
+    a region-injectivity assignment $\inj$
+    (Definition~\ref{def:peps_regionInjectivityData}), a \emph{normal one-edge
+        blocking datum} is a triple of regions $(R_e,B_e,C_e)$ satisfying
+    $u_e\in R_e$, $v_e\in B_e$,
+    $R_e\cap B_e=R_e\cap C_e=B_e\cap C_e=\varnothing$,
+    $R_e\cup B_e\cup C_e=V$, and $\inj(R_e),\inj(B_e),\inj(C_e)$. The
+    \emph{normal edge-blocking hypotheses} assign such a datum to every
+    $e\in E$, as in \cite[Theorem~3]{Molnar2018NormalPEPS}:
     \begin{tenkzequation}
         % Formula verdict: in the source 7-by-7 frame, A1=(4-6,2-3),
         % A2=(3-4,4-6), and A3 is their cell-set complement; the marked
@@ -406,13 +344,14 @@
     \lean{TNLean.PEPS.leftBoundaryRightEdgeInjectivityCountermodelSeven}
     \leanok
     \uses{def:peps_regionInjectivityData}
-    In the open $7\times7$ rectangle, let $u=(0,2)$ and $v=(1,2)$ be
-    the endpoints of a left-boundary horizontal edge. Define a region
-    relation by
-    \[
+    On the open $7\times 7$ lattice, let $u=(0,2)$ and $v=(1,2)$ be the
+    endpoints of the left-boundary horizontal edge $e_{\mathrm R}(0,2)$, and
+    define $\inj_{\partial}$ (Definition~\ref{def:peps_regionInjectivityData}) by
+    \begin{align}
         \inj_{\partial}(R)\quad\Longleftrightarrow\quad
-        u\in R\Longrightarrow v\in R.
-    \]
+        (u\in R\Longrightarrow v\in R).
+        \notag
+    \end{align}
 \end{definition}
 
 \begin{theorem}[Union closure of the boundary countermodel]%
@@ -421,12 +360,14 @@
         leftBoundaryRightEdgeInjectivityCountermodelSeven_unionClosure}
     \leanok
     \uses{def:peps_leftBoundaryRightEdgeInjectivityCountermodel}
-    The relation $\inj_{\partial}$ is closed under unions.
+    The relation $\inj_{\partial}$ of
+    Definition~\ref{def:peps_leftBoundaryRightEdgeInjectivityCountermodel}
+    satisfies $\inj_{\partial}(A)\wedge\inj_{\partial}(B)\Longrightarrow
+        \inj_{\partial}(A\cup B)$.
 \end{theorem}
 \begin{proof}\leanok
-    If $u\in A\cup B$, then $u$ belongs to one of the two regions. The
-    defining implication for that region places $v$ in the same region, hence
-    in $A\cup B$.
+    If $u\in A\cup B$, then $u\in A$ or $u\in B$, so $\inj_{\partial}(A)$ or
+    $\inj_{\partial}(B)$ gives $v\in A\cup B$.
 \end{proof}
 
 \begin{theorem}[Rectangular conditions for the boundary countermodel]%
@@ -436,13 +377,13 @@
     \leanok
     \uses{def:peps_leftBoundaryRightEdgeInjectivityCountermodel,
         def:peps_normalRectangleInjectivityHypotheses}
-    Every contiguous $2\times3$ and $3\times2$ rectangle satisfies
-    $\inj_{\partial}$. Indeed, a rectangle of either shape that contains $u$
-    necessarily contains its right neighbor $v$.
+    Every $R\in\mathcal R_{2\times 3}\cup\mathcal R_{3\times 2}$
+    (Definition~\ref{def:peps_normalRectangleInjectivityHypotheses}) on the
+    $7\times 7$ lattice satisfies $\inj_{\partial}(R)$.
 \end{theorem}
 \begin{proof}\leanok
-    This follows directly from the horizontal coordinates of the two
-    endpoints.
+    Any contiguous rectangle of width $w\ge 2$ containing $u=(0,2)$ has
+    horizontal interval $I(0,w)\ni 1$, hence contains $v=(1,2)$.
 \end{proof}
 
 \begin{theorem}[No boundary blocking for the countermodel]%
@@ -451,13 +392,14 @@
     \leanok
     \uses{def:peps_leftBoundaryRightEdgeInjectivityCountermodel,
         def:peps_normalEdgeBlockingHypotheses}
-    The relation $\inj_{\partial}$ admits no three-partite injective MPS
-    blocking around the edge $u$--$v$.
+    The relation $\inj_{\partial}$ of
+    Definition~\ref{def:peps_leftBoundaryRightEdgeInjectivityCountermodel}
+    admits no one-edge blocking datum $(R_e,B_e,C_e)$
+    (Definition~\ref{def:peps_normalEdgeBlockingHypotheses}) at $e=\{u,v\}$.
 \end{theorem}
 \begin{proof}\leanok
-    The red region must contain $u$, so its injectivity places $v$ in the red
-    region. The blocking requires $v$ to lie in the disjoint blue region,
-    which is impossible.
+    Since $u\in R_e$ and $\inj_{\partial}(R_e)$ holds, $v\in R_e$, contradicting
+    $v\in B_e$ and $R_e\cap B_e=\varnothing$.
 \end{proof}
 
 \begin{theorem}[Rectangular injectivity does not force an open-boundary
@@ -468,21 +410,18 @@
     \uses{thm:peps_leftBoundaryRightEdgeInjectivityCountermodel_unionClosure,
         thm:peps_leftBoundaryRightEdgeInjectivityCountermodel_rectangular,
         thm:peps_leftBoundaryRightEdge_not_boundaryBlockingData}
-    There is a union-closed region relation on the open $7\times7$ rectangle
-    that satisfies all contiguous $2\times3$ and $3\times2$ rectangle
-    conditions, but admits no three-partite injective MPS blocking around the
-    edge $u$--$v$.
-
-    This counterexample for abstract region relations shows only that the
-    rectangular and union hypotheses do not entail a boundary blocking on an
-    open rectangle. It neither gives a PEPS tensor nor concerns the periodic
-    translationally invariant statement of~\cite[Theorem~3]{Molnar2018NormalPEPS}.
-    The later general theorem in the source takes the every-edge three-partite
-    injective MPS blocking as a hypothesis.
+    On the open $7\times 7$ rectangle, there exists a union-closed region
+    assignment $\inj_{\partial}$ satisfying all $2\times 3$ and $3\times 2$
+    rectangular conditions that admits no three-partite injective blocking
+    around the boundary edge $u$--$v$ (this abstract region countermodel does
+    not concern the periodic torus setting of
+    \cite[Theorem~3]{Molnar2018NormalPEPS}).
 \end{theorem}
 \begin{proof}\leanok
-    The relation $\inj_{\partial}$ together with the three preceding theorems
-    establishes the claim.
+    Combine
+    Theorems~\ref{thm:peps_leftBoundaryRightEdgeInjectivityCountermodel_unionClosure},
+    \ref{thm:peps_leftBoundaryRightEdgeInjectivityCountermodel_rectangular},
+    and~\ref{thm:peps_leftBoundaryRightEdge_not_boundaryBlockingData}.
 \end{proof}
 
 \begin{theorem}[Injectivity from normal edge blocking]%
@@ -498,11 +437,9 @@
         NormalEdgeBlockingHypotheses.endpoint_injective_disjoint_cover_at_edge}
     \leanok
     \uses{def:peps_normalEdgeBlockingHypotheses}
-    A family of one-edge blocking data is precisely the normal edge-blocking
-    hypotheses. If $H$ is formed from the family $d_e$, then the one-edge
-    datum that $H$ associates with $e$ is $d_e$. Write the endpoints of $e$
-    as $u_e<v_e$ in the canonical vertex ordering. If the three regions are
-    $R_e$, $B_e$, and $C_e$, then
+    Under Definition~\ref{def:peps_normalEdgeBlockingHypotheses}, the one-edge
+    datum $d_e=(R_e,B_e,C_e)$ at each edge $e=\{u_e,v_e\}$ ($u_e<v_e$) satisfies
+    $\inj(R_e)$, $\inj(B_e)$, $\inj(C_e)$, and
     \begin{align}
         u_e                 & \in R_e,
         \notag                                                      \\
@@ -510,15 +447,11 @@
         \notag                                                      \\
         R_e\cap B_e         & =R_e\cap C_e=B_e\cap C_e=\varnothing,
         \notag                                                      \\
-        R_e\cup B_e\cup C_e & =V,
+        R_e\cup B_e\cup C_e & =V.
         \label{eq:peps_edge_blocking_cover}
     \end{align}
-    and the underlying PEPS tensor is injective on $R_e$, $B_e$, and $C_e$.
 \end{theorem}
 \begin{proof}\leanok
-    By construction, the one-edge datum at each edge $e$ is $d_e$.
-    The endpoint, disjointness, and coverage statements in
-    (\ref{eq:peps_edge_blocking_cover}), together with the injectivity
-    statements, are exactly the corresponding assumptions of that one-edge
-    datum.
+    Immediate by projecting the fields of $d_e$ in
+    Definition~\ref{def:peps_normalEdgeBlockingHypotheses}.
 \end{proof}

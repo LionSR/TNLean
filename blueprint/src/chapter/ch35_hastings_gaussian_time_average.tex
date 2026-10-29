@@ -4,11 +4,9 @@
 % Hastings, arXiv:0705.2024v4, law16.tex, lines 843--864 (step five of the
 % proof of Lemma 1). Finite complex matrices; no lattice content.
 
-The last step of the proof of Lemma~1 of \cite{Hastings2007AreaLaw} replaces
-the ground-state projector by a Gaussian average of the evolution, and then
-replaces the Hamiltonian in that average by a nearby operator. This section
-states both estimates for finite complex matrices, with explicit constants in
-the parameter $q$. Norms are operator norms.
+Step five of the proof of \cite[Lemma~1]{Hastings2007AreaLaw} approximates the
+ground-state projector $|\Omega\rangle\langle\Omega|$ by a Gaussian time average
+$P_q(H)$ and bounds the perturbation $\|P_q(M)-P_q(H)\|$.
 
 \begin{definition}[Gaussian time average]
     \label{def:hastings_gaussian_time_average}
@@ -18,19 +16,17 @@ the parameter $q$. Norms are operator norms.
         TNLean.MPS.AreaLaw.Hastings.le_timeAverageVariance_mul_sq,
         TNLean.MPS.AreaLaw.Hastings.sqrt_timeAverageVariance}
     \leanok
-    Let $q$ and $\Delta E$ be real numbers and put $h=\max(q/\Delta E^2,0)$ if
-    $\Delta E\ne0$, and $h=0$ if $\Delta E=0$.
-    For a complex square matrix $H$ let
-    \begin{align*}
-        P_q(H)=\int e^{iHt}\,d\gamma_h(t),
-    \end{align*}
-    where $\gamma_h$ is the centred Gaussian measure of variance $h$, and
-    $\gamma_0$ is the point mass at zero. For $q>0$ and $\Delta E>0$ this is
-    the operator
-    $P_q=\frac{\Delta E}{\sqrt{2\pi q}}\int e^{iHt}e^{-(t\Delta E)^2/2q}\,dt$
-    of \cite[lines 843--847]{Hastings2007AreaLaw}.
-    The variance satisfies $q\le h\,\Delta E^2$ whenever $\Delta E\ne0$, and
-    $\sqrt h=\sqrt{\max(q,0)}/\Delta E$ whenever $\Delta E>0$.
+    For $q,\Delta E\in\R$, set $h=\max(q/\Delta E^2,0)$ when $\Delta E\ne0$ and
+    $h=0$ when $\Delta E=0$. Let $\gamma_h$ be the centered Gaussian measure of
+    variance $h$ on $\R$ ($\gamma_0=\delta_0$). For a square matrix $H$, define
+    \begin{align}
+        P_q(H)=\int e^{iHt}\,d\gamma_h(t)
+        \label{eq:hastings_gaussian_time_average}
+    \end{align}
+    (for $q,\Delta E>0$,
+    $P_q(H)=\frac{\Delta E}{\sqrt{2\pi q}}\int e^{iHt-(t\Delta E)^2/(2q)}\,dt$
+    as in \cite[lines 843--847]{Hastings2007AreaLaw}). Then $q\le h\,\Delta E^2$
+    for $\Delta E\ne0$, and $\sqrt h=\sqrt{\max(q,0)}/\Delta E$ for $\Delta E>0$.
 \end{definition}
 
 \begin{theorem}[Gaussian time average across the gap]
@@ -38,67 +34,66 @@ the parameter $q$. Norms are operator norms.
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_gaussianTimeAverage_sub_groundProjector_le}
     \leanok
     \uses{def:hastings_gaussian_time_average}
-    Let $H$ be Hermitian, let $\Omega$ be a unit vector with $H\Omega=0$, let
-    $\Delta E>0$, and suppose that
-    $H\ge\Delta E\,(1-|\Omega\rangle\langle\Omega|)$. Then for every real $q$,
-    \begin{align*}
+    If $H=H^\dagger$, $\|\Omega\|=1$, $H\Omega=0$, $\Delta E>0$, and
+    $H\ge\Delta E\,(1-|\Omega\rangle\langle\Omega|)$, then for every $q\in\R$,
+    \begin{align}
         \bigl\|P_q(H)-|\Omega\rangle\langle\Omega|\bigr\|\le e^{-q/2}.
-    \end{align*}
+        \label{eq:hastings_gaussian_time_average_gap}
+    \end{align}
     This is the estimate of $\|P_q-P_0\|$ at
-    \cite[line 848]{Hastings2007AreaLaw}, for the unique gapped ground state
-    with energy zero. With the source's choice $q=(l/3)\Delta E/(2v)$ it
-    gives only $O(e^{-l/6\xi})$, not the printed $O(e^{-l/3\xi})$; the same
-    factor enters the two preceding estimates on the filtered pieces of the
-    Hamiltonian and the margin of the spectral cut-offs. Taking
-    $q=(l/3)\Delta E/v$ recovers the printed rate,
-    see~\cite{gap:hastings07_gaussian_average_exponent}.
+    \cite[line 848]{Hastings2007AreaLaw}; the source's $q=(l/3)\Delta E/(2v)$
+    yields $O(e^{-l/(6\xi)})$ whereas $q=(l/3)\Delta E/v$ recovers the printed
+    $O(e^{-l/(3\xi)})$~\cite{gap:hastings07_gaussian_average_exponent}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:hastings_gaussian_time_average}
-    Let $(e_k)$ be an orthonormal eigenbasis of $H$ with eigenvalues
-    $\lambda_k$. The Gaussian characteristic function gives
-    $\langle e_k,P_q(H)x\rangle=e^{-h\lambda_k^2/2}\langle e_k,x\rangle$.
-    Each $e_k$ is either a multiple of $\Omega$ with $\lambda_k=0$, or is
-    orthogonal to $\Omega$ with $\lambda_k\ge\Delta E$. Hence the coefficients
-    of $P_q(H)x-\langle\Omega,x\rangle\Omega$ are bounded by
-    $e^{-h\Delta E^2/2}$ times those of $x$, and Parseval's identity gives
-    the bound $e^{-h\Delta E^2/2}\|x\|$. Finally $h\Delta E^2\ge q$.
+    In an orthonormal eigenbasis $(e_k)$ of $H$ with $He_k=\lambda_ke_k$
+    ($e_0=\Omega$, $\lambda_0=0$, and $\lambda_k\ge\Delta E$ for $k\ne0$),
+    (\ref{eq:hastings_gaussian_time_average}) gives
+    $\langle e_k,P_q(H)x\rangle=e^{-h\lambda_k^2/2}\langle e_k,x\rangle$, so
+    \begin{align}
+        \bigl\|P_q(H)x-\langle\Omega,x\rangle\Omega\bigr\|^2
+        =\sum_{k\ne0}e^{-h\lambda_k^2}|\langle e_k,x\rangle|^2
+        \le e^{-h\Delta E^2}\|x\|^2\le e^{-q}\|x\|^2.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Comparison of two unitary evolutions]
     \label{thm:hastings_unitary_path_difference}
     \lean{Matrix.norm_hermitianUnitaryPath_sub_le}
     \leanok
-    For Hermitian matrices $M$ and $H$ and every real $t$,
-    \begin{align*}
+    For $M=M^\dagger$, $H=H^\dagger$, and $t\in\R$,
+    \begin{align}
         \|e^{iMt}-e^{iHt}\|\le\|M-H\|\,|t|.
-    \end{align*}
+        \label{eq:hastings_unitary_path_difference}
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    By the Duhamel formula,
-    $e^{-iMt}e^{iHt}-1=\int_0^te^{-iMs}\,i(H-M)\,e^{iHs}\,ds$. The integrand
-    has norm $\|M-H\|$, and multiplication by the unitary $e^{iMt}$ preserves
-    the norm.
+    By Duhamel's formula,
+    $e^{iHt}-e^{iMt}=e^{iMt}\int_0^te^{-iMs}i(H-M)e^{iHs}\,ds$, and unitarity
+    of $e^{iMt},e^{-iMs},e^{iHs}$ gives~(\ref{eq:hastings_unitary_path_difference}).
 \end{proof}
 
 \begin{theorem}[First absolute moment of a Gaussian tail]
     \label{thm:hastings_gaussian_absolute_moment_tail}
     \lean{TNLean.Lattice.integral_compl_Icc_abs_gaussianReal_le}
     \leanok
-    For $h,T\ge0$,
-    \begin{align*}
+    For $h,T\ge0$ (with the right-hand side $0$ when $h=0$),
+    \begin{align}
         \int_{|t|>T}|t|\,d\gamma_h(t)
-        \le \sqrt{2h/\pi}\,e^{-T^2/(2h)},
-    \end{align*}
-    where the right-hand side is interpreted as zero when $h=0$.
+        \le \sqrt{2h/\pi}\,e^{-T^2/(2h)}.
+        \label{eq:hastings_gaussian_absolute_moment_tail}
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    If $h=0$, the measure is concentrated at zero and the integral vanishes.
-    For $h>0$, write $\varphi_h(t)=(2\pi h)^{-1/2}e^{-t^2/(2h)}$.
-    Since $(-h\varphi_h)'(t)=t\varphi_h(t)$ and $\varphi_h(t)\to0$ as
-    $t\to\infty$, one has $\int_T^\infty t\varphi_h(t)\,dt=h\varphi_h(T)$.
-    Reflection gives the same contribution on $(-\infty,-T)$, hence the
-    asserted bound, with equality for $h>0$.
+    For $h=0$, $\gamma_0=\delta_0$ gives $0$. For $h>0$, with
+    $\varphi_h(t)=(2\pi h)^{-1/2}e^{-t^2/(2h)}$ and $(-h\varphi_h)'=t\varphi_h$,
+    \begin{align}
+        \int_{|t|>T}|t|\,d\gamma_h(t)=2\int_T^\infty t\varphi_h(t)\,dt
+        =2h\varphi_h(T)=\sqrt{2h/\pi}\,e^{-T^2/(2h)}.
+        \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[First absolute moment of a Gaussian]
@@ -111,10 +106,8 @@ the parameter $q$. Norms are operator norms.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_gaussian_absolute_moment_tail}
-    Specialize Theorem~\ref{thm:hastings_gaussian_absolute_moment_tail} to $T=0$.
-    Since $|t|$ vanishes at zero, removing that point does not change the
-    integral, even when $h=0$. Finally, $2\le\pi$ gives
-    $\sqrt{2h/\pi}\le\sqrt h$.
+    Set $T=0$ in~(\ref{eq:hastings_gaussian_absolute_moment_tail}) and use
+    $2\le\pi$.
 \end{proof}
 
 \begin{theorem}[Stability of the Gaussian time average]
@@ -124,29 +117,29 @@ the parameter $q$. Norms are operator norms.
     \leanok
     \uses{def:hastings_gaussian_time_average,
         thm:hastings_gaussian_time_average_gap}
-    Let $M$ and $H$ be Hermitian, let $\Delta E>0$, let $q$ be real and write
-    $\sqrt q$ for $\sqrt{\max(q,0)}$. Then
-    \begin{align*}
-        \|P_q(M)-P_q(H)\|\le\frac{\sqrt q}{\Delta E}\,\|M-H\|.
-    \end{align*}
-    If moreover $\Omega$ and $H$ satisfy the hypotheses of
-    Theorem~\ref{thm:hastings_gaussian_time_average_gap}, then
-    \begin{align*}
+    For $M=M^\dagger$, $H=H^\dagger$, $\Delta E>0$, and $q\in\R$ (writing
+    $\sqrt q=\sqrt{\max(q,0)}$),
+    \begin{align}
+        \|P_q(M)-P_q(H)\|\le\frac{\sqrt q}{\Delta E}\,\|M-H\|,
+        \label{eq:hastings_gaussian_stability_diff}
+    \end{align}
+    and under the hypotheses of Theorem~\ref{thm:hastings_gaussian_time_average_gap},
+    \begin{align}
         \bigl\|P_q(M)-|\Omega\rangle\langle\Omega|\bigr\|
         \le e^{-q/2}+\frac{\sqrt q}{\Delta E}\,\|M-H\|.
-    \end{align*}
-    With $M=M_L+M_B+M_R$ this is the first inequality of the display of
-    \cite[lines 849--864]{Hastings2007AreaLaw}, before the evolution of $M$
-    is written in the interaction picture.
+        \label{eq:hastings_gaussian_stability_proj}
+    \end{align}
+    With $M=M_L+M_B+M_R$, (\ref{eq:hastings_gaussian_stability_proj}) is the
+    first inequality of \cite[lines 849--864]{Hastings2007AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:hastings_unitary_path_difference,
         thm:hastings_gaussian_absolute_moment,
         thm:hastings_gaussian_time_average_gap}
-    Integrating Theorem~\ref{thm:hastings_unitary_path_difference} against
-    $\gamma_h$ gives
-    $\|P_q(M)-P_q(H)\|\le\|M-H\|\int|t|\,d\gamma_h$, and
-    Theorem~\ref{thm:hastings_gaussian_absolute_moment} bounds the integral
-    by $\sqrt h=\sqrt q/\Delta E$. The second bound follows from the triangle
-    inequality and Theorem~\ref{thm:hastings_gaussian_time_average_gap}.
+    Integrating~(\ref{eq:hastings_unitary_path_difference}) against $\gamma_h$
+    and applying Theorem~\ref{thm:hastings_gaussian_absolute_moment} gives
+    $\|P_q(M)-P_q(H)\|\le\|M-H\|\int|t|\,d\gamma_h\le(\sqrt q/\Delta E)\|M-H\|$,
+    and combining~(\ref{eq:hastings_gaussian_stability_diff}) with
+    (\ref{eq:hastings_gaussian_time_average_gap}) gives
+    (\ref{eq:hastings_gaussian_stability_proj}).
 \end{proof}
