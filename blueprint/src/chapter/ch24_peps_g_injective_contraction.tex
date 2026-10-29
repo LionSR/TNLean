@@ -1,0 +1,432 @@
+\section{Contracting \texorpdfstring{$G$}{G}-injective and \texorpdfstring{$G$}{G}-isometric tensors}%
+\label{sec:peps_g_injective_contraction}
+
+In two dimensions every link of the network carries its own representation,
+and the two tensors on a link act with the same one
+\cite[Section~``Two dimensions: $G$-injective PEPS'']{Schuch2010PEPS}. A
+leg entered by $U_g$ is a space $E$ carrying the representation $\tau$, and
+the leg at the other end of the link, left by $U_g^{-1}$, is the dual space
+$E^*$ carrying the contragredient representation
+$\tau^*(g)f=f\circ\tau(g^{-1})$. For a basis $e_i$ of $E$ with dual basis
+$e_i^*$, contracting the two legs is pairing against
+$\omega=\sum_ie_i^*\otimes e_i$, and a tensor is identified with its map
+$\mathcal{P}$ from the virtual to the physical system.
+
+\begin{lemma}[Contracted links]%
+    \label{lem:peps_link_contraction}
+    \lean{Representation.averageMap_apply_eq_sum,
+        Representation.map_dual_coevaluation,
+        contractRight_map_coevaluation, contractRight_map_dual,
+        TNLean.PEPS.linkVector, TNLean.PEPS.map_comm_apply,
+        TNLean.PEPS.map_dual_linkVector, TNLean.PEPS.linkPairing,
+        TNLean.PEPS.linkPairing_tmul, TNLean.PEPS.linkPairing_comm,
+        TNLean.PEPS.linkPairing_linkVector,
+        TNLean.PEPS.linkPairing_deltaOperator_map}
+    \leanok
+    \uses{def:peps_delta_operator, def:peps_semiregular,
+        thm:peps_semiregular_trace}
+    The vector $\omega$ is invariant under $\tau^*(g)\otimes\tau(g)$ for every
+    $g$. For an operator $M$ on $E$, the pairing $f\otimes e\mapsto f(Me)$
+    sends $\omega$ to $\tr M$ and $(\tau^*(g)\otimes\tau(h))\,\omega$ to
+    $\tr[U_{g^{-1}}MU_h]$. If $\tau$ is semi-regular and $M=\Delta$, the
+    latter is $\delta_{g,h}$
+    \cite[Section~``Two dimensions: $G$-injective PEPS'']{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Expanding $\tau^*(g)e_i^*$ in the dual basis,
+    $(\tau^*(g)\otimes\tau(g))\,\omega
+        =\sum_j e_j^*\otimes\tau(g)\sum_ie_i^*\big(\tau(g^{-1})e_j\big)e_i
+        =\sum_je_j^*\otimes e_j$. The pairing of $\omega$ is
+    $\sum_ie_i^*(Me_i)=\tr M$, and the pairing of
+    $(\tau^*(g)\otimes\tau(h))\,\omega$ is
+    $\sum_ie_i^*\big(\tau(g^{-1})M\tau(h)e_i\big)$. For $M=\Delta$ this is
+    $\tr[U_hU_{g^{-1}}\Delta]=\delta_{g,h}$ by
+    Lemma~\ref{thm:peps_semiregular_trace}.
+\end{proof}
+
+\begin{lemma}[Stability of $G$-injectivity under concatenation]%
+    \label{thm:peps_g_injective_concatenation}
+    \lean{TNLean.PEPS.linkContraction, TNLean.PEPS.linkContraction_tmul,
+        TNLean.PEPS.linkContraction_comp_tprod,
+        TNLean.PEPS.innerContraction, TNLean.PEPS.innerContraction_tmul,
+        TNLean.PEPS.innerContraction_map,
+        TNLean.PEPS.linkContractionLeftInverse,
+        TNLean.PEPS.linkContractionLeftInverse_comp,
+        TNLean.PEPS.IsGInjective.linkContraction}
+    \leanok
+    \uses{def:peps_g_injective, def:peps_delta_operator,
+        def:peps_semiregular, thm:peps_g_injective_left_inverse,
+        lem:peps_link_contraction, thm:peps_semiregular_tensor_product}
+    Let $A$ be a tensor with virtual system $W_A\otimes E^*$ and group action
+    $\sigma_A\otimes\tau^*$, where $E^*$ is its right leg and $W_A$ collects
+    its left, up and down legs, and let $B$ be a tensor with virtual system
+    $E\otimes W_B$ and group action $\tau\otimes\sigma_B$, where $E$ is its
+    left leg and $W_B$ collects its up, right and down legs. Let $\tau$ be
+    semi-regular, and let $C$ be the tensor obtained by contracting the right
+    leg of $A$ with the left leg of $B$, with the up, down and physical
+    indices blocked:
+    \begin{align*}
+        \mathcal{P}(C)(x\otimes y)
+        =\sum_i\mathcal{P}(A)(x\otimes e_i^*)\otimes\mathcal{P}(B)(e_i\otimes y).
+    \end{align*}
+    If $A$ and $B$ are $G$-injective, then $C$ is $G$-injective for
+    $\sigma_A\otimes\sigma_B$. Precisely, if
+    $L_A\mathcal{P}(A)=\Pi_{\sigma_A\otimes\tau^*}$ and
+    $L_B\mathcal{P}(B)=\Pi_{\tau\otimes\sigma_B}$, then the map $L_C$ that
+    applies $L_A\otimes L_B$ and contracts the two inner legs through $\Delta$,
+    $(x\otimes f)\otimes(e\otimes y)\mapsto|G|\,f(\Delta e)\,x\otimes y$,
+    satisfies $L_C\mathcal{P}(C)=\Pi_{\sigma_A\otimes\sigma_B}$. If in addition
+    $\sigma_A$ and $\sigma_B$ are semi-regular, then so is
+    $\sigma_A\otimes\sigma_B$ \cite[Lemma~5.2]{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Invariance of $A$ gives
+    $\mathcal{P}(A)(\sigma_A(g)x\otimes f)=\mathcal{P}(A)(x\otimes\tau^*(g^{-1})f)$
+    and similarly for $B$, so acting with $\sigma_A(g)\otimes\sigma_B(g)$ on
+    the virtual system of $C$ acts with $\tau^*(g^{-1})\otimes\tau(g^{-1})$
+    on $\omega$, which leaves it invariant by
+    Lemma~\ref{lem:peps_link_contraction}. For the left inverse,
+    $L_A\mathcal{P}(A)(x\otimes f)
+        =\frac{1}{|G|}\sum_g\sigma_A(g)x\otimes\tau^*(g)f$ and
+    $L_B\mathcal{P}(B)(e\otimes y)
+        =\frac{1}{|G|}\sum_h\tau(h)e\otimes\sigma_B(h)y$. Contracting through
+    $\Delta$ gives
+    \begin{align*}
+        L_C\mathcal{P}(C)(x\otimes y)
+        =\frac{1}{|G|}\sum_{g,h}\tr[U_{g^{-1}}\Delta U_h]\,
+        \sigma_A(g)x\otimes\sigma_B(h)y
+        =\frac{1}{|G|}\sum_g\sigma_A(g)x\otimes\sigma_B(g)y
+    \end{align*}
+    by Lemma~\ref{lem:peps_link_contraction}. Lemma~\ref{thm:peps_g_injective_left_inverse}
+    turns invariance and the left inverse into $G$-injectivity, and
+    Lemma~\ref{thm:peps_semiregular_tensor_product} gives the last claim.
+\end{proof}
+
+\begin{lemma}[Contracting legs of a connected block]%
+    \label{thm:peps_g_injective_leg_contraction}
+    \lean{TNLean.PEPS.legContraction,
+        TNLean.PEPS.legContractionLeftInverse,
+        TNLean.PEPS.legContraction_comp,
+        TNLean.PEPS.legContractionLeftInverse_comp,
+        TNLean.PEPS.IsGInjective.legContraction}
+    \leanok
+    \uses{def:peps_g_injective, def:peps_delta_operator,
+        def:peps_semiregular, thm:peps_g_injective_left_inverse,
+        lem:peps_link_contraction}
+    Let a tensor have virtual system $W\otimes E^*\otimes E$ with group action
+    $\sigma\otimes\tau^*\otimes\tau$, as for the up leg of $A$ and the down leg
+    of $B$ in the block $C$ above. Contracting the legs $E^*$ and $E$ gives
+    the map $x\mapsto\sum_i\mathcal{P}(x\otimes e_i^*\otimes e_i)$. If
+    $L\mathcal{P}=\Pi_{\sigma\otimes\tau^*\otimes\tau}$ and $\tr M\ne0$, then
+    contracting the corresponding legs of $L$ through $M$ and dividing by
+    $\tr M$ gives a left inverse of the contracted map up to $\Pi_\sigma$.
+    Consequently, if the tensor is $G$-injective and $\tau$ is semi-regular,
+    the contracted map is $G$-injective for $\sigma$, with $M=\Delta$, whose
+    trace is $1$ \cite[Observation~5.3]{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    The group elements attached to the two contracted legs cancel, because
+    $\omega$ is invariant under $\tau^*(g)\otimes\tau(g)$. Hence
+    $\Pi_{\sigma\otimes\tau^*\otimes\tau}(x\otimes\omega)
+        =\frac{1}{|G|}\sum_g\sigma(g)x\otimes\omega$, and pairing $\omega$
+    through $M$ gives $\tr M$. By Lemma~\ref{thm:peps_semiregular_trace}
+    with $g=h=1$, $\tr\Delta=1$ for semi-regular $\tau$.
+\end{proof}
+
+For a tensor $A$ let $A^\dagger$ be the tensor with complex conjugate entries
+and the roles of the incoming and outgoing legs exchanged, so that
+$\mathcal{P}(A^\dagger)=\mathcal{P}(A)^\dagger$. For a matrix product tensor
+with bond space $\mathbb{C}[G]$, on which the left-regular representation acts
+by $L_g\ket{h}=\ket{gh}$ and the group elements are orthonormal,
+$\mathcal{P}(A^\dagger)\ket{i}=(A^i)^\dagger$ under the identification above
+\cite[Section~``Isometric PEPS'']{Schuch2010PEPS}.
+
+\begin{definition}[$G$-isometric matrix product tensor]%
+    \label{def:peps_mps_g_isometric}
+    \lean{TNLean.PEPS.regularAdjoint, TNLean.PEPS.regularAdjoint_mul,
+        TNLean.PEPS.regularAdjoint_smul, TNLean.PEPS.mpsAdjointSiteMap,
+        TNLean.PEPS.mpsAdjointSiteMap_single, TNLean.PEPS.IsGIsometricMPS}
+    \leanok
+    \uses{def:peps_mps_g_injective}
+    A matrix product tensor $A$ with bond space $\mathbb{C}[G]$ is
+    $G$-isometric if $L_gA^iL_g^{-1}=A^i$ for all $g$ and $i$ and
+    $\mathcal{P}(A^\dagger)\mathcal{P}(A)=c\,\sigma$ for one constant $c>0$,
+    where $\sigma$ is the twirl onto the commutant of the left-regular
+    representation. For $c=1$ this is the condition
+    $\mathcal{P}(A)^{-1}=\mathcal{P}(A^\dagger)$ of the source; the constant
+    absorbs the normalization of the tensor
+    \cite[Definition~6.1]{Schuch2010PEPS},
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{definition}
+
+\begin{lemma}[$G$-isometric tensors are $G$-injective]%
+    \label{thm:peps_mps_g_isometric_injective}
+    \lean{TNLean.PEPS.IsGIsometricMPS.isGInjective}
+    \leanok
+    \uses{def:peps_mps_g_isometric, thm:peps_g_injective_left_inverse,
+        thm:peps_mps_g_injective_source_form}
+    A $G$-isometric matrix product tensor is $G$-injective for the left-regular
+    representation, with left inverse $c^{-1}\mathcal{P}(A^\dagger)$
+    \cite[Definition~6.1]{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    Invariance of $\mathcal{P}(A)$ under conjugation is equivalent to
+    $L_gA^iL_g^{-1}=A^i$, and
+    $c^{-1}\mathcal{P}(A^\dagger)\mathcal{P}(A)=\sigma$; the left-inverse form
+    of $G$-injectivity applies.
+\end{proof}
+
+\begin{lemma}[The left inverse for the regular representation]%
+    \label{lem:peps_regular_left_inverse}
+    \lean{TNLean.PEPS.card_smul_deltaOperator_leftRegular,
+        TNLean.PEPS.concatLeftInverse_leftRegular,
+        TNLean.PEPS.innerContraction_smul,
+        TNLean.PEPS.linkContractionLeftInverse_leftRegular}
+    \leanok
+    \uses{thm:peps_semiregular_trace, thm:peps_mps_g_injective_concatenation,
+        thm:peps_g_injective_concatenation}
+    For the left-regular representation $|G|\,\Delta=\mathbb{1}$. Hence the
+    left inverse of a concatenation $C^{ij}=A^iB^j$ of matrix product tensors
+    built from left inverses $L_A$ and $L_B$ is
+    $L_C\ket{i,j}=(L_B\ket{j})(L_A\ket{i})$, and if the contracted link of two
+    tensors in two dimensions carries the left-regular representation, the left
+    inverse of the contracted tensor applies $L_A\otimes L_B$ and contracts the
+    two ends of the link directly \cite[Lemma~6.2]{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    By Lemma~\ref{thm:peps_semiregular_trace}, $\Delta=\frac{1}{|G|}\Id$ for
+    the left-regular representation, that is, $|G|\,\Delta=\mathbb{1}$.
+    Substituting this identity into the two left inverses yields the claims.
+\end{proof}
+
+\begin{lemma}[Adjoints and invariant inner products]%
+    \label{thm:peps_isometric_adjoint}
+    \lean{TNLean.PEPS.toMatrix_basisCoordinates,
+        TNLean.PEPS.basisCoordinates,
+        TNLean.PEPS.basisRepresentation,
+        TNLean.PEPS.basisRepresentation_apply,
+        TNLean.PEPS.basisCoordinates_comp,
+        TNLean.PEPS.toMatrix_basisRepresentation,
+        TNLean.PEPS.matrix_mem_unitaryGroup_iff_dotProduct,
+        TNLean.PEPS.basisRepresentation_unitary_iff,
+        TNLean.PEPS.basisRepresentation_unitary_tensorProduct,
+        TNLean.PEPS.basisRepresentation_unitary_dual,
+        TNLean.PEPS.toMatrix_leftRegular,
+        TNLean.PEPS.basisRepresentation_unitary_leftRegular,
+        TNLean.PEPS.basisAdjoint,
+        TNLean.PEPS.toMatrix_basisAdjoint,
+        TNLean.PEPS.coordinateAdjoint,
+        TNLean.PEPS.coordinateAdjoint_dotProduct,
+        TNLean.PEPS.averageMap_dotProduct_of_unitary,
+        TNLean.PEPS.IsGIsometric.exists_coordinateAdjoint_comp,
+        TNLean.PEPS.isGIsometric_of_coordinateAdjoint_comp,
+        TNLean.PEPS.basisCoordinates_averageMap,
+        TNLean.PEPS.basisCoordinates_invariant_iff,
+        TNLean.PEPS.basisCoordinates_smul,
+        TNLean.PEPS.basisCoordinates_basisAdjoint,
+        TNLean.PEPS.basisCoordinates_injective,
+        TNLean.PEPS.basisAdjoint_comp_iff}
+    \leanok
+    \uses{def:peps_g_injective}
+    Choose orthonormal bases of the virtual and physical spaces. If the
+    virtual representation $\rho$ is unitary, its averaging projector
+    $\Pi_\rho$ is self-adjoint. An invariant map $T$ preserves the inner
+    products of invariant vectors up to a positive factor $c$ exactly when
+    $T^\dagger T=c\Pi_\rho$. Tensor products and contragredients of unitary
+    representations are unitary; in particular this applies to every
+    product of regular virtual legs \cite[Section~6]{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_group_averaging}
+    Unitarity gives $\langle\rho(g)x,y\rangle
+        =\langle x,\rho(g^{-1})y\rangle$; averaging and replacing $g$ by
+    $g^{-1}$ proves self-adjointness. Since $T\Pi_\rho=T$, the restricted
+    inner-product identity gives
+    $\langle Tx,Ty\rangle=c\langle x,\Pi_\rho y\rangle$, which is equivalent
+    to the adjoint identity. Conversely, applying the identity to invariant
+    vectors, on which $\Pi_\rho$ is the identity, recovers the inner-product relation.
+\end{proof}
+
+In two dimensions the concatenation contracts the right leg of a tensor $A$,
+with virtual system $W_{A}\otimes\mathbb{C}[G]^{*}$, with the left leg of a
+tensor $B$, with virtual system $\mathbb{C}[G]\otimes W_{B}$. In the basis of
+group elements on the link and coordinate bases of the remaining legs and of
+the physical systems, the contracted tensor has the entries
+$C_{(k,l),(a,b)}=\sum_{g}A_{k,(a,g)}B_{l,(g,b)}$, and the representations of
+the two virtual systems are $\sigma_{A}\otimes L$ and $L\otimes\sigma_{B}$,
+where $L$ is the left-regular representation on $\mathbb{C}^{G}$: the
+contragredient of a permutation representation has the same matrices in the
+dual basis.
+
+\begin{lemma}[Stability of isometry under the contraction of one link]%
+    \label{thm:peps_g_isometric_link_contraction}
+    \lean{TNLean.PEPS.leftRegularFun, TNLean.PEPS.leftRegularFun_apply,
+        TNLean.PEPS.coeff_leftRegular, TNLean.PEPS.toMatrix'_leftRegularFun,
+        TNLean.PEPS.toMatrix'_leftRegularFun_mem_unitaryGroup,
+        TNLean.PEPS.kroneckerRep, TNLean.PEPS.toMatrix'_kroneckerRep,
+        TNLean.PEPS.toMatrix'_kroneckerRep_mem_unitaryGroup,
+        TNLean.PEPS.star_averageMap_dotProduct,
+        TNLean.PEPS.conjTranspose_toMatrix'_mul_toMatrix',
+        TNLean.PEPS.linkContractionMatrix, TNLean.PEPS.linkContractionCoord,
+        TNLean.PEPS.conjTranspose_linkContractionMatrix_mul,
+        TNLean.PEPS.conjTranspose_linkContractionMatrix,
+        TNLean.PEPS.toMatrix'_averageMap,
+        TNLean.PEPS.conjTranspose_linkContractionMatrix_mul_eq,
+        TNLean.PEPS.linkContractionCoord_comp_kroneckerRep,
+        TNLean.PEPS.star_linkContractionCoord_dotProduct,
+        TNLean.PEPS.toLin'_conjTranspose_comp_linkContractionCoord,
+        TNLean.PEPS.IsGIsometric.linkContractionCoord,
+        TNLean.PEPS.dualTensorHom_sum_coord_tmul, TNLean.PEPS.linkVector_eq_sum_basis,
+        TNLean.PEPS.linkLeftCoord, TNLean.PEPS.linkRightCoord, TNLean.PEPS.pairCoord,
+        TNLean.PEPS.linkLeftCoord_single, TNLean.PEPS.linkRightCoord_single,
+        TNLean.PEPS.pairCoord_single, TNLean.PEPS.tensorCoord,
+        TNLean.PEPS.tensorCoord_tmul,
+        TNLean.PEPS.tensorCoord_comp_linkContraction_comp_pairCoord,
+        TNLean.PEPS.linkLeftCoord_comp_kroneckerRep,
+        TNLean.PEPS.linkRightCoord_comp_kroneckerRep,
+        TNLean.PEPS.pairCoord_comp_kroneckerRep,
+        TNLean.PEPS.IsGIsometric.linkContraction,
+        TNLean.PEPS.linkVector_eq_sum, TNLean.PEPS.toMatrix_linkContraction,
+        TNLean.PEPS.toMatrix_innerContraction_map,
+        TNLean.PEPS.basisAdjoint_linkContraction,
+        TNLean.PEPS.basisAdjoint_linkContraction_comp,
+        TNLean.PEPS.IsGIsometric.linkContraction_basis,
+        TNLean.PEPS.IsGIsometric.linkContraction_fourLeg}
+    \leanok
+    \uses{def:peps_g_injective}
+    Let $\sigma_{A}$ and $\sigma_{B}$ be unitary representations on the remaining
+    legs of $A$ and $B$, and let the contracted link carry the left-regular
+    representation. If $A$ is $G$-isometric for $\sigma_{A}\otimes L$ with
+    constant $c_{A}$ and $B$ is $G$-isometric for $L\otimes\sigma_{B}$ with
+    constant $c_{B}$, then the contracted tensor $C$ is $G$-isometric for
+    $\sigma_{A}\otimes\sigma_{B}$ with constant $c_{A}c_{B}$, and its left
+    inverse is $(c_{A}c_{B})^{-1}\mathcal{P}(C)^{\dagger}$, the contraction of
+    the adjoints of the two factors. In the source every leg carries the
+    left-regular representation or its contragredient, so the unitarity of
+    $\sigma_{A}$ and $\sigma_{B}$ follows from its hypotheses
+    \cite[Lemma~6.2]{Schuch2010PEPS},
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+    In particular, contracting the right leg of one four-leg regular PEPS
+    tensor with the left leg of another preserves $G$-isometry with
+    constant $c_Ac_B$, leaving the other six virtual legs open.
+
+    \begin{center}
+        % Source: SCP10 Lemma 6.2; coefficient C_(i,j),(a,b)=sum_k A_i,(a,k)B_j,(k,b).
+        % Right virtual leg of A pairs with the left virtual leg of B.
+        % Six virtual legs remain open; physical labels i,j are fixed.
+        % Boundary signature: (V,P)=(6,0).
+        \tenkzkernel
+        \begin{tenkz}[rows={wire},cols=2,bonds=none]
+            \tn[at=(1,1),skin=box,name=A,ports={180:virtual,0:virtual,90:virtual,270:virtual}]{A^i}
+            \tn[at=(1,2),skin=box,name=B,ports={180:virtual,0:virtual,90:virtual,270:virtual}]{B^j}
+            \tnwire{open w}{A.180}
+            \tnwire{A.0}{B.180}
+            \tnwire{B.0}{open e}
+            \tnwire{open n}{A.90}
+            \tnwire{open n}{B.90}
+            \tnwire{A.270}{open s}
+            \tnwire{B.270}{open s}
+        \end{tenkz}
+    \end{center}
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_g_injective_concatenation, thm:peps_isometric_adjoint,
+        lem:peps_regular_left_inverse}
+    For a unitary representation, $G$-isometry with constant $c$ means
+    $\mathcal{P}(A)^{\dagger}\mathcal{P}(A)=c\,\Pi$, since $\mathcal{P}(A)$ is
+    invariant and $\Pi$ is self-adjoint. The Gram matrix of $C$ is
+    \begin{align}
+        (\mathcal{P}(C)^{\dagger}\mathcal{P}(C))_{(a,b),(a',b')}
+        =\sum_{g,g'}(\mathcal{P}(A)^{\dagger}\mathcal{P}(A))_{(a,g),(a',g')}
+        (\mathcal{P}(B)^{\dagger}\mathcal{P}(B))_{(g,b),(g',b')} .
+        \label{eq:peps_link_contraction_gram}
+    \end{align}
+    Writing both projectors as averages over $G$, the link indices contribute
+    $\sum_{g,g'}(L_{h})_{gg'}(L_{k})_{gg'}=|G|\,\delta_{h,k}$, which is the
+    identity $\Delta=|G|^{-1}\mathbb{1}$ for the left-regular representation,
+    so the right-hand side is $c_{A}c_{B}\,\Pi_{(a,b),(a',b')}$ for the
+    projector $\Pi$ of $\sigma_{A}\otimes\sigma_{B}$. Hence
+    $\langle\mathcal{P}(C)x,\mathcal{P}(C)y\rangle=c_{A}c_{B}\langle x,y\rangle$
+    for invariant $x,y$, which also gives injectivity on the invariant
+    subspace. Entrywise,
+    $\mathcal{P}(C)^{\dagger}_{(a,b),(k,l)}
+        =\sum_{g}\mathcal{P}(A)^{\dagger}_{(a,g),k}\mathcal{P}(B)^{\dagger}_{(g,b),l}$,
+    so $\mathcal{P}(C)^{\dagger}$ is the contraction of the adjoints. Invariance of $C$ holds because the actions on the contracted
+    link cancel, as in Lemma~\ref{thm:peps_g_injective_concatenation}.
+    Equivalently, Lemma~\ref{thm:peps_isometric_adjoint} gives the
+    left inverses $c_A^{-1}\mathcal P(A)^\dagger$ and
+    $c_B^{-1}\mathcal P(B)^\dagger$.
+    Lemma~\ref{lem:peps_regular_left_inverse} identifies their
+    contraction with $(c_Ac_B)^{-1}\mathcal P(C)^\dagger$, and
+    Lemma~\ref{thm:peps_g_injective_concatenation} gives its
+    left-inverse equation.
+\end{proof}
+
+\begin{lemma}[Stability of isometry under concatenation of matrix product tensors]%
+    \label{thm:peps_mps_g_isometric_concatenation}
+    \lean{TNLean.PEPS.concatLeftInverse_mpsAdjointSiteMap,
+        TNLean.PEPS.IsGIsometricMPS.concatTensor}
+    \leanok
+    \uses{def:peps_mps_g_isometric, lem:peps_regular_left_inverse,
+        thm:peps_mps_g_injective_concatenation}
+    If the matrix product tensors $A$ and $B$ are $G$-isometric, so is
+    $C^{ij}=A^iB^j$: the left inverse built from $\mathcal{P}(A^\dagger)$ and
+    $\mathcal{P}(B^\dagger)$ is $\mathcal{P}(C^\dagger)$, and
+    $\mathcal{P}(C^\dagger)\mathcal{P}(C)=c_Ac_B\,\sigma$. This is the
+    one-dimensional case of the source's lemma; the two-dimensional case is
+    Lemma~\ref{thm:peps_g_isometric_link_contraction}
+    \cite[Lemma~6.2]{Schuch2010PEPS},
+    \cite{gap:rmp_peps_quantum_double_g_isometry}.
+\end{lemma}
+
+\begin{proof}\leanok
+    By Lemma~\ref{lem:peps_regular_left_inverse} the left inverse built from
+    $c_A^{-1}\mathcal{P}(A^\dagger)$ and $c_B^{-1}\mathcal{P}(B^\dagger)$ sends
+    $\ket{i,j}$ to $(c_Ac_B)^{-1}(B^j)^\dagger(A^i)^\dagger
+        =(c_Ac_B)^{-1}(A^iB^j)^\dagger$, and by
+    Lemma~\ref{thm:peps_mps_g_injective_concatenation} it is a left
+    inverse of $\mathcal{P}(C)$. Invariance of $C$ holds as for
+    $G$-injective tensors.
+\end{proof}
+
+\begin{lemma}[Regular representations in relative coordinates]%
+    \label{thm:peps_regular_blocking_coordinates}
+    \lean{Matrix.permMatrixHom_prodCongr,
+        RegularRepresentation.blockingEquiv, RegularRepresentation.blockingEquiv_apply,
+        RegularRepresentation.blockingEquiv_symm_apply,
+        RegularRepresentation.blockingEquiv_conjugates,
+        RegularRepresentation.blockingFamilyEquiv,
+        RegularRepresentation.blockingFamilyEquiv_apply,
+        RegularRepresentation.blockingFamilyEquiv_symm_apply,
+        RegularRepresentation.blockingFamilyEquiv_smul,
+        RegularRepresentation.blockingFamilyEquiv_conjugates,
+        RegularRepresentation.blockingMatrix,
+        RegularRepresentation.blockingMatrix_mem_unitaryGroup,
+        RegularRepresentation.blockingMatrix_conjugates,
+        RegularRepresentation.blockingFamilyMatrix,
+        RegularRepresentation.blockingFamilyMatrix_mem_unitaryGroup,
+        RegularRepresentation.blockingFamilyMatrix_conjugates}
+    \leanok
+    The basis permutation $T\ket{a,b}=\ket{a,ab}$ is unitary and satisfies
+    $T^\dagger(L_g\otimes L_g)T=L_g\otimes\mathbb 1$, where
+    $L_g\ket a=\ket{ga}$. For a finite family of additional labels, the
+    permutation $\ket{a,(b_i)_i}\mapsto\ket{a,(ab_i)_i}$ similarly transforms
+    simultaneous left multiplication into left multiplication of $a$
+    alone \cite[Section~6, ``Blocking and renormalization'']{Schuch2010PEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    The inverse change of coordinates is $(a,(c_i)_i)\mapsto
+        (a,(a^{-1}c_i)_i)$. Thus simultaneous multiplication by $g$ sends
+    $(a,(ab_i)_i)$ to $(ga,(gab_i)_i)$, and in relative coordinates only
+    the first label changes. The permutation matrices are unitary, and
+    the matrix of a product permutation is the Kronecker product of the
+    factor matrices.
+\end{proof}
