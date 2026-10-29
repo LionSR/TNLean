@@ -177,7 +177,7 @@ private theorem uncleTrial_contiguous_cancel
           (uncleConfigSegment τ (5 * N + 1) N (by omega)) := by
       funext σ
       simp only [contiguousRestrictₗ_apply, uncleTwoWallTrialSource]
-      rw [uncleConfigSegment_contiguous_inside τ N (N + 1) i _ σ hc hd]
+      rw [uncleConfigSegment_contiguous_inside τ N (N + 1) i _ σ hc (by omega)]
       rw [uncleConfigSegment_contiguous_outside τ 0 N i _ σ (by omega),
         uncleConfigSegment_contiguous_outside τ (2 * N + 1) (2 * N - 1) i _ σ (by omega),
         uncleConfigSegment_contiguous_outside τ (4 * N) (N + 1) i _ σ (by omega),
@@ -214,7 +214,7 @@ private theorem uncleTrial_contiguous_cancel
           (uncleConfigSegment τ (5 * N + 1) N (by omega)) := by
       funext σ
       simp only [contiguousRestrictₗ_apply, uncleTwoWallTrialSource]
-      rw [uncleConfigSegment_contiguous_inside τ (4 * N) (N + 1) i _ σ hc hd]
+      rw [uncleConfigSegment_contiguous_inside τ (4 * N) (N + 1) i _ σ hc (by omega)]
       rw [uncleConfigSegment_contiguous_outside τ 0 N i _ σ (by omega),
         uncleConfigSegment_contiguous_outside τ N (N + 1) i _ σ (by omega),
         uncleConfigSegment_contiguous_outside τ (2 * N + 1) (2 * N - 1) i _ σ (by omega),
@@ -272,8 +272,9 @@ private theorem uncleConfigSegment_last_prefix
     exact cyclicCfg_window_site (by omega) (by omega) (by omega) σ τ (by omega)
   · apply congrArg List.ofFn
     funext j
-    exact cyclicCfg_complement_site (by omega) (by omega) (by omega) σ τ
-      (show 2 - 1 ≤ 1 + j.val by omega) (show 1 + j.val < 6 * N + 1 - 1 by omega)
+    simpa only [Nat.zero_add] using
+      cyclicCfg_complement_site (by omega) (by omega) (by omega) σ τ
+        (show 2 - 1 ≤ 1 + j.val by omega) (show 1 + j.val < 6 * N + 1 - 1 by omega)
 
 private theorem uncleConfigSegment_last_suffix
     (N : ℕ) (hN : 0 < N) (τ : Cfg d (6 * N + 1)) (σ : Cfg d 2) :
