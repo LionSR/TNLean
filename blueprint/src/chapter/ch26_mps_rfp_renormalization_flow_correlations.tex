@@ -65,7 +65,7 @@ produce the dyadic powers $\E_B^{2^n}$.
     \label{fig:rfp_renormalization_step}
 \end{figure}
 
-\begin{theorem}[Primitive-transfer convergence for each auxiliary block]%
+\begin{lemma}[Primitive-transfer convergence for each auxiliary block]%
     \label{thm:rg_flow_converges_of_cf}
     \lean{MPSTensor.rg_flow_converges_of_cf}
     \leanok
@@ -78,13 +78,13 @@ produce the dyadic powers $\E_B^{2^n}$.
     $\E_{k,\infty}^2=\E_{k,\infty}$ such that
     $\E_{A_k}^{2^n}(\rho)\to\E_{k,\infty}(\rho)$ as $n\to\infty$ for every
     virtual matrix $\rho$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each block is injective and left-canonical, so its transfer map is a
     primitive channel with a unique positive-definite fixed point $\rho_0$.
     The exponential convergence bound
     $\lVert \E^n(X)-P(X)\rVert\le C(1-\delta)^n\lVert X\rVert$
-    (Theorem~\ref{thm:exponential_convergence_primitive}) yields pointwise
+    (Lemma~\ref{thm:exponential_convergence_primitive}) yields pointwise
     convergence $\E^n(X)\to P(X)$, and restricting to the dyadic subsequence
     $2^n\to\infty$ yields the claim with idempotent projection $\E_{k,\infty}=P_k$.
 \end{proof}
@@ -93,7 +93,7 @@ produce the dyadic powers $\E_B^{2^n}$.
 % docs/paper-gaps/cpsv16_canonical_form_renormalization_flow_phase_gap.tex.
 % The source assertion is refuted; the declaration named below formalizes the
 % counterexample rather than the universal convergence claim.
-\begin{theorem}[Phase obstruction to canonical-form flow convergence]
+\begin{lemma}[Phase obstruction to canonical-form flow convergence]
     \label{thm:cpsv_canonical_form_flow_phase_obstruction}
     \lean{MPSTensor.cubePhaseTensor_not_tendsto_dyadic_transferMap}
     \leanok
@@ -119,9 +119,9 @@ produce the dyadic powers $\E_B^{2^n}$.
     $\omega^2 e_{21}$, so the dyadic renormalization flow does not converge.
     This refutes the unrestricted canonical-form convergence assertion of
     \cite[lines~417 and 1211--1244]{Cirac2016MPDO_arXiv}, while leaving the
-    single-component convergence of Theorem~\ref{thm:rg_flow_converges_of_cf}
+    single-component convergence of Lemma~\ref{thm:rg_flow_converges_of_cf}
     intact.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     The two one-dimensional components are normal and both weights have
@@ -190,7 +190,7 @@ produce the dyadic powers $\E_B^{2^n}$.
     coordinates of the cube-phase tensor.
 \end{definition}
 
-\begin{theorem}[The MPS blocking relation gives the doubled-MPO condition]
+\begin{lemma}[The MPS blocking relation gives the doubled-MPO condition]
     \label{thm:blocked_gauge_phase_to_doubled_mpdo}
     \lean{MPSTensor.isPureOneLetterRFPViaTSUpToVirtualGauge_of_isBlockedGaugePhaseFixedPoint}
     \leanok
@@ -202,7 +202,7 @@ produce the dyadic powers $\E_B^{2^n}$.
     \end{align}
     satisfying the doubled-MPO virtual-gauge condition
     (Definition~\ref{def:one_letter_mpdo_virtual_gauge_rfp}).
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:doubled_virtual_gauge}
@@ -211,7 +211,7 @@ produce the dyadic powers $\E_B^{2^n}$.
     factor $\zeta\overline\zeta=|\zeta|^2=1$.
 \end{proof}
 
-\begin{theorem}[The printed pure blocking-up-to-gauge equivalence is false]
+\begin{lemma}[The printed pure blocking-up-to-gauge equivalence is false]
     \label{thm:cpsv_pure_rfp_gauge_status}
     \lean{MPSTensor.primitiveCubeRoot_isPrimitiveRoot}
     \lean{MPSTensor.scalarUnitTensor_isNormalTensor}
@@ -242,7 +242,7 @@ produce the dyadic powers $\E_B^{2^n}$.
     transfer map is not idempotent. Hence the canonical-restricted pure-state
     equivalence claimed in
     \cite[Appendix~D, lines~2100--2107]{Cirac2016MPDO_arXiv} is false.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:ft_perm_gl, lem:ft_perm_gl_identities, lem:ft_perm_matrix_conj_submatrix, def:cube_phase_swap_gauge, def:mpdo, lem:bond_dimension_one_identity_transfer_normal, def:cpsv_canonical_form, thm:blocked_gauge_phase_to_doubled_mpdo, thm:cpsv_canonical_form_flow_phase_obstruction}
@@ -265,11 +265,11 @@ produce the dyadic powers $\E_B^{2^n}$.
     \end{align}
     However, idempotence $\E_A^2=\E_A$ would imply $\E_A^{2^n}=\E_A$ for all
     $n\geq0$, contradicting the non-convergent alternating dyadic orbit of
-    Theorem~\ref{thm:cpsv_canonical_form_flow_phase_obstruction}.
+    Lemma~\ref{thm:cpsv_canonical_form_flow_phase_obstruction}.
 \end{proof}
 
 \begin{remark}
-    Theorem~\ref{thm:cpsv_pure_rfp_gauge_status} refutes the pure-state
+    Lemma~\ref{thm:cpsv_pure_rfp_gauge_status} refutes the pure-state
     equivalence assertion of \cite[Appendix~D]{Cirac2016MPDO_arXiv}; the
     general mixed-state case is treated separately in MPO theory.
 \end{remark}
@@ -443,14 +443,14 @@ produce the dyadic powers $\E_B^{2^n}$.
     strictly positive integers gives the positive-gap condition.
 \end{proof}
 
-\begin{theorem}[Idempotent transfer implies positive-gap physical CID]%
+\begin{lemma}[Idempotent transfer implies positive-gap physical CID]%
     \label{thm:is_positive_gap_physical_cid_of_is_rfp}
     \lean{MPSTensor.isPositiveGapPhysicalCID_of_isTransferIdempotent}
     \leanok
     \uses{def:mps_transfer_idempotence, def:is_positive_gap_physical_cid}
     If $\E_A^2=\E_A$, then $A$ satisfies positive-gap physical distance
     independence (Definition~\ref{def:is_positive_gap_physical_cid}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Idempotence yields $\E_A^n=\E_A$ for all $n\ge1$. Since
     $n_1,n_2,m_1,m_2\ge1$, substituting $\E_A$ for each power in the periodic
@@ -475,7 +475,7 @@ produce the dyadic powers $\E_B^{2^n}$.
     virtual-insertion distance independence (Definition~\ref{def:is_cid}).
 \end{definition}
 
-\begin{theorem}[Virtual-insertion distance independence implies RFP]%
+\begin{lemma}[Virtual-insertion distance independence implies RFP]%
     \label{thm:isCID_implies_isTransferIdempotent}
     \lean{MPSTensor.isCID_implies_isTransferIdempotent}
     \leanok
@@ -486,7 +486,7 @@ produce the dyadic powers $\E_B^{2^n}$.
     % The reverse direction of Theorem 3.8 in arXiv:1606.00608 additionally
     % fails for raw repeated-copy weights. A corrected restricted theorem would
     % additionally require realizing virtual insertions by physical observables.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Let $\rho>0$ be a right fixed point. For any virtual matrix $Z$, set
     $X=Z\rho^{-1}$, so that $X\rho=Z$. Applying distance independence with

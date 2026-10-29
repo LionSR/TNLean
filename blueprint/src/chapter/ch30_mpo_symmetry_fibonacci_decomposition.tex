@@ -1,4 +1,4 @@
-\begin{theorem}[Direct-sum classification of Fibonacci representations]%
+\begin{lemma}[Direct-sum classification of Fibonacci representations]%
     \label{thm:mpo_symmetry_fibonacci_decomposition}
     \lean{FibonacciCompression.exists_fibNim_pair,
         FibonacciCompression.fibNimPartner,
@@ -24,7 +24,7 @@
     missing indecomposability hypothesis recorded in
     \cite{gap:glm23_fibonacci_module_rank_scope} is imposed.
     % Source anchor: arXiv:2203.12563, lines 564--565 and 1991--1993.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -44,7 +44,7 @@
     precisely $T^2=I+T$.
 \end{proof}
 
-\begin{theorem}[Finite normal families with Fibonacci symmetry]%
+\begin{lemma}[Finite normal families with Fibonacci symmetry]%
     \label{thm:mpo_symmetry_fibonacci_normal_decomposition}
     \lean{FibonacciCompression.exists_equiv_prod_of_isMPOSymmetricFamily_fibNim}
     \leanok
@@ -67,7 +67,7 @@
     $|K|=2|R|$ is even.
     % Source anchor: arXiv:2203.12563, lines 458--460, 564--568, 1991--1993.
     % This theorem classifies multiplicities, not the gauge classes of L-symbols.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \uses{thm:mpo_symmetric_nimrep, thm:mpo_symmetry_fibonacci_decomposition}
@@ -81,7 +81,7 @@
     bijection gives the cardinality formula.
 \end{proof}
 
-\begin{theorem}[The indecomposable Fibonacci action]%
+\begin{lemma}[The indecomposable Fibonacci action]%
     \label{thm:mpo_symmetry_fibonacci_indecomposable}
     \lean{FibonacciCompression.exists_equiv_of_isIndecomposable_fibNim}
     \leanok
@@ -94,7 +94,7 @@
     labelled $x_1,x_\tau$ so that $\tau\cdot x_1=x_\tau$ and
     $\tau\cdot x_\tau=x_1+x_\tau$.
     % Source anchor: arXiv:2203.12563, line 1993.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok

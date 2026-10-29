@@ -3,7 +3,7 @@
 % **Local fix (zero-weight quotient):** the source quotient is completed on
 % zero-weight pairs. Documented in
 % docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex.
-\begin{theorem}[Positivity and zero-weight neighboring operators]
+\begin{lemma}[Positivity and zero-weight neighboring operators]
     \label{thm:mpdo_physical_sector_three_site_neighboring_operator_properties}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.sector_nonempty,
         MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.threeSiteMiddleIndex_nonempty}
@@ -14,7 +14,7 @@
     The sector set and every middle-subspin space are nonempty. Each
     $\Omega_{k,h}$ is positive semidefinite, and
     $a_kb_h=0$ implies $\Omega_{k,h}=0$.
-\end{theorem}
+\end{lemma}
 
 \begin{definition}[The three-site neighboring-state preparation $\mathcal T_1$]
     \label{def:mpdo_physical_sector_t1_preparation}
@@ -39,7 +39,7 @@
     nonzero-weight hypothesis.
 \end{definition}
 
-\begin{theorem}[Properties of the three-site neighboring densities]
+\begin{lemma}[Properties of the three-site neighboring densities]
     \label{thm:mpdo_physical_sector_t1_density_properties}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.normalizedThreeSiteNeighboringDensity_pos,
         MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_normalizedThreeSiteNeighboringDensity}
@@ -58,9 +58,9 @@
     semidefinite with trace one for every pair, and agrees with
     $\widehat\Omega_{k,h}$ on active pairs. The corresponding sectorwise and
     controlled maps prepare these densities on their diagonal summands.
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[$\mathcal T_1$ is trace-preserving completely positive]
+\begin{lemma}[$\mathcal T_1$ is trace-preserving completely positive]
     \label{thm:mpdo_physical_sector_t1_preparation_cptp}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSitePreparationMap_isKrausCPTP}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSiteControlledMap_isKrausCPTP}
@@ -69,7 +69,7 @@
     \uses{def:mpdo_physical_sector_t1_preparation, thm:mpdo_physical_sector_t1_density_properties}
     Each completed preparation is trace-preserving and completely positive.
     The same holds for their orthogonally controlled direct sum.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -94,14 +94,14 @@
     three complete physical sectors.
 \end{definition}
 
-\begin{theorem}[$\mathcal T$ is trace-preserving completely positive]
+\begin{lemma}[$\mathcal T$ is trace-preserving completely positive]
     \label{thm:mpdo_physical_sector_t_map_cptp}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.tMap_isKrausCPTP}
     \leanok
     \uses{def:mpdo_physical_sector_t_map}
     The refinement channel $\mathcal T$ is trace-preserving and completely
     positive.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -195,14 +195,14 @@ outer-sector summand. The composite channel has type
     Taking the orthogonal direct sum over $(k,h)$ defines $\mathcal S_1$.
 \end{definition}
 
-\begin{theorem}[$\mathcal S_1$ is trace-preserving completely positive]
+\begin{lemma}[$\mathcal S_1$ is trace-preserving completely positive]
     \label{thm:mpdo_physical_sector_s1_map_cptp}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedNeighboringControlledMap_isKrausCPTP}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.s1Map_isKrausCPTP}
     \leanok
     \uses{def:mpdo_physical_sector_s1_map}
     The map $\mathcal S_1$ is trace-preserving and completely positive.
-\end{theorem}
+\end{lemma}
 
 \begin{definition}[The coarse-graining channel $\mathcal S$]
     \label{def:mpdo_physical_sector_s_map}
@@ -215,13 +215,13 @@ outer-sector summand. The composite channel has type
     $\mathcal S=\mathcal S_2\mathcal S_1\mathcal S_0$.
 \end{definition}
 
-\begin{theorem}[$\mathcal S$ is trace-preserving completely positive]
+\begin{lemma}[$\mathcal S$ is trace-preserving completely positive]
     \label{thm:mpdo_physical_sector_s_map_cptp}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.sMap_isKrausCPTP}
     \leanok
     \uses{thm:mpdo_s0_map_cptp, thm:mpdo_physical_sector_s1_map_cptp, thm:mpdo_s2_map_cptp}
     The channel $\mathcal S$ is trace-preserving and completely positive.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -256,7 +256,7 @@ outer-sector summand. The composite channel has type
     \end{align}
 \end{definition}
 
-\begin{theorem}[Diagonal outer-sector block of the three-site closure]
+\begin{lemma}[Diagonal outer-sector block of the three-site closure]
     \label{thm:mpdo_regrouped_three_site_closure_block}
     \lean{MPOTensor.PhysicalSectorFactorization.s0Regrouped_threeSiteClosure_block_eq}
     \leanok
@@ -267,7 +267,7 @@ outer-sector summand. The composite channel has type
          & =B_{k,h}(X)\otimes\Omega_{k,h}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -278,7 +278,7 @@ outer-sector summand. The composite channel has type
     Taking the direct sum over $l$ gives the stated block.
 \end{proof}
 
-\begin{theorem}[Off-diagonal outer-sector entries of the three-site closure]
+\begin{lemma}[Off-diagonal outer-sector entries of the three-site closure]
     \label{thm:mpdo_regrouped_three_site_closure_off_diagonal}
     \lean{MPOTensor.PhysicalSectorFactorization.s0Regrouped_threeSiteClosure_apply_of_outer_ne}
     \leanok
@@ -286,7 +286,7 @@ outer-sector summand. The composite channel has type
     Every matrix entry of
     $R_{\Phi_3}\mathfrak R_3(\mathcal K_3(X))$ between distinct outer-sector
     pairs $(k,h)\ne(p,q)$ vanishes.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -296,7 +296,7 @@ outer-sector summand. The composite channel has type
     sector-coordinate tensor is block diagonal, so that factor vanishes.
 \end{proof}
 
-\begin{theorem}[Regrouped two-site closure block]
+\begin{lemma}[Regrouped two-site closure block]
     \label{thm:mpdo_t0_regrouped_two_site_closure_block}
     \lean{MPOTensor.PhysicalSectorFactorization.t0Regrouped_twoSiteClosure_block_eq}
     \leanok
@@ -307,7 +307,7 @@ outer-sector summand. The composite channel has type
          & =B_{k,h}(X)\otimes\eta_{k,h}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -317,7 +317,7 @@ outer-sector summand. The composite channel has type
     coordinates.
 \end{proof}
 
-\begin{theorem}[Diagonal-block action of $\mathcal T_0$]
+\begin{lemma}[Diagonal-block action of $\mathcal T_0$]
     \label{thm:mpdo_t0_same_block_action}
     \lean{MPOTensor.PhysicalSectorFactorization.t0Map_sameBlock_apply}
     \leanok
@@ -331,7 +331,7 @@ outer-sector summand. The composite channel has type
             \left([R_{\Phi_2}Y]_{(k,h),(k,h)}\right)\right]_{a,b}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -339,7 +339,7 @@ outer-sector summand. The composite channel has type
     the ordinary partial trace over its neighboring factor.
 \end{proof}
 
-\begin{theorem}[Partial trace of a factorized two-site block]
+\begin{lemma}[Partial trace of a factorized two-site block]
     \label{thm:mpdo_t0_factorized_block_action}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.t0Map_block_eq_smul}
     \leanok
@@ -347,7 +347,7 @@ outer-sector summand. The composite channel has type
     If the $(k,h)$ diagonal block of $R_{\Phi_2}Y$ is
     $B\otimes\eta_{k,h}$, then
     $[\mathcal T_0(Y)]_{(k,h),(k,h)}=a_kb_hB$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -359,7 +359,7 @@ outer-sector summand. The composite channel has type
 % **Local fix (zero-weight quotient):** the next three entries use the
 % completion documented in
 % docs/paper-gaps/cpgsv17_mpdo_zero_weight_preparation_completion.tex.
-\begin{theorem}[Preparation of a scaled boundary block]
+\begin{lemma}[Preparation of a scaled boundary block]
     \label{thm:mpdo_t1_scaled_block_preparation}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.completedThreeSitePreparationMap_smul}
     \leanok
@@ -368,7 +368,7 @@ outer-sector summand. The composite channel has type
     sectorwise preparation satisfies
     $\overline{\mathcal T}_{k,h}(a_kb_hB)
         =B\otimes\Omega_{k,h}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -378,7 +378,7 @@ outer-sector summand. The composite channel has type
     sides vanish because $\Omega_{k,h}=0$.
 \end{proof}
 
-\begin{theorem}[Diagonal-block action of $\mathcal T_1$]
+\begin{lemma}[Diagonal-block action of $\mathcal T_1$]
     \label{thm:mpdo_t1_factorized_block_action}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.t1Map_block_eq_kronecker}
     \leanok
@@ -386,7 +386,7 @@ outer-sector summand. The composite channel has type
     If the $(k,h)$ diagonal block of a boundary matrix $Y$ is $a_kb_hB$, then
     $[\mathcal T_1(Y)]_{(k,h),(k,h)}
         =B\otimes\Omega_{k,h}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -395,21 +395,21 @@ outer-sector summand. The composite channel has type
     sectorwise preparation, to which the preceding theorem applies.
 \end{proof}
 
-\begin{theorem}[Off-diagonal action of $\mathcal T_1$]
+\begin{lemma}[Off-diagonal action of $\mathcal T_1$]
     \label{thm:mpdo_t1_off_diagonal_action}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.t1Map_apply_of_ne}
     \leanok
     \uses{def:mpdo_physical_sector_t1_preparation}
     The map $\mathcal T_1$ annihilates every matrix entry between distinct
     outer-sector pairs.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
     This is the orthogonal control in the definition of $\mathcal T_1$.
 \end{proof}
 
-\begin{theorem}[Reindexing action of $\mathcal T_2$]
+\begin{lemma}[Reindexing action of $\mathcal T_2$]
     \label{thm:mpdo_t2_reindexing_action}
     \lean{MPOTensor.PhysicalSectorFactorization.t2Map_apply}
     \leanok
@@ -417,7 +417,7 @@ outer-sector summand. The composite channel has type
     Let $\Phi_3$ be the three-site regrouping. For every prepared matrix $Y$
     and three-site indices $p,q$,
     $[\mathcal T_2(Y)]_{p,q}=Y_{\Phi_3(p),\Phi_3(q)}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -425,7 +425,7 @@ outer-sector summand. The composite channel has type
     $\Phi_3^{-1}$.
 \end{proof}
 
-\begin{theorem}[Refinement of the two-site closure]
+\begin{lemma}[Refinement of the two-site closure]
     \label{thm:mpdo_physical_sector_t_closure_identity}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.tMap_twoSiteClosure_eq_threeSiteClosure}
     \leanok
@@ -442,7 +442,7 @@ outer-sector summand. The composite channel has type
          & =\mathfrak R_3(\mathcal K_3(X)).
         \label{eq:rfp_t_closure}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -473,7 +473,7 @@ outer-sector summand. The composite channel has type
     (\ref{eq:rfp_t_closure}).
 \end{proof}
 
-\begin{theorem}[Coarse-graining of the three-site closure]
+\begin{lemma}[Coarse-graining of the three-site closure]
     \label{thm:mpdo_physical_sector_s_closure_identity}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.s0Map_block_eq_smul}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.sMap_threeSiteClosure_eq_twoSiteClosure}
@@ -489,7 +489,7 @@ outer-sector summand. The composite channel has type
          & =\mathfrak R_2(\mathcal K_2(X)).
         \label{eq:rfp_s_closure}
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
     \leanok
@@ -513,7 +513,7 @@ outer-sector summand. The composite channel has type
 \end{proof}
 
 For the following construction, through
-Theorem~\ref{thm:mpdo_blocked_original_tensor_is_rfp_via_ts}, assume the
+Lemma~\ref{thm:mpdo_blocked_original_tensor_is_rfp_via_ts}, assume the
 neighboring-operator trace factorization of
 Definition~\ref{def:mpdo_neighboring_trace_factorization}. Write
 $q=\dim\!\left(\bigoplus_k L_k\otimes R_k\right)$
