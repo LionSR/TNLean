@@ -44,10 +44,10 @@ theorem uncleInteractionES_isPositive
   rw [← LinearIsometryEquiv.adjoint_toLinearMap_eq_symm]
   exact (parentInteractionES_isPositive (uncleTensor A B R L) 1).conj_adjoint e.toLinearMap
 
+open scoped ComplexOrder in
 /-- Every actual finite periodic uncle Hamiltonian is positive, including
 empty configuration spaces and chain lengths. This is the positivity used
 in the spectral conclusion of arXiv:1210.6613, proof of thm:gapless. -/
-open scoped ComplexOrder in
 theorem uncleHamiltonianES_isPositive
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
