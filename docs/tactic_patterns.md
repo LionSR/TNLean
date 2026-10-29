@@ -9819,17 +9819,19 @@ there is no need for a new tactic.
   imported audit uses Lean's `--setup` and a single explicit `importArts`
   entry, so no provider namespace or compiled dependency is copied.
 
-### Ceilings of the logarithmic filter scale — candidate (2026-10-29)
+### Ceilings of the logarithmic filter scale — promoted (2026-10-29)
 
-- **Seen:** The lower scale estimate in
-  `MPS/AreaLaw/PolynomialFilterParameters.lean` (`ceil_scale_bounds`) and
-  `MPS/AreaLaw/InteriorLowEnergyFamily.lean`.
-- **Pattern:** From `A ≥ 1`, `u ≥ 1` and `0 < g ≤ 1`, use
-  `1 ≤ u²/g`, scalar multiplication and `Nat.le_ceil` to obtain
-  `A ≤ ceil(A u²/g)`.
-- **Reuse:** The new occurrence uses the existing Mathlib order and ceiling
-  lemmas directly. The earlier full two-sided estimate remains private;
-  two occurrences do not yet require a new public helper.
+- **Seen:** `MPS/AreaLaw/PolynomialFilterParameters.lean`,
+  `MPS/AreaLaw/InteriorLowEnergyFamily.lean`, and the finite dyadic
+  count comparison in QICLean.
+- **Pattern:** From `A ≥ 1`, `u ≥ 1` and `0 < g ≤ 1`, bound the
+  actual ceiling of `A*u²/g` above by `(A+1)*u²/g` and below by `A`.
+- **Defined in:** QICLean `Analysis/PolynomialFilterCeil.lean`,
+  `Real.ceil_quadratic_scale_bounds`. The existing two-sided proof was
+  transferred unchanged from its private TNLean declaration.
+- **Refactored occurrences:** Both TNLean consumers use the shared
+  result. The companion dyadic ceiling comparison uses it twice,
+  retaining the finite rounding constants.
 
 ### Real spectral membership from a nonzero eigenvector — promoted (2026-10-29)
 

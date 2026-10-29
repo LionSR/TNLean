@@ -124,15 +124,8 @@ theorem exists_interior_low_energy_original_filter_family
     have hb : 0 ≤ Real.log (1 / g) := Real.log_nonneg ((one_le_div hg).mpr hg1)
     dsimp only [u]
     linarith only [hlogq, hb]
-  have hellA : Aconst ≤ (ell : ℝ) := by
-    have hA0 : 0 ≤ Aconst := zero_le_one.trans hA
-    have hu2 : 1 ≤ u ^ 2 := one_le_pow₀ hu1
-    have hratio : 1 ≤ u ^ 2 / g := (one_le_div hg).mpr (hg1.trans hu2)
-    calc
-      Aconst = Aconst * 1 := (mul_one Aconst).symm
-      _ ≤ Aconst * (u ^ 2 / g) := mul_le_mul_of_nonneg_left hratio hA0
-      _ = Aconst * u ^ 2 / g := (mul_div_assoc _ _ _).symm
-      _ ≤ (ell : ℝ) := Nat.le_ceil _
+  have hellA : Aconst ≤ (ell : ℝ) :=
+    (Real.ceil_quadratic_scale_bounds Aconst u g hA hu1 hg hg1).2.2
   have hell : 1 ≤ ell := by
     have hlarge : (21 : ℝ) ≤ (ell : ℝ) := hA21.trans hellA
     have : 21 ≤ ell := by exact_mod_cast hlarge

@@ -181,3 +181,36 @@
     Apply closeness composition before and after the improvement, using
     the same fixed family and the two physical comparisons.
 \end{proof}
+
+\begin{theorem}[Choosing a count base before the filter]
+    \label{thm:low_energy_interval_count_base}
+    \lean{Real.exists_low_energy_joint_scalar_parameters_above,
+      TNLean.MPS.AreaLaw.exists_short_actual_region_spanning_family_of_count_base,
+      TNLean.MPS.AreaLaw.exists_physical_low_energy_interval_family_of_count_base}
+    \leanok
+    The scalar constant in Theorem~\ref{thm:low_energy_joint_scalar_parameters}
+    can be required to exceed any prescribed real number. In particular,
+    choose $A\ge100$. In
+    Theorem~\ref{thm:physical_low_energy_interval_family}, choose an integer
+    $m\ge q$ before the degree, and replace only the numerical definitions by
+    \begin{align*}
+        u&=1+\log m+\log(1/g),&
+        \ell&=\lceil Au^2/g\rceil,&
+        D&=(m\ell^2)^{22\ell}.
+    \end{align*}
+    All conclusions of that theorem hold with this same $D$, and its count
+    estimate holds with $m$ in place of $q$. The physical local dimension
+    remains $q$, and the family acts on the original regional Hilbert space.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:low_energy_joint_scalar_parameters,
+      thm:short_region_spanning_family,thm:physical_low_energy_interval_family}
+    Choose the scalar degree and suppression estimate at $m$.
+    The physical polynomial family is still constructed on the original
+    chain; monotonicity in the numerical base bounds its count by $D^2$.
+    On short intervals, extend the actual configuration matrix units by
+    zero to this same count and choose their positive error after $D$.
+    In both cases, the inequality $D^{12}\Delta<10^{-5}$ concerns the
+    chosen $D$ and the degree used to construct the family.
+\end{proof}

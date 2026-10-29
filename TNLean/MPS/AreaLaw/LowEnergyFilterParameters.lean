@@ -63,14 +63,15 @@ theorem low_energy_threshold_le
 
 
 /-- At fixed density bandwidth, one constant controls the square-degree
-filter and the larger count needed after adding at most two window lengths
+filter above any prescribed scalar threshold, and the larger count needed
+after adding at most two window lengths
 to the target region. The strict width margin gives the strict tradeoff
 at exponent `22*ell`. ALVV, arXiv:1602.08828v2,
 Theorem `t:aisgapless`, lines 1027–1041. -/
-theorem exists_low_energy_joint_scalar_parameters (etaLD : ℝ) (hLD : 0 < etaLD) :
+theorem exists_low_energy_joint_scalar_parameters_above (etaLD M : ℝ) (hLD : 0 < etaLD) :
     let T := 21 + etaLD + 8 * log (400 * (288 * exp (11 / 8)) * (6 + etaLD))
     let CH := (3 * T + 52) / 2
-    ∃ A : ℝ, 1 ≤ A ∧ 21 ≤ A ∧
+    ∃ A : ℝ, 1 ≤ A ∧ 21 ≤ A ∧ M ≤ A ∧
       (∀ (q : ℕ) (g : ℝ), 2 ≤ q → 0 < g → g ≤ 1 →
         let u := 1 + log (q : ℝ) + log (1 / g)
         let ell : ℕ := ⌈A * u ^ 2 / g⌉₊
@@ -99,9 +100,9 @@ theorem exists_low_energy_joint_scalar_parameters (etaLD : ℝ) (hLD : 0 < etaLD
       log_nonneg (by nlinarith only [hC, hLD])
     dsimp only [T]
     linarith only [hLD, hlog]
-  obtain ⟨A, hA, hA21, _hAM, _hAlog, hall⟩ :=
-    exists_dg_scalar_parameters CH 0 (by dsimp only [CH]; positivity)
-  refine ⟨A, hA, hA21, ?_, ?_⟩
+  obtain ⟨A, hA, hA21, hAM, _hAlog, hall⟩ :=
+    exists_dg_scalar_parameters CH M (by dsimp only [CH]; positivity)
+  refine ⟨A, hA, hA21, hAM, ?_, ?_⟩
   · intro q g hq hg hg1 u ell D
     obtain ⟨_hlower, _hupper, hscale, _hcount, hlogD, _htrade, _htail⟩ :=
       hall q g hq hg hg1
@@ -162,6 +163,37 @@ theorem exists_low_energy_joint_scalar_parameters (etaLD : ℝ) (hLD : 0 < etaLD
         (4 * exp (-(4 * (ell : ℝ) ^ 2 * sqrt ((4 * g / 5) / R)))) :=
       mul_lt_mul_of_pos_left hDelLt (pow_pos hDpos 12)
     _ ≤ 1 / 100000 := htrade R hR hRup
+
+/-- The joint low-energy scale with no additional lower threshold.
+This is the native count used in ALVV, arXiv:1602.08828v2,
+Theorem `t:aisgapless`, lines 1027–1041. -/
+theorem exists_low_energy_joint_scalar_parameters (etaLD : ℝ) (hLD : 0 < etaLD) :
+    let T := 21 + etaLD + 8 * log (400 * (288 * exp (11 / 8)) * (6 + etaLD))
+    let CH := (3 * T + 52) / 2
+    ∃ A : ℝ, 1 ≤ A ∧ 21 ≤ A ∧
+      (∀ (q : ℕ) (g : ℝ), 2 ≤ q → 0 < g → g ≤ 1 →
+        let u := 1 + log (q : ℝ) + log (1 / g)
+        let ell : ℕ := ⌈A * u ^ 2 / g⌉₊
+        let D := (q * ell ^ 2) ^ (22 * ell)
+        21 ≤ ell ∧ log (D : ℝ) ≤
+          22 * (A + 1) * (6 + 2 * log (A + 1)) / g * u ^ 3) ∧
+      ∀ (q : ℕ) (eta w E0 t : ℝ), 2 ≤ q → 0 < w → 3 * w < eta → eta ≤ etaLD →
+      t = 21 + eta + 8 * log ((288 * exp (11 / 8)) /
+        min 1 ((1 / 200 : ℝ) * w ^ 2 / (2 * (6 + eta)))) →
+      19 + eta ≤ t → 0 ≤ E0 → E0 ≤ 4 →
+      let g := min w 1
+      let u := 1 + log (q : ℝ) + log (1 / g)
+      let ell : ℕ := ⌈A * u ^ 2 / g⌉₊
+      let D := (q * ell ^ 2) ^ (22 * ell)
+      let R := 3 * t + 4 * (ell : ℝ) - (E0 + eta - 2 * w)
+      let Delta := (2 * exp (-2 * ((ell ^ 2 : ℕ) : ℝ) * sqrt (w / R))) ^ 2
+      21 ≤ ell ∧ 0 < R ∧ R ≤ 2 * CH * (ell : ℝ) ∧ 0 < Delta ∧
+      log (D : ℝ) ≤ 22 * (A + 1) * (6 + 2 * log (A + 1)) / g * u ^ 3 ∧
+      (D : ℝ) ^ 12 * Delta < 1 / 100000 := by
+  intro T CH
+  obtain ⟨A, hA, hA21, _hAM, hcount, hscalar⟩ :=
+    exists_low_energy_joint_scalar_parameters_above etaLD 0 hLD
+  exact ⟨A, hA, hA21, hcount, hscalar⟩
 
 /-- At fixed density bandwidth, one constant controls the square-degree
 filter for every smaller physical bandwidth. The prescribed threshold and

@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Analysis.PolynomialFilterCeil
 import Mathlib.Analysis.Asymptotics.Lemmas
 import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
 import Mathlib.Tactic.Linarith
@@ -79,31 +80,6 @@ private theorem exists_log_sqrt_absorption (a b c M : ℝ) (hb : 0 ≤ b) (hc : 
     _ ≤ ‖a + b * log 2 + b * log A‖ := le_abs_self _
     _ ≤ c * ‖sqrt A‖ := hbound
     _ = c * sqrt A := by rw [Real.norm_eq_abs, abs_of_nonneg (sqrt_nonneg A)]
-
-/-- The ceiling of A v²/g is bounded above by (A+1)v²/g and below by A.
-Auxiliary to ALVV, arXiv:1602.08828v2, Theorem `t:ais`, lines 1010–1024. -/
-private theorem ceil_scale_bounds (A v g : ℝ) (hA : 1 ≤ A) (hv : 1 ≤ v)
-    (hg : 0 < g) (hg1 : g ≤ 1) :
-    A * v ^ 2 / g ≤ (⌈A * v ^ 2 / g⌉₊ : ℝ) ∧
-      (⌈A * v ^ 2 / g⌉₊ : ℝ) ≤ (A + 1) * v ^ 2 / g ∧
-      A ≤ (⌈A * v ^ 2 / g⌉₊ : ℝ) := by
-  have hA0 : 0 ≤ A := zero_le_one.trans hA
-  have hv2 : 1 ≤ v ^ 2 := by nlinarith
-  have hratio : 1 ≤ v ^ 2 / g := (le_div_iff₀ hg).2 (by linarith)
-  have hnonneg : 0 ≤ A * v ^ 2 / g :=
-    div_nonneg (mul_nonneg hA0 (sq_nonneg v)) hg.le
-  have hscale : A ≤ A * v ^ 2 / g := by
-    calc
-      A = A * 1 := (mul_one A).symm
-      _ ≤ A * (v ^ 2 / g) := mul_le_mul_of_nonneg_left hratio hA0
-      _ = A * v ^ 2 / g := by ring
-  have hlower : A * v ^ 2 / g ≤ (⌈A * v ^ 2 / g⌉₊ : ℝ) := Nat.le_ceil _
-  refine ⟨hlower, ?_, hscale.trans hlower⟩
-  calc
-    (⌈A * v ^ 2 / g⌉₊ : ℝ) ≤ A * v ^ 2 / g + 1 :=
-      (Nat.ceil_lt_add_one hnonneg).le
-    _ ≤ A * v ^ 2 / g + v ^ 2 / g := add_le_add le_rfl hratio
-    _ = (A + 1) * v ^ 2 / g := by ring
 
 /-- Joint choice of the logarithmic absorption constant and a prescribed
 lower threshold. Scalar auxiliary for ALVV, t:ais, lines 1010--1024. -/
@@ -265,7 +241,7 @@ theorem exists_dg_scalar_parameters (C_H M : ℝ) (hC : 0 < C_H) :
   have hb : 0 ≤ log (1 / g) := log_nonneg ((one_le_div hg).2 hg1)
   have hu1 : 1 ≤ u := by dsimp only [u]; linarith
   have hu0 : 0 ≤ u := by linarith
-  obtain ⟨hellLower, hellUpper, hellA⟩ := ceil_scale_bounds A u g hA hu1 hg hg1
+  obtain ⟨hellLower, hellUpper, hellA⟩ := ceil_quadratic_scale_bounds A u g hA hu1 hg hg1
   have hell1 : 1 ≤ (ell : ℝ) := hA.trans hellA
   have hell0 : 0 ≤ (ell : ℝ) := by linarith
   have hA0 : 0 ≤ A := by linarith
