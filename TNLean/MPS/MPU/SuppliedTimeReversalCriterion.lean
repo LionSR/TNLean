@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.SuppliedFourSpinSourceComparison
-import TNLean.MPS.MPU.TimeReversalLocalNecessity
+import TNLean.MPS.MPU.TimeReversalLocalSufficiency
 
 /-!
 # Time reversal for arbitrary supplied standard forms
@@ -71,27 +71,26 @@ private theorem adjoint_certificate_of_unitary_gate_transport
 
 namespace TwoSiteStandardFormData
 
-/-- Even-family time reversal gives the literal four-spin certificate for
-any supplied square standard form in an explicitly canonical ambient
-tensor. No normalized supplied half factors or comparison gauges are
-hypotheses. Source: CPSV17, `PropChiral` and `UUdaggertrick`, lines 1201–1252. -/
-theorem exists_timeReversal_certificate_of_square_ranks
+private theorem selected_square_source_gate_comparison
     {d D : ℕ} {W : MPOTensor (d * d) D}
     {u v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ}
-    (S : TwoSiteStandardFormData W u v) (hW : IsMPUCanonicalFormII W)
-    (hTR : ∀ N : ℕ, 1 < N → Even N → mpo W N = (mpo W N)ᴴ) :
-    ∃ (σ : ℂ) (x : Matrix.unitaryGroup (Fin d × Fin d) ℂ),
-      (σ = 1 ∨ σ = -1) ∧
-      staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u) =
-        σ • ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
-          (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ) *
-          (staircaseMiddle (A := Fin d) (E := Fin d) v)ᴴ := by
+    (S : TwoSiteStandardFormData W u v) (hW : IsMPUCanonicalFormII W) :
+    let T := sourceFactors W hW.ρ hW.ρ_posDef
+    let L := finCongr S.sourceRanks_eq.2
+    let R := finCongr S.sourceRanks_eq.1
+    let p := Equiv.prodCongr (finProdFinEquiv (m := d) (n := d))
+      (finProdFinEquiv (m := d) (n := d))
+    ∃ X Y : Matrix.unitaryGroup (Fin (d * d)) ℂ,
+      Matrix.reindex (Equiv.prodCongr L R) (Equiv.refl _) (SourceFactors.sourceU W T) =
+        ((X : Matrix _ _ ℂ) ⊗ₖ (Y : Matrix _ _ ℂ)) * Matrix.reindex p p
+          (staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u)) ∧
+      Matrix.reindex (Equiv.refl _) (Equiv.prodCongr R L) (SourceFactors.sourceV W T) =
+        Matrix.reindex p p (staircaseMiddle (A := Fin d) (E := Fin d) v) *
+          ((Y : Matrix _ _ ℂ)ᴴ ⊗ₖ (X : Matrix _ _ ℂ)ᴴ) := by
   classical
   let T := sourceFactors W hW.ρ hW.ρ_posDef
   have hr : r[W] = d * d := S.sourceRanks_eq.1
   have hl : ℓ[W] = d * d := S.sourceRanks_eq.2
-  obtain ⟨σ, z, hσ, hcert⟩ :=
-    hW.exists_supplied_source_adjoint_certificate (S.isMPUSimple hW) T hr hl hTR
   obtain ⟨X, Y, hu, hv⟩ := S.exists_fourSpin_selected_source_gate_gauges hW
   let L := finCongr hl
   let R := finCongr hr
@@ -134,6 +133,34 @@ theorem exists_timeReversal_certificate_of_square_ranks
     rw [hB] at h
     simpa only [X', Y', Unitary.coe_star, Matrix.star_eq_conjTranspose,
       Matrix.conjTranspose_reindex] using h
+  exact ⟨X', Y', hu', hv'⟩
+
+/-- Even-family time reversal gives the literal four-spin certificate for
+any supplied square standard form in an explicitly canonical ambient
+tensor. No normalized supplied half factors or comparison gauges are
+hypotheses. Source: CPSV17, `PropChiral` and `UUdaggertrick`, lines 1201–1252. -/
+theorem exists_timeReversal_certificate_of_square_ranks
+    {d D : ℕ} {W : MPOTensor (d * d) D}
+    {u v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ}
+    (S : TwoSiteStandardFormData W u v) (hW : IsMPUCanonicalFormII W)
+    (hTR : ∀ N : ℕ, 1 < N → Even N → mpo W N = (mpo W N)ᴴ) :
+    ∃ (σ : ℂ) (x : Matrix.unitaryGroup (Fin d × Fin d) ℂ),
+      (σ = 1 ∨ σ = -1) ∧
+      staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u) =
+        σ • ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
+          (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ) *
+          (staircaseMiddle (A := Fin d) (E := Fin d) v)ᴴ := by
+  classical
+  let T := sourceFactors W hW.ρ hW.ρ_posDef
+  have hr : r[W] = d * d := S.sourceRanks_eq.1
+  have hl : ℓ[W] = d * d := S.sourceRanks_eq.2
+  obtain ⟨σ, z, hσ, hcert⟩ :=
+    hW.exists_supplied_source_adjoint_certificate (S.isMPUSimple hW) T hr hl hTR
+  let e : (Fin d × Fin d) ≃ Fin (d * d) := finProdFinEquiv
+  let p := Equiv.prodCongr e e
+  let A := staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u)
+  let B := staircaseMiddle (A := Fin d) (E := Fin d) v
+  obtain ⟨X', Y', hu', hv'⟩ := selected_square_source_gate_comparison S hW
   rw [hu', hv'] at hcert
   obtain ⟨w, hw⟩ := adjoint_certificate_of_unitary_gate_transport
     (Matrix.reindex p p A) (Matrix.reindex p p B) X' Y' z σ hcert
@@ -190,6 +217,94 @@ theorem exists_timeReversal_certificate
   obtain ⟨σ, x, hσ, hlocal⟩ :=
     S₀.exists_timeReversal_certificate_of_square_ranks hW hTR
   exact ⟨hr, hl, σ, x, hσ, hlocal⟩
+
+
+/-- A supplied square standard form's literal four-spin sign equation
+implies adjoint symmetry on every positive even standard-form ring in the
+explicit ambient canonical scope. All normalized factors and comparison
+gauges are derived internally. Source: CPSV17, `PropChiral`,
+`UUdaggertrick` and `eq:dagger-sym-cond`, lines 1214–1236. -/
+theorem mpo_even_eq_adjoint_of_timeReversal_certificate
+    {d D : ℕ} {W : MPOTensor (d * d) D}
+    {u v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ}
+    (S : TwoSiteStandardFormData W u v) (hW : IsMPUCanonicalFormII W)
+    (σ : ℂ) (hσ : σ = 1 ∨ σ = -1)
+    (x : Matrix.unitaryGroup (Fin d × Fin d) ℂ)
+    (hlocal : staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u) =
+      σ • ((x : Matrix _ _ ℂ) ⊗ₖ (x : Matrix _ _ ℂ)ᴴ) *
+        (staircaseMiddle (A := Fin d) (E := Fin d) v)ᴴ)
+    (N : ℕ) (hN : 1 < N) (heven : Even N) : mpo W N = (mpo W N)ᴴ := by
+  classical
+  let T := sourceFactors W hW.ρ hW.ρ_posDef
+  have hr : r[W] = d * d := S.sourceRanks_eq.1
+  have hl : ℓ[W] = d * d := S.sourceRanks_eq.2
+  let A := Matrix.reindex (Equiv.prodCongr (finCongr hl) (finCongr hr))
+    (Equiv.refl _) (SourceFactors.sourceU W T)
+  let B := Matrix.reindex (Equiv.refl _)
+    (Equiv.prodCongr (finCongr hr) (finCongr hl)) (SourceFactors.sourceV W T)
+  let e : (Fin d × Fin d) ≃ Fin (d * d) := finProdFinEquiv
+  let p := Equiv.prodCongr e e
+  let x' : Matrix.unitaryGroup (Fin (d * d)) ℂ :=
+    ⟨Matrix.reindex e e x, Matrix.reindex_mem_unitaryGroup _ _ x.property⟩
+  let A₀ := Matrix.reindex p p
+    (staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u))
+  let B₀ := Matrix.reindex p p (staircaseMiddle (A := Fin d) (E := Fin d) v)
+  have hraw : A₀ = σ • ((x' : Matrix _ _ ℂ) ⊗ₖ (x' : Matrix _ _ ℂ)ᴴ) * B₀ᴴ := by
+    exact Matrix.reindex_adjoint_certificate e hlocal
+  obtain ⟨X, Y, hu, hv⟩ := selected_square_source_gate_comparison S hW
+  have hX : (X : Matrix _ _ ℂ)ᴴ * (X : Matrix _ _ ℂ) = 1 :=
+    ((Matrix.isUnitaryBetween_iff_mem_unitaryGroup _).mpr X.property).1
+  have hY : (Y : Matrix _ _ ℂ)ᴴ * (Y : Matrix _ _ ℂ) = 1 :=
+    ((Matrix.isUnitaryBetween_iff_mem_unitaryGroup _).mpr Y.property).1
+  have hAcancel : ((X : Matrix _ _ ℂ)ᴴ ⊗ₖ (Y : Matrix _ _ ℂ)ᴴ) * A = A₀ := by
+    change ((X : Matrix _ _ ℂ)ᴴ ⊗ₖ (Y : Matrix _ _ ℂ)ᴴ) *
+      Matrix.reindex (Equiv.prodCongr (finCongr hl) (finCongr hr))
+        (Equiv.refl _) (SourceFactors.sourceU W T) = A₀
+    rw [hu, ← Matrix.mul_assoc, ← Matrix.mul_kronecker_mul, hX, hY,
+      Matrix.one_kronecker_one, Matrix.one_mul]
+  have hBcancel : B * ((Y : Matrix _ _ ℂ) ⊗ₖ (X : Matrix _ _ ℂ)) = B₀ := by
+    change Matrix.reindex (Equiv.refl _)
+      (Equiv.prodCongr (finCongr hr) (finCongr hl)) (SourceFactors.sourceV W T) *
+        ((Y : Matrix _ _ ℂ) ⊗ₖ (X : Matrix _ _ ℂ)) = B₀
+    rw [hv, Matrix.mul_assoc, ← Matrix.mul_kronecker_mul, hY, hX,
+      Matrix.one_kronecker_one, Matrix.mul_one]
+  have hraw' : ((X : Matrix _ _ ℂ)ᴴ ⊗ₖ (Y : Matrix _ _ ℂ)ᴴ) * A =
+      σ • ((x' : Matrix _ _ ℂ) ⊗ₖ (x' : Matrix _ _ ℂ)ᴴ) *
+        (B * ((Y : Matrix _ _ ℂ) ⊗ₖ (X : Matrix _ _ ℂ)))ᴴ := by
+    rw [hAcancel, hBcancel]
+    exact hraw
+  obtain ⟨z, hz⟩ := adjoint_certificate_of_unitary_gate_transport A B
+    (star X) (star Y) x' σ (by
+      simpa only [Unitary.coe_star, Matrix.star_eq_conjTranspose,
+        Matrix.conjTranspose_conjTranspose] using hraw')
+  exact hW.mpo_even_eq_adjoint_of_source_local_certificate
+    (S.isMPUSimple hW) T hr hl σ hσ z hz N hN heven
+
+/-- The literal local criterion for ANY supplied standard form in an
+explicit canonical ambient tensor, at exactly the even standard-form
+lengths of the source. Intermediate rank equalities are conclusions in
+the forward direction. Source: CPSV17, `PropChiral`, lines 1201–1252. -/
+theorem even_timeReversal_iff_exists_certificate
+    {d D ℓ r : ℕ} {W : MPOTensor (d * d) D}
+    {u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
+    {v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
+    (S : TwoSiteStandardFormData W u v) (hW : IsMPUCanonicalFormII W) :
+    (∀ N : ℕ, 1 < N → Even N → mpo W N = (mpo W N)ᴴ) ↔
+      ∃ (hr : r = d) (hl : ℓ = d) (σ : ℂ)
+        (x : Matrix.unitaryGroup (Fin d × Fin d) ℂ),
+        let u₀ := Matrix.reindex (Equiv.prodCongr (finCongr hl) (finCongr hr))
+          (Equiv.refl _) u
+        let v₀ := Matrix.reindex (Equiv.refl _)
+          (Equiv.prodCongr (finCongr hr) (finCongr hl)) v
+        (σ = 1 ∨ σ = -1) ∧
+        staircaseMiddle (A := Fin d) (E := Fin d) v₀ * (u₀ ⊗ₖ u₀) =
+          σ • ((x : Matrix _ _ ℂ) ⊗ₖ (x : Matrix _ _ ℂ)ᴴ) *
+            (staircaseMiddle (A := Fin d) (E := Fin d) v₀)ᴴ := by
+  constructor
+  · exact S.exists_timeReversal_certificate hW
+  · rintro ⟨hr, hl, σ, x, hσ, hlocal⟩ N hN heven
+    have S₀ := S.reindexRanks (finCongr hl) (finCongr hr)
+    exact S₀.mpo_even_eq_adjoint_of_timeReversal_certificate hW σ hσ x hlocal N hN heven
 
 end TwoSiteStandardFormData
 

@@ -9888,9 +9888,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     dimensions equal $d$.
 \end{proof}
 
-\begin{lemma}[Forward time reversal for any supplied standard form in a canonical ambient tensor]
+\begin{lemma}[Local time reversal for any supplied standard form in a canonical ambient tensor]
     \label{lem:mpu_supplied_forward_local_time_reversal}
-    \lean{MPOTensor.TwoSiteStandardFormData.exists_timeReversal_certificate_of_square_ranks, MPOTensor.TwoSiteStandardFormData.exists_timeReversal_certificate}
+    \lean{MPOTensor.TwoSiteStandardFormData.exists_timeReversal_certificate_of_square_ranks, MPOTensor.TwoSiteStandardFormData.exists_timeReversal_certificate, MPOTensor.TwoSiteStandardFormData.mpo_even_eq_adjoint_of_timeReversal_certificate, MPOTensor.TwoSiteStandardFormData.even_timeReversal_iff_exists_certificate}
     \notready
     Let $W$ be explicitly in reduced canonical form II and let $u,v$
     be any supplied standard-form gates on pairs of $d$-dimensional sites.
@@ -9901,9 +9901,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         v_{23}(u\otimes u) & =\sigma(x\otimes x^\dagger)v_{23}^\dagger.
     \end{align}
-    No normalization of the supplied half factors is assumed.
-    The explicit ambient canonicality and even-length restrictions remain;
-    this is the corresponding restricted implication of
+    Conversely, these derived-rank and local-equation conditions imply
+    $W^{(N)}=W^{(N)\dagger}$ at every even $N>1$.
+    Thus the two conditions are equivalent. No normalization of the supplied
+    half factors is assumed. The explicit ambient canonicality and
+    even-length restrictions remain;
+    this is the corresponding restricted equivalence of
     \cite[lines~1201--1252]{Cirac2017MPU}, not the unrestricted source criterion.
 \end{lemma}
 
@@ -9921,6 +9924,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Multiply by $X^\dagger\otimes Y^\dagger$ to obtain the displayed equation
     with $x=X^\dagger zY$. All coordinate changes are the actual source-rank
     and physical-pair identifications, and no further blocking is used.
+    For the converse, the inverse comparison gives a normalized source
+    certificate with unitary $z=XxY^\dagger$. Its actual even-ring
+    contraction yields the asserted periodic adjoint symmetry.
 \end{proof}
 
 \begin{lemma}[Normalized physical-adjoint source factors]
@@ -10042,7 +10048,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
 \begin{lemma}[Forward adjoint certificate for actual normalized source factors]
     \label{lem:mpu_normalized_source_forward_adjoint_certificate}
-    \lean{MPOTensor.IsMPUCanonicalFormII.exists_supplied_source_adjoint_certificate}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_supplied_source_adjoint_certificate, Matrix.reindex_adjoint_certificate}
     \notready
     Let $W$ be simple and explicitly in reduced canonical form II, with
     $r(W)=\ell(W)=q$, where $q$ is its physical dimension.
@@ -10050,7 +10056,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     If $W^{(N)}=W^{(N)\dagger}$ for every even $N>1$, then, in these rank
     identifications, its gates obey
     $A=\sigma(x\otimes x^\dagger)B^\dagger$ for a unitary $x$ and
-    $\sigma\in\{1,-1\}$. This is the normalized-factor step of
+    $\sigma\in\{1,-1\}$. The equation is preserved under every common
+    coordinate relabeling of the two rank spaces and physical spaces.
+    This is the normalized-factor step of
     \cite[lines~1237--1252]{Cirac2017MPU} in the stated canonical scope.
 \end{lemma}
 

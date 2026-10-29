@@ -9730,3 +9730,20 @@ removed after the dependency audit exposed it.
   raw-factor comparison with `x=X†zY`.
 - **Notes:** This promotes an existing theorem at its owner; the canonical
   ambient presentation and exact even-length premise remain explicit.
+
+
+### Physical-pair relabeling of adjoint certificates — promoted (2026-10-29)
+
+- **Pattern:** Apply a matrix relabeling equivalence to a local sign equation,
+  commute it with multiplication, scalar action and adjunction, and transport
+  the two Kronecker factors along the physical-pair equivalence.
+- **Defined in:** `MPS/MPU/SourceFactorChoiceGates.lean`,
+  `Matrix.reindex_adjoint_certificate`.
+- **Refactored occurrences:** the chosen-source converse in
+  `TimeReversalLocalSufficiency.lean` and the actual arbitrary supplied-gate
+  converse in `SuppliedTimeReversalCriterion.lean` use the single proof.
+  The new module also shares its actual source-coordinate comparison between
+  both directions and reuses the same unitary transport in reverse.
+- **Notes:** The helper is a coordinate identity on actual matrices, with no
+  extra gate or factor predicate. Unitarity is required only by the actual
+  local-certificate transport, not by this identity.

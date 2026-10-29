@@ -77,5 +77,24 @@ No duplicate FT proof or compatibility alias is retained. This is the same
 proof body that hosted job123583866714 accepted under strict options at
 head160dc15b57cc5845495bd598f49e0a7894219afc; the new caller and transport
 proofs remain source-written and uncompiled. The ambient presentation and
-even-length restrictions are unchanged. The general converse and removal
-of the explicit ambient presentation are not asserted by this new module.
+even-length restrictions are unchanged. Removal of the explicit ambient
+presentation is not asserted by this new module.
+
+## Actual supplied-gate converse
+
+The same module now proves the converse and the full equivalence on this
+explicit ambient CFII/even-standard-form-length scope. For a supplied local
+certificate with x, inverse gate comparison gives the actual normalized
+source certificate with z=X*x*Y†. The existing normalized-source even-ring
+contraction theorem then proves the periodic adjoint equation. No adjoint
+standard-form supplier, extra physical closure equation or comparison
+witness is added as a premise. General intermediate ranks are transported
+only along the derived equalities r=ℓ=d.
+
+The two square-gate comparisons share a private source-coordinate proof.
+The repeated physical-pair adjoint-certificate transport is promoted as
+`Matrix.reindex_adjoint_certificate` at the existing gate-transport owner;
+the original chosen-source sufficiency proof and the new supplied-source
+converse both use it. This removes their duplicated coordinate proof. The
+new equivalence, transport and callers remain uncompiled pending hosted CI;
+the source nodes remain notready and #7020 remains open.
