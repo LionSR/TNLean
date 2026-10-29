@@ -23,7 +23,7 @@
     asserted.
 \end{definition}
 
-\begin{theorem}[Identification of the native checkerboard contraction]%
+\begin{lemma}[Identification of the native checkerboard contraction]%
     \label{thm:peps_kitaev_native_checkerboard_identification}
     \lean{TNLean.PEPS.graphOpenRegionNetwork_kitaevNativeCheckerboardSite,
         TNLean.PEPS.graphOpenRegionNetwork_kitaevNativeCheckerboardSite_apply}
@@ -44,7 +44,7 @@
     This is an equality of open coefficients, with every original
     boundary label retained. It asserts neither a native boundary CNOT
     operator nor a globally tiled blocking identity.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The four sites are distinct. Their internal edges are precisely the
@@ -55,5 +55,5 @@
     The sixteen native leg reads give the four tensor factors in the
     definition of $B$. Reindexing the finite sum and product therefore gives
     the asserted equality. The coefficient formula follows from
-    Theorem~\ref{thm:peps_kitaev_checkerboard_blocking}.
+    Lemma~\ref{thm:peps_kitaev_checkerboard_blocking}.
 \end{proof}

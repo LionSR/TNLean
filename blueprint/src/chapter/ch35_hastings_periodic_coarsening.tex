@@ -26,7 +26,7 @@ corrected deficiency and the additional closing window of
     these operators, with centred norm bound $K=4\ell J$.
 \end{definition}
 
-\begin{theorem}[Sharp regular grouping]
+\begin{lemma}[Sharp regular grouping]
     \label{thm:hastings_regular_periodic_grouping}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.card_periodicCoarseEdge_fibre,
         TNLean.MPS.AreaLaw.LocalSolution.finRotate_val_eq_succ_or_zero,
@@ -46,7 +46,7 @@ corrected deficiency and the additional closing window of
     Hermitian terms give Hermitian adjacent-pair operators, and
     $\sum_jA_j=\sum_iM_i$. The cyclic successor increases a natural
     block label by one, except that the last label returns to zero.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For a fixed within-block coordinate $s$, exactly one block gives
     assignment to $j$: it is $j$ in the first half, and $j-1$ in the
@@ -79,7 +79,7 @@ corrected deficiency and the additional closing window of
     assigned terms, and its hierarchy uses $K=8\ell J$.
 \end{definition}
 
-\begin{theorem}[Rounded cyclic supports and the number of terms]
+\begin{lemma}[Rounded cyclic supports and the number of terms]
     \label{thm:hastings_rounded_periodic_grouping}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicBlock_lt,
         TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicEdge_internal_centre,
@@ -103,7 +103,7 @@ corrected deficiency and the additional closing window of
     Each edge receives at most $4\ell$ terms. Consequently cyclic-local
     Hermitian terms give Hermitian pair operators supported on adjacent
     blocks, with $\sum_jA_j=\sum_iM_i$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Division with remainder gives the block count and the bounds on
     $M$. The first $N-1$ blocks have width $2\ell$; the last contains
@@ -118,7 +118,7 @@ corrected deficiency and the additional closing window of
     remaining centres of the last block together number at most $4\ell$.
 \end{proof}
 
-\begin{theorem}[Local estimates give linear pair estimates]
+\begin{lemma}[Local estimates give linear pair estimates]
     \label{thm:hastings_periodic_linear_pair_bounds}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_edgePartition_le_of_fibre_card,
         TNLean.MPS.AreaLaw.LocalSolution.residual_periodicCoarseOperator_le,
@@ -139,7 +139,7 @@ corrected deficiency and the additional closing window of
     In the regular grouping the respective constants are $4\ell J$
     and $2\ell\varepsilon$. More generally a sum over at most $B$ terms
     of norm at most $J$ has norm at most $BJ$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Sum the local residuals over the assigned centres. For the centred
     norm, use $|\langle\psi,A_j\psi\rangle|\le\|A_j\|$ and
@@ -147,7 +147,7 @@ corrected deficiency and the additional closing window of
     number of assigned centres.
 \end{proof}
 
-\begin{theorem}[Absorbing a linear truncation prefactor]
+\begin{lemma}[Absorbing a linear truncation prefactor]
     \label{thm:hastings_periodic_linear_truncation_error}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyTruncationError_mul_length_le_eighth_gap,
         TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_periodicHierarchyProjection_of_error}
@@ -161,7 +161,7 @@ corrected deficiency and the additional closing window of
     $K\le J_*r$ and any physical approximation error
     $\delta\le\Delta/8$ therefore suffice for the count of at most
     twice the physical ground-space dimension.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings05_explicit_projection_length,
         thm:hastings05_physical_gap_count}
@@ -171,7 +171,7 @@ corrected deficiency and the additional closing window of
     $2\delta\le\Delta/4$. The physical spectral gap then gives the count.
 \end{proof}
 
-\begin{theorem}[Explicit integer projection radius]
+\begin{lemma}[Explicit integer projection radius]
     \label{thm:hastings_periodic_chosen_radius}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyProjectionLength_roundedPeriodic_le,
         TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicProjectionRadius,
@@ -189,7 +189,7 @@ corrected deficiency and the additional closing window of
     For $N=\max\{1,\lfloor M/(2\ell)\rfloor\}$ and
     $h=\max\{2,\lceil\log_2N\rceil\}$, the actual hierarchy length
     $512h^2(1+\max\{0,\log((8J/\eta)/\Delta)\})$ is at most $r$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $N\le M$, the hierarchy depth is at most
     $\lceil\log_2M\rceil+2$. Thus its length is at most $A_M$.
@@ -198,7 +198,7 @@ corrected deficiency and the additional closing window of
     count determined by this same choice of $\ell$.
 \end{proof}
 
-\begin{theorem}[The hierarchy from periodic Gaussian-localization estimates]
+\begin{lemma}[The hierarchy from periodic Gaussian-localization estimates]
     \label{thm:hastings_periodic_physical_log_squared}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.exists_unit_mem_roundedPeriodicProjection,
         TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_roundedPeriodicProjection,
@@ -211,7 +211,7 @@ corrected deficiency and the additional closing window of
     Let $H=\sum_iH_i$ on a periodic chain of $M\ge1$ sites, with
     Hermitian $H_i$, spectral gap $\Delta>0$, and a unit ground vector
     $\psi$ of energy $E_0$. Let $J,\eta>0$ and choose $\ell,r$ as in
-    Theorem~\ref{thm:hastings_periodic_chosen_radius}.
+    Lemma~\ref{thm:hastings_periodic_chosen_radius}.
     Suppose Hermitian $M_i$ act in the cyclic radius-$\ell$ balls and satisfy
     \begin{align*}
         \|M_i\|                                  & \le J,       \\
@@ -229,7 +229,7 @@ corrected deficiency and the additional closing window of
     More generally, the same conclusions hold at any integer $\ell\ge1$
     with $r=\eta\ell$ satisfying the explicit length inequality for its
     own hierarchy depth.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_periodic_linear_pair_bounds,
         thm:hastings_periodic_linear_truncation_error,
@@ -243,7 +243,7 @@ corrected deficiency and the additional closing window of
     $2^h(8J/\eta)r e^{-r}\le\Delta/8$. Apply the physical-gap count.
 \end{proof}
 
-\begin{theorem}[The sharper constant for regular periodic blocks]
+\begin{lemma}[The sharper constant for regular periodic blocks]
     \label{thm:hastings_regular_periodic_log_squared}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.exists_unit_mem_periodicCoarseProjection,
         TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_periodicCoarseProjection,
@@ -257,7 +257,7 @@ corrected deficiency and the additional closing window of
     For the count, any comparison terms $G_i$ with sum $H$ and
     $\|G_i-M_i\|\le Je^{-r}$ suffice; in the physical application these
     are the full filtered terms.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_regular_periodic_grouping,
         thm:hastings_periodic_linear_pair_bounds,
@@ -266,7 +266,7 @@ corrected deficiency and the additional closing window of
     of $4\ell$. The remaining argument is unchanged.
 \end{proof}
 
-\begin{theorem}[The metric of the original physical cycle]
+\begin{lemma}[The metric of the original physical cycle]
     \label{thm:hastings_periodic_physical_metric}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicDistance_eq_valMinAbs,
         TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicDistance_triangle,
@@ -277,7 +277,7 @@ corrected deficiency and the additional closing window of
     $d(i,j)=\min\{|i-j|,M-|i-j|\}$ is the least absolute residue of
     $i-j$ modulo $M$. It is a metric, and every closed radius-$R$ ball
     has at most $2\lceil R\rceil+1$ sites.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The least absolute residue of a sum has absolute value no larger
     than the sum of the absolute values of the two representatives.
@@ -288,7 +288,7 @@ corrected deficiency and the additional closing window of
     elements.
 \end{proof}
 
-\begin{theorem}[The hierarchy from the original periodic Hamiltonian]
+\begin{lemma}[The hierarchy from the original periodic Hamiltonian]
     \label{thm:hastings_periodic_physical_hierarchy}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.physicalPeriodicProjectionRadius,
         TNLean.MPS.AreaLaw.LocalSolution.physicalPeriodicProjectionRadius_spec,
@@ -331,7 +331,7 @@ corrected deficiency and the additional closing window of
     $\ell<\lceil R\rceil+A_M/\eta+1$.
     No localization estimate, pair-norm estimate, length inequality,
     or gap of an approximating Hamiltonian is an additional premise.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_periodic_physical_metric,
         thm:hastings_periodic_physical_log_squared,
@@ -347,6 +347,6 @@ corrected deficiency and the additional closing window of
     The maximum with $\lceil R\rceil$ ensures $\ell\ge R$.
     Since the block count is at most $M$, enlarging the chosen radius
     preserves its sufficient length inequality. Apply
-    Theorem~\ref{thm:hastings_periodic_physical_log_squared} to these
+    Lemma~\ref{thm:hastings_periodic_physical_log_squared} to these
     constructed terms and the source's local residual condition.
 \end{proof}

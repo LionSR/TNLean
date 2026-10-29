@@ -17,7 +17,7 @@ implying polynomial growth of large metric balls.
     a simple graph $G_R$. Every site belongs to its own interaction ball.
 \end{definition}
 
-\begin{theorem}[Local metric data give graph interaction bounds]
+\begin{lemma}[Local metric data give graph interaction bounds]
     \label{thm:hastings05_metric_interaction_data}
     \lean{TNLean.Lattice.metricRangeGraph_edist_le_one,
         TNLean.Lattice.metricRangeGraph_edist_le_two,
@@ -31,7 +31,7 @@ implying polynomial growth of large metric balls.
     $S$, and every interaction ball has graph diameter at most two. If
     $\|h_i\|\le J$ with $J\ge0$, then
     $\sum_{i:\,x\in B_R(i)}\|h_i\|\le SJ$ at every site $x$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     A graph neighbour lies in the metric ball. Two sites in one interaction
     ball are joined through its centre by at most two graph edges.
@@ -39,7 +39,7 @@ implying polynomial growth of large metric balls.
     $x$ lie in $B_R(x)$. Sum their norm bounds.
 \end{proof}
 
-\begin{theorem}[Physical separation and intrinsic graph distance]
+\begin{lemma}[Physical separation and intrinsic graph distance]
     \label{thm:hastings05_metric_graph_separation}
     \lean{TNLean.Lattice.dist_le_range_mul_walkLength,
         TNLean.Lattice.dist_le_range_mul_graphDist,
@@ -54,7 +54,7 @@ implying polynomial growth of large metric balls.
     truncation $d(i,j)\le\ell-R$ has extended graph distance at least
     $\lceil(\ell-R)/R\rceil$ from $i$. At range zero, sites at positive
     physical distance lie in different graph components.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Sum the edge-length bounds along a shortest walk. Graph distance is an
     integer, giving the ceiling bound; disconnected sites have infinite
@@ -62,7 +62,7 @@ implying polynomial growth of large metric balls.
     physical distance zero.
 \end{proof}
 
-\begin{theorem}[The source's metric truncation preserves local support]
+\begin{lemma}[The source's metric truncation preserves local support]
     \label{thm:hastings05_metric_retained_support}
     \lean{TNLean.Lattice.metricRangeBall_retained_support,
         TNLean.Lattice.metricRangeBall_initial_support}
@@ -70,7 +70,7 @@ implying polynomial growth of large metric balls.
     \uses{def:hastings05_metric_interaction_graph}
     If $d(i,j)\le\ell-R$, then $B_R(j)\subseteq B_\ell(i)$.
     If $\ell\ge R$, then $B_R(i)\subseteq B_\ell(i)$ as well.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For $x\in B_R(j)$, the triangle inequality gives
     $d(i,x)\le d(i,j)+d(j,x)\le\ell-R+R=\ell$.

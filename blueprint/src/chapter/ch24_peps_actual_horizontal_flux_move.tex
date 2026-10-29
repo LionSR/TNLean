@@ -1,4 +1,4 @@
-\begin{theorem}[Vacancy in a horizontal two-plaquette block]
+\begin{lemma}[Vacancy in a horizontal two-plaquette block]
     \label{thm:peps_actual_horizontal_vacancy}
     \lean{TNLean.PEPS.regularWalkHolonomy_rightPlaquette_eq_one_iff_treeGauge,
         TNLean.PEPS.regularRegionTreeCycleResidual_middle_eq_one_iff_rightPlaquette,
@@ -7,12 +7,12 @@
     \uses{thm:peps_tree_gauge_transport}
     On a finite torus with periods $L_x\ge 4$ and $L_y\ge 3$, consider the translated $3\times 2$ block with its derived spanning path.
     As an auxiliary finite-torus criterion for SCP10 (Theorem~6.16, lines 2271--2305; see \cite{gap:rmp_peps_quantum_double_g_isometry} for the unrestricted braid), for any ordered bond assignment $u$ (including across both periodic seams), the right plaquette holonomy satisfies $H_R(u)=1$ if and only if the middle upward chord residual in the root-normalized tree gauge $k_u$ satisfies $\omega_{\mathrm{mid}}(u)=1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Since the other three edges of the right plaquette lie in the spanning path, Theorem~\ref{thm:peps_tree_gauge_transport} reduces $H_R(u)=1$ to $\omega_{\mathrm{mid}}(u)=1$, with directed traversal preserving the seam sorting convention.
+    Since the other three edges of the right plaquette lie in the spanning path, Lemma~\ref{thm:peps_tree_gauge_transport} reduces $H_R(u)=1$ to $\omega_{\mathrm{mid}}(u)=1$, with directed traversal preserving the seam sorting convention.
 \end{proof}
 
-\begin{theorem}[A fixed physical operation on arbitrary patch inputs]
+\begin{lemma}[A fixed physical operation on arbitrary patch inputs]
     \label{thm:peps_actual_horizontal_flux_operation}
     \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusActualHorizontalFluxMove,
         TNLean.PEPS.torusActualHorizontalFluxMove,
@@ -21,11 +21,11 @@
         TNLean.PEPS.torusActualHorizontalFluxMove_up_transport_of_vacancy}
     \leanok
     \uses{thm:peps_actual_cycle_physical_permutation,thm:peps_actual_horizontal_vacancy}
-    Assume regular $G$-isometric site tensors on the torus of Theorem~\ref{thm:peps_actual_horizontal_vacancy} (as an auxiliary operation in derived coordinates without asserting the complete braid \cite{gap:rmp_peps_quantum_double_g_isometry}).
+    Assume regular $G$-isometric site tensors on the torus of Lemma~\ref{thm:peps_actual_horizontal_vacancy} (as an auxiliary operation in derived coordinates without asserting the complete braid \cite{gap:rmp_peps_quantum_double_g_isometry}).
     For each translated $3\times 2$ block, there is a six-spin unitary $W$ (chosen before all bond assignments $u$ and boundary labels $\theta$) acting on $\Psi_R(u,\theta)$ and $\Psi(u)$ by updating the middle residual $\omega_{\mathrm{mid}}\mapsto \omega_{\mathrm{left}}\omega_{\mathrm{mid}}$ under $k_u$ while fixing all other ordered bonds $e\neq e_{\mathrm{mid}}$.
     If $H_R(u)=1$, the updated middle ordered coefficient is $k_{\mathrm{head}}\omega_{\mathrm{left}}k_{\mathrm{tail}}^{-1}$, and its directed upward bond element is $T L B^{-1}$ in terms of the original top-left rightward ($T$), left upward ($L$), and bottom-left rightward ($B$) directed bond elements.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Applying Theorem~\ref{thm:peps_actual_cycle_physical_permutation} to $(k_u,\omega_u)$ with controlled multiplication $(\omega_{\mathrm{left}},\omega_{\mathrm{mid}})\mapsto(\omega_{\mathrm{left}},\omega_{\mathrm{left}}\omega_{\mathrm{mid}})$ modifies only $e_{\mathrm{mid}}$.
-    When $H_R(u)=1$, Theorem~\ref{thm:peps_actual_horizontal_vacancy} gives $\omega_{\mathrm{mid}}=1$, and since the two upward chords share the same seam-sorting comparison, the adjacent tree gradients reduce $k_{\mathrm{head}}\omega_{\mathrm{left}}k_{\mathrm{tail}}^{-1}$ to $T L B^{-1}$.
+    Applying Lemma~\ref{thm:peps_actual_cycle_physical_permutation} to $(k_u,\omega_u)$ with controlled multiplication $(\omega_{\mathrm{left}},\omega_{\mathrm{mid}})\mapsto(\omega_{\mathrm{left}},\omega_{\mathrm{left}}\omega_{\mathrm{mid}})$ modifies only $e_{\mathrm{mid}}$.
+    When $H_R(u)=1$, Lemma~\ref{thm:peps_actual_horizontal_vacancy} gives $\omega_{\mathrm{mid}}=1$, and since the two upward chords share the same seam-sorting comparison, the adjacent tree gradients reduce $k_{\mathrm{head}}\omega_{\mathrm{left}}k_{\mathrm{tail}}^{-1}$ to $T L B^{-1}$.
 \end{proof}

@@ -8,7 +8,7 @@ arbitrary coefficient matrix satisfying the stated one-particle lower bound.
 The specific tree incidence estimate and its complete ground-space
 classification are discussed in \cite{gap:hastings05_tree_basis_counterexample}.
 
-\begin{theorem}[Positive quadratic lifting]
+\begin{lemma}[Positive quadratic lifting]
     \label{thm:hastings05_positive_quadratic_lift}
     \lean{TNLean.Lattice.TreeBasisCounterexample.quadraticLift,
         TNLean.Lattice.TreeBasisCounterexample.modeOperator,
@@ -33,14 +33,14 @@ classification are discussed in \cite{gap:hastings05_tree_basis_counterexample}.
         \quad\Longrightarrow\quad
         \mathcal L(A)\ge\delta\Bigl(\sum_vs_v^*s_v-B_w^*B_w\Bigr).
     \end{align*}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expand the matrix products and the finite sums. Every positive
     coefficient matrix has a factorization $D^*D$, and each lifted
     row contributes the positive operator $B_{D_k}^*B_{D_k}$.
 \end{proof}
 
-\begin{theorem}[Actual hard-core particle number]
+\begin{lemma}[Actual hard-core particle number]
     \label{thm:hastings05_hard_core_number}
     \lean{TNLean.Lattice.TreeBasisCounterexample.qubitLowering,
         TNLean.Lattice.TreeBasisCounterexample.qubitLowering_number,
@@ -64,7 +64,7 @@ classification are discussed in \cite{gap:hastings05_tree_basis_counterexample}.
     \begin{align*}
         \sum_v\|s_v\phi\|^2=m\|\phi\|^2.
     \end{align*}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For one qubit, $s^*s=\operatorname{diag}(0,1)$ is an orthogonal
     projection. The single-site embedding preserves products and adjoints,
@@ -73,7 +73,7 @@ classification are discussed in \cite{gap:hastings05_tree_basis_counterexample}.
     $\|s_v\|\le1$.
 \end{proof}
 
-\begin{theorem}[The multi-particle sector energy bound]
+\begin{lemma}[The multi-particle sector energy bound]
     \label{thm:hastings05_hard_core_sector_gap}
     \lean{TNLean.Lattice.TreeBasisCounterexample.norm_mode_apply_le,
         TNLean.Lattice.TreeBasisCounterexample.norm_mode_apply_sq_le,
@@ -97,7 +97,7 @@ classification are discussed in \cite{gap:hastings05_tree_basis_counterexample}.
     \end{align*}
     The assumed inequality is solely on the one-particle coefficient
     matrix; the multi-particle energy bound is derived.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Separate the site $r$ and apply Cauchy--Schwarz to the tail:
     \begin{align*}

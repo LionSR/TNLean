@@ -16,7 +16,7 @@ degenerate variance by interpreting the Gaussian tail bound as one.
 For a retained set of interactions $s$, put $H_s=\sum_{j\in s}h_j$ and
 $\tau_t^s(W)=e^{iH_st}We^{-iH_st}$.
 
-\begin{theorem}[Termwise commutator control of Gaussian truncation]
+\begin{lemma}[Termwise commutator control of Gaussian truncation]
     \label{thm:hastings05_termwise_gaussian_truncation}
     \lean{TNLean.Lattice.norm_gaussianFilteredTerm_sub_truncated_le_of_commutator_bounds}
     \leanok
@@ -29,7 +29,7 @@ $\tau_t^s(W)=e^{iH_st}We^{-iH_st}$.
         +2\|W\|e^{-(T\Delta)^2/(2q)}.
         \label{eq:hastings05_termwise_gaussian_truncation}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_truncated_evolution_comparison,
         thm:hastings_truncated_filter_comparison}
@@ -55,7 +55,7 @@ with $d_G(z,x)\le r$ for $x\in S$. Define
     \label{eq:hastings05_anchor_lr_constants}
 \end{align}
 
-\begin{theorem}[Propagation between anchored supports]
+\begin{lemma}[Propagation between anchored supports]
     \label{thm:hastings05_anchor_lr}
     \lean{TNLean.Lattice.norm_commutator_heisenbergEvolution_le_anchor_kernel}
     \leanok
@@ -66,7 +66,7 @@ with $d_G(z,x)\le r$ for $x\in S$. Define
          & \le A_\mu(S)\|W\|\|B\|e^{v_\mu|t|}k_\mu(z,b).
         \label{eq:hastings05_anchor_lr}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:qc_lr_finsets_numeric,
         thm:hastings05_observable_commutator_decay}
@@ -77,7 +77,7 @@ with $d_G(z,x)\le r$ for $x\in S$. Define
     shift $2r+1$. At infinite anchor distance, let $l$ tend to infinity.
 \end{proof}
 
-\begin{theorem}[Gaussian truncation with weighted omitted interactions]
+\begin{lemma}[Gaussian truncation with weighted omitted interactions]
     \label{thm:hastings05_weighted_gaussian_truncation}
     \lean{TNLean.Lattice.norm_gaussianFilteredTerm_sub_truncated_le_anchor_sum}
     \leanok
@@ -91,7 +91,7 @@ with $d_G(z,x)\le r$ for $x\in S$. Define
     \end{align}
     No cardinality bound is imposed on a region containing the retained
     interactions.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings05_anchor_lr,
         thm:hastings05_termwise_gaussian_truncation}
@@ -102,7 +102,7 @@ with $d_G(z,x)\le r$ for $x\in S$. Define
     (\ref{eq:hastings05_termwise_gaussian_truncation}).
 \end{proof}
 
-\begin{theorem}[A bounded-degree tail controls truncation]
+\begin{lemma}[A bounded-degree tail controls truncation]
     \label{thm:hastings05_degree_gaussian_truncation}
     \lean{TNLean.Lattice.norm_gaussianFilteredTerm_sub_truncated_le_degree_tail}
     \leanok
@@ -118,7 +118,7 @@ with $d_G(z,x)\le r$ for $x\in S$. Define
         +2\|W\|e^{-(T\Delta)^2/(2q)}.
         \label{eq:hastings05_degree_gaussian_truncation}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings05_weighted_gaussian_truncation,
         thm:hastings05_degree_weighted_tail}
@@ -140,13 +140,13 @@ operator by
     \label{eq:hastings05_metric_truncated_operator}
 \end{align}
 
-\begin{theorem}[Support and norm of the physical metric truncation]
+\begin{lemma}[Support and norm of the physical metric truncation]
     \label{thm:hastings05_metric_filter_properties}
     \lean{TNLean.Lattice.metric_truncated_filter_properties}
     \leanok
     If $\ell\ge R$, then $M_i(q,\Delta,\ell)$ is Hermitian, acts inside
     $B_\ell(i)$ and has norm at most $J$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings05_metric_retained_support,
         thm:hastings_truncated_support,thm:hastings_gaussian_filtered_spectral}
@@ -156,7 +156,7 @@ operator by
     contracts the operator norm.
 \end{proof}
 
-\begin{theorem}[Uniform metric truncation and leakage budget]
+\begin{lemma}[Uniform metric truncation and leakage budget]
     \label{thm:hastings05_metric_filter_budget}
     \lean{TNLean.Lattice.exists_metric_truncated_filter_budget}
     \leanok
@@ -181,7 +181,7 @@ operator by
         C      & =3+\frac{2A}{e\delta}.
         \label{eq:hastings05_metric_filter_constants}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings05_degree_gaussian_truncation,
         thm:hastings05_metric_interaction_data,
@@ -200,12 +200,12 @@ operator by
     $\|h_i\|C e^{-\delta\ell/2}$.
 \end{proof}
 
-\begin{theorem}[Exponential localization of actual truncated terms]
+\begin{lemma}[Exponential localization of actual truncated terms]
     \label{thm:hastings05_metric_facld}
     \lean{TNLean.Lattice.exists_metric_truncated_filter_localization}
     \leanok
     Under the metric assumptions of
-    Theorem~\ref{thm:hastings05_metric_filter_budget}, constants
+    Lemma~\ref{thm:hastings05_metric_filter_budget}, constants
     $c_1,\lambda>0$ and $C\ge0$, independent of the finite site set and
     Hamiltonian, give the following statements. Put $q=c_1\ell\Delta$
     and $M_i=M_i(q,\Delta,\ell)$ for $\ell\ge R$.
@@ -230,7 +230,7 @@ operator by
     \cite[lines 322--348]{Hastings2006Solving}. The printed minimum of
     decay lengths is read as a minimum of decay rates, as explained in
     \cite{gap:hastings05_truncated_dynamics}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings05_metric_filter_budget,
         thm:hastings05_metric_filter_properties,thm:hastings05_facld}
@@ -241,12 +241,12 @@ operator by
     $P_0\phi=\langle\Omega,\phi\rangle\Omega$.
 \end{proof}
 
-\begin{theorem}[The sum of the physical metric approximations]
+\begin{lemma}[The sum of the physical metric approximations]
     \label{thm:hastings05_metric_filter_sum}
     \lean{TNLean.Lattice.exists_metric_truncated_filter_sum_bound}
     \leanok
     Fix $R,S,J,\Delta$ as in
-    Theorem~\ref{thm:hastings05_metric_filter_budget}. Uniform constants
+    Lemma~\ref{thm:hastings05_metric_filter_budget}. Uniform constants
     $c_1,\lambda>0$ and $C\ge0$ give, for every admissible Hamiltonian and
     $\ell\ge R$,
     \begin{align}
@@ -254,7 +254,7 @@ operator by
          & \le|\Lambda|JC e^{-\lambda\ell}.
         \label{eq:hastings05_metric_filter_sum}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings05_metric_facld,thm:hastings05_sum_approximation}
     The full filtered terms sum to $H$. The finite-sum triangle
@@ -262,7 +262,7 @@ operator by
     (\ref{eq:hastings05_metric_filter_error}).
 \end{proof}
 
-\begin{theorem}[Low-energy decay without a growth assumption]
+\begin{lemma}[Low-energy decay without a growth assumption]
     \label{thm:hastings05_growth_free_blecm_separation}
     \lean{TNLean.Lattice.norm_groundCompression_commutator_le_graphSeparation,
         TNLean.Lattice.norm_groundCompression_commutator_le_metricSeparation}
@@ -290,7 +290,7 @@ operator by
     (\ref{eq:hastings05_growth_free_blecm_graph}) holds with
     $e^{-\gamma m}$ replaced by $e^{-\lambda l}$.
     No sphere or volume growth hypothesis is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings05_low_energy_commutator}
     Use the numerical finite-support propagation estimate on the time
@@ -302,7 +302,7 @@ operator by
     separation at least $\lceil l/R\rceil$.
 \end{proof}
 
-\begin{theorem}[The source's low-energy commutator for the actual truncated terms]
+\begin{lemma}[The source's low-energy commutator for the actual truncated terms]
     \label{thm:hastings05_growth_free_metric_blecm}
     \lean{TNLean.Lattice.norm_groundCompression_commutator_le_metricBalls,
         TNLean.Lattice.norm_groundCompression_metric_truncated_commutator_le}
@@ -325,13 +325,13 @@ operator by
     The explicit cardinality is the support factor of
     \cite[eqs.~(lc), (blecm), lines 1548--1601]{Hastings2006Solving}; it is
     retained when no uniform bound on the physical ball volume is available.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings05_growth_free_blecm_separation,
         thm:hastings05_metric_filter_properties}
     Physical support separation is at least $d(i,j)-2\rho$.
     Interchange $W,B$ in
-    Theorem~\ref{thm:hastings05_growth_free_blecm_separation} so that the
+    Lemma~\ref{thm:hastings05_growth_free_blecm_separation} so that the
     prefactor uses the second observable's support, and factor
     $e^{-\lambda(d(i,j)-2\rho)}=e^{2\lambda\rho}e^{-\lambda d(i,j)}$.
     The actual truncated terms have the stated support and norm at most $J$.

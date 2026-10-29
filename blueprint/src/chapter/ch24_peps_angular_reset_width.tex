@@ -40,14 +40,14 @@ allow arbitrary fixed real values.
     $L_{\rm w}(K,C_3,c,D')\le L_{\rm w}(K,C_3,c,D)$.
 \end{definition}
 
-\begin{theorem}[Sublinear polylogarithmic width, with an explicit scale]
+\begin{lemma}[Sublinear polylogarithmic width, with an explicit scale]
     \label{thm:peps_reset_polylog_width_explicit}
     \lean{TNLean.PEPS.Approximation.reset_scale_polylog_le_of_resetPolylogScale_le}
     \leanok
     \uses{def:peps_angular_reset_width_constants}
     Let $K,C_3\in\mathbb R$ and $c>0$. For every $s\ge S(K,C_3,c)$, the bound
     (\ref{eq:peps_reset_polylog_width}) holds.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_angular_reset_width_constants}
@@ -57,7 +57,7 @@ allow arbitrary fixed real values.
     $C_3\le\max\{C_3,0\}$.
 \end{proof}
 
-\begin{theorem}[Sublinear polylogarithmic width]
+\begin{lemma}[Sublinear polylogarithmic width]
     \label{thm:peps_reset_polylog_width}
     \lean{TNLean.PEPS.Approximation.exists_reset_scale_polylog_le}
     \leanok
@@ -66,15 +66,15 @@ allow arbitrary fixed real values.
         C_3(1+\log s)^K\le \frac c2s.
         \label{eq:peps_reset_polylog_width}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_reset_polylog_width_explicit,def:peps_angular_reset_width_constants}
     Take $S=S(K,C_3,c)\ge1$ in
-    Theorem~\ref{thm:peps_reset_polylog_width_explicit}.
+    Lemma~\ref{thm:peps_reset_polylog_width_explicit}.
 \end{proof}
 
-\begin{theorem}[Uniform width at every scale, with an explicit threshold]
+\begin{lemma}[Uniform width at every scale, with an explicit threshold]
     \label{thm:peps_angular_reset_uniform_width_explicit}
     \lean{TNLean.PEPS.Approximation.angular_reset_width_bound_of_threshold_le}
     \leanok
@@ -85,13 +85,13 @@ allow arbitrary fixed real values.
         B(L,s)\le\frac{3c}{4}s<cs.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_reset_polylog_width_explicit,def:peps_angular_reset_width_constants}
     Set $T=\max\{S(K,C_3,c),e^{\max(K,1)}\}$. Since $L\ge e^{T/D}$ and $L\ge2$,
     $D\log L\ge T$, so every $s\ge D\log L$ satisfies $s\ge S(K,C_3,c)$ and,
-    by Theorem~\ref{thm:peps_reset_polylog_width_explicit}, its
+    by Lemma~\ref{thm:peps_reset_polylog_width_explicit}, its
     polylogarithmic term is at most $cs/2$.
     The assumption $D\ge 4C_4/c$ and $\log L\ge0$ give
     $C_4\log L\le(c/4)D\log L\le cs/4$.
@@ -99,7 +99,7 @@ allow arbitrary fixed real values.
     $c>0$ and $s\ge1$.
 \end{proof}
 
-\begin{theorem}[Uniform width at every scale]
+\begin{lemma}[Uniform width at every scale]
     \label{thm:peps_angular_reset_uniform_width}
     \lean{
         TNLean.PEPS.Approximation.exists_angular_reset_width_bound_of_slope,
@@ -116,13 +116,13 @@ allow arbitrary fixed real values.
     In particular one can choose $D=\max\{1,4C_4/c\}$ before choosing
     $L_0$. Once the coefficients and exponent are fixed, both choices are independent
     of $L$ and $s$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_angular_reset_uniform_width_explicit,
         def:peps_angular_reset_width_constants}
     Take $L_0=L_{\rm w}(K,C_3,c,D)\ge2$ in
-    Theorem~\ref{thm:peps_angular_reset_uniform_width_explicit}; for the second
+    Lemma~\ref{thm:peps_angular_reset_uniform_width_explicit}; for the second
     statement take $D=\max\{1,4C_4/c\}$.
 \end{proof}
 
@@ -137,7 +137,7 @@ allow arbitrary fixed real values.
 \begin{proof}
     \leanok
     \uses{thm:peps_angular_reset_uniform_width_explicit}
-    Theorem~\ref{thm:peps_angular_reset_uniform_width_explicit} gives
+    Lemma~\ref{thm:peps_angular_reset_uniform_width_explicit} gives
     $w\le B(L,s)\le\frac{3c}{4}s<cs$.
 \end{proof}
 

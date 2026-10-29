@@ -1796,3 +1796,9 @@ and [#9847](https://github.com/LionSR/TNLean/issues/9847).
   corollary is formalized with the number of sampled words explicit in `C^m`,
   and `C^m ≤ n (1/η)^{ε₀/ε}` at the logarithmic power, which is polynomial
   when `ε₀/ε` is bounded.
+- [`lvv13_error_reduction_witness_norm.tex`](lvv13_error_reduction_witness_norm.tex)
+  (local correction, resolved) records that the step from `A v` to `K v` in the
+  proof of Claim `c:errorreduction` (arXiv:1307.5143v1, line 589) needs a lower
+  bound on `‖A v‖`; a two-dimensional example disproves it without one. The
+  source's `A` is Hermitian and fixes `Γ`, so `‖A v‖ ≥ 1/2`, and the new error is
+  `δ + 4 ‖K - A‖` in place of `2 δ`, a constant absorbed by the choice of `q(n)`.

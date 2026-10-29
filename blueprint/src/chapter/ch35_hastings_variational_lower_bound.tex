@@ -12,20 +12,20 @@ with $H$, because these commutators add up to zero over the translates. Write
 $\operatorname{ad}_H(X)=HX-XH$, and $\lambda_{\min}(K)$ for the lowest eigenvalue
 of a Hermitian $K$, the largest $\lambda$ with $K-\lambda\ge0$.
 
-\begin{theorem}[Iterated commutators of Hermitian operators]
+\begin{lemma}[Iterated commutators of Hermitian operators]
     \label{thm:hastings_commutator_iter_hermitian}
     \lean{Matrix.isHermitian_smul_commutatorIter,
         Matrix.conjTranspose_commutatorIter, Matrix.commutatorIter}
     \leanok
     For Hermitian $H$ and $A$, a real number $a$ and $k\ge0$, the operator
     $a\,i^k\operatorname{ad}_H^k(A)$ is Hermitian.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By induction, $(\operatorname{ad}_H^kA)^\dagger=(-1)^k\operatorname{ad}_H^k(A)$,
     and $\overline{i^k}(-1)^k=i^k$.
 \end{proof}
 
-\begin{theorem}[The variational lower bound for unitary conjugates]
+\begin{lemma}[The variational lower bound for unitary conjugates]
     \label{thm:hastings_variational_lower_bound}
     \lean{Matrix.card_mul_le_of_mulVec_eq_smul_of_conj,
         Matrix.card_mul_sInf_spectrum_le_of_conj,
@@ -43,8 +43,8 @@ of a Hermitian $K$, the largest $\lambda$ with $K-\lambda\ge0$.
     of $H$, and so its ground energy $E_0$, is at least $N\lambda$. This
     generalizes equation (varnum) of \cite{Hastings2006Solving}, whose terms are
     the translates of one term; the source's form is
-    Theorem~\ref{thm:hastings_variational_lower_bound_sites}.
-\end{theorem}
+    Lemma~\ref{thm:hastings_variational_lower_bound_sites}.
+\end{lemma}
 \begin{proof}\leanok
     Conjugation by a unitary $U$ that commutes with $H$ commutes with
     $\operatorname{ad}_H$, so
@@ -55,7 +55,7 @@ of a Hermitian $K$, the largest $\lambda$ with $K-\lambda\ge0$.
     $0\le\langle\Omega,(H-N\lambda)\Omega\rangle=(E-N\lambda)\|\Omega\|^2$.
 \end{proof}
 
-\begin{theorem}[The variational lower bound]
+\begin{lemma}[The variational lower bound]
     \label{thm:hastings_variational_lower_bound_sites}
     \lean{Matrix.card_mul_le_of_mulVec_eq_smul_of_sitePerm,
         Matrix.card_mul_sInf_spectrum_le_of_sitePerm}
@@ -66,7 +66,7 @@ of a Hermitian $K$, the largest $\lambda$ with $K-\lambda\ge0$.
     automorphisms of a finite graph, and let $P_g$ be the unitary that moves the
     configurations of the sites along $g$. For the sum
     $H=\sum_{g\in G}P_gH_0P_g^\dagger$ of the translates of one term $H_0$, and
-    $K$ as in Theorem~\ref{thm:hastings_variational_lower_bound}, every
+    $K$ as in Lemma~\ref{thm:hastings_variational_lower_bound}, every
     eigenvalue of $H$ is at least $|G|\lambda$ whenever $K-\lambda\ge0$. For
     Hermitian $H_0$, with $\lambda=\lambda_{\min}(K)$ and $N=|G|$,
     \begin{align}
@@ -79,12 +79,12 @@ of a Hermitian $K$, the largest $\lambda$ with $K-\lambda\ge0$.
     856--877, for translation-invariant $H=\sum_iH_i$; there the terms are
     written with $[H_i,H]=-\operatorname{ad}_H(H_i)$, which only changes the
     signs of the arbitrary constants.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{def:hastings_site_permutation}
     The map $g\mapsto P_g$ is multiplicative, so conjugation by $P_h$ permutes
     the translates and fixes $H$, and each $P_h$ is a unitary commuting with $H$.
-    Theorem~\ref{thm:hastings_variational_lower_bound} applies. For Hermitian
+    Lemma~\ref{thm:hastings_variational_lower_bound} applies. For Hermitian
     $K$, its real spectrum is finite, and every spectral value is at least
     its infimum. The spectral theorem therefore gives
     $K-\lambda_{\min}(K)\ge0$, yielding the stated specialization.
@@ -99,7 +99,7 @@ power requires correction, and $i^k$ already supplies the alternating sign
 identity is proved in QICLean; the finite-polynomial theorem above allows
 arbitrary real coefficients.
 
-\begin{theorem}[The Gaussian-filtered variational lower bound]
+\begin{lemma}[The Gaussian-filtered variational lower bound]
     \label{thm:hastings_gaussian_variational_lower_bound}
     \lean{TNLean.Lattice.sum_conj_gaussianFilteredTerm,
         TNLean.Lattice.card_mul_sInf_spectrum_gaussianFilteredTerm_le_of_conj,
@@ -115,13 +115,13 @@ arbitrary real coefficients.
     $N$ is the number of sites, so $E_0/N\ge\lambda_{\min}(K)$.
     This is the filtered choice discussed in \cite{Hastings2006Solving},
     source lines 1005--1009, in the variational bound (varnum).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_variational_lower_bound, thm:hastings_gaussian_filtered_spectral,
         thm:hastings_filtered_term_translate}
     Covariance of the Gaussian average gives
     $U_iKU_i^\dagger=\widetilde{U_iH_0U_i^\dagger}$, because $U_i$ fixes $H$.
     The filtered terms sum to $H$. Apply
-    Theorem~\ref{thm:hastings_variational_lower_bound} with local term $K$
+    Lemma~\ref{thm:hastings_variational_lower_bound} with local term $K$
     and all commutator coefficients zero.
 \end{proof}

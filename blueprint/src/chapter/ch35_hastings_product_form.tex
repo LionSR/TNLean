@@ -48,7 +48,7 @@ at each site after $n$ Trotter steps.
     $l$ has every larger range.
 \end{definition}
 
-\begin{theorem}[Operators supported near a specified centre]
+\begin{lemma}[Operators supported near a specified centre]
     \label{thm:hastings_product_form_supported_radius}
     \lean{TNLean.Lattice.hasProductForm_of_mem_supportedOperators_radius}
     \leanok
@@ -60,7 +60,7 @@ at each site after $n$ Trotter steps.
     The centre need not belong to $X$, and $X$ may be empty.
     This is the supported-factor expansion
     in~\cite[lines 1053--1061]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Take $\mathcal A=\{1,\dots,q\}^2$ and let the single-site operators be
     the matrix units $|a_j\rangle\langle b_j|$. Attach to $i_0$ the matrix
@@ -74,7 +74,7 @@ at each site after $n$ Trotter steps.
     Thus~(\ref{eq:hastings_mpf}) holds entry by entry.
 \end{proof}
 
-\begin{theorem}[Operators supported on a small set]
+\begin{lemma}[Operators supported on a small set]
     \label{thm:hastings_product_form_supported}
     \lean{TNLean.Lattice.hasProductForm_of_mem_supportedOperators}
     \leanok
@@ -83,13 +83,13 @@ at each site after $n$ Trotter steps.
     $X\subseteq\Lambda$ be nonempty with $y\in N_x$ for all $x,y\in X$.
     Every operator supported on $X$ has a matrix product form with these
     coefficient neighborhoods.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Pick $i_0\in X$ and apply
-    Theorem~\ref{thm:hastings_product_form_supported_radius}.
+    Lemma~\ref{thm:hastings_product_form_supported_radius}.
 \end{proof}
 
-\begin{theorem}[Products of matrix product forms]
+\begin{lemma}[Products of matrix product forms]
     \label{thm:hastings_product_form_mul}
     \lean{
         TNLean.Lattice.HasProductForm.mul,
@@ -101,7 +101,7 @@ at each site after $n$ Trotter steps.
     \uses{def:hastings_product_form}
     Operators with matrix product forms of range $l$ contain $1$ and are closed
     under multiplication, finite ordered products, and powers.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     For forms over $\mathcal A$ and $\mathcal B$, take index set
     $\mathcal A\times\mathcal B$, site operators $\rho_j(a)\sigma_j(b)$, and
@@ -109,7 +109,7 @@ at each site after $n$ Trotter steps.
     \cite[lines 1068--1077]{Hastings2006Solving}.
 \end{proof}
 
-\begin{theorem}[Trotter products with prescribed centres]
+\begin{lemma}[Trotter products with prescribed centres]
     \label{thm:hastings_trotter_product_form_radius}
     \lean{TNLean.Lattice.hasProductForm_trotterProduct_of_radius,
         TNLean.Lattice.hasProductForm_trotterProduct_of_dist_le}
@@ -127,14 +127,14 @@ at each site after $n$ Trotter steps.
     zero-step product is the identity, the conclusion also holds for $n=0$.
     This proves the radius-based construction of~\cite[lines
         1053--1077]{Hastings2006Solving} on every finite metric lattice.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Each $\exp(-\tfrac\beta nH_{i_k})$ is supported on $X_{i_k}$; apply
-    Theorems~\ref{thm:hastings_product_form_supported_radius}
+    Lemmas~\ref{thm:hastings_product_form_supported_radius}
     and~\ref{thm:hastings_product_form_mul}.
 \end{proof}
 
-\begin{theorem}[Local index counts of Trotter products]
+\begin{lemma}[Local index counts of Trotter products]
     \label{thm:hastings_trotter_index_count}
     \lean{TNLean.Lattice.ProductForm.ofSupported,
         TNLean.Lattice.ProductForm.card_index_ofSupported,
@@ -162,7 +162,7 @@ at each site after $n$ Trotter steps.
     At $n=0$ every index set has one element. This is the count of at most
     $nS$ components with $q^2$ values each asserted in
     \cite[lines 1068--1075]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expand a factor only in matrix units at its supporting sites, and use a
     one-element index set elsewhere. The matrix-element coefficient is
@@ -175,7 +175,7 @@ at each site after $n$ Trotter steps.
     times, which gives $(q^2)^{na_j}\le(q^2)^{nS}$.
 \end{proof}
 
-\begin{theorem}[Trotter products have a matrix product form]
+\begin{lemma}[Trotter products have a matrix product form]
     \label{thm:hastings_trotter_product_form}
     \lean{
         TNLean.Lattice.LocalHamiltonian.hasProductForm_trotterProduct,
@@ -199,13 +199,13 @@ at each site after $n$ Trotter steps.
     \end{align}
     has a matrix product form of range $R$
     \cite[lines 1048--1077]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Combine Theorems~\ref{thm:hastings_product_form_supported}
+    Combine Lemmas~\ref{thm:hastings_product_form_supported}
     and~\ref{thm:hastings_product_form_mul}.
 \end{proof}
 
-\begin{theorem}[The truncated operator in matrix product form]
+\begin{lemma}[The truncated operator in matrix product form]
     \label{thm:hastings_truncated_product_form}
     \lean{TNLean.Lattice.ClusterExpansion.IsLargeSupport,
         TNLean.Lattice.ClusterExpansion.noncommProd_apply_of_pairwiseDisjoint,
@@ -227,13 +227,13 @@ at each site after $n$ Trotter steps.
     form of range $l$. This is the matrix product form at high temperature
     of~\cite[lines 1256--1279]{Hastings2006Solving}, on every finite metric
     lattice. The local index count is given below.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:hastings_truncation_cluster_products,
         thm:hastings_cluster_operator_support,
         thm:hastings_product_form_supported_radius, thm:hastings_product_form_mul}
-    By Theorems~\ref{thm:hastings_truncation_cluster_products}
+    By Lemmas~\ref{thm:hastings_truncation_cluster_products}
     and~\ref{thm:hastings_cluster_operator_support},
     $\rho(\beta,l)=\sum_A\prod_{C\in\mathrm{clusters}(A)}E_C$, where empty-support
     terms factor out as a scalar multiple of $1$ and each remaining cluster $C$
@@ -241,10 +241,10 @@ at each site after $n$ Trotter steps.
     pairwise disjoint $S_C$. Indexing each site by its containing cluster (if
     any) and matrix-unit labels $(a_j,b_j)$ expresses $\sum_A\prod_CE_C$ in the
     form (\ref{eq:hastings_mpf}) of range $l$; conclude by
-    Theorem~\ref{thm:hastings_product_form_mul}.
+    Lemma~\ref{thm:hastings_product_form_mul}.
 \end{proof}
 
-\begin{theorem}[Local index ranges of the truncated operator]
+\begin{lemma}[Local index ranges of the truncated operator]
     \label{thm:hastings_truncated_index_count}
     \lean{TNLean.Lattice.ProductForm.restrict,
         TNLean.Lattice.ProductForm.card_index_restrict,
@@ -284,7 +284,7 @@ at each site after $n$ Trotter steps.
     exponential dimensional estimates
     \cite[lines 1273--1275 and 1318--1320]{Hastings2006Solving}; a metric
     alone does not imply such growth\cite{gap:hastings05_planar_domain_scope}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Delete index values that record a cluster not containing their site;
     its coefficient is zero at that site. A retained cluster containing $i$
@@ -310,7 +310,7 @@ at each site after $n$ Trotter steps.
     domain that dominates coordinate maximum distance, including its
     intrinsic walk metric. More generally, it transfers through any
     injective coordinate map that does not increase distances.
-    Thus Theorem~\ref{thm:hastings_truncated_index_count} applies with
+    Thus Lemma~\ref{thm:hastings_truncated_index_count} applies with
     $C=2^D$ on these lattices.
 \end{lemma}
 \begin{proof}\leanok

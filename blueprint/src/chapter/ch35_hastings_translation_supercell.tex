@@ -23,7 +23,7 @@ invariant, $P$ is the orthogonal projection onto the eigenspace of $H$ for an
 energy $E_0$, and $S\le G$ is a subgroup with $P_gv=v$ for every $g\in S$ and
 every $v$ in this eigenspace.
 
-\begin{theorem}[Compression of a conjugate]
+\begin{lemma}[Compression of a conjugate]
     \label{thm:hastings_supercell_compression}
     \lean{Submodule.starProjection_mul_conj_mul_starProjection,
         Matrix.sitePermMatrix_inv,
@@ -34,14 +34,14 @@ every $v$ in this eigenspace.
     space, and let $U^\dagger$ fix every vector of $K$. Then
     $Q(UWU^\dagger)Q=QWQ$ for every operator $W$. In particular
     $P(P_gWP_g^\dagger)P=PWP$ for every $g\in S$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     $U^\dagger Q=Q$, and taking adjoints $QU=Q$; so
     $QUWU^\dagger Q=QWQ$. For $g\in S$ take $U=P_g$: then
     $U^\dagger=P_{g^{-1}}$ and $g^{-1}\in S$.
 \end{proof}
 
-\begin{theorem}[Low-energy commutators across a supercell translation]
+\begin{lemma}[Low-energy commutators across a supercell translation]
     \label{thm:hastings_supercell_commutator}
     \lean{TNLean.Lattice.groundCompression_commutator_eq_of_mem_supercell,
         TNLean.Lattice.norm_groundCompression_commutator_le_of_mem_supercell}
@@ -56,7 +56,7 @@ every $v$ in this eigenspace.
     \end{align}
     Consequently, if $B(i,j)$ bounds $\|[PM_iP,PM_jP]\|$ for all $i$ and $j$,
     then $B(i,g\cdot j)$ bounds it too, for every $g\in S$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_supercell_compression,thm:hastings_filtered_term_translate}
     Since $H$ is invariant, $M_{g\cdot j}=P_gM_jP_g^\dagger$, and its
@@ -66,7 +66,7 @@ every $v$ in this eigenspace.
 With the bound of the low-energy commutator of separated operators on a finite
 graph, this gives the decay across supercell translations.
 
-\begin{theorem}[Decay across a supercell translation]
+\begin{lemma}[Decay across a supercell translation]
     \label{thm:hastings_supercell_decay}
     \lean{TNLean.Lattice.norm_groundCompression_commutator_le_of_supercell_separation}
     \leanok
@@ -77,15 +77,15 @@ graph, this gives the decay across supercell translations.
     every eigenvalue of $H=\sum_kh_k$ equal $E_0$ or be at least $E_0+\Delta E$.
     If $g\in S$ and $X_{g\cdot j}$ is disjoint from the sites within distance $l$
     of $X_i$, then $\|[PM_iP,PM_jP]\|$ is at most the bound of
-    Theorem~\ref{thm:hastings05_blecm} for the pair $h_i$, $h_{g\cdot j}$ at
+    Lemma~\ref{thm:hastings05_blecm} for the pair $h_i$, $h_{g\cdot j}$ at
     separation $l$, which decays exponentially in $l$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_supercell_compression,thm:hastings05_low_energy_commutator,
         thm:hastings05_blecm}
     The compression of $M_k$ is that of $h_k$, and the compression of
     $h_{g\cdot j}=P_gh_jP_g^\dagger$ is that of $h_j$ by
-    Theorem~\ref{thm:hastings_supercell_compression}. Apply the bound for
+    Lemma~\ref{thm:hastings_supercell_compression}. Apply the bound for
     separated operators to $h_i$ and $h_{g\cdot j}$.
 \end{proof}
 
@@ -105,14 +105,14 @@ by the momenta of the ground states.
     $\chi(\vec x)=e^{i\vec x\cdot\vec k_a}$.
 \end{definition}
 
-\begin{theorem}[The momentum sectors span the ground space]
+\begin{lemma}[The momentum sectors span the ground space]
     \label{thm:hastings_momentum_sectors_span}
     \lean{TNLean.Lattice.iSup_momentumSector}
     \leanok
     \uses{def:hastings_momentum_sector,def:hastings_site_invariant}
     Let $G$ be abelian and $H$ invariant. Then the eigenspace of $H$ for $E_0$ is
     the sum of the momentum sectors of the characters of $G$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $H$ is invariant, each $P_g$ maps the eigenspace into itself. A
     permutation has finite order, so $P_g^N=1$ for some $N\ge1$, and since
@@ -134,7 +134,7 @@ by the momenta of the ground states.
     characters of $G$ whose momentum sector is nonzero, a subgroup of $G$.
 \end{definition}
 
-\begin{theorem}[The supercell fixes the ground space]
+\begin{lemma}[The supercell fixes the ground space]
     \label{thm:hastings_supercell_of_momenta}
     \lean{TNLean.Lattice.mem_supercell_iff,
         TNLean.Lattice.sitePermMatrix_mulVec_eq_of_mem_supercell}
@@ -145,12 +145,12 @@ by the momenta of the ground states.
     supercell is a subgroup $S$ with the property assumed above, the
     translations by whole supercells of
     \cite[lines 1626--1630]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_momentum_sectors_span}
     If $g$ lies in the supercell, then $P_g$ fixes every vector of each nonzero
     momentum sector, hence of their sum, which is the eigenspace by
-    Theorem~\ref{thm:hastings_momentum_sectors_span}. Conversely, if $P_g$ fixes
+    Lemma~\ref{thm:hastings_momentum_sectors_span}. Conversely, if $P_g$ fixes
     the eigenspace and $v\ne0$ lies in the sector of $\chi$, then
     $\chi(g)v=P_gv=v$, so $\chi(g)=1$.
 \end{proof}
@@ -160,14 +160,14 @@ $q$ independent of the system size \cite[lines 1620--1625]{Hastings2006Solving}.
 With $N$ the least common multiple of the denominators, a character with a
 nonzero momentum sector satisfies $\chi(g)^N=1$.
 
-\begin{theorem}[Momenta of bounded denominator]
+\begin{lemma}[Momenta of bounded denominator]
     \label{thm:hastings_supercell_pow}
     \lean{TNLean.Lattice.pow_mem_supercell}
     \leanok
     \uses{def:hastings_supercell_of_momenta}
     If $\chi(g)^N=1$ for every $g\in G$ and every character $\chi$ with a nonzero
     momentum sector, then $g^N$ lies in the supercell for every $g\in G$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     $\chi(g^N)=\chi(g)^N=1$ for each such $\chi$.
 \end{proof}
@@ -183,33 +183,33 @@ Fix an integer $r\ge1$ and suppose every edge of the graph joins sites $u$, $v$
 with $|\pi(v)-\pi(u)|_n\le r$. On the ring of $n$ sites with its rotations, $\pi$ is
 the residue of the site.
 
-\begin{theorem}[Distance and cell coordinates]
+\begin{lemma}[Distance and cell coordinates]
     \label{thm:hastings_cell_distance_le}
     \lean{SimpleGraph.natAbs_valMinAbs_sub_le_edist}
     \leanok
     Writing $d(x,y)$ for graph distance,
     $|\pi(y)-\pi(x)|_n\le r\,d(x,y)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Along an edge the circular distance to $\pi(x)$ changes by at most $r$,
     so a walk of length $m$ gives displacement at most $rm$. Take a shortest
     walk; for disconnected vertices the graph distance is infinite.
 \end{proof}
 
-\begin{theorem}[Multiples of $N$ reach far]
+\begin{lemma}[Multiples of $N$ reach far]
     \label{thm:hastings_multiples_reach_far}
     \lean{TNLean.Lattice.exists_lt_natAbs_valMinAbs_add}
     \leanok
     For $N\ge1$ and $a,b\in\mathbb{Z}/n$ there is $t\ge0$ such that $b+Nt-a$
     has circular distance more than $\lfloor n/2\rfloor-N$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The residues $b+Nt-a$ for $t\ge0$ meet every arc of $N$ consecutive
     residues. Choose $t$ with $b+Nt-a$ among the $N$ residues ending at
     $\lfloor n/2\rfloor$.
 \end{proof}
 
-\begin{theorem}[A supercell translation carries a site far away]
+\begin{lemma}[A supercell translation carries a site far away]
     \label{thm:hastings_supercell_far}
     \lean{TNLean.Lattice.exists_mem_supercell_lt_edist_add,
         TNLean.Lattice.exists_mem_supercell_lt_edist,
@@ -228,15 +228,15 @@ the residue of the site.
     denominators of the momenta, this is the supercell
     of \cite[lines 1620--1630]{Hastings2006Solving} and the choice of
     $\vec x'$ in lines 1634--1641.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Take $t$ from Theorem~\ref{thm:hastings_multiples_reach_far} for $a=\pi(x)$ and
+    Take $t$ from Lemma~\ref{thm:hastings_multiples_reach_far} for $a=\pi(x)$ and
     $b=\pi(y)$, and $g=(e^t)^N$, which lies in the supercell by
-    Theorem~\ref{thm:hastings_supercell_pow}. Then $\pi(g\cdot y)=\pi(y)+Nt$, and
-    Theorem~\ref{thm:hastings_cell_distance_le} bounds the distance.
+    Lemma~\ref{thm:hastings_supercell_pow}. Then $\pi(g\cdot y)=\pi(y)+Nt$, and
+    Lemma~\ref{thm:hastings_cell_distance_le} bounds the distance.
 \end{proof}
 
-\begin{theorem}[Low-energy commutators of a translation-invariant lattice]
+\begin{lemma}[Low-energy commutators of a translation-invariant lattice]
     \label{thm:hastings_supercell_commutator_small}
     \lean{TNLean.Lattice.norm_groundCompression_commutator_le_of_momenta,
         Matrix.norm_sitePermMatrix_mul_mul_conjTranspose}
@@ -250,29 +250,29 @@ the residue of the site.
     momentum sector, and let $\pi$, $e$ and $n$ be as above. Then for every $l$
     with $2R+l+N\le\lfloor n/2\rfloor$ the low-energy commutator of the filtered
     terms at $i$ and $j$ obeys the bound of
-    Theorem~\ref{thm:hastings05_blecm} at separation $l$, with the norms of $h_i$
+    Lemma~\ref{thm:hastings05_blecm} at separation $l$, with the norms of $h_i$
     and $h_j$. Taking $l=\lfloor n/2\rfloor-N-2R$ makes it exponentially small in
     $n$. This is the conclusion of \cite[lines 1603--1641]{Hastings2006Solving}
     for the filtered terms $\tilde H_i$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_site_invariant_sum,thm:hastings_supercell_of_momenta,
         thm:hastings_supercell_far,thm:hastings_supercell_decay}
     The sum of covariant terms is invariant. By
-    Theorem~\ref{thm:hastings_supercell_far} some $g$ in the supercell carries
+    Lemma~\ref{thm:hastings_supercell_far} some $g$ in the supercell carries
     $j$ to distance more than $\lfloor n/2\rfloor-N\ge2R+l$ from $i$, so the
     sites within distance $l$ of $X_i$ miss $X_{g\cdot j}$. The supercell fixes the
-    ground space by Theorem~\ref{thm:hastings_supercell_of_momenta}, so
-    Theorem~\ref{thm:hastings_supercell_decay} applies, and
+    ground space by Lemma~\ref{thm:hastings_supercell_of_momenta}, so
+    Lemma~\ref{thm:hastings_supercell_decay} applies, and
     $\|h_{g\cdot j}\|=\|P_gh_jP_g^\dagger\|=\|h_j\|$.
 \end{proof}
 
-\begin{theorem}[A closed exponential bound for filtered low-energy commutators]
+\begin{lemma}[A closed exponential bound for filtered low-energy commutators]
     \label{thm:hastings_supercell_commutator_exp}
     \lean{TNLean.Lattice.norm_groundCompression_commutator_le_of_momenta_exp}
     \leanok
     \uses{thm:hastings_supercell_commutator_small,thm:hastings05_blecm_exp}
-    Under the hypotheses of Theorem~\ref{thm:hastings_supercell_commutator_small},
+    Under the hypotheses of Lemma~\ref{thm:hastings_supercell_commutator_small},
     let $\tilde H_i$ be the Gaussian-filtered term with any nonnegative
     filter parameter. Write $K_g(r+1)^{k}$ for the sphere-growth bound and set
     \begin{align}
@@ -292,7 +292,7 @@ the residue of the site.
     holds for every system size. This is an explicit bound for the filtered
     terms in the supercell argument of
     \cite[lines 1620--1641]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_site_invariant_sum,thm:hastings_supercell_of_momenta,
         thm:hastings_supercell_far,thm:hastings_supercell_commutator,
@@ -300,7 +300,7 @@ the residue of the site.
         thm:hastings05_low_energy_commutator,thm:hastings05_blecm_exp}
     If $\lfloor n/2\rfloor\ge N+2R$, take
     $l=\lfloor n/2\rfloor-N-2R$.
-    Theorem~\ref{thm:hastings_supercell_far} gives a supercell translation $g$
+    Lemma~\ref{thm:hastings_supercell_far} gives a supercell translation $g$
     such that
     \begin{align}
         d(i,g\cdot j)                            & >\lfloor n/2\rfloor-N=2R+l,\notag \\
@@ -312,36 +312,36 @@ the residue of the site.
                          & =[P\tilde H_iP,P\tilde H_jP],\notag   \\
         \|h_{g\cdot j}\| & =\|P_gh_jP_g^\dagger\|=\|h_j\|.\notag
     \end{align}
-    Theorem~\ref{thm:hastings05_blecm_exp} now gives
+    Lemma~\ref{thm:hastings05_blecm_exp} now gives
     (\ref{eq:hastings_supercell_exp}).
     Otherwise the exponential in (\ref{eq:hastings_supercell_exp}) is at least
     one. The commutator is at most $2\|h_i\|\,\|h_j\|$, and $C\ge6$.
     The original nonnegative filter parameter is arbitrary, since
-    Theorem~\ref{thm:hastings05_low_energy_commutator} gives
+    Lemma~\ref{thm:hastings05_low_energy_commutator} gives
     \begin{align}
         P\tilde H_kP=Ph_kP.\notag
     \end{align}
 \end{proof}
 
-\begin{theorem}[The truncated terms up to their truncation errors]
+\begin{lemma}[The truncated terms up to their truncation errors]
     \label{thm:hastings_supercell_commutator_truncated}
     \lean{TNLean.Lattice.norm_groundCompression_commutator_le_of_norm_sub_le,
         TNLean.Lattice.norm_groundCompression_commutator_truncated_le_of_momenta}
     \leanok
     \uses{thm:hastings_supercell_commutator_small, thm:hastings05_blecm_exp,
         thm:hastings_gaussian_filtered_spectral}
-    In the setting of Theorem~\ref{thm:hastings_supercell_commutator_small}, let
+    In the setting of Lemma~\ref{thm:hastings_supercell_commutator_small}, let
     $M_k$ be the filter of $h_k$ under a truncated Hamiltonian
     $\sum_{k'\in s_k}h_{k'}$, the term of eq.~\texttt{mid} of
     \cite[lines 285--307]{Hastings2006Solving}, and let
     $\lVert\tilde H_i-M_i\rVert\le\varepsilon_i$ and
     $\lVert\tilde H_j-M_j\rVert\le\varepsilon_j$, as eq.~\texttt{apb} provides.
     Then $\lVert[PM_iP,PM_jP]\rVert$ is at most the bound of
-    Theorem~\ref{thm:hastings_supercell_commutator_small} plus
+    Lemma~\ref{thm:hastings_supercell_commutator_small} plus
     $2\varepsilon_i\lVert h_j\rVert+2\lVert h_i\rVert\varepsilon_j$. The errors of
     eq.~\texttt{apb} do not decrease with $n$; the exponential smallness in $n$
-    for the $M_i$ is Theorem~\ref{thm:hastings_supercell_truncated_small}.
-\end{theorem}
+    for the $M_i$ is Lemma~\ref{thm:hastings_supercell_truncated_small}.
+\end{lemma}
 \begin{proof}\leanok
     Write $A=P\tilde H_iP$, $A'=PM_iP$, $B=P\tilde H_jP$ and $B'=PM_jP$. Then
     $[A',B']=[A,B]+[A'-A,B']+[A,B'-B]$. Compression by $P$ does not increase
@@ -350,24 +350,24 @@ the residue of the site.
     $2\varepsilon_i\lVert h_j\rVert$ and $2\lVert h_i\rVert\varepsilon_j$.
 \end{proof}
 
-\begin{theorem}[The source's truncated terms]
+\begin{lemma}[The source's truncated terms]
     \label{thm:hastings_supercell_truncated_small}
     \lean{TNLean.Lattice.truncatedTerm,
         TNLean.Lattice.truncatedTerm_smul,
         TNLean.Lattice.norm_groundCompression_truncatedTerm_commutator_le_of_momenta}
     \leanok
     \uses{def:hastings_supercell_of_momenta,thm:hastings05_blecm}
-    In the setting of Theorem~\ref{thm:hastings_supercell_commutator_small}, let
+    In the setting of Lemma~\ref{thm:hastings_supercell_commutator_small}, let
     $M_k$ be the filter of $h_k$ under $\sum_{k'\in s_k}h_{k'}$, the term of
     eq.~\texttt{mid} of \cite[lines 285--307]{Hastings2006Solving}, with
     covariant truncations $s_{g\cdot k}=g\cdot s_k$, and let $h_k$ and the terms of
     $s_k$ act on a set $K_k\ni k$ of diameter at most $R'$. Then for every $l$
     with $2R'+l+N\le\lfloor n/2\rfloor$ the low-energy commutator of $M_i$ and
-    $M_j$ obeys the bound of Theorem~\ref{thm:hastings05_blecm} at separation
+    $M_j$ obeys the bound of Lemma~\ref{thm:hastings05_blecm} at separation
     $l$. Taking $l=\lfloor n/2\rfloor-N-2R'$ makes it exponentially small in $n$,
     which is the conclusion of \cite[lines 1603--1641]{Hastings2006Solving} for
     the source's $M_i$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_site_invariant_sum,thm:hastings_supercell_compression,
         thm:hastings_supercell_of_momenta,thm:hastings_supercell_far,

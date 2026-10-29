@@ -87,7 +87,7 @@ ground space, without a condition on its translation eigenvalues.
     graph path gives the graph-distance bound.
 \end{proof}
 
-\begin{theorem}[A commutator from finitely many translation iterates]
+\begin{lemma}[A commutator from finitely many translation iterates]
     \label{thm:hastings_finite_translation_commutator}
     \lean{TNLean.Lattice.norm_commutator_le_of_finite_translation_orbit_bounds}
     \leanok
@@ -97,7 +97,7 @@ ground space, without a condition on its translation eigenvalues.
         \|[A,T^k(B)]\|\le C\qquad(1\le k\le n^2),
     \]
     then $\|[A,B]\|\le(2^{n^2}-1)C$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Put $m=n^2$ and let $p(z)=\sum_{k=0}^m p_kz^k$ be the
     characteristic polynomial of $T$. A nonzero eigenvector and norm
@@ -206,7 +206,7 @@ ground space, without a condition on its translation eigenvalues.
     $1\le2^m-1$ absorbs the cases needing no nontrivial translate.
 \end{proof}
 
-\begin{theorem}[Exponential smallness under invariant-Hamiltonian translations]
+\begin{lemma}[Exponential smallness under invariant-Hamiltonian translations]
     \label{thm:hastings_finite_translation_exp}
     \lean{TNLean.Lattice.norm_groundCompression_commutator_le_finite_translation_exp}
     \leanok
@@ -214,7 +214,7 @@ ground space, without a condition on its translation eigenvalues.
     Hamiltonian $H$. Let a cell coordinate modulo $N$ change by at
     most one along every graph edge, and let $e$ advance it by one.
     Assume the local generator bounds of
-    Theorem~\ref{thm:hastings05_growth_free_blecm_separation}, and let
+    Lemma~\ref{thm:hastings05_growth_free_blecm_separation}, and let
     the original spectral gap above $K$ be $\Delta>0$.
     If $\dim K\le n_0$, put
     \[
@@ -232,7 +232,7 @@ ground space, without a condition on its translation eigenvalues.
     \end{align}
     There is no condition on the ground-state momenta or on covariance
     of a chosen decomposition of $H$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:hastings_finite_observable_orbit,
         thm:hastings05_growth_free_blecm_separation,
@@ -250,7 +250,7 @@ ground space, without a condition on its translation eigenvalues.
     $\|[PWP,PBP]\|\le2\|W\|\|B\|$ and the same prefactor.
 \end{proof}
 
-\begin{corollary}[The actual truncated Gaussian terms without momentum restrictions]
+\begin{lemma}[The actual truncated Gaussian terms without momentum restrictions]
     \label{cor:hastings_finite_translation_truncated}
     \lean{TNLean.Lattice.norm_groundCompression_truncated_commutator_le_finite_translation_exp}
     \leanok
@@ -268,7 +268,7 @@ ground space, without a condition on its translation eigenvalues.
     The retained sets need not be covariant. This includes the
     physical ball cutoff of the source and the case of momentum
     denominators growing with $N$.
-\end{corollary}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:hastings_finite_translation_exp,
         thm:hastings_truncated_support,thm:hastings_gaussian_filtered_spectral}

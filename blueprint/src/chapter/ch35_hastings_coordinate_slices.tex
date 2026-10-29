@@ -39,7 +39,7 @@ in \cite{gap:hastings05_coordinate_slices,gap:hastings05_hierarchical_energy}.
     $|c_j'|\le\|A_j\|$, so centring costs at most a factor of two.
 \end{proof}
 
-\begin{theorem}[The geometry of coordinate slices]
+\begin{lemma}[The geometry of coordinate slices]
     \label{thm:hastings05_coordinate_slice_geometry}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.coordinateSlice,
         TNLean.MPS.AreaLaw.LocalSolution.coordinateSliceLower,
@@ -74,7 +74,7 @@ in \cite{gap:hastings05_coordinate_slices,gap:hastings05_hierarchical_energy}.
     On a finite coordinate box with the coordinate maximum metric,
     metric-ball locality implies the required coordinate-strip locality.
     The implication also holds for physical metrics dominating that metric.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The coordinate interval of a term lies between
     $\max\{0,z(i)-\ell\}$ and this lower endpoint plus $2\ell$.
@@ -84,7 +84,7 @@ in \cite{gap:hastings05_coordinate_slices,gap:hastings05_hierarchical_energy}.
     maximum-metric distance.
 \end{proof}
 
-\begin{theorem}[The complete coordinate-slice construction]
+\begin{lemma}[The complete coordinate-slice construction]
     \label{thm:hastings05_coordinate_slice_approximation}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.coordinateSliceProjection,
         TNLean.MPS.AreaLaw.LocalSolution.exists_unit_mem_coordinateSliceProjection,
@@ -120,7 +120,7 @@ in \cite{gap:hastings05_coordinate_slices,gap:hastings05_hierarchical_energy}.
         512(\lceil\log_2n\rceil+2)^3
         \bigl(1+\max\{0,\log(2J/\Delta)\}\bigr).
     \end{align*}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The edge residual is at most $nJe^{-r}\le Ke^{-r}$ and its centred
     norm is at most $K$. Apply the explicit finite hierarchy to these
@@ -130,7 +130,7 @@ in \cite{gap:hastings05_coordinate_slices,gap:hastings05_hierarchical_energy}.
     $B\le n$ and the effective coupling $J_{\mathrm{eff}}=2nJ$.
 \end{proof}
 
-\begin{corollary}[Full boxes in arbitrary dimension]
+\begin{lemma}[Full boxes in arbitrary dimension]
     \label{cor:hastings05_coordinate_slice_boxes}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.coordinateSide_le_card_box,
         TNLean.MPS.AreaLaw.LocalSolution.coordinateBox_slice_extent,
@@ -146,7 +146,7 @@ in \cite{gap:hastings05_coordinate_slices,gap:hastings05_hierarchical_energy}.
     maximum-metric locality implies strip locality. Hence all conclusions
     of the preceding theorem hold, including the cubic logarithmic length
     bound in the physical number of sites, in every dimension.
-\end{corollary}
+\end{lemma}
 \begin{proof}\leanok
     Vary coordinate $a$ while fixing the other coordinates at zero to
     inject its side into the full box. Also $z(v)<L_a\le2\ell L_a$.

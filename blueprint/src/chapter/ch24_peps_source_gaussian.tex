@@ -10,7 +10,7 @@ With the notation of Definition~\ref{def:peps_source_substitution}, write $\math
     $\nu_{e,\alpha}$ in the tensor-product standard orthonormal endpoint basis, and set $r_e=\min(u_e,v_e)$.
 \end{definition}
 
-\begin{theorem}[Local Schmidt frames chosen before partial expansion]
+\begin{lemma}[Local Schmidt frames chosen before partial expansion]
     \label{thm:peps_local_schmidt_sources}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceCoordinates_norm}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_local_schmidt_source_frames}
@@ -26,13 +26,13 @@ With the notation of Definition~\ref{def:peps_source_substitution}, write $\math
         \label{eq:peps_local_schmidt_source}
     \end{align}
     For any partial branches $\xi,\zeta$, every retained source at slot $i$ with original position $e=(g,j)$ has coordinate vector $z_{e,\xi_g}$ and mixed source matrix $z_{e,\xi_g}z_{e,\zeta_g}^{\dagger}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Orthonormal coordinates give $\|z_{e,\alpha}\|=\|\nu_{e,\alpha}\|=1$, and the finite Schmidt decomposition yields (\ref{eq:peps_local_schmidt_source}) for each $(e,\alpha)$. Since a retained partial slot evaluates $\nu_{e,\xi_g}$ at its original gate label $\xi_g$, the vector and outer-product identities follow by substitution.
 \end{proof}
 
-\begin{theorem}[Finite Schmidt support in arbitrary endpoint spaces]
+\begin{lemma}[Finite Schmidt support in arbitrary endpoint spaces]
     \label{thm:peps_tensor_schmidt_isometries}
     \lean{TNLean.Lattice.PartyCircuit.PairSource.exists_probability_schmidt_isometries}
     \leanok
@@ -42,7 +42,7 @@ With the notation of Definition~\ref{def:peps_source_substitution}, write $\math
     \begin{align}
         z=\sum_{t=1}^{r}\sqrt{\lambda_t}\,f|t\rangle\otimes g|t\rangle.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Since $z\in U_0\otimes V_0$ for finite-dimensional subspaces $U_0\subseteq U$ and $V_0\subseteq V$, applying the finite Schmidt decomposition in orthonormal coordinates on $U_0,V_0$ and composing the Schmidt frames with the isometric inclusions $U_0\hookrightarrow U$, $V_0\hookrightarrow V$ gives the decomposition.
@@ -57,14 +57,14 @@ With the notation of Definition~\ref{def:peps_source_substitution}, write $\math
     Fix $k\geq0$. Let $\mathbb P_k$ be the product probability law of independent standard circular complex Gaussian variables $\omega_{e,\alpha,\beta,s,p,q}$ indexed by $e=(g,j)\in\mathcal E$, $(\alpha,\beta)\in\Xi_g^2$, $0\leq s<k$, and $p,q\in\{1,\ldots,r_e\}$.
 \end{definition}
 
-\begin{theorem}[Fixed selections retain the Gaussian law]
+\begin{lemma}[Fixed selections retain the Gaussian law]
     \label{thm:peps_source_gaussian_selection}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.measurePreserving_sourceGaussian_eval}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.measurePreserving_selected_sourceGaussian}
     \leanok
     \uses{def:peps_source_gaussian_law}
     For any fixed $e=(g,j)\in\mathcal E$ and $(\alpha,\beta)\in\Xi_g^2$, the projection $\omega\mapsto(\omega_{e,\alpha,\beta,s,p,q})_{s,p,q}$ has the standard product Gaussian law under $\mathbb P_k$. More generally, for any $S\subseteq\mathcal E$ and deterministic labels $(\alpha_e,\beta_e)\in\Xi_g^2$ ($e\in S$), the families $(\omega_{e,\alpha_e,\beta_e,s,p,q})_{s,p,q}$ ($e\in S$) are independent with their prescribed Gaussian laws.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Coordinate projections preserve product measures, so projecting $\mathbb P_k$ first to $S\subseteq\mathcal E$ and then to the fixed index $(\alpha_e,\beta_e)$ at each $e\in S$ preserves the product Gaussian law.
@@ -88,7 +88,7 @@ With the notation of Definition~\ref{def:peps_source_substitution}, write $\math
     \end{align}
 \end{definition}
 
-\begin{theorem}[Unbiasedness of the original-source construction]
+\begin{lemma}[Unbiasedness of the original-source construction]
     \label{thm:peps_unbiased_original_sources}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integrable_sampledSourceMatrix}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integral_sampledSourceMatrix}
@@ -97,19 +97,19 @@ With the notation of Definition~\ref{def:peps_source_substitution}, write $\math
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceGaussianCorrection_eq_transport}
     \leanok
     \uses{thm:peps_local_schmidt_sources,thm:peps_source_gaussian_selection,def:peps_sampled_source_matrix}
-    For every $k>0$ and any weights $\lambda_{e,\alpha,t}\ge 0$ and frames $E_{e,\alpha},F_{e,\alpha}$ satisfying (\ref{eq:peps_local_schmidt_source}) (chosen as in Theorem~\ref{thm:peps_local_schmidt_sources} prior to all $S$ and partial branches), each $\widehat X_{e,\alpha\beta}$ is integrable,
+    For every $k>0$ and any weights $\lambda_{e,\alpha,t}\ge 0$ and frames $E_{e,\alpha},F_{e,\alpha}$ satisfying (\ref{eq:peps_local_schmidt_source}) (chosen as in Lemma~\ref{thm:peps_local_schmidt_sources} prior to all $S$ and partial branches), each $\widehat X_{e,\alpha\beta}$ is integrable,
     \begin{align}
         \mathbb E_k\widehat X_{e,\alpha\beta}=X_{e,\alpha\beta},
         \qquad \mathbb E_k\Delta_{e,\alpha\beta}=0,
     \end{align}
     and $\Delta_{e,\alpha\beta}=(E_{e,\alpha}\otimes F_{e,\alpha})\delta_{e,\alpha\beta}(E_{e,\beta}\otimes F_{e,\beta})^{\dagger}$, where $\delta_{e,\alpha\beta}$ is the centered correction in Schmidt coordinates.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_source_gaussian_selection} and the single-source expectation formula, (\ref{eq:peps_local_schmidt_source}) gives $\mathbb E_k\widehat X_{e,\alpha\beta}=X_{e,\alpha\beta}$, whence $\mathbb E_k\Delta_{e,\alpha\beta}=0$. Linearity of $M\mapsto(E_{e,\alpha}\otimes F_{e,\alpha})M(E_{e,\beta}\otimes F_{e,\beta})^{\dagger}$ yields the transport identity.
+    By Lemma~\ref{thm:peps_source_gaussian_selection} and the single-source expectation formula, (\ref{eq:peps_local_schmidt_source}) gives $\mathbb E_k\widehat X_{e,\alpha\beta}=X_{e,\alpha\beta}$, whence $\mathbb E_k\Delta_{e,\alpha\beta}=0$. Linearity of $M\mapsto(E_{e,\alpha}\otimes F_{e,\alpha})M(E_{e,\beta}\otimes F_{e,\beta})^{\dagger}$ yields the transport identity.
 \end{proof}
 
-\begin{theorem}[Covariance at original corrected positions]
+\begin{lemma}[Covariance at original corrected positions]
     \label{thm:peps_actual_gaussian_covariance}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceCorrection_product_eq_selected}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integrable_sourceCorrection_product_mul_conj}
@@ -131,13 +131,13 @@ With the notation of Definition~\ref{def:peps_source_substitution}, write $\math
         \label{eq:peps_actual_gaussian_covariance}
     \end{align}
     and $\mathbb E_k Z_{u,v}=0$ whenever $S\ne\varnothing$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_source_gaussian_selection}, the factors $(\delta_e(\omega))_{u_e,v_e}$ ($e\in S$) are independent with the single-source centered Gaussian law, so multiplying their mean-zero and diagonal covariance identities over $e\in S$ yields $\mathbb E_k Z_{u,v}=0$ for $S\ne\varnothing$ and (\ref{eq:peps_actual_gaussian_covariance}).
+    By Lemma~\ref{thm:peps_source_gaussian_selection}, the factors $(\delta_e(\omega))_{u_e,v_e}$ ($e\in S$) are independent with the single-source centered Gaussian law, so multiplying their mean-zero and diagonal covariance identities over $e\in S$ yields $\mathbb E_k Z_{u,v}=0$ for $S\ne\varnothing$ and (\ref{eq:peps_actual_gaussian_covariance}).
 \end{proof}
 
-\begin{theorem}[Expansion in selected multilinear arguments]
+\begin{lemma}[Expansion in selected multilinear arguments]
     \label{thm:peps_selected_multilinear_expansion}
     \lean{MultilinearMap.map_piecewise_sum_smul}
     \leanok
@@ -148,13 +148,13 @@ With the notation of Definition~\ref{def:peps_source_substitution}, write $\math
         \Bigl(\prod_{i\in S}c_{i,a_i}\Bigr)
         T\bigl(x[S\leftarrow v_{i,a_i}]\bigr).
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Restricting $T$ to the arguments in $S$ with $x_{S^c}$ fixed gives a multilinear map on $\prod_{i\in S}V_i$, and expanding the finite sums by multilinearity pulls out $\prod_{i\in S}c_{i,a_i}$.
 \end{proof}
 
-\begin{theorem}[Frame-mapped sources in prepared words]
+\begin{lemma}[Frame-mapped sources in prepared words]
     \label{thm:peps_prepared_source_frames}
     \lean{TNLean.Lattice.PartyCircuit.Word.sourceContraction_preparedDensityCoefficient_selected_frames}
     \leanok
@@ -168,10 +168,10 @@ With the notation of Definition~\ref{def:peps_source_substitution}, write $\math
         K_V(\eta^{a})\rho K_{V'}(\zeta^{b})^{\dagger},
     \end{align}
     where $\eta_i^a=u_i((a_i)_1)\otimes v_i((a_i)_2)$ for $i\in S$ and $\eta_i^a=\eta_i$ for $i\notin S$ (and similarly for $\zeta^b$ using $u'_i,v'_i,\zeta_i$), and $K_V(\eta^a)$ is the matrix of $V$ after preparing $\eta^a$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    Writing each frame-mapped matrix at $i\in S$ as $\sum_{a_i,b_i}(M_i)_{a_i,b_i}|\eta_i^{a_i}\rangle\langle\zeta_i^{b_i}|$, Theorem~\ref{thm:peps_selected_multilinear_expansion} expands the contraction over $(a,b)\in\prod_{i\in S}K_i^2\times\prod_{i\in S}(K'_i)^2$, and Theorem~\ref{thm:peps_prepared_source_contraction} identifies each rank-one summand with $K_V(\eta^a)\rho K_{V'}(\zeta^b)^{\dagger}$.
+    Writing each frame-mapped matrix at $i\in S$ as $\sum_{a_i,b_i}(M_i)_{a_i,b_i}|\eta_i^{a_i}\rangle\langle\zeta_i^{b_i}|$, Lemma~\ref{thm:peps_selected_multilinear_expansion} expands the contraction over $(a,b)\in\prod_{i\in S}K_i^2\times\prod_{i\in S}(K'_i)^2$, and Lemma~\ref{thm:peps_prepared_source_contraction} identifies each rank-one summand with $K_V(\eta^a)\rho K_{V'}(\zeta^b)^{\dagger}$.
 \end{proof}
 
 \begin{definition}[Schmidt assignments at retained original positions]
@@ -185,7 +185,7 @@ With the notation of Definition~\ref{def:peps_source_substitution}, write $\math
     Let $S\subseteq\mathcal E$ have every position incident to the affected parties $\mathcal A$, so the selected retained partial slots correspond bijectively to $S$ and their Schmidt index tuples identify with $\prod_{e\in S}\{1,\ldots,r_e\}^2$. For a partial branch $\xi$ and $u\in\prod_{e\in S}\{1,\ldots,r_e\}^2$, define the source family that places $E_{e,\xi_g}|(u_e)_1\rangle\otimes F_{e,\xi_g}|(u_e)_2\rangle$ at each selected slot with original position $e=(g,j)\in S$ and retains $\nu_{e,\xi_g}$ at all other slots.
 \end{definition}
 
-\begin{theorem}[Corrected terms in Schmidt coordinates]
+\begin{lemma}[Corrected terms in Schmidt coordinates]
     \label{thm:peps_corrected_gaussian_sum}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceTerm_gaussian_eq_sum}
     \leanok
@@ -201,13 +201,13 @@ With the notation of Definition~\ref{def:peps_source_substitution}, write $\math
         \label{eq:peps_corrected_gaussian_sum}
     \end{align}
     where $Z^{\xi,\zeta}_{u,v}(\omega)=\prod_{e=(g,j)\in S}(\delta_{e,\xi_g\zeta_g}(\omega))_{u_e,v_e}$ and $K_{\xi,u}$ is the residual word of $\xi$ with the source vectors of Definition~\ref{def:peps_partial_schmidt_assignments} prepared at its inputs.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    Expressing $F_S(\Delta(\omega))$ as the partial-branch source contraction (Theorem~\ref{thm:peps_corrected_source_contraction}) and writing $\Delta_{e,\xi_g\zeta_g}=(E_{e,\xi_g}\otimes F_{e,\xi_g})\delta_{e,\xi_g\zeta_g}(E_{e,\zeta_g}\otimes F_{e,\zeta_g})^{\dagger}$ (Theorem~\ref{thm:peps_unbiased_original_sources}), Theorem~\ref{thm:peps_prepared_source_frames} applied across the bijection of Definition~\ref{def:peps_partial_schmidt_assignments} yields (\ref{eq:peps_corrected_gaussian_sum}).
+    Expressing $F_S(\Delta(\omega))$ as the partial-branch source contraction (Lemma~\ref{thm:peps_corrected_source_contraction}) and writing $\Delta_{e,\xi_g\zeta_g}=(E_{e,\xi_g}\otimes F_{e,\xi_g})\delta_{e,\xi_g\zeta_g}(E_{e,\zeta_g}\otimes F_{e,\zeta_g})^{\dagger}$ (Lemma~\ref{thm:peps_unbiased_original_sources}), Lemma~\ref{thm:peps_prepared_source_frames} applied across the bijection of Definition~\ref{def:peps_partial_schmidt_assignments} yields (\ref{eq:peps_corrected_gaussian_sum}).
 \end{proof}
 
-\begin{theorem}[Pointwise physical error of the sampled operators]
+\begin{lemma}[Pointwise physical error of the sampled operators]
     \label{thm:peps_sampled_physical_error}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physical_sampledSourceMatrix_sub_eq_sum}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.rectangularTraceNorm_physical_sampledSourceMatrix_sub_le}
@@ -222,8 +222,8 @@ With the notation of Definition~\ref{def:peps_source_substitution}, write $\math
          & \leq\sum_{\varnothing\ne S\subseteq\mathcal E}
         \|\operatorname{tr}_{\rm disc}F_S(\Delta(\omega))\|_1.
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
-    Substituting $\widehat X_{e,\alpha\beta}=X_{e,\alpha\beta}+\Delta_{e,\alpha\beta}$ into Theorem~\ref{thm:peps_physical_corrected_subsets} gives the subset expansion, and the triangle inequality for $\|\cdot\|_1$ gives the norm bound.
+    Substituting $\widehat X_{e,\alpha\beta}=X_{e,\alpha\beta}+\Delta_{e,\alpha\beta}$ into Lemma~\ref{thm:peps_physical_corrected_subsets} gives the subset expansion, and the triangle inequality for $\|\cdot\|_1$ gives the norm bound.
 \end{proof}
