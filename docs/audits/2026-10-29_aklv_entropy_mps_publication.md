@@ -70,6 +70,11 @@ removed from `SequentialTruncation.lean`, preserving the theorem name and
 statement. The monotonicity of the allowed open-MPS bond dimension is also
 included; the same elementary result occurs in the separate LVV submission.
 
+Likewise, `WordMultiplicity.wordCoefficient` is now supplied by
+`QICLean.Algebra.WordCoefficient`. The identical definition is removed from
+`TNLean/Algebra/TwoMarkerScalarRecovery.lean`, which imports the companion
+module. The ordered-word sum, public name, and existing consumers are unchanged.
+
 ## Verification
 
 The two final target modules compiled successfully with the locked Lake
