@@ -27,14 +27,14 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[State preservation under corner extension]
+\begin{lemma}[State preservation under corner extension]
     \label{thm:peps_corner_extension_state_preserves}
     \lean{TNLean.PEPS.deformedRegionState_extend}
     \leanok
     \uses{def:peps_corner_extension}
     If all bond dimensions are positive and $R\subseteq S$, then
     $\Psi_{A,R,C}=\Psi_{A,S,\Ext_{R\subseteq S}(C)}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Separating $S\setminus R$ from $V\setminus S$ and substituting~(\ref{eq:peps_norm_corner_extension})
     gives, for every $\tau$,
@@ -49,7 +49,7 @@
     \end{align}
 \end{proof}
 
-\begin{theorem}[Consecutive horizontal windows have equal corner extensions]
+\begin{lemma}[Consecutive horizontal windows have equal corner extensions]
     \label{thm:peps_horizontal_consecutive_window_extend_eq}
     \lean{TNLean.PEPS.horizontalConsecutiveWindow_extend_eq}
     \leanok
@@ -65,9 +65,9 @@
         \Ext_{W_2\subseteq U}(C_2).
         \label{eq:peps_horizontal_consecutive_extend_eq}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_corner_extension_state_preserves},
+    By Lemma~\ref{thm:peps_corner_extension_state_preserves},
     \begin{align}
         \Psi_{A,U,\Ext_{W_1\subseteq U}(C_1)}
         =\Psi_{A,W_1,C_1}
@@ -80,7 +80,7 @@
 
 \input{chapter/ch24_peps_ft_torus_bond_uniform}
 
-\begin{theorem}[Patch-extended equality of the staircase end windows]
+\begin{lemma}[Patch-extended equality of the staircase end windows]
     \label{thm:peps_horizontal_staircase_patch_extend_eq}
     \lean{TNLean.PEPS.horizontalStaircase_patch_extend_eq}
     \leanok
@@ -94,9 +94,9 @@
         \Psi_{A,P,\Ext_{W_{\mathrm{left}}\subseteq P}(C_{\mathrm{end}})}.
         \label{eq:peps_staircase_patch_extend_eq}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_corner_extension_state_preserves},
+    By Lemma~\ref{thm:peps_corner_extension_state_preserves},
     \begin{align}
         \Psi_{A,P,\Ext_{W_{\mathrm{right}}\subseteq P}(C_0)}
         =\Psi_{A,W_{\mathrm{right}},C_0}
@@ -142,7 +142,7 @@
     strictly inside $T$, leaving $F_1,F_2$ and the boundary conditions invariant.
 \end{proof}
 
-\begin{theorem}[Composition of corner-extension coefficient kernels]
+\begin{lemma}[Composition of corner-extension coefficient kernels]
     \label{thm:peps_corner_extension_coefficient_composition}
     \lean{TNLean.PEPS.threeBlockBlueCoeff_comp}
     \leanok
@@ -158,9 +158,9 @@
         \Phi_{R,P}(\mu,\sigma|_{P\setminus R},\omega).
         \label{eq:peps_corner_kernel_comp}
     \end{align}
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[Linearity and transitivity of corner extension]
+\begin{lemma}[Linearity and transitivity of corner extension]
     \label{thm:peps_corner_extension_linear_transitive}
     \lean{TNLean.PEPS.bareExtendInsert_const_smul}
     \lean{TNLean.PEPS.extendInsert_const_smul}
@@ -186,11 +186,11 @@
         \label{eq:peps_norm_ext_trans}
     \end{align}
     where~(\ref{eq:peps_norm_ext_trans}) assumes positive bond dimensions.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Linearity follows from~(\ref{eq:peps_bare_corner_extension})--(\ref{eq:peps_norm_corner_extension});
     substituting~(\ref{eq:peps_corner_kernel_comp}) of
-    Theorem~\ref{thm:peps_corner_extension_coefficient_composition} into~(\ref{eq:peps_bare_corner_extension})
+    Lemma~\ref{thm:peps_corner_extension_coefficient_composition} into~(\ref{eq:peps_bare_corner_extension})
     gives~(\ref{eq:peps_bare_ext_trans}), and cancelling $P_{V\setminus S}>0$
     gives~(\ref{eq:peps_norm_ext_trans}).
 \end{proof}
@@ -212,7 +212,7 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[Restrictions of combined subregion configurations]
+\begin{lemma}[Restrictions of combined subregion configurations]
     \label{thm:peps_assemble_subregion_physical_config_restricts}
     \lean{TNLean.PEPS.restrictSubRegionσ_assembleSubRegionσ}
     \lean{TNLean.PEPS.restrictSubRegionσ_sdiff_assembleSubRegionσ}
@@ -221,23 +221,23 @@
     For~(\ref{eq:peps_assemble_subregion_config}),
     $\operatorname{As}_{R,S}(\sigma_R,\sigma_Q)|_R=\sigma_R$ and
     $\operatorname{As}_{R,S}(\sigma_R,\sigma_Q)|_{S\setminus R}=\sigma_Q$.
-\end{theorem}
+\end{lemma}
 
-\begin{theorem}[Kernel triviality of corner extension from the added block]
+\begin{lemma}[Kernel triviality of corner extension from the added block]
     \label{thm:peps_extend_insert_kernel_trivial_added_injective}
     \lean{TNLean.PEPS.extendInsert_kernel_trivial_of_addedInjective}
     \leanok
     \uses{def:peps_corner_extension, def:peps_assemble_subregion_physical_config, thm:peps_assemble_subregion_physical_config_restricts}
     For $R\subseteq S$ with positive bond dimensions and $Q=S\setminus R$
     blocked-tensor injective, $\Ext_{R\subseteq S}(C)=0\implies C=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $P_{V\setminus S}\ne0$, $\overline{\Ext}_{R\subseteq S}(C)=0$. Fix
     $\sigma_R$, let $\rho:\partial R\simeq\partial(V\setminus R)$ and
     $\tau:\partial S\simeq\partial(V\setminus S)$ be the complement-boundary
     bijections, and set $c_\eta=C_{\rho^{-1}(\eta),\sigma_R}$. Evaluating
     $\overline{\Ext}_{R\subseteq S}(C)=0$ at
-    $\operatorname{As}_{R,S}(\sigma_R,\sigma_Q)$ (Theorem~\ref{thm:peps_assemble_subregion_physical_config_restricts})
+    $\operatorname{As}_{R,S}(\sigma_R,\sigma_Q)$ (Lemma~\ref{thm:peps_assemble_subregion_physical_config_restricts})
     gives, for all $\sigma_Q$ and $\omega\in\partial(V\setminus S)$,
     \begin{align}
         \sum_{\eta\in\partial(V\setminus R)}
@@ -266,7 +266,7 @@
     $0=f_\omega(\beta)=c_{\rho(\mu)}=C_{\mu,\sigma_R}$.
 \end{proof}
 
-\begin{theorem}[Cancellation of a shared injective corner]
+\begin{lemma}[Cancellation of a shared injective corner]
     \label{thm:peps_extend_insert_cancel_added_injective}
     \lean{TNLean.PEPS.extendInsert_cancel_addedInjective}
     \leanok
@@ -274,14 +274,14 @@
     If $R\subseteq S$, all bond dimensions are positive, and $S\setminus R$ is
     blocked-tensor injective, then
     $\Ext_{R\subseteq S}(C_1)=\Ext_{R\subseteq S}(C_2)\implies C_1=C_2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By Theorem~\ref{thm:peps_corner_extension_linear_transitive},
+    By Lemma~\ref{thm:peps_corner_extension_linear_transitive},
     $\Ext_{R\subseteq S}(C_1-C_2)=0$, so $C_1-C_2=0$ by
-    Theorem~\ref{thm:peps_extend_insert_kernel_trivial_added_injective}.
+    Lemma~\ref{thm:peps_extend_insert_kernel_trivial_added_injective}.
 \end{proof}
 
-\begin{theorem}[Staircase-pair cancellation on the torus]
+\begin{lemma}[Staircase-pair cancellation on the torus]
     \label{thm:peps_staircase_pair_cancel}
     \lean{TNLean.PEPS.staircasePair_cancel}
     \leanok
@@ -291,9 +291,9 @@
     injective and all bond dimensions are positive, then for any inserts $X,Y$
     on $S$ (without assuming injectivity of $V\setminus S$),
     $\Ext_{S\subseteq S\cup Q}(X)=\Ext_{S\subseteq S\cup Q}(Y)\implies X=Y$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $2L\le W$ and $2K\le H$ imply $S\cap Q=\varnothing$, we have
     $(S\cup Q)\setminus S=Q$, and
-    Theorem~\ref{thm:peps_extend_insert_cancel_added_injective} applies.
+    Lemma~\ref{thm:peps_extend_insert_cancel_added_injective} applies.
 \end{proof}

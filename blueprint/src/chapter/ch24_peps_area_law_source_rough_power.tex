@@ -1,7 +1,7 @@
 \section{The physical rough bound and its principal density terms}
 \label{sec:arealaw-source-rough-power}
 
-\begin{theorem}[Target entropy transfer]
+\begin{lemma}[Target entropy transfer]
     \label{thm:arealaw-target-entropy-transfer}
     \lean{TNLean.PEPS.AreaLaw.Scan.eventually_abs_regionalEntropy_sub_le_of_truncation}
     \leanok
@@ -15,14 +15,14 @@
         |S(\widetilde\Omega_X)-S(\Omega_X)| \le n^{-247}.
         \label{eq:arealaw-target-entropy-transfer}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:area_law_regional_entropy_continuity}
-    At trace distance $t\le\sqrt{2/g}\,n^{-500}$, Theorem~\ref{thm:area_law_regional_entropy_continuity} gives $|S(\widetilde\Omega_X)-S(\Omega_X)|\le4\sqrt t(1+|X|\log q)\le4(2/g)^{1/4}n^{-250}(1+C_{\rm vol}n^2\log q)\le n^{-247}$ for $n\gg1$.
+    At trace distance $t\le\sqrt{2/g}\,n^{-500}$, Lemma~\ref{thm:area_law_regional_entropy_continuity} gives $|S(\widetilde\Omega_X)-S(\Omega_X)|\le4\sqrt t(1+|X|\log q)\le4(2/g)^{1/4}n^{-250}(1+C_{\rm vol}n^2\log q)\le n^{-247}$ for $n\gg1$.
 \end{proof}
 
-\begin{theorem}[The rough bound has the source entropy power]
+\begin{lemma}[The rough bound has the source entropy power]
     \label{thm:arealaw-source-rough-budget-power}
     \lean{TNLean.PEPS.AreaLaw.Scan.roughBudget_le_source_power}
     \leanok
@@ -40,13 +40,13 @@
          & \le(6C_e+13+6\log q)Wn^{1+e}.
         \label{eq:arealaw-source-rough-budget-power}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Since $n\ge2$, $z\ge1-n^{-100}\ge1/2$ and $-\log z\le1$, so with $N=n^{1+e}$, (\ref{eq:rough_budget_hyp}) gives $2\log d-\log z\le(2C_e+7)N\le(2C_e+7)WN$, $B_{\rm sh}/z\le4(C_e+1)N$, and $1+3nD\log q\le2(1+3\log q)N$; summing yields (\ref{eq:arealaw-source-rough-budget-power}).
 \end{proof}
 
-\begin{theorem}[Principal terms of the selected-density bound]
+\begin{lemma}[Principal terms of the selected-density bound]
     \label{thm:arealaw-selected-density-principal}
     \lean{TNLean.PEPS.AreaLaw.Scan.selectedDensity_budget_le_principal}
     \leanok
@@ -58,7 +58,7 @@
         +\frac{2(C_1+1)}{Wnm\varepsilon}R.
         \label{eq:arealaw-selected-density-principal}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Substituting $B\le C_rWn^{1+e}$ and $G\le C_t(\log n)^{C_l}$, cancelling $Wn$, and bounding each nonnegative coefficient by $C=2(C_1+1)(C_r+2C_t)$ gives (\ref{eq:arealaw-selected-density-principal}).
@@ -66,7 +66,7 @@
 
 % Source: OpenAI2026AreaLaw, Proposition 9.2, sections/08-scanner.tex,
 % lines 349--397 and 480--533. Ordinary module and imported dependency checks passed.
-\begin{theorem}[Selected density at arbitrary scanner exponents]
+\begin{lemma}[Selected density at arbitrary scanner exponents]
     \label{thm:arealaw-selected-density-delta}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.selectedDensity_budget_le_delta}
     \leanok
@@ -77,14 +77,14 @@
          & \le C_\delta\epsilon^{-1}
         \bigl(n^{e-\mu}+a^{1/4}(\log n)^{C_l}\bigr)+cR. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:al_scanner_scale_facts,thm:arealaw-selected-density-principal}
-    Applying (\ref{eq:arealaw-selected-density-principal}) of Theorem~\ref{thm:arealaw-selected-density-principal} at $\varepsilon=\epsilon/2$ and using $n^e/m\le C_sn^{e-\mu}$ ($C_s\ge1$) from Lemma~\ref{lem:al_scanner_scale_facts} yields the bound.
+    Applying (\ref{eq:arealaw-selected-density-principal}) of Lemma~\ref{thm:arealaw-selected-density-principal} at $\varepsilon=\epsilon/2$ and using $n^e/m\le C_sn^{e-\mu}$ ($C_s\ge1$) from Lemma~\ref{lem:al_scanner_scale_facts} yields the bound.
 \end{proof}
 
-\begin{theorem}[Energy from the selected density]
+\begin{lemma}[Energy from the selected density]
     \label{thm:arealaw-selected-energy-density}
     \lean{TNLean.PEPS.AreaLaw.Scan.selectedEnergy_le_of_density_le_add}
     \leanok
@@ -95,13 +95,13 @@
         E \le\frac A g(\delta^{1/8}+\epsilon+t)
         +\frac e g+\frac{A\rho^{1/8}+r}{g}. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Combine $d^{1/8}\le(\delta+\rho)^{1/8}\le\delta^{1/8}+\rho^{1/8}$, $1-p\le1$, and $p\le\epsilon$.
 \end{proof}
 
-\begin{theorem}[Vanishing selected-energy remainder]
+\begin{lemma}[Vanishing selected-energy remainder]
     \label{thm:arealaw-selected-energy-vanishing-remainder}
     \lean{TNLean.PEPS.AreaLaw.Scan.tendsto_selectedEnergy_remainder}
     \leanok
@@ -109,13 +109,13 @@
     \begin{align}
         \frac{A|\rho_k|^{1/8}+r_k}{g} \longrightarrow0. \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Continuity of $x\mapsto|x|^{1/8}$ at $0$ and linearity give $A|\rho_k|^{1/8}+r_k\to0$, which is preserved upon dividing by $g$.
 \end{proof}
 
-\begin{theorem}[Ordered-limit closure at the selected point]
+\begin{lemma}[Ordered-limit closure at the selected point]
     \label{thm:arealaw-selected-density-power}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_final_selectedDensity_le}
     \leanok
@@ -133,13 +133,13 @@
         \bigl(B_{\rm rough}+2nm\,GW a^{1/4}+R_k\bigr), \notag
     \end{align}
     then eventually $d_k(x,p)\le\varepsilon$ and $\mathcal P_k(x,p)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:arealaw-source-rough-budget-power,
         thm:arealaw-selected-density-principal,
         thm:arealaw-source-density-final}
-    Combining (\ref{eq:arealaw-source-rough-budget-power}) and (\ref{eq:arealaw-selected-density-principal}) with Theorem~\ref{thm:arealaw-source-density-final} at coefficient $2C$ bounds the principal part by $\varepsilon/2$ for $n\ge N$, while $R_k\to0$ ensures $\frac{2(C_1+1)}{Wnm\varepsilon}R_k\le\varepsilon/2$ for $k\gg1$.
+    Combining (\ref{eq:arealaw-source-rough-budget-power}) and (\ref{eq:arealaw-selected-density-principal}) with Lemma~\ref{thm:arealaw-source-density-final} at coefficient $2C$ bounds the principal part by $\varepsilon/2$ for $n\ge N$, while $R_k\to0$ ensures $\frac{2(C_1+1)}{Wnm\varepsilon}R_k\le\varepsilon/2$ for $k\gg1$.
 \end{proof}
 
-In the physical application, fixing the target window and label sequence yields (\ref{eq:rough_budget_hyp}), and Theorem~\ref{thm:al_scanner_source} discharges the selection premise while preserving the energy and sharp-comparison bounds at $(x,p)$ (prior to final energy absorption, the entropy telescope, and the area law).
+In the physical application, fixing the target window and label sequence yields (\ref{eq:rough_budget_hyp}), and Lemma~\ref{thm:al_scanner_source} discharges the selection premise while preserving the energy and sharp-comparison bounds at $(x,p)$ (prior to final energy absorption, the entropy telescope, and the area law).

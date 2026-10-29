@@ -34,7 +34,7 @@ of the virtual projective representation.
     While factor systems here take values in $\C^\times$, for finite groups $G$
     every class admits a unit-modulus representative, identifying
     $H^2(G,\C^\times)$ with $H^2(G,\mathrm U(1))$%
-    \ifftmpsvolume.\else\ (Theorem~\ref{thm:mpug_circle_complex_units_h2}).\fi
+    \ifftmpsvolume.\else\ (Lemma~\ref{thm:mpug_circle_complex_units_h2}).\fi
 \end{remark}
 
 \begin{definition}[Polar deformation in the original physical space]
@@ -56,7 +56,7 @@ of the virtual projective representation.
     rectangular.
 \end{definition}
 
-\begin{theorem}[Physical-matrix covariance from the tensor letters]
+\begin{lemma}[Physical-matrix covariance from the tensor letters]
     \label{thm:spt_physical_matrix_covariance}
     \lean{MPSTensor.physicalMatrix_mul_left_right,
         MPSTensor.physicalMatrix_covariance_of_rotatePhysical,
@@ -69,7 +69,7 @@ of the virtual projective representation.
     $UM=M(X^T\otimes Y)$. For unitary $X$ and $Y=X^\dagger$ this is
     the bond action $X^T\otimes X^{-1}$. The physical matrix $U$ need
     not be unitary for this algebraic implication.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:ldpolar_physical_matrix_rotate}
@@ -80,7 +80,7 @@ of the virtual projective representation.
     action.
 \end{proof}
 
-\begin{theorem}[Injectivity and symmetry along the polar deformation]
+\begin{lemma}[Injectivity and symmetry along the polar deformation]
     \label{thm:spt_polar_deformation}
     \lean{MPSTensor.isInjective_of_leftInverse_physicalMatrix,
         MPSTensor.posDef_polarDeformationPos,
@@ -101,7 +101,7 @@ of the virtual projective representation.
     In particular, as in \cite[Section~II.C, isometric form and symmetries]{Schuch2011Phases},
     if $U$ acts on $A$ by conjugation with a unitary bond
     matrix $X$, it acts on every $A_\gamma$ by the same conjugation.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_physical_matrix_covariance}
@@ -116,7 +116,7 @@ of the virtual projective representation.
     Since $X^{-1}=X^*$, this is also covariance by a virtual gauge change.
 \end{proof}
 
-\begin{theorem}[Uniform parent gap along an injective polar deformation]
+\begin{lemma}[Uniform parent gap along an injective polar deformation]
     \label{thm:spt_polar_deformation_gap}
     \lean{MPSTensor.exists_uniform_parentHamiltonianES_gap_polarDeformation,
         MPSTensor.parentInteractionES_polarDeformation_commute_onSiteTensorPow}
@@ -137,7 +137,7 @@ of the virtual projective representation.
     the one-site injective case; as documented in
     \cite{gap:spc11_uniform_gap_injective_scope}, the source also treats
     normal forms with several blocks.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_polar_deformation,
@@ -150,7 +150,7 @@ of the virtual projective representation.
     the physical tensor powers.
 \end{proof}
 
-\begin{theorem}[Canonical interactions along a symmetric injective path]
+\begin{lemma}[Canonical interactions along a symmetric injective path]
     \label{thm:spt_canonical_injective_gapped_path}
     \lean{MPSTensor.continuous_parentInteraction_matrix_family,
         MPSTensor.interactionHamiltonian_parent_spectrum_gap,
@@ -168,7 +168,7 @@ of the virtual projective representation.
     \cite{gap:spc11_uniform_gap_injective_scope}), their norms are at most
     one, their ground energy is zero, and one positive spectral gap holds
     for every parameter and every ring length $N\geq2$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:compact_parent_gap, thm:spt_parent_hamiltonian_symmetry}
@@ -207,7 +207,7 @@ of the virtual projective representation.
     preserved throughout the interpolation.
 \end{proof}
 
-\begin{theorem}[Physical embedding of virtual covariance]
+\begin{lemma}[Physical embedding of virtual covariance]
     \label{thm:spt_embedding_covariance}
     \lean{MPSTensor.continuous_rotatePhysical,
         MPSTensor.gaugeEquiv_rotatePhysical_of_intertwiner}
@@ -219,7 +219,7 @@ of the virtual projective representation.
     invertible bond matrix $X$ satisfies $(UA)^i=XA^iX^{-1}$.
     As in \cite[Section~II.F.2]{Schuch2011Phases}, the embedded tensor then
     satisfies $(V(EA))^i=X(EA)^iX^{-1}$ in the common physical space.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:rotate_physical, lem:physical_rotation_mul,
@@ -285,7 +285,7 @@ of the virtual projective representation.
     frame, while the second retains the original orthogonal complement.
 \end{definition}
 
-\begin{theorem}[Isometry and covariance of the frame embedding]
+\begin{lemma}[Isometry and covariance of the frame embedding]
     \label{thm:spt_frame_embedding}
     \lean{Matrix.isometricFrameEmbedding_isometry,
         Matrix.isometricFrameEmbedding_mul_frame,
@@ -307,7 +307,7 @@ of the virtual projective representation.
     For injective $A$, its isometric polar factor obeys the same covariance
     as $A$. Consequently, the physically embedded isometric tensor has
     exactly the frame $(J,0)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:spt_frame_embedding, thm:spt_polar_deformation}
@@ -385,7 +385,7 @@ of the virtual projective representation.
     any neighboring pair meeting either additional physical sector.
 \end{definition}
 
-\begin{theorem}[Projections, commutation, and spectral separation of sector bonds]
+\begin{lemma}[Projections, commutation, and spectral separation of sector bonds]
     \label{thm:spt_sector_bond_gap}
     \lean{Matrix.isStarProjection_reindex,
         MPSTensor.bondMatrixEquiv_symm_isSymmetricProjection,
@@ -408,7 +408,7 @@ of the virtual projective representation.
     gap above the ground space is at least one.
     In particular, this applies to the three-sector interaction
     whenever $B$ is an orthogonal projection.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:spt_sector_bond_interaction}
@@ -439,7 +439,7 @@ of the virtual projective representation.
     one to the orthogonal complement of the included two-site space.
 \end{definition}
 
-\begin{theorem}[Local symmetry of the normalized bond interaction]
+\begin{lemma}[Local symmetry of the normalized bond interaction]
     \label{thm:spt_normalized_bond_local_symmetry}
     \lean{MPOTensor.embedLocalOperator_full_zero,
         MPSTensor.normalizedBondInteraction_commute_onSite}
@@ -450,7 +450,7 @@ of the virtual projective representation.
     physical action of their direct sum. This holds at every interpolation
     parameter. In addition, embedding an interaction over an entire
     nonempty ring with origin at the first site leaves it unchanged.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_bond_interpolation_symmetry}
@@ -460,7 +460,7 @@ of the virtual projective representation.
     the full-window embedding at the origin is the identity.
 \end{proof}
 
-\begin{theorem}[The three-sector spectator interaction is the isometric extension]
+\begin{lemma}[The three-sector spectator interaction is the isometric extension]
     \label{thm:spt_spectator_bond_transport}
     \lean{MPSTensor.commonFixedPointInclusion_eq_coordinateInclusion,
         MPSTensor.physicalSpectatorBondInteraction_eq_isometricInteractionExtension}
@@ -474,7 +474,7 @@ of the virtual projective representation.
     As in \cite[Section~II.F.2]{Schuch2011Phases}, this expression
     identifies the coordinates of the unused-state penalty without
     requiring positivity or projection assumptions on $B$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Regrouping the two physical sites by their sector pair places the
@@ -483,7 +483,7 @@ of the virtual projective representation.
     to the original physical coordinates gives the stated equality.
 \end{proof}
 
-\begin{theorem}[Periodic intertwining and zero modes under isometric extension]
+\begin{lemma}[Periodic intertwining and zero modes under isometric extension]
     \label{thm:spt_isometric_interaction_zero_modes}
     \lean{MPSTensor.embedLocalOperator_isometry_intertwiner,
         MPSTensor.embed_isometricInteractionExtension_intertwiner,
@@ -499,7 +499,7 @@ of the virtual projective representation.
     for the unpenalized local conjugation $ThT^\dagger$ on the included chain.
     Every nonzero zero mode $\psi$ of $H_N$ therefore gives a nonzero
     zero mode $E_N\psi$ of $H'_N$, so zero belongs to its spectrum.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:spt_isometric_interaction_extension}
@@ -509,7 +509,7 @@ of the virtual projective representation.
     Finally, $E_N^\dagger E_N=I$ preserves nonvanishing.
 \end{proof}
 
-\begin{theorem}[Canonical parents and order under isometric extension]
+\begin{lemma}[Canonical parents and order under isometric extension]
     \label{thm:spt_isometric_parent_interaction}
     \lean{MPSTensor.isometricInteractionExtension_mono,
         MPSTensor.parentInteraction_matrix_rotatePhysical_eq_isometricInteractionExtension}
@@ -519,7 +519,7 @@ of the virtual projective representation.
     of $EA$ is the isometric interaction extension of the
     canonical parent of $A$. In addition, extension preserves local
     operator inequalities: $h\le k$ implies $h'\le k'$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_physical_embedding_parent}
@@ -529,7 +529,7 @@ of the virtual projective representation.
     whenever $k-h$ is positive.
 \end{proof}
 
-\begin{theorem}[Exact ground-space image for commuting projections]
+\begin{lemma}[Exact ground-space image for commuting projections]
     \label{thm:spt_isometric_interaction_ground_space}
     \lean{Matrix.range_toEuclideanLin_singleKrausMap_of_isometry,
         MPSTensor.interactionHamiltonian_ker_eq_range_groundProduct,
@@ -551,7 +551,7 @@ of the virtual projective representation.
     In particular, a prescribed ground space $\operatorname{span}\{\psi\}$
     maps to $\operatorname{span}\{E_N\psi\}$.
     The unused-state penalty introduces no additional zero modes.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_isometric_commuting_bond_product}
@@ -563,7 +563,7 @@ of the virtual projective representation.
     image, so the two kernel identities give the claim.
 \end{proof}
 
-\begin{theorem}[Normalized fixed-point frame and its covariance]
+\begin{lemma}[Normalized fixed-point frame and its covariance]
     \label{thm:spt_normalized_fixed_point_frame}
     \lean{MPSTensor.rotatePhysical_sptFixedPointTensor_eq_ofPhysicalMatrix,
         MPSTensor.intertwiner_of_rotatePhysical_sptFixedPointTensor_covariance}
@@ -578,7 +578,7 @@ of the virtual projective representation.
         UJ=J(X^T\otimes Y).
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Each letter is $c\sum_{a,b}J_{i,(a,b)}|a\rangle\langle b|$,
@@ -587,7 +587,7 @@ of the virtual projective representation.
     intertwining identity.
 \end{proof}
 
-\begin{theorem}[Canonical parent at the embedded polar endpoint]
+\begin{lemma}[Canonical parent at the embedded polar endpoint]
     \label{thm:spt_polar_fixed_point_parent}
     \lean{MPSTensor.sptScale_smul_polarFrameEmbedding_polar_endpoint,
         MPSTensor.parentInteraction_polarFrameEmbedding_polar_endpoint}
@@ -602,7 +602,7 @@ of the virtual projective representation.
     restriction documented in \cite{gap:spc11_uniform_gap_injective_scope}),
     the two tensors have the same canonical parent interaction at every
     length.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_frame_embedding,
@@ -612,7 +612,7 @@ of the virtual projective representation.
     and therefore its orthogonal complement projection.
 \end{proof}
 
-\begin{theorem}[Covariance of the two fixed-point coordinate frames]
+\begin{lemma}[Covariance of the two fixed-point coordinate frames]
     \label{thm:spt_fixed_point_coordinate_frames}
     \lean{MPSTensor.sptPhysicalEmbedding_left_intertwiner,
         MPSTensor.sptPhysicalEmbedding_right_intertwiner}
@@ -627,7 +627,7 @@ of the virtual projective representation.
     inclusions $J_0,J_1$ of their virtual-pair spaces into
     $\C^{(D_0+D_1)^2}$ intertwine the corresponding pair actions with the
     common fixed-point physical action induced by $V$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_normalized_fixed_point_frame}
@@ -667,7 +667,7 @@ of the virtual projective representation.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Isometry and symmetry of the common embeddings]
+\begin{lemma}[Isometry and symmetry of the common embeddings]
     \label{thm:spt_common_physical_endpoints}
     \lean{MPSTensor.physicalSumInclusion_isometry,
         MPSTensor.physicalSumInclusion_intertwiner,
@@ -684,7 +684,7 @@ of the virtual projective representation.
     are unitary and each $A_j$ has covariance under its original
     on-site action $U_j$ and the corresponding virtual action.
     Then the common action intertwines $E_j$ with $U_j$ and $Q$ with $V$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_frame_embedding,
@@ -698,7 +698,7 @@ of the virtual projective representation.
     inverse, so both descriptions of the pair action agree.
 \end{proof}
 
-\begin{theorem}[Polar endpoints in the common physical space]
+\begin{lemma}[Polar endpoints in the common physical space]
     \label{thm:spt_common_physical_polar_endpoints}
     \lean{MPSTensor.commonPhysicalEmbeddingLeft_mul_polarIsoMatrix,
         MPSTensor.commonPhysicalEmbeddingRight_mul_polarIsoMatrix,
@@ -712,7 +712,7 @@ of the virtual projective representation.
     The embedded isometric polar tensor, multiplied by $D_j^{-1/2}$,
     is therefore the normalized matrix-unit tensor in the frame $QJ_j$.
     Their canonical parent interactions agree at every length.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_frame_embedding,
@@ -747,7 +747,7 @@ of the virtual projective representation.
     endpoint identifies the normalized fixed-point canonical parent.
 \end{proof}
 
-\begin{theorem}[Unitary virtual covariance from unital normalization]
+\begin{lemma}[Unitary virtual covariance from unital normalization]
     \label{thm:spt_unitary_virtual_covariance_unital}
     \lean{MPSTensor.exists_posDef_adjoint_fixedPoint_of_isInjective_unital,
         MPSTensor.exists_unitary_covariance_of_isInjective_unital,
@@ -762,7 +762,7 @@ of the virtual projective representation.
     \cite[Section~II.C, isometric form and symmetries]{Schuch2011Phases},
     for a fixed unitary on-site representation preserving every periodic MPS
     vector, unitary virtual covariance can be chosen for every group element.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:injective_irreducible, lem:trace_mul_transfer_map_adjoint,
@@ -781,7 +781,7 @@ of the virtual projective representation.
     preceding argument gives the unitary choices.
 \end{proof}
 
-\begin{theorem}[Prepared polar path from an on-site symmetric injective tensor]
+\begin{lemma}[Prepared polar path from an on-site symmetric injective tensor]
     \label{thm:spt_prepared_polar_gapped_path}
     \lean{MPSTensor.exists_unital_parent_representative_of_isInjective,
         MPSTensor.exists_prepared_polarGappedInteractionPath_of_isOnSiteSymmetric}
@@ -800,7 +800,7 @@ of the virtual projective representation.
     interaction path on the original physical space with representation $U$
     throughout, without assuming normalization of $A$ or unitarity of its
     virtual matrices.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:injective_irreducible, thm:unital_data_irreducible,
@@ -818,7 +818,7 @@ of the virtual projective representation.
     the path.
 \end{proof}
 
-\begin{theorem}[Virtual class under gauge preparation]
+\begin{lemma}[Virtual class under gauge preparation]
     \label{thm:spt_virtual_class_gauge_preparation}
     \lean{TNLean.Algebra.ProjectiveRepresentation.conjugate,
         MPSTensor.twistedTensor_covariance_of_smul_gauge,
@@ -832,7 +832,7 @@ of the virtual projective representation.
     \cite[Sections~II.C and II.F.2]{Schuch2011Phases}, for $D>0$ and
     injective $B$, every virtual representation chosen for $B$ has factor
     system cohomologous to that of $\rho$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Conjugation preserves the projective multiplication law and commutes
@@ -841,7 +841,7 @@ of the virtual projective representation.
     with any other choice.
 \end{proof}
 
-\begin{theorem}[Virtual class along the prepared polar path]
+\begin{lemma}[Virtual class along the prepared polar path]
     \label{thm:spt_prepared_polar_virtual_class}
     \lean{MPSTensor.exists_unitary_virtualRep_polarDeformation,
         MPSTensor.cohomologousTo_polarIsometricTensor_of_isInjective_unital,
@@ -860,7 +860,7 @@ of the virtual projective representation.
     \cite{gap:spc11_uniform_gap_injective_scope}), any virtual
     representations chosen at the endpoints of the polar path have
     cohomologous factor systems.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:projective_rep_from_virtual_covariance,
@@ -907,7 +907,7 @@ of the virtual projective representation.
     \end{align}
     On an interval where the minimal injective bond dimension is fixed,
     continuous tensors with exact symmetry admit continuous virtual gauges
-    by Theorem~\ref{thm:spt_tensor_path_class_invariance}. Their factor
+    by Lemma~\ref{thm:spt_tensor_path_class_invariance}. Their factor
     systems have constant cohomology class by the determinant argument.
     Symmetry of a unique ground-state line initially gives a scalar action;
     its character must first be removed by a fixed physical phase gauge.
@@ -915,7 +915,7 @@ of the virtual projective representation.
     continuous balanced canonical data from the physical gap and restrict
     the virtual action to the invariant bond subspace surviving the limit.
     The algebraic restriction is
-    Theorem~\ref{thm:spt_invariant_bond_compression}, but the required
+    Lemma~\ref{thm:spt_invariant_bond_compression}, but the required
     continuity implication remains unformalized
     \cite{gap:spc11_spt_interpolation_upper_range}.
 
@@ -974,11 +974,11 @@ of the virtual projective representation.
     A direct computation using $\E_A(\Id)=\Id$ shows that
     $\E_{U(g)}(\rho(g^{-1}))=\rho(g^{-1})$, so
     $\rho(g^{-1})$ is a nonzero eigenvector with eigenvalue~$1$.
-    Theorem~\ref{thm:twisted_transfer_modulus_one_gauge_phase} gives
+    Lemma~\ref{thm:twisted_transfer_modulus_one_gauge_phase} gives
     gauge-phase equivalence with the companion tensor, and
-    Theorem~\ref{thm:virtual_unitary_of_twisted_gauge_phase} extracts a virtual
+    Lemma~\ref{thm:virtual_unitary_of_twisted_gauge_phase} extracts a virtual
     unitary and phase.
-    By Theorem~\ref{thm:boundary_state_invariant_of_virtual_unitary}, this
+    By Lemma~\ref{thm:boundary_state_invariant_of_virtual_unitary}, this
     unitary preserves the boundary state, so
     Lemma~\ref{lem:has_string_order_of_local_symmetry} gives
     virtual-boundary nondecay.
@@ -992,7 +992,7 @@ of the virtual projective representation.
     irrespective of its cocycle class, so tensors in different SPT phases
     all satisfy virtual-boundary nondecay for every group element.  This
     nondecay is equivalent to virtual local covariance
-    (Theorem~\ref{thm:string_order_iff_local_symmetry}); the invariant
+    (Lemma~\ref{thm:string_order_iff_local_symmetry}); the invariant
     that separates SPT phases is the cohomology class of the virtual
     representation cocycle (Theorem~\ref{thm:spt_classification}).
 \end{remark}
@@ -1005,7 +1005,7 @@ rephases the two endpoint virtual actions to a common factor system and then for
 their direct sum; necessity rests on the discreteness of the class along a
 continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 
-\begin{theorem}[Unitary rephasing of cohomologous virtual actions]
+\begin{lemma}[Unitary rephasing of cohomologous virtual actions]
     \label{thm:spt_unitary_rephasing}
     \lean{TNLean.Algebra.ProjectiveRepresentation.rephase,
         TNLean.Algebra.circleScalar_mem_unitaryGroup,
@@ -1028,7 +1028,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     If these systems are cohomologous, one can rephase the first action
     to have the factor system of the second
     \cite[Section~II.F.2, lines~886--921]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Choose $\lambda$ with
@@ -1065,20 +1065,20 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     of~\cite[Section~II.F.2, lines~909--921]{Schuch2011Phases}.
 \end{definition}
 
-\begin{theorem}[Unitarity of the virtual direct sum]
+\begin{lemma}[Unitarity of the virtual direct sum]
     \label{thm:spt_projective_direct_sum_unitary}
     \lean{TNLean.Algebra.ProjectiveRepresentation.directSum_mem_unitaryGroup}
     \leanok
     \uses{def:spt_projective_direct_sum}
     If $V_g^0$ and $V_g^1$ are unitary, then $V_g^0\oplus V_g^1$ is unitary.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The product with its adjoint is
     $(V_g^0(V_g^0)^*)\oplus(V_g^1(V_g^1)^*)=I_{D_0}\oplus I_{D_1}$.
 \end{proof}
 
-\begin{theorem}[Local continuous conjugators from matrix units]
+\begin{lemma}[Local continuous conjugators from matrix units]
     \label{thm:spt_local_matrix_conjugator}
     \lean{Matrix.matrixUnitConjugator, Matrix.matrixUnitConjugator_eq_smul,
         Matrix.matrixUnitConjugator_intertwines,
@@ -1096,7 +1096,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     $\alpha_t(M)X(t)=X(t)M$. It is invertible in a neighborhood
     of $t_0$. This is an auxiliary local construction for
     \cite[Section~II.F.2]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     If $\alpha_t=\operatorname{Ad}Y$, matrix-unit multiplication gives
@@ -1105,7 +1105,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     formula. Its determinant is nonzero near $t_0$.
 \end{proof}
 
-\begin{theorem}[Continuous inverse coefficients of an injective tensor]
+\begin{lemma}[Continuous inverse coefficients of an injective tensor]
     \label{thm:spt_continuous_inverse_coefficients}
     \lean{MPSTensor.coefficientInverseMatrix,
         MPSTensor.physicalMatrix_transpose_mul_coefficientInverseMatrix,
@@ -1127,7 +1127,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     in this expansion defines their virtual conjugation action,
     also continuously. This gives the inverse of the injective
     tensor map used in \cite[Section~II.F.2]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Injectivity gives full column rank of $P$, so $P^\dagger P$ is
@@ -1137,7 +1137,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     $YMY^{-1}$ after replacing the letters.
 \end{proof}
 
-\begin{theorem}[Local virtual gauges from an exact tensor symmetry]
+\begin{lemma}[Local virtual gauges from an exact tensor symmetry]
     \label{thm:spt_local_virtual_gauge}
     \lean{MPSTensor.exists_continuous_local_gauge_of_gaugeEquiv,
         MPSTensor.exists_continuous_local_virtualGauge_of_isOnSiteSymmetric}
@@ -1154,7 +1154,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \cite[Section~II.F.2]{Schuch2011Phases}; interval gluing and changes
     of minimal bond dimension remain separate steps, as recorded in
     \cite{gap:spc11_spt_interpolation_upper_range}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_local_matrix_conjugator,
@@ -1165,7 +1165,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     injective fundamental theorem, so the argument applies to each twist.
 \end{proof}
 
-\begin{theorem}[Continuous gauges on an interval]
+\begin{lemma}[Continuous gauges on an interval]
     \label{thm:spt_global_virtual_gauge}
     \lean{MPSTensor.gauge_covariance_of_invertible_intertwiner,
         MPSTensor.exists_units_smul_of_invertible_intertwiners,
@@ -1179,7 +1179,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     initial value and $B_t^iX_t=X_tA_t^i$ for every $t,i$.
     This proves the interval lifting of the local construction in
     \cite[Section~II.F.2]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_local_virtual_gauge}
@@ -1191,7 +1191,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     gives the prescribed initial gauge.
 \end{proof}
 
-\begin{theorem}[A constant character on continuous invariant ground lines]
+\begin{lemma}[A constant character on continuous invariant ground lines]
     \label{thm:spt_ground_line_character}
     \lean{Matrix.mul_rankOne_idempotent_eq_trace_smul,
         Matrix.trace_mul_mem_spectrum_of_rankOne_idempotent_commute,
@@ -1208,7 +1208,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     onto unique ground-state lines are a special case, provided their
     continuity has been established. This is an ingredient for the phase
     gauges allowed in \cite[Section~II.C.2 and Appendix~B]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     A matrix $X$ commuting with a rank-one idempotent $P$ satisfies
@@ -1219,7 +1219,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     Unitarity puts each scalar on the unit circle.
 \end{proof}
 
-\begin{theorem}[A one-site character from chain lengths two and three]
+\begin{lemma}[A one-site character from chain lengths two and three]
     \label{thm:spt_character_from_positive_lengths}
     \lean{MPSTensor.mpv_blockTensor_eq_smul_of_mpv_eq_smul_from_two,
         MPSTensor.eq_pow_div_of_mpv_eq_smul_from_two,
@@ -1237,7 +1237,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     $\chi(g)B$ and $A(g)$ have equal periodic vectors at all lengths,
     including length one. This gives the one-site phase gauge in
     \cite[Appendix~B]{Schuch2011Phases} from rings of length at least two.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     For each $L\ge2$, block into words of length $L$. Every positive
@@ -1250,7 +1250,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     from lengths at least two to every length.
 \end{proof}
 
-\begin{theorem}[Removing a physical symmetry character]
+\begin{lemma}[Removing a physical symmetry character]
     \label{thm:spt_physical_character_twist}
     \lean{MPSTensor.physicalCharacterTwist,
         MPSTensor.physicalCharacterTwist_apply,
@@ -1268,7 +1268,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     makes the symmetry exact at every length.
     This is the physical phase-gauge change allowed in
     \cite[Section~II.C.2 and Appendix~B]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Scalars commute with the matrix action, and the character law gives
@@ -1277,7 +1277,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     length-$N$ vector by $\chi(g)^N$. The inverse character cancels it.
 \end{proof}
 
-\begin{theorem}[Orthogonal original endpoint spaces in the common representation]
+\begin{lemma}[Orthogonal original endpoint spaces in the common representation]
     \label{thm:spt_common_physical_endpoint_orthogonality}
     \lean{MPSTensor.commonPhysicalEmbeddingLeft_conjTranspose_mul_right_eq_zero}
     \leanok
@@ -1287,7 +1287,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     tensors, without injectivity or symmetry assumptions, and gives
     the orthogonal endpoint summands required by
     \cite[Section~II.C.2]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_common_physical_endpoints}
@@ -1297,7 +1297,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     reduces to the zero mixed product of the active frames.
 \end{proof}
 
-\begin{theorem}[A gapped fixed-point path retaining the original physical spaces]
+\begin{lemma}[A gapped fixed-point path retaining the original physical spaces]
     \label{thm:spt_common_physical_fixed_point_path}
     \lean{Matrix.commute_singleKrausMap_of_unitary_intertwiner,
         MPSTensor.isometricInteractionExtension_commute_onSiteTensorPow,
@@ -1335,7 +1335,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     join its endpoints to the canonical two-site parents of the two included
     fixed-point tensors. This realizes the common-space construction in
     \cite[Section~II.F.2]{Schuch2011Phases} for the stated two-site setting.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_common_physical_endpoints,
@@ -1351,7 +1351,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     uniform positive gap; concatenate them with the bond interpolation.
 \end{proof}
 
-\begin{theorem}[The common-space bond path has an independent exact MPS realization]
+\begin{lemma}[The common-space bond path has an independent exact MPS realization]
     \label{thm:spt_common_physical_fixed_point_ground_path}
     \lean{MPSTensor.normalizedBondInterpolationMatrix_diagonal_ne_zero,
         MPSTensor.weightedMatrixUnitInterpolation_isInjective,
@@ -1374,7 +1374,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     virtual representation; symmetry comes from the physical path.
     This verifies the exact MPS interpolation in
     \cite[Section~II.F.2]{Schuch2011Phases} in the stated setting.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_common_physical_fixed_point_path}
@@ -1387,7 +1387,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     with least energy zero.
 \end{proof}
 
-\begin{theorem}[Local on-site commutation gives periodic symmetry]
+\begin{lemma}[Local on-site commutation gives periodic symmetry]
     \label{thm:spt_interaction_hamiltonian_symmetry}
     \lean{MPSTensor.interactionHamiltonian_commute_onSiteTensorPow}
     \leanok
@@ -1395,14 +1395,14 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     on-site matrix, then its translation-invariant periodic Hamiltonian
     commutes with the full tensor power at every chain length at least
     two. Unitarity is not needed for this algebraic identity.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Each embedded interaction term has the asserted commutation
     identity. Summing over its translates gives the result.
 \end{proof}
 
-\begin{theorem}[Aligning unitary virtual factors]
+\begin{lemma}[Aligning unitary virtual factors]
     \label{thm:spt_unitary_factor_alignment}
     \lean{TNLean.Algebra.ProjectiveRepresentation.norm_factor_eq_one_of_unitary,
         TNLean.Algebra.ProjectiveRepresentation.circlePhaseInclusion_eq_of_unitary,
@@ -1413,7 +1413,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     cohomologous factor systems can therefore be rephased by unit-circle
     scalars to have precisely the same factor system, preserving unitarity
     \cite[Section~II.F.2]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Take operator norms in the projective multiplication law. Both unitary
@@ -1422,7 +1422,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     second virtual representation.
 \end{proof}
 
-\begin{theorem}[Physical character changes preserve the same gapped path]
+\begin{lemma}[Physical character changes preserve the same gapped path]
     \label{thm:spt_character_gapped_path}
     \lean{Matrix.finKronecker_const_smul,
         MPSTensor.SymmetricGappedInteractionPath.physicalCharacterTwist,
@@ -1434,7 +1434,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     exact MPS ground realization. Both the Hamiltonians and their ground
     spaces are unchanged. This is the physical phase-gauge freedom of
     \cite[Section~II.C.2 and Appendix~B]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_physical_character_twist}
@@ -1443,7 +1443,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     Every other condition concerns the same interactions and tensor family.
 \end{proof}
 
-\begin{theorem}[Exact MPS ground lines along a canonical injective path]
+\begin{lemma}[Exact MPS ground lines along a canonical injective path]
     \label{thm:spt_canonical_injective_ground_path}
     \lean{MPSTensor.interactionHamiltonian_parent_groundSpace_eq_span_mpv,
         MPSTensor.exactMPSGroundPath_of_canonicalInjective}
@@ -1456,7 +1456,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     the MPS line, with least energy zero. The periodic vectors are also
     nonzero at length one. No additional virtual data are required by
     this ground-state certificate.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     One-site injectivity gives nonvanishing at each positive length.
@@ -1481,7 +1481,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Supported bond lifts preserve the exact ground realization]
+\begin{lemma}[Supported bond lifts preserve the exact ground realization]
     \label{thm:spt_supported_bond_lift}
     \lean{MPSTensor.mpv_isometricBondEmbedding,
         MPSTensor.continuous_isometricBondEmbedding,
@@ -1500,7 +1500,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     vectors as $A_\gamma$ at every positive length. Consequently it
     preserves an exact MPS ground realization of the same physical path,
     including its pointwise injective representatives.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The correction annihilates $V$ on its right and is supported on
@@ -1511,7 +1511,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     is preserved. All ground-line conditions concern these same vectors.
 \end{proof}
 
-\begin{theorem}[Exact ground lines through the canonical fixed-point comparisons]
+\begin{lemma}[Exact ground lines through the canonical fixed-point comparisons]
     \label{thm:spt_common_physical_canonical_ground_path}
     \lean{MPSTensor.interactionHamiltonian_affine_ker_eq_of_order,
         MPSTensor.ExactMPSGroundPath.of_ordered_affine,
@@ -1534,7 +1534,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     Hamiltonians with the same zero modes preserves that ground line.
     This certifies the parent comparisons in
     \cite[Section~II.F.2]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_common_physical_fixed_point_ground_path,
@@ -1548,7 +1548,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     common parameterization.
 \end{proof}
 
-\begin{theorem}[Cohomologous unitary factors give a common-space path]
+\begin{lemma}[Cohomologous unitary factors give a common-space path]
     \label{thm:spt_common_physical_injective_path}
     \lean{MPSTensor.commonPhysicalInjectiveGappedPath,
         MPSTensor.rotatePhysical_covariance_of_circle_rephase,
@@ -1567,7 +1567,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \cite[Section~II.F.2]{Schuch2011Phases}. The independent exact MPS
     ground realization is constructed in
     Definition~\ref{def:spt_common_physical_injective_ground_path}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_common_physical_polar_endpoints,
@@ -1601,7 +1601,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     follow from the corresponding half of the path.
 \end{proof}
 
-\begin{theorem}[One-site paths give the independent exact MPS phase condition]
+\begin{lemma}[One-site paths give the independent exact MPS phase condition]
     \label{thm:spt_exact_phase_one_site_path}
     \lean{MPSTensor.blockKron_one_eq_submatrix,
         MPSTensor.rotatePhysical_submatrix_singleBlockEquiv_blockTensor_one,
@@ -1615,7 +1615,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     vector lines are the included endpoint lines, proves the independent
     exact MPS phase condition with blocking length one and trivial
     endpoint characters.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Identify a one-letter word with its single physical index. The blocked
@@ -1626,7 +1626,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     all the required data.
 \end{proof}
 
-\begin{theorem}[Unitary preparation of a virtual implementation]
+\begin{lemma}[Unitary preparation of a virtual implementation]
     \label{thm:spt_exact_phase_unitary_preparation}
     \lean{MPSTensor.rotatePhysical_covariance_of_unitary_virtual_action,
         MPSTensor.exists_unitary_covariant_preparation_with_virtual_class}
@@ -1636,7 +1636,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     symmetry. A nonzero scalar rescaling and a bond change of basis give
     an injective tensor with a unitary virtual implementation in the
     same cohomology class. Its physical covariance is adjoint conjugation.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_prepared_polar_virtual_class}
@@ -1657,7 +1657,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     ground realization of the same three-stage physical path.
 \end{definition}
 
-\begin{theorem}[Dimensions and endpoints of exact ground concatenation]
+\begin{lemma}[Dimensions and endpoints of exact ground concatenation]
     \label{thm:spt_exact_ground_three_stage_endpoints}
     \lean{MPSTensor.ExactMPSGroundPath.trans_bondDimension,
         MPSTensor.ExactMPSGroundPath.reverseTransTrans_tensor_zero,
@@ -1668,7 +1668,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     tensor of the three-stage realization is the final tensor of the
     first, unreversed family, and its final tensor is the final tensor
     of the third family.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_common_physical_canonical_ground_path}
@@ -1700,7 +1700,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     periodic vectors and therefore the same exact ground realization.
 \end{proof}
 
-\begin{theorem}[Exact endpoints of the common polar ground families]
+\begin{lemma}[Exact endpoints of the common polar ground families]
     \label{thm:spt_common_physical_polar_ground_endpoints}
     \lean{MPSTensor.commonPhysicalLeftPolarExactMPSGroundPath_tensor_zero,
         MPSTensor.commonPhysicalRightPolarExactMPSGroundPath_tensor_zero,
@@ -1714,7 +1714,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     original tensor. Thus both fixed-point joins are exact tensor
     identities, while the original endpoints have the required vector
     lines.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_supported_bond_lift}
@@ -1749,7 +1749,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     with the same parameter changes as the physical path.
 \end{proof}
 
-\begin{theorem}[Cohomologous virtual factors give the independent exact MPS phase]
+\begin{lemma}[Cohomologous virtual factors give the independent exact MPS phase]
     \label{thm:spt_exact_phase_forward}
     \lean{MPSTensor.isSameExactMPSGappedPhase_of_unitary_common_factor,
         MPSTensor.isSameExactMPSGappedPhase_of_unitary_cohomologous,
@@ -1766,7 +1766,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     assumed. This proves the forward construction of
     \cite[Section~II.F.2]{Schuch2011Phases} in the stated one-site,
     trivial-character setting.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:spt_common_physical_injective_ground_path,
@@ -1786,7 +1786,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     the phase condition back by gauge invariance.
 \end{proof}
 
-\begin{theorem}[Chain characters from an independent physical path]
+\begin{lemma}[Chain characters from an independent physical path]
     \label{thm:spt_physical_path_chain_character}
     \lean{Matrix.eigenvector_of_mem_span_singleton,
         Matrix.eigenvalue_constant_of_continuous_invariant_line,
@@ -1801,7 +1801,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     symmetry acts on every length-$N$ ground vector by $c_N(g)$,
     independently of the path parameter. The ambient tensors need not
     be injective, and their minimal bond dimensions may change.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The nonzero periodic vectors depend continuously on the ambient tensors.
@@ -1812,7 +1812,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     law, and unitarity gives unit modulus.
 \end{proof}
 
-\begin{theorem}[A common physical character with varying minimal dimension]
+\begin{lemma}[A common physical character with varying minimal dimension]
     \label{thm:spt_varying_bond_physical_character}
     \lean{LinearMap.map_eq_smul_of_span_singleton_eq,
         MPSTensor.mpv_twistedTensor_eq_finKronecker_mulVec,
@@ -1830,7 +1830,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     This removes the scalar character in the varying-dimension argument
     of \cite[Appendices~B and~C]{Schuch2011Phases}; continuity of the
     canonical virtual support remains to be established.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_physical_path_chain_character,
@@ -1846,7 +1846,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     and remove the common character from the physical action.
 \end{proof}
 
-\begin{theorem}[The physical converse with a fixed injective realization]
+\begin{lemma}[The physical converse with a fixed injective realization]
     \label{thm:spt_fixed_bond_physical_converse}
     \lean{MPSTensor.ExactMPSGroundPath.exists_single_character_of_isInjective,
         MPSTensor.ExactMPSGroundPath.exists_exact_symmetry_of_isInjective,
@@ -1865,7 +1865,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     The fixed injective realization is the scope restriction; the
     varying-support converse remains open
     \cite{gap:spc11_spt_interpolation_upper_range}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_physical_path_chain_character,
@@ -1887,7 +1887,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     two-site MPS is $C_2(A)_{ij}=\operatorname{tr}(A^iA^j)$.
 \end{definition}
 
-\begin{theorem}[Minimal bond dimension is locally bounded below]
+\begin{lemma}[Minimal bond dimension is locally bounded below]
     \label{thm:spt_minimal_bond_dimension_lower_bound}
     \lean{MPSTensor.rank_twoSiteSchmidtMatrix_of_isInjective,
         MPSTensor.twoSiteSchmidtMatrix_apply_eq_mpv,
@@ -1906,7 +1906,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \cite[Section~II.F.2, lines~1059--1068]{Schuch2011Phases}.
     It uses the two-site vector and its continuity, and does not derive
     a surviving single-bond projective subspace from the physical gap.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:ldpolar_injective_physical}
@@ -1920,7 +1920,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     representative dimensions satisfy $D^2\ge D_0^2$, or $D\ge D_0$.
 \end{proof}
 
-\begin{theorem}[Two-site trace data determine the physical quotient]
+\begin{lemma}[Two-site trace data determine the physical quotient]
     \label{thm:spt_finite_two_site_trace_quotient}
     \lean{MPSTensor.traceGram_eq_smul_of_twoSite_trace_eq,
         MPSTensor.ker_linearCombination_eq_of_twoSite_trace_eq,
@@ -1933,7 +1933,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     $x\mapsto\sum_i x_iB^i$ have the same kernel, and $D=E$.
     Their trace forms are the compositions of these coefficient maps
     with the corresponding nondegenerate trace pairings.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Injectivity makes $M\mapsto(\tr(MA^i))_i$ and its analogue for $B$
@@ -1944,7 +1944,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     Hermitian forms.
 \end{proof}
 
-\begin{theorem}[Three-site trace data determine multiplication]
+\begin{lemma}[Three-site trace data determine multiplication]
     \label{thm:spt_finite_three_site_trace_algebra}
     \lean{MPSTensor.linearExtension_exists_unique_of_twoSite_trace_eq,
         MPSTensor.linearExtension_mul_of_two_three_trace_eq}
@@ -1956,7 +1956,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     If $c_3\ne0$ and
     $\tr(B^iB^jB^k)=c_3\tr(A^iA^jA^k)$ for all $i,j,k$, then
     $T(MN)=(c_2/c_3)T(M)T(N)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Use a left inverse of the trace-pairing map for $B$ to extend the
@@ -1965,7 +1965,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     on pairs of letters. Bilinearity extends it to arbitrary matrices.
 \end{proof}
 
-\begin{theorem}[Reconstruction from two finite rings]
+\begin{lemma}[Reconstruction from two finite rings]
     \label{thm:spt_finite_ring_reconstruction}
     \lean{MPSTensor.gaugeEquiv_smul_of_two_three_trace_eq,
         MPSTensor.samePositiveMpvRay_of_two_three_trace_eq,
@@ -1979,7 +1979,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     vector rays agree at every positive length.
     This finite-data assertion does not construct continuous canonical
     coordinates through a changing bond dimension.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_finite_two_site_trace_quotient,
@@ -2009,7 +2009,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     section. No positivity of the bilinear trace form $G$ is assumed.
 \end{definition}
 
-\begin{theorem}[A fixed section of a constant-rank trace form]
+\begin{lemma}[A fixed section of a constant-rank trace form]
     \label{thm:spt_trace_quotient_fixed_section}
     \lean{Matrix.exists_fixedSection_of_rank,
         Matrix.exists_open_fixedSection_range}
@@ -2019,7 +2019,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     that $G(t_0)F$ is injective. For this fixed $F$, there is an open
     neighborhood $S$ of $t_0$ on which $G(t)F$ remains injective and
     has the same range as $G(t)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Choose coordinates on the range of $G(t_0)$ and lift them through
@@ -2031,7 +2031,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 
 
 
-\begin{theorem}[Continuous multiplication coefficients at constant rank]
+\begin{lemma}[Continuous multiplication coefficients at constant rank]
     \label{thm:spt_trace_quotient_continuous_product}
     \lean{Matrix.continuous_traceQuotientProductCoordinates,
         Matrix.exists_open_continuous_traceQuotientProductCoordinates,
@@ -2045,7 +2045,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     $(C(t)^\dagger C(t))^{-1}C(t)^\dagger R_F(t)$ are continuous on
     an open neighborhood of the base point. The conclusion includes
     the section and its open neighborhood.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Use the preceding fixed section. Its Gram matrix is positive
@@ -2068,7 +2068,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Contraction of finite-ring trace data]
+\begin{lemma}[Contraction of finite-ring trace data]
     \label{thm:spt_trace_quotient_contraction}
     \lean{Matrix.traceQuotientSection_pair,
         Matrix.traceQuotientSection_triple,
@@ -2088,7 +2088,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \end{align}
     The contracted columns depend continuously on a continuous ambient
     tensor family in a fixed bond dimension.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Expand the coefficient sums and use bilinearity and trilinearity
@@ -2096,7 +2096,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     and matrix products in their defining formula.
 \end{proof}
 
-\begin{theorem}[Recovery of the minimal matrix algebra]
+\begin{lemma}[Recovery of the minimal matrix algebra]
     \label{thm:spt_trace_quotient_matrix_algebra_recovery}
     \lean{Matrix.traceQuotientProductCoordinates_recover,
         Matrix.exists_linearEquiv_traceQuotientSection,
@@ -2121,7 +2121,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     particularly through a change of rank, remains a separate step in
     the reconstruction proposed in
     \cite[Section~II.F.2, lines~953--993]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Injectivity of $GF$ implies injectivity of $Q$; the dimension
@@ -2132,7 +2132,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     from associativity of matrix multiplication and injectivity of $E$.
 \end{proof}
 
-\begin{theorem}[Local continuous algebra from an ambient tensor family]
+\begin{lemma}[Local continuous algebra from an ambient tensor family]
     \label{thm:spt_trace_quotient_continuous_algebra}
     \lean{Matrix.exists_local_continuous_traceQuotientAlgebra}
     \leanok
@@ -2156,7 +2156,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     This constant-dimension assertion does not construct a continuous
     tensor realization through a change of rank
     \cite{gap:spc11_spt_interpolation_upper_range}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The coefficient map of $A(t)$ is surjective, and its trace-pairing
@@ -2166,7 +2166,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     matrix-algebra recovery on the resulting neighborhood.
 \end{proof}
 
-\begin{theorem}[A continuous unit for the local trace quotient]
+\begin{lemma}[A continuous unit for the local trace quotient]
     \label{thm:spt_trace_quotient_continuous_unit}
     \lean{Matrix.exists_local_continuous_traceQuotientUnit}
     \leanok
@@ -2176,7 +2176,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     a continuous two-sided unit $u(t)$. The same pointwise normalized
     identifications with the minimal matrix algebra remain available.
     No continuous unit is assumed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     At the base point choose the unit $u_0$ using its matrix-algebra
@@ -2193,7 +2193,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     Set $R_D^0=I_D$ and $R_D^1=0$.
 \end{definition}
 
-\begin{theorem}[Physical rays do not fix an ambient stationary space]
+\begin{lemma}[Physical rays do not fix an ambient stationary space]
     \label{thm:spt_redundant_bond_stationary_space}
     \lean{MPSTensor.repeatedProductTensor_adjointMapLM,
         MPSTensor.repeatedProductTensor_isUnital,
@@ -2208,7 +2208,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     twice those of $R_1$, so their positive-length rays agree.
     In particular, the physical rays alone do not determine the
     stationary-space dimension of an arbitrary ambient realization.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Only the zero physical letter contributes to either the transfer map
@@ -2217,7 +2217,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     $D$. Thus the two realizations differ by the constant factor two.
 \end{proof}
 
-\begin{theorem}[Local continuous coordinates for a fixed-rank support]
+\begin{lemma}[Local continuous coordinates for a fixed-rank support]
     \label{thm:spt_continuous_projection_frame}
     \lean{Matrix.continuous_polarPos_family,
         Matrix.polarIso_eq_mul_inv_polarPos_of_injective,
@@ -2240,7 +2240,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     are hypotheses here; deriving the relevant canonical supports from
     the physical gap remains open
     \cite{gap:spc11_spt_interpolation_upper_range}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The Gram matrix of $P(t)J_0$ equals the identity at $t_0$ and remains
@@ -2251,7 +2251,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     two orthogonal range projections coincide.
 \end{proof}
 
-\begin{theorem}[Continuous separated spectral corners]
+\begin{lemma}[Continuous separated spectral corners]
     \label{thm:spt_continuous_spectral_corner}
     \lean{Matrix.spectralCornerRamp,
         Matrix.continuous_spectralCornerRamp,
@@ -2279,7 +2279,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     These facts provide auxiliary separated supports for the argument in
     \cite[Appendix~C]{Schuch2011Phases}; continuity and spectral separation
     of the relevant density remain explicit hypotheses.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The continuous ramp equals the spectral indicator on every spectrum,
@@ -2290,7 +2290,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     rank locally constant.
 \end{proof}
 
-\begin{theorem}[Continuous invariant compression preserves the factor]
+\begin{lemma}[Continuous invariant compression preserves the factor]
     \label{thm:spt_continuous_invariant_compression}
     \lean{TNLean.Algebra.ProjectiveRepresentation.exists_local_continuous_unitary_compression,
         TNLean.Algebra.ProjectiveRepresentation.continuous_factor_family}
@@ -2308,7 +2308,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     The continuous ambient representation and projections are explicit
     auxiliary hypotheses for the argument in
     \cite[Appendix~C]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_continuous_projection_frame,
@@ -2322,7 +2322,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     $\det(V_{gh})$, which never vanishes.
 \end{proof}
 
-\begin{theorem}[Cohomology from a continuous injective tensor path]
+\begin{lemma}[Cohomology from a continuous injective tensor path]
     \label{thm:spt_tensor_path_class_invariance}
     \lean{MPSTensor.exists_continuous_virtualGauge_of_isOnSiteSymmetric,
         MPSTensor.exists_continuous_projectiveRepresentation_of_isOnSiteSymmetric,
@@ -2344,7 +2344,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     extraction of continuous tensors from an independent ground-state
     path remain open, as recorded in
     \cite{gap:spc11_spt_interpolation_upper_range}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_global_virtual_gauge,
@@ -2358,7 +2358,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     class with any prescribed endpoint representatives.
 \end{proof}
 
-\begin{theorem}[Cohomology along a fixed-dimension virtual path]
+\begin{lemma}[Cohomology along a fixed-dimension virtual path]
     \label{thm:spt_virtual_path_class_invariance}
     \lean{MPSTensor.continuous_rootOfUnity_path_const,
         MPSTensor.exists_continuous_pow_root_path,
@@ -2380,7 +2380,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     independent exact MPS ground-state path, including changes of
     bond dimension, is a separate step in the classification theorem
     \cite[Section~II.F.2, lines~930--946]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Each $\det V_\gamma(g)$ is a continuous nonzero complex path, so it
@@ -2408,7 +2408,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Restriction to an invariant bond subspace]
+\begin{lemma}[Restriction to an invariant bond subspace]
     \label{thm:spt_invariant_bond_compression}
     \lean{Matrix.isometry_compression_mul_of_commute,
         Matrix.isometry_compression_mem_unitaryGroup,
@@ -2425,7 +2425,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     is given here; deriving it continuously from the physical gap
     remains a separate problem, recorded in
     \cite{gap:spc11_spt_interpolation_upper_range}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Invariance and $J^\dagger J=I$ give
@@ -2434,7 +2434,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     for the projective law, and to $V_g,V_g^\dagger$ for unitarity.
 \end{proof}
 
-\begin{theorem}[Spectral corners retaining the base support]
+\begin{lemma}[Spectral corners retaining the base support]
     \label{thm:spt_local_spectral_support}
     \lean{Matrix.eventually_spectral_separation_of_continuousAt,
         Matrix.exists_positive_spectral_cutoffs,
@@ -2454,7 +2454,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     When $\sigma(t)\geq0$, the cutoff always satisfies
     $\operatorname{supp}\sigma(t)\,P(t)=P(t)$, whether or not its spectrum
     is separated at that parameter.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_continuous_spectral_corner,
@@ -2477,7 +2477,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     $\widetilde X=KXK^\dagger+(I-KK^\dagger)$.
 \end{definition}
 
-\begin{theorem}[Comparison of supported bond frames]
+\begin{lemma}[Comparison of supported bond frames]
     \label{thm:spt_supported_frame_comparison}
     \lean{Matrix.isometryExtendByIdentity_mul_isometry,
         Matrix.isometry_conjTranspose_mul_isometryExtendByIdentity,
@@ -2503,7 +2503,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     An operator $P$ commuting with $\widetilde X$ has compression
     $K^\dagger P K$ commuting with $X$.
     Finally, $\tr\sigma=1$ forces $D>0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Multiply the defining matrix extension by $K$ and $K^\dagger$ and
@@ -2515,7 +2515,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     $\sigma=0$, contradicting its trace.
 \end{proof}
 
-\begin{theorem}[Local cohomology for a continuous supported density]
+\begin{lemma}[Local cohomology for a continuous supported density]
     \label{thm:spt_supported_density_class_invariance}
     \lean{MPSTensor.eventually_cohomologousTo_of_continuous_supported_density}
     \leanok
@@ -2533,7 +2533,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     The dimensions $D(t)$, support frames and virtual actions need no
     continuity, and no projective action is required on the complementary
     bond space.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_local_spectral_support,
@@ -2549,7 +2549,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     Apply local cohomology invariance under pointwise compression.
 \end{proof}
 
-\begin{theorem}[Cohomology under pointwise invariant compression]
+\begin{lemma}[Cohomology under pointwise invariant compression]
     \label{thm:spt_pointwise_invariant_compression}
     \lean{Matrix.isometry_compression_conj_of_commute,
         MPSTensor.cohomologousTo_of_continuous_injective_pointwise_compression}
@@ -2565,7 +2565,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     cohomologous. No continuity of $D(t)$, $A(t)$, $J(t)$ or $V_g(t)$
     is required, and the tensor letters need not preserve the included
     bond subspace.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_invariant_bond_compression,
@@ -2578,7 +2578,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     continuous injective tensor families to $C(t)$.
 \end{proof}
 
-\begin{theorem}[Local cohomology under invariant compression]
+\begin{lemma}[Local cohomology under invariant compression]
     \label{thm:spt_local_invariant_compression}
     \lean{MPSTensor.eventually_isInjective_of_continuousAt,
         Set.Icc.eventually_forall_convexComb,
@@ -2592,7 +2592,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     sufficiently nearby $t$. For a fixed ambient bond space,
     continuity of $A(t)$ and $J(t)$ on that neighborhood implies the
     required continuity of $C(t)=J(t)^\dagger A(t)J(t)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_pointwise_invariant_compression}
@@ -2603,7 +2603,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     by $[0,1]$ and apply the pointwise compression theorem.
 \end{proof}
 
-\begin{theorem}[Symmetry of a unique stationary matrix]
+\begin{lemma}[Symmetry of a unique stationary matrix]
     \label{thm:spt_unique_stationary_symmetry}
     \lean{MPSTensor.adjointMap_rotatePhysical_eq_of_unitary,
         MPSTensor.adjointMap_conj_of_unitary_covariance,
@@ -2616,7 +2616,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     matrix $\sigma$, then $X\sigma=\sigma X$.
     This conclusion requires neither invertibility nor positivity of
     $\sigma$. In particular, it applies to a singular stationary density.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Unitary physical rotation leaves the adjoint transfer map unchanged.
@@ -2627,7 +2627,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     to commutation with $X$.
 \end{proof}
 
-\begin{theorem}[Stationary density under support compression]
+\begin{lemma}[Stationary density under support compression]
     \label{thm:spt_stationary_density_compression}
     \lean{MPSTensor.stationaryMatrix_compression_unique}
     \leanok
@@ -2636,7 +2636,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     $K$, put $A^i=K^\dagger B^iK$. Then $K^\dagger\sigma K$ is the
     unique trace-one stationary matrix of the adjoint transfer map of $A$.
     No unitality assumption is needed for this implication.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Stationarity makes the support of $\sigma$ invariant under each
@@ -2647,7 +2647,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     for $B$; uniqueness and $K^\dagger K=I$ give the claim.
 \end{proof}
 
-\begin{theorem}[Local cohomology from unique stationary bond data]
+\begin{lemma}[Local cohomology from unique stationary bond data]
     \label{thm:spt_local_unique_stationary_class}
     \lean{MPSTensor.eventually_cohomologousTo_of_continuousOn_unique_stationary_density,
         MPSTensor.eventually_cohomologousTo_of_continuous_unique_stationary_density,
@@ -2666,7 +2666,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     fixed space at $t_0$ have complex dimension one. In this case density
     continuity and local uniqueness follow automatically. Neither case
     assumes continuity of the minimal support frames or virtual actions.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_stationary_density_compression,
@@ -2682,7 +2682,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     density and identify the given pointwise stationary choice with it.
 \end{proof}
 
-\begin{theorem}[Local continuity of a normalized stationary density]
+\begin{lemma}[Local continuity of a normalized stationary density]
     \label{thm:spt_local_stationary_density}
     \lean{MPSTensor.exists_local_continuous_adjointStationaryDensity_of_unital,
         MPSTensor.exists_open_continuousOn_stationaryDensity_of_unital}
@@ -2694,7 +2694,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     matrix $\sigma(t)$. This matrix is positive semidefinite and continuous;
     its rank may change. Consequently any pointwise choice of trace-one
     stationary matrices agrees with this family and is continuous there.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Write $\mathcal E_t^*$ for the adjoint transfer map and choose a
@@ -2708,7 +2708,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     identifies it with that state. The same inverse proves uniqueness.
 \end{proof}
 
-\begin{theorem}[Continuous normalized Perron data]
+\begin{lemma}[Continuous normalized Perron data]
     \label{thm:spt_continuous_right_perron_data}
     \lean{MPSTensor.continuous_rightPerronDensity_of_isInjective,
         MPSTensor.exists_continuous_rightPerronPair_of_isInjective}
@@ -2726,7 +2726,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     is continuous. This is a consequence of positive-map
     Perron--Frobenius theory, applied to the given tensor family
     \cite[Theorem~6.3]{Wolf2012Quantum}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Perron--Frobenius theory gives a positive definite right eigenmatrix
@@ -2738,7 +2738,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     Finally $r(t)=\tr\mathcal E_{A(t)}(\rho(t))$ is continuous.
 \end{proof}
 
-\begin{theorem}[Local continuous unital normalization]
+\begin{lemma}[Local continuous unital normalization]
     \label{thm:spt_continuous_unital_normalization}
     \lean{MPSTensor.exists_local_continuous_unitalNormalization_of_isInjective}
     \leanok
@@ -2753,7 +2753,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     The tensor $B(t)$ is unital and is gauge-equivalent to
     $r(t)^{-1/2}A(t)$. The continuous tensor family is a hypothesis;
     no choice from physical ground vectors is asserted here.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_local_invariant_compression,
@@ -2767,7 +2767,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     $\rho(t)^{-1/2}$ gives the stated bond conjugation.
 \end{proof}
 
-\begin{theorem}[Local continuous canonical bond data]
+\begin{lemma}[Local continuous canonical bond data]
     \label{thm:spt_continuous_canonical_normalization}
     \lean{MPSTensor.exists_local_continuous_canonicalNormalization_of_isInjective}
     \leanok
@@ -2784,7 +2784,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     assumed. These are local canonical data for the given tensor
     family; reconstruction from a physical uniform gap remains separate
     \cite{gap:spc11_spt_interpolation_upper_range}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_continuous_unital_normalization,
@@ -2800,32 +2800,32 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{proof}
 
 % Auxiliary results for local continuous minimal realizations.
-\begin{theorem}[Gram left inverses]
+\begin{lemma}[Gram left inverses]
     \label{thm:spt_gram_left_inverse}
     \lean{Matrix.gramLeftInverse_mul, Matrix.continuous_gramLeftInverse}
     \leanok
     If a complex rectangular matrix $C$ has independent columns, then
     $H=(C^\dagger C)^{-1}C^\dagger$ satisfies $HC=I$.
     For a continuous family with independent columns, $H$ is continuous.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The Gram matrix is positive definite and hence invertible.
     Matrix inversion is continuous on the invertible matrices.
 \end{proof}
 
-\begin{theorem}[Coordinates of a bilinear map]
+\begin{lemma}[Coordinates of a bilinear map]
     \label{thm:spt_bilinear_coordinates}
     \lean{Matrix.toLinearMap₂'_apply_mulVec_prod}
     \leanok
     Let $M$ have columns indexed by pairs $(a,b)$. The associated bilinear
     map satisfies $\mu(x,y)=M(x\otimes y)$, where
     $(x\otimes y)_{(a,b)}=x_a y_b$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Expand both sides in the coordinate basis.
 \end{proof}
 
-\begin{theorem}[Polynomial correction of an idempotent]
+\begin{lemma}[Polynomial correction of an idempotent]
     \label{thm:spt_newton_idempotent}
     \lean{idempotent_newton_defect, idempotent_newton_sub,
         idempotent_newton_twice_sub_one, idempotent_newton_increment_bound,
@@ -2842,7 +2842,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
         \|2x_0-1\|\,\|d_0\|\,2^{-n}.
         \notag
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Polynomial expansion gives the identities, including
     $2x_{n+1}-1=(2x_n-1)(1-2d_n)$.
@@ -2852,7 +2852,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     idempotent.
 \end{proof}
 
-\begin{theorem}[Continuous local idempotents]
+\begin{lemma}[Continuous local idempotents]
     \label{thm:spt_continuous_nearby_idempotent}
     \lean{Matrix.exists_local_continuous_idempotent_in_adjoin}
     \leanok
@@ -2861,7 +2861,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     a continuous family of idempotents $P(t)$, with $P(t_0)=X(t_0)$,
     belonging pointwise to the unital algebra generated by $X(t)$.
     No Hermiticity assumption is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:spt_newton_idempotent}
     Shrink the neighborhood so that the idempotency defect is at most
@@ -2871,7 +2871,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     by finite dimensionality. At $t_0$ every iterate equals $X(t_0)$.
 \end{proof}
 
-\begin{theorem}[Rank of an idempotent]
+\begin{lemma}[Rank of an idempotent]
     \label{thm:spt_idempotent_rank}
     \lean{Matrix.trace_eq_rank_of_idempotent,
         Matrix.exists_open_constantRank_of_idempotent}
@@ -2879,14 +2879,14 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     An idempotent complex matrix has trace equal to its rank.
     Consequently the rank of a continuous family of idempotents is
     locally constant, including for non-Hermitian idempotents.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The associated linear map is the projection onto its range.
     Its trace is the dimension of that range. Continuity of the trace
     and discreteness of the integer ranks give local constancy.
 \end{proof}
 
-\begin{theorem}[Continuous frames for a matrix range]
+\begin{lemma}[Continuous frames for a matrix range]
     \label{thm:spt_continuous_idempotent_frame}
     \lean{Matrix.exists_open_continuous_rangeFrame_of_constantRank,
         Matrix.exists_local_continuous_rangeFrame_of_idempotent}
@@ -2897,7 +2897,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     and satisfy $H(t)C(t)=I_D$.
     For an idempotent family it suffices that $P(t_0)$ have rank $D$;
     in addition $P(t)C(t)=C(t)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:spt_trace_quotient_fixed_section, thm:spt_gram_left_inverse,
         thm:spt_idempotent_rank}
@@ -2906,7 +2906,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     Apply the Gram left inverse and the preceding local rank result.
 \end{proof}
 
-\begin{theorem}[Dimension of a primitive left ideal]
+\begin{lemma}[Dimension of a primitive left ideal]
     \label{thm:spt_primitive_left_ideal_dimension}
     \lean{Matrix.finrank_range_mulRight_single,
         Matrix.finrank_range_rightMul_of_matrixAlgebra}
@@ -2914,13 +2914,13 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     In $\MN{D}$ the left ideal $\MN{D}E_{ii}$ has
     dimension $D$. The same holds under any algebra
     isomorphism.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The ideal consists of matrices supported in column $i$.
     That column is an arbitrary vector in $\C^D$.
 \end{proof}
 
-\begin{theorem}[Continuous primitive left ideals of a trace quotient]
+\begin{lemma}[Continuous primitive left ideals of a trace quotient]
     \label{thm:spt_continuous_trace_quotient_primitive}
     \lean{Matrix.exists_local_continuous_traceQuotientPrimitive}
     \leanok
@@ -2932,7 +2932,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     Both the multiplication coordinates and this right-multiplication
     matrix are continuous. No continuous choice of the pointwise minimal
     tensors or algebra identifications is assumed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:spt_trace_quotient_continuous_unit,
         thm:spt_continuous_nearby_idempotent,
@@ -2954,7 +2954,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     and a left inverse $H$, define $L(x)v=H\mu(x,Jv)$.
 \end{definition}
 
-\begin{theorem}[Matrix realization in a left-ideal frame]
+\begin{lemma}[Matrix realization in a left-ideal frame]
     \label{thm:spt_left_ideal_frame_realization}
     \lean{Matrix.leftIdealFrameAction_mulVec,
         Matrix.leftIdealFrameAction_intertwines,
@@ -2971,7 +2971,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     by an inner conjugation. It preserves traces. Applying it to
     a family of letters therefore preserves that family's bond gauge
     equivalence.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Associativity makes the left ideal invariant and gives
     $JL(x)v=\mu(x,Jv)$. This action is multiplicative and unital.
@@ -2988,7 +2988,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     $q_i=((GF)^\dagger GF)^{-1}(GF)^\dagger G e_i$.
 \end{definition}
 
-\begin{theorem}[Recovery of the letters]
+\begin{lemma}[Recovery of the letters]
     \label{thm:spt_trace_quotient_letter_recovery}
     \lean{Matrix.traceQuotientLetterCoordinates_recover,
         MPSTensor.gaugeEquiv_traceQuotientLetters,
@@ -3000,7 +3000,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     $E(x)=\kappa\sum_i(Fx)_i A^i$, with $\alpha_2\kappa\ne0$,
     then $E(q_i)=\kappa A^i$. In any left-ideal frame the represented
     letters are gauge-equivalent to $\kappa A$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:spt_gram_left_inverse, thm:spt_left_ideal_frame_realization,
         thm:spt_trace_quotient_contraction, thm:trace_pairing_injective}
@@ -3009,7 +3009,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     coordinates. Apply the preceding inner-conjugacy statement.
 \end{proof}
 
-\begin{theorem}[Continuity of represented letters]
+\begin{lemma}[Continuity of represented letters]
     \label{thm:spt_continuous_left_ideal_letters}
     \lean{Matrix.continuousOn_leftIdealFrameAction,
         Matrix.continuousOn_traceQuotientLetterCoordinates}
@@ -3020,14 +3020,14 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     and letter coordinates give continuous represented letters.
     The letter coordinates are continuous wherever the fixed section
     is injective.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:spt_gram_left_inverse}
     The formulas are finite sums and matrix products. The only inverse
     is the Gram inverse, which is continuous on this neighborhood.
 \end{proof}
 
-\begin{theorem}[Finite traces from positive-length periodic rays]
+\begin{lemma}[Finite traces from positive-length periodic rays]
     \label{thm:spt_positive_ray_finite_traces}
     \lean{MPSTensor.exists_nonzero_two_three_trace_scalars_of_samePositiveMpvRay}
     \leanok
@@ -3035,14 +3035,14 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     dimension have the same periodic rays at every positive length,
     their two-site and three-site word traces are proportional by
     nonzero scalars $\alpha_2$ and $\alpha_3$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpoalg_length_dependent_phase_power}
     Specialize the ray equality to lengths two and three and evaluate
     each vector in the physical coordinate basis.
 \end{proof}
 
-\begin{theorem}[Local continuous minimal realization from finite traces]
+\begin{lemma}[Local continuous minimal realization from finite traces]
     \label{thm:spt_continuous_minimal_finite_trace_realization}
     \lean{MPSTensor.exists_local_continuous_minimalTensor_of_two_three_trace_eq}
     \leanok
@@ -3063,7 +3063,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     continuous. This is a reconstruction at constant minimal
     dimension; the two trace identities alone make no assertion about
     the ambient tensor's longer periodic rays.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:spt_continuous_trace_quotient_primitive,
         thm:spt_continuous_idempotent_frame,
@@ -3077,7 +3077,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     theorem identifies them with the normalized minimal tensor.
 \end{proof}
 
-\begin{theorem}[Local continuous minimal realization of periodic rays]
+\begin{lemma}[Local continuous minimal realization of periodic rays]
     \label{thm:spt_continuous_minimal_ray_realization}
     \lean{MPSTensor.exists_local_continuous_minimalTensor_of_samePositiveMpvRay}
     \leanok
@@ -3087,7 +3087,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     Locally those same rays admit continuous one-site injective
     representatives of that bond dimension. No continuity of the
     given pointwise representatives is assumed.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:spt_positive_ray_finite_traces,
         thm:spt_continuous_minimal_finite_trace_realization,
@@ -3098,7 +3098,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     every positive-length periodic ray.
 \end{proof}
 
-\begin{theorem}[Local continuous canonical realization of periodic rays]
+\begin{lemma}[Local continuous canonical realization of periodic rays]
     \label{thm:spt_continuous_canonical_ray_realization}
     \lean{MPSTensor.exists_local_continuous_unitalTensor_of_samePositiveMpvRay}
     \leanok
@@ -3110,7 +3110,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     The minimal bond dimension is constant and positive. Reconstruction
     through a change of minimal dimension remains separate
     \cite{gap:spc11_spt_interpolation_upper_range}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:spt_continuous_minimal_ray_realization,
         thm:spt_continuous_canonical_normalization,
@@ -3140,14 +3140,14 @@ canonical realization is inferred from a physical spectral gap here.
     $\beta_V=e_D\circ(X\mapsto VXV^\dagger)\circ e_D^{-1}$.
 \end{definition}
 
-\begin{theorem}[Evaluation of the adjoint action]
+\begin{lemma}[Evaluation of the adjoint action]
     \label{thm:spc_aux_adjoint_evaluation}
     \lean{Matrix.conjugationEuclideanCLM_apply}
     \leanok
     \uses{def:spc_aux_adjoint_coordinates}
     For $V,X\in\MN{D}$, one has
     $\beta_V(e_DX)=e_D(VXV^\dagger)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:spc_aux_adjoint_coordinates}
@@ -3163,41 +3163,41 @@ canonical realization is inferred from a physical spectral gap here.
     $(\Phi_C)_{(a,b),i}=C^i_{b,a}$.
 \end{definition}
 
-\begin{theorem}[Evaluation of the coefficient operator]
+\begin{lemma}[Evaluation of the coefficient operator]
     \label{thm:spc_aux_coefficient_evaluation}
     \lean{MPSTensor.coefficientEuclideanMap_apply}
     \leanok
     \uses{def:spc_aux_coefficient_operator}
     For $x\in\C^d$, one has
     $\Phi_Cx=e_D(\sum_i x_i C^i)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:spc_aux_coefficient_operator}
     Each coordinate is $\sum_i C^i_{b,a}x_i$.
 \end{proof}
 
-\begin{theorem}[Continuity of the coefficient operator]
+\begin{lemma}[Continuity of the coefficient operator]
     \label{thm:spc_aux_coefficient_continuity}
     \lean{MPSTensor.continuous_coefficientEuclideanMap}
     \leanok
     \uses{def:spc_aux_coefficient_operator}
     For fixed $d,D$, the map $C\mapsto\Phi_C$ is continuous in the
     operator norm.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:spc_aux_coefficient_operator}
     The map is linear between finite-dimensional complex vector spaces.
 \end{proof}
 
-\begin{theorem}[Surjectivity of the injective coefficient operator]
+\begin{lemma}[Surjectivity of the injective coefficient operator]
     \label{thm:spc_aux_coefficient_surjective}
     \lean{MPSTensor.coefficientEuclideanMap_surjective_of_isInjective}
     \leanok
     \uses{def:spc_aux_coefficient_operator}
     If $\spn_{\C}\{C^i\}=\MN{D}$, then $\Phi_C$ is surjective.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spc_aux_coefficient_evaluation}
@@ -3215,13 +3215,13 @@ canonical realization is inferred from a physical spectral gap here.
     invertible.
 \end{definition}
 
-\begin{theorem}[Right-inverse identity at an injective tensor]
+\begin{lemma}[Right-inverse identity at an injective tensor]
     \label{thm:spc_aux_coefficient_inverse_identity}
     \lean{MPSTensor.coefficientEuclideanMap_comp_rightInverse_of_isInjective}
     \leanok
     \uses{def:spc_aux_coefficient_inverse}
     If $\spn_{\C}\{C^i\}=\MN{D}$, then $\Phi_C\Psi_C=I$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spc_aux_coefficient_surjective, def:spc_aux_coefficient_inverse}
@@ -3230,14 +3230,14 @@ canonical realization is inferred from a physical spectral gap here.
     inverse cancellation.
 \end{proof}
 
-\begin{theorem}[Continuity of the Gram right inverse]
+\begin{lemma}[Continuity of the Gram right inverse]
     \label{thm:spc_aux_coefficient_inverse_continuity}
     \lean{MPSTensor.continuousAt_coefficientRightInverse_of_isInjective}
     \leanok
     \uses{def:spc_aux_coefficient_inverse}
     If $\spn_{\C}\{C^i\}=\MN{D}$, the map $B\mapsto\Psi_B$ is
     continuous at $B=C$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spc_aux_coefficient_continuity, thm:spc_aux_coefficient_surjective, def:spc_aux_coefficient_inverse}
@@ -3246,7 +3246,7 @@ canonical realization is inferred from a physical spectral gap here.
     so its product with $\Phi_B^\dagger$ is continuous at $C$.
 \end{proof}
 
-\begin{theorem}[Coefficient form of exact covariance]
+\begin{lemma}[Coefficient form of exact covariance]
     \label{thm:spc_aux_coefficient_covariance}
     \lean{MPSTensor.coefficientEuclideanMap_covariance}
     \leanok
@@ -3255,7 +3255,7 @@ canonical realization is inferred from a physical spectral gap here.
     $\sum_j U_{ij}C^j=VC^iV^\dagger$ for every $i$. Then
     $\Phi_C U^{\mathsf T}=\beta_V\Phi_C$.
     Neither matrix is required to be unitary or invertible.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spc_aux_coefficient_evaluation, thm:spc_aux_adjoint_evaluation}
@@ -3268,7 +3268,7 @@ canonical realization is inferred from a physical spectral gap here.
     Apply vectorization.
 \end{proof}
 
-\begin{theorem}[Adjoint action determined by the physical action]
+\begin{lemma}[Adjoint action determined by the physical action]
     \label{thm:spc_aux_adjoint_coefficient_formula}
     \lean{MPSTensor.conjugationEuclideanCLM_eq_coefficients_of_isInjective}
     \leanok
@@ -3277,7 +3277,7 @@ canonical realization is inferred from a physical spectral gap here.
     $\sum_j U_{ij}C^j=VC^iV^\dagger$ for every $i$, with
     $U\in\MN{d}$ and $V\in\MN{D}$ arbitrary. Then
     $\beta_V=\Phi_C U^{\mathsf T}\Psi_C$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spc_aux_coefficient_covariance, thm:spc_aux_coefficient_inverse_identity}
@@ -3285,7 +3285,7 @@ canonical realization is inferred from a physical spectral gap here.
     $\Psi_C$ and use $\Phi_C\Psi_C=I$.
 \end{proof}
 
-\begin{theorem}[Uniform adjoint estimate near an injective tensor]
+\begin{lemma}[Uniform adjoint estimate near an injective tensor]
     \label{thm:spc_aux_uniform_adjoint_estimate}
     \lean{MPSTensor.eventually_uniform_conjugationEuclideanCLM_of_covariance}
     \leanok
@@ -3299,7 +3299,7 @@ canonical realization is inferred from a physical spectral gap here.
     $\sum_j(U_g)_{ij}C^j=VC^iV^\dagger$ obey
     $\|\beta_V-\beta_{V_g^0}\|<\varepsilon$.
     No continuity or unitarity of the virtual matrices is assumed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spc_aux_coefficient_continuity, thm:spc_aux_coefficient_inverse_continuity, thm:spc_aux_coefficient_surjective, thm:spc_aux_coefficient_covariance, thm:spc_aux_adjoint_coefficient_formula}
@@ -3316,7 +3316,7 @@ canonical realization is inferred from a physical spectral gap here.
     this bound uniformly smaller than $\varepsilon$.
 \end{proof}
 
-\begin{theorem}[Cancellation of a unitary projective factor]
+\begin{lemma}[Cancellation of a unitary projective factor]
     \label{thm:spc_aux_unitary_factor_cancel}
     \lean{TNLean.Algebra.ProjectiveRepresentation.factor_mul_star_eq_one_of_unitary}
     \leanok
@@ -3324,7 +3324,7 @@ canonical realization is inferred from a physical spectral gap here.
     Let $\rho:G\to\mathrm{GL}(D,\C)$ be a projective representation
     with factor $\omega$, where $D>0$. If every $\rho(g)$ is unitary,
     then $\omega(g,h)\overline{\omega(g,h)}=1$ for every $g,h$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_unitary_factor_alignment}
@@ -3344,21 +3344,21 @@ canonical realization is inferred from a physical spectral gap here.
     $X\mapsto\rho_1(g)X\rho_0(g)^\dagger$ on rectangular matrices.
 \end{definition}
 
-\begin{theorem}[Unitarity on the intertwiner space]
+\begin{lemma}[Unitarity on the intertwiner space]
     \label{thm:spc_aux_projective_hom_unitary}
     \lean{TNLean.Algebra.ProjectiveRepresentation.homMatrix_mem_unitaryGroup}
     \leanok
     \uses{def:spc_aux_projective_hom_action}
     If all matrices of $\rho_0$ and $\rho_1$ are unitary, then every
     $S_g$ is unitary. The dimensions $D_0,D_1$ may be zero.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:spc_aux_projective_hom_action}
     Entrywise conjugation preserves unitarity, as does the tensor product.
 \end{proof}
 
-\begin{theorem}[Multiplication on the intertwiner space]
+\begin{lemma}[Multiplication on the intertwiner space]
     \label{thm:spc_aux_projective_hom_product}
     \lean{TNLean.Algebra.ProjectiveRepresentation.homMatrix_mul}
     \leanok
@@ -3366,7 +3366,7 @@ canonical realization is inferred from a physical spectral gap here.
     If $\rho_a$ has factor $\omega_a$, then
     $S_gS_h=\overline{\omega_0(g,h)}\omega_1(g,h)S_{gh}$ for all $g,h$.
     Unitarity is not required.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:spc_aux_projective_hom_action}
@@ -3375,7 +3375,7 @@ canonical realization is inferred from a physical spectral gap here.
     projective multiplication laws.
 \end{proof}
 
-\begin{theorem}[Exact composition of conjugations on intertwiners]
+\begin{lemma}[Exact composition of conjugations on intertwiners]
     \label{thm:spc_aux_projective_hom_conjugation}
     \lean{TNLean.Algebra.ProjectiveRepresentation.homMatrix_conjugation_mul}
     \leanok
@@ -3384,7 +3384,7 @@ canonical realization is inferred from a physical spectral gap here.
     For every $g,h\in G$ and matrix $M$ on the intertwiner space,
     $S_g(S_hMS_h^\dagger)S_g^\dagger=S_{gh}MS_{gh}^\dagger$.
     The two factor systems need not agree.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spc_aux_projective_hom_product, thm:spc_aux_unitary_factor_cancel}
@@ -3393,7 +3393,7 @@ canonical realization is inferred from a physical spectral gap here.
     The scalar cancels because $\lambda_{g,h}\overline{\lambda_{g,h}}=1$.
 \end{proof}
 
-\begin{theorem}[Uniform rigidity of a unitary projective class]
+\begin{lemma}[Uniform rigidity of a unitary projective class]
     \label{thm:spc_aux_uniform_projective_rigidity}
     \lean{TNLean.Algebra.ProjectiveRepresentation.exists_uniform_adjoint_rigidity_radius}
     \leanok
@@ -3404,7 +3404,7 @@ canonical realization is inferred from a physical spectral gap here.
     If $\|\beta_{\rho_1(g)}-\beta_{\rho_0(g)}\|<\delta_D$ for every $g$,
     then $\omega_1$ is cohomologous to $\omega_0$.
     No topology on $G$ or continuity of either representation is required.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:spc_aux_projective_hom_action, thm:spc_aux_projective_hom_unitary, thm:spc_aux_projective_hom_conjugation, thm:spt_local_spectral_support, thm:spt_virtual_class_gauge_preparation}
@@ -3425,7 +3425,7 @@ canonical realization is inferred from a physical spectral gap here.
     $\omega_1(g,h)=c(g)c(h)c(gh)^{-1}\omega_0(g,h)$, as required.
 \end{proof}
 
-\begin{theorem}[Local constancy from continuous tensors and exact covariance]
+\begin{lemma}[Local constancy from continuous tensors and exact covariance]
     \label{thm:spc_aux_local_tensor_class}
     \lean{MPSTensor.eventually_cohomologousTo_of_continuousAt_exact_unitary_covariance}
     \leanok
@@ -3442,7 +3442,7 @@ canonical realization is inferred from a physical spectral gap here.
     Then $\omega_t$ is cohomologous to $\omega_{t_0}$ throughout some
     neighborhood of $t_0$. No continuity of $\rho_t$ or $\omega_t$,
     injectivity away from $t_0$, or connectedness of $T$ is assumed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spc_aux_uniform_adjoint_estimate, thm:spc_aux_uniform_projective_rigidity}
@@ -3454,7 +3454,7 @@ canonical realization is inferred from a physical spectral gap here.
 \end{proof}
 
 
-\begin{theorem}[Local class constancy from stationary support data]
+\begin{lemma}[Local class constancy from stationary support data]
     \label{thm:spc_aux_topological_stationary_support_class}
     \lean{MPSTensor.eventually_cohomologousTo_of_continuousAt_unital_supported_family}
     \leanok
@@ -3483,7 +3483,7 @@ canonical realization is inferred from a physical spectral gap here.
     representations are not required to be continuous. The ambient
     tensors and their supported covariance are assumed;
     this statement does not construct them from a physical gap.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_local_unique_stationary_class}
@@ -3528,7 +3528,7 @@ Hamiltonian gap remains separate
 \cite{gap:spc11_spt_interpolation_upper_range}.
 
 
-\begin{theorem}[Compactness of unital tensors]
+\begin{lemma}[Compactness of unital tensors]
     \label{thm:spc_aux_compact_unital_tensors}
     \lean{MPSTensor.isCompact_setOf_isUnital}
     \leanok
@@ -3536,7 +3536,7 @@ Hamiltonian gap remains separate
     For fixed $d,D\geq 0$, the set of tensors $A=(A^i)_{i=1}^d$ satisfying
     $\sum_i A^i(A^i)^\dagger=I_D$ is compact in the topology of their
     matrix entries. No injectivity or stationary-density assumption is needed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The normalization condition is closed. Its diagonal entries give
@@ -3545,7 +3545,7 @@ Hamiltonian gap remains separate
     compact complex unit discs.
 \end{proof}
 
-\begin{theorem}[A common stationary subsequence]
+\begin{lemma}[A common stationary subsequence]
     \label{thm:spc_aux_unital_stationary_subsequence}
     \lean{MPSTensor.exists_subsequence_unital_stationary_limit}
     \leanok
@@ -3559,7 +3559,7 @@ Hamiltonian gap remains separate
     $A_{n_k}\to B$, $\sigma_{n_k}\to\tau$, and
     $\mathcal E_B^*(\tau)=\tau$. The rank of $\tau$ may be smaller than
     the ranks of the matrices $\sigma_n$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spc_aux_compact_unital_tensors}
@@ -3569,7 +3569,7 @@ Hamiltonian gap remains separate
     to the limit.
 \end{proof}
 
-\begin{theorem}[Convergence on a fixed invariant quotient]
+\begin{lemma}[Convergence on a fixed invariant quotient]
     \label{thm:spc_aux_quotient_operator_limit}
     \lean{Submodule.tendsto_toMatrix_mapQ_of_tendsto}
     \leanok
@@ -3578,7 +3578,7 @@ Hamiltonian gap remains separate
     under every $f_n$ and under $f_\infty$. In any fixed basis of $V/W$,
     the matrices of the induced quotient operators converge to the
     matrix of the quotient operator induced by $f_\infty$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Choose a representative in $V$ of each quotient basis vector. Each
@@ -3587,7 +3587,7 @@ Hamiltonian gap remains separate
     continuous in finite dimension, so their values converge.
 \end{proof}
 
-\begin{theorem}[Stability of a fixed line under spectral contraction]
+\begin{lemma}[Stability of a fixed line under spectral contraction]
     \label{thm:spc_aux_fixed_line_limit}
     \lean{ContinuousLinearMap.eigenspace_one_limit_eq_span_of_uniform_spectrum_bound}
     \leanok
@@ -3598,7 +3598,7 @@ Hamiltonian gap remains separate
     every $f_n$ satisfies $|\lambda|\leq q$, then
     $\ker(f_\infty-I)=\spn_{\C}\{v\}$.
     The common spectral bound is an assumption of this statement.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spc_aux_quotient_operator_limit}
@@ -3618,7 +3618,7 @@ Hamiltonian gap remains separate
     image in $V/W$, proving the assertion. No diagonalizability is used.
 \end{proof}
 
-\begin{theorem}[A nontrivial spectral bound in the limit]
+\begin{lemma}[A nontrivial spectral bound in the limit]
     \label{thm:spc_aux_nontrivial_spectrum_limit}
     \lean{ContinuousLinearMap.spectrum_limit_norm_le_of_uniform_nontrivial_bound}
     \leanok
@@ -3629,7 +3629,7 @@ Hamiltonian gap remains separate
     $\lambda\neq 1$ of every $f_n$. Then every eigenvalue
     $\lambda\neq 1$ of $f_\infty$ also satisfies $|\lambda|\leq q$.
     Neither $q<1$ nor algebraic simplicity of $1$ at the limit is required.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spc_aux_quotient_operator_limit}
@@ -3646,7 +3646,7 @@ Hamiltonian gap remains separate
     Its eigenvalue therefore lies in the closed disc as asserted.
 \end{proof}
 
-\begin{theorem}[Equality of nonzero limiting periodic lines]
+\begin{lemma}[Equality of nonzero limiting periodic lines]
     \label{thm:spc_aux_periodic_line_limit}
     \lean{MPSTensor.mpv_span_eq_of_tendsto}
     \leanok
@@ -3660,7 +3660,7 @@ Hamiltonian gap remains separate
     If both limiting periodic vectors are nonzero, then
     $\spn_{\C}\{\ket{V^{(N)}(A)}\}
         =\spn_{\C}\{\ket{V^{(N)}(B)}\}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:eval_word}
@@ -3674,7 +3674,7 @@ Hamiltonian gap remains separate
 \end{proof}
 
 
-\begin{theorem}[Deviation of the periodic MPS norm]
+\begin{lemma}[Deviation of the periodic MPS norm]
     \label{thm:spt_compact_periodic_norm_deviation}
     \lean{MPSTensor.abs_norm_mpvState_sq_sub_one_le_of_transfer_spectrum}
     \leanok
@@ -3687,7 +3687,7 @@ Hamiltonian gap remains separate
          & \leq (D^2-1)q^N.
         \label{eq:spt_compact_norm_deviation}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:overlap_trace}
     The peripheral Jordan-block theorem for positive unital maps
@@ -3703,22 +3703,22 @@ Hamiltonian gap remains separate
     $\|\ket{V^{(N)}(A)}\|^2=\operatorname{Tr}(\E_A^N)$.
 \end{proof}
 
-\begin{theorem}[Lower bound for the periodic MPS norm]
+\begin{lemma}[Lower bound for the periodic MPS norm]
     \label{thm:spt_compact_periodic_norm_lower}
     \lean{MPSTensor.one_sub_le_norm_mpvState_sq_of_transfer_spectrum}
     \leanok
     Under the hypotheses of
-    Theorem~\ref{thm:spt_compact_periodic_norm_deviation}, every integer
+    Lemma~\ref{thm:spt_compact_periodic_norm_deviation}, every integer
     $N\geq0$ satisfies
     $1-(D^2-1)q^N\leq\|\ket{V^{(N)}(A)}\|^2$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:spt_compact_periodic_norm_deviation}
     Take the lower half of the absolute-value bound
     (\ref{eq:spt_compact_norm_deviation}).
 \end{proof}
 
-\begin{theorem}[A uniform lower bound on sufficiently long rings]
+\begin{lemma}[A uniform lower bound on sufficiently long rings]
     \label{thm:spt_compact_uniform_long_norm}
     \lean{MPSTensor.exists_uniform_norm_mpvState_sq_lowerBound_of_transfer_spectrum}
     \leanok
@@ -3729,23 +3729,23 @@ Hamiltonian gap remains separate
     There exists an integer $L>0$ such that
     $\|\ket{V^{(N)}(A_t)}\|^2\geq\tfrac12$ for every $t\in T$ and
     every integer $N\geq L$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:spt_compact_periodic_norm_lower}
     Choose $L>0$ such that $(D^2-1)q^N<\tfrac12$ whenever $N\geq L$,
     and apply the preceding lower bound to each $A_t$.
 \end{proof}
 
-\begin{theorem}[Uniform nonvanishing after physical blocking]
+\begin{lemma}[Uniform nonvanishing after physical blocking]
     \label{thm:spt_compact_uniform_blocking_nonzero}
     \lean{MPSTensor.exists_uniform_blocking_mpvState_ne_zero_of_transfer_spectrum}
     \leanok
-    Under the hypotheses of Theorem~\ref{thm:spt_compact_uniform_long_norm},
+    Under the hypotheses of Lemma~\ref{thm:spt_compact_uniform_long_norm},
     there exists an integer $L>0$ such that every $t\in T$ and every
     integer $N>0$ satisfy
     $\|\ket{V^{(N)}(A_t^{[L]})}\|^2\geq\tfrac12$ and
     $\ket{V^{(N)}(A_t^{[L]})}\ne0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:spt_compact_uniform_long_norm}
     Physical blocking gives $\E_{A_t^{[L]}}=\E_{A_t}^L$, hence the
@@ -3754,7 +3754,7 @@ Hamiltonian gap remains separate
     Its positive lower bound implies nonvanishing.
 \end{proof}
 
-\begin{theorem}[Transfer spectrum of a complementary diagonal corner]
+\begin{lemma}[Transfer spectrum of a complementary diagonal corner]
     \label{thm:spt_compact_transient_corner_spectrum}
     \lean{MPSTensor.spectrum_transferMap_transientCorner_norm_le}
     \leanok
@@ -3764,7 +3764,7 @@ Hamiltonian gap remains separate
     Put $R^i=(\Id-P)A^i(\Id-P)$. Suppose that $q\geq0$ and that
     every eigenvalue of $\E_A$ other than $1$ has modulus at most $q$.
     Then every eigenvalue of $\E_R$ has modulus at most $q$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Set $Q=\Id-P$. If $\E_R(X)=\lambda X$ with $\lambda\ne0$,
     then $QXQ=X$, since the range of $\E_R$ lies in the $Q$-corner.
@@ -3777,15 +3777,15 @@ Hamiltonian gap remains separate
     \cite[proof of the TI canonical-form theorem]{PerezGarcia2007Matrix}.
 \end{proof}
 
-\begin{theorem}[Decay of the complementary periodic contribution]
+\begin{lemma}[Decay of the complementary periodic contribution]
     \label{thm:spt_compact_transient_mpv_decay}
     \lean{MPSTensor.norm_mpvState_transientCorner_tendsto_zero_of_transfer_spectrum}
     \leanok
     Under the hypotheses of
-    Theorem~\ref{thm:spt_compact_transient_corner_spectrum}, suppose also
+    Lemma~\ref{thm:spt_compact_transient_corner_spectrum}, suppose also
     that $q<1$. Then $\|\ket{V^{(N)}(R)}\|\longrightarrow0$ as
     $N\longrightarrow\infty$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:spt_compact_transient_corner_spectrum}
     The spectral bound gives $r(\E_R)<1$, so the transfer-trace overlap
@@ -3794,7 +3794,7 @@ Hamiltonian gap remains separate
     gives the result.
 \end{proof}
 
-\begin{theorem}[Vanishing overlap of a periodic remainder]
+\begin{lemma}[Vanishing overlap of a periodic remainder]
     \label{thm:spc_aux_overlap_remainder_zero}
     \lean{MPSTensor.mpvOverlap_sub_tendsto_zero_of_eventual_decomposition}
     \leanok
@@ -3807,7 +3807,7 @@ Hamiltonian gap remains separate
     $O_{AB}(N)-O_{AC}(N)\to0$.
     This is an auxiliary asymptotic statement for the varying-support
     argument of \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:overlap_eq_inner, def:mpv_inner, def:mpv_state}
@@ -3823,7 +3823,7 @@ Hamiltonian gap remains separate
     asserted complex limit.
 \end{proof}
 
-\begin{theorem}[Preservation of a unit overlap modulus]
+\begin{lemma}[Preservation of a unit overlap modulus]
     \label{thm:spc_aux_retained_overlap_one}
     \lean{MPSTensor.mpvOverlap_norm_tendsto_one_of_eventual_decomposition}
     \leanok
@@ -3836,7 +3836,7 @@ Hamiltonian gap remains separate
     Convergence $|O_{AB}(N)|\to1$ then implies $|O_{AC}(N)|\to1$.
     Neither positivity nor a relation between the bond dimensions is
     required; the decomposition need not hold at length zero.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spc_aux_overlap_remainder_zero}
@@ -3846,11 +3846,11 @@ Hamiltonian gap remains separate
          & \leq|O_{AB}(N)-O_{AC}(N)|.\notag
     \end{align}
     The right-hand side tends to zero by
-    Theorem~\ref{thm:spc_aux_overlap_remainder_zero}; hence the two overlap
+    Lemma~\ref{thm:spc_aux_overlap_remainder_zero}; hence the two overlap
     moduli have the same limit.
 \end{proof}
 
-\begin{theorem}[Irreducibility of a uniquely stationary support compression]
+\begin{lemma}[Irreducibility of a uniquely stationary support compression]
     \label{thm:spc_aux_supported_compression_irreducible}
     \lean{MPSTensor.isIrreducibleMap_of_unital_support_compression}
     \leanok
@@ -3866,7 +3866,7 @@ Hamiltonian gap remains separate
     This is an auxiliary preparation result for
     \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}, using the
     channel criterion of \cite[Theorem~6.3]{Wolf2012Quantum}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_stationary_density_compression}
@@ -3886,7 +3886,7 @@ Hamiltonian gap remains separate
 
 \subsection{Reduction to the stationary support}
 
-\begin{theorem}[Adjoint transfer along a stationary support]
+\begin{lemma}[Adjoint transfer along a stationary support]
     \label{thm:spc_aux_adjoint_support_intertwining}
     \lean{MPSTensor.adjointMap_compression_lift}
     \leanok
@@ -3900,7 +3900,7 @@ Hamiltonian gap remains separate
          & =K\mathcal E_A^*(Z)K^\dagger.\notag
     \end{align}
     Neither unitality nor normalization of $\sigma$ is required.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{def:transfer_map}
@@ -3911,7 +3911,7 @@ Hamiltonian gap remains separate
 \end{proof}
 
 
-\begin{theorem}[Preparation on the full stationary support]
+\begin{lemma}[Preparation on the full stationary support]
     \label{thm:spc_aux_stationary_support_preparation}
     \lean{MPSTensor.prepare_stationary_support_compression}
     \leanok
@@ -3928,7 +3928,7 @@ Hamiltonian gap remains separate
     This is an auxiliary preparation result for
     \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}, using
     \cite[Lemma~6.4 and Theorem~6.3]{Wolf2012Quantum}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_stationary_density_compression,
@@ -3947,7 +3947,7 @@ Hamiltonian gap remains separate
     now applies. The trace-one condition excludes an empty support.
 \end{proof}
 
-\begin{theorem}[Normality from an ambient transfer bound]
+\begin{lemma}[Normality from an ambient transfer bound]
     \label{thm:spc_aux_stationary_support_normality}
     \lean{MPSTensor.isNormalTensor_of_unital_stationary_support_compression}
     \leanok
@@ -3963,7 +3963,7 @@ Hamiltonian gap remains separate
     This auxiliary consequence uses the normal-tensor definition of
     \cite[lines~231--235]{Cirac2016MPDO_arXiv} in the support setting of
     \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spc_aux_stationary_support_preparation,
@@ -3989,7 +3989,7 @@ Hamiltonian gap remains separate
 % Finite-dimensional auxiliaries for the stationary-support reduction.
 % These entries do not identify a physical Hamiltonian gap with transfer contraction.
 
-\begin{theorem}[Equality of transfer and adjoint fixed-space dimensions]
+\begin{lemma}[Equality of transfer and adjoint fixed-space dimensions]
     \label{thm:spc_aux_adjoint_fixed_dimension}
     \lean{MPSTensor.finrank_adjointFixedSpace_eq_transferFixedSpace}
     \leanok
@@ -4000,7 +4000,7 @@ Hamiltonian gap remains separate
     Positivity, normalization, irreducibility and positive bond dimension
     are not required. This is a finite-dimensional auxiliary identity for
     \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     In the matrix-unit basis and the corresponding transposed basis,
@@ -4010,7 +4010,7 @@ Hamiltonian gap remains separate
     replacing $\Id-\E_B$ by its negative does not change its kernel.
 \end{proof}
 
-\begin{theorem}[Positive-length decomposition along a triangular support]
+\begin{lemma}[Positive-length decomposition along a triangular support]
     \label{thm:spc_aux_supported_periodic_split}
     \lean{MPSTensor.mpv_eq_compression_add_transient_of_upperZero}
     \leanok
@@ -4024,7 +4024,7 @@ Hamiltonian gap remains separate
     This is the triangular trace decomposition used in
     \cite[proof of Theorem~TIcanonical, lines~785--815]{PerezGarcia2007Matrix},
     and in \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_isometric_bond_restriction}
@@ -4038,7 +4038,7 @@ Hamiltonian gap remains separate
     Length zero is excluded because its coefficient is the bond dimension.
 \end{proof}
 
-\begin{theorem}[Identification after removal of a vanishing periodic remainder]
+\begin{lemma}[Identification after removal of a vanishing periodic remainder]
     \label{thm:spc_aux_retained_dimension_gauge}
     \lean{MPSTensor.exists_dim_eq_gaugePhase_of_vanishing_periodic_remainder}
     \leanok
@@ -4056,7 +4056,7 @@ Hamiltonian gap remains separate
     This is a conditional auxiliary reduction for
     \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}, using
     \cite[Lemma~equalMPS]{Cirac2016MPDO_arXiv}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spc_aux_retained_overlap_one, thm:tp_gauge_from_adjoint_fixed,
@@ -4074,7 +4074,7 @@ Hamiltonian gap remains separate
 
 
 
-\begin{theorem}[Identification of a stationary support by its limiting overlap]
+\begin{lemma}[Identification of a stationary support by its limiting overlap]
     \label{thm:spc_aux_stationary_support_identification}
     \lean{MPSTensor.exists_dim_eq_gaugePhase_of_unital_stationary_support_overlap}
     \leanok
@@ -4095,7 +4095,7 @@ Hamiltonian gap remains separate
     The spectral bound and overlap limit are explicit assumptions in this
     auxiliary reduction for
     \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spc_aux_adjoint_fixed_dimension,
@@ -4377,7 +4377,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     choosing a normalized vector.
 \end{proof}
 
-\begin{corollary}[Negative-frequency identity along the actual MPS path]
+\begin{lemma}[Negative-frequency identity along the actual MPS path]
     \label{cor:spt_exact_ground_negative_frequency_identity}
     \lean{MPSTensor.ExactMPSGroundPath.negativeFrequency_connected_identity}
     \notready
@@ -4388,7 +4388,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     periodic vector equals the actual negative-frequency commutator
     above. No transfer, correlation-decay or continuous-gauge input is
     required.
-\end{corollary}
+\end{lemma}
 \begin{proof}
     The physical path supplies the least ground energy and the actual
     full ground line. Apply the preceding lemma to its Hamiltonian
@@ -4615,7 +4615,7 @@ argument below.
     used for this passage.
 \end{proof}
 
-\begin{corollary}[Actual finite-ring regularized-frequency locality]
+\begin{lemma}[Actual finite-ring regularized-frequency locality]
     \label{cor:spt_finite_ring_regularized_frequency_locality}
     \lean{MPSTensor.norm_negativeFrequency_interactionHamiltonian_commutator_le}
     \notready
@@ -4629,7 +4629,7 @@ argument below.
         \qquad v=8e^a,\qquad a\ge0.
     \]
     There is no supplied propagation or correlation estimate.
-\end{corollary}
+\end{lemma}
 \begin{proof}
     The actual finite-ring Lieb--Robinson bound supplies exactly the
     required short-time increment. Apply the preceding lemma.
@@ -4719,7 +4719,7 @@ argument below.
     Gaussian ground-vector error.
 \end{proof}
 
-\begin{corollary}[Ordinary connected Gaussian bound for the physical path]
+\begin{lemma}[Ordinary connected Gaussian bound for the physical path]
     \label{cor:spt_exact_ground_connected_gaussian_bound}
     \lean{MPSTensor.ExactMPSGroundPath.exists_uniform_centered_correlation_gaussian_bound,
         MPSTensor.ExactMPSGroundPath.exists_uniform_connected_correlation_gaussian_bound}
@@ -4739,7 +4739,7 @@ argument below.
             +\frac2T e^{-T^2/(2h)}\right)\right),
     \]
     where $q,T>0$, $a\ge0$, $h=q/\Delta^2$, and $v=8e^a$.
-\end{corollary}
+\end{lemma}
 \begin{proof}
     The actual physical gap supplies the full ground line and the common
     spectral gap. The actual finite-ring propagation estimate supplies
@@ -4771,7 +4771,7 @@ argument below.
     $\ell e^{-\ell/2}\le4e^{-\ell/4}$.
 \end{proof}
 
-\begin{theorem}[Ordinary connected exponential clustering along the physical path]
+\begin{lemma}[Ordinary connected exponential clustering along the physical path]
     \label{thm:spt_exact_ground_connected_exponential_clustering}
     \lean{MPSTensor.ExactMPSGroundPath.exists_uniform_connected_exponential_clustering}
     \notready
@@ -4786,7 +4786,7 @@ argument below.
         \le K(|X|+1)\|A\|\|B\|e^{-\kappa\ell}
     \]
     whenever $1\le\ell\le d(X,Y)$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     Set $a=1$, $v=8e$, $T=\ell/(2v)$, and $q=T\Delta$ in the
     preceding Gaussian bound. Both Gaussian errors are
@@ -4820,7 +4820,7 @@ choosing minimal canonical representatives are separate steps below.
 
 \subsection{Virtual classes at a compact limit}
 
-\begin{theorem}[The virtual class of an exact ground-state path under a transfer bound]
+\begin{lemma}[The virtual class of an exact ground-state path under a transfer bound]
     \label{thm:spc_aux_exact_ground_uniform_transfer_class}
     \lean{MPSTensor.ExactMPSGroundPath.exists_constant_virtual_class_of_uniform_transfer_bound}
     \leanok
@@ -4841,7 +4841,7 @@ choosing minimal canonical representatives are separate steps below.
     No continuous choice of the tensors, stationary densities, or virtual
     matrices is required. The uniform transfer bound is assumed explicitly;
     this statement does not derive it from the Hamiltonian gap.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_varying_bond_physical_character,
@@ -4898,7 +4898,7 @@ choosing minimal canonical representatives are separate steps below.
     multiplicity equals that space's dimension.
 \end{proof}
 
-\begin{theorem}[Compactness and class stability for periodic-ray sequences]
+\begin{lemma}[Compactness and class stability for periodic-ray sequences]
     \label{thm:spc_aux_compact_minimal_sequence_class}
     \lean{MPSTensor.eventually_cohomologousTo_of_tendsto_periodic_ray_sequence}
     \leanok
@@ -4912,7 +4912,7 @@ choosing minimal canonical representatives are separate steps below.
     these tensors, with pointwise unitary projective representatives having
     factor systems $\omega_0$ and $\omega_n$. Then $\omega_n$ is cohomologous
     to $\omega_0$ for all sufficiently large $n$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:spc_aux_convergent_unital_sequence_class,
         thm:spc_aux_compact_unital_tensors,thm:spc_aux_fixed_line_limit,
@@ -4925,7 +4925,7 @@ choosing minimal canonical representatives are separate steps below.
     of $A$. The stationary-support sequence theorem gives the contradiction.
 \end{proof}
 
-\begin{theorem}[Bounded bond dimensions and local virtual class]
+\begin{lemma}[Bounded bond dimensions and local virtual class]
     \label{thm:spc_aux_bounded_minimal_local_class}
     \lean{MPSTensor.eventually_cohomologousTo_of_continuousAt_bounded_unital_periodic_rays}
     \leanok
@@ -4937,7 +4937,7 @@ choosing minimal canonical representatives are separate steps below.
     representatives, assume a common bound $0\le q<1$ for every nonunit
     transfer eigenvalue. Then the virtual factor systems are cohomologous to
     that at $t_0$ throughout some neighborhood of $t_0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:spc_aux_compact_minimal_sequence_class}
     A sequence approaching $t_0$ on which the conclusion fails has a
@@ -4959,7 +4959,7 @@ choosing minimal canonical representatives are separate steps below.
     length $NL$ yields the blocked ray equality.
 \end{proof}
 
-\begin{theorem}[Normal realizations of bounded dimension]
+\begin{lemma}[Normal realizations of bounded dimension]
     \label{thm:spc_aux_bounded_normal_local_class}
     \lean{MPSTensor.eventually_cohomologousTo_of_continuousAt_bounded_normal_periodic_rays}
     \leanok
@@ -4972,7 +4972,7 @@ choosing minimal canonical representatives are separate steps below.
     virtual factor systems are locally cohomologous to that at $t_0$.
     Neither minimal tensors nor stationary densities need be chosen
     continuously. The uniform transfer bound is an explicit hypothesis.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:spc_aux_bounded_minimal_local_class,
         lem:spc_aux_bounded_normal_fourth_power_blocking,
@@ -4987,7 +4987,7 @@ choosing minimal canonical representatives are separate steps below.
 % Auxiliary preparation for compact-sequence class stability.
 % The transfer contraction bound is supplied throughout.
 
-\begin{theorem}[Uniqueness of a normalized adjoint stationary matrix]
+\begin{lemma}[Uniqueness of a normalized adjoint stationary matrix]
     \label{thm:spc_aux_normalized_stationary_unique}
     \lean{MPSTensor.normalized_adjoint_fixed_unique_of_transfer_fixed_finrank_one}
     \leanok
@@ -4998,7 +4998,7 @@ choosing minimal canonical representatives are separate steps below.
     If $\E_B^*(\sigma)=\sigma$, $\E_B^*(Z)=Z$, and
     $\tr\sigma=\tr Z=1$, then $Z=\sigma$, without requiring positivity or
     unitality.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:spc_aux_adjoint_fixed_dimension}
     Trace duality makes the adjoint fixed space one-dimensional.
@@ -5006,7 +5006,7 @@ choosing minimal canonical representatives are separate steps below.
     Thus $Z=c\sigma$; taking traces gives $c=1$.
 \end{proof}
 
-\begin{theorem}[Virtual class under gauge equivalence up to a scalar]
+\begin{lemma}[Virtual class under gauge equivalence up to a scalar]
     \label{thm:spc_aux_injective_gauge_class}
     \lean{MPSTensor.cohomologousTo_of_injective_gaugePhaseEquiv}
     \leanok
@@ -5019,7 +5019,7 @@ choosing minimal canonical representatives are separate steps below.
     representations $V_A,V_B$ with factors $\omega_A,\omega_B$ satisfying
     $\sum_jU(g)_{ij}A^j=V_A(g^{-1})A^iV_A(g^{-1})^{-1}$ and the
     corresponding identity for $B$. Then $\omega_B\sim\omega_A$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:spt_virtual_class_gauge_preparation}
     The scalar and gauge preserve injectivity. Conjugating $V_A$ by $X$
@@ -5028,7 +5028,7 @@ choosing minimal canonical representatives are separate steps below.
     $V_B$ and gives the asserted cohomology relation.
 \end{proof}
 
-\begin{theorem}[Unitary virtual transfer between unital tensors]
+\begin{lemma}[Unitary virtual transfer between unital tensors]
     \label{thm:spc_aux_unitary_gauge_virtual_transport}
     \lean{MPSTensor.exists_unitary_virtualRep_of_unital_gaugePhaseEquiv}
     \leanok
@@ -5041,7 +5041,7 @@ choosing minimal canonical representatives are separate steps below.
     $\sum_jU(g)_{ij}A^j=V(g^{-1})A^iV(g^{-1})^\dagger$.
     Then $B$ admits a unitary projective virtual action with exactly the
     factor $\omega$ and the same covariance identity.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:pgvwc07_intertwiner_unitary, thm:spt_virtual_class_gauge_preparation}
     The scalar and gauge make $B$ injective. The unital intertwiner theorem
@@ -5066,7 +5066,7 @@ choosing minimal canonical representatives are separate steps below.
     adjoints, so $U^{[L]}(g)U^{[L]}(g)^\dagger=\Id$.
 \end{proof}
 
-\begin{theorem}[Unchanged virtual factor under common blocking]
+\begin{lemma}[Unchanged virtual factor under common blocking]
     \label{thm:spc_aux_blocked_unitary_covariance}
     \lean{MPSTensor.rotatePhysical_blockTensor_of_unitary_virtual_covariance}
     \leanok
@@ -5077,7 +5077,7 @@ choosing minimal canonical representatives are separate steps below.
     $\sum_jU(g)_{ij}A^j=V(g^{-1})A^iV(g^{-1})^\dagger$.
     For every $L\geq0$, the same $V$ implements the covariance of $A^{[L]}$
     under $U^{[L]}$. In particular, its factor remains exactly $\omega$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:twisted_tensor_block_gauge}
     Twisting commutes with blocking. Word evaluation of the virtual gauge
@@ -5086,7 +5086,7 @@ choosing minimal canonical representatives are separate steps below.
     itself has not changed, so neither has its factor.
 \end{proof}
 
-\begin{theorem}[Overlap modulus of equal periodic spans]
+\begin{lemma}[Overlap modulus of equal periodic spans]
     \label{thm:spc_aux_periodic_span_overlap}
     \lean{MPSTensor.norm_mpvOverlap_eq_mul_norm_of_span_eq}
     \leanok
@@ -5096,7 +5096,7 @@ choosing minimal canonical representatives are separate steps below.
     vectors implies
     $|O_{AB}(N)|=\|\ket{V^{(N)}(A)}\|\,\|\ket{V^{(N)}(B)}\|$.
     Both vectors are allowed to vanish.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{lem:overlap_eq_inner}
     Equality of spans gives $\ket{V^{(N)}(B)}=c\ket{V^{(N)}(A)}$.
@@ -5105,7 +5105,7 @@ choosing minimal canonical representatives are separate steps below.
     product by homogeneity of the norm.
 \end{proof}
 
-\begin{theorem}[Unit limiting periodic norm from transfer contraction]
+\begin{lemma}[Unit limiting periodic norm from transfer contraction]
     \label{thm:spc_aux_periodic_norm_one}
     \lean{MPSTensor.norm_mpvState_tendsto_one_of_transfer_spectrum}
     \leanok
@@ -5117,7 +5117,7 @@ choosing minimal canonical representatives are separate steps below.
     Then $\|\ket{V^{(N)}(A)}\|\to1$.
     The spectral bound is an explicit auxiliary assumption in the setting
     of \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:spt_compact_periodic_norm_deviation}
     The periodic norm estimate gives
@@ -5126,7 +5126,7 @@ choosing minimal canonical representatives are separate steps below.
     root and nonnegativity of the norms finish the proof.
 \end{proof}
 
-\begin{theorem}[Unit overlap limit from eventual periodic-line equality]
+\begin{lemma}[Unit overlap limit from eventual periodic-line equality]
     \label{thm:spc_aux_periodic_line_unit_overlap}
     \lean{MPSTensor.norm_mpvOverlap_tendsto_one_of_eventual_span_eq}
     \leanok
@@ -5135,7 +5135,7 @@ choosing minimal canonical representatives are separate steps below.
     Suppose their periodic coefficient spans agree for all sufficiently
     large $N$, and both periodic state norms tend to one.
     Then $|O_{AB}(N)|\to1$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:spc_aux_periodic_span_overlap}
     Eventually the overlap modulus is the product of the two state norms.
@@ -5144,7 +5144,7 @@ choosing minimal canonical representatives are separate steps below.
 \end{proof}
 
 
-\begin{theorem}[Virtual class along a convergent unital sequence]
+\begin{lemma}[Virtual class along a convergent unital sequence]
     \label{thm:spc_aux_convergent_unital_sequence_class}
     \lean{MPSTensor.eventually_cohomologousTo_of_tendsto_unital_periodic_lines}
     \leanok
@@ -5172,7 +5172,7 @@ choosing minimal canonical representatives are separate steps below.
     The transfer bound and periodic-span equality are explicit hypotheses;
     this is an auxiliary reduction for
     \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:injective_irreducible,
         thm:spt_unitary_virtual_covariance_unital,
@@ -5207,7 +5207,7 @@ choosing minimal canonical representatives are separate steps below.
 \end{proof}
 
 
-\begin{theorem}[Endpoint cohomology for a given unital family]
+\begin{lemma}[Endpoint cohomology for a given unital family]
     \label{thm:spt_unital_supported_path_class}
     \lean{TNLean.Algebra.isMulCoboundary₂_div_of_eventually_at_all_points,
         MPSTensor.H2π_eq_of_continuous_unital_supported_family}
@@ -5218,7 +5218,7 @@ choosing minimal canonical representatives are separate steps below.
     Then the endpoint virtual factors are cohomologous. More generally,
     a scalar cohomology class that is locally constant on a preconnected
     parameter space is constant throughout that space.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_local_unique_stationary_class}
@@ -5239,7 +5239,7 @@ is the dimer fixed point that the printed claims describe
 Most results below take a projective representation with that factor system as
 given; for a finite group, the twisted regular representation on $\C^G$ provides
 one whose factor system lies in the class of the cocycle
-(Theorem~\ref{thm:spt_fixed_point_from_cocycle},
+(Lemma~\ref{thm:spt_fixed_point_from_cocycle},
 \cite{gap:rmp_spt_fixed_point_supplied_representation}). The symmetry retains
 an arbitrary character, which acts on the length-$N$ vector by its $N$th power;
 the earlier trivial-character restriction is resolved
@@ -5288,7 +5288,7 @@ virtual factor system \cite{gap:rmp_spt_fixed_point_onsite_scope}.
     $X_g^{\dagger}A^iX_g$.
 \end{definition}
 
-\begin{theorem}[The SPT fixed point has zero correlation length]
+\begin{lemma}[The SPT fixed point has zero correlation length]
     \label{thm:spt_fixed_point_transfer}
     \lean{MPSTensor.transferMap_sptFixedPointTensor, MPSTensor.star_sptScale_mul_sptScale, MPSTensor.sptScale_ne_zero, MPSTensor.sptFixedPointTensor_isTransferIdempotent, MPSTensor.finrank_range_transferMap_sptFixedPointTensor, MPSTensor.sptFixedPointTensor_isInjective, MPSTensor.sptFixedPointTensor_isNormal, MPSTensor.sum_smul_sptFixedPointTensor_apply, MPSTensor.eq_of_sum_smul_sptFixedPointTensor_eq}
     \leanok
@@ -5297,14 +5297,14 @@ virtual factor system \cite{gap:rmp_spt_fixed_point_onsite_scope}.
     $X\mapsto D^{-1}\tr(X)\,\Id$, an idempotent of rank one, and the tensor is
     injective, hence normal, so its letters are linearly independent
     \cite[Section~III.A]{Cirac2021Matrix}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     $\sum_{a,b}\ket{a}\bra{b}X\ket{b}\bra{a}=\tr(X)\,\Id$; the letters are nonzero
     multiples of the matrix units.
 \end{proof}
 
-\begin{theorem}[The SPT fixed point realizes the character and cocycle class]%
+\begin{lemma}[The SPT fixed point realizes the character and cocycle class]%
     \label{thm:spt_fixed_point_class}
     \lean{MPSTensor.twistedTensor_sptFixedPointTensor,
         MPSTensor.sptFixedPointTensor_isOnSiteSymmetricUpToCharacter,
@@ -5327,7 +5327,7 @@ virtual factor system \cite{gap:rmp_spt_fixed_point_onsite_scope}.
     $\phi$ has a factor system cohomologous to $\omega$.
     If $\rho$ is unitary and $|\phi(g)|=1$ for every $g$, then $U$ is
     a unitary representation \cite[Section~III.A]{Cirac2021Matrix}.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:cocycle_gauge_independence, thm:spt_fixed_point_transfer,
@@ -5341,13 +5341,13 @@ virtual factor system \cite{gap:rmp_spt_fixed_point_onsite_scope}.
     (\ref{eq:spt_character_twist}). For any other realization, cancel
     the nonzero scalar $\phi(g)$ and compare the two gauges for the action
     $\phi(g)^{-1}U(g)$. Since the tensor is injective,
-    Theorem~\ref{thm:cocycle_gauge_independence} makes their factor systems
+    Lemma~\ref{thm:cocycle_gauge_independence} makes their factor systems
     cohomologous. When $\rho$ is unitary, $W_g^{-1}=W_g^\dagger$ and
     $W_g^T\otimes W_g^\dagger$ is unitary; multiplication by the unit-modulus
     scalar $\phi(g)$ preserves unitarity.
 \end{proof}
 
-\begin{theorem}[The SPT fixed point of a character and cocycle class]
+\begin{lemma}[The SPT fixed point of a character and cocycle class]
     \label{thm:spt_fixed_point_from_cocycle}
     \lean{TNLean.Algebra.ScalarCocycle.inverse,
         TNLean.Algebra.ScalarCocycle.inverse_isCocycle,
@@ -5371,7 +5371,7 @@ virtual factor system \cite{gap:rmp_spt_fixed_point_onsite_scope}.
     representation realizing the symmetry with this character has a factor
     system cohomologous to $\omega$
     \cite[Section~III.A]{Cirac2021Matrix}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_fixed_point_class, thm:mpug_twisted_regular_multiplication,
@@ -5383,7 +5383,7 @@ virtual factor system \cite{gap:rmp_spt_fixed_point_onsite_scope}.
     $\rho$ is unitary, $W_g^{-1}=W_g^{\dagger}$. Every element $g$ has finite
     order, so $\phi(g)^{\operatorname{ord}(g)}=1$ and $|\phi(g)|=1$.
     Hence $U(g)=\phi(g)(W_g^{T}\otimes W_g^{\dagger})$ is unitary.
-    Theorem~\ref{thm:spt_fixed_point_class} gives the symmetry and shows that every virtual factor system is cohomologous to
+    Lemma~\ref{thm:spt_fixed_point_class} gives the symmetry and shows that every virtual factor system is cohomologous to
     $\bar\omega$, hence to $\omega$.
 \end{proof}
 
@@ -5454,7 +5454,7 @@ and the regrouping of physical registers into bonds.
     open as recorded in \cite{gap:spc11_spt_interpolation_upper_range}.
 \end{definition}
 
-\begin{theorem}[Elementary properties of MPS rays and path reversal]
+\begin{lemma}[Elementary properties of MPS rays and path reversal]
     \label{thm:spt_exact_mps_path_reversal}
     \lean{MPSTensor.SamePositiveMpvRay.refl,
         MPSTensor.SamePositiveMpvRay.symm,
@@ -5467,14 +5467,14 @@ and the regrouping of physical registers into bonds.
     and transitive. Reversing an interaction path and its exact MPS
     realization preserves all its ground-line conditions. In particular,
     the independent exact MPS phase condition is symmetric.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The first claims are properties of equality of subspaces. For reversal,
     compose both families with $\gamma\mapsto1-\gamma$.
 \end{proof}
 
-\begin{theorem}[Gauge preparation preserves the exact MPS phase condition]
+\begin{lemma}[Gauge preparation preserves the exact MPS phase condition]
     \label{thm:spt_exact_phase_gauge_invariance}
     \lean{MPSTensor.blockTensor_smul,
         MPSTensor.GaugeEquiv.rotatePhysical,
@@ -5490,7 +5490,7 @@ and the regrouping of physical registers into bonds.
     representations, then so do $A_0$ and $A_1$. The same blocking,
     characters, orthogonal physical inclusions, interaction path, and
     continuous ground-state family give the conclusion.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Blocking raises each scalar to the blocking length and preserves
@@ -5502,21 +5502,21 @@ and the regrouping of physical registers into bonds.
     needed by the phase condition.
 \end{proof}
 
-\begin{theorem}[Reversal of a symmetric gapped path]
+\begin{lemma}[Reversal of a symmetric gapped path]
     \label{thm:spt_common_space_path_reversal}
     \lean{MPSTensor.SymmetricGappedInteractionPath.reverse}
     \leanok
     \uses{def:spt_common_space_gapped_path}
     If $h_\gamma$ is a symmetric gapped path from $h_0$ to $h_1$, then
     $h_{1-\gamma}$ is such a path from $h_1$ to $h_0$, with the same gap bound.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The change of parameter $\gamma\mapsto1-\gamma$ is a continuous
     bijection of the unit interval and exchanges its endpoints.
 \end{proof}
 
-\begin{theorem}[Concatenation of symmetric gapped paths]
+\begin{lemma}[Concatenation of symmetric gapped paths]
     \label{thm:spt_common_space_path_concatenation}
     \lean{MPSTensor.SymmetricGappedInteractionPath.toPath,
         MPSTensor.SymmetricGappedInteractionPath.concatenatedInteraction,
@@ -5529,7 +5529,7 @@ and the regrouping of physical registers into bonds.
     There is then a symmetric gapped path from $h_0$ to $h_2$.
     If the original gap bounds are $\delta_0,\delta_1>0$, the
     concatenated path has gap bound $\min\{\delta_0,\delta_1\}$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Traverse the first path on the first half of the interval and
@@ -5538,7 +5538,7 @@ and the regrouping of physical registers into bonds.
     paths, so the norm bound, symmetry, and stated gap bound follow.
 \end{proof}
 
-\begin{theorem}[Order and interpolation of periodic Hamiltonians]
+\begin{lemma}[Order and interpolation of periodic Hamiltonians]
     \label{thm:spt_periodic_hamiltonian_order}
     \lean{MPSTensor.interactionHamiltonian_add_smul_sub,
         MPSTensor.interactionHamiltonian_posSemidef,
@@ -5550,7 +5550,7 @@ and the regrouping of physical registers into bonds.
     If $h\ge0$, then $H_N(h)\ge0$; if $h\le k$, then
     $H_N(h)\le H_N(k)$.  For every real $t$,
     $H_N(h+t(k-h))=H_N(h)+t(H_N(k)-H_N(h))$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Embedding an interaction into a cyclic window is a linear map
@@ -5558,7 +5558,7 @@ and the regrouping of physical registers into bonds.
     the cyclic positions.
 \end{proof}
 
-\begin{theorem}[Symmetry of canonical parent Hamiltonians]
+\begin{lemma}[Symmetry of canonical parent Hamiltonians]
     \label{thm:spt_parent_hamiltonian_symmetry}
     \lean{MPSTensor.onSiteTensorPow_conjTranspose_mul_self,
         MPSTensor.groundSpaceES_invariant_of_gauge_covariance,
@@ -5577,7 +5577,7 @@ and the regrouping of physical registers into bonds.
     parent interaction of range $L$ commutes with $U^{\otimes L}$.
     For every $N\geq L$, the periodic parent Hamiltonian commutes
     with $U^{\otimes N}$ \cite[Section~II.F.2]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Gauge changes preserve the open-boundary MPS space.  Physical rotation
@@ -5620,7 +5620,7 @@ and the regrouping of physical registers into bonds.
     symmetry follow from affine interpolation.
 \end{proof}
 
-\begin{theorem}[A continuous unit bond interpolation]
+\begin{lemma}[A continuous unit bond interpolation]
     \label{thm:spt_normalized_bond_interpolation}
     \lean{MPSTensor.bondInterpolationWeight,
         MPSTensor.bondInterpolationMatrix,
@@ -5651,7 +5651,7 @@ and the regrouping of physical registers into bonds.
     only the first and second diagonal blocks, respectively, remain.  The
     second summation range follows the correction recorded in
     \cite{gap:spc11_spt_interpolation_upper_range}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The two blocks have disjoint support, so the squared norm of the
@@ -5660,7 +5660,7 @@ and the regrouping of physical registers into bonds.
     normalization factor vary continuously with $\gamma$.
 \end{proof}
 
-\begin{theorem}[Symmetry of the interpolating bond]
+\begin{lemma}[Symmetry of the interpolating bond]
     \label{thm:spt_bond_interpolation_symmetry}
     \lean{MPSTensor.bondInterpolationMatrix_eq_fromBlocks,
         MPSTensor.bondInterpolationMatrix_commute_directSum,
@@ -5672,7 +5672,7 @@ and the regrouping of physical registers into bonds.
     Let $V^0,V^1$ be unitary projective representations with a common
     factor system, and put $V_g=V_g^0\oplus V_g^1$.  For the bond coefficient
     matrices $W(\gamma)$ and $\widehat W(\gamma)$ of
-    Theorem~\ref{thm:spt_normalized_bond_interpolation},
+    Lemma~\ref{thm:spt_normalized_bond_interpolation},
     \begin{align}
         V_gW(\gamma)V_g^*          & = W(\gamma),          &
         V_g\widehat W(\gamma)V_g^* & = \widehat W(\gamma).
@@ -5681,7 +5681,7 @@ and the regrouping of physical registers into bonds.
     These are the coefficient-matrix identities expressing invariance of
     the bond vector under $V_g\otimes\overline{V_g}$
     \cite[Section~II.F.2]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The matrix $W(\gamma)$ is scalar on each of the two summands, so it
@@ -5705,7 +5705,7 @@ and the regrouping of physical registers into bonds.
     of~\cite[Section~II.D.2]{Schuch2011Phases}.
 \end{definition}
 
-\begin{theorem}[Unitarity of bond regrouping]
+\begin{lemma}[Unitarity of bond regrouping]
     \label{thm:spt_incoming_bond_unitary}
     \lean{MPSTensor.incomingBondPerm_mem_unitaryGroup}
     \leanok
@@ -5713,13 +5713,13 @@ and the regrouping of physical registers into bonds.
     The matrix $P_N$ defined by $(P_N)_{s,b}=\delta_{e_N(s),b}$ is unitary.
     Thus it takes a bond-coordinate wavefunction to the corresponding
     physical-coordinate wavefunction by composition with $e_N$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The map $e_N$ permutes the configuration basis.
 \end{proof}
 
-\begin{theorem}[Locality after bond regrouping]
+\begin{lemma}[Locality after bond regrouping]
     \label{thm:spt_incoming_bond_locality}
     \lean{MPSTensor.incomingBondPerm_conj_local_apply}
     \leanok
@@ -5737,7 +5737,7 @@ and the regrouping of physical registers into bonds.
     \end{align}
     Hence every one-bond interaction becomes a nearest-neighbor physical
     interaction (a one-site interaction when $N=1$).
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Conjugation by a permutation matrix replaces the row and column
@@ -5745,7 +5745,7 @@ and the regrouping of physical registers into bonds.
     formula for $K_i$ gives the displayed entries.
 \end{proof}
 
-\begin{theorem}[Symmetry under bond regrouping]
+\begin{lemma}[Symmetry under bond regrouping]
     \label{thm:spt_bond_regrouping_symmetry}
     \lean{MPSTensor.incomingBondPerm_conj_registerAction,
         MPSTensor.incomingBondPerm_conj_sptFixedPointAction}
@@ -5763,7 +5763,7 @@ and the regrouping of physical registers into bonds.
     trivial character (Definition~\ref{def:spt_fixed_point_tensor}), the
     incoming-bond action is $W_g^{-1}\otimes W_g^{\mathsf T}$
     \cite[Section~II.F.2]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The matrix entries are products of left-register and right-register
@@ -5771,7 +5771,7 @@ and the regrouping of physical registers into bonds.
     this permutation does not change their product.
 \end{proof}
 
-\begin{theorem}[Uniform gap for independent interpolating bonds]
+\begin{lemma}[Uniform gap for independent interpolating bonds]
     \label{thm:spt_bond_product_parent_gap}
     \lean{MPSTensor.bondPenaltyAt_isStarProjection,
         MPSTensor.bondPenaltyAt_commute,
@@ -5784,7 +5784,7 @@ and the regrouping of physical registers into bonds.
         def:spt_incoming_bond_coordinates}
     Let $D_0,D_1>0$, $N>0$, and $\widehat\omega(\gamma)$ be the
     normalized bond vector of
-    Theorem~\ref{thm:spt_normalized_bond_interpolation}. In the Hilbert
+    Lemma~\ref{thm:spt_normalized_bond_interpolation}. In the Hilbert
     space of $N$ independent two-leg bonds, let
     \begin{align}
         h_i(\gamma)                       & = 1-
@@ -5806,8 +5806,8 @@ and the regrouping of physical registers into bonds.
     same holds for every unit bond vector in place of
     $\widehat\omega(\gamma)$. This statement uses independent-bond
     coordinates; the passage to the original site coordinates uses the
-    unitary of Theorem~\ref{thm:spt_incoming_bond_unitary}.
-\end{theorem}
+    unitary of Lemma~\ref{thm:spt_incoming_bond_unitary}.
+\end{lemma}
 
 \begin{proof}\leanok
     Unit norm makes each bond-line operator a rank-one orthogonal
@@ -5818,7 +5818,7 @@ and the regrouping of physical registers into bonds.
     $\widehat\omega(\gamma)^{\otimes N}$, which identifies the kernel.
 \end{proof}
 
-\begin{theorem}[Continuity of the bond parent Hamiltonian]
+\begin{lemma}[Continuity of the bond parent Hamiltonian]
     \label{thm:spt_bond_parent_continuity}
     \lean{MPSTensor.continuous_bondProductParentHamiltonian,
         MPSTensor.continuous_normalizedBondInterpolation_parent}
@@ -5827,7 +5827,7 @@ and the regrouping of physical registers into bonds.
         thm:spt_bond_product_parent_gap}
     For $D_0,D_1>0$ and each $N>0$, the independent-bond parent
     Hamiltonian $H_N(\gamma)$ is continuous in $\gamma\in\mathbb R$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Each matrix entry of a bond-line projection is a product of a bond
@@ -5865,13 +5865,13 @@ and the regrouping of physical registers into bonds.
     nonzero line spanned by $\eta^{\otimes N}$, which gives the spectral
     value $0$. For a unit eigenvector with eigenvalue $\lambda$, the
     inequality $H_N(\eta)^2\geq H_N(\eta)$ of
-    Theorem~\ref{thm:spt_bond_product_parent_gap} gives
+    Lemma~\ref{thm:spt_bond_product_parent_gap} gives
     $\lambda\leq\lambda^2$; with $\lambda\geq0$ this forces $\lambda=0$ or
     $\lambda\geq1$. Continuity along the interpolation is
-    Theorem~\ref{thm:spt_bond_parent_continuity}.
+    Lemma~\ref{thm:spt_bond_parent_continuity}.
 \end{proof}
 
-\begin{theorem}[Physical parent Hamiltonian of the interpolating bonds]
+\begin{lemma}[Physical parent Hamiltonian of the interpolating bonds]
     \label{thm:spt_physical_bond_parent_gap}
     \lean{MPSTensor.normalizedPhysicalBondInterpolation_parent_gap_one,
         MPSTensor.normalizedPhysicalBondInterpolation_parent_groundSpace,
@@ -5891,7 +5891,7 @@ and the regrouping of physical registers into bonds.
         \notag
     \end{align}
     for every $N>0$ and every physical-chain vector $v$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The incoming-bond change of coordinates is unitary. It carries the
@@ -5900,7 +5900,7 @@ and the regrouping of physical registers into bonds.
     finite-chain bond Hamiltonian, since the unitary conjugation is fixed.
 \end{proof}
 
-\begin{theorem}[On-site symmetry of the interpolating-bond parent Hamiltonian]
+\begin{lemma}[On-site symmetry of the interpolating-bond parent Hamiltonian]
     \label{thm:spt_physical_bond_parent_symmetry}
     \lean{MPSTensor.normalizedBondInterpolationVector_fixed_directSum,
         MPSTensor.bondProductParentHamiltonian_commute_sitewise_of_unitary_fixed,
@@ -5922,7 +5922,7 @@ and the regrouping of physical registers into bonds.
         \notag
     \end{align}
     \cite[Section~II.F.2]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The block-scalar coefficient matrix of the bond is invariant under
@@ -5932,7 +5932,7 @@ and the regrouping of physical registers into bonds.
     carries the commutation relation to physical coordinates.
 \end{proof}
 
-\begin{theorem}[Spectral gap of the physical bond parent Hamiltonian]
+\begin{lemma}[Spectral gap of the physical bond parent Hamiltonian]
     \label{thm:spt_physical_bond_parent_spectrum}
     \lean{MPSTensor.physicalBondProductParentHamiltonian_posSemidef,
         MPSTensor.physicalBondProductParentHamiltonian_spectrum_gap_one,
@@ -5944,19 +5944,19 @@ and the regrouping of physical registers into bonds.
     Hamiltonian $P_NH_N(\gamma)P_N^*$ is positive semidefinite for every
     $N>0$. Its spectrum contains $0$, and every spectral value $z$
     satisfies $\operatorname{Re}z=0$ or $\operatorname{Re}z\geq1$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The Hamiltonian is a unitary conjugate of a sum of orthogonal
     projections, hence positive semidefinite. Its nonzero kernel gives the
     spectral value $0$. For a unit eigenvector with eigenvalue $\lambda$,
     the quadratic-form inequality of
-    Theorem~\ref{thm:spt_physical_bond_parent_gap} reads
+    Lemma~\ref{thm:spt_physical_bond_parent_gap} reads
     $\lambda\leq\lambda^2$; with $\lambda\geq0$ this forces $\lambda=0$ or
     $\lambda\geq1$.
 \end{proof}
 
-\begin{theorem}[Two-site interaction for the bond parent Hamiltonian]
+\begin{lemma}[Two-site interaction for the bond parent Hamiltonian]
     \label{thm:spt_two_site_bond_interaction}
     \lean{MPSTensor.twoSiteBondInteraction_isStarProjection,
         MPSTensor.twoSiteBondInteraction_norm_le_one,
@@ -5976,7 +5976,7 @@ and the regrouping of physical registers into bonds.
     Here the indices are cyclic and $H_N(\eta)$ is the sum of the
     independent-bond penalties
     \cite[Section~II.D.2]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The two-site operator is a reordering of
@@ -5985,7 +5985,7 @@ and the regrouping of physical registers into bonds.
     reindexing by the cyclic successor gives the identity.
 \end{proof}
 
-\begin{theorem}[Symmetric gapped path between the direct-sum fixed points]
+\begin{lemma}[Symmetric gapped path between the direct-sum fixed points]
     \label{thm:spt_direct_sum_fixed_point_path}
     \lean{MPSTensor.sptFixedPointUnitaryAction,
         MPSTensor.normalizedBondFixedPointGappedPath}
@@ -6008,7 +6008,7 @@ and the regrouping of physical registers into bonds.
     $D^2$. Their operator norms are at most one, and the gap above the
     unique ground line is at least one for every $N\ge2$ and every
     $\gamma\in[0,1]$ \cite[Section~II.F.2]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Each local interaction is an orthogonal projection and depends
@@ -6020,7 +6020,7 @@ and the regrouping of physical registers into bonds.
     $U_g^{\otimes N}$ for every $g$.
 \end{proof}
 
-\begin{theorem}[Fixed-point path for cohomologous virtual actions]
+\begin{lemma}[Fixed-point path for cohomologous virtual actions]
     \label{thm:spt_cohomologous_fixed_point_path}
     \lean{MPSTensor.sptKron_eq_of_eq_smul,
         MPSTensor.sptFixedPointAction_eq_of_forall_eq_smul,
@@ -6035,26 +6035,26 @@ and the regrouping of physical registers into bonds.
     trivial character, equals that of $V^0$.
     Set $D=D_0+D_1$ and $W_g=V^{0\prime}_{g^{-1}}\oplus V^1_{g^{-1}}$.
     Under the common on-site action $U_g=W_g^T\otimes W_g^{-1}$, the
-    normalized bond interactions of Theorem~\ref{thm:spt_direct_sum_fixed_point_path}
+    normalized bond interactions of Lemma~\ref{thm:spt_direct_sum_fixed_point_path}
     give a symmetric gapped path between their two endpoint interactions on
     the physical space of dimension $D^2$
     \cite[Section~II.F.2]{Schuch2011Phases}. The normalized bond follows
     the corrected second-block range of
     \cite{gap:spc11_spt_interpolation_upper_range}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Choose $\lambda$ with
     $\omega_1(g,h)=\lambda_g\lambda_h\lambda_{gh}^{-1}\omega_0(g,h)$.
-    Theorem~\ref{thm:spt_unitary_rephasing} gives
+    Lemma~\ref{thm:spt_unitary_rephasing} gives
     $V^{0\prime}_g=(\lambda_g/|\lambda_g|)V^0_g$ with factor system
     $\omega_1$. Scalars cancel in $W^T\otimes W^{-1}$, so the first
     fixed-point physical action is unchanged.
-    Theorem~\ref{thm:spt_direct_sum_fixed_point_path} now applies to
+    Lemma~\ref{thm:spt_direct_sum_fixed_point_path} now applies to
     $V^{0\prime}\oplus V^1$.
 \end{proof}
 
-\begin{theorem}[Weighted matrix-unit MPS as a product of bonds]
+\begin{lemma}[Weighted matrix-unit MPS as a product of bonds]
     \label{thm:spt_weighted_matrix_unit_bond_product}
     \lean{MPSTensor.mpv_weightedMatrixUnitInterpolation_eq_incomingBondProduct,
         MPSTensor.mpv_weightedMatrixUnitInterpolation_zero,
@@ -6087,7 +6087,7 @@ and the regrouping of physical registers into bonds.
     \cite[Section~II.F.2]{Schuch2011Phases}. The tensor itself
     may have letters with cross-block indices at an endpoint; the cyclic
     coefficient identity is the relevant endpoint statement.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The trace of a cyclic product of matrix units vanishes unless each
@@ -6098,7 +6098,7 @@ and the regrouping of physical registers into bonds.
     relation of the matrix units passes to $A_\gamma$.
 \end{proof}
 
-\begin{theorem}[Canonical parent interaction of the SPT fixed point]
+\begin{lemma}[Canonical parent interaction of the SPT fixed point]
     \label{thm:spt_fixed_point_two_site_bond_kernel}
     \lean{MPSTensor.matrixUnitBondVector,
         MPSTensor.matrixUnitBondVector_sum_normSq,
@@ -6120,7 +6120,7 @@ and the regrouping of physical registers into bonds.
     acting on the middle registers. Its kernel is exactly $G_2(A)$, so
     $h$ equals the canonical two-site parent interaction of $A$
     \cite[Section~II.D.2]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Multiplication of two letters gives
@@ -6135,7 +6135,7 @@ and the regrouping of physical registers into bonds.
     so they coincide.
 \end{proof}
 
-\begin{theorem}[Contraction of a middle-bond operator]
+\begin{lemma}[Contraction of a middle-bond operator]
     \label{thm:spt_middle_bond_contraction}
     \lean{MPSTensor.twoSiteBondInteraction_mulVec_apply,
         MPSTensor.twoSiteBondInteraction_mulVec_separable,
@@ -6153,7 +6153,7 @@ and the regrouping of physical registers into bonds.
     coefficients $(K\eta)_{bc}F_{ad}$. For a unit vector $\eta$,
     $K=I-|\eta\rangle\langle\eta|$ annihilates every such $f$
     \cite[Section~II.D.2]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The identity factors constrain the exterior summation indices to
@@ -6162,7 +6162,7 @@ and the regrouping of physical registers into bonds.
     $(I-|\eta\rangle\langle\eta|)\eta=(1-\|\eta\|^2)\eta=0$.
 \end{proof}
 
-\begin{theorem}[Canonical-parent comparison for weighted matrix units]
+\begin{lemma}[Canonical-parent comparison for weighted matrix units]
     \label{thm:spt_weighted_matrix_unit_parent_comparison}
     \lean{MPSTensor.groundSpaceMap_weightedMatrixUnitInterpolation_two_apply,
         MPSTensor.twoSiteBondInteraction_groundSpaceMap_weightedMatrixUnitInterpolation,
@@ -6191,7 +6191,7 @@ and the regrouping of physical registers into bonds.
     parent Hamiltonian. These statements include the two endpoints, where
     some diagonal coefficients vanish
     \cite[Section~II.F.2]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     The two-site boundary coefficient is
@@ -6234,7 +6234,7 @@ and the regrouping of physical registers into bonds.
     their continuity as the bond coefficients vanish is unnecessary.
 \end{proof}
 
-\begin{theorem}[Boundary spaces under physical embeddings]
+\begin{lemma}[Boundary spaces under physical embeddings]
     \label{thm:spt_physical_embedding_boundary}
     \lean{Matrix.rectKronecker_conjTranspose,
         Matrix.rectKronecker_conjTranspose_mul_self,
@@ -6252,7 +6252,7 @@ and the regrouping of physical registers into bonds.
     $(\bigotimes_j E_j)^\dagger=\bigotimes_j E_j^\dagger$.
     These identities apply to the physical inclusions in
     \cite[Section~II.F.2]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:physical_rotation_word, def:ground_space_map}
@@ -6263,14 +6263,14 @@ and the regrouping of physical registers into bonds.
     $T_L^\dagger T_L=(E^\dagger E)^{\otimes L}=I$.
 \end{proof}
 
-\begin{theorem}[Projection onto an isometric image]
+\begin{lemma}[Projection onto an isometric image]
     \label{thm:spt_isometric_image_projection}
     \lean{LinearIsometry.starProjection_map_eq_comp_adjoint}
     \leanok
     Let $T:H\to K$ be an isometry between finite-dimensional Hilbert
     spaces, let $G\subseteq H$ be a subspace, and denote its orthogonal
     projection by $P_G$. Then $P_{TG}=TP_GT^\dagger$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     For $y\in K$, the vector $TP_GT^\dagger y$ lies in $TG$.
@@ -6280,7 +6280,7 @@ and the regrouping of physical registers into bonds.
     These two properties characterize the orthogonal projection.
 \end{proof}
 
-\begin{theorem}[Canonical parents under physical isometries]
+\begin{lemma}[Canonical parents under physical isometries]
     \label{thm:spt_physical_embedding_parent}
     \lean{MPSTensor.parentInteractionES_rotatePhysical_isometry,
         MPSTensor.parentInteractionES_rotatePhysical_isometry_decomposition,
@@ -6300,7 +6300,7 @@ and the regrouping of physical registers into bonds.
     The identity holds both as an operator and in the configuration basis.
     In particular, $T_L^\dagger v=0$ implies $h_L(EA)v=v$.
     No injectivity assumption on $A$ is needed.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:spt_physical_embedding_boundary,
@@ -6350,7 +6350,7 @@ and the regrouping of physical registers into bonds.
     of the embedded letters, which therefore span the full matrix algebra.
 \end{proof}
 
-\begin{theorem}[Isometric restriction of boundary vectors and covariance]
+\begin{lemma}[Isometric restriction of boundary vectors and covariance]
     \label{thm:spt_isometric_bond_restriction}
     \lean{MPSTensor.groundSpaceMap_eq_of_isometric_bond_intertwiner,
         MPSTensor.groundSpace_le_of_isometric_bond_intertwiner,
@@ -6367,7 +6367,7 @@ and the regrouping of physical registers into bonds.
     $XV=VY$ and $\sum_jU_{ij}A^j=XA^iX^{-1}$, then
     $\sum_jU_{ij}B^j=YB^iY^{-1}$
     \cite[Section~II.F.2]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Word evaluation preserves the intertwining relation. Cyclicity of
@@ -6425,14 +6425,14 @@ and the regrouping of physical registers into bonds.
     The endpoint weight is $D_j^{-1/2}$ on the occupied summand and
     zero elsewhere. Compression therefore gives the physical embedding
     formula. The weighted endpoint has no rows outside that summand.
-    Apply Theorem~\ref{thm:spt_isometric_bond_restriction} to obtain the
+    Apply Lemma~\ref{thm:spt_isometric_bond_restriction} to obtain the
     boundary inclusion and periodic-vector equality. The block-diagonal
     virtual action satisfies
     $(\rho_0\oplus\rho_1)(g)J_{e_j}=J_{e_j}\rho_j(g)$; the same theorem
     then gives the endpoint covariance.
 \end{proof}
 
-\begin{theorem}[Bond comparison with another canonical parent]
+\begin{lemma}[Bond comparison with another canonical parent]
     \label{thm:spt_embedded_parent_comparison}
     \lean{MPSTensor.twoSiteBondInteraction_le_parentInteraction_of_groundSpaceMap,
         MPSTensor.normalizedBondInteraction_le_parent_of_isometric_bond_intertwiner,
@@ -6455,7 +6455,7 @@ and the regrouping of physical registers into bonds.
     and trivial character, covariance of $B$ therefore makes
     $s\mapsto h_t+s(p_B-h_t)$ a symmetric gapped path with gap at
     least one \cite[Section~II.F.2]{Schuch2011Phases}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Comparing orthogonal projections gives $h_t\leq p_B$.
@@ -6523,7 +6523,7 @@ $\E_A$ itself is used, describes the same spectrum.
     anticommute.
 \end{proof}
 
-\begin{theorem}[Virtual gauges fix the boundary state]
+\begin{lemma}[Virtual gauges fix the boundary state]
     \label{thm:virtual_gauge_fixes_boundary_state}
     \lean{MPSTensor.exists_unitary_gauge_of_symmetry, MPSTensor.commute_boundaryState_of_symmetry}
     \leanok
@@ -6534,15 +6534,15 @@ $\E_A$ itself is used, describes the same spectrum.
     $\sum_j u_{ij}A^j=\zeta\,XA^iX^{-1}$ for all $i$, where $X\in\GL_{D}(\C)$
     and $\zeta\neq0$.  Then $X=c\,W$ for a nonzero scalar $c$ and a unitary $W$
     with $W\Lambda W^\dagger=\Lambda$.  In particular $X\Lambda=\Lambda X$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:gauge_phase_unique, thm:virtual_unitary_of_twisted_gauge_phase,
         thm:boundary_state_invariant_of_virtual_unitary}
-    Theorem~\ref{thm:virtual_unitary_of_twisted_gauge_phase}, applied to the
+    Lemma~\ref{thm:virtual_unitary_of_twisted_gauge_phase}, applied to the
     physical unitary $u^\dagger$, gives a unitary $V$ and a phase $\mu$ with
     $\sum_j (u^\dagger)_{ij}A^j=\mu\,VA^iV^\dagger$, and
-    Theorem~\ref{thm:boundary_state_invariant_of_virtual_unitary} gives
+    Lemma~\ref{thm:boundary_state_invariant_of_virtual_unitary} gives
     $V^\dagger\Lambda V=\Lambda$ after normalizing the trace of $\Lambda$.
     Undoing the physical mixing yields $A^i=\mu\zeta\,(VX)A^i(VX)^{-1}$, so
     Lemma~\ref{lem:gauge_phase_unique} makes $VX$ a nonzero scalar.  Hence $X$
@@ -6566,7 +6566,7 @@ $\E_A$ itself is used, describes the same spectrum.
     $\omega(g,h)=c_gc_hc_{gh}^{-1}$, a coboundary.
 \end{proof}
 
-\begin{theorem}[Degeneracy of the entanglement spectrum]
+\begin{lemma}[Degeneracy of the entanglement spectrum]
     \label{thm:spt_entanglement_spectrum_degenerate}
     \lean{MPSTensor.finrank_eigenspace_ne_one_of_isNontrivialClass}
     \leanok
@@ -6579,35 +6579,35 @@ $\E_A$ itself is used, describes the same spectrum.
     $\rho$ has a non-trivial class, no eigenspace of $\Lambda$ is one-dimensional:
     every eigenvalue of the entanglement spectrum is degenerate
     \cite[Section~III.A]{Cirac2021Matrix}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:virtual_gauge_fixes_boundary_state,
         lem:projective_commutant_eigenspace}
     Every $\rho(g)$ is the virtual gauge of $U(g^{-1})$ and commutes with $\Lambda$
-    by Theorem~\ref{thm:virtual_gauge_fixes_boundary_state}, so
+    by Lemma~\ref{thm:virtual_gauge_fixes_boundary_state}, so
     Lemma~\ref{lem:projective_commutant_eigenspace} excludes one-dimensional
     eigenspaces.
 \end{proof}
 
-\begin{theorem}[Even degeneracy for anticommuting gauges]
+\begin{lemma}[Even degeneracy for anticommuting gauges]
     \label{thm:spt_entanglement_spectrum_even}
     \lean{MPSTensor.even_finrank_eigenspace_of_anticommuting_gauges}
     \leanok
-    In the setting of Theorem~\ref{thm:virtual_gauge_fixes_boundary_state}, let
+    In the setting of Lemma~\ref{thm:virtual_gauge_fixes_boundary_state}, let
     $u,v$ be unitaries with virtual gauges $X,Y$, that is,
     $\sum_j u_{ij}A^j=\zeta\,XA^iX^{-1}$ and
     $\sum_j v_{ij}A^j=\eta\,YA^iY^{-1}$ with $\zeta,\eta\neq0$.  If $XY=-YX$,
     then every eigenspace of $\Lambda$ has even dimension.  This sharpens
-    Theorem~\ref{thm:spt_entanglement_spectrum_degenerate} when the projective
+    Lemma~\ref{thm:spt_entanglement_spectrum_degenerate} when the projective
     representation contains an anticommuting pair.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:virtual_gauge_fixes_boundary_state,
         lem:even_finrank_of_anticommute}
     Both gauges commute with $\Lambda$ by
-    Theorem~\ref{thm:virtual_gauge_fixes_boundary_state}, so
+    Lemma~\ref{thm:virtual_gauge_fixes_boundary_state}, so
     Lemma~\ref{lem:even_finrank_of_anticommute} gives even dimension on every
     eigenspace.
 \end{proof}
@@ -6640,7 +6640,7 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
     statement $X=u\,X'$ with $|u|=1$, so $X\bar X=|u|^2X'\bar X'$.
 \end{proof}
 
-\begin{theorem}[Time-reversal index]
+\begin{lemma}[Time-reversal index]
     \label{thm:time_reversal_index}
     \lean{MPSTensor.mul_map_star_eq_one_or_neg_one_of_timeReversal_gauge, MPSTensor.mul_map_star_eq_of_timeReversal_gauges}
     \leanok
@@ -6648,7 +6648,7 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
     unitary with $\sum_jP_{ij}\bar A^j=\zeta\,X^\dagger A^iX$ for all $i$.  Then
     $X\bar X=\pm\Id$, and the sign is the same for every unitary $X$ with this
     property \cite[Section~III.A]{Cirac2021Matrix}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:involution_index_of_twice}
@@ -6659,7 +6659,7 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
     invariance.
 \end{proof}
 
-\begin{theorem}[Reflection index]
+\begin{lemma}[Reflection index]
     \label{thm:reflection_index}
     \lean{MPSTensor.mul_map_star_eq_one_or_neg_one_of_reflection_gauge, MPSTensor.mul_map_star_eq_of_reflection_gauges}
     \leanok
@@ -6667,7 +6667,7 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
     $(A^i)^{T}=\zeta\,X^\dagger A^iX$ for all $i$.  Then $X\bar X=\pm\Id$, and the
     sign is the same for every unitary $X$ with this property
     \cite[Section~III.A]{Cirac2021Matrix}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:involution_index_of_twice}
@@ -6677,7 +6677,7 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
     Lemma~\ref{lem:involution_index_of_twice} applies.
 \end{proof}
 
-\begin{theorem}[Kramers obstruction]
+\begin{lemma}[Kramers obstruction]
     \label{thm:kramers_obstruction}
     \lean{MPSTensor.not_timeReversal_gauge_of_mul_map_star_eq_neg_one, MPSTensor.pauliY_mul_map_star, MPSTensor.not_wignerTimeReversal_gauge}
     \leanok
@@ -6687,7 +6687,7 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
     spin-$\tfrac12$ tensor carries the Wigner time reversal
     $A^i\mapsto\sum_j(\sigma_y)_{ij}\bar A^j$ in this form
     \cite[Section~III.A]{Cirac2021Matrix}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:gauge_phase_unique_normal}
@@ -6696,7 +6696,7 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
     Lemma~\ref{lem:gauge_phase_unique_normal}, $-|\zeta|^2=1$, which is impossible.
 \end{proof}
 
-\begin{theorem}[Kramers obstruction for injective tensors]
+\begin{lemma}[Kramers obstruction for injective tensors]
     \label{thm:kramers_obstruction_phase}
     \lean{MPSTensor.not_forall_mpv_wignerTimeReversal_eq_smul_of_isInjective}
     \leanok
@@ -6705,15 +6705,15 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
     under the Wigner time reversal: it is not the case that for every $N\ge1$ the
     matrix product vector of $\tilde A^i=\sum_j(\sigma_y)_{ij}\bar A^j$ is
     $c_N\ket{\psi_N(A)}$ with $|c_N|=1$ \cite[Section~III.A]{Cirac2021Matrix}.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     By Theorem~\ref{thm:ft_single_phase}, $\tilde A^i=\lambda\,XA^iX^{-1}$ for an
-    invertible $X$ and a phase $\lambda$, which Theorem~\ref{thm:kramers_obstruction}
+    invertible $X$ and a phase $\lambda$, which Lemma~\ref{thm:kramers_obstruction}
     excludes.
 \end{proof}
 
-\begin{theorem}[Anticommuting physical symmetries are obstructed]
+\begin{lemma}[Anticommuting physical symmetries are obstructed]
     \label{thm:anticommuting_physical_obstruction}
     \lean{MPSTensor.not_anticommuting_gauges_of_isNormal}
     \leanok
@@ -6721,7 +6721,7 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
     satisfies $\sum_jP_{ij}A^j=\zeta\,XA^iX^{-1}$ and
     $\sum_jQ_{ij}A^j=\eta\,YA^iY^{-1}$ for all $i$, with $X,Y\in\GL_{D}(\C)$ and
     $\zeta,\eta\neq0$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{lem:gauge_phase_unique_normal}
@@ -6730,7 +6730,7 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
     Lemma~\ref{lem:gauge_phase_unique_normal} would give $-1=1$.
 \end{proof}
 
-\begin{theorem}[No normal spin-$\tfrac12$ tensor is $\mathrm{SU}(2)$ symmetric]
+\begin{lemma}[No normal spin-$\tfrac12$ tensor is $\mathrm{SU}(2)$ symmetric]
     \label{thm:spin_half_su2_obstruction}
     \lean{MPSTensor.not_forall_mpv_twistedTensor_eq_smul_specialUnitaryGroup_of_isNormal, MPSTensor.not_isOnSiteSymmetric_specialUnitaryGroup_of_isNormal, MPSTensor.mpv_twistedTensor, MPSTensor.mpv_twistedTensor_eq_of_mul_eq, MPSTensor.blockKron_smul}
     \leanok
@@ -6740,7 +6740,7 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
     case that for every $g$ and every $N$ the vector $U(g)^{\otimes N}\ket{\psi_N(A)}$
     is a multiple of $\ket{\psi_N(A)}$ \cite[Section~III.A]{Cirac2021Matrix}.  In
     particular $A$ has no MPV-family invariance under $\mathrm{SU}(2)$.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:on_site_symmetric_block_tensor, lem:gauge_equiv_twisted,
@@ -6760,7 +6760,7 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
     is symmetric under the $L$-fold Kronecker powers, and the powers of
     $i\sigma_x$ and $i\sigma_z$ anticommute because $L$ is odd.  The fundamental
     theorem gives virtual gauges for both, which
-    Theorem~\ref{thm:anticommuting_physical_obstruction} rules out.  The source
+    Lemma~\ref{thm:anticommuting_physical_obstruction} rules out.  The source
     argues instead through the alternation of integer and half-integer virtual
     spins.
 \end{proof}

@@ -25,6 +25,51 @@ from test_blueprint_graph_worker import (
 
 
 class GraphPrecomputationTests(unittest.TestCase):
+    def test_layout_worker_must_post_a_result_before_exiting(self):
+        bridge = (
+            Path(__file__).resolve().parents[1]
+            / "blueprint/src/Packages/render_dependency_graph.cjs"
+        )
+        driver = r"""
+const Module = require('node:module');
+const {Worker} = require('node:worker_threads');
+const originalLoad = Module._load;
+Module._load = function (name, ...args) {
+  if (name !== 'node:worker_threads') return originalLoad.call(this, name, ...args);
+  return {isMainThread: true, Worker: class extends Worker {
+    constructor(filename, options) {
+      super(process.argv[2], {eval: true, resourceLimits: options.resourceLimits});
+    }
+  }};
+};
+require(process.argv[1]);
+"""
+        payload = json.dumps(
+            {"source": ".renderDot(`digraph { a; }`)", "assets": "/unused"}
+        )
+        cases = [
+            ("", "exited without a result"),
+            ("process.exit(7)", "exited with code 7"),
+            ("throw new Error('layout worker failed')", "layout worker failed"),
+            ("require('node:worker_threads').parentPort.postMessage('<svg/>')", None),
+        ]
+        for program, error in cases:
+            with self.subTest(program=program):
+                result = subprocess.run(
+                    ["node", "-e", driver, str(bridge), program],
+                    input=payload,
+                    text=True,
+                    capture_output=True,
+                    timeout=10,
+                )
+                if error is None:
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    self.assertEqual(json.loads(result.stdout)["svg"], "<svg/>")
+                else:
+                    self.assertNotEqual(result.returncode, 0)
+                    self.assertIn(error, result.stderr)
+                    self.assertEqual(result.stdout, "")
+
     def test_precomputed_page_keeps_statements_and_ready_contract(self):
         source = _fixture_source()
         prepared = renderer._precompute_dependency_graph(source)

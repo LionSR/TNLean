@@ -1,7 +1,7 @@
 \section{G-injectivity under physical maps}%
 \label{sec:peps_g_injective_physical_map}
 
-\begin{theorem}[Physical maps preserving G-injectivity]%
+\begin{lemma}[Physical maps preserving G-injectivity]%
     \label{thm:peps_g_injective_physical_map}
     \lean{TNLean.PEPS.comp_invariant_of_invariant,
         TNLean.PEPS.IsGInjective.comp_of_injOn_range,
@@ -23,7 +23,7 @@
     In particular, as a local consequence of
     \cite[Definition~5.1]{Schuch2010PEPS}, an invertible physical change of
     coordinates preserves $G$-injectivity in both directions.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_g_injective_invariants_range}
@@ -37,7 +37,7 @@
     inverse yields the reverse direction.
 \end{proof}
 
-\begin{theorem}[Physical isometries preserving G-isometry]%
+\begin{lemma}[Physical isometries preserving G-isometry]%
     \label{thm:peps_g_isometric_physical_map}
     \lean{TNLean.PEPS.IsGIsometric.comp_of_inner_eq,
         TNLean.PEPS.IsGIsometric.comp_isometry,
@@ -49,7 +49,7 @@
     same factor $c$. This includes rectangular isometries.
     An invertible physical isometry preserves $G$-isometry in both
     directions.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_g_injective_physical_map}
@@ -62,7 +62,7 @@
     isometry, giving the converse.
 \end{proof}
 
-\begin{theorem}[Compatibility with virtual comparison]%
+\begin{lemma}[Compatibility with virtual comparison]%
     \label{thm:peps_g_injective_physical_virtual_comparison}
     \lean{TNLean.PEPS.IsGInjective.virtualEquiv_comp_of_injective}
     \leanok
@@ -73,7 +73,7 @@
     physical ranges agree. Applying the same injective physical map
     $F:\mathcal P\to\mathcal Q$ to both tensors leaves their
     virtual comparison unchanged.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_g_injective_virtual_comparison}
@@ -94,7 +94,7 @@
     Its physical coefficient map is $T_{a^F}=FT_a$.
 \end{definition}
 
-\begin{theorem}[Physical deformation of G-injective site families]%
+\begin{lemma}[Physical deformation of G-injective site families]%
     \label{thm:peps_g_injective_physical_site_family}
     \lean{TNLean.PEPS.IsGInjective.physicalMapSite,
         TNLean.PEPS.IsGIsometric.physicalMapSite,
@@ -114,7 +114,7 @@
     physical isometries preserve regular $G$-isometry.
     In finite bond coordinates the resulting tensor family is exactly
     the physical deformation of the original group-labelled family.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:peps_g_injective_physical_map,thm:peps_g_isometric_physical_map}

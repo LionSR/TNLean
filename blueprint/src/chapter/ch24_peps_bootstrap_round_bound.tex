@@ -7,7 +7,7 @@ $e_0$ by $1-\ell$ at each round. The following estimates bound the round count
 in terms of the cyclic-color recurrence parameters of
 Section~\ref{sec:area_law_initial_exponent_gain}.
 
-\begin{theorem}[Logarithmic round bound]
+\begin{lemma}[Logarithmic round bound]
     \label{thm:area_law_bootstrap_round_log_bound}
     \lean{TNLean.PEPS.AreaLaw.Scan.boxBootstrapRounds_le_ceil_log_div}
     \leanok
@@ -17,7 +17,7 @@ Section~\ref{sec:area_law_initial_exponent_gain}.
         \le\left\lceil\frac{\log(1/\varepsilon)}{\ell}\right\rceil_+.
         \label{eq:area_law_bootstrap_round_log_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Since $\log(1-\ell)\le-\ell<0$, $\log(1/\varepsilon)\ge0$, and $e_0\le 1$,
     \begin{align}
@@ -42,7 +42,7 @@ Section~\ref{sec:area_law_initial_exponent_gain}.
     \end{align}
 \end{definition}
 
-\begin{theorem}[Bound on the physical bootstrap count]
+\begin{lemma}[Bound on the physical bootstrap count]
     \label{thm:area_law_initial_round_budget_bound}
     \lean{TNLean.PEPS.AreaLaw.Scan.boxBootstrapRounds_initial_le}
     \leanok
@@ -51,12 +51,12 @@ Section~\ref{sec:area_law_initial_exponent_gain}.
     Definition~\ref{def:area_law_bootstrap_parameters}, the round count $m$ of
     (\ref{eq:area_law_bootstrap_round_log_bound}) at $\varepsilon=e_*$ satisfies
     $m\le B$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:area_law_bootstrap_round_log_bound,
         thm:area_law_initial_exponent_gain_bounds,
         thm:area_law_bootstrap_margins}
-    By Theorems~\ref{thm:area_law_initial_exponent_gain_bounds} and
+    By Lemmas~\ref{thm:area_law_initial_exponent_gain_bounds} and
     \ref{thm:area_law_bootstrap_margins},
     \begin{align}
         \ell                     & \ge\frac{p}{400000\log M}>0,\notag         \\
@@ -66,7 +66,7 @@ Section~\ref{sec:area_law_initial_exponent_gain}.
     $\lceil\cdot\rceil_+$ yields $m\le B$ in (\ref{eq:area_law_initial_round_budget}).
 \end{proof}
 
-\begin{theorem}[The round budget reaches the safe-box exponent]
+\begin{lemma}[The round budget reaches the safe-box exponent]
     \label{thm:area_law_initial_round_budget_reaches}
     \lean{TNLean.PEPS.AreaLaw.Scan.pow_initialBoxBootstrapRoundBound_mul_le}
     \leanok
@@ -77,16 +77,16 @@ Section~\ref{sec:area_law_initial_exponent_gain}.
         (1-\ell)^B e_0\le e_*.
         \label{eq:area_law_initial_round_budget_reaches}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \lean{TNLean.PEPS.AreaLaw.Scan.pow_boxBootstrapRounds_mul_le}
     \uses{thm:area_law_initial_round_budget_bound}
     Since $0<1-\ell<1$ and $m\le B$ by
-    Theorem~\ref{thm:area_law_initial_round_budget_bound},
+    Lemma~\ref{thm:area_law_initial_round_budget_bound},
     $(1-\ell)^B e_0\le(1-\ell)^m e_0\le e_*$.
 \end{proof}
 
-\begin{theorem}[Physical entropy bound within the round budget]
+\begin{lemma}[Physical entropy bound within the round budget]
     \label{thm:area_law_physical_box_bounded_rounds}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_boxEntropy_le_boxError_bounded_rounds}
     \leanok
@@ -108,7 +108,7 @@ Section~\ref{sec:area_law_initial_exponent_gain}.
         \label{eq:area_law_physical_box_bounded_rounds}
     \end{align}
     evaluated at $C_m$ without comparing $C_m$ and $C_B$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \lean{TNLean.PEPS.AreaLaw.Scan.boxEntropy_le_boxError_explicit}
     \uses{thm:area_law_initial_round_budget_bound,
@@ -116,7 +116,7 @@ Section~\ref{sec:area_law_initial_exponent_gain}.
     In Proposition~9.5 \cite[lines~788--805]{OpenAI2026AreaLaw}
     (Theorem~\ref{thm:arealaw-physical-box-fixed-exponent}), the logarithmic
     round count $m$ satisfies $m\le B$ by
-    Theorem~\ref{thm:area_law_initial_round_budget_bound} and yields
+    Lemma~\ref{thm:area_law_initial_round_budget_bound} and yields
     (\ref{eq:area_law_physical_box_bounded_rounds}) with recurrence coefficient
     $C_m$ from (\ref{eq:area_law_physical_box_recurrence}).
 \end{proof}

@@ -6,7 +6,7 @@ The number of family members and their open-boundary bond dimensions are
 separate quantities. No sharp source bond or running-time conclusion is
 included.
 
-\begin{theorem}[Natural middle operators chosen before the exterior pair]
+\begin{lemma}[Natural middle operators chosen before the exterior pair]
     \label{thm:selected_common_natural_mpo_family}
     \lean{TNLean.MPS.AreaLaw.exists_common_physical_twoMarkerCoefficient_mpo_family}
     \leanok
@@ -74,7 +74,7 @@ included.
     Zero physical or virtual dimensions, degree zero, and impossible crossing
     frequencies are included. No factorization of each joint exterior $Q_r$
     into separate left and right operators is asserted.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:selected_coefficient_prescribed_middle,
         thm:selected_middle_fixed_physical_data,thm:finite_natural_retained_core_family,
@@ -105,7 +105,7 @@ included.
     chosen middle operators.
 \end{proof}
 
-\begin{theorem}[A polynomial-base bound for the selected family count]
+\begin{lemma}[A polynomial-base bound for the selected family count]
     \label{thm:selected_common_natural_cardinality}
     \lean{TNLean.MPS.AreaLaw.actual_common_physical_mpo_card_le}
     \leanok
@@ -120,7 +120,7 @@ included.
         \label{eq:selected_common_natural_cardinality}
     \end{align}
     holds. No low-frequency restriction is required.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     \uses{thm:selected_middle_collar_cardinality,thm:two_marker_middle_cardinality,
         def:physical_interval_complement_coordinates}
@@ -133,7 +133,7 @@ included.
     (\ref{eq:selected_common_natural_cardinality}).
 \end{proof}
 
-\begin{theorem}[The low-frequency numerical consequence]
+\begin{lemma}[The low-frequency numerical consequence]
     \label{thm:selected_common_natural_low_frequency_cardinality}
     \lean{TNLean.MPS.AreaLaw.actual_common_physical_mpo_card_low_frequency_le}
     \leanok
@@ -147,7 +147,7 @@ included.
     \end{align}
     This is an arithmetic implication and supplies no further operator or
     bond assertion.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     The frequency bounds give $(i+j)\ell\le k$, so
     $i+j\le\lfloor k/\ell\rfloor$. Since $\ell\ge1$,

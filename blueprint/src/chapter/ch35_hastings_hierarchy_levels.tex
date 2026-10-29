@@ -10,7 +10,7 @@ $\lVert\Psi_a-P_k^m\Psi_a\rVert$ against $\Psi_a$ directly yields a recurrence
 for squared deficiencies with prefactor $3^m-1$ in place of
 $2^m-1$~\cite{gap:hastings05_hierarchical_projection}.
 
-\begin{theorem}[One level against the ground state]
+\begin{lemma}[One level against the ground state]
     \label{thm:hastings05_level_against_ground_state}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_compressedWindowProjection_mul_sq_le}
     \leanok
@@ -29,15 +29,15 @@ $2^m-1$~\cite{gap:hastings05_hierarchical_projection}.
          & \le2D^2+\Bigl(\frac{\epsilon+2\lVert M-c\rVert D}{x}\Bigr)^2 .
         \label{eq:hastings05_level_bound}
     \end{align}
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Put $Q=PP'$ and $\psi'=Q\psi/\lVert Q\psi\rVert\in\operatorname{ran}Q$.
-    By Theorem~\ref{thm:hastings05_projection_deficiency} and
-    Theorem~\ref{thm:hastings05_normalization},
+    By Lemma~\ref{thm:hastings05_projection_deficiency} and
+    Lemma~\ref{thm:hastings05_normalization},
     $\lVert\psi-Q\psi\rVert^2\le2D^2$ and $\lVert\psi'-\psi\rVert\le2D$, so
-    Theorem~\ref{thm:hastings05_compressed_window_bound} gives
+    Lemma~\ref{thm:hastings05_compressed_window_bound} gives
     $\lVert\psi'-R\psi'\rVert\le(\epsilon+2\lVert M-c\rVert D)/x$. Since
-    $RQ=R$, Theorem~\ref{thm:hastings05_nested_projections} yields
+    $RQ=R$, Lemma~\ref{thm:hastings05_nested_projections} yields
     (\ref{eq:hastings05_level_bound}).
 \end{proof}
 
@@ -55,7 +55,7 @@ $2^m-1$~\cite{gap:hastings05_hierarchical_projection}.
     \end{align}
 \end{definition}
 
-\begin{theorem}[All levels]
+\begin{lemma}[All levels]
     \label{thm:hastings05_hierarchy_levels}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.isStarProjection_hierarchy,
         TNLean.MPS.AreaLaw.LocalSolution.norm_sub_hierarchy_le}
@@ -70,9 +70,9 @@ $2^m-1$~\cite{gap:hastings05_hierarchical_projection}.
     $\lVert\psi-P_k^m\psi\rVert\le D_m$ (with $\psi=\Psi_a$ and
     $c_k^m=\langle\Psi_a,M_k^m\Psi_a\rangle$ in
     \cite[lines 668--707]{Hastings2006Solving}).
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Induct on $m$, applying Theorem~\ref{thm:hastings05_level_against_ground_state}
+    Induct on $m$, applying Lemma~\ref{thm:hastings05_level_against_ground_state}
     to $P_{2k}^m,P_{2k+1}^m$ and comparing with
     (\ref{eq:hastings05_hierarchy_deficiency}) via
     $\lVert M_k^m-c_k^m\rVert\le K$.
@@ -88,7 +88,7 @@ $2^m-1$~\cite{gap:hastings05_hierarchical_projection}.
     $\beta_{m+1}=\bigl(2\beta_m^2+(e+2\beta_m)^{2s}\bigr)^{1/2}$.
 \end{definition}
 
-\begin{theorem}[The source's radii]
+\begin{lemma}[The source's radii]
     \label{thm:hastings05_hierarchy_source_radii}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_nonneg,
         TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_le_hierarchyMajorant}
@@ -96,13 +96,13 @@ $2^m-1$~\cite{gap:hastings05_hierarchical_projection}.
     \uses{def:hastings05_hierarchy_deficiency,def:hastings05_hierarchy_majorant}
     For $K,e>0$, $\epsilon=Ke$, and $x_m=K(e+2\beta_m)^{1-s}$
     \cite[lines 676--681]{Hastings2006Solving}, $0\le D_m\le\beta_m$ for all $m$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By induction on $m$ using~(\ref{eq:hastings05_hierarchy_deficiency}) and
     $(\epsilon+2KD_m)/x_m\le(e+2\beta_m)/(e+2\beta_m)^{1-s}=(e+2\beta_m)^s$.
 \end{proof}
 
-\begin{theorem}[The closed form]
+\begin{lemma}[The closed form]
     \label{thm:hastings05_hierarchy_closed_form}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_le,
         TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_le_rpow_quarter}
@@ -114,7 +114,7 @@ $2^m-1$~\cite{gap:hastings05_hierarchical_projection}.
     $N\exp[-(l_{\mathrm{proj}}/l_{\mathrm{fac}})(1-1/h)^h]$ at
     $e=\exp(-l_{\mathrm{proj}}/l_{\mathrm{fac}})$
     \cite[lines 705--707]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Set $C_m=3^m-1$. By induction on $m$, since $e\le e^{s^m}\le e^{s^{m+1}}$
     and $y^s\le y$ for $y\ge1$,
@@ -123,7 +123,7 @@ $2^m-1$~\cite{gap:hastings05_hierarchical_projection}.
         2C_m^2+(1+2C_m)^2\le(3C_m+2)^2=C_{m+1}^2.
         \notag
     \end{align}
-    For $s=1-1/h$ and $m=h$, Theorem~\ref{thm:hastings05_exponent} gives
+    For $s=1-1/h$ and $m=h$, Lemma~\ref{thm:hastings05_exponent} gives
     $(1-1/h)^h\ge1/4$, so $e^{(1-1/h)^h}\le e^{1/4}$.
 \end{proof}
 
@@ -133,7 +133,7 @@ Grouping sites into supersites of length $2l_{\mathrm{proj}}$ makes each $M_i$
 act on at most two adjacent supersites, with $M_{k,k+1}$ the sum of $M_i$ on
 supersites $k,k+1$~\cite[lines 609--628]{Hastings2006Solving}.
 
-\begin{theorem}[Spectral windows keep supports]
+\begin{lemma}[Spectral windows keep supports]
     \label{thm:hastings05_window_support}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.cfc_mem_supportedOperators,
         TNLean.MPS.AreaLaw.LocalSolution.windowProjection_mem_supportedOperators,
@@ -143,7 +143,7 @@ supersites $k,k+1$~\cite[lines 609--628]{Hastings2006Solving}.
     If $A$ is supported on $S$, then $f(A)$ is supported on $S$ for every
     $f:\R\to\R$; in particular, the spectral window of $M$ and its compression
     to $\operatorname{ran}Q$ are supported on $S$ whenever $M$ and $Q$ are.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Operators supported on $S$ form a closed $*$-subalgebra, which is preserved
     by the continuous functional calculus and products.
@@ -157,7 +157,7 @@ supersites $k,k+1$~\cite[lines 609--628]{Hastings2006Solving}.
     is $B_k^m=\{i:\lfloor\sigma(i)/2^m\rfloor=k\}$.
 \end{definition}
 
-\begin{theorem}[Halves of a block]
+\begin{lemma}[Halves of a block]
     \label{thm:hastings05_level_block_halves}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.levelBlock_two_mul_subset,
         TNLean.MPS.AreaLaw.LocalSolution.levelBlock_two_mul_add_one_subset,
@@ -166,12 +166,12 @@ supersites $k,k+1$~\cite[lines 609--628]{Hastings2006Solving}.
     \uses{def:hastings05_level_block}
     For all $m,k$, $B_{2k}^m\cap B_{2k+1}^m=\emptyset$ and
     $B_{2k}^m\cup B_{2k+1}^m\subseteq B_k^{m+1}$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     Use $\lfloor\sigma(i)/2^{m+1}\rfloor=\lfloor\lfloor\sigma(i)/2^m\rfloor/2\rfloor$.
 \end{proof}
 
-\begin{theorem}[All levels on supersites]
+\begin{lemma}[All levels on supersites]
     \label{thm:hastings05_supersite_hierarchy}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.mem_supportedOperators_hierarchy,
         TNLean.MPS.AreaLaw.LocalSolution.commute_supersiteHierarchy,
@@ -179,18 +179,18 @@ supersites $k,k+1$~\cite[lines 609--628]{Hastings2006Solving}.
     \leanok
     \uses{thm:hastings05_hierarchy_levels,thm:hastings05_window_support,
         thm:hastings05_level_block_halves}
-    In Theorem~\ref{thm:hastings05_hierarchy_levels}, if each $M_k^m$ is
+    In Lemma~\ref{thm:hastings05_hierarchy_levels}, if each $M_k^m$ is
     supported on $B_k^{m+1}$, then $P_k^m$ is supported on $B_k^m$,
     $[P_{2k}^m,P_{2k+1}^m]=0$, and $\lVert\psi-P_k^m\psi\rVert\le D_m$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    By induction on $m$ using Theorems~\ref{thm:hastings05_window_support}
+    By induction on $m$ using Lemmas~\ref{thm:hastings05_window_support}
     and~\ref{thm:hastings05_level_block_halves}, $P_{2k}^m$ and $P_{2k+1}^m$
     have disjoint supports $B_{2k}^m$ and $B_{2k+1}^m$, hence commute, and
-    Theorem~\ref{thm:hastings05_hierarchy_levels} applies.
+    Lemma~\ref{thm:hastings05_hierarchy_levels} applies.
 \end{proof}
 
-\begin{theorem}[The final states on supersites]
+\begin{lemma}[The final states on supersites]
     \label{thm:hastings05_supersite_final_states}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.isStarProjection_supersiteHierarchy,
         TNLean.MPS.AreaLaw.LocalSolution.abs_re_inner_supersiteHierarchySum_sub_le,
@@ -207,20 +207,20 @@ supersites $k,k+1$~\cite[lines 609--628]{Hastings2006Solving}.
         thm:hastings05_final_state_count_periodic}
     If each $M_k^m=(M_k^m)^\dagger$ is supported on $B_k^{m+1}$, then every
     $P_k^m$ is an orthogonal projection and
-    Theorems~\ref{thm:hastings05_hierarchy_sum_expectation},
+    Lemmas~\ref{thm:hastings05_hierarchy_sum_expectation},
     \ref{thm:hastings05_hchy_every_state},
     \ref{thm:hastings05_final_state_count_hierarchy},
     \ref{thm:hastings05_closing_link_window},
     \ref{thm:hastings05_hchy_periodic},
     and~\ref{thm:hastings05_final_state_count_periodic} hold without assuming
     $[P_{2k}^m,P_{2k+1}^m]=0$.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
-    Theorem~\ref{thm:hastings05_supersite_hierarchy} supplies
+    Lemma~\ref{thm:hastings05_supersite_hierarchy} supplies
     $[P_{2k}^m,P_{2k+1}^m]=0$.
 \end{proof}
 
-\begin{theorem}[The residual of a sum]
+\begin{lemma}[The residual of a sum]
     \label{thm:hastings05_sum_residual}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_toEuclideanLin_sum_sub_le}
     \leanok
@@ -228,7 +228,7 @@ supersites $k,k+1$~\cite[lines 609--628]{Hastings2006Solving}.
     $\lVert(\sum_iM_i-\sum_ic_i)\psi\rVert\le\sum_i\lVert(M_i-c_i)\psi\rVert$;
     for $c_i=\langle\Psi_a,M_i\Psi_a\rangle$ this bounds the residual of
     $M_{k,k+1}$ from eq.~(low)~\cite[lines 628--639]{Hastings2006Solving}.
-\end{theorem}
+\end{lemma}
 \begin{proof}\leanok
     By the triangle inequality.
 \end{proof}

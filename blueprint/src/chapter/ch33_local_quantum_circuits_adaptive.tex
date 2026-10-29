@@ -29,7 +29,7 @@ permitted within one block
     where each summand acts on the unnormalized post-measurement operator.
 \end{definition}
 
-\begin{theorem}[Trace preservation with classical feedforward]
+\begin{lemma}[Trace preservation with classical feedforward]
     \label{thm:qc_onsite_feedforward_cptp}
     \uses{def:qc_onsite_feedforward}
     \lean{QuantumCircuit.OnsiteChannel.feedforwardMap_isKrausCPTP,
@@ -42,7 +42,7 @@ permitted within one block
     instrument with its outcomes forgotten. A further linear map $\Theta$
     may be composed into every continuation in
     (\ref{eq:qc_onsite_feedforward}).
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     If $B_{J,a}$ are Kraus operators for $\Psi_J$, then $B_{J,a}K_J$ are
@@ -71,7 +71,7 @@ permitted within one block
     when $\Psi(\rho)=\sigma$ for such a protocol $\Psi$.
 \end{definition}
 
-\begin{theorem}[Channels, composition, and deterministic inclusion]
+\begin{lemma}[Channels, composition, and deterministic inclusion]
     \label{thm:qc_adaptive_protocol_properties}
     \uses{def:qc_adaptive_protocol}
     \lean{QuantumCircuit.IsAdaptiveChannelProtocol.isKrausCPTP,
@@ -91,13 +91,13 @@ permitted within one block
     protocols with the same depth bound. Adaptive conversion is reflexive
     in depth zero, monotone in its depth bound, transitive with additive
     depth, and preserves density matrices.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:qc_onsite_feedforward_cptp}
     \leanok
     By structural induction on the protocol tree, the onsite and layer cases
     follow from their channel properties, and the instrument case follows from
-    Theorem~\ref{thm:qc_onsite_feedforward_cptp}. Composing two protocols
+    Lemma~\ref{thm:qc_onsite_feedforward_cptp}. Composing two protocols
     attaches the second protocol to each branch of the first: an instrument
     preserves branch depth, a nearest-neighbor layer adds one, and enlarging
     a depth bound commutes with adding the second depth. Viewing an onsite
@@ -117,7 +117,7 @@ permitted within one block
     $\rho\mapsto\sum_m V_mP_mU\rho U^{\dagger}P_mV_m^{\dagger}$.
 \end{definition}
 
-\begin{theorem}[Measurement rounds act on density matrices]
+\begin{lemma}[Measurement rounds act on density matrices]
     \label{thm:qc_measurement_round_channel}
     \uses{def:qc_measurement_round_channel, def:qc_measurement_rounds}
     \lean{QuantumCircuit.MeasurementRound.sum_kraus,
@@ -131,7 +131,7 @@ permitted within one block
     deterministically prepares $\psi$ from a product input $v$, and both
     input and target pure operators have trace one, its average output is
     $\ket\psi\bra\psi$.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \leanok
     Unitarity of $U,V_m$, orthogonality of each $P_m$, and
@@ -144,7 +144,7 @@ permitted within one block
     normalization force $\sum_m|c_m|^2=1$.
 \end{proof}
 
-\begin{theorem}[Measurement rounds are adaptive protocols]
+\begin{lemma}[Measurement rounds are adaptive protocols]
     \label{thm:qc_measurement_round_adaptive}
     \uses{def:qc_measurement_round_channel, def:qc_adaptive_protocol}
     \lean{QuantumCircuit.MeasurementRound.adaptive}
@@ -152,7 +152,7 @@ permitted within one block
     The average channel of a computational-basis measurement round is a
     finite adaptive protocol whose quantum-depth bound is the length of
     the round's circuit.
-\end{theorem}
+\end{lemma}
 \begin{proof}
     \uses{thm:qc_adaptive_protocol_properties}
     \leanok
