@@ -38,22 +38,22 @@ theorem exists_supported_ground_cutoff {S : Set ι}
       P ∈ supportedOperators d S ∧ Matrix.trace P ≠ 0 ∧
       (A - (minEigenvalue hA : ℂ) • 1) * P = 0 := by
   classical
-  let λ := minEigenvalue hA
-  let f : ℝ → ℝ := fun x => if x = λ then 1 else 0
+  let groundEnergy := minEigenvalue hA
+  let f : ℝ → ℝ := fun x => if x = groundEnergy then 1 else 0
   let P := cfc f A
   have hc (g : ℝ → ℝ) : ContinuousOn g (spectrum ℝ A) :=
     A.finite_real_spectrum.continuousOn g
-  have hshift : cfc (fun x : ℝ => x - λ) A = A - (λ : ℂ) • 1 := by
-    rw [cfc_sub (fun x : ℝ => x) (fun _ : ℝ => λ) A (hc _) (hc _),
-      cfc_id' ℝ A hA.isSelfAdjoint, cfc_const λ A hA.isSelfAdjoint,
+  have hshift : cfc (fun x : ℝ => x - groundEnergy) A = A - (groundEnergy : ℂ) • 1 := by
+    rw [cfc_sub (fun x : ℝ => x) (fun _ : ℝ => groundEnergy) A (hc _) (hc _),
+      cfc_id' ℝ A hA.isSelfAdjoint, cfc_const groundEnergy A hA.isSelfAdjoint,
       Algebra.algebraMap_eq_smul_one, ← Complex.coe_smul]
-  have hkill : (A - (λ : ℂ) • 1) * P = 0 := by
+  have hkill : (A - (groundEnergy : ℂ) • 1) * P = 0 := by
     rw [← hshift, P, ← cfc_mul _ _ A (hc _) (hc _)]
-    have hfun : (fun x : ℝ => (x - λ) * f x) = fun _ => 0 := by
+    have hfun : (fun x : ℝ => (x - groundEnergy) * f x) = fun _ => 0 := by
       funext x
-      by_cases hx : x = λ <;> simp [f, hx]
+      by_cases hx : x = groundEnergy <;> simp [f, hx]
     rw [hfun, cfc_const_zero]
-  let T := Finset.univ.filter fun i => hA.eigenvalues i = λ
+  let T := Finset.univ.filter fun i => hA.eigenvalues i = groundEnergy
   have hT : T.Nonempty := by
     obtain ⟨i, hi⟩ := minEigenvalue_achieved hA
     exact ⟨i, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hi⟩⟩
@@ -63,6 +63,7 @@ theorem exists_supported_ground_cutoff {S : Set ι}
   rw [htrace]
   exact_mod_cast Finset.card_ne_zero.mpr hT
 
+omit [NeZero d] in
 /-- On disjoint regions, nonzero traces force a nonzero trace of the product.
 Source context: AKLV, Section 6.1, tensor product of regional ground states. -/
 theorem trace_mul_ne_zero_of_disjoint {S T : Set ι} (hST : Disjoint S T)
@@ -115,11 +116,12 @@ theorem exists_common_ground_of_disjoint
   have hkillA : (A - (minEigenvalue hA : ℂ) • 1) * (P * Q * W) = 0 := by
     rw [← Matrix.mul_assoc, ← Matrix.mul_assoc, hAP, Matrix.zero_mul, Matrix.zero_mul]
   have hkillB : (B - (minEigenvalue hB : ℂ) • 1) * (P * Q * W) = 0 := by
-    rw [← Matrix.mul_assoc, ← Matrix.mul_assoc, hBP.eq, Matrix.mul_assoc,
-      hBQ, Matrix.mul_zero, Matrix.zero_mul]
+    rw [Matrix.mul_assoc P Q W, hBP.left_comm (Q * W),
+      ← Matrix.mul_assoc (B - (minEigenvalue hB : ℂ) • 1) Q W,
+      hBQ, Matrix.zero_mul, Matrix.mul_zero]
   have hkillC : (C - (minEigenvalue hC : ℂ) • 1) * (P * Q * W) = 0 := by
-    rw [← Matrix.mul_assoc, ← Matrix.mul_assoc, hCP.eq, Matrix.mul_assoc,
-      hCQ.eq, Matrix.mul_assoc, Matrix.mul_assoc, hCW, Matrix.mul_zero, Matrix.mul_zero]
+    rw [Matrix.mul_assoc P Q W, hCP.left_comm (Q * W), hCQ.left_comm W,
+      hCW, Matrix.mul_zero, Matrix.mul_zero]
   obtain ⟨x, hx⟩ := Function.ne_iff.mp hnonzero
   obtain ⟨y, hxy⟩ := Function.ne_iff.mp hx
   refine ⟨(P * Q * W).col y, ?_, ?_, ?_, ?_⟩
