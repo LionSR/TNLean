@@ -197,3 +197,49 @@ rank theorem is separate from the detectability results above.
     common-kernel characterization of complementary projection products
     from \cite{QICLean2026Blueprint}. All padding terms vanish.
 \end{proof}
+
+\begin{definition}[The regional frustration-free truncation]
+    \label{def:physical_ff_regional_truncation}
+    \lean{TNLean.MPS.AreaLaw.intervalBondRestriction}
+    \lean{TNLean.MPS.AreaLaw.physicalFrustrationFreeTruncation}
+    \leanok
+    Let $h_i$ be orthogonal projections supported on consecutive bonds
+    of a finite chain. For a site interval $J=[a,b)$, put
+    $h_i^J=h_i$ when $a\le i$ and $i+1<b$, and $h_i^J=0$ otherwise.
+    Let $Q_p$ be the product of $I-h_i^J$ over the indices
+    $i\bmod2=p$, in the order of Definition~\ref{def:physical_detectability}.
+    Define
+    \[
+        \widetilde H_J=
+        \sum_{i:\,\{i,i+1\}\not\subseteq J}h_i+(I-Q_0)+(I-Q_1).
+    \]
+    This is the regional construction of
+    \cite[Section 6.1]{Arad2016RigorousRG}.
+\end{definition}
+
+\begin{theorem}[Positivity and the full kernel of the regional truncation]
+    \label{thm:physical_ff_regional_kernel}
+    \lean{TNLean.MPS.AreaLaw.physicalFrustrationFreeTruncation_posSemidef}
+    \lean{TNLean.MPS.AreaLaw.physicalFrustrationFreeTruncation_kernel_iff}
+    \lean{TNLean.MPS.AreaLaw.norm_physicalFrustrationFreeTruncation_region_le_two}
+    \leanok
+    With the preceding definitions,
+    \[
+        \widetilde H_J\ge0,\qquad
+        \ker\widetilde H_J=\ker\sum_i h_i,\qquad
+        \|(I-Q_0)+(I-Q_1)\|\le2.
+    \]
+    The interval may be empty or touch a chain endpoint.
+    No ground-state uniqueness or spectral gap is required.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:physical_ff_regional_truncation,thm:physical_parity_product_fixed_space}
+    The bonds in each parity are disjoint, so $Q_0$ and $Q_1$ are
+    orthogonal projections. Hence all displayed summands are positive,
+    and each regional complement has norm at most one.
+    A sum of orthogonal projections annihilates a vector precisely when
+    every summand does. For the two regional complements, this is
+    equivalent to $Q_0x=Q_1x=x$, which in turn is equivalent to
+    $h_i^Jx=0$ for every internal bond. Together with the outside bonds,
+    these are exactly the common-kernel conditions for the original sum.
+\end{proof}

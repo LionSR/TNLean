@@ -24,6 +24,17 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Kernels of finite projection sums — promoted (2026-10-29)
+
+- **Pattern:** Deduce that each projection annihilates a vector from the
+  vanishing of their finite sum.
+- **Abstraction:** The existing QICLean
+  `ProjectionGeometry.apply_eq_zero_of_sum_apply_eq_zero`.
+- **Uses:** The physical Hamiltonian kernel argument in
+  `MPS/AreaLaw/PhysicalDetectability.lean` and both finite projection
+  families in `MPS/AreaLaw/PhysicalFrustrationFreeTruncation.lean` use the
+  shared theorem. No new quadratic-form proof or tactic is introduced.
+
 ### Fixed vectors of complementary projection products — promoted (2026-10-29)
 
 - **Pattern:** Induct on the product length to show every complementary factor

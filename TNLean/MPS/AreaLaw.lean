@@ -89,6 +89,7 @@ import TNLean.MPS.AreaLaw.PhysicalDGSharpApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGViability
 import TNLean.MPS.AreaLaw.PhysicalDetectability
 import TNLean.MPS.AreaLaw.PhysicalDetectabilityGap
+import TNLean.MPS.AreaLaw.PhysicalFrustrationFreeTruncation
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.PhysicalLowEnergyCloseness
 import TNLean.MPS.AreaLaw.PhysicalLowEnergyFamily
