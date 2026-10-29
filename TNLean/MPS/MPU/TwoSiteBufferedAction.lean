@@ -94,10 +94,11 @@ theorem intervalCoordinates_localInclusion_eq_bufferedWindowMatrix
   obtain ⟨⟨⟨pre', suf'⟩, mid'⟩, rfl⟩ :=
     (MPOTensor.bufferedWindowConfigEquiv d n p s).surjective col
   have h := intervalCoordinates_localInclusion_apply d a n p s A
-  simp only [Nat.add_assoc] at h
+  rw! (castMode := .all) [Nat.add_assoc] at h
   rw [h]
   simp only [bufferedWindow_middle, bufferedWindow_outside_eq_iff,
-    MPOTensor.bufferedWindowMatrix, Matrix.reindex_apply, Equiv.symm_apply_apply,
+    MPOTensor.bufferedWindowMatrix, Matrix.reindex_apply, Matrix.submatrix_apply,
+    Equiv.symm_apply_apply,
     Matrix.rightKroneckerEmbed_apply, Matrix.kroneckerMap_apply, Matrix.one_apply]
   rw [mul_comm]
 
@@ -136,11 +137,10 @@ theorem finiteChainLocalObservable_originalSiteHeisenbergWindow
         (MPOTensor.originalSiteHeisenbergInputWindow d k A))) =
       localInclusion hΛ ((intervalCoordinates d a (3 * (2 * k))).symm
         (MPOTensor.originalSiteHeisenbergOutputWindow k u v A)) := by
-    apply (intervalCoordinates d (a - p) (p + (3 * (2 * k) + s))).injective
-    simp only [finiteChainConjugation_apply, map_mul, map_star,
-      intervalCoordinates_finiteChainMPOMatrix,
+    apply EquivLike.injective (intervalCoordinates d (a - p) (p + (3 * (2 * k) + s)))
+    simp only [intervalCoordinates_finiteChainConjugation,
       intervalCoordinates_localInclusion_eq_bufferedWindowMatrix,
-      StarAlgEquiv.apply_symm_apply, Matrix.star_eq_conjTranspose]
+      StarAlgEquiv.apply_symm_apply]
     exact MPOTensor.mpo_bufferedWindow_conjugation hU k p s hN S A
   change localObservable d _ (finiteChainConjugation hU hN (a - p)
     (localInclusion hΛ _)) = _
@@ -177,13 +177,13 @@ theorem intervalCoordinates_centralInclusion_originalSiteHeisenbergInputWindow
         (MPOTensor.originalSiteHeisenbergCentreEquiv d k) A))
   have ha : a + (2 * k : ℕ) - (2 * k : ℕ) = a := by omega
   have hlen : (2 * k + 2 * k) + 2 * k = 3 * (2 * k) := by omega
-  rw [ha, hlen] at h
+  rw! (castMode := .all) [ha, hlen] at h
   rw [h]
   simp only [StarAlgEquiv.apply_symm_apply, e,
     MPOTensor.originalSiteHeisenbergInputWindowEquiv_middle,
     MPOTensor.originalSiteHeisenbergInputWindowEquiv_outside_eq_iff,
     MPOTensor.originalSiteHeisenbergInputWindow, Matrix.reindex_apply,
-    Equiv.symm_apply_apply, Matrix.rightKroneckerEmbed_apply,
+    Matrix.submatrix_apply, Equiv.symm_apply_apply, Matrix.rightKroneckerEmbed_apply,
     Matrix.kroneckerMap_apply, Matrix.one_apply]
   rw [mul_comm]
 
@@ -224,7 +224,7 @@ theorem exists_finiteChainLocalObservable_central_interval
     omega
   have hinput : (intervalCoordinates d a (3 * (2 * k))).symm
       (MPOTensor.originalSiteHeisenbergInputWindow d k A) = localInclusion hcentral B := by
-    apply (intervalCoordinates d a (3 * (2 * k))).injective
+    apply EquivLike.injective (intervalCoordinates d a (3 * (2 * k)))
     rw [StarAlgEquiv.apply_symm_apply]
     have h := intervalCoordinates_centralInclusion_originalSiteHeisenbergInputWindow d k a A
     change intervalCoordinates d a (3 * (2 * k))
@@ -351,7 +351,6 @@ theorem finiteChainLocalObservable_eq_of_twoSiteStandardForm_buffers
     intro N b hN hcentral hΛ
     rw [finiteChainLocalObservable_localInclusion,
       finiteChainLocalObservable_localInclusion]
-
   rw [hcompose b₁ hN₁ _ hΛ₁] at h₁
   rw [hcompose b₂ hN₂ _ hΛ₂] at h₂
   exact h₁.trans h₂.symm
