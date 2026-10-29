@@ -1,0 +1,72 @@
+\section{The finite variational spectral step}
+\label{sec:uncle_variational_spectral_step}
+
+\begin{lemma}[A small positive eigenvalue from a trial vector]
+    \label{lem:uncle_variational_positive_eigenvalue}
+    \lean{MPSTensor.exists_pos_eigenvalue_uncleHamiltonianES_lt_of_rayleigh}
+    \notready
+    \uses{thm:uncle_kernel_local_conditions}
+    Let $H'_P$ be the actual finite periodic uncle Hamiltonian. If
+    $v\in(\ker H'_P)^\perp$ and
+    \[
+        \operatorname{Re}\langle H'_Pv,v\rangle<\varepsilon\|v\|^2,
+    \]
+    then $H'_P$ has a real eigenvalue $\mu$ with
+    $0<\mu<\varepsilon$.
+\end{lemma}
+\begin{proof}
+    The actual Hamiltonian is positive. Expand $v$ in an orthonormal
+    eigenbasis, with nonnegative eigenvalues $\lambda_j$. A zero
+    eigenvalue has zero coefficient because $v$ is orthogonal to the
+    kernel. If every positive $\lambda_j$ were at least $\varepsilon$,
+    the quadratic energy would be at least
+    $\varepsilon\sum_j|v_j|^2$, contradicting the strict bound.
+\end{proof}
+
+The norm, energy, and ground-state overlap estimates must still construct
+such a vector in the kernel complement. This lemma supplies only the final
+finite spectral argument of
+\cite[proof of the gaplessness theorem]{FernandezGonzalez2015Uncle}.
+
+\begin{corollary}[Subtracting the actual ground-space projection]
+    \label{cor:uncle_variational_projection_bound}
+    \lean{MPSTensor.exists_pos_eigenvalue_uncleHamiltonianES_lt_of_projection_bound}
+    \notready
+    \uses{lem:uncle_variational_positive_eigenvalue}
+    Let $P$ be the orthogonal projection onto $\ker H'_P$.
+    Any trial vector $v$ satisfying
+    \[
+        \operatorname{Re}\langle H'_Pv,v\rangle
+        <\varepsilon(\|v\|^2-\|Pv\|^2)
+    \]
+    yields an actual eigenvalue $0<\mu<\varepsilon$ of $H'_P$.
+\end{corollary}
+\begin{proof}
+    Put $w=v-Pv$. Then $w$ is orthogonal to the kernel,
+    $H'_Pw=H'_Pv$, and $\langle H'_Pv,Pv\rangle=0$ by symmetry.
+    Pythagoras gives $\|w\|^2=\|v\|^2-\|Pv\|^2$, reducing to
+    Lemma~\ref{lem:uncle_variational_positive_eigenvalue}.
+\end{proof}
+
+\begin{lemma}[Controlling the projection onto the two periodic sectors]
+    \label{lem:uncle_periodic_sector_projection_bound}
+    \lean{MPSTensor.norm_mpv_span_projection_sq_le}
+    \notready
+    Let $u,v$ be the actual periodic states of the two blocks at the same
+    length. If $\|u\|^2,\|v\|^2\ge1/2$ and
+    $|\langle u,v\rangle|\le1/4$, then for every trial vector $\varphi$
+    and the orthogonal projection $P$ onto their span,
+    \[
+        \|P\varphi\|^2\le
+        4\bigl(|\langle u,\varphi\rangle|^2+
+        |\langle v,\varphi\rangle|^2\bigr).
+    \]
+\end{lemma}
+\begin{proof}
+    Write $w=P\varphi=\alpha u+\beta v$. The Gram inequalities give
+    $|\alpha|^2+|\beta|^2\le4\|w\|^2$.
+    Projection orthogonality and Cauchy--Schwarz give
+    $\|w\|^4\le(|\alpha|^2+|\beta|^2)
+        (|\langle u,\varphi\rangle|^2+|\langle v,\varphi\rangle|^2)$.
+    If $w=0$ the conclusion is immediate; otherwise cancel $\|w\|^2$.
+\end{proof}
