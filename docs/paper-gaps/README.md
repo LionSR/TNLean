@@ -1583,6 +1583,20 @@ are distinguished from the separate cluster-expansion obstruction. Tracked
 under [#9847](https://github.com/LionSR/TNLean/issues/9847) and
 [#9833](https://github.com/LionSR/TNLean/issues/9833).
 
+## ALVV: the frustration-free truncation rank
+
+[`alvv16_frustration_free_truncation_rank.tex`](alvv16_frustration_free_truncation_rank.tex)
+(false source, open) gives an eight-qubit counterexample to the printed
+operator Schmidt-rank bound in `thm:FF-tH`, item 2. Both the original and
+truncated Hamiltonians have unique ground state and gap exactly one, but
+the truncated operator has rank seven at the middle cut, exceeding
+`d^2+2=6`. The corrected general bound is `d^2+3`; the additional term
+comes from the two complementary parts of an interior interval. This is
+an exact mathematical calculation, independently checked by full matrix
+realignment, and is not a Lean counterexample theorem. The ground and gap
+conclusions are unaffected. The corrected regional construction remains
+under [#9833](https://github.com/LionSR/TNLean/issues/9833).
+
 ## ALVV: the operator-norm cluster approximation
 
 [`alvv16_cluster_approximation.tex`](alvv16_cluster_approximation.tex)

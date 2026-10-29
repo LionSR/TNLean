@@ -132,3 +132,52 @@
     \end{align}
     Rearranging proves~(\ref{eq:physical_detectability_spectral_gap}).
 \end{proof}
+
+\begin{theorem}[Support of a range projection]
+    \label{thm:physical_range_projection_support}
+    \lean{QuantumCircuit.supportProj_mem_supportedOperators}
+    \leanok
+    Let the local dimension be positive. If a Hermitian operator $A$ acts on
+    a set $K$ of sites, its range projection $P_A$ acts on $K$ as well.
+\end{theorem}
+\begin{proof}\leanok
+    Every operator acting outside $K$ commutes with $A$ and hence with every
+    real function of $A$. The commutant characterization of support applies
+    to $P_A=\mathbf1_{\mathbb R\setminus\{0\}}(A)$.
+\end{proof}
+
+\begin{theorem}[Detectability for positive contraction chains]
+    \label{thm:physical_range_detectability}
+    \lean{TNLean.MPS.AreaLaw.norm_sq_physicalDetectability_supportProj_le}
+    \leanok
+    Let $H=\sum_i h_i$ be a nearest-neighbour chain of positive contractions
+    in positive local dimension. Suppose every nonzero eigenvalue of $H$ is
+    at least $\gamma>0$. Set $P_i=P_{h_i}$. Then every
+    $x\perp\ker H$ satisfies
+    \[
+      \|\operatorname{DL}(P)x\|^2
+          \le\frac4{4+\gamma}\|x\|^2.
+    \]
+    No condition on the dimension of $\ker H$ is required.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:physical_range_projection_support,thm:physical_detectability_kernel,
+      thm:physical_detectability_energy}
+    The range projections have the original bond supports. Their sum dominates
+    $H$ and has exactly the same kernel. The even/odd product preserves the
+    orthogonal complement of this kernel. For $y=\operatorname{DL}(P)x$,
+    \[
+      \gamma\|y\|^2\le\langle y,Hy\rangle
+        \le\Big\langle y,\sum_iP_i y\Big\rangle
+        \le4\bigl(\|x\|^2-\|y\|^2\bigr).
+    \]
+    Rearranging gives the claim. This implements the range-projection step
+    preceding the detectability argument of
+    \cite[Section 6.1]{Arad2016RigorousRG}.
+\end{proof}
+
+The regional truncation in \cite{Arad2016RigorousRG} also requires a rank
+correction: its printed bound $d^2+2$ fails on an eight-qubit chain with
+unique ground state and gap one. The corrected bound is $d^2+3$, as
+shown in \cite{gap:alvv16_frustration_free_truncation_rank}. The regional
+rank theorem is separate from the detectability results above.

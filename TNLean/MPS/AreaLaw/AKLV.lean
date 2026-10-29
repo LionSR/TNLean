@@ -24,5 +24,6 @@ import TNLean.MPS.AreaLaw.AKLV.PolynomialRank
 import TNLean.MPS.AreaLaw.AKLV.ShortWindow
 import TNLean.MPS.AreaLaw.AKLV.SpectralCluster
 import TNLean.MPS.AreaLaw.AKLV.TwoBlockTruncation
+import TNLean.MPS.AreaLaw.AKLV.VariableWindowRefinement
 import TNLean.MPS.AreaLaw.AKLV.WidthPolynomial
 import TNLean.MPS.AreaLaw.AKLV.WindowFrequencyRank

@@ -120,8 +120,14 @@ the actual clipped ground vector $\phi_{t_0}$, with overlap at least
 $1/\sqrt{2D}$. The phase-normalized filtered product has cut rank at most $D$,
 squared distance at most $1/64$ from $\phi_{t_0}$ and at most $1/16$ from
 $\Omega$. The small product overlap is not transferred directly to $\Omega$.
-The moving-ground-state recursion, boundary cases, entropy conclusion and sharper
-approximation rates remain to be proved.
+For every fitting window of at least six interactions, every threshold and
+chosen degree, a further physical refinement constructs the actual polynomial
+and its phase-normalized image of a unit input close to $\Omega$. It retains
+the variable-window rank bound and the contraction
+$\|\psi-\phi_t\|^2\le8\Delta\|x-\phi_t\|^2$, with
+$\|\psi-\Omega\|^2\le16\Delta+e^{-t/16}/50$.
+The coherent moving-ground-state recursion, boundary cases, entropy conclusion
+and optimized approximation rates remain to be proved.
 
 For a unique ground vector on an open chain with $q\ge2$ and $0\le h_j\le I$,
 the gap is at most one. An endpoint unitary with zero expectation in that vector
@@ -148,8 +154,16 @@ It fixes the full ground kernel and preserves its orthogonal complement, and the
 converse estimate holds for every unit vector with constant three. An actual
 spectral gap above the entire zero-energy kernel gives the homogeneous squared
 contraction factor $4/(4+\gamma)$, for arbitrary kernel dimension and without
-a gap cap. Reduction from arbitrary positive contractions to range projections, the regional
-truncated Hamiltonian and its spectral and spatial rank conclusions remain open.
+a gap cap. Replacement of arbitrary positive contraction terms by their actual
+range projections now preserves the bond supports and the full original kernel,
+and increases the Hamiltonian in operator order. The same contraction follows
+with the original gap. The regional truncated Hamiltonian and its spectral
+and spatial rank conclusions remain open. The printed regional rank bound
+$d^2+2$ also needs an additive correction: an eight-qubit example with unique
+ground and gap one has rank seven at the middle cut. The corrected general
+bound is $d^2+3$, documented in
+`docs/paper-gaps/alvv16_frustration_free_truncation_rank.tex`. This exact
+mathematical counterexample is not a Lean theorem.
 
 The global approximation also gives one $r$-dimensional reference space,
 mutually $\varepsilon$-close to the full physical ground space, whose every
@@ -209,14 +223,30 @@ $\|e^{(A_J-\varepsilon'_J I)/8}|_{G_\eta}\|\le5e^{(17+\eta)/8}$.
 The regional minima and centered original ground energy are constructed before
 $\varepsilon'_J$, $\eta$ and the vectors; the boundary count is at most two
 and the centered ground energy is at most two. No gap or ground-space-rank
-hypothesis is imposed. The soft residual and reverse spectral comparison still
-need to be obtained from these estimates.
+hypothesis is imposed. For equal order and scale, the constructed physical
+soft Hamiltonian is Hermitian, lies below the original Hamiltonian, and satisfies
+$\|(H-\widetilde H_{m,m})|_{G_\eta}\|\le80e^{(17+\eta)/8-m/16}$.
+The reverse comparison on the soft Hamiltonian's low-energy subspace remains open.
 
 The same-matrix soft/hard inequalities also retain the source's approximate
 minimum: if $A-\varepsilon'_J I\ge0$ and $r-10\le\varepsilon'_J$, then
 $\min(A,(r+t/2-10)I)-(t/2)2^{-m}I
  \le\varepsilon'_J I+h_{m,t}(A-\varepsilon'_J I)\le A$.
 This order statement is separate from closeness of physical spectral subspaces.
+The companion library also proves an energy-normalized bound for the actual
+finite alternating sum
+\[
+R_S^H(\beta)=\sum_{T\subseteq S}(-1)^{|T|}
+  e^{-\beta(H-\sum_{i\in T}h_i)}.
+\]
+For Hermitian $H,h_i$, $\|h_i\|\le1$ on the finite set $S$,
+$H\ge\lambda I$ and $\beta\ge0$, it gives
+$e^{\beta\lambda}\|R_S^H(\beta)\|\le(e^\beta-1)^{|S|}$.
+The lower energy may be negative. The proof derives the exact Duhamel
+identity and its norm induction; no partition function is used.
+The spatial cluster remainder and the construction and rank of its MPO
+remain separate obligations.
+
 The first printed uniform energy estimate for soft truncation has
 a separate three-qubit counterexample with fixed gap $1/2$, recorded in
 `docs/paper-gaps/alvv16_soft_truncation_energy_estimate.tex`. This is an exact

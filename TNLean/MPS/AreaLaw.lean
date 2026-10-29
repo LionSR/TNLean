@@ -94,6 +94,7 @@ import TNLean.MPS.AreaLaw.PhysicalLowEnergyCloseness
 import TNLean.MPS.AreaLaw.PhysicalLowEnergyFamily
 import TNLean.MPS.AreaLaw.PhysicalPeriodicPolynomialFamily
 import TNLean.MPS.AreaLaw.PhysicalPolynomialTensorFamily
+import TNLean.MPS.AreaLaw.PhysicalRangeDetectability
 import TNLean.MPS.AreaLaw.PhysicalSoftTruncationResidual
 import TNLean.MPS.AreaLaw.PolynomialFilterParameters
 import TNLean.MPS.AreaLaw.ProductCutIteration

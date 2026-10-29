@@ -19,8 +19,9 @@ chain geometry. This supports ALVV, arXiv:1602.08828v2, `def:DLO`,
 
 The local terms are orthogonal projections, exactly as assumed in
 `def:DLO`. This is the source's case after its range-projection reduction
-at lines 1457–1460. The reduction from arbitrary positive contractions
-and the regional truncated-Hamiltonian conclusions are separate.
+at lines 1457–1460. The reduction from arbitrary positive contractions is proved in
+`PhysicalRangeDetectability.lean`. The regional truncated-Hamiltonian
+conclusions are separate.
 -/
 
 open Matrix
