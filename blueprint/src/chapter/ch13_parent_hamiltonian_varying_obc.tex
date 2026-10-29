@@ -11,8 +11,9 @@ physical alphabets $I,J,K$ and rectangular matrices
 The virtual coordinate spaces may differ at every cut. The following
 identities are the local reconstruction step of the open-boundary
 uniqueness proof in \cite[Theorem~9, lines~1212--1237]{PerezGarcia2007Matrix}.
-They concern rectangular trace representations before any induction over
-an entire chain or comparison with a Hamiltonian kernel.
+The first identities concern rectangular trace representations on three sites.
+The subsequent induction treats the entire chain; comparison with a
+Hamiltonian kernel is a separate step.
 
 \begin{lemma}[Matching the boundary products on an overlap]
     \label{lem:varying_obc_overlap_boundary_products}
@@ -106,4 +107,70 @@ an entire chain or comparison with a Hamiltonian kernel.
          & =\sum_iA_i\Bigl(\sum_jB_jB_j^*\Bigr)A_i^*
         =\sum_iA_iA_i^*=I_a.
     \end{align}
+\end{proof}
+
+
+\subsection{Reconstruction on the whole open chain}
+
+\begin{lemma}[Products on the actual prefix bond spaces]
+    \label{lem:varying_obc_prefix_product_row_isometry}
+    \lean{Matrix.obc_rectangularEval_snoc,
+        Matrix.obc_rectangularEval_row_isometry}
+    \notready
+    \uses{lem:varying_obc_block_row_isometry}
+    Let $B^{[j]}_i\in M_{D_j,D_{j+1}}(\mathbb C)$ be the site matrices,
+    and put $P_m(i_0,\ldots,i_{m-1})=B^{[0]}_{i_0}\cdots B^{[m-1]}_{i_{m-1}}$,
+    with $P_0=I_{D_0}$. Then
+    \begin{align}
+        P_{m+1}(u,i) & =P_m(u)B^{[m]}_i.
+    \end{align}
+    If every site is canonically normalized by
+    $\sum_iB^{[j]}_i B^{[j]*}_i=I_{D_j}$, then
+    \begin{align}
+        \sum_{u}P_m(u)P_m(u)^* & =I_{D_0}.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \notready
+    The first equality follows from ordered multiplication. Induction on the
+    prefix length applies the two-family row-isometry identity at each step.
+\end{proof}
+
+\begin{lemma}[Adjacent coefficient sections determine a full boundary]
+    \label{lem:varying_obc_full_chain_reconstruction}
+    \lean{Matrix.obc_trace_reconstruction_of_adjacent_pair_sections,
+        Matrix.obc_scalar_reconstruction_of_adjacent_pair_sections}
+    \notready
+    \uses{lem:varying_obc_pair_sections_reconstruct,
+        lem:varying_obc_prefix_product_row_isometry}
+    Consider an open chain of $N\ge2$ sites, canonically normalized as above,
+    and assume that the matrices at each site span the corresponding
+    rectangular matrix space. Let $\phi$ be a coefficient family on the
+    physical configurations. Suppose that for every adjacent pair $j,j+1$
+    and every fixed configuration outside that pair, there is a boundary
+    matrix $X$ such that
+    \begin{align}
+        \phi(u,i,k,v) & =\operatorname{tr}
+        \bigl(X B^{[j]}_i B^{[j+1]}_k\bigr).
+    \end{align}
+    Then one matrix $Z\in M_{D_N,D_0}(\mathbb C)$ represents the entire family:
+    \begin{align}
+        \phi(i_0,\ldots,i_{N-1}) & =\operatorname{tr}
+        \bigl(Z B^{[0]}_{i_0}\cdots B^{[N-1]}_{i_{N-1}}\bigr).
+    \end{align}
+    If $D_0=D_N=1$, the coefficient family is a scalar multiple of the
+    represented open-chain state.
+\end{lemma}
+\begin{proof}
+    \notready
+    Inductively suppose that every fixed suffix gives a trace representation
+    on a prefix of length $m\ge2$. Separate the first $m-1$ sites as the actual
+    prefix product, followed by sites $m-1,m$. The induction hypothesis gives
+    the left two-family sections, and the original adjacent-pair condition
+    gives the right sections. The prefix product is row-isometric, and the
+    middle site satisfies the spanning condition. The three-site adjoint
+    reconstruction therefore extends the represented prefix by one site.
+    Iterating gives one boundary for the full chain. Singleton endpoint
+    spaces make this boundary a scalar. This proves the representation
+    conclusion without identifying normalized vectors of different phases.
 \end{proof}
