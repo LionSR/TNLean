@@ -1,0 +1,150 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+% Fallbacks keep this note compilable when a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{The Ground Energy in the Number of Sampled Words of Landau, Vazirani and Vidick}
+\author{}
+\date{2026-10-29}
+
+\begin{document}
+\maketitle
+\gapnote{false-source}{open}
+
+\section{The source statement}
+
+Landau, Vazirani and Vidick~\cite{Landau2015Polynomial},
+\href{https://arxiv.org/abs/1307.5143v1}{arXiv:1307.5143v1}, source
+\path{algo53.tex}, consider $H=\sum_{i=1}^{n-1}H_i$ on $n$ qudits of dimension
+$d$, with $H_i$ acting on the qudits $i$ and $i+1$ and $0\le H_i\le1$, a unique
+ground state $\Gamma$ of energy $\varepsilon_0$, and gap
+$\varepsilon=\varepsilon_1-\varepsilon_0$ (lines 283--285). No bound on
+$\varepsilon_0$ is assumed. With $C=(1-\varepsilon_0/n)^{-1}$ and $P_i=1-H_i$,
+the operator
+\begin{align*}
+    A=\Bigl(C\Bigl(1-\frac Hn\Bigr)\Bigr)^m
+    =C^m\frac1{n^m}\sum_{I\in\{1,\ldots,n\}^m}P_I
+\end{align*}
+is approximated by the sampling operator
+$K=C^m\ell^{-1}\sum_{j=1}^\ell P_{I_j}$ of $\ell$ independent uniform words
+(Definition \texttt{d:sagsp}, line 611). Corollary \texttt{c:agsp} (lines
+626--638) asserts that some $m=O(\varepsilon^{-1}n\log(q(n)/c_\varepsilon))$
+and $\ell=n^{O(1/\varepsilon)}$ give $\|K-A\|\le1/q(n)$, with every letter
+occurring at most $\kappa\log n$ times in every word, $\kappa=O(1/\varepsilon)$,
+with probability at least $1-1/n^3$. The proof (lines 640--644) applies the
+matrix Bernstein inequality with $R=C^m+1$ and $\sigma^2\le(C^m+1)^2$, and then
+uses
+\begin{align}
+    C^{2m}=n^{O(1/\varepsilon)}.
+    \label{eq:printed}
+\end{align}
+Theorem~1 of the source (\texttt{thm:main}, lines 213--216) states the running time
+$n^{c(d,\varepsilon)}\,\mathrm{poly}(n/\eta)$ with
+$c(d,\varepsilon)=2^{O(\log^3d/\varepsilon)}$, independent of $\varepsilon_0$.
+
+\section{The point at issue}
+
+Since $1+x\le e^x$,
+\begin{align*}
+    C=1+\frac{\varepsilon_0}{n-\varepsilon_0}
+    \le\exp\Bigl(\frac{\varepsilon_0}{n-\varepsilon_0}\Bigr),
+    \qquad
+    C^m\le\exp\Bigl(\frac{\varepsilon_0m}{n-\varepsilon_0}\Bigr).
+\end{align*}
+At $m$ of order $(n/\varepsilon)\log n$ this gives
+$C^{2m}=n^{O(\varepsilon_0/\varepsilon)}$, which is (\ref{eq:printed}) only when
+$\varepsilon_0$ is bounded independently of $n$. The hypotheses
+$0\le H_i\le1$ allow $\varepsilon_0$ of order $n$, and then
+(\ref{eq:printed}) fails.
+
+\section{A family with extensive ground energy}
+
+Take qubits, $n\ge2$, and let $N_i=|1\rangle\langle1|$ on qubit $i$. Put
+\begin{align*}
+    H_i=\frac12+\frac14(N_i+N_{i+1}),\qquad 1\le i\le n-1.
+\end{align*}
+Each $H_i$ acts on the qubits $i$ and $i+1$ and has eigenvalues
+$\tfrac12,\tfrac34,1$, so $0\le H_i\le1$. The terms commute, and
+\begin{align*}
+    H=\frac{n-1}2+\frac14(N_1+N_n)+\frac12\sum_{1<i<n}N_i
+\end{align*}
+is diagonal in the computational basis. Its unique ground state is
+$|0\cdots0\rangle$, with $\varepsilon_0=(n-1)/2$, and its first excited states
+flip one end qubit, so $\varepsilon=1/4$ for every $n$. Then
+\begin{align*}
+    C=\frac{2n}{n+1}\ge\frac43,
+    \qquad
+    \frac{1-\varepsilon_1/n}{1-\varepsilon_0/n}
+    =\frac{n-\varepsilon_1}{n-\varepsilon_0}=1-\frac1{2n+2}.
+\end{align*}
+The choice of $m$ must make the bound of equation \texttt{e:cutdown} (line 603)
+at most $c_\varepsilon/(2q(n))<1$. Since $-\log(1-x)\le x/(1-x)$, this forces
+$m\ge(2n+1)\log(2q(n)/c_\varepsilon)$, and then
+\begin{align*}
+    C^{2m}\ge\Bigl(\frac43\Bigr)^{2(2n+1)\log(2q(n)/c_\varepsilon)}
+    =\Bigl(\frac{2q(n)}{c_\varepsilon}\Bigr)^{2(2n+1)\log(4/3)},
+\end{align*}
+whose exponent grows linearly in $n$ at fixed $\varepsilon$. So
+(\ref{eq:printed}) is false for this family, and the Bernstein estimate of the
+proof, which needs $\ell$ of order $C^{2m}q(n)^2\log(d^n n^3)$, does not give a
+polynomial number of words. Rescaling $K$, which the source allows (line 614),
+does not help: the estimate controls $\|K-A\|$ relative to $\|A\|=1$, and the
+ratio $R/\|A\|$ is unchanged by a common rescaling.
+
+This note does not decide whether some other argument gives a polynomial $\ell$
+for this family; it records only that the printed step and the stated
+dependence of $\ell$ and of the running time on $\varepsilon$ alone do not
+follow from the source's argument.
+
+\section{The corrected statement}
+
+With $R=C^m+1$, an accuracy $\eta>0$, and
+\begin{align*}
+    \ell\ge\frac{2R^2+2R\eta/3}{\eta^2}\log(8d^nn^3),\qquad
+    \kappa\ge\frac{2m}n+2\log(4\ell n^4),
+\end{align*}
+the matrix Bernstein inequality, the scalar Bernstein inequality for the
+number of occurrences of a letter, and a union bound over the $\ell$ words and
+the $n$ letters give $\|K-A\|<\eta$ and at most $\kappa$ occurrences of every
+letter in every word with probability at least $1-1/(2n^3)$. This holds for
+every $m$ and every $\varepsilon_0$. At
+$m=\lceil((n-\varepsilon_0)/\varepsilon)\log(1/\eta)\rceil$ and
+$0<\eta\le1$, the bound $\varepsilon_0\le n-1$ gives
+\begin{align*}
+    C^m\le n\,\eta^{-\varepsilon_0/\varepsilon}.
+\end{align*}
+Hence $\ell$ is polynomial in $n$ and $1/\eta$ whenever $\varepsilon_0/\varepsilon$
+is bounded, and $\kappa=O(\varepsilon^{-1}\log n)$ for $\eta=1/\mathrm{poly}(n)$
+in that case, as in the source. For general $\varepsilon_0$, $\log\ell$ and
+$\kappa$ carry the additional term
+$O((\varepsilon_0/\varepsilon)\log(1/\eta))$, and the exponent of the running
+time of Theorem~1 acquires a term of order
+$\varepsilon_0/\varepsilon$.
+
+\section{Formalization}
+
+The sampling operator is \leanid{TNLean.MPS.AreaLaw.sampledProjector}, with
+the explicit $\ell$ and $\kappa$ of the previous section
+\leanid{TNLean.MPS.AreaLaw.sampledProjectorWordCount} and
+\leanid{TNLean.MPS.AreaLaw.sampledProjectorLetterBound}. The probability form is
+\leanid{TNLean.MPS.AreaLaw.one_sub_le_measureReal_sampledProjector}, and the
+existence form, with the rank bound of equation \texttt{e:decomp}, is
+\leanid{TNLean.MPS.AreaLaw.exists_sampledProjector}. The bounds on $C^m$ are
+\leanid{TNLean.MPS.AreaLaw.powerNormalization_pow_le_exp} and
+\leanid{TNLean.MPS.AreaLaw.powerNormalization_pow_ceil_le}. These statements
+carry only the source's hypotheses. The statement $\ell=n^{O(1/\varepsilon)}$
+for unbounded $\varepsilon_0$, and the running time of Theorem~1,
+are not formalized; the status stays open until the dependence of the whole
+algorithm on $\varepsilon_0$ is settled.
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}
