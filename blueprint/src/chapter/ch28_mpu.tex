@@ -9822,6 +9822,28 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     left-factor normalizations. Direct contraction gives the two adjoint gates.
 \end{proof}
 
+\begin{lemma}[Scalar transport of normalized source factors]
+    \label{lem:mpu_source_factors_scalar_transport}
+    \lean{MPOTensor.source_ranks_smul, MPOTensor.SourceFactors.smul, MPOTensor.SourceFactors.sourceU_smul, MPOTensor.SourceFactors.sourceV_smul}
+    \notready
+    For a nonzero scalar $c$, the two source ranks of $cU$ equal those of $U$.
+    Any normalized source factorization of $U$ transports to one of $cU$
+    with the same weight, by keeping both left factors, multiplying both
+    right factors by $c$, and multiplying both right inverses by $c^{-1}$.
+    In the canonical rank identifications the transported gates are $c^2u$
+    and $v$. In particular a sign disappears in the two-letter source gate.
+    These are the contractions of
+    \cite[lines~479--524]{Cirac2017MPU} used in the even-family comparison.
+\end{lemma}
+
+\begin{proof}
+    A nonzero scalar does not change matrix rank. The two cut products acquire
+    the scalar, the two left-factor normalizations stay unchanged, and the
+    right-inverse products acquire $cc^{-1}=1$. The unshifted gate contracts
+    two right factors, so it acquires $c^2$; the shifted gate contracts the
+    unchanged left factors.
+\end{proof}
+
 \begin{lemma}[Even-family virtual rigidity up to a sign]
     \label{lem:mpu_even_family_virtual_sign_gauge}
     \lean{MPOTensor.IsMPUCanonicalFormII.exists_unitary_virtual_sign_gauge_of_mpo_eq_even}

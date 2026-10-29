@@ -180,6 +180,7 @@ import TNLean.MPS.MPU.SourceFactorChoiceGates
 import TNLean.MPS.MPU.SourceFactorContraction
 import TNLean.MPS.MPU.SourceFactors
 import TNLean.MPS.MPU.SourceFactorsPhysicalAdjoint
+import TNLean.MPS.MPU.SourceFactorsScalar
 import TNLean.MPS.MPU.SourceFactorsTensorProduct
 import TNLean.MPS.MPU.SourceIndexValue
 import TNLean.MPS.MPU.SourcePeriodicSewing

@@ -189,3 +189,14 @@ canonical irreducible normalization then makes the virtual gauge unitary
 while retaining the sign. The scalar must still be threaded through the
 source-factor comparison before this removes the local criterion's length
 restriction. The new theorem is source-written and uncompiled.
+
+## Actual scalar factor transport
+
+`SourceFactorsScalar.lean` now constructs the actual scaled normalized record:
+keep both X factors, scale both Y factors by `c`, and scale both Z factors by
+`c⁻¹`. Nonzero scaling preserves the two exact cut ranks. Its public gate
+identities prove that the transported source U gate is `c²` times the old
+gate in canonical rank coordinates, while source V is unchanged. Thus the
+new even-family virtual sign does cancel in the actual gate contractions;
+no gate equality is added as a premise. The assembly with the existing
+unitary factor comparison remains to be written and verified.
