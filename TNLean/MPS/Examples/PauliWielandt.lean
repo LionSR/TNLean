@@ -64,7 +64,9 @@ theorem threePauliTensor_normalized :
   simp_rw [threePauliTensor, Matrix.conjTranspose_smul, star_pauliNormalization,
     PauliDissipation.pauli_conjTranspose, Matrix.smul_mul, Matrix.mul_smul,
     smul_smul, pauliNormalization_mul_self, PauliDissipation.pauli_sq]
-  norm_num [Fin.sum_univ_three, ← add_smul]
+  ext i j
+  fin_cases i <;> fin_cases j <;>
+    norm_num [Fin.sum_univ_three, Matrix.smul_apply, Matrix.one_apply]
 
 /-- Every nonzero qubit vector is spanned by its three one-letter Pauli images.
 This is the `q = 1` assertion of arXiv:0909.5347, lines 496–499. -/
@@ -80,12 +82,14 @@ theorem threePauliTensor_vectorSpreadSpan_one (φ : Fin 2 → ℂ) (hφ : φ ≠
     convert W.add_mem (hPauli 0) (W.smul_mem Complex.I (hPauli 1)) using 1
     ext i
     fin_cases i <;>
-      simp [SpinCover.pauli, Matrix.mulVec, Fin.sum_univ_two, smul_eq_mul, ← mul_assoc] <;> ring
+      simp [SpinCover.pauli, Matrix.mulVec, Matrix.vecHead, Matrix.vecTail,
+        Fin.sum_univ_two, smul_eq_mul, ← mul_assoc] <;> ring
   have hsecond : (2 * φ 0) • ![(0 : ℂ), 1] ∈ W := by
     convert W.sub_mem (hPauli 0) (W.smul_mem Complex.I (hPauli 1)) using 1
     ext i
     fin_cases i <;>
-      simp [SpinCover.pauli, Matrix.mulVec, Fin.sum_univ_two, smul_eq_mul, ← mul_assoc] <;> ring
+      simp [SpinCover.pauli, Matrix.mulVec, Matrix.vecHead, Matrix.vecTail,
+        Fin.sum_univ_two, smul_eq_mul, ← mul_assoc] <;> ring
   have haxes : ![(1 : ℂ), 0] ∈ W ∧ ![(0 : ℂ), 1] ∈ W := by
     by_cases hzero : φ 0 = 0
     · have hone : φ 1 ≠ 0 := by
@@ -98,13 +102,17 @@ theorem threePauliTensor_vectorSpreadSpan_one (φ : Fin 2 → ℂ) (hφ : φ ≠
       apply (W.smul_mem_iff hone).mp
       convert W.sub_mem (W.smul_mem (φ 0) he₀) (hPauli 2) using 1
       ext i
-      fin_cases i <;> simp [SpinCover.pauli, Matrix.mulVec, Fin.sum_univ_two, smul_eq_mul]
+      fin_cases i <;>
+        simp [SpinCover.pauli, Matrix.mulVec, Matrix.vecHead, Matrix.vecTail,
+          Fin.sum_univ_two, smul_eq_mul]
     · have he₁ := (W.smul_mem_iff (mul_ne_zero two_ne_zero hzero)).mp hsecond
       refine ⟨?_, he₁⟩
       apply (W.smul_mem_iff hzero).mp
       convert W.add_mem (hPauli 2) (W.smul_mem (φ 1) he₁) using 1
       ext i
-      fin_cases i <;> simp [SpinCover.pauli, Matrix.mulVec, Fin.sum_univ_two, smul_eq_mul]
+      fin_cases i <;>
+        simp [SpinCover.pauli, Matrix.mulVec, Matrix.vecHead, Matrix.vecTail,
+          Fin.sum_univ_two, smul_eq_mul]
   apply top_unique
   intro v _
   have hv : v = v 0 • ![(1 : ℂ), 0] + v 1 • ![(0 : ℂ), 1] := by
@@ -142,7 +150,7 @@ theorem threePauliTensor_wordSpan_two : Kraus.wordSpan threePauliTensor 2 = ⊤ 
     simpa [threePauliTensor, Kraus.evalWord, Matrix.smul_mul, Matrix.mul_smul,
       smul_smul] using Kraus.evalWord_mem_wordSpan threePauliTensor [a, b]
   have hone : (1 : Matrix (Fin 2) (Fin 2) ℂ) ∈ W := by
-    simpa [SpinCover.pauli_mul_eq] using hproduct 0 0
+    simpa only [PauliDissipation.pauli_sq] using hproduct 0 0
   have hPauli (k : Fin 3) : SpinCover.pauli k ∈ W := by
     have h := hproduct (k + 1) (k + 2)
     rw [pauli_cycle_mul] at h
