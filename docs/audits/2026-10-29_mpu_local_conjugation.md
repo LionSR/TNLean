@@ -120,3 +120,12 @@ the `CStarMatrix` multiplication instance. Explicit spectator equality cases
 and explicit matrix coercions repair those sites; product-map unfolding
 also exposes the remaining inverse reindex cancellation. No local Lean was
 run; the new head awaits hosted validation.
+
+## Hosted follow-up on `f552dbae4`
+
+Job `123434400248` found that the preceding broad coercion replacement had
+also changed the generic rank-removal lemma's signature to concrete source
+indices. Its generic matrix types are restored, and both theorem calls now
+supply every equivalence, matrix and gate argument explicitly to resolve
+the reported stuck finite-instance inference. The repair awaits hosted
+validation; no local Lean command was run.

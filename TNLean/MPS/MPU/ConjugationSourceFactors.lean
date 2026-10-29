@@ -264,9 +264,7 @@ private theorem remove_source_rank_reindex_left
     (el : a ≃ a') (er : b ≃ b')
     (x : Matrix a' a' ℂ) (y : Matrix b' b' ℂ) (u : Matrix (a × b) p ℂ) :
     Matrix.reindex (Equiv.prodCongr el.symm er.symm) (Equiv.refl _)
-        (((x : Matrix (Fin ℓ[MPOTensor.mapStar U]) (Fin ℓ[MPOTensor.mapStar U]) ℂ) ⊗ₖ
-          (y : Matrix (Fin r[MPOTensor.mapStar U]) (Fin r[MPOTensor.mapStar U]) ℂ)) *
-          Matrix.reindex (Equiv.prodCongr el er) (Equiv.refl _) u) =
+        ((x ⊗ₖ y) * Matrix.reindex (Equiv.prodCongr el er) (Equiv.refl _) u) =
       (Matrix.reindex el.symm el.symm x ⊗ₖ Matrix.reindex er.symm er.symm y) * u := by
   change Matrix.reindexLinearEquiv ℂ ℂ (Equiv.prodCongr el.symm er.symm)
       (Equiv.refl _) ((x ⊗ₖ y) *
@@ -360,7 +358,10 @@ theorem IsMPUCanonicalFormII.exists_local_conjugation_gauges
           (y : Matrix (Fin r[MPOTensor.mapStar U]) (Fin r[MPOTensor.mapStar U]) ℂ)) *
           Matrix.reindex (Equiv.prodCongr el er) (Equiv.refl _)
           (SourceFactors.sourceU U S)) at h
-    rw [remove_source_rank_reindex_left] at h
+    rw [remove_source_rank_reindex_left el er
+      (x : Matrix (Fin ℓ[MPOTensor.mapStar U]) (Fin ℓ[MPOTensor.mapStar U]) ℂ)
+      (y : Matrix (Fin r[MPOTensor.mapStar U]) (Fin r[MPOTensor.mapStar U]) ℂ)
+      (SourceFactors.sourceU U S)] at h
     simpa [x', y', Matrix.reindex_apply, Prod.map] using h
   · have h := congrArg
       (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr er.symm el.symm)) hv
@@ -372,7 +373,10 @@ theorem IsMPUCanonicalFormII.exists_local_conjugation_gauges
         (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr er el) (SourceFactors.sourceV U S) *
           ((y : Matrix (Fin r[MPOTensor.mapStar U]) (Fin r[MPOTensor.mapStar U]) ℂ)ᴴ ⊗ₖ
             (x : Matrix (Fin ℓ[MPOTensor.mapStar U]) (Fin ℓ[MPOTensor.mapStar U]) ℂ)ᴴ)) at h
-    rw [remove_source_rank_reindex_right] at h
+    rw [remove_source_rank_reindex_right el er
+      (x : Matrix (Fin ℓ[MPOTensor.mapStar U]) (Fin ℓ[MPOTensor.mapStar U]) ℂ)
+      (y : Matrix (Fin r[MPOTensor.mapStar U]) (Fin r[MPOTensor.mapStar U]) ℂ)
+      (SourceFactors.sourceV U S)] at h
     simpa [x', y', Matrix.reindex_apply, Prod.map, Matrix.star_eq_conjTranspose] using h
 
 /-- The forward local conjugation equations have one common symmetric or
