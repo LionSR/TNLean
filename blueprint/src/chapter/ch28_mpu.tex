@@ -9865,6 +9865,29 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     applies to that normalized compact factorization.
 \end{proof}
 
+\begin{lemma}[Square intermediate dimensions for any supplied adjoint-symmetric standard form]
+    \label{lem:mpu_supplied_standard_form_adjoint_zero_index}
+    \lean{MPOTensor.TwoSiteStandardFormData.intermediateRanks_eq_phys_of_even_mpo_eq_adjoint}
+    \notready
+    Let $W$ have any supplied standard form with unitary gates on pairs
+    of $d$-dimensional sites and intermediate dimensions $\ell,r>0$.
+    Suppose the ambient tensor $W$ is explicitly in reduced canonical
+    form II and $W^{(N)}=W^{(N)\dagger}$ for every even $N>1$.
+    Then $r=\ell=d$. Only the stated even standard-form lengths are used.
+    This is the zero-index comparison of
+    \cite[lines~1201--1252]{Cirac2017MPU} in the explicit canonical ambient scope.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:mpu_supplied_half_factor_minimality}
+    The even periodic families of $W$ and its actual adjoint agree.
+    Their actual source ranks agree by the sign-sensitive virtual
+    comparison, while adjunction exchanges the cuts. Thus
+    $\ell d=\ell(W)=r(W)=dr$. Positivity of $d$ gives $\ell=r$.
+    The unitary gate $u$ also gives $\ell r=d^2$, so both intermediate
+    dimensions equal $d$.
+\end{proof}
+
 \begin{lemma}[Normalized physical-adjoint source factors]
     \label{lem:mpu_normalized_physical_adjoint_source_factors}
     \lean{MPOTensor.IsMPUCanonicalFormII.reindexPhysical, MPOTensor.IsMPUCanonicalFormII.isMPUSimple_physicalAdjointTensor, MPOTensor.IsMPUCanonicalFormII.sourceFactors_sourceU_isUnitaryBetween, MPOTensor.IsMPUCanonicalFormII.sourceFactors_Y₁_mul_conjTranspose, MPOTensor.IsMPUCanonicalFormII.sourceFactors_Y₂_weighted_mul_conjTranspose, MPOTensor.SourceFactors.physicalAdjoint, MPOTensor.SourceFactors.sourceU_physicalAdjoint, MPOTensor.SourceFactors.sourceV_physicalAdjoint, MPOTensor.IsMPUCanonicalFormII.twoSiteSourceFactors_physicalAdjoint}

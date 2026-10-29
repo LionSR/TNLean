@@ -209,6 +209,36 @@ theorem exists_fourSpin_selected_source_gate_gauges
   exact S.exists_fourSpin_source_gate_gauges T
     (hW.sourceFactors_sourceU_isUnitaryBetween (S.isMPUSimple hW) T)
 
+/-- Even-family adjoint symmetry forces the intermediate dimensions of any
+supplied standard form to equal its original physical dimension. The
+ambient canonical presentation remains explicit. Source: CPSV17,
+`PropChiral`, zero-index observation and proof, lines 1201–1252. -/
+theorem intermediateRanks_eq_phys_of_even_mpo_eq_adjoint
+    (S : TwoSiteStandardFormData W u v) (hW : IsMPUCanonicalFormII W)
+    (hTR : ∀ N : ℕ, 1 < N → Even N → mpo W N = (mpo W N)ᴴ) :
+    r = d ∧ ℓ = d := by
+  have hEq : ∀ N : ℕ, 1 < N → Even N →
+      mpo W N = mpo (physicalAdjointTensor W) N := by
+    intro N hN heven
+    rw [mpo_physicalAdjointTensor_eq_conjTranspose]
+    exact hTR N hN heven
+  have hsame := hW.source_ranks_eq_of_mpo_eq_even hW.physicalAdjointTensor hEq
+  have hbalanced : ℓ[W] = r[W] := by
+    simpa only [rightRank_physicalAdjointTensor] using hsame.1
+  have hℓr : ℓ = r := by
+    apply mul_right_cancel₀ S.phys_pos.ne'
+    calc
+      ℓ * d = ℓ[W] := S.sourceRanks_eq.2.symm
+      _ = r[W] := hbalanced
+      _ = d * r := S.sourceRanks_eq.1
+      _ = r * d := Nat.mul_comm _ _
+  have hprod : ℓ * r = d * d := by
+    simpa only [Fintype.card_prod, Fintype.card_fin] using
+      le_antisymm (S.u_unitary.2.card_le u) (S.u_unitary.1.card_le u)
+  rw [← hℓr] at hprod
+  have hℓ : ℓ = d := (mul_self_inj (Nat.zero_le _) (Nat.zero_le _)).mp hprod
+  exact ⟨hℓr.symm.trans hℓ, hℓ⟩
+
 end TwoSiteStandardFormData
 
 end MPOTensor

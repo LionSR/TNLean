@@ -23,6 +23,13 @@ the existing normalized source factors internally. No extra gate, factor,
 normalization, inverse, SVD or gauge-existence premise is added to that
 corollary.
 
+The same comparison now derives square intermediate dimensions for any
+supplied standard form when its explicit canonical ambient tensor has
+adjoint symmetry at even standard-form lengths. Actual adjunction exchanges
+its source cuts, the even-family FT identifies those actual cut ranks, and
+`r[W]=d*r`, `ℓ[W]=ℓ*d` give `ℓ=r`. Unitarity supplies `ℓ*r=d*d`, hence both
+equal `d`. No all-length symmetry or further blocking is used.
+
 ## Scope
 
 The ambient canonical presentation remains explicit. The minimality of all
