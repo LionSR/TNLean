@@ -167,7 +167,7 @@ theorem tendsto_normalized_gaussianCauchyTransform
 positive- and negative-gap errors are bounded by \(e^{-q/2}\). This proves
 the scalar Cauchy/Gaussian limit identity rather than assuming a Fourier
 or approximation premise. Source: Hastings–Koma, arXiv:math-ph/0507008,
-Lemma 3.1, equation (3.7), with \(lpha=\Delta^2/(2q)\). -/
+Lemma 3.1, equation (3.7), with \(\alpha=\Delta^2/(2q)\). -/
 theorem tendsto_normalized_gaussianCauchyTransform_cutoff
     {q Δ : ℝ} (hq : 0 < q) (hΔ : 0 < Δ) (ω : ℝ) :
     let h := (q / Δ ^ 2).toNNReal
