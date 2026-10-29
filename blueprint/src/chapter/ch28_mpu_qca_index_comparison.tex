@@ -76,11 +76,10 @@
 
 \begin{lemma}[Actual complete-interval action and its four-block output]
     \label{lem:mpu_actual_complete_interval_four_output}
-    \lean{SpinChain.quasiLocalIntervalObservable_chainWindowOperator,
-        SpinChain.bufferedMPUQuasiLocalAut_central_interval,
+    \lean{SpinChain.bufferedMPUQuasiLocalAut_central_interval,
         SpinChain.bufferedMPUQuasiLocalAut_central_interval_four_output}
     \notready
-    \uses{lem:mpu_supplied_standard_form_actual_qca}
+    \uses{lem:mpu_supplied_standard_form_actual_qca,thm:quasi_local_bulk_inclusion}
     Under the supplied positive-block standard-form hypotheses, the
     actual completed action sends every matrix on the complete
     original-site interval $[a+2k,a+4k)$ to the two-link output matrix

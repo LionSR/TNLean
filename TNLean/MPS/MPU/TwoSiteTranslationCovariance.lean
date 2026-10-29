@@ -81,7 +81,7 @@ theorem bufferedMPUQuasiLocalAction_translation_quasiLocalObservable
   classical
   obtain ⟨b, N, hN, hΛ, hb, _⟩ :=
     exists_finiteChainLocalObservable_bufferedMPULocalAction hU k Λ
-  let hΛt := (translateRegion_mono t hΛ).trans (translateRegion_finiteChainRegion t b N).le
+  let hΛt := (translateRegion_mono t hΛ).trans (translateRegion_finiteChainRegion b t N).le
   have hbt : ∀ x ∈ translateRegion t Λ,
       b + t ≤ x - (2 * k : ℕ) ∧ x + (4 * k : ℕ) ≤ b + t + N := by
     intro x hx

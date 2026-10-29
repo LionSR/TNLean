@@ -9754,3 +9754,13 @@ there is no need for a new tactic.
   window evaluation and support theorems.
 - **Notes:** The actual middle output is [k,5k) inside its existing 6k-site
   window; no support conclusion or new factor predicate is a premise.
+### Reuse established interval-coordinate owners across consumers (2026-10-29)
+
+- **Seen:** actual MPU/QCA window and translation consumers, and parent-Hamiltonian
+  observable translation/commutator consumers.
+- **Finding:** Two newly written helpers collided with existing full declaration names;
+  one was a specialization, and the other reversed the two integer parameters.
+- **Repair:** Move the established general window statements unchanged to
+  `ParentHamiltonian/QuasiLocalWindowCoordinates`; move the established translation
+  statement unchanged to `QCA/IntervalTranslation`. Reuse those owners and retain
+  their existing signatures, rather than renaming the duplicates or adding aliases.
