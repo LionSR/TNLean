@@ -64,7 +64,7 @@ private noncomputable def adjacentSupportJoinMatrixEquiv
     (eS : ↥(oddSupportAlgebra hω x) ≃⋆ₐ[ℂ] Matrix (Fin s) (Fin s) ℂ) :
     ↥(embeddedEvenSupportAlgebra hω x ⊔ embeddedOddSupportAlgebra hω x)
       ≃⋆ₐ[ℂ] Matrix (Fin (r * s)) (Fin (r * s)) ℂ := by
-  let : Nontrivial (QuasiLocalAlgebra d) :=
+  letI : Nontrivial (QuasiLocalAlgebra d) :=
     (quasiLocalObservable_injective d ∅).nontrivial
   let eE : ↥(embeddedEvenSupportAlgebra hω x) ≃⋆ₐ[ℂ] Matrix (Fin r) (Fin r) ℂ :=
     (supportEmbeddingEquiv (leftPair x) (evenSupportAlgebra hω x)).symm.trans eR
@@ -211,7 +211,7 @@ private noncomputable def physicalPairSupportJoinMatrixEquiv
     (eS : ↥(evenSupportAlgebra hω (x + 1)) ≃⋆ₐ[ℂ] Matrix (Fin s) (Fin s) ℂ) :
     ↥(embeddedOddSupportAlgebra hω x ⊔ embeddedEvenSupportAlgebra hω (x + 1))
       ≃⋆ₐ[ℂ] Matrix (Fin (r * s)) (Fin (r * s)) ℂ := by
-  let : Nontrivial (QuasiLocalAlgebra d) :=
+  letI : Nontrivial (QuasiLocalAlgebra d) :=
     (quasiLocalObservable_injective d ∅).nontrivial
   let eO := (supportEmbeddingEquiv (rightPair x) (oddSupportAlgebra hω x)).symm.trans eR
   let eE := (supportEmbeddingEquiv (leftPair (x + 1))
