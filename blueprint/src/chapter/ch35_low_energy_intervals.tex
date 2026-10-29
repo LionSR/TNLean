@@ -3,12 +3,14 @@
 \begin{theorem}[The capped width and its logarithm]
     \label{thm:low_energy_cap}
     \lean{Real.low_energy_cap_bound}
+    \leanok
     If $w>0$ and $6w\le\eta_{\mathrm{LD}}$, set
     $g=\min\{w,1\}$ and $M=\max\{1,\eta_{\mathrm{LD}}/6\}$.
     Then $g^{-1}\le M/w$ and
     $\log(g^{-1})=\max\{\log(w^{-1}),0\}$.
 \end{theorem}
 \begin{proof}
+    \leanok
     If $w\le1$, then $g=w$ and $M\ge1$.
     If $w>1$, then $g=1$ and $w\le\eta_{\mathrm{LD}}/6\le M$.
 \end{proof}
@@ -16,6 +18,7 @@
 \begin{theorem}[An explicit count at the source scale]
     \label{thm:low_energy_source_count}
     \lean{Real.low_energy_count_le_source_scale}
+    \leanok
     Let $L\ge2$, $q\ge1$, $\mu>0$, and $K\ge0$. Set
     $w=\mu/(3\log L)$ and $g=\min\{w,1\}$, and suppose
     $6w\le\eta_{\mathrm{LD}}$. If a count satisfies
@@ -31,6 +34,7 @@
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:low_energy_cap}
     Apply the two preceding bounds and use $1/w=3\log L/\mu$.
 \end{proof}
@@ -38,6 +42,7 @@
 \begin{theorem}[The joint scalar count and strict contraction]
     \label{thm:low_energy_joint_scalar_parameters}
     \lean{Real.exists_low_energy_joint_scalar_parameters}
+    \leanok
     Under the numerical assumptions of
     Theorem~\ref{thm:low_energy_scalar_parameters}, the constant can be
     chosen so that its logarithmic bound and strict tradeoff hold at the
@@ -46,6 +51,7 @@
     chosen scale, before any physical threshold or ground energy is given.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:low_energy_threshold_bound}
     The denominator has the same norm bound as before. The strict width
     inequality $w\ge g>4g/5$ makes the physical contraction strictly
@@ -56,6 +62,7 @@
 \begin{theorem}[One spanning family on a short region]
     \label{thm:short_region_spanning_family}
     \lean{TNLean.MPS.AreaLaw.exists_short_actual_region_spanning_family}
+    \leanok
     Let $q\ge2$, $\ell\ge1$ and $|J|\le4\ell$, and put
     $D=(q\ell^2)^{22\ell}$. For every finite complementary Hilbert
     space, there is a family $(F_j)_{j=1}^{D^2}$ on $\mathcal H_J$,
@@ -64,6 +71,7 @@
     then $\sum_jF_jS=\mathcal H_J$, and this enlargement is zero-viable.
 \end{theorem}
 \begin{proof}
+    \leanok
     Configuration matrix units send every nonzero subspace onto a family
     spanning the entire regional space. Viability below one for a nonzero
     target forces $S\ne0$. There are $q^{2|J|}\le q^{8\ell}$ matrix
@@ -73,6 +81,7 @@
 \begin{theorem}[Enlarging the five-region target region]
     \label{thm:low_energy_regional_family}
     \lean{TNLean.MPS.AreaLaw.exists_five_region_low_energy_family_on_larger_region}
+    \leanok
     Let $q\ge2$, $\ell\ge1$, $a+2\ell\le b$, and
     $b+2\ell\le L-1$. Let $\varepsilon,w>0$ and $3w<\eta$, with
     supported positive unit nearest-neighbour terms as in
@@ -89,6 +98,7 @@
     lower target, with the same explicit $\Delta$ as in that theorem.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:physical_low_energy_filter_family,
       thm:actual_clipped_polynomial_family,thm:chebyshev_nested_polynomial_family}
     Keep the physical truncation and its two spectral comparisons.
@@ -103,6 +113,7 @@
 \begin{theorem}[A low-energy improving family on every interval]
     \label{thm:physical_low_energy_interval_family}
     \lean{TNLean.MPS.AreaLaw.exists_physical_low_energy_interval_family}
+    \leanok
     Fix $\eta_{\mathrm{LD}}>0$. A constant $A\ge21$ can be chosen before
     $L\ge2$, $q\ge2$, $\mu>0$, the bandwidth
     $2\mu/\log L\le\eta_1\le\eta_{\mathrm{LD}}$, and the supported
@@ -132,6 +143,7 @@
     parameters displayed above.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:low_energy_source_count,thm:low_energy_joint_scalar_parameters,
       thm:short_region_spanning_family,thm:low_energy_regional_family}
     For $|J|>4\ell$, inward effective cuts give a five-region core
@@ -151,6 +163,7 @@
 \begin{theorem}[The same family on the original spectral windows]
     \label{thm:physical_original_low_energy_interval_family}
     \lean{TNLean.MPS.AreaLaw.exists_physical_original_low_energy_interval_family}
+    \leanok
     All choices in Theorem~\ref{thm:physical_low_energy_interval_family}
     can be retained simultaneously with the following additional conclusion.
     If $S$ is $\delta$-viable for the original upper window,
@@ -163,6 +176,7 @@
     parameter and the final original-window error remain distinct.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:physical_low_energy_interval_family}
     Apply closeness composition before and after the improvement, using
     the same fixed family and the two physical comparisons.
