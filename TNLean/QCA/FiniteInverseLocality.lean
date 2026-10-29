@@ -54,7 +54,7 @@ theorem inverse_mem_range_localInclusion_of_forward_support
   obtain ⟨Δ, hΔ, hDisjoint, A, hA⟩ := hForward x hx C
   rw [← hA]
   rw [commute_iff_eq]
-  apply (localObservable d Γ).injective
+  apply localObservable_injective d Γ
   rw [map_mul, map_mul, localObservable_localInclusion, localObservable_localInclusion]
   exact (localObservable_commute_of_disjoint hDisjoint A B).symm.eq
 
