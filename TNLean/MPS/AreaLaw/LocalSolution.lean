@@ -13,6 +13,9 @@ import TNLean.MPS.AreaLaw.LocalSolution.FinalStateCount
 import TNLean.MPS.AreaLaw.LocalSolution.FinalStateEnergy
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchicalEnergy
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchicalProjection
+import TNLean.MPS.AreaLaw.LocalSolution.HierarchyEdgePartition
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchyLevels
+import TNLean.MPS.AreaLaw.LocalSolution.PeriodicCoarsening
+import TNLean.MPS.AreaLaw.LocalSolution.PhysicalPeriodicPairs
 import TNLean.MPS.AreaLaw.LocalSolution.SupersiteFinalState
 import TNLean.MPS.AreaLaw.LocalSolution.SupersiteHierarchy

@@ -1,0 +1,61 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{Physical Periodic Pair Operators in Hastings' Local Construction}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+Hastings, \emph{Solving gapped Hamiltonians locally},
+\href{https://arxiv.org/abs/cond-mat/0508554v3}{arXiv:cond-mat/0508554v3},
+source \path{proj3new.tex}, constructs finite-range Gaussian filters at
+lines 285--320 and groups them into neighbouring-supersite operators at
+lines 609--639. The formalized auxiliary in
+\path{TNLean/MPS/AreaLaw/LocalSolution/PhysicalPeriodicPairs.lean}
+constructs this family on a regular nonempty periodic chain with $N$
+blocks of exactly $2\ell$ physical sites each. It assumes a unique gapped
+ground vector of the original Hamiltonian. The degenerate case of the source
+and the subsequent hierarchical tensor construction are not claimed.
+
+Let $G$ be the actual nearest-neighbour ring on the physical sites, let
+$H=\sum_i h_i$, let $h_i$ act on the radius-$R$ ball about $i$, and assume
+$\|h_i\|\le J$ and that every such ball has at most $S$ sites. These are the
+source's finite-range hypotheses, lines 180--185. The truncated generator
+for term $i$ is $\sum_{k:d_G(i,k)\le\ell-R}h_k$, as in equation (hpdef).
+The approximation $M_i$ is the Gaussian filter of $h_i$ under that generator.
+Its support is in the radius-$\ell$ ball, and $\|M_i\|\le J$.
+The Gaussian weight includes the variance parameter as recorded in
+\path{hastings05_truncated_dynamics.tex}.
+
+The explicit error uses the actual maximum number of omitted terms whose
+supports meet a truncation ball. For $m+3R\le\ell$, the distance of each such
+term from the original support is at least $m$, by the triangle inequality.
+No local approximation, residual estimate, assignment of filters, or
+successful hierarchy is supplied as a hypothesis. Each coarse edge receives
+exactly $2\ell$ filters, so its norm is at most $2\ell J$, its centred norm
+at most $4\ell J$, and its residual is at most $2\ell$ times the proved
+local residual. The edge joining the last and first blocks is included.
+The result retains the shell count and the free Gaussian and time-window
+parameters; it does not identify a printed characteristic length.
+
+If $\|M-H\|\le\varepsilon$ and
+$H-E_0I\ge\Delta(I-P_0)$, then
+\[
+ M-(E_0-\varepsilon)I\ge\Delta(I-P_0).
+\]
+Here $P_0$ is the original ground projector. This comparison follows from
+the proved norm error; it is not an assumed gap of the approximating sum,
+and does not assert that $P_0$ is its ground projector.
+
+The remaining tasks are the degenerate ground-space basis construction,
+including scalar terminal classes, the hierarchy applied to this physical
+family, and a quantitative tensor representation of its final space.
+The first is recorded in \path{hastings05_two_dim_ground_basis.tex}; the
+closing-link issue in the second is recorded in
+\path{hastings05_hierarchical_energy.tex}. These are separate from the
+physical pair-family auxiliary.
+\end{document}

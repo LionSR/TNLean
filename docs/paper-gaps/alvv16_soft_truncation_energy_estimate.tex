@@ -1,0 +1,182 @@
+\documentclass{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{The First Uniform Energy Estimate for ALVV Soft Truncation}
+\author{}
+\date{October 29, 2026}
+\begin{document}
+\maketitle
+\gapnote{false-source}{open}
+
+\section{The estimate and its quantifiers}
+
+Arad, Landau, Vazirani and Vidick~\cite{Arad2016RigorousRG},
+\href{https://arxiv.org/abs/1602.08828v2}{arXiv:1602.08828v2}, define
+\begin{align}
+    h_{m,t}(x)=t\sum_{k=1}^m\frac{(1-e^{-x/t})^k}{k},
+    \qquad t\ge m\ge2,
+    \label{eq:alvv_soft_scalar}
+\end{align}
+where $m$ is an integer. Let $H=H_J+H_{\overline J}$ be a chain
+Hamiltonian with positive nearest-neighbour contractions. If $\varepsilon_J$
+is the ground energy of the internal sum $H_J$, choose
+$\varepsilon_J-10\le\varepsilon'_J\le\varepsilon_J$ and set
+\begin{align}
+    \widetilde H
+      &=\varepsilon'_J I+h_{m,t}(H_J-\varepsilon'_J I)+H_{\overline J},&
+    \varepsilon&=\varepsilon_{\overline J}+\varepsilon'_J.
+    \label{eq:alvv_soft_physical}
+\end{align}
+The first energy estimate in Lemma~\path{lem:exp-approx},
+equation~\path{eq:exp-approx-0}, asserts, for a normalized eigenvector
+$H\psi=\lambda\psi$,
+\begin{align}
+    0\le\lambda-\langle\psi,\widetilde H\psi\rangle
+       \le O\!\left(\frac{(\lambda-\varepsilon)^m}{m t^{m-1}}\right).
+    \label{eq:alvv_soft_printed}
+\end{align}
+The source locations are \path{local_alg_arxiv_v2.tex}, lines 1154--1157
+(scalar function), 1175--1185 (positive terms and regional convention),
+1195--1201 (estimate), and 1216--1227 (its proof).
+
+The usual uniform interpretation of (\ref{eq:alvv_soft_printed}) is false.
+The three-qubit family below has fixed local norms, local dimension and
+spectral gap. For every fixed admissible pair $(m,t)$, the ratio of its
+actual energy defect to the displayed scale is unbounded. Thus even a
+constant depending on these fixed parameters cannot establish the estimate
+uniformly over the Hamiltonian family. The separate condition on $t$ in the
+subsequent gap assertion does not qualify this first displayed estimate;
+the counterexample also applies to arbitrarily large fixed parameters.
+
+The counterexample is an exact mathematical calculation, not a formalized
+Lean proof. It concerns this first uniform estimate only. It does not assert
+that every later spectral, low-energy, or efficient-approximation conclusion
+is false.
+
+\section{A nondegenerate three-qubit family}
+
+Let $R=|1\rangle\langle1|$, $P=|0\rangle\langle0|$, and, for
+$1/2<c<1$, put
+\begin{align}
+    v_c&=c|0\rangle+\sqrt{1-c^2}|1\rangle,&
+    Q_c&=|v_c\rangle\langle v_c|,\notag\\
+    h_{12}&=\frac{R_1+P_2}{2},&
+    h_{23}&=\frac{Q_{c,2}+R_3}{2},& H_c&=h_{12}+h_{23}.
+    \label{eq:alvv_soft_example}
+\end{align}
+Identities on the other sites are suppressed. Each local term has spectrum
+$\{0,1/2,1\}$, norm one and minimum zero, and acts nontrivially on both
+sites of its assigned bond. These are admissible positive contractions.
+
+The middle-qubit operator $(P+Q_c)/2$ has eigenvalues $(1-c)/2$ and
+$(1+c)/2$. Hence the unique normalized ground vector and its energy are
+\begin{align}
+    \psi_c&=|0\rangle\otimes
+      \frac{|0\rangle-v_c}{\sqrt{2(1-c)}}\otimes|0\rangle,&
+    \lambda_c&=\frac{1-c}{2}.
+    \label{eq:alvv_soft_ground}
+\end{align}
+An outer-qubit excitation costs $1/2$, and the middle-qubit excitation costs
+$c>1/2$. Thus the full spectral gap is exactly $1/2$ for every $c$.
+Directly from (\ref{eq:alvv_soft_ground}),
+\begin{align}
+    \langle\psi_c,P_2\psi_c\rangle
+      =\langle\psi_c,Q_{c,2}\psi_c\rangle=\lambda_c.
+    \label{eq:alvv_soft_expectations}
+\end{align}
+
+Take the contiguous region $J=\{1,2\}$. The source convention gives
+$H_J=h_{12}$ and $H_{\overline J}=h_{23}$: the crossing interaction is
+included in the complementary remainder, not discarded. Both regional sums
+have ground energy zero. Thus $\varepsilon'_J=0$ is admissible and
+$\varepsilon=0$ in (\ref{eq:alvv_soft_physical}).
+
+\section{The exact defect at every fixed truncation scale}
+
+Differentiating (\ref{eq:alvv_soft_scalar}) and using $h_{m,t}(0)=0$ gives
+\begin{align}
+    x-h_{m,t}(x)
+      =t\int_0^{x/t}(1-e^{-u})^m\,du,\qquad x\ge0.
+    \label{eq:alvv_soft_defect_integral}
+\end{align}
+Consequently $a_{m,t}=1/2-h_{m,t}(1/2)$ is strictly positive for every
+fixed $m\ge2$ and $t\ge m$. On the sector in which the first qubit is
+$|0\rangle$, $h_{12}=P_2/2$. Functional calculus and
+(\ref{eq:alvv_soft_expectations}) therefore give the exact identity
+\begin{align}
+    \lambda_c-\langle\psi_c,\widetilde H_c\psi_c\rangle
+      =a_{m,t}\lambda_c.
+    \label{eq:alvv_soft_exact_defect}
+\end{align}
+For the explicitly admissible choice $m=t=2$,
+\begin{align}
+    a_{2,2}=4e^{-1/4}-e^{-1/2}-\frac52>0,
+    \label{eq:alvv_soft_small_scale}
+\end{align}
+where positivity follows from (\ref{eq:alvv_soft_defect_integral}).
+The displayed source scale is then $\lambda_c^2/4$, and the ratio is
+$4a_{2,2}/\lambda_c\to\infty$ as $c\uparrow1$.
+
+More generally, for every fixed admissible $(m,t)$ the ratio is
+\begin{align}
+    \frac{a_{m,t}\lambda_c}{\lambda_c^m/(m t^{m-1})}
+       =m t^{m-1}a_{m,t}\lambda_c^{1-m}\longrightarrow\infty.
+    \label{eq:alvv_soft_divergence}
+\end{align}
+All parameters except $c$ are fixed in this limit. Each individual
+Hamiltonian has a unique ground state and gap $1/2$; no degeneracy or
+vanishing spectral gap is involved.
+
+\section{The failed inference and the remaining comparison}
+
+The scalar estimate gives the valid moment bound
+\begin{align}
+    0\le\langle\psi,(H-\widetilde H)\psi\rangle
+      \le\frac{\langle\psi,A^m\psi\rangle}{m t^{m-1}},
+    \qquad A=H_J-\varepsilon'_J I\ge0.
+    \label{eq:alvv_soft_moment}
+\end{align}
+The source then uses $0\le A\le H-\varepsilon I$ to replace this
+moment by $(\lambda-\varepsilon)^m$. Order of noncommuting positive
+operators does not justify that replacement. In the present example,
+$A=h_{12}\le H_c$, but
+\begin{align}
+    \langle\psi_c,A^2\psi_c\rangle=\lambda_c/4
+      >\lambda_c^2=\langle\psi_c,H_c^2\psi_c\rangle,
+    \label{eq:alvv_soft_failed_power_order}
+\end{align}
+because $0<\lambda_c<1/4$.
+
+A corrected physical spectral comparison needs a separate argument.
+One possible route is to retain moments of the actual regional operator
+and derive their control from exponential moments. For example, scalar
+functional calculus gives, for $s>0$,
+\begin{align}
+    \|(H-\widetilde H)\psi\|
+      \le\frac{\|A^m\psi\|}{m t^{m-1}}
+      \le\frac{(m/(es))^m}{m t^{m-1}}\|e^{sA}\psi\|.
+    \label{eq:alvv_soft_possible_route}
+\end{align}
+Obtaining a suitable uniform exponential-moment estimate from the original
+local Hamiltonian, and deriving the required one-sided spectral comparisons
+from it, are additional proof obligations. Equation
+(\ref{eq:alvv_soft_possible_route}) does not assert that these obligations
+have been discharged.
+
+This obstruction is distinct from the incorrect cluster-approximation
+estimate, recorded in the separate note
+\href{https://sirui-lu.com/TNLean/paper-gaps/alvv16_cluster_approximation.pdf}
+{\emph{Support Size and Negative Local Terms in the ALVV Cluster Approximation}}.
+The corrected scalar soft-truncation estimates are not refuted here, and no
+failure of every subsequent conclusion follows from this counterexample.
+The physical soft-truncation comparison remains open under
+\href{https://github.com/LionSR/TNLean/issues/9847}{issue 9847} and the
+\href{https://github.com/LionSR/TNLean/issues/9833}{ALVV tracker}.
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+\end{document}

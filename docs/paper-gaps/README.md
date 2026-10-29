@@ -1565,6 +1565,24 @@ allows because it fixes `ξ` only through some pair (lines 96–112); at a fixed
 length the argument needs `ξ' > 6ξ`. A Lieb–Robinson pair in the source's
 form remains open under issue #9811.
 
+## ALVV: the first uniform soft-truncation energy estimate
+
+[`alvv16_soft_truncation_energy_estimate.tex`](alvv16_soft_truncation_energy_estimate.tex)
+(false source, open) gives an exact three-qubit counterexample to the first
+uniform energy estimate in `lem:exp-approx`, equation `eq:exp-approx-0`, of
+arXiv:1602.08828v2 (source lines 1195–1201 and 1216–1227). Both local terms
+are positive contractions of norm one, the ground state is unique, and the
+spectral gap is fixed at `1/2`. For every fixed admissible pair `t >= m >= 2`,
+the truncation defect is a positive constant times the ground energy, while
+the printed scale is its `m`-th power. Thus the implicit constant cannot be
+uniform over this family. The calculation is mathematical and is not a Lean
+proof. It does not refute all later spectral or approximation conclusions;
+the physical comparison requires a separate corrected argument. The source's
+noncommutative moment substitution and a possible exponential-moment route
+are distinguished from the separate cluster-expansion obstruction. Tracked
+under [#9847](https://github.com/LionSR/TNLean/issues/9847) and
+[#9833](https://github.com/LionSR/TNLean/issues/9833).
+
 ## ALVV: the operator-norm cluster approximation
 
 [`alvv16_cluster_approximation.tex`](alvv16_cluster_approximation.tex)

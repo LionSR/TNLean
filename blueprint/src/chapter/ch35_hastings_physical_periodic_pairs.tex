@@ -1,0 +1,139 @@
+\section{Physical neighbouring-block operators on a periodic chain}
+\label{sec:hastings05_physical_periodic_pairs}
+
+\begin{lemma}[Grouping a finite family]
+    \label{lem:hastings05_grouping_finite_family}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.edgePartition,
+        TNLean.MPS.AreaLaw.LocalSolution.sum_edgePartition,
+        TNLean.MPS.AreaLaw.LocalSolution.norm_edgePartition_le,
+        TNLean.MPS.AreaLaw.LocalSolution.isHermitian_edgePartition,
+        TNLean.MPS.AreaLaw.LocalSolution.centered_edgePartition,
+        TNLean.MPS.AreaLaw.LocalSolution.residual_edgePartition_le,
+        TNLean.MPS.AreaLaw.LocalSolution.centeredNorm_edgePartition_le,
+        TNLean.MPS.AreaLaw.LocalSolution.centeredNorm_edgePartition_le_two_mul,
+        TNLean.MPS.AreaLaw.LocalSolution.edgePartition_mem_supportedOperators,
+        TNLean.MPS.AreaLaw.LocalSolution.norm_edgePartition_le_of_fibre_card}
+    \leanok
+    Let $I$ and $E$ be finite sets, let $p\colon I\to E$, and let
+    $A_i$ be matrices indexed by $i\in I$. Set
+    $A'_j=\sum_{p(i)=j}A_i$ and $n_j=|\{i:p(i)=j\}|$. Then
+    $\sum_jA'_j=\sum_iA_i$. If $\|A_i\|\le J$ with $J\ge0$, then
+    $\|A'_j\|\le n_jJ$. Hermiticity and a common support pass to each
+    sum. Centring at the expectation in a fixed vector commutes with the
+    sum, so centred-norm and vector-residual bounds also add over its
+    actual fibre. In particular, for a unit vector and $\|A_i\|\le J$,
+    the centred norm is at most $2n_jJ$.
+\end{lemma}
+\begin{proof}\leanok
+    Each summand occurs exactly once. The triangle inequality gives the
+    norm and residual bounds, and both the expectation and application
+    to a vector are linear in the operator. The absolute expectation in
+    a unit vector is at most the operator norm.
+\end{proof}
+
+\begin{lemma}[The regular periodic assignment]
+    \label{lem:hastings05_regular_periodic_assignment}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.periodicCoarseEdge,
+        TNLean.MPS.AreaLaw.LocalSolution.card_periodicCoarseEdge_fibre,
+        TNLean.MPS.AreaLaw.LocalSolution.finRotate_val_eq_succ_or_zero,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicPhysicalCoordinate,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicPhysicalDistance,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicPhysicalCoordinate_lt,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicCoarseEdge_internal_centre,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicCoarseEdge_support,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicCoarseEdge_zero_support,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicCoarseEdge_support_all,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicCoarseOperator,
+        TNLean.MPS.AreaLaw.LocalSolution.sum_periodicCoarseOperator,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicCoarseOperator_mem_supportedOperators,
+        TNLean.MPS.AreaLaw.LocalSolution.isHermitian_periodicCoarseOperator,
+        TNLean.MPS.AreaLaw.LocalSolution.residual_periodicCoarseOperator_le,
+        TNLean.MPS.AreaLaw.LocalSolution.centeredNorm_periodicCoarseOperator_le}
+    \leanok
+    \uses{lem:hastings05_grouping_finite_family}
+    On a ring of $N\ge1$ blocks of $2\ell$ sites, with $\ell\ge1$,
+    assign a site in the first half of its block to the preceding edge
+    and a site in the second half to the following edge. Each edge
+    receives exactly $2\ell$ sites. The closed cyclic ball of radius
+    $\ell$ about each site is contained in the two blocks meeting its
+    assigned edge, including the closing edge.
+
+    Consequently, grouping operators supported in these balls gives a
+    neighbouring-block family with the same total sum. Uniform local
+    norm, centred-norm and residual bounds are multiplied by at most
+    $2\ell$, independently of $N$. In particular a local norm bound $J$
+    gives pair norm $2\ell J$ and centred pair norm $4\ell J$ in a unit
+    vector. This is the periodic grouping of~\cite[lines 609--639]{Hastings2006Solving}.
+\end{lemma}
+\begin{proof}\leanok
+    Each fibre has one site at every position within a block: positions
+    in the first half come from its right block and the others from its
+    left block. A cyclic ball of radius $\ell$ cannot pass either outer
+    endpoint of that pair of blocks. Apply
+    Lemma~\ref{lem:hastings05_grouping_finite_family} to the actual fibres.
+\end{proof}
+
+\begin{theorem}[Periodic pair operators constructed from the Hamiltonian]
+    \label{thm:hastings05_physical_periodic_pairs}
+    \lean{TNLean.MPS.AreaLaw.LocalSolution.periodicPhysicalGraph,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicPhysicalDistance_le_edist,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicLocalFilter,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicFilteredPair,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicTruncationShell,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicFilterError,
+        TNLean.MPS.AreaLaw.LocalSolution.periodicFilteredPair_properties}
+    \leanok
+    \uses{lem:hastings05_regular_periodic_assignment,
+        thm:hastings_truncated_approximation_time,thm:hastings05_facld,
+        thm:hastings_truncated_sum}
+    Partition a periodic chain into $N\ge1$ blocks of $2\ell$ sites each,
+    where $\ell\ge1$. Let $H=\sum_i h_i$, with Hermitian $h_i$ supported
+    within graph distance $R$ of site $i$, $\|h_i\|\le J$, and at most $S$
+    sites in each radius-$R$ ball. Suppose $H$ has a unique unit ground
+    vector $\Omega$ of energy $E_0$ and gap $\Delta>0$.
+    Fix $\theta,\mu\ge0$ and $m\in\mathbb N$ with $m+3R\le\ell$.
+    Let $M_i$ be the Gaussian filter of $h_i$, with variance
+    $\theta/\Delta^2$, under the truncated generator
+    \[
+        H_i^{\mathrm{loc}}=\sum_{k:d_G(i,k)\le\ell-R}h_k.
+    \]
+    Assign $i$ to the edge preceding its block when it is in the first
+    half of that block, and to the following edge otherwise. Let $M_j'$
+    be the sum of the assigned $M_i$. This includes the edge joining the
+    last and first blocks.
+
+    Let $A$ be the largest number of omitted radius-$R$ supports meeting
+    one radius-$\ell$ truncation ball, and put
+    \begin{align*}
+        v&=2S^2J e^{4\mu R}+1,\\
+        e&=2S^2(2+4SJ e^{4\mu R})J^2A\frac\theta\Delta
+              e^{v\theta/\Delta-\mu m}+2Je^{-\theta/2}.
+    \end{align*}
+    Every $M_j'$ is Hermitian, acts on the two adjacent blocks, and satisfies
+    \begin{align*}
+        \|M_j'\|&\le2\ell J,\\
+        \|M_j'-\langle\Omega,M_j'\Omega\rangle I\|&\le4\ell J,\\
+        \|(M_j'-\langle\Omega,M_j'\Omega\rangle I)\Omega\|
+          &\le2\ell(Je^{-\theta/2}+e).
+    \end{align*}
+    With $M=\sum_jM_j'$ and $\varepsilon=2N\ell e$, one has
+    \[
+        \|M-H\|\le\varepsilon,\qquad
+        M-(E_0-\varepsilon)I\ge\Delta(I-|\Omega\rangle\langle\Omega|).
+    \]
+    This is an auxiliary for the regular periodic blocking and unique
+    ground-vector case of~\cite[lines 285--387 and 609--639]{Hastings2006Solving};
+    it does not construct the degenerate basis, hierarchy or final tensor
+    representation~\cite{gap:hastings05_physical_periodic_pairs}.
+\end{theorem}
+\begin{proof}\leanok
+    The selected generators act in the radius-$\ell$ balls. If a term is
+    omitted, its centre is farther than $\ell-R$ from $i$; the triangle
+    inequality gives distance at least $m$ between its support and that
+    of $h_i$. The local-filter estimate and its ground-vector version
+    therefore apply with the actual omitted-shell count. Each coarse
+    edge receives exactly $2\ell$ filters, and the cyclic locality balls
+    lie in its two blocks. Summing the local bounds gives the pair
+    estimates and $\|M-H\|\le\varepsilon$. Finally
+    $M-H\ge-\varepsilon I$ adds to the original projector gap.
+\end{proof}

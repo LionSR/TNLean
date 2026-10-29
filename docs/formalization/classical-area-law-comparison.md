@@ -40,11 +40,16 @@ qualifications are recorded in `docs/paper-gaps/hastings07_lemma1_decay_length.t
 `hastings07_relent_constants.tex` and `hastings07_doubling_constants.tex`.
 
 For Hastings' 2006 programme, the local truncated filters and thermal truncated
-exponentials are constructed from the interactions. The later hierarchy still
-takes its operator and projector families and recursion estimates as inputs.
-The original-Hamiltonian assembly, existence of the degenerate-basis refinement,
-final tensor bond bounds, and thermal index bound in terms of a local radius
-remain to be proved. The conditional basis estimates apply to any dimension, but
+exponentials are constructed from the interactions. A further construction now
+produces the neighbouring-pair family on a regularly blocked physical ring,
+from the original Hamiltonian and its unique gapped ground vector. Pair support,
+norms and residuals are derived, including the closing pair. The total error is
+at most $2N\ell\varepsilon_{\mathrm{loc}}$ on $2N\ell$ sites, with the
+actual omitted-shell count retained in $\varepsilon_{\mathrm{loc}}$. The
+lower operator bound uses the original ground projector. This first regular
+periodic construction does not supply the full hierarchy: the general recursion,
+existence of the degenerate-basis refinement, final tensor bond bounds, and thermal
+index bound in terms of a local radius remain to be proved. The conditional basis estimates apply to any dimension, but
 assume a chosen refinement separating every pair; scalar terminal classes and
 refinement existence require an additional argument. This qualification is
 recorded in `docs/paper-gaps/hastings05_two_dim_ground_basis.tex`.
@@ -107,9 +112,10 @@ A universal scalar choice now sets $s=\lceil Au^2/g\rceil$, degree $s^2$ and
 $t_0=1024+16\log(1/g)$, where $u=1+\log q+\log(1/g)$.
 Its actual rank budget and squared shrinking coefficient satisfy
 $D\delta\le10^{-5}<1/256$, and $\log D\le C u^3/g$ with an explicit
-constant. The physical favorable filter, product-overlap initialization,
-phase-aligned moving-ground-state recursion, and entropy conclusion still need
-to be assembled.
+constant. An exact normalization theorem now constructs the phase-aligned output of a
+filter with nonzero target overlap, with its residual-to-overlap error and actual
+Schmidt-rank growth. The physical favorable filter, product-overlap initialization,
+moving-ground-state recursion, and entropy conclusion still need to be assembled.
 
 For a unique ground vector on an open chain with $q\ge2$ and $0\le h_j\le I$,
 the gap is at most one. An endpoint unitary with zero expectation in that vector
@@ -129,6 +135,14 @@ $g=\min(\gamma,1)$; a claim with the uncapped gap requires an additional argumen
 The source's degenerate-ground-space assumption includes a second spectral value,
 so the existence of an excited spectrum should be distinguished from an extra
 hypothesis imposed by a formalization.
+
+For frustration-free projection chains, the actual even/odd detectability operator
+is now constructed. Its noncommutation count is derived from the physical bonds.
+It fixes the full ground kernel and preserves its orthogonal complement, and the
+converse estimate holds for every unit vector with constant three. Under a unique
+ground-state gap, the squared contraction is $4/(4+\gamma)$ without a gap cap.
+Reduction from arbitrary positive contractions to range projections, the regional
+truncated Hamiltonian and its spectral and spatial rank conclusions remain open.
 
 The global approximation also gives one $r$-dimensional reference space,
 mutually $\varepsilon$-close to the full physical ground space, whose every
@@ -177,6 +191,18 @@ The low-density induction requires sampling between distinct nested targets
 and a dyadic rank estimate; the fixed-ground-space induction does not provide
 it. The sampled tree and a correct replacement for the false printed
 soft-cluster estimate also remain open.
+
+The scalar soft truncation is formalized with the corrected cap $t(1+\log m)$,
+its polynomial and geometric remainders, and an exponential-weight estimate.
+For $m\ge1$, $x\ge0$ and $0<\theta\le1/2$,
+$x-h_{m,m}(x)\le(2/\theta)e^{\theta x-\theta m/2}$.
+Applying this estimate to a regional Hamiltonian requires a physical exponential
+moment bound. The first printed uniform energy estimate for soft truncation has
+a separate three-qubit counterexample with fixed gap $1/2$, recorded in
+`docs/paper-gaps/alvv16_soft_truncation_energy_estimate.tex`. This is an exact
+mathematical calculation, not a Lean counterexample theorem; its conclusion is
+confined to that uniform energy estimate. A corrected physical spectral comparison
+and a sufficient cluster/MPO approximation remain to be proved.
 
 The exact formal statements, their source passages, and their verification evidence
 are recorded in the blueprint and the dated audit reports. A statement identified as a formalization of a source theorem must carry the
