@@ -9441,6 +9441,56 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Lemma~\ref{lem:mpu_skew_symmetric_even_card} applied to $U$ shows that $d$ is even.
 \end{proof}
 
+\begin{lemma}[Invariant orthogonal planes]
+    \label{lem:mpu_skew_orthogonal_plane}
+    \lean{LinearIsometry.orthonormal_pair_of_sq_eq_neg,
+        LinearIsometry.apply_pair_eq_standardSkew_sum,
+        LinearIsometry.mapsTo_span_pair_of_sq_eq_neg,
+        LinearIsometry.mapsTo_orthogonal_of_sq_eq_neg,
+        LinearIsometry.restrictInvariantOrthogonal_sq,
+        Matrix.orthogonalLinearIsometry_sq}
+    \notready
+    \discussion{7581}
+    Let $J$ be a linear isometry of a real inner-product space satisfying
+    $J^2=-\Id$. For every unit vector $v$, the ordered pair $(v,-Jv)$ is
+    orthonormal. Its span and its orthogonal complement are invariant under
+    $J$, and the restriction to the complement also squares to $-\Id$.
+    On that ordered plane the matrix of $J$ is
+    $Y=\left(\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\right)$.
+    Every real skew-symmetric orthogonal matrix supplies such an isometry.
+\end{lemma}
+\begin{proof}
+    Isometry and $J^2=-\Id$ give
+    $\langle x,Jy\rangle=-\langle Jx,y\rangle$. Taking $x=y=v$ shows
+    $\langle v,Jv\rangle=0$. The identities $Jv=-(-Jv)$ and
+    $J(-Jv)=v$ give invariance and the displayed orientation. For an invariant
+    subspace $W$, the same skew-adjoint identity gives
+    $\langle w,Jz\rangle=-\langle Jw,z\rangle=0$ for $w\in W$ and
+    $z\in W^\perp$, proving invariance of the complement. Finally,
+    $A^T=-A$ and $AA^T=\Id$ imply $A^2=-\Id$.
+\end{proof}
+
+\begin{lemma}[Sign and indexing of the standard skew form]
+    \label{lem:mpu_standard_skew_indexing}
+    \lean{Matrix.interleavedSkewForm_eq_neg_J_submatrix,
+        Matrix.interleavedSkewFormFin_apply}
+    \notready
+    \discussion{7581}
+    For a finite index set $I$, identify $(i,0),(i,1)\in I\times\{0,1\}$
+    with $i$ in the first and second copies of $I\sqcup I$. Under this
+    identification $\Id_I\otimes Y$ corresponds to
+    $\left(\begin{smallmatrix}0&\Id_I\\-\Id_I&0\end{smallmatrix}\right)$,
+    the negative of the split matrix
+    $\left(\begin{smallmatrix}0&-\Id_I\\\Id_I&0\end{smallmatrix}\right)$.
+    For $I=\{0,\ldots,m-1\}$ the interleaved enumeration gives the same
+    ordered blocks on $\{0,\ldots,2m-1\}$.
+\end{lemma}
+\begin{proof}
+    Compare the four choices of the two binary coordinates. The two diagonal
+    blocks vanish, and the off-diagonal blocks are $\Id_I$ and $-\Id_I$
+    in that order. Reindexing preserves these entries.
+\end{proof}
+
 \begin{proposition}[Orthogonal and symplectic standard forms]
     \label{corconj}
     \notready
