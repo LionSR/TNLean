@@ -116,35 +116,6 @@ theorem margolusAlternatingPairRule_input
   simpa only [StarAlgEquiv.symm_apply_apply] using
     margolusAlternatingPairRule_eq hω x (margolusInputRule hω (x + 1) A)
 
-private theorem hom_ext_evenPair
-    (f g : QuasiLocalAlgebra d →⋆ₐ[ℂ] QuasiLocalAlgebra d)
-    (hf : Continuous f) (hg : Continuous g)
-    (h : ∀ (x : ℤ) (A : Matrix (Config d (evenPair (x + 1)))
-        (Config d (evenPair (x + 1))) ℂ),
-      f (matrixToQuasiLocalObservable d (evenPair (x + 1)) A) =
-        g (matrixToQuasiLocalObservable d (evenPair (x + 1)) A)) : f = g := by
-  let S := StarAlgHom.equalizer (f.comp (algebraicToQuasiLocal d))
-    (g.comp (algebraicToQuasiLocal d))
-  have hle : (⨆ x : ℤ, (localObservable d (evenPair x)).range) ≤ S := by
-    refine iSup_le fun x => ?_
-    rintro _ ⟨A, rfl⟩
-    have hx : ∀ B : Matrix (Config d (evenPair x)) (Config d (evenPair x)) ℂ,
-        f (matrixToQuasiLocalObservable d (evenPair x) B) =
-          g (matrixToQuasiLocalObservable d (evenPair x) B) := by
-      simpa only [sub_add_cancel] using h (x - 1)
-    change f (quasiLocalObservable d (evenPair x) A) =
-      g (quasiLocalObservable d (evenPair x) A)
-    simpa only [matrixToQuasiLocalObservable, StarAlgHom.comp_apply,
-      StarAlgEquiv.apply_symm_apply] using hx (CStarMatrix.ofMatrixStarAlgEquiv.symm A)
-  have hlocal (A : AlgebraicLocalAlgebra d) :
-      f (algebraicToQuasiLocal d A) = g (algebraicToQuasiLocal d A) :=
-    hle (by rw [iSup_range_localObservable_evenPair]; exact StarSubalgebra.mem_top)
-  apply DFunLike.ext
-  intro X
-  induction X using UniformSpace.Completion.induction_on with
-  | hp => exact isClosed_eq hf hg
-  | ih A => exact hlocal A
-
 /-- The explicit alternating pair rules have one and only one continuous
 star-algebra action on the whole quasi-local algebra. It is the actual
 original QCA action. Existence has no assumed action or compatibility
@@ -162,9 +133,19 @@ theorem existsUnique_margolus_local_extension
   refine ⟨ω.toStarAlgHom, ⟨ω.isometry.continuous, ?_⟩, ?_⟩
   · exact margolusAlternatingPairRule_input hω
   · intro F hF
-    apply hom_ext_evenPair F ω.toStarAlgHom hF.1 ω.isometry.continuous
+    apply quasiLocalStarAlgHom_ext_evenPair F ω.toStarAlgHom hF.1 ω.isometry.continuous
     intro x A
-    exact (hF.2 x A).trans (margolusAlternatingPairRule_input hω x A).symm
+    have hpair (y : ℤ)
+        (B : Matrix (Config d (evenPair (y + 1))) (Config d (evenPair (y + 1))) ℂ) :
+        F (matrixToQuasiLocalObservable d (evenPair (y + 1)) B) =
+          ω (matrixToQuasiLocalObservable d (evenPair (y + 1)) B) :=
+      (hF.2 y B).trans (margolusAlternatingPairRule_input hω y B).symm
+    have hx : ∀ B : Matrix (Config d (evenPair x)) (Config d (evenPair x)) ℂ,
+        F (matrixToQuasiLocalObservable d (evenPair x) B) =
+          ω (matrixToQuasiLocalObservable d (evenPair x) B) := by
+      simpa only [sub_add_cancel] using hpair (x - 1)
+    simpa only [matrixToQuasiLocalObservable, StarAlgHom.comp_apply,
+      StarAlgEquiv.apply_symm_apply] using hx (CStarMatrix.ofMatrixStarAlgEquiv.symm A)
 
 /-- Translation compatibility is agreement with the original QCA at
 all translated blocks, derived from its actual covariance. No constraint
