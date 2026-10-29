@@ -236,7 +236,8 @@ whose range is the span of the columns of $M_i(\psi)$.
 
 \begin{lemma}[Left support after extending the right factor]
     \label{thm:lvv_left_columns_right_extension}
-    \lean{TNLean.MPS.AreaLaw.rightApply_mem_leftSupportSubmodule_leftColumns}
+    \lean{TNLean.MPS.AreaLaw.rightApply_mem_leftSupportSubmodule_leftColumns,
+        TNLean.MPS.AreaLaw.rightApply_mem_leftSupportSubmodule_of_columns}
     \leanok
     \uses{def:lvv_finite_left_columns,def:lvv_viable_set}
     Let $T$ be the finite set of left columns in
@@ -244,6 +245,9 @@ whose range is the span of the columns of $M_i(\psi)$.
     For every $i\in I$ and every linear map $W:\mathbb C^m\to\mathcal H_R$,
     the chain vector obtained from $(I_{\mathcal L}\otimes W)u_i$ by the
     cut identification belongs to $\operatorname{Span}(T)\otimes\mathcal H_R$.
+    More generally, an arbitrary finite environment and right extension
+    preserve this support whenever every left column lies in
+    $\operatorname{Span}(T)$.
     This is the support step used
     in~\cite[Claim~2.7, source lines 520--527]{Landau2015Polynomial}.
 \end{lemma}
@@ -307,7 +311,8 @@ whose range is the span of the columns of $M_i(\psi)$.
 
 \begin{lemma}[A size-trimming family chosen before the ground state]
     \label{thm:lvv_size_trimmed_family}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_trimmed_family}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_trimmed_family,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_trimmed_column_family}
     \leanok
     \uses{def:chain_model,def:chain_constant_bond,def:lvv_viable_set,def:lvv_viable_mps}
     Let $L\ge1$ and $q\ge2$. Fix a range-one chain Hamiltonian
@@ -337,6 +342,11 @@ whose range is the span of the columns of $M_i(\psi)$.
     state of $H$ of energy $E_0$ with gap at least $\Delta$, then
     $(k,c/L)$-viability of $S$ for $\Gamma$ implies
     $(k,1/12)$-viability of $T$ for $\Gamma$.
+    In this case there are $m\le D$, an isometry
+    $W:\C^m\to\mathcal H_R$, and a unit vector
+    $u\in\mathcal H_L\otimes\C^m$ such that every column
+    $u_a=(I\otimes\langle a|)u$ belongs to $T$ and
+    $|\langle\Gamma,(I\otimes W)u\rangle|\ge11/12$.
 
     This is an auxiliary version of
     \cite[Claim~2.7, source lines 472--478 and 520--527]{Landau2015Polynomial}.
@@ -387,12 +397,15 @@ whose range is the span of the columns of $M_i(\psi)$.
     Joining the left coordinates and extending the right factor places
     $v$ in $\operatorname{Span}(T_m)\otimes\mathcal H_R$, hence in
     $\operatorname{Span}(T)\otimes\mathcal H_R$. Thus $v$ witnesses the
-    asserted viability.
+    asserted viability. The same selected eigenvector $u_{m,X}$, after
+    joining the left coordinates, has all its columns in $T_m\subseteq T$;
+    its norm is one and the original right extension $W$ is an isometry.
 \end{proof}
 
 \begin{lemma}[Polynomial size of the size-trimming family]
     \label{thm:lvv_size_trimmed_family_polynomial}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_trimmed_family_polynomial}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_trimmed_family_polynomial,
+        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_size_trimmed_column_family_polynomial}
     \leanok
     \uses{def:chain_model,def:chain_constant_bond,def:lvv_viable_set,def:lvv_viable_mps}
     Under the assumptions of Lemma~\ref{thm:lvv_size_trimmed_family}, put
