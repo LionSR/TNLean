@@ -38,6 +38,21 @@ traces reproduce the fusion rule `U_g U_h = λ(g,h)^L U_{gh}` at the level of tr
 operator-level fusion rules are derived in
 `TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2Defect`.
 
+## Choice of explicit pair data
+
+The twelve entries instantiate two existing constructions: ten use
+`MultiBlockCompression.ofEq`, and `(x, y)` and `(xy, y)` use
+`MultiBlockCompression.ofConjInt` with the same displayed sign gauge. The source
+and target bond dimensions vary between one and two. The trace and remainder
+results are projections of those shared constructions; they do not repeat their
+proofs. A single `Fin 4 × Fin 4` family would therefore replace these data entries
+by dependent dimension cases and gauge cases without removing a compression
+argument. The complete assembly already uses `pairTarget` and the generic
+compression existence theorem in the defect module. Keep the explicit entries
+for their dimension-specific equalities and integer certificates. This is the
+decision on issue #7845; the shared constructions, rather than another indexed
+family of them, own the repeated proof pattern.
+
 ## Main definitions
 
 * `Z2Z2Condensation.eEStacked`, ..., `Z2Z2Condensation.xyYStacked`: the twelve stacked tensors.

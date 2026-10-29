@@ -40,6 +40,22 @@ The targets are `M_e` for `(x, x)`, `-M_y` for `(x, xy)`, `M_y` for `(xy, x)` an
 Only the vanishing of the remainder words of length at least four is stated here, which is the
 nilpotency clause of Theorem 7.7 with the bound `1 + z = 4`.
 
+## Choice of explicit pair data
+
+All four entries have source bond dimension four, target bond dimension one,
+and the same flag position: the retained scalar is in the third coordinate.
+They already share `MultiBlockCompression.ofScalarFlagFour`, its trace and
+nilpotency consequences, and the integer minor criteria for both intertwiner
+spaces. What varies is the target (`e`, `-y`, `y`, or `-e`), the four integer
+gauges and inverses, the conjugated letters, and the explicit left and right
+witnesses. An indexed construction would still need four tables for these
+certificates. It would not remove a flag or intertwiner proof, since those are
+already shared. Retain the named integer certificates and their direct checks;
+the defect module obtains the generic sixteen-pair assembly from target normality
+and the assembled word-trace identity.
+This records the decision on issue #7845 without asserting that the common flag
+positions differ between the four cases.
+
 ## Main results
 
 * `Z2Z2Condensation.xXCompression`, `Z2Z2Condensation.xXyCompression`,
