@@ -15,9 +15,11 @@ is clipped. Both actual restricted errors, on the original and clipped closed
 low-energy spaces, are derived from those bonds at `t ≥ η + 7`.
 
 Source: ALVV, arXiv:1602.08828v2, Definition 4.3 and Proposition 4.4(1),
-`local_alg_arxiv_v2.tex`, lines 873–921. The sufficient cutoff is explicit;
-the unrestricted truncated-side claim under merely `t > η` is not asserted.
-The companion spectral-window note is
+`local_alg_arxiv_v2.tex`, lines 873–921.
+
+**Local fix (cutoff):** The proof uses the explicit sufficient cutoff `t ≥ η + 7`;
+the printed unrestricted truncated-side claim under merely `t > η` is not asserted.
+The companion source note is
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_hard_truncation_windows.pdf.
 Its pending cutoff revision, the separate source counterexample and the
 acceptance gates for the physical prerequisites are recorded in
