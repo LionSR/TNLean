@@ -1,0 +1,41 @@
+\subsection{Actual finite Heisenberg action on complete blocks}
+\label{sec:mpu_finite_heisenberg}
+
+\begin{theorem}[Finite conjugation with arbitrary complete-block tail]
+    \label{thm:mpu_finite_heisenberg_complete_block}
+    \lean{MPOTensor.twoSiteHeisenbergInputEquiv,
+        MPOTensor.twoSiteHeisenbergOutputEquiv,
+        MPOTensor.twoSiteHeisenbergMatrix,
+        MPOTensor.twoSiteHeisenbergMatrix_intertwiner,
+        MPOTensor.twoSiteHeisenbergMatrix_isUnitaryBetween,
+        MPOTensor.twoSiteHeisenbergMatrix_conjugation}
+    \notready
+    \uses{def:mpu_supplied_two_site_standard_form,
+        lem:mpu_two_site_open_three_block_buffers}
+    Let $W$ have a supplied two-site standard form with gates $u,v$.
+    For every $n\ge0$, write the actual periodic operator $W^{(3+n)}$
+    in complete input coordinates separating the middle input pair,
+    and complete output coordinates separating the four neighbouring
+    output half-sites. Denote this reindexed operator by $M_n$.
+    Then, for every middle-pair observable $A$,
+    \begin{align}
+        M_n(I\otimes A)            & =(I\otimes B_{u,v}(A))M_n,\notag \\
+        M_n(I\otimes A)M_n^\dagger & =I\otimes B_{u,v}(A).
+        \label{eq:mpu_finite_heisenberg_complete_block}
+    \end{align}
+    The exterior identity includes the whole arbitrary tail. The local
+    output is therefore independent of its length. This is a finite
+    complete-block consequence of
+    \cite[\texttt{StandardForm} and \texttt{eq:appendix-1}, lines~603--622
+        and~2300--2306]{Cirac2017MPU}, under the scope restriction and remaining
+    assembly recorded in \cite{gap:mpu_qca_complete_block_heisenberg_scope}.
+\end{theorem}
+\begin{proof}
+    Fixing all exterior indices gives the already derived three-block
+    trace intertwiner, with the arbitrary tail retained as a virtual word
+    factor. Summing the middle indices identifies the two complete finite
+    matrix products. The coordinate maps are bijective, and the actual
+    periodic MPO is unitary by its supplied standard form. Multiplication
+    by its adjoint gives the conjugation formula. No periodic seam or
+    exterior word is removed in this argument.
+\end{proof}

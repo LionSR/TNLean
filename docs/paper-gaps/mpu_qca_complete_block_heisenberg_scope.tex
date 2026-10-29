@@ -1,0 +1,74 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Complete-Block Scope of the Finite MPU Heisenberg Identity}
+\author{}
+\date{2026-10-29}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source stabilization statement}
+
+Cirac--P\'erez-Garc\'ia--Schuch--Verstraete construct the induced
+quasi-local action from the eventually constant finite-chain conjugates
+$U^{(N)}A U^{(N)\dagger}$
+\cite[equation~\texttt{eq:appendix-1}, lines~2300--2306]{Cirac2017MPU}.
+Its neighbourhood is the original-site interval of radius $4D^4$.
+The full statement permits arbitrary supported observables and arbitrary
+sufficiently buffered finite intervals, including lengths not divisible
+by a selected simple-block length.
+
+\section{The finite identity proved here}
+
+Let $W$ have supplied two-site standard-form data with unitary gates
+$u$ and $v$, in the exact factor orders of
+\cite[\texttt{StandardForm} and Definition~\texttt{SF}, lines~603--622]{Cirac2017MPU}.
+For every $n\ge0$, use complete bijective coordinates on the actual
+periodic MPO of length $3+n$ in the $W$ alphabet. Separate the middle
+input pair from the two exterior input blocks and the arbitrary tail.
+On the output side separate the four neighbouring half-sites from the
+two exterior half-sites and the same tail. Write the resulting matrix as
+$M_n$. The derived identity is
+\begin{align}
+    M_n(I\otimes A)M_n^\dagger
+     & =I\otimes B_{u,v}(A),
+    \label{eq:mpu_qca_complete_block_finite_heisenberg}
+\end{align}
+where $B_{u,v}(A)$ is the actual two-link output observable determined by
+$u$ and $v$. The identity on the right includes the entire tail, so the
+local output is independent of its length. The periodic seam is retained
+inside the word trace, rather than discarded or replaced by a boundary
+premise.
+
+This is actual finite conjugation: the coordinate systems are bijections
+on all configurations, and unitarity of $M_n$ follows from the supplied
+standard form. No compatibility, stabilization, or support assertion is
+introduced as a hypothesis.
+
+\section{Remaining assembly}
+
+The complete blocks in this result are sites of the supplied blocked
+tensor $W$. They do not yet cover the arbitrary original-site prefix and
+suffix of a general finite interval, arbitrary local-observable support,
+or the common-interval forward/inverse identities required for a
+quasi-local automorphism. Thus
+(\ref{eq:mpu_qca_complete_block_finite_heisenberg}) is a finite ingredient;
+it is not the unrestricted formalization of
+\texttt{eq:appendix-1}.
+
+The elimination plan is to lift the existing residual-word three-block
+intertwiner through the same complete-coordinate construction, extend
+from the middle-pair observable to arbitrary supported observables, and
+prove equality of the resulting values in every common buffered interval.
+The physical-adjoint family supplies the inverse; these proved families
+then populate the existing compatible-local-action completion. The
+original-site radius follows from the source simple-block bound. The
+remaining source assembly is tracked by TNLean issue~\#7013; the induced
+QCA evaluation is also required by issue~\#7040.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

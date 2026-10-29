@@ -215,6 +215,7 @@ import TNLean.MPS.MPU.TruncatedSymmetryUnitarity
 import TNLean.MPS.MPU.TruncationCommutator
 import TNLean.MPS.MPU.TwoKrausPolar
 import TNLean.MPS.MPU.TwoSectorMerging
+import TNLean.MPS.MPU.TwoSiteFiniteHeisenberg
 import TNLean.MPS.MPU.TwoSiteStandardForm
 import TNLean.MPS.MPU.TwoSiteStandardFormCircuit
 import TNLean.MPS.MPU.TwoSiteStandardFormOpenWord
