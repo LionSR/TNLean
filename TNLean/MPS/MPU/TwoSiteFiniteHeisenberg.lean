@@ -564,18 +564,24 @@ theorem originalSiteHeisenbergInputWindowEquiv_outside_eq_iff (d k : ℕ)
         originalWindowMiddleEquiv_block]
 
 
+/-- The original central input decoder is the ordinary two-block
+configuration concatenation. Source: CPSV17, StandardForm and physical
+blocking, lines 603–622. -/
+theorem originalSiteHeisenbergCentreEquiv_eq_blockedConfigEquiv (d k : ℕ)
+    (c : HalfPair (MPSTensor.blockPhysDim d k)) :
+    originalSiteHeisenbergCentreEquiv d k c =
+      MPSTensor.blockedConfigEquiv d 2 k ![c.1, c.2] := by
+  apply List.ofFn_injective
+  change MPSTensor.wordOfBlock d (2 * k)
+    ((twoSiteDirectBlockEquiv d k).symm (finProdFinEquiv c)) = _
+  rw [wordOfBlock_twoSiteDirectBlockEquiv_symm, MPSTensor.ofFn_blockedConfigEquiv]
+  simp [Kraus.flattenBlockedWord, List.ofFn_succ]
+
 private theorem originalSiteHeisenbergCentreEquiv_block (d k : ℕ)
     (c : HalfPair (MPSTensor.blockPhysDim d k)) (b : Fin 2) (j : Fin k) :
     originalSiteHeisenbergCentreEquiv d k c (finProdFinEquiv (b, j)) =
       MPSTensor.decodeBlock d k (![c.1, c.2] b) j := by
-  have hcfg : originalSiteHeisenbergCentreEquiv d k c =
-      MPSTensor.blockedConfigEquiv d 2 k ![c.1, c.2] := by
-    apply List.ofFn_injective
-    change MPSTensor.wordOfBlock d (2 * k)
-      ((twoSiteDirectBlockEquiv d k).symm (finProdFinEquiv c)) = _
-    rw [wordOfBlock_twoSiteDirectBlockEquiv_symm, MPSTensor.ofFn_blockedConfigEquiv]
-    simp [Kraus.flattenBlockedWord, List.ofFn_succ]
-  rw [hcfg]
+  rw [originalSiteHeisenbergCentreEquiv_eq_blockedConfigEquiv]
   simp [MPSTensor.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp]
 
 private def fourHalfWordEquiv (b : ℕ) : FourHalves b ≃ (Fin 4 → Fin b) where
