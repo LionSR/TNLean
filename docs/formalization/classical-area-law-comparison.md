@@ -63,7 +63,9 @@ rate $\gamma/2^n$ for ground-space dimension $n$.
 For both the full-Hamiltonian filtered terms and the actual locally truncated
 terms, summation gives a bound independent of the number of sites when the
 ground-space dimension, local norm budget, gap, localization support and
-polynomial sphere-growth constants are fixed. The truncated terms are filtered
+polynomial sphere-growth constants are fixed. The local commutator estimate for separated metric balls now uses only the
+finite-range interaction bounds and the original gap; it needs no polynomial
+sphere-growth assumption. The truncated terms are filtered
 a second time under the original Hamiltonian to estimate their ground-space
 commutators. Their norms are bounded by the original interaction norms, so the
 original site budget is retained. No gap for a truncated Hamiltonian is assumed. The unrestricted metric
@@ -77,8 +79,10 @@ its retained-basis expansion is in Section III, lines 630–685.
 An additional bound on those dimensions would be a further result. The shared
 coordinate theorem now constructs the parent coefficient isometry from actual
 range coordinates of two child projections, with exact factorization and
-product-dimension bound, including zero ranks. Substitution of the physical
-local projections and recursive amplitude contraction remain to be completed.
+product-dimension bound, including zero ranks. The local supported projections now give actual local range frames. For fixed
+child frames, the parent coefficients have the exact physical configuration
+formula and reconstruct the parent isometry. Recursive amplitude contraction
+through the physical hierarchy remains to be completed.
 
 For the viable-set construction, the relevant quantifier order is different. The
 family at a cut is selected from the Hamiltonian and the preceding family before
