@@ -3,8 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPU.TranspositionLocalSufficiency
+import TNLean.MPS.MPU.TwoSiteStandardForm
+import TNLean.MPS.MPU.StaircaseGates
 import TNLean.MPS.MPDO.SimpleScaling
+import Mathlib.Analysis.Complex.Trigonometric
 import Mathlib.Tactic.FunProp
 
 /-!

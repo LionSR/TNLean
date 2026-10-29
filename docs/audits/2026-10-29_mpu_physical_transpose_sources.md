@@ -145,3 +145,9 @@ coarse constructor. This child is refreshed onto the repair and uses explicit
 canonical entry identities in both converse gate transports as well. No
 mathematical statement or hypothesis changes. Hosted acceptance remains
 pending and no local Lean was run.
+
+The deformation module imports only the actual standard-form definition,
+staircase gate operation, MPO scalar law and Mathlib exponential topology.
+It does not depend on either local-criterion proof: its path statement and
+its hosted checking can proceed independently of their canonical-source
+comparison prerequisites. The Blueprint proof dependency reflects this.
